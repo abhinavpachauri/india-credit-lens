@@ -3,11 +3,12 @@
 import { useState, useMemo } from "react";
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid,
-  Tooltip, ResponsiveContainer,
+  Tooltip, ResponsiveContainer, ReferenceLine, Label,
 } from "recharts";
 import { CreditRow, buildSeries, buildGrowthSeries, formatCr, formatGrowth } from "@/lib/data";
 import { pickColor } from "@/lib/theme";
 import ChartLegend from "./ChartLegend";
+import type { ChartAnnotation } from "@/lib/insights";
 
 interface TrendChartProps {
   rows: CreditRow[];
@@ -15,12 +16,13 @@ interface TrendChartProps {
   labels: Record<string, string>;
   pctLabel?: string;
   dataOpts?: { psl?: boolean; stmt?: string };
+  annotations?: ChartAnnotation[];
 }
 
 type ViewMode = "absolute" | "yoy" | "fy";
 
 export default function TrendChart({
-  rows, codes, labels, pctLabel = "% of Total", dataOpts = {}
+  rows, codes, labels, pctLabel = "% of Total", dataOpts = {}, annotations = []
 }: TrendChartProps) {
   const [mode, setMode] = useState<ViewMode>("absolute");
   const [hidden, setHidden] = useState<Set<string>>(new Set());
@@ -54,6 +56,11 @@ export default function TrendChart({
     mode === "absolute"
       ? [formatCr(Number(value) || 0), String(name ?? "")]
       : [formatGrowth(Number(value) || 0), String(name ?? "")];
+
+  // Only show hLine annotations in absolute mode (values are in L Cr)
+  const activeAnnotations = annotations.filter(
+    (a) => a.type === "hLine" && mode === "absolute"
+  );
 
   return (
     <div>
@@ -103,6 +110,24 @@ export default function TrendChart({
               color: "var(--font)",
             }}
           />
+
+          {/* Reference line annotations — absolute mode only */}
+          {activeAnnotations.map((ann, i) => (
+            <ReferenceLine
+              key={i}
+              y={ann.value}
+              stroke={ann.color}
+              strokeDasharray="5 4"
+              strokeWidth={1.5}
+            >
+              <Label
+                value={ann.label}
+                position={ann.position ?? "right"}
+                style={{ fontSize: 10, fill: ann.color, fontWeight: 500 }}
+              />
+            </ReferenceLine>
+          ))}
+
           {seriesKeys.map((key, i) => (
             hidden.has(key) ? null : (
               <Line

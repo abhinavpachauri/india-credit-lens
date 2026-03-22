@@ -3,11 +3,12 @@
 import { useState, useMemo } from "react";
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid,
-  Tooltip, ResponsiveContainer,
+  Tooltip, ResponsiveContainer, ReferenceLine, Label,
 } from "recharts";
 import { CreditRow, buildSeries, formatCr, uniqueDates } from "@/lib/data";
 import { pickColor } from "@/lib/theme";
 import ChartLegend from "./ChartLegend";
+import type { ChartAnnotation } from "@/lib/insights";
 
 interface DistributionChartProps {
   rows: CreditRow[];
@@ -15,10 +16,11 @@ interface DistributionChartProps {
   labels: Record<string, string>;
   pctLabel?: string;
   dataOpts?: { psl?: boolean; stmt?: string };
+  distAnnotations?: ChartAnnotation[];
 }
 
 export default function DistributionChart({
-  rows, codes, labels, pctLabel = "% Share", dataOpts = {}
+  rows, codes, labels, pctLabel = "% Share", dataOpts = {}, distAnnotations = []
 }: DistributionChartProps) {
   const [mode, setMode] = useState<"absolute" | "pct">("absolute");
   const [hidden, setHidden] = useState<Set<string>>(new Set());
@@ -72,6 +74,14 @@ export default function DistributionChart({
       ? [formatCr(Number(value) || 0), String(name ?? "")]
       : [`${Number(value || 0).toFixed(1)}%`, String(name ?? "")];
 
+  // Show pct annotations only in pct mode, absolute annotations only in absolute mode
+  const activeAnnotations = distAnnotations.filter((a) =>
+    a.type === "hLine" && (
+      (mode === "pct"      && (a.value ?? 0) <= 100) ||
+      (mode === "absolute" && (a.value ?? 0) > 100)
+    )
+  );
+
   return (
     <div>
       {/* Controls */}
@@ -118,6 +128,24 @@ export default function DistributionChart({
               color: "var(--font)",
             }}
           />
+
+          {/* Reference line annotations */}
+          {activeAnnotations.map((ann, i) => (
+            <ReferenceLine
+              key={i}
+              y={ann.value}
+              stroke={ann.color}
+              strokeDasharray="5 4"
+              strokeWidth={1.5}
+            >
+              <Label
+                value={ann.label}
+                position={ann.position ?? "right"}
+                style={{ fontSize: 10, fill: ann.color, fontWeight: 500 }}
+              />
+            </ReferenceLine>
+          ))}
+
           {seriesKeys.map((key, i) =>
             hidden.has(key) ? null : (
               <Bar key={key} dataKey={key} stackId="a" fill={pickColor(key, i)} />

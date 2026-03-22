@@ -1,13 +1,17 @@
 "use client";
 
+import type { SectionInsight } from "@/lib/insights";
+import { InsightStrip } from "./InsightStrip";
+
 interface SectionCardProps {
   title: string;
   icon: string;
   accentColor: string;
   children: React.ReactNode;
+  insights?: SectionInsight;
 }
 
-export default function SectionCard({ title, icon, accentColor, children }: SectionCardProps) {
+export default function SectionCard({ title, icon, accentColor, children, insights }: SectionCardProps) {
   return (
     <div
       className="rounded-xl mb-6 overflow-hidden"
@@ -31,6 +35,9 @@ export default function SectionCard({ title, icon, accentColor, children }: Sect
 
       {/* Card body */}
       <div className="px-5 py-4">{children}</div>
+
+      {/* Insight / Gap / Opportunity strip */}
+      {insights && <InsightStrip data={insights} />}
     </div>
   );
 }
