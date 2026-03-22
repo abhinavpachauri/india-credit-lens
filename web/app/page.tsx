@@ -6,7 +6,6 @@ import {
   formatCr, formatDate, uniqueDates, rowsForCodes,
 } from "@/lib/data";
 import { SEC_COLORS } from "@/lib/theme";
-import { SECTION_META } from "@/lib/insights";
 import Header from "@/components/Header";
 import TabBar, { TabId } from "@/components/TabBar";
 import SectionCard from "@/components/SectionCard";
@@ -99,22 +98,13 @@ export default function Dashboard() {
     codes: string[],
     labels: Record<string, string>,
     pctLabel: string,
-    dataOpts: { psl?: boolean; stmt?: string } = {},
-    sectionKey?: string,
-  ) => {
-    const meta = sectionKey ? SECTION_META[sectionKey] : undefined;
-    return tab === "trend" ? (
-      <TrendChart
-        rows={rows} codes={codes} labels={labels} pctLabel={pctLabel} dataOpts={dataOpts}
-        annotations={meta?.trendAnnotations}
-      />
+    dataOpts: { psl?: boolean; stmt?: string } = {}
+  ) =>
+    tab === "trend" ? (
+      <TrendChart rows={rows} codes={codes} labels={labels} pctLabel={pctLabel} dataOpts={dataOpts} />
     ) : (
-      <DistributionChart
-        rows={rows} codes={codes} labels={labels} pctLabel={pctLabel} dataOpts={dataOpts}
-        distAnnotations={meta?.distAnnotations}
-      />
+      <DistributionChart rows={rows} codes={codes} labels={labels} pctLabel={pctLabel} dataOpts={dataOpts} />
     );
-  };
 
   return (
     <div data-dark={dark} style={{ background: "var(--bg-page)", minHeight: "100vh" }}>
@@ -129,54 +119,54 @@ export default function Dashboard() {
 
       <main className="max-w-5xl mx-auto px-4 py-6">
         {/* Section 1 – Bank Credit */}
-        <SectionCard title="Bank Credit" icon="🏦" accentColor={SEC_COLORS[0]} insights={SECTION_META.bankCredit.insights}>
+        <SectionCard title="Bank Credit" icon="🏦" accentColor={SEC_COLORS[0]}>
           {renderChart(
             ["I", "II", "III"],
             { I: "Bank Credit", II: "Food Credit", III: "Non-food Credit" },
-            "% of Bank Credit", {}, "bankCredit"
+            "% of Bank Credit"
           )}
         </SectionCard>
 
         {/* Section 2 – Main Sectors */}
-        <SectionCard title="Main Sectors" icon="📊" accentColor={SEC_COLORS[1]} insights={SECTION_META.mainSectors.insights}>
+        <SectionCard title="Main Sectors" icon="📊" accentColor={SEC_COLORS[1]}>
           {renderChart(
             ["1", "2", "3", "4"],
             { "1": "Agriculture", "2": "Industry", "3": "Services", "4": "Personal Loans" },
-            "% Share", {}, "mainSectors"
+            "% Share"
           )}
         </SectionCard>
 
         {/* Section 3 – Industry by Size */}
         {sec3.codes.length > 0 && (
-          <SectionCard title="Industry by Size" icon="🏭" accentColor={SEC_COLORS[2]} insights={SECTION_META.industryBySize.insights}>
-            {renderChart(sec3.codes, sec3.labels, "% of Industry", {}, "industryBySize")}
+          <SectionCard title="Industry by Size" icon="🏭" accentColor={SEC_COLORS[2]}>
+            {renderChart(sec3.codes, sec3.labels, "% of Industry")}
           </SectionCard>
         )}
 
         {/* Section 4 – Services */}
         {sec4.codes.length > 0 && (
-          <SectionCard title="Services" icon="🛎️" accentColor={SEC_COLORS[3]} insights={SECTION_META.services.insights}>
-            {renderChart(sec4.codes, sec4.labels, "% of Services", {}, "services")}
+          <SectionCard title="Services" icon="🛎️" accentColor={SEC_COLORS[3]}>
+            {renderChart(sec4.codes, sec4.labels, "% of Services")}
           </SectionCard>
         )}
 
         {/* Section 5 – Personal Loans */}
         {sec5.codes.length > 0 && (
-          <SectionCard title="Personal Loans" icon="💳" accentColor={SEC_COLORS[4]} insights={SECTION_META.personalLoans.insights}>
-            {renderChart(sec5.codes, sec5.labels, "% of Personal Loans", {}, "personalLoans")}
+          <SectionCard title="Personal Loans" icon="💳" accentColor={SEC_COLORS[4]}>
+            {renderChart(sec5.codes, sec5.labels, "% of Personal Loans")}
           </SectionCard>
         )}
 
         {/* Section 6 – Priority Sector */}
         {pslCodes.length > 0 && (
-          <SectionCard title="Priority Sector" icon="⭐" accentColor={SEC_COLORS[5]} insights={SECTION_META.prioritySector.insights}>
-            {renderChart(pslCodes, pslLabels, "% of Priority Sector", pslDataOpts, "prioritySector")}
+          <SectionCard title="Priority Sector" icon="⭐" accentColor={SEC_COLORS[5]}>
+            {renderChart(pslCodes, pslLabels, "% of Priority Sector", pslDataOpts)}
           </SectionCard>
         )}
 
         {/* Section 7 – Industry by Type (filterable) */}
         {sec7.codes.length > 0 && (
-          <SectionCard title="Industry by Type" icon="🔩" accentColor={SEC_COLORS[6]} insights={SECTION_META.industryByType.insights}>
+          <SectionCard title="Industry by Type" icon="🔩" accentColor={SEC_COLORS[6]}>
             <IndustryFilter
               rows={rows}
               allCodes={sec7.codes}
@@ -189,7 +179,7 @@ export default function Dashboard() {
                 industry7,
                 Object.fromEntries(industry7.map((c) => [c, sec7.labels[c] ?? c])),
                 "% of Industry",
-                sec7DataOpts, "industryByType"
+                sec7DataOpts
               )}
           </SectionCard>
         )}
