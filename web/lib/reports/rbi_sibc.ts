@@ -184,12 +184,13 @@ export function buildSections(rows: CreditRow[]): ReportSection[] {
     "% Share"
   ));
 
-  // 3 — Industry by Size (children of code "2", Statement 1)
-  const sec3 = childrenOf(rows, "2");
+  // 3 — Industry by Size (children of code "2", Statement 1 only)
+  const sec3 = childrenOf(rows, "2", { stmt: "Statement 1" });
   sections.push(makeSection(
     rows,
     "industryBySize", "Industry by Size", "🏭", 2,
-    sec3.codes, sec3.labels, "% of Industry"
+    sec3.codes, sec3.labels, "% of Industry",
+    { stmt: "Statement 1" }
   ));
 
   // 4 — Services sub-sectors (children of code "3")
