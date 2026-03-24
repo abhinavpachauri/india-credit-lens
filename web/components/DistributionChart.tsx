@@ -8,17 +8,26 @@ import {
 import { formatCr } from "@/lib/data";
 import { pickColor } from "@/lib/theme";
 import ChartLegend from "./ChartLegend";
-import type { ChartPoint } from "@/lib/types";
+import type { ChartPoint, AnnotationEffect } from "@/lib/types";
 
 interface DistributionChartProps {
-  absoluteData: ChartPoint[];
-  seriesNames:  string[];
-  pctLabel?:    string;
-  visibleSeries?: string[];   // optional subset — used by IndustryFilter
+  absoluteData:     ChartPoint[];
+  seriesNames:      string[];
+  pctLabel?:        string;
+  visibleSeries?:   string[];
+  highlightConfig?: AnnotationEffect | null;
+}
+
+function barOpacity(name: string, config: AnnotationEffect | null | undefined): number {
+  if (!config) return 1;
+  if (config.highlight?.includes(name)) return 1;
+  if (config.dim?.includes(name))       return 0.15;
+  if ((config.highlight?.length ?? 0) > 0) return 0.15; // auto-fade
+  return 1;
 }
 
 export default function DistributionChart({
-  absoluteData, seriesNames, pctLabel = "% Share", visibleSeries,
+  absoluteData, seriesNames, pctLabel = "% Share", visibleSeries, highlightConfig,
 }: DistributionChartProps) {
   const [mode, setMode]     = useState<"absolute" | "pct">("absolute");
   const [hidden, setHidden] = useState<Set<string>>(new Set());
@@ -115,7 +124,13 @@ export default function DistributionChart({
           />
           {activeNames.map((name, i) =>
             hidden.has(name) ? null : (
-              <Bar key={name} dataKey={name} stackId="a" fill={pickColor(name, i)} />
+              <Bar
+                key={name}
+                dataKey={name}
+                stackId="a"
+                fill={pickColor(name, i)}
+                opacity={barOpacity(name, highlightConfig)}
+              />
             )
           )}
         </BarChart>

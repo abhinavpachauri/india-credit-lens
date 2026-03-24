@@ -8,21 +8,37 @@ import {
 import { formatCr, formatGrowth } from "@/lib/data";
 import { pickColor } from "@/lib/theme";
 import ChartLegend from "./ChartLegend";
-import type { ChartPoint } from "@/lib/types";
+import type { ChartPoint, AnnotationEffect } from "@/lib/types";
 
 interface TrendChartProps {
-  absoluteData: ChartPoint[];
-  growthData:   ChartPoint[];
-  seriesNames:  string[];
-  pctLabel?:    string;
-  visibleSeries?: string[];   // optional subset — used by IndustryFilter
+  absoluteData:    ChartPoint[];
+  growthData:      ChartPoint[];
+  seriesNames:     string[];
+  pctLabel?:       string;
+  visibleSeries?:  string[];          // optional subset — used by IndustryFilter
+  highlightConfig?: AnnotationEffect | null;  // from active annotation
+}
+
+/** Compute per-series visual style based on active annotation. */
+function seriesStyle(name: string, config: AnnotationEffect | null | undefined) {
+  if (!config) return { opacity: 1, strokeWidth: 2, strokeDasharray: undefined };
+  const highlighted = config.highlight?.includes(name) ?? false;
+  const dimmed      = config.dim?.includes(name)       ?? false;
+  const dashed      = config.dash?.includes(name)      ?? false;
+  // Auto-fade anything not explicitly highlighted when a highlight set exists
+  const autoFade    = (config.highlight?.length ?? 0) > 0 && !highlighted && !dimmed;
+  return {
+    opacity:          highlighted ? 1 : (dimmed || autoFade) ? 0.15 : 1,
+    strokeWidth:      highlighted ? 3 : 2,
+    strokeDasharray:  dashed ? "5 5" : undefined,
+  };
 }
 
 type ViewMode = "absolute" | "yoy" | "fy";
 
 export default function TrendChart({
   absoluteData, growthData, seriesNames,
-  pctLabel = "% of Total", visibleSeries,
+  pctLabel = "% of Total", visibleSeries, highlightConfig,
 }: TrendChartProps) {
   const [mode, setMode]     = useState<ViewMode>("absolute");
   const [hidden, setHidden] = useState<Set<string>>(new Set());
@@ -109,20 +125,24 @@ export default function TrendChart({
               color:        "var(--font)",
             }}
           />
-          {activeNames.map((name, i) =>
-            hidden.has(name) ? null : (
+          {activeNames.map((name, i) => {
+            if (hidden.has(name)) return null;
+            const style = seriesStyle(name, highlightConfig);
+            return (
               <Line
                 key={name}
                 type="monotone"
                 dataKey={name}
                 stroke={pickColor(name, i)}
-                strokeWidth={2}
-                dot={{ r: 4, strokeWidth: 1 }}
+                strokeWidth={style.strokeWidth}
+                strokeDasharray={style.strokeDasharray}
+                strokeOpacity={style.opacity}
+                dot={{ r: 4, strokeWidth: 1, opacity: style.opacity }}
                 activeDot={{ r: 6 }}
                 connectNulls
               />
-            )
-          )}
+            );
+          })}
         </LineChart>
       </ResponsiveContainer>
     </div>
