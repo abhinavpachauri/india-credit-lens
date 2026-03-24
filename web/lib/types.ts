@@ -29,11 +29,12 @@ export interface AnnotationEffect {
 }
 
 export interface Annotation {
-  id:           string;
-  title:        string;     // 4–6 words
-  body:         string;     // 2–3 sentences
-  implication?: string;     // "For lenders: ..."
-  effect:       AnnotationEffect;
+  id:            string;
+  title:         string;          // 4–6 words
+  body:          string;          // 2–3 sentences
+  implication?:  string;          // "For lenders: ..."
+  preferredMode?: "absolute" | "yoy" | "fy"; // chart switches to this mode when annotation is active
+  effect:        AnnotationEffect;
 }
 
 export interface SectionAnnotations {
