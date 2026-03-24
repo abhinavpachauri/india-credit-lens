@@ -5,46 +5,52 @@ import {
   LineChart, Line, XAxis, YAxis, CartesianGrid,
   Tooltip, ResponsiveContainer,
 } from "recharts";
-import { CreditRow, buildSeries, buildGrowthSeries, formatCr, formatGrowth } from "@/lib/data";
+import { formatCr, formatGrowth } from "@/lib/data";
 import { pickColor } from "@/lib/theme";
 import ChartLegend from "./ChartLegend";
+import type { ChartPoint } from "@/lib/types";
 
 interface TrendChartProps {
-  rows: CreditRow[];
-  codes: string[];
-  labels: Record<string, string>;
-  pctLabel?: string;
-  dataOpts?: { psl?: boolean; stmt?: string };
+  absoluteData: ChartPoint[];
+  growthData:   ChartPoint[];
+  seriesNames:  string[];
+  pctLabel?:    string;
+  visibleSeries?: string[];   // optional subset — used by IndustryFilter
 }
 
 type ViewMode = "absolute" | "yoy" | "fy";
 
 export default function TrendChart({
-  rows, codes, labels, pctLabel = "% of Total", dataOpts = {}
+  absoluteData, growthData, seriesNames,
+  pctLabel = "% of Total", visibleSeries,
 }: TrendChartProps) {
-  const [mode, setMode] = useState<ViewMode>("absolute");
+  const [mode, setMode]     = useState<ViewMode>("absolute");
   const [hidden, setHidden] = useState<Set<string>>(new Set());
 
-  const seriesData = useMemo(() => {
-    if (mode === "absolute") return buildSeries(rows, codes, labels, dataOpts);
-    return buildGrowthSeries(rows, codes, labels, mode === "yoy" ? "yoy" : "fy", dataOpts);
-  }, [rows, codes, labels, mode, dataOpts]);
+  // Which series to actually render
+  const activeNames = useMemo(
+    () => (visibleSeries ? seriesNames.filter((n) => visibleSeries.includes(n)) : seriesNames),
+    [seriesNames, visibleSeries]
+  );
 
-  const seriesKeys = codes.map((c) => labels[c] ?? c);
+  // Switch between absolute and growth data based on mode
+  const seriesData = useMemo(
+    () => (mode === "absolute" ? absoluteData : growthData),
+    [mode, absoluteData, growthData]
+  );
 
-  const legendItems = seriesKeys.map((label, i) => ({
-    label,
-    color: pickColor(label, i),
-    active: !hidden.has(label),
+  const legendItems = activeNames.map((name, i) => ({
+    label:  name,
+    color:  pickColor(name, i),
+    active: !hidden.has(name),
   }));
 
-  const toggleSeries = (label: string) => {
+  const toggleSeries = (name: string) =>
     setHidden((prev) => {
       const next = new Set(prev);
-      next.has(label) ? next.delete(label) : next.add(label);
+      next.has(name) ? next.delete(name) : next.add(name);
       return next;
     });
-  };
 
   const formatY = (v: number) =>
     mode === "absolute" ? formatCr(v, 1) : `${v > 0 ? "+" : ""}${v.toFixed(1)}%`;
@@ -57,14 +63,14 @@ export default function TrendChart({
 
   return (
     <div>
-      {/* Controls */}
+      {/* Mode toggle */}
       <div className="flex flex-wrap gap-4 mb-3 text-xs">
         <div className="flex items-center gap-2">
           {(["absolute", "yoy", "fy"] as ViewMode[]).map((m) => (
             <label key={m} className="flex items-center gap-1 cursor-pointer" style={{ color: "var(--font)" }}>
               <input
                 type="radio"
-                name={`mode-${codes[0]}`}
+                name={`mode-${activeNames[0] ?? "chart"}`}
                 value={m}
                 checked={mode === m}
                 onChange={() => setMode(m)}
@@ -96,27 +102,27 @@ export default function TrendChart({
           <Tooltip
             formatter={tooltipFormatter}
             contentStyle={{
-              background: "var(--bg-card)",
-              border: "1px solid var(--border-card)",
+              background:   "var(--bg-card)",
+              border:       "1px solid var(--border-card)",
               borderRadius: 8,
-              fontSize: 12,
-              color: "var(--font)",
+              fontSize:     12,
+              color:        "var(--font)",
             }}
           />
-          {seriesKeys.map((key, i) => (
-            hidden.has(key) ? null : (
+          {activeNames.map((name, i) =>
+            hidden.has(name) ? null : (
               <Line
-                key={key}
+                key={name}
                 type="monotone"
-                dataKey={key}
-                stroke={pickColor(key, i)}
+                dataKey={name}
+                stroke={pickColor(name, i)}
                 strokeWidth={2}
                 dot={{ r: 4, strokeWidth: 1 }}
                 activeDot={{ r: 6 }}
                 connectNulls
               />
             )
-          ))}
+          )}
         </LineChart>
       </ResponsiveContainer>
     </div>

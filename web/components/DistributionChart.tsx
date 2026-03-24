@@ -5,63 +5,58 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid,
   Tooltip, ResponsiveContainer,
 } from "recharts";
-import { CreditRow, buildSeries, formatCr, uniqueDates } from "@/lib/data";
+import { formatCr } from "@/lib/data";
 import { pickColor } from "@/lib/theme";
 import ChartLegend from "./ChartLegend";
+import type { ChartPoint } from "@/lib/types";
 
 interface DistributionChartProps {
-  rows: CreditRow[];
-  codes: string[];
-  labels: Record<string, string>;
-  pctLabel?: string;
-  dataOpts?: { psl?: boolean; stmt?: string };
+  absoluteData: ChartPoint[];
+  seriesNames:  string[];
+  pctLabel?:    string;
+  visibleSeries?: string[];   // optional subset — used by IndustryFilter
 }
 
 export default function DistributionChart({
-  rows, codes, labels, pctLabel = "% Share", dataOpts = {}
+  absoluteData, seriesNames, pctLabel = "% Share", visibleSeries,
 }: DistributionChartProps) {
-  const [mode, setMode] = useState<"absolute" | "pct">("absolute");
+  const [mode, setMode]     = useState<"absolute" | "pct">("absolute");
   const [hidden, setHidden] = useState<Set<string>>(new Set());
 
-  const seriesKeys = codes.map((c) => labels[c] ?? c);
-
-  const rawData = useMemo(() =>
-    buildSeries(rows, codes, labels, dataOpts),
-    [rows, codes, labels, dataOpts]
+  // Which series to actually render
+  const activeNames = useMemo(
+    () => (visibleSeries ? seriesNames.filter((n) => visibleSeries.includes(n)) : seriesNames),
+    [seriesNames, visibleSeries]
   );
 
   const chartData = useMemo(() => {
-    if (mode === "absolute") return rawData;
-    return rawData.map((point) => {
-      const total = seriesKeys.reduce((s, k) => s + (Number(point[k]) || 0), 0);
-      const pct: typeof point = { date: point.date };
-      seriesKeys.forEach((k) => {
+    if (mode === "absolute") return absoluteData;
+    return absoluteData.map((point) => {
+      const total = activeNames.reduce((s, k) => s + (Number(point[k]) || 0), 0);
+      const pct: ChartPoint = { date: point.date };
+      activeNames.forEach((k) => {
         pct[k] = total > 0 ? +((Number(point[k]) || 0) / total * 100).toFixed(1) : 0;
       });
       return pct;
     });
-  }, [rawData, seriesKeys, mode]);
+  }, [absoluteData, activeNames, mode]);
 
-  // Latest date breakdown table
-  const latestDates = uniqueDates(rows);
-  const latestDate  = latestDates[latestDates.length - 1];
+  // Summary table — latest data point
+  const latestRow   = absoluteData[absoluteData.length - 1];
+  const latestTotal = activeNames.reduce((s, k) => s + (Number(latestRow?.[k]) || 0), 0);
 
-  const latestRow = rawData[rawData.length - 1];
-  const latestTotal = seriesKeys.reduce((s, k) => s + (Number(latestRow?.[k]) || 0), 0);
-
-  const legendItems = seriesKeys.map((label, i) => ({
-    label,
-    color: pickColor(label, i),
-    active: !hidden.has(label),
+  const legendItems = activeNames.map((name, i) => ({
+    label:  name,
+    color:  pickColor(name, i),
+    active: !hidden.has(name),
   }));
 
-  const toggleSeries = (label: string) => {
+  const toggleSeries = (name: string) =>
     setHidden((prev) => {
       const next = new Set(prev);
-      next.has(label) ? next.delete(label) : next.add(label);
+      next.has(name) ? next.delete(name) : next.add(name);
       return next;
     });
-  };
 
   const formatY = (v: number) =>
     mode === "absolute" ? formatCr(v, 1) : `${v}%`;
@@ -74,13 +69,13 @@ export default function DistributionChart({
 
   return (
     <div>
-      {/* Controls */}
+      {/* Mode toggle */}
       <div className="flex gap-4 mb-3 text-xs">
         {(["absolute", "pct"] as const).map((m) => (
           <label key={m} className="flex items-center gap-1 cursor-pointer" style={{ color: "var(--font)" }}>
             <input
               type="radio"
-              name={`dist-${codes[0]}`}
+              name={`dist-${activeNames[0] ?? "chart"}`}
               value={m}
               checked={mode === m}
               onChange={() => setMode(m)}
@@ -111,22 +106,22 @@ export default function DistributionChart({
           <Tooltip
             formatter={tooltipFormatter}
             contentStyle={{
-              background: "var(--bg-card)",
-              border: "1px solid var(--border-card)",
+              background:   "var(--bg-card)",
+              border:       "1px solid var(--border-card)",
               borderRadius: 8,
-              fontSize: 12,
-              color: "var(--font)",
+              fontSize:     12,
+              color:        "var(--font)",
             }}
           />
-          {seriesKeys.map((key, i) =>
-            hidden.has(key) ? null : (
-              <Bar key={key} dataKey={key} stackId="a" fill={pickColor(key, i)} />
+          {activeNames.map((name, i) =>
+            hidden.has(name) ? null : (
+              <Bar key={name} dataKey={name} stackId="a" fill={pickColor(name, i)} />
             )
           )}
         </BarChart>
       </ResponsiveContainer>
 
-      {/* Summary table at latest date */}
+      {/* Summary table */}
       {latestRow && (
         <div className="mt-4 overflow-x-auto">
           <table className="w-full text-xs border-collapse">
@@ -138,17 +133,17 @@ export default function DistributionChart({
               </tr>
             </thead>
             <tbody>
-              {seriesKeys.map((key, i) => {
-                const val = Number(latestRow[key]) || 0;
+              {activeNames.map((name, i) => {
+                const val   = Number(latestRow[name]) || 0;
                 const share = latestTotal > 0 ? (val / latestTotal * 100).toFixed(1) : "—";
                 return (
-                  <tr key={key} style={{ borderBottom: "1px solid var(--border-card)" }}>
+                  <tr key={name} style={{ borderBottom: "1px solid var(--border-card)" }}>
                     <td className="py-1.5 px-2 flex items-center gap-1.5">
                       <span
                         className="inline-block w-2.5 h-2.5 rounded-sm flex-shrink-0"
-                        style={{ background: pickColor(key, i) }}
+                        style={{ background: pickColor(name, i) }}
                       />
-                      {key}
+                      {name}
                     </td>
                     <td className="py-1.5 px-2 text-right font-mono">{formatCr(val)}</td>
                     <td className="py-1.5 px-2 text-right font-mono">{share}%</td>

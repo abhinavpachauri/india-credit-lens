@@ -1,69 +1,60 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-import { CreditRow, buildSeries, uniqueDates } from "@/lib/data";
-
-// Stable empty opts to avoid new-object-on-every-render
-const EMPTY_OPTS = {};
+import type { ChartPoint } from "@/lib/types";
 
 type FilterMode = "topN" | "coverage" | "all";
 
 interface IndustryFilterProps {
-  rows: CreditRow[];
-  allCodes: string[];
-  labels: Record<string, string>;
-  dataOpts?: { psl?: boolean; stmt?: string };
-  onFilteredCodes: (codes: string[]) => void;
+  absoluteData:      ChartPoint[];
+  seriesNames:       string[];
+  onFilteredSeries:  (names: string[]) => void;
 }
 
 export default function IndustryFilter({
-  rows, allCodes, labels, dataOpts = EMPTY_OPTS, onFilteredCodes
+  absoluteData, seriesNames, onFilteredSeries,
 }: IndustryFilterProps) {
-  const [mode, setMode]     = useState<FilterMode>("topN");
-  const [topN, setTopN]     = useState(10);
+  const [mode, setMode]         = useState<FilterMode>("topN");
+  const [topN, setTopN]         = useState(10);
   const [coverage, setCoverage] = useState(80);
 
-  // Compute shares at latest date
+  // Compute each series' share at the latest date
   const shares = useMemo(() => {
-    const dates   = uniqueDates(rows);
-    const latest  = dates[dates.length - 1];
-    const series  = buildSeries(rows, allCodes, labels, dataOpts);
-    const latestPt = series[series.length - 1];
+    const latestPt = absoluteData[absoluteData.length - 1];
     if (!latestPt) return {} as Record<string, number>;
 
-    const total = allCodes.reduce(
-      (s, c) => s + (Number(latestPt[labels[c] ?? c]) || 0), 0
-    );
+    const total = seriesNames.reduce((s, n) => s + (Number(latestPt[n]) || 0), 0);
     const out: Record<string, number> = {};
-    allCodes.forEach((c) => {
-      out[c] = total > 0 ? (Number(latestPt[labels[c] ?? c]) || 0) / total * 100 : 0;
+    seriesNames.forEach((n) => {
+      out[n] = total > 0 ? (Number(latestPt[n]) || 0) / total * 100 : 0;
     });
     return out;
-  }, [rows, allCodes, labels, dataOpts]);
+  }, [absoluteData, seriesNames]);
 
-  const sortedCodes = useMemo(
-    () => [...allCodes].sort((a, b) => (shares[b] ?? 0) - (shares[a] ?? 0)),
-    [allCodes, shares]
+  // Sort series by share descending
+  const sortedNames = useMemo(
+    () => [...seriesNames].sort((a, b) => (shares[b] ?? 0) - (shares[a] ?? 0)),
+    [seriesNames, shares]
   );
 
+  // Apply filter mode
   const filtered = useMemo(() => {
-    if (mode === "all") return sortedCodes;
-    if (mode === "topN") return sortedCodes.slice(0, topN);
-    // coverage mode
+    if (mode === "all")  return sortedNames;
+    if (mode === "topN") return sortedNames.slice(0, topN);
     let cumulative = 0;
-    return sortedCodes.filter((c) => {
+    return sortedNames.filter((n) => {
       if (cumulative >= coverage) return false;
-      cumulative += shares[c] ?? 0;
+      cumulative += shares[n] ?? 0;
       return true;
     });
-  }, [mode, topN, coverage, sortedCodes, shares]);
+  }, [mode, topN, coverage, sortedNames, shares]);
 
-  // Propagate changes after render — useEffect, not useMemo
+  // Notify parent after render — useEffect avoids setState-during-render
   useEffect(() => {
-    onFilteredCodes(filtered);
+    onFilteredSeries(filtered);
   }, [filtered]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const coveredPct = filtered.reduce((s, c) => s + (shares[c] ?? 0), 0);
+  const coveredPct = filtered.reduce((s, n) => s + (shares[n] ?? 0), 0);
 
   return (
     <div
@@ -88,14 +79,14 @@ export default function IndustryFilter({
         <input
           type="number"
           min={1}
-          max={allCodes.length}
+          max={seriesNames.length}
           value={topN}
           onChange={(e) => setTopN(Number(e.target.value))}
           className="w-16 px-2 py-1 rounded border text-xs"
           style={{
             background: "var(--bg-card)",
-            border: "1px solid var(--border-card)",
-            color: "var(--font)",
+            border:     "1px solid var(--border-card)",
+            color:      "var(--font)",
           }}
         />
       )}
@@ -111,8 +102,8 @@ export default function IndustryFilter({
             className="w-16 px-2 py-1 rounded border text-xs"
             style={{
               background: "var(--bg-card)",
-              border: "1px solid var(--border-card)",
-              color: "var(--font)",
+              border:     "1px solid var(--border-card)",
+              color:      "var(--font)",
             }}
           />
           <span style={{ color: "var(--font-muted)" }}>%</span>
@@ -120,7 +111,7 @@ export default function IndustryFilter({
       )}
 
       <span style={{ color: "var(--font-muted)" }}>
-        Showing {filtered.length} of {allCodes.length} types covering{" "}
+        Showing {filtered.length} of {seriesNames.length} types covering{" "}
         <strong>{coveredPct.toFixed(1)}%</strong> of Industry
       </span>
     </div>
