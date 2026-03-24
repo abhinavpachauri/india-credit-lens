@@ -50,13 +50,19 @@ export default function AnnotationPanel({
 
   return (
     <div
-      className="mt-4 rounded-lg p-4 text-sm"
+      className="mt-4 p-4 text-sm"
       style={{
-        borderLeft:  `4px solid ${color}`,
-        background:  "var(--bg-page)",
-        border:      `1px solid ${color}30`,
-        borderLeftWidth: "4px",
-        borderLeftColor: color,
+        background:        "var(--bg-page)",
+        borderTopWidth:    "1px",
+        borderRightWidth:  "1px",
+        borderBottomWidth: "1px",
+        borderLeftWidth:   "4px",
+        borderStyle:       "solid",
+        borderTopColor:    `${color}30`,
+        borderRightColor:  `${color}30`,
+        borderBottomColor: `${color}30`,
+        borderLeftColor:   color,
+        borderRadius:      "0.5rem",
       }}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
