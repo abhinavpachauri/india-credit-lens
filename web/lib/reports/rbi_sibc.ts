@@ -36,6 +36,7 @@ const ANNOTATIONS: Record<string, SectionAnnotations> = {
         body:  "Micro & Small grew +31.2% YoY and Medium +22.3% — against Large at just +5.5%. " +
                "The credit opportunity has shifted decisively to mid-market origination.",
         implication: "MSME-focused NBFCs have structural runway. The data confirms the gap at scale, not just in the narrative.",
+        preferredMode: "yoy",
         effect: { highlight: ["Micro and Small", "Medium"] },
       },
     ],
@@ -66,6 +67,7 @@ const ANNOTATIONS: Record<string, SectionAnnotations> = {
         body:  "₹0.92L Cr → ₹4.01L Cr in 24 months (+337.9%). Gold prices rose ~25–30% but credit grew 4.4×. " +
                "This is volume expansion — more borrowers pledging gold — not collateral appreciation.",
         implication: "This pace of gold-secured credit growth is a leading indicator of household financial stress. It also signals a competitive window before larger banks saturate the category.",
+        preferredMode: "yoy",
         effect: { highlight: ["Loans against gold jewellery"] },
       },
       {
@@ -74,6 +76,7 @@ const ANNOTATIONS: Record<string, SectionAnnotations> = {
         body:  "+1.5% YoY after a historical trend of 25–30% growth. RBI's risk-weight intervention (Nov 2023) is the structural cause. " +
                "The plateau is regulatory, not cyclical.",
         implication: "Lenders with heavy revolving unsecured exposure should evaluate rotation into secured retail — vehicle, gold, and housing are all growing faster.",
+        preferredMode: "yoy",
         effect: { highlight: ["Credit Card Outstanding"], dash: ["Credit Card Outstanding"] },
       },
     ],
@@ -89,6 +92,7 @@ const ANNOTATIONS: Record<string, SectionAnnotations> = {
         body:  "PSL Housing +37.9% YoY (₹10.31L Cr) vs commercial housing loans +11.1%. " +
                "PSL Housing now represents 31.5% of total housing credit and is the fastest-growing PSL category.",
         implication: "Regulatory incentive and market growth are aligned. Efficient origination in the affordable housing segment provides both a subsidised cost of funds and a structural demand floor.",
+        preferredMode: "yoy",
         effect: { highlight: ["Housing"] },
       },
     ],
@@ -104,6 +108,7 @@ const ANNOTATIONS: Record<string, SectionAnnotations> = {
         body:  "All Engineering grew +35.9% YoY to ₹3.11L Cr — highest growth of any sub-sector above ₹1L Cr. " +
                "+60.3% over two years. PLI-linked supply-chain reshoring is the primary driver.",
         implication: "Manufacturing supply-chain finance — working capital, machinery loans, export credit — is the highest-velocity opportunity in the corporate credit segment today.",
+        preferredMode: "yoy",
         effect: { highlight: ["All Engineering"] },
       },
       {

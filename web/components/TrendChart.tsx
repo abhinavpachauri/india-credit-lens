@@ -17,6 +17,7 @@ interface TrendChartProps {
   pctLabel?:       string;
   visibleSeries?:  string[];          // optional subset — used by IndustryFilter
   highlightConfig?: AnnotationEffect | null;  // from active annotation
+  preferredMode?:  "absolute" | "yoy" | "fy" | null; // annotation overrides radio
 }
 
 /** Compute per-series visual style based on active annotation. */
@@ -38,9 +39,12 @@ type ViewMode = "absolute" | "yoy" | "fy";
 
 export default function TrendChart({
   absoluteData, growthData, seriesNames,
-  pctLabel = "% of Total", visibleSeries, highlightConfig,
+  pctLabel = "% of Total", visibleSeries, highlightConfig, preferredMode,
 }: TrendChartProps) {
   const [mode, setMode]     = useState<ViewMode>("absolute");
+
+  // When an annotation specifies a preferredMode, use it — otherwise use radio state
+  const effectiveMode: ViewMode = (preferredMode ?? mode) as ViewMode;
   const [hidden, setHidden] = useState<Set<string>>(new Set());
 
   // Which series to actually render
@@ -49,10 +53,10 @@ export default function TrendChart({
     [seriesNames, visibleSeries]
   );
 
-  // Switch between absolute and growth data based on mode
+  // Switch between absolute and growth data based on effectiveMode
   const seriesData = useMemo(
-    () => (mode === "absolute" ? absoluteData : growthData),
-    [mode, absoluteData, growthData]
+    () => (effectiveMode === "absolute" ? absoluteData : growthData),
+    [effectiveMode, absoluteData, growthData]
   );
 
   const legendItems = activeNames.map((name, i) => ({
@@ -69,11 +73,11 @@ export default function TrendChart({
     });
 
   const formatY = (v: number) =>
-    mode === "absolute" ? formatCr(v, 1) : `${v > 0 ? "+" : ""}${v.toFixed(1)}%`;
+    effectiveMode === "absolute" ? formatCr(v, 1) : `${v > 0 ? "+" : ""}${v.toFixed(1)}%`;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const tooltipFormatter = (value: any, name: any): [string, string] =>
-    mode === "absolute"
+    effectiveMode === "absolute"
       ? [formatCr(Number(value) || 0), String(name ?? "")]
       : [formatGrowth(Number(value) || 0), String(name ?? "")];
 
@@ -88,7 +92,7 @@ export default function TrendChart({
                 type="radio"
                 name={`mode-${activeNames[0] ?? "chart"}`}
                 value={m}
-                checked={mode === m}
+                checked={effectiveMode === m}
                 onChange={() => setMode(m)}
                 className="accent-blue-500"
               />
@@ -136,7 +140,7 @@ export default function TrendChart({
                 stroke={pickColor(name, i)}
                 strokeWidth={style.strokeWidth}
                 strokeDasharray={style.strokeDasharray}
-                strokeOpacity={style.opacity}
+                style={{ opacity: style.opacity }}
                 dot={{ r: 4, strokeWidth: 1, opacity: style.opacity }}
                 activeDot={{ r: 6 }}
                 connectNulls
