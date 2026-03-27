@@ -3,9 +3,9 @@
 import type { LensType, AnnotationState } from "@/hooks/useAnnotation";
 
 const LENS_CONFIG: Record<LensType, { label: string; color: string; bg: string }> = {
-  insights:      { label: "Insight",     color: "#2563EB", bg: "#EFF6FF" },
-  gaps:          { label: "Gap",         color: "#D97706", bg: "#FFFBEB" },
-  opportunities: { label: "Opportunity", color: "#16A34A", bg: "#F0FDF4" },
+  insights:      { label: "Insights",     color: "#2563EB", bg: "#EFF6FF" },
+  gaps:          { label: "Gaps",         color: "#D97706", bg: "#FFFBEB" },
+  opportunities: { label: "Opportunities", color: "#16A34A", bg: "#F0FDF4" },
 };
 
 interface AnnotationControlsProps {
@@ -45,7 +45,7 @@ export default function AnnotationControls({
               className="inline-block w-2 h-2 rounded-full"
               style={{ background: isActive ? "#fff" : color }}
             />
-            {label}s · {counts[lens]}
+            {label} · {counts[lens]}
           </button>
         );
       })}

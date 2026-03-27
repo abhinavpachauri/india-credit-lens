@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid,
   Tooltip, ResponsiveContainer,
@@ -16,6 +16,7 @@ interface DistributionChartProps {
   pctLabel?:        string;
   visibleSeries?:   string[];
   highlightConfig?: AnnotationEffect | null;
+  preferredMode?:   "absolute" | "yoy" | "fy" | null; // annotation overrides radio
 }
 
 function barOpacity(name: string, config: AnnotationEffect | null | undefined): number {
@@ -27,32 +28,55 @@ function barOpacity(name: string, config: AnnotationEffect | null | undefined): 
 }
 
 export default function DistributionChart({
-  absoluteData, seriesNames, pctLabel = "% Share", visibleSeries, highlightConfig,
+  absoluteData, seriesNames, pctLabel = "% Share", visibleSeries, highlightConfig, preferredMode,
 }: DistributionChartProps) {
-  const [mode, setMode]     = useState<"absolute" | "pct">("absolute");
+  const [mode, setMode] = useState<"absolute" | "pct">("absolute");
+
+  // yoy/fy annotations → show % share (relative view); absolute annotation → show ₹ Crore
+  const effectiveMode: "absolute" | "pct" =
+    preferredMode === "yoy" || preferredMode === "fy" ? "pct"
+    : preferredMode === "absolute" ? "absolute"
+    : mode;
   const [hidden, setHidden] = useState<Set<string>>(new Set());
 
-  // Which series to actually render
-  const activeNames = useMemo(
+  // Which series to actually render (base list from visibleSeries filter)
+  const baseNames = useMemo(
     () => (visibleSeries ? seriesNames.filter((n) => visibleSeries.includes(n)) : seriesNames),
     [seriesNames, visibleSeries]
   );
 
+  // When an annotation highlights specific series, focus only on those
+  const highlighted = highlightConfig?.highlight ?? [];
+  const activeNames = useMemo(
+    () => highlighted.length > 0 ? baseNames.filter((n) => highlighted.includes(n)) : baseNames,
+    [baseNames, highlighted]
+  );
+
+  // Auto-reset to absolute when a new annotation activates (user can override after)
+  useEffect(() => {
+    if (highlighted.length > 0) setMode("absolute");
+  }, [highlighted.join(",")]);
+
+  // When focused on highlighted series, use mode (user can switch); otherwise use effectiveMode
+  const chartMode: "absolute" | "pct" = highlighted.length > 0 ? mode : effectiveMode;
+
   const chartData = useMemo(() => {
-    if (mode === "absolute") return absoluteData;
+    if (chartMode === "absolute") return absoluteData;
     return absoluteData.map((point) => {
-      const total = activeNames.reduce((s, k) => s + (Number(point[k]) || 0), 0);
+      // Use baseNames (full series list) as denominator so % = share of full section total
+      const total = baseNames.reduce((s, k) => s + (Number(point[k]) || 0), 0);
       const pct: ChartPoint = { date: point.date };
       activeNames.forEach((k) => {
         pct[k] = total > 0 ? +((Number(point[k]) || 0) / total * 100).toFixed(1) : 0;
       });
       return pct;
     });
-  }, [absoluteData, activeNames, mode]);
+  }, [absoluteData, activeNames, baseNames, chartMode]);
 
   // Summary table — latest data point
+  // latestTotal uses baseNames so "Share" = % of full section, not % of highlighted subset
   const latestRow   = absoluteData[absoluteData.length - 1];
-  const latestTotal = activeNames.reduce((s, k) => s + (Number(latestRow?.[k]) || 0), 0);
+  const latestTotal = baseNames.reduce((s, k) => s + (Number(latestRow?.[k]) || 0), 0);
 
   const legendItems = activeNames.map((name, i) => ({
     label:  name,
@@ -68,11 +92,11 @@ export default function DistributionChart({
     });
 
   const formatY = (v: number) =>
-    mode === "absolute" ? formatCr(v, 1) : `${v}%`;
+    chartMode === "absolute" ? formatCr(v, 1) : `${v}%`;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const tooltipFormatter = (value: any, name: any): [string, string] =>
-    mode === "absolute"
+    chartMode === "absolute"
       ? [formatCr(Number(value) || 0), String(name ?? "")]
       : [`${Number(value || 0).toFixed(1)}%`, String(name ?? "")];
 
@@ -86,7 +110,7 @@ export default function DistributionChart({
               type="radio"
               name={`dist-${activeNames[0] ?? "chart"}`}
               value={m}
-              checked={mode === m}
+              checked={chartMode === m}
               onChange={() => setMode(m)}
               className="accent-blue-500"
             />
@@ -129,7 +153,7 @@ export default function DistributionChart({
                 dataKey={name}
                 stackId="a"
                 fill={pickColor(name, i)}
-                opacity={barOpacity(name, highlightConfig)}
+                opacity={highlighted.length > 0 ? 1 : barOpacity(name, highlightConfig)}
               />
             )
           )}

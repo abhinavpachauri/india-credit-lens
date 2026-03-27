@@ -42,6 +42,7 @@ export default function SectionWithAnnotations({ section, tab }: Props) {
         pctLabel={section.pctLabel}
         visibleSeries={visible}
         highlightConfig={ann.highlightConfig}
+        preferredMode={ann.activeAnnotation?.preferredMode ?? null}
       />
     );
   }
