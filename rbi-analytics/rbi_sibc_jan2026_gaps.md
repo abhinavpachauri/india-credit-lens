@@ -62,7 +62,7 @@ Gold Jewellery has grown from ₹0.92 L Cr (Jan 2024) to ₹4.01 L Cr (Jan 2026)
 The gold loan surge is presented as a product category statistic with no commentary on what it signals. Three explanations exist: (a) genuine demand for working capital / consumption smoothing, especially from lower-income households, (b) borrowers using gold to refinance unsecured debt as RBI tightens that market, (c) NBFCs aggressively expanding gold lending and banks competing. Any of these has material risk implications — for credit quality, systemic risk, and household balance sheets — that are invisible in the aggregate number.
 
 **What would be more honest:**
-Flag the gold loan growth as a risk signal requiring delinquency and purpose-of-borrowing data. State clearly that the 337% growth rate is not a "success" metric without understanding borrower stress.
+Flag the gold loan growth as a risk signal that needs delinquency data and borrower purpose data alongside it. The 337% growth rate is not a success story without knowing why people are borrowing.
 
 **Severity:** 🔴 High
 **Category:** `uncontextualised_positives` | `selective_omissions`
@@ -80,7 +80,7 @@ SIBC captures bank-to-NBFC credit — the wholesale funding leg. The end-borrowe
 Any analysis of services credit that does not call out the intermediary nature of the NBFC figure will misread where credit is actually deployed. The data suggests banks are increasingly lending to NBFCs rather than to end borrowers, which changes the risk profile (concentration to a small number of large NBFC counterparties) and obscures the true sectoral distribution.
 
 **What would be more honest:**
-Present the ₹19.05 L Cr NBFC figure with a clear footnote: "Wholesale bank-to-NBFC lending; end-borrower sector breakdown not available." Separately, use RBI's NBFC return data to reconstruct the end-sector picture.
+Present the ₹19.05 L Cr NBFC figure with a clear note: "This is wholesale bank-to-NBFC lending; what those NBFCs do with the money is not captured here." Separately, use RBI's NBFC return data to show where the money actually ends up.
 
 **Severity:** 🔴 High
 **Category:** `data_exclusion` | `metric_choice`

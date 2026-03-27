@@ -217,6 +217,19 @@ End with a **3-year playbook table**:
 - The systems view should reveal structural causes, not just describe observations
 - Opportunities should be specific enough to be actionable — "expand women's credit" is not an opportunity; "build a ₹2L → ₹10L graduation ladder for existing women business borrowers via proactive UBL offers at 12-month SBL repayment milestone" is
 
+**Writing style**
+
+Write like a knowledgeable colleague explaining something clearly — not a consulting deck being presented. The audience is a general banking professional: credit officers, product managers, branch bankers, analysts. They are smart but don't need jargon.
+
+Rules:
+- Plain English throughout. Avoid: "structural headwind", "collateral-first incumbents", "de facto credit enhancement", "evaluate rotation into", "orient primarily toward", "durable edge", "risk-adjusted returns", "mispricing"
+- Short sentences over compound ones. One idea per sentence.
+- Use the actual numbers. Specific figures are clearer than abstractions ("grew 5x faster" beats "significantly outpaced")
+- Say the uncomfortable thing directly. Don't soften risk findings with hedged language like "may warrant consideration"
+- Body text: what the data shows, in plain terms, with key numbers
+- Implication text: what this means practically for someone working in lending — not "lenders should consider" but "if your book is heavy on X, the data says Y"
+- Explain acronyms and schemes on first use (PLI = Production Linked Incentive, PMAY = government's affordable housing scheme, PSL = loans banks are required to make to certain sectors)
+
 ---
 
 ---

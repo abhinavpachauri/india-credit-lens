@@ -16,7 +16,7 @@ Top 5 segments by YoY growth differential (Jan 2025 → Jan 2026), filtered to s
 | 4 | Gems & Jewellery (Stmt 2) | 1.17 | +35.6% | +42.5% | Export-linked sector with working capital needs; cross-sell to gold loan base |
 | 5 | Vehicle Loans | 7.21 | +17.1% | +28.5% | Passenger vehicle volumes strong; EV financing underrepresented in bank books |
 
-**Key pattern:** The fastest-growing segments are split between distress-linked (gold), policy-linked (PSL housing), and capex/consumption-linked (engineering, vehicles). Only engineering is a pure macro growth story. Gold growth is real but requires careful portfolio quality monitoring.
+**Key pattern:** The fastest-growing segments split into three types: distress-linked (gold), policy-linked (PSL housing), and capex/consumption-linked (engineering, vehicles). Only engineering is a straightforward economic growth story. Gold growth is real but the borrower quality question needs watching.
 
 ---
 
@@ -32,7 +32,7 @@ Segments with low current share but upward trajectory — potential structural u
 | Education Loans (PSL) | 0.78 | — | +32.2% | Rising enrollment + study-abroad demand + PSL classification makes this a recurring-demand, government-backstopped segment with thin current penetration |
 | Priority Sector Housing | 10.31 | 31.5% of Housing | +36.2% | Affordable housing demand (EWS/LIG) is structurally undersupplied; PMAY and state schemes create demand floors that bank credit has not kept pace with |
 
-**Most actionable underweight:** Micro & Small Enterprises — data confirms both fastest MSME growth rate (+31.2% YoY) and large absolute base (₹10.31 L Cr) growing, which de-risks origination relative to greenfield categories.
+**Most actionable underweight:** Micro & Small Enterprises — fastest growth rate (+31.2% YoY) combined with a large absolute base (₹10.31 L Cr). This makes it lower risk to enter than a small, fast-growing category starting from near zero.
 
 ---
 
@@ -68,7 +68,7 @@ Standard gold loan underwriting prices risk based on: (a) LTV relative to gold p
 - New borrowers in a gold loan product are predominantly distress borrowers using liquid collateral — this borrower profile has a different repayment behaviour than established gold loan customers
 - At ₹4 L Cr and ~75% LTV, gross gold at-risk ≈ ₹5.3 L Cr. A 10% default rate = ₹0.4 L Cr gross loss before auction recovery — manageable, but growing
 
-**Commercial opportunity:** A lender that can underwrite gold loan quality more granularly (borrower income, purpose, repayment history, geography of origin) can price more accurately and avoid the poorest-quality cohorts while competing for the high-quality ones.
+**Commercial opportunity:** A lender that checks borrower income, purpose, repayment history, and geography — not just LTV — can pick the better-quality borrowers within the same market and price more accurately than competitors who only look at the gold value.
 
 ### 4B. All Engineering / Manufacturing: Risk Overpriced
 
@@ -76,13 +76,13 @@ Engineering credit (₹3.11 L Cr) is growing +35.9% YoY, but this segment histor
 
 **Evidence:** The 60.3% 2-year growth is a broad-based trend, not concentrated in a single sub-sector. Electronics (+25.6%) and Other Engineering (+38.8%) are both accelerating, suggesting diversified demand rather than a single capex project cycle.
 
-**Commercial opportunity:** A lender with legacy risk parameters calibrated to 2014-era infrastructure NPAs is systematically over-pricing supply-chain working capital and equipment finance for PLI-linked manufacturers. Repricing to current risk realised = volume gain.
+**Commercial opportunity:** A lender still using risk models from the 2014 infrastructure NPA cycle is charging too much for working capital and equipment loans to PLI-linked manufacturers. The risk profile of this segment today is materially better. Updating your pricing = volume gain.
 
 ### 4C. PSL Housing: Underpriced Risk Is Actually Low Risk
 
 Priority Sector Housing (₹10.31 L Cr) growing +37.9% YoY carries government-backed demand (PMAY), affordable ticket sizes (smaller loan = lower LTV = lower absolute loss given default), and strong repayment cultures in target geographies. Yet many lenders apply a uniform spread over housing loan benchmark rates regardless of PSL vs non-PSL.
 
-**Commercial opportunity:** Dedicated PSL Housing origination infrastructure — particularly in Tier 3/4 towns and semi-urban clusters — with a lower-cost operating model (co-lending, DSA networks, fintech partnerships) can deliver better risk-adjusted returns than equivalent commercial housing at current market spreads.
+**Commercial opportunity:** Building a low-cost origination network in Tier 3/4 towns — through agents, business correspondents, or co-lending with housing finance companies — can deliver better returns than commercial housing at current spreads, because the demand is deeper and the competition is thinner.
 
 ---
 
@@ -99,7 +99,7 @@ SIBC is a national aggregate — geographic breakdown is not available in this d
 ### Frontier geography
 The data growth rates imply the frontier is **not** in metro markets. The fastest-growing segments (Micro & Small, PSL Housing, Gold Jewellery) are semi-urban and rural products. The frontier is geographic depth — going from 25 cities to 200 cities for MSME and affordable housing, not geographic expansion to new metros.
 
-**Strategic inference:** A lender whose branch economics require Tier 1/2 city catchments is structurally excluded from the highest-growth opportunities in this data.
+**Strategic inference:** A lender whose economics only work in large cities is locked out of the fastest-growing opportunities in this data. The volume growth is in semi-urban and rural markets.
 
 ---
 
