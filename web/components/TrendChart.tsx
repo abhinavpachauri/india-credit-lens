@@ -139,6 +139,9 @@ export default function TrendChart({
             width={90}
           />
           <Tooltip
+            labelFormatter={(ts: number) =>
+              new Date(ts).toLocaleDateString("en-IN", { month: "short", year: "numeric" })
+            }
             formatter={tooltipFormatter}
             contentStyle={{
               background:   "var(--bg-card)",
