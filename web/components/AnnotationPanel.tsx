@@ -50,7 +50,7 @@ export default function AnnotationPanel({
 
   return (
     <div
-      className="mt-4 p-4 text-sm"
+      className="mt-4 p-5"
       style={{
         background:        "var(--bg-page)",
         borderTopWidth:    "1px",
@@ -67,11 +67,11 @@ export default function AnnotationPanel({
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      {/* Header row: lens label + navigation + close */}
-      <div className="flex items-center justify-between mb-2">
+      {/* Header row: lens badge + navigation + close */}
+      <div className="flex items-center justify-between mb-3">
         <span
-          className="text-xs font-semibold uppercase tracking-wide"
-          style={{ color }}
+          className="text-xs font-bold uppercase tracking-widest px-2 py-0.5 rounded-full"
+          style={{ color, background: `${color}18` }}
         >
           {label}
         </span>
@@ -83,7 +83,7 @@ export default function AnnotationPanel({
               <button
                 onClick={prev}
                 disabled={activeIndex === 0}
-                className="px-1.5 py-0.5 rounded disabled:opacity-30"
+                className="px-2 py-0.5 rounded disabled:opacity-30"
                 style={{ border: `1px solid var(--border-card)` }}
               >
                 ‹
@@ -92,7 +92,7 @@ export default function AnnotationPanel({
               <button
                 onClick={next}
                 disabled={activeIndex === total - 1}
-                className="px-1.5 py-0.5 rounded disabled:opacity-30"
+                className="px-2 py-0.5 rounded disabled:opacity-30"
                 style={{ border: `1px solid var(--border-card)` }}
               >
                 ›
@@ -103,7 +103,7 @@ export default function AnnotationPanel({
           {/* Close */}
           <button
             onClick={() => setLens(activeLens)}
-            className="text-xs px-1.5 py-0.5 rounded"
+            className="text-xs px-2 py-0.5 rounded"
             style={{ color: "var(--font-muted)", border: "1px solid var(--border-card)" }}
           >
             ✕
@@ -112,31 +112,36 @@ export default function AnnotationPanel({
       </div>
 
       {/* Title */}
-      <p className="font-semibold mb-1" style={{ color: "var(--font)" }}>
+      <p className="text-base font-bold mb-2 leading-snug" style={{ color: "var(--font)" }}>
         {activeAnnotation.title}
       </p>
 
       {/* Body */}
-      <p className="leading-relaxed" style={{ color: "var(--font)", fontSize: "0.8rem" }}>
+      <p className="text-sm leading-relaxed" style={{ color: "var(--font)" }}>
         {activeAnnotation.body}
       </p>
 
       {/* Implication */}
       {activeAnnotation.implication && (
-        <p
-          className="mt-2 pt-2 text-xs leading-relaxed italic"
-          style={{
-            color:       "var(--font-muted)",
-            borderTop:   "1px solid var(--border-card)",
-          }}
+        <div
+          className="mt-4 pt-4"
+          style={{ borderTop: "1px solid var(--border-card)" }}
         >
-          For lenders: {activeAnnotation.implication}
-        </p>
+          <p
+            className="text-xs font-bold uppercase tracking-widest mb-1.5"
+            style={{ color }}
+          >
+            For lenders
+          </p>
+          <p className="text-sm leading-relaxed" style={{ color: "var(--font)" }}>
+            {activeAnnotation.implication}
+          </p>
+        </div>
       )}
 
       {/* Mobile swipe hint — only show on first annotation */}
       {total > 1 && activeIndex === 0 && (
-        <p className="mt-2 text-xs text-center" style={{ color: "var(--font-muted)" }}>
+        <p className="mt-3 text-xs text-center" style={{ color: "var(--font-muted)" }}>
           swipe to navigate
         </p>
       )}
