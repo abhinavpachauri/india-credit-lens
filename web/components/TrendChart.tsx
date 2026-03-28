@@ -59,6 +59,19 @@ export default function TrendChart({
     [effectiveMode, absoluteData, growthData]
   );
 
+  // Proportional time axis: collect timestamps from current dataset
+  const tsTicks = useMemo(
+    () => seriesData.map((p) => p._ts as number).filter((t) => typeof t === "number" && t > 0),
+    [seriesData]
+  );
+  const tsDomain = useMemo(
+    (): [number, number] =>
+      tsTicks.length >= 2
+        ? [tsTicks[0], tsTicks[tsTicks.length - 1]]
+        : [0, 1],
+    [tsTicks]
+  );
+
   const legendItems = activeNames.map((name, i) => ({
     label:  name,
     color:  pickColor(name, i),
@@ -110,9 +123,8 @@ export default function TrendChart({
           <XAxis
             dataKey="_ts"
             type="number"
-            scale="time"
-            domain={["dataMin", "dataMax"]}
-            ticks={seriesData.map((p) => p._ts as number).filter(Boolean)}
+            domain={tsDomain}
+            ticks={tsTicks}
             tickFormatter={(ts: number) =>
               new Date(ts).toLocaleDateString("en-IN", { month: "short", year: "numeric" })
             }
