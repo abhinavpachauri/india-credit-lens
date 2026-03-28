@@ -101,7 +101,7 @@ export default function TrendChart({
       : payload;
     if (!visible.length) return null;
     return (
-      <div style={{ background: "var(--bg-card)", border: "1px solid var(--border-card)", borderRadius: 8, fontSize: 12, color: "var(--font)", padding: "8px 12px" }}>
+      <div style={{ background: "var(--bg-card)", border: "1px solid var(--border-card)", borderRadius: 8, fontSize: 13, color: "var(--font)", padding: "10px 14px" }}>
         <p style={{ marginBottom: 4, fontWeight: 600 }}>
           {new Date(Number(label)).toLocaleDateString("en-IN", { month: "short", year: "numeric" })}
         </p>
@@ -123,15 +123,15 @@ export default function TrendChart({
   return (
     <div>
       {/* Mode toggle — hidden when annotation locks the mode */}
-      <div className="flex flex-wrap gap-4 mb-3 text-xs">
+      <div className="flex flex-wrap gap-4 mb-3 text-sm">
         {preferredMode ? (
           <span style={{ color: "var(--font-muted)" }}>
             Showing: <strong style={{ color: "var(--font)" }}>{modeLabel[effectiveMode]}</strong>
           </span>
         ) : (
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             {(["absolute", "yoy", "fy"] as ViewMode[]).map((m) => (
-              <label key={m} className="flex items-center gap-1 cursor-pointer" style={{ color: "var(--font)" }}>
+              <label key={m} className="flex items-center gap-1.5 cursor-pointer" style={{ color: "var(--font)" }}>
                 <input
                   type="radio"
                   name={`mode-${activeNames[0] ?? "chart"}`}
@@ -149,7 +149,7 @@ export default function TrendChart({
 
       <ChartLegend items={legendItems} onToggle={toggleSeries} />
 
-      <ResponsiveContainer width="100%" height={300}>
+      <ResponsiveContainer width="100%" height={320}>
         <LineChart data={seriesData} margin={{ top: 4, right: 16, bottom: 4, left: 0 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="var(--grid)" />
           <XAxis
@@ -160,15 +160,15 @@ export default function TrendChart({
             tickFormatter={(ts: number) =>
               new Date(ts).toLocaleDateString("en-IN", { month: "short", year: "numeric" })
             }
-            tick={{ fontSize: 11, fill: "var(--font-muted)" }}
+            tick={{ fontSize: 12, fill: "var(--font-muted)" }}
             tickLine={false}
           />
           <YAxis
             tickFormatter={formatY}
-            tick={{ fontSize: 10, fill: "var(--font-muted)" }}
+            tick={{ fontSize: 12, fill: "var(--font-muted)" }}
             tickLine={false}
             axisLine={false}
-            width={90}
+            width={96}
           />
           <Tooltip content={<CustomTooltip />} />
           {activeNames.map((name, i) => {

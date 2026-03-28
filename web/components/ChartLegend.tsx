@@ -13,12 +13,12 @@ interface ChartLegendProps {
 
 export default function ChartLegend({ items, onToggle }: ChartLegendProps) {
   return (
-    <div className="flex flex-wrap gap-3 mb-3">
+    <div className="flex flex-wrap gap-2 mb-3">
       {items.map((item) => (
         <button
           key={item.label}
           onClick={() => onToggle(item.label)}
-          className="flex items-center gap-1.5 text-xs rounded px-2 py-1 transition-opacity"
+          className="flex items-center gap-2 text-sm rounded px-2.5 py-1 transition-opacity"
           style={{
             opacity: item.active ? 1 : 0.35,
             background: "var(--bg-card)",

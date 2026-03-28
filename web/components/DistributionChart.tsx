@@ -103,9 +103,9 @@ export default function DistributionChart({
   return (
     <div>
       {/* Mode toggle */}
-      <div className="flex gap-4 mb-3 text-xs">
+      <div className="flex gap-4 mb-3 text-sm">
         {(["absolute", "pct"] as const).map((m) => (
-          <label key={m} className="flex items-center gap-1 cursor-pointer" style={{ color: "var(--font)" }}>
+          <label key={m} className="flex items-center gap-1.5 cursor-pointer" style={{ color: "var(--font)" }}>
             <input
               type="radio"
               name={`dist-${activeNames[0] ?? "chart"}`}
@@ -121,20 +121,20 @@ export default function DistributionChart({
 
       <ChartLegend items={legendItems} onToggle={toggleSeries} />
 
-      <ResponsiveContainer width="100%" height={300}>
+      <ResponsiveContainer width="100%" height={320}>
         <BarChart data={chartData} margin={{ top: 4, right: 16, bottom: 4, left: 0 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="var(--grid)" />
           <XAxis
             dataKey="date"
-            tick={{ fontSize: 11, fill: "var(--font-muted)" }}
+            tick={{ fontSize: 12, fill: "var(--font-muted)" }}
             tickLine={false}
           />
           <YAxis
             tickFormatter={formatY}
-            tick={{ fontSize: 10, fill: "var(--font-muted)" }}
+            tick={{ fontSize: 12, fill: "var(--font-muted)" }}
             tickLine={false}
             axisLine={false}
-            width={90}
+            width={96}
           />
           <Tooltip
             formatter={tooltipFormatter}
@@ -142,7 +142,7 @@ export default function DistributionChart({
               background:   "var(--bg-card)",
               border:       "1px solid var(--border-card)",
               borderRadius: 8,
-              fontSize:     12,
+              fontSize:     13,
               color:        "var(--font)",
             }}
           />
@@ -163,12 +163,12 @@ export default function DistributionChart({
       {/* Summary table */}
       {latestRow && (
         <div className="mt-4 overflow-x-auto">
-          <table className="w-full text-xs border-collapse">
+          <table className="w-full text-sm border-collapse">
             <thead>
               <tr style={{ borderBottom: "1px solid var(--border-card)" }}>
-                <th className="text-left py-1.5 px-2 font-medium" style={{ color: "var(--font-muted)" }}>Segment</th>
-                <th className="text-right py-1.5 px-2 font-medium" style={{ color: "var(--font-muted)" }}>Outstanding</th>
-                <th className="text-right py-1.5 px-2 font-medium" style={{ color: "var(--font-muted)" }}>Share</th>
+                <th className="text-left py-2 px-2 text-xs font-semibold uppercase tracking-wide" style={{ color: "var(--font-muted)" }}>Segment</th>
+                <th className="text-right py-2 px-2 text-xs font-semibold uppercase tracking-wide" style={{ color: "var(--font-muted)" }}>Outstanding</th>
+                <th className="text-right py-2 px-2 text-xs font-semibold uppercase tracking-wide" style={{ color: "var(--font-muted)" }}>Share</th>
               </tr>
             </thead>
             <tbody>
@@ -177,22 +177,22 @@ export default function DistributionChart({
                 const share = latestTotal > 0 ? (val / latestTotal * 100).toFixed(1) : "—";
                 return (
                   <tr key={name} style={{ borderBottom: "1px solid var(--border-card)" }}>
-                    <td className="py-1.5 px-2 flex items-center gap-1.5">
+                    <td className="py-2 px-2 flex items-center gap-2">
                       <span
-                        className="inline-block w-2.5 h-2.5 rounded-sm flex-shrink-0"
+                        className="inline-block w-3 h-3 rounded-sm flex-shrink-0"
                         style={{ background: pickColor(name, i) }}
                       />
                       {name}
                     </td>
-                    <td className="py-1.5 px-2 text-right font-mono">{formatCr(val)}</td>
-                    <td className="py-1.5 px-2 text-right font-mono">{share}%</td>
+                    <td className="py-2 px-2 text-right font-mono">{formatCr(val)}</td>
+                    <td className="py-2 px-2 text-right font-mono">{share}%</td>
                   </tr>
                 );
               })}
-              <tr className="font-semibold">
-                <td className="py-1.5 px-2">Total</td>
-                <td className="py-1.5 px-2 text-right font-mono">{formatCr(latestTotal)}</td>
-                <td className="py-1.5 px-2 text-right">100%</td>
+              <tr className="font-semibold" style={{ borderTop: "2px solid var(--border-card)" }}>
+                <td className="py-2 px-2">Total</td>
+                <td className="py-2 px-2 text-right font-mono">{formatCr(latestTotal)}</td>
+                <td className="py-2 px-2 text-right">100%</td>
               </tr>
             </tbody>
           </table>
