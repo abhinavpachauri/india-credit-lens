@@ -101,7 +101,7 @@ export function buildSeries(
   const filtered = rowsForCodes(rows, codes, opts);
 
   return dates.map((date) => {
-    const point: ChartPoint = { date: formatDate(date) };
+    const point: ChartPoint = { date: formatDate(date), _ts: new Date(date).getTime() };
     codes.forEach((code) => {
       const row = filtered.find((r) => r.code === code && r.date === date);
       point[labels[code] ?? code] = row?.outstanding_cr ?? null;
@@ -132,25 +132,30 @@ export function buildGrowthSeries(
 
     let prevDate: string | undefined;
     if (mode === "yoy") {
-      // Find date from same month previous year
+      // Exact same month, previous calendar year — no fallback
       prevDate = dates.find((d) => {
         const dy = new Date(d).getFullYear();
         const dm = new Date(d).getMonth();
         return dy === currYear - 1 && dm === currMonth;
-      }) ?? dates[i - 1];
+      });
     } else {
-      // FY: find nearest March-end of previous fiscal year
-      const fyStartYear = currMonth >= 3 ? currYear : currYear - 1;
+      // FY growth = growth since the most recent March-end (start of current fiscal year).
+      // Previous March-end year:
+      //   - currMonth >= Apr (3): we're mid-FY, previous March = this calendar year (currYear)
+      //   - currMonth < Apr (0,1,2): we're in the Jan–Mar tail, previous March = currYear - 1
+      // e.g. Jan 2025 → Mar 2024; Mar 2025 → Mar 2024; Jan 2026 → Mar 2025
+      const prevMarchYear = currMonth >= 3 ? currYear : currYear - 1;
       prevDate = dates.find((d) => {
         const dy = new Date(d).getFullYear();
         const dm = new Date(d).getMonth();
-        return dy === fyStartYear - 1 && dm === 2; // March = 2
-      }) ?? dates[0];
+        return dy === prevMarchYear && dm === 2; // March = month 2
+      });
     }
 
+    // Skip if no valid comparison period exists — emit null rather than a wrong number
     if (!prevDate || prevDate === currDate) continue;
 
-    const point: ChartPoint = { date: formatDate(currDate) };
+    const point: ChartPoint = { date: formatDate(currDate), _ts: new Date(currDate).getTime() };
     codes.forEach((code) => {
       const curr = filtered.find((r) => r.code === code && r.date === currDate)?.outstanding_cr;
       const prev = filtered.find((r) => r.code === code && r.date === prevDate)?.outstanding_cr;

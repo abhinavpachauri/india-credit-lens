@@ -108,7 +108,14 @@ export default function TrendChart({
         <LineChart data={seriesData} margin={{ top: 4, right: 16, bottom: 4, left: 0 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="var(--grid)" />
           <XAxis
-            dataKey="date"
+            dataKey="_ts"
+            type="number"
+            scale="time"
+            domain={["dataMin", "dataMax"]}
+            ticks={seriesData.map((p) => p._ts as number).filter(Boolean)}
+            tickFormatter={(ts: number) =>
+              new Date(ts).toLocaleDateString("en-IN", { month: "short", year: "numeric" })
+            }
             tick={{ fontSize: 11, fill: "var(--font-muted)" }}
             tickLine={false}
           />
@@ -143,7 +150,7 @@ export default function TrendChart({
                 style={{ opacity: style.opacity }}
                 dot={{ r: 4, strokeWidth: 1, opacity: style.opacity }}
                 activeDot={{ r: 6 }}
-                connectNulls
+                connectNulls={effectiveMode === "absolute"}
               />
             );
           })}
