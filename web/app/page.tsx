@@ -63,6 +63,37 @@ export default function Dashboard() {
             <span className="font-semibold" style={{ color: "#4e8ef7" }}>India Credit Lens</span>
             {" "}— More reports coming soon
           </p>
+          <p className="mt-3">
+            <button
+              onClick={() => {
+                // Export the processed data model (no annotations) for Claude analysis pipeline
+                const exportData = {
+                  report:   report.id,
+                  source:   report.source,
+                  dataDate: report.dataDate,
+                  sections: report.sections.map((s) => ({
+                    id:           s.id,
+                    title:        s.title,
+                    seriesNames:  s.seriesNames,
+                    absoluteData: s.absoluteData,
+                    growthData:   s.growthData,
+                    fyData:       s.fyData,
+                  })),
+                };
+                const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: "application/json" });
+                const url  = URL.createObjectURL(blob);
+                const a    = document.createElement("a");
+                a.href     = url;
+                a.download = `${report.id}_sections_${report.dataDate}.json`;
+                a.click();
+                URL.revokeObjectURL(url);
+              }}
+              className="text-xs underline cursor-pointer"
+              style={{ color: "var(--font-muted)" }}
+            >
+              Export data model
+            </button>
+          </p>
         </footer>
       </main>
     </div>
