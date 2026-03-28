@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useAnnotation }    from "@/hooks/useAnnotation";
 import { SEC_COLORS }       from "@/lib/theme";
 import SectionCard          from "./SectionCard";
@@ -19,6 +19,9 @@ interface Props {
 
 export default function SectionWithAnnotations({ section, tab }: Props) {
   const ann = useAnnotation(section);
+
+  // Deselect annotation when switching tabs or distribution/trend view
+  useEffect(() => { ann.reset(); }, [tab]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Only used for filterable sections (Industry by Type)
   const [visibleSeries, setVisibleSeries] = useState<string[]>([]);

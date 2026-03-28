@@ -15,6 +15,7 @@ export interface AnnotationState {
   };
   total:   number;
   setLens: (lens: LensType) => void;
+  reset:   () => void;
   next:    () => void;
   prev:    () => void;
 }
@@ -43,6 +44,11 @@ export function useAnnotation(section: ReportSection): AnnotationState {
     });
   }, []);
 
+  const reset = useCallback(() => {
+    setActiveLensState(null);
+    setActiveIndex(0);
+  }, []);
+
   const next = useCallback(() =>
     setActiveIndex((i) => Math.min(i + 1, total - 1)), [total]);
 
@@ -52,6 +58,6 @@ export function useAnnotation(section: ReportSection): AnnotationState {
   return {
     activeLens, activeIndex, activeAnnotation,
     highlightConfig, counts, total,
-    setLens, next, prev,
+    setLens, reset, next, prev,
   };
 }

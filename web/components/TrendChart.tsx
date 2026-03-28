@@ -91,31 +91,60 @@ export default function TrendChart({
   const formatY = (v: number) =>
     effectiveMode === "absolute" ? formatCr(v, 1) : `${v > 0 ? "+" : ""}${v.toFixed(1)}%`;
 
+  // Custom tooltip — filters to highlighted series only when an annotation is active
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const tooltipFormatter = (value: any, name: any): [string, string] =>
-    effectiveMode === "absolute"
-      ? [formatCr(Number(value) || 0), String(name ?? "")]
-      : [formatGrowth(Number(value) || 0), String(name ?? "")];
+  const CustomTooltip = ({ active, payload, label }: any) => {
+    if (!active || !payload?.length) return null;
+    const highlighted = highlightConfig?.highlight;
+    const visible = highlighted?.length
+      ? payload.filter((p: any) => highlighted.includes(p.dataKey))
+      : payload;
+    if (!visible.length) return null;
+    return (
+      <div style={{ background: "var(--bg-card)", border: "1px solid var(--border-card)", borderRadius: 8, fontSize: 12, color: "var(--font)", padding: "8px 12px" }}>
+        <p style={{ marginBottom: 4, fontWeight: 600 }}>
+          {new Date(Number(label)).toLocaleDateString("en-IN", { month: "short", year: "numeric" })}
+        </p>
+        {visible.map((p: any) => (
+          <p key={p.dataKey} style={{ color: p.color, margin: "2px 0" }}>
+            {p.name}: {effectiveMode === "absolute" ? formatCr(Number(p.value) || 0) : formatGrowth(Number(p.value) || 0)}
+          </p>
+        ))}
+      </div>
+    );
+  };
+
+  const modeLabel: Record<ViewMode, string> = {
+    absolute: "Absolute",
+    yoy:      "YoY Growth",
+    fy:       "FY Growth",
+  };
 
   return (
     <div>
-      {/* Mode toggle */}
+      {/* Mode toggle — hidden when annotation locks the mode */}
       <div className="flex flex-wrap gap-4 mb-3 text-xs">
-        <div className="flex items-center gap-2">
-          {(["absolute", "yoy", "fy"] as ViewMode[]).map((m) => (
-            <label key={m} className="flex items-center gap-1 cursor-pointer" style={{ color: "var(--font)" }}>
-              <input
-                type="radio"
-                name={`mode-${activeNames[0] ?? "chart"}`}
-                value={m}
-                checked={effectiveMode === m}
-                onChange={() => setMode(m)}
-                className="accent-blue-500"
-              />
-              {m === "absolute" ? "Absolute" : m === "yoy" ? "YoY Growth" : "FY Growth"}
-            </label>
-          ))}
-        </div>
+        {preferredMode ? (
+          <span style={{ color: "var(--font-muted)" }}>
+            Showing: <strong style={{ color: "var(--font)" }}>{modeLabel[effectiveMode]}</strong>
+          </span>
+        ) : (
+          <div className="flex items-center gap-2">
+            {(["absolute", "yoy", "fy"] as ViewMode[]).map((m) => (
+              <label key={m} className="flex items-center gap-1 cursor-pointer" style={{ color: "var(--font)" }}>
+                <input
+                  type="radio"
+                  name={`mode-${activeNames[0] ?? "chart"}`}
+                  value={m}
+                  checked={effectiveMode === m}
+                  onChange={() => setMode(m)}
+                  className="accent-blue-500"
+                />
+                {modeLabel[m]}
+              </label>
+            ))}
+          </div>
+        )}
       </div>
 
       <ChartLegend items={legendItems} onToggle={toggleSeries} />
@@ -141,19 +170,7 @@ export default function TrendChart({
             axisLine={false}
             width={90}
           />
-          <Tooltip
-            labelFormatter={(ts) =>
-              new Date(Number(ts)).toLocaleDateString("en-IN", { month: "short", year: "numeric" })
-            }
-            formatter={tooltipFormatter}
-            contentStyle={{
-              background:   "var(--bg-card)",
-              border:       "1px solid var(--border-card)",
-              borderRadius: 8,
-              fontSize:     12,
-              color:        "var(--font)",
-            }}
-          />
+          <Tooltip content={<CustomTooltip />} />
           {activeNames.map((name, i) => {
             if (hidden.has(name)) return null;
             const style = seriesStyle(name, highlightConfig);
