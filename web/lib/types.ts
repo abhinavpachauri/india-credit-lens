@@ -52,6 +52,7 @@ export interface ReportSection {
   accentIndex:  number;           // index into SEC_COLORS[]
   absoluteData: ChartPoint[];     // ₹ Crore values over time
   growthData:   ChartPoint[];     // YoY % growth over time
+  fyData:       ChartPoint[];     // FY-to-date % growth (vs previous March-end)
   seriesNames:  string[];         // ordered list — drives legend + colour assignment
   pctLabel:     string;           // label for the % radio button in distribution view
   filterable?:  boolean;          // true → render with IndustryFilter (large series sets)

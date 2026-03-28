@@ -13,6 +13,7 @@ import type { ChartPoint, AnnotationEffect } from "@/lib/types";
 interface TrendChartProps {
   absoluteData:    ChartPoint[];
   growthData:      ChartPoint[];
+  fyData:          ChartPoint[];
   seriesNames:     string[];
   pctLabel?:       string;
   visibleSeries?:  string[];          // optional subset — used by IndustryFilter
@@ -38,7 +39,7 @@ function seriesStyle(name: string, config: AnnotationEffect | null | undefined) 
 type ViewMode = "absolute" | "yoy" | "fy";
 
 export default function TrendChart({
-  absoluteData, growthData, seriesNames,
+  absoluteData, growthData, fyData = [], seriesNames,
   pctLabel = "% of Total", visibleSeries, highlightConfig, preferredMode,
 }: TrendChartProps) {
   const [mode, setMode]     = useState<ViewMode>("absolute");
@@ -53,15 +54,17 @@ export default function TrendChart({
     [seriesNames, visibleSeries]
   );
 
-  // Switch between absolute and growth data based on effectiveMode
+  // Switch between absolute, YoY, and FY data based on effectiveMode
   const seriesData = useMemo(
-    () => (effectiveMode === "absolute" ? absoluteData : growthData),
-    [effectiveMode, absoluteData, growthData]
+    () => effectiveMode === "absolute" ? absoluteData
+        : effectiveMode === "fy"       ? fyData
+        :                                growthData,
+    [effectiveMode, absoluteData, growthData, fyData]
   );
 
   // Proportional time axis: collect timestamps from current dataset
   const tsTicks = useMemo(
-    () => seriesData.map((p) => p._ts as number).filter((t) => typeof t === "number" && t > 0),
+    () => (seriesData ?? []).map((p) => p._ts as number).filter((t) => typeof t === "number" && t > 0),
     [seriesData]
   );
   const tsDomain = useMemo(
@@ -139,8 +142,8 @@ export default function TrendChart({
             width={90}
           />
           <Tooltip
-            labelFormatter={(ts: number) =>
-              new Date(ts).toLocaleDateString("en-IN", { month: "short", year: "numeric" })
+            labelFormatter={(ts) =>
+              new Date(Number(ts)).toLocaleDateString("en-IN", { month: "short", year: "numeric" })
             }
             formatter={tooltipFormatter}
             contentStyle={{

@@ -40,6 +40,7 @@ export function buildSections(_rows: TemplateRow[]): ReportSection[] {
     accentIndex: 0,
     absoluteData: [],   // TODO: ChartPoint[] — [{date, "Series A": value, ...}]
     growthData:   [],   // TODO: ChartPoint[] — [{date, "Series A": yoyPct, ...}]
+    fyData:       [],   // TODO: ChartPoint[] — [{date, "Series A": fyPct, ...}]
     seriesNames:  [],   // TODO: ["Series A", "Series B", ...]
     pctLabel:    "% Share",
     annotations: { insights: [], gaps: [], opportunities: [] },

@@ -29,6 +29,7 @@ export default function SectionWithAnnotations({ section, tab }: Props) {
       <TrendChart
         absoluteData={section.absoluteData}
         growthData={section.growthData}
+        fyData={section.fyData}
         seriesNames={section.seriesNames}
         pctLabel={section.pctLabel}
         visibleSeries={visible}

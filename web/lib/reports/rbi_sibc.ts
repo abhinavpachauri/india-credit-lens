@@ -327,6 +327,7 @@ function makeSection(
 
   const absoluteData: ChartPoint[] = buildSeries(rows, codes, labels, opts);
   const growthData:   ChartPoint[] = buildGrowthSeries(rows, codes, labels, "yoy", opts);
+  const fyData:       ChartPoint[] = buildGrowthSeries(rows, codes, labels, "fy",  opts);
   const seriesNames:  string[]     = codes.map((c) => labels[c] ?? c);
 
   return {
@@ -336,6 +337,7 @@ function makeSection(
     accentIndex,
     absoluteData,
     growthData,
+    fyData,
     seriesNames,
     pctLabel,
     filterable,
