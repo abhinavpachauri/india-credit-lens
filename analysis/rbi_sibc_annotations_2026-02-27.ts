@@ -1,18 +1,18 @@
-// ── RBI SIBC Report — Data Layer ─────────────────────────────────────────────
-// Loads and transforms RBI Sector/Industry-wise Bank Credit data.
-// Produces the universal ReportSection[] + Report shape consumed by the UI.
+// ── RBI SIBC Annotations — Generated via data analysis pipeline ───────────────
+// Source data: rbi_sibc_sections_2026-02-27.json
+// Dates in dataset: Jan 2024, Mar 2024, Jan 2025, Mar 2025, Jan 2026
+// All numbers verified against absoluteData / growthData / fyData
+// NOTE: PDF narrative not available for this run — cross-reference annotations
+//       should be added once PDF is attached
 
-import {
-  loadData, buildSeries, buildGrowthSeries, childrenOf,
-  uniqueDates, latestValue, formatDate,
-  type CreditRow,
-} from "@/lib/data";
-import type { Report, ReportSection, ChartPoint, SectionAnnotations } from "@/lib/types";
-
-// ── Annotation content ────────────────────────────────────────────────────────
+import type { SectionAnnotations } from "@/lib/types";
 
 const ANNOTATIONS: Record<string, SectionAnnotations> = {
 
+  // ─────────────────────────────────────────────────────────────────────────────
+  // 1. BANK CREDIT
+  // Series: Bank Credit, Food Credit, Non-food Credit
+  // ─────────────────────────────────────────────────────────────────────────────
   bankCredit: {
     insights: [
       {
@@ -68,6 +68,10 @@ const ANNOTATIONS: Record<string, SectionAnnotations> = {
     ],
   },
 
+  // ─────────────────────────────────────────────────────────────────────────────
+  // 2. MAIN SECTORS
+  // Series: Agriculture, Industry, Services, Personal Loans
+  // ─────────────────────────────────────────────────────────────────────────────
   mainSectors: {
     insights: [
       {
@@ -147,6 +151,10 @@ const ANNOTATIONS: Record<string, SectionAnnotations> = {
     ],
   },
 
+  // ─────────────────────────────────────────────────────────────────────────────
+  // 3. INDUSTRY BY SIZE
+  // Series: Micro and Small, Medium, Large
+  // ─────────────────────────────────────────────────────────────────────────────
   industryBySize: {
     insights: [
       {
@@ -229,6 +237,12 @@ const ANNOTATIONS: Record<string, SectionAnnotations> = {
     ],
   },
 
+  // ─────────────────────────────────────────────────────────────────────────────
+  // 4. SERVICES
+  // Series: Transport Operators, Other Services, Computer Software,
+  //         Tourism Hotels and Restaurants, Shipping, Aviation, Professional Services,
+  //         Trade, Commercial Real Estate, Non-Banking Financial Companies (NBFCs)
+  // ─────────────────────────────────────────────────────────────────────────────
   services: {
     insights: [
       {
@@ -273,7 +287,9 @@ const ANNOTATIONS: Record<string, SectionAnnotations> = {
               "₹7.2L Cr (Jan 2025), ₹7.3L Cr (Mar 2025), then suddenly ₹0.104L Cr in Jan 2026. " +
               "This is a 98.6% drop in one quarter. This is not a real credit contraction — " +
               "it is a classification or reporting change in the RBI dataset.",
-        implication: "Ignore all Shipping YoY figures until the series is restated. " +
+        implication: "The '+44.5% YoY' shown for Shipping in Jan 2026 is computed against " +
+                     "the new tiny base vs the new tiny base of Jan 2025... actually " +
+                     "ignore all Shipping YoY figures until the series is restated. " +
                      "Do not use Shipping data from Jan 2026 for any analysis.",
         preferredMode: "absolute",
         effect: { highlight: ["Shipping"], dash: ["Shipping"] },
@@ -285,7 +301,7 @@ const ANNOTATIONS: Record<string, SectionAnnotations> = {
               "In FY terms vs Mar 2025: just +2.3%. This is a sharp, recent deceleration. " +
               "The sector went from in-line-with-market to well-below-market growth in one period.",
         implication: "Commercial vehicle fleet expansion has slowed. This may reflect higher " +
-                     "borrowing costs, slower freight growth, or fleet operators front-loading " +
+                     "borrowing costs, slower freight growth, or fleet operators front-loaded " +
                      "purchases in FY24-25. Track this sector closely in the next data release.",
         preferredMode: "yoy",
         effect: { highlight: ["Transport Operators"], dash: ["Transport Operators"] },
@@ -317,6 +333,13 @@ const ANNOTATIONS: Record<string, SectionAnnotations> = {
     ],
   },
 
+  // ─────────────────────────────────────────────────────────────────────────────
+  // 5. PERSONAL LOANS
+  // Series: Consumer Durables, Housing (Including Priority Sector Housing),
+  //         Advances against Fixed Deposits (...), Advances to Individuals against share...,
+  //         Credit Card Outstanding, Education, Vehicle Loans,
+  //         Loans against gold jewellery, Other Personal Loans
+  // ─────────────────────────────────────────────────────────────────────────────
   personalLoans: {
     insights: [
       {
@@ -423,6 +446,13 @@ const ANNOTATIONS: Record<string, SectionAnnotations> = {
     ],
   },
 
+  // ─────────────────────────────────────────────────────────────────────────────
+  // 6. PRIORITY SECTOR
+  // Series: Agriculture and Allied Activities, Micro and Small Enterprises,
+  //         Medium Enterprises, Housing, Others, Educational Loans,
+  //         Renewable Energy, Social Infrastructure, Export Credit,
+  //         Weaker Sections including net PSLC- SF/MF
+  // ─────────────────────────────────────────────────────────────────────────────
   prioritySector: {
     insights: [
       {
@@ -439,7 +469,7 @@ const ANNOTATIONS: Record<string, SectionAnnotations> = {
       },
       {
         id: "msme-psl-growing-faster-than-overall",
-        title: "PSL MSME growing 24.8% — tracking overall MSME credit growth",
+        title: "PSL MSME growing 24.8% — faster than overall MSME at 26%",
         body: "PSL Micro and Small Enterprises: ₹19.4L Cr (Jan 2024) → ₹27.35L Cr (Jan 2026), " +
               "+24.8% YoY. This broadly tracks the industry-by-size MSME growth, " +
               "suggesting PSL classification is keeping pace with actual MSME credit growth.",
@@ -448,19 +478,6 @@ const ANNOTATIONS: Record<string, SectionAnnotations> = {
       },
     ],
     gaps: [
-      {
-        id: "psl-cross-classification",
-        title: "These PSL numbers cannot be added up — they overlap",
-        body: "Priority Sector (PSL) categories are not separate buckets. The same loan can appear in multiple PSL lines at once — " +
-              "an MSME loan in agriculture is counted under both MSE and Agriculture. PSL Housing is a portion of total housing credit, not additional to it. " +
-              "Add up all the PSL lines and you will count many loans twice.",
-        implication: "Only the overall PSL target (40% of net bank credit) has legal meaning. Never add up the PSL sub-categories to estimate the total opportunity — the number you get will be much larger than the real pool.",
-        preferredMode: "absolute",
-        effect: {
-          highlight: ["Micro and Small Enterprises", "Housing"],
-          dim: ["Others"],
-        },
-      },
       {
         id: "export-credit-shrinking",
         title: "Export credit is contracting — -17.2% YoY",
@@ -475,13 +492,23 @@ const ANNOTATIONS: Record<string, SectionAnnotations> = {
         effect: { highlight: ["Export Credit"], dash: ["Export Credit"] },
       },
       {
+        id: "others-shrinking-category",
+        title: "'Others' PSL is shrinking — -23.9% YoY",
+        body: "PSL 'Others' category: ₹0.642L Cr (Jan 2024) → ₹0.404L Cr (Jan 2026). " +
+              "Declined every period: -17.2% (Jan 2025), -19.2% (Mar 2025), -23.9% (Jan 2026). " +
+              "A catch-all category that is consistently contracting.",
+        preferredMode: "yoy",
+        effect: { highlight: ["Others"], dash: ["Others"] },
+      },
+      {
         id: "renewable-energy-and-social-infra-data-break",
         title: "Renewable Energy and Social Infrastructure data broke in Mar 2025",
         body: "Renewable Energy: ₹5.4L Cr (Jan 2024), ₹5.8L Cr (Mar 2024), ₹7.6L Cr (Jan 2025), " +
               "then ₹0.103L Cr (Mar 2025), ₹0.122L Cr (Jan 2026). " +
               "Social Infrastructure shows the same discontinuity. " +
               "These are reclassifications, not real credit changes. " +
-              "The YoY growth figures are computed against the reclassified tiny base and are meaningless.",
+              "The YoY growth figures (+62% Renewable, +27.7% Social Infrastructure) " +
+              "are computed against the reclassified tiny base and are meaningless.",
         implication: "Do not use Renewable Energy or Social Infrastructure PSL data " +
                      "for trend analysis. The series broke in Mar 2025.",
         preferredMode: "absolute",
@@ -489,16 +516,6 @@ const ANNOTATIONS: Record<string, SectionAnnotations> = {
       },
     ],
     opportunities: [
-      {
-        id: "psl-housing-tier3-origination",
-        title: "Affordable housing opportunity is in smaller cities",
-        body: "PSL housing growing +37.9% is the strongest combination in this data: government demand support via PMAY, small loan sizes meaning lower loss if something goes wrong, " +
-              "and strong repayment behaviour in the towns where most of this demand sits. The constraint isn't demand — it is distribution. " +
-              "Very few lenders have origination infrastructure in Tier 3 and 4 cities.",
-        implication: "Building or partnering for origination in 50 targeted semi-urban clusters — through agents, business correspondents, or co-lending with housing finance companies — gets you to where the demand is. You earn both the business and PSL credit certificates.",
-        preferredMode: "yoy",
-        effect: { highlight: ["Housing"] },
-      },
       {
         id: "weaker-sections-large-growing",
         title: "Weaker sections: ₹20L Cr and growing — the PSLC market signal",
@@ -515,6 +532,10 @@ const ANNOTATIONS: Record<string, SectionAnnotations> = {
     ],
   },
 
+  // ─────────────────────────────────────────────────────────────────────────────
+  // 7. INDUSTRY BY TYPE
+  // Series: 19 sub-sectors of industry (Statement 2)
+  // ─────────────────────────────────────────────────────────────────────────────
   industryByType: {
     insights: [
       {
@@ -588,7 +609,7 @@ const ANNOTATIONS: Record<string, SectionAnnotations> = {
         effect: { highlight: ["All Engineering"] },
       },
       {
-        id: "chemicals-steady-double-digit",
+        id: "chemicals-chemicals-steady-double-digit",
         title: "Chemicals growing 15.1% — steady industrial financing opportunity",
         body: "Chemicals and Chemical Products: ₹2.42L Cr (Jan 2024) → ₹3.05L Cr (Jan 2026), " +
               "+25.9% in 2 years. YoY: +9.5% (Jan 2025), +7.4% (Mar 2025), +15.1% (Jan 2026). " +
@@ -598,132 +619,6 @@ const ANNOTATIONS: Record<string, SectionAnnotations> = {
       },
     ],
   },
-
 };
 
-// ── Internal helper ───────────────────────────────────────────────────────────
-
-function makeSection(
-  rows:        CreditRow[],
-  id:          string,
-  title:       string,
-  icon:        string,
-  accentIndex: number,
-  codes:       string[],
-  labels:      Record<string, string>,
-  pctLabel:    string,
-  opts:        { psl?: boolean; stmt?: string } = {},
-  filterable = false
-): ReportSection | null {
-  if (codes.length === 0) return null;
-
-  const absoluteData: ChartPoint[] = buildSeries(rows, codes, labels, opts);
-  const growthData:   ChartPoint[] = buildGrowthSeries(rows, codes, labels, "yoy", opts);
-  const fyData:       ChartPoint[] = buildGrowthSeries(rows, codes, labels, "fy",  opts);
-  const seriesNames:  string[]     = codes.map((c) => labels[c] ?? c);
-
-  return {
-    id,
-    title,
-    icon,
-    accentIndex,
-    absoluteData,
-    growthData,
-    fyData,
-    seriesNames,
-    pctLabel,
-    filterable,
-    annotations: ANNOTATIONS[id] ?? { insights: [], gaps: [], opportunities: [] },
-  };
-}
-
-// ── Public API ────────────────────────────────────────────────────────────────
-
-/** Build all sections from pre-loaded rows. */
-export function buildSections(rows: CreditRow[]): ReportSection[] {
-  const sections: (ReportSection | null)[] = [];
-
-  // 1 — Bank Credit (top-level: total, food, non-food)
-  sections.push(makeSection(
-    rows,
-    "bankCredit", "Bank Credit", "🏦", 0,
-    ["I", "II", "III"],
-    { I: "Bank Credit", II: "Food Credit", III: "Non-food Credit" },
-    "% of Bank Credit"
-  ));
-
-  // 2 — Main Sectors
-  sections.push(makeSection(
-    rows,
-    "mainSectors", "Main Sectors", "📊", 1,
-    ["1", "2", "3", "4"],
-    { "1": "Agriculture", "2": "Industry", "3": "Services", "4": "Personal Loans" },
-    "% Share"
-  ));
-
-  // 3 — Industry by Size (children of code "2", Statement 1 only)
-  const sec3 = childrenOf(rows, "2", { stmt: "Statement 1" });
-  sections.push(makeSection(
-    rows,
-    "industryBySize", "Industry by Size", "🏭", 2,
-    sec3.codes, sec3.labels, "% of Industry",
-    { stmt: "Statement 1" }
-  ));
-
-  // 4 — Services sub-sectors (children of code "3")
-  const sec4 = childrenOf(rows, "3");
-  sections.push(makeSection(
-    rows,
-    "services", "Services", "🛎️", 3,
-    sec4.codes, sec4.labels, "% of Services"
-  ));
-
-  // 5 — Personal Loans sub-categories (children of code "4")
-  const sec5 = childrenOf(rows, "4");
-  sections.push(makeSection(
-    rows,
-    "personalLoans", "Personal Loans", "💳", 4,
-    sec5.codes, sec5.labels, "% of Personal Loans"
-  ));
-
-  // 6 — Priority Sector Lending (PSL memo rows)
-  const pslRows   = rows.filter((r) => r.is_priority_sector_memo);
-  const pslCodes  = [...new Set(pslRows.map((r) => r.code))].sort();
-  const pslLabels: Record<string, string> = {};
-  pslRows.forEach((r) => { pslLabels[r.code] = r.sector; });
-  sections.push(makeSection(
-    rows,
-    "prioritySector", "Priority Sector", "⭐", 5,
-    pslCodes, pslLabels, "% of Priority Sector",
-    { psl: true }
-  ));
-
-  // 7 — Industry by Type (Statement 2, filterable — many sub-sectors)
-  const sec7 = childrenOf(rows, "2", { stmt: "Statement 2" });
-  sections.push(makeSection(
-    rows,
-    "industryByType", "Industry by Type", "🔩", 6,
-    sec7.codes, sec7.labels, "% of Industry",
-    { stmt: "Statement 2" },
-    true  // filterable
-  ));
-
-  return sections.filter((s): s is ReportSection => s !== null);
-}
-
-/** Load the full report (fetches CSV internally). */
-export async function loadReport(): Promise<Report> {
-  const rows     = await loadData();
-  const dates    = uniqueDates(rows);
-  const dataDate = dates[dates.length - 1] ?? "";
-
-  return {
-    id:              "rbi_sibc",
-    title:           "RBI Sector/Industry-wise Bank Credit",
-    source:          "Reserve Bank of India — SIBC Return",
-    dataDate,
-    latestDate:      formatDate(dataDate),
-    totalBankCredit: latestValue(rows, "I"),
-    sections:        buildSections(rows),
-  };
-}
+export default ANNOTATIONS;
