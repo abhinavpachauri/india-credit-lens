@@ -138,9 +138,8 @@ Rules:
 
 ## Output 2 — Markdown documents (secondary)
 
-After producing the ANNOTATIONS object, produce four markdown documents.
+After producing the ANNOTATIONS object, produce three markdown documents.
 These are for human consumption — Substack posts, briefings, internal strategy docs.
-They can be richer and more narrative than the tightly-constrained annotation bodies.
 
 ### gaps.md
 Title: **Credit Data Gaps — [Report Name] [Date]**
@@ -167,29 +166,115 @@ The 3–5 highest-conviction lending opportunities visible in the data. Each:
 - What type of lender is best positioned and why
 - Key risk or caveat
 
-### system_model.md
-Title: **System Model — [Report Name] [Date]**
+---
 
-This is the premium document. It should explain **why** the credit system looks the way
-it does — causal chains, structural shifts, policy effects — not just describe it.
+## Output 3 — System Model JSON (structured, replaces system_model.md)
 
-Structure:
-1. **The current state** — what the system looks like right now in 3–4 sentences
-2. **What's driving it** — 3–5 causal factors with evidence from the data
-3. **Structural shifts** — things that have changed irreversibly (not just grown)
-4. **Pressure points** — where the system is stressed or about to shift
-5. **The 2-year view** — where this is likely heading based on current trajectories
+After Output 1 and Output 2 are complete, produce `system_model.json`.
 
-The system model must synthesise across ALL sections. A good system model makes
-connections the per-section annotations miss — e.g. MSME formalisation growth →
-priority sector pressure → gold loan substitution → retail credit composition shift.
+This is the machine-readable causal model of the credit system. It is the single
+source of truth that powers the newsletter generator, Mermaid diagram, and the
+dashboard System View tab. All three rendering formats read from this file.
+
+**Critical rule: this file must not reinterpret annotations. It organises and
+connects what already exists in Output 1. The only genuinely new content is
+(a) driver nodes and (b) edges.**
+
+### Node taxonomy
+
+Produce nodes across five tiers:
+
+| Tier | What it represents | New content or derived? |
+|---|---|---|
+| `driver` | Macro forces causing credit to move (policy, regulation, prices, structural) | **New** — not in annotations directly |
+| `sector` | Credit categories with ₹ values and growth rates | Derived from annotations |
+| `gap` | Data limitations and blind spots | Derived from gap annotations |
+| `opportunity` | Actionable lending opportunities | Derived from opportunity annotations |
+| `pressure` | Latent risks and stress points | Derived from annotation implications |
+
+### Node schema
+
+```json
+{
+  "id": "snake_case_unique_id",
+  "tier": "driver | sector | gap | opportunity | pressure",
+  "label": "Short display label (3–5 words)",
+  "description": "1–2 sentences. For derived nodes, paraphrase from annotation body — do not add new interpretation.",
+  "stat": "+14.6% YoY or null",
+  "value_lcr": 204.8,
+  "annotation_ids": ["exact-id-from-output-1", "another-id"]
+}
+```
+
+**`annotation_ids` hard constraint:** every string must exactly match an `id` field
+from the ANNOTATIONS object produced in Output 1. Copy-paste, do not retype.
+A node with no matching annotations gets `"annotation_ids": []` — do not invent ids.
+
+### Edge schema
+
+Edges represent causal or structural relationships between nodes. This is the
+primary new analytical work in Output 3 — read across all sections and define
+what drives what.
+
+```json
+{
+  "from": "node_id",
+  "to": "node_id",
+  "type": "causes | reroutes_demand_to | suppresses | reinforces | creates_risk | creates_opportunity | is_data_gap | creates_gap | signals | contrast",
+  "label": "One phrase explaining the causal mechanism"
+}
+```
+
+Edge type definitions:
+- `causes` — direct causal link (formalisation → MSME growth)
+- `reroutes_demand_to` — demand shifted from one sector to another due to a driver
+- `suppresses` — driver or sector reduces growth elsewhere
+- `reinforces` — amplifies an existing trend without causing it
+- `creates_risk` — sector growth introduces a latent risk
+- `creates_opportunity` — sector growth opens a specific lending opportunity
+- `is_data_gap` — sector node is itself a data gap (broken series etc.)
+- `creates_gap` — a driver introduces analytical ambiguity in a sector
+- `signals` — indirect signal relationship (not direct causation)
+- `contrast` — structural comparison between two sector nodes
+
+### JSON structure
+
+```json
+{
+  "_meta": {
+    "report_id": "string",
+    "report_name": "string",
+    "period": "Mon YYYY",
+    "generated": "YYYY-MM-DD",
+    "total_credit_lcr": 0.0,
+    "yoy_growth_pct": 0.0,
+    "schema_version": "1.0"
+  },
+  "nodes": [ ...node objects... ],
+  "edges": [ ...edge objects... ]
+}
+```
+
+Use `"_comment"` keys freely within the arrays to group related nodes/edges
+(e.g. `"_comment": "── DRIVERS ──"`). These are ignored by renderers.
+
+### How many nodes and edges to aim for
+
+- Drivers: 4–8 (the macro forces that explain the data this period)
+- Sectors: one node per meaningful credit category in the data (typically 12–20)
+- Gaps: one node per gap annotation that represents a systemic blind spot (not just a data quirk)
+- Opportunities: one node per actionable opportunity (typically 4–8)
+- Pressure points: one node per latent risk visible in the data (typically 2–5)
+- Edges: 15–30 is healthy. More than 40 makes the diagram unreadable.
+
+Do not create nodes for trivial observations. Every node should earn its place
+by being referenced in at least one edge or having 2+ annotation_ids.
 
 ---
 
 ## Validation checklist before submitting
 
-Before finalising the ANNOTATIONS object, verify:
-
+**Output 1 — ANNOTATIONS:**
 - [ ] Every `highlight`/`dim`/`dash` value is in the corresponding `section.seriesNames`
 - [ ] Every date string matches a `date` field in `absoluteData` exactly
 - [ ] Every number is computed from the JSON, not approximated
@@ -197,6 +282,15 @@ Before finalising the ANNOTATIONS object, verify:
 - [ ] `preferredMode` is set on every annotation that involves growth rates
 - [ ] Each section has at least 2 annotations across insights/gaps/opportunities
 - [ ] No two annotations say the same thing with different wording
+
+**Output 3 — system_model.json:**
+- [ ] Every `annotation_ids` entry exactly matches an `id` from Output 1 (copy-paste)
+- [ ] No node description adds interpretation not present in its source annotation
+- [ ] Every edge `from` and `to` references a valid node `id` in the same file
+- [ ] Driver nodes have edges pointing TO at least one sector node
+- [ ] Every opportunity and pressure node has at least one incoming edge from a sector node
+- [ ] Gap nodes with `is_data_gap` or `creates_gap` edges are flagged in gaps.md too
+- [ ] Total edges are between 15–40 (fewer = incomplete, more = unreadable diagram)
 
 ---
 
@@ -227,7 +321,23 @@ Before finalising the ANNOTATIONS object, verify:
 2. Attach the downloaded JSON to this conversation
 3. Attach the original PDF report
 4. Paste this prompt
-5. Ask Claude to produce Output 1 first (ANNOTATIONS), validate it, then Output 2
+5. Run in this order — do not skip steps or combine:
 
-For Output 1, it helps to ask section by section rather than all at once — each section
-can have 10–15 annotations and the full ANNOTATIONS object for 7 sections is large.
+**Step 1 — Output 1 (ANNOTATIONS)**
+Ask section by section rather than all at once. Each section can have 10–15
+annotations and the full object for 7 sections is large. Validate each section
+before moving to the next.
+
+**Step 2 — Output 2 (Markdown documents)**
+Once ANNOTATIONS is finalised, produce gaps.md, insights.md, and opportunities.md.
+These draw on the same analysis — no new data reading needed.
+
+**Step 3 — Output 3 (system_model.json)**
+Produce this last, after Output 1 is fully validated. It references annotation IDs
+directly — if Output 1 changes, the JSON must be updated to match.
+Save as: `analysis/[report_id]_[YYYY-MM-DD]/system_model.json`
+
+**What replaces what:**
+- `system_model.md` is retired — `system_model.json` replaces it entirely
+- The JSON is both machine-readable (for renderers) and human-reviewable
+- Downstream generators (newsletter, diagram, dashboard SystemView) read from JSON only

@@ -50,9 +50,50 @@ export default function Dashboard() {
       <TabBar active={tab} onChange={setTab} />
 
       <main className="max-w-5xl mx-auto px-4 py-6">
+
+        {/* Substack subscribe embed — placement 3 */}
+        <div className="mb-8 flex flex-col items-center gap-2">
+          <p className="text-sm font-medium" style={{ color: "var(--font-muted)" }}>
+            Monthly credit intelligence, free — get it in your inbox
+          </p>
+          <iframe
+            src="https://indiacreditlens.substack.com/embed"
+            width="100%"
+            height="320"
+            style={{
+              maxWidth:   "480px",
+              border:     "1px solid #EEE",
+              background: "white",
+              borderRadius: "0.5rem",
+            }}
+            frameBorder="0"
+            scrolling="no"
+          />
+        </div>
+
         {report.sections.map((section) => (
           <SectionWithAnnotations key={section.id} section={section} tab={tab} />
         ))}
+
+        {/* Substack subscribe embed — end of page */}
+        <div className="mt-12 mb-8 flex flex-col items-center gap-2">
+          <p className="text-sm font-medium" style={{ color: "var(--font-muted)" }}>
+            Enjoyed the data? Get the analysis behind it in your inbox
+          </p>
+          <iframe
+            src="https://indiacreditlens.substack.com/embed"
+            width="100%"
+            height="320"
+            style={{
+              maxWidth:     "480px",
+              border:       "1px solid #EEE",
+              background:   "white",
+              borderRadius: "0.5rem",
+            }}
+            frameBorder="0"
+            scrolling="no"
+          />
+        </div>
 
         <footer className="mt-8 pb-8 text-center text-xs" style={{ color: "var(--font-muted)" }}>
           <p>
@@ -62,37 +103,6 @@ export default function Dashboard() {
           <p className="mt-1">
             <span className="font-semibold" style={{ color: "#4e8ef7" }}>India Credit Lens</span>
             {" "}— More reports coming soon
-          </p>
-          <p className="mt-3">
-            <button
-              onClick={() => {
-                // Export the processed data model (no annotations) for Claude analysis pipeline
-                const exportData = {
-                  report:   report.id,
-                  source:   report.source,
-                  dataDate: report.dataDate,
-                  sections: report.sections.map((s) => ({
-                    id:           s.id,
-                    title:        s.title,
-                    seriesNames:  s.seriesNames,
-                    absoluteData: s.absoluteData,
-                    growthData:   s.growthData,
-                    fyData:       s.fyData,
-                  })),
-                };
-                const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: "application/json" });
-                const url  = URL.createObjectURL(blob);
-                const a    = document.createElement("a");
-                a.href     = url;
-                a.download = `${report.id}_sections_${report.dataDate}.json`;
-                a.click();
-                URL.revokeObjectURL(url);
-              }}
-              className="text-xs underline cursor-pointer"
-              style={{ color: "var(--font-muted)" }}
-            >
-              Export data model
-            </button>
           </p>
         </footer>
       </main>
