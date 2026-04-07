@@ -21,8 +21,13 @@ export interface AnnotationState {
 }
 
 export function useAnnotation(section: ReportSection): AnnotationState {
-  const [activeLens,  setActiveLensState] = useState<LensType | null>(null);
-  const [activeIndex, setActiveIndex]     = useState(0);
+  const [activeLens, setActiveLensState] = useState<LensType | null>(() => {
+    const available = (["insights", "gaps", "opportunities"] as LensType[])
+      .filter((l) => section.annotations[l].length > 0);
+    if (available.length === 0) return null;
+    return available[Math.floor(Math.random() * available.length)];
+  });
+  const [activeIndex, setActiveIndex] = useState(0);
 
   const counts = {
     insights:      section.annotations.insights.length,

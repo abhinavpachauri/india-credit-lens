@@ -122,9 +122,9 @@ export default function TrendChart({
 
   return (
     <div>
-      {/* Mode toggle — hidden when annotation locks the mode */}
+      {/* Mode toggle — locked to label in intelligence mode, interactive in explore mode */}
       <div className="flex flex-wrap gap-4 mb-3 text-sm">
-        {preferredMode ? (
+        {preferredMode || highlightConfig ? (
           <span style={{ color: "var(--font-muted)" }}>
             Showing: <strong style={{ color: "var(--font)" }}>{modeLabel[effectiveMode]}</strong>
           </span>
@@ -147,7 +147,8 @@ export default function TrendChart({
         )}
       </div>
 
-      <ChartLegend items={legendItems} onToggle={toggleSeries} />
+      {/* Legend — not toggleable in intelligence mode */}
+      <ChartLegend items={legendItems} onToggle={highlightConfig ? undefined : toggleSeries} />
 
       <ResponsiveContainer width="100%" height={320}>
         <LineChart data={seriesData} margin={{ top: 4, right: 16, bottom: 4, left: 0 }}>

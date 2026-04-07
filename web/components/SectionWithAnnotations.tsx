@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useAnnotation }    from "@/hooks/useAnnotation";
 import { SEC_COLORS }       from "@/lib/theme";
 import SectionCard          from "./SectionCard";
@@ -20,12 +20,18 @@ interface Props {
 export default function SectionWithAnnotations({ section, tab }: Props) {
   const ann = useAnnotation(section);
 
-  // Deselect annotation when switching tabs or distribution/trend view
-  useEffect(() => { ann.reset(); }, [tab]); // eslint-disable-line react-hooks/exhaustive-deps
+  // Reset lens only when tab actually changes — not on initial mount
+  const prevTab = useRef<TabId | null>(null);
+  useEffect(() => {
+    if (prevTab.current !== null && prevTab.current !== tab) ann.reset();
+    prevTab.current = tab;
+  }, [tab]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Only used for filterable sections (Industry by Type)
+  // Series filter state — only active in explore mode
   const [visibleSeries, setVisibleSeries] = useState<string[]>([]);
   const onFilteredSeries = useCallback((names: string[]) => setVisibleSeries(names), []);
+
+  const isExploreMode = ann.activeLens === null;
 
   function renderChart(visible?: string[]) {
     return tab === "trend" ? (
@@ -57,28 +63,15 @@ export default function SectionWithAnnotations({ section, tab }: Props) {
       icon={section.icon}
       accentColor={SEC_COLORS[section.accentIndex]}
     >
-      {/* Annotation lens buttons — shown below card title */}
+      {/* Lens switcher */}
       <AnnotationControls
         counts={ann.counts}
         activeLens={ann.activeLens}
         setLens={ann.setLens}
+        onExplore={ann.reset}
       />
 
-      {/* Chart — filterable or standard */}
-      {section.filterable ? (
-        <>
-          <IndustryFilter
-            absoluteData={section.absoluteData}
-            seriesNames={section.seriesNames}
-            onFilteredSeries={onFilteredSeries}
-          />
-          {visibleSeries.length > 0 && renderChart(visibleSeries)}
-        </>
-      ) : (
-        renderChart()
-      )}
-
-      {/* Annotation text panel — below the chart */}
+      {/* Annotation card — above chart in intelligence mode */}
       <AnnotationPanel
         activeLens={ann.activeLens}
         activeAnnotation={ann.activeAnnotation}
@@ -86,8 +79,23 @@ export default function SectionWithAnnotations({ section, tab }: Props) {
         total={ann.total}
         next={ann.next}
         prev={ann.prev}
-        setLens={ann.setLens}
       />
+
+      {/* Chart — series filter only available in explore mode */}
+      {section.filterable ? (
+        <>
+          {isExploreMode && (
+            <IndustryFilter
+              absoluteData={section.absoluteData}
+              seriesNames={section.seriesNames}
+              onFilteredSeries={onFilteredSeries}
+            />
+          )}
+          {(!isExploreMode || visibleSeries.length > 0) && renderChart(isExploreMode ? visibleSeries : undefined)}
+        </>
+      ) : (
+        renderChart()
+      )}
     </SectionCard>
   );
 }

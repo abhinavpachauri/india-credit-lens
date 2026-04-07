@@ -23,11 +23,10 @@ interface AnnotationPanelProps {
   total:            number;
   next:             () => void;
   prev:             () => void;
-  setLens:          AnnotationState["setLens"];
 }
 
 export default function AnnotationPanel({
-  activeLens, activeAnnotation, activeIndex, total, next, prev, setLens,
+  activeLens, activeAnnotation, activeIndex, total, next, prev,
 }: AnnotationPanelProps) {
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
 
@@ -35,6 +34,7 @@ export default function AnnotationPanel({
 
   const color = LENS_COLOR[activeLens];
   const label = LENS_LABEL[activeLens];
+  const remaining = total - 1;
 
   function handleTouchStart(e: React.TouchEvent) {
     setTouchStartX(e.touches[0].clientX);
@@ -50,7 +50,7 @@ export default function AnnotationPanel({
 
   return (
     <div
-      className="mt-4 p-5"
+      className="mb-4 p-5"
       style={{
         background:        "var(--bg-page)",
         borderTopWidth:    "1px",
@@ -67,7 +67,7 @@ export default function AnnotationPanel({
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      {/* Header row: lens badge + navigation + close */}
+      {/* Badge + progress dots */}
       <div className="flex items-center justify-between mb-3">
         <span
           className="text-xs font-bold uppercase tracking-widest px-2 py-0.5 rounded-full"
@@ -76,39 +76,21 @@ export default function AnnotationPanel({
           {label}
         </span>
 
-        <div className="flex items-center gap-3">
-          {/* Navigation — only show if more than 1 */}
-          {total > 1 && (
-            <div className="flex items-center gap-2 text-xs" style={{ color: "var(--font-muted)" }}>
-              <button
-                onClick={prev}
-                disabled={activeIndex === 0}
-                className="px-2 py-0.5 rounded disabled:opacity-30"
-                style={{ border: `1px solid var(--border-card)` }}
-              >
-                ‹
-              </button>
-              <span>{activeIndex + 1} / {total}</span>
-              <button
-                onClick={next}
-                disabled={activeIndex === total - 1}
-                className="px-2 py-0.5 rounded disabled:opacity-30"
-                style={{ border: `1px solid var(--border-card)` }}
-              >
-                ›
-              </button>
-            </div>
-          )}
-
-          {/* Close */}
-          <button
-            onClick={() => setLens(activeLens)}
-            className="text-xs px-2 py-0.5 rounded"
-            style={{ color: "var(--font-muted)", border: "1px solid var(--border-card)" }}
-          >
-            ✕
-          </button>
-        </div>
+        {total > 1 && (
+          <div className="flex items-center gap-1.5">
+            {Array.from({ length: total }, (_, i) => (
+              <span
+                key={i}
+                className="inline-block rounded-full transition-all duration-200"
+                style={{
+                  width:      i === activeIndex ? "18px" : "6px",
+                  height:     "6px",
+                  background: i === activeIndex ? color : `${color}35`,
+                }}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Title */}
@@ -125,7 +107,7 @@ export default function AnnotationPanel({
       {activeAnnotation.implication && (
         <div
           className="mt-4 pt-4"
-          style={{ borderTop: "1px solid var(--border-card)" }}
+          style={{ borderTop: `1px solid ${color}20` }}
         >
           <p
             className="text-xs font-bold uppercase tracking-widest mb-1.5"
@@ -139,11 +121,49 @@ export default function AnnotationPanel({
         </div>
       )}
 
-      {/* Mobile swipe hint — only show on first annotation */}
-      {total > 1 && activeIndex === 0 && (
-        <p className="mt-3 text-xs text-center" style={{ color: "var(--font-muted)" }}>
-          swipe to navigate
+      {/* Newsletter CTA */}
+      <div
+        className="mt-4 pt-3"
+        style={{ borderTop: "1px solid var(--border-card)" }}
+      >
+        <p className="text-xs" style={{ color: "var(--font-muted)" }}>
+          {remaining > 0
+            ? `${remaining} more ${label.toLowerCase()}${remaining > 1 ? "s" : ""} in this section. `
+            : ""}
+          <a
+            href="https://indiacreditlens.substack.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color, textDecoration: "underline" }}
+          >
+            Get all 45 free →
+          </a>
         </p>
+      </div>
+
+      {/* Nav arrows */}
+      {total > 1 && (
+        <div className="mt-4 flex items-center justify-center gap-4">
+          <button
+            onClick={prev}
+            disabled={activeIndex === 0}
+            className="px-5 py-2 rounded-lg text-sm font-semibold disabled:opacity-25 transition-opacity"
+            style={{ border: `1.5px solid ${color}`, color, cursor: "pointer" }}
+          >
+            ←
+          </button>
+          <span className="text-xs tabular-nums" style={{ color: "var(--font-muted)" }}>
+            {activeIndex + 1} of {total}
+          </span>
+          <button
+            onClick={next}
+            disabled={activeIndex === total - 1}
+            className="px-5 py-2 rounded-lg text-sm font-semibold disabled:opacity-25 transition-opacity"
+            style={{ border: `1.5px solid ${color}`, color, cursor: "pointer" }}
+          >
+            →
+          </button>
+        </div>
       )}
     </div>
   );
