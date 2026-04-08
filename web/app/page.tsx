@@ -51,49 +51,13 @@ export default function Dashboard() {
 
       <main className="max-w-5xl mx-auto px-4 py-6">
 
-        {/* Substack subscribe embed — placement 3 */}
-        <div className="mb-8 flex flex-col items-center gap-2">
-          <p className="text-sm font-medium" style={{ color: "var(--font-muted)" }}>
-            Monthly credit intelligence, free — get it in your inbox
-          </p>
-          <iframe
-            src="https://indiacreditlens.substack.com/embed"
-            width="100%"
-            height="320"
-            style={{
-              maxWidth:   "480px",
-              border:     "1px solid #EEE",
-              background: "white",
-              borderRadius: "0.5rem",
-            }}
-            frameBorder="0"
-            scrolling="no"
-          />
-        </div>
+        {/* Substack subscribe embed — placement 3 (hidden, re-enable when ready) */}
 
         {report.sections.map((section) => (
           <SectionWithAnnotations key={section.id} section={section} tab={tab} />
         ))}
 
-        {/* Substack subscribe embed — end of page */}
-        <div className="mt-12 mb-8 flex flex-col items-center gap-2">
-          <p className="text-sm font-medium" style={{ color: "var(--font-muted)" }}>
-            Enjoyed the data? Get the analysis behind it in your inbox
-          </p>
-          <iframe
-            src="https://indiacreditlens.substack.com/embed"
-            width="100%"
-            height="320"
-            style={{
-              maxWidth:     "480px",
-              border:       "1px solid #EEE",
-              background:   "white",
-              borderRadius: "0.5rem",
-            }}
-            frameBorder="0"
-            scrolling="no"
-          />
-        </div>
+        {/* Substack subscribe embed — end of page (hidden, re-enable when ready) */}
 
         <footer className="mt-8 pb-8 text-center text-xs" style={{ color: "var(--font-muted)" }}>
           <p>
