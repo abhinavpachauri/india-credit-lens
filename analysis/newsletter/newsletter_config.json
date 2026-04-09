@@ -1,0 +1,51 @@
+{
+  "_meta": {
+    "format": "system_model_v2",
+    "report_id": "rbi_sibc",
+    "period": "January 2026",
+    "issue_number": 1,
+    "published": "2026-04-09",
+    "system_model_path": "../rbi_sibc_2026-02-27/system_model.json",
+    "annotations_path": "../../web/lib/reports/rbi_sibc.ts",
+    "note": "Edit editorial block per issue. Everything else (drivers, sectors, gaps, opportunities, risks) is generated from system_model.json + rbi_sibc.ts. Do not manually duplicate content from those files here."
+  },
+
+  "editorial": {
+    "issue_title": "Three Tides",
+    "tldr": [
+      "₹204.8L Cr total bank credit — +₹25.8L Cr added in 12 months, the largest absolute addition in this dataset. The credit cycle is genuinely accelerating.",
+      "Gold loans +128.8% YoY: this is demand migration, not a boom. RBI's November 2023 risk-weight increase repriced unsecured credit — borrowers moved to gold, which is secured, RBI-friendly, and still competitive.",
+      "Micro & Small enterprises +31.2% — three times last year's rate. The growth is real, but part of it is GST/UDYAM formalisation making previously-invisible businesses bankable for the first time.",
+      "Engineering credit +35.9% and accelerating for three consecutive periods. PLI commitments are translating into actual factory borrowing. This has runway."
+    ],
+    "system_narrative": "Three things moved the credit system this month — and they are connected. RBI's November 2023 risk-weight increase on unsecured lending repriced credit cards out of reach for many borrowers. That demand didn't disappear. It migrated to gold loans, which are secured, RBI-friendly, and now growing at 128.8% YoY. Separately, five years of GST registration and UDYAM enrolment are showing up in credit data for the first time — businesses that always existed but were invisible to formal lending. That is Micro & Small credit growing at 31.2%, not the economy suddenly accelerating. And PLI commitments are translating into factory borrowing — Engineering credit up 60% in two years. Three different forces, three different credit markets, all moving simultaneously. This is not a rising tide lifting all boats. It is three specific tides, each with its own logic.",
+    "featured_annotation_ids": [
+      "gold-loans-structural-surge",
+      "micro-small-acceleration-breakout",
+      "engineering-capex-cycle"
+    ],
+    "what_to_watch": {
+      "next_release": "March 2026 (expected April 2026)",
+      "bullets": [
+        "Gold loan growth rate — does +128.8% sustain or begin decelerating as the market matures and early movers saturate the accessible TAM?",
+        "Micro & Small base effect — March 2026 data will show whether +31.2% holds or was partially a January seasonal bump on top of the formalisation tailwind.",
+        "Shipping series — watch for RBI restatement or explanation of the January 2026 discontinuity. The ₹7.2L Cr cannot have simply vanished.",
+        "PSL Housing — +37.9% acceleration needs confirmation. One data point does not make a trend; March 2026 will tell us if PMAY demand is structural."
+      ]
+    }
+  },
+
+  "cta": {
+    "dashboard_label": "Explore all 45 signals from this release",
+    "dashboard_url": "https://indiacreditlens.com",
+    "digest_label": "Monthly Digest — full system model, forward view, lender strategy",
+    "digest_url": "https://indiacreditlens.substack.com"
+  },
+
+  "branding": {
+    "site": "indiacreditlens.com",
+    "substack": "indiacreditlens.substack.com",
+    "tagline": "Structured intelligence on India's credit markets",
+    "author": "Abhinav Pachauri"
+  }
+}
