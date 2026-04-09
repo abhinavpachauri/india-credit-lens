@@ -34,6 +34,10 @@ const ANNOTATIONS: Record<string, SectionAnnotations> = {
               "Even with its +58.9% YoY growth, its contribution to the headline growth " +
               "rate is less than 0.1 percentage point. The 14.6% headline is essentially " +
               "the non-food number.",
+        implication: "When reading system-level credit direction, strip food credit from the " +
+                     "headline entirely. The 14.6% YoY is a non-food signal. Food credit " +
+                     "volatility in January reflects government procurement timing — it has " +
+                     "no bearing on the credit cycle or lender strategy.",
         preferredMode: "absolute",
         effect: { dim: ["Food Credit"], highlight: ["Bank Credit", "Non-food Credit"] },
       },
@@ -102,6 +106,10 @@ const ANNOTATIONS: Record<string, SectionAnnotations> = {
               "₹124.5L Cr — 61% of total sectoral credit. Both are growing above the " +
               "system average: Services +15.5% and Personal Loans +14.9% YoY (Jan 2026). " +
               "Industry and Agriculture, at 34% of credit, are both below average.",
+        implication: "Portfolio weight should follow where the system is growing. Industry " +
+                     "and Agriculture are both growing below the 14.6% system average. " +
+                     "The two structural growth engines are Services and retail — and the " +
+                     "gap between them and the laggards is widening every period.",
         preferredMode: "yoy",
         effect: { highlight: ["Services", "Personal Loans"], dim: ["Agriculture", "Industry"] },
       },
@@ -126,6 +134,11 @@ const ANNOTATIONS: Record<string, SectionAnnotations> = {
         body: "Industry's share of total sectoral credit: Jan 2024 = 22.5%, Jan 2026 = 21.4%. " +
               "Even with +12.1% YoY growth, it is growing slower than the system average " +
               "of 14.6% — so its share keeps shrinking. This has been true for at least 2 years.",
+        implication: "Industry's share of total credit will keep declining until its growth " +
+                     "rate exceeds the 14.6% system average. Two consecutive years of share " +
+                     "loss — even while growing in absolute terms — is a structural signal, " +
+                     "not a cyclical one. The sub-sector mix (MSME vs Large) matters more " +
+                     "than the sector headline.",
         preferredMode: "absolute",
         effect: { highlight: ["Industry"], dim: ["Services", "Personal Loans"] },
       },
@@ -182,6 +195,10 @@ const ANNOTATIONS: Record<string, SectionAnnotations> = {
               "a 44.9% increase in 24 months. This segment has been consistently strong: " +
               "+18.4% (Jan 2025), +18.5% (Mar 2025), +22.3% (Jan 2026). " +
               "No quarter has been below 18% YoY growth in this dataset.",
+        implication: "For lenders: Medium enterprises have delivered 18%+ YoY growth in " +
+                     "every data point in this dataset — no miss, no volatility. This is not " +
+                     "a hot segment with one good quarter; it is the most consistently " +
+                     "growing size segment in industry credit over 2 years.",
         preferredMode: "yoy",
         effect: { highlight: ["Medium"] },
       },
@@ -208,6 +225,10 @@ const ANNOTATIONS: Record<string, SectionAnnotations> = {
               "Large accounts for 67% of total industry credit. Its slow growth (5.5% YoY) " +
               "is dragging the sector headline number down — without it, MSME+Medium would " +
               "show 28%+ growth.",
+        implication: "Do not quote 'industry credit grew 12.1%' without decomposing it. " +
+                     "Strip Large corporates and the remaining MSME and Medium segments " +
+                     "grew 28%+. A credit strategy that tracks the aggregate headline " +
+                     "misses where the growth is actually happening.",
         preferredMode: "absolute",
         effect: { highlight: ["Large"], dim: ["Micro and Small", "Medium"] },
       },
@@ -251,6 +272,11 @@ const ANNOTATIONS: Record<string, SectionAnnotations> = {
         body: "Trade credit grew from ₹9.85L Cr (Jan 2024) to ₹13.09L Cr (Jan 2026) — " +
               "a 32.9% increase in 2 years. YoY: +14.5% (Jan 2025), +15.6% (Mar 2025), " +
               "+16.1% (Jan 2026). The growth is consistent and accelerating slightly.",
+        implication: "For lenders: Trade credit is large (₹13L Cr), consistently growing " +
+                     "(14–16% YoY for 3 periods), and addressable through supply chain " +
+                     "financing and invoice discounting. TReDS-linked origination is the " +
+                     "entry point — the data trail is verifiable and the segment is " +
+                     "underserved by specialist lenders.",
         preferredMode: "yoy",
         effect: { highlight: ["Trade"] },
       },
@@ -261,6 +287,11 @@ const ANNOTATIONS: Record<string, SectionAnnotations> = {
               "By Jan 2026 that's +19.2% YoY (₹0.97L Cr vs ₹0.82L Cr). " +
               "The sector is clearly back — hospitality capex and working capital " +
               "is being funded again.",
+        implication: "For lenders: Hospitality credit has normalised. The sector that was " +
+                     "structurally avoided during and after COVID is now growing at +19.2% YoY " +
+                     "and accessing bank credit for working capital and capex again. " +
+                     "Risk profiles have recovered — the window for lenders who stayed away " +
+                     "to re-enter on better terms is open.",
         preferredMode: "yoy",
         effect: { highlight: ["Tourism, Hotels and Restaurants"] },
       },
@@ -311,6 +342,10 @@ const ANNOTATIONS: Record<string, SectionAnnotations> = {
         body: "Commercial Real Estate grew from ₹4.51L Cr (Jan 2024) to ₹5.98L Cr (Jan 2026) — " +
               "+32.6% in 2 years. Every data point shows 13–16% YoY growth. " +
               "This is a sector where bank credit is the primary financing vehicle.",
+        implication: "For lenders: Commercial Real Estate has compounded at 15% for two years " +
+                     "with no period of volatility. Offices, warehouses, and retail malls — " +
+                     "particularly in Tier 2 cities — are where demand is growing. Large " +
+                     "ticket, collateralised, and bank credit is the dominant financing route.",
         preferredMode: "absolute",
         effect: { highlight: ["Commercial Real Estate"] },
       },
@@ -351,6 +386,10 @@ const ANNOTATIONS: Record<string, SectionAnnotations> = {
         body: "Vehicle loans: +9.7% (Jan 2025), +8.6% (Mar 2025), +17.1% (Jan 2026). " +
               "Absolute: ₹5.61L Cr (Jan 2024) → ₹7.21L Cr (Jan 2026), +28.5% in 2 years. " +
               "The Jan 2026 acceleration is notable — from sub-10% back into high teens.",
+        implication: "For lenders: Vehicle credit has recovered from its mid-2025 slowdown " +
+                     "and is back above the system average at +17.1% YoY. Treat this as a " +
+                     "one-data-point signal — do not build strategy on it until March 2026 " +
+                     "data confirms whether the acceleration holds.",
         preferredMode: "yoy",
         effect: { highlight: ["Vehicle Loans"] },
       },
@@ -389,6 +428,10 @@ const ANNOTATIONS: Record<string, SectionAnnotations> = {
               "Negative YoY in every period: -2.4% (Jan 2025), -1.0% (Mar 2025), -4.0% (Jan 2026). " +
               "This is a category that is declining in bank credit — probably because " +
               "BNPL and fintech EMI platforms have taken this business away from banks.",
+        implication: "This category will not recover in bank credit. BNPL and fintech EMI " +
+                     "platforms have structurally displaced bank financing for consumer " +
+                     "durables. If your consumer durables book is growing, investigate " +
+                     "whether you are taking on quality that fintechs have already declined.",
         preferredMode: "yoy",
         effect: { highlight: ["Consumer Durables"], dash: ["Consumer Durables"] },
       },
@@ -443,6 +486,10 @@ const ANNOTATIONS: Record<string, SectionAnnotations> = {
         body: "PSL Micro and Small Enterprises: ₹19.4L Cr (Jan 2024) → ₹27.35L Cr (Jan 2026), " +
               "+24.8% YoY. This broadly tracks the industry-by-size MSME growth, " +
               "suggesting PSL classification is keeping pace with actual MSME credit growth.",
+        implication: "For lenders with PSL obligations: MSME credit is doing double duty — " +
+                     "meeting PSL targets while accessing a structurally growing segment. " +
+                     "Building MSME origination now captures the business return and PSL " +
+                     "compliance benefit simultaneously, without needing separate PSL strategies.",
         preferredMode: "yoy",
         effect: { highlight: ["Micro and Small Enterprises"] },
       },
@@ -524,6 +571,11 @@ const ANNOTATIONS: Record<string, SectionAnnotations> = {
               "Yet its YoY growth is just +6.4% — the slowest of any meaningful sub-sector. " +
               "From Jan 2024 (₹13.11L Cr) to Jan 2026 (₹14.27L Cr): +8.8% in 2 years. " +
               "Large infrastructure credit is not where the growth is.",
+        implication: "For lenders: Large infrastructure bank credit is not the opportunity. " +
+                     "Capital markets, ECBs, and government budgets are the primary funding " +
+                     "vehicles for large infra projects. The bank credit opportunity in " +
+                     "industry is in Engineering (+35.9%), Basic Metal (+13.8%), and " +
+                     "Chemicals (+15.1%) — not Infrastructure.",
         preferredMode: "absolute",
         effect: { highlight: ["Infrastructure"], dim: ["All Engineering", "Gems and Jewellery"] },
       },
@@ -534,6 +586,11 @@ const ANNOTATIONS: Record<string, SectionAnnotations> = {
               "Gems & Jewellery: +5.1% (Jan 2025) → +1.0% (Mar 2025) → +35.6% (Jan 2026). " +
               "Both accelerated sharply in the most recent period. Different drivers — " +
               "Engineering likely capex, Gems & Jewellery likely gold price effect on working capital.",
+        implication: "For lenders: these two sub-sectors look identical in the YoY chart " +
+                     "but are entirely different bets. Engineering's acceleration is " +
+                     "structural — PLI-linked capex. Gems & Jewellery's is gold-price-sensitive " +
+                     "and could reverse if gold prices correct. Treat them as separate " +
+                     "lending categories with different risk profiles.",
         preferredMode: "yoy",
         effect: { highlight: ["All Engineering", "Gems and Jewellery"] },
       },
@@ -543,6 +600,11 @@ const ANNOTATIONS: Record<string, SectionAnnotations> = {
         body: "Basic Metal and Metal Product: ₹3.81L Cr (Jan 2024) → ₹4.94L Cr (Jan 2026), " +
               "+29.8% in 2 years. YoY: +14.1% (Jan 2025), +12.8% (Mar 2025), +13.8% (Jan 2026). " +
               "Three periods of double-digit consistent growth — no volatility, no anomaly.",
+        implication: "For lenders: Basic Metal (steel, aluminium, copper) is the quiet " +
+                     "backbone of construction and manufacturing credit — growing at market " +
+                     "rate for three consecutive periods, no anomalies, tangible collateral, " +
+                     "large ticket sizes. A stable, low-surprise segment in an environment " +
+                     "of high sector volatility.",
         preferredMode: "yoy",
         effect: { highlight: ["Basic Metal and Metal Product"] },
       },
@@ -555,6 +617,11 @@ const ANNOTATIONS: Record<string, SectionAnnotations> = {
               "the remaining sub-sectors combined grew significantly faster. " +
               "The headline 'industry grew 12.1%' is pulled down by Infrastructure's " +
               "weight. The manufacturing and processing sub-sectors tell a different story.",
+        implication: "Always decompose industry credit before quoting the headline. " +
+                     "Engineering (+35.9%), Basic Metal (+13.8%), and Chemicals (+15.1%) " +
+                     "all outperform the system average of 14.6%. Infrastructure's weight " +
+                     "makes these invisible in the aggregate — the sector is structurally " +
+                     "stronger than the headline 12.1% suggests.",
         preferredMode: "yoy",
         effect: { dim: ["Infrastructure"] },
       },
@@ -593,6 +660,11 @@ const ANNOTATIONS: Record<string, SectionAnnotations> = {
         body: "Chemicals and Chemical Products: ₹2.42L Cr (Jan 2024) → ₹3.05L Cr (Jan 2026), " +
               "+25.9% in 2 years. YoY: +9.5% (Jan 2025), +7.4% (Mar 2025), +15.1% (Jan 2026). " +
               "The acceleration in the latest period is notable.",
+        implication: "For lenders: Chemicals is a diversified sector — pharma intermediates, " +
+                     "specialty chemicals, agrochem, paints. Growing at 15% with low " +
+                     "volatility across three periods. Smaller ticket sizes than " +
+                     "infrastructure but better growth trajectory and diversified " +
+                     "end-markets reduce concentration risk.",
         preferredMode: "yoy",
         effect: { highlight: ["Chemicals and Chemical Products"] },
       },

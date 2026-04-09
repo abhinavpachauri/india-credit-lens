@@ -1,0 +1,523 @@
+{
+  "_meta": {
+    "report_id": "rbi_sibc",
+    "report_name": "RBI Sector/Industry-wise Bank Credit",
+    "period": "Jan 2026",
+    "generated": "2026-02-27",
+    "total_credit_lcr": 204.8,
+    "yoy_growth_pct": 14.6,
+    "schema_version": "1.0",
+    "note": "annotation_ids reference IDs in web/lib/reports/rbi_sibc.ts. Nodes and edges are the new structured layer; annotations remain the source of interpreted content."
+  },
+
+  "nodes": [
+
+    {
+      "_comment": "── DRIVERS — macro forces explaining why credit moves ──────────────────",
+      "id": "driver_formalisation",
+      "tier": "driver",
+      "label": "GST / UDYAM Formalisation",
+      "description": "Post-2018 GST and UDYAM registrations created a large cohort of businesses now visible to formal credit for the first time.",
+      "stat": null,
+      "value_lcr": null,
+      "annotation_ids": ["msme-formalisation-not-new-borrowing", "micro-small-acceleration-breakout"]
+    },
+    {
+      "id": "driver_rbi_regulation",
+      "tier": "driver",
+      "label": "RBI Unsecured Risk-Weight Increase",
+      "description": "Nov 2023: RBI raised risk weights on unsecured consumer credit from 100% to 125%, raising its capital cost and slowing origination.",
+      "stat": "100% → 125%",
+      "value_lcr": null,
+      "annotation_ids": ["credit-cards-stagnating", "gold-loans-structural-surge"]
+    },
+    {
+      "id": "driver_gold_price_rise",
+      "tier": "driver",
+      "label": "Gold Price Appreciation",
+      "description": "Gold prices rose ~25–30% over 2024–25, inflating collateral values for gold-backed lending and working capital for gold-dependent industries.",
+      "stat": "+25–30%",
+      "value_lcr": null,
+      "annotation_ids": ["gold-loans-structural-surge", "gems-jewellery-gold-price-effect"]
+    },
+    {
+      "id": "driver_pli_policy",
+      "tier": "driver",
+      "label": "PLI Scheme / Manufacturing Capex",
+      "description": "India's Production Linked Incentive scheme and supply chain localisation from China are generating new manufacturing investment and bank credit demand.",
+      "stat": null,
+      "value_lcr": null,
+      "annotation_ids": ["engineering-capex-cycle", "engineering-gems-breakout"]
+    },
+    {
+      "id": "driver_household_stress",
+      "tier": "driver",
+      "label": "Household Liquidity Stress",
+      "description": "Post-COVID income disruption and elevated inflation 2022–24 increased household demand for short-tenor liquidity against existing gold assets.",
+      "stat": null,
+      "value_lcr": null,
+      "annotation_ids": ["gold-loans-structural-surge", "gold-loan-market-open"]
+    },
+    {
+      "id": "driver_nbfc_expansion",
+      "tier": "driver",
+      "label": "NBFC Intermediation Layer",
+      "description": "NBFCs funded by banks extend credit to segments banks cannot cost-effectively reach: microfinance, small informal businesses, rural borrowers.",
+      "stat": null,
+      "value_lcr": null,
+      "annotation_ids": ["nbfc-dominates-services-credit"]
+    },
+    {
+      "id": "driver_psl_compliance",
+      "tier": "driver",
+      "label": "PSL Compliance Pressure",
+      "description": "Banks must direct 40% of net bank credit to priority sectors. As total credit grows at 14.6%, PSL targets grow in absolute terms — harder to meet organically.",
+      "stat": "40% PSL target",
+      "value_lcr": null,
+      "annotation_ids": ["psl-cross-classification", "weaker-sections-large-growing"]
+    },
+
+    {
+      "_comment": "── SECTORS — where money flows ─────────────────────────────────────────",
+      "id": "sector_total_credit",
+      "tier": "sector",
+      "label": "Total Bank Credit",
+      "stat": "+14.6% YoY",
+      "value_lcr": 204.8,
+      "annotation_ids": ["credit-growth-reaccelerated", "non-food-credit-structural-expansion", "food-credit-irrelevant-to-headline"]
+    },
+    {
+      "id": "sector_personal_loans",
+      "tier": "sector",
+      "label": "Personal Loans",
+      "stat": "+14.9% YoY",
+      "value_lcr": 67.2,
+      "annotation_ids": ["personal-loans-largest-sector", "services-personal-loan-twin-engines"]
+    },
+    {
+      "id": "sector_gold_loans",
+      "tier": "sector",
+      "label": "Gold Loans",
+      "stat": "+128.8% YoY",
+      "value_lcr": 4.01,
+      "annotation_ids": ["gold-loans-structural-surge", "gold-loan-market-open"]
+    },
+    {
+      "id": "sector_credit_cards",
+      "tier": "sector",
+      "label": "Credit Cards",
+      "stat": "+1.5% YoY",
+      "value_lcr": 2.96,
+      "annotation_ids": ["credit-cards-stagnating"]
+    },
+    {
+      "id": "sector_consumer_durables",
+      "tier": "sector",
+      "label": "Consumer Durables",
+      "stat": "-4.0% YoY",
+      "value_lcr": 0.224,
+      "annotation_ids": ["consumer-durables-declining"]
+    },
+    {
+      "id": "sector_vehicle_loans",
+      "tier": "sector",
+      "label": "Vehicle Loans",
+      "stat": "+17.1% YoY",
+      "value_lcr": 7.21,
+      "annotation_ids": ["vehicle-loans-reaccelerating"]
+    },
+    {
+      "id": "sector_housing",
+      "tier": "sector",
+      "label": "Housing Loans",
+      "stat": "+11.1% YoY",
+      "value_lcr": 32.78,
+      "annotation_ids": ["housing-dominates-but-growing-slowest"]
+    },
+    {
+      "id": "sector_msme_micro_small",
+      "tier": "sector",
+      "label": "Micro & Small Enterprises",
+      "stat": "+31.2% YoY",
+      "value_lcr": 10.31,
+      "annotation_ids": ["micro-small-acceleration-breakout", "msme-formalisation-not-new-borrowing", "large-dominated-absolute-stock"]
+    },
+    {
+      "id": "sector_msme_medium",
+      "tier": "sector",
+      "label": "Medium Enterprises",
+      "stat": "+22.3% YoY",
+      "value_lcr": 4.26,
+      "annotation_ids": ["medium-enterprises-fastest-2yr", "medium-enterprise-underserved-window"]
+    },
+    {
+      "id": "sector_msme_large",
+      "tier": "sector",
+      "label": "Large Corporates",
+      "stat": "+5.5% YoY",
+      "value_lcr": 29.3,
+      "annotation_ids": ["large-corporate-structurally-slow", "large-dominated-absolute-stock"]
+    },
+    {
+      "id": "sector_services",
+      "tier": "sector",
+      "label": "Services",
+      "stat": "+15.5% YoY",
+      "value_lcr": 57.2,
+      "annotation_ids": ["services-personal-loan-twin-engines", "services-acceleration-sustained"]
+    },
+    {
+      "id": "sector_nbfc",
+      "tier": "sector",
+      "label": "NBFC Wholesale Credit",
+      "stat": "+17.8% YoY",
+      "value_lcr": 19.05,
+      "annotation_ids": ["nbfc-dominates-services-credit"]
+    },
+    {
+      "id": "sector_trade",
+      "tier": "sector",
+      "label": "Trade Credit",
+      "stat": "+16.1% YoY",
+      "value_lcr": 13.09,
+      "annotation_ids": ["trade-credit-steady-growth"]
+    },
+    {
+      "id": "sector_engineering",
+      "tier": "sector",
+      "label": "All Engineering",
+      "stat": "+35.9% YoY",
+      "value_lcr": 3.11,
+      "annotation_ids": ["engineering-gems-breakout", "engineering-capex-cycle"]
+    },
+    {
+      "id": "sector_psl_housing",
+      "tier": "sector",
+      "label": "PSL Housing",
+      "stat": "+37.9% YoY",
+      "value_lcr": 10.31,
+      "annotation_ids": ["psl-housing-surge", "psl-housing-tier3-origination"]
+    },
+    {
+      "id": "sector_shipping",
+      "tier": "sector",
+      "label": "Shipping Credit",
+      "stat": "-98.6% YoY",
+      "value_lcr": 0.104,
+      "annotation_ids": ["shipping-data-discontinuity"]
+    },
+
+    {
+      "_comment": "── GAPS — data limitations and blind spots ──────────────────────────────",
+      "id": "gap_shipping_reclassification",
+      "tier": "gap",
+      "label": "Shipping: Reclassification, Not Collapse",
+      "description": "₹7.3L Cr → ₹0.1L Cr is a reporting change, not a credit contraction. Series is unusable until restated.",
+      "stat": "-98.6%",
+      "value_lcr": null,
+      "annotation_ids": ["shipping-data-discontinuity"]
+    },
+    {
+      "id": "gap_msme_base_effect",
+      "tier": "gap",
+      "label": "MSME Growth: Formalisation vs Real Demand",
+      "description": "Part of +31.2% reflects newly-visible UDYAM-registered businesses, not businesses that were previously growing that fast.",
+      "stat": null,
+      "value_lcr": null,
+      "annotation_ids": ["msme-formalisation-not-new-borrowing"]
+    },
+    {
+      "id": "gap_psl_double_counting",
+      "tier": "gap",
+      "label": "PSL Lines Overlap — Do Not Sum",
+      "description": "PSL sub-categories are not separate buckets. The same loan can appear in multiple PSL lines. Adding them overstates the total.",
+      "stat": null,
+      "value_lcr": null,
+      "annotation_ids": ["psl-cross-classification"]
+    },
+    {
+      "id": "gap_data_series_breaks",
+      "tier": "gap",
+      "label": "Multiple Series Broke in 2025",
+      "description": "Shipping (Jan 2026), Renewable Energy (Mar 2025), Social Infrastructure (Mar 2025), and Advances against shares (Mar 2025) all show discontinuities that make YoY comparisons meaningless.",
+      "stat": "4 series affected",
+      "value_lcr": null,
+      "annotation_ids": ["shipping-data-discontinuity", "renewable-energy-and-social-infra-data-break", "advances-shares-bonds-reclassified"]
+    },
+    {
+      "id": "gap_nbfc_retail_invisible",
+      "tier": "gap",
+      "label": "NBFC Retail Lending Not Visible Here",
+      "description": "The ₹19.05L Cr is bank credit TO NBFCs (wholesale). What NBFCs lend to end borrowers — microfinance, small business, gold — is not in this dataset.",
+      "stat": null,
+      "value_lcr": null,
+      "annotation_ids": ["nbfc-dominates-services-credit"]
+    },
+
+    {
+      "_comment": "── OPPORTUNITIES — actionable for lenders ───────────────────────────────",
+      "id": "opp_gold_lending",
+      "tier": "opportunity",
+      "label": "Gold Loan Products",
+      "description": "₹4L Cr growing +128.8%. Digital valuation and doorstep processing are the cost advantages. MSME gold-backed products are the high-velocity entry.",
+      "stat": "+128.8% YoY",
+      "value_lcr": 4.01,
+      "annotation_ids": ["gold-loan-market-open", "gold-loans-structural-surge"]
+    },
+    {
+      "id": "opp_medium_enterprise",
+      "tier": "opportunity",
+      "label": "Medium Enterprise Lending",
+      "description": "₹4.26L Cr growing +22.3%. Too large for microfinance, too small for large corporate credit teams. Cash-flow underwriting, ticket ₹50L–₹5Cr.",
+      "stat": "+22.3% YoY",
+      "value_lcr": 4.26,
+      "annotation_ids": ["medium-enterprise-underserved-window", "medium-enterprises-fastest-2yr"]
+    },
+    {
+      "id": "opp_engineering_supply_chain",
+      "tier": "opportunity",
+      "label": "Engineering Supply Chain Credit",
+      "description": "PLI-linked companies expanding capacity. Supply chains verifiable via GST and TReDS. Long tenors, tangible collateral.",
+      "stat": "+35.9% YoY",
+      "value_lcr": 3.11,
+      "annotation_ids": ["engineering-capex-cycle", "engineering-gems-breakout"]
+    },
+    {
+      "id": "opp_psl_affordable_housing",
+      "tier": "opportunity",
+      "label": "PSL Affordable Housing — Tier 3/4",
+      "description": "PMAY demand exists. Constraint is distribution, not demand. 50 semi-urban clusters via BCs or co-lending generates business AND PSLC inventory.",
+      "stat": "+37.9% YoY",
+      "value_lcr": 10.31,
+      "annotation_ids": ["psl-housing-tier3-origination", "psl-housing-surge"]
+    },
+    {
+      "id": "opp_it_working_capital",
+      "tier": "opportunity",
+      "label": "IT / Software Working Capital",
+      "description": "India's IT sector earns ₹22L Cr+ annually but has only ₹0.41L Cr in bank credit. Underleveraged relative to cash flows.",
+      "stat": "+20.7% YoY",
+      "value_lcr": 0.41,
+      "annotation_ids": ["computer-software-small-but-growing"]
+    },
+    {
+      "id": "opp_pslc_origination",
+      "tier": "opportunity",
+      "label": "PSLC Origination — Sell Certificates",
+      "description": "Banks buying PSLCs to meet targets creates a market. Lenders who can genuinely originate in weaker sections / affordable housing generate sellable inventory.",
+      "stat": null,
+      "value_lcr": null,
+      "annotation_ids": ["weaker-sections-large-growing", "psl-housing-tier3-origination"]
+    },
+
+    {
+      "_comment": "── PRESSURE POINTS — latent risks and stress ────────────────────────────",
+      "id": "pressure_gold_ltv",
+      "tier": "pressure",
+      "label": "Gold LTV Risk at Scale",
+      "description": "Most gold loans were originated near all-time high gold prices. A 20–30% price fall would breach LTV limits across the portfolio simultaneously, forcing auctions at scale.",
+      "stat": "₹4L Cr at risk",
+      "value_lcr": 4.01,
+      "annotation_ids": ["gold-loans-structural-surge"]
+    },
+    {
+      "id": "pressure_nbfc_concentration",
+      "tier": "pressure",
+      "label": "NBFC Concentration in Bank Funding",
+      "description": "₹19.05L Cr of bank exposure growing +17.8% annually. Top 20 NBFCs are likely 80%+ of this. A single large NBFC stress event triggers contagion across bank credit.",
+      "stat": "₹19L Cr, +17.8%",
+      "value_lcr": 19.05,
+      "annotation_ids": ["nbfc-dominates-services-credit"]
+    },
+    {
+      "id": "pressure_fintech_unsecured",
+      "tier": "pressure",
+      "label": "Fintech Unsecured Book Not Visible",
+      "description": "RBI's risk-weight action targeted fintech-originated short-tenor unsecured loans. This book is not in the RBI SIBC dataset — deterioration there would trigger another regulatory tightening.",
+      "stat": null,
+      "value_lcr": null,
+      "annotation_ids": ["credit-cards-stagnating", "consumer-durables-declining"]
+    }
+
+  ],
+
+  "edges": [
+
+    {
+      "_comment": "── Driver → Sector causal connections ───────────────────────────────────",
+      "from": "driver_formalisation",
+      "to": "sector_msme_micro_small",
+      "type": "causes",
+      "label": "UDYAM-registered businesses becoming first-time bank borrowers"
+    },
+    {
+      "from": "driver_formalisation",
+      "to": "gap_msme_base_effect",
+      "type": "creates_gap",
+      "label": "Makes it impossible to separate new credit demand from newly-visible businesses"
+    },
+    {
+      "from": "driver_rbi_regulation",
+      "to": "sector_credit_cards",
+      "type": "suppresses",
+      "label": "Higher capital cost slowed origination and limit expansion"
+    },
+    {
+      "from": "driver_rbi_regulation",
+      "to": "sector_gold_loans",
+      "type": "reroutes_demand_to",
+      "label": "Unsecured credit repriced → borrower demand migrated to secured gold loans"
+    },
+    {
+      "from": "driver_rbi_regulation",
+      "to": "sector_consumer_durables",
+      "type": "suppresses",
+      "label": "Tighter unsecured lending environment accelerated fintech displacement of bank EMI"
+    },
+    {
+      "from": "driver_gold_price_rise",
+      "to": "sector_gold_loans",
+      "type": "reinforces",
+      "label": "Higher gold prices raise eligible loan amounts against existing gold holdings"
+    },
+    {
+      "from": "driver_gold_price_rise",
+      "to": "sector_engineering",
+      "type": "reinforces",
+      "label": "Gems & Jewellery working capital rises with gold inventory value"
+    },
+    {
+      "from": "driver_household_stress",
+      "to": "sector_gold_loans",
+      "type": "causes",
+      "label": "Households pledging gold to meet liquidity needs — not investment behaviour"
+    },
+    {
+      "from": "driver_pli_policy",
+      "to": "sector_engineering",
+      "type": "causes",
+      "label": "PLI commitments require capex — companies borrowing to build capacity"
+    },
+    {
+      "from": "driver_nbfc_expansion",
+      "to": "sector_nbfc",
+      "type": "causes",
+      "label": "Banks funding NBFC growth as indirect route to segments they can't serve"
+    },
+    {
+      "from": "driver_psl_compliance",
+      "to": "sector_psl_housing",
+      "type": "reinforces",
+      "label": "PSL housing qualifies for target fulfillment — compliance pressure is driving allocation"
+    },
+
+    {
+      "_comment": "── Sector → Outcome connections ─────────────────────────────────────────",
+      "from": "sector_gold_loans",
+      "to": "pressure_gold_ltv",
+      "type": "creates_risk",
+      "label": "Loans originated at peak gold prices — LTV breach risk if prices fall 20–30%"
+    },
+    {
+      "from": "sector_gold_loans",
+      "to": "opp_gold_lending",
+      "type": "creates_opportunity",
+      "label": "Growing 4.4x with no deceleration — large headroom vs vehicle loans"
+    },
+    {
+      "from": "sector_msme_micro_small",
+      "to": "opp_medium_enterprise",
+      "type": "creates_opportunity",
+      "label": "MSME acceleration shows demand exists — Medium is fastest-growing, smallest stock"
+    },
+    {
+      "from": "sector_msme_medium",
+      "to": "opp_medium_enterprise",
+      "type": "creates_opportunity",
+      "label": "44.9% growth in 2 years at only 10% of industry stock — underserved window open"
+    },
+    {
+      "from": "sector_engineering",
+      "to": "opp_engineering_supply_chain",
+      "type": "creates_opportunity",
+      "label": "PLI companies expanding capacity need supply chain working capital — GST/TReDS verifiable"
+    },
+    {
+      "from": "sector_psl_housing",
+      "to": "opp_psl_affordable_housing",
+      "type": "creates_opportunity",
+      "label": "Policy momentum + PMAY demand exists — constraint is Tier 3/4 distribution, not demand"
+    },
+    {
+      "from": "sector_psl_housing",
+      "to": "opp_pslc_origination",
+      "type": "creates_opportunity",
+      "label": "Banks buying PSLCs to meet targets — genuine PSL originators can sell certificates"
+    },
+    {
+      "from": "sector_nbfc",
+      "to": "pressure_nbfc_concentration",
+      "type": "creates_risk",
+      "label": "₹19L Cr growing 17.8% annually — single NBFC stress cascades into bank books"
+    },
+    {
+      "from": "sector_shipping",
+      "to": "gap_shipping_reclassification",
+      "type": "is_data_gap",
+      "label": "₹7.3L Cr → ₹0.1L Cr is a classification change, not a real credit collapse"
+    },
+    {
+      "from": "sector_credit_cards",
+      "to": "pressure_fintech_unsecured",
+      "type": "signals",
+      "label": "Credit card stall is visible — but the fintech unsecured book that replaced it is not in this dataset"
+    },
+
+    {
+      "_comment": "── Missing opportunity / risk / gap edges — added after validation ──────────",
+      "from": "sector_services",
+      "to": "opp_it_working_capital",
+      "type": "creates_opportunity",
+      "label": "IT/software is <1% of services credit but growing +20.7% — underleveraged relative to sector cash flows"
+    },
+    {
+      "from": "driver_rbi_regulation",
+      "to": "pressure_fintech_unsecured",
+      "type": "creates_risk",
+      "label": "RBI tightening displaced unsecured origination to fintechs — that book is now off-balance-sheet and invisible to this dataset"
+    },
+    {
+      "from": "sector_psl_housing",
+      "to": "gap_psl_double_counting",
+      "type": "is_data_gap",
+      "label": "PSL categories are not separate buckets — same loan counted across multiple PSL lines; totals cannot be summed"
+    },
+    {
+      "from": "sector_shipping",
+      "to": "gap_data_series_breaks",
+      "type": "is_data_gap",
+      "label": "Shipping, Renewable Energy, Social Infrastructure all show Mar 2025 discontinuities — reclassifications, not real credit moves"
+    },
+    {
+      "from": "sector_nbfc",
+      "to": "gap_nbfc_retail_invisible",
+      "type": "is_data_gap",
+      "label": "₹19.05L Cr is bank credit TO NBFCs — what NBFCs lend to end borrowers (microfinance, small biz, gold) is not in this dataset"
+    },
+
+    {
+      "_comment": "── Cross-sector structural relationships ─────────────────────────────────",
+      "from": "sector_msme_large",
+      "to": "sector_msme_micro_small",
+      "type": "contrast",
+      "label": "Large credit +5.5% vs Micro & Small +31.2% — structural shift confirmed over 2 years"
+    },
+    {
+      "from": "sector_personal_loans",
+      "to": "sector_msme_large",
+      "type": "contrast",
+      "label": "Retail now exceeds industry by ₹23.3L Cr and the gap is widening"
+    }
+
+  ]
+}
