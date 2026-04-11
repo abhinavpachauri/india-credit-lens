@@ -11,7 +11,7 @@ import type { Report, ReportSection, ChartPoint, SectionAnnotations } from "@/li
 
 // ── Annotation content ────────────────────────────────────────────────────────
 
-const ANNOTATIONS: Record<string, SectionAnnotations> = {
+export const ANNOTATIONS: Record<string, SectionAnnotations> = {
 
   bankCredit: {
     insights: [

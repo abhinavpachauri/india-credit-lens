@@ -1,0 +1,28 @@
+---
+title: PSL Compliance Pressure
+---
+flowchart TD
+
+    classDef driverNode fill:#1E3A5F,stroke:#1E3A5F,color:#ffffff
+    classDef sectorNode fill:#F0FDF4,stroke:#166534,color:#166534
+    classDef gapNode fill:#F9FAFB,stroke:#6B7280,color:#374151
+    classDef opportunityNode fill:#0F766E,stroke:#0F766E,color:#ffffff
+    classDef pressureNode fill:#B45309,stroke:#B45309,color:#ffffff
+
+%% --> causes/creates/signals  -.-> suppresses/risk/gap  ==> reroutes  <--> contrast
+
+    driver_psl_compliance(["PSL Compliance Pressure"])
+    sector_psl_housing["PSL Housing\n+37.9% YoY"]
+    gap_psl_double_counting{{"PSL Lines Overlap — Do Not Sum"}}
+    opp_psl_affordable_housing("PSL Affordable Housing — Tier 3/4")
+    opp_pslc_origination("PSLC Origination — Sell Certificates")
+
+    class driver_psl_compliance driverNode
+    class sector_psl_housing sectorNode
+    class gap_psl_double_counting gapNode
+    class opp_psl_affordable_housing,opp_pslc_origination opportunityNode
+
+    driver_psl_compliance --> sector_psl_housing
+    sector_psl_housing --> opp_psl_affordable_housing
+    sector_psl_housing --> opp_pslc_origination
+    sector_psl_housing -.-> gap_psl_double_counting

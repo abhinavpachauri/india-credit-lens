@@ -1,0 +1,102 @@
+---
+title: India Credit System — Jan 2026  |  ₹204.8L Cr total  |  +14.6% YoY
+---
+flowchart TD
+
+%% ── Style classes by node tier ─────────────────────────────────────────
+    classDef driverNode fill:#1E3A5F,stroke:#1E3A5F,color:#ffffff
+    classDef sectorNode fill:#F0FDF4,stroke:#166534,color:#166534
+    classDef gapNode fill:#F9FAFB,stroke:#6B7280,color:#374151
+    classDef opportunityNode fill:#0F766E,stroke:#0F766E,color:#ffffff
+    classDef pressureNode fill:#B45309,stroke:#B45309,color:#ffffff
+
+%% Arrow legend:
+%% -->   causes / creates / signals
+%% -.->  suppresses / creates_risk / creates_gap
+%% ==>   reroutes_demand_to
+%% <-->  contrast
+
+    subgraph DRIVER["⚡ WHAT'S DRIVING THE SYSTEM"]
+        driver_formalisation(["GST / UDYAM Formalisation"])
+        driver_rbi_regulation(["RBI Unsecured Risk-Weight Increase"])
+        driver_gold_price_rise(["Gold Price Appreciation"])
+        driver_pli_policy(["PLI Scheme / Manufacturing Capex"])
+        driver_household_stress(["Household Liquidity Stress"])
+        driver_nbfc_expansion(["NBFC Intermediation Layer"])
+        driver_psl_compliance(["PSL Compliance Pressure"])
+    end
+
+    subgraph SECTOR["📊 WHERE CREDIT IS MOVING"]
+        sector_personal_loans["Personal Loans\n+14.9% YoY"]
+        sector_gold_loans["Gold Loans\n+128.8% YoY"]
+        sector_credit_cards["Credit Cards\n+1.5% YoY"]
+        sector_consumer_durables["Consumer Durables\n-4.0% YoY"]
+        sector_msme_micro_small["Micro & Small Enterprises\n+31.2% YoY"]
+        sector_msme_medium["Medium Enterprises\n+22.3% YoY"]
+        sector_msme_large["Large Corporates\n+5.5% YoY"]
+        sector_services["Services\n+15.5% YoY"]
+        sector_nbfc["NBFC Wholesale Credit\n+17.8% YoY"]
+        sector_engineering["All Engineering\n+35.9% YoY"]
+        sector_psl_housing["PSL Housing\n+37.9% YoY"]
+        sector_shipping["Shipping Credit\n-98.6% YoY"]
+    end
+
+    subgraph GAP["🔍 DATA GAPS — what we can't see"]
+        gap_shipping_reclassification{{"Shipping: Reclassification, Not Collapse"}}
+        gap_msme_base_effect{{"MSME Growth: Formalisation vs Real Demand"}}
+        gap_psl_double_counting{{"PSL Lines Overlap — Do Not Sum"}}
+        gap_data_series_breaks{{"Multiple Series Broke in 2025"}}
+        gap_nbfc_retail_invisible{{"NBFC Retail Lending Not Visible Here"}}
+    end
+
+    subgraph OPPORTUNITY["🎯 OPPORTUNITIES — where to play"]
+        opp_gold_lending("Gold Loan Products")
+        opp_medium_enterprise("Medium Enterprise Lending")
+        opp_engineering_supply_chain("Engineering Supply Chain Credit")
+        opp_psl_affordable_housing("PSL Affordable Housing — Tier 3/4")
+        opp_it_working_capital("IT / Software Working Capital")
+        opp_pslc_origination("PSLC Origination — Sell Certificates")
+    end
+
+    subgraph PRESSURE["⚠️ RISKS — what could break"]
+        pressure_gold_ltv[/"Gold LTV Risk at Scale"/]
+        pressure_nbfc_concentration[/"NBFC Concentration in Bank Funding"/]
+        pressure_fintech_unsecured[/"Fintech Unsecured Book Not Visible"/]
+    end
+
+%% ── Apply styles ────────────────────────────────────────────────────────
+    class driver_formalisation,driver_rbi_regulation,driver_gold_price_rise,driver_pli_policy,driver_household_stress,driver_nbfc_expansion,driver_psl_compliance driverNode
+    class sector_personal_loans,sector_gold_loans,sector_credit_cards,sector_consumer_durables,sector_msme_micro_small,sector_msme_medium,sector_msme_large,sector_services,sector_nbfc,sector_engineering,sector_psl_housing,sector_shipping sectorNode
+    class gap_shipping_reclassification,gap_msme_base_effect,gap_psl_double_counting,gap_data_series_breaks,gap_nbfc_retail_invisible gapNode
+    class opp_gold_lending,opp_medium_enterprise,opp_engineering_supply_chain,opp_psl_affordable_housing,opp_it_working_capital,opp_pslc_origination opportunityNode
+    class pressure_gold_ltv,pressure_nbfc_concentration,pressure_fintech_unsecured pressureNode
+
+%% ── Edges ───────────────────────────────────────────────────────────────
+    driver_formalisation --> sector_msme_micro_small
+    driver_formalisation -.-> gap_msme_base_effect
+    driver_rbi_regulation -.-> sector_credit_cards
+    driver_rbi_regulation ==> sector_gold_loans
+    driver_rbi_regulation -.-> sector_consumer_durables
+    driver_gold_price_rise --> sector_gold_loans
+    driver_gold_price_rise --> sector_engineering
+    driver_household_stress --> sector_gold_loans
+    driver_pli_policy --> sector_engineering
+    driver_nbfc_expansion --> sector_nbfc
+    driver_psl_compliance --> sector_psl_housing
+    sector_gold_loans -.-> pressure_gold_ltv
+    sector_gold_loans --> opp_gold_lending
+    sector_msme_micro_small --> opp_medium_enterprise
+    sector_msme_medium --> opp_medium_enterprise
+    sector_engineering --> opp_engineering_supply_chain
+    sector_psl_housing --> opp_psl_affordable_housing
+    sector_psl_housing --> opp_pslc_origination
+    sector_nbfc -.-> pressure_nbfc_concentration
+    sector_shipping -.-> gap_shipping_reclassification
+    sector_credit_cards --> pressure_fintech_unsecured
+    sector_services --> opp_it_working_capital
+    driver_rbi_regulation -.-> pressure_fintech_unsecured
+    sector_psl_housing -.-> gap_psl_double_counting
+    sector_shipping -.-> gap_data_series_breaks
+    sector_nbfc -.-> gap_nbfc_retail_invisible
+    sector_msme_large <--> sector_msme_micro_small
+    sector_personal_loans <--> sector_msme_large

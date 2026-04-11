@@ -1,0 +1,20 @@
+---
+title: Services Signal
+---
+flowchart LR
+
+    classDef driverNode fill:#1E3A5F,stroke:#1E3A5F,color:#ffffff
+    classDef sectorNode fill:#F0FDF4,stroke:#166534,color:#166534
+    classDef gapNode fill:#F9FAFB,stroke:#6B7280,color:#374151
+    classDef opportunityNode fill:#0F766E,stroke:#0F766E,color:#ffffff
+    classDef pressureNode fill:#B45309,stroke:#B45309,color:#ffffff
+
+%% --> causes/creates/signals  -.-> suppresses/risk/gap  ==> reroutes  <--> contrast
+
+    sector_services["Services\n+15.5% YoY"]
+    opp_it_working_capital("IT / Software Working Capital")
+
+    class sector_services sectorNode
+    class opp_it_working_capital opportunityNode
+
+    sector_services --> opp_it_working_capital

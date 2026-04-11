@@ -8,8 +8,8 @@ interface TabBarProps {
 }
 
 const TABS: { id: TabId; label: string; icon: string }[] = [
-  { id: "trend",        label: "Trend",        icon: "📈" },
-  { id: "distribution", label: "Distribution",  icon: "📊" },
+  { id: "trend",        label: "Trend",       icon: "📈" },
+  { id: "distribution", label: "Distribution", icon: "📊" },
 ];
 
 export default function TabBar({ active, onChange }: TabBarProps) {

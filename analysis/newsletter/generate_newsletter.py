@@ -1,18 +1,24 @@
 #!/usr/bin/env python3
 """
-generate_newsletter.py v2 — India Credit Lens
+generate_newsletter.py v3 — India Credit Lens
 ----------------------------------------------
-Reads three sources, produces one newsletter (HTML + Markdown).
+Reads four sources, produces one newsletter (HTML + Markdown).
 
 Sources:
-  1. system_model.json    → structure (nodes by tier, causal edges)
-  2. rbi_sibc.ts          → content  (annotation title, body, implication)
-  3. newsletter_config.json → editorial (narrative, featured picks, what_to_watch)
+  1. system_model.json       → structure (nodes by tier, causal edges)
+  2. rbi_sibc.ts             → content  (annotation title, body, implication)
+  3. newsletter_config.json  → editorial (narrative, featured picks, what_to_watch)
+  4. subsystems.json         → derived causal stories (newsletter-flagged subsystems)
 
-Newsletter follows the system model's causal order:
-  HOOK → TL;DR → NARRATIVE [+flowchart] → DRIVERS →
-  WHERE CREDIT MOVED → KEY SIGNALS → OPPORTUNITIES [+quadrant] →
-  RISKS → GAPS [+sankey] → WHAT TO WATCH → CTA
+Newsletter structure:
+  HEADER → HERO STAT → TL;DR →
+  WHERE CREDIT MOVED (table) → KEY SIGNALS →
+  SYSTEM OVERVIEW (image + narrative + signposts) →
+  STORY 1 → STORY 2 → STORY 3 →
+  WHAT TO WATCH → CTA
+
+From issue #2 onwards: WHAT CHANGED section slides in between TL;DR and
+WHERE CREDIT MOVED, auto-generated from delta_model.json (not yet wired).
 
 Usage:
     python3 generate_newsletter.py
@@ -31,7 +37,7 @@ from pathlib import Path
 from datetime import date
 
 
-# ── Tier colour palette (matches system_model.json / dashboard) ───────────────
+# ── Tier colour palette ───────────────────────────────────────────────────────
 
 TIER_COLOR = {
     "driver":      {"bg": "#1E3A5F", "fg": "#ffffff", "accent": "#7eb8e8"},
@@ -39,6 +45,24 @@ TIER_COLOR = {
     "gap":         {"bg": "#F9FAFB", "fg": "#374151", "accent": "#6B7280"},
     "opportunity": {"bg": "#0F766E", "fg": "#ffffff", "accent": "#5eead4"},
     "pressure":    {"bg": "#FEF3C7", "fg": "#92400E", "accent": "#B45309"},
+}
+
+OUTCOME_BORDER = {
+    "opportunity": "#0F766E",
+    "pressure":    "#B45309",
+    "gap":         "#6B7280",
+}
+
+OUTCOME_STAT_COLOR = {
+    "opportunity": "#0F766E",
+    "pressure":    "#B45309",
+    "gap":         "#6B7280",
+}
+
+OUTCOME_TEXT_COLOR = {
+    "opportunity": "#2c1e0f",
+    "pressure":    "#92400E",
+    "gap":         "#374151",
 }
 
 
@@ -71,21 +95,19 @@ def parse_annotations(ts_path):
     current_type = "insight"
 
     type_map = {
-        "insights":     "insight",
-        "gaps":         "gap",
+        "insights":      "insight",
+        "gaps":          "gap",
         "opportunities": "opportunity",
     }
 
     for raw in lines:
         stripped = raw.strip()
 
-        # Track annotation type from containing array key
         for marker, typ in type_map.items():
             if re.match(rf"^\s*{marker}:\s*\[", raw):
                 current_type = typ
                 break
 
-        # Multi-line field continuation
         if in_field is not None:
             m = re.match(r'^\s*"([^"]*)"', stripped)
             if m:
@@ -96,12 +118,10 @@ def parse_annotations(ts_path):
                     field_parts = []
                 continue
             else:
-                # Unexpected — close field
                 current[in_field] = "".join(field_parts)
                 in_field = None
                 field_parts = []
 
-        # New annotation: id field
         m = re.match(r'^id:\s+"([^"]+)"', stripped)
         if m:
             if current and "id" in current:
@@ -112,14 +132,12 @@ def parse_annotations(ts_path):
         if current is None:
             continue
 
-        # Single-line string fields
         for field in ["title", "preferredMode"]:
             m = re.match(rf'^{field}:\s+"([^"]+)"', stripped)
             if m:
                 current[field] = m.group(1)
                 break
 
-        # Multi-line string fields (body, implication)
         for field in ["body", "implication"]:
             m = re.match(rf'^{field}:\s+"([^"]*)"', stripped)
             if m:
@@ -131,7 +149,6 @@ def parse_annotations(ts_path):
                     field_parts = []
                 break
 
-    # Save last annotation
     if current and "id" in current:
         if in_field and field_parts:
             current[in_field] = "".join(field_parts)
@@ -195,19 +212,18 @@ def section_heading(emoji, title, color, border):
     )
 
 
-def diagram_box(title, filename, description):
+def image_placeholder(title, filename, description):
+    """Dashed box standing in for a PNG the user will manually export and insert."""
     return (
-        f'<div style="margin:28px 0;padding:28px 24px;background:#f4f0e8;'
+        f'<div style="margin:24px 0;padding:24px;background:#f4f0e8;'
         f'border:2px dashed #c9a96e;text-align:center;border-radius:3px">'
-        f'<div style="font-size:1.6em;margin-bottom:8px">📊</div>'
+        f'<div style="font-size:1.4em;margin-bottom:8px">🖼</div>'
         f'<div style="font-family:system-ui,sans-serif;font-weight:700;'
         f'color:#7a5c30;margin-bottom:4px">{title}</div>'
-        f'<div style="font-family:system-ui,sans-serif;font-size:0.85em;color:#9a7c55">'
-        f'{description}</div>'
-        f'<div style="font-family:system-ui,sans-serif;font-size:0.75em;'
-        f'color:#b8a080;margin-top:6px">'
-        f'Preview: paste <code style="background:#e8ddc8;padding:2px 5px">'
-        f'{filename}</code> at mermaid.live → Export PNG → replace this box</div>'
+        f'<div style="font-family:system-ui,sans-serif;font-size:0.82em;'
+        f'color:#9a7c55;margin-bottom:10px">{description}</div>'
+        f'<code style="font-family:monospace;font-size:0.78em;background:#e8ddc8;'
+        f'padding:3px 10px;color:#5c4a2a;border-radius:2px">Insert: {filename}</code>'
         f'</div>'
     )
 
@@ -313,45 +329,6 @@ def build_tldr(editorial):
     )
 
 
-def build_narrative(editorial):
-    narrative = editorial.get("system_narrative", "")
-    return (
-        f'<div style="padding:0 40px">'
-        + section_heading("", "The System This Month", "#1a0f00", "#c9a96e")
-        + f'<p style="color:#2c1e0f;line-height:1.85;font-size:1.02em">{narrative}</p>'
-        + f'</div>'
-    )
-
-
-def build_drivers(driver_nodes):
-    if not driver_nodes:
-        return ""
-    cards = ""
-    for d in driver_nodes:
-        stat_html = (
-            f'<span style="font-family:system-ui;font-size:0.78em;'
-            f'color:#7eb8e8;margin-left:10px">{d["stat"]}</span>'
-        ) if d.get("stat") else ""
-        cards += (
-            f'<div style="margin:10px 0;padding:16px 20px;'
-            f'background:#1E3A5F;border-radius:2px">'
-            f'<div style="font-family:system-ui,sans-serif;font-weight:600;'
-            f'color:#ffffff;margin-bottom:5px">{d["label"]}{stat_html}</div>'
-            f'<div style="color:#a0b8d4;font-size:0.88em;line-height:1.5">'
-            f'{d.get("description", "")}</div>'
-            f'</div>'
-        )
-    return (
-        f'<div style="padding:0 40px">'
-        + section_heading("⚡", "What's Driving This", "#1E3A5F", "#1E3A5F")
-        + f'<p style="color:#7a5c30;font-size:0.88em;margin:-12px 0 16px">'
-        + f'Seven macro forces moving the credit system. '
-        + f'Understanding these is more useful than reading the headline numbers.</p>'
-        + cards
-        + f'</div>'
-    )
-
-
 def build_sectors_scoreboard(sector_nodes):
     """All sectors ranked by YoY growth — the scoreboard at a glance."""
     EXCLUDE = {"sector_total_credit"}
@@ -444,68 +421,134 @@ def build_key_signals(featured_ids, tiers, annotations):
     )
 
 
-def build_opportunities(opp_nodes, annotations):
-    if not opp_nodes:
-        return ""
-    cards = ""
-    for node in opp_nodes:
-        ann   = node_primary_annotation(node, annotations)
-        stat  = node.get("stat", "")
-        desc  = node.get("description", "")
-        body  = ann.get("body", desc) if ann else desc
+def build_system_overview(editorial, subsystems):
+    """System narrative + overview diagram placeholder + subsystem signposts."""
+    narrative = editorial.get("system_narrative", "")
+    nl_subs   = [s for s in subsystems if s.get("newsletter")]
+
+    signposts = "".join(
+        f'<li style="margin-bottom:8px;line-height:1.6;font-family:system-ui;'
+        f'font-size:0.9em">'
+        f'<strong style="color:#1E3A5F">{s["label"]}</strong></li>'
+        for s in nl_subs
+    )
+
+    return (
+        f'<div style="padding:0 40px">'
+        + section_heading("🗺", "The System This Month", "#1a0f00", "#c9a96e")
+        + f'<p style="color:#2c1e0f;line-height:1.85;font-size:1.02em">{narrative}</p>'
+        + image_placeholder(
+            "SYSTEM OVERVIEW",
+            "overview.png",
+            f"All {len(subsystems)} causal stories — how they connect"
+        )
+        + (
+            f'<p style="font-family:system-ui;font-size:0.85em;color:#7a5c30;'
+            f'margin:20px 0 10px">Three structural stories in this issue:</p>'
+            f'<ul style="padding-left:20px;margin:0 0 8px">{signposts}</ul>'
+            if nl_subs else ""
+        )
+        + f'</div>'
+    )
+
+
+def build_subsystem_story(sub, id_to_node, annotations):
+    """One causal story block: driver chips + sector stats + diagram + outcome cards."""
+    label = sub["label"]
+
+    # Driver chips — compact inline tags
+    driver_chips = ""
+    for did in sub.get("drivers", []):
+        d = id_to_node.get(did)
+        if d:
+            driver_chips += (
+                f'<span style="display:inline-block;background:#1E3A5F;color:#a0b8d4;'
+                f'font-family:system-ui,sans-serif;font-size:0.73em;padding:3px 10px;'
+                f'border-radius:2px;margin:2px 4px 2px 0">{d["label"]}</span>'
+            )
+
+    # Sector stat row — show all sectors with growth colour
+    sector_stats = ""
+    for sid in sub.get("sectors", []):
+        s = id_to_node.get(sid)
+        if not s:
+            continue
+        stat = s.get("stat", "")
+        g    = parse_growth_pct(stat)
+        if g is None or g < -50:   c = "#6B7280"
+        elif g < 0:                 c = "#B45309"
+        elif g > 25:                c = "#0F766E"
+        elif g > 14.6:              c = "#166534"
+        else:                       c = "#374151"
+        sector_stats += (
+            f'<div style="display:inline-block;margin:4px 20px 4px 0">'
+            f'<span style="font-family:system-ui,sans-serif;font-weight:800;'
+            f'color:{c};font-size:1.1em">{stat}</span>'
+            f'<span style="font-family:system-ui,sans-serif;color:#7a5c30;'
+            f'font-size:0.8em;margin-left:6px">{s["label"]}</span>'
+            f'</div>'
+        )
+
+    # Diagram placeholder — filename matches generate_mermaid.py output convention
+    slug       = re.sub(r"[^a-z0-9]+", "_", label.lower()).strip("_")[:30]
+    sub_id     = sub.get("id", "sub_xx")
+    img_file   = f"{sub_id}_{slug}.png"
+
+    # Outcome nodes: pressure + gap + opportunity — all rendered as side cards
+    outcome_cards = ""
+    for oid in sub.get("outcomes", []):
+        o = id_to_node.get(oid)
+        if not o:
+            continue
+        tier  = o.get("tier", "gap")
+        ann   = node_primary_annotation(o, annotations)
         impl  = ann.get("implication", "") if ann else ""
-        if len(body) > 320:
-            body = body[:317] + "…"
-        cards += side_card(stat, node["label"], body, impl, "#0F766E", "#0F766E")
+        desc  = o.get("description", "")
+        bc    = OUTCOME_BORDER.get(tier, "#6B7280")
+        sc    = OUTCOME_STAT_COLOR.get(tier, "#6B7280")
+        tc    = OUTCOME_TEXT_COLOR.get(tier, "#374151")
+        outcome_cards += side_card(o.get("stat", ""), o["label"], desc, impl, bc, sc, tc)
+
     return (
-        f'<div style="padding:0 40px">'
-        + section_heading("🎯", "Where to Play", "#0F766E", "#0F766E")
-        + cards
+        f'<div style="padding:0 40px;margin-top:32px">'
+        f'<h3 style="font-family:system-ui,sans-serif;font-size:1.05em;font-weight:700;'
+        f'color:#1a0f00;border-left:3px solid #1E3A5F;padding-left:14px;margin:0 0 14px">'
+        f'{label}</h3>'
+        + (
+            f'<div style="margin-bottom:14px">{driver_chips}</div>'
+            if driver_chips else ""
+        )
+        + (
+            f'<div style="padding:14px 0;border-top:1px solid #f0e8d8;'
+            f'border-bottom:1px solid #f0e8d8;margin-bottom:4px">{sector_stats}</div>'
+            if sector_stats else ""
+        )
+        + image_placeholder(label.upper(), img_file, f"Causal diagram: {label}")
+        + outcome_cards
         + f'</div>'
     )
 
 
-def build_risks(pressure_nodes, annotations):
-    if not pressure_nodes:
+def build_subsystem_stories(subsystems, model, annotations):
+    """Render one story block per newsletter-flagged subsystem."""
+    nl_subs    = [s for s in subsystems if s.get("newsletter")]
+    id_to_node = {n["id"]: n for n in real_nodes(model)}
+
+    if not nl_subs:
         return ""
-    cards = ""
-    for node in pressure_nodes:
-        ann  = node_primary_annotation(node, annotations)
-        impl = ann.get("implication", "") if ann else ""
-        cards += side_card(
-            node.get("stat", ""), node["label"],
-            node.get("description", ""), impl,
-            "#B45309", "#B45309", "#92400E"
-        )
-    return (
-        f'<div style="padding:0 40px">'
-        + section_heading("⚠️", "What Could Break", "#B45309", "#B45309")
-        + f'<p style="color:#7a5c30;font-size:0.88em;margin:-12px 0 16px">'
-        + f'Latent risks not visible in the headline growth number.</p>'
-        + cards
-        + f'</div>'
+
+    blocks = "".join(
+        build_subsystem_story(sub, id_to_node, annotations)
+        for sub in nl_subs
     )
-
-
-def build_gaps(gap_nodes, annotations):
-    if not gap_nodes:
-        return ""
-    cards = ""
-    for node in gap_nodes:
-        ann  = node_primary_annotation(node, annotations)
-        impl = ann.get("implication", "") if ann else ""
-        cards += side_card(
-            node.get("stat", ""), node["label"],
-            node.get("description", ""), impl,
-            "#6B7280", "#6B7280", "#374151"
-        )
     return (
         f'<div style="padding:0 40px">'
-        + section_heading("🔍", "What We Can't See", "#374151", "#6B7280")
-        + f'<p style="color:#7a5c30;font-size:0.88em;margin:-12px 0 16px">'
-        + f'Data gaps that limit or distort interpretation of the numbers above.</p>'
-        + cards
+        + section_heading("📖", "The Three Stories", "#1a0f00", "#1E3A5F")
+        + f'<p style="color:#7a5c30;font-size:0.88em;margin:-12px 0 4px">'
+        + f'Each story names the force, shows where credit moved, '
+        + f'and flags what to watch.</p>'
         + f'</div>'
+        + blocks
     )
 
 
@@ -588,9 +631,224 @@ HTML_SHELL = """\
 """
 
 
+# ── Substack shell (minimal styles — survives paste) ─────────────────────────
+
+SUBSTACK_SHELL = """\
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{title} — Substack</title>
+  <style>
+    body {{ max-width:680px; margin:40px auto; font-family:Georgia,serif;
+            color:#1a1a1a; line-height:1.75; font-size:17px; }}
+    h1,h2,h3 {{ font-family:system-ui,sans-serif; line-height:1.25; }}
+    h1 {{ font-size:1.9em; margin-bottom:6px; }}
+    h2 {{ font-size:1.15em; margin:36px 0 10px; border-bottom:1px solid #e5e5e5;
+          padding-bottom:6px; }}
+    h3 {{ font-size:1em; margin:28px 0 8px; }}
+    table {{ width:100%; border-collapse:collapse; font-size:0.9em; }}
+    th {{ text-align:left; padding:6px 10px; border-bottom:2px solid #ddd;
+          font-family:system-ui; font-size:0.8em; text-transform:uppercase;
+          letter-spacing:0.05em; color:#555; }}
+    td {{ padding:7px 10px; border-bottom:1px solid #f0f0f0; }}
+    blockquote {{ border-left:3px solid #ccc; margin:20px 0;
+                  padding:14px 20px; background:#f9f9f9; border-radius:2px; }}
+    blockquote p {{ margin:6px 0; }}
+    hr {{ border:none; border-top:1px solid #e5e5e5; margin:36px 0; }}
+    a {{ color:#1a1a1a; }}
+  </style>
+</head>
+<body>
+{body}
+</body>
+</html>
+"""
+
+
+# ── Substack HTML builder ─────────────────────────────────────────────────────
+
+def build_substack_html(cfg, model, annotations, subsystems):
+    """Semantic HTML only — no inline styles. Open in browser → Select All →
+    Copy → paste into Substack editor. Substack keeps headings, bold, italic,
+    blockquotes, tables, and links.
+    """
+    meta       = model.get("_meta", {})
+    edit       = cfg.get("editorial", {})
+    tiers      = nodes_by_tier(model)
+    period     = meta.get("period", "")
+    total      = meta.get("total_credit_lcr", "")
+    growth     = meta.get("yoy_growth_pct", "")
+    issue      = cfg["_meta"].get("issue_number", 1)
+    pub        = cfg["_meta"].get("published", "")
+    brand      = cfg.get("branding", {})
+    cta_cfg    = cfg.get("cta", {})
+    issue_t    = edit.get("issue_title", period)
+    featured   = edit.get("featured_annotation_ids", [])
+    nl_subs    = [s for s in subsystems if s.get("newsletter")]
+    id_to_node = {n["id"]: n for n in real_nodes(model)}
+
+    p = []   # parts list
+
+    # ── Header ────────────────────────────────────────────────────────────────
+    p.append(f'<h1>{period}: {issue_t}</h1>')
+    p.append(
+        f'<p><em>Issue #{issue} &nbsp;·&nbsp; {pub} &nbsp;·&nbsp; '
+        f'by {brand.get("author", "India Credit Lens")}</em></p>'
+    )
+    p.append('<hr>')
+
+    # ── Hero stat ─────────────────────────────────────────────────────────────
+    p.append(f'<h2>₹{total}L Cr &nbsp;—&nbsp; +{growth}% YoY</h2>')
+    p.append(
+        f'<p>Total bank credit outstanding · {period}. '
+        f'₹25.8L Cr added in 12 months vs ₹18.1L Cr the year before. '
+        f'The system is not just growing — it is accelerating.</p>'
+    )
+    p.append('<hr>')
+
+    # ── TL;DR ─────────────────────────────────────────────────────────────────
+    p.append('<h2>TL;DR</h2>')
+    bullets = "".join(f'<li>{b}</li>' for b in edit.get("tldr", []))
+    p.append(f'<ul>{bullets}</ul>')
+    p.append('<hr>')
+
+    # ── Future: What Changed (issue #2+) ──────────────────────────────────────
+
+    # ── Where credit moved ────────────────────────────────────────────────────
+    EXCLUDE = {"sector_total_credit"}
+    sector_rows = sorted(
+        [(n, parse_growth_pct(n.get("stat"))) for n in tiers.get("sector", [])
+         if n["id"] not in EXCLUDE],
+        key=lambda x: x[1] if x[1] is not None else -9999,
+        reverse=True,
+    )
+    p.append('<h2>Where Credit Moved</h2>')
+    rows_html = "".join(
+        f'<tr><td>{n["label"]}</td><td><strong>{n.get("stat","—")}</strong></td>'
+        f'<td>{"₹" + str(n["value_lcr"]) + "L Cr" if n.get("value_lcr") else "—"}</td></tr>'
+        for n, _ in sector_rows
+    )
+    p.append(
+        f'<table><thead><tr><th>Sector</th><th>YoY Growth</th>'
+        f'<th>Outstanding</th></tr></thead><tbody>{rows_html}</tbody></table>'
+    )
+    p.append('<hr>')
+
+    # ── Key signals ───────────────────────────────────────────────────────────
+    p.append('<h2>Key Signals This Month</h2>')
+    p.append('<p><em>Three signals selected as most consequential for lenders.</em></p>')
+    for aid in featured:
+        ann = annotations.get(aid)
+        if not ann:
+            continue
+        node  = find_best_node_for_annotation(aid, tiers)
+        stat  = node.get("stat", "")
+        title = ann.get("title", "")
+        body  = ann.get("body", "")
+        impl  = ann.get("implication", "")
+        p.append(
+            f'<blockquote>'
+            f'<p><strong>{stat} — {title}</strong></p>'
+            f'<p>{body}</p>'
+            + (f'<p><em>{impl}</em></p>' if impl else '')
+            + '</blockquote>'
+        )
+    p.append('<hr>')
+
+    # ── System overview ───────────────────────────────────────────────────────
+    p.append('<h2>The System This Month</h2>')
+    p.append(f'<p>{edit.get("system_narrative", "")}</p>')
+    p.append('<p><em>[Insert image: overview.png]</em></p>')
+    if nl_subs:
+        p.append('<p>Three structural stories in this issue:</p>')
+        sl = "".join(f'<li><strong>{s["label"]}</strong></li>' for s in nl_subs)
+        p.append(f'<ul>{sl}</ul>')
+    p.append('<hr>')
+
+    # ── Subsystem stories ─────────────────────────────────────────────────────
+    p.append('<h2>The Three Stories</h2>')
+    for sub in nl_subs:
+        label = sub["label"]
+        p.append(f'<h3>{label}</h3>')
+
+        # Drivers as italic label row
+        driver_labels = []
+        for did in sub.get("drivers", []):
+            d = id_to_node.get(did)
+            if d:
+                driver_labels.append(d["label"])
+        if driver_labels:
+            p.append(f'<p><em>{" · ".join(driver_labels)}</em></p>')
+
+        # Sector stats
+        for sid in sub.get("sectors", []):
+            s = id_to_node.get(sid)
+            if s:
+                p.append(
+                    f'<p><strong>{s.get("stat", "")}</strong>'
+                    f'&nbsp; {s["label"]}</p>'
+                )
+
+        # Diagram placeholder
+        slug     = re.sub(r"[^a-z0-9]+", "_", label.lower()).strip("_")[:30]
+        sub_id   = sub.get("id", "sub_xx")
+        img_file = f"{sub_id}_{slug}.png"
+        p.append(f'<p><em>[Insert image: {img_file}]</em></p>')
+
+        # Outcome nodes — risks, gaps, opportunities as blockquotes
+        for oid in sub.get("outcomes", []):
+            o = id_to_node.get(oid)
+            if not o:
+                continue
+            tier = o.get("tier", "gap")
+            icon = {"opportunity": "✅", "pressure": "⚠️", "gap": "🔍"}.get(tier, "•")
+            ann  = node_primary_annotation(o, annotations)
+            impl = ann.get("implication", "") if ann else ""
+            p.append(
+                f'<blockquote>'
+                f'<p><strong>{icon} {o["label"]}</strong></p>'
+                f'<p>{o.get("description", "")}</p>'
+                + (f'<p><em>{impl}</em></p>' if impl else '')
+                + '</blockquote>'
+            )
+
+        p.append('<hr>')
+
+    # ── What to watch ─────────────────────────────────────────────────────────
+    watch = edit.get("what_to_watch", {})
+    p.append('<h2>What to Watch Next</h2>')
+    p.append(f'<p><em>Next release: {watch.get("next_release", "")}</em></p>')
+    wl = "".join(f'<li>{b}</li>' for b in watch.get("bullets", []))
+    p.append(f'<ul>{wl}</ul>')
+    p.append('<hr>')
+
+    # ── CTA ───────────────────────────────────────────────────────────────────
+    p.append(
+        f'<p><strong>'
+        f'<a href="{cta_cfg.get("dashboard_url", "")}">'
+        f'{cta_cfg.get("dashboard_label", "Explore the dashboard")} →</a>'
+        f'</strong></p>'
+    )
+    p.append(
+        f'<p><a href="{cta_cfg.get("digest_url", "")}">'
+        f'{cta_cfg.get("digest_label", "Subscribe")} →</a></p>'
+    )
+    p.append(
+        f'<p><em>{brand.get("tagline", "")} &nbsp;·&nbsp; '
+        f'<a href="https://{brand.get("site", "")}">{brand.get("site", "")}</a></em></p>'
+    )
+
+    return SUBSTACK_SHELL.format(
+        title=f"India Credit Lens — {period}",
+        body="\n".join(p),
+    )
+
+
 # ── HTML builder ──────────────────────────────────────────────────────────────
 
-def build_html(cfg, model, annotations):
+def build_html(cfg, model, annotations, subsystems):
     meta  = model.get("_meta", {})
     edit  = cfg.get("editorial", {})
     tiers = nodes_by_tier(model)
@@ -599,32 +857,14 @@ def build_html(cfg, model, annotations):
         build_header(cfg, meta),
         build_hook(meta),
         build_tldr(edit),
-        divider(),
-        build_narrative(edit),
-        diagram_box(
-            "SYSTEM FLOW DIAGRAM", "flowchart.mmd",
-            "Causal map: what's driving the system → where credit moved → risks & opportunities"
-        ),
-        divider(),
-        build_drivers(tiers.get("driver", [])),
+        # ── Future: build_what_changed(delta) here (issue #2 onwards) ──
         divider(),
         build_sectors_scoreboard(tiers.get("sector", [])),
         divider(),
         build_key_signals(edit.get("featured_annotation_ids", []), tiers, annotations),
         divider(),
-        build_opportunities(tiers.get("opportunity", []), annotations),
-        diagram_box(
-            "CREDIT OPPORTUNITY MAP", "quadrant.mmd",
-            "Growth rate vs credit stock — where to build, scale, or harvest"
-        ),
-        divider(),
-        build_risks(tiers.get("pressure", []), annotations),
-        divider(),
-        build_gaps(tiers.get("gap", []), annotations),
-        diagram_box(
-            "CREDIT ALLOCATION — SANKEY", "sankey.mmd",
-            "Where ₹204.8L Cr is flowing across sectors (band width = ₹L Cr)"
-        ),
+        build_system_overview(edit, subsystems),
+        build_subsystem_stories(subsystems, model, annotations),
         divider(),
         build_what_to_watch(edit),
         divider(),
@@ -641,10 +881,10 @@ def build_html(cfg, model, annotations):
 
 # ── Markdown builder ──────────────────────────────────────────────────────────
 
-def build_markdown(cfg, model, annotations):
-    meta  = model.get("_meta", {})
-    edit  = cfg.get("editorial", {})
-    tiers = nodes_by_tier(model)
+def build_markdown(cfg, model, annotations, subsystems):
+    meta    = model.get("_meta", {})
+    edit    = cfg.get("editorial", {})
+    tiers   = nodes_by_tier(model)
     period  = meta.get("period", "")
     total   = meta.get("total_credit_lcr", "")
     growth  = meta.get("yoy_growth_pct", "")
@@ -654,37 +894,28 @@ def build_markdown(cfg, model, annotations):
     cta_cfg = cfg.get("cta", {})
     issue_t = edit.get("issue_title", period)
     featured = edit.get("featured_annotation_ids", [])
+    nl_subs  = [s for s in subsystems if s.get("newsletter")]
+    id_to_node = {n["id"]: n for n in real_nodes(model)}
 
     lines = []
+
+    # Header
     lines += [
         f"# India Credit Lens — {period}: {issue_t}",
         f"*Issue #{issue} · {pub} · {brand.get('site', '')}*",
-        "",
-        "---",
-        "",
+        "", "---", "",
         f"## ₹{total}L Cr",
         f"**Total bank credit outstanding · {period}**",
         f"+{growth}% YoY — fastest growth rate in this dataset.",
-        "",
-        "---",
-        "",
-        "## TL;DR",
-        "",
+        "", "---", "", "## TL;DR", "",
     ]
     for b in edit.get("tldr", []):
         lines.append(f"- {b}")
     lines += ["", "---", ""]
 
-    lines += ["## The System This Month", "", edit.get("system_narrative", ""), "",
-              "> 📊 **[DIAGRAM: flowchart.mmd]**", "", "---", ""]
+    # Future: ## What Changed Since Last Issue (delta section, issue #2 onwards)
 
-    lines += ["## ⚡ What's Driving This", ""]
-    for d in tiers.get("driver", []):
-        s = f" · {d['stat']}" if d.get("stat") else ""
-        lines += [f"**{d['label']}{s}**", d.get("description", ""), ""]
-    lines += ["---", ""]
-
-    # Sectors scoreboard
+    # Where credit moved
     EXCLUDE = {"sector_total_credit"}
     sector_rows = sorted(
         [(n, parse_growth_pct(n.get("stat"))) for n in tiers.get("sector", [])
@@ -692,14 +923,17 @@ def build_markdown(cfg, model, annotations):
         key=lambda x: x[1] if x[1] is not None else -9999,
         reverse=True,
     )
-    lines += ["## 📊 Where Credit Moved", "",
-              "| Sector | YoY Growth | Outstanding |",
-              "| --- | --- | --- |"]
+    lines += [
+        "## 📊 Where Credit Moved", "",
+        "| Sector | YoY Growth | Outstanding |",
+        "| --- | --- | --- |",
+    ]
     for node, _ in sector_rows:
         vol = f'₹{node["value_lcr"]}L Cr' if node.get("value_lcr") else "—"
         lines.append(f'| {node["label"]} | {node.get("stat","—")} | {vol} |')
     lines += ["", "---", ""]
 
+    # Key signals
     lines += ["## 🔎 Key Signals This Month", ""]
     for aid in featured:
         ann = annotations.get(aid)
@@ -710,42 +944,71 @@ def build_markdown(cfg, model, annotations):
         lines += [f"### {stat} — {ann.get('title', '')}", "", ann.get("body", ""), ""]
         if ann.get("implication"):
             lines += [f"*{ann['implication']}*", ""]
+    lines += ["---", ""]
+
+    # System overview
+    lines += ["## 🗺 The System This Month", "", edit.get("system_narrative", ""), ""]
+    lines += ["> 🖼 `[Insert: overview.png]`", ""]
+    if nl_subs:
+        lines += ["Three structural stories in this issue:", ""]
+        for s in nl_subs:
+            lines.append(f"- **{s['label']}**")
+    lines += ["", "---", ""]
+
+    # Subsystem stories
+    lines += ["## 📖 The Three Stories", ""]
+    for sub in nl_subs:
+        lines += [f"### {sub['label']}", ""]
+
+        # Driver chips (inline text)
+        driver_labels = []
+        for did in sub.get("drivers", []):
+            d = id_to_node.get(did)
+            if d:
+                driver_labels.append(d["label"])
+        if driver_labels:
+            lines += [f"**Drivers:** {' · '.join(driver_labels)}", ""]
+
+        # Sector stats
+        for sid in sub.get("sectors", []):
+            s = id_to_node.get(sid)
+            if s:
+                lines.append(f"**{s.get('stat', '')}** {s['label']}")
         lines.append("")
-    lines += ["---", ""]
 
-    lines += ["## 🎯 Where to Play", ""]
-    for node in tiers.get("opportunity", []):
-        ann  = node_primary_annotation(node, annotations)
-        stat = node.get("stat", "")
-        desc = node.get("description", "")
-        body = ann.get("body", desc) if ann else desc
-        impl = ann.get("implication", "") if ann else ""
-        lines += [f"**{node['label']}** · {stat}", body,
-                  f"*{impl}*" if impl else "", ""]
-    lines += ["> 📊 **[DIAGRAM: quadrant.mmd]**", "", "---", ""]
+        # Diagram placeholder
+        slug     = re.sub(r"[^a-z0-9]+", "_", sub["label"].lower()).strip("_")[:30]
+        sub_id   = sub.get("id", "sub_xx")
+        img_file = f"{sub_id}_{slug}.png"
+        lines += [f"> 🖼 `[Insert: {img_file}]`", ""]
 
-    lines += ["## ⚠️ What Could Break", ""]
-    for node in tiers.get("pressure", []):
-        s = f" · {node['stat']}" if node.get("stat") else ""
-        lines += [f"**{node['label']}{s}**", node.get("description", ""), ""]
-    lines += ["---", ""]
+        # Outcome nodes
+        for oid in sub.get("outcomes", []):
+            o = id_to_node.get(oid)
+            if not o:
+                continue
+            tier   = o.get("tier", "gap")
+            icon   = {"opportunity": "✅", "pressure": "⚠️", "gap": "🔍"}.get(tier, "•")
+            ann    = node_primary_annotation(o, annotations)
+            impl   = ann.get("implication", "") if ann else ""
+            lines += [f"{icon} **{o['label']}**", o.get("description", "")]
+            if impl:
+                lines += [f"*{impl}*"]
+            lines.append("")
 
-    lines += ["## 🔍 What We Can't See", ""]
-    for node in tiers.get("gap", []):
-        ann  = node_primary_annotation(node, annotations)
-        impl = ann.get("implication", "") if ann else ""
-        s    = f" · {node['stat']}" if node.get("stat") else ""
-        lines += [f"**{node['label']}{s}**", node.get("description", ""),
-                  f"*{impl}*" if impl else "", ""]
-    lines += ["> 📊 **[DIAGRAM: sankey.mmd]**", "", "---", ""]
+        lines += ["---", ""]
 
+    # What to watch
     watch = edit.get("what_to_watch", {})
-    lines += ["## 📅 What to Watch Next",
-              f"*Next release: {watch.get('next_release', '')}*", ""]
+    lines += [
+        "## 📅 What to Watch Next",
+        f"*Next release: {watch.get('next_release', '')}*", "",
+    ]
     for b in watch.get("bullets", []):
         lines.append(f"- {b}")
     lines += ["", "---", ""]
 
+    # CTA
     lines += [
         f"**{cta_cfg.get('dashboard_label', '')}**",
         f"→ {cta_cfg.get('dashboard_url', '')}",
@@ -773,7 +1036,7 @@ def generate(config_path=None, output_dir=None):
     if fmt != "system_model_v2":
         print(
             "❌  This generator requires format: 'system_model_v2' in newsletter_config.json.\n"
-            "    The old simple/full format is superseded. Use the new schema."
+            "    Use the new schema."
         )
         sys.exit(1)
 
@@ -794,44 +1057,66 @@ def generate(config_path=None, output_dir=None):
     annotations = parse_annotations(str(ann_path))
     print(f"     {len(annotations)} annotations parsed")
 
+    # Load subsystems.json (required for subsystem story sections)
+    subsystems = []
+    subs_rel = cfg["_meta"].get("subsystems_path", "")
+    if subs_rel:
+        subs_path = (config_dir / subs_rel).resolve()
+        if subs_path.exists():
+            with open(subs_path) as f:
+                subsystems = json.load(f)
+            nl_count = sum(1 for s in subsystems if s.get("newsletter"))
+            print(f"  → Subsystems loaded:     {len(subsystems)} total, {nl_count} for newsletter")
+        else:
+            print(f"  ⚠  subsystems.json not found at {subs_path} — subsystem stories will be empty")
+            print(f"     Run: python3 generate_mermaid.py first")
+    else:
+        print("  ⚠  subsystems_path not set in _meta — subsystem stories will be empty")
+
     featured = cfg.get("editorial", {}).get("featured_annotation_ids", [])
     for fid in featured:
         if fid not in annotations:
-            print(f"  ⚠️   Featured annotation '{fid}' not found — skipped")
+            print(f"  ⚠  featured annotation not found: {fid}")
 
-    output_dir = output_dir or os.path.join(base, "output")
+    if not output_dir:
+        output_dir = os.path.join(base, "output")
     os.makedirs(output_dir, exist_ok=True)
-    today = date.today()
 
-    html_content = build_html(cfg, model, annotations)
-    md_content   = build_markdown(cfg, model, annotations)
+    today = str(date.today())
+    html_path     = os.path.join(output_dir, f"newsletter_{today}.html")
+    substack_path = os.path.join(output_dir, f"newsletter_{today}_substack.html")
+    md_path       = os.path.join(output_dir, f"newsletter_{today}.md")
 
-    html_path = os.path.join(output_dir, f"newsletter_{today}.html")
-    md_path   = os.path.join(output_dir, f"newsletter_{today}.md")
+    html     = build_html(cfg, model, annotations, subsystems)
+    substack = build_substack_html(cfg, model, annotations, subsystems)
+    md       = build_markdown(cfg, model, annotations, subsystems)
 
     with open(html_path, "w", encoding="utf-8") as f:
-        f.write(html_content)
+        f.write(html)
+    with open(substack_path, "w", encoding="utf-8") as f:
+        f.write(substack)
     with open(md_path, "w", encoding="utf-8") as f:
-        f.write(md_content)
+        f.write(md)
 
-    meta  = model.get("_meta", {})
     tiers = nodes_by_tier(model)
-    words = len(md_content.split())
+    wc = len(md.split())
 
-    print(f"\n  ✓  HTML : {html_path}")
-    print(f"  ✓  MD   : {md_path}")
-    print(f"\n     Period           : {meta.get('period', '')}")
+    print(f"\n  ✓  HTML     (archive)  : {html_path}")
+    print(f"  ✓  HTML     (substack) : {substack_path}")
+    print(f"  ✓  MD                  : {md_path}")
+    print(f"\n     Period           : {model.get('_meta', {}).get('period', '')}")
     print(f"     Annotations      : {len(annotations)} parsed")
     print(f"     Featured signals : {len(featured)}")
+    print(f"     Newsletter stories: {sum(1 for s in subsystems if s.get('newsletter'))}")
     print(f"     Nodes rendered   :")
-    for tier, nodes in tiers.items():
-        print(f"       {tier:<12} {len(nodes)}")
-    print(f"     Word count       : ~{words}")
-    print(f"\n  → Open {os.path.basename(html_path)} in browser to preview")
-    print(f"  → Paste HTML into Substack Settings → Custom HTML block")
-    print()
+    for tier in ["driver", "sector", "gap", "opportunity", "pressure"]:
+        count = len(tiers.get(tier, []))
+        if count:
+            print(f"       {tier:<12} {count}")
+    print(f"     Word count       : ~{wc}")
+    print(f"\n  → Substack: open newsletter_{today}_substack.html in browser → Select All → Copy → paste into Substack editor")
+    print(f"  → Archive:  newsletter_{today}.html — full styled version\n")
 
 
 if __name__ == "__main__":
-    config = sys.argv[1] if len(sys.argv) > 1 else None
-    generate(config)
+    generate(sys.argv[1] if len(sys.argv) > 1 else None)
