@@ -50,6 +50,27 @@ export default function Dashboard() {
       <TabBar active={tab} onChange={setTab} />
 
       <main className="max-w-5xl mx-auto px-4 py-6">
+
+        {/* Substack embed — top */}
+        <div className="mb-8 flex flex-col items-center gap-2">
+          <p className="text-sm font-medium" style={{ color: "var(--font-muted)" }}>
+            Monthly credit intelligence, free — get it in your inbox
+          </p>
+          <iframe
+            src="https://indiacreditlens.substack.com/embed"
+            width="100%"
+            height="320"
+            style={{
+              maxWidth:     "480px",
+              border:       "1px solid #EEE",
+              background:   "white",
+              borderRadius: "0.5rem",
+            }}
+            frameBorder={0}
+            scrolling="no"
+          />
+        </div>
+
         {report.sections.map((section) => (
           <SectionWithAnnotations key={section.id} section={section} tab={tab} />
         ))}
