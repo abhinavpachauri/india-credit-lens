@@ -14,13 +14,19 @@ Checks:
   5. Data ranges     — growth rates parseable and within credible bounds
   6. Completeness    — model has minimum required tiers and connectivity
   7. Diagram readiness — which nodes have data for each diagram type
+  8. Subsystems      — (--check-subsystems) every node in exactly one subsystem,
+                       every driver leads ≥1 subsystem, counts 3-10, required fields,
+                       all node_ids exist in model
 
 Usage:
-    python3 validate.py rbi_sibc_2026-02-27/system_model.json
-    python3 validate.py rbi_sibc_2026-02-27/system_model.json \\
+    python3 validate.py rbi_sibc/2026-02-27/system_model.json
+    python3 validate.py rbi_sibc/2026-02-27/system_model.json \\
         --annotations ../web/lib/reports/rbi_sibc.ts
-    python3 validate.py rbi_sibc_2026-02-27/system_model.json \\
-        --output output/mermaid/rbi_sibc_2026-04-09
+    python3 validate.py rbi_sibc/2026-02-27/system_model.json \\
+        --output output/mermaid/rbi_sibc/2026-02-27
+    python3 validate.py rbi_sibc/2026-02-27/system_model.json \\
+        --check-subsystems \\
+        --subsystems-path output/mermaid/rbi_sibc/2026-02-27/subsystems.json
 
 Exit codes:
     0 = passed (errors=0; warnings are non-blocking)
@@ -357,9 +363,97 @@ def check_diagram_readiness(model, result):
         )
 
 
+# ── Check 8: Subsystems ───────────────────────────────────────────────────────
+
+def check_subsystems(model, subsystems_path, result):
+    try:
+        with open(subsystems_path) as f:
+            subsystems = json.load(f)
+    except FileNotFoundError:
+        result.error("subsystems", f"subsystems.json not found: {subsystems_path}")
+        return
+    except json.JSONDecodeError as e:
+        result.error("subsystems", f"subsystems.json is invalid JSON: {e}")
+        return
+
+    if not isinstance(subsystems, list):
+        result.error("subsystems", "subsystems.json must be a JSON array")
+        return
+
+    count = len(subsystems)
+    if count < 3:
+        result.error("subsystems", f"Too few subsystems: {count} (minimum 3)")
+    elif count > 10:
+        result.warn("subsystems", f"High subsystem count: {count} — consider merging related subsystems")
+    else:
+        result.note("subsystems", f"Subsystem count: {count} (within 3-10 range)")
+
+    required_fields = ["id", "label", "drivers", "sectors", "outcomes", "node_ids"]
+    node_ids_set = {n["id"] for n in real_nodes(model)}
+    driver_ids   = {n["id"] for n in real_nodes(model) if n.get("tier") == "driver"}
+
+    # Track membership per node for the "exactly one subsystem" check
+    node_membership = {}  # node_id → list of subsystem ids
+
+    for sub in subsystems:
+        sid = sub.get("id", "?")
+
+        # Required fields
+        for field in required_fields:
+            if field not in sub:
+                result.error("subsystems", f"Subsystem '{sid}' missing required field: '{field}'")
+
+        # All node_ids exist in model
+        for nid in sub.get("node_ids", []):
+            if nid not in node_ids_set:
+                result.error(
+                    "subsystems",
+                    f"Subsystem '{sid}' references node_id '{nid}' which does not exist in system_model.json",
+                )
+            node_membership.setdefault(nid, []).append(sid)
+
+        # drivers list references valid driver nodes
+        for did in sub.get("drivers", []):
+            if did not in node_ids_set:
+                result.warn("subsystems", f"Subsystem '{sid}' driver '{did}' not found in model nodes")
+            elif did not in driver_ids:
+                result.warn("subsystems", f"Subsystem '{sid}' driver '{did}' is not a tier=driver node")
+
+    # Every node must be in exactly one subsystem
+    for nid, memberships in node_membership.items():
+        if len(memberships) > 1:
+            result.error(
+                "subsystems",
+                f"Node '{nid}' appears in multiple subsystems: {memberships} — "
+                "each node must belong to exactly one subsystem.",
+            )
+
+    # Check all model nodes are in at least one subsystem
+    all_sub_nodes = set(node_membership.keys())
+    uncovered = node_ids_set - all_sub_nodes
+    if uncovered:
+        result.warn(
+            "subsystems",
+            f"{len(uncovered)} model node(s) not assigned to any subsystem: {sorted(uncovered)}",
+        )
+
+    # Every driver must lead ≥1 subsystem
+    sub_driver_ids = set()
+    for sub in subsystems:
+        sub_driver_ids.update(sub.get("drivers", []))
+
+    for did in driver_ids:
+        if did not in sub_driver_ids:
+            result.warn(
+                "subsystems",
+                f"Driver node '{did}' does not lead any subsystem — "
+                "every driver should anchor at least one subsystem.",
+            )
+
+
 # ── Orchestrator ──────────────────────────────────────────────────────────────
 
-def validate(model_path, annotations_path=None):
+def validate(model_path, annotations_path=None, subsystems_path=None):
     """Run all validation checks. Returns (ValidationResult, model dict)."""
     with open(model_path) as f:
         model = json.load(f)
@@ -389,6 +483,11 @@ def validate(model_path, annotations_path=None):
         ("Completeness",          check_completeness),
         ("Diagram readiness",     check_diagram_readiness),
     ]
+
+    if subsystems_path:
+        checks.append(
+            ("Subsystems", lambda m, r: check_subsystems(m, subsystems_path, r))
+        )
 
     for name, fn in checks:
         fn(model, result)
@@ -453,12 +552,20 @@ def write_report(result, model_path, output_dir):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Validate system_model.json")
-    parser.add_argument("model",         help="Path to system_model.json")
-    parser.add_argument("--annotations", help="Path to annotations .ts file (auto-detected if omitted)")
-    parser.add_argument("--output",      help="Directory to write validation_report.json")
+    parser.add_argument("model",              help="Path to system_model.json")
+    parser.add_argument("--annotations",      help="Path to annotations .ts file (auto-detected if omitted)")
+    parser.add_argument("--output",           help="Directory to write validation_report.json")
+    parser.add_argument("--check-subsystems", action="store_true",
+                        help="Also validate subsystems.json against this model")
+    parser.add_argument("--subsystems-path",  help="Path to subsystems.json (required if --check-subsystems)")
     args = parser.parse_args()
 
-    result, _ = validate(args.model, args.annotations)
+    if args.check_subsystems and not args.subsystems_path:
+        print("ERROR: --check-subsystems requires --subsystems-path", file=sys.stderr)
+        sys.exit(1)
+
+    subsystems_path = args.subsystems_path if args.check_subsystems else None
+    result, _ = validate(args.model, args.annotations, subsystems_path)
     print_report(result, args.model)
 
     if args.output:
