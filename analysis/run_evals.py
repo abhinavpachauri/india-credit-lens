@@ -208,7 +208,7 @@ def main():
     args = ap.parse_args()
 
     period_dir      = ANALYSIS / "rbi_sibc" / args.period
-    subsystems_path = ANALYSIS / "output" / "mermaid" / "rbi_sibc" / args.period / "subsystems.json"
+    subsystems_path = ANALYSIS / "rbi_sibc" / args.period / "subsystems.json"
 
     print(f"\n  Running evals for period: {args.period}")
     print(f"  Period dir : {period_dir}")

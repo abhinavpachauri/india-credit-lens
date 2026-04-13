@@ -4,13 +4,21 @@
   "periods": [
     {
       "period": "Jan 2026",
-      "date": "2026-02-27",
-      "path": "2026-02-27/system_model.json",
+      "dataDate": "2026-02-27",
       "total_credit_lcr": 204.8,
       "yoy_growth_pct": 14.6,
       "subsystem_count": 7,
-      "annotations_live": "web/lib/reports/rbi_sibc.ts"
+      "paths": {
+        "sections":       "rbi_sibc/2026-02-27/sections.json",
+        "system_model":   "rbi_sibc/2026-02-27/system_model.json",
+        "subsystems":     "rbi_sibc/2026-02-27/subsystems.json",
+        "annotations_draft": "rbi_sibc/2026-02-27/annotations_draft.ts",
+        "annotations_live":  "web/lib/reports/rbi_sibc.ts",
+        "mermaid_output": "output/mermaid/rbi_sibc/2026-02-27"
+      }
     }
   ],
-  "deltas": []
+  "merged": {
+    "sections": "rbi_sibc/merged/sections_merged.json"
+  }
 }

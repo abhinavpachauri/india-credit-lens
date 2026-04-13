@@ -214,13 +214,17 @@ In the new pipeline, this is captured as `driver` nodes and `edges` in `system_m
 |---|---|
 | `CLAUDE.md` | This file — root context, auto-loaded |
 | `STRATEGY_PLANNER.md` | Full strategy, revenue model, phased roadmap |
+| `PIPELINE_ARCHITECTURE.md` | **Pipeline architecture, directory structure, stage checklist** |
 | `analysis/report_analysis_prompt.md` | Master prompt for all report analyses |
-| `analysis/carousel/generate_carousel.py` | LinkedIn carousel PDF generator |
-| `analysis/carousel/carousel_config.json` | Carousel content (edit per issue) |
-| `analysis/newsletter/generate_newsletter.py` | Substack newsletter generator |
+| `analysis/run_evals.py` | Master eval orchestrator — run after every pipeline stage |
+| `analysis/extract_sibc.py` | Stage 1: SIBC xlsx → sections.json |
+| `analysis/generate_merge.py` | Stage 5: per-period sections.json[] → sections_merged.json |
+| `analysis/rbi_sibc/timeline.json` | Registry of all ingested periods |
+| `analysis/rbi_sibc/2026-02-27/` | Jan 2026 per-period outputs (sections, model, subsystems, docs) |
+| `analysis/rbi_sibc/merged/` | Merged outputs across all periods |
+| `analysis/newsletter/generate_newsletter.py` | Substack newsletter generator (script-only) |
 | `analysis/newsletter/newsletter_config.json` | Newsletter content (edit per issue) |
-| `analysis/rbi_sibc_2026-02-27/system_model.json` | Causal model — Jan 2026 RBI SIBC |
-| `web/lib/reports/rbi_sibc.ts` | Dashboard annotations — RBI SIBC |
+| `web/lib/reports/rbi_sibc.ts` | Dashboard annotations — RBI SIBC (live, from merged) |
 | `web/CLAUDE.md` | Web-specific context (Next.js, Vercel) |
 
 ---
