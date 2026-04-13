@@ -19,6 +19,13 @@ SIBC .xlsx
     │  → rbi_sibc/{period}/sections.json
     │
     ▼
+[Stage 1b] update_web_data.py
+    │  Consolidates ALL xlsx files → single deduplicated long CSV
+    │  → rbi-analytics/consolidated/consolidated_long.csv
+    │  → web/public/data/rbi_sibc_consolidated.csv   ← dashboard charts live here
+    │  Dedup rule: latest report_date wins for any (statement, code, date) overlap
+    │
+    ▼
 [Stage 2] Claude: Per-period analysis
     │  → rbi_sibc/{period}/system_model.json
     │  → rbi_sibc/{period}/subsystems.json      (co-generated, always a unit)
@@ -205,6 +212,7 @@ Update `merged.sections` path if the merged file moves.
 ```
 □  Place SIBC .xlsx in rbi-analytics/
 □  python3 analysis/extract_sibc.py rbi-analytics/SIBC{date}.xlsx
+□  python3 analysis/update_web_data.py
 □  Validate: python3 analysis/run_evals.py --period {date} --skip-build
 □  Claude: per-period analysis → system_model.json + subsystems.json + annotations_draft.ts + docs
 □  Validate: python3 analysis/run_evals.py --period {date} --skip-build

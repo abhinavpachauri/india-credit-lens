@@ -218,6 +218,7 @@ In the new pipeline, this is captured as `driver` nodes and `edges` in `system_m
 | `analysis/report_analysis_prompt.md` | Master prompt for all report analyses |
 | `analysis/run_evals.py` | Master eval orchestrator — run after every pipeline stage |
 | `analysis/extract_sibc.py` | Stage 1: SIBC xlsx → sections.json |
+| `analysis/update_web_data.py` | Stage 1b: consolidate all xlsx → web/public/data/rbi_sibc_consolidated.csv |
 | `analysis/generate_merge.py` | Stage 5: per-period sections.json[] → sections_merged.json |
 | `analysis/rbi_sibc/timeline.json` | Registry of all ingested periods |
 | `analysis/rbi_sibc/2026-02-27/` | Jan 2026 per-period outputs (sections, model, subsystems, docs) |

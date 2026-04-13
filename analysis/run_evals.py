@@ -75,6 +75,20 @@ def run_check(label, cmd, cwd=None):
 
 # ── Individual checks ─────────────────────────────────────────────────────────
 
+def check_web_data():
+    """Verify web/public/data/rbi_sibc_consolidated.csv exists and is non-empty."""
+    csv_path = WEB / "public" / "data" / "rbi_sibc_consolidated.csv"
+    if not csv_path.exists():
+        return False, "", f"Web CSV not found: {csv_path} — run update_web_data.py"
+    size = csv_path.stat().st_size
+    if size < 1000:
+        return False, "", f"Web CSV suspiciously small ({size} bytes) — may be empty"
+    # Count rows quickly
+    with open(csv_path) as f:
+        rows = sum(1 for _ in f) - 1  # minus header
+    return True, f"{rows} data rows", ""
+
+
 def check_sections(period_dir, merged=False):
     sections_path = period_dir / "sections.json"
     if not sections_path.exists():
@@ -219,14 +233,19 @@ def main():
     # ── Check 1: sections.json ────────────────────────────────────────────────
     passed, out, err = check_sections(period_dir, merged=args.merged)
     notes = one_line_summary(out, err, passed)
-    results.append(("1. sections.json", passed, notes))
+    results.append(("1.  sections.json", passed, notes))
     if not passed:
         print(out)
         print(err, file=sys.stderr)
 
+    # ── Check 1b: web CSV ─────────────────────────────────────────────────────
+    passed, out, err = check_web_data()
+    notes = out if passed else err
+    results.append(("1b. web CSV (rbi_sibc_consolidated.csv)", passed, notes[:50]))
+
     # ── Check 2: annotations_draft.ts ────────────────────────────────────────
     passed, out, err = check_annotations_draft(period_dir)
-    label = "2. annotations_draft.ts"
+    label = "2.  annotations_draft.ts"
     if passed is None:
         results.append((label, None, err))
     else:
@@ -239,7 +258,7 @@ def main():
     # ── Check 3: live annotations (web/lib/reports/rbi_sibc.ts) ──────────────
     passed, out, err = check_annotations_live()
     notes = one_line_summary(out, err, passed)
-    results.append(("3. annotations live (rbi_sibc.ts)", passed, notes))
+    results.append(("3.  annotations live (rbi_sibc.ts)", passed, notes))
     if not passed:
         print(out)
         print(err, file=sys.stderr)
@@ -247,7 +266,7 @@ def main():
     # ── Check 4: system_model.json ────────────────────────────────────────────
     passed, out, err = check_system_model(period_dir)
     notes = one_line_summary(out, err, passed)
-    results.append(("4. system_model.json", passed, notes))
+    results.append(("4.  system_model.json", passed, notes))
     if not passed:
         print(out)
         print(err, file=sys.stderr)
@@ -255,19 +274,19 @@ def main():
     # ── Check 5: subsystems.json ──────────────────────────────────────────────
     passed, out, err = check_subsystems(period_dir, subsystems_path)
     notes = one_line_summary(out, err, passed)
-    results.append(("5. subsystems.json", passed, notes))
+    results.append(("5.  subsystems.json", passed, notes))
     if not passed:
         print(out)
         print(err, file=sys.stderr)
 
     # ── Check 6: TypeScript build ─────────────────────────────────────────────
     if args.skip_build:
-        results.append(("6. tsc + npm run build", None, "skipped (--skip-build)"))
+        results.append(("6.  tsc + npm run build", None, "skipped (--skip-build)"))
     else:
         print("  Running tsc + npm run build (this may take ~30s)...")
         passed, out, err = check_build()
         notes = one_line_summary(out, err, passed)
-        results.append(("6. tsc + npm run build", passed, notes))
+        results.append(("6.  tsc + npm run build", passed, notes))
         if not passed:
             print(out)
             print(err, file=sys.stderr)
