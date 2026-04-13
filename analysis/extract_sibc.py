@@ -352,12 +352,12 @@ def extract(xlsx_path: Path, out_dir: Path | None = None, dry_run: bool = False)
                 {"True": True, "False": False, True: True, False: False}
             )
 
-    # ── Date columns ──────────────────────────────────────────────────────────
+    # ── Date columns — per statement ──────────────────────────────────────────
     import re
-    date_cols = sorted(
-        [c for c in stmt1.columns if re.match(r"\d{4}-\d{2}-\d{2}", c)]
-    )
-    print(f"  Outstanding date columns: {date_cols}")
+    stmt1_date_cols = sorted([c for c in stmt1.columns if re.match(r"\d{4}-\d{2}-\d{2}", c)])
+    stmt2_date_cols = sorted([c for c in stmt2.columns if re.match(r"\d{4}-\d{2}-\d{2}", c)])
+    print(f"  Statement 1 date columns: {stmt1_date_cols}")
+    print(f"  Statement 2 date columns: {stmt2_date_cols}")
 
     # ── Report date from filename ─────────────────────────────────────────────
     report_date = parse_filename_date(xlsx_path)
@@ -371,6 +371,8 @@ def extract(xlsx_path: Path, out_dir: Path | None = None, dry_run: bool = False)
     sections = []
     for sec_def in SECTION_DEFS:
         print(f"  Building section: {sec_def['id']}")
+        # industryByType (series=None) auto-detects from Statement 2 — use stmt2 dates
+        date_cols = stmt2_date_cols if sec_def["series"] is None else stmt1_date_cols
         section = build_section(sec_def, stmt1, stmt2, date_cols)
         sections.append(section)
 
