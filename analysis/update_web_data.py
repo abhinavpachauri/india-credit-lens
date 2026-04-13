@@ -30,6 +30,8 @@ import shutil
 import sys
 from pathlib import Path
 
+import pandas as pd
+
 # ── Repo paths ────────────────────────────────────────────────────────────────
 
 REPO_ROOT     = Path(__file__).resolve().parent.parent
@@ -39,6 +41,47 @@ CONSOLIDATED  = RBI_ANALYTICS / "consolidated" / "consolidated_long.csv"
 WEB_CSV       = WEB_DATA / "rbi_sibc_consolidated.csv"
 
 sys.path.insert(0, str(RBI_ANALYTICS))
+
+
+def deduplicate_by_month(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Collapse multiple rows for the same calendar month into one.
+
+    Why this is needed:
+      - The SIBC file contains multiple weekly snapshots per month
+        (e.g. 2024-03-08 AND 2024-03-22 are both March 2024).
+      - Across files, different publications may cover the same month.
+
+    Rule (applied in order):
+      1. Latest report_date wins   — most recently published file is authoritative
+      2. Latest date wins          — within the same file, latest weekly snapshot wins
+
+    The surviving row's 'date' is kept as-is (not normalised to month-end).
+    """
+    before = len(df)
+
+    df = df.copy()
+    df["_date_ts"]   = pd.to_datetime(df["date"],        errors="coerce")
+    df["_report_ts"] = pd.to_datetime(df["report_date"], errors="coerce")
+    df["_year_month"] = df["_date_ts"].dt.to_period("M")
+
+    df = (
+        df
+        .sort_values(["_report_ts", "_date_ts"], ascending=[False, False])
+        .drop_duplicates(
+            subset=["statement", "code", "sector", "_year_month"],
+            keep="first",
+        )
+        .drop(columns=["_date_ts", "_report_ts", "_year_month"])
+        .sort_values(["statement", "code", "date"])
+        .reset_index(drop=True)
+    )
+
+    after = len(df)
+    if before != after:
+        print(f"  Deduped : {before - after} duplicate month rows removed "
+              f"({before} → {after} rows)")
+    return df
 
 
 def main(dry_run: bool = False):
@@ -82,6 +125,9 @@ def main(dry_run: bool = False):
     if df.empty:
         print("ERROR: Consolidation produced empty DataFrame", file=sys.stderr)
         sys.exit(1)
+
+    # ── Deduplicate at month level ────────────────────────────────────────────
+    df = deduplicate_by_month(df)
 
     # Write to rbi-analytics/consolidated/
     CONSOLIDATED.parent.mkdir(parents=True, exist_ok=True)
