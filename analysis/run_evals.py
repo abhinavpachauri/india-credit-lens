@@ -6,12 +6,14 @@ Master evaluation orchestrator. Runs all validation checks against a given
 period's outputs and prints a summary table.
 
 Checks run (in order):
-  1. validate_sections.py          on rbi_sibc/<period>/sections.json
-  2. validate_annotations.py       on rbi_sibc/<period>/annotations_draft.ts
-  3. validate_annotations.py       on web/lib/reports/rbi_sibc.ts  (live)
-  4. validate.py                   on rbi_sibc/<period>/system_model.json
-  5. validate.py --check-subsystems on system_model.json + subsystems.json
-  6. tsc --noEmit + npm run build   in web/
+  1.  validate_sections.py          on rbi_sibc/<period>/sections.json
+  1b. web CSV duplicate-month check  on web/public/data/rbi_sibc_consolidated.csv
+                                     auto-fixes by re-running update_web_data.py
+  2.  validate_annotations.py       on rbi_sibc/<period>/annotations_draft.ts
+  3.  validate_annotations.py       on web/lib/reports/rbi_sibc.ts  (live)
+  4.  validate.py                   on rbi_sibc/<period>/system_model.json
+  5.  validate.py --check-subsystems on system_model.json + subsystems.json
+  6.  tsc --noEmit + npm run build   in web/
 
 Usage:
     # Run against Jan 2026 period (default)
@@ -76,17 +78,61 @@ def run_check(label, cmd, cwd=None):
 # ── Individual checks ─────────────────────────────────────────────────────────
 
 def check_web_data():
-    """Verify web/public/data/rbi_sibc_consolidated.csv exists and is non-empty."""
+    """
+    Check web/public/data/rbi_sibc_consolidated.csv:
+      - Exists and is non-empty
+      - No month-level duplicate rows (same statement/code/sector/year-month)
+
+    If duplicates are found, automatically re-runs update_web_data.py to fix
+    them in-place, then re-checks. Reports what was auto-fixed.
+    """
+    import pandas as pd
+
     csv_path = WEB / "public" / "data" / "rbi_sibc_consolidated.csv"
+
     if not csv_path.exists():
-        return False, "", f"Web CSV not found: {csv_path} — run update_web_data.py"
-    size = csv_path.stat().st_size
-    if size < 1000:
-        return False, "", f"Web CSV suspiciously small ({size} bytes) — may be empty"
-    # Count rows quickly
-    with open(csv_path) as f:
-        rows = sum(1 for _ in f) - 1  # minus header
-    return True, f"{rows} data rows", ""
+        return False, "", f"Web CSV not found — run update_web_data.py"
+    if csv_path.stat().st_size < 1000:
+        return False, "", f"Web CSV suspiciously small — may be empty"
+
+    def count_dupes(path):
+        df = pd.read_csv(path, dtype=str)
+        df["_ym"] = pd.to_datetime(df["date"], errors="coerce").dt.to_period("M").astype(str)
+        dupes = df.groupby(["statement", "code", "sector", "_ym"])["date"].nunique()
+        return int((dupes > 1).sum()), len(df)
+
+    dupe_count, row_count = count_dupes(csv_path)
+
+    if dupe_count == 0:
+        return True, f"{row_count} rows, 0 duplicate months", ""
+
+    # ── Duplicates found — auto-fix via update_web_data.py ───────────────────
+    fix_note = f"{dupe_count} duplicate month(s) found — auto-fixing..."
+    print(f"\n  ⚠️  {fix_note}")
+
+    fix_passed, fix_out, fix_err = run_check(
+        "update_web_data",
+        [sys.executable, str(ANALYSIS / "update_web_data.py")],
+        cwd=REPO_ROOT,
+    )
+
+    if not fix_passed:
+        return False, "", (
+            f"{dupe_count} duplicate month(s) found; "
+            f"auto-fix via update_web_data.py failed: {fix_err[:80]}"
+        )
+
+    # Re-check after fix
+    dupe_count_after, row_count_after = count_dupes(csv_path)
+    if dupe_count_after > 0:
+        return False, "", (
+            f"Still {dupe_count_after} duplicate month(s) after auto-fix — "
+            "investigate update_web_data.py"
+        )
+
+    return True, (
+        f"{row_count_after} rows — auto-fixed {dupe_count} duplicate month(s)"
+    ), ""
 
 
 def check_sections(period_dir, merged=False):
