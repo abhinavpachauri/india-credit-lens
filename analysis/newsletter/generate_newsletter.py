@@ -1,32 +1,31 @@
 #!/usr/bin/env python3
 """
-generate_newsletter.py v3 — India Credit Lens
+generate_newsletter.py v4 — India Credit Lens
 ----------------------------------------------
-Reads four sources, produces one newsletter (HTML + Markdown).
+Supports two config formats:
 
-Sources:
-  1. system_model.json       → structure (nodes by tier, causal edges)
-  2. rbi_sibc.ts             → content  (annotation title, body, implication)
-  3. newsletter_config.json  → editorial (narrative, featured picks, what_to_watch)
-  4. subsystems.json         → derived causal stories (newsletter-flagged subsystems)
+  system_model_v2  (Issue #1, standalone)
+    Sources: system_model.json, rbi_sibc.ts, newsletter_config.json, subsystems.json
+    Structure: HEADER → HERO → TL;DR → WHERE CREDIT MOVED → KEY SIGNALS →
+               SYSTEM OVERVIEW → STORIES → WHAT TO WATCH → CTA
 
-Newsletter structure:
-  HEADER → HERO STAT → TL;DR →
-  WHERE CREDIT MOVED (table) → KEY SIGNALS →
-  SYSTEM OVERVIEW (image + narrative + signposts) →
-  STORY 1 → STORY 2 → STORY 3 →
-  WHAT TO WATCH → CTA
-
-From issue #2 onwards: WHAT CHANGED section slides in between TL;DR and
-WHERE CREDIT MOVED, auto-generated from delta_model.json (not yet wired).
+  delta_v1  (Issue #2+, delta from previous period)
+    Sources: merged system_model.json, rbi_sibc.ts, newsletter_config.json,
+             merged subsystems.json
+    Structure: HEADER → HERO → WHAT HELD → WHAT CHANGED → WHAT'S NEW →
+               WHAT TO WATCH → CTA
+    Editorial fields: what_held[], what_changed[], what_new[], what_to_watch
+    Image support (Option B): image_url per signal — if empty, renders dashed
+                              placeholder; if set, renders <img> tag.
 
 Usage:
     python3 generate_newsletter.py
     python3 generate_newsletter.py newsletter_config.json
 
 Output:
-    output/newsletter_YYYY-MM-DD.html   ← paste into Substack HTML block
-    output/newsletter_YYYY-MM-DD.md     ← markdown version
+    output/newsletter_YYYY-MM-DD.html           ← styled archive version
+    output/newsletter_YYYY-MM-DD_substack.html  ← paste into Substack HTML block
+    output/newsletter_YYYY-MM-DD.md             ← markdown version
 """
 
 import json
@@ -569,6 +568,472 @@ def build_what_to_watch(editorial):
     )
 
 
+def _delta_image(image_url: str, subsystem_id: str, signal: str) -> str:
+    """Option B: render <img> if image_url is set, else dashed placeholder."""
+    if image_url:
+        return (
+            f'<div style="margin:16px 0;text-align:center">'
+            f'<img src="{image_url}" alt="{signal}" '
+            f'style="max-width:100%;border-radius:2px;border:1px solid #e2d9c5">'
+            f'</div>'
+        )
+    slug = re.sub(r"[^a-z0-9]+", "_", signal.lower()).strip("_")[:30]
+    return image_placeholder(
+        signal.upper()[:40],
+        f"{subsystem_id}_{slug}.png",
+        "Causal diagram — export from mermaid.live and insert here",
+    )
+
+
+def build_delta_held(what_held: list) -> str:
+    """WHAT HELD section — signals confirmed from previous issue."""
+    if not what_held:
+        return ""
+
+    cards = ""
+    for item in what_held:
+        signal    = item.get("signal", "")
+        prev_stat = item.get("prev_stat", "")
+        curr_stat = item.get("curr_stat", "")
+        note      = item.get("note", "")
+        image_url = item.get("image_url", "")
+        sub_id    = item.get("subsystem_id", "")
+
+        cards += (
+            f'<div style="margin:18px 0;padding:20px 24px;background:#F0FDF4;'
+            f'border-left:3px solid #166534;border-radius:0 2px 2px 0">'
+            f'<div style="font-family:system-ui,sans-serif;font-size:0.72em;font-weight:700;'
+            f'text-transform:uppercase;letter-spacing:1.5px;color:#166534;margin-bottom:6px">'
+            f'✓ Confirmed</div>'
+            f'<div style="font-family:system-ui,sans-serif;font-weight:700;'
+            f'color:#14532d;font-size:0.97em;margin-bottom:10px">{signal}</div>'
+            f'<div style="display:flex;gap:24px;margin-bottom:12px;flex-wrap:wrap">'
+            f'<div style="flex:1;min-width:180px">'
+            f'<div style="font-size:0.72em;color:#166534;font-weight:600;margin-bottom:3px">'
+            f'ISSUE #1</div>'
+            f'<div style="font-size:0.88em;color:#374151">{prev_stat}</div></div>'
+            f'<div style="flex:1;min-width:180px">'
+            f'<div style="font-size:0.72em;color:#166534;font-weight:600;margin-bottom:3px">'
+            f'NOW (MERGED)</div>'
+            f'<div style="font-size:0.88em;color:#14532d;font-weight:600">{curr_stat}</div>'
+            f'</div></div>'
+            + (f'<p style="margin:0;color:#374151;font-size:0.88em;line-height:1.65">'
+               f'{note}</p>' if note else '')
+            + (_delta_image(image_url, sub_id, signal) if (image_url or sub_id) else '')
+            + f'</div>'
+        )
+
+    return (
+        f'<div style="padding:0 40px">'
+        + section_heading("✓", "What Held — Signals Confirmed", "#166534", "#166534")
+        + f'<p style="color:#7a5c30;font-size:0.88em;margin:-12px 0 16px">'
+        + f'Signals from Issue #1 that the merged dataset now confirms as structural.</p>'
+        + cards
+        + f'</div>'
+    )
+
+
+def build_delta_changed(what_changed: list) -> str:
+    """WHAT CHANGED section — signals where the read materially updated."""
+    if not what_changed:
+        return ""
+
+    cards = ""
+    for item in what_changed:
+        signal     = item.get("signal", "")
+        prev_read  = item.get("prev_read", "")
+        curr_read  = item.get("curr_read", "")
+        implication = item.get("implication", "")
+        image_url  = item.get("image_url", "")
+        sub_id     = item.get("subsystem_id", "")
+
+        cards += (
+            f'<div style="margin:18px 0;padding:20px 24px;background:#FEF3C7;'
+            f'border-left:3px solid #B45309;border-radius:0 2px 2px 0">'
+            f'<div style="font-family:system-ui,sans-serif;font-size:0.72em;font-weight:700;'
+            f'text-transform:uppercase;letter-spacing:1.5px;color:#B45309;margin-bottom:6px">'
+            f'⟳ Updated</div>'
+            f'<div style="font-family:system-ui,sans-serif;font-weight:700;'
+            f'color:#92400E;font-size:0.97em;margin-bottom:12px">{signal}</div>'
+            f'<div style="margin-bottom:10px">'
+            f'<div style="font-size:0.72em;color:#B45309;font-weight:600;margin-bottom:4px">'
+            f'ISSUE #1 READ</div>'
+            f'<p style="margin:0;color:#78350f;font-size:0.88em;line-height:1.65;'
+            f'font-style:italic">{prev_read}</p></div>'
+            f'<div style="margin-bottom:12px">'
+            f'<div style="font-size:0.72em;color:#B45309;font-weight:600;margin-bottom:4px">'
+            f'NOW (MERGED)</div>'
+            f'<p style="margin:0;color:#92400E;font-size:0.88em;line-height:1.65;'
+            f'font-weight:600">{curr_read}</p></div>'
+            + (f'<p style="margin:10px 0 0;color:#78350f;font-size:0.85em;'
+               f'line-height:1.6;border-top:1px solid rgba(180,83,9,0.2);padding-top:10px">'
+               f'<strong>Implication:</strong> {implication}</p>' if implication else '')
+            + (_delta_image(image_url, sub_id, signal) if (image_url or sub_id) else '')
+            + f'</div>'
+        )
+
+    return (
+        f'<div style="padding:0 40px">'
+        + section_heading("⟳", "What Changed — Read Updated", "#B45309", "#B45309")
+        + f'<p style="color:#7a5c30;font-size:0.88em;margin:-12px 0 16px">'
+        + f'Signals from Issue #1 where the merged dataset materially updates the interpretation.</p>'
+        + cards
+        + f'</div>'
+    )
+
+
+def build_delta_new(what_new: list) -> str:
+    """WHAT'S NEW section — signals only visible with the full merged series."""
+    if not what_new:
+        return ""
+
+    cards = ""
+    for item in what_new:
+        signal     = item.get("signal", "")
+        stat       = item.get("stat", "")
+        body       = item.get("body", "")
+        implication = item.get("implication", "")
+        image_url  = item.get("image_url", "")
+        sub_id     = item.get("subsystem_id", "")
+
+        cards += (
+            f'<div style="margin:20px 0;padding:24px 28px;background:#1E3A5F;'
+            f'border-radius:2px">'
+            f'<div style="font-family:system-ui,sans-serif;font-size:0.72em;font-weight:700;'
+            f'text-transform:uppercase;letter-spacing:1.5px;color:#7eb8e8;margin-bottom:6px">'
+            f'★ Net new</div>'
+            f'<div style="font-family:system-ui,sans-serif;font-size:2em;font-weight:800;'
+            f'color:#ffffff;line-height:1;margin-bottom:8px">{stat}</div>'
+            f'<div style="font-family:system-ui,sans-serif;font-weight:700;'
+            f'color:#a0b8d4;font-size:0.9em;margin-bottom:14px">{signal}</div>'
+            f'<p style="margin:0 0 12px;color:#e2eaf5;font-size:0.9em;line-height:1.7">'
+            f'{body}</p>'
+            + (f'<p style="margin:0;color:#7eb8e8;font-style:italic;font-size:0.85em;'
+               f'line-height:1.6;border-top:1px solid rgba(126,184,232,0.2);padding-top:12px">'
+               f'{implication}</p>' if implication else '')
+            + (_delta_image(image_url, sub_id, signal) if (image_url or sub_id) else '')
+            + f'</div>'
+        )
+
+    return (
+        f'<div style="padding:0 40px">'
+        + section_heading("★", "What's New — Only Visible in the Merged Series",
+                          "#1E3A5F", "#1E3A5F")
+        + f'<p style="color:#7a5c30;font-size:0.88em;margin:-12px 0 16px">'
+        + f'Signals that require the full multi-period series — impossible to see '
+        + f'from any single SIBC file.</p>'
+        + cards
+        + f'</div>'
+    )
+
+
+def build_delta_html(cfg, model, subsystems):
+    """Full HTML output for delta_v1 format."""
+    meta  = model.get("_meta", {})
+    edit  = cfg.get("editorial", {})
+    issue = cfg["_meta"].get("issue_number", 2)
+    pub   = cfg["_meta"].get("published", "")
+    period     = cfg["_meta"].get("period", "")
+    prev_period = cfg["_meta"].get("prev_period", "")
+    brand = cfg.get("branding", {})
+    author = brand.get("author", "India Credit Lens")
+
+    what_held    = edit.get("what_held", [])
+    what_changed = edit.get("what_changed", [])
+    what_new     = edit.get("what_new", [])
+
+    hero_narrative = edit.get("hero_narrative", "")
+
+    header = (
+        f'<div style="padding:36px 40px 0">'
+        f'<div style="font-family:system-ui,sans-serif;font-size:10px;'
+        f'text-transform:uppercase;letter-spacing:3px;color:#b45309;margin-bottom:12px">'
+        f'India Credit Lens &nbsp;·&nbsp; Issue #{issue} &nbsp;·&nbsp; {pub}</div>'
+        f'<h1 style="font-size:2em;margin:0 0 6px;color:#1a0f00;line-height:1.2">'
+        f'{period}: {edit.get("issue_title", "")}</h1>'
+        f'<div style="color:#7a5c30;font-size:0.9em">'
+        f'Delta from {prev_period} &nbsp;·&nbsp; RBI SIBC &nbsp;·&nbsp; by {author}</div>'
+        f'</div>'
+    )
+
+    hero = (
+        f'<div style="margin:28px 0 0;padding:36px 40px;background:#1E3A5F">'
+        f'<div style="font-family:system-ui,sans-serif;font-size:0.75em;font-weight:600;'
+        f'text-transform:uppercase;letter-spacing:2px;color:#7eb8e8;margin-bottom:12px">'
+        f'What one more month of data tells us</div>'
+        f'<p style="color:#ffffff;font-size:1.05em;line-height:1.8;margin:0">'
+        f'{hero_narrative}</p>'
+        f'</div>'
+    )
+
+    held_count    = len(what_held)
+    changed_count = len(what_changed)
+    new_count     = len(what_new)
+    scoreline = (
+        f'<div style="padding:20px 40px;background:#fffcf5;'
+        f'border-top:1px solid #e2d9c5;border-bottom:1px solid #e2d9c5">'
+        f'<div style="display:flex;gap:32px;flex-wrap:wrap;'
+        f'font-family:system-ui,sans-serif">'
+        f'<div><span style="font-size:2em;font-weight:800;color:#166534">{held_count}</span>'
+        f'<span style="font-size:0.8em;color:#7a5c30;margin-left:6px">Held</span></div>'
+        f'<div><span style="font-size:2em;font-weight:800;color:#B45309">{changed_count}</span>'
+        f'<span style="font-size:0.8em;color:#7a5c30;margin-left:6px">Changed</span></div>'
+        f'<div><span style="font-size:2em;font-weight:800;color:#1E3A5F">{new_count}</span>'
+        f'<span style="font-size:0.8em;color:#7a5c30;margin-left:6px">New</span></div>'
+        f'</div></div>'
+    )
+
+    parts = [
+        header,
+        hero,
+        scoreline,
+        divider(),
+        build_delta_held(what_held),
+        divider(),
+        build_delta_changed(what_changed),
+        divider(),
+        build_delta_new(what_new),
+        divider(),
+        build_what_to_watch(edit),
+        divider(),
+        build_cta(cfg),
+        build_footer(cfg),
+    ]
+
+    return HTML_SHELL.format(
+        title=f"India Credit Lens — {period} (Delta)",
+        body="\n".join(parts),
+    )
+
+
+def build_delta_substack(cfg, model, subsystems):
+    """Semantic HTML for Substack paste — delta_v1 format."""
+    edit        = cfg.get("editorial", {})
+    issue       = cfg["_meta"].get("issue_number", 2)
+    pub         = cfg["_meta"].get("published", "")
+    period      = cfg["_meta"].get("period", "")
+    prev_period = cfg["_meta"].get("prev_period", "")
+    brand       = cfg.get("branding", {})
+    cta_cfg     = cfg.get("cta", {})
+    what_held    = edit.get("what_held", [])
+    what_changed = edit.get("what_changed", [])
+    what_new     = edit.get("what_new", [])
+    watch        = edit.get("what_to_watch", {})
+
+    p = []
+    p.append(f'<h1>{period}: {edit.get("issue_title", "")}</h1>')
+    p.append(
+        f'<p><em>Issue #{issue} &nbsp;·&nbsp; {pub} &nbsp;·&nbsp; Delta from {prev_period}'
+        f' &nbsp;·&nbsp; by {brand.get("author", "India Credit Lens")}</em></p>'
+    )
+    p.append('<hr>')
+    p.append(f'<p>{edit.get("hero_narrative", "")}</p>')
+    p.append('<hr>')
+
+    # WHAT HELD
+    if what_held:
+        p.append('<h2>What Held — Signals Confirmed</h2>')
+        p.append('<p><em>Signals from Issue #1 that the merged dataset now confirms as structural.</em></p>')
+        for item in what_held:
+            p.append(f'<h3>✓ {item.get("signal", "")}</h3>')
+            p.append(
+                f'<p><strong>Issue #1:</strong> {item.get("prev_stat", "")}<br>'
+                f'<strong>Now (merged):</strong> {item.get("curr_stat", "")}</p>'
+            )
+            if item.get("note"):
+                p.append(f'<p>{item["note"]}</p>')
+            sub_id = item.get("subsystem_id", "")
+            signal = item.get("signal", "")
+            if item.get("image_url"):
+                p.append(f'<p><img src="{item["image_url"]}" alt="{signal}"></p>')
+            elif sub_id:
+                slug = re.sub(r"[^a-z0-9]+", "_", signal.lower()).strip("_")[:30]
+                p.append(f'<p><em>[Insert image: {sub_id}_{slug}.png]</em></p>')
+        p.append('<hr>')
+
+    # WHAT CHANGED
+    if what_changed:
+        p.append('<h2>What Changed — Read Updated</h2>')
+        p.append('<p><em>Signals where the merged dataset materially updates the interpretation.</em></p>')
+        for item in what_changed:
+            p.append(f'<h3>⟳ {item.get("signal", "")}</h3>')
+            p.append(f'<p><strong>Issue #1:</strong> <em>{item.get("prev_read", "")}</em></p>')
+            p.append(f'<p><strong>Now:</strong> {item.get("curr_read", "")}</p>')
+            if item.get("implication"):
+                p.append(f'<blockquote><p><strong>Implication:</strong> {item["implication"]}</p></blockquote>')
+            sub_id = item.get("subsystem_id", "")
+            signal = item.get("signal", "")
+            if item.get("image_url"):
+                p.append(f'<p><img src="{item["image_url"]}" alt="{signal}"></p>')
+            elif sub_id:
+                slug = re.sub(r"[^a-z0-9]+", "_", signal.lower()).strip("_")[:30]
+                p.append(f'<p><em>[Insert image: {sub_id}_{slug}.png]</em></p>')
+        p.append('<hr>')
+
+    # WHAT'S NEW
+    if what_new:
+        p.append('<h2>What\'s New — Only Visible in the Merged Series</h2>')
+        p.append('<p><em>Signals that require the full multi-period series.</em></p>')
+        for item in what_new:
+            p.append(f'<h3>★ {item.get("signal", "")}</h3>')
+            p.append(f'<p><strong>{item.get("stat", "")}</strong></p>')
+            p.append(f'<p>{item.get("body", "")}</p>')
+            if item.get("implication"):
+                p.append(f'<blockquote><p><em>{item["implication"]}</em></p></blockquote>')
+            sub_id = item.get("subsystem_id", "")
+            signal = item.get("signal", "")
+            if item.get("image_url"):
+                p.append(f'<p><img src="{item["image_url"]}" alt="{signal}"></p>')
+            elif sub_id:
+                slug = re.sub(r"[^a-z0-9]+", "_", signal.lower()).strip("_")[:30]
+                p.append(f'<p><em>[Insert image: {sub_id}_{slug}.png]</em></p>')
+        p.append('<hr>')
+
+    # WHAT TO WATCH
+    p.append(f'<h2>What to Watch Next</h2>')
+    p.append(f'<p><em>Next release: {watch.get("next_release", "")}</em></p>')
+    wl = "".join(f'<li>{b}</li>' for b in watch.get("bullets", []))
+    p.append(f'<ul>{wl}</ul>')
+    p.append('<hr>')
+
+    # CTA
+    p.append(
+        f'<p><strong>'
+        f'<a href="{cta_cfg.get("dashboard_url", "")}">'
+        f'{cta_cfg.get("dashboard_label", "")} →</a></strong></p>'
+    )
+    p.append(
+        f'<p><a href="{cta_cfg.get("digest_url", "")}">'
+        f'{cta_cfg.get("digest_label", "")} →</a></p>'
+    )
+    p.append(
+        f'<p><em>{brand.get("tagline", "")} &nbsp;·&nbsp; '
+        f'<a href="https://{brand.get("site", "")}">{brand.get("site", "")}</a></em></p>'
+    )
+
+    return SUBSTACK_SHELL.format(
+        title=f"India Credit Lens — {period} (Delta)",
+        body="\n".join(p),
+    )
+
+
+def build_delta_markdown(cfg, model, subsystems):
+    """Markdown output for delta_v1 format."""
+    edit        = cfg.get("editorial", {})
+    issue       = cfg["_meta"].get("issue_number", 2)
+    pub         = cfg["_meta"].get("published", "")
+    period      = cfg["_meta"].get("period", "")
+    prev_period = cfg["_meta"].get("prev_period", "")
+    brand       = cfg.get("branding", {})
+    cta_cfg     = cfg.get("cta", {})
+    what_held    = edit.get("what_held", [])
+    what_changed = edit.get("what_changed", [])
+    what_new     = edit.get("what_new", [])
+    watch        = edit.get("what_to_watch", {})
+
+    lines = [
+        f"# India Credit Lens — {period}: {edit.get('issue_title', '')}",
+        f"*Issue #{issue} · {pub} · Delta from {prev_period} · {brand.get('site', '')}*",
+        "", "---", "",
+        edit.get("hero_narrative", ""),
+        "", "---", "",
+    ]
+
+    # What held
+    if what_held:
+        lines += ["## ✓ What Held — Signals Confirmed", ""]
+        lines.append("*Signals from Issue #1 that the merged dataset now confirms as structural.*")
+        lines.append("")
+        for item in what_held:
+            lines += [
+                f"### {item.get('signal', '')}",
+                f"**Issue #1:** {item.get('prev_stat', '')}",
+                f"**Now (merged):** {item.get('curr_stat', '')}",
+                "",
+            ]
+            if item.get("note"):
+                lines += [item["note"], ""]
+            sub_id = item.get("subsystem_id", "")
+            signal = item.get("signal", "")
+            if item.get("image_url"):
+                lines += [f"![{signal}]({item['image_url']})", ""]
+            elif sub_id:
+                slug = re.sub(r"[^a-z0-9]+", "_", signal.lower()).strip("_")[:30]
+                lines += [f"> 🖼 `[Insert: {sub_id}_{slug}.png]`", ""]
+        lines += ["---", ""]
+
+    # What changed
+    if what_changed:
+        lines += ["## ⟳ What Changed — Read Updated", ""]
+        lines.append("*Signals where the merged dataset materially updates the interpretation.*")
+        lines.append("")
+        for item in what_changed:
+            lines += [
+                f"### {item.get('signal', '')}",
+                f"**Issue #1:** *{item.get('prev_read', '')}*",
+                "",
+                f"**Now:** {item.get('curr_read', '')}",
+                "",
+            ]
+            if item.get("implication"):
+                lines += [f"> **Implication:** {item['implication']}", ""]
+            sub_id = item.get("subsystem_id", "")
+            signal = item.get("signal", "")
+            if item.get("image_url"):
+                lines += [f"![{signal}]({item['image_url']})", ""]
+            elif sub_id:
+                slug = re.sub(r"[^a-z0-9]+", "_", signal.lower()).strip("_")[:30]
+                lines += [f"> 🖼 `[Insert: {sub_id}_{slug}.png]`", ""]
+        lines += ["---", ""]
+
+    # What's new
+    if what_new:
+        lines += ["## ★ What's New — Only Visible in the Merged Series", ""]
+        lines.append("*Signals that require the full multi-period series.*")
+        lines.append("")
+        for item in what_new:
+            lines += [
+                f"### {item.get('signal', '')}",
+                f"**{item.get('stat', '')}**",
+                "",
+                item.get("body", ""),
+                "",
+            ]
+            if item.get("implication"):
+                lines += [f"*{item['implication']}*", ""]
+            sub_id = item.get("subsystem_id", "")
+            signal = item.get("signal", "")
+            if item.get("image_url"):
+                lines += [f"![{signal}]({item['image_url']})", ""]
+            elif sub_id:
+                slug = re.sub(r"[^a-z0-9]+", "_", signal.lower()).strip("_")[:30]
+                lines += [f"> 🖼 `[Insert: {sub_id}_{slug}.png]`", ""]
+        lines += ["---", ""]
+
+    # What to watch
+    lines += [
+        "## 📅 What to Watch Next",
+        f"*Next release: {watch.get('next_release', '')}*", "",
+    ]
+    for b in watch.get("bullets", []):
+        lines.append(f"- {b}")
+    lines += ["", "---", ""]
+
+    # CTA
+    lines += [
+        f"**{cta_cfg.get('dashboard_label', '')}**",
+        f"→ {cta_cfg.get('dashboard_url', '')}",
+        "",
+        f"**{cta_cfg.get('digest_label', '')}**",
+        f"→ {cta_cfg.get('digest_url', '')}",
+        "",
+        "---",
+        f"*{brand.get('tagline', '')} · {brand.get('site', '')}*",
+        "",
+    ]
+    return "\n".join(lines)
+
+
 def build_cta(cfg):
     cta   = cfg.get("cta", {})
     brand = cfg.get("branding", {})
@@ -1025,7 +1490,73 @@ def build_markdown(cfg, model, annotations, subsystems):
 
 # ── Entry point ───────────────────────────────────────────────────────────────
 
-def generate(config_path=None, output_dir=None):
+def render_mermaid_diagrams(cfg, mermaid_base: Path, output_dir: Path) -> dict[str, str]:
+    """
+    Option A: render subsystem .mmd files to PNG using mmdc.
+
+    Discovers .mmd files in mermaid_base matching sub_NN_*.mmd,
+    renders each to output_dir/images/, and returns a dict mapping
+    subsystem_id → absolute PNG path (file:// URL for local HTML).
+
+    Requires: mmdc (npm install -g @mermaid-js/mermaid-cli)
+    """
+    import shutil
+    import subprocess
+
+    mmdc = shutil.which("mmdc")
+    if not mmdc:
+        print("  ⚠  mmdc not found — install with: npm install -g @mermaid-js/mermaid-cli")
+        return {}
+
+    img_dir = output_dir / "images"
+    img_dir.mkdir(parents=True, exist_ok=True)
+
+    mmd_files = sorted(mermaid_base.glob("sub_*.mmd"))
+    if not mmd_files:
+        print(f"  ⚠  No sub_*.mmd files found in {mermaid_base}")
+        return {}
+
+    rendered: dict[str, str] = {}
+    print(f"\n  Rendering {len(mmd_files)} subsystem diagram(s) via mmdc:")
+
+    for mmd in mmd_files:
+        # Extract sub_id from filename (e.g. sub_01_gold_price... → sub_01)
+        stem   = mmd.stem                              # sub_01_gold_price_at_record_high
+        sub_id = "_".join(stem.split("_")[:2])         # sub_01
+        out_png = img_dir / f"{stem}.png"
+
+        result = subprocess.run(
+            [mmdc, "-i", str(mmd), "-o", str(out_png), "-t", "default", "-b", "white"],
+            capture_output=True, text=True,
+        )
+        if result.returncode == 0 and out_png.exists():
+            rendered[sub_id] = out_png.as_uri()   # file:///... — works in local browser
+            print(f"    ✓  {sub_id} → {out_png.name}  ({out_png.stat().st_size // 1024}K)")
+        else:
+            print(f"    ✗  {sub_id} — mmdc error: {result.stderr.strip()[:120]}")
+
+    return rendered
+
+
+def apply_rendered_images(cfg: dict, rendered: dict[str, str]) -> dict:
+    """
+    Inject rendered PNG file:// URLs into newsletter_config editorial fields.
+    Only fills image_url where it is currently empty and a rendered PNG exists.
+    Returns a modified copy of cfg (does not mutate original).
+    """
+    import copy
+    cfg = copy.deepcopy(cfg)
+    edit = cfg.get("editorial", {})
+    for section in ("what_held", "what_changed", "what_new"):
+        for item in edit.get(section, []):
+            sub_id = item.get("subsystem_id", "")
+            if not item.get("image_url") and sub_id in rendered:
+                item["image_url"] = rendered[sub_id]
+    return cfg
+
+
+def generate(config_path=None, output_dir=None, render_diagrams=False):
+    REPO_ROOT = Path(__file__).resolve().parent.parent.parent
     base = os.path.dirname(os.path.abspath(__file__))
     config_path = config_path or os.path.join(base, "newsletter_config.json")
 
@@ -1033,10 +1564,10 @@ def generate(config_path=None, output_dir=None):
         cfg = json.load(f)
 
     fmt = cfg.get("_meta", {}).get("format", "")
-    if fmt != "system_model_v2":
+    if fmt not in ("system_model_v2", "delta_v1"):
         print(
-            "❌  This generator requires format: 'system_model_v2' in newsletter_config.json.\n"
-            "    Use the new schema."
+            f"❌  Unknown format: '{fmt}' in newsletter_config.json.\n"
+            "    Supported: 'system_model_v2' (Issue #1) | 'delta_v1' (Issue #2+)"
         )
         sys.exit(1)
 
@@ -1087,9 +1618,29 @@ def generate(config_path=None, output_dir=None):
     substack_path = os.path.join(output_dir, f"newsletter_{today}_substack.html")
     md_path       = os.path.join(output_dir, f"newsletter_{today}.md")
 
-    html     = build_html(cfg, model, annotations, subsystems)
-    substack = build_substack_html(cfg, model, annotations, subsystems)
-    md       = build_markdown(cfg, model, annotations, subsystems)
+    if fmt == "delta_v1":
+        # Option A: auto-render diagrams if --render-diagrams flag is set
+        if render_diagrams:
+            # Look for mermaid outputs in the latest registered period's mermaid dir
+            mermaid_base = (REPO_ROOT / "analysis" / "output" / "mermaid" / "rbi_sibc"
+                            if True else None)
+            if mermaid_base:
+                # Use the most recent mermaid subdirectory
+                mermaid_dirs = sorted(mermaid_base.glob("????-??-??")) if mermaid_base.exists() else []
+                if mermaid_dirs:
+                    latest_mmd = mermaid_dirs[-1]
+                    rendered   = render_mermaid_diagrams(cfg, latest_mmd, Path(output_dir))
+                    cfg        = apply_rendered_images(cfg, rendered)
+                    print(f"  → {len(rendered)} diagrams rendered (Option A)")
+                else:
+                    print("  ⚠  No mermaid output directories found — skipping diagram rendering")
+        html     = build_delta_html(cfg, model, subsystems)
+        substack = build_delta_substack(cfg, model, subsystems)
+        md       = build_delta_markdown(cfg, model, subsystems)
+    else:
+        html     = build_html(cfg, model, annotations, subsystems)
+        substack = build_substack_html(cfg, model, annotations, subsystems)
+        md       = build_markdown(cfg, model, annotations, subsystems)
 
     with open(html_path, "w", encoding="utf-8") as f:
         f.write(html)
@@ -1098,25 +1649,62 @@ def generate(config_path=None, output_dir=None):
     with open(md_path, "w", encoding="utf-8") as f:
         f.write(md)
 
-    tiers = nodes_by_tier(model)
     wc = len(md.split())
 
     print(f"\n  ✓  HTML     (archive)  : {html_path}")
     print(f"  ✓  HTML     (substack) : {substack_path}")
     print(f"  ✓  MD                  : {md_path}")
-    print(f"\n     Period           : {model.get('_meta', {}).get('period', '')}")
-    print(f"     Annotations      : {len(annotations)} parsed")
-    print(f"     Featured signals : {len(featured)}")
-    print(f"     Newsletter stories: {sum(1 for s in subsystems if s.get('newsletter'))}")
-    print(f"     Nodes rendered   :")
-    for tier in ["driver", "sector", "gap", "opportunity", "pressure"]:
-        count = len(tiers.get(tier, []))
-        if count:
-            print(f"       {tier:<12} {count}")
+    print(f"\n     Format           : {fmt}")
+    print(f"     Period           : {cfg['_meta'].get('period', '')}")
+
+    if fmt == "delta_v1":
+        edit = cfg.get("editorial", {})
+        print(f"     Prev period      : {cfg['_meta'].get('prev_period', '')}")
+        print(f"     Held signals     : {len(edit.get('what_held', []))}")
+        print(f"     Changed signals  : {len(edit.get('what_changed', []))}")
+        print(f"     New signals      : {len(edit.get('what_new', []))}")
+        # Flag any image placeholders that need manual fill
+        all_items = (
+            edit.get("what_held", []) +
+            edit.get("what_changed", []) +
+            edit.get("what_new", [])
+        )
+        placeholders = [i.get("signal", "?") for i in all_items if not i.get("image_url") and i.get("subsystem_id")]
+        if placeholders:
+            print(f"\n  ⚠  Image placeholders (Option B — fill manually):")
+            for sig in placeholders:
+                sub_id = next((i.get("subsystem_id","") for i in all_items if i.get("signal") == sig), "")
+                slug   = re.sub(r"[^a-z0-9]+", "_", sig.lower()).strip("_")[:30]
+                print(f"       {sub_id}_{slug}.png")
+            print(f"     → Export from mermaid.live, set image_url in newsletter_config.json,")
+            print(f"       then re-run to replace placeholders with real images.")
+    else:
+        tiers = nodes_by_tier(model)
+        print(f"     Annotations      : {len(annotations)} parsed")
+        print(f"     Featured signals : {len(featured)}")
+        print(f"     Newsletter stories: {sum(1 for s in subsystems if s.get('newsletter'))}")
+        print(f"     Nodes rendered   :")
+        for tier in ["driver", "sector", "gap", "opportunity", "pressure"]:
+            count = len(tiers.get(tier, []))
+            if count:
+                print(f"       {tier:<12} {count}")
+
     print(f"     Word count       : ~{wc}")
     print(f"\n  → Substack: open newsletter_{today}_substack.html in browser → Select All → Copy → paste into Substack editor")
     print(f"  → Archive:  newsletter_{today}.html — full styled version\n")
 
 
 if __name__ == "__main__":
-    generate(sys.argv[1] if len(sys.argv) > 1 else None)
+    import argparse as _ap
+    _parser = _ap.ArgumentParser(description="Generate India Credit Lens newsletter")
+    _parser.add_argument("config", nargs="?", help="Path to newsletter_config.json")
+    _parser.add_argument(
+        "--render-diagrams",
+        action="store_true",
+        help="Option A: auto-render subsystem .mmd files to PNG via mmdc and embed in newsletter",
+    )
+    _args = _parser.parse_args()
+    generate(
+        config_path=_args.config,
+        render_diagrams=_args.render_diagrams,
+    )
