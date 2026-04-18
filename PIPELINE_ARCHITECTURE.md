@@ -36,7 +36,15 @@ SIBC .xlsx
     │
     ▼
 [Stage 3] run_evals.py (gate — exit 1 blocks next stage)
-    │  Checks: sections.json, annotations_draft.ts, system_model.json, subsystems.json
+    │  Check 0:  validate_timeline.py      timeline.json schema + path existence
+    │  Check 1:  validate_sections.py      sections.json schema + data integrity
+    │  Check 1b: web CSV dedup check       auto-fixes via update_web_data.py
+    │  Check 2:  validate_annotations.py   annotations_draft.ts structure
+    │  Check 2b: validate_content.py       dates/values/growth in bodies vs sections.json
+    │  Check 3:  validate_annotations.py   live rbi_sibc.ts
+    │  Check 4:  validate.py               system_model.json
+    │  Check 5:  validate.py --subsystems  subsystems.json
+    │  Check 6:  tsc + npm run build
     │
     ▼
 [Stage 4] generate_mermaid.py
@@ -47,6 +55,7 @@ SIBC .xlsx
 [Stage 5] generate_merge.py
     │  → rbi_sibc/merged/sections_merged.json
     │    (merges all periods; later period values override earlier for same month)
+    │  Auto-runs validate_sections.py --merged post-write; exits 1 on failure
     │
     ▼
 [Stage 6] Claude: Merged analysis
@@ -58,11 +67,13 @@ SIBC .xlsx
     │  → rbi_sibc/merged/opportunities.md
     │
     ▼
-[Stage 7] run_evals.py --merged (gate)
+[Stage 7] run_evals.py --period merged --merged (gate)
+    │  Same checks as Stage 3; null values in Jan series are warnings not errors
     │
     ▼
 [Stage 8] Web + content update
-    │  → web/lib/reports/rbi_sibc.ts  (from merged annotations)
+    │  promote_annotations.py              (automated copy + ID verification)
+    │  → web/lib/reports/rbi_sibc.ts  (from merged annotations, IDs verified)
     │  → newsletter_config.json        (from merged system_model + subsystems)
     │  → generate_newsletter.py        (script-only, no Claude)
 ```
@@ -104,12 +115,15 @@ analysis/
 │               └── sub_*.mmd
 │
 ├── extract_sibc.py                 ← Stage 1: xlsx → sections.json
-├── generate_merge.py               ← Stage 5: sections[] → sections_merged.json
+├── generate_merge.py               ← Stage 5: sections[] → sections_merged.json + auto-validate
 ├── generate_mermaid.py             ← Stage 4: system_model → .mmd files
+├── promote_annotations.py          ← Stage 8: annotations_merged.ts → rbi_sibc.ts (verified copy)
 ├── generate_delta.py               ← Ad-hoc: period-over-period delta (not in pipeline)
-├── validate_sections.py            ← Validator: sections.json
-├── validate_annotations.py         ← Validator: annotations .ts files
-├── validate.py                     ← Validator: system_model.json + subsystems
+├── validate_timeline.py            ← Validator: timeline.json (Check 0)
+├── validate_sections.py            ← Validator: sections.json (Check 1)
+├── validate_annotations.py         ← Validator: annotations .ts files (Checks 2, 3)
+├── validate_content.py             ← Validator: numbers/dates in annotation bodies (Check 2b)
+├── validate.py                     ← Validator: system_model.json + subsystems (Checks 4, 5)
 ├── run_evals.py                    ← Master eval orchestrator (Stages 3, 7)
 ├── report_analysis_prompt.md       ← Master prompt for all Claude analyses
 │
@@ -151,6 +165,16 @@ web/
 - `run_evals.py` exits 1 on any error. The next stage does not run until it exits 0.
 - Warnings are non-blocking; errors block.
 - Run evals after Stage 2 (per-period) and after Stage 6 (merged).
+- Check 0 (`validate_timeline.py`) runs first on every eval — it is the registry guard.
+
+### Stage 5 self-validates
+- `generate_merge.py` auto-runs `validate_sections.py --merged` after writing.
+- If post-merge validation fails, `generate_merge.py` exits 1 — Stage 6 must not run.
+
+### Stage 8 is automated, not manual
+- Use `promote_annotations.py` to copy `annotations_merged.ts` → `rbi_sibc.ts`.
+- The script verifies annotation IDs match before and after the write.
+- Never copy manually — the verification step is the guardrail.
 
 ### annotation_ids are sacred
 - Every `annotation_id` in `system_model.json` must exactly match an `id` in the
@@ -217,11 +241,14 @@ Update `merged.sections` path if the merged file moves.
 □  Claude: per-period analysis → system_model.json + subsystems.json + annotations_draft.ts + docs
 □  Validate: python3 analysis/run_evals.py --period {date} --skip-build
 □  python3 analysis/generate_mermaid.py rbi_sibc/{date}/system_model.json
-□  python3 analysis/generate_merge.py   (auto-discovers all periods from timeline.json)
 □  Update timeline.json — add new period entry
+□  python3 analysis/validate_timeline.py           (confirm timeline is clean)
+□  python3 analysis/generate_merge.py              (auto-discovers periods; validates on exit)
 □  Claude: merged analysis → merged/system_model.json + subsystems.json + annotations_merged.ts + docs
-□  Validate: python3 analysis/run_evals.py --period merged --skip-build  (once merged eval added)
-□  Update web/lib/reports/rbi_sibc.ts from merged annotations
-□  npm run build + tsc --noEmit
-□  Commit + push
+□  python3 analysis/run_evals.py --period merged --merged --skip-build
+□  python3 analysis/promote_annotations.py --dry-run   (preview ID diff)
+□  python3 analysis/promote_annotations.py             (copy + verify)
+□  python3 analysis/run_evals.py --period merged --merged   (full run with build)
+□  Commit per-period outputs, then merged outputs, then web/ separately
+□  git push
 ```

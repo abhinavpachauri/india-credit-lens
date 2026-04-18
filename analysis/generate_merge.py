@@ -34,6 +34,7 @@ Exit codes:
 import argparse
 import json
 import re
+import subprocess
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -53,8 +54,8 @@ MONTH_ORDER = {
 }
 
 def display_to_sortkey(label: str) -> tuple:
-    """'Jan 2024' → (2024, 1) for sorting."""
-    parts = label.strip().split()
+    """'Jan 2024' or 'Jan 2024*' → (2024, 1) for sorting."""
+    parts = label.rstrip("*").strip().split()
     if len(parts) != 2:
         return (9999, 99)
     mon, year = parts[0], parts[1]
@@ -62,8 +63,9 @@ def display_to_sortkey(label: str) -> tuple:
 
 
 def display_to_date(label: str) -> datetime | None:
-    """'Jan 2024' → datetime(2024, 1, 1)"""
-    parts = label.strip().split()
+    """'Jan 2024' or 'Jan 2024*' → datetime(2024, 1, 1)"""
+    label = label.rstrip("*").strip()
+    parts = label.split()
     if len(parts) != 2:
         return None
     mon_num = MONTH_ORDER.get(parts[0])
@@ -134,6 +136,16 @@ def merge_sections(period_files: list[Path]) -> dict:
         if data.get("dataDate", "") > latest_date:
             latest_date = data["dataDate"]
         print(f"  Loaded: {pf}  (dataDate={data.get('dataDate')})")
+
+    # Collect dateOverrides from all periods
+    all_date_overrides = []
+    seen_orig = set()
+    for data in loaded:
+        for rec in data.get("dateOverrides", []):
+            key = rec.get("original_iso", "")
+            if key and key not in seen_orig:
+                seen_orig.add(key)
+                all_date_overrides.append(rec)
 
     # Gather all section IDs in order from the first file
     section_ids = [s["id"] for s in loaded[0]["sections"]]
@@ -219,11 +231,12 @@ def merge_sections(period_files: list[Path]) -> dict:
         })
 
     return {
-        "report":   "rbi_sibc",
-        "dataDate": latest_date,
-        "merged":   True,
-        "periods":  [str(pf) for pf in period_files],
-        "sections": merged_sections,
+        "report":        "rbi_sibc",
+        "dataDate":      latest_date,
+        "merged":        True,
+        "periods":       [str(pf) for pf in period_files],
+        "sections":      merged_sections,
+        "dateOverrides": all_date_overrides,
     }
 
 
@@ -294,3 +307,26 @@ if __name__ == "__main__":
     print(f"  Sections  : {n_sections}")
     print(f"  Data rows : {total_rows} total across all sections")
     print(f"  dataDate  : {merged['dataDate']}")
+
+    # ── Post-merge validation ─────────────────────────────────────────────────
+    # Auto-run validate_sections.py --merged to catch data integrity issues
+    # immediately. Exits non-zero if validation fails so the caller knows the
+    # merged file should not be used for downstream analysis.
+    print(f"\n  Running post-merge validation (validate_sections.py --merged)...")
+    val_cmd = [sys.executable, str(ANALYSIS / "validate_sections.py"),
+               str(out_path), "--merged"]
+    proc = subprocess.run(val_cmd, cwd=str(ANALYSIS), capture_output=True, text=True)
+    # Print the last few lines of output (skip verbose per-section notes)
+    output_lines = (proc.stdout + proc.stderr).strip().splitlines()
+    summary_lines = [l for l in output_lines if any(
+        kw in l for kw in ["PASSED", "FAILED", "ERROR", "WARNING", "✅", "❌", "⚠️"]
+    )]
+    for line in summary_lines[-6:]:
+        print(f"  {line.strip()}")
+
+    if proc.returncode != 0:
+        print(f"\n  ❌ Post-merge validation FAILED — sections_merged.json has errors.")
+        print(f"     Fix errors before running Stage 6 (Claude merged analysis).")
+        sys.exit(1)
+    else:
+        print(f"  Post-merge validation passed — sections_merged.json is ready.")

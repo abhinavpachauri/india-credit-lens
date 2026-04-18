@@ -198,6 +198,131 @@ def compute_growth(current_val, base_val) -> float | None:
         return None
 
 
+# ── Delayed-publication detection ─────────────────────────────────────────────
+
+def detect_anomalous_dates(date_cols: list[str], stmt_name: str) -> list[dict]:
+    """
+    Find dates that may be delayed publications from the prior calendar month.
+
+    Pattern: within the same calendar month, two dates exist where
+      - one is early  (day ≤ 14) — possible delayed prior-month snapshot
+      - one is late   (day ≥ 15) — genuine current-month snapshot
+
+    Returns a list of anomaly dicts; empty list if no anomalies.
+    """
+    from collections import defaultdict
+    month_map: dict[str, list[str]] = defaultdict(list)
+    for col in date_cols:
+        try:
+            d = datetime.strptime(col, "%Y-%m-%d")
+            month_map[d.strftime("%Y-%m")].append(col)
+        except ValueError:
+            continue
+
+    anomalies = []
+    for _month, cols in sorted(month_map.items()):
+        if len(cols) < 2:
+            continue
+        early = [c for c in cols if datetime.strptime(c, "%Y-%m-%d").day <= 14]
+        late  = [c for c in cols if datetime.strptime(c, "%Y-%m-%d").day >= 15]
+        if not (early and late):
+            continue
+        for e in early:
+            import calendar
+            d  = datetime.strptime(e, "%Y-%m-%d")
+            pm = d.month - 1 if d.month > 1 else 12
+            py = d.year if d.month > 1 else d.year - 1
+            # Use the last day of the prior month so the relabelled date sits at
+            # the natural end of that month on the proportional time axis.
+            # Keeping the original day number (e.g. 8) would place it only ~13
+            # days after the previous month's observation, visually cramping the
+            # chart even though a full month has elapsed.
+            last_day = calendar.monthrange(py, pm)[1]
+            rel = datetime(py, pm, last_day)
+            anomalies.append({
+                "statement":          stmt_name,
+                "early_date":         e,
+                "late_date":          late[0],
+                "original_display":   d.strftime("%b %Y"),
+                "relabelled_iso":     rel.strftime("%Y-%m-%d"),
+                "relabelled_display": rel.strftime("%b %Y") + "*",
+            })
+    return anomalies
+
+
+def prompt_date_override(anomalies: list[dict], out_dir: Path) -> dict[str, str]:
+    """
+    Prompt the user to decide how to handle each anomalous date.
+
+    Returns iso_overrides: {original_iso: relabelled_iso}
+      - "__EXCLUDE__" as value means drop the date entirely.
+      - Empty dict means keep as-is.
+
+    Saves date_overrides.json to out_dir when choice is B.
+    """
+    print("\n" + "=" * 64)
+    print("⚠️  DATE ANOMALY DETECTED — manual decision required")
+    print("=" * 64)
+    print(f"\n  {len(anomalies)} potential delayed-publication date(s) found:\n")
+    for a in anomalies:
+        print(f"  Statement : {a['statement']}")
+        print(f"  Early date: {a['early_date']}  "
+              f"(day ≤ 14 — may be delayed {a['relabelled_display'].rstrip('*')} data)")
+        print(f"  Late date : {a['late_date']}  "
+              f"(genuine {a['original_display']} snapshot)")
+        print()
+
+    print("  How should the early date(s) be treated?")
+    print("  [A] Keep as-is          — original month label (YoY may be null)")
+    print("  [B] Relabel to prior month — display as 'Feb YYYY*' (recommended)")
+    print("  [C] Exclude             — drop these dates from output entirely")
+    print("  [D] Abort               — stop extraction; inspect raw file first")
+    print()
+
+    try:
+        choice = input("  Choice (A/B/C/D): ").strip().upper()
+    except (EOFError, KeyboardInterrupt):
+        print("\n  No terminal — defaulting to [A] (keep as-is). Re-run interactively to relabel.")
+        return {}
+
+    if choice == "D":
+        print("\n  Aborting. Re-run after inspecting the raw file.")
+        sys.exit(0)
+
+    if choice == "B":
+        from datetime import date as _date
+        iso_overrides: dict[str, str] = {}
+        records = []
+        for a in anomalies:
+            iso_overrides[a["early_date"]] = a["relabelled_iso"]
+            records.append({
+                "statement":          a["statement"],
+                "original_iso":       a["early_date"],
+                "relabelled_iso":     a["relabelled_iso"],
+                "original_display":   a["original_display"],
+                "relabelled_display": a["relabelled_display"],
+                "reason":             "delayed_publication",
+                "decided_by":         "user",
+                "decided_at":         _date.today().isoformat(),
+            })
+        overrides_path = out_dir / "date_overrides.json"
+        with open(overrides_path, "w") as f:
+            json.dump({"overrides": records}, f, indent=2)
+        print(f"\n  ✅ Saved overrides → {overrides_path}")
+        for a in anomalies:
+            print(f"     {a['early_date']}  →  {a['relabelled_iso']}  "
+                  f"('{a['relabelled_display']}')")
+        return iso_overrides
+
+    if choice == "C":
+        print(f"\n  Excluding {len(anomalies)} early date(s) from output.")
+        return {a["early_date"]: "__EXCLUDE__" for a in anomalies}
+
+    # A or unrecognised
+    print("\n  Keeping dates as-is. YoY for affected months may be null.")
+    return {}
+
+
 # ── Row lookup ────────────────────────────────────────────────────────────────
 
 def lookup_row(df, code: str, statement: str, is_priority: bool):
@@ -217,8 +342,19 @@ def lookup_row(df, code: str, statement: str, is_priority: bool):
 
 # ── Section builder ───────────────────────────────────────────────────────────
 
-def build_section(sec_def: dict, stmt1: object, stmt2: object, date_cols: list[str]) -> dict:
-    """Build one section dict from parsed DataFrames."""
+def build_section(
+    sec_def: dict,
+    stmt1: object,
+    stmt2: object,
+    date_cols: list[str],
+    iso_overrides: dict[str, str] | None = None,
+) -> dict:
+    """
+    Build one section dict from parsed DataFrames.
+
+    iso_overrides maps original ISO date → relabelled ISO date (or "__EXCLUDE__").
+    Relabelled dates are displayed with a trailing '*' to signal delayed publication.
+    """
     section_id = sec_def["id"]
     title      = sec_def["title"]
     series_def = sec_def["series"]
@@ -254,58 +390,100 @@ def build_section(sec_def: dict, stmt1: object, stmt2: object, date_cols: list[s
             "absoluteData": [], "growthData": [], "fyData": [],
         }
 
-    # ── absoluteData ──────────────────────────────────────────────────────────
-    absolute_data = []
+    # ── Apply iso_overrides to produce (orig_col, eff_col) pairs ─────────────
+    # orig_col = key for DataFrame value lookup
+    # eff_col  = ISO date used for month arithmetic (YoY / FY)
+    col_pairs: list[tuple[str, str]] = []
     for col in date_cols:
-        row_dict = {"date": col_to_display(col)}
+        if iso_overrides and col in iso_overrides:
+            eff = iso_overrides[col]
+            if eff == "__EXCLUDE__":
+                continue   # drop this date entirely
+            col_pairs.append((col, eff))
+        else:
+            col_pairs.append((col, col))
+
+    eff_to_orig: dict[str, str] = {eff: orig for orig, eff in col_pairs}
+
+    def _display(eff_col: str, orig_col: str) -> str:
+        label = col_to_display(eff_col)
+        return label + ("*" if eff_col != orig_col else "")
+
+    # ── absoluteData ──────────────────────────────────────────────────────────
+    # Later col_pair overwrites earlier one for the same display month.
+    abs_by_label: dict[str, dict] = {}
+    for orig_col, eff_col in col_pairs:
+        disp = _display(eff_col, orig_col)
+        row_dict = {"date": disp}
         for label in series_names:
-            val = series_rows[label].get(col)
+            val = series_rows[label].get(orig_col)
             row_dict[label] = round(float(val), 2) if val is not None else None
-        absolute_data.append(row_dict)
+        abs_by_label[disp] = row_dict
+
+    # Preserve display order (latest per display month at end)
+    seen_labels: list[str] = []
+    for orig_col, eff_col in col_pairs:
+        disp = _display(eff_col, orig_col)
+        if disp in seen_labels:
+            seen_labels.remove(disp)
+        seen_labels.append(disp)
+    absolute_data = [abs_by_label[lbl] for lbl in dict.fromkeys(seen_labels)]
+
+    # Rebuild deduped effective ISO date list (latest eff_col per display month)
+    deduped_eff_map: dict[str, str] = {}   # display → eff_col
+    for orig_col, eff_col in col_pairs:
+        disp = _display(eff_col, orig_col)
+        deduped_eff_map[disp] = eff_col
+    deduped_eff_cols = list(deduped_eff_map.values())
 
     # ── growthData (YoY) ──────────────────────────────────────────────────────
     growth_data = []
-    for col in date_cols:
-        prior = same_month_prior_year(col, date_cols)
-        if prior is None:
+    for eff_col in deduped_eff_cols:
+        prior_eff = same_month_prior_year(eff_col, deduped_eff_cols)
+        if prior_eff is None:
             continue
-        row_dict = {"date": col_to_display(col)}
+        orig_col   = eff_to_orig.get(eff_col, eff_col)
+        orig_prior = eff_to_orig.get(prior_eff, prior_eff)
+        disp = _display(eff_col, orig_col)
+        row_dict = {"date": disp}
         for label in series_names:
-            cur = series_rows[label].get(col)
-            bas = series_rows[label].get(prior)
-            row_dict[label] = compute_growth(cur, bas)
+            row_dict[label] = compute_growth(
+                series_rows[label].get(orig_col),
+                series_rows[label].get(orig_prior),
+            )
         growth_data.append(row_dict)
 
     # ── fyData (FY-to-date from most recent March) ────────────────────────────
     fy_data = []
-    for col in date_cols:
-        march = most_recent_march(col, date_cols)
-        if march is None or march == col:   # skip if col IS March (no FTD growth for base itself)
-            # For March itself: FY growth = YoY growth (full FY elapsed)
-            # We still include it if we have a prior-year March
-            prior_march = most_recent_march(march or col, date_cols) if march else None
-            if march and march != col:
-                pass  # handled below
-            elif march == col:
-                # FY base col is itself — compute YoY of this March
-                prior = same_month_prior_year(col, date_cols)
-                if prior is None:
-                    continue
-                row_dict = {"date": col_to_display(col)}
-                for label in series_names:
-                    cur = series_rows[label].get(col)
-                    bas = series_rows[label].get(prior)
-                    row_dict[label] = compute_growth(cur, bas)
-                fy_data.append(row_dict)
+    for eff_col in deduped_eff_cols:
+        march_eff = most_recent_march(eff_col, deduped_eff_cols)
+        if march_eff is None:
+            continue
+        orig_col   = eff_to_orig.get(eff_col, eff_col)
+        orig_march = eff_to_orig.get(march_eff, march_eff)
+        disp = _display(eff_col, orig_col)
+
+        if march_eff == eff_col:
+            # This column IS a March-end — FY growth = YoY growth
+            prior_eff  = same_month_prior_year(eff_col, deduped_eff_cols)
+            if prior_eff is None:
                 continue
-            else:
-                continue
-        row_dict = {"date": col_to_display(col)}
-        for label in series_names:
-            cur = series_rows[label].get(col)
-            bas = series_rows[label].get(march)
-            row_dict[label] = compute_growth(cur, bas)
-        fy_data.append(row_dict)
+            orig_prior = eff_to_orig.get(prior_eff, prior_eff)
+            row_dict = {"date": disp}
+            for label in series_names:
+                row_dict[label] = compute_growth(
+                    series_rows[label].get(orig_col),
+                    series_rows[label].get(orig_prior),
+                )
+            fy_data.append(row_dict)
+        else:
+            row_dict = {"date": disp}
+            for label in series_names:
+                row_dict[label] = compute_growth(
+                    series_rows[label].get(orig_col),
+                    series_rows[label].get(orig_march),
+                )
+            fy_data.append(row_dict)
 
     return {
         "id":           section_id,
@@ -359,6 +537,25 @@ def extract(xlsx_path: Path, out_dir: Path | None = None, dry_run: bool = False)
     print(f"  Statement 1 date columns: {stmt1_date_cols}")
     print(f"  Statement 2 date columns: {stmt2_date_cols}")
 
+    # ── Detect delayed-publication dates and prompt user ─────────────────────
+    # Must resolve out_dir before prompting (needed to save date_overrides.json)
+    if out_dir is None:
+        _tmp_out_dir = ANALYSIS / "rbi_sibc" / parse_filename_date(xlsx_path).strftime("%Y-%m-%d")
+    else:
+        _tmp_out_dir = Path(out_dir)
+    _tmp_out_dir.mkdir(parents=True, exist_ok=True)
+
+    stmt1_anomalies = detect_anomalous_dates(stmt1_date_cols, "Statement 1")
+    stmt2_anomalies = detect_anomalous_dates(stmt2_date_cols, "Statement 2")
+    all_anomalies   = stmt1_anomalies + stmt2_anomalies
+
+    iso_overrides: dict[str, str] = {}
+    if all_anomalies and not dry_run:
+        iso_overrides = prompt_date_override(all_anomalies, _tmp_out_dir)
+    elif all_anomalies and dry_run:
+        print(f"\n  [dry-run] {len(all_anomalies)} date anomaly(ies) detected — "
+              f"would prompt for override decision")
+
     # ── Report date from filename ─────────────────────────────────────────────
     report_date = parse_filename_date(xlsx_path)
     if report_date is None:
@@ -373,7 +570,7 @@ def extract(xlsx_path: Path, out_dir: Path | None = None, dry_run: bool = False)
         print(f"  Building section: {sec_def['id']}")
         # industryByType (series=None) auto-detects from Statement 2 — use stmt2 dates
         date_cols = stmt2_date_cols if sec_def["series"] is None else stmt1_date_cols
-        section = build_section(sec_def, stmt1, stmt2, date_cols)
+        section = build_section(sec_def, stmt1, stmt2, date_cols, iso_overrides=iso_overrides)
         sections.append(section)
 
     payload = {
@@ -381,6 +578,12 @@ def extract(xlsx_path: Path, out_dir: Path | None = None, dry_run: bool = False)
         "dataDate": data_date,
         "sections": sections,
     }
+
+    # Attach override record if one was saved this run
+    overrides_path = _tmp_out_dir / "date_overrides.json"
+    if overrides_path.exists():
+        with open(overrides_path) as f:
+            payload["dateOverrides"] = json.load(f).get("overrides", [])
 
     # ── Output ────────────────────────────────────────────────────────────────
     if out_dir is None:

@@ -12,8 +12,9 @@ export interface CreditRow {
   is_priority_sector_memo: boolean;
   parent_code:             string;
   parent_statement:        string;
-  date:                    string;   // observation date YYYY-MM-DD
+  date:                    string;   // observation date YYYY-MM-DD (may be relabelled)
   outstanding_cr:          number | null;
+  source_date:             string;   // original publication date if relabelled, else ""
 }
 
 // ── Fetch + parse the public CSV ──────────────────────────────────────────────
@@ -43,6 +44,7 @@ export async function loadData(): Promise<CreditRow[]> {
     outstanding_cr:          r.outstanding_cr === "" || r.outstanding_cr == null
                                ? null
                                : Number(r.outstanding_cr),
+    source_date:             r.source_date ?? "",
   }));
 
   return _cache;
@@ -97,11 +99,22 @@ export function buildSeries(
   labels: Record<string, string>,
   opts: { psl?: boolean; stmt?: string } = {}
 ): ChartPoint[] {
-  const dates = uniqueDates(rows);
   const filtered = rowsForCodes(rows, codes, opts);
+  // Use only dates where this section has actual data — avoids phantom null
+  // points from other sections (e.g. Statement 2 Feb dates appearing in a
+  // Statement 1 section's timeline and breaking connectNulls behaviour).
+  const dates = uniqueDates(filtered);
 
   return dates.map((date) => {
-    const point: ChartPoint = { date: formatDate(date), _ts: new Date(date).getTime() };
+    // Check if any row for this date has a source_date (delayed-publication relabelling)
+    const sourceRow = filtered.find((r) => r.date === date && r.source_date);
+    const isDelayed = !!sourceRow?.source_date;
+    const displayDate = formatDate(date) + (isDelayed ? "*" : "");
+    const point: ChartPoint = {
+      date:        displayDate,
+      _ts:         new Date(date).getTime(),
+      ...(isDelayed ? { _sourceDate: formatDate(sourceRow!.source_date) } : {}),
+    };
     codes.forEach((code) => {
       const row = filtered.find((r) => r.code === code && r.date === date);
       point[labels[code] ?? code] = row?.outstanding_cr ?? null;
@@ -118,8 +131,11 @@ export function buildGrowthSeries(
   mode: "yoy" | "fy",
   opts: { psl?: boolean; stmt?: string } = {}
 ): ChartPoint[] {
-  const dates = uniqueDates(rows);
   const filtered = rowsForCodes(rows, codes, opts);
+  // Use only dates where this section has actual data — same reason as buildSeries.
+  // This prevents null growth points from other sections' dates (e.g. Statement 2
+  // Feb 23rd appearing between Statement 1's Feb* and Mar, breaking the line).
+  const dates = uniqueDates(filtered);
   if (dates.length < 2) return [];
 
   // For YoY: pair each date with the date 12 months prior (or nearest)
@@ -155,7 +171,13 @@ export function buildGrowthSeries(
     // Skip if no valid comparison period exists — emit null rather than a wrong number
     if (!prevDate || prevDate === currDate) continue;
 
-    const point: ChartPoint = { date: formatDate(currDate), _ts: new Date(currDate).getTime() };
+    const sourceRow2 = filtered.find((r) => r.date === currDate && r.source_date);
+    const isDelayed2 = !!sourceRow2?.source_date;
+    const point: ChartPoint = {
+      date: formatDate(currDate) + (isDelayed2 ? "*" : ""),
+      _ts:  new Date(currDate).getTime(),
+      ...(isDelayed2 ? { _sourceDate: formatDate(sourceRow2!.source_date) } : {}),
+    };
     codes.forEach((code) => {
       const curr = filtered.find((r) => r.code === code && r.date === currDate)?.outstanding_cr;
       const prev = filtered.find((r) => r.code === code && r.date === prevDate)?.outstanding_cr;

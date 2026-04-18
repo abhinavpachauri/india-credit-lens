@@ -1,0 +1,116 @@
+[
+  {
+    "id": "sub_01",
+    "label": "The Gold Economy & Regulated Retail Cooling",
+    "chart_type": "flowchart",
+    "chart_direction": "LR",
+    "newsletter": true,
+    "drivers": ["driver_gold_price_surge", "driver_rbi_unsecured_tightening"],
+    "sectors": [
+      "sector_gold_loans",
+      "sector_gems_jewellery",
+      "sector_credit_cards",
+      "sector_personal_loans"
+    ],
+    "outcomes": [
+      "opp_gold_lending",
+      "pressure_gold_price_reversal",
+      "pressure_unsecured_demand_migration"
+    ],
+    "node_ids": [
+      "driver_gold_price_surge",
+      "driver_rbi_unsecured_tightening",
+      "sector_gold_loans",
+      "sector_gems_jewellery",
+      "sector_credit_cards",
+      "sector_personal_loans",
+      "opp_gold_lending",
+      "pressure_gold_price_reversal",
+      "pressure_unsecured_demand_migration"
+    ]
+  },
+  {
+    "id": "sub_02",
+    "label": "The MSME Formalisation Wave",
+    "chart_type": "flowchart",
+    "chart_direction": "LR",
+    "newsletter": true,
+    "drivers": ["driver_msme_formalisation", "driver_nbfc_regulatory_recovery"],
+    "sectors": ["sector_msme_industry", "sector_nbfcs", "sector_large_corporate"],
+    "outcomes": ["opp_msme_credit", "pressure_msme_first_cycle_risk", "gap_nbfc_double_counting"],
+    "node_ids": [
+      "driver_msme_formalisation",
+      "driver_nbfc_regulatory_recovery",
+      "sector_msme_industry",
+      "sector_nbfcs",
+      "sector_large_corporate",
+      "opp_msme_credit",
+      "pressure_msme_first_cycle_risk",
+      "gap_nbfc_double_counting"
+    ]
+  },
+  {
+    "id": "sub_03",
+    "label": "The PLI Manufacturing Capex Cycle",
+    "chart_type": "flowchart",
+    "chart_direction": "LR",
+    "newsletter": true,
+    "drivers": ["driver_pli_manufacturing"],
+    "sectors": ["sector_all_engineering", "sector_vehicle_loans"],
+    "outcomes": ["opp_pli_supply_chain", "opp_ev_vehicle_credit"],
+    "node_ids": [
+      "driver_pli_manufacturing",
+      "sector_all_engineering",
+      "sector_vehicle_loans",
+      "opp_pli_supply_chain",
+      "opp_ev_vehicle_credit"
+    ]
+  },
+  {
+    "id": "sub_04",
+    "label": "The PSL Housing Reclassification Event",
+    "chart_type": "flowchart",
+    "chart_direction": "TD",
+    "newsletter": false,
+    "drivers": ["driver_psl_limit_revision"],
+    "sectors": ["sector_psl_housing", "sector_housing", "sector_export_credit"],
+    "outcomes": ["gap_psl_housing_reclassification"],
+    "node_ids": [
+      "driver_psl_limit_revision",
+      "sector_psl_housing",
+      "sector_housing",
+      "sector_export_credit",
+      "gap_psl_housing_reclassification"
+    ]
+  },
+  {
+    "id": "sub_05",
+    "label": "The Infrastructure Plateau",
+    "chart_type": "flowchart",
+    "chart_direction": "LR",
+    "newsletter": false,
+    "drivers": ["driver_infra_cycle_maturing"],
+    "sectors": ["sector_infrastructure", "sector_renewable_energy"],
+    "outcomes": ["opp_renewable_project_finance"],
+    "node_ids": [
+      "driver_infra_cycle_maturing",
+      "sector_infrastructure",
+      "sector_renewable_energy",
+      "opp_renewable_project_finance"
+    ]
+  },
+  {
+    "id": "sub_06",
+    "label": "System Credit Overview",
+    "chart_type": "flowchart",
+    "chart_direction": "LR",
+    "newsletter": false,
+    "drivers": [],
+    "sectors": ["sector_bank_credit"],
+    "outcomes": ["gap_no_feb_yoy"],
+    "node_ids": [
+      "sector_bank_credit",
+      "gap_no_feb_yoy"
+    ]
+  }
+]

@@ -6,10 +6,13 @@ Master evaluation orchestrator. Runs all validation checks against a given
 period's outputs and prints a summary table.
 
 Checks run (in order):
+  0.  validate_timeline.py          on rbi_sibc/timeline.json (always runs first)
   1.  validate_sections.py          on rbi_sibc/<period>/sections.json
   1b. web CSV duplicate-month check  on web/public/data/rbi_sibc_consolidated.csv
                                      auto-fixes by re-running update_web_data.py
   2.  validate_annotations.py       on rbi_sibc/<period>/annotations_draft.ts
+  2b. validate_content.py           on annotations_draft.ts + insights/gaps/opp .md
+                                     checks dates, growth rates, ₹ values vs sections.json
   3.  validate_annotations.py       on web/lib/reports/rbi_sibc.ts  (live)
   4.  validate.py                   on rbi_sibc/<period>/system_model.json
   5.  validate.py --check-subsystems on system_model.json + subsystems.json
@@ -135,12 +138,23 @@ def check_web_data():
     ), ""
 
 
+def check_timeline():
+    """Check 0: validate timeline.json — always runs first, regardless of period."""
+    timeline_path = ANALYSIS / "rbi_sibc" / "timeline.json"
+    if not timeline_path.exists():
+        return False, "", f"timeline.json not found: {timeline_path}"
+    cmd = [sys.executable, str(ANALYSIS / "validate_timeline.py"),
+           "--path", str(timeline_path)]
+    return run_check("timeline", cmd, cwd=ANALYSIS)
+
+
 def check_sections(period_dir, merged=False):
-    sections_path = period_dir / "sections.json"
+    # Merged directory uses sections_merged.json; per-period uses sections.json
+    sections_path = period_dir / ("sections_merged.json" if period_dir.name == "merged" else "sections.json")
     if not sections_path.exists():
         return False, "", f"File not found: {sections_path}"
     cmd = [sys.executable, str(ANALYSIS / "validate_sections.py"), str(sections_path)]
-    if merged:
+    if merged or period_dir.name == "merged":
         cmd.append("--merged")
     return run_check("sections", cmd, cwd=ANALYSIS)
 
@@ -165,13 +179,42 @@ def check_system_model(period_dir):
     model_path = period_dir / "system_model.json"
     if not model_path.exists():
         return False, "", f"File not found: {model_path}"
-    ann_path = WEB / "lib" / "reports" / "rbi_sibc.ts"
+    # Prefer annotations_draft.ts (per-period), then annotations_merged.ts (merged),
+    # then fall back to live rbi_sibc.ts.
+    draft_path  = period_dir / "annotations_draft.ts"
+    merged_path = period_dir / "annotations_merged.ts"
+    live_path   = WEB / "lib" / "reports" / "rbi_sibc.ts"
+    ann_path = (draft_path if draft_path.exists()
+                else merged_path if merged_path.exists()
+                else live_path)
     cmd = [
         sys.executable, str(ANALYSIS / "validate.py"),
         str(model_path),
         "--annotations", str(ann_path),
     ]
     return run_check("system_model", cmd, cwd=ANALYSIS)
+
+
+def check_content(period_dir, sections_path):
+    """Content accuracy check: dates, growth rates, ₹ values in annotations + markdown."""
+    # For merged directory, sections_merged.json is the authoritative file
+    if period_dir.name == "merged" and not sections_path.exists():
+        sections_path = period_dir / "sections_merged.json"
+    if not sections_path.exists():
+        return None, "", f"sections.json not found — skipping content check"
+    ann_ts = period_dir / "annotations_draft.ts"
+    if not ann_ts.exists():
+        ann_ts = period_dir / "annotations_merged.ts"
+    if not ann_ts.exists():
+        return None, "", f"No annotations file found — skipping content check"
+    cmd = [
+        sys.executable, str(ANALYSIS / "validate_content.py"),
+        "--period", period_dir.name,
+    ]
+    # For merged, use --merged flag
+    if period_dir.name == "merged":
+        cmd = [sys.executable, str(ANALYSIS / "validate_content.py"), "--merged"]
+    return run_check("content", cmd, cwd=ANALYSIS)
 
 
 def check_subsystems(period_dir, subsystems_path):
@@ -276,6 +319,14 @@ def main():
 
     results = []
 
+    # ── Check 0: timeline.json ────────────────────────────────────────────────
+    passed, out, err = check_timeline()
+    notes = one_line_summary(out, err, passed)
+    results.append(("0.  timeline.json", passed, notes))
+    if not passed:
+        print(out)
+        print(err, file=sys.stderr)
+
     # ── Check 1: sections.json ────────────────────────────────────────────────
     passed, out, err = check_sections(period_dir, merged=args.merged)
     notes = one_line_summary(out, err, passed)
@@ -296,6 +347,23 @@ def main():
         results.append((label, None, err))
     else:
         notes = one_line_summary(out, err, passed)
+        results.append((label, passed, notes))
+        if not passed:
+            print(out)
+            print(err, file=sys.stderr)
+
+    # ── Check 2b: content accuracy (numbers/dates in annotation bodies + docs) ─
+    sections_path = period_dir / ("sections_merged.json" if period_dir.name == "merged" else "sections.json")
+    passed, out, err = check_content(period_dir, sections_path)
+    label = "2b. content accuracy (annotations + docs)"
+    if passed is None:
+        results.append((label, None, err))
+    else:
+        notes = one_line_summary(out, err, passed)
+        if passed:
+            # Extract the summary line from stdout for display
+            summary_lines = [l.strip() for l in (out + err).splitlines() if '✅' in l or '⚠️' in l]
+            notes = summary_lines[-1][:50] if summary_lines else "passed"
         results.append((label, passed, notes))
         if not passed:
             print(out)

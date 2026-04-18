@@ -75,6 +75,17 @@ export default function TrendChart({
     [tsTicks]
   );
 
+  // Map _ts → original publication date note (for delayed-publication markers)
+  const dateNotes = useMemo(() => {
+    const notes: Record<number, string> = {};
+    (seriesData ?? []).forEach((p) => {
+      if (p._sourceDate && typeof p._ts === "number" && p._ts > 0) {
+        notes[p._ts as number] = `Published: ${p._sourceDate}`;
+      }
+    });
+    return notes;
+  }, [seriesData]);
+
   const legendItems = activeNames.map((name, i) => ({
     label:  name,
     color:  pickColor(name, i),
@@ -100,16 +111,24 @@ export default function TrendChart({
       ? payload.filter((p: any) => highlighted.includes(p.dataKey))
       : payload;
     if (!visible.length) return null;
+    const ts   = Number(label);
+    const note = dateNotes[ts];
     return (
       <div style={{ background: "var(--bg-card)", border: "1px solid var(--border-card)", borderRadius: 8, fontSize: 13, color: "var(--font)", padding: "10px 14px" }}>
         <p style={{ marginBottom: 4, fontWeight: 600 }}>
-          {new Date(Number(label)).toLocaleDateString("en-IN", { month: "short", year: "numeric" })}
+          {new Date(ts).toLocaleDateString("en-IN", { month: "short", year: "numeric" })}
+          {note ? "*" : ""}
         </p>
         {visible.map((p: any) => (
           <p key={p.dataKey} style={{ color: p.color, margin: "2px 0" }}>
             {p.name}: {effectiveMode === "absolute" ? formatCr(Number(p.value) || 0) : formatGrowth(Number(p.value) || 0)}
           </p>
         ))}
+        {note && (
+          <p style={{ color: "var(--font-muted)", fontSize: 11, marginTop: 6, fontStyle: "italic", borderTop: "1px solid var(--border-card)", paddingTop: 4 }}>
+            {note}
+          </p>
+        )}
       </div>
     );
   };

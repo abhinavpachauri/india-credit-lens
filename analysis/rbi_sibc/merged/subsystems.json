@@ -1,0 +1,113 @@
+[
+  {
+    "id": "sub_01",
+    "label": "The Gold Economy & Regulated Retail Cooling",
+    "chart_type": "line",
+    "chart_direction": "diverging",
+    "newsletter": {
+      "headline": "Gold loans tripled while credit cards flatlined — two products, one policy",
+      "summary": "RBI's unsecured credit tightening (Nov 2023) is simultaneously suppressing credit cards and redirecting household demand toward gold-backed lending. The Jan 2025→Jan 2026 comparison makes both movements unambiguous."
+    },
+    "drivers": ["driver_gold_price_surge", "driver_rbi_unsecured_tightening"],
+    "sectors": ["sector_gold_loans", "sector_credit_cards", "sector_personal_loans"],
+    "outcomes": ["opp_gold_loan_entry", "pressure_unsecured_migration"],
+    "node_ids": [
+      "driver_gold_price_surge", "driver_rbi_unsecured_tightening",
+      "sector_gold_loans", "sector_credit_cards", "sector_personal_loans",
+      "opp_gold_loan_entry", "pressure_unsecured_migration"
+    ]
+  },
+  {
+    "id": "sub_02",
+    "label": "The MSME Formalisation Wave",
+    "chart_type": "bar",
+    "chart_direction": "up",
+    "newsletter": {
+      "headline": "MSME YoY credit growth tripled in one year — this is now confirmed structural",
+      "summary": "Micro & Small enterprise YoY growth jumped from 9.6% (Jan 2025) to 31.2% (Jan 2026). PSL Micro & Small corroborates at +25.6% FY. Two independent series pointing the same direction: UDYAM + GST have crossed the underwriting threshold."
+    },
+    "drivers": ["driver_msme_formalisation"],
+    "sectors": ["sector_msme", "sector_large_corporate"],
+    "outcomes": ["opp_msme_origination"],
+    "node_ids": [
+      "driver_msme_formalisation",
+      "sector_msme", "sector_large_corporate",
+      "opp_msme_origination"
+    ]
+  },
+  {
+    "id": "sub_03",
+    "label": "The PLI Manufacturing Capex Cycle",
+    "chart_type": "line",
+    "chart_direction": "up",
+    "newsletter": {
+      "headline": "All Engineering up 62% in 2 years — PLI drawdowns are now real banking flows",
+      "summary": "PLI scheme recipients approved in 2022-23 entered the investment phase in FY25-26. ₹1.96L Cr → ₹2.32L Cr → ₹3.16L Cr across three Feb data points. The announcement phase is over — credit drawdowns are happening."
+    },
+    "drivers": ["driver_pli_manufacturing"],
+    "sectors": ["sector_all_engineering", "sector_industry"],
+    "outcomes": ["opp_pli_supply_chain"],
+    "node_ids": [
+      "driver_pli_manufacturing",
+      "sector_all_engineering", "sector_industry",
+      "opp_pli_supply_chain"
+    ]
+  },
+  {
+    "id": "sub_04",
+    "label": "The PSL Housing Reclassification Event",
+    "chart_type": "bar",
+    "chart_direction": "up",
+    "newsletter": {
+      "headline": "+38% PSL housing growth is a classification event, not organic lending",
+      "summary": "The Oct 2024 RBI revision raised PSL housing limits (metro: ₹35L→₹45L). Loans already on books that previously exceeded the threshold now qualify. The ₹2.87L Cr appearing as credit growth is reclassification, not new lending. Context mandatory when citing."
+    },
+    "drivers": ["driver_psl_limit_revision"],
+    "sectors": ["sector_psl_housing"],
+    "outcomes": [],
+    "node_ids": [
+      "driver_psl_limit_revision",
+      "sector_psl_housing",
+      "gap_psl_reclassification"
+    ]
+  },
+  {
+    "id": "sub_05",
+    "label": "The Infrastructure Plateau & Next Cycle Pivot",
+    "chart_type": "line",
+    "chart_direction": "down",
+    "newsletter": {
+      "headline": "Infrastructure credit decelerating — banks need to pivot to the next capex wave",
+      "summary": "Infrastructure at ₹14.44L Cr and 32.5% of industry credit is growing at only +5.8% FY. The FY22-24 capex wave projects are now in operations, repaying not drawing down. Green hydrogen, data centers, and renewable energy are the next wave — not yet at drawdown scale."
+    },
+    "drivers": ["driver_infra_cycle_maturing"],
+    "sectors": ["sector_infrastructure"],
+    "outcomes": ["opp_renewable_energy"],
+    "node_ids": [
+      "driver_infra_cycle_maturing",
+      "sector_infrastructure",
+      "pressure_infrastructure_repayment",
+      "opp_renewable_energy"
+    ]
+  },
+  {
+    "id": "sub_06",
+    "label": "System Credit Overview — Multi-Period Trajectory",
+    "chart_type": "line",
+    "chart_direction": "up",
+    "newsletter": {
+      "headline": "Bank credit added ₹44L Cr in two years — FY26 accelerating above FY25",
+      "summary": "Total bank credit: ₹160.4L Cr (Jan 2024) → ₹178.7L Cr (Jan 2025) → ₹204.8L Cr (Jan 2026). YoY growth lifted from 11.4% to 14.6%. FY26 tracking at 13.8% vs FY25's 11.0% — structural acceleration, not base effect."
+    },
+    "drivers": ["driver_nbfc_regulatory_recovery"],
+    "sectors": ["sector_bank_credit", "sector_services", "sector_vehicle_loans", "sector_computer_software", "sector_transport"],
+    "outcomes": ["opp_vehicle_ev"],
+    "node_ids": [
+      "driver_nbfc_regulatory_recovery",
+      "sector_bank_credit", "sector_services", "sector_vehicle_loans",
+      "sector_computer_software", "sector_transport",
+      "gap_jan_series_nulls", "gap_food_credit_artifact",
+      "opp_vehicle_ev"
+    ]
+  }
+]

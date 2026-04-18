@@ -49,8 +49,8 @@ REQUIRED_SECTION_FIELDS = ["id", "title", "seriesNames", "absoluteData", "growth
 GROWTH_MIN = -50.0
 GROWTH_MAX = 300.0
 
-# Regex to parse "Jan 2024", "Mar 2025", etc.
-DATE_LABEL_RE = re.compile(r"^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{4})$")
+# Regex to parse "Jan 2024", "Mar 2025", or "Feb 2024*" (delayed-publication labels).
+DATE_LABEL_RE = re.compile(r"^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{4})\*?$")
 
 MONTH_MAP = {
     "Jan": 1, "Feb": 2, "Mar": 3, "Apr": 4, "May": 5, "Jun": 6,
@@ -238,7 +238,13 @@ def check_series_match(data, result):
 
 # ── Check 8: No nulls ─────────────────────────────────────────────────────────
 
-def check_no_nulls(data, result):
+def check_no_nulls(data, result, merged=False):
+    """
+    For per-period files: null values are errors — all series should be populated.
+    For merged files: null values are warnings — some series (Gold Loans, Housing,
+    NBFCs, Tourism) only appear in March SIBC files and are legitimately null in
+    January rows of the merged dataset.
+    """
     for sec in data.get("sections", []):
         sid = sec.get("id", "?")
         for array_name in ("absoluteData", "growthData", "fyData"):
@@ -247,18 +253,23 @@ def check_no_nulls(data, result):
                     if key == "date":
                         continue
                     if val is None:
-                        result.error(
-                            "no_nulls",
+                        msg = (
                             f"Section '{sid}'.{array_name}[date={row.get('date')}] "
-                            f"key '{key}' is null.",
+                            f"key '{key}' is null."
                         )
+                        if merged:
+                            result.warn("no_nulls", msg + " (expected for series absent in January SIBC files)")
+                        else:
+                            result.error("no_nulls", msg)
 
 
 # ── Check 9: Merged continuity ────────────────────────────────────────────────
 
 def check_merged_continuity(data, result):
     """Only run when --merged is passed. Checks that all absoluteData date labels
-    form a roughly continuous monthly sequence with no gap > 2 months."""
+    form a roughly continuous sequence with no gap > 12 months. RBI SIBC files are
+    semi-annual (January and March only), so gaps of up to 10 months between
+    consecutive data points are normal and expected."""
     for sec in data.get("sections", []):
         sid = sec.get("id", "?")
         abs_data = sec.get("absoluteData", [])
@@ -278,13 +289,13 @@ def check_merged_continuity(data, result):
         dates_sorted = sorted(dates)
         for i in range(1, len(dates_sorted)):
             gap = months_between(dates_sorted[i - 1], dates_sorted[i])
-            if gap > 2:
+            if gap > 12:
                 result.error(
                     "merged_continuity",
                     f"Section '{sid}' has a {gap}-month gap between "
                     f"'{dates_sorted[i-1].strftime('%b %Y')}' and "
                     f"'{dates_sorted[i].strftime('%b %Y')}' — "
-                    "merged series should have no gap > 2 months.",
+                    "merged series should have no gap > 12 months.",
                 )
 
         result.note(
@@ -292,6 +303,49 @@ def check_merged_continuity(data, result):
             f"Section '{sid}': {len(dates_sorted)} date points from "
             f"{dates_sorted[0].strftime('%b %Y')} to {dates_sorted[-1].strftime('%b %Y')}",
         )
+
+
+# ── Check 2c: dateOverrides consistency ──────────────────────────────────────
+
+def check_date_overrides(data: dict, result) -> None:
+    """Check 2c: dateOverrides entries are consistent with absoluteData."""
+    overrides = data.get("dateOverrides", [])
+    if not overrides:
+        return  # No overrides — nothing to validate
+
+    sections = {s["id"]: s for s in data.get("sections", [])}
+
+    for rec in overrides:
+        orig    = rec.get("original_iso", "")
+        relabel = rec.get("relabelled_iso", "")
+        disp    = rec.get("relabelled_display", "")
+        stmt    = rec.get("statement", "")
+
+        # Validate ISO date format
+        for field, val in [("original_iso", orig), ("relabelled_iso", relabel)]:
+            if not val:
+                result.error("date_overrides", f"dateOverrides: missing '{field}'")
+                continue
+            try:
+                datetime.strptime(val, "%Y-%m-%d")
+            except ValueError:
+                result.error(
+                    "date_overrides",
+                    f"dateOverrides: {field}={val!r} is not a valid YYYY-MM-DD date"
+                )
+
+        # Check that the relabelled display label appears in at least one section's absoluteData
+        if disp:
+            found = any(
+                any(row.get("date") == disp for row in sec.get("absoluteData", []))
+                for sec in sections.values()
+            )
+            if not found:
+                result.warn(
+                    "date_overrides",
+                    f"dateOverrides: relabelled_display={disp!r} not found in any section's absoluteData "
+                    f"(may be expected if section uses different statement)"
+                )
 
 
 # ── Orchestrator ──────────────────────────────────────────────────────────────
@@ -310,7 +364,8 @@ def validate(sections_path, merged=False):
         ("Growth bounds",   lambda d, r: check_growth_bounds(d, r)),
         ("Key sectors",     lambda d, r: check_key_sectors(d, r)),
         ("Series match",    lambda d, r: check_series_match(d, r)),
-        ("No nulls",        lambda d, r: check_no_nulls(d, r)),
+        ("No nulls",        lambda d, r: check_no_nulls(d, r, merged=merged)),
+        ("Date overrides",  lambda d, r: check_date_overrides(d, r)),
     ]
 
     if merged:

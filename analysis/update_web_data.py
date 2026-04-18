@@ -26,6 +26,7 @@ Exit codes:
 """
 
 import argparse
+import json
 import shutil
 import sys
 from pathlib import Path
@@ -36,6 +37,7 @@ import pandas as pd
 
 REPO_ROOT     = Path(__file__).resolve().parent.parent
 RBI_ANALYTICS = REPO_ROOT / "rbi-analytics"
+ANALYSIS      = REPO_ROOT / "analysis"
 WEB_DATA      = REPO_ROOT / "web" / "public" / "data"
 CONSOLIDATED  = RBI_ANALYTICS / "consolidated" / "consolidated_long.csv"
 WEB_CSV       = WEB_DATA / "rbi_sibc_consolidated.csv"
@@ -84,6 +86,59 @@ def deduplicate_by_month(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+def load_and_apply_overrides(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Discover all date_overrides.json files in period directories and apply them.
+
+    For each override record: rows where date == original_iso get their date
+    updated to relabelled_iso, and a new 'source_date' column is set to the
+    original ISO date (so the frontend can show the raw publication date on hover).
+    """
+    period_root = ANALYSIS / "rbi_sibc"
+    override_files = sorted(period_root.glob("*/date_overrides.json"))
+
+    if not override_files:
+        df["source_date"] = ""
+        return df
+
+    # Build flat list of override records
+    records = []
+    for path in override_files:
+        with open(path) as f:
+            data = json.load(f)
+        records.extend(data.get("overrides", []))
+
+    if not records:
+        df["source_date"] = ""
+        return df
+
+    print(f"\n  Applying {len(records)} date override(s) from {len(override_files)} period(s):")
+    df = df.copy()
+    df["source_date"] = ""
+
+    for rec in records:
+        orig    = rec.get("original_iso", "")
+        relabel = rec.get("relabelled_iso", "")
+        stmt    = rec.get("statement", "")
+        if not orig or not relabel:
+            continue
+
+        mask = (df["date"] == orig)
+        if stmt:
+            mask = mask & (df["statement"] == stmt)
+
+        n = mask.sum()
+        if n == 0:
+            print(f"  [WARN] Override not matched: {orig} ({stmt}) — 0 rows found")
+            continue
+
+        df.loc[mask, "source_date"] = orig
+        df.loc[mask, "date"]        = relabel
+        print(f"  Relabelled: {orig} → {relabel}  ({n} rows, {stmt})")
+
+    return df
+
+
 def main(dry_run: bool = False):
     # ── Discover xlsx files ───────────────────────────────────────────────────
     xlsx_files = sorted(
@@ -125,6 +180,13 @@ def main(dry_run: bool = False):
     if df.empty:
         print("ERROR: Consolidation produced empty DataFrame", file=sys.stderr)
         sys.exit(1)
+
+    # ── Apply date overrides BEFORE dedup ────────────────────────────────────
+    # Overrides remap early-March dates (delayed publications) to their true
+    # prior month. This must happen before deduplicate_by_month so the early
+    # date (e.g. 2024-03-08 → 2024-02-08) is not discarded as a duplicate
+    # of the genuine March snapshot (2024-03-22).
+    df = load_and_apply_overrides(df)
 
     # ── Deduplicate at month level ────────────────────────────────────────────
     df = deduplicate_by_month(df)
