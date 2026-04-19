@@ -585,14 +585,24 @@ def _delta_image(image_url: str, subsystem_id: str, signal: str) -> str:
     )
 
 
-def build_delta_held(what_held: list) -> str:
-    """WHAT HELD section — signals confirmed from previous issue."""
+def _badge_pill(badge_text: str, color: str, bg: str) -> str:
+    return (
+        f'<div style="display:inline-block;background:{bg};color:{color};'
+        f'font-family:system-ui,sans-serif;font-size:0.68em;font-weight:700;'
+        f'letter-spacing:0.8px;padding:4px 12px;border-radius:12px;margin-bottom:10px">'
+        f'{badge_text}</div>'
+    )
+
+
+def build_delta_dominant_forces(what_held: list) -> str:
+    """THE DOMINANT FORCES — structural signals confirmed across multiple data points."""
     if not what_held:
         return ""
 
     cards = ""
     for item in what_held:
         signal    = item.get("signal", "")
+        badge     = item.get("badge", "▲ Confirmed this month")
         prev_stat = item.get("prev_stat", "")
         curr_stat = item.get("curr_stat", "")
         note      = item.get("note", "")
@@ -600,24 +610,23 @@ def build_delta_held(what_held: list) -> str:
         sub_id    = item.get("subsystem_id", "")
 
         cards += (
-            f'<div style="margin:18px 0;padding:20px 24px;background:#F0FDF4;'
+            f'<div style="margin:20px 0;padding:24px 28px;background:#F0FDF4;'
             f'border-left:3px solid #166534;border-radius:0 2px 2px 0">'
-            f'<div style="font-family:system-ui,sans-serif;font-size:0.72em;font-weight:700;'
-            f'text-transform:uppercase;letter-spacing:1.5px;color:#166534;margin-bottom:6px">'
-            f'✓ Confirmed</div>'
-            f'<div style="font-family:system-ui,sans-serif;font-weight:700;'
-            f'color:#14532d;font-size:0.97em;margin-bottom:10px">{signal}</div>'
-            f'<div style="display:flex;gap:24px;margin-bottom:12px;flex-wrap:wrap">'
-            f'<div style="flex:1;min-width:180px">'
-            f'<div style="font-size:0.72em;color:#166534;font-weight:600;margin-bottom:3px">'
-            f'ISSUE #1</div>'
-            f'<div style="font-size:0.88em;color:#374151">{prev_stat}</div></div>'
-            f'<div style="flex:1;min-width:180px">'
-            f'<div style="font-size:0.72em;color:#166534;font-weight:600;margin-bottom:3px">'
-            f'NOW (MERGED)</div>'
-            f'<div style="font-size:0.88em;color:#14532d;font-weight:600">{curr_stat}</div>'
-            f'</div></div>'
-            + (f'<p style="margin:0;color:#374151;font-size:0.88em;line-height:1.65">'
+            + _badge_pill(badge, "#166534", "#dcfce7")
+            + f'<div style="font-family:system-ui,sans-serif;font-weight:700;'
+            f'color:#14532d;font-size:1em;margin-bottom:14px;line-height:1.4">{signal}</div>'
+            f'<div style="display:flex;gap:24px;margin-bottom:16px;flex-wrap:wrap;'
+            f'padding:14px;background:rgba(255,255,255,0.6);border-radius:2px">'
+            f'<div style="flex:1;min-width:160px">'
+            f'<div style="font-size:0.7em;color:#166534;font-weight:700;'
+            f'text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Last issue</div>'
+            f'<div style="font-size:0.85em;color:#374151;line-height:1.5">{prev_stat}</div></div>'
+            f'<div style="flex:1;min-width:160px">'
+            f'<div style="font-size:0.7em;color:#166534;font-weight:700;'
+            f'text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Now (merged)</div>'
+            f'<div style="font-size:0.85em;color:#14532d;font-weight:600;line-height:1.5">'
+            f'{curr_stat}</div></div></div>'
+            + (f'<p style="margin:0;color:#374151;font-size:0.9em;line-height:1.75">'
                f'{note}</p>' if note else '')
             + (_delta_image(image_url, sub_id, signal) if (image_url or sub_id) else '')
             + f'</div>'
@@ -625,48 +634,49 @@ def build_delta_held(what_held: list) -> str:
 
     return (
         f'<div style="padding:0 40px">'
-        + section_heading("✓", "What Held — Signals Confirmed", "#166534", "#166534")
-        + f'<p style="color:#7a5c30;font-size:0.88em;margin:-12px 0 16px">'
-        + f'Signals from Issue #1 that the merged dataset now confirms as structural.</p>'
+        + section_heading("▲", "The Dominant Forces", "#14532d", "#166534")
+        + f'<p style="color:#7a5c30;font-size:0.88em;margin:-12px 0 20px">'
+        f'Three structural forces shaping Indian credit — confirmed across multiple data points.</p>'
         + cards
         + f'</div>'
     )
 
 
-def build_delta_changed(what_changed: list) -> str:
-    """WHAT CHANGED section — signals where the read materially updated."""
+def build_delta_one_correction(what_changed: list) -> str:
+    """ONE CORRECTION — signals where the interpretation materially updated."""
     if not what_changed:
         return ""
 
     cards = ""
     for item in what_changed:
-        signal     = item.get("signal", "")
-        prev_read  = item.get("prev_read", "")
-        curr_read  = item.get("curr_read", "")
+        signal      = item.get("signal", "")
+        badge       = item.get("badge", "⟳ Updated read")
+        prev_read   = item.get("prev_read", "")
+        curr_read   = item.get("curr_read", "")
         implication = item.get("implication", "")
-        image_url  = item.get("image_url", "")
-        sub_id     = item.get("subsystem_id", "")
+        image_url   = item.get("image_url", "")
+        sub_id      = item.get("subsystem_id", "")
 
         cards += (
-            f'<div style="margin:18px 0;padding:20px 24px;background:#FEF3C7;'
+            f'<div style="margin:20px 0;padding:24px 28px;background:#FEF3C7;'
             f'border-left:3px solid #B45309;border-radius:0 2px 2px 0">'
-            f'<div style="font-family:system-ui,sans-serif;font-size:0.72em;font-weight:700;'
-            f'text-transform:uppercase;letter-spacing:1.5px;color:#B45309;margin-bottom:6px">'
-            f'⟳ Updated</div>'
-            f'<div style="font-family:system-ui,sans-serif;font-weight:700;'
-            f'color:#92400E;font-size:0.97em;margin-bottom:12px">{signal}</div>'
-            f'<div style="margin-bottom:10px">'
-            f'<div style="font-size:0.72em;color:#B45309;font-weight:600;margin-bottom:4px">'
-            f'ISSUE #1 READ</div>'
+            + _badge_pill(badge, "#92400E", "#fde68a")
+            + f'<div style="font-family:system-ui,sans-serif;font-weight:700;'
+            f'color:#92400E;font-size:1em;margin-bottom:16px;line-height:1.4">{signal}</div>'
+            f'<div style="margin-bottom:14px;padding:12px 16px;background:rgba(255,255,255,0.5);'
+            f'border-radius:2px">'
+            f'<div style="font-size:0.7em;color:#B45309;font-weight:700;'
+            f'text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">What it looked like</div>'
             f'<p style="margin:0;color:#78350f;font-size:0.88em;line-height:1.65;'
             f'font-style:italic">{prev_read}</p></div>'
-            f'<div style="margin-bottom:12px">'
-            f'<div style="font-size:0.72em;color:#B45309;font-weight:600;margin-bottom:4px">'
-            f'NOW (MERGED)</div>'
+            f'<div style="margin-bottom:14px;padding:12px 16px;background:#fff7ed;'
+            f'border-radius:2px">'
+            f'<div style="font-size:0.7em;color:#B45309;font-weight:700;'
+            f'text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">What it actually is</div>'
             f'<p style="margin:0;color:#92400E;font-size:0.88em;line-height:1.65;'
             f'font-weight:600">{curr_read}</p></div>'
-            + (f'<p style="margin:10px 0 0;color:#78350f;font-size:0.85em;'
-               f'line-height:1.6;border-top:1px solid rgba(180,83,9,0.2);padding-top:10px">'
+            + (f'<p style="margin:0;color:#78350f;font-size:0.88em;line-height:1.7;'
+               f'border-top:1px solid rgba(180,83,9,0.15);padding-top:12px">'
                f'<strong>Implication:</strong> {implication}</p>' if implication else '')
             + (_delta_image(image_url, sub_id, signal) if (image_url or sub_id) else '')
             + f'</div>'
@@ -674,42 +684,42 @@ def build_delta_changed(what_changed: list) -> str:
 
     return (
         f'<div style="padding:0 40px">'
-        + section_heading("⟳", "What Changed — Read Updated", "#B45309", "#B45309")
-        + f'<p style="color:#7a5c30;font-size:0.88em;margin:-12px 0 16px">'
-        + f'Signals from Issue #1 where the merged dataset materially updates the interpretation.</p>'
+        + section_heading("⟳", "One Correction", "#92400E", "#B45309")
+        + f'<p style="color:#7a5c30;font-size:0.88em;margin:-12px 0 20px">'
+        f'A number in the headlines this month that is not what it looks like — '
+        f'and what it actually means.</p>'
         + cards
         + f'</div>'
     )
 
 
-def build_delta_new(what_new: list) -> str:
-    """WHAT'S NEW section — signals only visible with the full merged series."""
+def build_delta_series_reveals(what_new: list) -> str:
+    """WHAT THE SERIES REVEALS — signals only visible across multiple periods."""
     if not what_new:
         return ""
 
     cards = ""
     for item in what_new:
-        signal     = item.get("signal", "")
-        stat       = item.get("stat", "")
-        body       = item.get("body", "")
+        signal      = item.get("signal", "")
+        badge       = item.get("badge", "★ Only visible across time")
+        stat        = item.get("stat", "")
+        body        = item.get("body", "")
         implication = item.get("implication", "")
-        image_url  = item.get("image_url", "")
-        sub_id     = item.get("subsystem_id", "")
+        image_url   = item.get("image_url", "")
+        sub_id      = item.get("subsystem_id", "")
 
         cards += (
             f'<div style="margin:20px 0;padding:24px 28px;background:#1E3A5F;'
             f'border-radius:2px">'
-            f'<div style="font-family:system-ui,sans-serif;font-size:0.72em;font-weight:700;'
-            f'text-transform:uppercase;letter-spacing:1.5px;color:#7eb8e8;margin-bottom:6px">'
-            f'★ Net new</div>'
-            f'<div style="font-family:system-ui,sans-serif;font-size:2em;font-weight:800;'
-            f'color:#ffffff;line-height:1;margin-bottom:8px">{stat}</div>'
-            f'<div style="font-family:system-ui,sans-serif;font-weight:700;'
-            f'color:#a0b8d4;font-size:0.9em;margin-bottom:14px">{signal}</div>'
-            f'<p style="margin:0 0 12px;color:#e2eaf5;font-size:0.9em;line-height:1.7">'
+            + _badge_pill(badge, "#7eb8e8", "#162d4a")
+            + f'<div style="font-family:system-ui,sans-serif;font-size:2em;font-weight:800;'
+            f'color:#ffffff;line-height:1;margin-bottom:10px">{stat}</div>'
+            f'<div style="font-family:system-ui,sans-serif;font-weight:600;'
+            f'color:#a0b8d4;font-size:0.92em;margin-bottom:16px;line-height:1.4">{signal}</div>'
+            f'<p style="margin:0 0 14px;color:#e2eaf5;font-size:0.9em;line-height:1.8">'
             f'{body}</p>'
-            + (f'<p style="margin:0;color:#7eb8e8;font-style:italic;font-size:0.85em;'
-               f'line-height:1.6;border-top:1px solid rgba(126,184,232,0.2);padding-top:12px">'
+            + (f'<p style="margin:0;color:#7eb8e8;font-style:italic;font-size:0.86em;'
+               f'line-height:1.65;border-top:1px solid rgba(126,184,232,0.2);padding-top:12px">'
                f'{implication}</p>' if implication else '')
             + (_delta_image(image_url, sub_id, signal) if (image_url or sub_id) else '')
             + f'</div>'
@@ -717,11 +727,10 @@ def build_delta_new(what_new: list) -> str:
 
     return (
         f'<div style="padding:0 40px">'
-        + section_heading("★", "What's New — Only Visible in the Merged Series",
-                          "#1E3A5F", "#1E3A5F")
-        + f'<p style="color:#7a5c30;font-size:0.88em;margin:-12px 0 16px">'
-        + f'Signals that require the full multi-period series — impossible to see '
-        + f'from any single SIBC file.</p>'
+        + section_heading("★", "What the Series Reveals", "#1E3A5F", "#1E3A5F")
+        + f'<p style="color:#7a5c30;font-size:0.88em;margin:-12px 0 20px">'
+        f'Two signals that require connecting multiple months of data — '
+        f'invisible in any single RBI publication.</p>'
         + cards
         + f'</div>'
     )
@@ -729,20 +738,17 @@ def build_delta_new(what_new: list) -> str:
 
 def build_delta_html(cfg, model, subsystems):
     """Full HTML output for delta_v1 format."""
-    meta  = model.get("_meta", {})
-    edit  = cfg.get("editorial", {})
-    issue = cfg["_meta"].get("issue_number", 2)
-    pub   = cfg["_meta"].get("published", "")
-    period     = cfg["_meta"].get("period", "")
+    edit        = cfg.get("editorial", {})
+    issue       = cfg["_meta"].get("issue_number", 2)
+    pub         = cfg["_meta"].get("published", "")
+    period      = cfg["_meta"].get("period", "")
     prev_period = cfg["_meta"].get("prev_period", "")
-    brand = cfg.get("branding", {})
-    author = brand.get("author", "India Credit Lens")
+    brand       = cfg.get("branding", {})
+    author      = brand.get("author", "India Credit Lens")
 
     what_held    = edit.get("what_held", [])
     what_changed = edit.get("what_changed", [])
     what_new     = edit.get("what_new", [])
-
-    hero_narrative = edit.get("hero_narrative", "")
 
     header = (
         f'<div style="padding:36px 40px 0">'
@@ -752,47 +758,40 @@ def build_delta_html(cfg, model, subsystems):
         f'<h1 style="font-size:2em;margin:0 0 6px;color:#1a0f00;line-height:1.2">'
         f'{period}: {edit.get("issue_title", "")}</h1>'
         f'<div style="color:#7a5c30;font-size:0.9em">'
-        f'Delta from {prev_period} &nbsp;·&nbsp; RBI SIBC &nbsp;·&nbsp; by {author}</div>'
+        f'RBI Sector/Industry-wise Bank Credit &nbsp;·&nbsp; by {author}</div>'
         f'</div>'
     )
+
+    context_strip_text = edit.get("context_strip", "")
+    context_strip = (
+        f'<div style="margin:24px 40px 0;padding:16px 20px;background:#f4f0e8;'
+        f'border-left:3px solid #c9a96e;border-radius:0 2px 2px 0">'
+        f'<p style="margin:0;font-family:system-ui,sans-serif;font-size:0.83em;'
+        f'color:#7a5c30;line-height:1.7">'
+        f'<strong style="color:#5c4a2a">What is this?</strong> {context_strip_text}</p>'
+        f'</div>'
+    ) if context_strip_text else ""
 
     hero = (
         f'<div style="margin:28px 0 0;padding:36px 40px;background:#1E3A5F">'
-        f'<div style="font-family:system-ui,sans-serif;font-size:0.75em;font-weight:600;'
-        f'text-transform:uppercase;letter-spacing:2px;color:#7eb8e8;margin-bottom:12px">'
-        f'What one more month of data tells us</div>'
-        f'<p style="color:#ffffff;font-size:1.05em;line-height:1.8;margin:0">'
-        f'{hero_narrative}</p>'
+        f'<div style="font-family:system-ui,sans-serif;font-size:0.72em;font-weight:600;'
+        f'text-transform:uppercase;letter-spacing:2px;color:#7eb8e8;margin-bottom:14px">'
+        f'February 2026 &nbsp;·&nbsp; RBI SIBC</div>'
+        f'<p style="color:#ffffff;font-size:1.08em;line-height:1.85;margin:0">'
+        f'{edit.get("hero_narrative", "")}</p>'
         f'</div>'
-    )
-
-    held_count    = len(what_held)
-    changed_count = len(what_changed)
-    new_count     = len(what_new)
-    scoreline = (
-        f'<div style="padding:20px 40px;background:#fffcf5;'
-        f'border-top:1px solid #e2d9c5;border-bottom:1px solid #e2d9c5">'
-        f'<div style="display:flex;gap:32px;flex-wrap:wrap;'
-        f'font-family:system-ui,sans-serif">'
-        f'<div><span style="font-size:2em;font-weight:800;color:#166534">{held_count}</span>'
-        f'<span style="font-size:0.8em;color:#7a5c30;margin-left:6px">Held</span></div>'
-        f'<div><span style="font-size:2em;font-weight:800;color:#B45309">{changed_count}</span>'
-        f'<span style="font-size:0.8em;color:#7a5c30;margin-left:6px">Changed</span></div>'
-        f'<div><span style="font-size:2em;font-weight:800;color:#1E3A5F">{new_count}</span>'
-        f'<span style="font-size:0.8em;color:#7a5c30;margin-left:6px">New</span></div>'
-        f'</div></div>'
     )
 
     parts = [
         header,
+        context_strip,
         hero,
-        scoreline,
         divider(),
-        build_delta_held(what_held),
+        build_delta_dominant_forces(what_held),
         divider(),
-        build_delta_changed(what_changed),
+        build_delta_one_correction(what_changed),
         divider(),
-        build_delta_new(what_new),
+        build_delta_series_reveals(what_new),
         divider(),
         build_what_to_watch(edit),
         divider(),
@@ -801,18 +800,35 @@ def build_delta_html(cfg, model, subsystems):
     ]
 
     return HTML_SHELL.format(
-        title=f"India Credit Lens — {period} (Delta)",
+        title=f"India Credit Lens — {period}",
         body="\n".join(parts),
     )
 
 
+def _substack_image(item: dict) -> str:
+    """Return image tag or placeholder line for Substack output."""
+    signal = item.get("signal", "")
+    sub_id = item.get("subsystem_id", "")
+    if item.get("image_url"):
+        return f'<p><img src="{item["image_url"]}" alt="{signal}" style="max-width:100%"></p>'
+    elif sub_id:
+        slug = re.sub(r"[^a-z0-9]+", "_", signal.lower()).strip("_")[:30]
+        return f'<p><em>[Insert image: {sub_id}_{slug}.png]</em></p>'
+    return ""
+
+
 def build_delta_substack(cfg, model, subsystems):
-    """Semantic HTML for Substack paste — delta_v1 format."""
+    """
+    Clean semantic HTML for Substack paste — delta_v1 format.
+
+    Usage: open _substack.html in browser → Select All → Copy →
+    paste into Substack visual editor (not HTML embed block).
+    Substack preserves headings, bold, italic, blockquotes, lists, links.
+    """
     edit        = cfg.get("editorial", {})
     issue       = cfg["_meta"].get("issue_number", 2)
     pub         = cfg["_meta"].get("published", "")
     period      = cfg["_meta"].get("period", "")
-    prev_period = cfg["_meta"].get("prev_period", "")
     brand       = cfg.get("branding", {})
     cta_cfg     = cfg.get("cta", {})
     what_held    = edit.get("what_held", [])
@@ -821,82 +837,116 @@ def build_delta_substack(cfg, model, subsystems):
     watch        = edit.get("what_to_watch", {})
 
     p = []
+
+    # ── Header ────────────────────────────────────────────────────────────────
     p.append(f'<h1>{period}: {edit.get("issue_title", "")}</h1>')
     p.append(
-        f'<p><em>Issue #{issue} &nbsp;·&nbsp; {pub} &nbsp;·&nbsp; Delta from {prev_period}'
-        f' &nbsp;·&nbsp; by {brand.get("author", "India Credit Lens")}</em></p>'
+        f'<p><em>Issue #{issue} &nbsp;·&nbsp; {pub}'
+        f' &nbsp;·&nbsp; by {brand.get("author", "India Credit Lens")}'
+        f' &nbsp;·&nbsp; <a href="https://{brand.get("site", "")}">'
+        f'{brand.get("site", "")}</a></em></p>'
     )
+
+    # ── Context strip (for new readers) ───────────────────────────────────────
+    context = edit.get("context_strip", "")
+    if context:
+        p.append(f'<blockquote><p>{context}</p></blockquote>')
+
     p.append('<hr>')
+
+    # ── Hero ──────────────────────────────────────────────────────────────────
     p.append(f'<p>{edit.get("hero_narrative", "")}</p>')
     p.append('<hr>')
 
-    # WHAT HELD
+    # ── The Dominant Forces ───────────────────────────────────────────────────
     if what_held:
-        p.append('<h2>What Held — Signals Confirmed</h2>')
-        p.append('<p><em>Signals from Issue #1 that the merged dataset now confirms as structural.</em></p>')
+        p.append('<h2>▲ The Dominant Forces</h2>')
+        p.append(
+            '<p><em>Three structural forces shaping Indian credit — '
+            'confirmed across multiple data points.</em></p>'
+        )
         for item in what_held:
-            p.append(f'<h3>✓ {item.get("signal", "")}</h3>')
+            badge     = item.get("badge", "")
+            signal    = item.get("signal", "")
+            prev_stat = item.get("prev_stat", "")
+            curr_stat = item.get("curr_stat", "")
+            note      = item.get("note", "")
+
+            p.append(f'<h3>{signal}</h3>')
+            if badge:
+                p.append(f'<p><strong>{badge}</strong></p>')
             p.append(
-                f'<p><strong>Issue #1:</strong> {item.get("prev_stat", "")}<br>'
-                f'<strong>Now (merged):</strong> {item.get("curr_stat", "")}</p>'
+                f'<p><strong>Last issue:</strong> {prev_stat}<br>'
+                f'<strong>Now (merged):</strong> {curr_stat}</p>'
             )
-            if item.get("note"):
-                p.append(f'<p>{item["note"]}</p>')
-            sub_id = item.get("subsystem_id", "")
-            signal = item.get("signal", "")
-            if item.get("image_url"):
-                p.append(f'<p><img src="{item["image_url"]}" alt="{signal}"></p>')
-            elif sub_id:
-                slug = re.sub(r"[^a-z0-9]+", "_", signal.lower()).strip("_")[:30]
-                p.append(f'<p><em>[Insert image: {sub_id}_{slug}.png]</em></p>')
+            if note:
+                p.append(f'<p>{note}</p>')
+            p.append(_substack_image(item))
+
         p.append('<hr>')
 
-    # WHAT CHANGED
+    # ── One Correction ────────────────────────────────────────────────────────
     if what_changed:
-        p.append('<h2>What Changed — Read Updated</h2>')
-        p.append('<p><em>Signals where the merged dataset materially updates the interpretation.</em></p>')
+        p.append('<h2>⟳ One Correction</h2>')
+        p.append(
+            '<p><em>A number in the headlines this month that is not what it '
+            'looks like — and what it actually means.</em></p>'
+        )
         for item in what_changed:
-            p.append(f'<h3>⟳ {item.get("signal", "")}</h3>')
-            p.append(f'<p><strong>Issue #1:</strong> <em>{item.get("prev_read", "")}</em></p>')
-            p.append(f'<p><strong>Now:</strong> {item.get("curr_read", "")}</p>')
-            if item.get("implication"):
-                p.append(f'<blockquote><p><strong>Implication:</strong> {item["implication"]}</p></blockquote>')
-            sub_id = item.get("subsystem_id", "")
-            signal = item.get("signal", "")
-            if item.get("image_url"):
-                p.append(f'<p><img src="{item["image_url"]}" alt="{signal}"></p>')
-            elif sub_id:
-                slug = re.sub(r"[^a-z0-9]+", "_", signal.lower()).strip("_")[:30]
-                p.append(f'<p><em>[Insert image: {sub_id}_{slug}.png]</em></p>')
+            badge      = item.get("badge", "")
+            signal     = item.get("signal", "")
+            prev_read  = item.get("prev_read", "")
+            curr_read  = item.get("curr_read", "")
+            implication = item.get("implication", "")
+
+            p.append(f'<h3>{signal}</h3>')
+            if badge:
+                p.append(f'<p><strong>{badge}</strong></p>')
+            p.append(f'<p><strong>What it looked like:</strong> <em>{prev_read}</em></p>')
+            p.append(f'<p><strong>What it actually is:</strong> {curr_read}</p>')
+            if implication:
+                p.append(
+                    f'<blockquote><p><strong>Implication:</strong> {implication}</p></blockquote>'
+                )
+            p.append(_substack_image(item))
+
         p.append('<hr>')
 
-    # WHAT'S NEW
+    # ── What the Series Reveals ───────────────────────────────────────────────
     if what_new:
-        p.append('<h2>What\'s New — Only Visible in the Merged Series</h2>')
-        p.append('<p><em>Signals that require the full multi-period series.</em></p>')
+        p.append('<h2>★ What the Series Reveals</h2>')
+        p.append(
+            '<p><em>Two signals that require connecting multiple months of data — '
+            'invisible in any single RBI publication.</em></p>'
+        )
         for item in what_new:
-            p.append(f'<h3>★ {item.get("signal", "")}</h3>')
-            p.append(f'<p><strong>{item.get("stat", "")}</strong></p>')
-            p.append(f'<p>{item.get("body", "")}</p>')
-            if item.get("implication"):
-                p.append(f'<blockquote><p><em>{item["implication"]}</em></p></blockquote>')
-            sub_id = item.get("subsystem_id", "")
-            signal = item.get("signal", "")
-            if item.get("image_url"):
-                p.append(f'<p><img src="{item["image_url"]}" alt="{signal}"></p>')
-            elif sub_id:
-                slug = re.sub(r"[^a-z0-9]+", "_", signal.lower()).strip("_")[:30]
-                p.append(f'<p><em>[Insert image: {sub_id}_{slug}.png]</em></p>')
+            badge       = item.get("badge", "")
+            signal      = item.get("signal", "")
+            stat        = item.get("stat", "")
+            body        = item.get("body", "")
+            implication = item.get("implication", "")
+
+            p.append(f'<h3>{signal}</h3>')
+            if badge:
+                p.append(f'<p><strong>{badge}</strong></p>')
+            if stat:
+                p.append(f'<p><strong>{stat}</strong></p>')
+            if body:
+                p.append(f'<p>{body}</p>')
+            if implication:
+                p.append(f'<blockquote><p><em>{implication}</em></p></blockquote>')
+            p.append(_substack_image(item))
+
         p.append('<hr>')
 
-    # WHAT TO WATCH
-    p.append(f'<h2>What to Watch Next</h2>')
+    # ── What to Watch ─────────────────────────────────────────────────────────
+    p.append('<h2>📅 What to Watch Next</h2>')
     p.append(f'<p><em>Next release: {watch.get("next_release", "")}</em></p>')
     wl = "".join(f'<li>{b}</li>' for b in watch.get("bullets", []))
     p.append(f'<ul>{wl}</ul>')
     p.append('<hr>')
 
-    # CTA
+    # ── CTA ───────────────────────────────────────────────────────────────────
     p.append(
         f'<p><strong>'
         f'<a href="{cta_cfg.get("dashboard_url", "")}">'
@@ -912,7 +962,7 @@ def build_delta_substack(cfg, model, subsystems):
     )
 
     return SUBSTACK_SHELL.format(
-        title=f"India Credit Lens — {period} (Delta)",
+        title=f"India Credit Lens — {period}",
         body="\n".join(p),
     )
 
@@ -923,7 +973,6 @@ def build_delta_markdown(cfg, model, subsystems):
     issue       = cfg["_meta"].get("issue_number", 2)
     pub         = cfg["_meta"].get("published", "")
     period      = cfg["_meta"].get("period", "")
-    prev_period = cfg["_meta"].get("prev_period", "")
     brand       = cfg.get("branding", {})
     cta_cfg     = cfg.get("cta", {})
     what_held    = edit.get("what_held", [])
@@ -933,28 +982,39 @@ def build_delta_markdown(cfg, model, subsystems):
 
     lines = [
         f"# India Credit Lens — {period}: {edit.get('issue_title', '')}",
-        f"*Issue #{issue} · {pub} · Delta from {prev_period} · {brand.get('site', '')}*",
-        "", "---", "",
-        edit.get("hero_narrative", ""),
-        "", "---", "",
+        f"*Issue #{issue} · {pub} · by {brand.get('author', '')} · {brand.get('site', '')}*",
+        "",
     ]
 
-    # What held
+    # Context strip
+    context = edit.get("context_strip", "")
+    if context:
+        lines += [f"> {context}", ""]
+
+    lines += ["---", "", edit.get("hero_narrative", ""), "", "---", ""]
+
+    # The Dominant Forces
     if what_held:
-        lines += ["## ✓ What Held — Signals Confirmed", ""]
-        lines.append("*Signals from Issue #1 that the merged dataset now confirms as structural.*")
+        lines += ["## ▲ The Dominant Forces", ""]
+        lines.append(
+            "*Three structural forces shaping Indian credit — "
+            "confirmed across multiple data points.*"
+        )
         lines.append("")
         for item in what_held:
+            signal = item.get("signal", "")
+            badge  = item.get("badge", "")
+            lines += [f"### {signal}", ""]
+            if badge:
+                lines += [f"**{badge}**", ""]
             lines += [
-                f"### {item.get('signal', '')}",
-                f"**Issue #1:** {item.get('prev_stat', '')}",
+                f"**Last issue:** {item.get('prev_stat', '')}",
                 f"**Now (merged):** {item.get('curr_stat', '')}",
                 "",
             ]
             if item.get("note"):
                 lines += [item["note"], ""]
             sub_id = item.get("subsystem_id", "")
-            signal = item.get("signal", "")
             if item.get("image_url"):
                 lines += [f"![{signal}]({item['image_url']})", ""]
             elif sub_id:
@@ -962,23 +1022,29 @@ def build_delta_markdown(cfg, model, subsystems):
                 lines += [f"> 🖼 `[Insert: {sub_id}_{slug}.png]`", ""]
         lines += ["---", ""]
 
-    # What changed
+    # One Correction
     if what_changed:
-        lines += ["## ⟳ What Changed — Read Updated", ""]
-        lines.append("*Signals where the merged dataset materially updates the interpretation.*")
+        lines += ["## ⟳ One Correction", ""]
+        lines.append(
+            "*A number in the headlines this month that is not what it "
+            "looks like — and what it actually means.*"
+        )
         lines.append("")
         for item in what_changed:
+            signal = item.get("signal", "")
+            badge  = item.get("badge", "")
+            lines += [f"### {signal}", ""]
+            if badge:
+                lines += [f"**{badge}**", ""]
             lines += [
-                f"### {item.get('signal', '')}",
-                f"**Issue #1:** *{item.get('prev_read', '')}*",
+                f"**What it looked like:** *{item.get('prev_read', '')}*",
                 "",
-                f"**Now:** {item.get('curr_read', '')}",
+                f"**What it actually is:** {item.get('curr_read', '')}",
                 "",
             ]
             if item.get("implication"):
                 lines += [f"> **Implication:** {item['implication']}", ""]
             sub_id = item.get("subsystem_id", "")
-            signal = item.get("signal", "")
             if item.get("image_url"):
                 lines += [f"![{signal}]({item['image_url']})", ""]
             elif sub_id:
@@ -986,23 +1052,27 @@ def build_delta_markdown(cfg, model, subsystems):
                 lines += [f"> 🖼 `[Insert: {sub_id}_{slug}.png]`", ""]
         lines += ["---", ""]
 
-    # What's new
+    # What the Series Reveals
     if what_new:
-        lines += ["## ★ What's New — Only Visible in the Merged Series", ""]
-        lines.append("*Signals that require the full multi-period series.*")
+        lines += ["## ★ What the Series Reveals", ""]
+        lines.append(
+            "*Two signals that require connecting multiple months of data — "
+            "invisible in any single RBI publication.*"
+        )
         lines.append("")
         for item in what_new:
-            lines += [
-                f"### {item.get('signal', '')}",
-                f"**{item.get('stat', '')}**",
-                "",
-                item.get("body", ""),
-                "",
-            ]
+            signal = item.get("signal", "")
+            badge  = item.get("badge", "")
+            lines += [f"### {signal}", ""]
+            if badge:
+                lines += [f"**{badge}**", ""]
+            if item.get("stat"):
+                lines += [f"**{item['stat']}**", ""]
+            if item.get("body"):
+                lines += [item["body"], ""]
             if item.get("implication"):
                 lines += [f"*{item['implication']}*", ""]
             sub_id = item.get("subsystem_id", "")
-            signal = item.get("signal", "")
             if item.get("image_url"):
                 lines += [f"![{signal}]({item['image_url']})", ""]
             elif sub_id:
@@ -1010,7 +1080,7 @@ def build_delta_markdown(cfg, model, subsystems):
                 lines += [f"> 🖼 `[Insert: {sub_id}_{slug}.png]`", ""]
         lines += ["---", ""]
 
-    # What to watch
+    # What to Watch
     lines += [
         "## 📅 What to Watch Next",
         f"*Next release: {watch.get('next_release', '')}*", "",
