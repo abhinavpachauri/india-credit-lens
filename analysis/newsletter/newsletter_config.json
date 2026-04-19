@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "format": "delta_v1",
+    "format": "delta_v2",
     "report_id": "rbi_sibc",
     "period": "February 2026",
     "prev_period": "January 2026",
@@ -10,7 +10,8 @@
     "annotations_path": "../../web/lib/reports/rbi_sibc.ts",
     "subsystems_path": "../rbi_sibc/merged/subsystems.json",
     "prev_period_path": "../rbi_sibc/2026-02-27",
-    "note": "delta_v1 format — editorial covers what_held / what_changed / what_new. Numbers come from system_model.json + annotations. Do not manually duplicate data from those files here."
+    "overview_mermaid_file": "../output/mermaid/rbi_sibc/2026-04-14/overview.mmd",
+    "note": "delta_v2 format — flat signals[] ordered by editorial priority: new first, then correction, then confirmed. Diagram shown for new + correction; confirmed links back to prev issue. Numbers come from system_model.json + annotations."
   },
 
   "editorial": {
@@ -18,56 +19,20 @@
     "context_strip": "Every month the RBI publishes bank credit data across 80+ sectors. India Credit Lens builds a causal model from that data — explaining why credit moved, not just that it moved. This is Issue #2, covering February 2026 data and what the full Jan 2024–Feb 2026 series now reveals.",
     "hero_narrative": "₹207.5L Cr in total bank credit. FY26 tracking at 13.8% — faster than all of FY25. Three structural forces are now confirmed across multiple data points. One headline number turns out to be a classification event, not growth. And connecting two months of data reveals things no single RBI file can show.",
 
-    "what_held": [
-      {
-        "signal": "Gold loans: the structural shift from unsecured to secured household borrowing",
-        "badge": "▲ Stronger than January — now confirmed across 3 data points",
-        "subsystem_id": "sub_01",
-        "mermaid_file": "../output/mermaid/rbi_sibc/2026-04-14/sub_01_rbi_riskweight_hike_on_unsecur.mmd",
-        "prev_stat": "+128.8% YoY — Jan 2026 (one data point)",
-        "curr_stat": "+359% over 24 months — Mar 2024, Mar 2025, Feb 2026 all confirming",
-        "note": "RBI's November 2023 risk-weight increase on unsecured lending made credit cards more capital-expensive. That demand didn't disappear — it migrated to gold loans, which are secured, RBI-friendly, and competitively priced. The Jan 2026 file showed one data point at +128.8%. The merged series shows three consecutive March data points all accelerating — the structural shift is unambiguous. At ₹4.29L Cr, gold loans are still smaller than vehicle loans (₹7.21L Cr), so the runway remains.",
-        "image_url": ""
-      },
-      {
-        "signal": "MSME credit: the formalisation wave crossing the underwriting threshold",
-        "badge": "▲ Corroborated — two independent series now agree",
-        "subsystem_id": "sub_02",
-        "mermaid_file": "../output/mermaid/rbi_sibc/2026-04-14/sub_02_msme_formalisation_via_udyam_g.mmd",
-        "prev_stat": "+31.2% YoY — Jan 2026 (single series)",
-        "curr_stat": "+31.2% YoY confirmed + PSL Micro & Small +25.6% FY independently corroborating",
-        "note": "Five years of GST registration and UDYAM enrolment have brought millions of small businesses into formal credit data for the first time. The Jan 2026 reading of +31.2% was a single series — large enough to flag but not yet corroborated. The merged view adds the PSL Micro & Small series showing +25.6% FY growth independently. Two series, two measurement approaches, same direction. The formalisation wave has crossed the underwriting threshold at scale.",
-        "image_url": ""
-      },
-      {
-        "signal": "PLI manufacturing capex: announced commitments becoming real bank credit drawdowns",
-        "badge": "▲ Extended — Feb data adds a third year to the arc",
-        "subsystem_id": "sub_03",
-        "mermaid_file": "../output/mermaid/rbi_sibc/2026-04-13/sub_04_pli_manufacturing_capex_wave.mmd",
-        "prev_stat": "+35.9% YoY — Jan 2026, three consecutive periods accelerating",
-        "curr_stat": "+62% across Feb 2024, Feb 2025, Feb 2026 — the February cross-section confirms the same trajectory",
-        "note": "India's PLI scheme approved recipients in 2022-23 who entered the investment phase in FY25-26. The Jan 2026 file showed +35.9% YoY with three consecutive periods of acceleration — consistent but only visible in one cross-section. The Feb data points add a second cross-section showing the same +62% arc. This is not a January seasonal spike. PLI drawdowns are in progress, and the supply chains of anchor manufacturers are the next credit layer.",
-        "image_url": ""
-      }
+    "tldr": [
+      "₹207.5L Cr total bank credit — FY26 tracking at 13.8% vs FY25's full-year 11.0%. The system is in genuine structural expansion.",
+      "PSL Housing +38% is not growth. The Oct 2024 RBI ceiling revision reclassified existing loans already on bank books. ₹2.87L Cr is a relabelling event, not new lending.",
+      "Gold loans confirmed across three independent data points (+359% over 24 months). MSME corroborated by two independent series. PLI extended to a second cross-section. All three structural shifts are unambiguous.",
+      "Infrastructure — 32.5% of all industry credit — is growing at its slowest rate. The FY22-24 capex wave is in operations, not drawdown. The next wave (green hydrogen, data centres) is 18-24 months from credit scale."
     ],
 
-    "what_changed": [
-      {
-        "signal": "PSL Housing +38%: a number that looks like growth but isn't",
-        "badge": "⟳ Last month: uncertain. Now: explained.",
-        "subsystem_id": "sub_04",
-        "mermaid_file": "../output/mermaid/rbi_sibc/2026-04-14/sub_04_rbi_psl_housing_limit_revision.mmd",
-        "prev_read": "Issue #1 flagged the +37.9% surge as suspicious — it reversed two consecutive flat periods with no visible demand catalyst. Three explanations were offered (PMAY acceleration, reclassification, genuine new origination) but left unresolved.",
-        "curr_read": "Confirmed reclassification. The Oct 2024 RBI revision raised PSL housing loan ceilings (metro: ₹35L → ₹45L, non-metro: ₹25L → ₹35L). Loans already on bank books that previously exceeded the old limits now qualify as PSL. The ₹2.87L Cr appearing as credit growth is existing exposure being relabelled — not new lending.",
-        "implication": "PSL housing achievement figures for FY26 are not comparable to prior years. Any lender or analyst citing +38% PSL housing growth as evidence of market expansion is reading a classification event as an economic signal. The affordable housing opportunity is real — PMAY, Tier 3/4 distribution gaps, strong repayment behaviour — but this particular number cannot be used to size it.",
-        "image_url": ""
-      }
-    ],
+    "system_narrative": "Six causal stories now run through India's bank credit system, and February confirms five of them. The RBI's November 2023 risk-weight action is still reshaping retail credit — demand that left credit cards has migrated to gold, secured, RBI-friendly, and still growing. The formalisation wave is now confirmed from two independent series. PLI drawdowns have a second cross-section. One number that looked like a boom — PSL Housing +38% — turns out to be a classification event, not new lending. And stepping back across both months of data: the system is accelerating at 13.8% FY26 while infrastructure, its largest single component, is growing at its slowest rate. These are not contradictions. They are the texture of a credit cycle mid-turn.",
 
-    "what_new": [
+    "signals": [
       {
-        "signal": "FY26 is accelerating above FY25 — and you cannot see this from a single file",
-        "badge": "★ Only visible by connecting January and February data",
+        "type": "new",
+        "story_arc": "The Acceleration Nobody Computed",
+        "signal": "FY26 is accelerating above FY25 — invisible in any single RBI file",
         "subsystem_id": "sub_06",
         "mermaid_file": "../output/mermaid/rbi_sibc/2026-04-14/overview.mmd",
         "stat": "13.8% FY26 vs 11.0% FY25",
@@ -76,13 +41,64 @@
         "image_url": ""
       },
       {
-        "signal": "Infrastructure credit is decelerating — and the next wave is not yet borrowing",
-        "badge": "★ Multi-period trend — not visible from any single SIBC file",
+        "type": "new",
+        "story_arc": "The Infrastructure Pause",
+        "signal": "Infrastructure credit is decelerating — the next wave is not yet borrowing",
         "subsystem_id": "sub_05",
         "mermaid_file": "../output/mermaid/rbi_sibc/2026-04-14/sub_03_infrastructure_supercycle_comp.mmd",
         "stat": "+5.8% FY at ₹14.44L Cr — 32.5% of all industry credit",
         "body": "Infrastructure is the largest component of industry credit and it is growing at the slowest rate in the dataset. The FY22-24 capex wave — roads, metro rail, urban utilities — is now in operations. Those projects are repaying, not drawing down. The next wave (green hydrogen, data centres, offshore wind, semiconductor fabs) has received approvals and signed PPAs, but has not yet reached credit drawdown scale. The approval-to-drawdown gap is typically 18-24 months, putting the next infrastructure credit wave at FY27-28.",
         "implication": "Corporate banks with heavy infrastructure exposure face a structural growth headwind for the next 12-18 months. The window to build credit capability for the next capex cycle — renewable energy project finance, data centre construction lending — is open now, before the drawdown wave begins.",
+        "image_url": ""
+      },
+      {
+        "type": "correction",
+        "story_arc": "The Reclassification",
+        "signal": "PSL Housing +38%: a number that looks like growth but isn't",
+        "subsystem_id": "sub_04",
+        "mermaid_file": "../output/mermaid/rbi_sibc/2026-04-14/sub_04_rbi_psl_housing_limit_revision.mmd",
+        "prev_read": "Issue #1 flagged the +37.9% surge as suspicious — it reversed two consecutive flat periods with no visible demand catalyst. Three explanations were offered (PMAY acceleration, reclassification, genuine new origination) but left unresolved.",
+        "curr_read": "Confirmed reclassification. The Oct 2024 RBI revision raised PSL housing loan ceilings (metro: ₹35L → ₹45L, non-metro: ₹25L → ₹35L). Loans already on bank books that previously exceeded the old limits now qualify as PSL. The ₹2.87L Cr appearing as credit growth is existing exposure being relabelled — not new lending.",
+        "implication": "PSL housing achievement figures for FY26 are not comparable to prior years. Any lender or analyst citing +38% PSL housing growth as evidence of market expansion is reading a classification event as an economic signal. The affordable housing opportunity is real — PMAY, Tier 3/4 distribution gaps, strong repayment behaviour — but this particular number cannot be used to size it.",
+        "image_url": ""
+      },
+      {
+        "type": "confirmed",
+        "story_arc": "The Regulation Migration",
+        "signal": "Gold loans: the structural shift from unsecured to secured household borrowing",
+        "subsystem_id": "sub_01",
+        "mermaid_file": null,
+        "prev_issue_number": 1,
+        "prev_stat": "+128.8% YoY — Jan 2026 (one data point)",
+        "curr_stat": "+359% over 24 months — Mar 2024, Mar 2025, Feb 2026 all confirming",
+        "badge": "▲ Stronger than January — now confirmed across 3 data points",
+        "note": "RBI's November 2023 risk-weight increase on unsecured lending made credit cards more capital-expensive. That demand didn't disappear — it migrated to gold loans, which are secured, RBI-friendly, and competitively priced. The Jan 2026 file showed one data point at +128.8%. The merged series shows three consecutive March data points all accelerating — the structural shift is unambiguous. At ₹4.29L Cr, gold loans are still smaller than vehicle loans (₹7.21L Cr), so the runway remains.",
+        "image_url": ""
+      },
+      {
+        "type": "confirmed",
+        "story_arc": "The Formalisation Wave",
+        "signal": "MSME credit: the formalisation wave crossing the underwriting threshold",
+        "subsystem_id": "sub_02",
+        "mermaid_file": null,
+        "prev_issue_number": 1,
+        "prev_stat": "+31.2% YoY — Jan 2026 (single series)",
+        "curr_stat": "+31.2% YoY confirmed + PSL Micro & Small +25.6% FY independently corroborating",
+        "badge": "▲ Corroborated — two independent series now agree",
+        "note": "Five years of GST registration and UDYAM enrolment have brought millions of small businesses into formal credit data for the first time. The Jan 2026 reading of +31.2% was a single series — large enough to flag but not yet corroborated. The merged view adds the PSL Micro & Small series showing +25.6% FY growth independently. Two series, two measurement approaches, same direction. The formalisation wave has crossed the underwriting threshold at scale.",
+        "image_url": ""
+      },
+      {
+        "type": "confirmed",
+        "story_arc": "The PLI Capex Cycle",
+        "signal": "PLI manufacturing capex: announced commitments becoming real bank credit drawdowns",
+        "subsystem_id": "sub_03",
+        "mermaid_file": null,
+        "prev_issue_number": 1,
+        "prev_stat": "+35.9% YoY — Jan 2026, three consecutive periods accelerating",
+        "curr_stat": "+62% across Feb 2024, Feb 2025, Feb 2026 — the February cross-section confirms the same trajectory",
+        "badge": "▲ Extended — Feb data adds a third year to the arc",
+        "note": "India's PLI scheme approved recipients in 2022-23 who entered the investment phase in FY25-26. The Jan 2026 file showed +35.9% YoY with three consecutive periods of acceleration — consistent but only visible in one cross-section. The Feb data adds a second cross-section showing the same +62% arc. This is not a January seasonal spike. PLI drawdowns are in progress, and the supply chains of anchor manufacturers are the next credit layer.",
         "image_url": ""
       }
     ],

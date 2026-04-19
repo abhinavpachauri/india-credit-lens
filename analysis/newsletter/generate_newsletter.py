@@ -736,6 +736,651 @@ def build_delta_series_reveals(what_new: list) -> str:
     )
 
 
+# ── delta_v2 builders ─────────────────────────────────────────────────────────
+
+def _d2_outcomes(subsystem_id, subsystems, id_to_node, annotations):
+    """Return rendered outcome cards (✅/⚠️/🔍) for a subsystem."""
+    sub = next((s for s in subsystems if s.get("id") == subsystem_id), None)
+    if not sub:
+        return ""
+    cards = ""
+    for oid in sub.get("outcomes", []):
+        o = id_to_node.get(oid)
+        if not o:
+            continue
+        tier = o.get("tier", "gap")
+        icon = {"opportunity": "✅", "pressure": "⚠️", "gap": "🔍"}.get(tier, "•")
+        bc   = OUTCOME_BORDER.get(tier, "#6B7280")
+        sc   = OUTCOME_STAT_COLOR.get(tier, "#6B7280")
+        tc   = OUTCOME_TEXT_COLOR.get(tier, "#374151")
+        ann  = node_primary_annotation(o, annotations)
+        impl = ann.get("implication", "") if ann else ""
+        desc = o.get("description", "")
+        label_with_icon = f"{icon} {o['label']}"
+        cards += side_card(o.get("stat", ""), label_with_icon, desc, impl, bc, sc, tc)
+    return cards
+
+
+def _d2_outcomes_md(subsystem_id, subsystems, id_to_node, annotations):
+    """Return outcome lines for markdown output."""
+    sub = next((s for s in subsystems if s.get("id") == subsystem_id), None)
+    if not sub:
+        return []
+    lines = []
+    for oid in sub.get("outcomes", []):
+        o = id_to_node.get(oid)
+        if not o:
+            continue
+        tier = o.get("tier", "gap")
+        icon = {"opportunity": "✅", "pressure": "⚠️", "gap": "🔍"}.get(tier, "•")
+        ann  = node_primary_annotation(o, annotations)
+        impl = ann.get("implication", "") if ann else ""
+        lines += [f"{icon} **{o['label']}**", o.get("description", "")]
+        if impl:
+            lines.append(f"*{impl}*")
+        lines.append("")
+    return lines
+
+
+def _d2_diagram_html(item):
+    """Render diagram img or placeholder for HTML output."""
+    image_url = item.get("image_url", "")
+    sub_id    = item.get("subsystem_id", "")
+    signal    = item.get("signal", "")
+    if image_url:
+        return (
+            f'<div style="margin:20px 0;text-align:center">'
+            f'<img src="{image_url}" alt="{signal}" '
+            f'style="max-width:100%;border-radius:2px;border:1px solid #e2d9c5">'
+            f'</div>'
+        )
+    if sub_id:
+        slug = re.sub(r"[^a-z0-9]+", "_", signal.lower()).strip("_")[:30]
+        return image_placeholder(signal.upper()[:40], f"{sub_id}_{slug}.png",
+                                 "Causal diagram — auto-rendered via mmdc")
+    return ""
+
+
+def _d2_diagram_substack(item):
+    """Return image tag or placeholder for Substack output."""
+    if item.get("image_url"):
+        return f'<p><img src="{item["image_url"]}" alt="{item.get("signal","")}" style="max-width:100%"></p>'
+    sub_id = item.get("subsystem_id", "")
+    if sub_id:
+        slug = re.sub(r"[^a-z0-9]+", "_", item.get("signal","").lower()).strip("_")[:30]
+        return f'<p><em>[Insert image: {sub_id}_{slug}.png]</em></p>'
+    return ""
+
+
+def _d2_signal_new_html(item, subsystems, id_to_node, annotations):
+    """★ NEW signal card — dark blue, full diagram, outcome rows."""
+    story_arc   = item.get("story_arc", "")
+    signal      = item.get("signal", "")
+    stat        = item.get("stat", "")
+    body        = item.get("body", "")
+    implication = item.get("implication", "")
+    outcomes    = _d2_outcomes(item.get("subsystem_id",""), subsystems, id_to_node, annotations)
+
+    return (
+        f'<div style="margin:28px 0">'
+        f'<div style="font-family:system-ui,sans-serif;font-size:0.68em;font-weight:700;'
+        f'text-transform:uppercase;letter-spacing:1.5px;color:#7eb8e8;margin-bottom:8px">'
+        f'★ New this issue</div>'
+        f'<div style="padding:28px 32px;background:#1E3A5F;border-radius:2px">'
+        + _badge_pill(f'★ {story_arc}', "#7eb8e8", "#162d4a")
+        + (f'<div style="font-family:system-ui,sans-serif;font-size:1.9em;font-weight:800;'
+           f'color:#ffffff;line-height:1;margin:10px 0">{stat}</div>' if stat else '')
+        + f'<div style="font-family:system-ui,sans-serif;font-weight:600;color:#a0b8d4;'
+        f'font-size:0.95em;margin-bottom:16px;line-height:1.4">{signal}</div>'
+        f'<p style="margin:0 0 14px;color:#e2eaf5;font-size:0.9em;line-height:1.8">{body}</p>'
+        + (f'<p style="margin:0;color:#7eb8e8;font-style:italic;font-size:0.86em;'
+           f'line-height:1.65;border-top:1px solid rgba(126,184,232,0.2);padding-top:12px">'
+           f'{implication}</p>' if implication else '')
+        + f'</div>'
+        + _d2_diagram_html(item)
+        + outcomes
+        + f'</div>'
+    )
+
+
+def _d2_signal_correction_html(item, subsystems, id_to_node, annotations):
+    """⟳ CORRECTION card — amber, diagram, prev/now read."""
+    story_arc   = item.get("story_arc", "")
+    signal      = item.get("signal", "")
+    prev_read   = item.get("prev_read", "")
+    curr_read   = item.get("curr_read", "")
+    implication = item.get("implication", "")
+    outcomes    = _d2_outcomes(item.get("subsystem_id",""), subsystems, id_to_node, annotations)
+
+    return (
+        f'<div style="margin:28px 0">'
+        f'<div style="font-family:system-ui,sans-serif;font-size:0.68em;font-weight:700;'
+        f'text-transform:uppercase;letter-spacing:1.5px;color:#B45309;margin-bottom:8px">'
+        f'⟳ Correction from Issue #1</div>'
+        f'<div style="padding:24px 28px;background:#FEF3C7;'
+        f'border-left:3px solid #B45309;border-radius:0 2px 2px 0">'
+        + _badge_pill(f'⟳ {story_arc}', "#92400E", "#fde68a")
+        + f'<div style="font-family:system-ui,sans-serif;font-weight:700;'
+        f'color:#92400E;font-size:1em;margin-bottom:16px;line-height:1.4">{signal}</div>'
+        f'<div style="margin-bottom:12px;padding:12px 16px;background:rgba(255,255,255,0.5);border-radius:2px">'
+        f'<div style="font-size:0.7em;color:#B45309;font-weight:700;text-transform:uppercase;'
+        f'letter-spacing:1px;margin-bottom:6px">What it looked like</div>'
+        f'<p style="margin:0;color:#78350f;font-size:0.88em;line-height:1.65;font-style:italic">{prev_read}</p></div>'
+        f'<div style="margin-bottom:12px;padding:12px 16px;background:#fff7ed;border-radius:2px">'
+        f'<div style="font-size:0.7em;color:#B45309;font-weight:700;text-transform:uppercase;'
+        f'letter-spacing:1px;margin-bottom:6px">What it actually is</div>'
+        f'<p style="margin:0;color:#92400E;font-size:0.88em;line-height:1.65;font-weight:600">{curr_read}</p></div>'
+        + (f'<p style="margin:0;color:#78350f;font-size:0.88em;line-height:1.7;'
+           f'border-top:1px solid rgba(180,83,9,0.15);padding-top:12px">'
+           f'<strong>Implication:</strong> {implication}</p>' if implication else '')
+        + f'</div>'
+        + _d2_diagram_html(item)
+        + outcomes
+        + f'</div>'
+    )
+
+
+def _d2_signal_confirmed_html(item, subsystems, id_to_node, annotations):
+    """▲ CONFIRMED card — green, prev→now, no diagram, link to prev issue."""
+    story_arc      = item.get("story_arc", "")
+    signal         = item.get("signal", "")
+    badge          = item.get("badge", "▲ Confirmed this month")
+    prev_stat      = item.get("prev_stat", "")
+    curr_stat      = item.get("curr_stat", "")
+    note           = item.get("note", "")
+    prev_issue_num = item.get("prev_issue_number", 1)
+    outcomes       = _d2_outcomes(item.get("subsystem_id",""), subsystems, id_to_node, annotations)
+
+    back_link = (
+        f'<div style="margin:16px 0 0;padding:10px 14px;background:rgba(255,255,255,0.5);'
+        f'border-radius:2px;font-family:system-ui,sans-serif;font-size:0.78em;color:#166534">'
+        f'→ Causal diagram: <em>see Issue #{prev_issue_num}</em></div>'
+    )
+
+    return (
+        f'<div style="margin:28px 0">'
+        f'<div style="font-family:system-ui,sans-serif;font-size:0.68em;font-weight:700;'
+        f'text-transform:uppercase;letter-spacing:1.5px;color:#166534;margin-bottom:8px">'
+        f'▲ Confirmed from Issue #{prev_issue_num}</div>'
+        f'<div style="padding:24px 28px;background:#F0FDF4;'
+        f'border-left:3px solid #166534;border-radius:0 2px 2px 0">'
+        + _badge_pill(f'{badge} · {story_arc}', "#166534", "#dcfce7")
+        + f'<div style="font-family:system-ui,sans-serif;font-weight:700;'
+        f'color:#14532d;font-size:1em;margin-bottom:14px;line-height:1.4">{signal}</div>'
+        f'<div style="display:flex;gap:24px;margin-bottom:14px;flex-wrap:wrap;'
+        f'padding:14px;background:rgba(255,255,255,0.6);border-radius:2px">'
+        f'<div style="flex:1;min-width:160px">'
+        f'<div style="font-size:0.7em;color:#166534;font-weight:700;text-transform:uppercase;'
+        f'letter-spacing:1px;margin-bottom:4px">Issue #{prev_issue_num}</div>'
+        f'<div style="font-size:0.85em;color:#374151;line-height:1.5">{prev_stat}</div></div>'
+        f'<div style="flex:1;min-width:160px">'
+        f'<div style="font-size:0.7em;color:#166534;font-weight:700;text-transform:uppercase;'
+        f'letter-spacing:1px;margin-bottom:4px">Now (merged)</div>'
+        f'<div style="font-size:0.85em;color:#14532d;font-weight:600;line-height:1.5">{curr_stat}</div></div></div>'
+        + (f'<p style="margin:0;color:#374151;font-size:0.9em;line-height:1.75">{note}</p>' if note else '')
+        + back_link
+        + f'</div>'
+        + outcomes
+        + f'</div>'
+    )
+
+
+def build_d2_signals_html(signals, subsystems, id_to_node, annotations):
+    """Render all signals in editorial order (new → correction → confirmed)."""
+    blocks = ""
+    for item in signals:
+        t = item.get("type", "")
+        if t == "new":
+            blocks += _d2_signal_new_html(item, subsystems, id_to_node, annotations)
+        elif t == "correction":
+            blocks += _d2_signal_correction_html(item, subsystems, id_to_node, annotations)
+        elif t == "confirmed":
+            blocks += _d2_signal_confirmed_html(item, subsystems, id_to_node, annotations)
+    return f'<div style="padding:0 40px">' + section_heading("📡", "The Signals", "#1a0f00", "#c9a96e") + blocks + f'</div>'
+
+
+def build_d2_scoreboard(model):
+    """Where Credit Moved — built from system_model sector nodes."""
+    tiers = nodes_by_tier(model)
+    EXCLUDE = {"sector_total_credit"}
+    rows = [(n, parse_growth_pct(n.get("stat"))) for n in tiers.get("sector", [])
+            if n["id"] not in EXCLUDE]
+    rows.sort(key=lambda x: x[1] if x[1] is not None else -9999, reverse=True)
+
+    def g_color(g):
+        if g is None or g < -50: return "#6B7280"
+        if g < 0:                return "#B45309"
+        if g > 25:               return "#0F766E"
+        if g > 13.8:             return "#166534"
+        return "#374151"
+
+    table_rows = ""
+    for node, growth in rows:
+        stat  = node.get("stat", "—")
+        vol   = f'₹{node["value_lcr"]}L Cr' if node.get("value_lcr") else "—"
+        label = node["label"]
+        c     = g_color(growth)
+        table_rows += (
+            f'<tr>'
+            f'<td style="padding:8px 12px 8px 0;color:#2c1e0f;font-size:0.87em;'
+            f'border-bottom:1px solid #f0e8d8">{label}</td>'
+            f'<td style="padding:8px 12px;font-family:system-ui;font-weight:700;'
+            f'color:{c};font-size:0.87em;white-space:nowrap;'
+            f'border-bottom:1px solid #f0e8d8;text-align:right">{stat}</td>'
+            f'<td style="padding:8px 0 8px 12px;color:#7a5c30;font-size:0.82em;'
+            f'white-space:nowrap;border-bottom:1px solid #f0e8d8;text-align:right">{vol}</td>'
+            f'</tr>'
+        )
+    th = ('font-family:system-ui;font-size:0.72em;font-weight:600;'
+          'text-transform:uppercase;letter-spacing:1px;color:#7a5c30;'
+          'padding-bottom:8px;border-bottom:2px solid #e2d9c5')
+    avg_note = (
+        '<p style="font-size:0.76em;color:#9a7c55;margin:8px 0 0;font-style:italic">'
+        '<span style="color:#0F766E">■</span> above +25% &nbsp;'
+        '<span style="color:#166534">■</span> above system avg (+13.8%) &nbsp;'
+        '<span style="color:#374151">■</span> below avg &nbsp;'
+        '<span style="color:#B45309">■</span> declining</p>'
+    )
+    return (
+        f'<div style="padding:0 40px">'
+        + section_heading("📊", "Where Credit Moved", "#166534", "#166534")
+        + f'<table style="width:100%;border-collapse:collapse">'
+        + f'<thead><tr>'
+        + f'<th style="text-align:left;{th}">Sector</th>'
+        + f'<th style="text-align:right;{th}">YoY Growth</th>'
+        + f'<th style="text-align:right;{th}">Outstanding</th>'
+        + f'</tr></thead>'
+        + f'<tbody>{table_rows}</tbody>'
+        + f'</table>'
+        + avg_note
+        + f'</div>'
+    )
+
+
+def build_d2_system_section(editorial, overview_image_url=""):
+    """System narrative + overview diagram."""
+    narrative = editorial.get("system_narrative", "")
+    if overview_image_url:
+        diagram = (
+            f'<div style="margin:20px 0;text-align:center">'
+            f'<img src="{overview_image_url}" alt="System overview" '
+            f'style="max-width:100%;border-radius:2px;border:1px solid #e2d9c5">'
+            f'</div>'
+        )
+    else:
+        diagram = image_placeholder("SYSTEM OVERVIEW", "overview.png",
+                                    "All causal stories — how they connect")
+    return (
+        f'<div style="padding:0 40px">'
+        + section_heading("🗺", "The System This Month", "#1a0f00", "#c9a96e")
+        + f'<p style="color:#2c1e0f;line-height:1.85;font-size:1.02em">{narrative}</p>'
+        + diagram
+        + f'</div>'
+    )
+
+
+def build_delta_v2_html(cfg, model, subsystems, annotations):
+    edit     = cfg.get("editorial", {})
+    meta     = cfg.get("_meta", {})
+    issue    = meta.get("issue_number", 2)
+    pub      = meta.get("published", "")
+    period   = meta.get("period", "")
+    brand    = cfg.get("branding", {})
+    author   = brand.get("author", "India Credit Lens")
+    signals  = edit.get("signals", [])
+    id_to_node = {n["id"]: n for n in real_nodes(model)}
+    overview_url = meta.get("_overview_image_url", "")
+
+    header = (
+        f'<div style="padding:36px 40px 0">'
+        f'<div style="font-family:system-ui,sans-serif;font-size:10px;'
+        f'text-transform:uppercase;letter-spacing:3px;color:#b45309;margin-bottom:12px">'
+        f'India Credit Lens &nbsp;·&nbsp; Issue #{issue} &nbsp;·&nbsp; {pub}</div>'
+        f'<h1 style="font-size:2em;margin:0 0 6px;color:#1a0f00;line-height:1.2">'
+        f'{period}: {edit.get("issue_title","")}</h1>'
+        f'<div style="color:#7a5c30;font-size:0.9em">'
+        f'RBI Sector/Industry-wise Bank Credit &nbsp;·&nbsp; by {author}</div>'
+        f'</div>'
+    )
+
+    context_text = edit.get("context_strip", "")
+    context_strip = (
+        f'<div style="margin:24px 40px 0;padding:16px 20px;background:#f4f0e8;'
+        f'border-left:3px solid #c9a96e;border-radius:0 2px 2px 0">'
+        f'<p style="margin:0;font-family:system-ui,sans-serif;font-size:0.83em;'
+        f'color:#7a5c30;line-height:1.7">'
+        f'<strong style="color:#5c4a2a">What is this?</strong> {context_text}</p>'
+        f'</div>'
+    ) if context_text else ""
+
+    hero = (
+        f'<div style="margin:28px 0 0;padding:36px 40px;background:#1E3A5F">'
+        f'<p style="color:#ffffff;font-size:1.08em;line-height:1.85;margin:0">'
+        f'{edit.get("hero_narrative","")}</p>'
+        f'</div>'
+    )
+
+    tldr_items = "".join(
+        f'<li style="margin-bottom:9px;line-height:1.65">{b}</li>'
+        for b in edit.get("tldr", [])
+    )
+    tldr = (
+        f'<div style="padding:24px 40px;background:#fffcf5;border-left:4px solid #b45309">'
+        f'<div style="font-family:system-ui,sans-serif;font-weight:700;'
+        f'text-transform:uppercase;letter-spacing:1.5px;font-size:0.75em;'
+        f'color:#b45309;margin-bottom:12px">TL;DR — Four things to know</div>'
+        f'<ul style="margin:0;padding-left:20px;color:#2c1e0f;line-height:1.7">'
+        f'{tldr_items}</ul>'
+        f'</div>'
+    ) if edit.get("tldr") else ""
+
+    parts = [
+        header, context_strip, hero, tldr,
+        divider(),
+        build_d2_scoreboard(model),
+        divider(),
+        build_d2_system_section(edit, overview_url),
+        divider(),
+        build_d2_signals_html(signals, subsystems, id_to_node, annotations),
+        divider(),
+        build_what_to_watch(edit),
+        divider(),
+        build_cta(cfg),
+        build_footer(cfg),
+    ]
+    return HTML_SHELL.format(title=f"India Credit Lens — {period}", body="\n".join(parts))
+
+
+def build_delta_v2_substack(cfg, model, subsystems, annotations):
+    """Clean semantic HTML for Substack paste — delta_v2."""
+    edit     = cfg.get("editorial", {})
+    meta     = cfg.get("_meta", {})
+    issue    = meta.get("issue_number", 2)
+    pub      = meta.get("published", "")
+    period   = meta.get("period", "")
+    brand    = cfg.get("branding", {})
+    cta_cfg  = cfg.get("cta", {})
+    signals  = edit.get("signals", [])
+    watch    = edit.get("what_to_watch", {})
+    id_to_node = {n["id"]: n for n in real_nodes(model)}
+    overview_url = meta.get("_overview_image_url", "")
+
+    tiers = nodes_by_tier(model)
+    EXCLUDE = {"sector_total_credit"}
+    sector_rows = sorted(
+        [(n, parse_growth_pct(n.get("stat"))) for n in tiers.get("sector", [])
+         if n["id"] not in EXCLUDE],
+        key=lambda x: x[1] if x[1] is not None else -9999, reverse=True,
+    )
+
+    p = []
+
+    # Header
+    p.append(f'<h1>{period}: {edit.get("issue_title","")}</h1>')
+    p.append(
+        f'<p><em>Issue #{issue} &nbsp;·&nbsp; {pub}'
+        f' &nbsp;·&nbsp; by {brand.get("author","India Credit Lens")}'
+        f' &nbsp;·&nbsp; <a href="https://{brand.get("site","")}">'
+        f'{brand.get("site","")}</a></em></p>'
+    )
+
+    ctx = edit.get("context_strip", "")
+    if ctx:
+        p.append(f'<blockquote><p>{ctx}</p></blockquote>')
+    p.append('<hr>')
+
+    # Hero + TL;DR
+    p.append(f'<p>{edit.get("hero_narrative","")}</p>')
+    if edit.get("tldr"):
+        p.append('<h2>TL;DR</h2>')
+        p.append('<ul>' + ''.join(f'<li>{b}</li>' for b in edit["tldr"]) + '</ul>')
+    p.append('<hr>')
+
+    # Scoreboard
+    p.append('<h2>📊 Where Credit Moved</h2>')
+    rows_html = "".join(
+        f'<tr><td>{n["label"]}</td><td><strong>{n.get("stat","—")}</strong></td>'
+        f'<td>{"₹" + str(n["value_lcr"]) + "L Cr" if n.get("value_lcr") else "—"}</td></tr>'
+        for n, _ in sector_rows
+    )
+    p.append(
+        f'<table><thead><tr><th>Sector</th><th>YoY Growth</th>'
+        f'<th>Outstanding</th></tr></thead><tbody>{rows_html}</tbody></table>'
+    )
+    p.append('<hr>')
+
+    # System narrative + overview
+    p.append('<h2>🗺 The System This Month</h2>')
+    p.append(f'<p>{edit.get("system_narrative","")}</p>')
+    if overview_url:
+        p.append(f'<p><img src="{overview_url}" alt="System overview" style="max-width:100%"></p>')
+    else:
+        p.append('<p><em>[Insert image: overview.png]</em></p>')
+    p.append('<hr>')
+
+    # Signals
+    p.append('<h2>📡 The Signals</h2>')
+    for item in signals:
+        t          = item.get("type", "")
+        story_arc  = item.get("story_arc", "")
+        signal     = item.get("signal", "")
+        sub_id     = item.get("subsystem_id", "")
+
+        if t == "new":
+            p.append(f'<h3>★ {story_arc}</h3>')
+            p.append(f'<p><em>New this issue</em></p>')
+            if item.get("stat"):
+                p.append(f'<p><strong>{item["stat"]}</strong></p>')
+            p.append(f'<p>{signal}</p>')
+            if item.get("body"):
+                p.append(f'<p>{item["body"]}</p>')
+            if item.get("implication"):
+                p.append(f'<blockquote><p><em>{item["implication"]}</em></p></blockquote>')
+            p.append(_d2_diagram_substack(item))
+
+        elif t == "correction":
+            p.append(f'<h3>⟳ {story_arc}</h3>')
+            p.append(f'<p><em>Correction from Issue #1</em></p>')
+            p.append(f'<p><strong>{signal}</strong></p>')
+            p.append(f'<p><strong>What it looked like:</strong> <em>{item.get("prev_read","")}</em></p>')
+            p.append(f'<p><strong>What it actually is:</strong> {item.get("curr_read","")}</p>')
+            if item.get("implication"):
+                p.append(f'<blockquote><p><strong>Implication:</strong> {item["implication"]}</p></blockquote>')
+            p.append(_d2_diagram_substack(item))
+
+        elif t == "confirmed":
+            prev_num = item.get("prev_issue_number", 1)
+            badge    = item.get("badge", "▲ Confirmed")
+            p.append(f'<h3>▲ {story_arc}</h3>')
+            p.append(f'<p><em>Confirmed from Issue #{prev_num} · {badge}</em></p>')
+            p.append(f'<p><strong>{signal}</strong></p>')
+            p.append(
+                f'<p><strong>Issue #{prev_num}:</strong> {item.get("prev_stat","")}<br>'
+                f'<strong>Now (merged):</strong> {item.get("curr_stat","")}</p>'
+            )
+            if item.get("note"):
+                p.append(f'<p>{item["note"]}</p>')
+            p.append(f'<p><em>→ Causal diagram: see Issue #{prev_num}</em></p>')
+
+        # Outcomes for all types
+        sub = next((s for s in subsystems if s.get("id") == sub_id), None)
+        if sub:
+            for oid in sub.get("outcomes", []):
+                o = id_to_node.get(oid)
+                if not o:
+                    continue
+                tier = o.get("tier", "gap")
+                icon = {"opportunity": "✅", "pressure": "⚠️", "gap": "🔍"}.get(tier, "•")
+                ann  = node_primary_annotation(o, annotations)
+                impl = ann.get("implication", "") if ann else ""
+                p.append(
+                    f'<blockquote>'
+                    f'<p><strong>{icon} {o["label"]}</strong></p>'
+                    f'<p>{o.get("description","")}</p>'
+                    + (f'<p><em>{impl}</em></p>' if impl else '')
+                    + '</blockquote>'
+                )
+
+    p.append('<hr>')
+
+    # What to Watch
+    p.append('<h2>📅 What to Watch Next</h2>')
+    p.append(f'<p><em>Next release: {watch.get("next_release","")}</em></p>')
+    p.append('<ul>' + ''.join(f'<li>{b}</li>' for b in watch.get("bullets", [])) + '</ul>')
+    p.append('<hr>')
+
+    # CTA
+    p.append(f'<p><strong><a href="{cta_cfg.get("dashboard_url","")}">'
+             f'{cta_cfg.get("dashboard_label","")} →</a></strong></p>')
+    p.append(f'<p><a href="{cta_cfg.get("digest_url","")}">'
+             f'{cta_cfg.get("digest_label","")} →</a></p>')
+    p.append(f'<p><em>{brand.get("tagline","")} &nbsp;·&nbsp; '
+             f'<a href="https://{brand.get("site","")}">{brand.get("site","")}</a></em></p>')
+
+    return SUBSTACK_SHELL.format(title=f"India Credit Lens — {period}", body="\n".join(p))
+
+
+def build_delta_v2_markdown(cfg, model, subsystems, annotations):
+    """Markdown output for delta_v2."""
+    edit     = cfg.get("editorial", {})
+    meta     = cfg.get("_meta", {})
+    issue    = meta.get("issue_number", 2)
+    pub      = meta.get("published", "")
+    period   = meta.get("period", "")
+    brand    = cfg.get("branding", {})
+    cta_cfg  = cfg.get("cta", {})
+    signals  = edit.get("signals", [])
+    watch    = edit.get("what_to_watch", {})
+    id_to_node = {n["id"]: n for n in real_nodes(model)}
+
+    tiers = nodes_by_tier(model)
+    EXCLUDE = {"sector_total_credit"}
+    sector_rows = sorted(
+        [(n, parse_growth_pct(n.get("stat"))) for n in tiers.get("sector", [])
+         if n["id"] not in EXCLUDE],
+        key=lambda x: x[1] if x[1] is not None else -9999, reverse=True,
+    )
+
+    lines = [
+        f"# India Credit Lens — {period}: {edit.get('issue_title','')}",
+        f"*Issue #{issue} · {pub} · by {brand.get('author','')} · {brand.get('site','')}*",
+        "",
+    ]
+
+    ctx = edit.get("context_strip", "")
+    if ctx:
+        lines += [f"> {ctx}", ""]
+
+    lines += ["---", "", edit.get("hero_narrative", ""), "", "---", ""]
+
+    if edit.get("tldr"):
+        lines += ["## TL;DR", ""]
+        for b in edit["tldr"]:
+            lines.append(f"- {b}")
+        lines += ["", "---", ""]
+
+    # Scoreboard
+    lines += [
+        "## 📊 Where Credit Moved", "",
+        "| Sector | YoY Growth | Outstanding |",
+        "| --- | --- | --- |",
+    ]
+    for node, _ in sector_rows:
+        vol = f'₹{node["value_lcr"]}L Cr' if node.get("value_lcr") else "—"
+        lines.append(f'| {node["label"]} | {node.get("stat","—")} | {vol} |')
+    lines += ["", "---", ""]
+
+    # System narrative
+    lines += ["## 🗺 The System This Month", "", edit.get("system_narrative", ""), ""]
+    lines += ["> 🖼 `[Insert: overview.png]`", "", "---", ""]
+
+    # Signals
+    lines += ["## 📡 The Signals", ""]
+    for item in signals:
+        t         = item.get("type", "")
+        story_arc = item.get("story_arc", "")
+        signal    = item.get("signal", "")
+        sub_id    = item.get("subsystem_id", "")
+
+        if t == "new":
+            lines += [f"### ★ {story_arc}", ""]
+            lines.append("*New this issue*")
+            lines.append("")
+            if item.get("stat"):
+                lines += [f"**{item['stat']}**", ""]
+            lines += [f"**{signal}**", ""]
+            if item.get("body"):
+                lines += [item["body"], ""]
+            if item.get("implication"):
+                lines += [f"*{item['implication']}*", ""]
+            if item.get("image_url"):
+                lines += [f"![{signal}]({item['image_url']})", ""]
+            else:
+                slug = re.sub(r"[^a-z0-9]+", "_", signal.lower()).strip("_")[:30]
+                lines += [f"> 🖼 `[Insert: {sub_id}_{slug}.png]`", ""]
+
+        elif t == "correction":
+            prev_num = 1
+            lines += [f"### ⟳ {story_arc}", ""]
+            lines.append(f"*Correction from Issue #1*")
+            lines.append("")
+            lines += [f"**{signal}**", ""]
+            lines += [
+                f"**What it looked like:** *{item.get('prev_read','')}*", "",
+                f"**What it actually is:** {item.get('curr_read','')}", "",
+            ]
+            if item.get("implication"):
+                lines += [f"> **Implication:** {item['implication']}", ""]
+            if item.get("image_url"):
+                lines += [f"![{signal}]({item['image_url']})", ""]
+            else:
+                slug = re.sub(r"[^a-z0-9]+", "_", signal.lower()).strip("_")[:30]
+                lines += [f"> 🖼 `[Insert: {sub_id}_{slug}.png]`", ""]
+
+        elif t == "confirmed":
+            prev_num = item.get("prev_issue_number", 1)
+            badge    = item.get("badge", "▲ Confirmed")
+            lines += [f"### ▲ {story_arc}", ""]
+            lines.append(f"*Confirmed from Issue #{prev_num} · {badge}*")
+            lines.append("")
+            lines += [f"**{signal}**", ""]
+            lines += [
+                f"**Issue #{prev_num}:** {item.get('prev_stat','')}",
+                f"**Now (merged):** {item.get('curr_stat','')}",
+                "",
+            ]
+            if item.get("note"):
+                lines += [item["note"], ""]
+            lines += [f"*→ Causal diagram: see Issue #{prev_num}*", ""]
+
+        # Outcomes
+        lines += _d2_outcomes_md(sub_id, subsystems, id_to_node, annotations)
+        lines += ["---", ""]
+
+    # What to Watch
+    lines += [
+        "## 📅 What to Watch Next",
+        f"*Next release: {watch.get('next_release','')}*", "",
+    ]
+    for b in watch.get("bullets", []):
+        lines.append(f"- {b}")
+    lines += ["", "---", ""]
+
+    # CTA
+    lines += [
+        f"**{cta_cfg.get('dashboard_label','')}**",
+        f"→ {cta_cfg.get('dashboard_url','')}",
+        "",
+        f"**{cta_cfg.get('digest_label','')}**",
+        f"→ {cta_cfg.get('digest_url','')}",
+        "",
+        "---",
+        f"*{brand.get('tagline','')} · {brand.get('site','')}*",
+        "",
+    ]
+    return "\n".join(lines)
+
+
 def build_delta_html(cfg, model, subsystems):
     """Full HTML output for delta_v1 format."""
     edit        = cfg.get("editorial", {})
@@ -1586,33 +2231,55 @@ def render_mermaid_diagrams(cfg, mermaid_base: Path, output_dir: Path) -> dict:
     img_dir = output_dir / "images"
     img_dir.mkdir(parents=True, exist_ok=True)
 
-    # Build list of (sub_id, mmd_path) to render — explicit mermaid_file wins
-    nl_dir = Path(__file__).resolve().parent
-    edit   = cfg.get("editorial", {})
+    # Build list of (key, mmd_path) to render
+    # key = subsystem_id for signal diagrams, "_overview" for the overview diagram
+    nl_dir  = Path(__file__).resolve().parent
+    fmt     = cfg.get("_meta", {}).get("format", "")
+    edit    = cfg.get("editorial", {})
     tasks: list[tuple[str, Path]] = []
-    seen_sub_ids: set[str] = set()
+    seen_keys: set[str] = set()
 
-    for section in ("what_held", "what_changed", "what_new"):
-        for item in edit.get(section, []):
-            sub_id  = item.get("subsystem_id", "")
-            mmd_rel = item.get("mermaid_file", "")
-            if not sub_id or sub_id in seen_sub_ids:
-                continue
-            seen_sub_ids.add(sub_id)
-
-            if mmd_rel:
-                mmd_path = (nl_dir / mmd_rel).resolve()
-                if mmd_path.exists():
-                    tasks.append((sub_id, mmd_path))
-                else:
-                    print(f"  ⚠  mermaid_file not found for {sub_id}: {mmd_path}")
+    # Overview diagram (delta_v2 only)
+    if fmt == "delta_v2":
+        ov_rel = cfg.get("_meta", {}).get("overview_mermaid_file", "")
+        if ov_rel:
+            ov_path = (nl_dir / ov_rel).resolve()
+            if ov_path.exists():
+                tasks.append(("_overview", ov_path))
             else:
-                # Fallback: match sub_NN_*.mmd in mermaid_base
-                matches = sorted(mermaid_base.glob(f"{sub_id}_*.mmd"))
-                if matches:
-                    tasks.append((sub_id, matches[0]))
-                else:
-                    print(f"  ⚠  No .mmd found for {sub_id} in {mermaid_base}")
+                print(f"  ⚠  overview_mermaid_file not found: {ov_path}")
+
+    # Per-signal diagrams
+    if fmt == "delta_v2":
+        signal_items = edit.get("signals", [])
+    else:
+        signal_items = []
+        for section in ("what_held", "what_changed", "what_new"):
+            signal_items += edit.get(section, [])
+
+    for item in signal_items:
+        sub_id  = item.get("subsystem_id", "")
+        mmd_rel = item.get("mermaid_file") or ""   # None → ""
+        if not sub_id or sub_id in seen_keys:
+            continue
+        # confirmed signals with mermaid_file=null → skip rendering
+        if fmt == "delta_v2" and item.get("type") == "confirmed":
+            continue
+        seen_keys.add(sub_id)
+
+        if mmd_rel:
+            mmd_path = (nl_dir / mmd_rel).resolve()
+            if mmd_path.exists():
+                tasks.append((sub_id, mmd_path))
+            else:
+                print(f"  ⚠  mermaid_file not found for {sub_id}: {mmd_path}")
+        else:
+            # Fallback: match sub_NN_*.mmd in mermaid_base
+            matches = sorted(mermaid_base.glob(f"{sub_id}_*.mmd"))
+            if matches:
+                tasks.append((sub_id, matches[0]))
+            else:
+                print(f"  ⚠  No .mmd found for {sub_id} in {mermaid_base}")
 
     if not tasks:
         print("  ⚠  No mermaid files to render.")
@@ -1642,16 +2309,29 @@ def apply_rendered_images(cfg: dict, rendered: dict[str, str]) -> dict:
     """
     Inject base64 image data URLs into newsletter_config editorial fields.
     Only fills image_url where it is currently empty and a rendered image exists.
+    Also stores _overview_image_url in _meta for delta_v2.
     Returns a modified copy of cfg (does not mutate original).
     """
     import copy
     cfg  = copy.deepcopy(cfg)
+    fmt  = cfg.get("_meta", {}).get("format", "")
     edit = cfg.get("editorial", {})
-    for section in ("what_held", "what_changed", "what_new"):
-        for item in edit.get(section, []):
+
+    # Overview image (delta_v2)
+    if "_overview" in rendered:
+        cfg["_meta"]["_overview_image_url"] = rendered["_overview"]
+
+    if fmt == "delta_v2":
+        for item in edit.get("signals", []):
             sub_id = item.get("subsystem_id", "")
             if not item.get("image_url") and sub_id in rendered:
                 item["image_url"] = rendered[sub_id]
+    else:
+        for section in ("what_held", "what_changed", "what_new"):
+            for item in edit.get(section, []):
+                sub_id = item.get("subsystem_id", "")
+                if not item.get("image_url") and sub_id in rendered:
+                    item["image_url"] = rendered[sub_id]
     return cfg
 
 
@@ -1664,10 +2344,10 @@ def generate(config_path=None, output_dir=None, render_diagrams=False):
         cfg = json.load(f)
 
     fmt = cfg.get("_meta", {}).get("format", "")
-    if fmt not in ("system_model_v2", "delta_v1"):
+    if fmt not in ("system_model_v2", "delta_v1", "delta_v2"):
         print(
             f"❌  Unknown format: '{fmt}' in newsletter_config.json.\n"
-            "    Supported: 'system_model_v2' (Issue #1) | 'delta_v1' (Issue #2+)"
+            "    Supported: 'system_model_v2' (Issue #1) | 'delta_v1' | 'delta_v2' (Issue #2+)"
         )
         sys.exit(1)
 
@@ -1718,25 +2398,27 @@ def generate(config_path=None, output_dir=None, render_diagrams=False):
     substack_path = os.path.join(output_dir, f"newsletter_{today}_substack.html")
     md_path       = os.path.join(output_dir, f"newsletter_{today}.md")
 
-    if fmt == "delta_v1":
-        # Option A: auto-render diagrams if --render-diagrams flag is set
+    if fmt in ("delta_v1", "delta_v2"):
+        # Auto-render diagrams if --render-diagrams flag is set
         if render_diagrams:
-            # Look for mermaid outputs in the latest registered period's mermaid dir
-            mermaid_base = (REPO_ROOT / "analysis" / "output" / "mermaid" / "rbi_sibc"
-                            if True else None)
-            if mermaid_base:
-                # Use the most recent mermaid subdirectory
-                mermaid_dirs = sorted(mermaid_base.glob("????-??-??")) if mermaid_base.exists() else []
-                if mermaid_dirs:
-                    latest_mmd = mermaid_dirs[-1]
-                    rendered   = render_mermaid_diagrams(cfg, latest_mmd, Path(output_dir))
-                    cfg        = apply_rendered_images(cfg, rendered)
-                    print(f"  → {len(rendered)} diagrams rendered (Option A)")
-                else:
-                    print("  ⚠  No mermaid output directories found — skipping diagram rendering")
-        html     = build_delta_html(cfg, model, subsystems)
-        substack = build_delta_substack(cfg, model, subsystems)
-        md       = build_delta_markdown(cfg, model, subsystems)
+            mermaid_base = REPO_ROOT / "analysis" / "output" / "mermaid" / "rbi_sibc"
+            mermaid_dirs = sorted(mermaid_base.glob("????-??-??")) if mermaid_base.exists() else []
+            if mermaid_dirs:
+                latest_mmd = mermaid_dirs[-1]
+                rendered   = render_mermaid_diagrams(cfg, latest_mmd, Path(output_dir))
+                cfg        = apply_rendered_images(cfg, rendered)
+                print(f"  → {len(rendered)} diagrams rendered (Option A)")
+            else:
+                print("  ⚠  No mermaid output directories found — skipping diagram rendering")
+
+        if fmt == "delta_v2":
+            html     = build_delta_v2_html(cfg, model, subsystems, annotations)
+            substack = build_delta_v2_substack(cfg, model, subsystems, annotations)
+            md       = build_delta_v2_markdown(cfg, model, subsystems, annotations)
+        else:
+            html     = build_delta_html(cfg, model, subsystems)
+            substack = build_delta_substack(cfg, model, subsystems)
+            md       = build_delta_markdown(cfg, model, subsystems)
     else:
         html     = build_html(cfg, model, annotations, subsystems)
         substack = build_substack_html(cfg, model, annotations, subsystems)
@@ -1757,19 +2439,29 @@ def generate(config_path=None, output_dir=None, render_diagrams=False):
     print(f"\n     Format           : {fmt}")
     print(f"     Period           : {cfg['_meta'].get('period', '')}")
 
-    if fmt == "delta_v1":
+    if fmt in ("delta_v1", "delta_v2"):
         edit = cfg.get("editorial", {})
         print(f"     Prev period      : {cfg['_meta'].get('prev_period', '')}")
-        print(f"     Held signals     : {len(edit.get('what_held', []))}")
-        print(f"     Changed signals  : {len(edit.get('what_changed', []))}")
-        print(f"     New signals      : {len(edit.get('what_new', []))}")
-        # Flag any image placeholders that need manual fill
-        all_items = (
-            edit.get("what_held", []) +
-            edit.get("what_changed", []) +
-            edit.get("what_new", [])
-        )
-        placeholders = [i.get("signal", "?") for i in all_items if not i.get("image_url") and i.get("subsystem_id")]
+        if fmt == "delta_v2":
+            sigs = edit.get("signals", [])
+            new_c  = sum(1 for s in sigs if s.get("type") == "new")
+            corr_c = sum(1 for s in sigs if s.get("type") == "correction")
+            conf_c = sum(1 for s in sigs if s.get("type") == "confirmed")
+            print(f"     New signals      : {new_c}")
+            print(f"     Corrections      : {corr_c}")
+            print(f"     Confirmed signals: {conf_c}")
+            all_items = sigs
+        else:
+            print(f"     Held signals     : {len(edit.get('what_held', []))}")
+            print(f"     Changed signals  : {len(edit.get('what_changed', []))}")
+            print(f"     New signals      : {len(edit.get('what_new', []))}")
+            all_items = (
+                edit.get("what_held", []) + edit.get("what_changed", []) + edit.get("what_new", [])
+            )
+        # Flag confirmed signals (no diagram expected) and others missing images
+        placeholders = [i.get("signal", "?") for i in all_items
+                        if not i.get("image_url") and i.get("subsystem_id")
+                        and not (fmt == "delta_v2" and i.get("type") == "confirmed")]
         if placeholders:
             print(f"\n  ⚠  Image placeholders (Option B — fill manually):")
             for sig in placeholders:
