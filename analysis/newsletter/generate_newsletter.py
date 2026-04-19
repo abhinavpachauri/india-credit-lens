@@ -36,6 +36,73 @@ from pathlib import Path
 from datetime import date
 
 
+# ── Node ID → CSV sector name mapping (for YoY computation from consolidated CSV) ──
+# Keys = system_model node IDs (stable across issues)
+# Values = exact sector name in rbi_sibc_consolidated.csv
+NODE_TO_CSV_SECTOR = {
+    "sector_bank_credit":     "Bank Credit (II + III)",
+    "sector_personal_loans":  "Personal Loans",
+    "sector_gold_loans":      "Loans against gold jewellery",
+    "sector_credit_cards":    "Credit Card Outstanding",
+    "sector_vehicle_loans":   "Vehicle Loans",
+    "sector_housing":         "Housing",
+    "sector_msme_industry":   "Micro and Small",
+    "sector_large_corporate": "Large",
+    "sector_nbfcs":           "Non-Banking Financial Companies (NBFCs)",
+    "sector_all_engineering": "All Engineering",
+    "sector_gems_jewellery":  "Gems and Jewellery",
+    "sector_infrastructure":  "Infrastructure",
+    "sector_renewable_energy":"Renewable Energy",
+    "sector_psl_housing":     "Housing (Including Priority Sector Housing)",
+    "sector_export_credit":   "Export Credit",
+}
+
+
+def compute_yoy_from_csv(csv_path: str, curr_date: str, prev_year_month: str) -> dict:
+    """
+    Compute YoY % for each node in NODE_TO_CSV_SECTOR.
+    curr_date: exact date string in CSV (e.g. '2026-02-28')
+    prev_year_month: YYYY-MM prefix (e.g. '2025-02') — uses latest available date
+                     per sector within that month (handles sectors on different dates)
+
+    Returns: {node_id: {"yoy_pct": float, "fmt": "+X.Y% YoY", "outstanding_lcr": float}}
+    """
+    try:
+        import pandas as pd
+        df = pd.read_csv(csv_path)
+    except Exception as e:
+        print(f"  ⚠  Could not load CSV for YoY: {e}")
+        return {}
+
+    # Build per-sector prior-year lookup: latest value in the prev_year_month
+    prev_month_data = df[df["date"].str.startswith(prev_year_month)]
+    if prev_month_data.empty:
+        print(f"  ⚠  No prior-year data found for {prev_year_month} in CSV")
+        return {}
+    # Keep latest date per sector (some sectors appear on multiple dates within month)
+    prev_rows = (
+        prev_month_data.sort_values("date")
+        .groupby("sector")["outstanding_cr"]
+        .last()
+    )
+    curr_rows = df[df["date"] == curr_date].set_index("sector")["outstanding_cr"]
+
+    result = {}
+    for node_id, csv_name in NODE_TO_CSV_SECTOR.items():
+        curr_val = curr_rows.get(csv_name)
+        prev_val = prev_rows.get(csv_name)
+        if curr_val is None or prev_val is None or prev_val == 0:
+            continue
+        yoy = (curr_val - prev_val) / prev_val * 100
+        sign = "+" if yoy >= 0 else ""
+        result[node_id] = {
+            "yoy_pct": yoy,
+            "fmt": f"{sign}{yoy:.1f}% YoY",
+            "outstanding_lcr": round(curr_val / 100000, 2),  # crores → L Cr
+        }
+    return result
+
+
 # ── Tier colour palette ───────────────────────────────────────────────────────
 
 TIER_COLOR = {
@@ -951,34 +1018,53 @@ def build_d2_signals_html(signals, subsystems, id_to_node, annotations, prev_iss
     )
 
 
-def build_d2_scoreboard(period_model):
-    """Where Credit Moved — built from current-period system_model sector nodes."""
+def build_d2_scoreboard(period_model, yoy_lookup: dict = None):
+    """Where Credit Moved — uses true YoY from CSV where available, falls back to model stat."""
     tiers = nodes_by_tier(period_model)
     EXCLUDE = {"sector_total_credit"}
-    rows = [(n, parse_growth_pct(n.get("stat"))) for n in tiers.get("sector", [])
-            if n["id"] not in EXCLUDE]
-    rows.sort(key=lambda x: x[1] if x[1] is not None else -9999, reverse=True)
+    yoy_lookup = yoy_lookup or {}
+
+    # Compute system avg YoY from lookup (use total credit if available)
+    sys_avg = 13.8   # default
+    if "sector_bank_credit" in yoy_lookup:
+        sys_avg = round(yoy_lookup["sector_bank_credit"]["yoy_pct"], 1)
+
+    # Build rows: prefer YoY lookup, fall back to model stat
+    rows = []
+    for n in tiers.get("sector", []):
+        if n["id"] in EXCLUDE:
+            continue
+        nid = n["id"]
+        if nid in yoy_lookup:
+            yoy_data = yoy_lookup[nid]
+            g        = yoy_data["yoy_pct"]
+            stat_str = yoy_data["fmt"]
+            vol      = f'₹{yoy_data["outstanding_lcr"]}L Cr'
+        else:
+            g        = parse_growth_pct(n.get("stat"))
+            stat_str = n.get("stat", "—")
+            vol      = f'₹{n["value_lcr"]}L Cr' if n.get("value_lcr") else "—"
+        rows.append((n["label"], stat_str, vol, g))
+
+    rows.sort(key=lambda x: x[3] if x[3] is not None else -9999, reverse=True)
 
     def g_color(g):
         if g is None or g < -50: return "#6B7280"
         if g < 0:                return "#B45309"
         if g > 25:               return "#0F766E"
-        if g > 13.8:             return "#166534"
+        if g > sys_avg:          return "#166534"
         return "#374151"
 
     table_rows = ""
-    for node, growth in rows:
-        stat  = node.get("stat", "—")
-        vol   = f'₹{node["value_lcr"]}L Cr' if node.get("value_lcr") else "—"
-        label = node["label"]
-        c     = g_color(growth)
+    for label, stat_str, vol, growth in rows:
+        c = g_color(growth)
         table_rows += (
             f'<tr>'
             f'<td style="padding:8px 12px 8px 0;color:#2c1e0f;font-size:0.87em;'
             f'border-bottom:1px solid #f0e8d8">{label}</td>'
             f'<td style="padding:8px 12px;font-family:system-ui;font-weight:700;'
             f'color:{c};font-size:0.87em;white-space:nowrap;'
-            f'border-bottom:1px solid #f0e8d8;text-align:right">{stat}</td>'
+            f'border-bottom:1px solid #f0e8d8;text-align:right">{stat_str}</td>'
             f'<td style="padding:8px 0 8px 12px;color:#7a5c30;font-size:0.82em;'
             f'white-space:nowrap;border-bottom:1px solid #f0e8d8;text-align:right">{vol}</td>'
             f'</tr>'
@@ -987,11 +1073,11 @@ def build_d2_scoreboard(period_model):
           'text-transform:uppercase;letter-spacing:1px;color:#7a5c30;'
           'padding-bottom:8px;border-bottom:2px solid #e2d9c5')
     avg_note = (
-        '<p style="font-size:0.76em;color:#9a7c55;margin:8px 0 0;font-style:italic">'
-        '<span style="color:#0F766E">■</span> above +25% &nbsp;'
-        '<span style="color:#166534">■</span> above system avg (+13.8%) &nbsp;'
-        '<span style="color:#374151">■</span> below avg &nbsp;'
-        '<span style="color:#B45309">■</span> declining</p>'
+        f'<p style="font-size:0.76em;color:#9a7c55;margin:8px 0 0;font-style:italic">'
+        f'<span style="color:#0F766E">■</span> above +25% &nbsp;'
+        f'<span style="color:#166534">■</span> above system avg (+{sys_avg}% YoY) &nbsp;'
+        f'<span style="color:#374151">■</span> below avg &nbsp;'
+        f'<span style="color:#B45309">■</span> declining</p>'
     )
     return (
         f'<div style="padding:0 40px">'
@@ -1020,7 +1106,7 @@ def build_d2_system_section(editorial):
     )
 
 
-def build_delta_v2_html(cfg, model, period_model, subsystems, annotations):
+def build_delta_v2_html(cfg, model, period_model, subsystems, annotations, yoy_lookup=None):
     edit          = cfg.get("editorial", {})
     meta          = cfg.get("_meta", {})
     issue         = meta.get("issue_number", 2)
@@ -1078,7 +1164,7 @@ def build_delta_v2_html(cfg, model, period_model, subsystems, annotations):
     parts = [
         header, context_strip, hero, tldr,
         divider(),
-        build_d2_scoreboard(period_model),
+        build_d2_scoreboard(period_model, yoy_lookup),
         divider(),
         build_d2_system_section(edit),
         divider(),
@@ -1092,7 +1178,7 @@ def build_delta_v2_html(cfg, model, period_model, subsystems, annotations):
     return HTML_SHELL.format(title=f"India Credit Lens — {period}", body="\n".join(parts))
 
 
-def build_delta_v2_substack(cfg, model, period_model, subsystems, annotations):
+def build_delta_v2_substack(cfg, model, period_model, subsystems, annotations, yoy_lookup=None):
     """Clean semantic HTML for Substack paste — delta_v2."""
     edit          = cfg.get("editorial", {})
     meta          = cfg.get("_meta", {})
@@ -1105,15 +1191,25 @@ def build_delta_v2_substack(cfg, model, period_model, subsystems, annotations):
     watch         = edit.get("what_to_watch", {})
     prev_issue_url = meta.get("prev_issue_url", "#")
     id_to_node    = {n["id"]: n for n in real_nodes(model)}
+    yoy_lookup    = yoy_lookup or {}
 
-    # Scoreboard from per-period model
+    # Scoreboard: prefer YoY lookup, fall back to period model stats
     tiers = nodes_by_tier(period_model)
     EXCLUDE = {"sector_total_credit"}
-    sector_rows = sorted(
-        [(n, parse_growth_pct(n.get("stat"))) for n in tiers.get("sector", [])
-         if n["id"] not in EXCLUDE],
-        key=lambda x: x[1] if x[1] is not None else -9999, reverse=True,
-    )
+    raw_nodes = [n for n in tiers.get("sector", []) if n["id"] not in EXCLUDE]
+    sector_rows = []
+    for n in raw_nodes:
+        nid = n["id"]
+        if nid in yoy_lookup:
+            g        = yoy_lookup[nid]["yoy_pct"]
+            stat_str = yoy_lookup[nid]["fmt"]
+            vol      = f'₹{yoy_lookup[nid]["outstanding_lcr"]}L Cr'
+        else:
+            g        = parse_growth_pct(n.get("stat"))
+            stat_str = n.get("stat", "—")
+            vol      = f'₹{n["value_lcr"]}L Cr' if n.get("value_lcr") else "—"
+        sector_rows.append((n["label"], stat_str, vol, g))
+    sector_rows.sort(key=lambda x: x[3] if x[3] is not None else -9999, reverse=True)
 
     p = []
 
@@ -1141,9 +1237,8 @@ def build_delta_v2_substack(cfg, model, period_model, subsystems, annotations):
     # Scoreboard
     p.append('<h2>📊 Where Credit Moved</h2>')
     rows_html = "".join(
-        f'<tr><td>{n["label"]}</td><td><strong>{n.get("stat","—")}</strong></td>'
-        f'<td>{"₹" + str(n["value_lcr"]) + "L Cr" if n.get("value_lcr") else "—"}</td></tr>'
-        for n, _ in sector_rows
+        f'<tr><td>{label}</td><td><strong>{stat_str}</strong></td><td>{vol}</td></tr>'
+        for label, stat_str, vol, _ in sector_rows
     )
     p.append(
         f'<table><thead><tr><th>Sector</th><th>YoY Growth</th>'
@@ -1239,7 +1334,7 @@ def build_delta_v2_substack(cfg, model, period_model, subsystems, annotations):
     return SUBSTACK_SHELL.format(title=f"India Credit Lens — {period}", body="\n".join(p))
 
 
-def build_delta_v2_markdown(cfg, model, period_model, subsystems, annotations):
+def build_delta_v2_markdown(cfg, model, period_model, subsystems, annotations, yoy_lookup=None):
     """Markdown output for delta_v2."""
     edit          = cfg.get("editorial", {})
     meta          = cfg.get("_meta", {})
@@ -1252,14 +1347,25 @@ def build_delta_v2_markdown(cfg, model, period_model, subsystems, annotations):
     watch         = edit.get("what_to_watch", {})
     prev_issue_url = meta.get("prev_issue_url", "#")
     id_to_node    = {n["id"]: n for n in real_nodes(model)}
+    yoy_lookup    = yoy_lookup or {}
 
+    # Scoreboard rows with YoY
     tiers = nodes_by_tier(period_model)
     EXCLUDE = {"sector_total_credit"}
-    sector_rows = sorted(
-        [(n, parse_growth_pct(n.get("stat"))) for n in tiers.get("sector", [])
-         if n["id"] not in EXCLUDE],
-        key=lambda x: x[1] if x[1] is not None else -9999, reverse=True,
-    )
+    raw_nodes = [n for n in tiers.get("sector", []) if n["id"] not in EXCLUDE]
+    sector_rows = []
+    for n in raw_nodes:
+        nid = n["id"]
+        if nid in yoy_lookup:
+            g        = yoy_lookup[nid]["yoy_pct"]
+            stat_str = yoy_lookup[nid]["fmt"]
+            vol      = f'₹{yoy_lookup[nid]["outstanding_lcr"]}L Cr'
+        else:
+            g        = parse_growth_pct(n.get("stat"))
+            stat_str = n.get("stat", "—")
+            vol      = f'₹{n["value_lcr"]}L Cr' if n.get("value_lcr") else "—"
+        sector_rows.append((n["label"], stat_str, vol, g))
+    sector_rows.sort(key=lambda x: x[3] if x[3] is not None else -9999, reverse=True)
 
     lines = [
         f"# India Credit Lens — {period}: {edit.get('issue_title','')}",
@@ -1285,9 +1391,8 @@ def build_delta_v2_markdown(cfg, model, period_model, subsystems, annotations):
         "| Sector | YoY Growth | Outstanding |",
         "| --- | --- | --- |",
     ]
-    for node, _ in sector_rows:
-        vol = f'₹{node["value_lcr"]}L Cr' if node.get("value_lcr") else "—"
-        lines.append(f'| {node["label"]} | {node.get("stat","—")} | {vol} |')
+    for label, stat_str, vol, _ in sector_rows:
+        lines.append(f'| {label} | {stat_str} | {vol} |')
     lines += ["", "---", ""]
 
     # System narrative (no diagram)
@@ -2421,12 +2526,26 @@ def generate(config_path=None, output_dir=None, render_diagrams=False):
                 if curr_model_path.exists():
                     with open(curr_model_path) as f:
                         period_model = json.load(f)
-                    print(f"  → Current-period model : {curr_model_path.name}")
+                    print(f"  → Current-period model : {curr_model_path.name} ({curr_model_path.parent.name})")
                 else:
                     print(f"  ⚠  current_period_model_path not found: {curr_model_path}")
-            html     = build_delta_v2_html(cfg, model, period_model, subsystems, annotations)
-            substack = build_delta_v2_substack(cfg, model, period_model, subsystems, annotations)
-            md       = build_delta_v2_markdown(cfg, model, period_model, subsystems, annotations)
+
+            # Compute true YoY from consolidated CSV
+            yoy_lookup = {}
+            csv_rel = cfg["_meta"].get("csv_path", "")
+            curr_date = cfg["_meta"].get("csv_curr_date", "")
+            prev_ym   = cfg["_meta"].get("csv_prev_year_month", "")
+            if csv_rel and curr_date and prev_ym:
+                csv_path = (config_dir / csv_rel).resolve()
+                yoy_lookup = compute_yoy_from_csv(str(csv_path), curr_date, prev_ym)
+                matched = len([k for k in yoy_lookup if k != "sector_bank_credit"])
+                print(f"  → YoY from CSV         : {len(yoy_lookup)} sectors computed ({curr_date} vs {prev_ym})")
+            else:
+                print("  ⚠  csv_path/curr_date/prev_year_month not set — scoreboard uses model FY stats")
+
+            html     = build_delta_v2_html(cfg, model, period_model, subsystems, annotations, yoy_lookup)
+            substack = build_delta_v2_substack(cfg, model, period_model, subsystems, annotations, yoy_lookup)
+            md       = build_delta_v2_markdown(cfg, model, period_model, subsystems, annotations, yoy_lookup)
         else:
             html     = build_delta_html(cfg, model, subsystems)
             substack = build_delta_substack(cfg, model, subsystems)
