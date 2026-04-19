@@ -1,0 +1,23 @@
+---
+title: NBFC Sector Post-Regulatory Recovery
+---
+flowchart LR
+
+    classDef driverNode fill:#1E3A5F,stroke:#1E3A5F,color:#ffffff
+    classDef sectorNode fill:#F0FDF4,stroke:#166534,color:#166534
+    classDef gapNode fill:#F9FAFB,stroke:#6B7280,color:#374151
+    classDef opportunityNode fill:#0F766E,stroke:#0F766E,color:#ffffff
+    classDef pressureNode fill:#B45309,stroke:#B45309,color:#ffffff
+
+%% --> causes/creates/signals  -.-> suppresses/risk/gap  ==> reroutes  <--> contrast
+
+    driver_nbfc_regulatory_recovery(["NBFC Sector Post-Regulatory Recovery"])
+    sector_nbfcs["NBFC Borrowings from Banks\n+19.1% FY"]
+    gap_nbfc_double_counting{{"NBFC Credit — Double-Counted in System"}}
+
+    class driver_nbfc_regulatory_recovery driverNode
+    class sector_nbfcs sectorNode
+    class gap_nbfc_double_counting gapNode
+
+    driver_nbfc_regulatory_recovery --> sector_nbfcs
+    sector_nbfcs -.-> gap_nbfc_double_counting

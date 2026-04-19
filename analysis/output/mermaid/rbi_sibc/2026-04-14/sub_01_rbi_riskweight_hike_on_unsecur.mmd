@@ -1,0 +1,34 @@
+---
+title: RBI risk-weight hike on unsecured credit (Nov 2023)
+---
+flowchart LR
+
+    classDef driverNode fill:#1E3A5F,stroke:#1E3A5F,color:#ffffff
+    classDef sectorNode fill:#F0FDF4,stroke:#166534,color:#166534
+    classDef gapNode fill:#F9FAFB,stroke:#6B7280,color:#374151
+    classDef opportunityNode fill:#0F766E,stroke:#0F766E,color:#ffffff
+    classDef pressureNode fill:#B45309,stroke:#B45309,color:#ffffff
+
+%% --> causes/creates/signals  -.-> suppresses/risk/gap  ==> reroutes  <--> contrast
+
+    driver_gold_price_surge(["Gold price surge (2023–2026)"])
+    driver_rbi_unsecured_tightening(["RBI risk-weight hike on unsecured credit (Nov 2023)"])
+    sector_credit_cards["Credit Cards Outstanding"]
+    sector_gold_loans["Gold Loans"]
+    gap_jan_series_nulls{{"January SIBC missing Gold, Housing, NBFC, Tourism data"}}
+    opp_gold_loan_entry("Gold loan market entry / deepening")
+    pressure_unsecured_migration[/"Unsecured credit demand migrating to untracked channels"/]
+
+    class driver_gold_price_surge,driver_rbi_unsecured_tightening driverNode
+    class sector_credit_cards,sector_gold_loans sectorNode
+    class gap_jan_series_nulls gapNode
+    class opp_gold_loan_entry opportunityNode
+    class pressure_unsecured_migration pressureNode
+
+    driver_gold_price_surge --> sector_gold_loans
+    driver_gold_price_surge --> opp_gold_loan_entry
+    driver_rbi_unsecured_tightening -.-> sector_credit_cards
+    driver_rbi_unsecured_tightening ==> sector_gold_loans
+    driver_rbi_unsecured_tightening -.-> pressure_unsecured_migration
+    sector_gold_loans -.-> gap_jan_series_nulls
+    sector_credit_cards -.-> pressure_unsecured_migration

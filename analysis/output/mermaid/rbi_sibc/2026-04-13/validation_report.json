@@ -1,0 +1,40 @@
+{
+  "passed": true,
+  "model_path": "analysis/rbi_sibc/2026-03-30/system_model.json",
+  "generated": "2026-04-14",
+  "summary": {
+    "errors": 0,
+    "warnings": 2,
+    "info": 3
+  },
+  "errors": [],
+  "warnings": [
+    {
+      "check": "annotation_ids",
+      "level": "WARNING",
+      "message": "Annotations file not found \u2014 skipping annotation ID cross-check. Pass --annotations path/to/report.ts to enable this check."
+    },
+    {
+      "check": "completeness",
+      "level": "WARNING",
+      "message": "Gap node 'gap_no_feb_yoy' has no 'is_data_gap' or 'creates_gap' inbound edge \u2014 data gap is flagged but its source is not modelled."
+    }
+  ],
+  "info": [
+    {
+      "check": "diagram_readiness",
+      "level": "INFO",
+      "message": "Flowchart   : all 15 sector nodes renderable (no extra data needed)"
+    },
+    {
+      "check": "diagram_readiness",
+      "level": "INFO",
+      "message": "Quadrant    : 15 sectors plottable"
+    },
+    {
+      "check": "diagram_readiness",
+      "level": "INFO",
+      "message": "Sankey      : 15 sectors plottable"
+    }
+  ]
+}

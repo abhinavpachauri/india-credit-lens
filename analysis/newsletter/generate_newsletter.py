@@ -1560,16 +1560,21 @@ def build_markdown(cfg, model, annotations, subsystems):
 
 # ── Entry point ───────────────────────────────────────────────────────────────
 
-def render_mermaid_diagrams(cfg, mermaid_base: Path, output_dir: Path) -> dict[str, str]:
+def render_mermaid_diagrams(cfg, mermaid_base: Path, output_dir: Path) -> dict:
     """
-    Option A: render subsystem .mmd files to PNG using mmdc.
+    Option A: render .mmd files to PNG via mmdc and return as base64 data URLs.
 
-    Discovers .mmd files in mermaid_base matching sub_NN_*.mmd,
-    renders each to output_dir/images/, and returns a dict mapping
-    subsystem_id → absolute PNG path (file:// URL for local HTML).
+    Each newsletter item can specify a 'mermaid_file' path (relative to the
+    newsletter/ directory) pointing to the exact .mmd file to use. If not set,
+    falls back to matching sub_NN_*.mmd files in mermaid_base by sub_id prefix.
+
+    Returns: dict mapping subsystem_id → "data:image/png;base64,..." URL.
+    Images are embedded inline — no hosted URLs needed, works in Substack paste.
 
     Requires: mmdc (npm install -g @mermaid-js/mermaid-cli)
     """
+    import base64
+    import copy
     import shutil
     import subprocess
 
@@ -1581,41 +1586,66 @@ def render_mermaid_diagrams(cfg, mermaid_base: Path, output_dir: Path) -> dict[s
     img_dir = output_dir / "images"
     img_dir.mkdir(parents=True, exist_ok=True)
 
-    mmd_files = sorted(mermaid_base.glob("sub_*.mmd"))
-    if not mmd_files:
-        print(f"  ⚠  No sub_*.mmd files found in {mermaid_base}")
+    # Build list of (sub_id, mmd_path) to render — explicit mermaid_file wins
+    nl_dir = Path(__file__).resolve().parent
+    edit   = cfg.get("editorial", {})
+    tasks: list[tuple[str, Path]] = []
+    seen_sub_ids: set[str] = set()
+
+    for section in ("what_held", "what_changed", "what_new"):
+        for item in edit.get(section, []):
+            sub_id  = item.get("subsystem_id", "")
+            mmd_rel = item.get("mermaid_file", "")
+            if not sub_id or sub_id in seen_sub_ids:
+                continue
+            seen_sub_ids.add(sub_id)
+
+            if mmd_rel:
+                mmd_path = (nl_dir / mmd_rel).resolve()
+                if mmd_path.exists():
+                    tasks.append((sub_id, mmd_path))
+                else:
+                    print(f"  ⚠  mermaid_file not found for {sub_id}: {mmd_path}")
+            else:
+                # Fallback: match sub_NN_*.mmd in mermaid_base
+                matches = sorted(mermaid_base.glob(f"{sub_id}_*.mmd"))
+                if matches:
+                    tasks.append((sub_id, matches[0]))
+                else:
+                    print(f"  ⚠  No .mmd found for {sub_id} in {mermaid_base}")
+
+    if not tasks:
+        print("  ⚠  No mermaid files to render.")
         return {}
 
     rendered: dict[str, str] = {}
-    print(f"\n  Rendering {len(mmd_files)} subsystem diagram(s) via mmdc:")
+    print(f"\n  Rendering {len(tasks)} diagram(s) via mmdc (embedded as base64):")
 
-    for mmd in mmd_files:
-        # Extract sub_id from filename (e.g. sub_01_gold_price... → sub_01)
-        stem   = mmd.stem                              # sub_01_gold_price_at_record_high
-        sub_id = "_".join(stem.split("_")[:2])         # sub_01
-        out_png = img_dir / f"{stem}.png"
-
-        result = subprocess.run(
+    for sub_id, mmd in tasks:
+        out_png = img_dir / f"{mmd.stem}.png"
+        result  = subprocess.run(
             [mmdc, "-i", str(mmd), "-o", str(out_png), "-t", "default", "-b", "white"],
             capture_output=True, text=True,
         )
         if result.returncode == 0 and out_png.exists():
-            rendered[sub_id] = out_png.as_uri()   # file:///... — works in local browser
-            print(f"    ✓  {sub_id} → {out_png.name}  ({out_png.stat().st_size // 1024}K)")
+            with open(out_png, "rb") as f:
+                b64 = base64.b64encode(f.read()).decode("utf-8")
+            rendered[sub_id] = f"data:image/png;base64,{b64}"
+            print(f"    ✓  {sub_id} → {mmd.name}  ({out_png.stat().st_size // 1024}K, embedded)")
         else:
-            print(f"    ✗  {sub_id} — mmdc error: {result.stderr.strip()[:120]}")
+            print(f"    ✗  {sub_id} ({mmd.name}) — {result.stderr.strip()[:120]}")
 
     return rendered
 
 
 def apply_rendered_images(cfg: dict, rendered: dict[str, str]) -> dict:
     """
-    Inject rendered PNG file:// URLs into newsletter_config editorial fields.
-    Only fills image_url where it is currently empty and a rendered PNG exists.
+    Inject base64 image data URLs into newsletter_config editorial fields.
+    Only fills image_url where it is currently empty and a rendered image exists.
     Returns a modified copy of cfg (does not mutate original).
     """
     import copy
-    cfg = copy.deepcopy(cfg)
+    cfg  = copy.deepcopy(cfg)
     edit = cfg.get("editorial", {})
     for section in ("what_held", "what_changed", "what_new"):
         for item in edit.get(section, []):

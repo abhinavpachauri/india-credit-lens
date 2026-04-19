@@ -1,0 +1,27 @@
+---
+title: MSME Formalisation via GST & UDYAM
+---
+flowchart LR
+
+    classDef driverNode fill:#1E3A5F,stroke:#1E3A5F,color:#ffffff
+    classDef sectorNode fill:#F0FDF4,stroke:#166534,color:#166534
+    classDef gapNode fill:#F9FAFB,stroke:#6B7280,color:#374151
+    classDef opportunityNode fill:#0F766E,stroke:#0F766E,color:#ffffff
+    classDef pressureNode fill:#B45309,stroke:#B45309,color:#ffffff
+
+%% --> causes/creates/signals  -.-> suppresses/risk/gap  ==> reroutes  <--> contrast
+
+    driver_msme_formalisation(["MSME Formalisation via GST & UDYAM"])
+    sector_msme_industry["Micro & Small Industry\n+29.2% FY"]
+    opp_msme_credit("MSME Formalisation Credit")
+    pressure_msme_first_cycle_risk[/"MSME First-Cycle Default Risk"/]
+
+    class driver_msme_formalisation driverNode
+    class sector_msme_industry sectorNode
+    class opp_msme_credit opportunityNode
+    class pressure_msme_first_cycle_risk pressureNode
+
+    driver_msme_formalisation --> sector_msme_industry
+    sector_msme_industry --> opp_msme_credit
+    sector_msme_industry -.-> pressure_msme_first_cycle_risk
+    driver_msme_formalisation --> opp_msme_credit

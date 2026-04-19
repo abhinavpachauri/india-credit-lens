@@ -1,0 +1,100 @@
+---
+title: India Credit System — Feb 2026  |  ₹207.5L Cr total  |  +None% YoY
+---
+flowchart TD
+
+%% ── Style classes by node tier ─────────────────────────────────────────
+    classDef driverNode fill:#1E3A5F,stroke:#1E3A5F,color:#ffffff
+    classDef sectorNode fill:#F0FDF4,stroke:#166534,color:#166534
+    classDef gapNode fill:#F9FAFB,stroke:#6B7280,color:#374151
+    classDef opportunityNode fill:#0F766E,stroke:#0F766E,color:#ffffff
+    classDef pressureNode fill:#B45309,stroke:#B45309,color:#ffffff
+
+%% Arrow legend:
+%% -->   causes / creates / signals
+%% -.->  suppresses / creates_risk / creates_gap
+%% ==>   reroutes_demand_to
+%% <-->  contrast
+
+    subgraph DRIVER["⚡ WHAT'S DRIVING THE SYSTEM"]
+        driver_gold_price_surge(["Gold Price at Record High"])
+        driver_rbi_unsecured_tightening(["RBI Unsecured Credit Tightening"])
+        driver_psl_limit_revision(["PSL Housing Limit Revision"])
+        driver_pli_manufacturing(["PLI Manufacturing Capex Wave"])
+        driver_msme_formalisation(["MSME Formalisation via GST & UDYAM"])
+        driver_nbfc_regulatory_recovery(["NBFC Sector Post-Regulatory Recovery"])
+        driver_infra_cycle_maturing(["Infrastructure Capex Cycle Maturing"])
+    end
+
+    subgraph SECTOR["📊 WHERE CREDIT IS MOVING"]
+        sector_bank_credit["Total Bank Credit\n+13.8% FY"]
+        sector_gold_loans["Gold Loans (Personal)\n+107.8% FY"]
+        sector_credit_cards["Credit Card Outstanding\n+2.7% FY"]
+        sector_vehicle_loans["Vehicle Loans\n+16.6% FY"]
+        sector_msme_industry["Micro & Small Industry\n+29.2% FY"]
+        sector_large_corporate["Large Corporate Credit\n+5.7% FY"]
+        sector_nbfcs["NBFC Borrowings from Banks\n+19.1% FY"]
+        sector_all_engineering["All Engineering (Industry)\n+36.0% YoY"]
+        sector_gems_jewellery["Gems & Jewellery (Industry)\n+40.2% YoY"]
+        sector_infrastructure["Infrastructure Credit\n+5.8% FY"]
+        sector_renewable_energy["Renewable Energy PSL\n+35.2% FY"]
+        sector_psl_housing["PSL Housing\n+38.4% FY (classification event)"]
+    end
+
+    subgraph GAP["🔍 DATA GAPS — what we can't see"]
+        gap_psl_housing_reclassification{{"PSL Housing — Classification Distortion"}}
+        gap_nbfc_double_counting{{"NBFC Credit — Double-Counted in System"}}
+        gap_no_feb_yoy{{"No Feb 2026 YoY for Most Sections"}}
+    end
+
+    subgraph OPPORTUNITY["🎯 OPPORTUNITIES — where to play"]
+        opp_gold_lending("Bank Gold Lending Market Share")
+        opp_msme_credit("MSME Formalisation Credit")
+        opp_pli_supply_chain("PLI Anchor Supply Chain Finance")
+        opp_renewable_project_finance("Renewable Energy Project Finance")
+        opp_ev_vehicle_credit("EV-Specific Vehicle Credit")
+    end
+
+    subgraph PRESSURE["⚠️ RISKS — what could break"]
+        pressure_gold_price_reversal[/"Gold Price Retracement Risk"/]
+        pressure_msme_first_cycle_risk[/"MSME First-Cycle Default Risk"/]
+        pressure_unsecured_demand_migration[/"Unsecured Credit Moving to Untracked Channels"/]
+    end
+
+%% ── Apply styles ────────────────────────────────────────────────────────
+    class driver_gold_price_surge,driver_rbi_unsecured_tightening,driver_psl_limit_revision,driver_pli_manufacturing,driver_msme_formalisation,driver_nbfc_regulatory_recovery,driver_infra_cycle_maturing driverNode
+    class sector_bank_credit,sector_gold_loans,sector_credit_cards,sector_vehicle_loans,sector_msme_industry,sector_large_corporate,sector_nbfcs,sector_all_engineering,sector_gems_jewellery,sector_infrastructure,sector_renewable_energy,sector_psl_housing sectorNode
+    class gap_psl_housing_reclassification,gap_nbfc_double_counting,gap_no_feb_yoy gapNode
+    class opp_gold_lending,opp_msme_credit,opp_pli_supply_chain,opp_renewable_project_finance,opp_ev_vehicle_credit opportunityNode
+    class pressure_gold_price_reversal,pressure_msme_first_cycle_risk,pressure_unsecured_demand_migration pressureNode
+
+%% ── Edges ───────────────────────────────────────────────────────────────
+    driver_gold_price_surge --> sector_gold_loans
+    driver_gold_price_surge --> sector_gems_jewellery
+    driver_rbi_unsecured_tightening -.-> sector_credit_cards
+    driver_rbi_unsecured_tightening ==> sector_gold_loans
+    driver_psl_limit_revision --> sector_psl_housing
+    driver_psl_limit_revision -.-> gap_psl_housing_reclassification
+    driver_pli_manufacturing --> sector_all_engineering
+    driver_msme_formalisation --> sector_msme_industry
+    driver_nbfc_regulatory_recovery --> sector_nbfcs
+    driver_infra_cycle_maturing -.-> sector_infrastructure
+    sector_nbfcs --> sector_gold_loans
+    sector_nbfcs --> sector_msme_industry
+    sector_all_engineering --> sector_msme_industry
+    sector_large_corporate <--> sector_msme_industry
+    sector_infrastructure <--> sector_all_engineering
+    sector_nbfcs -.-> gap_nbfc_double_counting
+    sector_gems_jewellery <--> gap_no_feb_yoy
+    sector_gold_loans --> opp_gold_lending
+    sector_msme_industry --> opp_msme_credit
+    sector_all_engineering --> opp_pli_supply_chain
+    sector_renewable_energy --> opp_renewable_project_finance
+    sector_vehicle_loans --> opp_ev_vehicle_credit
+    sector_gold_loans -.-> pressure_gold_price_reversal
+    sector_gems_jewellery -.-> pressure_gold_price_reversal
+    sector_msme_industry -.-> pressure_msme_first_cycle_risk
+    sector_credit_cards -.-> pressure_unsecured_demand_migration
+    gap_no_feb_yoy -.-> sector_bank_credit
+    driver_pli_manufacturing --> opp_pli_supply_chain
+    driver_msme_formalisation --> opp_msme_credit

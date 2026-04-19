@@ -1,0 +1,24 @@
+---
+title: PLI Manufacturing Capex Wave
+---
+flowchart LR
+
+    classDef driverNode fill:#1E3A5F,stroke:#1E3A5F,color:#ffffff
+    classDef sectorNode fill:#F0FDF4,stroke:#166534,color:#166534
+    classDef gapNode fill:#F9FAFB,stroke:#6B7280,color:#374151
+    classDef opportunityNode fill:#0F766E,stroke:#0F766E,color:#ffffff
+    classDef pressureNode fill:#B45309,stroke:#B45309,color:#ffffff
+
+%% --> causes/creates/signals  -.-> suppresses/risk/gap  ==> reroutes  <--> contrast
+
+    driver_pli_manufacturing(["PLI Manufacturing Capex Wave"])
+    sector_all_engineering["All Engineering (Industry)\n+36.0% YoY"]
+    opp_pli_supply_chain("PLI Anchor Supply Chain Finance")
+
+    class driver_pli_manufacturing driverNode
+    class sector_all_engineering sectorNode
+    class opp_pli_supply_chain opportunityNode
+
+    driver_pli_manufacturing --> sector_all_engineering
+    sector_all_engineering --> opp_pli_supply_chain
+    driver_pli_manufacturing --> opp_pli_supply_chain

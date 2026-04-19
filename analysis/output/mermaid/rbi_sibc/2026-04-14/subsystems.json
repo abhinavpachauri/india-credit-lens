@@ -1,0 +1,132 @@
+[
+  {
+    "label": "RBI risk-weight hike on unsecured credit (Nov 2023)",
+    "chart_type": "flowchart",
+    "chart_direction": "LR",
+    "newsletter": true,
+    "drivers": [
+      "driver_gold_price_surge",
+      "driver_rbi_unsecured_tightening"
+    ],
+    "sectors": [
+      "sector_credit_cards",
+      "sector_gold_loans"
+    ],
+    "outcomes": [
+      "gap_jan_series_nulls",
+      "opp_gold_loan_entry",
+      "pressure_unsecured_migration"
+    ],
+    "node_ids": [
+      "driver_gold_price_surge",
+      "driver_rbi_unsecured_tightening",
+      "gap_jan_series_nulls",
+      "opp_gold_loan_entry",
+      "pressure_unsecured_migration",
+      "sector_credit_cards",
+      "sector_gold_loans"
+    ],
+    "id": "sub_01"
+  },
+  {
+    "label": "MSME formalisation via UDYAM + GST data",
+    "chart_type": "flowchart",
+    "chart_direction": "LR",
+    "newsletter": true,
+    "drivers": [
+      "driver_msme_formalisation"
+    ],
+    "sectors": [
+      "sector_msme"
+    ],
+    "outcomes": [
+      "opp_msme_origination"
+    ],
+    "node_ids": [
+      "driver_msme_formalisation",
+      "opp_msme_origination",
+      "sector_msme"
+    ],
+    "id": "sub_02"
+  },
+  {
+    "label": "Infrastructure supercycle completing (FY22\u201324)",
+    "chart_type": "flowchart",
+    "chart_direction": "LR",
+    "newsletter": true,
+    "drivers": [
+      "driver_infra_cycle_maturing"
+    ],
+    "sectors": [
+      "sector_infrastructure"
+    ],
+    "outcomes": [
+      "opp_renewable_energy",
+      "pressure_infrastructure_repayment"
+    ],
+    "node_ids": [
+      "driver_infra_cycle_maturing",
+      "opp_renewable_energy",
+      "pressure_infrastructure_repayment",
+      "sector_infrastructure"
+    ],
+    "id": "sub_03"
+  },
+  {
+    "label": "RBI PSL housing limit revision (Oct 2024)",
+    "chart_type": "flowchart",
+    "chart_direction": "LR",
+    "newsletter": false,
+    "drivers": [
+      "driver_psl_limit_revision"
+    ],
+    "sectors": [
+      "sector_psl_housing"
+    ],
+    "outcomes": [
+      "gap_psl_reclassification"
+    ],
+    "node_ids": [
+      "driver_psl_limit_revision",
+      "gap_psl_reclassification",
+      "sector_psl_housing"
+    ],
+    "id": "sub_04"
+  },
+  {
+    "label": "Data Quality: Total Bank Credit",
+    "chart_type": "flowchart",
+    "chart_direction": "LR",
+    "newsletter": false,
+    "drivers": [],
+    "sectors": [
+      "sector_bank_credit"
+    ],
+    "outcomes": [
+      "gap_food_credit_artifact"
+    ],
+    "node_ids": [
+      "gap_food_credit_artifact",
+      "sector_bank_credit"
+    ],
+    "id": "sub_05"
+  },
+  {
+    "label": "Vehicle Loans Signal",
+    "chart_type": "flowchart",
+    "chart_direction": "LR",
+    "newsletter": false,
+    "drivers": [],
+    "sectors": [
+      "sector_vehicle_loans"
+    ],
+    "outcomes": [
+      "opp_vehicle_ev"
+    ],
+    "node_ids": [
+      "opp_vehicle_ev",
+      "sector_vehicle_loans"
+    ],
+    "id": "sub_06"
+  }
+]

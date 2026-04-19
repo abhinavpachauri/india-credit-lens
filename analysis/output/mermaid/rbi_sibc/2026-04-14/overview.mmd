@@ -1,0 +1,40 @@
+---
+title: System Overview — Jan 2024 – Feb 2026 (merged)  |  6 causal stories
+---
+flowchart LR
+
+    classDef driverNode fill:#1E3A5F,stroke:#1E3A5F,color:#ffffff
+    classDef sectorNode fill:#F0FDF4,stroke:#166534,color:#166534
+    classDef outcomeNode fill:#0F766E,stroke:#0F766E,color:#ffffff
+
+    sub_01_drv(["RBI risk-weight hike on unsecured credit (Nov 2023)"]):::driverNode
+    sub_01_sec["Credit Cards Outstanding"]:::sectorNode
+    sub_01_out("1 opp + 1 risk + 1 gap"):::outcomeNode
+    sub_01_drv --> sub_01_sec
+    sub_01_sec --> sub_01_out
+
+    sub_02_drv(["MSME formalisation via UDYAM + GST data"]):::driverNode
+    sub_02_sec["Micro & Small Enterprises"]:::sectorNode
+    sub_02_out("1 opp"):::outcomeNode
+    sub_02_drv --> sub_02_sec
+    sub_02_sec --> sub_02_out
+
+    sub_03_drv(["Infrastructure supercycle completing (FY22–24)"]):::driverNode
+    sub_03_sec["Infrastructure credit"]:::sectorNode
+    sub_03_out("1 opp + 1 risk"):::outcomeNode
+    sub_03_drv --> sub_03_sec
+    sub_03_sec --> sub_03_out
+
+    sub_04_drv(["RBI PSL housing limit revision (Oct 2024)"]):::driverNode
+    sub_04_sec["PSL Housing"]:::sectorNode
+    sub_04_out("1 gap"):::outcomeNode
+    sub_04_drv --> sub_04_sec
+    sub_04_sec --> sub_04_out
+
+    sub_05_sec["Total Bank Credit"]:::sectorNode
+    sub_05_out("1 gap"):::outcomeNode
+    sub_05_sec --> sub_05_out
+
+    sub_06_sec["Vehicle Loans"]:::sectorNode
+    sub_06_out("1 opp"):::outcomeNode
+    sub_06_sec --> sub_06_out

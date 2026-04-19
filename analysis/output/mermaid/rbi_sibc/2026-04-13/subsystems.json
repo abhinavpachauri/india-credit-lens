@@ -1,0 +1,136 @@
+[
+  {
+    "label": "Gold Price at Record High",
+    "chart_type": "flowchart",
+    "chart_direction": "LR",
+    "newsletter": true,
+    "drivers": [
+      "driver_gold_price_surge",
+      "driver_rbi_unsecured_tightening"
+    ],
+    "sectors": [
+      "sector_credit_cards",
+      "sector_gems_jewellery",
+      "sector_gold_loans"
+    ],
+    "outcomes": [
+      "gap_no_feb_yoy",
+      "opp_gold_lending",
+      "pressure_gold_price_reversal",
+      "pressure_unsecured_demand_migration"
+    ],
+    "node_ids": [
+      "driver_gold_price_surge",
+      "driver_rbi_unsecured_tightening",
+      "gap_no_feb_yoy",
+      "opp_gold_lending",
+      "pressure_gold_price_reversal",
+      "pressure_unsecured_demand_migration",
+      "sector_credit_cards",
+      "sector_gems_jewellery",
+      "sector_gold_loans"
+    ],
+    "id": "sub_01"
+  },
+  {
+    "label": "NBFC Sector Post-Regulatory Recovery",
+    "chart_type": "flowchart",
+    "chart_direction": "LR",
+    "newsletter": true,
+    "drivers": [
+      "driver_nbfc_regulatory_recovery"
+    ],
+    "sectors": [
+      "sector_nbfcs"
+    ],
+    "outcomes": [
+      "gap_nbfc_double_counting"
+    ],
+    "node_ids": [
+      "driver_nbfc_regulatory_recovery",
+      "gap_nbfc_double_counting",
+      "sector_nbfcs"
+    ],
+    "id": "sub_02"
+  },
+  {
+    "label": "MSME Formalisation via GST & UDYAM",
+    "chart_type": "flowchart",
+    "chart_direction": "LR",
+    "newsletter": true,
+    "drivers": [
+      "driver_msme_formalisation"
+    ],
+    "sectors": [
+      "sector_msme_industry"
+    ],
+    "outcomes": [
+      "opp_msme_credit",
+      "pressure_msme_first_cycle_risk"
+    ],
+    "node_ids": [
+      "driver_msme_formalisation",
+      "opp_msme_credit",
+      "pressure_msme_first_cycle_risk",
+      "sector_msme_industry"
+    ],
+    "id": "sub_03"
+  },
+  {
+    "label": "PLI Manufacturing Capex Wave",
+    "chart_type": "flowchart",
+    "chart_direction": "LR",
+    "newsletter": false,
+    "drivers": [
+      "driver_pli_manufacturing"
+    ],
+    "sectors": [
+      "sector_all_engineering"
+    ],
+    "outcomes": [
+      "opp_pli_supply_chain"
+    ],
+    "node_ids": [
+      "driver_pli_manufacturing",
+      "opp_pli_supply_chain",
+      "sector_all_engineering"
+    ],
+    "id": "sub_04"
+  },
+  {
+    "label": "Renewable Energy PSL Signal",
+    "chart_type": "flowchart",
+    "chart_direction": "LR",
+    "newsletter": false,
+    "drivers": [],
+    "sectors": [
+      "sector_renewable_energy"
+    ],
+    "outcomes": [
+      "opp_renewable_project_finance"
+    ],
+    "node_ids": [
+      "opp_renewable_project_finance",
+      "sector_renewable_energy"
+    ],
+    "id": "sub_05"
+  },
+  {
+    "label": "Vehicle Loans Signal",
+    "chart_type": "flowchart",
+    "chart_direction": "LR",
+    "newsletter": false,
+    "drivers": [],
+    "sectors": [
+      "sector_vehicle_loans"
+    ],
+    "outcomes": [
+      "opp_ev_vehicle_credit"
+    ],
+    "node_ids": [
+      "opp_ev_vehicle_credit",
+      "sector_vehicle_loans"
+    ],
+    "id": "sub_06"
+  }
+]
