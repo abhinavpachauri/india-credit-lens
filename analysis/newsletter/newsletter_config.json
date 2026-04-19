@@ -10,7 +10,8 @@
     "annotations_path": "../../web/lib/reports/rbi_sibc.ts",
     "subsystems_path": "../rbi_sibc/merged/subsystems.json",
     "prev_period_path": "../rbi_sibc/2026-02-27",
-    "overview_mermaid_file": "../output/mermaid/rbi_sibc/2026-04-14/overview.mmd",
+    "current_period_model_path": "../rbi_sibc/2026-03-30/system_model.json",
+    "prev_issue_url": "https://indiacreditlens.substack.com/p/issue-1",
     "note": "delta_v2 format — flat signals[] ordered by editorial priority: new first, then correction, then confirmed. Diagram shown for new + correction; confirmed links back to prev issue. Numbers come from system_model.json + annotations."
   },
 
@@ -34,7 +35,7 @@
         "story_arc": "The Acceleration Nobody Computed",
         "signal": "FY26 is accelerating above FY25 — invisible in any single RBI file",
         "subsystem_id": "sub_06",
-        "mermaid_file": "../output/mermaid/rbi_sibc/2026-04-14/overview.mmd",
+        "mermaid_file": null,
         "stat": "13.8% FY26 vs 11.0% FY25",
         "body": "Total bank credit FY26 is tracking at 13.8% (Feb 2026 vs Mar 2025) against FY25's full-year 11.0%. To compute this you need the Feb 2026 outstanding figure and the Mar 2025 base — which come from two different SIBC files. No single publication contains both. The merged series makes this comparison possible for the first time. The acceleration is not a base effect: it is consistent across both periods in the series.",
         "implication": "Any lending portfolio that grew less than 13% in FY26 to February has lost market share in an expanding system. The system is in genuine structural expansion — not post-COVID recovery, not base effect.",
