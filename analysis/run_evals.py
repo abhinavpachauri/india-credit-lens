@@ -13,6 +13,10 @@ Checks run (in order):
   2.  validate_annotations.py       on rbi_sibc/<period>/annotations_draft.ts
   2b. validate_content.py           on annotations_draft.ts + insights/gaps/opp .md
                                      checks dates, growth rates, ₹ values vs sections.json
+  2c. validate_claims.py            on rbi_sibc/<period>/system_model.json
+                                     checks claim_type + source on driver/opp/pressure/gap nodes
+                                     FAIL if claim_type missing or inference has no source
+                                     WARN (non-blocking) if hypothesis nodes present
   3.  validate_annotations.py       on web/lib/reports/rbi_sibc.ts  (live)
   4.  validate.py                   on rbi_sibc/<period>/system_model.json
   5.  validate.py --check-subsystems on system_model.json + subsystems.json
@@ -217,6 +221,15 @@ def check_content(period_dir, sections_path):
     return run_check("content", cmd, cwd=ANALYSIS)
 
 
+def check_claims(period_dir):
+    """Check 2c: validate claim_type + source on driver/opportunity/pressure/gap nodes."""
+    model_path = period_dir / "system_model.json"
+    if not model_path.exists():
+        return None, "", f"system_model.json not found — skipping claim check"
+    cmd = [sys.executable, str(ANALYSIS / "validate_claims.py"), str(model_path)]
+    return run_check("claims", cmd, cwd=ANALYSIS)
+
+
 def check_subsystems(period_dir, subsystems_path):
     model_path = period_dir / "system_model.json"
     if not model_path.exists():
@@ -364,6 +377,23 @@ def main():
             # Extract the summary line from stdout for display
             summary_lines = [l.strip() for l in (out + err).splitlines() if '✅' in l or '⚠️' in l]
             notes = summary_lines[-1][:50] if summary_lines else "passed"
+        results.append((label, passed, notes))
+        if not passed:
+            print(out)
+            print(err, file=sys.stderr)
+
+    # ── Check 2c: claim sourcing (claim_type + source on system model nodes) ──
+    passed, out, err = check_claims(period_dir)
+    label = "2c. claim sourcing (system_model.json)"
+    if passed is None:
+        results.append((label, None, err))
+    else:
+        notes = one_line_summary(out, err, passed)
+        # Extract hypothesis warning line for display if present
+        for line in (out + err).splitlines():
+            if "hypothesis" in line.lower() and ("◈" in line or "warn" in line.lower()):
+                notes = line.strip()[:50]
+                break
         results.append((label, passed, notes))
         if not passed:
             print(out)

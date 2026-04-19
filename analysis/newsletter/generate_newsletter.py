@@ -23,9 +23,7 @@ Usage:
     python3 generate_newsletter.py newsletter_config.json
 
 Output:
-    output/newsletter_YYYY-MM-DD.html           ← styled archive version
-    output/newsletter_YYYY-MM-DD_substack.html  ← paste into Substack HTML block
-    output/newsletter_YYYY-MM-DD.md             ← markdown version
+    output/newsletter_YYYY-MM-DD_substack.html  ← paste into Substack editor
 """
 
 import json
@@ -2500,9 +2498,7 @@ def generate(config_path=None, output_dir=None, render_diagrams=False):
     os.makedirs(output_dir, exist_ok=True)
 
     today = str(date.today())
-    html_path     = os.path.join(output_dir, f"newsletter_{today}.html")
     substack_path = os.path.join(output_dir, f"newsletter_{today}_substack.html")
-    md_path       = os.path.join(output_dir, f"newsletter_{today}.md")
 
     if fmt in ("delta_v1", "delta_v2"):
         # Auto-render diagrams if --render-diagrams flag is set
@@ -2543,30 +2539,18 @@ def generate(config_path=None, output_dir=None, render_diagrams=False):
             else:
                 print("  ⚠  csv_path/curr_date/prev_year_month not set — scoreboard uses model FY stats")
 
-            html     = build_delta_v2_html(cfg, model, period_model, subsystems, annotations, yoy_lookup)
             substack = build_delta_v2_substack(cfg, model, period_model, subsystems, annotations, yoy_lookup)
-            md       = build_delta_v2_markdown(cfg, model, period_model, subsystems, annotations, yoy_lookup)
         else:
-            html     = build_delta_html(cfg, model, subsystems)
             substack = build_delta_substack(cfg, model, subsystems)
-            md       = build_delta_markdown(cfg, model, subsystems)
     else:
-        html     = build_html(cfg, model, annotations, subsystems)
         substack = build_substack_html(cfg, model, annotations, subsystems)
-        md       = build_markdown(cfg, model, annotations, subsystems)
 
-    with open(html_path, "w", encoding="utf-8") as f:
-        f.write(html)
     with open(substack_path, "w", encoding="utf-8") as f:
         f.write(substack)
-    with open(md_path, "w", encoding="utf-8") as f:
-        f.write(md)
 
-    wc = len(md.split())
+    wc = len(substack.split())
 
-    print(f"\n  ✓  HTML     (archive)  : {html_path}")
-    print(f"  ✓  HTML     (substack) : {substack_path}")
-    print(f"  ✓  MD                  : {md_path}")
+    print(f"\n  ✓  Substack HTML : {substack_path}")
     print(f"\n     Format           : {fmt}")
     print(f"     Period           : {cfg['_meta'].get('period', '')}")
 
@@ -2614,8 +2598,7 @@ def generate(config_path=None, output_dir=None, render_diagrams=False):
                 print(f"       {tier:<12} {count}")
 
     print(f"     Word count       : ~{wc}")
-    print(f"\n  → Substack: open newsletter_{today}_substack.html in browser → Select All → Copy → paste into Substack editor")
-    print(f"  → Archive:  newsletter_{today}.html — full styled version\n")
+    print(f"\n  → Open newsletter_{today}_substack.html in browser → Select All → Copy → paste into Substack editor\n")
 
 
 if __name__ == "__main__":

@@ -202,9 +202,20 @@ Produce nodes across five tiers:
   "description": "1–2 sentences. For derived nodes, paraphrase from annotation body — do not add new interpretation.",
   "stat": "+14.6% YoY or null",
   "value_lcr": 204.8,
-  "annotation_ids": ["exact-id-from-output-1", "another-id"]
+  "annotation_ids": ["exact-id-from-output-1", "another-id"],
+  "claim_type": "data | inference | hypothesis",
+  "source": "exact citation — e.g. \"RBI Circular RBI/2023-24/73, Nov 2023\"",
+  "source_url": "public URL if available, else \"\""
 }
 ```
+
+**`claim_type` / `source` / `source_url` — mandatory on every driver, opportunity, pressure, and gap node:**
+
+- `"data"` — directly observable in the SIBC data attached. No external source needed. Growth rates, outstanding values, trends visible in sections.json.
+- `"inference"` — causal explanation that references something outside the SIBC data (RBI circulars, government schemes, macro context). Requires a real source citation — name the document, circular number, or dataset. Do not use "SIBC data" as source for an inference.
+- `"hypothesis"` — forward-looking or unverifiable claim. Allowed but must be explicit. The sourcing pipeline will attempt to find a source; if none found, it stays as hypothesis and is flagged in the newsletter.
+
+Sector nodes do not need `claim_type`/`source`/`source_url` — they are data nodes by definition.
 
 **`annotation_ids` hard constraint:** every string must exactly match an `id` field
 from the ANNOTATIONS object produced in Output 1. Copy-paste, do not retype.
@@ -291,6 +302,10 @@ by being referenced in at least one edge or having 2+ annotation_ids.
 - [ ] Every opportunity and pressure node has at least one incoming edge from a sector node
 - [ ] Gap nodes with `is_data_gap` or `creates_gap` edges are flagged in gaps.md too
 - [ ] Total edges are between 15–40 (fewer = incomplete, more = unreadable diagram)
+- [ ] Every driver, opportunity, pressure, and gap node has a `claim_type` field
+- [ ] Nodes with claim_type "inference" have a non-empty `source` field (not "SIBC data")
+- [ ] Nodes with claim_type "hypothesis" have `claim_type` explicitly set (not left blank)
+- [ ] No node description asserts external facts (EV sales figures, capex wave timing, government scheme approvals) without claim_type = "inference" or "hypothesis"
 
 ---
 
