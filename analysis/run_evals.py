@@ -222,8 +222,15 @@ def check_content(period_dir, sections_path):
 
 
 def check_claims(period_dir):
-    """Check 2c: validate claim_type + source on driver/opportunity/pressure/gap nodes."""
-    model_path = period_dir / "system_model.json"
+    """Check 2c: validate claim_type + source on merged system model nodes.
+
+    Always checks the merged model — that is the authoritative source of cross-period
+    structural claims (drivers, opportunities, pressures, gaps). Per-period models are
+    raw analysis snapshots and are not subject to this check.
+    """
+    # Always validate the merged model regardless of which per-period is active
+    merged_model = ANALYSIS / "rbi_sibc" / "merged" / "system_model.json"
+    model_path = merged_model if merged_model.exists() else period_dir / "system_model.json"
     if not model_path.exists():
         return None, "", f"system_model.json not found — skipping claim check"
     cmd = [sys.executable, str(ANALYSIS / "validate_claims.py"), str(model_path)]
@@ -315,8 +322,8 @@ def one_line_summary(stdout, stderr, passed):
 
 def main():
     ap = argparse.ArgumentParser(description="Run all India Credit Lens eval checks")
-    ap.add_argument("--period",     default="2026-02-27",
-                    help="Period directory name under analysis/rbi_sibc/ (default: 2026-02-27)")
+    ap.add_argument("--period",     default="2026-03-30",
+                    help="Period directory name under analysis/rbi_sibc/ (default: 2026-03-30)")
     ap.add_argument("--merged",     action="store_true",
                     help="Also run merged-continuity check on sections.json")
     ap.add_argument("--skip-build", action="store_true",

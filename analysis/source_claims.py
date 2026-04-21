@@ -44,6 +44,7 @@ import os
 import sys
 import copy
 import argparse
+import time
 from pathlib import Path
 from datetime import date
 
@@ -121,10 +122,14 @@ If no credible source is found, set found=false, claim_type="hypothesis", source
 Do not fabricate URLs or citations. If uncertain, say so in rationale."""
 
 
-def source_node(client: anthropic.Anthropic, node: dict, dry_run: bool = False) -> dict:
+def source_node(client: anthropic.Anthropic, node: dict, dry_run: bool = False,
+                delay: int = 30) -> dict:
     """
     Attempt to source a single node. Returns updated node dict.
+    delay: seconds to wait before the API call (rate-limit guard, default 30s).
     """
+    import re
+
     nid   = node.get("id", "?")
     label = node.get("label", "")
     tier  = node.get("tier", "")
@@ -136,8 +141,14 @@ def source_node(client: anthropic.Anthropic, node: dict, dry_run: bool = False) 
         print(f"    → DRY RUN — skipping API call")
         return node
 
+    if delay > 0:
+        print(f"    ⏳ waiting {delay}s (rate-limit guard)…")
+        time.sleep(delay)
+
     prompt = build_source_prompt(node)
 
+    # ── API call with one rate-limit retry ────────────────────────────────────
+    response = None
     try:
         response = client.messages.create(
             model="claude-opus-4-5",
@@ -145,54 +156,26 @@ def source_node(client: anthropic.Anthropic, node: dict, dry_run: bool = False) 
             tools=[{"type": "web_search_20250305", "name": "web_search", "max_uses": 3}],
             messages=[{"role": "user", "content": prompt}],
         )
-
-        # Extract text content from response
-        result_text = ""
-        for block in response.content:
-            if hasattr(block, "text"):
-                result_text += block.text
-
-        # Parse JSON from response
-        import re
-        json_match = re.search(r'\{[^{}]*"found"[^{}]*\}', result_text, re.DOTALL)
-        if not json_match:
-            print(f"    ⚠  Could not parse JSON response — keeping as hypothesis")
+    except anthropic.RateLimitError as e:
+        backoff = 90
+        print(f"    ⚠  Rate limit — backing off {backoff}s then retrying…")
+        time.sleep(backoff)
+        try:
+            response = client.messages.create(
+                model="claude-opus-4-5",
+                max_tokens=1024,
+                tools=[{"type": "web_search_20250305", "name": "web_search", "max_uses": 3}],
+                messages=[{"role": "user", "content": prompt}],
+            )
+        except anthropic.APIError as e2:
+            print(f"    ✗  API error after retry: {e2} — keeping as hypothesis")
             node = copy.deepcopy(node)
             node["claim_type"]           = "hypothesis"
             node["source"]               = ""
             node["source_url"]           = ""
             node["source_verified_date"] = TODAY
-            node["source_rationale"]     = "Auto-sourcing failed to parse response"
+            node["source_rationale"]     = f"API error during sourcing: {str(e2)[:80]}"
             return node
-
-        result = json.loads(json_match.group())
-        found       = result.get("found", False)
-        claim_type  = result.get("claim_type", "hypothesis")
-        source      = result.get("source", "")
-        source_url  = result.get("source_url", "")
-        excerpt     = result.get("source_excerpt", "")
-        confidence  = result.get("confidence", "low")
-        rationale   = result.get("rationale", "")
-
-        node = copy.deepcopy(node)
-        node["claim_type"]           = claim_type
-        node["source"]               = source
-        node["source_url"]           = source_url
-        node["source_verified_date"] = TODAY
-
-        if excerpt:
-            node["source_excerpt"] = excerpt
-        if rationale:
-            node["source_rationale"] = rationale
-
-        if found and claim_type == "inference":
-            print(f"    ✓  Upgraded to inference")
-            print(f"       source: {source[:80]}")
-            if source_url:
-                print(f"       url   : {source_url[:80]}")
-        else:
-            print(f"    ◈  Remains hypothesis — {rationale[:70]}")
-
     except anthropic.APIError as e:
         print(f"    ✗  API error: {e} — keeping as hypothesis")
         node = copy.deepcopy(node)
@@ -201,6 +184,50 @@ def source_node(client: anthropic.Anthropic, node: dict, dry_run: bool = False) 
         node["source_url"]           = ""
         node["source_verified_date"] = TODAY
         node["source_rationale"]     = f"API error during sourcing: {str(e)[:80]}"
+        return node
+
+    # ── Parse response ────────────────────────────────────────────────────────
+    result_text = ""
+    for block in response.content:
+        if hasattr(block, "text"):
+            result_text += block.text
+
+    json_match = re.search(r'\{[^{}]*"found"[^{}]*\}', result_text, re.DOTALL)
+    if not json_match:
+        print(f"    ⚠  Could not parse JSON response — keeping as hypothesis")
+        node = copy.deepcopy(node)
+        node["claim_type"]           = "hypothesis"
+        node["source"]               = ""
+        node["source_url"]           = ""
+        node["source_verified_date"] = TODAY
+        node["source_rationale"]     = "Auto-sourcing failed to parse response"
+        return node
+
+    result     = json.loads(json_match.group())
+    found      = result.get("found", False)
+    claim_type = result.get("claim_type", "hypothesis")
+    source     = result.get("source", "")
+    source_url = result.get("source_url", "")
+    excerpt    = result.get("source_excerpt", "")
+    rationale  = result.get("rationale", "")
+
+    node = copy.deepcopy(node)
+    node["claim_type"]           = claim_type
+    node["source"]               = source
+    node["source_url"]           = source_url
+    node["source_verified_date"] = TODAY
+    if excerpt:
+        node["source_excerpt"]   = excerpt
+    if rationale:
+        node["source_rationale"] = rationale
+
+    if found and claim_type == "inference":
+        print(f"    ✓  Upgraded to inference")
+        print(f"       source: {source[:80]}")
+        if source_url:
+            print(f"       url   : {source_url[:80]}")
+    else:
+        print(f"    ◈  Remains hypothesis — {rationale[:70]}")
 
     return node
 
@@ -241,6 +268,8 @@ def main():
                     help="Show what would be sourced without calling the API")
     ap.add_argument("--force", action="store_true",
                     help="Re-source nodes that already have a source (useful for re-verification)")
+    ap.add_argument("--delay", type=int, default=30,
+                    help="Seconds to wait between API calls (default: 30, set 0 to disable)")
     args = ap.parse_args()
 
     model_path = Path(args.model_path).resolve()
@@ -268,6 +297,8 @@ def main():
     print(f"  Needs sourcing: {len(to_source)}")
     if args.dry_run:
         print(f"  DRY RUN — no API calls will be made")
+    elif args.delay > 0:
+        print(f"  Delay: {args.delay}s between calls  (~{args.delay * len(to_source) // 60}min total)")
     print()
 
     if not to_source:
@@ -291,7 +322,7 @@ def main():
             updated_nodes.append(node)
             continue
 
-        updated = source_node(client, node, dry_run=args.dry_run)
+        updated = source_node(client, node, dry_run=args.dry_run, delay=args.delay)
         updated_nodes.append(updated)
 
         ct = updated.get("claim_type", "")

@@ -803,6 +803,122 @@ def build_delta_series_reveals(what_new: list) -> str:
 
 # ── delta_v2 builders ─────────────────────────────────────────────────────────
 
+def _source_entries_for_sub(subsystem_id, subsystems, id_to_node):
+    """Return deduplicated list of (label, url) for inference/data nodes in a subsystem."""
+    sub = next((s for s in subsystems if s.get("id") == subsystem_id), None)
+    if not sub:
+        return []
+    seen_urls = set()
+    entries = []
+    for nid in sub.get("node_ids", []):
+        n = id_to_node.get(nid)
+        if not n:
+            continue
+        ct  = n.get("claim_type", "")
+        src = n.get("source", "").strip()
+        url = n.get("source_url", "").strip()
+        if ct not in ("inference", "data") or not src:
+            continue
+        # Deduplicate by URL (same circular cited by multiple nodes)
+        key = url or src
+        if key in seen_urls:
+            continue
+        seen_urls.add(key)
+        # Shorten source label: take up to first semicolon or 90 chars
+        short = src.split(";")[0].split(",")[0].strip()
+        if len(short) > 90:
+            short = short[:87] + "…"
+        entries.append((short, url))
+    return entries
+
+
+def _sources_block_html(subsystem_id, subsystems, id_to_node):
+    """Render a compact sources footnote block for a signal card (HTML)."""
+    entries = _source_entries_for_sub(subsystem_id, subsystems, id_to_node)
+    if not entries:
+        return ""
+    rows = ""
+    for label, url in entries:
+        if url:
+            rows += (
+                f'<div style="margin-bottom:3px">'
+                f'<span style="color:#6b7280">↗</span> '
+                f'<a href="{url}" style="color:#4b5563;text-decoration:underline;'
+                f'text-underline-offset:2px">{label}</a>'
+                f'</div>'
+            )
+        else:
+            rows += (
+                f'<div style="margin-bottom:3px">'
+                f'<span style="color:#6b7280">↗ {label}</span>'
+                f'</div>'
+            )
+    return (
+        f'<div style="margin-top:16px;padding:12px 16px;'
+        f'background:#f9fafb;border-radius:2px;border-top:1px solid #e5e7eb">'
+        f'<div style="font-family:system-ui,sans-serif;font-size:0.68em;font-weight:700;'
+        f'text-transform:uppercase;letter-spacing:0.8px;color:#9ca3af;margin-bottom:6px">'
+        f'Sources</div>'
+        f'<div style="font-family:system-ui,sans-serif;font-size:0.75em;line-height:1.6;color:#6b7280">'
+        + rows
+        + f'</div></div>'
+    )
+
+
+def _sources_block_substack(subsystem_id, subsystems, id_to_node):
+    """Render sources footnote for Substack (plain HTML, no inline styles needed)."""
+    entries = _source_entries_for_sub(subsystem_id, subsystems, id_to_node)
+    if not entries:
+        return ""
+    lines = ["<p><em>Sources:</em></p><ul>"]
+    for label, url in entries:
+        if url:
+            lines.append(f'<li><a href="{url}">{label}</a></li>')
+        else:
+            lines.append(f'<li>{label}</li>')
+    lines.append("</ul>")
+    return "\n".join(lines)
+
+
+def _hypothesis_nodes_for_sub(subsystem_id, subsystems, id_to_node):
+    """Return list of hypothesis nodes linked to a subsystem (any node_ids field)."""
+    sub = next((s for s in subsystems if s.get("id") == subsystem_id), None)
+    if not sub:
+        return []
+    all_ids = sub.get("node_ids", [])
+    return [
+        id_to_node[nid] for nid in all_ids
+        if nid in id_to_node and id_to_node[nid].get("claim_type") == "hypothesis"
+    ]
+
+
+def _hypothesis_note_html(subsystem_id, subsystems, id_to_node):
+    """Amber inline note listing hypothesis nodes for a signal card (HTML)."""
+    nodes = _hypothesis_nodes_for_sub(subsystem_id, subsystems, id_to_node)
+    if not nodes:
+        return ""
+    labels = "; ".join(n["label"] for n in nodes)
+    return (
+        f'<div style="margin-top:14px;padding:10px 14px;'
+        f'background:#fffbeb;border-left:3px solid #d97706;border-radius:0 2px 2px 0">'
+        f'<span style="font-family:system-ui,sans-serif;font-size:0.75em;font-weight:700;'
+        f'color:#92400e;text-transform:uppercase;letter-spacing:0.8px">⚠ Working hypothesis</span>'
+        f'<p style="margin:4px 0 0;font-family:system-ui,sans-serif;font-size:0.78em;'
+        f'color:#78350f;line-height:1.55">'
+        f'{labels} — mechanism inferred from data pattern; not yet independently sourced.</p>'
+        f'</div>'
+    )
+
+
+def _hypothesis_note_substack(subsystem_id, subsystems, id_to_node):
+    """Plain-text hypothesis note for Substack signal blocks."""
+    nodes = _hypothesis_nodes_for_sub(subsystem_id, subsystems, id_to_node)
+    if not nodes:
+        return ""
+    labels = "; ".join(n["label"] for n in nodes)
+    return f'<p><em>⚠ Working hypothesis: {labels} — mechanism inferred from data pattern, not independently sourced.</em></p>'
+
+
 def _d2_outcomes(subsystem_id, subsystems, id_to_node, annotations):
     """Return rendered outcome cards (✅/⚠️/🔍) for a subsystem."""
     sub = next((s for s in subsystems if s.get("id") == subsystem_id), None)
@@ -906,6 +1022,8 @@ def _d2_signal_new_html(item, subsystems, id_to_node, annotations):
         + (f'<p style="margin:0;color:#7eb8e8;font-style:italic;font-size:0.86em;'
            f'line-height:1.65;border-top:1px solid rgba(126,184,232,0.2);padding-top:12px">'
            f'{implication}</p>' if implication else '')
+        + _hypothesis_note_html(item.get("subsystem_id",""), subsystems, id_to_node)
+        + _sources_block_html(item.get("subsystem_id",""), subsystems, id_to_node)
         + f'</div>'
         + _d2_diagram_html(item)
         + outcomes
@@ -943,6 +1061,8 @@ def _d2_signal_correction_html(item, subsystems, id_to_node, annotations):
         + (f'<p style="margin:0;color:#78350f;font-size:0.88em;line-height:1.7;'
            f'border-top:1px solid rgba(180,83,9,0.15);padding-top:12px">'
            f'<strong>Implication:</strong> {implication}</p>' if implication else '')
+        + _hypothesis_note_html(item.get("subsystem_id",""), subsystems, id_to_node)
+        + _sources_block_html(item.get("subsystem_id",""), subsystems, id_to_node)
         + f'</div>'
         + _d2_diagram_html(item)
         + outcomes
@@ -950,7 +1070,7 @@ def _d2_signal_correction_html(item, subsystems, id_to_node, annotations):
     )
 
 
-def _d2_signal_confirmed_html(item, prev_issue_url=""):
+def _d2_signal_confirmed_html(item, subsystems, id_to_node, prev_issue_url=""):
     """▲ CONFIRMED card — compact green row: badge + stat delta + CTA link only."""
     story_arc      = item.get("story_arc", "")
     signal         = item.get("signal", "")
@@ -959,10 +1079,13 @@ def _d2_signal_confirmed_html(item, prev_issue_url=""):
     prev_issue_num = item.get("prev_issue_number", 1)
     cta_url        = prev_issue_url or "#"
 
+    sub_id   = item.get("subsystem_id", "")
+    hyp_note = _hypothesis_note_html(sub_id, subsystems, id_to_node)
+    src_block = _sources_block_html(sub_id, subsystems, id_to_node)
     return (
-        f'<div style="margin:16px 0;padding:16px 20px;background:#F0FDF4;'
-        f'border-left:3px solid #166534;border-radius:0 2px 2px 0;'
-        f'display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap">'
+        f'<div style="margin:16px 0;background:#F0FDF4;'
+        f'border-left:3px solid #166534;border-radius:0 2px 2px 0">'
+        f'<div style="padding:16px 20px;display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap">'
         + _badge_pill(badge, "#166534", "#dcfce7")
         + f'<div style="flex:1;min-width:200px">'
         f'<div style="font-family:system-ui,sans-serif;font-weight:700;'
@@ -976,6 +1099,9 @@ def _d2_signal_confirmed_html(item, prev_issue_url=""):
         f'border-radius:2px;text-decoration:none;white-space:nowrap">'
         f'Full analysis → Issue #{prev_issue_num}</a>'
         f'</div>'
+        + (f'<div style="padding:0 20px 8px">{hyp_note}</div>' if hyp_note else '')
+        + (f'<div style="padding:0 20px 16px">{src_block}</div>' if src_block else '')
+        + f'</div>'
     )
 
 
@@ -992,7 +1118,7 @@ def build_d2_signals_html(signals, subsystems, id_to_node, annotations, prev_iss
         elif t == "correction":
             correction_blocks += _d2_signal_correction_html(item, subsystems, id_to_node, annotations)
         elif t == "confirmed":
-            confirmed_blocks += _d2_signal_confirmed_html(item, prev_issue_url)
+            confirmed_blocks += _d2_signal_confirmed_html(item, subsystems, id_to_node, prev_issue_url)
 
     # Group confirmed signals under a single sub-heading
     confirmed_section = ""
@@ -1267,6 +1393,10 @@ def build_delta_v2_substack(cfg, model, period_model, subsystems, annotations, y
                 p.append(f'<p>{item["body"]}</p>')
             if item.get("implication"):
                 p.append(f'<blockquote><p><em>{item["implication"]}</em></p></blockquote>')
+            hyp = _hypothesis_note_substack(sub_id, subsystems, id_to_node)
+            if hyp: p.append(hyp)
+            src = _sources_block_substack(sub_id, subsystems, id_to_node)
+            if src: p.append(src)
             p.append(_d2_diagram_substack(item))
 
         elif t == "correction":
@@ -1277,6 +1407,10 @@ def build_delta_v2_substack(cfg, model, period_model, subsystems, annotations, y
             p.append(f'<p><strong>What it actually is:</strong> {item.get("curr_read","")}</p>')
             if item.get("implication"):
                 p.append(f'<blockquote><p><strong>Implication:</strong> {item["implication"]}</p></blockquote>')
+            hyp = _hypothesis_note_substack(sub_id, subsystems, id_to_node)
+            if hyp: p.append(hyp)
+            src = _sources_block_substack(sub_id, subsystems, id_to_node)
+            if src: p.append(src)
             p.append(_d2_diagram_substack(item))
 
         elif t == "confirmed":
@@ -1291,6 +1425,10 @@ def build_delta_v2_substack(cfg, model, period_model, subsystems, annotations, y
                 f'{curr_stat}<br>'
                 f'<a href="{cta_url}">Full analysis → Issue #{prev_num}</a></p>'
             )
+            hyp = _hypothesis_note_substack(sub_id, subsystems, id_to_node)
+            if hyp: p.append(hyp)
+            src = _sources_block_substack(sub_id, subsystems, id_to_node)
+            if src: p.append(src)
             # No diagram, no outcomes for confirmed
             continue
 
