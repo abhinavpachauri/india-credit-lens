@@ -111,7 +111,33 @@ def check_web_data():
 
     dupe_count, row_count = count_dupes(csv_path)
 
+    def check_canonical_dates(path):
+        """All dates must be the last day of their month (canonical period-end)."""
+        from calendar import monthrange
+        df = pd.read_csv(path, dtype=str)
+        bad = []
+        for raw in df["date"].dropna().unique():
+            try:
+                d = pd.to_datetime(raw).date()
+            except Exception:
+                bad.append(f"unparseable: {raw}")
+                continue
+            # Apr 1-7 should have been normalised to Mar 31
+            if d.month == 4 and d.day <= 7:
+                bad.append(f"{raw} (should be {d.year}-03-31 — Apr fortnightly not normalised)")
+                continue
+            last = monthrange(d.year, d.month)[1]
+            if d.day != last:
+                bad.append(f"{raw} (should be {d.year}-{d.month:02d}-{last:02d})")
+        return bad
+
     if dupe_count == 0:
+        bad_dates = check_canonical_dates(csv_path)
+        if bad_dates:
+            return False, "", (
+                f"{len(bad_dates)} non-canonical date(s) — run update_web_data.py to normalise: "
+                + "; ".join(bad_dates[:3])
+            )
         return True, f"{row_count} rows, 0 duplicate months", ""
 
     # ── Duplicates found — auto-fix via update_web_data.py ───────────────────

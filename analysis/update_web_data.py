@@ -29,6 +29,8 @@ import argparse
 import json
 import shutil
 import sys
+from calendar import monthrange
+from datetime import date as date_type
 from pathlib import Path
 
 import pandas as pd
@@ -43,6 +45,78 @@ CONSOLIDATED  = RBI_ANALYTICS / "consolidated" / "consolidated_long.csv"
 WEB_CSV       = WEB_DATA / "rbi_sibc_consolidated.csv"
 
 sys.path.insert(0, str(RBI_ANALYTICS))
+
+
+def _canonical_month_end(d: date_type) -> date_type:
+    """
+    Map a raw RBI publication date to the canonical last day of its reporting period.
+
+    Rules:
+      - Apr 1–7  →  Mar 31 of the same year
+            RBI publishes the fortnightly Bank Credit figure (Statement 1:
+            Bank Credit, Food Credit, Non-food Credit) on the first Friday
+            after March year-end — typically Apr 4–5. That figure is the
+            March snapshot, not April's.
+      - All other dates  →  last calendar day of the same month
+            Weekly sector snapshots land on Fridays within the month
+            (e.g. Jan 24, Mar 22). Mapping them to month-end makes every
+            period's data land on a single x-axis point in the dashboard.
+
+    Examples:
+      2024-04-05  →  2024-03-31   (Apr fortnightly → Mar year-end)
+      2025-04-04  →  2025-03-31
+      2024-03-22  →  2024-03-31   (weekly sector snapshot)
+      2025-03-21  →  2025-03-31
+      2024-01-26  →  2024-01-31
+      2024-02-23  →  2024-02-29   (2024 is a leap year)
+      2025-02-21  →  2025-02-28
+      2026-03-31  →  2026-03-31   (already canonical)
+    """
+    if d.month == 4 and d.day <= 7:
+        return date_type(d.year, 3, 31)
+    last_day = monthrange(d.year, d.month)[1]
+    return date_type(d.year, d.month, last_day)
+
+
+def normalize_to_period_end(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Normalize all raw publication dates to canonical period-end dates.
+
+    Runs AFTER load_and_apply_overrides() so semantic corrections (e.g. an
+    early-March date relabelled as February) are already applied. This step
+    only does formatting normalisation (weekly snapshot → month-end).
+
+    Preserves the original date in source_date only for rows not already
+    tagged by the overrides step — overrides already set source_date to the
+    pre-override original, which is the most informative provenance.
+
+    Logs every remapping so the output is auditable.
+    """
+    df = df.copy()
+    dates_parsed = pd.to_datetime(df["date"], errors="coerce")
+    canonical    = dates_parsed.apply(
+        lambda d: str(_canonical_month_end(d.date())) if pd.notna(d) else None
+    )
+
+    changed = canonical != df["date"]
+    n_changed = changed.sum()
+
+    if n_changed == 0:
+        return df
+
+    print(f"\n  Normalising {n_changed} date(s) to period-end:")
+    for orig, canon in sorted(
+        set(zip(df.loc[changed, "date"], canonical[changed]))
+    ):
+        n = ((df["date"] == orig) & changed).sum()
+        print(f"    {orig}  →  {canon}  ({n} rows)")
+
+    # Preserve original in source_date only where not already set by overrides
+    untagged = changed & (df["source_date"] == "")
+    df.loc[untagged, "source_date"] = df.loc[untagged, "date"]
+
+    df.loc[changed, "date"] = canonical[changed]
+    return df
 
 
 def deduplicate_by_month(df: pd.DataFrame) -> pd.DataFrame:
@@ -181,14 +255,21 @@ def main(dry_run: bool = False):
         print("ERROR: Consolidation produced empty DataFrame", file=sys.stderr)
         sys.exit(1)
 
-    # ── Apply date overrides BEFORE dedup ────────────────────────────────────
+    # ── Step 1: Apply semantic date overrides ────────────────────────────────
     # Overrides remap early-March dates (delayed publications) to their true
-    # prior month. This must happen before deduplicate_by_month so the early
-    # date (e.g. 2024-03-08 → 2024-02-08) is not discarded as a duplicate
-    # of the genuine March snapshot (2024-03-22).
+    # prior month. Must run first — these are semantic corrections, not just
+    # formatting (e.g. 2024-03-08 is actually February data → 2024-02-29).
     df = load_and_apply_overrides(df)
 
-    # ── Deduplicate at month level ────────────────────────────────────────────
+    # ── Step 2: Normalize to canonical period-end dates ───────────────────────
+    # Maps all weekly snapshot dates to the last day of their month, and maps
+    # early-April Bank Credit fortnightly dates (Apr 1–7) to March 31.
+    # This ensures every reporting period lands on a single x-axis point in
+    # the dashboard — no split between e.g. 2024-03-22 (sectors) and
+    # 2024-04-05 (Bank Credit total) for the same March 2024 snapshot.
+    df = normalize_to_period_end(df)
+
+    # ── Step 3: Deduplicate at month level ───────────────────────────────────
     df = deduplicate_by_month(df)
 
     # Write to rbi-analytics/consolidated/
