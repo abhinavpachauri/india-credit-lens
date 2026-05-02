@@ -237,6 +237,61 @@ def collect_fields(cfg: dict) -> list[tuple[str, str, bool]]:
     return fields
 
 
+# ── Image URL validation ──────────────────────────────────────────────────────────
+
+def validate_images(cfg: dict, config_path: Path, result: Result) -> int:
+    """
+    Check D: image_url fields — ERROR if missing or pointing to a non-existent file.
+
+    Rules:
+      D1. Every signal must have a non-empty image_url (anchor post has no image by design,
+          but the 6 signals each need one for LinkedIn posts).
+      D2. The referenced file must exist on disk (resolved relative to config_path's directory).
+      D3. WARNING if the image file is older than sections_merged.json (possible stale render).
+
+    Returns count of signals checked.
+    """
+    newsletter_dir = config_path.parent
+    signals = cfg.get('editorial', {}).get('signals', [])
+    n = 0
+
+    for i, sig in enumerate(signals):
+        sig_type = sig.get('type', 'unknown')
+        arc      = sig.get('story_arc', f'signal_{i}')
+        prefix   = f"signals[{i}] ({sig_type}: {arc})"
+        url      = sig.get('image_url', '').strip()
+        n += 1
+
+        # D1: image_url must be set
+        if not url:
+            result.error(
+                f"{prefix}: image_url is empty — run generate_images.py then assign "
+                f"the path before running generate_linkedin.py"
+            )
+            continue
+
+        # D2: file must exist
+        img_path = newsletter_dir / url
+        if not img_path.exists():
+            result.error(
+                f"{prefix}: image_url '{url}' → file not found at {img_path}. "
+                f"Run generate_images.py or check the path."
+            )
+            continue
+
+        # D3: freshness — warn if image is older than sections_merged.json
+        if SECTIONS_MERGED.exists():
+            img_mtime      = img_path.stat().st_mtime
+            sections_mtime = SECTIONS_MERGED.stat().st_mtime
+            if img_mtime < sections_mtime:
+                result.warn(
+                    f"{prefix}: image '{img_path.name}' is older than sections_merged.json. "
+                    f"Re-run generate_images.py to refresh from the latest Mermaid output."
+                )
+
+    return n
+
+
 # ── Main ──────────────────────────────────────────────────────────────────────────
 
 def run(config_path: Path, sections_path: Path) -> bool:
@@ -266,8 +321,12 @@ def run(config_path: Path, sections_path: Path) -> bool:
     for label, text, is_prev in fields:
         validate_text(text, label, all_dates, all_values, all_growths, result, prev_stat=is_prev)
 
+    # Check D: image_url presence and file existence
+    n_images = validate_images(cfg, config_path, result)
+
     # ── Report ────────────────────────────────────────────────────────────────────
     print(f"  Fields checked : {len(fields)}")
+    print(f"  Images checked : {n_images} signal(s)")
     print()
 
     if result.errors:
