@@ -33,6 +33,23 @@
         "mermaid_output":    "output/mermaid/rbi_sibc/2026-04-13"
       }
     }
+    ,
+    {
+      "period": "Mar 2026",
+      "dataDate": "2026-04-30",
+      "total_credit_lcr": 213.6,
+      "yoy_growth_pct": 16.1,
+      "fy_growth_pct": 16.1,
+      "subsystem_count": 7,
+      "paths": {
+        "sections":          "rbi_sibc/2026-04-30/sections.json",
+        "system_model":      "rbi_sibc/2026-04-30/system_model.json",
+        "subsystems":        "rbi_sibc/2026-04-30/subsystems.json",
+        "annotations_draft": "rbi_sibc/2026-04-30/annotations_draft.ts",
+        "annotations_live":  "web/lib/reports/rbi_sibc.ts",
+        "mermaid_output":    "output/mermaid/rbi_sibc/2026-05-01"
+      }
+    }
   ],
   "merged": {
     "sections": "rbi_sibc/merged/sections_merged.json"

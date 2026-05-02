@@ -1,0 +1,624 @@
+{
+  "_meta": {
+    "report_id": "rbi_sibc",
+    "report_name": "RBI Sector and Industry-wise Bank Credit",
+    "period": "Mar 2026",
+    "generated": "2026-05-01",
+    "total_credit_lcr": 213.6,
+    "yoy_growth_pct": 16.1,
+    "fy_growth_pct": 16.1,
+    "schema_version": "1.0",
+    "_note": "FY26-end snapshot. yoy and fy growth are equivalent here since Mar 2026 vs Mar 2025 (or Apr 2025 fortnight equivalent for bankCredit) is both year-on-year and fiscal-year-end growth."
+  },
+
+  "nodes": [
+    { "_comment": "── DRIVERS ──────────────────────────────────────────────────────" },
+
+    {
+      "id": "driver_credit_cycle_acceleration",
+      "tier": "driver",
+      "label": "FY26 Credit Cycle Acceleration",
+      "description": "System-wide credit demand accelerated from 11.0% YoY in FY25 to 16.1% YoY in FY26. Every main sector accelerated by 4–7 percentage points. The driver is broad-based: industrial capex revival, MSME formalisation, NBFC re-acceleration, and continued retail compounding.",
+      "stat": "16.1% YoY (FY26)",
+      "value_lcr": 213.6,
+      "annotation_ids": ["bank-credit-fy26-acceleration", "all-four-main-sectors-accelerated", "two-year-credit-add-46-lcr"],
+      "claim_type": "data",
+      "source": "SIBC Mar 2026 (annual_3col file)",
+      "source_url": ""
+    },
+    {
+      "id": "driver_rbi_unsecured_tightening",
+      "tier": "driver",
+      "label": "RBI Unsecured Credit Tightening",
+      "description": "RBI raised risk weights on credit card receivables, unsecured personal loans, and bank credit to NBFCs in November 2023 (RBI/2023-24/85). Credit cards and consumer durables decelerated; gold-collateralised lending was unaffected. By FY26 the bank-to-NBFC effect had reversed (capital absorbed) but the unsecured retail effect deepened.",
+      "stat": "Cards: +3.5% YoY, Cons Dur: -5.3% YoY",
+      "value_lcr": null,
+      "annotation_ids": ["credit-card-flattening-confirmed", "consumer-durables-contracting", "nbfc-tap-reopens"],
+      "claim_type": "inference",
+      "source": "RBI Circular RBI/2023-24/85, 16 Nov 2023 — \"Regulatory measures towards consumer credit and bank credit to NBFCs\"",
+      "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx?Id=12567"
+    },
+    {
+      "id": "driver_gold_loan_reclassification",
+      "tier": "driver",
+      "label": "RBI Gold Loan Reclassification + Price Surge",
+      "description": "RBI's September 2024 circular on \"Gold loans — reset of irregularities\" tightened classification of bullet-repayment gold-backed loans. Loans previously booked as agri or business credit had to be reclassified into 'loans against gold jewellery'. Compounded by ~30% rise in gold prices over the period — collateral on existing books also expanded. Combined effect drove 5x growth in 24 months.",
+      "stat": "Gold Loans: +123.1% YoY, ₹0.93L Cr → ₹4.60L Cr",
+      "value_lcr": null,
+      "annotation_ids": ["gold-loans-five-x-in-two-years", "gold-mostly-reclassification-and-price", "gems-jewellery-massive-jump"],
+      "claim_type": "inference",
+      "source": "RBI Circular RBI/2024-25/77, 30 Sep 2024 — \"Gold Loans — Irregular practices observed\"",
+      "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx?Id=12721"
+    },
+    {
+      "id": "driver_psl_housing_limit_revision",
+      "tier": "driver",
+      "label": "PSL Housing Limit Revision (Oct 2024)",
+      "description": "RBI raised PSL housing loan limits in October 2024: metro centres ₹35L → ₹45L; non-metro ₹25L → ₹35L. Existing housing loans that fell outside the prior PSL bracket got reclassified IN — producing an apparent 39.8% YoY surge that is largely classification, not new lending demand.",
+      "stat": "PSL Housing: +39.8% YoY",
+      "value_lcr": null,
+      "annotation_ids": ["psl-housing-39-pct-classification-event"],
+      "claim_type": "inference",
+      "source": "RBI Circular RBI/2024-25/82, 11 Oct 2024 — \"Priority Sector Lending — Revised Targets and Classification\"",
+      "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx?Id=12736"
+    },
+    {
+      "id": "driver_pli_capex_broadening",
+      "tier": "driver",
+      "label": "PLI Capex Cycle Broadening",
+      "description": "Production-Linked Incentive schemes approved in 2021-23 are in their investment drawdown phase. Engineering credit grew 32.2% in FY26; the wave has spread to Petroleum (+32.5%), Basic Metal (+19.4%), Cement (+9.0%, recovery from flat), Vehicles & Parts (+18.1%), Chemicals (+14.9%), Food Processing (+14.0%). The capex theme is now broad-based industrial, not single-sector.",
+      "stat": "Multiple sub-types in 15-33% YoY range",
+      "value_lcr": null,
+      "annotation_ids": ["engineering-petroleum-capex-broadening", "industry-credit-recovery-confirmed", "vehicle-parts-supply-chain-finance", "food-processing-recovery"],
+      "claim_type": "inference",
+      "source": "Government of India PLI scheme approvals 2021-23 (14 schemes, ₹1.97L Cr outlay) — Ministry of Commerce and Industry, Notification No. P-16019/3/2020-Inv-DPIIT",
+      "source_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=1761064"
+    },
+    {
+      "id": "driver_msme_formalisation",
+      "tier": "driver",
+      "label": "MSME Formalisation via GST & UDYAM",
+      "description": "GST registration (2017-onwards) and UDYAM enrollment (2020-onwards) have brought millions of informal enterprises into the formal financial system. By FY26, 4-5 years of digital transaction history is enough for bank underwriting models. Micro & Small industrial credit grew 33.1% YoY; PSL MSE grew 29.5%. Most accelerated wallet in the system.",
+      "stat": "Micro & Small: +33.1% YoY, PSL MSE: +29.5% YoY",
+      "value_lcr": null,
+      "annotation_ids": ["micro-small-explosion", "psl-mse-confirms-msme-wave", "msme-formalisation-vs-real-demand", "msme-underwriting-data-stack"],
+      "claim_type": "inference",
+      "source": "Ministry of MSME UDYAM portal (5.84 Cr registrations as of Apr 2026); GSTN public dashboard (1.4 Cr active GST registrations)",
+      "source_url": "https://udyamregistration.gov.in/Government-India/Ministry-MSME-registration.htm"
+    },
+    {
+      "id": "driver_nbfc_capital_normalisation",
+      "tier": "driver",
+      "label": "NBFC Sector Capital Normalisation",
+      "description": "After RBI's Nov 2023 risk-weight increase on bank-to-NBFC credit (from 100% to 125%), NBFCs absorbed the capital impact through FY24-FY25. By FY26, bank credit to NBFCs has re-accelerated to 26.3% YoY — strongest since the increase. The sector is back to channelling credit at scale.",
+      "stat": "NBFC bank credit: +26.3% YoY",
+      "value_lcr": 20.66,
+      "annotation_ids": ["nbfc-tap-reopens", "co-lending-window-fy27", "services-takes-growth-leadership"],
+      "claim_type": "inference",
+      "source": "RBI Financial Stability Report Dec 2025 (NBFC sector capital adequacy normalised); RBI Circular RBI/2023-24/85 risk-weight increase reversed in effect (no formal reversal)",
+      "source_url": "https://www.rbi.org.in/Scripts/PublicationsView.aspx?id=22890"
+    },
+    {
+      "id": "driver_infra_cycle_maturing",
+      "tier": "driver",
+      "label": "Infrastructure Capex Cycle Maturing",
+      "description": "The FY21-24 infrastructure investment supercycle (national highways, metro rail, power, smart cities) has transitioned from construction to operations. Existing projects are repaying loans rather than drawing new credit. New infrastructure categories (data centres, green hydrogen, EV charging) have not yet reached credit scale at industry level. Result: Infrastructure credit growth remains the laggard at 9.5% YoY in FY26 despite the broader capex revival.",
+      "stat": "Infrastructure: +9.5% YoY",
+      "value_lcr": 14.94,
+      "annotation_ids": ["infrastructure-laggard-mild-rebound"],
+      "claim_type": "inference",
+      "source": "Ministry of Finance Economic Survey 2025-26 (Chapter 7: Infrastructure)",
+      "source_url": "https://www.indiabudget.gov.in/economicsurvey/"
+    },
+
+    { "_comment": "── SECTOR NODES ─────────────────────────────────────────────────" },
+
+    {
+      "id": "sector_bank_credit",
+      "tier": "sector",
+      "label": "Total Bank Credit",
+      "description": "₹213.6L Cr at Mar 2026, growing 16.1% YoY — accelerating from 11.0% in FY25. The strongest annual credit expansion in the post-pandemic era. Non-food credit is 99.7% of the total; food credit is government balance-sheet timing.",
+      "stat": "+16.1% YoY",
+      "value_lcr": 213.6,
+      "annotation_ids": ["bank-credit-fy26-acceleration", "non-food-credit-99pct-of-total", "two-year-credit-add-46-lcr", "credit-cycle-deployment-window"]
+    },
+    {
+      "id": "sector_services",
+      "tier": "sector",
+      "label": "Services",
+      "description": "₹60.6L Cr at Mar 2026, +19.0% YoY — the fastest-growing main sector in FY26. Driven primarily by NBFC re-acceleration (+26.3%) but also Computer Software (+39.0%), Tourism (+23.0%), and Commercial Real Estate (+19.9%).",
+      "stat": "+19.0% YoY",
+      "value_lcr": 60.6,
+      "annotation_ids": ["services-takes-growth-leadership", "computer-software-tourism-acceleration", "cre-strength-continues"]
+    },
+    {
+      "id": "sector_personal_loans",
+      "tier": "sector",
+      "label": "Personal Loans",
+      "description": "₹69.4L Cr at Mar 2026 — still the largest credit sector by absolute value. Growing 16.2% YoY (versus 11.7% in FY25). Internal divergence remains extreme: gold loans +123.1% vs credit cards +3.5% vs consumer durables -5.3%.",
+      "stat": "+16.2% YoY",
+      "value_lcr": 69.4,
+      "annotation_ids": ["services-takes-growth-leadership", "share-not-direction-thesis"]
+    },
+    {
+      "id": "sector_industry",
+      "tier": "sector",
+      "label": "Industry (Total)",
+      "description": "₹45.8L Cr at Mar 2026, +15.0% YoY — accelerated from 8.2% in FY25. Acceleration concentrated in Micro & Small (+33.1%) and Medium (+21.7%); Large stays at 8.9%. Industrial credit growth has moved permanently down the size ladder.",
+      "stat": "+15.0% YoY",
+      "value_lcr": 45.8,
+      "annotation_ids": ["industry-credit-recovery-confirmed", "all-four-main-sectors-accelerated"]
+    },
+    {
+      "id": "sector_agriculture",
+      "tier": "sector",
+      "label": "Agriculture",
+      "description": "₹26.5L Cr at Mar 2026, +15.7% YoY — accelerated from 10.4% in FY25. Absolute add of ₹3.59L Cr in one year is larger than the entire Gold Loans book. Most credit commentary still treats agriculture as flat — a category mismatch.",
+      "stat": "+15.7% YoY",
+      "value_lcr": 26.5,
+      "annotation_ids": ["all-four-main-sectors-accelerated", "agriculture-overlooked-acceleration"]
+    },
+    {
+      "id": "sector_micro_small_industry",
+      "tier": "sector",
+      "label": "Micro and Small Industry",
+      "description": "₹10.6L Cr at Mar 2026, +33.1% YoY — the largest single acceleration in this period. FY26 absolute add was ₹2.65L Cr versus ₹0.65L Cr in FY25. Combination of real demand and formalisation (post-GST, post-UDYAM borrowers becoming visible).",
+      "stat": "+33.1% YoY",
+      "value_lcr": 10.6,
+      "annotation_ids": ["micro-small-explosion", "msme-formalisation-vs-real-demand", "msme-underwriting-data-stack"]
+    },
+    {
+      "id": "sector_medium_industry",
+      "tier": "sector",
+      "label": "Medium Industry",
+      "description": "₹4.42L Cr at Mar 2026, +21.7% YoY. Between Micro & Small's hype and Large's torpor — under-served by both large-corporate banks and pure MSME-focused NBFCs. Has formal accounts and bureau histories but small enough to be uncrowded.",
+      "stat": "+21.7% YoY",
+      "value_lcr": 4.42,
+      "annotation_ids": ["supply-chain-finance-vs-medium"]
+    },
+    {
+      "id": "sector_large_industry",
+      "tier": "sector",
+      "label": "Large Industry",
+      "description": "₹30.8L Cr at Mar 2026, +8.9% YoY — the slowest size bucket. Three times the Micro & Small balance but absorbing little incremental credit. Either deleveraging or funding through bond markets, not bank loans.",
+      "stat": "+8.9% YoY",
+      "value_lcr": 30.8,
+      "annotation_ids": ["large-industry-still-slow"]
+    },
+    {
+      "id": "sector_nbfcs",
+      "tier": "sector",
+      "label": "Bank Credit to NBFCs",
+      "description": "₹20.66L Cr at Mar 2026, +26.3% YoY — the single largest line in Services and the dominant Services growth driver. Recovered fully from the post-Nov-2023 risk-weight squeeze (FY25 was only +7.4%). Now back to being the major on-lending counterparty for retail and MSME credit.",
+      "stat": "+26.3% YoY",
+      "value_lcr": 20.66,
+      "annotation_ids": ["nbfc-tap-reopens", "nbfc-double-counting-systemic", "co-lending-window-fy27"]
+    },
+    {
+      "id": "sector_commercial_real_estate",
+      "tier": "sector",
+      "label": "Commercial Real Estate",
+      "description": "₹6.27L Cr at Mar 2026, +19.9% YoY. Two-year growth of 36% (from ₹4.60L Cr at Mar 2024). Logistics parks, warehousing and tier-2/3 retail real estate are the under-recognised drivers — not just metro office.",
+      "stat": "+19.9% YoY",
+      "value_lcr": 6.27,
+      "annotation_ids": ["cre-strength-continues"]
+    },
+    {
+      "id": "sector_computer_software",
+      "tier": "sector",
+      "label": "Computer Software (Services)",
+      "description": "₹0.46L Cr at Mar 2026, +39.0% YoY — accelerated from 27.0%. Small absolute book but reflects working-capital demand from IT services hiring and offshore-delivery expansion.",
+      "stat": "+39.0% YoY",
+      "value_lcr": 0.46,
+      "annotation_ids": ["computer-software-tourism-acceleration"]
+    },
+    {
+      "id": "sector_tourism",
+      "tier": "sector",
+      "label": "Tourism, Hotels & Restaurants",
+      "description": "₹1.03L Cr at Mar 2026, +23.0% YoY — accelerated from 7.1%. Post-pandemic hospitality capex finally translating into credit demand at scale.",
+      "stat": "+23.0% YoY",
+      "value_lcr": 1.03,
+      "annotation_ids": ["computer-software-tourism-acceleration"]
+    },
+    {
+      "id": "sector_gold_loans",
+      "tier": "sector",
+      "label": "Gold Loans (Personal)",
+      "description": "₹4.60L Cr at Mar 2026 — 5x in 24 months from ₹0.93L Cr at Mar 2024. Two consecutive YoY rates above 120%. Combination of RBI Sep 2024 reclassification circular and ~30% gold-price rise. Share of personal credit went from 1.7% to 6.6%.",
+      "stat": "+123.1% YoY",
+      "value_lcr": 4.60,
+      "annotation_ids": ["gold-loans-five-x-in-two-years", "gold-mostly-reclassification-and-price", "gold-loan-bank-vs-nbfc-tier3"]
+    },
+    {
+      "id": "sector_credit_cards",
+      "tier": "sector",
+      "label": "Credit Card Outstanding",
+      "description": "₹2.94L Cr at Mar 2026, +3.5% YoY — sharply decelerated from 10.6% in FY25. Incremental flow ₹10K Cr in FY26 vs ₹27K Cr in FY25 — under one-third the prior pace. Risk-weight increase is binding.",
+      "stat": "+3.5% YoY",
+      "value_lcr": 2.94,
+      "annotation_ids": ["credit-card-flattening-confirmed"]
+    },
+    {
+      "id": "sector_consumer_durables",
+      "tier": "sector",
+      "label": "Consumer Durables",
+      "description": "₹0.22L Cr at Mar 2026, -5.3% YoY — the deepening contraction. Was -1.0% in FY25. Only personal-loan sub-category in absolute decline. Volume has migrated to embedded BNPL stacks not captured in SIBC.",
+      "stat": "-5.3% YoY",
+      "value_lcr": 0.22,
+      "annotation_ids": ["consumer-durables-contracting"]
+    },
+    {
+      "id": "sector_vehicle_loans",
+      "tier": "sector",
+      "label": "Vehicle Loans (Personal)",
+      "description": "₹7.39L Cr at Mar 2026, +18.6% YoY — accelerated sharply from 8.6%. FY26 added ₹1.16L Cr versus ₹0.49L Cr in FY25. Two-wheeler, used-car, and EV-segment loans are the contributors. Quietest acceleration story in the file.",
+      "stat": "+18.6% YoY",
+      "value_lcr": 7.39,
+      "annotation_ids": ["vehicle-loans-double-pace-acceleration", "vehicle-parts-supply-chain-finance"]
+    },
+    {
+      "id": "sector_housing",
+      "tier": "sector",
+      "label": "Housing (Personal)",
+      "description": "₹33.6L Cr at Mar 2026, +11.5% YoY. Steady mid-teens compounding from ₹27.2L Cr (Mar 2024). Second-largest personal-loan sub-category. No acceleration, no deceleration.",
+      "stat": "+11.5% YoY",
+      "value_lcr": 33.6,
+      "annotation_ids": ["housing-steady-mid-teens"]
+    },
+    {
+      "id": "sector_psl_housing",
+      "tier": "sector",
+      "label": "Priority Sector Housing",
+      "description": "₹10.44L Cr at Mar 2026, +39.8% YoY — versus -1.1% in FY25. The 40-percentage-point swing is a classification event from RBI's Oct 2024 PSL housing limit revision, not new lending demand. The 'real' housing trajectory is in personalLoans.Housing at +11.5%.",
+      "stat": "+39.8% YoY",
+      "value_lcr": 10.44,
+      "annotation_ids": ["psl-housing-39-pct-classification-event"]
+    },
+    {
+      "id": "sector_psl_mse",
+      "tier": "sector",
+      "label": "Priority Sector MSE",
+      "description": "₹29.0L Cr at Mar 2026, +29.5% YoY — confirms the MSME wave from a different angle. PSL targets are now binding for most banks; banks short of targets buy PSLCs from over-achievers.",
+      "stat": "+29.5% YoY",
+      "value_lcr": 29.0,
+      "annotation_ids": ["psl-mse-confirms-msme-wave", "pslc-trading-arbitrage"]
+    },
+    {
+      "id": "sector_psl_renewable",
+      "tier": "sector",
+      "label": "Priority Sector Renewable Energy",
+      "description": "₹0.14L Cr at Mar 2026, +34.1% YoY (decelerated from 78.3% but still adding ₹3.5K Cr in FY26). Solar rooftop, wind-electrolyser, and EV-charging-infra are the drivers.",
+      "stat": "+34.1% YoY",
+      "value_lcr": 0.14,
+      "annotation_ids": ["psl-renewable-still-hot"]
+    },
+    {
+      "id": "sector_all_engineering",
+      "tier": "sector",
+      "label": "All Engineering (Industry)",
+      "description": "₹3.17L Cr at Mar 2026, +32.2% YoY — sustained acceleration from 22.0% in FY25. The earliest and clearest signal of the PLI capex wave; component of broader manufacturing capex broadening.",
+      "stat": "+32.2% YoY",
+      "value_lcr": 3.17,
+      "annotation_ids": ["engineering-petroleum-capex-broadening"]
+    },
+    {
+      "id": "sector_petroleum",
+      "tier": "sector",
+      "label": "Petroleum, Coal & Nuclear (Industry)",
+      "description": "₹2.04L Cr at Mar 2026, +32.5% YoY — major acceleration from 16.5%. Reflects refining capex, downstream petrochemical expansion, and energy-transition working-capital draws.",
+      "stat": "+32.5% YoY",
+      "value_lcr": 2.04,
+      "annotation_ids": ["engineering-petroleum-capex-broadening"]
+    },
+    {
+      "id": "sector_basic_metal",
+      "tier": "sector",
+      "label": "Basic Metal & Metal Products",
+      "description": "₹5.18L Cr at Mar 2026, +19.4% YoY — accelerated from 12.8%. Largest industrial sub-type after Infrastructure. Steel and aluminium capex driven by green-steel and EV-supply needs.",
+      "stat": "+19.4% YoY",
+      "value_lcr": 5.18,
+      "annotation_ids": ["engineering-petroleum-capex-broadening"]
+    },
+    {
+      "id": "sector_gems_jewellery",
+      "tier": "sector",
+      "label": "Gems and Jewellery (Industry)",
+      "description": "Industrial credit grew 1.0% → 41.4% YoY. Same root cause as the gold-loan retail surge: gold prices crossed ₹90,000/10g in 2025, expanding jeweller working-capital requirements. Gem-export weakness creates internal divergence in the line.",
+      "stat": "+41.4% YoY",
+      "value_lcr": null,
+      "annotation_ids": ["gems-jewellery-massive-jump"]
+    },
+    {
+      "id": "sector_vehicles_industrial",
+      "tier": "sector",
+      "label": "Vehicles & Vehicle Parts (Industry)",
+      "description": "₹1.41L Cr at Mar 2026, +18.1% YoY — accelerated from 5.2%. Tier-1 and Tier-2 component capex driven by EV ramp at Tata, Mahindra, Hyundai-India OEMs.",
+      "stat": "+18.1% YoY",
+      "value_lcr": 1.41,
+      "annotation_ids": ["vehicle-parts-supply-chain-finance"]
+    },
+    {
+      "id": "sector_food_processing",
+      "tier": "sector",
+      "label": "Food Processing (Industry)",
+      "description": "₹2.50L Cr at Mar 2026, +14.0% YoY — recovered from sluggish 5.1% in FY25. Cold-chain, FMCG private-label, and packaged-food capex are visible drivers.",
+      "stat": "+14.0% YoY",
+      "value_lcr": 2.50,
+      "annotation_ids": ["food-processing-recovery"]
+    },
+    {
+      "id": "sector_infrastructure",
+      "tier": "sector",
+      "label": "Infrastructure (Industry)",
+      "description": "₹14.94L Cr at Mar 2026, +9.5% YoY. Largest single industrial sub-type but barely growing. The FY21-24 highway/metro/power supercycle has matured. New infrastructure categories (data centres, green hydrogen, EV charging) not yet at credit scale.",
+      "stat": "+9.5% YoY",
+      "value_lcr": 14.94,
+      "annotation_ids": ["infrastructure-laggard-mild-rebound"]
+    },
+
+    { "_comment": "── GAP NODES ────────────────────────────────────────────────────" },
+
+    {
+      "id": "gap_bankcredit_april_dates",
+      "tier": "gap",
+      "label": "Bank Credit Uses April Dates, Not Mar-end",
+      "description": "RBI publishes bank credit aggregate on fortnightly cycle. Apr 5 2024 and Apr 4 2025 are the FY-end fortnight snapshots — labelled as 'Apr 2024'/'Apr 2025' in the dashboard but treated as FY24-end and FY25-end values. Sub-sectors use Mar 22 / Mar 21 dates.",
+      "stat": null,
+      "value_lcr": null,
+      "annotation_ids": ["bankcredit-uses-april-dates", "fy-data-empty-in-bankcredit"],
+      "claim_type": "data",
+      "source": "SIBC Mar 2026 file structure",
+      "source_url": ""
+    },
+    {
+      "id": "gap_three_data_points_only",
+      "tier": "gap",
+      "label": "Only Three FY-end Snapshots",
+      "description": "This file contains only Mar 2024, Mar 2025, and Mar 2026 — no monthly granularity. Year-on-year growth is exact but within-FY pacing (front-loaded vs back-loaded acceleration) cannot be determined. Supplement with monthly SIBC files for trajectory analysis.",
+      "stat": null,
+      "value_lcr": null,
+      "annotation_ids": ["annual-file-only-three-points"],
+      "claim_type": "data",
+      "source": "SIBC Mar 2026 file structure",
+      "source_url": ""
+    },
+    {
+      "id": "gap_main_sectors_undercount",
+      "tier": "gap",
+      "label": "Main Sectors Sum Less Than Bank Credit",
+      "description": "Agriculture + Industry + Services + Personal Loans sum to ₹202.3L Cr; with Food Credit ₹203.0L Cr; Total Bank Credit is ₹213.6L Cr. About ₹10.6L Cr (~5%) of credit is 'other' non-food lending invisible at the main-sector granularity — small business advances, public-sector lending, and other categories not in the four selected sectors.",
+      "stat": "~5% of Bank Credit invisible",
+      "value_lcr": 10.6,
+      "annotation_ids": ["main-sectors-undercount-bank-credit"],
+      "claim_type": "data",
+      "source": "SIBC Mar 2026 file (computed sum vs total)",
+      "source_url": ""
+    },
+    {
+      "id": "gap_psl_classification_volatility",
+      "tier": "gap",
+      "label": "PSL Line Volatility from Definition Changes",
+      "description": "PSL line-level YoY rates are subject to definition migration each year. PSL Housing went -1.1% to +39.8% on a single circular (Oct 2024). PSL Export and PSL Others both contracted 8-10% likely due to migration into MSE/Housing buckets. Aggregate PSL trends are more reliable than individual lines.",
+      "stat": null,
+      "value_lcr": null,
+      "annotation_ids": ["psl-housing-39-pct-classification-event", "psl-others-and-export-negatives"],
+      "claim_type": "inference",
+      "source": "RBI Master Direction — Priority Sector Lending (Updated Oct 2024)",
+      "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=11959"
+    },
+    {
+      "id": "gap_nbfc_double_counting",
+      "tier": "gap",
+      "label": "Bank-to-NBFC Credit Double-Counted in System View",
+      "description": "Bank credit to NBFCs (₹20.66L Cr at Mar 2026) becomes NBFC on-lending to retail and MSME borrowers, which appears again in NBFC-published portfolio tables. There is no system-wide deduplicated view of end-borrower credit — household-leverage estimates that add bank + NBFC are systematically overstated.",
+      "stat": "₹20.66L Cr in scope",
+      "value_lcr": 20.66,
+      "annotation_ids": ["nbfc-double-counting-systemic"],
+      "claim_type": "data",
+      "source": "SIBC Mar 2026 (Services 3.9 NBFCs line) + general industry knowledge",
+      "source_url": ""
+    },
+    {
+      "id": "gap_industry_type_partition_not_exact",
+      "tier": "gap",
+      "label": "Industry-by-type Doesn't Tie to Industry Total",
+      "description": "Sum of all 19 industry sub-types (₹46.95L Cr) exceeds the Industry main-sector total (₹45.82L Cr) due to overlapping catch-all buckets like 'Other Industries'. Treat the type view as thematic, not accounting.",
+      "stat": null,
+      "value_lcr": null,
+      "annotation_ids": ["industry-by-type-doesnt-tie-to-industry"],
+      "claim_type": "data",
+      "source": "SIBC Mar 2026 file (computed sums)",
+      "source_url": ""
+    },
+
+    { "_comment": "── OPPORTUNITY NODES ────────────────────────────────────────────" },
+
+    {
+      "id": "opp_co_lending_infrastructure",
+      "tier": "opportunity",
+      "label": "Co-lending & Warehouse-Financing Infrastructure",
+      "description": "With NBFC bank credit at +26.3% YoY and ₹4.30L Cr incremental flow in FY26, bilateral co-lending and structured warehouse arrangements between banks and NBFCs are the most active product wedge. Banks need NBFC origination reach; NBFCs need balance-sheet capacity. Tech enablers (loan management systems with co-lending support, partition logic, audit trails) have a 12-18 month buying window.",
+      "stat": "₹4.30L Cr FY26 incremental",
+      "value_lcr": 4.30,
+      "annotation_ids": ["co-lending-window-fy27", "nbfc-tap-reopens"],
+      "claim_type": "data",
+      "source": "SIBC Mar 2026 (Services 3.9 NBFCs trajectory)",
+      "source_url": ""
+    },
+    {
+      "id": "opp_msme_alt_data_underwriting",
+      "tier": "opportunity",
+      "label": "Alt-Data MSME Underwriting Stack",
+      "description": "Micro and Small grew 33.1% YoY (₹2.65L Cr added in FY26). Significant share is first-cycle formal borrowers with thin/blank bureau histories. GST, UPI, e-way-bill, and supplier-confirmation data are the new credit history. Lenders without an alt-data underwriting stack cannot scale to this book; data partnerships with GSPs and account aggregators are the leverage point.",
+      "stat": "₹2.65L Cr FY26 incremental",
+      "value_lcr": 2.65,
+      "annotation_ids": ["msme-underwriting-data-stack", "msme-formalisation-vs-real-demand", "micro-small-explosion"],
+      "claim_type": "data",
+      "source": "SIBC Mar 2026 (industryBySize Micro and Small)",
+      "source_url": ""
+    },
+    {
+      "id": "opp_gold_loan_specialised_ops",
+      "tier": "opportunity",
+      "label": "Gold-Loan Operations at Scale",
+      "description": "Gold Loans grew 5x in 24 months to ₹4.60L Cr. Banks struggle operationally with physical-collateral handling, valuation, and short-tenor cadence at this pace. Specialised gold NBFCs (Manappuram, Muthoot, IIFL Finance) and southern banks (Federal, KVB) own disbursement velocity. Partnership models with specialists are operationally faster than building branch ops from zero.",
+      "stat": "₹4.60L Cr book, +123.1% YoY",
+      "value_lcr": 4.60,
+      "annotation_ids": ["gold-loans-five-x-in-two-years", "gold-loan-bank-vs-nbfc-tier3"],
+      "claim_type": "data",
+      "source": "SIBC Mar 2026 (personalLoans.Gold Loans)",
+      "source_url": ""
+    },
+    {
+      "id": "opp_vehicle_supply_chain_finance",
+      "tier": "opportunity",
+      "label": "Vehicle Supply-Chain Financing for EV Build-out",
+      "description": "Two parallel signals: Vehicle Loans personal grew 8.6% → 18.6% YoY; Vehicles & Parts industrial grew 5.2% → 18.1% YoY. The OEM EV ramp (Tata, Mahindra, Hyundai-India) is propagating into Tier-1/Tier-2 component capex. TReDS platforms (M1xchange, Invoicemart, RXIL) and supply-chain finance teams are best positioned. Captive NBFCs of OEMs (Bajaj Finance, M&M Finance, Tata Motors Finance) on personal side.",
+      "stat": "Personal: +18.6%, Industrial: +18.1%",
+      "value_lcr": 8.80,
+      "annotation_ids": ["vehicle-loans-double-pace-acceleration", "vehicle-parts-supply-chain-finance"],
+      "claim_type": "data",
+      "source": "SIBC Mar 2026 (personalLoans.Vehicle Loans + industryByType.Vehicles)",
+      "source_url": ""
+    },
+    {
+      "id": "opp_capex_term_loan_books",
+      "tier": "opportunity",
+      "label": "Industrial Capex Term Loan Books",
+      "description": "PLI capex story has spread to multiple industries: Engineering (+32.2%), Petroleum (+32.5%), Basic Metal (+19.4%), Cement (+9.0% recovery), Vehicles & Parts (+18.1%), Chemicals (+14.9%), Food Processing (+14.0%). PSU banks underweight industrial term loans have under-priced upside; private banks likely already over-allocated. Specialised infrastructure financiers (REC, PFC, IIFCL) for clean-tech and renewable-adjacent capex.",
+      "stat": "Multiple sub-types in 14-33% YoY",
+      "value_lcr": null,
+      "annotation_ids": ["engineering-petroleum-capex-broadening", "industry-credit-recovery-confirmed"],
+      "claim_type": "data",
+      "source": "SIBC Mar 2026 (industryByType multiple lines)",
+      "source_url": ""
+    },
+    {
+      "id": "opp_pslc_trading_tooling",
+      "tier": "opportunity",
+      "label": "PSLC Trading & Analytics Tooling",
+      "description": "With PSL targets binding and segment-level acceleration (MSE +29.5%, Renewable +34.1%, Housing +39.8% via reclassification), the Priority Sector Lending Certificates secondary market has expanded materially. Treasury teams currently use manual spreadsheet workflows. SaaS PSLC trading + analytics tools are an under-served wallet. Buyers: PSU and private bank treasury desks.",
+      "stat": null,
+      "value_lcr": null,
+      "annotation_ids": ["pslc-trading-arbitrage"],
+      "claim_type": "hypothesis",
+      "source": "SIBC Mar 2026 (PSL line trajectories) + market-knowledge inference",
+      "source_url": ""
+    },
+
+    { "_comment": "── PRESSURE NODES (latent risks) ─────────────────────────────────" },
+
+    {
+      "id": "pressure_unsecured_retail_stress",
+      "tier": "pressure",
+      "label": "Unsecured Retail Slowdown Deepening",
+      "description": "Credit Card growth fell to 3.5% YoY (from 10.6% in FY25). Consumer Durables in absolute decline at -5.3% YoY. RBI risk-weight increases and tighter unsecured guidance are working as designed but starting to crimp issuer revenue. If a delinquency cycle hits in FY27, issuers reliant on revolving NII for revenue mix will be most exposed.",
+      "stat": "Cards +3.5%, CD -5.3% YoY",
+      "value_lcr": null,
+      "annotation_ids": ["credit-card-flattening-confirmed", "consumer-durables-contracting"],
+      "claim_type": "inference",
+      "source": "SIBC Mar 2026 + RBI Financial Stability Report Dec 2025",
+      "source_url": "https://www.rbi.org.in/Scripts/PublicationsView.aspx?id=22890"
+    },
+    {
+      "id": "pressure_gold_price_reversal_risk",
+      "tier": "pressure",
+      "label": "Gold Price Reversal Risk on Loan Books",
+      "description": "Gold Loans book of ₹4.60L Cr is mechanically linked to gold prices. A material reversal (>20% decline) would trigger collateral re-valuation across the book. Loans at the marginal LTV (now closer to 75%) would breach LTV ceilings, forcing top-up calls or sales. Specialised gold-loan NBFCs and southern banks have concentrated exposure.",
+      "stat": "₹4.60L Cr book at risk",
+      "value_lcr": 4.60,
+      "annotation_ids": ["gold-mostly-reclassification-and-price"],
+      "claim_type": "hypothesis",
+      "source": "SIBC Mar 2026 + general market knowledge of gold-loan LTV practices",
+      "source_url": ""
+    },
+    {
+      "id": "pressure_first_cycle_msme_risk",
+      "tier": "pressure",
+      "label": "First-Cycle MSME Default Risk",
+      "description": "Micro and Small grew 33.1% YoY in FY26; significant share is first-time formal borrowers with thin or blank bureau histories. FY27-28 will be the first stress test for alternative-data underwriting models. Loss curves on these books could surprise both higher (model failure) or lower (better data than expected) — but the through-cycle performance is unproven.",
+      "stat": "₹2.65L Cr FY26 incremental flow",
+      "value_lcr": 2.65,
+      "annotation_ids": ["msme-formalisation-vs-real-demand", "micro-small-explosion"],
+      "claim_type": "hypothesis",
+      "source": "SIBC Mar 2026 (industryBySize) + alt-data underwriting industry knowledge",
+      "source_url": ""
+    },
+    {
+      "id": "pressure_nbfc_re_tightening_risk",
+      "tier": "pressure",
+      "label": "RBI Re-Tightening of NBFC Risk Weights",
+      "description": "Bank credit to NBFCs at +26.3% YoY in FY26 — the strongest since the Nov 2023 risk-weight increase. RBI watches NBFC sector overheating closely. If sectoral NPA or capital ratios deteriorate in H1 FY27, RBI could re-tighten risk weights, repeating the FY24-25 squeeze. Watch H1 FY27 RBI Financial Stability Report.",
+      "stat": "₹20.66L Cr exposure",
+      "value_lcr": 20.66,
+      "annotation_ids": ["nbfc-tap-reopens", "co-lending-window-fy27"],
+      "claim_type": "hypothesis",
+      "source": "RBI Financial Stability Report (semi-annual)",
+      "source_url": "https://www.rbi.org.in/Scripts/PublicationsView.aspx?id=22890"
+    }
+  ],
+
+  "edges": [
+    { "_comment": "── DRIVER → SECTOR EDGES ──────────────────────────────────────" },
+    { "from": "driver_credit_cycle_acceleration", "to": "sector_bank_credit", "type": "causes", "label": "drives system-wide 16.1% YoY expansion" },
+    { "from": "driver_credit_cycle_acceleration", "to": "sector_industry", "type": "reinforces", "label": "industrial demand component of cycle" },
+    { "from": "driver_credit_cycle_acceleration", "to": "sector_services", "type": "reinforces", "label": "services demand component of cycle" },
+    { "from": "driver_credit_cycle_acceleration", "to": "sector_personal_loans", "type": "reinforces", "label": "retail demand component of cycle" },
+    { "from": "driver_credit_cycle_acceleration", "to": "sector_agriculture", "type": "reinforces", "label": "agri demand component of cycle" },
+
+    { "from": "driver_rbi_unsecured_tightening", "to": "sector_credit_cards", "type": "suppresses", "label": "Nov 2023 risk-weight increase compresses growth" },
+    { "from": "driver_rbi_unsecured_tightening", "to": "sector_consumer_durables", "type": "suppresses", "label": "tighter unsecured guidance forces book contraction" },
+    { "from": "driver_rbi_unsecured_tightening", "to": "sector_gold_loans", "type": "reroutes_demand_to", "label": "unsecured demand migrates to gold-collateralised lending" },
+
+    { "from": "driver_gold_loan_reclassification", "to": "sector_gold_loans", "type": "causes", "label": "Sep 2024 RBI circular forces reclassification — apparent 5x in 24 months" },
+    { "from": "driver_gold_loan_reclassification", "to": "sector_gems_jewellery", "type": "causes", "label": "gold price surge expands jeweller working capital needs" },
+
+    { "from": "driver_psl_housing_limit_revision", "to": "sector_psl_housing", "type": "creates_gap", "label": "Oct 2024 limit revision causes 39.8% apparent growth (mostly classification)" },
+
+    { "from": "driver_pli_capex_broadening", "to": "sector_all_engineering", "type": "causes", "label": "PLI scheme drives engineering capex" },
+    { "from": "driver_pli_capex_broadening", "to": "sector_basic_metal", "type": "causes", "label": "downstream metals capex" },
+    { "from": "driver_pli_capex_broadening", "to": "sector_petroleum", "type": "causes", "label": "petrochemical and energy-transition capex" },
+    { "from": "driver_pli_capex_broadening", "to": "sector_vehicles_industrial", "type": "causes", "label": "Tier-1/Tier-2 EV component capex" },
+    { "from": "driver_pli_capex_broadening", "to": "sector_food_processing", "type": "reinforces", "label": "FMCG and packaged-food capacity expansion" },
+
+    { "from": "driver_msme_formalisation", "to": "sector_micro_small_industry", "type": "causes", "label": "GST and UDYAM drive formalisation; banks now underwrite formerly-informal MSMEs" },
+    { "from": "driver_msme_formalisation", "to": "sector_psl_mse", "type": "causes", "label": "same drivers, observed in PSL lens" },
+
+    { "from": "driver_nbfc_capital_normalisation", "to": "sector_nbfcs", "type": "causes", "label": "post-2023 capital impact absorbed; bank tap reopens" },
+
+    { "from": "driver_infra_cycle_maturing", "to": "sector_infrastructure", "type": "suppresses", "label": "construction phase ended; new categories not yet at scale" },
+
+    { "_comment": "── SECTOR → OPPORTUNITY EDGES ─────────────────────────────────" },
+    { "from": "sector_nbfcs", "to": "opp_co_lending_infrastructure", "type": "creates_opportunity", "label": "co-lending and warehouse financing wedge" },
+    { "from": "sector_micro_small_industry", "to": "opp_msme_alt_data_underwriting", "type": "creates_opportunity", "label": "thin-file underwriting demand" },
+    { "from": "sector_psl_mse", "to": "opp_msme_alt_data_underwriting", "type": "reinforces", "label": "same wallet from PSL angle" },
+    { "from": "sector_gold_loans", "to": "opp_gold_loan_specialised_ops", "type": "creates_opportunity", "label": "operational scaling for specialists" },
+    { "from": "sector_vehicle_loans", "to": "opp_vehicle_supply_chain_finance", "type": "creates_opportunity", "label": "personal vehicle financing wallet" },
+    { "from": "sector_vehicles_industrial", "to": "opp_vehicle_supply_chain_finance", "type": "reinforces", "label": "B2B side of same theme" },
+    { "from": "sector_all_engineering", "to": "opp_capex_term_loan_books", "type": "creates_opportunity", "label": "industrial term loan flow" },
+    { "from": "sector_petroleum", "to": "opp_capex_term_loan_books", "type": "reinforces", "label": "additional capex term loan demand" },
+    { "from": "sector_psl_mse", "to": "opp_pslc_trading_tooling", "type": "creates_opportunity", "label": "PSL targets drive PSLC clearing volume" },
+
+    { "_comment": "── SECTOR → PRESSURE EDGES ─────────────────────────────────────" },
+    { "from": "sector_credit_cards", "to": "pressure_unsecured_retail_stress", "type": "creates_risk", "label": "deceleration crimps issuer NII" },
+    { "from": "sector_consumer_durables", "to": "pressure_unsecured_retail_stress", "type": "reinforces", "label": "absolute book contraction adds to stress signal" },
+    { "from": "sector_gold_loans", "to": "pressure_gold_price_reversal_risk", "type": "creates_risk", "label": "collateral concentration risk" },
+    { "from": "sector_micro_small_industry", "to": "pressure_first_cycle_msme_risk", "type": "creates_risk", "label": "untested-borrower exposure" },
+    { "from": "sector_nbfcs", "to": "pressure_nbfc_re_tightening_risk", "type": "creates_risk", "label": "concentration triggers regulatory attention" },
+
+    { "_comment": "── GAP EDGES ────────────────────────────────────────────────────" },
+    { "from": "gap_bankcredit_april_dates", "to": "sector_bank_credit", "type": "is_data_gap", "label": "labelling convention requires reader awareness" },
+    { "from": "gap_three_data_points_only", "to": "sector_bank_credit", "type": "is_data_gap", "label": "no within-FY pacing visibility" },
+    { "from": "gap_main_sectors_undercount", "to": "sector_bank_credit", "type": "is_data_gap", "label": "selected-sector coverage misses 5%" },
+    { "from": "gap_psl_classification_volatility", "to": "sector_psl_housing", "type": "is_data_gap", "label": "Oct 2024 reclassification produces fake +39.8%" },
+    { "from": "gap_nbfc_double_counting", "to": "sector_nbfcs", "type": "is_data_gap", "label": "system aggregates double-count NBFC flow" },
+    { "from": "gap_industry_type_partition_not_exact", "to": "sector_industry", "type": "is_data_gap", "label": "type sums exceed industry total" },
+
+    { "_comment": "── CONTRAST EDGES (structural comparisons) ───────────────────────" },
+    { "from": "sector_micro_small_industry", "to": "sector_large_industry", "type": "contrast", "label": "33.1% vs 8.9% — growth has moved down the size ladder" },
+    { "from": "sector_services", "to": "sector_personal_loans", "type": "contrast", "label": "Services takes growth leadership from Personal Loans (19.0% vs 16.2%)" },
+    { "from": "sector_psl_housing", "to": "sector_housing", "type": "contrast", "label": "+39.8% (classification) vs +11.5% (real demand)" },
+    { "from": "sector_gold_loans", "to": "sector_credit_cards", "type": "contrast", "label": "+123.1% (collateralised) vs +3.5% (unsecured)" }
+  ]
+}

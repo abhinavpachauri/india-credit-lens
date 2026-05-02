@@ -1,0 +1,180 @@
+{
+  "xlsx": "SIBCS30042026.xlsx",
+  "data_date": "2026-04-30",
+  "period_dir": "analysis/rbi_sibc/2026-04-30",
+  "detected_at": "2026-05-01",
+  "format_id": "annual_3col",
+  "format_description": "Annual release \u2014 3 absolute outstanding cols + period-over-period variation",
+  "supported": true,
+  "confirmed_by_user": false,
+  "stmt1": {
+    "outstanding_labels": [
+      "5.Apr,2024",
+      "4.Apr,2025",
+      "31.Mar,2026"
+    ],
+    "outstanding_iso": [
+      "2024-04-05",
+      "2025-04-04",
+      "2026-03-31"
+    ],
+    "variation_labels": [
+      "4.Apr,2025 / 5.Apr,2024",
+      "31.Mar,2026 / 4.Apr,2025"
+    ],
+    "n_outstanding": 3
+  },
+  "stmt2": {
+    "outstanding_labels": [
+      "22.Mar,2024",
+      "21.Mar,2025",
+      "31.Mar,2026"
+    ],
+    "outstanding_iso": [
+      "2024-03-22",
+      "2025-03-21",
+      "2026-03-31"
+    ],
+    "variation_labels": [
+      "21.Mar,2025 / 22.Mar,2024",
+      "31.Mar,2026 / 21.Mar,2025"
+    ],
+    "n_outstanding": 3
+  },
+  "date_analysis": {
+    "merged_ends_at": "Feb 2026",
+    "stmt1_new_dates": [
+      "Apr 2024",
+      "Apr 2025",
+      "Mar 2026"
+    ],
+    "stmt2_new_dates": [
+      "Mar 2026"
+    ]
+  },
+  "series_check": {
+    "stmt1_codes_found": [
+      "I",
+      "II",
+      "III",
+      "1",
+      "2",
+      "2.1",
+      "2.2",
+      "2.3",
+      "3",
+      "3.1",
+      "3.2",
+      "3.3",
+      "3.4",
+      "3.5",
+      "3.6",
+      "3.7",
+      "3.7.1",
+      "3.7.2",
+      "3.8",
+      "3.9",
+      "3.9.1",
+      "3.9.2",
+      "3.10",
+      "4",
+      "4.1",
+      "4.2",
+      "4.3",
+      "4.4",
+      "4.5",
+      "4.6",
+      "4.7",
+      "4.8",
+      "4.9",
+      "i",
+      "ii",
+      "iii",
+      "iv",
+      "v",
+      "vi",
+      "vii",
+      "viii",
+      "ix",
+      "x"
+    ],
+    "stmt2_codes_found": [
+      "2.1",
+      "2.2",
+      "2.2.1",
+      "2.2.2",
+      "2.2.3",
+      "2.2.4",
+      "2.3",
+      "2.4",
+      "2.4.1",
+      "2.4.2",
+      "2.4.3",
+      "2.4.4",
+      "2.5",
+      "2.6",
+      "2.7",
+      "2.8",
+      "2.9",
+      "2.9.1",
+      "2.9.2",
+      "2.9.3",
+      "2.9.4",
+      "2.10",
+      "2.11",
+      "2.12",
+      "2.13",
+      "2.13.1",
+      "2.13.2",
+      "2.14",
+      "2.14.1",
+      "2.14.2",
+      "2.15",
+      "2.16",
+      "2.17",
+      "2.18",
+      "2.18.1",
+      "2.18.2",
+      "2.18.3",
+      "2.18.4",
+      "2.18.5",
+      "2.18.6",
+      "2.18.7",
+      "2.19"
+    ],
+    "missing_expected": [],
+    "new_s2_codes": [],
+    "name_changes": [
+      {
+        "code": "3.3",
+        "expected": "Tourism, Hotels & Restaurants",
+        "found": "Tourism, Hotels and Restaurants"
+      },
+      {
+        "code": "3.9",
+        "expected": "NBFCs",
+        "found": "Non-Banking Financial Companies (NBFCs)"
+      },
+      {
+        "code": "4.2",
+        "expected": "Housing",
+        "found": "Housing (Including Priority Sector Housing)"
+      },
+      {
+        "code": "4.3",
+        "expected": "Advances vs Fixed Deposits",
+        "found": "Advances against Fixed Deposits (Including FCNR (B), NRNR Deposits etc.)"
+      },
+      {
+        "code": "4.4",
+        "expected": "Advances vs Shares/Bonds",
+        "found": "Advances to Individuals against share, bonds, etc."
+      },
+      {
+        "code": "4.8",
+        "expected": "Gold Loans",
+        "found": "Loans against gold jewellery"
+      }
+    ]
+  }
+}
