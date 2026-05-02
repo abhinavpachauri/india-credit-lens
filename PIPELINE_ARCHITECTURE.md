@@ -185,8 +185,7 @@ web/
 - `newsletter_config.json` is generated from the merged system_model + subsystems.
 - Per-period system models do not feed the newsletter directly.
 
-### No carousel in active pipeline
-- `generate_carousel.py` is ad-hoc only. Run manually when needed.
+### generate_delta.py is not a pipeline stage
 - `generate_delta.py` exists but is not a pipeline stage — parked for future use.
 
 ### Git / deployment

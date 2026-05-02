@@ -264,15 +264,19 @@ def parse_sheet(ws_data: list[tuple], sheet_name: str, report_date: datetime) ->
         if cell and str(cell).strip():
             date_labels.append(str(cell).strip())
 
-    # The sheet has: 5 outstanding cols + 2 YoY cols + 2 FY cols = 9 numeric cols
-    # Map column indices (1-based from raw row) to semantic names
-    n_outstanding = 5   # columns B-F
-    n_yoy = 2           # columns G-H
-    n_fy = 2            # columns I-J
+    # Outstanding cols have no "/" in their header; variation cols do.
+    # Older monthly files have 5 outstanding + 2 YoY + 2 FY = 9 cols.
+    # Annual files have 3 outstanding + 2 variation = 5 cols.
+    # Detect dynamically so both formats are handled without hardcoding.
+    out_dates = [d for d in date_labels if "/" not in d]
+    var_labels = [d for d in date_labels if "/" in d]
 
-    out_dates = date_labels[:n_outstanding]
-    yoy_pairs = date_labels[n_outstanding: n_outstanding + n_yoy]
-    fy_pairs  = date_labels[n_outstanding + n_yoy: n_outstanding + n_yoy + n_fy]
+    # Split variation labels into YoY and FY halves (best-effort; first half = YoY).
+    # extract_sibc.py recomputes growth from absolute values so these columns are
+    # informational only — the split just preserves column naming conventions.
+    mid       = len(var_labels) // 2
+    yoy_pairs = var_labels[:mid] if mid > 0 else var_labels
+    fy_pairs  = var_labels[mid:] if mid > 0 and len(var_labels) > mid else []
 
     # ---- build column schema ----
     # We'll name outstanding cols by their date, e.g. "2024-01-26"
@@ -287,11 +291,35 @@ def parse_sheet(ws_data: list[tuple], sheet_name: str, report_date: datetime) ->
     numeric_cols = out_col_names + yoy_col_names + fy_col_names
 
     # ---- parse data rows ----
+    # Some SIBC files have multiple date-header blocks within a single sheet.
+    # For example, Bank Credit rows (I/II/III) may use one set of fortnightly
+    # dates while the sector breakdown (Agriculture, Industry …) uses a different
+    # set published on the same day.  When a row with first_cell=None contains
+    # parseable dates it is treated as a sub-header; all subsequent rows use the
+    # updated column names until the next sub-header (or end of sheet).
+    active_numeric_cols = numeric_cols
+
     records = []
     in_priority_sector = False  # tracks when we enter the Priority Sector memo block
     for raw_row in ws_data[5:]:  # skip title+unit+2 header rows+% row
         first_cell = raw_row[0]
         if first_cell is None:
+            # Sub-header detection: None-first-cell row whose remaining cells
+            # contain at least two parseable RBI dates.
+            row_cells = [
+                str(c).strip() for c in raw_row[1:]
+                if c is not None and str(c).strip() and str(c).strip() != "None"
+            ]
+            sub_out = [d for d in row_cells if "/" not in d and parse_rbi_date(d) is not None]
+            sub_var = [d for d in row_cells if "/" in d]
+            if len(sub_out) >= 2:
+                sub_out_cols = [fmt(d) for d in sub_out]
+                mid_v = len(sub_var) // 2
+                sub_yoy = sub_var[:mid_v] if mid_v > 0 else sub_var
+                sub_fy  = sub_var[mid_v:] if mid_v > 0 and len(sub_var) > mid_v else []
+                sub_yoy_cols = [f"yoy_pct__{p.replace(' ','').replace('/','__')}" for p in sub_yoy]
+                sub_fy_cols  = [f"fy_pct__{p.replace(' ','').replace('/','__')}"  for p in sub_fy]
+                active_numeric_cols = sub_out_cols + sub_yoy_cols + sub_fy_cols
             continue
 
         name_str = str(first_cell)
@@ -317,9 +345,9 @@ def parse_sheet(ws_data: list[tuple], sheet_name: str, report_date: datetime) ->
             if not has_data:
                 continue
 
-        numeric_values = list(raw_row[1: 1 + len(numeric_cols)])
+        numeric_values = list(raw_row[1: 1 + len(active_numeric_cols)])
         # Pad if fewer columns than expected
-        while len(numeric_values) < len(numeric_cols):
+        while len(numeric_values) < len(active_numeric_cols):
             numeric_values.append(None)
 
         record = {
@@ -330,7 +358,7 @@ def parse_sheet(ws_data: list[tuple], sheet_name: str, report_date: datetime) ->
             "level": level,
             "is_priority_sector_memo": in_priority_sector,
         }
-        for col, val in zip(numeric_cols, numeric_values):
+        for col, val in zip(active_numeric_cols, numeric_values):
             record[col] = val
 
         records.append(record)

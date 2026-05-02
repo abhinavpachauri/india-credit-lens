@@ -31,10 +31,10 @@ No to all three → deprioritise.
 
 | Component | Status |
 |---|---|
-| RBI SIBC dashboard | **Live** — 7 sections, 42 annotations (merged Jan–Feb 2026) |
+| RBI SIBC dashboard | **Live** — 7 sections, 49 annotations (merged Jan–Mar 2026) |
 | SEO layer | **Live** — metadata, OG image, sitemap, JSON-LD |
-| LinkedIn carousel generator | **Live** — `analysis/carousel/generate_carousel.py` |
 | Free newsletter generator | **Live** — `analysis/newsletter/generate_newsletter.py` |
+| LinkedIn post generator | **Live** — `analysis/newsletter/generate_linkedin.py` (7 packages from newsletter_config.json) |
 | validate_content.py (Check 2b) | **Live** — content accuracy eval on annotation bodies |
 | promote_annotations.py (Stage 8) | **Live** — automated verified copy to web |
 | System View dashboard tab | Planned |
@@ -93,9 +93,11 @@ Use CLI tools for all external service interactions — they are the most contex
 | `analysis/update_web_data.py` | Stage 1b: all xlsx → rbi_sibc_consolidated.csv |
 | `analysis/generate_merge.py` | Stage 5: sections.json[] → sections_merged.json (auto-validates) |
 | `analysis/promote_annotations.py` | Stage 8: annotations_merged.ts → rbi_sibc.ts (verified copy + ID diff) |
+| `analysis/newsletter/CLAUDE.md` | Newsletter + LinkedIn post generation context |
+| `analysis/newsletter/generate_linkedin.py` | LinkedIn post packages from newsletter_config.json (7 posts: anchor + 6 signals) |
 | `analysis/rbi_sibc/timeline.json` | Registry of all ingested periods |
-| `analysis/rbi_sibc/2026-03-30/` | Feb 2026 per-period outputs |
-| `analysis/rbi_sibc/merged/` | Merged outputs (Jan 2024 – Feb 2026) — source for live dashboard |
+| `analysis/rbi_sibc/2026-04-30/` | Mar 2026 per-period outputs (latest) |
+| `analysis/rbi_sibc/merged/` | Merged outputs (Jan 2024 – Mar 2026) — source for live dashboard |
 | `web/lib/reports/rbi_sibc.ts` | Live dashboard annotations (promoted from merged) |
 | `web/CLAUDE.md` | Web-specific context (Next.js, Vercel, component patterns) |
 
@@ -129,7 +131,7 @@ For session-specific state (current period, what's been validated, what's pendin
 
 1. Connect `indiacreditlens.com` domain on Vercel
 2. Add Substack/email CTA to dashboard footer
-3. Publish Feb 2026 carousel + newsletter
+3. Publish Mar 2026 newsletter
 4. System View tab (interactive diagram from `system_model.json`)
 5. `generate_digest.py` — premium monthly PDF
 6. Gold Loan Monitor page (free version — data in SIBC)

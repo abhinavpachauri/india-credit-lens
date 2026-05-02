@@ -41,6 +41,7 @@ Exit codes:
 """
 
 import argparse
+import json
 import subprocess
 import sys
 import os
@@ -150,6 +151,40 @@ def check_timeline():
     cmd = [sys.executable, str(ANALYSIS / "validate_timeline.py"),
            "--path", str(timeline_path)]
     return run_check("timeline", cmd, cwd=ANALYSIS)
+
+
+def check_format(period_dir):
+    """Check 0.5: verify format_report.json exists, format is confirmed and supported.
+
+    Reads the report written by detect_format.py.  Missing report is a WARN
+    (backwards-compat for periods processed before this check was added).
+    Unsupported or unconfirmed format is a hard FAIL.
+    """
+    if period_dir.name == "merged":
+        return None, "", "skipped for merged"
+
+    report_path = period_dir / "format_report.json"
+    if not report_path.exists():
+        return None, "", "format_report.json missing — run detect_format.py first (skipped for legacy periods)"
+
+    try:
+        with open(report_path) as f:
+            report = json.load(f)
+    except Exception as e:
+        return False, "", f"Cannot read format_report.json: {e}"
+
+    fmt_id    = report.get("format_id", "unknown")
+    supported = report.get("supported", False)
+    confirmed = report.get("confirmed_by_user", False)
+
+    if not confirmed:
+        return False, "", f"Format not confirmed by user — re-run detect_format.py"
+    if not supported:
+        return False, "", (
+            f"Format '{fmt_id}' not supported — add parser support, "
+            f"then re-run extract_sibc.py"
+        )
+    return True, f"format={fmt_id}, confirmed=true, supported=true", ""
 
 
 def check_sections(period_dir, merged=False):
@@ -346,6 +381,17 @@ def main():
     if not passed:
         print(out)
         print(err, file=sys.stderr)
+
+    # ── Check 0.5: format_report.json ────────────────────────────────────────
+    passed, out, err = check_format(period_dir)
+    label = "0.5 format_report.json"
+    if passed is None:
+        results.append((label, None, err))
+    else:
+        notes = out if passed else err
+        results.append((label, passed, notes[:60]))
+        if not passed:
+            print(err, file=sys.stderr)
 
     # ── Check 1: sections.json ────────────────────────────────────────────────
     passed, out, err = check_sections(period_dir, merged=args.merged)
