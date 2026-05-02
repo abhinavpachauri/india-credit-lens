@@ -63,6 +63,7 @@ authoring `newsletter_config.json` — do not infer or override it in scripts.
 
 | Script | Input | Output |
 |---|---|---|
+| `validate_newsletter_config.py` | `newsletter_config.json` + `sections_merged.json` | Pass/fail — exits 1 on errors |
 | `generate_newsletter.py` | `newsletter_config.json` | `output/newsletter_YYYY-MM-DD.html` + `_substack.html` |
 | `generate_linkedin.py` | `newsletter_config.json` | `output/linkedin/YYYY-MM-DD/` — 7 post packages |
 
@@ -160,11 +161,14 @@ When not to add: when the causal mechanism is backed by an RBI circular, PIB not
 ```
 □  Merged pipeline complete (Stage 7 evals passing)
 □  Author newsletter_config.json — signals[], image_url fields, hero_narrative
+□  python3 analysis/newsletter/validate_newsletter_config.py   ← GATE: fix all errors before proceeding
 □  python3 analysis/newsletter/generate_newsletter.py
 □  Review output/newsletter_YYYY-MM-DD_substack.html — adjust prose, keep numbers exact
 □  python3 analysis/newsletter/generate_linkedin.py
 □  Review output/linkedin/YYYY-MM-DD/ — adjust hook tone, keep stat exact
 □  Publish newsletter to Substack (week 1)
+□  Update _meta.current_issue_url in newsletter_config.json with published Substack URL
+□  Regenerate LinkedIn posts (CTAs will now link to the specific issue)
 □  Schedule LinkedIn posts per schedule.md (weeks 1–7, 1–2 posts/week)
 ```
 
