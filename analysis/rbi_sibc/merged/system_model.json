@@ -2,10 +2,10 @@
   "_meta": {
     "report_id": "rbi_sibc",
     "report_name": "RBI Sector/Industry-wise Bank Credit (Merged)",
-    "period": "Jan 2024 – Feb 2026 (merged)",
-    "generated": "2026-04-14",
-    "total_credit_lcr": 204.8,
-    "yoy_growth_pct": 14.6,
+    "period": "Jan 2024 – Mar 2026 (merged)",
+    "generated": "2026-05-02",
+    "total_credit_lcr": 213.6,
+    "yoy_growth_pct": 16.1,
     "schema_version": "1.0",
     "source": "annotations_merged.ts + sections_merged.json",
     "note": "Cross-period causal model. annotation_ids reference IDs in annotations_merged.ts. Highlights structural trends not visible in any single-period file."
@@ -64,7 +64,7 @@
       "label": "PLI scheme capex drawdown phase (FY25–26)",
       "description": "Production-Linked Incentive scheme recipients approved in 2022-23 entered the investment phase in FY25-26, driving real capex credit drawdowns in electronics, defence, medical devices, and EV components. Visible as multi-year All Engineering surge in merged data.",
       "annotation_ids": [
-        "all-engineering-pli-signal",
+        "pli-capex-broadening-confirmed",
         "pli-supply-chain-finance"
       ],
       "claim_type": "inference",
@@ -96,7 +96,7 @@
       "label": "NBFC credit recovery post risk-weight cycle",
       "description": "RBI risk weights on bank-to-NBFC credit (raised 2023) temporarily suppressed flows. By Jan 2026 the channel has fully reopened, with NBFC credit re-accelerating. The January NBFC series is null — only March SIBC captures NBFC sub-classification.",
       "annotation_ids": [
-        "nbfc-jan-data-absent"
+        "nbfc-risk-weight-cycle-complete"
       ],
       "claim_type": "hypothesis",
       "source": "RBI Circular DOR.STR.REC.57/21.06.001/2023-24 (November 16, 2023) partially supports risk weight increase; RBI SIBC data exists but specific Jan 2026 re-acceleration and data structure claims not verified",
@@ -187,7 +187,7 @@
       "description": "Most dramatic growth story in the data. ₹0.93L Cr (Mar 2024) → ₹2.06L Cr (Mar 2025) → ₹4.29L Cr (Feb 2026). +359% in 24 months. Only visible in March SIBC files — January data is null for this series.",
       "annotation_ids": [
         "gold-loans-structural-surge",
-        "gold-loans-null-in-jan"
+        "gold-loans-reclassification-overstates-demand"
       ]
     },
     {
@@ -215,7 +215,7 @@
       "label": "All Engineering (Industry by Type)",
       "description": "Fastest-growing large industry sub-sector. ₹1.96L Cr (Feb 2024) → ₹2.32L Cr (Feb 2025) → ₹3.16L Cr (Feb 2026). +62% in 2 years. PLI capex drawdowns driving the surge.",
       "annotation_ids": [
-        "all-engineering-pli-signal"
+        "pli-capex-broadening-confirmed"
       ]
     },
     {
@@ -262,8 +262,8 @@
       "label": "January SIBC missing Gold, Housing, NBFC, Tourism data",
       "description": "January SIBC files do not report sub-classifications for Gold Loans, PSL Housing, NBFC credit, and Tourism. These series only appear in March files. Merged Jan→Jan YoY comparisons for these categories are not possible.",
       "annotation_ids": [
-        "gold-loans-null-in-jan",
-        "nbfc-jan-data-absent"
+        "gold-loans-reclassification-overstates-demand",
+        "nbfc-risk-weight-cycle-complete"
       ],
       "claim_type": "data",
       "source": "RBI Sectoral Deployment of Bank Credit — Jan 2026 SIBC file (gold loans, housing, NBFC, tourism sub-categories absent)",
@@ -341,7 +341,7 @@
       "description": "Tier-2 and tier-3 suppliers to PLI anchor companies represent the next layer of manufacturing credit. Anchor company relationships provide implicit credit assurance for supply chain finance structures.",
       "annotation_ids": [
         "pli-supply-chain-finance",
-        "all-engineering-pli-signal"
+        "pli-capex-broadening-confirmed"
       ],
       "claim_type": "inference",
       "source": "PIB Press Release - PLI Scheme: Powering India's Industrial Renaissance (PRID: 155082), August 2025",

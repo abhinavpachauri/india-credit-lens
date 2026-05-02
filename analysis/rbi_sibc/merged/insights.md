@@ -1,79 +1,77 @@
-# Credit Insights — RBI SIBC Merged (Jan 2024 – Feb 2026)
+# Credit Insights — RBI SIBC Merged (Jan 2024 – Mar 2026)
 
-> Period: Jan 2024 – Feb 2026 | Generated: 2026-04-14
-> Source: RBI SIBC merged across all ingested periods
-> Data: 8 data points — Jan 2024, Feb 2024*, Mar 2024, Jan 2025, Feb 2025*, Mar 2025, Jan 2026, Feb 2026
-
----
-
-## 1. Bank credit added ₹44L Cr in two years — FY26 accelerating above FY25
-
-Bank Credit: ₹160.4L Cr (Jan 2024) → ₹178.7L Cr (Jan 2025) → ₹204.8L Cr (Jan 2026). YoY growth lifted from 11.4% to 14.6%. FY26 is tracking at 13.8% (Feb 2026 vs Mar 2025) against FY25's full-year 11.0%. This is not base effect — eleven months of data on the same trajectory confirms structural acceleration.
-
-**Why the merged view matters:** No single-period file shows the YoY acceleration. The Jan→Jan comparison is only possible with merged data.
-
-**Implication for lenders:** Any portfolio that grew less than 13% in FY26 (to Feb) lost market share. The system is in expansion.
+> Period: Jan 2024 – Mar 2026 | Updated: 2026-05-02
+> Source: RBI SIBC merged across all ingested periods (Jan 2026, Feb 2026, Mar 2026 files)
+> Data: Jan 2024, Mar 2024, Jan 2025, Mar 2025, Jan 2026, Feb 2026, Mar 2026 (FY-end annual)
 
 ---
 
-## 2. MSME YoY credit growth tripled in one year — the cross-period confirmation
+## 1. FY26 is closed — bank credit +16.1% YoY, strongest in this cycle
 
-Micro and Small YoY: +9.6% (Jan 2025) → +31.2% (Jan 2026). This tripling is only visible with merged data. PSL Micro and Small independently corroborates: +25.6% FY (Feb 2026). Two series, two independent measurement approaches, same direction. The UDYAM + GST underwriting threshold has been crossed at scale.
+Bank Credit: ₹160.5L Cr (Apr 2024) → ₹184.0L Cr (Apr 2025) → **₹213.6L Cr (Mar 2026)**. FY26 added ₹29.6L Cr vs ₹18.2L Cr in FY25 — 63% more. YoY growth: +11.0% (FY25) → +16.1% (FY26). Within FY26: Jan 2026 FY was +12.0%, Feb 2026 FY was +13.5%, Mar 2026 FY confirmed +16.1%. The acceleration was back-loaded.
 
-Large enterprises grew only +5.7% FY (Feb 2026). The size inversion — smallest borrowers growing fastest — is now multi-period confirmed.
+**Why the merged view matters:** The within-FY26 acceleration (12% → 13.5% → 16.1%) is only visible with merged data. The Mar 2026 annual snapshot confirmed the trend the monthly files were already showing.
 
-**Implication for lenders:** Banks that built MSME origination infrastructure in 2022-24 are now harvesting. The window is open but will close as competition intensifies. If your industrial book is predominantly large corporate, your growth rate is structurally capped.
-
----
-
-## 3. Gold loans tripled in 24 months — visible only at the March data points
-
-Gold Loans: ₹0.93L Cr (Mar 2024) → ₹2.06L Cr (Mar 2025) → ₹4.29L Cr (Feb 2026). +359% in 24 months. This series is null in the January SIBC files — the surge is only visible via the March data points in merged data.
-
-Share of personal loans: 1.75% → 3.45% → 6.31%. Gold-backed credit is replacing unsecured personal loans as the preferred short-tenure borrowing instrument for Indian households.
-
-**Implication for lenders:** Banks entering gold lending now are taking share from NBFCs. Move fast — the operational moat (branch-level assay, cash management) is the barrier, not regulatory approval.
+**Implication for lenders:** Any portfolio that grew below 16% in FY26 lost share in a system-wide tailwind. The FY27 base is ₹213.6L Cr — absolute origination targets rise every year.
 
 ---
 
-## 4. Credit card YoY fell from 13% to 1.5% in one year — RBI policy fully visible
+## 2. MSME credit tripled its growth rate — confirmed across Jan, Feb, and Mar 2026
 
-Credit Card Outstanding YoY: +13.0% (Jan 2025) → +1.5% (Jan 2026). Consumer Durables YoY: -1.0% (Jan 2025) → -9.6% (Jan 2026). Both trends are only unambiguous with the Jan→Jan comparison. The Nov 2023 RBI risk-weight hike on credit cards and consumer credit has had its intended effect — visible in full in the merged data.
+Micro and Small YoY: +9.6% (FY25) → +33.1% (FY26). This 3× jump is confirmed in Jan 2026, Feb 2026, and Mar 2026 independently (29-33% range). PSL MSE independently corroborates: ₹22.4L Cr (Mar 2025) → ₹29.0L Cr (Mar 2026), +29.5%. Two series, two independent measurement approaches, same direction.
 
-**Why it matters:** The credit is not disappearing — it is migrating to BNPL, UPI credit lines, and gold loans. Traditional credit card issuers should invest in UPI credit-linked products before this migration completes.
+Large enterprises grew only +8.9% FY26. The size inversion — smallest borrowers growing fastest — is now multi-period confirmed and has reached FY-end data.
 
----
-
-## 5. All Engineering up 62% in 2 years — PLI capex drawdowns are now real banking flows
-
-All Engineering: ₹1.96L Cr (Feb 2024) → ₹2.32L Cr (Feb 2025) → ₹3.16L Cr (Feb 2026). +62% across three February data points. This is the fastest-growing large industry sub-sector. PLI scheme recipients approved in 2022-23 entered the investment phase in FY25-26, driving real capex credit drawdowns in electronics, defence, medical devices, and EV components.
-
-**Implication for lenders:** Banks that built PLI-sector relationships during application phases are seeing drawdowns now. Supply chain finance to tier-2 and tier-3 PLI suppliers is the next layer.
+**Implication for lenders:** Alt-data underwriting (GST, UPI, e-way bills) is no longer optional — it is the only way to underwrite the fastest-growing book. FY27-28 will be the first stress test for these models; first-cycle borrower loss curves could surprise.
 
 ---
 
-## 6. Vehicle loans accelerating counter to all other personal credit
+## 3. Gold loans 5× in 24 months — FY-end data confirms the scale; reclassification is the driver
 
-Vehicle Loans YoY: +9.7% (Jan 2025) → +17.1% (Jan 2026). This is the opposite direction from credit cards and consumer durables. EV adoption and premium vehicle financing are driving growth beyond pure volume expansion. The multi-period trajectory is upward with no signs of deceleration.
+Gold Loans: ₹0.93L Cr (Mar 2024) → ₹2.06L Cr (Mar 2025, +121%) → **₹4.60L Cr (Mar 2026, +123%)**. Two consecutive YoY rates above 120%, confirmed at FY-end. Share of personal credit: 1.7% → 3.5% → 6.6%.
 
-**Implication for lenders:** EV-specific loan products — battery residual value, charging infrastructure finance — represent a product differentiation opportunity as EV share of new vehicle sales grows.
+The merged view adds critical context: gold loans are null in January files — the series only appears at March (FY-end) data points. The cross-period pattern shows that the reclassification event (RBI Sep 2024 circular) plus gold price appreciation (~30%) together account for most of the stock increase — not net new disbursement demand.
 
----
-
-## 7. Transport operators decelerating after the fleet expansion surge
-
-Transport Operators YoY: +12.0% (Jan 2025) → +4.3% (Jan 2026). Post-COVID logistics credit normalization after the fleet expansion surge of FY24. The merged view reveals this as a multi-period trend, not a one-month anomaly.
-
-**Implication for lenders:** Transport operator portfolios built during the FY24 expansion cycle face elevated credit risk if freight rates soften while repayments ramp up. Monitor closely.
+**Implication for lenders:** The reclassification stock effect is fully recognised by Mar 2026. FY27 growth will be flow-only — real new disbursements at current prices. A gold price reversal >20% would compress both collateral values and the reported book.
 
 ---
 
-## 8. Infrastructure credit decelerating — the supercycle is over
+## 4. Credit cards confirmed at 3.5% YoY in FY26 — RBI policy structurally binding
 
-Infrastructure: +5.8% FY in FY26. At ₹14.44L Cr and 32.5% of all industry credit, the growth rate matters systemically. The FY22-24 capex wave projects are now in operations, shifting from drawdown to repayment. The next capex wave (data centers, green hydrogen, semiconductor fab) has not yet reached credit drawdown scale.
+Credit Card Outstanding YoY: +13.0% (Jan 2025) → +1.5% (Jan 2026) → **+3.5% (FY26, Mar 2026)**. Consumer Durables in outright contraction: -1.0% (FY25) → **-5.3% (FY26)**. The FY-end Mar 2026 data closes the debate — this is not a temporary blip. The RBI 2023 risk-weight hike is confirmed as structurally binding across all three periods.
 
-**Implication for lenders:** Corporate banks with heavy infrastructure exposure need to start building credit capability for the next cycle now. Renewable energy project finance is the most immediate opportunity.
+**Why it matters:** The credit is not disappearing — it is migrating to BNPL, UPI credit lines, and gold loans. The card business model must pivot to fee, interchange, and float — not revolving NII. POS consumer durable finance is in structural decline.
 
 ---
 
-*For the full annotation set, system model, and lending opportunity analysis: see annotations_merged.ts, system_model.json, and opportunities_merged.md in this directory.*
+## 5. PLI capex broadened in FY26 — confirmed at FY-end across 6 sub-sectors
+
+FY26 YoY: All Engineering **+32.2%** (₹3.17L Cr), Petroleum **+32.5%** (₹2.04L Cr), Basic Metal **+19.4%** (₹5.18L Cr), Chemicals +14.9%, Food Processing +14.0%, Vehicles & Parts +18.1%. Every sub-sector accelerated vs FY25.
+
+The merged view shows the acceleration building: All Engineering grew +22% in FY25, +32% in FY26. The Mar 2026 FY-end data confirms the drawdown phase is broad-based — not just electronics.
+
+**Implication for lenders:** Supply chain finance to tier-2 and tier-3 PLI suppliers is the next product layer. Infrastructure remains the laggard at +9.5% YoY — the 2019-24 highway/metro supercycle has matured.
+
+---
+
+## 6. NBFC tap reopens fully — +26.3% YoY in FY26, the 2023 cycle absorbed
+
+Bank credit to NBFCs: ₹15.23L Cr (Mar 2024) → ₹16.35L Cr (Mar 2025, +7.4%) → **₹20.66L Cr (Mar 2026, +26.3%)**. FY26 incremental: ₹4.30L Cr vs FY25 incremental of ₹1.12L Cr — nearly 4×.
+
+The monthly files (Jan, Feb 2026) showed NBFCs as null — the NBFC series is only available at March-end. The merged view makes this data gap explicit: NBFCs are invisible in 2 of 3 monthly files but are the single largest services sub-sector and most important driver.
+
+**Implication for lenders:** Co-origination and warehouse financing infrastructure for bank-NBFC partnerships is the operative product wedge for FY27. RBI could re-tighten if NBFC sector overheats — monitor H1 FY27 FSR closely.
+
+---
+
+## 7. PSL Housing +39.8% in FY26 — classification event, not housing demand
+
+PSL Housing: ₹7.47L Cr (Mar 2025, -1.1%) → **₹10.44L Cr (Mar 2026, +39.8%)**. RBI's October 2024 PSL limit revision (metro: ₹35L → ₹45L; non-metro: ₹25L → ₹35L) reclassified existing mortgages in. They are not new originations.
+
+The real housing lending signal: personalLoans.Housing at +11.5% YoY (₹30.1L Cr → ₹33.6L Cr). Steady mid-teens compounding.
+
+**Implication for analysts:** Strip the PSL Housing line from any housing demand quote. PSL line shifts of 30+ percentage points in a single year are almost always definition changes — always check for regulatory revision before citing growth.
+
+---
+
+*For the full annotation set, system model, and lending opportunity analysis: see annotations_merged.ts, system_model.json, and opportunities.md in this directory.*
