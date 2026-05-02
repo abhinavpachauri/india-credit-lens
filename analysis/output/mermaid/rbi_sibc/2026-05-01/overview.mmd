@@ -1,0 +1,38 @@
+---
+title: System Overview — Mar 2026  |  5 causal stories
+---
+flowchart LR
+
+    classDef driverNode fill:#1E3A5F,stroke:#1E3A5F,color:#ffffff
+    classDef sectorNode fill:#F0FDF4,stroke:#166534,color:#166534
+    classDef outcomeNode fill:#0F766E,stroke:#0F766E,color:#ffffff
+
+    sub_01_drv(["RBI Unsecured Credit Tightening"]):::driverNode
+    sub_01_sec["Gold Loans (Personal)\n+123.1% YoY"]:::sectorNode
+    sub_01_out("1 opp + 2 risk"):::outcomeNode
+    sub_01_drv --> sub_01_sec
+    sub_01_sec --> sub_01_out
+
+    sub_02_drv(["NBFC Sector Capital Normalisation"]):::driverNode
+    sub_02_sec["Bank Credit to NBFCs\n+26.3% YoY"]:::sectorNode
+    sub_02_out("1 opp + 1 risk"):::outcomeNode
+    sub_02_drv --> sub_02_sec
+    sub_02_sec --> sub_02_out
+
+    sub_03_drv(["MSME Formalisation via GST & UDYAM"]):::driverNode
+    sub_03_sec["Micro and Small Industry\n+33.1% YoY"]:::sectorNode
+    sub_03_out("2 opp + 1 risk"):::outcomeNode
+    sub_03_drv --> sub_03_sec
+    sub_03_sec --> sub_03_out
+
+    sub_04_drv(["PLI Capex Cycle Broadening"]):::driverNode
+    sub_04_sec["Vehicle Loans (Personal)\n+18.6% YoY"]:::sectorNode
+    sub_04_out("1 opp"):::outcomeNode
+    sub_04_drv --> sub_04_sec
+    sub_04_sec --> sub_04_out
+
+    sub_05_drv(["PLI Capex Cycle Broadening"]):::driverNode
+    sub_05_sec["Petroleum, Coal & Nuclear (Industry)\n+32.5% YoY"]:::sectorNode
+    sub_05_out("1 opp"):::outcomeNode
+    sub_05_drv --> sub_05_sec
+    sub_05_sec --> sub_05_out
