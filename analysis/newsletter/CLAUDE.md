@@ -64,8 +64,26 @@ authoring `newsletter_config.json` — do not infer or override it in scripts.
 | Script | Input | Output |
 |---|---|---|
 | `validate_newsletter_config.py` | `newsletter_config.json` + `sections_merged.json` | Pass/fail — exits 1 on errors |
+| `generate_images.py` | Stage 4 mermaid `.mmd` files | `output/images/*.png` — one per diagram |
 | `generate_newsletter.py` | `newsletter_config.json` | `output/newsletter_YYYY-MM-DD.html` + `_substack.html` |
-| `generate_linkedin.py` | `newsletter_config.json` | `output/linkedin/YYYY-MM-DD/` — 7 post packages |
+| `generate_linkedin.py` | `newsletter_config.json` + `output/images/` | `output/linkedin/YYYY-MM-DD/` — 7 post packages (txt + png) |
+
+---
+
+## generate_images.py
+
+Renders all relevant Stage 4 Mermaid `.mmd` diagrams to PNG images for use
+in newsletter and LinkedIn posts. Must run **before** authoring `image_url`
+fields in `newsletter_config.json`.
+
+Discovers the latest `analysis/output/mermaid/rbi_sibc/YYYY-MM-DD/` directory
+automatically. Renders: `overview.mmd`, `sub_NN_*.mmd`, `quadrant.mmd`.
+Overwrites prior period images in `output/images/`.
+
+Prints a manifest to guide `image_url` assignment — which diagram fits which
+signal type.
+
+Run: `python3 analysis/newsletter/generate_images.py`
 
 ---
 
@@ -160,12 +178,17 @@ When not to add: when the causal mechanism is backed by an RBI circular, PIB not
 
 ```
 □  Merged pipeline complete (Stage 7 evals passing)
-□  Author newsletter_config.json — signals[], image_url fields, hero_narrative
+□  python3 analysis/newsletter/generate_images.py   ← renders Stage 4 Mermaid .mmd → output/images/*.png
+□  Author newsletter_config.json — signals[], hero_narrative
+     └─ assign image_url per signal from the generate_images.py manifest
+        overview.png       → system-wide / synchronisation signals
+        sub_NN_*.png       → the matching subsystem's causal signal
+        quadrant.png       → comparative / laggard signals
 □  python3 analysis/newsletter/validate_newsletter_config.py   ← GATE: fix all errors before proceeding
 □  python3 analysis/newsletter/generate_newsletter.py
 □  Review output/newsletter_YYYY-MM-DD_substack.html — adjust prose, keep numbers exact
 □  python3 analysis/newsletter/generate_linkedin.py
-□  Review output/linkedin/YYYY-MM-DD/ — adjust hook tone, keep stat exact
+□  Review output/linkedin/YYYY-MM-DD/ — each post has .txt + .png; check image–copy pairing
 □  Publish newsletter to Substack (week 1)
 □  Update _meta.current_issue_url in newsletter_config.json with published Substack URL
 □  Regenerate LinkedIn posts (CTAs will now link to the specific issue)
