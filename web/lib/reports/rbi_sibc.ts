@@ -65,18 +65,6 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
         preferredMode: "fy",
         effect: { highlight: ["Food Credit"], dash: ["Food Credit"] },
       },
-      {
-        id: "bankcredit-april-date-convention",
-        title: "Bank Credit uses April fortnight dates — treat them as FY-end",
-        body: "Bank Credit aggregate columns are labelled 'Apr 2024' (Apr 5, 2024) and 'Apr 2025' (Apr 4, 2025) " +
-              "because RBI publishes on a fortnightly cycle. Sub-sectors (Agriculture, Industry, Services, Personal Loans) " +
-              "use Mar 22, 2024 and Mar 21, 2025 — different actual dates in the same statement. " +
-              "The published 16.1% YoY variation uses RBI's own variation column, not a recomputed figure.",
-        implication: "Treat all Bank Credit date labels as FY-end snapshots. " +
-                     "Do not mix Bank Credit totals with sector sub-totals in an arithmetic sum — the dates are not identical.",
-        preferredMode: "yoy",
-        effect: { dash: ["Bank Credit"] },
-      },
     ],
     opportunities: [
       {
@@ -176,7 +164,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
       {
         id: "services-credit-entry",
         title: "Services sector credit is the fastest-growing main channel",
-        body: "Services grew from ₹44.1L Cr (Jan 2024) to ₹58L Cr (Mar 2026) — a ₹14L Cr+ addition in 27 months. " +
+        body: "Services grew from ₹44.1L Cr (Jan 2024) to ₹60.6L Cr (Mar 2026) — a ₹16.5L Cr addition in 27 months. " +
               "Within services: NBFCs ₹20.66L Cr (+26.3%), Computer Software accelerating, CRE and Trade both above 16% YoY. " +
               "Each sub-sector has distinct risk and opportunity profiles.",
         implication: "Lenders building service-sector credit capabilities — IT working capital, logistics finance, " +
@@ -620,12 +608,12 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
       },
       {
         id: "industry-type-partition-not-exact",
-        title: "Industry sub-types do not sum to the Industry total",
-        body: "The industry-by-type breakdown (Statement 5) does not perfectly reconcile to the industry total in Statement 1. " +
-              "Some sub-sectors use different classification vintages, and 'Other Industries' is a residual bucket. " +
-              "Cross-sectional arithmetic should treat Statement 5 as indicative, not additive.",
-        implication: "Do not sum Statement 5 sub-sectors as a cross-check against the Statement 1 Industry total. " +
-                     "Use each statement independently for its own trend analysis.",
+        title: "Industry sub-types don't add up to the Industry total",
+        body: "The industry-by-type breakdown in this section does not reconcile to the Industry Total shown in Main Sectors. " +
+              "Sub-sectors use different classification vintages, and an 'Other Industries' residual absorbs unclassified credit. " +
+              "The gap is small but real — do not treat this section as an arithmetic decomposition of the headline.",
+        implication: "Use this section for within-series trend analysis only — e.g. tracking Infrastructure or Engineering individually. " +
+                     "Do not sum sub-types to cross-check or reconstruct the Industry Total.",
         preferredMode: "absolute",
         effect: { dash: ["Infrastructure"] },
       },

@@ -28,6 +28,12 @@ export interface AnnotationEffect {
   };
 }
 
+export interface AnnotationBasis {
+  facts:       string[];   // exact data points from sections.json this rests on
+  inferences:  string[];   // analytical steps beyond what the data directly shows
+  hypothesis?: string[];   // forward-looking or unverifiable claims in this annotation
+}
+
 export interface Annotation {
   id:            string;
   title:         string;          // 4–6 words
@@ -35,6 +41,9 @@ export interface Annotation {
   implication?:  string;          // "For lenders: ..."
   preferredMode?: "absolute" | "yoy" | "fy"; // chart switches to this mode when annotation is active
   effect:        AnnotationEffect;
+  // ── Explainability fields (optional — populate for any annotation making causal or forward claims) ──
+  claim_type?:   "data" | "inference" | "hypothesis"; // highest claim_type in body+implication
+  basis?:        AnnotationBasis;                       // structured reasoning chain
 }
 
 export interface SectionAnnotations {

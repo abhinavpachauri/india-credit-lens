@@ -358,6 +358,102 @@ def check_body_length(sections, result):
                     )
 
 
+# ── Check D: superlative claims ───────────────────────────────────────────────
+# Superlatives must be verified within the attached data, not asserted as fact.
+# Flag for human review — cannot auto-verify but can flag for attention.
+
+_SUPERLATIVES = re.compile(
+    r'\b(strongest|largest|fastest|highest|lowest|first time|only one|sole|unprecedented|'
+    r'record high|all-time|never before|most significant|biggest)\b',
+    re.IGNORECASE,
+)
+
+def check_superlatives(sections, result):
+    """
+    Check D — WARNING: superlative claims in insights and opportunities.
+    The analyst must verify these against the dataset before submitting.
+    Gaps are excluded — superlatives in gaps ("the only missing series") are benign.
+    """
+    for section, lenses in sections.items():
+        for lens in ("insights", "opportunities"):
+            for ann in lenses.get(lens, []):
+                text = (ann.get("title", "") + " " + ann.get("body", "") +
+                        " " + ann.get("implication", ""))
+                matches = _SUPERLATIVES.findall(text)
+                if matches:
+                    unique = list(dict.fromkeys(m.lower() for m in matches))
+                    result.warn(
+                        "superlatives",
+                        f"[{section}.{lens}] '{ann['id']}' uses superlative(s): "
+                        f"{unique}. Verify these are true within the attached dataset "
+                        f"and state the comparison explicitly in the body.",
+                    )
+
+
+# ── Check E: gap audience relevance ──────────────────────────────────────────
+# Gaps must describe limitations a lender could wrongly act on — not pipeline
+# methodology or RBI publication format notes.
+
+_PIPELINE_TERMS = re.compile(
+    r'\b(fortnightly|fortnight|publishes on|publication date|labelled|column header|'
+    r'April date|Apr date|april label|statement 1|statement 2|sibc file|'
+    r'pipeline|consolidat|xlsx|csv|our data)\b',
+    re.IGNORECASE,
+)
+
+def check_gap_relevance(sections, result):
+    """
+    Check E — ERROR: gap annotations containing pipeline/methodology language.
+    Gaps must be audience-relevant (CRO could misread the data), not internal
+    documentation about how we process RBI files.
+    """
+    for section, lenses in sections.items():
+        for ann in lenses.get("gaps", []):
+            text = ann.get("title", "") + " " + ann.get("body", "") + " " + ann.get("implication", "")
+            matches = _PIPELINE_TERMS.findall(text)
+            if matches:
+                unique = list(dict.fromkeys(m.lower() for m in matches))
+                result.error(
+                    "gap_relevance",
+                    f"[{section}.gaps] '{ann['id']}' contains pipeline/methodology "
+                    f"language: {unique}. Gaps must describe what a lender could "
+                    f"misread — not how RBI publishes or how we process the data. "
+                    f"Remove or rewrite for the audience.",
+                )
+
+
+# ── Check F: opportunity actionability ───────────────────────────────────────
+# Opportunity implications must prescribe a specific action, not just describe
+# a market condition.
+
+_ACTION_VERBS = re.compile(
+    r'\b(build|enter|exit|prioritis[e]?|prioritiz[e]?|avoid|hedge|partner|target|'
+    r'develop|scale|launch|expand|specialise|speciali[sz]e|deploy|originate|'
+    r'underwrite|structure|offer|position|capture|lead|focus on)\b',
+    re.IGNORECASE,
+)
+
+def check_opportunity_actionability(sections, result):
+    """
+    Check F — WARNING: opportunity implications missing action verbs.
+    An opportunity that only describes a tailwind is an insight in the wrong bucket.
+    """
+    for section, lenses in sections.items():
+        for ann in lenses.get("opportunities", []):
+            imp = ann.get("implication", "")
+            if not imp:
+                # implication absence is already caught by check_schema
+                continue
+            if not _ACTION_VERBS.search(imp):
+                result.warn(
+                    "opp_actionability",
+                    f"[{section}.opportunities] '{ann['id']}' implication has no action "
+                    f"verb (build/enter/target/develop/scale/etc.). Opportunities must "
+                    f"prescribe what a specific lender should do — not just describe a "
+                    f"tailwind. Current: \"{imp[:80]}...\"",
+                )
+
+
 # ── Orchestrator ──────────────────────────────────────────────────────────────
 
 def validate(ts_path):
@@ -374,12 +470,15 @@ def validate(ts_path):
         return result, sections
 
     checks = [
-        ("Schema",           check_schema),
-        ("ID format",        check_id_format),
-        ("Uniqueness",       check_uniqueness),
-        ("Section coverage", check_coverage),
-        ("System minimums",  check_minimums),
-        ("Body length",      check_body_length),
+        ("Schema",              check_schema),
+        ("ID format",           check_id_format),
+        ("Uniqueness",          check_uniqueness),
+        ("Section coverage",    check_coverage),
+        ("System minimums",     check_minimums),
+        ("Body length",         check_body_length),
+        ("Superlatives",        check_superlatives),        # Check D — warn
+        ("Gap relevance",       check_gap_relevance),       # Check E — error
+        ("Opp actionability",   check_opportunity_actionability),  # Check F — warn
     ]
 
     for name, fn in checks:

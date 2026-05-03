@@ -342,7 +342,48 @@ Draft ingestion plans for all sources below are in `DATA_SOURCES.md`. Pipeline r
 
 ---
 
-## 13. Key Risks & Mitigations
+## 13. Monetization Roadmap
+
+The reasoning chain — fact → inference → hypothesis — is the proprietary asset.
+The free dashboard gives conclusions. Paid tiers give the reasoning.
+
+### Free tier (current)
+- Dashboard: 7 sections, 48+ annotations, causal system model
+- Newsletter (Substack free): top 6 signals per issue with explained reasoning
+- Dashboard claim-type badge: `DATA` / `INFERRED` / `HYPOTHESIS` on each annotation
+  — planned for next build cycle, no engineering cost
+
+### Paid Tier 1 — Premium Substack (₹2,000–5,000/mo or $25–50/mo)
+*Target: 50+ free subscribers before launching*
+- Full annotation set (all 48+, not just the 6 newsletter signals)
+- `basis` chain per annotation — fact → inference → hypothesis, structured
+- System model narrative: causal diagram explained in prose per section
+- What changed vs prior period: annotation diff, upgraded/downgraded signals
+- Trigger: when newsletter hits 50 free subscribers
+
+### Paid Tier 2 — Quarterly Analyst Report (PDF, ₹15,000–25,000/report or ₹50,000/year)
+*Target: NBFCs, banks, PE/VC funds wanting board-ready credit environment briefing*
+- Full system model as a structured deliverable: causal diagram + all basis chains
+- Formatted for credit committee — defensible, cited, claim-typed
+- Every claim traces to a data point or a named external source
+- Consulting entry product: a NBFC paying for this report is 3 calls from a retainer
+- Trigger: after 2 newsletter issues published, cold outreach to 10 target NBFCs
+
+### Paid Tier 3 — API / Structured Data (SaaS, $200–500/mo per seat)
+*Target: fintechs and NBFCs wanting to embed credit signals into internal tools*
+- Structured JSON: annotations + basis chains + claim_type, per RBI cycle
+- Powers: credit appetite frameworks, portfolio review tools, lending playbooks
+- The annotation schema is already machine-readable — `basis` field makes it
+  genuinely useful structured intelligence, not just text
+- Trigger: 3+ inbound requests for data access (signals product-market fit)
+
+### Sequencing rule
+Consulting monetises first (no product build required). Substack paid is parallel.
+API is last — requires proven signal quality and inbound demand.
+
+---
+
+## 14. Key Risks & Mitigations
 
 | Risk | Likelihood | Mitigation |
 |---|---|---|

@@ -83,6 +83,20 @@ interface Annotation {
     dim?:       string[];   // series to fade (20% opacity)
     dash?:      string[];   // series to show dashed (use for "misleading" or caveat series)
   };
+  // ── Explainability fields ──────────────────────────────────────────────────
+  // Required whenever body or implication makes a causal, comparative, or
+  // forward-looking claim. Optional for pure data observations.
+  claim_type?: "data" | "inference" | "hypothesis";
+  // "data"       — directly readable from sections.json. No external source needed.
+  // "inference"  — causal explanation referencing something outside SIBC data
+  //                (RBI circulars, policy, macro context). Must have basis.inferences.
+  // "hypothesis" — forward-looking or unverifiable. Must be explicit.
+  //                Newsletter generator will add a caveat marker on hypothesis claims.
+  basis?: {
+    facts:       string[];   // verbatim data points this rests on, e.g. "+33.1% YoY, ₹10.63L Cr"
+    inferences:  string[];   // analytical steps beyond the raw data
+    hypothesis?: string[];   // forward claims — what would falsify this
+  };
 }
 ```
 
@@ -106,14 +120,69 @@ interface Annotation {
 
 ### Annotation type definitions
 
-- **Insight** — something true and non-obvious about what's in the data.
-  "Personal loans overtook industry credit" is an insight.
+Each type has a forcing question. If the annotation doesn't satisfy the forcing
+question, it belongs in a different bucket or should not be written at all.
 
-- **Gap** — a limitation, caveat, seasonal distortion, or missing piece that makes
-  the data misleading if read naively. "January food credit spike is seasonal, not structural" is a gap.
+---
 
-- **Opportunity** — a specific, actionable lending opportunity for a credit professional.
-  Must be grounded in the data, not generic advice.
+**Insight** — *"What does the data show, and what is the most defensible interpretation?"*
+
+An insight is a non-obvious finding with an analytical interpretation. It can be a
+pure data observation ("Personal loans overtook industry credit") or an inference
+("the acceleration is structural, not cyclical") — but every claim must be clearly
+labelled with `claim_type`.
+
+Rules:
+- Does NOT include pipeline or methodology observations (e.g. "RBI uses April dates").
+  That is internal documentation, not an audience-relevant insight.
+- Superlatives ("strongest in this cycle", "largest single-year add") must be
+  verifiable within the attached data. State the comparison explicitly in the body.
+- If the body contains causal language ("reflects", "driven by", "structural shift",
+  "because of") → set `claim_type: "inference"` and populate `basis.inferences`.
+- If the body contains forward-looking language ("will", "entering FY27", "tailwind
+  for X years") → set `claim_type: "hypothesis"` and populate `basis.hypothesis`.
+
+---
+
+**Gap** — *"What might a lender wrongly conclude from this data, and why?"*
+
+A gap is an audience-relevant limitation — something that looks like a signal but
+is actually a distortion, a missing series, or a seasonal effect that a reader
+could misinterpret.
+
+Rules:
+- Must answer: what wrong conclusion could a CRO draw if they didn't know this?
+- Pipeline/methodology notes are NOT gaps for the audience:
+  ✗ "RBI publishes Bank Credit on a fortnightly cycle" — this is internal pipeline context
+  ✗ "The April date labels are not true April data" — solved by the pipeline, invisible to users
+  ✓ "January food credit spike is seasonal, not structural" — a reader could misread it
+  ✓ "Bank-to-NBFC credit double-counts downstream retail exposure" — a lender could overstate risk
+- Gaps are the hardest type to write well. Aim for 2–3 high-quality gaps per section,
+  not 4–5 mediocre ones.
+
+---
+
+**Opportunity** — *"What specific action should a specific lender take, in which segment, and why now?"*
+
+An opportunity is prescriptive, not descriptive. The implication field must complete
+this template:
+
+> **[Lender type] should [action verb] [segment/product] because [data finding] —
+> window is [timeframe or condition].**
+
+Test: replace the implication with "This is a tailwind" — if the meaning barely
+changes, it is not an opportunity, it is an insight.
+
+Rules:
+- The implication MUST contain an action verb: build, enter, exit, prioritise, avoid,
+  hedge, partner, target, develop, scale, launch, expand, specialise.
+- Must name the lender type (NBFC, bank, fintech, co-lender) and the specific segment.
+- Must state the window: a timeframe ("FY27"), a condition ("before base normalises"),
+  or a trigger ("once second bureau vintage data is available").
+- "Lenders with scalable origination have a compounding tailwind" → NOT an opportunity.
+  "Fintechs should build MSME co-origination capacity now — the annual credit target
+  rises ₹5L Cr/year and NBFCs without alt-data infrastructure will cede this to
+  bureau-based lenders within 2 FY cycles" → opportunity.
 
 ### Writing style — strictly enforced
 
@@ -293,6 +362,14 @@ by being referenced in at least one edge or having 2+ annotation_ids.
 - [ ] `preferredMode` is set on every annotation that involves growth rates
 - [ ] Each section has at least 2 annotations across insights/gaps/opportunities
 - [ ] No two annotations say the same thing with different wording
+- [ ] Every superlative ("strongest", "largest", "fastest", "first", "only") is
+      verified within the attached data — the comparison is stated explicitly in body
+- [ ] Every annotation body with causal language has `claim_type: "inference"` or `"hypothesis"`
+- [ ] Every gap annotation answers: what wrong conclusion could a CRO draw?
+      No gap is a pipeline/methodology note (RBI dates, fortnightly publication, etc.)
+- [ ] Every opportunity implication contains an action verb and names a lender type,
+      segment, and window — it completes the template sentence
+- [ ] `basis` is populated on every annotation with `claim_type: "inference"` or `"hypothesis"`
 
 **Output 3 — system_model.json:**
 - [ ] Every `annotation_ids` entry exactly matches an `id` from Output 1 (copy-paste)
