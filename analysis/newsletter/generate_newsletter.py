@@ -881,14 +881,22 @@ def _sources_block_substack(subsystem_id, subsystems, id_to_node):
 
 
 def _hypothesis_nodes_for_sub(subsystem_id, subsystems, id_to_node):
-    """Return list of hypothesis nodes linked to a subsystem (any node_ids field)."""
+    """Return list of hypothesis nodes linked to a subsystem (any node_ids field).
+
+    Only driver/pressure/gap tier nodes are included — opportunity nodes with
+    claim_type="hypothesis" belong in the opportunity block, not the disclaimer
+    note.  Mixing them produces confusing combined labels like
+    "NBFC credit recovery; EV-specific vehicle credit products" on an NBFC card.
+    """
     sub = next((s for s in subsystems if s.get("id") == subsystem_id), None)
     if not sub:
         return []
     all_ids = sub.get("node_ids", [])
     return [
         id_to_node[nid] for nid in all_ids
-        if nid in id_to_node and id_to_node[nid].get("claim_type") == "hypothesis"
+        if nid in id_to_node
+        and id_to_node[nid].get("claim_type") == "hypothesis"
+        and id_to_node[nid].get("tier") != "opportunity"   # opportunities rendered separately
     ]
 
 
@@ -919,13 +927,20 @@ def _hypothesis_note_substack(subsystem_id, subsystems, id_to_node):
     return f'<p><em>⚠ Working hypothesis: {labels} — mechanism inferred from data pattern, not independently sourced.</em></p>'
 
 
-def _d2_outcomes(subsystem_id, subsystems, id_to_node, annotations):
-    """Return rendered outcome cards (✅/⚠️/🔍) for a subsystem."""
+def _d2_outcomes(subsystem_id, subsystems, id_to_node, annotations, prior_opp_ids=None):
+    """Return rendered outcome cards (✅/⚠️/🔍) for a subsystem.
+
+    prior_opp_ids: set of outcome node IDs already published in a prior issue.
+    Those are silently skipped to prevent cross-issue repetition.
+    """
+    prior_opp_ids = prior_opp_ids or set()
     sub = next((s for s in subsystems if s.get("id") == subsystem_id), None)
     if not sub:
         return ""
     cards = ""
     for oid in sub.get("outcomes", []):
+        if oid in prior_opp_ids:
+            continue   # already featured in a prior issue — do not repeat
         o = id_to_node.get(oid)
         if not o:
             continue
@@ -942,13 +957,19 @@ def _d2_outcomes(subsystem_id, subsystems, id_to_node, annotations):
     return cards
 
 
-def _d2_outcomes_md(subsystem_id, subsystems, id_to_node, annotations):
-    """Return outcome lines for markdown output."""
+def _d2_outcomes_md(subsystem_id, subsystems, id_to_node, annotations, prior_opp_ids=None):
+    """Return outcome lines for markdown output.
+
+    prior_opp_ids: set of outcome node IDs already published in a prior issue.
+    """
+    prior_opp_ids = prior_opp_ids or set()
     sub = next((s for s in subsystems if s.get("id") == subsystem_id), None)
     if not sub:
         return []
     lines = []
     for oid in sub.get("outcomes", []):
+        if oid in prior_opp_ids:
+            continue   # already featured in a prior issue — do not repeat
         o = id_to_node.get(oid)
         if not o:
             continue
@@ -1376,6 +1397,7 @@ def build_delta_v2_substack(cfg, model, period_model, subsystems, annotations, y
     p.append('<hr>')
 
     # Signals
+    prior_opp_ids = set(meta.get("prior_published_opportunity_ids", []))
     p.append('<h2>📡 The Signals</h2>')
     for item in signals:
         t          = item.get("type", "")
@@ -1432,10 +1454,12 @@ def build_delta_v2_substack(cfg, model, period_model, subsystems, annotations, y
             # No diagram, no outcomes for confirmed
             continue
 
-        # Outcomes for new + correction only
+        # Outcomes for new + correction only (skip prior-issue opportunities)
         sub = next((s for s in subsystems if s.get("id") == sub_id), None)
         if sub:
             for oid in sub.get("outcomes", []):
+                if oid in prior_opp_ids:
+                    continue   # already featured in a prior issue — do not repeat
                 o = id_to_node.get(oid)
                 if not o:
                     continue
