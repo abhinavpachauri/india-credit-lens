@@ -1396,14 +1396,48 @@ def build_delta_v2_substack(cfg, model, period_model, subsystems, annotations, y
     p.append(f'<p>{edit.get("system_narrative","")}</p>')
     p.append('<hr>')
 
-    # Signals
+    # ── Signals ────────────────────────────────────────────────────────────────
+    # New/correction signals get full treatment.
+    # Prior-issue signals (confirmed/unchanged/updated/refuted) are rendered as
+    # a compact status list — no body, no hypothesis, no sources.  The reader
+    # follows the link to the prior issue for full context.
+    # ──────────────────────────────────────────────────────────────────────────
     prior_opp_ids = set(meta.get("prior_published_opportunity_ids", []))
-    p.append('<h2>📡 The Signals</h2>')
-    for item in signals:
+
+    # Status icon for prior-issue entries derived from item["status"] or badge prefix.
+    _PRIOR_STATUS_ICON = {
+        "confirmed":  "✅",
+        "stronger":   "↗",
+        "unchanged":  "↔",
+        "weakening":  "↘",
+        "refuted":    "❌",
+    }
+
+    def _prior_status_icon(item):
+        s = item.get("status", "").lower()
+        if s in _PRIOR_STATUS_ICON:
+            return _PRIOR_STATUS_ICON[s]
+        # Fall back to badge prefix if no explicit status field
+        badge = item.get("badge", "")
+        if badge.startswith("▲") or badge.startswith("✅"): return "✅"
+        if badge.startswith("="): return "↔"
+        if badge.startswith("↘") or badge.startswith("▼"): return "↘"
+        if badge.startswith("❌"): return "❌"
+        return "✅"
+
+    NEW_TYPES  = {"new", "correction"}
+    PRIOR_TYPES = {"confirmed", "unchanged", "updated", "refuted"}
+
+    new_signals   = [s for s in signals if s.get("type") in NEW_TYPES]
+    prior_signals = [s for s in signals if s.get("type") in PRIOR_TYPES]
+
+    # ── Section A: New signals ─────────────────────────────────────────────────
+    p.append('<h2>📡 New This Issue</h2>')
+    for item in new_signals:
         t          = item.get("type", "")
         story_arc  = item.get("story_arc", "")
         signal     = item.get("signal", "")
-        sub_id     = item.get("subsystem_id", "")
+        sub_id     = item.get("subsystem_id", "") or ""
 
         if t == "new":
             p.append(f'<h3>★ {story_arc}</h3>')
@@ -1422,8 +1456,9 @@ def build_delta_v2_substack(cfg, model, period_model, subsystems, annotations, y
             p.append(_d2_diagram_substack(item))
 
         elif t == "correction":
+            prev_num = item.get("prev_issue_number", 1)
             p.append(f'<h3>⟳ {story_arc}</h3>')
-            p.append(f'<p><em>Correction from Issue #1</em></p>')
+            p.append(f'<p><em>Correction from Issue #{prev_num}</em></p>')
             p.append(f'<p><strong>{signal}</strong></p>')
             p.append(f'<p><strong>What it looked like:</strong> <em>{item.get("prev_read","")}</em></p>')
             p.append(f'<p><strong>What it actually is:</strong> {item.get("curr_read","")}</p>')
@@ -1435,31 +1470,12 @@ def build_delta_v2_substack(cfg, model, period_model, subsystems, annotations, y
             if src: p.append(src)
             p.append(_d2_diagram_substack(item))
 
-        elif t == "confirmed":
-            prev_num   = item.get("prev_issue_number", 1)
-            badge      = item.get("badge", "▲ Confirmed")
-            curr_stat  = item.get("curr_stat", "")
-            cta_url    = prev_issue_url or "#"
-            # Compact row: badge + stat delta + CTA link only
-            p.append(
-                f'<p><strong>▲ {story_arc}</strong> &nbsp;'
-                f'<em>{badge}</em><br>'
-                f'{curr_stat}<br>'
-                f'<a href="{cta_url}">Full analysis → Issue #{prev_num}</a></p>'
-            )
-            hyp = _hypothesis_note_substack(sub_id, subsystems, id_to_node)
-            if hyp: p.append(hyp)
-            src = _sources_block_substack(sub_id, subsystems, id_to_node)
-            if src: p.append(src)
-            # No diagram, no outcomes for confirmed
-            continue
-
-        # Outcomes for new + correction only (skip prior-issue opportunities)
+        # Outcomes: new + correction only, skip prior-issue opportunities
         sub = next((s for s in subsystems if s.get("id") == sub_id), None)
         if sub:
             for oid in sub.get("outcomes", []):
                 if oid in prior_opp_ids:
-                    continue   # already featured in a prior issue — do not repeat
+                    continue
                 o = id_to_node.get(oid)
                 if not o:
                     continue
@@ -1474,6 +1490,34 @@ def build_delta_v2_substack(cfg, model, period_model, subsystems, annotations, y
                     + (f'<p><em>{impl}</em></p>' if impl else '')
                     + '</blockquote>'
                 )
+
+    # ── Section B: Prior signals status update ─────────────────────────────────
+    if prior_signals:
+        p.append('<hr>')
+        p.append('<h2>📋 Prior Signals — Status Update</h2>')
+        p.append(
+            '<p><em>Signals first published in earlier issues. '
+            'Status reflects new data in this period. '
+            'Follow the link for the original analysis.</em></p>'
+        )
+        rows = []
+        for item in prior_signals:
+            icon     = _prior_status_icon(item)
+            arc      = item.get("story_arc", "")
+            badge    = item.get("badge", "")
+            curr_stat = item.get("curr_stat", "")
+            prev_num  = item.get("prev_issue_number", 1)
+            # Build the per-issue URL: use item-level url if provided, else prev_issue_url
+            item_url  = item.get("prev_issue_url", prev_issue_url or "#")
+            # One-liner: icon + arc + badge description + stat + link
+            note_parts = [p_ for p_ in [badge, curr_stat] if p_]
+            note = " — ".join(note_parts) if note_parts else ""
+            rows.append(
+                f'<li>{icon} <strong>{arc}</strong>'
+                + (f' — {note}' if note else '')
+                + f' <a href="{item_url}">Issue #{prev_num} →</a></li>'
+            )
+        p.append('<ul>' + ''.join(rows) + '</ul>')
 
     p.append('<hr>')
 
@@ -1558,18 +1602,46 @@ def build_delta_v2_markdown(cfg, model, period_model, subsystems, annotations, y
     # System narrative (no diagram)
     lines += ["## 🗺 The System This Month", "", edit.get("system_narrative", ""), "", "---", ""]
 
-    # Signals
-    lines += ["## 📡 The Signals", ""]
-    for item in signals:
+    # ── Signals ─────────────────────────────────────────────────────────────────
+    # New/correction → full treatment under "New This Issue".
+    # Prior-issue types (confirmed/unchanged/updated/refuted) → compact status
+    # list under "Prior Signals — Status Update". No body, no sources. Reader
+    # follows the link to the prior issue for the original analysis.
+    # ────────────────────────────────────────────────────────────────────────────
+    prior_opp_ids_md = set(meta.get("prior_published_opportunity_ids", []))
+
+    _PRIOR_ICON_MD = {
+        "confirmed": "✅", "stronger": "↗", "unchanged": "↔",
+        "weakening": "↘", "refuted": "❌",
+    }
+
+    def _prior_icon_md(item):
+        s = item.get("status", "").lower()
+        if s in _PRIOR_ICON_MD:
+            return _PRIOR_ICON_MD[s]
+        badge = item.get("badge", "")
+        if badge.startswith("▲") or badge.startswith("✅"): return "✅"
+        if badge.startswith("="): return "↔"
+        if badge.startswith("↘") or badge.startswith("▼"): return "↘"
+        if badge.startswith("❌"): return "❌"
+        return "✅"
+
+    NEW_TYPES_MD   = {"new", "correction"}
+    PRIOR_TYPES_MD = {"confirmed", "unchanged", "updated", "refuted"}
+
+    new_items_md   = [s for s in signals if s.get("type") in NEW_TYPES_MD]
+    prior_items_md = [s for s in signals if s.get("type") in PRIOR_TYPES_MD]
+
+    # Section A — new signals
+    lines += ["## 📡 New This Issue", ""]
+    for item in new_items_md:
         t         = item.get("type", "")
         story_arc = item.get("story_arc", "")
         signal    = item.get("signal", "")
-        sub_id    = item.get("subsystem_id", "")
+        sub_id    = item.get("subsystem_id", "") or ""
 
         if t == "new":
-            lines += [f"### ★ {story_arc}", ""]
-            lines.append("*New this issue*")
-            lines.append("")
+            lines += [f"### ★ {story_arc}", "", "*New this issue*", ""]
             if item.get("stat"):
                 lines += [f"**{item['stat']}**", ""]
             lines += [f"**{signal}**", ""]
@@ -1583,13 +1655,10 @@ def build_delta_v2_markdown(cfg, model, period_model, subsystems, annotations, y
             elif mmd_file is not None:
                 slug = re.sub(r"[^a-z0-9]+", "_", signal.lower()).strip("_")[:30]
                 lines += [f"> 🖼 `[Insert: {sub_id}_{slug}.png]`", ""]
-            # mermaid_file=null → no diagram line
 
         elif t == "correction":
-            prev_num = 1
-            lines += [f"### ⟳ {story_arc}", ""]
-            lines.append(f"*Correction from Issue #1*")
-            lines.append("")
+            prev_num = item.get("prev_issue_number", 1)
+            lines += [f"### ⟳ {story_arc}", "", f"*Correction from Issue #{prev_num}*", ""]
             lines += [f"**{signal}**", ""]
             lines += [
                 f"**What it looked like:** *{item.get('prev_read','')}*", "",
@@ -1603,20 +1672,34 @@ def build_delta_v2_markdown(cfg, model, period_model, subsystems, annotations, y
                 slug = re.sub(r"[^a-z0-9]+", "_", signal.lower()).strip("_")[:30]
                 lines += [f"> 🖼 `[Insert: {sub_id}_{slug}.png]`", ""]
 
-        elif t == "confirmed":
-            prev_num   = item.get("prev_issue_number", 1)
-            badge      = item.get("badge", "▲ Confirmed")
-            curr_stat  = item.get("curr_stat", "")
-            cta_url    = prev_issue_url or "#"
-            lines += [f"### ▲ {story_arc}"]
-            lines += [f"*{badge}*", ""]
-            lines += [f"**{curr_stat}**", ""]
-            lines += [f"[Full analysis → Issue #{prev_num}]({cta_url})", "", "---", ""]
-            continue  # no outcomes, no diagram for confirmed
-
-        # Outcomes for new + correction only
-        lines += _d2_outcomes_md(sub_id, subsystems, id_to_node, annotations)
+        # Outcomes: new + correction only, skip prior-issue opportunities
+        lines += _d2_outcomes_md(sub_id, subsystems, id_to_node, annotations,
+                                  prior_opp_ids=prior_opp_ids_md)
         lines += ["---", ""]
+
+    # Section B — prior signals status update (compact list)
+    if prior_items_md:
+        lines += ["## 📋 Prior Signals — Status Update", ""]
+        lines.append(
+            "*Signals from earlier issues. New data this period. "
+            "Follow the link for the original analysis.*"
+        )
+        lines.append("")
+        for item in prior_items_md:
+            icon      = _prior_icon_md(item)
+            arc       = item.get("story_arc", "")
+            badge     = item.get("badge", "")
+            curr_stat = item.get("curr_stat", "")
+            prev_num  = item.get("prev_issue_number", 1)
+            item_url  = item.get("prev_issue_url", prev_issue_url or "#")
+            note_parts = [p_ for p_ in [badge, curr_stat] if p_]
+            note = " — ".join(note_parts) if note_parts else ""
+            lines.append(
+                f"- {icon} **{arc}**"
+                + (f" — {note}" if note else "")
+                + f" [Issue #{prev_num} →]({item_url})"
+            )
+        lines += ["", "---", ""]
 
     # What to Watch
     lines += [
