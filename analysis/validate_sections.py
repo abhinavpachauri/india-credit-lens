@@ -13,6 +13,7 @@ Checks:
   6. Key sectors    — minimum expected sector IDs present
   7. Series match   — seriesNames exactly match keys in every absoluteData row
   8. No nulls       — no null/None values in any data row
+  8b. All-null series — any series where ALL rows are null (stale extraction guard)
   9. Merged check   — (--merged) all known periods present, no gap >2 months
 
 Usage:
@@ -305,6 +306,54 @@ def check_merged_continuity(data, result):
         )
 
 
+# ── Check 8b: All-null series detection (stale extraction guard) ──────────────
+
+def check_all_null_series(data, result, merged=False):
+    """
+    Fires when an entire series is null across ALL absoluteData rows.
+    This catches the case where extract_sibc.py was run with an older parser
+    that could not read certain rows — every value comes back None rather than
+    a number.  A partial null (some rows null, some populated) is handled by
+    check_no_nulls; this check is specifically for the all-null symptom.
+
+    Per-period: ERROR — the extraction is definitively broken for that series.
+    Merged:     WARNING — a series absent from ALL periods is suspicious but may
+                be a newly added series not yet present in older SIBC files.
+    """
+    import math
+
+    for sec in data.get("sections", []):
+        sid = sec.get("id", "?")
+        abs_data = sec.get("absoluteData", [])
+        if not abs_data:
+            continue
+
+        series_names = sec.get("seriesNames", [])
+        for series in series_names:
+            values = [row.get(series) for row in abs_data]
+            # A value counts as "missing" if it is None or NaN
+            missing = [
+                v for v in values
+                if v is None or (isinstance(v, float) and math.isnan(v))
+            ]
+            if len(missing) == len(values):
+                msg = (
+                    f"Section '{sid}' series '{series}' is null/NaN across ALL "
+                    f"{len(values)} absoluteData rows — likely a stale extraction "
+                    f"(re-run extract_sibc.py with the current parser)."
+                )
+                if merged:
+                    result.warn("all_null_series", msg)
+                else:
+                    result.error("all_null_series", msg)
+            elif len(missing) > len(values) * 0.5:
+                result.warn(
+                    "all_null_series",
+                    f"Section '{sid}' series '{series}' has {len(missing)}/{len(values)} "
+                    f"null/NaN absoluteData rows — verify parser is reading all columns.",
+                )
+
+
 # ── Check 2c: dateOverrides consistency ──────────────────────────────────────
 
 def check_date_overrides(data: dict, result) -> None:
@@ -365,6 +414,7 @@ def validate(sections_path, merged=False):
         ("Key sectors",     lambda d, r: check_key_sectors(d, r)),
         ("Series match",    lambda d, r: check_series_match(d, r)),
         ("No nulls",        lambda d, r: check_no_nulls(d, r, merged=merged)),
+        ("All-null series", lambda d, r: check_all_null_series(d, r, merged=merged)),
         ("Date overrides",  lambda d, r: check_date_overrides(d, r)),
     ]
 
