@@ -801,6 +801,141 @@ def build_delta_series_reveals(what_new: list) -> str:
     )
 
 
+# ── Signal registry ───────────────────────────────────────────────────────────
+
+_REGISTRY_STATUS_ICON = {
+    "confirmed": "✅",
+    "stronger":  "↗",
+    "unchanged": "↔",
+    "weakening": "↘",
+    "refuted":   "❌",
+    "new":       "★",
+}
+
+
+def load_signal_registry(registry_path):
+    """Load signal_registry.json from path relative to CWD or absolute."""
+    import os
+    path = Path(registry_path) if not os.path.isabs(registry_path) \
+        else Path(registry_path)
+    if not path.exists():
+        # Try relative to this script's directory
+        alt = Path(__file__).parent / registry_path
+        if alt.exists():
+            path = alt
+        else:
+            print(f"  ⚠  signal_registry.json not found at {registry_path}")
+            return None
+    with open(path) as f:
+        return json.load(f)
+
+
+def _registry_prior_signals_html(registry, current_issue):
+    """Render the Prior Signals section from the cumulative registry.
+
+    Shows every signal introduced before the current issue, with:
+    - Status icon from the latest history entry
+    - Current story arc name
+    - Latest stat
+    - Link to introducing issue + link to latest update (if different)
+    """
+    if not registry:
+        return ""
+
+    signals = [
+        s for s in registry.get("signals", [])
+        if s.get("introduced_issue", 0) < current_issue
+    ]
+    if not signals:
+        return ""
+
+    rows = []
+    for sig in signals:
+        history = sig.get("history", [])
+        if not history:
+            continue
+        latest   = history[-1]
+        status   = latest.get("status", "confirmed")
+        icon     = _REGISTRY_STATUS_ICON.get(status, "•")
+        arc      = latest.get("story_arc") or sig.get("story_arc", "")
+        stat     = latest.get("stat", "")
+        intro_n  = sig.get("introduced_issue", "?")
+        intro_url = sig.get("introduced_url", "#")
+        latest_n = latest.get("issue", intro_n)
+        latest_url = latest.get("url", intro_url)
+
+        # Link to introducing issue; if latest update is in a different issue also link that
+        if latest_n != intro_n:
+            links = (
+                f'<a href="{intro_url}">Issue #{intro_n}</a>'
+                f' · <a href="{latest_url}">Updated #{latest_n}</a>'
+            )
+        else:
+            links = f'<a href="{intro_url}">Issue #{intro_n}</a>'
+
+        rows.append(
+            f'<li>{icon} <strong>{arc}</strong>'
+            + (f' — {stat}' if stat else '')
+            + f' — {links}</li>'
+        )
+
+    return (
+        '<hr>'
+        '<h2>📋 Signal Tracker — All Prior Issues</h2>'
+        '<p><em>Every signal we have published, with current status. '
+        'Follow the links for the original analysis.</em></p>'
+        '<ul>' + ''.join(rows) + '</ul>'
+    )
+
+
+def _registry_prior_signals_md(registry, current_issue):
+    """Markdown version of the prior signals tracker from registry."""
+    if not registry:
+        return []
+
+    signals = [
+        s for s in registry.get("signals", [])
+        if s.get("introduced_issue", 0) < current_issue
+    ]
+    if not signals:
+        return []
+
+    lines = [
+        "## 📋 Signal Tracker — All Prior Issues", "",
+        "*Every signal we have published, with current status. "
+        "Follow the links for the original analysis.*", "",
+    ]
+    for sig in signals:
+        history = sig.get("history", [])
+        if not history:
+            continue
+        latest    = history[-1]
+        status    = latest.get("status", "confirmed")
+        icon      = _REGISTRY_STATUS_ICON.get(status, "•")
+        arc       = latest.get("story_arc") or sig.get("story_arc", "")
+        stat      = latest.get("stat", "")
+        intro_n   = sig.get("introduced_issue", "?")
+        intro_url = sig.get("introduced_url", "#")
+        latest_n  = latest.get("issue", intro_n)
+        latest_url = latest.get("url", intro_url)
+
+        if latest_n != intro_n:
+            links = (
+                f"[Issue #{intro_n}]({intro_url})"
+                f" · [Updated #{latest_n}]({latest_url})"
+            )
+        else:
+            links = f"[Issue #{intro_n}]({intro_url})"
+
+        lines.append(
+            f"- {icon} **{arc}**"
+            + (f" — {stat}" if stat else "")
+            + f" — {links}"
+        )
+    lines += ["", "---", ""]
+    return lines
+
+
 # ── delta_v2 builders ─────────────────────────────────────────────────────────
 
 def _source_entries_for_sub(subsystem_id, subsystems, id_to_node):
@@ -1491,8 +1626,16 @@ def build_delta_v2_substack(cfg, model, period_model, subsystems, annotations, y
                     + '</blockquote>'
                 )
 
-    # ── Section B: Prior signals status update ─────────────────────────────────
-    if prior_signals:
+    # ── Section B: Prior signals — registry takes priority, inline list as fallback
+    registry_path = meta.get("signal_registry_path", "")
+    if registry_path:
+        registry = load_signal_registry(registry_path)
+        current_issue = meta.get("issue_number", 1)
+        reg_html = _registry_prior_signals_html(registry, current_issue)
+        if reg_html:
+            p.append(reg_html)
+    elif prior_signals:
+        # Fallback: inline confirmed entries from newsletter_config.json signals list
         p.append('<hr>')
         p.append('<h2>📋 Prior Signals — Status Update</h2>')
         p.append(
@@ -1502,14 +1645,12 @@ def build_delta_v2_substack(cfg, model, period_model, subsystems, annotations, y
         )
         rows = []
         for item in prior_signals:
-            icon     = _prior_status_icon(item)
-            arc      = item.get("story_arc", "")
-            badge    = item.get("badge", "")
+            icon      = _prior_status_icon(item)
+            arc       = item.get("story_arc", "")
+            badge     = item.get("badge", "")
             curr_stat = item.get("curr_stat", "")
             prev_num  = item.get("prev_issue_number", 1)
-            # Build the per-issue URL: use item-level url if provided, else prev_issue_url
             item_url  = item.get("prev_issue_url", prev_issue_url or "#")
-            # One-liner: icon + arc + badge description + stat + link
             note_parts = [p_ for p_ in [badge, curr_stat] if p_]
             note = " — ".join(note_parts) if note_parts else ""
             rows.append(
@@ -1677,8 +1818,13 @@ def build_delta_v2_markdown(cfg, model, period_model, subsystems, annotations, y
                                   prior_opp_ids=prior_opp_ids_md)
         lines += ["---", ""]
 
-    # Section B — prior signals status update (compact list)
-    if prior_items_md:
+    # Section B — prior signals: registry takes priority, inline list as fallback
+    registry_path_md = meta.get("signal_registry_path", "")
+    if registry_path_md:
+        registry_md = load_signal_registry(registry_path_md)
+        current_issue_md = meta.get("issue_number", 1)
+        lines += _registry_prior_signals_md(registry_md, current_issue_md)
+    elif prior_items_md:
         lines += ["## 📋 Prior Signals — Status Update", ""]
         lines.append(
             "*Signals from earlier issues. New data this period. "
