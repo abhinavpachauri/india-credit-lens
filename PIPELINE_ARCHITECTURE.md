@@ -129,7 +129,8 @@ analysis/
 │
 └── newsletter/
     ├── generate_newsletter.py      ← Script-only content generator
-    ├── newsletter_config.json      ← Input config (from merged system_model)
+    ├── newsletter_config.json      ← Current-issue config (new signals only)
+    ├── signal_registry.json        ← Cumulative signal tracker — ALL prior issues (update each cycle)
     └── output/                     ← Generated newsletters (dated)
 
 rbi-analytics/                      ← Ingestion layer (do not restructure)
@@ -184,6 +185,16 @@ web/
 ### Newsletter from merged only
 - `newsletter_config.json` is generated from the merged system_model + subsystems.
 - Per-period system models do not feed the newsletter directly.
+
+### signal_registry.json must be updated every issue
+- `signal_registry.json` is the cumulative tracker of every signal ever published.
+- **Update before authoring `newsletter_config.json`** — not after.
+- Two actions per issue:
+  1. Add a `history` entry to each existing signal (status + stat + issue URL).
+  2. Add new top-level entries for signals introduced this issue (status: "new").
+- `newsletter_config.json` `signals[]` should only contain `type: "new"` entries.
+  The Prior Signals section is auto-rendered from the registry.
+- Full authoring checklist: `analysis/newsletter/CLAUDE.md § Workflow per report cycle`.
 
 ### generate_delta.py is not a pipeline stage
 - `generate_delta.py` exists but is not a pipeline stage — parked for future use.
