@@ -33,6 +33,7 @@ Exit codes:
 
 import argparse
 import json
+import math
 import re
 import subprocess
 import sys
@@ -168,7 +169,9 @@ def merge_sections(period_files: list[Path]) -> dict:
         series_names = sec_blocks[-1]["seriesNames"]
 
         # ── Merge absoluteData ────────────────────────────────────────────────
-        # Key: date label → {series: value}. Later periods override earlier.
+        # Key: date label → {series: value}. Later periods override earlier,
+        # BUT a null/NaN value from a later period never overwrites a good value
+        # from an earlier period — some FY-end files drop historical rows.
         abs_map: dict[str, dict] = {}
         for block in sec_blocks:
             for row in block.get("absoluteData", []):
@@ -176,7 +179,13 @@ def merge_sections(period_files: list[Path]) -> dict:
                 if date_lbl not in abs_map:
                     abs_map[date_lbl] = {}
                 for key, val in row.items():
-                    if key != "date":
+                    if key == "date":
+                        continue
+                    is_null = val is None or (isinstance(val, float) and math.isnan(val))
+                    existing = abs_map[date_lbl].get(key)
+                    existing_null = existing is None or (isinstance(existing, float) and math.isnan(existing))
+                    # Only overwrite if new value is non-null, OR there is no existing good value
+                    if not is_null or existing_null:
                         abs_map[date_lbl][key] = val
 
         # Sort by date

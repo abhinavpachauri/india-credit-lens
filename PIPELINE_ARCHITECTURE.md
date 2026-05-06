@@ -54,7 +54,8 @@ SIBC .xlsx
     ▼
 [Stage 5] generate_merge.py
     │  → rbi_sibc/merged/sections_merged.json
-    │    (merges all periods; later period values override earlier for same month)
+    │    (merges all periods; later period non-null values override earlier for same month;
+    │     null/NaN from a later file never overwrites a good value from an earlier file)
     │  Auto-runs validate_sections.py --merged post-write; exits 1 on failure
     │
     ▼
