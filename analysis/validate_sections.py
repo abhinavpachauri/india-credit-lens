@@ -14,6 +14,9 @@ Checks:
   7. Series match   — seriesNames exactly match keys in every absoluteData row
   8. No nulls       — no null/None values in any data row
   8b. All-null series — any series where ALL rows are null (stale extraction guard)
+  8c. YoY coverage  — for every (series, month) where both Year N and Year N-1 exist
+                       in absoluteData, a null in either blocks a computable YoY; flagged
+                       as WARNING (merged) or ERROR (per-period)
   9. Merged check   — (--merged) all known periods present, no gap >2 months
 
 Usage:
@@ -28,6 +31,7 @@ Exit codes:
 """
 
 import json
+import math
 import os
 import re
 import sys
@@ -354,6 +358,75 @@ def check_all_null_series(data, result, merged=False):
                 )
 
 
+# ── Check 8c: YoY growth coverage ────────────────────────────────────────────
+
+def check_yoy_coverage(data, result, merged=False):
+    """
+    Check 8c: For every (series, month-name) pair where absoluteData contains
+    entries for both Year N and Year N-1, flag any null value that makes the
+    YoY growth uncomputable.
+
+    This catches the subtle failure mode where a later SIBC file drops historical
+    rows as NaN — the dates are present in absoluteData but the values are null,
+    silently producing missing entries in growthData.
+
+    Severity: ERROR for per-period files; WARNING for merged files (some nulls are
+    expected for series absent in January SIBC files, e.g. Gold Loans).
+    """
+    for sec in data.get("sections", []):
+        sid = sec.get("id", "?")
+        abs_data = sec.get("absoluteData", [])
+        series_names = sec.get("seriesNames", [])
+        if not abs_data or not series_names:
+            continue
+
+        # Build map: display-label → {series: value}
+        val_map: dict[str, dict] = {}
+        for row in abs_data:
+            lbl = row.get("date", "")
+            if lbl:
+                val_map[lbl] = {k: v for k, v in row.items() if k != "date"}
+
+        # Parse each label to extract (month_name, year) — e.g. "Jan 2025" → ("Jan", 2025)
+        MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+        parsed: dict[str, tuple[str, int]] = {}  # label → (month_abbr, year)
+        for lbl in val_map:
+            parts = lbl.split()
+            if len(parts) == 2 and parts[0] in MONTHS:
+                try:
+                    parsed[lbl] = (parts[0], int(parts[1]))
+                except ValueError:
+                    pass
+
+        # For each label, check if the same month in prior year exists
+        for lbl, (month, year) in parsed.items():
+            prior_lbl = f"{month} {year - 1}"
+            if prior_lbl not in val_map:
+                continue  # No prior-year entry — YoY simply not computable, not a data error
+
+            for sn in series_names:
+                curr_val = val_map[lbl].get(sn)
+                prev_val = val_map[prior_lbl].get(sn)
+
+                curr_null = curr_val is None or (isinstance(curr_val, float) and math.isnan(curr_val))
+                prev_null = prev_val is None or (isinstance(prev_val, float) and math.isnan(prev_val))
+
+                if curr_null or prev_null:
+                    null_side = []
+                    if prev_null:
+                        null_side.append(f"{prior_lbl} (prior-year)")
+                    if curr_null:
+                        null_side.append(f"{lbl} (current)")
+                    msg = (
+                        f"Section '{sid}' series '{sn}': YoY growth for {lbl} is uncomputable — "
+                        f"null absoluteData value at {' and '.join(null_side)}."
+                    )
+                    if merged:
+                        result.warn("yoy_coverage", msg)
+                    else:
+                        result.error("yoy_coverage", msg)
+
+
 # ── Check 2c: dateOverrides consistency ──────────────────────────────────────
 
 def check_date_overrides(data: dict, result) -> None:
@@ -415,6 +488,7 @@ def validate(sections_path, merged=False):
         ("Series match",    lambda d, r: check_series_match(d, r)),
         ("No nulls",        lambda d, r: check_no_nulls(d, r, merged=merged)),
         ("All-null series", lambda d, r: check_all_null_series(d, r, merged=merged)),
+        ("YoY coverage",    lambda d, r: check_yoy_coverage(d, r, merged=merged)),
         ("Date overrides",  lambda d, r: check_date_overrides(d, r)),
     ]
 
