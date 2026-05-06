@@ -204,22 +204,39 @@ def detect_anomalous_dates(date_cols: list[str], stmt_name: str) -> list[dict]:
     """
     Find dates that may be delayed publications from the prior calendar month.
 
-    Pattern: within the same calendar month, two dates exist where
-      - one is early  (day ≤ 14) — possible delayed prior-month snapshot
-      - one is late   (day ≥ 15) — genuine current-month snapshot
+    Two patterns are detected:
+
+    Pattern A — Intra-month split (original):
+      Within the same calendar month, two dates exist where
+        - one is early  (day ≤ 14) — possible delayed prior-month snapshot
+        - one is late   (day ≥ 15) — genuine current-month snapshot
+
+    Pattern B — April FY-end delayed compilation (RBI convention):
+      For the same calendar year, both a March date AND an early April date
+      (day ≤ 10) exist.  RBI compiles the FY-end (March 31) SIBC a few days
+      into April; the April date IS the March 31 FY-end figure, not genuine
+      April data.  Without a same-month late date, Pattern A never fires, so
+      this pattern requires its own detection arm.
 
     Returns a list of anomaly dicts; empty list if no anomalies.
     """
+    import calendar as _calendar
     from collections import defaultdict
-    month_map: dict[str, list[str]] = defaultdict(list)
+
+    parsed = []
     for col in date_cols:
         try:
-            d = datetime.strptime(col, "%Y-%m-%d")
-            month_map[d.strftime("%Y-%m")].append(col)
+            parsed.append((datetime.strptime(col, "%Y-%m-%d"), col))
         except ValueError:
             continue
 
     anomalies = []
+
+    # ── Pattern A: two dates in same calendar month, one early, one late ─────
+    month_map: dict[str, list[str]] = defaultdict(list)
+    for d, col in parsed:
+        month_map[d.strftime("%Y-%m")].append(col)
+
     for _month, cols in sorted(month_map.items()):
         if len(cols) < 2:
             continue
@@ -228,16 +245,12 @@ def detect_anomalous_dates(date_cols: list[str], stmt_name: str) -> list[dict]:
         if not (early and late):
             continue
         for e in early:
-            import calendar
             d  = datetime.strptime(e, "%Y-%m-%d")
             pm = d.month - 1 if d.month > 1 else 12
             py = d.year if d.month > 1 else d.year - 1
             # Use the last day of the prior month so the relabelled date sits at
             # the natural end of that month on the proportional time axis.
-            # Keeping the original day number (e.g. 8) would place it only ~13
-            # days after the previous month's observation, visually cramping the
-            # chart even though a full month has elapsed.
-            last_day = calendar.monthrange(py, pm)[1]
+            last_day = _calendar.monthrange(py, pm)[1]
             rel = datetime(py, pm, last_day)
             anomalies.append({
                 "statement":          stmt_name,
@@ -246,7 +259,41 @@ def detect_anomalous_dates(date_cols: list[str], stmt_name: str) -> list[dict]:
                 "original_display":   d.strftime("%b %Y"),
                 "relabelled_iso":     rel.strftime("%Y-%m-%d"),
                 "relabelled_display": rel.strftime("%b %Y") + "*",
+                "pattern":            "A",
             })
+
+    # ── Pattern B: early-April date co-exists with a March date in same year ─
+    # Group by year
+    year_map: dict[int, list[tuple[datetime, str]]] = defaultdict(list)
+    for d, col in parsed:
+        year_map[d.year].append((d, col))
+
+    # Track early dates already flagged by Pattern A to avoid duplicates
+    already_flagged = {a["early_date"] for a in anomalies}
+
+    for year, entries in sorted(year_map.items()):
+        march_dates = [(d, col) for d, col in entries if d.month == 3]
+        early_april = [(d, col) for d, col in entries if d.month == 4 and d.day <= 10]
+        if not (march_dates and early_april):
+            continue
+        for d, col in early_april:
+            if col in already_flagged:
+                continue
+            # Relabel to the last day of March of the same year
+            last_mar = _calendar.monthrange(year, 3)[1]
+            rel = datetime(year, 3, last_mar)
+            # Pick the nearest March date as the "late" reference counterpart
+            late_ref = max(march_dates, key=lambda x: x[0])[1]
+            anomalies.append({
+                "statement":          stmt_name,
+                "early_date":         col,
+                "late_date":          late_ref,
+                "original_display":   d.strftime("%b %Y"),
+                "relabelled_iso":     rel.strftime("%Y-%m-%d"),
+                "relabelled_display": "Mar " + str(year) + "*",
+                "pattern":            "B",
+            })
+
     return anomalies
 
 
@@ -295,12 +342,14 @@ def prompt_date_override(anomalies: list[dict], out_dir: Path) -> dict[str, str]
         records = []
         for a in anomalies:
             iso_overrides[a["early_date"]] = a["relabelled_iso"]
+            # Pattern B (Apr → Mar FY-end): no asterisk — the result is the canonical label
+            disp = a["relabelled_display"].rstrip("*") if a.get("pattern") == "B" else a["relabelled_display"]
             records.append({
                 "statement":          a["statement"],
                 "original_iso":       a["early_date"],
                 "relabelled_iso":     a["relabelled_iso"],
                 "original_display":   a["original_display"],
-                "relabelled_display": a["relabelled_display"],
+                "relabelled_display": disp,
                 "reason":             "delayed_publication",
                 "decided_by":         "user",
                 "decided_at":         _date.today().isoformat(),
@@ -407,7 +456,19 @@ def build_section(
 
     def _display(eff_col: str, orig_col: str) -> str:
         label = col_to_display(eff_col)
-        return label + ("*" if eff_col != orig_col else "")
+        if eff_col == orig_col:
+            return label
+        # Pattern B: early April → March of same year (RBI FY-end delayed compilation).
+        # No asterisk — this IS the canonical FY-end figure, not a shifted label.
+        try:
+            orig_d = datetime.strptime(orig_col, "%Y-%m-%d")
+            eff_d  = datetime.strptime(eff_col,  "%Y-%m-%d")
+            if orig_d.month == 4 and eff_d.month == 3 and orig_d.year == eff_d.year:
+                return label
+        except ValueError:
+            pass
+        # Pattern A: intra-month relabelling — append '*' as a visual marker
+        return label + "*"
 
     # ── absoluteData ──────────────────────────────────────────────────────────
     # Later col_pair overwrites earlier one for the same display month.
@@ -550,8 +611,18 @@ def extract(xlsx_path: Path, out_dir: Path | None = None, dry_run: bool = False)
     all_anomalies   = stmt1_anomalies + stmt2_anomalies
 
     iso_overrides: dict[str, str] = {}
+    _existing_overrides = _tmp_out_dir / "date_overrides.json"
     if all_anomalies and not dry_run:
-        iso_overrides = prompt_date_override(all_anomalies, _tmp_out_dir)
+        if _existing_overrides.exists():
+            # Non-interactive re-run: load pre-existing decisions and skip the prompt
+            with open(_existing_overrides) as _f:
+                _saved = json.load(_f)
+            for rec in _saved.get("overrides", []):
+                iso_overrides[rec["original_iso"]] = rec["relabelled_iso"]
+            print(f"\n  ℹ️  Loaded {len(iso_overrides)} date override(s) from "
+                  f"{_existing_overrides} — skipping interactive prompt.")
+        else:
+            iso_overrides = prompt_date_override(all_anomalies, _tmp_out_dir)
     elif all_anomalies and dry_run:
         print(f"\n  [dry-run] {len(all_anomalies)} date anomaly(ies) detected — "
               f"would prompt for override decision")
