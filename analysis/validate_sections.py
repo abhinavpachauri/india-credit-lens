@@ -394,14 +394,19 @@ def check_yoy_coverage(data, result, merged=False):
             parts = lbl.split()
             if len(parts) == 2 and parts[0] in MONTHS:
                 try:
-                    parsed[lbl] = (parts[0], int(parts[1]))
+                    # Strip trailing '*' (Pattern A relabelled dates e.g. "Feb 2025*")
+                    parsed[lbl] = (parts[0], int(parts[1].rstrip("*")))
                 except ValueError:
                     pass
 
-        # For each label, check if the same month in prior year exists
+        # For each label, check if the same month in prior year exists.
+        # Check both plain ("Feb 2025") and relabelled ("Feb 2025*") variants —
+        # Pattern A relabelled dates carry an asterisk but are semantically equivalent.
         for lbl, (month, year) in parsed.items():
-            prior_lbl = f"{month} {year - 1}"
-            if prior_lbl not in val_map:
+            prior_plain = f"{month} {year - 1}"
+            prior_star  = f"{month} {year - 1}*"
+            prior_lbl = prior_plain if prior_plain in val_map else (prior_star if prior_star in val_map else None)
+            if prior_lbl is None:
                 continue  # No prior-year entry — YoY simply not computable, not a data error
 
             for sn in series_names:

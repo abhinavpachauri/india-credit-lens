@@ -27,6 +27,7 @@ Exit codes:
 
 import argparse
 import json
+import math
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -342,7 +343,8 @@ def prompt_date_override(anomalies: list[dict], out_dir: Path) -> dict[str, str]
         records = []
         for a in anomalies:
             iso_overrides[a["early_date"]] = a["relabelled_iso"]
-            # Pattern B (Apr → Mar FY-end): no asterisk — the result is the canonical label
+            # Pattern B (Apr → Mar FY-end): no asterisk — result IS the canonical label.
+            # Pattern A (intra-month): keep asterisk as visual display signal.
             disp = a["relabelled_display"].rstrip("*") if a.get("pattern") == "B" else a["relabelled_display"]
             records.append({
                 "statement":          a["statement"],
@@ -467,34 +469,53 @@ def build_section(
                 return label
         except ValueError:
             pass
-        # Pattern A: intra-month relabelling — append '*' as a visual marker
+        # Pattern A: intra-month relabelling — append '*' as a display signal that this
+        # point was mapped from an adjacent-month column (visible on chart, not a data error).
         return label + "*"
 
     # ── absoluteData ──────────────────────────────────────────────────────────
-    # Later col_pair overwrites earlier one for the same display month.
+    # The RBI SIBC file carries columns that only apply to certain code groups.
+    # e.g. the genuine "2025-02-21" column has data for sector codes but NaN for
+    # top-level aggregates (I/II/III), while the early-March column is the reverse.
+    # A column where ALL series for this section are NaN is skipped entirely —
+    # it has no data for this section and would produce an all-null row (invalid JSON).
     abs_by_label: dict[str, dict] = {}
     for orig_col, eff_col in col_pairs:
-        disp = _display(eff_col, orig_col)
-        row_dict = {"date": disp}
+        # Resolve values first; skip column entirely if all series are null
+        resolved: dict[str, float | None] = {}
         for label in series_names:
             val = series_rows[label].get(orig_col)
-            row_dict[label] = round(float(val), 2) if val is not None else None
+            # Normalise pandas NaN → None so JSON serialises as null not NaN
+            if val is not None and isinstance(val, float) and math.isnan(val):
+                val = None
+            resolved[label] = round(float(val), 2) if val is not None else None
+
+        if all(v is None for v in resolved.values()):
+            continue  # column has no data for any series in this section — skip
+
+        disp = _display(eff_col, orig_col)
+        row_dict = {"date": disp, **resolved}
         abs_by_label[disp] = row_dict
 
-    # Preserve display order (latest per display month at end)
+    # Preserve display order (latest per display month at end).
+    # Only include labels that survived the all-null filter above.
     seen_labels: list[str] = []
     for orig_col, eff_col in col_pairs:
         disp = _display(eff_col, orig_col)
+        if disp not in abs_by_label:
+            continue  # this column was skipped (all-null for this section)
         if disp in seen_labels:
             seen_labels.remove(disp)
         seen_labels.append(disp)
     absolute_data = [abs_by_label[lbl] for lbl in dict.fromkeys(seen_labels)]
 
-    # Rebuild deduped effective ISO date list (latest eff_col per display month)
+    # Rebuild deduped effective ISO date list (latest eff_col per display month,
+    # only for labels that have data).
     deduped_eff_map: dict[str, str] = {}   # display → eff_col
     for orig_col, eff_col in col_pairs:
         disp = _display(eff_col, orig_col)
-        deduped_eff_map[disp] = eff_col
+        if disp in abs_by_label:
+            deduped_eff_map[disp] = eff_col
     deduped_eff_cols = list(deduped_eff_map.values())
 
     # ── growthData (YoY) ──────────────────────────────────────────────────────
