@@ -573,6 +573,17 @@ def extract(xlsx_path: Path, out_dir: Path | None = None, dry_run: bool = False)
         section = build_section(sec_def, stmt1, stmt2, date_cols, iso_overrides=iso_overrides)
         sections.append(section)
 
+    # ── Section-specific distribution overrides ───────────────────────────────
+    # bankCredit: "Bank Credit" = "Food Credit" + "Non-food Credit" (aggregate).
+    # Distribution chart must use only the two components so they sum to 100%.
+    DISTRIBUTION_OVERRIDES: dict[str, list[str]] = {
+        "bankCredit": ["Food Credit", "Non-food Credit"],
+    }
+    for section in sections:
+        override = DISTRIBUTION_OVERRIDES.get(section["id"])
+        if override:
+            section["distributionSeriesNames"] = override
+
     payload = {
         "report":   "rbi_sibc",
         "dataDate": data_date,

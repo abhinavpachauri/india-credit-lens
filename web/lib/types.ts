@@ -62,7 +62,11 @@ export interface ReportSection {
   absoluteData: ChartPoint[];     // ₹ Crore values over time
   growthData:   ChartPoint[];     // YoY % growth over time
   fyData:       ChartPoint[];     // FY-to-date % growth (vs previous March-end)
-  seriesNames:  string[];         // ordered list — drives legend + colour assignment
+  seriesNames:             string[];  // ordered list — drives legend + colour assignment in trend view
+  distributionSeriesNames?: string[]; // if set, distribution chart uses this list instead of seriesNames
+                                      // use when seriesNames includes a "total" series that is the sum
+                                      // of the other series (e.g. bankCredit: excludes "Bank Credit" so
+                                      // Food Credit + Non-food Credit sum to 100% correctly)
   pctLabel:     string;           // label for the % radio button in distribution view
   filterable?:  boolean;          // true → render with IndustryFilter (large series sets)
   annotations:  SectionAnnotations;

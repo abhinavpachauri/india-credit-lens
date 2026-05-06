@@ -869,7 +869,8 @@ function makeSection(
   labels:      Record<string, string>,
   pctLabel:    string,
   opts:        { psl?: boolean; stmt?: string } = {},
-  filterable = false
+  filterable = false,
+  distributionCodes?: string[]
 ): ReportSection | null {
   if (codes.length === 0) return null;
 
@@ -877,6 +878,7 @@ function makeSection(
   const growthData:   ChartPoint[] = buildGrowthSeries(rows, codes, labels, "yoy", opts);
   const fyData:       ChartPoint[] = buildGrowthSeries(rows, codes, labels, "fy",  opts);
   const seriesNames:  string[]     = codes.map((c) => labels[c] ?? c);
+  const distributionSeriesNames    = distributionCodes?.map((c) => labels[c] ?? c);
 
   return {
     id,
@@ -887,6 +889,7 @@ function makeSection(
     growthData,
     fyData,
     seriesNames,
+    ...(distributionSeriesNames ? { distributionSeriesNames } : {}),
     pctLabel,
     filterable,
     annotations: ANNOTATIONS[id] ?? { insights: [], gaps: [], opportunities: [] },
@@ -899,13 +902,16 @@ function makeSection(
 export function buildSections(rows: CreditRow[]): ReportSection[] {
   const sections: (ReportSection | null)[] = [];
 
-  // 1 — Bank Credit (top-level: total, food, non-food)
+  // 1 — Bank Credit (total, food, non-food)
+  // distributionCodes excludes "I" (Bank Credit = Food + Non-food) so distribution sums to 100% correctly
   sections.push(makeSection(
     rows,
     "bankCredit", "Bank Credit", "🏦", 0,
     ["I", "II", "III"],
     { I: "Bank Credit", II: "Food Credit", III: "Non-food Credit" },
-    "% of Bank Credit"
+    "% of Bank Credit",
+    {}, false,
+    ["II", "III"]
   ));
 
   // 2 — Main Sectors

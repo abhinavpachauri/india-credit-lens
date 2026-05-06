@@ -48,7 +48,7 @@ export default function SectionWithAnnotations({ section, tab }: Props) {
     ) : (
       <DistributionChart
         absoluteData={section.absoluteData}
-        seriesNames={section.seriesNames}
+        seriesNames={section.distributionSeriesNames ?? section.seriesNames}
         pctLabel={section.pctLabel}
         visibleSeries={visible}
         highlightConfig={ann.highlightConfig}
