@@ -62,27 +62,6 @@ export default function TrendChart({
     [effectiveMode, absoluteData, growthData, fyData]
   );
 
-  // Y-axis domain: scale to highlighted series only so small-scale series aren't dwarfed
-  const yDomain = useMemo((): [number | string, number | string] => {
-    const highlighted = highlightConfig?.highlight;
-    if (!highlighted?.length) return ["auto", "auto"];
-    const vals: number[] = [];
-    (seriesData ?? []).forEach((point) => {
-      highlighted.forEach((name) => {
-        const v = Number(point[name]);
-        if (isFinite(v)) vals.push(v);
-      });
-    });
-    if (vals.length === 0) return ["auto", "auto"];
-    const min = Math.min(...vals);
-    const max = Math.max(...vals);
-    const pad = (max - min) * 0.2 || Math.abs(max) * 0.15 || 1;
-    const domMin = effectiveMode !== "absolute" && min >= 0
-      ? Math.max(0, +(min - pad).toFixed(1))
-      : +(min - pad).toFixed(1);
-    return [domMin, +(max + pad).toFixed(1)];
-  }, [highlightConfig, seriesData, effectiveMode]);
-
   // Proportional time axis: collect timestamps from current dataset
   const tsTicks = useMemo(
     () => (seriesData ?? []).map((p) => p._ts as number).filter((t) => typeof t === "number" && t > 0),
@@ -107,10 +86,16 @@ export default function TrendChart({
     return notes;
   }, [seriesData]);
 
+  // When an annotation highlights specific series, only those series render as lines.
+  // Others are shown in the legend as inactive (so users know they exist) but not drawn —
+  // this lets recharts auto-scale the Y-axis to the relevant data naturally.
+  const hasHighlight = (highlightConfig?.highlight?.length ?? 0) > 0;
+  const highlightSet = new Set(highlightConfig?.highlight ?? []);
+
   const legendItems = activeNames.map((name, i) => ({
     label:  name,
     color:  pickColor(name, i),
-    active: !hidden.has(name),
+    active: !hidden.has(name) && (!hasHighlight || highlightSet.has(name)),
   }));
 
   const toggleSeries = (name: string) =>
@@ -205,7 +190,6 @@ export default function TrendChart({
             tickLine={false}
           />
           <YAxis
-            domain={yDomain}
             tickFormatter={formatY}
             tick={{ fontSize: 12, fill: "var(--font-muted)" }}
             tickLine={false}
@@ -215,6 +199,9 @@ export default function TrendChart({
           <Tooltip content={<CustomTooltip />} />
           {activeNames.map((name, i) => {
             if (hidden.has(name)) return null;
+            // When annotation highlights specific series, completely hide all others —
+            // this lets the Y-axis auto-scale to only the relevant data
+            if (hasHighlight && !highlightSet.has(name)) return null;
             const style = seriesStyle(name, highlightConfig);
             return (
               <Line
