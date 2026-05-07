@@ -41,6 +41,7 @@ export interface Annotation {
   implication?:  string;          // "For lenders: ..."
   preferredMode?: "absolute" | "yoy" | "fy"; // chart switches to this mode when annotation is active
   effect:        AnnotationEffect;
+  hidden?:       boolean;         // true → suppressed from dashboard (methodology notes, low-signal gaps)
   // ── Explainability fields (optional — populate for any annotation making causal or forward claims) ──
   claim_type?:   "data" | "inference" | "hypothesis"; // highest claim_type in body+implication
   basis?:        AnnotationBasis;                       // structured reasoning chain

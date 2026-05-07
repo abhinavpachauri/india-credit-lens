@@ -46,9 +46,9 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
         body: "Non-food credit is ₹212.9L Cr of the ₹213.6L Cr total at Mar 2026 — 99.7% of bank credit. " +
               "Food credit at ₹0.70L Cr at Mar 2026 is minimal and seasonal. " +
               "The +16.1% FY26 headline growth is entirely a non-food signal.",
-        implication: "Always strip food credit from headline numbers before quoting them. " +
-                     "Jan and Feb observations will show elevated food credit due to kharif procurement cycles — " +
-                     "always anchor growth comparisons to March-end figures.",
+        implication: "Non-food credit is the signal for cross-cycle comparisons — it tracks banking system capacity. " +
+                     "Food credit matters separately as a seasonal indicator of MSP procurement scale " +
+                     "(tracked in the next annotation). For cross-cycle comparisons, anchor to March-end non-food figures.",
         preferredMode: "absolute",
         effect: { highlight: ["Non-food Credit"], dim: ["Food Credit"] },
       },
@@ -68,6 +68,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
     gaps: [
       {
         id: "bankcredit-april-date-convention",
+        hidden: true,
         title: "Bank Credit uses April fortnight dates — treat them as FY-end",
         body: "Bank Credit aggregate columns are labelled 'Apr 2024' (Apr 5, 2024) and 'Apr 2025' (Apr 4, 2025) " +
               "because RBI publishes on a fortnightly cycle. Sub-sectors (Agriculture, Industry, Services, Personal Loans) " +
@@ -670,7 +671,7 @@ function makeSection(
   codes:       string[],
   labels:      Record<string, string>,
   pctLabel:    string,
-  opts:        { psl?: boolean; stmt?: string } = {},
+  opts:        { psl?: boolean; stmt?: string; distCodes?: string[] } = {},
   filterable = false
 ): ReportSection | null {
   if (codes.length === 0) return null;
@@ -679,6 +680,7 @@ function makeSection(
   const growthData:   ChartPoint[] = buildGrowthSeries(rows, codes, labels, "yoy", opts);
   const fyData:       ChartPoint[] = buildGrowthSeries(rows, codes, labels, "fy",  opts);
   const seriesNames:  string[]     = codes.map((c) => labels[c] ?? c);
+  const distributionSeriesNames    = opts.distCodes?.map((c) => labels[c] ?? c);
 
   return {
     id,
@@ -689,6 +691,7 @@ function makeSection(
     growthData,
     fyData,
     seriesNames,
+    ...(distributionSeriesNames ? { distributionSeriesNames } : {}),
     pctLabel,
     filterable,
     annotations: ANNOTATIONS[id] ?? { insights: [], gaps: [], opportunities: [] },
@@ -707,7 +710,8 @@ export function buildSections(rows: CreditRow[]): ReportSection[] {
     "bankCredit", "Bank Credit", "🏦", 0,
     ["I", "II", "III"],
     { I: "Bank Credit", II: "Food Credit", III: "Non-food Credit" },
-    "% of Bank Credit"
+    "% of Bank Credit",
+    { distCodes: ["II", "III"] }
   ));
 
   // 2 — Main Sectors
