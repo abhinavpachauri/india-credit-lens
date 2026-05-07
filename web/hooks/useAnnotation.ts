@@ -30,13 +30,13 @@ export function useAnnotation(section: ReportSection): AnnotationState {
   const [activeIndex, setActiveIndex] = useState(0);
 
   const counts = {
-    insights:      section.annotations.insights.length,
-    gaps:          section.annotations.gaps.length,
-    opportunities: section.annotations.opportunities.length,
+    insights:      section.annotations.insights.filter((a) => !a.hidden).length,
+    gaps:          section.annotations.gaps.filter((a) => !a.hidden).length,
+    opportunities: section.annotations.opportunities.filter((a) => !a.hidden).length,
   };
 
   const activeList: Annotation[] =
-    activeLens ? section.annotations[activeLens] : [];
+    activeLens ? section.annotations[activeLens].filter((a) => !a.hidden) : [];
   const total            = activeList.length;
   const activeAnnotation = activeList[activeIndex] ?? null;
   const highlightConfig  = activeAnnotation?.effect ?? null;

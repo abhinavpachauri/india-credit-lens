@@ -164,7 +164,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
                      "For full system accounting, anchor on the Bank Credit total. " +
                      "Any macro leverage ratio built from sector sums will understate total credit by ~5%.",
         preferredMode: "absolute",
-        effect: { dash: ["Bank Credit"] },
+        effect: {},
       },
     ],
     opportunities: [
@@ -616,11 +616,11 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
       {
         id: "industry-type-partition-not-exact",
         title: "Industry sub-types do not sum to the Industry total",
-        body: "The industry-by-type breakdown (Statement 5) does not perfectly reconcile to the industry total in Statement 1. " +
+        body: "The industry-by-type breakdown does not perfectly reconcile to the industry total from the main sector view. " +
               "Some sub-sectors use different classification vintages, and 'Other Industries' is a residual bucket. " +
-              "Cross-sectional arithmetic should treat Statement 5 as indicative, not additive.",
-        implication: "Do not sum Statement 5 sub-sectors as a cross-check against the Statement 1 Industry total. " +
-                     "Use each statement independently for its own trend analysis.",
+              "Treat the type breakdown as indicative, not additive.",
+        implication: "Do not sum industry sub-types as a cross-check against the main industry total — they will not reconcile. " +
+                     "Use each view independently for its own trend analysis.",
         preferredMode: "absolute",
         effect: { dash: ["Infrastructure"] },
       },

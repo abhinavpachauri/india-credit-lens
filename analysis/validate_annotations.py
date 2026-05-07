@@ -178,6 +178,20 @@ def _extract_annotations(section_content, lens_type):
                 parts = re.findall(r'"((?:[^"\\]|\\.)*)"', imp_seg)
                 ann["implication"] = " ".join(parts[:4]) if parts else ""
 
+        # Extract effect fields: highlight, dim, dash
+        for field in ("highlight", "dim", "dash"):
+            pattern_ef = re.compile(
+                rf'{field}:\s*\[([^\]]*)\]'
+            )
+            m_ef = pattern_ef.search(obj_content)
+            if m_ef:
+                names = re.findall(r'"([^"]+)"', m_ef.group(1))
+                ann[f"effect_{field}"] = names
+
+        # Extract hidden flag
+        if re.search(r'hidden:\s*true', obj_content):
+            ann["hidden"] = True
+
         annotations.append(ann)
 
     return annotations
@@ -337,6 +351,13 @@ def check_minimums(sections, result):
 
 # ── Check 6: Body length ──────────────────────────────────────────────────────
 
+PIPELINE_LANGUAGE = [
+    "statement 1", "statement 2", "statement 3", "statement 4", "statement 5",
+    "statement 6", "statement 7", "statement 8",
+    "table 1", "table 2", "table 3",
+    "appendix", "annex",
+]
+
 def check_body_length(sections, result):
     for section, lenses in sections.items():
         for lens, items in lenses.items():
@@ -357,10 +378,76 @@ def check_body_length(sections, result):
                         f"minimum {MIN_IMPLICATION_CHARS}. Too brief to be actionable.",
                     )
 
+                # Check for internal pipeline/methodology language in user-facing text
+                combined = (body + " " + imp).lower()
+                found_lang = [t for t in PIPELINE_LANGUAGE if t in combined]
+                if found_lang:
+                    result.error(
+                        "pipeline_language",
+                        f"[{section}.{lens}] '{ann['id']}' contains internal pipeline/methodology "
+                        f"language: {found_lang}. Replace with reader-facing descriptions.",
+                    )
+
+
+# ── Check G: effect.highlight present on insights + opportunities ─────────────
+
+def check_effect_highlight_present(sections, result):
+    """Every non-hidden insight and opportunity must declare effect.highlight."""
+    for section, lenses in sections.items():
+        for lens_type in ("insights", "opportunities"):
+            for ann in lenses.get(lens_type, []):
+                if ann.get("hidden"):
+                    continue
+                if not ann.get("effect_highlight"):
+                    result.error(
+                        "effect_highlight",
+                        f"[{section}.{lens_type}] '{ann.get('id','?')}' has no effect.highlight. "
+                        "Every insight and opportunity must declare which series tells the story — "
+                        "this controls Y-axis scaling and chart focus on the dashboard.",
+                    )
+
+
+# ── Check H: series names in effect arrays must exist in section ──────────────
+
+def check_effect_series_names(sections, result, section_series_map):
+    """Names in effect.highlight/dim/dash must be valid seriesNames for that section."""
+    for section, lenses in sections.items():
+        valid_names = set(section_series_map.get(section, []))
+        if not valid_names:
+            continue  # no series data for this section — skip
+        for lens_type in ("insights", "gaps", "opportunities"):
+            for ann in lenses.get(lens_type, []):
+                for field in ("effect_highlight", "effect_dim", "effect_dash"):
+                    for name in ann.get(field, []):
+                        if name not in valid_names:
+                            result.error(
+                                "effect_series_names",
+                                f"[{section}.{lens_type}] '{ann.get('id','?')}' has "
+                                f"effect.{field.replace('effect_','')} contains '{name}' "
+                                f"which is not in this section's seriesNames: {sorted(valid_names)}.",
+                            )
+
 
 # ── Orchestrator ──────────────────────────────────────────────────────────────
 
-def validate(ts_path):
+def _load_section_series_map(sections_json_path):
+    """Load seriesNames per section from sections_merged.json."""
+    import json as _json
+    try:
+        with open(sections_json_path) as f:
+            data = _json.load(f)
+    except Exception:
+        return {}
+    series_map = {}
+    for item in (data if isinstance(data, list) else []):
+        key = item.get("key") or item.get("id") or item.get("section")
+        names = item.get("seriesNames", [])
+        if key and names:
+            series_map[key] = names
+    return series_map
+
+
+def validate(ts_path, sections_json_path=None):
     sections, parse_error = parse_annotations_file(ts_path)
 
     result = ValidationResult()
@@ -380,10 +467,15 @@ def validate(ts_path):
         ("Section coverage", check_coverage),
         ("System minimums",  check_minimums),
         ("Body length",      check_body_length),
+        ("Effect highlight", check_effect_highlight_present),
     ]
 
     for name, fn in checks:
         fn(sections, result)
+
+    if sections_json_path:
+        series_map = _load_section_series_map(sections_json_path)
+        check_effect_series_names(sections, result, series_map)
 
     return result, sections
 
@@ -458,9 +550,10 @@ if __name__ == "__main__":
     )
     parser.add_argument("annotations", help="Path to the TypeScript annotations file")
     parser.add_argument("--output",    help="Directory to write validation report JSON")
+    parser.add_argument("--sections",  help="Path to sections_merged.json for Check H (series name validation)")
     args = parser.parse_args()
 
-    result, sections = validate(args.annotations)
+    result, sections = validate(args.annotations, sections_json_path=args.sections)
     print_report(result, args.annotations, sections)
 
     if args.output:

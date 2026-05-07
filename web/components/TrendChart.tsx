@@ -86,10 +86,16 @@ export default function TrendChart({
     return notes;
   }, [seriesData]);
 
+  // When an annotation highlights specific series, only those series render as lines.
+  // Others are shown in the legend as inactive (so users know they exist) but not drawn —
+  // this lets recharts auto-scale the Y-axis to the relevant data naturally.
+  const hasHighlight = (highlightConfig?.highlight?.length ?? 0) > 0;
+  const highlightSet = new Set(highlightConfig?.highlight ?? []);
+
   const legendItems = activeNames.map((name, i) => ({
     label:  name,
     color:  pickColor(name, i),
-    active: !hidden.has(name),
+    active: !hidden.has(name) && (!hasHighlight || highlightSet.has(name)),
   }));
 
   const toggleSeries = (name: string) =>
@@ -193,6 +199,9 @@ export default function TrendChart({
           <Tooltip content={<CustomTooltip />} />
           {activeNames.map((name, i) => {
             if (hidden.has(name)) return null;
+            // When annotation highlights specific series, completely hide all others —
+            // this lets the Y-axis auto-scale to only the relevant data
+            if (hasHighlight && !highlightSet.has(name)) return null;
             const style = seriesStyle(name, highlightConfig);
             return (
               <Line

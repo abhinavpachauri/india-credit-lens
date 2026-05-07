@@ -211,6 +211,9 @@ def check_annotations_live():
     if not live_path.exists():
         return False, "", f"File not found: {live_path}"
     cmd = [sys.executable, str(ANALYSIS / "validate_annotations.py"), str(live_path)]
+    sections_path = ANALYSIS / "rbi_sibc" / "merged" / "sections_merged.json"
+    if sections_path.exists():
+        cmd += ["--sections", str(sections_path)]
     return run_check("annotations_live", cmd, cwd=ANALYSIS)
 
 
