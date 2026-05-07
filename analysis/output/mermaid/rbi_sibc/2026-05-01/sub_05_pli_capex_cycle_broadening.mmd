@@ -1,0 +1,26 @@
+---
+title: PLI Capex Cycle Broadening
+---
+flowchart LR
+
+    classDef driverNode fill:#1E3A5F,stroke:#1E3A5F,color:#ffffff
+    classDef sectorNode fill:#F0FDF4,stroke:#166534,color:#166534
+    classDef gapNode fill:#F9FAFB,stroke:#6B7280,color:#374151
+    classDef opportunityNode fill:#0F766E,stroke:#0F766E,color:#ffffff
+    classDef pressureNode fill:#B45309,stroke:#B45309,color:#ffffff
+
+%% --> causes/creates/signals  -.-> suppresses/risk/gap  ==> reroutes  <--> contrast
+
+    driver_pli_capex_broadening(["PLI Capex Cycle Broadening"])
+    sector_all_engineering["All Engineering (Industry)\n+32.2% YoY"]
+    sector_petroleum["Petroleum, Coal & Nuclear (Industry)\n+32.5% YoY"]
+    opp_capex_term_loan_books("Industrial Capex Term Loan Books")
+
+    class driver_pli_capex_broadening driverNode
+    class sector_all_engineering,sector_petroleum sectorNode
+    class opp_capex_term_loan_books opportunityNode
+
+    driver_pli_capex_broadening --> sector_all_engineering
+    driver_pli_capex_broadening --> sector_petroleum
+    sector_all_engineering --> opp_capex_term_loan_books
+    sector_petroleum --> opp_capex_term_loan_books

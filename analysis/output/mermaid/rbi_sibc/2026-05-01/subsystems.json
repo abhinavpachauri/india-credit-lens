@@ -1,0 +1,129 @@
+[
+  {
+    "label": "RBI Unsecured Credit Tightening",
+    "chart_type": "flowchart",
+    "chart_direction": "LR",
+    "newsletter": true,
+    "drivers": [
+      "driver_gold_loan_reclassification",
+      "driver_rbi_unsecured_tightening"
+    ],
+    "sectors": [
+      "sector_consumer_durables",
+      "sector_credit_cards",
+      "sector_gold_loans"
+    ],
+    "outcomes": [
+      "opp_gold_loan_specialised_ops",
+      "pressure_gold_price_reversal_risk",
+      "pressure_unsecured_retail_stress"
+    ],
+    "node_ids": [
+      "driver_gold_loan_reclassification",
+      "driver_rbi_unsecured_tightening",
+      "opp_gold_loan_specialised_ops",
+      "pressure_gold_price_reversal_risk",
+      "pressure_unsecured_retail_stress",
+      "sector_consumer_durables",
+      "sector_credit_cards",
+      "sector_gold_loans"
+    ],
+    "id": "sub_01"
+  },
+  {
+    "label": "NBFC Sector Capital Normalisation",
+    "chart_type": "flowchart",
+    "chart_direction": "LR",
+    "newsletter": true,
+    "drivers": [
+      "driver_nbfc_capital_normalisation"
+    ],
+    "sectors": [
+      "sector_nbfcs"
+    ],
+    "outcomes": [
+      "opp_co_lending_infrastructure",
+      "pressure_nbfc_re_tightening_risk"
+    ],
+    "node_ids": [
+      "driver_nbfc_capital_normalisation",
+      "opp_co_lending_infrastructure",
+      "pressure_nbfc_re_tightening_risk",
+      "sector_nbfcs"
+    ],
+    "id": "sub_02"
+  },
+  {
+    "label": "MSME Formalisation via GST & UDYAM",
+    "chart_type": "flowchart",
+    "chart_direction": "TD",
+    "newsletter": true,
+    "drivers": [
+      "driver_msme_formalisation"
+    ],
+    "sectors": [
+      "sector_micro_small_industry",
+      "sector_psl_mse"
+    ],
+    "outcomes": [
+      "opp_msme_alt_data_underwriting",
+      "opp_pslc_trading_tooling",
+      "pressure_first_cycle_msme_risk"
+    ],
+    "node_ids": [
+      "driver_msme_formalisation",
+      "opp_msme_alt_data_underwriting",
+      "opp_pslc_trading_tooling",
+      "pressure_first_cycle_msme_risk",
+      "sector_micro_small_industry",
+      "sector_psl_mse"
+    ],
+    "id": "sub_03"
+  },
+  {
+    "label": "PLI Capex Cycle Broadening",
+    "chart_type": "flowchart",
+    "chart_direction": "LR",
+    "newsletter": false,
+    "drivers": [
+      "driver_pli_capex_broadening"
+    ],
+    "sectors": [
+      "sector_vehicle_loans",
+      "sector_vehicles_industrial"
+    ],
+    "outcomes": [
+      "opp_vehicle_supply_chain_finance"
+    ],
+    "node_ids": [
+      "driver_pli_capex_broadening",
+      "opp_vehicle_supply_chain_finance",
+      "sector_vehicle_loans",
+      "sector_vehicles_industrial"
+    ],
+    "id": "sub_04"
+  },
+  {
+    "label": "PLI Capex Cycle Broadening",
+    "chart_type": "flowchart",
+    "chart_direction": "LR",
+    "newsletter": false,
+    "drivers": [
+      "driver_pli_capex_broadening"
+    ],
+    "sectors": [
+      "sector_all_engineering",
+      "sector_petroleum"
+    ],
+    "outcomes": [
+      "opp_capex_term_loan_books"
+    ],
+    "node_ids": [
+      "driver_pli_capex_broadening",
+      "opp_capex_term_loan_books",
+      "sector_all_engineering",
+      "sector_petroleum"
+    ],
+    "id": "sub_05"
+  }
+]

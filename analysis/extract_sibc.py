@@ -27,6 +27,7 @@ Exit codes:
 
 import argparse
 import json
+import math
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -411,27 +412,42 @@ def build_section(
 
     # ── absoluteData ──────────────────────────────────────────────────────────
     # Later col_pair overwrites earlier one for the same display month.
+    # Skip dates where all series values are None — happens when different row
+    # groups in the same sheet have different date columns (e.g. Bank Credit uses
+    # Apr dates while sectors 1–4 use Mar dates in the annual file).
     abs_by_label: dict[str, dict] = {}
+    skipped_eff_cols: set[str] = set()
     for orig_col, eff_col in col_pairs:
         disp = _display(eff_col, orig_col)
         row_dict = {"date": disp}
         for label in series_names:
             val = series_rows[label].get(orig_col)
-            row_dict[label] = round(float(val), 2) if val is not None else None
+            row_dict[label] = (
+                round(float(val), 2)
+                if val is not None and not (isinstance(val, float) and math.isnan(val))
+                else None
+            )
+        if all(row_dict.get(label) is None for label in series_names):
+            skipped_eff_cols.add(eff_col)
+            continue
         abs_by_label[disp] = row_dict
 
-    # Preserve display order (latest per display month at end)
+    # Preserve display order (latest per display month at end), excluding skipped
     seen_labels: list[str] = []
     for orig_col, eff_col in col_pairs:
+        if eff_col in skipped_eff_cols:
+            continue
         disp = _display(eff_col, orig_col)
         if disp in seen_labels:
             seen_labels.remove(disp)
         seen_labels.append(disp)
     absolute_data = [abs_by_label[lbl] for lbl in dict.fromkeys(seen_labels)]
 
-    # Rebuild deduped effective ISO date list (latest eff_col per display month)
+    # Rebuild deduped effective ISO date list (latest eff_col per display month, excluding skipped)
     deduped_eff_map: dict[str, str] = {}   # display → eff_col
     for orig_col, eff_col in col_pairs:
+        if eff_col in skipped_eff_cols:
+            continue
         disp = _display(eff_col, orig_col)
         deduped_eff_map[disp] = eff_col
     deduped_eff_cols = list(deduped_eff_map.values())
@@ -495,10 +511,67 @@ def build_section(
     }
 
 
+# ── Format detection gate ─────────────────────────────────────────────────────
+
+def ensure_format_confirmed(xlsx_path: Path, period_dir: Path, dry_run: bool = False) -> bool:
+    """
+    Run format detection before extraction if format_report.json is missing or unconfirmed.
+    Returns True to proceed, False to abort.
+    """
+    report_path = period_dir / "format_report.json"
+
+    # Already confirmed — skip detection entirely
+    if report_path.exists():
+        try:
+            with open(report_path) as f:
+                report = json.load(f)
+            if report.get("confirmed_by_user") and report.get("supported"):
+                fmt_id = report.get("format_id", "unknown")
+                print(f"  Format : {fmt_id} (confirmed) — skipping detection")
+                return True
+        except Exception:
+            pass  # corrupt report — re-run detection
+
+    if dry_run:
+        print("  [dry-run] Would run format detection (format not yet confirmed)")
+        return True
+
+    # Import detect_format from the same analysis directory
+    sys.path.insert(0, str(ANALYSIS))
+    try:
+        from detect_format import detect
+    except ImportError as e:
+        print(f"  [WARN] Cannot import detect_format.py: {e} — skipping format gate", file=sys.stderr)
+        return True
+
+    rc = detect(xlsx_path)
+    if rc != 0:
+        print("\n  Extraction aborted — resolve format issues and re-run.", file=sys.stderr)
+        return False
+    return True
+
+
 # ── Main ──────────────────────────────────────────────────────────────────────
 
 def extract(xlsx_path: Path, out_dir: Path | None = None, dry_run: bool = False) -> dict:
     print(f"\n  Parsing: {xlsx_path.name}")
+
+    # ── Resolve output directory early (needed for format gate) ──────────────
+    report_date = parse_filename_date(xlsx_path)
+    if report_date is None:
+        print(f"ERROR: Cannot parse report date from filename: {xlsx_path.name}", file=sys.stderr)
+        sys.exit(1)
+    data_date = report_date.strftime("%Y-%m-%d")
+
+    if out_dir is None:
+        resolved_out_dir = ANALYSIS / "rbi_sibc" / data_date
+    else:
+        resolved_out_dir = Path(out_dir)
+    resolved_out_dir.mkdir(parents=True, exist_ok=True)
+
+    # ── Format detection gate ─────────────────────────────────────────────────
+    if not ensure_format_confirmed(xlsx_path, resolved_out_dir, dry_run=dry_run):
+        sys.exit(1)
 
     # ── Parse ─────────────────────────────────────────────────────────────────
     try:
@@ -538,30 +611,17 @@ def extract(xlsx_path: Path, out_dir: Path | None = None, dry_run: bool = False)
     print(f"  Statement 2 date columns: {stmt2_date_cols}")
 
     # ── Detect delayed-publication dates and prompt user ─────────────────────
-    # Must resolve out_dir before prompting (needed to save date_overrides.json)
-    if out_dir is None:
-        _tmp_out_dir = ANALYSIS / "rbi_sibc" / parse_filename_date(xlsx_path).strftime("%Y-%m-%d")
-    else:
-        _tmp_out_dir = Path(out_dir)
-    _tmp_out_dir.mkdir(parents=True, exist_ok=True)
-
     stmt1_anomalies = detect_anomalous_dates(stmt1_date_cols, "Statement 1")
     stmt2_anomalies = detect_anomalous_dates(stmt2_date_cols, "Statement 2")
     all_anomalies   = stmt1_anomalies + stmt2_anomalies
 
     iso_overrides: dict[str, str] = {}
     if all_anomalies and not dry_run:
-        iso_overrides = prompt_date_override(all_anomalies, _tmp_out_dir)
+        iso_overrides = prompt_date_override(all_anomalies, resolved_out_dir)
     elif all_anomalies and dry_run:
         print(f"\n  [dry-run] {len(all_anomalies)} date anomaly(ies) detected — "
               f"would prompt for override decision")
 
-    # ── Report date from filename ─────────────────────────────────────────────
-    report_date = parse_filename_date(xlsx_path)
-    if report_date is None:
-        print(f"ERROR: Cannot parse report date from filename: {xlsx_path.name}", file=sys.stderr)
-        sys.exit(1)
-    data_date = report_date.strftime("%Y-%m-%d")
     print(f"  Report/publication date : {data_date}")
 
     # ── Build sections ────────────────────────────────────────────────────────
@@ -580,24 +640,18 @@ def extract(xlsx_path: Path, out_dir: Path | None = None, dry_run: bool = False)
     }
 
     # Attach override record if one was saved this run
-    overrides_path = _tmp_out_dir / "date_overrides.json"
+    overrides_path = resolved_out_dir / "date_overrides.json"
     if overrides_path.exists():
         with open(overrides_path) as f:
             payload["dateOverrides"] = json.load(f).get("overrides", [])
 
     # ── Output ────────────────────────────────────────────────────────────────
-    if out_dir is None:
-        out_dir = ANALYSIS / "rbi_sibc" / data_date
-
-    out_dir = Path(out_dir)
-
     if dry_run:
-        print(f"\n  [dry-run] Would write sections.json → {out_dir}/sections.json")
+        print(f"\n  [dry-run] Would write sections.json → {resolved_out_dir}/sections.json")
         print(f"  Sections: {[s['id'] for s in sections]}")
         return payload
 
-    out_dir.mkdir(parents=True, exist_ok=True)
-    out_path = out_dir / "sections.json"
+    out_path = resolved_out_dir / "sections.json"
     with open(out_path, "w") as f:
         json.dump(payload, f, indent=2)
 

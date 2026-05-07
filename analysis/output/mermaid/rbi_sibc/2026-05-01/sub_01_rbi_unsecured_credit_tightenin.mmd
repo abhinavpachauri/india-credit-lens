@@ -1,0 +1,36 @@
+---
+title: RBI Unsecured Credit Tightening
+---
+flowchart LR
+
+    classDef driverNode fill:#1E3A5F,stroke:#1E3A5F,color:#ffffff
+    classDef sectorNode fill:#F0FDF4,stroke:#166534,color:#166534
+    classDef gapNode fill:#F9FAFB,stroke:#6B7280,color:#374151
+    classDef opportunityNode fill:#0F766E,stroke:#0F766E,color:#ffffff
+    classDef pressureNode fill:#B45309,stroke:#B45309,color:#ffffff
+
+%% --> causes/creates/signals  -.-> suppresses/risk/gap  ==> reroutes  <--> contrast
+
+    driver_gold_loan_reclassification(["RBI Gold Loan Reclassification + Price Surge"])
+    driver_rbi_unsecured_tightening(["RBI Unsecured Credit Tightening"])
+    sector_consumer_durables["Consumer Durables\n-5.3% YoY"]
+    sector_credit_cards["Credit Card Outstanding\n+3.5% YoY"]
+    sector_gold_loans["Gold Loans (Personal)\n+123.1% YoY"]
+    opp_gold_loan_specialised_ops("Gold-Loan Operations at Scale")
+    pressure_gold_price_reversal_risk[/"Gold Price Reversal Risk on Loan Books"/]
+    pressure_unsecured_retail_stress[/"Unsecured Retail Slowdown Deepening"/]
+
+    class driver_gold_loan_reclassification,driver_rbi_unsecured_tightening driverNode
+    class sector_consumer_durables,sector_credit_cards,sector_gold_loans sectorNode
+    class opp_gold_loan_specialised_ops opportunityNode
+    class pressure_gold_price_reversal_risk,pressure_unsecured_retail_stress pressureNode
+
+    driver_rbi_unsecured_tightening -.-> sector_credit_cards
+    driver_rbi_unsecured_tightening -.-> sector_consumer_durables
+    driver_rbi_unsecured_tightening ==> sector_gold_loans
+    driver_gold_loan_reclassification --> sector_gold_loans
+    sector_gold_loans --> opp_gold_loan_specialised_ops
+    sector_credit_cards -.-> pressure_unsecured_retail_stress
+    sector_consumer_durables --> pressure_unsecured_retail_stress
+    sector_gold_loans -.-> pressure_gold_price_reversal_risk
+    sector_gold_loans <--> sector_credit_cards
