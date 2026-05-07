@@ -2,10 +2,10 @@
   "_meta": {
     "report_id": "rbi_sibc",
     "report_name": "RBI Sector/Industry-wise Bank Credit (Merged)",
-    "period": "Jan 2024 – Feb 2026 (merged)",
-    "generated": "2026-04-14",
-    "total_credit_lcr": 204.8,
-    "yoy_growth_pct": 14.6,
+    "period": "Jan 2024 – Mar 2026 (merged)",
+    "generated": "2026-05-02",
+    "total_credit_lcr": 213.6,
+    "yoy_growth_pct": 16.1,
     "schema_version": "1.0",
     "source": "annotations_merged.ts + sections_merged.json",
     "note": "Cross-period causal model. annotation_ids reference IDs in annotations_merged.ts. Highlights structural trends not visible in any single-period file."
@@ -64,7 +64,7 @@
       "label": "PLI scheme capex drawdown phase (FY25–26)",
       "description": "Production-Linked Incentive scheme recipients approved in 2022-23 entered the investment phase in FY25-26, driving real capex credit drawdowns in electronics, defence, medical devices, and EV components. Visible as multi-year All Engineering surge in merged data.",
       "annotation_ids": [
-        "all-engineering-pli-signal",
+        "pli-capex-broadening-confirmed",
         "pli-supply-chain-finance"
       ],
       "claim_type": "inference",
@@ -96,7 +96,7 @@
       "label": "NBFC credit recovery post risk-weight cycle",
       "description": "RBI risk weights on bank-to-NBFC credit (raised 2023) temporarily suppressed flows. By Jan 2026 the channel has fully reopened, with NBFC credit re-accelerating. The January NBFC series is null — only March SIBC captures NBFC sub-classification.",
       "annotation_ids": [
-        "nbfc-jan-data-absent"
+        "nbfc-risk-weight-cycle-complete"
       ],
       "claim_type": "hypothesis",
       "source": "RBI Circular DOR.STR.REC.57/21.06.001/2023-24 (November 16, 2023) partially supports risk weight increase; RBI SIBC data exists but specific Jan 2026 re-acceleration and data structure claims not verified",
@@ -104,6 +104,21 @@
       "source_verified_date": "2026-04-20",
       "source_rationale": "Risk weight circular verified; NBFC credit re-acceleration by Jan 2026 and SIBC data structure claims not confirmed",
       "source_excerpt": "RBI/2023-24/85 DOR.STR.REC.57 - Regulatory measures towards consumer credit and bank-NBFC exposures (Nov 2023)"
+    },
+    {
+      "id": "driver_msp_procurement_growth",
+      "tier": "driver",
+      "label": "MSP procurement volumes growing year-on-year",
+      "description": "Government MSP procurement agencies (FCI, state agencies) draw increasing bank credit each kharif season to finance grain purchases. Growing MSP prices and expanding procurement quantities mean each year's food credit peak and March-end trough are higher than the prior year — the food credit cycle is mechanistic, not random seasonality.",
+      "annotation_ids": [
+        "food-credit-jan-artifact"
+      ],
+      "claim_type": "inference",
+      "source": "RBI SIBC series — food credit sub-category, sections_merged.json (all three periods)",
+      "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx",
+      "source_verified_date": "2026-05-07",
+      "source_rationale": "Secular rise in March-end food credit (₹0.21L Cr → ₹0.70L Cr in 2 years) is directly observable in sections_merged.json. MSP procurement as mechanism is an inference — no direct procurement volume data in SIBC.",
+      "source_excerpt": "Food credit March-end: ₹0.21L Cr (Mar 2024) → ₹0.29L Cr (Mar 2025) → ₹0.70L Cr (Mar 2026)"
     },
     {
       "id": "driver_infra_cycle_maturing",
@@ -187,7 +202,7 @@
       "description": "Most dramatic growth story in the data. ₹0.93L Cr (Mar 2024) → ₹2.06L Cr (Mar 2025) → ₹4.29L Cr (Feb 2026). +359% in 24 months. Only visible in March SIBC files — January data is null for this series.",
       "annotation_ids": [
         "gold-loans-structural-surge",
-        "gold-loans-null-in-jan"
+        "gold-loans-reclassification-overstates-demand"
       ]
     },
     {
@@ -215,7 +230,7 @@
       "label": "All Engineering (Industry by Type)",
       "description": "Fastest-growing large industry sub-sector. ₹1.96L Cr (Feb 2024) → ₹2.32L Cr (Feb 2025) → ₹3.16L Cr (Feb 2026). +62% in 2 years. PLI capex drawdowns driving the surge.",
       "annotation_ids": [
-        "all-engineering-pli-signal"
+        "pli-capex-broadening-confirmed"
       ]
     },
     {
@@ -262,8 +277,8 @@
       "label": "January SIBC missing Gold, Housing, NBFC, Tourism data",
       "description": "January SIBC files do not report sub-classifications for Gold Loans, PSL Housing, NBFC credit, and Tourism. These series only appear in March files. Merged Jan→Jan YoY comparisons for these categories are not possible.",
       "annotation_ids": [
-        "gold-loans-null-in-jan",
-        "nbfc-jan-data-absent"
+        "gold-loans-reclassification-overstates-demand",
+        "nbfc-risk-weight-cycle-complete"
       ],
       "claim_type": "data",
       "source": "RBI Sectoral Deployment of Bank Credit — Jan 2026 SIBC file (gold loans, housing, NBFC, tourism sub-categories absent)",
@@ -273,20 +288,19 @@
       "source_rationale": "Directly observed null values in ingested Jan 2026 SIBC xlsx; confirmed by extract_sibc.py output."
     },
     {
-      "id": "gap_food_credit_artifact",
-      "tier": "gap",
-      "label": "Food credit seasonal artifact contaminates totals",
-      "description": "Food credit peaks in January (kharif procurement season) and drops by March. This causes the Jan bank credit total to appear larger than March, distorting FY-to-date growth calculations. Non-food credit is the correct signal.",
+      "id": "sector_food_credit",
+      "tier": "sector",
+      "label": "Food credit growing cycle — 5× in two years at March-end",
+      "description": "Food credit peaks each January (kharif procurement) and compresses by March (repayment). Both the seasonal peaks and the March-end troughs are rising secularly. March-end: ₹0.21L Cr (Mar 2024) → ₹0.29L Cr (Mar 2025, +38.4%) → ₹0.70L Cr (Mar 2026, +139.4%). Jan peaks: ₹0.46L Cr (Jan 2024) → ₹0.89L Cr (Jan 2026, +95%). At <0.4% of total bank credit, the absolute size is small — but the growth rate is the signal. The January FY figure overstates the annual run-rate; March-end is the correct anchor for trend analysis.",
       "annotation_ids": [
-        "food-credit-jan-artifact",
-        "nonfood-credit-all-the-signal"
+        "food-credit-jan-artifact"
       ],
-      "claim_type": "data",
-      "source": "RBI SIBC series — food credit sub-category (seasonal procurement financing visible in merged sections_merged.json)",
+      "claim_type": "inference",
+      "source": "RBI SIBC series — food credit sub-category (sections_merged.json, all three periods: 2026-02-27, 2026-03-30, 2026-04-30)",
       "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx",
-      "source_verified_date": "2026-04-19",
-      "source_excerpt": "Food credit shows sharp seasonal spikes (kharif/rabi procurement) that inflate total industry credit in specific months.",
-      "source_rationale": "Directly observable seasonal pattern across all periods in sections_merged.json."
+      "source_verified_date": "2026-05-07",
+      "source_rationale": "March-end food credit values directly readable from sections_merged.json. Growth rates computed from those values.",
+      "source_excerpt": "Food credit March-end: ₹0.21L Cr (Mar 2024) → ₹0.29L Cr (Mar 2025) → ₹0.70L Cr (Mar 2026)"
     },
     {
       "id": "gap_psl_reclassification",
@@ -341,7 +355,7 @@
       "description": "Tier-2 and tier-3 suppliers to PLI anchor companies represent the next layer of manufacturing credit. Anchor company relationships provide implicit credit assurance for supply chain finance structures.",
       "annotation_ids": [
         "pli-supply-chain-finance",
-        "all-engineering-pli-signal"
+        "pli-capex-broadening-confirmed"
       ],
       "claim_type": "inference",
       "source": "PIB Press Release - PLI Scheme: Powering India's Industrial Renaissance (PRID: 155082), August 2025",
@@ -527,9 +541,15 @@
     },
     {
       "from": "sector_bank_credit",
-      "to": "gap_food_credit_artifact",
-      "type": "creates_gap",
-      "label": "January totals inflated by food credit peak"
+      "to": "sector_food_credit",
+      "type": "signals",
+      "label": "Food credit sub-sector showing secular growth via MSP cycle"
+    },
+    {
+      "from": "driver_msp_procurement_growth",
+      "to": "sector_food_credit",
+      "type": "causes",
+      "label": "Larger procurement volumes each cycle raise peaks and troughs"
     },
     {
       "from": "sector_msme",

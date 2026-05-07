@@ -1,43 +1,57 @@
-# Lending Opportunities — RBI SIBC Merged (Jan 2024 – Feb 2026)
+# Lending Opportunities — RBI SIBC Merged (Jan 2024 – Mar 2026)
 
-> Period: Jan 2024 – Feb 2026 | Generated: 2026-04-14
-> Source: RBI SIBC merged across all ingested periods
-
----
-
-## 1. Gold loan origination — structural growth with 2–3 year runway
-
-**Signal strength: High (confirmed across 3 March data points)**
-
-Gold Loans: ₹0.93L Cr (Mar 2024) → ₹2.06L Cr (Mar 2025) → ₹4.29L Cr (Feb 2026). +359% in 24 months. Share of personal loans rising every period. This is not a seasonal uptick — it is a structural shift in how Indian households borrow short-term.
-
-**The opportunity:** Banks are taking share from NBFCs who built the original gold lending infrastructure. The moat is operational, not regulatory: branch-level assay capability, safe custody infrastructure, and cash management for disbursement. Banks that move now can acquire these capabilities before costs rise.
-
-**The window:** Gold prices are structurally elevated. RBI unsecured credit tightening remains in effect. Both tailwinds persist. The window is 2–3 years before NBFC competition rebuilds and margins compress.
-
-**Action:** Build or acquire assay + safe custody capability. Target NBFC gold loan portfolios for co-origination. Price aggressively to acquire market share while the window is open.
+> Period: Jan 2024 – Mar 2026 | Updated: 2026-05-02
+> Source: RBI SIBC merged across all ingested periods (Jan 2026, Feb 2026, Mar 2026 files)
 
 ---
 
-## 2. MSME origination infrastructure — the first wave, before saturation
+## 1. Specialised gold-loan operations — reclassification done, flow opportunity ahead
 
-**Signal strength: High (tripling YoY confirmed in independent series)**
+**Signal strength: High (FY-end confirmed at ₹4.60L Cr, +123% YoY)**
 
-Micro & Small YoY: +9.6% (Jan 2025) → +31.2% (Jan 2026). PSL Micro & Small: +25.6% FY (Feb 2026). Two independent series, same direction. Banks with MSME origination infrastructure built in 2022-24 are harvesting now.
+Gold Loans: ₹0.93L Cr (Mar 2024) → ₹2.06L Cr (Mar 2025) → **₹4.60L Cr (Mar 2026)**. Two consecutive YoY rates above 120%. Share of personal credit: 1.7% → 3.5% → 6.6%. The reclassification stock effect is fully recognised by Mar 2026 — FY27 growth will be flow-only.
 
-**The opportunity:** The next ₹10L Cr of industrial credit will come from MSMEs. Banks that haven't yet built MSME origination capability are 2-3 years behind the leaders. The gap is closeable — but not for long.
+**The opportunity:** Banks struggle operationally with physical-collateral handling at this pace. Pure-play gold NBFCs (Manappuram, Muthoot, IIFL) and southern banks (Federal, KVB) own disbursement velocity. For new entrants: partnership models with gold NBFCs are operationally faster than building branch operations from zero.
 
-**The structural driver:** UDYAM registration and GST transaction history have crossed the underwriting threshold for a material slice of the MSME universe. This is not cyclical — it is a permanent expansion of the underwritable population.
+**The window:** Gold prices remain elevated. RBI unsecured tightening continues. A gold price reversal >20% would compress collateral values and trigger LTV covenant reviews across the book.
 
-**Action:** Invest in MSME credit scoring models trained on GST data. Build supply chain underwriting relationships with large anchor corporates. Target Medium enterprises (+22.3% YoY at Jan 2026) as a bridge to sophisticated MSME credit before the Micro & Small segment becomes highly competitive.
+**Action:** Build co-origination or co-lending partnerships with gold NBFC specialists. Stress-test gold loan portfolios against gold price scenarios. Track FY27 disbursement volumes (not balances) to isolate real demand from reclassification tail.
 
 ---
 
-## 3. PLI supply chain finance — anchor assurance reduces the credit risk
+## 2. Alternative-data MSME underwriting — FY-end confirmation makes this non-negotiable
 
-**Signal strength: Medium (PLI in drawdown phase confirmed, SCF opportunity is derived)**
+**Signal strength: Very High (33.1% YoY confirmed at FY-end, two independent series aligned)**
 
-All Engineering: ₹1.96L Cr (Feb 2024) → ₹2.32L Cr (Feb 2025) → ₹3.16L Cr (Feb 2026). PLI scheme capex drawdowns are real banking flows, not forward projections.
+Micro & Small YoY: +9.6% (FY25) → **+33.1% (FY26, Mar 2026)**. PSL MSE: +13.4% (FY25) → **+29.5% (FY26, Mar 2026)**. Two independent series, confirmed at year-end. FY26 incremental: ₹2.65L Cr — 4× the FY25 add.
+
+**The opportunity:** A meaningful share of this growth is first-cycle formal borrowers post-GST and UDYAM with thin or blank bureau histories. Bureau-only underwriting cannot scale to this book. Alt-data models (GST returns, UPI transaction history, e-way-bill volumes) are the only way to underwrite the fastest-growing portfolio in the system.
+
+**The window:** GST-registered MSMEs from 2019-22 now have 4-6 years of digital financial history — enough for model training. FY27-28 will be the first stress test for alt-data models; first-cycle borrower loss curves could surprise.
+
+**Action:** Partner with GSPs (GST Suvidha Providers) and account aggregators for data access. Train underwriting models on 4+ years of GST and UPI data. Target Medium enterprises (+21.7% YoY) as a bridge — they have richer data and lower first-cycle risk than Micro.
+
+---
+
+## 3. Co-lending and warehouse-financing infrastructure for the bank-NBFC cycle
+
+**Signal strength: Very High (NBFC credit +26.3% YoY FY26, ₹4.30L Cr incremental — confirmed at FY-end)**
+
+Bank credit to NBFCs: ₹15.23L Cr (Mar 2024) → ₹16.35L Cr (Mar 2025, +7.4%) → **₹20.66L Cr (Mar 2026, +26.3%)**. FY26 incremental nearly 4× FY25. The 2023 risk-weight tightening cycle is fully absorbed.
+
+**The opportunity:** Banks need NBFC origination reach; NBFCs need bank balance sheet capacity. The product wedges: co-origination agreements, warehouse lines, loan-management systems with co-lending partition logic and audit-trail rigour.
+
+**The window:** 12-18 months before in-house tooling at large banks fills the LMS gap. RBI could re-tighten risk weights if it perceives NBFC overheating — monitor H1 FY27 FSR.
+
+**Action:** Build or partner on LMS with co-lending support. Offer warehouse credit facilities to top-20 NBFCs by book size. Track RBI FSR closely for re-tightening signals.
+
+---
+
+## 4. PLI supply chain finance — anchor assurance reduces the credit risk
+
+**Signal strength: High (PLI capex broadening confirmed at FY-end across 6 sub-sectors)**
+
+All Engineering: ₹1.96L Cr (Feb 2024) → ₹2.32L Cr (Feb 2025) → **₹3.17L Cr (Mar 2026, +32.2% YoY)**. Petroleum +32.5%, Basic Metal +19.4%. PLI scheme capex drawdowns are confirmed as broad-based, not just electronics.
 
 **The opportunity:** The anchor PLI companies (electronics, defence OEMs, medical device manufacturers) have tier-2 and tier-3 supplier bases that are underfinanced. Supply chain finance to these suppliers — invoice discounting, vendor pre-payment facilities — carries implicit credit assurance from the anchor relationship.
 
@@ -47,32 +61,32 @@ All Engineering: ₹1.96L Cr (Feb 2024) → ₹2.32L Cr (Feb 2025) → ₹3.16L 
 
 ---
 
-## 4. EV-specific vehicle credit — product differentiation before commoditization
+## 5. Vehicle supply-chain finance for the EV and Tier-2 component build-out
 
-**Signal strength: Medium (vehicle loan acceleration confirmed; EV share is derived)**
+**Signal strength: High (vehicle loans +18.6% YoY FY26 + vehicles/parts industrial +18.1% — dual signal confirmed)**
 
-Vehicle Loans YoY: +9.7% (Jan 2025) → +17.1% (Jan 2026). Accelerating when all other personal credit is decelerating. EV adoption and premium vehicle financing are driving growth beyond pure volume.
+Vehicle Loans (personal): **+18.6% YoY** (₹7.39L Cr at Mar 2026). Vehicles & Parts (industrial): **+18.1% YoY** (₹1.41L Cr). The OEM EV ramp-up (Tata, Mahindra, Hyundai-India) is propagating into Tier-1 and Tier-2 component capex.
 
-**The opportunity:** Standard auto loans treat EV and ICE vehicles identically. EV-specific loan products — accounting for battery residual value, charging infrastructure co-financing, and utility cost savings in repayment capacity — can price more accurately and acquire EV buyers as long-term customers.
+**The opportunity:** Two parallel plays. Personal side: OEM captive NBFCs (Bajaj Finance, M&M Finance) for consumer vehicle loans. Industrial side: TReDS platforms, supply-chain finance teams at private banks, and specialist NBFCs for Tier-2 component finance.
 
-**The window:** EV penetration of new vehicle sales is currently 4-5%. It will reach 15-20% within 5 years. Banks that build EV-specific products and OEM partnerships now will own this segment before it becomes a mass-market commodity.
+**The window:** EV adoption rates lagging policy targets could compress Tier-1 component capex pipelines. Watch Q2 FY27 PV and 2W EV penetration data.
 
-**Action:** Partner with top 3 EV OEMs (Tata Motors, MG Motor, Mahindra Electric) for exclusive or preferred lender status. Develop battery residual value models in collaboration with OEMs. Offer charging infrastructure financing as a loan top-up product.
-
----
-
-## 5. Renewable energy project finance — the next infrastructure capex wave
-
-**Signal strength: Medium (infrastructure deceleration confirmed; renewables opportunity is structural)**
-
-Infrastructure credit decelerating at +5.8% FY. The FY22-24 capex wave is in operations. The next wave — green hydrogen, utility-scale solar, battery storage, offshore wind — is not yet at credit drawdown scale.
-
-**The opportunity:** The government has committed ₹6.8L Cr in renewable energy capex through 2030 under the National Green Hydrogen Mission and Renewable Energy targets. Project finance lenders with expertise in PPA-backed cash flow modeling, grid integration risk, and construction-to-operations transition financing will capture this cycle as they captured the road and metro rail cycle in FY22-24.
-
-**The window:** Most renewable energy projects are in the approval and PPA-signing phase now. Credit drawdowns begin 12-18 months after PPA execution. The drawdown wave starts in FY27-28.
-
-**Action:** Build project finance teams with renewable energy expertise. Develop financing structures for storage-linked solar (which has better bankability than standalone solar). Create a green infrastructure credit desk now — before the drawdown wave begins.
+**Action:** Partner with OEM captive NBFCs for co-lending on consumer side. Build supply-chain finance products for Tier-2 component suppliers to top-3 EV OEMs.
 
 ---
 
-*For the full annotation set: see annotations_merged.ts. For data quality caveats on these opportunities: see gaps_merged.md.*
+## 6. Renewable energy project finance — the next infrastructure capex wave
+
+**Signal strength: Medium (infrastructure deceleration confirmed; renewables PSL data shows runway)**
+
+Infrastructure credit +9.5% YoY (FY26) — the laggard. Renewable Energy PSL: ₹0.06L Cr (Mar 2024) → ₹0.14L Cr (Feb 2026), +35% FY in FY26. India needs ₹20-25L Cr of renewable energy investment by 2030. Bank credit stands at 0.007% of total bank credit.
+
+**The opportunity:** No incumbent lender has built renewable energy project finance capabilities at scale. First-movers on DISCOM offtake risk underwriting, distributed solar credit, and battery storage finance will own this market for a decade.
+
+**The window:** Most renewable energy projects are in the PPA-signing phase now. Credit drawdowns begin 12-18 months after PPA execution. The drawdown wave starts in FY27-28.
+
+**Action:** Build project finance teams with renewable energy expertise. Develop structures for storage-linked solar. Partner with REC and PFC for co-lending on large-ticket green capex.
+
+---
+
+*For the full annotation set: see annotations_merged.ts. For data quality caveats: see gaps.md.*

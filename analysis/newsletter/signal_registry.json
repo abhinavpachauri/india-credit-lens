@@ -1,0 +1,163 @@
+{
+  "_meta": {
+    "report_id": "rbi_sibc",
+    "last_updated_issue": 3,
+    "description": "Cumulative tracker of every signal published across India Credit Lens issues. One entry per underlying story — story_arc names may evolve across issues. Add a history entry each time a signal is updated. Generator uses this for the Prior Signals section.",
+    "status_values": {
+      "new":       "First appearance this issue — full card treatment",
+      "confirmed": "Prior claim confirmed as stated",
+      "stronger":  "Confirmed but came in stronger than signalled",
+      "unchanged": "No new data or direction unchanged",
+      "weakening": "Signal showing early reversal",
+      "refuted":   "Prior claim shown to be factually wrong"
+    }
+  },
+  "signals": [
+    {
+      "id": "gold_loan_economy",
+      "story_arc": "Gold Loans: Stock Effect Done, Flow Era Begins",
+      "theme": "Gold Economy",
+      "introduced_issue": 1,
+      "introduced_url": "https://indiacreditlens.substack.com/p/issue-1",
+      "history": [
+        {
+          "issue": 1,
+          "status": "new",
+          "story_arc": "The Regulation Migration",
+          "stat": "₹4.01L Cr — Jan 2026 (+128.8% YoY vs Jan 2025)"
+        },
+        {
+          "issue": 3,
+          "status": "confirmed",
+          "story_arc": "Gold Loans: Stock Effect Done, Flow Era Begins",
+          "stat": "₹4.60L Cr — Mar 2026 FY-end (+123% YoY) — reclassification complete, FY27 is flow-only",
+          "url": "https://indiacreditlens.substack.com/p/issue-3"
+        }
+      ]
+    },
+    {
+      "id": "pli_capex_cycle",
+      "story_arc": "PLI Capex: Broad-Based and Accelerating",
+      "theme": "Manufacturing Capex",
+      "introduced_issue": 1,
+      "introduced_url": "https://indiacreditlens.substack.com/p/issue-1",
+      "history": [
+        {
+          "issue": 1,
+          "status": "new",
+          "story_arc": "The PLI Capex Cycle",
+          "stat": "All Engineering +35.9% YoY, ₹3.11L Cr — Jan 2026"
+        },
+        {
+          "issue": 3,
+          "status": "stronger",
+          "story_arc": "PLI Capex: Broad-Based and Accelerating",
+          "stat": "+32.2% YoY at Mar 2026 FY-end — broad-based across 6 sub-sectors, not just electronics",
+          "url": "https://indiacreditlens.substack.com/p/issue-3"
+        }
+      ]
+    },
+    {
+      "id": "formalisation_wave",
+      "story_arc": "MSME Scale Confirmation",
+      "theme": "MSME Formalisation",
+      "introduced_issue": 1,
+      "introduced_url": "https://indiacreditlens.substack.com/p/issue-1",
+      "history": [
+        {
+          "issue": 1,
+          "status": "new",
+          "story_arc": "The Formalisation Wave",
+          "stat": "Micro & Small +31.2% YoY, ₹10.31L Cr — Jan 2026"
+        },
+        {
+          "issue": 3,
+          "status": "stronger",
+          "story_arc": "MSME Scale Confirmation",
+          "stat": "+33.1% YoY at Mar 2026 FY-end (₹10.63L Cr) — independently confirmed by PSL MSE +29.5%",
+          "url": "https://indiacreditlens.substack.com/p/issue-3"
+        }
+      ]
+    },
+    {
+      "id": "psl_housing_reclass",
+      "story_arc": "PSL Housing Reclassification",
+      "theme": "PSL Mechanics",
+      "introduced_issue": 1,
+      "introduced_url": "https://indiacreditlens.substack.com/p/issue-1",
+      "history": [
+        {
+          "issue": 1,
+          "status": "new",
+          "story_arc": "PSL Housing anomaly",
+          "stat": "PSL Housing +37.9% YoY flagged as suspicious — Jan 2026"
+        },
+        {
+          "issue": 2,
+          "status": "refuted",
+          "story_arc": "The Reclassification",
+          "stat": "Confirmed reclassification — Oct 2024 RBI ceiling raise, not real origination growth",
+          "url": "https://indiacreditlens.substack.com/p/issue-2"
+        }
+      ]
+    },
+    {
+      "id": "credit_acceleration",
+      "story_arc": "The Synchronisation Signal",
+      "theme": "System-Wide Credit",
+      "introduced_issue": 2,
+      "introduced_url": "https://indiacreditlens.substack.com/p/issue-2",
+      "history": [
+        {
+          "issue": 2,
+          "status": "new",
+          "story_arc": "The Acceleration Nobody Computed",
+          "stat": "FY26 tracking at 13.8% FY (Feb 2026 vs Mar 2025) — vs FY25's 11.0%"
+        },
+        {
+          "issue": 3,
+          "status": "stronger",
+          "story_arc": "The Synchronisation Signal",
+          "stat": "+17.1% YoY at Mar 2026 FY-end — all four main sectors accelerated simultaneously, a first in this dataset",
+          "url": "https://indiacreditlens.substack.com/p/issue-3"
+        }
+      ]
+    },
+    {
+      "id": "infrastructure_plateau",
+      "story_arc": "Infrastructure: Still the Laggard",
+      "theme": "Infrastructure",
+      "introduced_issue": 2,
+      "introduced_url": "https://indiacreditlens.substack.com/p/issue-2",
+      "history": [
+        {
+          "issue": 2,
+          "status": "new",
+          "story_arc": "The Infrastructure Pause",
+          "stat": "+5.8% FY at ₹14.44L Cr — Feb 2026, approval-to-drawdown gap still open"
+        },
+        {
+          "issue": 3,
+          "status": "unchanged",
+          "story_arc": "Infrastructure: Still the Laggard",
+          "stat": "+9.5% FY at Mar 2026 FY-end (₹14.94L Cr) — structurally unchanged",
+          "url": "https://indiacreditlens.substack.com/p/issue-3"
+        }
+      ]
+    },
+    {
+      "id": "nbfc_channel_reopens",
+      "story_arc": "The NBFC Channel Reopens",
+      "theme": "NBFC Funding",
+      "introduced_issue": 3,
+      "introduced_url": "https://indiacreditlens.substack.com/p/issue-3",
+      "history": [
+        {
+          "issue": 3,
+          "status": "new",
+          "stat": "₹20.66L Cr (+26.3% FY-end) — FY26 incremental nearly 4× FY25"
+        }
+      ]
+    }
+  ]
+}
