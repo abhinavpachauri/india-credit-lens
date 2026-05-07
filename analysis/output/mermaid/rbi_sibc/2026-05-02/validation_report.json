@@ -1,0 +1,45 @@
+{
+  "passed": true,
+  "model_path": "analysis/rbi_sibc/merged/system_model.json",
+  "generated": "2026-05-07",
+  "summary": {
+    "errors": 0,
+    "warnings": 2,
+    "info": 4
+  },
+  "errors": [],
+  "warnings": [
+    {
+      "check": "annotation_ids",
+      "level": "WARNING",
+      "message": "Annotations file not found \u2014 skipping annotation ID cross-check. Pass --annotations path/to/report.ts to enable this check."
+    },
+    {
+      "check": "diagram_readiness",
+      "level": "WARNING",
+      "message": "Fewer than 3 sectors have both volume and growth data \u2014 quadrant chart will be sparse. Add value_lcr to more sector nodes."
+    }
+  ],
+  "info": [
+    {
+      "check": "diagram_readiness",
+      "level": "INFO",
+      "message": "Flowchart   : all 15 sector nodes renderable (no extra data needed)"
+    },
+    {
+      "check": "diagram_readiness",
+      "level": "INFO",
+      "message": "Quadrant    : 0 sectors plottable, 15 excluded"
+    },
+    {
+      "check": "diagram_readiness",
+      "level": "INFO",
+      "message": "  Excluded from quadrant: sector_bank_credit (missing: value_lcr, parseable stat); sector_industry (missing: value_lcr, parseable stat); sector_services (missing: value_lcr, parseable stat); sector_personal_loans (missing: value_lcr, parseable stat); sector_msme (missing: value_lcr, parseable stat); sector_large_corporate (missing: value_lcr, parseable stat); sector_gold_loans (missing: value_lcr, parseable stat); sector_credit_cards (missing: value_lcr, parseable stat); sector_vehicle_loans (missing: value_lcr, parseable stat); sector_all_engineering (missing: value_lcr, parseable stat); sector_infrastructure (missing: value_lcr, parseable stat); sector_computer_software (missing: value_lcr, parseable stat); sector_psl_housing (missing: value_lcr, parseable stat); sector_transport (missing: value_lcr, parseable stat); sector_food_credit (missing: value_lcr, parseable stat)"
+    },
+    {
+      "check": "diagram_readiness",
+      "level": "INFO",
+      "message": "Sankey      : 0 sectors plottable, 15 excluded (no value_lcr)"
+    }
+  ]
+}

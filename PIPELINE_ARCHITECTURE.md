@@ -5,11 +5,27 @@
 
 ---
 
-## Overview: Two Objects, One Pipeline
+## Architecture Overview
 
-Every SIBC report file produces two objects. Both go through the same stages
-in sequence. The pipeline never merges first — per-period analysis always
-comes before the merged view.
+The pipeline has two distinct layers:
+
+**Data layer** — runs every period, fully deterministic:
+```
+xlsx → sections.json → sections_merged.json → rbi_sibc_consolidated.csv
+```
+
+**Analysis layer** — runs every period, but scope depends on cadence:
+- Per-period: `delta_brief.md` only (lightweight, ~5 min Claude pass)
+- Merged: **FOUNDATION mode** (FY-end, ~once/year) or **UPDATE mode** (interim, ~10 months/year)
+
+**Only the merged layer publishes to the web dashboard and newsletter.**
+Per-period analysis artifacts (system_model, subsystems, annotations) are not created.
+The system_model.json and subsystems.json are living documents that evolve deliberately —
+they are not regenerated from scratch on every period.
+
+---
+
+## Pipeline Stages
 
 ```
 SIBC .xlsx
@@ -17,6 +33,7 @@ SIBC .xlsx
     ▼
 [Stage 1] extract_sibc.py
     │  → rbi_sibc/{period}/sections.json
+    │  → rbi_sibc/{period}/format_report.json
     │
     ▼
 [Stage 1b] update_web_data.py
@@ -26,58 +43,160 @@ SIBC .xlsx
     │  Dedup rule: latest report_date wins for any (statement, code, date) overlap
     │
     ▼
-[Stage 2] Claude: Per-period analysis
-    │  → rbi_sibc/{period}/system_model.json
-    │  → rbi_sibc/{period}/subsystems.json      (co-generated, always a unit)
-    │  → rbi_sibc/{period}/annotations_draft.ts
-    │  → rbi_sibc/{period}/insights.md
-    │  → rbi_sibc/{period}/gaps.md
-    │  → rbi_sibc/{period}/opportunities.md
+[Stage 2] Claude: delta_brief.md  (per-period, always)
+    │  → rbi_sibc/{period}/delta_brief.md
+    │  Scope: what moved vs prior period, any data quality flags, one newsletter hook
+    │  NOT a full analysis — no system_model, no subsystems, no annotations_draft
     │
     ▼
-[Stage 3] run_evals.py (gate — exit 1 blocks next stage)
-    │  Check 0:  validate_timeline.py      timeline.json schema + path existence
-    │  Check 1:  validate_sections.py      sections.json schema + data integrity
-    │  Check 1b: web CSV dedup check       auto-fixes via update_web_data.py
-    │  Check 2:  validate_annotations.py   annotations_draft.ts structure
-    │  Check 2b: validate_content.py       dates/values/growth in bodies vs sections.json
-    │  Check 3:  validate_annotations.py   live rbi_sibc.ts
-    │  Check 4:  validate.py               system_model.json
-    │  Check 5:  validate.py --subsystems  subsystems.json
-    │  Check 6:  tsc + npm run build
+[Stage 3] run_evals.py --period {date} (reduced gate)
+    │  Check 0:   validate_timeline.py      timeline.json schema + path existence
+    │  Check 0.5: format_report.json        format detection confirmed + supported
+    │  Check 1:   validate_sections.py      sections.json schema + data integrity
+    │  Check 1b:  web CSV dedup check       auto-fixes via update_web_data.py
+    │  — Checks 2, 2b, 2c, 4, 5 are skipped (no per-period analysis artifacts) —
     │
     ▼
-[Stage 4] generate_mermaid.py
-    │  → output/mermaid/rbi_sibc/{period}/*.mmd
-    │  → output/mermaid/rbi_sibc/{period}/subsystems.json  (copy; canonical is period dir)
-    │
-    ▼
-[Stage 5] generate_merge.py
+[Stage 4] generate_merge.py
     │  → rbi_sibc/merged/sections_merged.json
-    │    (merges all periods; later period non-null values override earlier for same month;
-    │     null/NaN from a later file never overwrites a good value from an earlier file)
+    │    (merges all periods; later period non-null values override earlier for same month)
     │  Auto-runs validate_sections.py --merged post-write; exits 1 on failure
     │
     ▼
-[Stage 6] Claude: Merged analysis
-    │  → rbi_sibc/merged/system_model.json
-    │  → rbi_sibc/merged/subsystems.json
-    │  → rbi_sibc/merged/annotations_merged.ts
+[Stage 5] Claude: Merged analysis — FOUNDATION or UPDATE mode
+    │
+    │  Determine mode BEFORE starting (see System Model Cadence rules below):
+    │
+    │  FOUNDATION (FY-end, ~once/year — full rebuild):
+    │  → rbi_sibc/merged/system_model.json       full rebuild, _meta.mode = "foundation"
+    │  → rbi_sibc/merged/subsystems.json         full rebuild
+    │  → rbi_sibc/merged/annotations_merged.ts   full rewrite (IDs may change — see guard)
+    │  → rbi_sibc/merged/insights.md
+    │  → rbi_sibc/merged/gaps.md
+    │  → rbi_sibc/merged/opportunities.md
+    │
+    │  UPDATE (interim months — additive only):
+    │  → rbi_sibc/merged/system_model.json       update stats + add new nodes only
+    │                                             _meta.mode = "update", bump last_updated
+    │  → rbi_sibc/merged/subsystems.json         append new subsystems only
+    │  → rbi_sibc/merged/annotations_merged.ts   update bodies + add new IDs only
     │  → rbi_sibc/merged/insights.md
     │  → rbi_sibc/merged/gaps.md
     │  → rbi_sibc/merged/opportunities.md
     │
     ▼
-[Stage 7] run_evals.py --period merged --merged (gate)
-    │  Same checks as Stage 3; null values in Jan series are warnings not errors
+[Stage 6] run_evals.py --period merged --merged (gate)
+    │  Full check suite; null values in Jan series are warnings not errors
     │
     ▼
-[Stage 8] Web + content update
+[Stage 7] Web + content update
     │  promote_annotations.py              (automated copy + ID verification)
-    │  → web/lib/reports/rbi_sibc.ts  (from merged annotations, IDs verified)
-    │  → newsletter_config.json        (from merged system_model + subsystems)
-    │  → generate_newsletter.py        (script-only, no Claude)
+    │  → web/lib/reports/rbi_sibc.ts
+    │  generate_mermaid.py                 (only if system_model nodes/edges changed)
+    │  → newsletter_config.json            (from merged system_model + subsystems)
+    │  → generate_newsletter.py            (script-only, no Claude)
 ```
+
+---
+
+## System Model Cadence (governing rule)
+
+`system_model.json` and `subsystems.json` are **living documents**, not generated artifacts.
+They evolve in two modes. **Choosing the wrong mode is the most consequential error in this pipeline.**
+
+### FOUNDATION mode — full rebuild
+
+**When:** The new period is the March year-end file (dataDate falls in April–May, covers
+the complete fiscal year). Approximately once per year.
+
+**What happens:**
+- Full rebuild of `system_model.json` from `sections_merged.json` — all nodes and edges
+- Full rebuild of `subsystems.json`
+- Full rewrite of `annotations_merged.ts` — IDs may change (see annotation ID guard below)
+- Full rewrite of `insights.md`, `gaps.md`, `opportunities.md`
+
+**Why FY-end:** The March file gives Claude the complete annual picture — all four quarters,
+confirmed YoY growth, full sector composition. Interim files have partial data; a FOUNDATION
+pass on interim data produces a shallower model than the same data would produce at year-end.
+
+**Guard — set in `_meta`:**
+```json
+"_meta": {
+  "mode": "foundation",
+  "last_foundation_date": "2026-04-30"
+}
+```
+
+### UPDATE mode — additive only
+
+**When:** All non-FY-end periods. Default for ~10 months of the year.
+
+**What happens:**
+- Read the existing `system_model.json` first — the current model is the starting point
+- Update stats/values in existing node descriptions (e.g., ₹X.XL Cr → ₹Y.YL Cr)
+- Add new nodes only for genuinely new signals (new driver, new sector behaviour, new gap)
+- **Never delete or rename existing nodes** — node IDs are permanent once created
+- Append new annotations; update bodies of existing ones; never delete existing IDs
+- `subsystems.json`: add new subsystem clusters only; never restructure existing ones
+
+**Guard — set in `_meta`:**
+```json
+"_meta": {
+  "mode": "update",
+  "last_updated": "2026-03-30",
+  "last_foundation_date": "2026-04-30"
+}
+```
+
+### Mode decision table
+
+| Condition | Mode |
+|---|---|
+| March year-end file (dataDate April–May, covers full FY) | **FOUNDATION** |
+| Any other month | **UPDATE** |
+| Structural event changes multiple causal relationships simultaneously | **FOUNDATION** (explicit decision required — note why in `_meta.note`) |
+| First-ever period for a new report type | **FOUNDATION** (always) |
+
+### Mermaid generation cadence
+
+`generate_mermaid.py` is **on-demand**, not automatic on every period:
+- **Always** after a FOUNDATION pass
+- After an UPDATE pass **only if** new nodes or edges were added
+- **Not** after an UPDATE pass that only updated node description stats
+- Check: compare node/edge count before and after the UPDATE pass as your guide
+
+---
+
+## Per-period folder (minimal)
+
+Each period folder contains exactly three files:
+
+```
+rbi_sibc/{YYYY-MM-DD}/
+    ├── sections.json        ← Raw extracted data — input to generate_merge.py
+    ├── format_report.json   ← Format detection result — Check 0.5 gate
+    └── delta_brief.md       ← Lightweight Claude delta analysis
+```
+
+`delta_brief.md` structure (keep tight — 150–200 words max):
+```markdown
+## Period
+{month} {year} | dataDate: {YYYY-MM-DD} | vs prior: {prev_period}
+
+## What moved
+- 2–4 bullet observations on what changed vs prior period
+
+## Data quality flags
+- Any format anomalies, null series, reclassification effects in this file
+
+## Newsletter hook
+- One headline stat or story for the upcoming newsletter issue
+```
+
+**No system_model.json, subsystems.json, annotations_draft.ts, insights.md, gaps.md,
+opportunities.md, or mermaid output in per-period folders.**
+Existing period folders (2026-02-27, 2026-03-30, 2026-04-30) retain their historical
+artifacts — do not delete them. New periods follow the minimal structure.
 
 ---
 
@@ -89,49 +208,45 @@ analysis/
 │   ├── timeline.json               ← Registry of all ingested periods
 │   ├── merged/
 │   │   ├── sections_merged.json    ← Combined time-series across all periods
-│   │   ├── system_model.json       ← Causal model of merged data
-│   │   ├── subsystems.json         ← Subsystem map for merged model
+│   │   ├── system_model.json       ← Causal model (living doc — FOUNDATION or UPDATE)
+│   │   ├── subsystems.json         ← Subsystem map (living doc — append only in UPDATE)
 │   │   ├── annotations_merged.ts   ← Draft annotations (→ web/lib/reports/)
 │   │   ├── insights.md
 │   │   ├── gaps.md
 │   │   └── opportunities.md
 │   └── {YYYY-MM-DD}/               ← One folder per SIBC publication date
-│       ├── sections.json           ← Raw extracted data (from extract_sibc.py)
-│       ├── system_model.json       ← Per-period causal model
-│       ├── subsystems.json         ← Per-period subsystem map (canonical)
-│       ├── annotations_draft.ts    ← Per-period draft annotations
-│       ├── insights.md
-│       ├── gaps.md
-│       └── opportunities.md
+│       ├── sections.json           ← Raw extracted data (always present)
+│       ├── format_report.json      ← Format detection (always present)
+│       └── delta_brief.md          ← Delta analysis (always present, new periods only)
 │
 ├── output/
 │   └── mermaid/
 │       └── rbi_sibc/
-│           └── {YYYY-MM-DD}/       ← Generated diagram files
+│           └── {YYYY-MM-DD}/       ← Generated diagram files (merged only, on-demand)
 │               ├── flowchart.mmd
 │               ├── overview.mmd
 │               ├── quadrant.mmd
 │               ├── sankey.mmd
-│               ├── subsystems.json ← Copy of period dir canonical
+│               ├── subsystems.json ← Copy of merged subsystems at generation time
 │               └── sub_*.mmd
 │
-├── extract_sibc.py                 ← Stage 1: xlsx → sections.json
-├── generate_merge.py               ← Stage 5: sections[] → sections_merged.json + auto-validate
-├── generate_mermaid.py             ← Stage 4: system_model → .mmd files
-├── promote_annotations.py          ← Stage 8: annotations_merged.ts → rbi_sibc.ts (verified copy)
+├── extract_sibc.py                 ← Stage 1: xlsx → sections.json + format_report.json
+├── generate_merge.py               ← Stage 4: sections.json[] → sections_merged.json (auto-validates)
+├── generate_mermaid.py             ← Stage 7 (on-demand): system_model → .mmd files
+├── promote_annotations.py          ← Stage 7: annotations_merged.ts → rbi_sibc.ts (verified copy)
 ├── generate_delta.py               ← Ad-hoc: period-over-period delta (not in pipeline)
 ├── validate_timeline.py            ← Validator: timeline.json (Check 0)
 ├── validate_sections.py            ← Validator: sections.json (Check 1)
-├── validate_annotations.py         ← Validator: annotations .ts files (Checks 2, 3)
+├── validate_annotations.py         ← Validator: annotations .ts files (Check 3)
 ├── validate_content.py             ← Validator: numbers/dates in annotation bodies (Check 2b)
 ├── validate.py                     ← Validator: system_model.json + subsystems (Checks 4, 5)
-├── run_evals.py                    ← Master eval orchestrator (Stages 3, 7)
+├── run_evals.py                    ← Master eval orchestrator (Stages 3, 6)
 ├── report_analysis_prompt.md       ← Master prompt for all Claude analyses
 │
 └── newsletter/
     ├── generate_newsletter.py      ← Script-only content generator
     ├── newsletter_config.json      ← Current-issue config (new signals only)
-    ├── signal_registry.json        ← Cumulative signal tracker — ALL prior issues (update each cycle)
+    ├── signal_registry.json        ← Cumulative signal tracker — ALL prior issues
     └── output/                     ← Generated newsletters (dated)
 
 rbi-analytics/                      ← Ingestion layer (do not restructure)
@@ -150,55 +265,40 @@ web/
 
 ## Key Rules
 
-### One pipeline, two objects
-- Per-period object: analysis of a single SIBC file. Never published directly.
-- Merged object: analysis of combined data across all periods. This is what the
-  web dashboard and newsletter use.
-- Merge happens at the **data level** (`sections.json`), not annotation level.
-  Merged annotations are always a fresh Claude analysis pass on merged data.
+### Analysis layer is merged-only
+- Per-period folder contains data only (`sections.json`, `format_report.json`, `delta_brief.md`).
+- All analytical output — system_model, subsystems, annotations — lives in `merged/` only.
+- Web dashboard and newsletter always source from merged outputs. Never from per-period.
 
-### Subsystems are co-generated with system_model
-- `generate_mermaid.py` runs immediately after `system_model.json` is produced.
-- They are always a unit. Never generate one without the other.
-- Canonical subsystems location: `rbi_sibc/{period}/subsystems.json`
-- The copy in `output/mermaid/` is for diagram generation only.
+### System model is a living document
+- `system_model.json` and `subsystems.json` evolve deliberately. See System Model Cadence above.
+- In UPDATE mode: read first, add/update only, never delete nodes or edges.
+- In FOUNDATION mode: full rebuild is legitimate — but only at FY-end or an explicit structural event.
+- The `_meta.mode` field in `system_model.json` records which mode produced the current version.
 
-### Validators are pipeline gates
-- `run_evals.py` exits 1 on any error. The next stage does not run until it exits 0.
-- Warnings are non-blocking; errors block.
-- Run evals after Stage 2 (per-period) and after Stage 6 (merged).
-- Check 0 (`validate_timeline.py`) runs first on every eval — it is the registry guard.
+### Annotation IDs are permanent
+- An `id` field in `annotations_merged.ts`, once created, is never renamed or deleted.
+- UPDATE mode may add new IDs. FOUNDATION mode may restructure — but before promoting,
+  run `promote_annotations.py --dry-run` and explicitly account for every removed ID.
+- `annotation_ids` in `system_model.json` must exactly match `id` fields in the annotations
+  file. Copy-paste — never retype. The validator enforces this at every run.
 
-### Stage 5 self-validates
+### Stage 3 evals scope depends on mode
+- Per-period run: Checks 0, 0.5, 1, 1b only. No Claude artifacts to validate.
+- Merged run: full check suite (Checks 0, 1, 1b, 2b, 2c, 3, 4, 5, 6).
+
+### Stage 4 self-validates
 - `generate_merge.py` auto-runs `validate_sections.py --merged` after writing.
-- If post-merge validation fails, `generate_merge.py` exits 1 — Stage 6 must not run.
+- If post-merge validation fails, `generate_merge.py` exits 1 — Stage 5 must not run.
 
-### Stage 8 is automated, not manual
+### Stage 7 promotion is automated, not manual
 - Use `promote_annotations.py` to copy `annotations_merged.ts` → `rbi_sibc.ts`.
 - The script verifies annotation IDs match before and after the write.
 - Never copy manually — the verification step is the guardrail.
 
-### annotation_ids are sacred
-- Every `annotation_id` in `system_model.json` must exactly match an `id` in the
-  annotations file. Copy-paste — never retype.
-- The validator enforces this at every run.
-
 ### Newsletter from merged only
 - `newsletter_config.json` is generated from the merged system_model + subsystems.
-- Per-period system models do not feed the newsletter directly.
-
-### signal_registry.json must be updated every issue
-- `signal_registry.json` is the cumulative tracker of every signal ever published.
-- **Update before authoring `newsletter_config.json`** — not after.
-- Two actions per issue:
-  1. Add a `history` entry to each existing signal (status + stat + issue URL).
-  2. Add new top-level entries for signals introduced this issue (status: "new").
-- `newsletter_config.json` `signals[]` should only contain `type: "new"` entries.
-  The Prior Signals section is auto-rendered from the registry.
-- Full authoring checklist: `analysis/newsletter/CLAUDE.md § Workflow per report cycle`.
-
-### generate_delta.py is not a pipeline stage
-- `generate_delta.py` exists but is not a pipeline stage — parked for future use.
+- `signal_registry.json` must be updated before authoring `newsletter_config.json` each issue.
 
 ### Git / deployment
 - Never auto-push to GitHub.
@@ -216,50 +316,83 @@ web/
   "report_name": "RBI Sector/Industry-wise Bank Credit",
   "periods": [
     {
-      "period":          "Jan 2026",
-      "dataDate":        "2026-02-27",
-      "total_credit_lcr": 204.8,
-      "yoy_growth_pct":  14.6,
-      "subsystem_count": 7,
+      "period":           "Mar 2026",
+      "dataDate":         "2026-04-30",
+      "is_fy_end":        true,
+      "total_credit_lcr": 213.6,
+      "yoy_growth_pct":   16.1,
+      "fy_growth_pct":    16.1,
       "paths": {
-        "sections":          "rbi_sibc/2026-02-27/sections.json",
-        "system_model":      "rbi_sibc/2026-02-27/system_model.json",
-        "subsystems":        "rbi_sibc/2026-02-27/subsystems.json",
-        "annotations_draft": "rbi_sibc/2026-02-27/annotations_draft.ts",
-        "annotations_live":  "web/lib/reports/rbi_sibc.ts",
-        "mermaid_output":    "output/mermaid/rbi_sibc/2026-02-27"
+        "sections":      "rbi_sibc/2026-04-30/sections.json",
+        "format_report": "rbi_sibc/2026-04-30/format_report.json",
+        "delta_brief":   "rbi_sibc/2026-04-30/delta_brief.md"
       }
     }
   ],
   "merged": {
-    "sections": "rbi_sibc/merged/sections_merged.json"
+    "sections":     "rbi_sibc/merged/sections_merged.json",
+    "system_model": "rbi_sibc/merged/system_model.json",
+    "subsystems":   "rbi_sibc/merged/subsystems.json",
+    "annotations":  "rbi_sibc/merged/annotations_merged.ts"
   }
 }
 ```
 
-Add a new entry to `periods[]` for every new SIBC file ingested.
-Update `merged.sections` path if the merged file moves.
+**New field: `is_fy_end`** — set `true` when the period is a March year-end file
+(dataDate in April–May). This is the trigger for FOUNDATION mode in Stage 5.
+All prior period entries should be backfilled with `is_fy_end: false`.
 
 ---
 
-## Adding a New Period (Phase 3 checklist)
+## Adding a New Period (checklist)
+
+Determine mode before starting. Check `is_fy_end` for the incoming file.
+
+### Interim period — UPDATE mode (~10 months/year)
 
 ```
 □  Place SIBC .xlsx in rbi-analytics/
 □  python3 analysis/extract_sibc.py rbi-analytics/SIBC{date}.xlsx
 □  python3 analysis/update_web_data.py
-□  Validate: python3 analysis/run_evals.py --period {date} --skip-build
-□  Claude: per-period analysis → system_model.json + subsystems.json + annotations_draft.ts + docs
-□  Validate: python3 analysis/run_evals.py --period {date} --skip-build
-□  python3 analysis/generate_mermaid.py rbi_sibc/{date}/system_model.json
-□  Update timeline.json — add new period entry
-□  python3 analysis/validate_timeline.py           (confirm timeline is clean)
-□  python3 analysis/generate_merge.py              (auto-discovers periods; validates on exit)
-□  Claude: merged analysis → merged/system_model.json + subsystems.json + annotations_merged.ts + docs
+□  Claude: delta_brief.md → rbi_sibc/{date}/delta_brief.md   (150–200 words, see structure above)
+□  Update timeline.json — add new period entry with is_fy_end: false
+□  python3 analysis/run_evals.py --period {date} --skip-build
+   (Checks 0, 0.5, 1, 1b only — should pass cleanly if extraction was clean)
+□  python3 analysis/generate_merge.py
+□  READ rbi_sibc/merged/system_model.json before starting Stage 5
+   — confirm _meta.mode of current model, note node/edge count
+□  Claude: merged UPDATE pass
+   — update stats in existing nodes, add new nodes only for genuinely new signals
+   — update annotation bodies, add new IDs only, never delete existing IDs
+   — set _meta.mode = "update", bump _meta.last_updated
 □  python3 analysis/run_evals.py --period merged --merged --skip-build
-□  python3 analysis/promote_annotations.py --dry-run   (preview ID diff)
-□  python3 analysis/promote_annotations.py             (copy + verify)
+□  IF new nodes/edges were added: python3 analysis/generate_mermaid.py rbi_sibc/merged/system_model.json
+□  python3 analysis/promote_annotations.py --dry-run   (verify no IDs removed)
+□  python3 analysis/promote_annotations.py
 □  python3 analysis/run_evals.py --period merged --merged   (full run with build)
+□  Commit per-period outputs, then merged outputs, then web/ separately
+□  git push
+```
+
+### FY-end period — FOUNDATION mode (~once/year, March file published April–May)
+
+```
+□  All steps above through generate_merge.py
+□  READ rbi_sibc/merged/system_model.json — note last_foundation_date, record prior node count
+□  Confirm: is this truly a March year-end file? (dataDate April–May, full fiscal year visible)
+   If not certain, use UPDATE mode instead.
+□  Claude: merged FOUNDATION pass
+   — full rebuild of system_model.json from sections_merged.json
+   — set _meta.mode = "foundation", _meta.last_foundation_date = dataDate
+   — full rebuild of subsystems.json
+   — full rewrite of annotations_merged.ts
+□  python3 analysis/run_evals.py --period merged --merged --skip-build
+□  python3 analysis/generate_mermaid.py rbi_sibc/merged/system_model.json   (always after FOUNDATION)
+□  python3 analysis/promote_annotations.py --dry-run
+   — REVIEW the ID diff carefully: any removed IDs must be explicitly justified
+□  python3 analysis/promote_annotations.py
+□  python3 analysis/run_evals.py --period merged --merged   (full run with build)
+□  Update signal_registry.json — add history entries for any signals with new data
 □  Commit per-period outputs, then merged outputs, then web/ separately
 □  git push
 ```

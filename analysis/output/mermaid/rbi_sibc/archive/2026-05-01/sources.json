@@ -1,0 +1,502 @@
+{
+  "driver_credit_cycle_acceleration": {
+    "label": "FY26 Credit Cycle Acceleration",
+    "tier": "driver",
+    "stat": "16.1% YoY (FY26)",
+    "value_lcr": 213.6,
+    "annotation_ids": [
+      "bank-credit-fy26-acceleration",
+      "all-four-main-sectors-accelerated",
+      "two-year-credit-add-46-lcr"
+    ]
+  },
+  "driver_rbi_unsecured_tightening": {
+    "label": "RBI Unsecured Credit Tightening",
+    "tier": "driver",
+    "stat": "Cards: +3.5% YoY, Cons Dur: -5.3% YoY",
+    "value_lcr": null,
+    "annotation_ids": [
+      "credit-card-flattening-confirmed",
+      "consumer-durables-contracting",
+      "nbfc-tap-reopens"
+    ]
+  },
+  "driver_gold_loan_reclassification": {
+    "label": "RBI Gold Loan Reclassification + Price Surge",
+    "tier": "driver",
+    "stat": "Gold Loans: +123.1% YoY, \u20b90.93L Cr \u2192 \u20b94.60L Cr",
+    "value_lcr": null,
+    "annotation_ids": [
+      "gold-loans-five-x-in-two-years",
+      "gold-mostly-reclassification-and-price",
+      "gems-jewellery-massive-jump"
+    ]
+  },
+  "driver_psl_housing_limit_revision": {
+    "label": "PSL Housing Limit Revision (Oct 2024)",
+    "tier": "driver",
+    "stat": "PSL Housing: +39.8% YoY",
+    "value_lcr": null,
+    "annotation_ids": [
+      "psl-housing-39-pct-classification-event"
+    ]
+  },
+  "driver_pli_capex_broadening": {
+    "label": "PLI Capex Cycle Broadening",
+    "tier": "driver",
+    "stat": "Multiple sub-types in 15-33% YoY range",
+    "value_lcr": null,
+    "annotation_ids": [
+      "engineering-petroleum-capex-broadening",
+      "industry-credit-recovery-confirmed",
+      "vehicle-parts-supply-chain-finance",
+      "food-processing-recovery"
+    ]
+  },
+  "driver_msme_formalisation": {
+    "label": "MSME Formalisation via GST & UDYAM",
+    "tier": "driver",
+    "stat": "Micro & Small: +33.1% YoY, PSL MSE: +29.5% YoY",
+    "value_lcr": null,
+    "annotation_ids": [
+      "micro-small-explosion",
+      "psl-mse-confirms-msme-wave",
+      "msme-formalisation-vs-real-demand",
+      "msme-underwriting-data-stack"
+    ]
+  },
+  "driver_nbfc_capital_normalisation": {
+    "label": "NBFC Sector Capital Normalisation",
+    "tier": "driver",
+    "stat": "NBFC bank credit: +26.3% YoY",
+    "value_lcr": 20.66,
+    "annotation_ids": [
+      "nbfc-tap-reopens",
+      "co-lending-window-fy27",
+      "services-takes-growth-leadership"
+    ]
+  },
+  "driver_infra_cycle_maturing": {
+    "label": "Infrastructure Capex Cycle Maturing",
+    "tier": "driver",
+    "stat": "Infrastructure: +9.5% YoY",
+    "value_lcr": 14.94,
+    "annotation_ids": [
+      "infrastructure-laggard-mild-rebound"
+    ]
+  },
+  "sector_bank_credit": {
+    "label": "Total Bank Credit",
+    "tier": "sector",
+    "stat": "+16.1% YoY",
+    "value_lcr": 213.6,
+    "annotation_ids": [
+      "bank-credit-fy26-acceleration",
+      "non-food-credit-99pct-of-total",
+      "two-year-credit-add-46-lcr",
+      "credit-cycle-deployment-window"
+    ]
+  },
+  "sector_services": {
+    "label": "Services",
+    "tier": "sector",
+    "stat": "+19.0% YoY",
+    "value_lcr": 60.6,
+    "annotation_ids": [
+      "services-takes-growth-leadership",
+      "computer-software-tourism-acceleration",
+      "cre-strength-continues"
+    ]
+  },
+  "sector_personal_loans": {
+    "label": "Personal Loans",
+    "tier": "sector",
+    "stat": "+16.2% YoY",
+    "value_lcr": 69.4,
+    "annotation_ids": [
+      "services-takes-growth-leadership",
+      "share-not-direction-thesis"
+    ]
+  },
+  "sector_industry": {
+    "label": "Industry (Total)",
+    "tier": "sector",
+    "stat": "+15.0% YoY",
+    "value_lcr": 45.8,
+    "annotation_ids": [
+      "industry-credit-recovery-confirmed",
+      "all-four-main-sectors-accelerated"
+    ]
+  },
+  "sector_agriculture": {
+    "label": "Agriculture",
+    "tier": "sector",
+    "stat": "+15.7% YoY",
+    "value_lcr": 26.5,
+    "annotation_ids": [
+      "all-four-main-sectors-accelerated",
+      "agriculture-overlooked-acceleration"
+    ]
+  },
+  "sector_micro_small_industry": {
+    "label": "Micro and Small Industry",
+    "tier": "sector",
+    "stat": "+33.1% YoY",
+    "value_lcr": 10.6,
+    "annotation_ids": [
+      "micro-small-explosion",
+      "msme-formalisation-vs-real-demand",
+      "msme-underwriting-data-stack"
+    ]
+  },
+  "sector_medium_industry": {
+    "label": "Medium Industry",
+    "tier": "sector",
+    "stat": "+21.7% YoY",
+    "value_lcr": 4.42,
+    "annotation_ids": [
+      "supply-chain-finance-vs-medium"
+    ]
+  },
+  "sector_large_industry": {
+    "label": "Large Industry",
+    "tier": "sector",
+    "stat": "+8.9% YoY",
+    "value_lcr": 30.8,
+    "annotation_ids": [
+      "large-industry-still-slow"
+    ]
+  },
+  "sector_nbfcs": {
+    "label": "Bank Credit to NBFCs",
+    "tier": "sector",
+    "stat": "+26.3% YoY",
+    "value_lcr": 20.66,
+    "annotation_ids": [
+      "nbfc-tap-reopens",
+      "nbfc-double-counting-systemic",
+      "co-lending-window-fy27"
+    ]
+  },
+  "sector_commercial_real_estate": {
+    "label": "Commercial Real Estate",
+    "tier": "sector",
+    "stat": "+19.9% YoY",
+    "value_lcr": 6.27,
+    "annotation_ids": [
+      "cre-strength-continues"
+    ]
+  },
+  "sector_computer_software": {
+    "label": "Computer Software (Services)",
+    "tier": "sector",
+    "stat": "+39.0% YoY",
+    "value_lcr": 0.46,
+    "annotation_ids": [
+      "computer-software-tourism-acceleration"
+    ]
+  },
+  "sector_tourism": {
+    "label": "Tourism, Hotels & Restaurants",
+    "tier": "sector",
+    "stat": "+23.0% YoY",
+    "value_lcr": 1.03,
+    "annotation_ids": [
+      "computer-software-tourism-acceleration"
+    ]
+  },
+  "sector_gold_loans": {
+    "label": "Gold Loans (Personal)",
+    "tier": "sector",
+    "stat": "+123.1% YoY",
+    "value_lcr": 4.6,
+    "annotation_ids": [
+      "gold-loans-five-x-in-two-years",
+      "gold-mostly-reclassification-and-price",
+      "gold-loan-bank-vs-nbfc-tier3"
+    ]
+  },
+  "sector_credit_cards": {
+    "label": "Credit Card Outstanding",
+    "tier": "sector",
+    "stat": "+3.5% YoY",
+    "value_lcr": 2.94,
+    "annotation_ids": [
+      "credit-card-flattening-confirmed"
+    ]
+  },
+  "sector_consumer_durables": {
+    "label": "Consumer Durables",
+    "tier": "sector",
+    "stat": "-5.3% YoY",
+    "value_lcr": 0.22,
+    "annotation_ids": [
+      "consumer-durables-contracting"
+    ]
+  },
+  "sector_vehicle_loans": {
+    "label": "Vehicle Loans (Personal)",
+    "tier": "sector",
+    "stat": "+18.6% YoY",
+    "value_lcr": 7.39,
+    "annotation_ids": [
+      "vehicle-loans-double-pace-acceleration",
+      "vehicle-parts-supply-chain-finance"
+    ]
+  },
+  "sector_housing": {
+    "label": "Housing (Personal)",
+    "tier": "sector",
+    "stat": "+11.5% YoY",
+    "value_lcr": 33.6,
+    "annotation_ids": [
+      "housing-steady-mid-teens"
+    ]
+  },
+  "sector_psl_housing": {
+    "label": "Priority Sector Housing",
+    "tier": "sector",
+    "stat": "+39.8% YoY",
+    "value_lcr": 10.44,
+    "annotation_ids": [
+      "psl-housing-39-pct-classification-event"
+    ]
+  },
+  "sector_psl_mse": {
+    "label": "Priority Sector MSE",
+    "tier": "sector",
+    "stat": "+29.5% YoY",
+    "value_lcr": 29.0,
+    "annotation_ids": [
+      "psl-mse-confirms-msme-wave",
+      "pslc-trading-arbitrage"
+    ]
+  },
+  "sector_psl_renewable": {
+    "label": "Priority Sector Renewable Energy",
+    "tier": "sector",
+    "stat": "+34.1% YoY",
+    "value_lcr": 0.14,
+    "annotation_ids": [
+      "psl-renewable-still-hot"
+    ]
+  },
+  "sector_all_engineering": {
+    "label": "All Engineering (Industry)",
+    "tier": "sector",
+    "stat": "+32.2% YoY",
+    "value_lcr": 3.17,
+    "annotation_ids": [
+      "engineering-petroleum-capex-broadening"
+    ]
+  },
+  "sector_petroleum": {
+    "label": "Petroleum, Coal & Nuclear (Industry)",
+    "tier": "sector",
+    "stat": "+32.5% YoY",
+    "value_lcr": 2.04,
+    "annotation_ids": [
+      "engineering-petroleum-capex-broadening"
+    ]
+  },
+  "sector_basic_metal": {
+    "label": "Basic Metal & Metal Products",
+    "tier": "sector",
+    "stat": "+19.4% YoY",
+    "value_lcr": 5.18,
+    "annotation_ids": [
+      "engineering-petroleum-capex-broadening"
+    ]
+  },
+  "sector_gems_jewellery": {
+    "label": "Gems and Jewellery (Industry)",
+    "tier": "sector",
+    "stat": "+41.4% YoY",
+    "value_lcr": null,
+    "annotation_ids": [
+      "gems-jewellery-massive-jump"
+    ]
+  },
+  "sector_vehicles_industrial": {
+    "label": "Vehicles & Vehicle Parts (Industry)",
+    "tier": "sector",
+    "stat": "+18.1% YoY",
+    "value_lcr": 1.41,
+    "annotation_ids": [
+      "vehicle-parts-supply-chain-finance"
+    ]
+  },
+  "sector_food_processing": {
+    "label": "Food Processing (Industry)",
+    "tier": "sector",
+    "stat": "+14.0% YoY",
+    "value_lcr": 2.5,
+    "annotation_ids": [
+      "food-processing-recovery"
+    ]
+  },
+  "sector_infrastructure": {
+    "label": "Infrastructure (Industry)",
+    "tier": "sector",
+    "stat": "+9.5% YoY",
+    "value_lcr": 14.94,
+    "annotation_ids": [
+      "infrastructure-laggard-mild-rebound"
+    ]
+  },
+  "gap_bankcredit_april_dates": {
+    "label": "Bank Credit Uses April Dates, Not Mar-end",
+    "tier": "gap",
+    "stat": null,
+    "value_lcr": null,
+    "annotation_ids": [
+      "bankcredit-uses-april-dates",
+      "fy-data-empty-in-bankcredit"
+    ]
+  },
+  "gap_three_data_points_only": {
+    "label": "Only Three FY-end Snapshots",
+    "tier": "gap",
+    "stat": null,
+    "value_lcr": null,
+    "annotation_ids": [
+      "annual-file-only-three-points"
+    ]
+  },
+  "gap_main_sectors_undercount": {
+    "label": "Main Sectors Sum Less Than Bank Credit",
+    "tier": "gap",
+    "stat": "~5% of Bank Credit invisible",
+    "value_lcr": 10.6,
+    "annotation_ids": [
+      "main-sectors-undercount-bank-credit"
+    ]
+  },
+  "gap_psl_classification_volatility": {
+    "label": "PSL Line Volatility from Definition Changes",
+    "tier": "gap",
+    "stat": null,
+    "value_lcr": null,
+    "annotation_ids": [
+      "psl-housing-39-pct-classification-event",
+      "psl-others-and-export-negatives"
+    ]
+  },
+  "gap_nbfc_double_counting": {
+    "label": "Bank-to-NBFC Credit Double-Counted in System View",
+    "tier": "gap",
+    "stat": "\u20b920.66L Cr in scope",
+    "value_lcr": 20.66,
+    "annotation_ids": [
+      "nbfc-double-counting-systemic"
+    ]
+  },
+  "gap_industry_type_partition_not_exact": {
+    "label": "Industry-by-type Doesn't Tie to Industry Total",
+    "tier": "gap",
+    "stat": null,
+    "value_lcr": null,
+    "annotation_ids": [
+      "industry-by-type-doesnt-tie-to-industry"
+    ]
+  },
+  "opp_co_lending_infrastructure": {
+    "label": "Co-lending & Warehouse-Financing Infrastructure",
+    "tier": "opportunity",
+    "stat": "\u20b94.30L Cr FY26 incremental",
+    "value_lcr": 4.3,
+    "annotation_ids": [
+      "co-lending-window-fy27",
+      "nbfc-tap-reopens"
+    ]
+  },
+  "opp_msme_alt_data_underwriting": {
+    "label": "Alt-Data MSME Underwriting Stack",
+    "tier": "opportunity",
+    "stat": "\u20b92.65L Cr FY26 incremental",
+    "value_lcr": 2.65,
+    "annotation_ids": [
+      "msme-underwriting-data-stack",
+      "msme-formalisation-vs-real-demand",
+      "micro-small-explosion"
+    ]
+  },
+  "opp_gold_loan_specialised_ops": {
+    "label": "Gold-Loan Operations at Scale",
+    "tier": "opportunity",
+    "stat": "\u20b94.60L Cr book, +123.1% YoY",
+    "value_lcr": 4.6,
+    "annotation_ids": [
+      "gold-loans-five-x-in-two-years",
+      "gold-loan-bank-vs-nbfc-tier3"
+    ]
+  },
+  "opp_vehicle_supply_chain_finance": {
+    "label": "Vehicle Supply-Chain Financing for EV Build-out",
+    "tier": "opportunity",
+    "stat": "Personal: +18.6%, Industrial: +18.1%",
+    "value_lcr": 8.8,
+    "annotation_ids": [
+      "vehicle-loans-double-pace-acceleration",
+      "vehicle-parts-supply-chain-finance"
+    ]
+  },
+  "opp_capex_term_loan_books": {
+    "label": "Industrial Capex Term Loan Books",
+    "tier": "opportunity",
+    "stat": "Multiple sub-types in 14-33% YoY",
+    "value_lcr": null,
+    "annotation_ids": [
+      "engineering-petroleum-capex-broadening",
+      "industry-credit-recovery-confirmed"
+    ]
+  },
+  "opp_pslc_trading_tooling": {
+    "label": "PSLC Trading & Analytics Tooling",
+    "tier": "opportunity",
+    "stat": null,
+    "value_lcr": null,
+    "annotation_ids": [
+      "pslc-trading-arbitrage"
+    ]
+  },
+  "pressure_unsecured_retail_stress": {
+    "label": "Unsecured Retail Slowdown Deepening",
+    "tier": "pressure",
+    "stat": "Cards +3.5%, CD -5.3% YoY",
+    "value_lcr": null,
+    "annotation_ids": [
+      "credit-card-flattening-confirmed",
+      "consumer-durables-contracting"
+    ]
+  },
+  "pressure_gold_price_reversal_risk": {
+    "label": "Gold Price Reversal Risk on Loan Books",
+    "tier": "pressure",
+    "stat": "\u20b94.60L Cr book at risk",
+    "value_lcr": 4.6,
+    "annotation_ids": [
+      "gold-mostly-reclassification-and-price"
+    ]
+  },
+  "pressure_first_cycle_msme_risk": {
+    "label": "First-Cycle MSME Default Risk",
+    "tier": "pressure",
+    "stat": "\u20b92.65L Cr FY26 incremental flow",
+    "value_lcr": 2.65,
+    "annotation_ids": [
+      "msme-formalisation-vs-real-demand",
+      "micro-small-explosion"
+    ]
+  },
+  "pressure_nbfc_re_tightening_risk": {
+    "label": "RBI Re-Tightening of NBFC Risk Weights",
+    "tier": "pressure",
+    "stat": "\u20b920.66L Cr exposure",
+    "value_lcr": 20.66,
+    "annotation_ids": [
+      "nbfc-tap-reopens",
+      "co-lending-window-fy27"
+    ]
+  }
+}

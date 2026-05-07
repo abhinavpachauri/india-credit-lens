@@ -290,6 +290,14 @@ def parse_sheet(ws_data: list[tuple], sheet_name: str, report_date: datetime) ->
 
     numeric_cols = out_col_names + yoy_col_names + fy_col_names
 
+    # Some SIBC files have multiple date-header blocks within a single sheet.
+    # For example, Bank Credit rows (I/II/III) may use one set of fortnightly
+    # dates while the sector breakdown (Agriculture, Industry …) uses a different
+    # set published on the same day.  When a row with first_cell=None contains
+    # parseable dates it is treated as a sub-header; all subsequent rows use the
+    # updated column names until the next sub-header (or end of sheet).
+    active_numeric_cols = numeric_cols
+
     # ---- parse data rows ----
     # Some SIBC files have multiple date-header blocks within a single sheet.
     # For example, Bank Credit rows (I/II/III) may use one set of fortnightly

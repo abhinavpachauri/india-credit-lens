@@ -1,0 +1,131 @@
+---
+title: India Credit System — Mar 2026  |  ₹213.6L Cr total  |  +16.1% YoY
+---
+flowchart TD
+
+%% ── Style classes by node tier ─────────────────────────────────────────
+    classDef driverNode fill:#1E3A5F,stroke:#1E3A5F,color:#ffffff
+    classDef sectorNode fill:#F0FDF4,stroke:#166534,color:#166534
+    classDef gapNode fill:#F9FAFB,stroke:#6B7280,color:#374151
+    classDef opportunityNode fill:#0F766E,stroke:#0F766E,color:#ffffff
+    classDef pressureNode fill:#B45309,stroke:#B45309,color:#ffffff
+
+%% Arrow legend:
+%% -->   causes / creates / signals
+%% -.->  suppresses / creates_risk / creates_gap
+%% ==>   reroutes_demand_to
+%% <-->  contrast
+
+    subgraph DRIVER["⚡ WHAT'S DRIVING THE SYSTEM"]
+        driver_credit_cycle_acceleration(["FY26 Credit Cycle Acceleration"])
+        driver_rbi_unsecured_tightening(["RBI Unsecured Credit Tightening"])
+        driver_gold_loan_reclassification(["RBI Gold Loan Reclassification + Price Surge"])
+        driver_psl_housing_limit_revision(["PSL Housing Limit Revision (Oct 2024)"])
+        driver_pli_capex_broadening(["PLI Capex Cycle Broadening"])
+        driver_msme_formalisation(["MSME Formalisation via GST & UDYAM"])
+        driver_nbfc_capital_normalisation(["NBFC Sector Capital Normalisation"])
+        driver_infra_cycle_maturing(["Infrastructure Capex Cycle Maturing"])
+    end
+
+    subgraph SECTOR["📊 WHERE CREDIT IS MOVING"]
+        sector_bank_credit["Total Bank Credit\n+16.1% YoY"]
+        sector_services["Services\n+19.0% YoY"]
+        sector_personal_loans["Personal Loans\n+16.2% YoY"]
+        sector_industry["Industry (Total)\n+15.0% YoY"]
+        sector_agriculture["Agriculture\n+15.7% YoY"]
+        sector_micro_small_industry["Micro and Small Industry\n+33.1% YoY"]
+        sector_large_industry["Large Industry\n+8.9% YoY"]
+        sector_nbfcs["Bank Credit to NBFCs\n+26.3% YoY"]
+        sector_gold_loans["Gold Loans (Personal)\n+123.1% YoY"]
+        sector_credit_cards["Credit Card Outstanding\n+3.5% YoY"]
+        sector_consumer_durables["Consumer Durables\n-5.3% YoY"]
+        sector_vehicle_loans["Vehicle Loans (Personal)\n+18.6% YoY"]
+        sector_housing["Housing (Personal)\n+11.5% YoY"]
+        sector_psl_housing["Priority Sector Housing\n+39.8% YoY"]
+        sector_psl_mse["Priority Sector MSE\n+29.5% YoY"]
+        sector_all_engineering["All Engineering (Industry)\n+32.2% YoY"]
+        sector_petroleum["Petroleum, Coal & Nuclear (Industry)\n+32.5% YoY"]
+        sector_basic_metal["Basic Metal & Metal Products\n+19.4% YoY"]
+        sector_gems_jewellery["Gems and Jewellery (Industry)\n+41.4% YoY"]
+        sector_vehicles_industrial["Vehicles & Vehicle Parts (Industry)\n+18.1% YoY"]
+        sector_food_processing["Food Processing (Industry)\n+14.0% YoY"]
+        sector_infrastructure["Infrastructure (Industry)\n+9.5% YoY"]
+    end
+
+    subgraph GAP["🔍 DATA GAPS — what we can't see"]
+        gap_bankcredit_april_dates{{"Bank Credit Uses April Dates, Not Mar-end"}}
+        gap_three_data_points_only{{"Only Three FY-end Snapshots"}}
+        gap_main_sectors_undercount{{"Main Sectors Sum Less Than Bank Credit"}}
+        gap_psl_classification_volatility{{"PSL Line Volatility from Definition Changes"}}
+        gap_nbfc_double_counting{{"Bank-to-NBFC Credit Double-Counted in System View"}}
+        gap_industry_type_partition_not_exact{{"Industry-by-type Doesn't Tie to Industry Total"}}
+    end
+
+    subgraph OPPORTUNITY["🎯 OPPORTUNITIES — where to play"]
+        opp_co_lending_infrastructure("Co-lending & Warehouse-Financing Infrastructure")
+        opp_msme_alt_data_underwriting("Alt-Data MSME Underwriting Stack")
+        opp_gold_loan_specialised_ops("Gold-Loan Operations at Scale")
+        opp_vehicle_supply_chain_finance("Vehicle Supply-Chain Financing for EV Build-out")
+        opp_capex_term_loan_books("Industrial Capex Term Loan Books")
+        opp_pslc_trading_tooling("PSLC Trading & Analytics Tooling")
+    end
+
+    subgraph PRESSURE["⚠️ RISKS — what could break"]
+        pressure_unsecured_retail_stress[/"Unsecured Retail Slowdown Deepening"/]
+        pressure_gold_price_reversal_risk[/"Gold Price Reversal Risk on Loan Books"/]
+        pressure_first_cycle_msme_risk[/"First-Cycle MSME Default Risk"/]
+        pressure_nbfc_re_tightening_risk[/"RBI Re-Tightening of NBFC Risk Weights"/]
+    end
+
+%% ── Apply styles ────────────────────────────────────────────────────────
+    class driver_credit_cycle_acceleration,driver_rbi_unsecured_tightening,driver_gold_loan_reclassification,driver_psl_housing_limit_revision,driver_pli_capex_broadening,driver_msme_formalisation,driver_nbfc_capital_normalisation,driver_infra_cycle_maturing driverNode
+    class sector_bank_credit,sector_services,sector_personal_loans,sector_industry,sector_agriculture,sector_micro_small_industry,sector_large_industry,sector_nbfcs,sector_gold_loans,sector_credit_cards,sector_consumer_durables,sector_vehicle_loans,sector_housing,sector_psl_housing,sector_psl_mse,sector_all_engineering,sector_petroleum,sector_basic_metal,sector_gems_jewellery,sector_vehicles_industrial,sector_food_processing,sector_infrastructure sectorNode
+    class gap_bankcredit_april_dates,gap_three_data_points_only,gap_main_sectors_undercount,gap_psl_classification_volatility,gap_nbfc_double_counting,gap_industry_type_partition_not_exact gapNode
+    class opp_co_lending_infrastructure,opp_msme_alt_data_underwriting,opp_gold_loan_specialised_ops,opp_vehicle_supply_chain_finance,opp_capex_term_loan_books,opp_pslc_trading_tooling opportunityNode
+    class pressure_unsecured_retail_stress,pressure_gold_price_reversal_risk,pressure_first_cycle_msme_risk,pressure_nbfc_re_tightening_risk pressureNode
+
+%% ── Edges ───────────────────────────────────────────────────────────────
+    driver_credit_cycle_acceleration --> sector_bank_credit
+    driver_credit_cycle_acceleration --> sector_industry
+    driver_credit_cycle_acceleration --> sector_services
+    driver_credit_cycle_acceleration --> sector_personal_loans
+    driver_credit_cycle_acceleration --> sector_agriculture
+    driver_rbi_unsecured_tightening -.-> sector_credit_cards
+    driver_rbi_unsecured_tightening -.-> sector_consumer_durables
+    driver_rbi_unsecured_tightening ==> sector_gold_loans
+    driver_gold_loan_reclassification --> sector_gold_loans
+    driver_gold_loan_reclassification --> sector_gems_jewellery
+    driver_psl_housing_limit_revision -.-> sector_psl_housing
+    driver_pli_capex_broadening --> sector_all_engineering
+    driver_pli_capex_broadening --> sector_basic_metal
+    driver_pli_capex_broadening --> sector_petroleum
+    driver_pli_capex_broadening --> sector_vehicles_industrial
+    driver_pli_capex_broadening --> sector_food_processing
+    driver_msme_formalisation --> sector_micro_small_industry
+    driver_msme_formalisation --> sector_psl_mse
+    driver_nbfc_capital_normalisation --> sector_nbfcs
+    driver_infra_cycle_maturing -.-> sector_infrastructure
+    sector_nbfcs --> opp_co_lending_infrastructure
+    sector_micro_small_industry --> opp_msme_alt_data_underwriting
+    sector_psl_mse --> opp_msme_alt_data_underwriting
+    sector_gold_loans --> opp_gold_loan_specialised_ops
+    sector_vehicle_loans --> opp_vehicle_supply_chain_finance
+    sector_vehicles_industrial --> opp_vehicle_supply_chain_finance
+    sector_all_engineering --> opp_capex_term_loan_books
+    sector_petroleum --> opp_capex_term_loan_books
+    sector_psl_mse --> opp_pslc_trading_tooling
+    sector_credit_cards -.-> pressure_unsecured_retail_stress
+    sector_consumer_durables --> pressure_unsecured_retail_stress
+    sector_gold_loans -.-> pressure_gold_price_reversal_risk
+    sector_micro_small_industry -.-> pressure_first_cycle_msme_risk
+    sector_nbfcs -.-> pressure_nbfc_re_tightening_risk
+    gap_bankcredit_april_dates -.-> sector_bank_credit
+    gap_three_data_points_only -.-> sector_bank_credit
+    gap_main_sectors_undercount -.-> sector_bank_credit
+    gap_psl_classification_volatility -.-> sector_psl_housing
+    gap_nbfc_double_counting -.-> sector_nbfcs
+    gap_industry_type_partition_not_exact -.-> sector_industry
+    sector_micro_small_industry <--> sector_large_industry
+    sector_services <--> sector_personal_loans
+    sector_psl_housing <--> sector_housing
+    sector_gold_loans <--> sector_credit_cards

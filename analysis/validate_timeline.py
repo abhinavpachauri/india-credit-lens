@@ -87,8 +87,7 @@ def check_period_fields(data, result):
         "paths":            dict,
     }
     optional_numeric = ["yoy_growth_pct", "fy_growth_pct"]
-    required_paths   = ["sections", "system_model", "subsystems",
-                        "annotations_draft", "annotations_live"]
+    required_paths   = ["sections"]
 
     for i, entry in enumerate(data.get("periods", [])):
         loc = f"periods[{i}]"
@@ -161,10 +160,10 @@ def check_duplicates(data, result):
 def check_paths(data, timeline_path, result):
     """
     All paths in each period's 'paths' dict must resolve to existing files,
-    relative to ANALYSIS dir. 'mermaid_output' and 'annotations_live' are
-    allowed to be directories or paths that may not exist yet (they are outputs).
+    relative to ANALYSIS dir. Per-period paths: sections (required), format_report
+    and delta_brief (optional). Legacy analysis files are archived, not referenced.
     """
-    OPTIONAL_PATHS = {"mermaid_output", "annotations_live"}
+    OPTIONAL_PATHS = {"format_report", "delta_brief"}
 
     for i, entry in enumerate(data.get("periods", [])):
         dd = entry.get("dataDate", f"entry_{i}")

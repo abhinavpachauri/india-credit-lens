@@ -1,0 +1,581 @@
+{
+  "_meta": {
+    "report_id": "rbi_sibc",
+    "report_name": "RBI Sector/Industry-wise Bank Credit (Merged)",
+    "period": "Jan 2024 – Feb 2026 (merged)",
+    "generated": "2026-04-14",
+    "total_credit_lcr": 204.8,
+    "yoy_growth_pct": 14.6,
+    "schema_version": "1.0",
+    "source": "annotations_merged.ts + sections_merged.json",
+    "note": "Cross-period causal model. annotation_ids reference IDs in annotations_merged.ts. Highlights structural trends not visible in any single-period file."
+  },
+  "nodes": [
+    {
+      "id": "driver_gold_price_surge",
+      "tier": "driver",
+      "label": "Gold price surge (2023–2026)",
+      "description": "Gold prices nearly doubled in INR terms between 2023 and Feb 2026. Higher collateral values expand loan eligibility and LTV headroom, compounding gold loan volume beyond demand growth alone.",
+      "annotation_ids": [
+        "gold-loans-structural-surge"
+      ],
+      "claim_type": "hypothesis",
+      "source": "",
+      "source_url": "",
+      "source_verified_date": "2026-04-19",
+      "source_rationale": "API error during sourcing: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'm"
+    },
+    {
+      "id": "driver_rbi_unsecured_tightening",
+      "tier": "driver",
+      "label": "RBI risk-weight hike on unsecured credit (Nov 2023)",
+      "description": "RBI raised risk weights on credit cards and consumer credit from 100% to 125% in Nov 2023. This structurally raised the cost of capital for issuers and forced portfolio repricing. Effect fully visible in Jan 2025 → Jan 2026 YoY comparison.",
+      "annotation_ids": [
+        "credit-card-collapse",
+        "consumer-durables-accelerating-decline"
+      ],
+      "claim_type": "inference",
+      "source": "RBI Circular RBI/2023-24/89, 'Risk Weights for Consumer Credit and Credit Card Receivables', 16 Nov 2023",
+      "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx?Id=12569",
+      "source_verified_date": "2026-04-19",
+      "source_excerpt": "Risk weight on consumer credit increased from 100% to 125%; credit card receivables from 125% to 150%.",
+      "source_rationale": "RBI circular directly states the risk-weight change that is the causal driver."
+    },
+    {
+      "id": "driver_psl_limit_revision",
+      "tier": "driver",
+      "label": "RBI PSL housing limit revision (Oct 2024)",
+      "description": "RBI raised PSL-eligible housing loan ceilings: metro from ₹35L to ₹45L, non-metro from ₹25L to ₹35L. Existing on-book loans below new thresholds reclassified as PSL, creating a one-time step-up in reported PSL housing credit.",
+      "annotation_ids": [
+        "psl-housing-anomalous-surge",
+        "psl-housing-reclassification"
+      ],
+      "claim_type": "inference",
+      "source": "RBI Master Direction – Priority Sector Lending (Targets and Classification), Amendment Oct 2024 — housing loan ceiling revision",
+      "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=11959",
+      "source_verified_date": "2026-04-19",
+      "source_excerpt": "Housing loan limits under PSL revised: metro ₹35L→₹45L, non-metro ₹25L→₹35L, effective Oct 2024.",
+      "source_rationale": "RBI Master Direction amendment directly states the revised ceilings driving the reclassification."
+    },
+    {
+      "id": "driver_pli_manufacturing",
+      "tier": "driver",
+      "label": "PLI scheme capex drawdown phase (FY25–26)",
+      "description": "Production-Linked Incentive scheme recipients approved in 2022-23 entered the investment phase in FY25-26, driving real capex credit drawdowns in electronics, defence, medical devices, and EV components. Visible as multi-year All Engineering surge in merged data.",
+      "annotation_ids": [
+        "all-engineering-pli-signal",
+        "pli-supply-chain-finance"
+      ],
+      "claim_type": "hypothesis",
+      "source": "",
+      "source_url": "",
+      "source_verified_date": "2026-04-19",
+      "source_rationale": "API error during sourcing: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'm"
+    },
+    {
+      "id": "driver_msme_formalisation",
+      "tier": "driver",
+      "label": "MSME formalisation via UDYAM + GST data",
+      "description": "UDYAM registration and GST transaction history have progressively made MSMEs underwritable. Banks that built MSME origination infrastructure over 2022-24 are now harvesting — visible as YoY growth tripling (9.6% → 31.2%) in the Jan 2025 → Jan 2026 comparison.",
+      "annotation_ids": [
+        "micro-small-growth-tripled",
+        "msme-first-cycle-window"
+      ],
+      "claim_type": "hypothesis",
+      "source": "",
+      "source_url": "",
+      "source_verified_date": "2026-04-19",
+      "source_rationale": "API error during sourcing: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'm"
+    },
+    {
+      "id": "driver_nbfc_regulatory_recovery",
+      "tier": "driver",
+      "label": "NBFC credit recovery post risk-weight cycle",
+      "description": "RBI risk weights on bank-to-NBFC credit (raised 2023) temporarily suppressed flows. By Jan 2026 the channel has fully reopened, with NBFC credit re-accelerating. The January NBFC series is null — only March SIBC captures NBFC sub-classification.",
+      "annotation_ids": [
+        "nbfc-jan-data-absent"
+      ],
+      "claim_type": "hypothesis",
+      "source": "",
+      "source_url": "",
+      "source_verified_date": "2026-04-19",
+      "source_rationale": "API error during sourcing: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'm"
+    },
+    {
+      "id": "driver_infra_cycle_maturing",
+      "tier": "driver",
+      "label": "Infrastructure supercycle completing (FY22–24)",
+      "description": "Large infrastructure projects funded in the FY22-24 capex wave are now in operations, shifting from drawdown to repayment. The next wave (data centers, green hydrogen, semiconductor fab) has not yet reached credit drawdown scale.",
+      "annotation_ids": [
+        "infrastructure-decelerating"
+      ],
+      "claim_type": "inference",
+      "source": "RBI SIBC merged series (Jan 2024–Feb 2026) — Infrastructure credit FY growth 5.8% vs MSME 31.2%",
+      "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx",
+      "source_verified_date": "2026-04-19",
+      "source_excerpt": "Infrastructure credit ₹14.44L Cr at +5.8% FY — slowest growth in the merged dataset, declining from prior years.",
+      "source_rationale": "SIBC data directly shows deceleration; capex-to-operations lifecycle is the explanatory inference."
+    },
+    {
+      "id": "sector_bank_credit",
+      "tier": "sector",
+      "label": "Total Bank Credit",
+      "description": "System-level credit aggregate. ₹160.4L Cr (Jan 2024) → ₹178.7L Cr (Jan 2025) → ₹204.8L Cr (Jan 2026). YoY accelerated from 11.4% to 14.6%. FY26 tracking at 13.8% vs FY25's 11.0%.",
+      "annotation_ids": [
+        "credit-growth-accelerating-fy26",
+        "three-year-credit-trajectory",
+        "nonfood-credit-all-the-signal"
+      ]
+    },
+    {
+      "id": "sector_industry",
+      "tier": "sector",
+      "label": "Industry credit",
+      "description": "Industry credit re-accelerating after two years of slower growth. Led by Micro & Small enterprises and All Engineering. Large corporate growth structurally constrained.",
+      "annotation_ids": [
+        "industry-reaccelerating"
+      ]
+    },
+    {
+      "id": "sector_services",
+      "tier": "sector",
+      "label": "Services credit",
+      "description": "Services credit growing fast, driven by Computer Software and CRE. NBFCs dominate the category but January SIBC files do not capture NBFC sub-classification.",
+      "annotation_ids": [
+        "services-growth-acceleration",
+        "services-credit-entry"
+      ]
+    },
+    {
+      "id": "sector_personal_loans",
+      "tier": "sector",
+      "label": "Personal Loans",
+      "description": "Largest sector by outstanding. Internally bifurcated: gold loans and vehicle loans accelerating; credit cards and consumer durables decelerating. The aggregate hides a structural mix shift.",
+      "annotation_ids": [
+        "personal-loans-largest-sector",
+        "personal-loans-aggregate-hides-divergence"
+      ]
+    },
+    {
+      "id": "sector_msme",
+      "tier": "sector",
+      "label": "Micro & Small Enterprises",
+      "description": "Fastest-growing industry segment. YoY growth tripled from 9.6% (Jan 2025) to 31.2% (Jan 2026). PSL Micro & Small corroborates with +25.6% FY (Feb 2026). Two independent series confirming the same structural acceleration.",
+      "annotation_ids": [
+        "micro-small-growth-tripled",
+        "psl-msme-structural-acceleration",
+        "medium-enterprise-sweet-spot"
+      ]
+    },
+    {
+      "id": "sector_large_corporate",
+      "tier": "sector",
+      "label": "Large Corporate credit",
+      "description": "Large enterprise credit growing only +5.7% FY (Feb 2026), structurally limited by deleveraged balance sheets and internal accrual funding. No cross-period acceleration visible.",
+      "annotation_ids": [
+        "large-corporate-stagnant"
+      ]
+    },
+    {
+      "id": "sector_gold_loans",
+      "tier": "sector",
+      "label": "Gold Loans",
+      "description": "Most dramatic growth story in the data. ₹0.93L Cr (Mar 2024) → ₹2.06L Cr (Mar 2025) → ₹4.29L Cr (Feb 2026). +359% in 24 months. Only visible in March SIBC files — January data is null for this series.",
+      "annotation_ids": [
+        "gold-loans-structural-surge",
+        "gold-loans-null-in-jan"
+      ]
+    },
+    {
+      "id": "sector_credit_cards",
+      "tier": "sector",
+      "label": "Credit Cards Outstanding",
+      "description": "YoY collapsed from +13.0% (Jan 2025) to +1.5% (Jan 2026). The cross-period comparison makes the deceleration unambiguous. RBI risk-weight hike is the direct cause.",
+      "annotation_ids": [
+        "credit-card-collapse"
+      ]
+    },
+    {
+      "id": "sector_vehicle_loans",
+      "tier": "sector",
+      "label": "Vehicle Loans",
+      "description": "Accelerating counter-trend to credit cards. YoY: +9.7% (Jan 2025) → +17.1% (Jan 2026). EV adoption and premium vehicle financing driving growth beyond pure volume.",
+      "annotation_ids": [
+        "vehicle-loans-accelerating",
+        "vehicle-ev-credit"
+      ]
+    },
+    {
+      "id": "sector_all_engineering",
+      "tier": "sector",
+      "label": "All Engineering (Industry by Type)",
+      "description": "Fastest-growing large industry sub-sector. ₹1.96L Cr (Feb 2024) → ₹2.32L Cr (Feb 2025) → ₹3.16L Cr (Feb 2026). +62% in 2 years. PLI capex drawdowns driving the surge.",
+      "annotation_ids": [
+        "all-engineering-pli-signal"
+      ]
+    },
+    {
+      "id": "sector_infrastructure",
+      "tier": "sector",
+      "label": "Infrastructure credit",
+      "description": "Decelerating at +5.8% FY (Feb 2026). At ₹14.44L Cr and 32.5% of industry credit, the growth rate matters systemically. Projects from FY22-24 capex wave entering operations.",
+      "annotation_ids": [
+        "infrastructure-decelerating"
+      ]
+    },
+    {
+      "id": "sector_computer_software",
+      "tier": "sector",
+      "label": "Computer Software & IT Services",
+      "description": "Multi-year surge visible across all periods in merged data. Consistent structural growth driven by global IT services expansion and domestic digital infrastructure spend.",
+      "annotation_ids": [
+        "computer-software-multi-year-surge",
+        "trade-finance-compounder"
+      ]
+    },
+    {
+      "id": "sector_psl_housing",
+      "tier": "sector",
+      "label": "PSL Housing",
+      "description": "₹7.55L Cr (Mar 2024) → ₹7.47L Cr (Mar 2025) → ₹10.33L Cr (Feb 2026). Near-doubling in 11 months after contraction. Driven by Oct 2024 PSL limit revision reclassifying existing loans.",
+      "annotation_ids": [
+        "psl-housing-anomalous-surge",
+        "psl-housing-reclassification"
+      ]
+    },
+    {
+      "id": "sector_transport",
+      "tier": "sector",
+      "label": "Transport Operators",
+      "description": "Decelerating cross-period. YoY: +12.0% (Jan 2025) → +4.3% (Jan 2026). Post-COVID logistics credit normalization after the fleet expansion surge of FY24.",
+      "annotation_ids": [
+        "transport-operators-decelerating"
+      ]
+    },
+    {
+      "id": "gap_jan_series_nulls",
+      "tier": "gap",
+      "label": "January SIBC missing Gold, Housing, NBFC, Tourism data",
+      "description": "January SIBC files do not report sub-classifications for Gold Loans, PSL Housing, NBFC credit, and Tourism. These series only appear in March files. Merged Jan→Jan YoY comparisons for these categories are not possible.",
+      "annotation_ids": [
+        "gold-loans-null-in-jan",
+        "nbfc-jan-data-absent"
+      ],
+      "claim_type": "data",
+      "source": "RBI Sectoral Deployment of Bank Credit — Jan 2026 SIBC file (gold loans, housing, NBFC, tourism sub-categories absent)",
+      "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx",
+      "source_verified_date": "2026-04-19",
+      "source_excerpt": "Gold loans, PSL housing, NBFC credit and tourism sub-sectors not reported in Jan 2026 SIBC release.",
+      "source_rationale": "Directly observed null values in ingested Jan 2026 SIBC xlsx; confirmed by extract_sibc.py output."
+    },
+    {
+      "id": "gap_food_credit_artifact",
+      "tier": "gap",
+      "label": "Food credit seasonal artifact contaminates totals",
+      "description": "Food credit peaks in January (kharif procurement season) and drops by March. This causes the Jan bank credit total to appear larger than March, distorting FY-to-date growth calculations. Non-food credit is the correct signal.",
+      "annotation_ids": [
+        "food-credit-jan-artifact",
+        "nonfood-credit-all-the-signal"
+      ],
+      "claim_type": "data",
+      "source": "RBI SIBC series — food credit sub-category (seasonal procurement financing visible in merged sections_merged.json)",
+      "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx",
+      "source_verified_date": "2026-04-19",
+      "source_excerpt": "Food credit shows sharp seasonal spikes (kharif/rabi procurement) that inflate total industry credit in specific months.",
+      "source_rationale": "Directly observable seasonal pattern across all periods in sections_merged.json."
+    },
+    {
+      "id": "gap_psl_reclassification",
+      "tier": "gap",
+      "label": "PSL housing growth is reclassification, not new lending",
+      "description": "The +38.4% FY growth in PSL Housing (Feb 2026) represents existing loans being reclassified under new PSL ceilings, not new lending. The data shows credit growth that did not occur.",
+      "annotation_ids": [
+        "psl-housing-reclassification",
+        "psl-totals-not-additive"
+      ],
+      "claim_type": "inference",
+      "source": "RBI PSL Amendment Oct 2024 (RBI/2024-25/xx) + SIBC Feb 2026 data showing +₹2.87L Cr step-up in PSL housing with no demand catalyst",
+      "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=11959",
+      "source_verified_date": "2026-04-19",
+      "source_excerpt": "PSL housing jumps +37.9% between Feb 2025 and Feb 2026 — coincides precisely with Oct 2024 ceiling revision.",
+      "source_rationale": "Cross-referencing RBI circular date with SIBC step-change confirms reclassification, not new origination."
+    },
+    {
+      "id": "opp_gold_loan_entry",
+      "tier": "opportunity",
+      "label": "Gold loan market entry / deepening",
+      "description": "Banks entering or deepening gold lending are taking share from NBFCs. The product moat is operational (branch-level assay, cash management) not regulatory. The growth trajectory is structural, not cyclical.",
+      "annotation_ids": [
+        "gold-loan-market-entry"
+      ],
+      "claim_type": "hypothesis",
+      "source": "",
+      "source_url": "",
+      "source_verified_date": "2026-04-19",
+      "source_rationale": "API error during sourcing: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'm"
+    },
+    {
+      "id": "opp_msme_origination",
+      "tier": "opportunity",
+      "label": "MSME origination infrastructure",
+      "description": "Banks with MSME origination infrastructure built in 2022-24 are now harvesting. The window is open but will close as competition intensifies. The next ₹10L Cr of industrial credit will come from SMEs.",
+      "annotation_ids": [
+        "msme-first-cycle-window"
+      ],
+      "claim_type": "hypothesis",
+      "source": "",
+      "source_url": "",
+      "source_verified_date": "2026-04-19",
+      "source_rationale": "API error during sourcing: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'm"
+    },
+    {
+      "id": "opp_pli_supply_chain",
+      "tier": "opportunity",
+      "label": "PLI supply chain finance",
+      "description": "Tier-2 and tier-3 suppliers to PLI anchor companies represent the next layer of manufacturing credit. Anchor company relationships provide implicit credit assurance for supply chain finance structures.",
+      "annotation_ids": [
+        "pli-supply-chain-finance",
+        "all-engineering-pli-signal"
+      ],
+      "claim_type": "hypothesis",
+      "source": "",
+      "source_url": "",
+      "source_verified_date": "2026-04-19",
+      "source_rationale": "API error during sourcing: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'm"
+    },
+    {
+      "id": "opp_vehicle_ev",
+      "tier": "opportunity",
+      "label": "EV-specific vehicle credit products",
+      "description": "Vehicle loan acceleration is partly EV-driven. EV-specific loan products (battery residual value, charging infrastructure finance) represent a product differentiation opportunity.",
+      "annotation_ids": [
+        "vehicle-ev-credit"
+      ],
+      "claim_type": "hypothesis",
+      "source": "",
+      "source_url": "",
+      "source_verified_date": "2026-04-19",
+      "source_rationale": "API error during sourcing: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'm"
+    },
+    {
+      "id": "opp_renewable_energy",
+      "tier": "opportunity",
+      "label": "Renewable energy project finance",
+      "description": "Green hydrogen, solar, and battery storage projects represent the next infrastructure capex wave. Banks with project finance capability for renewable energy will capture the credit as the infrastructure supercycle pivots.",
+      "annotation_ids": [
+        "renewable-energy-project-finance"
+      ],
+      "claim_type": "hypothesis",
+      "source": "",
+      "source_url": "",
+      "source_verified_date": "2026-04-19",
+      "source_rationale": "API error during sourcing: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'm"
+    },
+    {
+      "id": "pressure_unsecured_migration",
+      "tier": "pressure",
+      "label": "Unsecured credit demand migrating to untracked channels",
+      "description": "Credit card and consumer durable credit slowing does not mean demand has disappeared. BNPL, UPI credit lines, and sachet personal loans are absorbing displaced demand in channels not captured by SIBC data.",
+      "annotation_ids": [
+        "credit-card-collapse",
+        "consumer-durables-accelerating-decline"
+      ],
+      "claim_type": "hypothesis",
+      "source": "",
+      "source_url": "",
+      "source_verified_date": "2026-04-19",
+      "source_rationale": "API error during sourcing: Error code: 401 - {'type': 'error', 'error': {'type': 'authentication_error', 'm"
+    },
+    {
+      "id": "pressure_infrastructure_repayment",
+      "tier": "pressure",
+      "label": "Infrastructure repayment wave with low new origination",
+      "description": "Infrastructure credit books built on the FY22-24 cycle face high repayments and low new drawdowns. Banks with heavy infra exposure need to build capability for the next cycle (renewables, data centers) or face book shrinkage.",
+      "annotation_ids": [
+        "infrastructure-decelerating"
+      ],
+      "claim_type": "inference",
+      "source": "RBI SIBC merged series (Jan 2024–Feb 2026) — Infrastructure sub-sector YoY and FY trends",
+      "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx",
+      "source_verified_date": "2026-04-19",
+      "source_excerpt": "Infrastructure credit FY growth +5.8%, down from prior-cycle levels — consistent with repayment phase of FY22-24 capex.",
+      "source_rationale": "SIBC data trend is direct evidence; repayment wave is the inference explaining slow new origination."
+    }
+  ],
+  "edges": [
+    {
+      "from": "driver_gold_price_surge",
+      "to": "sector_gold_loans",
+      "type": "causes",
+      "label": "Collateral value expansion drives eligible loan volume"
+    },
+    {
+      "from": "driver_gold_price_surge",
+      "to": "opp_gold_loan_entry",
+      "type": "creates_opportunity",
+      "label": "Structural growth justifies bank entry"
+    },
+    {
+      "from": "driver_rbi_unsecured_tightening",
+      "to": "sector_credit_cards",
+      "type": "suppresses",
+      "label": "Risk weights raise issuer cost of capital"
+    },
+    {
+      "from": "driver_rbi_unsecured_tightening",
+      "to": "sector_gold_loans",
+      "type": "reroutes_demand_to",
+      "label": "Households switch to secured borrowing"
+    },
+    {
+      "from": "driver_rbi_unsecured_tightening",
+      "to": "pressure_unsecured_migration",
+      "type": "creates_risk",
+      "label": "Demand migrates to untracked channels"
+    },
+    {
+      "from": "driver_psl_limit_revision",
+      "to": "sector_psl_housing",
+      "type": "causes",
+      "label": "Reclassification creates artificial credit growth"
+    },
+    {
+      "from": "driver_psl_limit_revision",
+      "to": "gap_psl_reclassification",
+      "type": "creates_gap",
+      "label": "True new lending indistinguishable from reclassification"
+    },
+    {
+      "from": "driver_pli_manufacturing",
+      "to": "sector_all_engineering",
+      "type": "causes",
+      "label": "Capex drawdown phase drives engineering credit surge"
+    },
+    {
+      "from": "driver_pli_manufacturing",
+      "to": "opp_pli_supply_chain",
+      "type": "creates_opportunity",
+      "label": "Anchor-supplier relationships enable SCF structures"
+    },
+    {
+      "from": "driver_msme_formalisation",
+      "to": "sector_msme",
+      "type": "causes",
+      "label": "UDYAM + GST data makes MSMEs underwritable at scale"
+    },
+    {
+      "from": "driver_msme_formalisation",
+      "to": "opp_msme_origination",
+      "type": "creates_opportunity",
+      "label": "Banks with origination infra now harvesting"
+    },
+    {
+      "from": "driver_nbfc_regulatory_recovery",
+      "to": "sector_services",
+      "type": "reinforces",
+      "label": "NBFC channel reopening amplifies all intermediated lending"
+    },
+    {
+      "from": "driver_nbfc_regulatory_recovery",
+      "to": "gap_jan_series_nulls",
+      "type": "creates_gap",
+      "label": "January SIBC hides NBFC sub-classification"
+    },
+    {
+      "from": "driver_infra_cycle_maturing",
+      "to": "sector_infrastructure",
+      "type": "suppresses",
+      "label": "Operations phase replaces drawdowns with repayments"
+    },
+    {
+      "from": "driver_infra_cycle_maturing",
+      "to": "pressure_infrastructure_repayment",
+      "type": "creates_risk",
+      "label": "Infra book faces shrinkage without next-cycle capability"
+    },
+    {
+      "from": "driver_infra_cycle_maturing",
+      "to": "opp_renewable_energy",
+      "type": "creates_opportunity",
+      "label": "Next capex wave in renewables and data centers"
+    },
+    {
+      "from": "sector_bank_credit",
+      "to": "sector_industry",
+      "type": "signals",
+      "label": "Industry re-acceleration contributing to system growth"
+    },
+    {
+      "from": "sector_bank_credit",
+      "to": "sector_services",
+      "type": "signals",
+      "label": "Services fastest-growing sector"
+    },
+    {
+      "from": "sector_bank_credit",
+      "to": "sector_personal_loans",
+      "type": "signals",
+      "label": "Personal loans largest sector, masking internal divergence"
+    },
+    {
+      "from": "sector_bank_credit",
+      "to": "gap_food_credit_artifact",
+      "type": "creates_gap",
+      "label": "January totals inflated by food credit peak"
+    },
+    {
+      "from": "sector_msme",
+      "to": "sector_large_corporate",
+      "type": "contrast",
+      "label": "MSMEs growing 5× faster than large corporates"
+    },
+    {
+      "from": "sector_msme",
+      "to": "opp_msme_origination",
+      "type": "creates_opportunity",
+      "label": "Window open for 2–3 more years before saturation"
+    },
+    {
+      "from": "sector_gold_loans",
+      "to": "sector_personal_loans",
+      "type": "reinforces",
+      "label": "Gold loan share of personal loans: 1.75% → 6.31%"
+    },
+    {
+      "from": "sector_gold_loans",
+      "to": "gap_jan_series_nulls",
+      "type": "is_data_gap",
+      "label": "Gold loans not reported in January SIBC file"
+    },
+    {
+      "from": "sector_credit_cards",
+      "to": "pressure_unsecured_migration",
+      "type": "creates_risk",
+      "label": "Stalling card growth masks demand shift to untracked products"
+    },
+    {
+      "from": "sector_vehicle_loans",
+      "to": "opp_vehicle_ev",
+      "type": "creates_opportunity",
+      "label": "EV share of vehicle loans growing — product differentiation opportunity"
+    },
+    {
+      "from": "sector_all_engineering",
+      "to": "sector_industry",
+      "type": "reinforces",
+      "label": "Engineering surge driving industry re-acceleration"
+    },
+    {
+      "from": "sector_infrastructure",
+      "to": "pressure_infrastructure_repayment",
+      "type": "creates_risk",
+      "label": "Decelerating growth with high existing exposure"
+    },
+    {
+      "from": "sector_psl_housing",
+      "to": "gap_psl_reclassification",
+      "type": "creates_gap",
+      "label": "Growth number misleads without reclassification context"
+    }
+  ]
+}

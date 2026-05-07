@@ -1,0 +1,31 @@
+---
+title: MSME Formalisation via GST & UDYAM
+---
+flowchart TD
+
+    classDef driverNode fill:#1E3A5F,stroke:#1E3A5F,color:#ffffff
+    classDef sectorNode fill:#F0FDF4,stroke:#166534,color:#166534
+    classDef gapNode fill:#F9FAFB,stroke:#6B7280,color:#374151
+    classDef opportunityNode fill:#0F766E,stroke:#0F766E,color:#ffffff
+    classDef pressureNode fill:#B45309,stroke:#B45309,color:#ffffff
+
+%% --> causes/creates/signals  -.-> suppresses/risk/gap  ==> reroutes  <--> contrast
+
+    driver_msme_formalisation(["MSME Formalisation via GST & UDYAM"])
+    sector_micro_small_industry["Micro and Small Industry\n+33.1% YoY"]
+    sector_psl_mse["Priority Sector MSE\n+29.5% YoY"]
+    opp_msme_alt_data_underwriting("Alt-Data MSME Underwriting Stack")
+    opp_pslc_trading_tooling("PSLC Trading & Analytics Tooling")
+    pressure_first_cycle_msme_risk[/"First-Cycle MSME Default Risk"/]
+
+    class driver_msme_formalisation driverNode
+    class sector_micro_small_industry,sector_psl_mse sectorNode
+    class opp_msme_alt_data_underwriting,opp_pslc_trading_tooling opportunityNode
+    class pressure_first_cycle_msme_risk pressureNode
+
+    driver_msme_formalisation --> sector_micro_small_industry
+    driver_msme_formalisation --> sector_psl_mse
+    sector_micro_small_industry --> opp_msme_alt_data_underwriting
+    sector_psl_mse --> opp_msme_alt_data_underwriting
+    sector_psl_mse --> opp_pslc_trading_tooling
+    sector_micro_small_industry -.-> pressure_first_cycle_msme_risk

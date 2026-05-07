@@ -1,0 +1,154 @@
+[
+  {
+    "id": "sub_01",
+    "label": "Gold Surge & Unsecured Retail Cooling",
+    "chart_type": "flowchart",
+    "chart_direction": "LR",
+    "newsletter": true,
+    "drivers": ["driver_gold_loan_reclassification", "driver_rbi_unsecured_tightening"],
+    "sectors": [
+      "sector_gold_loans",
+      "sector_gems_jewellery",
+      "sector_credit_cards",
+      "sector_consumer_durables",
+      "sector_personal_loans"
+    ],
+    "outcomes": [
+      "opp_gold_loan_specialised_ops",
+      "pressure_gold_price_reversal_risk",
+      "pressure_unsecured_retail_stress"
+    ],
+    "node_ids": [
+      "driver_gold_loan_reclassification",
+      "driver_rbi_unsecured_tightening",
+      "sector_gold_loans",
+      "sector_gems_jewellery",
+      "sector_credit_cards",
+      "sector_consumer_durables",
+      "sector_personal_loans",
+      "opp_gold_loan_specialised_ops",
+      "pressure_gold_price_reversal_risk",
+      "pressure_unsecured_retail_stress"
+    ]
+  },
+  {
+    "id": "sub_02",
+    "label": "MSME Formalisation Wave",
+    "chart_type": "flowchart",
+    "chart_direction": "LR",
+    "newsletter": true,
+    "drivers": ["driver_msme_formalisation"],
+    "sectors": ["sector_micro_small_industry", "sector_medium_industry", "sector_large_industry", "sector_psl_mse"],
+    "outcomes": ["opp_msme_alt_data_underwriting", "opp_pslc_trading_tooling", "pressure_first_cycle_msme_risk"],
+    "node_ids": [
+      "driver_msme_formalisation",
+      "sector_micro_small_industry",
+      "sector_medium_industry",
+      "sector_large_industry",
+      "sector_psl_mse",
+      "opp_msme_alt_data_underwriting",
+      "opp_pslc_trading_tooling",
+      "pressure_first_cycle_msme_risk"
+    ]
+  },
+  {
+    "id": "sub_03",
+    "label": "PLI Capex Broadening",
+    "chart_type": "flowchart",
+    "chart_direction": "LR",
+    "newsletter": true,
+    "drivers": ["driver_pli_capex_broadening"],
+    "sectors": [
+      "sector_all_engineering",
+      "sector_petroleum",
+      "sector_basic_metal",
+      "sector_vehicles_industrial",
+      "sector_food_processing",
+      "sector_vehicle_loans"
+    ],
+    "outcomes": ["opp_capex_term_loan_books", "opp_vehicle_supply_chain_finance", "gap_industry_type_partition_not_exact"],
+    "node_ids": [
+      "driver_pli_capex_broadening",
+      "sector_all_engineering",
+      "sector_petroleum",
+      "sector_basic_metal",
+      "sector_vehicles_industrial",
+      "sector_food_processing",
+      "sector_vehicle_loans",
+      "opp_capex_term_loan_books",
+      "opp_vehicle_supply_chain_finance",
+      "gap_industry_type_partition_not_exact"
+    ]
+  },
+  {
+    "id": "sub_04",
+    "label": "NBFC Tap Reopens",
+    "chart_type": "flowchart",
+    "chart_direction": "LR",
+    "newsletter": true,
+    "drivers": ["driver_nbfc_capital_normalisation"],
+    "sectors": ["sector_nbfcs", "sector_services", "sector_commercial_real_estate", "sector_computer_software", "sector_tourism"],
+    "outcomes": ["opp_co_lending_infrastructure", "pressure_nbfc_re_tightening_risk", "gap_nbfc_double_counting"],
+    "node_ids": [
+      "driver_nbfc_capital_normalisation",
+      "sector_nbfcs",
+      "sector_services",
+      "sector_commercial_real_estate",
+      "sector_computer_software",
+      "sector_tourism",
+      "opp_co_lending_infrastructure",
+      "pressure_nbfc_re_tightening_risk",
+      "gap_nbfc_double_counting"
+    ]
+  },
+  {
+    "id": "sub_05",
+    "label": "PSL Housing Reclassification Event",
+    "chart_type": "flowchart",
+    "chart_direction": "TD",
+    "newsletter": false,
+    "drivers": ["driver_psl_housing_limit_revision"],
+    "sectors": ["sector_psl_housing", "sector_housing"],
+    "outcomes": ["gap_psl_classification_volatility"],
+    "node_ids": [
+      "driver_psl_housing_limit_revision",
+      "sector_psl_housing",
+      "sector_housing",
+      "gap_psl_classification_volatility"
+    ]
+  },
+  {
+    "id": "sub_06",
+    "label": "Infrastructure Plateau",
+    "chart_type": "flowchart",
+    "chart_direction": "LR",
+    "newsletter": false,
+    "drivers": ["driver_infra_cycle_maturing"],
+    "sectors": ["sector_infrastructure", "sector_psl_renewable"],
+    "outcomes": [],
+    "node_ids": [
+      "driver_infra_cycle_maturing",
+      "sector_infrastructure",
+      "sector_psl_renewable"
+    ]
+  },
+  {
+    "id": "sub_07",
+    "label": "FY26 System Credit Overview",
+    "chart_type": "flowchart",
+    "chart_direction": "LR",
+    "newsletter": true,
+    "drivers": ["driver_credit_cycle_acceleration"],
+    "sectors": ["sector_bank_credit", "sector_industry", "sector_agriculture"],
+    "outcomes": ["gap_bankcredit_april_dates", "gap_three_data_points_only", "gap_main_sectors_undercount"],
+    "node_ids": [
+      "driver_credit_cycle_acceleration",
+      "sector_bank_credit",
+      "sector_industry",
+      "sector_agriculture",
+      "gap_bankcredit_april_dates",
+      "gap_three_data_points_only",
+      "gap_main_sectors_undercount"
+    ]
+  }
+]

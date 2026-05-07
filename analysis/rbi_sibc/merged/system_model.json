@@ -2,19 +2,22 @@
   "_meta": {
     "report_id": "rbi_sibc",
     "report_name": "RBI Sector/Industry-wise Bank Credit (Merged)",
-    "period": "Jan 2024 – Mar 2026 (merged)",
+    "period": "Jan 2024 \u2013 Mar 2026 (merged)",
     "generated": "2026-05-02",
     "total_credit_lcr": 213.6,
     "yoy_growth_pct": 16.1,
     "schema_version": "1.0",
     "source": "annotations_merged.ts + sections_merged.json",
-    "note": "Cross-period causal model. annotation_ids reference IDs in annotations_merged.ts. Highlights structural trends not visible in any single-period file."
+    "note": "Cross-period causal model. annotation_ids reference IDs in annotations_merged.ts. Highlights structural trends not visible in any single-period file.",
+    "mode": "foundation",
+    "last_foundation_date": "2026-04-30",
+    "last_updated": "2026-05-07"
   },
   "nodes": [
     {
       "id": "driver_gold_price_surge",
       "tier": "driver",
-      "label": "Gold price surge (2023–2026)",
+      "label": "Gold price surge (2023\u20132026)",
       "description": "Gold prices nearly doubled in INR terms between 2023 and Feb 2026. Higher collateral values expand loan eligibility and LTV headroom, compounding gold loan volume beyond demand growth alone.",
       "annotation_ids": [
         "gold-loans-structural-surge"
@@ -24,13 +27,13 @@
       "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx?prid=55327",
       "source_verified_date": "2026-04-20",
       "source_rationale": "RBI official SGB prices show gold nearly tripled from 2023 to Feb 2026, exceeding the 'nearly doubled' claim",
-      "source_excerpt": "Gold price per gram: ₹5,611 (Mar 2023) → ₹6,263 (Feb 2024) → ₹15,440 redemption price (Feb 2026) per RBI SGB notifications"
+      "source_excerpt": "Gold price per gram: \u20b95,611 (Mar 2023) \u2192 \u20b96,263 (Feb 2024) \u2192 \u20b915,440 redemption price (Feb 2026) per RBI SGB notifications"
     },
     {
       "id": "driver_rbi_unsecured_tightening",
       "tier": "driver",
       "label": "RBI risk-weight hike on unsecured credit (Nov 2023)",
-      "description": "RBI raised risk weights on credit cards and consumer credit from 100% to 125% in Nov 2023. This structurally raised the cost of capital for issuers and forced portfolio repricing. Effect fully visible in Jan 2025 → Jan 2026 YoY comparison.",
+      "description": "RBI raised risk weights on credit cards and consumer credit from 100% to 125% in Nov 2023. This structurally raised the cost of capital for issuers and forced portfolio repricing. Effect fully visible in Jan 2025 \u2192 Jan 2026 YoY comparison.",
       "annotation_ids": [
         "credit-card-collapse",
         "consumer-durables-accelerating-decline"
@@ -46,22 +49,22 @@
       "id": "driver_psl_limit_revision",
       "tier": "driver",
       "label": "RBI PSL housing limit revision (Oct 2024)",
-      "description": "RBI raised PSL-eligible housing loan ceilings: metro from ₹35L to ₹45L, non-metro from ₹25L to ₹35L. Existing on-book loans below new thresholds reclassified as PSL, creating a one-time step-up in reported PSL housing credit.",
+      "description": "RBI raised PSL-eligible housing loan ceilings: metro from \u20b935L to \u20b945L, non-metro from \u20b925L to \u20b935L. Existing on-book loans below new thresholds reclassified as PSL, creating a one-time step-up in reported PSL housing credit.",
       "annotation_ids": [
         "psl-housing-anomalous-surge",
         "psl-housing-reclassification"
       ],
       "claim_type": "inference",
-      "source": "RBI Master Direction – Priority Sector Lending (Targets and Classification), Amendment Oct 2024 — housing loan ceiling revision",
+      "source": "RBI Master Direction \u2013 Priority Sector Lending (Targets and Classification), Amendment Oct 2024 \u2014 housing loan ceiling revision",
       "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=11959",
       "source_verified_date": "2026-04-19",
-      "source_excerpt": "Housing loan limits under PSL revised: metro ₹35L→₹45L, non-metro ₹25L→₹35L, effective Oct 2024.",
+      "source_excerpt": "Housing loan limits under PSL revised: metro \u20b935L\u2192\u20b945L, non-metro \u20b925L\u2192\u20b935L, effective Oct 2024.",
       "source_rationale": "RBI Master Direction amendment directly states the revised ceilings driving the reclassification."
     },
     {
       "id": "driver_pli_manufacturing",
       "tier": "driver",
-      "label": "PLI scheme capex drawdown phase (FY25–26)",
+      "label": "PLI scheme capex drawdown phase (FY25\u201326)",
       "description": "Production-Linked Incentive scheme recipients approved in 2022-23 entered the investment phase in FY25-26, driving real capex credit drawdowns in electronics, defence, medical devices, and EV components. Visible as multi-year All Engineering surge in merged data.",
       "annotation_ids": [
         "pli-capex-broadening-confirmed",
@@ -72,13 +75,13 @@
       "source_url": "https://www.pib.gov.in/PressNoteDetails.aspx?NoteId=155082&ModuleId=3&reg=3&lang=2",
       "source_verified_date": "2026-04-20",
       "source_rationale": "PIB confirms 2-3yr implementation lag and FY25 capex surge, but lacks sector-specific FY22-23 approval data",
-      "source_excerpt": "Projects implemented over 2-3 years; by 2025 realized investments rose to ₹1.76 lakh crore as projects shifted to active implementation"
+      "source_excerpt": "Projects implemented over 2-3 years; by 2025 realized investments rose to \u20b91.76 lakh crore as projects shifted to active implementation"
     },
     {
       "id": "driver_msme_formalisation",
       "tier": "driver",
       "label": "MSME formalisation via UDYAM + GST data",
-      "description": "UDYAM registration and GST transaction history have progressively made MSMEs underwritable. Banks that built MSME origination infrastructure over 2022-24 are now harvesting — visible as YoY growth tripling (9.6% → 31.2%) in the Jan 2025 → Jan 2026 comparison.",
+      "description": "UDYAM registration and GST transaction history have progressively made MSMEs underwritable. Banks that built MSME origination infrastructure over 2022-24 are now harvesting \u2014 visible as YoY growth tripling (9.6% \u2192 31.2%) in the Jan 2025 \u2192 Jan 2026 comparison.",
       "annotation_ids": [
         "micro-small-growth-tripled",
         "msme-first-cycle-window"
@@ -94,7 +97,7 @@
       "id": "driver_nbfc_regulatory_recovery",
       "tier": "driver",
       "label": "NBFC credit recovery post risk-weight cycle",
-      "description": "RBI risk weights on bank-to-NBFC credit (raised 2023) temporarily suppressed flows. By Jan 2026 the channel has fully reopened, with NBFC credit re-accelerating. The January NBFC series is null — only March SIBC captures NBFC sub-classification.",
+      "description": "RBI risk weights on bank-to-NBFC credit (raised 2023) temporarily suppressed flows. By Jan 2026 the channel has fully reopened, with NBFC credit re-accelerating. The January NBFC series is null \u2014 only March SIBC captures NBFC sub-classification.",
       "annotation_ids": [
         "nbfc-risk-weight-cycle-complete"
       ],
@@ -106,25 +109,40 @@
       "source_excerpt": "RBI/2023-24/85 DOR.STR.REC.57 - Regulatory measures towards consumer credit and bank-NBFC exposures (Nov 2023)"
     },
     {
+      "id": "driver_msp_procurement_growth",
+      "tier": "driver",
+      "label": "MSP procurement volumes growing year-on-year",
+      "description": "Government MSP procurement agencies (FCI, state agencies) draw increasing bank credit each kharif season to finance grain purchases. Growing MSP prices and expanding procurement quantities mean each year's food credit peak and March-end trough are higher than the prior year \u2014 the food credit cycle is mechanistic, not random seasonality.",
+      "annotation_ids": [
+        "food-credit-jan-artifact"
+      ],
+      "claim_type": "inference",
+      "source": "RBI SIBC series \u2014 food credit sub-category, sections_merged.json (all three periods)",
+      "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx",
+      "source_verified_date": "2026-05-07",
+      "source_rationale": "Secular rise in March-end food credit (\u20b90.21L Cr \u2192 \u20b90.70L Cr in 2 years) is directly observable in sections_merged.json. MSP procurement as mechanism is an inference \u2014 no direct procurement volume data in SIBC.",
+      "source_excerpt": "Food credit March-end: \u20b90.21L Cr (Mar 2024) \u2192 \u20b90.29L Cr (Mar 2025) \u2192 \u20b90.70L Cr (Mar 2026)"
+    },
+    {
       "id": "driver_infra_cycle_maturing",
       "tier": "driver",
-      "label": "Infrastructure supercycle completing (FY22–24)",
+      "label": "Infrastructure supercycle completing (FY22\u201324)",
       "description": "Large infrastructure projects funded in the FY22-24 capex wave are now in operations, shifting from drawdown to repayment. The next wave (data centers, green hydrogen, semiconductor fab) has not yet reached credit drawdown scale.",
       "annotation_ids": [
         "infrastructure-decelerating"
       ],
       "claim_type": "inference",
-      "source": "RBI SIBC merged series (Jan 2024–Feb 2026) — Infrastructure credit FY growth 5.8% vs MSME 31.2%",
+      "source": "RBI SIBC merged series (Jan 2024\u2013Feb 2026) \u2014 Infrastructure credit FY growth 5.8% vs MSME 31.2%",
       "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx",
       "source_verified_date": "2026-04-19",
-      "source_excerpt": "Infrastructure credit ₹14.44L Cr at +5.8% FY — slowest growth in the merged dataset, declining from prior years.",
+      "source_excerpt": "Infrastructure credit \u20b914.44L Cr at +5.8% FY \u2014 slowest growth in the merged dataset, declining from prior years.",
       "source_rationale": "SIBC data directly shows deceleration; capex-to-operations lifecycle is the explanatory inference."
     },
     {
       "id": "sector_bank_credit",
       "tier": "sector",
       "label": "Total Bank Credit",
-      "description": "System-level credit aggregate. ₹160.4L Cr (Jan 2024) → ₹178.7L Cr (Jan 2025) → ₹204.8L Cr (Jan 2026). YoY accelerated from 11.4% to 14.6%. FY26 tracking at 13.8% vs FY25's 11.0%.",
+      "description": "System-level credit aggregate. \u20b9160.4L Cr (Jan 2024) \u2192 \u20b9178.7L Cr (Jan 2025) \u2192 \u20b9204.8L Cr (Jan 2026). YoY accelerated from 11.4% to 14.6%. FY26 tracking at 13.8% vs FY25's 11.0%.",
       "annotation_ids": [
         "credit-growth-accelerating-fy26",
         "three-year-credit-trajectory",
@@ -184,7 +202,7 @@
       "id": "sector_gold_loans",
       "tier": "sector",
       "label": "Gold Loans",
-      "description": "Most dramatic growth story in the data. ₹0.93L Cr (Mar 2024) → ₹2.06L Cr (Mar 2025) → ₹4.29L Cr (Feb 2026). +359% in 24 months. Only visible in March SIBC files — January data is null for this series.",
+      "description": "Most dramatic growth story in the data. \u20b90.93L Cr (Mar 2024) \u2192 \u20b92.06L Cr (Mar 2025) \u2192 \u20b94.29L Cr (Feb 2026). +359% in 24 months. Only visible in March SIBC files \u2014 January data is null for this series.",
       "annotation_ids": [
         "gold-loans-structural-surge",
         "gold-loans-reclassification-overstates-demand"
@@ -203,7 +221,7 @@
       "id": "sector_vehicle_loans",
       "tier": "sector",
       "label": "Vehicle Loans",
-      "description": "Accelerating counter-trend to credit cards. YoY: +9.7% (Jan 2025) → +17.1% (Jan 2026). EV adoption and premium vehicle financing driving growth beyond pure volume.",
+      "description": "Accelerating counter-trend to credit cards. YoY: +9.7% (Jan 2025) \u2192 +17.1% (Jan 2026). EV adoption and premium vehicle financing driving growth beyond pure volume.",
       "annotation_ids": [
         "vehicle-loans-accelerating",
         "vehicle-ev-credit"
@@ -213,7 +231,7 @@
       "id": "sector_all_engineering",
       "tier": "sector",
       "label": "All Engineering (Industry by Type)",
-      "description": "Fastest-growing large industry sub-sector. ₹1.96L Cr (Feb 2024) → ₹2.32L Cr (Feb 2025) → ₹3.16L Cr (Feb 2026). +62% in 2 years. PLI capex drawdowns driving the surge.",
+      "description": "Fastest-growing large industry sub-sector. \u20b91.96L Cr (Feb 2024) \u2192 \u20b92.32L Cr (Feb 2025) \u2192 \u20b93.16L Cr (Feb 2026). +62% in 2 years. PLI capex drawdowns driving the surge.",
       "annotation_ids": [
         "pli-capex-broadening-confirmed"
       ]
@@ -222,7 +240,7 @@
       "id": "sector_infrastructure",
       "tier": "sector",
       "label": "Infrastructure credit",
-      "description": "Decelerating at +5.8% FY (Feb 2026). At ₹14.44L Cr and 32.5% of industry credit, the growth rate matters systemically. Projects from FY22-24 capex wave entering operations.",
+      "description": "Decelerating at +5.8% FY (Feb 2026). At \u20b914.44L Cr and 32.5% of industry credit, the growth rate matters systemically. Projects from FY22-24 capex wave entering operations.",
       "annotation_ids": [
         "infrastructure-decelerating"
       ]
@@ -241,7 +259,7 @@
       "id": "sector_psl_housing",
       "tier": "sector",
       "label": "PSL Housing",
-      "description": "₹7.55L Cr (Mar 2024) → ₹7.47L Cr (Mar 2025) → ₹10.33L Cr (Feb 2026). Near-doubling in 11 months after contraction. Driven by Oct 2024 PSL limit revision reclassifying existing loans.",
+      "description": "\u20b97.55L Cr (Mar 2024) \u2192 \u20b97.47L Cr (Mar 2025) \u2192 \u20b910.33L Cr (Feb 2026). Near-doubling in 11 months after contraction. Driven by Oct 2024 PSL limit revision reclassifying existing loans.",
       "annotation_ids": [
         "psl-housing-anomalous-surge",
         "psl-housing-reclassification"
@@ -251,7 +269,7 @@
       "id": "sector_transport",
       "tier": "sector",
       "label": "Transport Operators",
-      "description": "Decelerating cross-period. YoY: +12.0% (Jan 2025) → +4.3% (Jan 2026). Post-COVID logistics credit normalization after the fleet expansion surge of FY24.",
+      "description": "Decelerating cross-period. YoY: +12.0% (Jan 2025) \u2192 +4.3% (Jan 2026). Post-COVID logistics credit normalization after the fleet expansion surge of FY24.",
       "annotation_ids": [
         "transport-operators-decelerating"
       ]
@@ -260,33 +278,32 @@
       "id": "gap_jan_series_nulls",
       "tier": "gap",
       "label": "January SIBC missing Gold, Housing, NBFC, Tourism data",
-      "description": "January SIBC files do not report sub-classifications for Gold Loans, PSL Housing, NBFC credit, and Tourism. These series only appear in March files. Merged Jan→Jan YoY comparisons for these categories are not possible.",
+      "description": "January SIBC files do not report sub-classifications for Gold Loans, PSL Housing, NBFC credit, and Tourism. These series only appear in March files. Merged Jan\u2192Jan YoY comparisons for these categories are not possible.",
       "annotation_ids": [
         "gold-loans-reclassification-overstates-demand",
         "nbfc-risk-weight-cycle-complete"
       ],
       "claim_type": "data",
-      "source": "RBI Sectoral Deployment of Bank Credit — Jan 2026 SIBC file (gold loans, housing, NBFC, tourism sub-categories absent)",
+      "source": "RBI Sectoral Deployment of Bank Credit \u2014 Jan 2026 SIBC file (gold loans, housing, NBFC, tourism sub-categories absent)",
       "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx",
       "source_verified_date": "2026-04-19",
       "source_excerpt": "Gold loans, PSL housing, NBFC credit and tourism sub-sectors not reported in Jan 2026 SIBC release.",
       "source_rationale": "Directly observed null values in ingested Jan 2026 SIBC xlsx; confirmed by extract_sibc.py output."
     },
     {
-      "id": "gap_food_credit_artifact",
-      "tier": "gap",
-      "label": "Food credit seasonal artifact contaminates totals",
-      "description": "Food credit peaks in January (kharif procurement season) and drops by March. This causes the Jan bank credit total to appear larger than March, distorting FY-to-date growth calculations. Non-food credit is the correct signal.",
+      "id": "sector_food_credit",
+      "tier": "sector",
+      "label": "Food credit growing cycle \u2014 5\u00d7 in two years at March-end",
+      "description": "Food credit peaks each January (kharif procurement) and compresses by March (repayment). Both the seasonal peaks and the March-end troughs are rising secularly. March-end: \u20b90.21L Cr (Mar 2024) \u2192 \u20b90.29L Cr (Mar 2025, +38.4%) \u2192 \u20b90.70L Cr (Mar 2026, +139.4%). Jan peaks: \u20b90.46L Cr (Jan 2024) \u2192 \u20b90.89L Cr (Jan 2026, +95%). At <0.4% of total bank credit, the absolute size is small \u2014 but the growth rate is the signal. The January FY figure overstates the annual run-rate; March-end is the correct anchor for trend analysis.",
       "annotation_ids": [
-        "food-credit-jan-artifact",
-        "nonfood-credit-all-the-signal"
+        "food-credit-jan-artifact"
       ],
-      "claim_type": "data",
-      "source": "RBI SIBC series — food credit sub-category (seasonal procurement financing visible in merged sections_merged.json)",
+      "claim_type": "inference",
+      "source": "RBI SIBC series \u2014 food credit sub-category (sections_merged.json, all three periods: 2026-02-27, 2026-03-30, 2026-04-30)",
       "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx",
-      "source_verified_date": "2026-04-19",
-      "source_excerpt": "Food credit shows sharp seasonal spikes (kharif/rabi procurement) that inflate total industry credit in specific months.",
-      "source_rationale": "Directly observable seasonal pattern across all periods in sections_merged.json."
+      "source_verified_date": "2026-05-07",
+      "source_rationale": "March-end food credit values directly readable from sections_merged.json. Growth rates computed from those values.",
+      "source_excerpt": "Food credit March-end: \u20b90.21L Cr (Mar 2024) \u2192 \u20b90.29L Cr (Mar 2025) \u2192 \u20b90.70L Cr (Mar 2026)"
     },
     {
       "id": "gap_psl_reclassification",
@@ -298,10 +315,10 @@
         "psl-totals-not-additive"
       ],
       "claim_type": "inference",
-      "source": "RBI PSL Amendment Oct 2024 (RBI/2024-25/xx) + SIBC Feb 2026 data showing +₹2.87L Cr step-up in PSL housing with no demand catalyst",
+      "source": "RBI PSL Amendment Oct 2024 (RBI/2024-25/xx) + SIBC Feb 2026 data showing +\u20b92.87L Cr step-up in PSL housing with no demand catalyst",
       "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=11959",
       "source_verified_date": "2026-04-19",
-      "source_excerpt": "PSL housing jumps +37.9% between Feb 2025 and Feb 2026 — coincides precisely with Oct 2024 ceiling revision.",
+      "source_excerpt": "PSL housing jumps +37.9% between Feb 2025 and Feb 2026 \u2014 coincides precisely with Oct 2024 ceiling revision.",
       "source_rationale": "Cross-referencing RBI circular date with SIBC step-change confirms reclassification, not new origination."
     },
     {
@@ -323,7 +340,7 @@
       "id": "opp_msme_origination",
       "tier": "opportunity",
       "label": "MSME origination infrastructure",
-      "description": "Banks with MSME origination infrastructure built in 2022-24 are now harvesting. The window is open but will close as competition intensifies. The next ₹10L Cr of industrial credit will come from SMEs.",
+      "description": "Banks with MSME origination infrastructure built in 2022-24 are now harvesting. The window is open but will close as competition intensifies. The next \u20b910L Cr of industrial credit will come from SMEs.",
       "annotation_ids": [
         "msme-first-cycle-window"
       ],
@@ -331,8 +348,8 @@
       "source": "SIDBI MSME Pulse Special Edition Report, June 2025",
       "source_url": "https://www.sidbi.in/msme-pulse",
       "source_verified_date": "2026-04-20",
-      "source_rationale": "Supports MSME credit growth momentum but no direct evidence for ₹10L Cr industrial credit from SMEs claim",
-      "source_excerpt": "Commercial credit portfolio (<₹50cr) reached ₹35.2 lakh crore at 13% CAGR; ₹1-10cr segment accounts for 42% of portfolio"
+      "source_rationale": "Supports MSME credit growth momentum but no direct evidence for \u20b910L Cr industrial credit from SMEs claim",
+      "source_excerpt": "Commercial credit portfolio (<\u20b950cr) reached \u20b935.2 lakh crore at 13% CAGR; \u20b91-10cr segment accounts for 42% of portfolio"
     },
     {
       "id": "opp_pli_supply_chain",
@@ -376,7 +393,7 @@
       "source": "PIB Press Release PRID 1888547 - Cabinet approves National Green Hydrogen Mission, January 4, 2023",
       "source_url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=1888547",
       "source_verified_date": "2026-04-20",
-      "source_rationale": "Official govt data quantifies ₹8L crore investment wave in green hydrogen/RE, validating infrastructure capex opportunity",
+      "source_rationale": "Official govt data quantifies \u20b98L crore investment wave in green hydrogen/RE, validating infrastructure capex opportunity",
       "source_excerpt": "Over Rs. Eight lakh crore in total investments; 125 GW renewable energy capacity addition by 2030"
     },
     {
@@ -403,10 +420,10 @@
         "infrastructure-decelerating"
       ],
       "claim_type": "inference",
-      "source": "RBI SIBC merged series (Jan 2024–Feb 2026) — Infrastructure sub-sector YoY and FY trends",
+      "source": "RBI SIBC merged series (Jan 2024\u2013Feb 2026) \u2014 Infrastructure sub-sector YoY and FY trends",
       "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx",
       "source_verified_date": "2026-04-19",
-      "source_excerpt": "Infrastructure credit FY growth +5.8%, down from prior-cycle levels — consistent with repayment phase of FY22-24 capex.",
+      "source_excerpt": "Infrastructure credit FY growth +5.8%, down from prior-cycle levels \u2014 consistent with repayment phase of FY22-24 capex.",
       "source_rationale": "SIBC data trend is direct evidence; repayment wave is the inference explaining slow new origination."
     }
   ],
@@ -527,27 +544,33 @@
     },
     {
       "from": "sector_bank_credit",
-      "to": "gap_food_credit_artifact",
-      "type": "creates_gap",
-      "label": "January totals inflated by food credit peak"
+      "to": "sector_food_credit",
+      "type": "signals",
+      "label": "Food credit sub-sector showing secular growth via MSP cycle"
+    },
+    {
+      "from": "driver_msp_procurement_growth",
+      "to": "sector_food_credit",
+      "type": "causes",
+      "label": "Larger procurement volumes each cycle raise peaks and troughs"
     },
     {
       "from": "sector_msme",
       "to": "sector_large_corporate",
       "type": "contrast",
-      "label": "MSMEs growing 5× faster than large corporates"
+      "label": "MSMEs growing 5\u00d7 faster than large corporates"
     },
     {
       "from": "sector_msme",
       "to": "opp_msme_origination",
       "type": "creates_opportunity",
-      "label": "Window open for 2–3 more years before saturation"
+      "label": "Window open for 2\u20133 more years before saturation"
     },
     {
       "from": "sector_gold_loans",
       "to": "sector_personal_loans",
       "type": "reinforces",
-      "label": "Gold loan share of personal loans: 1.75% → 6.31%"
+      "label": "Gold loan share of personal loans: 1.75% \u2192 6.31%"
     },
     {
       "from": "sector_gold_loans",
@@ -565,7 +588,7 @@
       "from": "sector_vehicle_loans",
       "to": "opp_vehicle_ev",
       "type": "creates_opportunity",
-      "label": "EV share of vehicle loans growing — product differentiation opportunity"
+      "label": "EV share of vehicle loans growing \u2014 product differentiation opportunity"
     },
     {
       "from": "sector_all_engineering",

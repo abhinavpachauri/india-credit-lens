@@ -1,0 +1,70 @@
+{
+  "passed": true,
+  "model_path": "analysis/rbi_sibc/2026-04-30/system_model.json",
+  "generated": "2026-05-02",
+  "summary": {
+    "errors": 0,
+    "warnings": 7,
+    "info": 4
+  },
+  "errors": [],
+  "warnings": [
+    {
+      "check": "annotation_ids",
+      "level": "WARNING",
+      "message": "Annotations file not found \u2014 skipping annotation ID cross-check. Pass --annotations path/to/report.ts to enable this check."
+    },
+    {
+      "check": "completeness",
+      "level": "WARNING",
+      "message": "Gap node 'gap_bankcredit_april_dates' has no 'is_data_gap' or 'creates_gap' inbound edge \u2014 data gap is flagged but its source is not modelled."
+    },
+    {
+      "check": "completeness",
+      "level": "WARNING",
+      "message": "Gap node 'gap_three_data_points_only' has no 'is_data_gap' or 'creates_gap' inbound edge \u2014 data gap is flagged but its source is not modelled."
+    },
+    {
+      "check": "completeness",
+      "level": "WARNING",
+      "message": "Gap node 'gap_main_sectors_undercount' has no 'is_data_gap' or 'creates_gap' inbound edge \u2014 data gap is flagged but its source is not modelled."
+    },
+    {
+      "check": "completeness",
+      "level": "WARNING",
+      "message": "Gap node 'gap_psl_classification_volatility' has no 'is_data_gap' or 'creates_gap' inbound edge \u2014 data gap is flagged but its source is not modelled."
+    },
+    {
+      "check": "completeness",
+      "level": "WARNING",
+      "message": "Gap node 'gap_nbfc_double_counting' has no 'is_data_gap' or 'creates_gap' inbound edge \u2014 data gap is flagged but its source is not modelled."
+    },
+    {
+      "check": "completeness",
+      "level": "WARNING",
+      "message": "Gap node 'gap_industry_type_partition_not_exact' has no 'is_data_gap' or 'creates_gap' inbound edge \u2014 data gap is flagged but its source is not modelled."
+    }
+  ],
+  "info": [
+    {
+      "check": "diagram_readiness",
+      "level": "INFO",
+      "message": "Flowchart   : all 27 sector nodes renderable (no extra data needed)"
+    },
+    {
+      "check": "diagram_readiness",
+      "level": "INFO",
+      "message": "Quadrant    : 26 sectors plottable, 1 excluded"
+    },
+    {
+      "check": "diagram_readiness",
+      "level": "INFO",
+      "message": "  Excluded from quadrant: sector_gems_jewellery (missing: value_lcr)"
+    },
+    {
+      "check": "diagram_readiness",
+      "level": "INFO",
+      "message": "Sankey      : 26 sectors plottable, 1 excluded (no value_lcr)"
+    }
+  ]
+}

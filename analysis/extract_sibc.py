@@ -205,39 +205,22 @@ def detect_anomalous_dates(date_cols: list[str], stmt_name: str) -> list[dict]:
     """
     Find dates that may be delayed publications from the prior calendar month.
 
-    Two patterns are detected:
-
-    Pattern A — Intra-month split (original):
-      Within the same calendar month, two dates exist where
-        - one is early  (day ≤ 14) — possible delayed prior-month snapshot
-        - one is late   (day ≥ 15) — genuine current-month snapshot
-
-    Pattern B — April FY-end delayed compilation (RBI convention):
-      For the same calendar year, both a March date AND an early April date
-      (day ≤ 10) exist.  RBI compiles the FY-end (March 31) SIBC a few days
-      into April; the April date IS the March 31 FY-end figure, not genuine
-      April data.  Without a same-month late date, Pattern A never fires, so
-      this pattern requires its own detection arm.
+    Pattern: within the same calendar month, two dates exist where
+      - one is early  (day ≤ 14) — possible delayed prior-month snapshot
+      - one is late   (day ≥ 15) — genuine current-month snapshot
 
     Returns a list of anomaly dicts; empty list if no anomalies.
     """
-    import calendar as _calendar
     from collections import defaultdict
-
-    parsed = []
+    month_map: dict[str, list[str]] = defaultdict(list)
     for col in date_cols:
         try:
-            parsed.append((datetime.strptime(col, "%Y-%m-%d"), col))
+            d = datetime.strptime(col, "%Y-%m-%d")
+            month_map[d.strftime("%Y-%m")].append(col)
         except ValueError:
             continue
 
     anomalies = []
-
-    # ── Pattern A: two dates in same calendar month, one early, one late ─────
-    month_map: dict[str, list[str]] = defaultdict(list)
-    for d, col in parsed:
-        month_map[d.strftime("%Y-%m")].append(col)
-
     for _month, cols in sorted(month_map.items()):
         if len(cols) < 2:
             continue
@@ -246,12 +229,16 @@ def detect_anomalous_dates(date_cols: list[str], stmt_name: str) -> list[dict]:
         if not (early and late):
             continue
         for e in early:
+            import calendar
             d  = datetime.strptime(e, "%Y-%m-%d")
             pm = d.month - 1 if d.month > 1 else 12
             py = d.year if d.month > 1 else d.year - 1
             # Use the last day of the prior month so the relabelled date sits at
             # the natural end of that month on the proportional time axis.
-            last_day = _calendar.monthrange(py, pm)[1]
+            # Keeping the original day number (e.g. 8) would place it only ~13
+            # days after the previous month's observation, visually cramping the
+            # chart even though a full month has elapsed.
+            last_day = calendar.monthrange(py, pm)[1]
             rel = datetime(py, pm, last_day)
             anomalies.append({
                 "statement":          stmt_name,
@@ -260,41 +247,7 @@ def detect_anomalous_dates(date_cols: list[str], stmt_name: str) -> list[dict]:
                 "original_display":   d.strftime("%b %Y"),
                 "relabelled_iso":     rel.strftime("%Y-%m-%d"),
                 "relabelled_display": rel.strftime("%b %Y") + "*",
-                "pattern":            "A",
             })
-
-    # ── Pattern B: early-April date co-exists with a March date in same year ─
-    # Group by year
-    year_map: dict[int, list[tuple[datetime, str]]] = defaultdict(list)
-    for d, col in parsed:
-        year_map[d.year].append((d, col))
-
-    # Track early dates already flagged by Pattern A to avoid duplicates
-    already_flagged = {a["early_date"] for a in anomalies}
-
-    for year, entries in sorted(year_map.items()):
-        march_dates = [(d, col) for d, col in entries if d.month == 3]
-        early_april = [(d, col) for d, col in entries if d.month == 4 and d.day <= 10]
-        if not (march_dates and early_april):
-            continue
-        for d, col in early_april:
-            if col in already_flagged:
-                continue
-            # Relabel to the last day of March of the same year
-            last_mar = _calendar.monthrange(year, 3)[1]
-            rel = datetime(year, 3, last_mar)
-            # Pick the nearest March date as the "late" reference counterpart
-            late_ref = max(march_dates, key=lambda x: x[0])[1]
-            anomalies.append({
-                "statement":          stmt_name,
-                "early_date":         col,
-                "late_date":          late_ref,
-                "original_display":   d.strftime("%b %Y"),
-                "relabelled_iso":     rel.strftime("%Y-%m-%d"),
-                "relabelled_display": "Mar " + str(year) + "*",
-                "pattern":            "B",
-            })
-
     return anomalies
 
 
@@ -343,15 +296,12 @@ def prompt_date_override(anomalies: list[dict], out_dir: Path) -> dict[str, str]
         records = []
         for a in anomalies:
             iso_overrides[a["early_date"]] = a["relabelled_iso"]
-            # Pattern B (Apr → Mar FY-end): no asterisk — result IS the canonical label.
-            # Pattern A (intra-month): keep asterisk as visual display signal.
-            disp = a["relabelled_display"].rstrip("*") if a.get("pattern") == "B" else a["relabelled_display"]
             records.append({
                 "statement":          a["statement"],
                 "original_iso":       a["early_date"],
                 "relabelled_iso":     a["relabelled_iso"],
                 "original_display":   a["original_display"],
-                "relabelled_display": disp,
+                "relabelled_display": a["relabelled_display"],
                 "reason":             "delayed_publication",
                 "decided_by":         "user",
                 "decided_at":         _date.today().isoformat(),
@@ -458,64 +408,48 @@ def build_section(
 
     def _display(eff_col: str, orig_col: str) -> str:
         label = col_to_display(eff_col)
-        if eff_col == orig_col:
-            return label
-        # Pattern B: early April → March of same year (RBI FY-end delayed compilation).
-        # No asterisk — this IS the canonical FY-end figure, not a shifted label.
-        try:
-            orig_d = datetime.strptime(orig_col, "%Y-%m-%d")
-            eff_d  = datetime.strptime(eff_col,  "%Y-%m-%d")
-            if orig_d.month == 4 and eff_d.month == 3 and orig_d.year == eff_d.year:
-                return label
-        except ValueError:
-            pass
-        # Pattern A: intra-month relabelling — append '*' as a display signal that this
-        # point was mapped from an adjacent-month column (visible on chart, not a data error).
-        return label + "*"
+        return label + ("*" if eff_col != orig_col else "")
 
     # ── absoluteData ──────────────────────────────────────────────────────────
-    # The RBI SIBC file carries columns that only apply to certain code groups.
-    # e.g. the genuine "2025-02-21" column has data for sector codes but NaN for
-    # top-level aggregates (I/II/III), while the early-March column is the reverse.
-    # A column where ALL series for this section are NaN is skipped entirely —
-    # it has no data for this section and would produce an all-null row (invalid JSON).
+    # Later col_pair overwrites earlier one for the same display month.
+    # Skip dates where all series values are None — happens when different row
+    # groups in the same sheet have different date columns (e.g. Bank Credit uses
+    # Apr dates while sectors 1–4 use Mar dates in the annual file).
     abs_by_label: dict[str, dict] = {}
+    skipped_eff_cols: set[str] = set()
     for orig_col, eff_col in col_pairs:
-        # Resolve values first; skip column entirely if all series are null
-        resolved: dict[str, float | None] = {}
+        disp = _display(eff_col, orig_col)
+        row_dict = {"date": disp}
         for label in series_names:
             val = series_rows[label].get(orig_col)
-            # Normalise pandas NaN → None so JSON serialises as null not NaN
-            if val is not None and isinstance(val, float) and math.isnan(val):
-                val = None
-            resolved[label] = round(float(val), 2) if val is not None else None
-
-        if all(v is None for v in resolved.values()):
-            continue  # column has no data for any series in this section — skip
-
-        disp = _display(eff_col, orig_col)
-        row_dict = {"date": disp, **resolved}
+            row_dict[label] = (
+                round(float(val), 2)
+                if val is not None and not (isinstance(val, float) and math.isnan(val))
+                else None
+            )
+        if all(row_dict.get(label) is None for label in series_names):
+            skipped_eff_cols.add(eff_col)
+            continue
         abs_by_label[disp] = row_dict
 
-    # Preserve display order (latest per display month at end).
-    # Only include labels that survived the all-null filter above.
+    # Preserve display order (latest per display month at end), excluding skipped
     seen_labels: list[str] = []
     for orig_col, eff_col in col_pairs:
+        if eff_col in skipped_eff_cols:
+            continue
         disp = _display(eff_col, orig_col)
-        if disp not in abs_by_label:
-            continue  # this column was skipped (all-null for this section)
         if disp in seen_labels:
             seen_labels.remove(disp)
         seen_labels.append(disp)
     absolute_data = [abs_by_label[lbl] for lbl in dict.fromkeys(seen_labels)]
 
-    # Rebuild deduped effective ISO date list (latest eff_col per display month,
-    # only for labels that have data).
+    # Rebuild deduped effective ISO date list (latest eff_col per display month, excluding skipped)
     deduped_eff_map: dict[str, str] = {}   # display → eff_col
     for orig_col, eff_col in col_pairs:
+        if eff_col in skipped_eff_cols:
+            continue
         disp = _display(eff_col, orig_col)
-        if disp in abs_by_label:
-            deduped_eff_map[disp] = eff_col
+        deduped_eff_map[disp] = eff_col
     deduped_eff_cols = list(deduped_eff_map.values())
 
     # ── growthData (YoY) ──────────────────────────────────────────────────────
@@ -577,10 +511,67 @@ def build_section(
     }
 
 
+# ── Format detection gate ─────────────────────────────────────────────────────
+
+def ensure_format_confirmed(xlsx_path: Path, period_dir: Path, dry_run: bool = False) -> bool:
+    """
+    Run format detection before extraction if format_report.json is missing or unconfirmed.
+    Returns True to proceed, False to abort.
+    """
+    report_path = period_dir / "format_report.json"
+
+    # Already confirmed — skip detection entirely
+    if report_path.exists():
+        try:
+            with open(report_path) as f:
+                report = json.load(f)
+            if report.get("confirmed_by_user") and report.get("supported"):
+                fmt_id = report.get("format_id", "unknown")
+                print(f"  Format : {fmt_id} (confirmed) — skipping detection")
+                return True
+        except Exception:
+            pass  # corrupt report — re-run detection
+
+    if dry_run:
+        print("  [dry-run] Would run format detection (format not yet confirmed)")
+        return True
+
+    # Import detect_format from the same analysis directory
+    sys.path.insert(0, str(ANALYSIS))
+    try:
+        from detect_format import detect
+    except ImportError as e:
+        print(f"  [WARN] Cannot import detect_format.py: {e} — skipping format gate", file=sys.stderr)
+        return True
+
+    rc = detect(xlsx_path)
+    if rc != 0:
+        print("\n  Extraction aborted — resolve format issues and re-run.", file=sys.stderr)
+        return False
+    return True
+
+
 # ── Main ──────────────────────────────────────────────────────────────────────
 
 def extract(xlsx_path: Path, out_dir: Path | None = None, dry_run: bool = False) -> dict:
     print(f"\n  Parsing: {xlsx_path.name}")
+
+    # ── Resolve output directory early (needed for format gate) ──────────────
+    report_date = parse_filename_date(xlsx_path)
+    if report_date is None:
+        print(f"ERROR: Cannot parse report date from filename: {xlsx_path.name}", file=sys.stderr)
+        sys.exit(1)
+    data_date = report_date.strftime("%Y-%m-%d")
+
+    if out_dir is None:
+        resolved_out_dir = ANALYSIS / "rbi_sibc" / data_date
+    else:
+        resolved_out_dir = Path(out_dir)
+    resolved_out_dir.mkdir(parents=True, exist_ok=True)
+
+    # ── Format detection gate ─────────────────────────────────────────────────
+    if not ensure_format_confirmed(xlsx_path, resolved_out_dir, dry_run=dry_run):
+        sys.exit(1)
 
     # ── Parse ─────────────────────────────────────────────────────────────────
     try:
@@ -620,40 +611,17 @@ def extract(xlsx_path: Path, out_dir: Path | None = None, dry_run: bool = False)
     print(f"  Statement 2 date columns: {stmt2_date_cols}")
 
     # ── Detect delayed-publication dates and prompt user ─────────────────────
-    # Must resolve out_dir before prompting (needed to save date_overrides.json)
-    if out_dir is None:
-        _tmp_out_dir = ANALYSIS / "rbi_sibc" / parse_filename_date(xlsx_path).strftime("%Y-%m-%d")
-    else:
-        _tmp_out_dir = Path(out_dir)
-    _tmp_out_dir.mkdir(parents=True, exist_ok=True)
-
     stmt1_anomalies = detect_anomalous_dates(stmt1_date_cols, "Statement 1")
     stmt2_anomalies = detect_anomalous_dates(stmt2_date_cols, "Statement 2")
     all_anomalies   = stmt1_anomalies + stmt2_anomalies
 
     iso_overrides: dict[str, str] = {}
-    _existing_overrides = _tmp_out_dir / "date_overrides.json"
     if all_anomalies and not dry_run:
-        if _existing_overrides.exists():
-            # Non-interactive re-run: load pre-existing decisions and skip the prompt
-            with open(_existing_overrides) as _f:
-                _saved = json.load(_f)
-            for rec in _saved.get("overrides", []):
-                iso_overrides[rec["original_iso"]] = rec["relabelled_iso"]
-            print(f"\n  ℹ️  Loaded {len(iso_overrides)} date override(s) from "
-                  f"{_existing_overrides} — skipping interactive prompt.")
-        else:
-            iso_overrides = prompt_date_override(all_anomalies, _tmp_out_dir)
+        iso_overrides = prompt_date_override(all_anomalies, resolved_out_dir)
     elif all_anomalies and dry_run:
         print(f"\n  [dry-run] {len(all_anomalies)} date anomaly(ies) detected — "
               f"would prompt for override decision")
 
-    # ── Report date from filename ─────────────────────────────────────────────
-    report_date = parse_filename_date(xlsx_path)
-    if report_date is None:
-        print(f"ERROR: Cannot parse report date from filename: {xlsx_path.name}", file=sys.stderr)
-        sys.exit(1)
-    data_date = report_date.strftime("%Y-%m-%d")
     print(f"  Report/publication date : {data_date}")
 
     # ── Build sections ────────────────────────────────────────────────────────
@@ -665,17 +633,6 @@ def extract(xlsx_path: Path, out_dir: Path | None = None, dry_run: bool = False)
         section = build_section(sec_def, stmt1, stmt2, date_cols, iso_overrides=iso_overrides)
         sections.append(section)
 
-    # ── Section-specific distribution overrides ───────────────────────────────
-    # bankCredit: "Bank Credit" = "Food Credit" + "Non-food Credit" (aggregate).
-    # Distribution chart must use only the two components so they sum to 100%.
-    DISTRIBUTION_OVERRIDES: dict[str, list[str]] = {
-        "bankCredit": ["Food Credit", "Non-food Credit"],
-    }
-    for section in sections:
-        override = DISTRIBUTION_OVERRIDES.get(section["id"])
-        if override:
-            section["distributionSeriesNames"] = override
-
     payload = {
         "report":   "rbi_sibc",
         "dataDate": data_date,
@@ -683,24 +640,18 @@ def extract(xlsx_path: Path, out_dir: Path | None = None, dry_run: bool = False)
     }
 
     # Attach override record if one was saved this run
-    overrides_path = _tmp_out_dir / "date_overrides.json"
+    overrides_path = resolved_out_dir / "date_overrides.json"
     if overrides_path.exists():
         with open(overrides_path) as f:
             payload["dateOverrides"] = json.load(f).get("overrides", [])
 
     # ── Output ────────────────────────────────────────────────────────────────
-    if out_dir is None:
-        out_dir = ANALYSIS / "rbi_sibc" / data_date
-
-    out_dir = Path(out_dir)
-
     if dry_run:
-        print(f"\n  [dry-run] Would write sections.json → {out_dir}/sections.json")
+        print(f"\n  [dry-run] Would write sections.json → {resolved_out_dir}/sections.json")
         print(f"  Sections: {[s['id'] for s in sections]}")
         return payload
 
-    out_dir.mkdir(parents=True, exist_ok=True)
-    out_path = out_dir / "sections.json"
+    out_path = resolved_out_dir / "sections.json"
     with open(out_path, "w") as f:
         json.dump(payload, f, indent=2)
 

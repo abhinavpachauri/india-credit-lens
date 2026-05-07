@@ -1,0 +1,24 @@
+---
+title: RBI PSL housing limit revision (Oct 2024)
+---
+flowchart LR
+
+    classDef driverNode fill:#1E3A5F,stroke:#1E3A5F,color:#ffffff
+    classDef sectorNode fill:#F0FDF4,stroke:#166534,color:#166534
+    classDef gapNode fill:#F9FAFB,stroke:#6B7280,color:#374151
+    classDef opportunityNode fill:#0F766E,stroke:#0F766E,color:#ffffff
+    classDef pressureNode fill:#B45309,stroke:#B45309,color:#ffffff
+
+%% --> causes/creates/signals  -.-> suppresses/risk/gap  ==> reroutes  <--> contrast
+
+    driver_psl_limit_revision(["RBI PSL housing limit revision (Oct 2024)"])
+    sector_psl_housing["PSL Housing"]
+    gap_psl_reclassification{{"PSL housing growth is reclassification, not new lending"}}
+
+    class driver_psl_limit_revision driverNode
+    class sector_psl_housing sectorNode
+    class gap_psl_reclassification gapNode
+
+    driver_psl_limit_revision --> sector_psl_housing
+    driver_psl_limit_revision -.-> gap_psl_reclassification
+    sector_psl_housing -.-> gap_psl_reclassification
