@@ -9,13 +9,14 @@
       "yoy_growth_pct": 14.6,
       "subsystem_count": 7,
       "paths": {
-        "sections":          "rbi_sibc/2026-02-27/sections.json",
-        "system_model":      "rbi_sibc/2026-02-27/system_model.json",
-        "subsystems":        "rbi_sibc/2026-02-27/subsystems.json",
+        "sections": "rbi_sibc/2026-02-27/sections.json",
+        "system_model": "rbi_sibc/2026-02-27/system_model.json",
+        "subsystems": "rbi_sibc/2026-02-27/subsystems.json",
         "annotations_draft": "rbi_sibc/2026-02-27/annotations_draft.ts",
-        "annotations_live":  "web/lib/reports/rbi_sibc.ts",
-        "mermaid_output":    "output/mermaid/rbi_sibc/2026-02-27"
-      }
+        "annotations_live": "web/lib/reports/rbi_sibc.ts",
+        "mermaid_output": "output/mermaid/rbi_sibc/2026-02-27"
+      },
+      "is_fy_end": false
     },
     {
       "period": "Feb 2026",
@@ -25,15 +26,15 @@
       "fy_growth_pct": 13.8,
       "subsystem_count": 6,
       "paths": {
-        "sections":          "rbi_sibc/2026-03-30/sections.json",
-        "system_model":      "rbi_sibc/2026-03-30/system_model.json",
-        "subsystems":        "rbi_sibc/2026-03-30/subsystems.json",
+        "sections": "rbi_sibc/2026-03-30/sections.json",
+        "system_model": "rbi_sibc/2026-03-30/system_model.json",
+        "subsystems": "rbi_sibc/2026-03-30/subsystems.json",
         "annotations_draft": "rbi_sibc/2026-03-30/annotations_draft.ts",
-        "annotations_live":  "web/lib/reports/rbi_sibc.ts",
-        "mermaid_output":    "output/mermaid/rbi_sibc/2026-04-13"
-      }
-    }
-    ,
+        "annotations_live": "web/lib/reports/rbi_sibc.ts",
+        "mermaid_output": "output/mermaid/rbi_sibc/2026-04-13"
+      },
+      "is_fy_end": false
+    },
     {
       "period": "Mar 2026",
       "dataDate": "2026-04-30",
@@ -42,16 +43,20 @@
       "fy_growth_pct": 16.1,
       "subsystem_count": 7,
       "paths": {
-        "sections":          "rbi_sibc/2026-04-30/sections.json",
-        "system_model":      "rbi_sibc/2026-04-30/system_model.json",
-        "subsystems":        "rbi_sibc/2026-04-30/subsystems.json",
+        "sections": "rbi_sibc/2026-04-30/sections.json",
+        "system_model": "rbi_sibc/2026-04-30/system_model.json",
+        "subsystems": "rbi_sibc/2026-04-30/subsystems.json",
         "annotations_draft": "rbi_sibc/2026-04-30/annotations_draft.ts",
-        "annotations_live":  "web/lib/reports/rbi_sibc.ts",
-        "mermaid_output":    "output/mermaid/rbi_sibc/2026-05-01"
-      }
+        "annotations_live": "web/lib/reports/rbi_sibc.ts",
+        "mermaid_output": "output/mermaid/rbi_sibc/2026-05-01"
+      },
+      "is_fy_end": true
     }
   ],
   "merged": {
-    "sections": "rbi_sibc/merged/sections_merged.json"
+    "sections": "rbi_sibc/merged/sections_merged.json",
+    "system_model": "rbi_sibc/merged/system_model.json",
+    "subsystems": "rbi_sibc/merged/subsystems.json",
+    "annotations": "rbi_sibc/merged/annotations_merged.ts"
   }
 }

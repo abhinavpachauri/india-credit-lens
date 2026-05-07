@@ -27,16 +27,17 @@ No to all three → deprioritise.
 
 ---
 
-## Current Platform State (April 2026)
+## Current Platform State (May 2026)
 
 | Component | Status |
 |---|---|
-| RBI SIBC dashboard | **Live** — 7 sections, 42 annotations (merged Jan–Feb 2026) |
+| RBI SIBC dashboard | **Live** — 7 sections, 49 annotations (merged Jan 2024–Mar 2026) |
 | SEO layer | **Live** — metadata, OG image, sitemap, JSON-LD |
 | LinkedIn carousel generator | **Live** — `analysis/carousel/generate_carousel.py` |
-| Free newsletter generator | **Live** — `analysis/newsletter/generate_newsletter.py` |
+| Free newsletter generator | **Live** — `analysis/newsletter/generate_newsletter.py` (Issue #3 published) |
 | validate_content.py (Check 2b) | **Live** — content accuracy eval on annotation bodies |
-| promote_annotations.py (Stage 8) | **Live** — automated verified copy to web |
+| promote_annotations.py (Stage 7) | **Live** — automated verified copy to web |
+| signal_registry.json | **Live** — 7 signals tracked across 3 issues |
 | System View dashboard tab | Planned |
 | Monthly Digest generator | Planned |
 | Gold Loan Monitor page | Planned |
@@ -66,7 +67,9 @@ Use CLI tools for all external service interactions — they are the most contex
 
 ### Analysis outputs
 - `annotation_ids` in `system_model.json` must **exactly match** `id` fields in the annotations file. Copy-paste — never retype.
-- Stage 8 always uses `promote_annotations.py` — never manual copy.
+- **Annotation IDs are permanent.** Once an `id` exists in `annotations_merged.ts`, it is never renamed or deleted — even across FOUNDATION rebuilds. UPDATE mode only adds. FOUNDATION mode may restructure, but any removed ID requires explicit justification after `promote_annotations.py --dry-run`.
+- **Merged system_model.json has two modes — read `PIPELINE_ARCHITECTURE.md` before every Stage 5.** FY-end (March file) = FOUNDATION. All other months = UPDATE. Wrong mode = wrong depth of analysis.
+- Stage 7 always uses `promote_annotations.py` — never manual copy.
 
 ### Git / deployment
 - Never auto-push to GitHub
@@ -81,21 +84,22 @@ Use CLI tools for all external service interactions — they are the most contex
 |---|---|
 | `CLAUDE.md` | This file |
 | `STRATEGY_PLANNER.md` | Content ladder, revenue model, product roadmap |
-| `PIPELINE_ARCHITECTURE.md` | **Pipeline stages, directory structure, adding-period checklist** |
+| `PIPELINE_ARCHITECTURE.md` | **Pipeline stages, system model cadence, adding-period checklist** |
 | `analysis/report_analysis_prompt.md` | Master prompt + analytical framework for all report analyses |
-| `analysis/run_evals.py` | Master eval gate — 7 checks, Stages 3 and 7 |
+| `analysis/run_evals.py` | Master eval gate — Stages 3 and 6 |
 | `analysis/validate_timeline.py` | Check 0: timeline.json schema + path existence |
 | `analysis/validate_sections.py` | Check 1: sections.json data integrity |
-| `analysis/validate_annotations.py` | Checks 2, 3: annotations .ts structure |
+| `analysis/validate_annotations.py` | Check 3: live rbi_sibc.ts structure |
 | `analysis/validate_content.py` | Check 2b: dates/values/growth in annotation bodies vs sections.json |
 | `analysis/validate.py` | Checks 4, 5: system_model.json + subsystems.json |
-| `analysis/extract_sibc.py` | Stage 1: SIBC xlsx → sections.json |
+| `analysis/extract_sibc.py` | Stage 1: SIBC xlsx → sections.json + format_report.json |
 | `analysis/update_web_data.py` | Stage 1b: all xlsx → rbi_sibc_consolidated.csv |
-| `analysis/generate_merge.py` | Stage 5: sections.json[] → sections_merged.json (auto-validates) |
-| `analysis/promote_annotations.py` | Stage 8: annotations_merged.ts → rbi_sibc.ts (verified copy + ID diff) |
-| `analysis/rbi_sibc/timeline.json` | Registry of all ingested periods |
-| `analysis/rbi_sibc/2026-03-30/` | Feb 2026 per-period outputs |
-| `analysis/rbi_sibc/merged/` | Merged outputs (Jan 2024 – Feb 2026) — source for live dashboard |
+| `analysis/generate_merge.py` | Stage 4: sections.json[] → sections_merged.json (auto-validates) |
+| `analysis/generate_mermaid.py` | Stage 7 (on-demand): system_model → .mmd files |
+| `analysis/promote_annotations.py` | Stage 7: annotations_merged.ts → rbi_sibc.ts (verified copy + ID diff) |
+| `analysis/rbi_sibc/timeline.json` | Registry of all ingested periods (includes `is_fy_end` flag) |
+| `analysis/rbi_sibc/merged/` | Merged outputs (Jan 2024–Mar 2026) — source for live dashboard |
+| `analysis/newsletter/signal_registry.json` | Cumulative signal tracker — update before each newsletter issue |
 | `web/lib/reports/rbi_sibc.ts` | Live dashboard annotations (promoted from merged) |
 | `web/CLAUDE.md` | Web-specific context (Next.js, Vercel, component patterns) |
 
@@ -105,8 +109,8 @@ Use CLI tools for all external service interactions — they are the most contex
 
 | Skill | When to invoke |
 |---|---|
-| `/per-period-analysis` | Stage 2: analysing a new SIBC file per-period |
-| `/merged-analysis` | Stage 6: producing merged outputs across all periods |
+| `/per-period-analysis` | Stage 2: writing `delta_brief.md` for a new period (lightweight — ~150 words) |
+| `/merged-analysis` | Stage 5: merged UPDATE or FOUNDATION pass — check `is_fy_end` in timeline first |
 | `/add-new-report` | Full walkthrough: adding a new SIBC period end-to-end |
 
 Use `Use a subagent to investigate X` when exploring data files — keeps main context clean.
