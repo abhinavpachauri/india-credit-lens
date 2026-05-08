@@ -1,7 +1,7 @@
 # India Credit Lens — Strategy Planner
 > Applying the BankRegData Model to the Indian Lending Intelligence Market
 
-**Version:** 2.0 | **Updated:** April 2026 | **Author:** Abhinav
+**Version:** 2.1 | **Updated:** May 2026 | **Author:** Abhinav
 **Status:** Foundation built → Content ladder live → Product monitors next
 
 ---
@@ -65,7 +65,7 @@ Every piece of content sits on a ladder. The goal is to pull readers up the ladd
    System narrative + 2 signals + 1 gap + 1 opportunity + what to watch
    FREE | Email capture, engagement | Monthly
 
-        ↓  "explore all 42 signals on the dashboard"
+        ↓  "explore all insights on the dashboard"
 
 ② Dashboard (indiacreditlens.com)
    All annotations, all charts, interactive System View tab
@@ -119,7 +119,7 @@ Every post leads with the finding, never the source.
 
 ### RBI event-reactive posts
 
-When RBI publishes a monetary policy decision, a new circular, or a relevant report, respond within 24 hours with a data point from the existing SIBC analysis. `rbi_monitor.py` automates daily RSS checks and alerts when relevant releases land. Reactive posts have the highest engagement — they meet the audience when attention is already high.
+When RBI publishes a monetary policy decision, a new circular, or a relevant report, respond within 24 hours with a data point from the existing SIBC analysis. Reactive posts have the highest engagement — they meet the audience when attention is already high. Planned: `rbi_monitor.py` to automate daily RSS checks and alert when relevant releases land.
 
 ### Data-backing contract
 
@@ -131,7 +131,7 @@ Full execution rules are in `analysis/newsletter/CLAUDE.md`.
 
 ## 5. Four Outputs Per Report (Non-Negotiable Framework)
 
-Every report analysed in a single Claude pass produces four structured outputs: dashboard annotations, markdown docs (insights / gaps / opportunities), `system_model.json` (causal graph), and `newsletter_config.json`. This single-pass discipline keeps analysis consistent and makes all content regeneration script-only — no Claude cost after the initial analysis pass.
+Every report analysed in a single Claude pass produces four structured outputs: `annotations_merged.ts` (dashboard annotations), markdown docs (`insights.md` / `gaps.md` / `opportunities.md`), `system_model.json` (causal graph), and `subsystems.json` (subsystem map). `newsletter_config.json` is then authored from these outputs — it is not auto-generated. This single-pass discipline keeps analysis consistent and makes all content regeneration script-only — no Claude cost after the initial analysis pass.
 
 Full output schemas, file naming conventions, and validator commands are in `analysis/report_analysis_prompt.md` and `PIPELINE_ARCHITECTURE.md`.
 
@@ -207,7 +207,7 @@ India equivalent at 5–10x lower pricing: 50–200 institutional subscribers ×
 
 ### Tier 2 — Macro and sentiment signals (evaluated April 2026, ingestion planned)
 
-Draft ingestion plans for all sources below are in `DATA_SOURCES.md`. Pipeline redesign required before ingestion begins. All 9 sources passed the decision filter.
+All 9 sources below passed the decision filter. Pipeline redesign required before ingestion begins. Draft ingestion plans to be documented in `DATA_SOURCES.md` (not yet created).
 
 | Report ID | Report | What it adds | Product monitors it feeds |
 |---|---|---|---|
@@ -255,27 +255,29 @@ Draft ingestion plans for all sources below are in `DATA_SOURCES.md`. Pipeline r
 ## 11. Phased Roadmap
 
 ### Phase 0: Foundation ✅ COMPLETE
-- [x] Dashboard live on Vercel — RBI SIBC, 7 sections, 42 annotations (Jan–Feb 2026 merged)
+- [x] Dashboard live on Vercel — RBI SIBC, 7 sections, 49 annotations (Jan 2024–Mar 2026 merged)
 - [x] SEO layer — metadata, OG image, sitemap, JSON-LD
 - [x] Analysis pipeline — report_analysis_prompt.md, four-output framework
 - [x] system_model.json schema — nodes, edges, annotation_ids, claim_type fields
 - [x] Stage 6b live — source_claims.py enriches nodes with external citations
 - [x] Check 2c live — validate_claims.py gates claim_type + source on all nodes
-- [x] Free newsletter generator — delta_v2 format (HELD / CHANGED / NEW), Substack markdown
-- [x] RBI SIBC pipeline — Jan 2026 and Feb 2026 periods ingested, merged, and live
-- [x] New data source evaluation — 9 sources assessed, draft plans in DATA_SOURCES.md
+- [x] Free newsletter generator — delta_v2 format, Substack HTML (Issue #3 published)
+- [x] LinkedIn post generator — 7-post package per cycle (1 anchor + 6 signal posts)
+- [x] Email / Substack CTA — SubstackCTA + EmailGate live on dashboard
+- [x] RBI SIBC pipeline — Jan 2024–Mar 2026 (7 periods) ingested, merged, and live
+- [x] New data source evaluation — 9 Tier 2 sources assessed, decision filter passed
 
 ---
 
 ### Phase 1: Content Engine → Email List (Now — Month 6)
 **Goal: 500+ Substack subscribers, 2,000+ LinkedIn followers, first consulting enquiry**
 
-- [ ] Publish newsletter for every new RBI SIBC release
-- [ ] Add email/Substack CTA to dashboard footer
+- [~] Publish newsletter + LinkedIn posts for every new RBI SIBC release (Issue #3 published — Apr 2026 next)
+- [x] Email / Substack CTA on dashboard
+- [x] Connect indiacreditlens.com domain on Vercel
 - [ ] Add BSR-1 Quarterly (next report — most granular bank-level data)
 - [ ] Add CIBIL Quarterly (unlocks Gold Loan Monitor MVP)
-- [ ] System View tab on dashboard (interactive causal diagram)
-- [ ] Connect indiacreditlens.com domain on Vercel
+- [ ] System View tab on dashboard (interactive causal diagram — SystemView.tsx built, not wired)
 
 **Investment:** Time only
 **Success metric:** 500 newsletter subscribers, 1 consulting enquiry
@@ -342,43 +344,25 @@ Draft ingestion plans for all sources below are in `DATA_SOURCES.md`. Pipeline r
 
 ---
 
-## 13. Monetization Roadmap
+## 13. Monetisation Sequencing
 
 The reasoning chain — fact → inference → hypothesis — is the proprietary asset.
 The free dashboard gives conclusions. Paid tiers give the reasoning.
+See Section 10 for canonical tier pricing.
 
-### Free tier (current)
-- Dashboard: 7 sections, 48+ annotations, causal system model
-- Newsletter (Substack free): top 6 signals per issue with explained reasoning
-- Dashboard claim-type badge: `DATA` / `INFERRED` / `HYPOTHESIS` on each annotation
-  — planned for next build cycle, no engineering cost
+### Launch triggers (in order)
 
-### Paid Tier 1 — Premium Substack (₹2,000–5,000/mo or $25–50/mo)
-*Target: 50+ free subscribers before launching*
-- Full annotation set (all 48+, not just the 6 newsletter signals)
-- `basis` chain per annotation — fact → inference → hypothesis, structured
-- System model narrative: causal diagram explained in prose per section
-- What changed vs prior period: annotation diff, upgraded/downgraded signals
-- Trigger: when newsletter hits 50 free subscribers
-
-### Paid Tier 2 — Quarterly Analyst Report (PDF, ₹15,000–25,000/report or ₹50,000/year)
-*Target: NBFCs, banks, PE/VC funds wanting board-ready credit environment briefing*
-- Full system model as a structured deliverable: causal diagram + all basis chains
-- Formatted for credit committee — defensible, cited, claim-typed
-- Every claim traces to a data point or a named external source
-- Consulting entry product: a NBFC paying for this report is 3 calls from a retainer
-- Trigger: after 2 newsletter issues published, cold outreach to 10 target NBFCs
-
-### Paid Tier 3 — API / Structured Data (SaaS, $200–500/mo per seat)
-*Target: fintechs and NBFCs wanting to embed credit signals into internal tools*
-- Structured JSON: annotations + basis chains + claim_type, per RBI cycle
-- Powers: credit appetite frameworks, portfolio review tools, lending playbooks
-- The annotation schema is already machine-readable — `basis` field makes it
-  genuinely useful structured intelligence, not just text
-- Trigger: 3+ inbound requests for data access (signals product-market fit)
+| Tier | Trigger before launching |
+|---|---|
+| **Consulting** | No build required — outreach after 2 newsletter issues published. First priority. |
+| **Monthly Digest (paid Substack)** | 50+ free newsletter subscribers |
+| **Product Monitor — Gold Loan** | CIBIL Quarterly added to pipeline |
+| **Product Monitor — MSME** | SIDBI MSME Pulse added to pipeline |
+| **API / Structured Data** | 3+ inbound requests for data access |
 
 ### Sequencing rule
 Consulting monetises first (no product build required). Substack paid is parallel.
+Product monitors unlock sequentially as new report sources are added.
 API is last — requires proven signal quality and inbound demand.
 
 ---
@@ -396,13 +380,13 @@ API is last — requires proven signal quality and inbound demand.
 
 ---
 
-## 14. Immediate Next Actions
+## 15. Immediate Next Actions
 
 See `CLAUDE.md → Next Builds` for the current prioritised execution queue across both tracks (Track A: content & platform; Track B: multi-source pipeline). This document holds the strategic roadmap — CLAUDE.md holds the live task list.
 
 ---
 
-## 14. The Positioning Statement
+## 16. The Positioning Statement
 
 > **India Credit Lens** is the intelligence layer on top of India's public lending data —
 > turning fragmented regulatory reports into structured signals, causal models, and
@@ -410,5 +394,5 @@ See `CLAUDE.md → Next Builds` for the current prioritised execution queue acro
 
 ---
 
-*Next review: July 2026 | Track against Phase 1 milestones*
+*Next review: August 2026 | Track against Phase 1 milestones*
 *Model inspiration: BankRegData (US) — 1,275 clients, 2–3 people, 16 years, no funding*
