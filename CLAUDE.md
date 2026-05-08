@@ -29,19 +29,21 @@ No to all three → deprioritise.
 
 ## Current Platform State (May 2026)
 
+Live components only. Planned work lives in `STRATEGY_PLANNER.md`.
+
 | Component | Status |
 |---|---|
 | RBI SIBC dashboard | **Live** — 7 sections, 49 annotations (merged Jan 2024–Mar 2026) |
 | SEO layer | **Live** — metadata, OG image, sitemap, JSON-LD |
-| LinkedIn carousel generator | **Live** — `analysis/carousel/generate_carousel.py` |
+| Email / Substack CTA | **Live** — `SubstackCTA.tsx` + `EmailGate.tsx` |
 | Free newsletter generator | **Live** — `analysis/newsletter/generate_newsletter.py` (Issue #3 published) |
+| LinkedIn post generator | **Live** — `analysis/newsletter/generate_linkedin.py` (7-post package per cycle) |
 | validate_content.py (Check 2b) | **Live** — content accuracy eval on annotation bodies |
+| validate_claims.py (Stage 6b) | **Live** — claim sourcing + citation layer on system model |
 | promote_annotations.py (Stage 7) | **Live** — automated verified copy to web |
 | signal_registry.json | **Live** — 7 signals tracked across 3 issues |
-| System View dashboard tab | Planned |
-| Monthly Digest generator | Planned |
-| Gold Loan Monitor page | Planned |
-| Email/Substack CTA on dashboard | Planned |
+| Subsystem generation | **Live** — `generate_mermaid.py` → `.mmd` + `validate.py --check-subsystems` |
+| detect_format.py (Stage 0.5) | **Live** — flags format changes in new XLSX before extraction |
 
 ---
 
@@ -49,12 +51,22 @@ No to all three → deprioritise.
 
 Use CLI tools for all external service interactions — they are the most context-efficient approach (one line of output vs loading API JSON).
 
+### External services
+
 | Tool | Use for |
 |---|---|
 | `gh` | PRs, CI status, issues, release notes — never use GitHub web for anything scriptable |
-| `vercel` | Domain management, deployment status, env vars — Next Build #1 uses `vercel domains add` |
-| `python3 analysis/run_evals.py` | Always run through the eval script, not individual validators ad-hoc |
-| `python3 analysis/promote_annotations.py` | Always use for Stage 8 — never `cp` or manual paste |
+| `vercel` | Domain management, deployment status, env vars |
+
+### Pipeline gates (always use these — never run validators ad-hoc)
+
+| Tool | Use for |
+|---|---|
+| `python3 analysis/run_evals.py` | Master eval gate — Stages 3 and 6 |
+| `python3 analysis/promote_annotations.py` | Stage 7: verified copy annotations_merged.ts → rbi_sibc.ts — never `cp` or manual paste |
+| `python3 analysis/detect_format.py` | Stage 0.5: flag format changes before extraction |
+| `python3 analysis/source_claims.py` | Stage 6b: source all system model claims |
+| `python3 analysis/newsletter/validate_newsletter_config.py` | Gate before every newsletter/LinkedIn generation run |
 
 ---
 
@@ -89,19 +101,34 @@ Use CLI tools for all external service interactions — they are the most contex
 | `analysis/run_evals.py` | Master eval gate — Stages 3 and 6 |
 | `analysis/validate_timeline.py` | Check 0: timeline.json schema + path existence |
 | `analysis/validate_sections.py` | Check 1: sections.json data integrity |
-| `analysis/validate_annotations.py` | Check 3: live rbi_sibc.ts structure |
+| `analysis/validate_annotations.py` | Check 3: live rbi_sibc.ts structure (Checks A–H) |
 | `analysis/validate_content.py` | Check 2b: dates/values/growth in annotation bodies vs sections.json |
+| `analysis/validate_claims.py` | Check 2c: claim sourcing — every system model claim has a source |
 | `analysis/validate.py` | Checks 4, 5: system_model.json + subsystems.json |
 | `analysis/extract_sibc.py` | Stage 1: SIBC xlsx → sections.json + format_report.json |
+| `analysis/detect_format.py` | Stage 0.5: detect structural changes in new XLSX vs prior period |
 | `analysis/update_web_data.py` | Stage 1b: all xlsx → rbi_sibc_consolidated.csv |
 | `analysis/generate_merge.py` | Stage 4: sections.json[] → sections_merged.json (auto-validates) |
-| `analysis/generate_mermaid.py` | Stage 7 (on-demand): system_model → .mmd files |
+| `analysis/generate_mermaid.py` | Stage 6a (on-demand): system_model → .mmd files + subsystems.json |
+| `analysis/source_claims.py` | Stage 6b: source all claims in system_model.json |
 | `analysis/promote_annotations.py` | Stage 7: annotations_merged.ts → rbi_sibc.ts (verified copy + ID diff) |
 | `analysis/rbi_sibc/timeline.json` | Registry of all ingested periods (includes `is_fy_end` flag) |
 | `analysis/rbi_sibc/merged/` | Merged outputs (Jan 2024–Mar 2026) — source for live dashboard |
-| `analysis/newsletter/signal_registry.json` | Cumulative signal tracker — update before each newsletter issue |
 | `web/lib/reports/rbi_sibc.ts` | Live dashboard annotations (promoted from merged) |
 | `web/CLAUDE.md` | Web-specific context (Next.js, Vercel, component patterns) |
+
+### Newsletter subsystem
+
+| File | Purpose |
+|---|---|
+| `analysis/newsletter/CLAUDE.md` | Newsletter + LinkedIn generation context — read before any content generation |
+| `analysis/newsletter/newsletter_config.json` | Current issue config — signals, hero narrative, image assignments |
+| `analysis/newsletter/signal_registry.json` | Cumulative signal tracker — update before each issue |
+| `analysis/newsletter/newsletter_delta_brief.py` | Generates delta_brief from merged outputs for newsletter authoring |
+| `analysis/newsletter/validate_newsletter_config.py` | Gate: validates config before generation |
+| `analysis/newsletter/generate_images.py` | Renders Mermaid .mmd → PNG for newsletter + LinkedIn |
+| `analysis/newsletter/generate_newsletter.py` | Renders newsletter HTML (standard + Substack) |
+| `analysis/newsletter/generate_linkedin.py` | Renders 7-post LinkedIn package (1 anchor + 6 signal posts) |
 
 ---
 
@@ -113,7 +140,11 @@ Use CLI tools for all external service interactions — they are the most contex
 | `/merged-analysis` | Stage 5: merged UPDATE or FOUNDATION pass — check `is_fy_end` in timeline first |
 | `/add-new-report` | Full walkthrough: adding a new SIBC period end-to-end |
 
+Newsletter and LinkedIn generation do not have skills yet — run scripts directly per `analysis/newsletter/CLAUDE.md`.
+
 Use `Use a subagent to investigate X` when exploring data files — keeps main context clean.
+
+---
 
 ## Compaction Instructions
 
@@ -129,13 +160,9 @@ For session-specific state (current period, what's been validated, what's pendin
 
 ---
 
-## Next Builds (in order)
+## Next Builds
+
+See `STRATEGY_PLANNER.md` for the prioritised roadmap. Immediately next:
 
 1. Connect `indiacreditlens.com` domain on Vercel
-2. Add Substack/email CTA to dashboard footer
-3. Publish Feb 2026 carousel + newsletter
-4. System View tab (interactive diagram from `system_model.json`)
-5. `generate_digest.py` — premium monthly PDF
-6. Gold Loan Monitor page (free version — data in SIBC)
-7. BSR-1 Quarterly — next report
-8. CIBIL Quarterly — unlocks cross-report Gold Loan Monitor
+2. Publish Apr 2026 newsletter + LinkedIn posts

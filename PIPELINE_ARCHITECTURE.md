@@ -43,6 +43,13 @@ SIBC .xlsx
     │  Dedup rule: latest report_date wins for any (statement, code, date) overlap
     │
     ▼
+[Stage 1c] detect_format.py  (run manually — prerequisite for Check 0.5)
+    │  Compares new XLSX structure against prior period
+    │  → rbi_sibc/{period}/format_report.json   (updates confirmed/unsupported flag)
+    │  If format changes are detected: review + confirm before proceeding
+    │  Skipped for legacy periods (pre-existing format_report.json)
+    │
+    ▼
 [Stage 2] Claude: delta_brief.md  (per-period, always)
     │  → rbi_sibc/{period}/delta_brief.md
     │  Scope: what moved vs prior period, any data quality flags, one newsletter hook
@@ -54,7 +61,7 @@ SIBC .xlsx
     │  Check 0.5: format_report.json        format detection confirmed + supported
     │  Check 1:   validate_sections.py      sections.json schema + data integrity
     │  Check 1b:  web CSV dedup check       auto-fixes via update_web_data.py
-    │  — Checks 2, 2b, 2c, 4, 5 are skipped (no per-period analysis artifacts) —
+    │  — Checks 2, 2b, 2c, 3, 4, 5 are skipped (no per-period analysis artifacts) —
     │
     ▼
 [Stage 4] generate_merge.py
@@ -86,15 +93,41 @@ SIBC .xlsx
     │
     ▼
 [Stage 6] run_evals.py --period merged --merged (gate)
-    │  Full check suite; null values in Jan series are warnings not errors
+    │  Check 0:   validate_timeline.py
+    │  Check 0.5: format_report.json
+    │  Check 1:   validate_sections.py --merged
+    │  Check 1b:  web CSV dedup
+    │  Check 2:   validate_annotations.py on annotations_draft (skipped if absent)
+    │  Check 2b:  validate_content.py — numbers/dates in annotation bodies
+    │  Check 2c:  validate_claims.py  — claim_type + source on system_model nodes
+    │  Check 3:   validate_annotations.py on live rbi_sibc.ts (Checks A–H)
+    │  Check 4:   validate.py — system_model.json structure
+    │  Check 5:   validate.py --check-subsystems — subsystems.json
+    │  Check 6:   tsc + npm run build
+    │  Null values in Jan series are warnings not errors
+    │
+    ▼
+[Stage 6a] generate_mermaid.py  (on-demand — see cadence rules below)
+    │  → analysis/output/mermaid/rbi_sibc/{YYYY-MM-DD}/
+    │     overview.mmd, quadrant.mmd, sankey.mmd, flowchart.mmd, sub_*.mmd
+    │  Always after FOUNDATION; after UPDATE only if nodes/edges changed
+    │
+    ▼
+[Stage 6b] source_claims.py  (merged only)
+    │  Sources every claim in system_model.json against sections_merged.json
+    │  Adds claim_type + source_path to each node — required for Check 2c
     │
     ▼
 [Stage 7] Web + content update
     │  promote_annotations.py              (automated copy + ID verification)
     │  → web/lib/reports/rbi_sibc.ts
-    │  generate_mermaid.py                 (only if system_model nodes/edges changed)
-    │  → newsletter_config.json            (from merged system_model + subsystems)
-    │  → generate_newsletter.py            (script-only, no Claude)
+    │
+    │  — Newsletter + LinkedIn (see analysis/newsletter/CLAUDE.md) —
+    │  Author newsletter_config.json        (from merged system_model + subsystems)
+    │  validate_newsletter_config.py        (gate — fix all errors before proceeding)
+    │  generate_images.py                   (Mermaid .mmd → PNG, before image_url assignment)
+    │  generate_newsletter.py               (script-only, no Claude)
+    │  generate_linkedin.py                 (7-post package: 1 anchor + 6 signal posts)
 ```
 
 ---
@@ -157,7 +190,7 @@ pass on interim data produces a shallower model than the same data would produce
 | Structural event changes multiple causal relationships simultaneously | **FOUNDATION** (explicit decision required — note why in `_meta.note`) |
 | First-ever period for a new report type | **FOUNDATION** (always) |
 
-### Mermaid generation cadence
+### Mermaid generation cadence (Stage 6a)
 
 `generate_mermaid.py` is **on-demand**, not automatic on every period:
 - **Always** after a FOUNDATION pass
@@ -231,23 +264,32 @@ analysis/
 │               └── sub_*.mmd
 │
 ├── extract_sibc.py                 ← Stage 1: xlsx → sections.json + format_report.json
+├── detect_format.py                ← Stage 1c: flag format changes vs prior period
+├── update_web_data.py              ← Stage 1b: all xlsx → rbi_sibc_consolidated.csv
 ├── generate_merge.py               ← Stage 4: sections.json[] → sections_merged.json (auto-validates)
-├── generate_mermaid.py             ← Stage 7 (on-demand): system_model → .mmd files
+├── generate_mermaid.py             ← Stage 6a (on-demand): system_model → .mmd files
+├── source_claims.py                ← Stage 6b: source all claims in system_model.json
 ├── promote_annotations.py          ← Stage 7: annotations_merged.ts → rbi_sibc.ts (verified copy)
 ├── generate_delta.py               ← Ad-hoc: period-over-period delta (not in pipeline)
 ├── validate_timeline.py            ← Validator: timeline.json (Check 0)
 ├── validate_sections.py            ← Validator: sections.json (Check 1)
-├── validate_annotations.py         ← Validator: annotations .ts files (Check 3)
+├── validate_annotations.py         ← Validator: annotations .ts files (Check 3, Checks A–H)
 ├── validate_content.py             ← Validator: numbers/dates in annotation bodies (Check 2b)
+├── validate_claims.py              ← Validator: claim_type + source on system model (Check 2c)
 ├── validate.py                     ← Validator: system_model.json + subsystems (Checks 4, 5)
 ├── run_evals.py                    ← Master eval orchestrator (Stages 3, 6)
 ├── report_analysis_prompt.md       ← Master prompt for all Claude analyses
 │
 └── newsletter/
-    ├── generate_newsletter.py      ← Script-only content generator
-    ├── newsletter_config.json      ← Current-issue config (new signals only)
+    ├── CLAUDE.md                   ← Newsletter + LinkedIn subsystem context
+    ├── newsletter_config.json      ← Current-issue config (new signals only — authored, not generated)
     ├── signal_registry.json        ← Cumulative signal tracker — ALL prior issues
-    └── output/                     ← Generated newsletters (dated)
+    ├── newsletter_delta_brief.py   ← Generates delta brief from merged outputs for newsletter authoring
+    ├── validate_newsletter_config.py ← Gate: validates config before any generation
+    ├── generate_images.py          ← Renders Mermaid .mmd → PNG for newsletter + LinkedIn
+    ├── generate_newsletter.py      ← Renders newsletter HTML (standard + Substack)
+    ├── generate_linkedin.py        ← Renders 7-post LinkedIn package
+    └── output/                     ← Generated files (newsletters + linkedin/ packages, dated)
 
 rbi-analytics/                      ← Ingestion layer (do not restructure)
 ├── parser.py                       ← Called by extract_sibc.py
@@ -285,11 +327,15 @@ web/
 
 ### Stage 3 evals scope depends on mode
 - Per-period run: Checks 0, 0.5, 1, 1b only. No Claude artifacts to validate.
-- Merged run: full check suite (Checks 0, 1, 1b, 2b, 2c, 3, 4, 5, 6).
+- Merged run (Stage 6): full check suite — Checks 0, 0.5, 1, 1b, 2, 2b, 2c, 3, 4, 5, 6.
 
 ### Stage 4 self-validates
 - `generate_merge.py` auto-runs `validate_sections.py --merged` after writing.
 - If post-merge validation fails, `generate_merge.py` exits 1 — Stage 5 must not run.
+
+### Stage 6a mermaid generation is on-demand, not automatic
+- `generate_mermaid.py` runs after FOUNDATION always; after UPDATE only if nodes/edges changed.
+- Check node/edge count before and after UPDATE pass to decide.
 
 ### Stage 7 promotion is automated, not manual
 - Use `promote_annotations.py` to copy `annotations_merged.ts` → `rbi_sibc.ts`.
@@ -353,6 +399,8 @@ Determine mode before starting. Check `is_fy_end` for the incoming file.
 ```
 □  Place SIBC .xlsx in rbi-analytics/
 □  python3 analysis/extract_sibc.py rbi-analytics/SIBC{date}.xlsx
+□  python3 analysis/detect_format.py rbi-analytics/SIBC{date}.xlsx
+   — review format_report.json; confirm or flag changes before proceeding
 □  python3 analysis/update_web_data.py
 □  Claude: delta_brief.md → rbi_sibc/{date}/delta_brief.md   (150–200 words, see structure above)
 □  Update timeline.json — add new period entry with is_fy_end: false
@@ -365,11 +413,18 @@ Determine mode before starting. Check `is_fy_end` for the incoming file.
    — update stats in existing nodes, add new nodes only for genuinely new signals
    — update annotation bodies, add new IDs only, never delete existing IDs
    — set _meta.mode = "update", bump _meta.last_updated
+□  python3 analysis/source_claims.py rbi_sibc/merged/system_model.json
 □  python3 analysis/run_evals.py --period merged --merged --skip-build
 □  IF new nodes/edges were added: python3 analysis/generate_mermaid.py rbi_sibc/merged/system_model.json
 □  python3 analysis/promote_annotations.py --dry-run   (verify no IDs removed)
 □  python3 analysis/promote_annotations.py
 □  python3 analysis/run_evals.py --period merged --merged   (full run with build)
+□  Update analysis/newsletter/signal_registry.json — add history entries for affected signals
+□  Author analysis/newsletter/newsletter_config.json
+□  python3 analysis/newsletter/validate_newsletter_config.py   (gate)
+□  python3 analysis/newsletter/generate_images.py              (if mermaid diagrams updated)
+□  python3 analysis/newsletter/generate_newsletter.py
+□  python3 analysis/newsletter/generate_linkedin.py
 □  Commit per-period outputs, then merged outputs, then web/ separately
 □  git push
 ```
@@ -378,6 +433,7 @@ Determine mode before starting. Check `is_fy_end` for the incoming file.
 
 ```
 □  All steps above through generate_merge.py
+   (extract_sibc, detect_format, update_web_data, delta_brief, timeline.json, run_evals per-period)
 □  READ rbi_sibc/merged/system_model.json — note last_foundation_date, record prior node count
 □  Confirm: is this truly a March year-end file? (dataDate April–May, full fiscal year visible)
    If not certain, use UPDATE mode instead.
@@ -386,13 +442,19 @@ Determine mode before starting. Check `is_fy_end` for the incoming file.
    — set _meta.mode = "foundation", _meta.last_foundation_date = dataDate
    — full rebuild of subsystems.json
    — full rewrite of annotations_merged.ts
+□  python3 analysis/source_claims.py rbi_sibc/merged/system_model.json
 □  python3 analysis/run_evals.py --period merged --merged --skip-build
 □  python3 analysis/generate_mermaid.py rbi_sibc/merged/system_model.json   (always after FOUNDATION)
 □  python3 analysis/promote_annotations.py --dry-run
    — REVIEW the ID diff carefully: any removed IDs must be explicitly justified
 □  python3 analysis/promote_annotations.py
 □  python3 analysis/run_evals.py --period merged --merged   (full run with build)
-□  Update signal_registry.json — add history entries for any signals with new data
+□  Update analysis/newsletter/signal_registry.json — add history entries for all signals
+□  Author analysis/newsletter/newsletter_config.json
+□  python3 analysis/newsletter/validate_newsletter_config.py   (gate)
+□  python3 analysis/newsletter/generate_images.py              (always after FOUNDATION — full diagram refresh)
+□  python3 analysis/newsletter/generate_newsletter.py
+□  python3 analysis/newsletter/generate_linkedin.py
 □  Commit per-period outputs, then merged outputs, then web/ separately
 □  git push
 ```
