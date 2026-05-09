@@ -255,7 +255,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
         implication: "Co-origination, warehouse financing, and loan-management infrastructure for bank-NBFC partnerships " +
                      "are the operative product wedges for FY27. " +
                      "Watch H1 FY27 RBI Financial Stability Reports — RBI could re-tighten if NBFC sector overheats again.",
-        preferredMode: "yoy",
+        preferredMode: "absolute",
         effect: { highlight: ["NBFCs"] },
       },
       {
@@ -303,7 +303,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
         implication: "When triangulating debt-to-income or debt-to-GDP ratios, deduct bank-to-NBFC flow first. " +
                      "Headline household-leverage numbers that add bank credit + NBFC credit are systematically overstated.",
         preferredMode: "absolute",
-        effect: { dash: ["NBFCs"] },
+        effect: { highlight: ["NBFCs"] },
       },
       {
         id: "other-services-opacity",
@@ -326,8 +326,8 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
               "The product wedges: co-origination agreements, warehouse lines, LMS with co-lending partition logic.",
         implication: "Tech and product builders have a 12-18 month window before in-house tooling at large banks fills the gap. " +
                      "Loan-management systems with co-lending support, partition logic, and audit-trail rigour are the specific need.",
-        preferredMode: "absolute",
-        effect: { highlight: ["NBFCs"] },
+        preferredMode: "yoy",
+        effect: { highlight: ["NBFCs", "Trade", "Commercial Real Estate"] },
       },
       {
         id: "trade-finance-compounder",
