@@ -84,6 +84,7 @@ Use CLI tools for all external service interactions — they are the most contex
 - Stage 7 always uses `promote_annotations.py` — never manual copy.
 
 ### Git / deployment
+- **Solo project — work directly on `main`. Never create feature branches or worktrees.**
 - Never auto-push to GitHub
 - Always run `python3 analysis/run_evals.py` (includes `npm run build`) before `git push`
 - Show results and wait for explicit confirmation
