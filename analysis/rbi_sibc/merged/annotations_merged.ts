@@ -144,18 +144,6 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
     ],
     gaps: [
       {
-        id: "personal-loans-aggregate-hides-divergence",
-        title: "The personal loans aggregate is a weighted average of opposite trends",
-        body: "Personal Loans at +16.2% YoY (FY26) is a weighted average of gold loans growing +123%, " +
-              "vehicle loans +18.6%, credit cards +3.5%, and consumer durables -5.3%. " +
-              "These are opposite policy and demand signals bundled into one number.",
-        implication: "Never use the Personal Loans aggregate to make a directional point. " +
-                     "Always disaggregate into secured vs unsecured, or by product type. " +
-                     "The 2023 RBI risk-weight tightening on unsecured is still working through the book.",
-        preferredMode: "yoy",
-        effect: { dash: ["Personal Loans"] },
-      },
-      {
         id: "main-sectors-undercount",
         title: "Main sector totals undercount system credit by ₹10.6L Cr",
         body: "Agriculture + Industry + Services + Personal Loans at Mar 2026 sum to ₹202.3L Cr. " +
@@ -409,6 +397,18 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
       },
     ],
     gaps: [
+      {
+        id: "personal-loans-aggregate-hides-divergence",
+        title: "The personal loans aggregate is a weighted average of opposite trends",
+        body: "Personal Loans at +16.2% YoY (FY26) is a weighted average of Gold Loans +123%, " +
+              "Vehicle Loans +18.6%, Credit Card Outstanding +3.5%, and Consumer Durables -5.3%. " +
+              "These are opposite policy and demand signals bundled into one number.",
+        implication: "Never use the Personal Loans aggregate to make a directional point. " +
+                     "Always disaggregate into secured vs unsecured, or by product type. " +
+                     "The 2023 RBI risk-weight tightening on unsecured is still working through the book.",
+        preferredMode: "yoy",
+        effect: {},
+      },
       {
         id: "gold-loans-reclassification-overstates-demand",
         title: "Gold loans 123% overstates real disbursement demand — separate stock from flow",
