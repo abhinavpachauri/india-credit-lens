@@ -428,6 +428,55 @@ def check_effect_series_names(sections, result, section_series_map):
                             )
 
 
+# ── Check I: gap body references series from another section ──────────────────
+
+def check_gap_series_placement(sections, result, section_series_map):
+    """
+    Check I — WARNING: gap body/title/implication references series names that
+    exist in another section but NOT in the current section's chart.
+
+    This detects gaps placed in the wrong section — where the chart cannot
+    illustrate the problem because the relevant series aren't visible.
+
+    Example: a gap about Gold Loans / Consumer Durables divergence placed in
+    mainSectors (which only shows Agriculture, Industry, Services, Personal Loans)
+    should be in personalLoans instead.
+
+    Only matches multi-word series names (≥2 words) to avoid false positives
+    from common single words like 'Housing' or 'Trade'.
+    """
+    # Build reverse map: series_name -> set of sections that contain it
+    series_to_sections: dict[str, set[str]] = {}
+    for sec, names in section_series_map.items():
+        for name in names:
+            if len(name.split()) >= 2:  # multi-word only to reduce false positives
+                series_to_sections.setdefault(name, set()).add(sec)
+
+    for section, lenses in sections.items():
+        current_series = set(section_series_map.get(section, []))
+        for ann in lenses.get("gaps", []):
+            if ann.get("hidden"):
+                continue
+            text = (ann.get("title", "") + " " +
+                    ann.get("body",  "") + " " +
+                    ann.get("implication", ""))
+            foreign = []
+            for series_name, in_sections in series_to_sections.items():
+                if series_name in text and series_name not in current_series:
+                    foreign.append(f"'{series_name}' (belongs to: {sorted(in_sections)})")
+            # Require 2+ foreign series before warning — a single mention is often
+            # legitimate context (e.g. a personalLoans gap referencing "Personal Loans"
+            # as an aggregate name). Two or more foreign series strongly suggests the
+            # gap belongs in another section.
+            if len(foreign) >= 2:
+                result.warn(
+                    "gap_series_placement",
+                    f"[{section}.gaps] '{ann.get('id','?')}' references {len(foreign)} series "
+                    f"not in this section's chart: {foreign}. "
+                    f"Gap may be in the wrong section — the chart cannot illustrate this problem.",
+                )
+
+
 # ── Orchestrator ──────────────────────────────────────────────────────────────
 
 def _load_section_series_map(sections_json_path):
@@ -438,9 +487,12 @@ def _load_section_series_map(sections_json_path):
             data = _json.load(f)
     except Exception:
         return {}
+    # sections_merged.json: top-level dict with a 'sections' list,
+    # each entry has 'id' and 'seriesNames'
+    sections_list = data.get("sections", data) if isinstance(data, dict) else data
     series_map = {}
-    for item in (data if isinstance(data, list) else []):
-        key = item.get("key") or item.get("id") or item.get("section")
+    for item in (sections_list if isinstance(sections_list, list) else []):
+        key = item.get("id") or item.get("key") or item.get("section")
         names = item.get("seriesNames", [])
         if key and names:
             series_map[key] = names
@@ -476,6 +528,7 @@ def validate(ts_path, sections_json_path=None):
     if sections_json_path:
         series_map = _load_section_series_map(sections_json_path)
         check_effect_series_names(sections, result, series_map)
+        check_gap_series_placement(sections, result, series_map)
 
     return result, sections
 
