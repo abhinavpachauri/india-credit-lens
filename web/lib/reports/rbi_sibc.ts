@@ -734,6 +734,9 @@ export function buildSections(rows: CreditRow[]): ReportSection[] {
 
   // 4 — Services sub-sectors (children of code "3")
   const sec4 = childrenOf(rows, "3");
+  // Shorten CSV labels so they match annotation effects and the chart legend
+  sec4.labels["3.9"] = "NBFCs";                         // "Non-Banking Financial Companies (NBFCs)"
+  sec4.labels["3.3"] = "Tourism, Hotels & Restaurants"; // "Tourism, Hotels and Restaurants"
   sections.push(makeSection(
     rows,
     "services", "Services", "🛎️", 3,
