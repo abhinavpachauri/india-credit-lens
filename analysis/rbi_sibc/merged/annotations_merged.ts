@@ -255,7 +255,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
         implication: "Co-origination, warehouse financing, and loan-management infrastructure for bank-NBFC partnerships " +
                      "are the operative product wedges for FY27. " +
                      "Watch H1 FY27 RBI Financial Stability Reports — RBI could re-tighten if NBFC sector overheats again.",
-        preferredMode: "absolute",
+        preferredMode: "yoy",
         effect: { highlight: ["NBFCs"] },
       },
       {
