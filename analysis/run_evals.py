@@ -18,6 +18,7 @@ Checks run (in order):
                                      FAIL if claim_type missing or inference has no source
                                      WARN (non-blocking) if hypothesis nodes present
   3.  validate_annotations.py       on web/lib/reports/rbi_sibc.ts  (live)
+  3b. validate_web_series.py        CSV+overrides vs sections_merged.json + annotation effects
   4.  validate.py                   on rbi_sibc/<period>/system_model.json
   5.  validate.py --check-subsystems on system_model.json + subsystems.json
   6.  tsc --noEmit + npm run build   in web/
@@ -485,6 +486,18 @@ def main():
     passed, out, err = check_annotations_live()
     notes = one_line_summary(out, err, passed)
     results.append(("3.  annotations live (rbi_sibc.ts)", passed, notes))
+    if not passed:
+        print(out)
+        print(err, file=sys.stderr)
+
+    # ── Check 3b: web series name consistency ─────────────────────────────────
+    passed, out, err = run_check(
+        "web_series",
+        [sys.executable, str(ANALYSIS / "validate_web_series.py")],
+        cwd=REPO_ROOT,
+    )
+    notes = one_line_summary(out, err, passed)
+    results.append(("3b. web series names (CSV vs annotations)", passed, notes))
     if not passed:
         print(out)
         print(err, file=sys.stderr)

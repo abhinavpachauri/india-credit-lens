@@ -163,14 +163,17 @@ def check_paths(data, timeline_path, result):
     relative to ANALYSIS dir. Per-period paths: sections (required), format_report
     and delta_brief (optional). Legacy analysis files are archived, not referenced.
     """
-    OPTIONAL_PATHS = {"format_report", "delta_brief"}
+    OPTIONAL_PATHS = {"format_report", "delta_brief", "mermaid_output"}
+    # Paths stored relative to REPO_ROOT (not ANALYSIS)
+    REPO_ROOT_PATHS = {"annotations_live"}
 
     for i, entry in enumerate(data.get("periods", [])):
         dd = entry.get("dataDate", f"entry_{i}")
         for key, rel_path in entry.get("paths", {}).items():
             if key in OPTIONAL_PATHS:
                 continue
-            full_path = ANALYSIS / rel_path
+            base = REPO_ROOT if key in REPO_ROOT_PATHS else ANALYSIS
+            full_path = base / rel_path
             if not full_path.exists():
                 result.error("paths",
                     f"periods[dataDate={dd}]: paths.{key} → '{rel_path}' does not exist")

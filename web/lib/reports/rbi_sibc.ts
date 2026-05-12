@@ -8,6 +8,11 @@ import {
   type CreditRow,
 } from "@/lib/data";
 import type { Report, ReportSection, ChartPoint, SectionAnnotations } from "@/lib/types";
+import rawOverrides from "./rbi_sibc_label_overrides.json";
+
+// Short display labels for verbose RBI CSV sector names.
+// Source of truth: rbi_sibc_label_overrides.json (also read by validate_web_series.py).
+const LABEL_OVERRIDES = rawOverrides as Record<string, Record<string, string>>;
 
 // ── Annotation content ────────────────────────────────────────────────────────
 
@@ -734,9 +739,7 @@ export function buildSections(rows: CreditRow[]): ReportSection[] {
 
   // 4 — Services sub-sectors (children of code "3")
   const sec4 = childrenOf(rows, "3");
-  // Shorten CSV labels so they match annotation effects and the chart legend
-  sec4.labels["3.9"] = "NBFCs";                         // "Non-Banking Financial Companies (NBFCs)"
-  sec4.labels["3.3"] = "Tourism, Hotels & Restaurants"; // "Tourism, Hotels and Restaurants"
+  Object.assign(sec4.labels, LABEL_OVERRIDES["services"] ?? {});
   sections.push(makeSection(
     rows,
     "services", "Services", "🛎️", 3,
@@ -745,6 +748,7 @@ export function buildSections(rows: CreditRow[]): ReportSection[] {
 
   // 5 — Personal Loans sub-categories (children of code "4")
   const sec5 = childrenOf(rows, "4");
+  Object.assign(sec5.labels, LABEL_OVERRIDES["personalLoans"] ?? {});
   sections.push(makeSection(
     rows,
     "personalLoans", "Personal Loans", "💳", 4,
@@ -756,6 +760,7 @@ export function buildSections(rows: CreditRow[]): ReportSection[] {
   const pslCodes  = [...new Set(pslRows.map((r) => r.code))].sort();
   const pslLabels: Record<string, string> = {};
   pslRows.forEach((r) => { pslLabels[r.code] = r.sector; });
+  Object.assign(pslLabels, LABEL_OVERRIDES["prioritySector"] ?? {});
   sections.push(makeSection(
     rows,
     "prioritySector", "Priority Sector", "⭐", 5,
