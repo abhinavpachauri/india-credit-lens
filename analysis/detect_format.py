@@ -14,7 +14,7 @@ Writes format_report.json to the period directory.
 Interactive prompt: confirm date range + gaps, then proceed or abort.
 
 Usage:
-    python3 detect_format.py rbi-analytics/SIBCS30042026.xlsx
+    python3 detect_format.py analysis/rbi_sibc/2026-04-30/raw/SIBCS30042026.xlsx
     python3 detect_format.py ... --check     # non-interactive (for run_evals.py)
     python3 detect_format.py ... --dry-run   # detect + print, no write, no prompt
 
@@ -33,11 +33,11 @@ import openpyxl
 
 # ── Repo paths ─────────────────────────────────────────────────────────────────
 
-REPO_ROOT     = Path(__file__).resolve().parent.parent
-ANALYSIS      = REPO_ROOT / "analysis"
-RBI_ANALYTICS = REPO_ROOT / "rbi-analytics"
+REPO_ROOT    = Path(__file__).resolve().parent.parent
+ANALYSIS     = REPO_ROOT / "analysis"
+RBI_SIBC_LIB = ANALYSIS / "rbi_sibc" / "lib"
 
-sys.path.insert(0, str(RBI_ANALYTICS))
+sys.path.insert(0, str(RBI_SIBC_LIB))
 
 try:
     from parser import parse_filename_date, parse_rbi_date, detect_code_and_level

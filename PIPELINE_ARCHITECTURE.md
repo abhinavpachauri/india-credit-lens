@@ -38,7 +38,7 @@ SIBC .xlsx
     ▼
 [Stage 1b] update_web_data.py
     │  Consolidates ALL xlsx files → single deduplicated long CSV
-    │  → rbi-analytics/consolidated/consolidated_long.csv
+    │  Scans analysis/rbi_sibc/*/raw/SIBC*.xlsx
     │  → web/public/data/rbi_sibc_consolidated.csv   ← dashboard charts live here
     │  Dedup rule: latest report_date wins for any (statement, code, date) overlap
     │
@@ -291,12 +291,14 @@ analysis/
     ├── generate_linkedin.py        ← Renders 7-post LinkedIn package
     └── output/                     ← Generated files (newsletters + linkedin/ packages, dated)
 
-rbi-analytics/                      ← Ingestion layer (do not restructure)
-├── parser.py                       ← Called by extract_sibc.py
-├── consolidate.py                  ← Multi-file consolidation (exploration)
+analysis/rbi_sibc/lib/              ← SIBC parser utilities
+├── parser.py                       ← Called by extract_sibc.py + detect_format.py
+├── consolidate.py                  ← Called by update_web_data.py
 ├── dashboard.py                    ← Streamlit exploration tool (local only)
-├── SIBC*.xlsx                      ← Source files (raw, never modified)
-└── consolidated/                   ← CSV outputs from parser.py
+└── requirements.txt                ← Python deps for lib tools
+
+analysis/rbi_sibc/{period}/raw/     ← Source XLSX files (raw, never modified)
+analysis/rbi_sibc/archive/          ← Pre-pipeline era XLSX files
 
 web/
 └── lib/reports/
@@ -397,9 +399,9 @@ Determine mode before starting. Check `is_fy_end` for the incoming file.
 ### Interim period — UPDATE mode (~10 months/year)
 
 ```
-□  Place SIBC .xlsx in rbi-analytics/
-□  python3 analysis/extract_sibc.py rbi-analytics/SIBC{date}.xlsx
-□  python3 analysis/detect_format.py rbi-analytics/SIBC{date}.xlsx
+□  Place SIBC .xlsx in analysis/rbi_sibc/{period}/raw/
+□  python3 analysis/extract_sibc.py analysis/rbi_sibc/{period}/raw/SIBC{date}.xlsx
+□  python3 analysis/detect_format.py analysis/rbi_sibc/{period}/raw/SIBC{date}.xlsx
    — review format_report.json; confirm or flag changes before proceeding
 □  python3 analysis/update_web_data.py
 □  Claude: delta_brief.md → rbi_sibc/{date}/delta_brief.md   (150–200 words, see structure above)

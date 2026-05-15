@@ -44,6 +44,7 @@ Live components only. Planned work lives in `STRATEGY_PLANNER.md`.
 | signal_registry.json | **Live** — 7 signals tracked across 3 issues |
 | Subsystem generation | **Live** — `generate_mermaid.py` → `.mmd` + `validate.py --check-subsystems` |
 | detect_format.py (Stage 0.5) | **Live** — flags format changes in new XLSX before extraction |
+| ATM/POS pipeline | **Built** — `rbi_atm_pos/` — awaiting first files; Stages 0–3 ready |
 
 ---
 
@@ -62,11 +63,12 @@ Use CLI tools for all external service interactions — they are the most contex
 
 | Tool | Use for |
 |---|---|
-| `python3 analysis/run_evals.py` | Master eval gate — Stages 3 and 6 |
+| `python3 analysis/run_evals.py` | Master eval gate — SIBC Stages 3 and 6 |
 | `python3 analysis/promote_annotations.py` | Stage 7: verified copy annotations_merged.ts → rbi_sibc.ts — never `cp` or manual paste |
 | `python3 analysis/detect_format.py` | Stage 0.5: flag format changes before extraction |
 | `python3 analysis/source_claims.py` | Stage 6b: source all system model claims |
 | `python3 analysis/newsletter/validate_newsletter_config.py` | Gate before every newsletter/LinkedIn generation run |
+| `python3 analysis/run_atm_pos_evals.py --xlsx {file}` | ATM/POS pipeline gate — Stages 0–3 (format → consolidation) |
 
 ---
 
@@ -117,6 +119,8 @@ Use CLI tools for all external service interactions — they are the most contex
 | `analysis/rbi_sibc/merged/` | Merged outputs (Jan 2024–Mar 2026) — source for live dashboard |
 | `web/lib/reports/rbi_sibc.ts` | Live dashboard annotations (promoted from merged) |
 | `web/CLAUDE.md` | Web-specific context (Next.js, Vercel, component patterns) |
+| `analysis/rbi_atm_pos/CLAUDE.md` | ATM/POS pipeline context — read before any ATM/POS work |
+| `analysis/rbi_atm_pos/timeline.json` | Registry of ingested ATM/POS months |
 
 ### Newsletter subsystem
 

@@ -27,7 +27,7 @@ _MONTH_MAP = {
     "jul": 7, "aug": 8, "sep": 9, "oct": 10, "nov": 11, "dec": 12,
 }
 
-def parse_rbi_date(text: str) -> datetime | None:
+def parse_rbi_date(text: str) -> "datetime | None":
     """Parse dates like '26.Jan,2024' or '31.Jan,2026'."""
     if not text:
         return None
@@ -39,7 +39,7 @@ def parse_rbi_date(text: str) -> datetime | None:
         return None
     return datetime(year, mon, day)
 
-def parse_filename_date(path: Path) -> datetime | None:
+def parse_filename_date(path: Path) -> "datetime | None":
     """
     Extract the publication date from an SIBC filename.
 
@@ -412,7 +412,7 @@ def to_long(df_wide: pd.DataFrame) -> pd.DataFrame:
 # Main entry point
 # ---------------------------------------------------------------------------
 
-def parse_file(filepath: str | Path) -> dict[str, pd.DataFrame]:
+def parse_file(filepath: "str | Path") -> dict[str, pd.DataFrame]:
     """
     Parse a single SIBC Excel file.
     Returns {
@@ -445,7 +445,7 @@ def parse_file(filepath: str | Path) -> dict[str, pd.DataFrame]:
     return results
 
 
-def save_outputs(filepath: str | Path, out_dir: str | Path | None = None):
+def save_outputs(filepath: "str | Path", out_dir: "str | Path | None" = None):
     """Parse and save CSV outputs next to the source file (or to out_dir)."""
     path = Path(filepath)
     out_dir = Path(out_dir) if out_dir else path.parent
@@ -462,7 +462,7 @@ def save_outputs(filepath: str | Path, out_dir: str | Path | None = None):
     return results
 
 
-def read_parsed_csv(csv_path: str | Path) -> pd.DataFrame:
+def read_parsed_csv(csv_path: "str | Path") -> pd.DataFrame:
     """
     Read a CSV produced by this parser with correct dtypes.
     Always use this instead of pd.read_csv() directly — otherwise pandas

@@ -5,7 +5,7 @@ extract_sibc.py — India Credit Lens
 Parses a raw SIBC .xlsx file and produces sections.json in the correct
 period directory under analysis/rbi_sibc/{YYYY-MM-DD}/.
 
-Calls rbi-analytics/parser.py for raw parsing, then maps sector codes
+Calls analysis/rbi_sibc/lib/parser.py for raw parsing, then maps sector codes
 to the dashboard section structure.
 
 All growth rates are computed from absolute outstanding data:
@@ -34,16 +34,16 @@ from pathlib import Path
 
 # ── Repo paths ────────────────────────────────────────────────────────────────
 
-REPO_ROOT     = Path(__file__).resolve().parent.parent
-RBI_ANALYTICS = REPO_ROOT / "rbi-analytics"
-ANALYSIS      = REPO_ROOT / "analysis"
+REPO_ROOT    = Path(__file__).resolve().parent.parent
+ANALYSIS     = REPO_ROOT / "analysis"
+RBI_SIBC_LIB = ANALYSIS / "rbi_sibc" / "lib"
 
-sys.path.insert(0, str(RBI_ANALYTICS))
+sys.path.insert(0, str(RBI_SIBC_LIB))
 
 try:
     from parser import parse_file, parse_filename_date
 except ImportError as e:
-    print(f"ERROR: Cannot import parser.py from {RBI_ANALYTICS}: {e}", file=sys.stderr)
+    print(f"ERROR: Cannot import parser.py from {RBI_SIBC_LIB}: {e}", file=sys.stderr)
     sys.exit(1)
 
 
@@ -148,7 +148,7 @@ def col_to_display(col: str) -> str:
         return col
 
 
-def same_month_prior_year(col: str, all_cols: list[str]) -> str | None:
+def same_month_prior_year(col: str, all_cols: list[str]) -> "str | None":
     """Find a column from the previous year with the same month, if present."""
     try:
         d = datetime.strptime(col, "%Y-%m-%d")
@@ -165,7 +165,7 @@ def same_month_prior_year(col: str, all_cols: list[str]) -> str | None:
     return None
 
 
-def most_recent_march(col: str, all_cols: list[str]) -> str | None:
+def most_recent_march(col: str, all_cols: list[str]) -> "str | None":
     """Find the most recent March column that is before or at this col's date."""
     try:
         d = datetime.strptime(col, "%Y-%m-%d")
@@ -185,7 +185,7 @@ def most_recent_march(col: str, all_cols: list[str]) -> str | None:
     return max(march_cols, key=lambda x: x[0])[1]
 
 
-def compute_growth(current_val, base_val) -> float | None:
+def compute_growth(current_val, base_val) -> "float | None":
     """(current/base - 1) × 100, rounded to 1 dp. None if either is None/zero."""
     if current_val is None or base_val is None:
         return None
@@ -348,7 +348,7 @@ def build_section(
     stmt1: object,
     stmt2: object,
     date_cols: list[str],
-    iso_overrides: dict[str, str] | None = None,
+    iso_overrides: "dict[str, str] | None" = None,
 ) -> dict:
     """
     Build one section dict from parsed DataFrames.
@@ -553,7 +553,7 @@ def ensure_format_confirmed(xlsx_path: Path, period_dir: Path, dry_run: bool = F
 
 # ── Main ──────────────────────────────────────────────────────────────────────
 
-def extract(xlsx_path: Path, out_dir: Path | None = None, dry_run: bool = False) -> dict:
+def extract(xlsx_path: Path, out_dir: "Path | None" = None, dry_run: bool = False) -> dict:
     print(f"\n  Parsing: {xlsx_path.name}")
 
     # ── Resolve output directory early (needed for format gate) ──────────────
