@@ -53,7 +53,14 @@ def period_from_xlsx(xlsx_path):
     """Extract YYYY-MM-DD from sheet name without full detection run."""
     import pandas as pd
     wb = pd.ExcelFile(xlsx_path)
+    # Accept "For Website {M} {Y}" (newer) or bare "{M} {Y}" (older RBI format)
     sheet = next((s for s in wb.sheet_names if s.startswith("For Website ")), None)
+    if not sheet:
+        sheet = next(
+            (s for s in wb.sheet_names
+             if len(s.split()) == 2 and s.split()[0] in MONTHS),
+            None,
+        )
     if not sheet:
         return None
     parts = sheet.replace("For Website ", "").strip().split()

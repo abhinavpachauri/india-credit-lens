@@ -52,7 +52,7 @@ MONTHS = {
 
 EXPECTED_COLS    = 29
 EXPECTED_BANKS   = 64
-SHEET_PREFIX     = "For Website "
+SHEET_PREFIX     = "For Website "  # newer RBI format
 FORMAT_ID        = "atm_pos_monthly"
 
 CATEGORY_HEADERS = {
@@ -66,7 +66,7 @@ def _c(text, colour):
 
 
 def parse_sheet_date(sheet_name):
-    """'For Website March 2026' → ('2026-03-31', 'March 2026')"""
+    """'For Website March 2026' or 'March 2026' → ('2026-03-31', 'March 2026')"""
     suffix = sheet_name.replace(SHEET_PREFIX, "").strip()
     parts = suffix.split()
     if len(parts) != 2 or parts[0] not in MONTHS:
@@ -77,6 +77,26 @@ def parse_sheet_date(sheet_name):
     return date(year, month, last).isoformat(), suffix
 
 
+def find_data_sheet(wb):
+    """Return the data sheet name, accepting both 'For Website {M} {Y}' and '{M} {Y}'."""
+    # Prefer newer "For Website" format first
+    for s in wb.sheet_names:
+        if s.startswith(SHEET_PREFIX):
+            parts = s.replace(SHEET_PREFIX, "").strip().split()
+            if len(parts) == 2 and parts[0] in MONTHS:
+                return s
+    # Fall back to bare "{Month} {Year}" format (older RBI files)
+    for s in wb.sheet_names:
+        parts = s.strip().split()
+        if len(parts) == 2 and parts[0] in MONTHS:
+            try:
+                int(parts[1])
+                return s
+            except ValueError:
+                pass
+    return None
+
+
 def detect(xlsx_path):
     """Run all format checks. Returns (issues, warnings, report_dict)."""
     issues   = []
@@ -84,12 +104,11 @@ def detect(xlsx_path):
 
     wb = pd.ExcelFile(xlsx_path)
 
-    # Check 1: sheet name
-    matching = [s for s in wb.sheet_names if s.startswith(SHEET_PREFIX)]
-    if not matching:
-        issues.append(f"No sheet starting with '{SHEET_PREFIX}' found. Sheets: {wb.sheet_names}")
+    # Check 1: sheet name (accepts "For Website {M} {Y}" or bare "{M} {Y}")
+    sheet_name = find_data_sheet(wb)
+    if not sheet_name:
+        issues.append(f"No recognised data sheet found. Sheets: {wb.sheet_names}")
         return issues, warnings, {}
-    sheet_name = matching[0]
 
     try:
         report_date, report_month = parse_sheet_date(sheet_name)

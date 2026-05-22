@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { formatCr } from "@/lib/data";
 
 interface HeaderProps {
@@ -10,6 +12,13 @@ interface HeaderProps {
 }
 
 export default function Header({ totalBankCredit, latestDate, darkMode, onToggleDark }: HeaderProps) {
+  const pathname = usePathname();
+
+  const navLinks = [
+    { label: "Credit Dashboard", href: "/" },
+    { label: "Payments",         href: "/payments" },
+  ];
+
   return (
     <header
       className="sticky top-0 z-50 px-6 py-3 flex items-center justify-between"
@@ -34,6 +43,27 @@ export default function Header({ totalBankCredit, latestDate, darkMode, onToggle
           </span>
         </div>
       </div>
+
+      {/* Navigation */}
+      <nav className="hidden sm:flex items-center gap-1">
+        {navLinks.map(({ label, href }) => {
+          const isActive = pathname === href;
+          return (
+            <Link
+              key={href}
+              href={href}
+              className="text-sm font-medium px-3 py-1 transition-colors"
+              style={{
+                color:        isActive ? "#4e8ef7" : "var(--font-muted)",
+                borderBottom: isActive ? "2px solid #4e8ef7" : "2px solid transparent",
+                textDecoration: "none",
+              }}
+            >
+              {label}
+            </Link>
+          );
+        })}
+      </nav>
 
       {/* Centre metric */}
       {totalBankCredit && (

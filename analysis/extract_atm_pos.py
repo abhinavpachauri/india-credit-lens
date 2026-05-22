@@ -175,7 +175,11 @@ def main():
         # format_report.json may not exist yet — locate it via sheet name
         import openpyxl
         wb = openpyxl.load_workbook(xlsx_path, read_only=True, data_only=True)
-        sheet_name = next((s for s in wb.sheetnames if s.startswith("For Website ")), None)
+        sheet_name = next(
+            (s for s in wb.sheetnames if s.startswith("For Website ") or
+             (len(s.split()) == 2 and s.split()[0] in ("January","February","March","April","May","June","July","August","September","October","November","December"))),
+            None,
+        )
         wb.close()
         if not sheet_name:
             print(f"{_c('ERROR', RED)}: Run detect_atm_pos_format.py first.", file=sys.stderr)
@@ -190,7 +194,12 @@ def main():
     # Re-read format_report
     import calendar
     wb2 = pd.ExcelFile(xlsx_path)
-    sheet_name = next((s for s in wb2.sheet_names if s.startswith("For Website ")), None)
+    _months = ("January","February","March","April","May","June","July","August","September","October","November","December")
+    sheet_name = next(
+        (s for s in wb2.sheet_names if s.startswith("For Website ") or
+         (len(s.split()) == 2 and s.split()[0] in _months)),
+        None,
+    )
     suffix = sheet_name.replace("For Website ", "").strip().split()
     MONTHS = {
         "January": 1, "February": 2, "March": 3, "April": 4,
