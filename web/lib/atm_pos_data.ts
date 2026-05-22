@@ -257,7 +257,7 @@ export interface SectionDef {
   id:    string;
   title: string;
   icon:  string;
-  group: "cards" | "cc" | "dc" | "infra";
+  group: "cc" | "dc" | "infra";
   // simple metric (no vol/val)
   metric?: string | string[];
   unit?:   string;
@@ -269,27 +269,42 @@ export interface SectionDef {
 }
 
 export const SECTION_DEFS: SectionDef[] = [
-  { id: "credit_cards",  title: "Credit Cards Outstanding",             icon: "💳", group: "cards", metric: "credit_cards",             unit: "count"          },
-  { id: "debit_cards",   title: "Debit Cards Outstanding",              icon: "💳", group: "cards", metric: "debit_cards",              unit: "count"          },
-  { id: "cc_pos",        title: "Credit Card — POS Transactions",       icon: "🏪", group: "cc",    volMetric: "cc_pos_txn_vol",         valMetric: "cc_pos_txn_val",         volUnit: "transactions", valUnit: "rs_thousands" },
-  { id: "cc_ecom",       title: "Credit Card — eCommerce Transactions", icon: "🛒", group: "cc",    volMetric: "cc_ecom_txn_vol",        valMetric: "cc_ecom_txn_val",        volUnit: "transactions", valUnit: "rs_thousands" },
-  { id: "cc_atm",        title: "Credit Card — ATM Cash Withdrawals",   icon: "🏧", group: "cc",    volMetric: "cc_atm_withdrawal_vol",  valMetric: "cc_atm_withdrawal_val",  volUnit: "transactions", valUnit: "rs_thousands" },
-  { id: "cc_other",      title: "Credit Card — Other Transactions",     icon: "💳", group: "cc",    volMetric: "cc_other_txn_vol",       valMetric: "cc_other_txn_val",       volUnit: "transactions", valUnit: "rs_thousands" },
-  { id: "dc_atm",        title: "Debit Card — ATM Cash Withdrawals",    icon: "🏧", group: "dc",    volMetric: "dc_atm_withdrawal_vol",  valMetric: "dc_atm_withdrawal_val",  volUnit: "transactions", valUnit: "rs_thousands" },
-  { id: "dc_pos",        title: "Debit Card — POS Transactions",        icon: "🏪", group: "dc",    volMetric: "dc_pos_txn_vol",         valMetric: "dc_pos_txn_val",         volUnit: "transactions", valUnit: "rs_thousands" },
-  { id: "dc_ecom",       title: "Debit Card — eCommerce Transactions",  icon: "🛒", group: "dc",    volMetric: "dc_ecom_txn_vol",        valMetric: "dc_ecom_txn_val",        volUnit: "transactions", valUnit: "rs_thousands" },
-  { id: "dc_pos_wd",     title: "Debit Card — POS Cash Withdrawals",    icon: "💳", group: "dc",    volMetric: "dc_pos_withdrawal_vol",  valMetric: "dc_pos_withdrawal_val",  volUnit: "transactions", valUnit: "rs_thousands" },
-  { id: "dc_other",      title: "Debit Card — Other Transactions",      icon: "💳", group: "dc",    volMetric: "dc_other_txn_vol",       valMetric: "dc_other_txn_val",       volUnit: "transactions", valUnit: "rs_thousands" },
-  { id: "pos_terminals", title: "POS Terminals Deployed",               icon: "🏪", group: "infra", metric: "pos_terminals",             unit: "count"          },
-  { id: "upi_qr",        title: "UPI QR Codes Deployed",                icon: "📱", group: "infra", metric: "upi_qr",                   unit: "count"          },
-  { id: "atms",          title: "ATMs (On-site + Off-site)",            icon: "🏧", group: "infra", metric: ["atm_onsite", "atm_offsite"], unit: "count"        },
-  { id: "micro_atms",    title: "Micro ATMs Deployed",                  icon: "📱", group: "infra", metric: "micro_atms",               unit: "count"          },
-  { id: "bharat_qr",     title: "Bharat QR Codes Deployed",             icon: "📱", group: "infra", metric: "bharat_qr",                unit: "count"          },
+  { id: "credit_cards",  title: "Cards Outstanding",      icon: "💳", group: "cc",    metric: "credit_cards",             unit: "count"          },
+  { id: "cc_pos",        title: "POS Transactions",        icon: "🏪", group: "cc",    volMetric: "cc_pos_txn_vol",         valMetric: "cc_pos_txn_val",         volUnit: "transactions", valUnit: "rs_thousands" },
+  { id: "cc_ecom",       title: "eCommerce Transactions",  icon: "🛒", group: "cc",    volMetric: "cc_ecom_txn_vol",        valMetric: "cc_ecom_txn_val",        volUnit: "transactions", valUnit: "rs_thousands" },
+  { id: "cc_atm",        title: "ATM Cash Withdrawals",    icon: "🏧", group: "cc",    volMetric: "cc_atm_withdrawal_vol",  valMetric: "cc_atm_withdrawal_val",  volUnit: "transactions", valUnit: "rs_thousands" },
+  { id: "cc_other",      title: "Other Transactions",      icon: "💳", group: "cc",    volMetric: "cc_other_txn_vol",       valMetric: "cc_other_txn_val",       volUnit: "transactions", valUnit: "rs_thousands" },
+  { id: "debit_cards",   title: "Cards Outstanding",       icon: "💳", group: "dc",    metric: "debit_cards",              unit: "count"          },
+  { id: "dc_atm",        title: "ATM Cash Withdrawals",    icon: "🏧", group: "dc",    volMetric: "dc_atm_withdrawal_vol",  valMetric: "dc_atm_withdrawal_val",  volUnit: "transactions", valUnit: "rs_thousands" },
+  { id: "dc_pos",        title: "POS Transactions",        icon: "🏪", group: "dc",    volMetric: "dc_pos_txn_vol",         valMetric: "dc_pos_txn_val",         volUnit: "transactions", valUnit: "rs_thousands" },
+  { id: "dc_ecom",       title: "eCommerce Transactions",  icon: "🛒", group: "dc",    volMetric: "dc_ecom_txn_vol",        valMetric: "dc_ecom_txn_val",        volUnit: "transactions", valUnit: "rs_thousands" },
+  { id: "dc_pos_wd",     title: "POS Cash Withdrawals",    icon: "💳", group: "dc",    volMetric: "dc_pos_withdrawal_vol",  valMetric: "dc_pos_withdrawal_val",  volUnit: "transactions", valUnit: "rs_thousands" },
+  { id: "dc_other",      title: "Other Transactions",      icon: "💳", group: "dc",    volMetric: "dc_other_txn_vol",       valMetric: "dc_other_txn_val",       volUnit: "transactions", valUnit: "rs_thousands" },
+  { id: "pos_terminals", title: "POS Terminals",           icon: "🏪", group: "infra", metric: "pos_terminals",             unit: "count"          },
+  { id: "upi_qr",        title: "UPI QR Codes",            icon: "📱", group: "infra", metric: "upi_qr",                   unit: "count"          },
+  { id: "atms",          title: "ATMs (On-site + Off-site)", icon: "🏧", group: "infra", metric: ["atm_onsite", "atm_offsite"], unit: "count"      },
+  { id: "micro_atms",    title: "Micro ATMs",              icon: "📱", group: "infra", metric: "micro_atms",               unit: "count"          },
+  { id: "bharat_qr",     title: "Bharat QR Codes",         icon: "📱", group: "infra", metric: "bharat_qr",                unit: "count"          },
 ];
 
 export const GROUP_LABELS: Record<string, string> = {
-  cards: "CARDS OUTSTANDING",
-  cc:    "CREDIT CARD TRANSACTIONS",
-  dc:    "DEBIT CARD TRANSACTIONS",
-  infra: "INFRASTRUCTURE",
+  cc:    "CREDIT CARD",
+  dc:    "DEBIT CARD",
+  infra: "DIGITAL INFRASTRUCTURE",
 };
+
+// ── getTopNBanks ───────────────────────────────────────────────────────────────
+
+export function getTopNBanks(rows: AtmPosRow[], metric: string | string[], n: number): string[] {
+  const metrics    = Array.isArray(metric) ? metric : [metric];
+  const latestDate = getAvailableDates(rows).slice(-1)[0];
+  if (!latestDate) return [];
+  const bankTotals = new Map<string, number>();
+  rows
+    .filter((r) => r.report_date === latestDate && r.record_type === "bank" && metrics.includes(r.metric))
+    .forEach((r) => { bankTotals.set(r.bank_name, (bankTotals.get(r.bank_name) ?? 0) + (r.value || 0)); });
+  return Array.from(bankTotals.entries())
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, n)
+    .map(([name]) => name);
+}

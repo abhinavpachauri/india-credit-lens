@@ -3,17 +3,17 @@
 import { useState, useMemo } from "react";
 import { buildSectionData } from "@/lib/atm_pos_data";
 import type { SectionDef, AtmPosRow, FilterState, VolVal } from "@/lib/atm_pos_data";
-import { pickColor } from "@/lib/theme";
 import AtmPosTrendChart from "@/components/AtmPosTrendChart";
 import AtmPosDistributionChart from "@/components/AtmPosDistributionChart";
 
 interface AtmPosSectionCardProps {
-  def:             SectionDef;
-  rows:            AtmPosRow[];
-  filter:          FilterState;
-  tab:             "trend" | "distribution";
-  hiddenSeries:    Set<string>;
-  onToggleSeries:  (name: string) => void;
+  def:          SectionDef;
+  rows:         AtmPosRow[];
+  filter:       FilterState;
+  tab:          "trend" | "distribution";
+  hiddenSeries: Set<string>;
+  trendMode:    "absolute" | "mom";
+  distMode:     "absolute" | "pct";
 }
 
 const ACTIVE_VOL_VAL: React.CSSProperties = {
@@ -28,7 +28,15 @@ const INACTIVE_VOL_VAL: React.CSSProperties = {
   border:     "1px solid var(--border-card)",
 };
 
-export default function AtmPosSectionCard({ def, rows, filter, tab, hiddenSeries, onToggleSeries }: AtmPosSectionCardProps) {
+export default function AtmPosSectionCard({
+  def,
+  rows,
+  filter,
+  tab,
+  hiddenSeries,
+  trendMode,
+  distMode,
+}: AtmPosSectionCardProps) {
   const [volVal, setVolVal] = useState<VolVal>("vol");
 
   const hasVolVal = !!(def.volMetric && def.valMetric);
@@ -55,15 +63,14 @@ export default function AtmPosSectionCard({ def, rows, filter, tab, hiddenSeries
         border:       "1px solid var(--border-card)",
         borderRadius: 10,
         boxShadow:    "0 1px 4px var(--shadow)",
-        padding:      "16px 20px",
-        marginBottom: 16,
+        padding:      "14px 16px",
       }}
     >
       {/* Card header */}
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          <span className="text-base">{def.icon}</span>
-          <h3 className="text-sm font-semibold" style={{ color: "var(--font)" }}>
+          <span className="text-sm">{def.icon}</span>
+          <h3 className="text-xs font-semibold" style={{ color: "var(--font)" }}>
             {def.title}
           </h3>
         </div>
@@ -75,7 +82,7 @@ export default function AtmPosSectionCard({ def, rows, filter, tab, hiddenSeries
               <button
                 key={v}
                 onClick={() => setVolVal(v)}
-                className="text-xs font-medium px-2.5 py-1 rounded-full transition-colors"
+                className="text-xs font-medium px-2 py-0.5 rounded-full transition-colors"
                 style={volVal === v ? ACTIVE_VOL_VAL : INACTIVE_VOL_VAL}
               >
                 {v === "vol" ? "Vol" : "Val"}
@@ -84,31 +91,6 @@ export default function AtmPosSectionCard({ def, rows, filter, tab, hiddenSeries
           </div>
         )}
       </div>
-
-      {/* Series chips */}
-      {seriesNames.length > 0 && (
-        <div className="flex flex-wrap gap-1.5 mb-3">
-          {seriesNames.map((name, i) => {
-            const color    = pickColor(name, i);
-            const isHidden = hiddenSeries.has(name);
-            return (
-              <button
-                key={name}
-                onClick={() => onToggleSeries(name)}
-                className="text-xs font-medium px-3 py-1 rounded-full transition-all"
-                style={{
-                  background: isHidden ? "transparent" : color,
-                  border:     `1.5px solid ${color}`,
-                  color:      isHidden ? color          : "#fff",
-                  opacity:    isHidden ? 0.65            : 1,
-                }}
-              >
-                {name}
-              </button>
-            );
-          })}
-        </div>
-      )}
 
       {/* Chart */}
       {tab === "trend" ? (
@@ -119,6 +101,7 @@ export default function AtmPosSectionCard({ def, rows, filter, tab, hiddenSeries
           unit={activeUnit}
           hiddenSeries={hiddenSeries}
           chartId={def.id}
+          chartMode={trendMode}
         />
       ) : (
         <AtmPosDistributionChart
@@ -127,6 +110,7 @@ export default function AtmPosSectionCard({ def, rows, filter, tab, hiddenSeries
           unit={activeUnit}
           hiddenSeries={hiddenSeries}
           chartId={def.id}
+          chartMode={distMode}
         />
       )}
     </div>

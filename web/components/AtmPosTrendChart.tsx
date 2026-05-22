@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid,
   Tooltip, ResponsiveContainer,
@@ -16,6 +15,7 @@ interface AtmPosTrendChartProps {
   unit:         string;
   hiddenSeries: Set<string>;
   chartId:      string;
+  chartMode:    "absolute" | "mom";
 }
 
 export default function AtmPosTrendChart({
@@ -24,14 +24,12 @@ export default function AtmPosTrendChart({
   seriesNames,
   unit,
   hiddenSeries,
-  chartId,
+  chartMode,
 }: AtmPosTrendChartProps) {
-  const [mode, setMode] = useState<"absolute" | "mom">("absolute");
-
-  const chartData = mode === "absolute" ? absoluteData : momData;
+  const chartData = chartMode === "absolute" ? absoluteData : momData;
 
   const formatY = (v: number) =>
-    mode === "absolute" ? formatAtmValue(v, unit) : `${v.toFixed(1)}%`;
+    chartMode === "absolute" ? formatAtmValue(v, unit) : `${v.toFixed(1)}%`;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const CustomTooltip = ({ active, payload, label }: any) => {
@@ -51,7 +49,7 @@ export default function AtmPosTrendChart({
         {payload.map((p: any) => (
           <p key={p.dataKey} style={{ color: p.color, margin: "2px 0" }}>
             {p.name}:{" "}
-            {mode === "absolute"
+            {chartMode === "absolute"
               ? formatAtmValue(Number(p.value) || 0, unit)
               : p.value == null
               ? "—"
@@ -63,63 +61,40 @@ export default function AtmPosTrendChart({
   };
 
   return (
-    <div>
-      {/* Toggle */}
-      <div className="flex items-center gap-4 mb-3 text-sm">
-        {(["absolute", "mom"] as const).map((m) => (
-          <label
-            key={m}
-            className="flex items-center gap-1.5 cursor-pointer"
-            style={{ color: "var(--font)" }}
-          >
-            <input
-              type="radio"
-              name={`trend-mode-${chartId}`}
-              value={m}
-              checked={mode === m}
-              onChange={() => setMode(m)}
-              className="accent-blue-500"
-            />
-            {m === "absolute" ? "Absolute" : "MoM %"}
-          </label>
-        ))}
-      </div>
-
-      <div style={{ minWidth: 0, overflow: "hidden" }}>
-        <ResponsiveContainer width="100%" height={280}>
-          <LineChart data={chartData} margin={{ top: 4, right: 16, bottom: 4, left: 0 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="var(--grid)" />
-            <XAxis
-              dataKey="date"
-              tick={{ fontSize: 12, fill: "var(--font-muted)" }}
-              tickLine={false}
-            />
-            <YAxis
-              tickFormatter={formatY}
-              tick={{ fontSize: 12, fill: "var(--font-muted)" }}
-              tickLine={false}
-              axisLine={false}
-              width={80}
-            />
-            <Tooltip content={<CustomTooltip />} />
-            {seriesNames.map((name, i) =>
-              hiddenSeries.has(name) ? null : (
-                <Line
-                  key={name}
-                  type="monotone"
-                  dataKey={name}
-                  name={name}
-                  stroke={pickColor(name, i)}
-                  strokeWidth={2}
-                  dot={false}
-                  connectNulls={false}
-                  isAnimationActive={false}
-                />
-              ),
-            )}
-          </LineChart>
-        </ResponsiveContainer>
-      </div>
+    <div style={{ minWidth: 0, overflow: "hidden" }}>
+      <ResponsiveContainer width="100%" height={240}>
+        <LineChart data={chartData} margin={{ top: 4, right: 8, bottom: 4, left: 0 }}>
+          <CartesianGrid strokeDasharray="3 3" stroke="var(--grid)" />
+          <XAxis
+            dataKey="date"
+            tick={{ fontSize: 11, fill: "var(--font-muted)" }}
+            tickLine={false}
+          />
+          <YAxis
+            tickFormatter={formatY}
+            tick={{ fontSize: 11, fill: "var(--font-muted)" }}
+            tickLine={false}
+            axisLine={false}
+            width={72}
+          />
+          <Tooltip content={<CustomTooltip />} />
+          {seriesNames.map((name, i) =>
+            hiddenSeries.has(name) ? null : (
+              <Line
+                key={name}
+                type="monotone"
+                dataKey={name}
+                name={name}
+                stroke={pickColor(name, i)}
+                strokeWidth={2}
+                dot={false}
+                connectNulls={false}
+                isAnimationActive={false}
+              />
+            ),
+          )}
+        </LineChart>
+      </ResponsiveContainer>
     </div>
   );
 }
