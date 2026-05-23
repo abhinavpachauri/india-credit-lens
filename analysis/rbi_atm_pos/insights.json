@@ -1,0 +1,236 @@
+[
+  {
+    "id": "cc-ecom-vs-pos-share",
+    "group": "cc",
+    "cut": "total",
+    "period": "Mar 2026",
+    "title": "CC ecommerce holds above POS at 50.2% of total CC volume",
+    "body": "In Mar 2026, ecommerce accounted for 50.2% (+0.1pp vs prior month) of total CC transaction volume vs POS at 49.1%. This structural shift \u2014 digital-first over in-store \u2014 has persisted for multiple months.",
+    "effect": {
+      "highlight": [
+        "Total"
+      ],
+      "tab": "distribution",
+      "distMode": "pct",
+      "focusCard": "cc_ecom"
+    },
+    "exploreAction": {
+      "mode": "by_type"
+    }
+  },
+  {
+    "id": "cc-cards-streak",
+    "group": "cc",
+    "cut": "total",
+    "period": "Mar 2026",
+    "title": "Credit cards outstanding: 5 consecutive months of growth \u2014 118.6M cards",
+    "body": "Total credit cards outstanding reached 118.6M in Mar 2026 (+0.8% MoM), marking the 5 consecutive months of growth. Issuance momentum is broad-based across bank types.",
+    "effect": {
+      "highlight": [
+        "Total"
+      ],
+      "tab": "trend",
+      "trendMode": "absolute",
+      "focusCard": "credit_cards"
+    },
+    "exploreAction": {
+      "mode": "by_type"
+    }
+  },
+  {
+    "id": "cc-category-share-shift",
+    "group": "cc",
+    "cut": "by_type",
+    "period": "Mar 2026",
+    "title": "SFB banks gained CC card share in Mar 2026 (+0.1pp)",
+    "body": "SFB banks hold 1.5% of total credit cards outstanding in Mar 2026 (+0.1pp vs prior month). Private banks lost the most share at -0.1pp, now at 71.0%. SFB growth in credit cards reflects increased fintech partnerships.",
+    "effect": {
+      "highlight": [
+        "SFB",
+        "Total"
+      ],
+      "tab": "distribution",
+      "distMode": "pct",
+      "focusCard": "credit_cards"
+    },
+    "exploreAction": {
+      "mode": "by_type"
+    }
+  },
+  {
+    "id": "cc-top5-concentration",
+    "group": "cc",
+    "cut": "top_n",
+    "period": "Mar 2026",
+    "title": "Top 5 banks hold 74.3% of CC cards \u2014 HDFC BANK LTD leads at 22.2%",
+    "body": "In Mar 2026, the top 5 banks account for 74.3% of total credit cards outstanding (-0.2pp vs prior month). HDFC BANK LTD leads with 22.2% share (+0.2% MoM).",
+    "effect": {
+      "highlight": [
+        "HDFC BANK LTD",
+        "Total"
+      ],
+      "tab": "distribution",
+      "distMode": "pct",
+      "focusCard": "credit_cards"
+    },
+    "exploreAction": {
+      "mode": "top_n",
+      "topN": 10
+    }
+  },
+  {
+    "id": "dc-ecom-share",
+    "group": "dc",
+    "cut": "total",
+    "period": "Mar 2026",
+    "title": "DC ecommerce is 4.8% of total DC transaction volume in Mar 2026",
+    "body": "Debit card ecommerce accounted for 4.8% of total DC transaction volume in Mar 2026 (+0.3pp vs prior month). ATM cash still dominates at 81.4%. The structural shift away from cash toward digital payments is ongoing.",
+    "effect": {
+      "highlight": [
+        "Total"
+      ],
+      "tab": "distribution",
+      "distMode": "pct",
+      "focusCard": "dc_ecom"
+    },
+    "exploreAction": {
+      "mode": "by_type"
+    }
+  },
+  {
+    "id": "dc-cards-streak",
+    "group": "dc",
+    "cut": "total",
+    "period": "Mar 2026",
+    "title": "Debit cards: 5 consecutive months of growth \u2014 1.04B outstanding",
+    "body": "Total debit cards outstanding reached 1.04B in Mar 2026 (+0.3% MoM), the 5 consecutive months of growth. With over 1B cards, India debit base continues to expand.",
+    "effect": {
+      "highlight": [
+        "Total"
+      ],
+      "tab": "trend",
+      "trendMode": "absolute",
+      "focusCard": "debit_cards"
+    },
+    "exploreAction": {
+      "mode": "by_type"
+    }
+  },
+  {
+    "id": "dc-psb-dominance",
+    "group": "dc",
+    "cut": "by_type",
+    "period": "Mar 2026",
+    "title": "PSB banks hold 62.9% of debit cards \u2014 PSB gaining share in Mar 2026",
+    "body": "Public sector banks account for 62.9% of total debit cards outstanding in Mar 2026 (+0.1pp vs prior month). Private banks hold 25.1%. PSB banks are the fastest-growing category (+0.1pp share gain).",
+    "effect": {
+      "highlight": [
+        "PSB",
+        "Total"
+      ],
+      "tab": "distribution",
+      "distMode": "pct",
+      "focusCard": "debit_cards"
+    },
+    "exploreAction": {
+      "mode": "by_type"
+    }
+  },
+  {
+    "id": "dc-top-bank-leader",
+    "group": "dc",
+    "cut": "top_n",
+    "period": "Mar 2026",
+    "title": "STATE BANK OF INDIA leads DC cards at 24.2%",
+    "body": "STATE BANK OF INDIA holds 24.2% of total debit cards in Mar 2026 (+0.5% MoM). Top 5 banks account for 49.8% (-0.1pp vs prior month).",
+    "effect": {
+      "highlight": [
+        "STATE BANK OF INDIA",
+        "Total"
+      ],
+      "tab": "distribution",
+      "distMode": "pct",
+      "focusCard": "debit_cards"
+    },
+    "exploreAction": {
+      "mode": "top_n",
+      "topN": 10
+    }
+  },
+  {
+    "id": "infra-qr-per-pos",
+    "group": "infra",
+    "cut": "total",
+    "period": "Mar 2026",
+    "title": "India now has 65 UPI QR codes per POS terminal",
+    "body": "As of Mar 2026, there are 65 UPI QR codes (761.2M) for every POS terminal (11.8M). This ratio was 65 in the prior month. UPI QR grew +0.9% MoM vs POS terminals at +0.9% MoM \u2014 digital acceptance infrastructure is outpacing hardware deployment.",
+    "effect": {
+      "highlight": [
+        "Total"
+      ],
+      "tab": "trend",
+      "trendMode": "absolute",
+      "focusCard": "upi_qr"
+    },
+    "exploreAction": {
+      "mode": "by_type"
+    }
+  },
+  {
+    "id": "infra-pos-streak",
+    "group": "infra",
+    "cut": "total",
+    "period": "Mar 2026",
+    "title": "POS terminals: 4 consecutive months of growth \u2014 11.8M deployed",
+    "body": "POS terminals reached 11.8M in Mar 2026 (+0.9% MoM), the 4 consecutive months of growth. Physical acceptance infrastructure continues to expand.",
+    "effect": {
+      "highlight": [
+        "Total"
+      ],
+      "tab": "trend",
+      "trendMode": "absolute",
+      "focusCard": "pos_terminals"
+    },
+    "exploreAction": {
+      "mode": "by_type"
+    }
+  },
+  {
+    "id": "infra-upi-vs-bharat-qr",
+    "group": "infra",
+    "cut": "total",
+    "period": "Mar 2026",
+    "title": "UPI QR codes are 135x Bharat QR in scale \u2014 761.2M vs 5.63M",
+    "body": "As of Mar 2026, there are 761.2M UPI QR codes deployed vs 5.63M Bharat QR codes \u2014 a 135x gap. UPI QR grew +0.9% MoM vs Bharat QR at -4.5% MoM. UPI has decisively won the QR standard battle in India.",
+    "effect": {
+      "highlight": [
+        "Total"
+      ],
+      "tab": "trend",
+      "trendMode": "absolute",
+      "focusCard": "upi_qr"
+    },
+    "exploreAction": null
+  },
+  {
+    "id": "infra-top-bank-pos",
+    "group": "infra",
+    "cut": "top_n",
+    "period": "Mar 2026",
+    "title": "RBL BANK LTD leads POS terminal deployment at 22.5% market share",
+    "body": "RBL BANK LTD has deployed 2.65M POS terminals in Mar 2026, accounting for 22.5% of total (+9.5% MoM). Top 5 banks hold 93.1% of all POS terminals (+0.1pp vs prior month). Notable: RBL BANK LTD moved from #2 to #1.",
+    "effect": {
+      "highlight": [
+        "RBL BANK LTD",
+        "Total"
+      ],
+      "tab": "distribution",
+      "distMode": "pct",
+      "focusCard": "pos_terminals"
+    },
+    "exploreAction": {
+      "mode": "top_n",
+      "topN": 10
+    }
+  }
+]

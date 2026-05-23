@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import {
   SECTION_DEFS,
   GROUP_LABELS,
@@ -8,6 +8,11 @@ import {
   getTopNBanks,
 } from "@/lib/atm_pos_data";
 import type { AtmPosRow, FilterState } from "@/lib/atm_pos_data";
+import {
+  loadAtmPosInsights,
+  filterInsights,
+} from "@/lib/atm_pos_insights";
+import type { AtmPosInsight } from "@/lib/atm_pos_insights";
 import { pickColor } from "@/lib/theme";
 import AtmPosSectionCard from "@/components/AtmPosSectionCard";
 
@@ -18,7 +23,7 @@ const GROUP_PRIMARY: Record<string, string> = {
   infra: "pos_terminals",
 };
 
-const ALL_TYPES = ["PSB", "Private", "Foreign", "SFB", "Payments"];
+const ALL_TYPES     = ["PSB", "Private", "Foreign", "SFB", "Payments"];
 const TOP_N_OPTIONS = [5, 10, 20] as const;
 const BY_TYPE_SERIES = ["Total", "PSB", "Private", "Foreign", "SFB", "Payments"];
 
@@ -47,14 +52,22 @@ export default function AtmPosGroupSection({ group, rows }: AtmPosGroupSectionPr
   );
   const allBanks = useMemo(() => getAllBanks(rows), [rows]);
 
-  const [mode,          setMode]          = useState<GroupMode>("by_type");
-  const [selectedBanks, setSelectedBanks] = useState<string[]>([]);
-  const [topN,          setTopN]          = useState<number>(10);
-  const [hiddenSeries,  setHiddenSeries]  = useState<Set<string>>(new Set());
-  const [tab,           setTab]           = useState<TabId>("trend");
-  const [trendMode,     setTrendMode]     = useState<"absolute" | "mom">("absolute");
-  const [distMode,      setDistMode]      = useState<"absolute" | "pct">("absolute");
-  const [bankSearch,    setBankSearch]    = useState("");
+  const [mode,           setMode]           = useState<GroupMode>("by_type");
+  const [selectedBanks,  setSelectedBanks]  = useState<string[]>([]);
+  const [topN,           setTopN]           = useState<number>(10);
+  const [hiddenSeries,   setHiddenSeries]   = useState<Set<string>>(new Set());
+  const [tab,            setTab]            = useState<TabId>("trend");
+  const [trendMode,      setTrendMode]      = useState<"absolute" | "mom">("absolute");
+  const [distMode,       setDistMode]       = useState<"absolute" | "pct">("absolute");
+  const [bankSearch,     setBankSearch]     = useState("");
+  const [activeInsight,  setActiveInsight]  = useState<AtmPosInsight | null>(null);
+  const [allInsights,    setAllInsights]    = useState<AtmPosInsight[]>([]);
+  const cardsRef = useRef<HTMLDivElement>(null);
+
+  // Load insights once
+  useEffect(() => {
+    loadAtmPosInsights().then(setAllInsights).catch(() => setAllInsights([]));
+  }, []);
 
   // Pre-compute top N banks at group level for consistent chips across all cards
   const topNBanks = useMemo(() => {
@@ -77,13 +90,19 @@ export default function AtmPosGroupSection({ group, rows }: AtmPosGroupSectionPr
     if (mode === "individual") {
       return { mode: "individual", selectedTypes: [], selectedBanks, topN };
     }
-    // top_n: forward as individual with pre-computed banks so all cards share same set
     return { mode: "individual", selectedTypes: [], selectedBanks: topNBanks, topN };
   }, [mode, selectedBanks, topNBanks, topN]);
 
+  // Insights visible for current group + mode
+  const visibleInsights = useMemo(
+    () => filterInsights(allInsights, group, mode),
+    [allInsights, group, mode],
+  );
+
   const handleModeChange = (m: GroupMode) => {
     setMode(m);
-    setHiddenSeries(new Set()); // reset chip visibility on mode switch
+    setHiddenSeries(new Set());
+    setActiveInsight(null);
   };
 
   const toggleSeries = (name: string) => {
@@ -98,6 +117,40 @@ export default function AtmPosGroupSection({ group, rows }: AtmPosGroupSectionPr
     setSelectedBanks((prev) =>
       prev.includes(bank) ? prev.filter((b) => b !== bank) : [...prev, bank],
     );
+  };
+
+  // Apply insight effect: dim all series except highlight, switch tab/mode
+  const applyInsight = (ins: AtmPosInsight) => {
+    if (activeInsight?.id === ins.id) {
+      // Clicking active insight resets everything
+      setActiveInsight(null);
+      setHiddenSeries(new Set());
+      return;
+    }
+    setActiveInsight(ins);
+
+    // Dim all series not in highlight
+    const highlighted = new Set(ins.effect.highlight);
+    const toHide = new Set(seriesNames.filter((n) => !highlighted.has(n)));
+    setHiddenSeries(toHide);
+
+    // Switch tab and chart mode
+    setTab(ins.effect.tab);
+    if (ins.effect.trendMode) setTrendMode(ins.effect.trendMode);
+    if (ins.effect.distMode)  setDistMode(ins.effect.distMode);
+
+    // Scroll to focus card if specified
+    if (ins.effect.focusCard && cardsRef.current) {
+      const el = cardsRef.current.querySelector(`[data-card-id="${ins.effect.focusCard}"]`);
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  };
+
+  // Explore action: switch mode then re-apply insight
+  const applyExplore = (ins: AtmPosInsight) => {
+    if (!ins.exploreAction) return;
+    handleModeChange(ins.exploreAction.mode);
+    if (ins.exploreAction.topN) setTopN(ins.exploreAction.topN);
   };
 
   const filteredBanks = bankSearch
@@ -282,19 +335,97 @@ export default function AtmPosGroupSection({ group, rows }: AtmPosGroupSectionPr
         )}
       </div>
 
-      {/* 3-column card grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      {/* ── Insights panel ──────────────────────────────────────────────────── */}
+      {visibleInsights.length > 0 && (
+        <div className="mb-4 flex flex-col gap-2">
+          {visibleInsights.map((ins) => {
+            const isActive = activeInsight?.id === ins.id;
+            return (
+              <div
+                key={ins.id}
+                onClick={() => applyInsight(ins)}
+                className="cursor-pointer rounded-lg transition-all"
+                style={{
+                  background: isActive ? "var(--bg-card)" : "var(--bg-page)",
+                  border:     `1px solid ${isActive ? "#4e8ef7" : "var(--border-card)"}`,
+                  padding:    "10px 14px",
+                }}
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-start gap-2 min-w-0">
+                    <span className="mt-0.5 flex-shrink-0 text-sm">💡</span>
+                    <div className="min-w-0">
+                      <p
+                        className="text-xs font-semibold leading-snug"
+                        style={{ color: isActive ? "#4e8ef7" : "var(--font)" }}
+                      >
+                        {ins.title}
+                      </p>
+                      {isActive && (
+                        <p
+                          className="text-xs mt-1.5 leading-relaxed"
+                          style={{ color: "var(--font-muted)" }}
+                        >
+                          {ins.body}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 flex-shrink-0">
+                    {/* Cut badge */}
+                    <span
+                      className="text-xs px-2 py-0.5 rounded-full"
+                      style={{
+                        background: "var(--bg-page)",
+                        border:     "1px solid var(--border-card)",
+                        color:      "var(--font-muted)",
+                        fontSize:   10,
+                      }}
+                    >
+                      {ins.cut === "by_type" ? "By Type" : ins.cut === "top_n" ? "Top N" : "Total"}
+                    </span>
+                    {/* Explore button — only shown when insight is active and explore action exists */}
+                    {isActive && ins.exploreAction && (
+                      <button
+                        onClick={(e) => { e.stopPropagation(); applyExplore(ins); }}
+                        className="text-xs font-medium px-3 py-1 rounded-full transition-colors"
+                        style={{
+                          background: "#4e8ef7",
+                          color:      "#fff",
+                          border:     "1px solid #4e8ef7",
+                        }}
+                      >
+                        Explore →
+                      </button>
+                    )}
+                    <span
+                      className="text-xs"
+                      style={{ color: "var(--font-muted)", transform: isActive ? "rotate(180deg)" : "none", display: "inline-block" }}
+                    >
+                      ▾
+                    </span>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Card grid */}
+      <div ref={cardsRef} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {sections.map((def) => (
-          <AtmPosSectionCard
-            key={def.id}
-            def={def}
-            rows={rows}
-            filter={cardFilter}
-            tab={tab}
-            hiddenSeries={hiddenSeries}
-            trendMode={trendMode}
-            distMode={distMode}
-          />
+          <div key={def.id} data-card-id={def.id}>
+            <AtmPosSectionCard
+              def={def}
+              rows={rows}
+              filter={cardFilter}
+              tab={tab}
+              hiddenSeries={hiddenSeries}
+              trendMode={trendMode}
+              distMode={distMode}
+            />
+          </div>
         ))}
       </div>
     </div>
