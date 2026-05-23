@@ -103,6 +103,34 @@ def mom_pct(latest: float, prior: float) -> float | None:
     return round2((latest - prior) / prior * 100)
 
 
+# ── Quarter helpers ───────────────────────────────────────────────────────────
+
+# Stock metrics: use end-of-quarter value; flow metrics: sum the quarter
+STOCK_METRICS = {
+    "credit_cards", "debit_cards", "pos_terminals", "upi_qr",
+    "atm_onsite", "atm_offsite", "micro_atms", "bharat_qr",
+}
+
+
+def get_quarter(iso_date: str) -> tuple[int, int]:
+    """Return (fy_start_year, quarter_number) for Indian FY (Apr–Mar).
+    e.g. '2025-10-31' → (2025, 3)  '2026-01-31' → (2025, 4)
+    """
+    d = datetime.strptime(iso_date[:10], "%Y-%m-%d")
+    m, y = d.month, d.year
+    if m >= 4:
+        fy = y
+        q = 1 if m <= 6 else 2 if m <= 9 else 3
+    else:
+        fy = y - 1
+        q = 4
+    return fy, q
+
+
+def quarter_label(fy: int, q: int) -> str:
+    return f"Q{q} FY{str(fy + 1)[2:]}"   # (2025, 3) → "Q3 FY26"
+
+
 def compute_streak(values: list[float]) -> tuple[int, str]:
     """
     Given values in chronological order, return (streak_length, direction)
@@ -166,10 +194,19 @@ def load_csv() -> tuple[list[str], dict]:
 # ── Signal builders ───────────────────────────────────────────────────────────
 
 def build_total_metric_signals(dates, data, metrics):
-    """MoM%, streak, latest value for each metric at the Total level."""
+    """MoM%, QoQ%, streak, latest value for each metric at the Total level."""
     latest = dates[-1]
     prior  = dates[-2] if len(dates) > 1 else None
     out    = {}
+
+    # Pre-compute QoQ buckets
+    quarter_dates: dict[tuple, list] = defaultdict(list)
+    for d in dates:
+        quarter_dates[get_quarter(d)].append(d)
+    sorted_quarters = sorted(quarter_dates.keys())
+    has_qoq = len(sorted_quarters) >= 2
+    prev_q_dates = sorted(quarter_dates[sorted_quarters[-2]]) if has_qoq else []
+    curr_q_dates = sorted(quarter_dates[sorted_quarters[-1]]) if has_qoq else []
 
     for metric in metrics:
         vals_by_date = {
@@ -181,14 +218,27 @@ def build_total_metric_signals(dates, data, metrics):
         chron_vals = [vals_by_date[d] for d in dates]
         streak_len, streak_dir = compute_streak(chron_vals)
 
+        # QoQ: stock = end-of-quarter; flow = sum of quarter
+        qoq = None
+        if has_qoq:
+            is_stock = metric in STOCK_METRICS
+            if is_stock:
+                prev_qv = vals_by_date.get(prev_q_dates[-1], 0)
+                curr_qv = vals_by_date.get(curr_q_dates[-1], 0)
+            else:
+                prev_qv = sum(vals_by_date.get(d, 0) for d in prev_q_dates)
+                curr_qv = sum(vals_by_date.get(d, 0) for d in curr_q_dates)
+            qoq = round2((curr_qv - prev_qv) / prev_qv * 100) if prev_qv else None
+
         out[metric] = {
-            "latest":      round2(latest_val),
-            "prior":       round2(prior_val) if prior_val is not None else None,
-            "mom_pct":     mom_pct(latest_val, prior_val) if prior_val is not None else None,
-            "mom_dir":     ("up" if latest_val > prior_val else "down" if latest_val < prior_val else "flat")
-                           if prior_val is not None else "flat",
+            "latest":        round2(latest_val),
+            "prior":         round2(prior_val) if prior_val is not None else None,
+            "mom_pct":       mom_pct(latest_val, prior_val) if prior_val is not None else None,
+            "mom_dir":       ("up" if latest_val > prior_val else "down" if latest_val < prior_val else "flat")
+                             if prior_val is not None else "flat",
+            "qoq_pct":       qoq,
             "streak_months": streak_len,
-            "streak_dir":  streak_dir,
+            "streak_dir":    streak_dir,
         }
     return out
 
@@ -387,6 +437,14 @@ def main():
     latest = dates[-1]
     prior  = dates[-2] if len(dates) > 1 else None
 
+    # Quarter context for meta
+    q_buckets = defaultdict(list)
+    for d in dates:
+        q_buckets[get_quarter(d)].append(d)
+    sorted_qs = sorted(q_buckets.keys())
+    curr_q = sorted_qs[-1] if sorted_qs else None
+    prev_q = sorted_qs[-2] if len(sorted_qs) >= 2 else None
+
     signals = {
         "meta": {
             "generated_at":  datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
@@ -396,6 +454,8 @@ def main():
             "prior_month":   fmt_month(prior) if prior else None,
             "all_periods":   dates,
             "all_months":    [fmt_month(d) for d in dates],
+            "curr_quarter":  quarter_label(*curr_q) if curr_q else None,
+            "prev_quarter":  quarter_label(*prev_q) if prev_q else None,
         },
         "groups": {},
     }

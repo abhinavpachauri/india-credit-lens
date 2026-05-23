@@ -195,19 +195,22 @@ def cc_atm_withdrawal_trend(s, month) -> dict | None:
 
 def cc_cards_streak(s, month) -> dict | None:
     """CC cards outstanding — streak if ≥ 3 months."""
-    m = s["groups"]["cc"]["total"]["metrics"].get("credit_cards", {})
-    streak = m.get("streak_months", 1)
+    m          = s["groups"]["cc"]["total"]["metrics"].get("credit_cards", {})
+    streak     = m.get("streak_months", 1)
     streak_dir = m.get("streak_dir", "flat")
-    latest = m.get("latest")
-    mom = m.get("mom_pct")
+    latest     = m.get("latest")
+    qoq        = m.get("qoq_pct")
+    curr_q     = s["meta"].get("curr_quarter", "latest quarter")
+    prev_q     = s["meta"].get("prev_quarter", "prior quarter")
 
     if streak < 3 or streak_dir == "flat":
         return None
 
     latest_fmt = fmt_num(latest)
+    qoq_str    = f" ({sign(qoq)}% QoQ vs {prev_q})" if qoq is not None else ""
     title = f"Credit cards outstanding: {streak_label(streak, streak_dir)} — {latest_fmt} cards"
     body = (
-        f"Total credit cards outstanding reached {latest_fmt} in {month} ({mom:+.1f}% MoM), "
+        f"Total credit cards outstanding reached {latest_fmt} in {month}{qoq_str}, "
         f"marking the {streak_label(streak, streak_dir)}. "
         f"{'Issuance momentum is broad-based across bank types.' if streak_dir == 'up' else 'Card attrition or issuance slowdown is underway.'}"
     )
@@ -382,14 +385,17 @@ def dc_cards_streak(s, month) -> dict | None:
     streak = m.get("streak_months", 1)
     sd     = m.get("streak_dir", "flat")
     latest = m.get("latest")
-    mom    = m.get("mom_pct")
+    qoq    = m.get("qoq_pct")
+    curr_q = s["meta"].get("curr_quarter", "latest quarter")
+    prev_q = s["meta"].get("prev_quarter", "prior quarter")
 
     if streak < 4 or sd == "flat":
         return None  # higher bar for DC (slower moving)
 
+    qoq_str = f" ({sign(qoq)}% QoQ vs {prev_q})" if qoq is not None else ""
     title = f"Debit cards: {streak_label(streak, sd)} — {fmt_num(latest)} outstanding"
     body = (
-        f"Total debit cards outstanding reached {fmt_num(latest)} in {month} ({mom:+.1f}% MoM), "
+        f"Total debit cards outstanding reached {fmt_num(latest)} in {month}{qoq_str}, "
         f"the {streak_label(streak, sd)}. "
         f"{'With over 1B cards, India debit base continues to expand.' if latest > 1e9 else ''}"
     )
@@ -519,14 +525,16 @@ def infra_pos_streak(s, month) -> dict | None:
     streak = m.get("streak_months", 1)
     sd     = m.get("streak_dir", "flat")
     latest = m.get("latest")
-    mom    = m.get("mom_pct")
+    qoq    = m.get("qoq_pct")
+    prev_q = s["meta"].get("prev_quarter", "prior quarter")
 
     if streak < 3 or sd == "flat":
         return None
 
+    qoq_str = f" ({sign(qoq)}% QoQ vs {prev_q})" if qoq is not None else ""
     title = f"POS terminals: {streak_label(streak, sd)} — {fmt_num(latest)} deployed"
     body = (
-        f"POS terminals reached {fmt_num(latest)} in {month} ({mom:+.1f}% MoM), "
+        f"POS terminals reached {fmt_num(latest)} in {month}{qoq_str}, "
         f"the {streak_label(streak, sd)}. "
         f"{'Physical acceptance infrastructure continues to expand.' if sd == 'up' else 'POS terminal count is contracting — QR-first acceptance may be replacing hardware.'}"
     )

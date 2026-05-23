@@ -249,6 +249,63 @@ export function buildSectionData(
   return { absoluteData, momData, seriesNames };
 }
 
+// ── QoQ computation ────────────────────────────────────────────────────────────
+
+function getQuarterKey(ts: number): string {
+  const d = new Date(ts);
+  const month = d.getUTCMonth() + 1;
+  const year  = d.getUTCFullYear();
+  let fy: number, q: number;
+  if (month >= 4) {
+    fy = year;
+    q  = month <= 6 ? 1 : month <= 9 ? 2 : 3;
+  } else {
+    fy = year - 1;
+    q  = 4;
+  }
+  return `${fy}-Q${q}`;
+}
+
+/**
+ * Computes QoQ % change for the "Total" series in absoluteData.
+ * Stock units (count): end-of-quarter value.
+ * Flow units (transactions / rs_thousands): sum of quarter.
+ */
+export function buildQoQValue(absoluteData: ChartPoint[], unit: string): number | null {
+  if (!absoluteData.length) return null;
+
+  const quarterMap = new Map<string, ChartPoint[]>();
+  for (const point of absoluteData) {
+    const key = getQuarterKey(point._ts as number);
+    if (!quarterMap.has(key)) quarterMap.set(key, []);
+    quarterMap.get(key)!.push(point);
+  }
+
+  const sortedKeys = Array.from(quarterMap.keys()).sort((a, b) => {
+    const [afy, aq] = a.split("-Q").map(Number);
+    const [bfy, bq] = b.split("-Q").map(Number);
+    return afy !== bfy ? afy - bfy : aq - bq;
+  });
+
+  if (sortedKeys.length < 2) return null;
+
+  const prevPts = quarterMap.get(sortedKeys[sortedKeys.length - 2])!
+    .sort((a, b) => (a._ts as number) - (b._ts as number));
+  const currPts = quarterMap.get(sortedKeys[sortedKeys.length - 1])!
+    .sort((a, b) => (a._ts as number) - (b._ts as number));
+
+  const isFlow  = unit === "transactions" || unit === "rs_thousands";
+  const qVal    = (pts: ChartPoint[]) =>
+    isFlow
+      ? pts.reduce((s, p) => s + (Number(p["Total"]) || 0), 0)
+      : Number(pts[pts.length - 1]["Total"]) || 0;
+
+  const prev = qVal(prevPts);
+  const curr = qVal(currPts);
+  if (prev === 0) return null;
+  return +((curr - prev) / prev * 100).toFixed(1);
+}
+
 // ── Section definitions ────────────────────────────────────────────────────────
 
 export type VolVal = "vol" | "val";
