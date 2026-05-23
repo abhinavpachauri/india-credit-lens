@@ -624,6 +624,83 @@ def infra_top_bank_pos(s, month) -> dict | None:
     )
 
 
+def cc_transaction_surge(s, month) -> dict | None:
+    """All CC transaction types up strongly in same month — year-end / seasonal signal."""
+    metrics   = s["groups"]["cc"]["total"]["metrics"]
+    txn_keys  = ["cc_pos_txn_vol", "cc_ecom_txn_vol", "cc_atm_withdrawal_vol", "cc_other_txn_vol"]
+    moms      = {k: metrics.get(k, {}).get("mom_pct") for k in txn_keys}
+    valid     = {k: v for k, v in moms.items() if v is not None}
+    if not valid:
+        return None
+    avg_mom = sum(valid.values()) / len(valid)
+    if not all(v > 10 for v in valid.values()) or avg_mom < 12:
+        return None  # only fire when all types surge together
+
+    title = f"All CC transaction types surged in {month} — avg {avg_mom:.1f}% MoM"
+    body = (
+        f"All four CC transaction types grew strongly in {month}: "
+        f"POS +{moms['cc_pos_txn_vol']:.1f}%, "
+        f"eCommerce +{moms['cc_ecom_txn_vol']:.1f}%, "
+        f"ATM +{moms['cc_atm_withdrawal_vol']:.1f}%, "
+        f"Other +{moms['cc_other_txn_vol']:.1f}%. "
+        f"March year-end spending typically drives broad-based CC transaction growth."
+    )
+    return insight(
+        "cc-txn-surge", "cc", "total", month, title, body,
+        effect={"highlight": ["Total"], "tab": "trend", "trendMode": "mom", "focusCard": "cc_pos"},
+    )
+
+
+def dc_atm_share_structural(s, month) -> dict | None:
+    """DC ATM cash losing share to digital — structural shift signal."""
+    cross     = s["groups"]["dc"]["total"]["cross"]
+    atm       = cross.get("dc_atm_withdrawal_vol", {})
+    ecom      = cross.get("dc_ecom_txn_vol", {})
+    atm_sh    = atm.get("share_pct")
+    atm_delta = atm.get("share_delta_pp")
+    ecom_sh   = ecom.get("share_pct")
+    ecom_delta= ecom.get("share_delta_pp")
+
+    if atm_sh is None or atm_delta is None or atm_delta >= 0:
+        return None  # only fire when ATM share declining
+
+    title = f"DC ATM cash losing share — {atm_sh:.1f}% of DC volume ({sign(atm_delta)}pp) as digital grows"
+    body  = (
+        f"Debit card ATM withdrawals account for {atm_sh:.1f}% of total DC transaction volume in {month} "
+        f"({sign(atm_delta)}pp vs prior month). "
+    )
+    if ecom_sh and ecom_delta:
+        body += f"DC ecommerce has grown to {ecom_sh:.1f}% ({sign(ecom_delta)}pp). "
+    body += "The structural shift from cash to digital payments is underway in the debit segment."
+    return insight(
+        "dc-atm-share-structural", "dc", "total", month, title, body,
+        effect={"highlight": ["Total"], "tab": "distribution", "distMode": "pct", "focusCard": "dc_atm"},
+    )
+
+
+def dc_pos_cash_decline(s, month) -> dict | None:
+    """DC POS cash withdrawals declining — distinct from ATM cash trend."""
+    m      = s["groups"]["dc"]["total"]["metrics"].get("dc_pos_withdrawal_vol", {})
+    streak = m.get("streak_months", 1)
+    sd     = m.get("streak_dir", "flat")
+    mom    = m.get("mom_pct")
+
+    if sd != "down" or streak < 2 or mom is None:
+        return None
+
+    title = f"DC POS cash withdrawals: {streak_label(streak, 'down')} ({mom:.1f}% MoM)"
+    body  = (
+        f"Debit card POS cash-back withdrawal volume fell {abs(mom):.1f}% MoM in {month}, "
+        f"the {streak_label(streak, 'down')}. "
+        f"This is a separate channel from ATM cash — POS cash-back usage is contracting "
+        f"while digital POS payments continue to grow."
+    )
+    return insight(
+        "dc-pos-cash-decline", "dc", "total", month, title, body,
+        effect={"highlight": ["Total"], "tab": "trend", "trendMode": "mom", "focusCard": "dc_pos_wd"},
+    )
+
+
 # ══════════════════════════════════════════════════════════════════════════════
 # Orchestrate
 # ══════════════════════════════════════════════════════════════════════════════
@@ -633,10 +710,13 @@ RULES = [
     cc_ecom_vs_pos,
     cc_atm_withdrawal_trend,
     cc_cards_streak,
+    cc_transaction_surge,
     cc_category_share_shift,
     cc_top_bank_concentration,
     # DC
     dc_atm_trend,
+    dc_atm_share_structural,
+    dc_pos_cash_decline,
     dc_ecom_share,
     dc_cards_streak,
     dc_category_dominance,

@@ -38,6 +38,23 @@
     }
   },
   {
+    "id": "cc-txn-surge",
+    "group": "cc",
+    "cut": "total",
+    "period": "Mar 2026",
+    "title": "All CC transaction types surged in Mar 2026 \u2014 avg 15.8% MoM",
+    "body": "All four CC transaction types grew strongly in Mar 2026: POS +16.7%, eCommerce +17.2%, ATM +11.4%, Other +18.1%. March year-end spending typically drives broad-based CC transaction growth.",
+    "effect": {
+      "highlight": [
+        "Total"
+      ],
+      "tab": "trend",
+      "trendMode": "mom",
+      "focusCard": "cc_pos"
+    },
+    "exploreAction": null
+  },
+  {
     "id": "cc-category-share-shift",
     "group": "cc",
     "cut": "by_type",
@@ -77,6 +94,40 @@
       "mode": "top_n",
       "topN": 10
     }
+  },
+  {
+    "id": "dc-atm-share-structural",
+    "group": "dc",
+    "cut": "total",
+    "period": "Mar 2026",
+    "title": "DC ATM cash losing share \u2014 81.4% of DC volume (-0.5pp) as digital grows",
+    "body": "Debit card ATM withdrawals account for 81.4% of total DC transaction volume in Mar 2026 (-0.5pp vs prior month). DC ecommerce has grown to 4.8% (+0.3pp). The structural shift from cash to digital payments is underway in the debit segment.",
+    "effect": {
+      "highlight": [
+        "Total"
+      ],
+      "tab": "distribution",
+      "distMode": "pct",
+      "focusCard": "dc_atm"
+    },
+    "exploreAction": null
+  },
+  {
+    "id": "dc-pos-cash-decline",
+    "group": "dc",
+    "cut": "total",
+    "period": "Mar 2026",
+    "title": "DC POS cash withdrawals: 2 consecutive months of decline (-7.0% MoM)",
+    "body": "Debit card POS cash-back withdrawal volume fell 7.0% MoM in Mar 2026, the 2 consecutive months of decline. This is a separate channel from ATM cash \u2014 POS cash-back usage is contracting while digital POS payments continue to grow.",
+    "effect": {
+      "highlight": [
+        "Total"
+      ],
+      "tab": "trend",
+      "trendMode": "mom",
+      "focusCard": "dc_pos_wd"
+    },
+    "exploreAction": null
   },
   {
     "id": "dc-ecom-share",

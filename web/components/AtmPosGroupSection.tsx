@@ -337,75 +337,70 @@ export default function AtmPosGroupSection({ group, rows }: AtmPosGroupSectionPr
 
       {/* ── Insights panel ──────────────────────────────────────────────────── */}
       {visibleInsights.length > 0 && (
-        <div className="mb-4 flex flex-col gap-2">
-          {visibleInsights.map((ins) => {
-            const isActive = activeInsight?.id === ins.id;
+        <div
+          className="mb-4"
+          style={{
+            background:   "var(--bg-card)",
+            border:       "1px solid var(--border-card)",
+            borderLeft:   "3px solid #4e8ef7",
+            borderRadius: "0 8px 8px 0",
+            overflow:     "hidden",
+          }}
+        >
+          {visibleInsights.map((ins, idx) => {
+            const isActive  = activeInsight?.id === ins.id;
+            const cutLabel  = ins.cut === "by_type" ? "By Type" : ins.cut === "top_n" ? "Top N" : "Total";
             return (
               <div
                 key={ins.id}
                 onClick={() => applyInsight(ins)}
-                className="cursor-pointer rounded-lg transition-all"
+                className="cursor-pointer transition-colors"
                 style={{
-                  background: isActive ? "var(--bg-card)" : "var(--bg-page)",
-                  border:     `1px solid ${isActive ? "#4e8ef7" : "var(--border-card)"}`,
                   padding:    "10px 14px",
+                  borderTop:  idx > 0 ? "1px solid var(--border-card)" : "none",
+                  background: isActive ? "#4e8ef710" : "transparent",
                 }}
               >
-                <div className="flex items-start justify-between gap-3">
-                  <div className="flex items-start gap-2 min-w-0">
-                    <span className="mt-0.5 flex-shrink-0 text-sm">💡</span>
-                    <div className="min-w-0">
-                      <p
-                        className="text-sm font-semibold leading-snug"
-                        style={{ color: isActive ? "#4e8ef7" : "var(--font)" }}
-                      >
-                        {ins.title}
-                      </p>
-                      {isActive && (
-                        <p
-                          className="text-sm mt-1.5 leading-relaxed"
-                          style={{ color: "var(--font-muted)" }}
-                        >
-                          {ins.body}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2 flex-shrink-0">
-                    {/* Cut badge */}
+                <div className="flex items-start gap-2">
+                  <span className="flex-shrink-0 mt-0.5" style={{ fontSize: 13 }}>💡</span>
+                  <p
+                    className="text-sm font-medium leading-snug flex-1 min-w-0"
+                    style={{ color: isActive ? "#4e8ef7" : "var(--font)" }}
+                  >
+                    {ins.title}
+                  </p>
+                  <div className="flex items-center gap-1.5 flex-shrink-0 ml-2">
                     <span
-                      className="text-xs px-2 py-0.5 rounded-full"
                       style={{
-                        background: "var(--bg-page)",
-                        border:     "1px solid var(--border-card)",
-                        color:      "var(--font-muted)",
-                        fontSize:   10,
+                        fontSize:     11,
+                        color:        "var(--font-muted)",
+                        background:   "var(--bg-page)",
+                        border:       "1px solid var(--border-card)",
+                        borderRadius: 4,
+                        padding:      "1px 6px",
                       }}
                     >
-                      {ins.cut === "by_type" ? "By Type" : ins.cut === "top_n" ? "Top N" : "Total"}
+                      {cutLabel}
                     </span>
-                    {/* Explore button — only shown when insight is active and explore action exists */}
                     {isActive && ins.exploreAction && (
                       <button
                         onClick={(e) => { e.stopPropagation(); applyExplore(ins); }}
-                        className="text-sm font-medium px-3 py-1 rounded-full transition-colors"
-                        style={{
-                          background: "#4e8ef7",
-                          color:      "#fff",
-                          border:     "1px solid #4e8ef7",
-                        }}
+                        className="text-sm font-medium px-2.5 py-0.5 rounded transition-colors"
+                        style={{ background: "#4e8ef7", color: "#fff", border: "none" }}
                       >
                         Explore →
                       </button>
                     )}
-                    <span
-                      className="text-xs"
-                      style={{ color: "var(--font-muted)", transform: isActive ? "rotate(180deg)" : "none", display: "inline-block" }}
-                    >
-                      ▾
-                    </span>
                   </div>
                 </div>
+                {isActive && (
+                  <p
+                    className="text-sm leading-relaxed mt-2"
+                    style={{ color: "var(--font-muted)", paddingLeft: 22 }}
+                  >
+                    {ins.body}
+                  </p>
+                )}
               </div>
             );
           })}

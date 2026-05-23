@@ -56,6 +56,23 @@ export default function AtmPosSectionCard({
     [rows, activeMetric, filter],
   );
 
+  // Latest MoM % for the Total series — always visible badge
+  const latestMom = useMemo(() => {
+    if (!momData.length) return null;
+    const latest = momData[momData.length - 1];
+    const val = latest["Total"];
+    if (val == null) return null;
+    const n = Number(val);
+    return isNaN(n) ? null : n;
+  }, [momData]);
+
+  const momColor = latestMom == null ? "var(--font-muted)"
+    : latestMom > 0 ? "#16a34a"
+    : latestMom < 0 ? "#dc2626"
+    : "var(--font-muted)";
+
+  const momArrow = latestMom == null ? "" : latestMom > 0 ? " ↑" : latestMom < 0 ? " ↓" : "";
+
   return (
     <div
       style={{
@@ -67,17 +84,25 @@ export default function AtmPosSectionCard({
       }}
     >
       {/* Card header */}
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2">
-          <span className="text-sm">{def.icon}</span>
-          <h3 className="text-sm font-semibold" style={{ color: "var(--font)" }}>
-            {def.title}
-          </h3>
-        </div>
+      <div className="flex items-center gap-2 mb-3">
+        <span className="text-sm flex-shrink-0">{def.icon}</span>
+        <h3 className="text-sm font-semibold min-w-0" style={{ color: "var(--font)" }}>
+          {def.title}
+        </h3>
+
+        {/* MoM badge — always visible */}
+        {latestMom !== null && (
+          <span
+            className="text-xs font-medium tabular-nums flex-shrink-0 ml-auto"
+            style={{ color: momColor }}
+          >
+            {latestMom > 0 ? "+" : ""}{latestMom.toFixed(1)}%{momArrow}
+          </span>
+        )}
 
         {/* Vol / Val toggle */}
         {hasVolVal && (
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1 flex-shrink-0">
             {(["vol", "val"] as const).map((v) => (
               <button
                 key={v}
