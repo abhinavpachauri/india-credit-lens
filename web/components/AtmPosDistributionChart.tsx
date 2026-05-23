@@ -62,13 +62,13 @@ export default function AtmPosDistributionChart({
             <CartesianGrid strokeDasharray="3 3" stroke="var(--grid)" />
             <XAxis
               dataKey="date"
-              tick={{ fontSize: 11, fill: "var(--font-muted)" }}
+              tick={{ fontSize: 12, fill: "var(--font-muted)" }}
               tickLine={false}
             />
             <YAxis
               tickFormatter={formatY}
               domain={chartMode === "pct" ? [0, 100] : undefined}
-              tick={{ fontSize: 11, fill: "var(--font-muted)" }}
+              tick={{ fontSize: 12, fill: "var(--font-muted)" }}
               tickLine={false}
               axisLine={false}
               width={72}
@@ -101,7 +101,7 @@ export default function AtmPosDistributionChart({
       {/* Summary table */}
       {latestRow && (
         <div className="mt-3 overflow-x-auto">
-          <table className="w-full text-xs border-collapse">
+          <table className="w-full text-sm border-collapse">
             <thead>
               <tr style={{ borderBottom: "1px solid var(--border-card)" }}>
                 <th

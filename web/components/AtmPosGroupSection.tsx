@@ -186,7 +186,7 @@ export default function AtmPosGroupSection({ group, rows }: AtmPosGroupSectionPr
                 <button
                   key={m}
                   onClick={() => handleModeChange(m)}
-                  className="text-xs font-medium px-3 py-1.5 rounded-full transition-colors"
+                  className="text-sm font-medium px-3 py-1.5 rounded-full transition-colors"
                   style={BTN(mode === m)}
                 >
                   {label}
@@ -204,7 +204,7 @@ export default function AtmPosGroupSection({ group, rows }: AtmPosGroupSectionPr
                 <button
                   key={t}
                   onClick={() => setTab(t as TabId)}
-                  className="text-xs font-medium px-3 py-1.5 rounded-full transition-colors"
+                  className="text-sm font-medium px-3 py-1.5 rounded-full transition-colors"
                   style={BTN(tab === t)}
                 >
                   {label}
@@ -216,7 +216,7 @@ export default function AtmPosGroupSection({ group, rows }: AtmPosGroupSectionPr
           <div className="hidden sm:block" style={DIVIDER_STYLE} />
 
           {/* Chart mode radios */}
-          <div className="flex items-center gap-3 text-xs">
+          <div className="flex items-center gap-3 text-sm">
             {tab === "trend"
               ? (["absolute", "mom"] as const).map((m) => (
                   <label
@@ -259,12 +259,12 @@ export default function AtmPosGroupSection({ group, rows }: AtmPosGroupSectionPr
             <>
               <div className="hidden sm:block" style={DIVIDER_STYLE} />
               <div className="flex items-center gap-1">
-                <span className="text-xs mr-1" style={{ color: "var(--font-muted)" }}>Top:</span>
+                <span className="text-sm mr-1" style={{ color: "var(--font-muted)" }}>Top:</span>
                 {TOP_N_OPTIONS.map((n) => (
                   <button
                     key={n}
                     onClick={() => setTopN(n)}
-                    className="text-xs font-medium px-2.5 py-1 rounded-full transition-colors"
+                    className="text-sm font-medium px-2.5 py-1 rounded-full transition-colors"
                     style={BTN(topN === n)}
                   >
                     {n}
@@ -285,7 +285,7 @@ export default function AtmPosGroupSection({ group, rows }: AtmPosGroupSectionPr
                 <button
                   key={name}
                   onClick={() => toggleSeries(name)}
-                  className="text-xs font-medium px-3 py-1 rounded-full transition-all"
+                  className="text-sm font-medium px-3 py-1 rounded-full transition-all"
                   style={{
                     background: isHidden ? "transparent" : color,
                     border:     `1.5px solid ${color}`,
@@ -308,7 +308,7 @@ export default function AtmPosGroupSection({ group, rows }: AtmPosGroupSectionPr
               placeholder="Search banks…"
               value={bankSearch}
               onChange={(e) => setBankSearch(e.target.value)}
-              className="w-full text-xs px-3 py-1.5 rounded mb-2"
+              className="w-full text-sm px-3 py-1.5 rounded mb-2"
               style={{
                 border:     "1px solid var(--border-card)",
                 background: "var(--bg-page)",
@@ -323,7 +323,7 @@ export default function AtmPosGroupSection({ group, rows }: AtmPosGroupSectionPr
                   <button
                     key={bank}
                     onClick={() => toggleBank(bank)}
-                    className="text-xs px-2.5 py-1 rounded-full transition-colors"
+                    className="text-sm px-2.5 py-1 rounded-full transition-colors"
                     style={BTN(sel)}
                   >
                     {bank}
@@ -356,14 +356,14 @@ export default function AtmPosGroupSection({ group, rows }: AtmPosGroupSectionPr
                     <span className="mt-0.5 flex-shrink-0 text-sm">💡</span>
                     <div className="min-w-0">
                       <p
-                        className="text-xs font-semibold leading-snug"
+                        className="text-sm font-semibold leading-snug"
                         style={{ color: isActive ? "#4e8ef7" : "var(--font)" }}
                       >
                         {ins.title}
                       </p>
                       {isActive && (
                         <p
-                          className="text-xs mt-1.5 leading-relaxed"
+                          className="text-sm mt-1.5 leading-relaxed"
                           style={{ color: "var(--font-muted)" }}
                         >
                           {ins.body}
@@ -388,7 +388,7 @@ export default function AtmPosGroupSection({ group, rows }: AtmPosGroupSectionPr
                     {isActive && ins.exploreAction && (
                       <button
                         onClick={(e) => { e.stopPropagation(); applyExplore(ins); }}
-                        className="text-xs font-medium px-3 py-1 rounded-full transition-colors"
+                        className="text-sm font-medium px-3 py-1 rounded-full transition-colors"
                         style={{
                           background: "#4e8ef7",
                           color:      "#fff",

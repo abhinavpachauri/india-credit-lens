@@ -9,6 +9,24 @@
   --grid:       #e8ddd0;
   --font:       #2c1e0f;
   --font-muted: #7a6a55;
+
+  /* ── Typography scale (use these semantic levels in ALL dashboards)
+     --fs-meta    11px  axis ticks, footnotes, tiny badges
+     --fs-label   12px  section group headers (uppercase), table column headers
+     --fs-body    14px  body text, controls, chips, buttons, insight text
+     --fs-card    16px  card titles, annotation titles
+     --fs-section 18px  section card headers (SIBC)
+     Tailwind mapping: text-xs≈label, text-sm≈body, text-base≈card, text-lg≈section
+  ── */
+  --fs-meta:    0.6875rem;
+  --fs-label:   0.75rem;
+  --fs-body:    0.875rem;
+  --fs-card:    1rem;
+  --fs-section: 1.125rem;
+
+  /* Chart-specific (px, used directly in Recharts props) */
+  --chart-tick-size: 12;
+  --chart-tooltip-size: 13;
 }
 
 [data-dark="true"] {

@@ -40,7 +40,7 @@ export default function AtmPosTrendChart({
           background:   "var(--bg-card)",
           border:       "1px solid var(--border-card)",
           borderRadius: 8,
-          fontSize:     13,
+          fontSize:     13,  // --chart-tooltip-size
           color:        "var(--font)",
           padding:      "10px 14px",
         }}
@@ -67,12 +67,12 @@ export default function AtmPosTrendChart({
           <CartesianGrid strokeDasharray="3 3" stroke="var(--grid)" />
           <XAxis
             dataKey="date"
-            tick={{ fontSize: 11, fill: "var(--font-muted)" }}
+            tick={{ fontSize: 12, fill: "var(--font-muted)" }}
             tickLine={false}
           />
           <YAxis
             tickFormatter={formatY}
-            tick={{ fontSize: 11, fill: "var(--font-muted)" }}
+            tick={{ fontSize: 12, fill: "var(--font-muted)" }}
             tickLine={false}
             axisLine={false}
             width={72}

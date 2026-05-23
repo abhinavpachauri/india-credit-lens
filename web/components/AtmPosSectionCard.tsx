@@ -70,7 +70,7 @@ export default function AtmPosSectionCard({
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <span className="text-sm">{def.icon}</span>
-          <h3 className="text-xs font-semibold" style={{ color: "var(--font)" }}>
+          <h3 className="text-sm font-semibold" style={{ color: "var(--font)" }}>
             {def.title}
           </h3>
         </div>
@@ -82,7 +82,7 @@ export default function AtmPosSectionCard({
               <button
                 key={v}
                 onClick={() => setVolVal(v)}
-                className="text-xs font-medium px-2 py-0.5 rounded-full transition-colors"
+                className="text-sm font-medium px-2 py-0.5 rounded-full transition-colors"
                 style={volVal === v ? ACTIVE_VOL_VAL : INACTIVE_VOL_VAL}
               >
                 {v === "vol" ? "Vol" : "Val"}
