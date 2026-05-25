@@ -5,6 +5,7 @@ import { loadAtmPosData } from "@/lib/atm_pos_data";
 import type { AtmPosRow } from "@/lib/atm_pos_data";
 import Header            from "@/components/Header";
 import AtmPosGroupSection from "@/components/AtmPosGroupSection";
+import NewsletterCTA      from "@/components/NewsletterCTA";
 
 const GROUPS = ["cc", "dc", "infra"] as const;
 
@@ -50,48 +51,18 @@ export default function PaymentsPage() {
 
       <main className="max-w-6xl mx-auto px-3 sm:px-4 py-6">
 
-        {/* Substack CTA — top */}
-        <div className="mb-8 flex flex-col items-center gap-2">
-          <p className="text-sm font-medium" style={{ color: "var(--font-muted)" }}>
-            Monthly credit intelligence, free — get it in your inbox
-          </p>
-          <iframe
-            src="https://indiacreditlens.substack.com/embed"
-            width="100%"
-            height="320"
-            style={{
-              maxWidth:     "480px",
-              border:       "1px solid #EEE",
-              background:   "white",
-              borderRadius: "0.5rem",
-            }}
-            frameBorder={0}
-            scrolling="no"
-          />
+        {/* Newsletter CTA — top */}
+        <div className="mb-8">
+          <NewsletterCTA variant="banner" />
         </div>
 
         {GROUPS.map((group) => (
           <AtmPosGroupSection key={group} group={group} rows={rows} />
         ))}
 
-        {/* Substack CTA — bottom */}
-        <div className="mt-10 mb-2 flex flex-col items-center gap-2">
-          <p className="text-sm font-medium" style={{ color: "var(--font-muted)" }}>
-            Enjoyed the data? Get the analysis behind it in your inbox
-          </p>
-          <iframe
-            src="https://indiacreditlens.substack.com/embed"
-            width="100%"
-            height="320"
-            style={{
-              maxWidth:     "480px",
-              border:       "1px solid #EEE",
-              background:   "white",
-              borderRadius: "0.5rem",
-            }}
-            frameBorder={0}
-            scrolling="no"
-          />
+        {/* Newsletter CTA — bottom */}
+        <div className="mt-10 mb-2">
+          <NewsletterCTA variant="banner" />
         </div>
 
         <footer
