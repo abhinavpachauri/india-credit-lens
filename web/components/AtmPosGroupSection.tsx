@@ -52,10 +52,10 @@ export default function AtmPosGroupSection({ group, rows }: AtmPosGroupSectionPr
   );
   const allBanks = useMemo(() => getAllBanks(rows), [rows]);
 
-  const [mode,           setMode]           = useState<GroupMode>("by_type");
+  const [mode,           setMode]           = useState<GroupMode>("top_n");
   const [selectedBanks,  setSelectedBanks]  = useState<string[]>([]);
-  const [topN,           setTopN]           = useState<number>(10);
-  const [hiddenSeries,   setHiddenSeries]   = useState<Set<string>>(new Set());
+  const [topN,           setTopN]           = useState<number>(5);
+  const [hiddenSeries,   setHiddenSeries]   = useState<Set<string>>(new Set(["Total"]));
   const [tab,            setTab]            = useState<TabId>("trend");
   const [trendMode,      setTrendMode]      = useState<"absolute" | "mom">("absolute");
   const [distMode,       setDistMode]       = useState<"absolute" | "pct">("absolute");
@@ -101,7 +101,8 @@ export default function AtmPosGroupSection({ group, rows }: AtmPosGroupSectionPr
 
   const handleModeChange = (m: GroupMode) => {
     setMode(m);
-    setHiddenSeries(new Set());
+    // Keep Total hidden by default in bank-level modes; show all in by_type
+    setHiddenSeries(m === "by_type" ? new Set() : new Set(["Total"]));
     setActiveInsight(null);
   };
 
