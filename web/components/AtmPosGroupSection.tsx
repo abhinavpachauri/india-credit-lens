@@ -15,6 +15,7 @@ import {
 import type { AtmPosInsight } from "@/lib/atm_pos_insights";
 import { pickColor } from "@/lib/theme";
 import AtmPosSectionCard from "@/components/AtmPosSectionCard";
+import LoginGate from "@/components/LoginGate";
 
 // Primary metric per group — used to rank banks for Top N
 const GROUP_PRIMARY: Record<string, string> = {
@@ -423,6 +424,14 @@ export default function AtmPosGroupSection({ group, rows }: AtmPosGroupSectionPr
             />
           </div>
         ))}
+      </div>
+
+      {/* ── Opportunities — behind login ─────────────────────────────────────── */}
+      <div className="mt-4">
+        <LoginGate
+          title="Opportunities"
+          description={`Where ${GROUP_LABELS[group].toLowerCase()} data signals lending and product opportunities — unlocked with a free account.`}
+        />
       </div>
     </div>
   );
