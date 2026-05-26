@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { buildSectionData, buildQoQValue } from "@/lib/atm_pos_data";
+import { buildSectionData } from "@/lib/atm_pos_data";
 import type { SectionDef, AtmPosRow, FilterState, VolVal } from "@/lib/atm_pos_data";
 import AtmPosTrendChart from "@/components/AtmPosTrendChart";
 import AtmPosDistributionChart from "@/components/AtmPosDistributionChart";
@@ -56,18 +56,6 @@ export default function AtmPosSectionCard({
     [rows, activeMetric, filter],
   );
 
-  // QoQ % for the Total series — always visible badge
-  const latestQoQ = useMemo(
-    () => buildQoQValue(absoluteData, activeUnit),
-    [absoluteData, activeUnit],
-  );
-
-  const qoqColor = latestQoQ == null ? "var(--font-muted)"
-    : latestQoQ > 0 ? "#16a34a"
-    : latestQoQ < 0 ? "#dc2626"
-    : "var(--font-muted)";
-
-  const qoqArrow = latestQoQ == null ? "" : latestQoQ > 0 ? " ↑" : latestQoQ < 0 ? " ↓" : "";
 
   return (
     <div
@@ -86,15 +74,6 @@ export default function AtmPosSectionCard({
           {def.title}
         </h3>
 
-        {/* QoQ badge — always visible */}
-        {latestQoQ !== null && (
-          <span
-            className="text-xs font-medium tabular-nums flex-shrink-0 ml-auto"
-            style={{ color: qoqColor }}
-          >
-            {latestQoQ > 0 ? "+" : ""}{latestQoQ.toFixed(1)}% QoQ{qoqArrow}
-          </span>
-        )}
 
         {/* Vol / Val toggle */}
         {hasVolVal && (
