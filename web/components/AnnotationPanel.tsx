@@ -3,7 +3,6 @@
 import { useState } from "react";
 import type { LensType, AnnotationState } from "@/hooks/useAnnotation";
 import type { Annotation } from "@/lib/types";
-import LoginGate from "@/components/LoginGate";
 
 const LENS_COLOR: Record<LensType, string> = {
   insights:      "#2563EB",
@@ -32,16 +31,6 @@ export default function AnnotationPanel({
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
 
   if (!activeLens || !activeAnnotation) return null;
-
-  // Opportunities are behind login
-  if (activeLens === "opportunities") {
-    return (
-      <LoginGate
-        title="Opportunities"
-        description="Strategic opportunities from multi-period analysis — where credit deployment meets payment behaviour."
-      />
-    );
-  }
 
   const color = LENS_COLOR[activeLens];
   const label = LENS_LABEL[activeLens];
