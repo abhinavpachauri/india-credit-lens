@@ -168,12 +168,6 @@ export default function AtmPosGroupSection({ group, rows }: AtmPosGroupSectionPr
     if (ins.effect.distMode)  setDistMode(ins.effect.distMode);
   };
 
-  const applyExplore = (ins: AtmPosInsight) => {
-    if (!ins.exploreAction) return;
-    handleModeChange(ins.exploreAction.mode);
-    if (ins.exploreAction.topN) setTopN(ins.exploreAction.topN);
-  };
-
   // Enter insights mode — auto-activate first insight immediately
   const enterInsightsMode = () => {
     setInsightsMode(true);
@@ -390,42 +384,30 @@ export default function AtmPosGroupSection({ group, rows }: AtmPosGroupSectionPr
               </div>
             )}
 
-            {/* Footer: prev/next + explore */}
+            {/* Footer: prev/next */}
             <div
-              className="flex items-center justify-between mt-4 pt-3"
+              className="flex items-center gap-3 mt-4 pt-3"
               style={{ borderTop: "1px solid var(--border-card)" }}
             >
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={goPrev}
-                  disabled={activeIdx === 0}
-                  className="px-4 py-1.5 rounded-lg text-sm font-semibold disabled:opacity-25 transition-opacity"
-                  style={{ border: `1.5px solid ${color}`, color }}
-                >
-                  ←
-                </button>
-                <span className="text-xs tabular-nums" style={{ color: "var(--font-muted)" }}>
-                  {activeIdx + 1} of {total}
-                </span>
-                <button
-                  onClick={goNext}
-                  disabled={activeIdx === total - 1}
-                  className="px-4 py-1.5 rounded-lg text-sm font-semibold disabled:opacity-25 transition-opacity"
-                  style={{ border: `1.5px solid ${color}`, color }}
-                >
-                  →
-                </button>
-              </div>
-
-              {ins.exploreAction && (
-                <button
-                  onClick={() => applyExplore(ins)}
-                  className="text-sm font-semibold px-3 py-1.5 rounded-lg transition-colors"
-                  style={{ background: color, color: "#fff", border: "none" }}
-                >
-                  Explore →
-                </button>
-              )}
+              <button
+                onClick={goPrev}
+                disabled={activeIdx === 0}
+                className="px-4 py-1.5 rounded-lg text-sm font-semibold disabled:opacity-25 transition-opacity"
+                style={{ border: `1.5px solid ${color}`, color }}
+              >
+                ←
+              </button>
+              <span className="text-xs tabular-nums" style={{ color: "var(--font-muted)" }}>
+                {activeIdx + 1} of {total}
+              </span>
+              <button
+                onClick={goNext}
+                disabled={activeIdx === total - 1}
+                className="px-4 py-1.5 rounded-lg text-sm font-semibold disabled:opacity-25 transition-opacity"
+                style={{ border: `1.5px solid ${color}`, color }}
+              >
+                →
+              </button>
             </div>
           </div>
         );
