@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect, useRef } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   SECTION_DEFS,
   GROUP_LABELS,
@@ -23,8 +23,8 @@ const GROUP_PRIMARY: Record<string, string> = {
   infra: "pos_terminals",
 };
 
-const ALL_TYPES     = ["PSB", "Private", "Foreign", "SFB", "Payments"];
-const TOP_N_OPTIONS = [5, 10, 20] as const;
+const ALL_TYPES      = ["PSB", "Private", "Foreign", "SFB", "Payments"];
+const TOP_N_OPTIONS  = [5, 10, 20] as const;
 const BY_TYPE_SERIES = ["Total", "PSB", "Private", "Foreign", "SFB", "Payments"];
 
 type GroupMode = "by_type" | "individual" | "top_n";
@@ -52,17 +52,19 @@ export default function AtmPosGroupSection({ group, rows }: AtmPosGroupSectionPr
   );
   const allBanks = useMemo(() => getAllBanks(rows), [rows]);
 
-  const [mode,           setMode]           = useState<GroupMode>("top_n");
-  const [selectedBanks,  setSelectedBanks]  = useState<string[]>([]);
-  const [topN,           setTopN]           = useState<number>(5);
-  const [hiddenSeries,   setHiddenSeries]   = useState<Set<string>>(new Set(["Total"]));
-  const [tab,            setTab]            = useState<TabId>("trend");
-  const [trendMode,      setTrendMode]      = useState<"absolute" | "mom">("absolute");
-  const [distMode,       setDistMode]       = useState<"absolute" | "pct">("absolute");
-  const [bankSearch,     setBankSearch]     = useState("");
-  const [activeInsight,  setActiveInsight]  = useState<AtmPosInsight | null>(null);
-  const [allInsights,    setAllInsights]    = useState<AtmPosInsight[]>([]);
-  const cardsRef = useRef<HTMLDivElement>(null);
+  const [mode,          setMode]          = useState<GroupMode>("top_n");
+  const [selectedBanks, setSelectedBanks] = useState<string[]>([]);
+  const [topN,          setTopN]          = useState<number>(5);
+  const [hiddenSeries,  setHiddenSeries]  = useState<Set<string>>(new Set(["Total"]));
+  const [tab,           setTab]           = useState<TabId>("trend");
+  const [trendMode,     setTrendMode]     = useState<"absolute" | "mom">("absolute");
+  const [distMode,      setDistMode]      = useState<"absolute" | "pct">("absolute");
+  const [bankSearch,    setBankSearch]    = useState("");
+  const [activeInsight, setActiveInsight] = useState<AtmPosInsight | null>(null);
+  const [allInsights,   setAllInsights]   = useState<AtmPosInsight[]>([]);
+  const [insightsMode,   setInsightsMode]  = useState(false);
+  const [tickerIdx,      setTickerIdx]     = useState(0);
+  const [tickerVisible,  setTickerVisible] = useState(true);
 
   // Load insights once
   useEffect(() => {
@@ -99,9 +101,30 @@ export default function AtmPosGroupSection({ group, rows }: AtmPosGroupSectionPr
     [allInsights, group, mode],
   );
 
+  const insightCount = visibleInsights.filter((i) => i.type === "insight").length;
+  const gapCount     = visibleInsights.filter((i) => i.type === "gap").length;
+
+  // Reset ticker when mode changes
+  useEffect(() => {
+    setTickerIdx(0);
+    setTickerVisible(true);
+  }, [mode]);
+
+  // Cycle through headlines on the CTA strip (pause in insights mode)
+  useEffect(() => {
+    if (insightsMode || visibleInsights.length <= 1) return;
+    const id = setInterval(() => {
+      setTickerVisible(false);
+      setTimeout(() => {
+        setTickerIdx((prev) => (prev + 1) % visibleInsights.length);
+        setTickerVisible(true);
+      }, 350);
+    }, 3200);
+    return () => clearInterval(id);
+  }, [insightsMode, visibleInsights.length]);
+
   const handleModeChange = (m: GroupMode) => {
     setMode(m);
-    // Keep Total hidden by default in bank-level modes; show all in by_type
     setHiddenSeries(m === "by_type" ? new Set() : new Set(["Total"]));
     setActiveInsight(null);
   };
@@ -123,40 +146,60 @@ export default function AtmPosGroupSection({ group, rows }: AtmPosGroupSectionPr
   // Apply insight effect: dim all series except highlight, switch tab/mode
   const applyInsight = (ins: AtmPosInsight) => {
     if (activeInsight?.id === ins.id) {
-      // Clicking active insight resets everything
       setActiveInsight(null);
       setHiddenSeries(new Set());
       return;
     }
     setActiveInsight(ins);
 
-    // Dim all series not in highlight
     const highlighted = new Set(ins.effect.highlight);
     const toHide = new Set(seriesNames.filter((n) => !highlighted.has(n)));
     setHiddenSeries(toHide);
 
-    // Switch tab and chart mode
     setTab(ins.effect.tab);
     if (ins.effect.trendMode) setTrendMode(ins.effect.trendMode);
     if (ins.effect.distMode)  setDistMode(ins.effect.distMode);
-
-    // Scroll to focus card if specified
-    if (ins.effect.focusCard && cardsRef.current) {
-      const el = cardsRef.current.querySelector(`[data-card-id="${ins.effect.focusCard}"]`);
-      if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
-    }
   };
 
-  // Explore action: switch mode then re-apply insight
   const applyExplore = (ins: AtmPosInsight) => {
     if (!ins.exploreAction) return;
     handleModeChange(ins.exploreAction.mode);
     if (ins.exploreAction.topN) setTopN(ins.exploreAction.topN);
   };
 
+  // Enter insights mode — auto-activate first insight immediately
+  const enterInsightsMode = () => {
+    setInsightsMode(true);
+    if (visibleInsights.length > 0) applyInsight(visibleInsights[0]);
+  };
+
+  // Exit insights mode: reset chart state
+  const exitInsightsMode = () => {
+    setInsightsMode(false);
+    setActiveInsight(null);
+    setHiddenSeries(mode === "by_type" ? new Set() : new Set(["Total"]));
+    setTab("trend");
+    setTrendMode("absolute");
+    setDistMode("absolute");
+  };
+
   const filteredBanks = bankSearch
     ? allBanks.filter((b) => b.toLowerCase().includes(bankSearch.toLowerCase()))
     : allBanks;
+
+  // Active insight index (for nav)
+  const activeIdx = activeInsight
+    ? visibleInsights.findIndex((i) => i.id === activeInsight.id)
+    : -1;
+
+  const goNext = () => {
+    const next = visibleInsights[activeIdx + 1];
+    if (next) applyInsight(next);
+  };
+  const goPrev = () => {
+    const prev = visibleInsights[activeIdx - 1];
+    if (prev) applyInsight(prev);
+  };
 
   return (
     <div className="mb-12">
@@ -168,7 +211,220 @@ export default function AtmPosGroupSection({ group, rows }: AtmPosGroupSectionPr
         {GROUP_LABELS[group]}
       </h2>
 
-      {/* Controls panel */}
+      {/* ── Insights CTA strip / Back-to-explore strip ──────────────────────── */}
+      {visibleInsights.length > 0 && (
+        !insightsMode ? (
+          /* EXPLORE MODE → prominent CTA */
+          <div
+            onClick={enterInsightsMode}
+            className="cursor-pointer mb-4 flex items-center justify-between gap-4"
+            style={{
+              background:   "#4e8ef712",
+              border:       "1.5px solid #4e8ef740",
+              borderLeft:   "5px solid #4e8ef7",
+              borderRadius: "0 10px 10px 0",
+              padding:      "16px 20px",
+            }}
+          >
+            <div className="min-w-0">
+              {/* Static count line */}
+              <p className="text-base font-bold leading-snug" style={{ color: "var(--font)" }}>
+                {insightCount > 0 && `💡 ${insightCount} insight${insightCount !== 1 ? "s" : ""}`}
+                {insightCount > 0 && gapCount > 0 && (
+                  <span style={{ color: "var(--font-muted)", fontWeight: 400 }}> · </span>
+                )}
+                {gapCount > 0 && (
+                  <span style={{ color: "#D97706" }}>
+                    {`⚠️ ${gapCount} gap${gapCount !== 1 ? "s" : ""}`}
+                  </span>
+                )}
+                <span style={{ color: "var(--font-muted)", fontWeight: 400 }}> in this view</span>
+              </p>
+
+              {/* Animated ticker — cycles through headlines */}
+              {visibleInsights.length > 0 && (
+                <div style={{ minHeight: 26, overflow: "hidden", marginTop: 6, marginBottom: 4 }}>
+                  <p
+                    className="text-sm font-medium leading-snug truncate"
+                    style={{
+                      color:      visibleInsights[tickerIdx]?.type === "gap" ? "#D97706" : "var(--font)",
+                      opacity:    tickerVisible ? 1 : 0,
+                      transform:  tickerVisible ? "translateY(0)" : "translateY(-7px)",
+                      transition: "opacity 0.35s ease, transform 0.35s ease",
+                    }}
+                  >
+                    {visibleInsights[tickerIdx]?.type === "gap" ? "⚠️" : "💡"}{" "}
+                    {visibleInsights[tickerIdx]?.title}
+                  </p>
+                </div>
+              )}
+
+              {/* Static CTA line */}
+              <p className="text-sm" style={{ color: "#4e8ef7", fontWeight: 500 }}>
+                What they mean for lenders — click to explore →
+              </p>
+            </div>
+            <div
+              className="flex-shrink-0 flex items-center justify-center rounded-full font-bold"
+              style={{
+                width:      38,
+                height:     38,
+                background: "#4e8ef7",
+                color:      "#fff",
+                fontSize:   18,
+              }}
+            >
+              →
+            </div>
+          </div>
+        ) : (
+          /* INSIGHTS MODE → back strip (same size as CTA, full div clickable) */
+          <div
+            onClick={exitInsightsMode}
+            className="cursor-pointer mb-4 flex items-center justify-between gap-4"
+            style={{
+              background:   "#4e8ef712",
+              border:       "1.5px solid #4e8ef740",
+              borderLeft:   "5px solid #4e8ef7",
+              borderRadius: "0 10px 10px 0",
+              padding:      "16px 20px",
+            }}
+          >
+            <div className="min-w-0">
+              <p className="text-base font-bold leading-snug" style={{ color: "#4e8ef7" }}>
+                ← Exit insights
+              </p>
+              <p className="text-sm mt-1" style={{ color: "var(--font-muted)", fontWeight: 500 }}>
+                {activeIdx >= 0 ? `${activeIdx + 1} of ${visibleInsights.length}` : visibleInsights.length} · Insights mode active
+              </p>
+            </div>
+            <div
+              className="flex-shrink-0 flex items-center justify-center rounded-full font-bold"
+              style={{
+                width:      38,
+                height:     38,
+                background: "#4e8ef7",
+                color:      "#fff",
+                fontSize:   18,
+              }}
+            >
+              ×
+            </div>
+          </div>
+        )
+      )}
+
+      {/* ── Insight card (one at a time, SIBC style) ────────────────────────── */}
+      {insightsMode && activeInsight && (() => {
+        const ins       = activeInsight;
+        const isGap     = ins.type === "gap";
+        const color     = isGap ? "#D97706" : "#4e8ef7";
+        const typeLabel = isGap ? "Gap" : "Insight";
+        const total     = visibleInsights.length;
+
+        return (
+          <div
+            className="mb-4"
+            style={{
+              background:   "var(--bg-card)",
+              border:       "1px solid var(--border-card)",
+              borderLeft:   `4px solid ${color}`,
+              borderRadius: "0 10px 10px 0",
+              padding:      "18px 20px",
+            }}
+          >
+            {/* Type badge + progress dots */}
+            <div className="flex items-center justify-between mb-3">
+              <span
+                className="text-xs font-bold uppercase tracking-widest px-2.5 py-0.5 rounded-full"
+                style={{ color, background: `${color}18` }}
+              >
+                {typeLabel}
+              </span>
+              {total > 1 && (
+                <div className="flex items-center gap-1.5">
+                  {visibleInsights.map((_, i) => (
+                    <span
+                      key={i}
+                      className="inline-block rounded-full transition-all duration-200"
+                      style={{
+                        width:      i === activeIdx ? "18px" : "6px",
+                        height:     "6px",
+                        background: i === activeIdx ? color : `${color}35`,
+                      }}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Title */}
+            <p className="text-base font-bold leading-snug mb-2" style={{ color: "var(--font)" }}>
+              {ins.title}
+            </p>
+
+            {/* Body */}
+            <p className="text-sm leading-relaxed" style={{ color: "var(--font-muted)" }}>
+              {ins.body}
+            </p>
+
+            {/* For lenders */}
+            {ins.implication && (
+              <div className="mt-4 pt-4" style={{ borderTop: `1px solid ${color}20` }}>
+                <p
+                  className="text-xs font-bold uppercase tracking-widest mb-1.5"
+                  style={{ color }}
+                >
+                  For lenders
+                </p>
+                <p className="text-sm leading-relaxed" style={{ color: "var(--font)" }}>
+                  {ins.implication}
+                </p>
+              </div>
+            )}
+
+            {/* Footer: prev/next + explore */}
+            <div
+              className="flex items-center justify-between mt-4 pt-3"
+              style={{ borderTop: "1px solid var(--border-card)" }}
+            >
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={goPrev}
+                  disabled={activeIdx === 0}
+                  className="px-4 py-1.5 rounded-lg text-sm font-semibold disabled:opacity-25 transition-opacity"
+                  style={{ border: `1.5px solid ${color}`, color }}
+                >
+                  ←
+                </button>
+                <span className="text-xs tabular-nums" style={{ color: "var(--font-muted)" }}>
+                  {activeIdx + 1} of {total}
+                </span>
+                <button
+                  onClick={goNext}
+                  disabled={activeIdx === total - 1}
+                  className="px-4 py-1.5 rounded-lg text-sm font-semibold disabled:opacity-25 transition-opacity"
+                  style={{ border: `1.5px solid ${color}`, color }}
+                >
+                  →
+                </button>
+              </div>
+
+              {ins.exploreAction && (
+                <button
+                  onClick={() => applyExplore(ins)}
+                  className="text-sm font-semibold px-3 py-1.5 rounded-lg transition-colors"
+                  style={{ background: color, color: "#fff", border: "none" }}
+                >
+                  Explore →
+                </button>
+              )}
+            </div>
+          </div>
+        );
+      })()}
+
+      {/* ── Controls panel ──────────────────────────────────────────────────── */}
       <div
         style={{
           background:   "var(--bg-card)",
@@ -291,7 +547,7 @@ export default function AtmPosGroupSection({ group, rows }: AtmPosGroupSectionPr
                     background: isHidden ? "transparent" : color,
                     border:     `1.5px solid ${color}`,
                     color:      isHidden ? color : "#fff",
-                    opacity:    isHidden ? 0.65  : 1,
+                    opacity:    isHidden ? 0.65 : 1,
                   }}
                 >
                   {name}
@@ -336,80 +592,8 @@ export default function AtmPosGroupSection({ group, rows }: AtmPosGroupSectionPr
         )}
       </div>
 
-      {/* ── Insights panel ──────────────────────────────────────────────────── */}
-      {visibleInsights.length > 0 && (
-        <div
-          className="mb-4"
-          style={{
-            background:   "var(--bg-card)",
-            border:       "1px solid var(--border-card)",
-            borderLeft:   "3px solid #4e8ef7",
-            borderRadius: "0 8px 8px 0",
-            overflow:     "hidden",
-          }}
-        >
-          {visibleInsights.map((ins, idx) => {
-            const isActive  = activeInsight?.id === ins.id;
-            const cutLabel  = ins.cut === "by_type" ? "By Type" : ins.cut === "top_n" ? "Top N" : "Total";
-            return (
-              <div
-                key={ins.id}
-                onClick={() => applyInsight(ins)}
-                className="cursor-pointer transition-colors"
-                style={{
-                  padding:    "10px 14px",
-                  borderTop:  idx > 0 ? "1px solid var(--border-card)" : "none",
-                  background: isActive ? "#4e8ef710" : "transparent",
-                }}
-              >
-                <div className="flex items-start gap-2">
-                  <span className="flex-shrink-0 mt-0.5" style={{ fontSize: 13 }}>💡</span>
-                  <p
-                    className="text-sm font-medium leading-snug flex-1 min-w-0"
-                    style={{ color: isActive ? "#4e8ef7" : "var(--font)" }}
-                  >
-                    {ins.title}
-                  </p>
-                  <div className="flex items-center gap-1.5 flex-shrink-0 ml-2">
-                    <span
-                      style={{
-                        fontSize:     11,
-                        color:        "var(--font-muted)",
-                        background:   "var(--bg-page)",
-                        border:       "1px solid var(--border-card)",
-                        borderRadius: 4,
-                        padding:      "1px 6px",
-                      }}
-                    >
-                      {cutLabel}
-                    </span>
-                    {isActive && ins.exploreAction && (
-                      <button
-                        onClick={(e) => { e.stopPropagation(); applyExplore(ins); }}
-                        className="text-sm font-medium px-2.5 py-0.5 rounded transition-colors"
-                        style={{ background: "#4e8ef7", color: "#fff", border: "none" }}
-                      >
-                        Explore →
-                      </button>
-                    )}
-                  </div>
-                </div>
-                {isActive && (
-                  <p
-                    className="text-sm leading-relaxed mt-2"
-                    style={{ color: "var(--font-muted)", paddingLeft: 22 }}
-                  >
-                    {ins.body}
-                  </p>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      )}
-
       {/* Card grid */}
-      <div ref={cardsRef} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {sections.map((def) => (
           <div key={def.id} data-card-id={def.id}>
             <AtmPosSectionCard

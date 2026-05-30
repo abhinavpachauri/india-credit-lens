@@ -19,14 +19,17 @@ export interface InsightExploreAction {
 }
 
 export interface AtmPosInsight {
-  id:            string;
-  group:         InsightGroup;
-  cut:           InsightCut;
-  period:        string;
-  title:         string;
-  body:          string;
-  effect:        InsightEffect;
-  exploreAction: InsightExploreAction | null;
+  id:             string;
+  group:          InsightGroup;
+  cut:            InsightCut;
+  period:         string;
+  type:           "insight" | "gap";
+  title:          string;
+  body:           string;
+  implication?:   string;
+  sourceSignals?: string[];
+  effect:         InsightEffect;
+  exploreAction:  InsightExploreAction | null;
 }
 
 // ── Loader ────────────────────────────────────────────────────────────────────
