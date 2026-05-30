@@ -30,13 +30,21 @@ export default function AtmPosDistributionChart({
     [seriesNames, hiddenSeries],
   );
 
+  // When "Total" is a series, use it as the 100% denominator so individual
+  // banks/types show their true share. Summing all series would double-count
+  // (Total already contains all sub-series).
+  const getPctDenominator = (point: ChartPoint): number => {
+    if (seriesNames.includes("Total")) return Number(point["Total"]) || 0;
+    return seriesNames.reduce((s, k) => s + (Number(point[k]) || 0), 0);
+  };
+
   const chartData = useMemo(() => {
     if (chartMode === "absolute") return absoluteData;
     return absoluteData.map((point) => {
-      const total = seriesNames.reduce((s, k) => s + (Number(point[k]) || 0), 0);
+      const denom = getPctDenominator(point);
       const pct: ChartPoint = { date: point.date, _ts: point._ts };
       seriesNames.forEach((k) => {
-        pct[k] = total > 0 ? +((Number(point[k]) || 0) / total * 100).toFixed(1) : 0;
+        pct[k] = denom > 0 ? +((Number(point[k]) || 0) / denom * 100).toFixed(1) : 0;
       });
       return pct;
     });
@@ -52,7 +60,7 @@ export default function AtmPosDistributionChart({
       : [`${Number(value || 0).toFixed(1)}%`, String(name ?? "")];
 
   const latestRow   = absoluteData[absoluteData.length - 1];
-  const latestTotal = seriesNames.reduce((s, k) => s + (Number(latestRow?.[k]) || 0), 0);
+  const latestTotal = latestRow ? getPctDenominator(latestRow) : 0;
 
   return (
     <div>

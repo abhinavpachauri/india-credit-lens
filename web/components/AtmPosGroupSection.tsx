@@ -95,6 +95,13 @@ export default function AtmPosGroupSection({ group, rows }: AtmPosGroupSectionPr
     return { mode: "individual", selectedTypes: [], selectedBanks: topNBanks, topN };
   }, [mode, selectedBanks, topNBanks, topN]);
 
+  // In insights mode, show only the card the active insight is about
+  const sectionsToShow = useMemo(() => {
+    if (!insightsMode || !activeInsight?.effect.focusCard) return sections;
+    const focused = sections.filter((s) => s.id === activeInsight.effect.focusCard);
+    return focused.length > 0 ? focused : sections;
+  }, [insightsMode, activeInsight, sections]);
+
   // Insights visible for current group + mode
   const visibleInsights = useMemo(
     () => filterInsights(allInsights, group, mode),
@@ -424,8 +431,8 @@ export default function AtmPosGroupSection({ group, rows }: AtmPosGroupSectionPr
         );
       })()}
 
-      {/* ── Controls panel ──────────────────────────────────────────────────── */}
-      <div
+      {/* ── Controls panel (hidden in insights mode) ────────────────────────── */}
+      {!insightsMode && <div
         style={{
           background:   "var(--bg-card)",
           border:       "1px solid var(--border-card)",
@@ -590,11 +597,11 @@ export default function AtmPosGroupSection({ group, rows }: AtmPosGroupSectionPr
             </div>
           </div>
         )}
-      </div>
+      </div>}
 
       {/* Card grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {sections.map((def) => (
+        {sectionsToShow.map((def) => (
           <div key={def.id} data-card-id={def.id}>
             <AtmPosSectionCard
               def={def}

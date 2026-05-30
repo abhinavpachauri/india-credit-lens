@@ -150,8 +150,8 @@ def cc_ecom_vs_pos(s, month) -> dict | None:
         "cc-ecom-vs-pos-share", "cc", "total", month, title, body,
         effect={
             "highlight": ["Total"],
-            "tab": "distribution",
-            "distMode": "pct",
+            "tab": "trend",
+            "trendMode": "absolute",
             "focusCard": "cc_ecom",
         },
         explore={"mode": "by_type"},
@@ -384,7 +384,7 @@ def cc_top_bank_concentration(s, month) -> dict | None:
         )
         return insight(
             "cc-top5-concentration", "cc", "top_n", month, title, body,
-            effect={"highlight": [leader["name"], "Total"], "tab": "distribution", "distMode": "pct", "focusCard": "credit_cards"},
+            effect={"highlight": [leader["name"]], "tab": "distribution", "distMode": "pct", "focusCard": "credit_cards"},
             explore={"mode": "top_n", "topN": 10},
             implication=implication,
             source_signals=[
@@ -495,7 +495,7 @@ def dc_ecom_share(s, month) -> dict | None:
     )
     return insight(
         "dc-ecom-share", "dc", "total", month, title, body,
-        effect={"highlight": ["Total"], "tab": "distribution", "distMode": "pct", "focusCard": "dc_ecom"},
+        effect={"highlight": ["Total"], "tab": "trend", "trendMode": "absolute", "focusCard": "dc_ecom"},
         explore={"mode": "by_type"},
         implication=implication,
         source_signals=[
@@ -636,7 +636,7 @@ def dc_top_bank(s, month) -> dict | None:
     )
     return insight(
         "dc-top-bank-leader", "dc", "top_n", month, title, body,
-        effect={"highlight": [leader["name"], "Total"], "tab": "distribution", "distMode": "pct", "focusCard": "debit_cards"},
+        effect={"highlight": [leader["name"]], "tab": "distribution", "distMode": "pct", "focusCard": "debit_cards"},
         explore={"mode": "top_n", "topN": 10},
         implication=implication,
         source_signals=[
@@ -859,7 +859,7 @@ def infra_top_bank_pos(s, month) -> dict | None:
     )
     return insight(
         "infra-top-bank-pos", "infra", "top_n", month, title, body,
-        effect={"highlight": [leader["name"], "Total"], "tab": "distribution", "distMode": "pct", "focusCard": "pos_terminals"},
+        effect={"highlight": [leader["name"]], "tab": "distribution", "distMode": "pct", "focusCard": "pos_terminals"},
         explore={"mode": "top_n", "topN": 10},
         implication=implication,
         source_signals=[
@@ -938,7 +938,7 @@ def dc_atm_share_structural(s, month) -> dict | None:
     )
     return insight(
         "dc-atm-share-structural", "dc", "total", month, title, body,
-        effect={"highlight": ["Total"], "tab": "distribution", "distMode": "pct", "focusCard": "dc_atm"},
+        effect={"highlight": ["Total"], "tab": "trend", "trendMode": "absolute", "focusCard": "dc_atm"},
         implication=implication,
         source_signals=[
             "groups.dc.total.cross.dc_atm_withdrawal_vol.share_pct",
@@ -1011,7 +1011,7 @@ def gap_dc_cash_dominance(s, month) -> dict | None:
     )
     return insight(
         "gap-dc-cash-dominance", "dc", "total", month, title, body,
-        effect={"highlight": ["Total"], "tab": "distribution", "distMode": "pct", "focusCard": "dc_atm"},
+        effect={"highlight": ["Total"], "tab": "trend", "trendMode": "absolute", "focusCard": "dc_atm"},
         type_="gap",
         implication=implication,
         source_signals=[
@@ -1115,7 +1115,7 @@ def gap_pos_concentration(s, month) -> dict | None:
     )
     return insight(
         "gap-pos-concentration", "infra", "top_n", month, title, body,
-        effect={"highlight": ["Total"], "tab": "distribution", "distMode": "pct", "focusCard": "pos_terminals"},
+        effect={"highlight": ["Total"], "tab": "trend", "trendMode": "absolute", "focusCard": "pos_terminals"},
         explore={"mode": "top_n", "topN": 5},
         type_="gap",
         implication=implication,
@@ -1188,7 +1188,7 @@ def gap_dc_ecom_low(s, month) -> dict | None:
     )
     return insight(
         "gap-dc-ecom-low", "dc", "total", month, title, body,
-        effect={"highlight": ["Total"], "tab": "distribution", "distMode": "pct", "focusCard": "dc_ecom"},
+        effect={"highlight": ["Total"], "tab": "trend", "trendMode": "absolute", "focusCard": "dc_ecom"},
         type_="gap",
         implication=implication,
         source_signals=[
