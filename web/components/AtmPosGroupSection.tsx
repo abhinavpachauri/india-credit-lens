@@ -221,18 +221,18 @@ export default function AtmPosGroupSection({ group, rows }: AtmPosGroupSectionPr
           /* EXPLORE MODE → prominent CTA */
           <div
             onClick={enterInsightsMode}
-            className="cursor-pointer mb-4 flex items-center justify-between gap-4"
+            className="cursor-pointer mb-4 flex items-center justify-between gap-3"
             style={{
               background:   "#4e8ef712",
               border:       "1.5px solid #4e8ef740",
               borderLeft:   "5px solid #4e8ef7",
               borderRadius: "0 10px 10px 0",
-              padding:      "16px 20px",
+              padding:      "14px 16px",
             }}
           >
-            <div className="min-w-0">
+            <div className="min-w-0 flex-1">
               {/* Static count line */}
-              <p className="text-base font-bold leading-snug" style={{ color: "var(--font)" }}>
+              <p className="text-sm font-bold leading-snug" style={{ color: "var(--font)" }}>
                 {insightCount > 0 && `💡 ${insightCount} insight${insightCount !== 1 ? "s" : ""}`}
                 {insightCount > 0 && gapCount > 0 && (
                   <span style={{ color: "var(--font-muted)", fontWeight: 400 }}> · </span>
@@ -245,16 +245,20 @@ export default function AtmPosGroupSection({ group, rows }: AtmPosGroupSectionPr
                 <span style={{ color: "var(--font-muted)", fontWeight: 400 }}> in this view</span>
               </p>
 
-              {/* Animated ticker — cycles through headlines */}
+              {/* Animated ticker — cycles through headlines, wraps on mobile */}
               {visibleInsights.length > 0 && (
-                <div style={{ minHeight: 26, overflow: "hidden", marginTop: 6, marginBottom: 4 }}>
+                <div style={{ minHeight: 40, overflow: "hidden", marginTop: 5, marginBottom: 4 }}>
                   <p
-                    className="text-sm font-medium leading-snug truncate"
+                    className="text-sm font-medium leading-snug"
                     style={{
-                      color:      visibleInsights[tickerIdx]?.type === "gap" ? "#D97706" : "var(--font)",
-                      opacity:    tickerVisible ? 1 : 0,
-                      transform:  tickerVisible ? "translateY(0)" : "translateY(-7px)",
-                      transition: "opacity 0.35s ease, transform 0.35s ease",
+                      color:                visibleInsights[tickerIdx]?.type === "gap" ? "#D97706" : "var(--font)",
+                      opacity:              tickerVisible ? 1 : 0,
+                      transform:            tickerVisible ? "translateY(0)" : "translateY(-7px)",
+                      transition:           "opacity 0.35s ease, transform 0.35s ease",
+                      display:              "-webkit-box",
+                      WebkitLineClamp:      2,
+                      WebkitBoxOrient:      "vertical",
+                      overflow:             "hidden",
                     }}
                   >
                     {visibleInsights[tickerIdx]?.type === "gap" ? "⚠️" : "💡"}{" "}
@@ -265,17 +269,17 @@ export default function AtmPosGroupSection({ group, rows }: AtmPosGroupSectionPr
 
               {/* Static CTA line */}
               <p className="text-sm" style={{ color: "#4e8ef7", fontWeight: 500 }}>
-                What they mean for lenders — click to explore →
+                What they mean for lenders — tap to explore →
               </p>
             </div>
             <div
               className="flex-shrink-0 flex items-center justify-center rounded-full font-bold"
               style={{
-                width:      38,
-                height:     38,
+                width:      34,
+                height:     34,
                 background: "#4e8ef7",
                 color:      "#fff",
-                fontSize:   18,
+                fontSize:   16,
               }}
             >
               →
@@ -334,19 +338,19 @@ export default function AtmPosGroupSection({ group, rows }: AtmPosGroupSectionPr
               border:       "1px solid var(--border-card)",
               borderLeft:   `4px solid ${color}`,
               borderRadius: "0 10px 10px 0",
-              padding:      "18px 20px",
+              padding:      "14px 16px",
             }}
           >
             {/* Type badge + progress dots */}
-            <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center justify-between gap-2 mb-3">
               <span
-                className="text-xs font-bold uppercase tracking-widest px-2.5 py-0.5 rounded-full"
+                className="text-xs font-bold uppercase tracking-widest px-2.5 py-0.5 rounded-full flex-shrink-0"
                 style={{ color, background: `${color}18` }}
               >
                 {typeLabel}
               </span>
               {total > 1 && (
-                <div className="flex items-center gap-1.5">
+                <div className="flex items-center flex-wrap gap-1.5 justify-end">
                   {visibleInsights.map((_, i) => (
                     <span
                       key={i}
@@ -355,6 +359,7 @@ export default function AtmPosGroupSection({ group, rows }: AtmPosGroupSectionPr
                         width:      i === activeIdx ? "18px" : "6px",
                         height:     "6px",
                         background: i === activeIdx ? color : `${color}35`,
+                        flexShrink: 0,
                       }}
                     />
                   ))}
