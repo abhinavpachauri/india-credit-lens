@@ -413,17 +413,17 @@ export default function AtmPosGroupSection({ group, rows }: AtmPosGroupSectionPr
 
                     {showReasoning && (
                       <div
-                        className="mt-2 rounded-lg text-xs"
+                        className="mt-2 rounded-lg text-sm"
                         style={{
                           background: `${color}08`,
                           border:     `1px solid ${color}25`,
                           padding:    "10px 12px",
                         }}
                       >
-                        <ol className="flex flex-col gap-1.5" style={{ paddingLeft: 0, listStyle: "none", margin: 0 }}>
+                        <ol className="flex flex-col gap-2" style={{ paddingLeft: 0, listStyle: "none", margin: 0 }}>
                           {ins.reasoning.chain.map((step, i) => (
-                            <li key={i} className="flex gap-2" style={{ lineHeight: 1.5 }}>
-                              <span className="flex-shrink-0 font-bold" style={{ color, minWidth: 14 }}>
+                            <li key={i} className="flex gap-2" style={{ lineHeight: 1.6 }}>
+                              <span className="flex-shrink-0 font-bold" style={{ color, minWidth: 16 }}>
                                 {i + 1}.
                               </span>
                               <span style={{ color: "var(--font)" }}>{step}</span>
