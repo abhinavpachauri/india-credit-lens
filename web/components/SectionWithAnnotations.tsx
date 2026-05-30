@@ -1,16 +1,17 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useAnnotation }    from "@/hooks/useAnnotation";
-import { SEC_COLORS }       from "@/lib/theme";
-import SectionCard          from "./SectionCard";
-import AnnotationControls   from "./AnnotationControls";
-import AnnotationPanel      from "./AnnotationPanel";
-import TrendChart           from "./TrendChart";
-import DistributionChart    from "./DistributionChart";
-import IndustryFilter       from "./IndustryFilter";
-import type { ReportSection } from "@/lib/types";
-import type { TabId }         from "./TabBar";
+import { useSectionInsights }   from "@/hooks/useSectionInsights";
+import { SEC_COLORS }           from "@/lib/theme";
+import { TYPE_COLOR }           from "@/components/dls/InsightCard";
+import SectionCard              from "./SectionCard";
+import InsightCTAStrip          from "./dls/InsightCTAStrip";
+import InsightCard              from "./dls/InsightCard";
+import TrendChart               from "./TrendChart";
+import DistributionChart        from "./DistributionChart";
+import IndustryFilter           from "./IndustryFilter";
+import type { ReportSection }   from "@/lib/types";
+import type { TabId }           from "./TabBar";
 
 interface Props {
   section: ReportSection;
@@ -18,20 +19,18 @@ interface Props {
 }
 
 export default function SectionWithAnnotations({ section, tab }: Props) {
-  const ann = useAnnotation(section);
+  const ins = useSectionInsights(section);
 
-  // Reset lens only when tab actually changes — not on initial mount
+  // Reset insights mode when tab changes
   const prevTab = useRef<TabId | null>(null);
   useEffect(() => {
-    if (prevTab.current !== null && prevTab.current !== tab) ann.reset();
+    if (prevTab.current !== null && prevTab.current !== tab) ins.exit();
     prevTab.current = tab;
   }, [tab]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Series filter state — only active in explore mode
+  // Series filter — only in explore (non-active) mode
   const [visibleSeries, setVisibleSeries] = useState<string[]>([]);
   const onFilteredSeries = useCallback((names: string[]) => setVisibleSeries(names), []);
-
-  const isExploreMode = ann.activeLens === null;
 
   function renderChart(visible?: string[]) {
     return tab === "trend" ? (
@@ -42,8 +41,8 @@ export default function SectionWithAnnotations({ section, tab }: Props) {
         seriesNames={section.seriesNames}
         pctLabel={section.pctLabel}
         visibleSeries={visible}
-        highlightConfig={ann.highlightConfig}
-        preferredMode={ann.activeAnnotation?.preferredMode ?? null}
+        highlightConfig={ins.highlightConfig}
+        preferredMode={ins.current?.preferredMode ?? null}
       />
     ) : (
       <DistributionChart
@@ -51,11 +50,30 @@ export default function SectionWithAnnotations({ section, tab }: Props) {
         seriesNames={section.distributionSeriesNames ?? section.seriesNames}
         pctLabel={section.pctLabel}
         visibleSeries={visible}
-        highlightConfig={ann.highlightConfig}
-        preferredMode={ann.activeAnnotation?.preferredMode ?? null}
+        highlightConfig={ins.highlightConfig}
+        preferredMode={ins.current?.preferredMode ?? null}
       />
     );
   }
+
+  // Newsletter CTA footer — shows remaining count + Substack link
+  const remaining = ins.total - 1 - ins.activeIdx;
+  const currentType = ins.current?._type ?? "insight";
+  const newsletterFooter = remaining > 0 ? (
+    <p className="text-xs" style={{ color: "var(--font-muted)" }}>
+      {remaining} more {currentType}{remaining !== 1 ? "s" : ""} in this section.{" "}
+      <a
+        href="https://indiacreditlens.substack.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{ color: TYPE_COLOR[currentType], textDecoration: "underline" }}
+      >
+        Get all 45 free →
+      </a>
+    </p>
+  ) : null;
+
+  const isExploreMode = !ins.isActive;
 
   return (
     <SectionCard
@@ -63,25 +81,37 @@ export default function SectionWithAnnotations({ section, tab }: Props) {
       icon={section.icon}
       accentColor={SEC_COLORS[section.accentIndex]}
     >
-      {/* Lens switcher */}
-      <AnnotationControls
-        counts={ann.counts}
-        activeLens={ann.activeLens}
-        setLens={ann.setLens}
-        onExplore={ann.reset}
-      />
+      {/* CTA / exit strip */}
+      {ins.flat.length > 0 && (
+        <InsightCTAStrip
+          items={ins.flat.map((a) => ({ type: a._type, title: a.title }))}
+          counts={ins.counts}
+          isActive={ins.isActive}
+          activeIdx={ins.activeIdx}
+          total={ins.total}
+          onEnter={ins.enter}
+          onExit={ins.exit}
+        />
+      )}
 
-      {/* Annotation card — above chart in intelligence mode */}
-      <AnnotationPanel
-        activeLens={ann.activeLens}
-        activeAnnotation={ann.activeAnnotation}
-        activeIndex={ann.activeIndex}
-        total={ann.total}
-        next={ann.next}
-        prev={ann.prev}
-      />
+      {/* Insight card — key resets internal chain-expand state on navigation */}
+      {ins.isActive && ins.current && (
+        <InsightCard
+          key={ins.activeIdx}
+          type={ins.current._type}
+          title={ins.current.title}
+          body={ins.current.body}
+          implication={ins.current.implication}
+          chain={ins.current.basis?.inferences}
+          activeIndex={ins.activeIdx}
+          total={ins.total}
+          onNext={ins.next}
+          onPrev={ins.prev}
+          footerSlot={newsletterFooter}
+        />
+      )}
 
-      {/* Chart — series filter only available in explore mode */}
+      {/* Chart — series filter only in explore mode */}
       {section.filterable ? (
         <>
           {isExploreMode && (

@@ -14,6 +14,8 @@ import {
 } from "@/lib/atm_pos_insights";
 import type { AtmPosInsight } from "@/lib/atm_pos_insights";
 import { pickColor } from "@/lib/theme";
+import InsightCard   from "@/components/dls/InsightCard";
+import InsightCTAStrip from "@/components/dls/InsightCTAStrip";
 import AtmPosSectionCard from "@/components/AtmPosSectionCard";
 
 // Primary metric per group — used to rank banks for Top N
@@ -60,12 +62,9 @@ export default function AtmPosGroupSection({ group, rows }: AtmPosGroupSectionPr
   const [trendMode,     setTrendMode]     = useState<"absolute" | "mom">("absolute");
   const [distMode,      setDistMode]      = useState<"absolute" | "pct">("absolute");
   const [bankSearch,    setBankSearch]    = useState("");
-  const [activeInsight,  setActiveInsight]  = useState<AtmPosInsight | null>(null);
-  const [allInsights,    setAllInsights]    = useState<AtmPosInsight[]>([]);
-  const [insightsMode,   setInsightsMode]   = useState(false);
-  const [showReasoning,  setShowReasoning]  = useState(false);
-  const [tickerIdx,      setTickerIdx]     = useState(0);
-  const [tickerVisible,  setTickerVisible] = useState(true);
+  const [activeInsight, setActiveInsight] = useState<AtmPosInsight | null>(null);
+  const [allInsights,   setAllInsights]   = useState<AtmPosInsight[]>([]);
+  const [insightsMode,  setInsightsMode]  = useState(false);
 
   // Load insights once
   useEffect(() => {
@@ -112,25 +111,6 @@ export default function AtmPosGroupSection({ group, rows }: AtmPosGroupSectionPr
   const insightCount = visibleInsights.filter((i) => i.type === "insight").length;
   const gapCount     = visibleInsights.filter((i) => i.type === "gap").length;
 
-  // Reset ticker when mode changes
-  useEffect(() => {
-    setTickerIdx(0);
-    setTickerVisible(true);
-  }, [mode]);
-
-  // Cycle through headlines on the CTA strip (pause in insights mode)
-  useEffect(() => {
-    if (insightsMode || visibleInsights.length <= 1) return;
-    const id = setInterval(() => {
-      setTickerVisible(false);
-      setTimeout(() => {
-        setTickerIdx((prev) => (prev + 1) % visibleInsights.length);
-        setTickerVisible(true);
-      }, 350);
-    }, 3200);
-    return () => clearInterval(id);
-  }, [insightsMode, visibleInsights.length]);
-
   const handleModeChange = (m: GroupMode) => {
     setMode(m);
     setHiddenSeries(m === "by_type" ? new Set() : new Set(["Total"]));
@@ -156,11 +136,9 @@ export default function AtmPosGroupSection({ group, rows }: AtmPosGroupSectionPr
     if (activeInsight?.id === ins.id) {
       setActiveInsight(null);
       setHiddenSeries(new Set());
-      setShowReasoning(false);
       return;
     }
     setActiveInsight(ins);
-    setShowReasoning(false);
 
     const highlighted = new Set(ins.effect.highlight);
     const toHide = new Set(seriesNames.filter((n) => !highlighted.has(n)));
@@ -215,256 +193,38 @@ export default function AtmPosGroupSection({ group, rows }: AtmPosGroupSectionPr
         {GROUP_LABELS[group]}
       </h2>
 
-      {/* ── Insights CTA strip / Back-to-explore strip ──────────────────────── */}
+      {/* ── Insights CTA / exit strip (DLS) ────────────────────────────────── */}
       {visibleInsights.length > 0 && (
-        !insightsMode ? (
-          /* EXPLORE MODE → prominent CTA */
-          <div
-            onClick={enterInsightsMode}
-            className="cursor-pointer mb-4 flex items-center justify-between gap-3"
-            style={{
-              background:   "#4e8ef712",
-              border:       "1.5px solid #4e8ef740",
-              borderLeft:   "5px solid #4e8ef7",
-              borderRadius: "0 10px 10px 0",
-              padding:      "14px 16px",
-            }}
-          >
-            <div className="min-w-0 flex-1">
-              {/* Static count line */}
-              <p className="text-sm font-bold leading-snug" style={{ color: "var(--font)" }}>
-                {insightCount > 0 && `💡 ${insightCount} insight${insightCount !== 1 ? "s" : ""}`}
-                {insightCount > 0 && gapCount > 0 && (
-                  <span style={{ color: "var(--font-muted)", fontWeight: 400 }}> · </span>
-                )}
-                {gapCount > 0 && (
-                  <span style={{ color: "#D97706" }}>
-                    {`⚠️ ${gapCount} gap${gapCount !== 1 ? "s" : ""}`}
-                  </span>
-                )}
-                <span style={{ color: "var(--font-muted)", fontWeight: 400 }}> in this view</span>
-              </p>
-
-              {/* Animated ticker — cycles through headlines, wraps on mobile */}
-              {visibleInsights.length > 0 && (
-                <div style={{ minHeight: 40, overflow: "hidden", marginTop: 5, marginBottom: 4 }}>
-                  <p
-                    className="text-sm font-medium leading-snug"
-                    style={{
-                      color:                visibleInsights[tickerIdx]?.type === "gap" ? "#D97706" : "var(--font)",
-                      opacity:              tickerVisible ? 1 : 0,
-                      transform:            tickerVisible ? "translateY(0)" : "translateY(-7px)",
-                      transition:           "opacity 0.35s ease, transform 0.35s ease",
-                      display:              "-webkit-box",
-                      WebkitLineClamp:      2,
-                      WebkitBoxOrient:      "vertical",
-                      overflow:             "hidden",
-                    }}
-                  >
-                    {visibleInsights[tickerIdx]?.type === "gap" ? "⚠️" : "💡"}{" "}
-                    {visibleInsights[tickerIdx]?.title}
-                  </p>
-                </div>
-              )}
-
-              {/* Static CTA line */}
-              <p className="text-sm" style={{ color: "#4e8ef7", fontWeight: 500 }}>
-                What they mean for lenders — tap to explore →
-              </p>
-            </div>
-            <div
-              className="flex-shrink-0 flex items-center justify-center rounded-full font-bold"
-              style={{
-                width:      34,
-                height:     34,
-                background: "#4e8ef7",
-                color:      "#fff",
-                fontSize:   16,
-              }}
-            >
-              →
-            </div>
-          </div>
-        ) : (
-          /* INSIGHTS MODE → back strip (same size as CTA, full div clickable) */
-          <div
-            onClick={exitInsightsMode}
-            className="cursor-pointer mb-4 flex items-center justify-between gap-4"
-            style={{
-              background:   "#4e8ef712",
-              border:       "1.5px solid #4e8ef740",
-              borderLeft:   "5px solid #4e8ef7",
-              borderRadius: "0 10px 10px 0",
-              padding:      "16px 20px",
-            }}
-          >
-            <div className="min-w-0">
-              <p className="text-base font-bold leading-snug" style={{ color: "#4e8ef7" }}>
-                ← Exit insights
-              </p>
-              <p className="text-sm mt-1" style={{ color: "var(--font-muted)", fontWeight: 500 }}>
-                {activeIdx >= 0 ? `${activeIdx + 1} of ${visibleInsights.length}` : visibleInsights.length} · Insights mode active
-              </p>
-            </div>
-            <div
-              className="flex-shrink-0 flex items-center justify-center rounded-full font-bold"
-              style={{
-                width:      38,
-                height:     38,
-                background: "#4e8ef7",
-                color:      "#fff",
-                fontSize:   18,
-              }}
-            >
-              ×
-            </div>
-          </div>
-        )
+        <InsightCTAStrip
+          items={visibleInsights.map((i) => ({ type: i.type, title: i.title }))}
+          counts={{
+            insight:     insightCount,
+            gap:         gapCount,
+            opportunity: 0,
+          }}
+          isActive={insightsMode}
+          activeIdx={activeIdx}
+          total={visibleInsights.length}
+          onEnter={enterInsightsMode}
+          onExit={exitInsightsMode}
+        />
       )}
 
-      {/* ── Insight card (one at a time, SIBC style) ────────────────────────── */}
-      {insightsMode && activeInsight && (() => {
-        const ins       = activeInsight;
-        const isGap     = ins.type === "gap";
-        const color     = isGap ? "#D97706" : "#4e8ef7";
-        const typeLabel = isGap ? "Gap" : "Insight";
-        const total     = visibleInsights.length;
-
-        return (
-          <div
-            className="mb-4"
-            style={{
-              background:   "var(--bg-card)",
-              border:       "1px solid var(--border-card)",
-              borderLeft:   `4px solid ${color}`,
-              borderRadius: "0 10px 10px 0",
-              padding:      "14px 16px",
-            }}
-          >
-            {/* Type badge + progress dots */}
-            <div className="flex items-center justify-between gap-2 mb-3">
-              <span
-                className="text-xs font-bold uppercase tracking-widest px-2.5 py-0.5 rounded-full flex-shrink-0"
-                style={{ color, background: `${color}18` }}
-              >
-                {typeLabel}
-              </span>
-              {total > 1 && (
-                <div className="flex items-center flex-wrap gap-1.5 justify-end">
-                  {visibleInsights.map((_, i) => (
-                    <span
-                      key={i}
-                      className="inline-block rounded-full transition-all duration-200"
-                      style={{
-                        width:      i === activeIdx ? "18px" : "6px",
-                        height:     "6px",
-                        background: i === activeIdx ? color : `${color}35`,
-                        flexShrink: 0,
-                      }}
-                    />
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Title */}
-            <p className="text-base font-bold leading-snug mb-2" style={{ color: "var(--font)" }}>
-              {ins.title}
-            </p>
-
-            {/* Body */}
-            <p className="text-sm leading-relaxed" style={{ color: "var(--font-muted)" }}>
-              {ins.body}
-            </p>
-
-            {/* For lenders */}
-            {ins.implication && (
-              <div className="mt-4 pt-4" style={{ borderTop: `1px solid ${color}20` }}>
-                <p
-                  className="text-xs font-bold uppercase tracking-widest mb-1.5"
-                  style={{ color }}
-                >
-                  For lenders
-                </p>
-                <p className="text-sm leading-relaxed" style={{ color: "var(--font)" }}>
-                  {ins.implication}
-                </p>
-
-                {/* Reasoning expand — Stage 4d sourced claims */}
-                {ins.reasoning && (
-                  <div className="mt-3">
-                    <button
-                      onClick={() => setShowReasoning((s) => !s)}
-                      className="flex items-center gap-1.5 text-xs font-semibold"
-                      style={{ color: "var(--font-muted)", background: "none", border: "none", padding: 0, cursor: "pointer" }}
-                    >
-                      <span
-                        style={{
-                          display:    "inline-block",
-                          transition: "transform 0.2s",
-                          transform:  showReasoning ? "rotate(90deg)" : "rotate(0deg)",
-                          fontSize:   9,
-                        }}
-                      >
-                        ▶
-                      </span>
-                      {showReasoning ? "Hide inference" : "Inference chain"}
-                    </button>
-
-                    {showReasoning && (
-                      <div
-                        className="mt-2 rounded-lg text-sm"
-                        style={{
-                          background: `${color}08`,
-                          border:     `1px solid ${color}25`,
-                          padding:    "10px 12px",
-                        }}
-                      >
-                        <ol className="flex flex-col gap-2" style={{ paddingLeft: 0, listStyle: "none", margin: 0 }}>
-                          {ins.reasoning.chain.map((step, i) => (
-                            <li key={i} className="flex gap-2" style={{ lineHeight: 1.6 }}>
-                              <span className="flex-shrink-0 font-bold" style={{ color, minWidth: 16 }}>
-                                {i + 1}.
-                              </span>
-                              <span style={{ color: "var(--font)" }}>{step}</span>
-                            </li>
-                          ))}
-                        </ol>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* Footer: prev/next */}
-            <div
-              className="flex items-center gap-3 mt-4 pt-3"
-              style={{ borderTop: "1px solid var(--border-card)" }}
-            >
-              <button
-                onClick={goPrev}
-                disabled={activeIdx === 0}
-                className="px-4 py-1.5 rounded-lg text-sm font-semibold disabled:opacity-25 transition-opacity"
-                style={{ border: `1.5px solid ${color}`, color }}
-              >
-                ←
-              </button>
-              <span className="text-xs tabular-nums" style={{ color: "var(--font-muted)" }}>
-                {activeIdx + 1} of {total}
-              </span>
-              <button
-                onClick={goNext}
-                disabled={activeIdx === total - 1}
-                className="px-4 py-1.5 rounded-lg text-sm font-semibold disabled:opacity-25 transition-opacity"
-                style={{ border: `1.5px solid ${color}`, color }}
-              >
-                →
-              </button>
-            </div>
-          </div>
-        );
-      })()}
+      {/* ── Insight card (DLS) — key resets internal chain-expand on navigation */}
+      {insightsMode && activeInsight && (
+        <InsightCard
+          key={activeIdx}
+          type={activeInsight.type}
+          title={activeInsight.title}
+          body={activeInsight.body}
+          implication={activeInsight.implication}
+          chain={activeInsight.reasoning?.chain}
+          activeIndex={activeIdx}
+          total={visibleInsights.length}
+          onNext={goNext}
+          onPrev={goPrev}
+        />
+      )}
 
       {/* ── Controls panel (hidden in insights mode) ────────────────────────── */}
       {!insightsMode && <div
