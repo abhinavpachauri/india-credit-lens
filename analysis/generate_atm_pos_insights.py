@@ -142,9 +142,9 @@ def cc_ecom_vs_pos(s, month) -> dict | None:
             return None  # no notable move
 
     implication = (
-        f"With ecommerce at {ecom_sh:.1f}% of CC volume, the majority of CC spend is now card-not-present (CNP). "
-        f"Lenders should review fraud scoring models calibrated on POS-dominant spend patterns — "
-        f"CNP transactions carry higher chargeback exposure and require digital-first decisioning."
+        f"More than half of credit card spending is now online — not at physical stores. "
+        f"Online transactions (called CNP, or card-not-present, because the card isn't physically swiped) carry higher fraud risk. "
+        f"If your fraud detection was built around in-store spending patterns, it needs to be updated for an online-first customer base."
     )
     return insight(
         "cc-ecom-vs-pos-share", "cc", "total", month, title, body,
@@ -213,10 +213,9 @@ def cc_atm_withdrawal_trend(s, month) -> dict | None:
         if atm_sh:
             body += f"Cash accounts for {atm_sh:.1f}% of CC transaction volume."
         implication = (
-            f"Rising CC ATM cash withdrawals over {streak} months signals growing cash advance "
-            "dependency in credit card portfolios. Cash advances typically attract higher interest "
-            "rates and no grace periods — monitor for elevated delinquency risk in segments showing "
-            "this pattern."
+            f"When credit card holders keep withdrawing cash from ATMs over {streak} months, it usually means they're struggling with liquidity — using credit cards as a cash loan. "
+            "Cash advances on credit cards are expensive (higher interest, no interest-free period). "
+            "Watch for higher default risk in customer segments where this pattern shows up."
         )
         return insight(
             "cc-atm-rising", "cc", "total", month, title, body,
@@ -254,16 +253,16 @@ def cc_cards_streak(s, month) -> dict | None:
     )
     if streak_dir == "up":
         implication = (
-            f"Consecutive months of CC card growth ({streak} months) indicates sustained acquisition momentum. "
-            f"Lenders should track activation rates alongside issuance — dormant card growth inflates "
-            "headline numbers without building transaction-based credit history."
+            f"{streak} straight months of card growth looks good, but card count alone can mislead. "
+            "Many new cards never get used — they sit inactive. "
+            "What matters for lending is how many cards are actually being transacted on. "
+            "Track activation rate (what percentage of issued cards have any spend in the last few months) alongside the headline number."
         )
     else:
         implication = (
-            f"Consecutive months of CC card decline ({streak} months) may signal intentional "
-            "portfolio pruning (loss-making or inactive accounts) or competitive attrition. "
-            "Lenders acquiring from the secondary market should verify whether this is "
-            "quality-driven contraction or market share loss."
+            f"{streak} straight months of card decline could mean two things: banks are intentionally closing inactive or loss-making accounts (which is healthy), "
+            "or they're losing customers to competitors (which is a red flag). "
+            "Before drawing conclusions, check whether the decline is coming from one bank type or spread across all."
         )
     return insight(
         "cc-cards-streak", "cc", "total", month, title, body,
@@ -305,10 +304,10 @@ def cc_category_share_shift(s, month) -> dict | None:
         f"{'Private bank CC dominance continues to compound.' if gainer == 'Private' else ''}"
     )
     implication = (
-        f"{gainer} banks gaining {g_delta:.1f}pp CC share signals a shift in acquisition strategy or "
-        f"partnership activity in that segment. For lenders benchmarking portfolio quality, "
-        f"tracking which bank type is gaining share helps contextualise portfolio concentration risk "
-        f"and pricing expectations in the credit card market."
+        f"{gainer} banks picking up credit card share — even by {g_delta:.1f}pp — signals a change in who's acquiring customers. "
+        f"{'SFBs (Small Finance Banks — banks that focus on underserved segments like AU or Equitas) growing in credit cards usually means fintech partnerships or co-branded products are kicking in.' if gainer == 'SFB' else ''}"
+        f"{'Private banks compounding their lead means the premium card market is further consolidating.' if gainer == 'Private' else ''}"
+        "For anyone benchmarking credit card portfolio quality, knowing which bank type is gaining share matters — their customer profiles and risk behaviour can be very different."
     )
     return insight(
         "cc-category-share-shift", "cc", "by_type", month, title, body,
@@ -355,9 +354,10 @@ def cc_top_bank_concentration(s, month) -> dict | None:
                 body += f" ({sign(delta)}pp vs prior month)"
             body += "."
         implication = (
-            f"A rank change in the top-5 CC issuers reflects meaningful shifts in acquisition pace "
-            f"or portfolio quality management. Lenders benchmarking competitive positioning should "
-            f"track whether the move is driven by new card issuance or balance attrition."
+            f"A rank change among the top CC issuers means one bank is either issuing cards faster "
+            f"or closing inactive accounts more aggressively. For anyone watching the credit card market, "
+            f"it's worth understanding the reason — growing rank means gaining customers, falling rank "
+            f"could mean pruning a portfolio or losing share to a competitor."
         )
         return insight(
             "cc-top-bank-rank-change", "cc", "top_n", month, title, body,
@@ -377,10 +377,10 @@ def cc_top_bank_concentration(s, month) -> dict | None:
             f"({leader['mom_pct']:+.1f}% MoM)."
         )
         implication = (
-            f"With {top5sh:.1f}% concentration in the top 5 CC issuers, smaller banks have limited "
-            "scale to build competitive rewards programs or co-brand partnerships. For credit strategy "
-            "teams, this concentration means data from RBI's aggregate CC series is effectively "
-            "proxied by a handful of banks' portfolios."
+            f"74% of all credit cards in India are with just 5 banks. "
+            "In practice, this means the national credit card data from RBI tells you largely "
+            "what HDFC, SBI, ICICI, Axis, and Kotak are doing — not the market as a whole. "
+            "If your strategy relies on industry-level CC data, keep this concentration in mind."
         )
         return insight(
             "cc-top5-concentration", "cc", "top_n", month, title, body,
@@ -423,10 +423,10 @@ def dc_atm_trend(s, month) -> dict | None:
                 body += f" ({sign(atm_dt)}pp)"
             body += ". Debit cards are increasingly used for digital payments, not just ATM cash."
         implication = (
-            "Growing comfort with digital debit payments among traditionally cash-dependent segments "
-            "improves transaction data quality for underwriting. Debit-transacting customers who "
-            "shift to digital payments build richer footprints — a precursor for credit product "
-            "eligibility assessments."
+            "Debit card holders who are shifting from ATM cash to digital payments (POS or online) "
+            "start leaving a traceable spending history. That history is exactly what lenders need "
+            "to assess someone's first credit application. So fewer ATM withdrawals is actually "
+            "good news for expanding the pool of underwritable debit customers."
         )
         return insight(
             "dc-atm-declining", "dc", "total", month, title, body,
@@ -445,10 +445,10 @@ def dc_atm_trend(s, month) -> dict | None:
         if atm_sh:
             body += f"Cash accounts for {atm_sh:.1f}% of total DC volume."
         implication = (
-            f"Sustained DC ATM growth ({streak} months) indicates cash-dependent transaction patterns "
-            "remain strong. For lenders building alternate data underwriting, this signals a large "
-            "segment that leaves limited digital footprints — cash-first behaviour requires "
-            "bureau-plus-physical verification approaches."
+            f"Debit card ATM cash growing for {streak} straight months means a large part of "
+            "the debit base is still cash-first — their spending leaves no digital trail. "
+            "For lenders using transaction data to underwrite, this segment is essentially invisible. "
+            "Bureau scores (CIBIL, Experian) and physical income verification remain the only reliable tools here."
         )
         return insight(
             "dc-atm-rising", "dc", "total", month, title, body,
@@ -488,10 +488,10 @@ def dc_ecom_share(s, month) -> dict | None:
     body += "The structural shift away from cash toward digital payments is ongoing."
 
     implication = (
-        f"Debit card ecommerce at {ecom_sh:.1f}% of DC volume creates a digitally-traceable "
-        "subpopulation of debit-only customers — higher-value prospects for credit product cross-sell. "
-        "Lenders with access to debit transaction data should segment by digital vs ATM-cash "
-        "behaviour to prioritise credit outreach."
+        f"Only {ecom_sh:.1f}% of debit card spending is online, but that group is valuable. "
+        "These are debit-only customers who already shop digitally — which means their spending "
+        "leaves a traceable record. For cross-selling a first credit card or personal loan, "
+        "debit customers with online spending history are much easier to assess than pure ATM-cash users."
     )
     return insight(
         "dc-ecom-share", "dc", "total", month, title, body,
@@ -527,10 +527,11 @@ def dc_cards_streak(s, month) -> dict | None:
         f"{'India debit base continues to expand.' if latest > 1e9 else ''}"
     )
     implication = (
-        f"India debit card base at {fmt_num(latest)} provides a large population with formal banking "
-        "access. However, card count alone overstates addressable credit opportunity — "
-        "lenders should focus on the active-transacting subset, which is the realistic "
-        "pool for first-credit products."
+        f"India has {fmt_num(latest)} debit cards — but that number is misleading as a credit opportunity. "
+        "A large chunk are Jan Dhan accounts (zero-balance accounts opened under the government's "
+        "financial inclusion scheme) that see very little activity. "
+        "The real pool for first-time credit products is much smaller — focus on debit card holders "
+        "who are actually transacting, not just account holders."
     )
     return insight(
         "dc-cards-streak", "dc", "total", month, title, body,
@@ -569,10 +570,11 @@ def dc_category_dominance(s, month) -> dict | None:
         f"{(gainer + ' banks are the fastest-growing category (' + sign(cats[gainer].get('share_delta_pp',0)) + 'pp share gain).') if gainer else ''}"
     )
     implication = (
-        f"PSB dominance at {psb_sh:.1f}% of debit cards reflects Jan Dhan linkage and rural banking "
-        "penetration rather than active acquisition. For credit lenders, PSB debit portfolios skew "
-        "toward low-income, low-activity accounts — transaction-based underwriting signals must be "
-        "calibrated separately from urban private bank debit portfolios."
+        f"PSBs (government-owned banks like SBI, PNB, Bank of Baroda) hold {psb_sh:.1f}% of debit cards, "
+        "largely because of Jan Dhan — the government scheme that opened basic bank accounts "
+        "for millions of low-income households. Many of these accounts have little activity. "
+        "If you're using debit transaction data for credit assessment, PSB debit data needs to be "
+        "treated very differently from, say, HDFC or Kotak debit customers."
     )
     return insight(
         "dc-psb-dominance", "dc", "by_type", month, title, body,
@@ -611,9 +613,11 @@ def dc_top_bank(s, month) -> dict | None:
         if top5sh:
             body += f"Top 5 banks: {top5sh:.1f}% of total DC cards{f' ({sign(delta)}pp)' if delta else ''}."
         implication = (
-            "Rank changes in debit card leaders often reflect PSB account closure campaigns or "
-            "private bank expansion in Tier 2/3 cities. The bank gaining rank is expanding its "
-            "bankable population base — a leading indicator of future credit origination volume."
+            "Rank changes in debit cards usually mean one of two things: a PSB is closing "
+            "dormant Jan Dhan accounts (drops in rank), or a private bank is pushing into "
+            "smaller towns and cities (rises in rank). "
+            "The bank moving up is reaching new customers — which often translates to more "
+            "credit origination potential over the next few quarters."
         )
         return insight(
             "dc-top-bank-rank-change", "dc", "top_n", month, title, body,
@@ -630,9 +634,10 @@ def dc_top_bank(s, month) -> dict | None:
         f"Top 5 banks account for {top5sh:.1f}%{f' ({sign(delta)}pp vs prior month)' if delta else ''}."
     )
     implication = (
-        f"The top 5 DC banks hold {top5sh:.1f}% of debit cards. For lenders using debit card "
-        "transaction data in underwriting, coverage quality is largely determined by data-sharing "
-        "arrangements with these top banks — gaps in coverage create blind spots for credit decisions."
+        f"Top 5 banks hold {top5sh:.1f}% of debit cards. If you're using debit transaction data "
+        "for credit underwriting (assessing someone's spending behaviour before giving them a loan), "
+        "the quality of that data depends heavily on whether these top banks are sharing data with you. "
+        "Without coverage from at least 2-3 of them, you're missing nearly half the market."
     )
     return insight(
         "dc-top-bank-leader", "dc", "top_n", month, title, body,
@@ -683,10 +688,11 @@ def infra_qr_per_pos(s, month) -> dict | None:
             f"digital acceptance infrastructure is {'outpacing' if upi_mom > pos_mom else 'growing in line with'} hardware deployment."
         )
     implication = (
-        f"At {latest:.0f} UPI QR codes per POS terminal, QR-based merchant acceptance has decisively "
-        "outpaced hardware deployment. Lenders without credit products accessible via UPI QR "
-        "(credit on UPI, BNPL on QR) are structurally excluded from the long-tail merchant base "
-        "that has no POS terminal — this is the majority of small merchants."
+        f"There are {latest:.0f} UPI QR codes for every POS (card swipe) machine in India. "
+        "This means the typical small merchant — kirana store, auto driver, vegetable vendor — "
+        "accepts payments through a QR code on their phone, not a card machine. "
+        "Any credit product designed for small merchants (small business loans, BNPL for vendors) "
+        "needs to work over UPI QR, not just over POS terminals."
     )
     return insight(
         "infra-qr-per-pos", "infra", "total", month, title, body,
@@ -723,16 +729,18 @@ def infra_pos_streak(s, month) -> dict | None:
     )
     if sd == "up":
         implication = (
-            f"Growing POS terminal count ({fmt_num(latest)} and rising) signals merchant "
-            "formalisation — merchants deploying POS terminals generate transaction histories "
-            "that can underpin MSME credit assessments. Lenders with POS-linked lending "
-            "products (merchant cash advances, working capital) benefit from this infrastructure growth."
+            f"Every new POS machine deployed ({fmt_num(latest)} and growing) is a merchant "
+            "who starts building a transaction history — how much they sell, how often, which days. "
+            "That data is exactly what lenders use to assess working capital loans (short-term "
+            "business credit based on daily sales). More POS terminals means more merchants "
+            "who can be lent to based on their actual business performance."
         )
     else:
         implication = (
-            "Contracting POS terminal count may indicate QR-based acceptance is substituting "
-            "hardware deployment. Lenders using POS transaction data for merchant underwriting "
-            "should re-evaluate data sourcing strategy as merchant activity migrates to QR rails."
+            "POS terminal count falling likely means merchants are switching to UPI QR codes "
+            "instead — cheaper, no hardware needed. If you use POS transaction data to assess "
+            "merchant creditworthiness, your data coverage may be quietly shrinking as merchant "
+            "activity shifts to QR rails where you may not have visibility."
         )
     return insight(
         "infra-pos-streak", "infra", "total", month, title, body,
@@ -772,10 +780,10 @@ def infra_upi_vs_bharat_qr(s, month) -> dict | None:
         body += f"UPI QR grew {upi_mom:+.1f}% MoM vs Bharat QR at {bqr_mom:+.1f}% MoM. "
     body += "UPI has decisively won the QR standard battle in India."
     implication = (
-        f"UPI QR at {ratio:.0f}x Bharat QR scale means any payments or lending infrastructure "
-        "built on Bharat QR rails is operating on a de facto deprecated standard. "
-        "Lenders evaluating QR-linked credit products should anchor on UPI QR as the only "
-        "viable acceptance network at scale."
+        f"Bharat QR was an earlier QR code standard that lost out to UPI QR — which is now {ratio:.0f} times bigger. "
+        "Building any credit product (credit on UPI, BNPL) on Bharat QR today would be like "
+        "building on a platform that merchants have already abandoned. "
+        "UPI QR is the only QR standard worth designing for."
     )
     return insight(
         "infra-upi-vs-bharat-qr", "infra", "total", month, title, body,
@@ -811,9 +819,11 @@ def infra_category_pos(s, month) -> dict | None:
         f"{loser + ' banks lost the most share.' if loser and loser != gainer else ''}"
     )
     implication = (
-        f"{gainer} banks expanding POS share signals growing merchant acquiring relationships in that "
-        "segment. Banks with strong POS networks have the richest merchant transaction data — "
-        "relevant for co-branded card partnerships and MSME merchant credit origination."
+        f"{gainer} banks gaining POS share means they're building more merchant relationships in that segment. "
+        "Banks that own the POS network also own the merchant's transaction data — daily sales, "
+        "busy periods, average ticket size. "
+        "That data is the foundation for merchant lending (small business loans based on sales history). "
+        "Watch which bank type is expanding POS — they're positioning for merchant credit."
     )
     return insight(
         "infra-category-pos-share", "infra", "by_type", month, title, body,
@@ -852,10 +862,12 @@ def infra_top_bank_pos(s, month) -> dict | None:
 
     top5sh_val = top5sh or 0
     implication = (
-        f"Top 5 banks controlling {top5sh_val:.1f}% of POS terminals means merchant acquiring — "
-        "and by extension, merchant transaction data — is concentrated in a handful of institutions. "
-        "Lenders building merchant credit products outside these banks face significant data "
-        "coverage gaps. Co-lending or data-sharing with top POS acquirers is a prerequisite for scale."
+        f"5 banks own {top5sh_val:.1f}% of all POS machines in India. "
+        "That also means merchant sales data — what shopkeepers sell, how much, how often — "
+        "sits largely with those same 5 banks. "
+        "If you want to lend to merchants and need their sales history to decide how much credit to give, "
+        "you either need a data partnership with one of these banks or an alternate source "
+        "like GST returns or UPI transaction feeds."
     )
     return insight(
         "infra-top-bank-pos", "infra", "top_n", month, title, body,
@@ -892,9 +904,10 @@ def cc_transaction_surge(s, month) -> dict | None:
         f"March year-end spending typically drives broad-based CC transaction growth."
     )
     implication = (
-        f"Year-end CC transaction surges (avg {avg_mom:.1f}% MoM across all types) are seasonal — "
-        "not reflective of structural demand growth. Underwriters should normalise Q4 spend volumes "
-        "when assessing credit utilisation or limit adequacy to avoid overstating repayment capacity."
+        f"March always spikes — it's financial year-end and people tend to spend more. "
+        f"An average {avg_mom:.1f}% jump this month is seasonal, not a sign customers suddenly have more money. "
+        "If you're assessing how much credit a customer can repay, don't use March spend as your baseline — "
+        "it will make their repayment capacity look higher than it actually is."
     )
     return insight(
         "cc-txn-surge", "cc", "total", month, title, body,
@@ -931,10 +944,11 @@ def dc_atm_share_structural(s, month) -> dict | None:
         body += f"DC ecommerce has grown to {ecom_sh:.1f}% ({sign(ecom_delta)}pp). "
     body += "The structural shift from cash to digital payments is underway in the debit segment."
     implication = (
-        f"DC ATM cash at {atm_sh:.1f}% and declining creates an expanding segment of digitally-active "
-        "debit customers with improving transaction footprints. Lenders with access to debit "
-        "transaction data should segment on this shift — moving-to-digital debit customers are "
-        "prime candidates for first-credit product origination."
+        f"Debit card ATM cash is at {atm_sh:.1f}% and falling — which means a growing group of "
+        "debit card holders is switching to digital payments (online or at stores). "
+        "Those customers start leaving a spending history that lenders can actually use. "
+        "Debit customers who are moving to digital are among the best targets for a first credit card "
+        "or personal loan — they have a track record, just not a credit one yet."
     )
     return insight(
         "dc-atm-share-structural", "dc", "total", month, title, body,
@@ -967,10 +981,10 @@ def dc_pos_cash_decline(s, month) -> dict | None:
         f"while digital POS payments continue to grow."
     )
     implication = (
-        "Declining POS cash-back withdrawals indicate merchants and customers are shifting toward "
-        "net digital payments rather than using POS as a cash-out channel. This is a positive "
-        "signal for POS-data quality — transaction records increasingly reflect actual purchases "
-        "rather than cash access events, improving their value for credit underwriting."
+        "Some merchants used to let customers withdraw cash at their POS machine — called cash-back at POS. "
+        "This is declining. That's actually good for data quality: POS transaction records now reflect "
+        "real purchases, not cash withdrawals disguised as purchases. "
+        "Better purchase data means more accurate signals when assessing credit for small businesses or retail customers."
     )
     return insight(
         "dc-pos-cash-decline", "dc", "total", month, title, body,
@@ -1004,10 +1018,11 @@ def gap_dc_cash_dominance(s, month) -> dict | None:
         f"India's debit card base remains overwhelmingly cash-dependent."
     )
     implication = (
-        f"With {atm_sh:.1f}% of DC volume still being ATM cash, the majority of debit card "
-        "transactions leave no digital footprint for underwriting purposes. Lenders building "
-        "alternate data credit models on debit transaction data face severe coverage gaps — "
-        "bureau supplementation remains essential for the cash-dominant debit segment."
+        f"{atm_sh:.1f}% of debit card spending is ATM cash. Cash leaves no digital record — "
+        "you can't tell where it was spent or on what. "
+        "For lenders trying to assess a debit card holder's financial behaviour, the transaction "
+        "history is mostly blank. Bureau scores (CIBIL, Experian) remain the primary tool "
+        "for this segment — debit transaction data alone isn't enough yet."
     )
     return insight(
         "gap-dc-cash-dominance", "dc", "total", month, title, body,
@@ -1040,10 +1055,10 @@ def gap_bharat_qr_contraction(s, month) -> dict | None:
         f"Merchant preference has consolidated on UPI QR as the dominant QR acceptance standard."
     )
     implication = (
-        f"Bharat QR's {bqr_mom:.1f}% MoM decline signals the standard is being actively abandoned "
-        "by merchants. Any lending or payments product built on Bharat QR infrastructure "
-        "faces accelerating merchant disengagement. Reallocate merchant acquisition "
-        "and credit-linked acceptance strategy to UPI QR rails exclusively."
+        f"Bharat QR is shrinking {abs(bqr_mom):.1f}% every month — merchants are removing it. "
+        "If any part of your lending or payments product depends on Bharat QR acceptance, "
+        "that's a real problem. Move everything to UPI QR. "
+        "There is no viable future for Bharat QR as a payments or credit infrastructure."
     )
     return insight(
         "gap-bharat-qr-contraction", "infra", "total", month, title, body,
@@ -1075,10 +1090,12 @@ def gap_atm_offsite_decline(s, month) -> dict | None:
         f"their decline reduces physical cash access for underserved geographies."
     )
     implication = (
-        "Declining offsite ATMs reduce repayment infrastructure for rural borrowers who remain "
-        "cash-dependent. Lenders with rural loan books should assess whether offsite ATM "
-        "coverage in their geographies is contracting — this can impair EMI collection "
-        "in areas without digital payment penetration."
+        "Offsite ATMs are standalone machines in villages, petrol pumps, small towns — "
+        "placed away from bank branches specifically to serve rural areas. "
+        "When these decline and digital payments haven't reached those areas yet, "
+        "rural borrowers lose their easiest way to access cash for repayment. "
+        "If you have loans in rural geographies, check whether ATM coverage in those areas is shrinking — "
+        "it can make EMI collection harder."
     )
     return insight(
         "gap-atm-offsite-decline", "infra", "total", month, title, body,
@@ -1108,10 +1125,11 @@ def gap_pos_concentration(s, month) -> dict | None:
         f"All remaining banks combined share less than {100 - top5sh:.1f}% of merchant acquiring infrastructure."
     )
     implication = (
-        f"POS concentration at {top5sh:.1f}% in 5 banks means meaningful merchant transaction data "
-        "for credit underwriting is controlled by a tiny number of institutions. Lenders without "
-        "data-sharing partnerships with these top POS acquirers are effectively blind to the "
-        "majority of formal merchant transaction history in India."
+        f"{top5sh:.1f}% of all POS machines in India are owned by just 5 banks — "
+        "and so is most of the merchant transaction data that comes with them. "
+        "If you're building merchant credit products (loans to shopkeepers or small businesses) "
+        "and don't have data partnerships with these top banks, you're working with an incomplete picture. "
+        "Alternate sources — GST filings, UPI transaction data — can partially fill this gap."
     )
     return insight(
         "gap-pos-concentration", "infra", "top_n", month, title, body,
@@ -1145,10 +1163,12 @@ def gap_foreign_cc_decline(s, month) -> dict | None:
         f"share signals continued loss of the premium CC market to private Indian banks."
     )
     implication = (
-        f"Foreign bank CC share at {sh:.1f}% and declining means the premium-card, high-limit "
-        "borrower segment is consolidating within Indian private banks. For credit intelligence, "
-        "the RBI CC data increasingly reflects domestic bank portfolios — foreign bank premium "
-        "cardholder behaviour is underrepresented and requires separate data sources."
+        f"Foreign banks (Amex, Standard Chartered, etc.) traditionally served high-income customers — "
+        "high credit limits, frequent international travel, premium cards. "
+        "With their share at just {sh:.1f}% and still falling, those customers are now largely "
+        "being served by Indian private banks instead. "
+        "For anyone analysing RBI's credit card data, this means the premium borrower segment "
+        "is now in the domestic bank numbers — not in a separate foreign bank bucket."
     )
     return insight(
         "gap-foreign-cc-decline", "cc", "by_type", month, title, body,
@@ -1180,11 +1200,11 @@ def gap_dc_ecom_low(s, month) -> dict | None:
         f"with minimal digital payment activity."
     )
     implication = (
-        f"DC ecommerce at {ecom_sh:.1f}% of volume means debit card transaction histories are "
-        "predominantly cash events — not useful for digital underwriting. Lenders building "
-        "first-credit products for the debit-primary mass market should rely on bureau + "
-        "income-proxy signals rather than transaction-data models, which will suffer from "
-        "severe data sparsity in this population."
+        f"Only {ecom_sh:.1f}% of debit card volume is online spending — the rest is mostly ATM cash. "
+        "For the typical debit card holder, their transaction history is largely cash withdrawals, "
+        "which tells you very little about their financial behaviour. "
+        "To lend to this segment, bureau scores (CIBIL, Experian) and income proxies "
+        "(salary credits, GST filings) will be far more reliable than transaction data models."
     )
     return insight(
         "gap-dc-ecom-low", "dc", "total", month, title, body,
