@@ -18,6 +18,16 @@ export interface InsightExploreAction {
   topN?: number;
 }
 
+export interface InsightReasoningSignal {
+  key:   string;   // dot-path into signals.json  e.g. "groups.cc.top_n.top5_share_pct"
+  value: number;   // live value at generation time — validated by Stage 4d
+}
+
+export interface InsightReasoning {
+  signals: InsightReasoningSignal[];   // data points that back this claim
+  chain:   string[];                   // step-by-step inference: signal → meaning → lender action
+}
+
 export interface AtmPosInsight {
   id:             string;
   group:          InsightGroup;
@@ -27,6 +37,7 @@ export interface AtmPosInsight {
   title:          string;
   body:           string;
   implication?:   string;
+  reasoning?:     InsightReasoning;    // Stage 4d: claim sourcing for the implication
   sourceSignals?: string[];
   effect:         InsightEffect;
   exploreAction:  InsightExploreAction | null;

@@ -60,9 +60,10 @@ export default function AtmPosGroupSection({ group, rows }: AtmPosGroupSectionPr
   const [trendMode,     setTrendMode]     = useState<"absolute" | "mom">("absolute");
   const [distMode,      setDistMode]      = useState<"absolute" | "pct">("absolute");
   const [bankSearch,    setBankSearch]    = useState("");
-  const [activeInsight, setActiveInsight] = useState<AtmPosInsight | null>(null);
-  const [allInsights,   setAllInsights]   = useState<AtmPosInsight[]>([]);
-  const [insightsMode,   setInsightsMode]  = useState(false);
+  const [activeInsight,  setActiveInsight]  = useState<AtmPosInsight | null>(null);
+  const [allInsights,    setAllInsights]    = useState<AtmPosInsight[]>([]);
+  const [insightsMode,   setInsightsMode]   = useState(false);
+  const [showReasoning,  setShowReasoning]  = useState(false);
   const [tickerIdx,      setTickerIdx]     = useState(0);
   const [tickerVisible,  setTickerVisible] = useState(true);
 
@@ -155,9 +156,11 @@ export default function AtmPosGroupSection({ group, rows }: AtmPosGroupSectionPr
     if (activeInsight?.id === ins.id) {
       setActiveInsight(null);
       setHiddenSeries(new Set());
+      setShowReasoning(false);
       return;
     }
     setActiveInsight(ins);
+    setShowReasoning(false);
 
     const highlighted = new Set(ins.effect.highlight);
     const toHide = new Set(seriesNames.filter((n) => !highlighted.has(n)));
@@ -381,6 +384,51 @@ export default function AtmPosGroupSection({ group, rows }: AtmPosGroupSectionPr
                 <p className="text-sm leading-relaxed" style={{ color: "var(--font)" }}>
                   {ins.implication}
                 </p>
+
+                {/* Reasoning expand — Stage 4d sourced claims */}
+                {ins.reasoning && (
+                  <div className="mt-3">
+                    <button
+                      onClick={() => setShowReasoning((s) => !s)}
+                      className="flex items-center gap-1.5 text-xs font-semibold"
+                      style={{ color: "var(--font-muted)", background: "none", border: "none", padding: 0, cursor: "pointer" }}
+                    >
+                      <span
+                        style={{
+                          display:    "inline-block",
+                          transition: "transform 0.2s",
+                          transform:  showReasoning ? "rotate(90deg)" : "rotate(0deg)",
+                          fontSize:   9,
+                        }}
+                      >
+                        ▶
+                      </span>
+                      {showReasoning ? "Hide inference" : "Inference chain"}
+                    </button>
+
+                    {showReasoning && (
+                      <div
+                        className="mt-2 rounded-lg text-xs"
+                        style={{
+                          background: `${color}08`,
+                          border:     `1px solid ${color}25`,
+                          padding:    "10px 12px",
+                        }}
+                      >
+                        <ol className="flex flex-col gap-1.5" style={{ paddingLeft: 0, listStyle: "none", margin: 0 }}>
+                          {ins.reasoning.chain.map((step, i) => (
+                            <li key={i} className="flex gap-2" style={{ lineHeight: 1.5 }}>
+                              <span className="flex-shrink-0 font-bold" style={{ color, minWidth: 14 }}>
+                                {i + 1}.
+                              </span>
+                              <span style={{ color: "var(--font)" }}>{step}</span>
+                            </li>
+                          ))}
+                        </ol>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             )}
 

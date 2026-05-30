@@ -84,8 +84,42 @@ def sign(v: float) -> str:
     return f"+{v:.1f}" if v >= 0 else f"{v:.1f}"
 
 
+def get_signal_value(s: dict, key: str) -> float | None:
+    """Traverse a dot-path key in the signals dict, return float or None."""
+    node = s
+    for part in key.split("."):
+        if isinstance(node, dict):
+            node = node.get(part)
+        elif isinstance(node, list):
+            try:
+                node = node[int(part)]
+            except (ValueError, IndexError):
+                return None
+        else:
+            return None
+        if node is None:
+            return None
+    return float(node) if isinstance(node, (int, float)) and not isinstance(node, bool) else None
+
+
+def build_reasoning(s: dict, keys: list, chain: list) -> dict:
+    """Build a reasoning object with live signal values for Stage 4d validation."""
+    signals = []
+    for key in keys:
+        val = get_signal_value(s, key)
+        if val is not None:
+            signals.append({"key": key, "value": round(val, 4)})
+    return {"signals": signals, "chain": chain}
+
+
 def insight(id_, group, cut, period, title, body, effect, explore=None,
-            type_="insight", implication=None, source_signals=None):
+            type_="insight", implication=None, source_signals=None,
+            chain=None, signals_dict=None):
+    reasoning = (
+        build_reasoning(signals_dict, source_signals or [], chain)
+        if chain and signals_dict and source_signals
+        else None
+    )
     return {
         "id":            id_,
         "group":         group,
@@ -95,6 +129,7 @@ def insight(id_, group, cut, period, title, body, effect, explore=None,
         "title":         title,
         "body":          body,
         "implication":   implication,
+        "reasoning":     reasoning,
         "sourceSignals": source_signals or [],
         "effect":        effect,
         "exploreAction": explore,
@@ -161,6 +196,12 @@ def cc_ecom_vs_pos(s, month) -> dict | None:
             "groups.cc.total.cross.cc_pos_txn_vol.share_pct",
             "groups.cc.total.cross.cc_ecom_txn_vol.share_delta_pp",
         ],
+        chain=[
+            f"CC ecommerce at {ecom_sh:.1f}% of volume — majority of CC spend is now online, not at physical stores",
+            "Online transactions (card-not-present / CNP) carry higher fraud risk since the card is never physically verified",
+            "Fraud detection built for in-store patterns needs recalibration for an online-first customer base",
+        ],
+        signals_dict=s,
     )
 
 
@@ -202,6 +243,12 @@ def cc_atm_withdrawal_trend(s, month) -> dict | None:
                 "groups.cc.total.metrics.cc_atm_withdrawal_vol.streak_months",
                 "groups.cc.total.cross.cc_atm_withdrawal_vol.share_pct",
             ],
+            chain=[
+                f"CC ATM cash declining for {streak} months — customers using credit cards for purchases, not cash",
+                "Lower cash advance usage reduces high-interest revolving exposure in CC portfolios",
+                "Shift signals growing digital payment preference — proxy for improving financial literacy in the base",
+            ],
+            signals_dict=s,
         )
 
     if streak_dir == "up" and streak >= 3 and mom > 3:
@@ -226,6 +273,12 @@ def cc_atm_withdrawal_trend(s, month) -> dict | None:
                 "groups.cc.total.metrics.cc_atm_withdrawal_vol.streak_months",
                 "groups.cc.total.cross.cc_atm_withdrawal_vol.share_pct",
             ],
+            chain=[
+                f"CC ATM cash growing for {streak} months — customers using credit cards as liquidity access, not for purchases",
+                "Cash advances carry higher interest and no interest-free period — expensive revolving behaviour",
+                "Sustained cash advance growth signals liquidity stress; monitor for elevated default risk in these segments",
+            ],
+            signals_dict=s,
         )
     return None
 
@@ -275,6 +328,12 @@ def cc_cards_streak(s, month) -> dict | None:
             "groups.cc.total.metrics.credit_cards.streak_dir",
             "groups.cc.total.metrics.credit_cards.qoq_pct",
         ],
+        chain=[
+            f"CC cards outstanding {'growing' if streak_dir == 'up' else 'declining'} for {streak} consecutive months",
+            "Card count includes dormant cards that were issued but never activated or used",
+            "Activation rate (cards with any spend in recent months) is the real signal for credit origination potential",
+        ],
+        signals_dict=s,
     )
 
 
@@ -325,6 +384,12 @@ def cc_category_share_shift(s, month) -> dict | None:
             f"groups.cc.by_type.categories.{loser}.share_pct",
             f"groups.cc.by_type.categories.{loser}.share_delta_pp",
         ],
+        chain=[
+            f"{gainer} banks gained {g_delta:.1f}pp CC share — {loser} banks lost {abs(l_delta):.1f}pp",
+            f"{'SFB growth signals fintech partnerships or co-branded card activity in underserved segments' if gainer == 'SFB' else 'Private bank lead compounding as premium card market consolidates further'}",
+            "Customer risk profiles differ significantly across bank types — portfolio benchmarking must account for this mix shift",
+        ],
+        signals_dict=s,
     )
 
 
@@ -364,7 +429,13 @@ def cc_top_bank_concentration(s, month) -> dict | None:
             effect={"highlight": [rc["name"], "Total"], "tab": "trend", "trendMode": "absolute", "focusCard": "credit_cards"},
             explore={"mode": "top_n", "topN": 10},
             implication=implication,
-            source_signals=["groups.cc.top_n.rank_changes", "groups.cc.top_n.top5_share_pct"],
+            source_signals=["groups.cc.top_n.top5_share_pct"],
+            chain=[
+                f"{rc['name']} moved from #{rc['from_rank']} to #{rc['to_rank']} in CC cards outstanding",
+                f"{'Rising rank means faster card issuance or competitor attrition in that bank' if direction == 'up' else 'Falling rank suggests portfolio pruning or losing acquisition pace to competitors'}",
+                "Track whether the move reflects new card issuance (gaining customers) or balance attrition (losing them)",
+            ],
+            signals_dict=s,
         )
     else:
         if top5sh is None:
@@ -393,6 +464,12 @@ def cc_top_bank_concentration(s, month) -> dict | None:
                 "groups.cc.top_n.banks.0.share_pct",
                 "groups.cc.top_n.banks.0.mom_pct",
             ],
+            chain=[
+                f"Top 5 banks hold {top5sh:.1f}% of all CC cards — {leader['name']} alone accounts for {leader['share_pct']:.1f}%",
+                "RBI aggregate CC data is effectively proxied by these 5 institutions — smaller banks are statistically marginal",
+                "Industry-level CC strategy analysis must account for this concentration — it reflects large-bank dynamics, not the full market",
+            ],
+            signals_dict=s,
         )
 
 
@@ -437,6 +514,12 @@ def dc_atm_trend(s, month) -> dict | None:
                 "groups.dc.total.metrics.dc_atm_withdrawal_vol.streak_months",
                 "groups.dc.total.cross.dc_atm_withdrawal_vol.share_pct",
             ],
+            chain=[
+                f"DC ATM cash withdrawals declining for {streak} months — customers shifting to digital debit payments",
+                "Digital debit transactions (POS, ecommerce) leave structured spending records vs cash which leaves none",
+                "Debit customers moving to digital build a transaction history lenders can use to assess first credit applications",
+            ],
+            signals_dict=s,
         )
 
     if sd == "up" and streak >= 3:
@@ -459,6 +542,12 @@ def dc_atm_trend(s, month) -> dict | None:
                 "groups.dc.total.metrics.dc_atm_withdrawal_vol.streak_months",
                 "groups.dc.total.cross.dc_atm_withdrawal_vol.share_pct",
             ],
+            chain=[
+                f"DC ATM cash growing for {streak} months — debit base is cash-first, not digitally active",
+                "Cash transactions leave no digital record — financial behaviour is opaque to transaction-data models",
+                "Bureau scores (CIBIL, Experian) and physical income verification are the primary underwriting tools for this segment",
+            ],
+            signals_dict=s,
         )
     return None
 
@@ -503,6 +592,12 @@ def dc_ecom_share(s, month) -> dict | None:
             "groups.dc.total.cross.dc_ecom_txn_vol.share_delta_pp",
             "groups.dc.total.cross.dc_atm_withdrawal_vol.share_pct",
         ],
+        chain=[
+            f"DC ecommerce is {ecom_sh:.1f}% of DC volume — small but digitally traceable subgroup within a cash-dominant base",
+            "Online debit customers leave structured purchase records; ATM-cash users leave none",
+            "Digital-active debit customers are higher-value cross-sell targets for first credit products — traceable history enables underwriting",
+        ],
+        signals_dict=s,
     )
 
 
@@ -543,6 +638,12 @@ def dc_cards_streak(s, month) -> dict | None:
             "groups.dc.total.metrics.debit_cards.streak_months",
             "groups.dc.total.metrics.debit_cards.qoq_pct",
         ],
+        chain=[
+            f"Debit card base at {fmt_num(latest)} — large headline number includes substantial Jan Dhan zero-balance accounts",
+            "Jan Dhan accounts (government financial inclusion scheme) skew toward low-income, low-activity customers",
+            "Addressable credit opportunity is a fraction of total card count — active-transacting subset is the real pool",
+        ],
+        signals_dict=s,
     )
 
 
@@ -591,6 +692,12 @@ def dc_category_dominance(s, month) -> dict | None:
             "groups.dc.by_type.categories.PSB.share_delta_pp",
             "groups.dc.by_type.categories.Private.share_pct",
         ],
+        chain=[
+            f"PSBs hold {psb_sh:.1f}% of debit cards — primarily through Jan Dhan scheme linkage, not active acquisition",
+            "Jan Dhan portfolios skew toward low-income, low-activity accounts with thin or no transaction histories",
+            "PSB and private bank debit data require separate calibration for transaction-based credit underwriting",
+        ],
+        signals_dict=s,
     )
 
 
@@ -624,7 +731,13 @@ def dc_top_bank(s, month) -> dict | None:
             effect={"highlight": [rc["name"], "Total"], "tab": "trend", "trendMode": "absolute", "focusCard": "debit_cards"},
             explore={"mode": "top_n", "topN": 10},
             implication=implication,
-            source_signals=["groups.dc.top_n.rank_changes", "groups.dc.top_n.top5_share_pct"],
+            source_signals=["groups.dc.top_n.top5_share_pct"],
+            chain=[
+                f"{rc['name']} shifted from #{rc['from_rank']} to #{rc['to_rank']} in debit cards",
+                "PSB rank drops often reflect Jan Dhan dormant account closures; private bank rises reflect geographic expansion",
+                "Bank moving up is reaching new customers — leading indicator of future credit origination volume in that segment",
+            ],
+            signals_dict=s,
         )
 
     title = f"{leader['name']} leads DC cards at {leader['share_pct']:.1f}%"
@@ -650,6 +763,12 @@ def dc_top_bank(s, month) -> dict | None:
             "groups.dc.top_n.banks.0.share_pct",
             "groups.dc.top_n.banks.0.mom_pct",
         ],
+        chain=[
+            f"Top 5 banks hold {top5sh:.1f}% of debit cards — {leader['name']} alone accounts for {leader['share_pct']:.1f}%",
+            "Debit transaction data coverage for underwriting depends on data-sharing with these top institutions",
+            "Without data from 2-3 of these banks, nearly half the debit market is invisible for credit decisions",
+        ],
+        signals_dict=s,
     )
 
 
@@ -705,6 +824,12 @@ def infra_qr_per_pos(s, month) -> dict | None:
             "groups.infra.total.metrics.upi_qr.mom_pct",
             "groups.infra.total.metrics.pos_terminals.mom_pct",
         ],
+        chain=[
+            f"{latest:.0f} UPI QR codes per POS terminal — QR acceptance vastly outnumbers hardware deployment",
+            "Typical small merchant (kirana, auto, vendor) accepts via QR only — no POS terminal",
+            "Credit products for small merchants (BNPL, business loans) must work over UPI QR to reach this majority",
+        ],
+        signals_dict=s,
     )
 
 
@@ -752,6 +877,12 @@ def infra_pos_streak(s, month) -> dict | None:
             "groups.infra.total.metrics.pos_terminals.streak_months",
             "groups.infra.total.metrics.pos_terminals.qoq_pct",
         ],
+        chain=[
+            f"POS terminals {'growing' if sd == 'up' else 'declining'} for {streak} months — now at {fmt_num(latest)}",
+            f"{'Each new POS terminal generates merchant transaction history (sales volume, frequency, ticket size)' if sd == 'up' else 'Declining POS likely means merchant migration to UPI QR — cheaper and no hardware needed'}",
+            f"{'Growing POS base expands pool of merchants underwritable for working capital or merchant cash advances' if sd == 'up' else 'POS-based merchant credit data coverage may be quietly shrinking as activity migrates to QR rails'}",
+        ],
+        signals_dict=s,
     )
 
 
@@ -795,6 +926,12 @@ def infra_upi_vs_bharat_qr(s, month) -> dict | None:
             "groups.infra.total.metrics.upi_qr.mom_pct",
             "groups.infra.total.metrics.bharat_qr.mom_pct",
         ],
+        chain=[
+            f"UPI QR at {fmt_num(upi_v)} vs Bharat QR at {fmt_num(bqr_v)} — a {ratio:.0f}x gap",
+            "Bharat QR was an earlier standard; merchants have consolidated on UPI QR as the accepted norm",
+            "Building payments or lending infrastructure on Bharat QR rails is operationally unviable at any meaningful merchant scale",
+        ],
+        signals_dict=s,
     )
 
 
@@ -834,6 +971,12 @@ def infra_category_pos(s, month) -> dict | None:
             f"groups.infra.by_type.categories.{gainer}.share_pct",
             f"groups.infra.by_type.categories.{gainer}.share_delta_pp",
         ],
+        chain=[
+            f"{gainer} banks gained {g_delta:.1f}pp POS share — building more merchant acquiring relationships",
+            "Banks owning the POS network own the merchant's transaction data (daily sales, ticket size, frequency)",
+            "POS share expansion is a leading indicator of positioning for merchant credit (working capital, cash advances)",
+        ],
+        signals_dict=s,
     )
 
 
@@ -879,6 +1022,12 @@ def infra_top_bank_pos(s, month) -> dict | None:
             "groups.infra.top_n.banks.0.share_pct",
             "groups.infra.top_n.banks.0.mom_pct",
         ],
+        chain=[
+            f"Top 5 banks own {top5sh_val:.1f}% of POS terminals — merchant acquiring infrastructure is highly concentrated",
+            "Merchant transaction data (sales history for credit underwriting) sits with the same institutions",
+            "Merchant credit without data partnerships with these banks requires alternate sources — GST returns, UPI transaction feeds",
+        ],
+        signals_dict=s,
     )
 
 
@@ -919,6 +1068,12 @@ def cc_transaction_surge(s, month) -> dict | None:
             "groups.cc.total.metrics.cc_atm_withdrawal_vol.mom_pct",
             "groups.cc.total.metrics.cc_other_txn_vol.mom_pct",
         ],
+        chain=[
+            f"All 4 CC transaction types grew simultaneously — avg {avg_mom:.1f}% MoM in March",
+            "March is financial year-end in India — broad-based spending surge is a recurring seasonal pattern",
+            "Seasonal spike overstates true credit utilisation; normalise March volumes before assessing repayment capacity",
+        ],
+        signals_dict=s,
     )
 
 
@@ -960,6 +1115,12 @@ def dc_atm_share_structural(s, month) -> dict | None:
             "groups.dc.total.cross.dc_ecom_txn_vol.share_pct",
             "groups.dc.total.cross.dc_ecom_txn_vol.share_delta_pp",
         ],
+        chain=[
+            f"DC ATM cash share fell {abs(atm_delta):.1f}pp to {atm_sh:.1f}% — customers shifting away from cash",
+            "Digital debit transactions (POS, ecommerce) create structured spending records; cash leaves none",
+            "Debit customers moving to digital build a usable credit history — prime candidates for first credit origination",
+        ],
+        signals_dict=s,
     )
 
 
@@ -994,6 +1155,12 @@ def dc_pos_cash_decline(s, month) -> dict | None:
             "groups.dc.total.metrics.dc_pos_withdrawal_vol.mom_pct",
             "groups.dc.total.metrics.dc_pos_withdrawal_vol.streak_months",
         ],
+        chain=[
+            f"DC POS cash-back withdrawals fell {abs(mom):.1f}% MoM for {streak} months — merchants reducing cash-out via POS",
+            "POS records now reflect real purchases rather than cash access events disguised as transactions",
+            "Cleaner purchase data improves signal quality for credit underwriting of MSME and retail customers",
+        ],
+        signals_dict=s,
     )
 
 
@@ -1034,6 +1201,12 @@ def gap_dc_cash_dominance(s, month) -> dict | None:
             "groups.dc.total.cross.dc_atm_withdrawal_vol.share_delta_pp",
             "groups.dc.total.cross.dc_ecom_txn_vol.share_pct",
         ],
+        chain=[
+            f"{atm_sh:.1f}% of DC volume is ATM cash — transactions that leave no digital record",
+            "Cash-dominant customers' financial behaviour is opaque — spending categories, frequency, merchants all unknown",
+            "Bureau scores (CIBIL, Experian) remain essential for this segment; debit transaction data alone is insufficient",
+        ],
+        signals_dict=s,
     )
 
 
@@ -1070,6 +1243,12 @@ def gap_bharat_qr_contraction(s, month) -> dict | None:
             "groups.infra.total.metrics.bharat_qr.latest",
             "groups.infra.total.metrics.upi_qr.latest",
         ],
+        chain=[
+            f"Bharat QR declining {abs(bqr_mom):.1f}% MoM — merchants are actively removing it, not seasonal dip",
+            f"UPI QR at {fmt_num(upi_v)} vs Bharat QR at {fmt_num(bqr_v)} — gap structural and widening",
+            "Any payments or lending product built on Bharat QR infrastructure faces accelerating merchant disengagement",
+        ],
+        signals_dict=s,
     )
 
 
@@ -1107,6 +1286,12 @@ def gap_atm_offsite_decline(s, month) -> dict | None:
             "groups.infra.total.metrics.atm_offsite.latest",
             "groups.infra.total.metrics.atm_onsite.mom_pct",
         ],
+        chain=[
+            f"Offsite ATMs (standalone machines in rural/semi-urban areas away from branches) fell {abs(off_mom):.1f}% MoM",
+            "Rural borrowers without digital payment access rely on offsite ATMs as primary cash access point for loan repayment",
+            "Declining offsite ATM coverage can impair EMI collection in areas where digital payment penetration is still low",
+        ],
+        signals_dict=s,
     )
 
 
@@ -1141,6 +1326,12 @@ def gap_pos_concentration(s, month) -> dict | None:
             "groups.infra.top_n.top5_share_pct",
             "groups.infra.top_n.banks.0.share_pct",
         ],
+        chain=[
+            f"Top 5 banks own {top5sh:.1f}% of POS terminals — merchant acquiring infrastructure highly concentrated",
+            "Merchant transaction data (sales history needed for credit underwriting) controlled by the same 5 institutions",
+            "Merchant credit underwriting without data partnerships with these banks requires alternates — GST filings, UPI feeds",
+        ],
+        signals_dict=s,
     )
 
 
@@ -1180,6 +1371,12 @@ def gap_foreign_cc_decline(s, month) -> dict | None:
             "groups.cc.by_type.categories.Foreign.share_pct",
             "groups.cc.by_type.categories.Foreign.share_delta_pp",
         ],
+        chain=[
+            f"Foreign banks hold only {sh:.1f}% of CC cards and declining — premium card segment exiting to Indian private banks",
+            "Foreign banks (Amex, Standard Chartered) traditionally served high-income, high-limit, internationally-active customers",
+            "Premium cardholder behaviour is under-represented in RBI aggregate CC data — now consolidated into private bank numbers",
+        ],
+        signals_dict=s,
     )
 
 
@@ -1215,6 +1412,12 @@ def gap_dc_ecom_low(s, month) -> dict | None:
             "groups.dc.total.cross.dc_ecom_txn_vol.share_pct",
             "groups.dc.total.cross.dc_atm_withdrawal_vol.share_pct",
         ],
+        chain=[
+            f"DC ecommerce at only {ecom_sh:.1f}% of DC volume — debit history is predominantly ATM cash withdrawals",
+            "Cash withdrawal records reveal nothing about spending behaviour — categories, merchants, frequency unknown",
+            "Income proxies (salary credits, GST filings) and bureau scores are more reliable than transaction models for this segment",
+        ],
+        signals_dict=s,
     )
 
 

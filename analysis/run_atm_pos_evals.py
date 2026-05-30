@@ -2,7 +2,7 @@
 """
 run_atm_pos_evals.py — India Credit Lens
 ------------------------------------------
-Master eval gate for the ATM/POS pipeline. Runs Stages 0–3 in sequence.
+Master eval gate for the ATM/POS pipeline. Runs Stages 0–3, then 4b/4c/4d.
 
 Usage:
     # Ingest one or more new XLSX files (full pipeline)
@@ -10,6 +10,9 @@ Usage:
 
     # Re-validate + re-consolidate an already-extracted period
     python3 run_atm_pos_evals.py --period 2026-03-31
+
+    # Skip insight generation (Stages 4b/4c/4d) — data-only run
+    python3 run_atm_pos_evals.py --xlsx file.xlsx --skip-insights
 
 Exit codes:
     0  all stages passed
@@ -149,11 +152,6 @@ def run_pipeline_for_period(period):
     results = []
 
     # Stage 0 check: format_report.json confirmed?
-    passed, out = run(
-        "Stage 0 check",
-        [sys.executable, str(ANALYSIS / "detect_atm_pos_format.py"),
-         str(ATM_POS_DIR / period / "raw" / "placeholder"), "--check"],
-    )
     # Stage 0 check requires the xlsx path — skip and just validate/consolidate
     # when working from an existing period directory
     results.append(("0. Format (pre-confirmed)", None, "skipped — period already extracted"))
@@ -177,11 +175,45 @@ def run_pipeline_for_period(period):
     return results
 
 
+def run_insight_stages():
+    """Stages 4b/4c/4d — generate + validate insights. Runs once after all extractions."""
+    results = []
+
+    # Stage 4b: generate insights
+    passed, out = run(
+        "Stage 4b",
+        [sys.executable, str(ANALYSIS / "generate_atm_pos_insights.py")],
+    )
+    results.append(("4b. Generate insights", passed, out))
+    if not passed:
+        return results
+
+    # Stage 4c: validate numbers in insights
+    passed, out = run(
+        "Stage 4c",
+        [sys.executable, str(ANALYSIS / "validate_atm_pos_insights.py")],
+    )
+    results.append(("4c. Validate numbers", passed, out))
+    if not passed:
+        return results
+
+    # Stage 4d: validate declared signal claims
+    passed, out = run(
+        "Stage 4d",
+        [sys.executable, str(ANALYSIS / "validate_atm_pos_claims.py")],
+    )
+    results.append(("4d. Validate claims", passed, out))
+
+    return results
+
+
 def main():
     ap = argparse.ArgumentParser(description="ATM/POS pipeline eval gate")
     group = ap.add_mutually_exclusive_group(required=True)
     group.add_argument("--xlsx",   nargs="+", help="One or more XLSX files to ingest")
     group.add_argument("--period", help="Re-validate existing period (YYYY-MM-DD)")
+    ap.add_argument("--skip-insights", action="store_true",
+                    help="Skip Stages 4b/4c/4d (data-only run)")
     args = ap.parse_args()
 
     all_results = []
@@ -194,6 +226,15 @@ def main():
             all_results.extend(results)
     else:
         all_results = run_pipeline_for_period(args.period)
+
+    # Run insight stages unless skipped or prior stages failed
+    if not args.skip_insights:
+        prior_ok = all(r[1] is True or r[1] is None for r in all_results)
+        if prior_ok:
+            print("\n  Running insight stages (4b/4c/4d)…")
+            all_results.extend(run_insight_stages())
+        else:
+            all_results.append(("4b/4c/4d. Insights", None, "skipped — upstream failures"))
 
     overall = print_summary(all_results)
     sys.exit(0 if overall else 1)
