@@ -5,6 +5,7 @@ import {
   SECTION_DEFS,
   GROUP_LABELS,
   GROUP_ICONS,
+  GROUP_ACCENT,
   getAllBanks,
   getTopNBanks,
 } from "@/lib/atm_pos_data";
@@ -410,6 +411,7 @@ export default function AtmPosGroupSection({ group, rows }: AtmPosGroupSectionPr
               hiddenSeries={hiddenSeries}
               trendMode={trendMode}
               distMode={distMode}
+              accentColor={GROUP_ACCENT[group] ?? "#4e8ef7"}
             />
           </div>
         ))}

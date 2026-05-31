@@ -2,7 +2,8 @@
 """
 run_atm_pos_evals.py — India Credit Lens
 ------------------------------------------
-Master eval gate for the ATM/POS pipeline. Runs Stages 0–3, then 4b/4c/4d.
+Master eval gate for the ATM/POS pipeline. Runs Stages 0–3, then 4b/4c/4d,
+then a web CSV integrity check and TypeScript build gate.
 
 Usage:
     # Ingest one or more new XLSX files (full pipeline)
@@ -13,6 +14,9 @@ Usage:
 
     # Skip insight generation (Stages 4b/4c/4d) — data-only run
     python3 run_atm_pos_evals.py --xlsx file.xlsx --skip-insights
+
+    # Skip TypeScript build (use when web/ hasn't changed)
+    python3 run_atm_pos_evals.py --xlsx file.xlsx --skip-build
 
 Exit codes:
     0  all stages passed
@@ -175,6 +179,73 @@ def run_pipeline_for_period(period):
     return results
 
 
+def check_atm_pos_csv():
+    """
+    Validate web/public/data/atm_pos_consolidated.csv:
+      - Exists and is non-empty
+      - No duplicate (report_date, bank_name, metric) rows
+      - All report_date values are canonical end-of-month
+    """
+    import pandas as pd
+    from calendar import monthrange
+
+    csv_path = REPO_ROOT / "web" / "public" / "data" / "atm_pos_consolidated.csv"
+    if not csv_path.exists():
+        return False, "atm_pos_consolidated.csv not found — run consolidate_atm_pos.py"
+    if csv_path.stat().st_size < 1000:
+        return False, "atm_pos_consolidated.csv suspiciously small — may be empty"
+
+    df = pd.read_csv(csv_path, dtype=str)
+
+    # Duplicate check
+    key_cols = ["report_date", "bank_name", "metric"]
+    missing = [c for c in key_cols if c not in df.columns]
+    if missing:
+        return False, f"Expected columns missing: {missing}"
+
+    dupe_count = int(df.duplicated(subset=key_cols).sum())
+    if dupe_count > 0:
+        return False, f"{dupe_count} duplicate (report_date, bank_name, metric) row(s)"
+
+    # Canonical end-of-month date check
+    bad_dates = []
+    for raw in df["report_date"].dropna().unique():
+        try:
+            import datetime
+            d = datetime.date.fromisoformat(raw)
+        except Exception:
+            bad_dates.append(f"unparseable: {raw}")
+            continue
+        last = monthrange(d.year, d.month)[1]
+        if d.day != last:
+            bad_dates.append(f"{raw} (should be {d.year}-{d.month:02d}-{last:02d})")
+
+    if bad_dates:
+        return False, f"{len(bad_dates)} non-canonical date(s): {'; '.join(bad_dates[:3])}"
+
+    row_count   = len(df)
+    date_count  = df["report_date"].nunique()
+    bank_count  = df[df["bank_name"].notna()]["bank_name"].nunique()
+    return True, f"{row_count} rows · {date_count} periods · {bank_count} banks/totals"
+
+
+def check_build():
+    """tsc --noEmit then npm run build in web/."""
+    WEB = REPO_ROOT / "web"
+    tsc_proc = subprocess.run(
+        ["npx", "tsc", "--noEmit"],
+        cwd=str(WEB), capture_output=True, text=True,
+    )
+    if tsc_proc.returncode != 0:
+        return False, (tsc_proc.stdout + tsc_proc.stderr).strip()
+    build_proc = subprocess.run(
+        ["npm", "run", "build"],
+        cwd=str(WEB), capture_output=True, text=True,
+    )
+    out = (build_proc.stdout + build_proc.stderr).strip()
+    return build_proc.returncode == 0, out
+
+
 def run_insight_stages():
     """Stages 4b/4c/4d — generate + validate insights. Runs once after all extractions."""
     results = []
@@ -214,6 +285,8 @@ def main():
     group.add_argument("--period", help="Re-validate existing period (YYYY-MM-DD)")
     ap.add_argument("--skip-insights", action="store_true",
                     help="Skip Stages 4b/4c/4d (data-only run)")
+    ap.add_argument("--skip-build", action="store_true",
+                    help="Skip tsc + npm run build (use when web/ hasn't changed)")
     args = ap.parse_args()
 
     all_results = []
@@ -235,6 +308,27 @@ def main():
             all_results.extend(run_insight_stages())
         else:
             all_results.append(("4b/4c/4d. Insights", None, "skipped — upstream failures"))
+
+    # Web CSV integrity check
+    prior_ok = all(r[1] is True or r[1] is None for r in all_results)
+    if prior_ok:
+        passed, note = check_atm_pos_csv()
+        all_results.append(("5.  Web CSV integrity", passed, note))
+    else:
+        all_results.append(("5.  Web CSV integrity", None, "skipped — upstream failures"))
+
+    # TypeScript build gate
+    if args.skip_build:
+        all_results.append(("6.  tsc + npm run build", None, "skipped (--skip-build)"))
+    else:
+        prior_ok = all(r[1] is True or r[1] is None for r in all_results)
+        if prior_ok:
+            print("\n  Running tsc + npm run build (this may take ~30s)…")
+            passed, out = check_build()
+            last_line = (out.splitlines()[-1] if out else "")[:50]
+            all_results.append(("6.  tsc + npm run build", passed, last_line))
+        else:
+            all_results.append(("6.  tsc + npm run build", None, "skipped — upstream failures"))
 
     overall = print_summary(all_results)
     sys.exit(0 if overall else 1)

@@ -7,14 +7,12 @@
  * Used by both the SIBC and Payments dashboards.
  *
  * Props:
- *   type        — drives colour + badge label
- *   chain       — optional numbered inference steps (tap to expand)
- *   footerSlot  — optional extra content rendered above nav (e.g. newsletter CTA)
- *   key={activeIndex} on the parent resets internal state on navigation
+ *   type   — drives colour + badge label
+ *   chain  — optional numbered inference steps (tap to expand)
+ *   key={activeIndex} on the parent resets internal showChain state on navigation
  */
 
 import { useState } from "react";
-import type { ReactNode } from "react";
 
 export type InsightType = "insight" | "gap" | "opportunity";
 
@@ -40,12 +38,11 @@ export interface InsightCardProps {
   total:        number;
   onNext:       () => void;
   onPrev:       () => void;
-  footerSlot?:  ReactNode;      // rendered above nav (e.g. newsletter CTA for SIBC)
 }
 
 export default function InsightCard({
   type, title, body, implication, chain,
-  activeIndex, total, onNext, onPrev, footerSlot,
+  activeIndex, total, onNext, onPrev,
 }: InsightCardProps) {
   const [showChain, setShowChain] = useState(false);
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
@@ -182,13 +179,6 @@ export default function InsightCard({
               )}
             </div>
           )}
-        </div>
-      )}
-
-      {/* Footer slot — e.g. newsletter CTA for SIBC */}
-      {footerSlot && (
-        <div className="mt-4 pt-3" style={{ borderTop: "1px solid var(--border-card)" }}>
-          {footerSlot}
         </div>
       )}
 

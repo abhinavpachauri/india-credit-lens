@@ -356,6 +356,13 @@ export const GROUP_ICONS: Record<string, string> = {
   infra: "📡",
 };
 
+// Left-border accent colour per group — mirrors SectionCard accent pattern
+export const GROUP_ACCENT: Record<string, string> = {
+  cc:    "#4e8ef7",   // blue
+  dc:    "#2ca02c",   // green
+  infra: "#f0912a",   // orange
+};
+
 // ── getTopNBanks ───────────────────────────────────────────────────────────────
 
 export function getTopNBanks(rows: AtmPosRow[], metric: string | string[], n: number): string[] {

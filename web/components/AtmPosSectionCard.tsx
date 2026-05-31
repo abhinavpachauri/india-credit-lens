@@ -3,7 +3,8 @@
 import { useState, useMemo } from "react";
 import { buildSectionData } from "@/lib/atm_pos_data";
 import type { SectionDef, AtmPosRow, FilterState, VolVal } from "@/lib/atm_pos_data";
-import AtmPosTrendChart from "@/components/AtmPosTrendChart";
+import SectionCard          from "@/components/SectionCard";
+import AtmPosTrendChart     from "@/components/AtmPosTrendChart";
 import AtmPosDistributionChart from "@/components/AtmPosDistributionChart";
 
 interface AtmPosSectionCardProps {
@@ -14,6 +15,7 @@ interface AtmPosSectionCardProps {
   hiddenSeries: Set<string>;
   trendMode:    "absolute" | "mom";
   distMode:     "absolute" | "pct";
+  accentColor:  string;
 }
 
 const ACTIVE_VOL_VAL: React.CSSProperties = {
@@ -36,6 +38,7 @@ export default function AtmPosSectionCard({
   hiddenSeries,
   trendMode,
   distMode,
+  accentColor,
 }: AtmPosSectionCardProps) {
   const [volVal, setVolVal] = useState<VolVal>("vol");
 
@@ -56,17 +59,8 @@ export default function AtmPosSectionCard({
     [rows, activeMetric, filter],
   );
 
-
   return (
-    <div
-      style={{
-        background:   "var(--bg-card)",
-        border:       "1px solid var(--border-card)",
-        borderRadius: 10,
-        boxShadow:    "0 1px 4px var(--shadow)",
-        padding:      "14px 16px",
-      }}
-    >
+    <SectionCard accentColor={accentColor} bare>
       {/* Card header */}
       <div className="flex items-center gap-2 mb-3">
         <span className="text-sm flex-shrink-0">{def.icon}</span>
@@ -74,10 +68,9 @@ export default function AtmPosSectionCard({
           {def.title}
         </h3>
 
-
         {/* Vol / Val toggle */}
         {hasVolVal && (
-          <div className="flex items-center gap-1 flex-shrink-0">
+          <div className="flex items-center gap-1 ml-auto flex-shrink-0">
             {(["vol", "val"] as const).map((v) => (
               <button
                 key={v}
@@ -113,6 +106,6 @@ export default function AtmPosSectionCard({
           chartMode={distMode}
         />
       )}
-    </div>
+    </SectionCard>
   );
 }
