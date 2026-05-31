@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useSectionInsights }   from "@/hooks/useSectionInsights";
 import { SEC_COLORS }           from "@/lib/theme";
-import { TYPE_COLOR }           from "@/components/dls/InsightCard";
 import SectionCard              from "./SectionCard";
 import InsightCTAStrip          from "./dls/InsightCTAStrip";
 import InsightCard              from "./dls/InsightCard";
@@ -56,23 +55,6 @@ export default function SectionWithAnnotations({ section, tab }: Props) {
     );
   }
 
-  // Newsletter CTA footer — shows remaining count + Substack link
-  const remaining = ins.total - 1 - ins.activeIdx;
-  const currentType = ins.current?._type ?? "insight";
-  const newsletterFooter = remaining > 0 ? (
-    <p className="text-xs" style={{ color: "var(--font-muted)" }}>
-      {remaining} more {currentType}{remaining !== 1 ? "s" : ""} in this section.{" "}
-      <a
-        href="https://indiacreditlens.substack.com"
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{ color: TYPE_COLOR[currentType], textDecoration: "underline" }}
-      >
-        Get all 45 free →
-      </a>
-    </p>
-  ) : null;
-
   const isExploreMode = !ins.isActive;
 
   const accentColor = SEC_COLORS[section.accentIndex];
@@ -116,7 +98,6 @@ export default function SectionWithAnnotations({ section, tab }: Props) {
           total={ins.total}
           onNext={ins.next}
           onPrev={ins.prev}
-          footerSlot={newsletterFooter}
         />
       )}
 
