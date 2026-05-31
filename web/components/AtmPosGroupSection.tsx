@@ -4,6 +4,7 @@ import { useState, useMemo, useEffect } from "react";
 import {
   SECTION_DEFS,
   GROUP_LABELS,
+  GROUP_ICONS,
   getAllBanks,
   getTopNBanks,
 } from "@/lib/atm_pos_data";
@@ -186,12 +187,15 @@ export default function AtmPosGroupSection({ group, rows }: AtmPosGroupSectionPr
   return (
     <div className="mb-12">
       {/* Group label */}
-      <h2
-        className="text-xs font-semibold uppercase tracking-wider"
-        style={{ color: "var(--font-muted)", marginTop: 32, marginBottom: 12 }}
-      >
-        {GROUP_LABELS[group]}
-      </h2>
+      <div className="flex items-center gap-2" style={{ marginTop: 32, marginBottom: 12 }}>
+        <span className="text-lg leading-none">{GROUP_ICONS[group]}</span>
+        <h2
+          className="text-xs font-semibold uppercase tracking-wider"
+          style={{ color: "var(--font-muted)" }}
+        >
+          {GROUP_LABELS[group]}
+        </h2>
+      </div>
 
       {/* ── Insights CTA / exit strip (DLS) ────────────────────────────────── */}
       {visibleInsights.length > 0 && (

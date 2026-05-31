@@ -350,6 +350,12 @@ export const GROUP_LABELS: Record<string, string> = {
   infra: "DIGITAL INFRASTRUCTURE",
 };
 
+export const GROUP_ICONS: Record<string, string> = {
+  cc:    "💳",
+  dc:    "🏧",
+  infra: "📡",
+};
+
 // ── getTopNBanks ───────────────────────────────────────────────────────────────
 
 export function getTopNBanks(rows: AtmPosRow[], metric: string | string[], n: number): string[] {

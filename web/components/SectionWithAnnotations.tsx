@@ -75,13 +75,22 @@ export default function SectionWithAnnotations({ section, tab }: Props) {
 
   const isExploreMode = !ins.isActive;
 
+  const accentColor = SEC_COLORS[section.accentIndex];
+
   return (
-    <SectionCard
-      title={section.title}
-      icon={section.icon}
-      accentColor={SEC_COLORS[section.accentIndex]}
-    >
-      {/* CTA / exit strip */}
+    <div className="mb-8">
+      {/* Section heading — matches payments group heading pattern */}
+      <div className="flex items-center gap-2" style={{ marginTop: 32, marginBottom: 12 }}>
+        <span className="text-lg leading-none">{section.icon}</span>
+        <h2
+          className="text-sm font-bold leading-snug"
+          style={{ color: "var(--font)" }}
+        >
+          {section.title}
+        </h2>
+      </div>
+
+      {/* CTA / exit strip — outside the card, above it */}
       {ins.flat.length > 0 && (
         <InsightCTAStrip
           items={ins.flat.map((a) => ({ type: a._type, title: a.title }))}
@@ -111,21 +120,23 @@ export default function SectionWithAnnotations({ section, tab }: Props) {
         />
       )}
 
-      {/* Chart — series filter only in explore mode */}
-      {section.filterable ? (
-        <>
-          {isExploreMode && (
-            <IndustryFilter
-              absoluteData={section.absoluteData}
-              seriesNames={section.seriesNames}
-              onFilteredSeries={onFilteredSeries}
-            />
-          )}
-          {(!isExploreMode || visibleSeries.length > 0) && renderChart(isExploreMode ? visibleSeries : undefined)}
-        </>
-      ) : (
-        renderChart()
-      )}
-    </SectionCard>
+      {/* Chart card — bare (no duplicate title header) */}
+      <SectionCard accentColor={accentColor} bare>
+        {section.filterable ? (
+          <>
+            {isExploreMode && (
+              <IndustryFilter
+                absoluteData={section.absoluteData}
+                seriesNames={section.seriesNames}
+                onFilteredSeries={onFilteredSeries}
+              />
+            )}
+            {(!isExploreMode || visibleSeries.length > 0) && renderChart(isExploreMode ? visibleSeries : undefined)}
+          </>
+        ) : (
+          renderChart()
+        )}
+      </SectionCard>
+    </div>
   );
 }

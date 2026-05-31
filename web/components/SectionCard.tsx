@@ -1,13 +1,14 @@
 "use client";
 
 interface SectionCardProps {
-  title: string;
-  icon: string;
+  title?: string;
+  icon?: string;
   accentColor: string;
+  bare?: boolean;          // true → skip title header; use when heading is rendered above
   children: React.ReactNode;
 }
 
-export default function SectionCard({ title, icon, accentColor, children }: SectionCardProps) {
+export default function SectionCard({ title, icon, accentColor, bare, children }: SectionCardProps) {
   return (
     <div
       className="rounded-xl mb-6 overflow-hidden"
@@ -18,16 +19,18 @@ export default function SectionCard({ title, icon, accentColor, children }: Sect
         borderLeft: `4px solid ${accentColor}`,
       }}
     >
-      {/* Card header */}
-      <div
-        className="px-5 py-3 flex items-center gap-2"
-        style={{ background: `${accentColor}15` }}
-      >
-        <span className="text-lg">{icon}</span>
-        <h2 className="text-base font-semibold" style={{ color: accentColor }}>
-          {title}
-        </h2>
-      </div>
+      {/* Card header — omitted when bare=true (heading rendered above) */}
+      {!bare && title && (
+        <div
+          className="px-5 py-3 flex items-center gap-2"
+          style={{ background: `${accentColor}15` }}
+        >
+          {icon && <span className="text-lg">{icon}</span>}
+          <h2 className="text-base font-semibold" style={{ color: accentColor }}>
+            {title}
+          </h2>
+        </div>
+      )}
 
       {/* Card body */}
       <div className="px-5 py-4">{children}</div>
