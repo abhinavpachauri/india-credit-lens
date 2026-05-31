@@ -11,12 +11,21 @@ Completely isolated from SIBC — separate scripts, separate eval gate, separate
 python3 analysis/run_atm_pos_evals.py --xlsx path/to/file.xlsx [file2.xlsx ...]
 ```
 
+Flags:
+- `--skip-insights`  skip Stages 4b/4c/4d (data-only run)
+- `--skip-build`     skip tsc + npm run build (use when web/ unchanged)
+
 Or step by step:
 ```
-Stage 0: python3 analysis/detect_atm_pos_format.py {xlsx}   → {period}/format_report.json
-Stage 1: python3 analysis/extract_atm_pos.py {xlsx}         → {period}/sections.json + raw/
-Stage 2: python3 analysis/validate_atm_pos.py {YYYY-MM-DD}  → checks A–E
-Stage 3: python3 analysis/consolidate_atm_pos.py {YYYY-MM-DD} → atm_pos_consolidated.csv + timeline.json
+Stage 0:  python3 analysis/detect_atm_pos_format.py {xlsx}     → {period}/format_report.json
+Stage 1:  python3 analysis/extract_atm_pos.py {xlsx}           → {period}/sections.json + raw/
+Stage 2:  python3 analysis/validate_atm_pos.py {YYYY-MM-DD}    → checks A–E
+Stage 3:  python3 analysis/consolidate_atm_pos.py {YYYY-MM-DD} → atm_pos_consolidated.csv + timeline.json
+Stage 4b: python3 analysis/generate_atm_pos_insights.py        → web/public/data/atm_pos_insights.json
+Stage 4c: python3 analysis/validate_atm_pos_insights.py        → validates numbers vs signals.json (±0.5%)
+Stage 4d: python3 analysis/validate_atm_pos_claims.py          → validates reasoning.chain (≥2 steps) + signal keys/values
+Stage 5:  (automatic in gate) web CSV integrity check           → validates atm_pos_consolidated.csv
+Stage 6:  (automatic in gate) tsc + npm run build               → TypeScript compile + Next.js production build
 ```
 
 Re-validate an already-extracted period:
@@ -30,16 +39,18 @@ python3 analysis/run_atm_pos_evals.py --period 2026-03-31
 
 ```
 analysis/rbi_atm_pos/
-  canonical_banks.json     64-bank registry — update here for renames/mergers
-  timeline.json            ingested months registry
-  incoming/                drop new XLSX files here before running pipeline
+  canonical_banks.json         64-bank registry — update here for renames/mergers
+  timeline.json                ingested months registry
+  incoming/                    drop new XLSX files here before running pipeline
   {YYYY-MM-DD}/
-    format_report.json     Stage 0 output (must be confirmed before Stage 1)
-    sections.json          Stage 1 output (wide format, one record per bank)
-    raw/                   archived source XLSX
+    format_report.json         Stage 0 output (must be confirmed before Stage 1)
+    sections.json              Stage 1 output (wide format, one record per bank)
+    raw/                       archived source XLSX
 
 web/public/data/
-  atm_pos_consolidated.csv Stage 3 output (long format, all periods)
+  atm_pos_consolidated.csv     Stage 3 output (long format, all periods)
+  atm_pos_insights.json        Stage 4b output (insight + gap objects with reasoning)
+  atm_pos_signals.json         Signals reference file (values validated against in 4c/4d)
 ```
 
 ---
@@ -71,6 +82,31 @@ Columns: `report_date, bank_name, bank_category, record_type, metric, value, uni
 
 `record_type`: `bank` | `total`
 
+### atm_pos_insights.json (insight objects)
+```json
+[
+  {
+    "id": "cc-pos-share-rising",
+    "group": "cc",
+    "mode": "top_n",
+    "type": "insight",
+    "title": "...",
+    "body": "...",
+    "implication": "...",
+    "reasoning": {
+      "signals": [{"key": "cc_pos_share", "value": 62.3}],
+      "chain": [
+        "Step 1 ...",
+        "Step 2 ..."
+      ]
+    }
+  }
+]
+```
+
+`reasoning.chain` maps to `InsightCard`'s `chain` prop (inference expand).
+`reasoning.signals` are validated against `atm_pos_signals.json` in Stage 4c/4d.
+
 ---
 
 ## Metrics tracked
@@ -101,6 +137,13 @@ Columns: `report_date, bank_name, bank_category, record_type, metric, value, uni
 | Total = sum of bank rows ±0.1% | Stage 2 Check D |
 | report_date must be valid month-end | Stage 2 Check E |
 | Dedup: latest extraction wins for same (bank, metric, month) | Stage 3 consolidation |
+| Signal values in insights match atm_pos_signals.json ±0.5% | Stage 4c: validate_atm_pos_insights.py |
+| Each signal key declared in insight exists in signals.json | Stage 4d: validate_atm_pos_claims.py |
+| reasoning.chain must have ≥ 2 steps per insight | Stage 4d: validate_atm_pos_claims.py |
+| atm_pos_consolidated.csv has no duplicate (date, bank, metric) rows | Stage 5: run_atm_pos_evals.py |
+| All report_date values in CSV are canonical month-end | Stage 5: run_atm_pos_evals.py |
+| tsc --noEmit passes cleanly | Stage 6: run_atm_pos_evals.py |
+| npm run build completes without error | Stage 6: run_atm_pos_evals.py |
 
 ---
 

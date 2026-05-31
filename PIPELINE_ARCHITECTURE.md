@@ -100,6 +100,9 @@ SIBC .xlsx
     │  Check 2:   validate_annotations.py on annotations_draft (skipped if absent)
     │  Check 2b:  validate_content.py — numbers/dates in annotation bodies
     │  Check 2c:  validate_claims.py  — claim_type + source on system_model nodes
+    │  Check 2d:  validate_annotation_basis.py — basis completeness on merged + live annotations
+    │             FAIL if inference/hypothesis annotation missing basis.inferences
+    │             FAIL if data annotation missing basis.facts
     │  Check 3:   validate_annotations.py on live rbi_sibc.ts (Checks A–H)
     │  Check 4:   validate.py — system_model.json structure
     │  Check 5:   validate.py --check-subsystems — subsystems.json
@@ -276,7 +279,9 @@ analysis/
 ├── validate_annotations.py         ← Validator: annotations .ts files (Check 3, Checks A–H)
 ├── validate_content.py             ← Validator: numbers/dates in annotation bodies (Check 2b)
 ├── validate_claims.py              ← Validator: claim_type + source on system model (Check 2c)
+├── validate_annotation_basis.py    ← Validator: basis completeness on merged + live annotations (Check 2d)
 ├── validate.py                     ← Validator: system_model.json + subsystems (Checks 4, 5)
+├── backfill_sibc_basis.py          ← One-time: backfilled basis fields for all 49 annotations (run once)
 ├── run_evals.py                    ← Master eval orchestrator (Stages 3, 6)
 ├── report_analysis_prompt.md       ← Master prompt for all Claude analyses
 │
@@ -417,6 +422,7 @@ Determine mode before starting. Check `is_fy_end` for the incoming file.
    — set _meta.mode = "update", bump _meta.last_updated
 □  python3 analysis/source_claims.py rbi_sibc/merged/system_model.json
 □  python3 analysis/run_evals.py --period merged --merged --skip-build
+   (includes Check 2d — basis completeness; new annotations must have basis fields)
 □  IF new nodes/edges were added: python3 analysis/generate_mermaid.py rbi_sibc/merged/system_model.json
 □  python3 analysis/promote_annotations.py --dry-run   (verify no IDs removed)
 □  python3 analysis/promote_annotations.py
@@ -446,6 +452,7 @@ Determine mode before starting. Check `is_fy_end` for the incoming file.
    — full rewrite of annotations_merged.ts
 □  python3 analysis/source_claims.py rbi_sibc/merged/system_model.json
 □  python3 analysis/run_evals.py --period merged --merged --skip-build
+   (includes Check 2d — all rewritten annotations must have basis fields)
 □  python3 analysis/generate_mermaid.py rbi_sibc/merged/system_model.json   (always after FOUNDATION)
 □  python3 analysis/promote_annotations.py --dry-run
    — REVIEW the ID diff carefully: any removed IDs must be explicitly justified

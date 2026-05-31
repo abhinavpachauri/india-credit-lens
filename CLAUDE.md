@@ -39,12 +39,14 @@ Live components only. Planned work lives in `STRATEGY_PLANNER.md`.
 | Free newsletter generator | **Live** — `analysis/newsletter/generate_newsletter.py` (Issue #3 published) |
 | LinkedIn post generator | **Live** — `analysis/newsletter/generate_linkedin.py` (7-post package per cycle) |
 | validate_content.py (Check 2b) | **Live** — content accuracy eval on annotation bodies |
-| validate_claims.py (Stage 6b) | **Live** — claim sourcing + citation layer on system model |
+| validate_claims.py (Check 2c) | **Live** — claim sourcing + citation layer on system model |
+| validate_annotation_basis.py (Check 2d) | **Live** — basis completeness check (inference/hypothesis → basis.inferences non-empty) |
 | promote_annotations.py (Stage 7) | **Live** — automated verified copy to web |
 | signal_registry.json | **Live** — 7 signals tracked across 3 issues |
 | Subsystem generation | **Live** — `generate_mermaid.py` → `.mmd` + `validate.py --check-subsystems` |
 | detect_format.py (Stage 0.5) | **Live** — flags format changes in new XLSX before extraction |
-| ATM/POS pipeline | **Built** — `rbi_atm_pos/` — awaiting first files; Stages 0–3 ready |
+| ATM/POS pipeline | **Live** — `rbi_atm_pos/` — Stages 0–6 complete (data → insights → CSV check → build gate) |
+| AppShell + DLS | **Live** — shared Header (one instance), `dls/InsightCard`, `dls/InsightCTAStrip` used by both SIBC and Payments |
 
 ---
 
@@ -68,7 +70,7 @@ Use CLI tools for all external service interactions — they are the most contex
 | `python3 analysis/detect_format.py` | Stage 0.5: flag format changes before extraction |
 | `python3 analysis/source_claims.py` | Stage 6b: source all system model claims |
 | `python3 analysis/newsletter/validate_newsletter_config.py` | Gate before every newsletter/LinkedIn generation run |
-| `python3 analysis/run_atm_pos_evals.py --xlsx {file}` | ATM/POS pipeline gate — Stages 0–3 (format → consolidation) |
+| `python3 analysis/run_atm_pos_evals.py --xlsx {file}` | ATM/POS pipeline gate — Stages 0–6 (format → insights → CSV check → build) |
 
 ---
 
@@ -107,6 +109,7 @@ Use CLI tools for all external service interactions — they are the most contex
 | `analysis/validate_annotations.py` | Check 3: live rbi_sibc.ts structure (Checks A–H) |
 | `analysis/validate_content.py` | Check 2b: dates/values/growth in annotation bodies vs sections.json |
 | `analysis/validate_claims.py` | Check 2c: claim sourcing — every system model claim has a source |
+| `analysis/validate_annotation_basis.py` | Check 2d: basis completeness — inference/hypothesis annotations must have basis.inferences |
 | `analysis/validate.py` | Checks 4, 5: system_model.json + subsystems.json |
 | `analysis/extract_sibc.py` | Stage 1: SIBC xlsx → sections.json + format_report.json |
 | `analysis/detect_format.py` | Stage 0.5: detect structural changes in new XLSX vs prior period |
@@ -118,7 +121,10 @@ Use CLI tools for all external service interactions — they are the most contex
 | `analysis/rbi_sibc/timeline.json` | Registry of all ingested periods (includes `is_fy_end` flag) |
 | `analysis/rbi_sibc/merged/` | Merged outputs (Jan 2024–Mar 2026) — source for live dashboard |
 | `web/lib/reports/rbi_sibc.ts` | Live dashboard annotations (promoted from merged) |
-| `web/CLAUDE.md` | Web-specific context (Next.js, Vercel, component patterns) |
+| `web/CLAUDE.md` | Web-specific context — Next.js, AppShell, DLS components, colour system, mobile rules |
+| `web/components/AppShell.tsx` | Shared shell: Header rendered once + dark mode state across all pages |
+| `web/components/dls/InsightCard.tsx` | DLS: shared insight card (SIBC + Payments) |
+| `web/components/dls/InsightCTAStrip.tsx` | DLS: shared entry/exit strip with headline ticker |
 | `analysis/rbi_atm_pos/CLAUDE.md` | ATM/POS pipeline context — read before any ATM/POS work |
 | `analysis/rbi_atm_pos/timeline.json` | Registry of ingested ATM/POS months |
 
