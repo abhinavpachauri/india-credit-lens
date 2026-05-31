@@ -145,7 +145,7 @@ export default function InsightCTAStrip({
         </p>
 
         {/* Animated ticker */}
-        <div style={{ minHeight: 44, display: "flex", alignItems: "center", overflow: "hidden", marginTop: 4, marginBottom: 4 }}>
+        <div style={{ minHeight: 44, display: "flex", alignItems: "center", overflow: "hidden", marginTop: 4, marginBottom: 0 }}>
           <p
             className="text-sm font-medium leading-snug"
             style={{
@@ -164,9 +164,13 @@ export default function InsightCTAStrip({
           </p>
         </div>
 
-        {/* CTA */}
-        <p className="text-sm" style={{ color: ACCENT, fontWeight: 500 }}>
-          What they mean for lenders — tap to explore →
+        {/* Separator */}
+        <div style={{ height: 1, background: "var(--border-card)", margin: "6px 0" }} />
+
+        {/* CTA — muted label so it doesn't blend with the ticker */}
+        <p className="text-xs" style={{ color: "var(--font-muted)", fontWeight: 500, letterSpacing: "0.01em" }}>
+          What they mean for lenders —{" "}
+          <span style={{ color: ACCENT }}>tap to explore →</span>
         </p>
       </div>
 
