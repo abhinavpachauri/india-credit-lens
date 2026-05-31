@@ -17,6 +17,9 @@ Checks run (in order):
                                      checks claim_type + source on driver/opp/pressure/gap nodes
                                      FAIL if claim_type missing or inference has no source
                                      WARN (non-blocking) if hypothesis nodes present
+  2d. validate_annotation_basis.py  on annotations_merged.ts + rbi_sibc.ts (live)
+                                     FAIL if inference/hypothesis annotation has no basis.inferences
+                                     FAIL if data annotation has no basis.facts
   3.  validate_annotations.py       on web/lib/reports/rbi_sibc.ts  (live)
   3b. validate_web_series.py        CSV+overrides vs sections_merged.json + annotation effects
   4.  validate.py                   on rbi_sibc/<period>/system_model.json
@@ -481,6 +484,22 @@ def main():
         if not passed:
             print(out)
             print(err, file=sys.stderr)
+
+    # ── Check 2d: annotation basis completeness ───────────────────────────────
+    passed, out, err = run_check(
+        "annotation_basis",
+        [sys.executable, str(ANALYSIS / "validate_annotation_basis.py")],
+        cwd=REPO_ROOT,
+    )
+    notes = one_line_summary(out, err, passed)
+    if passed:
+        # Use the PASS line directly — it's concise
+        summary_lines = [l.strip() for l in out.splitlines() if "PASS" in l or "FAIL" in l]
+        notes = summary_lines[0][:55] if summary_lines else "passed"
+    results.append(("2d. annotation basis completeness", passed, notes))
+    if not passed:
+        print(out)
+        print(err, file=sys.stderr)
 
     # ── Check 3: live annotations (web/lib/reports/rbi_sibc.ts) ──────────────
     passed, out, err = check_annotations_live()
