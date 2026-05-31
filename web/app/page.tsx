@@ -52,11 +52,6 @@ export default function Dashboard() {
 
       <main className="max-w-5xl mx-auto px-4 py-6">
 
-        {/* Newsletter CTA — top */}
-        <div className="mb-8">
-          <NewsletterCTA variant="banner" />
-        </div>
-
         {report.sections.map((section) => (
           <SectionWithAnnotations key={section.id} section={section} tab={tab} />
         ))}

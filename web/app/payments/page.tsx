@@ -51,11 +51,6 @@ export default function PaymentsPage() {
 
       <main className="max-w-6xl mx-auto px-3 sm:px-4 py-6">
 
-        {/* Newsletter CTA — top */}
-        <div className="mb-8">
-          <NewsletterCTA variant="banner" />
-        </div>
-
         {GROUPS.map((group) => (
           <AtmPosGroupSection key={group} group={group} rows={rows} />
         ))}

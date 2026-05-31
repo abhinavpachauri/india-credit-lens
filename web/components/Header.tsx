@@ -69,23 +69,25 @@ export default function Header({
           })}
         </nav>
 
-        {/* Desktop: bank credit metric */}
-        {totalBankCredit && (
-          <div className="hidden sm:flex flex-col items-end flex-shrink-0">
-            <span
-              className="text-[10px] font-medium uppercase tracking-wider"
-              style={{ color: "var(--font-muted)" }}
-            >
-              Total Bank Credit
-            </span>
-            <span className="text-sm font-bold" style={{ color: "var(--font)" }}>
-              {formatCr(totalBankCredit, 1)}
-            </span>
-            <span className="text-[10px]" style={{ color: "var(--font-muted)" }}>
-              as of {latestDate}
-            </span>
-          </div>
-        )}
+        {/* Desktop: bank credit metric — always reserves space so nav stays centred */}
+        <div className="hidden sm:flex flex-col items-end flex-shrink-0" style={{ minWidth: 110 }}>
+          {totalBankCredit ? (
+            <>
+              <span
+                className="text-[10px] font-medium uppercase tracking-wider"
+                style={{ color: "var(--font-muted)" }}
+              >
+                Total Bank Credit
+              </span>
+              <span className="text-sm font-bold" style={{ color: "var(--font)" }}>
+                {formatCr(totalBankCredit, 1)}
+              </span>
+              <span className="text-[10px]" style={{ color: "var(--font-muted)" }}>
+                as of {latestDate}
+              </span>
+            </>
+          ) : null}
+        </div>
 
         {/* Dark mode toggle */}
         <button

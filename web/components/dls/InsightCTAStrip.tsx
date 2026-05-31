@@ -145,7 +145,7 @@ export default function InsightCTAStrip({
         </p>
 
         {/* Animated ticker */}
-        <div style={{ minHeight: 40, overflow: "hidden", marginTop: 5, marginBottom: 4 }}>
+        <div style={{ minHeight: 44, display: "flex", alignItems: "center", overflow: "hidden", marginTop: 4, marginBottom: 4 }}>
           <p
             className="text-sm font-medium leading-snug"
             style={{
