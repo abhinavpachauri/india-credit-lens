@@ -6,6 +6,7 @@ import { SEC_COLORS }           from "@/lib/theme";
 import SectionCard              from "./SectionCard";
 import InsightCTAStrip          from "./dls/InsightCTAStrip";
 import InsightCard              from "./dls/InsightCard";
+import OpportunityTeaser        from "./dls/OpportunityTeaser";
 import TrendChart               from "./TrendChart";
 import DistributionChart        from "./DistributionChart";
 import IndustryFilter           from "./IndustryFilter";
@@ -98,6 +99,9 @@ export default function SectionWithAnnotations({ section }: Props) {
           {section.title}
         </h2>
       </div>
+
+      {/* Opportunity teaser — gated, separate from carousel */}
+      <OpportunityTeaser opps={ins.opps} sectionId={section.id} />
 
       {/* CTA / exit strip */}
       {ins.flat.length > 0 && (

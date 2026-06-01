@@ -6,8 +6,9 @@ import type { InsightType } from "@/components/dls/InsightCard";
  * useSectionInsights
  *
  * Flat annotation hook for SIBC sections.
- * Merges insights → gaps → opportunities into a single navigable list.
- * Replaces useAnnotation for the new SIBC UX (CTA strip + InsightCard).
+ * Merges insights + gaps into a single navigable list (the carousel).
+ * Opportunities are returned separately as `opps` — they are gated and
+ * rendered via OpportunityTeaser, not in the carousel.
  */
 
 export interface FlatAnnotation extends Annotation {
@@ -15,7 +16,8 @@ export interface FlatAnnotation extends Annotation {
 }
 
 export interface SectionInsightsState {
-  flat:            FlatAnnotation[];
+  flat:            FlatAnnotation[];   // insights + gaps — navigable carousel
+  opps:            FlatAnnotation[];   // opportunities — gated, not in carousel
   counts:          { insight: number; gap: number; opportunity: number };
   isActive:        boolean;
   activeIdx:       number;
@@ -29,16 +31,21 @@ export interface SectionInsightsState {
 }
 
 export function useSectionInsights(section: ReportSection): SectionInsightsState {
+  // Carousel: insights + gaps only
   const flat: FlatAnnotation[] = [
     ...section.annotations.insights.filter((a) => !a.hidden).map((a) => ({ ...a, _type: "insight" as InsightType })),
     ...section.annotations.gaps.filter((a) => !a.hidden).map((a) => ({ ...a, _type: "gap" as InsightType })),
-    ...section.annotations.opportunities.filter((a) => !a.hidden).map((a) => ({ ...a, _type: "opportunity" as InsightType })),
   ];
+
+  // Gated: opportunities separate
+  const opps: FlatAnnotation[] = section.annotations.opportunities
+    .filter((a) => !a.hidden)
+    .map((a) => ({ ...a, _type: "opportunity" as InsightType }));
 
   const counts = {
     insight:     section.annotations.insights.filter((a) => !a.hidden).length,
     gap:         section.annotations.gaps.filter((a) => !a.hidden).length,
-    opportunity: section.annotations.opportunities.filter((a) => !a.hidden).length,
+    opportunity: opps.length,
   };
 
   const [isActive,  setIsActive]  = useState(false);
@@ -53,5 +60,5 @@ export function useSectionInsights(section: ReportSection): SectionInsightsState
   const next  = () => setActiveIdx((i) => Math.min(i + 1, total - 1));
   const prev  = () => setActiveIdx((i) => Math.max(i - 1, 0));
 
-  return { flat, counts, isActive, activeIdx, current, highlightConfig, total, enter, exit, next, prev };
+  return { flat, opps, counts, isActive, activeIdx, current, highlightConfig, total, enter, exit, next, prev };
 }

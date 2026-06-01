@@ -2,12 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useAuth, SignInButton, UserButton } from "@clerk/nextjs";
 import { formatCr } from "@/lib/data";
 
 // ── Add future dashboards here ─────────────────────────────────────────────────
 const NAV_LINKS = [
-  { label: "Credit",   href: "/",        icon: "📊" },
-  { label: "Payments", href: "/payments", icon: "💳" },
+  { label: "Credit",        href: "/",             icon: "📊" },
+  { label: "Payments",      href: "/payments",      icon: "💳" },
+  { label: "Opportunities", href: "/opportunities", icon: "🔒" },
 ];
 
 interface HeaderProps {
@@ -23,7 +25,8 @@ export default function Header({
   darkMode,
   onToggleDark,
 }: HeaderProps) {
-  const pathname = usePathname();
+  const pathname  = usePathname();
+  const { isSignedIn } = useAuth();
 
   return (
     <header
@@ -69,24 +72,46 @@ export default function Header({
           })}
         </nav>
 
-        {/* Desktop: bank credit metric — always reserves space so nav stays centred */}
-        <div className="hidden sm:flex flex-col items-end flex-shrink-0" style={{ minWidth: 110 }}>
-          {totalBankCredit ? (
-            <>
-              <span
-                className="text-[10px] font-medium uppercase tracking-wider"
-                style={{ color: "var(--font-muted)" }}
+        {/* Right side: credit metric + auth + dark mode */}
+        <div className="hidden sm:flex items-center gap-3 flex-shrink-0">
+          {/* Bank credit metric — always reserves space so nav stays centred */}
+          <div className="flex flex-col items-end" style={{ minWidth: 110 }}>
+            {totalBankCredit ? (
+              <>
+                <span
+                  className="text-[10px] font-medium uppercase tracking-wider"
+                  style={{ color: "var(--font-muted)" }}
+                >
+                  Total Bank Credit
+                </span>
+                <span className="text-sm font-bold" style={{ color: "var(--font)" }}>
+                  {formatCr(totalBankCredit, 1)}
+                </span>
+                <span className="text-[10px]" style={{ color: "var(--font-muted)" }}>
+                  as of {latestDate}
+                </span>
+              </>
+            ) : null}
+          </div>
+
+          {/* Auth — UserButton (signed in) or Sign in link (signed out) */}
+          {isSignedIn ? (
+            <UserButton />
+          ) : (
+            <SignInButton mode="modal">
+              <button
+                className="text-sm font-medium px-3 py-1.5 rounded-full transition-colors"
+                style={{
+                  color:      "#16A34A",
+                  background: "#16A34A10",
+                  border:     "1px solid #16A34A40",
+                  cursor:     "pointer",
+                }}
               >
-                Total Bank Credit
-              </span>
-              <span className="text-sm font-bold" style={{ color: "var(--font)" }}>
-                {formatCr(totalBankCredit, 1)}
-              </span>
-              <span className="text-[10px]" style={{ color: "var(--font-muted)" }}>
-                as of {latestDate}
-              </span>
-            </>
-          ) : null}
+                Sign in
+              </button>
+            </SignInButton>
+          )}
         </div>
 
         {/* Dark mode toggle */}
@@ -103,7 +128,7 @@ export default function Header({
         </button>
       </div>
 
-      {/* ── Mobile nav strip — always visible, hidden on sm+ ─────────────────── */}
+      {/* ── Mobile nav strip ─────────────────────────────────────────────────── */}
       <nav
         className="sm:hidden flex"
         style={{ borderTop: "1px solid var(--border-card)" }}
@@ -114,7 +139,7 @@ export default function Header({
             <Link
               key={href}
               href={href}
-              className="flex-1 flex items-center justify-center gap-2 py-2.5 text-sm font-medium transition-colors"
+              className="flex-1 flex items-center justify-center gap-1 py-2.5 text-xs font-medium transition-colors"
               style={{
                 color:          isActive ? "#4e8ef7" : "var(--font-muted)",
                 background:     isActive ? "#4e8ef710" : "transparent",
