@@ -3,7 +3,7 @@ import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 const isProtected = createRouteMatcher(["/opportunities(.*)"]);
 
 export default clerkMiddleware(async (auth, req) => {
-  if (isProtected(req)) await (await auth()).redirectToSignIn();
+  if (isProtected(req)) await auth.protect();
 });
 
 export const config = {
