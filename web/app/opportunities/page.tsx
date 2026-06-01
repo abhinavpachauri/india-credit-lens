@@ -3,6 +3,11 @@
 import { useEffect, useState } from "react";
 import { loadAllOpportunities } from "@/lib/opportunities";
 import type { Opportunity } from "@/lib/opportunities";
+import {
+  loadSectionChartMap, chartKey,
+} from "@/lib/section-chart-data";
+import type { SectionChartMap, SectionChartSlice } from "@/lib/section-chart-data";
+import SectionSparkline from "@/components/dls/SectionSparkline";
 
 type PipelineFilter = "all" | "sibc" | "atm_pos";
 
@@ -30,7 +35,13 @@ const BTN = (active: boolean): React.CSSProperties => ({
   transition: "all 0.15s",
 });
 
-function OpportunityCard({ opp }: { opp: Opportunity }) {
+function OpportunityCard({
+  opp,
+  chartSlice,
+}: {
+  opp:        Opportunity;
+  chartSlice: SectionChartSlice | null;
+}) {
   const [expanded, setExpanded] = useState(false);
 
   return (
@@ -99,9 +110,25 @@ function OpportunityCard({ opp }: { opp: Opportunity }) {
         </div>
       )}
 
+      {/* Sparkline — lazy: renders only when chart data is available */}
+      {chartSlice && (
+        <div
+          style={{
+            borderTop:  `1px solid ${OPP_COLOR}20`,
+            paddingTop: 4,
+            marginTop:  chartSlice ? 8 : 0,
+          }}
+        >
+          <p style={{ fontSize: 11, color: "var(--font-muted)", marginBottom: 2 }}>
+            {opp.sectionIcon} {opp.sectionTitle} trend (24 months)
+          </p>
+          <SectionSparkline slice={chartSlice} />
+        </div>
+      )}
+
       {/* Inference chain — expandable */}
       {opp.basis?.inferences && opp.basis.inferences.length > 0 && (
-        <div>
+        <div style={{ marginTop: chartSlice ? 12 : 0 }}>
           <button
             onClick={() => setExpanded((x) => !x)}
             style={{
@@ -139,11 +166,19 @@ function OpportunityCard({ opp }: { opp: Opportunity }) {
 }
 
 export default function OpportunitiesPage() {
-  const [opps,   setOpps]   = useState<Opportunity[] | null>(null);
-  const [filter, setFilter] = useState<PipelineFilter>("all");
+  const [opps,     setOpps]     = useState<Opportunity[] | null>(null);
+  const [charts,   setCharts]   = useState<SectionChartMap | null>(null);
+  const [filter,   setFilter]   = useState<PipelineFilter>("all");
 
   useEffect(() => {
-    loadAllOpportunities().then(setOpps);
+    // Load opportunities and chart data in parallel
+    Promise.all([
+      loadAllOpportunities(),
+      loadSectionChartMap(),
+    ]).then(([o, c]) => {
+      setOpps(o);
+      setCharts(c);
+    });
   }, []);
 
   if (!opps) {
@@ -157,9 +192,9 @@ export default function OpportunitiesPage() {
     );
   }
 
-  const sibcCount   = opps.filter((o) => o.pipeline === "sibc").length;
-  const atmCount    = opps.filter((o) => o.pipeline === "atm_pos").length;
-  const filtered    = filter === "all" ? opps : opps.filter((o) => o.pipeline === filter);
+  const sibcCount = opps.filter((o) => o.pipeline === "sibc").length;
+  const atmCount  = opps.filter((o) => o.pipeline === "atm_pos").length;
+  const filtered  = filter === "all" ? opps : opps.filter((o) => o.pipeline === filter);
 
   return (
     <main className="max-w-3xl mx-auto px-4 py-8">
@@ -176,10 +211,10 @@ export default function OpportunitiesPage() {
 
       {/* Pipeline filter */}
       <div className="flex gap-2 mb-8 flex-wrap">
-        <button style={BTN(filter === "all")}   onClick={() => setFilter("all")}>
+        <button style={BTN(filter === "all")}  onClick={() => setFilter("all")}>
           All {opps.length}
         </button>
-        <button style={BTN(filter === "sibc")}  onClick={() => setFilter("sibc")}>
+        <button style={BTN(filter === "sibc")} onClick={() => setFilter("sibc")}>
           📊 Credit {sibcCount}
         </button>
         {atmCount > 0 && (
@@ -195,7 +230,13 @@ export default function OpportunitiesPage() {
           No opportunities for this filter yet.
         </p>
       ) : (
-        filtered.map((opp) => <OpportunityCard key={opp.id} opp={opp} />)
+        filtered.map((opp) => (
+          <OpportunityCard
+            key={opp.id}
+            opp={opp}
+            chartSlice={charts?.get(chartKey(opp.pipeline, opp.sectionId)) ?? null}
+          />
+        ))
       )}
 
       <footer className="mt-10 pb-8 text-center text-xs" style={{ color: "var(--font-muted)" }}>
