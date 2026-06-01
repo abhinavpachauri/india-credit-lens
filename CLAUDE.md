@@ -42,7 +42,8 @@ Live components only. Planned work lives in `STRATEGY_PLANNER.md`.
 | validate_claims.py (Check 2c) | **Live** — claim sourcing + citation layer on system model |
 | validate_annotation_basis.py (Check 2d) | **Live** — basis completeness check (inference/hypothesis → basis.inferences non-empty) |
 | promote_annotations.py (Stage 7) | **Live** — automated verified copy to web |
-| signal_registry.json | **Live** — 7 signals tracked across 3 issues |
+| signal_registry.json | **Live** — 7 signals tracked across 3 issues (newsletter subsystem) |
+| signal history layer | **Live** — `analysis/signals/` — registry.json (70 signals), history/sibc.json + history/atm_pos.json; Check 2e validator; `generate_signal_history.py` |
 | Subsystem generation | **Live** — `generate_mermaid.py` → `.mmd` + `validate.py --check-subsystems` |
 | detect_format.py (Stage 0.5) | **Live** — flags format changes in new XLSX before extraction |
 | ATM/POS pipeline | **Live** — `rbi_atm_pos/` — Stages 0–6 complete (data → insights → CSV check → build gate) |
@@ -71,6 +72,9 @@ Use CLI tools for all external service interactions — they are the most contex
 | `python3 analysis/source_claims.py` | Stage 6b: source all system model claims |
 | `python3 analysis/newsletter/validate_newsletter_config.py` | Gate before every newsletter/LinkedIn generation run |
 | `python3 analysis/run_atm_pos_evals.py --xlsx {file}` | ATM/POS pipeline gate — Stages 0–6 (format → insights → CSV check → build) |
+| `python3 analysis/generate_signal_history.py append --pipeline {name} --period {date}` | After every pipeline period: append signal statuses to history |
+| `python3 analysis/generate_signal_history.py status` | Print current signal states across all pipelines |
+| `python3 analysis/validate_signal_history.py` | Check 2e: signal history integrity (registry + history files) |
 
 ---
 
@@ -110,6 +114,7 @@ Use CLI tools for all external service interactions — they are the most contex
 | `analysis/validate_content.py` | Check 2b: dates/values/growth in annotation bodies vs sections.json |
 | `analysis/validate_claims.py` | Check 2c: claim sourcing — every system model claim has a source |
 | `analysis/validate_annotation_basis.py` | Check 2d: basis completeness — inference/hypothesis annotations must have basis.inferences |
+| `analysis/validate_signal_history.py` | Check 2e: signal history integrity — registry schema + history file consistency |
 | `analysis/validate.py` | Checks 4, 5: system_model.json + subsystems.json |
 | `analysis/extract_sibc.py` | Stage 1: SIBC xlsx → sections.json + format_report.json |
 | `analysis/detect_format.py` | Stage 0.5: detect structural changes in new XLSX vs prior period |
@@ -118,6 +123,11 @@ Use CLI tools for all external service interactions — they are the most contex
 | `analysis/generate_mermaid.py` | Stage 6a (on-demand): system_model → .mmd files + subsystems.json |
 | `analysis/source_claims.py` | Stage 6b: source all claims in system_model.json |
 | `analysis/promote_annotations.py` | Stage 7: annotations_merged.ts → rbi_sibc.ts (verified copy + ID diff) |
+| `analysis/generate_signal_history.py` | Signal history: `append` / `status` / `seed` commands |
+| `analysis/signals/registry.json` | Universal signal catalog — 70 signals across SIBC + ATM/POS |
+| `analysis/signals/history/sibc.json` | Append-only SIBC signal history (Claude-authored snapshots) |
+| `analysis/signals/history/atm_pos.json` | Append-only ATM/POS signal history (auto-derived) |
+| `analysis/rbi_sibc/merged/signal_snapshot.json` | Claude writes during Stage 5 — SIBC signal statuses per period |
 | `analysis/rbi_sibc/timeline.json` | Registry of all ingested periods (includes `is_fy_end` flag) |
 | `analysis/rbi_sibc/merged/` | Merged outputs (Jan 2024–Mar 2026) — source for live dashboard |
 | `web/lib/reports/rbi_sibc.ts` | Live dashboard annotations (promoted from merged) |

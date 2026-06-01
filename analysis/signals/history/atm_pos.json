@@ -1,0 +1,79 @@
+{
+  "_meta": {
+    "pipeline": "atm_pos",
+    "schema_version": "1.0",
+    "description": "Append-only signal history for the ATM/POS (Card & Acceptance Infrastructure) pipeline. Entries are auto-derived from atm_pos_insights.json \u2014 Claude does not author these. Each entry records the status of every tracked signal for one ingested period. Never edit past entries \u2014 only append.",
+    "entry_count": 1
+  },
+  "entries": [
+    {
+      "period": "2026-03-31",
+      "appended_at": "2026-06-01T09:19:08",
+      "signals": {
+        "cc-ecom-vs-pos-share": {
+          "status": "new"
+        },
+        "cc-cards-streak": {
+          "status": "new"
+        },
+        "cc-txn-surge": {
+          "status": "new"
+        },
+        "cc-category-share-shift": {
+          "status": "new"
+        },
+        "cc-top5-concentration": {
+          "status": "new"
+        },
+        "gap-foreign-cc-decline": {
+          "status": "new"
+        },
+        "dc-atm-share-structural": {
+          "status": "new"
+        },
+        "dc-pos-cash-decline": {
+          "status": "new"
+        },
+        "dc-ecom-share": {
+          "status": "new"
+        },
+        "dc-cards-streak": {
+          "status": "new"
+        },
+        "dc-psb-dominance": {
+          "status": "new"
+        },
+        "dc-top-bank-leader": {
+          "status": "new"
+        },
+        "gap-dc-cash-dominance": {
+          "status": "new"
+        },
+        "gap-dc-ecom-low": {
+          "status": "new"
+        },
+        "infra-qr-per-pos": {
+          "status": "new"
+        },
+        "infra-pos-streak": {
+          "status": "new"
+        },
+        "infra-upi-vs-bharat-qr": {
+          "status": "new"
+        },
+        "infra-top-bank-pos": {
+          "status": "new"
+        },
+        "gap-bharat-qr-contraction": {
+          "status": "new"
+        },
+        "gap-atm-offsite-decline": {
+          "status": "new"
+        },
+        "gap-pos-concentration": {
+          "status": "new"
+        }
+      }
+    }
+  ]
+}

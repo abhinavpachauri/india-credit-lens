@@ -3,7 +3,7 @@
 run_atm_pos_evals.py — India Credit Lens
 ------------------------------------------
 Master eval gate for the ATM/POS pipeline. Runs Stages 0–3, then 4b/4c/4d,
-then a web CSV integrity check and TypeScript build gate.
+then a web CSV integrity check, signal history integrity check, and TypeScript build gate.
 
 Usage:
     # Ingest one or more new XLSX files (full pipeline)
@@ -229,6 +229,18 @@ def check_atm_pos_csv():
     return True, f"{row_count} rows · {date_count} periods · {bank_count} banks/totals"
 
 
+def check_signal_history():
+    """Check 2e: signal history integrity — registry schema + history file consistency."""
+    passed, out = run(
+        "signal_history",
+        [sys.executable, str(ANALYSIS / "validate_signal_history.py")],
+    )
+    # Extract a short summary line
+    lines = out.splitlines()
+    summary = next((l.strip() for l in lines if "passed" in l.lower() or "failure" in l.lower()), "")
+    return passed, summary or (out[:60] if out else "passed")
+
+
 def check_build():
     """tsc --noEmit then npm run build in web/."""
     WEB = REPO_ROOT / "web"
@@ -316,6 +328,14 @@ def main():
         all_results.append(("5.  Web CSV integrity", passed, note))
     else:
         all_results.append(("5.  Web CSV integrity", None, "skipped — upstream failures"))
+
+    # Signal history integrity check
+    prior_ok = all(r[1] is True or r[1] is None for r in all_results)
+    if prior_ok:
+        passed, note = check_signal_history()
+        all_results.append(("5b. Signal history integrity", passed, note))
+    else:
+        all_results.append(("5b. Signal history integrity", None, "skipped — upstream failures"))
 
     # TypeScript build gate
     if args.skip_build:

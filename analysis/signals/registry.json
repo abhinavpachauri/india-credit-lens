@@ -1,0 +1,669 @@
+{
+  "_meta": {
+    "schema_version": "1.0",
+    "description": "Signal registry \u2014 permanent catalog of every tracked signal across all ingestion pipelines. Signal IDs are immutable once created. Add new signals; never rename or delete.",
+    "last_updated": "2026-06-01"
+  },
+  "pipelines": {
+    "sibc": {
+      "id": "sibc",
+      "name": "RBI Sector/Industry-wise Bank Credit",
+      "cadence": "monthly",
+      "domain_primary": "credit",
+      "snapshot_path": "analysis/rbi_sibc/merged/signal_snapshot.json",
+      "insight_source": "analysis/rbi_sibc/merged/annotations_merged.ts",
+      "description": "Outstanding bank credit by sector, industry size, services sub-sector, personal loans, priority sector"
+    },
+    "atm_pos": {
+      "id": "atm_pos",
+      "name": "RBI ATM/POS Card Statistics",
+      "cadence": "monthly",
+      "domain_primary": "payments",
+      "snapshot_path": null,
+      "insight_source": "web/public/data/atm_pos_insights.json",
+      "description": "Credit/debit card outstanding, POS/ATM/QR transaction volumes and infrastructure counts",
+      "auto_snapshot": true
+    }
+  },
+  "domains": {
+    "credit_growth": "Credit expansion \u2014 sector acceleration, new highs, positive trend breaks",
+    "credit_stress": "Credit contraction, deceleration, stress proxies, policy-driven decline",
+    "market_structure": "Market share shifts, bank-type competition, concentration, new entrants",
+    "infrastructure": "ATM, POS, QR code deployment, utilisation, digital acceptance infrastructure",
+    "policy": "PSL, regulatory mandates, RBI policy effects, PSLC trading, PLI schemes",
+    "data_quality": "Methodological gaps, reclassifications, double-counting, opacity in source data",
+    "cross_pipeline": "Signals that require data from more than one ingestion source to interpret"
+  },
+  "signals": {
+    "credit-growth-accelerating-fy26": {
+      "id": "credit-growth-accelerating-fy26",
+      "pipeline": "sibc",
+      "domain": "credit_growth",
+      "type": "data",
+      "first_seen": "2026-03-30",
+      "current_status": "unknown",
+      "title": "FY26 complete: +16.1% YoY \u2014 strongest in this data series"
+    },
+    "three-year-credit-trajectory": {
+      "id": "three-year-credit-trajectory",
+      "pipeline": "sibc",
+      "domain": "credit_growth",
+      "type": "inference",
+      "first_seen": "2026-03-30",
+      "current_status": "unknown",
+      "title": "Bank credit added \u20b953L Cr in two years \u2014 compounding"
+    },
+    "nonfood-credit-all-the-signal": {
+      "id": "nonfood-credit-all-the-signal",
+      "pipeline": "sibc",
+      "domain": "credit_growth",
+      "type": "data",
+      "first_seen": "2026-03-30",
+      "current_status": "unknown",
+      "title": "Non-food credit is the only number that matters"
+    },
+    "food-credit-jan-artifact": {
+      "id": "food-credit-jan-artifact",
+      "pipeline": "sibc",
+      "domain": "data_quality",
+      "type": "inference",
+      "first_seen": "2026-03-30",
+      "current_status": "unknown",
+      "title": "Food credit cycle growing \u2014 5\u00d7 in two years at March"
+    },
+    "bankcredit-april-date-convention": {
+      "id": "bankcredit-april-date-convention",
+      "pipeline": "sibc",
+      "domain": "data_quality",
+      "type": "data",
+      "first_seen": "2026-03-30",
+      "current_status": "unknown",
+      "title": "Bank Credit uses April fortnight dates \u2014 treat the dataDate accordingly"
+    },
+    "credit-cycle-expansion": {
+      "id": "credit-cycle-expansion",
+      "pipeline": "sibc",
+      "domain": "credit_growth",
+      "type": "inference",
+      "first_seen": "2026-03-30",
+      "current_status": "unknown",
+      "title": "\u20b929.6L Cr added in one year \u2014 largest annual absolute addition"
+    },
+    "fy26-all-sectors-synchronised": {
+      "id": "fy26-all-sectors-synchronised",
+      "pipeline": "sibc",
+      "domain": "credit_growth",
+      "type": "data",
+      "first_seen": "2026-03-30",
+      "current_status": "unknown",
+      "title": "All four main sectors accelerated in FY26 \u2014 no laggards"
+    },
+    "services-growth-acceleration": {
+      "id": "services-growth-acceleration",
+      "pipeline": "sibc",
+      "domain": "credit_growth",
+      "type": "inference",
+      "first_seen": "2026-03-30",
+      "current_status": "unknown",
+      "title": "Services hit 19.0% YoY in FY26 \u2014 fastest main sector"
+    },
+    "industry-reaccelerating": {
+      "id": "industry-reaccelerating",
+      "pipeline": "sibc",
+      "domain": "credit_growth",
+      "type": "inference",
+      "first_seen": "2026-03-30",
+      "current_status": "unknown",
+      "title": "Industry YoY jumped from 8.2% to 15.0% \u2014 biggest acceleration"
+    },
+    "personal-loans-largest-sector": {
+      "id": "personal-loans-largest-sector",
+      "pipeline": "sibc",
+      "domain": "credit_growth",
+      "type": "data",
+      "first_seen": "2026-03-30",
+      "current_status": "unknown",
+      "title": "Personal Loans: still the largest sector \u2014 \u20b969.6L Cr"
+    },
+    "main-sectors-undercount": {
+      "id": "main-sectors-undercount",
+      "pipeline": "sibc",
+      "domain": "data_quality",
+      "type": "data",
+      "first_seen": "2026-03-30",
+      "current_status": "unknown",
+      "title": "Main sector totals undercount system credit by \u20b910L Cr+"
+    },
+    "services-credit-entry": {
+      "id": "services-credit-entry",
+      "pipeline": "sibc",
+      "domain": "credit_growth",
+      "type": "inference",
+      "first_seen": "2026-03-30",
+      "current_status": "unknown",
+      "title": "Services sector credit is the fastest-growing main sector entry point"
+    },
+    "micro-small-growth-tripled": {
+      "id": "micro-small-growth-tripled",
+      "pipeline": "sibc",
+      "domain": "credit_growth",
+      "type": "inference",
+      "first_seen": "2026-03-30",
+      "current_status": "unknown",
+      "title": "Micro & Small: 9.6% \u2192 33.1% YoY over one year \u2014 inflection"
+    },
+    "large-corporate-stagnant": {
+      "id": "large-corporate-stagnant",
+      "pipeline": "sibc",
+      "domain": "credit_stress",
+      "type": "data",
+      "first_seen": "2026-03-30",
+      "current_status": "unknown",
+      "title": "Large corporates: +8.9% YoY \u2014 weakest industrial borrower"
+    },
+    "medium-enterprise-sweet-spot": {
+      "id": "medium-enterprise-sweet-spot",
+      "pipeline": "sibc",
+      "domain": "credit_growth",
+      "type": "inference",
+      "first_seen": "2026-03-30",
+      "current_status": "unknown",
+      "title": "Medium enterprises: +21.7% YoY \u2014 structurally preferred tier"
+    },
+    "size-definition-boundary-issue": {
+      "id": "size-definition-boundary-issue",
+      "pipeline": "sibc",
+      "domain": "data_quality",
+      "type": "inference",
+      "first_seen": "2026-03-30",
+      "current_status": "unknown",
+      "title": "MSME size boundaries shift with regulatory revisions"
+    },
+    "msme-first-cycle-window": {
+      "id": "msme-first-cycle-window",
+      "pipeline": "sibc",
+      "domain": "market_structure",
+      "type": "inference",
+      "first_seen": "2026-03-30",
+      "current_status": "unknown",
+      "title": "Alt-data MSME underwriting now essential \u2014 first cycle window"
+    },
+    "nbfc-risk-weight-cycle-complete": {
+      "id": "nbfc-risk-weight-cycle-complete",
+      "pipeline": "sibc",
+      "domain": "market_structure",
+      "type": "inference",
+      "first_seen": "2026-03-30",
+      "current_status": "unknown",
+      "title": "NBFC credit +26.3% YoY \u2014 2023 risk-weight cycle now complete"
+    },
+    "computer-software-multi-year-surge": {
+      "id": "computer-software-multi-year-surge",
+      "pipeline": "sibc",
+      "domain": "credit_growth",
+      "type": "inference",
+      "first_seen": "2026-03-30",
+      "current_status": "unknown",
+      "title": "Computer Software credit: 3 consecutive periods of acceleration"
+    },
+    "transport-operators-decelerating": {
+      "id": "transport-operators-decelerating",
+      "pipeline": "sibc",
+      "domain": "credit_stress",
+      "type": "inference",
+      "first_seen": "2026-03-30",
+      "current_status": "unknown",
+      "title": "Transport Operators growth collapsed: 12% \u2192 4.3% YoY"
+    },
+    "cre-trade-consistent-growth": {
+      "id": "cre-trade-consistent-growth",
+      "pipeline": "sibc",
+      "domain": "credit_growth",
+      "type": "inference",
+      "first_seen": "2026-03-30",
+      "current_status": "unknown",
+      "title": "CRE and Trade both accelerating: 14% \u2192 16% YoY"
+    },
+    "nbfc-double-counting": {
+      "id": "nbfc-double-counting",
+      "pipeline": "sibc",
+      "domain": "data_quality",
+      "type": "inference",
+      "first_seen": "2026-03-30",
+      "current_status": "unknown",
+      "title": "Bank credit to NBFCs is double-counted in system totals"
+    },
+    "other-services-opacity": {
+      "id": "other-services-opacity",
+      "pipeline": "sibc",
+      "domain": "data_quality",
+      "type": "data",
+      "first_seen": "2026-03-30",
+      "current_status": "unknown",
+      "title": "Other Services is \u20b912.4L Cr with no breakdown"
+    },
+    "co-lending-infrastructure": {
+      "id": "co-lending-infrastructure",
+      "pipeline": "sibc",
+      "domain": "market_structure",
+      "type": "inference",
+      "first_seen": "2026-03-30",
+      "current_status": "unknown",
+      "title": "Co-lending and warehouse-financing infrastructure is the credit wedge"
+    },
+    "trade-finance-compounder": {
+      "id": "trade-finance-compounder",
+      "pipeline": "sibc",
+      "domain": "credit_growth",
+      "type": "inference",
+      "first_seen": "2026-03-30",
+      "current_status": "unknown",
+      "title": "Trade credit at \u20b913.1L Cr, 16% YoY \u2014 services compounder"
+    },
+    "gold-loans-structural-surge": {
+      "id": "gold-loans-structural-surge",
+      "pipeline": "sibc",
+      "domain": "credit_growth",
+      "type": "inference",
+      "first_seen": "2026-03-30",
+      "current_status": "unknown",
+      "title": "Gold loans 5\u00d7 in 24 months \u2014 \u20b90.93L Cr to \u20b94.60L Cr"
+    },
+    "credit-card-collapse": {
+      "id": "credit-card-collapse",
+      "pipeline": "sibc",
+      "domain": "credit_stress",
+      "type": "inference",
+      "first_seen": "2026-03-30",
+      "current_status": "unknown",
+      "title": "Credit cards: +3.5% YoY in FY26 \u2014 policy-constrained"
+    },
+    "vehicle-loans-accelerating": {
+      "id": "vehicle-loans-accelerating",
+      "pipeline": "sibc",
+      "domain": "credit_growth",
+      "type": "inference",
+      "first_seen": "2026-03-30",
+      "current_status": "unknown",
+      "title": "Vehicle loans growth doubled: 8.6% \u2192 18.6% YoY in FY26"
+    },
+    "consumer-durables-accelerating-decline": {
+      "id": "consumer-durables-accelerating-decline",
+      "pipeline": "sibc",
+      "domain": "credit_stress",
+      "type": "inference",
+      "first_seen": "2026-03-30",
+      "current_status": "unknown",
+      "title": "Consumer durables: -5.3% YoY in FY26 \u2014 three consecutive declines"
+    },
+    "personal-loans-aggregate-hides-divergence": {
+      "id": "personal-loans-aggregate-hides-divergence",
+      "pipeline": "sibc",
+      "domain": "data_quality",
+      "type": "data",
+      "first_seen": "2026-03-30",
+      "current_status": "unknown",
+      "title": "Personal loans aggregate masks divergent sub-category trends"
+    },
+    "gold-loans-reclassification-overstates-demand": {
+      "id": "gold-loans-reclassification-overstates-demand",
+      "pipeline": "sibc",
+      "domain": "data_quality",
+      "type": "inference",
+      "first_seen": "2026-03-30",
+      "current_status": "unknown",
+      "title": "Gold loans 123% growth overstates real disbursement demand"
+    },
+    "other-personal-loans-opacity": {
+      "id": "other-personal-loans-opacity",
+      "pipeline": "sibc",
+      "domain": "data_quality",
+      "type": "data",
+      "first_seen": "2026-03-30",
+      "current_status": "unknown",
+      "title": "Other Personal Loans is 25% of the portfolio \u2014 no breakdown"
+    },
+    "gold-loan-market-entry": {
+      "id": "gold-loan-market-entry",
+      "pipeline": "sibc",
+      "domain": "market_structure",
+      "type": "inference",
+      "first_seen": "2026-03-30",
+      "current_status": "unknown",
+      "title": "Gold lending market being re-segmented \u2014 banks vs NBFCs"
+    },
+    "vehicle-ev-credit": {
+      "id": "vehicle-ev-credit",
+      "pipeline": "sibc",
+      "domain": "credit_growth",
+      "type": "inference",
+      "first_seen": "2026-03-30",
+      "current_status": "unknown",
+      "title": "Vehicle loans +18.6% \u2014 EV-specific credit is the new signal"
+    },
+    "psl-msme-structural-acceleration": {
+      "id": "psl-msme-structural-acceleration",
+      "pipeline": "sibc",
+      "domain": "policy",
+      "type": "data",
+      "first_seen": "2026-03-30",
+      "current_status": "unknown",
+      "title": "PSL MSME: +13.4% FY25 \u2192 +29.5% FY26 \u2014 structural acceleration"
+    },
+    "psl-housing-anomalous-surge": {
+      "id": "psl-housing-anomalous-surge",
+      "pipeline": "sibc",
+      "domain": "policy",
+      "type": "inference",
+      "first_seen": "2026-03-30",
+      "current_status": "unknown",
+      "title": "PSL Housing +39.8% YoY \u2014 definition change or real surge"
+    },
+    "export-credit-declining": {
+      "id": "export-credit-declining",
+      "pipeline": "sibc",
+      "domain": "credit_stress",
+      "type": "inference",
+      "first_seen": "2026-03-30",
+      "current_status": "unknown",
+      "title": "Export credit: +4.2% FY25, -13.0% FY26 \u2014 structural reversal"
+    },
+    "psl-housing-reclassification": {
+      "id": "psl-housing-reclassification",
+      "pipeline": "sibc",
+      "domain": "data_quality",
+      "type": "inference",
+      "first_seen": "2026-03-30",
+      "current_status": "unknown",
+      "title": "PSL housing data contaminated by a regulatory reclassification"
+    },
+    "psl-totals-not-additive": {
+      "id": "psl-totals-not-additive",
+      "pipeline": "sibc",
+      "domain": "data_quality",
+      "type": "inference",
+      "first_seen": "2026-03-30",
+      "current_status": "unknown",
+      "title": "PSL category totals cannot be summed \u2014 Weaker Sections overlap"
+    },
+    "renewable-energy-project-finance": {
+      "id": "renewable-energy-project-finance",
+      "pipeline": "sibc",
+      "domain": "policy",
+      "type": "inference",
+      "first_seen": "2026-03-30",
+      "current_status": "unknown",
+      "title": "Renewable energy PSL: \u20b90.14L Cr for a \u20b920L Cr annual opportunity"
+    },
+    "pslc-trading-tooling": {
+      "id": "pslc-trading-tooling",
+      "pipeline": "sibc",
+      "domain": "policy",
+      "type": "inference",
+      "first_seen": "2026-03-30",
+      "current_status": "unknown",
+      "title": "PSLC trading volume rising \u2014 banks need automated tooling"
+    },
+    "pli-capex-broadening-confirmed": {
+      "id": "pli-capex-broadening-confirmed",
+      "pipeline": "sibc",
+      "domain": "policy",
+      "type": "inference",
+      "first_seen": "2026-03-30",
+      "current_status": "unknown",
+      "title": "PLI capex broadened in FY26: Engineering +32%, Petroleum +32.5%"
+    },
+    "gems-jewellery-gold-price-proxy": {
+      "id": "gems-jewellery-gold-price-proxy",
+      "pipeline": "sibc",
+      "domain": "credit_growth",
+      "type": "inference",
+      "first_seen": "2026-03-30",
+      "current_status": "unknown",
+      "title": "Gems & Jewellery up 40% YoY \u2014 gold price proxy in credit data"
+    },
+    "infrastructure-decelerating": {
+      "id": "infrastructure-decelerating",
+      "pipeline": "sibc",
+      "domain": "credit_stress",
+      "type": "inference",
+      "first_seen": "2026-03-30",
+      "current_status": "unknown",
+      "title": "Infrastructure at +9.5% YoY in FY26 \u2014 supercycle losing steam"
+    },
+    "chemicals-petroleum-capex": {
+      "id": "chemicals-petroleum-capex",
+      "pipeline": "sibc",
+      "domain": "credit_growth",
+      "type": "inference",
+      "first_seen": "2026-03-30",
+      "current_status": "unknown",
+      "title": "Chemicals +14.9%, Petroleum +32.5% YoY \u2014 specialised capex cycle"
+    },
+    "infrastructure-sub-classification-absent": {
+      "id": "infrastructure-sub-classification-absent",
+      "pipeline": "sibc",
+      "domain": "data_quality",
+      "type": "inference",
+      "first_seen": "2026-03-30",
+      "current_status": "unknown",
+      "title": "Infrastructure is largest industrial sub-sector with no breakdown"
+    },
+    "industry-type-partition-not-exact": {
+      "id": "industry-type-partition-not-exact",
+      "pipeline": "sibc",
+      "domain": "data_quality",
+      "type": "inference",
+      "first_seen": "2026-03-30",
+      "current_status": "unknown",
+      "title": "Industry sub-types do not sum to the Industry total exactly"
+    },
+    "pli-supply-chain-finance": {
+      "id": "pli-supply-chain-finance",
+      "pipeline": "sibc",
+      "domain": "policy",
+      "type": "inference",
+      "first_seen": "2026-03-30",
+      "current_status": "unknown",
+      "title": "PLI supply chains: one anchor yields 50\u2013100 supplier financing opportunities"
+    },
+    "basic-metal-capex-lending": {
+      "id": "basic-metal-capex-lending",
+      "pipeline": "sibc",
+      "domain": "credit_growth",
+      "type": "inference",
+      "first_seen": "2026-03-30",
+      "current_status": "unknown",
+      "title": "Basic Metal +19.4% YoY \u2014 steel and aluminium capex lending window"
+    },
+    "cc-ecom-vs-pos-share": {
+      "id": "cc-ecom-vs-pos-share",
+      "pipeline": "atm_pos",
+      "domain": "market_structure",
+      "type": "insight",
+      "first_seen": "2026-03-31",
+      "current_status": "new",
+      "title": "CC ecommerce holds above POS at 50.2% of total CC volume"
+    },
+    "cc-cards-streak": {
+      "id": "cc-cards-streak",
+      "pipeline": "atm_pos",
+      "domain": "credit_growth",
+      "type": "insight",
+      "first_seen": "2026-03-31",
+      "current_status": "new",
+      "title": "Credit cards outstanding: 5 consecutive months of growth \u2014 118.6M"
+    },
+    "cc-txn-surge": {
+      "id": "cc-txn-surge",
+      "pipeline": "atm_pos",
+      "domain": "credit_growth",
+      "type": "insight",
+      "first_seen": "2026-03-31",
+      "current_status": "new",
+      "title": "All CC transaction types surged in Mar 2026 \u2014 avg 15.8% MoM"
+    },
+    "cc-category-share-shift": {
+      "id": "cc-category-share-shift",
+      "pipeline": "atm_pos",
+      "domain": "market_structure",
+      "type": "insight",
+      "first_seen": "2026-03-31",
+      "current_status": "new",
+      "title": "SFB banks gained CC card share in Mar 2026 (+0.1pp)"
+    },
+    "cc-top5-concentration": {
+      "id": "cc-top5-concentration",
+      "pipeline": "atm_pos",
+      "domain": "market_structure",
+      "type": "insight",
+      "first_seen": "2026-03-31",
+      "current_status": "new",
+      "title": "Top 5 banks hold 74.3% of CC cards \u2014 HDFC BANK LTD leads at 22.2%"
+    },
+    "gap-foreign-cc-decline": {
+      "id": "gap-foreign-cc-decline",
+      "pipeline": "atm_pos",
+      "domain": "credit_stress",
+      "type": "gap",
+      "first_seen": "2026-03-31",
+      "current_status": "new",
+      "title": "Foreign bank CC share at 3.7% \u2014 premium segment shrinking"
+    },
+    "dc-atm-share-structural": {
+      "id": "dc-atm-share-structural",
+      "pipeline": "atm_pos",
+      "domain": "market_structure",
+      "type": "insight",
+      "first_seen": "2026-03-31",
+      "current_status": "new",
+      "title": "DC ATM cash losing share \u2014 81.4% of DC volume as digital grows"
+    },
+    "dc-pos-cash-decline": {
+      "id": "dc-pos-cash-decline",
+      "pipeline": "atm_pos",
+      "domain": "credit_stress",
+      "type": "insight",
+      "first_seen": "2026-03-31",
+      "current_status": "new",
+      "title": "DC POS cash withdrawals: 2 consecutive months of decline (-7.0% MoM)"
+    },
+    "dc-ecom-share": {
+      "id": "dc-ecom-share",
+      "pipeline": "atm_pos",
+      "domain": "market_structure",
+      "type": "insight",
+      "first_seen": "2026-03-31",
+      "current_status": "new",
+      "title": "DC ecommerce is 4.8% of total DC transaction volume in Mar 2026"
+    },
+    "dc-cards-streak": {
+      "id": "dc-cards-streak",
+      "pipeline": "atm_pos",
+      "domain": "credit_growth",
+      "type": "insight",
+      "first_seen": "2026-03-31",
+      "current_status": "new",
+      "title": "Debit cards: 5 consecutive months of growth \u2014 1.04B outstanding"
+    },
+    "dc-psb-dominance": {
+      "id": "dc-psb-dominance",
+      "pipeline": "atm_pos",
+      "domain": "market_structure",
+      "type": "insight",
+      "first_seen": "2026-03-31",
+      "current_status": "new",
+      "title": "PSB banks hold 62.9% of debit cards \u2014 gaining share in Mar 2026"
+    },
+    "dc-top-bank-leader": {
+      "id": "dc-top-bank-leader",
+      "pipeline": "atm_pos",
+      "domain": "market_structure",
+      "type": "insight",
+      "first_seen": "2026-03-31",
+      "current_status": "new",
+      "title": "STATE BANK OF INDIA leads DC cards at 24.2%"
+    },
+    "gap-dc-cash-dominance": {
+      "id": "gap-dc-cash-dominance",
+      "pipeline": "atm_pos",
+      "domain": "market_structure",
+      "type": "gap",
+      "first_seen": "2026-03-31",
+      "current_status": "new",
+      "title": "DC ATM cash at 81.4% of DC volume \u2014 digital transition incomplete"
+    },
+    "gap-dc-ecom-low": {
+      "id": "gap-dc-ecom-low",
+      "pipeline": "atm_pos",
+      "domain": "credit_stress",
+      "type": "gap",
+      "first_seen": "2026-03-31",
+      "current_status": "new",
+      "title": "DC ecommerce at 4.8% of DC volume \u2014 debit cards leave thin digital footprints"
+    },
+    "infra-qr-per-pos": {
+      "id": "infra-qr-per-pos",
+      "pipeline": "atm_pos",
+      "domain": "infrastructure",
+      "type": "insight",
+      "first_seen": "2026-03-31",
+      "current_status": "new",
+      "title": "India now has 65 UPI QR codes per POS terminal"
+    },
+    "infra-pos-streak": {
+      "id": "infra-pos-streak",
+      "pipeline": "atm_pos",
+      "domain": "infrastructure",
+      "type": "insight",
+      "first_seen": "2026-03-31",
+      "current_status": "new",
+      "title": "POS terminals: 4 consecutive months of growth \u2014 11.8M deployed"
+    },
+    "infra-upi-vs-bharat-qr": {
+      "id": "infra-upi-vs-bharat-qr",
+      "pipeline": "atm_pos",
+      "domain": "infrastructure",
+      "type": "insight",
+      "first_seen": "2026-03-31",
+      "current_status": "new",
+      "title": "UPI QR codes are 135x Bharat QR in scale \u2014 761.2M vs 5.63M"
+    },
+    "infra-top-bank-pos": {
+      "id": "infra-top-bank-pos",
+      "pipeline": "atm_pos",
+      "domain": "market_structure",
+      "type": "insight",
+      "first_seen": "2026-03-31",
+      "current_status": "new",
+      "title": "RBL BANK LTD leads POS terminal deployment at 22.5% share"
+    },
+    "gap-bharat-qr-contraction": {
+      "id": "gap-bharat-qr-contraction",
+      "pipeline": "atm_pos",
+      "domain": "infrastructure",
+      "type": "gap",
+      "first_seen": "2026-03-31",
+      "current_status": "new",
+      "title": "Bharat QR contracting -4.5% MoM \u2014 5.63M vs 761.2M UPI QR"
+    },
+    "gap-atm-offsite-decline": {
+      "id": "gap-atm-offsite-decline",
+      "pipeline": "atm_pos",
+      "domain": "infrastructure",
+      "type": "gap",
+      "first_seen": "2026-03-31",
+      "current_status": "new",
+      "title": "Offsite ATMs declining -0.2% MoM \u2014 rural cash access contracting"
+    },
+    "gap-pos-concentration": {
+      "id": "gap-pos-concentration",
+      "pipeline": "atm_pos",
+      "domain": "market_structure",
+      "type": "gap",
+      "first_seen": "2026-03-31",
+      "current_status": "new",
+      "title": "Top 5 banks hold 93.1% of POS terminals \u2014 acquiring market concentrated"
+    }
+  }
+}

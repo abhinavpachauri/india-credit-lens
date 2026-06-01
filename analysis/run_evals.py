@@ -20,6 +20,8 @@ Checks run (in order):
   2d. validate_annotation_basis.py  on annotations_merged.ts + rbi_sibc.ts (live)
                                      FAIL if inference/hypothesis annotation has no basis.inferences
                                      FAIL if data annotation has no basis.facts
+  2e. validate_signal_history.py    on analysis/signals/registry.json + history/
+                                     FAIL if schema invalid, orphan IDs, or status mismatch
   3.  validate_annotations.py       on web/lib/reports/rbi_sibc.ts  (live)
   3b. validate_web_series.py        CSV+overrides vs sections_merged.json + annotation effects
   4.  validate.py                   on rbi_sibc/<period>/system_model.json
@@ -497,6 +499,21 @@ def main():
         summary_lines = [l.strip() for l in out.splitlines() if "PASS" in l or "FAIL" in l]
         notes = summary_lines[0][:55] if summary_lines else "passed"
     results.append(("2d. annotation basis completeness", passed, notes))
+    if not passed:
+        print(out)
+        print(err, file=sys.stderr)
+
+    # ── Check 2e: signal history integrity ────────────────────────────────────
+    passed, out, err = run_check(
+        "signal_history",
+        [sys.executable, str(ANALYSIS / "validate_signal_history.py")],
+        cwd=REPO_ROOT,
+    )
+    notes = one_line_summary(out, err, passed)
+    if passed:
+        summary_lines = [l.strip() for l in out.splitlines() if "passed" in l.lower() or "FAIL" in l]
+        notes = summary_lines[0][:60] if summary_lines else "passed"
+    results.append(("2e. signal history integrity", passed, notes))
     if not passed:
         print(out)
         print(err, file=sys.stderr)

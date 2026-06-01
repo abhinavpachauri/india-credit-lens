@@ -81,6 +81,8 @@ SIBC .xlsx
     │  → rbi_sibc/merged/insights.md
     │  → rbi_sibc/merged/gaps.md
     │  → rbi_sibc/merged/opportunities.md
+    │  → rbi_sibc/merged/signal_snapshot.json    signal status per ID for this period
+    │                                             (used by generate_signal_history.py append)
     │
     │  UPDATE (interim months — additive only):
     │  → rbi_sibc/merged/system_model.json       update stats + add new nodes only
@@ -90,6 +92,7 @@ SIBC .xlsx
     │  → rbi_sibc/merged/insights.md
     │  → rbi_sibc/merged/gaps.md
     │  → rbi_sibc/merged/opportunities.md
+    │  → rbi_sibc/merged/signal_snapshot.json    signal status per ID for this period
     │
     ▼
 [Stage 6] run_evals.py --period merged --merged (gate)
@@ -103,6 +106,8 @@ SIBC .xlsx
     │  Check 2d:  validate_annotation_basis.py — basis completeness on merged + live annotations
     │             FAIL if inference/hypothesis annotation missing basis.inferences
     │             FAIL if data annotation missing basis.facts
+    │  Check 2e:  validate_signal_history.py — registry.json schema + history file consistency
+    │             FAIL if orphan signal IDs in history, invalid statuses, or current_status mismatch
     │  Check 3:   validate_annotations.py on live rbi_sibc.ts (Checks A–H)
     │  Check 4:   validate.py — system_model.json structure
     │  Check 5:   validate.py --check-subsystems — subsystems.json
@@ -124,6 +129,12 @@ SIBC .xlsx
 [Stage 7] Web + content update
     │  promote_annotations.py              (automated copy + ID verification)
     │  → web/lib/reports/rbi_sibc.ts
+    │
+    │  — Signal history layer —
+    │  python3 analysis/generate_signal_history.py append --pipeline sibc --period {date}
+    │  → analysis/signals/history/sibc.json        (append-only, never edit past entries)
+    │  → analysis/signals/registry.json            (current_status updated for each signal)
+    │  Prerequisite: signal_snapshot.json must exist in rbi_sibc/merged/ (written in Stage 5)
     │
     │  — Newsletter + LinkedIn (see analysis/newsletter/CLAUDE.md) —
     │  Author newsletter_config.json        (from merged system_model + subsystems)
@@ -247,6 +258,7 @@ analysis/
 │   │   ├── system_model.json       ← Causal model (living doc — FOUNDATION or UPDATE)
 │   │   ├── subsystems.json         ← Subsystem map (living doc — append only in UPDATE)
 │   │   ├── annotations_merged.ts   ← Draft annotations (→ web/lib/reports/)
+│   │   ├── signal_snapshot.json    ← Claude writes during Stage 5 (see schema below)
 │   │   ├── insights.md
 │   │   ├── gaps.md
 │   │   └── opportunities.md
@@ -280,9 +292,17 @@ analysis/
 ├── validate_content.py             ← Validator: numbers/dates in annotation bodies (Check 2b)
 ├── validate_claims.py              ← Validator: claim_type + source on system model (Check 2c)
 ├── validate_annotation_basis.py    ← Validator: basis completeness on merged + live annotations (Check 2d)
+├── validate_signal_history.py      ← Validator: registry.json + history/*.json integrity (Check 2e)
 ├── validate.py                     ← Validator: system_model.json + subsystems (Checks 4, 5)
+├── generate_signal_history.py      ← Signal history: append | status | seed commands
 ├── backfill_sibc_basis.py          ← One-time: backfilled basis fields for all 49 annotations (run once)
 ├── run_evals.py                    ← Master eval orchestrator (Stages 3, 6)
+│
+├── signals/
+│   ├── registry.json               ← Universal signal catalog (70+ signals, all pipelines)
+│   └── history/
+│       ├── sibc.json               ← Append-only SIBC signal history (Claude-authored snapshots)
+│       └── atm_pos.json            ← Append-only ATM/POS signal history (auto-derived from insights.json)
 ├── report_analysis_prompt.md       ← Master prompt for all Claude analyses
 │
 └── newsletter/
@@ -427,6 +447,8 @@ Determine mode before starting. Check `is_fy_end` for the incoming file.
 □  python3 analysis/promote_annotations.py --dry-run   (verify no IDs removed)
 □  python3 analysis/promote_annotations.py
 □  python3 analysis/run_evals.py --period merged --merged   (full run with build)
+□  python3 analysis/generate_signal_history.py append --pipeline sibc --period {date}
+   Prerequisite: signal_snapshot.json in rbi_sibc/merged/ (written during Stage 5)
 □  Update analysis/newsletter/signal_registry.json — add history entries for affected signals
 □  Author analysis/newsletter/newsletter_config.json
 □  python3 analysis/newsletter/validate_newsletter_config.py   (gate)
@@ -458,6 +480,8 @@ Determine mode before starting. Check `is_fy_end` for the incoming file.
    — REVIEW the ID diff carefully: any removed IDs must be explicitly justified
 □  python3 analysis/promote_annotations.py
 □  python3 analysis/run_evals.py --period merged --merged   (full run with build)
+□  python3 analysis/generate_signal_history.py append --pipeline sibc --period {date}
+   Prerequisite: signal_snapshot.json in rbi_sibc/merged/ (written during Stage 5)
 □  Update analysis/newsletter/signal_registry.json — add history entries for all signals
 □  Author analysis/newsletter/newsletter_config.json
 □  python3 analysis/newsletter/validate_newsletter_config.py   (gate)
@@ -466,4 +490,108 @@ Determine mode before starting. Check `is_fy_end` for the incoming file.
 □  python3 analysis/newsletter/generate_linkedin.py
 □  Commit per-period outputs, then merged outputs, then web/ separately
 □  git push
+```
+
+---
+
+## Signal History Layer
+
+Cross-pipeline, cross-period signal continuity. Claude's memory across sessions.
+
+### Architecture
+
+```
+analysis/signals/
+  registry.json              — universal signal catalog (all pipelines, all domains)
+  history/
+    sibc.json                — append-only SIBC history (one entry per ingested period)
+    atm_pos.json             — append-only ATM/POS history (auto-derived from insights.json)
+```
+
+### registry.json structure
+
+```json
+{
+  "_meta": { "schema_version": "1.0", "last_updated": "YYYY-MM-DD" },
+  "pipelines": {
+    "sibc":    { "label": "...", "source": "RBI SIBC", "snapshot_path": "..." },
+    "atm_pos": { "label": "...", "source": "RBI ATM/POS", "auto_snapshot": true }
+  },
+  "domains": { "credit_growth": { "description": "..." }, ... },
+  "signals": {
+    "<signal-id>": {
+      "id": "...", "pipeline": "sibc", "domain": "credit_growth",
+      "type": "data", "first_seen": "YYYY-MM-DD",
+      "current_status": "active", "title": "..."
+    }
+  }
+}
+```
+
+### history/{pipeline}.json structure
+
+```json
+{
+  "_meta": { "pipeline": "sibc", "schema_version": "1.0", "entry_count": 2 },
+  "entries": [
+    {
+      "period": "YYYY-MM-DD",
+      "appended_at": "ISO8601",
+      "signals": {
+        "<signal-id>": { "status": "active", "note": "optional free-text" }
+      }
+    }
+  ]
+}
+```
+
+### signal_snapshot.json (SIBC — Claude writes during Stage 5)
+
+Location: `analysis/rbi_sibc/merged/signal_snapshot.json`
+
+```json
+{
+  "period": "YYYY-MM-DD",
+  "signals": {
+    "<signal-id>": {
+      "status": "active",
+      "note": "optional free-text summary of what changed this period"
+    }
+  }
+}
+```
+
+**Status values:** `new` | `active` | `strengthening` | `weakening` | `reversed` | `absent` | `unknown`
+
+- `new` — first period this signal appears
+- `active` — signal persists, no meaningful directional change
+- `strengthening` — signal is intensifying (growth accelerating, spread widening, etc.)
+- `weakening` — signal is fading but still present
+- `reversed` — signal has turned (growth → contraction, or vice versa)
+- `absent` — signal was tracked but does not appear in this period's data
+- `unknown` — not yet assessed for this period
+
+### Adding a new pipeline to signal history
+
+1. Add entry to `registry.json` → `pipelines`
+2. Add all signals for that pipeline to `registry.json` → `signals`
+3. Create `analysis/signals/history/{pipeline}.json` with empty scaffold
+4. If auto-derivable: set `auto_snapshot: true` in pipeline entry — `generate_signal_history.py append` reads from the pipeline's insights file
+5. If Claude-authored: set `snapshot_path` in pipeline entry — Claude writes `signal_snapshot.json` during analysis, then run `generate_signal_history.py append`
+6. Wire `generate_signal_history.py append` into the pipeline's eval gate (after insights validation)
+
+### Commands
+
+```bash
+# Append ATM/POS period (auto-derived from atm_pos_insights.json)
+python3 analysis/generate_signal_history.py append --pipeline atm_pos --period 2026-03-31
+
+# Append SIBC period (reads rbi_sibc/merged/signal_snapshot.json)
+python3 analysis/generate_signal_history.py append --pipeline sibc --period 2026-03-30
+
+# Print current signal states across all pipelines
+python3 analysis/generate_signal_history.py status
+
+# Validate registry + history file integrity
+python3 analysis/validate_signal_history.py
 ```
