@@ -1,14 +1,14 @@
 /**
- * Section chart data layer — lightweight slice of report data for sparklines.
+ * Section chart data layer — full chart slice for opportunity cards.
  *
- * Returns a Map<sectionId, SectionChartSlice> for any pipeline.
+ * Returns a Map<pipeline:sectionId, SectionChartSlice> for any pipeline.
  * SIBC: loads from rbi_sibc.ts (full report, CSV fetch — browser-cached after
  *       first dashboard visit)
  * ATM/POS: stub returning empty map — extend when ATM/POS opportunities exist
  *
  * Usage:
  *   const charts = await loadSectionChartMap();
- *   const slice  = charts.get("bankCredit");   // → { absoluteData, seriesNames }
+ *   const slice  = charts.get(chartKey("sibc", "bankCredit"));
  */
 
 import type { ChartPoint } from "@/lib/types";
@@ -16,14 +16,18 @@ import type { ChartPoint } from "@/lib/types";
 // ── Public types ──────────────────────────────────────────────────────────────
 
 export interface SectionChartSlice {
-  absoluteData: ChartPoint[];
-  seriesNames:  string[];
+  absoluteData:             ChartPoint[];
+  growthData:               ChartPoint[];
+  fyData:                   ChartPoint[];
+  seriesNames:              string[];
+  distributionSeriesNames?: string[];   // subset used by distribution chart
+  pctLabel:                 string;
 }
 
-/** Keyed by pipeline:sectionId — avoids collisions when ATM/POS opps land. */
+/** Keyed by pipeline:sectionId — avoids collisions across pipelines. */
 export type SectionChartMap = Map<string, SectionChartSlice>;
 
-/** Canonical key for a given opportunity. */
+/** Canonical lookup key for a given opportunity. */
 export function chartKey(pipeline: string, sectionId: string): string {
   return `${pipeline}:${sectionId}`;
 }
@@ -31,15 +35,17 @@ export function chartKey(pipeline: string, sectionId: string): string {
 // ── SIBC loader ───────────────────────────────────────────────────────────────
 
 async function loadSibcChartMap(): Promise<SectionChartMap> {
-  // Dynamic import avoids pulling the full rbi_sibc module into the initial
-  // bundle for pages that don't need it.
   const { loadReport } = await import("@/lib/reports/rbi_sibc");
   const report = await loadReport();
   const map: SectionChartMap = new Map();
   for (const section of report.sections) {
     map.set(chartKey("sibc", section.id), {
-      absoluteData: section.absoluteData,
-      seriesNames:  section.seriesNames,
+      absoluteData:            section.absoluteData,
+      growthData:              section.growthData,
+      fyData:                  section.fyData,
+      seriesNames:             section.seriesNames,
+      distributionSeriesNames: section.distributionSeriesNames,
+      pctLabel:                section.pctLabel,
     });
   }
   return map;
