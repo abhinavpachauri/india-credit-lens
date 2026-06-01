@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { loadReport }           from "@/lib/reports/rbi_sibc";
 import { useAppShell }          from "@/components/AppShell";
-import TabBar, { TabId }        from "@/components/TabBar";
 import SectionWithAnnotations   from "@/components/SectionWithAnnotations";
 import NewsletterCTA             from "@/components/NewsletterCTA";
 import type { Report }          from "@/lib/types";
@@ -11,7 +10,6 @@ import type { Report }          from "@/lib/types";
 export default function Dashboard() {
   const { setHeaderMetric } = useAppShell();
   const [report, setReport] = useState<Report | null>(null);
-  const [tab,    setTab]    = useState<TabId>("trend");
 
   useEffect(() => {
     loadReport().then((r) => {
@@ -32,25 +30,21 @@ export default function Dashboard() {
   }
 
   return (
-    <>
-      <TabBar active={tab} onChange={setTab} />
+    <main className="max-w-5xl mx-auto px-4 py-6">
+      {report.sections.map((section) => (
+        <SectionWithAnnotations key={section.id} section={section} />
+      ))}
 
-      <main className="max-w-5xl mx-auto px-4 py-6">
-        {report.sections.map((section) => (
-          <SectionWithAnnotations key={section.id} section={section} tab={tab} />
-        ))}
+      <div className="mt-10 mb-2">
+        <NewsletterCTA variant="banner" />
+      </div>
 
-        <div className="mt-10 mb-2">
-          <NewsletterCTA variant="banner" />
-        </div>
-
-        <footer className="mt-6 pb-8 text-center text-xs" style={{ color: "var(--font-muted)" }}>
-          <p>
-            Source: {report.source} · Values in ₹ Crore ·
-            Latest data: <strong>{report.latestDate}</strong>
-          </p>
-        </footer>
-      </main>
-    </>
+      <footer className="mt-6 pb-8 text-center text-xs" style={{ color: "var(--font-muted)" }}>
+        <p>
+          Source: {report.source} · Values in ₹ Crore ·
+          Latest data: <strong>{report.latestDate}</strong>
+        </p>
+      </footer>
+    </main>
   );
 }

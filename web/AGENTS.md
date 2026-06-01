@@ -87,11 +87,23 @@ Data source: `useSectionInsights(section)` hook — flattens insights / gaps / o
 into a single navigable list. Exposes `ins.flat`, `ins.current`, `ins.enter`, `ins.exit`,
 `ins.next`, `ins.prev`, `ins.highlightConfig`.
 
-Structural order (always):
+Structural order (always) — mirrors payments exactly:
 1. Section heading (icon + `text-sm font-bold` title)
 2. `<InsightCTAStrip>` (if insights exist)
 3. `<InsightCard key={ins.activeIdx}>` (if active)
-4. `<SectionCard accentColor={...} bare>` wrapping chart only
+4. Controls card (hidden in insights mode) — tab buttons + chart-mode radios + IndustryFilter
+5. `<SectionCard accentColor={...} bare>` wrapping chart only
+
+**No global TabBar.** Tab state (`trend` / `distribution`) and chart-mode state
+(`trendMode`: absolute/yoy/fy · `distMode`: absolute/pct) are local to each section.
+`TrendChart` and `DistributionChart` receive `mode` as a prop — they no longer own it.
+
+Controls card (same style as payments):
+- Tab buttons: 📈 Trend · 📊 Distribution
+- Radios (right of divider): change based on active tab
+  - Trend:        Absolute · YoY % · FY Cumul.
+  - Distribution: ₹ Crore  · % Share
+- IndustryFilter row: only for `section.filterable === true`
 
 `SectionCard bare` skips the internal title header — heading is rendered above the card.
 

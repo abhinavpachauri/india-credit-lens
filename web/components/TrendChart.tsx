@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo } from "react"; // useState kept for hidden series toggle
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid,
   Tooltip, ResponsiveContainer,
@@ -16,9 +16,10 @@ interface TrendChartProps {
   fyData:          ChartPoint[];
   seriesNames:     string[];
   pctLabel?:       string;
-  visibleSeries?:  string[];          // optional subset — used by IndustryFilter
-  highlightConfig?: AnnotationEffect | null;  // from active annotation
-  preferredMode?:  "absolute" | "yoy" | "fy" | null; // annotation overrides radio
+  mode:            "absolute" | "yoy" | "fy";  // owned by parent controls card
+  visibleSeries?:  string[];                   // optional subset — used by IndustryFilter
+  highlightConfig?: AnnotationEffect | null;   // from active annotation
+  preferredMode?:  "absolute" | "yoy" | "fy" | null; // annotation overrides parent mode
 }
 
 /** Compute per-series visual style based on active annotation. */
@@ -40,11 +41,9 @@ type ViewMode = "absolute" | "yoy" | "fy";
 
 export default function TrendChart({
   absoluteData, growthData, fyData = [], seriesNames,
-  pctLabel = "% of Total", visibleSeries, highlightConfig, preferredMode,
+  pctLabel = "% of Total", mode, visibleSeries, highlightConfig, preferredMode,
 }: TrendChartProps) {
-  const [mode, setMode]     = useState<ViewMode>("absolute");
-
-  // When an annotation specifies a preferredMode, use it — otherwise use radio state
+  // When an annotation specifies a preferredMode, use it — otherwise use parent-controlled mode
   const effectiveMode: ViewMode = (preferredMode ?? mode) as ViewMode;
   const [hidden, setHidden] = useState<Set<string>>(new Set());
 
@@ -139,39 +138,8 @@ export default function TrendChart({
     );
   };
 
-  const modeLabel: Record<ViewMode, string> = {
-    absolute: "Absolute",
-    yoy:      "YoY Growth",
-    fy:       "FY Growth",
-  };
-
   return (
     <div>
-      {/* Mode toggle — locked to label in intelligence mode, interactive in explore mode */}
-      <div className="flex flex-wrap gap-4 mb-3 text-sm">
-        {preferredMode || highlightConfig ? (
-          <span style={{ color: "var(--font-muted)" }}>
-            Showing: <strong style={{ color: "var(--font)" }}>{modeLabel[effectiveMode]}</strong>
-          </span>
-        ) : (
-          <div className="flex items-center gap-3">
-            {(["absolute", "yoy", "fy"] as ViewMode[]).map((m) => (
-              <label key={m} className="flex items-center gap-1.5 cursor-pointer" style={{ color: "var(--font)" }}>
-                <input
-                  type="radio"
-                  name={`mode-${activeNames[0] ?? "chart"}`}
-                  value={m}
-                  checked={effectiveMode === m}
-                  onChange={() => setMode(m)}
-                  className="accent-blue-500"
-                />
-                {modeLabel[m]}
-              </label>
-            ))}
-          </div>
-        )}
-      </div>
-
       {/* Legend — not toggleable in intelligence mode */}
       <ChartLegend items={legendItems} onToggle={highlightConfig ? undefined : toggleSeries} />
 

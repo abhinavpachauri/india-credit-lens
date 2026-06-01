@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid,
   Tooltip, ResponsiveContainer,
@@ -14,9 +14,10 @@ interface DistributionChartProps {
   absoluteData:     ChartPoint[];
   seriesNames:      string[];
   pctLabel?:        string;
+  mode:             "absolute" | "pct"; // owned by parent controls card
   visibleSeries?:   string[];
   highlightConfig?: AnnotationEffect | null;
-  preferredMode?:   "absolute" | "yoy" | "fy" | null; // annotation overrides radio
+  preferredMode?:   "absolute" | "yoy" | "fy" | null; // annotation overrides parent mode
 }
 
 function barOpacity(name: string, config: AnnotationEffect | null | undefined): number {
@@ -28,11 +29,10 @@ function barOpacity(name: string, config: AnnotationEffect | null | undefined): 
 }
 
 export default function DistributionChart({
-  absoluteData, seriesNames, pctLabel = "% Share", visibleSeries, highlightConfig, preferredMode,
+  absoluteData, seriesNames, pctLabel = "% Share", mode, visibleSeries, highlightConfig, preferredMode,
 }: DistributionChartProps) {
-  const [mode, setMode] = useState<"absolute" | "pct">("absolute");
-
   // yoy/fy annotations → show % share (relative view); absolute annotation → show ₹ Crore
+  // otherwise use the parent-controlled mode
   const effectiveMode: "absolute" | "pct" =
     preferredMode === "yoy" || preferredMode === "fy" ? "pct"
     : preferredMode === "absolute" ? "absolute"
@@ -52,13 +52,9 @@ export default function DistributionChart({
     [baseNames, highlighted]
   );
 
-  // Auto-reset to absolute when a new annotation activates (user can override after)
-  useEffect(() => {
-    if (highlighted.length > 0) setMode("absolute");
-  }, [highlighted.join(",")]);
-
-  // When focused on highlighted series, use mode (user can switch); otherwise use effectiveMode
-  const chartMode: "absolute" | "pct" = highlighted.length > 0 ? mode : effectiveMode;
+  // When annotation highlights specific series, use effectiveMode (parent-controlled, may be
+  // overridden by preferredMode); otherwise same
+  const chartMode: "absolute" | "pct" = effectiveMode;
 
   const chartData = useMemo(() => {
     if (chartMode === "absolute") return absoluteData;
@@ -102,23 +98,6 @@ export default function DistributionChart({
 
   return (
     <div>
-      {/* Mode toggle */}
-      <div className="flex gap-4 mb-3 text-sm">
-        {(["absolute", "pct"] as const).map((m) => (
-          <label key={m} className="flex items-center gap-1.5 cursor-pointer" style={{ color: "var(--font)" }}>
-            <input
-              type="radio"
-              name={`dist-${activeNames[0] ?? "chart"}`}
-              value={m}
-              checked={chartMode === m}
-              onChange={() => setMode(m)}
-              className="accent-blue-500"
-            />
-            {m === "absolute" ? "₹ Crore" : pctLabel}
-          </label>
-        ))}
-      </div>
-
       <ChartLegend items={legendItems} onToggle={toggleSeries} />
 
       <ResponsiveContainer width="100%" height={320}>
