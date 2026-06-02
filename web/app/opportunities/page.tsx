@@ -166,7 +166,7 @@ function OpportunityCard({
   opp:        Opportunity;
   chartSlice: SectionChartSlice | null;
 }) {
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(true);
 
   return (
     <div
@@ -246,38 +246,59 @@ function OpportunityCard({
             </div>
           )}
 
-          {/* Reasoning toggle */}
+          {/* Reasoning toggle — expanded by default, styled to match InsightCard */}
           {opp.basis?.inferences && opp.basis.inferences.length > 0 && (
-            <div>
+            <div className="mt-3">
               <button
                 onClick={() => setExpanded((x) => !x)}
+                className="flex items-center gap-1.5 text-xs font-semibold"
                 style={{
-                  fontSize:   12,
                   color:      "var(--font-muted)",
-                  background: "transparent",
+                  background: "none",
                   border:     "none",
-                  cursor:     "pointer",
                   padding:    0,
+                  cursor:     "pointer",
                 }}
               >
-                {expanded ? "▾ Hide reasoning" : "▸ Show reasoning"}
+                <span
+                  style={{
+                    display:    "inline-block",
+                    transition: "transform 0.2s",
+                    transform:  expanded ? "rotate(90deg)" : "rotate(0deg)",
+                    fontSize:   9,
+                  }}
+                >
+                  ▶
+                </span>
+                {expanded ? "Hide inference" : "Inference chain"}
               </button>
+
               {expanded && (
-                <ol style={{ marginTop: 8, paddingLeft: 20 }}>
-                  {opp.basis.inferences.map((step, i) => (
-                    <li
-                      key={i}
-                      style={{
-                        fontSize:     13,
-                        color:        "var(--font-muted)",
-                        lineHeight:   1.6,
-                        marginBottom: 4,
-                      }}
-                    >
-                      {step}
-                    </li>
-                  ))}
-                </ol>
+                <div
+                  className="mt-2 rounded-lg text-sm"
+                  style={{
+                    background: `${OPP_COLOR}08`,
+                    border:     `1px solid ${OPP_COLOR}25`,
+                    padding:    "10px 12px",
+                  }}
+                >
+                  <ol
+                    className="flex flex-col gap-2"
+                    style={{ paddingLeft: 0, listStyle: "none", margin: 0 }}
+                  >
+                    {opp.basis.inferences.map((step, i) => (
+                      <li key={i} className="flex gap-2" style={{ lineHeight: 1.6 }}>
+                        <span
+                          className="flex-shrink-0 font-bold"
+                          style={{ color: OPP_COLOR, minWidth: 16 }}
+                        >
+                          {i + 1}.
+                        </span>
+                        <span style={{ color: "var(--font)" }}>{step}</span>
+                      </li>
+                    ))}
+                  </ol>
+                </div>
               )}
             </div>
           )}
