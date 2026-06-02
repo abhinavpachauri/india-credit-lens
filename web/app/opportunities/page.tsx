@@ -157,6 +157,112 @@ function ChartPanel({ slice, sectionId }: { slice: SectionChartSlice; sectionId:
   );
 }
 
+// ── Flip zone: For lenders ↔ Inference chain ─────────────────────────────────
+
+function FlipZone({
+  implication,
+  inferences,
+}: {
+  implication?: string;
+  inferences?:  string[];
+}) {
+  const [showBack,  setShowBack]  = useState(false);
+  const [midFlip,   setMidFlip]   = useState(false);
+  const hasInferences = (inferences?.length ?? 0) > 0;
+
+  const flip = () => {
+    setMidFlip(true);
+    setTimeout(() => {
+      setShowBack((s) => !s);
+      setMidFlip(false);
+    }, 160);
+  };
+
+  if (!implication && !hasInferences) return null;
+
+  return (
+    <div>
+      {/* Divider */}
+      <div style={{ height: 1, background: `${OPP_COLOR}25`, margin: "14px 0" }} />
+
+      {/* Flip container — scaleX 1→0→1 swaps content at midpoint */}
+      <div
+        style={{
+          transition:      "transform 0.16s ease-in, opacity 0.16s",
+          transform:       midFlip ? "scaleX(0)" : "scaleX(1)",
+          opacity:         midFlip ? 0 : 1,
+          transformOrigin: "center",
+        }}
+      >
+        {!showBack ? (
+          /* ── Front: For lenders ── */
+          <div>
+            <p style={{ fontSize: 12, fontWeight: 700, color: OPP_COLOR, marginBottom: 6 }}>
+              For lenders
+            </p>
+            <p style={{ fontSize: 14, color: "var(--font)", lineHeight: 1.65 }}>
+              {implication}
+            </p>
+            {hasInferences && (
+              <button
+                onClick={flip}
+                className="flex items-center gap-1.5 text-xs font-semibold mt-3"
+                style={{
+                  color:      "var(--font-muted)",
+                  background: "none",
+                  border:     "none",
+                  padding:    0,
+                  cursor:     "pointer",
+                }}
+              >
+                <span style={{ fontSize: 11 }}>↺</span>
+                Inference chain
+              </button>
+            )}
+          </div>
+        ) : (
+          /* ── Back: Inference chain ── */
+          <div>
+            <p style={{ fontSize: 12, fontWeight: 700, color: OPP_COLOR, marginBottom: 8 }}>
+              Inference chain
+            </p>
+            <ol
+              className="flex flex-col gap-2"
+              style={{ paddingLeft: 0, listStyle: "none", margin: 0 }}
+            >
+              {inferences!.map((step, i) => (
+                <li key={i} className="flex gap-2" style={{ lineHeight: 1.6 }}>
+                  <span
+                    className="flex-shrink-0 font-bold"
+                    style={{ color: OPP_COLOR, minWidth: 16, fontSize: 14 }}
+                  >
+                    {i + 1}.
+                  </span>
+                  <span style={{ fontSize: 14, color: "var(--font)" }}>{step}</span>
+                </li>
+              ))}
+            </ol>
+            <button
+              onClick={flip}
+              className="flex items-center gap-1.5 text-xs font-semibold mt-3"
+              style={{
+                color:      "var(--font-muted)",
+                background: "none",
+                border:     "none",
+                padding:    0,
+                cursor:     "pointer",
+              }}
+            >
+              <span style={{ fontSize: 11 }}>↺</span>
+              Back
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // ── Opportunity card ──────────────────────────────────────────────────────────
 
 function OpportunityCard({
@@ -166,8 +272,6 @@ function OpportunityCard({
   opp:        Opportunity;
   chartSlice: SectionChartSlice | null;
 }) {
-  const [expanded, setExpanded] = useState(true);
-
   return (
     <div
       id={opp.sectionId}
@@ -226,82 +330,11 @@ function OpportunityCard({
             {opp.body}
           </p>
 
-          {/* Implication */}
-          {opp.implication && (
-            <div
-              style={{
-                background:   `${OPP_COLOR}0D`,
-                border:       `1px solid ${OPP_COLOR}30`,
-                borderRadius: 6,
-                padding:      "10px 14px",
-                marginBottom: 12,
-              }}
-            >
-              <p style={{ fontSize: 12, fontWeight: 600, color: OPP_COLOR, marginBottom: 4 }}>
-                For lenders
-              </p>
-              <p style={{ fontSize: 13, color: "var(--font)", lineHeight: 1.6 }}>
-                {opp.implication}
-              </p>
-            </div>
-          )}
-
-          {/* Reasoning toggle — expanded by default, styled to match InsightCard */}
-          {opp.basis?.inferences && opp.basis.inferences.length > 0 && (
-            <div className="mt-3">
-              <button
-                onClick={() => setExpanded((x) => !x)}
-                className="flex items-center gap-1.5 text-xs font-semibold"
-                style={{
-                  color:      "var(--font-muted)",
-                  background: "none",
-                  border:     "none",
-                  padding:    0,
-                  cursor:     "pointer",
-                }}
-              >
-                <span
-                  style={{
-                    display:    "inline-block",
-                    transition: "transform 0.2s",
-                    transform:  expanded ? "rotate(90deg)" : "rotate(0deg)",
-                    fontSize:   9,
-                  }}
-                >
-                  ▶
-                </span>
-                {expanded ? "Hide inference" : "Inference chain"}
-              </button>
-
-              {expanded && (
-                <div
-                  className="mt-2 rounded-lg text-sm"
-                  style={{
-                    background: `${OPP_COLOR}08`,
-                    border:     `1px solid ${OPP_COLOR}25`,
-                    padding:    "10px 12px",
-                  }}
-                >
-                  <ol
-                    className="flex flex-col gap-2"
-                    style={{ paddingLeft: 0, listStyle: "none", margin: 0 }}
-                  >
-                    {opp.basis.inferences.map((step, i) => (
-                      <li key={i} className="flex gap-2" style={{ lineHeight: 1.6 }}>
-                        <span
-                          className="flex-shrink-0 font-bold"
-                          style={{ color: OPP_COLOR, minWidth: 16 }}
-                        >
-                          {i + 1}.
-                        </span>
-                        <span style={{ color: "var(--font)" }}>{step}</span>
-                      </li>
-                    ))}
-                  </ol>
-                </div>
-              )}
-            </div>
-          )}
+          {/* Flip zone: For lenders ↔ Inference chain */}
+          <FlipZone
+            implication={opp.implication}
+            inferences={opp.basis?.inferences}
+          />
         </div>
 
         {/* ── Right: chart panel ── */}
