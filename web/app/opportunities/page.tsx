@@ -196,8 +196,15 @@ function FlipZone({
       >
         {!showBack ? (
           /* ── Front: For lenders ── */
-          <div>
-            <p style={{ fontSize: 12, fontWeight: 700, color: OPP_COLOR, marginBottom: 6 }}>
+          <div
+            style={{
+              background:   `${OPP_COLOR}0D`,
+              border:       `1px solid ${OPP_COLOR}30`,
+              borderRadius: 8,
+              padding:      "12px 14px",
+            }}
+          >
+            <p style={{ fontSize: 14, fontWeight: 700, color: OPP_COLOR, marginBottom: 6 }}>
               For lenders
             </p>
             <p style={{ fontSize: 14, color: "var(--font)", lineHeight: 1.65 }}>
