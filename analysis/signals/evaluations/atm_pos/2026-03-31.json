@@ -1,0 +1,201 @@
+{
+  "pipeline": "atm_pos",
+  "period": "2026-03-31",
+  "evaluated_at": "2026-06-04T18:14:58",
+  "prompt_version": "1.1",
+  "model": "claude-sonnet-4-5-20250929",
+  "domains": {
+    "infrastructure": {
+      "narrative": "India's payment acceptance infrastructure is undergoing structural bifurcation: banks are consolidating ATMs from offsite (-137 units to 6-period low) to onsite locations (+634 to 6-period high) to cut costs, while POS terminals grow robustly (+104,484 to upper range) despite UPI QR codes outnumbering them 64.7x. Private banks control 82.2% of POS deployment with RBL, Axis, and ICICI holding the top three positions, concentrating merchant acquiring revenue and credit exposure. The QR-to-POS ratio above 64x confirms zero-MDR QR infrastructure as the primary acceptance layer, compressing interchange income but expanding digital payment reach with minimal capital deployment—a dynamic that favours asset-light digital strategies over traditional card infrastructure investments.",
+      "signals": {
+        "atm-offsite-abs": {
+          "observation": "Offsite ATM count stands at 73,693 units, at or near the minimum of the 6-period historical range.",
+          "direction": "Declined by 137 units from prior period (73,830), with status marked as weakening.",
+          "inference": "Banks are actively rationalising offsite ATM footprint, likely driven by rising maintenance costs and migration to digital channels. This contraction at multi-period lows signals a structural shift away from physical cash infrastructure in non-branch locations.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_abs",
+            "record_type": "total",
+            "metric": "atm_offsite"
+          }
+        },
+        "atm-onsite-abs": {
+          "observation": "Onsite ATM count stands at 135,638 units, at or near the maximum of the 6-period historical range.",
+          "direction": "Increased by 634 units from prior period (135,004), with status marked as strengthening.",
+          "inference": "Banks are consolidating ATM infrastructure within branch premises, optimising for cost efficiency while maintaining customer access. The divergence between onsite expansion and offsite contraction reflects a deliberate strategy to reduce standalone ATM operating expenses.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_abs",
+            "record_type": "total",
+            "metric": "atm_onsite"
+          }
+        },
+        "pos-bank-scan": {
+          "observation": "POS terminal deployment across 64 banks shows RBL Bank leading at 2,645,836 units, followed by Axis Bank (2,602,032) and ICICI Bank (2,153,965), with three banks at zero deployment.",
+          "direction": "All 64 entities are active, with a spread of 2,645,836 terminals between top and bottom.",
+          "inference": "POS deployment is highly concentrated among top three private banks (RBL, Axis, ICICI) controlling over 60% of infrastructure, indicating merchant acquisition scale advantages. Zero deployment by Woori Bank, Utkarsh SFB, and Unity SFB reflects either strategic non-participation or nascent market entry, creating credit exposure concentration risk in merchant acquiring.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_bank_scan",
+            "record_type": "bank",
+            "metric": "pos_terminals",
+            "value_type": "value"
+          }
+        },
+        "pos-category-share-scan": {
+          "observation": "Private Sector Banks hold 82.2% share of POS terminals, Public Sector Banks 17.6%, Foreign Banks 0.1%, with Payment Banks and Small Finance Banks at 0.0%.",
+          "direction": "Distribution across 5 categories shows an 82.2 percentage point spread between top and bottom.",
+          "inference": "Private banks dominate merchant acceptance infrastructure with 82.2% share, reflecting superior merchant acquisition capabilities and technology investments. Public sector banks' 17.6% share and near-zero presence of SFBs/Payment Banks signals structural underperformance in digital payment acceptance, limiting their transaction banking revenue potential.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_category_scan_share",
+            "record_type": "bank",
+            "metric": "pos_terminals"
+          }
+        },
+        "pos-terminals-abs": {
+          "observation": "Total POS terminal count stands at 11,769,361 units, positioned above the 75th percentile of the 6-period historical range.",
+          "direction": "Increased by 104,484 units from prior period (11,664,877), with status marked as strengthening.",
+          "inference": "POS infrastructure continues robust expansion at +104,484 units, sustaining upper-range momentum despite UPI's dominance. This growth reflects merchant demand for card acceptance alongside QR codes, supporting interchange revenue streams for issuing banks and validating continued investment in physical acceptance infrastructure.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_abs",
+            "record_type": "total",
+            "metric": "pos_terminals"
+          }
+        },
+        "upi-qr-per-pos": {
+          "observation": "The ratio of UPI QR codes to POS terminals stands at 64.7x, positioned above the 75th percentile of the 6-period historical range.",
+          "direction": "Increased marginally by 0.02x from prior period (64.7x), with status marked as strengthening.",
+          "inference": "UPI QR deployment outpaces POS terminals by 64.7 times, reflecting the zero-MDR advantage and lower deployment cost of QR infrastructure. This extreme ratio confirms QR as the dominant acceptance mode for small merchants, compressing card-based MDR revenue for banks while expanding digital payment breadth at minimal capital intensity.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_ratio",
+            "record_type": "total",
+            "metric": "upi_qr",
+            "denominator_metric": "pos_terminals"
+          }
+        }
+      }
+    },
+    "cards_stock": {
+      "narrative": "India's card stock exhibits a structural bifurcation: Private Sector Banks dominate credit cards with 71% share driven by three issuers (HDFC, ICICI leading), while Public Sector Banks control 62.9% of debit cards reflecting their deposit franchise. The credit card market is oligopolistic with the top three banks holding the majority and multiple institutions at zero issuance, signaling high barriers to unsecured lending scale. Payment Banks' 8.3% debit card share versus 0% credit card presence confirms regulatory and capital constraints separate deposit access from credit underwriting capability.",
+      "signals": {
+        "cc-bank-scan": {
+          "observation": "Credit card outstanding distribution across 64 banks shows HDFC Bank leading with 26,312,515 cards, followed by State Bank of India at 22,098,042 and ICICI Bank at 19,051,092, while three banks (Woori Bank, Ujjivan SFB, UCO Bank) hold zero cards.",
+          "direction": "All 64 entities are active with a spread of 26,312,515 cards between the top issuer and non-issuers, indicating extreme concentration in the top three private and public sector banks.",
+          "inference": "The credit card market exhibits oligopolistic concentration with the top three issuers (HDFC, SBI, ICICI) collectively holding a dominant position, while multiple banks including a public sector bank (UCO) and a small finance bank have exited or never entered credit card issuance, reflecting high barriers to scale and regulatory capital requirements for unsecured lending portfolios.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_bank_scan",
+            "record_type": "bank",
+            "metric": "credit_cards",
+            "value_type": "value"
+          }
+        },
+        "cc-category-share-scan": {
+          "observation": "Private Sector Banks hold 71.0% of credit cards outstanding, Public Sector Banks 23.8%, Foreign Banks 3.7%, Small Finance Banks 1.5%, and Payment Banks 0.0%.",
+          "direction": "The distribution shows a 71.0 percentage point spread between the leading and trailing categories, with Private Sector Banks commanding nearly three times the share of Public Sector Banks.",
+          "inference": "Private banks' 71% dominance in credit cards reflects their superior underwriting infrastructure, digital acquisition capabilities, and customer segmentation targeting higher-income urban borrowers, while Payment Banks remain structurally excluded due to regulatory restrictions on lending. The 23.8% PSB share, despite their larger deposit base, signals weaker credit card monetization and risk appetite in unsecured retail.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_category_scan_share",
+            "record_type": "bank",
+            "metric": "credit_cards"
+          }
+        },
+        "dc-category-share-scan": {
+          "observation": "Public Sector Banks hold 62.9% of debit cards outstanding, Private Sector Banks 25.1%, Payment Banks 8.3%, Small Finance Banks 3.2%, and Foreign Banks 0.4%.",
+          "direction": "The distribution shows a 62.5 percentage point spread, with Public Sector Banks holding 2.5 times the share of Private Sector Banks, a complete reversal of the credit card hierarchy.",
+          "inference": "The debit card market mirrors deposit market structure rather than credit capability, with PSBs' 62.9% share driven by their mass-market CASA base including Jan Dhan accounts and rural penetration, while Payment Banks' 8.3% share (versus 0% in credit cards) reflects their deposit-taking license and focus on basic banking for underbanked segments. This structural divergence between debit and credit card shares confirms that credit card issuance is a function of underwriting sophistication and risk capital, not customer access.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_category_scan_share",
+            "record_type": "bank",
+            "metric": "debit_cards"
+          }
+        }
+      }
+    },
+    "credit_card_txn": {
+      "narrative": "Credit card transaction flows are undergoing a sharp structural pivot: ecommerce has surged to 64.09% of total value (+2.3pp), reaching a historical peak and strengthening, while ATM cash withdrawals have compressed to 0.19%, a six-period low. The 2.3pp ecommerce gain in a single month signals accelerating digital commerce adoption, likely driven by festive/promotional activity, but concentrates credit risk in online channels where fraud and merchant default exposure differ materially from physical POS. Portfolio managers should reassess channel-specific loss rates and MDR economics as the offline-to-online shift accelerates beyond seasonal norms.",
+      "signals": {
+        "cc-atm-val-share": {
+          "observation": "ATM cash withdrawals represent 0.19% of total credit card transaction value in the current period.",
+          "direction": "Share declined by 0.02 percentage points from 0.20% in the prior period, reaching the minimum level observed across the 6-period historical range with active status.",
+          "inference": "Credit card cash advance usage continues to compress to negligible levels, reflecting either tightening issuer controls on cash withdrawal limits or sustained cardholder preference for digital/POS channels. This reduces high-risk revolving exposure but also signals minimal emergency liquidity demand through credit cards.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_ratio_sum",
+            "record_type": "total",
+            "metric": "cc_atm_withdrawal_val",
+            "denominator_metrics": [
+              "cc_pos_txn_val",
+              "cc_ecom_txn_val",
+              "cc_atm_withdrawal_val",
+              "cc_other_txn_val"
+            ]
+          }
+        },
+        "cc-ecom-val-share": {
+          "observation": "Ecommerce transactions account for 64.09% of total credit card transaction value in the current period.",
+          "direction": "Share increased by 2.30 percentage points from 61.79% in the prior period, reaching the maximum level observed across the 6-period historical range with strengthening status.",
+          "inference": "Ecommerce is capturing an accelerating share of credit card spend, crossing 64% and gaining 2.3pp in a single period—a structural shift beyond noise thresholds. This concentration increases issuer exposure to online fraud vectors and platform-specific merchant risk, while POS retail share contracts correspondingly.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_ratio_sum",
+            "record_type": "total",
+            "metric": "cc_ecom_txn_val",
+            "denominator_metrics": [
+              "cc_pos_txn_val",
+              "cc_ecom_txn_val",
+              "cc_atm_withdrawal_val",
+              "cc_other_txn_val"
+            ]
+          }
+        }
+      }
+    },
+    "debit_card_txn": {
+      "narrative": "Debit card transaction flows are undergoing a structural channel shift: ATM cash, despite commanding 87% of value, lost 67bp of share in a single period—the sharpest decline observed—while ecommerce hit a record 4.69% share, up 47bp. This is a zero-sum reallocation within the debit card envelope, with cash withdrawal dominance eroding as digital commerce gains traction. For credit teams, this implies changing fraud vectors (online vs physical), evolving interchange economics, and potential pressure on ATM network investments as utilisation per terminal declines.",
+      "signals": {
+        "dc-atm-val-share": {
+          "observation": "Debit card ATM cash withdrawals account for 86.75% of total debit card transaction value in the current period.",
+          "direction": "Share declined by 0.67 percentage points from 87.42% in the prior period, crossing the ±0.5pp materiality threshold and earning a weakening status.",
+          "inference": "ATM cash remains the dominant debit card use case but is losing ground structurally, likely to digital channels. The 67bp decline in a single period signals accelerating channel migration, with implications for ATM infrastructure ROI and cash management costs for banks.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_ratio_sum",
+            "record_type": "total",
+            "metric": "dc_atm_withdrawal_val",
+            "denominator_metrics": [
+              "dc_atm_withdrawal_val",
+              "dc_pos_txn_val",
+              "dc_ecom_txn_val",
+              "dc_pos_withdrawal_val",
+              "dc_other_txn_val"
+            ]
+          }
+        },
+        "dc-ecom-val-share": {
+          "observation": "Debit card ecommerce transactions represent 4.69% of total debit card transaction value, reaching a historical maximum over the 6-period window.",
+          "direction": "Share increased by 0.47 percentage points from 4.22%, just below the ±0.5pp threshold but sufficient to trigger active status given the upward trajectory to a new peak.",
+          "inference": "Ecommerce is the fastest-growing debit card channel in relative terms, capturing share from ATM cash as digital commerce adoption deepens. While still a small absolute share, the sustained climb to record levels indicates structural behaviour change, particularly relevant for fraud monitoring and interchange revenue mix as online transactions carry different risk and fee profiles than ATM withdrawals.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_ratio_sum",
+            "record_type": "total",
+            "metric": "dc_ecom_txn_val",
+            "denominator_metrics": [
+              "dc_atm_withdrawal_val",
+              "dc_pos_txn_val",
+              "dc_ecom_txn_val",
+              "dc_pos_withdrawal_val",
+              "dc_other_txn_val"
+            ]
+          }
+        }
+      }
+    }
+  }
+}
