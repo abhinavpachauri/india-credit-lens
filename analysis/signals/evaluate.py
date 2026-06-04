@@ -29,8 +29,8 @@ REPO        = Path(__file__).resolve().parent.parent.parent
 PROMPTS_DIR = Path(__file__).parent / "prompts"
 EVALS_DIR   = Path(__file__).parent / "evaluations"
 
-MODEL          = "claude-3-5-haiku-20241022"
-PROMPT_VERSION = "1.0"
+MODEL          = "claude-3-5-sonnet-20241022"
+PROMPT_VERSION = "1.1"
 
 # ── Pipeline context blocks ───────────────────────────────────────────────────
 
