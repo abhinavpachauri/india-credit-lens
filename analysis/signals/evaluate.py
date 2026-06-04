@@ -172,6 +172,68 @@ def _evaluate_domain(pipeline: str, period: str, domain: str,
     return result, False
 
 
+# ── Source reference ─────────────────────────────────────────────────────────
+
+# Canonical source files per pipeline (relative to repo root)
+_SOURCE_FILE: dict[str, str] = {
+    "sibc":    "analysis/rbi_sibc/merged/sections_merged.json",
+    "atm_pos": "web/public/data/atm_pos_consolidated.csv",
+}
+
+
+def _source_ref(sig: dict) -> dict:
+    """
+    Build a source-reference dict from a signal's registry entry.
+    Carries enough information to locate the exact data series in the
+    source file — no values, no interpretation, pure provenance.
+
+    SIBC:    { source_file, section, series }          (1a/1b)
+             { source_file, section, series_a, series_b } (spread)
+    ATM/POS: { source_file, metric, record_type }      (1a)
+             { source_file, metric, record_type, bank_category } (1b/1c)
+             { source_file, metrics, record_type }     (csv_sum_yoy)
+    """
+    pipeline  = sig.get("pipeline", "")
+    compute   = sig.get("compute",  {})
+    sub_layer = sig.get("sub_layer", "1a")
+
+    ref: dict = {
+        "source_file": _SOURCE_FILE.get(pipeline, ""),
+        "method":      compute.get("method", ""),
+    }
+
+    if pipeline == "sibc":
+        if "section" in compute:
+            ref["section"] = compute["section"]
+        if "series" in compute:
+            ref["series"] = compute["series"]
+        # spread signals reference two series
+        if "series_a" in compute:
+            ref["series_a"] = compute["series_a"]
+        if "series_b" in compute:
+            ref["series_b"] = compute["series_b"]
+        if "entity_type" in compute:
+            ref["entity_type"] = compute["entity_type"]
+
+    elif pipeline == "atm_pos":
+        # record_type: 1a/1c scans on total rows; 1b/1c bank-level
+        ref["record_type"] = "bank" if sub_layer in ("1b", "1c") else "total"
+        if "metric" in compute:
+            ref["metric"] = compute["metric"]
+        if "metrics" in compute:           # csv_sum_yoy sums multiple columns
+            ref["metrics"] = compute["metrics"]
+        if "denominator_metric" in compute:
+            ref["denominator_metric"] = compute["denominator_metric"]
+        if "denominator_metrics" in compute:
+            ref["denominator_metrics"] = compute["denominator_metrics"]
+        if "category" in compute:          # 1b named-category signals
+            ref["bank_category"] = compute["category"]
+        if "value_type" in compute:        # csv_bank_scan: "value" vs "yoy"
+            ref["value_type"] = compute["value_type"]
+
+    return ref
+
+
 # ── Main entry point ──────────────────────────────────────────────────────────
 
 def run_evaluate(pipeline: str, period: str,
@@ -215,9 +277,20 @@ def run_evaluate(pipeline: str, period: str,
 
         # Separate signal interpretations from domain narrative
         narrative = result.pop("_domain_narrative", "")
+
+        # Build signal entries: LLM interpretation + source provenance
+        signals_out: dict = {}
+        for sid in signal_ids:
+            if sid not in result:
+                continue
+            sig_entry = dict(result[sid])   # observation / direction / inference
+            sig_def   = registry["signals"].get(sid, {})
+            sig_entry["source_ref"] = _source_ref(sig_def)
+            signals_out[sid] = sig_entry
+
         output["domains"][domain] = {
             "narrative": narrative,
-            "signals":   {sid: result[sid] for sid in signal_ids if sid in result},
+            "signals":   signals_out,
         }
 
         n = len(signal_ids)
