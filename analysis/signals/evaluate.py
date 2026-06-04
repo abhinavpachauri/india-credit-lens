@@ -223,7 +223,7 @@ def _evaluate_domain(pipeline: str, period: str, domain: str,
 
 # Canonical source files per pipeline (relative to repo root)
 _SOURCE_FILE: dict[str, str] = {
-    "sibc":    "analysis/rbi_sibc/merged/sections_merged.json",
+    "sibc":    "web/public/data/rbi_sibc_consolidated.csv",
     "atm_pos": "web/public/data/atm_pos_consolidated.csv",
 }
 
@@ -234,11 +234,13 @@ def _source_ref(sig: dict) -> dict:
     Carries enough information to locate the exact data series in the
     source file — no values, no interpretation, pure provenance.
 
-    SIBC:    { source_file, section, series }          (1a/1b)
-             { source_file, section, series_a, series_b } (spread)
-    ATM/POS: { source_file, metric, record_type }      (1a)
+    SIBC:    { source_file, method, code, statement }            (scalar)
+             { source_file, method, code_a, code_b, statement }  (spread)
+             { source_file, method, parent_code, statement }     (scan)
+             Adds is_psl=true for PSL memo items.
+    ATM/POS: { source_file, metric, record_type }                (1a)
              { source_file, metric, record_type, bank_category } (1b/1c)
-             { source_file, metrics, record_type }     (csv_sum_yoy)
+             { source_file, metrics, record_type }               (csv_sum_yoy)
     """
     pipeline  = sig.get("pipeline", "")
     compute   = sig.get("compute",  {})
@@ -250,17 +252,14 @@ def _source_ref(sig: dict) -> dict:
     }
 
     if pipeline == "sibc":
-        if "section" in compute:
-            ref["section"] = compute["section"]
-        if "series" in compute:
-            ref["series"] = compute["series"]
-        # spread signals reference two series
-        if "series_a" in compute:
-            ref["series_a"] = compute["series_a"]
-        if "series_b" in compute:
-            ref["series_b"] = compute["series_b"]
-        if "entity_type" in compute:
-            ref["entity_type"] = compute["entity_type"]
+        # scalar signals: code + statement
+        for k in ("code", "statement", "code_a", "code_b",
+                  "parent_code", "child_codes", "entity_type",
+                  "denominator_code", "denominator_statement"):
+            if k in compute:
+                ref[k] = compute[k]
+        if compute.get("is_psl"):
+            ref["is_psl"] = True
 
     elif pipeline == "atm_pos":
         # record_type: 1a/1c scans on total rows; 1b/1c bank-level

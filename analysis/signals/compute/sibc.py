@@ -1,81 +1,120 @@
 """
-SIBC compute methods — all algorithmic, no LLM input.
-Source: analysis/rbi_sibc/merged/sections_merged.json
+SIBC compute methods — reads from rbi_sibc_consolidated.csv.
 
-Each method receives (params: dict, period_label: str) and returns list[dict]:
+Single source of truth: same file used by the live dashboard.
+Source: web/public/data/rbi_sibc_consolidated.csv
+
+Each method receives (params, period, df) and returns list[dict]:
   { entity_type, entity_id, value, status, unit }
 
-period_label is the sections_merged.json date label for the target period
-(e.g. "Jan 2026", "Feb 2026", "Mar 2026"). The engine resolves this from
-the dataDate using _build_label_index().
+period: YYYY-MM-DD matching the CSV date column (e.g. "2026-03-31").
+No timeline.json lookup needed — period resolves directly from CSV dates.
 
 Layer 1a methods (aggregate scalars):
-  static_active, series_yoy, series_abs, series_share, multi_series_share,
-  count_positive_yoy, is_max_series, abs_undercount, yoy_spread, yoy_spread_named
+  csv_sector_yoy              — YoY% for a single sector code
+  csv_sector_abs              — Absolute level for a single sector code
+  csv_sector_share            — Sector share of parent
+  csv_sector_yoy_spread       — YoY spread between two sector codes
+  csv_sector_count_positive_yoy — Count of named codes with positive YoY
 
-Layer 1b methods (cross-series scalars within a section):
-  (same methods as 1a, just different params — series_share with section totals, etc.)
+Layer 1b methods (named sub-group scalars):
+  Same methods as 1a — different code/parent_code params
 
-Layer 1c methods (entity-level scans — return one row per entity):
-  section_scan_yoy, section_scan_share
+Layer 1c methods (entity scans — one row per child):
+  csv_sector_scan_yoy         — YoY for every child of a parent code
+  csv_sector_scan_share       — Share for every child of a parent code
+  csv_psl_scan_yoy            — YoY for all PSL memo items
+
+YoY momentum: status rules compare current YoY to prior-period YoY,
+both computed inline from the CSV. No external state required.
 """
 
 from __future__ import annotations
-import json
+
+import calendar
+from datetime import date
 from pathlib import Path
 
-REPO            = Path(__file__).resolve().parent.parent.parent.parent
-SECTIONS_MERGED = REPO / "analysis" / "rbi_sibc" / "merged" / "sections_merged.json"
-TIMELINE        = REPO / "analysis" / "rbi_sibc" / "timeline.json"
+import pandas as pd
 
-_cache: dict | None = None
-_label_map: dict[str, str] | None = None   # dataDate → period_label
+REPO     = Path(__file__).resolve().parent.parent.parent.parent
+CSV      = REPO / "web" / "public" / "data" / "rbi_sibc_consolidated.csv"
+TIMELINE = REPO / "analysis" / "rbi_sibc" / "timeline.json"
+
+_df_cache: pd.DataFrame | None = None
 
 
-def _load() -> dict:
-    global _cache
-    if _cache is None:
-        with open(SECTIONS_MERGED) as f:
-            _cache = json.load(f)
-    return _cache
+def resolve_csv_date(data_date: str) -> str | None:
+    """
+    Map a report dataDate (e.g. '2026-04-30') → csv_date ('2026-03-31').
+    Returns the input unchanged if no matching entry found (allows direct
+    csv_date pass-through when no translation is needed).
+    """
+    import json as _json
+    try:
+        tl = _json.loads(TIMELINE.read_text())
+        for entry in tl.get("periods", []):
+            if entry.get("dataDate") == data_date:
+                return entry.get("csv_date", data_date)
+    except Exception:
+        pass
+    return data_date
+
+
+def _load_df() -> pd.DataFrame:
+    global _df_cache
+    if _df_cache is None:
+        _df_cache = pd.read_csv(CSV, dtype={"code": str, "parent_code": str})
+        _df_cache["date"] = pd.to_datetime(_df_cache["date"]).dt.strftime("%Y-%m-%d")
+        _df_cache["code"]        = _df_cache["code"].fillna("").str.strip()
+        _df_cache["parent_code"] = _df_cache["parent_code"].fillna("").str.strip()
+    return _df_cache
 
 
 def invalidate_cache() -> None:
-    global _cache, _label_map
-    _cache = None
-    _label_map = None
+    global _df_cache
+    _df_cache = None
 
 
-def build_label_map() -> dict[str, str]:
-    """Return {dataDate: period_label} from timeline.json."""
-    global _label_map
-    if _label_map is None:
-        with open(TIMELINE) as f:
-            tl = json.load(f)
-        _label_map = {
-            p["dataDate"]: p["period"]
-            for p in tl.get("periods", [])
-            if p.get("dataDate") and p.get("period")
-        }
-    return _label_map
+# ── Date helpers ──────────────────────────────────────────────────────────────
+
+def _prior_year(period: str, available: set[str]) -> str | None:
+    """Same month, one year prior — returns None if not in available dates."""
+    d = date.fromisoformat(period)
+    py = d.year - 1
+    last_day = calendar.monthrange(py, d.month)[1]
+    candidate = f"{py}-{d.month:02d}-{last_day:02d}"
+    return candidate if candidate in available else None
 
 
-def _section(section_id: str) -> dict | None:
-    return next((s for s in _load().get("sections", []) if s["id"] == section_id), None)
+def _prior_period(period: str, available: set[str]) -> str | None:
+    """Most recent date before period in available set."""
+    sorted_dates = sorted(available)
+    try:
+        idx = sorted_dates.index(period)
+        return sorted_dates[idx - 1] if idx > 0 else None
+    except ValueError:
+        return None
 
 
-def _find_idx(data: list[dict], label: str) -> int | None:
-    """Return the index in data[] whose 'date' matches label (exact or prefix)."""
-    for i, row in enumerate(data):
-        if row.get("date") == label:
-            return i
-        # handle provisional marks like "Feb 2025*"
-        if row.get("date", "").rstrip("*") == label.rstrip("*"):
-            return i
-    return None
+# ── Value lookup ──────────────────────────────────────────────────────────────
 
+def _val(df: pd.DataFrame, date_str: str, code: str,
+         statement: str = "Statement 1", is_psl: bool = False) -> float | None:
+    q = df[(df["date"] == date_str) & (df["code"] == str(code))]
+    if is_psl:
+        q = q[q["is_priority_sector_memo"] == True]   # noqa: E712
+    else:
+        q = q[q["statement"] == statement]
+    rows = q["outstanding_cr"]
+    return float(rows.iloc[0]) if not rows.empty else None
+
+
+# ── Status evaluation ─────────────────────────────────────────────────────────
 
 def _eval_status(rules: list, value: float, prev: float) -> str:
+    if value is None:
+        return "unknown"
     ctx = {"value": value, "prev_value": prev if prev is not None else value}
     for rule in rules:
         cond = rule["if"]
@@ -90,296 +129,272 @@ def _eval_status(rules: list, value: float, prev: float) -> str:
 
 
 def _row(entity_type: str, entity_id: str, value, status: str, unit: str) -> dict:
-    return {"entity_type": entity_type, "entity_id": entity_id,
-            "value": round(float(value), 4) if value is not None else None,
-            "status": status, "unit": unit}
+    return {
+        "entity_type": entity_type,
+        "entity_id":   entity_id,
+        "value":       round(float(value), 4) if value is not None else None,
+        "status":      status,
+        "unit":        unit,
+    }
 
 
 def _unknown() -> list[dict]:
     return [_row("aggregate", "total", None, "unknown", "")]
 
 
-def _get_rows(data: list[dict], label: str) -> tuple[dict, dict]:
+# ── YoY helper (current + prior-period YoY for momentum) ─────────────────────
+
+def _compute_yoy(df: pd.DataFrame, period: str, code: str,
+                 statement: str, avail: set[str],
+                 is_psl: bool = False) -> tuple[float | None, float | None]:
     """
-    Return (current_row, prev_row) for the given label.
-    Falls back to last row if label not found.
+    Returns (yoy, prev_yoy) where prev_yoy is the prior period's YoY —
+    used by status rules to assess acceleration/deceleration.
+    Both computed from CSV without external state.
     """
-    idx = _find_idx(data, label)
-    if idx is None:
-        # label not in data — use latest available
-        idx = len(data) - 1
-    cur  = data[idx]
-    prev = data[idx - 1] if idx > 0 else cur
-    return cur, prev
+    prior_yr = _prior_year(period, avail)
+    if not prior_yr:
+        return None, None
+    v  = _val(df, period,   code, statement, is_psl)
+    pv = _val(df, prior_yr, code, statement, is_psl)
+    if v is None or pv is None or pv == 0:
+        return None, None
+    yoy = (v - pv) / pv * 100
+
+    prev_pd = _prior_period(period, avail)
+    prev_yoy = yoy
+    if prev_pd:
+        prev_yr2 = _prior_year(prev_pd, avail)
+        if prev_yr2:
+            v2  = _val(df, prev_pd,  code, statement, is_psl)
+            pv2 = _val(df, prev_yr2, code, statement, is_psl)
+            if v2 and pv2 and pv2 != 0:
+                prev_yoy = (v2 - pv2) / pv2 * 100
+    return yoy, prev_yoy
 
 
 # ── Layer 1a / 1b scalar methods ──────────────────────────────────────────────
 
-def static_active(params: dict, period_label: str) -> list[dict]:
-    return [_row("aggregate", "total", 1.0, "active", "index")]
-
-
-def series_yoy(params: dict, period_label: str) -> list[dict]:
-    sec = _section(params["section"])
-    if not sec:
+def csv_sector_yoy(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
+    """YoY% for a single sector code. Set is_psl=true in params for PSL memo items."""
+    code   = str(params["code"])
+    stmt   = params.get("statement", "Statement 1")
+    is_psl = bool(params.get("is_psl", False))
+    avail  = set(df["date"].unique())
+    yoy, prev_yoy = _compute_yoy(df, period, code, stmt, avail, is_psl=is_psl)
+    if yoy is None:
         return _unknown()
-    gd = sec.get("growthData", [])
-    if not gd:
-        return _unknown()
-    s = params["series"]
-    cur, prev = _get_rows(gd, period_label)
-    v = cur.get(s)
-    p = prev.get(s)
-    if v is None:
-        return _unknown()
-    return [_row("aggregate", "total", v,
-                 _eval_status(params.get("status_rules", []), v, p if p is not None else v),
+    return [_row("aggregate", "total", yoy,
+                 _eval_status(params.get("status_rules", []), yoy, prev_yoy),
                  "pct")]
 
 
-def series_abs(params: dict, period_label: str) -> list[dict]:
-    sec = _section(params["section"])
-    if not sec:
-        return _unknown()
-    ad = sec.get("absoluteData", [])
-    if not ad:
-        return _unknown()
-    s = params["series"]
-    cur, prev = _get_rows(ad, period_label)
-    v = cur.get(s)
-    p = prev.get(s)
+def csv_sector_abs(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
+    """Absolute outstanding credit for a single sector code."""
+    code   = str(params["code"])
+    stmt   = params.get("statement", "Statement 1")
+    is_psl = bool(params.get("is_psl", False))
+    avail  = set(df["date"].unique())
+    v      = _val(df, period, code, stmt, is_psl=is_psl)
     if v is None:
         return _unknown()
+    prior = _prior_period(period, avail)
+    pv    = _val(df, prior, code, stmt, is_psl=is_psl) if prior else v
+    unit  = params.get("unit", "rs_cr")
     return [_row("aggregate", "total", v,
-                 _eval_status(params.get("status_rules", []), v, p if p is not None else v),
-                 params.get("unit", "lcr_cr"))]
+                 _eval_status(params.get("status_rules", []), v, pv if pv else v),
+                 unit)]
 
 
-def series_share(params: dict, period_label: str) -> list[dict]:
-    sec = _section(params["section"])
-    if not sec:
+def csv_sector_share(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
+    """Sector share of parent sector (%)."""
+    code        = str(params["code"])
+    parent_code = str(params["parent_code"])
+    stmt        = params.get("statement", "Statement 1")
+    avail       = set(df["date"].unique())
+    v   = _val(df, period, code,        stmt)
+    den = _val(df, period, parent_code, stmt)
+    if v is None or den is None or den == 0:
         return _unknown()
-    ad = sec.get("absoluteData", [])
-    if not ad:
-        return _unknown()
-    s    = params["series"]
-    dnom = params.get("denominator_series")
-    cur, prev = _get_rows(ad, period_label)
-
-    def _share(row):
-        num = row.get(s, 0) or 0
-        den = (row.get(dnom, 0) or 0) if dnom else \
-              sum(v for k, v in row.items() if k != "date" and isinstance(v, (int, float)))
-        return (num / den * 100) if den else None
-
-    v = _share(cur)
-    p = _share(prev)
-    if v is None:
-        return _unknown()
-    return [_row("aggregate", "total", v,
-                 _eval_status(params.get("status_rules", []), v, p if p is not None else v),
+    share  = v / den * 100
+    prior  = _prior_period(period, avail)
+    pshare = share
+    if prior:
+        pv  = _val(df, prior, code,        stmt)
+        pdn = _val(df, prior, parent_code, stmt)
+        if pv is not None and pdn and pdn != 0:
+            pshare = pv / pdn * 100
+    return [_row("aggregate", "total", share,
+                 _eval_status(params.get("status_rules", []), share, pshare),
                  "pct")]
 
 
-def multi_series_share(params: dict, period_label: str) -> list[dict]:
-    sec = _section(params["section"])
-    if not sec:
+def csv_sector_yoy_spread(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
+    """YoY spread: code_a growth minus code_b growth (pp)."""
+    code_a = str(params["code_a"])
+    code_b = str(params["code_b"])
+    stmt   = params.get("statement", "Statement 1")
+    avail  = set(df["date"].unique())
+    yoy_a, _ = _compute_yoy(df, period, code_a, stmt, avail)
+    yoy_b, _ = _compute_yoy(df, period, code_b, stmt, avail)
+    if yoy_a is None or yoy_b is None:
         return _unknown()
-    ad = sec.get("absoluteData", [])
-    if not ad:
-        return _unknown()
-    series_list = params["series"]
-    dnom        = params.get("denominator_series")
-    cur, prev   = _get_rows(ad, period_label)
-
-    def _share(row):
-        num = sum(row.get(s, 0) or 0 for s in series_list)
-        den = (row.get(dnom, 0) or 0) if dnom else \
-              sum(v for k, v in row.items() if k != "date" and isinstance(v, (int, float)))
-        return (num / den * 100) if den else None
-
-    v = _share(cur)
-    p = _share(prev)
-    if v is None:
-        return _unknown()
-    return [_row("aggregate", "total", v,
-                 _eval_status(params.get("status_rules", []), v, p if p is not None else v),
-                 "pct")]
-
-
-def count_positive_yoy(params: dict, period_label: str) -> list[dict]:
-    sec = _section(params["section"])
-    if not sec:
-        return _unknown()
-    gd = sec.get("growthData", [])
-    if not gd:
-        return _unknown()
-    cur, prev = _get_rows(gd, period_label)
-    count = sum(1 for k, v in cur.items()  if k != "date" and isinstance(v, (int, float)) and v > 0)
-    pcount= sum(1 for k, v in prev.items() if k != "date" and isinstance(v, (int, float)) and v > 0)
-    return [_row("aggregate", "total", count,
-                 _eval_status(params.get("status_rules", []), count, pcount),
-                 "count")]
-
-
-def is_max_series(params: dict, period_label: str) -> list[dict]:
-    sec = _section(params["section"])
-    if not sec:
-        return _unknown()
-    ad = sec.get("absoluteData", [])
-    if not ad:
-        return _unknown()
-    s = params["series"]
-    cur, _ = _get_rows(ad, period_label)
-    vals   = {k: v for k, v in cur.items() if k != "date" and isinstance(v, (int, float))}
-    if not vals or s not in vals:
-        return _unknown()
-    is_max = 1 if vals[s] == max(vals.values()) else 0
-    return [_row("aggregate", "total", is_max,
-                 _eval_status(params.get("status_rules", []), is_max, is_max),
-                 "index")]
-
-
-def abs_undercount(params: dict, period_label: str) -> list[dict]:
-    num_sec = _section(params["numerator_section"])
-    den_sec = _section(params["denominator_section"])
-    if not num_sec or not den_sec:
-        return _unknown()
-    num_ad = num_sec.get("absoluteData", [])
-    den_ad = den_sec.get("absoluteData", [])
-    if not num_ad or not den_ad:
-        return _unknown()
-    ns = params["numerator_series"]
-    num_cur, num_prev = _get_rows(num_ad, period_label)
-    den_cur, den_prev = _get_rows(den_ad, period_label)
-    numer = num_cur.get(ns)
-    if numer is None:
-        return _unknown()
-    den   = sum(v for k, v in den_cur.items() if k != "date" and isinstance(v, (int, float)))
-    gap   = numer - den
-    pn    = num_prev.get(ns, 0) or 0
-    pd    = sum(v for k, v in den_prev.items() if k != "date" and isinstance(v, (int, float)))
-    pgap  = pn - pd
-    return [_row("aggregate", "total", gap,
-                 _eval_status(params.get("status_rules", []), gap, pgap),
-                 "lcr_cr")]
-
-
-def yoy_spread(params: dict, period_label: str) -> list[dict]:
-    sec = _section(params["section"])
-    if not sec:
-        return _unknown()
-    gd = sec.get("growthData", [])
-    if not gd:
-        return _unknown()
-    cur, prev = _get_rows(gd, period_label)
-    vals  = [v for k, v in cur.items()  if k != "date" and isinstance(v, (int, float))]
-    pvals = [v for k, v in prev.items() if k != "date" and isinstance(v, (int, float))]
-    if len(vals) < 2:
-        return _unknown()
-    spread  = max(vals)  - min(vals)
-    pspread = (max(pvals) - min(pvals)) if len(pvals) >= 2 else spread
+    spread = yoy_a - yoy_b
+    prior  = _prior_period(period, avail)
+    pspread = spread
+    if prior:
+        pa, _ = _compute_yoy(df, prior, code_a, stmt, avail)
+        pb, _ = _compute_yoy(df, prior, code_b, stmt, avail)
+        if pa is not None and pb is not None:
+            pspread = pa - pb
     return [_row("aggregate", "total", spread,
                  _eval_status(params.get("status_rules", []), spread, pspread),
                  "pp")]
 
 
-def yoy_spread_named(params: dict, period_label: str) -> list[dict]:
-    sec = _section(params["section"])
-    if not sec:
-        return _unknown()
-    gd = sec.get("growthData", [])
-    if not gd:
-        return _unknown()
-    a = params["series_a"]
-    b = params["series_b"]
-    cur, prev = _get_rows(gd, period_label)
-    va = cur.get(a)
-    vb = cur.get(b)
-    if va is None or vb is None:
-        return _unknown()
-    spread = va - vb
-    pa = prev.get(a) or va
-    pb = prev.get(b) or vb
-    return [_row("aggregate", "total", spread,
-                 _eval_status(params.get("status_rules", []), spread, pa - pb),
-                 "pp")]
+def csv_sector_count_positive_yoy(params: dict, period: str,
+                                   df: pd.DataFrame) -> list[dict]:
+    """Count of named sector codes with positive YoY growth."""
+    codes = [str(c) for c in params["child_codes"]]
+    stmt  = params.get("statement", "Statement 1")
+    avail = set(df["date"].unique())
+    prior = _prior_period(period, avail)
+
+    count  = sum(1 for c in codes
+                 if (_compute_yoy(df, period, c, stmt, avail)[0] or 0) > 0)
+    pcount = count
+    if prior:
+        pcount = sum(1 for c in codes
+                     if (_compute_yoy(df, prior, c, stmt, avail)[0] or 0) > 0)
+    return [_row("aggregate", "total", count,
+                 _eval_status(params.get("status_rules", []), count, pcount),
+                 "count")]
 
 
-# ── Layer 1c scan methods ─────────────────────────────────────────────────────
+# ── Layer 1c scan methods ──────────────────────────────────────────────────────
 
-def section_scan_yoy(params: dict, period_label: str) -> list[dict]:
-    sec = _section(params["section"])
-    if not sec:
-        return []
-    gd = sec.get("growthData", [])
-    if not gd:
-        return []
-    cur, prev = _get_rows(gd, period_label)
-    rules   = params.get("status_rules", [])
-    exclude = set(params.get("exclude_series", []))
-    entity_type = params.get("entity_type", "section_series")
+def csv_sector_scan_yoy(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
+    """YoY for every child of parent_code at child_level."""
+    parent_code = str(params["parent_code"])
+    stmt        = params.get("statement", "Statement 1")
+    child_level = params.get("child_level", 2)
+    entity_type = params.get("entity_type", "sector")
+    avail       = set(df["date"].unique())
+    exclude     = {str(c) for c in params.get("exclude_codes", [])}
+
+    children = df[
+        (df["date"] == period) &
+        (df["statement"] == stmt) &
+        (df["parent_code"] == parent_code) &
+        (df["level"] == child_level)
+    ]
     out = []
-    for k, v in cur.items():
-        if k == "date" or k in exclude or not isinstance(v, (int, float)):
+    for _, row in children.iterrows():
+        code = str(row["code"])
+        if code in exclude:
             continue
-        pv = prev.get(k, v)
-        out.append(_row(entity_type, k, v,
-                        _eval_status(rules, v, pv if pv is not None else v),
+        yoy, prev_yoy = _compute_yoy(df, period, code, stmt, avail)
+        if yoy is None:
+            continue
+        out.append(_row(entity_type, row["sector"], yoy,
+                        _eval_status(params.get("status_rules", []), yoy, prev_yoy),
                         "pct"))
-    return sorted(out, key=lambda r: r["value"] if r["value"] is not None else -999, reverse=True)
+    return sorted(out, key=lambda r: r["value"] if r["value"] is not None else -999,
+                  reverse=True)
 
 
-def section_scan_share(params: dict, period_label: str) -> list[dict]:
-    sec = _section(params["section"])
-    if not sec:
+def csv_sector_scan_share(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
+    """Share of parent for every child of parent_code at child_level."""
+    parent_code      = str(params["parent_code"])
+    stmt             = params.get("statement", "Statement 1")
+    # Denominator may differ from structural parent (e.g. Statement 2 types → Statement 1 total)
+    denom_code       = str(params.get("denominator_code", parent_code))
+    denom_stmt       = params.get("denominator_statement", stmt)
+    child_level      = params.get("child_level", 2)
+    entity_type      = params.get("entity_type", "sector")
+    avail            = set(df["date"].unique())
+    exclude          = {str(c) for c in params.get("exclude_codes", [])}
+
+    parent_val = _val(df, period, denom_code, denom_stmt)
+    if parent_val is None or parent_val == 0:
         return []
-    ad = sec.get("absoluteData", [])
-    if not ad:
-        return []
-    cur, prev = _get_rows(ad, period_label)
-    rules   = params.get("status_rules", [])
-    exclude = set(params.get("exclude_series", []))
-    entity_type = params.get("entity_type", "section_series")
 
-    total  = sum(v for k, v in cur.items()  if k != "date" and k not in exclude and isinstance(v, (int, float)))
-    ptotal = sum(v for k, v in prev.items() if k != "date" and k not in exclude and isinstance(v, (int, float)))
+    prior       = _prior_period(period, avail)
+    prior_denom = _val(df, prior, denom_code, denom_stmt) if prior else None
+
+    children = df[
+        (df["date"] == period) &
+        (df["statement"] == stmt) &
+        (df["parent_code"] == parent_code) &
+        (df["level"] == child_level)
+    ]
     out = []
-    for k, v in cur.items():
-        if k == "date" or k in exclude or not isinstance(v, (int, float)):
+    for _, row in children.iterrows():
+        code = str(row["code"])
+        if code in exclude:
             continue
-        share  = (v / total * 100) if total else None
-        pv     = prev.get(k, 0) or 0
-        pshare = (pv / ptotal * 100) if ptotal else share
-        out.append(_row(entity_type, k, share,
-                        _eval_status(rules, share, pshare) if share is not None else "unknown",
+        v = _val(df, period, code, stmt)
+        if v is None:
+            continue
+        share  = v / parent_val * 100
+        pshare = share
+        if prior and prior_denom and prior_denom != 0:
+            pv = _val(df, prior, code, stmt)
+            if pv is not None:
+                pshare = pv / prior_denom * 100
+        out.append(_row(entity_type, row["sector"], share,
+                        _eval_status(params.get("status_rules", []), share, pshare),
                         "pct"))
-    return sorted(out, key=lambda r: r["value"] if r["value"] is not None else -999, reverse=True)
+    return sorted(out, key=lambda r: r["value"] if r["value"] is not None else -999,
+                  reverse=True)
+
+
+def csv_psl_scan_yoy(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
+    """YoY for all Priority Sector Lending memo items."""
+    entity_type = params.get("entity_type", "psl_category")
+    avail       = set(df["date"].unique())
+    exclude     = {str(c) for c in params.get("exclude_codes", [])}
+
+    psl_rows = df[
+        (df["date"] == period) &
+        (df["is_priority_sector_memo"] == True)   # noqa: E712
+    ]
+    out = []
+    for _, row in psl_rows.iterrows():
+        code = str(row["code"])
+        if code in exclude:
+            continue
+        yoy, prev_yoy = _compute_yoy(df, period, code, "Statement 1", avail,
+                                      is_psl=True)
+        if yoy is None:
+            continue
+        out.append(_row(entity_type, row["sector"], yoy,
+                        _eval_status(params.get("status_rules", []), yoy, prev_yoy),
+                        "pct"))
+    return sorted(out, key=lambda r: r["value"] if r["value"] is not None else -999,
+                  reverse=True)
 
 
 # ── dispatch ──────────────────────────────────────────────────────────────────
 
 METHODS: dict = {
-    "static_active":       static_active,
-    "series_yoy":          series_yoy,
-    "series_abs":          series_abs,
-    "series_share":        series_share,
-    "multi_series_share":  multi_series_share,
-    "count_positive_yoy":  count_positive_yoy,
-    "is_max_series":       is_max_series,
-    "abs_undercount":      abs_undercount,
-    "yoy_spread":          yoy_spread,
-    "yoy_spread_named":    yoy_spread_named,
-    "section_scan_yoy":    section_scan_yoy,
-    "section_scan_share":  section_scan_share,
+    "csv_sector_yoy":               csv_sector_yoy,
+    "csv_sector_abs":               csv_sector_abs,
+    "csv_sector_share":             csv_sector_share,
+    "csv_sector_yoy_spread":        csv_sector_yoy_spread,
+    "csv_sector_count_positive_yoy": csv_sector_count_positive_yoy,
+    "csv_sector_scan_yoy":          csv_sector_scan_yoy,
+    "csv_sector_scan_share":        csv_sector_scan_share,
+    "csv_psl_scan_yoy":             csv_psl_scan_yoy,
 }
 
 
-def compute(metric_id: str, params: dict, period_label: str = "") -> list[dict]:
+def compute(metric_id: str, params: dict, period: str,
+            df: pd.DataFrame) -> list[dict]:
     fn = METHODS.get(params.get("method", ""))
     if fn is None:
         return _unknown()
     try:
-        return fn(params, period_label) or _unknown()
+        return fn(params, period, df) or _unknown()
     except Exception:
         return _unknown()

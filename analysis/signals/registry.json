@@ -429,11 +429,11 @@
       "layer": 1,
       "sub_layer": "1a",
       "domain": "credit_headline",
-      "spec_version": "1.0",
+      "spec_version": "2.0",
       "compute": {
-        "method": "series_yoy",
-        "section": "bankCredit",
-        "series": "Bank Credit",
+        "method": "csv_sector_yoy",
+        "code": "I",
+        "statement": "Statement 1",
         "status_rules": [
           {
             "if": "value > prev_value and value > 0",
@@ -450,7 +450,7 @@
         ]
       },
       "id": "sibc-bank-credit-yoy",
-      "current_status": "strengthening",
+      "current_status": "active",
       "first_seen": "2024-04-22",
       "type": "data"
     },
@@ -460,11 +460,11 @@
       "layer": 1,
       "sub_layer": "1a",
       "domain": "credit_headline",
-      "spec_version": "1.0",
+      "spec_version": "2.0",
       "compute": {
-        "method": "series_abs",
-        "section": "bankCredit",
-        "series": "Bank Credit",
+        "method": "csv_sector_abs",
+        "code": "I",
+        "statement": "Statement 1",
         "unit": "lcr_cr",
         "status_rules": [
           {
@@ -492,11 +492,11 @@
       "layer": 1,
       "sub_layer": "1a",
       "domain": "credit_headline",
-      "spec_version": "1.0",
+      "spec_version": "2.0",
       "compute": {
-        "method": "series_yoy",
-        "section": "bankCredit",
-        "series": "Non-food Credit",
+        "method": "csv_sector_yoy",
+        "code": "III",
+        "statement": "Statement 1",
         "status_rules": [
           {
             "if": "value > prev_value and value > 0",
@@ -513,7 +513,7 @@
         ]
       },
       "id": "sibc-nonfood-credit-yoy",
-      "current_status": "strengthening",
+      "current_status": "active",
       "first_seen": "2024-04-22",
       "type": "data"
     },
@@ -523,11 +523,11 @@
       "layer": 1,
       "sub_layer": "1a",
       "domain": "credit_headline",
-      "spec_version": "1.0",
+      "spec_version": "2.0",
       "compute": {
-        "method": "series_abs",
-        "section": "bankCredit",
-        "series": "Non-food Credit",
+        "method": "csv_sector_abs",
+        "code": "III",
+        "statement": "Statement 1",
         "unit": "lcr_cr",
         "status_rules": [
           {
@@ -555,10 +555,16 @@
       "layer": 1,
       "sub_layer": "1a",
       "domain": "credit_headline",
-      "spec_version": "1.0",
+      "spec_version": "2.0",
       "compute": {
-        "method": "count_positive_yoy",
-        "section": "mainSectors",
+        "method": "csv_sector_count_positive_yoy",
+        "child_codes": [
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "statement": "Statement 1",
         "status_rules": [
           {
             "if": "value > prev_value",
@@ -589,11 +595,11 @@
       "layer": 1,
       "sub_layer": "1b",
       "domain": "sector_mix",
-      "spec_version": "1.0",
+      "spec_version": "2.0",
       "compute": {
-        "method": "series_yoy",
-        "section": "mainSectors",
-        "series": "Agriculture",
+        "method": "csv_sector_yoy",
+        "code": "1",
+        "statement": "Statement 1",
         "status_rules": [
           {
             "if": "value > prev_value and value > 0",
@@ -620,11 +626,12 @@
       "layer": 1,
       "sub_layer": "1b",
       "domain": "sector_mix",
-      "spec_version": "1.0",
+      "spec_version": "2.0",
       "compute": {
-        "method": "series_share",
-        "section": "mainSectors",
-        "series": "Agriculture",
+        "method": "csv_sector_share",
+        "code": "1",
+        "parent_code": "III",
+        "statement": "Statement 1",
         "status_rules": [
           {
             "if": "value > prev_value + 0.5",
@@ -651,11 +658,11 @@
       "layer": 1,
       "sub_layer": "1b",
       "domain": "sector_mix",
-      "spec_version": "1.0",
+      "spec_version": "2.0",
       "compute": {
-        "method": "series_yoy",
-        "section": "mainSectors",
-        "series": "Industry",
+        "method": "csv_sector_yoy",
+        "code": "2",
+        "statement": "Statement 1",
         "status_rules": [
           {
             "if": "value > prev_value and value > 0",
@@ -682,11 +689,12 @@
       "layer": 1,
       "sub_layer": "1b",
       "domain": "sector_mix",
-      "spec_version": "1.0",
+      "spec_version": "2.0",
       "compute": {
-        "method": "series_share",
-        "section": "mainSectors",
-        "series": "Industry",
+        "method": "csv_sector_share",
+        "code": "2",
+        "parent_code": "III",
+        "statement": "Statement 1",
         "status_rules": [
           {
             "if": "value > prev_value + 0.5",
@@ -713,11 +721,11 @@
       "layer": 1,
       "sub_layer": "1b",
       "domain": "sector_mix",
-      "spec_version": "1.0",
+      "spec_version": "2.0",
       "compute": {
-        "method": "series_yoy",
-        "section": "mainSectors",
-        "series": "Services",
+        "method": "csv_sector_yoy",
+        "code": "3",
+        "statement": "Statement 1",
         "status_rules": [
           {
             "if": "value > prev_value and value > 0",
@@ -744,11 +752,12 @@
       "layer": 1,
       "sub_layer": "1b",
       "domain": "sector_mix",
-      "spec_version": "1.0",
+      "spec_version": "2.0",
       "compute": {
-        "method": "series_share",
-        "section": "mainSectors",
-        "series": "Services",
+        "method": "csv_sector_share",
+        "code": "3",
+        "parent_code": "III",
+        "statement": "Statement 1",
         "status_rules": [
           {
             "if": "value > prev_value + 0.5",
@@ -775,11 +784,11 @@
       "layer": 1,
       "sub_layer": "1b",
       "domain": "sector_mix",
-      "spec_version": "1.0",
+      "spec_version": "2.0",
       "compute": {
-        "method": "series_yoy",
-        "section": "mainSectors",
-        "series": "Personal Loans",
+        "method": "csv_sector_yoy",
+        "code": "4",
+        "statement": "Statement 1",
         "status_rules": [
           {
             "if": "value > prev_value and value > 0",
@@ -806,11 +815,12 @@
       "layer": 1,
       "sub_layer": "1b",
       "domain": "sector_mix",
-      "spec_version": "1.0",
+      "spec_version": "2.0",
       "compute": {
-        "method": "series_share",
-        "section": "mainSectors",
-        "series": "Personal Loans",
+        "method": "csv_sector_share",
+        "code": "4",
+        "parent_code": "III",
+        "statement": "Statement 1",
         "status_rules": [
           {
             "if": "value > prev_value + 0.5",
@@ -837,11 +847,11 @@
       "layer": 1,
       "sub_layer": "1b",
       "domain": "industry",
-      "spec_version": "1.0",
+      "spec_version": "2.0",
       "compute": {
-        "method": "series_yoy",
-        "section": "industryBySize",
-        "series": "Micro and Small",
+        "method": "csv_sector_yoy",
+        "code": "2.1",
+        "statement": "Statement 1",
         "status_rules": [
           {
             "if": "value > prev_value and value > 0",
@@ -868,11 +878,12 @@
       "layer": 1,
       "sub_layer": "1b",
       "domain": "industry",
-      "spec_version": "1.0",
+      "spec_version": "2.0",
       "compute": {
-        "method": "series_share",
-        "section": "industryBySize",
-        "series": "Micro and Small",
+        "method": "csv_sector_share",
+        "code": "2.1",
+        "parent_code": "2",
+        "statement": "Statement 1",
         "status_rules": [
           {
             "if": "value > prev_value + 0.5",
@@ -899,11 +910,11 @@
       "layer": 1,
       "sub_layer": "1b",
       "domain": "industry",
-      "spec_version": "1.0",
+      "spec_version": "2.0",
       "compute": {
-        "method": "series_yoy",
-        "section": "industryBySize",
-        "series": "Medium",
+        "method": "csv_sector_yoy",
+        "code": "2.2",
+        "statement": "Statement 1",
         "status_rules": [
           {
             "if": "value > prev_value and value > 0",
@@ -930,11 +941,12 @@
       "layer": 1,
       "sub_layer": "1b",
       "domain": "industry",
-      "spec_version": "1.0",
+      "spec_version": "2.0",
       "compute": {
-        "method": "series_share",
-        "section": "industryBySize",
-        "series": "Medium",
+        "method": "csv_sector_share",
+        "code": "2.2",
+        "parent_code": "2",
+        "statement": "Statement 1",
         "status_rules": [
           {
             "if": "value > prev_value + 0.5",
@@ -961,11 +973,11 @@
       "layer": 1,
       "sub_layer": "1b",
       "domain": "industry",
-      "spec_version": "1.0",
+      "spec_version": "2.0",
       "compute": {
-        "method": "series_yoy",
-        "section": "industryBySize",
-        "series": "Large",
+        "method": "csv_sector_yoy",
+        "code": "2.3",
+        "statement": "Statement 1",
         "status_rules": [
           {
             "if": "value > prev_value and value > 0",
@@ -992,11 +1004,12 @@
       "layer": 1,
       "sub_layer": "1b",
       "domain": "industry",
-      "spec_version": "1.0",
+      "spec_version": "2.0",
       "compute": {
-        "method": "series_share",
-        "section": "industryBySize",
-        "series": "Large",
+        "method": "csv_sector_share",
+        "code": "2.3",
+        "parent_code": "2",
+        "statement": "Statement 1",
         "status_rules": [
           {
             "if": "value > prev_value + 0.5",
@@ -1023,12 +1036,12 @@
       "layer": 1,
       "sub_layer": "1b",
       "domain": "industry",
-      "spec_version": "1.0",
+      "spec_version": "2.0",
       "compute": {
-        "method": "yoy_spread_named",
-        "section": "industryBySize",
-        "series_a": "Micro and Small",
-        "series_b": "Large",
+        "method": "csv_sector_yoy_spread",
+        "code_a": "2.1",
+        "code_b": "2.3",
+        "statement": "Statement 1",
         "status_rules": [
           {
             "if": "value > prev_value",
@@ -1055,11 +1068,11 @@
       "layer": 1,
       "sub_layer": "1b",
       "domain": "retail",
-      "spec_version": "1.0",
+      "spec_version": "2.0",
       "compute": {
-        "method": "series_yoy",
-        "section": "personalLoans",
-        "series": "Housing",
+        "method": "csv_sector_yoy",
+        "code": "4.2",
+        "statement": "Statement 1",
         "status_rules": [
           {
             "if": "value > prev_value and value > 0",
@@ -1086,11 +1099,12 @@
       "layer": 1,
       "sub_layer": "1b",
       "domain": "retail",
-      "spec_version": "1.0",
+      "spec_version": "2.0",
       "compute": {
-        "method": "series_share",
-        "section": "personalLoans",
-        "series": "Housing",
+        "method": "csv_sector_share",
+        "code": "4.2",
+        "parent_code": "4",
+        "statement": "Statement 1",
         "status_rules": [
           {
             "if": "value > prev_value + 0.5",
@@ -1117,11 +1131,11 @@
       "layer": 1,
       "sub_layer": "1b",
       "domain": "retail",
-      "spec_version": "1.0",
+      "spec_version": "2.0",
       "compute": {
-        "method": "series_yoy",
-        "section": "personalLoans",
-        "series": "Gold Loans",
+        "method": "csv_sector_yoy",
+        "code": "4.8",
+        "statement": "Statement 1",
         "status_rules": [
           {
             "if": "value > prev_value and value > 0",
@@ -1148,11 +1162,12 @@
       "layer": 1,
       "sub_layer": "1b",
       "domain": "retail",
-      "spec_version": "1.0",
+      "spec_version": "2.0",
       "compute": {
-        "method": "series_share",
-        "section": "personalLoans",
-        "series": "Gold Loans",
+        "method": "csv_sector_share",
+        "code": "4.8",
+        "parent_code": "4",
+        "statement": "Statement 1",
         "status_rules": [
           {
             "if": "value > prev_value + 0.5",
@@ -1179,11 +1194,11 @@
       "layer": 1,
       "sub_layer": "1b",
       "domain": "retail",
-      "spec_version": "1.0",
+      "spec_version": "2.0",
       "compute": {
-        "method": "series_yoy",
-        "section": "personalLoans",
-        "series": "Credit Card Outstanding",
+        "method": "csv_sector_yoy",
+        "code": "4.5",
+        "statement": "Statement 1",
         "status_rules": [
           {
             "if": "value > prev_value and value > 0",
@@ -1210,11 +1225,12 @@
       "layer": 1,
       "sub_layer": "1b",
       "domain": "retail",
-      "spec_version": "1.0",
+      "spec_version": "2.0",
       "compute": {
-        "method": "series_share",
-        "section": "personalLoans",
-        "series": "Credit Card Outstanding",
+        "method": "csv_sector_share",
+        "code": "4.5",
+        "parent_code": "4",
+        "statement": "Statement 1",
         "status_rules": [
           {
             "if": "value > prev_value + 0.5",
@@ -1241,11 +1257,11 @@
       "layer": 1,
       "sub_layer": "1b",
       "domain": "retail",
-      "spec_version": "1.0",
+      "spec_version": "2.0",
       "compute": {
-        "method": "series_yoy",
-        "section": "personalLoans",
-        "series": "Vehicle Loans",
+        "method": "csv_sector_yoy",
+        "code": "4.7",
+        "statement": "Statement 1",
         "status_rules": [
           {
             "if": "value > prev_value and value > 0",
@@ -1272,11 +1288,11 @@
       "layer": 1,
       "sub_layer": "1b",
       "domain": "retail",
-      "spec_version": "1.0",
+      "spec_version": "2.0",
       "compute": {
-        "method": "series_yoy",
-        "section": "personalLoans",
-        "series": "Education",
+        "method": "csv_sector_yoy",
+        "code": "4.6",
+        "statement": "Statement 1",
         "status_rules": [
           {
             "if": "value > prev_value and value > 0",
@@ -1303,11 +1319,12 @@
       "layer": 1,
       "sub_layer": "1b",
       "domain": "psl",
-      "spec_version": "1.0",
+      "spec_version": "2.0",
       "compute": {
-        "method": "series_yoy",
-        "section": "prioritySector",
-        "series": "Agriculture",
+        "method": "csv_sector_yoy",
+        "code": "i",
+        "statement": "Statement 1",
+        "is_psl": true,
         "status_rules": [
           {
             "if": "value > prev_value and value > 0",
@@ -1334,11 +1351,12 @@
       "layer": 1,
       "sub_layer": "1b",
       "domain": "psl",
-      "spec_version": "1.0",
+      "spec_version": "2.0",
       "compute": {
-        "method": "series_yoy",
-        "section": "prioritySector",
-        "series": "Micro and Small Enterprises",
+        "method": "csv_sector_yoy",
+        "code": "ii",
+        "statement": "Statement 1",
+        "is_psl": true,
         "status_rules": [
           {
             "if": "value > prev_value and value > 0",
@@ -1365,11 +1383,12 @@
       "layer": 1,
       "sub_layer": "1b",
       "domain": "psl",
-      "spec_version": "1.0",
+      "spec_version": "2.0",
       "compute": {
-        "method": "series_yoy",
-        "section": "prioritySector",
-        "series": "Housing",
+        "method": "csv_sector_yoy",
+        "code": "iv",
+        "statement": "Statement 1",
+        "is_psl": true,
         "status_rules": [
           {
             "if": "value > prev_value and value > 0",
@@ -1396,11 +1415,12 @@
       "layer": 1,
       "sub_layer": "1b",
       "domain": "psl",
-      "spec_version": "1.0",
+      "spec_version": "2.0",
       "compute": {
-        "method": "series_yoy",
-        "section": "prioritySector",
-        "series": "Renewable Energy",
+        "method": "csv_sector_yoy",
+        "code": "vi",
+        "statement": "Statement 1",
+        "is_psl": true,
         "status_rules": [
           {
             "if": "value > prev_value and value > 0",
@@ -1427,10 +1447,12 @@
       "layer": 1,
       "sub_layer": "1c",
       "domain": "industry",
-      "spec_version": "1.0",
+      "spec_version": "2.0",
       "compute": {
-        "method": "section_scan_yoy",
-        "section": "industryByType",
+        "method": "csv_sector_scan_yoy",
+        "parent_code": "2",
+        "child_level": 2,
+        "statement": "Statement 2",
         "entity_type": "industry_type",
         "status_rules": [
           {
@@ -1458,10 +1480,14 @@
       "layer": 1,
       "sub_layer": "1c",
       "domain": "industry",
-      "spec_version": "1.0",
+      "spec_version": "2.0",
       "compute": {
-        "method": "section_scan_share",
-        "section": "industryByType",
+        "method": "csv_sector_scan_share",
+        "parent_code": "2",
+        "child_level": 2,
+        "statement": "Statement 2",
+        "denominator_code": "2",
+        "denominator_statement": "Statement 1",
         "entity_type": "industry_type",
         "status_rules": [
           {
@@ -1489,10 +1515,12 @@
       "layer": 1,
       "sub_layer": "1c",
       "domain": "sector_mix",
-      "spec_version": "1.0",
+      "spec_version": "2.0",
       "compute": {
-        "method": "section_scan_yoy",
-        "section": "services",
+        "method": "csv_sector_scan_yoy",
+        "parent_code": "3",
+        "child_level": 2,
+        "statement": "Statement 1",
         "entity_type": "service_sector",
         "status_rules": [
           {
@@ -1520,10 +1548,12 @@
       "layer": 1,
       "sub_layer": "1c",
       "domain": "sector_mix",
-      "spec_version": "1.0",
+      "spec_version": "2.0",
       "compute": {
-        "method": "section_scan_share",
-        "section": "services",
+        "method": "csv_sector_scan_share",
+        "parent_code": "3",
+        "child_level": 2,
+        "statement": "Statement 1",
         "entity_type": "service_sector",
         "status_rules": [
           {
@@ -1551,10 +1581,12 @@
       "layer": 1,
       "sub_layer": "1c",
       "domain": "retail",
-      "spec_version": "1.0",
+      "spec_version": "2.0",
       "compute": {
-        "method": "section_scan_yoy",
-        "section": "personalLoans",
+        "method": "csv_sector_scan_yoy",
+        "parent_code": "4",
+        "child_level": 2,
+        "statement": "Statement 1",
         "entity_type": "pl_category",
         "status_rules": [
           {
@@ -1582,10 +1614,12 @@
       "layer": 1,
       "sub_layer": "1c",
       "domain": "retail",
-      "spec_version": "1.0",
+      "spec_version": "2.0",
       "compute": {
-        "method": "section_scan_share",
-        "section": "personalLoans",
+        "method": "csv_sector_scan_share",
+        "parent_code": "4",
+        "child_level": 2,
+        "statement": "Statement 1",
         "entity_type": "pl_category",
         "status_rules": [
           {
@@ -1613,10 +1647,9 @@
       "layer": 1,
       "sub_layer": "1c",
       "domain": "psl",
-      "spec_version": "1.0",
+      "spec_version": "2.0",
       "compute": {
-        "method": "section_scan_yoy",
-        "section": "prioritySector",
+        "method": "csv_psl_scan_yoy",
         "entity_type": "psl_category",
         "status_rules": [
           {

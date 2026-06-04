@@ -127,13 +127,13 @@ Use CLI tools for all external service interactions — they are the most contex
 | `analysis/generate_signal_history.py` | Stage 4 (`append`) + Stage 5 (`evaluate`) + `status` + `seed` commands |
 | `analysis/signals/registry.json` | Universal signal catalog — 90 signals, layer 1/2/3 tagged; all Layer 1 signals have compute specs (SIBC + ATM/POS) |
 | `analysis/signals/signals.db` | **Primary signal store** — SQLite; (pipeline, period, metric_id, entity_type, entity_id) fact table + metric_ranges |
-| `analysis/signals/compute/` | Compute engine: engine.py dispatches; sibc.py + atm_pos.py implement all 1a/1b/1c methods |
+| `analysis/signals/compute/` | Compute engine: engine.py dispatches; sibc.py + atm_pos.py implement all 1a/1b/1c methods. Both read from their consolidated CSVs — SIBC from `rbi_sibc_consolidated.csv`, ATM/POS from `atm_pos_consolidated.csv`. SIBC maps `dataDate → csv_date` via `timeline.json` before querying the CSV. |
 | `analysis/signals/db.py` | DB init, schema, refresh_ranges() |
 | `analysis/signals/history/sibc.json` | Human-readable mirror of signals.db for SIBC (not primary) |
 | `analysis/signals/history/atm_pos.json` | Human-readable mirror of signals.db for ATM/POS (not primary) |
 | `analysis/cross_source/catalog.json` | Tuple registry — all declared cross-source pairs (Layer 2b) |
 | `analysis/rbi_atm_pos/merged/system_model.json` | ATM/POS per-source system model (Layer 2a — pending first FOUNDATION) |
-| `analysis/rbi_sibc/timeline.json` | Registry of all ingested periods (includes `is_fy_end` flag) |
+| `analysis/rbi_sibc/timeline.json` | Registry of all ingested periods (includes `is_fy_end`, `dataDate` = report release date, `csv_date` = actual data date matching the consolidated CSV) |
 | `analysis/rbi_sibc/merged/` | Merged outputs (Jan 2024–Mar 2026) — source for live dashboard |
 | `web/lib/reports/rbi_sibc.ts` | Live dashboard annotations (promoted from merged) |
 | `web/CLAUDE.md` | Web-specific context — Next.js, AppShell, DLS components, colour system, mobile rules |

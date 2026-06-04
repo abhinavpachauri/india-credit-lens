@@ -2,6 +2,12 @@
 Compute engine — dispatches to SIBC or ATM/POS methods, writes results to SQLite.
 
 Entry point: run_append(pipeline, period, conn, registry)
+
+Both SIBC and ATM/POS read from their consolidated CSVs:
+  SIBC    → web/public/data/rbi_sibc_consolidated.csv
+  ATM/POS → web/public/data/atm_pos_consolidated.csv
+
+period is always YYYY-MM-DD (the dataDate) for both pipelines.
 """
 
 from __future__ import annotations
@@ -14,21 +20,6 @@ from typing import Any
 from . import sibc as _sibc
 from . import atm_pos as _atm_pos
 from ..db import refresh_ranges
-
-REPO    = Path(__file__).resolve().parent.parent.parent.parent
-CSV     = REPO / "web" / "public" / "data" / "atm_pos_consolidated.csv"
-
-
-def _resolve_period_label(pipeline: str, period: str) -> str:
-    """
-    For SIBC: map dataDate (YYYY-MM-DD) → period label ("Jan 2026" etc.)
-    using the label_map from sibc module.
-    For other pipelines: return period as-is (not used).
-    """
-    if pipeline != "sibc":
-        return period
-    label_map = _sibc.build_label_map()
-    return label_map.get(period, "")   # empty string → _get_rows falls back to latest
 
 
 def _upsert(conn: sqlite3.Connection, pipeline: str, period: str, rows: list[dict]) -> int:
@@ -64,15 +55,19 @@ def run_append(pipeline: str, period: str,
     if not signals:
         return {"metric_count": 0, "row_count": 0, "statuses": {}}
 
-    # Load ATM/POS DataFrame once if needed
-    df = None
-    if pipeline == "atm_pos":
-        import pandas as pd
-        df = _atm_pos._load_df()
+    # Load DataFrames once per pipeline
+    df_sibc    = None
+    df_atm_pos = None
+    if pipeline == "sibc":
+        df_sibc = _sibc._load_df()
+    elif pipeline == "atm_pos":
+        df_atm_pos = _atm_pos._load_df()
+
+    # For SIBC: period (dataDate) → csv_date used for CSV lookup
+    csv_period = _sibc.resolve_csv_date(period) if pipeline == "sibc" else period
 
     all_rows: list[dict] = []
     skipped = 0
-    period_label = _resolve_period_label(pipeline, period)
 
     for sig_id, sig in signals.items():
         compute_spec = sig.get("compute")
@@ -80,12 +75,10 @@ def run_append(pipeline: str, period: str,
             skipped += 1
             continue
 
-        method = compute_spec.get("method", "")
-
         if pipeline == "sibc":
-            rows = _sibc.compute(sig_id, compute_spec, period_label)
+            rows = _sibc.compute(sig_id, compute_spec, csv_period, df_sibc)
         elif pipeline == "atm_pos":
-            rows = _atm_pos.compute(sig_id, compute_spec, period, df)
+            rows = _atm_pos.compute(sig_id, compute_spec, period, df_atm_pos)
         else:
             rows = []
 

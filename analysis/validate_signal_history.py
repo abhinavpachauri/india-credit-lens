@@ -27,7 +27,7 @@ REG   = SIG / "registry.json"
 HIST  = SIG / "history"
 DB    = SIG / "signals.db"
 
-VALID_STATUSES  = {"new", "active", "strengthening", "weakening", "reversed", "absent", "unknown", "pending"}
+VALID_STATUSES  = {"new", "active", "strengthening", "weakening", "declining", "reversed", "absent", "unknown", "pending"}
 REQUIRED_SIG    = {"id", "pipeline", "domain", "type", "first_seen", "current_status", "title"}
 VALID_SIG_TYPES = {"data", "inference", "hypothesis", "insight", "gap", "opportunity"}
 VALID_LAYERS    = {1, 2, 3}

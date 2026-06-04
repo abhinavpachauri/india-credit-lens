@@ -6,9 +6,10 @@ Registry:   analysis/signals/registry.json        — universal signal catalog (
 DB:         analysis/signals/signals.db           — computed signal values (primary store)
 History:    analysis/signals/history/{pipeline}.json — append-only JSON mirror (human-readable)
 Source:
-  SIBC layer 1:   analysis/rbi_sibc/merged/sections_merged.json  — computed algorithmically
-  SIBC layer 2/3: status = "pending" until those layers are implemented
-  ATM/POS layer 1: web/public/data/atm_pos_consolidated.csv      — computed algorithmically
+  SIBC layer 1:    web/public/data/rbi_sibc_consolidated.csv  — computed algorithmically
+                   period (dataDate) resolved to csv_date via analysis/rbi_sibc/timeline.json
+  SIBC layer 2/3:  status = "pending" until those layers are implemented
+  ATM/POS layer 1: web/public/data/atm_pos_consolidated.csv   — computed algorithmically
 
 Layer model
 -----------
@@ -50,12 +51,10 @@ SIG    = ANAL / "signals"
 REG    = SIG / "registry.json"
 HIST   = SIG / "history"
 
-SECTIONS_MERGED = ANAL / "rbi_sibc" / "merged" / "sections_merged.json"
-
 KNOWN_PIPELINES  = {"sibc", "atm_pos"}
 PIPELINE_SOURCES = list(KNOWN_PIPELINES)
 
-VALID_STATUSES = {"new", "active", "strengthening", "weakening", "reversed", "absent", "unknown", "pending"}
+VALID_STATUSES = {"new", "active", "strengthening", "weakening", "declining", "reversed", "absent", "unknown", "pending"}
 
 # ─── helpers ──────────────────────────────────────────────────────────────────
 

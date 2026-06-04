@@ -52,16 +52,17 @@ Applies to every pipeline. Scripts differ; stage purpose and order do not.
            Validate extracted data: schema, required series, value ranges, known banks/sectors
 
 [Stage 3]  Consolidation + Merge
-           All periods → consolidated CSV  (long format, all periods — for charts)
-                      + sections_merged.json (time-series, analysis-ready — for signals)
-           This is the single source of truth for all downstream stages.
+           All periods → rbi_sibc_consolidated.csv (long format — single source of truth for charts + signals)
+                      + sections_merged.json (time-series, analysis-ready — for Layer 2a model + annotations)
+           Both files are produced; the CSV is the canonical data source for signal compute.
 
 [Stage 4]  Layer 1 — signal compute            (every period, always)
            Read compute specs from registry.json
            Compute status + value algorithmically from consolidated data
-             SIBC: reads sections_merged.json by period label (dataDate → label via timeline.json)
+             SIBC:    reads rbi_sibc_consolidated.csv filtered by csv_date
+                      (dataDate → csv_date resolved via timeline.json csv_date field)
              ATM/POS: reads atm_pos_consolidated.csv filtered by report_date
-           Write all entity-level rows to signals.db (INSERT OR REPLACE)
+           Write all entity-level rows to signals.db (INSERT OR REPLACE) with period=dataDate
            Refresh metric_ranges in signals.db for all affected metrics
            Mirror aggregate-level results to signals/history/{pipeline}.json
            No Claude involvement. No exceptions.
@@ -173,24 +174,28 @@ Every signal carries:
   Entity rows stored in DB with entity_type / entity_id. No filtering in compute layer —
   analysis layer extracts top-N / directional / outlier observations via DB queries.
 
-**Layer 1 `compute` spec — SIBC** (reads sections_merged.json by period label):
+**Layer 1 `compute` spec — SIBC** (reads `rbi_sibc_consolidated.csv`, period resolved via `csv_date`):
 ```json
 "compute": {
-  "method": "series_yoy",
-  "section": "bankCredit",
-  "series": "Non-food Credit",
+  "method": "csv_sector_yoy",
+  "code": "III",
+  "statement": "Statement 1",
   "status_rules": [
-    { "if": "value > prev_value and value > 10", "then": "strengthening" },
-    { "if": "value > 10",                        "then": "active" },
-    { "if": "value > 0",                         "then": "weakening" },
-    { "if": "true",                              "then": "reversed" }
+    { "if": "value > prev_value and value > 0", "then": "strengthening" },
+    { "if": "value > 0",                        "then": "active" },
+    { "if": "true",                             "then": "declining" }
   ]
 }
 ```
 
-SIBC compute methods: `series_yoy` | `series_abs` | `series_share` | `multi_series_share` |
-`count_positive_yoy` | `is_max_series` | `abs_undercount` | `yoy_spread` | `yoy_spread_named` |
-`static_active` | `section_scan_yoy` | `section_scan_share`
+Params: `code` = CSV sector code (e.g. "I", "III", "1", "2.1", "4.8", "i" for PSL).
+`statement` = "Statement 1" (main sectors, PSL) or "Statement 2" (industry by type).
+`parent_code` = required for `csv_sector_share` and scan methods.
+`is_psl: true` = filters `is_priority_sector_memo=True` rows.
+
+SIBC compute methods: `csv_sector_yoy` | `csv_sector_abs` | `csv_sector_share` |
+`csv_sector_yoy_spread` | `csv_sector_count_positive_yoy` |
+`csv_sector_scan_yoy` | `csv_sector_scan_share` | `csv_psl_scan_yoy`
 
 **Layer 1 `compute` spec — ATM/POS** (reads atm_pos_consolidated.csv):
 ```json
