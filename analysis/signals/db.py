@@ -63,6 +63,19 @@ CREATE TABLE IF NOT EXISTS ingestion_log (
     row_count    INTEGER,
     computed_at  TEXT    DEFAULT (datetime('now'))
 );
+
+CREATE TABLE IF NOT EXISTS llm_cache (
+    input_hash     TEXT    NOT NULL,
+    prompt_version TEXT    NOT NULL,
+    pipeline       TEXT,
+    period         TEXT,
+    domain         TEXT,
+    result         TEXT    NOT NULL,
+    model          TEXT,
+    tokens_used    INTEGER,
+    created_at     TEXT    DEFAULT (datetime('now')),
+    PRIMARY KEY (input_hash, prompt_version)
+);
 """
 
 

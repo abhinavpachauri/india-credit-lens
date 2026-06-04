@@ -18,10 +18,12 @@ Layer model
 
 Commands
 --------
-  append --pipeline sibc    --period 2026-03-30   Compute SIBC Layer 1 → DB + history JSON
-  append --pipeline atm_pos --period 2026-03-31   Compute ATM/POS Layer 1 → DB + history JSON
-  status                                           Print current signal states (all pipelines)
-  seed                                             (Re)seed registry first_seen from history
+  append   --pipeline sibc    --period 2026-03-30   Compute SIBC Layer 1 → DB + history JSON
+  append   --pipeline atm_pos --period 2026-03-31   Compute ATM/POS Layer 1 → DB + history JSON
+  evaluate --pipeline sibc    --period 2026-03-30   LLM interpret Layer 1 signals → evaluations JSON
+  evaluate --pipeline atm_pos --period 2026-03-31   LLM interpret Layer 1 signals → evaluations JSON
+  status                                             Print current signal states (all pipelines)
+  seed                                               (Re)seed registry first_seen from history
 
 Status values: new | active | strengthening | weakening | reversed | absent | unknown | pending
 
@@ -50,7 +52,8 @@ HIST   = SIG / "history"
 
 SECTIONS_MERGED = ANAL / "rbi_sibc" / "merged" / "sections_merged.json"
 
-KNOWN_PIPELINES = {"sibc", "atm_pos"}
+KNOWN_PIPELINES  = {"sibc", "atm_pos"}
+PIPELINE_SOURCES = list(KNOWN_PIPELINES)
 
 VALID_STATUSES = {"new", "active", "strengthening", "weakening", "reversed", "absent", "unknown", "pending"}
 
@@ -184,6 +187,39 @@ def cmd_append(pipeline: str, period: str) -> int:
     return 0
 
 
+# ─── evaluate command ────────────────────────────────────────────────────────
+
+def cmd_evaluate(pipeline: str, period: str) -> int:
+    """
+    LLM-interpret Layer 1 signals for (pipeline, period).
+    Reads computed values from signals.db, builds domain-grouped context payloads,
+    calls Claude API (temperature=0, hash-cached), and writes structured evaluations to
+    signals/evaluations/{pipeline}/{period}.json.
+
+    Requires ANTHROPIC_API_KEY env var. Safe to re-run — cache hits skip API calls.
+    """
+    if pipeline not in KNOWN_PIPELINES:
+        print(f"ERROR: unknown pipeline '{pipeline}'. Known: {sorted(KNOWN_PIPELINES)}")
+        return 1
+
+    from signals.db import init_db
+    from signals.evaluate import run_evaluate
+
+    registry = load_registry()
+    conn     = init_db()
+
+    print(f"Evaluating Layer 1 signals: {pipeline} / {period} ...")
+    summary = run_evaluate(pipeline, period, conn, registry)
+
+    print(f"\n  ✓ {pipeline} / {period}")
+    print(f"    Domains evaluated  : {summary['domains_evaluated']}")
+    print(f"    Signals interpreted: {summary['signals_interpreted']}")
+    print(f"    API calls          : {summary['api_calls']}")
+    print(f"    Cache hits         : {summary['cache_hits']}")
+    print(f"    Output             : {summary['output_path']}")
+    return 0
+
+
 # ─── status command ───────────────────────────────────────────────────────────
 
 def cmd_status() -> int:
@@ -269,6 +305,10 @@ def main() -> int:
     p_append.add_argument("--pipeline", required=True, help="Pipeline name (sibc, atm_pos, ...)")
     p_append.add_argument("--period",   required=True, help="Period date YYYY-MM-DD")
 
+    p_eval = sub.add_parser("evaluate", help="LLM-interpret Layer 1 signals for a period")
+    p_eval.add_argument("--pipeline", required=True, help="Pipeline name (sibc, atm_pos, ...)")
+    p_eval.add_argument("--period",   required=True, help="Period date YYYY-MM-DD")
+
     sub.add_parser("status", help="Print current signal states across all pipelines")
     sub.add_parser("seed",   help="Backfill registry first_seen from existing history entries")
 
@@ -276,6 +316,8 @@ def main() -> int:
 
     if args.command == "append":
         return cmd_append(args.pipeline, args.period)
+    elif args.command == "evaluate":
+        return cmd_evaluate(args.pipeline, args.period)
     elif args.command == "status":
         return cmd_status()
     elif args.command == "seed":
