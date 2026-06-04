@@ -6,6 +6,13 @@ Tables:
   signals        — computed fact table (pipeline × period × metric × entity)
   metric_ranges  — rolling stats per metric, updated after every append
   ingestion_log  — one row per pipeline/period append run
+
+spec_version on signals:
+  Tracks which version of the signal definition produced each row.
+  Set from registry.json signals[id].spec_version at compute time.
+  When a signal spec changes, bump spec_version in the registry and
+  re-run append for all historical periods — stale rows are identifiable
+  by the old spec_version value.
 """
 
 import sqlite3
@@ -15,16 +22,17 @@ DB_PATH = Path(__file__).parent / "signals.db"
 
 _SCHEMA = """
 CREATE TABLE IF NOT EXISTS signals (
-    pipeline     TEXT    NOT NULL,
-    period       TEXT    NOT NULL,
-    metric_id    TEXT    NOT NULL,
-    entity_type  TEXT    NOT NULL DEFAULT 'aggregate',
-    entity_id    TEXT    NOT NULL DEFAULT 'total',
-    value        REAL,
-    unit         TEXT,
-    status       TEXT,
-    data_status  TEXT    DEFAULT 'provisional',
-    computed_at  TEXT    DEFAULT (datetime('now')),
+    pipeline      TEXT    NOT NULL,
+    period        TEXT    NOT NULL,
+    metric_id     TEXT    NOT NULL,
+    entity_type   TEXT    NOT NULL DEFAULT 'aggregate',
+    entity_id     TEXT    NOT NULL DEFAULT 'total',
+    value         REAL,
+    unit          TEXT,
+    status        TEXT,
+    spec_version  TEXT    DEFAULT '1.0',
+    data_status   TEXT    DEFAULT 'provisional',
+    computed_at   TEXT    DEFAULT (datetime('now')),
     PRIMARY KEY (pipeline, period, metric_id, entity_type, entity_id)
 );
 

@@ -63,14 +63,20 @@ def _total_val(df: pd.DataFrame, period: str, metric: str) -> float | None:
 
 
 def _category_val(df: pd.DataFrame, period: str, metric: str, category: str) -> float | None:
+    """
+    Sum all bank rows for a given bank_category (CSV has one row per bank, no pre-aggregated
+    category rows). Falls back to individual bank_name lookup for bank-level signals.
+    """
     rows = df[(df["report_date"] == period) &
               (df["metric"] == metric) &
               (df["bank_category"] == category) &
-              (df["record_type"] == "bank")]["value"]
-    if rows.empty:
-        rows = df[(df["report_date"] == period) &
-                  (df["metric"] == metric) &
-                  (df["bank_name"] == category)]["value"]
+              (df["record_type"] == "bank")]["value"].dropna()
+    if not rows.empty:
+        return float(rows.sum())
+    # Fallback: individual bank lookup
+    rows = df[(df["report_date"] == period) &
+              (df["metric"] == metric) &
+              (df["bank_name"] == category)]["value"].dropna()
     return float(rows.iloc[0]) if not rows.empty else None
 
 
@@ -101,6 +107,21 @@ def _unknown() -> list[dict]:
 
 
 # ── Layer 1a ──────────────────────────────────────────────────────────────────
+
+def csv_total_abs(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
+    """Absolute value for the total row — no YoY transform."""
+    metric = params["metric"]
+    v = _total_val(df, period, metric)
+    if v is None:
+        return _unknown()
+    avail = set(df["report_date"].unique())
+    prior = _prior_year(period, avail)
+    pv    = _total_val(df, prior, metric) if prior else v
+    unit_rows = df[(df["report_date"] == period) & (df["metric"] == metric)]["unit"]
+    unit = params.get("unit") or (unit_rows.iloc[0] if not unit_rows.empty else "count")
+    return [_row("aggregate", "total", v,
+                 _eval_status(params.get("status_rules", []), v, pv), unit)]
+
 
 def csv_total_yoy(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
     metric  = params["metric"]
@@ -298,6 +319,7 @@ def csv_bank_scan(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
 # ── dispatch ──────────────────────────────────────────────────────────────────
 
 METHODS: dict = {
+    "csv_total_abs":           csv_total_abs,
     "csv_total_yoy":           csv_total_yoy,
     "csv_total_ratio":         csv_total_ratio,
     "csv_ratio_sum":           csv_ratio_sum,

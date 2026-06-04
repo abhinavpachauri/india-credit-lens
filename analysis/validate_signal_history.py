@@ -110,9 +110,9 @@ def check_registry(reg: dict) -> set[str]:
         if sig["current_status"] not in VALID_STATUSES:
             fail(f"registry.signals['{sig_id}'].current_status '{sig['current_status']}' invalid")
 
-        # first_seen format YYYY-MM-DD
-        fs = sig.get("first_seen", "")
-        if len(fs) != 10 or fs[4] != "-" or fs[7] != "-":
+        # first_seen format YYYY-MM-DD (None allowed for signals not yet appended)
+        fs = sig.get("first_seen")
+        if fs is not None and (not isinstance(fs, str) or len(fs) != 10 or fs[4] != "-" or fs[7] != "-"):
             fail(f"registry.signals['{sig_id}'].first_seen '{fs}' is not YYYY-MM-DD")
 
         # layer field

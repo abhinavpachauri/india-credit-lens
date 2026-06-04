@@ -32,45 +32,17 @@
     "infrastructure": "ATM, POS, QR code deployment, utilisation, digital acceptance infrastructure",
     "policy": "PSL, regulatory mandates, RBI policy effects, PSLC trading, PLI schemes",
     "data_quality": "Methodological gaps, reclassifications, double-counting, opacity in source data",
-    "cross_pipeline": "Signals that require data from more than one ingestion source to interpret"
+    "cross_pipeline": "Signals that require data from more than one ingestion source to interpret",
+    "credit_headline": "System-level bank credit — total volume, YoY growth, breadth across sectors",
+    "sector_mix": "Main sector composition — Agriculture, Industry, Services, Personal Loans: YoY and share",
+    "industry": "Industry credit detail — by size (Micro/Small/Medium/Large) and by type (all industry segments)",
+    "retail": "Personal loans detail — Housing, Gold, Credit Cards, Vehicle, Education: YoY and share",
+    "psl": "Priority sector lending — Agriculture, MSME, Housing, Renewable Energy: YoY growth",
+    "cards_stock": "Cards outstanding — credit and debit card counts by issuer category",
+    "credit_card_txn": "Credit card transaction flows — POS, ecommerce, ATM withdrawal: value and channel mix",
+    "debit_card_txn": "Debit card transaction flows — ATM cash, POS, ecommerce: value and channel mix"
   },
   "signals": {
-    "credit-growth-accelerating-fy26": {
-      "id": "credit-growth-accelerating-fy26",
-      "pipeline": "sibc",
-      "domain": "credit_growth",
-      "type": "data",
-      "first_seen": "2026-03-30",
-      "current_status": "strengthening",
-      "title": "FY26 complete: +16.1% YoY — strongest in this data series",
-      "layer": 1,
-      "compute": {
-        "source": "sections_merged.json",
-        "section": "bankCredit",
-        "series": "Bank Credit",
-        "field": "growthData",
-        "method": "series_yoy",
-        "status_rules": [
-          {
-            "if": "value > prev_value and value > 5",
-            "then": "strengthening"
-          },
-          {
-            "if": "value > 5",
-            "then": "active"
-          },
-          {
-            "if": "value > 0",
-            "then": "weakening"
-          },
-          {
-            "if": "true",
-            "then": "reversed"
-          }
-        ]
-      },
-      "sub_layer": "1a"
-    },
     "three-year-credit-trajectory": {
       "id": "three-year-credit-trajectory",
       "pipeline": "sibc",
@@ -80,40 +52,6 @@
       "current_status": "pending",
       "title": "Bank credit added ₹53L Cr in two years — compounding",
       "layer": 2
-    },
-    "nonfood-credit-all-the-signal": {
-      "id": "nonfood-credit-all-the-signal",
-      "pipeline": "sibc",
-      "domain": "credit_growth",
-      "type": "data",
-      "first_seen": "2026-03-30",
-      "current_status": "active",
-      "title": "Non-food credit is the only number that matters",
-      "layer": 1,
-      "compute": {
-        "source": "sections_merged.json",
-        "section": "bankCredit",
-        "series": "Non-food Credit",
-        "field": "absoluteData",
-        "method": "series_share",
-        "note": "Non-food Credit as % of total Bank Credit",
-        "status_rules": [
-          {
-            "if": "value >= 99.5",
-            "then": "active"
-          },
-          {
-            "if": "value >= 99",
-            "then": "weakening"
-          },
-          {
-            "if": "true",
-            "then": "reversed"
-          }
-        ],
-        "denominator_series": "Bank Credit"
-      },
-      "sub_layer": "1a"
     },
     "food-credit-jan-artifact": {
       "id": "food-credit-jan-artifact",
@@ -125,21 +63,6 @@
       "title": "Food credit cycle growing — 5× in two years at March",
       "layer": 2
     },
-    "bankcredit-april-date-convention": {
-      "id": "bankcredit-april-date-convention",
-      "pipeline": "sibc",
-      "domain": "data_quality",
-      "type": "data",
-      "first_seen": "2026-03-30",
-      "current_status": "active",
-      "title": "Bank Credit uses April fortnight dates — treat the dataDate accordingly",
-      "layer": 1,
-      "compute": {
-        "method": "static_active",
-        "note": "Permanent methodology fact — Bank Credit dataDate uses April fortnight convention"
-      },
-      "sub_layer": "1a"
-    },
     "credit-cycle-expansion": {
       "id": "credit-cycle-expansion",
       "pipeline": "sibc",
@@ -149,38 +72,6 @@
       "current_status": "pending",
       "title": "₹29.6L Cr added in one year — largest annual absolute addition",
       "layer": 2
-    },
-    "fy26-all-sectors-synchronised": {
-      "id": "fy26-all-sectors-synchronised",
-      "pipeline": "sibc",
-      "domain": "credit_growth",
-      "type": "data",
-      "first_seen": "2026-03-30",
-      "current_status": "active",
-      "title": "All four main sectors accelerated in FY26 — no laggards",
-      "layer": 1,
-      "compute": {
-        "source": "sections_merged.json",
-        "section": "mainSectors",
-        "field": "growthData",
-        "method": "count_positive_yoy",
-        "note": "Count of 4 main sectors with positive YoY (out of 4)",
-        "status_rules": [
-          {
-            "if": "value == 4",
-            "then": "active"
-          },
-          {
-            "if": "value == 3",
-            "then": "weakening"
-          },
-          {
-            "if": "true",
-            "then": "reversed"
-          }
-        ]
-      },
-      "sub_layer": "1a"
     },
     "services-growth-acceleration": {
       "id": "services-growth-acceleration",
@@ -202,72 +93,6 @@
       "title": "Industry YoY jumped from 8.2% to 15.0% — biggest acceleration",
       "layer": 2
     },
-    "personal-loans-largest-sector": {
-      "id": "personal-loans-largest-sector",
-      "pipeline": "sibc",
-      "domain": "credit_growth",
-      "type": "data",
-      "first_seen": "2026-03-30",
-      "current_status": "active",
-      "title": "Personal Loans: still the largest sector — ₹69.6L Cr",
-      "layer": 1,
-      "compute": {
-        "source": "sections_merged.json",
-        "section": "mainSectors",
-        "series": "Personal Loans",
-        "field": "absoluteData",
-        "method": "is_max_series",
-        "note": "1 if Personal Loans is the largest main sector by outstanding; 0 otherwise",
-        "status_rules": [
-          {
-            "if": "value == 1",
-            "then": "active"
-          },
-          {
-            "if": "true",
-            "then": "reversed"
-          }
-        ]
-      },
-      "sub_layer": "1a"
-    },
-    "main-sectors-undercount": {
-      "id": "main-sectors-undercount",
-      "pipeline": "sibc",
-      "domain": "data_quality",
-      "type": "data",
-      "first_seen": "2026-03-30",
-      "current_status": "strengthening",
-      "title": "Main sector totals undercount system credit by ₹10L Cr+",
-      "layer": 1,
-      "compute": {
-        "source": "sections_merged.json",
-        "method": "abs_undercount",
-        "note": "Gap between Non-food Credit and sum of 4 main sectors (₹ Cr)",
-        "numerator_section": "bankCredit",
-        "numerator_series": "Non-food Credit",
-        "denominator_section": "mainSectors",
-        "status_rules": [
-          {
-            "if": "value > 1000000",
-            "then": "strengthening"
-          },
-          {
-            "if": "value > 500000",
-            "then": "active"
-          },
-          {
-            "if": "value > 100000",
-            "then": "weakening"
-          },
-          {
-            "if": "true",
-            "then": "absent"
-          }
-        ]
-      },
-      "sub_layer": "1a"
-    },
     "services-credit-entry": {
       "id": "services-credit-entry",
       "pipeline": "sibc",
@@ -287,39 +112,6 @@
       "current_status": "pending",
       "title": "Micro & Small: 9.6% → 33.1% YoY over one year — inflection",
       "layer": 2
-    },
-    "large-corporate-stagnant": {
-      "id": "large-corporate-stagnant",
-      "pipeline": "sibc",
-      "domain": "credit_stress",
-      "type": "data",
-      "first_seen": "2026-03-30",
-      "current_status": "active",
-      "title": "Large corporates: +8.9% YoY — weakest industrial borrower",
-      "layer": 1,
-      "compute": {
-        "source": "sections_merged.json",
-        "section": "industryBySize",
-        "series": "Large",
-        "field": "growthData",
-        "method": "series_yoy",
-        "note": "Signal active when Large YoY% is low relative to peers",
-        "status_rules": [
-          {
-            "if": "value < 10",
-            "then": "active"
-          },
-          {
-            "if": "value < 15",
-            "then": "weakening"
-          },
-          {
-            "if": "true",
-            "then": "reversed"
-          }
-        ]
-      },
-      "sub_layer": "1a"
     },
     "medium-enterprise-sweet-spot": {
       "id": "medium-enterprise-sweet-spot",
@@ -401,39 +193,6 @@
       "title": "Bank credit to NBFCs is double-counted in system totals",
       "layer": 2
     },
-    "other-services-opacity": {
-      "id": "other-services-opacity",
-      "pipeline": "sibc",
-      "domain": "data_quality",
-      "type": "data",
-      "first_seen": "2026-03-30",
-      "current_status": "active",
-      "title": "Other Services is ₹12.4L Cr with no breakdown",
-      "layer": 1,
-      "compute": {
-        "source": "sections_merged.json",
-        "section": "services",
-        "series": "Other Services",
-        "field": "absoluteData",
-        "method": "series_abs",
-        "note": "Other Services outstanding (₹ Cr) — active while no sub-breakdown is published",
-        "status_rules": [
-          {
-            "if": "value > 500000",
-            "then": "active"
-          },
-          {
-            "if": "value > 200000",
-            "then": "weakening"
-          },
-          {
-            "if": "true",
-            "then": "absent"
-          }
-        ]
-      },
-      "sub_layer": "1a"
-    },
     "co-lending-infrastructure": {
       "id": "co-lending-infrastructure",
       "pipeline": "sibc",
@@ -494,42 +253,6 @@
       "title": "Consumer durables: -5.3% YoY in FY26 — three consecutive declines",
       "layer": 2
     },
-    "personal-loans-aggregate-hides-divergence": {
-      "id": "personal-loans-aggregate-hides-divergence",
-      "pipeline": "sibc",
-      "domain": "data_quality",
-      "type": "data",
-      "first_seen": "2026-03-30",
-      "current_status": "strengthening",
-      "title": "Personal loans aggregate masks divergent sub-category trends",
-      "layer": 1,
-      "compute": {
-        "source": "sections_merged.json",
-        "section": "personalLoans",
-        "field": "growthData",
-        "method": "yoy_spread",
-        "note": "Spread (pp) between max and min sub-category YoY% in Personal Loans",
-        "status_rules": [
-          {
-            "if": "value > 50",
-            "then": "strengthening"
-          },
-          {
-            "if": "value > 20",
-            "then": "active"
-          },
-          {
-            "if": "value > 10",
-            "then": "weakening"
-          },
-          {
-            "if": "true",
-            "then": "reversed"
-          }
-        ]
-      },
-      "sub_layer": "1a"
-    },
     "gold-loans-reclassification-overstates-demand": {
       "id": "gold-loans-reclassification-overstates-demand",
       "pipeline": "sibc",
@@ -539,39 +262,6 @@
       "current_status": "pending",
       "title": "Gold loans 123% growth overstates real disbursement demand",
       "layer": 2
-    },
-    "other-personal-loans-opacity": {
-      "id": "other-personal-loans-opacity",
-      "pipeline": "sibc",
-      "domain": "data_quality",
-      "type": "data",
-      "first_seen": "2026-03-30",
-      "current_status": "weakening",
-      "title": "Other Personal Loans is 25% of the portfolio — no breakdown",
-      "layer": 1,
-      "compute": {
-        "source": "sections_merged.json",
-        "section": "personalLoans",
-        "series": "Other Personal Loans",
-        "field": "absoluteData",
-        "method": "series_share",
-        "note": "Other Personal Loans as % of total personal loan portfolio outstanding",
-        "status_rules": [
-          {
-            "if": "value > 25",
-            "then": "active"
-          },
-          {
-            "if": "value > 20",
-            "then": "weakening"
-          },
-          {
-            "if": "true",
-            "then": "reversed"
-          }
-        ]
-      },
-      "sub_layer": "1a"
     },
     "gold-loan-market-entry": {
       "id": "gold-loan-market-entry",
@@ -592,42 +282,6 @@
       "current_status": "pending",
       "title": "Vehicle loans +18.6% — EV-specific credit is the new signal",
       "layer": 2
-    },
-    "psl-msme-structural-acceleration": {
-      "id": "psl-msme-structural-acceleration",
-      "pipeline": "sibc",
-      "domain": "policy",
-      "type": "data",
-      "first_seen": "2026-03-30",
-      "current_status": "strengthening",
-      "title": "PSL MSME: +13.4% FY25 → +29.5% FY26 — structural acceleration",
-      "layer": 1,
-      "compute": {
-        "source": "sections_merged.json",
-        "section": "prioritySector",
-        "series": "Micro and Small Enterprises",
-        "field": "growthData",
-        "method": "series_yoy",
-        "status_rules": [
-          {
-            "if": "value > prev_value and value > 20",
-            "then": "strengthening"
-          },
-          {
-            "if": "value > 15",
-            "then": "active"
-          },
-          {
-            "if": "value > 0",
-            "then": "weakening"
-          },
-          {
-            "if": "true",
-            "then": "reversed"
-          }
-        ]
-      },
-      "sub_layer": "1a"
     },
     "psl-housing-anomalous-surge": {
       "id": "psl-housing-anomalous-surge",
@@ -769,1285 +423,1234 @@
       "title": "Basic Metal +19.4% YoY — steel and aluminium capex lending window",
       "layer": 2
     },
-    "cc-ecom-vs-pos-share": {
-      "id": "cc-ecom-vs-pos-share",
-      "pipeline": "atm_pos",
-      "domain": "market_structure",
-      "type": "insight",
-      "first_seen": "2026-03-31",
-      "current_status": "new",
-      "title": "CC ecommerce holds above POS at 50.2% of total CC volume",
+    "sibc-bank-credit-yoy": {
+      "title": "Bank credit YoY growth (%)",
+      "pipeline": "sibc",
       "layer": 1,
       "sub_layer": "1a",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
       "compute": {
-        "method": "csv_ratio_sum",
-        "metric": "cc_ecom_txn_vol",
-        "denominator_metrics": [
-          "cc_ecom_txn_vol",
-          "cc_pos_txn_vol"
-        ],
-        "status_rules": [
-          {
-            "if": "value > 50",
-            "then": "strengthening"
-          },
-          {
-            "if": "value > 40",
-            "then": "active"
-          },
-          {
-            "if": "value > 30",
-            "then": "weakening"
-          },
-          {
-            "if": "true",
-            "then": "reversed"
-          }
-        ]
-      }
+        "method": "series_yoy",
+        "section": "bankCredit",
+        "series": "Bank Credit"
+      },
+      "id": "sibc-bank-credit-yoy",
+      "current_status": "unknown",
+      "first_seen": "2024-04-22",
+      "type": "data"
     },
-    "cc-cards-streak": {
-      "id": "cc-cards-streak",
-      "pipeline": "atm_pos",
-      "domain": "credit_growth",
-      "type": "insight",
-      "first_seen": "2026-03-31",
-      "current_status": "new",
-      "title": "Credit cards outstanding: 5 consecutive months of growth — 118.6M",
+    "sibc-bank-credit-abs": {
+      "title": "Bank credit absolute volume (₹Cr)",
+      "pipeline": "sibc",
       "layer": 1,
       "sub_layer": "1a",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
       "compute": {
-        "method": "csv_total_yoy",
-        "metric": "credit_cards",
-        "status_rules": [
-          {
-            "if": "value > prev_value and value > 10",
-            "then": "strengthening"
-          },
-          {
-            "if": "value > 10",
-            "then": "active"
-          },
-          {
-            "if": "value > 0",
-            "then": "weakening"
-          },
-          {
-            "if": "true",
-            "then": "reversed"
-          }
-        ]
-      }
+        "method": "series_abs",
+        "section": "bankCredit",
+        "series": "Bank Credit",
+        "unit": "lcr_cr"
+      },
+      "id": "sibc-bank-credit-abs",
+      "current_status": "unknown",
+      "first_seen": "2024-04-22",
+      "type": "data"
     },
-    "cc-txn-surge": {
-      "id": "cc-txn-surge",
-      "pipeline": "atm_pos",
-      "domain": "credit_growth",
-      "type": "insight",
-      "first_seen": "2026-03-31",
-      "current_status": "new",
-      "title": "All CC transaction types surged in Mar 2026 — avg 15.8% MoM",
+    "sibc-nonfood-credit-yoy": {
+      "title": "Non-food credit YoY growth (%)",
+      "pipeline": "sibc",
       "layer": 1,
       "sub_layer": "1a",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
       "compute": {
-        "method": "csv_sum_yoy",
-        "metrics": [
-          "cc_pos_txn_vol",
-          "cc_ecom_txn_vol"
-        ],
-        "status_rules": [
-          {
-            "if": "value > 25",
-            "then": "strengthening"
-          },
-          {
-            "if": "value > 15",
-            "then": "active"
-          },
-          {
-            "if": "value > 0",
-            "then": "weakening"
-          },
-          {
-            "if": "true",
-            "then": "reversed"
-          }
-        ]
-      }
+        "method": "series_yoy",
+        "section": "bankCredit",
+        "series": "Non-food Credit"
+      },
+      "id": "sibc-nonfood-credit-yoy",
+      "current_status": "unknown",
+      "first_seen": "2024-04-22",
+      "type": "data"
     },
-    "cc-category-share-shift": {
-      "id": "cc-category-share-shift",
-      "pipeline": "atm_pos",
-      "domain": "market_structure",
-      "type": "insight",
-      "first_seen": "2026-03-31",
-      "current_status": "new",
-      "title": "SFB banks gained CC card share in Mar 2026 (+0.1pp)",
+    "sibc-nonfood-credit-abs": {
+      "title": "Non-food credit absolute volume (₹Cr)",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "series_abs",
+        "section": "bankCredit",
+        "series": "Non-food Credit",
+        "unit": "lcr_cr"
+      },
+      "id": "sibc-nonfood-credit-abs",
+      "current_status": "unknown",
+      "first_seen": "2024-04-22",
+      "type": "data"
+    },
+    "sibc-sectors-positive-yoy-count": {
+      "title": "Number of main sectors with positive YoY (breadth)",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "count_positive_yoy",
+        "section": "mainSectors"
+      },
+      "id": "sibc-sectors-positive-yoy-count",
+      "current_status": "unknown",
+      "first_seen": "2024-04-22",
+      "type": "data"
+    },
+    "sibc-agriculture-yoy": {
+      "title": "Agriculture credit YoY growth (%)",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1b",
+      "domain": "sector_mix",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "series_yoy",
+        "section": "mainSectors",
+        "series": "Agriculture"
+      },
+      "id": "sibc-agriculture-yoy",
+      "current_status": "unknown",
+      "first_seen": "2024-04-22",
+      "type": "data"
+    },
+    "sibc-agriculture-share": {
+      "title": "Agriculture share of total credit (%)",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1b",
+      "domain": "sector_mix",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "series_share",
+        "section": "mainSectors",
+        "series": "Agriculture"
+      },
+      "id": "sibc-agriculture-share",
+      "current_status": "unknown",
+      "first_seen": "2024-04-22",
+      "type": "data"
+    },
+    "sibc-industry-yoy": {
+      "title": "Industry credit YoY growth (%)",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1b",
+      "domain": "sector_mix",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "series_yoy",
+        "section": "mainSectors",
+        "series": "Industry"
+      },
+      "id": "sibc-industry-yoy",
+      "current_status": "unknown",
+      "first_seen": "2024-04-22",
+      "type": "data"
+    },
+    "sibc-industry-share": {
+      "title": "Industry share of total credit (%)",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1b",
+      "domain": "sector_mix",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "series_share",
+        "section": "mainSectors",
+        "series": "Industry"
+      },
+      "id": "sibc-industry-share",
+      "current_status": "unknown",
+      "first_seen": "2024-04-22",
+      "type": "data"
+    },
+    "sibc-services-yoy": {
+      "title": "Services credit YoY growth (%)",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1b",
+      "domain": "sector_mix",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "series_yoy",
+        "section": "mainSectors",
+        "series": "Services"
+      },
+      "id": "sibc-services-yoy",
+      "current_status": "unknown",
+      "first_seen": "2024-04-22",
+      "type": "data"
+    },
+    "sibc-services-share": {
+      "title": "Services share of total credit (%)",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1b",
+      "domain": "sector_mix",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "series_share",
+        "section": "mainSectors",
+        "series": "Services"
+      },
+      "id": "sibc-services-share",
+      "current_status": "unknown",
+      "first_seen": "2024-04-22",
+      "type": "data"
+    },
+    "sibc-personal-loans-yoy": {
+      "title": "Personal loans credit YoY growth (%)",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1b",
+      "domain": "sector_mix",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "series_yoy",
+        "section": "mainSectors",
+        "series": "Personal Loans"
+      },
+      "id": "sibc-personal-loans-yoy",
+      "current_status": "unknown",
+      "first_seen": "2024-04-22",
+      "type": "data"
+    },
+    "sibc-personal-loans-share": {
+      "title": "Personal loans share of total credit (%)",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1b",
+      "domain": "sector_mix",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "series_share",
+        "section": "mainSectors",
+        "series": "Personal Loans"
+      },
+      "id": "sibc-personal-loans-share",
+      "current_status": "unknown",
+      "first_seen": "2024-04-22",
+      "type": "data"
+    },
+    "sibc-msme-micro-small-yoy": {
+      "title": "Micro & Small enterprises credit YoY growth (%)",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1b",
+      "domain": "industry",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "series_yoy",
+        "section": "industryBySize",
+        "series": "Micro and Small"
+      },
+      "id": "sibc-msme-micro-small-yoy",
+      "current_status": "unknown",
+      "first_seen": "2024-04-22",
+      "type": "data"
+    },
+    "sibc-msme-micro-small-share": {
+      "title": "Micro & Small share of industry credit (%)",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1b",
+      "domain": "industry",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "series_share",
+        "section": "industryBySize",
+        "series": "Micro and Small"
+      },
+      "id": "sibc-msme-micro-small-share",
+      "current_status": "unknown",
+      "first_seen": "2024-04-22",
+      "type": "data"
+    },
+    "sibc-msme-medium-yoy": {
+      "title": "Medium enterprises credit YoY growth (%)",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1b",
+      "domain": "industry",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "series_yoy",
+        "section": "industryBySize",
+        "series": "Medium"
+      },
+      "id": "sibc-msme-medium-yoy",
+      "current_status": "unknown",
+      "first_seen": "2024-04-22",
+      "type": "data"
+    },
+    "sibc-msme-medium-share": {
+      "title": "Medium enterprises share of industry credit (%)",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1b",
+      "domain": "industry",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "series_share",
+        "section": "industryBySize",
+        "series": "Medium"
+      },
+      "id": "sibc-msme-medium-share",
+      "current_status": "unknown",
+      "first_seen": "2024-04-22",
+      "type": "data"
+    },
+    "sibc-large-corporate-yoy": {
+      "title": "Large corporate credit YoY growth (%)",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1b",
+      "domain": "industry",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "series_yoy",
+        "section": "industryBySize",
+        "series": "Large"
+      },
+      "id": "sibc-large-corporate-yoy",
+      "current_status": "unknown",
+      "first_seen": "2024-04-22",
+      "type": "data"
+    },
+    "sibc-large-corporate-share": {
+      "title": "Large corporate share of industry credit (%)",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1b",
+      "domain": "industry",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "series_share",
+        "section": "industryBySize",
+        "series": "Large"
+      },
+      "id": "sibc-large-corporate-share",
+      "current_status": "unknown",
+      "first_seen": "2024-04-22",
+      "type": "data"
+    },
+    "sibc-msme-size-yoy-spread": {
+      "title": "MSME vs Large corporate YoY spread (pp)",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1b",
+      "domain": "industry",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "yoy_spread_named",
+        "section": "industryBySize",
+        "series_a": "Micro and Small",
+        "series_b": "Large"
+      },
+      "id": "sibc-msme-size-yoy-spread",
+      "current_status": "unknown",
+      "first_seen": "2024-04-22",
+      "type": "data"
+    },
+    "sibc-pl-housing-yoy": {
+      "title": "Housing loans YoY growth (%)",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1b",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "series_yoy",
+        "section": "personalLoans",
+        "series": "Housing"
+      },
+      "id": "sibc-pl-housing-yoy",
+      "current_status": "unknown",
+      "first_seen": "2024-04-22",
+      "type": "data"
+    },
+    "sibc-pl-housing-share": {
+      "title": "Housing share of personal loans (%)",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1b",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "series_share",
+        "section": "personalLoans",
+        "series": "Housing"
+      },
+      "id": "sibc-pl-housing-share",
+      "current_status": "unknown",
+      "first_seen": "2024-04-22",
+      "type": "data"
+    },
+    "sibc-pl-gold-yoy": {
+      "title": "Gold loans YoY growth (%)",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1b",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "series_yoy",
+        "section": "personalLoans",
+        "series": "Gold Loans"
+      },
+      "id": "sibc-pl-gold-yoy",
+      "current_status": "unknown",
+      "first_seen": "2024-04-22",
+      "type": "data"
+    },
+    "sibc-pl-gold-share": {
+      "title": "Gold loans share of personal loans (%)",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1b",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "series_share",
+        "section": "personalLoans",
+        "series": "Gold Loans"
+      },
+      "id": "sibc-pl-gold-share",
+      "current_status": "unknown",
+      "first_seen": "2024-04-22",
+      "type": "data"
+    },
+    "sibc-pl-cc-yoy": {
+      "title": "Credit card outstanding YoY growth (%)",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1b",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "series_yoy",
+        "section": "personalLoans",
+        "series": "Credit Card Outstanding"
+      },
+      "id": "sibc-pl-cc-yoy",
+      "current_status": "unknown",
+      "first_seen": "2024-04-22",
+      "type": "data"
+    },
+    "sibc-pl-cc-share": {
+      "title": "Credit cards share of personal loans (%)",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1b",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "series_share",
+        "section": "personalLoans",
+        "series": "Credit Card Outstanding"
+      },
+      "id": "sibc-pl-cc-share",
+      "current_status": "unknown",
+      "first_seen": "2024-04-22",
+      "type": "data"
+    },
+    "sibc-pl-vehicle-yoy": {
+      "title": "Vehicle loans YoY growth (%)",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1b",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "series_yoy",
+        "section": "personalLoans",
+        "series": "Vehicle Loans"
+      },
+      "id": "sibc-pl-vehicle-yoy",
+      "current_status": "unknown",
+      "first_seen": "2024-04-22",
+      "type": "data"
+    },
+    "sibc-pl-education-yoy": {
+      "title": "Education loans YoY growth (%)",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1b",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "series_yoy",
+        "section": "personalLoans",
+        "series": "Education"
+      },
+      "id": "sibc-pl-education-yoy",
+      "current_status": "unknown",
+      "first_seen": "2024-04-22",
+      "type": "data"
+    },
+    "sibc-psl-agri-yoy": {
+      "title": "PSL Agriculture YoY growth (%)",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1b",
+      "domain": "psl",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "series_yoy",
+        "section": "prioritySector",
+        "series": "Agriculture"
+      },
+      "id": "sibc-psl-agri-yoy",
+      "current_status": "unknown",
+      "first_seen": "2024-04-22",
+      "type": "data"
+    },
+    "sibc-psl-msme-yoy": {
+      "title": "PSL Micro & Small enterprises YoY growth (%)",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1b",
+      "domain": "psl",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "series_yoy",
+        "section": "prioritySector",
+        "series": "Micro and Small Enterprises"
+      },
+      "id": "sibc-psl-msme-yoy",
+      "current_status": "unknown",
+      "first_seen": "2024-04-22",
+      "type": "data"
+    },
+    "sibc-psl-housing-yoy": {
+      "title": "PSL Housing YoY growth (%)",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1b",
+      "domain": "psl",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "series_yoy",
+        "section": "prioritySector",
+        "series": "Housing"
+      },
+      "id": "sibc-psl-housing-yoy",
+      "current_status": "unknown",
+      "first_seen": "2024-04-22",
+      "type": "data"
+    },
+    "sibc-psl-renewable-yoy": {
+      "title": "PSL Renewable Energy YoY growth (%)",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1b",
+      "domain": "psl",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "series_yoy",
+        "section": "prioritySector",
+        "series": "Renewable Energy"
+      },
+      "id": "sibc-psl-renewable-yoy",
+      "current_status": "unknown",
+      "first_seen": "2024-04-22",
+      "type": "data"
+    },
+    "sibc-industry-type-yoy-scan": {
+      "title": "YoY growth scan — all industry types (%)",
+      "pipeline": "sibc",
       "layer": 1,
       "sub_layer": "1c",
+      "domain": "industry",
+      "spec_version": "1.0",
       "compute": {
-        "method": "csv_category_scan_share",
-        "metric": "credit_cards",
-        "status_rules": [
-          {
-            "if": "value > prev_value + 1",
-            "then": "strengthening"
-          },
-          {
-            "if": "value > 20",
-            "then": "active"
-          },
-          {
-            "if": "value > 5",
-            "then": "weakening"
-          },
-          {
-            "if": "true",
-            "then": "absent"
-          }
-        ]
-      }
+        "method": "section_scan_yoy",
+        "section": "industryByType",
+        "entity_type": "industry_type"
+      },
+      "id": "sibc-industry-type-yoy-scan",
+      "current_status": "unknown",
+      "first_seen": "2024-04-22",
+      "type": "data"
     },
-    "gap-foreign-cc-decline": {
-      "id": "gap-foreign-cc-decline",
-      "pipeline": "atm_pos",
-      "domain": "credit_stress",
-      "type": "gap",
-      "first_seen": "2026-03-31",
-      "current_status": "new",
-      "title": "Foreign bank CC share at 3.7% — premium segment shrinking",
+    "sibc-industry-type-share-scan": {
+      "title": "Share scan — all industry types (% of industry credit)",
+      "pipeline": "sibc",
       "layer": 1,
-      "sub_layer": "1b",
+      "sub_layer": "1c",
+      "domain": "industry",
+      "spec_version": "1.0",
       "compute": {
-        "method": "csv_category_yoy",
-        "metric": "credit_cards",
-        "category": "Foreign Banks",
-        "status_rules": [
-          {
-            "if": "value < 0",
-            "then": "strengthening"
-          },
-          {
-            "if": "value < 5",
-            "then": "active"
-          },
-          {
-            "if": "true",
-            "then": "absent"
-          }
-        ]
-      }
+        "method": "section_scan_share",
+        "section": "industryByType",
+        "entity_type": "industry_type"
+      },
+      "id": "sibc-industry-type-share-scan",
+      "current_status": "unknown",
+      "first_seen": "2024-04-22",
+      "type": "data"
     },
-    "dc-atm-share-structural": {
-      "id": "dc-atm-share-structural",
+    "sibc-services-yoy-scan": {
+      "title": "YoY growth scan — all services sub-sectors (%)",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1c",
+      "domain": "sector_mix",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "section_scan_yoy",
+        "section": "services",
+        "entity_type": "service_sector"
+      },
+      "id": "sibc-services-yoy-scan",
+      "current_status": "unknown",
+      "first_seen": "2024-04-22",
+      "type": "data"
+    },
+    "sibc-services-share-scan": {
+      "title": "Share scan — all services sub-sectors (% of services credit)",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1c",
+      "domain": "sector_mix",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "section_scan_share",
+        "section": "services",
+        "entity_type": "service_sector"
+      },
+      "id": "sibc-services-share-scan",
+      "current_status": "unknown",
+      "first_seen": "2024-04-22",
+      "type": "data"
+    },
+    "sibc-pl-yoy-scan": {
+      "title": "YoY growth scan — all personal loan sub-categories (%)",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1c",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "section_scan_yoy",
+        "section": "personalLoans",
+        "entity_type": "pl_category"
+      },
+      "id": "sibc-pl-yoy-scan",
+      "current_status": "unknown",
+      "first_seen": "2024-04-22",
+      "type": "data"
+    },
+    "sibc-pl-share-scan": {
+      "title": "Share scan — all personal loan sub-categories (% of PL)",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1c",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "section_scan_share",
+        "section": "personalLoans",
+        "entity_type": "pl_category"
+      },
+      "id": "sibc-pl-share-scan",
+      "current_status": "unknown",
+      "first_seen": "2024-04-22",
+      "type": "data"
+    },
+    "sibc-psl-yoy-scan": {
+      "title": "YoY growth scan — all PSL sub-categories (%)",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1c",
+      "domain": "psl",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "section_scan_yoy",
+        "section": "prioritySector",
+        "entity_type": "psl_category"
+      },
+      "id": "sibc-psl-yoy-scan",
+      "current_status": "unknown",
+      "first_seen": "2024-04-22",
+      "type": "data"
+    },
+    "atm-onsite-abs": {
+      "title": "Onsite ATMs — absolute count",
+      "type": "data",
       "pipeline": "atm_pos",
-      "domain": "market_structure",
-      "type": "insight",
-      "first_seen": "2026-03-31",
-      "current_status": "new",
-      "title": "DC ATM cash losing share — 81.4% of DC volume as digital grows",
       "layer": 1,
       "sub_layer": "1a",
+      "domain": "infrastructure",
+      "spec_version": "1.0",
       "compute": {
-        "method": "csv_ratio_sum",
-        "metric": "dc_atm_withdrawal_vol",
-        "denominator_metrics": [
-          "dc_pos_txn_vol",
-          "dc_ecom_txn_vol",
-          "dc_atm_withdrawal_vol"
-        ],
-        "status_rules": [
-          {
-            "if": "value > 60",
-            "then": "strengthening"
-          },
-          {
-            "if": "value > 45",
-            "then": "active"
-          },
-          {
-            "if": "value > 30",
-            "then": "weakening"
-          },
-          {
-            "if": "true",
-            "then": "reversed"
-          }
-        ]
-      }
+        "method": "csv_total_abs",
+        "metric": "atm_onsite"
+      },
+      "id": "atm-onsite-abs",
+      "current_status": "unknown",
+      "first_seen": "2025-09-30"
     },
-    "dc-pos-cash-decline": {
-      "id": "dc-pos-cash-decline",
+    "atm-onsite-yoy": {
+      "title": "Onsite ATMs YoY growth (%)",
+      "type": "data",
       "pipeline": "atm_pos",
-      "domain": "credit_stress",
-      "type": "insight",
-      "first_seen": "2026-03-31",
-      "current_status": "new",
-      "title": "DC POS cash withdrawals: 2 consecutive months of decline (-7.0% MoM)",
       "layer": 1,
       "sub_layer": "1a",
+      "domain": "infrastructure",
+      "spec_version": "1.0",
       "compute": {
         "method": "csv_total_yoy",
-        "metric": "dc_pos_withdrawal_vol",
-        "status_rules": [
-          {
-            "if": "value < 0",
-            "then": "strengthening"
-          },
-          {
-            "if": "value < 5",
-            "then": "weakening"
-          },
-          {
-            "if": "true",
-            "then": "absent"
-          }
-        ]
-      }
+        "metric": "atm_onsite"
+      },
+      "id": "atm-onsite-yoy",
+      "current_status": "unknown",
+      "first_seen": "2025-09-30"
     },
-    "dc-ecom-share": {
-      "id": "dc-ecom-share",
+    "atm-offsite-abs": {
+      "title": "Offsite ATMs — absolute count",
+      "type": "data",
       "pipeline": "atm_pos",
-      "domain": "market_structure",
-      "type": "insight",
-      "first_seen": "2026-03-31",
-      "current_status": "absent",
-      "title": "DC ecommerce is 4.8% of total DC transaction volume in Mar 2026",
       "layer": 1,
       "sub_layer": "1a",
+      "domain": "infrastructure",
+      "spec_version": "1.0",
       "compute": {
-        "method": "csv_ratio_sum",
-        "metric": "dc_ecom_txn_vol",
-        "denominator_metrics": [
-          "dc_pos_txn_vol",
-          "dc_ecom_txn_vol",
-          "dc_atm_withdrawal_vol"
-        ],
-        "status_rules": [
-          {
-            "if": "value > 25",
-            "then": "strengthening"
-          },
-          {
-            "if": "value > 15",
-            "then": "active"
-          },
-          {
-            "if": "value > 5",
-            "then": "weakening"
-          },
-          {
-            "if": "true",
-            "then": "absent"
-          }
-        ]
-      }
+        "method": "csv_total_abs",
+        "metric": "atm_offsite"
+      },
+      "id": "atm-offsite-abs",
+      "current_status": "unknown",
+      "first_seen": "2025-09-30"
     },
-    "dc-cards-streak": {
-      "id": "dc-cards-streak",
+    "atm-offsite-yoy": {
+      "title": "Offsite ATMs YoY growth (%)",
+      "type": "data",
       "pipeline": "atm_pos",
-      "domain": "credit_growth",
-      "type": "insight",
-      "first_seen": "2026-03-31",
-      "current_status": "new",
-      "title": "Debit cards: 5 consecutive months of growth — 1.04B outstanding",
       "layer": 1,
       "sub_layer": "1a",
+      "domain": "infrastructure",
+      "spec_version": "1.0",
       "compute": {
         "method": "csv_total_yoy",
-        "metric": "debit_cards",
-        "status_rules": [
-          {
-            "if": "value > 5",
-            "then": "active"
-          },
-          {
-            "if": "value > 0",
-            "then": "weakening"
-          },
-          {
-            "if": "true",
-            "then": "reversed"
-          }
-        ]
-      }
+        "metric": "atm_offsite"
+      },
+      "id": "atm-offsite-yoy",
+      "current_status": "unknown",
+      "first_seen": "2025-09-30"
     },
-    "dc-psb-dominance": {
-      "id": "dc-psb-dominance",
+    "pos-terminals-abs": {
+      "title": "POS terminals — absolute count",
+      "type": "data",
       "pipeline": "atm_pos",
-      "domain": "market_structure",
-      "type": "insight",
-      "first_seen": "2026-03-31",
-      "current_status": "new",
-      "title": "PSB banks hold 62.9% of debit cards — gaining share in Mar 2026",
-      "layer": 1,
-      "sub_layer": "1b",
-      "compute": {
-        "method": "csv_category_share",
-        "metric": "debit_cards",
-        "category": "Public Sector Banks",
-        "status_rules": [
-          {
-            "if": "value > 65",
-            "then": "strengthening"
-          },
-          {
-            "if": "value > 55",
-            "then": "active"
-          },
-          {
-            "if": "true",
-            "then": "weakening"
-          }
-        ]
-      }
-    },
-    "gap-dc-cash-dominance": {
-      "id": "gap-dc-cash-dominance",
-      "pipeline": "atm_pos",
-      "domain": "market_structure",
-      "type": "gap",
-      "first_seen": "2026-03-31",
-      "current_status": "new",
-      "title": "DC ATM cash at 81.4% of DC volume — digital transition incomplete",
       "layer": 1,
       "sub_layer": "1a",
+      "domain": "infrastructure",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_total_abs",
+        "metric": "pos_terminals"
+      },
+      "id": "pos-terminals-abs",
+      "current_status": "unknown",
+      "first_seen": "2025-09-30"
+    },
+    "pos-terminals-yoy": {
+      "title": "POS terminals YoY growth (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "infrastructure",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_total_yoy",
+        "metric": "pos_terminals"
+      },
+      "id": "pos-terminals-yoy",
+      "current_status": "unknown",
+      "first_seen": "2025-09-30"
+    },
+    "upi-qr-yoy": {
+      "title": "UPI QR codes YoY growth (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "infrastructure",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_total_yoy",
+        "metric": "upi_qr"
+      },
+      "id": "upi-qr-yoy",
+      "current_status": "unknown",
+      "first_seen": "2025-09-30"
+    },
+    "bharat-qr-yoy": {
+      "title": "Bharat QR codes YoY growth (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "infrastructure",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_total_yoy",
+        "metric": "bharat_qr"
+      },
+      "id": "bharat-qr-yoy",
+      "current_status": "unknown",
+      "first_seen": "2025-09-30"
+    },
+    "micro-atm-yoy": {
+      "title": "Micro-ATMs YoY growth (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "infrastructure",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_total_yoy",
+        "metric": "micro_atms"
+      },
+      "id": "micro-atm-yoy",
+      "current_status": "unknown",
+      "first_seen": "2025-09-30"
+    },
+    "upi-qr-per-pos": {
+      "title": "UPI QR codes per POS terminal (ratio)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "infrastructure",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_total_ratio",
+        "metric": "upi_qr",
+        "denominator_metric": "pos_terminals",
+        "unit": "ratio"
+      },
+      "id": "upi-qr-per-pos",
+      "current_status": "unknown",
+      "first_seen": "2025-09-30"
+    },
+    "cc-outstanding-yoy": {
+      "title": "Credit cards outstanding YoY growth (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_total_yoy",
+        "metric": "credit_cards"
+      },
+      "id": "cc-outstanding-yoy",
+      "current_status": "unknown",
+      "first_seen": "2025-09-30"
+    },
+    "dc-outstanding-yoy": {
+      "title": "Debit cards outstanding YoY growth (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_total_yoy",
+        "metric": "debit_cards"
+      },
+      "id": "dc-outstanding-yoy",
+      "current_status": "unknown",
+      "first_seen": "2025-09-30"
+    },
+    "cc-pos-val-yoy": {
+      "title": "CC POS transaction value YoY growth (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "credit_card_txn",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_total_yoy",
+        "metric": "cc_pos_txn_val"
+      },
+      "id": "cc-pos-val-yoy",
+      "current_status": "unknown",
+      "first_seen": "2025-09-30"
+    },
+    "cc-ecom-val-yoy": {
+      "title": "CC ecommerce transaction value YoY growth (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "credit_card_txn",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_total_yoy",
+        "metric": "cc_ecom_txn_val"
+      },
+      "id": "cc-ecom-val-yoy",
+      "current_status": "unknown",
+      "first_seen": "2025-09-30"
+    },
+    "cc-atm-val-yoy": {
+      "title": "CC ATM withdrawal value YoY growth (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "credit_card_txn",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_total_yoy",
+        "metric": "cc_atm_withdrawal_val"
+      },
+      "id": "cc-atm-val-yoy",
+      "current_status": "unknown",
+      "first_seen": "2025-09-30"
+    },
+    "cc-ecom-val-share": {
+      "title": "CC ecommerce share of total CC transaction value (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "credit_card_txn",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_ratio_sum",
+        "metric": "cc_ecom_txn_val",
+        "denominator_metrics": [
+          "cc_pos_txn_val",
+          "cc_ecom_txn_val",
+          "cc_atm_withdrawal_val",
+          "cc_other_txn_val"
+        ]
+      },
+      "id": "cc-ecom-val-share",
+      "current_status": "unknown",
+      "first_seen": "2025-09-30"
+    },
+    "cc-atm-val-share": {
+      "title": "CC ATM cash share of total CC transaction value (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "credit_card_txn",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_ratio_sum",
+        "metric": "cc_atm_withdrawal_val",
+        "denominator_metrics": [
+          "cc_pos_txn_val",
+          "cc_ecom_txn_val",
+          "cc_atm_withdrawal_val",
+          "cc_other_txn_val"
+        ]
+      },
+      "id": "cc-atm-val-share",
+      "current_status": "unknown",
+      "first_seen": "2025-09-30"
+    },
+    "dc-atm-val-yoy": {
+      "title": "DC ATM withdrawal value YoY growth (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "debit_card_txn",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_total_yoy",
+        "metric": "dc_atm_withdrawal_val"
+      },
+      "id": "dc-atm-val-yoy",
+      "current_status": "unknown",
+      "first_seen": "2025-09-30"
+    },
+    "dc-pos-val-yoy": {
+      "title": "DC POS transaction value YoY growth (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "debit_card_txn",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_total_yoy",
+        "metric": "dc_pos_txn_val"
+      },
+      "id": "dc-pos-val-yoy",
+      "current_status": "unknown",
+      "first_seen": "2025-09-30"
+    },
+    "dc-ecom-val-yoy": {
+      "title": "DC ecommerce transaction value YoY growth (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "debit_card_txn",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_total_yoy",
+        "metric": "dc_ecom_txn_val"
+      },
+      "id": "dc-ecom-val-yoy",
+      "current_status": "unknown",
+      "first_seen": "2025-09-30"
+    },
+    "dc-atm-val-share": {
+      "title": "DC ATM cash share of total DC transaction value (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "debit_card_txn",
+      "spec_version": "1.0",
       "compute": {
         "method": "csv_ratio_sum",
         "metric": "dc_atm_withdrawal_val",
         "denominator_metrics": [
           "dc_atm_withdrawal_val",
           "dc_pos_txn_val",
-          "dc_ecom_txn_val"
-        ],
-        "status_rules": [
-          {
-            "if": "value > 50",
-            "then": "strengthening"
-          },
-          {
-            "if": "value > 35",
-            "then": "active"
-          },
-          {
-            "if": "true",
-            "then": "weakening"
-          }
+          "dc_ecom_txn_val",
+          "dc_pos_withdrawal_val",
+          "dc_other_txn_val"
         ]
-      }
+      },
+      "id": "dc-atm-val-share",
+      "current_status": "unknown",
+      "first_seen": "2025-09-30"
     },
-    "gap-dc-ecom-low": {
-      "id": "gap-dc-ecom-low",
+    "dc-ecom-val-share": {
+      "title": "DC ecommerce share of total DC transaction value (%)",
+      "type": "data",
       "pipeline": "atm_pos",
-      "domain": "credit_stress",
-      "type": "gap",
-      "first_seen": "2026-03-31",
-      "current_status": "new",
-      "title": "DC ecommerce at 4.8% of DC volume — debit cards leave thin digital footprints",
       "layer": 1,
       "sub_layer": "1a",
+      "domain": "debit_card_txn",
+      "spec_version": "1.0",
       "compute": {
         "method": "csv_ratio_sum",
-        "metric": "dc_ecom_txn_vol",
+        "metric": "dc_ecom_txn_val",
         "denominator_metrics": [
-          "dc_pos_txn_vol",
-          "dc_ecom_txn_vol",
-          "dc_atm_withdrawal_vol"
-        ],
-        "status_rules": [
-          {
-            "if": "value < 10",
-            "then": "strengthening"
-          },
-          {
-            "if": "value < 20",
-            "then": "active"
-          },
-          {
-            "if": "true",
-            "then": "absent"
-          }
-        ]
-      }
-    },
-    "infra-qr-per-pos": {
-      "id": "infra-qr-per-pos",
-      "pipeline": "atm_pos",
-      "domain": "infrastructure",
-      "type": "insight",
-      "first_seen": "2026-03-31",
-      "current_status": "new",
-      "title": "India now has 65 UPI QR codes per POS terminal",
-      "layer": 1,
-      "sub_layer": "1a",
-      "compute": {
-        "method": "csv_total_ratio",
-        "metric": "upi_qr",
-        "denominator_metric": "pos_terminals",
-        "status_rules": [
-          {
-            "if": "value > 5",
-            "then": "strengthening"
-          },
-          {
-            "if": "value > 2",
-            "then": "active"
-          },
-          {
-            "if": "value > 1",
-            "then": "weakening"
-          },
-          {
-            "if": "true",
-            "then": "absent"
-          }
-        ]
-      }
-    },
-    "infra-pos-streak": {
-      "id": "infra-pos-streak",
-      "pipeline": "atm_pos",
-      "domain": "infrastructure",
-      "type": "insight",
-      "first_seen": "2026-03-31",
-      "current_status": "new",
-      "title": "POS terminals: 4 consecutive months of growth — 11.8M deployed",
-      "layer": 1,
-      "sub_layer": "1a",
-      "compute": {
-        "method": "csv_total_yoy",
-        "metric": "pos_terminals",
-        "status_rules": [
-          {
-            "if": "value > prev_value and value > 10",
-            "then": "strengthening"
-          },
-          {
-            "if": "value > 10",
-            "then": "active"
-          },
-          {
-            "if": "value > 0",
-            "then": "weakening"
-          },
-          {
-            "if": "true",
-            "then": "reversed"
-          }
-        ]
-      }
-    },
-    "infra-upi-vs-bharat-qr": {
-      "id": "infra-upi-vs-bharat-qr",
-      "pipeline": "atm_pos",
-      "domain": "infrastructure",
-      "type": "insight",
-      "first_seen": "2026-03-31",
-      "current_status": "new",
-      "title": "UPI QR codes are 135x Bharat QR in scale — 761.2M vs 5.63M",
-      "layer": 1,
-      "sub_layer": "1a",
-      "compute": {
-        "method": "csv_total_ratio",
-        "metric": "upi_qr",
-        "denominator_metric": "bharat_qr",
-        "unit": "ratio",
-        "status_rules": [
-          {
-            "if": "value > 10",
-            "then": "strengthening"
-          },
-          {
-            "if": "value > 5",
-            "then": "active"
-          },
-          {
-            "if": "value > 2",
-            "then": "weakening"
-          },
-          {
-            "if": "true",
-            "then": "absent"
-          }
-        ]
-      }
-    },
-    "gap-bharat-qr-contraction": {
-      "id": "gap-bharat-qr-contraction",
-      "pipeline": "atm_pos",
-      "domain": "infrastructure",
-      "type": "gap",
-      "first_seen": "2026-03-31",
-      "current_status": "new",
-      "title": "Bharat QR contracting -4.5% MoM — 5.63M vs 761.2M UPI QR",
-      "layer": 1,
-      "sub_layer": "1a",
-      "compute": {
-        "method": "csv_total_yoy",
-        "metric": "bharat_qr",
-        "status_rules": [
-          {
-            "if": "value < 0",
-            "then": "strengthening"
-          },
-          {
-            "if": "value < 5",
-            "then": "active"
-          },
-          {
-            "if": "true",
-            "then": "absent"
-          }
-        ]
-      }
-    },
-    "gap-atm-offsite-decline": {
-      "id": "gap-atm-offsite-decline",
-      "pipeline": "atm_pos",
-      "domain": "infrastructure",
-      "type": "gap",
-      "first_seen": "2026-03-31",
-      "current_status": "new",
-      "title": "Offsite ATMs declining -0.2% MoM — rural cash access contracting",
-      "layer": 1,
-      "sub_layer": "1a",
-      "compute": {
-        "method": "csv_total_yoy",
-        "metric": "atm_offsite",
-        "status_rules": [
-          {
-            "if": "value < 0",
-            "then": "strengthening"
-          },
-          {
-            "if": "value < 3",
-            "then": "weakening"
-          },
-          {
-            "if": "true",
-            "then": "absent"
-          }
-        ]
-      }
-    },
-    "sibc-sector-industry-share": {
-      "pipeline": "sibc",
-      "layer": 1,
-      "sub_layer": "1b",
-      "domain": "credit_growth",
-      "type": "data",
-      "label": "Industry share of total credit",
-      "formula": "Industry / sum(mainSectors)",
-      "compute": {
-        "method": "series_share",
-        "section": "mainSectors",
-        "series": "Industry",
-        "status_rules": [
-          {
-            "if": "value > prev_value + 1",
-            "then": "strengthening"
-          },
-          {
-            "if": "value > 28",
-            "then": "active"
-          },
-          {
-            "if": "true",
-            "then": "weakening"
-          }
+          "dc_atm_withdrawal_val",
+          "dc_pos_txn_val",
+          "dc_ecom_txn_val",
+          "dc_pos_withdrawal_val",
+          "dc_other_txn_val"
         ]
       },
-      "current_status": "weakening",
-      "first_seen": "2026-03-30",
-      "id": "sibc-sector-industry-share",
-      "title": "Industry credit share"
-    },
-    "sibc-sector-services-share": {
-      "pipeline": "sibc",
-      "layer": 1,
-      "sub_layer": "1b",
-      "domain": "credit_growth",
-      "type": "data",
-      "label": "Services share of total credit",
-      "formula": "Services / sum(mainSectors)",
-      "compute": {
-        "method": "series_share",
-        "section": "mainSectors",
-        "series": "Services",
-        "status_rules": [
-          {
-            "if": "value > prev_value + 1",
-            "then": "strengthening"
-          },
-          {
-            "if": "value > 25",
-            "then": "active"
-          },
-          {
-            "if": "true",
-            "then": "weakening"
-          }
-        ]
-      },
-      "current_status": "active",
-      "first_seen": "2026-03-30",
-      "id": "sibc-sector-services-share",
-      "title": "Services credit share"
-    },
-    "sibc-sector-pl-share": {
-      "pipeline": "sibc",
-      "layer": 1,
-      "sub_layer": "1b",
-      "domain": "credit_growth",
-      "type": "data",
-      "label": "Personal loans share of total credit",
-      "formula": "Personal Loans / sum(mainSectors)",
-      "compute": {
-        "method": "series_share",
-        "section": "mainSectors",
-        "series": "Personal Loans",
-        "status_rules": [
-          {
-            "if": "value > prev_value + 1",
-            "then": "strengthening"
-          },
-          {
-            "if": "value > 28",
-            "then": "active"
-          },
-          {
-            "if": "true",
-            "then": "weakening"
-          }
-        ]
-      },
-      "current_status": "active",
-      "first_seen": "2026-03-30",
-      "id": "sibc-sector-pl-share",
-      "title": "Personal loans credit share"
-    },
-    "sibc-industry-msme-share": {
-      "pipeline": "sibc",
-      "layer": 1,
-      "sub_layer": "1b",
-      "domain": "credit_growth",
-      "type": "data",
-      "label": "MSME share of industry by size",
-      "formula": "Micro and Small / sum(industryBySize)",
-      "compute": {
-        "method": "series_share",
-        "section": "industryBySize",
-        "series": "Micro and Small",
-        "status_rules": [
-          {
-            "if": "value > prev_value + 2",
-            "then": "strengthening"
-          },
-          {
-            "if": "value > 25",
-            "then": "active"
-          },
-          {
-            "if": "true",
-            "then": "weakening"
-          }
-        ]
-      },
-      "current_status": "weakening",
-      "first_seen": "2026-03-30",
-      "id": "sibc-industry-msme-share",
-      "title": "MSME share of industry (by size)"
-    },
-    "sibc-industry-size-yoy-spread": {
-      "pipeline": "sibc",
-      "layer": 1,
-      "sub_layer": "1b",
-      "domain": "credit_growth",
-      "type": "data",
-      "label": "MSME vs Large corporate YoY spread",
-      "formula": "Micro and Small YoY − Large YoY",
-      "compute": {
-        "method": "yoy_spread_named",
-        "section": "industryBySize",
-        "series_a": "Micro and Small",
-        "series_b": "Large",
-        "status_rules": [
-          {
-            "if": "value > 20",
-            "then": "strengthening"
-          },
-          {
-            "if": "value > 10",
-            "then": "active"
-          },
-          {
-            "if": "value > 0",
-            "then": "weakening"
-          },
-          {
-            "if": "true",
-            "then": "reversed"
-          }
-        ]
-      },
-      "current_status": "strengthening",
-      "first_seen": "2026-03-30",
-      "id": "sibc-industry-size-yoy-spread",
-      "title": "MSME vs large-corporate YoY spread"
-    },
-    "sibc-pl-gold-share": {
-      "pipeline": "sibc",
-      "layer": 1,
-      "sub_layer": "1b",
-      "domain": "credit_growth",
-      "type": "data",
-      "label": "Gold loans share of personal loans",
-      "formula": "Gold Loans / sum(personalLoans)",
-      "compute": {
-        "method": "series_share",
-        "section": "personalLoans",
-        "series": "Gold Loans",
-        "status_rules": [
-          {
-            "if": "value > prev_value + 1",
-            "then": "strengthening"
-          },
-          {
-            "if": "value > 4",
-            "then": "active"
-          },
-          {
-            "if": "value > 1",
-            "then": "weakening"
-          },
-          {
-            "if": "true",
-            "then": "absent"
-          }
-        ]
-      },
-      "current_status": "active",
-      "first_seen": "2026-03-30",
-      "id": "sibc-pl-gold-share",
-      "title": "Gold loans share of personal loans"
-    },
-    "sibc-pl-cc-share": {
-      "pipeline": "sibc",
-      "layer": 1,
-      "sub_layer": "1b",
-      "domain": "credit_stress",
-      "type": "data",
-      "label": "Credit card share of personal loans",
-      "formula": "Credit Card Outstanding / sum(personalLoans)",
-      "compute": {
-        "method": "series_share",
-        "section": "personalLoans",
-        "series": "Credit Card Outstanding",
-        "status_rules": [
-          {
-            "if": "value < prev_value - 0.5",
-            "then": "strengthening"
-          },
-          {
-            "if": "value > 6",
-            "then": "active"
-          },
-          {
-            "if": "value > 3",
-            "then": "weakening"
-          },
-          {
-            "if": "true",
-            "then": "absent"
-          }
-        ]
-      },
-      "current_status": "weakening",
-      "first_seen": "2026-03-30",
-      "id": "sibc-pl-cc-share",
-      "title": "Credit card share of personal loans"
-    },
-    "sibc-pl-secured-share": {
-      "pipeline": "sibc",
-      "layer": 1,
-      "sub_layer": "1b",
-      "domain": "credit_growth",
-      "type": "data",
-      "label": "Secured retail share of personal loans (gold + vehicle)",
-      "formula": "(Gold Loans + Vehicle/Auto Loans) / sum(personalLoans)",
-      "compute": {
-        "method": "multi_series_share",
-        "section": "personalLoans",
-        "series": [
-          "Gold Loans",
-          "Vehicle/Auto Loans"
-        ],
-        "status_rules": [
-          {
-            "if": "value > prev_value + 1",
-            "then": "strengthening"
-          },
-          {
-            "if": "value > 20",
-            "then": "active"
-          },
-          {
-            "if": "true",
-            "then": "weakening"
-          }
-        ]
-      },
-      "current_status": "weakening",
-      "first_seen": "2026-03-30",
-      "id": "sibc-pl-secured-share",
-      "title": "Secured retail share of personal loans"
-    },
-    "sibc-industry-engineering-share": {
-      "pipeline": "sibc",
-      "layer": 1,
-      "sub_layer": "1b",
-      "domain": "credit_growth",
-      "type": "data",
-      "label": "All Engineering share of industry by type",
-      "formula": "All Engineering / sum(industryByType)",
-      "compute": {
-        "method": "series_share",
-        "section": "industryByType",
-        "series": "All Engineering",
-        "status_rules": [
-          {
-            "if": "value > prev_value + 1",
-            "then": "strengthening"
-          },
-          {
-            "if": "value > 12",
-            "then": "active"
-          },
-          {
-            "if": "true",
-            "then": "weakening"
-          }
-        ]
-      },
-      "current_status": "weakening",
-      "first_seen": "2026-03-30",
-      "id": "sibc-industry-engineering-share",
-      "title": "Engineering share of industry (by type)"
-    },
-    "sibc-industry-infra-share": {
-      "pipeline": "sibc",
-      "layer": 1,
-      "sub_layer": "1b",
-      "domain": "credit_stress",
-      "type": "data",
-      "label": "Infrastructure share of industry by type",
-      "formula": "Infrastructure / sum(industryByType)",
-      "compute": {
-        "method": "series_share",
-        "section": "industryByType",
-        "series": "Infrastructure",
-        "status_rules": [
-          {
-            "if": "value < prev_value - 1",
-            "then": "strengthening"
-          },
-          {
-            "if": "value > 30",
-            "then": "active"
-          },
-          {
-            "if": "true",
-            "then": "weakening"
-          }
-        ]
-      },
-      "current_status": "active",
-      "first_seen": "2026-03-30",
-      "id": "sibc-industry-infra-share",
-      "title": "Infrastructure share of industry (by type)"
-    },
-    "sibc-psl-housing-share": {
-      "pipeline": "sibc",
-      "layer": 1,
-      "sub_layer": "1b",
-      "domain": "policy",
-      "type": "data",
-      "label": "Housing share of PSL total",
-      "formula": "Housing / sum(prioritySector)",
-      "compute": {
-        "method": "series_share",
-        "section": "prioritySector",
-        "series": "Housing",
-        "status_rules": [
-          {
-            "if": "value > prev_value + 2",
-            "then": "strengthening"
-          },
-          {
-            "if": "value > 20",
-            "then": "active"
-          },
-          {
-            "if": "true",
-            "then": "weakening"
-          }
-        ]
-      },
-      "current_status": "weakening",
-      "first_seen": "2026-03-30",
-      "id": "sibc-psl-housing-share",
-      "title": "Housing share of PSL"
-    },
-    "sibc-psl-msme-share": {
-      "pipeline": "sibc",
-      "layer": 1,
-      "sub_layer": "1b",
-      "domain": "credit_growth",
-      "type": "data",
-      "label": "MSME share of PSL total",
-      "formula": "Micro and Small Enterprises / sum(prioritySector)",
-      "compute": {
-        "method": "series_share",
-        "section": "prioritySector",
-        "series": "Micro and Small Enterprises",
-        "status_rules": [
-          {
-            "if": "value > prev_value + 1",
-            "then": "strengthening"
-          },
-          {
-            "if": "value > 15",
-            "then": "active"
-          },
-          {
-            "if": "true",
-            "then": "weakening"
-          }
-        ]
-      },
-      "current_status": "active",
-      "first_seen": "2026-03-30",
-      "id": "sibc-psl-msme-share",
-      "title": "MSME share of PSL"
-    },
-    "sibc-services-software-share": {
-      "pipeline": "sibc",
-      "layer": 1,
-      "sub_layer": "1b",
-      "domain": "credit_growth",
-      "type": "data",
-      "label": "Computer Software share of Services credit",
-      "formula": "Computer Software / sum(services)",
-      "compute": {
-        "method": "series_share",
-        "section": "services",
-        "series": "Computer Software",
-        "status_rules": [
-          {
-            "if": "value > prev_value + 1",
-            "then": "strengthening"
-          },
-          {
-            "if": "value > 10",
-            "then": "active"
-          },
-          {
-            "if": "true",
-            "then": "weakening"
-          }
-        ]
-      },
-      "current_status": "weakening",
-      "first_seen": "2026-03-30",
-      "id": "sibc-services-software-share",
-      "title": "Computer software share of services credit"
-    },
-    "sibc-industry-type-scan": {
-      "pipeline": "sibc",
-      "layer": 1,
-      "sub_layer": "1c",
-      "domain": "credit_growth",
-      "type": "data",
-      "label": "YoY growth scan — all industry types",
-      "formula": "YoY for each industryByType series",
-      "compute": {
-        "method": "section_scan_yoy",
-        "section": "industryByType",
-        "entity_type": "industry_type",
-        "status_rules": [
-          {
-            "if": "value > 20",
-            "then": "strengthening"
-          },
-          {
-            "if": "value > 10",
-            "then": "active"
-          },
-          {
-            "if": "value > 0",
-            "then": "weakening"
-          },
-          {
-            "if": "true",
-            "then": "reversed"
-          }
-        ]
-      },
+      "id": "dc-ecom-val-share",
       "current_status": "unknown",
-      "first_seen": "2026-03-30",
-      "id": "sibc-industry-type-scan",
-      "title": "YoY scan — all industry types"
+      "first_seen": "2025-09-30"
     },
-    "sibc-services-scan": {
-      "pipeline": "sibc",
-      "layer": 1,
-      "sub_layer": "1c",
-      "domain": "credit_growth",
+    "cc-psb-share": {
+      "title": "PSB share of credit cards outstanding (%)",
       "type": "data",
-      "label": "YoY growth scan — all services sub-sectors",
-      "formula": "YoY for each services series",
-      "compute": {
-        "method": "section_scan_yoy",
-        "section": "services",
-        "entity_type": "service_type",
-        "status_rules": [
-          {
-            "if": "value > 20",
-            "then": "strengthening"
-          },
-          {
-            "if": "value > 10",
-            "then": "active"
-          },
-          {
-            "if": "value > 0",
-            "then": "weakening"
-          },
-          {
-            "if": "true",
-            "then": "reversed"
-          }
-        ]
-      },
-      "current_status": "unknown",
-      "first_seen": "2026-03-30",
-      "id": "sibc-services-scan",
-      "title": "YoY scan — all services sub-sectors"
-    },
-    "sibc-pl-scan": {
-      "pipeline": "sibc",
-      "layer": 1,
-      "sub_layer": "1c",
-      "domain": "credit_growth",
-      "type": "data",
-      "label": "YoY growth scan — all personal loan sub-series",
-      "formula": "YoY for each personalLoans series",
-      "compute": {
-        "method": "section_scan_yoy",
-        "section": "personalLoans",
-        "entity_type": "loan_type",
-        "status_rules": [
-          {
-            "if": "value > 20",
-            "then": "strengthening"
-          },
-          {
-            "if": "value > 10",
-            "then": "active"
-          },
-          {
-            "if": "value > 0",
-            "then": "weakening"
-          },
-          {
-            "if": "true",
-            "then": "reversed"
-          }
-        ]
-      },
-      "current_status": "unknown",
-      "first_seen": "2026-03-30",
-      "id": "sibc-pl-scan",
-      "title": "YoY scan — all personal loan sub-series"
-    },
-    "sibc-psl-scan": {
-      "pipeline": "sibc",
-      "layer": 1,
-      "sub_layer": "1c",
-      "domain": "policy",
-      "type": "data",
-      "label": "YoY growth scan — all PSL sub-categories",
-      "formula": "YoY for each prioritySector series",
-      "compute": {
-        "method": "section_scan_yoy",
-        "section": "prioritySector",
-        "entity_type": "psl_category",
-        "status_rules": [
-          {
-            "if": "value > 20",
-            "then": "strengthening"
-          },
-          {
-            "if": "value > 10",
-            "then": "active"
-          },
-          {
-            "if": "value > 0",
-            "then": "weakening"
-          },
-          {
-            "if": "true",
-            "then": "reversed"
-          }
-        ]
-      },
-      "current_status": "unknown",
-      "first_seen": "2026-03-30",
-      "id": "sibc-psl-scan",
-      "title": "YoY scan — all PSL sub-categories"
-    },
-    "atm-cc-cash-stress": {
       "pipeline": "atm_pos",
       "layer": 1,
       "sub_layer": "1b",
-      "domain": "credit_stress",
-      "type": "data",
-      "label": "CC ATM withdrawal share of total CC transactions (cash-as-credit proxy)",
-      "formula": "cc_atm_withdrawal_vol / (cc_pos_txn_vol + cc_ecom_txn_vol + cc_atm_withdrawal_vol)",
-      "compute": {
-        "method": "csv_ratio_sum",
-        "metric": "cc_atm_withdrawal_vol",
-        "denominator_metrics": [
-          "cc_pos_txn_vol",
-          "cc_ecom_txn_vol",
-          "cc_atm_withdrawal_vol"
-        ],
-        "status_rules": [
-          {
-            "if": "value > 10",
-            "then": "strengthening"
-          },
-          {
-            "if": "value > 5",
-            "then": "active"
-          },
-          {
-            "if": "value > 2",
-            "then": "weakening"
-          },
-          {
-            "if": "true",
-            "then": "absent"
-          }
-        ]
-      },
-      "current_status": "absent",
-      "first_seen": "2026-03-31",
-      "id": "atm-cc-cash-stress",
-      "title": "CC ATM cash stress ratio"
-    },
-    "atm-private-cc-share": {
-      "pipeline": "atm_pos",
-      "layer": 1,
-      "sub_layer": "1b",
-      "domain": "market_structure",
-      "type": "data",
-      "label": "Private sector banks share of total credit cards",
-      "formula": "Private Sector Banks credit_cards / Total credit_cards",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
       "compute": {
         "method": "csv_category_share",
         "metric": "credit_cards",
-        "category": "Private Sector Banks",
-        "status_rules": [
-          {
-            "if": "value > prev_value + 1",
-            "then": "strengthening"
-          },
-          {
-            "if": "value > 60",
-            "then": "active"
-          },
-          {
-            "if": "true",
-            "then": "weakening"
-          }
-        ]
+        "category": "Public Sector Banks"
       },
+      "id": "cc-psb-share",
       "current_status": "unknown",
-      "first_seen": "2026-03-31",
-      "id": "atm-private-cc-share",
-      "title": "Private bank CC card share"
+      "first_seen": "2025-09-30"
     },
-    "atm-pos-per-cc": {
+    "cc-private-share": {
+      "title": "Private bank share of credit cards outstanding (%)",
+      "type": "data",
       "pipeline": "atm_pos",
       "layer": 1,
       "sub_layer": "1b",
-      "domain": "market_structure",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_category_share",
+        "metric": "credit_cards",
+        "category": "Private Sector Banks"
+      },
+      "id": "cc-private-share",
+      "current_status": "unknown",
+      "first_seen": "2025-09-30"
+    },
+    "dc-psb-share": {
+      "title": "PSB share of debit cards outstanding (%)",
       "type": "data",
-      "label": "POS terminals per credit card (acceptance density)",
-      "formula": "pos_terminals / credit_cards",
-      "compute": {
-        "method": "csv_total_ratio",
-        "metric": "pos_terminals",
-        "denominator_metric": "credit_cards",
-        "unit": "ratio",
-        "status_rules": [
-          {
-            "if": "value > prev_value + 0.1",
-            "then": "strengthening"
-          },
-          {
-            "if": "value > 1",
-            "then": "active"
-          },
-          {
-            "if": "value > 0.5",
-            "then": "weakening"
-          },
-          {
-            "if": "true",
-            "then": "absent"
-          }
-        ]
-      },
-      "current_status": "absent",
-      "first_seen": "2026-03-31",
-      "id": "atm-pos-per-cc",
-      "title": "POS terminals per credit card"
-    },
-    "dc-bank-scan": {
-      "id": "dc-bank-scan",
       "pipeline": "atm_pos",
-      "domain": "market_structure",
-      "type": "insight",
-      "first_seen": "2026-03-31",
-      "current_status": "unknown",
-      "title": "Debit card volume — all banks",
       "layer": 1,
-      "sub_layer": "1c",
+      "sub_layer": "1b",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
       "compute": {
-        "method": "csv_bank_scan",
+        "method": "csv_category_share",
         "metric": "debit_cards",
-        "value_type": "value"
+        "category": "Public Sector Banks"
       },
-      "label": "Debit card volume per bank (full scan)"
-    },
-    "infra-pos-bank-scan": {
-      "id": "infra-pos-bank-scan",
-      "pipeline": "atm_pos",
-      "domain": "market_structure",
-      "type": "insight",
-      "first_seen": "2026-03-31",
+      "id": "dc-psb-share",
       "current_status": "unknown",
-      "title": "POS terminals — all banks",
+      "first_seen": "2025-09-30"
+    },
+    "dc-private-share": {
+      "title": "Private bank share of debit cards outstanding (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1b",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_category_share",
+        "metric": "debit_cards",
+        "category": "Private Sector Banks"
+      },
+      "id": "dc-private-share",
+      "current_status": "unknown",
+      "first_seen": "2025-09-30"
+    },
+    "pos-psb-share": {
+      "title": "PSB share of POS terminals (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1b",
+      "domain": "infrastructure",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_category_share",
+        "metric": "pos_terminals",
+        "category": "Public Sector Banks"
+      },
+      "id": "pos-psb-share",
+      "current_status": "unknown",
+      "first_seen": "2025-09-30"
+    },
+    "pos-private-share": {
+      "title": "Private bank share of POS terminals (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1b",
+      "domain": "infrastructure",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_category_share",
+        "metric": "pos_terminals",
+        "category": "Private Sector Banks"
+      },
+      "id": "pos-private-share",
+      "current_status": "unknown",
+      "first_seen": "2025-09-30"
+    },
+    "cc-category-share-scan": {
+      "title": "CC outstanding share — every bank category (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
       "layer": 1,
       "sub_layer": "1c",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_category_scan_share",
+        "metric": "credit_cards"
+      },
+      "id": "cc-category-share-scan",
+      "current_status": "unknown",
+      "first_seen": "2025-09-30"
+    },
+    "dc-category-share-scan": {
+      "title": "DC outstanding share — every bank category (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1c",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_category_scan_share",
+        "metric": "debit_cards"
+      },
+      "id": "dc-category-share-scan",
+      "current_status": "unknown",
+      "first_seen": "2025-09-30"
+    },
+    "pos-category-share-scan": {
+      "title": "POS terminal share — every bank category (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1c",
+      "domain": "infrastructure",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_category_scan_share",
+        "metric": "pos_terminals"
+      },
+      "id": "pos-category-share-scan",
+      "current_status": "unknown",
+      "first_seen": "2025-09-30"
+    },
+    "cc-bank-scan": {
+      "title": "CC outstanding — every bank (absolute count)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1c",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_bank_scan",
+        "metric": "credit_cards",
+        "value_type": "value"
+      },
+      "id": "cc-bank-scan",
+      "current_status": "unknown",
+      "first_seen": "2025-09-30"
+    },
+    "pos-bank-scan": {
+      "title": "POS terminals — every bank (absolute count)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1c",
+      "domain": "infrastructure",
+      "spec_version": "1.0",
       "compute": {
         "method": "csv_bank_scan",
         "metric": "pos_terminals",
         "value_type": "value"
       },
-      "label": "POS terminals per bank (full scan)"
+      "id": "pos-bank-scan",
+      "current_status": "unknown",
+      "first_seen": "2025-09-30"
     }
   }
 }

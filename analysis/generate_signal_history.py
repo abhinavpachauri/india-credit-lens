@@ -161,10 +161,13 @@ def cmd_append(pipeline: str, period: str) -> int:
     hist["entries"].sort(key=lambda e: e["period"])
     save_history(pipeline, hist)
 
-    # ── Step 5: update current_status in registry ─────────────────────────────
+    # ── Step 5: update current_status + first_seen in registry ───────────────
     for sig_id, res in all_results.items():
         if sig_id in registry["signals"]:
-            registry["signals"][sig_id]["current_status"] = res["status"]
+            sig = registry["signals"][sig_id]
+            sig["current_status"] = res["status"]
+            if not sig.get("first_seen"):
+                sig["first_seen"] = period
     save_registry(registry)
 
     # ── Summary ───────────────────────────────────────────────────────────────

@@ -40,12 +40,13 @@ def _upsert(conn: sqlite3.Connection, pipeline: str, period: str, rows: list[dic
         conn.execute(
             """INSERT OR REPLACE INTO signals
                (pipeline, period, metric_id, entity_type, entity_id,
-                value, unit, status, computed_at)
-               VALUES (?,?,?,?,?, ?,?,?,?)""",
+                value, unit, status, spec_version, computed_at)
+               VALUES (?,?,?,?,?, ?,?,?,?,?)""",
             (pipeline, period, r["metric_id"],
              r.get("entity_type", "aggregate"),
              r.get("entity_id",   "total"),
-             r.get("value"), r.get("unit"), r.get("status"), ts)
+             r.get("value"), r.get("unit"), r.get("status"),
+             r.get("spec_version", "1.0"), ts)
         )
         count += 1
     return count
@@ -88,8 +89,10 @@ def run_append(pipeline: str, period: str,
         else:
             rows = []
 
+        spec_version = sig.get("spec_version", "1.0")
         for r in rows:
-            r["metric_id"] = sig_id
+            r["metric_id"]    = sig_id
+            r["spec_version"] = spec_version
         all_rows.extend(rows)
 
     row_count = _upsert(conn, pipeline, period, all_rows)
