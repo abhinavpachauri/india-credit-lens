@@ -211,11 +211,15 @@ def cmd_evaluate(pipeline: str, period: str) -> int:
     print(f"Evaluating Layer 1 signals: {pipeline} / {period} ...")
     summary = run_evaluate(pipeline, period, conn, registry)
 
-    print(f"\n  ✓ {pipeline} / {period}")
+    status = "✓" if summary['errors'] == 0 else f"⚠ {summary['errors']} domain(s) failed"
+    print(f"\n  {status}  {pipeline} / {period}")
     print(f"    Domains evaluated  : {summary['domains_evaluated']}")
     print(f"    Signals interpreted: {summary['signals_interpreted']}")
-    print(f"    API calls          : {summary['api_calls']}")
-    print(f"    Cache hits         : {summary['cache_hits']}")
+    print(f"    API calls          : {summary['api_calls']}  |  Cache hits: {summary['cache_hits']}")
+    if summary['total_tokens']:
+        saved = summary['cache_read_tokens']
+        print(f"    Tokens used        : {summary['total_tokens']:,}"
+              + (f"  |  Cache read: {saved:,} (saved ~{saved//1000}k tokens)" if saved else ""))
     print(f"    Output             : {summary['output_path']}")
     return 0
 
