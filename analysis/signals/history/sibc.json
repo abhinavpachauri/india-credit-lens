@@ -3,550 +3,12 @@
     "pipeline": "sibc",
     "schema_version": "1.0",
     "description": "Append-only signal history for the SIBC (Statement of India Bank Credit) pipeline. Each entry records the status of every tracked signal for one ingested period. Never edit past entries — only append.",
-    "entry_count": 5
+    "entry_count": 3
   },
   "entries": [
     {
-      "period": "2024-04-22",
-      "appended_at": "2026-06-04T15:35:37",
-      "signals": {
-        "three-year-credit-trajectory": {
-          "status": "pending"
-        },
-        "food-credit-jan-artifact": {
-          "status": "pending"
-        },
-        "credit-cycle-expansion": {
-          "status": "pending"
-        },
-        "services-growth-acceleration": {
-          "status": "pending"
-        },
-        "industry-reaccelerating": {
-          "status": "pending"
-        },
-        "services-credit-entry": {
-          "status": "pending"
-        },
-        "micro-small-growth-tripled": {
-          "status": "pending"
-        },
-        "medium-enterprise-sweet-spot": {
-          "status": "pending"
-        },
-        "size-definition-boundary-issue": {
-          "status": "pending"
-        },
-        "msme-first-cycle-window": {
-          "status": "pending"
-        },
-        "nbfc-risk-weight-cycle-complete": {
-          "status": "pending"
-        },
-        "computer-software-multi-year-surge": {
-          "status": "pending"
-        },
-        "transport-operators-decelerating": {
-          "status": "pending"
-        },
-        "cre-trade-consistent-growth": {
-          "status": "pending"
-        },
-        "nbfc-double-counting": {
-          "status": "pending"
-        },
-        "co-lending-infrastructure": {
-          "status": "pending"
-        },
-        "trade-finance-compounder": {
-          "status": "pending"
-        },
-        "gold-loans-structural-surge": {
-          "status": "pending"
-        },
-        "credit-card-collapse": {
-          "status": "pending"
-        },
-        "vehicle-loans-accelerating": {
-          "status": "pending"
-        },
-        "consumer-durables-accelerating-decline": {
-          "status": "pending"
-        },
-        "gold-loans-reclassification-overstates-demand": {
-          "status": "pending"
-        },
-        "gold-loan-market-entry": {
-          "status": "pending"
-        },
-        "vehicle-ev-credit": {
-          "status": "pending"
-        },
-        "psl-housing-anomalous-surge": {
-          "status": "pending"
-        },
-        "export-credit-declining": {
-          "status": "pending"
-        },
-        "psl-housing-reclassification": {
-          "status": "pending"
-        },
-        "psl-totals-not-additive": {
-          "status": "pending"
-        },
-        "renewable-energy-project-finance": {
-          "status": "pending"
-        },
-        "pslc-trading-tooling": {
-          "status": "pending"
-        },
-        "pli-capex-broadening-confirmed": {
-          "status": "pending"
-        },
-        "gems-jewellery-gold-price-proxy": {
-          "status": "pending"
-        },
-        "infrastructure-decelerating": {
-          "status": "pending"
-        },
-        "chemicals-petroleum-capex": {
-          "status": "pending"
-        },
-        "infrastructure-sub-classification-absent": {
-          "status": "pending"
-        },
-        "industry-type-partition-not-exact": {
-          "status": "pending"
-        },
-        "pli-supply-chain-finance": {
-          "status": "pending"
-        },
-        "basic-metal-capex-lending": {
-          "status": "pending"
-        },
-        "sibc-bank-credit-yoy": {
-          "status": "new",
-          "value": 17.1
-        },
-        "sibc-bank-credit-abs": {
-          "status": "new",
-          "value": 21361434.74
-        },
-        "sibc-nonfood-credit-yoy": {
-          "status": "new",
-          "value": 16.9
-        },
-        "sibc-nonfood-credit-abs": {
-          "status": "new",
-          "value": 21291163.39
-        },
-        "sibc-sectors-positive-yoy-count": {
-          "status": "new",
-          "value": 4.0
-        },
-        "sibc-agriculture-yoy": {
-          "status": "new",
-          "value": 15.7
-        },
-        "sibc-agriculture-share": {
-          "status": "new",
-          "value": 13.0797
-        },
-        "sibc-industry-yoy": {
-          "status": "new",
-          "value": 15.0
-        },
-        "sibc-industry-share": {
-          "status": "new",
-          "value": 22.6494
-        },
-        "sibc-services-yoy": {
-          "status": "new",
-          "value": 19.0
-        },
-        "sibc-services-share": {
-          "status": "new",
-          "value": 29.9592
-        },
-        "sibc-personal-loans-yoy": {
-          "status": "new",
-          "value": 16.2
-        },
-        "sibc-personal-loans-share": {
-          "status": "new",
-          "value": 34.3118
-        },
-        "sibc-msme-micro-small-yoy": {
-          "status": "new",
-          "value": 33.1
-        },
-        "sibc-msme-micro-small-share": {
-          "status": "new",
-          "value": 23.2021
-        },
-        "sibc-msme-medium-yoy": {
-          "status": "new",
-          "value": 21.7
-        },
-        "sibc-msme-medium-share": {
-          "status": "new",
-          "value": 9.6512
-        },
-        "sibc-large-corporate-yoy": {
-          "status": "new",
-          "value": 8.9
-        },
-        "sibc-large-corporate-share": {
-          "status": "new",
-          "value": 67.1467
-        },
-        "sibc-msme-size-yoy-spread": {
-          "status": "new",
-          "value": 24.2
-        },
-        "sibc-pl-housing-yoy": {
-          "status": "new",
-          "value": 11.5
-        },
-        "sibc-pl-housing-share": {
-          "status": "new",
-          "value": 48.3477
-        },
-        "sibc-pl-gold-yoy": {
-          "status": "new",
-          "value": 123.1
-        },
-        "sibc-pl-gold-share": {
-          "status": "new",
-          "value": 6.6315
-        },
-        "sibc-pl-cc-yoy": {
-          "status": "new",
-          "value": 3.5
-        },
-        "sibc-pl-cc-share": {
-          "status": "new",
-          "value": 4.2421
-        },
-        "sibc-pl-vehicle-yoy": {
-          "status": "new",
-          "value": 18.6
-        },
-        "sibc-pl-education-yoy": {
-          "status": "new",
-          "value": 13.4
-        },
-        "sibc-psl-agri-yoy": {
-          "status": "new",
-          "value": 16.0
-        },
-        "sibc-psl-msme-yoy": {
-          "status": "new",
-          "value": 29.5
-        },
-        "sibc-psl-housing-yoy": {
-          "status": "new",
-          "value": 39.8
-        },
-        "sibc-psl-renewable-yoy": {
-          "status": "new",
-          "value": 34.1
-        },
-        "sibc-industry-type-yoy-scan": {
-          "status": "unknown"
-        },
-        "sibc-industry-type-share-scan": {
-          "status": "unknown"
-        },
-        "sibc-services-yoy-scan": {
-          "status": "unknown"
-        },
-        "sibc-services-share-scan": {
-          "status": "unknown"
-        },
-        "sibc-pl-yoy-scan": {
-          "status": "unknown"
-        },
-        "sibc-pl-share-scan": {
-          "status": "unknown"
-        },
-        "sibc-psl-yoy-scan": {
-          "status": "unknown"
-        }
-      }
-    },
-    {
-      "period": "2025-04-22",
-      "appended_at": "2026-06-04T15:35:38",
-      "signals": {
-        "three-year-credit-trajectory": {
-          "status": "pending"
-        },
-        "food-credit-jan-artifact": {
-          "status": "pending"
-        },
-        "credit-cycle-expansion": {
-          "status": "pending"
-        },
-        "services-growth-acceleration": {
-          "status": "pending"
-        },
-        "industry-reaccelerating": {
-          "status": "pending"
-        },
-        "services-credit-entry": {
-          "status": "pending"
-        },
-        "micro-small-growth-tripled": {
-          "status": "pending"
-        },
-        "medium-enterprise-sweet-spot": {
-          "status": "pending"
-        },
-        "size-definition-boundary-issue": {
-          "status": "pending"
-        },
-        "msme-first-cycle-window": {
-          "status": "pending"
-        },
-        "nbfc-risk-weight-cycle-complete": {
-          "status": "pending"
-        },
-        "computer-software-multi-year-surge": {
-          "status": "pending"
-        },
-        "transport-operators-decelerating": {
-          "status": "pending"
-        },
-        "cre-trade-consistent-growth": {
-          "status": "pending"
-        },
-        "nbfc-double-counting": {
-          "status": "pending"
-        },
-        "co-lending-infrastructure": {
-          "status": "pending"
-        },
-        "trade-finance-compounder": {
-          "status": "pending"
-        },
-        "gold-loans-structural-surge": {
-          "status": "pending"
-        },
-        "credit-card-collapse": {
-          "status": "pending"
-        },
-        "vehicle-loans-accelerating": {
-          "status": "pending"
-        },
-        "consumer-durables-accelerating-decline": {
-          "status": "pending"
-        },
-        "gold-loans-reclassification-overstates-demand": {
-          "status": "pending"
-        },
-        "gold-loan-market-entry": {
-          "status": "pending"
-        },
-        "vehicle-ev-credit": {
-          "status": "pending"
-        },
-        "psl-housing-anomalous-surge": {
-          "status": "pending"
-        },
-        "export-credit-declining": {
-          "status": "pending"
-        },
-        "psl-housing-reclassification": {
-          "status": "pending"
-        },
-        "psl-totals-not-additive": {
-          "status": "pending"
-        },
-        "renewable-energy-project-finance": {
-          "status": "pending"
-        },
-        "pslc-trading-tooling": {
-          "status": "pending"
-        },
-        "pli-capex-broadening-confirmed": {
-          "status": "pending"
-        },
-        "gems-jewellery-gold-price-proxy": {
-          "status": "pending"
-        },
-        "infrastructure-decelerating": {
-          "status": "pending"
-        },
-        "chemicals-petroleum-capex": {
-          "status": "pending"
-        },
-        "infrastructure-sub-classification-absent": {
-          "status": "pending"
-        },
-        "industry-type-partition-not-exact": {
-          "status": "pending"
-        },
-        "pli-supply-chain-finance": {
-          "status": "pending"
-        },
-        "basic-metal-capex-lending": {
-          "status": "pending"
-        },
-        "sibc-bank-credit-yoy": {
-          "status": "strengthening",
-          "value": 17.1
-        },
-        "sibc-bank-credit-abs": {
-          "status": "strengthening",
-          "value": 21361434.74
-        },
-        "sibc-nonfood-credit-yoy": {
-          "status": "strengthening",
-          "value": 16.9
-        },
-        "sibc-nonfood-credit-abs": {
-          "status": "strengthening",
-          "value": 21291163.39
-        },
-        "sibc-sectors-positive-yoy-count": {
-          "status": "active",
-          "value": 4.0
-        },
-        "sibc-agriculture-yoy": {
-          "status": "strengthening",
-          "value": 15.7
-        },
-        "sibc-agriculture-share": {
-          "status": "active",
-          "value": 13.0797
-        },
-        "sibc-industry-yoy": {
-          "status": "strengthening",
-          "value": 15.0
-        },
-        "sibc-industry-share": {
-          "status": "active",
-          "value": 22.6494
-        },
-        "sibc-services-yoy": {
-          "status": "strengthening",
-          "value": 19.0
-        },
-        "sibc-services-share": {
-          "status": "active",
-          "value": 29.9592
-        },
-        "sibc-personal-loans-yoy": {
-          "status": "strengthening",
-          "value": 16.2
-        },
-        "sibc-personal-loans-share": {
-          "status": "active",
-          "value": 34.3118
-        },
-        "sibc-msme-micro-small-yoy": {
-          "status": "strengthening",
-          "value": 33.1
-        },
-        "sibc-msme-micro-small-share": {
-          "status": "active",
-          "value": 23.2021
-        },
-        "sibc-msme-medium-yoy": {
-          "status": "strengthening",
-          "value": 21.7
-        },
-        "sibc-msme-medium-share": {
-          "status": "active",
-          "value": 9.6512
-        },
-        "sibc-large-corporate-yoy": {
-          "status": "strengthening",
-          "value": 8.9
-        },
-        "sibc-large-corporate-share": {
-          "status": "active",
-          "value": 67.1467
-        },
-        "sibc-msme-size-yoy-spread": {
-          "status": "strengthening",
-          "value": 24.2
-        },
-        "sibc-pl-housing-yoy": {
-          "status": "strengthening",
-          "value": 11.5
-        },
-        "sibc-pl-housing-share": {
-          "status": "active",
-          "value": 48.3477
-        },
-        "sibc-pl-gold-yoy": {
-          "status": "active",
-          "value": 123.1
-        },
-        "sibc-pl-gold-share": {
-          "status": "active",
-          "value": 6.6315
-        },
-        "sibc-pl-cc-yoy": {
-          "status": "strengthening",
-          "value": 3.5
-        },
-        "sibc-pl-cc-share": {
-          "status": "active",
-          "value": 4.2421
-        },
-        "sibc-pl-vehicle-yoy": {
-          "status": "strengthening",
-          "value": 18.6
-        },
-        "sibc-pl-education-yoy": {
-          "status": "active",
-          "value": 13.4
-        },
-        "sibc-psl-agri-yoy": {
-          "status": "strengthening",
-          "value": 16.0
-        },
-        "sibc-psl-msme-yoy": {
-          "status": "strengthening",
-          "value": 29.5
-        },
-        "sibc-psl-housing-yoy": {
-          "status": "strengthening",
-          "value": 39.8
-        },
-        "sibc-psl-renewable-yoy": {
-          "status": "active",
-          "value": 34.1
-        },
-        "sibc-industry-type-yoy-scan": {
-          "status": "unknown"
-        },
-        "sibc-industry-type-share-scan": {
-          "status": "unknown"
-        },
-        "sibc-services-yoy-scan": {
-          "status": "unknown"
-        },
-        "sibc-services-share-scan": {
-          "status": "unknown"
-        },
-        "sibc-pl-yoy-scan": {
-          "status": "unknown"
-        },
-        "sibc-pl-share-scan": {
-          "status": "unknown"
-        },
-        "sibc-psl-yoy-scan": {
-          "status": "unknown"
-        }
-      }
-    },
-    {
       "period": "2026-02-27",
-      "appended_at": "2026-06-04T11:20:06",
+      "appended_at": "2026-06-04T18:41:45",
       "signals": {
         "three-year-credit-trajectory": {
           "status": "pending"
@@ -661,20 +123,161 @@
         },
         "basic-metal-capex-lending": {
           "status": "pending"
+        },
+        "sibc-bank-credit-yoy": {
+          "status": "strengthening",
+          "value": 14.6
+        },
+        "sibc-bank-credit-abs": {
+          "status": "strengthening",
+          "value": 20475381.96
+        },
+        "sibc-nonfood-credit-yoy": {
+          "status": "strengthening",
+          "value": 14.4
+        },
+        "sibc-nonfood-credit-abs": {
+          "status": "strengthening",
+          "value": 20386086.56
+        },
+        "sibc-sectors-positive-yoy-count": {
+          "status": "active",
+          "value": 4.0
+        },
+        "sibc-agriculture-yoy": {
+          "status": "strengthening",
+          "value": 11.4
+        },
+        "sibc-agriculture-share": {
+          "status": "active",
+          "value": 12.9744
+        },
+        "sibc-industry-yoy": {
+          "status": "strengthening",
+          "value": 12.1
+        },
+        "sibc-industry-share": {
+          "status": "active",
+          "value": 22.6855
+        },
+        "sibc-services-yoy": {
+          "status": "strengthening",
+          "value": 15.5
+        },
+        "sibc-services-share": {
+          "status": "active",
+          "value": 29.5851
+        },
+        "sibc-personal-loans-yoy": {
+          "status": "strengthening",
+          "value": 14.9
+        },
+        "sibc-personal-loans-share": {
+          "status": "active",
+          "value": 34.755
+        },
+        "sibc-msme-micro-small-yoy": {
+          "status": "strengthening",
+          "value": 31.2
+        },
+        "sibc-msme-micro-small-share": {
+          "status": "strengthening",
+          "value": 23.5009
+        },
+        "sibc-msme-medium-yoy": {
+          "status": "strengthening",
+          "value": 22.3
+        },
+        "sibc-msme-medium-share": {
+          "status": "strengthening",
+          "value": 9.7124
+        },
+        "sibc-large-corporate-yoy": {
+          "status": "active",
+          "value": 5.5
+        },
+        "sibc-large-corporate-share": {
+          "status": "weakening",
+          "value": 66.7867
+        },
+        "sibc-msme-size-yoy-spread": {
+          "status": "strengthening",
+          "value": 25.7
+        },
+        "sibc-pl-housing-yoy": {
+          "status": "strengthening",
+          "value": 11.1
+        },
+        "sibc-pl-housing-share": {
+          "status": "weakening",
+          "value": 48.7639
+        },
+        "sibc-pl-gold-yoy": {
+          "status": "strengthening",
+          "value": 128.8
         },
         "sibc-pl-gold-share": {
           "status": "strengthening",
           "value": 5.9574
         },
+        "sibc-pl-cc-yoy": {
+          "status": "active",
+          "value": 1.5
+        },
         "sibc-pl-cc-share": {
-          "status": "weakening",
+          "status": "active",
           "value": 4.409
+        },
+        "sibc-pl-vehicle-yoy": {
+          "status": "strengthening",
+          "value": 17.1
+        },
+        "sibc-pl-education-yoy": {
+          "status": "active",
+          "value": 14.0
+        },
+        "sibc-psl-agri-yoy": {
+          "status": "strengthening",
+          "value": 14.1
+        },
+        "sibc-psl-msme-yoy": {
+          "status": "strengthening",
+          "value": 24.8
+        },
+        "sibc-psl-housing-yoy": {
+          "status": "strengthening",
+          "value": 37.9
+        },
+        "sibc-psl-renewable-yoy": {
+          "status": "active",
+          "value": 62.0
+        },
+        "sibc-industry-type-yoy-scan": {
+          "status": "unknown"
+        },
+        "sibc-industry-type-share-scan": {
+          "status": "unknown"
+        },
+        "sibc-services-yoy-scan": {
+          "status": "unknown"
+        },
+        "sibc-services-share-scan": {
+          "status": "unknown"
+        },
+        "sibc-pl-yoy-scan": {
+          "status": "unknown"
+        },
+        "sibc-pl-share-scan": {
+          "status": "unknown"
+        },
+        "sibc-psl-yoy-scan": {
+          "status": "unknown"
         }
       }
     },
     {
       "period": "2026-03-30",
-      "appended_at": "2026-06-04T11:20:06",
+      "appended_at": "2026-06-04T18:41:45",
       "signals": {
         "three-year-credit-trajectory": {
           "status": "pending"
@@ -790,19 +393,160 @@
         "basic-metal-capex-lending": {
           "status": "pending"
         },
+        "sibc-bank-credit-yoy": {
+          "status": "active",
+          "value": 14.5
+        },
+        "sibc-bank-credit-abs": {
+          "status": "strengthening",
+          "value": 20754077.69
+        },
+        "sibc-nonfood-credit-yoy": {
+          "status": "active",
+          "value": 14.3
+        },
+        "sibc-nonfood-credit-abs": {
+          "status": "strengthening",
+          "value": 20671434.55
+        },
+        "sibc-sectors-positive-yoy-count": {
+          "status": "active",
+          "value": 4.0
+        },
+        "sibc-agriculture-yoy": {
+          "status": "strengthening",
+          "value": 12.3
+        },
+        "sibc-agriculture-share": {
+          "status": "active",
+          "value": 12.98
+        },
+        "sibc-industry-yoy": {
+          "status": "strengthening",
+          "value": 13.5
+        },
+        "sibc-industry-share": {
+          "status": "active",
+          "value": 22.6952
+        },
+        "sibc-services-yoy": {
+          "status": "strengthening",
+          "value": 16.3
+        },
+        "sibc-services-share": {
+          "status": "active",
+          "value": 29.6387
+        },
+        "sibc-personal-loans-yoy": {
+          "status": "strengthening",
+          "value": 15.2
+        },
+        "sibc-personal-loans-share": {
+          "status": "active",
+          "value": 34.6861
+        },
+        "sibc-msme-micro-small-yoy": {
+          "status": "active",
+          "value": 30.4
+        },
+        "sibc-msme-micro-small-share": {
+          "status": "active",
+          "value": 23.2011
+        },
+        "sibc-msme-medium-yoy": {
+          "status": "active",
+          "value": 21.0
+        },
+        "sibc-msme-medium-share": {
+          "status": "active",
+          "value": 9.6749
+        },
+        "sibc-large-corporate-yoy": {
+          "status": "strengthening",
+          "value": 7.8
+        },
+        "sibc-large-corporate-share": {
+          "status": "active",
+          "value": 67.1239
+        },
+        "sibc-msme-size-yoy-spread": {
+          "status": "weakening",
+          "value": 22.6
+        },
+        "sibc-pl-housing-yoy": {
+          "status": "active",
+          "value": 11.0
+        },
+        "sibc-pl-housing-share": {
+          "status": "active",
+          "value": 48.6356
+        },
+        "sibc-pl-gold-yoy": {
+          "status": "active",
+          "value": 127.9
+        },
         "sibc-pl-gold-share": {
-          "status": "new",
+          "status": "active",
           "value": 6.3055
         },
+        "sibc-pl-cc-yoy": {
+          "status": "strengthening",
+          "value": 1.7
+        },
         "sibc-pl-cc-share": {
-          "status": "new",
+          "status": "active",
           "value": 4.2971
+        },
+        "sibc-pl-vehicle-yoy": {
+          "status": "active",
+          "value": 17.1
+        },
+        "sibc-pl-education-yoy": {
+          "status": "active",
+          "value": 13.7
+        },
+        "sibc-psl-agri-yoy": {
+          "status": "strengthening",
+          "value": 15.2
+        },
+        "sibc-psl-msme-yoy": {
+          "status": "strengthening",
+          "value": 26.5
+        },
+        "sibc-psl-housing-yoy": {
+          "status": "strengthening",
+          "value": 38.2
+        },
+        "sibc-psl-renewable-yoy": {
+          "status": "strengthening",
+          "value": 64.4
+        },
+        "sibc-industry-type-yoy-scan": {
+          "status": "unknown"
+        },
+        "sibc-industry-type-share-scan": {
+          "status": "unknown"
+        },
+        "sibc-services-yoy-scan": {
+          "status": "unknown"
+        },
+        "sibc-services-share-scan": {
+          "status": "unknown"
+        },
+        "sibc-pl-yoy-scan": {
+          "status": "unknown"
+        },
+        "sibc-pl-share-scan": {
+          "status": "unknown"
+        },
+        "sibc-psl-yoy-scan": {
+          "status": "unknown"
         }
       }
     },
     {
       "period": "2026-04-30",
-      "appended_at": "2026-06-04T15:35:39",
+      "appended_at": "2026-06-04T18:41:46",
       "signals": {
         "three-year-credit-trajectory": {
           "status": "pending"
