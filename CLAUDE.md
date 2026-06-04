@@ -43,10 +43,10 @@ Live components only. Planned work lives in `STRATEGY_PLANNER.md`.
 | validate_annotation_basis.py (Check 2d) | **Live** — basis completeness check (inference/hypothesis → basis.inferences non-empty) |
 | promote_annotations.py (Stage 7) | **Live** — automated verified copy to web |
 | signal_registry.json | **Live** — 7 signals tracked across 3 issues (newsletter subsystem) |
-| signal history layer | **Live** — `analysis/signals/` — registry.json (70 signals), history/sibc.json + history/atm_pos.json; Check 2e validator; `generate_signal_history.py` |
+| signal compute layer | **Live** — `analysis/signals/` — registry.json (90 signals, 52 Layer 1 with compute specs), signals.db (SQLite — primary store), history JSON files (mirrors); compute engine in signals/compute/; Check 2e validates DB + registry + history |
 | Subsystem generation | **Live** — `generate_mermaid.py` → `.mmd` + `validate.py --check-subsystems` |
 | detect_format.py (Stage 0) | **Live** — flags format changes in new XLSX before extraction |
-| ATM/POS pipeline | **Live** — `rbi_atm_pos/` — Stages 0–3 complete; Stage 4 (L1 compute) presence/absence only; Stage 5 (L2a) pending — insights script runs in gate for now |
+| ATM/POS pipeline | **Live** — `rbi_atm_pos/` — Stages 0–3 complete; Stage 4 (L1 compute) fully numeric — 22 signals across 6 periods in DB; Stage 5 (L2a) pending |
 | AppShell + DLS | **Live** — shared Header (one instance), `dls/InsightCard`, `dls/InsightCTAStrip` used by both SIBC and Payments |
 
 ---
@@ -71,10 +71,10 @@ Use CLI tools for all external service interactions — they are the most contex
 | `python3 analysis/promote_annotations.py` | Stage 7: verified copy annotations_merged.ts → rbi_sibc.ts — never `cp` or manual paste |
 | `python3 analysis/detect_format.py` | Stage 0: flag format changes before extraction (SIBC) |
 | `python3 analysis/source_claims.py` | Post-model-update: source all system model claims (run after any Layer 2a model change) |
-| `python3 analysis/generate_signal_history.py append --pipeline {name} --period {date}` | Stage 4: Layer 1 signal compute + append to history |
+| `python3 analysis/generate_signal_history.py append --pipeline {name} --period {date}` | Stage 4: Layer 1 signal compute → writes to signals.db + mirrors to history JSON |
 | `python3 analysis/generate_signal_history.py evaluate --pipeline {name} --period {date}` | Stage 5: Layer 2a signal evaluate (once model exists) |
 | `python3 analysis/generate_signal_history.py status` | Print current signal states across all pipelines |
-| `python3 analysis/validate_signal_history.py` | Check 2e: signal history integrity (registry + history files) |
+| `python3 analysis/validate_signal_history.py` | Check 2e: signal history integrity (DB rows + registry + history JSON mirror) |
 | `python3 analysis/newsletter/validate_newsletter_config.py` | Newsletter gate — exception path, not part of standard pipeline |
 
 ---
@@ -115,7 +115,7 @@ Use CLI tools for all external service interactions — they are the most contex
 | `analysis/validate_content.py` | Check 2b: dates/values/growth in annotation bodies vs sections.json |
 | `analysis/validate_claims.py` | Check 2c: claim sourcing — every system model claim has a source |
 | `analysis/validate_annotation_basis.py` | Check 2d: basis completeness — inference/hypothesis annotations must have basis.inferences |
-| `analysis/validate_signal_history.py` | Check 2e: signal history integrity — registry schema + history file consistency |
+| `analysis/validate_signal_history.py` | Check 2e: signal history integrity — DB rows, registry schema, history JSON mirror |
 | `analysis/validate.py` | Checks 4, 5: system_model.json + subsystems.json |
 | `analysis/extract_sibc.py` | Stage 1: SIBC xlsx → sections.json + format_report.json |
 | `analysis/detect_format.py` | Stage 0: detect structural changes in new XLSX vs prior period (SIBC) |
@@ -125,9 +125,12 @@ Use CLI tools for all external service interactions — they are the most contex
 | `analysis/source_claims.py` | Post-model-update: source all claims in system_model.json |
 | `analysis/promote_annotations.py` | Stage 7: annotations_merged.ts → rbi_sibc.ts (verified copy + ID diff) |
 | `analysis/generate_signal_history.py` | Stage 4 (`append`) + Stage 5 (`evaluate`) + `status` + `seed` commands |
-| `analysis/signals/registry.json` | Universal signal catalog — 70 signals, layer 1/2/3 tagged, compute specs on layer-1 SIBC signals |
-| `analysis/signals/history/sibc.json` | Append-only SIBC history — layer 1 algorithmic (value + status), layer 2/3 pending |
-| `analysis/signals/history/atm_pos.json` | Append-only ATM/POS signal history (layer 1 auto-derived) |
+| `analysis/signals/registry.json` | Universal signal catalog — 90 signals, layer 1/2/3 tagged; all Layer 1 signals have compute specs (SIBC + ATM/POS) |
+| `analysis/signals/signals.db` | **Primary signal store** — SQLite; (pipeline, period, metric_id, entity_type, entity_id) fact table + metric_ranges |
+| `analysis/signals/compute/` | Compute engine: engine.py dispatches; sibc.py + atm_pos.py implement all 1a/1b/1c methods |
+| `analysis/signals/db.py` | DB init, schema, refresh_ranges() |
+| `analysis/signals/history/sibc.json` | Human-readable mirror of signals.db for SIBC (not primary) |
+| `analysis/signals/history/atm_pos.json` | Human-readable mirror of signals.db for ATM/POS (not primary) |
 | `analysis/cross_source/catalog.json` | Tuple registry — all declared cross-source pairs (Layer 2b) |
 | `analysis/rbi_atm_pos/merged/system_model.json` | ATM/POS per-source system model (Layer 2a — pending first FOUNDATION) |
 | `analysis/rbi_sibc/timeline.json` | Registry of all ingested periods (includes `is_fy_end` flag) |
@@ -187,7 +190,7 @@ For session-specific state (current period, what's been validated, what's pendin
 
 See `STRATEGY_PLANNER.md` for the prioritised roadmap. Immediately next:
 
-1. ATM/POS Layer 1: add numeric compute specs to registry + sections_merged.json for ATM/POS
-2. Ingest next SIBC + ATM/POS period (files expected soon)
-3. ATM/POS Layer 2a: first FOUNDATION pass on system_model.json once full year of data available
-4. Newsletter standardisation: blocked on signal layer completion across both pipelines
+1. Ingest next SIBC + ATM/POS period (files expected soon)
+2. Layer 2 signal evaluation: design `evaluate` command — reads Layer 1 DB values → LLM interpretation → writes Layer 2 statuses to DB
+3. ATM/POS Layer 2a: first FOUNDATION pass on system_model.json (6 months of data now available)
+4. Newsletter standardisation: blocked on Layer 2 signal evaluation across both pipelines

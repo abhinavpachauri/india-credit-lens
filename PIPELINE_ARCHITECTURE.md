@@ -56,10 +56,14 @@ Applies to every pipeline. Scripts differ; stage purpose and order do not.
                       + sections_merged.json (time-series, analysis-ready — for signals)
            This is the single source of truth for all downstream stages.
 
-[Stage 4]  Layer 1 — signal evaluate           (every period, always)
+[Stage 4]  Layer 1 — signal compute            (every period, always)
            Read compute specs from registry.json
-           Compute status + value algorithmically from sections_merged.json
-           Append to signals/history/{pipeline}.json
+           Compute status + value algorithmically from consolidated data
+             SIBC: reads sections_merged.json by period label (dataDate → label via timeline.json)
+             ATM/POS: reads atm_pos_consolidated.csv filtered by report_date
+           Write all entity-level rows to signals.db (INSERT OR REPLACE)
+           Refresh metric_ranges in signals.db for all affected metrics
+           Mirror aggregate-level results to signals/history/{pipeline}.json
            No Claude involvement. No exceptions.
 
 [Stage 5]  Layer 2a — signal evaluate          (every period, if model exists)
@@ -156,12 +160,20 @@ Signal IDs are immutable once created. Add signals; never rename or delete.
 
 Every signal carries:
 - `layer` — 1, 2, or 3
+- `sub_layer` — `"1a"` | `"1b"` | `"1c"` (Layer 1 only)
 - `pipeline` — which source owns this signal
 - `type` — `data` (observable) or `inference` (derived) or `insight` (narrative)
-- `compute` — required for all `layer: 1` SIBC data signals; defines algorithmic derivation
+- `compute` — required for all `layer: 1` signals; defines algorithmic derivation
 - `evaluate` — required for all `layer: 2` and `layer: 3` signals once model exists
 
-**Layer 1 `compute` spec** — reads from `sections_merged.json`:
+**Layer 1 sub-layers:**
+- `1a` — aggregate scalars from total rows (YoY, ratios, shares, spreads)
+- `1b` — composition scalars across natural data boundaries (sector share, category breakdown)
+- `1c` — full entity scans — one row per entity (all banks, all industry types, all categories)
+  Entity rows stored in DB with entity_type / entity_id. No filtering in compute layer —
+  analysis layer extracts top-N / directional / outlier observations via DB queries.
+
+**Layer 1 `compute` spec — SIBC** (reads sections_merged.json by period label):
 ```json
 "compute": {
   "method": "series_yoy",
@@ -176,10 +188,23 @@ Every signal carries:
 }
 ```
 
-Compute methods: `series_yoy` | `series_abs` | `series_share` | `count_positive_yoy` |
-`is_max_series` | `is_min_series` | `abs_undercount` | `yoy_spread` | `static_active`
+SIBC compute methods: `series_yoy` | `series_abs` | `series_share` | `multi_series_share` |
+`count_positive_yoy` | `is_max_series` | `abs_undercount` | `yoy_spread` | `yoy_spread_named` |
+`static_active` | `section_scan_yoy` | `section_scan_share`
 
-**Layer 2a `evaluate` spec** — reads from Layer 1 signal history:
+**Layer 1 `compute` spec — ATM/POS** (reads atm_pos_consolidated.csv):
+```json
+"compute": {
+  "method": "csv_bank_scan",
+  "metric": "debit_cards",
+  "value_type": "value"
+}
+```
+
+ATM/POS compute methods: `csv_total_yoy` | `csv_total_ratio` | `csv_ratio_sum` | `csv_sum_yoy` |
+`csv_category_share` | `csv_category_yoy` | `csv_category_scan_share` | `csv_bank_scan`
+
+**Layer 2a `evaluate` spec** — reads from Layer 1 DB outputs:
 ```json
 "evaluate": {
   "requires": ["psl-msme-structural-acceleration", "micro-small-growth-tripled"],
@@ -191,44 +216,56 @@ Compute methods: `series_yoy` | `series_abs` | `series_share` | `count_positive_
 }
 ```
 
-Signals without an `evaluate` spec carry forward their last known status — they do not
-reset to `pending` on every period. Claude assigns status during the model update pass;
-the registry spec formalises it for subsequent periods.
+### DB — primary signal store
 
-### History — append-only per-pipeline
+`analysis/signals/signals.db` — SQLite, single file for all pipelines.
 
-`analysis/signals/history/{pipeline}.json` — one entry per ingested period.
+**`signals` table** — fact table, one row per (pipeline, period, metric_id, entity_type, entity_id):
+- `entity_type`: `aggregate` | `bank` | `bank_category` | `industry_type` | `section_series` | `loan_type` | `psl_category`
+- `entity_id`: `total` for aggregates; entity name for 1c scans
+- `value`: computed numeric value (NULL for signals without numeric output)
+- `status`: result of status_rules evaluation
+
+**`metric_ranges` table** — min/max/mean/p25/p75 per metric, refreshed after every append.
+Used by analysis layer to understand where the current value sits in historical context.
+
+**`ingestion_log` table** — one row per append run; tracks metric_count and row_count.
+
+Current state (June 2026):
+- SIBC: 28 compute signals × 3 periods = 254 rows
+- ATM/POS: 22 compute signals × 6 periods = 874 rows (includes full bank-level 1c scans)
+
+### History JSON — human-readable mirror
+
+`analysis/signals/history/{pipeline}.json` — mirrors aggregate/total rows from DB.
+Not the primary store — DB is authoritative. Used for audit trail and human review.
 
 ```json
 {
-  "_meta": { "pipeline": "sibc", "schema_version": "1.0", "entry_count": 2 },
+  "_meta": { "pipeline": "sibc", "schema_version": "1.0", "entry_count": 3 },
   "entries": [
     {
       "period": "YYYY-MM-DD",
       "appended_at": "ISO8601",
       "signals": {
-        "<layer-1-signal>": { "status": "active",  "value": 17.1 },
-        "<layer-2-signal>": { "status": "active" },
-        "<unimplemented>":  { "status": "pending" }
+        "<layer-1-signal>": { "status": "strengthening", "value": 17.1 },
+        "<layer-2-signal>": { "status": "pending" }
       }
     }
   ]
 }
 ```
 
-Layer 1 entries always carry `value` (numeric). Layer 2+ carry `status` only.
-`pending` means the layer's model does not yet exist for this pipeline.
-
 **Status values:** `new` | `active` | `strengthening` | `weakening` | `reversed` | `absent` | `unknown` | `pending`
 
 ### Validator — Check 2e
 
 `validate_signal_history.py` enforces:
-- `layer` field present on every signal in registry
-- `compute` spec present on every SIBC `layer: 1` data signal
-- `value` present in history for every non-`static_active` layer-1 signal
-- No orphan signal IDs in history files
-- `current_status` in registry matches latest history entry
+- A: registry.json schema — required fields, valid statuses, known pipelines/domains
+- B: history JSON schema — chronological order, no orphan IDs
+- C: continuity — every signal appears in history after first_seen
+- D: current_status in registry matches latest history entry
+- E: DB integrity — signals.db exists, layer-1 metrics present, no orphaned IDs, metric_ranges populated
 
 ---
 
@@ -324,29 +361,26 @@ No system_model, subsystems, annotations_draft, or mermaid output in per-period 
 **Source:** RBI ATM/Acceptance Infrastructure and Card Statistics (monthly XLSX)
 **Cadence:** Monthly
 
-### Current state vs target architecture
+### Current state
 
-| Stage | Target | Current state | Gap |
-|---|---|---|---|
-| 0 | Format detection | `detect_atm_pos_format.py` ✓ | — |
-| 1 | Extraction | `extract_atm_pos.py` ✓ | — |
-| 2 | Per-period validation | `validate_atm_pos.py` ✓ | — |
-| 3 | Consolidation + Merge | CSV ✓ · sections_merged.json ✗ | Need merged JSON for L1 compute |
-| 4 | Layer 1 evaluate | Presence/absence only | Need numeric compute specs from CSV |
-| 5 | Layer 2a evaluate | Not implemented | `generate_atm_pos_insights.py` (currently in gate) must move here |
-| 6 | Evals gate | `run_atm_pos_evals.py` ✓ | Insights generation currently conflated in gate |
-| 7 | Presentation promote | Direct write, no promotion step | Need explicit promotion |
+| Stage | Script | Status |
+|---|---|---|
+| 0 | `detect_atm_pos_format.py` | ✓ Live |
+| 1 | `extract_atm_pos.py` | ✓ Live |
+| 2 | `validate_atm_pos.py` | ✓ Live |
+| 3 | `consolidate_atm_pos.py` → `atm_pos_consolidated.csv` | ✓ Live |
+| 4 | `generate_signal_history.py append --pipeline atm_pos` | ✓ Live — fully numeric; 22 signals, 6 periods in DB |
+| 5 | Layer 2a evaluate | ⏳ Pending — first FOUNDATION pass on system_model.json required |
+| 6 | `run_atm_pos_evals.py` | ✓ Live |
+| 7 | Presentation promote | ⏳ Pending — direct write for now |
 
-**Key structural fix pending:** `generate_atm_pos_insights.py` is a Layer 2a artifact
-(Claude-generated insights). It currently sits inside the eval gate as a data stage.
-It must be moved to Stage 5 once the Layer 2a architecture is formalised. Until then
-it runs as-is — the current web presentation is not affected.
+**ATM/POS Layer 1 compute reads directly from `atm_pos_consolidated.csv`** — no
+sections_merged.json needed. All 22 signals have `compute` specs; full bank-level
+entity rows stored in signals.db (1c signals store all ~60 banks per period, not top-N).
 
-**Layer 1 compute for ATM/POS:** The 21 ATM/POS signals currently have `layer: 1` in the
-registry but no `compute` specs. They are derived from presence/absence in insights.json —
-which is a Layer 2a output, not a data stage. Once `sections_merged.json` exists for ATM/POS,
-proper numeric `compute` specs must be added to the registry for all 21 signals and
-`generate_signal_history.py` updated to read from consolidated data.
+**`generate_atm_pos_insights.py`** is a Layer 2a artifact (Claude-generated insights)
+currently running inside the eval gate. It will move to Stage 5 once the ATM/POS
+system_model.json FOUNDATION pass is complete.
 
 ### Layer 2a model — ATM/POS system model
 
@@ -501,9 +535,9 @@ Never copy `annotations_merged.ts` → `rbi_sibc.ts` manually.
 □  python3 analysis/run_atm_pos_evals.py --xlsx {file}
    (Stages 0–3: format detection, extraction, validation, consolidation)
 □  python3 analysis/generate_signal_history.py append --pipeline atm_pos --period {YYYY-MM-DD}
-   (Stage 4 — Layer 1: currently presence/absence; will be numeric once compute specs added)
+   (Stage 4 — Layer 1: fully numeric; writes all 22 signals to signals.db + mirrors to history JSON)
 □  [Stage 5 — Layer 2a evaluate: NOT YET WIRED — generate_atm_pos_insights.py runs inside
-   gate for now; do not move until ATM/POS sections_merged.json and compute specs exist]
+   gate for now; will move to Stage 5 after ATM/POS system_model.json FOUNDATION pass]
 □  Commit per-period → web/ separately
 □  git push
 ```
@@ -544,10 +578,18 @@ analysis/
 │       └── system_model.json       ← Layer 2b model per tuple (pending)
 │
 ├── signals/
-│   ├── registry.json               ← Universal signal catalog (layer/compute/evaluate specs)
+│   ├── registry.json               ← Universal signal catalog (90 signals, layer/compute/evaluate specs)
+│   ├── signals.db                  ← PRIMARY store — SQLite fact table (pipeline × period × metric × entity)
+│   ├── db.py                       ← DB init, schema, refresh_ranges()
+│   ├── migrate_to_db.py            ← One-time migration from history JSON → DB
+│   ├── update_registry.py          ← One-time script: added sub_layer + compute specs to registry
+│   ├── compute/
+│   │   ├── engine.py               ← Dispatch: reads registry, calls sibc/atm_pos, writes DB
+│   │   ├── sibc.py                 ← SIBC compute methods (1a/1b/1c) — reads sections_merged.json
+│   │   └── atm_pos.py              ← ATM/POS compute methods (1a/1b/1c) — reads CSV
 │   └── history/
-│       ├── sibc.json               ← Append-only (L1: values; L2/3: pending or active)
-│       └── atm_pos.json            ← Append-only (L1: presence/absence → numeric pending)
+│       ├── sibc.json               ← Mirror of DB aggregate rows (human-readable audit trail)
+│       └── atm_pos.json            ← Mirror of DB aggregate rows (human-readable audit trail)
 │
 ├── output/
 │   └── mermaid/rbi_sibc/{YYYY-MM-DD}/   ← On-demand mermaid diagrams
