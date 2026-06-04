@@ -27,7 +27,7 @@ No to all three → deprioritise.
 
 ---
 
-## Current Platform State (May 2026)
+## Current Platform State (June 2026)
 
 Live components only. Planned work lives in `STRATEGY_PLANNER.md`.
 
@@ -45,8 +45,8 @@ Live components only. Planned work lives in `STRATEGY_PLANNER.md`.
 | signal_registry.json | **Live** — 7 signals tracked across 3 issues (newsletter subsystem) |
 | signal history layer | **Live** — `analysis/signals/` — registry.json (70 signals), history/sibc.json + history/atm_pos.json; Check 2e validator; `generate_signal_history.py` |
 | Subsystem generation | **Live** — `generate_mermaid.py` → `.mmd` + `validate.py --check-subsystems` |
-| detect_format.py (Stage 0.5) | **Live** — flags format changes in new XLSX before extraction |
-| ATM/POS pipeline | **Live** — `rbi_atm_pos/` — Stages 0–6 complete (data → insights → CSV check → build gate) |
+| detect_format.py (Stage 0) | **Live** — flags format changes in new XLSX before extraction |
+| ATM/POS pipeline | **Live** — `rbi_atm_pos/` — Stages 0–3 complete; Stage 4 (L1 compute) presence/absence only; Stage 5 (L2a) pending — insights script runs in gate for now |
 | AppShell + DLS | **Live** — shared Header (one instance), `dls/InsightCard`, `dls/InsightCTAStrip` used by both SIBC and Payments |
 
 ---
@@ -66,15 +66,16 @@ Use CLI tools for all external service interactions — they are the most contex
 
 | Tool | Use for |
 |---|---|
-| `python3 analysis/run_evals.py` | Master eval gate — SIBC Stages 3 and 6 |
+| `python3 analysis/run_evals.py` | SIBC gate — Stages 0–6 (data integrity + signal + model validation) |
+| `python3 analysis/run_atm_pos_evals.py --xlsx {file}` | ATM/POS gate — Stages 0–3 + L1 signal append + build |
 | `python3 analysis/promote_annotations.py` | Stage 7: verified copy annotations_merged.ts → rbi_sibc.ts — never `cp` or manual paste |
-| `python3 analysis/detect_format.py` | Stage 0.5: flag format changes before extraction |
-| `python3 analysis/source_claims.py` | Stage 6b: source all system model claims |
-| `python3 analysis/newsletter/validate_newsletter_config.py` | Gate before every newsletter/LinkedIn generation run |
-| `python3 analysis/run_atm_pos_evals.py --xlsx {file}` | ATM/POS pipeline gate — Stages 0–6 (format → insights → CSV check → build) |
-| `python3 analysis/generate_signal_history.py append --pipeline {name} --period {date}` | After every pipeline period: append signal statuses to history |
+| `python3 analysis/detect_format.py` | Stage 0: flag format changes before extraction (SIBC) |
+| `python3 analysis/source_claims.py` | Post-model-update: source all system model claims (run after any Layer 2a model change) |
+| `python3 analysis/generate_signal_history.py append --pipeline {name} --period {date}` | Stage 4: Layer 1 signal compute + append to history |
+| `python3 analysis/generate_signal_history.py evaluate --pipeline {name} --period {date}` | Stage 5: Layer 2a signal evaluate (once model exists) |
 | `python3 analysis/generate_signal_history.py status` | Print current signal states across all pipelines |
 | `python3 analysis/validate_signal_history.py` | Check 2e: signal history integrity (registry + history files) |
+| `python3 analysis/newsletter/validate_newsletter_config.py` | Newsletter gate — exception path, not part of standard pipeline |
 
 ---
 
@@ -88,7 +89,7 @@ Use CLI tools for all external service interactions — they are the most contex
 ### Analysis outputs
 - `annotation_ids` in `system_model.json` must **exactly match** `id` fields in the annotations file. Copy-paste — never retype.
 - **Annotation IDs are permanent.** Once an `id` exists in `annotations_merged.ts`, it is never renamed or deleted — even across FOUNDATION rebuilds. UPDATE mode only adds. FOUNDATION mode may restructure, but any removed ID requires explicit justification after `promote_annotations.py --dry-run`.
-- **Merged system_model.json has two modes — read `PIPELINE_ARCHITECTURE.md` before every Stage 5.** FY-end (March file) = FOUNDATION. All other months = UPDATE. Wrong mode = wrong depth of analysis.
+- **Layer 2a model has two modes — read `PIPELINE_ARCHITECTURE.md` before every model update pass.** FY-end (March file) = FOUNDATION. All other months = UPDATE. Wrong mode = wrong depth of analysis. Signal evaluation (Stage 5) runs every period regardless of mode.
 - Stage 7 always uses `promote_annotations.py` — never manual copy.
 
 ### Git / deployment
@@ -117,17 +118,18 @@ Use CLI tools for all external service interactions — they are the most contex
 | `analysis/validate_signal_history.py` | Check 2e: signal history integrity — registry schema + history file consistency |
 | `analysis/validate.py` | Checks 4, 5: system_model.json + subsystems.json |
 | `analysis/extract_sibc.py` | Stage 1: SIBC xlsx → sections.json + format_report.json |
-| `analysis/detect_format.py` | Stage 0.5: detect structural changes in new XLSX vs prior period |
-| `analysis/update_web_data.py` | Stage 1b: all xlsx → rbi_sibc_consolidated.csv |
-| `analysis/generate_merge.py` | Stage 4: sections.json[] → sections_merged.json (auto-validates) |
-| `analysis/generate_mermaid.py` | Stage 6a (on-demand): system_model → .mmd files + subsystems.json |
-| `analysis/source_claims.py` | Stage 6b: source all claims in system_model.json |
+| `analysis/detect_format.py` | Stage 0: detect structural changes in new XLSX vs prior period (SIBC) |
+| `analysis/update_web_data.py` | Stage 3: all xlsx → rbi_sibc_consolidated.csv |
+| `analysis/generate_merge.py` | Stage 3: sections.json[] → sections_merged.json (auto-validates) |
+| `analysis/generate_mermaid.py` | On-demand: system_model → .mmd files (always after FOUNDATION; after UPDATE only if nodes/edges changed) |
+| `analysis/source_claims.py` | Post-model-update: source all claims in system_model.json |
 | `analysis/promote_annotations.py` | Stage 7: annotations_merged.ts → rbi_sibc.ts (verified copy + ID diff) |
-| `analysis/generate_signal_history.py` | Signal history: `append` / `status` / `seed` commands |
-| `analysis/signals/registry.json` | Universal signal catalog — 70 signals across SIBC + ATM/POS |
-| `analysis/signals/history/sibc.json` | Append-only SIBC signal history (Claude-authored snapshots) |
-| `analysis/signals/history/atm_pos.json` | Append-only ATM/POS signal history (auto-derived) |
-| `analysis/rbi_sibc/merged/signal_snapshot.json` | Claude writes during Stage 5 — SIBC signal statuses per period |
+| `analysis/generate_signal_history.py` | Stage 4 (`append`) + Stage 5 (`evaluate`) + `status` + `seed` commands |
+| `analysis/signals/registry.json` | Universal signal catalog — 70 signals, layer 1/2/3 tagged, compute specs on layer-1 SIBC signals |
+| `analysis/signals/history/sibc.json` | Append-only SIBC history — layer 1 algorithmic (value + status), layer 2/3 pending |
+| `analysis/signals/history/atm_pos.json` | Append-only ATM/POS signal history (layer 1 auto-derived) |
+| `analysis/cross_source/catalog.json` | Tuple registry — all declared cross-source pairs (Layer 2b) |
+| `analysis/rbi_atm_pos/merged/system_model.json` | ATM/POS per-source system model (Layer 2a — pending first FOUNDATION) |
 | `analysis/rbi_sibc/timeline.json` | Registry of all ingested periods (includes `is_fy_end` flag) |
 | `analysis/rbi_sibc/merged/` | Merged outputs (Jan 2024–Mar 2026) — source for live dashboard |
 | `web/lib/reports/rbi_sibc.ts` | Live dashboard annotations (promoted from merged) |
@@ -157,11 +159,11 @@ Use CLI tools for all external service interactions — they are the most contex
 
 | Skill | When to invoke |
 |---|---|
-| `/per-period-analysis` | Stage 2: writing `delta_brief.md` for a new period (lightweight — ~150 words) |
-| `/merged-analysis` | Stage 5: merged UPDATE or FOUNDATION pass — check `is_fy_end` in timeline first |
+| `/per-period-analysis` | Writing `delta_brief.md` for a new period (lightweight — ~150 words) |
+| `/merged-analysis` | Layer 2a model UPDATE or FOUNDATION pass — check `is_fy_end` in timeline first |
 | `/add-new-report` | Full walkthrough: adding a new SIBC period end-to-end |
 
-Newsletter and LinkedIn generation do not have skills yet — run scripts directly per `analysis/newsletter/CLAUDE.md`.
+Newsletter and LinkedIn generation are an exception path — not yet standardised to the unified pipeline architecture. Run scripts directly per `analysis/newsletter/CLAUDE.md` only when explicitly resuming newsletter work.
 
 Use `Use a subagent to investigate X` when exploring data files — keeps main context clean.
 
@@ -185,5 +187,7 @@ For session-specific state (current period, what's been validated, what's pendin
 
 See `STRATEGY_PLANNER.md` for the prioritised roadmap. Immediately next:
 
-1. Connect `indiacreditlens.com` domain on Vercel
-2. Publish Apr 2026 newsletter + LinkedIn posts
+1. ATM/POS Layer 1: add numeric compute specs to registry + sections_merged.json for ATM/POS
+2. Ingest next SIBC + ATM/POS period (files expected soon)
+3. ATM/POS Layer 2a: first FOUNDATION pass on system_model.json once full year of data available
+4. Newsletter standardisation: blocked on signal layer completion across both pipelines

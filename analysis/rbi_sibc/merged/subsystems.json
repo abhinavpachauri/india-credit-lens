@@ -1,113 +1,315 @@
-[
-  {
-    "id": "sub_01",
-    "label": "The Gold Economy & Regulated Retail Cooling",
-    "chart_type": "line",
-    "chart_direction": "diverging",
-    "newsletter": {
-      "headline": "Gold loans tripled while credit cards flatlined — two products, one policy",
-      "summary": "RBI's unsecured credit tightening (Nov 2023) is simultaneously suppressing credit cards and redirecting household demand toward gold-backed lending. The Jan 2025→Jan 2026 comparison makes both movements unambiguous."
-    },
-    "drivers": ["driver_gold_price_surge", "driver_rbi_unsecured_tightening"],
-    "sectors": ["sector_gold_loans", "sector_credit_cards", "sector_personal_loans"],
-    "outcomes": ["opp_gold_loan_entry", "pressure_unsecured_migration"],
-    "node_ids": [
-      "driver_gold_price_surge", "driver_rbi_unsecured_tightening",
-      "sector_gold_loans", "sector_credit_cards", "sector_personal_loans",
-      "opp_gold_loan_entry", "pressure_unsecured_migration"
-    ]
+{
+  "_meta": {
+    "schema_version": "2.0",
+    "description": "SIBC subsystems — published interface for Layer 2b cross-source model. Each subsystem is treated as a node by the cross-source model. Separate from system_model.json.",
+    "last_updated": "2026-06-04",
+    "subsystem_edges_note": "subsystem_edges describes cross-subsystem interactions at the same abstraction level as node-level edges in system_model.json"
   },
-  {
-    "id": "sub_02",
-    "label": "The MSME Formalisation Wave",
-    "chart_type": "bar",
-    "chart_direction": "up",
-    "newsletter": {
-      "headline": "MSME YoY credit growth tripled in one year — this is now confirmed structural",
-      "summary": "Micro & Small enterprise YoY growth jumped from 9.6% (Jan 2025) to 31.2% (Jan 2026). PSL Micro & Small corroborates at +25.6% FY. Two independent series pointing the same direction: UDYAM + GST have crossed the underwriting threshold."
+  "subsystems": [
+    {
+      "id": "gold_retail_ecosystem",
+      "label": "Gold Economy & Regulated Retail Cooling",
+      "description": "RBI risk-weight tightening simultaneously suppresses unsecured retail and redirects household demand toward secured gold lending. Two products moving in opposite directions from one policy action.",
+      "member_nodes": [
+        "driver_gold_price_surge",
+        "driver_rbi_unsecured_tightening",
+        "sector_gold_loans",
+        "sector_credit_cards",
+        "sector_vehicle_loans",
+        "sector_consumer_durables"
+      ],
+      "inputs": [
+        {
+          "node_id": "driver_gold_price_surge",
+          "role": "collateral_price_signal"
+        },
+        {
+          "node_id": "driver_rbi_unsecured_tightening",
+          "role": "regulatory_policy_signal"
+        }
+      ],
+      "outputs": [
+        {
+          "node_id": "sector_gold_loans",
+          "feeds_into": "system_credit_overview",
+          "via": "sector_personal_loans"
+        },
+        {
+          "node_id": "sector_credit_cards",
+          "feeds_into": "system_credit_overview",
+          "via": "sector_personal_loans"
+        },
+        {
+          "node_id": "sector_vehicle_loans",
+          "feeds_into": "system_credit_overview",
+          "via": "sector_personal_loans"
+        },
+        {
+          "node_id": "sector_consumer_durables",
+          "feeds_into": "system_credit_overview",
+          "via": "sector_personal_loans"
+        }
+      ]
     },
-    "drivers": ["driver_msme_formalisation"],
-    "sectors": ["sector_msme", "sector_large_corporate"],
-    "outcomes": ["opp_msme_origination"],
-    "node_ids": [
-      "driver_msme_formalisation",
-      "sector_msme", "sector_large_corporate",
-      "opp_msme_origination"
-    ]
-  },
-  {
-    "id": "sub_03",
-    "label": "The PLI Manufacturing Capex Cycle",
-    "chart_type": "line",
-    "chart_direction": "up",
-    "newsletter": {
-      "headline": "All Engineering up 62% in 2 years — PLI drawdowns are now real banking flows",
-      "summary": "PLI scheme recipients approved in 2022-23 entered the investment phase in FY25-26. ₹1.96L Cr → ₹2.32L Cr → ₹3.16L Cr across three Feb data points. The announcement phase is over — credit drawdowns are happening."
+    {
+      "id": "msme_ecosystem",
+      "label": "MSME Formalisation Wave",
+      "description": "UDYAM + GST data crossing the underwriting threshold. Banks with origination infrastructure built 2022–24 now harvesting. Fastest-growing industrial credit segment; window closes as competition intensifies.",
+      "member_nodes": [
+        "driver_msme_formalisation",
+        "sector_msme",
+        "sector_medium_enterprise",
+        "sector_large_corporate"
+      ],
+      "inputs": [
+        {
+          "node_id": "driver_msme_formalisation",
+          "role": "formalisation_signal"
+        }
+      ],
+      "outputs": [
+        {
+          "node_id": "sector_msme",
+          "feeds_into": "system_credit_overview",
+          "via": "sector_industry"
+        },
+        {
+          "node_id": "sector_medium_enterprise",
+          "feeds_into": "system_credit_overview",
+          "via": "sector_industry"
+        },
+        {
+          "node_id": "sector_large_corporate",
+          "feeds_into": "system_credit_overview",
+          "via": "sector_industry"
+        }
+      ]
     },
-    "drivers": ["driver_pli_manufacturing"],
-    "sectors": ["sector_all_engineering", "sector_industry"],
-    "outcomes": ["opp_pli_supply_chain"],
-    "node_ids": [
-      "driver_pli_manufacturing",
-      "sector_all_engineering", "sector_industry",
-      "opp_pli_supply_chain"
-    ]
-  },
-  {
-    "id": "sub_04",
-    "label": "The PSL Housing Reclassification Event",
-    "chart_type": "bar",
-    "chart_direction": "up",
-    "newsletter": {
-      "headline": "+38% PSL housing growth is a classification event, not organic lending",
-      "summary": "The Oct 2024 RBI revision raised PSL housing limits (metro: ₹35L→₹45L). Loans already on books that previously exceeded the threshold now qualify. The ₹2.87L Cr appearing as credit growth is reclassification, not new lending. Context mandatory when citing."
+    {
+      "id": "pli_capex_ecosystem",
+      "label": "PLI Manufacturing Capex Cycle",
+      "description": "PLI scheme recipients approved 2022–23 entering investment phase FY25–26. Visible as All Engineering, chemicals, and metals credit surging. Tier-2/3 supplier chain finance is the next wave.",
+      "member_nodes": [
+        "driver_pli_manufacturing",
+        "sector_all_engineering",
+        "sector_chemicals_petroleum",
+        "sector_basic_metals"
+      ],
+      "inputs": [
+        {
+          "node_id": "driver_pli_manufacturing",
+          "role": "policy_capex_signal"
+        }
+      ],
+      "outputs": [
+        {
+          "node_id": "sector_all_engineering",
+          "feeds_into": "system_credit_overview",
+          "via": "sector_industry"
+        },
+        {
+          "node_id": "sector_chemicals_petroleum",
+          "feeds_into": "system_credit_overview",
+          "via": "sector_industry"
+        },
+        {
+          "node_id": "sector_basic_metals",
+          "feeds_into": "system_credit_overview",
+          "via": "sector_industry"
+        }
+      ]
     },
-    "drivers": ["driver_psl_limit_revision"],
-    "sectors": ["sector_psl_housing"],
-    "outcomes": [],
-    "node_ids": [
-      "driver_psl_limit_revision",
-      "sector_psl_housing",
-      "gap_psl_reclassification"
-    ]
-  },
-  {
-    "id": "sub_05",
-    "label": "The Infrastructure Plateau & Next Cycle Pivot",
-    "chart_type": "line",
-    "chart_direction": "down",
-    "newsletter": {
-      "headline": "Infrastructure credit decelerating — banks need to pivot to the next capex wave",
-      "summary": "Infrastructure at ₹14.44L Cr and 32.5% of industry credit is growing at only +5.8% FY. The FY22-24 capex wave projects are now in operations, repaying not drawing down. Green hydrogen, data centers, and renewable energy are the next wave — not yet at drawdown scale."
+    {
+      "id": "psl_housing_ecosystem",
+      "label": "PSL Housing Reclassification Event",
+      "description": "Oct 2024 PSL limit revision reclassified existing loans as PSL, creating artificial credit growth. True new lending indistinguishable from reclassification. PSL surplus from reclassification creates PSLC market opportunity.",
+      "member_nodes": [
+        "driver_psl_limit_revision",
+        "sector_psl_housing",
+        "sector_export_credit"
+      ],
+      "inputs": [
+        {
+          "node_id": "driver_psl_limit_revision",
+          "role": "regulatory_policy_signal"
+        }
+      ],
+      "outputs": [
+        {
+          "node_id": "sector_psl_housing",
+          "feeds_into": "system_credit_overview",
+          "via": "pslData"
+        },
+        {
+          "node_id": "sector_export_credit",
+          "feeds_into": "system_credit_overview",
+          "via": "pslData"
+        }
+      ]
     },
-    "drivers": ["driver_infra_cycle_maturing"],
-    "sectors": ["sector_infrastructure"],
-    "outcomes": ["opp_renewable_energy"],
-    "node_ids": [
-      "driver_infra_cycle_maturing",
-      "sector_infrastructure",
-      "pressure_infrastructure_repayment",
-      "opp_renewable_energy"
-    ]
-  },
-  {
-    "id": "sub_06",
-    "label": "System Credit Overview — Multi-Period Trajectory",
-    "chart_type": "line",
-    "chart_direction": "up",
-    "newsletter": {
-      "headline": "Bank credit added ₹44L Cr in two years — FY26 accelerating above FY25",
-      "summary": "Total bank credit: ₹160.4L Cr (Jan 2024) → ₹178.7L Cr (Jan 2025) → ₹204.8L Cr (Jan 2026). YoY growth lifted from 11.4% to 14.6%. FY26 tracking at 13.8% vs FY25's 11.0% — structural acceleration, not base effect."
+    {
+      "id": "infrastructure_ecosystem",
+      "label": "Infrastructure Plateau & Next Cycle Pivot",
+      "description": "FY22–24 capex wave projects in operations phase. Repayments compressing credit book growth. Green energy, data centers, green hydrogen as next wave — not yet at drawdown scale.",
+      "member_nodes": [
+        "driver_infra_cycle_maturing",
+        "sector_infrastructure"
+      ],
+      "inputs": [
+        {
+          "node_id": "driver_infra_cycle_maturing",
+          "role": "cycle_phase_signal"
+        }
+      ],
+      "outputs": [
+        {
+          "node_id": "sector_infrastructure",
+          "feeds_into": "system_credit_overview",
+          "via": "sector_industry"
+        }
+      ]
     },
-    "drivers": ["driver_nbfc_regulatory_recovery"],
-    "sectors": ["sector_bank_credit", "sector_services", "sector_vehicle_loans", "sector_computer_software", "sector_transport"],
-    "outcomes": ["opp_vehicle_ev"],
-    "node_ids": [
-      "driver_nbfc_regulatory_recovery",
-      "sector_bank_credit", "sector_services", "sector_vehicle_loans",
-      "sector_computer_software", "sector_transport",
-      "gap_jan_series_nulls", "sector_food_credit",
-      "opp_vehicle_ev"
-    ]
-  }
-]
+    {
+      "id": "system_credit_overview",
+      "label": "System Credit Overview",
+      "description": "Top-level credit aggregate and cross-sector view. Aggregates outputs from all ecosystem subsystems. Food credit cycle and data gaps visible only at this level.",
+      "member_nodes": [
+        "sector_bank_credit",
+        "sector_industry",
+        "sector_services",
+        "sector_personal_loans",
+        "sector_food_credit",
+        "driver_msp_procurement_growth"
+      ],
+      "inputs": [
+        {
+          "node_id": "gold_retail_ecosystem",
+          "role": "subsystem_output",
+          "type": "subsystem"
+        },
+        {
+          "node_id": "msme_ecosystem",
+          "role": "subsystem_output",
+          "type": "subsystem"
+        },
+        {
+          "node_id": "services_ecosystem",
+          "role": "subsystem_output",
+          "type": "subsystem"
+        },
+        {
+          "node_id": "pli_capex_ecosystem",
+          "role": "subsystem_output",
+          "type": "subsystem"
+        },
+        {
+          "node_id": "infrastructure_ecosystem",
+          "role": "subsystem_output",
+          "type": "subsystem"
+        },
+        {
+          "node_id": "psl_housing_ecosystem",
+          "role": "subsystem_output",
+          "type": "subsystem"
+        }
+      ],
+      "outputs": [
+        {
+          "node_id": "sector_bank_credit",
+          "feeds_into": null,
+          "via": null
+        }
+      ]
+    },
+    {
+      "id": "services_ecosystem",
+      "label": "Services Credit & NBFC Channel",
+      "description": "NBFC credit recovery post risk-weight cycle reopening the services channel. Computer Software and Trade are structural growth drivers. NBFC double-counting is a persistent data quality issue.",
+      "member_nodes": [
+        "driver_nbfc_regulatory_recovery",
+        "sector_computer_software",
+        "sector_transport",
+        "sector_trade"
+      ],
+      "inputs": [
+        {
+          "node_id": "driver_nbfc_regulatory_recovery",
+          "role": "regulatory_recovery_signal"
+        }
+      ],
+      "outputs": [
+        {
+          "node_id": "sector_computer_software",
+          "feeds_into": "system_credit_overview",
+          "via": "sector_services"
+        },
+        {
+          "node_id": "sector_transport",
+          "feeds_into": "system_credit_overview",
+          "via": "sector_services"
+        },
+        {
+          "node_id": "sector_trade",
+          "feeds_into": "system_credit_overview",
+          "via": "sector_services"
+        }
+      ]
+    }
+  ],
+  "subsystem_edges": [
+    {
+      "from": "gold_retail_ecosystem",
+      "to": "system_credit_overview",
+      "type": "feeds",
+      "label": "Personal loan sub-sectors aggregate into system credit"
+    },
+    {
+      "from": "msme_ecosystem",
+      "to": "system_credit_overview",
+      "type": "feeds",
+      "label": "MSME and enterprise sub-sectors aggregate into industry credit"
+    },
+    {
+      "from": "services_ecosystem",
+      "to": "system_credit_overview",
+      "type": "feeds",
+      "label": "Services sub-sectors aggregate into system credit"
+    },
+    {
+      "from": "pli_capex_ecosystem",
+      "to": "system_credit_overview",
+      "type": "feeds",
+      "label": "Manufacturing capex sub-sectors aggregate into industry credit"
+    },
+    {
+      "from": "infrastructure_ecosystem",
+      "to": "system_credit_overview",
+      "type": "feeds",
+      "label": "Infrastructure credit aggregates into industry and system credit"
+    },
+    {
+      "from": "psl_housing_ecosystem",
+      "to": "system_credit_overview",
+      "type": "overlaps",
+      "label": "PSL credit overlaps with sector credit — same loans, different classification"
+    },
+    {
+      "from": "gold_retail_ecosystem",
+      "to": "msme_ecosystem",
+      "type": "contrasts",
+      "label": "Gold + retail acceleration vs MSME-led industrial growth — diverging household vs enterprise credit"
+    },
+    {
+      "from": "pli_capex_ecosystem",
+      "to": "msme_ecosystem",
+      "type": "feeds",
+      "label": "PLI anchor companies create supply chain credit demand for MSME tier-2/3 suppliers"
+    },
+    {
+      "from": "infrastructure_ecosystem",
+      "to": "pli_capex_ecosystem",
+      "type": "enables",
+      "label": "Infrastructure buildout (grid, logistics) enables PLI manufacturing scale"
+    }
+  ]
+}

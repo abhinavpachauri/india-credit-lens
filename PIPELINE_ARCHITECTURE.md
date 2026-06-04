@@ -1,231 +1,276 @@
 # Pipeline Architecture — India Credit Lens
 
-> Single source of truth for the data ingestion and content generation pipeline.
+> Single source of truth for the data ingestion, signal, and content generation pipeline.
 > Referenced by `CLAUDE.md`. Read this before adding any new report or period.
 
 ---
 
-## Architecture Overview
+## Architectural Principles
 
-The pipeline has two distinct layers:
+**Separate gates per pipeline.** Each data source (SIBC, ATM/POS, future sources) has its own
+eval gate. Pipelines run independently — a new credit file does not block a payments file.
 
-**Data layer** — runs every period, fully deterministic:
-```
-xlsx → sections.json → sections_merged.json → rbi_sibc_consolidated.csv
-```
+**Identical stage sequence.** Every pipeline follows the same stage numbering and purpose.
+Scripts differ per pipeline; stages do not.
 
-**Analysis layer** — runs every period, but scope depends on cadence:
-- Per-period: `delta_brief.md` only (lightweight, ~5 min Claude pass)
-- Merged: **FOUNDATION mode** (FY-end, ~once/year) or **UPDATE mode** (interim, ~10 months/year)
+**Every layer has two distinct concerns:**
 
-**Only the merged layer publishes to the web dashboard and newsletter.**
-Per-period analysis artifacts (system_model, subsystems, annotations) are not created.
-The system_model.json and subsystems.json are living documents that evolve deliberately —
-they are not regenerated from scratch on every period.
+| Layer | Model | Signal evaluation |
+|---|---|---|
+| 1 | `compute` specs in registry — written once per signal | Every ingestion — algorithmic from consolidated data |
+| 2a | `system_model.json` per source — FOUNDATION or UPDATE, rare | Every ingestion — rules from model + L1 outputs |
+| 2b | Cross-source model per tuple — after both L2a FOUNDATION | Every ingestion — after both constituent L2a evaluate |
+| 3  | `ecosystem_model.json` — authored once, updated ~6 monthly | Every ingestion — rules from model + L2b outputs |
+
+Model updates and signal evaluation are never conflated. A new period always runs signal
+evaluation for all layers where a model exists. Model updates are explicit, separate steps
+with their own cadence. If no model exists yet, evaluation is skipped silently and signals
+carry `pending` status.
+
+**Presentation is always downstream.** The web dashboard, insight pages, and opportunities
+are generated from the final signal layer outputs — not from any intermediate pipeline artifact.
+
+**Newsletter is an exception.** Newsletter generation is not yet standardised to this
+architecture. Do not modify newsletter scripts until the signal layer is complete across
+all pipelines.
 
 ---
 
-## Pipeline Stages
+## Standard Stage Sequence
+
+Applies to every pipeline. Scripts differ; stage purpose and order do not.
 
 ```
-SIBC .xlsx
-    │
-    ▼
-[Stage 1] extract_sibc.py
-    │  → rbi_sibc/{period}/sections.json
-    │  → rbi_sibc/{period}/format_report.json
-    │
-    ▼
-[Stage 1b] update_web_data.py
-    │  Consolidates ALL xlsx files → single deduplicated long CSV
-    │  Scans analysis/rbi_sibc/*/raw/SIBC*.xlsx
-    │  → web/public/data/rbi_sibc_consolidated.csv   ← dashboard charts live here
-    │  Dedup rule: latest report_date wins for any (statement, code, date) overlap
-    │
-    ▼
-[Stage 1c] detect_format.py  (run manually — prerequisite for Check 0.5)
-    │  Compares new XLSX structure against prior period
-    │  → rbi_sibc/{period}/format_report.json   (updates confirmed/unsupported flag)
-    │  If format changes are detected: review + confirm before proceeding
-    │  Skipped for legacy periods (pre-existing format_report.json)
-    │
-    ▼
-[Stage 2] Claude: delta_brief.md  (per-period, always)
-    │  → rbi_sibc/{period}/delta_brief.md
-    │  Scope: what moved vs prior period, any data quality flags, one newsletter hook
-    │  NOT a full analysis — no system_model, no subsystems, no annotations_draft
-    │
-    ▼
-[Stage 3] run_evals.py --period {date} (reduced gate)
-    │  Check 0:   validate_timeline.py      timeline.json schema + path existence
-    │  Check 0.5: format_report.json        format detection confirmed + supported
-    │  Check 1:   validate_sections.py      sections.json schema + data integrity
-    │  Check 1b:  web CSV dedup check       auto-fixes via update_web_data.py
-    │  — Checks 2, 2b, 2c, 3, 4, 5 are skipped (no per-period analysis artifacts) —
-    │
-    ▼
-[Stage 4] generate_merge.py
-    │  → rbi_sibc/merged/sections_merged.json
-    │    (merges all periods; later period non-null values override earlier for same month)
-    │  Auto-runs validate_sections.py --merged post-write; exits 1 on failure
-    │
-    ▼
-[Stage 5] Claude: Merged analysis — FOUNDATION or UPDATE mode
-    │
-    │  Determine mode BEFORE starting (see System Model Cadence rules below):
-    │
-    │  FOUNDATION (FY-end, ~once/year — full rebuild):
-    │  → rbi_sibc/merged/system_model.json       full rebuild, _meta.mode = "foundation"
-    │  → rbi_sibc/merged/subsystems.json         full rebuild
-    │  → rbi_sibc/merged/annotations_merged.ts   full rewrite (IDs may change — see guard)
-    │  → rbi_sibc/merged/insights.md
-    │  → rbi_sibc/merged/gaps.md
-    │  → rbi_sibc/merged/opportunities.md
-    │  → rbi_sibc/merged/signal_snapshot.json    signal status per ID for this period
-    │                                             (used by generate_signal_history.py append)
-    │
-    │  UPDATE (interim months — additive only):
-    │  → rbi_sibc/merged/system_model.json       update stats + add new nodes only
-    │                                             _meta.mode = "update", bump last_updated
-    │  → rbi_sibc/merged/subsystems.json         append new subsystems only
-    │  → rbi_sibc/merged/annotations_merged.ts   update bodies + add new IDs only
-    │  → rbi_sibc/merged/insights.md
-    │  → rbi_sibc/merged/gaps.md
-    │  → rbi_sibc/merged/opportunities.md
-    │  → rbi_sibc/merged/signal_snapshot.json    signal status per ID for this period
-    │
-    ▼
-[Stage 6] run_evals.py --period merged --merged (gate)
-    │  Check 0:   validate_timeline.py
-    │  Check 0.5: format_report.json
-    │  Check 1:   validate_sections.py --merged
-    │  Check 1b:  web CSV dedup
-    │  Check 2:   validate_annotations.py on annotations_draft (skipped if absent)
-    │  Check 2b:  validate_content.py — numbers/dates in annotation bodies
-    │  Check 2c:  validate_claims.py  — claim_type + source on system_model nodes
-    │  Check 2d:  validate_annotation_basis.py — basis completeness on merged + live annotations
-    │             FAIL if inference/hypothesis annotation missing basis.inferences
-    │             FAIL if data annotation missing basis.facts
-    │  Check 2e:  validate_signal_history.py — registry.json schema + history file consistency
-    │             FAIL if orphan signal IDs in history, invalid statuses, or current_status mismatch
-    │  Check 3:   validate_annotations.py on live rbi_sibc.ts (Checks A–H)
-    │  Check 4:   validate.py — system_model.json structure
-    │  Check 5:   validate.py --check-subsystems — subsystems.json
-    │  Check 6:   tsc + npm run build
-    │  Null values in Jan series are warnings not errors
-    │
-    ▼
-[Stage 6a] generate_mermaid.py  (on-demand — see cadence rules below)
-    │  → analysis/output/mermaid/rbi_sibc/{YYYY-MM-DD}/
-    │     overview.mmd, quadrant.mmd, sankey.mmd, flowchart.mmd, sub_*.mmd
-    │  Always after FOUNDATION; after UPDATE only if nodes/edges changed
-    │
-    ▼
-[Stage 6b] source_claims.py  (merged only)
-    │  Sources every claim in system_model.json against sections_merged.json
-    │  Adds claim_type + source_path to each node — required for Check 2c
-    │
-    ▼
-[Stage 7] Web + content update
-    │  promote_annotations.py              (automated copy + ID verification)
-    │  → web/lib/reports/rbi_sibc.ts
-    │
-    │  — Signal history layer —
-    │  python3 analysis/generate_signal_history.py append --pipeline sibc --period {date}
-    │  → analysis/signals/history/sibc.json        (append-only, never edit past entries)
-    │  → analysis/signals/registry.json            (current_status updated for each signal)
-    │  Prerequisite: signal_snapshot.json must exist in rbi_sibc/merged/ (written in Stage 5)
-    │
-    │  — Newsletter + LinkedIn (see analysis/newsletter/CLAUDE.md) —
-    │  Author newsletter_config.json        (from merged system_model + subsystems)
-    │  validate_newsletter_config.py        (gate — fix all errors before proceeding)
-    │  generate_images.py                   (Mermaid .mmd → PNG, before image_url assignment)
-    │  generate_newsletter.py               (script-only, no Claude)
-    │  generate_linkedin.py                 (7-post package: 1 anchor + 6 signal posts)
+[Stage 0]  Format detection
+           Compare incoming file structure against prior period
+           Gate: must be confirmed clean or changes reviewed before Stage 1
+
+[Stage 1]  Extraction
+           Raw file → per-period sections.json (schema-validated, typed)
+
+[Stage 2]  Per-period validation
+           Validate extracted data: schema, required series, value ranges, known banks/sectors
+
+[Stage 3]  Consolidation + Merge
+           All periods → consolidated CSV  (long format, all periods — for charts)
+                      + sections_merged.json (time-series, analysis-ready — for signals)
+           This is the single source of truth for all downstream stages.
+
+[Stage 4]  Layer 1 — signal evaluate           (every period, always)
+           Read compute specs from registry.json
+           Compute status + value algorithmically from sections_merged.json
+           Append to signals/history/{pipeline}.json
+           No Claude involvement. No exceptions.
+
+[Stage 5]  Layer 2a — signal evaluate          (every period, if model exists)
+           Read evaluate specs from registry.json
+           Apply rules using Layer 1 history outputs for this period
+           Append Layer 2a signal statuses to signals/history/{pipeline}.json
+           SKIP silently if system_model.json does not yet exist — signals stay pending.
+
+[Stage 6]  Evals gate
+           Validates all artifacts produced by Stages 0–5:
+           data integrity, signal history consistency, model structure (if present)
+
+[Stage 7]  Presentation promote
+           Push validated insights to web (annotations, gaps, opportunities)
+           Explicit promotion step — never a direct write
+
+────────────────────── cross-pipeline boundary ──────────────────────────────────
+
+[Stage X]  Layer 2b — cross-source signal evaluate   (after BOTH pipelines complete Stages 0–7)
+           Read cross-source evaluate specs from catalog.json
+           Apply rules using L2a outputs from both constituent pipelines
+           NOT YET IMPLEMENTED — pending first cross-source model FOUNDATION pass
+
+[Stage Y]  Layer 3 — ecosystem signal evaluate        (after Stage X)
+           Apply rules from ecosystem_model.json using L2b outputs
+           NOT YET IMPLEMENTED — pending first ecosystem model authoring
 ```
 
 ---
 
-## System Model Cadence (governing rule)
+## Model Update Cadence
 
-`system_model.json` and `subsystems.json` are **living documents**, not generated artifacts.
-They evolve in two modes. **Choosing the wrong mode is the most consequential error in this pipeline.**
+Model updates are named explicitly and run on their own schedule — they are not part of
+the per-period gate. When a model update runs, it must be followed by a full eval gate pass.
 
-### FOUNDATION mode — full rebuild
+### Layer 2a model — per-source system model
 
-**When:** The new period is the March year-end file (dataDate falls in April–May, covers
-the complete fiscal year). Approximately once per year.
+**FOUNDATION** — full rebuild. Triggers:
+- First-ever period for a new source (always FOUNDATION)
+- FY-end period (March file, dataDate April–May) for SIBC
+- Equivalent annual anchor period for other sources
+- Structural event that changes multiple causal relationships simultaneously
 
-**What happens:**
-- Full rebuild of `system_model.json` from `sections_merged.json` — all nodes and edges
-- Full rebuild of `subsystems.json`
-- Full rewrite of `annotations_merged.ts` — IDs may change (see annotation ID guard below)
-- Full rewrite of `insights.md`, `gaps.md`, `opportunities.md`
+**UPDATE** — additive only. Triggers:
+- Any interim period where new nodes or signals emerge
+- Never restructure existing nodes/edges in UPDATE mode
 
-**Why FY-end:** The March file gives Claude the complete annual picture — all four quarters,
-confirmed YoY growth, full sector composition. Interim files have partial data; a FOUNDATION
-pass on interim data produces a shallower model than the same data would produce at year-end.
-
-**Guard — set in `_meta`:**
+**Guard in `_meta`:**
 ```json
-"_meta": {
-  "mode": "foundation",
-  "last_foundation_date": "2026-04-30"
+{
+  "_meta": {
+    "mode": "foundation | update",
+    "last_foundation_date": "YYYY-MM-DD",
+    "last_updated": "YYYY-MM-DD"
+  }
 }
 ```
 
-### UPDATE mode — additive only
+After any Layer 2a model update:
+- Re-run Stage 5 (Layer 2a evaluate) for the current period
+- Re-run Stage 6 (evals gate)
+- Add `evaluate` specs to registry for any new Layer 2a signals
 
-**When:** All non-FY-end periods. Default for ~10 months of the year.
+### Layer 2b model — cross-source model
 
-**What happens:**
-- Read the existing `system_model.json` first — the current model is the starting point
-- Update stats/values in existing node descriptions (e.g., ₹X.XL Cr → ₹Y.YL Cr)
-- Add new nodes only for genuinely new signals (new driver, new sector behaviour, new gap)
-- **Never delete or rename existing nodes** — node IDs are permanent once created
-- Append new annotations; update bodies of existing ones; never delete existing IDs
-- `subsystems.json`: add new subsystem clusters only; never restructure existing ones
+- FOUNDATION after both constituent sources have completed a FOUNDATION pass
+- UPDATE when the cross-source interaction patterns shift materially
+- One model per declared tuple in `cross_source/catalog.json`
+- Tuple must be declared in catalog before model is authored
 
-**Guard — set in `_meta`:**
-```json
-"_meta": {
-  "mode": "update",
-  "last_updated": "2026-03-30",
-  "last_foundation_date": "2026-04-30"
-}
-```
+### Layer 3 model — ecosystem expert model
 
-### Mode decision table
+- Authored once; updated approximately every 6 months or on a major model release
+- Full rebuild each time — no UPDATE mode
+- Location: `analysis/ecosystem_model.json`
+- Requires strict claim validation before use in signal evaluation
+- NOT YET IMPLEMENTED
 
-| Condition | Mode |
-|---|---|
-| March year-end file (dataDate April–May, covers full FY) | **FOUNDATION** |
-| Any other month | **UPDATE** |
-| Structural event changes multiple causal relationships simultaneously | **FOUNDATION** (explicit decision required — note why in `_meta.note`) |
-| First-ever period for a new report type | **FOUNDATION** (always) |
+### Mermaid generation (SIBC — on-demand)
 
-### Mermaid generation cadence (Stage 6a)
-
-`generate_mermaid.py` is **on-demand**, not automatic on every period:
-- **Always** after a FOUNDATION pass
-- After an UPDATE pass **only if** new nodes or edges were added
-- **Not** after an UPDATE pass that only updated node description stats
-- Check: compare node/edge count before and after the UPDATE pass as your guide
+`generate_mermaid.py` is not part of the per-period gate. Run it:
+- Always after a Layer 2a FOUNDATION pass
+- After an UPDATE pass only if new nodes or edges were added
+- Check node/edge count before and after UPDATE to decide
 
 ---
 
-## Per-period folder (minimal)
+## Signal Layer Architecture
 
-Each period folder contains exactly three files:
+### Registry — universal signal catalog
+
+`analysis/signals/registry.json` is the single catalog for all signals across all pipelines.
+Signal IDs are immutable once created. Add signals; never rename or delete.
+
+Every signal carries:
+- `layer` — 1, 2, or 3
+- `pipeline` — which source owns this signal
+- `type` — `data` (observable) or `inference` (derived) or `insight` (narrative)
+- `compute` — required for all `layer: 1` SIBC data signals; defines algorithmic derivation
+- `evaluate` — required for all `layer: 2` and `layer: 3` signals once model exists
+
+**Layer 1 `compute` spec** — reads from `sections_merged.json`:
+```json
+"compute": {
+  "method": "series_yoy",
+  "section": "bankCredit",
+  "series": "Non-food Credit",
+  "status_rules": [
+    { "if": "value > prev_value and value > 10", "then": "strengthening" },
+    { "if": "value > 10",                        "then": "active" },
+    { "if": "value > 0",                         "then": "weakening" },
+    { "if": "true",                              "then": "reversed" }
+  ]
+}
+```
+
+Compute methods: `series_yoy` | `series_abs` | `series_share` | `count_positive_yoy` |
+`is_max_series` | `is_min_series` | `abs_undercount` | `yoy_spread` | `static_active`
+
+**Layer 2a `evaluate` spec** — reads from Layer 1 signal history:
+```json
+"evaluate": {
+  "requires": ["psl-msme-structural-acceleration", "micro-small-growth-tripled"],
+  "rules": [
+    { "if": "psl-msme-structural-acceleration == 'strengthening' and micro-small-growth-tripled in ['active', 'strengthening']", "then": "active" },
+    { "if": "psl-msme-structural-acceleration == 'weakening'", "then": "weakening" },
+    { "if": "true", "then": "absent" }
+  ]
+}
+```
+
+Signals without an `evaluate` spec carry forward their last known status — they do not
+reset to `pending` on every period. Claude assigns status during the model update pass;
+the registry spec formalises it for subsequent periods.
+
+### History — append-only per-pipeline
+
+`analysis/signals/history/{pipeline}.json` — one entry per ingested period.
+
+```json
+{
+  "_meta": { "pipeline": "sibc", "schema_version": "1.0", "entry_count": 2 },
+  "entries": [
+    {
+      "period": "YYYY-MM-DD",
+      "appended_at": "ISO8601",
+      "signals": {
+        "<layer-1-signal>": { "status": "active",  "value": 17.1 },
+        "<layer-2-signal>": { "status": "active" },
+        "<unimplemented>":  { "status": "pending" }
+      }
+    }
+  ]
+}
+```
+
+Layer 1 entries always carry `value` (numeric). Layer 2+ carry `status` only.
+`pending` means the layer's model does not yet exist for this pipeline.
+
+**Status values:** `new` | `active` | `strengthening` | `weakening` | `reversed` | `absent` | `unknown` | `pending`
+
+### Validator — Check 2e
+
+`validate_signal_history.py` enforces:
+- `layer` field present on every signal in registry
+- `compute` spec present on every SIBC `layer: 1` data signal
+- `value` present in history for every non-`static_active` layer-1 signal
+- No orphan signal IDs in history files
+- `current_status` in registry matches latest history entry
+
+---
+
+## SIBC Pipeline
+
+**Gate:** `python3 analysis/run_evals.py`
+**Source:** RBI Sector/Industry-wise Bank Credit (monthly XLSX)
+**Cadence:** Monthly
+
+### Scripts per stage
+
+| Stage | Script | Output |
+|---|---|---|
+| 0 | `detect_format.py` | `{period}/format_report.json` |
+| 1 | `extract_sibc.py` | `{period}/sections.json` |
+| 2 | `validate_sections.py` (Check 1) | — |
+| 3 | `generate_merge.py` + `update_web_data.py` | `merged/sections_merged.json` + `rbi_sibc_consolidated.csv` |
+| 4 | `generate_signal_history.py append --pipeline sibc` | `signals/history/sibc.json` |
+| 5 | `generate_signal_history.py evaluate --pipeline sibc` (pending) | `signals/history/sibc.json` (L2a statuses) |
+| 6 | `run_evals.py --period merged --merged` | — |
+| 7 | `promote_annotations.py` | `web/lib/reports/rbi_sibc.ts` |
+
+### Layer 2a model — SIBC system model
+
+Location: `analysis/rbi_sibc/merged/system_model.json`
+Status: **Live** — updated to Mar 2026 (FOUNDATION pass complete)
+
+FOUNDATION trigger: March year-end file (`is_fy_end: true` in timeline.json)
+UPDATE trigger: Interim months where new signals emerge
+
+After any model update: run `source_claims.py` → run Stage 6 → run promote.
+
+### Per-period folder (minimal)
 
 ```
 rbi_sibc/{YYYY-MM-DD}/
-    ├── sections.json        ← Raw extracted data — input to generate_merge.py
-    ├── format_report.json   ← Format detection result — Check 0.5 gate
-    └── delta_brief.md       ← Lightweight Claude delta analysis
+    ├── sections.json        ← Stage 1 output
+    ├── format_report.json   ← Stage 0 output
+    └── delta_brief.md       ← Lightweight Claude delta (150–200 words)
 ```
 
-`delta_brief.md` structure (keep tight — 150–200 words max):
+`delta_brief.md` structure:
 ```markdown
 ## Period
 {month} {year} | dataDate: {YYYY-MM-DD} | vs prior: {prev_period}
@@ -234,159 +279,19 @@ rbi_sibc/{YYYY-MM-DD}/
 - 2–4 bullet observations on what changed vs prior period
 
 ## Data quality flags
-- Any format anomalies, null series, reclassification effects in this file
+- Any format anomalies, null series, reclassification effects
 
-## Newsletter hook
-- One headline stat or story for the upcoming newsletter issue
+## Signal watch
+- Which Layer 1 signals are showing movement worth watching
 ```
 
-**No system_model.json, subsystems.json, annotations_draft.ts, insights.md, gaps.md,
-opportunities.md, or mermaid output in per-period folders.**
-Existing period folders (2026-02-27, 2026-03-30, 2026-04-30) retain their historical
-artifacts — do not delete them. New periods follow the minimal structure.
+No system_model, subsystems, annotations_draft, or mermaid output in per-period folders.
 
----
-
-## Directory Structure
-
-```
-analysis/
-├── rbi_sibc/
-│   ├── timeline.json               ← Registry of all ingested periods
-│   ├── merged/
-│   │   ├── sections_merged.json    ← Combined time-series across all periods
-│   │   ├── system_model.json       ← Causal model (living doc — FOUNDATION or UPDATE)
-│   │   ├── subsystems.json         ← Subsystem map (living doc — append only in UPDATE)
-│   │   ├── annotations_merged.ts   ← Draft annotations (→ web/lib/reports/)
-│   │   ├── signal_snapshot.json    ← Claude writes during Stage 5 (see schema below)
-│   │   ├── insights.md
-│   │   ├── gaps.md
-│   │   └── opportunities.md
-│   └── {YYYY-MM-DD}/               ← One folder per SIBC publication date
-│       ├── sections.json           ← Raw extracted data (always present)
-│       ├── format_report.json      ← Format detection (always present)
-│       └── delta_brief.md          ← Delta analysis (always present, new periods only)
-│
-├── output/
-│   └── mermaid/
-│       └── rbi_sibc/
-│           └── {YYYY-MM-DD}/       ← Generated diagram files (merged only, on-demand)
-│               ├── flowchart.mmd
-│               ├── overview.mmd
-│               ├── quadrant.mmd
-│               ├── sankey.mmd
-│               ├── subsystems.json ← Copy of merged subsystems at generation time
-│               └── sub_*.mmd
-│
-├── extract_sibc.py                 ← Stage 1: xlsx → sections.json + format_report.json
-├── detect_format.py                ← Stage 1c: flag format changes vs prior period
-├── update_web_data.py              ← Stage 1b: all xlsx → rbi_sibc_consolidated.csv
-├── generate_merge.py               ← Stage 4: sections.json[] → sections_merged.json (auto-validates)
-├── generate_mermaid.py             ← Stage 6a (on-demand): system_model → .mmd files
-├── source_claims.py                ← Stage 6b: source all claims in system_model.json
-├── promote_annotations.py          ← Stage 7: annotations_merged.ts → rbi_sibc.ts (verified copy)
-├── generate_delta.py               ← Ad-hoc: period-over-period delta (not in pipeline)
-├── validate_timeline.py            ← Validator: timeline.json (Check 0)
-├── validate_sections.py            ← Validator: sections.json (Check 1)
-├── validate_annotations.py         ← Validator: annotations .ts files (Check 3, Checks A–H)
-├── validate_content.py             ← Validator: numbers/dates in annotation bodies (Check 2b)
-├── validate_claims.py              ← Validator: claim_type + source on system model (Check 2c)
-├── validate_annotation_basis.py    ← Validator: basis completeness on merged + live annotations (Check 2d)
-├── validate_signal_history.py      ← Validator: registry.json + history/*.json integrity (Check 2e)
-├── validate.py                     ← Validator: system_model.json + subsystems (Checks 4, 5)
-├── generate_signal_history.py      ← Signal history: append | status | seed commands
-├── backfill_sibc_basis.py          ← One-time: backfilled basis fields for all 49 annotations (run once)
-├── run_evals.py                    ← Master eval orchestrator (Stages 3, 6)
-│
-├── signals/
-│   ├── registry.json               ← Universal signal catalog (70+ signals, all pipelines)
-│   └── history/
-│       ├── sibc.json               ← Append-only SIBC signal history (Claude-authored snapshots)
-│       └── atm_pos.json            ← Append-only ATM/POS signal history (auto-derived from insights.json)
-├── report_analysis_prompt.md       ← Master prompt for all Claude analyses
-│
-└── newsletter/
-    ├── CLAUDE.md                   ← Newsletter + LinkedIn subsystem context
-    ├── newsletter_config.json      ← Current-issue config (new signals only — authored, not generated)
-    ├── signal_registry.json        ← Cumulative signal tracker — ALL prior issues
-    ├── newsletter_delta_brief.py   ← Generates delta brief from merged outputs for newsletter authoring
-    ├── validate_newsletter_config.py ← Gate: validates config before any generation
-    ├── generate_images.py          ← Renders Mermaid .mmd → PNG for newsletter + LinkedIn
-    ├── generate_newsletter.py      ← Renders newsletter HTML (standard + Substack)
-    ├── generate_linkedin.py        ← Renders 7-post LinkedIn package
-    └── output/                     ← Generated files (newsletters + linkedin/ packages, dated)
-
-analysis/rbi_sibc/lib/              ← SIBC parser utilities
-├── parser.py                       ← Called by extract_sibc.py + detect_format.py
-├── consolidate.py                  ← Called by update_web_data.py
-├── dashboard.py                    ← Streamlit exploration tool (local only)
-└── requirements.txt                ← Python deps for lib tools
-
-analysis/rbi_sibc/{period}/raw/     ← Source XLSX files (raw, never modified)
-analysis/rbi_sibc/archive/          ← Pre-pipeline era XLSX files
-
-web/
-└── lib/reports/
-    └── rbi_sibc.ts                 ← Live annotations (from merged annotations_merged.ts)
-```
-
----
-
-## Key Rules
-
-### Analysis layer is merged-only
-- Per-period folder contains data only (`sections.json`, `format_report.json`, `delta_brief.md`).
-- All analytical output — system_model, subsystems, annotations — lives in `merged/` only.
-- Web dashboard and newsletter always source from merged outputs. Never from per-period.
-
-### System model is a living document
-- `system_model.json` and `subsystems.json` evolve deliberately. See System Model Cadence above.
-- In UPDATE mode: read first, add/update only, never delete nodes or edges.
-- In FOUNDATION mode: full rebuild is legitimate — but only at FY-end or an explicit structural event.
-- The `_meta.mode` field in `system_model.json` records which mode produced the current version.
-
-### Annotation IDs are permanent
-- An `id` field in `annotations_merged.ts`, once created, is never renamed or deleted.
-- UPDATE mode may add new IDs. FOUNDATION mode may restructure — but before promoting,
-  run `promote_annotations.py --dry-run` and explicitly account for every removed ID.
-- `annotation_ids` in `system_model.json` must exactly match `id` fields in the annotations
-  file. Copy-paste — never retype. The validator enforces this at every run.
-
-### Stage 3 evals scope depends on mode
-- Per-period run: Checks 0, 0.5, 1, 1b only. No Claude artifacts to validate.
-- Merged run (Stage 6): full check suite — Checks 0, 0.5, 1, 1b, 2, 2b, 2c, 3, 4, 5, 6.
-
-### Stage 4 self-validates
-- `generate_merge.py` auto-runs `validate_sections.py --merged` after writing.
-- If post-merge validation fails, `generate_merge.py` exits 1 — Stage 5 must not run.
-
-### Stage 6a mermaid generation is on-demand, not automatic
-- `generate_mermaid.py` runs after FOUNDATION always; after UPDATE only if nodes/edges changed.
-- Check node/edge count before and after UPDATE pass to decide.
-
-### Stage 7 promotion is automated, not manual
-- Use `promote_annotations.py` to copy `annotations_merged.ts` → `rbi_sibc.ts`.
-- The script verifies annotation IDs match before and after the write.
-- Never copy manually — the verification step is the guardrail.
-
-### Newsletter from merged only
-- `newsletter_config.json` is generated from the merged system_model + subsystems.
-- `signal_registry.json` must be updated before authoring `newsletter_config.json` each issue.
-
-### Git / deployment
-- Never auto-push to GitHub.
-- Always run `npm run build` + `tsc --noEmit` before pushing (or run `run_evals.py`
-  without `--skip-build`).
-- Commit per-period and merged outputs separately for clean git history.
-
----
-
-## timeline.json Schema
+### timeline.json schema
 
 ```json
 {
   "report_id": "rbi_sibc",
-  "report_name": "RBI Sector/Industry-wise Bank Credit",
   "periods": [
     {
       "period":           "Mar 2026",
@@ -411,187 +316,287 @@ web/
 }
 ```
 
-**New field: `is_fy_end`** — set `true` when the period is a March year-end file
-(dataDate in April–May). This is the trigger for FOUNDATION mode in Stage 5.
-All prior period entries should be backfilled with `is_fy_end: false`.
+---
+
+## ATM/POS Pipeline
+
+**Gate:** `python3 analysis/run_atm_pos_evals.py`
+**Source:** RBI ATM/Acceptance Infrastructure and Card Statistics (monthly XLSX)
+**Cadence:** Monthly
+
+### Current state vs target architecture
+
+| Stage | Target | Current state | Gap |
+|---|---|---|---|
+| 0 | Format detection | `detect_atm_pos_format.py` ✓ | — |
+| 1 | Extraction | `extract_atm_pos.py` ✓ | — |
+| 2 | Per-period validation | `validate_atm_pos.py` ✓ | — |
+| 3 | Consolidation + Merge | CSV ✓ · sections_merged.json ✗ | Need merged JSON for L1 compute |
+| 4 | Layer 1 evaluate | Presence/absence only | Need numeric compute specs from CSV |
+| 5 | Layer 2a evaluate | Not implemented | `generate_atm_pos_insights.py` (currently in gate) must move here |
+| 6 | Evals gate | `run_atm_pos_evals.py` ✓ | Insights generation currently conflated in gate |
+| 7 | Presentation promote | Direct write, no promotion step | Need explicit promotion |
+
+**Key structural fix pending:** `generate_atm_pos_insights.py` is a Layer 2a artifact
+(Claude-generated insights). It currently sits inside the eval gate as a data stage.
+It must be moved to Stage 5 once the Layer 2a architecture is formalised. Until then
+it runs as-is — the current web presentation is not affected.
+
+**Layer 1 compute for ATM/POS:** The 21 ATM/POS signals currently have `layer: 1` in the
+registry but no `compute` specs. They are derived from presence/absence in insights.json —
+which is a Layer 2a output, not a data stage. Once `sections_merged.json` exists for ATM/POS,
+proper numeric `compute` specs must be added to the registry for all 21 signals and
+`generate_signal_history.py` updated to read from consolidated data.
+
+### Layer 2a model — ATM/POS system model
+
+Location: `analysis/rbi_atm_pos/merged/system_model.json`
+Status: **Pending** — first FOUNDATION pass required
+
+Directory `analysis/rbi_atm_pos/merged/` exists. Author system_model.json after at least
+one full fiscal year of ATM/POS data is available.
 
 ---
 
-## Adding a New Period (checklist)
+## Cross-Pipeline Stages
 
-Determine mode before starting. Check `is_fy_end` for the incoming file.
+These run after both SIBC and ATM/POS have completed Stages 0–7 for the same period.
+They are not gated on each other — if only one pipeline has a new period, cross-pipeline
+stages still run using the latest available data from each source.
 
-### Interim period — UPDATE mode (~10 months/year)
+### Layer 2b — cross-source signal evaluate
+
+**Catalog:** `analysis/cross_source/catalog.json`
+**Status:** Not yet implemented — no cross-source model exists
+
+Declared tuples:
+
+| Tuple | Sources | Interaction |
+|---|---|---|
+| `sibc_x_atm_pos` | SIBC × ATM/POS | personalLoans ↔ credit_cards, debit_cards |
+
+To activate a tuple:
+1. Author `analysis/cross_source/{tuple_id}/system_model.json` (FOUNDATION pass)
+2. Add `evaluate` specs to all Layer 2b signals in registry
+3. Set `status: "active"` in catalog entry
+4. Wire `generate_signal_history.py evaluate --pipeline cross:{tuple_id}` into cross-pipeline gate
+
+### Layer 3 — ecosystem signal evaluate
+
+**Location:** `analysis/ecosystem_model.json` (does not yet exist)
+**Status:** Not yet implemented
+
+The ecosystem model is Claude's structured understanding of the Indian lending ecosystem —
+risk transmission, NBFC vs bank dynamics, policy effects on credit cycles, collections
+behaviour. It is not derived from any single ingested data source. It provides the
+"for lenders" interpretive layer that sits above all pipeline-specific signals.
+
+**Authoring cadence:** Once, then updated approximately every 6 months or on a major
+model release. Always a full rebuild — no UPDATE mode.
+
+**Claim validation:** Every claim in ecosystem_model.json must pass `validate_claims.py`
+before it is used in any signal evaluation or presentation output.
+
+---
+
+## Key Rules
+
+### Annotation IDs are permanent
+An `id` in `annotations_merged.ts`, once created, is never renamed or deleted.
+UPDATE mode may add new IDs. FOUNDATION mode may restructure — but before promoting,
+run `promote_annotations.py --dry-run` and explicitly account for every removed ID.
+`annotation_ids` in `system_model.json` must exactly match `id` fields in the annotations file.
+
+### Signal IDs are permanent
+A signal `id` in `registry.json`, once created, is never renamed or deleted.
+Signals tagged `layer: 2` or `layer: 3` are preserved in the registry even before their
+evaluation layer is implemented — they carry `pending` status in history until then.
+
+### Stage 3 self-validates
+`generate_merge.py` auto-runs `validate_sections.py --merged` after writing.
+If post-merge validation fails, the script exits 1 and Stage 4 must not run.
+
+### Layer 1 always runs — no exceptions
+If Stage 3 produces a valid `sections_merged.json`, Stage 4 always runs.
+Layer 1 signal evaluation is not optional, not skippable, not conditioned on model state.
+
+### Layer 2a evaluate ≠ Layer 2a model update
+Running Stage 5 (Layer 2a evaluate) every period is mandatory when a model exists.
+Updating `system_model.json` (FOUNDATION or UPDATE) is a separate, explicitly triggered step.
+Never conflate the two.
+
+### Promotion is automated, never manual
+`promote_annotations.py` verifies annotation IDs match before and after write.
+Never copy `annotations_merged.ts` → `rbi_sibc.ts` manually.
+
+### Git / deployment
+- Work directly on `main` — solo project, no feature branches
+- Never auto-push to GitHub
+- Always run full evals (including build) before `git push`
+- Commit per-period outputs, merged outputs, and web/ separately
+
+---
+
+## Adding a New Period
+
+### SIBC — interim period (UPDATE mode)
 
 ```
-□  Place SIBC .xlsx in analysis/rbi_sibc/{period}/raw/
-□  python3 analysis/extract_sibc.py analysis/rbi_sibc/{period}/raw/SIBC{date}.xlsx
-□  python3 analysis/detect_format.py analysis/rbi_sibc/{period}/raw/SIBC{date}.xlsx
-   — review format_report.json; confirm or flag changes before proceeding
+□  Place xlsx in analysis/rbi_sibc/{dataDate}/raw/
+□  python3 analysis/detect_format.py {xlsx}
+   — review format_report.json; confirm before proceeding
+□  python3 analysis/extract_sibc.py {xlsx}
 □  python3 analysis/update_web_data.py
-□  Claude: delta_brief.md → rbi_sibc/{date}/delta_brief.md   (150–200 words, see structure above)
-□  Update timeline.json — add new period entry with is_fy_end: false
-□  python3 analysis/run_evals.py --period {date} --skip-build
-   (Checks 0, 0.5, 1, 1b only — should pass cleanly if extraction was clean)
+□  Update timeline.json — add period entry, is_fy_end: false
+□  Claude: delta_brief.md  (150–200 words; see structure above)
+□  python3 analysis/run_evals.py --period {dataDate} --skip-build
+   (Checks 0, 0.5, 1, 1b — data integrity only)
 □  python3 analysis/generate_merge.py
-□  READ rbi_sibc/merged/system_model.json before starting Stage 5
-   — confirm _meta.mode of current model, note node/edge count
-□  Claude: merged UPDATE pass
+□  python3 analysis/generate_signal_history.py append --pipeline sibc --period {dataDate}
+   (Stage 4 — Layer 1 always runs here)
+□  IF system_model.json exists AND signals moved materially:
+   python3 analysis/generate_signal_history.py evaluate --pipeline sibc --period {dataDate}
+   (Stage 5 — Layer 2a evaluate; skip if no change in L1 inputs)
+□  READ rbi_sibc/merged/system_model.json — is a model UPDATE warranted?
+   If yes (new signals, material pattern shift): run Layer 2a model UPDATE pass
    — update stats in existing nodes, add new nodes only for genuinely new signals
-   — update annotation bodies, add new IDs only, never delete existing IDs
    — set _meta.mode = "update", bump _meta.last_updated
-□  python3 analysis/source_claims.py rbi_sibc/merged/system_model.json
+   — python3 analysis/source_claims.py rbi_sibc/merged/system_model.json
+   — python3 analysis/generate_mermaid.py (only if new nodes/edges added)
 □  python3 analysis/run_evals.py --period merged --merged --skip-build
-   (includes Check 2d — basis completeness; new annotations must have basis fields)
-□  IF new nodes/edges were added: python3 analysis/generate_mermaid.py rbi_sibc/merged/system_model.json
-□  python3 analysis/promote_annotations.py --dry-run   (verify no IDs removed)
+□  python3 analysis/promote_annotations.py --dry-run
 □  python3 analysis/promote_annotations.py
-□  python3 analysis/run_evals.py --period merged --merged   (full run with build)
-□  python3 analysis/generate_signal_history.py append --pipeline sibc --period {date}
-   Prerequisite: signal_snapshot.json in rbi_sibc/merged/ (written during Stage 5)
-□  Update analysis/newsletter/signal_registry.json — add history entries for affected signals
-□  Author analysis/newsletter/newsletter_config.json
-□  python3 analysis/newsletter/validate_newsletter_config.py   (gate)
-□  python3 analysis/newsletter/generate_images.py              (if mermaid diagrams updated)
-□  python3 analysis/newsletter/generate_newsletter.py
-□  python3 analysis/newsletter/generate_linkedin.py
-□  Commit per-period outputs, then merged outputs, then web/ separately
+□  python3 analysis/run_evals.py --period merged --merged
+□  Commit per-period → merged → web/ separately
 □  git push
 ```
 
-### FY-end period — FOUNDATION mode (~once/year, March file published April–May)
+### SIBC — FY-end period (FOUNDATION mode)
 
 ```
-□  All steps above through generate_merge.py
-   (extract_sibc, detect_format, update_web_data, delta_brief, timeline.json, run_evals per-period)
-□  READ rbi_sibc/merged/system_model.json — note last_foundation_date, record prior node count
-□  Confirm: is this truly a March year-end file? (dataDate April–May, full fiscal year visible)
-   If not certain, use UPDATE mode instead.
-□  Claude: merged FOUNDATION pass
+□  All steps above through generate_merge.py + Stage 4 signal append
+□  Confirm: is_fy_end true? dataDate April–May? Full fiscal year visible?
+   If not certain, treat as UPDATE.
+□  Layer 2a model FOUNDATION pass:
    — full rebuild of system_model.json from sections_merged.json
    — set _meta.mode = "foundation", _meta.last_foundation_date = dataDate
    — full rebuild of subsystems.json
-   — full rewrite of annotations_merged.ts
-□  python3 analysis/source_claims.py rbi_sibc/merged/system_model.json
+   — full rewrite of annotations_merged.ts (ID guard applies — see Key Rules)
+   — python3 analysis/source_claims.py rbi_sibc/merged/system_model.json
+□  python3 analysis/generate_signal_history.py evaluate --pipeline sibc --period {dataDate}
+   (re-run Stage 5 after model rebuild)
 □  python3 analysis/run_evals.py --period merged --merged --skip-build
-   (includes Check 2d — all rewritten annotations must have basis fields)
-□  python3 analysis/generate_mermaid.py rbi_sibc/merged/system_model.json   (always after FOUNDATION)
-□  python3 analysis/promote_annotations.py --dry-run
-   — REVIEW the ID diff carefully: any removed IDs must be explicitly justified
+□  python3 analysis/generate_mermaid.py rbi_sibc/merged/system_model.json
+□  python3 analysis/promote_annotations.py --dry-run  (REVIEW every removed ID)
 □  python3 analysis/promote_annotations.py
-□  python3 analysis/run_evals.py --period merged --merged   (full run with build)
-□  python3 analysis/generate_signal_history.py append --pipeline sibc --period {date}
-   Prerequisite: signal_snapshot.json in rbi_sibc/merged/ (written during Stage 5)
-□  Update analysis/newsletter/signal_registry.json — add history entries for all signals
-□  Author analysis/newsletter/newsletter_config.json
-□  python3 analysis/newsletter/validate_newsletter_config.py   (gate)
-□  python3 analysis/newsletter/generate_images.py              (always after FOUNDATION — full diagram refresh)
-□  python3 analysis/newsletter/generate_newsletter.py
-□  python3 analysis/newsletter/generate_linkedin.py
-□  Commit per-period outputs, then merged outputs, then web/ separately
+□  python3 analysis/run_evals.py --period merged --merged
+□  Commit per-period → merged → web/ separately
+□  git push
+```
+
+### ATM/POS — new period
+
+```
+□  Place xlsx in analysis/rbi_atm_pos/incoming/
+□  python3 analysis/run_atm_pos_evals.py --xlsx {file}
+   (Stages 0–3: format detection, extraction, validation, consolidation)
+□  python3 analysis/generate_signal_history.py append --pipeline atm_pos --period {YYYY-MM-DD}
+   (Stage 4 — Layer 1: currently presence/absence; will be numeric once compute specs added)
+□  [Stage 5 — Layer 2a evaluate: NOT YET WIRED — generate_atm_pos_insights.py runs inside
+   gate for now; do not move until ATM/POS sections_merged.json and compute specs exist]
+□  Commit per-period → web/ separately
 □  git push
 ```
 
 ---
 
-## Signal History Layer
-
-Cross-pipeline, cross-period signal continuity. Claude's memory across sessions.
-
-### Architecture
+## Directory Structure
 
 ```
-analysis/signals/
-  registry.json              — universal signal catalog (all pipelines, all domains)
-  history/
-    sibc.json                — append-only SIBC history (one entry per ingested period)
-    atm_pos.json             — append-only ATM/POS history (auto-derived from insights.json)
+analysis/
+├── rbi_sibc/
+│   ├── timeline.json               ← Registry of all ingested periods
+│   ├── merged/
+│   │   ├── sections_merged.json    ← Stage 3: combined time-series (source for L1 compute)
+│   │   ├── system_model.json       ← Layer 2a model (living doc — FOUNDATION or UPDATE)
+│   │   ├── subsystems.json         ← Subsystem map (append-only in UPDATE)
+│   │   ├── annotations_merged.ts   ← Draft annotations (→ web via promote_annotations.py)
+│   │   ├── insights.md
+│   │   ├── gaps.md
+│   │   └── opportunities.md
+│   └── {YYYY-MM-DD}/
+│       ├── sections.json
+│       ├── format_report.json
+│       └── delta_brief.md
+│
+├── rbi_atm_pos/
+│   ├── timeline.json
+│   ├── canonical_banks.json
+│   ├── merged/
+│   │   └── system_model.json       ← Layer 2a model (pending — first FOUNDATION pass needed)
+│   └── {YYYY-MM-DD}/
+│       ├── format_report.json
+│       └── sections.json
+│
+├── cross_source/
+│   ├── catalog.json                ← Tuple registry — all declared cross-source pairs
+│   └── {tuple_id}/
+│       └── system_model.json       ← Layer 2b model per tuple (pending)
+│
+├── signals/
+│   ├── registry.json               ← Universal signal catalog (layer/compute/evaluate specs)
+│   └── history/
+│       ├── sibc.json               ← Append-only (L1: values; L2/3: pending or active)
+│       └── atm_pos.json            ← Append-only (L1: presence/absence → numeric pending)
+│
+├── output/
+│   └── mermaid/rbi_sibc/{YYYY-MM-DD}/   ← On-demand mermaid diagrams
+│
+├── run_evals.py                    ← SIBC gate (Stages 0–6)
+├── run_atm_pos_evals.py            ← ATM/POS gate (Stages 0–6)
+├── extract_sibc.py                 ← Stage 1 SIBC
+├── extract_atm_pos.py              ← Stage 1 ATM/POS
+├── detect_format.py                ← Stage 0 SIBC
+├── detect_atm_pos_format.py        ← Stage 0 ATM/POS
+├── update_web_data.py              ← Stage 3 SIBC (CSV consolidation)
+├── consolidate_atm_pos.py          ← Stage 3 ATM/POS (CSV consolidation)
+├── generate_merge.py               ← Stage 3 SIBC (sections_merged.json)
+├── generate_signal_history.py      ← Stage 4 + Stage 5: append | evaluate | status | seed
+├── source_claims.py                ← Post-model-update: claim sourcing for system_model.json
+├── promote_annotations.py          ← Stage 7 SIBC: verified copy to web
+├── generate_mermaid.py             ← On-demand: system_model → .mmd diagrams
+│
+├── validate_timeline.py            ← Check 0
+├── validate_sections.py            ← Check 1
+├── validate_annotations.py         ← Check 3
+├── validate_content.py             ← Check 2b
+├── validate_claims.py              ← Check 2c
+├── validate_annotation_basis.py    ← Check 2d
+├── validate_signal_history.py      ← Check 2e
+├── validate.py                     ← Checks 4, 5
+│
+├── report_analysis_prompt.md       ← Master prompt for all Claude analysis passes
+│
+└── newsletter/                     ← Exception — not yet standardised to this architecture
+    ├── CLAUDE.md
+    └── ...
+
+web/
+└── lib/reports/
+    └── rbi_sibc.ts                 ← Live annotations (promoted from merged)
+
+web/public/data/
+    ├── rbi_sibc_consolidated.csv
+    ├── atm_pos_consolidated.csv
+    └── atm_pos_insights.json       ← Layer 2a output (will move to promotion step)
 ```
 
-### registry.json structure
+---
 
-```json
-{
-  "_meta": { "schema_version": "1.0", "last_updated": "YYYY-MM-DD" },
-  "pipelines": {
-    "sibc":    { "label": "...", "source": "RBI SIBC", "snapshot_path": "..." },
-    "atm_pos": { "label": "...", "source": "RBI ATM/POS", "auto_snapshot": true }
-  },
-  "domains": { "credit_growth": { "description": "..." }, ... },
-  "signals": {
-    "<signal-id>": {
-      "id": "...", "pipeline": "sibc", "domain": "credit_growth",
-      "type": "data", "first_seen": "YYYY-MM-DD",
-      "current_status": "active", "title": "..."
-    }
-  }
-}
-```
+## Skills (load on demand)
 
-### history/{pipeline}.json structure
-
-```json
-{
-  "_meta": { "pipeline": "sibc", "schema_version": "1.0", "entry_count": 2 },
-  "entries": [
-    {
-      "period": "YYYY-MM-DD",
-      "appended_at": "ISO8601",
-      "signals": {
-        "<signal-id>": { "status": "active", "note": "optional free-text" }
-      }
-    }
-  ]
-}
-```
-
-### signal_snapshot.json (SIBC — Claude writes during Stage 5)
-
-Location: `analysis/rbi_sibc/merged/signal_snapshot.json`
-
-```json
-{
-  "period": "YYYY-MM-DD",
-  "signals": {
-    "<signal-id>": {
-      "status": "active",
-      "note": "optional free-text summary of what changed this period"
-    }
-  }
-}
-```
-
-**Status values:** `new` | `active` | `strengthening` | `weakening` | `reversed` | `absent` | `unknown`
-
-- `new` — first period this signal appears
-- `active` — signal persists, no meaningful directional change
-- `strengthening` — signal is intensifying (growth accelerating, spread widening, etc.)
-- `weakening` — signal is fading but still present
-- `reversed` — signal has turned (growth → contraction, or vice versa)
-- `absent` — signal was tracked but does not appear in this period's data
-- `unknown` — not yet assessed for this period
-
-### Adding a new pipeline to signal history
-
-1. Add entry to `registry.json` → `pipelines`
-2. Add all signals for that pipeline to `registry.json` → `signals`
-3. Create `analysis/signals/history/{pipeline}.json` with empty scaffold
-4. If auto-derivable: set `auto_snapshot: true` in pipeline entry — `generate_signal_history.py append` reads from the pipeline's insights file
-5. If Claude-authored: set `snapshot_path` in pipeline entry — Claude writes `signal_snapshot.json` during analysis, then run `generate_signal_history.py append`
-6. Wire `generate_signal_history.py append` into the pipeline's eval gate (after insights validation)
-
-### Commands
-
-```bash
-# Append ATM/POS period (auto-derived from atm_pos_insights.json)
-python3 analysis/generate_signal_history.py append --pipeline atm_pos --period 2026-03-31
-
-# Append SIBC period (reads rbi_sibc/merged/signal_snapshot.json)
-python3 analysis/generate_signal_history.py append --pipeline sibc --period 2026-03-30
-
-# Print current signal states across all pipelines
-python3 analysis/generate_signal_history.py status
-
-# Validate registry + history file integrity
-python3 analysis/validate_signal_history.py
-```
+| Skill | When to invoke |
+|---|---|
+| `/per-period-analysis` | Stage 2 delta_brief.md for a new period (~150 words) |
+| `/merged-analysis` | Layer 2a model UPDATE or FOUNDATION pass — check `is_fy_end` first |
+| `/add-new-report` | Full walkthrough: adding a new SIBC period end-to-end |

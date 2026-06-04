@@ -376,8 +376,16 @@ def check_subsystems(model, subsystems_path, result):
         result.error("subsystems", f"subsystems.json is invalid JSON: {e}")
         return
 
-    if not isinstance(subsystems, list):
-        result.error("subsystems", "subsystems.json must be a JSON array")
+    # Support both v1 (raw array) and v2 (object with subsystems key + _meta)
+    if isinstance(subsystems, dict):
+        schema_ver = subsystems.get("_meta", {}).get("schema_version", "?")
+        result.note("subsystems", f"subsystems.json schema v{schema_ver} (object format)")
+        subsystems = subsystems.get("subsystems", [])
+        if not isinstance(subsystems, list):
+            result.error("subsystems", "subsystems.json object format must have a 'subsystems' array")
+            return
+    elif not isinstance(subsystems, list):
+        result.error("subsystems", "subsystems.json must be a JSON array or object with 'subsystems' key")
         return
 
     count = len(subsystems)
@@ -388,7 +396,14 @@ def check_subsystems(model, subsystems_path, result):
     else:
         result.note("subsystems", f"Subsystem count: {count} (within 3-10 range)")
 
-    required_fields = ["id", "label", "drivers", "sectors", "outcomes", "node_ids"]
+    # v2 schema uses member_nodes; v1 uses node_ids + drivers/sectors/outcomes
+    # Detect schema by presence of member_nodes on first subsystem
+    v2_schema = bool(subsystems and "member_nodes" in subsystems[0])
+    if v2_schema:
+        required_fields = ["id", "label", "member_nodes"]
+    else:
+        required_fields = ["id", "label", "drivers", "sectors", "outcomes", "node_ids"]
+
     node_ids_set = {n["id"] for n in real_nodes(model)}
     driver_ids   = {n["id"] for n in real_nodes(model) if n.get("tier") == "driver"}
 
@@ -403,21 +418,26 @@ def check_subsystems(model, subsystems_path, result):
             if field not in sub:
                 result.error("subsystems", f"Subsystem '{sid}' missing required field: '{field}'")
 
-        # All node_ids exist in model
-        for nid in sub.get("node_ids", []):
+        # Resolve membership list: member_nodes (v2) or node_ids (v1)
+        members = sub.get("member_nodes") or sub.get("node_ids", [])
+        for nid in members:
             if nid not in node_ids_set:
                 result.error(
                     "subsystems",
-                    f"Subsystem '{sid}' references node_id '{nid}' which does not exist in system_model.json",
+                    f"Subsystem '{sid}' references node '{nid}' which does not exist in system_model.json",
                 )
             node_membership.setdefault(nid, []).append(sid)
 
-        # drivers list references valid driver nodes
-        for did in sub.get("drivers", []):
-            if did not in node_ids_set:
-                result.warn("subsystems", f"Subsystem '{sid}' driver '{did}' not found in model nodes")
-            elif did not in driver_ids:
-                result.warn("subsystems", f"Subsystem '{sid}' driver '{did}' is not a tier=driver node")
+        # Resolve driver list: v2 infers from member_nodes ∩ driver_ids; v1 uses explicit drivers field
+        if v2_schema:
+            sub_drivers = [n for n in members if n in driver_ids]
+        else:
+            sub_drivers = sub.get("drivers", [])
+            for did in sub_drivers:
+                if did not in node_ids_set:
+                    result.warn("subsystems", f"Subsystem '{sid}' driver '{did}' not found in model nodes")
+                elif did not in driver_ids:
+                    result.warn("subsystems", f"Subsystem '{sid}' driver '{did}' is not a tier=driver node")
 
     # Every node must be in exactly one subsystem
     for nid, memberships in node_membership.items():
@@ -428,19 +448,40 @@ def check_subsystems(model, subsystems_path, result):
                 "each node must belong to exactly one subsystem.",
             )
 
-    # Check all model nodes are in at least one subsystem
+    # Check all model nodes are in at least one subsystem.
+    # gap / opportunity / pressure nodes are deliberately excluded — they are derived
+    # analytical observations, not structural members of a subsystem.
+    derived_tiers = {"gap", "opportunity", "pressure"}
+    structural_node_ids = {
+        n["id"] for n in real_nodes(model)
+        if n.get("tier") not in derived_tiers
+    }
     all_sub_nodes = set(node_membership.keys())
-    uncovered = node_ids_set - all_sub_nodes
+    uncovered = structural_node_ids - all_sub_nodes
     if uncovered:
         result.warn(
             "subsystems",
-            f"{len(uncovered)} model node(s) not assigned to any subsystem: {sorted(uncovered)}",
+            f"{len(uncovered)} structural node(s) not assigned to any subsystem: {sorted(uncovered)}",
+        )
+    # Note derived nodes intentionally unassigned — this is by design
+    unassigned_derived = node_ids_set - structural_node_ids - all_sub_nodes
+    if unassigned_derived:
+        result.note(
+            "subsystems",
+            f"{len(unassigned_derived)} derived node(s) (gap/opp/pressure) correctly unassigned to subsystems",
         )
 
     # Every driver must lead ≥1 subsystem
-    sub_driver_ids = set()
-    for sub in subsystems:
-        sub_driver_ids.update(sub.get("drivers", []))
+    if v2_schema:
+        # In v2, drivers are inferred from member_nodes ∩ driver_ids
+        sub_driver_ids = set()
+        for sub in subsystems:
+            members = sub.get("member_nodes", [])
+            sub_driver_ids.update(n for n in members if n in driver_ids)
+    else:
+        sub_driver_ids = set()
+        for sub in subsystems:
+            sub_driver_ids.update(sub.get("drivers", []))
 
     for did in driver_ids:
         if did not in sub_driver_ids:

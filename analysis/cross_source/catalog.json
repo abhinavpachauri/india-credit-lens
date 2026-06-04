@@ -1,0 +1,37 @@
+{
+  "_meta": {
+    "schema_version": "1.0",
+    "description": "Cross-source tuple catalog — declares every meaningful intersection between ingested data sources. Tuples are curated, not auto-generated. Add a new tuple when a new source is ingested and you can identify specific section pairs that interact with an existing source. Never infer tuples automatically.",
+    "last_updated": "2026-06-03"
+  },
+  "tuples": {
+    "sibc_x_atm_pos": {
+      "id": "sibc_x_atm_pos",
+      "title": "Credit × Payments",
+      "sources": ["sibc", "atm_pos"],
+      "rationale": "Credit card outstanding in SIBC and CC transaction volumes in ATM/POS measure the same lending population from two angles — stock vs flow. Personal loan sub-categories in SIBC (vehicle, consumer durables) correlate with debit card spend patterns. These two sources produce a richer picture of consumer credit behaviour than either source alone.",
+      "section_pairs": [
+        {
+          "id": "cc_stock_vs_flow",
+          "sibc_section": "personalLoans",
+          "sibc_series": ["Credit Card Outstanding"],
+          "atm_pos_domain": "credit_cards",
+          "note": "CC outstanding (SIBC stock) vs CC POS + ecom transaction volumes (ATM/POS flow) — divergence signals utilisation change or portfolio mix shift"
+        },
+        {
+          "id": "personal_loans_vs_debit_spend",
+          "sibc_section": "personalLoans",
+          "sibc_series": ["Consumer Durables", "Vehicle Loans", "Other Personal Loans"],
+          "atm_pos_domain": "debit_cards",
+          "note": "Consumer credit growth in SIBC vs debit card digital spend footprint in ATM/POS — low digital debit share alongside high personal loan growth indicates cash-dependent borrower base"
+        }
+      ],
+      "model_path": "analysis/cross_source/sibc_x_atm_pos/system_model.json",
+      "status": "pending",
+      "mode": null,
+      "last_updated": null,
+      "created": "2026-06-03",
+      "update_trigger": "Update when either SIBC personalLoans section or ATM/POS credit_cards / debit_cards domain shows meaningful movement in the period's Layer 2a system model. Cross-source FOUNDATION when both constituent sources have completed a FOUNDATION pass."
+    }
+  }
+}

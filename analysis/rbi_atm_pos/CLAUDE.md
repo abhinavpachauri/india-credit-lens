@@ -1,31 +1,45 @@
 # ATM/POS Pipeline — India Credit Lens
 
 RBI ATM, Acceptance Infrastructure and Card Statistics.
-Completely isolated from SIBC — separate scripts, separate eval gate, separate CSV output.
+Separate gate from SIBC — same stage sequence, different scripts.
+Full architecture: see `PIPELINE_ARCHITECTURE.md`.
 
 ---
 
-## Stages (run in order via master gate)
+## Current stage mapping vs unified architecture
+
+| Unified Stage | Purpose | ATM/POS script | Status |
+|---|---|---|---|
+| 0 | Format detection | `detect_atm_pos_format.py` | ✓ Live |
+| 1 | Extraction | `extract_atm_pos.py` | ✓ Live |
+| 2 | Per-period validation | `validate_atm_pos.py` (Checks A–E) | ✓ Live |
+| 3 | Consolidation | `consolidate_atm_pos.py` → CSV + timeline | ✓ Live · sections_merged.json pending |
+| 4 | Layer 1 signal evaluate | `generate_signal_history.py append` | ⚠ Presence/absence only · numeric compute specs pending |
+| 5 | Layer 2a signal evaluate | `generate_atm_pos_insights.py` (runs in gate for now) | ⚠ Insight script is Layer 2a — needs decoupling from gate |
+| 6 | Evals gate | `run_atm_pos_evals.py` | ✓ Live |
+| 7 | Presentation promote | Direct write (no promotion step yet) | ⚠ Pending |
+
+## Running the gate
 
 ```
 python3 analysis/run_atm_pos_evals.py --xlsx path/to/file.xlsx [file2.xlsx ...]
 ```
 
 Flags:
-- `--skip-insights`  skip Stages 4b/4c/4d (data-only run)
-- `--skip-build`     skip tsc + npm run build (use when web/ unchanged)
+- `--skip-insights`  skip insight generation (Stages 4b/4c/4d) — data-only run
+- `--skip-build`     skip tsc + npm run build
 
-Or step by step:
+Step by step:
 ```
 Stage 0:  python3 analysis/detect_atm_pos_format.py {xlsx}     → {period}/format_report.json
 Stage 1:  python3 analysis/extract_atm_pos.py {xlsx}           → {period}/sections.json + raw/
 Stage 2:  python3 analysis/validate_atm_pos.py {YYYY-MM-DD}    → checks A–E
 Stage 3:  python3 analysis/consolidate_atm_pos.py {YYYY-MM-DD} → atm_pos_consolidated.csv + timeline.json
-Stage 4b: python3 analysis/generate_atm_pos_insights.py        → web/public/data/atm_pos_insights.json
-Stage 4c: python3 analysis/validate_atm_pos_insights.py        → validates numbers vs signals.json (±0.5%)
-Stage 4d: python3 analysis/validate_atm_pos_claims.py          → validates reasoning.chain (≥2 steps) + signal keys/values
-Stage 5:  (automatic in gate) web CSV integrity check           → validates atm_pos_consolidated.csv
-Stage 6:  (automatic in gate) tsc + npm run build               → TypeScript compile + Next.js production build
+[Stage 4] python3 analysis/generate_signal_history.py append --pipeline atm_pos --period {YYYY-MM-DD}
+[Stage 5] python3 analysis/generate_atm_pos_insights.py        → web/public/data/atm_pos_insights.json
+          python3 analysis/validate_atm_pos_insights.py        → validates numbers vs signals.json (±0.5%)
+          python3 analysis/validate_atm_pos_claims.py          → validates reasoning.chain (≥2 steps)
+Stage 6:  (automatic in gate) web CSV integrity check + tsc + npm run build
 ```
 
 Re-validate an already-extracted period:

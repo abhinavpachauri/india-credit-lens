@@ -2,16 +2,422 @@
   "_meta": {
     "pipeline": "atm_pos",
     "schema_version": "1.0",
-    "description": "Append-only signal history for the ATM/POS (Card & Acceptance Infrastructure) pipeline. Entries are auto-derived from atm_pos_insights.json \u2014 Claude does not author these. Each entry records the status of every tracked signal for one ingested period. Never edit past entries \u2014 only append.",
-    "entry_count": 1
+    "description": "Append-only signal history for the ATM/POS (Card & Acceptance Infrastructure) pipeline. Entries are auto-derived from atm_pos_insights.json — Claude does not author these. Each entry records the status of every tracked signal for one ingested period. Never edit past entries — only append.",
+    "entry_count": 6
   },
   "entries": [
     {
-      "period": "2026-03-31",
-      "appended_at": "2026-06-01T09:19:08",
+      "period": "2025-10-31",
+      "appended_at": "2026-06-04T12:10:34",
       "signals": {
         "cc-ecom-vs-pos-share": {
-          "status": "new"
+          "status": "active",
+          "value": 49.4509
+        },
+        "cc-cards-streak": {
+          "status": "unknown"
+        },
+        "cc-txn-surge": {
+          "status": "unknown"
+        },
+        "cc-category-share-shift": {
+          "status": "unknown"
+        },
+        "gap-foreign-cc-decline": {
+          "status": "unknown"
+        },
+        "dc-atm-share-structural": {
+          "status": "strengthening",
+          "value": 80.8881
+        },
+        "dc-pos-cash-decline": {
+          "status": "unknown"
+        },
+        "dc-ecom-share": {
+          "status": "absent",
+          "value": 4.6524
+        },
+        "dc-cards-streak": {
+          "status": "unknown"
+        },
+        "dc-psb-dominance": {
+          "status": "unknown"
+        },
+        "gap-dc-cash-dominance": {
+          "status": "strengthening",
+          "value": 85.6347
+        },
+        "gap-dc-ecom-low": {
+          "status": "strengthening",
+          "value": 4.6524
+        },
+        "infra-qr-per-pos": {
+          "status": "strengthening",
+          "value": 58.2889
+        },
+        "infra-pos-streak": {
+          "status": "unknown"
+        },
+        "infra-upi-vs-bharat-qr": {
+          "status": "strengthening",
+          "value": 118.6291
+        },
+        "gap-bharat-qr-contraction": {
+          "status": "unknown"
+        },
+        "gap-atm-offsite-decline": {
+          "status": "unknown"
+        },
+        "atm-cc-cash-stress": {
+          "status": "absent",
+          "value": 0.1377
+        },
+        "atm-private-cc-share": {
+          "status": "unknown"
+        },
+        "atm-pos-per-cc": {
+          "status": "absent",
+          "value": 0.1078
+        },
+        "dc-bank-scan": {
+          "status": "unknown"
+        },
+        "infra-pos-bank-scan": {
+          "status": "unknown"
+        }
+      }
+    },
+    {
+      "period": "2025-11-30",
+      "appended_at": "2026-06-04T12:10:35",
+      "signals": {
+        "cc-ecom-vs-pos-share": {
+          "status": "active",
+          "value": 49.3024
+        },
+        "cc-cards-streak": {
+          "status": "unknown"
+        },
+        "cc-txn-surge": {
+          "status": "unknown"
+        },
+        "cc-category-share-shift": {
+          "status": "unknown"
+        },
+        "gap-foreign-cc-decline": {
+          "status": "unknown"
+        },
+        "dc-atm-share-structural": {
+          "status": "strengthening",
+          "value": 81.2421
+        },
+        "dc-pos-cash-decline": {
+          "status": "unknown"
+        },
+        "dc-ecom-share": {
+          "status": "absent",
+          "value": 4.6004
+        },
+        "dc-cards-streak": {
+          "status": "unknown"
+        },
+        "dc-psb-dominance": {
+          "status": "unknown"
+        },
+        "gap-dc-cash-dominance": {
+          "status": "strengthening",
+          "value": 87.3189
+        },
+        "gap-dc-ecom-low": {
+          "status": "strengthening",
+          "value": 4.6004
+        },
+        "infra-qr-per-pos": {
+          "status": "strengthening",
+          "value": 64.7091
+        },
+        "infra-pos-streak": {
+          "status": "unknown"
+        },
+        "infra-upi-vs-bharat-qr": {
+          "status": "strengthening",
+          "value": 122.3339
+        },
+        "gap-bharat-qr-contraction": {
+          "status": "unknown"
+        },
+        "gap-atm-offsite-decline": {
+          "status": "unknown"
+        },
+        "atm-cc-cash-stress": {
+          "status": "absent",
+          "value": 0.134
+        },
+        "atm-private-cc-share": {
+          "status": "unknown"
+        },
+        "atm-pos-per-cc": {
+          "status": "absent",
+          "value": 0.0979
+        },
+        "dc-bank-scan": {
+          "status": "unknown"
+        },
+        "infra-pos-bank-scan": {
+          "status": "unknown"
+        }
+      }
+    },
+    {
+      "period": "2025-12-31",
+      "appended_at": "2026-06-04T12:10:36",
+      "signals": {
+        "cc-ecom-vs-pos-share": {
+          "status": "active",
+          "value": 49.2541
+        },
+        "cc-cards-streak": {
+          "status": "unknown"
+        },
+        "cc-txn-surge": {
+          "status": "unknown"
+        },
+        "cc-category-share-shift": {
+          "status": "unknown"
+        },
+        "gap-foreign-cc-decline": {
+          "status": "unknown"
+        },
+        "dc-atm-share-structural": {
+          "status": "strengthening",
+          "value": 80.9114
+        },
+        "dc-pos-cash-decline": {
+          "status": "unknown"
+        },
+        "dc-ecom-share": {
+          "status": "absent",
+          "value": 4.6259
+        },
+        "dc-cards-streak": {
+          "status": "unknown"
+        },
+        "dc-psb-dominance": {
+          "status": "unknown"
+        },
+        "gap-dc-cash-dominance": {
+          "status": "strengthening",
+          "value": 86.5556
+        },
+        "gap-dc-ecom-low": {
+          "status": "strengthening",
+          "value": 4.6259
+        },
+        "infra-qr-per-pos": {
+          "status": "strengthening",
+          "value": 63.7374
+        },
+        "infra-pos-streak": {
+          "status": "unknown"
+        },
+        "infra-upi-vs-bharat-qr": {
+          "status": "strengthening",
+          "value": 124.166
+        },
+        "gap-bharat-qr-contraction": {
+          "status": "unknown"
+        },
+        "gap-atm-offsite-decline": {
+          "status": "unknown"
+        },
+        "atm-cc-cash-stress": {
+          "status": "absent",
+          "value": 0.1294
+        },
+        "atm-private-cc-share": {
+          "status": "unknown"
+        },
+        "atm-pos-per-cc": {
+          "status": "absent",
+          "value": 0.0991
+        },
+        "dc-bank-scan": {
+          "status": "unknown"
+        },
+        "infra-pos-bank-scan": {
+          "status": "unknown"
+        }
+      }
+    },
+    {
+      "period": "2026-01-31",
+      "appended_at": "2026-06-04T12:10:37",
+      "signals": {
+        "cc-ecom-vs-pos-share": {
+          "status": "strengthening",
+          "value": 50.1735
+        },
+        "cc-cards-streak": {
+          "status": "unknown"
+        },
+        "cc-txn-surge": {
+          "status": "unknown"
+        },
+        "cc-category-share-shift": {
+          "status": "unknown"
+        },
+        "gap-foreign-cc-decline": {
+          "status": "unknown"
+        },
+        "dc-atm-share-structural": {
+          "status": "strengthening",
+          "value": 81.2599
+        },
+        "dc-pos-cash-decline": {
+          "status": "unknown"
+        },
+        "dc-ecom-share": {
+          "status": "absent",
+          "value": 4.4995
+        },
+        "dc-cards-streak": {
+          "status": "unknown"
+        },
+        "dc-psb-dominance": {
+          "status": "unknown"
+        },
+        "gap-dc-cash-dominance": {
+          "status": "strengthening",
+          "value": 86.3549
+        },
+        "gap-dc-ecom-low": {
+          "status": "strengthening",
+          "value": 4.4995
+        },
+        "infra-qr-per-pos": {
+          "status": "strengthening",
+          "value": 63.9556
+        },
+        "infra-pos-streak": {
+          "status": "unknown"
+        },
+        "infra-upi-vs-bharat-qr": {
+          "status": "strengthening",
+          "value": 126.354
+        },
+        "gap-bharat-qr-contraction": {
+          "status": "unknown"
+        },
+        "gap-atm-offsite-decline": {
+          "status": "unknown"
+        },
+        "atm-cc-cash-stress": {
+          "status": "absent",
+          "value": 0.1296
+        },
+        "atm-private-cc-share": {
+          "status": "unknown"
+        },
+        "atm-pos-per-cc": {
+          "status": "absent",
+          "value": 0.099
+        },
+        "dc-bank-scan": {
+          "status": "unknown"
+        },
+        "infra-pos-bank-scan": {
+          "status": "unknown"
+        }
+      }
+    },
+    {
+      "period": "2026-02-28",
+      "appended_at": "2026-06-04T12:10:38",
+      "signals": {
+        "cc-ecom-vs-pos-share": {
+          "status": "strengthening",
+          "value": 50.424
+        },
+        "cc-cards-streak": {
+          "status": "unknown"
+        },
+        "cc-txn-surge": {
+          "status": "unknown"
+        },
+        "cc-category-share-shift": {
+          "status": "unknown"
+        },
+        "gap-foreign-cc-decline": {
+          "status": "unknown"
+        },
+        "dc-atm-share-structural": {
+          "status": "strengthening",
+          "value": 81.895
+        },
+        "dc-pos-cash-decline": {
+          "status": "unknown"
+        },
+        "dc-ecom-share": {
+          "status": "absent",
+          "value": 4.4773
+        },
+        "dc-cards-streak": {
+          "status": "unknown"
+        },
+        "dc-psb-dominance": {
+          "status": "unknown"
+        },
+        "gap-dc-cash-dominance": {
+          "status": "strengthening",
+          "value": 87.4734
+        },
+        "gap-dc-ecom-low": {
+          "status": "strengthening",
+          "value": 4.4773
+        },
+        "infra-qr-per-pos": {
+          "status": "strengthening",
+          "value": 64.656
+        },
+        "infra-pos-streak": {
+          "status": "unknown"
+        },
+        "infra-upi-vs-bharat-qr": {
+          "status": "strengthening",
+          "value": 127.8884
+        },
+        "gap-bharat-qr-contraction": {
+          "status": "unknown"
+        },
+        "gap-atm-offsite-decline": {
+          "status": "unknown"
+        },
+        "atm-cc-cash-stress": {
+          "status": "absent",
+          "value": 0.1293
+        },
+        "atm-private-cc-share": {
+          "status": "unknown"
+        },
+        "atm-pos-per-cc": {
+          "status": "absent",
+          "value": 0.0991
+        },
+        "dc-bank-scan": {
+          "status": "unknown"
+        },
+        "infra-pos-bank-scan": {
+          "status": "unknown"
+        }
+      }
+    },
+    {
+      "period": "2026-03-31",
+      "appended_at": "2026-06-04T12:10:39",
+      "signals": {
+        "cc-ecom-vs-pos-share": {
+          "status": "new",
+          "value": 50.5279
         },
         "cc-cards-streak": {
           "status": "new"
@@ -22,20 +428,19 @@
         "cc-category-share-shift": {
           "status": "new"
         },
-        "cc-top5-concentration": {
-          "status": "new"
-        },
         "gap-foreign-cc-decline": {
           "status": "new"
         },
         "dc-atm-share-structural": {
-          "status": "new"
+          "status": "new",
+          "value": 81.4321
         },
         "dc-pos-cash-decline": {
           "status": "new"
         },
         "dc-ecom-share": {
-          "status": "new"
+          "status": "absent",
+          "value": 4.8249
         },
         "dc-cards-streak": {
           "status": "new"
@@ -43,26 +448,24 @@
         "dc-psb-dominance": {
           "status": "new"
         },
-        "dc-top-bank-leader": {
-          "status": "new"
-        },
         "gap-dc-cash-dominance": {
-          "status": "new"
+          "status": "new",
+          "value": 86.7993
         },
         "gap-dc-ecom-low": {
-          "status": "new"
+          "status": "new",
+          "value": 4.8249
         },
         "infra-qr-per-pos": {
-          "status": "new"
+          "status": "new",
+          "value": 64.6779
         },
         "infra-pos-streak": {
           "status": "new"
         },
         "infra-upi-vs-bharat-qr": {
-          "status": "new"
-        },
-        "infra-top-bank-pos": {
-          "status": "new"
+          "status": "new",
+          "value": 135.1347
         },
         "gap-bharat-qr-contraction": {
           "status": "new"
@@ -70,8 +473,22 @@
         "gap-atm-offsite-decline": {
           "status": "new"
         },
-        "gap-pos-concentration": {
-          "status": "new"
+        "atm-cc-cash-stress": {
+          "status": "absent",
+          "value": 0.1231
+        },
+        "atm-private-cc-share": {
+          "status": "unknown"
+        },
+        "atm-pos-per-cc": {
+          "status": "absent",
+          "value": 0.0992
+        },
+        "dc-bank-scan": {
+          "status": "unknown"
+        },
+        "infra-pos-bank-scan": {
+          "status": "unknown"
         }
       }
     }

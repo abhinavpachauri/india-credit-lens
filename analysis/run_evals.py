@@ -250,17 +250,19 @@ def check_annotations_live():
 
 
 def check_system_model(period_dir):
-    model_path = period_dir / "system_model.json"
+    # The merged system model is the authoritative structural artifact —
+    # per-period directories do not carry their own system_model.json.
+    merged_model = ANALYSIS / "rbi_sibc" / "merged" / "system_model.json"
+    model_path = merged_model if merged_model.exists() else period_dir / "system_model.json"
     if not model_path.exists():
         return False, "", f"File not found: {model_path}"
-    # Prefer annotations_draft.ts (per-period), then annotations_merged.ts (merged),
-    # then fall back to live rbi_sibc.ts.
-    draft_path  = period_dir / "annotations_draft.ts"
-    merged_path = period_dir / "annotations_merged.ts"
+    # Prefer live rbi_sibc.ts for annotation ID cross-check (promoted from merged).
     live_path   = WEB / "lib" / "reports" / "rbi_sibc.ts"
-    ann_path = (draft_path if draft_path.exists()
-                else merged_path if merged_path.exists()
-                else live_path)
+    merged_ann  = ANALYSIS / "rbi_sibc" / "merged" / "annotations_merged.ts"
+    draft_path  = period_dir / "annotations_draft.ts"
+    ann_path = (live_path    if live_path.exists()
+                else merged_ann if merged_ann.exists()
+                else draft_path)
     cmd = [
         sys.executable, str(ANALYSIS / "validate.py"),
         str(model_path),
@@ -308,16 +310,20 @@ def check_claims(period_dir):
 
 
 def check_subsystems(period_dir, subsystems_path):
-    model_path = period_dir / "system_model.json"
+    # Both model and subsystems live in merged/ — per-period dirs have neither.
+    merged_model = ANALYSIS / "rbi_sibc" / "merged" / "system_model.json"
+    model_path = merged_model if merged_model.exists() else period_dir / "system_model.json"
     if not model_path.exists():
         return False, "", f"system_model.json not found: {model_path}"
-    if not Path(subsystems_path).exists():
-        return False, "", f"subsystems.json not found: {subsystems_path}"
+    merged_subs = ANALYSIS / "rbi_sibc" / "merged" / "subsystems.json"
+    resolved_subs = merged_subs if merged_subs.exists() else Path(subsystems_path)
+    if not resolved_subs.exists():
+        return False, "", f"subsystems.json not found: {resolved_subs}"
     cmd = [
         sys.executable, str(ANALYSIS / "validate.py"),
         str(model_path),
         "--check-subsystems",
-        "--subsystems-path", str(subsystems_path),
+        "--subsystems-path", str(resolved_subs),
     ]
     return run_check("subsystems", cmd, cwd=ANALYSIS)
 
