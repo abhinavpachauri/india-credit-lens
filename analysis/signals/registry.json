@@ -433,10 +433,24 @@
       "compute": {
         "method": "series_yoy",
         "section": "bankCredit",
-        "series": "Bank Credit"
+        "series": "Bank Credit",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
       },
       "id": "sibc-bank-credit-yoy",
-      "current_status": "unknown",
+      "current_status": "strengthening",
       "first_seen": "2024-04-22",
       "type": "data"
     },
@@ -451,10 +465,24 @@
         "method": "series_abs",
         "section": "bankCredit",
         "series": "Bank Credit",
-        "unit": "lcr_cr"
+        "unit": "lcr_cr",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
       },
       "id": "sibc-bank-credit-abs",
-      "current_status": "unknown",
+      "current_status": "strengthening",
       "first_seen": "2024-04-22",
       "type": "data"
     },
@@ -468,10 +496,24 @@
       "compute": {
         "method": "series_yoy",
         "section": "bankCredit",
-        "series": "Non-food Credit"
+        "series": "Non-food Credit",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
       },
       "id": "sibc-nonfood-credit-yoy",
-      "current_status": "unknown",
+      "current_status": "strengthening",
       "first_seen": "2024-04-22",
       "type": "data"
     },
@@ -486,10 +528,24 @@
         "method": "series_abs",
         "section": "bankCredit",
         "series": "Non-food Credit",
-        "unit": "lcr_cr"
+        "unit": "lcr_cr",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
       },
       "id": "sibc-nonfood-credit-abs",
-      "current_status": "unknown",
+      "current_status": "strengthening",
       "first_seen": "2024-04-22",
       "type": "data"
     },
@@ -502,10 +558,28 @@
       "spec_version": "1.0",
       "compute": {
         "method": "count_positive_yoy",
-        "section": "mainSectors"
+        "section": "mainSectors",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value == 0",
+            "then": "declining"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
       },
       "id": "sibc-sectors-positive-yoy-count",
-      "current_status": "unknown",
+      "current_status": "active",
       "first_seen": "2024-04-22",
       "type": "data"
     },
@@ -519,10 +593,24 @@
       "compute": {
         "method": "series_yoy",
         "section": "mainSectors",
-        "series": "Agriculture"
+        "series": "Agriculture",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
       },
       "id": "sibc-agriculture-yoy",
-      "current_status": "unknown",
+      "current_status": "strengthening",
       "first_seen": "2024-04-22",
       "type": "data"
     },
@@ -536,10 +624,24 @@
       "compute": {
         "method": "series_share",
         "section": "mainSectors",
-        "series": "Agriculture"
+        "series": "Agriculture",
+        "status_rules": [
+          {
+            "if": "value > prev_value + 0.5",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value - 0.5",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
       },
       "id": "sibc-agriculture-share",
-      "current_status": "unknown",
+      "current_status": "active",
       "first_seen": "2024-04-22",
       "type": "data"
     },
@@ -553,10 +655,24 @@
       "compute": {
         "method": "series_yoy",
         "section": "mainSectors",
-        "series": "Industry"
+        "series": "Industry",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
       },
       "id": "sibc-industry-yoy",
-      "current_status": "unknown",
+      "current_status": "strengthening",
       "first_seen": "2024-04-22",
       "type": "data"
     },
@@ -570,10 +686,24 @@
       "compute": {
         "method": "series_share",
         "section": "mainSectors",
-        "series": "Industry"
+        "series": "Industry",
+        "status_rules": [
+          {
+            "if": "value > prev_value + 0.5",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value - 0.5",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
       },
       "id": "sibc-industry-share",
-      "current_status": "unknown",
+      "current_status": "active",
       "first_seen": "2024-04-22",
       "type": "data"
     },
@@ -587,10 +717,24 @@
       "compute": {
         "method": "series_yoy",
         "section": "mainSectors",
-        "series": "Services"
+        "series": "Services",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
       },
       "id": "sibc-services-yoy",
-      "current_status": "unknown",
+      "current_status": "strengthening",
       "first_seen": "2024-04-22",
       "type": "data"
     },
@@ -604,10 +748,24 @@
       "compute": {
         "method": "series_share",
         "section": "mainSectors",
-        "series": "Services"
+        "series": "Services",
+        "status_rules": [
+          {
+            "if": "value > prev_value + 0.5",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value - 0.5",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
       },
       "id": "sibc-services-share",
-      "current_status": "unknown",
+      "current_status": "active",
       "first_seen": "2024-04-22",
       "type": "data"
     },
@@ -621,10 +779,24 @@
       "compute": {
         "method": "series_yoy",
         "section": "mainSectors",
-        "series": "Personal Loans"
+        "series": "Personal Loans",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
       },
       "id": "sibc-personal-loans-yoy",
-      "current_status": "unknown",
+      "current_status": "strengthening",
       "first_seen": "2024-04-22",
       "type": "data"
     },
@@ -638,10 +810,24 @@
       "compute": {
         "method": "series_share",
         "section": "mainSectors",
-        "series": "Personal Loans"
+        "series": "Personal Loans",
+        "status_rules": [
+          {
+            "if": "value > prev_value + 0.5",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value - 0.5",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
       },
       "id": "sibc-personal-loans-share",
-      "current_status": "unknown",
+      "current_status": "active",
       "first_seen": "2024-04-22",
       "type": "data"
     },
@@ -655,10 +841,24 @@
       "compute": {
         "method": "series_yoy",
         "section": "industryBySize",
-        "series": "Micro and Small"
+        "series": "Micro and Small",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
       },
       "id": "sibc-msme-micro-small-yoy",
-      "current_status": "unknown",
+      "current_status": "strengthening",
       "first_seen": "2024-04-22",
       "type": "data"
     },
@@ -672,10 +872,24 @@
       "compute": {
         "method": "series_share",
         "section": "industryBySize",
-        "series": "Micro and Small"
+        "series": "Micro and Small",
+        "status_rules": [
+          {
+            "if": "value > prev_value + 0.5",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value - 0.5",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
       },
       "id": "sibc-msme-micro-small-share",
-      "current_status": "unknown",
+      "current_status": "active",
       "first_seen": "2024-04-22",
       "type": "data"
     },
@@ -689,10 +903,24 @@
       "compute": {
         "method": "series_yoy",
         "section": "industryBySize",
-        "series": "Medium"
+        "series": "Medium",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
       },
       "id": "sibc-msme-medium-yoy",
-      "current_status": "unknown",
+      "current_status": "strengthening",
       "first_seen": "2024-04-22",
       "type": "data"
     },
@@ -706,10 +934,24 @@
       "compute": {
         "method": "series_share",
         "section": "industryBySize",
-        "series": "Medium"
+        "series": "Medium",
+        "status_rules": [
+          {
+            "if": "value > prev_value + 0.5",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value - 0.5",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
       },
       "id": "sibc-msme-medium-share",
-      "current_status": "unknown",
+      "current_status": "active",
       "first_seen": "2024-04-22",
       "type": "data"
     },
@@ -723,10 +965,24 @@
       "compute": {
         "method": "series_yoy",
         "section": "industryBySize",
-        "series": "Large"
+        "series": "Large",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
       },
       "id": "sibc-large-corporate-yoy",
-      "current_status": "unknown",
+      "current_status": "strengthening",
       "first_seen": "2024-04-22",
       "type": "data"
     },
@@ -740,10 +996,24 @@
       "compute": {
         "method": "series_share",
         "section": "industryBySize",
-        "series": "Large"
+        "series": "Large",
+        "status_rules": [
+          {
+            "if": "value > prev_value + 0.5",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value - 0.5",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
       },
       "id": "sibc-large-corporate-share",
-      "current_status": "unknown",
+      "current_status": "active",
       "first_seen": "2024-04-22",
       "type": "data"
     },
@@ -758,10 +1028,24 @@
         "method": "yoy_spread_named",
         "section": "industryBySize",
         "series_a": "Micro and Small",
-        "series_b": "Large"
+        "series_b": "Large",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
       },
       "id": "sibc-msme-size-yoy-spread",
-      "current_status": "unknown",
+      "current_status": "strengthening",
       "first_seen": "2024-04-22",
       "type": "data"
     },
@@ -775,10 +1059,24 @@
       "compute": {
         "method": "series_yoy",
         "section": "personalLoans",
-        "series": "Housing"
+        "series": "Housing",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
       },
       "id": "sibc-pl-housing-yoy",
-      "current_status": "unknown",
+      "current_status": "strengthening",
       "first_seen": "2024-04-22",
       "type": "data"
     },
@@ -792,10 +1090,24 @@
       "compute": {
         "method": "series_share",
         "section": "personalLoans",
-        "series": "Housing"
+        "series": "Housing",
+        "status_rules": [
+          {
+            "if": "value > prev_value + 0.5",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value - 0.5",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
       },
       "id": "sibc-pl-housing-share",
-      "current_status": "unknown",
+      "current_status": "active",
       "first_seen": "2024-04-22",
       "type": "data"
     },
@@ -809,10 +1121,24 @@
       "compute": {
         "method": "series_yoy",
         "section": "personalLoans",
-        "series": "Gold Loans"
+        "series": "Gold Loans",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
       },
       "id": "sibc-pl-gold-yoy",
-      "current_status": "unknown",
+      "current_status": "active",
       "first_seen": "2024-04-22",
       "type": "data"
     },
@@ -826,10 +1152,24 @@
       "compute": {
         "method": "series_share",
         "section": "personalLoans",
-        "series": "Gold Loans"
+        "series": "Gold Loans",
+        "status_rules": [
+          {
+            "if": "value > prev_value + 0.5",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value - 0.5",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
       },
       "id": "sibc-pl-gold-share",
-      "current_status": "unknown",
+      "current_status": "active",
       "first_seen": "2024-04-22",
       "type": "data"
     },
@@ -843,10 +1183,24 @@
       "compute": {
         "method": "series_yoy",
         "section": "personalLoans",
-        "series": "Credit Card Outstanding"
+        "series": "Credit Card Outstanding",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
       },
       "id": "sibc-pl-cc-yoy",
-      "current_status": "unknown",
+      "current_status": "strengthening",
       "first_seen": "2024-04-22",
       "type": "data"
     },
@@ -860,10 +1214,24 @@
       "compute": {
         "method": "series_share",
         "section": "personalLoans",
-        "series": "Credit Card Outstanding"
+        "series": "Credit Card Outstanding",
+        "status_rules": [
+          {
+            "if": "value > prev_value + 0.5",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value - 0.5",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
       },
       "id": "sibc-pl-cc-share",
-      "current_status": "unknown",
+      "current_status": "active",
       "first_seen": "2024-04-22",
       "type": "data"
     },
@@ -877,10 +1245,24 @@
       "compute": {
         "method": "series_yoy",
         "section": "personalLoans",
-        "series": "Vehicle Loans"
+        "series": "Vehicle Loans",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
       },
       "id": "sibc-pl-vehicle-yoy",
-      "current_status": "unknown",
+      "current_status": "strengthening",
       "first_seen": "2024-04-22",
       "type": "data"
     },
@@ -894,10 +1276,24 @@
       "compute": {
         "method": "series_yoy",
         "section": "personalLoans",
-        "series": "Education"
+        "series": "Education",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
       },
       "id": "sibc-pl-education-yoy",
-      "current_status": "unknown",
+      "current_status": "active",
       "first_seen": "2024-04-22",
       "type": "data"
     },
@@ -911,10 +1307,24 @@
       "compute": {
         "method": "series_yoy",
         "section": "prioritySector",
-        "series": "Agriculture"
+        "series": "Agriculture",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
       },
       "id": "sibc-psl-agri-yoy",
-      "current_status": "unknown",
+      "current_status": "strengthening",
       "first_seen": "2024-04-22",
       "type": "data"
     },
@@ -928,10 +1338,24 @@
       "compute": {
         "method": "series_yoy",
         "section": "prioritySector",
-        "series": "Micro and Small Enterprises"
+        "series": "Micro and Small Enterprises",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
       },
       "id": "sibc-psl-msme-yoy",
-      "current_status": "unknown",
+      "current_status": "strengthening",
       "first_seen": "2024-04-22",
       "type": "data"
     },
@@ -945,10 +1369,24 @@
       "compute": {
         "method": "series_yoy",
         "section": "prioritySector",
-        "series": "Housing"
+        "series": "Housing",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
       },
       "id": "sibc-psl-housing-yoy",
-      "current_status": "unknown",
+      "current_status": "strengthening",
       "first_seen": "2024-04-22",
       "type": "data"
     },
@@ -962,10 +1400,24 @@
       "compute": {
         "method": "series_yoy",
         "section": "prioritySector",
-        "series": "Renewable Energy"
+        "series": "Renewable Energy",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
       },
       "id": "sibc-psl-renewable-yoy",
-      "current_status": "unknown",
+      "current_status": "active",
       "first_seen": "2024-04-22",
       "type": "data"
     },
@@ -979,7 +1431,21 @@
       "compute": {
         "method": "section_scan_yoy",
         "section": "industryByType",
-        "entity_type": "industry_type"
+        "entity_type": "industry_type",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
       },
       "id": "sibc-industry-type-yoy-scan",
       "current_status": "unknown",
@@ -996,7 +1462,21 @@
       "compute": {
         "method": "section_scan_share",
         "section": "industryByType",
-        "entity_type": "industry_type"
+        "entity_type": "industry_type",
+        "status_rules": [
+          {
+            "if": "value > prev_value + 0.5",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value - 0.5",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
       },
       "id": "sibc-industry-type-share-scan",
       "current_status": "unknown",
@@ -1013,7 +1493,21 @@
       "compute": {
         "method": "section_scan_yoy",
         "section": "services",
-        "entity_type": "service_sector"
+        "entity_type": "service_sector",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
       },
       "id": "sibc-services-yoy-scan",
       "current_status": "unknown",
@@ -1030,7 +1524,21 @@
       "compute": {
         "method": "section_scan_share",
         "section": "services",
-        "entity_type": "service_sector"
+        "entity_type": "service_sector",
+        "status_rules": [
+          {
+            "if": "value > prev_value + 0.5",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value - 0.5",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
       },
       "id": "sibc-services-share-scan",
       "current_status": "unknown",
@@ -1047,7 +1555,21 @@
       "compute": {
         "method": "section_scan_yoy",
         "section": "personalLoans",
-        "entity_type": "pl_category"
+        "entity_type": "pl_category",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
       },
       "id": "sibc-pl-yoy-scan",
       "current_status": "unknown",
@@ -1064,7 +1586,21 @@
       "compute": {
         "method": "section_scan_share",
         "section": "personalLoans",
-        "entity_type": "pl_category"
+        "entity_type": "pl_category",
+        "status_rules": [
+          {
+            "if": "value > prev_value + 0.5",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value - 0.5",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
       },
       "id": "sibc-pl-share-scan",
       "current_status": "unknown",
@@ -1081,7 +1617,21 @@
       "compute": {
         "method": "section_scan_yoy",
         "section": "prioritySector",
-        "entity_type": "psl_category"
+        "entity_type": "psl_category",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
       },
       "id": "sibc-psl-yoy-scan",
       "current_status": "unknown",
@@ -1098,10 +1648,24 @@
       "spec_version": "1.0",
       "compute": {
         "method": "csv_total_abs",
-        "metric": "atm_onsite"
+        "metric": "atm_onsite",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
       },
       "id": "atm-onsite-abs",
-      "current_status": "unknown",
+      "current_status": "strengthening",
       "first_seen": "2025-09-30"
     },
     "atm-onsite-yoy": {
@@ -1114,7 +1678,21 @@
       "spec_version": "1.0",
       "compute": {
         "method": "csv_total_yoy",
-        "metric": "atm_onsite"
+        "metric": "atm_onsite",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
       },
       "id": "atm-onsite-yoy",
       "current_status": "unknown",
@@ -1130,10 +1708,24 @@
       "spec_version": "1.0",
       "compute": {
         "method": "csv_total_abs",
-        "metric": "atm_offsite"
+        "metric": "atm_offsite",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
       },
       "id": "atm-offsite-abs",
-      "current_status": "unknown",
+      "current_status": "weakening",
       "first_seen": "2025-09-30"
     },
     "atm-offsite-yoy": {
@@ -1146,7 +1738,21 @@
       "spec_version": "1.0",
       "compute": {
         "method": "csv_total_yoy",
-        "metric": "atm_offsite"
+        "metric": "atm_offsite",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
       },
       "id": "atm-offsite-yoy",
       "current_status": "unknown",
@@ -1162,10 +1768,24 @@
       "spec_version": "1.0",
       "compute": {
         "method": "csv_total_abs",
-        "metric": "pos_terminals"
+        "metric": "pos_terminals",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
       },
       "id": "pos-terminals-abs",
-      "current_status": "unknown",
+      "current_status": "strengthening",
       "first_seen": "2025-09-30"
     },
     "pos-terminals-yoy": {
@@ -1178,7 +1798,21 @@
       "spec_version": "1.0",
       "compute": {
         "method": "csv_total_yoy",
-        "metric": "pos_terminals"
+        "metric": "pos_terminals",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
       },
       "id": "pos-terminals-yoy",
       "current_status": "unknown",
@@ -1194,7 +1828,21 @@
       "spec_version": "1.0",
       "compute": {
         "method": "csv_total_yoy",
-        "metric": "upi_qr"
+        "metric": "upi_qr",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
       },
       "id": "upi-qr-yoy",
       "current_status": "unknown",
@@ -1210,7 +1858,21 @@
       "spec_version": "1.0",
       "compute": {
         "method": "csv_total_yoy",
-        "metric": "bharat_qr"
+        "metric": "bharat_qr",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
       },
       "id": "bharat-qr-yoy",
       "current_status": "unknown",
@@ -1226,7 +1888,21 @@
       "spec_version": "1.0",
       "compute": {
         "method": "csv_total_yoy",
-        "metric": "micro_atms"
+        "metric": "micro_atms",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
       },
       "id": "micro-atm-yoy",
       "current_status": "unknown",
@@ -1244,10 +1920,24 @@
         "method": "csv_total_ratio",
         "metric": "upi_qr",
         "denominator_metric": "pos_terminals",
-        "unit": "ratio"
+        "unit": "ratio",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
       },
       "id": "upi-qr-per-pos",
-      "current_status": "unknown",
+      "current_status": "strengthening",
       "first_seen": "2025-09-30"
     },
     "cc-outstanding-yoy": {
@@ -1260,7 +1950,21 @@
       "spec_version": "1.0",
       "compute": {
         "method": "csv_total_yoy",
-        "metric": "credit_cards"
+        "metric": "credit_cards",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
       },
       "id": "cc-outstanding-yoy",
       "current_status": "unknown",
@@ -1276,7 +1980,21 @@
       "spec_version": "1.0",
       "compute": {
         "method": "csv_total_yoy",
-        "metric": "debit_cards"
+        "metric": "debit_cards",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
       },
       "id": "dc-outstanding-yoy",
       "current_status": "unknown",
@@ -1292,7 +2010,21 @@
       "spec_version": "1.0",
       "compute": {
         "method": "csv_total_yoy",
-        "metric": "cc_pos_txn_val"
+        "metric": "cc_pos_txn_val",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
       },
       "id": "cc-pos-val-yoy",
       "current_status": "unknown",
@@ -1308,7 +2040,21 @@
       "spec_version": "1.0",
       "compute": {
         "method": "csv_total_yoy",
-        "metric": "cc_ecom_txn_val"
+        "metric": "cc_ecom_txn_val",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
       },
       "id": "cc-ecom-val-yoy",
       "current_status": "unknown",
@@ -1324,7 +2070,21 @@
       "spec_version": "1.0",
       "compute": {
         "method": "csv_total_yoy",
-        "metric": "cc_atm_withdrawal_val"
+        "metric": "cc_atm_withdrawal_val",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
       },
       "id": "cc-atm-val-yoy",
       "current_status": "unknown",
@@ -1346,10 +2106,24 @@
           "cc_ecom_txn_val",
           "cc_atm_withdrawal_val",
           "cc_other_txn_val"
+        ],
+        "status_rules": [
+          {
+            "if": "value > prev_value + 0.5",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value - 0.5",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
         ]
       },
       "id": "cc-ecom-val-share",
-      "current_status": "unknown",
+      "current_status": "strengthening",
       "first_seen": "2025-09-30"
     },
     "cc-atm-val-share": {
@@ -1368,10 +2142,24 @@
           "cc_ecom_txn_val",
           "cc_atm_withdrawal_val",
           "cc_other_txn_val"
+        ],
+        "status_rules": [
+          {
+            "if": "value > prev_value + 0.5",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value - 0.5",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
         ]
       },
       "id": "cc-atm-val-share",
-      "current_status": "unknown",
+      "current_status": "active",
       "first_seen": "2025-09-30"
     },
     "dc-atm-val-yoy": {
@@ -1384,7 +2172,21 @@
       "spec_version": "1.0",
       "compute": {
         "method": "csv_total_yoy",
-        "metric": "dc_atm_withdrawal_val"
+        "metric": "dc_atm_withdrawal_val",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
       },
       "id": "dc-atm-val-yoy",
       "current_status": "unknown",
@@ -1400,7 +2202,21 @@
       "spec_version": "1.0",
       "compute": {
         "method": "csv_total_yoy",
-        "metric": "dc_pos_txn_val"
+        "metric": "dc_pos_txn_val",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
       },
       "id": "dc-pos-val-yoy",
       "current_status": "unknown",
@@ -1416,7 +2232,21 @@
       "spec_version": "1.0",
       "compute": {
         "method": "csv_total_yoy",
-        "metric": "dc_ecom_txn_val"
+        "metric": "dc_ecom_txn_val",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
       },
       "id": "dc-ecom-val-yoy",
       "current_status": "unknown",
@@ -1439,10 +2269,24 @@
           "dc_ecom_txn_val",
           "dc_pos_withdrawal_val",
           "dc_other_txn_val"
+        ],
+        "status_rules": [
+          {
+            "if": "value > prev_value + 0.5",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value - 0.5",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
         ]
       },
       "id": "dc-atm-val-share",
-      "current_status": "unknown",
+      "current_status": "weakening",
       "first_seen": "2025-09-30"
     },
     "dc-ecom-val-share": {
@@ -1462,10 +2306,24 @@
           "dc_ecom_txn_val",
           "dc_pos_withdrawal_val",
           "dc_other_txn_val"
+        ],
+        "status_rules": [
+          {
+            "if": "value > prev_value + 0.5",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value - 0.5",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
         ]
       },
       "id": "dc-ecom-val-share",
-      "current_status": "unknown",
+      "current_status": "active",
       "first_seen": "2025-09-30"
     },
     "cc-psb-share": {
@@ -1479,7 +2337,21 @@
       "compute": {
         "method": "csv_category_share",
         "metric": "credit_cards",
-        "category": "Public Sector Banks"
+        "category": "Public Sector Banks",
+        "status_rules": [
+          {
+            "if": "value > prev_value + 0.5",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value - 0.5",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
       },
       "id": "cc-psb-share",
       "current_status": "unknown",
@@ -1496,7 +2368,21 @@
       "compute": {
         "method": "csv_category_share",
         "metric": "credit_cards",
-        "category": "Private Sector Banks"
+        "category": "Private Sector Banks",
+        "status_rules": [
+          {
+            "if": "value > prev_value + 0.5",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value - 0.5",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
       },
       "id": "cc-private-share",
       "current_status": "unknown",
@@ -1513,7 +2399,21 @@
       "compute": {
         "method": "csv_category_share",
         "metric": "debit_cards",
-        "category": "Public Sector Banks"
+        "category": "Public Sector Banks",
+        "status_rules": [
+          {
+            "if": "value > prev_value + 0.5",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value - 0.5",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
       },
       "id": "dc-psb-share",
       "current_status": "unknown",
@@ -1530,7 +2430,21 @@
       "compute": {
         "method": "csv_category_share",
         "metric": "debit_cards",
-        "category": "Private Sector Banks"
+        "category": "Private Sector Banks",
+        "status_rules": [
+          {
+            "if": "value > prev_value + 0.5",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value - 0.5",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
       },
       "id": "dc-private-share",
       "current_status": "unknown",
@@ -1547,7 +2461,21 @@
       "compute": {
         "method": "csv_category_share",
         "metric": "pos_terminals",
-        "category": "Public Sector Banks"
+        "category": "Public Sector Banks",
+        "status_rules": [
+          {
+            "if": "value > prev_value + 0.5",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value - 0.5",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
       },
       "id": "pos-psb-share",
       "current_status": "unknown",
@@ -1564,7 +2492,21 @@
       "compute": {
         "method": "csv_category_share",
         "metric": "pos_terminals",
-        "category": "Private Sector Banks"
+        "category": "Private Sector Banks",
+        "status_rules": [
+          {
+            "if": "value > prev_value + 0.5",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value - 0.5",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
       },
       "id": "pos-private-share",
       "current_status": "unknown",
@@ -1580,7 +2522,21 @@
       "spec_version": "1.0",
       "compute": {
         "method": "csv_category_scan_share",
-        "metric": "credit_cards"
+        "metric": "credit_cards",
+        "status_rules": [
+          {
+            "if": "value > prev_value + 0.5",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value - 0.5",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
       },
       "id": "cc-category-share-scan",
       "current_status": "unknown",
@@ -1596,7 +2552,21 @@
       "spec_version": "1.0",
       "compute": {
         "method": "csv_category_scan_share",
-        "metric": "debit_cards"
+        "metric": "debit_cards",
+        "status_rules": [
+          {
+            "if": "value > prev_value + 0.5",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value - 0.5",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
       },
       "id": "dc-category-share-scan",
       "current_status": "unknown",
@@ -1612,7 +2582,21 @@
       "spec_version": "1.0",
       "compute": {
         "method": "csv_category_scan_share",
-        "metric": "pos_terminals"
+        "metric": "pos_terminals",
+        "status_rules": [
+          {
+            "if": "value > prev_value + 0.5",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value - 0.5",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
       },
       "id": "pos-category-share-scan",
       "current_status": "unknown",
@@ -1629,7 +2613,21 @@
       "compute": {
         "method": "csv_bank_scan",
         "metric": "credit_cards",
-        "value_type": "value"
+        "value_type": "value",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
       },
       "id": "cc-bank-scan",
       "current_status": "unknown",
@@ -1646,7 +2644,21 @@
       "compute": {
         "method": "csv_bank_scan",
         "metric": "pos_terminals",
-        "value_type": "value"
+        "value_type": "value",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
       },
       "id": "pos-bank-scan",
       "current_status": "unknown",

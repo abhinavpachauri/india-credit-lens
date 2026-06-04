@@ -55,6 +55,16 @@ def _prior_year(period: str, available: set[str]) -> str | None:
     return candidate if candidate in available else None
 
 
+def _prior_period(period: str, available: set[str]) -> str | None:
+    """Most recent period before `period` in available dates."""
+    sorted_dates = sorted(available)
+    try:
+        idx = sorted_dates.index(period)
+    except ValueError:
+        return None
+    return sorted_dates[idx - 1] if idx > 0 else None
+
+
 def _total_val(df: pd.DataFrame, period: str, metric: str) -> float | None:
     rows = df[(df["report_date"] == period) &
               (df["metric"] == metric) &
@@ -109,13 +119,13 @@ def _unknown() -> list[dict]:
 # ── Layer 1a ──────────────────────────────────────────────────────────────────
 
 def csv_total_abs(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
-    """Absolute value for the total row — no YoY transform."""
+    """Absolute value for the total row — status compares to prior period (MoM)."""
     metric = params["metric"]
     v = _total_val(df, period, metric)
     if v is None:
         return _unknown()
     avail = set(df["report_date"].unique())
-    prior = _prior_year(period, avail)
+    prior = _prior_period(period, avail)
     pv    = _total_val(df, prior, metric) if prior else v
     unit_rows = df[(df["report_date"] == period) & (df["metric"] == metric)]["unit"]
     unit = params.get("unit") or (unit_rows.iloc[0] if not unit_rows.empty else "count")
@@ -138,32 +148,33 @@ def csv_total_yoy(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
 
 
 def csv_total_ratio(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
+    """Ratio of two metrics — status compares to prior period (MoM)."""
     num = _total_val(df, period, params["metric"])
     den = _total_val(df, period, params["denominator_metric"])
     if num is None or den is None or den == 0:
         return _unknown()
-    v   = num / den
+    v     = num / den
     avail = set(df["report_date"].unique())
-    prior = _prior_year(period, avail)
-    pnum = _total_val(df, prior, params["metric"])          if prior else None
-    pden = _total_val(df, prior, params["denominator_metric"]) if prior else None
-    pv   = (pnum / pden) if (pnum and pden and pden != 0) else v
-    unit = params.get("unit", "ratio")
+    prior = _prior_period(period, avail)
+    pnum  = _total_val(df, prior, params["metric"])             if prior else None
+    pden  = _total_val(df, prior, params["denominator_metric"]) if prior else None
+    pv    = (pnum / pden) if (pnum and pden and pden != 0) else v
+    unit  = params.get("unit", "ratio")
     return [_row("aggregate", "total", v,
                  _eval_status(params.get("status_rules", []), v, pv), unit)]
 
 
 def csv_ratio_sum(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
-    """metric / (metric_1 + metric_2 + ...) × 100."""
+    """metric / (metric_1 + metric_2 + ...) × 100 — status compares to prior period (MoM)."""
     metric = params["metric"]
     denom_metrics = params["denominator_metrics"]
     num = _total_val(df, period, metric)
     den = sum((_total_val(df, period, m) or 0) for m in denom_metrics)
     if num is None or den == 0:
         return _unknown()
-    v = num / den * 100
+    v     = num / den * 100
     avail = set(df["report_date"].unique())
-    prior = _prior_year(period, avail)
+    prior = _prior_period(period, avail)
     if prior:
         pnum = _total_val(df, prior, metric)
         pden = sum((_total_val(df, prior, m) or 0) for m in denom_metrics)
@@ -191,17 +202,17 @@ def csv_sum_yoy(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
 # ── Layer 1b ──────────────────────────────────────────────────────────────────
 
 def csv_category_share(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
-    """bank_category value / Total value for a metric."""
+    """bank_category / Total for a metric — status compares to prior period (MoM)."""
     metric   = params["metric"]
     category = params["category"]
     cat_v    = _category_val(df, period, metric, category)
     total_v  = _total_val(df,   period, metric)
     if cat_v is None or total_v is None or total_v == 0:
         return _unknown()
-    v = cat_v / total_v * 100
+    v     = cat_v / total_v * 100
     avail = set(df["report_date"].unique())
-    prior = _prior_year(period, avail)
-    pv = v
+    prior = _prior_period(period, avail)
+    pv    = v
     if prior:
         pc = _category_val(df, prior, metric, category)
         pt = _total_val(df,   prior, metric)
@@ -229,13 +240,13 @@ def csv_category_yoy(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
 # ── Layer 1c ──────────────────────────────────────────────────────────────────
 
 def csv_category_scan_share(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
-    """Share of total for every bank_category. One row per category."""
+    """Share of total for every bank_category — status compares to prior period (MoM)."""
     metric  = params["metric"]
     total_v = _total_val(df, period, metric)
     if total_v is None or total_v == 0:
         return []
     avail = set(df["report_date"].unique())
-    prior = _prior_year(period, avail)
+    prior = _prior_period(period, avail)
     rules = params.get("status_rules", [])
     cats  = df[(df["report_date"] == period) &
                (df["metric"] == metric) &
