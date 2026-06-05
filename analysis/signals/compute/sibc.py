@@ -375,6 +375,161 @@ def csv_psl_scan_yoy(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
                   reverse=True)
 
 
+# ── 1d: Multi-period compute methods ─────────────────────────────────────────
+
+def _fy_end_dates(avail: set[str]) -> list[str]:
+    """Return sorted list of March 31 dates present in the CSV."""
+    return sorted(d for d in avail if d.endswith("-03-31"))
+
+
+def csv_streak(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
+    """
+    Count consecutive periods (going back from current) where a YoY
+    condition holds.
+
+    params:
+      code       — sector code
+      statement  — default "Statement 1"
+      is_psl     — default False
+      condition  — "positive" | "negative" | "above:{n}" | "below:{n}"
+                   e.g. "negative" → yoy < 0, "above:20" → yoy > 20
+    """
+    code      = str(params["code"])
+    stmt      = params.get("statement", "Statement 1")
+    is_psl    = bool(params.get("is_psl", False))
+    condition = params.get("condition", "positive")
+    avail     = set(df["date"].unique())
+
+    def _meets(yoy: float | None) -> bool:
+        if yoy is None:
+            return False
+        if condition == "positive":
+            return yoy > 0
+        if condition == "negative":
+            return yoy < 0
+        if condition.startswith("above:"):
+            return yoy > float(condition.split(":")[1])
+        if condition.startswith("below:"):
+            return yoy < float(condition.split(":")[1])
+        return False
+
+    sorted_dates = sorted(avail)
+    try:
+        idx = sorted_dates.index(period)
+    except ValueError:
+        return _unknown()
+
+    streak = 0
+    for d in reversed(sorted_dates[: idx + 1]):
+        yoy, _ = _compute_yoy(df, d, code, stmt, avail, is_psl=is_psl)
+        if _meets(yoy):
+            streak += 1
+        else:
+            break
+
+    if streak == 0:
+        return _unknown()
+
+    prev_streak = 0
+    if idx > 0:
+        for d in reversed(sorted_dates[: idx]):
+            yoy, _ = _compute_yoy(df, d, code, stmt, avail, is_psl=is_psl)
+            if _meets(yoy):
+                prev_streak += 1
+            else:
+                break
+
+    return [_row("aggregate", "total", streak,
+                 _eval_status(params.get("status_rules", []), streak, prev_streak),
+                 "periods")]
+
+
+def csv_sector_fy_acceleration(params: dict, period: str,
+                                df: pd.DataFrame) -> list[dict]:
+    """
+    YoY acceleration between the two most recent FY-end (March 31) dates.
+    Returns (latest_fy_yoy - prior_fy_yoy) in percentage points.
+
+    params:
+      code      — sector code
+      statement — default "Statement 1"
+      is_psl    — default False
+    """
+    code   = str(params["code"])
+    stmt   = params.get("statement", "Statement 1")
+    is_psl = bool(params.get("is_psl", False))
+    avail  = set(df["date"].unique())
+
+    fy_dates = _fy_end_dates(avail)
+    if len(fy_dates) < 2:
+        return _unknown()
+
+    latest_fy = fy_dates[-1]
+    prior_fy  = fy_dates[-2]
+
+    yoy_latest, _ = _compute_yoy(df, latest_fy, code, stmt, avail, is_psl=is_psl)
+    yoy_prior,  _ = _compute_yoy(df, prior_fy,  code, stmt, avail, is_psl=is_psl)
+
+    if yoy_latest is None or yoy_prior is None:
+        return _unknown()
+
+    accel = yoy_latest - yoy_prior
+
+    # prev_value: acceleration from second-to-last vs third-to-last FY (if available)
+    prev_accel = accel
+    if len(fy_dates) >= 3:
+        prior2_fy = fy_dates[-3]
+        yoy_prior2, _ = _compute_yoy(df, prior2_fy, code, stmt, avail, is_psl=is_psl)
+        if yoy_prior2 is not None:
+            prev_accel = yoy_prior - yoy_prior2
+
+    return [_row("aggregate", "total", accel,
+                 _eval_status(params.get("status_rules", []), accel, prev_accel),
+                 "pp")]
+
+
+def csv_sector_fy_delta(params: dict, period: str,
+                         df: pd.DataFrame) -> list[dict]:
+    """
+    Absolute credit add (₹L Cr) between the two most recent FY-end dates.
+
+    params:
+      code      — sector code
+      statement — default "Statement 1"
+      unit      — default "lcr_cr"
+    """
+    code  = str(params["code"])
+    stmt  = params.get("statement", "Statement 1")
+    unit  = params.get("unit", "lcr_cr")
+    avail = set(df["date"].unique())
+
+    fy_dates = _fy_end_dates(avail)
+    if len(fy_dates) < 2:
+        return _unknown()
+
+    latest_fy = fy_dates[-1]
+    prior_fy  = fy_dates[-2]
+
+    v_latest = _val(df, latest_fy, code, stmt)
+    v_prior  = _val(df, prior_fy,  code, stmt)
+
+    if v_latest is None or v_prior is None:
+        return _unknown()
+
+    delta = v_latest - v_prior
+
+    prev_delta = delta
+    if len(fy_dates) >= 3:
+        prior2_fy = fy_dates[-3]
+        v_prior2  = _val(df, prior2_fy, code, stmt)
+        if v_prior2 is not None:
+            prev_delta = v_prior - v_prior2
+
+    return [_row("aggregate", "total", delta,
+                 _eval_status(params.get("status_rules", []), delta, prev_delta),
+                 unit)]
+
+
 # ── dispatch ──────────────────────────────────────────────────────────────────
 
 METHODS: dict = {
@@ -386,6 +541,10 @@ METHODS: dict = {
     "csv_sector_scan_yoy":          csv_sector_scan_yoy,
     "csv_sector_scan_share":        csv_sector_scan_share,
     "csv_psl_scan_yoy":             csv_psl_scan_yoy,
+    # 1d — multi-period
+    "csv_streak":                   csv_streak,
+    "csv_sector_fy_acceleration":   csv_sector_fy_acceleration,
+    "csv_sector_fy_delta":          csv_sector_fy_delta,
 }
 
 
