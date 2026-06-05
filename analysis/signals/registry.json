@@ -4160,6 +4160,1586 @@
           }
         ]
       }
+    },
+    "micro-atms-abs": {
+      "id": "micro-atms-abs",
+      "title": "Micro ATMs — absolute count",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "infrastructure",
+      "spec_version": "1.0",
+      "current_status": "strengthening",
+      "first_seen": "2025-10-31",
+      "compute": {
+        "method": "csv_total_abs",
+        "metric": "micro_atms",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bharat-qr-abs": {
+      "id": "bharat-qr-abs",
+      "title": "Bharat QR codes — absolute count",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "infrastructure",
+      "spec_version": "1.0",
+      "current_status": "weakening",
+      "first_seen": "2025-10-31",
+      "compute": {
+        "method": "csv_total_abs",
+        "metric": "bharat_qr",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "upi-qr-abs": {
+      "id": "upi-qr-abs",
+      "title": "UPI QR codes — absolute count",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "infrastructure",
+      "spec_version": "1.0",
+      "current_status": "strengthening",
+      "first_seen": "2025-10-31",
+      "compute": {
+        "method": "csv_total_abs",
+        "metric": "upi_qr",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "cc-outstanding-abs": {
+      "id": "cc-outstanding-abs",
+      "title": "Credit cards outstanding — absolute count",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "current_status": "strengthening",
+      "first_seen": "2025-10-31",
+      "compute": {
+        "method": "csv_total_abs",
+        "metric": "credit_cards",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "dc-outstanding-abs": {
+      "id": "dc-outstanding-abs",
+      "title": "Debit cards outstanding — absolute count",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "current_status": "strengthening",
+      "first_seen": "2025-10-31",
+      "compute": {
+        "method": "csv_total_abs",
+        "metric": "debit_cards",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "cc-atm-val-abs": {
+      "id": "cc-atm-val-abs",
+      "title": "CC ATM cash withdrawals — absolute value (₹ thousands)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "credit_card_txn",
+      "spec_version": "1.0",
+      "current_status": "strengthening",
+      "first_seen": "2025-10-31",
+      "compute": {
+        "method": "csv_total_abs",
+        "metric": "cc_atm_withdrawal_val",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ],
+        "unit": "rs_thousands"
+      }
+    },
+    "cc-ecom-val-abs": {
+      "id": "cc-ecom-val-abs",
+      "title": "CC ecommerce transactions — absolute value (₹ thousands)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "credit_card_txn",
+      "spec_version": "1.0",
+      "current_status": "strengthening",
+      "first_seen": "2025-10-31",
+      "compute": {
+        "method": "csv_total_abs",
+        "metric": "cc_ecom_txn_val",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ],
+        "unit": "rs_thousands"
+      }
+    },
+    "cc-pos-val-abs": {
+      "id": "cc-pos-val-abs",
+      "title": "CC POS transactions — absolute value (₹ thousands)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "credit_card_txn",
+      "spec_version": "1.0",
+      "current_status": "strengthening",
+      "first_seen": "2025-10-31",
+      "compute": {
+        "method": "csv_total_abs",
+        "metric": "cc_pos_txn_val",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ],
+        "unit": "rs_thousands"
+      }
+    },
+    "cc-other-val-abs": {
+      "id": "cc-other-val-abs",
+      "title": "CC other transactions — absolute value (₹ thousands)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "credit_card_txn",
+      "spec_version": "1.0",
+      "current_status": "strengthening",
+      "first_seen": "2025-10-31",
+      "compute": {
+        "method": "csv_total_abs",
+        "metric": "cc_other_txn_val",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ],
+        "unit": "rs_thousands"
+      }
+    },
+    "cc-other-val-yoy": {
+      "id": "cc-other-val-yoy",
+      "title": "CC other transactions value YoY growth (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "credit_card_txn",
+      "spec_version": "1.0",
+      "current_status": "unknown",
+      "first_seen": "2025-10-31",
+      "compute": {
+        "method": "csv_total_yoy",
+        "metric": "cc_other_txn_val",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      }
+    },
+    "cc-pos-val-share": {
+      "id": "cc-pos-val-share",
+      "title": "CC POS share of total CC transaction value (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "credit_card_txn",
+      "spec_version": "1.0",
+      "current_status": "weakening",
+      "first_seen": "2025-10-31",
+      "compute": {
+        "method": "csv_ratio_sum",
+        "metric": "cc_pos_txn_val",
+        "denominator_metrics": [
+          "cc_atm_withdrawal_val",
+          "cc_ecom_txn_val",
+          "cc_pos_txn_val",
+          "cc_other_txn_val"
+        ],
+        "status_rules": [
+          {
+            "if": "value > prev_value + 0.5",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value - 0.5",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "cc-other-val-share": {
+      "id": "cc-other-val-share",
+      "title": "CC other share of total CC transaction value (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "credit_card_txn",
+      "spec_version": "1.0",
+      "current_status": "active",
+      "first_seen": "2025-10-31",
+      "compute": {
+        "method": "csv_ratio_sum",
+        "metric": "cc_other_txn_val",
+        "denominator_metrics": [
+          "cc_atm_withdrawal_val",
+          "cc_ecom_txn_val",
+          "cc_pos_txn_val",
+          "cc_other_txn_val"
+        ],
+        "status_rules": [
+          {
+            "if": "value > prev_value + 0.5",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value - 0.5",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "cc-atm-vol-yoy": {
+      "id": "cc-atm-vol-yoy",
+      "title": "CC ATM cash withdrawals volume YoY growth (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "credit_card_txn",
+      "spec_version": "1.0",
+      "current_status": "unknown",
+      "first_seen": "2025-10-31",
+      "compute": {
+        "method": "csv_total_yoy",
+        "metric": "cc_atm_withdrawal_vol",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      }
+    },
+    "cc-atm-vol-abs": {
+      "id": "cc-atm-vol-abs",
+      "title": "CC ATM cash withdrawals — absolute volume (transactions)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "credit_card_txn",
+      "spec_version": "1.0",
+      "current_status": "strengthening",
+      "first_seen": "2025-10-31",
+      "compute": {
+        "method": "csv_total_abs",
+        "metric": "cc_atm_withdrawal_vol",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ],
+        "unit": "transactions"
+      }
+    },
+    "cc-atm-vol-share": {
+      "id": "cc-atm-vol-share",
+      "title": "CC ATM cash withdrawals share of total CC transaction volume (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "credit_card_txn",
+      "spec_version": "1.0",
+      "current_status": "active",
+      "first_seen": "2025-10-31",
+      "compute": {
+        "method": "csv_ratio_sum",
+        "metric": "cc_atm_withdrawal_vol",
+        "denominator_metrics": [
+          "cc_atm_withdrawal_vol",
+          "cc_ecom_txn_vol",
+          "cc_pos_txn_vol",
+          "cc_other_txn_vol"
+        ],
+        "status_rules": [
+          {
+            "if": "value > prev_value + 0.5",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value - 0.5",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "cc-ecom-vol-yoy": {
+      "id": "cc-ecom-vol-yoy",
+      "title": "CC ecommerce transactions volume YoY growth (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "credit_card_txn",
+      "spec_version": "1.0",
+      "current_status": "unknown",
+      "first_seen": "2025-10-31",
+      "compute": {
+        "method": "csv_total_yoy",
+        "metric": "cc_ecom_txn_vol",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      }
+    },
+    "cc-ecom-vol-abs": {
+      "id": "cc-ecom-vol-abs",
+      "title": "CC ecommerce transactions — absolute volume (transactions)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "credit_card_txn",
+      "spec_version": "1.0",
+      "current_status": "strengthening",
+      "first_seen": "2025-10-31",
+      "compute": {
+        "method": "csv_total_abs",
+        "metric": "cc_ecom_txn_vol",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ],
+        "unit": "transactions"
+      }
+    },
+    "cc-ecom-vol-share": {
+      "id": "cc-ecom-vol-share",
+      "title": "CC ecommerce transactions share of total CC transaction volume (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "credit_card_txn",
+      "spec_version": "1.0",
+      "current_status": "active",
+      "first_seen": "2025-10-31",
+      "compute": {
+        "method": "csv_ratio_sum",
+        "metric": "cc_ecom_txn_vol",
+        "denominator_metrics": [
+          "cc_atm_withdrawal_vol",
+          "cc_ecom_txn_vol",
+          "cc_pos_txn_vol",
+          "cc_other_txn_vol"
+        ],
+        "status_rules": [
+          {
+            "if": "value > prev_value + 0.5",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value - 0.5",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "cc-pos-vol-yoy": {
+      "id": "cc-pos-vol-yoy",
+      "title": "CC POS transactions volume YoY growth (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "credit_card_txn",
+      "spec_version": "1.0",
+      "current_status": "unknown",
+      "first_seen": "2025-10-31",
+      "compute": {
+        "method": "csv_total_yoy",
+        "metric": "cc_pos_txn_vol",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      }
+    },
+    "cc-pos-vol-abs": {
+      "id": "cc-pos-vol-abs",
+      "title": "CC POS transactions — absolute volume (transactions)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "credit_card_txn",
+      "spec_version": "1.0",
+      "current_status": "strengthening",
+      "first_seen": "2025-10-31",
+      "compute": {
+        "method": "csv_total_abs",
+        "metric": "cc_pos_txn_vol",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ],
+        "unit": "transactions"
+      }
+    },
+    "cc-pos-vol-share": {
+      "id": "cc-pos-vol-share",
+      "title": "CC POS transactions share of total CC transaction volume (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "credit_card_txn",
+      "spec_version": "1.0",
+      "current_status": "active",
+      "first_seen": "2025-10-31",
+      "compute": {
+        "method": "csv_ratio_sum",
+        "metric": "cc_pos_txn_vol",
+        "denominator_metrics": [
+          "cc_atm_withdrawal_vol",
+          "cc_ecom_txn_vol",
+          "cc_pos_txn_vol",
+          "cc_other_txn_vol"
+        ],
+        "status_rules": [
+          {
+            "if": "value > prev_value + 0.5",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value - 0.5",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "cc-other-vol-yoy": {
+      "id": "cc-other-vol-yoy",
+      "title": "CC other transactions volume YoY growth (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "credit_card_txn",
+      "spec_version": "1.0",
+      "current_status": "unknown",
+      "first_seen": "2025-10-31",
+      "compute": {
+        "method": "csv_total_yoy",
+        "metric": "cc_other_txn_vol",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      }
+    },
+    "cc-other-vol-abs": {
+      "id": "cc-other-vol-abs",
+      "title": "CC other transactions — absolute volume (transactions)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "credit_card_txn",
+      "spec_version": "1.0",
+      "current_status": "strengthening",
+      "first_seen": "2025-10-31",
+      "compute": {
+        "method": "csv_total_abs",
+        "metric": "cc_other_txn_vol",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ],
+        "unit": "transactions"
+      }
+    },
+    "cc-other-vol-share": {
+      "id": "cc-other-vol-share",
+      "title": "CC other transactions share of total CC transaction volume (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "credit_card_txn",
+      "spec_version": "1.0",
+      "current_status": "active",
+      "first_seen": "2025-10-31",
+      "compute": {
+        "method": "csv_ratio_sum",
+        "metric": "cc_other_txn_vol",
+        "denominator_metrics": [
+          "cc_atm_withdrawal_vol",
+          "cc_ecom_txn_vol",
+          "cc_pos_txn_vol",
+          "cc_other_txn_vol"
+        ],
+        "status_rules": [
+          {
+            "if": "value > prev_value + 0.5",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value - 0.5",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "dc-atm-val-abs": {
+      "id": "dc-atm-val-abs",
+      "title": "DC ATM withdrawals — absolute value (₹ thousands)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "debit_card_txn",
+      "spec_version": "1.0",
+      "current_status": "strengthening",
+      "first_seen": "2025-10-31",
+      "compute": {
+        "method": "csv_total_abs",
+        "metric": "dc_atm_withdrawal_val",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ],
+        "unit": "rs_thousands"
+      }
+    },
+    "dc-ecom-val-abs": {
+      "id": "dc-ecom-val-abs",
+      "title": "DC ecommerce transactions — absolute value (₹ thousands)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "debit_card_txn",
+      "spec_version": "1.0",
+      "current_status": "strengthening",
+      "first_seen": "2025-10-31",
+      "compute": {
+        "method": "csv_total_abs",
+        "metric": "dc_ecom_txn_val",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ],
+        "unit": "rs_thousands"
+      }
+    },
+    "dc-pos-val-abs": {
+      "id": "dc-pos-val-abs",
+      "title": "DC POS transactions — absolute value (₹ thousands)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "debit_card_txn",
+      "spec_version": "1.0",
+      "current_status": "strengthening",
+      "first_seen": "2025-10-31",
+      "compute": {
+        "method": "csv_total_abs",
+        "metric": "dc_pos_txn_val",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ],
+        "unit": "rs_thousands"
+      }
+    },
+    "dc-other-val-abs": {
+      "id": "dc-other-val-abs",
+      "title": "DC other transactions — absolute value (₹ thousands)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "debit_card_txn",
+      "spec_version": "1.0",
+      "current_status": "strengthening",
+      "first_seen": "2025-10-31",
+      "compute": {
+        "method": "csv_total_abs",
+        "metric": "dc_other_txn_val",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ],
+        "unit": "rs_thousands"
+      }
+    },
+    "dc-pos-withdrawal-val-abs": {
+      "id": "dc-pos-withdrawal-val-abs",
+      "title": "DC POS cash withdrawals — absolute value (₹ thousands)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "debit_card_txn",
+      "spec_version": "1.0",
+      "current_status": "strengthening",
+      "first_seen": "2025-10-31",
+      "compute": {
+        "method": "csv_total_abs",
+        "metric": "dc_pos_withdrawal_val",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ],
+        "unit": "rs_thousands"
+      }
+    },
+    "dc-other-val-yoy": {
+      "id": "dc-other-val-yoy",
+      "title": "DC other transactions value YoY growth (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "debit_card_txn",
+      "spec_version": "1.0",
+      "current_status": "unknown",
+      "first_seen": "2025-10-31",
+      "compute": {
+        "method": "csv_total_yoy",
+        "metric": "dc_other_txn_val",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      }
+    },
+    "dc-pos-withdrawal-val-yoy": {
+      "id": "dc-pos-withdrawal-val-yoy",
+      "title": "DC POS cash withdrawal value YoY growth (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "debit_card_txn",
+      "spec_version": "1.0",
+      "current_status": "unknown",
+      "first_seen": "2025-10-31",
+      "compute": {
+        "method": "csv_total_yoy",
+        "metric": "dc_pos_withdrawal_val",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      }
+    },
+    "dc-pos-val-share": {
+      "id": "dc-pos-val-share",
+      "title": "DC POS share of total DC transaction value (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "debit_card_txn",
+      "spec_version": "1.0",
+      "current_status": "active",
+      "first_seen": "2025-10-31",
+      "compute": {
+        "method": "csv_ratio_sum",
+        "metric": "dc_pos_txn_val",
+        "denominator_metrics": [
+          "dc_atm_withdrawal_val",
+          "dc_ecom_txn_val",
+          "dc_pos_txn_val",
+          "dc_other_txn_val",
+          "dc_pos_withdrawal_val"
+        ],
+        "status_rules": [
+          {
+            "if": "value > prev_value + 0.5",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value - 0.5",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "dc-other-val-share": {
+      "id": "dc-other-val-share",
+      "title": "DC other share of total DC transaction value (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "debit_card_txn",
+      "spec_version": "1.0",
+      "current_status": "active",
+      "first_seen": "2025-10-31",
+      "compute": {
+        "method": "csv_ratio_sum",
+        "metric": "dc_other_txn_val",
+        "denominator_metrics": [
+          "dc_atm_withdrawal_val",
+          "dc_ecom_txn_val",
+          "dc_pos_txn_val",
+          "dc_other_txn_val",
+          "dc_pos_withdrawal_val"
+        ],
+        "status_rules": [
+          {
+            "if": "value > prev_value + 0.5",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value - 0.5",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "dc-pos-withdrawal-val-share": {
+      "id": "dc-pos-withdrawal-val-share",
+      "title": "DC POS cash withdrawal share of total DC value (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "debit_card_txn",
+      "spec_version": "1.0",
+      "current_status": "active",
+      "first_seen": "2025-10-31",
+      "compute": {
+        "method": "csv_ratio_sum",
+        "metric": "dc_pos_withdrawal_val",
+        "denominator_metrics": [
+          "dc_atm_withdrawal_val",
+          "dc_ecom_txn_val",
+          "dc_pos_txn_val",
+          "dc_other_txn_val",
+          "dc_pos_withdrawal_val"
+        ],
+        "status_rules": [
+          {
+            "if": "value > prev_value + 0.5",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value - 0.5",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "dc-atm-vol-yoy": {
+      "id": "dc-atm-vol-yoy",
+      "title": "DC ATM withdrawals volume YoY growth (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "debit_card_txn",
+      "spec_version": "1.0",
+      "current_status": "unknown",
+      "first_seen": "2025-10-31",
+      "compute": {
+        "method": "csv_total_yoy",
+        "metric": "dc_atm_withdrawal_vol",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      }
+    },
+    "dc-atm-vol-abs": {
+      "id": "dc-atm-vol-abs",
+      "title": "DC ATM withdrawals — absolute volume (transactions)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "debit_card_txn",
+      "spec_version": "1.0",
+      "current_status": "strengthening",
+      "first_seen": "2025-10-31",
+      "compute": {
+        "method": "csv_total_abs",
+        "metric": "dc_atm_withdrawal_vol",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ],
+        "unit": "transactions"
+      }
+    },
+    "dc-atm-vol-share": {
+      "id": "dc-atm-vol-share",
+      "title": "DC ATM withdrawals share of total DC transaction volume (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "debit_card_txn",
+      "spec_version": "1.0",
+      "current_status": "active",
+      "first_seen": "2025-10-31",
+      "compute": {
+        "method": "csv_ratio_sum",
+        "metric": "dc_atm_withdrawal_vol",
+        "denominator_metrics": [
+          "dc_atm_withdrawal_vol",
+          "dc_ecom_txn_vol",
+          "dc_pos_txn_vol",
+          "dc_other_txn_vol",
+          "dc_pos_withdrawal_vol"
+        ],
+        "status_rules": [
+          {
+            "if": "value > prev_value + 0.5",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value - 0.5",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "dc-ecom-vol-yoy": {
+      "id": "dc-ecom-vol-yoy",
+      "title": "DC ecommerce transactions volume YoY growth (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "debit_card_txn",
+      "spec_version": "1.0",
+      "current_status": "unknown",
+      "first_seen": "2025-10-31",
+      "compute": {
+        "method": "csv_total_yoy",
+        "metric": "dc_ecom_txn_vol",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      }
+    },
+    "dc-ecom-vol-abs": {
+      "id": "dc-ecom-vol-abs",
+      "title": "DC ecommerce transactions — absolute volume (transactions)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "debit_card_txn",
+      "spec_version": "1.0",
+      "current_status": "strengthening",
+      "first_seen": "2025-10-31",
+      "compute": {
+        "method": "csv_total_abs",
+        "metric": "dc_ecom_txn_vol",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ],
+        "unit": "transactions"
+      }
+    },
+    "dc-ecom-vol-share": {
+      "id": "dc-ecom-vol-share",
+      "title": "DC ecommerce transactions share of total DC transaction volume (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "debit_card_txn",
+      "spec_version": "1.0",
+      "current_status": "active",
+      "first_seen": "2025-10-31",
+      "compute": {
+        "method": "csv_ratio_sum",
+        "metric": "dc_ecom_txn_vol",
+        "denominator_metrics": [
+          "dc_atm_withdrawal_vol",
+          "dc_ecom_txn_vol",
+          "dc_pos_txn_vol",
+          "dc_other_txn_vol",
+          "dc_pos_withdrawal_vol"
+        ],
+        "status_rules": [
+          {
+            "if": "value > prev_value + 0.5",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value - 0.5",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "dc-pos-vol-yoy": {
+      "id": "dc-pos-vol-yoy",
+      "title": "DC POS transactions volume YoY growth (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "debit_card_txn",
+      "spec_version": "1.0",
+      "current_status": "unknown",
+      "first_seen": "2025-10-31",
+      "compute": {
+        "method": "csv_total_yoy",
+        "metric": "dc_pos_txn_vol",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      }
+    },
+    "dc-pos-vol-abs": {
+      "id": "dc-pos-vol-abs",
+      "title": "DC POS transactions — absolute volume (transactions)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "debit_card_txn",
+      "spec_version": "1.0",
+      "current_status": "strengthening",
+      "first_seen": "2025-10-31",
+      "compute": {
+        "method": "csv_total_abs",
+        "metric": "dc_pos_txn_vol",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ],
+        "unit": "transactions"
+      }
+    },
+    "dc-pos-vol-share": {
+      "id": "dc-pos-vol-share",
+      "title": "DC POS transactions share of total DC transaction volume (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "debit_card_txn",
+      "spec_version": "1.0",
+      "current_status": "active",
+      "first_seen": "2025-10-31",
+      "compute": {
+        "method": "csv_ratio_sum",
+        "metric": "dc_pos_txn_vol",
+        "denominator_metrics": [
+          "dc_atm_withdrawal_vol",
+          "dc_ecom_txn_vol",
+          "dc_pos_txn_vol",
+          "dc_other_txn_vol",
+          "dc_pos_withdrawal_vol"
+        ],
+        "status_rules": [
+          {
+            "if": "value > prev_value + 0.5",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value - 0.5",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "dc-other-vol-yoy": {
+      "id": "dc-other-vol-yoy",
+      "title": "DC other transactions volume YoY growth (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "debit_card_txn",
+      "spec_version": "1.0",
+      "current_status": "unknown",
+      "first_seen": "2025-10-31",
+      "compute": {
+        "method": "csv_total_yoy",
+        "metric": "dc_other_txn_vol",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      }
+    },
+    "dc-other-vol-abs": {
+      "id": "dc-other-vol-abs",
+      "title": "DC other transactions — absolute volume (transactions)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "debit_card_txn",
+      "spec_version": "1.0",
+      "current_status": "strengthening",
+      "first_seen": "2025-10-31",
+      "compute": {
+        "method": "csv_total_abs",
+        "metric": "dc_other_txn_vol",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ],
+        "unit": "transactions"
+      }
+    },
+    "dc-other-vol-share": {
+      "id": "dc-other-vol-share",
+      "title": "DC other transactions share of total DC transaction volume (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "debit_card_txn",
+      "spec_version": "1.0",
+      "current_status": "active",
+      "first_seen": "2025-10-31",
+      "compute": {
+        "method": "csv_ratio_sum",
+        "metric": "dc_other_txn_vol",
+        "denominator_metrics": [
+          "dc_atm_withdrawal_vol",
+          "dc_ecom_txn_vol",
+          "dc_pos_txn_vol",
+          "dc_other_txn_vol",
+          "dc_pos_withdrawal_vol"
+        ],
+        "status_rules": [
+          {
+            "if": "value > prev_value + 0.5",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value - 0.5",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "dc-pos-withdrawal-vol-yoy": {
+      "id": "dc-pos-withdrawal-vol-yoy",
+      "title": "DC POS cash withdrawals volume YoY growth (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "debit_card_txn",
+      "spec_version": "1.0",
+      "current_status": "unknown",
+      "first_seen": "2025-10-31",
+      "compute": {
+        "method": "csv_total_yoy",
+        "metric": "dc_pos_withdrawal_vol",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      }
+    },
+    "dc-pos-withdrawal-vol-abs": {
+      "id": "dc-pos-withdrawal-vol-abs",
+      "title": "DC POS cash withdrawals — absolute volume (transactions)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "debit_card_txn",
+      "spec_version": "1.0",
+      "current_status": "weakening",
+      "first_seen": "2025-10-31",
+      "compute": {
+        "method": "csv_total_abs",
+        "metric": "dc_pos_withdrawal_vol",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ],
+        "unit": "transactions"
+      }
+    },
+    "dc-pos-withdrawal-vol-share": {
+      "id": "dc-pos-withdrawal-vol-share",
+      "title": "DC POS cash withdrawals share of total DC transaction volume (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1a",
+      "domain": "debit_card_txn",
+      "spec_version": "1.0",
+      "current_status": "active",
+      "first_seen": "2025-10-31",
+      "compute": {
+        "method": "csv_ratio_sum",
+        "metric": "dc_pos_withdrawal_vol",
+        "denominator_metrics": [
+          "dc_atm_withdrawal_vol",
+          "dc_ecom_txn_vol",
+          "dc_pos_txn_vol",
+          "dc_other_txn_vol",
+          "dc_pos_withdrawal_vol"
+        ],
+        "status_rules": [
+          {
+            "if": "value > prev_value + 0.5",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value - 0.5",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
     }
   }
 }
