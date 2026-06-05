@@ -21,7 +21,6 @@ from __future__ import annotations
 import hashlib
 import json
 import os
-import re
 import sqlite3
 import time
 from datetime import datetime
@@ -112,12 +111,14 @@ def _get_client():
 def _extract_json(text: str) -> dict:
     """
     Robustly extract the outermost JSON object from a response string.
-    Handles: plain JSON, markdown fences, trailing prose after the closing brace.
+    Handles: plain JSON, markdown fences, leading/trailing prose.
+
+    Uses raw_decode so it stops at the end of the first complete JSON
+    object — never fails on "Extra data" from trailing LLM prose.
     """
-    # Strip markdown fences first
+    # Strip markdown fences
     if "```" in text:
-        parts = text.split("```")
-        for part in parts:
+        for part in text.split("```"):
             part = part.strip()
             if part.startswith("json"):
                 part = part[4:].strip()
@@ -125,11 +126,18 @@ def _extract_json(text: str) -> dict:
                 text = part
                 break
 
-    # Find outermost {...} block — handles trailing text after closing brace
-    match = re.search(r'\{.*\}', text, re.DOTALL)
-    if not match:
-        raise ValueError(f"No JSON object found in LLM response. Raw text:\n{text[:500]}")
-    return json.loads(match.group())
+    # Locate the opening brace (skip any leading prose)
+    start = text.find("{")
+    if start == -1:
+        raise ValueError(f"No JSON object found in LLM response:\n{text[:500]}")
+
+    # raw_decode reads exactly one JSON value and returns (obj, end_pos)
+    # — it does not fail on trailing characters after the closing brace
+    try:
+        obj, _ = json.JSONDecoder().raw_decode(text, start)
+        return obj
+    except json.JSONDecodeError as exc:
+        raise ValueError(f"JSON parse error ({exc}). Raw text:\n{text[:800]}")
 
 
 # ── LLM call ─────────────────────────────────────────────────────────────────
