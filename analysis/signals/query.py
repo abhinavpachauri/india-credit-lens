@@ -13,31 +13,44 @@ from pathlib import Path
 # ── Signal type → prompt type label ──────────────────────────────────────────
 
 METHOD_TYPE: dict[str, str] = {
+    # Layer 1a — aggregate scalars
     "series_yoy":              "yoy",
     "csv_total_yoy":           "yoy",
     "csv_category_yoy":        "yoy",
     "csv_sum_yoy":             "yoy",
+    "csv_sector_yoy":          "yoy",
     "series_share":            "share",
     "multi_series_share":      "share",
     "csv_ratio_sum":           "share",
     "csv_category_share":      "share",
+    "csv_sector_share":        "share",
     "series_abs":              "absolute",
     "csv_total_abs":           "absolute",
+    "csv_sector_abs":          "absolute",
     "abs_undercount":          "absolute",
     "yoy_spread":              "spread",
     "yoy_spread_named":        "spread",
+    "csv_sector_yoy_spread":   "spread",
     "csv_total_ratio":         "ratio",
     "count_positive_yoy":      "breadth",
+    "csv_sector_count_positive_yoy": "breadth",
     "static_active":           "breadth",
+    # Layer 1c — entity scans
     "section_scan_yoy":        "scan",
     "section_scan_share":      "scan",
     "csv_category_scan_share": "scan",
+    "csv_sector_scan_yoy":     "scan",
+    "csv_sector_scan_share":   "scan",
+    "csv_psl_scan_yoy":        "scan",
+    "csv_bank_scan":           "scan",
+    # Layer 1d — multi-period
+    "csv_streak":              "streak",
+    "csv_sector_fy_acceleration": "acceleration",
+    "csv_sector_fy_delta":     "absolute",
 }
 
 def _signal_type(sig: dict) -> str:
     method = sig.get("compute", {}).get("method", "")
-    if method == "csv_bank_scan":
-        return "scan"
     return METHOD_TYPE.get(method, "yoy")
 
 
@@ -124,6 +137,10 @@ def _scalar_payload(conn: sqlite3.Connection, sig_id: str, sig: dict,
     elif unit == "count":
         vstr = f"{value:.0f}"
         pvstr = f"{prior_value:.0f}" if prior_value is not None else "n/a"
+        dstr = f"{delta:+.0f}" if delta is not None else "n/a"
+    elif unit == "periods":
+        vstr = f"{int(value)} consecutive period(s)"
+        pvstr = f"{int(prior_value)}" if prior_value is not None else "n/a"
         dstr = f"{delta:+.0f}" if delta is not None else "n/a"
     else:
         vstr = f"{value:,.1f} {unit}"

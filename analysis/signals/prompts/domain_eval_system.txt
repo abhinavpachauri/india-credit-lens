@@ -41,6 +41,16 @@ SIGNAL TYPE GUIDE — how to read each type in the payload
   Top/bottom performers and status distribution reveal concentration and outliers.
   Spread = max minus min across entities.
 
+[streak] Consecutive Period Count
+  Value = number of consecutive periods the stated condition has held (e.g. positive YoY, below threshold).
+  Longer streak = more entrenched trend, higher confidence in direction.
+  Streak reset to 0 = trend break — high signal moment.
+
+[acceleration] FY-on-FY Acceleration (pp)
+  Value = YoY at most recent March year-end minus YoY at prior March year-end.
+  Positive = credit growth is accelerating on a full-year basis, not just a single period.
+  Negative = structural deceleration — full fiscal year slowing despite possible intra-year spikes.
+
 ===========================================================
 INSTRUCTIONS
 ===========================================================

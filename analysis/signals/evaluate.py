@@ -32,7 +32,7 @@ PROMPTS_DIR = Path(__file__).parent / "prompts"
 EVALS_DIR   = Path(__file__).parent / "evaluations"
 
 MODEL          = "claude-sonnet-4-5-20250929"
-PROMPT_VERSION = "1.1"
+PROMPT_VERSION = "1.2"
 
 # ── Pipeline context blocks ───────────────────────────────────────────────────
 
