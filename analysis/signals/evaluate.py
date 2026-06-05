@@ -33,6 +33,7 @@ EVALS_DIR   = Path(__file__).parent / "evaluations"
 
 MODEL          = "claude-sonnet-4-5-20250929"
 PROMPT_VERSION = "1.2"
+CHUNK_SIZE     = 12   # max signals per LLM call — keeps JSON output under ~4k tokens
 
 # ── Pipeline context blocks ───────────────────────────────────────────────────
 
@@ -142,7 +143,7 @@ def _call_llm(system_prompt: str, user_content: str) -> tuple[dict, int]:
     client = _get_client()
     msg = client.messages.create(
         model=MODEL,
-        max_tokens=2000,
+        max_tokens=8000,
         temperature=0,
         system=[{
             "type": "text",
@@ -190,20 +191,21 @@ def _build_user_message(pipeline: str, domain: str, domain_description: str,
 
 # ── Domain evaluation ─────────────────────────────────────────────────────────
 
-def _evaluate_domain(pipeline: str, period: str, domain: str,
-                     signals_payload: str, signal_ids: list[str],
-                     domain_description: str,
-                     conn: sqlite3.Connection) -> tuple[dict, bool, int, int, int]:
+def _evaluate_chunk(pipeline: str, period: str, domain: str, chunk_idx: int,
+                    chunk_payload: str, chunk_ids: list[str],
+                    domain_description: str,
+                    conn: sqlite3.Connection) -> tuple[dict, bool, int, int, int]:
     """
-    Evaluate one domain. Returns (result_dict, from_cache, tokens, cache_read, cache_created).
-    result_dict keys: signal_ids + '_domain_narrative'.
+    Evaluate one chunk of signals. Cache key includes chunk_idx so each chunk
+    is cached independently.
     """
     cache_key_obj = {
-        "pipeline": pipeline,
-        "period":   period,
-        "domain":   domain,
-        "payload":  signals_payload,
-        "version":  PROMPT_VERSION,
+        "pipeline":  pipeline,
+        "period":    period,
+        "domain":    domain,
+        "chunk":     chunk_idx,
+        "payload":   chunk_payload,
+        "version":   PROMPT_VERSION,
     }
     input_hash = _payload_hash(cache_key_obj)
 
@@ -212,11 +214,45 @@ def _evaluate_domain(pipeline: str, period: str, domain: str,
         return cached, True, 0, 0, 0
 
     system_prompt = _get_system_prompt()
-    user_message  = _build_user_message(pipeline, domain, domain_description, signals_payload)
+    user_message  = _build_user_message(pipeline, domain, domain_description, chunk_payload)
     result, tokens, cache_read, cache_created = _call_llm(system_prompt, user_message)
 
     _cache_set(conn, input_hash, pipeline, period, domain, result, MODEL, tokens)
     return result, False, tokens, cache_read, cache_created
+
+
+def _evaluate_domain(pipeline: str, period: str, domain: str,
+                     signals_payload: str, signal_ids: list[str],
+                     domain_description: str,
+                     conn: sqlite3.Connection) -> tuple[dict, bool, int, int, int]:
+    """
+    Evaluate one domain, chunking into batches of CHUNK_SIZE to avoid max_tokens
+    truncation for large domains (industry=22, retail=23 signals).
+    Returns (merged_result_dict, all_from_cache, total_tokens, total_cache_read, total_cache_created).
+    """
+    from .query import build_chunk_payload
+
+    chunks = build_chunk_payload(signal_ids, signals_payload, CHUNK_SIZE)
+
+    merged:    dict = {}
+    all_cache: bool = True
+    tot_tok = tot_read = tot_created = 0
+
+    for chunk_idx, (chunk_payload, chunk_ids) in enumerate(chunks):
+        result, from_cache, tokens, cache_read, cache_created = _evaluate_chunk(
+            pipeline, period, domain, chunk_idx,
+            chunk_payload, chunk_ids,
+            domain_description, conn
+        )
+        # Accumulate signal entries; last chunk's _domain_narrative wins
+        merged.update(result)
+        if not from_cache:
+            all_cache = False
+        tot_tok     += tokens
+        tot_read    += cache_read
+        tot_created += cache_created
+
+    return merged, all_cache, tot_tok, tot_read, tot_created
 
 
 # ── Source reference ─────────────────────────────────────────────────────────

@@ -273,3 +273,39 @@ def build_domain_payload(conn: sqlite3.Connection, pipeline: str,
             included.append(sid)
 
     return "\n\n".join(blocks), included
+
+
+def build_chunk_payload(signal_ids: list[str], full_payload: str,
+                        chunk_size: int) -> list[tuple[str, list[str]]]:
+    """
+    Split a full domain payload (already built by build_domain_payload) into
+    chunks of at most chunk_size signal blocks, preserving block boundaries.
+
+    Each block starts with '--- <signal_id> [type: ...] ---'.
+    Returns list of (chunk_payload_text, chunk_signal_ids).
+    """
+    if not signal_ids:
+        return []
+
+    # Split payload back into individual blocks
+    import re
+    raw_blocks = re.split(r'\n(?=--- )', full_payload)
+
+    # Map each block to its signal_id (first line prefix)
+    id_to_block: dict[str, str] = {}
+    for block in raw_blocks:
+        first_line = block.split("\n")[0]
+        # extract signal_id from '--- sibc-xxx [type: yyy] ---'
+        m = re.match(r'^--- (\S+) \[', first_line)
+        if m:
+            id_to_block[m.group(1)] = block
+
+    # Build chunks in the order signal_ids were provided
+    chunks: list[tuple[str, list[str]]] = []
+    for i in range(0, len(signal_ids), chunk_size):
+        chunk_ids = signal_ids[i : i + chunk_size]
+        chunk_blocks = [id_to_block[sid] for sid in chunk_ids if sid in id_to_block]
+        if chunk_blocks:
+            chunks.append(("\n\n".join(chunk_blocks), chunk_ids))
+
+    return chunks if chunks else [(full_payload, signal_ids)]
