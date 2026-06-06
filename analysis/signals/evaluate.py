@@ -32,7 +32,7 @@ EVALS_DIR   = Path(__file__).parent / "evaluations"
 
 MODEL          = "claude-sonnet-4-5-20250929"
 PROMPT_VERSION = "1.3"
-CHUNK_SIZE     = 12   # max signals per LLM call — keeps JSON output under ~4k tokens
+CHUNK_SIZE     = 8    # max signals per LLM call — keeps JSON output well under 8k tokens
 
 # ── Pipeline context blocks ───────────────────────────────────────────────────
 
@@ -247,11 +247,36 @@ def _evaluate_domain(pipeline: str, period: str, domain: str,
     tot_tok = tot_read = tot_created = 0
 
     for chunk_idx, (chunk_payload, chunk_ids) in enumerate(chunks):
-        result, from_cache, tokens, cache_read, cache_created = _evaluate_chunk(
-            pipeline, period, domain, chunk_idx,
-            chunk_payload, chunk_ids,
-            domain_description, conn
-        )
+        try:
+            result, from_cache, tokens, cache_read, cache_created = _evaluate_chunk(
+                pipeline, period, domain, chunk_idx,
+                chunk_payload, chunk_ids,
+                domain_description, conn
+            )
+        except Exception as exc:
+            # Truncation guard: if a chunk fails, split it in half and retry each half
+            if len(chunk_ids) <= 2:
+                raise   # already minimal — propagate
+            from .query import build_chunk_payload as _bcp
+            half = len(chunk_ids) // 2
+            sub_chunks = _bcp(chunk_ids, chunk_payload, half)
+            result = {}
+            tokens = cache_read = cache_created = 0
+            from_cache = True
+            for sub_idx, (sub_payload, sub_ids) in enumerate(sub_chunks):
+                sub_result, sub_cache, sub_tok, sub_read, sub_created = _evaluate_chunk(
+                    pipeline, period, domain,
+                    chunk_idx * 100 + sub_idx,   # unique sub-chunk key
+                    sub_payload, sub_ids,
+                    domain_description, conn
+                )
+                result.update(sub_result)
+                tokens      += sub_tok
+                cache_read  += sub_read
+                cache_created += sub_created
+                if not sub_cache:
+                    from_cache = False
+
         # Accumulate signal entries; last chunk's _domain_narrative wins
         merged.update(result)
         if not from_cache:
