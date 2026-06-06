@@ -74,6 +74,8 @@ def _range_position(value: float, p25: float | None, p75: float | None,
 def _scalar_payload(conn: sqlite3.Connection, sig_id: str, sig: dict,
                     pipeline: str, period: str) -> str | None:
     """Build one-signal context block for scalar (non-scan) signals."""
+    from datetime import datetime
+
     row = conn.execute(
         """SELECT s.value, s.unit, s.status, s.period
            FROM signals s
@@ -87,17 +89,23 @@ def _scalar_payload(conn: sqlite3.Connection, sig_id: str, sig: dict,
 
     value, unit, status, _ = row[0], row[1], row[2], row[3]
 
-    # Prior period value
-    prior_row = conn.execute(
-        """SELECT s.value, s.period FROM signals s
-           WHERE s.pipeline=? AND s.metric_id=?
-             AND s.entity_type='aggregate' AND s.entity_id='total'
-             AND s.period < ?
-           ORDER BY s.period DESC LIMIT 1""",
-        (pipeline, sig_id, period)
-    ).fetchone()
+    # Full period history — all available values in chronological order
+    history_rows = conn.execute(
+        """SELECT period, value FROM signals
+           WHERE pipeline=? AND metric_id=?
+             AND entity_type='aggregate' AND entity_id='total'
+             AND value IS NOT NULL
+           ORDER BY period""",
+        (pipeline, sig_id)
+    ).fetchall()
 
-    prior_value = prior_row[0] if prior_row else None
+    # Prior period value (still needed for delta)
+    prior_value = None
+    for i, (p, v) in enumerate(history_rows):
+        if p == period and i > 0:
+            prior_value = history_rows[i - 1][1]
+            break
+
     delta = (value - prior_value) if prior_value is not None else None
 
     # Range stats
@@ -149,6 +157,26 @@ def _scalar_payload(conn: sqlite3.Connection, sig_id: str, sig: dict,
 
     lines.append(f"Value: {vstr} | Status: {status}")
     lines.append(f"Prior period: {pvstr} | Change: {dstr}")
+
+    # Full chronological series — lets the LLM write multi-period trajectories
+    if len(history_rows) > 1:
+        def _fmt_v(v: float) -> str:
+            if unit == "pct":                   return f"{v:.1f}%"
+            if unit in ("lcr_cr", "rs_thousands"): return f"{v:,.0f} {unit}"
+            if unit == "pp":                    return f"{v:.1f}pp"
+            if unit == "periods":               return f"{int(v)} periods"
+            if unit == "count":                 return f"{v:,.0f}"
+            if unit == "ratio":                 return f"{v:.1f}x"
+            return f"{v:,.1f}"
+
+        def _fmt_p(p: str) -> str:
+            try:    return datetime.strptime(p, "%Y-%m-%d").strftime("%b %Y")
+            except: return p
+
+        series = " → ".join(
+            f"{_fmt_p(p)}: {_fmt_v(v)}" for p, v in history_rows
+        )
+        lines.append(f"Series: {series}")
 
     if rng:
         min_v, max_v, p25, p75, n = rng
