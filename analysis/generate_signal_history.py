@@ -214,7 +214,7 @@ def cmd_evaluate(pipeline: str, period: str) -> int:
     print(f"\n  {status}  {pipeline} / {period}")
     print(f"    Domains evaluated  : {summary['domains_evaluated']}")
     print(f"    Signals interpreted: {summary['signals_interpreted']}")
-    print(f"    API calls          : {summary['api_calls']}  |  Cache hits: {summary['cache_hits']}")
+    print(f"    LLM calls          : {summary['api_calls']}  |  Cache hits: {summary['cache_hits']}")
     if summary['total_tokens']:
         saved = summary['cache_read_tokens']
         print(f"    Tokens used        : {summary['total_tokens']:,}"

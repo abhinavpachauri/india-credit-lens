@@ -22,6 +22,7 @@ import hashlib
 import json
 import os
 import sqlite3
+import subprocess
 import time
 from datetime import datetime
 from pathlib import Path
@@ -90,22 +91,20 @@ def _cache_set(conn: sqlite3.Connection, input_hash: str, pipeline: str,
     conn.commit()
 
 
-# ── LLM client (module-level singleton) ──────────────────────────────────────
+# ── LLM backend selection ─────────────────────────────────────────────────────
+#
+# Default: claude CLI (Pro subscription, no extra API cost).
+# Fallback: Anthropic SDK if ANTHROPIC_API_KEY is set and --use-api flag passed.
+# The CLI path is used whenever `claude` is available in PATH.
 
-_client = None
+def _claude_cli_available() -> bool:
+    try:
+        r = subprocess.run(["claude", "--version"], capture_output=True, timeout=5)
+        return r.returncode == 0
+    except (FileNotFoundError, subprocess.TimeoutExpired):
+        return False
 
-def _get_client():
-    global _client
-    if _client is None:
-        try:
-            import anthropic
-        except ImportError:
-            raise RuntimeError("anthropic package not installed. Run: pip install anthropic")
-        api_key = os.environ.get("ANTHROPIC_API_KEY")
-        if not api_key:
-            raise RuntimeError("ANTHROPIC_API_KEY environment variable not set.")
-        _client = anthropic.Anthropic(api_key=api_key)
-    return _client
+USE_CLI: bool = _claude_cli_available()  # True unless claude binary not found
 
 
 def _extract_json(text: str) -> dict:
@@ -142,13 +141,46 @@ def _extract_json(text: str) -> dict:
 
 # ── LLM call ─────────────────────────────────────────────────────────────────
 
-def _call_llm(system_prompt: str, user_content: str) -> tuple[dict, int]:
+def _call_llm(system_prompt: str, user_content: str) -> tuple[dict, int, int, int]:
     """
-    Call Claude with a cached system prompt + dynamic user message.
-    System prompt is marked ephemeral for prompt caching — saves ~800 input
-    tokens on every call after the first within a session.
+    Call Claude via the claude CLI (Pro subscription) or the Anthropic SDK
+    (API key). CLI is preferred — no extra cost on top of Claude Pro.
+
+    Returns (result_dict, tokens, cache_read, cache_created).
+    Token counts are 0 when using the CLI (not metered that way).
     """
-    client = _get_client()
+    if USE_CLI:
+        # Combine system + user into one prompt passed via stdin
+        # so we avoid shell-quoting issues with large payloads
+        combined = f"{system_prompt}\n\n{'─'*60}\n\n{user_content}"
+        proc = subprocess.run(
+            ["claude", "-p", "--output-format", "text"],
+            input=combined,
+            capture_output=True,
+            text=True,
+            timeout=120,
+        )
+        if proc.returncode != 0:
+            raise RuntimeError(
+                f"claude CLI exited {proc.returncode}: {proc.stderr[:300]}"
+            )
+        text = proc.stdout.strip()
+        result = _extract_json(text)
+        return result, 0, 0, 0
+
+    # ── Anthropic SDK fallback ────────────────────────────────────────────────
+    api_key = os.environ.get("ANTHROPIC_API_KEY")
+    if not api_key:
+        raise RuntimeError(
+            "claude CLI not found and ANTHROPIC_API_KEY not set. "
+            "Either install Claude Code or export ANTHROPIC_API_KEY."
+        )
+    try:
+        import anthropic
+    except ImportError:
+        raise RuntimeError("pip install anthropic  (or install Claude Code)")
+
+    client = anthropic.Anthropic(api_key=api_key)
     msg = client.messages.create(
         model=MODEL,
         max_tokens=8000,
@@ -161,15 +193,11 @@ def _call_llm(system_prompt: str, user_content: str) -> tuple[dict, int]:
         messages=[{"role": "user", "content": user_content}],
         extra_headers={"anthropic-beta": "prompt-caching-2024-07-31"},
     )
-
     text = msg.content[0].text.strip()
-
-    # Token accounting: cache_read tokens are ~10x cheaper than input tokens
-    usage  = msg.usage
-    tokens = usage.input_tokens + usage.output_tokens
+    usage         = msg.usage
+    tokens        = usage.input_tokens + usage.output_tokens
     cache_read    = getattr(usage, "cache_read_input_tokens",    0) or 0
     cache_created = getattr(usage, "cache_creation_input_tokens", 0) or 0
-
     result = _extract_json(text)
     return result, tokens, cache_read, cache_created
 
@@ -432,8 +460,9 @@ def run_evaluate(pipeline: str, period: str,
             print(f"cache hit  ({elapsed:.1f}s)")
         else:
             api_calls += 1
-            cache_info = f"  cache_created={cache_created}" if cache_created else ""
-            print(f"API call   ({elapsed:.1f}s)  {tokens} tokens{cache_info}")
+            backend = "CLI" if USE_CLI else "API"
+            token_info = f"  {tokens} tokens" if tokens else ""
+            print(f"{backend} call  ({elapsed:.1f}s){token_info}")
 
     # Write output file
     out_path = EVALS_DIR / pipeline / f"{period}.json"
