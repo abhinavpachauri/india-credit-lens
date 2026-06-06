@@ -43,10 +43,12 @@ Live components only. Planned work lives in `STRATEGY_PLANNER.md`.
 | validate_annotation_basis.py (Check 2d) | **Live** — basis completeness check (inference/hypothesis → basis.inferences non-empty) |
 | promote_annotations.py (Stage 7) | **Live** — automated verified copy to web |
 | signal_registry.json | **Live** — 7 signals tracked across 3 issues (newsletter subsystem) |
-| signal compute layer | **Live** — `analysis/signals/` — registry.json (90 signals, 52 Layer 1 with compute specs), signals.db (SQLite — primary store), history JSON files (mirrors); compute engine in signals/compute/; Check 2e validates DB + registry + history |
+| signal compute layer | **Live** — `analysis/signals/` — registry.json (174 signals total: SIBC 84 L1 + ATM/POS 82 L1 + L2/L3), signals.db (SQLite — primary store); compute engine in signals/compute/; Check 2e validates DB + registry + history |
+| signal evaluate layer | **Live** — `analysis/signals/evaluate.py` — Stage 5 LLM evaluation via `claude -p` CLI (Pro subscription, no API cost); prompt v1.4 (executive tone, full period series in payload); evaluations written to `signals/evaluations/{pipeline}/{period}.json` |
+| L1 annotation classification | **Done** — all 49 SIBC annotations classified: 26 L1 / 18 L2 / 5 L3; all 21 ATM/POS insights classified: 16 L1 / 3 L2 / 2 gaps |
 | Subsystem generation | **Live** — `generate_mermaid.py` → `.mmd` + `validate.py --check-subsystems` |
 | detect_format.py (Stage 0) | **Live** — flags format changes in new XLSX before extraction |
-| ATM/POS pipeline | **Live** — `rbi_atm_pos/` — Stages 0–3 complete; Stage 4 (L1 compute) fully numeric — 22 signals across 6 periods in DB; Stage 5 (L2a) pending |
+| ATM/POS pipeline | **Live** — `rbi_atm_pos/` — Stages 0–3 complete; Stage 4 (L1 compute) — 82 signals in registry, 56 with DB values (26 YoY signals pending prior-year data); Stage 5 evaluation complete for 2026-03-31 |
 | AppShell + DLS | **Live** — shared Header (one instance), `dls/InsightCard`, `dls/InsightCTAStrip` used by both SIBC and Payments |
 
 ---
@@ -127,7 +129,12 @@ Use CLI tools for all external service interactions — they are the most contex
 | `analysis/generate_signal_history.py` | Stage 4 (`append`) + Stage 5 (`evaluate`) + `status` + `seed` commands |
 | `analysis/signals/registry.json` | Universal signal catalog — 90 signals, layer 1/2/3 tagged; all Layer 1 signals have compute specs (SIBC + ATM/POS) |
 | `analysis/signals/signals.db` | **Primary signal store** — SQLite; (pipeline, period, metric_id, entity_type, entity_id) fact table + metric_ranges |
-| `analysis/signals/compute/` | Compute engine: engine.py dispatches; sibc.py + atm_pos.py implement all 1a/1b/1c methods. Both read from their consolidated CSVs — SIBC from `rbi_sibc_consolidated.csv`, ATM/POS from `atm_pos_consolidated.csv`. SIBC maps `dataDate → csv_date` via `timeline.json` before querying the CSV. |
+| `analysis/signals/compute/` | Compute engine: engine.py dispatches; sibc.py + atm_pos.py implement all 1a/1b/1c/1d methods. Both read from consolidated CSVs. SIBC maps `dataDate → csv_date` via `timeline.json` before querying. |
+| `analysis/signals/evaluate.py` | Stage 5 LLM evaluation engine — reads signals.db, builds domain payloads (full period series included), calls `claude -p` CLI, writes to evaluations/. prompt_version=1.4. Cache in llm_cache table. |
+| `analysis/signals/query.py` | Builds signal payloads for evaluate — scalar + scan + full chronological series per signal |
+| `analysis/signals/prompts/domain_eval_system.txt` | System prompt v1.4 — executive tone, trajectory style, no jargon |
+| `analysis/signals/evaluations/sibc/2026-04-30.json` | Latest SIBC evaluation — 84 signals, 5 domains, prompt v1.4 |
+| `analysis/signals/evaluations/atm_pos/2026-03-31.json` | Latest ATM/POS evaluation — 50 signals, 4 domains, prompt v1.4 |
 | `analysis/signals/db.py` | DB init, schema, refresh_ranges() |
 | `analysis/signals/history/sibc.json` | Human-readable mirror of signals.db for SIBC (not primary) |
 | `analysis/signals/history/atm_pos.json` | Human-readable mirror of signals.db for ATM/POS (not primary) |
@@ -190,7 +197,14 @@ For session-specific state (current period, what's been validated, what's pendin
 
 See `STRATEGY_PLANNER.md` for the prioritised roadmap. Immediately next:
 
-1. Ingest next SIBC + ATM/POS period (files expected soon)
-2. Layer 2 signal evaluation: design `evaluate` command — reads Layer 1 DB values → LLM interpretation → writes Layer 2 statuses to DB
-3. ATM/POS Layer 2a: first FOUNDATION pass on system_model.json (6 months of data now available)
-4. Newsletter standardisation: blocked on Layer 2 signal evaluation across both pipelines
+1. **Ingest next SIBC + ATM/POS period** — files expected soon; run full pipeline gate after ingestion
+2. **UI wiring for L1 signals** — wire UI to consume from evaluation JSONs instead of hand-authored annotations for L1 signals; requires:
+   - Add `chart_series` + `chart_dim` fields to registry.json per L1 signal (maps signal → chart highlight)
+   - `preferredMode` derivable from compute method type (yoy→"yoy", abs→"absolute", fy_acceleration→"fy")
+   - Build `generate_analysis_report.py` output formatter
+3. **Two ATM/POS signal gaps to fix**:
+   - `dc-psb-share` computed but not appearing in evaluation (check domain routing in evaluate.py)
+   - `dc-bank-scan` missing from registry — debit card bank-level scan needed
+4. **Tag live annotations with layer: 1/2/3** — metadata-only change, safe to do now
+5. **ATM/POS Layer 2a** — first FOUNDATION pass on system_model.json (6 months of data now available)
+6. Newsletter standardisation: blocked on Layer 2 signal evaluation
