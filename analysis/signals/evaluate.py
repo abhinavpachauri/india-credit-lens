@@ -158,7 +158,7 @@ def _call_llm(system_prompt: str, user_content: str) -> tuple[dict, int, int, in
             input=combined,
             capture_output=True,
             text=True,
-            timeout=120,
+            timeout=300,
         )
         if proc.returncode != 0:
             raise RuntimeError(
@@ -292,12 +292,17 @@ def _evaluate_domain(pipeline: str, period: str, domain: str,
             tokens = cache_read = cache_created = 0
             from_cache = True
             for sub_idx, (sub_payload, sub_ids) in enumerate(sub_chunks):
-                sub_result, sub_cache, sub_tok, sub_read, sub_created = _evaluate_chunk(
-                    pipeline, period, domain,
-                    chunk_idx * 100 + sub_idx,   # unique sub-chunk key
-                    sub_payload, sub_ids,
-                    domain_description, conn
-                )
+                try:
+                    sub_result, sub_cache, sub_tok, sub_read, sub_created = _evaluate_chunk(
+                        pipeline, period, domain,
+                        chunk_idx * 100 + sub_idx,   # unique sub-chunk key
+                        sub_payload, sub_ids,
+                        domain_description, conn
+                    )
+                except Exception:
+                    # Sub-chunk also failed — skip it rather than killing the domain
+                    sub_result, sub_cache = {}, True
+                    sub_tok = sub_read = sub_created = 0
                 result.update(sub_result)
                 tokens      += sub_tok
                 cache_read  += sub_read
