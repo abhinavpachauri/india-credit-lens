@@ -31,7 +31,7 @@ PROMPTS_DIR = Path(__file__).parent / "prompts"
 EVALS_DIR   = Path(__file__).parent / "evaluations"
 
 MODEL          = "claude-sonnet-4-5-20250929"
-PROMPT_VERSION = "1.2"
+PROMPT_VERSION = "1.3"
 CHUNK_SIZE     = 12   # max signals per LLM call — keeps JSON output under ~4k tokens
 
 # ── Pipeline context blocks ───────────────────────────────────────────────────
