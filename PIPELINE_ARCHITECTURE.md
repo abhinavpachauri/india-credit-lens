@@ -64,18 +64,19 @@ Applies to every pipeline. Scripts differ; stage purpose and order do not.
              ATM/POS: reads atm_pos_consolidated.csv filtered by report_date
            Write all entity-level rows to signals.db (INSERT OR REPLACE) with period=dataDate
            Refresh metric_ranges in signals.db for all affected metrics
-           Mirror aggregate-level results to signals/history/{pipeline}.json
+           Update current_status + first_seen in registry.json
            No Claude involvement. No exceptions.
 
-[Stage 5]  Layer 2a — signal evaluate          (every period, if model exists)
-           Read evaluate specs from registry.json
-           Apply rules using Layer 1 history outputs for this period
-           Append Layer 2a signal statuses to signals/history/{pipeline}.json
-           SKIP silently if system_model.json does not yet exist — signals stay pending.
+[Stage 5]  Layer 2a — signal evaluate          (every period)
+           Load prior period evaluation JSON if it exists (auto-detected from signals.db)
+           Inject prior signal narratives into prompt for narrative diff
+           Call LLM (claude -p CLI); cache by payload hash + prompt_version
+           Write evaluations/{pipeline}/{period}.json
+           First period: no diff (no prior eval). Second period onward: diff is automatic.
 
 [Stage 6]  Evals gate
            Validates all artifacts produced by Stages 0–5:
-           data integrity, signal history consistency, model structure (if present)
+           data integrity, signal DB consistency, model structure (if present)
 
 [Stage 7]  Presentation promote
            Push validated insights to web (annotations, gaps, opportunities)
@@ -240,37 +241,14 @@ Current state (June 2026):
 - SIBC: 28 compute signals × 3 periods = 254 rows
 - ATM/POS: 22 compute signals × 6 periods = 874 rows (includes full bank-level 1c scans)
 
-### History JSON — human-readable mirror
-
-`analysis/signals/history/{pipeline}.json` — mirrors aggregate/total rows from DB.
-Not the primary store — DB is authoritative. Used for audit trail and human review.
-
-```json
-{
-  "_meta": { "pipeline": "sibc", "schema_version": "1.0", "entry_count": 3 },
-  "entries": [
-    {
-      "period": "YYYY-MM-DD",
-      "appended_at": "ISO8601",
-      "signals": {
-        "<layer-1-signal>": { "status": "strengthening", "value": 17.1 },
-        "<layer-2-signal>": { "status": "pending" }
-      }
-    }
-  ]
-}
-```
-
 **Status values:** `new` | `active` | `strengthening` | `weakening` | `reversed` | `absent` | `unknown` | `pending`
 
 ### Validator — Check 2e
 
 `validate_signal_history.py` enforces:
 - A: registry.json schema — required fields, valid statuses, known pipelines/domains
-- B: history JSON schema — chronological order, no orphan IDs
-- C: continuity — every signal appears in history after first_seen
-- D: current_status in registry matches latest history entry
-- E: DB integrity — signals.db exists, layer-1 metrics present, no orphaned IDs, metric_ranges populated
+- B: signals.db integrity — tables present, L1 metrics have rows (continuity), no orphaned metric_ids,
+     metric_ranges populated, registry current_status matches latest DB row per L1 signal
 
 ---
 
@@ -288,8 +266,8 @@ Not the primary store — DB is authoritative. Used for audit trail and human re
 | 1 | `extract_sibc.py` | `{period}/sections.json` |
 | 2 | `validate_sections.py` (Check 1) | — |
 | 3 | `generate_merge.py` + `update_web_data.py` | `merged/sections_merged.json` + `rbi_sibc_consolidated.csv` |
-| 4 | `generate_signal_history.py append --pipeline sibc` | `signals/history/sibc.json` |
-| 5 | `generate_signal_history.py evaluate --pipeline sibc` (pending) | `signals/history/sibc.json` (L2a statuses) |
+| 4 | `generate_signal_history.py append --pipeline sibc` | `signals/signals.db` + registry update |
+| 5 | `generate_signal_history.py evaluate --pipeline sibc` | `signals/evaluations/sibc/{period}.json` |
 | 6 | `run_evals.py --period merged --merged` | — |
 | 7 | `promote_annotations.py` | `web/lib/reports/rbi_sibc.ts` |
 
@@ -374,7 +352,7 @@ No system_model, subsystems, annotations_draft, or mermaid output in per-period 
 | 1 | `extract_atm_pos.py` | ✓ Live |
 | 2 | `validate_atm_pos.py` | ✓ Live |
 | 3 | `consolidate_atm_pos.py` → `atm_pos_consolidated.csv` | ✓ Live |
-| 4 | `generate_signal_history.py append --pipeline atm_pos` | ✓ Live — fully numeric; 22 signals, 6 periods in DB |
+| 4 | `generate_signal_history.py append --pipeline atm_pos` | ✓ Live — writes to signals.db + registry; 82 signals, 6 periods |
 | 5 | Layer 2a evaluate | ⏳ Pending — first FOUNDATION pass on system_model.json required |
 | 6 | `run_atm_pos_evals.py` | ✓ Live |
 | 7 | Presentation promote | ⏳ Pending — direct write for now |
@@ -540,12 +518,61 @@ Never copy `annotations_merged.ts` → `rbi_sibc.ts` manually.
 □  python3 analysis/run_atm_pos_evals.py --xlsx {file}
    (Stages 0–3: format detection, extraction, validation, consolidation)
 □  python3 analysis/generate_signal_history.py append --pipeline atm_pos --period {YYYY-MM-DD}
-   (Stage 4 — Layer 1: fully numeric; writes all 22 signals to signals.db + mirrors to history JSON)
+   (Stage 4 — Layer 1: writes all signals to signals.db + updates registry)
 □  [Stage 5 — Layer 2a evaluate: NOT YET WIRED — generate_atm_pos_insights.py runs inside
    gate for now; will move to Stage 5 after ATM/POS system_model.json FOUNDATION pass]
 □  Commit per-period → web/ separately
 □  git push
 ```
+
+---
+
+## Annotation Migration Strategy
+
+Annotations in `annotations_merged.ts` were authored before the signal compute layer existed.
+Migration to computed output is layer-by-layer — the file is NOT retired until all three
+layers have compute coverage.
+
+### Principle
+Do not do a big-bang replacement. Each layer migrates independently when its compute is ready.
+The `layer` field on each annotation is the marker that controls which annotations are
+authored vs auto-computed.
+
+### Migration steps (in order)
+
+**Step 1 — Tag annotations (prerequisite for everything else)**
+Add `layer: 1 | 2 | 3` to every annotation object in `annotations_merged.ts`.
+Metadata-only — no content change. Run `promote_annotations.py` after.
+
+**Step 2 — Build `generate_analysis_report.py` formatter**
+Reads `evaluations/{pipeline}/{period}.json`, outputs annotation-shaped objects for
+`layer: 1` signals only. Does not touch layer 2/3 entries.
+
+**Step 3 — Wire layer 1 to computed output**
+Replace body/content of `layer: 1` annotations with formatter output each period.
+Layer 2/3 annotations remain authored and unchanged.
+
+**Step 4+ — Layer 2/3 compute (future)**
+When L2 compute is built → retire authored layer 2 annotations.
+When L3 compute is built → retire authored layer 3 annotations.
+When all layers computed → retire `annotations_merged.ts` entirely.
+
+### UPDATE pass scoping
+The Layer 2a model UPDATE pass continues each period, but its scope narrows as layers migrate:
+- Pre-Step 3: UPDATE pass authors all annotations
+- Post-Step 3: UPDATE pass only refreshes `layer: 2` annotations (layer 1 auto-computed)
+- Layer 3: unchanged each period (~6-monthly cadence regardless)
+
+### Known annotation reclassifications
+These annotations were initially classified as L1 but must remain L2 (authored):
+- `psl-housing-anomalous-surge` — the 39.8% YoY surge is a regulatory reclassification
+  artifact (RBI Oct 2024 PSL limit revision), not real demand. Computed signal inference
+  gets this wrong. Requires authored causal framing.
+
+### Known signal gaps (fix before replacing those annotations)
+- `computer-software-multi-year-surge` and `transport-operators-decelerating` both map to
+  `sibc-services-yoy-scan` which emits one merged narrative — transport doesn't appear.
+  Fix: scan signals need per-entity evaluation output before these can be replaced.
 
 ---
 
@@ -586,15 +613,15 @@ analysis/
 │   ├── registry.json               ← Universal signal catalog (90 signals, layer/compute/evaluate specs)
 │   ├── signals.db                  ← PRIMARY store — SQLite fact table (pipeline × period × metric × entity)
 │   ├── db.py                       ← DB init, schema, refresh_ranges()
-│   ├── migrate_to_db.py            ← One-time migration from history JSON → DB
+│   ├── migrate_to_db.py            ← One-time migration script (historical — no longer needed)
 │   ├── update_registry.py          ← One-time script: added sub_layer + compute specs to registry
 │   ├── compute/
 │   │   ├── engine.py               ← Dispatch: reads registry, calls sibc/atm_pos, writes DB
-│   │   ├── sibc.py                 ← SIBC compute methods (1a/1b/1c) — reads sections_merged.json
-│   │   └── atm_pos.py              ← ATM/POS compute methods (1a/1b/1c) — reads CSV
-│   └── history/
-│       ├── sibc.json               ← Mirror of DB aggregate rows (human-readable audit trail)
-│       └── atm_pos.json            ← Mirror of DB aggregate rows (human-readable audit trail)
+│   │   ├── sibc.py                 ← SIBC compute methods (1a/1b/1c/1d) — reads consolidated CSV
+│   │   └── atm_pos.py              ← ATM/POS compute methods (1a/1b/1c/1d) — reads CSV
+│   └── evaluations/
+│       ├── sibc/                   ← LLM evaluation JSONs per period (observation/direction/inference)
+│       └── atm_pos/                ← LLM evaluation JSONs per period
 │
 ├── output/
 │   └── mermaid/rbi_sibc/{YYYY-MM-DD}/   ← On-demand mermaid diagrams

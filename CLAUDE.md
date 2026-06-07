@@ -43,8 +43,8 @@ Live components only. Planned work lives in `STRATEGY_PLANNER.md`.
 | validate_annotation_basis.py (Check 2d) | **Live** — basis completeness check (inference/hypothesis → basis.inferences non-empty) |
 | promote_annotations.py (Stage 7) | **Live** — automated verified copy to web |
 | signal_registry.json | **Live** — 7 signals tracked across 3 issues (newsletter subsystem) |
-| signal compute layer | **Live** — `analysis/signals/` — registry.json (174 signals total: SIBC 84 L1 + ATM/POS 82 L1 + L2/L3), signals.db (SQLite — primary store); compute engine in signals/compute/; Check 2e validates DB + registry + history |
-| signal evaluate layer | **Live** — `analysis/signals/evaluate.py` — Stage 5 LLM evaluation via `claude -p` CLI (Pro subscription, no API cost); prompt v1.4 (executive tone, full period series in payload); evaluations written to `signals/evaluations/{pipeline}/{period}.json` |
+| signal compute layer | **Live** — `analysis/signals/` — registry.json (174 signals total: SIBC 84 L1 + ATM/POS 82 L1 + L2/L3), signals.db (SQLite — sole store); compute engine in signals/compute/; Check 2e validates DB + registry |
+| signal evaluate layer | **Live** — `analysis/signals/evaluate.py` — Stage 5 LLM evaluation via `claude -p` CLI (Pro subscription, no API cost); prompt v1.4 (executive tone, full period series in payload); prior-period signal narratives auto-injected for diff from 2nd period onward; evaluations written to `signals/evaluations/{pipeline}/{period}.json` |
 | L1 annotation classification | **Done** — all 49 SIBC annotations classified: 26 L1 / 18 L2 / 5 L3; all 21 ATM/POS insights classified: 16 L1 / 3 L2 / 2 gaps |
 | Subsystem generation | **Live** — `generate_mermaid.py` → `.mmd` + `validate.py --check-subsystems` |
 | detect_format.py (Stage 0) | **Live** — flags format changes in new XLSX before extraction |
@@ -73,10 +73,10 @@ Use CLI tools for all external service interactions — they are the most contex
 | `python3 analysis/promote_annotations.py` | Stage 7: verified copy annotations_merged.ts → rbi_sibc.ts — never `cp` or manual paste |
 | `python3 analysis/detect_format.py` | Stage 0: flag format changes before extraction (SIBC) |
 | `python3 analysis/source_claims.py` | Post-model-update: source all system model claims (run after any Layer 2a model change) |
-| `python3 analysis/generate_signal_history.py append --pipeline {name} --period {date}` | Stage 4: Layer 1 signal compute → writes to signals.db + mirrors to history JSON |
-| `python3 analysis/generate_signal_history.py evaluate --pipeline {name} --period {date}` | Stage 5: Layer 2a signal evaluate (once model exists) |
+| `python3 analysis/generate_signal_history.py append --pipeline {name} --period {date}` | Stage 4: Layer 1 signal compute → writes to signals.db + updates registry |
+| `python3 analysis/generate_signal_history.py evaluate --pipeline {name} --period {date}` | Stage 5: LLM signal evaluate → evaluations JSON; auto-loads prior period for narrative diff |
 | `python3 analysis/generate_signal_history.py status` | Print current signal states across all pipelines |
-| `python3 analysis/validate_signal_history.py` | Check 2e: signal history integrity (DB rows + registry + history JSON mirror) |
+| `python3 analysis/validate_signal_history.py` | Check 2e: signal history integrity — DB rows, registry schema, status sync vs DB |
 | `python3 analysis/newsletter/validate_newsletter_config.py` | Newsletter gate — exception path, not part of standard pipeline |
 
 ---
@@ -117,7 +117,7 @@ Use CLI tools for all external service interactions — they are the most contex
 | `analysis/validate_content.py` | Check 2b: dates/values/growth in annotation bodies vs sections.json |
 | `analysis/validate_claims.py` | Check 2c: claim sourcing — every system model claim has a source |
 | `analysis/validate_annotation_basis.py` | Check 2d: basis completeness — inference/hypothesis annotations must have basis.inferences |
-| `analysis/validate_signal_history.py` | Check 2e: signal history integrity — DB rows, registry schema, history JSON mirror |
+| `analysis/validate_signal_history.py` | Check 2e: signal history integrity — DB rows, registry schema, status sync vs DB |
 | `analysis/validate.py` | Checks 4, 5: system_model.json + subsystems.json |
 | `analysis/extract_sibc.py` | Stage 1: SIBC xlsx → sections.json + format_report.json |
 | `analysis/detect_format.py` | Stage 0: detect structural changes in new XLSX vs prior period (SIBC) |
@@ -136,8 +136,6 @@ Use CLI tools for all external service interactions — they are the most contex
 | `analysis/signals/evaluations/sibc/2026-04-30.json` | Latest SIBC evaluation — 84 signals, 5 domains, prompt v1.4 |
 | `analysis/signals/evaluations/atm_pos/2026-03-31.json` | Latest ATM/POS evaluation — 50 signals, 4 domains, prompt v1.4 |
 | `analysis/signals/db.py` | DB init, schema, refresh_ranges() |
-| `analysis/signals/history/sibc.json` | Human-readable mirror of signals.db for SIBC (not primary) |
-| `analysis/signals/history/atm_pos.json` | Human-readable mirror of signals.db for ATM/POS (not primary) |
 | `analysis/cross_source/catalog.json` | Tuple registry — all declared cross-source pairs (Layer 2b) |
 | `analysis/rbi_atm_pos/merged/system_model.json` | ATM/POS per-source system model (Layer 2a — pending first FOUNDATION) |
 | `analysis/rbi_sibc/timeline.json` | Registry of all ingested periods (includes `is_fy_end`, `dataDate` = report release date, `csv_date` = actual data date matching the consolidated CSV) |

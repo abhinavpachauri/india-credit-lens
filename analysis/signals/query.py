@@ -76,12 +76,23 @@ def _scalar_payload(conn: sqlite3.Connection, sig_id: str, sig: dict,
     """Build one-signal context block for scalar (non-scan) signals."""
     from datetime import datetime
 
+    # csv_category_share signals are stored under entity_type='bank_category'
+    # keyed by the category name from the compute spec, not as aggregate/total
+    compute  = sig.get("compute", {})
+    method   = compute.get("method", "")
+    if method == "csv_category_share":
+        entity_type = "bank_category"
+        entity_id   = compute.get("category", "total")
+    else:
+        entity_type = "aggregate"
+        entity_id   = "total"
+
     row = conn.execute(
         """SELECT s.value, s.unit, s.status, s.period
            FROM signals s
            WHERE s.pipeline=? AND s.period=? AND s.metric_id=?
-             AND s.entity_type='aggregate' AND s.entity_id='total'""",
-        (pipeline, period, sig_id)
+             AND s.entity_type=? AND s.entity_id=?""",
+        (pipeline, period, sig_id, entity_type, entity_id)
     ).fetchone()
 
     if row is None or row[0] is None:
@@ -93,10 +104,10 @@ def _scalar_payload(conn: sqlite3.Connection, sig_id: str, sig: dict,
     history_rows = conn.execute(
         """SELECT period, value FROM signals
            WHERE pipeline=? AND metric_id=?
-             AND entity_type='aggregate' AND entity_id='total'
+             AND entity_type=? AND entity_id=?
              AND value IS NOT NULL
            ORDER BY period""",
-        (pipeline, sig_id)
+        (pipeline, sig_id, entity_type, entity_id)
     ).fetchall()
 
     # Prior period value (still needed for delta)
@@ -113,8 +124,8 @@ def _scalar_payload(conn: sqlite3.Connection, sig_id: str, sig: dict,
         """SELECT min_value, max_value, p25_value, p75_value, period_count
            FROM metric_ranges
            WHERE metric_id=? AND pipeline=?
-             AND entity_type='aggregate' AND entity_id='total'""",
-        (sig_id, pipeline)
+             AND entity_type=? AND entity_id=?""",
+        (sig_id, pipeline, entity_type, entity_id)
     ).fetchone()
 
     sig_type = _signal_type(sig)

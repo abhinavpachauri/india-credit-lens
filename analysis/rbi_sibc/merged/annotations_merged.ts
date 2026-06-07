@@ -12,6 +12,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
     insights: [
       {
         id: "credit-growth-accelerating-fy26",
+        layer: 1,
         title: "FY26 complete: +16.1% YoY — the strongest in this cycle",
         body: "Bank Credit at Mar 2026: ₹213.6L Cr. FY26 added ₹29.6L Cr — vs ₹18.2L Cr in FY25 and ₹23.5L Cr in FY24. " +
               "YoY growth: +11.0% (FY25) → +16.1% (FY26). " +
@@ -38,6 +39,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
       },
       {
         id: "three-year-credit-trajectory",
+        layer: 1,
         title: "Bank credit added ₹53L Cr in two years — compounding, not steady-state",
         body: "Bank Credit: ₹160.5L Cr (Apr 2024) → ₹184.0L Cr (Apr 2025) → ₹213.6L Cr (Mar 2026). " +
               "₹53.1L Cr added in 24 months. Each year adds more absolute credit than the prior: FY25 ₹18.2L Cr, FY26 ₹29.6L Cr — 63% more. " +
@@ -66,6 +68,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
       },
       {
         id: "nonfood-credit-all-the-signal",
+        layer: 2,
         title: "Non-food credit is the only number that matters",
         body: "Non-food credit is ₹212.9L Cr of the ₹213.6L Cr total at Mar 2026 — 99.7% of bank credit. " +
               "Food credit at ₹0.70L Cr at Mar 2026 is minimal and seasonal. " +
@@ -90,6 +93,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
       },
       {
         id: "food-credit-jan-artifact",
+        layer: 2,
         title: "Food credit cycle growing — 5× in two years at March-end",
         body: "The seasonal pattern is real — kharif procurement agencies draw in Jan and repay by March — but both peaks and troughs are rising. " +
               "March-end: ₹0.21L Cr (Mar 2024) → ₹0.29L Cr (Mar 2025, +38.4%) → ₹0.70L Cr (Mar 2026, +139.4%). " +
@@ -120,6 +124,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
     gaps: [
       {
         id: "bankcredit-april-date-convention",
+        layer: 2,
         hidden: true,
         title: "Bank Credit uses April fortnight dates — treat them as FY-end",
         body: "Bank Credit aggregate columns are labelled 'Apr 2024' (Apr 5, 2024) and 'Apr 2025' (Apr 4, 2025) " +
@@ -147,6 +152,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
     opportunities: [
       {
         id: "credit-cycle-expansion",
+        layer: 3,
         title: "₹29.6L Cr added in one year — the largest annual absolute add in this dataset",
         body: "FY26 added ₹29.6L Cr (Mar 2025 → Mar 2026), vs ₹18.2L Cr in FY25 — a 63% increase in annual flow. " +
               "This is not a rate-driven cyclical recovery — it reflects formalisation of credit access " +
@@ -180,6 +186,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
     insights: [
       {
         id: "fy26-all-sectors-synchronised",
+        layer: 1,
         title: "All four main sectors accelerated in FY26 — no laggard in the system",
         body: "FY26 YoY: Agriculture +15.7%, Industry +15.0%, Services +19.0%, Personal Loans +16.2%. " +
               "FY25 comparison: Agriculture +10.4%, Industry +8.2%, Services +12.0%, Personal Loans +11.7%. " +
@@ -204,6 +211,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
       },
       {
         id: "services-growth-acceleration",
+        layer: 1,
         title: "Services hit 19.0% YoY in FY26 — fastest main sector two years running",
         body: "Services YoY: +12.3% (Jan 2025) → +15.5% (Jan 2026) → +19.0% (Mar 2026). " +
               "The acceleration built through FY26 and was confirmed at year-end. " +
@@ -228,6 +236,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
       },
       {
         id: "industry-reaccelerating",
+        layer: 1,
         title: "Industry YoY jumped from 8.2% to 15.0% — biggest acceleration in this cycle",
         body: "Industry YoY: +8.2% (FY25) → +15.0% (FY26). " +
               "The 6.8pp acceleration is the largest single-year move across all main sectors. " +
@@ -253,6 +262,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
       },
       {
         id: "personal-loans-largest-sector",
+        layer: 1,
         title: "Personal Loans: still the largest sector — ₹69.6L Cr, +16.2% YoY",
         body: "Personal Loans: ₹52.3L Cr (Jan 2024) → ₹58.5L Cr (Jan 2025) → ₹67.2L Cr (Jan 2026) → estimated ₹69.6L Cr (Mar 2026). " +
               "YoY +16.2% in FY26, vs +11.7% in FY25. " +
@@ -278,6 +288,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
     gaps: [
       {
         id: "main-sectors-undercount",
+        layer: 2,
         title: "Main sector totals undercount system credit by ₹10.6L Cr",
         body: "Agriculture + Industry + Services + Personal Loans at Mar 2026 sum to ₹202.3L Cr. " +
               "Total Bank Credit is ₹213.6L Cr. Adding Food Credit (₹0.70L Cr) reaches ₹203.0L Cr. " +
@@ -304,6 +315,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
     opportunities: [
       {
         id: "services-credit-entry",
+        layer: 3,
         title: "Services sector credit is the fastest-growing main channel",
         body: "Services grew from ₹44.1L Cr (Jan 2024) to ₹60.6L Cr (Mar 2026) — a ₹16.5L Cr addition in 27 months. " +
               "Within services: NBFCs ₹20.66L Cr (+26.3%), Computer Software accelerating, CRE and Trade both above 16% YoY. " +
@@ -335,6 +347,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
     insights: [
       {
         id: "micro-small-growth-tripled",
+        layer: 1,
         title: "Micro & Small: 9.6% → 33.1% YoY over one year — inflection confirmed",
         body: "Micro and Small YoY: +9.6% (FY25) → +33.1% (FY26). " +
               "Absolute credit: ₹7.17L Cr (Jan 2024) → ₹7.98L Cr (Mar 2025) → ₹10.63L Cr (Mar 2026). " +
@@ -365,6 +378,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
       },
       {
         id: "large-corporate-stagnant",
+        layer: 1,
         title: "Large corporates: +8.9% YoY — the weakest industrial segment in FY26",
         body: "Large enterprise YoY: +6.8% (FY25) → +8.9% (FY26). " +
               "Absolute credit: ₹26.03L Cr (Jan 2024) → ₹29.31L Cr (Jan 2026) → Mar 2026 est ₹30L Cr. " +
@@ -389,6 +403,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
       },
       {
         id: "medium-enterprise-sweet-spot",
+        layer: 1,
         title: "Medium enterprises: +21.7% YoY — the structurally underserved middle tier",
         body: "Medium enterprise YoY: +18.4% (FY25) → +21.7% (FY26). " +
               "The medium tier is growing faster than Large (+8.9%) and nearly as fast as Micro & Small (+33.1%). " +
@@ -414,6 +429,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
     gaps: [
       {
         id: "size-definition-boundary-issue",
+        layer: 2,
         title: "MSME size boundaries shift with regulatory revisions",
         body: "The Micro, Small, and Medium categories follow MSMED Act definitions. " +
               "A Micro enterprise crossing the turnover threshold migrates to Small, inflating growth without new credit. " +
@@ -443,6 +459,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
     opportunities: [
       {
         id: "msme-first-cycle-window",
+        layer: 3,
         title: "Alt-data MSME underwriting is now essential — not optional",
         body: "Micro and Small: ₹7.17L Cr (Jan 2024) → ₹10.63L Cr (Mar 2026), adding ₹3.46L Cr in 27 months. " +
               "A meaningful share are first-cycle formal borrowers post-GST and UDYAM with thin or blank bureau histories. " +
@@ -475,6 +492,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
     insights: [
       {
         id: "nbfc-risk-weight-cycle-complete",
+        layer: 2,
         title: "NBFC credit +26.3% YoY — the 2023 risk-weight cycle is fully absorbed",
         body: "Bank credit to NBFCs: ₹15.23L Cr (Mar 2024) → ₹16.35L Cr (Mar 2025, +7.4%) → ₹20.66L Cr (Mar 2026, +26.3%). " +
               "Incremental flow: FY25 ₹1.12L Cr, FY26 ₹4.30L Cr — nearly 4× the prior year. " +
@@ -503,6 +521,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
       },
       {
         id: "computer-software-multi-year-surge",
+        layer: 1,
         title: "Computer Software credit: 3 consecutive periods of 20%+ growth",
         body: "Computer Software: ₹0.26L Cr (Jan 2024) → ₹0.34L Cr (Jan 2025) → ₹0.41L Cr (Jan 2026) → ₹0.46L Cr (Feb 2026). " +
               "+28.2% YoY (Jan 2025) and +20.7% YoY (Jan 2026). " +
@@ -526,6 +545,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
       },
       {
         id: "transport-operators-decelerating",
+        layer: 1,
         title: "Transport Operators growth collapsed: 12% → 4.3% YoY in one year",
         body: "Transport Operators YoY: +12.0% (Jan 2025) → +4.3% (Jan 2026). " +
               "Absolute: ₹2.29L Cr (Jan 2024) → ₹2.57L Cr (Jan 2025) → ₹2.68L Cr (Jan 2026). " +
@@ -552,6 +572,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
       },
       {
         id: "cre-trade-consistent-growth",
+        layer: 1,
         title: "CRE and Trade both accelerating: 14% → 16% YoY",
         body: "Commercial Real Estate YoY: +14.1% (Jan 2025) → +16.2% (Jan 2026), at ₹5.98L Cr (Jan 2026). " +
               "Trade YoY: +14.5% (Jan 2025) → +16.1% (Jan 2026), at ₹13.09L Cr (Jan 2026). " +
@@ -577,6 +598,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
     gaps: [
       {
         id: "nbfc-double-counting",
+        layer: 2,
         title: "Bank credit to NBFCs is double-counted in any system aggregate",
         body: "NBFC credit at ₹20.66L Cr (Mar 2026) is the largest single line in the Services category. " +
               "Bank credit to NBFCs becomes NBFC on-lending to retail and MSME borrowers — those downstream loans " +
@@ -600,6 +622,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
       },
       {
         id: "other-services-opacity",
+        layer: 2,
         title: "Other Services is ₹12.4L Cr with no breakdown",
         body: "'Other Services' at ₹12.4L Cr (Feb 2026) is ~21% of the entire Services sector. " +
               "It grew from ₹9.37L Cr (Jan 2024) to ₹12.36L Cr (Feb 2026) — +31.9% in 24 months. " +
@@ -624,6 +647,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
     opportunities: [
       {
         id: "co-lending-infrastructure",
+        layer: 3,
         title: "Co-lending and warehouse-financing infrastructure for the bank-NBFC cycle",
         body: "Bank credit to NBFCs added ₹4.30L Cr in FY26 alone — nearly 4× the FY25 flow of ₹1.12L Cr. " +
               "NBFCs need bank balance sheet capacity; banks need NBFC origination reach. " +
@@ -649,6 +673,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
       },
       {
         id: "trade-finance-compounder",
+        layer: 3,
         title: "Trade credit at ₹13.1L Cr, 16% YoY — the services sector's anchor",
         body: "Trade credit: ₹9.85L Cr (Jan 2024) → ₹11.27L Cr (Jan 2025) → ₹13.09L Cr (Jan 2026). " +
               "+33% in 2 years. The second-largest services sub-sector (after NBFCs and Other Services combined). " +
@@ -677,6 +702,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
     insights: [
       {
         id: "gold-loans-structural-surge",
+        layer: 1,
         title: "Gold loans 5× in 24 months — ₹0.93L Cr to ₹4.60L Cr",
         body: "Gold Loans: ₹0.93L Cr (Mar 2024) → ₹2.06L Cr (Mar 2025, +121.1% YoY) → ₹4.60L Cr (Mar 2026, +123.1% YoY). " +
               "Share of personal credit: 1.7% (Mar 2024) → 3.5% (Mar 2025) → 6.6% (Mar 2026). " +
@@ -703,6 +729,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
       },
       {
         id: "credit-card-collapse",
+        layer: 1,
         title: "Credit cards: +3.5% YoY in FY26 — policy-constrained and confirmed",
         body: "Credit Card Outstanding YoY: +13.0% (Jan 2025) → +1.5% (Jan 2026) → +3.5% (FY26, Mar 2026). " +
               "FY26 incremental: ₹10,094 Cr vs ₹27,350 Cr in FY25 — under one-third the pace. " +
@@ -729,6 +756,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
       },
       {
         id: "vehicle-loans-accelerating",
+        layer: 1,
         title: "Vehicle loans growth doubled: 8.6% → 18.6% YoY in FY26",
         body: "Vehicle Loans YoY: +8.6% (FY25) → +18.6% (FY26). " +
               "Absolute: ₹5.61L Cr (Jan 2024) → ₹6.23L Cr (Mar 2025) → ₹7.39L Cr (Mar 2026). " +
@@ -753,6 +781,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
       },
       {
         id: "consumer-durables-accelerating-decline",
+        layer: 1,
         title: "Consumer durables: -5.3% YoY in FY26 — three consecutive periods of negative growth",
         body: "Consumer Durables YoY: -2.4% (Jan 2025), -1.0% (FY25, Mar 2025), -5.3% (FY26, Mar 2026). " +
               "Book declined from ₹23,445 Cr (Mar 2025) to ₹21,962 Cr (Mar 2026). " +
@@ -779,6 +808,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
     gaps: [
       {
         id: "personal-loans-aggregate-hides-divergence",
+        layer: 2,
         title: "The personal loans aggregate is a weighted average of opposite trends",
         body: "Personal Loans at +16.2% YoY (FY26) is a weighted average of Gold Loans +123%, " +
               "Vehicle Loans +18.6%, Credit Card Outstanding +3.5%, and Consumer Durables -5.3%. " +
@@ -802,6 +832,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
       },
       {
         id: "gold-loans-reclassification-overstates-demand",
+        layer: 2,
         title: "Gold loans 123% overstates real disbursement demand — separate stock from flow",
         body: "Two effects compound: RBI's Sep 2024 circular required bullet-repayment gold loans to migrate from " +
               "agri/business categories into 'loans against gold jewellery'. Gold prices also rose ~30%, expanding collateral value. " +
@@ -828,6 +859,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
       },
       {
         id: "other-personal-loans-opacity",
+        layer: 2,
         title: "Other Personal Loans is 25% of the portfolio — no breakdown",
         body: "'Other Personal Loans': ₹13.96L Cr (Jan 2024) → ₹15.11L Cr (Jan 2025) → ₹16.85L Cr (Jan 2026). " +
               "+20.7% in 2 years. Larger than Vehicle Loans and Education combined. " +
@@ -852,6 +884,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
     opportunities: [
       {
         id: "gold-loan-market-entry",
+        layer: 3,
         title: "Gold lending market is being re-segmented — banks vs NBFCs",
         body: "Gold Loans: ₹0.93L Cr (Mar 2024) → ₹4.60L Cr (Mar 2026). " +
               "Gold NBFCs (Muthoot, Manappuram) have had market exclusivity for decades. " +
@@ -875,6 +908,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
       },
       {
         id: "vehicle-ev-credit",
+        layer: 3,
         title: "Vehicle loans +18.6% — EV-specific credit is the next product layer",
         body: "Vehicle loans: ₹5.61L Cr (Jan 2024) → ₹7.39L Cr (Mar 2026), +31.7% in 27 months. " +
               "EV sales crossed 20L units in FY25. Standard vehicle finance doesn't address battery degradation risk, " +
@@ -907,6 +941,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
     insights: [
       {
         id: "psl-msme-structural-acceleration",
+        layer: 1,
         title: "PSL MSME: +13.4% YoY in FY25, +29.5% YoY in FY26 — two independent series aligned",
         body: "PSL Micro and Small Enterprises: ₹19.74L Cr (Mar 2024) → ₹22.39L Cr (Mar 2025, +13.4%) → ₹29.0L Cr (Mar 2026, +29.5%). " +
               "Statement 3 industryBySize confirms: ₹7.98L Cr (Mar 2025) → ₹10.63L Cr (Mar 2026), +33.1%. " +
@@ -930,6 +965,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
       },
       {
         id: "psl-housing-anomalous-surge",
+        layer: 2,
         title: "PSL Housing +39.8% YoY — this is a definition change, not real housing demand",
         body: "PSL Housing: ₹7.55L Cr (Mar 2024) → ₹7.47L Cr (Mar 2025, -1.1% YoY) → ₹10.44L Cr (Mar 2026, +39.8% YoY). " +
               "The near-reversal follows RBI's October 2024 PSL housing limit revision (metro: ₹35L → ₹45L; non-metro: ₹25L → ₹35L). " +
@@ -953,6 +989,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
       },
       {
         id: "export-credit-declining",
+        layer: 1,
         title: "Export credit: +4.2% in FY25, -13.0% FY in FY26",
         body: "Export Credit PSL: ₹11,330 Cr (Mar 2024) → ₹11,805 Cr (Mar 2025, +4.2%) → ₹10,270 Cr (Feb 2026, -13.0% FY). " +
               "After a modest FY25 it turned negative. " +
@@ -977,6 +1014,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
     gaps: [
       {
         id: "psl-housing-reclassification",
+        layer: 2,
         title: "PSL housing data contaminated by a regulatory revision — not flagged in the report",
         body: "The PSL housing loan limit revision reclassified existing mortgages into the PSL bucket. " +
               "The ₹2.97L Cr apparent addition in FY26 represents existing loans now visible in a different column — not new disbursements. " +
@@ -1000,6 +1038,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
       },
       {
         id: "psl-totals-not-additive",
+        layer: 2,
         title: "PSL category totals cannot be summed — Weaker Sections overlaps everything",
         body: "Weaker Sections at ₹20.32L Cr (Feb 2026) is a cross-cutting subset of the PSL total. " +
               "SC/ST borrowers, small farmers, and SHG members appear in Agriculture, MSME, and Housing rows simultaneously. " +
@@ -1024,6 +1063,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
     opportunities: [
       {
         id: "renewable-energy-project-finance",
+        layer: 3,
         title: "Renewable energy PSL: ₹0.14L Cr for a ₹20L Cr opportunity",
         body: "Renewable Energy PSL: ₹0.06L Cr (Mar 2024) → ₹0.10L Cr (Mar 2025, +78.3%) → ₹0.14L Cr (Feb 2026, +35.2% FY). " +
               "India needs ₹20-25L Cr of renewable energy investment by 2030. " +
@@ -1050,6 +1090,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
       },
       {
         id: "pslc-trading-tooling",
+        layer: 3,
         title: "PSLC trading volume rising — banks need automated compliance tooling",
         body: "As MSME PSL books grow at 29.5% YoY, the PSL certificate (PSLC) trading market on RBI's e-Kuber platform " +
               "becomes more active. Banks with excess PSL achievement sell to those with deficits. " +
@@ -1077,6 +1118,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
     insights: [
       {
         id: "pli-capex-broadening-confirmed",
+        layer: 1,
         title: "PLI capex broadened in FY26: Engineering +32%, Petroleum +33%, Metal +19%",
         body: "FY26 YoY by sub-sector: All Engineering +32.2% (₹3.17L Cr), Petroleum +32.5% (₹2.04L Cr), " +
               "Basic Metal +19.4% (₹5.18L Cr), Chemicals +14.9% (₹3.08L Cr), Food Processing +14.0% (₹2.50L Cr), " +
@@ -1101,6 +1143,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
       },
       {
         id: "gems-jewellery-gold-price-proxy",
+        layer: 1,
         title: "Gems & Jewellery up 40% YoY — this is a gold price proxy, not volume",
         body: "Gems and Jewellery: ₹0.82L Cr (Feb 2024) → ₹0.83L Cr (Feb 2025) → ₹1.17L Cr (Feb 2026). " +
               "+40.2% YoY. Gold prices rose ~25-30% in the same period. " +
@@ -1128,6 +1171,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
       },
       {
         id: "infrastructure-decelerating",
+        layer: 1,
         title: "Infrastructure at +9.5% YoY in FY26 — the supercycle has matured",
         body: "Infrastructure: ₹13.37L Cr (Mar 2025) → ₹14.63L Cr (Mar 2026 est), +9.5% YoY. " +
               "Still the largest industrial sub-sector at ₹14.9L Cr (Mar 2026) but barely expanding relative to its size. " +
@@ -1154,6 +1198,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
       },
       {
         id: "chemicals-petroleum-capex",
+        layer: 1,
         title: "Chemicals +14.9% YoY, Petroleum +32.5% YoY — specialty and energy capex real",
         body: "Chemicals and Chemical Products: +14.9% YoY (₹3.08L Cr at Mar 2026). " +
               "Petroleum, Coal Products: +32.5% YoY (₹2.04L Cr at Mar 2026). " +
@@ -1179,6 +1224,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
     gaps: [
       {
         id: "infrastructure-sub-classification-absent",
+        layer: 2,
         title: "Infrastructure is the largest industrial sub-sector — completely opaque",
         body: "'Infrastructure' at ₹14.9L Cr (Mar 2026) aggregates roads, power, telecom, railways, ports, and urban infra. " +
               "Each sub-type has different growth drivers, tenor, and credit quality. " +
@@ -1201,6 +1247,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
       },
       {
         id: "industry-type-partition-not-exact",
+        layer: 2,
         title: "Industry sub-types do not sum to the Industry total",
         body: "The industry-by-type breakdown does not perfectly reconcile to the industry total from the main sector view. " +
               "Some sub-sectors use different classification vintages, and 'Other Industries' is a residual bucket. " +
@@ -1225,6 +1272,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
     opportunities: [
       {
         id: "pli-supply-chain-finance",
+        layer: 3,
         title: "PLI supply chains: one anchor yields 50-100 supplier credit relationships",
         body: "All Engineering credit added ₹1.21L Cr in FY26. " +
               "PLI-approved anchor companies (electronics, defence, EV components) have 50-100 tier-2 suppliers. " +
@@ -1247,6 +1295,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
       },
       {
         id: "basic-metal-capex-lending",
+        layer: 1,
         title: "Basic Metal +19.4% YoY — steel and aluminium capacity additions real in FY26",
         body: "Basic Metal and Metal Product: +19.4% YoY in FY26, reaching ₹5.18L Cr at Mar 2026. " +
               "India's steel capacity additions (JSW, SAIL, Tata Steel expansions) are the primary driver. " +

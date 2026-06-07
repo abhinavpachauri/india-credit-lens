@@ -36,6 +36,7 @@ export interface AnnotationBasis {
 
 export interface Annotation {
   id:            string;
+  layer?:        1 | 2 | 3;      // 1 = computed from CSV, 2 = causal/regulatory/cross-signal, 3 = strategic
   title:         string;          // 4–6 words
   body:          string;          // 2–3 sentences
   implication?:  string;          // "For lenders: ..."

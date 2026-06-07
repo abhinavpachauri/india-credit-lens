@@ -214,7 +214,8 @@ def _get_system_prompt() -> str:
 
 
 def _build_user_message(pipeline: str, domain: str, domain_description: str,
-                        signals_payload: str) -> str:
+                        signals_payload: str,
+                        prior_eval_block: str = "") -> str:
     template = (PROMPTS_DIR / "domain_eval_user.txt").read_text()
     return (
         template
@@ -222,7 +223,77 @@ def _build_user_message(pipeline: str, domain: str, domain_description: str,
         .replace("{domain_name}",        domain)
         .replace("{domain_description}", domain_description)
         .replace("{signals_payload}",    signals_payload)
+        .replace("{prior_eval_block}",   prior_eval_block)
     )
+
+
+# ── Prior evaluation helpers ──────────────────────────────────────────────────
+
+def _find_prior_period(conn: sqlite3.Connection, pipeline: str, period: str) -> str | None:
+    """Return the latest period in signals.db before the given period, or None."""
+    row = conn.execute(
+        "SELECT MAX(period) FROM signals WHERE pipeline=? AND period < ?",
+        (pipeline, period)
+    ).fetchone()
+    return row[0] if row and row[0] else None
+
+
+def _load_prior_eval(pipeline: str, prior_period: str) -> dict:
+    """
+    Load evaluations/{pipeline}/{prior_period}.json and return a flat dict of
+    signal_id → {observation, direction, inference}.
+    Returns empty dict if the file doesn't exist.
+    """
+    path = EVALS_DIR / pipeline / f"{prior_period}.json"
+    if not path.exists():
+        return {}
+    try:
+        with open(path) as f:
+            data = json.load(f)
+        flat: dict = {}
+        for domain_data in data.get("domains", {}).values():
+            for sig_id, sig_eval in domain_data.get("signals", {}).items():
+                flat[sig_id] = {
+                    k: sig_eval[k]
+                    for k in ("observation", "direction", "inference")
+                    if k in sig_eval
+                }
+        return flat
+    except Exception:
+        return {}
+
+
+def _build_prior_eval_block(prior_period: str,
+                             domain_signal_ids: list[str],
+                             prior_signals: dict) -> str:
+    """
+    Build the PRIOR PERIOD CONTEXT section for the user prompt.
+    Only includes signals that are both in this domain's chunk and have a prior eval entry.
+    Returns empty string if nothing to show.
+    """
+    relevant = {sid: prior_signals[sid] for sid in domain_signal_ids if sid in prior_signals}
+    if not relevant:
+        return ""
+
+    lines = [
+        "",
+        "===========================================================",
+        f"PRIOR PERIOD CONTEXT ({prior_period})",
+        "===========================================================",
+        "These narratives describe the previous period. Note meaningful changes.",
+        "",
+    ]
+    for sig_id, entry in relevant.items():
+        lines.append(f"{sig_id}:")
+        if "observation" in entry:
+            lines.append(f"  observation: {entry['observation']}")
+        if "direction" in entry:
+            lines.append(f"  direction:   {entry['direction']}")
+        if "inference" in entry:
+            lines.append(f"  inference:   {entry['inference']}")
+        lines.append("")
+
+    return "\n".join(lines)
 
 
 # ── Domain evaluation ─────────────────────────────────────────────────────────
@@ -230,18 +301,27 @@ def _build_user_message(pipeline: str, domain: str, domain_description: str,
 def _evaluate_chunk(pipeline: str, period: str, domain: str, chunk_idx: int,
                     chunk_payload: str, chunk_ids: list[str],
                     domain_description: str,
-                    conn: sqlite3.Connection) -> tuple[dict, bool, int, int, int]:
+                    conn: sqlite3.Connection,
+                    prior_period: str | None = None,
+                    prior_signals: dict | None = None) -> tuple[dict, bool, int, int, int]:
     """
     Evaluate one chunk of signals. Cache key includes chunk_idx so each chunk
-    is cached independently.
+    is cached independently. Prior eval narratives are injected into the prompt
+    when available (signal-level, only for signals in this chunk).
     """
+    prior_eval_block = ""
+    if prior_period and prior_signals:
+        prior_eval_block = _build_prior_eval_block(prior_period, chunk_ids, prior_signals)
+
     cache_key_obj = {
-        "pipeline":  pipeline,
-        "period":    period,
-        "domain":    domain,
-        "chunk":     chunk_idx,
-        "payload":   chunk_payload,
-        "version":   PROMPT_VERSION,
+        "pipeline":       pipeline,
+        "period":         period,
+        "domain":         domain,
+        "chunk":          chunk_idx,
+        "payload":        chunk_payload,
+        "version":        PROMPT_VERSION,
+        "prior_period":   prior_period or "",
+        "prior_eval":     prior_eval_block,   # content change → cache miss
     }
     input_hash = _payload_hash(cache_key_obj)
 
@@ -250,7 +330,9 @@ def _evaluate_chunk(pipeline: str, period: str, domain: str, chunk_idx: int,
         return cached, True, 0, 0, 0
 
     system_prompt = _get_system_prompt()
-    user_message  = _build_user_message(pipeline, domain, domain_description, chunk_payload)
+    user_message  = _build_user_message(
+        pipeline, domain, domain_description, chunk_payload, prior_eval_block
+    )
     result, tokens, cache_read, cache_created = _call_llm(system_prompt, user_message)
 
     _cache_set(conn, input_hash, pipeline, period, domain, result, MODEL, tokens)
@@ -260,10 +342,13 @@ def _evaluate_chunk(pipeline: str, period: str, domain: str, chunk_idx: int,
 def _evaluate_domain(pipeline: str, period: str, domain: str,
                      signals_payload: str, signal_ids: list[str],
                      domain_description: str,
-                     conn: sqlite3.Connection) -> tuple[dict, bool, int, int, int]:
+                     conn: sqlite3.Connection,
+                     prior_period: str | None = None,
+                     prior_signals: dict | None = None) -> tuple[dict, bool, int, int, int]:
     """
     Evaluate one domain, chunking into batches of CHUNK_SIZE to avoid max_tokens
     truncation for large domains (industry=22, retail=23 signals).
+    Prior eval narratives (signal-level) are forwarded to each chunk.
     Returns (merged_result_dict, all_from_cache, total_tokens, total_cache_read, total_cache_created).
     """
     from .query import build_chunk_payload
@@ -279,7 +364,9 @@ def _evaluate_domain(pipeline: str, period: str, domain: str,
             result, from_cache, tokens, cache_read, cache_created = _evaluate_chunk(
                 pipeline, period, domain, chunk_idx,
                 chunk_payload, chunk_ids,
-                domain_description, conn
+                domain_description, conn,
+                prior_period=prior_period,
+                prior_signals=prior_signals,
             )
         except Exception as exc:
             # Truncation guard: if a chunk fails, split it in half and retry each half
@@ -297,7 +384,9 @@ def _evaluate_domain(pipeline: str, period: str, domain: str,
                         pipeline, period, domain,
                         chunk_idx * 100 + sub_idx,   # unique sub-chunk key
                         sub_payload, sub_ids,
-                        domain_description, conn
+                        domain_description, conn,
+                        prior_period=prior_period,
+                        prior_signals=prior_signals,
                     )
                 except Exception:
                     # Sub-chunk also failed — skip it rather than killing the domain
@@ -394,13 +483,25 @@ def run_evaluate(pipeline: str, period: str,
 
     domains      = PIPELINE_DOMAINS.get(pipeline, [])
     all_domains  = registry.get("domains", {})
+
+    # ── Load prior period evaluation for narrative diffing ────────────────────
+    prior_period  = _find_prior_period(conn, pipeline, period)
+    prior_signals = _load_prior_eval(pipeline, prior_period) if prior_period else {}
+    if prior_period and prior_signals:
+        print(f"  Prior period: {prior_period} ({len(prior_signals)} signal narratives loaded)")
+    elif prior_period:
+        print(f"  Prior period: {prior_period} (no evaluation file found — diff inactive)")
+    else:
+        print(f"  Prior period: none (first evaluation for this pipeline)")
+
     output: dict = {
-        "pipeline":     pipeline,
-        "period":       period,
-        "evaluated_at": datetime.now().isoformat(timespec="seconds"),
+        "pipeline":       pipeline,
+        "period":         period,
+        "evaluated_at":   datetime.now().isoformat(timespec="seconds"),
         "prompt_version": PROMPT_VERSION,
-        "model":        MODEL,
-        "domains":      {},
+        "model":          MODEL,
+        "prior_period":   prior_period,
+        "domains":        {},
     }
 
     total_signals  = 0
@@ -429,7 +530,9 @@ def run_evaluate(pipeline: str, period: str,
             result, from_cache, tokens, cache_read, cache_created = _evaluate_domain(
                 pipeline, period, domain,
                 signals_payload, signal_ids,
-                domain_description, conn
+                domain_description, conn,
+                prior_period=prior_period if prior_signals else None,
+                prior_signals=prior_signals if prior_signals else None,
             )
         except Exception as exc:
             elapsed = time.monotonic() - t0
@@ -485,4 +588,5 @@ def run_evaluate(pipeline: str, period: str,
         "total_tokens":        total_tokens,
         "cache_read_tokens":   total_cached_r,
         "output_path":         str(out_path),
+        "prior_period":        prior_period,
     }

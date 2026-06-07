@@ -327,6 +327,65 @@ def csv_bank_scan(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
         return out
 
 
+# ── Layer 1d ──────────────────────────────────────────────────────────────────
+
+def csv_streak(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
+    """
+    Count consecutive periods (going backwards from current) where a
+    month-over-month condition holds on the total metric value.
+
+    params:
+      metric    — metric name in the CSV
+      condition — 'value > prev_value' (default, growth streak)
+                  'value < prev_value' (contraction streak)
+    """
+    metric    = params["metric"]
+    condition = params.get("condition", "value > prev_value")
+    avail     = sorted(df["report_date"].unique())
+
+    if period not in avail:
+        return _unknown()
+
+    idx = avail.index(period)
+
+    def _meets(v: float | None, pv: float | None) -> bool:
+        if v is None or pv is None:
+            return False
+        if condition == "value > prev_value":
+            return v > pv
+        if condition == "value < prev_value":
+            return v < pv
+        return False
+
+    # Count streak ending at current period
+    streak = 0
+    for i in range(idx, -1, -1):
+        v  = _total_val(df, avail[i],          metric)
+        pv = _total_val(df, avail[i - 1], metric) if i > 0 else None
+        if _meets(v, pv):
+            streak += 1
+        else:
+            break
+
+    if streak == 0:
+        return _unknown()
+
+    # Count streak ending at prior period (for status comparison)
+    prev_streak = 0
+    if idx > 0:
+        for i in range(idx - 1, -1, -1):
+            v  = _total_val(df, avail[i],          metric)
+            pv = _total_val(df, avail[i - 1], metric) if i > 0 else None
+            if _meets(v, pv):
+                prev_streak += 1
+            else:
+                break
+
+    return [_row("aggregate", "total", streak,
+                 _eval_status(params.get("status_rules", []), streak, prev_streak),
+                 "periods")]
+
+
 # ── dispatch ──────────────────────────────────────────────────────────────────
 
 METHODS: dict = {
@@ -339,6 +398,7 @@ METHODS: dict = {
     "csv_category_yoy":        csv_category_yoy,
     "csv_category_scan_share": csv_category_scan_share,
     "csv_bank_scan":           csv_bank_scan,
+    "csv_streak":              csv_streak,
 }
 
 

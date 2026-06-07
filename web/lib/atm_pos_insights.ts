@@ -30,6 +30,7 @@ export interface InsightReasoning {
 
 export interface AtmPosInsight {
   id:             string;
+  layer?:         1 | 2 | 3;     // 1 = computed from CSV, 2 = causal/regulatory/cross-signal, 3 = strategic
   group:          InsightGroup;
   cut:            InsightCut;
   period:         string;

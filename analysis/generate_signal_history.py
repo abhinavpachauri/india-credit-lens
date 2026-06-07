@@ -4,7 +4,6 @@ Signal history layer — cross-pipeline, cross-period signal continuity.
 
 Registry:   analysis/signals/registry.json        — universal signal catalog (90+ signals)
 DB:         analysis/signals/signals.db           — computed signal values (primary store)
-History:    analysis/signals/history/{pipeline}.json — append-only JSON mirror (human-readable)
 Source:
   SIBC layer 1:    web/public/data/rbi_sibc_consolidated.csv  — computed algorithmically
                    period (dataDate) resolved to csv_date via analysis/rbi_sibc/timeline.json
@@ -19,37 +18,35 @@ Layer model
 
 Commands
 --------
-  append   --pipeline sibc    --period 2026-03-30   Compute SIBC Layer 1 → DB + history JSON
-  append   --pipeline atm_pos --period 2026-03-31   Compute ATM/POS Layer 1 → DB + history JSON
+  append   --pipeline sibc    --period 2026-03-30   Compute SIBC Layer 1 → DB + registry update
+  append   --pipeline atm_pos --period 2026-03-31   Compute ATM/POS Layer 1 → DB + registry update
   evaluate --pipeline sibc    --period 2026-03-30   LLM interpret Layer 1 signals → evaluations JSON
   evaluate --pipeline atm_pos --period 2026-03-31   LLM interpret Layer 1 signals → evaluations JSON
   status                                             Print current signal states (all pipelines)
-  seed                                               (Re)seed registry first_seen from history
+  seed                                               Backfill registry first_seen from signals.db
 
 Status values: new | active | strengthening | weakening | reversed | absent | unknown | pending
 
-Append is idempotent: running twice for the same period updates the existing entry.
+Append is idempotent: running twice for the same period updates the existing DB rows.
 
 Design principles
 -----------------
 - DB is authoritative: all Layer 1 values computed by engine → signals.db
-- JSON history files mirror DB for human-readable audit trail
 - Layer 1 always algorithmic: no LLM input for status or value
 - Layer 2/3 status = "pending" until those layers are built
-- Scalable: adding a new pipeline = add entry in registry.json + new history/{pipeline}.json
+- Scalable: adding a new pipeline = add entry in registry.json
 """
 
 import argparse
 import json
 import sys
-from datetime import datetime, date
+from datetime import date
 from pathlib import Path
 
 REPO   = Path(__file__).resolve().parent.parent
 ANAL   = REPO / "analysis"
 SIG    = ANAL / "signals"
 REG    = SIG / "registry.json"
-HIST   = SIG / "history"
 
 KNOWN_PIPELINES  = {"sibc", "atm_pos"}
 PIPELINE_SOURCES = list(KNOWN_PIPELINES)
@@ -74,34 +71,19 @@ def save_registry(reg: dict) -> None:
     reg["_meta"]["last_updated"] = date.today().isoformat()
     save_json(REG, reg)
 
-def load_history(pipeline: str) -> dict:
-    path = HIST / f"{pipeline}.json"
-    if not path.exists():
-        raise FileNotFoundError(
-            f"No history file for pipeline '{pipeline}'. "
-            f"Create analysis/signals/history/{pipeline}.json first."
-        )
-    return load_json(path)
-
-def save_history(pipeline: str, hist: dict) -> None:
-    hist["_meta"]["entry_count"] = len(hist["entries"])
-    save_json(HIST / f"{pipeline}.json", hist)
-
 
 # ─── append command ───────────────────────────────────────────────────────────
 
 def cmd_append(pipeline: str, period: str) -> int:
     """
     Compute Layer 1 signals for (pipeline, period) via the compute engine,
-    write results to signals.db, then mirror the aggregate-level values into
-    the history/{pipeline}.json file and update current_status in registry.json.
+    write results to signals.db, and update current_status in registry.json.
     """
     if pipeline not in KNOWN_PIPELINES:
         print(f"ERROR: unknown pipeline '{pipeline}'. Known: {sorted(KNOWN_PIPELINES)}")
         return 1
 
     registry = load_registry()
-    hist     = load_history(pipeline)
 
     # ── Step 1: run compute engine → DB ───────────────────────────────────────
     from signals.db import init_db
@@ -146,24 +128,7 @@ def cmd_append(pipeline: str, period: str) -> int:
         else:
             all_results[sig_id] = {"status": "pending"}
 
-    # ── Step 4: write to history JSON (human-readable mirror) ─────────────────
-    entry = {
-        "period":      period,
-        "appended_at": datetime.now().isoformat(timespec="seconds"),
-        "signals":     all_results,
-    }
-    existing_idx = next(
-        (i for i, e in enumerate(hist["entries"]) if e["period"] == period), None
-    )
-    if existing_idx is not None:
-        print(f"  Updating existing JSON entry for period {period}.")
-        hist["entries"][existing_idx] = entry
-    else:
-        hist["entries"].append(entry)
-    hist["entries"].sort(key=lambda e: e["period"])
-    save_history(pipeline, hist)
-
-    # ── Step 5: update current_status + first_seen in registry ───────────────
+    # ── Step 4: update current_status + first_seen in registry ───────────────
     for sig_id, res in all_results.items():
         if sig_id in registry["signals"]:
             sig = registry["signals"][sig_id]
@@ -192,10 +157,13 @@ def cmd_evaluate(pipeline: str, period: str) -> int:
     """
     LLM-interpret Layer 1 signals for (pipeline, period).
     Reads computed values from signals.db, builds domain-grouped context payloads,
-    calls Claude API (temperature=0, hash-cached), and writes structured evaluations to
+    calls Claude (temperature=0, hash-cached), and writes structured evaluations to
     signals/evaluations/{pipeline}/{period}.json.
 
-    Requires ANTHROPIC_API_KEY env var. Safe to re-run — cache hits skip API calls.
+    Automatically loads the prior period's evaluation (if it exists) and passes
+    signal-level prior narratives into the prompt so the LLM can highlight changes.
+
+    Safe to re-run — cache hits skip LLM calls.
     """
     if pipeline not in KNOWN_PIPELINES:
         print(f"ERROR: unknown pipeline '{pipeline}'. Known: {sorted(KNOWN_PIPELINES)}")
@@ -215,6 +183,10 @@ def cmd_evaluate(pipeline: str, period: str) -> int:
     print(f"    Domains evaluated  : {summary['domains_evaluated']}")
     print(f"    Signals interpreted: {summary['signals_interpreted']}")
     print(f"    LLM calls          : {summary['api_calls']}  |  Cache hits: {summary['cache_hits']}")
+    if summary.get('prior_period'):
+        print(f"    Prior period used  : {summary['prior_period']} (narrative diff active)")
+    else:
+        print(f"    Prior period used  : none (first evaluation for this pipeline)")
     if summary['total_tokens']:
         saved = summary['cache_read_tokens']
         print(f"    Tokens used        : {summary['total_tokens']:,}"
@@ -226,6 +198,9 @@ def cmd_evaluate(pipeline: str, period: str) -> int:
 # ─── status command ───────────────────────────────────────────────────────────
 
 def cmd_status() -> int:
+    from signals.db import init_db
+    conn = init_db()
+
     registry = load_registry()
     all_signals = registry["signals"]
 
@@ -236,14 +211,12 @@ def cmd_status() -> int:
         pipelines.setdefault(pl, {}).setdefault(dom, []).append(sig)
 
     for pl, domains in sorted(pipelines.items()):
-        hist_path = HIST / f"{pl}.json"
-        if hist_path.exists():
-            hist = load_json(hist_path)
-            last_period = hist["entries"][-1]["period"] if hist["entries"] else "(none)"
-            n_entries   = len(hist["entries"])
-        else:
-            last_period = "(no history file)"
-            n_entries   = 0
+        row = conn.execute(
+            "SELECT COUNT(DISTINCT period), MAX(period) FROM signals WHERE pipeline=?",
+            (pl,)
+        ).fetchone()
+        n_entries   = row[0] if row else 0
+        last_period = row[1] if row and row[1] else "(none)"
 
         print(f"\n{'='*60}")
         print(f"  Pipeline: {pl}  |  {n_entries} period(s)  |  latest: {last_period}")
@@ -267,32 +240,30 @@ def cmd_status() -> int:
 # ─── seed command ─────────────────────────────────────────────────────────────
 
 def cmd_seed() -> int:
+    """Backfill registry first_seen from signals.db (earliest non-unknown period per signal)."""
+    from signals.db import init_db
+    conn = init_db()
+
     registry = load_registry()
     updated  = 0
 
-    for pl in PIPELINE_SOURCES:
-        hist_path = HIST / f"{pl}.json"
-        if not hist_path.exists() or not hist_path.stat().st_size:
-            continue
-        hist = load_json(hist_path)
-        if not hist["entries"]:
-            continue
+    rows = conn.execute(
+        "SELECT metric_id, MIN(period) FROM signals "
+        "WHERE status NOT IN ('absent','unknown','pending') "
+        "GROUP BY metric_id"
+    ).fetchall()
 
-        for entry in sorted(hist["entries"], key=lambda e: e["period"]):
-            for sig_id, sig_data in entry["signals"].items():
-                if sig_id not in registry["signals"]:
-                    continue
-                status = sig_data.get("status", "unknown")
-                if status in ("absent", "unknown", "pending"):
-                    continue
-                reg_sig = registry["signals"][sig_id]
-                existing_first = reg_sig.get("first_seen", "")
-                if not existing_first or entry["period"] < existing_first:
-                    reg_sig["first_seen"] = entry["period"]
-                    updated += 1
+    for metric_id, earliest_period in rows:
+        if metric_id not in registry["signals"]:
+            continue
+        reg_sig = registry["signals"][metric_id]
+        existing = reg_sig.get("first_seen", "")
+        if not existing or earliest_period < existing:
+            reg_sig["first_seen"] = earliest_period
+            updated += 1
 
     save_registry(registry)
-    print(f"  ✓ seed complete — {updated} first_seen values updated")
+    print(f"  ✓ seed complete — {updated} first_seen values updated from signals.db")
     return 0
 
 
@@ -304,7 +275,7 @@ def main() -> int:
     )
     sub = parser.add_subparsers(dest="command", required=True)
 
-    p_append = sub.add_parser("append", help="Append a period's signal statuses to history")
+    p_append = sub.add_parser("append", help="Append a period's signal statuses to DB + registry")
     p_append.add_argument("--pipeline", required=True, help="Pipeline name (sibc, atm_pos, ...)")
     p_append.add_argument("--period",   required=True, help="Period date YYYY-MM-DD")
 
@@ -313,7 +284,7 @@ def main() -> int:
     p_eval.add_argument("--period",   required=True, help="Period date YYYY-MM-DD")
 
     sub.add_parser("status", help="Print current signal states across all pipelines")
-    sub.add_parser("seed",   help="Backfill registry first_seen from existing history entries")
+    sub.add_parser("seed",   help="Backfill registry first_seen from signals.db")
 
     args = parser.parse_args()
 

@@ -2,7 +2,7 @@
   "_meta": {
     "schema_version": "1.0",
     "description": "Signal registry — permanent catalog of every tracked signal across all ingestion pipelines. Signal IDs are immutable once created. Add new signals; never rename or delete. layer: 1 = per-chart data signal (algorithmically computed), 2 = cross-chart synthesis (authored per period from data), 3 = lending ecosystem expert model (generated ~6-monthly, strict claim validation).",
-    "last_updated": "2026-06-05"
+    "last_updated": "2026-06-07"
   },
   "pipelines": {
     "sibc": {
@@ -5740,6 +5740,69 @@
           }
         ]
       }
+    },
+    "dc-bank-scan": {
+      "id": "dc-bank-scan",
+      "title": "DC outstanding — every bank (absolute count)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1c",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_bank_scan",
+        "metric": "debit_cards",
+        "value_type": "value",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      },
+      "current_status": "unknown",
+      "first_seen": "2025-10-31"
+    },
+    "pos-terminals-pos-streak": {
+      "id": "pos-terminals-pos-streak",
+      "title": "POS terminals — consecutive months of growth",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1d",
+      "domain": "infrastructure",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_streak",
+        "metric": "pos_terminals",
+        "record_type": "total",
+        "condition": "value > prev_value",
+        "status_rules": [
+          {
+            "if": "value >= 3",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      },
+      "current_status": "strengthening",
+      "first_seen": "2025-10-31"
     }
   }
 }

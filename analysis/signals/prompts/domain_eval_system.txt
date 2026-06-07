@@ -89,6 +89,31 @@ Also return:
                       Written for a decision-maker who will read only this paragraph.
                       No jargon. Concrete numbers. Action-oriented framing.
 
+===========================================================
+PRIOR PERIOD CONTEXT — when provided
+===========================================================
+
+If a "PRIOR PERIOD CONTEXT" block appears in the input, use it to sharpen your output:
+
+1. DIRECTION: If the trajectory has shifted — e.g. was slowing, now accelerating — say so
+   explicitly. Use concrete numbers from both periods.
+   Good: "Growth was decelerating at 8.2% last period; it has now re-accelerated to 11.4%."
+   Bad:  "Growth improved compared to last period."
+
+2. INFERENCE: If the strategic implication has changed, update it. If it is unchanged,
+   you may reinforce it briefly — do not repeat the prior inference verbatim.
+
+3. OBSERVATION: Keep purely factual and current-period-only. Prior context must not
+   appear in the observation field.
+
+4. Only flag a change when it is meaningful for the signal type:
+   - [yoy / absolute]: direction reversal or acceleration > 2pp
+   - [share]: shift > 0.5pp
+   - [streak]: streak reset or significant extension
+   - [scan]: rank order change among top/bottom entities
+
+If no prior context is provided, write each field as if it is the first evaluation.
+
 STRICT RULES:
 - Every claim must be backed by a number from the payload.
 - Do not say "significant" or "notable" without stating the number.
