@@ -74,13 +74,29 @@ Applies to every pipeline. Scripts differ; stage purpose and order do not.
            Write evaluations/{pipeline}/{period}.json
            First period: no diff (no prior eval). Second period onward: diff is automatic.
 
+[Stage 5.5] Analysis report generation     (every period, after Stage 5)
+           SIBC:    python3 analysis/generate_analysis_report.py
+                    Reads evaluations/sibc/{period}.json + registry.json
+                    Maps signals → UI sections via domain + signal-level routing
+                    Composes body (observation+direction), implication (inference)
+                    Derives title from eval `title` field (v1.5+) or observation
+                    Populates effect.highlight from registry.chart_series
+                    Writes web/public/data/sibc_l1_annotations.json
+           ATM/POS: python3 analysis/generate_atm_pos_analysis_report.py
+                    Reads evaluations/atm_pos/{period}.json
+                    Updates title/body/implication for layer:1 insights in-place
+                    Preserves effect/group/cut/exploreAction (chart-wiring metadata)
+                    Writes web/public/data/atm_pos_insights.json
+
 [Stage 6]  Evals gate
-           Validates all artifacts produced by Stages 0–5:
+           Validates all artifacts produced by Stages 0–5.5:
            data integrity, signal DB consistency, model structure (if present)
 
 [Stage 7]  Presentation promote
            Push validated insights to web (annotations, gaps, opportunities)
            Explicit promotion step — never a direct write
+           SIBC: promote_annotations.py merges L1 (from sibc_l1_annotations.json)
+                 with L2/L3 (from annotations_merged.ts) at makeSection() time
 
 ────────────────────── cross-pipeline boundary ──────────────────────────────────
 
@@ -471,9 +487,10 @@ Never copy `annotations_merged.ts` → `rbi_sibc.ts` manually.
 □  python3 analysis/generate_merge.py
 □  python3 analysis/generate_signal_history.py append --pipeline sibc --period {dataDate}
    (Stage 4 — Layer 1 always runs here)
-□  IF system_model.json exists AND signals moved materially:
-   python3 analysis/generate_signal_history.py evaluate --pipeline sibc --period {dataDate}
-   (Stage 5 — Layer 2a evaluate; skip if no change in L1 inputs)
+□  python3 analysis/generate_signal_history.py evaluate --pipeline sibc --period {dataDate}
+   (Stage 5 — LLM signal evaluate; always runs every period)
+□  python3 analysis/generate_analysis_report.py
+   (Stage 5.5 — generate sibc_l1_annotations.json for UI from eval output)
 □  READ rbi_sibc/merged/system_model.json — is a model UPDATE warranted?
    If yes (new signals, material pattern shift): run Layer 2a model UPDATE pass
    — update stats in existing nodes, add new nodes only for genuinely new signals
@@ -519,6 +536,10 @@ Never copy `annotations_merged.ts` → `rbi_sibc.ts` manually.
    (Stages 0–3: format detection, extraction, validation, consolidation)
 □  python3 analysis/generate_signal_history.py append --pipeline atm_pos --period {YYYY-MM-DD}
    (Stage 4 — Layer 1: writes all signals to signals.db + updates registry)
+□  python3 analysis/generate_signal_history.py evaluate --pipeline atm_pos --period {YYYY-MM-DD}
+   (Stage 5 — LLM signal evaluate)
+□  python3 analysis/generate_atm_pos_analysis_report.py
+   (Stage 5.5 — update atm_pos_insights.json L1 content from eval output)
 □  [Stage 5 — Layer 2a evaluate: NOT YET WIRED — generate_atm_pos_insights.py runs inside
    gate for now; will move to Stage 5 after ATM/POS system_model.json FOUNDATION pass]
 □  Commit per-period → web/ separately

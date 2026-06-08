@@ -2,7 +2,7 @@
   "_meta": {
     "schema_version": "1.0",
     "description": "Signal registry — permanent catalog of every tracked signal across all ingestion pipelines. Signal IDs are immutable once created. Add new signals; never rename or delete. layer: 1 = per-chart data signal (algorithmically computed), 2 = cross-chart synthesis (authored per period from data), 3 = lending ecosystem expert model (generated ~6-monthly, strict claim validation).",
-    "last_updated": "2026-06-07"
+    "last_updated": "2026-06-08"
   },
   "pipelines": {
     "sibc": {
@@ -452,7 +452,10 @@
       "id": "sibc-bank-credit-yoy",
       "current_status": "active",
       "first_seen": "2024-04-22",
-      "type": "data"
+      "type": "data",
+      "chart_series": [
+        "Non-food Credit"
+      ]
     },
     "sibc-bank-credit-abs": {
       "title": "Bank credit absolute volume (₹Cr)",
@@ -484,7 +487,10 @@
       "id": "sibc-bank-credit-abs",
       "current_status": "strengthening",
       "first_seen": "2024-04-22",
-      "type": "data"
+      "type": "data",
+      "chart_series": [
+        "Bank Credit"
+      ]
     },
     "sibc-nonfood-credit-yoy": {
       "title": "Non-food credit YoY growth (%)",
@@ -515,7 +521,10 @@
       "id": "sibc-nonfood-credit-yoy",
       "current_status": "active",
       "first_seen": "2024-04-22",
-      "type": "data"
+      "type": "data",
+      "chart_series": [
+        "Non-food Credit"
+      ]
     },
     "sibc-nonfood-credit-abs": {
       "title": "Non-food credit absolute volume (₹Cr)",
@@ -547,7 +556,10 @@
       "id": "sibc-nonfood-credit-abs",
       "current_status": "strengthening",
       "first_seen": "2024-04-22",
-      "type": "data"
+      "type": "data",
+      "chart_series": [
+        "Non-food Credit"
+      ]
     },
     "sibc-sectors-positive-yoy-count": {
       "title": "Number of main sectors with positive YoY (breadth)",
@@ -587,7 +599,13 @@
       "id": "sibc-sectors-positive-yoy-count",
       "current_status": "active",
       "first_seen": "2024-04-22",
-      "type": "data"
+      "type": "data",
+      "chart_series": [
+        "Agriculture",
+        "Industry",
+        "Services",
+        "Personal Loans"
+      ]
     },
     "sibc-agriculture-yoy": {
       "title": "Agriculture credit YoY growth (%)",
@@ -618,7 +636,10 @@
       "id": "sibc-agriculture-yoy",
       "current_status": "strengthening",
       "first_seen": "2024-04-22",
-      "type": "data"
+      "type": "data",
+      "chart_series": [
+        "Agriculture"
+      ]
     },
     "sibc-agriculture-share": {
       "title": "Agriculture share of total credit (%)",
@@ -650,7 +671,10 @@
       "id": "sibc-agriculture-share",
       "current_status": "active",
       "first_seen": "2024-04-22",
-      "type": "data"
+      "type": "data",
+      "chart_series": [
+        "Agriculture"
+      ]
     },
     "sibc-industry-yoy": {
       "title": "Industry credit YoY growth (%)",
@@ -681,7 +705,10 @@
       "id": "sibc-industry-yoy",
       "current_status": "strengthening",
       "first_seen": "2024-04-22",
-      "type": "data"
+      "type": "data",
+      "chart_series": [
+        "Industry"
+      ]
     },
     "sibc-industry-share": {
       "title": "Industry share of total credit (%)",
@@ -713,7 +740,10 @@
       "id": "sibc-industry-share",
       "current_status": "active",
       "first_seen": "2024-04-22",
-      "type": "data"
+      "type": "data",
+      "chart_series": [
+        "Industry"
+      ]
     },
     "sibc-services-yoy": {
       "title": "Services credit YoY growth (%)",
@@ -744,7 +774,10 @@
       "id": "sibc-services-yoy",
       "current_status": "strengthening",
       "first_seen": "2024-04-22",
-      "type": "data"
+      "type": "data",
+      "chart_series": [
+        "Services"
+      ]
     },
     "sibc-services-share": {
       "title": "Services share of total credit (%)",
@@ -776,7 +809,10 @@
       "id": "sibc-services-share",
       "current_status": "active",
       "first_seen": "2024-04-22",
-      "type": "data"
+      "type": "data",
+      "chart_series": [
+        "Services"
+      ]
     },
     "sibc-personal-loans-yoy": {
       "title": "Personal loans credit YoY growth (%)",
@@ -807,7 +843,10 @@
       "id": "sibc-personal-loans-yoy",
       "current_status": "strengthening",
       "first_seen": "2024-04-22",
-      "type": "data"
+      "type": "data",
+      "chart_series": [
+        "Personal Loans"
+      ]
     },
     "sibc-personal-loans-share": {
       "title": "Personal loans share of total credit (%)",
@@ -839,7 +878,10 @@
       "id": "sibc-personal-loans-share",
       "current_status": "active",
       "first_seen": "2024-04-22",
-      "type": "data"
+      "type": "data",
+      "chart_series": [
+        "Personal Loans"
+      ]
     },
     "sibc-msme-micro-small-yoy": {
       "title": "Micro & Small enterprises credit YoY growth (%)",
@@ -870,7 +912,10 @@
       "id": "sibc-msme-micro-small-yoy",
       "current_status": "strengthening",
       "first_seen": "2024-04-22",
-      "type": "data"
+      "type": "data",
+      "chart_series": [
+        "Micro and Small"
+      ]
     },
     "sibc-msme-micro-small-share": {
       "title": "Micro & Small share of industry credit (%)",
@@ -902,7 +947,10 @@
       "id": "sibc-msme-micro-small-share",
       "current_status": "active",
       "first_seen": "2024-04-22",
-      "type": "data"
+      "type": "data",
+      "chart_series": [
+        "Micro and Small"
+      ]
     },
     "sibc-msme-medium-yoy": {
       "title": "Medium enterprises credit YoY growth (%)",
@@ -933,7 +981,10 @@
       "id": "sibc-msme-medium-yoy",
       "current_status": "strengthening",
       "first_seen": "2024-04-22",
-      "type": "data"
+      "type": "data",
+      "chart_series": [
+        "Medium"
+      ]
     },
     "sibc-msme-medium-share": {
       "title": "Medium enterprises share of industry credit (%)",
@@ -965,7 +1016,10 @@
       "id": "sibc-msme-medium-share",
       "current_status": "active",
       "first_seen": "2024-04-22",
-      "type": "data"
+      "type": "data",
+      "chart_series": [
+        "Medium"
+      ]
     },
     "sibc-large-corporate-yoy": {
       "title": "Large corporate credit YoY growth (%)",
@@ -996,7 +1050,10 @@
       "id": "sibc-large-corporate-yoy",
       "current_status": "strengthening",
       "first_seen": "2024-04-22",
-      "type": "data"
+      "type": "data",
+      "chart_series": [
+        "Large"
+      ]
     },
     "sibc-large-corporate-share": {
       "title": "Large corporate share of industry credit (%)",
@@ -1028,7 +1085,10 @@
       "id": "sibc-large-corporate-share",
       "current_status": "active",
       "first_seen": "2024-04-22",
-      "type": "data"
+      "type": "data",
+      "chart_series": [
+        "Large"
+      ]
     },
     "sibc-msme-size-yoy-spread": {
       "title": "MSME vs Large corporate YoY spread (pp)",
@@ -1060,7 +1120,11 @@
       "id": "sibc-msme-size-yoy-spread",
       "current_status": "strengthening",
       "first_seen": "2024-04-22",
-      "type": "data"
+      "type": "data",
+      "chart_series": [
+        "Micro and Small",
+        "Large"
+      ]
     },
     "sibc-pl-housing-yoy": {
       "title": "Housing loans YoY growth (%)",
@@ -1091,7 +1155,10 @@
       "id": "sibc-pl-housing-yoy",
       "current_status": "strengthening",
       "first_seen": "2024-04-22",
-      "type": "data"
+      "type": "data",
+      "chart_series": [
+        "Housing"
+      ]
     },
     "sibc-pl-housing-share": {
       "title": "Housing share of personal loans (%)",
@@ -1123,7 +1190,10 @@
       "id": "sibc-pl-housing-share",
       "current_status": "active",
       "first_seen": "2024-04-22",
-      "type": "data"
+      "type": "data",
+      "chart_series": [
+        "Housing"
+      ]
     },
     "sibc-pl-gold-yoy": {
       "title": "Gold loans YoY growth (%)",
@@ -1154,7 +1224,10 @@
       "id": "sibc-pl-gold-yoy",
       "current_status": "active",
       "first_seen": "2024-04-22",
-      "type": "data"
+      "type": "data",
+      "chart_series": [
+        "Gold Loans"
+      ]
     },
     "sibc-pl-gold-share": {
       "title": "Gold loans share of personal loans (%)",
@@ -1186,7 +1259,10 @@
       "id": "sibc-pl-gold-share",
       "current_status": "active",
       "first_seen": "2024-04-22",
-      "type": "data"
+      "type": "data",
+      "chart_series": [
+        "Gold Loans"
+      ]
     },
     "sibc-pl-cc-yoy": {
       "title": "Credit card outstanding YoY growth (%)",
@@ -1217,7 +1293,10 @@
       "id": "sibc-pl-cc-yoy",
       "current_status": "strengthening",
       "first_seen": "2024-04-22",
-      "type": "data"
+      "type": "data",
+      "chart_series": [
+        "Credit Card Outstanding"
+      ]
     },
     "sibc-pl-cc-share": {
       "title": "Credit cards share of personal loans (%)",
@@ -1249,7 +1328,10 @@
       "id": "sibc-pl-cc-share",
       "current_status": "active",
       "first_seen": "2024-04-22",
-      "type": "data"
+      "type": "data",
+      "chart_series": [
+        "Credit Card Outstanding"
+      ]
     },
     "sibc-pl-vehicle-yoy": {
       "title": "Vehicle loans YoY growth (%)",
@@ -1280,7 +1362,10 @@
       "id": "sibc-pl-vehicle-yoy",
       "current_status": "strengthening",
       "first_seen": "2024-04-22",
-      "type": "data"
+      "type": "data",
+      "chart_series": [
+        "Vehicle Loans"
+      ]
     },
     "sibc-pl-education-yoy": {
       "title": "Education loans YoY growth (%)",
@@ -1311,7 +1396,10 @@
       "id": "sibc-pl-education-yoy",
       "current_status": "active",
       "first_seen": "2024-04-22",
-      "type": "data"
+      "type": "data",
+      "chart_series": [
+        "Education Loans"
+      ]
     },
     "sibc-psl-agri-yoy": {
       "title": "PSL Agriculture YoY growth (%)",
@@ -1343,7 +1431,10 @@
       "id": "sibc-psl-agri-yoy",
       "current_status": "strengthening",
       "first_seen": "2024-04-22",
-      "type": "data"
+      "type": "data",
+      "chart_series": [
+        "Agriculture"
+      ]
     },
     "sibc-psl-msme-yoy": {
       "title": "PSL Micro & Small enterprises YoY growth (%)",
@@ -1375,7 +1466,10 @@
       "id": "sibc-psl-msme-yoy",
       "current_status": "strengthening",
       "first_seen": "2024-04-22",
-      "type": "data"
+      "type": "data",
+      "chart_series": [
+        "Micro and Small Enterprises"
+      ]
     },
     "sibc-psl-housing-yoy": {
       "title": "PSL Housing YoY growth (%)",
@@ -1407,7 +1501,10 @@
       "id": "sibc-psl-housing-yoy",
       "current_status": "strengthening",
       "first_seen": "2024-04-22",
-      "type": "data"
+      "type": "data",
+      "chart_series": [
+        "Housing"
+      ]
     },
     "sibc-psl-renewable-yoy": {
       "title": "PSL Renewable Energy YoY growth (%)",
@@ -1439,7 +1536,10 @@
       "id": "sibc-psl-renewable-yoy",
       "current_status": "active",
       "first_seen": "2024-04-22",
-      "type": "data"
+      "type": "data",
+      "chart_series": [
+        "Renewable Energy"
+      ]
     },
     "sibc-industry-type-yoy-scan": {
       "title": "YoY growth scan — all industry types (%)",
@@ -1472,7 +1572,8 @@
       "id": "sibc-industry-type-yoy-scan",
       "current_status": "unknown",
       "first_seen": "2024-04-22",
-      "type": "data"
+      "type": "data",
+      "chart_series": []
     },
     "sibc-industry-type-share-scan": {
       "title": "Share scan — all industry types (% of industry credit)",
@@ -1507,7 +1608,8 @@
       "id": "sibc-industry-type-share-scan",
       "current_status": "unknown",
       "first_seen": "2024-04-22",
-      "type": "data"
+      "type": "data",
+      "chart_series": []
     },
     "sibc-services-yoy-scan": {
       "title": "YoY growth scan — all services sub-sectors (%)",
@@ -1540,7 +1642,8 @@
       "id": "sibc-services-yoy-scan",
       "current_status": "unknown",
       "first_seen": "2024-04-22",
-      "type": "data"
+      "type": "data",
+      "chart_series": []
     },
     "sibc-services-share-scan": {
       "title": "Share scan — all services sub-sectors (% of services credit)",
@@ -1573,7 +1676,8 @@
       "id": "sibc-services-share-scan",
       "current_status": "unknown",
       "first_seen": "2024-04-22",
-      "type": "data"
+      "type": "data",
+      "chart_series": []
     },
     "sibc-pl-yoy-scan": {
       "title": "YoY growth scan — all personal loan sub-categories (%)",
@@ -1606,7 +1710,8 @@
       "id": "sibc-pl-yoy-scan",
       "current_status": "unknown",
       "first_seen": "2024-04-22",
-      "type": "data"
+      "type": "data",
+      "chart_series": []
     },
     "sibc-pl-share-scan": {
       "title": "Share scan — all personal loan sub-categories (% of PL)",
@@ -1639,7 +1744,8 @@
       "id": "sibc-pl-share-scan",
       "current_status": "unknown",
       "first_seen": "2024-04-22",
-      "type": "data"
+      "type": "data",
+      "chart_series": []
     },
     "sibc-psl-yoy-scan": {
       "title": "YoY growth scan — all PSL sub-categories (%)",
@@ -1669,7 +1775,8 @@
       "id": "sibc-psl-yoy-scan",
       "current_status": "unknown",
       "first_seen": "2024-04-22",
-      "type": "data"
+      "type": "data",
+      "chart_series": []
     },
     "atm-onsite-abs": {
       "title": "Onsite ATMs — absolute count",
@@ -2726,7 +2833,10 @@
             "then": "declining"
           }
         ]
-      }
+      },
+      "chart_series": [
+        "Food Credit"
+      ]
     },
     "sibc-food-credit-abs": {
       "id": "sibc-food-credit-abs",
@@ -2758,7 +2868,10 @@
             "then": "active"
           }
         ]
-      }
+      },
+      "chart_series": [
+        "Food Credit"
+      ]
     },
     "sibc-pl-consumer-durables-yoy": {
       "id": "sibc-pl-consumer-durables-yoy",
@@ -2789,7 +2902,10 @@
             "then": "declining"
           }
         ]
-      }
+      },
+      "chart_series": [
+        "Consumer Durables"
+      ]
     },
     "sibc-pl-consumer-durables-share": {
       "id": "sibc-pl-consumer-durables-share",
@@ -2821,7 +2937,10 @@
             "then": "active"
           }
         ]
-      }
+      },
+      "chart_series": [
+        "Consumer Durables"
+      ]
     },
     "sibc-pl-fd-advances-yoy": {
       "id": "sibc-pl-fd-advances-yoy",
@@ -2852,7 +2971,10 @@
             "then": "declining"
           }
         ]
-      }
+      },
+      "chart_series": [
+        "Advances vs Fixed Deposits"
+      ]
     },
     "sibc-pl-fd-advances-share": {
       "id": "sibc-pl-fd-advances-share",
@@ -2884,7 +3006,10 @@
             "then": "active"
           }
         ]
-      }
+      },
+      "chart_series": [
+        "Advances vs Fixed Deposits"
+      ]
     },
     "sibc-pl-share-advances-yoy": {
       "id": "sibc-pl-share-advances-yoy",
@@ -2915,7 +3040,10 @@
             "then": "declining"
           }
         ]
-      }
+      },
+      "chart_series": [
+        "Advances vs Shares/Bonds"
+      ]
     },
     "sibc-pl-share-advances-share": {
       "id": "sibc-pl-share-advances-share",
@@ -2947,7 +3075,10 @@
             "then": "active"
           }
         ]
-      }
+      },
+      "chart_series": [
+        "Advances vs Shares/Bonds"
+      ]
     },
     "sibc-pl-other-yoy": {
       "id": "sibc-pl-other-yoy",
@@ -2978,7 +3109,10 @@
             "then": "declining"
           }
         ]
-      }
+      },
+      "chart_series": [
+        "Other Personal Loans"
+      ]
     },
     "sibc-pl-other-share": {
       "id": "sibc-pl-other-share",
@@ -3010,7 +3144,10 @@
             "then": "active"
           }
         ]
-      }
+      },
+      "chart_series": [
+        "Other Personal Loans"
+      ]
     },
     "sibc-pl-education-share": {
       "id": "sibc-pl-education-share",
@@ -3042,7 +3179,10 @@
             "then": "active"
           }
         ]
-      }
+      },
+      "chart_series": [
+        "Education Loans"
+      ]
     },
     "sibc-pl-vehicle-share": {
       "id": "sibc-pl-vehicle-share",
@@ -3074,7 +3214,10 @@
             "then": "active"
           }
         ]
-      }
+      },
+      "chart_series": [
+        "Vehicle Loans"
+      ]
     },
     "sibc-psl-medium-yoy": {
       "id": "sibc-psl-medium-yoy",
@@ -3106,7 +3249,10 @@
             "then": "declining"
           }
         ]
-      }
+      },
+      "chart_series": [
+        "Medium Enterprises"
+      ]
     },
     "sibc-psl-education-yoy": {
       "id": "sibc-psl-education-yoy",
@@ -3138,7 +3284,10 @@
             "then": "declining"
           }
         ]
-      }
+      },
+      "chart_series": [
+        "Education Loans"
+      ]
     },
     "sibc-psl-social-infra-yoy": {
       "id": "sibc-psl-social-infra-yoy",
@@ -3170,7 +3319,10 @@
             "then": "declining"
           }
         ]
-      }
+      },
+      "chart_series": [
+        "Social Infrastructure"
+      ]
     },
     "sibc-psl-export-yoy": {
       "id": "sibc-psl-export-yoy",
@@ -3202,7 +3354,10 @@
             "then": "declining"
           }
         ]
-      }
+      },
+      "chart_series": [
+        "Export Credit"
+      ]
     },
     "sibc-psl-others-yoy": {
       "id": "sibc-psl-others-yoy",
@@ -3234,7 +3389,10 @@
             "then": "declining"
           }
         ]
-      }
+      },
+      "chart_series": [
+        "Others"
+      ]
     },
     "sibc-psl-weaker-sections-yoy": {
       "id": "sibc-psl-weaker-sections-yoy",
@@ -3266,7 +3424,10 @@
             "then": "declining"
           }
         ]
-      }
+      },
+      "chart_series": [
+        "Weaker Sections"
+      ]
     },
     "sibc-trade-sub-yoy-scan": {
       "id": "sibc-trade-sub-yoy-scan",
@@ -3299,7 +3460,10 @@
             "then": "declining"
           }
         ]
-      }
+      },
+      "chart_series": [
+        "Trade"
+      ]
     },
     "sibc-trade-sub-share-scan": {
       "id": "sibc-trade-sub-share-scan",
@@ -3334,7 +3498,10 @@
             "then": "active"
           }
         ]
-      }
+      },
+      "chart_series": [
+        "Trade"
+      ]
     },
     "sibc-nbfc-sub-yoy-scan": {
       "id": "sibc-nbfc-sub-yoy-scan",
@@ -3367,7 +3534,10 @@
             "then": "declining"
           }
         ]
-      }
+      },
+      "chart_series": [
+        "NBFCs"
+      ]
     },
     "sibc-nbfc-sub-share-scan": {
       "id": "sibc-nbfc-sub-share-scan",
@@ -3402,7 +3572,10 @@
             "then": "active"
           }
         ]
-      }
+      },
+      "chart_series": [
+        "NBFCs"
+      ]
     },
     "sibc-infra-sub-yoy-scan": {
       "id": "sibc-infra-sub-yoy-scan",
@@ -3435,7 +3608,10 @@
             "then": "declining"
           }
         ]
-      }
+      },
+      "chart_series": [
+        "Infrastructure"
+      ]
     },
     "sibc-infra-sub-share-scan": {
       "id": "sibc-infra-sub-share-scan",
@@ -3470,7 +3646,10 @@
             "then": "active"
           }
         ]
-      }
+      },
+      "chart_series": [
+        "Infrastructure"
+      ]
     },
     "sibc-basic-metal-sub-yoy-scan": {
       "id": "sibc-basic-metal-sub-yoy-scan",
@@ -3503,7 +3682,10 @@
             "then": "declining"
           }
         ]
-      }
+      },
+      "chart_series": [
+        "Basic Metal and Metal Product"
+      ]
     },
     "sibc-basic-metal-sub-share-scan": {
       "id": "sibc-basic-metal-sub-share-scan",
@@ -3538,7 +3720,10 @@
             "then": "active"
           }
         ]
-      }
+      },
+      "chart_series": [
+        "Basic Metal and Metal Product"
+      ]
     },
     "sibc-engineering-sub-yoy-scan": {
       "id": "sibc-engineering-sub-yoy-scan",
@@ -3571,7 +3756,10 @@
             "then": "declining"
           }
         ]
-      }
+      },
+      "chart_series": [
+        "All Engineering"
+      ]
     },
     "sibc-engineering-sub-share-scan": {
       "id": "sibc-engineering-sub-share-scan",
@@ -3606,7 +3794,10 @@
             "then": "active"
           }
         ]
-      }
+      },
+      "chart_series": [
+        "All Engineering"
+      ]
     },
     "sibc-food-processing-sub-yoy-scan": {
       "id": "sibc-food-processing-sub-yoy-scan",
@@ -3639,7 +3830,10 @@
             "then": "declining"
           }
         ]
-      }
+      },
+      "chart_series": [
+        "Food Processing"
+      ]
     },
     "sibc-food-processing-sub-share-scan": {
       "id": "sibc-food-processing-sub-share-scan",
@@ -3674,7 +3868,10 @@
             "then": "active"
           }
         ]
-      }
+      },
+      "chart_series": [
+        "Food Processing"
+      ]
     },
     "sibc-textiles-sub-yoy-scan": {
       "id": "sibc-textiles-sub-yoy-scan",
@@ -3707,7 +3904,10 @@
             "then": "declining"
           }
         ]
-      }
+      },
+      "chart_series": [
+        "Textiles"
+      ]
     },
     "sibc-textiles-sub-share-scan": {
       "id": "sibc-textiles-sub-share-scan",
@@ -3742,7 +3942,10 @@
             "then": "active"
           }
         ]
-      }
+      },
+      "chart_series": [
+        "Textiles"
+      ]
     },
     "sibc-chemicals-sub-yoy-scan": {
       "id": "sibc-chemicals-sub-yoy-scan",
@@ -3775,7 +3978,11 @@
             "then": "declining"
           }
         ]
-      }
+      },
+      "chart_series": [
+        "Chemicals and Chemical Products",
+        "Petroleum, Coal Products and Nuclear Fuels"
+      ]
     },
     "sibc-chemicals-sub-share-scan": {
       "id": "sibc-chemicals-sub-share-scan",
@@ -3810,7 +4017,10 @@
             "then": "active"
           }
         ]
-      }
+      },
+      "chart_series": [
+        "Chemicals and Chemical Products"
+      ]
     },
     "sibc-pl-consumer-durables-neg-streak": {
       "id": "sibc-pl-consumer-durables-neg-streak",
@@ -3842,7 +4052,10 @@
             "then": "unknown"
           }
         ]
-      }
+      },
+      "chart_series": [
+        "Consumer Durables"
+      ]
     },
     "sibc-pl-cc-below10-streak": {
       "id": "sibc-pl-cc-below10-streak",
@@ -3874,7 +4087,10 @@
             "then": "unknown"
           }
         ]
-      }
+      },
+      "chart_series": [
+        "Credit Card Outstanding"
+      ]
     },
     "sibc-pl-gold-pos-streak": {
       "id": "sibc-pl-gold-pos-streak",
@@ -3906,7 +4122,10 @@
             "then": "unknown"
           }
         ]
-      }
+      },
+      "chart_series": [
+        "Gold Loans"
+      ]
     },
     "sibc-psl-renewable-pos-streak": {
       "id": "sibc-psl-renewable-pos-streak",
@@ -3939,7 +4158,10 @@
           }
         ],
         "is_psl": true
-      }
+      },
+      "chart_series": [
+        "Renewable Energy"
+      ]
     },
     "sibc-bank-credit-fy-acceleration": {
       "id": "sibc-bank-credit-fy-acceleration",
@@ -3970,7 +4192,10 @@
             "then": "active"
           }
         ]
-      }
+      },
+      "chart_series": [
+        "Non-food Credit"
+      ]
     },
     "sibc-industry-fy-acceleration": {
       "id": "sibc-industry-fy-acceleration",
@@ -4001,7 +4226,10 @@
             "then": "active"
           }
         ]
-      }
+      },
+      "chart_series": [
+        "Industry"
+      ]
     },
     "sibc-services-fy-acceleration": {
       "id": "sibc-services-fy-acceleration",
@@ -4032,7 +4260,10 @@
             "then": "active"
           }
         ]
-      }
+      },
+      "chart_series": [
+        "Services"
+      ]
     },
     "sibc-msme-micro-small-fy-acceleration": {
       "id": "sibc-msme-micro-small-fy-acceleration",
@@ -4063,7 +4294,10 @@
             "then": "active"
           }
         ]
-      }
+      },
+      "chart_series": [
+        "Micro and Small"
+      ]
     },
     "sibc-psl-msme-fy-acceleration": {
       "id": "sibc-psl-msme-fy-acceleration",
@@ -4095,7 +4329,10 @@
           }
         ],
         "is_psl": true
-      }
+      },
+      "chart_series": [
+        "Micro and Small Enterprises"
+      ]
     },
     "sibc-bank-credit-fy-delta": {
       "id": "sibc-bank-credit-fy-delta",
@@ -4127,7 +4364,10 @@
             "then": "active"
           }
         ]
-      }
+      },
+      "chart_series": [
+        "Bank Credit"
+      ]
     },
     "sibc-nonfood-credit-fy-delta": {
       "id": "sibc-nonfood-credit-fy-delta",
@@ -4159,7 +4399,10 @@
             "then": "active"
           }
         ]
-      }
+      },
+      "chart_series": [
+        "Non-food Credit"
+      ]
     },
     "micro-atms-abs": {
       "id": "micro-atms-abs",

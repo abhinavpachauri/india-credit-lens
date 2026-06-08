@@ -81,15 +81,35 @@ def real_edges(model):
 
 def extract_annotation_ids(ts_path):
     """Parse annotation IDs from a TypeScript annotations file.
-    Looks for:  id: "some-annotation-id"
+    Also picks up IDs from sibc_l1_annotations.json (computed L1 annotations)
+    which lives at web/public/data/sibc_l1_annotations.json relative to repo root.
     """
+    ids: set = set()
     try:
         with open(ts_path) as f:
             content = f.read()
-        ids = re.findall(r'id:\s*"([^"]+)"', content)
-        return set(ids)
+        ids.update(re.findall(r'id:\s*"([^"]+)"', content))
     except FileNotFoundError:
         return None
+
+    # Also include L1 computed annotation IDs (they live in a separate JSON file)
+    # sibc_l1_annotations.json is at web/public/data/ relative to repo root.
+    # validate.py lives at analysis/ so repo root is one level up.
+    import json as _json
+    script_dir = Path(__file__).resolve().parent
+    l1_path    = script_dir.parent / "web" / "public" / "data" / "sibc_l1_annotations.json"
+    if l1_path.exists():
+        try:
+            data = _json.loads(l1_path.read_text())
+            for sec in data.get("sections", {}).values():
+                for bucket in ("insights", "gaps", "opportunities"):
+                    for ann in sec.get(bucket, []):
+                        if ann.get("id"):
+                            ids.add(ann["id"])
+        except Exception:
+            pass
+
+    return ids
 
 
 # ── Result collector ──────────────────────────────────────────────────────────

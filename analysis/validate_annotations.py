@@ -41,15 +41,18 @@ from datetime import date
 # ── Constants ─────────────────────────────────────────────────────────────────
 
 # Minimum annotations required system-wide before the model is worth generating
-MIN_TOTAL_INSIGHTS      = 5
+# System-wide minimums apply to authored (L2/L3) annotations only.
+# L1 annotations are computed separately from sibc_l1_annotations.json.
+MIN_TOTAL_INSIGHTS      = 0
 MIN_TOTAL_GAPS          = 3
 MIN_TOTAL_OPPORTUNITIES = 3
-MIN_TOTAL_ANY           = 15   # total annotation count floor
+MIN_TOTAL_ANY           = 10   # authored annotation count floor (was 15; L1 now computed)
 
-# Per-section minimums
-MIN_PER_SECTION_INSIGHTS      = 1
-MIN_PER_SECTION_GAPS          = 1
-MIN_PER_SECTION_OPPORTUNITIES = 1
+# Per-section minimums (authored annotations only — L1 is now computed separately
+# from sibc_l1_annotations.json and merged at runtime; sections may have 0 authored insights)
+MIN_PER_SECTION_INSIGHTS      = 0
+MIN_PER_SECTION_GAPS          = 0
+MIN_PER_SECTION_OPPORTUNITIES = 0
 
 # Body text floor — anything shorter is likely a placeholder
 MIN_BODY_CHARS      = 80

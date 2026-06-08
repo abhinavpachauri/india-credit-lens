@@ -72,6 +72,17 @@ OUTPUT FIELDS
 
 For every signal_id, return exactly:
 
+  title       : 8–12 word punchy headline for the UI insight card.
+                Must include the key number and direction word.
+                Write for a busy executive who reads only the headline.
+                Examples of good titles:
+                  "Bank credit at ₹213.6L Cr — highest on record"
+                  "Credit cards below 10% YoY for third straight period"
+                  "Gold loans 5× in two years — share hits 6.6%"
+                  "Micro & Small surged 33% — inflection confirmed"
+                  "PSL export credit -8.4% YoY — decline moderating"
+                Bad (too generic): "Bank credit growth (%)" or "Strong performance"
+
   observation : The headline fact — one sentence with the key number.
                 What happened, stated plainly. No interpretation.
 
@@ -122,6 +133,7 @@ STRICT RULES:
 RETURN FORMAT:
 {
   "signal_id_1": {
+    "title": "...",
     "observation": "...",
     "direction": "...",
     "inference": "..."
