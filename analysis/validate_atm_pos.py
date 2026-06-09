@@ -63,7 +63,7 @@ TOLERANCE = 0.001  # 0.1%
 
 def load_canonical_names():
     data = json.loads(CANONICAL.read_text())
-    return {b["name"] for b in data["banks"]}
+    return {b["name"] for b in data["banks"] if b.get("status", "active") == "active"}
 
 
 def check_a(bank_records, canonical_names):

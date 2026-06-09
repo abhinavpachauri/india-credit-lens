@@ -88,6 +88,29 @@ Use CLI tools for all external service interactions — they are the most contex
 2. **Explicit approval** — no code until layout confirmed
 3. **Then implement** — translate approved ASCII directly
 
+### SIBC date normalisation (non-negotiable — read before any consolidation)
+
+RBI publishes Statement 1 (Bank Credit / Food Credit / Non-food Credit) as a fortnightly
+release — always a Friday, which can fall in the first week of the **following** month.
+That publication date must be remapped to the **prior** month-end. Two rules are hard-coded
+in `update_web_data.py`; specific edge cases live in `{period}/date_overrides.json`.
+
+| Published on | Maps to | Why |
+|---|---|---|
+| Apr 1–7 | Mar 31 | Post-FY-end Bank Credit release — Apr 4–5 = March data |
+| May 1–7 | Apr 30 | Post-April Bank Credit release — May 2–3 = April data |
+| Mar 1–7 | Feb 28/29 | Early-March Bank Credit = February data — captured in `date_overrides.json` for the period |
+| Any other date | Last day of same month | Mid-month sector snapshot → month-end |
+
+**Before `update_web_data.py` writes the CSV:** always show the full remapping table
+(overrides applied + normalization applied) and wait for explicit user confirmation.
+This is the same A/B gate as `detect_format.py` — never skip it.
+
+When a new XLSX introduces dates not covered by the rules above, ask the user to classify
+each raw date before proceeding. Document the decision in `{period}/date_overrides.json`
+if it is a semantic correction (early-month = prior-month data); the normalization rule
+handles formatting-only cases automatically.
+
 ### Analysis outputs
 - `annotation_ids` in `system_model.json` must **exactly match** `id` fields in the annotations file. Copy-paste — never retype.
 - **Annotation IDs are permanent.** Once an `id` exists in `annotations_merged.ts`, it is never renamed or deleted — even across FOUNDATION rebuilds. UPDATE mode only adds. FOUNDATION mode may restructure, but any removed ID requires explicit justification after `promote_annotations.py --dry-run`.

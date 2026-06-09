@@ -274,6 +274,23 @@ Current state (June 2026):
 **Source:** RBI Sector/Industry-wise Bank Credit (monthly XLSX)
 **Cadence:** Monthly
 
+### Date normalization rules (update_web_data.py)
+
+RBI publishes Statement 1 (Bank Credit / Food Credit / Non-food Credit) as a fortnightly
+release. The publication date is always a Friday — which can fall in the first week of the
+**following** month. These must be remapped to the prior month-end. Two rules are baked into
+`_canonical_month_end`; specific dates are also captured in `{period}/date_overrides.json`.
+
+| Publication date | Maps to | Mechanism | Reason |
+|---|---|---|---|
+| Apr 1–7 | Mar 31 | normalization rule | Post-FY-end Bank Credit release |
+| May 1–7 | Apr 30 | normalization rule | Post-April Bank Credit release |
+| Mar 1–7 | Feb 28/29 | `date_overrides.json` in the Feb/Mar period dir | Early-March Bank Credit = Feb data |
+| All other dates | last day of same month | normalization fallback | Mid-month sector snapshots |
+
+**Always ask for confirmation before `update_web_data.py` writes the CSV.**
+Show the full remapping table (overrides + normalization) and wait for explicit sign-off.
+
 ### Scripts per stage
 
 | Stage | Script | Output |

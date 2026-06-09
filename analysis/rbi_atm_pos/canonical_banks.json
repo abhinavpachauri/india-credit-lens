@@ -1,16 +1,17 @@
 {
   "_meta": {
     "description": "Canonical 64-bank registry for ATM/POS pipeline. Update here when RBI adds, removes, or renames a bank — never change directly in sections.json.",
-    "last_updated": "2026-05-14",
-    "source_period": "March 2026",
+    "last_updated": "2026-06-09",
+    "source_period": "April 2026",
     "categories": {
       "Public Sector Banks": 12,
       "Private Sector Banks": 21,
       "Foreign Banks": 14,
-      "Payment Banks": 6,
+      "Payment Banks": 5,
       "Small Finance Banks": 11
     },
-    "total": 64
+    "total": 63,
+    "note": "PAYTM PAYMENTS BANK removed from April 2026 onward — RBI licence cancelled March 2024"
   },
   "banks": [
     {"sr": 1,  "name": "BANK OF BARODA",                       "category": "Public Sector Banks"},
@@ -65,7 +66,7 @@
     {"sr": 50, "name": "INDIA POST PAYMENTS BANK",             "category": "Payment Banks"},
     {"sr": 51, "name": "JIO PAYMENTS BANK",                    "category": "Payment Banks"},
     {"sr": 52, "name": "NSDL PAYMENTS BANK",                   "category": "Payment Banks"},
-    {"sr": 53, "name": "PAYTM PAYMENTS BANK",                  "category": "Payment Banks"},
+    {"sr": 53, "name": "PAYTM PAYMENTS BANK",                  "category": "Payment Banks",  "status": "closed", "closed_from": "2026-04-30", "note": "RBI cancelled licence March 2024; ceased operations; removed from RBI reporting from April 2026 onward"},
     {"sr": 54, "name": "AU SMALL FINANCE BANK LTD",            "category": "Small Finance Banks"},
     {"sr": 55, "name": "CAPITAL SMALL FINANCE BANK LTD",       "category": "Small Finance Banks"},
     {"sr": 56, "name": "EQUITAS SMALL FINANCE BANK LTD",       "category": "Small Finance Banks"},

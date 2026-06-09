@@ -49,6 +49,30 @@ python3 analysis/run_atm_pos_evals.py --period 2026-03-31
 
 ---
 
+## Date normalisation rules (same principle as SIBC)
+
+ATM/POS `report_date` values are canonical month-ends by design (e.g. `2026-03-31`) —
+`consolidate_atm_pos.py` currently does no date remapping.
+
+However, **the same rule applies if RBI ever publishes a file with an early-month date:**
+a publication date in the first week of a month represents data from the **prior** month-end.
+
+| Published on | Maps to | Example |
+|---|---|---|
+| Day 1–7 of any month | Last day of prior month | May 3 → Apr 30 |
+| Day 8 onward | Last day of same month | Apr 19 → Apr 30 |
+
+If a new ATM/POS file arrives with a raw date that doesn't match a canonical month-end,
+**stop and classify it before consolidating** — ask the user whether it is current-month
+or prior-month data, document the decision in a `{period}/date_overrides.json`, and wire
+the override into `consolidate_atm_pos.py` (mirroring how SIBC handles it in
+`update_web_data.py`). Full rule table: `PIPELINE_ARCHITECTURE.md` → SIBC date
+normalisation section.
+
+**Always show the full date remapping and get explicit confirmation before the CSV is written.**
+
+---
+
 ## Folder structure
 
 ```
