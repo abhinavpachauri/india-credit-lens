@@ -104,7 +104,9 @@ def _claude_cli_available() -> bool:
     except (FileNotFoundError, subprocess.TimeoutExpired):
         return False
 
-USE_CLI: bool = _claude_cli_available()  # True unless claude binary not found
+# Prefer Anthropic SDK (API key) over CLI when key is available — faster, no subprocess overhead.
+# Falls back to CLI if no key set, falls back to error if neither available.
+USE_CLI: bool = (not os.environ.get("ANTHROPIC_API_KEY")) and _claude_cli_available()
 
 
 def _extract_json(text: str) -> dict:
