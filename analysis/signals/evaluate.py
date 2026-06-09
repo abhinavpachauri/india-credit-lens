@@ -33,7 +33,9 @@ EVALS_DIR   = Path(__file__).parent / "evaluations"
 
 MODEL          = "claude-sonnet-4-5-20250929"
 PROMPT_VERSION = "1.5"
-CHUNK_SIZE     = 8    # max signals per LLM call — keeps JSON output well under 8k tokens
+# CLI is fragile with large outputs; API is reliable — larger chunks = fewer calls
+CHUNK_SIZE_CLI = 8
+CHUNK_SIZE_API = 12
 
 # ── Pipeline context blocks ───────────────────────────────────────────────────
 
@@ -346,16 +348,20 @@ def _evaluate_domain(pipeline: str, period: str, domain: str,
                      domain_description: str,
                      conn: sqlite3.Connection,
                      prior_period: str | None = None,
-                     prior_signals: dict | None = None) -> tuple[dict, bool, int, int, int]:
+                     prior_signals: dict | None = None,
+                     chunk_size: int | None = None) -> tuple[dict, bool, int, int, int]:
     """
-    Evaluate one domain, chunking into batches of CHUNK_SIZE to avoid max_tokens
+    Evaluate one domain, chunking into batches of chunk_size to avoid max_tokens
     truncation for large domains (industry=22, retail=23 signals).
     Prior eval narratives (signal-level) are forwarded to each chunk.
     Returns (merged_result_dict, all_from_cache, total_tokens, total_cache_read, total_cache_created).
     """
     from .query import build_chunk_payload
 
-    chunks = build_chunk_payload(signal_ids, signals_payload, CHUNK_SIZE)
+    if chunk_size is None:
+        chunk_size = CHUNK_SIZE_CLI if USE_CLI else CHUNK_SIZE_API
+
+    chunks = build_chunk_payload(signal_ids, signals_payload, chunk_size)
 
     merged:    dict = {}
     all_cache: bool = True
@@ -375,7 +381,7 @@ def _evaluate_domain(pipeline: str, period: str, domain: str,
             if len(chunk_ids) <= 2:
                 raise   # already minimal — propagate
             from .query import build_chunk_payload as _bcp
-            half = len(chunk_ids) // 2
+            half = max(2, len(chunk_ids) // 2)
             sub_chunks = _bcp(chunk_ids, chunk_payload, half)
             result = {}
             tokens = cache_read = cache_created = 0
@@ -479,9 +485,15 @@ def run_evaluate(pipeline: str, period: str,
                  conn: sqlite3.Connection, registry: dict) -> dict:
     """
     Evaluate all domains for (pipeline, period).
+    Domains are evaluated in parallel when using the API (USE_CLI=False).
+    Each parallel thread opens its own DB connection for thread safety.
     Returns summary dict. Writes evaluation JSON to evaluations/{pipeline}/{period}.json.
     """
     from .query import build_domain_payload
+    from .db    import init_db
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+
+    CHUNK_SIZE = CHUNK_SIZE_CLI if USE_CLI else CHUNK_SIZE_API
 
     domains      = PIPELINE_DOMAINS.get(pipeline, [])
     all_domains  = registry.get("domains", {})
@@ -495,6 +507,19 @@ def run_evaluate(pipeline: str, period: str,
         print(f"  Prior period: {prior_period} (no evaluation file found — diff inactive)")
     else:
         print(f"  Prior period: none (first evaluation for this pipeline)")
+
+    # ── Build all payloads upfront (main thread, single connection) ───────────
+    domain_work: list[tuple[str, str, list[str]]] = []   # (domain, payload, ids)
+    for domain in domains:
+        payload, ids = build_domain_payload(conn, pipeline, period, domain, registry)
+        if not ids:
+            print(f"  {domain:<22} — no data, skipped")
+        else:
+            domain_work.append((domain, payload, ids))
+
+    n_domains = len(domain_work)
+    mode = "parallel" if not USE_CLI else "sequential"
+    print(f"  Evaluating {n_domains} domain(s) [{mode}, chunk_size={CHUNK_SIZE}] ...")
 
     output: dict = {
         "pipeline":       pipeline,
@@ -512,67 +537,77 @@ def run_evaluate(pipeline: str, period: str,
     total_tokens   = 0
     total_cached_r = 0
     errors         = 0
-    n_domains      = len(domains)
 
-    for idx, domain in enumerate(domains, 1):
-        domain_description = all_domains.get(domain, domain)
-        signals_payload, signal_ids = build_domain_payload(
-            conn, pipeline, period, domain, registry
-        )
-
-        if not signal_ids:
-            print(f"  [{idx}/{n_domains}] {domain:<22} — no data, skipped")
-            continue
-
-        n = len(signal_ids)
-        print(f"  [{idx}/{n_domains}] {domain:<22} {n:>2} signals  ", end="", flush=True)
-        t0 = time.monotonic()
-
+    def _eval_one(domain: str, signals_payload: str,
+                  signal_ids: list[str]) -> tuple[str, dict | None, bool, int, int, int, float]:
+        """Evaluate one domain. Opens its own DB connection (thread-safe)."""
+        thread_conn = init_db()
+        desc = all_domains.get(domain, domain)
+        t0   = time.monotonic()
         try:
-            result, from_cache, tokens, cache_read, cache_created = _evaluate_domain(
+            result, from_cache, tokens, cache_read, _ = _evaluate_domain(
                 pipeline, period, domain,
-                signals_payload, signal_ids,
-                domain_description, conn,
+                signals_payload, signal_ids, desc, thread_conn,
                 prior_period=prior_period if prior_signals else None,
                 prior_signals=prior_signals if prior_signals else None,
+                chunk_size=CHUNK_SIZE,
             )
+            return domain, result, from_cache, tokens, cache_read, 0, time.monotonic() - t0
         except Exception as exc:
-            elapsed = time.monotonic() - t0
-            print(f"ERROR ({elapsed:.1f}s): {exc}")
-            errors += 1
-            continue
+            return domain, None, False, 0, 0, 1, time.monotonic() - t0
 
-        elapsed = time.monotonic() - t0
+    # ── Parallel evaluation (API) or sequential (CLI) ─────────────────────────
+    max_workers = 1 if USE_CLI else min(n_domains, 6)
 
-        # Separate signal interpretations from domain narrative
-        narrative = result.pop("_domain_narrative", "")
-
-        # Build signal entries: LLM interpretation + source provenance
-        signals_out: dict = {}
-        for sid in signal_ids:
-            if sid not in result:
-                continue
-            sig_entry = dict(result[sid])   # observation / direction / inference
-            sig_def   = registry["signals"].get(sid, {})
-            sig_entry["source_ref"] = _source_ref(sig_def)
-            signals_out[sid] = sig_entry
-
-        output["domains"][domain] = {
-            "narrative": narrative,
-            "signals":   signals_out,
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        future_to_domain = {
+            executor.submit(_eval_one, domain, payload, ids): (domain, ids)
+            for domain, payload, ids in domain_work
         }
 
-        total_signals  += n
-        total_tokens   += tokens
-        total_cached_r += cache_read
-        if from_cache:
-            cache_hits += 1
-            print(f"cache hit  ({elapsed:.1f}s)")
-        else:
-            api_calls += 1
-            backend = "CLI" if USE_CLI else "API"
-            token_info = f"  {tokens} tokens" if tokens else ""
-            print(f"{backend} call  ({elapsed:.1f}s){token_info}")
+        for future in as_completed(future_to_domain):
+            domain, ids = future_to_domain[future]
+            domain_desc, result, from_cache, tokens, cache_read, err, elapsed = future.result()
+
+            if err or result is None:
+                print(f"  {domain:<22} ERROR ({elapsed:.1f}s)")
+                errors += 1
+                continue
+
+            # Separate domain narrative from per-signal entries
+            narrative  = result.pop("_domain_narrative", "")
+
+            signals_out: dict = {}
+            for sid in ids:
+                if sid not in result:
+                    continue
+                sig_entry = dict(result[sid])
+                sig_def   = registry["signals"].get(sid, {})
+                sig_entry["source_ref"] = _source_ref(sig_def)
+                signals_out[sid] = sig_entry
+
+            output["domains"][domain] = {
+                "narrative": narrative,
+                "signals":   signals_out,
+            }
+
+            total_signals  += len(ids)
+            total_tokens   += tokens
+            total_cached_r += cache_read
+
+            if from_cache:
+                cache_hits += 1
+                tag = f"cache hit"
+            else:
+                api_calls += 1
+                backend    = "CLI" if USE_CLI else "API"
+                tag        = f"{backend} call"
+                if tokens:
+                    tag += f"  {tokens:,} tok"
+                    if cache_read:
+                        tag += f"  (cached {cache_read:,})"
+
+            print(f"  {domain:<22} {len(ids):>2} signals  {tag}  ({elapsed:.1f}s)")
 
     # Write output file
     out_path = EVALS_DIR / pipeline / f"{period}.json"
