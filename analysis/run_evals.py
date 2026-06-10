@@ -524,6 +524,22 @@ def main():
         print(out)
         print(err, file=sys.stderr)
 
+    # ── Stage 5.5: generate UI annotation JSON from evaluation output ────────
+    report_script = ANALYSIS / "generate_analysis_report.py"
+    if report_script.exists():
+        passed, out, err = run_check(
+            "stage_5_5",
+            [sys.executable, str(report_script)],
+            cwd=REPO_ROOT,
+        )
+        notes = one_line_summary(out, err, passed)
+        results.append(("5.5 generate_analysis_report.py", passed, notes))
+        if not passed:
+            print(out)
+            print(err, file=sys.stderr)
+    else:
+        results.append(("5.5 generate_analysis_report.py", None, "script not found — skipped"))
+
     # ── Check 3: live annotations (web/lib/reports/rbi_sibc.ts) ──────────────
     passed, out, err = check_annotations_live()
     notes = one_line_summary(out, err, passed)

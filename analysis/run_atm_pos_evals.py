@@ -337,6 +337,20 @@ def main():
     else:
         all_results.append(("5b. Signal history integrity", None, "skipped — upstream failures"))
 
+    # Stage 5.5: generate UI annotation JSON from evaluation output
+    prior_ok = all(r[1] is True or r[1] is None for r in all_results)
+    report_script = ANALYSIS / "generate_atm_pos_analysis_report.py"
+    if prior_ok and report_script.exists():
+        passed, out = run(
+            "Stage 5.5",
+            [sys.executable, str(report_script)],
+        )
+        last_line = (out.splitlines()[-1] if out else "")[:45]
+        all_results.append(("5.5 generate_atm_pos_report", passed, last_line))
+    else:
+        reason = "script not found" if not report_script.exists() else "skipped — upstream failures"
+        all_results.append(("5.5 generate_atm_pos_report", None, reason))
+
     # TypeScript build gate
     if args.skip_build:
         all_results.append(("6.  tsc + npm run build", None, "skipped (--skip-build)"))
