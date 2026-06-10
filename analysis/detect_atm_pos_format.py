@@ -125,24 +125,35 @@ def detect(xlsx_path):
             "Pipeline column map needs updating."
         )
 
-    # Check 3: title cell
-    title = str(df.iloc[1, 1]) if df.shape[0] > 1 else ""
-    if "ATM" not in title.upper():
-        issues.append(f"Title cell does not contain 'ATM': '{title[:80]}'")
+    # Check 3: title cell — search rows 0–2 (older files lack a blank leading row)
+    title = ""
+    for title_row in range(min(3, df.shape[0])):
+        candidate = str(df.iloc[title_row, 1]) if df.shape[1] > 1 else ""
+        if "ATM" in candidate.upper():
+            title = candidate
+            break
+    if not title:
+        # Report what was found at rows 0-2 for diagnosis
+        found = str(df.iloc[1, 1]) if df.shape[0] > 1 else ""
+        issues.append(f"Title cell does not contain 'ATM': '{found[:80]}'")
 
-    # Check 4: column number row (row index 7) should have 1–26 in cols 3–28
-    if df.shape[0] > 7:
-        col_nums = []
-        for c in range(3, min(29, df.shape[1])):
-            try:
-                col_nums.append(int(float(df.iloc[7, c])))
-            except (ValueError, TypeError):
-                col_nums.append(None)
-        expected = list(range(1, 27))
-        if col_nums != expected:
-            issues.append(
-                f"Column-number row (row 8) mismatch. Expected 1–26, got: {col_nums[:10]}..."
-            )
+    # Check 4: column number row — accept row index 6 or 7 (offset by 1 in older files)
+    col_num_found = False
+    for col_row in (7, 6):
+        if df.shape[0] > col_row:
+            col_nums = []
+            for c in range(3, min(29, df.shape[1])):
+                try:
+                    col_nums.append(int(float(df.iloc[col_row, c])))
+                except (ValueError, TypeError):
+                    col_nums.append(None)
+            if col_nums == list(range(1, 27)):
+                col_num_found = True
+                break
+    if not col_num_found:
+        issues.append(
+            f"Column-number row (rows 6–7) mismatch. Expected 1–26, got: {col_nums[:10]}..."
+        )
 
     # Check 5: bank count
     bank_count = 0

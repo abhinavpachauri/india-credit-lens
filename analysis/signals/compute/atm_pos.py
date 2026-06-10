@@ -367,7 +367,9 @@ def csv_streak(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
         else:
             break
 
-    if streak == 0:
+    # streak=0 means condition not met for current period — still a valid result (declining)
+    # Only return unknown when there is no prior period to compare at all
+    if streak == 0 and idx == 0:
         return _unknown()
 
     # Count streak ending at prior period (for status comparison)

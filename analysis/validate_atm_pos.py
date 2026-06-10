@@ -61,9 +61,25 @@ VOL_VAL_PAIRS = [
 TOLERANCE = 0.001  # 0.1%
 
 
-def load_canonical_names():
+def load_canonical_names(report_date=None):
     data = json.loads(CANONICAL.read_text())
-    return {b["name"] for b in data["banks"] if b.get("status", "active") == "active"}
+    names = set()
+    for b in data["banks"]:
+        status = b.get("status", "active")
+        if status == "active":
+            # Use former_name for periods before the rename took effect
+            if report_date and b.get("former_name") and b.get("renamed_from"):
+                if report_date < b["renamed_from"]:
+                    names.add(b["former_name"])
+                else:
+                    names.add(b["name"])
+            else:
+                names.add(b["name"])
+        elif status == "closed" and report_date:
+            closed_from = b.get("closed_from", "9999-12-31")
+            if report_date < closed_from:  # bank was active for this period
+                names.add(b["name"])
+    return names
 
 
 def check_a(bank_records, canonical_names):
@@ -175,7 +191,7 @@ def main():
         sys.exit(1)
 
     sections = json.loads(sections_path.read_text())
-    canonical_names = load_canonical_names()
+    canonical_names = load_canonical_names(report_date=args.period)
 
     bank_records  = [r for r in sections["records"] if r["record_type"] == "bank"]
     total_records = [r for r in sections["records"] if r["record_type"] == "total"]
