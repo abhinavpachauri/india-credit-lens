@@ -2,7 +2,7 @@
   "_meta": {
     "schema_version": "1.0",
     "description": "Signal registry — permanent catalog of every tracked signal across all ingestion pipelines. Signal IDs are immutable once created. Add new signals; never rename or delete. layer: 1 = per-chart data signal (algorithmically computed), 2 = cross-chart synthesis (authored per period from data), 3 = lending ecosystem expert model (generated ~6-monthly, strict claim validation).",
-    "last_updated": "2026-06-09"
+    "last_updated": "2026-06-10"
   },
   "pipelines": {
     "sibc": {
@@ -1806,7 +1806,7 @@
       },
       "id": "atm-onsite-abs",
       "current_status": "strengthening",
-      "first_seen": "2025-09-30"
+      "first_seen": "2025-01-31"
     },
     "atm-onsite-yoy": {
       "title": "Onsite ATMs YoY growth (%)",
@@ -1835,7 +1835,7 @@
         ]
       },
       "id": "atm-onsite-yoy",
-      "current_status": "unknown",
+      "current_status": "active",
       "first_seen": "2025-09-30"
     },
     "atm-offsite-abs": {
@@ -1866,7 +1866,7 @@
       },
       "id": "atm-offsite-abs",
       "current_status": "strengthening",
-      "first_seen": "2025-09-30"
+      "first_seen": "2025-01-31"
     },
     "atm-offsite-yoy": {
       "title": "Offsite ATMs YoY growth (%)",
@@ -1895,7 +1895,7 @@
         ]
       },
       "id": "atm-offsite-yoy",
-      "current_status": "unknown",
+      "current_status": "declining",
       "first_seen": "2025-09-30"
     },
     "pos-terminals-abs": {
@@ -1926,7 +1926,7 @@
       },
       "id": "pos-terminals-abs",
       "current_status": "weakening",
-      "first_seen": "2025-09-30"
+      "first_seen": "2025-01-31"
     },
     "pos-terminals-yoy": {
       "title": "POS terminals YoY growth (%)",
@@ -1955,7 +1955,7 @@
         ]
       },
       "id": "pos-terminals-yoy",
-      "current_status": "unknown",
+      "current_status": "active",
       "first_seen": "2025-09-30"
     },
     "upi-qr-yoy": {
@@ -1985,7 +1985,7 @@
         ]
       },
       "id": "upi-qr-yoy",
-      "current_status": "unknown",
+      "current_status": "active",
       "first_seen": "2025-09-30"
     },
     "bharat-qr-yoy": {
@@ -2015,7 +2015,7 @@
         ]
       },
       "id": "bharat-qr-yoy",
-      "current_status": "unknown",
+      "current_status": "declining",
       "first_seen": "2025-09-30"
     },
     "micro-atm-yoy": {
@@ -2045,7 +2045,7 @@
         ]
       },
       "id": "micro-atm-yoy",
-      "current_status": "unknown",
+      "current_status": "declining",
       "first_seen": "2025-09-30"
     },
     "upi-qr-per-pos": {
@@ -2078,7 +2078,7 @@
       },
       "id": "upi-qr-per-pos",
       "current_status": "strengthening",
-      "first_seen": "2025-09-30"
+      "first_seen": "2025-01-31"
     },
     "cc-outstanding-yoy": {
       "title": "Credit cards outstanding YoY growth (%)",
@@ -2107,7 +2107,7 @@
         ]
       },
       "id": "cc-outstanding-yoy",
-      "current_status": "unknown",
+      "current_status": "active",
       "first_seen": "2025-09-30"
     },
     "dc-outstanding-yoy": {
@@ -2137,7 +2137,7 @@
         ]
       },
       "id": "dc-outstanding-yoy",
-      "current_status": "unknown",
+      "current_status": "active",
       "first_seen": "2025-09-30"
     },
     "cc-pos-val-yoy": {
@@ -2167,7 +2167,7 @@
         ]
       },
       "id": "cc-pos-val-yoy",
-      "current_status": "unknown",
+      "current_status": "active",
       "first_seen": "2025-09-30"
     },
     "cc-ecom-val-yoy": {
@@ -2197,7 +2197,7 @@
         ]
       },
       "id": "cc-ecom-val-yoy",
-      "current_status": "unknown",
+      "current_status": "active",
       "first_seen": "2025-09-30"
     },
     "cc-atm-val-yoy": {
@@ -2227,7 +2227,7 @@
         ]
       },
       "id": "cc-atm-val-yoy",
-      "current_status": "unknown",
+      "current_status": "declining",
       "first_seen": "2025-09-30"
     },
     "cc-ecom-val-share": {
@@ -2264,7 +2264,7 @@
       },
       "id": "cc-ecom-val-share",
       "current_status": "weakening",
-      "first_seen": "2025-09-30"
+      "first_seen": "2025-01-31"
     },
     "cc-atm-val-share": {
       "title": "CC ATM cash share of total CC transaction value (%)",
@@ -2300,7 +2300,7 @@
       },
       "id": "cc-atm-val-share",
       "current_status": "active",
-      "first_seen": "2025-09-30"
+      "first_seen": "2025-01-31"
     },
     "dc-atm-val-yoy": {
       "title": "DC ATM withdrawal value YoY growth (%)",
@@ -2329,7 +2329,7 @@
         ]
       },
       "id": "dc-atm-val-yoy",
-      "current_status": "unknown",
+      "current_status": "declining",
       "first_seen": "2025-09-30"
     },
     "dc-pos-val-yoy": {
@@ -2359,7 +2359,7 @@
         ]
       },
       "id": "dc-pos-val-yoy",
-      "current_status": "unknown",
+      "current_status": "declining",
       "first_seen": "2025-09-30"
     },
     "dc-ecom-val-yoy": {
@@ -2389,7 +2389,7 @@
         ]
       },
       "id": "dc-ecom-val-yoy",
-      "current_status": "unknown",
+      "current_status": "active",
       "first_seen": "2025-09-30"
     },
     "dc-atm-val-share": {
@@ -2427,7 +2427,7 @@
       },
       "id": "dc-atm-val-share",
       "current_status": "weakening",
-      "first_seen": "2025-09-30"
+      "first_seen": "2025-01-31"
     },
     "dc-ecom-val-share": {
       "title": "DC ecommerce share of total DC transaction value (%)",
@@ -2464,7 +2464,7 @@
       },
       "id": "dc-ecom-val-share",
       "current_status": "active",
-      "first_seen": "2025-09-30"
+      "first_seen": "2025-01-31"
     },
     "cc-psb-share": {
       "title": "PSB share of credit cards outstanding (%)",
@@ -2495,7 +2495,7 @@
       },
       "id": "cc-psb-share",
       "current_status": "unknown",
-      "first_seen": "2025-09-30"
+      "first_seen": "2025-01-31"
     },
     "cc-private-share": {
       "title": "Private bank share of credit cards outstanding (%)",
@@ -2526,7 +2526,7 @@
       },
       "id": "cc-private-share",
       "current_status": "unknown",
-      "first_seen": "2025-09-30"
+      "first_seen": "2025-01-31"
     },
     "dc-psb-share": {
       "title": "PSB share of debit cards outstanding (%)",
@@ -2557,7 +2557,7 @@
       },
       "id": "dc-psb-share",
       "current_status": "unknown",
-      "first_seen": "2025-09-30"
+      "first_seen": "2025-01-31"
     },
     "dc-private-share": {
       "title": "Private bank share of debit cards outstanding (%)",
@@ -2588,7 +2588,7 @@
       },
       "id": "dc-private-share",
       "current_status": "unknown",
-      "first_seen": "2025-09-30"
+      "first_seen": "2025-01-31"
     },
     "pos-psb-share": {
       "title": "PSB share of POS terminals (%)",
@@ -2619,7 +2619,7 @@
       },
       "id": "pos-psb-share",
       "current_status": "unknown",
-      "first_seen": "2025-09-30"
+      "first_seen": "2025-01-31"
     },
     "pos-private-share": {
       "title": "Private bank share of POS terminals (%)",
@@ -2650,7 +2650,7 @@
       },
       "id": "pos-private-share",
       "current_status": "unknown",
-      "first_seen": "2025-09-30"
+      "first_seen": "2025-01-31"
     },
     "cc-category-share-scan": {
       "title": "CC outstanding share — every bank category (%)",
@@ -2680,7 +2680,7 @@
       },
       "id": "cc-category-share-scan",
       "current_status": "unknown",
-      "first_seen": "2025-09-30"
+      "first_seen": "2025-01-31"
     },
     "dc-category-share-scan": {
       "title": "DC outstanding share — every bank category (%)",
@@ -2710,7 +2710,7 @@
       },
       "id": "dc-category-share-scan",
       "current_status": "unknown",
-      "first_seen": "2025-09-30"
+      "first_seen": "2025-01-31"
     },
     "pos-category-share-scan": {
       "title": "POS terminal share — every bank category (%)",
@@ -2740,7 +2740,7 @@
       },
       "id": "pos-category-share-scan",
       "current_status": "unknown",
-      "first_seen": "2025-09-30"
+      "first_seen": "2025-01-31"
     },
     "cc-bank-scan": {
       "title": "CC outstanding — every bank (absolute count)",
@@ -2771,7 +2771,7 @@
       },
       "id": "cc-bank-scan",
       "current_status": "unknown",
-      "first_seen": "2025-09-30"
+      "first_seen": "2025-01-31"
     },
     "pos-bank-scan": {
       "title": "POS terminals — every bank (absolute count)",
@@ -2802,7 +2802,7 @@
       },
       "id": "pos-bank-scan",
       "current_status": "unknown",
-      "first_seen": "2025-09-30"
+      "first_seen": "2025-01-31"
     },
     "sibc-food-credit-yoy": {
       "id": "sibc-food-credit-yoy",
@@ -4414,7 +4414,7 @@
       "domain": "infrastructure",
       "spec_version": "1.0",
       "current_status": "weakening",
-      "first_seen": "2025-10-31",
+      "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_total_abs",
         "metric": "micro_atms",
@@ -4444,7 +4444,7 @@
       "domain": "infrastructure",
       "spec_version": "1.0",
       "current_status": "weakening",
-      "first_seen": "2025-10-31",
+      "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_total_abs",
         "metric": "bharat_qr",
@@ -4474,7 +4474,7 @@
       "domain": "infrastructure",
       "spec_version": "1.0",
       "current_status": "strengthening",
-      "first_seen": "2025-10-31",
+      "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_total_abs",
         "metric": "upi_qr",
@@ -4504,7 +4504,7 @@
       "domain": "cards_stock",
       "spec_version": "1.0",
       "current_status": "strengthening",
-      "first_seen": "2025-10-31",
+      "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_total_abs",
         "metric": "credit_cards",
@@ -4534,7 +4534,7 @@
       "domain": "cards_stock",
       "spec_version": "1.0",
       "current_status": "weakening",
-      "first_seen": "2025-10-31",
+      "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_total_abs",
         "metric": "debit_cards",
@@ -4564,7 +4564,7 @@
       "domain": "credit_card_txn",
       "spec_version": "1.0",
       "current_status": "weakening",
-      "first_seen": "2025-10-31",
+      "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_total_abs",
         "metric": "cc_atm_withdrawal_val",
@@ -4595,7 +4595,7 @@
       "domain": "credit_card_txn",
       "spec_version": "1.0",
       "current_status": "weakening",
-      "first_seen": "2025-10-31",
+      "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_total_abs",
         "metric": "cc_ecom_txn_val",
@@ -4626,7 +4626,7 @@
       "domain": "credit_card_txn",
       "spec_version": "1.0",
       "current_status": "weakening",
-      "first_seen": "2025-10-31",
+      "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_total_abs",
         "metric": "cc_pos_txn_val",
@@ -4657,7 +4657,7 @@
       "domain": "credit_card_txn",
       "spec_version": "1.0",
       "current_status": "strengthening",
-      "first_seen": "2025-10-31",
+      "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_total_abs",
         "metric": "cc_other_txn_val",
@@ -4687,7 +4687,7 @@
       "sub_layer": "1a",
       "domain": "credit_card_txn",
       "spec_version": "1.0",
-      "current_status": "unknown",
+      "current_status": "active",
       "first_seen": "2025-10-31",
       "compute": {
         "method": "csv_total_yoy",
@@ -4718,7 +4718,7 @@
       "domain": "credit_card_txn",
       "spec_version": "1.0",
       "current_status": "strengthening",
-      "first_seen": "2025-10-31",
+      "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_ratio_sum",
         "metric": "cc_pos_txn_val",
@@ -4754,7 +4754,7 @@
       "domain": "credit_card_txn",
       "spec_version": "1.0",
       "current_status": "active",
-      "first_seen": "2025-10-31",
+      "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_ratio_sum",
         "metric": "cc_other_txn_val",
@@ -4789,7 +4789,7 @@
       "sub_layer": "1a",
       "domain": "credit_card_txn",
       "spec_version": "1.0",
-      "current_status": "unknown",
+      "current_status": "declining",
       "first_seen": "2025-10-31",
       "compute": {
         "method": "csv_total_yoy",
@@ -4820,7 +4820,7 @@
       "domain": "credit_card_txn",
       "spec_version": "1.0",
       "current_status": "weakening",
-      "first_seen": "2025-10-31",
+      "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_total_abs",
         "metric": "cc_atm_withdrawal_vol",
@@ -4851,7 +4851,7 @@
       "domain": "credit_card_txn",
       "spec_version": "1.0",
       "current_status": "active",
-      "first_seen": "2025-10-31",
+      "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_ratio_sum",
         "metric": "cc_atm_withdrawal_vol",
@@ -4886,7 +4886,7 @@
       "sub_layer": "1a",
       "domain": "credit_card_txn",
       "spec_version": "1.0",
-      "current_status": "unknown",
+      "current_status": "active",
       "first_seen": "2025-10-31",
       "compute": {
         "method": "csv_total_yoy",
@@ -4917,7 +4917,7 @@
       "domain": "credit_card_txn",
       "spec_version": "1.0",
       "current_status": "weakening",
-      "first_seen": "2025-10-31",
+      "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_total_abs",
         "metric": "cc_ecom_txn_vol",
@@ -4948,7 +4948,7 @@
       "domain": "credit_card_txn",
       "spec_version": "1.0",
       "current_status": "active",
-      "first_seen": "2025-10-31",
+      "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_ratio_sum",
         "metric": "cc_ecom_txn_vol",
@@ -4983,7 +4983,7 @@
       "sub_layer": "1a",
       "domain": "credit_card_txn",
       "spec_version": "1.0",
-      "current_status": "unknown",
+      "current_status": "active",
       "first_seen": "2025-10-31",
       "compute": {
         "method": "csv_total_yoy",
@@ -5014,7 +5014,7 @@
       "domain": "credit_card_txn",
       "spec_version": "1.0",
       "current_status": "weakening",
-      "first_seen": "2025-10-31",
+      "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_total_abs",
         "metric": "cc_pos_txn_vol",
@@ -5045,7 +5045,7 @@
       "domain": "credit_card_txn",
       "spec_version": "1.0",
       "current_status": "active",
-      "first_seen": "2025-10-31",
+      "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_ratio_sum",
         "metric": "cc_pos_txn_vol",
@@ -5080,7 +5080,7 @@
       "sub_layer": "1a",
       "domain": "credit_card_txn",
       "spec_version": "1.0",
-      "current_status": "unknown",
+      "current_status": "active",
       "first_seen": "2025-10-31",
       "compute": {
         "method": "csv_total_yoy",
@@ -5111,7 +5111,7 @@
       "domain": "credit_card_txn",
       "spec_version": "1.0",
       "current_status": "strengthening",
-      "first_seen": "2025-10-31",
+      "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_total_abs",
         "metric": "cc_other_txn_vol",
@@ -5142,7 +5142,7 @@
       "domain": "credit_card_txn",
       "spec_version": "1.0",
       "current_status": "active",
-      "first_seen": "2025-10-31",
+      "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_ratio_sum",
         "metric": "cc_other_txn_vol",
@@ -5178,7 +5178,7 @@
       "domain": "debit_card_txn",
       "spec_version": "1.0",
       "current_status": "weakening",
-      "first_seen": "2025-10-31",
+      "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_total_abs",
         "metric": "dc_atm_withdrawal_val",
@@ -5209,7 +5209,7 @@
       "domain": "debit_card_txn",
       "spec_version": "1.0",
       "current_status": "weakening",
-      "first_seen": "2025-10-31",
+      "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_total_abs",
         "metric": "dc_ecom_txn_val",
@@ -5240,7 +5240,7 @@
       "domain": "debit_card_txn",
       "spec_version": "1.0",
       "current_status": "weakening",
-      "first_seen": "2025-10-31",
+      "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_total_abs",
         "metric": "dc_pos_txn_val",
@@ -5271,7 +5271,7 @@
       "domain": "debit_card_txn",
       "spec_version": "1.0",
       "current_status": "strengthening",
-      "first_seen": "2025-10-31",
+      "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_total_abs",
         "metric": "dc_other_txn_val",
@@ -5302,7 +5302,7 @@
       "domain": "debit_card_txn",
       "spec_version": "1.0",
       "current_status": "weakening",
-      "first_seen": "2025-10-31",
+      "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_total_abs",
         "metric": "dc_pos_withdrawal_val",
@@ -5332,7 +5332,7 @@
       "sub_layer": "1a",
       "domain": "debit_card_txn",
       "spec_version": "1.0",
-      "current_status": "unknown",
+      "current_status": "active",
       "first_seen": "2025-10-31",
       "compute": {
         "method": "csv_total_yoy",
@@ -5362,7 +5362,7 @@
       "sub_layer": "1a",
       "domain": "debit_card_txn",
       "spec_version": "1.0",
-      "current_status": "unknown",
+      "current_status": "active",
       "first_seen": "2025-10-31",
       "compute": {
         "method": "csv_total_yoy",
@@ -5393,7 +5393,7 @@
       "domain": "debit_card_txn",
       "spec_version": "1.0",
       "current_status": "strengthening",
-      "first_seen": "2025-10-31",
+      "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_ratio_sum",
         "metric": "dc_pos_txn_val",
@@ -5430,7 +5430,7 @@
       "domain": "debit_card_txn",
       "spec_version": "1.0",
       "current_status": "active",
-      "first_seen": "2025-10-31",
+      "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_ratio_sum",
         "metric": "dc_other_txn_val",
@@ -5467,7 +5467,7 @@
       "domain": "debit_card_txn",
       "spec_version": "1.0",
       "current_status": "active",
-      "first_seen": "2025-10-31",
+      "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_ratio_sum",
         "metric": "dc_pos_withdrawal_val",
@@ -5503,7 +5503,7 @@
       "sub_layer": "1a",
       "domain": "debit_card_txn",
       "spec_version": "1.0",
-      "current_status": "unknown",
+      "current_status": "declining",
       "first_seen": "2025-10-31",
       "compute": {
         "method": "csv_total_yoy",
@@ -5534,7 +5534,7 @@
       "domain": "debit_card_txn",
       "spec_version": "1.0",
       "current_status": "weakening",
-      "first_seen": "2025-10-31",
+      "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_total_abs",
         "metric": "dc_atm_withdrawal_vol",
@@ -5565,7 +5565,7 @@
       "domain": "debit_card_txn",
       "spec_version": "1.0",
       "current_status": "weakening",
-      "first_seen": "2025-10-31",
+      "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_ratio_sum",
         "metric": "dc_atm_withdrawal_vol",
@@ -5601,7 +5601,7 @@
       "sub_layer": "1a",
       "domain": "debit_card_txn",
       "spec_version": "1.0",
-      "current_status": "unknown",
+      "current_status": "declining",
       "first_seen": "2025-10-31",
       "compute": {
         "method": "csv_total_yoy",
@@ -5632,7 +5632,7 @@
       "domain": "debit_card_txn",
       "spec_version": "1.0",
       "current_status": "weakening",
-      "first_seen": "2025-10-31",
+      "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_total_abs",
         "metric": "dc_ecom_txn_vol",
@@ -5663,7 +5663,7 @@
       "domain": "debit_card_txn",
       "spec_version": "1.0",
       "current_status": "active",
-      "first_seen": "2025-10-31",
+      "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_ratio_sum",
         "metric": "dc_ecom_txn_vol",
@@ -5699,7 +5699,7 @@
       "sub_layer": "1a",
       "domain": "debit_card_txn",
       "spec_version": "1.0",
-      "current_status": "unknown",
+      "current_status": "declining",
       "first_seen": "2025-10-31",
       "compute": {
         "method": "csv_total_yoy",
@@ -5730,7 +5730,7 @@
       "domain": "debit_card_txn",
       "spec_version": "1.0",
       "current_status": "weakening",
-      "first_seen": "2025-10-31",
+      "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_total_abs",
         "metric": "dc_pos_txn_vol",
@@ -5761,7 +5761,7 @@
       "domain": "debit_card_txn",
       "spec_version": "1.0",
       "current_status": "active",
-      "first_seen": "2025-10-31",
+      "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_ratio_sum",
         "metric": "dc_pos_txn_vol",
@@ -5797,7 +5797,7 @@
       "sub_layer": "1a",
       "domain": "debit_card_txn",
       "spec_version": "1.0",
-      "current_status": "unknown",
+      "current_status": "declining",
       "first_seen": "2025-10-31",
       "compute": {
         "method": "csv_total_yoy",
@@ -5828,7 +5828,7 @@
       "domain": "debit_card_txn",
       "spec_version": "1.0",
       "current_status": "weakening",
-      "first_seen": "2025-10-31",
+      "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_total_abs",
         "metric": "dc_other_txn_vol",
@@ -5859,7 +5859,7 @@
       "domain": "debit_card_txn",
       "spec_version": "1.0",
       "current_status": "active",
-      "first_seen": "2025-10-31",
+      "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_ratio_sum",
         "metric": "dc_other_txn_vol",
@@ -5895,7 +5895,7 @@
       "sub_layer": "1a",
       "domain": "debit_card_txn",
       "spec_version": "1.0",
-      "current_status": "unknown",
+      "current_status": "declining",
       "first_seen": "2025-10-31",
       "compute": {
         "method": "csv_total_yoy",
@@ -5926,7 +5926,7 @@
       "domain": "debit_card_txn",
       "spec_version": "1.0",
       "current_status": "weakening",
-      "first_seen": "2025-10-31",
+      "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_total_abs",
         "metric": "dc_pos_withdrawal_vol",
@@ -5957,7 +5957,7 @@
       "domain": "debit_card_txn",
       "spec_version": "1.0",
       "current_status": "active",
-      "first_seen": "2025-10-31",
+      "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_ratio_sum",
         "metric": "dc_pos_withdrawal_vol",
@@ -6013,7 +6013,7 @@
         ]
       },
       "current_status": "unknown",
-      "first_seen": "2025-10-31"
+      "first_seen": "2025-01-31"
     },
     "pos-terminals-pos-streak": {
       "id": "pos-terminals-pos-streak",
@@ -6044,8 +6044,8 @@
           }
         ]
       },
-      "current_status": "strengthening",
-      "first_seen": "2025-10-31"
+      "current_status": "declining",
+      "first_seen": "2025-02-28"
     }
   }
 }
