@@ -1,8 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { loadAllOpportunities }  from "@/lib/opportunities";
-import type { Opportunity }       from "@/lib/opportunities";
 import {
   loadSectionChartMap, chartKey,
 } from "@/lib/section-chart-data";
@@ -10,75 +8,87 @@ import type { SectionChartMap, SectionChartSlice } from "@/lib/section-chart-dat
 import TrendChart        from "@/components/TrendChart";
 import DistributionChart from "@/components/DistributionChart";
 
-// ── Styles shared across all cards ───────────────────────────────────────────
+// ── Derived feed types (web/public/data/opportunities_feed.json) ─────────────
 
-type PipelineFilter = "all" | "sibc" | "atm_pos";
+type Pipeline = "sibc" | "atm_pos";
+type Status   = "active" | "watch" | "closed" | "retired";
 
-const PIPELINE_LABEL: Record<string, string> = {
-  sibc:    "Credit",
-  atm_pos: "Payments",
-};
+interface FeedItem {
+  id: string; pipeline: Pipeline; scope: "pipeline"; tier: "opportunity" | "risk";
+  status: Status; authored_status?: string;
+  section: { id: string | null; title: string; icon: string };
+  title: string; body: string; implication?: string | null;
+  chain: string[]; driver?: string | null; via?: string | null; evidence: string[];
+}
+interface CrossItem {
+  id: string; status: Status; title: string; body: string;
+  basis: string; link: string; badge: string;
+}
+interface Feed {
+  cross_system: CrossItem[];
+  pipelines: Record<Pipeline, FeedItem[]>;
+  _meta: { periods: Record<string, string> };
+}
 
-const PIPELINE_COLOR: Record<string, string> = {
-  sibc:    "#4e8ef7",
-  atm_pos: "#2ca02c",
-};
+// ── Styles ───────────────────────────────────────────────────────────────────
 
+type PipelineFilter = "all" | Pipeline;
+type StatusFilter   = "live" | "active" | "watch" | "all";
+
+const PIPELINE_LABEL: Record<string, string> = { sibc: "Credit", atm_pos: "Payments" };
+const PIPELINE_COLOR: Record<string, string> = { sibc: "#4e8ef7", atm_pos: "#2ca02c" };
 const OPP_COLOR = "#16A34A";
 
+const STATUS_META: Record<Status, { label: string; color: string; dot: string }> = {
+  active:  { label: "Active",  color: "#16A34A", dot: "●" },
+  watch:   { label: "Watch",   color: "#D97706", dot: "◐" },
+  closed:  { label: "Closed",  color: "#6B7280", dot: "○" },
+  retired: { label: "Retired", color: "#9CA3AF", dot: "⊘" },
+};
+
 const BTN_FILTER = (active: boolean): React.CSSProperties => ({
-  background:   active ? OPP_COLOR : "var(--bg-page)",
-  color:        active ? "#fff"    : "var(--font-muted)",
-  border:       `1px solid ${active ? OPP_COLOR : "var(--border-card)"}`,
-  borderRadius: 20,
-  padding:      "6px 16px",
-  fontSize:     13,
-  fontWeight:   500,
-  cursor:       "pointer",
-  transition:   "all 0.15s",
+  background: active ? OPP_COLOR : "var(--bg-page)", color: active ? "#fff" : "var(--font-muted)",
+  border: `1px solid ${active ? OPP_COLOR : "var(--border-card)"}`, borderRadius: 20,
+  padding: "6px 16px", fontSize: 13, fontWeight: 500, cursor: "pointer", transition: "all 0.15s",
 });
-
 const BTN_CTRL = (active: boolean): React.CSSProperties => ({
-  background:   active ? "#4e8ef7"       : "var(--bg-page)",
-  color:        active ? "#fff"          : "var(--font-muted)",
-  border:       `1px solid ${active ? "#4e8ef7" : "var(--border-card)"}`,
-  borderRadius: 20,
-  padding:      "5px 12px",
-  fontSize:     12,
-  fontWeight:   500,
-  cursor:       "pointer",
-  transition:   "all 0.15s",
+  background: active ? "#4e8ef7" : "var(--bg-page)", color: active ? "#fff" : "var(--font-muted)",
+  border: `1px solid ${active ? "#4e8ef7" : "var(--border-card)"}`, borderRadius: 20,
+  padding: "5px 12px", fontSize: 12, fontWeight: 500, cursor: "pointer", transition: "all 0.15s",
 });
-
 const CONTROLS_CARD: React.CSSProperties = {
-  background:   "var(--bg-card)",
-  border:       "1px solid var(--border-card)",
-  borderRadius: 8,
-  padding:      "10px 14px",
-  marginBottom: 12,
+  background: "var(--bg-card)", border: "1px solid var(--border-card)",
+  borderRadius: 8, padding: "10px 14px", marginBottom: 12,
 };
+const DIVIDER: React.CSSProperties = { width: 1, height: 18, background: "var(--border-card)", flexShrink: 0 };
 
-const DIVIDER: React.CSSProperties = {
-  width: 1, height: 18, background: "var(--border-card)", flexShrink: 0,
-};
+// ── Status pill ───────────────────────────────────────────────────────────────
 
-// ── Per-card chart controls ───────────────────────────────────────────────────
+function StatusPill({ status }: { status: Status }) {
+  const m = STATUS_META[status];
+  return (
+    <span style={{
+      display: "inline-flex", alignItems: "center", gap: 5, fontSize: 11, fontWeight: 700,
+      textTransform: "uppercase", letterSpacing: "0.05em", color: m.color,
+      background: `${m.color}14`, border: `1px solid ${m.color}40`, borderRadius: 20, padding: "2px 9px",
+    }}>
+      <span style={{ fontSize: 9 }}>{m.dot}</span>{m.label}
+    </span>
+  );
+}
 
-type TabId     = "trend" | "distribution";
-type TrendMode = "absolute" | "yoy" | "fy";
-type DistMode  = "absolute" | "pct";
+// ── Per-card chart panel (unchanged) ───────────────────────────────────────────
+
+type TabId = "trend" | "distribution";
 
 function ChartPanel({ slice, sectionId }: { slice: SectionChartSlice; sectionId: string }) {
-  const [tab,       setTab]       = useState<TabId>("trend");
-  const [trendMode, setTrendMode] = useState<TrendMode>("absolute");
-  const [distMode,  setDistMode]  = useState<DistMode>("absolute");
-
+  const [tab, setTab]             = useState<TabId>("trend");
+  const [trendMode, setTrendMode] = useState<"absolute" | "yoy" | "fy">("absolute");
+  const [distMode, setDistMode]   = useState<"absolute" | "pct">("absolute");
   return (
     <div>
-      {/* Controls */}
       <div style={CONTROLS_CARD}>
         <div className="flex flex-wrap items-center gap-2">
-          {/* Tab */}
           <div className="flex gap-1">
             {(["trend", "distribution"] as const).map((t) => (
               <button key={t} style={BTN_CTRL(tab === t)} onClick={() => setTab(t)}>
@@ -86,182 +96,74 @@ function ChartPanel({ slice, sectionId }: { slice: SectionChartSlice; sectionId:
               </button>
             ))}
           </div>
-
           <div className="hidden sm:block" style={DIVIDER} />
-
-          {/* Mode radios */}
           <div className="flex items-center gap-3 text-xs" style={{ color: "var(--font)" }}>
             {tab === "trend"
               ? (["absolute", "yoy", "fy"] as const).map((m) => (
                   <label key={m} className="flex items-center gap-1 cursor-pointer">
-                    <input
-                      type="radio"
-                      name={`trend-${sectionId}`}
-                      value={m}
-                      checked={trendMode === m}
-                      onChange={() => setTrendMode(m)}
-                      className="accent-blue-500"
-                    />
+                    <input type="radio" name={`trend-${sectionId}`} value={m}
+                      checked={trendMode === m} onChange={() => setTrendMode(m)} className="accent-blue-500" />
                     {m === "absolute" ? "Absolute" : m === "yoy" ? "YoY %" : "FY Cumul."}
-                  </label>
-                ))
+                  </label>))
               : (["absolute", "pct"] as const).map((m) => (
                   <label key={m} className="flex items-center gap-1 cursor-pointer">
-                    <input
-                      type="radio"
-                      name={`dist-${sectionId}`}
-                      value={m}
-                      checked={distMode === m}
-                      onChange={() => setDistMode(m)}
-                      className="accent-blue-500"
-                    />
+                    <input type="radio" name={`dist-${sectionId}`} value={m}
+                      checked={distMode === m} onChange={() => setDistMode(m)} className="accent-blue-500" />
                     {m === "absolute" ? "₹ Crore" : "% Share"}
-                  </label>
-                ))}
+                  </label>))}
           </div>
         </div>
       </div>
-
-      {/* Chart */}
-      <div
-        style={{
-          background:   "var(--bg-card)",
-          border:       "1px solid var(--border-card)",
-          borderRadius: 8,
-          padding:      "12px 8px 8px",
-        }}
-      >
+      <div style={{ background: "var(--bg-card)", border: "1px solid var(--border-card)", borderRadius: 8, padding: "12px 8px 8px" }}>
         {tab === "trend" ? (
-          <TrendChart
-            absoluteData={slice.absoluteData}
-            growthData={slice.growthData}
-            fyData={slice.fyData}
-            seriesNames={slice.seriesNames}
-            pctLabel={slice.pctLabel}
-            mode={trendMode}
-            highlightConfig={null}
-            preferredMode={null}
-          />
+          <TrendChart absoluteData={slice.absoluteData} growthData={slice.growthData} fyData={slice.fyData}
+            seriesNames={slice.seriesNames} pctLabel={slice.pctLabel} mode={trendMode}
+            highlightConfig={null} preferredMode={null} />
         ) : (
-          <DistributionChart
-            absoluteData={slice.absoluteData}
-            seriesNames={slice.distributionSeriesNames ?? slice.seriesNames}
-            pctLabel={slice.pctLabel}
-            mode={distMode}
-            highlightConfig={null}
-            preferredMode={null}
-          />
+          <DistributionChart absoluteData={slice.absoluteData}
+            seriesNames={slice.distributionSeriesNames ?? slice.seriesNames} pctLabel={slice.pctLabel}
+            mode={distMode} highlightConfig={null} preferredMode={null} />
         )}
       </div>
     </div>
   );
 }
 
-// ── Flip zone: For lenders ↔ Inference chain ─────────────────────────────────
+// ── Flip zone: For lenders ↔ Causal chain ───────────────────────────────────
 
-function FlipZone({
-  implication,
-  inferences,
-}: {
-  implication?: string;
-  inferences?:  string[];
-}) {
-  const [showBack,  setShowBack]  = useState(false);
-  const [midFlip,   setMidFlip]   = useState(false);
-  const hasInferences = (inferences?.length ?? 0) > 0;
-
-  const flip = () => {
-    setMidFlip(true);
-    setTimeout(() => {
-      setShowBack((s) => !s);
-      setMidFlip(false);
-    }, 160);
-  };
-
-  if (!implication && !hasInferences) return null;
-
+function FlipZone({ implication, chain }: { implication?: string | null; chain?: string[] }) {
+  const [showBack, setShowBack] = useState(false);
+  const [midFlip, setMidFlip]   = useState(false);
+  const hasChain = (chain?.length ?? 0) > 0;
+  const flip = () => { setMidFlip(true); setTimeout(() => { setShowBack((s) => !s); setMidFlip(false); }, 160); };
+  if (!implication && !hasChain) return null;
   return (
     <div>
-      {/* Divider */}
       <div style={{ height: 1, background: `${OPP_COLOR}25`, margin: "14px 0" }} />
-
-      {/* Flip container — scaleX 1→0→1 swaps content at midpoint */}
-      <div
-        style={{
-          transition:      "transform 0.16s ease-in, opacity 0.16s",
-          transform:       midFlip ? "scaleX(0)" : "scaleX(1)",
-          opacity:         midFlip ? 0 : 1,
-          transformOrigin: "center",
-        }}
-      >
+      <div style={{ transition: "transform 0.16s ease-in, opacity 0.16s", transform: midFlip ? "scaleX(0)" : "scaleX(1)", opacity: midFlip ? 0 : 1, transformOrigin: "center" }}>
         {!showBack ? (
-          /* ── Front: For lenders ── */
-          <div
-            style={{
-              background:   `${OPP_COLOR}0D`,
-              border:       `1px solid ${OPP_COLOR}30`,
-              borderRadius: 8,
-              padding:      "12px 14px",
-            }}
-          >
-            <p style={{ fontSize: 14, fontWeight: 700, color: OPP_COLOR, marginBottom: 6 }}>
-              For lenders
-            </p>
-            <p style={{ fontSize: 14, color: "var(--font)", lineHeight: 1.65 }}>
-              {implication}
-            </p>
-            {hasInferences && (
-              <button
-                onClick={flip}
-                className="flex items-center gap-1.5 text-xs font-semibold mt-3"
-                style={{
-                  color:      "var(--font-muted)",
-                  background: "none",
-                  border:     "none",
-                  padding:    0,
-                  cursor:     "pointer",
-                }}
-              >
-                <span style={{ fontSize: 11 }}>↺</span>
-                Inference chain
-              </button>
-            )}
+          <div style={{ background: `${OPP_COLOR}0D`, border: `1px solid ${OPP_COLOR}30`, borderRadius: 8, padding: "12px 14px" }}>
+            <p style={{ fontSize: 14, fontWeight: 700, color: OPP_COLOR, marginBottom: 6 }}>For lenders</p>
+            <p style={{ fontSize: 14, color: "var(--font)", lineHeight: 1.65 }}>{implication}</p>
+            {hasChain && (
+              <button onClick={flip} className="flex items-center gap-1.5 text-xs font-semibold mt-3"
+                style={{ color: "var(--font-muted)", background: "none", border: "none", padding: 0, cursor: "pointer" }}>
+                <span style={{ fontSize: 11 }}>↺</span> Causal chain
+              </button>)}
           </div>
         ) : (
-          /* ── Back: Inference chain ── */
           <div>
-            <p style={{ fontSize: 12, fontWeight: 700, color: OPP_COLOR, marginBottom: 8 }}>
-              Inference chain
-            </p>
-            <ol
-              className="flex flex-col gap-2"
-              style={{ paddingLeft: 0, listStyle: "none", margin: 0 }}
-            >
-              {inferences!.map((step, i) => (
+            <p style={{ fontSize: 12, fontWeight: 700, color: OPP_COLOR, marginBottom: 8 }}>Causal chain</p>
+            <ol className="flex flex-col gap-2" style={{ paddingLeft: 0, listStyle: "none", margin: 0 }}>
+              {chain!.map((step, i) => (
                 <li key={i} className="flex gap-2" style={{ lineHeight: 1.6 }}>
-                  <span
-                    className="flex-shrink-0 font-bold"
-                    style={{ color: OPP_COLOR, minWidth: 16, fontSize: 14 }}
-                  >
-                    {i + 1}.
-                  </span>
+                  <span className="flex-shrink-0 font-bold" style={{ color: OPP_COLOR, minWidth: 16, fontSize: 14 }}>{i + 1}.</span>
                   <span style={{ fontSize: 14, color: "var(--font)" }}>{step}</span>
-                </li>
-              ))}
+                </li>))}
             </ol>
-            <button
-              onClick={flip}
-              className="flex items-center gap-1.5 text-xs font-semibold mt-3"
-              style={{
-                color:      "var(--font-muted)",
-                background: "none",
-                border:     "none",
-                padding:    0,
-                cursor:     "pointer",
-              }}
-            >
-              <span style={{ fontSize: 11 }}>↺</span>
-              Back
+            <button onClick={flip} className="flex items-center gap-1.5 text-xs font-semibold mt-3"
+              style={{ color: "var(--font-muted)", background: "none", border: "none", padding: 0, cursor: "pointer" }}>
+              <span style={{ fontSize: 11 }}>↺</span> Back
             </button>
           </div>
         )}
@@ -270,84 +172,94 @@ function FlipZone({
   );
 }
 
-// ── Opportunity card ──────────────────────────────────────────────────────────
+// ── Cross-system premium band ───────────────────────────────────────────────
 
-function OpportunityCard({
-  opp,
-  chartSlice,
-}: {
-  opp:        Opportunity;
-  chartSlice: SectionChartSlice | null;
-}) {
+function CrossBand({ items }: { items: CrossItem[] }) {
+  if (items.length === 0) return null;
   return (
-    <div
-      id={opp.sectionId}
-      style={{
-        background:   "var(--bg-card)",
-        border:       "1px solid var(--border-card)",
-        borderLeft:   `4px solid ${OPP_COLOR}`,
-        borderRadius: 10,
-        marginBottom: 20,
-        overflow:     "hidden",
-      }}
-    >
-      {/* Two-col grid: text left, chart right */}
-      <div
-        className="grid grid-cols-1 sm:grid-cols-[45fr_55fr]"
-        style={{ alignItems: "start" }}
-      >
-        {/* ── Left: opportunity content ── */}
-        <div
-          style={{
-            padding:     "20px 24px",
-            borderRight: chartSlice ? "1px solid var(--border-card)" : undefined,
-          }}
-        >
-          {/* Badges */}
-          <div className="flex items-center gap-2 mb-3 flex-wrap">
-            <span
-              style={{
-                fontSize:      11,
-                fontWeight:    700,
-                textTransform: "uppercase",
-                letterSpacing: "0.06em",
-                color:         "#fff",
-                background:    PIPELINE_COLOR[opp.pipeline] ?? OPP_COLOR,
-                borderRadius:  4,
-                padding:       "2px 8px",
-              }}
-            >
-              {PIPELINE_LABEL[opp.pipeline] ?? opp.pipeline}
-            </span>
-            <span style={{ fontSize: 13, color: "var(--font-muted)" }}>
-              {opp.sectionIcon} {opp.sectionTitle}
-            </span>
+    <div style={{
+      border: `1.5px solid ${OPP_COLOR}`, borderRadius: 12, padding: "16px 20px", marginBottom: 28,
+      background: `linear-gradient(135deg, ${OPP_COLOR}0D, transparent 60%)`,
+    }}>
+      <div className="flex items-center gap-2 mb-3 flex-wrap">
+        <span style={{ fontSize: 11, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.08em", color: OPP_COLOR }}>
+          ✦ Cross-system signals
+        </span>
+        <span style={{ fontSize: 12, color: "var(--font-muted)" }}>premium · only by composing pipelines</span>
+      </div>
+      {items.map((c) => (
+        <div key={c.id} style={{ marginTop: 4 }}>
+          <div className="flex items-center gap-2 mb-1 flex-wrap">
+            <StatusPill status={c.status} />
+            <h3 className="text-base font-bold leading-snug" style={{ color: "var(--font)" }}>{c.title}</h3>
           </div>
-
-          {/* Title */}
-          <h3
-            className="text-base font-bold leading-snug mb-3"
-            style={{ color: "var(--font)" }}
-          >
-            {opp.title}
-          </h3>
-
-          {/* Body */}
-          <p style={{ fontSize: 14, color: "var(--font)", lineHeight: 1.65, marginBottom: 12 }}>
-            {opp.body}
+          <p style={{ fontSize: 14, color: "var(--font)", lineHeight: 1.65, marginBottom: 6 }}>{c.body}</p>
+          <p style={{ fontSize: 12, color: "var(--font-muted)", fontFamily: "var(--font-mono, monospace)" }}>
+            basis: {c.basis}
           </p>
+          <span style={{ display: "inline-block", marginTop: 6, fontSize: 11, fontWeight: 700, color: "#fff",
+            background: "linear-gradient(90deg,#4e8ef7,#2ca02c)", borderRadius: 4, padding: "2px 8px" }}>
+            {c.badge}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+}
 
-          {/* Flip zone: For lenders ↔ Inference chain */}
-          <FlipZone
-            implication={opp.implication}
-            inferences={opp.basis?.inferences}
-          />
+// ── Opportunity card ────────────────────────────────────────────────────────
+
+function MetaRow({ k, v }: { k: string; v: string }) {
+  return (
+    <div className="flex gap-2" style={{ fontSize: 13, lineHeight: 1.55, marginTop: 4 }}>
+      <span style={{ color: "var(--font-muted)", minWidth: 48, fontWeight: 600 }}>{k}</span>
+      <span style={{ color: "var(--font)" }}>{v}</span>
+    </div>
+  );
+}
+
+function OpportunityCard({ item, chartSlice }: { item: FeedItem; chartSlice: SectionChartSlice | null }) {
+  return (
+    <div style={{
+      background: "var(--bg-card)", border: "1px solid var(--border-card)",
+      borderLeft: `4px solid ${STATUS_META[item.status].color}`, borderRadius: 10, marginBottom: 20, overflow: "hidden",
+    }}>
+      <div className="grid grid-cols-1 sm:grid-cols-[45fr_55fr]" style={{ alignItems: "start" }}>
+        <div style={{ padding: "20px 24px", borderRight: chartSlice ? "1px solid var(--border-card)" : undefined }}>
+          {/* Badges + status */}
+          <div className="flex items-center gap-2 mb-3 flex-wrap">
+            <StatusPill status={item.status} />
+            <span style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em",
+              color: "#fff", background: PIPELINE_COLOR[item.pipeline] ?? OPP_COLOR, borderRadius: 4, padding: "2px 8px" }}>
+              {PIPELINE_LABEL[item.pipeline] ?? item.pipeline}
+            </span>
+            {item.section.title && (
+              <span style={{ fontSize: 13, color: "var(--font-muted)" }}>{item.section.icon} {item.section.title}</span>
+            )}
+          </div>
+          <h3 className="text-base font-bold leading-snug mb-3" style={{ color: "var(--font)" }}>{item.title}</h3>
+          <p style={{ fontSize: 14, color: "var(--font)", lineHeight: 1.65, marginBottom: 10 }}>{item.body}</p>
+
+          {/* Driver / via / evidence */}
+          {item.driver && <MetaRow k="driver" v={item.driver} />}
+          {item.via && <MetaRow k="via" v={item.via} />}
+          {item.evidence.length > 0 && (
+            <div className="flex gap-2 flex-wrap" style={{ marginTop: 8, alignItems: "center" }}>
+              <span style={{ fontSize: 13, color: "var(--font-muted)", fontWeight: 600 }}>▸ evidence</span>
+              {item.evidence.map((e) => (
+                <span key={e} style={{ fontSize: 11, color: STATUS_META[item.status].color,
+                  background: `${STATUS_META[item.status].color}12`, border: `1px solid ${STATUS_META[item.status].color}30`,
+                  borderRadius: 4, padding: "1px 7px", fontFamily: "var(--font-mono, monospace)" }}>{e}</span>
+              ))}
+            </div>
+          )}
+
+          <FlipZone implication={item.implication} chain={item.chain} />
         </div>
 
-        {/* ── Right: chart panel ── */}
         {chartSlice && (
           <div style={{ padding: "20px 20px 16px" }}>
-            <ChartPanel slice={chartSlice} sectionId={opp.sectionId} />
+            <ChartPanel slice={chartSlice} sectionId={item.section.id!} />
           </div>
         )}
       </div>
@@ -358,81 +270,98 @@ function OpportunityCard({
 // ── Page ──────────────────────────────────────────────────────────────────────
 
 export default function OpportunitiesPage() {
-  const [opps,   setOpps]   = useState<Opportunity[] | null>(null);
+  const [feed, setFeed]     = useState<Feed | null>(null);
   const [charts, setCharts] = useState<SectionChartMap | null>(null);
-  const [filter, setFilter] = useState<PipelineFilter>("all");
+  const [pf, setPf]         = useState<PipelineFilter>("all");
+  const [sf, setSf]         = useState<StatusFilter>("live");
 
   useEffect(() => {
     Promise.all([
-      loadAllOpportunities(),
+      fetch("/data/opportunities_feed.json").then((r) => r.json() as Promise<Feed>),
       loadSectionChartMap(),
-    ]).then(([o, c]) => {
-      setOpps(o);
-      setCharts(c);
-    });
+    ]).then(([f, c]) => { setFeed(f); setCharts(c); });
   }, []);
 
-  if (!opps) {
-    return (
-      <div
-        className="flex items-center justify-center min-h-[60vh] text-sm"
-        style={{ color: "var(--font-muted)" }}
-      >
-        Loading opportunities…
-      </div>
-    );
+  if (!feed) {
+    return <div className="flex items-center justify-center min-h-[60vh] text-sm" style={{ color: "var(--font-muted)" }}>Loading opportunities…</div>;
   }
 
-  const sibcCount = opps.filter((o) => o.pipeline === "sibc").length;
-  const atmCount  = opps.filter((o) => o.pipeline === "atm_pos").length;
-  const filtered  = filter === "all" ? opps : opps.filter((o) => o.pipeline === filter);
+  const allOpps: FeedItem[] = (["sibc", "atm_pos"] as Pipeline[])
+    .flatMap((p) => feed.pipelines[p] ?? [])
+    .filter((o) => o.tier === "opportunity" && o.status !== "retired");
+
+  const byPipeline = pf === "all" ? allOpps : allOpps.filter((o) => o.pipeline === pf);
+  const statusOk = (s: Status) =>
+    sf === "all" ? true : sf === "live" ? (s === "active" || s === "watch") : s === sf;
+  const visible = byPipeline.filter((o) => statusOk(o.status));
+
+  const sibcN = allOpps.filter((o) => o.pipeline === "sibc").length;
+  const atmN  = allOpps.filter((o) => o.pipeline === "atm_pos").length;
+  const period = feed._meta.periods.sibc ?? "";
+
+  const renderPipeline = (p: Pipeline) => {
+    const items = visible.filter((o) => o.pipeline === p);
+    if (items.length === 0) return null;
+    const activeN = items.filter((o) => o.status === "active").length;
+    return (
+      <div key={p} style={{ marginBottom: 12 }}>
+        <div className="flex items-center gap-2" style={{ margin: "8px 0 14px" }}>
+          <span style={{ fontSize: 13, fontWeight: 700, color: PIPELINE_COLOR[p] }}>
+            {PIPELINE_LABEL[p]} ({p === "sibc" ? "SIBC" : "ATM/POS"})
+          </span>
+          <div style={{ flex: 1, height: 1, background: "var(--border-card)" }} />
+          <span style={{ fontSize: 12, color: "var(--font-muted)" }}>{activeN} active</span>
+        </div>
+        {items.map((o) => (
+          <OpportunityCard key={o.id} item={o}
+            chartSlice={(o.section.id && charts?.get(chartKey(o.pipeline, o.section.id))) || null} />
+        ))}
+      </div>
+    );
+  };
 
   return (
-    // Full width — wider than the 3xl content pages
     <main className="max-w-7xl mx-auto px-4 py-8">
-      {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold mb-2" style={{ color: "var(--font)" }}>
-          Opportunities
-        </h1>
-        <p className="text-sm" style={{ color: "var(--font-muted)" }}>
-          {opps.length} actionable opportunities identified from India&apos;s credit and payments data.
-          Updated each period.
+      <div className="mb-6">
+        <div className="flex items-baseline gap-3 flex-wrap">
+          <h1 className="text-2xl font-bold" style={{ color: "var(--font)" }}>Opportunities</h1>
+          {period && <span style={{ fontSize: 13, color: "var(--font-muted)" }}>⟳ {period}</span>}
+        </div>
+        <p className="text-sm mt-1" style={{ color: "var(--font-muted)" }}>
+          Live openings derived from the causal model · re-evaluated each ingestion.
         </p>
       </div>
 
-      {/* Pipeline filter */}
-      <div className="flex gap-2 mb-8 flex-wrap">
-        <button style={BTN_FILTER(filter === "all")}  onClick={() => setFilter("all")}>
-          All {opps.length}
-        </button>
-        <button style={BTN_FILTER(filter === "sibc")} onClick={() => setFilter("sibc")}>
-          📊 Credit {sibcCount}
-        </button>
-        {atmCount > 0 && (
-          <button style={BTN_FILTER(filter === "atm_pos")} onClick={() => setFilter("atm_pos")}>
-            💳 Payments {atmCount}
-          </button>
-        )}
+      {/* Filters */}
+      <div className="flex gap-4 mb-7 flex-wrap items-center">
+        <div className="flex gap-2 flex-wrap">
+          <button style={BTN_FILTER(pf === "all")} onClick={() => setPf("all")}>All {allOpps.length}</button>
+          <button style={BTN_FILTER(pf === "sibc")} onClick={() => setPf("sibc")}>📊 Credit {sibcN}</button>
+          {atmN > 0 && <button style={BTN_FILTER(pf === "atm_pos")} onClick={() => setPf("atm_pos")}>💳 Payments {atmN}</button>}
+        </div>
+        <div className="hidden sm:block" style={DIVIDER} />
+        <div className="flex gap-2 flex-wrap text-xs items-center">
+          <span style={{ color: "var(--font-muted)" }}>Status:</span>
+          {(["live", "active", "watch", "all"] as StatusFilter[]).map((s) => (
+            <button key={s} style={BTN_CTRL(sf === s)} onClick={() => setSf(s)}>
+              {s === "live" ? "Live" : s[0].toUpperCase() + s.slice(1)}
+            </button>
+          ))}
+        </div>
       </div>
 
-      {/* Cards */}
-      {filtered.length === 0 ? (
-        <p style={{ color: "var(--font-muted)", fontSize: 14 }}>
-          No opportunities for this filter yet.
-        </p>
+      {/* Cross-system premium band */}
+      {(pf === "all") && <CrossBand items={feed.cross_system} />}
+
+      {/* Per-pipeline cards */}
+      {visible.length === 0 ? (
+        <p style={{ color: "var(--font-muted)", fontSize: 14 }}>No opportunities for this filter.</p>
       ) : (
-        filtered.map((opp) => (
-          <OpportunityCard
-            key={opp.id}
-            opp={opp}
-            chartSlice={charts?.get(chartKey(opp.pipeline, opp.sectionId)) ?? null}
-          />
-        ))
+        (pf === "all" ? (["sibc", "atm_pos"] as Pipeline[]) : [pf as Pipeline]).map(renderPipeline)
       )}
 
       <footer className="mt-10 pb-8 text-center text-xs" style={{ color: "var(--font-muted)" }}>
-        Source: RBI SIBC + ATM/POS data · India Credit Lens analysis
+        Derived from the India Credit Lens causal model (S3) · status updates each ingestion
       </footer>
     </main>
   );

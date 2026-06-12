@@ -576,6 +576,7 @@ def main():
             ("4b. system_state (S3)", "generate_system_state.py", ["--pipeline", "sibc", "--period", latest]),
             ("4c. opportunities (live)", "derive_opportunities.py", ["--pipeline", "sibc", "--period", latest]),
             ("4d. ecosystem projection", "compose_ecosystem.py", []),
+            ("4e. opportunities UI feed", "generate_opportunities_feed.py", []),
         ]:
             passed, out, err = run_check(label, [sys.executable, str(ANALYSIS / script)] + extra, cwd=REPO_ROOT)
             results.append((label, passed, one_line_summary(out, err, passed)))

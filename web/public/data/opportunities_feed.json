@@ -1,0 +1,412 @@
+{
+  "_meta": {
+    "spec_ref": "analysis/COMPOSITION_SPEC.md §12",
+    "generated_by": "analysis/generate_opportunities_feed.py",
+    "periods": {
+      "sibc": "2026-05-29",
+      "atm_pos": "2026-04-30"
+    }
+  },
+  "cross_system": [
+    {
+      "id": "xopp_x_cc_spend_leads_cc_stock",
+      "status": "watch",
+      "title": "Cross-system signal: credit_card flow softening ahead of stock",
+      "body": "Credit-card spend flow (payments) leads credit-card outstanding stock (SIBC): sustained spending growth precedes balance build-up. Confirmed cross-system instance of the flow→stock law.",
+      "basis": "icl:atm_pos/spend_value/cc_spend_value (f=-1) → icl:sibc/Statement1/4.5 (t=1)",
+      "link": "x_cc_spend_leads_cc_stock",
+      "badge": "Credit ✕ Payments"
+    }
+  ],
+  "pipelines": {
+    "sibc": [
+      {
+        "id": "opp_gold_loan_entry",
+        "pipeline": "sibc",
+        "scope": "pipeline",
+        "tier": "opportunity",
+        "status": "active",
+        "authored_status": "active",
+        "section": {
+          "id": "personalLoans",
+          "title": "Personal Loans",
+          "icon": "💳"
+        },
+        "title": "Gold loan market entry / deepening for banks",
+        "body": "Banks are taking share from NBFCs in gold loans, with banks growing faster. The product moat is operational (branch-level assay, safe custody, cash management), not regulatory — banks with branch networks can sustain competitive advantage. The growth trajectory is structural (collateral-driven), not speculative.",
+        "implication": "Lenders aligned to Collateral price → secured-lending capacity capture this first.",
+        "chain": [
+          "Rising collateral value raises effective LTV headroom, enlarging the eligible borrower pool and the maximum loan per unit of collateral. Applies to any secured product against the same collateral, in any measure (stock or flow).",
+          "Triggered by Gold price surge (2023–2026) — RBI Press Releases – Sovereign Gold Bond Scheme (March 2023: prid=55327; Feb 202",
+          "Live signals confirming: sibc-pl-gold-pos-streak, sibc-pl-gold-yoy"
+        ],
+        "driver": "Gold price surge (2023–2026)",
+        "via": "Collateral price → secured-lending capacity",
+        "evidence": [
+          "sibc-pl-gold-pos-streak",
+          "sibc-pl-gold-yoy"
+        ]
+      },
+      {
+        "id": "opp_msme_origination",
+        "pipeline": "sibc",
+        "scope": "pipeline",
+        "tier": "opportunity",
+        "status": "active",
+        "authored_status": "active",
+        "section": {
+          "id": "industryBySize",
+          "title": "Industry by Size",
+          "icon": "🏭"
+        },
+        "title": "MSME origination infrastructure investment window",
+        "body": "Banks that invested in MSME origination infrastructure (UDYAM-linked underwriting, GST-based cash flow analysis, co-lending rails) over 2022-24 are in a harvesting phase now. The competitive window for catch-up investment is approximately 2-3 years before the first-cycle cohort matures and saturation limits further marginal returns. Banks without this infrastructure will structurally underperform in MSME credit growth.",
+        "implication": "Lenders aligned to Formalisation infrastructure → small-borrower underwritability capture this first.",
+        "chain": [
+          "Registry + tax-data coverage (UDYAM, GST) makes small borrowers underwritable at scale for the first time; lenders with origination infrastructure convert registry access into credit at previously unachievable volumes.",
+          "Triggered by MSME formalisation via UDYAM registration + GST data — SIDBI MSME Pulse Special Edition Report, June 2025",
+          "Live signals confirming: sibc-msme-micro-small-fy-acceleration, sibc-msme-micro-small-share, sibc-msme-micro-small-yoy, sibc-msme-size-yoy-spread"
+        ],
+        "driver": "MSME formalisation via UDYAM registration + GST data",
+        "via": "Formalisation infrastructure → small-borrower underwritability",
+        "evidence": [
+          "sibc-msme-micro-small-fy-acceleration",
+          "sibc-msme-micro-small-share",
+          "sibc-msme-micro-small-yoy",
+          "sibc-msme-size-yoy-spread"
+        ]
+      },
+      {
+        "id": "opp_pli_supply_chain",
+        "pipeline": "sibc",
+        "scope": "pipeline",
+        "tier": "opportunity",
+        "status": "active",
+        "authored_status": "active",
+        "section": {
+          "id": "industryByType",
+          "title": "Industry by Type",
+          "icon": "🔩"
+        },
+        "title": "PLI anchor-supplier chain finance",
+        "body": "PLI scheme recipients have validated anchor relationships with tier-1 and tier-2 suppliers. Supply chain finance structures (invoice discounting, vendor finance, dealer finance) can be layered on these anchor-supplier relationships at lower credit risk than standalone unsecured MSME lending, because the cash flow is backed by a large anchor company.",
+        "implication": "Lenders aligned to Industrial-policy capex → supply-chain credit capture this first.",
+        "chain": [
+          "A capex incentive program (e.g. PLI) drives drawdowns first in upstream input sectors (metals, chemicals) and then downstream manufacturing (engineering) on a 2–3 year implementation lag — co-accelerating sectors that do not normally move together.",
+          "Triggered by PLI scheme capex drawdown phase (FY25–26) — PIB Press Note – PLI Scheme: Powering India's Industrial Renaissance, NoteId 155",
+          "Live signals confirming: sibc-basic-metal-sub-yoy-scan, sibc-chemicals-sub-yoy-scan, sibc-engineering-sub-yoy-scan"
+        ],
+        "driver": "PLI scheme capex drawdown phase (FY25–26)",
+        "via": "Industrial-policy capex → supply-chain credit",
+        "evidence": [
+          "sibc-basic-metal-sub-yoy-scan",
+          "sibc-chemicals-sub-yoy-scan",
+          "sibc-engineering-sub-yoy-scan"
+        ]
+      },
+      {
+        "id": "opp_pslc_tooling",
+        "pipeline": "sibc",
+        "scope": "pipeline",
+        "tier": "opportunity",
+        "status": "active",
+        "authored_status": "active",
+        "section": {
+          "id": "prioritySector",
+          "title": "Priority Sector",
+          "icon": "⭐"
+        },
+        "title": "PSLC market depth from PSL reclassification surplus",
+        "body": "Banks that received a large reclassification-driven PSL surplus from the Oct 2024 ceiling revision can sell PSL Certificates to banks that are under-achieving on PSL targets. This deepens the PSLC secondary market and creates a one-time monetisation event for well-positioned banks.",
+        "implication": "Lenders aligned to PSL classification threshold → reported reclassification capture this first.",
+        "chain": [
+          "Revising a PSL eligibility ceiling reclassifies existing sub-threshold stock into the priority bucket, producing reported growth that is not new lending and distorting the flow read.",
+          "Triggered by RBI PSL housing loan ceiling revision (Oct 2024) — RBI Master Direction – Priority Sector Lending (Targets and Classification), Ame",
+          "Live signals confirming: sibc-psl-housing-yoy"
+        ],
+        "driver": "RBI PSL housing loan ceiling revision (Oct 2024)",
+        "via": "PSL classification threshold → reported reclassification",
+        "evidence": [
+          "sibc-psl-housing-yoy"
+        ]
+      },
+      {
+        "id": "opp_renewable_energy",
+        "pipeline": "sibc",
+        "scope": "pipeline",
+        "tier": "opportunity",
+        "status": "active",
+        "authored_status": "emerging",
+        "section": {
+          "id": "industryByType",
+          "title": "Industry by Type",
+          "icon": "🔩"
+        },
+        "title": "Renewable energy project finance — next capex wave",
+        "body": "As the infrastructure supercycle completes, the next infrastructure credit wave is in solar, wind, and green hydrogen projects. Banks with project finance capability built on traditional infrastructure can redeploy that expertise. Government renewable energy targets create a regulatory pipeline that de-risks the opportunity.",
+        "implication": "Lenders aligned to Project lifecycle phase → new origination vs repayment capture this first.",
+        "chain": [
+          "As a project cohort moves from construction (drawdown) to operations (repayment), net credit balance declines unless new origination offsets it — suppressing growth even while existing books remain large.",
+          "Triggered by Infrastructure supercycle completing (FY22–24) — RBI SIBC merged series (Jan 2024 – Apr 2026) — Infrastructure sub-sector YoY",
+          "Live signals confirming: sibc-infra-sub-yoy-scan"
+        ],
+        "driver": "Infrastructure supercycle completing (FY22–24)",
+        "via": "Project lifecycle phase → new origination vs repayment",
+        "evidence": [
+          "sibc-infra-sub-yoy-scan"
+        ]
+      },
+      {
+        "id": "opp_vehicle_ev",
+        "pipeline": "sibc",
+        "scope": "pipeline",
+        "tier": "opportunity",
+        "status": "retired",
+        "authored_status": "retired",
+        "section": {
+          "id": "personalLoans",
+          "title": "Personal Loans",
+          "icon": "💳"
+        },
+        "title": "EV-specific vehicle credit products",
+        "body": "RETIRED at first FOUNDATION (2026-06-10). No external source verified for EV share of vehicle loans or EV-specific credit risk differentiation. No L1 signal separating EV from ICE vehicle loans. Returns only when EV share of vehicle loans is measurable in L1 (e.g., VAHAN registration data ingestion).",
+        "implication": null,
+        "chain": [
+          "Live signals confirming: sibc-pl-vehicle-share, sibc-pl-vehicle-yoy"
+        ],
+        "driver": null,
+        "via": null,
+        "evidence": [
+          "sibc-pl-vehicle-share",
+          "sibc-pl-vehicle-yoy"
+        ]
+      },
+      {
+        "id": "risk_infrastructure_repayment",
+        "pipeline": "sibc",
+        "scope": "pipeline",
+        "tier": "risk",
+        "status": "active",
+        "authored_status": "active",
+        "section": {
+          "id": "industryByType",
+          "title": "Industry by Type",
+          "icon": "🔩"
+        },
+        "title": "Infrastructure repayment wave with insufficient new origination pipeline",
+        "body": "Banks over-indexed to traditional infrastructure credit face a structural squeeze: the FY22-24 project book moves to repayment (compressing balances) while the next-cycle pipeline (renewables, data centres) is slower to ramp. Banks without next-cycle project finance capability face credit portfolio contraction.",
+        "implication": "Lenders aligned to Project lifecycle phase → new origination vs repayment capture this first.",
+        "chain": [
+          "As a project cohort moves from construction (drawdown) to operations (repayment), net credit balance declines unless new origination offsets it — suppressing growth even while existing books remain large.",
+          "Triggered by Infrastructure supercycle completing (FY22–24) — RBI SIBC merged series (Jan 2024 – Apr 2026) — Infrastructure sub-sector YoY",
+          "Live signals confirming: sibc-infra-sub-share-scan, sibc-infra-sub-yoy-scan"
+        ],
+        "driver": "Infrastructure supercycle completing (FY22–24)",
+        "via": "Project lifecycle phase → new origination vs repayment",
+        "evidence": [
+          "sibc-infra-sub-share-scan",
+          "sibc-infra-sub-yoy-scan"
+        ]
+      },
+      {
+        "id": "risk_unsecured_migration",
+        "pipeline": "sibc",
+        "scope": "pipeline",
+        "tier": "risk",
+        "status": "active",
+        "authored_status": "watch",
+        "section": {
+          "id": "personalLoans",
+          "title": "Personal Loans",
+          "icon": "💳"
+        },
+        "title": "CIC reporting compliance gaps creating off-balance-sheet credit risk",
+        "body": "RBI Digital Lending Guidelines (2022/2025) require BNPL and digital credit to report to Credit Information Companies. However, compliance may be incomplete among newer digital lenders operating under first-loss guarantee structures or co-lending arrangements where the regulated entity's on-book exposure is partially shielded. If reporting gaps exist, the true unsecured credit stress is understated in bank balance sheets and in SIBC data.",
+        "implication": "Lenders aligned to Regulatory capital weight → unsecured origination economics capture this first.",
+        "chain": [
+          "Higher risk weights raise the regulatory capital cost per unit of exposure, compressing origination economics for unsecured retail products until reversed.",
+          "Triggered by RBI risk-weight hike on unsecured credit (Nov 2023) — RBI Circular RBI/2023-24/89, 'Risk Weights for Consumer Credit and Credit Card R",
+          "Live signals confirming: sibc-pl-cc-below10-streak, sibc-pl-cc-share, sibc-pl-cc-yoy, sibc-pl-consumer-durables-neg-streak, sibc-pl-consumer-durables-share, sibc-pl-consumer-durables-yoy"
+        ],
+        "driver": "RBI risk-weight hike on unsecured credit (Nov 2023)",
+        "via": "Regulatory capital weight → unsecured origination economics",
+        "evidence": [
+          "sibc-pl-cc-below10-streak",
+          "sibc-pl-cc-share",
+          "sibc-pl-cc-yoy",
+          "sibc-pl-consumer-durables-neg-streak",
+          "sibc-pl-consumer-durables-share",
+          "sibc-pl-consumer-durables-yoy"
+        ]
+      }
+    ],
+    "atm_pos": [
+      {
+        "id": "opp_credit_card_deepening",
+        "pipeline": "atm_pos",
+        "scope": "pipeline",
+        "tier": "opportunity",
+        "status": "active",
+        "authored_status": "active",
+        "section": {
+          "id": "cc",
+          "title": "Credit Cards",
+          "icon": "💳"
+        },
+        "title": "Credit card penetration deepening — PSB share gap is the opening",
+        "body": "Credit cards outstanding (~119M) represents approximately 11-12% of the debit card base (~1B+). PSBs hold ~64% of debit cards but only ~29% of credit cards — a structural share gap exploitable through debit-to-credit card upgrade offers to existing bank customers. The acquisition cost of upgrading an existing debit card customer to a credit card is materially lower than cold acquisition.",
+        "implication": null,
+        "chain": [
+          "Live signals confirming: cc-bank-scan, cc-category-share-scan, cc-outstanding-abs, cc-outstanding-yoy, cc-private-share, cc-psb-share"
+        ],
+        "driver": null,
+        "via": null,
+        "evidence": [
+          "cc-bank-scan",
+          "cc-category-share-scan",
+          "cc-outstanding-abs",
+          "cc-outstanding-yoy",
+          "cc-private-share",
+          "cc-psb-share"
+        ]
+      },
+      {
+        "id": "opp_rural_cash_distribution",
+        "pipeline": "atm_pos",
+        "scope": "pipeline",
+        "tier": "opportunity",
+        "status": "active",
+        "authored_status": "active",
+        "section": {
+          "id": "infra",
+          "title": "Infrastructure",
+          "icon": "🏗️"
+        },
+        "title": "Rural cash distribution via Micro ATM / Business Correspondent networks",
+        "body": "Micro ATM growth counter-trending against overall ATM network contraction signals persistent rural and semi-urban cash demand at a scale below the economics of full ATM deployment. Banks and fintechs expanding Business Correspondent channels with micro ATM deployment can serve this demand at lower capex than branch or full ATM infrastructure.",
+        "implication": null,
+        "chain": [
+          "Live signals confirming: micro-atm-yoy, micro-atms-abs"
+        ],
+        "driver": null,
+        "via": null,
+        "evidence": [
+          "micro-atm-yoy",
+          "micro-atms-abs"
+        ]
+      },
+      {
+        "id": "opp_transit_payment_products",
+        "pipeline": "atm_pos",
+        "scope": "pipeline",
+        "tier": "opportunity",
+        "status": "active",
+        "authored_status": "emerging",
+        "section": {
+          "id": "cc",
+          "title": "Credit Cards",
+          "icon": "💳"
+        },
+        "title": "Embedded transit and tap-to-pay payment products",
+        "body": "The structural embedding of a new credit card use case (the 'other' category) signals a platform land-grab window for card issuers and acquirers who integrate with the winning infrastructure — whether transit NFC or UPI-linked credit. The opportunity is real regardless of which force hypothesis is confirmed; the appropriate platform strategy differs based on which force is validated.",
+        "implication": "Lenders aligned to Embedded payment rails → new card-spend surface capture this first.",
+        "chain": [
+          "A new embedded payment use case (transit NFC tap-to-pay or RuPay-credit-on-UPI) creates a structurally growing card-spend channel in the unclassified 'other' category. Driver composition is unresolved (hypothesis).",
+          "Triggered by Embedded card payment infrastructure rollout (transit NFC or RuPay-credit-on-UPI)",
+          "Live signals confirming: cc-other-val-yoy, cc-other-vol-yoy"
+        ],
+        "driver": "Embedded card payment infrastructure rollout (transit NFC or RuPay-credit-on-UPI)",
+        "via": "Embedded payment rails → new card-spend surface",
+        "evidence": [
+          "cc-other-val-yoy",
+          "cc-other-vol-yoy"
+        ]
+      },
+      {
+        "id": "risk_cc_market_concentration",
+        "pipeline": "atm_pos",
+        "scope": "pipeline",
+        "tier": "risk",
+        "status": "closed",
+        "authored_status": "active",
+        "section": {
+          "id": null,
+          "title": "",
+          "icon": ""
+        },
+        "title": "Credit card market concentrated in top-5 private banks",
+        "body": "The top-5 private banks control approximately 71% of credit card outstanding. The largest single issuer holds ~20% of the market. This concentration creates systemic fragility — as demonstrated when a single payment bank's exit caused a market-wide debit card step-down. Similar disruption from a major credit card issuer would have proportionally larger effects.",
+        "implication": null,
+        "chain": [],
+        "driver": null,
+        "via": null,
+        "evidence": []
+      },
+      {
+        "id": "risk_debit_card_base_erosion",
+        "pipeline": "atm_pos",
+        "scope": "pipeline",
+        "tier": "risk",
+        "status": "active",
+        "authored_status": "active",
+        "section": {
+          "id": "dc",
+          "title": "Debit Cards",
+          "icon": "🏧"
+        },
+        "title": "Debit card base structural decline reducing cash access for underbanked",
+        "body": "The debit card base is contracting through payment bank exits and lifecycle purges. This reduces the potential transaction base for populations that depend on debit cards for cash access and digital payments — particularly lower-income and rural segments without credit cards or reliable UPI-linked accounts.",
+        "implication": "Lenders aligned to Enforcement-driven institutional exit → card stock capture this first.",
+        "chain": [
+          "Regulatory wind-down of a major issuer forces cancellation of its entire card portfolio, producing a single-period step-down in the stock concentrated in that issuer's lender category.",
+          "Triggered by RBI enforcement action against Paytm Payments Bank (Jan–Apr 2026) — RBI Press Release 2024-2025/1589 — Paytm Payments Bank Limited: directions under",
+          "Live signals confirming: dc-bank-scan, dc-category-share-scan, dc-outstanding-abs, dc-outstanding-yoy, dc-private-share, dc-psb-share"
+        ],
+        "driver": "RBI enforcement action against Paytm Payments Bank (Jan–Apr 2026)",
+        "via": "Enforcement-driven institutional exit → card stock",
+        "evidence": [
+          "dc-bank-scan",
+          "dc-category-share-scan",
+          "dc-outstanding-abs",
+          "dc-outstanding-yoy",
+          "dc-private-share",
+          "dc-psb-share"
+        ]
+      },
+      {
+        "id": "risk_infrastructure_bifurcation",
+        "pipeline": "atm_pos",
+        "scope": "pipeline",
+        "tier": "risk",
+        "status": "active",
+        "authored_status": "active",
+        "section": {
+          "id": "infra",
+          "title": "Infrastructure",
+          "icon": "🏗️"
+        },
+        "title": "Payment acceptance bifurcation: POS contracting while UPI grows",
+        "body": "POS terminal network contraction while UPI QR expands creates an acceptance gap: merchants who drop POS terminals cannot accept international cards, EMI transactions, premium credit card features, or POS-authenticated payments. Customers without UPI-linked accounts face reduced options at merchants who have switched fully to UPI.",
+        "implication": "Lenders aligned to Zero MDR → acceptance-infrastructure mix capture this first.",
+        "chain": [
+          "Zero MDR on UPI makes QR acceptance structurally cheaper than card POS (no hardware, no per-txn fee), driving QR deployment while suppressing POS-terminal investment. Polarity is per-target: + for QR, − for POS.",
+          "Triggered by Zero MDR policy on UPI transactions (NPCI/GoI) — Union Budget 2022-23 — MDR waiver provisions for UPI and RuPay; NPCI product ove",
+          "Live signals confirming: pos-bank-scan, pos-category-share-scan, pos-private-share, pos-psb-share, pos-terminals-abs, pos-terminals-pos-streak, pos-terminals-yoy, upi-qr-per-pos, upi-qr-yoy"
+        ],
+        "driver": "Zero MDR policy on UPI transactions (NPCI/GoI)",
+        "via": "Zero MDR → acceptance-infrastructure mix",
+        "evidence": [
+          "pos-bank-scan",
+          "pos-category-share-scan",
+          "pos-private-share",
+          "pos-psb-share",
+          "pos-terminals-abs",
+          "pos-terminals-pos-streak",
+          "pos-terminals-yoy",
+          "upi-qr-per-pos",
+          "upi-qr-yoy"
+        ]
+      }
+    ]
+  }
+}
