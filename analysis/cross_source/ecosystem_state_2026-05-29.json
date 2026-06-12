@@ -1,0 +1,56 @@
+{
+  "_meta": {
+    "description": "Computed cross-system ecosystem projection (S3 composed). Never hand-edited.",
+    "spec_ref": "analysis/COMPOSITION_SPEC.md §7",
+    "pipeline_periods": {
+      "sibc": "2026-05-29",
+      "atm_pos": "2026-04-30"
+    },
+    "period": "2026-05-29"
+  },
+  "cross_edge_states": [
+    {
+      "id": "x_cc_spend_leads_cc_stock",
+      "type": "leads",
+      "from": "icl:atm_pos/spend_value/cc_spend_value",
+      "to": "icl:sibc/Statement1/4.5",
+      "from_direction": -1,
+      "to_direction": 1,
+      "state": "divergent",
+      "shared": {
+        "product": "credit_card"
+      },
+      "derived_from": "R1_stock_flow"
+    },
+    {
+      "id": "x_cc_count_corresponds_cc_stock",
+      "type": "corresponds_to",
+      "from": "icl:atm_pos/cards/credit_cards",
+      "to": "icl:sibc/Statement1/4.5",
+      "from_direction": 1,
+      "to_direction": 1,
+      "state": "linked",
+      "shared": {
+        "product": "credit_card"
+      },
+      "derived_from": "R3_corresponds"
+    }
+  ],
+  "cross_source_opportunities": [
+    {
+      "id": "xopp_x_cc_spend_leads_cc_stock",
+      "scope": "cross_source",
+      "surface": "opportunities",
+      "status": "watch",
+      "label": "Cross-system signal: credit_card flow softening ahead of stock",
+      "refs": {
+        "cross_edge": "x_cc_spend_leads_cc_stock",
+        "entities": [
+          "icl:atm_pos/spend_value/cc_spend_value",
+          "icl:sibc/Statement1/4.5"
+        ]
+      },
+      "mechanism": "Credit-card spend flow (payments) leads credit-card outstanding stock (SIBC): sustained spending growth precedes balance build-up. Confirmed cross-system instance of the flow→stock law."
+    }
+  ]
+}

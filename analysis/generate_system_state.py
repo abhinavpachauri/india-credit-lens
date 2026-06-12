@@ -46,7 +46,47 @@ def load_signal_dirs(pipeline, period):
     return {m: STATUS_DIR.get(s, 0) for m, s in rows}, {m: s for m, s in rows}
 
 
-def compute(model, sig_dir):
+def load_entity_weights(cfg):
+    """entity_id -> absolute CSV value (latest period), for share-weighted propagation.
+    Falls back silently to unweighted where a value is unavailable."""
+    profile = gs.load_json(cfg["profile"])
+    cols = profile["columns"]
+    weights = {}
+    model = gs.load_json(cfg["model"])
+    if profile["hierarchy_source"] == "csv":
+        vals = {}
+        for r in gs.latest_rows_csv(profile):
+            code = r[cols["code"]].strip()
+            if code:
+                try:
+                    vals[(r[cols["partition"]], code)] = abs(float(r[cols["value"]] or 0))
+                except ValueError:
+                    pass
+        for n in model["nodes"]:
+            if n.get("tier") == "entity":
+                weights[n["id"]] = vals.get((n.get("statement"), n.get("code")), 0.0)
+    else:
+        import csv as _csv
+        rows = list(_csv.DictReader(open(gs.ROOT / profile["source_csv"])))
+        for k, v in profile.get("csv_filter", {}).items():
+            rows = [r for r in rows if r[k] == v]
+        for col in profile.get("period_selection", {}).get("order_by", []):
+            mx = max(r[col] for r in rows)
+            rows = [r for r in rows if r[col] == mx]
+        vals = {}
+        for r in rows:
+            try:
+                vals[r[cols["metric"]]] = abs(float(r[cols["value"]] or 0))
+            except ValueError:
+                pass
+        for n in model["nodes"]:
+            if n.get("tier") == "entity" and n.get("metric"):
+                weights[n["id"]] = vals.get(n["metric"], 0.0)
+    return weights
+
+
+def compute(model, sig_dir, weights=None):
+    weights = weights or {}
     entities = [n for n in model["nodes"] if n.get("tier") == "entity"]
     by_id = {n["id"]: n for n in entities}
     children = defaultdict(list)   # parent_id -> [(child_id, decomposition)]
@@ -72,13 +112,14 @@ def compute(model, sig_dir):
         kids = children.get(nid)
         if not kids:
             return entity_dir.get(nid, 0)
-        # per-decomposition mean, then combine across decompositions by sign of sum
-        by_dec = defaultdict(list)
+        # share-weighted within a decomposition (dominant children win); decompositions
+        # combined by sign of their weighted directions. Falls back to unit weights.
+        by_dec = defaultdict(float)
         for cid, dec in kids:
-            by_dec[dec].append(resolve(cid, seen))
-        # if a leaf-derived signal already set this aggregate, keep the stronger evidence:
+            d = resolve(cid, seen)
+            by_dec[dec] += d * (weights.get(cid, 0.0) or 1.0)
         own = entity_dir.get(nid, 0)
-        agg = sign(sum(sign(sum(v)) for v in by_dec.values()))
+        agg = sign(sum(sign(v) for v in by_dec.values()))
         entity_dir[nid] = own if own != 0 else agg
         return entity_dir[nid]
 
@@ -172,7 +213,8 @@ def main():
         print(f"✗ no signals in DB for {args.pipeline} {args.period}", file=sys.stderr)
         return 1
 
-    state = compute(model, sig_dir)
+    weights = load_entity_weights(cfg)
+    state = compute(model, sig_dir, weights)
     out = {
         "_meta": {
             "pipeline": args.pipeline, "period": args.period,
