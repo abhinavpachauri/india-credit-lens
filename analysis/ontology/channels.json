@@ -1,0 +1,156 @@
+{
+  "_meta": {
+    "id": "icl_channels",
+    "description": "Causal channel registry (stratum S2a) — DATA-LESS causal mechanisms defined over concepts, shared across all pipelines (COMPOSITION_SPEC.md §2a). No dates, no URLs, no signal evidence — those live in per-pipeline force_instances (S2b). A channel is true whether or not anything is currently firing. force_instances reference these by id via instance_of.",
+    "spec_ref": "analysis/COMPOSITION_SPEC.md",
+    "concepts_ref": "analysis/ontology/concepts.json",
+    "version": "1.0"
+  },
+
+  "channels": [
+    {
+      "id": "ch_collateral_price_secured",
+      "label": "Collateral price → secured-lending capacity",
+      "driver_type": "macro_factor",
+      "source_concept": "macro:collateral_price",
+      "target_concepts": [{"product": "gold_loan"}],
+      "mechanism": "Rising collateral value raises effective LTV headroom, enlarging the eligible borrower pool and the maximum loan per unit of collateral. Applies to any secured product against the same collateral, in any measure (stock or flow).",
+      "polarity": "+",
+      "lifecycle": "permanent",
+      "cross_system_note": "Spans SIBC gold-loan stock and any future originations gold-disbursement flow."
+    },
+    {
+      "id": "ch_capital_weight_unsecured",
+      "label": "Regulatory capital weight → unsecured origination economics",
+      "driver_type": "policy_action",
+      "source_concept": "policy:risk_weight",
+      "target_concepts": [{"product": "credit_card"}, {"product": "consumer_durable"}],
+      "mechanism": "Higher risk weights raise the regulatory capital cost per unit of exposure, compressing origination economics for unsecured retail products until reversed.",
+      "polarity": "-",
+      "lifecycle": "permanent"
+    },
+    {
+      "id": "ch_unsecured_to_secured_substitution",
+      "label": "Suppressed unsecured demand → secured substitution",
+      "driver_type": "structural_shift",
+      "source_concept": "structural:digital_substitution",
+      "target_concepts": [{"product": "gold_loan"}],
+      "mechanism": "When unsecured credit access tightens, displaced household liquidity demand reroutes to secured collateral borrowing for similar needs. A demand-side rerouting, not a new origination driver.",
+      "polarity": "~",
+      "lifecycle": "permanent"
+    },
+    {
+      "id": "ch_psl_threshold_reclassification",
+      "label": "PSL classification threshold → reported reclassification",
+      "driver_type": "policy_action",
+      "source_concept": "policy:psl_threshold",
+      "target_concepts": [{"product": "housing"}, {"product": "export_credit"}],
+      "mechanism": "Revising a PSL eligibility ceiling reclassifies existing sub-threshold stock into the priority bucket, producing reported growth that is not new lending and distorting the flow read.",
+      "polarity": "+",
+      "lifecycle": "permanent",
+      "distortion": true
+    },
+    {
+      "id": "ch_industrial_capex_supplychain",
+      "label": "Industrial-policy capex → supply-chain credit",
+      "driver_type": "policy_action",
+      "source_concept": "policy:capex_program",
+      "target_concepts": [{"product": "industry", "segment": "corporate"}],
+      "mechanism": "A capex incentive program (e.g. PLI) drives drawdowns first in upstream input sectors (metals, chemicals) and then downstream manufacturing (engineering) on a 2–3 year implementation lag — co-accelerating sectors that do not normally move together.",
+      "polarity": "+",
+      "lifecycle": "permanent"
+    },
+    {
+      "id": "ch_formalisation_underwritability",
+      "label": "Formalisation infrastructure → small-borrower underwritability",
+      "driver_type": "structural_shift",
+      "source_concept": "structural:formalisation_data",
+      "target_concepts": [{"product": "msme_credit", "segment": "msme"}],
+      "mechanism": "Registry + tax-data coverage (UDYAM, GST) makes small borrowers underwritable at scale for the first time; lenders with origination infrastructure convert registry access into credit at previously unachievable volumes.",
+      "polarity": "+",
+      "lifecycle": "permanent",
+      "cross_system_note": "Spans SIBC MSME stock, future TReDS MSME-invoice flow, and originations MSME flow."
+    },
+    {
+      "id": "ch_wholesale_funding_intermediation",
+      "label": "Bank→NBFC exposure rule → intermediated credit",
+      "driver_type": "policy_action",
+      "source_concept": "policy:bank_nbfc_exposure_rule",
+      "target_concepts": [{"product": "nbfc_credit", "segment": "financial_institution"}],
+      "mechanism": "Changes to bank-to-NBFC exposure risk weights expand or suppress the wholesale funding channel; recovery amplifies all NBFC-intermediated lending, which is reported under services regardless of end-use sector.",
+      "polarity": "+",
+      "lifecycle": "permanent"
+    },
+    {
+      "id": "ch_procurement_policy_food",
+      "label": "Public procurement policy → procurement credit",
+      "driver_type": "policy_action",
+      "source_concept": "policy:procurement_msp",
+      "target_concepts": [{"product": "food_credit", "segment": "government"}],
+      "mechanism": "Rising MSP prices and procurement volumes require larger seasonal bank drawdowns by procurement agencies, lifting both the peak and trough of the food-credit cycle (secular trend on a seasonal pattern).",
+      "polarity": "+",
+      "lifecycle": "permanent"
+    },
+    {
+      "id": "ch_project_lifecycle_origination",
+      "label": "Project lifecycle phase → new origination vs repayment",
+      "driver_type": "structural_shift",
+      "source_concept": "structural:project_lifecycle",
+      "target_concepts": [{"product": "infrastructure_credit"}],
+      "mechanism": "As a project cohort moves from construction (drawdown) to operations (repayment), net credit balance declines unless new origination offsets it — suppressing growth even while existing books remain large.",
+      "polarity": "-",
+      "lifecycle": "permanent"
+    },
+    {
+      "id": "ch_zero_mdr_acceptance_mix",
+      "label": "Zero MDR → acceptance-infrastructure mix",
+      "driver_type": "policy_action",
+      "source_concept": "policy:mdr",
+      "target_concepts": [{"product": "qr_acceptance"}, {"product": "pos_acceptance"}],
+      "mechanism": "Zero MDR on UPI makes QR acceptance structurally cheaper than card POS (no hardware, no per-txn fee), driving QR deployment while suppressing POS-terminal investment. Polarity is per-target: + for QR, − for POS.",
+      "polarity": "~",
+      "lifecycle": "permanent",
+      "per_target_polarity": {"qr_acceptance": "+", "pos_acceptance": "-"}
+    },
+    {
+      "id": "ch_card_lifecycle_norms",
+      "label": "Card-inactivity rule → reported card stock",
+      "driver_type": "policy_action",
+      "source_concept": "policy:card_lifecycle_rule",
+      "target_concepts": [{"product": "credit_card", "measure": "count.value"}],
+      "mechanism": "Mandatory closure of inactive cards creates periodic step-downs in the reported outstanding count that do not represent demand contraction — a purge of inactive inventory, with recovery as new issuance resumes.",
+      "polarity": "-",
+      "lifecycle": "permanent"
+    },
+    {
+      "id": "ch_institutional_exit_card_stock",
+      "label": "Enforcement-driven institutional exit → card stock",
+      "driver_type": "policy_action",
+      "source_concept": "policy:enforcement_action",
+      "target_concepts": [{"product": "debit_card", "measure": "count.value"}],
+      "mechanism": "Regulatory wind-down of a major issuer forces cancellation of its entire card portfolio, producing a single-period step-down in the stock concentrated in that issuer's lender category.",
+      "polarity": "-",
+      "lifecycle": "conditional"
+    },
+    {
+      "id": "ch_digital_substitution_cash",
+      "label": "Digital payment reach → cash-withdrawal demand",
+      "driver_type": "structural_shift",
+      "source_concept": "structural:digital_substitution",
+      "target_concepts": [{"product": "atm_cash"}, {"product": "debit_card", "measure": "flow.value"}],
+      "mechanism": "As merchant digital (UPI/card) acceptance expands, consumers pre-withdraw cash less often, suppressing ATM/debit cash-withdrawal flow.",
+      "polarity": "-",
+      "lifecycle": "permanent"
+    },
+    {
+      "id": "ch_embedded_payment_card_other",
+      "label": "Embedded payment rails → new card-spend surface",
+      "driver_type": "structural_shift",
+      "source_concept": "structural:embedded_payment_rails",
+      "target_concepts": [{"product": "card_spend"}],
+      "mechanism": "A new embedded payment use case (transit NFC tap-to-pay or RuPay-credit-on-UPI) creates a structurally growing card-spend channel in the unclassified 'other' category. Driver composition is unresolved (hypothesis).",
+      "polarity": "+",
+      "lifecycle": "conditional"
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "_meta": {
+    "description": "Confirmed cross-system edges (Layer 2b, COMPOSITION_SPEC.md §6). Promoted from cross_source/candidates.json after review. Each edge references entities by URN across DIFFERENT pipelines. The ecosystem projection consumes only confirmed edges here — never candidates.",
+    "spec_ref": "analysis/COMPOSITION_SPEC.md",
+    "candidates_ref": "analysis/cross_source/candidates.json"
+  },
+  "cross_edges": [
+    {
+      "id": "x_cc_spend_leads_cc_stock",
+      "type": "leads",
+      "from": "icl:atm_pos/spend_value/cc_spend_value",
+      "to": "icl:sibc/Statement1/4.5",
+      "polarity": "+",
+      "scope": "cross_source",
+      "derived_from": "R1_stock_flow",
+      "shared": {"product": "credit_card"},
+      "mechanism": "Credit-card spend flow (payments) leads credit-card outstanding stock (SIBC): sustained spending growth precedes balance build-up. Confirmed cross-system instance of the flow→stock law.",
+      "status": "confirmed"
+    },
+    {
+      "id": "x_cc_count_corresponds_cc_stock",
+      "type": "corresponds_to",
+      "from": "icl:atm_pos/cards/credit_cards",
+      "to": "icl:sibc/Statement1/4.5",
+      "polarity": "structural",
+      "scope": "cross_source",
+      "derived_from": "R3_corresponds",
+      "shared": {"product": "credit_card"},
+      "mechanism": "Credit-card count (payments, # cards) and credit-card outstanding (SIBC, ₹ balance) are two measures of the same product; together they yield average balance per card.",
+      "status": "confirmed"
+    }
+  ]
+}
