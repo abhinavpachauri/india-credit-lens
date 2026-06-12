@@ -22,6 +22,7 @@ export interface SectionChartSlice {
   seriesNames:              string[];
   distributionSeriesNames?: string[];   // subset used by distribution chart
   pctLabel:                 string;
+  variant?:                 "sibc" | "atm_pos";   // atm_pos: growthData is MoM, no FY
 }
 
 /** Keyed by pipeline:sectionId — avoids collisions across pipelines. */
@@ -54,9 +55,32 @@ async function loadSibcChartMap(): Promise<SectionChartMap> {
 // ── ATM/POS loader (stub — extend when ATM/POS opportunities are authored) ───
 
 async function loadAtmPosChartMap(): Promise<SectionChartMap> {
-  // When ATM/POS opportunities land, import the ATM/POS report loader here
-  // and build the map the same way as SIBC.
-  return new Map();
+  const { loadAtmPosData, buildSectionData } = await import("@/lib/atm_pos_data");
+  const rows = await loadAtmPosData();
+  const map: SectionChartMap = new Map();
+  // headline metric per opportunity group; charted as Total + by bank-type over time
+  const GROUP_METRIC: Record<string, string> = {
+    cc: "credit_cards", dc: "debit_cards", infra: "pos_terminals",
+  };
+  const filter = {
+    mode: "by_type" as const,
+    selectedTypes: ["PSB", "Private", "Foreign", "SFB", "Payments"],
+    selectedBanks: [] as string[],
+    topN: 5,
+  };
+  for (const [group, metric] of Object.entries(GROUP_METRIC)) {
+    const sd = buildSectionData(rows, metric, filter);
+    map.set(chartKey("atm_pos", group), {
+      absoluteData:            sd.absoluteData,
+      growthData:              sd.momData,   // MoM % (no YoY/FY for the payments slice)
+      fyData:                  [],
+      seriesNames:             sd.seriesNames,
+      distributionSeriesNames: sd.seriesNames,
+      pctLabel:                "% of Total",
+      variant:                 "atm_pos",
+    });
+  }
+  return map;
 }
 
 // ── Public API ────────────────────────────────────────────────────────────────

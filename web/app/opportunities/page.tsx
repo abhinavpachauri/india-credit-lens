@@ -19,6 +19,7 @@ interface FeedItem {
   section: { id: string | null; title: string; icon: string };
   title: string; body: string; implication?: string | null;
   chain: string[]; driver?: string | null; via?: string | null; evidence: string[];
+  highlight?: string[];
 }
 interface CrossItem {
   id: string; status: Status; title: string; body: string;
@@ -81,10 +82,19 @@ function StatusPill({ status }: { status: Status }) {
 
 type TabId = "trend" | "distribution";
 
-function ChartPanel({ slice, sectionId }: { slice: SectionChartSlice; sectionId: string }) {
+function ChartPanel({ slice, sectionId, highlightConfig }: {
+  slice: SectionChartSlice; sectionId: string;
+  highlightConfig?: { highlight: string[] } | null;
+}) {
   const [tab, setTab]             = useState<TabId>("trend");
   const [trendMode, setTrendMode] = useState<"absolute" | "yoy" | "fy">("absolute");
   const [distMode, setDistMode]   = useState<"absolute" | "pct">("absolute");
+  const isAtm = slice.variant === "atm_pos";
+  // payments slice has no YoY/FY — offer Absolute + MoM only
+  const trendModes = (isAtm ? ["absolute", "yoy"] : ["absolute", "yoy", "fy"]) as ("absolute" | "yoy" | "fy")[];
+  const trendLabel = (m: string) =>
+    m === "absolute" ? (isAtm ? "Count" : "Absolute") : m === "yoy" ? (isAtm ? "MoM %" : "YoY %") : "FY Cumul.";
+  const mode = trendMode === "fy" && isAtm ? "absolute" : trendMode;
   return (
     <div>
       <div style={CONTROLS_CARD}>
@@ -99,17 +109,17 @@ function ChartPanel({ slice, sectionId }: { slice: SectionChartSlice; sectionId:
           <div className="hidden sm:block" style={DIVIDER} />
           <div className="flex items-center gap-3 text-xs" style={{ color: "var(--font)" }}>
             {tab === "trend"
-              ? (["absolute", "yoy", "fy"] as const).map((m) => (
+              ? trendModes.map((m) => (
                   <label key={m} className="flex items-center gap-1 cursor-pointer">
                     <input type="radio" name={`trend-${sectionId}`} value={m}
                       checked={trendMode === m} onChange={() => setTrendMode(m)} className="accent-blue-500" />
-                    {m === "absolute" ? "Absolute" : m === "yoy" ? "YoY %" : "FY Cumul."}
+                    {trendLabel(m)}
                   </label>))
               : (["absolute", "pct"] as const).map((m) => (
                   <label key={m} className="flex items-center gap-1 cursor-pointer">
                     <input type="radio" name={`dist-${sectionId}`} value={m}
                       checked={distMode === m} onChange={() => setDistMode(m)} className="accent-blue-500" />
-                    {m === "absolute" ? "₹ Crore" : "% Share"}
+                    {m === "absolute" ? (isAtm ? "Count" : "₹ Crore") : "% Share"}
                   </label>))}
           </div>
         </div>
@@ -117,12 +127,12 @@ function ChartPanel({ slice, sectionId }: { slice: SectionChartSlice; sectionId:
       <div style={{ background: "var(--bg-card)", border: "1px solid var(--border-card)", borderRadius: 8, padding: "12px 8px 8px" }}>
         {tab === "trend" ? (
           <TrendChart absoluteData={slice.absoluteData} growthData={slice.growthData} fyData={slice.fyData}
-            seriesNames={slice.seriesNames} pctLabel={slice.pctLabel} mode={trendMode}
-            highlightConfig={null} preferredMode={null} />
+            seriesNames={slice.seriesNames} pctLabel={slice.pctLabel} mode={mode}
+            highlightConfig={highlightConfig ?? null} preferredMode={null} />
         ) : (
           <DistributionChart absoluteData={slice.absoluteData}
             seriesNames={slice.distributionSeriesNames ?? slice.seriesNames} pctLabel={slice.pctLabel}
-            mode={distMode} highlightConfig={null} preferredMode={null} />
+            mode={distMode} highlightConfig={highlightConfig ?? null} preferredMode={null} />
         )}
       </div>
     </div>
@@ -259,7 +269,8 @@ function OpportunityCard({ item, chartSlice }: { item: FeedItem; chartSlice: Sec
 
         {chartSlice && (
           <div style={{ padding: "20px 20px 16px" }}>
-            <ChartPanel slice={chartSlice} sectionId={item.section.id!} />
+            <ChartPanel slice={chartSlice} sectionId={item.section.id!}
+              highlightConfig={item.highlight?.length ? { highlight: item.highlight } : null} />
           </div>
         )}
       </div>

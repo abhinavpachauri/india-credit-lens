@@ -60,6 +60,13 @@ ATM_GROUP = {"credit_card": ("cc", "Credit Cards", "💳"),
              "micro_atm_cash": ("infra", "Infrastructure", "🏗️")}
 
 
+def load_chart_series_index():
+    """registry signal_id -> chart_series[] (the exact chart series names to highlight)."""
+    reg = gs.load_json(gs.ANALYSIS / "signals" / "registry.json")
+    return {sid: s.get("chart_series") or []
+            for sid, s in reg["signals"].items()}
+
+
 def build_pipeline_items(pipeline, channels):
     period = latest_period(pipeline)
     cfg = gs.PIPELINES[pipeline]
@@ -71,6 +78,7 @@ def build_pipeline_items(pipeline, channels):
     opp_nodes = {n["id"]: n for n in model["nodes"] if n.get("tier") in ("opportunity", "risk")}
     fi = {f["id"]: f for f in model.get("force_instances", [])}
     ent = {n["urn"]: n for n in model["nodes"] if n.get("tier") == "entity"}
+    chart_series = load_chart_series_index()
 
     items = []
     for oid, d in derived.items():
@@ -83,17 +91,30 @@ def build_pipeline_items(pipeline, channels):
         driver = inst["label"] if inst else None
         via = chan["label"] if chan else None
         # section (for chart) from the first anchored entity
-        section_id, sec_title, sec_icon = None, "", ""
+        section_id, sec_title, sec_icon, highlight = None, "", "", []
         anchor = (refs.get("entities") or [None])[0]
         e = ent.get(anchor)
         if e:
             if pipeline == "sibc":
                 section_id = sibc_section_for(e["code"], e.get("statement"))
                 sec_title, sec_icon = SIBC_SECTION_META.get(section_id, ("", ""))
+                # highlight = chart series of the anchored entity's L1 signals; prefer the
+                # entity-specific single-series signals (a yoy/abs/share on THIS entity) over
+                # broad scan/count signals that list every sibling series.
+                singles, union = [], []
+                for sid in e.get("signal_ids") or []:
+                    cs = chart_series.get(sid, [])
+                    for x in cs:
+                        if x not in union:
+                            union.append(x)
+                    if len(cs) == 1 and cs[0] not in singles:
+                        singles.append(cs[0])
+                highlight = singles or union
             else:
                 g = ATM_GROUP.get((e.get("concept_tags") or {}).get("product"))
                 if g:
                     section_id, sec_title, sec_icon = g
+                    highlight = ["Total"]   # payments slice highlights the headline total
         chain = []
         if chan:
             chain.append(chan.get("mechanism", chan["label"]))
@@ -110,6 +131,7 @@ def build_pipeline_items(pipeline, channels):
             "implication": (f"Lenders aligned to {via} capture this first." if via else None),
             "chain": chain, "driver": driver, "via": via,
             "evidence": d.get("evidence", []),
+            "highlight": highlight,
         })
     return items
 
