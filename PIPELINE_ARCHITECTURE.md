@@ -22,6 +22,24 @@ Scripts differ per pipeline; stages do not.
 | 2b | Cross-source model per tuple — after both L2a FOUNDATION | Every ingestion — after both constituent L2a evaluate |
 | 3  | `ecosystem_model.json` — authored once, updated ~6 monthly | Every ingestion — rules from model + L2b outputs |
 
+**v4.0 (June 2026) — the Layer 2/3 model is now built and operational.** See `analysis/COMPOSITION_SPEC.md`
+v1.0 (extends `SYSTEM_MODEL_SPEC.md` v3.0). It refines the above into **five strata**:
+
+| Stratum | What | Where | Cadence |
+|---|---|---|---|
+| **S1** structural skeleton | entities + composes_into/reclassifies, URNs, concept_tags | `generate_skeleton.py` → `system_model.json` | deterministic, every ingestion |
+| **S2a** causal structure | data-less channels over concepts | **shared hub** `analysis/ontology/{concepts,channels}.json` | authored, rarely changes |
+| **S2b** force instances | dated, sourced activations of a channel | `force_instances[]` in `system_model.json` | authored |
+| **S3** dynamic state | forces/edges/loops fire from live signals; opportunity status | `generate_system_state.py`, `derive_opportunities.py`, `compose_ecosystem.py` | computed, every ingestion |
+| **S4** inference | LLM proposes new channels/instances/cross-edges, gated by sourcing | (next build) | on pattern |
+
+Cross-system composition is **federated** (no monolith): each pipeline maps entities to the shared hub
+once; `derive_cross_links.py` derives cross-edges through shared concepts (stock↔flow + shared channel);
+`cross_source/composition.json` holds confirmed edges; the combined view is **projected**, never authored.
+Both gates (`run_evals.py`, `run_atm_pos_evals.py`) run skeleton-regen + `validate_system_model.py` + S3 +
+opportunities each ingestion. Legacy `validate.py` checks 4/5, `validate_claims.py`, `generate_mermaid.py`,
+`source_claims.py` are **retired** (detached from the gate).
+
 Model updates and signal evaluation are never conflated. A new period always runs signal
 evaluation for all layers where a model exists. Model updates are explicit, separate steps
 with their own cadence. If no model exists yet, evaluation is skipped silently and signals

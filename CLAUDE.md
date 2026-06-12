@@ -50,6 +50,11 @@ Live components only. Planned work lives in `STRATEGY_PLANNER.md`.
 | detect_format.py (Stage 0) | **Live** — flags format changes in new XLSX before extraction |
 | ATM/POS pipeline | **Live** — `rbi_atm_pos/` — Stages 0–3 complete; Stage 4 (L1 compute) — 82 signals in registry, 56 with DB values (26 YoY signals pending prior-year data); Stage 5 evaluation complete for 2026-03-31 |
 | AppShell + DLS | **Live** — shared Header (one instance), `dls/InsightCard`, `dls/InsightCTAStrip` used by both SIBC and Payments |
+| **Layer 2a system models (v4.0)** | **Live** — `system_model.json` for both pipelines (SIBC 85 entities, ATM/POS 35). Deterministic structural skeleton (`generate_skeleton.py`) + behavioral-causal split into shared **channels** (S2a) + dated **force_instances** (S2b). Specs: `analysis/SYSTEM_MODEL_SPEC.md` v3.0 + `analysis/COMPOSITION_SPEC.md` v1.0. Validated by `validate_system_model.py` in both gates. |
+| **Composition hub (Layer 2b)** | **Live** — `analysis/ontology/{concepts,channels}.json` shared across pipelines; entities carry global URNs + `concept_tags`. `derive_cross_links.py` derives cross-system candidates (stock↔flow + shared-channel); `cross_source/composition.json` holds confirmed cross-edges; `validate_composition.py` enforces the no-monolith rule. |
+| **S3 dynamic state + opportunities** | **Live** — `generate_system_state.py` (forces/edges/loops fire from `signals.db`), `derive_opportunities.py` (status active/watch/closed/retired from driver firing), `compose_ecosystem.py` (cross-system premium feed). Both gates run these each ingestion. |
+| **Opportunities UI** | **Live** — gated `/opportunities` reads `web/public/data/opportunities_feed.json` (`generate_opportunities_feed.py`); `generate_opportunity_narrative.py` adds plain-English, numbers-grounded copy (post-gate step). |
+| ~~validate.py checks 4/5 · validate_claims (2c) · generate_mermaid · source_claims · subsystems~~ | **Retired** — superseded by the v4.0 system model + `validate_system_model.py`. Scripts remain on disk, detached from the gate. |
 
 ---
 
@@ -72,7 +77,13 @@ Use CLI tools for all external service interactions — they are the most contex
 | `python3 analysis/run_atm_pos_evals.py --xlsx {file}` | ATM/POS gate — Stages 0–3 + L1 signal append + build |
 | `python3 analysis/promote_annotations.py` | Stage 7: verified copy annotations_merged.ts → rbi_sibc.ts — never `cp` or manual paste |
 | `python3 analysis/detect_format.py` | Stage 0: flag format changes before extraction (SIBC) |
-| `python3 analysis/source_claims.py` | Post-model-update: source all system model claims (run after any Layer 2a model change) |
+| ~~`python3 analysis/source_claims.py`~~ | **Legacy** — v2 claim sourcing; superseded by `validate_system_model.py` (sourcing built in). Detached from gate. |
+| `python3 analysis/generate_skeleton.py --pipeline {sibc\|atm_pos}` | Stage 4-struct: regenerate the deterministic skeleton (preserves behavioral layer + force_instances). Runs inside both gates. |
+| `python3 analysis/validate_system_model.py --pipeline {name}` | v4.0 model gate — structural + D1/D2/D3 discipline + force sourcing + URN/concept_tags. Replaces legacy checks 4/5/2c. |
+| `python3 analysis/generate_system_state.py --pipeline {name} --period {date}` | S3: compute dynamic state from `signals.db` → `system_state_{period}.json`. |
+| `python3 analysis/derive_opportunities.py --pipeline {name} --period {date}` | Derive live opportunity/risk status from S3 driver firing. |
+| `python3 analysis/derive_cross_links.py` · `compose_ecosystem.py` · `validate_composition.py` | Cross-system pass (Layer 2b): derive candidates → project ecosystem state → validate cross-edges. |
+| `python3 analysis/generate_opportunities_feed.py` then `generate_opportunity_narrative.py` | Presentation: build `opportunities_feed.json`, then add plain-English narrative (post-gate, cached). |
 | `python3 analysis/generate_signal_history.py append --pipeline {name} --period {date}` | Stage 4: Layer 1 signal compute → writes to signals.db + updates registry |
 | `python3 analysis/generate_signal_history.py evaluate --pipeline {name} --period {date}` | Stage 5: LLM signal evaluate → evaluations JSON; auto-loads prior period for narrative diff |
 | `python3 analysis/generate_signal_history.py status` | Print current signal states across all pipelines |
@@ -216,16 +227,15 @@ For session-specific state (current period, what's been validated, what's pendin
 
 ## Next Builds
 
-See `STRATEGY_PLANNER.md` for the prioritised roadmap. Immediately next:
+See `STRATEGY_PLANNER.md` for the prioritised roadmap.
 
-1. **Ingest next SIBC + ATM/POS period** — files expected soon; run full pipeline gate after ingestion
-2. **UI wiring for L1 signals** — wire UI to consume from evaluation JSONs instead of hand-authored annotations for L1 signals; requires:
-   - Add `chart_series` + `chart_dim` fields to registry.json per L1 signal (maps signal → chart highlight)
-   - `preferredMode` derivable from compute method type (yoy→"yoy", abs→"absolute", fy_acceleration→"fy")
-   - Build `generate_analysis_report.py` output formatter
-3. **Two ATM/POS signal gaps to fix**:
-   - `dc-psb-share` computed but not appearing in evaluation (check domain routing in evaluate.py)
-   - `dc-bank-scan` missing from registry — debit card bank-level scan needed
-4. **Tag live annotations with layer: 1/2/3** — metadata-only change, safe to do now
-5. **ATM/POS Layer 2a** — first FOUNDATION pass on system_model.json (6 months of data now available)
-6. Newsletter standardisation: blocked on Layer 2 signal evaluation
+**Done (June 2026):** Layer 2a system models (both pipelines, v4.0) · composition hub + cross-system
+derivation (Layer 2b) · S3 dynamic state · live opportunity derivation + `/opportunities` UI + plain-English
+narrative. The whole `S1 → S2a/S2b → S3 → opportunities → ecosystem → UI` chain runs in the gates.
+
+**Immediately next:**
+1. **Ingest next SIBC + ATM/POS period** — run full gate after ingestion (now also regenerates skeleton + S3 + opportunities).
+2. **Opportunity-chart alignment** — `/opportunities` cards should highlight the series the opportunity is about (SIBC) and load payments chart slices (`loadAtmPosChartMap` is a stub). The payments *insights* page already highlights correctly via `effect.highlight`.
+3. **S4 inference loop** — LLM proposes new channels/instances/cross-edges from S3 patterns + the authored-vs-observed mismatch detector; gated by sourcing.
+4. **Two ATM/POS signal gaps**: `dc-psb-share` evaluation routing · `dc-bank-scan` missing from registry.
+5. Newsletter standardisation: now unblocked by the Layer 2 model.
