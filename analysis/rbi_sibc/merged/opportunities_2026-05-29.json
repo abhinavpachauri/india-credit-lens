@@ -11,6 +11,32 @@
   },
   "items": [
     {
+      "id": "opp_colending_infra",
+      "tier": "opportunity",
+      "label": "Co-lending & warehouse-financing infrastructure",
+      "surface": "opportunities",
+      "scope": "pipeline",
+      "status": "active",
+      "authored_status": "active",
+      "evidence": [
+        "sibc-msme-micro-small-fy-acceleration",
+        "sibc-msme-micro-small-share",
+        "sibc-msme-micro-small-yoy",
+        "sibc-msme-size-yoy-spread"
+      ],
+      "refs": {
+        "entities": [
+          "icl:sibc/Statement1/2.1"
+        ],
+        "instances": [
+          "force_msme_formalisation"
+        ],
+        "channels": [
+          "ch_formalisation_underwritability"
+        ]
+      }
+    },
+    {
       "id": "opp_gold_loan_entry",
       "tier": "opportunity",
       "label": "Gold loan market entry / deepening for banks",
@@ -131,6 +157,35 @@
         ],
         "channels": [
           "ch_project_lifecycle_origination"
+        ]
+      }
+    },
+    {
+      "id": "opp_services_entry",
+      "tier": "opportunity",
+      "label": "Services sector credit entry / scale-up",
+      "surface": "opportunities",
+      "scope": "pipeline",
+      "status": "active",
+      "authored_status": "active",
+      "evidence": [
+        "sibc-nbfc-sub-yoy-scan",
+        "sibc-sectors-positive-yoy-count",
+        "sibc-services-fy-acceleration",
+        "sibc-services-share",
+        "sibc-services-share-scan",
+        "sibc-services-yoy",
+        "sibc-services-yoy-scan"
+      ],
+      "refs": {
+        "entities": [
+          "icl:sibc/Statement1/3"
+        ],
+        "instances": [
+          "force_nbfc_regulatory_recovery"
+        ],
+        "channels": [
+          "ch_wholesale_funding_intermediation"
         ]
       }
     },

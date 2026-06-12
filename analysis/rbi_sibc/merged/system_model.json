@@ -2749,6 +2749,40 @@
       "source_rationale": "Multi-period deceleration pattern is consistent with operations-phase rotation",
       "status": "active",
       "annotation_ids": []
+    },
+    {
+      "id": "opp_services_entry",
+      "tier": "opportunity",
+      "label": "Services sector credit entry / scale-up",
+      "description": "Services is the fastest-growing main sector, led by NBFC, trade and CRE credit. Lenders without a services origination capability are under-indexed to the highest-growth credit pool; the NBFC channel recovery is reopening intermediated flow.",
+      "claim_type": "inference",
+      "domain": "sector_mix",
+      "source": "RBI SIBC merged series (Jan 2024 – Apr 2026)",
+      "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx",
+      "source_verified_date": "2026-06-11",
+      "source_excerpt": "",
+      "source_rationale": "Anchored to live SIBC sector trajectory.",
+      "status": "active",
+      "annotation_ids": [
+        "services-credit-entry"
+      ]
+    },
+    {
+      "id": "opp_colending_infra",
+      "tier": "opportunity",
+      "label": "Co-lending & warehouse-financing infrastructure",
+      "description": "MSME formalisation makes small-borrower credit underwritable, but distribution is the bottleneck. Banks that build co-lending rails and warehouse-financing infrastructure with NBFC partners capture origination volume that pure balance-sheet lending cannot reach.",
+      "claim_type": "inference",
+      "domain": "industry",
+      "source": "RBI SIBC merged series (Jan 2024 – Apr 2026)",
+      "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx",
+      "source_verified_date": "2026-06-11",
+      "source_excerpt": "",
+      "source_rationale": "Anchored to live SIBC sector trajectory.",
+      "status": "active",
+      "annotation_ids": [
+        "co-lending-infrastructure"
+      ]
     }
   ],
   "edges": [
@@ -3856,6 +3890,42 @@
       "mechanism": "Vehicle loan growth includes an emerging EV component — retired until EV share is measurable in L1 data",
       "retired_with": "opp_vehicle_ev",
       "id": "e_S1_4_7__creates_opportunity__opp_vehicle_ev"
+    },
+    {
+      "id": "force_nbfc_regulatory_recovery__creates_opportunity__opp_services_entry",
+      "type": "creates_opportunity",
+      "from": "force_nbfc_regulatory_recovery",
+      "to": "opp_services_entry",
+      "polarity": "+",
+      "scope": "inter_group",
+      "mechanism": "Driver trajectory opens this strategic window."
+    },
+    {
+      "id": "e_S1_3__creates_opportunity__opp_services_entry",
+      "type": "creates_opportunity",
+      "from": "e_S1_3",
+      "to": "opp_services_entry",
+      "polarity": "+",
+      "scope": "inter_group",
+      "mechanism": "Driver trajectory opens this strategic window."
+    },
+    {
+      "id": "force_msme_formalisation__creates_opportunity__opp_colending_infra",
+      "type": "creates_opportunity",
+      "from": "force_msme_formalisation",
+      "to": "opp_colending_infra",
+      "polarity": "+",
+      "scope": "inter_group",
+      "mechanism": "Driver trajectory opens this strategic window."
+    },
+    {
+      "id": "e_S1_2_1__creates_opportunity__opp_colending_infra",
+      "type": "creates_opportunity",
+      "from": "e_S1_2_1",
+      "to": "opp_colending_infra",
+      "polarity": "+",
+      "scope": "inter_group",
+      "mechanism": "Driver trajectory opens this strategic window."
     }
   ],
   "force_instances": [

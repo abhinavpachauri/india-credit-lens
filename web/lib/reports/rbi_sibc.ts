@@ -132,7 +132,7 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
     opportunities: [
       {
         id: "credit-cycle-expansion",
-        layer: 3,
+        layer: 1,
         title: "₹29.6L Cr added in one year — the largest annual absolute add in this dataset",
         body: "FY26 added ₹29.6L Cr (Mar 2025 → Mar 2026), vs ₹18.2L Cr in FY25 — a 63% increase in annual flow. " +
               "This is not a rate-driven cyclical recovery — it reflects formalisation of credit access " +

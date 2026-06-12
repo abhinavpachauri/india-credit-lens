@@ -689,6 +689,34 @@
       "polarity": "+",
       "from": "e_S1_4_7",
       "to": "opp_vehicle_ev"
+    },
+    "force_nbfc_regulatory_recovery__creates_opportunity__opp_services_entry": {
+      "state": "dominant",
+      "type": "creates_opportunity",
+      "polarity": "+",
+      "from": "force_nbfc_regulatory_recovery",
+      "to": "opp_services_entry"
+    },
+    "e_S1_3__creates_opportunity__opp_services_entry": {
+      "state": "dominant",
+      "type": "creates_opportunity",
+      "polarity": "+",
+      "from": "e_S1_3",
+      "to": "opp_services_entry"
+    },
+    "force_msme_formalisation__creates_opportunity__opp_colending_infra": {
+      "state": "dominant",
+      "type": "creates_opportunity",
+      "polarity": "+",
+      "from": "force_msme_formalisation",
+      "to": "opp_colending_infra"
+    },
+    "e_S1_2_1__creates_opportunity__opp_colending_infra": {
+      "state": "dominant",
+      "type": "creates_opportunity",
+      "polarity": "+",
+      "from": "e_S1_2_1",
+      "to": "opp_colending_infra"
     }
   },
   "loop_states": {
