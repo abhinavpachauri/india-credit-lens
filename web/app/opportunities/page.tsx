@@ -1,9 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {
-  loadSectionChartMap, chartKey,
-} from "@/lib/section-chart-data";
+import { loadSectionChartMap, chartKey } from "@/lib/section-chart-data";
 import type { SectionChartMap, SectionChartSlice } from "@/lib/section-chart-data";
 import TrendChart        from "@/components/TrendChart";
 import DistributionChart from "@/components/DistributionChart";
@@ -13,23 +11,20 @@ import DistributionChart from "@/components/DistributionChart";
 type Pipeline = "sibc" | "atm_pos";
 type Status   = "active" | "watch" | "closed" | "retired";
 
-interface FeedItem {
-  id: string; pipeline: Pipeline; scope: "pipeline"; tier: "opportunity" | "risk";
-  status: Status; authored_status?: string;
-  section: { id: string | null; title: string; icon: string };
-  title: string; body: string; implication?: string | null;
-  chain: string[]; driver?: string | null; via?: string | null; evidence: string[];
-  highlight?: string[];
-}
-interface CrossItem {
-  id: string; status: Status; title: string; body: string;
-  basis: string; link: string; badge: string;
+interface ChartRef { pipeline: Pipeline; section: string; highlight: string[]; caption?: string }
+
+interface Item {
+  id: string; pipeline?: Pipeline; scope: "pipeline" | "cross_source"; tier: "opportunity" | "risk";
+  status: Status; section?: { id: string | null; title: string; icon: string };
+  title: string; body: string; implication?: string | null; chain: string[];
+  charts: ChartRef[]; badge?: string;
 }
 interface Feed {
-  cross_system: CrossItem[];
-  pipelines: Record<Pipeline, FeedItem[]>;
+  cross_system: Item[];
+  pipelines: Record<Pipeline, Item[]>;
   _meta: { periods: Record<string, string> };
 }
+interface ResolvedChart { slice: SectionChartSlice; highlight: string[]; caption?: string; key: string }
 
 // ── Styles ───────────────────────────────────────────────────────────────────
 
@@ -78,7 +73,7 @@ function StatusPill({ status }: { status: Status }) {
   );
 }
 
-// ── Per-card chart panel (unchanged) ───────────────────────────────────────────
+// ── Per-chart panel ────────────────────────────────────────────────────────────
 
 type TabId = "trend" | "distribution";
 
@@ -90,7 +85,6 @@ function ChartPanel({ slice, sectionId, highlightConfig }: {
   const [trendMode, setTrendMode] = useState<"absolute" | "yoy" | "fy">("absolute");
   const [distMode, setDistMode]   = useState<"absolute" | "pct">("absolute");
   const isAtm = slice.variant === "atm_pos";
-  // payments slice has no YoY/FY — offer Absolute + MoM only
   const trendModes = (isAtm ? ["absolute", "yoy"] : ["absolute", "yoy", "fy"]) as ("absolute" | "yoy" | "fy")[];
   const trendLabel = (m: string) =>
     m === "absolute" ? (isAtm ? "Count" : "Absolute") : m === "yoy" ? (isAtm ? "MoM %" : "YoY %") : "FY Cumul.";
@@ -158,12 +152,12 @@ function FlipZone({ implication, chain }: { implication?: string | null; chain?:
             {hasChain && (
               <button onClick={flip} className="flex items-center gap-1.5 text-xs font-semibold mt-3"
                 style={{ color: "var(--font-muted)", background: "none", border: "none", padding: 0, cursor: "pointer" }}>
-                <span style={{ fontSize: 11 }}>↺</span> Causal chain
+                <span style={{ fontSize: 11 }}>↺</span> Why — the chain
               </button>)}
           </div>
         ) : (
           <div>
-            <p style={{ fontSize: 12, fontWeight: 700, color: OPP_COLOR, marginBottom: 8 }}>Causal chain</p>
+            <p style={{ fontSize: 12, fontWeight: 700, color: OPP_COLOR, marginBottom: 8 }}>Why — the chain</p>
             <ol className="flex flex-col gap-2" style={{ paddingLeft: 0, listStyle: "none", margin: 0 }}>
               {chain!.map((step, i) => (
                 <li key={i} className="flex gap-2" style={{ lineHeight: 1.6 }}>
@@ -182,95 +176,54 @@ function FlipZone({ implication, chain }: { implication?: string | null; chain?:
   );
 }
 
-// ── Cross-system premium band ───────────────────────────────────────────────
+// ── Card (opportunity + cross-system, unified) ──────────────────────────────
 
-function CrossBand({ items }: { items: CrossItem[] }) {
-  if (items.length === 0) return null;
+function OppCard({ item, charts }: { item: Item; charts: ResolvedChart[] }) {
+  const isCross = item.scope === "cross_source";
+  const accent  = isCross ? OPP_COLOR : STATUS_META[item.status].color;
   return (
     <div style={{
-      border: `1.5px solid ${OPP_COLOR}`, borderRadius: 12, padding: "16px 20px", marginBottom: 28,
-      background: `linear-gradient(135deg, ${OPP_COLOR}0D, transparent 60%)`,
-    }}>
-      <div className="flex items-center gap-2 mb-3 flex-wrap">
-        <span style={{ fontSize: 11, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.08em", color: OPP_COLOR }}>
-          ✦ Cross-system signals
-        </span>
-        <span style={{ fontSize: 12, color: "var(--font-muted)" }}>premium · only by composing pipelines</span>
-      </div>
-      {items.map((c) => (
-        <div key={c.id} style={{ marginTop: 4 }}>
-          <div className="flex items-center gap-2 mb-1 flex-wrap">
-            <StatusPill status={c.status} />
-            <h3 className="text-base font-bold leading-snug" style={{ color: "var(--font)" }}>{c.title}</h3>
-          </div>
-          <p style={{ fontSize: 14, color: "var(--font)", lineHeight: 1.65, marginBottom: 6 }}>{c.body}</p>
-          <p style={{ fontSize: 12, color: "var(--font-muted)", fontFamily: "var(--font-mono, monospace)" }}>
-            basis: {c.basis}
-          </p>
-          <span style={{ display: "inline-block", marginTop: 6, fontSize: 11, fontWeight: 700, color: "#fff",
-            background: "linear-gradient(90deg,#4e8ef7,#2ca02c)", borderRadius: 4, padding: "2px 8px" }}>
-            {c.badge}
-          </span>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-// ── Opportunity card ────────────────────────────────────────────────────────
-
-function MetaRow({ k, v }: { k: string; v: string }) {
-  return (
-    <div className="flex gap-2" style={{ fontSize: 13, lineHeight: 1.55, marginTop: 4 }}>
-      <span style={{ color: "var(--font-muted)", minWidth: 48, fontWeight: 600 }}>{k}</span>
-      <span style={{ color: "var(--font)" }}>{v}</span>
-    </div>
-  );
-}
-
-function OpportunityCard({ item, chartSlice }: { item: FeedItem; chartSlice: SectionChartSlice | null }) {
-  return (
-    <div style={{
-      background: "var(--bg-card)", border: "1px solid var(--border-card)",
-      borderLeft: `4px solid ${STATUS_META[item.status].color}`, borderRadius: 10, marginBottom: 20, overflow: "hidden",
+      background: "var(--bg-card)", border: `1px solid ${isCross ? OPP_COLOR : "var(--border-card)"}`,
+      borderLeft: `4px solid ${accent}`, borderRadius: 10, marginBottom: 20, overflow: "hidden",
+      ...(isCross ? { background: `linear-gradient(135deg, ${OPP_COLOR}0A, transparent 55%)` } : {}),
     }}>
       <div className="grid grid-cols-1 sm:grid-cols-[45fr_55fr]" style={{ alignItems: "start" }}>
-        <div style={{ padding: "20px 24px", borderRight: chartSlice ? "1px solid var(--border-card)" : undefined }}>
-          {/* Badges + status */}
+        {/* Text */}
+        <div style={{ padding: "20px 24px", borderRight: charts.length ? "1px solid var(--border-card)" : undefined }}>
           <div className="flex items-center gap-2 mb-3 flex-wrap">
             <StatusPill status={item.status} />
-            <span style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em",
-              color: "#fff", background: PIPELINE_COLOR[item.pipeline] ?? OPP_COLOR, borderRadius: 4, padding: "2px 8px" }}>
-              {PIPELINE_LABEL[item.pipeline] ?? item.pipeline}
-            </span>
-            {item.section.title && (
+            {isCross ? (
+              <span style={{ fontSize: 11, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.06em",
+                color: "#fff", background: "linear-gradient(90deg,#4e8ef7,#2ca02c)", borderRadius: 4, padding: "2px 8px" }}>
+                ✦ {item.badge ?? "Cross-system"}
+              </span>
+            ) : (
+              <span style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em",
+                color: "#fff", background: PIPELINE_COLOR[item.pipeline ?? "sibc"] ?? OPP_COLOR, borderRadius: 4, padding: "2px 8px" }}>
+                {PIPELINE_LABEL[item.pipeline ?? ""] ?? item.pipeline}
+              </span>
+            )}
+            {item.section?.title && (
               <span style={{ fontSize: 13, color: "var(--font-muted)" }}>{item.section.icon} {item.section.title}</span>
             )}
           </div>
           <h3 className="text-base font-bold leading-snug mb-3" style={{ color: "var(--font)" }}>{item.title}</h3>
-          <p style={{ fontSize: 14, color: "var(--font)", lineHeight: 1.65, marginBottom: 10 }}>{item.body}</p>
-
-          {/* Driver / via / evidence */}
-          {item.driver && <MetaRow k="driver" v={item.driver} />}
-          {item.via && <MetaRow k="via" v={item.via} />}
-          {item.evidence.length > 0 && (
-            <div className="flex gap-2 flex-wrap" style={{ marginTop: 8, alignItems: "center" }}>
-              <span style={{ fontSize: 13, color: "var(--font-muted)", fontWeight: 600 }}>▸ evidence</span>
-              {item.evidence.map((e) => (
-                <span key={e} style={{ fontSize: 11, color: STATUS_META[item.status].color,
-                  background: `${STATUS_META[item.status].color}12`, border: `1px solid ${STATUS_META[item.status].color}30`,
-                  borderRadius: 4, padding: "1px 7px", fontFamily: "var(--font-mono, monospace)" }}>{e}</span>
-              ))}
-            </div>
-          )}
-
+          <p style={{ fontSize: 14, color: "var(--font)", lineHeight: 1.65 }}>{item.body}</p>
           <FlipZone implication={item.implication} chain={item.chain} />
         </div>
 
-        {chartSlice && (
-          <div style={{ padding: "20px 20px 16px" }}>
-            <ChartPanel slice={chartSlice} sectionId={item.section.id!}
-              highlightConfig={item.highlight?.length ? { highlight: item.highlight } : null} />
+        {/* Charts (1 for opportunities, 2 for cross-system) */}
+        {charts.length > 0 && (
+          <div style={{ padding: "20px 20px 16px", display: "flex", flexDirection: "column", gap: 18 }}>
+            {charts.map((c) => (
+              <div key={c.key}>
+                {c.caption && (
+                  <p style={{ fontSize: 12, fontWeight: 700, color: "var(--font-muted)", marginBottom: 6 }}>{c.caption}</p>
+                )}
+                <ChartPanel slice={c.slice} sectionId={c.key}
+                  highlightConfig={c.highlight.length ? { highlight: c.highlight } : null} />
+              </div>
+            ))}
           </div>
         )}
       </div>
@@ -297,23 +250,31 @@ export default function OpportunitiesPage() {
     return <div className="flex items-center justify-center min-h-[60vh] text-sm" style={{ color: "var(--font-muted)" }}>Loading opportunities…</div>;
   }
 
-  const allOpps: FeedItem[] = (["sibc", "atm_pos"] as Pipeline[])
-    .flatMap((p) => feed.pipelines[p] ?? [])
-    .filter((o) => o.tier === "opportunity" && o.status !== "retired");
+  const resolve = (item: Item): ResolvedChart[] => {
+    const out: ResolvedChart[] = [];
+    (item.charts ?? []).forEach((c, i) => {
+      const slice = charts?.get(chartKey(c.pipeline, c.section));
+      if (slice) out.push({ slice, highlight: c.highlight, caption: c.caption, key: `${item.id}-${i}` });
+    });
+    return out;
+  };
 
-  const byPipeline = pf === "all" ? allOpps : allOpps.filter((o) => o.pipeline === pf);
   const statusOk = (s: Status) =>
     sf === "all" ? true : sf === "live" ? (s === "active" || s === "watch") : s === sf;
-  const visible = byPipeline.filter((o) => statusOk(o.status));
 
+  const allOpps = (["sibc", "atm_pos"] as Pipeline[])
+    .flatMap((p) => feed.pipelines[p] ?? [])
+    .filter((o) => o.tier === "opportunity" && o.status !== "retired");
   const sibcN = allOpps.filter((o) => o.pipeline === "sibc").length;
   const atmN  = allOpps.filter((o) => o.pipeline === "atm_pos").length;
   const period = feed._meta.periods.sibc ?? "";
 
+  const crossVisible = feed.cross_system.filter((c) => statusOk(c.status));
+  const visible = (pf === "all" ? allOpps : allOpps.filter((o) => o.pipeline === pf)).filter((o) => statusOk(o.status));
+
   const renderPipeline = (p: Pipeline) => {
     const items = visible.filter((o) => o.pipeline === p);
     if (items.length === 0) return null;
-    const activeN = items.filter((o) => o.status === "active").length;
     return (
       <div key={p} style={{ marginBottom: 12 }}>
         <div className="flex items-center gap-2" style={{ margin: "8px 0 14px" }}>
@@ -321,12 +282,9 @@ export default function OpportunitiesPage() {
             {PIPELINE_LABEL[p]} ({p === "sibc" ? "SIBC" : "ATM/POS"})
           </span>
           <div style={{ flex: 1, height: 1, background: "var(--border-card)" }} />
-          <span style={{ fontSize: 12, color: "var(--font-muted)" }}>{activeN} active</span>
+          <span style={{ fontSize: 12, color: "var(--font-muted)" }}>{items.filter((o) => o.status === "active").length} active</span>
         </div>
-        {items.map((o) => (
-          <OpportunityCard key={o.id} item={o}
-            chartSlice={(o.section.id && charts?.get(chartKey(o.pipeline, o.section.id))) || null} />
-        ))}
+        {items.map((o) => <OppCard key={o.id} item={o} charts={resolve(o)} />)}
       </div>
     );
   };
@@ -361,11 +319,21 @@ export default function OpportunitiesPage() {
         </div>
       </div>
 
-      {/* Cross-system premium band */}
-      {(pf === "all") && <CrossBand items={feed.cross_system} />}
+      {/* Cross-system signals (premium) */}
+      {pf === "all" && crossVisible.length > 0 && (
+        <div style={{ marginBottom: 22 }}>
+          <div className="flex items-center gap-2" style={{ marginBottom: 12, flexWrap: "wrap" }}>
+            <span style={{ fontSize: 12, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.07em", color: OPP_COLOR }}>
+              ✦ Cross-system signals
+            </span>
+            <span style={{ fontSize: 12, color: "var(--font-muted)" }}>only by composing pipelines</span>
+          </div>
+          {crossVisible.map((c) => <OppCard key={c.id} item={c} charts={resolve(c)} />)}
+        </div>
+      )}
 
       {/* Per-pipeline cards */}
-      {visible.length === 0 ? (
+      {visible.length === 0 && crossVisible.length === 0 ? (
         <p style={{ color: "var(--font-muted)", fontSize: 14 }}>No opportunities for this filter.</p>
       ) : (
         (pf === "all" ? (["sibc", "atm_pos"] as Pipeline[]) : [pf as Pipeline]).map(renderPipeline)

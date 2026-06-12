@@ -10,12 +10,36 @@
   "cross_system": [
     {
       "id": "xopp_x_cc_spend_leads_cc_stock",
+      "scope": "cross_source",
+      "tier": "opportunity",
       "status": "watch",
       "title": "Cross-system signal: credit_card flow softening ahead of stock",
-      "body": "Credit card spending is slowing down now, which means credit card balances will grow more slowly in the coming months. When people spend less on their cards today, banks see smaller balance increases later.",
-      "basis": "icl:atm_pos/spend_value/cc_spend_value (f=-1) → icl:sibc/Statement1/4.5 (t=1)",
-      "link": "x_cc_spend_leads_cc_stock",
+      "body": "Credit card spending is slowing down, which usually happens before credit card loans start shrinking. When people spend less on their cards, they typically pay down their balances over the next few months, causing total credit card debt to drop. This gives banks a few months' head start to see what's coming.",
+      "implication": "Banks should prepare for lower credit card loan growth and adjust their lending plans before the slowdown hits their loan books.",
+      "chain": [
+        "People are spending less money on their credit cards",
+        "Lower spending usually leads to people paying down their card balances over the next few months",
+        "Banks can spot this early and adjust their credit card lending before loan growth actually slows"
+      ],
       "badge": "Credit ✕ Payments",
+      "charts": [
+        {
+          "pipeline": "atm_pos",
+          "section": "cc",
+          "highlight": [
+            "Total"
+          ],
+          "caption": "Credit card spend (value) (Payments)"
+        },
+        {
+          "pipeline": "sibc",
+          "section": "personalLoans",
+          "highlight": [
+            "Credit Card Outstanding"
+          ],
+          "caption": "Credit Card Outstanding (Credit)"
+        }
+      ],
       "narrative": true
     }
   ],
@@ -34,15 +58,15 @@
           "icon": "🏭"
         },
         "title": "Co-lending & warehouse-financing infrastructure",
-        "body": "Small businesses are becoming much easier to check for loans because of new government tracking systems (UDYAM registration and GST data). Micro and small business lending jumped 30.09% this year and now makes up 23.12% of all business loans. But banks struggle to reach these small companies directly because they don't have the right sales networks.",
-        "implication": "Banks should partner with finance companies that specialize in small business lending through co-lending deals and warehouse financing to tap into this 30% growth market.",
+        "body": "Small business credit is growing fast at 30.09% this year and now makes up 23.12% of all business lending. The government's UDYAM registration and GST data are making tiny businesses easier to check for creditworthiness. But banks struggle to reach these small borrowers directly because there are so many of them.",
+        "implication": "Build partnerships with finance companies that can find and assess small borrowers, then either lend together or provide funding to those finance companies.",
         "chain": [
-          "Registry + tax-data coverage (UDYAM, GST) makes small borrowers underwritable at scale for the first time; lenders with origination infrastructure convert registry access into credit at previously unachievable volumes.",
-          "Triggered by MSME formalisation via UDYAM registration + GST data — SIDBI MSME Pulse Special Edition Report, June 2025",
-          "Live signals confirming: sibc-msme-micro-small-fy-acceleration, sibc-msme-micro-small-share, sibc-msme-micro-small-yoy, sibc-msme-size-yoy-spread"
+          "Government systems make small businesses easier to track and verify",
+          "Small business lending grows 30% but banks can't reach all these borrowers directly",
+          "Banks partner with finance companies who can find small borrowers and either share the lending or fund the finance company"
         ],
-        "driver": "MSME formalisation via UDYAM registration + GST data",
-        "via": "Formalisation infrastructure → small-borrower underwritability",
+        "_driver": "MSME formalisation via UDYAM registration + GST data",
+        "_via": "Formalisation infrastructure → small-borrower underwritability",
         "evidence": [
           "sibc-msme-micro-small-fy-acceleration",
           "sibc-msme-micro-small-share",
@@ -51,6 +75,15 @@
         ],
         "highlight": [
           "Micro and Small"
+        ],
+        "charts": [
+          {
+            "pipeline": "sibc",
+            "section": "industryBySize",
+            "highlight": [
+              "Micro and Small"
+            ]
+          }
         ],
         "narrative": true
       },
@@ -67,21 +100,30 @@
           "icon": "💳"
         },
         "title": "Gold loan market entry / deepening for banks",
-        "body": "Banks are winning gold loans from finance companies, growing 121% in the last year and staying strong for 8 straight periods. Rising gold prices since 2023 make people want more loans against their gold jewelry. Banks beat finance companies because they have local branches to test gold purity, store it safely, and handle cash payments.",
-        "implication": "Banks with many branches should start or expand gold loan services now while gold prices stay high.",
+        "body": "Banks are growing gold loans by 121% year-over-year and have been growing for 8 straight periods. They're taking customers away from NBFCs because gold prices shot up from 2023 to 2026, making gold-backed loans more attractive to borrowers. Banks can offer better rates and service because they have local branches to check gold quality and store it safely.",
+        "implication": "Banks with many branches should quickly expand their gold loan business to grab market share while gold prices stay high.",
         "chain": [
-          "Rising collateral value raises effective LTV headroom, enlarging the eligible borrower pool and the maximum loan per unit of collateral. Applies to any secured product against the same collateral, in any measure (stock or flow).",
-          "Triggered by Gold price surge (2023–2026) — RBI Press Releases – Sovereign Gold Bond Scheme (March 2023: prid=55327; Feb 202",
-          "Live signals confirming: sibc-pl-gold-pos-streak, sibc-pl-gold-yoy"
+          "Gold prices rose sharply from 2023 to 2026",
+          "Higher gold prices let people borrow more money against their gold jewelry",
+          "Banks beat NBFCs because they can check and store gold at local branches"
         ],
-        "driver": "Gold price surge (2023–2026)",
-        "via": "Collateral price → secured-lending capacity",
+        "_driver": "Gold price surge (2023–2026)",
+        "_via": "Collateral price → secured-lending capacity",
         "evidence": [
           "sibc-pl-gold-pos-streak",
           "sibc-pl-gold-yoy"
         ],
         "highlight": [
           "Gold Loans"
+        ],
+        "charts": [
+          {
+            "pipeline": "sibc",
+            "section": "personalLoans",
+            "highlight": [
+              "Gold Loans"
+            ]
+          }
         ],
         "narrative": true
       },
@@ -98,15 +140,15 @@
           "icon": "🏭"
         },
         "title": "MSME origination infrastructure investment window",
-        "body": "Small business lending is growing 30.09% per year because government registration systems (UDYAM and GST) now provide the data banks need to evaluate tiny borrowers. Micro and small businesses now make up 23.12% of all business lending, up from much lower levels. Banks that built systems to use this government data over the past 2-3 years are winning big, but the window to catch up is closing.",
-        "implication": "Banks should immediately invest in technology that can automatically analyze GST cash flows and UDYAM business data to approve small business loans quickly.",
+        "body": "Small business lending is exploding at 30% annual growth, and these tiny businesses now represent 23% of all MSME lending. Banks that built digital systems to assess small businesses using government registration data and GST records are winning big. Banks without these systems have about 2-3 years to catch up before the opportunity window closes.",
+        "implication": "Banks should immediately invest in digital underwriting systems that can analyze UDYAM registrations and GST data to safely lend to small businesses.",
         "chain": [
-          "Registry + tax-data coverage (UDYAM, GST) makes small borrowers underwritable at scale for the first time; lenders with origination infrastructure convert registry access into credit at previously unachievable volumes.",
-          "Triggered by MSME formalisation via UDYAM registration + GST data — SIDBI MSME Pulse Special Edition Report, June 2025",
-          "Live signals confirming: sibc-msme-micro-small-fy-acceleration, sibc-msme-micro-small-share, sibc-msme-micro-small-yoy, sibc-msme-size-yoy-spread"
+          "Government digitized small business registration and made tax data available",
+          "Banks can now assess creditworthiness of tiny businesses they couldn't lend to before",
+          "Early-moving banks are capturing fast-growing market share while others get left behind"
         ],
-        "driver": "MSME formalisation via UDYAM registration + GST data",
-        "via": "Formalisation infrastructure → small-borrower underwritability",
+        "_driver": "MSME formalisation via UDYAM registration + GST data",
+        "_via": "Formalisation infrastructure → small-borrower underwritability",
         "evidence": [
           "sibc-msme-micro-small-fy-acceleration",
           "sibc-msme-micro-small-share",
@@ -115,6 +157,15 @@
         ],
         "highlight": [
           "Micro and Small"
+        ],
+        "charts": [
+          {
+            "pipeline": "sibc",
+            "section": "industryBySize",
+            "highlight": [
+              "Micro and Small"
+            ]
+          }
         ],
         "narrative": true
       },
@@ -131,15 +182,15 @@
           "icon": "🔩"
         },
         "title": "PLI anchor-supplier chain finance",
-        "body": "Big companies getting PLI scheme money are spending more on their suppliers, with credit growing 17-35% in key manufacturing sectors like engineering, metals, and chemicals. Banks can lend to these suppliers more safely than normal small business loans because the big PLI company will pay them back. This turns risky small business lending into safer corporate-backed lending.",
-        "implication": "Banks should offer supply chain finance products to suppliers of PLI scheme companies instead of standalone small business loans.",
+        "body": "The government's PLI scheme is paying big manufacturers to boost production. These companies are expanding fast and need more suppliers. Basic metals lending grew 17%, chemicals grew 20%, and engineering grew 35%. Banks can lend to these suppliers more safely because they have contracts with large established companies that guarantee payment.",
+        "implication": "Banks should offer supply chain finance products like invoice discounting to PLI suppliers instead of regular unsecured business loans.",
         "chain": [
-          "A capex incentive program (e.g. PLI) drives drawdowns first in upstream input sectors (metals, chemicals) and then downstream manufacturing (engineering) on a 2–3 year implementation lag — co-accelerating sectors that do not normally move together.",
-          "Triggered by PLI scheme capex drawdown phase (FY25–26) — PIB Press Note – PLI Scheme: Powering India's Industrial Renaissance, NoteId 155",
-          "Live signals confirming: sibc-basic-metal-sub-yoy-scan, sibc-chemicals-sub-yoy-scan, sibc-engineering-sub-yoy-scan"
+          "Government pays manufacturers to increase production",
+          "Manufacturers expand and sign contracts with more suppliers",
+          "Banks can safely lend to suppliers because big companies back the payments"
         ],
-        "driver": "PLI scheme capex drawdown phase (FY25–26)",
-        "via": "Industrial-policy capex → supply-chain credit",
+        "_driver": "PLI scheme capex drawdown phase (FY25–26)",
+        "_via": "Industrial-policy capex → supply-chain credit",
         "evidence": [
           "sibc-basic-metal-sub-yoy-scan",
           "sibc-chemicals-sub-yoy-scan",
@@ -147,6 +198,15 @@
         ],
         "highlight": [
           "Basic Metal and Metal Product"
+        ],
+        "charts": [
+          {
+            "pipeline": "sibc",
+            "section": "industryByType",
+            "highlight": [
+              "Basic Metal and Metal Product"
+            ]
+          }
         ],
         "narrative": true
       },
@@ -163,20 +223,29 @@
           "icon": "⭐"
         },
         "title": "PSLC market depth from PSL reclassification surplus",
-        "body": "In October 2024, RBI changed the rules about which housing loans count toward banks' required social lending quotas. Some banks suddenly had way more loans that qualified, with housing social lending growing 39.94% year-over-year. Banks that got this unexpected surplus can now sell certificates to other banks that are behind on their social lending targets.",
-        "implication": "Banks with extra social lending credits should sell PSL Certificates to banks that need them - it's free money from a rule change.",
+        "body": "RBI changed the rules in October 2024 to let more housing loans count toward banks' required priority sector lending. This instantly gave some banks extra PSL credit without doing any new lending - housing PSL lending jumped 39.94% year-over-year. Banks with this surprise surplus can now sell PSL certificates to banks that are behind on their targets.",
+        "implication": "If your bank got extra PSL credit from the rule change, sell certificates to banks missing their targets - if you're behind on PSL goals, buy certificates from banks with surplus.",
         "chain": [
-          "Revising a PSL eligibility ceiling reclassifies existing sub-threshold stock into the priority bucket, producing reported growth that is not new lending and distorting the flow read.",
-          "Triggered by RBI PSL housing loan ceiling revision (Oct 2024) — RBI Master Direction – Priority Sector Lending (Targets and Classification), Ame",
-          "Live signals confirming: sibc-psl-housing-yoy"
+          "RBI rule change let more housing loans count for required priority lending",
+          "Some banks suddenly had extra PSL credit without making new loans",
+          "Banks with surplus can sell certificates to banks that need to hit their targets"
         ],
-        "driver": "RBI PSL housing loan ceiling revision (Oct 2024)",
-        "via": "PSL classification threshold → reported reclassification",
+        "_driver": "RBI PSL housing loan ceiling revision (Oct 2024)",
+        "_via": "PSL classification threshold → reported reclassification",
         "evidence": [
           "sibc-psl-housing-yoy"
         ],
         "highlight": [
           "Housing"
+        ],
+        "charts": [
+          {
+            "pipeline": "sibc",
+            "section": "prioritySector",
+            "highlight": [
+              "Housing"
+            ]
+          }
         ],
         "narrative": true
       },
@@ -193,20 +262,29 @@
           "icon": "🔩"
         },
         "title": "Renewable energy project finance — next capex wave",
-        "body": "Big infrastructure projects that banks funded from 2022-2024 are finishing up, with some areas down 26% and 44% while others still grow at 21% and 74%. Banks have teams that know how to finance large projects like roads and bridges. The government wants more solar, wind, and green hydrogen projects built, creating a clear pipeline of deals to replace the old infrastructure loans.",
-        "implication": "Banks should point their existing project finance teams toward renewable energy deals instead of traditional infrastructure.",
+        "body": "Traditional infrastructure lending is winding down — some sectors dropped 26% and 44% this year while others grew 74% and 21%, showing the boom-bust cycle is ending. Banks spent the last few years building teams that know how to finance big, long-term projects like roads and power plants. Government renewable energy targets are creating a new pipeline of solar, wind, and green hydrogen projects that need the same type of financing.",
+        "implication": "Banks should move their project finance teams from traditional infrastructure to renewable energy deals.",
         "chain": [
-          "As a project cohort moves from construction (drawdown) to operations (repayment), net credit balance declines unless new origination offsets it — suppressing growth even while existing books remain large.",
-          "Triggered by Infrastructure supercycle completing (FY22–24) — RBI SIBC merged series (Jan 2024 – Apr 2026) — Infrastructure sub-sector YoY",
-          "Live signals confirming: sibc-infra-sub-yoy-scan"
+          "Traditional infrastructure projects are finishing their building phase",
+          "Banks now have experienced teams who know how to finance large projects",
+          "Government renewable targets create new solar and wind projects that need the same financing skills"
         ],
-        "driver": "Infrastructure supercycle completing (FY22–24)",
-        "via": "Project lifecycle phase → new origination vs repayment",
+        "_driver": "Infrastructure supercycle completing (FY22–24)",
+        "_via": "Project lifecycle phase → new origination vs repayment",
         "evidence": [
           "sibc-infra-sub-yoy-scan"
         ],
         "highlight": [
           "Infrastructure"
+        ],
+        "charts": [
+          {
+            "pipeline": "sibc",
+            "section": "industryByType",
+            "highlight": [
+              "Infrastructure"
+            ]
+          }
         ],
         "narrative": true
       },
@@ -223,15 +301,15 @@
           "icon": "📊"
         },
         "title": "Services sector credit entry / scale-up",
-        "body": "Services companies are borrowing money 18.6% faster than last year and now make up 28.2% of all business credit in India. NBFCs (non-bank lenders) are also growing again at 16.7% after regulatory troubles, and they're the main way banks reach services companies. Services credit growth jumped by 7 percentage points this year, making it the fastest-growing major sector.",
-        "implication": "Banks should either build direct lending teams for services companies or lend more money to NBFCs who already know how to reach this fast-growing sector.",
+        "body": "Services sector credit is growing at 18.58% per year, much faster than other sectors, and now makes up 28.21% of all bank lending. NBFCs that specialize in services lending are growing even faster at 16.68% to 57.1% as banks start lending to them again after regulatory changes.",
+        "implication": "Banks should either build direct lending teams for services companies or increase their lending to NBFCs that already serve this fast-growing market.",
         "chain": [
-          "Changes to bank-to-NBFC exposure risk weights expand or suppress the wholesale funding channel; recovery amplifies all NBFC-intermediated lending, which is reported under services regardless of end-use sector.",
-          "Triggered by NBFC credit channel recovery post risk-weight cycle — RBI Circular DOR.STR.REC.57/21.06.001/2023-24 (November 16, 2023)",
-          "Live signals confirming: sibc-nbfc-sub-yoy-scan, sibc-sectors-positive-yoy-count, sibc-services-fy-acceleration, sibc-services-share, sibc-services-share-scan, sibc-services-yoy, sibc-services-yoy-scan"
+          "Services companies need more credit and are growing fast at 18.58% per year",
+          "NBFCs that lend to services are recovering and growing at 16-57% as banks lend to them again",
+          "Banks can grow by either lending directly to services companies or by lending more money to these specialized NBFCs"
         ],
-        "driver": "NBFC credit channel recovery post risk-weight cycle",
-        "via": "Bank→NBFC exposure rule → intermediated credit",
+        "_driver": "NBFC credit channel recovery post risk-weight cycle",
+        "_via": "Bank→NBFC exposure rule → intermediated credit",
         "evidence": [
           "sibc-nbfc-sub-yoy-scan",
           "sibc-sectors-positive-yoy-count",
@@ -243,6 +321,15 @@
         ],
         "highlight": [
           "Services"
+        ],
+        "charts": [
+          {
+            "pipeline": "sibc",
+            "section": "mainSectors",
+            "highlight": [
+              "Services"
+            ]
+          }
         ],
         "narrative": true
       },
@@ -260,18 +347,25 @@
         },
         "title": "EV-specific vehicle credit products",
         "body": "RETIRED at first FOUNDATION (2026-06-10). No external source verified for EV share of vehicle loans or EV-specific credit risk differentiation. No L1 signal separating EV from ICE vehicle loans. Returns only when EV share of vehicle loans is measurable in L1 (e.g., VAHAN registration data ingestion).",
-        "implication": null,
-        "chain": [
-          "Live signals confirming: sibc-pl-vehicle-share, sibc-pl-vehicle-yoy"
-        ],
-        "driver": null,
-        "via": null,
+        "implication": "Move on this while the trend is still running in your favour.",
+        "chain": [],
+        "_driver": null,
+        "_via": null,
         "evidence": [
           "sibc-pl-vehicle-share",
           "sibc-pl-vehicle-yoy"
         ],
         "highlight": [
           "Vehicle Loans"
+        ],
+        "charts": [
+          {
+            "pipeline": "sibc",
+            "section": "personalLoans",
+            "highlight": [
+              "Vehicle Loans"
+            ]
+          }
         ]
       },
       {
@@ -288,20 +382,28 @@
         },
         "title": "Infrastructure repayment wave with insufficient new origination pipeline",
         "body": "Banks over-indexed to traditional infrastructure credit face a structural squeeze: the FY22-24 project book moves to repayment (compressing balances) while the next-cycle pipeline (renewables, data centres) is slower to ramp. Banks without next-cycle project finance capability face credit portfolio contraction.",
-        "implication": "Lenders aligned to Project lifecycle phase → new origination vs repayment capture this first.",
+        "implication": "Move on this while the trend is still running in your favour.",
         "chain": [
           "As a project cohort moves from construction (drawdown) to operations (repayment), net credit balance declines unless new origination offsets it — suppressing growth even while existing books remain large.",
-          "Triggered by Infrastructure supercycle completing (FY22–24) — RBI SIBC merged series (Jan 2024 – Apr 2026) — Infrastructure sub-sector YoY",
-          "Live signals confirming: sibc-infra-sub-share-scan, sibc-infra-sub-yoy-scan"
+          "This is being driven by Infrastructure supercycle completing (FY22–24)."
         ],
-        "driver": "Infrastructure supercycle completing (FY22–24)",
-        "via": "Project lifecycle phase → new origination vs repayment",
+        "_driver": "Infrastructure supercycle completing (FY22–24)",
+        "_via": "Project lifecycle phase → new origination vs repayment",
         "evidence": [
           "sibc-infra-sub-share-scan",
           "sibc-infra-sub-yoy-scan"
         ],
         "highlight": [
           "Infrastructure"
+        ],
+        "charts": [
+          {
+            "pipeline": "sibc",
+            "section": "industryByType",
+            "highlight": [
+              "Infrastructure"
+            ]
+          }
         ]
       },
       {
@@ -318,14 +420,13 @@
         },
         "title": "CIC reporting compliance gaps creating off-balance-sheet credit risk",
         "body": "RBI Digital Lending Guidelines (2022/2025) require BNPL and digital credit to report to Credit Information Companies. However, compliance may be incomplete among newer digital lenders operating under first-loss guarantee structures or co-lending arrangements where the regulated entity's on-book exposure is partially shielded. If reporting gaps exist, the true unsecured credit stress is understated in bank balance sheets and in SIBC data.",
-        "implication": "Lenders aligned to Regulatory capital weight → unsecured origination economics capture this first.",
+        "implication": "Move on this while the trend is still running in your favour.",
         "chain": [
           "Higher risk weights raise the regulatory capital cost per unit of exposure, compressing origination economics for unsecured retail products until reversed.",
-          "Triggered by RBI risk-weight hike on unsecured credit (Nov 2023) — RBI Circular RBI/2023-24/89, 'Risk Weights for Consumer Credit and Credit Card R",
-          "Live signals confirming: sibc-pl-cc-below10-streak, sibc-pl-cc-share, sibc-pl-cc-yoy, sibc-pl-consumer-durables-neg-streak, sibc-pl-consumer-durables-share, sibc-pl-consumer-durables-yoy"
+          "This is being driven by RBI risk-weight hike on unsecured credit (Nov 2023)."
         ],
-        "driver": "RBI risk-weight hike on unsecured credit (Nov 2023)",
-        "via": "Regulatory capital weight → unsecured origination economics",
+        "_driver": "RBI risk-weight hike on unsecured credit (Nov 2023)",
+        "_via": "Regulatory capital weight → unsecured origination economics",
         "evidence": [
           "sibc-pl-cc-below10-streak",
           "sibc-pl-cc-share",
@@ -336,6 +437,15 @@
         ],
         "highlight": [
           "Consumer Durables"
+        ],
+        "charts": [
+          {
+            "pipeline": "sibc",
+            "section": "personalLoans",
+            "highlight": [
+              "Consumer Durables"
+            ]
+          }
         ]
       }
     ],
@@ -353,13 +463,15 @@
           "icon": "💳"
         },
         "title": "Credit card penetration deepening — PSB share gap is the opening",
-        "body": "Credit cards are growing fast at 8.2% per year and reached 119.4 million cards in April 2026. Government banks only have 24% of all credit cards, but they control 64% of debit cards — that's a huge gap. Government banks have millions of people who already use their debit cards but don't have credit cards yet.",
-        "implication": "Government banks should offer credit cards to their existing debit card customers since they already have the banking relationship and know these customers.",
+        "body": "Credit cards are growing 8.15% yearly with 119 million total cards. Public sector banks have only 24% of credit cards but 64% of debit cards, meaning they have millions of existing customers who could get credit cards but don't. Converting existing customers costs much less than finding new ones.",
+        "implication": "Public sector banks should offer credit card upgrades to their existing debit card customers since they already know and trust these customers.",
         "chain": [
-          "Live signals confirming: cc-bank-scan, cc-category-share-scan, cc-outstanding-abs, cc-outstanding-yoy, cc-private-share, cc-psb-share"
+          "Public sector banks have way more debit card customers than credit card customers",
+          "Their existing customers already trust them and have working bank accounts",
+          "Converting existing customers to credit cards costs much less than finding brand new customers"
         ],
-        "driver": null,
-        "via": null,
+        "_driver": null,
+        "_via": null,
         "evidence": [
           "cc-bank-scan",
           "cc-category-share-scan",
@@ -370,6 +482,15 @@
         ],
         "highlight": [
           "Total"
+        ],
+        "charts": [
+          {
+            "pipeline": "atm_pos",
+            "section": "cc",
+            "highlight": [
+              "Total"
+            ]
+          }
         ],
         "narrative": true
       },
@@ -386,19 +507,30 @@
           "icon": "🏗️"
         },
         "title": "Rural cash distribution via Micro ATM / Business Correspondent networks",
-        "body": "Micro ATMs dropped 7.17% this year but there are still 1.37 million of them running. Rural areas need cash access but full ATMs cost too much to set up there. Micro ATMs let banks provide cash services at much lower cost than building branches or full ATMs.",
-        "implication": "Banks should expand business correspondent networks with micro ATM placement in rural areas instead of expensive full ATM rollouts.",
+        "body": "Micro ATMs dropped 7.17% but there are still 1.37 million of them serving rural areas. Rural people still need cash but these areas can't support the cost of full ATMs or bank branches. This creates a gap that smaller, cheaper micro ATMs can fill.",
+        "implication": "Banks should expand their business correspondent networks with micro ATM devices to serve rural cash demand at lower cost than building full branches.",
         "chain": [
-          "Live signals confirming: micro-atm-yoy, micro-atms-abs"
+          "Rural areas still need cash access but full ATMs cost too much to install and maintain",
+          "Micro ATMs can provide basic cash services at much lower cost than full ATMs or branches",
+          "Banks can serve this rural market by partnering with local business correspondents who operate micro ATMs"
         ],
-        "driver": null,
-        "via": null,
+        "_driver": null,
+        "_via": null,
         "evidence": [
           "micro-atm-yoy",
           "micro-atms-abs"
         ],
         "highlight": [
           "Total"
+        ],
+        "charts": [
+          {
+            "pipeline": "atm_pos",
+            "section": "infra",
+            "highlight": [
+              "Total"
+            ]
+          }
         ],
         "narrative": true
       },
@@ -415,21 +547,30 @@
           "icon": "💳"
         },
         "title": "Embedded transit and tap-to-pay payment products",
-        "body": "Credit card spending in the 'other' category exploded 493% in value and 300% in volume this year. This massive growth comes from new payment systems being built into public transport (tap-to-pay on buses and trains) and apps that now let people use credit cards through UPI. People are using credit cards in completely new places where they never could before.",
-        "implication": "Banks should quickly connect their credit cards to these new payment systems to capture their share of this fast-growing market.",
+        "body": "Credit card spending in the 'other' category grew 493% in value and 300% in volume this year. This massive jump comes from new payment systems that let people use credit cards for metro rides, bus fares, and quick tap payments at stores. People are switching from cash and debit cards to credit cards for these everyday purchases.",
+        "implication": "Banks should rush to get their credit cards working with these new transit and tap-payment systems before competitors grab the customers.",
         "chain": [
-          "A new embedded payment use case (transit NFC tap-to-pay or RuPay-credit-on-UPI) creates a structurally growing card-spend channel in the unclassified 'other' category. Driver composition is unresolved (hypothesis).",
-          "Triggered by Embedded card payment infrastructure rollout (transit NFC or RuPay-credit-on-UPI)",
-          "Live signals confirming: cc-other-val-yoy, cc-other-vol-yoy"
+          "New payment systems are being built that accept credit cards for metro rides and quick store payments",
+          "People are trying these systems and switching from cash to credit cards for daily purchases",
+          "Banks that connect their cards to these systems first will capture these new spending habits"
         ],
-        "driver": "Embedded card payment infrastructure rollout (transit NFC or RuPay-credit-on-UPI)",
-        "via": "Embedded payment rails → new card-spend surface",
+        "_driver": "Embedded card payment infrastructure rollout (transit NFC or RuPay-credit-on-UPI)",
+        "_via": "Embedded payment rails → new card-spend surface",
         "evidence": [
           "cc-other-val-yoy",
           "cc-other-vol-yoy"
         ],
         "highlight": [
           "Total"
+        ],
+        "charts": [
+          {
+            "pipeline": "atm_pos",
+            "section": "cc",
+            "highlight": [
+              "Total"
+            ]
+          }
         ],
         "narrative": true
       },
@@ -447,12 +588,13 @@
         },
         "title": "Credit card market concentrated in top-5 private banks",
         "body": "The top-5 private banks control approximately 71% of credit card outstanding. The largest single issuer holds ~20% of the market. This concentration creates systemic fragility — as demonstrated when a single payment bank's exit caused a market-wide debit card step-down. Similar disruption from a major credit card issuer would have proportionally larger effects.",
-        "implication": null,
+        "implication": "Move on this while the trend is still running in your favour.",
         "chain": [],
-        "driver": null,
-        "via": null,
+        "_driver": null,
+        "_via": null,
         "evidence": [],
-        "highlight": []
+        "highlight": [],
+        "charts": []
       },
       {
         "id": "risk_debit_card_base_erosion",
@@ -468,14 +610,13 @@
         },
         "title": "Debit card base structural decline reducing cash access for underbanked",
         "body": "The debit card base is contracting through payment bank exits and lifecycle purges. This reduces the potential transaction base for populations that depend on debit cards for cash access and digital payments — particularly lower-income and rural segments without credit cards or reliable UPI-linked accounts.",
-        "implication": "Lenders aligned to Enforcement-driven institutional exit → card stock capture this first.",
+        "implication": "Move on this while the trend is still running in your favour.",
         "chain": [
           "Regulatory wind-down of a major issuer forces cancellation of its entire card portfolio, producing a single-period step-down in the stock concentrated in that issuer's lender category.",
-          "Triggered by RBI enforcement action against Paytm Payments Bank (Jan–Apr 2026) — RBI Press Release 2024-2025/1589 — Paytm Payments Bank Limited: directions under",
-          "Live signals confirming: dc-bank-scan, dc-category-share-scan, dc-outstanding-abs, dc-outstanding-yoy, dc-private-share, dc-psb-share"
+          "This is being driven by RBI enforcement action against Paytm Payments Bank (Jan–Apr 2026)."
         ],
-        "driver": "RBI enforcement action against Paytm Payments Bank (Jan–Apr 2026)",
-        "via": "Enforcement-driven institutional exit → card stock",
+        "_driver": "RBI enforcement action against Paytm Payments Bank (Jan–Apr 2026)",
+        "_via": "Enforcement-driven institutional exit → card stock",
         "evidence": [
           "dc-bank-scan",
           "dc-category-share-scan",
@@ -486,6 +627,15 @@
         ],
         "highlight": [
           "Total"
+        ],
+        "charts": [
+          {
+            "pipeline": "atm_pos",
+            "section": "dc",
+            "highlight": [
+              "Total"
+            ]
+          }
         ]
       },
       {
@@ -502,14 +652,13 @@
         },
         "title": "Payment acceptance bifurcation: POS contracting while UPI grows",
         "body": "POS terminal network contraction while UPI QR expands creates an acceptance gap: merchants who drop POS terminals cannot accept international cards, EMI transactions, premium credit card features, or POS-authenticated payments. Customers without UPI-linked accounts face reduced options at merchants who have switched fully to UPI.",
-        "implication": "Lenders aligned to Zero MDR → acceptance-infrastructure mix capture this first.",
+        "implication": "Move on this while the trend is still running in your favour.",
         "chain": [
           "Zero MDR on UPI makes QR acceptance structurally cheaper than card POS (no hardware, no per-txn fee), driving QR deployment while suppressing POS-terminal investment. Polarity is per-target: + for QR, − for POS.",
-          "Triggered by Zero MDR policy on UPI transactions (NPCI/GoI) — Union Budget 2022-23 — MDR waiver provisions for UPI and RuPay; NPCI product ove",
-          "Live signals confirming: pos-bank-scan, pos-category-share-scan, pos-private-share, pos-psb-share, pos-terminals-abs, pos-terminals-pos-streak, pos-terminals-yoy, upi-qr-per-pos, upi-qr-yoy"
+          "This is being driven by Zero MDR policy on UPI transactions (NPCI/GoI)."
         ],
-        "driver": "Zero MDR policy on UPI transactions (NPCI/GoI)",
-        "via": "Zero MDR → acceptance-infrastructure mix",
+        "_driver": "Zero MDR policy on UPI transactions (NPCI/GoI)",
+        "_via": "Zero MDR → acceptance-infrastructure mix",
         "evidence": [
           "pos-bank-scan",
           "pos-category-share-scan",
@@ -523,6 +672,15 @@
         ],
         "highlight": [
           "Total"
+        ],
+        "charts": [
+          {
+            "pipeline": "atm_pos",
+            "section": "infra",
+            "highlight": [
+              "Total"
+            ]
+          }
         ]
       }
     ]

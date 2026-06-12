@@ -35,9 +35,13 @@ SYSTEM = (
     "deploy, land-grab, synergy, accretive, value accretion, deepening, ecosystem, "
     "positioned, optionality, flywheel, secularly, outperformance, re-rating. "
     "If you would use a fancy word, use the simple one instead (e.g. say 'growing fast' not "
-    "'structural tailwind'; 'lending through NBFCs' not 'intermediated flow'). No hype, no "
+    "'structural tailwind'; 'lending through NBFCs' not 'intermediated flow'). "
+    "Also write a `chain`: 2-3 short plain-English steps that walk through the cause and effect "
+    "(what's happening → why → what it leads to). The chain MUST NOT contain signal codes, "
+    "metric IDs (like 'sibc-pl-gold-yoy'), or jargon — just plain reasoning. No hype, no "
     'preamble. Return ONLY minified JSON: {"body":"2-3 plain sentences with the numbers",'
-    '"implication":"one plain sentence saying what the bank should do"}.'
+    '"implication":"one plain sentence saying what the bank should do",'
+    '"chain":["step 1","step 2","step 3"]}.'
 )
 
 
@@ -100,7 +104,8 @@ def main():
             (item.get("evidence") or []) + entity_signal_ids(models, set(refs_entities or []))))
         signals = db_signal_values(pipeline, period, metric_ids) if pipeline else []
         payload = {"title": item["title"], "description": item.get("body", ""),
-                   "driver": item.get("driver"), "via": item.get("via"), "signals": signals}
+                   "driver": item.get("_driver") or item.get("driver"),
+                   "via": item.get("_via") or item.get("via"), "signals": signals}
         key = hashlib.sha1(json.dumps(payload, sort_keys=True).encode()).hexdigest()[:16]
         if key in cache:
             res = cache[key]; skipped += 1
@@ -117,6 +122,8 @@ def main():
             # the card already renders a "For lenders" header — strip any duplicate prefix
             imp = re.sub(r"^\s*for lenders\s*[:\-—]\s*", "", res["implication"], flags=re.I)
             item["implication"] = imp[0].upper() + imp[1:] if imp else imp
+        if res.get("chain"):
+            item["chain"] = res["chain"]
         item["narrative"] = True
 
     for pipe in gs.PIPELINES:
@@ -137,6 +144,11 @@ def main():
                     print(f"  ⚠ {c['id']}: {e}", file=sys.stderr); failed += 1; res = None
             if res:
                 c["body"] = res.get("body", c["body"])
+                if res.get("implication"):
+                    imp = re.sub(r"^\s*for lenders\s*[:\-—]\s*", "", res["implication"], flags=re.I)
+                    c["implication"] = imp[0].upper() + imp[1:] if imp else imp
+                if res.get("chain"):
+                    c["chain"] = res["chain"]
                 c["narrative"] = True
 
     CACHE.write_text(json.dumps(cache, indent=2, ensure_ascii=False))
