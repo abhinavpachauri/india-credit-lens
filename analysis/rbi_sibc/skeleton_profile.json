@@ -1,0 +1,125 @@
+{
+  "_meta": {
+    "pipeline": "sibc",
+    "description": "Machine-readable SIBC structural profile consumed by analysis/generate_skeleton.py. Companion to skeleton_profile.md (human reference). Encodes SPEC v3.0 §6.1: column->role map, decomposition labels, authored reclassification target map, artifact skip rules. The ONLY authored structural inputs are reclass_target_map and parent_overrides; everything else is deterministic column logic.",
+    "spec_ref": "analysis/SYSTEM_MODEL_SPEC.md",
+    "skeleton_profile_md": "analysis/rbi_sibc/skeleton_profile.md",
+    "expected_node_count": 85,
+    "expected_node_count_note": "85 emitted entities = 86 distinct (statement, code) rows in the latest period minus the Statement 2 header artifact row (empty code, level -1). The .md's '86' counts that artifact."
+  },
+
+  "source_csv": "web/public/data/rbi_sibc_consolidated.csv",
+  "hierarchy_source": "csv",
+
+  "columns": {
+    "partition": "statement",
+    "code": "code",
+    "level": "level",
+    "parent_code": "parent_code",
+    "parent_partition": "parent_statement",
+    "reclass_flag": "is_priority_sector_memo",
+    "value": "outstanding_cr",
+    "label": "sector"
+  },
+
+  "period_selection": {
+    "comment": "Structure is taken from the latest period only. Select max report_date, then within it max date.",
+    "order_by": ["report_date", "date"]
+  },
+
+  "truthy": ["True", "true", "1", "yes"],
+
+  "artifact_skip": {
+    "empty_code": true,
+    "comment": "Skips the Statement 2 header artifact row (empty code, level -1, sector 'Industries (2.1 to 2.19)')."
+  },
+
+  "parent_overrides": [
+    {
+      "partition": "Statement 1", "code": "II",
+      "parent_partition": "Statement 1", "parent_code": "I",
+      "decomposition": "primary",
+      "basis": "CSV leaves II (Food Credit) parentless at level 0; the RBI identity Bank Credit (I) = Food Credit (II) + Non-food Credit (III) makes II a primary child of I. Authored once, stable."
+    },
+    {
+      "partition": "Statement 1", "code": "III",
+      "parent_partition": "Statement 1", "parent_code": "I",
+      "decomposition": "primary",
+      "basis": "Same identity: I = II + III. III (Non-food Credit) is a primary child of I."
+    }
+  ],
+
+  "decomposition": {
+    "comment": "SPEC §6 step 3: a parent whose children span >1 partition value has alternate decompositions; each child's decomposition = its partition value (aliased below). Single-partition parents -> 'primary'. Only Industry (code 2) has alternates in SIBC.",
+    "labels": { "Statement 1": "by_size", "Statement 2": "by_type" },
+    "default": "primary"
+  },
+
+  "exhaustive_decompositions": {
+    "comment": "Per (parent_partition, parent_code) -> whether its children sum to the parent. Where false, a residual is EXPECTED (RBI sectoral deployment covers a bank subset / sub-classifications are partial); the validator reports it as a note, not a failure. Unlisted parents default to exhaustive=true.",
+    "default": true,
+    "non_exhaustive": [
+      { "partition": "Statement 1", "code": "III", "expected_residual_pct": 4.9, "basis": "Non-food Credit > 1+2+3+4: sectoral deployment is a partial coverage of non-food credit." },
+      { "partition": "Statement 1", "code": "3.9", "expected_residual_pct": 65.0, "basis": "NBFCs (3.9) > HFCs (3.9.1) + PFIs (3.9.2): only two NBFC sub-classes are reported; the rest is unclassified." }
+    ]
+  },
+
+  "reclass_target_map": {
+    "comment": "Authored. PSL memo rows (is_priority_sector_memo=True, codes i-x, Statement 1) re-slice credit already counted in the primary tree under different thresholds. additive:false. target=null where PSL-native (no single primary-tree node).",
+    "entries": {
+      "i":    { "label": "Agriculture",                "target": { "partition": "Statement 1", "code": "1" },    "basis": "PSL agriculture uses eligibility caps; primary tree is all agriculture credit." },
+      "ii":   { "label": "Micro and Small Enterprises", "target": { "partition": "Statement 1", "code": "2.1" },  "basis": "PSL MSME uses turnover-based (June 2020) definition; Industry-by-size uses a different size basis - different populations." },
+      "iii":  { "label": "Medium Enterprises",          "target": { "partition": "Statement 1", "code": "2.2" },  "basis": "Same MSME definitional mismatch as ii." },
+      "iv":   { "label": "Housing",                     "target": { "partition": "Statement 1", "code": "4.2" },  "basis": "PSL housing applies loan-ceiling thresholds (metro/non-metro); primary tree is all housing credit." },
+      "v":    { "label": "Educational Loans",           "target": { "partition": "Statement 1", "code": "4.6" },  "basis": "PSL education applies an amount cap." },
+      "vi":   { "label": "Renewable Energy",            "target": { "partition": "Statement 2", "code": "2.18" }, "basis": "PSL renewable maps to a subset of by-type infrastructure/power; not a clean 1:1." },
+      "vii":  { "label": "Social Infrastructure",       "target": null, "basis": "PSL-native classification; no single primary-tree node." },
+      "viii": { "label": "Export Credit",              "target": null, "basis": "PSL-native; export credit is not a separate primary-tree node." },
+      "ix":   { "label": "Others",                      "target": null, "basis": "PSL-native residual." },
+      "x":    { "label": "Weaker Sections",            "target": null, "basis": "PSL-native cross-cutting classification (incl. net PSLC- SF/MF)." }
+    }
+  },
+
+  "signal_attach": {
+    "comment": "Deterministic signal_ids attachment. SIBC L1 signals carry compute.code + compute.statement = the entity identity key. Scan signals (method csv_*_scan_*) cover a family; attach to the parent entity matching compute.code/compute.statement.",
+    "registry": "analysis/signals/registry.json",
+    "match_on": { "code": "compute.code", "partition": "compute.statement" }
+  },
+
+  "concept": {
+    "comment": "COMPOSITION_SPEC.md §4 concept_tags. SIBC is a stock world, system-total, national — so measure/lender/geography are uniform defaults. product+segment are authored per (statement::code); sub-leaves inherit from the nearest tagged ancestor. Keys are 'statement::code' because code collides across statements (e.g. Statement 1::2.1 Micro&Small vs Statement 2::2.1 Mining).",
+    "defaults": { "measure": "stock.balance", "lender": "all", "geography": "national", "segment": "mixed" },
+    "inherit_from_ancestor": ["product", "segment"],
+    "tags": {
+      "Statement 1::I":   { "product": "bank_credit",          "segment": "mixed" },
+      "Statement 1::II":  { "product": "food_credit",          "segment": "government" },
+      "Statement 1::III": { "product": "bank_credit",          "segment": "mixed" },
+      "Statement 1::1":   { "product": "agriculture",          "segment": "agri" },
+      "Statement 1::2":   { "product": "industry",             "segment": "corporate" },
+      "Statement 1::2.1": { "product": "msme_credit",          "segment": "msme" },
+      "Statement 1::2.2": { "product": "msme_credit",          "segment": "msme" },
+      "Statement 1::2.3": { "product": "large_corporate",      "segment": "corporate" },
+      "Statement 2::2.18":{ "product": "infrastructure_credit","segment": "corporate" },
+      "Statement 1::3":   { "product": "services",             "segment": "mixed" },
+      "Statement 1::3.7": { "product": "trade_credit",         "segment": "corporate" },
+      "Statement 1::3.9": { "product": "nbfc_credit",          "segment": "financial_institution" },
+      "Statement 1::4":   { "product": "personal_loan",        "segment": "retail" },
+      "Statement 1::4.1": { "product": "consumer_durable",     "segment": "retail" },
+      "Statement 1::4.2": { "product": "housing",              "segment": "retail" },
+      "Statement 1::4.5": { "product": "credit_card",          "segment": "retail" },
+      "Statement 1::4.6": { "product": "education_loan",       "segment": "retail" },
+      "Statement 1::4.7": { "product": "vehicle_loan",         "segment": "retail" },
+      "Statement 1::4.8": { "product": "gold_loan",            "segment": "retail" },
+      "Statement 1::i":   { "product": "agriculture",          "segment": "agri" },
+      "Statement 1::ii":  { "product": "msme_credit",          "segment": "msme" },
+      "Statement 1::iii": { "product": "msme_credit",          "segment": "msme" },
+      "Statement 1::iv":  { "product": "housing",              "segment": "retail" },
+      "Statement 1::v":   { "product": "education_loan",       "segment": "retail" },
+      "Statement 1::vi":  { "product": "renewable_energy",     "segment": "corporate" },
+      "Statement 1::vii": { "product": "social_infrastructure","segment": "corporate" },
+      "Statement 1::viii":{ "product": "export_credit",        "segment": "corporate" },
+      "Statement 1::ix":  { "product": "bank_credit",          "segment": "mixed" },
+      "Statement 1::x":   { "product": "weaker_sections",      "segment": "mixed" }
+    }
+  }
+}

@@ -241,6 +241,24 @@ def check_signal_history():
     return passed, summary or (out[:60] if out else "passed")
 
 
+def check_system_model():
+    """Stage 5c: regenerate the ATM/POS structural skeleton deterministically from the
+    CSV + profile (preserving the authored behavioral layer), then validate the merged
+    system_model.json against SYSTEM_MODEL_SPEC v3.0."""
+    gen_ok, gen_out = run(
+        "skeleton",
+        [sys.executable, str(ANALYSIS / "generate_skeleton.py"), "--pipeline", "atm_pos"],
+    )
+    if not gen_ok:
+        return False, (gen_out.splitlines()[-1] if gen_out else "skeleton gen failed")[:60]
+    val_ok, val_out = run(
+        "system_model",
+        [sys.executable, str(ANALYSIS / "validate_system_model.py"), "--pipeline", "atm_pos"],
+    )
+    summary = next((l.strip() for l in val_out.splitlines() if "PASS" in l or "FAIL" in l), "")
+    return val_ok, (summary or val_out[:60])
+
+
 def check_build():
     """tsc --noEmit then npm run build in web/."""
     WEB = REPO_ROOT / "web"
@@ -336,6 +354,14 @@ def main():
         all_results.append(("5b. Signal history integrity", passed, note))
     else:
         all_results.append(("5b. Signal history integrity", None, "skipped — upstream failures"))
+
+    # Stage 5c: system model (skeleton regen + v3.0 validation)
+    prior_ok = all(r[1] is True or r[1] is None for r in all_results)
+    if prior_ok:
+        passed, note = check_system_model()
+        all_results.append(("5c. system_model.json (v4.0 skeleton + causal)", passed, note))
+    else:
+        all_results.append(("5c. system_model.json (v3.0)", None, "skipped — upstream failures"))
 
     # Stage 5.5: generate UI annotation JSON from evaluation output
     prior_ok = all(r[1] is True or r[1] is None for r in all_results)

@@ -1,0 +1,110 @@
+{
+  "_meta": {
+    "pipeline": "atm_pos",
+    "description": "Machine-readable ATM/POS structural profile consumed by analysis/generate_skeleton.py. Companion to skeleton_profile.md. The ATM/POS consolidated CSV is long-format (bank_name, bank_category, record_type, metric, value, unit) with NO parent column, so the composition hierarchy is AUTHORED here (hierarchy_source=profile). System totals are record_type='total'. bank_category (PSB/Private/Foreign/SFB/Payment) is a cross-cutting additive lens, documented below but NOT exploded into nodes.",
+    "spec_ref": "analysis/SYSTEM_MODEL_SPEC.md",
+    "skeleton_profile_md": "analysis/rbi_atm_pos/skeleton_profile.md",
+    "expected_node_count": 35
+  },
+
+  "source_csv": "web/public/data/atm_pos_consolidated.csv",
+  "hierarchy_source": "profile",
+
+  "columns": {
+    "metric": "metric",
+    "value": "value",
+    "unit": "unit",
+    "category": "bank_category",
+    "record_type": "record_type"
+  },
+  "csv_filter": { "record_type": "total" },
+  "period_selection": { "order_by": ["report_date"] },
+
+  "lens": {
+    "bank_category": {
+      "field": "bank_category",
+      "values": ["Public Sector Banks", "Private Sector Banks", "Foreign Banks", "Small Finance Banks", "Payment Banks"],
+      "additive": true,
+      "emit_nodes": false,
+      "comment": "Genuine additive decomposition (categories sum to total) and the full bank-level matrix is queryable in the CSV, but neither is exploded into the skeleton. Bank/category share signals (cc-psb-share, dc-psb-share, pos-private-share, *-bank-scan, *-category-share-scan) attach to their underlying metric entity via signal_attach."
+    }
+  },
+
+  "signal_attach": {
+    "registry": "analysis/signals/registry.json",
+    "match_on": { "metric": "compute.metric" },
+    "comment": "Every ATM/POS L1 signal carries compute.metric. signal_ids on a metric leaf = all registry L1 signals whose compute.metric == that node's metric."
+  },
+
+  "concept": {
+    "comment": "COMPOSITION_SPEC.md §4 concept_tags. ATM/POS spans three measure classes by partition (cards=count, spend=flow, infra=count). product is tagged on card-type aggregates + infra leaves; channel/sub leaves inherit. Card stock(count) and card spend(flow) share the SAME product (credit_card/debit_card) so the cross-system stock↔flow law links them to SIBC's credit-card stock. Container roots (cards_in_force, card_spend_*, acceptance_infrastructure) intentionally carry no product. Keys are 'partition::code'.",
+    "defaults": { "lender": "all", "geography": "national", "segment": "mixed" },
+    "defaults_by_partition": {
+      "cards":         { "measure": "count.value" },
+      "spend_value":   { "measure": "flow.value" },
+      "spend_volume":  { "measure": "flow.volume" },
+      "infrastructure":{ "measure": "count.value" }
+    },
+    "inherit_from_ancestor": ["product", "segment"],
+    "tags": {
+      "cards::credit_cards":            { "product": "credit_card", "segment": "retail" },
+      "cards::debit_cards":             { "product": "debit_card",  "segment": "retail" },
+      "spend_value::cc_spend_value":    { "product": "credit_card", "segment": "mixed" },
+      "spend_value::dc_spend_value":    { "product": "debit_card",  "segment": "mixed" },
+      "spend_volume::cc_spend_volume":  { "product": "credit_card", "segment": "mixed" },
+      "spend_volume::dc_spend_volume":  { "product": "debit_card",  "segment": "mixed" },
+      "infrastructure::pos_terminals":  { "product": "pos_acceptance",  "segment": "mixed" },
+      "infrastructure::upi_qr":         { "product": "qr_acceptance",   "segment": "mixed" },
+      "infrastructure::bharat_qr":      { "product": "qr_acceptance",   "segment": "mixed" },
+      "infrastructure::atms":           { "product": "atm_cash",        "segment": "mixed" },
+      "infrastructure::micro_atms":     { "product": "micro_atm_cash",  "segment": "mixed" }
+    }
+  },
+
+  "aggregation_modes": {
+    "sum": "children are disjoint and sum to the parent value (additivity validated, tolerance-checked)",
+    "grouping": "parent is a category container over heterogeneous instruments that are NOT summable (additivity NOT checked)",
+    "leaf": "terminal metric node, value read from the CSV total"
+  },
+
+  "nodes": [
+    { "partition": "cards", "code": "cards_in_force", "label": "Cards in force", "level": 0, "parent_code": null, "metric": null, "unit": "count", "aggregation": "sum" },
+    { "partition": "cards", "code": "credit_cards", "label": "Credit cards outstanding", "level": 1, "parent_code": "cards_in_force", "metric": "credit_cards", "unit": "count", "aggregation": "leaf" },
+    { "partition": "cards", "code": "debit_cards", "label": "Debit cards outstanding", "level": 1, "parent_code": "cards_in_force", "metric": "debit_cards", "unit": "count", "aggregation": "leaf" },
+
+    { "partition": "spend_value", "code": "card_spend_value", "label": "Total card spend (value)", "level": 0, "parent_code": null, "metric": null, "unit": "rs_thousands", "aggregation": "sum" },
+    { "partition": "spend_value", "code": "cc_spend_value", "label": "Credit card spend (value)", "level": 1, "parent_code": "card_spend_value", "metric": null, "unit": "rs_thousands", "aggregation": "sum" },
+    { "partition": "spend_value", "code": "cc_pos_txn_val", "label": "CC POS value", "level": 2, "parent_code": "cc_spend_value", "metric": "cc_pos_txn_val", "unit": "rs_thousands", "aggregation": "leaf" },
+    { "partition": "spend_value", "code": "cc_ecom_txn_val", "label": "CC e-commerce value", "level": 2, "parent_code": "cc_spend_value", "metric": "cc_ecom_txn_val", "unit": "rs_thousands", "aggregation": "leaf" },
+    { "partition": "spend_value", "code": "cc_atm_withdrawal_val", "label": "CC ATM withdrawal value", "level": 2, "parent_code": "cc_spend_value", "metric": "cc_atm_withdrawal_val", "unit": "rs_thousands", "aggregation": "leaf" },
+    { "partition": "spend_value", "code": "cc_other_txn_val", "label": "CC other value", "level": 2, "parent_code": "cc_spend_value", "metric": "cc_other_txn_val", "unit": "rs_thousands", "aggregation": "leaf" },
+    { "partition": "spend_value", "code": "dc_spend_value", "label": "Debit card spend (value)", "level": 1, "parent_code": "card_spend_value", "metric": null, "unit": "rs_thousands", "aggregation": "sum" },
+    { "partition": "spend_value", "code": "dc_pos_txn_val", "label": "DC POS value", "level": 2, "parent_code": "dc_spend_value", "metric": "dc_pos_txn_val", "unit": "rs_thousands", "aggregation": "leaf" },
+    { "partition": "spend_value", "code": "dc_ecom_txn_val", "label": "DC e-commerce value", "level": 2, "parent_code": "dc_spend_value", "metric": "dc_ecom_txn_val", "unit": "rs_thousands", "aggregation": "leaf" },
+    { "partition": "spend_value", "code": "dc_atm_withdrawal_val", "label": "DC ATM withdrawal value", "level": 2, "parent_code": "dc_spend_value", "metric": "dc_atm_withdrawal_val", "unit": "rs_thousands", "aggregation": "leaf" },
+    { "partition": "spend_value", "code": "dc_other_txn_val", "label": "DC other value", "level": 2, "parent_code": "dc_spend_value", "metric": "dc_other_txn_val", "unit": "rs_thousands", "aggregation": "leaf" },
+    { "partition": "spend_value", "code": "dc_pos_withdrawal_val", "label": "DC POS cash withdrawal value", "level": 2, "parent_code": "dc_spend_value", "metric": "dc_pos_withdrawal_val", "unit": "rs_thousands", "aggregation": "leaf" },
+
+    { "partition": "spend_volume", "code": "card_spend_volume", "label": "Total card spend (volume)", "level": 0, "parent_code": null, "metric": null, "unit": "transactions", "aggregation": "sum" },
+    { "partition": "spend_volume", "code": "cc_spend_volume", "label": "Credit card spend (volume)", "level": 1, "parent_code": "card_spend_volume", "metric": null, "unit": "transactions", "aggregation": "sum" },
+    { "partition": "spend_volume", "code": "cc_pos_txn_vol", "label": "CC POS volume", "level": 2, "parent_code": "cc_spend_volume", "metric": "cc_pos_txn_vol", "unit": "transactions", "aggregation": "leaf" },
+    { "partition": "spend_volume", "code": "cc_ecom_txn_vol", "label": "CC e-commerce volume", "level": 2, "parent_code": "cc_spend_volume", "metric": "cc_ecom_txn_vol", "unit": "transactions", "aggregation": "leaf" },
+    { "partition": "spend_volume", "code": "cc_atm_withdrawal_vol", "label": "CC ATM withdrawal volume", "level": 2, "parent_code": "cc_spend_volume", "metric": "cc_atm_withdrawal_vol", "unit": "transactions", "aggregation": "leaf" },
+    { "partition": "spend_volume", "code": "cc_other_txn_vol", "label": "CC other volume", "level": 2, "parent_code": "cc_spend_volume", "metric": "cc_other_txn_vol", "unit": "transactions", "aggregation": "leaf" },
+    { "partition": "spend_volume", "code": "dc_spend_volume", "label": "Debit card spend (volume)", "level": 1, "parent_code": "card_spend_volume", "metric": null, "unit": "transactions", "aggregation": "sum" },
+    { "partition": "spend_volume", "code": "dc_pos_txn_vol", "label": "DC POS volume", "level": 2, "parent_code": "dc_spend_volume", "metric": "dc_pos_txn_vol", "unit": "transactions", "aggregation": "leaf" },
+    { "partition": "spend_volume", "code": "dc_ecom_txn_vol", "label": "DC e-commerce volume", "level": 2, "parent_code": "dc_spend_volume", "metric": "dc_ecom_txn_vol", "unit": "transactions", "aggregation": "leaf" },
+    { "partition": "spend_volume", "code": "dc_atm_withdrawal_vol", "label": "DC ATM withdrawal volume", "level": 2, "parent_code": "dc_spend_volume", "metric": "dc_atm_withdrawal_vol", "unit": "transactions", "aggregation": "leaf" },
+    { "partition": "spend_volume", "code": "dc_other_txn_vol", "label": "DC other volume", "level": 2, "parent_code": "dc_spend_volume", "metric": "dc_other_txn_vol", "unit": "transactions", "aggregation": "leaf" },
+    { "partition": "spend_volume", "code": "dc_pos_withdrawal_vol", "label": "DC POS cash withdrawal volume", "level": 2, "parent_code": "dc_spend_volume", "metric": "dc_pos_withdrawal_vol", "unit": "transactions", "aggregation": "leaf" },
+
+    { "partition": "infrastructure", "code": "acceptance_infrastructure", "label": "Acceptance & cash infrastructure", "level": 0, "parent_code": null, "metric": null, "unit": "count", "aggregation": "grouping" },
+    { "partition": "infrastructure", "code": "atms", "label": "ATMs (on-site + off-site)", "level": 1, "parent_code": "acceptance_infrastructure", "metric": null, "unit": "count", "aggregation": "sum" },
+    { "partition": "infrastructure", "code": "atm_onsite", "label": "On-site ATMs", "level": 2, "parent_code": "atms", "metric": "atm_onsite", "unit": "count", "aggregation": "leaf" },
+    { "partition": "infrastructure", "code": "atm_offsite", "label": "Off-site ATMs", "level": 2, "parent_code": "atms", "metric": "atm_offsite", "unit": "count", "aggregation": "leaf" },
+    { "partition": "infrastructure", "code": "micro_atms", "label": "Micro ATMs", "level": 1, "parent_code": "acceptance_infrastructure", "metric": "micro_atms", "unit": "count", "aggregation": "leaf" },
+    { "partition": "infrastructure", "code": "pos_terminals", "label": "POS terminals", "level": 1, "parent_code": "acceptance_infrastructure", "metric": "pos_terminals", "unit": "count", "aggregation": "leaf" },
+    { "partition": "infrastructure", "code": "bharat_qr", "label": "Bharat QR codes", "level": 1, "parent_code": "acceptance_infrastructure", "metric": "bharat_qr", "unit": "count", "aggregation": "leaf" },
+    { "partition": "infrastructure", "code": "upi_qr", "label": "UPI QR codes", "level": 1, "parent_code": "acceptance_infrastructure", "metric": "upi_qr", "unit": "count", "aggregation": "leaf" }
+  ]
+}

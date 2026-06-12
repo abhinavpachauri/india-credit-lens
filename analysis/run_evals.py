@@ -250,25 +250,25 @@ def check_annotations_live():
 
 
 def check_system_model(period_dir):
-    # The merged system model is the authoritative structural artifact —
-    # per-period directories do not carry their own system_model.json.
-    merged_model = ANALYSIS / "rbi_sibc" / "merged" / "system_model.json"
-    model_path = merged_model if merged_model.exists() else period_dir / "system_model.json"
-    if not model_path.exists():
-        return False, "", f"File not found: {model_path}"
-    # Prefer live rbi_sibc.ts for annotation ID cross-check (promoted from merged).
-    live_path   = WEB / "lib" / "reports" / "rbi_sibc.ts"
-    merged_ann  = ANALYSIS / "rbi_sibc" / "merged" / "annotations_merged.ts"
-    draft_path  = period_dir / "annotations_draft.ts"
-    ann_path = (live_path    if live_path.exists()
-                else merged_ann if merged_ann.exists()
-                else draft_path)
-    cmd = [
-        sys.executable, str(ANALYSIS / "validate.py"),
-        str(model_path),
-        "--annotations", str(ann_path),
-    ]
-    return run_check("system_model", cmd, cwd=ANALYSIS)
+    """Stage 4 (v3.0): regenerate the structural skeleton deterministically from the
+    CSV + profile (preserving the authored behavioral layer), then validate the merged
+    system_model.json against SYSTEM_MODEL_SPEC v3.0. This supersedes the legacy
+    validate.py (v2 schema), validate_claims.py (claim sourcing is now built into
+    validate_system_model), and subsystems/mermaid checks — all retired with the v3 model."""
+    gen = run_check(
+        "skeleton",
+        [sys.executable, str(ANALYSIS / "generate_skeleton.py"), "--pipeline", "sibc"],
+        cwd=REPO_ROOT,
+    )
+    if not gen[0]:
+        return gen
+    val = run_check(
+        "system_model",
+        [sys.executable, str(ANALYSIS / "validate_system_model.py"), "--pipeline", "sibc"],
+        cwd=ANALYSIS,
+    )
+    # combine: surface generator output alongside validation output
+    return val[0], gen[1] + "\n" + val[1], gen[2] + val[2]
 
 
 def check_content(period_dir, sections_path):
@@ -476,22 +476,8 @@ def main():
             print(out)
             print(err, file=sys.stderr)
 
-    # ── Check 2c: claim sourcing (claim_type + source on system model nodes) ──
-    passed, out, err = check_claims(period_dir)
-    label = "2c. claim sourcing (system_model.json)"
-    if passed is None:
-        results.append((label, None, err))
-    else:
-        notes = one_line_summary(out, err, passed)
-        # Extract hypothesis warning line for display if present
-        for line in (out + err).splitlines():
-            if "hypothesis" in line.lower() and ("◈" in line or "warn" in line.lower()):
-                notes = line.strip()[:50]
-                break
-        results.append((label, passed, notes))
-        if not passed:
-            print(out)
-            print(err, file=sys.stderr)
+    # (Check 2c retired — claim sourcing is now enforced inside validate_system_model.py
+    #  as part of the v3.0 Stage-4 system-model check.)
 
     # ── Check 2d: annotation basis completeness ───────────────────────────────
     passed, out, err = run_check(
@@ -560,21 +546,16 @@ def main():
         print(out)
         print(err, file=sys.stderr)
 
-    # ── Check 4: system_model.json ────────────────────────────────────────────
+    # ── Check 4: system model (skeleton regen + v3.0 validation) ──────────────
     passed, out, err = check_system_model(period_dir)
     notes = one_line_summary(out, err, passed)
-    results.append(("4.  system_model.json", passed, notes))
+    results.append(("4.  system_model.json (v4.0 skeleton + causal)", passed, notes))
     if not passed:
         print(out)
         print(err, file=sys.stderr)
 
-    # ── Check 5: subsystems.json ──────────────────────────────────────────────
-    passed, out, err = check_subsystems(period_dir, subsystems_path)
-    notes = one_line_summary(out, err, passed)
-    results.append(("5.  subsystems.json", passed, notes))
-    if not passed:
-        print(out)
-        print(err, file=sys.stderr)
+    # (Check 5 subsystems.json retired — Mermaid/subsystems are a legacy artifact,
+    #  superseded by the Layer 2/3 model. Not part of the v3.0 gate.)
 
     # ── Check 6: TypeScript build ─────────────────────────────────────────────
     if args.skip_build:
