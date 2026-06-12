@@ -240,4 +240,52 @@ S3 dynamic compute and S4 inference are built after steps 1–4 prove the static
 
 ---
 
+## 12. Projection / Surfacing contract (model → UI)
+
+The UI surfaces are **projections** of the model — different strata feed different surfaces.
+No surface reads the source-of-truth files directly; each consumes a projected feed. Every
+surfaceable node (insight / risk / opportunity) carries a small reference set so the UI knows
+*where* to place it and can drill from headline → evidence.
+
+### 12.1 Stratum → surface map
+| Model element | Surface | Renders | Driven by |
+|---|---|---|---|
+| entity (S1) + L1 signals | per-pipeline dashboard — chart | series, value, YoY | S1 + signals.db |
+| force_instance firing (S2b × S3) | per-pipeline dashboard — "why it moved" | causal explanation + source | S2b + S3 |
+| risk, active | per-pipeline page (callout) | tension + evidence | S2 + S3 |
+| opportunity, active | **`/opportunities` layer** | opening, status, evidence | channel/instance + S3 |
+| cross-edge, active | **`/opportunities` — premium** | cross-system opening | cross-ref + S3 |
+
+### 12.2 Surfaceable-node reference fields
+Added to every `risk` / `opportunity` node (and to confirmed cross-edges):
+```
+surface : "sibc" | "payments" | "opportunities"      # which UI surface
+scope   : "pipeline" | "cross_source"                 # placement + provenance
+refs    : { entities:[urn...], channel:id?, instance:id?, cross_edge:id? }
+status  : active | watch | closed                     # COMPUTED by S3, never hand-set
+```
+`scope: pipeline` → renders on that pipeline's dashboard. `scope: cross_source` → renders on the
+opportunities layer. `refs` make the card drill-downable (channel → instance → source → live signals).
+
+### 12.3 Deterministic opportunity status (replaces ad-hoc authoring)
+Opportunity/risk `status` is **derived every period**, not hand-set:
+```
+for each opportunity O anchored to driver D (channel-instance or cross-edge):
+    if D is firing (S3) for ≥2 periods         → active
+    elif D fired previously but not now        → watch
+    elif D dormant ≥N periods                  → closed
+    attach the S3 signal evidence that decided it
+```
+This is the systematic trigger rule the prior ad-hoc opportunities lacked: driver → signal state →
+opportunity status, with evidence, evaluated each ingestion.
+
+### 12.4 Monetisation note (why the opportunities layer is the product)
+Per-pipeline insights are commoditisable (anyone with the source file can derive them) — they build
+credibility on the pipeline dashboards. **Cross-system opportunities** (`scope: cross_source`) cannot
+be produced without the composition layer, so they are the differentiated, defensible product and
+should populate the opportunities layer preferentially. Example: `x_cc_spend_leads_cc_stock` +
+payments POS contraction ⇒ *"unsecured origination headroom opening — route via UPI-credit, not POS."*
+
+---
+
 *Composition Specification v1.0 — extends System Model Specification v3.0 — India Credit Lens*
