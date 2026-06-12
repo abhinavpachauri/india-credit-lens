@@ -12,14 +12,45 @@
       "id": "xopp_x_cc_spend_leads_cc_stock",
       "status": "watch",
       "title": "Cross-system signal: credit_card flow softening ahead of stock",
-      "body": "Credit-card spend flow (payments) leads credit-card outstanding stock (SIBC): sustained spending growth precedes balance build-up. Confirmed cross-system instance of the flow→stock law.",
+      "body": "Credit card spending flows are outpacing balance accumulation by 2-6x: transaction volumes grew 21-27% YoY in Apr 2026 while outstanding balances expanded just 3.8% in May 2026. Despite sustained payment growth, credit outstanding remains trapped in single digits for four consecutive periods, confirming the flow→stock lag effect where spending velocity leads balance build-up.",
       "basis": "icl:atm_pos/spend_value/cc_spend_value (f=-1) → icl:sibc/Statement1/4.5 (t=1)",
       "link": "x_cc_spend_leads_cc_stock",
-      "badge": "Credit ✕ Payments"
+      "badge": "Credit ✕ Payments",
+      "narrative": true
     }
   ],
   "pipelines": {
     "sibc": [
+      {
+        "id": "opp_colending_infra",
+        "pipeline": "sibc",
+        "scope": "pipeline",
+        "tier": "opportunity",
+        "status": "active",
+        "authored_status": "active",
+        "section": {
+          "id": "industryBySize",
+          "title": "Industry by Size",
+          "icon": "🏭"
+        },
+        "title": "Co-lending & warehouse-financing infrastructure",
+        "body": "Micro/small MSME lending accelerated 23.77pp in FY26, driving 30.09% YoY growth and capturing 23.12% of total MSME credit. Formalisation via UDYAM + GST makes underwriting scalable, but pure balance-sheet lending cannot match NBFC reach into informal segments. The 20.06pp size-spread compression signals market maturation—early infrastructure builders capture disproportionate origination flow.",
+        "implication": "Build co-lending rails and warehouse-financing partnerships now while NBFC distribution remains fragmented and before competitors lock in the best origination channels.",
+        "chain": [
+          "Registry + tax-data coverage (UDYAM, GST) makes small borrowers underwritable at scale for the first time; lenders with origination infrastructure convert registry access into credit at previously unachievable volumes.",
+          "Triggered by MSME formalisation via UDYAM registration + GST data — SIDBI MSME Pulse Special Edition Report, June 2025",
+          "Live signals confirming: sibc-msme-micro-small-fy-acceleration, sibc-msme-micro-small-share, sibc-msme-micro-small-yoy, sibc-msme-size-yoy-spread"
+        ],
+        "driver": "MSME formalisation via UDYAM registration + GST data",
+        "via": "Formalisation infrastructure → small-borrower underwritability",
+        "evidence": [
+          "sibc-msme-micro-small-fy-acceleration",
+          "sibc-msme-micro-small-share",
+          "sibc-msme-micro-small-yoy",
+          "sibc-msme-size-yoy-spread"
+        ],
+        "narrative": true
+      },
       {
         "id": "opp_gold_loan_entry",
         "pipeline": "sibc",
@@ -33,8 +64,8 @@
           "icon": "💳"
         },
         "title": "Gold loan market entry / deepening for banks",
-        "body": "Banks are taking share from NBFCs in gold loans, with banks growing faster. The product moat is operational (branch-level assay, safe custody, cash management), not regulatory — banks with branch networks can sustain competitive advantage. The growth trajectory is structural (collateral-driven), not speculative.",
-        "implication": "Lenders aligned to Collateral price → secured-lending capacity capture this first.",
+        "body": "Gold loans surged 121.21% year-over-year with banks sustaining 8 consecutive periods of positive momentum, systematically taking market share from NBFCs as gold price appreciation expands secured lending capacity. Banks with existing branch networks hold decisive operational advantages in assay, custody, and cash management that NBFCs cannot replicate at scale. The growth trajectory remains structural—driven by collateral price inflation, not credit speculation—making this a durable revenue expansion opportunity.",
+        "implication": "Deploy branch-based gold loan capabilities now while the structural tailwind persists and before NBFC incumbents can build competing operational infrastructure.",
         "chain": [
           "Rising collateral value raises effective LTV headroom, enlarging the eligible borrower pool and the maximum loan per unit of collateral. Applies to any secured product against the same collateral, in any measure (stock or flow).",
           "Triggered by Gold price surge (2023–2026) — RBI Press Releases – Sovereign Gold Bond Scheme (March 2023: prid=55327; Feb 202",
@@ -45,7 +76,8 @@
         "evidence": [
           "sibc-pl-gold-pos-streak",
           "sibc-pl-gold-yoy"
-        ]
+        ],
+        "narrative": true
       },
       {
         "id": "opp_msme_origination",
@@ -60,8 +92,8 @@
           "icon": "🏭"
         },
         "title": "MSME origination infrastructure investment window",
-        "body": "Banks that invested in MSME origination infrastructure (UDYAM-linked underwriting, GST-based cash flow analysis, co-lending rails) over 2022-24 are in a harvesting phase now. The competitive window for catch-up investment is approximately 2-3 years before the first-cycle cohort matures and saturation limits further marginal returns. Banks without this infrastructure will structurally underperform in MSME credit growth.",
-        "implication": "Lenders aligned to Formalisation infrastructure → small-borrower underwritability capture this first.",
+        "body": "Micro and small MSME credit accelerated 23.77pp in FY2026 to 30.09% YoY growth, now commanding 23.12% of total MSME portfolio share. The size-based growth spread compressed to 20.06pp as smaller borrowers outpaced medium enterprises, validating infrastructure-led origination models. Banks with UDYAM-GST underwriting rails are harvesting first-mover advantage in the formalised micro-borrower segment.",
+        "implication": "Deploy MSME infrastructure investment within 24 months or accept structural underperformance as the formalisation wave matures and competitive positioning solidifies.",
         "chain": [
           "Registry + tax-data coverage (UDYAM, GST) makes small borrowers underwritable at scale for the first time; lenders with origination infrastructure convert registry access into credit at previously unachievable volumes.",
           "Triggered by MSME formalisation via UDYAM registration + GST data — SIDBI MSME Pulse Special Edition Report, June 2025",
@@ -74,7 +106,8 @@
           "sibc-msme-micro-small-share",
           "sibc-msme-micro-small-yoy",
           "sibc-msme-size-yoy-spread"
-        ]
+        ],
+        "narrative": true
       },
       {
         "id": "opp_pli_supply_chain",
@@ -89,8 +122,8 @@
           "icon": "🔩"
         },
         "title": "PLI anchor-supplier chain finance",
-        "body": "PLI scheme recipients have validated anchor relationships with tier-1 and tier-2 suppliers. Supply chain finance structures (invoice discounting, vendor finance, dealer finance) can be layered on these anchor-supplier relationships at lower credit risk than standalone unsecured MSME lending, because the cash flow is backed by a large anchor company.",
-        "implication": "Lenders aligned to Industrial-policy capex → supply-chain credit capture this first.",
+        "body": "PLI capex drawdown is driving exceptional credit demand across anchor sectors—engineering credit surged 34.5% YoY while basic metals and chemicals sustained 17-20% growth through April 2026. These anchor companies are expanding supplier networks to meet PLI production targets, creating validated cash-flow relationships ripe for structured finance.",
+        "implication": "Prioritize supply chain finance products targeting tier-1/tier-2 suppliers of PLI recipients over standalone MSME lending—the anchor backstop significantly de-risks the exposure while capturing the sectoral momentum.",
         "chain": [
           "A capex incentive program (e.g. PLI) drives drawdowns first in upstream input sectors (metals, chemicals) and then downstream manufacturing (engineering) on a 2–3 year implementation lag — co-accelerating sectors that do not normally move together.",
           "Triggered by PLI scheme capex drawdown phase (FY25–26) — PIB Press Note – PLI Scheme: Powering India's Industrial Renaissance, NoteId 155",
@@ -102,7 +135,8 @@
           "sibc-basic-metal-sub-yoy-scan",
           "sibc-chemicals-sub-yoy-scan",
           "sibc-engineering-sub-yoy-scan"
-        ]
+        ],
+        "narrative": true
       },
       {
         "id": "opp_pslc_tooling",
@@ -117,8 +151,8 @@
           "icon": "⭐"
         },
         "title": "PSLC market depth from PSL reclassification surplus",
-        "body": "Banks that received a large reclassification-driven PSL surplus from the Oct 2024 ceiling revision can sell PSL Certificates to banks that are under-achieving on PSL targets. This deepens the PSLC secondary market and creates a one-time monetisation event for well-positioned banks.",
-        "implication": "Lenders aligned to PSL classification threshold → reported reclassification capture this first.",
+        "body": "PSL housing loans surged 39.94% YoY following the Oct 2024 ceiling revision, creating substantial reclassification surpluses at well-positioned banks. This one-time regulatory windfall generates sellable PSL Certificates for banks exceeding their revised targets. The influx of tradeable certificates deepens PSLC secondary market liquidity for the first time since the ceiling change.",
+        "implication": "Buy PSLCs from surplus banks at favorable rates while supply peaks, or monetize your own reclassification gains before the market normalizes.",
         "chain": [
           "Revising a PSL eligibility ceiling reclassifies existing sub-threshold stock into the priority bucket, producing reported growth that is not new lending and distorting the flow read.",
           "Triggered by RBI PSL housing loan ceiling revision (Oct 2024) — RBI Master Direction – Priority Sector Lending (Targets and Classification), Ame",
@@ -128,7 +162,8 @@
         "via": "PSL classification threshold → reported reclassification",
         "evidence": [
           "sibc-psl-housing-yoy"
-        ]
+        ],
+        "narrative": true
       },
       {
         "id": "opp_renewable_energy",
@@ -143,8 +178,8 @@
           "icon": "🔩"
         },
         "title": "Renewable energy project finance — next capex wave",
-        "body": "As the infrastructure supercycle completes, the next infrastructure credit wave is in solar, wind, and green hydrogen projects. Banks with project finance capability built on traditional infrastructure can redeploy that expertise. Government renewable energy targets create a regulatory pipeline that de-risks the opportunity.",
-        "implication": "Lenders aligned to Project lifecycle phase → new origination vs repayment capture this first.",
+        "body": "Infrastructure sub-sector scan shows traditional project finance declining (-26.03%, -44.06%, -11.91%) while renewable segments surge 74.02% year-over-year. The infrastructure supercycle's completion creates a $2T refinancing opportunity as project finance teams pivot from roads and bridges to solar farms and green hydrogen. Mixed signals across infrastructure (21.47% active, 1.41% strengthening, 0.45% stable) confirm the sector rotation underway.",
+        "implication": "Redeploy existing project finance capabilities to renewable energy — same risk frameworks, higher regulatory tailwinds, deeper government pipeline visibility.",
         "chain": [
           "As a project cohort moves from construction (drawdown) to operations (repayment), net credit balance declines unless new origination offsets it — suppressing growth even while existing books remain large.",
           "Triggered by Infrastructure supercycle completing (FY22–24) — RBI SIBC merged series (Jan 2024 – Apr 2026) — Infrastructure sub-sector YoY",
@@ -154,7 +189,41 @@
         "via": "Project lifecycle phase → new origination vs repayment",
         "evidence": [
           "sibc-infra-sub-yoy-scan"
-        ]
+        ],
+        "narrative": true
+      },
+      {
+        "id": "opp_services_entry",
+        "pipeline": "sibc",
+        "scope": "pipeline",
+        "tier": "opportunity",
+        "status": "active",
+        "authored_status": "active",
+        "section": {
+          "id": "mainSectors",
+          "title": "Main Sectors",
+          "icon": "📊"
+        },
+        "title": "Services sector credit entry / scale-up",
+        "body": "Services credit surged 18.58% YoY with 6.99pp FY acceleration, now commanding 28.21% of total credit as NBFC intermediation rebounds (16.68% sub-sector growth, with specialized segments hitting 57.1%). The sector's outperformance across trade, CRE, and professional services creates a bifurcated credit market where services-exposed lenders capture disproportionate growth.",
+        "implication": "Build direct services origination capabilities or establish NBFC partnerships to access the intermediated flow before competitors lock up the channel.",
+        "chain": [
+          "Changes to bank-to-NBFC exposure risk weights expand or suppress the wholesale funding channel; recovery amplifies all NBFC-intermediated lending, which is reported under services regardless of end-use sector.",
+          "Triggered by NBFC credit channel recovery post risk-weight cycle — RBI Circular DOR.STR.REC.57/21.06.001/2023-24 (November 16, 2023)",
+          "Live signals confirming: sibc-nbfc-sub-yoy-scan, sibc-sectors-positive-yoy-count, sibc-services-fy-acceleration, sibc-services-share, sibc-services-share-scan, sibc-services-yoy, sibc-services-yoy-scan"
+        ],
+        "driver": "NBFC credit channel recovery post risk-weight cycle",
+        "via": "Bank→NBFC exposure rule → intermediated credit",
+        "evidence": [
+          "sibc-nbfc-sub-yoy-scan",
+          "sibc-sectors-positive-yoy-count",
+          "sibc-services-fy-acceleration",
+          "sibc-services-share",
+          "sibc-services-share-scan",
+          "sibc-services-yoy",
+          "sibc-services-yoy-scan"
+        ],
+        "narrative": true
       },
       {
         "id": "opp_vehicle_ev",
@@ -254,8 +323,8 @@
           "icon": "💳"
         },
         "title": "Credit card penetration deepening — PSB share gap is the opening",
-        "body": "Credit cards outstanding (~119M) represents approximately 11-12% of the debit card base (~1B+). PSBs hold ~64% of debit cards but only ~29% of credit cards — a structural share gap exploitable through debit-to-credit card upgrade offers to existing bank customers. The acquisition cost of upgrading an existing debit card customer to a credit card is materially lower than cold acquisition.",
-        "implication": null,
+        "body": "Credit cards outstanding hit 119.4M in April 2026, growing 8.15% YoY, but PSBs capture only 23.8% share versus their dominant debit card position. Private banks command 71% of the credit card market, creating a 40+ percentage point share gap that PSBs can exploit through targeted debit-to-credit upgrades within their existing customer base. The acquisition economics favor upgrading known customers over cold prospecting in a market adding ~9M new cards annually.",
+        "implication": "PSBs should prioritize credit card conversion campaigns targeting their debit card holders, leveraging existing relationship data and transaction history to drive higher-margin product adoption.",
         "chain": [
           "Live signals confirming: cc-bank-scan, cc-category-share-scan, cc-outstanding-abs, cc-outstanding-yoy, cc-private-share, cc-psb-share"
         ],
@@ -268,7 +337,8 @@
           "cc-outstanding-yoy",
           "cc-private-share",
           "cc-psb-share"
-        ]
+        ],
+        "narrative": true
       },
       {
         "id": "opp_rural_cash_distribution",
@@ -283,8 +353,8 @@
           "icon": "🏗️"
         },
         "title": "Rural cash distribution via Micro ATM / Business Correspondent networks",
-        "body": "Micro ATM growth counter-trending against overall ATM network contraction signals persistent rural and semi-urban cash demand at a scale below the economics of full ATM deployment. Banks and fintechs expanding Business Correspondent channels with micro ATM deployment can serve this demand at lower capex than branch or full ATM infrastructure.",
-        "implication": null,
+        "body": "The micro ATM network declined 7.17% YoY to 1.37 million units, signaling sector consolidation as weaker operators exit rural cash distribution. Despite contraction, the 1.37M installed base represents persistent cash demand in markets where full ATM deployment remains uneconomical.",
+        "implication": "Acquire micro ATM capacity from exiting players to consolidate rural distribution at discounted asset values.",
         "chain": [
           "Live signals confirming: micro-atm-yoy, micro-atms-abs"
         ],
@@ -293,7 +363,8 @@
         "evidence": [
           "micro-atm-yoy",
           "micro-atms-abs"
-        ]
+        ],
+        "narrative": true
       },
       {
         "id": "opp_transit_payment_products",
@@ -308,8 +379,8 @@
           "icon": "💳"
         },
         "title": "Embedded transit and tap-to-pay payment products",
-        "body": "The structural embedding of a new credit card use case (the 'other' category) signals a platform land-grab window for card issuers and acquirers who integrate with the winning infrastructure — whether transit NFC or UPI-linked credit. The opportunity is real regardless of which force hypothesis is confirmed; the appropriate platform strategy differs based on which force is validated.",
-        "implication": "Lenders aligned to Embedded payment rails → new card-spend surface capture this first.",
+        "body": "The 'other' credit card category exploded 493% by value and 300% by volume YoY, signaling the emergence of embedded payment infrastructure beyond traditional merchant acceptance. This structural shift — whether transit NFC or RuPay-credit-on-UPI — is creating entirely new card-spend surfaces at platform scale. The growth rates indicate infrastructure rollout, not pilot testing.",
+        "implication": "Identify and integrate with the winning embedded payment platform now, before the land-grab window closes and interchange economics get competed away.",
         "chain": [
           "A new embedded payment use case (transit NFC tap-to-pay or RuPay-credit-on-UPI) creates a structurally growing card-spend channel in the unclassified 'other' category. Driver composition is unresolved (hypothesis).",
           "Triggered by Embedded card payment infrastructure rollout (transit NFC or RuPay-credit-on-UPI)",
@@ -320,7 +391,8 @@
         "evidence": [
           "cc-other-val-yoy",
           "cc-other-vol-yoy"
-        ]
+        ],
+        "narrative": true
       },
       {
         "id": "risk_cc_market_concentration",
