@@ -249,6 +249,18 @@ def check_annotations_live():
     return run_check("annotations_live", cmd, cwd=ANALYSIS)
 
 
+def latest_db_period(pipeline):
+    """Most recent period present in signals.db for a pipeline (for S3 compute)."""
+    import sqlite3
+    db = ANALYSIS / "signals" / "signals.db"
+    if not db.exists():
+        return None
+    con = sqlite3.connect(db)
+    row = con.execute("select max(period) from signals where pipeline=?", (pipeline,)).fetchone()
+    con.close()
+    return row[0] if row else None
+
+
 def check_system_model(period_dir):
     """Stage 4 (v3.0): regenerate the structural skeleton deterministically from the
     CSV + profile (preserving the authored behavioral layer), then validate the merged
@@ -556,6 +568,19 @@ def main():
 
     # (Check 5 subsystems.json retired — Mermaid/subsystems are a legacy artifact,
     #  superseded by the Layer 2/3 model. Not part of the v3.0 gate.)
+
+    # ── Stage 5.7: S3 dynamic state + live opportunities + ecosystem ──────────
+    latest = latest_db_period("sibc")
+    if latest:
+        for label, script, extra in [
+            ("4b. system_state (S3)", "generate_system_state.py", ["--pipeline", "sibc", "--period", latest]),
+            ("4c. opportunities (live)", "derive_opportunities.py", ["--pipeline", "sibc", "--period", latest]),
+            ("4d. ecosystem projection", "compose_ecosystem.py", []),
+        ]:
+            passed, out, err = run_check(label, [sys.executable, str(ANALYSIS / script)] + extra, cwd=REPO_ROOT)
+            results.append((label, passed, one_line_summary(out, err, passed)))
+            if not passed:
+                print(out); print(err, file=sys.stderr)
 
     # ── Check 6: TypeScript build ─────────────────────────────────────────────
     if args.skip_build:

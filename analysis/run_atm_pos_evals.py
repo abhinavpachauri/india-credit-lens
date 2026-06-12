@@ -241,6 +241,31 @@ def check_signal_history():
     return passed, summary or (out[:60] if out else "passed")
 
 
+def latest_db_period(pipeline):
+    import sqlite3
+    db = ANALYSIS / "signals" / "signals.db"
+    if not db.exists():
+        return None
+    con = sqlite3.connect(db)
+    row = con.execute("select max(period) from signals where pipeline=?", (pipeline,)).fetchone()
+    con.close()
+    return row[0] if row else None
+
+
+def check_system_state():
+    """Stage 5d: S3 dynamic state + live opportunity feed for the latest period."""
+    period = latest_db_period("atm_pos")
+    if not period:
+        return None, "no signals in db"
+    ok1, o1 = run("system_state", [sys.executable, str(ANALYSIS / "generate_system_state.py"),
+                                   "--pipeline", "atm_pos", "--period", period])
+    if not ok1:
+        return False, (o1.splitlines()[-1] if o1 else "state failed")[:55]
+    ok2, o2 = run("opportunities", [sys.executable, str(ANALYSIS / "derive_opportunities.py"),
+                                    "--pipeline", "atm_pos", "--period", period])
+    return ok2, f"state + opportunities @ {period}"
+
+
 def check_system_model():
     """Stage 5c: regenerate the ATM/POS structural skeleton deterministically from the
     CSV + profile (preserving the authored behavioral layer), then validate the merged
@@ -362,6 +387,14 @@ def main():
         all_results.append(("5c. system_model.json (v4.0 skeleton + causal)", passed, note))
     else:
         all_results.append(("5c. system_model.json (v3.0)", None, "skipped — upstream failures"))
+
+    # Stage 5d: S3 dynamic state + live opportunities
+    prior_ok = all(r[1] is True or r[1] is None for r in all_results)
+    if prior_ok:
+        passed, note = check_system_state()
+        all_results.append(("5d. system_state + opportunities (S3)", passed, note))
+    else:
+        all_results.append(("5d. system_state + opportunities (S3)", None, "skipped — upstream failures"))
 
     # Stage 5.5: generate UI annotation JSON from evaluation output
     prior_ok = all(r[1] is True or r[1] is None for r in all_results)
