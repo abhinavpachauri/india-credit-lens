@@ -132,7 +132,14 @@ def _claude_json(system, payload, web=False, timeout=240):
 
 
 def call_llm(payload):
-    return _claude_json(SYSTEM, payload).get("proposals", [])
+    # one retry — the generation call occasionally returns malformed JSON
+    for attempt in range(2):
+        try:
+            return _claude_json(SYSTEM, payload).get("proposals", [])
+        except (json.JSONDecodeError, ValueError):
+            if attempt == 1:
+                raise
+    return []
 
 
 def verify_proposal(p):

@@ -5,56 +5,117 @@
     "spec_ref": "analysis/COMPOSITION_SPEC.md",
     "version": "1.0"
   },
-
   "dimensions": {
     "product": {
       "required": true,
       "description": "The instrument/exposure being measured — the primary join key across systems.",
       "values": [
-        "bank_credit", "food_credit", "agriculture", "industry", "msme_credit",
-        "large_corporate", "services", "nbfc_credit", "trade_credit",
-        "infrastructure_credit", "personal_loan", "housing", "gold_loan",
-        "vehicle_loan", "credit_card", "debit_card", "consumer_durable",
-        "education_loan", "export_credit", "renewable_energy", "social_infrastructure",
-        "weaker_sections", "pos_acceptance", "qr_acceptance", "atm_cash",
-        "micro_atm_cash", "card_spend"
+        "bank_credit",
+        "food_credit",
+        "agriculture",
+        "industry",
+        "msme_credit",
+        "large_corporate",
+        "services",
+        "nbfc_credit",
+        "trade_credit",
+        "infrastructure_credit",
+        "personal_loan",
+        "housing",
+        "gold_loan",
+        "vehicle_loan",
+        "credit_card",
+        "debit_card",
+        "consumer_durable",
+        "education_loan",
+        "export_credit",
+        "renewable_energy",
+        "social_infrastructure",
+        "weaker_sections",
+        "pos_acceptance",
+        "qr_acceptance",
+        "atm_cash",
+        "micro_atm_cash",
+        "card_spend"
       ]
     },
     "measure": {
       "required": true,
       "description": "What kind of quantity. The cross-system law lives here: a flow leads/accumulates into a stock (COMPOSITION_SPEC.md §6). class ∈ {stock, flow, count}; unit ∈ {value, volume, balance}.",
-      "classes": ["stock", "flow", "count"],
-      "units": ["value", "volume", "balance"],
+      "classes": [
+        "stock",
+        "flow",
+        "count"
+      ],
+      "units": [
+        "value",
+        "volume",
+        "balance"
+      ],
       "values": [
-        "stock.balance", "flow.value", "flow.volume", "count.value"
+        "stock.balance",
+        "flow.value",
+        "flow.volume",
+        "count.value"
       ]
     },
     "segment": {
       "required": false,
       "description": "Borrower / counterparty class.",
-      "values": ["retail", "msme", "corporate", "agri", "government", "financial_institution", "mixed"]
+      "values": [
+        "retail",
+        "msme",
+        "corporate",
+        "agri",
+        "government",
+        "financial_institution",
+        "mixed"
+      ]
     },
     "lender": {
       "required": false,
       "description": "Lender / issuer type. 'all' = system-total (the only resolved value for system-aggregate pipelines like SIBC and ATM/POS totals).",
-      "values": ["psb", "private", "foreign", "sfb", "payment_bank", "nbfc", "all"]
+      "values": [
+        "psb",
+        "private",
+        "foreign",
+        "sfb",
+        "payment_bank",
+        "nbfc",
+        "all"
+      ]
     },
     "geography": {
       "required": false,
       "description": "Spatial resolution. Mostly 'national' today; metro/non_metro/state surface only when an ingestion resolves them.",
-      "values": ["national", "metro", "non_metro"]
+      "values": [
+        "national",
+        "metro",
+        "non_metro"
+      ]
     }
   },
-
   "driver_concepts": {
     "description": "Exogenous driver references used as the source_concept of causal channels (COMPOSITION_SPEC.md §2a). Not entity tags — these name the external forces the channels originate from.",
     "values": [
-      "macro:collateral_price", "macro:interest_rate", "macro:gdp_growth",
-      "policy:risk_weight", "policy:psl_threshold", "policy:capex_program",
-      "policy:procurement_msp", "policy:mdr", "policy:card_lifecycle_rule",
-      "policy:enforcement_action", "policy:bank_nbfc_exposure_rule",
-      "structural:formalisation_data", "structural:project_lifecycle",
-      "structural:embedded_payment_rails", "structural:digital_substitution"
+      "macro:collateral_price",
+      "macro:interest_rate",
+      "macro:gdp_growth",
+      "policy:risk_weight",
+      "policy:psl_threshold",
+      "policy:capex_program",
+      "policy:procurement_msp",
+      "policy:mdr",
+      "policy:card_lifecycle_rule",
+      "policy:enforcement_action",
+      "policy:bank_nbfc_exposure_rule",
+      "structural:formalisation_data",
+      "structural:project_lifecycle",
+      "structural:embedded_payment_rails",
+      "structural:digital_substitution",
+      "policy:rupay_incentive",
+      "policy:cash_at_pos",
+      "policy:contactless_limit"
     ]
   }
 }
