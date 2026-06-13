@@ -230,12 +230,14 @@ For session-specific state (current period, what's been validated, what's pendin
 See `STRATEGY_PLANNER.md` for the prioritised roadmap.
 
 **Done (June 2026):** Layer 2a system models (both pipelines, v4.0) · composition hub + cross-system
-derivation (Layer 2b) · S3 dynamic state · live opportunity derivation + `/opportunities` UI + plain-English
-narrative. The whole `S1 → S2a/S2b → S3 → opportunities → ecosystem → UI` chain runs in the gates.
+derivation (Layer 2b) · S3 dynamic state · live opportunity derivation + `/opportunities` UI (per-card
+chart highlight, cross-system 2-chart card) + plain-English narrative (preserved across gate regen) ·
+**S4 inference loop** (`run_inference.py` — sourcing-gated proposals, never auto-promoted) · all L1 signal
+`current_status` synced (scan/bank-scan/share roll-up in `seed`+`append`; 0 unknowns). The whole
+`S1 → S2a/S2b → S3 → opportunities → ecosystem → UI` chain runs in the gates; S4 is a manual review step.
 
 **Immediately next:**
 1. **Ingest next SIBC + ATM/POS period** — run full gate after ingestion (now also regenerates skeleton + S3 + opportunities).
-2. **Opportunity-chart alignment** — `/opportunities` cards should highlight the series the opportunity is about (SIBC) and load payments chart slices (`loadAtmPosChartMap` is a stub). The payments *insights* page already highlights correctly via `effect.highlight`.
-3. **S4 inference loop** — LLM proposes new channels/instances/cross-edges from S3 patterns + the authored-vs-observed mismatch detector; gated by sourcing.
-4. **Two ATM/POS signal gaps**: `dc-psb-share` evaluation routing · `dc-bank-scan` missing from registry.
-5. Newsletter standardisation: now unblocked by the Layer 2 model.
+2. **Layer 3 ecosystem strategic model** — authored ~6-monthly; consumes L2a/L2b causal graphs (next session).
+3. **Review S4 proposals** — `analysis/s4_proposals/{period}.json`: source + promote the worthwhile candidate channels.
+4. Newsletter standardisation: now unblocked by the Layer 2 model.

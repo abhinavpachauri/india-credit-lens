@@ -1,0 +1,440 @@
+{
+  "_meta": {
+    "description": "S4 inference proposals — HYPOTHESES, sourcing-gated. NEVER auto-promoted; review + source + promote by hand.",
+    "spec_ref": "analysis/COMPOSITION_SPEC.md §8",
+    "period": "2026-05-29"
+  },
+  "gaps_detected": {
+    "unexplained": {
+      "sibc": [
+        {
+          "entity": "Agriculture and Allied Activities",
+          "urn": "icl:sibc/Statement1/1",
+          "product": "agriculture",
+          "direction": "rising"
+        },
+        {
+          "entity": "Medium",
+          "urn": "icl:sibc/Statement1/2.2",
+          "product": "msme_credit",
+          "direction": "rising"
+        },
+        {
+          "entity": "Large",
+          "urn": "icl:sibc/Statement1/2.3",
+          "product": "large_corporate",
+          "direction": "rising"
+        },
+        {
+          "entity": "Housing (Including Priority Sector Housing)",
+          "urn": "icl:sibc/Statement1/4.2",
+          "product": "housing",
+          "direction": "rising"
+        },
+        {
+          "entity": "Advances against Fixed Deposits (Including FCNR (B), NRNR Deposits etc.)",
+          "urn": "icl:sibc/Statement1/4.3",
+          "product": "personal_loan",
+          "direction": "rising"
+        },
+        {
+          "entity": "Education",
+          "urn": "icl:sibc/Statement1/4.6",
+          "product": "education_loan",
+          "direction": "rising"
+        },
+        {
+          "entity": "Vehicle Loans",
+          "urn": "icl:sibc/Statement1/4.7",
+          "product": "vehicle_loan",
+          "direction": "rising"
+        },
+        {
+          "entity": "Other Personal Loans",
+          "urn": "icl:sibc/Statement1/4.9",
+          "product": "personal_loan",
+          "direction": "rising"
+        },
+        {
+          "entity": "Agriculture and Allied Activities",
+          "urn": "icl:sibc/Statement1/i",
+          "product": "agriculture",
+          "direction": "rising"
+        },
+        {
+          "entity": "Micro and Small Enterprises",
+          "urn": "icl:sibc/Statement1/ii",
+          "product": "msme_credit",
+          "direction": "rising"
+        },
+        {
+          "entity": "Medium Enterprises",
+          "urn": "icl:sibc/Statement1/iii",
+          "product": "msme_credit",
+          "direction": "rising"
+        },
+        {
+          "entity": "Educational Loans",
+          "urn": "icl:sibc/Statement1/v",
+          "product": "education_loan",
+          "direction": "rising"
+        },
+        {
+          "entity": "Renewable Energy",
+          "urn": "icl:sibc/Statement1/vi",
+          "product": "renewable_energy",
+          "direction": "rising"
+        },
+        {
+          "entity": "Social Infrastructure",
+          "urn": "icl:sibc/Statement1/vii",
+          "product": "social_infrastructure",
+          "direction": "rising"
+        },
+        {
+          "entity": "Weaker Sections including net PSLC- SF/MF",
+          "urn": "icl:sibc/Statement1/x",
+          "product": "weaker_sections",
+          "direction": "rising"
+        }
+      ],
+      "atm_pos": [
+        {
+          "entity": "Bharat QR codes",
+          "urn": "icl:atm_pos/infrastructure/bharat_qr",
+          "product": "qr_acceptance",
+          "direction": "falling"
+        },
+        {
+          "entity": "Micro ATMs",
+          "urn": "icl:atm_pos/infrastructure/micro_atms",
+          "product": "micro_atm_cash",
+          "direction": "falling"
+        },
+        {
+          "entity": "On-site ATMs",
+          "urn": "icl:atm_pos/infrastructure/atm_onsite",
+          "product": "atm_cash",
+          "direction": "rising"
+        },
+        {
+          "entity": "CC ATM withdrawal value",
+          "urn": "icl:atm_pos/spend_value/cc_atm_withdrawal_val",
+          "product": "credit_card",
+          "direction": "falling"
+        },
+        {
+          "entity": "CC e-commerce value",
+          "urn": "icl:atm_pos/spend_value/cc_ecom_txn_val",
+          "product": "credit_card",
+          "direction": "falling"
+        },
+        {
+          "entity": "CC POS value",
+          "urn": "icl:atm_pos/spend_value/cc_pos_txn_val",
+          "product": "credit_card",
+          "direction": "rising"
+        },
+        {
+          "entity": "DC e-commerce value",
+          "urn": "icl:atm_pos/spend_value/dc_ecom_txn_val",
+          "product": "debit_card",
+          "direction": "rising"
+        },
+        {
+          "entity": "DC other value",
+          "urn": "icl:atm_pos/spend_value/dc_other_txn_val",
+          "product": "debit_card",
+          "direction": "rising"
+        },
+        {
+          "entity": "DC POS value",
+          "urn": "icl:atm_pos/spend_value/dc_pos_txn_val",
+          "product": "debit_card",
+          "direction": "falling"
+        },
+        {
+          "entity": "DC POS cash withdrawal value",
+          "urn": "icl:atm_pos/spend_value/dc_pos_withdrawal_val",
+          "product": "debit_card",
+          "direction": "rising"
+        },
+        {
+          "entity": "CC ATM withdrawal volume",
+          "urn": "icl:atm_pos/spend_volume/cc_atm_withdrawal_vol",
+          "product": "credit_card",
+          "direction": "falling"
+        },
+        {
+          "entity": "CC e-commerce volume",
+          "urn": "icl:atm_pos/spend_volume/cc_ecom_txn_vol",
+          "product": "credit_card",
+          "direction": "rising"
+        },
+        {
+          "entity": "CC other volume",
+          "urn": "icl:atm_pos/spend_volume/cc_other_txn_vol",
+          "product": "credit_card",
+          "direction": "rising"
+        },
+        {
+          "entity": "CC POS volume",
+          "urn": "icl:atm_pos/spend_volume/cc_pos_txn_vol",
+          "product": "credit_card",
+          "direction": "rising"
+        },
+        {
+          "entity": "DC ATM withdrawal volume",
+          "urn": "icl:atm_pos/spend_volume/dc_atm_withdrawal_vol",
+          "product": "debit_card",
+          "direction": "falling"
+        }
+      ]
+    },
+    "mismatches": {
+      "sibc": [],
+      "atm_pos": []
+    },
+    "cross": [
+      {
+        "from": "icl:atm_pos/spend_value/cc_atm_withdrawal_val",
+        "to": "icl:sibc/Statement1/4.5",
+        "shared": {
+          "product": "credit_card"
+        },
+        "rule": "R1_stock_flow"
+      },
+      {
+        "from": "icl:atm_pos/spend_value/cc_ecom_txn_val",
+        "to": "icl:sibc/Statement1/4.5",
+        "shared": {
+          "product": "credit_card"
+        },
+        "rule": "R1_stock_flow"
+      },
+      {
+        "from": "icl:atm_pos/spend_value/cc_other_txn_val",
+        "to": "icl:sibc/Statement1/4.5",
+        "shared": {
+          "product": "credit_card"
+        },
+        "rule": "R1_stock_flow"
+      },
+      {
+        "from": "icl:atm_pos/spend_value/cc_pos_txn_val",
+        "to": "icl:sibc/Statement1/4.5",
+        "shared": {
+          "product": "credit_card"
+        },
+        "rule": "R1_stock_flow"
+      },
+      {
+        "from": "icl:atm_pos/spend_volume/cc_spend_volume",
+        "to": "icl:sibc/Statement1/4.5",
+        "shared": {
+          "product": "credit_card"
+        },
+        "rule": "R1_stock_flow"
+      },
+      {
+        "from": "icl:atm_pos/spend_volume/cc_atm_withdrawal_vol",
+        "to": "icl:sibc/Statement1/4.5",
+        "shared": {
+          "product": "credit_card"
+        },
+        "rule": "R1_stock_flow"
+      },
+      {
+        "from": "icl:atm_pos/spend_volume/cc_ecom_txn_vol",
+        "to": "icl:sibc/Statement1/4.5",
+        "shared": {
+          "product": "credit_card"
+        },
+        "rule": "R1_stock_flow"
+      },
+      {
+        "from": "icl:atm_pos/spend_volume/cc_other_txn_vol",
+        "to": "icl:sibc/Statement1/4.5",
+        "shared": {
+          "product": "credit_card"
+        },
+        "rule": "R1_stock_flow"
+      },
+      {
+        "from": "icl:atm_pos/spend_volume/cc_pos_txn_vol",
+        "to": "icl:sibc/Statement1/4.5",
+        "shared": {
+          "product": "credit_card"
+        },
+        "rule": "R1_stock_flow"
+      }
+    ]
+  },
+  "proposals": [
+    {
+      "kind": "channel",
+      "label": "Monetary policy transmission → credit demand elasticity",
+      "mechanism": "Repo rate cuts or improved transmission mechanism lowers lending rates, increasing credit demand across rate-sensitive segments",
+      "affects": "all_credit_products",
+      "required_source": "RBI Monetary Policy Committee meeting minutes and repo rate announcements for 2025-2026",
+      "claim_type": "hypothesis",
+      "from_pipeline": "sibc",
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "Credit guarantee scheme expansion → priority sector origination",
+      "mechanism": "Extension of ECLGS or launch of new government credit guarantee schemes reduces bank risk perception for priority sector lending",
+      "affects": "agriculture, msme_credit, education_loan, weaker_sections",
+      "required_source": "Ministry of Finance notifications on ECLGS extensions or new credit guarantee scheme announcements for 2025-2026",
+      "claim_type": "hypothesis",
+      "from_pipeline": "sibc",
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "Risk weight recalibration → sectoral lending capacity",
+      "mechanism": "RBI reduces risk weights for specific sectors or asset classes, improving regulatory capital efficiency for those exposures",
+      "affects": "housing, vehicle_loan, msme_credit, agriculture",
+      "required_source": "RBI circulars on risk weight modifications for different asset classes in 2025-2026",
+      "claim_type": "hypothesis",
+      "from_pipeline": "sibc",
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "Account Aggregator framework adoption → underwriting efficiency",
+      "mechanism": "Increased adoption of AA framework reduces customer acquisition costs and enables faster credit decisions for retail segments",
+      "affects": "personal_loan, housing, vehicle_loan, education_loan",
+      "required_source": "NPCI or RBI reports on Account Aggregator transaction volumes and participating entities for 2025-2026",
+      "claim_type": "hypothesis",
+      "from_pipeline": "sibc",
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "Union Budget allocation increase → sectoral credit demand",
+      "mechanism": "Increased budget allocations or subsidies for specific sectors create downstream credit demand from beneficiaries",
+      "affects": "agriculture, renewable_energy, social_infrastructure",
+      "required_source": "Union Budget 2025-26 documents showing sectoral allocation changes compared to previous year",
+      "claim_type": "hypothesis",
+      "from_pipeline": "sibc",
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "UPI infrastructure mandate → QR acceptance substitution",
+      "mechanism": "RBI mandates for UPI-QR standardization and interoperability crowd out proprietary Bharat QR deployments as merchants consolidate to NPCI standard QR codes.",
+      "affects": "qr_acceptance",
+      "required_source": "NPCI UPI ecosystem guidelines and RBI Master Direction on Payment and Settlement Systems",
+      "claim_type": "hypothesis",
+      "from_pipeline": "atm_pos",
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "Bank branch rationalization policy → ATM location optimization",
+      "mechanism": "RBI guidelines on branch presence and cash management efficiency drive banks to concentrate ATM infrastructure on-site at remaining branches rather than maintaining dispersed off-site networks.",
+      "affects": "atm_cash",
+      "required_source": "RBI Guidelines on Branch Authorisation and bank branch licensing policies issued post-COVID",
+      "claim_type": "hypothesis",
+      "from_pipeline": "atm_pos",
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "Credit card cash advance regulation → ATM withdrawal compression",
+      "mechanism": "RBI directions on credit card cash advance limits and higher fee structures suppress ATM cash withdrawal usage in favor of card-present transactions.",
+      "affects": "credit_card",
+      "required_source": "RBI Master Direction on Credit Card and Debit Card Operations Section on cash advance limits and fees",
+      "claim_type": "hypothesis",
+      "from_pipeline": "atm_pos",
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "Payment aggregator licensing costs → micro-infrastructure exit",
+      "mechanism": "New PA licensing framework with higher compliance costs forces smaller payment infrastructure providers to exit micro-ATM and rural POS deployment.",
+      "affects": "micro_atm_cash",
+      "required_source": "RBI Guidelines on Regulation of Payment Aggregators and Payment Gateways issued in March 2021 and subsequent amendments",
+      "claim_type": "hypothesis",
+      "from_pipeline": "atm_pos",
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "E-commerce transaction fees → ticket size compression",
+      "mechanism": "Higher acquirer fees on small-value e-commerce transactions drive merchants to implement minimum transaction thresholds, compressing average ticket size while increasing volume through order bundling.",
+      "affects": "credit_card",
+      "required_source": "NPCI and merchant acquirer fee schedules for e-commerce transactions and RBI data on transaction value distributions",
+      "claim_type": "hypothesis",
+      "from_pipeline": "atm_pos",
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "RuPay interchange incentive → debit channel preference",
+      "mechanism": "NPCI interchange rate structures favor specific debit card usage channels (e-commerce vs POS vs ATM) through differential merchant discount rates, shifting transaction flow between channels.",
+      "affects": "debit_card",
+      "required_source": "NPCI RuPay Merchant Discount Rate structure and interchange fee schedules published annually",
+      "claim_type": "hypothesis",
+      "from_pipeline": "atm_pos",
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "Digital lending integration → card utilization patterns",
+      "mechanism": "NBFC digital lending partnerships with card networks create new credit utilization channels that appear in 'other' transaction categories, changing traditional spend pattern distributions.",
+      "affects": "credit_card",
+      "required_source": "RBI Guidelines on Digital Lending through online platforms and fintech partnership disclosures by major card issuers",
+      "claim_type": "hypothesis",
+      "from_pipeline": "atm_pos",
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "Dynamic credit limit revision → utilization capacity",
+      "mechanism": "Banks adjust credit card limits based on spending velocity and transaction patterns, directly affecting maximum possible outstanding balances",
+      "affects": "credit_card",
+      "required_source": "RBI Master Direction on Credit Card and Debit Card - Issuance and Conduct or individual bank credit policy disclosures on dynamic limit adjustments",
+      "claim_type": "hypothesis",
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "Cash advance fee structure → balance composition",
+      "mechanism": "Higher cash advance fees and interest rates cause borrowers to shift between ATM withdrawals and POS spending, affecting revolving balance accumulation patterns",
+      "affects": "credit_card",
+      "required_source": "Bank credit card fee schedules or RBI data on cash advance vs purchase transaction proportions and their differential pricing",
+      "claim_type": "hypothesis",
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "Minimum payment calculation method → revolving balance persistence",
+      "mechanism": "Changes in minimum payment calculation rules affect how quickly outstanding balances are paid down relative to new spending flows",
+      "affects": "credit_card",
+      "required_source": "RBI circular on minimum payment calculation methods or banking industry guidelines on revolving credit payment structures",
+      "claim_type": "hypothesis",
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "Merchant category blocking → spending channel substitution",
+      "mechanism": "Regulatory or risk-based restrictions on certain merchant categories force spend to alternative channels, affecting overall utilization patterns",
+      "affects": "credit_card",
+      "required_source": "RBI notifications on merchant category restrictions or bank risk management policies on transaction category limits",
+      "claim_type": "hypothesis",
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "Billing cycle harmonization → payment timing synchronization",
+      "mechanism": "Industry standardization of billing cycles affects the timing relationship between spending flows and balance reporting periods",
+      "affects": "credit_card",
+      "required_source": "Banking industry association guidelines on billing cycle standardization or RBI data collection methodology changes for credit card reporting",
+      "claim_type": "hypothesis",
+      "status": "proposed"
+    }
+  ]
+}
