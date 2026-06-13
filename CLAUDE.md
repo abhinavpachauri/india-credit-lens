@@ -43,12 +43,12 @@ Live components only. Planned work lives in `STRATEGY_PLANNER.md`.
 | validate_annotation_basis.py (Check 2d) | **Live** — basis completeness check (inference/hypothesis → basis.inferences non-empty) |
 | promote_annotations.py (Stage 7) | **Live** — automated verified copy to web |
 | signal_registry.json | **Live** — 7 signals tracked across 3 issues (newsletter subsystem) |
-| signal compute layer | **Live** — `analysis/signals/` — registry.json (174 signals total: SIBC 84 L1 + ATM/POS 82 L1 + L2/L3), signals.db (SQLite — sole store); compute engine in signals/compute/; Check 2e validates DB + registry |
+| signal compute layer | **Live** — `analysis/signals/` — registry.json (**206 signals**: SIBC 84 L1 + 34 L2 + 4 L3; ATM/POS 84 L1), signals.db (SQLite — sole store); compute engine in signals/compute/; Check 2e validates DB + registry |
 | signal evaluate layer | **Live** — `analysis/signals/evaluate.py` — Stage 5 LLM evaluation via `claude -p` CLI (Pro subscription, no API cost); prompt v1.4 (executive tone, full period series in payload); prior-period signal narratives auto-injected for diff from 2nd period onward; evaluations written to `signals/evaluations/{pipeline}/{period}.json` |
 | L1 annotation classification | **Done** — all 49 SIBC annotations classified: 26 L1 / 18 L2 / 5 L3; all 21 ATM/POS insights classified: 16 L1 / 3 L2 / 2 gaps |
 | Subsystem generation | **Live** — `generate_mermaid.py` → `.mmd` + `validate.py --check-subsystems` |
 | detect_format.py (Stage 0) | **Live** — flags format changes in new XLSX before extraction |
-| ATM/POS pipeline | **Live** — `rbi_atm_pos/` — Stages 0–3 complete; Stage 4 (L1 compute) — 82 signals in registry, 56 with DB values (26 YoY signals pending prior-year data); Stage 5 evaluation complete for 2026-03-31 |
+| ATM/POS pipeline | **Live** — `rbi_atm_pos/` — Stages 0–3 + L1 compute (84 signals) + evaluate complete through **2026-04-30** (16 periods in DB). **Dashboard insights** come from a *separate deterministic path*: Stage 4a `compute_atm_pos_signals.py` → `rbi_atm_pos/signals.json` → Stage 4b `generate_atm_pos_insights.py` → `atm_pos_insights.json` (17 insights, Apr 2026). Both stages run inside `run_atm_pos_evals.py`. NB: `generate_atm_pos_analysis_report.py` (the db/eval-driven "Stage 5.5") is currently a **no-op** (it only updates `layer==1` items and 4b writes none) — 4b is authoritative until the dual paths are reconciled. |
 | AppShell + DLS | **Live** — shared Header (one instance), `dls/InsightCard`, `dls/InsightCTAStrip` used by both SIBC and Payments |
 | **Layer 2a system models (v4.0)** | **Live** — `system_model.json` for both pipelines (SIBC 85 entities, ATM/POS 35). Deterministic structural skeleton (`generate_skeleton.py`) + behavioral-causal split into shared **channels** (S2a) + dated **force_instances** (S2b). Specs: `analysis/SYSTEM_MODEL_SPEC.md` v3.0 + `analysis/COMPOSITION_SPEC.md` v1.0. Validated by `validate_system_model.py` in both gates. |
 | **Composition hub (Layer 2b)** | **Live** — `analysis/ontology/{concepts,channels}.json` shared across pipelines; entities carry global URNs + `concept_tags`. `derive_cross_links.py` derives cross-system candidates (stock↔flow + shared-channel); `cross_source/composition.json` holds confirmed cross-edges; `validate_composition.py` enforces the no-monolith rule. |
@@ -167,8 +167,8 @@ handles formatting-only cases automatically.
 | `analysis/signals/evaluate.py` | Stage 5 LLM evaluation engine — reads signals.db, builds domain payloads (full period series included), calls `claude -p` CLI, writes to evaluations/. prompt_version=1.4. Cache in llm_cache table. |
 | `analysis/signals/query.py` | Builds signal payloads for evaluate — scalar + scan + full chronological series per signal |
 | `analysis/signals/prompts/domain_eval_system.txt` | System prompt v1.4 — executive tone, trajectory style, no jargon |
-| `analysis/signals/evaluations/sibc/2026-04-30.json` | Latest SIBC evaluation — 84 signals, 5 domains, prompt v1.4 |
-| `analysis/signals/evaluations/atm_pos/2026-03-31.json` | Latest ATM/POS evaluation — 50 signals, 4 domains, prompt v1.4 |
+| `analysis/signals/evaluations/sibc/2026-05-29.json` | Latest SIBC evaluation — 5 domains, prompt v1.5 |
+| `analysis/signals/evaluations/atm_pos/2026-04-30.json` | Latest ATM/POS evaluation — 4 domains, prompt v1.5 |
 | `analysis/signals/db.py` | DB init, schema, refresh_ranges() |
 | `analysis/cross_source/catalog.json` | Tuple registry — all declared cross-source pairs (Layer 2b) |
 | `analysis/rbi_atm_pos/merged/system_model.json` | ATM/POS per-source system model (Layer 2a — pending first FOUNDATION) |

@@ -35,16 +35,24 @@ Stage 0:  python3 analysis/detect_atm_pos_format.py {xlsx}     → {period}/form
 Stage 1:  python3 analysis/extract_atm_pos.py {xlsx}           → {period}/sections.json + raw/
 Stage 2:  python3 analysis/validate_atm_pos.py {YYYY-MM-DD}    → checks A–E
 Stage 3:  python3 analysis/consolidate_atm_pos.py {YYYY-MM-DD} → atm_pos_consolidated.csv + timeline.json
-[Stage 4] python3 analysis/generate_signal_history.py append --pipeline atm_pos --period {YYYY-MM-DD}
-[Stage 5] python3 analysis/generate_atm_pos_insights.py        → web/public/data/atm_pos_insights.json
-          python3 analysis/validate_atm_pos_insights.py        → validates numbers vs signals.json (±0.5%)
-          python3 analysis/validate_atm_pos_claims.py          → validates reasoning.chain (≥2 steps)
-Stage 6:  (automatic in gate) web CSV integrity check + tsc + npm run build
+[Stage 4]  python3 analysis/generate_signal_history.py append --pipeline atm_pos --period {YYYY-MM-DD}
+[Stage 4a] python3 analysis/compute_atm_pos_signals.py         → rbi_atm_pos/signals.json (refresh from latest CSV)
+[Stage 4b] python3 analysis/generate_atm_pos_insights.py       → web/public/data/atm_pos_insights.json
+[Stage 4c] python3 analysis/validate_atm_pos_insights.py       → numbers vs signals.json (±0.5%; incl. prior-period ratios)
+[Stage 4d] python3 analysis/validate_atm_pos_claims.py         → validates reasoning.chain (≥2 steps)
+Stage 6:   (automatic in gate) web CSV integrity check + tsc + npm run build
 ```
+
+> **Stage 4a is mandatory before 4b.** `generate_atm_pos_insights.py` reads
+> `rbi_atm_pos/signals.json`, which carries `meta.latest_month`. If you run 4b without
+> first running `compute_atm_pos_signals.py` (4a), the dashboard serves the **prior period**
+> silently. Both run inside `run_atm_pos_evals.py` (4a wired in 2026-06-13) — prefer the gate
+> over hand-running scripts. NB: `generate_atm_pos_analysis_report.py` (the db/eval "Stage 5.5")
+> is a **no-op** today (updates only `layer==1`; 4b writes none) — 4b is authoritative.
 
 Re-validate an already-extracted period:
 ```
-python3 analysis/run_atm_pos_evals.py --period 2026-03-31
+python3 analysis/run_atm_pos_evals.py --period 2026-04-30
 ```
 
 ---
