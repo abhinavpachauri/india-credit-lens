@@ -67,6 +67,28 @@ def save_json(path: Path, obj: dict | list) -> None:
 def load_registry() -> dict:
     return load_json(REG)
 
+def sync_current_status_from_db(conn, registry: dict) -> int:
+    """Roll up registry current_status from the latest-period DB rows. Single-entity signals
+    take their one status; multi-entity signals (scan / bank-scan / category-share) take the
+    most common status across their entity rows. Returns the number of statuses changed."""
+    from collections import Counter
+    latest = dict(conn.execute("SELECT metric_id, MAX(period) FROM signals GROUP BY metric_id").fetchall())
+    updated = 0
+    for metric_id, period in latest.items():
+        if metric_id not in registry["signals"]:
+            continue
+        statuses = [r[0] for r in conn.execute(
+            "SELECT status FROM signals WHERE metric_id=? AND period=?", (metric_id, period)
+        ).fetchall() if r[0] not in ("unknown", "absent", "pending")]
+        if not statuses:
+            continue
+        rolled = Counter(statuses).most_common(1)[0][0]
+        if registry["signals"][metric_id].get("current_status") != rolled:
+            registry["signals"][metric_id]["current_status"] = rolled
+            updated += 1
+    return updated
+
+
 def save_registry(reg: dict) -> None:
     reg["_meta"]["last_updated"] = date.today().isoformat()
     save_json(REG, reg)
@@ -135,6 +157,9 @@ def cmd_append(pipeline: str, period: str) -> int:
             sig["current_status"] = res["status"]
             if not sig.get("first_seen"):
                 sig["first_seen"] = period
+    # multi-entity signals (scan / bank-scan / category-share) have no single status above —
+    # roll them up from the DB rows just written so they don't drift back to 'unknown'.
+    sync_current_status_from_db(conn, registry)
     save_registry(registry)
 
     # ── Summary ───────────────────────────────────────────────────────────────
@@ -240,19 +265,24 @@ def cmd_status() -> int:
 # ─── seed command ─────────────────────────────────────────────────────────────
 
 def cmd_seed() -> int:
-    """Backfill registry first_seen from signals.db (earliest non-unknown period per signal)."""
+    """Backfill registry first_seen + current_status from signals.db.
+
+    current_status sync covers the multi-entity signals (scan / bank-scan / category-share)
+    that cmd_append's single-status update skips: for those the latest-period status is rolled
+    up to the most common status across their entity rows, so they no longer read 'unknown'.
+    """
+    from collections import Counter
     from signals.db import init_db
     conn = init_db()
 
     registry = load_registry()
-    updated  = 0
+    first_seen_updated = status_updated = 0
 
     rows = conn.execute(
         "SELECT metric_id, MIN(period) FROM signals "
         "WHERE status NOT IN ('absent','unknown','pending') "
         "GROUP BY metric_id"
     ).fetchall()
-
     for metric_id, earliest_period in rows:
         if metric_id not in registry["signals"]:
             continue
@@ -260,10 +290,14 @@ def cmd_seed() -> int:
         existing = reg_sig.get("first_seen", "")
         if not existing or earliest_period < existing:
             reg_sig["first_seen"] = earliest_period
-            updated += 1
+            first_seen_updated += 1
+
+    # current_status sync — latest period per metric, rolled up across entity rows
+    status_updated = sync_current_status_from_db(conn, registry)
 
     save_registry(registry)
-    print(f"  ✓ seed complete — {updated} first_seen values updated from signals.db")
+    print(f"  ✓ seed complete — {first_seen_updated} first_seen + {status_updated} current_status "
+          f"updated from signals.db")
     return 0
 
 

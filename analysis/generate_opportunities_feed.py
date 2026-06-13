@@ -201,6 +201,24 @@ def main():
         "cross_system": build_cross_system(models, chart_series),
         "pipelines": {p: build_pipeline_items(p, channels, models, chart_series) for p in gs.PIPELINES},
     }
+    # Preserve existing narrative across regeneration (so the gate's feed rebuild does not
+    # revert to templated copy). Carry forward body/implication/chain for items that were
+    # already narrated; new/changed items stay templated until generate_opportunity_narrative
+    # runs again (cached → fast). Same preserve-on-regen pattern as the skeleton.
+    if OUT.exists():
+        try:
+            prev = gs.load_json(OUT)
+            narrated = {}
+            for it in prev.get("cross_system", []) + [x for v in prev.get("pipelines", {}).values() for x in v]:
+                if it.get("narrative"):
+                    narrated[it["id"]] = {k: it.get(k) for k in ("body", "implication", "chain")}
+            for it in bundle["cross_system"] + [x for v in bundle["pipelines"].values() for x in v]:
+                if it["id"] in narrated:
+                    it.update(narrated[it["id"]])
+                    it["narrative"] = True
+        except Exception:
+            pass
+
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(bundle, indent=2, ensure_ascii=False))
     n = sum(len(v) for v in bundle["pipelines"].values())

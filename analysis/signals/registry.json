@@ -2,7 +2,7 @@
   "_meta": {
     "schema_version": "1.0",
     "description": "Signal registry — permanent catalog of every tracked signal across all ingestion pipelines. Signal IDs are immutable once created. Add new signals; never rename or delete. layer: 1 = per-chart data signal (algorithmically computed), 2 = cross-chart synthesis (authored per period from data), 3 = lending ecosystem expert model (generated ~6-monthly, strict claim validation).",
-    "last_updated": "2026-06-10"
+    "last_updated": "2026-06-13"
   },
   "pipelines": {
     "sibc": {
@@ -1570,7 +1570,7 @@
         ]
       },
       "id": "sibc-industry-type-yoy-scan",
-      "current_status": "unknown",
+      "current_status": "strengthening",
       "first_seen": "2024-04-22",
       "type": "data",
       "chart_series": []
@@ -1606,7 +1606,7 @@
         ]
       },
       "id": "sibc-industry-type-share-scan",
-      "current_status": "unknown",
+      "current_status": "active",
       "first_seen": "2024-04-22",
       "type": "data",
       "chart_series": []
@@ -1640,7 +1640,7 @@
         ]
       },
       "id": "sibc-services-yoy-scan",
-      "current_status": "unknown",
+      "current_status": "active",
       "first_seen": "2024-04-22",
       "type": "data",
       "chart_series": []
@@ -1674,7 +1674,7 @@
         ]
       },
       "id": "sibc-services-share-scan",
-      "current_status": "unknown",
+      "current_status": "active",
       "first_seen": "2024-04-22",
       "type": "data",
       "chart_series": []
@@ -1708,7 +1708,7 @@
         ]
       },
       "id": "sibc-pl-yoy-scan",
-      "current_status": "unknown",
+      "current_status": "active",
       "first_seen": "2024-04-22",
       "type": "data",
       "chart_series": []
@@ -1742,7 +1742,7 @@
         ]
       },
       "id": "sibc-pl-share-scan",
-      "current_status": "unknown",
+      "current_status": "active",
       "first_seen": "2024-04-22",
       "type": "data",
       "chart_series": []
@@ -1773,7 +1773,7 @@
         ]
       },
       "id": "sibc-psl-yoy-scan",
-      "current_status": "unknown",
+      "current_status": "strengthening",
       "first_seen": "2024-04-22",
       "type": "data",
       "chart_series": []
@@ -2494,7 +2494,7 @@
         ]
       },
       "id": "cc-psb-share",
-      "current_status": "unknown",
+      "current_status": "active",
       "first_seen": "2025-01-31"
     },
     "cc-private-share": {
@@ -2525,7 +2525,7 @@
         ]
       },
       "id": "cc-private-share",
-      "current_status": "unknown",
+      "current_status": "active",
       "first_seen": "2025-01-31"
     },
     "dc-psb-share": {
@@ -2556,7 +2556,7 @@
         ]
       },
       "id": "dc-psb-share",
-      "current_status": "unknown",
+      "current_status": "strengthening",
       "first_seen": "2025-01-31"
     },
     "dc-private-share": {
@@ -2587,7 +2587,7 @@
         ]
       },
       "id": "dc-private-share",
-      "current_status": "unknown",
+      "current_status": "strengthening",
       "first_seen": "2025-01-31"
     },
     "pos-psb-share": {
@@ -2618,7 +2618,7 @@
         ]
       },
       "id": "pos-psb-share",
-      "current_status": "unknown",
+      "current_status": "strengthening",
       "first_seen": "2025-01-31"
     },
     "pos-private-share": {
@@ -2649,7 +2649,7 @@
         ]
       },
       "id": "pos-private-share",
-      "current_status": "unknown",
+      "current_status": "weakening",
       "first_seen": "2025-01-31"
     },
     "cc-category-share-scan": {
@@ -2679,7 +2679,7 @@
         ]
       },
       "id": "cc-category-share-scan",
-      "current_status": "unknown",
+      "current_status": "active",
       "first_seen": "2025-01-31"
     },
     "dc-category-share-scan": {
@@ -2709,7 +2709,7 @@
         ]
       },
       "id": "dc-category-share-scan",
-      "current_status": "unknown",
+      "current_status": "strengthening",
       "first_seen": "2025-01-31"
     },
     "pos-category-share-scan": {
@@ -2739,7 +2739,7 @@
         ]
       },
       "id": "pos-category-share-scan",
-      "current_status": "unknown",
+      "current_status": "active",
       "first_seen": "2025-01-31"
     },
     "cc-bank-scan": {
@@ -2770,7 +2770,7 @@
         ]
       },
       "id": "cc-bank-scan",
-      "current_status": "unknown",
+      "current_status": "strengthening",
       "first_seen": "2025-01-31"
     },
     "pos-bank-scan": {
@@ -2801,7 +2801,7 @@
         ]
       },
       "id": "pos-bank-scan",
-      "current_status": "unknown",
+      "current_status": "active",
       "first_seen": "2025-01-31"
     },
     "sibc-food-credit-yoy": {
@@ -3438,7 +3438,7 @@
       "domain": "sector_mix",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "unknown",
+      "current_status": "active",
       "first_seen": "2025-02-28",
       "compute": {
         "method": "csv_sector_scan_yoy",
@@ -3474,7 +3474,7 @@
       "domain": "sector_mix",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "unknown",
+      "current_status": "weakening",
       "first_seen": "2025-02-28",
       "compute": {
         "method": "csv_sector_scan_share",
@@ -3512,7 +3512,7 @@
       "domain": "sector_mix",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "unknown",
+      "current_status": "strengthening",
       "first_seen": "2025-02-28",
       "compute": {
         "method": "csv_sector_scan_yoy",
@@ -3548,7 +3548,7 @@
       "domain": "sector_mix",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "unknown",
+      "current_status": "active",
       "first_seen": "2025-02-28",
       "compute": {
         "method": "csv_sector_scan_share",
@@ -3586,7 +3586,7 @@
       "domain": "industry",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "unknown",
+      "current_status": "declining",
       "first_seen": "2025-02-28",
       "compute": {
         "method": "csv_sector_scan_yoy",
@@ -3622,7 +3622,7 @@
       "domain": "industry",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "unknown",
+      "current_status": "active",
       "first_seen": "2025-02-28",
       "compute": {
         "method": "csv_sector_scan_share",
@@ -3660,7 +3660,7 @@
       "domain": "industry",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "unknown",
+      "current_status": "active",
       "first_seen": "2025-02-28",
       "compute": {
         "method": "csv_sector_scan_yoy",
@@ -3696,7 +3696,7 @@
       "domain": "industry",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "unknown",
+      "current_status": "weakening",
       "first_seen": "2025-02-28",
       "compute": {
         "method": "csv_sector_scan_share",
@@ -3734,7 +3734,7 @@
       "domain": "industry",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "unknown",
+      "current_status": "active",
       "first_seen": "2025-02-28",
       "compute": {
         "method": "csv_sector_scan_yoy",
@@ -3770,7 +3770,7 @@
       "domain": "industry",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "unknown",
+      "current_status": "weakening",
       "first_seen": "2025-02-28",
       "compute": {
         "method": "csv_sector_scan_share",
@@ -3808,7 +3808,7 @@
       "domain": "industry",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "unknown",
+      "current_status": "declining",
       "first_seen": "2025-02-28",
       "compute": {
         "method": "csv_sector_scan_yoy",
@@ -3844,7 +3844,7 @@
       "domain": "industry",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "unknown",
+      "current_status": "active",
       "first_seen": "2025-02-28",
       "compute": {
         "method": "csv_sector_scan_share",
@@ -3882,7 +3882,7 @@
       "domain": "industry",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "unknown",
+      "current_status": "strengthening",
       "first_seen": "2025-02-28",
       "compute": {
         "method": "csv_sector_scan_yoy",
@@ -3918,7 +3918,7 @@
       "domain": "industry",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "unknown",
+      "current_status": "active",
       "first_seen": "2025-02-28",
       "compute": {
         "method": "csv_sector_scan_share",
@@ -3956,7 +3956,7 @@
       "domain": "industry",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "unknown",
+      "current_status": "strengthening",
       "first_seen": "2025-02-28",
       "compute": {
         "method": "csv_sector_scan_yoy",
@@ -3993,7 +3993,7 @@
       "domain": "industry",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "unknown",
+      "current_status": "active",
       "first_seen": "2025-02-28",
       "compute": {
         "method": "csv_sector_scan_share",
@@ -6012,7 +6012,7 @@
           }
         ]
       },
-      "current_status": "unknown",
+      "current_status": "strengthening",
       "first_seen": "2025-01-31"
     },
     "pos-terminals-pos-streak": {
