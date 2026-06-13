@@ -33,7 +33,8 @@ type StatusFilter   = "live" | "active" | "watch" | "all";
 
 const PIPELINE_LABEL: Record<string, string> = { sibc: "Credit", atm_pos: "Payments" };
 const PIPELINE_COLOR: Record<string, string> = { sibc: "#4e8ef7", atm_pos: "#2ca02c" };
-const OPP_COLOR = "#16A34A";
+const OPP_COLOR  = "#16A34A";
+const RISK_COLOR = "#DC2626";
 
 const STATUS_META: Record<Status, { label: string; color: string; dot: string }> = {
   active:  { label: "Active",  color: "#16A34A", dot: "●" },
@@ -135,7 +136,9 @@ function ChartPanel({ slice, sectionId, highlightConfig }: {
 
 // ── Flip zone: For lenders ↔ Causal chain ───────────────────────────────────
 
-function FlipZone({ implication, chain }: { implication?: string | null; chain?: string[] }) {
+function FlipZone({ implication, chain, accent = OPP_COLOR, frontLabel = "For lenders" }: {
+  implication?: string | null; chain?: string[]; accent?: string; frontLabel?: string;
+}) {
   const [showBack, setShowBack] = useState(false);
   const [midFlip, setMidFlip]   = useState(false);
   const hasChain = (chain?.length ?? 0) > 0;
@@ -143,11 +146,11 @@ function FlipZone({ implication, chain }: { implication?: string | null; chain?:
   if (!implication && !hasChain) return null;
   return (
     <div>
-      <div style={{ height: 1, background: `${OPP_COLOR}25`, margin: "14px 0" }} />
+      <div style={{ height: 1, background: `${accent}25`, margin: "14px 0" }} />
       <div style={{ transition: "transform 0.16s ease-in, opacity 0.16s", transform: midFlip ? "scaleX(0)" : "scaleX(1)", opacity: midFlip ? 0 : 1, transformOrigin: "center" }}>
         {!showBack ? (
-          <div style={{ background: `${OPP_COLOR}0D`, border: `1px solid ${OPP_COLOR}30`, borderRadius: 8, padding: "12px 14px" }}>
-            <p style={{ fontSize: 14, fontWeight: 700, color: OPP_COLOR, marginBottom: 6 }}>For lenders</p>
+          <div style={{ background: `${accent}0D`, border: `1px solid ${accent}30`, borderRadius: 8, padding: "12px 14px" }}>
+            <p style={{ fontSize: 14, fontWeight: 700, color: accent, marginBottom: 6 }}>{frontLabel}</p>
             <p style={{ fontSize: 14, color: "var(--font)", lineHeight: 1.65 }}>{implication}</p>
             {hasChain && (
               <button onClick={flip} className="flex items-center gap-1.5 text-xs font-semibold mt-3"
@@ -157,11 +160,11 @@ function FlipZone({ implication, chain }: { implication?: string | null; chain?:
           </div>
         ) : (
           <div>
-            <p style={{ fontSize: 12, fontWeight: 700, color: OPP_COLOR, marginBottom: 8 }}>Why — the chain</p>
+            <p style={{ fontSize: 12, fontWeight: 700, color: accent, marginBottom: 8 }}>Why — the chain</p>
             <ol className="flex flex-col gap-2" style={{ paddingLeft: 0, listStyle: "none", margin: 0 }}>
               {chain!.map((step, i) => (
                 <li key={i} className="flex gap-2" style={{ lineHeight: 1.6 }}>
-                  <span className="flex-shrink-0 font-bold" style={{ color: OPP_COLOR, minWidth: 16, fontSize: 14 }}>{i + 1}.</span>
+                  <span className="flex-shrink-0 font-bold" style={{ color: accent, minWidth: 16, fontSize: 14 }}>{i + 1}.</span>
                   <span style={{ fontSize: 14, color: "var(--font)" }}>{step}</span>
                 </li>))}
             </ol>
@@ -180,10 +183,11 @@ function FlipZone({ implication, chain }: { implication?: string | null; chain?:
 
 function OppCard({ item, charts }: { item: Item; charts: ResolvedChart[] }) {
   const isCross = item.scope === "cross_source";
-  const accent  = isCross ? OPP_COLOR : STATUS_META[item.status].color;
+  const isRisk  = item.tier === "risk";
+  const accent  = isCross ? OPP_COLOR : isRisk ? RISK_COLOR : STATUS_META[item.status].color;
   return (
     <div style={{
-      background: "var(--bg-card)", border: `1px solid ${isCross ? OPP_COLOR : "var(--border-card)"}`,
+      background: "var(--bg-card)", border: `1px solid ${isCross ? OPP_COLOR : isRisk ? `${RISK_COLOR}55` : "var(--border-card)"}`,
       borderLeft: `4px solid ${accent}`, borderRadius: 10, marginBottom: 20, overflow: "hidden",
       ...(isCross ? { background: `linear-gradient(135deg, ${OPP_COLOR}0A, transparent 55%)` } : {}),
     }}>
@@ -192,6 +196,12 @@ function OppCard({ item, charts }: { item: Item; charts: ResolvedChart[] }) {
         <div style={{ padding: "20px 24px", borderRight: charts.length ? "1px solid var(--border-card)" : undefined }}>
           <div className="flex items-center gap-2 mb-3 flex-wrap">
             <StatusPill status={item.status} />
+            {isRisk && (
+              <span style={{ fontSize: 11, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.06em",
+                color: "#fff", background: RISK_COLOR, borderRadius: 4, padding: "2px 8px" }}>
+                ⚠ Risk
+              </span>
+            )}
             {isCross ? (
               <span style={{ fontSize: 11, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.06em",
                 color: "#fff", background: "linear-gradient(90deg,#4e8ef7,#2ca02c)", borderRadius: 4, padding: "2px 8px" }}>
@@ -209,7 +219,8 @@ function OppCard({ item, charts }: { item: Item; charts: ResolvedChart[] }) {
           </div>
           <h3 className="text-base font-bold leading-snug mb-3" style={{ color: "var(--font)" }}>{item.title}</h3>
           <p style={{ fontSize: 14, color: "var(--font)", lineHeight: 1.65 }}>{item.body}</p>
-          <FlipZone implication={item.implication} chain={item.chain} />
+          <FlipZone implication={item.implication} chain={item.chain}
+            accent={isRisk ? RISK_COLOR : OPP_COLOR} frontLabel={isRisk ? "Why it matters" : "For lenders"} />
         </div>
 
         {/* Charts (1 for opportunities, 2 for cross-system) */}
@@ -269,12 +280,18 @@ export default function OpportunitiesPage() {
   const atmN  = allOpps.filter((o) => o.pipeline === "atm_pos").length;
   const period = feed._meta.periods.sibc ?? "";
 
+  const allRisks = (["sibc", "atm_pos"] as Pipeline[])
+    .flatMap((p) => feed.pipelines[p] ?? [])
+    .filter((o) => o.tier === "risk" && o.status !== "retired");
+
   const crossVisible = feed.cross_system.filter((c) => statusOk(c.status));
   const visible = (pf === "all" ? allOpps : allOpps.filter((o) => o.pipeline === pf)).filter((o) => statusOk(o.status));
+  const visibleRisks = (pf === "all" ? allRisks : allRisks.filter((o) => o.pipeline === pf)).filter((o) => statusOk(o.status));
 
   const renderPipeline = (p: Pipeline) => {
-    const items = visible.filter((o) => o.pipeline === p);
-    if (items.length === 0) return null;
+    const opps  = visible.filter((o) => o.pipeline === p);
+    const risks = visibleRisks.filter((o) => o.pipeline === p);
+    if (opps.length === 0 && risks.length === 0) return null;
     return (
       <div key={p} style={{ marginBottom: 12 }}>
         <div className="flex items-center gap-2" style={{ margin: "8px 0 14px" }}>
@@ -282,9 +299,23 @@ export default function OpportunitiesPage() {
             {PIPELINE_LABEL[p]} ({p === "sibc" ? "SIBC" : "ATM/POS"})
           </span>
           <div style={{ flex: 1, height: 1, background: "var(--border-card)" }} />
-          <span style={{ fontSize: 12, color: "var(--font-muted)" }}>{items.filter((o) => o.status === "active").length} active</span>
+          <span style={{ fontSize: 12, color: "var(--font-muted)" }}>
+            {opps.filter((o) => o.status === "active").length} active
+            {risks.length > 0 && ` · ${risks.length} risk${risks.length === 1 ? "" : "s"}`}
+          </span>
         </div>
-        {items.map((o) => <OppCard key={o.id} item={o} charts={resolve(o)} />)}
+        {opps.map((o) => <OppCard key={o.id} item={o} charts={resolve(o)} />)}
+        {risks.length > 0 && (
+          <div style={{ margin: "4px 0 10px" }}>
+            <div className="flex items-center gap-2" style={{ marginBottom: 10 }}>
+              <span style={{ fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", color: RISK_COLOR }}>
+                ⚠ Risks &amp; watch-outs
+              </span>
+              <div style={{ flex: 1, height: 1, background: `${RISK_COLOR}25` }} />
+            </div>
+            {risks.map((o) => <OppCard key={o.id} item={o} charts={resolve(o)} />)}
+          </div>
+        )}
       </div>
     );
   };
@@ -297,7 +328,7 @@ export default function OpportunitiesPage() {
           {period && <span style={{ fontSize: 13, color: "var(--font-muted)" }}>⟳ {period}</span>}
         </div>
         <p className="text-sm mt-1" style={{ color: "var(--font-muted)" }}>
-          Live openings derived from the causal model · re-evaluated each ingestion.
+          Live openings &amp; risks derived from the causal model · re-evaluated each ingestion.
         </p>
       </div>
 
@@ -333,7 +364,7 @@ export default function OpportunitiesPage() {
       )}
 
       {/* Per-pipeline cards */}
-      {visible.length === 0 && crossVisible.length === 0 ? (
+      {visible.length === 0 && visibleRisks.length === 0 && crossVisible.length === 0 ? (
         <p style={{ color: "var(--font-muted)", fontSize: 14 }}>No opportunities for this filter.</p>
       ) : (
         (pf === "all" ? (["sibc", "atm_pos"] as Pipeline[]) : [pf as Pipeline]).map(renderPipeline)

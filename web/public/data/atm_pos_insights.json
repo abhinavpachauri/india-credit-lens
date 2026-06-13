@@ -3,28 +3,28 @@
     "id": "cc-ecom-vs-pos-share",
     "group": "cc",
     "cut": "total",
-    "period": "Mar 2026",
+    "period": "Apr 2026",
     "type": "insight",
-    "title": "CC ecommerce holds above POS at 50.2% of total CC volume",
-    "body": "In Mar 2026, ecommerce accounted for 50.2% (+0.1pp vs prior month) of total CC transaction volume vs POS at 49.1%. This structural shift — digital-first over in-store — has persisted for multiple months.",
+    "title": "CC ecommerce holds above POS at 50.1% of total CC volume",
+    "body": "In Apr 2026, ecommerce accounted for 50.1% (-0.1pp vs prior month) of total CC transaction volume vs POS at 49.2%. This structural shift — digital-first over in-store — has persisted for multiple months.",
     "implication": "More than half of credit card spending is now online — not at physical stores. Online transactions (called CNP, or card-not-present, because the card isn't physically swiped) carry higher fraud risk. If your fraud detection was built around in-store spending patterns, it needs to be updated for an online-first customer base.",
     "reasoning": {
       "signals": [
         {
           "key": "groups.cc.total.cross.cc_ecom_txn_vol.share_pct",
-          "value": 50.17
+          "value": 50.09
         },
         {
           "key": "groups.cc.total.cross.cc_pos_txn_vol.share_pct",
-          "value": 49.13
+          "value": 49.19
         },
         {
           "key": "groups.cc.total.cross.cc_ecom_txn_vol.share_delta_pp",
-          "value": 0.1
+          "value": -0.08
         }
       ],
       "chain": [
-        "CC ecommerce at 50.2% of volume — majority of CC spend is now online, not at physical stores",
+        "CC ecommerce at 50.1% of volume — majority of CC spend is now online, not at physical stores",
         "Online transactions (card-not-present / CNP) carry higher fraud risk since the card is never physically verified",
         "Fraud detection built for in-store patterns needs recalibration for an online-first customer base"
       ]
@@ -50,28 +50,28 @@
     "id": "cc-cards-streak",
     "group": "cc",
     "cut": "total",
-    "period": "Mar 2026",
+    "period": "Apr 2026",
     "type": "insight",
-    "title": "Credit cards outstanding: 5 consecutive months of growth — 118.6M cards",
-    "body": "Total credit cards outstanding reached 118.6M in Mar 2026 (+2.5% QoQ vs Q3 FY26), marking the 5 consecutive months of growth. Issuance momentum is broad-based across bank types.",
-    "implication": "5 straight months of card growth looks good, but card count alone can mislead. Many new cards never get used — they sit inactive. What matters for lending is how many cards are actually being transacted on. Track activation rate (what percentage of issued cards have any spend in the last few months) alongside the headline number.",
+    "title": "Credit cards outstanding: 10 consecutive months of growth — 119.4M cards",
+    "body": "Total credit cards outstanding reached 119.4M in Apr 2026 (+0.7% QoQ vs Q4 FY26), marking the 10 consecutive months of growth. Issuance momentum is broad-based across bank types.",
+    "implication": "10 straight months of card growth looks good, but card count alone can mislead. Many new cards never get used — they sit inactive. What matters for lending is how many cards are actually being transacted on. Track activation rate (what percentage of issued cards have any spend in the last few months) alongside the headline number.",
     "reasoning": {
       "signals": [
         {
           "key": "groups.cc.total.metrics.credit_cards.latest",
-          "value": 118633677.0
+          "value": 119436129.0
         },
         {
           "key": "groups.cc.total.metrics.credit_cards.streak_months",
-          "value": 5.0
+          "value": 10.0
         },
         {
           "key": "groups.cc.total.metrics.credit_cards.qoq_pct",
-          "value": 2.45
+          "value": 0.68
         }
       ],
       "chain": [
-        "CC cards outstanding growing for 5 consecutive months",
+        "CC cards outstanding growing for 10 consecutive months",
         "Card count includes dormant cards that were issued but never activated or used",
         "Activation rate (cards with any spend in recent months) is the real signal for credit origination potential"
       ]
@@ -95,85 +95,35 @@
     }
   },
   {
-    "id": "cc-txn-surge",
-    "group": "cc",
-    "cut": "total",
-    "period": "Mar 2026",
-    "type": "insight",
-    "title": "All CC transaction types surged in Mar 2026 — avg 15.8% MoM",
-    "body": "All four CC transaction types grew strongly in Mar 2026: POS +16.7%, eCommerce +17.2%, ATM +11.4%, Other +18.1%. March year-end spending typically drives broad-based CC transaction growth.",
-    "implication": "March always spikes — it's financial year-end and people tend to spend more. An average 15.8% jump this month is seasonal, not a sign customers suddenly have more money. If you're assessing how much credit a customer can repay, don't use March spend as your baseline — it will make their repayment capacity look higher than it actually is.",
-    "reasoning": {
-      "signals": [
-        {
-          "key": "groups.cc.total.metrics.cc_pos_txn_vol.mom_pct",
-          "value": 16.69
-        },
-        {
-          "key": "groups.cc.total.metrics.cc_ecom_txn_vol.mom_pct",
-          "value": 17.18
-        },
-        {
-          "key": "groups.cc.total.metrics.cc_atm_withdrawal_vol.mom_pct",
-          "value": 11.38
-        },
-        {
-          "key": "groups.cc.total.metrics.cc_other_txn_vol.mom_pct",
-          "value": 18.12
-        }
-      ],
-      "chain": [
-        "All 4 CC transaction types grew simultaneously — avg 15.8% MoM in March",
-        "March is financial year-end in India — broad-based spending surge is a recurring seasonal pattern",
-        "Seasonal spike overstates true credit utilisation; normalise March volumes before assessing repayment capacity"
-      ]
-    },
-    "sourceSignals": [
-      "groups.cc.total.metrics.cc_pos_txn_vol.mom_pct",
-      "groups.cc.total.metrics.cc_ecom_txn_vol.mom_pct",
-      "groups.cc.total.metrics.cc_atm_withdrawal_vol.mom_pct",
-      "groups.cc.total.metrics.cc_other_txn_vol.mom_pct"
-    ],
-    "effect": {
-      "highlight": [
-        "Total"
-      ],
-      "tab": "trend",
-      "trendMode": "mom",
-      "focusCard": "cc_pos"
-    },
-    "exploreAction": null
-  },
-  {
     "id": "cc-category-share-shift",
     "group": "cc",
     "cut": "by_type",
-    "period": "Mar 2026",
+    "period": "Apr 2026",
     "type": "insight",
-    "title": "SFB banks gained CC card share in Mar 2026 (+0.1pp)",
-    "body": "SFB banks hold 1.5% of total credit cards outstanding in Mar 2026 (+0.1pp vs prior month). Private banks lost the most share at -0.1pp, now at 71.0%. SFB growth in credit cards reflects increased fintech partnerships.",
+    "title": "SFB banks gained CC card share in Apr 2026 (+0.1pp)",
+    "body": "SFB banks hold 1.6% of total credit cards outstanding in Apr 2026 (+0.1pp vs prior month). Foreign banks lost the most share at -0.1pp, now at 3.6%. SFB growth in credit cards reflects increased fintech partnerships.",
     "implication": "SFB banks picking up credit card share — even by 0.1pp — signals a change in who's acquiring customers. SFBs (Small Finance Banks — banks that focus on underserved segments like AU or Equitas) growing in credit cards usually means fintech partnerships or co-branded products are kicking in.For anyone benchmarking credit card portfolio quality, knowing which bank type is gaining share matters — their customer profiles and risk behaviour can be very different.",
     "reasoning": {
       "signals": [
         {
           "key": "groups.cc.by_type.categories.SFB.share_pct",
-          "value": 1.47
+          "value": 1.57
         },
         {
           "key": "groups.cc.by_type.categories.SFB.share_delta_pp",
-          "value": 0.11
+          "value": 0.1
         },
         {
-          "key": "groups.cc.by_type.categories.Private.share_pct",
-          "value": 71.0
+          "key": "groups.cc.by_type.categories.Foreign.share_pct",
+          "value": 3.62
         },
         {
-          "key": "groups.cc.by_type.categories.Private.share_delta_pp",
-          "value": -0.1
+          "key": "groups.cc.by_type.categories.Foreign.share_delta_pp",
+          "value": -0.07
         }
       ],
       "chain": [
-        "SFB banks gained 0.1pp CC share — Private banks lost 0.1pp",
+        "SFB banks gained 0.1pp CC share — Foreign banks lost 0.1pp",
         "SFB growth signals fintech partnerships or co-branded card activity in underserved segments",
         "Customer risk profiles differ significantly across bank types — portfolio benchmarking must account for this mix shift"
       ]
@@ -181,8 +131,8 @@
     "sourceSignals": [
       "groups.cc.by_type.categories.SFB.share_pct",
       "groups.cc.by_type.categories.SFB.share_delta_pp",
-      "groups.cc.by_type.categories.Private.share_pct",
-      "groups.cc.by_type.categories.Private.share_delta_pp"
+      "groups.cc.by_type.categories.Foreign.share_pct",
+      "groups.cc.by_type.categories.Foreign.share_delta_pp"
     ],
     "effect": {
       "highlight": [
@@ -198,51 +148,37 @@
     }
   },
   {
-    "id": "cc-top5-concentration",
+    "id": "cc-top-bank-rank-change",
     "group": "cc",
     "cut": "top_n",
-    "period": "Mar 2026",
+    "period": "Apr 2026",
     "type": "insight",
-    "title": "Top 5 banks hold 74.3% of CC cards — HDFC BANK LTD leads at 22.2%",
-    "body": "In Mar 2026, the top 5 banks account for 74.3% of total credit cards outstanding (-0.2pp vs prior month). HDFC BANK LTD leads with 22.2% share (+0.2% MoM).",
-    "implication": "74% of all credit cards in India are with just 5 banks. In practice, this means the national credit card data from RBI tells you largely what HDFC, SBI, ICICI, Axis, and Kotak are doing — not the market as a whole. If your strategy relies on industry-level CC data, keep this concentration in mind.",
+    "title": "IDFC FIRST BANK LTD moves up to #6 in CC cards",
+    "body": "IDFC FIRST BANK LTD moved from #7 to #6 in credit cards outstanding in Apr 2026. Top 5 banks collectively hold 74.2% of total CC cards (-0.1pp vs prior month).",
+    "implication": "A rank change among the top CC issuers means one bank is either issuing cards faster or closing inactive accounts more aggressively. For anyone watching the credit card market, it's worth understanding the reason — growing rank means gaining customers, falling rank could mean pruning a portfolio or losing share to a competitor.",
     "reasoning": {
       "signals": [
         {
           "key": "groups.cc.top_n.top5_share_pct",
-          "value": 74.31
-        },
-        {
-          "key": "groups.cc.top_n.top5_share_delta_pp",
-          "value": -0.17
-        },
-        {
-          "key": "groups.cc.top_n.banks.0.share_pct",
-          "value": 22.18
-        },
-        {
-          "key": "groups.cc.top_n.banks.0.mom_pct",
-          "value": 0.2
+          "value": 74.24
         }
       ],
       "chain": [
-        "Top 5 banks hold 74.3% of all CC cards — HDFC BANK LTD alone accounts for 22.2%",
-        "RBI aggregate CC data is effectively proxied by these 5 institutions — smaller banks are statistically marginal",
-        "Industry-level CC strategy analysis must account for this concentration — it reflects large-bank dynamics, not the full market"
+        "IDFC FIRST BANK LTD moved from #7 to #6 in CC cards outstanding",
+        "Rising rank means faster card issuance or competitor attrition in that bank",
+        "Track whether the move reflects new card issuance (gaining customers) or balance attrition (losing them)"
       ]
     },
     "sourceSignals": [
-      "groups.cc.top_n.top5_share_pct",
-      "groups.cc.top_n.top5_share_delta_pp",
-      "groups.cc.top_n.banks.0.share_pct",
-      "groups.cc.top_n.banks.0.mom_pct"
+      "groups.cc.top_n.top5_share_pct"
     ],
     "effect": {
       "highlight": [
-        "HDFC BANK LTD"
+        "IDFC FIRST BANK LTD",
+        "Total"
       ],
-      "tab": "distribution",
-      "distMode": "pct",
+      "tab": "trend",
+      "trendMode": "absolute",
       "focusCard": "credit_cards"
     },
     "exploreAction": {
@@ -254,24 +190,24 @@
     "id": "gap-foreign-cc-decline",
     "group": "cc",
     "cut": "by_type",
-    "period": "Mar 2026",
+    "period": "Apr 2026",
     "type": "gap",
-    "title": "Gap: Foreign bank CC share at 3.7% (-0.0pp MoM) — premium segment shrinking",
-    "body": "Foreign banks hold only 3.7% of total credit cards outstanding in Mar 2026, down 0.03pp vs prior month. Foreign banks traditionally serve the high-income, high-spend segment — their declining share signals continued loss of the premium CC market to private Indian banks.",
+    "title": "Gap: Foreign bank CC share at 3.6% (-0.1pp MoM) — premium segment shrinking",
+    "body": "Foreign banks hold only 3.6% of total credit cards outstanding in Apr 2026, down 0.07pp vs prior month. Foreign banks traditionally serve the high-income, high-spend segment — their declining share signals continued loss of the premium CC market to private Indian banks.",
     "implication": "Foreign banks (Amex, Standard Chartered, etc.) traditionally served high-income customers — high credit limits, frequent international travel, premium cards. With their share at just {sh:.1f}% and still falling, those customers are now largely being served by Indian private banks instead. For anyone analysing RBI's credit card data, this means the premium borrower segment is now in the domestic bank numbers — not in a separate foreign bank bucket.",
     "reasoning": {
       "signals": [
         {
           "key": "groups.cc.by_type.categories.Foreign.share_pct",
-          "value": 3.69
+          "value": 3.62
         },
         {
           "key": "groups.cc.by_type.categories.Foreign.share_delta_pp",
-          "value": -0.03
+          "value": -0.07
         }
       ],
       "chain": [
-        "Foreign banks hold only 3.7% of CC cards and declining — premium card segment exiting to Indian private banks",
+        "Foreign banks hold only 3.6% of CC cards and declining — premium card segment exiting to Indian private banks",
         "Foreign banks (Amex, Standard Chartered) traditionally served high-income, high-limit, internationally-active customers",
         "Premium cardholder behaviour is under-represented in RBI aggregate CC data — now consolidated into private bank numbers"
       ]
@@ -297,32 +233,32 @@
     "id": "dc-atm-share-structural",
     "group": "dc",
     "cut": "total",
-    "period": "Mar 2026",
+    "period": "Apr 2026",
     "type": "insight",
-    "title": "DC ATM cash losing share — 81.4% of DC volume (-0.5pp) as digital grows",
-    "body": "Debit card ATM withdrawals account for 81.4% of total DC transaction volume in Mar 2026 (-0.5pp vs prior month). DC ecommerce has grown to 4.8% (+0.3pp). The structural shift from cash to digital payments is underway in the debit segment.",
-    "implication": "Debit card ATM cash is at 81.4% and falling — which means a growing group of debit card holders is switching to digital payments (online or at stores). Those customers start leaving a spending history that lenders can actually use. Debit customers who are moving to digital are among the best targets for a first credit card or personal loan — they have a track record, just not a credit one yet.",
+    "title": "DC ATM cash losing share — 80.8% of DC volume (-0.6pp) as digital grows",
+    "body": "Debit card ATM withdrawals account for 80.8% of total DC transaction volume in Apr 2026 (-0.6pp vs prior month). DC ecommerce has grown to 5.0% (+0.2pp). The structural shift from cash to digital payments is underway in the debit segment.",
+    "implication": "Debit card ATM cash is at 80.8% and falling — which means a growing group of debit card holders is switching to digital payments (online or at stores). Those customers start leaving a spending history that lenders can actually use. Debit customers who are moving to digital are among the best targets for a first credit card or personal loan — they have a track record, just not a credit one yet.",
     "reasoning": {
       "signals": [
         {
           "key": "groups.dc.total.cross.dc_atm_withdrawal_vol.share_pct",
-          "value": 81.42
+          "value": 80.84
         },
         {
           "key": "groups.dc.total.cross.dc_atm_withdrawal_vol.share_delta_pp",
-          "value": -0.46
+          "value": -0.58
         },
         {
           "key": "groups.dc.total.cross.dc_ecom_txn_vol.share_pct",
-          "value": 4.82
+          "value": 5.02
         },
         {
           "key": "groups.dc.total.cross.dc_ecom_txn_vol.share_delta_pp",
-          "value": 0.34
+          "value": 0.2
         }
       ],
       "chain": [
-        "DC ATM cash share fell 0.5pp to 81.4% — customers shifting away from cash",
+        "DC ATM cash share fell 0.6pp to 80.8% — customers shifting away from cash",
         "Digital debit transactions (POS, ecommerce) create structured spending records; cash leaves none",
         "Debit customers moving to digital build a usable credit history — prime candidates for first credit origination"
       ]
@@ -347,24 +283,24 @@
     "id": "dc-pos-cash-decline",
     "group": "dc",
     "cut": "total",
-    "period": "Mar 2026",
+    "period": "Apr 2026",
     "type": "insight",
-    "title": "DC POS cash withdrawals: 2 consecutive months of decline (-7.0% MoM)",
-    "body": "Debit card POS cash-back withdrawal volume fell 7.0% MoM in Mar 2026, the 2 consecutive months of decline. This is a separate channel from ATM cash — POS cash-back usage is contracting while digital POS payments continue to grow.",
+    "title": "DC POS cash withdrawals: 3 consecutive months of decline (-18.9% MoM)",
+    "body": "Debit card POS cash-back withdrawal volume fell 18.9% MoM in Apr 2026, the 3 consecutive months of decline. This is a separate channel from ATM cash — POS cash-back usage is contracting while digital POS payments continue to grow.",
     "implication": "Some merchants used to let customers withdraw cash at their POS machine — called cash-back at POS. This is declining. That's actually good for data quality: POS transaction records now reflect real purchases, not cash withdrawals disguised as purchases. Better purchase data means more accurate signals when assessing credit for small businesses or retail customers.",
     "reasoning": {
       "signals": [
         {
           "key": "groups.dc.total.metrics.dc_pos_withdrawal_vol.mom_pct",
-          "value": -7.01
+          "value": -18.93
         },
         {
           "key": "groups.dc.total.metrics.dc_pos_withdrawal_vol.streak_months",
-          "value": 2.0
+          "value": 3.0
         }
       ],
       "chain": [
-        "DC POS cash-back withdrawals fell 7.0% MoM for 2 months — merchants reducing cash-out via POS",
+        "DC POS cash-back withdrawals fell 18.9% MoM for 3 months — merchants reducing cash-out via POS",
         "POS records now reflect real purchases rather than cash access events disguised as transactions",
         "Cleaner purchase data improves signal quality for credit underwriting of MSME and retail customers"
       ]
@@ -387,28 +323,28 @@
     "id": "dc-ecom-share",
     "group": "dc",
     "cut": "total",
-    "period": "Mar 2026",
+    "period": "Apr 2026",
     "type": "insight",
-    "title": "DC ecommerce is 4.8% of total DC transaction volume in Mar 2026",
-    "body": "Debit card ecommerce accounted for 4.8% of total DC transaction volume in Mar 2026 (+0.3pp vs prior month). ATM cash still dominates at 81.4%. The structural shift away from cash toward digital payments is ongoing.",
-    "implication": "Only 4.8% of debit card spending is online, but that group is valuable. These are debit-only customers who already shop digitally — which means their spending leaves a traceable record. For cross-selling a first credit card or personal loan, debit customers with online spending history are much easier to assess than pure ATM-cash users.",
+    "title": "DC ecommerce is 5.0% of total DC transaction volume in Apr 2026",
+    "body": "Debit card ecommerce accounted for 5.0% of total DC transaction volume in Apr 2026 (+0.2pp vs prior month). ATM cash still dominates at 80.8%. The structural shift away from cash toward digital payments is ongoing.",
+    "implication": "Only 5.0% of debit card spending is online, but that group is valuable. These are debit-only customers who already shop digitally — which means their spending leaves a traceable record. For cross-selling a first credit card or personal loan, debit customers with online spending history are much easier to assess than pure ATM-cash users.",
     "reasoning": {
       "signals": [
         {
           "key": "groups.dc.total.cross.dc_ecom_txn_vol.share_pct",
-          "value": 4.82
+          "value": 5.02
         },
         {
           "key": "groups.dc.total.cross.dc_ecom_txn_vol.share_delta_pp",
-          "value": 0.34
+          "value": 0.2
         },
         {
           "key": "groups.dc.total.cross.dc_atm_withdrawal_vol.share_pct",
-          "value": 81.42
+          "value": 80.84
         }
       ],
       "chain": [
-        "DC ecommerce is 4.8% of DC volume — small but digitally traceable subgroup within a cash-dominant base",
+        "DC ecommerce is 5.0% of DC volume — small but digitally traceable subgroup within a cash-dominant base",
         "Online debit customers leave structured purchase records; ATM-cash users leave none",
         "Digital-active debit customers are higher-value cross-sell targets for first credit products — traceable history enables underwriting"
       ]
@@ -431,78 +367,31 @@
     }
   },
   {
-    "id": "dc-cards-streak",
-    "group": "dc",
-    "cut": "total",
-    "period": "Mar 2026",
-    "type": "insight",
-    "title": "Debit cards: 5 consecutive months of growth — 1.04B outstanding",
-    "body": "Total debit cards outstanding reached 1.04B in Mar 2026 (+1.0% QoQ vs Q3 FY26), the 5 consecutive months of growth. India debit base continues to expand.",
-    "implication": "India has 1.04B debit cards — but that number is misleading as a credit opportunity. A large chunk are Jan Dhan accounts (zero-balance accounts opened under the government's financial inclusion scheme) that see very little activity. The real pool for first-time credit products is much smaller — focus on debit card holders who are actually transacting, not just account holders.",
-    "reasoning": {
-      "signals": [
-        {
-          "key": "groups.dc.total.metrics.debit_cards.latest",
-          "value": 1044755973.0
-        },
-        {
-          "key": "groups.dc.total.metrics.debit_cards.streak_months",
-          "value": 5.0
-        },
-        {
-          "key": "groups.dc.total.metrics.debit_cards.qoq_pct",
-          "value": 1.01
-        }
-      ],
-      "chain": [
-        "Debit card base at 1.04B — large headline number includes substantial Jan Dhan zero-balance accounts",
-        "Jan Dhan accounts (government financial inclusion scheme) skew toward low-income, low-activity customers",
-        "Addressable credit opportunity is a fraction of total card count — active-transacting subset is the real pool"
-      ]
-    },
-    "sourceSignals": [
-      "groups.dc.total.metrics.debit_cards.latest",
-      "groups.dc.total.metrics.debit_cards.streak_months",
-      "groups.dc.total.metrics.debit_cards.qoq_pct"
-    ],
-    "effect": {
-      "highlight": [
-        "Total"
-      ],
-      "tab": "trend",
-      "trendMode": "absolute",
-      "focusCard": "debit_cards"
-    },
-    "exploreAction": {
-      "mode": "by_type"
-    }
-  },
-  {
     "id": "dc-psb-dominance",
     "group": "dc",
     "cut": "by_type",
-    "period": "Mar 2026",
+    "period": "Apr 2026",
     "type": "insight",
-    "title": "PSB banks hold 62.9% of debit cards — PSB gaining share in Mar 2026",
-    "body": "Public sector banks account for 62.9% of total debit cards outstanding in Mar 2026 (+0.1pp vs prior month). Private banks hold 25.1%. PSB banks are the fastest-growing category (+0.1pp share gain).",
-    "implication": "PSBs (government-owned banks like SBI, PNB, Bank of Baroda) hold 62.9% of debit cards, largely because of Jan Dhan — the government scheme that opened basic bank accounts for millions of low-income households. Many of these accounts have little activity. If you're using debit transaction data for credit assessment, PSB debit data needs to be treated very differently from, say, HDFC or Kotak debit customers.",
+    "title": "PSB banks hold 64.2% of debit cards — PSB gaining share in Apr 2026",
+    "body": "Public sector banks account for 64.2% of total debit cards outstanding in Apr 2026 (+1.3pp vs prior month). Private banks hold 25.8%. PSB banks are the fastest-growing category (+1.3pp share gain).",
+    "implication": "PSBs (government-owned banks like SBI, PNB, Bank of Baroda) hold 64.2% of debit cards, largely because of Jan Dhan — the government scheme that opened basic bank accounts for millions of low-income households. Many of these accounts have little activity. If you're using debit transaction data for credit assessment, PSB debit data needs to be treated very differently from, say, HDFC or Kotak debit customers.",
     "reasoning": {
       "signals": [
         {
           "key": "groups.dc.by_type.categories.PSB.share_pct",
-          "value": 62.88
+          "value": 64.17
         },
         {
           "key": "groups.dc.by_type.categories.PSB.share_delta_pp",
-          "value": 0.05
+          "value": 1.29
         },
         {
           "key": "groups.dc.by_type.categories.Private.share_pct",
-          "value": 25.14
+          "value": 25.84
         }
       ],
       "chain": [
-        "PSBs hold 62.9% of debit cards — primarily through Jan Dhan scheme linkage, not active acquisition",
+        "PSBs hold 64.2% of debit cards — primarily through Jan Dhan scheme linkage, not active acquisition",
         "Jan Dhan portfolios skew toward low-income, low-activity accounts with thin or no transaction histories",
         "PSB and private bank debit data require separate calibration for transaction-based credit underwriting"
       ]
@@ -526,51 +415,37 @@
     }
   },
   {
-    "id": "dc-top-bank-leader",
+    "id": "dc-top-bank-rank-change",
     "group": "dc",
     "cut": "top_n",
-    "period": "Mar 2026",
+    "period": "Apr 2026",
     "type": "insight",
-    "title": "STATE BANK OF INDIA leads DC cards at 24.2%",
-    "body": "STATE BANK OF INDIA holds 24.2% of total debit cards in Mar 2026 (+0.5% MoM). Top 5 banks account for 49.8% (-0.1pp vs prior month).",
-    "implication": "Top 5 banks hold 49.8% of debit cards. If you're using debit transaction data for credit underwriting (assessing someone's spending behaviour before giving them a loan), the quality of that data depends heavily on whether these top banks are sharing data with you. Without coverage from at least 2-3 of them, you're missing nearly half the market.",
+    "title": "INDIAN BANK moves to #9 in debit cards (from #10)",
+    "body": "INDIAN BANK shifted from #10 to #9 in Apr 2026. Top 5 banks: 50.8% of total DC cards (+1.0pp).",
+    "implication": "Rank changes in debit cards usually mean one of two things: a PSB is closing dormant Jan Dhan accounts (drops in rank), or a private bank is pushing into smaller towns and cities (rises in rank). The bank moving up is reaching new customers — which often translates to more credit origination potential over the next few quarters.",
     "reasoning": {
       "signals": [
         {
           "key": "groups.dc.top_n.top5_share_pct",
-          "value": 49.8
-        },
-        {
-          "key": "groups.dc.top_n.top5_share_delta_pp",
-          "value": -0.05
-        },
-        {
-          "key": "groups.dc.top_n.banks.0.share_pct",
-          "value": 24.17
-        },
-        {
-          "key": "groups.dc.top_n.banks.0.mom_pct",
-          "value": 0.47
+          "value": 50.82
         }
       ],
       "chain": [
-        "Top 5 banks hold 49.8% of debit cards — STATE BANK OF INDIA alone accounts for 24.2%",
-        "Debit transaction data coverage for underwriting depends on data-sharing with these top institutions",
-        "Without data from 2-3 of these banks, nearly half the debit market is invisible for credit decisions"
+        "INDIAN BANK shifted from #10 to #9 in debit cards",
+        "PSB rank drops often reflect Jan Dhan dormant account closures; private bank rises reflect geographic expansion",
+        "Bank moving up is reaching new customers — leading indicator of future credit origination volume in that segment"
       ]
     },
     "sourceSignals": [
-      "groups.dc.top_n.top5_share_pct",
-      "groups.dc.top_n.top5_share_delta_pp",
-      "groups.dc.top_n.banks.0.share_pct",
-      "groups.dc.top_n.banks.0.mom_pct"
+      "groups.dc.top_n.top5_share_pct"
     ],
     "effect": {
       "highlight": [
-        "STATE BANK OF INDIA"
+        "INDIAN BANK",
+        "Total"
       ],
-      "tab": "distribution",
-      "distMode": "pct",
+      "tab": "trend",
+      "trendMode": "absolute",
       "focusCard": "debit_cards"
     },
     "exploreAction": {
@@ -582,28 +457,28 @@
     "id": "gap-dc-cash-dominance",
     "group": "dc",
     "cut": "total",
-    "period": "Mar 2026",
+    "period": "Apr 2026",
     "type": "gap",
-    "title": "Gap: DC ATM cash at 81.4% of DC volume — digital transition is incomplete",
-    "body": "Despite growth in digital payments, ATM cash withdrawals still account for 81.4% of total debit card transaction volume in Mar 2026 (-0.5pp vs prior month). DC ecommerce is only 4.8% of DC volume. India's debit card base remains overwhelmingly cash-dependent.",
-    "implication": "81.4% of debit card spending is ATM cash. Cash leaves no digital record — you can't tell where it was spent or on what. For lenders trying to assess a debit card holder's financial behaviour, the transaction history is mostly blank. Bureau scores (CIBIL, Experian) remain the primary tool for this segment — debit transaction data alone isn't enough yet.",
+    "title": "Gap: DC ATM cash at 80.8% of DC volume — digital transition is incomplete",
+    "body": "Despite growth in digital payments, ATM cash withdrawals still account for 80.8% of total debit card transaction volume in Apr 2026 (-0.6pp vs prior month). DC ecommerce is only 5.0% of DC volume. India's debit card base remains overwhelmingly cash-dependent.",
+    "implication": "80.8% of debit card spending is ATM cash. Cash leaves no digital record — you can't tell where it was spent or on what. For lenders trying to assess a debit card holder's financial behaviour, the transaction history is mostly blank. Bureau scores (CIBIL, Experian) remain the primary tool for this segment — debit transaction data alone isn't enough yet.",
     "reasoning": {
       "signals": [
         {
           "key": "groups.dc.total.cross.dc_atm_withdrawal_vol.share_pct",
-          "value": 81.42
+          "value": 80.84
         },
         {
           "key": "groups.dc.total.cross.dc_atm_withdrawal_vol.share_delta_pp",
-          "value": -0.46
+          "value": -0.58
         },
         {
           "key": "groups.dc.total.cross.dc_ecom_txn_vol.share_pct",
-          "value": 4.82
+          "value": 5.02
         }
       ],
       "chain": [
-        "81.4% of DC volume is ATM cash — transactions that leave no digital record",
+        "80.8% of DC volume is ATM cash — transactions that leave no digital record",
         "Cash-dominant customers' financial behaviour is opaque — spending categories, frequency, merchants all unknown",
         "Bureau scores (CIBIL, Experian) remain essential for this segment; debit transaction data alone is insufficient"
       ]
@@ -627,24 +502,24 @@
     "id": "gap-dc-ecom-low",
     "group": "dc",
     "cut": "total",
-    "period": "Mar 2026",
+    "period": "Apr 2026",
     "type": "gap",
-    "title": "Gap: DC ecommerce at 4.8% of DC volume — debit cards leave thin digital footprints",
-    "body": "Debit card ecommerce transactions account for only 4.8% of total DC transaction volume in Mar 2026. ATM cash dominates at 81.4%. The vast majority of debit card holders transact primarily via ATM cash withdrawal, with minimal digital payment activity.",
-    "implication": "Only 4.8% of debit card volume is online spending — the rest is mostly ATM cash. For the typical debit card holder, their transaction history is largely cash withdrawals, which tells you very little about their financial behaviour. To lend to this segment, bureau scores (CIBIL, Experian) and income proxies (salary credits, GST filings) will be far more reliable than transaction data models.",
+    "title": "Gap: DC ecommerce at 5.0% of DC volume — debit cards leave thin digital footprints",
+    "body": "Debit card ecommerce transactions account for only 5.0% of total DC transaction volume in Apr 2026. ATM cash dominates at 80.8%. The vast majority of debit card holders transact primarily via ATM cash withdrawal, with minimal digital payment activity.",
+    "implication": "Only 5.0% of debit card volume is online spending — the rest is mostly ATM cash. For the typical debit card holder, their transaction history is largely cash withdrawals, which tells you very little about their financial behaviour. To lend to this segment, bureau scores (CIBIL, Experian) and income proxies (salary credits, GST filings) will be far more reliable than transaction data models.",
     "reasoning": {
       "signals": [
         {
           "key": "groups.dc.total.cross.dc_ecom_txn_vol.share_pct",
-          "value": 4.82
+          "value": 5.02
         },
         {
           "key": "groups.dc.total.cross.dc_atm_withdrawal_vol.share_pct",
-          "value": 81.42
+          "value": 80.84
         }
       ],
       "chain": [
-        "DC ecommerce at only 4.8% of DC volume — debit history is predominantly ATM cash withdrawals",
+        "DC ecommerce at only 5.0% of DC volume — debit history is predominantly ATM cash withdrawals",
         "Cash withdrawal records reveal nothing about spending behaviour — categories, merchants, frequency unknown",
         "Income proxies (salary credits, GST filings) and bureau scores are more reliable than transaction models for this segment"
       ]
@@ -667,32 +542,32 @@
     "id": "infra-qr-per-pos",
     "group": "infra",
     "cut": "total",
-    "period": "Mar 2026",
+    "period": "Apr 2026",
     "type": "insight",
-    "title": "India now has 65 UPI QR codes per POS terminal",
-    "body": "As of Mar 2026, there are 65 UPI QR codes (761.2M) for every POS terminal (11.8M). This ratio was 65 in the prior month. UPI QR grew +0.9% MoM vs POS terminals at +0.9% MoM — digital acceptance infrastructure is outpacing hardware deployment.",
-    "implication": "There are 65 UPI QR codes for every POS (card swipe) machine in India. This means the typical small merchant — kirana store, auto driver, vegetable vendor — accepts payments through a QR code on their phone, not a card machine. Any credit product designed for small merchants (small business loans, BNPL for vendors) needs to work over UPI QR, not just over POS terminals.",
+    "title": "India now has 67 UPI QR codes per POS terminal",
+    "body": "As of Apr 2026, there are 67 UPI QR codes (770.8M) for every POS terminal (11.4M). This ratio was 65 in the prior month. UPI QR grew +1.3% MoM vs POS terminals at -2.7% MoM — digital acceptance infrastructure is outpacing hardware deployment.",
+    "implication": "There are 67 UPI QR codes for every POS (card swipe) machine in India. This means the typical small merchant — kirana store, auto driver, vegetable vendor — accepts payments through a QR code on their phone, not a card machine. Any credit product designed for small merchants (small business loans, BNPL for vendors) needs to work over UPI QR, not just over POS terminals.",
     "reasoning": {
       "signals": [
         {
           "key": "groups.infra.total.metrics.upi_qr.latest",
-          "value": 761217394.0
+          "value": 770811461.0
         },
         {
           "key": "groups.infra.total.metrics.pos_terminals.latest",
-          "value": 11769361.0
+          "value": 11446998.0
         },
         {
           "key": "groups.infra.total.metrics.upi_qr.mom_pct",
-          "value": 0.93
+          "value": 1.26
         },
         {
           "key": "groups.infra.total.metrics.pos_terminals.mom_pct",
-          "value": 0.9
+          "value": -2.74
         }
       ],
       "chain": [
-        "65 UPI QR codes per POS terminal — QR acceptance vastly outnumbers hardware deployment",
+        "67 UPI QR codes per POS terminal — QR acceptance vastly outnumbers hardware deployment",
         "Typical small merchant (kirana, auto, vendor) accepts via QR only — no POS terminal",
         "Credit products for small merchants (BNPL, business loans) must work over UPI QR to reach this majority"
       ]
@@ -716,82 +591,35 @@
     }
   },
   {
-    "id": "infra-pos-streak",
-    "group": "infra",
-    "cut": "total",
-    "period": "Mar 2026",
-    "type": "insight",
-    "title": "POS terminals: 4 consecutive months of growth — 11.8M deployed",
-    "body": "POS terminals reached 11.8M in Mar 2026 (+2.6% QoQ vs Q3 FY26), the 4 consecutive months of growth. Physical acceptance infrastructure continues to expand.",
-    "implication": "Every new POS machine deployed (11.8M and growing) is a merchant who starts building a transaction history — how much they sell, how often, which days. That data is exactly what lenders use to assess working capital loans (short-term business credit based on daily sales). More POS terminals means more merchants who can be lent to based on their actual business performance.",
-    "reasoning": {
-      "signals": [
-        {
-          "key": "groups.infra.total.metrics.pos_terminals.latest",
-          "value": 11769361.0
-        },
-        {
-          "key": "groups.infra.total.metrics.pos_terminals.streak_months",
-          "value": 4.0
-        },
-        {
-          "key": "groups.infra.total.metrics.pos_terminals.qoq_pct",
-          "value": 2.57
-        }
-      ],
-      "chain": [
-        "POS terminals growing for 4 months — now at 11.8M",
-        "Each new POS terminal generates merchant transaction history (sales volume, frequency, ticket size)",
-        "Growing POS base expands pool of merchants underwritable for working capital or merchant cash advances"
-      ]
-    },
-    "sourceSignals": [
-      "groups.infra.total.metrics.pos_terminals.latest",
-      "groups.infra.total.metrics.pos_terminals.streak_months",
-      "groups.infra.total.metrics.pos_terminals.qoq_pct"
-    ],
-    "effect": {
-      "highlight": [
-        "Total"
-      ],
-      "tab": "trend",
-      "trendMode": "absolute",
-      "focusCard": "pos_terminals"
-    },
-    "exploreAction": {
-      "mode": "by_type"
-    }
-  },
-  {
     "id": "infra-upi-vs-bharat-qr",
     "group": "infra",
     "cut": "total",
-    "period": "Mar 2026",
+    "period": "Apr 2026",
     "type": "insight",
-    "title": "UPI QR codes are 135x Bharat QR in scale — 761.2M vs 5.63M",
-    "body": "As of Mar 2026, there are 761.2M UPI QR codes deployed vs 5.63M Bharat QR codes — a 135x gap. UPI QR grew +0.9% MoM vs Bharat QR at -4.5% MoM. UPI has decisively won the QR standard battle in India.",
-    "implication": "Bharat QR was an earlier QR code standard that lost out to UPI QR — which is now 135 times bigger. Building any credit product (credit on UPI, BNPL) on Bharat QR today would be like building on a platform that merchants have already abandoned. UPI QR is the only QR standard worth designing for.",
+    "title": "UPI QR codes are 137x Bharat QR in scale — 770.8M vs 5.62M",
+    "body": "As of Apr 2026, there are 770.8M UPI QR codes deployed vs 5.62M Bharat QR codes — a 137x gap. UPI QR grew +1.3% MoM vs Bharat QR at -0.3% MoM. UPI has decisively won the QR standard battle in India.",
+    "implication": "Bharat QR was an earlier QR code standard that lost out to UPI QR — which is now 137 times bigger. Building any credit product (credit on UPI, BNPL) on Bharat QR today would be like building on a platform that merchants have already abandoned. UPI QR is the only QR standard worth designing for.",
     "reasoning": {
       "signals": [
         {
           "key": "groups.infra.total.metrics.upi_qr.latest",
-          "value": 761217394.0
+          "value": 770811461.0
         },
         {
           "key": "groups.infra.total.metrics.bharat_qr.latest",
-          "value": 5633027.0
+          "value": 5616038.0
         },
         {
           "key": "groups.infra.total.metrics.upi_qr.mom_pct",
-          "value": 0.93
+          "value": 1.26
         },
         {
           "key": "groups.infra.total.metrics.bharat_qr.mom_pct",
-          "value": -4.48
+          "value": -0.3
         }
       ],
       "chain": [
-        "UPI QR at 761.2M vs Bharat QR at 5.63M — a 135x gap",
+        "UPI QR at 770.8M vs Bharat QR at 5.62M — a 137x gap",
         "Bharat QR was an earlier standard; merchants have consolidated on UPI QR as the accepted norm",
         "Building payments or lending infrastructure on Bharat QR rails is operationally unviable at any meaningful merchant scale"
       ]
@@ -813,31 +641,74 @@
     "exploreAction": null
   },
   {
+    "id": "infra-category-pos-share",
+    "group": "infra",
+    "cut": "by_type",
+    "period": "Apr 2026",
+    "type": "insight",
+    "title": "PSB banks fastest-growing in POS terminal deployment in Apr 2026 (+0.5pp share)",
+    "body": "PSB banks hold 18.1% of total POS terminals in Apr 2026, gaining +0.5pp vs prior month. Private banks lost the most share.",
+    "implication": "PSB banks gaining POS share means they're building more merchant relationships in that segment. Banks that own the POS network also own the merchant's transaction data — daily sales, busy periods, average ticket size. That data is the foundation for merchant lending (small business loans based on sales history). Watch which bank type is expanding POS — they're positioning for merchant credit.",
+    "reasoning": {
+      "signals": [
+        {
+          "key": "groups.infra.by_type.categories.PSB.share_pct",
+          "value": 18.14
+        },
+        {
+          "key": "groups.infra.by_type.categories.PSB.share_delta_pp",
+          "value": 0.51
+        }
+      ],
+      "chain": [
+        "PSB banks gained 0.5pp POS share — building more merchant acquiring relationships",
+        "Banks owning the POS network own the merchant's transaction data (daily sales, ticket size, frequency)",
+        "POS share expansion is a leading indicator of positioning for merchant credit (working capital, cash advances)"
+      ]
+    },
+    "sourceSignals": [
+      "groups.infra.by_type.categories.PSB.share_pct",
+      "groups.infra.by_type.categories.PSB.share_delta_pp"
+    ],
+    "effect": {
+      "highlight": [
+        "PSB",
+        "Total"
+      ],
+      "tab": "distribution",
+      "distMode": "pct",
+      "focusCard": "pos_terminals"
+    },
+    "exploreAction": {
+      "mode": "by_type"
+    }
+  },
+  {
     "id": "infra-top-bank-pos",
     "group": "infra",
     "cut": "top_n",
-    "period": "Mar 2026",
+    "period": "Apr 2026",
     "type": "insight",
-    "title": "RBL BANK LTD leads POS terminal deployment at 22.5% market share",
-    "body": "RBL BANK LTD has deployed 2.65M POS terminals in Mar 2026, accounting for 22.5% of total (+9.5% MoM). Top 5 banks hold 93.1% of all POS terminals (+0.1pp vs prior month). Notable: RBL BANK LTD moved from #2 to #1.",
-    "implication": "5 banks own 93.1% of all POS machines in India. That also means merchant sales data — what shopkeepers sell, how much, how often — sits largely with those same 5 banks. If you want to lend to merchants and need their sales history to decide how much credit to give, you either need a data partnership with one of these banks or an alternate source like GST returns or UPI transaction feeds.",
+    "title": "RBL BANK LTD leads POS terminal deployment at 23.8% market share",
+    "body": "RBL BANK LTD has deployed 2.73M POS terminals in Apr 2026, accounting for 23.8% of total (+3.1% MoM). Top 5 banks hold 92.8% of all POS terminals (-0.2pp vs prior month). Notable: HDFC BANK LTD moved from #4 to #3.",
+    "implication": "5 banks own 92.8% of all POS machines in India. That also means merchant sales data — what shopkeepers sell, how much, how often — sits largely with those same 5 banks. If you want to lend to merchants and need their sales history to decide how much credit to give, you either need a data partnership with one of these banks or an alternate source like GST returns or UPI transaction feeds.",
     "reasoning": {
       "signals": [
         {
           "key": "groups.infra.top_n.top5_share_pct",
-          "value": 93.08
+          "value": 92.83
         },
         {
           "key": "groups.infra.top_n.banks.0.share_pct",
-          "value": 22.48
+          "value": 23.84
         },
         {
           "key": "groups.infra.top_n.banks.0.mom_pct",
-          "value": 9.46
+          "value": 3.13
         }
       ],
       "chain": [
-        "Top 5 banks own 93.1% of POS terminals — merchant acquiring infrastructure is highly concentrated",
+        "Top 5 banks own 92.8% of POS terminals — merchant acquiring infrastructure is highly concentrated",
         "Merchant transaction data (sales history for credit underwriting) sits with the same institutions",
         "Merchant credit without data partnerships with these banks requires alternate sources — GST returns, UPI transaction feeds"
       ]
@@ -861,117 +732,27 @@
     }
   },
   {
-    "id": "gap-bharat-qr-contraction",
-    "group": "infra",
-    "cut": "total",
-    "period": "Mar 2026",
-    "type": "gap",
-    "title": "Gap: Bharat QR contracting -4.5% MoM — 5.63M vs 761.2M UPI QR",
-    "body": "Bharat QR codes fell 4.5% MoM in Mar 2026, now at 5.63M — compared to 761.2M UPI QR codes (135x gap). Merchant preference has consolidated on UPI QR as the dominant QR acceptance standard.",
-    "implication": "Bharat QR is shrinking 4.5% every month — merchants are removing it. If any part of your lending or payments product depends on Bharat QR acceptance, that's a real problem. Move everything to UPI QR. There is no viable future for Bharat QR as a payments or credit infrastructure.",
-    "reasoning": {
-      "signals": [
-        {
-          "key": "groups.infra.total.metrics.bharat_qr.mom_pct",
-          "value": -4.48
-        },
-        {
-          "key": "groups.infra.total.metrics.bharat_qr.latest",
-          "value": 5633027.0
-        },
-        {
-          "key": "groups.infra.total.metrics.upi_qr.latest",
-          "value": 761217394.0
-        }
-      ],
-      "chain": [
-        "Bharat QR declining 4.5% MoM — merchants are actively removing it, not seasonal dip",
-        "UPI QR at 761.2M vs Bharat QR at 5.63M — gap structural and widening",
-        "Any payments or lending product built on Bharat QR infrastructure faces accelerating merchant disengagement"
-      ]
-    },
-    "sourceSignals": [
-      "groups.infra.total.metrics.bharat_qr.mom_pct",
-      "groups.infra.total.metrics.bharat_qr.latest",
-      "groups.infra.total.metrics.upi_qr.latest"
-    ],
-    "effect": {
-      "highlight": [
-        "Total"
-      ],
-      "tab": "trend",
-      "trendMode": "mom",
-      "focusCard": "bharat_qr"
-    },
-    "exploreAction": null
-  },
-  {
-    "id": "gap-atm-offsite-decline",
-    "group": "infra",
-    "cut": "total",
-    "period": "Mar 2026",
-    "type": "gap",
-    "title": "Gap: Offsite ATMs declining -0.2% MoM — rural cash access contracting",
-    "body": "Offsite ATMs fell 0.2% MoM in Mar 2026 (now 73.7K), while onsite ATMs grew +0.5% MoM. Offsite ATMs serve rural and semi-urban populations where branch presence is limited — their decline reduces physical cash access for underserved geographies.",
-    "implication": "Offsite ATMs are standalone machines in villages, petrol pumps, small towns — placed away from bank branches specifically to serve rural areas. When these decline and digital payments haven't reached those areas yet, rural borrowers lose their easiest way to access cash for repayment. If you have loans in rural geographies, check whether ATM coverage in those areas is shrinking — it can make EMI collection harder.",
-    "reasoning": {
-      "signals": [
-        {
-          "key": "groups.infra.total.metrics.atm_offsite.mom_pct",
-          "value": -0.19
-        },
-        {
-          "key": "groups.infra.total.metrics.atm_offsite.latest",
-          "value": 73693.0
-        },
-        {
-          "key": "groups.infra.total.metrics.atm_onsite.mom_pct",
-          "value": 0.47
-        }
-      ],
-      "chain": [
-        "Offsite ATMs (standalone machines in rural/semi-urban areas away from branches) fell 0.2% MoM",
-        "Rural borrowers without digital payment access rely on offsite ATMs as primary cash access point for loan repayment",
-        "Declining offsite ATM coverage can impair EMI collection in areas where digital payment penetration is still low"
-      ]
-    },
-    "sourceSignals": [
-      "groups.infra.total.metrics.atm_offsite.mom_pct",
-      "groups.infra.total.metrics.atm_offsite.latest",
-      "groups.infra.total.metrics.atm_onsite.mom_pct"
-    ],
-    "effect": {
-      "highlight": [
-        "Total"
-      ],
-      "tab": "trend",
-      "trendMode": "mom",
-      "focusCard": "atm_offsite"
-    },
-    "exploreAction": null
-  },
-  {
     "id": "gap-pos-concentration",
     "group": "infra",
     "cut": "top_n",
-    "period": "Mar 2026",
+    "period": "Apr 2026",
     "type": "gap",
-    "title": "Gap: Top 5 banks hold 93.1% of POS terminals — acquiring market is highly concentrated",
-    "body": "In Mar 2026, the top 5 banks account for 93.1% of all deployed POS terminals in India. RBL BANK LTD leads at 22.5% market share. All remaining banks combined share less than 6.9% of merchant acquiring infrastructure.",
-    "implication": "93.1% of all POS machines in India are owned by just 5 banks — and so is most of the merchant transaction data that comes with them. If you're building merchant credit products (loans to shopkeepers or small businesses) and don't have data partnerships with these top banks, you're working with an incomplete picture. Alternate sources — GST filings, UPI transaction data — can partially fill this gap.",
+    "title": "Gap: Top 5 banks hold 92.8% of POS terminals — acquiring market is highly concentrated",
+    "body": "In Apr 2026, the top 5 banks account for 92.8% of all deployed POS terminals in India. RBL BANK LTD leads at 23.8% market share. All remaining banks combined share less than 7.2% of merchant acquiring infrastructure.",
+    "implication": "92.8% of all POS machines in India are owned by just 5 banks — and so is most of the merchant transaction data that comes with them. If you're building merchant credit products (loans to shopkeepers or small businesses) and don't have data partnerships with these top banks, you're working with an incomplete picture. Alternate sources — GST filings, UPI transaction data — can partially fill this gap.",
     "reasoning": {
       "signals": [
         {
           "key": "groups.infra.top_n.top5_share_pct",
-          "value": 93.08
+          "value": 92.83
         },
         {
           "key": "groups.infra.top_n.banks.0.share_pct",
-          "value": 22.48
+          "value": 23.84
         }
       ],
       "chain": [
-        "Top 5 banks own 93.1% of POS terminals — merchant acquiring infrastructure highly concentrated",
+        "Top 5 banks own 92.8% of POS terminals — merchant acquiring infrastructure highly concentrated",
         "Merchant transaction data (sales history needed for credit underwriting) controlled by the same 5 institutions",
         "Merchant credit underwriting without data partnerships with these banks requires alternates — GST filings, UPI feeds"
       ]

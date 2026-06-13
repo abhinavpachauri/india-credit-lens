@@ -302,8 +302,21 @@ def check_build():
 
 
 def run_insight_stages():
-    """Stages 4b/4c/4d — generate + validate insights. Runs once after all extractions."""
+    """Stages 4a/4b/4c/4d — refresh signals payload, generate + validate insights.
+    Runs once after all extractions."""
     results = []
+
+    # Stage 4a: rebuild the deterministic signals payload (signals.json) from the latest
+    # consolidated CSV. MUST run before 4b — generate_atm_pos_insights.py reads this file,
+    # and if it is not refreshed the dashboard silently serves a stale prior period (the
+    # 2026-06-13 review found it frozen a full month behind the data).
+    passed, out = run(
+        "Stage 4a",
+        [sys.executable, str(ANALYSIS / "compute_atm_pos_signals.py")],
+    )
+    results.append(("4a. Refresh signals payload", passed, out))
+    if not passed:
+        return results
 
     # Stage 4b: generate insights
     passed, out = run(

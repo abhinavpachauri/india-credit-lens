@@ -82,35 +82,55 @@ def extract_numbers(text: str) -> list[float]:
     return nums
 
 
-def value_in_signals(num: float, flat_signals: dict[str, float],
-                     source_vals: list[float] | None = None) -> bool:
-    """
-    Return True if `num` is within tolerance of any value in flat_signals,
-    OR if it can be derived as round(A/B) from source signal values
-    (to accept computed ratios like UPI_QR / POS_terminals).
-    """
-    vals = list(flat_signals.values())
-    for sig_val in vals:
-        if sig_val == 0:
+def _matches(num: float, candidates) -> bool:
+    for v in candidates:
+        if v == 0:
             if abs(num) < ABS_TOL:
                 return True
         else:
-            if abs(num - sig_val) / max(abs(sig_val), 1e-9) <= REL_TOL:
+            if abs(num - v) / max(abs(v), 1e-9) <= REL_TOL:
                 return True
-            # Absolute tolerance for small values (e.g. share percentages)
-            if abs(num - sig_val) <= ABS_TOL:
+            if abs(num - v) <= ABS_TOL:   # absolute tolerance for small values (shares)
                 return True
+    return False
 
-    # Check if num can be a ratio of two source signal values (derived computation)
-    if source_vals and len(source_vals) >= 2:
-        for i, a in enumerate(source_vals):
-            for b in source_vals:
-                if b != 0 and a != b:
-                    ratio = a / b
-                    if abs(num - round(ratio)) <= ABS_TOL:
-                        return True
-                    if abs(num - ratio) / max(abs(ratio), 1e-9) <= REL_TOL:
-                        return True
+
+def _ratio_matches(num: float, base_vals) -> bool:
+    """True if num is round(A/B) or ≈A/B for some ordered pair in base_vals."""
+    if not base_vals or len(base_vals) < 2:
+        return False
+    for a in base_vals:
+        for b in base_vals:
+            if b != 0 and a != b:
+                ratio = a / b
+                if abs(num - round(ratio)) <= ABS_TOL:
+                    return True
+                if abs(num - ratio) / max(abs(ratio), 1e-9) <= REL_TOL:
+                    return True
+    return False
+
+
+def value_in_signals(num: float, flat_signals: dict[str, float],
+                     source_vals: list[float] | None = None,
+                     prior_vals: list[float] | None = None) -> bool:
+    """
+    Return True if `num` is within tolerance of:
+      - any value in flat_signals, or
+      - a current-period ratio round(A/B) of source signal values (e.g. UPI_QR / POS), or
+      - a prior-period value reconstructed from latest + mom_pct, or
+      - a prior-period ratio of those reconstructed values.
+    The prior-period checks accept bodies that legitimately cite "this ratio was X in the
+    prior month" — a comparison the latest-only signals cannot match directly.
+    """
+    if _matches(num, flat_signals.values()):
+        return True
+    if _ratio_matches(num, source_vals or []):       # current-period ratio
+        return True
+    if prior_vals:
+        if _matches(num, prior_vals):                # reconstructed prior value
+            return True
+        if _ratio_matches(num, prior_vals):          # prior-period ratio
+            return True
     return False
 
 
@@ -157,6 +177,15 @@ def validate_insight(ins: dict, flat_signals: dict[str, float]) -> list[str]:
 
     # Collect numeric values from the declared source signals for ratio-derivation check
     source_vals = [flat_signals[k] for k in src if k in flat_signals]
+    # Reconstruct prior-period values from any (X.latest, X.mom_pct) sibling pair so the
+    # validator can verify "prior month" comparisons (e.g. "this ratio was 65 last month").
+    src_map = {k: flat_signals[k] for k in src if k in flat_signals}
+    prior_vals = []
+    for k, v in src_map.items():
+        if k.endswith(".latest"):
+            mom = src_map.get(k[: -len(".latest")] + ".mom_pct")
+            if mom is not None and (1 + mom / 100) != 0:
+                prior_vals.append(v / (1 + mom / 100))
 
     texts_to_check = []
     if ins.get("body"):
@@ -170,7 +199,7 @@ def validate_insight(ins: dict, flat_signals: dict[str, float]) -> list[str]:
             # Skip year-like numbers (1990–2100) and trivial small integers used as ordinals
             if 1990 <= abs(num) <= 2100:
                 continue
-            if not value_in_signals(num, flat_signals, source_vals):
+            if not value_in_signals(num, flat_signals, source_vals, prior_vals):
                 # Not found anywhere in signals — hard error
                 errors.append(
                     f"[{iid}] UNVERIFIED number {num} in {field_name}: "
