@@ -21,6 +21,7 @@ Usage:  python3 analysis/run_inference.py            # all pipelines, latest per
 import argparse
 import glob
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -89,20 +90,75 @@ def detect_cross():
             for c in cand if c["rule"] == "R1_stock_flow" and (c["from"], c["to"]) not in confirmed][:10]
 
 
-def call_llm(payload):
+VERIFY_SYSTEM = (
+    "You verify a proposed causal mechanism for India's credit/payments system. USE WEB SEARCH to "
+    "find an authoritative PRIMARY source (RBI, NPCI, Ministry of Finance, PIB, Union Budget). Decide "
+    "whether a real, citable source actually supports the claimed mechanism — do NOT invent a URL. If "
+    "you cannot find a real supporting source, say so. Return ONLY JSON: "
+    '{"verified":true/false,"verdict":"supported|not_found|contradicts","url":"","source_title":"",'
+    '"excerpt":"a short line quoted from the source","verified_date":"YYYY-MM-DD","note":""}.'
+)
+
+
+MODEL = "claude-sonnet-4-5-20250929"
+
+
+def _parse_json(text):
+    a, b = text.find("{"), text.rfind("}")
+    return json.loads(text[a:b + 1])
+
+
+def _claude_json(system, payload, web=False, timeout=240):
+    """Prefer the Anthropic API (reliable, supports the web_search server tool) when
+    ANTHROPIC_API_KEY is set; fall back to the `claude -p` CLI otherwise. The CLI is
+    rate-gated on the Pro subscription, so the API path is the default for S4."""
+    if os.environ.get("ANTHROPIC_API_KEY"):
+        import anthropic
+        client = anthropic.Anthropic()
+        kwargs = dict(model=MODEL, max_tokens=2000, system=system,
+                      messages=[{"role": "user", "content": json.dumps(payload, ensure_ascii=False)}])
+        if web:
+            kwargs["tools"] = [{"type": "web_search_20250305", "name": "web_search", "max_uses": 4}]
+        resp = client.messages.create(**kwargs)
+        text = "".join(getattr(b, "text", "") for b in resp.content if getattr(b, "type", None) == "text")
+        return _parse_json(text)
+    # CLI fallback (no web search available this way)
     proc = subprocess.run(["claude", "-p", "--output-format", "text"],
-                          input=f"{SYSTEM}\n\n{'─'*50}\n\n{json.dumps(payload, ensure_ascii=False)}",
-                          capture_output=True, text=True, timeout=180)
+                          input=f"{system}\n\n{'─'*50}\n\n{json.dumps(payload, ensure_ascii=False)}",
+                          capture_output=True, text=True, timeout=timeout)
     if proc.returncode != 0:
         raise RuntimeError(proc.stderr[:200])
-    t = proc.stdout
-    a, b = t.find("{"), t.rfind("}")
-    return json.loads(t[a:b + 1]).get("proposals", [])
+    return _parse_json(proc.stdout)
+
+
+def call_llm(payload):
+    return _claude_json(SYSTEM, payload).get("proposals", [])
+
+
+def verify_proposal(p):
+    """Web-verify a proposal's source. Returns the proposal with a `verification` block and a
+    `promotable` flag (true only when a real supporting source with a URL + excerpt is found)."""
+    try:
+        v = _claude_json(VERIFY_SYSTEM, {"label": p.get("label"), "mechanism": p.get("mechanism"),
+                                         "affects": p.get("affects"),
+                                         "source_to_check": p.get("required_source")}, web=True)
+    except Exception as e:
+        v = {"verified": False, "verdict": "error", "note": str(e)[:120]}
+    p["verification"] = v
+    p["promotable"] = bool(v.get("verified") and v.get("verdict") == "supported" and v.get("url"))
+    if p["promotable"]:
+        p["claim_type"] = "inference"        # now externally sourced
+        p["source"] = v.get("source_title", "")
+        p["source_url"] = v.get("url", "")
+        p["source_excerpt"] = v.get("excerpt", "")
+        p["source_verified_date"] = v.get("verified_date", "")
+    return p
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--no-llm", action="store_true")
+    ap.add_argument("--no-verify", action="store_true", help="skip the web source-verification pass")
     args = ap.parse_args()
 
     channels = gs.load_json(ROOT / "analysis/ontology/channels.json")["channels"]
@@ -135,6 +191,11 @@ def main():
         except Exception as e:
             print(f"  ⚠ cross: {e}", file=sys.stderr)
 
+    # web source-verification pass — turns "source needed" into verified/rejected (sourcing gate)
+    if proposals and not args.no_llm and not args.no_verify:
+        print(f"  verifying {len(proposals)} proposals against primary sources (web)…", file=sys.stderr)
+        proposals = [verify_proposal(p) for p in proposals]
+
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     out = {
         "_meta": {"description": "S4 inference proposals — HYPOTHESES, sourcing-gated. NEVER "
@@ -147,12 +208,15 @@ def main():
     out_path.write_text(json.dumps(out, indent=2, ensure_ascii=False))
 
     nun = sum(len(v) for v in gaps["unexplained"].values())
+    promotable = [p for p in out["proposals"] if p.get("promotable")]
     print(f"S4 inference @ {period}: {nun} unexplained movements, "
           f"{sum(len(v) for v in gaps['mismatches'].values())} mismatches, "
           f"{len(gaps['cross'])} unconfirmed cross-links")
-    print(f"  → {len(out['proposals'])} sourcing-gated proposals (none auto-promoted)")
-    for p in out["proposals"][:6]:
-        print(f"    · [{p['kind']}] {p.get('label','')[:48]} — needs: {p.get('required_source','?')[:50]}")
+    print(f"  → {len(out['proposals'])} proposals · {len(promotable)} PROMOTABLE (source verified) · "
+          f"{len(out['proposals']) - len(promotable)} stay hypothesis")
+    for p in promotable:
+        print(f"    ✓ PROMOTABLE [{p['kind']}] {p.get('label','')[:46]}")
+        print(f"        source: {p.get('source_url','')}")
     print(f"  wrote {out_path.relative_to(ROOT)}")
     return 0
 
