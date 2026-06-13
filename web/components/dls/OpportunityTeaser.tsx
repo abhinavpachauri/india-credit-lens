@@ -16,6 +16,7 @@
 import Link from "next/link";
 import { useAuth, SignInButton } from "@clerk/nextjs";
 import type { FlatAnnotation } from "@/hooks/useSectionInsights";
+import { OPPORTUNITIES_GATED } from "@/lib/gating";
 
 const OPP_COLOR = "#16A34A";  // TYPE_COLOR.opportunity
 
@@ -26,6 +27,8 @@ interface Props {
 
 export default function OpportunityTeaser({ opps, sectionId }: Props) {
   const { isSignedIn } = useAuth();
+  // Open when gating is disabled, or when the user is signed in.
+  const open = !OPPORTUNITIES_GATED || !!isSignedIn;
 
   if (opps.length === 0) return null;
 
@@ -48,7 +51,7 @@ export default function OpportunityTeaser({ opps, sectionId }: Props) {
         background:   `${OPP_COLOR}08`,
       }}
     >
-      <span style={{ fontSize: 14, flexShrink: 0 }}>🔒</span>
+      <span style={{ fontSize: 14, flexShrink: 0 }}>{open ? "✨" : "🔒"}</span>
 
       <span
         style={{
@@ -65,8 +68,8 @@ export default function OpportunityTeaser({ opps, sectionId }: Props) {
         {label}
       </span>
 
-      {/* Signed out — modal sign-in */}
-      {!isSignedIn && (
+      {/* Gated + signed out — modal sign-in */}
+      {!open && (
         <SignInButton mode="modal">
           <button
             style={{
@@ -86,8 +89,8 @@ export default function OpportunityTeaser({ opps, sectionId }: Props) {
         </SignInButton>
       )}
 
-      {/* Signed in — link to opportunities page */}
-      {isSignedIn && (
+      {/* Open (ungated or signed in) — link to opportunities page */}
+      {open && (
         <Link
           href={`/opportunities#${sectionId}`}
           style={{

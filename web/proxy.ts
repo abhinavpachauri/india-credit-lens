@@ -1,9 +1,10 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import { OPPORTUNITIES_GATED } from "./lib/gating";
 
 const isProtected = createRouteMatcher(["/opportunities(.*)"]);
 
 export default clerkMiddleware(async (auth, req) => {
-  if (isProtected(req)) await auth.protect();
+  if (OPPORTUNITIES_GATED && isProtected(req)) await auth.protect();
 });
 
 export const config = {

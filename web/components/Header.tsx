@@ -4,12 +4,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth, SignInButton, UserButton } from "@clerk/nextjs";
 import { formatCr } from "@/lib/data";
+import { OPPORTUNITIES_GATED } from "@/lib/gating";
 
 // ── Add future dashboards here ─────────────────────────────────────────────────
 const NAV_LINKS = [
   { label: "Credit",        href: "/",             icon: "📊" },
   { label: "Payments",      href: "/payments",      icon: "💳" },
-  { label: "Opportunities", href: "/opportunities", icon: "🔒" },
+  { label: "Opportunities", href: "/opportunities", icon: OPPORTUNITIES_GATED ? "🔒" : "✨" },
 ];
 
 interface HeaderProps {
