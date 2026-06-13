@@ -10,7 +10,7 @@ Steps:
   1. Leaf entity directions   — sign of the entity's signal statuses this period.
   2. Mechanical propagation    — aggregate directions roll up composes_into (per decomposition).
   3. Force-instance states     — active | latent from signal_evidence.
-  4. Behavioral edge states    — active | dominant | dormant | reversed by from-direction × polarity.
+  4. Behavioral edge states    — active | reversed | dormant by from-direction × polarity (sign-only).
   5. Loop states               — active_reinforcing | active_balancing | partial | dormant.
   6. System observations       — dominant forces, binding constraints, active loops.
 
@@ -29,7 +29,12 @@ from collections import defaultdict
 import generate_skeleton as gs
 
 DB = gs.ANALYSIS / "signals" / "signals.db"
-STATUS_DIR = {"strengthening": 1, "active": 1, "weakening": -1, "declining": -1}
+# Direction map covering every status the L1 compute layer can emit: registry status_rules
+# emit strengthening/active/weakening/declining, plus `unknown` when a value is unavailable.
+# `unknown` is a genuine zero. Any status OUTSIDE this set is an L1-contract violation and is
+# surfaced loudly (never silently zeroed) — a silent `.get(s, 0)` catch-all previously hid
+# `reversed`-class statuses from S3 entirely. See HANDOFF_PIPELINE_REVIEW §5.
+STATUS_DIR = {"strengthening": 1, "active": 1, "weakening": -1, "declining": -1, "unknown": 0}
 
 
 def sign(x):
@@ -37,12 +42,17 @@ def sign(x):
 
 
 def load_signal_dirs(pipeline, period):
-    """metric_id -> direction (+1/0/-1) for the period."""
+    """metric_id -> direction (+1/0/-1) for the period. Warns on any status the L1 contract
+    does not define rather than silently treating it as no-direction."""
     con = sqlite3.connect(DB)
     rows = con.execute(
         "select metric_id, status from signals where pipeline=? and period=?",
         (pipeline, period)).fetchall()
     con.close()
+    unmapped = sorted({s for _, s in rows if s not in STATUS_DIR})
+    if unmapped:
+        print(f"⚠ generate_system_state: {len(unmapped)} unmapped signal status(es) "
+              f"treated as no-direction (not in STATUS_DIR): {unmapped}", file=sys.stderr)
     return {m: STATUS_DIR.get(s, 0) for m, s in rows}, {m: s for m, s in rows}
 
 
@@ -148,6 +158,11 @@ def compute(model, sig_dir, weights=None):
         if nid in force_states:
             return 1 if force_states[nid]["state"] == "active" else 0
         return 0
+    # Edge firing state. Node direction is sign-only ({-1, 0, +1}) — S3 deliberately does not
+    # model magnitude (see HANDOFF_PIPELINE_REVIEW §5), so there is no dominant/active split:
+    # an edge fires in its expected direction ("active"), against it ("reversed"), or not at
+    # all ("dormant"). The prior `"dominant" if abs(d) >= 1` branch was unreachable because
+    # abs(d) is always 1 when d != 0.
     edge_states = {}
     for e in model["edges"]:
         pol = e.get("polarity")
@@ -157,10 +172,8 @@ def compute(model, sig_dir, weights=None):
         expected = 1 if pol == "+" else -1 if pol == "-" else 0
         if d == 0:
             st = "dormant"
-        elif pol == "~":
+        elif pol == "~" or sign(d) == expected:
             st = "active"
-        elif sign(d) == expected:
-            st = "dominant" if abs(d) >= 1 else "active"
         else:
             st = "reversed"
         edge_states[e.get("id", f"{e['from']}->{e['to']}")] = {
@@ -171,8 +184,8 @@ def compute(model, sig_dir, weights=None):
     loop_states = {}
     for lp in model.get("loops", []):
         states = [edge_states.get(eid, {}).get("state") for eid in lp.get("participating_edges", [])]
-        live = [s for s in states if s in ("active", "dominant", "reversed")]
-        if states and all(s in ("active", "dominant") for s in states):
+        live = [s for s in states if s in ("active", "reversed")]
+        if states and all(s == "active" for s in states):
             st = "active_reinforcing" if lp.get("type") == "reinforcing" else "active_balancing"
         elif live:
             st = "partial"
@@ -185,7 +198,7 @@ def compute(model, sig_dir, weights=None):
     obs = {
         "dominant_forces": [k for k, v in force_states.items() if v["state"] == "active"],
         "binding_constraints": [k for k, v in edge_states.items()
-                                if v["polarity"] == "-" and v["state"] in ("active", "dominant")],
+                                if v["polarity"] == "-" and v["state"] == "active"],
         "active_reinforcing_loops": [k for k, v in loop_states.items() if v["state"] == "active_reinforcing"],
         "active_balancing_loops": [k for k, v in loop_states.items() if v["state"] == "active_balancing"],
         "authored_vs_observed_mismatches": [k for k, v in force_states.items() if v["mismatch"]],

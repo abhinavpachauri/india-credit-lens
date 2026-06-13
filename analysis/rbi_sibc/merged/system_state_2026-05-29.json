@@ -502,14 +502,14 @@
   },
   "edge_states": {
     "force_gold_price_surge__drives__e_S1_4_8": {
-      "state": "dominant",
+      "state": "active",
       "type": "drives",
       "polarity": "+",
       "from": "force_gold_price_surge",
       "to": "e_S1_4_8"
     },
     "force_gold_price_surge__creates_opportunity__opp_gold_loan_entry": {
-      "state": "dominant",
+      "state": "active",
       "type": "creates_opportunity",
       "polarity": "+",
       "from": "force_gold_price_surge",
@@ -558,98 +558,98 @@
       "to": "risk_unsecured_migration"
     },
     "force_psl_limit_revision__drives__e_S1_iv": {
-      "state": "dominant",
+      "state": "active",
       "type": "drives",
       "polarity": "+",
       "from": "force_psl_limit_revision",
       "to": "e_S1_iv"
     },
     "force_psl_limit_revision__drives__e_S1_viii": {
-      "state": "dominant",
+      "state": "active",
       "type": "drives",
       "polarity": "+",
       "from": "force_psl_limit_revision",
       "to": "e_S1_viii"
     },
     "force_psl_limit_revision__creates_opportunity__opp_pslc_tooling": {
-      "state": "dominant",
+      "state": "active",
       "type": "creates_opportunity",
       "polarity": "+",
       "from": "force_psl_limit_revision",
       "to": "opp_pslc_tooling"
     },
     "force_pli_manufacturing__drives__e_S2_2_14": {
-      "state": "dominant",
+      "state": "active",
       "type": "drives",
       "polarity": "+",
       "from": "force_pli_manufacturing",
       "to": "e_S2_2_14"
     },
     "force_pli_manufacturing__drives__e_S2_2_9": {
-      "state": "dominant",
+      "state": "active",
       "type": "drives",
       "polarity": "+",
       "from": "force_pli_manufacturing",
       "to": "e_S2_2_9"
     },
     "force_pli_manufacturing__drives__e_S2_2_13": {
-      "state": "dominant",
+      "state": "active",
       "type": "drives",
       "polarity": "+",
       "from": "force_pli_manufacturing",
       "to": "e_S2_2_13"
     },
     "force_pli_manufacturing__creates_opportunity__opp_pli_supply_chain": {
-      "state": "dominant",
+      "state": "active",
       "type": "creates_opportunity",
       "polarity": "+",
       "from": "force_pli_manufacturing",
       "to": "opp_pli_supply_chain"
     },
     "e_S2_2_9__amplifies__e_S2_2_14": {
-      "state": "dominant",
+      "state": "active",
       "type": "amplifies",
       "polarity": "+",
       "from": "e_S2_2_9",
       "to": "e_S2_2_14"
     },
     "e_S2_2_13__amplifies__e_S2_2_14": {
-      "state": "dominant",
+      "state": "active",
       "type": "amplifies",
       "polarity": "+",
       "from": "e_S2_2_13",
       "to": "e_S2_2_14"
     },
     "force_msme_formalisation__drives__e_S1_2_1": {
-      "state": "dominant",
+      "state": "active",
       "type": "drives",
       "polarity": "+",
       "from": "force_msme_formalisation",
       "to": "e_S1_2_1"
     },
     "force_msme_formalisation__creates_opportunity__opp_msme_origination": {
-      "state": "dominant",
+      "state": "active",
       "type": "creates_opportunity",
       "polarity": "+",
       "from": "force_msme_formalisation",
       "to": "opp_msme_origination"
     },
     "e_S1_2_1__creates_opportunity__opp_msme_origination": {
-      "state": "dominant",
+      "state": "active",
       "type": "creates_opportunity",
       "polarity": "+",
       "from": "e_S1_2_1",
       "to": "opp_msme_origination"
     },
     "force_nbfc_regulatory_recovery__amplifies__e_S1_3": {
-      "state": "dominant",
+      "state": "active",
       "type": "amplifies",
       "polarity": "+",
       "from": "force_nbfc_regulatory_recovery",
       "to": "e_S1_3"
     },
     "force_msp_procurement_growth__drives__e_S1_II": {
-      "state": "dominant",
+      "state": "active",
       "type": "drives",
       "polarity": "+",
       "from": "force_msp_procurement_growth",
@@ -670,49 +670,49 @@
       "to": "risk_infrastructure_repayment"
     },
     "force_infra_cycle_maturing__creates_opportunity__opp_renewable_energy": {
-      "state": "dominant",
+      "state": "active",
       "type": "creates_opportunity",
       "polarity": "+",
       "from": "force_infra_cycle_maturing",
       "to": "opp_renewable_energy"
     },
     "e_S2_2_18__creates_risk__risk_infrastructure_repayment": {
-      "state": "dominant",
+      "state": "active",
       "type": "creates_risk",
       "polarity": "-",
       "from": "e_S2_2_18",
       "to": "risk_infrastructure_repayment"
     },
     "e_S1_4_7__creates_opportunity__opp_vehicle_ev": {
-      "state": "dominant",
+      "state": "active",
       "type": "creates_opportunity",
       "polarity": "+",
       "from": "e_S1_4_7",
       "to": "opp_vehicle_ev"
     },
     "force_nbfc_regulatory_recovery__creates_opportunity__opp_services_entry": {
-      "state": "dominant",
+      "state": "active",
       "type": "creates_opportunity",
       "polarity": "+",
       "from": "force_nbfc_regulatory_recovery",
       "to": "opp_services_entry"
     },
     "e_S1_3__creates_opportunity__opp_services_entry": {
-      "state": "dominant",
+      "state": "active",
       "type": "creates_opportunity",
       "polarity": "+",
       "from": "e_S1_3",
       "to": "opp_services_entry"
     },
     "force_msme_formalisation__creates_opportunity__opp_colending_infra": {
-      "state": "dominant",
+      "state": "active",
       "type": "creates_opportunity",
       "polarity": "+",
       "from": "force_msme_formalisation",
       "to": "opp_colending_infra"
     },
     "e_S1_2_1__creates_opportunity__opp_colending_infra": {
-      "state": "dominant",
+      "state": "active",
       "type": "creates_opportunity",
       "polarity": "+",
       "from": "e_S1_2_1",

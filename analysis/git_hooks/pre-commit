@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# India Credit Lens pre-commit hook.
+# Guards against committing stale derived artifacts (2026-06-13 review finding #1):
+# a model/source edit must not be committed without regenerating the dependent
+# deterministic S3/projection files. Only runs when a relevant source OR derived
+# file is staged — unrelated commits (web/, docs) are not slowed down.
+#
+# Install: ln -sf ../../analysis/git_hooks/pre-commit .git/hooks/pre-commit
+set -euo pipefail
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+
+# Files whose change can invalidate the derived chain.
+TRIGGER_RE='(system_model\.json|ontology/(channels|concepts)\.json|signals/registry\.json|skeleton_profile\.(json|md)|cross_source/composition\.json|system_state_.*\.json|opportunities_.*\.json|candidates\.json|opportunities_feed\.json)'
+
+if git diff --cached --name-only | grep -Eq "$TRIGGER_RE"; then
+  echo "[pre-commit] source/derived files staged — checking derived-artifact freshness…"
+  python3 "$REPO_ROOT/analysis/check_derived_fresh.py" --quiet
+else
+  exit 0
+fi

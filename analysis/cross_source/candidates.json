@@ -6,30 +6,10 @@
   },
   "candidates": [
     {
-      "rule": "R3_corresponds",
-      "type": "corresponds_to",
-      "from": "icl:sibc/Statement1/4.5",
-      "to": "icl:atm_pos/cards/credit_cards",
-      "shared": {
-        "product": "credit_card"
-      },
-      "rationale": "same product credit_card, stock.balance ↔ count.value",
-      "status": "candidate"
-    },
-    {
       "rule": "R1_stock_flow",
       "type": "leads",
-      "from": "icl:atm_pos/spend_value/cc_spend_value",
-      "to": "icl:sibc/Statement1/4.5",
-      "shared": {
-        "product": "credit_card"
-      },
-      "rationale": "flow.value flow leads stock.balance for product credit_card",
-      "status": "candidate"
-    },
-    {
-      "rule": "R1_stock_flow",
-      "type": "leads",
+      "priority": 1,
+      "group": "R1:credit_card:atm_pos->sibc",
       "from": "icl:atm_pos/spend_value/cc_atm_withdrawal_val",
       "to": "icl:sibc/Statement1/4.5",
       "shared": {
@@ -41,6 +21,8 @@
     {
       "rule": "R1_stock_flow",
       "type": "leads",
+      "priority": 1,
+      "group": "R1:credit_card:atm_pos->sibc",
       "from": "icl:atm_pos/spend_value/cc_ecom_txn_val",
       "to": "icl:sibc/Statement1/4.5",
       "shared": {
@@ -52,6 +34,8 @@
     {
       "rule": "R1_stock_flow",
       "type": "leads",
+      "priority": 1,
+      "group": "R1:credit_card:atm_pos->sibc",
       "from": "icl:atm_pos/spend_value/cc_other_txn_val",
       "to": "icl:sibc/Statement1/4.5",
       "shared": {
@@ -63,6 +47,8 @@
     {
       "rule": "R1_stock_flow",
       "type": "leads",
+      "priority": 1,
+      "group": "R1:credit_card:atm_pos->sibc",
       "from": "icl:atm_pos/spend_value/cc_pos_txn_val",
       "to": "icl:sibc/Statement1/4.5",
       "shared": {
@@ -74,17 +60,21 @@
     {
       "rule": "R1_stock_flow",
       "type": "leads",
-      "from": "icl:atm_pos/spend_volume/cc_spend_volume",
+      "priority": 1,
+      "group": "R1:credit_card:atm_pos->sibc",
+      "from": "icl:atm_pos/spend_value/cc_spend_value",
       "to": "icl:sibc/Statement1/4.5",
       "shared": {
         "product": "credit_card"
       },
-      "rationale": "flow.volume flow leads stock.balance for product credit_card",
+      "rationale": "flow.value flow leads stock.balance for product credit_card",
       "status": "candidate"
     },
     {
       "rule": "R1_stock_flow",
       "type": "leads",
+      "priority": 1,
+      "group": "R1:credit_card:atm_pos->sibc",
       "from": "icl:atm_pos/spend_volume/cc_atm_withdrawal_vol",
       "to": "icl:sibc/Statement1/4.5",
       "shared": {
@@ -96,6 +86,8 @@
     {
       "rule": "R1_stock_flow",
       "type": "leads",
+      "priority": 1,
+      "group": "R1:credit_card:atm_pos->sibc",
       "from": "icl:atm_pos/spend_volume/cc_ecom_txn_vol",
       "to": "icl:sibc/Statement1/4.5",
       "shared": {
@@ -107,6 +99,8 @@
     {
       "rule": "R1_stock_flow",
       "type": "leads",
+      "priority": 1,
+      "group": "R1:credit_card:atm_pos->sibc",
       "from": "icl:atm_pos/spend_volume/cc_other_txn_vol",
       "to": "icl:sibc/Statement1/4.5",
       "shared": {
@@ -118,6 +112,8 @@
     {
       "rule": "R1_stock_flow",
       "type": "leads",
+      "priority": 1,
+      "group": "R1:credit_card:atm_pos->sibc",
       "from": "icl:atm_pos/spend_volume/cc_pos_txn_vol",
       "to": "icl:sibc/Statement1/4.5",
       "shared": {
@@ -127,8 +123,36 @@
       "status": "candidate"
     },
     {
+      "rule": "R1_stock_flow",
+      "type": "leads",
+      "priority": 1,
+      "group": "R1:credit_card:atm_pos->sibc",
+      "from": "icl:atm_pos/spend_volume/cc_spend_volume",
+      "to": "icl:sibc/Statement1/4.5",
+      "shared": {
+        "product": "credit_card"
+      },
+      "rationale": "flow.volume flow leads stock.balance for product credit_card",
+      "status": "candidate"
+    },
+    {
+      "rule": "R3_corresponds",
+      "type": "corresponds_to",
+      "priority": 2,
+      "group": "R3:credit_card",
+      "from": "icl:sibc/Statement1/4.5",
+      "to": "icl:atm_pos/cards/credit_cards",
+      "shared": {
+        "product": "credit_card"
+      },
+      "rationale": "same product credit_card, stock.balance ↔ count.value",
+      "status": "candidate"
+    },
+    {
       "rule": "R2_shared_channel",
       "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_capital_weight_unsecured",
       "from": "icl:sibc/Statement1/4.1",
       "to": "icl:atm_pos/cards/credit_cards",
       "shared": {
@@ -142,19 +166,8 @@
     {
       "rule": "R2_shared_channel",
       "type": "co_driven",
-      "from": "icl:sibc/Statement1/4.1",
-      "to": "icl:atm_pos/spend_value/cc_spend_value",
-      "shared": {
-        "channel": "ch_capital_weight_unsecured",
-        "product_a": "consumer_durable",
-        "product_b": "credit_card"
-      },
-      "rationale": "both products are targets of channel ch_capital_weight_unsecured",
-      "status": "candidate"
-    },
-    {
-      "rule": "R2_shared_channel",
-      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_capital_weight_unsecured",
       "from": "icl:sibc/Statement1/4.1",
       "to": "icl:atm_pos/spend_value/cc_atm_withdrawal_val",
       "shared": {
@@ -168,6 +181,8 @@
     {
       "rule": "R2_shared_channel",
       "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_capital_weight_unsecured",
       "from": "icl:sibc/Statement1/4.1",
       "to": "icl:atm_pos/spend_value/cc_ecom_txn_val",
       "shared": {
@@ -181,6 +196,8 @@
     {
       "rule": "R2_shared_channel",
       "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_capital_weight_unsecured",
       "from": "icl:sibc/Statement1/4.1",
       "to": "icl:atm_pos/spend_value/cc_other_txn_val",
       "shared": {
@@ -194,6 +211,8 @@
     {
       "rule": "R2_shared_channel",
       "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_capital_weight_unsecured",
       "from": "icl:sibc/Statement1/4.1",
       "to": "icl:atm_pos/spend_value/cc_pos_txn_val",
       "shared": {
@@ -207,89 +226,13 @@
     {
       "rule": "R2_shared_channel",
       "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_capital_weight_unsecured",
       "from": "icl:sibc/Statement1/4.1",
-      "to": "icl:atm_pos/spend_volume/cc_spend_volume",
-      "shared": {
-        "channel": "ch_capital_weight_unsecured",
-        "product_a": "consumer_durable",
-        "product_b": "credit_card"
-      },
-      "rationale": "both products are targets of channel ch_capital_weight_unsecured",
-      "status": "candidate"
-    },
-    {
-      "rule": "R2_shared_channel",
-      "type": "co_driven",
-      "from": "icl:sibc/Statement1/4.1",
-      "to": "icl:atm_pos/spend_volume/cc_atm_withdrawal_vol",
-      "shared": {
-        "channel": "ch_capital_weight_unsecured",
-        "product_a": "consumer_durable",
-        "product_b": "credit_card"
-      },
-      "rationale": "both products are targets of channel ch_capital_weight_unsecured",
-      "status": "candidate"
-    },
-    {
-      "rule": "R2_shared_channel",
-      "type": "co_driven",
-      "from": "icl:sibc/Statement1/4.1",
-      "to": "icl:atm_pos/spend_volume/cc_ecom_txn_vol",
-      "shared": {
-        "channel": "ch_capital_weight_unsecured",
-        "product_a": "consumer_durable",
-        "product_b": "credit_card"
-      },
-      "rationale": "both products are targets of channel ch_capital_weight_unsecured",
-      "status": "candidate"
-    },
-    {
-      "rule": "R2_shared_channel",
-      "type": "co_driven",
-      "from": "icl:sibc/Statement1/4.1",
-      "to": "icl:atm_pos/spend_volume/cc_other_txn_vol",
-      "shared": {
-        "channel": "ch_capital_weight_unsecured",
-        "product_a": "consumer_durable",
-        "product_b": "credit_card"
-      },
-      "rationale": "both products are targets of channel ch_capital_weight_unsecured",
-      "status": "candidate"
-    },
-    {
-      "rule": "R2_shared_channel",
-      "type": "co_driven",
-      "from": "icl:sibc/Statement1/4.1",
-      "to": "icl:atm_pos/spend_volume/cc_pos_txn_vol",
-      "shared": {
-        "channel": "ch_capital_weight_unsecured",
-        "product_a": "consumer_durable",
-        "product_b": "credit_card"
-      },
-      "rationale": "both products are targets of channel ch_capital_weight_unsecured",
-      "status": "candidate"
-    },
-    {
-      "rule": "R2_shared_channel",
-      "type": "co_driven",
-      "from": "icl:sibc/Statement1/4.5",
-      "to": "icl:atm_pos/cards/credit_cards",
-      "shared": {
-        "channel": "ch_capital_weight_unsecured",
-        "product_a": "credit_card",
-        "product_b": "credit_card"
-      },
-      "rationale": "both products are targets of channel ch_capital_weight_unsecured",
-      "status": "candidate"
-    },
-    {
-      "rule": "R2_shared_channel",
-      "type": "co_driven",
-      "from": "icl:sibc/Statement1/4.5",
       "to": "icl:atm_pos/spend_value/cc_spend_value",
       "shared": {
         "channel": "ch_capital_weight_unsecured",
-        "product_a": "credit_card",
+        "product_a": "consumer_durable",
         "product_b": "credit_card"
       },
       "rationale": "both products are targets of channel ch_capital_weight_unsecured",
@@ -298,76 +241,13 @@
     {
       "rule": "R2_shared_channel",
       "type": "co_driven",
-      "from": "icl:sibc/Statement1/4.5",
-      "to": "icl:atm_pos/spend_value/cc_atm_withdrawal_val",
-      "shared": {
-        "channel": "ch_capital_weight_unsecured",
-        "product_a": "credit_card",
-        "product_b": "credit_card"
-      },
-      "rationale": "both products are targets of channel ch_capital_weight_unsecured",
-      "status": "candidate"
-    },
-    {
-      "rule": "R2_shared_channel",
-      "type": "co_driven",
-      "from": "icl:sibc/Statement1/4.5",
-      "to": "icl:atm_pos/spend_value/cc_ecom_txn_val",
-      "shared": {
-        "channel": "ch_capital_weight_unsecured",
-        "product_a": "credit_card",
-        "product_b": "credit_card"
-      },
-      "rationale": "both products are targets of channel ch_capital_weight_unsecured",
-      "status": "candidate"
-    },
-    {
-      "rule": "R2_shared_channel",
-      "type": "co_driven",
-      "from": "icl:sibc/Statement1/4.5",
-      "to": "icl:atm_pos/spend_value/cc_other_txn_val",
-      "shared": {
-        "channel": "ch_capital_weight_unsecured",
-        "product_a": "credit_card",
-        "product_b": "credit_card"
-      },
-      "rationale": "both products are targets of channel ch_capital_weight_unsecured",
-      "status": "candidate"
-    },
-    {
-      "rule": "R2_shared_channel",
-      "type": "co_driven",
-      "from": "icl:sibc/Statement1/4.5",
-      "to": "icl:atm_pos/spend_value/cc_pos_txn_val",
-      "shared": {
-        "channel": "ch_capital_weight_unsecured",
-        "product_a": "credit_card",
-        "product_b": "credit_card"
-      },
-      "rationale": "both products are targets of channel ch_capital_weight_unsecured",
-      "status": "candidate"
-    },
-    {
-      "rule": "R2_shared_channel",
-      "type": "co_driven",
-      "from": "icl:sibc/Statement1/4.5",
-      "to": "icl:atm_pos/spend_volume/cc_spend_volume",
-      "shared": {
-        "channel": "ch_capital_weight_unsecured",
-        "product_a": "credit_card",
-        "product_b": "credit_card"
-      },
-      "rationale": "both products are targets of channel ch_capital_weight_unsecured",
-      "status": "candidate"
-    },
-    {
-      "rule": "R2_shared_channel",
-      "type": "co_driven",
-      "from": "icl:sibc/Statement1/4.5",
+      "priority": 3,
+      "group": "R2:ch_capital_weight_unsecured",
+      "from": "icl:sibc/Statement1/4.1",
       "to": "icl:atm_pos/spend_volume/cc_atm_withdrawal_vol",
       "shared": {
         "channel": "ch_capital_weight_unsecured",
-        "product_a": "credit_card",
+        "product_a": "consumer_durable",
         "product_b": "credit_card"
       },
       "rationale": "both products are targets of channel ch_capital_weight_unsecured",
@@ -376,11 +256,13 @@
     {
       "rule": "R2_shared_channel",
       "type": "co_driven",
-      "from": "icl:sibc/Statement1/4.5",
+      "priority": 3,
+      "group": "R2:ch_capital_weight_unsecured",
+      "from": "icl:sibc/Statement1/4.1",
       "to": "icl:atm_pos/spend_volume/cc_ecom_txn_vol",
       "shared": {
         "channel": "ch_capital_weight_unsecured",
-        "product_a": "credit_card",
+        "product_a": "consumer_durable",
         "product_b": "credit_card"
       },
       "rationale": "both products are targets of channel ch_capital_weight_unsecured",
@@ -389,11 +271,13 @@
     {
       "rule": "R2_shared_channel",
       "type": "co_driven",
-      "from": "icl:sibc/Statement1/4.5",
+      "priority": 3,
+      "group": "R2:ch_capital_weight_unsecured",
+      "from": "icl:sibc/Statement1/4.1",
       "to": "icl:atm_pos/spend_volume/cc_other_txn_vol",
       "shared": {
         "channel": "ch_capital_weight_unsecured",
-        "product_a": "credit_card",
+        "product_a": "consumer_durable",
         "product_b": "credit_card"
       },
       "rationale": "both products are targets of channel ch_capital_weight_unsecured",
@@ -402,11 +286,13 @@
     {
       "rule": "R2_shared_channel",
       "type": "co_driven",
-      "from": "icl:sibc/Statement1/4.5",
+      "priority": 3,
+      "group": "R2:ch_capital_weight_unsecured",
+      "from": "icl:sibc/Statement1/4.1",
       "to": "icl:atm_pos/spend_volume/cc_pos_txn_vol",
       "shared": {
         "channel": "ch_capital_weight_unsecured",
-        "product_a": "credit_card",
+        "product_a": "consumer_durable",
         "product_b": "credit_card"
       },
       "rationale": "both products are targets of channel ch_capital_weight_unsecured",
@@ -415,144 +301,16 @@
     {
       "rule": "R2_shared_channel",
       "type": "co_driven",
-      "from": "icl:sibc/Statement1/4.5",
-      "to": "icl:atm_pos/cards/credit_cards",
-      "shared": {
-        "channel": "ch_card_lifecycle_norms",
-        "product_a": "credit_card",
-        "product_b": "credit_card"
-      },
-      "rationale": "both products are targets of channel ch_card_lifecycle_norms",
-      "status": "candidate"
-    },
-    {
-      "rule": "R2_shared_channel",
-      "type": "co_driven",
-      "from": "icl:sibc/Statement1/4.5",
-      "to": "icl:atm_pos/spend_value/cc_spend_value",
-      "shared": {
-        "channel": "ch_card_lifecycle_norms",
-        "product_a": "credit_card",
-        "product_b": "credit_card"
-      },
-      "rationale": "both products are targets of channel ch_card_lifecycle_norms",
-      "status": "candidate"
-    },
-    {
-      "rule": "R2_shared_channel",
-      "type": "co_driven",
-      "from": "icl:sibc/Statement1/4.5",
-      "to": "icl:atm_pos/spend_value/cc_atm_withdrawal_val",
-      "shared": {
-        "channel": "ch_card_lifecycle_norms",
-        "product_a": "credit_card",
-        "product_b": "credit_card"
-      },
-      "rationale": "both products are targets of channel ch_card_lifecycle_norms",
-      "status": "candidate"
-    },
-    {
-      "rule": "R2_shared_channel",
-      "type": "co_driven",
-      "from": "icl:sibc/Statement1/4.5",
-      "to": "icl:atm_pos/spend_value/cc_ecom_txn_val",
-      "shared": {
-        "channel": "ch_card_lifecycle_norms",
-        "product_a": "credit_card",
-        "product_b": "credit_card"
-      },
-      "rationale": "both products are targets of channel ch_card_lifecycle_norms",
-      "status": "candidate"
-    },
-    {
-      "rule": "R2_shared_channel",
-      "type": "co_driven",
-      "from": "icl:sibc/Statement1/4.5",
-      "to": "icl:atm_pos/spend_value/cc_other_txn_val",
-      "shared": {
-        "channel": "ch_card_lifecycle_norms",
-        "product_a": "credit_card",
-        "product_b": "credit_card"
-      },
-      "rationale": "both products are targets of channel ch_card_lifecycle_norms",
-      "status": "candidate"
-    },
-    {
-      "rule": "R2_shared_channel",
-      "type": "co_driven",
-      "from": "icl:sibc/Statement1/4.5",
-      "to": "icl:atm_pos/spend_value/cc_pos_txn_val",
-      "shared": {
-        "channel": "ch_card_lifecycle_norms",
-        "product_a": "credit_card",
-        "product_b": "credit_card"
-      },
-      "rationale": "both products are targets of channel ch_card_lifecycle_norms",
-      "status": "candidate"
-    },
-    {
-      "rule": "R2_shared_channel",
-      "type": "co_driven",
-      "from": "icl:sibc/Statement1/4.5",
+      "priority": 3,
+      "group": "R2:ch_capital_weight_unsecured",
+      "from": "icl:sibc/Statement1/4.1",
       "to": "icl:atm_pos/spend_volume/cc_spend_volume",
       "shared": {
-        "channel": "ch_card_lifecycle_norms",
-        "product_a": "credit_card",
+        "channel": "ch_capital_weight_unsecured",
+        "product_a": "consumer_durable",
         "product_b": "credit_card"
       },
-      "rationale": "both products are targets of channel ch_card_lifecycle_norms",
-      "status": "candidate"
-    },
-    {
-      "rule": "R2_shared_channel",
-      "type": "co_driven",
-      "from": "icl:sibc/Statement1/4.5",
-      "to": "icl:atm_pos/spend_volume/cc_atm_withdrawal_vol",
-      "shared": {
-        "channel": "ch_card_lifecycle_norms",
-        "product_a": "credit_card",
-        "product_b": "credit_card"
-      },
-      "rationale": "both products are targets of channel ch_card_lifecycle_norms",
-      "status": "candidate"
-    },
-    {
-      "rule": "R2_shared_channel",
-      "type": "co_driven",
-      "from": "icl:sibc/Statement1/4.5",
-      "to": "icl:atm_pos/spend_volume/cc_ecom_txn_vol",
-      "shared": {
-        "channel": "ch_card_lifecycle_norms",
-        "product_a": "credit_card",
-        "product_b": "credit_card"
-      },
-      "rationale": "both products are targets of channel ch_card_lifecycle_norms",
-      "status": "candidate"
-    },
-    {
-      "rule": "R2_shared_channel",
-      "type": "co_driven",
-      "from": "icl:sibc/Statement1/4.5",
-      "to": "icl:atm_pos/spend_volume/cc_other_txn_vol",
-      "shared": {
-        "channel": "ch_card_lifecycle_norms",
-        "product_a": "credit_card",
-        "product_b": "credit_card"
-      },
-      "rationale": "both products are targets of channel ch_card_lifecycle_norms",
-      "status": "candidate"
-    },
-    {
-      "rule": "R2_shared_channel",
-      "type": "co_driven",
-      "from": "icl:sibc/Statement1/4.5",
-      "to": "icl:atm_pos/spend_volume/cc_pos_txn_vol",
-      "shared": {
-        "channel": "ch_card_lifecycle_norms",
-        "product_a": "credit_card",
-        "product_b": "credit_card"
-      },
-      "rationale": "both products are targets of channel ch_card_lifecycle_norms",
+      "rationale": "both products are targets of channel ch_capital_weight_unsecured",
       "status": "candidate"
     }
   ]

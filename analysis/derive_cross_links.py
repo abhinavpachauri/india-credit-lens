@@ -53,8 +53,17 @@ def load_entities():
     return ents
 
 
+def _pipe(urn):
+    # urn = icl:{pipeline}/{partition}/{code}
+    return urn.split(":", 1)[1].split("/", 1)[0]
+
+
 def derive(ents):
     candidates = []
+    # Unordered URN pairs already captured by a stronger rule (R1/R3). A shared-channel
+    # (R2 co_driven) candidate between the same two entities is redundant — the stock↔flow
+    # law already relates them — so we suppress it to cut R2 noise without losing signal.
+    strong_pairs = set()
 
     # R1 + R3 — group by product, pair across pipelines with differing measure class
     by_product = defaultdict(list)
@@ -69,24 +78,32 @@ def derive(ents):
             # orient flow → (stock|count)
             flow, other = (a, b) if a["mclass"] == "flow" else (b, a) if b["mclass"] == "flow" else (None, None)
             if flow is not None and other["mclass"] in ("stock", "count"):
+                strong_pairs.add(frozenset((flow["urn"], other["urn"])))
                 candidates.append({
-                    "rule": "R1_stock_flow", "type": "leads",
+                    "rule": "R1_stock_flow", "type": "leads", "priority": 1,
+                    # group folds the flow fan-out: many flow measures of one product → one stock
+                    "group": f"R1:{product}:{_pipe(flow['urn'])}->{_pipe(other['urn'])}",
                     "from": flow["urn"], "to": other["urn"],
                     "shared": {"product": product},
                     "rationale": f"{flow['measure']} flow leads {other['measure']} for product {product}",
                     "status": "candidate",
                 })
             elif {a["mclass"], b["mclass"]} == {"count", "stock"}:
+                strong_pairs.add(frozenset((a["urn"], b["urn"])))
                 candidates.append({
-                    "rule": "R3_corresponds", "type": "corresponds_to",
+                    "rule": "R3_corresponds", "type": "corresponds_to", "priority": 2,
+                    "group": f"R3:{product}",
                     "from": a["urn"], "to": b["urn"],
                     "shared": {"product": product},
                     "rationale": f"same product {product}, {a['measure']} ↔ {b['measure']}",
                     "status": "candidate",
                 })
 
-    # R2 — shared channel: entities (cross-pipeline) whose product a channel targets
+    # R2 — shared channel: entities (cross-pipeline) whose product a channel targets.
+    # Skip pairs already captured by R1/R3 (redundant) and de-duplicate identical pairs
+    # that several channels would otherwise emit repeatedly.
     channels = gs.load_json(ROOT / "analysis/ontology/channels.json")["channels"]
+    seen_r2 = set()
     for ch in channels:
         target_products = {t.get("product") for t in ch.get("target_concepts", []) if t.get("product")}
         members = [e for e in ents if e["product"] in target_products]
@@ -96,13 +113,23 @@ def derive(ents):
         for a, b in combinations(members, 2):
             if a["pipeline"] == b["pipeline"]:
                 continue
+            pair = frozenset((a["urn"], b["urn"]))
+            if pair in strong_pairs:
+                continue  # stock↔flow already relates them — co_driven adds nothing
+            key = (ch["id"], pair)
+            if key in seen_r2:
+                continue
+            seen_r2.add(key)
             candidates.append({
-                "rule": "R2_shared_channel", "type": "co_driven",
+                "rule": "R2_shared_channel", "type": "co_driven", "priority": 3,
+                "group": f"R2:{ch['id']}",
                 "from": a["urn"], "to": b["urn"],
                 "shared": {"channel": ch["id"], "product_a": a["product"], "product_b": b["product"]},
                 "rationale": f"both products are targets of channel {ch['id']}",
                 "status": "candidate",
             })
+    # Highest-value (near-deterministic) law first; R2 noise last.
+    candidates.sort(key=lambda c: (c["priority"], c.get("group", ""), c["from"], c["to"]))
     return candidates
 
 
@@ -123,10 +150,12 @@ def main():
 
     from collections import Counter
     by_rule = Counter(c["rule"] for c in candidates)
-    cross_pairs = Counter(tuple(sorted({c["from"].split("/")[0], c["to"].split("/")[0]})) for c in candidates)
+    groups_by_rule = defaultdict(set)
+    for c in candidates:
+        groups_by_rule[c["rule"]].add(c.get("group"))
     print(f"derived {len(candidates)} cross-system candidates from {len(ents)} tagged entities")
     for r, n in sorted(by_rule.items()):
-        print(f"    {r:20s} {n}")
+        print(f"    {r:20s} {n:3d} candidate(s) across {len(groups_by_rule[r])} group(s)  (priority {candidates and next(c['priority'] for c in candidates if c['rule']==r)})")
     print("  sample R1 stock↔flow links:")
     for c in candidates:
         if c["rule"] == "R1_stock_flow":

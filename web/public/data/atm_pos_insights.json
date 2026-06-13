@@ -3,11 +3,11 @@
     "id": "cc-ecom-vs-pos-share",
     "group": "cc",
     "cut": "total",
-    "period": "2026-04-30",
+    "period": "Mar 2026",
     "type": "insight",
-    "title": "Ecommerce share at 62.41% — down 1.68pp from Mar",
-    "body": "Ecommerce accounts for 62.41% of total credit card transaction value in Apr 2026, down 1.68pp from Mar 2026. Share fell 64.09% → 62.41%, the largest single-month decline in the 16-period series and now back near the median of the 61.7–63.6% range. POS transactions captured 37.4% of total credit card value in Apr 2026, up 1.7 points from Mar 2026's 35.7%. Share rose 35.7% → 37.4%, reversing the five-month decline and posting the largest single-month gain in this dataset.",
-    "implication": "Ecommerce has lost its Mar surge in value share — the channel is back to its 62% structural baseline, confirming the Mar spike was seasonal and POS is reclaiming share. The structural share loss to ecommerce has paused — Apr's 1.7 point gain suggests offline retail recaptured wallet share despite falling absolute value, meaning ecommerce contracted even more sharply. This is a tactical reversal, not a trend break. The sub-40% share level confirms POS remains structurally weaker than the Nov 2025 peak of 40.0%.",
+    "title": "CC ecommerce holds above POS at 50.2% of total CC volume",
+    "body": "In Mar 2026, ecommerce accounted for 50.2% (+0.1pp vs prior month) of total CC transaction volume vs POS at 49.1%. This structural shift — digital-first over in-store — has persisted for multiple months.",
+    "implication": "More than half of credit card spending is now online — not at physical stores. Online transactions (called CNP, or card-not-present, because the card isn't physically swiped) carry higher fraud risk. If your fraud detection was built around in-store spending patterns, it needs to be updated for an online-first customer base.",
     "reasoning": {
       "signals": [
         {
@@ -24,8 +24,9 @@
         }
       ],
       "chain": [
-        "Ecommerce has lost its Mar surge in value share — the channel is back to its 62% structural baseline, confirming the Mar spike was seasonal and POS is reclaiming share.",
-        "The structural share loss to ecommerce has paused — Apr's 1.7 point gain suggests offline retail recaptured wallet share despite falling absolute value, meaning ecommerce contracted even more sharply. This is a tactical reversal, not a trend break. The sub-40% share level confirms POS remains structurally weaker than the Nov 2025 peak of 40.0%."
+        "CC ecommerce at 50.2% of volume — majority of CC spend is now online, not at physical stores",
+        "Online transactions (card-not-present / CNP) carry higher fraud risk since the card is never physically verified",
+        "Fraud detection built for in-store patterns needs recalibration for an online-first customer base"
       ]
     },
     "sourceSignals": [
@@ -43,18 +44,17 @@
     },
     "exploreAction": {
       "mode": "by_type"
-    },
-    "layer": 1
+    }
   },
   {
     "id": "cc-cards-streak",
     "group": "cc",
     "cut": "total",
-    "period": "2026-04-30",
+    "period": "Mar 2026",
     "type": "insight",
-    "title": "Credit cards at 119.4M — highest on record, up 802K",
-    "body": "Credit cards outstanding stand at 119.4M in Apr 2026, up 802K from 118.6M prior period. Stock reached an all-time high: 118.6M in Mar 2026 → 119.4M in Apr 2026. The market added 802K cards in one month, down 14% from prior period's 929K but still the third-fastest gain since the Oct 2025 purge.",
-    "implication": "The credit card market has fully recovered from the Oct 2025 regulatory purge and set a new record — the 119.4M base is now 37K cards above the prior Apr 2025 peak (119.4M), confirming the purge cleanup is complete and the market has entered sustained expansion. The 802K gain is 14% slower than Mar 2026's 929K, signaling growth is moderating but remains robust. Issuers are now operating at peak capacity.",
+    "title": "Credit cards outstanding: 5 consecutive months of growth — 118.6M cards",
+    "body": "Total credit cards outstanding reached 118.6M in Mar 2026 (+2.5% QoQ vs Q3 FY26), marking the 5 consecutive months of growth. Issuance momentum is broad-based across bank types.",
+    "implication": "5 straight months of card growth looks good, but card count alone can mislead. Many new cards never get used — they sit inactive. What matters for lending is how many cards are actually being transacted on. Track activation rate (what percentage of issued cards have any spend in the last few months) alongside the headline number.",
     "reasoning": {
       "signals": [
         {
@@ -71,7 +71,9 @@
         }
       ],
       "chain": [
-        "The credit card market has fully recovered from the Oct 2025 regulatory purge and set a new record — the 119.4M base is now 37K cards above the prior Apr 2025 peak (119.4M), confirming the purge cleanup is complete and the market has entered sustained expansion. The 802K gain is 14% slower than Mar 2026's 929K, signaling growth is moderating but remains robust. Issuers are now operating at peak capacity."
+        "CC cards outstanding growing for 5 consecutive months",
+        "Card count includes dormant cards that were issued but never activated or used",
+        "Activation rate (cards with any spend in recent months) is the real signal for credit origination potential"
       ]
     },
     "sourceSignals": [
@@ -90,18 +92,17 @@
     },
     "exploreAction": {
       "mode": "by_type"
-    },
-    "layer": 1
+    }
   },
   {
     "id": "cc-txn-surge",
     "group": "cc",
     "cut": "total",
-    "period": "2026-04-30",
+    "period": "Mar 2026",
     "type": "insight",
-    "title": "CC POS value falls to ₹73,849 Cr — Mar surge reversed",
-    "body": "Credit card POS transaction value fell to ₹73,849 Cr in Apr 2026, down ₹4,622 Cr from Mar 2026's ₹78,470 Cr. Value dropped ₹78,470 Cr → ₹73,849 Cr, a 5.9% monthly decline — erasing 42% of Mar's ₹11,035 Cr surge and falling back near the Feb level of ₹67,435 Cr. Credit card ecommerce transaction value totalled ₹123.4L Cr in Apr 2026, down ₹17.6L Cr from Mar 2026. Value fell ₹140.9L Cr → ₹123.4L Cr, a 12.5% drop that erases the Mar record and pushes the level back near the 16-period median. Credit card ATM cash withdrawals totalled ₹3.65L Cr in Apr 2026, down ₹0.42L Cr from Mar 2026. Value fell ₹4.08L Cr → ₹3.65L Cr, a 10.3% drop that erases the entire Mar rebound and pushes the level back below the 16-period p25.",
-    "implication": "The Mar POS surge was a one-month spike, not a sustained recovery — Apr's pullback confirms offline retail demand remains volatile and has not stabilised near festive-season levels. The anticipated normalisation near ₹78,000 Cr has failed. Lenders should expect continued month-to-month swings as consumer spending patterns remain uneven. The Mar breakout was a one-month spike — ecommerce has retreated sharply but remains above the Oct–Feb trough, confirming the channel is still in expansion but with high month-to-month volatility. The Mar recovery was a one-month blip — ATM cash has collapsed back to its Feb trough, confirming the channel has no sustained demand and remains structurally weak.",
+    "title": "All CC transaction types surged in Mar 2026 — avg 15.8% MoM",
+    "body": "All four CC transaction types grew strongly in Mar 2026: POS +16.7%, eCommerce +17.2%, ATM +11.4%, Other +18.1%. March year-end spending typically drives broad-based CC transaction growth.",
+    "implication": "March always spikes — it's financial year-end and people tend to spend more. An average 15.8% jump this month is seasonal, not a sign customers suddenly have more money. If you're assessing how much credit a customer can repay, don't use March spend as your baseline — it will make their repayment capacity look higher than it actually is.",
     "reasoning": {
       "signals": [
         {
@@ -122,9 +123,9 @@
         }
       ],
       "chain": [
-        "The Mar POS surge was a one-month spike, not a sustained recovery — Apr's pullback confirms offline retail demand remains volatile and has not stabilised near festive-season levels. The anticipated normalisation near ₹78,000 Cr has failed. Lenders should expect continued month-to-month swings as consumer spending patterns remain uneven.",
-        "The Mar breakout was a one-month spike — ecommerce has retreated sharply but remains above the Oct–Feb trough, confirming the channel is still in expansion but with high month-to-month volatility.",
-        "The Mar recovery was a one-month blip — ATM cash has collapsed back to its Feb trough, confirming the channel has no sustained demand and remains structurally weak."
+        "All 4 CC transaction types grew simultaneously — avg 15.8% MoM in March",
+        "March is financial year-end in India — broad-based spending surge is a recurring seasonal pattern",
+        "Seasonal spike overstates true credit utilisation; normalise March volumes before assessing repayment capacity"
       ]
     },
     "sourceSignals": [
@@ -141,18 +142,17 @@
       "trendMode": "mom",
       "focusCard": "cc_pos"
     },
-    "exploreAction": null,
-    "layer": 1
+    "exploreAction": null
   },
   {
     "id": "cc-category-share-shift",
     "group": "cc",
     "cut": "by_type",
-    "period": "2026-04-30",
+    "period": "Mar 2026",
     "type": "insight",
-    "title": "CC POS value share rises to 37.4% — reverses decline",
-    "body": "POS transactions captured 37.4% of total credit card value in Apr 2026, up 1.7 points from Mar 2026's 35.7%. Share rose 35.7% → 37.4%, reversing the five-month decline and posting the largest single-month gain in this dataset. Ecommerce accounts for 62.41% of total credit card transaction value in Apr 2026, down 1.68pp from Mar 2026. Share fell 64.09% → 62.41%, the largest single-month decline in the 16-period series and now back near the median of the 61.7–63.6% range. ATM cash withdrawals account for 0.18% of total credit card transaction value in Apr 2026, down 0.01pp from Mar 2026. Share slipped 0.19% → 0.18%, the first move below 0.19% in the series and now at the minimum of the 16-period range.",
-    "implication": "The structural share loss to ecommerce has paused — Apr's 1.7 point gain suggests offline retail recaptured wallet share despite falling absolute value, meaning ecommerce contracted even more sharply. This is a tactical reversal, not a trend break. The sub-40% share level confirms POS remains structurally weaker than the Nov 2025 peak of 40.0%. Ecommerce has lost its Mar surge in value share — the channel is back to its 62% structural baseline, confirming the Mar spike was seasonal and POS is reclaiming share. ATM cash has lost another share point and is now at its lowest level on record — ecommerce and POS capture 99.82% of value, confirming this channel is economically irrelevant.",
+    "title": "SFB banks gained CC card share in Mar 2026 (+0.1pp)",
+    "body": "SFB banks hold 1.5% of total credit cards outstanding in Mar 2026 (+0.1pp vs prior month). Private banks lost the most share at -0.1pp, now at 71.0%. SFB growth in credit cards reflects increased fintech partnerships.",
+    "implication": "SFB banks picking up credit card share — even by 0.1pp — signals a change in who's acquiring customers. SFBs (Small Finance Banks — banks that focus on underserved segments like AU or Equitas) growing in credit cards usually means fintech partnerships or co-branded products are kicking in.For anyone benchmarking credit card portfolio quality, knowing which bank type is gaining share matters — their customer profiles and risk behaviour can be very different.",
     "reasoning": {
       "signals": [
         {
@@ -173,9 +173,9 @@
         }
       ],
       "chain": [
-        "The structural share loss to ecommerce has paused — Apr's 1.7 point gain suggests offline retail recaptured wallet share despite falling absolute value, meaning ecommerce contracted even more sharply. This is a tactical reversal, not a trend break. The sub-40% share level confirms POS remains structurally weaker than the Nov 2025 peak of 40.0%.",
-        "Ecommerce has lost its Mar surge in value share — the channel is back to its 62% structural baseline, confirming the Mar spike was seasonal and POS is reclaiming share.",
-        "ATM cash has lost another share point and is now at its lowest level on record — ecommerce and POS capture 99.82% of value, confirming this channel is economically irrelevant."
+        "SFB banks gained 0.1pp CC share — Private banks lost 0.1pp",
+        "SFB growth signals fintech partnerships or co-branded card activity in underserved segments",
+        "Customer risk profiles differ significantly across bank types — portfolio benchmarking must account for this mix shift"
       ]
     },
     "sourceSignals": [
@@ -195,18 +195,17 @@
     },
     "exploreAction": {
       "mode": "by_type"
-    },
-    "layer": 1
+    }
   },
   {
     "id": "cc-top5-concentration",
     "group": "cc",
     "cut": "top_n",
-    "period": "2026-04-30",
+    "period": "Mar 2026",
     "type": "insight",
-    "title": "HDFC holds 26.4M credit cards — top three at 56.7% share",
-    "body": "HDFC Bank holds 26.4M credit cards outstanding, SBI 22.2M, ICICI 19.2M — the three account for 67.8M cards out of 119.4M total (56.7% of market). Top three concentration tightened from 56.8% to 56.7% — a 0.1pp decline as the total market grew from 118.6M to 119.4M cards. HDFC added 138K cards: 26.3M → 26.4M. The remaining 60 banks now share 51.6M cards, up from 51.2M.",
-    "implication": "The oligopoly loosening has stalled — the top three lost only 0.1pp share as the market added 802K cards, down from the prior period's 0.3pp decline. The mid-tier added 402K cards while the top three added 400K, capturing exactly 50% of new issuance vs 65% prior period. The de-concentration trend has paused, confirming the top three have stabilised their competitive position after two months of share erosion.",
+    "title": "Top 5 banks hold 74.3% of CC cards — HDFC BANK LTD leads at 22.2%",
+    "body": "In Mar 2026, the top 5 banks account for 74.3% of total credit cards outstanding (-0.2pp vs prior month). HDFC BANK LTD leads with 22.2% share (+0.2% MoM).",
+    "implication": "74% of all credit cards in India are with just 5 banks. In practice, this means the national credit card data from RBI tells you largely what HDFC, SBI, ICICI, Axis, and Kotak are doing — not the market as a whole. If your strategy relies on industry-level CC data, keep this concentration in mind.",
     "reasoning": {
       "signals": [
         {
@@ -227,7 +226,9 @@
         }
       ],
       "chain": [
-        "The oligopoly loosening has stalled — the top three lost only 0.1pp share as the market added 802K cards, down from the prior period's 0.3pp decline. The mid-tier added 402K cards while the top three added 400K, capturing exactly 50% of new issuance vs 65% prior period. The de-concentration trend has paused, confirming the top three have stabilised their competitive position after two months of share erosion."
+        "Top 5 banks hold 74.3% of all CC cards — HDFC BANK LTD alone accounts for 22.2%",
+        "RBI aggregate CC data is effectively proxied by these 5 institutions — smaller banks are statistically marginal",
+        "Industry-level CC strategy analysis must account for this concentration — it reflects large-bank dynamics, not the full market"
       ]
     },
     "sourceSignals": [
@@ -247,8 +248,7 @@
     "exploreAction": {
       "mode": "top_n",
       "topN": 10
-    },
-    "layer": 1
+    }
   },
   {
     "id": "gap-foreign-cc-decline",
@@ -291,18 +291,17 @@
     },
     "exploreAction": {
       "mode": "by_type"
-    },
-    "layer": 2
+    }
   },
   {
     "id": "dc-atm-share-structural",
     "group": "dc",
     "cut": "total",
-    "period": "2026-04-30",
+    "period": "Mar 2026",
     "type": "insight",
-    "title": "ATM cash share 86.2% — down 0.54pp, near floor",
-    "body": "ATM withdrawals accounted for 86.21% of total debit card transaction value in Apr 2026. Share fell 86.75% → 86.21%, dropping 0.54pp and moving below the 25th percentile to the lower range of the 16-month window.",
-    "implication": "Cash is losing value share to digital channels at an accelerating pace. The 86.2% level is near the historical floor. Digital POS and ecommerce are structurally gaining share — the 87%+ equilibrium is broken.",
+    "title": "DC ATM cash losing share — 81.4% of DC volume (-0.5pp) as digital grows",
+    "body": "Debit card ATM withdrawals account for 81.4% of total DC transaction volume in Mar 2026 (-0.5pp vs prior month). DC ecommerce has grown to 4.8% (+0.3pp). The structural shift from cash to digital payments is underway in the debit segment.",
+    "implication": "Debit card ATM cash is at 81.4% and falling — which means a growing group of debit card holders is switching to digital payments (online or at stores). Those customers start leaving a spending history that lenders can actually use. Debit customers who are moving to digital are among the best targets for a first credit card or personal loan — they have a track record, just not a credit one yet.",
     "reasoning": {
       "signals": [
         {
@@ -323,7 +322,9 @@
         }
       ],
       "chain": [
-        "Cash is losing value share to digital channels at an accelerating pace. The 86.2% level is near the historical floor. Digital POS and ecommerce are structurally gaining share — the 87%+ equilibrium is broken."
+        "DC ATM cash share fell 0.5pp to 81.4% — customers shifting away from cash",
+        "Digital debit transactions (POS, ecommerce) create structured spending records; cash leaves none",
+        "Debit customers moving to digital build a usable credit history — prime candidates for first credit origination"
       ]
     },
     "sourceSignals": [
@@ -340,18 +341,17 @@
       "trendMode": "absolute",
       "focusCard": "dc_atm"
     },
-    "exploreAction": null,
-    "layer": 1
+    "exploreAction": null
   },
   {
     "id": "dc-pos-cash-decline",
     "group": "dc",
     "cut": "total",
-    "period": "2026-04-30",
+    "period": "Mar 2026",
     "type": "insight",
-    "title": "ATM cash share 86.2% — down 0.54pp, near floor",
-    "body": "ATM withdrawals accounted for 86.21% of total debit card transaction value in Apr 2026. Share fell 86.75% → 86.21%, dropping 0.54pp and moving below the 25th percentile to the lower range of the 16-month window. POS transactions accounted for 9.08% of total debit card transaction value in Apr 2026. Share rose from 8.50% in Mar 2026 to 9.08% in Apr 2026 — a 0.58 percentage point gain — now above the 75th percentile and at the highest level since Oct 2025.",
-    "implication": "Cash is losing value share to digital channels at an accelerating pace. The 86.2% level is near the historical floor. Digital POS and ecommerce are structurally gaining share — the 87%+ equilibrium is broken. POS has regained structural share for the first time in six months, driven by relative strength as other channels (likely ATM cash) contracted. This is a meaningful shift — POS is reclaiming its footprint within the debit card mix despite flat absolute value.",
+    "title": "DC POS cash withdrawals: 2 consecutive months of decline (-7.0% MoM)",
+    "body": "Debit card POS cash-back withdrawal volume fell 7.0% MoM in Mar 2026, the 2 consecutive months of decline. This is a separate channel from ATM cash — POS cash-back usage is contracting while digital POS payments continue to grow.",
+    "implication": "Some merchants used to let customers withdraw cash at their POS machine — called cash-back at POS. This is declining. That's actually good for data quality: POS transaction records now reflect real purchases, not cash withdrawals disguised as purchases. Better purchase data means more accurate signals when assessing credit for small businesses or retail customers.",
     "reasoning": {
       "signals": [
         {
@@ -364,8 +364,9 @@
         }
       ],
       "chain": [
-        "Cash is losing value share to digital channels at an accelerating pace. The 86.2% level is near the historical floor. Digital POS and ecommerce are structurally gaining share — the 87%+ equilibrium is broken.",
-        "POS has regained structural share for the first time in six months, driven by relative strength as other channels (likely ATM cash) contracted. This is a meaningful shift — POS is reclaiming its footprint within the debit card mix despite flat absolute value."
+        "DC POS cash-back withdrawals fell 7.0% MoM for 2 months — merchants reducing cash-out via POS",
+        "POS records now reflect real purchases rather than cash access events disguised as transactions",
+        "Cleaner purchase data improves signal quality for credit underwriting of MSME and retail customers"
       ]
     },
     "sourceSignals": [
@@ -380,18 +381,17 @@
       "trendMode": "mom",
       "focusCard": "dc_pos_wd"
     },
-    "exploreAction": null,
-    "layer": 1
+    "exploreAction": null
   },
   {
     "id": "dc-ecom-share",
     "group": "dc",
     "cut": "total",
-    "period": "2026-04-30",
+    "period": "Mar 2026",
     "type": "insight",
-    "title": "Ecommerce value share 4.65% — holding upper range",
-    "body": "Ecommerce transactions accounted for 4.65% of total debit card transaction value in Apr 2026. Share fell 4.69% → 4.65%, dropping 0.04pp but remaining above the 75th percentile in the upper range of the 16-month window.",
-    "implication": "Digital commerce is holding value share near the historical upper range despite the absolute value decline. The 4.65% level is stable — ecommerce is oscillating in the 4.6%–4.7% band with no clear directional bias.",
+    "title": "DC ecommerce is 4.8% of total DC transaction volume in Mar 2026",
+    "body": "Debit card ecommerce accounted for 4.8% of total DC transaction volume in Mar 2026 (+0.3pp vs prior month). ATM cash still dominates at 81.4%. The structural shift away from cash toward digital payments is ongoing.",
+    "implication": "Only 4.8% of debit card spending is online, but that group is valuable. These are debit-only customers who already shop digitally — which means their spending leaves a traceable record. For cross-selling a first credit card or personal loan, debit customers with online spending history are much easier to assess than pure ATM-cash users.",
     "reasoning": {
       "signals": [
         {
@@ -408,7 +408,9 @@
         }
       ],
       "chain": [
-        "Digital commerce is holding value share near the historical upper range despite the absolute value decline. The 4.65% level is stable — ecommerce is oscillating in the 4.6%–4.7% band with no clear directional bias."
+        "DC ecommerce is 4.8% of DC volume — small but digitally traceable subgroup within a cash-dominant base",
+        "Online debit customers leave structured purchase records; ATM-cash users leave none",
+        "Digital-active debit customers are higher-value cross-sell targets for first credit products — traceable history enables underwriting"
       ]
     },
     "sourceSignals": [
@@ -426,18 +428,17 @@
     },
     "exploreAction": {
       "mode": "by_type"
-    },
-    "layer": 1
+    }
   },
   {
     "id": "dc-cards-streak",
     "group": "dc",
     "cut": "total",
-    "period": "2026-04-30",
+    "period": "Mar 2026",
     "type": "insight",
-    "title": "Debit cards at 1.02B — down 21.4M in largest purge since Oct 2025",
-    "body": "Debit cards outstanding stand at 1.02B in Apr 2026, down 21.4M cards from 1.04B prior period. Stock contracted sharply: 1.04B in Mar 2026 → 1.02B in Apr 2026 — a 21.4M decline in one month, the largest drop since the Oct 2025 purge. The market is now 11.4M cards below the Dec 2025 peak (1.03B).",
-    "implication": "The debit card market has undergone a second major purge — the 21.4M decline is the largest one-month drop since the Oct 2025 regulatory cleanup, confirming issuers have resumed inactive card removal after three months of recovery. The 1.02B base is now back to the Aug 2025 level, erasing five months of growth. The purge is concentrated in payment banks and mid-tier PSBs, signaling a targeted cleanup rather than a broad market contraction.",
+    "title": "Debit cards: 5 consecutive months of growth — 1.04B outstanding",
+    "body": "Total debit cards outstanding reached 1.04B in Mar 2026 (+1.0% QoQ vs Q3 FY26), the 5 consecutive months of growth. India debit base continues to expand.",
+    "implication": "India has 1.04B debit cards — but that number is misleading as a credit opportunity. A large chunk are Jan Dhan accounts (zero-balance accounts opened under the government's financial inclusion scheme) that see very little activity. The real pool for first-time credit products is much smaller — focus on debit card holders who are actually transacting, not just account holders.",
     "reasoning": {
       "signals": [
         {
@@ -454,7 +455,9 @@
         }
       ],
       "chain": [
-        "The debit card market has undergone a second major purge — the 21.4M decline is the largest one-month drop since the Oct 2025 regulatory cleanup, confirming issuers have resumed inactive card removal after three months of recovery. The 1.02B base is now back to the Aug 2025 level, erasing five months of growth. The purge is concentrated in payment banks and mid-tier PSBs, signaling a targeted cleanup rather than a broad market contraction."
+        "Debit card base at 1.04B — large headline number includes substantial Jan Dhan zero-balance accounts",
+        "Jan Dhan accounts (government financial inclusion scheme) skew toward low-income, low-activity customers",
+        "Addressable credit opportunity is a fraction of total card count — active-transacting subset is the real pool"
       ]
     },
     "sourceSignals": [
@@ -472,18 +475,17 @@
     },
     "exploreAction": {
       "mode": "by_type"
-    },
-    "layer": 1
+    }
   },
   {
     "id": "dc-psb-dominance",
     "group": "dc",
     "cut": "by_type",
-    "period": "2026-04-30",
+    "period": "Mar 2026",
     "type": "insight",
-    "title": "PSB debit share at 64.2% — up 1.3pp as purge hits payment banks",
-    "body": "Public sector banks' share of debit cards outstanding stands at 64.2% in Apr 2026, up 1.3pp from 62.9% prior period. Share spiked from 62.9% in Mar 2026 to 64.2% in Apr 2026 — a 1.3pp gain, the largest one-period increase in this 16-month window. Currently at 64.2%, at the upper end of the historical range (62.8%–64.2%). Private sector banks' share of debit cards outstanding stands at 25.8% in Apr 2026, up 0.7pp from 25.1% prior period. Share spiked from 25.1% in Mar 2026 to 25.8% in Apr 2026 — a 0.7pp gain, the largest one-period increase in this 16-month window. Currently at 25.8%, near the upper end of the historical range.",
-    "implication": "PSBs gained debit share sharply as the market contracted — the 1.3pp gain is the largest one-period increase on record, confirming the Apr 2026 purge hit payment banks (down 2.3pp) harder than PSBs. The 64.2% level is 1.1pp above the Nov–Dec 2025 level of 63.1%, signaling PSBs have reclaimed all share lost in Jan–Mar 2026 and are now at their strongest position in this window. The spike is driven by differential card purging, not organic growth, confirming the cleanup is reshaping the competitive landscape. Private banks gained debit share sharply as the market contracted — the 0.7pp gain is the largest one-period increase on record, confirming the Apr 2026 purge hit PSBs and payment banks harder than privates. The 25.8% level is 0.5pp above the Nov–Dec 2025 equilibrium, signaling privates have reclaimed share lost in Jan–Mar 2026. Privates are now capturing share in both credit and debit, confirming the purge has shifted the competitive landscape in their favor.",
+    "title": "PSB banks hold 62.9% of debit cards — PSB gaining share in Mar 2026",
+    "body": "Public sector banks account for 62.9% of total debit cards outstanding in Mar 2026 (+0.1pp vs prior month). Private banks hold 25.1%. PSB banks are the fastest-growing category (+0.1pp share gain).",
+    "implication": "PSBs (government-owned banks like SBI, PNB, Bank of Baroda) hold 62.9% of debit cards, largely because of Jan Dhan — the government scheme that opened basic bank accounts for millions of low-income households. Many of these accounts have little activity. If you're using debit transaction data for credit assessment, PSB debit data needs to be treated very differently from, say, HDFC or Kotak debit customers.",
     "reasoning": {
       "signals": [
         {
@@ -500,8 +502,9 @@
         }
       ],
       "chain": [
-        "PSBs gained debit share sharply as the market contracted — the 1.3pp gain is the largest one-period increase on record, confirming the Apr 2026 purge hit payment banks (down 2.3pp) harder than PSBs. The 64.2% level is 1.1pp above the Nov–Dec 2025 level of 63.1%, signaling PSBs have reclaimed all share lost in Jan–Mar 2026 and are now at their strongest position in this window. The spike is driven by differential card purging, not organic growth, confirming the cleanup is reshaping the competitive landscape.",
-        "Private banks gained debit share sharply as the market contracted — the 0.7pp gain is the largest one-period increase on record, confirming the Apr 2026 purge hit PSBs and payment banks harder than privates. The 25.8% level is 0.5pp above the Nov–Dec 2025 equilibrium, signaling privates have reclaimed share lost in Jan–Mar 2026. Privates are now capturing share in both credit and debit, confirming the purge has shifted the competitive landscape in their favor."
+        "PSBs hold 62.9% of debit cards — primarily through Jan Dhan scheme linkage, not active acquisition",
+        "Jan Dhan portfolios skew toward low-income, low-activity accounts with thin or no transaction histories",
+        "PSB and private bank debit data require separate calibration for transaction-based credit underwriting"
       ]
     },
     "sourceSignals": [
@@ -520,18 +523,17 @@
     },
     "exploreAction": {
       "mode": "by_type"
-    },
-    "layer": 1
+    }
   },
   {
     "id": "dc-top-bank-leader",
     "group": "dc",
     "cut": "top_n",
-    "period": "2026-04-30",
+    "period": "Mar 2026",
     "type": "insight",
-    "title": "SBI holds 253.6M debit cards — top three at 39.4% share",
-    "body": "SBI holds 253.6M debit cards outstanding, Bank of Baroda 86.3M, HDFC Bank 63.1M — the three account for 403.0M cards out of 1.02B total (39.4% of market). Top three concentration tightened from 38.5% to 39.4% — a 0.9pp gain as the total market shrank from 1.04B to 1.02B cards. SBI's card base grew: 252.5M → 253.6M (+1.1M cards). Five banks shifted status: Punjab National Bank, ICICI Bank, Karnataka Bank, Karur Vysya Bank, and RBL Bank all moved from strengthening to weakening.",
-    "implication": "Debit card concentration spiked as the market contracted — the 0.9pp gain is the sharpest one-period increase in this window, driven by a 21.4M card purge that hit mid-tier banks harder than the top three. SBI added 1.1M cards while the market shrank 21.4M, confirming the purge was concentrated in mid-tier PSBs and smaller privates. The five status shifts to weakening signal widespread contraction outside the top three, confirming the market is undergoing a second cleanup wave after the Oct 2025 purge.",
+    "title": "STATE BANK OF INDIA leads DC cards at 24.2%",
+    "body": "STATE BANK OF INDIA holds 24.2% of total debit cards in Mar 2026 (+0.5% MoM). Top 5 banks account for 49.8% (-0.1pp vs prior month).",
+    "implication": "Top 5 banks hold 49.8% of debit cards. If you're using debit transaction data for credit underwriting (assessing someone's spending behaviour before giving them a loan), the quality of that data depends heavily on whether these top banks are sharing data with you. Without coverage from at least 2-3 of them, you're missing nearly half the market.",
     "reasoning": {
       "signals": [
         {
@@ -552,7 +554,9 @@
         }
       ],
       "chain": [
-        "Debit card concentration spiked as the market contracted — the 0.9pp gain is the sharpest one-period increase in this window, driven by a 21.4M card purge that hit mid-tier banks harder than the top three. SBI added 1.1M cards while the market shrank 21.4M, confirming the purge was concentrated in mid-tier PSBs and smaller privates. The five status shifts to weakening signal widespread contraction outside the top three, confirming the market is undergoing a second cleanup wave after the Oct 2025 purge."
+        "Top 5 banks hold 49.8% of debit cards — STATE BANK OF INDIA alone accounts for 24.2%",
+        "Debit transaction data coverage for underwriting depends on data-sharing with these top institutions",
+        "Without data from 2-3 of these banks, nearly half the debit market is invisible for credit decisions"
       ]
     },
     "sourceSignals": [
@@ -572,8 +576,7 @@
     "exploreAction": {
       "mode": "top_n",
       "topN": 10
-    },
-    "layer": 1
+    }
   },
   {
     "id": "gap-dc-cash-dominance",
@@ -618,8 +621,7 @@
       "trendMode": "absolute",
       "focusCard": "dc_atm"
     },
-    "exploreAction": null,
-    "layer": 2
+    "exploreAction": null
   },
   {
     "id": "gap-dc-ecom-low",
@@ -659,18 +661,17 @@
       "trendMode": "absolute",
       "focusCard": "dc_ecom"
     },
-    "exploreAction": null,
-    "layer": 2
+    "exploreAction": null
   },
   {
     "id": "infra-qr-per-pos",
     "group": "infra",
     "cut": "total",
-    "period": "2026-04-30",
+    "period": "Mar 2026",
     "type": "insight",
-    "title": "UPI QR codes at 67.3× per POS — highest ratio on record",
-    "body": "There are now 67.3 UPI QR codes for every POS terminal in Apr 2026, up 2.66 from 64.7 in Mar 2026. Ratio surged 64.7× → 67.3×, the largest single-month jump in this 16-period series — the gap has widened by 5.5× since Nov's 61.8× low.",
-    "implication": "The bifurcation has resumed. UPI QR's 9.6M-code gain in Apr dwarfed POS's 322K-unit decline, driving the ratio to a new record high. For every POS terminal deployed, there are now 67 UPI QR codes — the structural shift toward lightweight digital acceptance is accelerating. Physical infrastructure is contracting while digital infrastructure scales exponentially.",
+    "title": "India now has 65 UPI QR codes per POS terminal",
+    "body": "As of Mar 2026, there are 65 UPI QR codes (761.2M) for every POS terminal (11.8M). This ratio was 65 in the prior month. UPI QR grew +0.9% MoM vs POS terminals at +0.9% MoM — digital acceptance infrastructure is outpacing hardware deployment.",
+    "implication": "There are 65 UPI QR codes for every POS (card swipe) machine in India. This means the typical small merchant — kirana store, auto driver, vegetable vendor — accepts payments through a QR code on their phone, not a card machine. Any credit product designed for small merchants (small business loans, BNPL for vendors) needs to work over UPI QR, not just over POS terminals.",
     "reasoning": {
       "signals": [
         {
@@ -691,7 +692,9 @@
         }
       ],
       "chain": [
-        "The bifurcation has resumed. UPI QR's 9.6M-code gain in Apr dwarfed POS's 322K-unit decline, driving the ratio to a new record high. For every POS terminal deployed, there are now 67 UPI QR codes — the structural shift toward lightweight digital acceptance is accelerating. Physical infrastructure is contracting while digital infrastructure scales exponentially."
+        "65 UPI QR codes per POS terminal — QR acceptance vastly outnumbers hardware deployment",
+        "Typical small merchant (kirana, auto, vendor) accepts via QR only — no POS terminal",
+        "Credit products for small merchants (BNPL, business loans) must work over UPI QR to reach this majority"
       ]
     },
     "sourceSignals": [
@@ -710,18 +713,17 @@
     },
     "exploreAction": {
       "mode": "by_type"
-    },
-    "layer": 1
+    }
   },
   {
     "id": "infra-pos-streak",
     "group": "infra",
     "cut": "total",
-    "period": "2026-04-30",
+    "period": "Mar 2026",
     "type": "insight",
-    "title": "POS terminal growth streak reset to zero — trend break confirmed",
-    "body": "POS terminals have grown for 0 consecutive periods in Apr 2026, down from 4 periods in Mar 2026. Streak reset from 4 periods to 0 — the four-month recovery run that began in Dec 2025 has ended, and the network is now contracting again.",
-    "implication": "The streak reset is the highest-signal moment in this dataset. The four-month stabilisation was not durable expansion — it was a pause before another leg down. The network has now contracted in 2 of the last 6 months, with both declines erasing prior gains. Physical POS infrastructure is in structural retreat.",
+    "title": "POS terminals: 4 consecutive months of growth — 11.8M deployed",
+    "body": "POS terminals reached 11.8M in Mar 2026 (+2.6% QoQ vs Q3 FY26), the 4 consecutive months of growth. Physical acceptance infrastructure continues to expand.",
+    "implication": "Every new POS machine deployed (11.8M and growing) is a merchant who starts building a transaction history — how much they sell, how often, which days. That data is exactly what lenders use to assess working capital loans (short-term business credit based on daily sales). More POS terminals means more merchants who can be lent to based on their actual business performance.",
     "reasoning": {
       "signals": [
         {
@@ -738,7 +740,9 @@
         }
       ],
       "chain": [
-        "The streak reset is the highest-signal moment in this dataset. The four-month stabilisation was not durable expansion — it was a pause before another leg down. The network has now contracted in 2 of the last 6 months, with both declines erasing prior gains. Physical POS infrastructure is in structural retreat."
+        "POS terminals growing for 4 months — now at 11.8M",
+        "Each new POS terminal generates merchant transaction history (sales volume, frequency, ticket size)",
+        "Growing POS base expands pool of merchants underwritable for working capital or merchant cash advances"
       ]
     },
     "sourceSignals": [
@@ -756,18 +760,17 @@
     },
     "exploreAction": {
       "mode": "by_type"
-    },
-    "layer": 1
+    }
   },
   {
     "id": "infra-upi-vs-bharat-qr",
     "group": "infra",
     "cut": "total",
-    "period": "2026-04-30",
+    "period": "Mar 2026",
     "type": "insight",
-    "title": "Bharat QR at 5.62M — down 1.1M in 12 months, terminal decline",
-    "body": "Bharat QR code deployment stands at 5,616,038 in Apr 2026, down 16,989 codes from Mar's 5,633,027 — the lowest level on record. Fell 5,897,360 → 5,633,027 → 5,616,038 over three months, losing 281,322 codes since Feb — the network is now 130× smaller than UPI QR's 731M codes. UPI QR code deployment reached 770,811,461 in Apr 2026, up 9,594,067 codes from 761,217,394 in Mar 2026. Rose 761,217,394 → 770,811,461, accelerating from Mar's 7.0M-code gain — the 9.6M monthly increase is 37% larger and marks the strongest expansion since Feb's 15.8M-code surge.",
-    "implication": "Bharat QR is in terminal decline — the network lost 281K codes in two months, erasing Feb's 54K gain, and is now down 1.1M codes (15.7%) year-on-year. The standard has no merchant traction against UPI QR and will continue shrinking as banks abandon the failed infrastructure. UPI QR deployment has re-accelerated after Mar's slowdown, confirming the structural expansion is intact. The network is adding 9–10M codes per month, on track to exceed 780M by May 2026. The 9.6M gain in Apr is the second-largest in this 16-period series, and it comes as POS terminals contract — the bifurcation between digital and physical acceptance infrastructure is widening.",
+    "title": "UPI QR codes are 135x Bharat QR in scale — 761.2M vs 5.63M",
+    "body": "As of Mar 2026, there are 761.2M UPI QR codes deployed vs 5.63M Bharat QR codes — a 135x gap. UPI QR grew +0.9% MoM vs Bharat QR at -4.5% MoM. UPI has decisively won the QR standard battle in India.",
+    "implication": "Bharat QR was an earlier QR code standard that lost out to UPI QR — which is now 135 times bigger. Building any credit product (credit on UPI, BNPL) on Bharat QR today would be like building on a platform that merchants have already abandoned. UPI QR is the only QR standard worth designing for.",
     "reasoning": {
       "signals": [
         {
@@ -788,8 +791,9 @@
         }
       ],
       "chain": [
-        "Bharat QR is in terminal decline — the network lost 281K codes in two months, erasing Feb's 54K gain, and is now down 1.1M codes (15.7%) year-on-year. The standard has no merchant traction against UPI QR and will continue shrinking as banks abandon the failed infrastructure.",
-        "UPI QR deployment has re-accelerated after Mar's slowdown, confirming the structural expansion is intact. The network is adding 9–10M codes per month, on track to exceed 780M by May 2026. The 9.6M gain in Apr is the second-largest in this 16-period series, and it comes as POS terminals contract — the bifurcation between digital and physical acceptance infrastructure is widening."
+        "UPI QR at 761.2M vs Bharat QR at 5.63M — a 135x gap",
+        "Bharat QR was an earlier standard; merchants have consolidated on UPI QR as the accepted norm",
+        "Building payments or lending infrastructure on Bharat QR rails is operationally unviable at any meaningful merchant scale"
       ]
     },
     "sourceSignals": [
@@ -806,18 +810,17 @@
       "trendMode": "absolute",
       "focusCard": "upi_qr"
     },
-    "exploreAction": null,
-    "layer": 1
+    "exploreAction": null
   },
   {
     "id": "infra-top-bank-pos",
     "group": "infra",
     "cut": "top_n",
-    "period": "2026-04-30",
+    "period": "Mar 2026",
     "type": "insight",
-    "title": "RBL leads POS at 2.73M terminals — Axis at 2.58M, HDFC surges",
-    "body": "RBL Bank operates 2,728,601 POS terminals in Apr 2026, the largest deployment among 63 banks, followed by Axis (2,579,341) and HDFC (1,813,022). RBL rose to 2.73M from Mar's 2.65M, adding 83K terminals, while Axis fell 23K to 2.58M and HDFC surged 240K to 1.81M — RBL and HDFC are strengthening, Axis is strengthening. HDFC shifted from weakening to strengthening; ICICI and Central Bank shifted from strengthening to weakening.",
-    "implication": "HDFC surged 240K terminals in one month — the largest single-bank gain on record — while RBL added 83K and Axis contracted 23K. The top three control 64.8% of all terminals, unchanged from Mar, but HDFC's surge signals aggressive merchant acquisition. ICICI and Central Bank are now contracting, confirming smaller private banks are losing ground to the top three.",
+    "title": "RBL BANK LTD leads POS terminal deployment at 22.5% market share",
+    "body": "RBL BANK LTD has deployed 2.65M POS terminals in Mar 2026, accounting for 22.5% of total (+9.5% MoM). Top 5 banks hold 93.1% of all POS terminals (+0.1pp vs prior month). Notable: RBL BANK LTD moved from #2 to #1.",
+    "implication": "5 banks own 93.1% of all POS machines in India. That also means merchant sales data — what shopkeepers sell, how much, how often — sits largely with those same 5 banks. If you want to lend to merchants and need their sales history to decide how much credit to give, you either need a data partnership with one of these banks or an alternate source like GST returns or UPI transaction feeds.",
     "reasoning": {
       "signals": [
         {
@@ -834,7 +837,9 @@
         }
       ],
       "chain": [
-        "HDFC surged 240K terminals in one month — the largest single-bank gain on record — while RBL added 83K and Axis contracted 23K. The top three control 64.8% of all terminals, unchanged from Mar, but HDFC's surge signals aggressive merchant acquisition. ICICI and Central Bank are now contracting, confirming smaller private banks are losing ground to the top three."
+        "Top 5 banks own 93.1% of POS terminals — merchant acquiring infrastructure is highly concentrated",
+        "Merchant transaction data (sales history for credit underwriting) sits with the same institutions",
+        "Merchant credit without data partnerships with these banks requires alternate sources — GST returns, UPI transaction feeds"
       ]
     },
     "sourceSignals": [
@@ -853,18 +858,17 @@
     "exploreAction": {
       "mode": "top_n",
       "topN": 10
-    },
-    "layer": 1
+    }
   },
   {
     "id": "gap-bharat-qr-contraction",
     "group": "infra",
     "cut": "total",
-    "period": "2026-04-30",
+    "period": "Mar 2026",
     "type": "gap",
-    "title": "Bharat QR at 5.62M — down 1.1M in 12 months, terminal decline",
-    "body": "Bharat QR code deployment stands at 5,616,038 in Apr 2026, down 16,989 codes from Mar's 5,633,027 — the lowest level on record. Fell 5,897,360 → 5,633,027 → 5,616,038 over three months, losing 281,322 codes since Feb — the network is now 130× smaller than UPI QR's 731M codes.",
-    "implication": "Bharat QR is in terminal decline — the network lost 281K codes in two months, erasing Feb's 54K gain, and is now down 1.1M codes (15.7%) year-on-year. The standard has no merchant traction against UPI QR and will continue shrinking as banks abandon the failed infrastructure.",
+    "title": "Gap: Bharat QR contracting -4.5% MoM — 5.63M vs 761.2M UPI QR",
+    "body": "Bharat QR codes fell 4.5% MoM in Mar 2026, now at 5.63M — compared to 761.2M UPI QR codes (135x gap). Merchant preference has consolidated on UPI QR as the dominant QR acceptance standard.",
+    "implication": "Bharat QR is shrinking 4.5% every month — merchants are removing it. If any part of your lending or payments product depends on Bharat QR acceptance, that's a real problem. Move everything to UPI QR. There is no viable future for Bharat QR as a payments or credit infrastructure.",
     "reasoning": {
       "signals": [
         {
@@ -881,7 +885,9 @@
         }
       ],
       "chain": [
-        "Bharat QR is in terminal decline — the network lost 281K codes in two months, erasing Feb's 54K gain, and is now down 1.1M codes (15.7%) year-on-year. The standard has no merchant traction against UPI QR and will continue shrinking as banks abandon the failed infrastructure."
+        "Bharat QR declining 4.5% MoM — merchants are actively removing it, not seasonal dip",
+        "UPI QR at 761.2M vs Bharat QR at 5.63M — gap structural and widening",
+        "Any payments or lending product built on Bharat QR infrastructure faces accelerating merchant disengagement"
       ]
     },
     "sourceSignals": [
@@ -897,8 +903,7 @@
       "trendMode": "mom",
       "focusCard": "bharat_qr"
     },
-    "exploreAction": null,
-    "layer": 1
+    "exploreAction": null
   },
   {
     "id": "gap-atm-offsite-decline",
@@ -943,18 +948,17 @@
       "trendMode": "mom",
       "focusCard": "atm_offsite"
     },
-    "exploreAction": null,
-    "layer": 1
+    "exploreAction": null
   },
   {
     "id": "gap-pos-concentration",
     "group": "infra",
     "cut": "top_n",
-    "period": "2026-04-30",
+    "period": "Mar 2026",
     "type": "gap",
-    "title": "RBL leads POS at 2.73M terminals — Axis at 2.58M, HDFC surges",
-    "body": "RBL Bank operates 2,728,601 POS terminals in Apr 2026, the largest deployment among 63 banks, followed by Axis (2,579,341) and HDFC (1,813,022). RBL rose to 2.73M from Mar's 2.65M, adding 83K terminals, while Axis fell 23K to 2.58M and HDFC surged 240K to 1.81M — RBL and HDFC are strengthening, Axis is strengthening. HDFC shifted from weakening to strengthening; ICICI and Central Bank shifted from strengthening to weakening.",
-    "implication": "HDFC surged 240K terminals in one month — the largest single-bank gain on record — while RBL added 83K and Axis contracted 23K. The top three control 64.8% of all terminals, unchanged from Mar, but HDFC's surge signals aggressive merchant acquisition. ICICI and Central Bank are now contracting, confirming smaller private banks are losing ground to the top three.",
+    "title": "Gap: Top 5 banks hold 93.1% of POS terminals — acquiring market is highly concentrated",
+    "body": "In Mar 2026, the top 5 banks account for 93.1% of all deployed POS terminals in India. RBL BANK LTD leads at 22.5% market share. All remaining banks combined share less than 6.9% of merchant acquiring infrastructure.",
+    "implication": "93.1% of all POS machines in India are owned by just 5 banks — and so is most of the merchant transaction data that comes with them. If you're building merchant credit products (loans to shopkeepers or small businesses) and don't have data partnerships with these top banks, you're working with an incomplete picture. Alternate sources — GST filings, UPI transaction data — can partially fill this gap.",
     "reasoning": {
       "signals": [
         {
@@ -967,7 +971,9 @@
         }
       ],
       "chain": [
-        "HDFC surged 240K terminals in one month — the largest single-bank gain on record — while RBL added 83K and Axis contracted 23K. The top three control 64.8% of all terminals, unchanged from Mar, but HDFC's surge signals aggressive merchant acquisition. ICICI and Central Bank are now contracting, confirming smaller private banks are losing ground to the top three."
+        "Top 5 banks own 93.1% of POS terminals — merchant acquiring infrastructure highly concentrated",
+        "Merchant transaction data (sales history needed for credit underwriting) controlled by the same 5 institutions",
+        "Merchant credit underwriting without data partnerships with these banks requires alternates — GST filings, UPI feeds"
       ]
     },
     "sourceSignals": [
@@ -985,7 +991,6 @@
     "exploreAction": {
       "mode": "top_n",
       "topN": 5
-    },
-    "layer": 1
+    }
   }
 ]
