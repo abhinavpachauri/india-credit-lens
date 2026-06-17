@@ -92,6 +92,20 @@ def _signal_type(sig: dict) -> str:
     return METHOD_TYPE.get(method, "yoy")
 
 
+def _range_stats(vals: list[float]) -> tuple | None:
+    """Compute (min, max, p25, p75, count) over a value list. Returns None when
+    empty; p25/p75 are None when there are too few points for quartiles."""
+    if not vals:
+        return None
+    s = sorted(vals)
+    n = len(s)
+    if n >= 4:
+        import statistics
+        q = statistics.quantiles(s, n=4)   # [p25, median, p75]
+        return s[0], s[-1], q[0], q[2], n
+    return s[0], s[-1], None, None, n
+
+
 def _range_position(value: float, p25: float | None, p75: float | None,
                     min_v: float | None, max_v: float | None) -> str:
     if p25 is None or p75 is None:
@@ -138,14 +152,17 @@ def _scalar_payload(conn: sqlite3.Connection, sig_id: str, sig: dict,
 
     value, unit, status, _ = row[0], row[1], row[2], row[3]
 
-    # Full period history — all available values in chronological order
+    # Period history THROUGH the eval period — never future periods. An eval is
+    # a point-in-time view; when re-running an old period after newer data has
+    # landed, an unbounded query would leak future values into the trajectory and
+    # confuse which month is "current".
     history_rows = conn.execute(
         """SELECT period, value FROM signals
            WHERE pipeline=? AND metric_id=?
              AND entity_type=? AND entity_id=?
-             AND value IS NOT NULL
+             AND value IS NOT NULL AND period <= ?
            ORDER BY period""",
-        (pipeline, sig_id, entity_type, entity_id)
+        (pipeline, sig_id, entity_type, entity_id, period)
     ).fetchall()
 
     # Prior period value (still needed for delta)
@@ -157,14 +174,10 @@ def _scalar_payload(conn: sqlite3.Connection, sig_id: str, sig: dict,
 
     delta = (value - prior_value) if prior_value is not None else None
 
-    # Range stats
-    rng = conn.execute(
-        """SELECT min_value, max_value, p25_value, p75_value, period_count
-           FROM metric_ranges
-           WHERE metric_id=? AND pipeline=?
-             AND entity_type=? AND entity_id=?""",
-        (sig_id, pipeline, entity_type, entity_id)
-    ).fetchone()
+    # Range stats — computed over the same period-bounded history, so the period
+    # count and min/max/position reflect the eval period, not the global series.
+    _hv = [v for _, v in history_rows if v is not None]
+    rng = _range_stats(_hv)
 
     sig_type = _signal_type(sig)
     title    = sig.get("title", sig_id)
