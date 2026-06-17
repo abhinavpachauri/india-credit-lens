@@ -522,6 +522,23 @@ def main():
         print(out)
         print(err, file=sys.stderr)
 
+    # ── Check 2f: signal freshness — signals.db == fresh recompute from CSV ────
+    # Catches stale rows when the CSV is corrected but not every period is
+    # re-appended (root cause of the FY-acceleration phantom jump).
+    passed, out, err = run_check(
+        "signal_freshness",
+        [sys.executable, str(ANALYSIS / "check_signal_freshness.py"), "--pipeline", "sibc"],
+        cwd=REPO_ROOT,
+    )
+    notes = one_line_summary(out, err, passed)
+    fresh_line = [l.strip() for l in (out + err).splitlines() if "signals.db" in l]
+    if fresh_line:
+        notes = fresh_line[0].lstrip("✓✗ ").strip()[:60]
+    results.append(("2f. signal freshness (DB vs CSV)", passed, notes))
+    if not passed:
+        print(out)
+        print(err, file=sys.stderr)
+
     # ── Stage 5.5: generate UI annotation JSON from evaluation output ────────
     report_script = ANALYSIS / "generate_analysis_report.py"
     if report_script.exists():

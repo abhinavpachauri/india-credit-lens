@@ -241,6 +241,18 @@ def check_signal_history():
     return passed, summary or (out[:60] if out else "passed")
 
 
+def check_signal_freshness():
+    """Check 5b2: signals.db == a fresh recompute from the current CSV (atm_pos).
+    Catches stale rows left behind when the CSV changes but not every period is
+    re-appended (root cause of the FY-acceleration phantom jump)."""
+    passed, out = run(
+        "signal_freshness",
+        [sys.executable, str(ANALYSIS / "check_signal_freshness.py"), "--pipeline", "atm_pos"],
+    )
+    line = next((l.strip() for l in out.splitlines() if "signals.db" in l), "")
+    return passed, (line.lstrip("✓✗ ").strip()[:60] if line else (out[:60] if out else "passed"))
+
+
 def latest_db_period(pipeline):
     import sqlite3
     db = ANALYSIS / "signals" / "signals.db"
@@ -392,6 +404,14 @@ def main():
         all_results.append(("5b. Signal history integrity", passed, note))
     else:
         all_results.append(("5b. Signal history integrity", None, "skipped — upstream failures"))
+
+    # Signal freshness — DB rows must match a fresh recompute from the CSV
+    prior_ok = all(r[1] is True or r[1] is None for r in all_results)
+    if prior_ok:
+        passed, note = check_signal_freshness()
+        all_results.append(("5b2. Signal freshness (DB vs CSV)", passed, note))
+    else:
+        all_results.append(("5b2. Signal freshness (DB vs CSV)", None, "skipped — upstream failures"))
 
     # Stage 5c: system model (skeleton regen + v3.0 validation)
     prior_ok = all(r[1] is True or r[1] is None for r in all_results)

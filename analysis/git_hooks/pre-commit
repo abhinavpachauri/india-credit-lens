@@ -1,20 +1,34 @@
 #!/usr/bin/env bash
 # India Credit Lens pre-commit hook.
-# Guards against committing stale derived artifacts (2026-06-13 review finding #1):
-# a model/source edit must not be committed without regenerating the dependent
-# deterministic S3/projection files. Only runs when a relevant source OR derived
-# file is staged — unrelated commits (web/, docs) are not slowed down.
+# Two deterministic freshness guards. Each only runs when its relevant files are
+# staged, so unrelated commits (web/, docs) are not slowed down:
+#
+#   1. Derived chain (S1->S3): a model/source edit must not be committed without
+#      regenerating the dependent deterministic system_state/opportunity files.
+#      (2026-06-13 review finding #1.)
+#   2. signals.db freshness: the computed signal DB must match a fresh recompute
+#      from the consolidated CSVs — catches stale rows left when a CSV is
+#      corrected but not every period is re-appended. (2026-06 FY-acceleration
+#      phantom jump.)
 #
 # Install: ln -sf ../../analysis/git_hooks/pre-commit .git/hooks/pre-commit
-set -euo pipefail
+set -uo pipefail
 REPO_ROOT="$(git rev-parse --show-toplevel)"
+STAGED="$(git diff --cached --name-only)"
 
-# Files whose change can invalidate the derived chain.
-TRIGGER_RE='(system_model\.json|ontology/(channels|concepts)\.json|signals/registry\.json|skeleton_profile\.(json|md)|cross_source/composition\.json|system_state_.*\.json|opportunities_.*\.json|candidates\.json|opportunities_feed\.json)'
+# Sources/derived files that can invalidate the deterministic S1->S3 chain.
+DERIVED_RE='(system_model\.json|ontology/(channels|concepts)\.json|signals/registry\.json|skeleton_profile\.(json|md)|cross_source/composition\.json|system_state_.*\.json|opportunities_.*\.json|candidates\.json|opportunities_feed\.json)'
 
-if git diff --cached --name-only | grep -Eq "$TRIGGER_RE"; then
+# Sources that can stale signals.db (the computed signal fact table).
+SIGNAL_RE='(rbi_sibc_consolidated\.csv|atm_pos_consolidated\.csv|signals/registry\.json|signals/compute/.*\.py|signals\.db)'
+
+rc=0
+if echo "$STAGED" | grep -Eq "$DERIVED_RE"; then
   echo "[pre-commit] source/derived files staged — checking derived-artifact freshness…"
-  python3 "$REPO_ROOT/analysis/check_derived_fresh.py" --quiet
-else
-  exit 0
+  python3 "$REPO_ROOT/analysis/check_derived_fresh.py" --quiet || rc=$?
 fi
+if echo "$STAGED" | grep -Eq "$SIGNAL_RE"; then
+  echo "[pre-commit] signal sources staged — checking signals.db freshness (recompute from CSV)…"
+  python3 "$REPO_ROOT/analysis/check_signal_freshness.py" --quiet || rc=$?
+fi
+exit $rc
