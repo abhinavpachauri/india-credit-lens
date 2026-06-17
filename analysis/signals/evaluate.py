@@ -32,7 +32,7 @@ PROMPTS_DIR = Path(__file__).parent / "prompts"
 EVALS_DIR   = Path(__file__).parent / "evaluations"
 
 MODEL          = "claude-sonnet-4-5-20250929"
-PROMPT_VERSION = "1.5"
+PROMPT_VERSION = "1.6"
 # CLI is fragile with large outputs; API is reliable — larger chunks = fewer calls
 CHUNK_SIZE_CLI = 8
 CHUNK_SIZE_API = 12
@@ -269,7 +269,8 @@ def _load_prior_eval(pipeline: str, prior_period: str) -> dict:
 
 def _build_prior_eval_block(prior_period: str,
                              domain_signal_ids: list[str],
-                             prior_signals: dict) -> str:
+                             prior_signals: dict,
+                             pipeline: str = "") -> str:
     """
     Build the PRIOR PERIOD CONTEXT section for the user prompt.
     Only includes signals that are both in this domain's chunk and have a prior eval entry.
@@ -279,10 +280,14 @@ def _build_prior_eval_block(prior_period: str,
     if not relevant:
         return ""
 
+    # Show the data month, not the RBI release date (see query.display_date).
+    from .query import display_date
+    prior_label = display_date(prior_period, pipeline) if pipeline else prior_period
+
     lines = [
         "",
         "===========================================================",
-        f"PRIOR PERIOD CONTEXT ({prior_period})",
+        f"PRIOR PERIOD CONTEXT ({prior_label})",
         "===========================================================",
         "These narratives describe the previous period. Note meaningful changes.",
         "",
@@ -315,7 +320,7 @@ def _evaluate_chunk(pipeline: str, period: str, domain: str, chunk_idx: int,
     """
     prior_eval_block = ""
     if prior_period and prior_signals:
-        prior_eval_block = _build_prior_eval_block(prior_period, chunk_ids, prior_signals)
+        prior_eval_block = _build_prior_eval_block(prior_period, chunk_ids, prior_signals, pipeline)
 
     cache_key_obj = {
         "pipeline":       pipeline,

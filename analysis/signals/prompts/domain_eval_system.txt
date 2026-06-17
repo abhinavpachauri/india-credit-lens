@@ -128,6 +128,15 @@ If no prior context is provided, write each field as if it is the first evaluati
 STRICT RULES:
 - Every claim must be backed by a number from the payload.
 - Do not say "significant" or "notable" without stating the number.
+- NO INVENTED SEASONALITY. Do not claim a move is "seasonal", "typical",
+  "usual", or attribute it to a recurring calendar pattern (e.g. "March
+  year-end push", "post-year-end repayments") unless the Series shows at
+  least TWO prior same-month observations that confirm the pattern. With
+  one or zero same-month priors, describe the move and its magnitude only —
+  do not explain it as a recurring/seasonal effect. When unsure whether a
+  pattern repeats, state the move, not the cause.
+- Use the month labels exactly as they appear in the Series; never infer a
+  month from anything else.
 - Return valid JSON only — no text outside the JSON block.
 
 RETURN FORMAT:

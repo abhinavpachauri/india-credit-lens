@@ -6,8 +6,46 @@ from signals.db and formats them into a compact text payload per domain.
 """
 
 from __future__ import annotations
+import json
 import sqlite3
+from functools import lru_cache
 from pathlib import Path
+
+
+# ── Period label translation ──────────────────────────────────────────────────
+# SIBC keys signals.db by `dataDate` (the RBI fortnightly *release* date), which
+# can fall ~1 month after the data month it reports. The compute layer maps
+# dataDate→csv_date to pull the right *value*, but the DB period key stays the
+# release date. When we render a period as a human month for the LLM we must
+# show the DATA month (csv_date), not the release month — otherwise the model
+# (and every downstream narrative) is off by one. Other pipelines key on the
+# true data date, so this is an identity no-op for them.
+
+_TIMELINES: dict[str, Path] = {
+    "sibc": Path(__file__).resolve().parent.parent / "rbi_sibc" / "timeline.json",
+}
+
+
+@lru_cache(maxsize=None)
+def _datadate_to_csvdate(pipeline: str) -> dict[str, str]:
+    path = _TIMELINES.get(pipeline)
+    if not path or not path.exists():
+        return {}
+    try:
+        data = json.loads(path.read_text())
+    except Exception:
+        return {}
+    return {
+        p["dataDate"]: p["csv_date"]
+        for p in data.get("periods", [])
+        if p.get("dataDate") and p.get("csv_date")
+    }
+
+
+def display_date(period: str, pipeline: str) -> str:
+    """Translate a stored DB period key (release date) to the data month-end
+    that should be SHOWN. No-op when the period is not in the lag map."""
+    return _datadate_to_csvdate(pipeline).get(period, period)
 
 
 # ── Signal type → prompt type label ──────────────────────────────────────────
@@ -181,8 +219,9 @@ def _scalar_payload(conn: sqlite3.Connection, sig_id: str, sig: dict,
             return f"{v:,.1f}"
 
         def _fmt_p(p: str) -> str:
-            try:    return datetime.strptime(p, "%Y-%m-%d").strftime("%b %Y")
-            except: return p
+            disp = display_date(p, pipeline)
+            try:    return datetime.strptime(disp, "%Y-%m-%d").strftime("%b %Y")
+            except: return disp
 
         series = " → ".join(
             f"{_fmt_p(p)}: {_fmt_v(v)}" for p, v in history_rows
