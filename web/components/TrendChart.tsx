@@ -91,10 +91,13 @@ export default function TrendChart({
   const hasHighlight = (highlightConfig?.highlight?.length ?? 0) > 0;
   const highlightSet = new Set(highlightConfig?.highlight ?? []);
 
+  // In intelligence mode the annotation governs which series show; manual
+  // legend toggles (`hidden`) only apply in explore mode. This prevents a
+  // highlighted series from being suppressed by a stale prior deselection.
   const legendItems = activeNames.map((name, i) => ({
     label:  name,
     color:  pickColor(name, i),
-    active: !hidden.has(name) && (!hasHighlight || highlightSet.has(name)),
+    active: hasHighlight ? highlightSet.has(name) : !hidden.has(name),
   }));
 
   const toggleSeries = (name: string) =>
@@ -166,7 +169,9 @@ export default function TrendChart({
           />
           <Tooltip content={<CustomTooltip />} />
           {activeNames.map((name, i) => {
-            if (hidden.has(name)) return null;
+            // Explore mode honours manual legend toggles; intelligence mode does
+            // not — the annotation highlight decides visibility (below).
+            if (!hasHighlight && hidden.has(name)) return null;
             // When annotation highlights specific series, completely hide all others —
             // this lets the Y-axis auto-scale to only the relevant data
             if (hasHighlight && !highlightSet.has(name)) return null;
