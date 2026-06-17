@@ -77,8 +77,11 @@ def sync_current_status_from_db(conn, registry: dict) -> int:
     for metric_id, period in latest.items():
         if metric_id not in registry["signals"]:
             continue
+        # entity_type='fy_yoy' rows are auxiliary component rates (e.g. the two
+        # FY-end YoY values behind an acceleration), not status-bearing — exclude
+        # them so they don't skew the roll-up away from the primary metric status.
         statuses = [r[0] for r in conn.execute(
-            "SELECT status FROM signals WHERE metric_id=? AND period=?", (metric_id, period)
+            "SELECT status FROM signals WHERE metric_id=? AND period=? AND entity_type != 'fy_yoy'", (metric_id, period)
         ).fetchall() if r[0] not in ("unknown", "absent", "pending")]
         if not statuses:
             continue

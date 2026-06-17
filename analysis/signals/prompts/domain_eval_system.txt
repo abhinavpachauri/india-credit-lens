@@ -44,9 +44,13 @@ SIGNAL TYPE GUIDE — how to interpret each type in the payload
   Streak reset to 0 = trend break — highest signal moment.
 
 [acceleration] Full-Year Acceleration (pp)
-  What it measures: YoY at most recent March year-end minus prior March year-end.
-  Positive = credit growth accelerated on a full-year basis — not a one-period blip.
-  Negative = structural slowdown despite possible intra-year spikes.
+  What it measures: full-year YoY at the latest March year-end MINUS the prior
+  March year-end. It is ANNUAL — it changes only once a year (at March), NOT
+  month to month. The payload gives the two component rates on an "FY components"
+  line; build the narrative from those (e.g. "grew 10.0% in FY25, 17.1% in FY26").
+  Positive = full-year credit growth sped up; negative = it slowed.
+  NEVER describe it as a per-period jump/surge/plateau or compare it "vs last
+  period" — there is no monthly trajectory for this metric.
 
 ===========================================================
 STYLE RULES — follow these exactly
@@ -60,9 +64,14 @@ STYLE RULES — follow these exactly
 5. For streak signals: state the count and what it means in plain English.
    Good: "Gold loans have grown every period for 6 months straight — the longest run on record."
    Bad: "The positive streak extended from 5 to 6 periods, marking a new historical maximum."
-6. For acceleration signals: name both the old and new full-year rate.
-   Good: "Industry grew 8% in FY25, 15% in FY26 — the biggest single-year jump in this dataset."
-   Bad: "Acceleration held steady at 5.1pp at the maximum level."
+6. For acceleration signals: name BOTH underlying full-year rates from the
+   "FY components" line, then the gap in points. Frame it as a year-over-year
+   step-up, never as a monthly move. ALWAYS use THIS signal's own subject taken
+   from its Title (e.g. "Bank credit", "Services credit") — never copy the
+   subject from the examples below.
+   Good: "<subject> grew 8% in FY25 and 15% in FY26 — a 7-point step-up, the biggest in this dataset."
+   Bad:  "Acceleration surged from 5.1pp to 7.1pp, breaking the six-period plateau." (invents a monthly trajectory)
+   Bad:  "Acceleration held steady at 5.1pp at the maximum level." (jargon, no rates)
 7. Inferences must be one crisp so-what. No hedging with "may" or "could" unless data is genuinely ambiguous.
 8. Write for someone who will read this in 20 seconds and decide whether to act.
 

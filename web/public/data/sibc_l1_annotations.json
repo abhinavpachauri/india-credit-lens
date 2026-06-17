@@ -1,30 +1,16 @@
 {
   "pipeline": "sibc",
   "period": "2026-05-29",
-  "generated_at": "2026-06-15T08:57:32",
+  "generated_at": "2026-06-17T20:48:23",
   "sections": {
     "bankCredit": {
       "insights": [
         {
-          "id": "sibc-bank-credit-abs",
-          "layer": 1,
-          "title": "Bank credit at ₹212.1L Cr — first decline in 6 periods",
-          "body": "Total bank credit fell to ₹212.1 lakh crore in April 2026, down ₹1.5 lakh crore from the March peak of ₹213.6 lakh crore. Volume contracted ₹213.6L Cr → ₹212.1L Cr, the first month-on-month decline after five consecutive months of expansion from ₹178.7L Cr in January 2025.",
-          "implication": "This is the first reversal in the upward trajectory since the dataset began — watch whether this is a one-month correction or the start of a cooling cycle. Banks remain near record deployment levels, but momentum has broken.",
-          "preferredMode": "absolute",
-          "effect": {
-            "highlight": [
-              "Bank Credit"
-            ]
-          },
-          "claim_type": "data"
-        },
-        {
           "id": "sibc-bank-credit-fy-acceleration",
           "layer": 1,
-          "title": "FY26 acceleration jumps to 7.1pp — new record high",
-          "body": "Bank credit growth accelerated 7.1 percentage points from FY25 to FY26, the highest acceleration in this dataset. Acceleration surged from 5.1pp → 7.1pp, a 2.0 point jump in a single period after holding flat at 5.1pp for six consecutive months.",
-          "implication": "The structural shift into a higher growth regime has intensified — this is not just sustained momentum but a sharp re-acceleration. Banks are deploying capital faster than at any point in this window, signaling either strong demand or aggressive supply-side push.",
+          "title": "Bank credit grew 10% in FY25, 17% in FY26 — 7-point step-up",
+          "body": "Bank credit grew 10.0% in FY25 and 17.1% in FY26, a 7.1 percentage point acceleration. This is the largest full-year step-up in the dataset, marking a sharp inflection from the prior year's single-digit growth.",
+          "implication": "The credit cycle has decisively turned. Lenders who scaled origination capacity in FY25 are now capturing outsized share; those who lagged face a widening competitive gap.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -36,9 +22,9 @@
         {
           "id": "sibc-bank-credit-fy-delta",
           "layer": 1,
-          "title": "FY26 credit addition hits ₹31.2L Cr — largest on record",
-          "body": "Banks added ₹31.2 lakh crore in absolute credit during FY26, the maximum annual expansion in this dataset. The FY26 addition rose from ₹29.6L Cr → ₹31.2L Cr, an increase of ₹1.6 lakh crore over the prior reading.",
-          "implication": "This is the largest single-year credit creation on record, surpassing the prior peak by ₹1.6 lakh crore. Banks have scaled up lending capacity and are deploying it at unprecedented levels — a clear signal of institutional confidence or policy-driven expansion.",
+          "title": "Banks deployed ₹31.2L Cr in FY26 — highest annual add on record",
+          "body": "Banks deployed ₹31.2L Cr of net new credit in FY26, the highest annual addition in this window. This figure has held constant across all seven periods in the dataset, as it reflects the full-year tally locked at March 2026 year-end.",
+          "implication": "The system added more credit in one year than in any prior period tracked here. Underwriting standards and portfolio concentration risk deserve close scrutiny at this scale.",
           "preferredMode": "absolute",
           "effect": {
             "highlight": [
@@ -50,9 +36,9 @@
         {
           "id": "sibc-bank-credit-yoy",
           "layer": 1,
-          "title": "Bank credit YoY holds at 16.0% — near upper range",
-          "body": "Bank credit grew 16.0% year-on-year in April 2026, effectively flat from the prior period's 16.1%. Growth edged down 0.08 points from 16.1% → 16.0%, remaining at the upper end of the historical range after accelerating from 11.0% in March 2025.",
-          "implication": "Growth has plateaued at the highest level in this window — the acceleration phase may be complete. If this holds, banks are sustaining a high-growth equilibrium rather than continuing to accelerate.",
+          "title": "Bank credit YoY slowed to 16.0% — down 1.1pp from March peak",
+          "body": "Bank credit grew 16.0% year-on-year in April 2026, down from 17.1% in March 2026. Growth decelerated 17.1% → 16.0%, the first slowdown after a four-period acceleration from 10.0% in March 2025.",
+          "implication": "The March year-end surge has given way to a modest cooling. The 16.0% rate still sits at the top of the historical range, but the trajectory has turned — watch for further deceleration if April's absolute decline extends into May.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -64,9 +50,9 @@
         {
           "id": "sibc-food-credit-abs",
           "layer": 1,
-          "title": "Food credit surges to ₹1.04L Cr — new all-time high",
-          "body": "Food credit outstanding jumped to ₹103,915 crore in April 2026, the highest level on record. Volume spiked ₹70,271 Cr → ₹103,915 Cr, a ₹33,644 crore increase in one month, reversing the prior period's decline from ₹82,643 Cr.",
-          "implication": "Food credit has reversed its post-harvest decline and surged to a new peak — this is not typical seasonal behavior based on the available data. The move suggests either a policy-driven push or a structural shift in agricultural working capital demand.",
+          "title": "Food credit surged to ₹1.04L Cr — highest level in dataset",
+          "body": "Food credit outstanding jumped to ₹1.04L Cr in April 2026, up ₹0.34L Cr from ₹0.70L Cr in March 2026. Volume spiked ₹0.70L Cr → ₹1.04L Cr, reversing the prior period's decline and reaching the highest level in this seven-period window.",
+          "implication": "The sharp rebound likely reflects seasonal procurement financing for the new crop year. Food credit remains volatile and small (under 0.5% of total bank credit), but the swing is large enough to warrant monitoring for liquidity stress in agri-commodity chains.",
           "preferredMode": "absolute",
           "effect": {
             "highlight": [
@@ -78,9 +64,9 @@
         {
           "id": "sibc-food-credit-yoy",
           "layer": 1,
-          "title": "Food credit YoY decelerates to 66.4% from 139.4% peak",
-          "body": "Food credit grew 66.4% year-on-year in April 2026, down sharply from the prior period's 139.4%. Growth decelerated 139.4% → 66.4%, a 73 point drop, though it remains at the upper end of the historical range.",
-          "implication": "The explosive triple-digit growth has moderated, but food credit is still expanding at twice the system rate. The deceleration reflects the prior period's unsustainable spike normalizing, not a structural slowdown.",
+          "title": "Food credit YoY slowed to 66.4% — down 26pp from March",
+          "body": "Food credit grew 66.4% year-on-year in April 2026, down sharply from 92.4% in March 2026. Growth decelerated 92.4% → 66.4%, a 25.9 percentage point drop, moving from near the top of the range to the median.",
+          "implication": "The triple-digit growth rate is compressing as the base normalises. The April 2025 base was already elevated at ₹0.56L Cr, so the 66.4% rate reflects real volume growth, not just base effects — but expect further moderation as the year progresses.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -92,9 +78,9 @@
         {
           "id": "sibc-nonfood-credit-fy-delta",
           "layer": 1,
-          "title": "Non-food FY26 addition hits ₹30.8L Cr — new record",
-          "body": "Non-food credit added ₹30.8 lakh crore during FY26, the maximum annual expansion in this dataset. The FY26 addition rose from ₹29.2L Cr → ₹30.8L Cr, an increase of ₹1.6 lakh crore over the prior reading.",
-          "implication": "This is the largest single-year non-food credit creation on record, accounting for 99% of total system expansion. Banks are channeling virtually all new lending into commercial and retail segments, not food-related financing — a clear signal of where institutional confidence and demand are concentrated.",
+          "title": "Non-food credit added ₹30.8L Cr in FY26 — record annual deployment",
+          "body": "Banks deployed ₹30.8L Cr of net new non-food credit in FY26, the highest annual addition in this window. This figure has remained constant across all seven periods, as it reflects the full-year tally locked at March 2026 year-end.",
+          "implication": "Non-food credit accounts for 99% of the ₹31.2L Cr system-wide add. The growth is broad-based across productive sectors — a positive signal for economic activity, but watch for pockets of over-leverage.",
           "preferredMode": "absolute",
           "effect": {
             "highlight": [
@@ -106,9 +92,9 @@
         {
           "id": "sibc-nonfood-credit-yoy",
           "layer": 1,
-          "title": "Non-food credit YoY holds at 15.8% — near upper range",
-          "body": "Non-food credit grew 15.8% year-on-year in April 2026, effectively flat from the prior period's 15.9%. Growth edged down 0.06 points from 15.9% → 15.8%, remaining at the upper end of the historical range after accelerating from 10.9% in March 2025.",
-          "implication": "Growth has plateaued at the highest level in this window — the acceleration phase appears complete. If this holds, banks are sustaining a high-growth equilibrium in non-food lending rather than continuing to accelerate.",
+          "title": "Non-food credit YoY eased to 15.8% — down 1.1pp from March",
+          "body": "Non-food credit grew 15.8% year-on-year in April 2026, down from 16.9% in March 2026. Growth decelerated 16.9% → 15.8%, the first slowdown after a four-period acceleration from 9.9% in March 2025.",
+          "implication": "Non-food credit is cooling in lockstep with total bank credit. The 15.8% rate remains at the top of the historical range, but the trajectory has turned — lenders should prepare for tighter competition and margin pressure if the slowdown persists.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -120,11 +106,25 @@
       ],
       "gaps": [
         {
+          "id": "sibc-bank-credit-abs",
+          "layer": 1,
+          "title": "Bank credit dipped to ₹212.1L Cr — first decline in 7 periods",
+          "body": "Total bank credit outstanding fell to ₹212.1L Cr in April 2026, down ₹1.5L Cr from the March 2026 peak of ₹213.6L Cr. Volume declined ₹213.6L Cr → ₹212.1L Cr, breaking a six-period climb that had lifted credit from ₹178.7L Cr in January 2025.",
+          "implication": "The first month-on-month contraction since this dataset began signals post-year-end deleveraging or loan repayments. Watch whether this is a one-period correction or the start of a cooling cycle — the level remains in the upper range, but momentum has stalled.",
+          "preferredMode": "absolute",
+          "effect": {
+            "highlight": [
+              "Bank Credit"
+            ]
+          },
+          "claim_type": "data"
+        },
+        {
           "id": "sibc-nonfood-credit-abs",
           "layer": 1,
-          "title": "Non-food credit at ₹211.1L Cr — first decline in 6 periods",
-          "body": "Non-food credit fell to ₹211.1 lakh crore in April 2026, down ₹1.8 lakh crore from the March peak of ₹212.9 lakh crore. Volume contracted ₹212.9L Cr → ₹211.1L Cr, the first month-on-month decline after five consecutive months of expansion from ₹178.1L Cr in January 2025.",
-          "implication": "Non-food credit drives 99% of system volume, so this decline mirrors the total bank credit reversal. The first contraction in six periods signals a potential inflection — watch whether this is a one-month correction or the start of a broader cooling trend.",
+          "title": "Non-food credit fell to ₹211.1L Cr — first drop after 6-period climb",
+          "body": "Non-food credit outstanding declined to ₹211.1L Cr in April 2026, down ₹1.8L Cr from the March 2026 peak of ₹212.9L Cr. Volume fell ₹212.9L Cr → ₹211.1L Cr, breaking a six-period climb from ₹178.1L Cr in January 2025.",
+          "implication": "Non-food credit — which accounts for 99.5% of total bank credit — is driving the system-wide contraction. The decline suggests post-year-end loan repayments or slower disbursements in agriculture, industry, services, and retail. Watch whether this is a one-month correction or the start of a sustained slowdown.",
           "preferredMode": "absolute",
           "effect": {
             "highlight": [
@@ -141,9 +141,9 @@
         {
           "id": "sibc-sectors-positive-yoy-count",
           "layer": 1,
-          "title": "All 4 sectors growing YoY — breadth unchanged at maximum",
-          "body": "All 4 main sectors recorded positive year-on-year growth in April 2026, unchanged from the prior period. Breadth held steady at 4 sectors across all seven reporting periods from January 2025 through April 2026.",
-          "implication": "Growth remains broad-based across agriculture, industry, services, and retail — no sector is contracting or dragging down the overall expansion. This sustained breadth reinforces the structural nature of the credit cycle, not a narrow or fragile rally.",
+          "title": "All 4 main sectors grew YoY — breadth unchanged at maximum",
+          "body": "All four main credit sectors — agriculture, industry, services, retail — posted positive year-on-year growth in April 2026. Breadth has held at 4 out of 4 sectors for the entire seven-period window, with no sector slipping into contraction.",
+          "implication": "Credit expansion remains broad-based, not concentrated. This reduces systemic risk but also means no sector is being starved — competition for quality assets is intense across the board.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -158,9 +158,9 @@
         {
           "id": "sibc-agriculture-share",
           "layer": 1,
-          "title": "Agriculture holds 12.44% of credit — stable near median",
-          "body": "Agriculture accounts for 12.44% of total bank credit in April 2026. Share ticked up marginally from 12.43% → 12.44%, essentially flat after the prior period's 0.12pp gain.",
-          "implication": "Agriculture maintains its traditional ~12.4% allocation despite double-digit growth — banks are expanding ag lending in lockstep with overall portfolio growth, not overweighting the sector.",
+          "title": "Agriculture share steady at 12.4% — holding midpoint",
+          "body": "Agriculture's share of total bank credit stands at 12.44% in Apr 2026. Share edged up 0.02pp from 12.42% last period, holding near the median of its seven-period range (12.3%–12.6%).",
+          "implication": "Agriculture maintains a stable footprint in the credit mix — share stability despite decelerating growth signals the sector is expanding in line with the overall pool, neither gaining nor losing structural ground.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -172,9 +172,9 @@
         {
           "id": "sibc-agriculture-yoy",
           "layer": 1,
-          "title": "Agriculture growth slows to 13.7% — down from 15.7% peak",
-          "body": "Agriculture credit grew 13.70% year-on-year in April 2026. Growth decelerated from 15.70% → 13.70%, a -2.00pp pullback from the prior period's record high.",
-          "implication": "Agriculture has come off its peak but remains in the upper range of this window — the 15.7% spike was likely a one-period surge, now normalizing to a still-strong mid-teens pace.",
+          "title": "Agriculture growth slows to 13.7% — down from 15.6% peak",
+          "body": "Agriculture credit grew 13.70% YoY in Apr 2026, down from the prior period's peak of 15.62%. Growth decelerated 1.92pp from 15.62% → 13.70%, the first slowdown after a four-period climb (10.4% → 11.4% → 12.3% → 15.6%).",
+          "implication": "Agriculture lending momentum has moderated after peaking in Mar 2026 — the deceleration suggests the sharp upswing may be normalizing. Lenders should monitor whether this is a temporary pause or the start of a sustained slowdown, particularly in asset quality as the growth cycle matures.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -186,9 +186,9 @@
         {
           "id": "sibc-industry-fy-acceleration",
           "layer": 1,
-          "title": "Industry FY acceleration hits 6.8pp — new record high",
-          "body": "Industry credit shows full-year acceleration of 6.8 percentage points in April 2026. FY acceleration edged up from 6.7pp → 6.8pp, breaking the six-period plateau at 6.7pp.",
-          "implication": "Industry lending momentum has strengthened further on a full-year basis — this is the highest acceleration on record, signaling sustained structural demand for industrial credit, not a cyclical blip.",
+          "title": "Industry credit 15.0% in FY26 vs 8.2% in FY25 — 6.8pp step-up",
+          "body": "Industry credit grew 8.2% in FY25 and 15.0% in FY26, marking a 6.8-point acceleration. This is the full-year acceleration measured at Mar 2026 year-end, reflecting a sharp step-up in annual growth momentum.",
+          "implication": "Industry credit has re-rated decisively — the near-doubling of growth pace signals a structural shift, likely driven by capex revival, manufacturing push, or PLI-linked demand. This is the strongest industrial credit cycle in recent years.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -200,9 +200,9 @@
         {
           "id": "sibc-industry-share",
           "layer": 1,
-          "title": "Industry share at 21.50% — lowest level in dataset",
-          "body": "Industry accounts for 21.50% of total credit in April 2026. Share edged down from 21.52% → 21.50%, now at the minimum level across all six periods.",
-          "implication": "Despite record growth rates, industry is losing share to faster-growing sectors — personal loans and services are outpacing industrial credit expansion, reshaping the portfolio mix.",
+          "title": "Industry share at 21.5% — lowest in seven periods",
+          "body": "Industry accounts for 21.50% of total bank credit in Apr 2026, the lowest reading in this dataset. Share slipped 0.03pp from 21.53% last period, holding at the bottom of its range (21.5%–21.9%).",
+          "implication": "Despite strong YoY growth, industry's share remains flat at the lower bound — it is growing in line with the overall credit pool, not gaining structural ground. The sector is recovering robustly but being outpaced by services and personal loans in the composition race.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -214,9 +214,9 @@
         {
           "id": "sibc-industry-yoy",
           "layer": 1,
-          "title": "Industry credit at 15.06% YoY — highest growth on record",
-          "body": "Industry credit grew 15.06% year-on-year in April 2026, the strongest pace in this seven-period window. Growth accelerated from 14.96% → 15.06%, extending the upward trajectory from 8.2% in March 2025.",
-          "implication": "Industry credit is hitting peak momentum — likely driven by infrastructure investment, manufacturing recovery, and corporate capex revival as the economy scales productive capacity.",
+          "title": "Industry credit at 15.1% YoY — highest on record",
+          "body": "Industry credit grew 15.06% YoY in Apr 2026, the fastest rate in this seven-period window. Growth held steady at 15.06% from 15.02% last period, sustaining the peak reached in Mar 2026 after a four-period climb: 8.2% → 12.1% → 13.5% → 15.0% → 15.1%.",
+          "implication": "Industry lending has plateaued at its highest level — the sustained 15%+ pace confirms a capex-driven recovery is entrenched. Lenders should prioritize sectors with strong order books and balance sheet repair, and watch for credit quality as the cycle matures.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -228,9 +228,9 @@
         {
           "id": "sibc-personal-loans-share",
           "layer": 1,
-          "title": "Personal loans at 33.0% share — upper range, up 0.37pp",
-          "body": "Personal loans represent 32.98% of total credit in April 2026, the largest sector allocation. Share rose from 32.60% → 32.98%, reversing the prior period's 0.28pp decline and returning to the upper range.",
-          "implication": "Personal loans have regained share momentum after a brief dip — consumer lending is reasserting dominance in the credit mix, driven by sustained household demand.",
+          "title": "Personal loans at 33.0% share — back to upper range",
+          "body": "Personal loans account for 32.98% of total bank credit in Apr 2026, at the upper end of its range. Share rose 0.38pp from 32.59% last period (32.59% → 32.98%), rebounding from the prior period's low to match the historical high of 33.0%.",
+          "implication": "Personal loans have regained ground in the credit mix after slipping in Mar 2026 — the sharp 0.38pp rebound signals renewed momentum. This reverses the prior narrative of losing share to productive sectors, suggesting retail credit demand remains robust and is reclaiming its structural footprint.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -242,9 +242,9 @@
         {
           "id": "sibc-personal-loans-yoy",
           "layer": 1,
-          "title": "Personal loans grow 16.0% YoY — upper range, slight dip",
-          "body": "Personal loans credit grew 16.01% year-on-year in April 2026. Growth eased marginally from 16.24% → 16.01%, staying in the upper range after climbing from 11.7% in March 2025.",
-          "implication": "Consumer lending momentum remains strong despite the minor deceleration — household credit demand is durably positive, supporting continued retail-led portfolio expansion.",
+          "title": "Personal loans 16.0% YoY — holding near peak",
+          "body": "Personal loans credit grew 16.01% YoY in Apr 2026, near the highest rate in this dataset. Growth held steady at 16.01% from 16.21% last period, sustaining the elevated pace reached in Mar 2026 after a four-period climb: 11.7% → 14.9% → 15.2% → 16.2% → 16.0%.",
+          "implication": "Personal loans remain a growth engine at peak velocity — the sustained 16%+ pace confirms strong retail demand, likely driven by credit cards, personal loans, and vehicle finance. Lenders should monitor unsecured exposure and delinquency trends as growth plateaus at elevated levels.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -256,9 +256,9 @@
         {
           "id": "sibc-services-fy-acceleration",
           "layer": 1,
-          "title": "Services FY acceleration holds at 7.0pp — maximum sustained",
-          "body": "Services credit maintained 7.0 percentage point full-year acceleration in April 2026. FY acceleration held steady at 7.0pp for seven consecutive periods since January 2025, the maximum level on record.",
-          "implication": "Services credit growth has structurally shifted higher and sustained the pace for over a year — this is an entrenched uptrend reflecting broad-based economic activity beyond manufacturing.",
+          "title": "Services credit 19.0% in FY26 vs 12.0% in FY25 — 7.0pp jump",
+          "body": "Services credit grew 12.0% in FY25 and 19.0% in FY26, marking a 7.0-point acceleration. This is the full-year acceleration measured at Mar 2026 year-end, reflecting the sharpest annual step-up in this dataset.",
+          "implication": "Services credit has re-accelerated decisively — the 7-point jump signals broad-based demand across trade, NBFCs, and other services. This is the strongest services credit cycle in recent years, driven by consumption recovery and NBFC expansion.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -270,9 +270,9 @@
         {
           "id": "sibc-services-share",
           "layer": 1,
-          "title": "Services share at 28.2% — down 0.26pp from peak",
-          "body": "Services captured 28.21% of total bank credit in April 2026. Share declined from 28.47% → 28.21%, pulling back from the prior period's record high but remaining in the upper range.",
-          "implication": "Services ceded share to personal loans this period but still hold near-peak allocation — the sector's structural uptrend is intact despite the minor pullback.",
+          "title": "Services share at 28.2% — down from Mar peak",
+          "body": "Services account for 28.21% of total bank credit in Apr 2026. Share declined 0.26pp from 28.47% last period (28.47% → 28.21%), slipping from the prior period's peak but holding near the upper quartile of its range (27.8%–28.5%).",
+          "implication": "Services have given back some ground after reaching a structural high in Mar 2026 — the 0.26pp decline suggests other sectors (personal loans, agriculture) are growing faster this period. Services remain elevated but the share trajectory has reversed, signaling a pause in the sector's structural gain.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -284,9 +284,9 @@
         {
           "id": "sibc-services-yoy",
           "layer": 1,
-          "title": "Services credit at 18.6% YoY — second-highest in window",
-          "body": "Services credit grew 18.58% year-on-year in April 2026, down 0.41 percentage points from the prior period's 18.99% peak. Growth decelerated slightly from 18.99% → 18.58%, but remains near the upper end of the historical range and well above the 12.0% pace recorded in April 2025.",
-          "implication": "Services credit expansion remains robust at nearly double the historical norm, signaling sustained business investment and working capital demand. The marginal slowdown from the prior peak does not alter the structural growth story — this is still the economy's primary credit engine.",
+          "title": "Services credit at 18.6% YoY — momentum plateaus after March peak",
+          "body": "Services credit grew 18.6% year-on-year in April 2026, down 0.4 points from the prior period. Growth decelerated from 19.0% in March 2026 to 18.6% in April 2026. The trajectory over the past year shows: 12.0% → 15.5% → 16.3% → 19.0% → 18.6%. The March peak was the highest in this window; April marks the first pullback after three periods of acceleration.",
+          "implication": "Services credit remains in the upper range of its historical distribution but has lost momentum after peaking in March. The 0.4-point decline is modest, but it breaks a three-period acceleration streak. Lenders should watch the next period closely — if growth continues to decelerate, the March peak may have been a cyclical high rather than a new structural level. Services is still the fastest-growing major sector, but the trajectory has shifted from accelerating to plateauing.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -304,9 +304,9 @@
         {
           "id": "sibc-large-corporate-share",
           "layer": 1,
-          "title": "Large corporates hold 67.2% of industry credit — stable at equilibrium",
-          "body": "Large corporates hold a 67.15% share of industry credit, up 0.01 points from the prior period. The share has stabilized at 67.1% → 67.2%, holding steady after the year-long decline from 71.0%.",
-          "implication": "The credit market has reached a new equilibrium. Large enterprises retain dominant access, but the stabilization confirms banks have completed their rebalancing toward smaller borrowers.",
+          "title": "Large corporates at 67.2% share — lowest in 7 periods",
+          "body": "Large corporates account for 67.2% of industry credit in Apr 2026, down 0.08pp from last period. Share compressed from 71.0% in Jan 2025 to 67.2% in Apr 2026 — a 3.8 percentage point decline over six periods, now at the bottom of the historical range.",
+          "implication": "Large corporate dominance continues to erode as MSME segments capture incremental lending. The structural shift is accelerating — the largest borrowers are losing ground every period despite their own growth re-acceleration.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -318,9 +318,9 @@
         {
           "id": "sibc-large-corporate-yoy",
           "layer": 1,
-          "title": "Large corporate credit hits 10.0% YoY — strongest growth on record",
-          "body": "Large corporate credit growth accelerated to 10.04%, the strongest reading in this 7-period window. Growth momentum built from 8.9% → 10.0%, breaking above the prior maximum and extending the upward trajectory from 5.5% three periods ago.",
-          "implication": "Banks are backing large corporate capex plans with renewed confidence. This acceleration signals corporate India's investment cycle is gaining momentum with institutional financing support — the strongest signal yet.",
+          "title": "Large corporates hit 10.0% YoY — fastest growth on record",
+          "body": "Large corporate credit grew 10.0% YoY in Apr 2026, the strongest reading in this seven-period window. Growth accelerated from 9.1% last period to 10.0%, extending a recovery that began at 5.5% in Jan 2026 → 7.8% → 9.1% → 10.0%.",
+          "implication": "Large corporates are in their strongest growth phase yet, but the 10% pace still trails MSME segments by 10–20 percentage points. They are growing faster than ever in this dataset but still losing market share — the MSME surge is simply too powerful to contain.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -332,9 +332,23 @@
         {
           "id": "sibc-msme-medium-share",
           "layer": 1,
-          "title": "Medium enterprises at 9.7% share — highest level on record",
-          "body": "Medium enterprises hold a 9.73% share of industry credit, up 0.08 points from the prior period. The share climbed from 9.7% → 9.7%, holding at the maximum level after rising from 8.9% a year ago.",
-          "implication": "Medium enterprises have secured a steady 1-in-10 share of industry financing. The sustained maximum level confirms banks have locked in a higher allocation to this growth-critical segment.",
+          "title": "Medium enterprises hold 9.7% share — highest on record",
+          "body": "Medium enterprises account for 9.7% of industry credit in Apr 2026, up 0.07pp from last period. Share rose from 8.9% in Jan 2025 to 9.7% by Jan 2026 and has held at that peak for four consecutive periods.",
+          "implication": "Medium enterprises have gained 0.8pp of share over the past year and are now defending that position at the top of the range. The segment is growing fast enough to maintain its foothold but not expanding further — it has plateaued at a new structural level.",
+          "preferredMode": "yoy",
+          "effect": {
+            "highlight": [
+              "Medium"
+            ]
+          },
+          "claim_type": "data"
+        },
+        {
+          "id": "sibc-msme-medium-yoy",
+          "layer": 1,
+          "title": "Medium enterprises at 19.9% YoY — growth moderating",
+          "body": "Medium enterprise credit grew 19.9% YoY in Apr 2026, down 1.96pp from last period. Growth decelerated from 21.8% last period to 19.9%, the first sub-20% reading since Jan 2026 after peaking at 22.3%.",
+          "implication": "Medium enterprises are cooling after three straight periods above 20%, but the 19.9% pace still doubles large corporate growth. The segment remains a strong outperformer — the deceleration is a moderation, not a reversal.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -346,9 +360,9 @@
         {
           "id": "sibc-msme-micro-small-fy-acceleration",
           "layer": 1,
-          "title": "Micro & Small FY acceleration at 23.8pp — slight moderation from peak",
-          "body": "Micro & Small enterprise credit posted 23.8pp full-year acceleration, down 0.5 points from the prior period. Acceleration eased from 24.2pp → 23.8pp, the first decline after holding at maximum for six consecutive periods.",
-          "implication": "The small business lending surge remains entrenched but is beginning to normalize. The 23.8pp acceleration still signals systematic expansion of micro-enterprise exposure, not a temporary spike.",
+          "title": "Micro & Small grew 32.7% in FY26 vs 8.9% in FY25 — 23.8pp step-up",
+          "body": "Micro & Small credit grew 8.9% in the year ending Mar 2025 and 32.7% in the year ending Mar 2026, a 23.8 percentage point acceleration. Full-year growth jumped from single digits in FY25 to 30%+ in FY26 — the sharpest year-over-year step-up in this dataset.",
+          "implication": "This is an inflection, not incremental improvement. Micro & Small lending has shifted into a new growth regime, likely driven by policy tailwinds, digital underwriting scale, or supply chain financing expansion. Lenders with exposure here are riding the fastest-growing segment in industry credit.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -360,9 +374,9 @@
         {
           "id": "sibc-msme-micro-small-share",
           "layer": 1,
-          "title": "Micro & Small at 23.1% share — holding near record high",
-          "body": "Micro & Small enterprises claimed 23.12% of total industry credit, down 0.08 points from the prior period. Share eased from 23.2% → 23.1%, holding near the maximum after climbing from 20.0% a year ago.",
-          "implication": "Small businesses have won a structurally larger slice of bank credit allocation. The sustained 23% level reflects deliberate portfolio rebalancing toward smaller ticket lending.",
+          "title": "Micro & Small at 23.1% share — holding 3pp gain from last year",
+          "body": "Micro & Small enterprises account for 23.1% of industry credit in Apr 2026, up 0.01pp from last period. Share surged from 20.0% in Mar 2025 to 23.5% in Jan 2026, then stabilized at 23.1% — a net gain of 3.1 percentage points in 13 months.",
+          "implication": "Micro & Small borrowers have captured 3pp of share from large corporates and are now defending that position. The structural reallocation is complete — banks and NBFCs have aggressively scaled down-market and are holding the new allocation steady.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -374,9 +388,9 @@
         {
           "id": "sibc-msme-micro-small-yoy",
           "layer": 1,
-          "title": "Micro & Small credit at 30.1% YoY — decelerating from record peak",
-          "body": "Micro & Small enterprise credit surged 30.09% year-on-year, decelerating 3.05 points from the prior period. Growth eased from 33.1% → 30.1%, stepping back from the record high but still 3× the pace from a year ago (8.9%).",
-          "implication": "Banks are still aggressively expanding small business books, but the deceleration suggests the initial surge is normalizing. The 30% pace still signals a fundamental shift in credit allocation strategy.",
+          "title": "Micro & Small at 30.1% YoY — fourth straight period above 30%",
+          "body": "Micro & Small credit grew 30.1% YoY in Apr 2026, down 2.59pp from last period but still above 30%. Growth exploded from 8.9% in Mar 2025 to 31.2% in Jan 2026, then sustained at 31.2% → 30.4% → 32.7% → 30.1% for four consecutive periods.",
+          "implication": "This is the hottest segment in industry credit. Lenders with Micro & Small exposure are seeing 3× the growth of large corporates. The trend is entrenched — four straight periods above 30% signals structural demand, not a one-time spike. The slight deceleration to 30.1% is noise within a sustained boom.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -388,9 +402,9 @@
         {
           "id": "sibc-msme-size-yoy-spread",
           "layer": 1,
-          "title": "MSME-Large spread narrows to 20.1pp — gap closing from peak",
-          "body": "MSME credit outpaced large corporate lending by 20.1 percentage points, down 4.1 points from the prior period. The growth gap narrowed from 24.2pp → 20.1pp, driven by large corporate acceleration (8.9% → 10.0%) and MSME deceleration (33.1% → 30.1%).",
-          "implication": "Banks are rebalancing toward large corporates after months of MSME-heavy lending. The narrowing spread suggests either renewed confidence in large deals or normalization of the small-ticket surge — watch for further convergence.",
+          "title": "MSME outpacing large corporates by 20.1pp — spread narrowing",
+          "body": "MSME credit is growing 20.1 percentage points faster than large corporate credit in Apr 2026. The spread widened from 2.1pp in Mar 2025 to 25.7pp in Jan 2026, then narrowed to 23.5pp → 20.1% as large corporates re-accelerated.",
+          "implication": "The growth divergence between MSME and large corporates remains extreme but is narrowing as large corporates hit their fastest pace on record. MSME still dominates incremental credit, but large corporates are clawing back some momentum — the gap is compressing from its Jan 2026 peak.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -401,22 +415,7 @@
           "claim_type": "data"
         }
       ],
-      "gaps": [
-        {
-          "id": "sibc-msme-medium-yoy",
-          "layer": 1,
-          "title": "Medium enterprise credit at 19.9% YoY — growth moderating from peak",
-          "body": "Medium enterprise credit growth reached 19.88%, decelerating 1.86 points from the prior period. Growth momentum eased from 21.7% → 19.9%, stepping back from the recent peak but still outpacing large corporates by 10 points.",
-          "implication": "Banks are still aggressively financing the missing middle, but the deceleration suggests the initial surge is normalizing. The 10-point premium over large corporates confirms sustained strategic focus on scale-up businesses.",
-          "preferredMode": "yoy",
-          "effect": {
-            "highlight": [
-              "Medium"
-            ]
-          },
-          "claim_type": "data"
-        }
-      ],
+      "gaps": [],
       "opportunities": []
     },
     "services": {
@@ -424,9 +423,9 @@
         {
           "id": "sibc-nbfc-sub-share-scan",
           "layer": 1,
-          "title": "HFCs hold 17.9%, PFIs 16.9% — PFIs shift to active status",
-          "body": "Housing Finance Companies command 17.9% of NBFC credit while Public Financial Institutions hold 16.9%. PFIs shifted status from strengthening to active, with a 1.0 percentage point gap between the two segments.",
-          "implication": "The NBFC sector shows balanced allocation between housing and public finance, with PFIs stabilizing after recent momentum — HFCs maintain a narrow lead but the gap is tightening.",
+          "title": "HFCs 17.9%, PFIs 16.9% — PFIs shift to active status",
+          "body": "Within NBFC lending, Housing Finance Companies hold 17.9% share and Public Financial Institutions 16.9%. PFIs shifted from strengthening to active status, narrowing the gap with HFCs. The spread between the two is 1.0pp, down from 1.2pp last period.",
+          "implication": "PFIs have moderated after a breakout phase but remain close to HFCs — the status shift to active suggests growth is stabilizing at elevated levels. HFCs retain the lead but PFIs are within striking distance for a share crossover if momentum resumes.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -438,9 +437,9 @@
         {
           "id": "sibc-nbfc-sub-yoy-scan",
           "layer": 1,
-          "title": "PFIs surge 57.1% YoY — HFCs trail at 16.7%",
-          "body": "Public Financial Institutions are growing at 57.1% while Housing Finance Companies expand at 16.7%, both in strengthening status. A 40.4 percentage point growth spread separates the two NBFC segments, with PFIs accelerating from 52.5% in the prior period.",
-          "implication": "This is an extreme divergence — PFIs are in hypergrowth mode, likely reflecting government-backed lending programs or infrastructure finance, while HFCs face structural headwinds from regulatory tightening or market saturation.",
+          "title": "PFIs surge 57.1% YoY, HFCs 16.7% — 40pp spread",
+          "body": "Public Financial Institutions grew 57.1% YoY, while Housing Finance Companies grew 16.7%. Both segments are strengthening. PFIs are growing at more than triple the pace of HFCs. The 40.4pp spread is the widest in this scan, up from 37.0pp last period.",
+          "implication": "PFIs remain in a breakout phase — the explosive 57% growth likely reflects government-backed infra lending or policy-driven credit expansion. HFCs are growing steadily but PFIs are the clear outlier. Lenders must assess PFI asset quality and concentration risk given the extreme pace.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -452,9 +451,9 @@
         {
           "id": "sibc-services-share-scan",
           "layer": 1,
-          "title": "NBFCs lead at 34.5%, Trade weakens — status shifts signal rotation",
-          "body": "NBFCs command 34.5% of services credit, Trade holds 22.1%, and Other Services 20.5%. NBFCs shifted from strengthening to active status, while Trade moved from active to weakening — the spread between top and bottom remains 34.4 percentage points.",
-          "implication": "The NBFC boom is stabilizing after recent hypergrowth, while Trade is losing momentum — this signals a rotation within services credit toward financial intermediation and away from traditional commerce.",
+          "title": "NBFCs 34.5%, Trade 22.1% — NBFCs shift to active, Trade weakens",
+          "body": "Within services credit, NBFCs hold 34.5% share, Trade 22.1%, and Other Services 20.5%. Shipping, Computer Software, and Aviation are the smallest at 0.2%, 0.9%, and 0.9% respectively. NBFCs shifted from strengthening to active status, while Trade shifted from active to weakening. The spread between the top (NBFCs) and bottom (Shipping) is 34.4pp, up from 34.0pp last period.",
+          "implication": "NBFCs remain the dominant force in services credit but momentum has moderated — the shift to active suggests growth is stabilizing at elevated levels. Trade is now weakening, signaling a slowdown in trade finance demand. Lenders should watch for a rotation within services: NBFCs consolidating gains while trade-linked credit cools.",
           "preferredMode": "yoy",
           "effect": {},
           "claim_type": "data"
@@ -462,9 +461,9 @@
         {
           "id": "sibc-services-yoy-scan",
           "layer": 1,
-          "title": "Computer Software surged to 52.7% — now leads services growth",
-          "body": "Computer Software leads services growth at 52.7% and advanced to strengthening status, followed by Shipping at 40.7% and NBFCs at 27.7%. Computer Software jumped from 39.0% to 52.7% and shifted from active to strengthening. Shipping decelerated from 42.2% to 40.7% and moved back to active. Four other sub-sectors — Tourism, Hotels, Commercial Real Estate, and Trade — all shifted from strengthening to active.",
-          "implication": "Growth leadership has rotated sharply to technology, with Computer Software now the standout driver. The broad-based shift from strengthening to active across Tourism, Hotels, Real Estate, and Trade suggests the prior period's acceleration was a March year-end spike, not a sustained trend. The services expansion is now concentrating in tech and logistics rather than spreading evenly.",
+          "title": "Computer Software surges to 52.7% — 6 of 10 services sub-sectors active",
+          "body": "All 10 services sub-sectors are growing year-on-year. Computer Software leads at 52.7%, followed by Shipping at 40.7% and NBFCs at 27.7%. Transport Operators trails at 8.7%. The spread between top and bottom widened to 44.1 percentage points, up from 32.5 points last period. Computer Software shifted from active to strengthening status and jumped from 39.0% to 52.7% — a 13.7-point acceleration. Shipping, Tourism, Commercial Real Estate, and Trade all shifted from strengthening back to active, indicating their growth rates have stabilised after prior acceleration.",
+          "implication": "Services credit growth is now concentrating in Computer Software, which is pulling away from the pack with a 13.7-point surge. The widening spread and status shifts signal a narrowing of momentum — four sub-sectors that were accelerating last period have now plateaued. Shipping remains strong at 40.7% but has stopped accelerating. NBFCs at 27.7% continue to strengthen. Lenders should prioritise Software and NBFC exposure — these are the only two sub-sectors still accelerating. The broader services portfolio is growing but no longer broadening.",
           "preferredMode": "yoy",
           "effect": {},
           "claim_type": "data"
@@ -472,9 +471,9 @@
         {
           "id": "sibc-trade-sub-share-scan",
           "layer": 1,
-          "title": "Retail Trade share rises to 44.4% — wholesale loses ground",
-          "body": "Retail Trade holds 44.4% of trade credit and strengthened, while Wholesale Trade's 55.6% share weakened. The wholesale-retail split shifted toward retail, reversing the prior period's trend. Wholesale moved from strengthening to weakening; Retail moved from weakening to strengthening.",
-          "implication": "Consumer-facing retail is now capturing more credit allocation than B2B wholesale, a reversal from last period. This suggests end-consumer spending is driving trade credit more than supply chain financing — a shift worth monitoring if it persists beyond one period.",
+          "title": "Retail Trade hits 44.4% share — reverses Wholesale dominance trend",
+          "body": "Within Trade credit, Wholesale holds 55.6% share and Retail 44.4%, an 11.1 percentage point spread. Retail is strengthening while Wholesale is weakening. The spread narrowed from 12.7 points last period to 11.1 points. Status shifts reversed: Wholesale moved from strengthening to weakening, while Retail moved from weakening to strengthening. Retail is now gaining share after losing ground in the prior period.",
+          "implication": "Retail Trade is clawing back share from Wholesale, reversing the prior period's divergence. The 1.6-point narrowing in one period signals Retail is growing faster than Wholesale in absolute terms, even if its YoY rate is lower (see YoY scan below). This shift suggests consumer-facing commerce is regaining momentum, possibly driven by festive or seasonal demand. Lenders should rebalance Trade exposure — Retail is no longer the laggard.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -486,9 +485,9 @@
         {
           "id": "sibc-trade-sub-yoy-scan",
           "layer": 1,
-          "title": "Wholesale Trade at 18.1% YoY — double Retail's 8.0%",
-          "body": "Wholesale Trade grew 18.1% year-on-year and Retail Trade 8.0%, both holding active status despite the 10.1 percentage point growth gap. Wholesale decelerated from 20.1% to 18.1% and shifted from strengthening to active. Retail decelerated from 11.5% to 8.0% and also moved from strengthening to active.",
-          "implication": "Both wholesale and retail trade credit slowed from the prior period's strengthening pace, confirming the March spike was temporary. Wholesale still grows at more than double retail's rate, indicating businesses continue to invest in inventory and operations faster than consumers are spending — but the momentum has cooled across both channels.",
+          "title": "Wholesale Trade at 18.1% YoY — Retail lags at 8.0%",
+          "body": "Wholesale Trade credit grew 18.1% year-on-year and Retail Trade grew 8.0%, both active. The growth spread between them is 10.1 percentage points. Both sub-sectors shifted from strengthening to active status, indicating their growth rates have stabilised after prior acceleration. The spread widened from 8.5 points last period to 10.1 points. Wholesale decelerated from 20.1% to 18.1% (down 2.0 points), while Retail decelerated from 11.6% to 8.0% (down 3.6 points).",
+          "implication": "Trade credit growth is decelerating across both Wholesale and Retail, but Retail is slowing faster — it lost 3.6 points versus Wholesale's 2.0-point decline. The widening growth spread means Wholesale is still pulling away in percentage terms, even as both sub-sectors plateau. Retail's 8.0% growth is the weakest reading for either sub-sector in this window. Despite Retail gaining share (see share scan above), its YoY momentum is fading. Lenders should monitor Retail Trade closely — if growth continues to decelerate, the share gain may be temporary, driven by Wholesale slowing even faster rather than Retail strengthening.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -506,9 +505,9 @@
         {
           "id": "sibc-pl-cc-below10-streak",
           "layer": 1,
-          "title": "Credit cards sub-10% YoY for 4 periods — longest streak",
-          "body": "Credit card growth has stayed below 10% for 4 consecutive periods, the longest such streak on record. Streak extended from 3 periods to 4 periods, reaching a new maximum.",
-          "implication": "Credit card demand remains in a sustained weak phase with no recovery signal — consumer spending restraint is now entrenched, not cyclical.",
+          "title": "Credit cards below 10% YoY for 4 straight periods — longest run",
+          "body": "Credit card growth has remained below 10% YoY for 4 consecutive periods, the longest such run in this dataset. The sub-10% streak extended from 3 periods in Mar 2026 to 4 periods in Apr 2026.",
+          "implication": "Credit card lending remains structurally subdued. The streak extension confirms this is not a temporary pause but a sustained regime shift — tighter underwriting and regulatory scrutiny have permanently reset card origination volumes.",
           "preferredMode": "absolute",
           "effect": {
             "highlight": [
@@ -520,9 +519,9 @@
         {
           "id": "sibc-pl-cc-share",
           "layer": 1,
-          "title": "Credit cards at 4.28% share — marginal uptick from floor",
-          "body": "Credit cards now represent 4.28% of personal loans, up 0.04 percentage points from 4.24% last period. Share ticked up 4.24% → 4.28%, the first gain after hitting the lowest level in 6 periods.",
-          "implication": "Credit cards have stopped losing ground but remain near their weakest portfolio position — recovery is tentative at best.",
+          "title": "Credit card share at 4.28% — marginal uptick from record low",
+          "body": "Credit cards now account for 4.28% of personal loans, up 0.04 points from the prior period's record low of 4.24%. Share trajectory: 5.0% → 4.9% → 4.8% → 4.4% → 4.3% → 4.2% → 4.3%. The latest reading is a minor uptick but remains near the bottom of the range.",
+          "implication": "The marginal uptick is noise, not a reversal. Cards continue to lose ground within personal loans as gold and housing capture incremental flows — this structural shift is intact.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -534,9 +533,9 @@
         {
           "id": "sibc-pl-cc-yoy",
           "layer": 1,
-          "title": "Credit cards 3.78% YoY — fourth period below 4%",
-          "body": "Credit card outstanding grew 3.78% year-on-year, up from 3.55% in the prior period. Growth edged up 3.55% → 3.78%, the second consecutive small gain after bottoming at 1.5%.",
-          "implication": "Credit cards are stabilising but remain in single-digit growth territory — the sector has not yet broken out of its post-collapse range.",
+          "title": "Credit card growth at 3.78% YoY — stabilising in low single digits",
+          "body": "Credit card outstanding grew 3.78% YoY in Apr 2026, up from 3.55% in Mar 2026. Growth trajectory: 13.0% → 11.2% → 10.6% → 1.5% → 1.7% → 3.5% → 3.8%. The latest reading is a 0.2-point uptick, holding near the median of the recent range.",
+          "implication": "Growth has stabilised in the 3–4% band after the sharp deceleration from 13% a year ago. This is the new normal for card lending — lenders should focus on yield optimisation and portfolio quality, not volume expansion.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -546,11 +545,25 @@
           "claim_type": "data"
         },
         {
+          "id": "sibc-pl-consumer-durables-share",
+          "layer": 1,
+          "title": "Consumer Durables share flat at 0.32% — shrinking into irrelevance",
+          "body": "Consumer Durables represent 0.32% of personal loans, unchanged from the prior period and near the bottom of the range. Share trajectory: 0.4% → 0.4% → 0.4% → 0.3% → 0.3% → 0.3% → 0.3%. The segment has lost 0.1 points since Jan 2025 and remains at the floor.",
+          "implication": "This segment is shrinking into irrelevance within retail credit. Lenders have effectively exited — no strategic priority or portfolio growth expected.",
+          "preferredMode": "yoy",
+          "effect": {
+            "highlight": [
+              "Consumer Durables"
+            ]
+          },
+          "claim_type": "data"
+        },
+        {
           "id": "sibc-pl-education-share",
           "layer": 1,
-          "title": "Education loans 2.24% share — lowest on record",
-          "body": "Education loans account for 2.24% of personal loans, down 0.01 percentage points from 2.25% last period. Share edged down 2.25% → 2.24%, reaching the minimum in this 7-period window.",
-          "implication": "Education loans maintain a small but stable share of personal lending, with slight erosion as faster-growing segments like gold loans gain ground.",
+          "title": "Education loans at 2.24% share — lowest in this window",
+          "body": "Education loans account for 2.24% of personal loans, down 0.01 points from the prior period and the smallest share in 7 periods. Share trajectory: 2.3% → 2.3% → 2.3% → 2.3% → 2.3% → 2.2% → 2.2%. The segment has drifted down 0.1 points since Jan 2025.",
+          "implication": "Education lending is growing but losing ground relative to faster-moving segments like gold and housing. This is a stable, low-volatility portfolio — not a growth engine.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -562,9 +575,9 @@
         {
           "id": "sibc-pl-education-yoy",
           "layer": 1,
-          "title": "Education loans 13.27% YoY — slowest in this window",
-          "body": "Education loans grew 13.27% year-on-year, down 0.11 percentage points from 13.38% last period. Growth decelerated 13.38% → 13.27%, the slowest pace in this 7-period dataset.",
-          "implication": "Education loans remain the standout performer in personal lending with consistent double-digit growth, though momentum is gradually easing.",
+          "title": "Education loans at 13.27% YoY — decelerating to lowest rate",
+          "body": "Education loans grew 13.27% YoY in Apr 2026, down from 13.36% in Mar 2026 and the slowest rate in 7 periods. Growth trajectory: 15.9% → 15.3% → 15.1% → 14.0% → 13.7% → 13.4% → 13.3%. The rate has declined 2.6 points over 15 months.",
+          "implication": "Education lending is decelerating gradually but remains in double digits. This is a defensive, low-risk segment — expect continued mid-teens growth but no acceleration.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -576,9 +589,9 @@
         {
           "id": "sibc-pl-fd-advances-share",
           "layer": 1,
-          "title": "FD advances 2.27% share — down 0.17pp from peak",
-          "body": "Advances against Fixed Deposits represent 2.27% of personal loans, down 0.17 percentage points from 2.44% last period. Share dropped 2.44% → 2.27%, retreating from the highest level in this window.",
-          "implication": "FD-backed advances have given back recent gains, suggesting the surge in collateralised lending may have been a one-period spike rather than a sustained shift.",
+          "title": "FD advances share at 2.27% — sharp 0.17pp drop from prior peak",
+          "body": "Advances against Fixed Deposits now represent 2.27% of personal loans, down 0.17 points from the prior period's 2.44%. Share trajectory: 2.3% → 2.3% → 2.4% → 2.3% → 2.3% → 2.4% → 2.3%. The latest reading is a sharp reversal from the prior period's peak.",
+          "implication": "The prior period's share peak was likely driven by a temporary surge; the drop back to 2.3% suggests normalisation. FD-backed lending remains a defensive play but is not gaining structural ground.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -590,9 +603,9 @@
         {
           "id": "sibc-pl-fd-advances-yoy",
           "layer": 1,
-          "title": "FD advances 9.61% YoY — collapsed from 19.22%",
-          "body": "FD-backed advances grew 9.61% year-on-year, down 9.61 percentage points from 19.22% last period. Growth halved 19.22% → 9.61%, the sharpest single-period deceleration in this dataset.",
-          "implication": "The aggressive expansion in collateralised personal lending has stalled — banks may be pulling back after a brief push into this safer product.",
+          "title": "FD advances at 9.61% YoY — sharp 9.6pp drop from 19.22%",
+          "body": "Advances against Fixed Deposits grew 9.61% YoY in Apr 2026, down sharply from 19.22% in Mar 2026 and the slowest rate in 7 periods. Growth trajectory: 17.1% → 12.8% → 13.4% → 13.1% → 14.1% → 19.2% → 9.6%. The latest reading is a 9.6-point drop from the prior period's peak.",
+          "implication": "The prior period's 19.2% spike was an outlier, likely driven by a temporary surge. The drop to 9.6% is a sharp reversal — FD-backed lending is decelerating, not accelerating. The structural pivot toward collateralised credit is less pronounced than the prior period suggested.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -604,9 +617,9 @@
         {
           "id": "sibc-pl-gold-pos-streak",
           "layer": 1,
-          "title": "Gold loans positive for 8 periods — longest run",
-          "body": "Gold loans have grown every period for 8 consecutive months, the longest unbroken run on record. Positive streak extended from 6 periods to 8 periods, marking a new maximum.",
-          "implication": "Gold lending has become the most reliable growth driver in personal loans with no signs of momentum breaking — the trend is entrenched.",
+          "title": "Gold loans positive for 8 straight periods — longest expansion ever",
+          "body": "Gold loans have posted positive YoY growth for 8 consecutive periods, the longest unbroken expansion streak in this dataset. The positive streak extended from 7 periods in Mar 2026 to 8 periods in Apr 2026.",
+          "implication": "Gold lending is the most consistent growth story in retail credit. The record-length streak confirms this momentum is entrenched — driven by high gold prices, strong rural demand, and lender appetite for secured lending.",
           "preferredMode": "absolute",
           "effect": {
             "highlight": [
@@ -618,9 +631,9 @@
         {
           "id": "sibc-pl-gold-share",
           "layer": 1,
-          "title": "Gold loans 7.02% share — highest on record",
-          "body": "Gold loans captured 7.02% of all personal lending, up 0.39 percentage points from 6.63% last period. Share climbed 6.63% → 7.02%, reaching the highest level in this 7-period window.",
-          "implication": "Gold loans have more than doubled their portfolio weight in 12 months, reshaping the personal lending mix toward secured products at the expense of unsecured categories.",
+          "title": "Gold loans at 7.02% share — highest ever, up 0.37pp",
+          "body": "Gold loans now account for 7.02% of personal loans, up 0.37 points from the prior period and the highest share in this dataset. Share trajectory: 3.0% → 3.2% → 3.5% → 6.0% → 6.3% → 6.6% → 7.0%. The segment has more than doubled its share in 15 months.",
+          "implication": "Gold lending has become a structural pillar of retail credit, displacing unsecured products. This is the single biggest portfolio shift in personal loans — lenders should expand gold loan capacity aggressively to capture this sustained demand.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -632,9 +645,9 @@
         {
           "id": "sibc-pl-gold-yoy",
           "layer": 1,
-          "title": "Gold loans at 121.2% YoY — still doubling despite cooling",
-          "body": "Gold loan growth held at 121.21%, down marginally from 123.15% last period. Growth eased 123.15% → 121.21%, the second consecutive decline from the 128.8% peak in January 2026.",
-          "implication": "The explosive gold lending boom is moderating but remains in triple digits — banks are still doubling their gold portfolios year-on-year as borrowers pledge jewelry for liquidity.",
+          "title": "Gold loans at 121.2% YoY — sixth straight triple-digit period",
+          "body": "Gold loans grew 121.2% YoY in Apr 2026, down from 123.7% in Mar 2026. Growth decelerated by 2.5 points period-on-period (123.7% → 121.2%), continuing the gradual cooling from the Feb 2026 peak of 127.9%.",
+          "implication": "Triple-digit growth has now persisted for six consecutive periods, confirming sustained structural demand. The deceleration from 128.8% in Jan 2026 to 121.2% suggests the explosive phase is moderating, but gold remains the fastest-growing personal loan category by a factor of 6×.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -646,9 +659,9 @@
         {
           "id": "sibc-pl-housing-share",
           "layer": 1,
-          "title": "Housing share drops to 48.2% — lowest on record",
-          "body": "Housing loans fell to 48.15% of personal lending, the smallest share in this 7-period window. Portfolio weight declined 48.35% → 48.15%, extending the slide from over 50% a year ago.",
-          "implication": "Housing's structural dominance is eroding as gold and vehicle loans capture market share — the traditional anchor of personal credit is losing ground despite absolute growth.",
+          "title": "Housing share falls to 48.2% — lowest on record",
+          "body": "Housing loans now account for 48.2% of personal loans, down from 48.4% in Mar 2026. Share has declined steadily from 50.4% in Jan 2025 to 48.2% in Apr 2026, losing 2.2 points over five quarters.",
+          "implication": "Housing is losing ground in a growing personal loan pool — gold, vehicles, and other PL are capturing incremental credit faster. This is a structural shift: housing growth is healthy at 11.4%, but it is being outpaced by categories growing at 18–121%.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -660,9 +673,9 @@
         {
           "id": "sibc-pl-housing-yoy",
           "layer": 1,
-          "title": "Housing growth steady at 11.4% — upper range sustained",
-          "body": "Housing loan growth held at 11.39%, essentially flat from 11.48% last period. Growth edged down 11.48% → 11.39%, remaining near the top of its 10.7-11.5% range.",
-          "implication": "Mortgage demand is resilient — housing credit is expanding at a healthy double-digit pace even as its portfolio share shrinks, indicating robust underlying volumes.",
+          "title": "Housing loans at 11.4% YoY — holding near upper range",
+          "body": "Housing loans grew 11.4% YoY in Apr 2026, down marginally from 11.5% in Mar 2026. Growth has stabilized in the 11.0%–11.5% range since Jan 2026, after running at 10.7%–11.1% in early 2025.",
+          "implication": "Housing growth has re-accelerated and is now holding near the top of its recent range. Demand is healthy, but the 11.4% pace is still being outrun by gold (121%) and vehicles (18%) — explaining the continued share loss. Housing remains the anchor, but not the momentum play.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -674,9 +687,9 @@
         {
           "id": "sibc-pl-other-share",
           "layer": 1,
-          "title": "Other Personal Loans at 24.9% — record low share",
-          "body": "Other personal loans held 24.90% of the portfolio, the smallest share in this dataset. Share slipped 24.99% → 24.90%, continuing the decline from 25.8% levels in early 2025.",
-          "implication": "Miscellaneous unsecured lending is losing ground to specialized secured products — banks are shifting mix toward collateral-backed exposure.",
+          "title": "Other PL share at 24.9% — lowest in seven periods",
+          "body": "Other Personal Loans account for 24.9% of personal loans, down from 25.0% in Mar 2026. Share has declined from 25.8% in Jan 2025 to 24.9% in Apr 2026, losing 0.9 points over five quarters.",
+          "implication": "Despite accelerating growth (12.7% YoY), Other PL is losing share — a sign that gold and vehicles are growing even faster. This category is still the second-largest by share, but it is no longer the incremental growth leader.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -688,9 +701,9 @@
         {
           "id": "sibc-pl-other-yoy",
           "layer": 1,
-          "title": "Other Personal Loans at 12.7% YoY — momentum holding",
-          "body": "Other Personal Loans grew 12.70% year-on-year, down slightly from 12.98% last period. Growth eased 12.98% → 12.70%, still near the upper end of its 7.5-13.0% range.",
-          "implication": "Non-housing, non-vehicle personal credit is expanding at a solid pace despite losing share — absolute volumes are growing but slower than the overall personal loans pool.",
+          "title": "Other PL at 12.7% YoY — growth holding near peak",
+          "body": "Other Personal Loans grew 12.7% YoY in Apr 2026, down marginally from 12.8% in Mar 2026. Growth has accelerated sharply from 7.5% in Mar 2025 to 12.7% in Apr 2026, and has held in the 12.1%–12.8% range for the last three periods.",
+          "implication": "A clear inflection: growth has nearly doubled year-on-year and is now holding near its peak. This category — which includes personal loans not classified elsewhere — has regained momentum, likely driven by consumption and working capital needs. The trajectory has stabilized after the sharp re-acceleration.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -702,9 +715,9 @@
         {
           "id": "sibc-pl-share-advances-share",
           "layer": 1,
-          "title": "Securities-backed loans at 0.15% — minimal penetration",
-          "body": "Advances against shares and bonds held 0.15% of total personal loans, unchanged from last period. Share remained flat at 0.15%, fluctuating within a narrow 0.1-0.2% band across all periods.",
-          "implication": "Securities-backed lending remains a niche product with negligible market presence — banks are not scaling this segment despite recent growth volatility.",
+          "title": "Advances against shares at 0.1% — immaterial to mix",
+          "body": "Advances against shares and bonds account for 0.1% of personal loans, down from 0.2% in Mar 2026. Share has fluctuated between 0.1% and 0.2% across seven periods, with no sustained trend.",
+          "implication": "This is a niche product with no material impact on personal loan composition. At 0.1% share, movements in this category are irrelevant to portfolio strategy.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -714,21 +727,11 @@
           "claim_type": "data"
         },
         {
-          "id": "sibc-pl-share-scan",
-          "layer": 1,
-          "title": "Housing at 48.2%, Other PL 24.9%, Vehicle 10.7% — top three dominate",
-          "body": "Housing dominates personal loans at 48.2% share, followed by Other Personal Loans at 24.9% and Vehicle Loans at 10.7%. The top three categories control 83.8% of the market, with niche segments like advances against shares (0.1%) and consumer durables (0.3%) representing minimal share.",
-          "implication": "Personal credit remains concentrated in housing and general-purpose loans, with vehicle financing the only other material segment — product diversification is limited, and banks are doubling down on core secured categories.",
-          "preferredMode": "yoy",
-          "effect": {},
-          "claim_type": "data"
-        },
-        {
           "id": "sibc-pl-vehicle-share",
           "layer": 1,
-          "title": "Vehicle loans at 10.7% share — stable in tight range",
-          "body": "Vehicle loans held 10.67% of personal loans, up marginally from 10.64% last period. Share edged up 10.64% → 10.67%, staying within the narrow 10.4-10.7% range.",
-          "implication": "Vehicle lending share is holding steady despite strong growth — the broader personal loans pool is expanding at a similar pace, keeping the mix stable.",
+          "title": "Vehicle loans at 10.7% share — holding steady",
+          "body": "Vehicle loans account for 10.7% of personal loans, up marginally from 10.6% in Mar 2026. Share has held in the 10.4%–10.7% range across seven periods, with no meaningful drift.",
+          "implication": "Vehicles are growing fast (18.0% YoY) but in line with the overall personal loan pool — they are not gaining share but are a reliable growth contributor. The stable share confirms that vehicle lending is keeping pace with the broader personal loan expansion.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -740,9 +743,9 @@
         {
           "id": "sibc-pl-vehicle-yoy",
           "layer": 1,
-          "title": "Vehicle loans at 18.0% YoY — strong growth sustained",
-          "body": "Vehicle loans grew 17.97% year-on-year, down slightly from 18.61% last period. Growth eased 18.61% → 17.97%, still near the top of its 8.6-18.6% range.",
-          "implication": "Auto financing remains in a pronounced upturn — growth has more than doubled from the 8.6% low a year ago, reflecting sustained consumer demand and aggressive bank competition in this secured segment.",
+          "title": "Vehicle loans at 18.0% YoY — second-fastest major category",
+          "body": "Vehicle loans grew 18.0% YoY in Apr 2026, down from 18.6% in Mar 2026. Growth more than doubled from 8.6% in Mar 2025 to 18.0% in Apr 2026, and has held in the 17.1%–18.6% range since Jan 2026.",
+          "implication": "A sharp inflection: vehicle lending has re-accelerated after a weak FY25 and is now holding near its peak. This likely reflects pent-up demand, improved affordability, or aggressive dealer financing. Vehicles are now the second-fastest growing major personal loan category after gold, and the trajectory has stabilized at elevated levels.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -756,24 +759,10 @@
         {
           "id": "sibc-pl-consumer-durables-neg-streak",
           "layer": 1,
-          "title": "Consumer durables negative for 6 periods — new record",
-          "body": "Consumer durables lending has contracted for 6 consecutive periods, the longest negative streak on record. Negative streak jumped from 4 periods to 6 periods, extending the historical maximum by 2 periods.",
-          "implication": "Consumer durables financing is in deep structural decline — discretionary spending on cars and appliances shows no sign of recovery.",
+          "title": "Consumer Durables negative for 6 straight periods — record contraction",
+          "body": "Consumer Durables have posted negative YoY growth for 6 consecutive periods, the longest contraction streak on record. The negative streak extended from 5 periods in Mar 2026 to 6 periods in Apr 2026.",
+          "implication": "Consumer durable financing is in structural decline. The record-length contraction confirms lenders have exited this segment — no meaningful origination or portfolio recovery is expected unless consumption rebounds sharply.",
           "preferredMode": "absolute",
-          "effect": {
-            "highlight": [
-              "Consumer Durables"
-            ]
-          },
-          "claim_type": "data"
-        },
-        {
-          "id": "sibc-pl-consumer-durables-share",
-          "layer": 1,
-          "title": "Consumer durables flat at 0.32% — marginal segment",
-          "body": "Consumer durables represent 0.32% of personal loans, unchanged from the prior period. Share held steady at 0.3%, near the lowest level in this dataset.",
-          "implication": "Consumer durables have become a negligible segment within personal lending as sustained contraction erodes their portfolio weight.",
-          "preferredMode": "yoy",
           "effect": {
             "highlight": [
               "Consumer Durables"
@@ -784,9 +773,9 @@
         {
           "id": "sibc-pl-consumer-durables-yoy",
           "layer": 1,
-          "title": "Consumer durables -3.38% YoY — contraction easing",
-          "body": "Consumer durables lending contracted 3.38% year-on-year, an improvement from the 5.34% decline last period. Contraction moderated -5.34% → -3.38%, the smallest decline in 4 periods.",
-          "implication": "While still shrinking, consumer durables financing is declining at a slower pace — the worst may be behind, but growth has not returned.",
+          "title": "Consumer Durables -3.38% YoY — decline moderating from -5.34%",
+          "body": "Consumer Durables outstanding contracted 3.38% YoY in Apr 2026, an improvement from the -5.34% decline in Mar 2026. Growth trajectory: -2.4% → 2.6% → -1.0% → -4.0% → -9.8% → -5.3% → -3.4%. The decline has moderated by 2.0 points from the prior period.",
+          "implication": "The worst of the contraction may be behind us, but the segment remains in decline. Recovery is not yet visible — lenders should continue to de-prioritise this category.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -798,9 +787,9 @@
         {
           "id": "sibc-pl-share-advances-yoy",
           "layer": 1,
-          "title": "Securities-backed loans turn negative at -3.6% — reversal confirmed",
-          "body": "Advances against shares and bonds contracted 3.59% year-on-year, the first decline in this dataset. Growth reversed from +4.63% → -3.59%, an 8.2-point swing into contraction.",
-          "implication": "Securities-backed lending has flipped from recovery to decline — the brief stabilization was short-lived, and banks are now pulling back from this volatile segment.",
+          "title": "Advances against shares turn negative at -3.6% YoY",
+          "body": "Advances against shares contracted 3.6% YoY in Apr 2026, down from +4.6% growth in Mar 2026. Growth collapsed from 33.0% in Jan 2025 to -3.6% in Apr 2026, turning negative for the first time in this window after a brief stabilization at 2.8%–4.6% in Feb–Mar 2026.",
+          "implication": "The sharp deceleration from a high base has now turned into outright contraction, likely reflecting tighter underwriting or reduced demand for leveraged equity exposure. At 0.1% share, this category is immaterial to overall personal loan dynamics.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -810,11 +799,21 @@
           "claim_type": "data"
         },
         {
+          "id": "sibc-pl-share-scan",
+          "layer": 1,
+          "title": "Housing at 48.2%, Other PL 24.9%, Vehicles 10.7% — top 3 hold 84%",
+          "body": "Housing accounts for 48.2% of personal loans, followed by Other PL at 24.9% and Vehicles at 10.7%. The top three categories hold 84% of personal loans. Housing's lead has narrowed from 50.4% in Jan 2025 to 48.2% in Apr 2026, while gold (6.6% share, not in top 3) and vehicles capture incremental flows.",
+          "implication": "The personal loan mix is shifting: housing remains the anchor, but gold (121% YoY) and vehicles (18% YoY) are the momentum plays. Lenders focused on housing alone are missing the fastest-growing pockets. At the bottom, advances against shares (0.1%) and consumer durables (0.3%) are immaterial.",
+          "preferredMode": "yoy",
+          "effect": {},
+          "claim_type": "data"
+        },
+        {
           "id": "sibc-pl-yoy-scan",
           "layer": 1,
-          "title": "Gold 121.2%, Vehicle 18.0%, Education 13.3% lead — Consumer Durables -3.4%",
-          "body": "Gold loans exploded 121.2% year-on-year, dwarfing all other personal loan categories, while Consumer Durables contracted 3.4% and Advances against shares fell 3.6%. The growth spread widened to 124.8 percentage points between gold loans and securities-backed advances, with Vehicle Loans (18.0%) and Education (13.3%) also showing strong momentum.",
-          "implication": "Personal credit is polarizing sharply — secured lending against gold and vehicles is booming while unsecured consumer financing and securities-backed loans contract, reflecting banks' preference for tangible collateral amid economic uncertainty. Credit Cards flipped to strengthening at 3.8%, signaling a potential recovery in unsecured retail.",
+          "title": "Gold at 121%, Vehicles 18%, Education 13% — 6 of 9 active",
+          "body": "Gold loans grew 121.2% YoY, followed by vehicles at 18.0% and education at 13.3%. Consumer durables contracted 3.4%, and advances against shares fell 3.6%. Six of nine categories are active, two are declining (consumer durables, advances against shares), and one is strengthening (credit cards at 3.8%). The spread between the fastest and slowest is 124.8 points.",
+          "implication": "Broad-based momentum across personal loans, with gold still the outlier. Housing (11.4%), vehicles (18.0%), and other PL (12.7%) are all active and holding near recent peaks — a sign that the personal loan cycle is gaining momentum beyond gold. Consumer durables and advances against shares are the lone weak spots, but both are immaterial at <0.5% share combined. Credit cards are strengthening from a low base.",
           "preferredMode": "yoy",
           "effect": {},
           "claim_type": "data"
@@ -827,9 +826,9 @@
         {
           "id": "sibc-psl-agri-yoy",
           "layer": 1,
-          "title": "PSL agriculture at 17.3% YoY — highest on record",
-          "body": "PSL agriculture credit grew 17.33% year-on-year in April 2026, the strongest pace in this 7-period window. Growth accelerated from 16.03% → 17.33%, extending a steady climb from 11.0% in March 2025.",
-          "implication": "Rural credit demand is strengthening as agricultural income improves and banks expand seasonal working capital and farm mechanisation lending. The sustained acceleration signals structural improvement in farm sector creditworthiness.",
+          "title": "PSL Agriculture at 17.3% YoY — highest on record",
+          "body": "PSL Agriculture credit grew 17.33% year-on-year in Apr 2026, the strongest reading in the seven-period series. Growth re-accelerated from 15.95% last period to 17.33%, extending a steady climb from 11.0% in Mar 2025 → 17.3% in Apr 2026.",
+          "implication": "Agriculture lending momentum is building through FY27. Banks are deploying more capital to this segment than at any point in this window — the trajectory suggests sustained strength as crop cycles and policy support align.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -841,9 +840,9 @@
         {
           "id": "sibc-psl-education-yoy",
           "layer": 1,
-          "title": "PSL education loans at 23.3% YoY — holding near peak",
-          "body": "PSL educational loans expanded 23.27% year-on-year, maintaining near-peak growth with minimal change from the prior period. Growth edged up from 23.02% → 23.27%, stabilising after surging from 0.9% a year ago.",
-          "implication": "Student loan demand remains robust as higher education costs rise, with banks sustaining aggressive expansion despite the rapid run-up. The plateau suggests underwriting discipline is now balancing growth appetite.",
+          "title": "PSL Education Loans hold at 23.3% YoY — structural shift intact",
+          "body": "PSL Educational Loans grew 23.27% year-on-year in Apr 2026, holding near the upper end of the range. Growth was near zero through Mar 2025 (0.9%), then surged to 23.5% in Jan 2026 and has held above 23% for four straight periods.",
+          "implication": "Education lending remains structurally re-rated. Banks are sustaining high deployment to student loans — this is not a one-off spike but a durable shift, likely driven by demand recovery and policy tailwinds.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -855,9 +854,9 @@
         {
           "id": "sibc-psl-housing-yoy",
           "layer": 1,
-          "title": "PSL housing at 39.9% YoY — record growth sustained",
-          "body": "PSL housing credit surged 39.94% year-on-year, holding at the highest growth rate in this window. Growth edged up from 39.80% → 39.94%, sustaining the dramatic turnaround from -1.1% a year ago.",
-          "implication": "Affordable housing demand is booming as interest rates stabilise and government incentives drive first-time buyer activity. The sustained near-40% pace signals structural shift in priority sector housing penetration.",
+          "title": "PSL Housing at 39.9% YoY — highest on record, momentum intact",
+          "body": "PSL Housing credit grew 39.94% year-on-year in Apr 2026, the highest reading in this window. Growth was negative through Mar 2025 (-1.1%), then surged to 37.9% in Jan 2026 and has accelerated further to 39.9% in Apr 2026.",
+          "implication": "Housing is the standout PSL segment. Banks are aggressively deploying capital to affordable housing — this is a structural re-rating, not a cyclical bounce. Expect continued strength as policy support and demand converge.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -869,9 +868,9 @@
         {
           "id": "sibc-psl-medium-yoy",
           "layer": 1,
-          "title": "PSL medium enterprises at 17.2% YoY — slowest on record",
-          "body": "PSL medium enterprise credit grew 17.24% year-on-year, marking the weakest pace in this 7-period window. Growth decelerated from 17.85% → 17.24%, down from peaks above 22% in early 2025.",
-          "implication": "Mid-market businesses are facing tighter credit conditions as banks shift focus to retail and micro-enterprise lending with better risk profiles. The sustained deceleration suggests structural reallocation away from medium enterprises.",
+          "title": "PSL Medium Enterprises at 17.2% YoY — lowest on record",
+          "body": "PSL Medium Enterprises credit grew 17.24% year-on-year in Apr 2026, the weakest reading in the seven-period series. Growth has decelerated steadily from 22.6% in Mar 2025 → 18.9% in Jan 2026 → 17.9% in Mar 2026 → 17.2% in Apr 2026.",
+          "implication": "Medium enterprises are losing momentum while Micro & Small are surging. Banks are shifting focus to smaller borrowers or seeing weaker demand from mid-sized firms — monitor for further deceleration or a floor near 17%.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -883,9 +882,9 @@
         {
           "id": "sibc-psl-msme-fy-acceleration",
           "layer": 1,
-          "title": "PSL MSME acceleration at 15.9pp — first decline from peak",
-          "body": "PSL MSME credit acceleration measured 15.9 percentage points on a full-year basis, the first reading below the prior 16.1pp maximum. Acceleration eased from 16.1pp → 15.9pp after holding steady for six consecutive periods.",
-          "implication": "MSME lending momentum remains structurally elevated but is no longer accelerating at the peak rate. The shift suggests the explosive growth phase driven by government guarantees and digital platforms is maturing into sustained high-growth equilibrium.",
+          "title": "PSL MSME grew 13.4% in FY25, 29.4% in FY26 — 15.9pp step-up",
+          "body": "PSL MSME credit grew 13.4% in the year ending Mar 2025 and 29.4% in the year ending Mar 2026 — a 15.9-point acceleration, the largest in this dataset. Full-year growth more than doubled from FY25 to FY26, marking a sharp inflection in MSME lending.",
+          "implication": "MSME is the fastest-accelerating PSL segment. Banks are pouring capital into small businesses — this is a structural shift, likely policy-driven and demand-led. Expect this to anchor PSL growth in FY27.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -897,9 +896,9 @@
         {
           "id": "sibc-psl-msme-yoy",
           "layer": 1,
-          "title": "PSL micro & small at 28.5% YoY — cooling from peak",
-          "body": "PSL micro and small enterprise credit expanded 28.53% year-on-year, easing from the prior period's record high. Growth decelerated from 29.53% → 28.53%, though still more than double the 13.4% level a year ago.",
-          "implication": "Small business credit remains in a lending boom driven by digital platforms and government guarantees, but the first deceleration from peak suggests banks are moderating pace after the rapid run-up. Watch for sustained cooling as a signal of tightening underwriting.",
+          "title": "PSL Micro & Small at 28.5% YoY — upper range, slight deceleration",
+          "body": "PSL Micro & Small enterprises credit grew 28.53% year-on-year in Apr 2026, in the upper range of the series. Growth decelerated slightly from 29.36% last period to 28.53%, after surging from 13.4% in Mar 2025 → 29.4% in Mar 2026.",
+          "implication": "Micro & Small remains the engine of PSL growth. The slight deceleration is noise — banks are sustaining aggressive deployment to the smallest borrowers. Watch for credit quality as volumes scale.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -911,9 +910,9 @@
         {
           "id": "sibc-psl-renewable-pos-streak",
           "layer": 1,
-          "title": "PSL renewable energy positive for 8 straight periods — record streak",
-          "body": "Renewable energy lending has grown for 8 consecutive periods, the longest positive streak on record. Extended from 6 to 8 periods, reaching a new historical maximum.",
-          "implication": "Banks are sustaining their renewable energy push despite recent growth moderation, signaling structural commitment to green financing mandates. The unbroken streak confirms this is not a cyclical play but a permanent portfolio shift.",
+          "title": "PSL Renewable Energy positive for 8 straight periods — longest streak",
+          "body": "PSL Renewable Energy has posted positive year-on-year growth for 8 consecutive periods, the longest streak in this dataset. The streak extended from 7 periods last time to 8 now, with no interruption since the series began.",
+          "implication": "Renewable Energy lending is entrenched in positive territory. Banks are consistently deploying capital to green projects — this is a structural trend, not a cyclical bounce. Expect sustained momentum.",
           "preferredMode": "absolute",
           "effect": {
             "highlight": [
@@ -925,9 +924,9 @@
         {
           "id": "sibc-psl-renewable-yoy",
           "layer": 1,
-          "title": "PSL renewable energy at 15.6% YoY — sharp deceleration to lowest",
-          "body": "Renewable energy lending grew 15.64%, down sharply from 34.13% in the prior period. Growth decelerated by 18.49 points, falling to the weakest reading in this 7-period window after peaking at 78.3% in March 2025.",
-          "implication": "The green lending boom is cooling rapidly after explosive growth phases, though double-digit expansion suggests the sector remains structurally attractive. The sharp deceleration signals banks are normalising after front-loading renewable energy exposure to meet mandates.",
+          "title": "PSL Renewable Energy at 15.6% YoY — lowest on record, sharp deceleration",
+          "body": "PSL Renewable Energy grew 15.64% year-on-year in Apr 2026, the slowest reading in the seven-period series. Growth decelerated sharply from 26.01% last period to 15.64%, and from a peak of 78.3% in Mar 2025 → 15.6% in Apr 2026.",
+          "implication": "Renewable Energy is still growing but has lost significant momentum. The sharp deceleration suggests normalisation after an exceptional FY25 — watch whether this stabilises above 15% or decelerates further toward single digits.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -939,9 +938,9 @@
         {
           "id": "sibc-psl-social-infra-yoy",
           "layer": 1,
-          "title": "PSL social infrastructure at 35.3% YoY — surging after volatility",
-          "body": "Social infrastructure lending grew 35.27%, surging from 12.88% in the prior period. Growth accelerated by 22.39 points, swinging from -1.0% contraction in February 2026 to 35.3% expansion.",
-          "implication": "Banks are aggressively re-engaging with social infrastructure after volatile swings, likely driven by government spending on healthcare and education facilities. The sharp acceleration suggests lumpy project disbursements rather than steady trend — watch for reversal.",
+          "title": "PSL Social Infrastructure surged to 35.3% YoY — sharp rebound",
+          "body": "PSL Social Infrastructure grew 35.27% year-on-year in Apr 2026, rebounding sharply from 12.88% last period. Growth surged from 12.88% in Mar 2026 to 35.27% in Apr 2026, a 22.39-point jump. The series has been volatile: 61.9% in Mar 2025 → -1.0% in Feb 2026 → 35.3% in Apr 2026.",
+          "implication": "Social Infrastructure has returned to strong growth after erratic swings. This segment is highly volatile — the rebound suggests renewed deployment, but the trajectory warrants caution on sustainability given the prior instability.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -953,9 +952,9 @@
         {
           "id": "sibc-psl-weaker-sections-yoy",
           "layer": 1,
-          "title": "PSL weaker sections at 10.7% YoY — weakest on record",
-          "body": "Weaker sections lending grew 10.67%, the slowest pace in this 7-period window. Growth decelerated from 11.07% → 10.67%, down from 15.3% in March 2025.",
-          "implication": "Financial inclusion momentum is softening as banks prioritize higher-yield PSL categories over mandated weaker section targets. The sustained deceleration signals structural reallocation toward agriculture, MSME, and housing segments with better risk-return profiles.",
+          "title": "PSL Weaker Sections at 10.7% YoY — lowest on record",
+          "body": "PSL Weaker Sections (including PSLC SF/MF) grew 10.67% year-on-year in Apr 2026, the weakest reading in the seven-period series. Growth decelerated from 11.07% last period to 10.67%, and from a peak of 15.3% in Mar 2025 → 10.7% in Apr 2026.",
+          "implication": "Weaker Sections lending is losing momentum while Micro & Small and Housing are surging. Banks are prioritising higher-growth PSL categories — watch for further deceleration or policy interventions to revive this segment.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -963,25 +962,15 @@
             ]
           },
           "claim_type": "data"
-        },
-        {
-          "id": "sibc-psl-yoy-scan",
-          "layer": 1,
-          "title": "Housing 39.9%, Export Credit -12.0% — PSL spread widens to 52.4%",
-          "body": "Housing leads PSL growth at 39.9%, while export credit contracts 12.0% and others decline 12.5%. Spread widened from 49.4% to 52.4%. Export credit deteriorated from -8.4% → -12.0%, others from -9.6% → -12.5%. Micro and Small Enterprises shifted from strengthening to active status at 28.5%, Educational Loans moved from active to strengthening.",
-          "implication": "PSL bifurcation is intensifying — housing and micro enterprises remain the only bankable priority segments while trade-linked categories are in structural decline. The 52.4% spread signals banks are concentrating capital in proven retail/MSME plays and abandoning export-linked exposures. Micro and Small Enterprises crossing into active status at 28.5% confirms this is now a core growth engine, not a compliance play.",
-          "preferredMode": "yoy",
-          "effect": {},
-          "claim_type": "data"
         }
       ],
       "gaps": [
         {
           "id": "sibc-psl-export-yoy",
           "layer": 1,
-          "title": "PSL export credit at -12.0% YoY — decline re-widening",
-          "body": "PSL export credit contracted 12.02% year-on-year, reversing the prior period's improvement. Contraction widened from -8.36% → -12.02%, breaking the recovery trend from the -17.2% trough in January 2026.",
-          "implication": "Export financing remains under pressure from global trade headwinds. The reversal after three months of improvement suggests banks see no near-term export recovery, raising caution on trade-linked working capital exposure.",
+          "title": "PSL Export Credit at -12.0% YoY — decline deepens again",
+          "body": "PSL Export Credit contracted 12.02% year-on-year in Apr 2026, still negative and worsening from the prior period. The contraction deepened from -8.36% last period to -12.02%, reversing the prior easing trend. Growth was positive at 5.3% in Mar 2025 → -17.2% in Jan 2026 → -12.0% in Apr 2026.",
+          "implication": "Export credit stabilisation has stalled. The renewed decline suggests trade finance demand remains weak or banks are pulling back — the trajectory is now uncertain, and a return to positive growth is no longer imminent.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -993,15 +982,25 @@
         {
           "id": "sibc-psl-others-yoy",
           "layer": 1,
-          "title": "PSL others at -12.5% YoY — contraction re-widening",
-          "body": "PSL other categories contracted 12.45% year-on-year, reversing the prior period's sharp improvement. Contraction widened from -9.55% → -12.45%, breaking the recovery trend from the -23.9% trough in January 2026.",
-          "implication": "Specialty PSL categories are volatile as banks complete portfolio rebalancing. The reversal after improvement suggests no sustained recovery — banks remain focused on core agriculture, MSME, and housing segments.",
+          "title": "PSL Others at -12.5% YoY — contraction deepens again",
+          "body": "PSL Others contracted 12.45% year-on-year in Apr 2026, worsening from the prior period. The contraction deepened from -9.55% last period to -12.45%, reversing the prior narrowing trend. The low was -23.9% in Jan 2026.",
+          "implication": "The 'Others' bucket has lost stabilisation momentum. The renewed decline suggests miscellaneous PSL categories are not finding footing — a return to positive growth is no longer imminent.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
               "Others"
             ]
           },
+          "claim_type": "data"
+        },
+        {
+          "id": "sibc-psl-yoy-scan",
+          "layer": 1,
+          "title": "Housing 39.9%, Micro & Small 28.5% — PSL spread widens to 52.4pp",
+          "body": "Housing credit grew 39.9% YoY, Social Infrastructure 35.3%, and Micro and Small Enterprises 28.5% — the three fastest-growing PSL segments. The spread between top and bottom performers widened from 49.4pp to 52.4pp. Export Credit contracted 12.0% (vs -8.4% prior), Others declined 12.5% (vs -9.6% prior), while Weaker Sections grew 10.7% (vs 11.1% prior). Micro and Small Enterprises shifted from strengthening to active; Educational Loans moved from active to strengthening.",
+          "implication": "PSL bifurcation is intensifying — the spread widened 3pp as Housing held near 40% and Export Credit's contraction deepened to double digits. Banks are doubling down on retail-facing PSL (housing, social infrastructure, education) while corporate/export categories continue to shrink. Micro & Small's shift to active status at 28.5% confirms sustained momentum in the MSME segment. The widening spread signals a structural reallocation: lenders are exiting low-margin, trade-linked PSL in favour of high-growth retail and infrastructure categories.",
+          "preferredMode": "yoy",
+          "effect": {},
           "claim_type": "data"
         }
       ],
@@ -1013,8 +1012,8 @@
           "id": "sibc-basic-metal-sub-share-scan",
           "layer": 1,
           "title": "Iron & Steel share slips to 68.2% — Other Metal gains ground",
-          "body": "Iron & Steel holds 68.2% of basic metal credit while Other Metal Products commands 31.8%. Iron & Steel's share declined from 68.8% → 68.2% while Other Metal Products rose from 31.2% → 31.8%, narrowing the spread from 37.7 to 36.4 percentage points.",
-          "implication": "The share shift confirms specialty metals are steadily capturing allocation from traditional steel, though infrastructure-driven steel lending still dominates. Watch for continued rotation toward higher-value metal products.",
+          "body": "Iron and Steel holds 68.2% of Basic Metal credit, while Other Metal and Metal Products accounts for 31.8%. Iron and Steel's share fell from 68.8% to 68.2%, shifting from strengthening to weakening. Other Metal and Metal Products rose from 31.2% to 31.8%, moving from weakening to strengthening. The spread narrowed from 37.7 to 36.4 percentage points.",
+          "implication": "Iron and Steel's dominance is eroding for the first time in this window. Other Metal Products is clawing back share despite the smaller base — lenders are diversifying within Basic Metal, likely backing aluminium, copper, and specialty alloys as steel demand moderates.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -1026,9 +1025,9 @@
         {
           "id": "sibc-basic-metal-sub-yoy-scan",
           "layer": 1,
-          "title": "Other Metal Products 19.9% YoY — outpacing Iron & Steel at 16.7%",
-          "body": "Other Metal Products grew 19.9% year-on-year versus Iron & Steel at 16.7%. Growth rates converged — the spread narrowed from 2.2 to 3.3 percentage points, with Other Metal Products accelerating from 21.0% → 19.9% and Iron & Steel decelerating from 18.7% → 16.7%.",
-          "implication": "Despite share dominance, Iron & Steel growth is slowing while specialty metals maintain momentum. This divergence signals banks are backing downstream metal fabrication and specialty alloys over core steel production.",
+          "title": "Other Metal Products leads at 19.9% YoY — Iron & Steel at 16.7%",
+          "body": "Other Metal and Metal Products grew 19.9% year-on-year, while Iron and Steel expanded 16.7%. Other Metal Products' growth slowed from 21.0% to 19.9%. Iron and Steel accelerated from 18.8% to 16.7%, shifting from strengthening to active. The spread narrowed from 2.2 to 3.3 percentage points.",
+          "implication": "Other Metal Products maintains its growth lead, confirming sustained demand for non-steel metals. Iron and Steel's deceleration to 16.7% signals cooling momentum — watch for demand-side headwinds in construction and automotive steel consumption.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -1038,25 +1037,11 @@
           "claim_type": "data"
         },
         {
-          "id": "sibc-chemicals-sub-share-scan",
-          "layer": 1,
-          "title": "Pharma share dips to 33.5% — Fertiliser stabilises at 10.2%",
-          "body": "Others leads chemical credit at 44.1%, followed by Drugs & Pharmaceuticals at 33.5%, Petro Chemicals at 12.2%, and Fertiliser at 10.2%. Drugs & Pharmaceuticals share declined from 33.9% → 33.5% while Fertiliser rose from 9.9% → 10.2%, with the spread narrowing from 34.3 to 33.8 percentage points.",
-          "implication": "Pharma's share erosion and fertiliser's stabilisation suggest a pause in the prior rotation. All segments now show balanced positioning — no clear winner emerging in chemical credit allocation this period.",
-          "preferredMode": "yoy",
-          "effect": {
-            "highlight": [
-              "Chemicals and Chemical Products"
-            ]
-          },
-          "claim_type": "data"
-        },
-        {
           "id": "sibc-engineering-sub-share-scan",
           "layer": 1,
-          "title": "Electronics share jumps to 19.9% — Other Engineering slips to 80.1%",
-          "body": "Other Engineering holds 80.1% of engineering credit while Electronics commands 19.9%. Electronics share rose from 18.9% → 19.9% while Other Engineering declined from 81.1% → 80.1%, narrowing the spread from 62.2 to 60.2 percentage points.",
-          "implication": "Electronics is clawing back share from traditional engineering for the first time in this window. The 1 percentage point shift signals early rotation toward tech hardware manufacturing over heavy machinery.",
+          "title": "Electronics share rises to 19.9% — Others slip to 80.1%",
+          "body": "Within All Engineering, Others (non-Electronics) holds 80.1% share, while Electronics accounts for 19.9%. Others' share fell from 81.1% to 80.1%, shifting from strengthening to weakening. Electronics rose from 18.9% to 19.9%, moving from weakening to strengthening. The spread narrowed from 62.2 to 60.2 percentage points.",
+          "implication": "Electronics is gaining share for the first time in this window — a reversal of the prior trend. Lenders are rotating back into consumer electronics, IT hardware, or semiconductor-related capex as traditional engineering growth moderates.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -1068,9 +1053,9 @@
         {
           "id": "sibc-engineering-sub-yoy-scan",
           "layer": 1,
-          "title": "Other Engineering 34.5% YoY — Electronics strengthens to 17.8%",
-          "body": "Other Engineering grows 34.5% year-on-year versus Electronics at 17.8%. Other Engineering decelerated from 37.5% → 34.5% while Electronics accelerated from 13.3% → 17.8%, narrowing the spread from 24.2 to 16.7 percentage points.",
-          "implication": "Electronics growth is re-accelerating while heavy engineering cools. The narrowing gap confirms banks are beginning to back electronics manufacturing — likely driven by PLI schemes and domestic semiconductor push.",
+          "title": "Others lead at 34.5% YoY — Electronics strengthens to 17.8%",
+          "body": "Others (non-Electronics) grew 34.5% year-on-year, while Electronics expanded 17.8%. Others decelerated from 37.5% to 34.5%, remaining active. Electronics accelerated from 13.3% to 17.8%, shifting from active to strengthening. The spread narrowed from 24.2 to 16.7 percentage points.",
+          "implication": "Electronics is re-accelerating after prior moderation — a sign of renewed demand in tech hardware or manufacturing capex. Others remain the growth leader but are slowing, suggesting peak momentum in heavy engineering may have passed.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -1083,8 +1068,22 @@
           "id": "sibc-food-processing-sub-share-scan",
           "layer": 1,
           "title": "Edible Oils share rises to 11.1% — Sugar slips to 11.1%",
-          "body": "Others commands 75.9% of food processing credit, followed by Sugar at 11.1%, Edible Oils at 11.1%, and Tea at 1.9%. Edible Oils share rose from 10.4% → 11.1% while Sugar declined from 11.9% → 11.1%, with the spread narrowing from 73.7 to 74.0 percentage points.",
-          "implication": "Edible Oils has overtaken Sugar in share allocation for the first time. This marks a structural shift toward processed food inputs over traditional commodity crops in food processing credit.",
+          "body": "Within Food Processing, Others holds 75.9%, Sugar 11.1%, Edible Oils and Vanaspati 11.1%, and Tea 1.9%. Edible Oils and Vanaspati rose from 10.5% to 11.1%, shifting from strengthening to strengthening. Sugar fell from 11.9% to 11.1%, moving from active to weakening. Others rose from 75.6% to 75.9%, shifting from weakening to active. The spread widened from 73.5 to 74.0 percentage points.",
+          "implication": "Edible Oils has overtaken Sugar in share for the first time — a structural shift driven by import substitution and domestic capacity expansion. Sugar's share loss signals weakening demand or lender caution on subsidy-dependent economics.",
+          "preferredMode": "yoy",
+          "effect": {
+            "highlight": [
+              "Food Processing"
+            ]
+          },
+          "claim_type": "data"
+        },
+        {
+          "id": "sibc-food-processing-sub-yoy-scan",
+          "layer": 1,
+          "title": "Edible Oils surge 33.0% YoY — Sugar and Tea turn negative",
+          "body": "Edible Oils and Vanaspati grew 33.0% year-on-year, Others 13.6%, Sugar -0.4%, and Tea -3.1%. Edible Oils accelerated from 25.3% to 33.0%, remaining in strengthening. Others decelerated from 14.6% to 13.6%, shifting from strengthening to active. Sugar turned negative from 4.3% to -0.4%, moving from active to declining. Tea contracted further from 0.8% to -3.1%, shifting from strengthening to declining. The spread widened from 24.5 to 36.1 percentage points.",
+          "implication": "Edible Oils is the clear outlier — accelerating to 33.0% on policy support and rising consumption. Sugar and Tea have both turned negative, signalling structural stress in traditional agri-processing segments. Lenders are concentrating exposure in Edible Oils and exiting legacy crops.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -1096,9 +1095,9 @@
         {
           "id": "sibc-industry-type-share-scan",
           "layer": 1,
-          "title": "Infrastructure 32.8% share — Basic Metal 11.3%, Other Industries 7.5%",
-          "body": "Infrastructure dominates industry credit with a 32.8% share, followed by Basic Metal and Metal Products at 11.3% and Other Industries at 7.5%. Infrastructure share rose from 32.6% → 32.8% while Basic Metal held steady at 11.3%. The top 3 segments control over half of industry lending, with bottom segments like Leather at 0.3% and Glass at 0.4% unchanged.",
-          "implication": "Infrastructure continues to consolidate its credit dominance — banks are doubling down on India's capital formation story. The concentration is intensifying, not diversifying.",
+          "title": "Infrastructure holds 32.8% of industry credit — stable across 19 types",
+          "body": "Infrastructure accounts for 32.8% of industry credit, Basic Metal and Metal Products 11.3%, and Other Industries 7.5%. Leather and Leather Products holds just 0.3%. Infrastructure's share rose from 32.5% to 32.8%. All 19 industry types remain in active status. The spread widened from 32.2 to 32.5 percentage points.",
+          "implication": "Infrastructure continues to dominate industry credit by a wide margin, reflecting sustained capex in power, roads, and utilities. The stable status across all segments confirms broad-based growth with no major structural shifts — lenders are maintaining diversified exposure across the industrial spectrum.",
           "preferredMode": "yoy",
           "effect": {},
           "claim_type": "data"
@@ -1106,9 +1105,9 @@
         {
           "id": "sibc-industry-type-yoy-scan",
           "layer": 1,
-          "title": "Petroleum 37.8% YoY leads — All Engineering 30.8%, Gems 26.0%",
-          "body": "Petroleum, Coal Products and Nuclear Fuels leads industry growth at 37.8%, followed by All Engineering at 30.8% and Gems & Jewellery at 26.0%. Growth remains broad-based with 9 active and 10 strengthening sectors. Petroleum accelerated from 32.5% → 37.8% while Gems decelerated from 41.4% → 26.0%. The spread narrowed from 31.3 to 31.3 percentage points.",
-          "implication": "Energy transition financing is accelerating — Petroleum's surge signals banks are backing India's refining and nuclear capacity expansion. Gems cooled but remains strong, confirming sustained export-oriented lending across multiple sectors.",
+          "title": "Petroleum surges to 37.8% YoY — 10 of 19 segments strengthening",
+          "body": "Petroleum, Coal Products and Nuclear Fuels grew 37.8% year-on-year, All Engineering 30.8%, and Gems and Jewellery 26.0%. Leather and Leather Products grew just 6.4%. Petroleum accelerated from 32.4% to 37.8%, shifting to strengthening. All Engineering decelerated from 32.2% to 30.8%, remaining active. Gems and Jewellery decelerated sharply from 41.4% to 26.0%, shifting from strengthening to active. Ten of 19 segments are now strengthening, down from twelve. The spread narrowed from 34.2 to 31.3 percentage points. Chemicals and Chemical Products and Paper and Paper Products shifted from active to strengthening; Gems and Jewellery, Basic Metal and Metal Product, and Glass and Glassware shifted from strengthening to active.",
+          "implication": "Petroleum has overtaken Gems and Jewellery as the growth leader — likely on energy transition investments and refining capacity expansion. Gems and Jewellery's sharp deceleration from 41.4% to 26.0% signals cooling export demand or working capital normalisation. The shift from twelve to ten strengthening segments suggests growth is concentrating in fewer pockets — watch for divergence between energy/capex-heavy sectors and consumer-facing industries.",
           "preferredMode": "yoy",
           "effect": {},
           "claim_type": "data"
@@ -1116,9 +1115,9 @@
         {
           "id": "sibc-infra-sub-share-scan",
           "layer": 1,
-          "title": "Power 56.8% share — Roads 22.8%, Other Infrastructure 12.2%",
-          "body": "Power commands 56.8% of infrastructure credit, with Roads at 22.8% and Other Infrastructure at 12.2%. Power share rose from 56.6% → 56.8% while Roads rose from 22.6% → 22.8%. The top 3 infrastructure categories control 91.8% of the segment, with transport modes like Airports at 0.5% and Railways at 0.4% unchanged.",
-          "implication": "Power and Roads are tightening their grip on infrastructure credit — the concentration is intensifying. Banks are backing core energy and connectivity over diversified transport infrastructure.",
+          "title": "Power share rises to 56.8% — Telecom weakens within Infrastructure",
+          "body": "Within Infrastructure, Power holds 56.8%, Roads 22.8%, and Other Infrastructure 12.2%. Railways (other than Indian Railways) accounts for just 0.4%. Power's share rose from 56.5% to 56.8%, remaining active. Roads' share rose from 22.7% to 22.8%, remaining active. Telecommunications shifted from active to weakening. The spread widened from 56.1 to 56.4 percentage points.",
+          "implication": "Power is consolidating its dominance within Infrastructure, reflecting sustained renewable energy and thermal capacity investments. Telecom's shift to weakening confirms structural stress — lenders are reducing exposure as the sector deleverages and capex slows.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -1130,9 +1129,9 @@
         {
           "id": "sibc-textiles-sub-share-scan",
           "layer": 1,
-          "title": "Other Textiles dominates at 44.7% — Cotton second at 36.5%",
-          "body": "Other Textiles dominates at 44.7% of textile credit, followed by Cotton Textiles at 36.5%. All four textile sub-segments remain active with a 42.9% spread between largest (Other Textiles) and smallest (Jute Textiles at 1.7%).",
-          "implication": "Textile lending is concentrated in non-cotton segments, likely reflecting synthetic fiber and technical textile expansion over traditional cotton manufacturing.",
+          "title": "Other Textiles 44.7%, Cotton 36.5% — two segments hold 81% of pool",
+          "body": "Within Textiles, Other Textiles accounts for 44.7% of credit, Cotton Textiles 36.5%, Man-Made 17.1%, and Jute 1.7%. The four sub-segments span a 42.9 percentage point range, with Other Textiles and Cotton together holding 81% of the pool — unchanged from last period.",
+          "implication": "Textiles credit is concentrated in two legacy categories — Other and Cotton. Man-Made and Jute are marginal. Any shift in Cotton or Other Textiles will move the entire sector.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -1144,9 +1143,9 @@
         {
           "id": "sibc-textiles-sub-yoy-scan",
           "layer": 1,
-          "title": "Jute Textiles leads at 19.9% YoY — all four segments growing",
-          "body": "All four textile segments posted positive growth, led by Jute Textiles at 19.9% and Other Textiles at 13.3%. Broad-based growth with Jute Textiles and Cotton Textiles both strengthening, while Other Textiles and Man-Made Textiles shifted from strengthening to active.",
-          "implication": "Even traditional manufacturing sectors like textiles are benefiting from the credit expansion. The universal positive growth signals broad industrial optimism, though the status downgrades in Other and Man-Made suggest momentum is moderating in the larger segments.",
+          "title": "Jute leads Textiles at 19.9% YoY — Other and Cotton shift to active",
+          "body": "All four Textiles sub-segments are growing, led by Jute at 19.9% YoY, Other Textiles at 13.3%, Cotton at 4.8%, and Man-Made at 2.7%. Other Textiles and Man-Made both shifted from strengthening to active status this period, while Jute and Cotton moved to strengthening. The spread widened from 13.9pp to 17.2pp as Jute accelerated and Man-Made slowed.",
+          "implication": "Textiles credit remains in broad-based recovery, but momentum is shifting. Jute is pulling away at 19.9%, while the two largest segments (Other and Cotton) have stabilized at mid-teens and low single-digit growth. Man-Made is the laggard at 2.7% — the segment is growing but barely keeping pace with inflation.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -1158,11 +1157,25 @@
       ],
       "gaps": [
         {
+          "id": "sibc-chemicals-sub-share-scan",
+          "layer": 1,
+          "title": "Pharma share slips to 33.5% — Fertiliser stabilises at 10.2%",
+          "body": "Within Chemicals, Others holds 44.1%, Drugs and Pharmaceuticals 33.5%, Petro Chemicals 12.2%, and Fertiliser 10.2%. Drugs and Pharmaceuticals' share fell from 33.9% to 33.5%, shifting from strengthening to active. Fertiliser rose from 9.9% to 10.2%, moving from weakening to active. The spread narrowed from 34.3 to 33.8 percentage points.",
+          "implication": "Pharma's share loss marks a reversal after prior gains — growth is slowing relative to the broader Chemicals pool. Fertiliser's stabilisation at 10.2% suggests the worst of the contraction may be over, but it remains the smallest segment.",
+          "preferredMode": "yoy",
+          "effect": {
+            "highlight": [
+              "Chemicals and Chemical Products"
+            ]
+          },
+          "claim_type": "data"
+        },
+        {
           "id": "sibc-chemicals-sub-yoy-scan",
           "layer": 1,
-          "title": "Pharma surges 20.6% YoY — Fertiliser flat at -0.3%",
-          "body": "Drugs & Pharmaceuticals leads chemical growth at 20.6%, followed by Petro Chemicals at 19.4% and Others at 16.4%, while Fertiliser contracts -0.3%. Pharma accelerated from 17.9% → 20.6% while Petro Chemicals decelerated sharply from 27.7% → 19.4%. Fertiliser improved from -4.5% → -0.3%, narrowing the spread from 32.2 to 20.9 percentage points.",
-          "implication": "Pharma has seized growth leadership as petrochemicals cool. Fertiliser's contraction is moderating — near stabilisation after sustained decline. Banks are rotating toward pharma manufacturing and away from commodity chemicals.",
+          "title": "Pharma surges to 20.6% YoY — Fertiliser flat at -0.3%",
+          "body": "Drugs and Pharmaceuticals grew 20.6% year-on-year, Petro Chemicals 19.4%, and Others 16.4%. Fertiliser contracted -0.3%. Pharma accelerated from 17.9% to 20.6%, shifting to strengthening. Petro Chemicals decelerated sharply from 27.8% to 19.4%, moving to active. Others accelerated from 14.9% to 16.4%, shifting from active to strengthening. Fertiliser improved from -4.5% to -0.3%, but remains in decline. The spread narrowed from 32.3 to 20.9 percentage points.",
+          "implication": "Pharma has overtaken Petro Chemicals as the growth leader — likely on export demand and domestic healthcare expansion. Petro Chemicals' sharp deceleration from 27.8% signals cooling downstream demand or capacity saturation. Fertiliser's near-zero contraction suggests stabilisation, but lenders remain cautious.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -1173,25 +1186,11 @@
           "claim_type": "data"
         },
         {
-          "id": "sibc-food-processing-sub-yoy-scan",
-          "layer": 1,
-          "title": "Edible Oils 33.0% YoY — Sugar turns negative at -0.4%",
-          "body": "Edible Oils & Vanaspati leads food processing growth at 33.0%, followed by Others at 13.6%, while Sugar contracts -0.4% and Tea -3.1%. Edible Oils accelerated from 23.9% → 33.0% while Others decelerated from 14.8% → 13.6%. Sugar turned negative from 4.3% → -0.4% and Tea from 0.8% → -3.1%, widening the spread from 23.1 to 36.1 percentage points.",
-          "implication": "Edible Oils is surging while traditional commodities collapse. Sugar's first contraction and Tea's accelerating decline signal banks are abandoning legacy agri-processing for value-added food manufacturing.",
-          "preferredMode": "yoy",
-          "effect": {
-            "highlight": [
-              "Food Processing"
-            ]
-          },
-          "claim_type": "data"
-        },
-        {
           "id": "sibc-infra-sub-yoy-scan",
           "layer": 1,
-          "title": "Ports surge 74.0% YoY — Power 21.5%, Railways collapse -44.1%",
-          "body": "Ports surge 74.0% while Power grows 21.5% and Other Infrastructure 1.4%. Railways contracts -44.1%, Airports -26.0%, and Telecommunications -11.9%. Ports accelerated from 48.7% → 74.0% while Power decelerated from 22.1% → 21.5%. Railways worsened from -50.1% → -44.1% while Airports improved from -27.2% → -26.0%. The spread widened from 98.8 to 118.1 percentage points.",
-          "implication": "Ports financing is exploding — banks are aggressively backing India's export infrastructure as trade volumes surge. Traditional transport sectors remain in deep contraction, confirming the structural shift toward trade-enabling over domestic connectivity infrastructure.",
+          "title": "Ports surge 74.0% YoY — Railways contract -44.1%",
+          "body": "Ports grew 74.0% year-on-year, Power 21.5%, and Other Infrastructure 1.4%. Railways (other than Indian Railways) contracted -44.1%, Airports -26.0%, and Telecommunications -11.9%. Ports accelerated from 48.7% to 74.0%, shifting from active to strengthening. Power decelerated from 21.7% to 21.5%, shifting from strengthening to active. Other Infrastructure turned positive from 1.2% to 1.4%, shifting from declining to strengthening. Roads accelerated from 1.2% to an unstated level, shifting from strengthening to active. Railways' contraction improved from -49.8% to -44.1%, remaining in decline. Airports' contraction improved from -27.0% to -26.0%, remaining in decline. Telecom's contraction improved from -12.2% to -11.9%, remaining in decline. The spread widened from 98.5 to 118.1 percentage points.",
+          "implication": "Ports is the standout growth driver within Infrastructure — accelerating to 74.0% on trade volume recovery and capacity expansion. Railways, Airports, and Telecom remain in sharp contraction, though all three are moderating — watch for stabilisation signals. The 118.1-point spread is the widest in this domain, confirming extreme divergence between trade/power infrastructure and transport/telecom segments.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [

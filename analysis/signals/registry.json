@@ -2,7 +2,7 @@
   "_meta": {
     "schema_version": "1.0",
     "description": "Signal registry — permanent catalog of every tracked signal across all ingestion pipelines. Signal IDs are immutable once created. Add new signals; never rename or delete. layer: 1 = per-chart data signal (algorithmically computed), 2 = cross-chart synthesis (authored per period from data), 3 = lending ecosystem expert model (generated ~6-monthly, strict claim validation).",
-    "last_updated": "2026-06-13"
+    "last_updated": "2026-06-17"
   },
   "pipelines": {
     "sibc": {
@@ -453,7 +453,9 @@
       "current_status": "active",
       "first_seen": "2024-04-22",
       "type": "data",
-      "chart_series": ["Bank Credit"]
+      "chart_series": [
+        "Bank Credit"
+      ]
     },
     "sibc-bank-credit-abs": {
       "title": "Bank credit absolute volume (₹Cr)",
@@ -4174,6 +4176,7 @@
       "first_seen": "2025-02-28",
       "compute": {
         "method": "csv_sector_fy_acceleration",
+        "annual": true,
         "code": "I",
         "statement": "Statement 1",
         "status_rules": [
@@ -4191,7 +4194,9 @@
           }
         ]
       },
-      "chart_series": ["Bank Credit"]
+      "chart_series": [
+        "Bank Credit"
+      ]
     },
     "sibc-industry-fy-acceleration": {
       "id": "sibc-industry-fy-acceleration",
@@ -4206,6 +4211,7 @@
       "first_seen": "2025-02-28",
       "compute": {
         "method": "csv_sector_fy_acceleration",
+        "annual": true,
         "code": "2",
         "statement": "Statement 1",
         "status_rules": [
@@ -4240,6 +4246,7 @@
       "first_seen": "2025-02-28",
       "compute": {
         "method": "csv_sector_fy_acceleration",
+        "annual": true,
         "code": "3",
         "statement": "Statement 1",
         "status_rules": [
@@ -4274,6 +4281,7 @@
       "first_seen": "2025-02-28",
       "compute": {
         "method": "csv_sector_fy_acceleration",
+        "annual": true,
         "code": "2.1",
         "statement": "Statement 1",
         "status_rules": [
@@ -4308,6 +4316,7 @@
       "first_seen": "2025-02-28",
       "compute": {
         "method": "csv_sector_fy_acceleration",
+        "annual": true,
         "code": "ii",
         "statement": "Statement 1",
         "status_rules": [

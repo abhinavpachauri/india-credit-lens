@@ -218,30 +218,54 @@ def _scalar_payload(conn: sqlite3.Connection, sig_id: str, sig: dict,
         dstr = f"{delta:+.1f}" if delta is not None else "n/a"
 
     lines.append(f"Value: {vstr} | Status: {status}")
-    lines.append(f"Prior period: {pvstr} | Change: {dstr}")
 
-    # Full chronological series — lets the LLM write multi-period trajectories
-    if len(history_rows) > 1:
-        def _fmt_v(v: float) -> str:
-            if unit == "pct":                   return f"{v:.1f}%"
-            if unit in ("lcr_cr", "rs_thousands"): return f"{v:,.0f} {unit}"
-            if unit == "pp":                    return f"{v:.1f}pp"
-            if unit == "periods":               return f"{int(v)} periods"
-            if unit == "count":                 return f"{v:,.0f}"
-            if unit == "ratio":                 return f"{v:.1f}x"
-            return f"{v:,.1f}"
+    # Annual second-order metrics (e.g. FY acceleration) are period-invariant —
+    # they only change at each March year-end, so a prior-period delta, a
+    # per-period series, and a historical range are all meaningless and invite a
+    # fabricated "jump" narrative. Surface the underlying component rates instead,
+    # which make the value interpretable and traceable to its inputs.
+    is_annual = bool(sig.get("compute", {}).get("annual"))
 
-        def _fmt_p(p: str) -> str:
-            disp = display_date(p, pipeline)
-            try:    return datetime.strptime(disp, "%Y-%m-%d").strftime("%b %Y")
-            except: return disp
+    if is_annual:
+        comp = conn.execute(
+            """SELECT entity_id, value FROM signals
+               WHERE pipeline=? AND period=? AND metric_id=?
+                 AND entity_type='fy_yoy' AND value IS NOT NULL
+               ORDER BY entity_id""",
+            (pipeline, period, sig_id)
+        ).fetchall()
+        if len(comp) >= 2:
+            def _fy(d: str) -> str:
+                try:    return datetime.strptime(d, "%Y-%m-%d").strftime("%b %Y")
+                except: return d
+            parts = ", ".join(f"year ending {_fy(d)} grew {v:.1f}%" for d, v in comp)
+            lines.append(f"FY components: {parts} (acceleration = {value:+.1f}pp)")
+        lines.append("Note: annual metric — set at each March year-end; it does NOT change month to month, so do not describe it as a per-period jump/surge/plateau.")
+    else:
+        lines.append(f"Prior period: {pvstr} | Change: {dstr}")
 
-        series = " → ".join(
-            f"{_fmt_p(p)}: {_fmt_v(v)}" for p, v in history_rows
-        )
-        lines.append(f"Series: {series}")
+        # Full chronological series — lets the LLM write multi-period trajectories
+        if len(history_rows) > 1:
+            def _fmt_v(v: float) -> str:
+                if unit == "pct":                   return f"{v:.1f}%"
+                if unit in ("lcr_cr", "rs_thousands"): return f"{v:,.0f} {unit}"
+                if unit == "pp":                    return f"{v:.1f}pp"
+                if unit == "periods":               return f"{int(v)} periods"
+                if unit == "count":                 return f"{v:,.0f}"
+                if unit == "ratio":                 return f"{v:.1f}x"
+                return f"{v:,.1f}"
 
-    if rng:
+            def _fmt_p(p: str) -> str:
+                disp = display_date(p, pipeline)
+                try:    return datetime.strptime(disp, "%Y-%m-%d").strftime("%b %Y")
+                except: return disp
+
+            series = " → ".join(
+                f"{_fmt_p(p)}: {_fmt_v(v)}" for p, v in history_rows
+            )
+            lines.append(f"Series: {series}")
+
+    if rng and not is_annual:
         min_v, max_v, p25, p75, n = rng
         pos = _range_position(value, p25, p75, min_v, max_v)
         if unit == "pct":

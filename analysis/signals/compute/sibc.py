@@ -483,9 +483,18 @@ def csv_sector_fy_acceleration(params: dict, period: str,
         if yoy_prior2 is not None:
             prev_accel = yoy_prior - yoy_prior2
 
-    return [_row("aggregate", "total", accel,
-                 _eval_status(params.get("status_rules", []), accel, prev_accel),
-                 "pp")]
+    # Acceleration is a second-order scalar (difference of two FY-end YoY rates)
+    # and is period-invariant — it depends only on the FY-ends, not the eval
+    # period. Emit its two component rates as well, keyed by FY-end date, so the
+    # value is interpretable and traceable back to its inputs (year to Mar YYYY
+    # grew X%). entity_type='fy_yoy' keeps these out of the aggregate/total
+    # status-sync and scalar-history paths.
+    return [
+        _row("aggregate", "total", accel,
+             _eval_status(params.get("status_rules", []), accel, prev_accel), "pp"),
+        _row("fy_yoy", prior_fy,  yoy_prior,  "active", "pct"),
+        _row("fy_yoy", latest_fy, yoy_latest, "active", "pct"),
+    ]
 
 
 def csv_sector_fy_delta(params: dict, period: str,
