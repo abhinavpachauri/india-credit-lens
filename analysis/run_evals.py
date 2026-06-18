@@ -617,6 +617,22 @@ def main():
             if not passed:
                 print(out); print(err, file=sys.stderr)
 
+        # ── Check 4f: opportunity traceability (advisory) ─────────────────────
+        # Every number in an opportunity's body/chain/implication should trace to
+        # its evidence signals. Advisory for now — Layer 2 narratives are LLM +
+        # complex cross-signal; flip to --strict once the narrative generator is
+        # fully grounded. See validate_opportunity_traceability.py.
+        passed, out, err = run_check(
+            "opportunity_traceability",
+            [sys.executable, str(ANALYSIS / "validate_opportunity_traceability.py")],
+            cwd=REPO_ROOT,
+        )
+        tline = [l.strip() for l in (out + err).splitlines() if "opportunit" in l.lower() and ("✓" in l or "⚠" in l or "✗" in l)]
+        note  = tline[0].lstrip("✓✗⚠ ").strip()[:60] if tline else one_line_summary(out, err, passed)
+        results.append(("4f. opportunity traceability (advisory)", passed, note))
+        if not passed:
+            print(out); print(err, file=sys.stderr)
+
     # ── Check 6: TypeScript build ─────────────────────────────────────────────
     if args.skip_build:
         results.append(("6.  tsc + npm run build", None, "skipped (--skip-build)"))
