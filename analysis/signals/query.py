@@ -423,6 +423,16 @@ def signal_numbers(conn: sqlite3.Connection, sid: str, sig: dict,
     return facts
 
 
+def scan_distribution(conn: sqlite3.Connection, sid: str,
+                      pipeline: str, period: str) -> list[tuple]:
+    """Full ranked distribution for a scan signal: [(entity_id, value, status)]
+    sorted high→low. Source for deterministic scan insight generation."""
+    return [(r[0], r[1], r[2]) for r in conn.execute(
+        "SELECT entity_id, value, status FROM signals "
+        "WHERE pipeline=? AND period=? AND metric_id=? AND value IS NOT NULL "
+        "ORDER BY value DESC", (pipeline, period, sid)).fetchall()]
+
+
 def flat_numbers(facts: dict) -> list[float]:
     """All legitimate numbers from signal_numbers(), including the common derived
     values an insight may legitimately state (period delta; pairwise component

@@ -14,12 +14,13 @@ Signal → section routing is done by domain + signal prefix rules below.
 """
 
 import json
+import re
 import sqlite3
 import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from signals.query import signal_numbers   # noqa: E402
+from signals.query import signal_numbers, scan_distribution, _signal_type   # noqa: E402
 
 REPO  = Path(__file__).resolve().parent.parent
 ANAL  = REPO / "analysis"
@@ -144,6 +145,66 @@ def data_facts(facts: dict, src_ref: dict) -> list[str]:
     return out
 
 
+# ── Deterministic scan insights (every number from the distribution) ──────────
+# Scan signals summarise a distribution — a mechanical task the LLM does badly
+# (it rounds, groups, and invents middle-entity figures). We generate their
+# body/chain/implication directly from the ranked distribution so every number
+# is grounded by construction and Check 2g hard-enforces them.
+
+def _short(name: str) -> str:
+    name = re.split(r"\s*\(", name)[0]
+    name = re.split(r"\s+including\b", name)[0]
+    name = re.split(r"\s+other than\b", name)[0]
+    return name.strip()
+
+
+def _scan_fmt(v: float, unit: str) -> str:
+    return f"{v:.1f}%" if unit == "pct" else f"{v:,.0f}"
+
+
+def deterministic_scan_insight(dist: list[tuple], unit: str) -> tuple[str, str, list[str], str]:
+    """Return (title, body, chain, implication) for a scan distribution —
+    fully grounded in the ranked entity values."""
+    n  = len(dist)
+    fv = lambda v: _scan_fmt(v, unit)
+    leaders  = dist[:2]
+    laggard  = dist[-1]
+    spread   = dist[0][1] - dist[-1][1] if n >= 2 else 0.0
+    n_pos    = sum(1 for _, v, _ in dist if v > 0)
+    signed   = any(v < 0 for _, v, _ in dist)        # yoy-type (growth) vs share-type
+    top3     = sum(v for _, v, _ in dist[:3])
+
+    L0, Lv0 = _short(leaders[0][0]), fv(leaders[0][1])
+    W0, Wv0 = _short(laggard[0]),    fv(laggard[1])
+
+    title = f"{L0} leads at {Lv0}; {W0} lowest at {Wv0}"
+
+    parts = [f"{L0} leads at {Lv0}"]
+    if n > 1:
+        parts.append(f"{_short(leaders[1][0])} at {fv(leaders[1][1])}")
+    body = ", ".join(parts) + f"; {W0} is lowest at {Wv0}. "
+    body += (f"{n_pos} of {n} categories positive, spread {fv(spread)}."
+             if signed else
+             f"Top three hold {fv(top3)} of the total, spread {fv(spread)}.")
+
+    chain = [
+        f"{L0} is the standout at {Lv0}.",
+        f"{W0} is the weakest at {Wv0} — a spread of {fv(spread)} across {n} categories.",
+        (f"{n_pos} of {n} categories are growing — "
+         f"{'broad-based' if n_pos > n / 2 else 'concentrated'} momentum."
+         if signed else
+         f"The top three hold {fv(top3)} of the total — "
+         f"{'concentrated' if top3 > 60 else 'dispersed'} mix."),
+    ]
+    implication = (
+        f"Lenders can lean into {L0} ({Lv0}) and monitor {W0} ({Wv0}). "
+        + ("Broad participation supports diversified deployment."
+           if (signed and n_pos > n / 2) else
+           "Narrow leadership argues for selective positioning.")
+    )
+    return title, body, chain, implication
+
+
 # ── Main ──────────────────────────────────────────────────────────────────────
 
 def main(period: str | None = None) -> int:
@@ -193,20 +254,27 @@ def main(period: str | None = None) -> int:
 
         method       = reg_sig.get("compute", {}).get("method", "")
         chart_series = reg_sig.get("chart_series", [])
-        obs    = se.get("observation", "")
-        dir_   = se.get("direction",   "")
-        inf    = se.get("inference",   "")
-        chain  = se.get("chain") or []
-        body   = " ".join(filter(None, [obs, dir_]))
-        itype  = insight_type(obs, inf)
+        facts        = signal_numbers(conn, sid, reg_sig, "sibc", period)
 
         # Shared schema: basis.facts = traceable data points (the numbers this
-        # rests on), basis.inferences = the LLM reasoning chain rendered by the card.
-        facts = signal_numbers(conn, sid, reg_sig, "sibc", period)
+        # rests on), basis.inferences = the reasoning chain rendered by the card.
+        if _signal_type(reg_sig) == "scan" and (dist := scan_distribution(conn, sid, "sibc", period)):
+            # Scan distributions are generated deterministically (grounded by
+            # construction), not from the LLM narrative.
+            title, body, chain, inf = deterministic_scan_insight(dist, facts.get("unit") or "pct")
+            itype = "insight"
+        else:
+            obs   = se.get("observation", "")
+            dir_  = se.get("direction",   "")
+            inf   = se.get("inference",   "")
+            chain = se.get("chain") or []
+            title = derive_title(se)
+            body  = " ".join(filter(None, [obs, dir_]))
+            itype = insight_type(obs, inf)
         annotation = {
             "id":            sid,
             "layer":         1,
-            "title":         derive_title(se),
+            "title":         title,
             "body":          body,
             "implication":   inf,
             "preferredMode": preferred_mode(method),

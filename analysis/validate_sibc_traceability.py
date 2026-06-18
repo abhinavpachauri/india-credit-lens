@@ -147,12 +147,9 @@ def check(period: str | None = None, quiet: bool = False) -> int:
                     for num in extract_numbers(text):
                         ok = matches(num, cand) or (not is_scan and ratio_matches(num, cand))
                         if not ok:
-                            msg = (f"{sid} [{field}] ungrounded number {num} "
-                                   f"— not in signal data {sorted(set(round(x,2) for x in own))[:12]}")
-                            # Scan/distribution narratives summarise (group/round)
-                            # and resist exact number-traceability — surface, don't
-                            # block. Scalar insights must trace exactly.
-                            (warnings if is_scan else failures).append(msg)
+                            failures.append(
+                                f"{sid} [{field}] ungrounded number {num} "
+                                f"— not in signal data {sorted(set(round(x,2) for x in own))[:12]}")
 
                 # 2) Status-consistency of the implication (substring heuristic →
                 #    can trip on hedged/conditional language → warn, don't block).
@@ -182,8 +179,8 @@ def check(period: str | None = None, quiet: bool = False) -> int:
         return 1
 
     if not quiet:
-        print(f"  ✓ traceability — every number in {checked} scalar insights traces to "
-              f"signals.db ({len(warnings)} scan/status warnings)")
+        print(f"  ✓ traceability — every number in {checked} insights traces to "
+              f"signals.db ({len(warnings)} status warning(s))")
     return 0
 
 
