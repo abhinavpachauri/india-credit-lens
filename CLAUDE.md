@@ -44,7 +44,8 @@ Live components only. Planned work lives in `STRATEGY_PLANNER.md`.
 | promote_annotations.py (Stage 7) | **Live** — automated verified copy to web |
 | signal_registry.json | **Live** — 7 signals tracked across 3 issues (newsletter subsystem) |
 | signal compute layer | **Live** — `analysis/signals/` — registry.json (**206 signals**: SIBC 84 L1 + 34 L2 + 4 L3; ATM/POS 84 L1), signals.db (SQLite — sole store); compute engine in signals/compute/; Check 2e validates DB + registry, Check 2f/5b2 verifies DB == fresh recompute from CSV |
-| signal evaluate layer | **Live** — `analysis/signals/evaluate.py` — Stage 5 LLM evaluation via `claude -p` CLI (Pro subscription, no API cost); prompt v1.4 (executive tone, full period series in payload); prior-period signal narratives auto-injected for diff from 2nd period onward; evaluations written to `signals/evaluations/{pipeline}/{period}.json` |
+| signal evaluate layer | **Live** — `analysis/signals/evaluate.py` — Stage 5 LLM evaluation via `claude -p` CLI (Pro subscription, no API cost); **prompt v1.11** (executive tone, full period series + full scan distribution in payload, per-signal **chain** output, traceability + no-invented-seasonality rules); prior-period narratives auto-injected for diff; evaluations written to `signals/evaluations/{pipeline}/{period}.json` |
+| **Insight schema + traceability** | **Live** — ONE shared insight schema across both pipelines: `basis.{facts, inferences}` (facts = traceable data points, inferences = the chain the card renders). SIBC **scalar** insights = LLM chain (prompt v1.11); SIBC **scan/distribution** insights = deterministic (`generate_analysis_report.deterministic_scan_insight`, grounded by construction); ATM/POS insights = deterministic templates carrying `basis`. **Check 2g** (`validate_sibc_traceability.py`) + ATM/POS Stage 4c (`validate_atm_pos_insights.py`) hard-fail any number in body/chain/implication that doesn't trace to the computed signals. SIBC `_signal_type=='scan'` branch overrides LLM text with deterministic. (3 fuzzy status-substring warnings remain non-blocking — see Open Notes.) |
 | L1 annotation classification | **Done** — all 49 SIBC annotations classified: 26 L1 / 18 L2 / 5 L3; all 21 ATM/POS insights classified: 16 L1 / 3 L2 / 2 gaps |
 | Subsystem generation | **Live** — `generate_mermaid.py` → `.mmd` + `validate.py --check-subsystems` |
 | detect_format.py (Stage 0) | **Live** — flags format changes in new XLSX before extraction |
@@ -154,6 +155,9 @@ handles formatting-only cases automatically.
 | `analysis/validate_annotation_basis.py` | Check 2d: basis completeness — inference/hypothesis annotations must have basis.inferences |
 | `analysis/validate_signal_history.py` | Check 2e: signal history integrity — DB rows, registry schema, status sync vs DB |
 | `analysis/check_signal_freshness.py` | Check 2f/5b2: deterministic signals.db freshness — recompute all periods from CSV, fail on drift. Closes the staleness gap `check_derived_fresh.py` leaves (it excludes the binary DB). |
+| `analysis/validate_sibc_traceability.py` | Check 2g: every number in a SIBC insight's body/chain/implication must trace to a value in signals.db (scalar = hard fail; scan = deterministic so grounded by construction). Status-substring contradictions = non-blocking warnings. Ground truth = `query.signal_numbers`/`flat_numbers` (period-wide, unit-aware). |
+| `analysis/validate_atm_pos_insights.py` | Stage 4c: ATM/POS traceability — numbers in body/**chain**/implication must trace to `signals.json`. Mirror of Check 2g for the deterministic payments path. |
+| `analysis/generate_analysis_report.py` | Stage 5.5: eval JSON → `sibc_l1_annotations.json`. Scalar insights carry the LLM chain → `basis.inferences`; **scan insights generated deterministically** (`deterministic_scan_insight`). Attaches `basis.facts` from `signal_numbers`. |
 | `analysis/validate.py` | Checks 4, 5: system_model.json + subsystems.json |
 | `analysis/extract_sibc.py` | Stage 1: SIBC xlsx → sections.json + format_report.json |
 | `analysis/detect_format.py` | Stage 0: detect structural changes in new XLSX vs prior period (SIBC) |
@@ -237,6 +241,22 @@ chart highlight, cross-system 2-chart card) + plain-English narrative (preserved
 **S4 inference loop** (`run_inference.py` — sourcing-gated proposals, never auto-promoted) · all L1 signal
 `current_status` synced (scan/bank-scan/share roll-up in `seed`+`append`; 0 unknowns). The whole
 `S1 → S2a/S2b → S3 → opportunities → ecosystem → UI` chain runs in the gates; S4 is a manual review step.
+
+**Done (this session — traceability + freshness, all pushed):** deterministic **signals.db freshness guard**
+(Check 2f/5b2 — recompute every period from CSV, fail on drift; in both gates + pre-commit) · FY-acceleration
+redesigned as an **annual** metric carrying its two FY-end YoY component rates (`fy_yoy` entity rows) ·
+**traceable inference chains** + ONE **shared insight schema** (`basis.{facts, inferences}`) across both pipelines ·
+**Check 2g** insight traceability (every number in body/chain/implication traces to signals.db; scalar hard-fail) ·
+SIBC scan insights + all ATM/POS insights **deterministic** (grounded by construction); SIBC scalars LLM + validated ·
+ATM/POS Stage 4c now validates the chain too; payments card reads `basis.inferences`.
+
+**Open Notes:**
+- **3 SIBC status-substring warnings (non-blocking):** `validate_sibc_traceability.py` flags scalar
+  implications whose wording may conflict with the computed status (`sibc-industry-yoy` "decelerat" vs
+  strengthening; `sibc-msme-size-yoy-spread` "accelerat" vs weakening; `sibc-pl-share-advances-yoy`
+  "strengthening" vs declining). The check is a fuzzy substring heuristic (trips on hedged/conditional
+  language) — kept as a warning, not a gate failure. Review the wording; tighten the heuristic only if it
+  proves noisy.
 
 **Immediately next:**
 1. **Ingest next SIBC + ATM/POS period** — run full gate after ingestion (now also regenerates skeleton + S3 + opportunities).
