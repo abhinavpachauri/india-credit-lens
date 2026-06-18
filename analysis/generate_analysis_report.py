@@ -14,8 +14,12 @@ Signal → section routing is done by domain + signal prefix rules below.
 """
 
 import json
+import sqlite3
 import sys
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from signals.query import signal_numbers   # noqa: E402
 
 REPO  = Path(__file__).resolve().parent.parent
 ANAL  = REPO / "analysis"
@@ -107,11 +111,46 @@ def derive_title(eval_entry: dict) -> str:
     truncated = first[:90].rsplit(" ", 1)[0]
     return truncated + "…"
 
+# ── Traceability: data points the insight rests on (basis.facts) ──────────────
+
+def _fmt_val(v, unit: str) -> str:
+    if unit == "pct":     return f"{v:.1f}%"
+    if unit == "pp":      return f"{v:.1f}pp"
+    if unit == "lcr_cr":  return f"{v:,.1f}L Cr"
+    if unit == "ratio":   return f"{v:.1f}x"
+    if unit == "periods": return f"{int(v)} periods"
+    return f"{v:,.1f}"
+
+
+def data_facts(facts: dict, src_ref: dict) -> list[str]:
+    """Readable list of the computed data points this insight rests on — the
+    traceability anchors (basis.facts in the shared schema)."""
+    u = facts.get("unit") or ""
+    out: list[str] = []
+    if facts.get("value") is not None:
+        out.append(f"Current: {_fmt_val(facts['value'], u)}")
+    if facts.get("prior") is not None:
+        out.append(f"Prior period: {_fmt_val(facts['prior'], u)}")
+    for label, v in (facts.get("components") or {}).items():
+        nice = label.replace("fy_yoy:", "FY YoY @ ")
+        out.append(f"{nice}: {_fmt_val(v, 'pct')}")
+    rng = facts.get("range") or {}
+    if rng.get("min") is not None and rng.get("max") is not None:
+        out.append(f"Range: {_fmt_val(rng['min'], u)} – {_fmt_val(rng['max'], u)} "
+                   f"over {rng.get('count', '?')} periods")
+    sf = src_ref.get("source_file", "")
+    if sf:
+        out.append(f"Source: {sf} ({src_ref.get('method', '')})")
+    return out
+
+
 # ── Main ──────────────────────────────────────────────────────────────────────
 
 def main(period: str | None = None) -> int:
     with open(REG) as f:
         registry = json.load(f)["signals"]
+
+    conn = sqlite3.connect(f"file:{SIG / 'signals.db'}?mode=ro", uri=True)
 
     # Find latest SIBC evaluation if period not specified
     eval_dir = EVALS / "sibc"
@@ -157,9 +196,13 @@ def main(period: str | None = None) -> int:
         obs    = se.get("observation", "")
         dir_   = se.get("direction",   "")
         inf    = se.get("inference",   "")
+        chain  = se.get("chain") or []
         body   = " ".join(filter(None, [obs, dir_]))
         itype  = insight_type(obs, inf)
 
+        # Shared schema: basis.facts = traceable data points (the numbers this
+        # rests on), basis.inferences = the LLM reasoning chain rendered by the card.
+        facts = signal_numbers(conn, sid, reg_sig, "sibc", period)
         annotation = {
             "id":            sid,
             "layer":         1,
@@ -169,6 +212,10 @@ def main(period: str | None = None) -> int:
             "preferredMode": preferred_mode(method),
             "effect":        {"highlight": chart_series} if chart_series else {},
             "claim_type":    "data",
+            "basis":         {
+                "facts":      data_facts(facts, se.get("source_ref", {})),
+                "inferences": chain,
+            },
         }
 
         sections_out[section][itype + "s"].append(annotation)

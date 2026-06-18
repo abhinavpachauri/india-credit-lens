@@ -32,7 +32,7 @@ PROMPTS_DIR = Path(__file__).parent / "prompts"
 EVALS_DIR   = Path(__file__).parent / "evaluations"
 
 MODEL          = "claude-sonnet-4-5-20250929"
-PROMPT_VERSION = "1.8"
+PROMPT_VERSION = "1.11"
 # CLI is fragile with large outputs; API is reliable — larger chunks = fewer calls
 CHUNK_SIZE_CLI = 8
 CHUNK_SIZE_API = 12

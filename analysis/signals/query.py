@@ -340,21 +340,137 @@ def _scan_payload(conn: sqlite3.Connection, sig_id: str, sig: dict,
     def _fmt(v: float) -> str:
         return f"{v:.1f}%" if unit == "pct" else f"{v:,.0f}"
 
-    top_str    = ", ".join(f"{r[0]} {_fmt(r[1])}({r[2][0].upper()})" for r in top3)
-    bottom_str = ", ".join(f"{r[0]} {_fmt(r[1])}({r[2][0].upper()})" for r in bottom3)
+    # Full distribution — every entity value, so the narrative can cite any real
+    # figure (and never has to invent one for a middle entity).
+    all_str = "; ".join(f"{r[0]} {_fmt(r[1])}({r[2][0].upper()})" for r in rows)
 
     lines = [
         f"--- {sig_id} [type: {sig_type}] ---",
         f"Title: {title}",
         f"Distribution: {n} entities | {status_summary}",
-        f"Top:    {top_str}",
-        f"Bottom: {bottom_str}",
+        f"All entities (ranked, cite ONLY these values): {all_str}",
         f"Spread: {_fmt(spread)}",
     ]
     if changed:
         lines.append(f"Status shifts: {'; '.join(changed[:5])}")
 
     return "\n".join(lines)
+
+
+# ── Ground-truth numbers (traceability) ───────────────────────────────────────
+
+def signal_numbers(conn: sqlite3.Connection, sid: str, sig: dict,
+                   pipeline: str, period: str) -> dict:
+    """Return the numbers a signal legitimately produced for `period` — the
+    ground truth an insight/chain may cite. Used both to attach source.values
+    to an annotation and to validate that narrative text invents no figure.
+    Mirrors the fetches in _scalar_payload / _scan_payload."""
+    method = sig.get("compute", {}).get("method", "")
+    stype  = _signal_type(sig)
+    facts: dict = {"unit": None, "value": None, "prior": None, "status": None,
+                   "series": [], "components": {}, "range": {}, "scan": []}
+
+    if stype == "scan":
+        rows = conn.execute(
+            "SELECT entity_id, value FROM signals "
+            "WHERE pipeline=? AND period=? AND metric_id=? AND value IS NOT NULL",
+            (pipeline, period, sid)).fetchall()
+        vals = [r[1] for r in rows]
+        facts["scan"] = vals
+        if len(vals) >= 2:
+            facts["range"] = {"min": min(vals), "max": max(vals)}
+            facts["spread"] = max(vals) - min(vals)
+        ur = conn.execute(
+            "SELECT unit FROM signals WHERE pipeline=? AND period=? AND metric_id=? LIMIT 1",
+            (pipeline, period, sid)).fetchone()
+        facts["unit"] = ur[0] if ur else None
+        return facts
+
+    if method == "csv_category_share":
+        etype, eid = "bank_category", sig.get("compute", {}).get("category", "total")
+    else:
+        etype, eid = "aggregate", "total"
+
+    row = conn.execute(
+        "SELECT value, unit, status FROM signals "
+        "WHERE pipeline=? AND period=? AND metric_id=? AND entity_type=? AND entity_id=?",
+        (pipeline, period, sid, etype, eid)).fetchone()
+    if row:
+        facts["value"], facts["unit"], facts["status"] = row
+
+    hist = conn.execute(
+        "SELECT period, value FROM signals "
+        "WHERE pipeline=? AND metric_id=? AND entity_type=? AND entity_id=? "
+        "AND value IS NOT NULL AND period <= ? ORDER BY period",
+        (pipeline, sid, etype, eid, period)).fetchall()
+    facts["series"] = [v for _, v in hist]
+    for i, (p, _v) in enumerate(hist):
+        if p == period and i > 0:
+            facts["prior"] = hist[i - 1][1]
+            break
+    rng = _range_stats([v for v in facts["series"] if v is not None])
+    if rng:
+        mn, mx, p25, p75, n = rng
+        facts["range"] = {"min": mn, "max": mx, "p25": p25, "p75": p75, "count": n}
+
+    # Component rows (e.g. the two fy_yoy rates behind an acceleration).
+    for et, eid2, v in conn.execute(
+        "SELECT entity_type, entity_id, value FROM signals "
+        "WHERE pipeline=? AND period=? AND metric_id=? "
+        "AND entity_type NOT IN ('aggregate','bank_category') AND value IS NOT NULL",
+        (pipeline, period, sid)).fetchall():
+        facts["components"][f"{et}:{eid2}"] = v
+    return facts
+
+
+def flat_numbers(facts: dict) -> list[float]:
+    """All legitimate numbers from signal_numbers(), including the common derived
+    values an insight may legitimately state (period delta; pairwise component
+    differences such as fy_latest - fy_prior = acceleration).
+
+    Unit-aware: lcr_cr values are stored raw (crore) but always displayed in lakh
+    crore (÷1e5), so monetary numbers are emitted at the display scale. Component
+    rates (their own unit, e.g. pct) and the period count are dimensionless here
+    and are not scaled."""
+    scale = 1e5 if facts.get("unit") == "lcr_cr" else 1.0
+
+    mono: list[float] = []   # numbers in the signal's own (monetary/level) unit
+    for k in ("value", "prior"):
+        if facts.get(k) is not None:
+            mono.append(float(facts[k]))
+    mono += [float(v) for v in facts.get("series", []) if v is not None]
+    mono += [float(v) for v in facts.get("scan", [])]
+    # Scan distribution derived values an insight may legitimately state:
+    #   cumulative top-k sums ("top N hold X%"), entity counts ("4 sub-sectors"),
+    #   and the mean ("averaging around X%").
+    sc = sorted((float(v) for v in facts.get("scan", [])), reverse=True)
+    cum = 0.0
+    for v in sc:
+        cum += v
+        mono.append(cum)
+    if sc:
+        mono += [float(i) for i in range(1, len(sc) + 1)]   # counts of entities
+        mono.append(sum(sc) / len(sc))                      # mean
+    r = facts.get("range", {})
+    mono += [float(v) for v in (r.get("min"), r.get("max"), r.get("p25"), r.get("p75")) if v is not None]
+    if "spread" in facts:
+        mono.append(float(facts["spread"]))
+    if facts.get("value") is not None and facts.get("prior") is not None:
+        d = float(facts["value"]) - float(facts["prior"])
+        mono += [d, abs(d)]
+
+    nums = [m / scale for m in mono]
+
+    comps = [float(v) for v in facts.get("components", {}).values()]   # own unit (e.g. pct)
+    nums += comps
+    for i in range(len(comps)):
+        for j in range(len(comps)):
+            if i != j:
+                nums.append(comps[i] - comps[j])
+
+    if r.get("count"):                       # dimensionless period count
+        nums.append(float(r["count"]))
+    return nums
 
 
 # ── Domain payload ────────────────────────────────────────────────────────────

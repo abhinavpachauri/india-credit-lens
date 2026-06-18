@@ -539,6 +539,23 @@ def main():
         print(out)
         print(err, file=sys.stderr)
 
+    # ── Check 2g: insight traceability — every scalar insight number traces to DB ─
+    # Deterministic enforcement behind the LLM-generated chain: an ungrounded
+    # number in a scalar insight fails; scan-distribution summaries warn.
+    passed, out, err = run_check(
+        "traceability",
+        [sys.executable, str(ANALYSIS / "validate_sibc_traceability.py")],
+        cwd=REPO_ROOT,
+    )
+    notes = one_line_summary(out, err, passed)
+    tline = [l.strip() for l in (out + err).splitlines() if "traceability" in l.lower() and ("✓" in l or "✗" in l)]
+    if tline:
+        notes = tline[0].lstrip("✓✗ ").strip()[:60]
+    results.append(("2g. insight traceability", passed, notes))
+    if not passed:
+        print(out)
+        print(err, file=sys.stderr)
+
     # ── Stage 5.5: generate UI annotation JSON from evaluation output ────────
     report_script = ANALYSIS / "generate_analysis_report.py"
     if report_script.exists():
