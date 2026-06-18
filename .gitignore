@@ -35,3 +35,7 @@ DOMAIN_BRAND_RESEARCH.md
 *.xlsx
 rbi-analytics/
 trading_system.db
+
+# SQLite transient sidecars (signals.db itself IS tracked — these are not)
+*.db-shm
+*.db-wal
