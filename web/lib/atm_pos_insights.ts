@@ -28,6 +28,13 @@ export interface InsightReasoning {
   chain:   string[];                   // step-by-step inference: signal → meaning → lender action
 }
 
+// Shared insight schema across both pipelines (matches SIBC AnnotationBasis):
+// facts = traceable data points this rests on, inferences = chain the card renders.
+export interface InsightBasis {
+  facts:      string[];
+  inferences: string[];
+}
+
 export interface AtmPosInsight {
   id:             string;
   layer?:         1 | 2 | 3;     // 1 = computed from CSV, 2 = causal/regulatory/cross-signal, 3 = strategic
@@ -38,7 +45,8 @@ export interface AtmPosInsight {
   title:          string;
   body:           string;
   implication?:   string;
-  reasoning?:     InsightReasoning;    // Stage 4d: claim sourcing for the implication
+  reasoning?:     InsightReasoning;    // kept for back-compat (reasoning.chain)
+  basis?:         InsightBasis;        // shared schema — basis.facts / basis.inferences
   sourceSignals?: string[];
   effect:         InsightEffect;
   exploreAction:  InsightExploreAction | null;

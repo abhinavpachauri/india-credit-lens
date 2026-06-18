@@ -112,14 +112,26 @@ def build_reasoning(s: dict, keys: list, chain: list) -> dict:
     return {"signals": signals, "chain": chain}
 
 
+def build_basis(s: dict, keys: list, chain: list) -> dict:
+    """Shared insight schema (same shape as SIBC): basis.facts = the traceable
+    data points this rests on, basis.inferences = the reasoning chain the card
+    renders. One contract across both pipelines, one traceability validator."""
+    facts = []
+    for key in keys:
+        val = get_signal_value(s, key)
+        if val is not None:
+            label = ".".join(key.split(".")[-2:])    # short, readable
+            facts.append(f"{label}: {round(val, 2)}")
+    facts.append("Source: web/public/data/atm_pos_consolidated.csv")
+    return {"facts": facts, "inferences": chain}
+
+
 def insight(id_, group, cut, period, title, body, effect, explore=None,
             type_="insight", implication=None, source_signals=None,
             chain=None, signals_dict=None):
-    reasoning = (
-        build_reasoning(signals_dict, source_signals or [], chain)
-        if chain and signals_dict and source_signals
-        else None
-    )
+    has_reasoning = bool(chain and signals_dict and source_signals)
+    reasoning = build_reasoning(signals_dict, source_signals or [], chain) if has_reasoning else None
+    basis     = build_basis(signals_dict, source_signals or [], chain) if has_reasoning else None
     return {
         "id":            id_,
         "group":         group,
@@ -129,7 +141,8 @@ def insight(id_, group, cut, period, title, body, effect, explore=None,
         "title":         title,
         "body":          body,
         "implication":   implication,
-        "reasoning":     reasoning,
+        "reasoning":     reasoning,   # kept for card back-compat (reasoning.chain)
+        "basis":         basis,       # shared schema (basis.facts / basis.inferences)
         "sourceSignals": source_signals or [],
         "effect":        effect,
         "exploreAction": explore,

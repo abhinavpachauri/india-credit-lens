@@ -192,6 +192,13 @@ def validate_insight(ins: dict, flat_signals: dict[str, float]) -> list[str]:
         texts_to_check.append(("body", ins["body"]))
     if ins.get("implication"):
         texts_to_check.append(("implication", ins["implication"]))
+    # The reasoning chain (basis.inferences) must be traceable too — same
+    # guarantee SIBC Check 2g enforces. A number in the chain that is not in
+    # signals.json is an ungrounded claim.
+    chain = (ins.get("basis") or {}).get("inferences") \
+        or (ins.get("reasoning") or {}).get("chain") or []
+    if chain:
+        texts_to_check.append(("chain", " ".join(chain)))
 
     for field_name, text in texts_to_check:
         nums = extract_numbers(text)

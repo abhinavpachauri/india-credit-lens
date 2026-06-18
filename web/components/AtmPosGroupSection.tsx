@@ -223,7 +223,7 @@ export default function AtmPosGroupSection({ group, rows }: AtmPosGroupSectionPr
           title={activeInsight.title}
           body={activeInsight.body}
           implication={activeInsight.implication}
-          chain={activeInsight.reasoning?.chain}
+          chain={activeInsight.basis?.inferences ?? activeInsight.reasoning?.chain}
           activeIndex={activeIdx}
           total={visibleInsights.length}
           onNext={goNext}

@@ -29,6 +29,19 @@
         "Fraud detection built for in-store patterns needs recalibration for an online-first customer base"
       ]
     },
+    "basis": {
+      "facts": [
+        "cc_ecom_txn_vol.share_pct: 50.09",
+        "cc_pos_txn_vol.share_pct: 49.19",
+        "cc_ecom_txn_vol.share_delta_pp: -0.08",
+        "Source: web/public/data/atm_pos_consolidated.csv"
+      ],
+      "inferences": [
+        "CC ecommerce at 50.1% of volume \u2014 majority of CC spend is now online, not at physical stores",
+        "Online transactions (card-not-present / CNP) carry higher fraud risk since the card is never physically verified",
+        "Fraud detection built for in-store patterns needs recalibration for an online-first customer base"
+      ]
+    },
     "sourceSignals": [
       "groups.cc.total.cross.cc_ecom_txn_vol.share_pct",
       "groups.cc.total.cross.cc_pos_txn_vol.share_pct",
@@ -71,6 +84,19 @@
         }
       ],
       "chain": [
+        "CC cards outstanding growing for 10 consecutive months",
+        "Card count includes dormant cards that were issued but never activated or used",
+        "Activation rate (cards with any spend in recent months) is the real signal for credit origination potential"
+      ]
+    },
+    "basis": {
+      "facts": [
+        "credit_cards.latest: 119436129.0",
+        "credit_cards.streak_months: 10.0",
+        "credit_cards.qoq_pct: 0.68",
+        "Source: web/public/data/atm_pos_consolidated.csv"
+      ],
+      "inferences": [
         "CC cards outstanding growing for 10 consecutive months",
         "Card count includes dormant cards that were issued but never activated or used",
         "Activation rate (cards with any spend in recent months) is the real signal for credit origination potential"
@@ -128,6 +154,20 @@
         "Customer risk profiles differ significantly across bank types \u2014 portfolio benchmarking must account for this mix shift"
       ]
     },
+    "basis": {
+      "facts": [
+        "SFB.share_pct: 1.57",
+        "SFB.share_delta_pp: 0.1",
+        "Foreign.share_pct: 3.62",
+        "Foreign.share_delta_pp: -0.07",
+        "Source: web/public/data/atm_pos_consolidated.csv"
+      ],
+      "inferences": [
+        "SFB banks gained 0.1pp CC share \u2014 Foreign banks lost 0.1pp",
+        "SFB growth signals fintech partnerships or co-branded card activity in underserved segments",
+        "Customer risk profiles differ significantly across bank types \u2014 portfolio benchmarking must account for this mix shift"
+      ]
+    },
     "sourceSignals": [
       "groups.cc.by_type.categories.SFB.share_pct",
       "groups.cc.by_type.categories.SFB.share_delta_pp",
@@ -164,6 +204,17 @@
         }
       ],
       "chain": [
+        "IDFC FIRST BANK LTD moved from #7 to #6 in CC cards outstanding",
+        "Rising rank means faster card issuance or competitor attrition in that bank",
+        "Track whether the move reflects new card issuance (gaining customers) or balance attrition (losing them)"
+      ]
+    },
+    "basis": {
+      "facts": [
+        "top_n.top5_share_pct: 74.24",
+        "Source: web/public/data/atm_pos_consolidated.csv"
+      ],
+      "inferences": [
         "IDFC FIRST BANK LTD moved from #7 to #6 in CC cards outstanding",
         "Rising rank means faster card issuance or competitor attrition in that bank",
         "Track whether the move reflects new card issuance (gaining customers) or balance attrition (losing them)"
@@ -207,6 +258,18 @@
         }
       ],
       "chain": [
+        "Foreign banks hold only 3.6% of CC cards and declining \u2014 premium card segment exiting to Indian private banks",
+        "Foreign banks (Amex, Standard Chartered) traditionally served high-income, high-limit, internationally-active customers",
+        "Premium cardholder behaviour is under-represented in RBI aggregate CC data \u2014 now consolidated into private bank numbers"
+      ]
+    },
+    "basis": {
+      "facts": [
+        "Foreign.share_pct: 3.62",
+        "Foreign.share_delta_pp: -0.07",
+        "Source: web/public/data/atm_pos_consolidated.csv"
+      ],
+      "inferences": [
         "Foreign banks hold only 3.6% of CC cards and declining \u2014 premium card segment exiting to Indian private banks",
         "Foreign banks (Amex, Standard Chartered) traditionally served high-income, high-limit, internationally-active customers",
         "Premium cardholder behaviour is under-represented in RBI aggregate CC data \u2014 now consolidated into private bank numbers"
@@ -263,6 +326,20 @@
         "Debit customers moving to digital build a usable credit history \u2014 prime candidates for first credit origination"
       ]
     },
+    "basis": {
+      "facts": [
+        "dc_atm_withdrawal_vol.share_pct: 80.84",
+        "dc_atm_withdrawal_vol.share_delta_pp: -0.58",
+        "dc_ecom_txn_vol.share_pct: 5.02",
+        "dc_ecom_txn_vol.share_delta_pp: 0.2",
+        "Source: web/public/data/atm_pos_consolidated.csv"
+      ],
+      "inferences": [
+        "DC ATM cash share fell 0.6pp to 80.8% \u2014 customers shifting away from cash",
+        "Digital debit transactions (POS, ecommerce) create structured spending records; cash leaves none",
+        "Debit customers moving to digital build a usable credit history \u2014 prime candidates for first credit origination"
+      ]
+    },
     "sourceSignals": [
       "groups.dc.total.cross.dc_atm_withdrawal_vol.share_pct",
       "groups.dc.total.cross.dc_atm_withdrawal_vol.share_delta_pp",
@@ -300,6 +377,18 @@
         }
       ],
       "chain": [
+        "DC POS cash-back withdrawals fell 18.9% MoM for 3 months \u2014 merchants reducing cash-out via POS",
+        "POS records now reflect real purchases rather than cash access events disguised as transactions",
+        "Cleaner purchase data improves signal quality for credit underwriting of MSME and retail customers"
+      ]
+    },
+    "basis": {
+      "facts": [
+        "dc_pos_withdrawal_vol.mom_pct: -18.93",
+        "dc_pos_withdrawal_vol.streak_months: 3.0",
+        "Source: web/public/data/atm_pos_consolidated.csv"
+      ],
+      "inferences": [
         "DC POS cash-back withdrawals fell 18.9% MoM for 3 months \u2014 merchants reducing cash-out via POS",
         "POS records now reflect real purchases rather than cash access events disguised as transactions",
         "Cleaner purchase data improves signal quality for credit underwriting of MSME and retail customers"
@@ -344,6 +433,19 @@
         }
       ],
       "chain": [
+        "DC ecommerce is 5.0% of DC volume \u2014 small but digitally traceable subgroup within a cash-dominant base",
+        "Online debit customers leave structured purchase records; ATM-cash users leave none",
+        "Digital-active debit customers are higher-value cross-sell targets for first credit products \u2014 traceable history enables underwriting"
+      ]
+    },
+    "basis": {
+      "facts": [
+        "dc_ecom_txn_vol.share_pct: 5.02",
+        "dc_ecom_txn_vol.share_delta_pp: 0.2",
+        "dc_atm_withdrawal_vol.share_pct: 80.84",
+        "Source: web/public/data/atm_pos_consolidated.csv"
+      ],
+      "inferences": [
         "DC ecommerce is 5.0% of DC volume \u2014 small but digitally traceable subgroup within a cash-dominant base",
         "Online debit customers leave structured purchase records; ATM-cash users leave none",
         "Digital-active debit customers are higher-value cross-sell targets for first credit products \u2014 traceable history enables underwriting"
@@ -396,6 +498,19 @@
         "PSB and private bank debit data require separate calibration for transaction-based credit underwriting"
       ]
     },
+    "basis": {
+      "facts": [
+        "PSB.share_pct: 64.17",
+        "PSB.share_delta_pp: 1.29",
+        "Private.share_pct: 25.84",
+        "Source: web/public/data/atm_pos_consolidated.csv"
+      ],
+      "inferences": [
+        "PSBs hold 64.2% of debit cards \u2014 primarily through Jan Dhan scheme linkage, not active acquisition",
+        "Jan Dhan portfolios skew toward low-income, low-activity accounts with thin or no transaction histories",
+        "PSB and private bank debit data require separate calibration for transaction-based credit underwriting"
+      ]
+    },
     "sourceSignals": [
       "groups.dc.by_type.categories.PSB.share_pct",
       "groups.dc.by_type.categories.PSB.share_delta_pp",
@@ -431,6 +546,17 @@
         }
       ],
       "chain": [
+        "INDIAN BANK shifted from #10 to #9 in debit cards",
+        "PSB rank drops often reflect Jan Dhan dormant account closures; private bank rises reflect geographic expansion",
+        "Bank moving up is reaching new customers \u2014 leading indicator of future credit origination volume in that segment"
+      ]
+    },
+    "basis": {
+      "facts": [
+        "top_n.top5_share_pct: 50.82",
+        "Source: web/public/data/atm_pos_consolidated.csv"
+      ],
+      "inferences": [
         "INDIAN BANK shifted from #10 to #9 in debit cards",
         "PSB rank drops often reflect Jan Dhan dormant account closures; private bank rises reflect geographic expansion",
         "Bank moving up is reaching new customers \u2014 leading indicator of future credit origination volume in that segment"
@@ -483,6 +609,19 @@
         "Bureau scores (CIBIL, Experian) remain essential for this segment; debit transaction data alone is insufficient"
       ]
     },
+    "basis": {
+      "facts": [
+        "dc_atm_withdrawal_vol.share_pct: 80.84",
+        "dc_atm_withdrawal_vol.share_delta_pp: -0.58",
+        "dc_ecom_txn_vol.share_pct: 5.02",
+        "Source: web/public/data/atm_pos_consolidated.csv"
+      ],
+      "inferences": [
+        "80.8% of DC volume is ATM cash \u2014 transactions that leave no digital record",
+        "Cash-dominant customers' financial behaviour is opaque \u2014 spending categories, frequency, merchants all unknown",
+        "Bureau scores (CIBIL, Experian) remain essential for this segment; debit transaction data alone is insufficient"
+      ]
+    },
     "sourceSignals": [
       "groups.dc.total.cross.dc_atm_withdrawal_vol.share_pct",
       "groups.dc.total.cross.dc_atm_withdrawal_vol.share_delta_pp",
@@ -519,6 +658,18 @@
         }
       ],
       "chain": [
+        "DC ecommerce at only 5.0% of DC volume \u2014 debit history is predominantly ATM cash withdrawals",
+        "Cash withdrawal records reveal nothing about spending behaviour \u2014 categories, merchants, frequency unknown",
+        "Income proxies (salary credits, GST filings) and bureau scores are more reliable than transaction models for this segment"
+      ]
+    },
+    "basis": {
+      "facts": [
+        "dc_ecom_txn_vol.share_pct: 5.02",
+        "dc_atm_withdrawal_vol.share_pct: 80.84",
+        "Source: web/public/data/atm_pos_consolidated.csv"
+      ],
+      "inferences": [
         "DC ecommerce at only 5.0% of DC volume \u2014 debit history is predominantly ATM cash withdrawals",
         "Cash withdrawal records reveal nothing about spending behaviour \u2014 categories, merchants, frequency unknown",
         "Income proxies (salary credits, GST filings) and bureau scores are more reliable than transaction models for this segment"
@@ -567,6 +718,20 @@
         }
       ],
       "chain": [
+        "67 UPI QR codes per POS terminal \u2014 QR acceptance vastly outnumbers hardware deployment",
+        "Typical small merchant (kirana, auto, vendor) accepts via QR only \u2014 no POS terminal",
+        "Credit products for small merchants (BNPL, business loans) must work over UPI QR to reach this majority"
+      ]
+    },
+    "basis": {
+      "facts": [
+        "upi_qr.latest: 770811461.0",
+        "pos_terminals.latest: 11446998.0",
+        "upi_qr.mom_pct: 1.26",
+        "pos_terminals.mom_pct: -2.74",
+        "Source: web/public/data/atm_pos_consolidated.csv"
+      ],
+      "inferences": [
         "67 UPI QR codes per POS terminal \u2014 QR acceptance vastly outnumbers hardware deployment",
         "Typical small merchant (kirana, auto, vendor) accepts via QR only \u2014 no POS terminal",
         "Credit products for small merchants (BNPL, business loans) must work over UPI QR to reach this majority"
@@ -624,6 +789,20 @@
         "Building payments or lending infrastructure on Bharat QR rails is operationally unviable at any meaningful merchant scale"
       ]
     },
+    "basis": {
+      "facts": [
+        "upi_qr.latest: 770811461.0",
+        "bharat_qr.latest: 5616038.0",
+        "upi_qr.mom_pct: 1.26",
+        "bharat_qr.mom_pct: -0.3",
+        "Source: web/public/data/atm_pos_consolidated.csv"
+      ],
+      "inferences": [
+        "UPI QR at 770.8M vs Bharat QR at 5.62M \u2014 a 137x gap",
+        "Bharat QR was an earlier standard; merchants have consolidated on UPI QR as the accepted norm",
+        "Building payments or lending infrastructure on Bharat QR rails is operationally unviable at any meaningful merchant scale"
+      ]
+    },
     "sourceSignals": [
       "groups.infra.total.metrics.upi_qr.latest",
       "groups.infra.total.metrics.bharat_qr.latest",
@@ -661,6 +840,18 @@
         }
       ],
       "chain": [
+        "PSB banks gained 0.5pp POS share \u2014 building more merchant acquiring relationships",
+        "Banks owning the POS network own the merchant's transaction data (daily sales, ticket size, frequency)",
+        "POS share expansion is a leading indicator of positioning for merchant credit (working capital, cash advances)"
+      ]
+    },
+    "basis": {
+      "facts": [
+        "PSB.share_pct: 18.14",
+        "PSB.share_delta_pp: 0.51",
+        "Source: web/public/data/atm_pos_consolidated.csv"
+      ],
+      "inferences": [
         "PSB banks gained 0.5pp POS share \u2014 building more merchant acquiring relationships",
         "Banks owning the POS network own the merchant's transaction data (daily sales, ticket size, frequency)",
         "POS share expansion is a leading indicator of positioning for merchant credit (working capital, cash advances)"
@@ -713,6 +904,19 @@
         "Merchant credit without data partnerships with these banks requires alternate sources \u2014 GST returns, UPI transaction feeds"
       ]
     },
+    "basis": {
+      "facts": [
+        "top_n.top5_share_pct: 92.83",
+        "0.share_pct: 23.84",
+        "0.mom_pct: 3.13",
+        "Source: web/public/data/atm_pos_consolidated.csv"
+      ],
+      "inferences": [
+        "Top 5 banks own 92.8% of POS terminals \u2014 merchant acquiring infrastructure is highly concentrated",
+        "Merchant transaction data (sales history for credit underwriting) sits with the same institutions",
+        "Merchant credit without data partnerships with these banks requires alternate sources \u2014 GST returns, UPI transaction feeds"
+      ]
+    },
     "sourceSignals": [
       "groups.infra.top_n.top5_share_pct",
       "groups.infra.top_n.banks.0.share_pct",
@@ -752,6 +956,18 @@
         }
       ],
       "chain": [
+        "Top 5 banks own 92.8% of POS terminals \u2014 merchant acquiring infrastructure highly concentrated",
+        "Merchant transaction data (sales history needed for credit underwriting) controlled by the same 5 institutions",
+        "Merchant credit underwriting without data partnerships with these banks requires alternates \u2014 GST filings, UPI feeds"
+      ]
+    },
+    "basis": {
+      "facts": [
+        "top_n.top5_share_pct: 92.83",
+        "0.share_pct: 23.84",
+        "Source: web/public/data/atm_pos_consolidated.csv"
+      ],
+      "inferences": [
         "Top 5 banks own 92.8% of POS terminals \u2014 merchant acquiring infrastructure highly concentrated",
         "Merchant transaction data (sales history needed for credit underwriting) controlled by the same 5 institutions",
         "Merchant credit underwriting without data partnerships with these banks requires alternates \u2014 GST filings, UPI feeds"
