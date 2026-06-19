@@ -40,7 +40,7 @@ export interface Annotation {
   title:         string;          // 4–6 words
   body:          string;          // 2–3 sentences
   implication?:  string;          // "For lenders: ..."
-  preferredMode?: "absolute" | "yoy" | "fy"; // chart switches to this mode when annotation is active
+  preferredMode?: "absolute" | "yoy" | "fy" | "share"; // active annotation switches the chart to this view ("share" → Distribution tab, % share)
   effect:        AnnotationEffect;
   hidden?:       boolean;         // true → suppressed from dashboard (methodology notes, low-signal gaps)
   // ── Explainability fields (optional — populate for any annotation making causal or forward claims) ──

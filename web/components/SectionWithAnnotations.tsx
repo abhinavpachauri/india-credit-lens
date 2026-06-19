@@ -65,7 +65,23 @@ export default function SectionWithAnnotations({ section }: Props) {
   const accentColor   = SEC_COLORS[section.accentIndex];
 
   function renderChart(visible?: string[]) {
-    return tab === "trend" ? (
+    const pm = ins.isActive ? (ins.current?.preferredMode ?? null) : null;
+    // An active insight drives the TAB, not just the mode: a "share" insight shows
+    // the Distribution view; everything else the Trend view. In explore mode the
+    // user's tab choice wins.
+    const showDistribution = ins.isActive ? pm === "share" : tab === "distribution";
+
+    return showDistribution ? (
+      <DistributionChart
+        absoluteData={section.absoluteData}
+        seriesNames={section.distributionSeriesNames ?? section.seriesNames}
+        pctLabel={section.pctLabel}
+        mode={distMode}
+        visibleSeries={visible}
+        highlightConfig={ins.highlightConfig}
+        preferredMode={pm}
+      />
+    ) : (
       <TrendChart
         absoluteData={section.absoluteData}
         growthData={section.growthData}
@@ -75,17 +91,7 @@ export default function SectionWithAnnotations({ section }: Props) {
         mode={trendMode}
         visibleSeries={visible}
         highlightConfig={ins.highlightConfig}
-        preferredMode={ins.current?.preferredMode ?? null}
-      />
-    ) : (
-      <DistributionChart
-        absoluteData={section.absoluteData}
-        seriesNames={section.distributionSeriesNames ?? section.seriesNames}
-        pctLabel={section.pctLabel}
-        mode={distMode}
-        visibleSeries={visible}
-        highlightConfig={ins.highlightConfig}
-        preferredMode={ins.current?.preferredMode ?? null}
+        preferredMode={pm}
       />
     );
   }

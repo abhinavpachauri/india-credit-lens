@@ -72,9 +72,17 @@ SIGNAL_SECTION_OVERRIDE: dict[str, str] = {
 # ── Signal method → preferredMode ─────────────────────────────────────────────
 
 def preferred_mode(method: str) -> str:
-    if "abs" in method or "streak" in method or "delta" in method:
+    """Which chart view best represents this signal when its insight is active.
+    'share' means the Distribution tab (% share); the others are Trend-tab modes.
+    The card switches BOTH tab and mode to this — so a share insight shows the
+    distribution, and a streak/yoy insight shows the YoY line it describes."""
+    if "share" in method:                         # share + share-scan → distribution
+        return "share"
+    if "abs" in method or "delta" in method:      # levels / FY add → absolute
         return "absolute"
-    return "yoy"   # yoy, share, scan, acceleration, ratio, breadth → all percentage views
+    # streak tracks a YoY/growth condition over time → show the YoY line, not the level.
+    # yoy / acceleration / ratio / breadth / yoy-scan → YoY too.
+    return "yoy"
 
 # ── Signal → insight type ─────────────────────────────────────────────────────
 

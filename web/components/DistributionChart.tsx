@@ -17,7 +17,7 @@ interface DistributionChartProps {
   mode:             "absolute" | "pct"; // owned by parent controls card
   visibleSeries?:   string[];
   highlightConfig?: AnnotationEffect | null;
-  preferredMode?:   "absolute" | "yoy" | "fy" | null; // annotation overrides parent mode
+  preferredMode?:   "absolute" | "yoy" | "fy" | "share" | null; // annotation overrides parent mode
 }
 
 function barOpacity(name: string, config: AnnotationEffect | null | undefined): number {
@@ -34,7 +34,7 @@ export default function DistributionChart({
   // yoy/fy annotations → show % share (relative view); absolute annotation → show ₹ Crore
   // otherwise use the parent-controlled mode
   const effectiveMode: "absolute" | "pct" =
-    preferredMode === "yoy" || preferredMode === "fy" ? "pct"
+    preferredMode === "yoy" || preferredMode === "fy" || preferredMode === "share" ? "pct"
     : preferredMode === "absolute" ? "absolute"
     : mode;
   const [hidden, setHidden] = useState<Set<string>>(new Set());
