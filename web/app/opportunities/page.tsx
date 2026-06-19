@@ -258,6 +258,26 @@ export default function OpportunitiesPage() {
     ]).then(([f, c]) => { setFeed(f); setCharts(c); });
   }, []);
 
+  // Deep-link from a dashboard teaser (/opportunities#<opp-id>): the feed loads
+  // async, so the anchored card isn't in the DOM when the browser first handles
+  // the hash. Once the feed is in, widen the status filter so the target can't be
+  // hidden, then scroll it into view.
+  useEffect(() => {
+    if (!feed) return;
+    const id = decodeURIComponent(window.location.hash.slice(1));
+    if (!id) return;
+    setSf("all");                       // ensure the target can't be filtered out
+    let tries = 0;
+    let timer: ReturnType<typeof setTimeout>;
+    const tick = () => {
+      const el = document.getElementById(id);
+      if (el) { el.scrollIntoView({ behavior: "smooth", block: "start" }); return; }
+      if (tries++ < 20) timer = setTimeout(tick, 50);   // poll up to ~1s
+    };
+    timer = setTimeout(tick, 50);
+    return () => clearTimeout(timer);
+  }, [feed]);
+
   if (!feed) {
     return <div className="flex items-center justify-center min-h-[60vh] text-sm" style={{ color: "var(--font-muted)" }}>Loading opportunities…</div>;
   }
