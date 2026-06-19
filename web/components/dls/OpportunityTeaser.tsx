@@ -15,23 +15,27 @@
 
 import Link from "next/link";
 import { useAuth, SignInButton } from "@clerk/nextjs";
-import type { FlatAnnotation } from "@/hooks/useSectionInsights";
 import { OPPORTUNITIES_GATED } from "@/lib/gating";
+import { opportunitiesFor } from "@/lib/opportunities";
 
 const OPP_COLOR = "#16A34A";  // TYPE_COLOR.opportunity
 
 interface Props {
-  opps:      FlatAnnotation[];
+  pipeline:  "sibc" | "atm_pos";
   sectionId: string;
 }
 
-export default function OpportunityTeaser({ opps, sectionId }: Props) {
+export default function OpportunityTeaser({ pipeline, sectionId }: Props) {
   const { isSignedIn } = useAuth();
   // Open when gating is disabled, or when the user is signed in.
   const open = !OPPORTUNITIES_GATED || !!isSignedIn;
 
+  // Same feed the /opportunities page reads → IDs line up for deep-linking.
+  const opps = opportunitiesFor(pipeline, sectionId);
   if (opps.length === 0) return null;
 
+  // Deep-link straight to the (first) opportunity's card anchor on the page.
+  const href = `/opportunities#${opps[0].id}`;
   const label =
     opps.length === 1
       ? opps[0].title
@@ -92,7 +96,7 @@ export default function OpportunityTeaser({ opps, sectionId }: Props) {
       {/* Open (ungated or signed in) — link to opportunities page */}
       {open && (
         <Link
-          href={`/opportunities#${sectionId}`}
+          href={href}
           style={{
             flexShrink:     0,
             fontSize:       12,

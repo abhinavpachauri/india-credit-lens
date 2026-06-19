@@ -186,9 +186,10 @@ function OppCard({ item, charts }: { item: Item; charts: ResolvedChart[] }) {
   const isRisk  = item.tier === "risk";
   const accent  = isCross ? OPP_COLOR : isRisk ? RISK_COLOR : STATUS_META[item.status].color;
   return (
-    <div style={{
+    <div id={item.id} style={{
       background: "var(--bg-card)", border: `1px solid ${isCross ? OPP_COLOR : isRisk ? `${RISK_COLOR}55` : "var(--border-card)"}`,
       borderLeft: `4px solid ${accent}`, borderRadius: 10, marginBottom: 20, overflow: "hidden",
+      scrollMarginTop: 88,   // clear the sticky header when deep-linked from a teaser
       ...(isCross ? { background: `linear-gradient(135deg, ${OPP_COLOR}0A, transparent 55%)` } : {}),
     }}>
       <div className="grid grid-cols-1 sm:grid-cols-[45fr_55fr]" style={{ alignItems: "start" }}>

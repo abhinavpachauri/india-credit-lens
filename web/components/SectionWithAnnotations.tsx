@@ -9,6 +9,7 @@ import InsightCard              from "./dls/InsightCard";
 import OpportunityTeaser        from "./dls/OpportunityTeaser";
 import TrendChart               from "./TrendChart";
 import DistributionChart        from "./DistributionChart";
+import { opportunitiesFor }     from "@/lib/opportunities";
 import IndustryFilter           from "./IndustryFilter";
 import type { ReportSection }   from "@/lib/types";
 
@@ -41,6 +42,8 @@ const BTN = (active: boolean): React.CSSProperties => ({
 
 export default function SectionWithAnnotations({ section }: Props) {
   const ins = useSectionInsights(section);
+  // Opportunity count from the shared feed (same source as the teaser + page).
+  const oppCount = opportunitiesFor("sibc", section.id).length;
 
   // Per-section tab and chart-mode state — mirrors payments per-group controls
   const [tab,       setTab]       = useState<TabId>("trend");
@@ -101,13 +104,13 @@ export default function SectionWithAnnotations({ section }: Props) {
       </div>
 
       {/* Opportunity teaser — gated, separate from carousel */}
-      <OpportunityTeaser opps={ins.opps} sectionId={section.id} />
+      <OpportunityTeaser pipeline="sibc" sectionId={section.id} />
 
       {/* CTA / exit strip */}
       {ins.flat.length > 0 && (
         <InsightCTAStrip
           items={ins.flat.map((a) => ({ type: a._type, title: a.title }))}
-          counts={ins.counts}
+          counts={{ ...ins.counts, opportunity: oppCount }}
           isActive={ins.isActive}
           activeIdx={ins.activeIdx}
           total={ins.total}

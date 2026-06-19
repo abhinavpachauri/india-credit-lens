@@ -48,6 +48,15 @@ carry `pending` status.
 **Presentation is always downstream.** The web dashboard, insight pages, and opportunities
 are generated from the final signal layer outputs — not from any intermediate pipeline artifact.
 
+**Opportunities are ONE system (Layer 2 feed).** `opportunities_feed.json` (built by
+`generate_opportunities_feed.py`) is the single source for both the `/opportunities` page AND the
+per-section **opportunity teasers** on the SIBC and Payments dashboards. The shared
+`dls/OpportunityTeaser` (`pipeline`, `sectionId`) reads the feed via `web/lib/opportunities.ts`
+(`opportunitiesFor`) and deep-links to a specific opportunity card — `/opportunities#<opp.id>` —
+which carries a matching `id` anchor. Both pipelines' dashboards surface teasers identically;
+authored `rbi_sibc.ts` section opportunities are no longer the teaser source. Number traceability
+of opportunity copy is guarded by Check 4f (`validate_opportunity_traceability.py`, advisory).
+
 **Newsletter is an exception.** Newsletter generation is not yet standardised to this
 architecture. Do not modify newsletter scripts until the signal layer is complete across
 all pipelines.
