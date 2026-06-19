@@ -14,7 +14,6 @@
  */
 
 import Link from "next/link";
-import { useAuth, SignInButton } from "@clerk/nextjs";
 import { OPPORTUNITIES_GATED } from "@/lib/gating";
 import { opportunitiesFor } from "@/lib/opportunities";
 
@@ -26,9 +25,10 @@ interface Props {
 }
 
 export default function OpportunityTeaser({ pipeline, sectionId }: Props) {
-  const { isSignedIn } = useAuth();
-  // Open when gating is disabled, or when the user is signed in.
-  const open = !OPPORTUNITIES_GATED || !!isSignedIn;
+  // Clerk removed — gating is open by default. If re-gated later (NEXT_PUBLIC_
+  // GATE_OPPORTUNITIES=true) without auth wired back, the locked state simply
+  // hides the link rather than offering sign-in.
+  const open = !OPPORTUNITIES_GATED;
 
   // Same feed the /opportunities page reads → IDs line up for deep-linking.
   const opps = opportunitiesFor(pipeline, sectionId);
@@ -72,28 +72,7 @@ export default function OpportunityTeaser({ pipeline, sectionId }: Props) {
         {label}
       </span>
 
-      {/* Gated + signed out — modal sign-in */}
-      {!open && (
-        <SignInButton mode="modal">
-          <button
-            style={{
-              flexShrink:  0,
-              fontSize:    12,
-              fontWeight:  600,
-              color:       OPP_COLOR,
-              background:  "transparent",
-              border:      "none",
-              cursor:      "pointer",
-              padding:     0,
-              whiteSpace:  "nowrap",
-            }}
-          >
-            Sign in to read →
-          </button>
-        </SignInButton>
-      )}
-
-      {/* Open (ungated or signed in) — link to opportunities page */}
+      {/* Open (ungated) — link to the specific opportunity on the page */}
       {open && (
         <Link
           href={href}

@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useAuth, SignInButton, UserButton } from "@clerk/nextjs";
 import { formatCr } from "@/lib/data";
 import { OPPORTUNITIES_GATED } from "@/lib/gating";
 
@@ -27,7 +26,6 @@ export default function Header({
   onToggleDark,
 }: HeaderProps) {
   const pathname  = usePathname();
-  const { isSignedIn } = useAuth();
 
   return (
     <header
@@ -95,24 +93,6 @@ export default function Header({
             ) : null}
           </div>
 
-          {/* Auth — UserButton (signed in) or Sign in link (signed out) */}
-          {isSignedIn ? (
-            <UserButton />
-          ) : (
-            <SignInButton mode="modal">
-              <button
-                className="text-sm font-medium px-3 py-1.5 rounded-full transition-colors"
-                style={{
-                  color:      "#16A34A",
-                  background: "#16A34A10",
-                  border:     "1px solid #16A34A40",
-                  cursor:     "pointer",
-                }}
-              >
-                Sign in
-              </button>
-            </SignInButton>
-          )}
         </div>
 
         {/* Dark mode toggle */}
