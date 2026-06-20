@@ -63,7 +63,7 @@ export default function AtmPosGroupSection({ group, rows }: AtmPosGroupSectionPr
   const [topN,          setTopN]          = useState<number>(5);
   const [hiddenSeries,  setHiddenSeries]  = useState<Set<string>>(new Set(["Total"]));
   const [tab,           setTab]           = useState<TabId>("trend");
-  const [trendMode,     setTrendMode]     = useState<"absolute" | "mom">("absolute");
+  const [trendMode,     setTrendMode]     = useState<"absolute" | "mom" | "yoy">("absolute");
   const [distMode,      setDistMode]      = useState<"absolute" | "pct">("absolute");
   const [bankSearch,    setBankSearch]    = useState("");
   const [activeInsight, setActiveInsight] = useState<AtmPosInsight | null>(null);
@@ -287,7 +287,7 @@ export default function AtmPosGroupSection({ group, rows }: AtmPosGroupSectionPr
           {/* Chart mode radios */}
           <div className="flex items-center gap-3 text-sm">
             {tab === "trend"
-              ? (["absolute", "mom"] as const).map((m) => (
+              ? (["absolute", "mom", "yoy"] as const).map((m) => (
                   <label
                     key={m}
                     className="flex items-center gap-1.5 cursor-pointer"
@@ -301,7 +301,7 @@ export default function AtmPosGroupSection({ group, rows }: AtmPosGroupSectionPr
                       onChange={() => setTrendMode(m)}
                       className="accent-blue-500"
                     />
-                    {m === "absolute" ? "Absolute" : "MoM %"}
+                    {m === "absolute" ? "Absolute" : m === "mom" ? "MoM %" : "YoY %"}
                   </label>
                 ))
               : (["absolute", "pct"] as const).map((m) => (

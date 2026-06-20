@@ -17,6 +17,7 @@ Usage:
 import csv
 import json
 import shutil
+import sqlite3
 from collections import defaultdict
 from datetime import datetime
 from pathlib import Path
@@ -101,6 +102,81 @@ def mom_pct(latest: float, prior: float) -> float | None:
     if prior == 0:
         return None
     return round2((latest - prior) / prior * 100)
+
+
+# ── YoY: sourced from the registry-backed signals.db (NOT recomputed here) ──────
+#
+# YoY is a *registered* Layer-1 signal (`*-yoy`, method csv_total_yoy) stored in
+# signals.db and freshness-guarded by Check 2f. The dashboard must consume those
+# values, never compute a parallel copy — otherwise the two can silently drift.
+# We read them here and carry them into signals.json so the deterministic insight
+# templates stay traceable to the same source as every other insight.
+
+DB_PATH = ROOT / "analysis/signals/signals.db"
+
+
+def _yoy_signal_map() -> dict[str, str]:
+    """metric → registered yoy signal_id, derived from the registry (single source)."""
+    with open(ROOT / "analysis/signals/registry.json") as f:
+        reg = json.load(f)
+    sigs = reg["signals"]
+    items = sigs.items() if isinstance(sigs, dict) else [(s["id"], s) for s in sigs]
+    out = {}
+    for sid, s in items:
+        if s.get("pipeline") != "atm_pos":
+            continue
+        c = s.get("compute", {})
+        if c.get("method") == "csv_total_yoy" and c.get("metric"):
+            out[c["metric"]] = sid
+    return out
+
+
+def load_db_yoy(latest_period: str, prior_period: str | None) -> dict[str, dict]:
+    """Read registered yoy signals from signals.db for latest + prior period.
+    Returns {metric: {"latest": float|None, "prior": float|None}}.
+    Guards that signals.db actually covers the latest CSV period (append-before-gate
+    contract) — fails loudly rather than emitting stale/missing YoY."""
+    if not DB_PATH.exists():
+        raise SystemExit(f"signals.db not found at {DB_PATH} — run the signal append first")
+    smap = _yoy_signal_map()
+    con = sqlite3.connect(DB_PATH)
+    try:
+        db_latest = con.execute(
+            "SELECT MAX(period) FROM signals WHERE pipeline='atm_pos'"
+        ).fetchone()[0]
+        if db_latest != latest_period:
+            raise SystemExit(
+                f"signals.db latest atm_pos period is {db_latest} but the CSV latest is "
+                f"{latest_period}. Append the period to signals.db before Stage 4a:\n"
+                f"  python3 analysis/generate_signal_history.py append --pipeline atm_pos "
+                f"--period {latest_period}"
+            )
+
+        def read(period):
+            if not period:
+                return {}
+            rows = con.execute(
+                "SELECT metric_id, value FROM signals "
+                "WHERE pipeline='atm_pos' AND entity_type='aggregate' AND entity_id='total' "
+                "AND period=? AND metric_id LIKE '%-yoy'",
+                (period,),
+            ).fetchall()
+            return {mid: val for mid, val in rows}
+
+        latest_vals = read(latest_period)
+        prior_vals  = read(prior_period)
+    finally:
+        con.close()
+
+    out = {}
+    for metric, sid in smap.items():
+        lv = latest_vals.get(sid)
+        pv = prior_vals.get(sid)
+        out[metric] = {
+            "latest": round2(lv) if lv is not None else None,
+            "prior":  round2(pv) if pv is not None else None,
+        }
+    return out
 
 
 # ── Quarter helpers ───────────────────────────────────────────────────────────
@@ -193,8 +269,10 @@ def load_csv() -> tuple[list[str], dict]:
 
 # ── Signal builders ───────────────────────────────────────────────────────────
 
-def build_total_metric_signals(dates, data, metrics):
-    """MoM%, QoQ%, streak, latest value for each metric at the Total level."""
+def build_total_metric_signals(dates, data, metrics, db_yoy):
+    """MoM%, QoQ%, streak, latest value for each metric at the Total level.
+    YoY fields are sourced from `db_yoy` (registered signals.db values), not
+    recomputed here — single source, no drift."""
     latest = dates[-1]
     prior  = dates[-2] if len(dates) > 1 else None
     out    = {}
@@ -230,6 +308,17 @@ def build_total_metric_signals(dates, data, metrics):
                 curr_qv = sum(vals_by_date.get(d, 0) for d in curr_q_dates)
             qoq = round2((curr_qv - prev_qv) / prev_qv * 100) if prev_qv else None
 
+        # YoY: read from signals.db (registered *-yoy signals), never recomputed.
+        # Trajectory (acceleration) = latest YoY minus prior-period YoY of the same
+        # registered signal — both already in the DB.
+        yoy_entry     = db_yoy.get(metric, {})
+        yoy_pct       = yoy_entry.get("latest")
+        yoy_prior_pct = yoy_entry.get("prior")
+        yoy_dir       = (("up" if yoy_pct > 0 else "down" if yoy_pct < 0 else "flat")
+                         if yoy_pct is not None else None)
+        yoy_accel_pp  = (round2(yoy_pct - yoy_prior_pct)
+                         if (yoy_pct is not None and yoy_prior_pct is not None) else None)
+
         out[metric] = {
             "latest":        round2(latest_val),
             "prior":         round2(prior_val) if prior_val is not None else None,
@@ -237,6 +326,10 @@ def build_total_metric_signals(dates, data, metrics):
             "mom_dir":       ("up" if latest_val > prior_val else "down" if latest_val < prior_val else "flat")
                              if prior_val is not None else "flat",
             "qoq_pct":       qoq,
+            "yoy_pct":       yoy_pct,
+            "yoy_dir":       yoy_dir,
+            "yoy_prior_pct": yoy_prior_pct,
+            "yoy_accel_pp":  yoy_accel_pp,
             "streak_months": streak_len,
             "streak_dir":    streak_dir,
         }
@@ -437,6 +530,10 @@ def main():
     latest = dates[-1]
     prior  = dates[-2] if len(dates) > 1 else None
 
+    # YoY sourced from the registry-backed signals.db (single source, no drift)
+    print("Loading YoY from signals.db (registered *-yoy signals)…")
+    db_yoy = load_db_yoy(latest, prior)
+
     # Quarter context for meta
     q_buckets = defaultdict(list)
     for d in dates:
@@ -456,6 +553,7 @@ def main():
             "all_months":    [fmt_month(d) for d in dates],
             "curr_quarter":  quarter_label(*curr_q) if curr_q else None,
             "prev_quarter":  quarter_label(*prev_q) if prev_q else None,
+            "yoy_source":    "signals.db (registered *-yoy signals; csv_total_yoy)",
         },
         "groups": {},
     }
@@ -466,7 +564,7 @@ def main():
         metrics  = gdef["metrics"]
         vol_mets = gdef["vol_metrics"]
 
-        total_sigs  = build_total_metric_signals(dates, data, metrics)
+        total_sigs  = build_total_metric_signals(dates, data, metrics, db_yoy)
         cross_sigs  = build_cross_metric_signals(dates, data, vol_mets)
         cat_sigs    = build_category_signals_raw(dates, raw_rows, primary)
         topn_sigs   = build_top_n_signals(dates, raw_rows, primary)

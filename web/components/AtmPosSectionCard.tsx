@@ -13,7 +13,7 @@ interface AtmPosSectionCardProps {
   filter:       FilterState;
   tab:          "trend" | "distribution";
   hiddenSeries: Set<string>;
-  trendMode:    "absolute" | "mom";
+  trendMode:    "absolute" | "mom" | "yoy";
   distMode:     "absolute" | "pct";
   accentColor:  string;
 }
@@ -54,7 +54,7 @@ export default function AtmPosSectionCard({
     return { activeMetric: def.valMetric!, activeUnit: def.valUnit ?? "rs_thousands" };
   }, [def, volVal]);
 
-  const { absoluteData, momData, seriesNames } = useMemo(
+  const { absoluteData, momData, yoyData, seriesNames } = useMemo(
     () => buildSectionData(rows, activeMetric, filter),
     [rows, activeMetric, filter],
   );
@@ -90,6 +90,7 @@ export default function AtmPosSectionCard({
         <AtmPosTrendChart
           absoluteData={absoluteData}
           momData={momData}
+          yoyData={yoyData}
           seriesNames={seriesNames}
           unit={activeUnit}
           hiddenSeries={hiddenSeries}

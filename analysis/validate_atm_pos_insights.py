@@ -17,12 +17,15 @@ Usage:
 
 import json
 import re
+import sqlite3
 import sys
 from pathlib import Path
 
 ROOT        = Path(__file__).parent.parent
 SIGNALS_IN  = ROOT / "analysis/rbi_atm_pos/signals.json"
 INSIGHTS_IN = ROOT / "analysis/rbi_atm_pos/insights.json"
+DB_PATH     = ROOT / "analysis/signals/signals.db"
+REGISTRY    = ROOT / "analysis/signals/registry.json"
 
 # Relative tolerance: a text value of "81.4" matches a signals value of 81.42
 REL_TOL = 0.005   # 0.5%
@@ -30,6 +33,64 @@ ABS_TOL = 0.6     # absolute fallback for values near 0
 
 # Minimum digits to bother checking (ignore trivial small integers)
 MIN_VALUE_TO_CHECK = 0.5
+
+
+def check_yoy_matches_db(signals: dict) -> list[str]:
+    """No-drift guard: every YoY value in signals.json must equal the registered
+    `*-yoy` signal in signals.db. YoY is a registered Layer-1 signal — the dashboard
+    must source it, never recompute a parallel copy. Any divergence is a hard fail.
+    """
+    errors: list[str] = []
+    if not DB_PATH.exists():
+        return [f"signals.db not found at {DB_PATH} — cannot verify YoY source"]
+
+    # metric → registered yoy signal_id (from the registry, single source)
+    with open(REGISTRY) as f:
+        reg = json.load(f)
+    sigs = reg["signals"]
+    items = sigs.items() if isinstance(sigs, dict) else [(s["id"], s) for s in sigs]
+    metric_to_sig = {
+        s["compute"]["metric"]: sid
+        for sid, s in items
+        if s.get("pipeline") == "atm_pos"
+        and s.get("compute", {}).get("method") == "csv_total_yoy"
+        and s.get("compute", {}).get("metric")
+    }
+
+    latest = signals["meta"]["latest_period"]
+    prior  = signals["meta"].get("prior_period")
+    con = sqlite3.connect(DB_PATH)
+    try:
+        def db_val(sig, period):
+            if not period:
+                return None
+            r = con.execute(
+                "SELECT value FROM signals WHERE pipeline='atm_pos' "
+                "AND entity_type='aggregate' AND entity_id='total' "
+                "AND metric_id=? AND period=?",
+                (sig, period),
+            ).fetchone()
+            return r[0] if r else None
+
+        for gid, g in signals["groups"].items():
+            for metric, m in g["total"]["metrics"].items():
+                sig = metric_to_sig.get(metric)
+                if not sig:
+                    continue
+                for field, period in (("yoy_pct", latest), ("yoy_prior_pct", prior)):
+                    js = m.get(field)
+                    db = db_val(sig, period)
+                    db = round(db, 2) if db is not None else None
+                    if js is None and db is None:
+                        continue
+                    if js is None or db is None or abs(js - db) > 0.011:
+                        errors.append(
+                            f"YoY DRIFT [{metric}.{field}]: signals.json={js} vs "
+                            f"signals.db({sig})={db} — dashboard YoY must equal the registered signal"
+                        )
+    finally:
+        con.close()
+    return errors
 
 
 def load_signals_flat(signals: dict) -> dict[str, float]:
@@ -155,8 +216,41 @@ def source_signals_subset(
     return subset
 
 
-def validate_insight(ins: dict, flat_signals: dict[str, float]) -> list[str]:
-    """Return list of error strings for this insight (empty = OK)."""
+def load_db_period_numbers(period: str) -> list[float]:
+    """Period-wide signals.db ground truth for atm_pos: every number the period's
+    registered signals produced (current, full series, range bounds, components,
+    diffs). This is the SAME ground truth SIBC Check 2g uses — required to verify
+    the rich, history-referencing LLM prose. signals.db is kept honest by Check 2f."""
+    if not DB_PATH.exists():
+        return []
+    sys.path.insert(0, str(ROOT / "analysis"))
+    from signals.query import signal_numbers, flat_numbers  # noqa: E402
+    with open(REGISTRY) as f:
+        reg = json.load(f)["signals"]
+    items = reg.items() if isinstance(reg, dict) else [(s["id"], s) for s in reg]
+    con = sqlite3.connect(f"file:{DB_PATH}?mode=ro", uri=True)
+    nums: list[float] = []
+    try:
+        for sid, sig in items:
+            if sig.get("pipeline") != "atm_pos" or sig.get("layer") != 1:
+                continue
+            try:
+                nums += flat_numbers(signal_numbers(con, sid, sig, "atm_pos", period))
+            except Exception:
+                pass
+    finally:
+        con.close()
+    return nums
+
+
+def validate_insight(ins: dict, flat_signals: dict[str, float],
+                     db_period_nums: list[float] | None = None) -> list[str]:
+    """Return list of error strings for this insight (empty = OK).
+
+    LLM-represented insights (representation=='llm') carry history-referencing
+    prose, so their numbers are checked against the period-wide signals.db ground
+    truth (`db_period_nums`) + ratios — exactly like SIBC scalar insights. The
+    deterministic insights validate against signals.json as before."""
     errors = []
     iid = ins.get("id", "?")
 
@@ -200,17 +294,26 @@ def validate_insight(ins: dict, flat_signals: dict[str, float]) -> list[str]:
     if chain:
         texts_to_check.append(("chain", " ".join(chain)))
 
+    is_llm = ins.get("representation") == "llm"
     for field_name, text in texts_to_check:
         nums = extract_numbers(text)
         for num in nums:
             # Skip year-like numbers (1990–2100) and trivial small integers used as ordinals
             if 1990 <= abs(num) <= 2100:
                 continue
-            if not value_in_signals(num, flat_signals, source_vals, prior_vals):
-                # Not found anywhere in signals — hard error
+            if is_llm:
+                # LLM prose → verify against the period-wide signals.db ground truth
+                # (current + full series + ranges + components + ratios).
+                pool = db_period_nums or []
+                ok = _matches(num, pool) or _ratio_matches(num, pool)
+                src_label = "signals.db (period-wide)"
+            else:
+                ok = value_in_signals(num, flat_signals, source_vals, prior_vals)
+                src_label = "signals.json"
+            if not ok:
                 errors.append(
                     f"[{iid}] UNVERIFIED number {num} in {field_name}: "
-                    f"not found in signals.json (check for hallucinated values)"
+                    f"not found in {src_label} (check for hallucinated values)"
                 )
 
     return errors
@@ -235,16 +338,30 @@ def main():
         insights = json.load(f)
 
     flat_signals = load_signals_flat(signals)
-    print(f"  Signals: {len(flat_signals)} numeric values loaded")
-    print(f"  Insights: {len(insights)} to validate\n")
+    period = signals["meta"]["latest_period"]
+    db_period_nums = load_db_period_numbers(period)
+    n_llm = sum(1 for i in insights if i.get("representation") == "llm")
+    print(f"  Signals: {len(flat_signals)} numeric values loaded (signals.json)")
+    print(f"  signals.db period-wide ground truth: {len(db_period_nums)} values ({period})")
+    print(f"  Insights: {len(insights)} to validate ({n_llm} LLM-represented → verified vs signals.db)\n")
 
-    all_errors:   list[str] = []
+    # No-drift guard: dashboard YoY must equal the registered signals.db YoY.
+    yoy_errors = check_yoy_matches_db(signals)
+    if yoy_errors:
+        print("  YoY source check (signals.json vs registered signals.db):")
+        for e in yoy_errors:
+            print(f"  ✗ {e}")
+        print()
+    else:
+        print("  ✓ YoY values match the registered signals.db (no drift)\n")
+
+    all_errors:   list[str] = list(yoy_errors)
     warnings:     list[str] = []
     insight_count = 0
     gap_count     = 0
 
     for ins in insights:
-        errors = validate_insight(ins, flat_signals)
+        errors = validate_insight(ins, flat_signals, db_period_nums)
         itype = ins.get("type", "insight")
         if itype == "gap":
             gap_count += 1

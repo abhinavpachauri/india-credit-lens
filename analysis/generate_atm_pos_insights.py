@@ -22,6 +22,78 @@ ROOT        = Path(__file__).parent.parent
 SIGNALS_IN  = ROOT / "analysis/rbi_atm_pos/signals.json"
 OUT_PATH    = ROOT / "analysis/rbi_atm_pos/insights.json"
 WEB_PATH    = ROOT / "web/public/data/atm_pos_insights.json"
+EVAL_DIR    = ROOT / "analysis/signals/evaluations/atm_pos"
+
+# ── LLM representation layer ──────────────────────────────────────────────────
+# Same architecture as SIBC: deterministic selection + UI routing + traceable
+# facts (everything below), but the annotation PROSE for scalar insights comes
+# from the LLM evaluation (signals.db → evaluate.py → evaluations/atm_pos/{period}.json,
+# prompt v1.11, via the API). The LLM interprets the computed signals; Stage 4c
+# then hard-checks every number it wrote against signals.db. Scan / share /
+# concentration / composed insights stay deterministic — the SIBC scalar=LLM,
+# scan=deterministic split.
+#
+# Each entry maps a deterministic insight id → the registered signal_id whose LLM
+# narrative becomes its representation. Only 1:1 anchors with a registered signal
+# qualify; composed/ratio/scan insights are intentionally absent (stay deterministic).
+EVAL_ANCHOR = {
+    "cc-cards-yoy":     "cc-outstanding-yoy",
+    "dc-cards-yoy":     "dc-outstanding-yoy",
+    "infra-pos-yoy":    "pos-terminals-yoy",
+    "infra-upi-yoy":    "upi-qr-yoy",
+    "infra-pos-streak": "pos-terminals-pos-streak",
+    "infra-qr-per-pos": "upi-qr-per-pos",
+}
+
+
+def load_eval_signals(period: str) -> tuple[dict, str | None]:
+    """Flatten the latest atm_pos LLM evaluation → {signal_id: entry}, plus its
+    prompt_version. Returns ({}, None) if no eval exists for the period (the
+    dashboard then falls back to deterministic prose — gate never breaks)."""
+    path = EVAL_DIR / f"{period}.json"
+    if not path.exists():
+        return {}, None
+    with open(path) as f:
+        ev = json.load(f)
+    flat = {}
+    for _dom, dd in ev.get("domains", {}).items():
+        for sid, se in dd.get("signals", {}).items():
+            flat[sid] = se
+    return flat, ev.get("prompt_version")
+
+
+def apply_llm_representation(insights: list, eval_signals: dict, prompt_version) -> int:
+    """Override the prose (title/body/implication/chain) of anchored scalar
+    insights with the LLM narrative; keep deterministic selection, UI routing
+    (effect/exploreAction), sourceSignals and basis.facts. Returns the count
+    converted to LLM representation."""
+    converted = 0
+    for ins in insights:
+        ins["representation"] = "deterministic"
+        anchor = EVAL_ANCHOR.get(ins["id"])
+        se = eval_signals.get(anchor) if anchor else None
+        if not se:
+            continue
+        body  = " ".join(x for x in [se.get("observation", ""), se.get("direction", "")] if x).strip()
+        chain = se.get("chain") or []
+        impl  = se.get("inference") or ins.get("implication")
+        title = se.get("title") or ins["title"]
+        if not (body and chain):
+            continue  # incomplete eval entry → keep deterministic
+        ins["title"]       = title
+        ins["body"]        = body
+        ins["implication"] = impl
+        # chain feeds both the card back-compat path (reasoning.chain) and the
+        # shared schema (basis.inferences) — keep them in sync.
+        ins.setdefault("reasoning", {"signals": []})
+        ins["reasoning"]["chain"] = chain
+        if ins.get("basis"):
+            ins["basis"]["inferences"] = chain
+        ins["representation"] = "llm"
+        ins["eval_signal"]    = anchor
+        ins["prompt_version"] = prompt_version
+        converted += 1
+    return converted
 
 # ── Metric labels (human-readable) ────────────────────────────────────────────
 
@@ -82,6 +154,17 @@ def streak_label(n: int, direction: str) -> str:
 
 def sign(v: float) -> str:
     return f"+{v:.1f}" if v >= 0 else f"{v:.1f}"
+
+
+def yoy_phrase(accel_pp: float | None) -> str:
+    """Describe the trajectory of a YoY growth rate vs the prior month's YoY rate."""
+    if accel_pp is None:
+        return "holding steady"
+    if accel_pp >= 0.5:
+        return "accelerating"
+    if accel_pp <= -0.5:
+        return "decelerating"
+    return "holding steady"
 
 
 def get_signal_value(s: dict, key: str) -> float | None:
@@ -1435,6 +1518,246 @@ def gap_dc_ecom_low(s, month) -> dict | None:
 
 
 # ══════════════════════════════════════════════════════════════════════════════
+# YoY TRAJECTORY RULES  (seasonally-clean — unlocked by the 2024 backfill)
+# Year-on-year strips the seasonal swings (March FY-end, festive spikes) that
+# dominate MoM. These rules report the YoY rate AND whether it is accelerating or
+# decelerating vs the prior month's YoY rate — a trajectory MoM/streak can't show.
+# ══════════════════════════════════════════════════════════════════════════════
+
+def cc_cards_yoy(s, month) -> dict | None:
+    """Credit cards outstanding — YoY growth rate + trajectory."""
+    m         = s["groups"]["cc"]["total"]["metrics"].get("credit_cards", {})
+    yoy       = m.get("yoy_pct")
+    prior_yoy = m.get("yoy_prior_pct")
+    accel     = m.get("yoy_accel_pp")
+    latest    = m.get("latest")
+    if yoy is None or abs(yoy) < 2:
+        return None
+
+    trend = yoy_phrase(accel)
+    title = f"Credit cards growing {yoy:.1f}% YoY — issuance {trend}"
+    body  = (
+        f"Total credit cards outstanding reached {fmt_num(latest)} in {month}, "
+        f"up {yoy:.1f}% year-on-year. "
+    )
+    if prior_yoy is not None and accel is not None:
+        body += (
+            f"The YoY growth rate was {prior_yoy:.1f}% a month ago, so issuance is {trend} "
+            f"({sign(accel)}pp). "
+        )
+    body += "Year-on-year strips out the seasonal swings — March year-end and festive spikes — that distort month-on-month."
+    implication = (
+        f"Credit card issuance is running at {yoy:.1f}% a year — a cleaner read on portfolio "
+        f"growth than any single month, which is skewed by seasonality. "
+        f"{'A decelerating YoY rate is an early sign issuers are tightening acquisition — watch new-account approval rates next quarter.' if trend == 'decelerating' else 'A steady-to-accelerating YoY rate signals issuers are still leaning into acquisition; track activation, not just card count.'}"
+    )
+    return insight(
+        "cc-cards-yoy", "cc", "total", month, title, body,
+        effect={"highlight": ["Total"], "tab": "trend", "trendMode": "yoy", "focusCard": "credit_cards"},
+        explore={"mode": "by_type"},
+        implication=implication,
+        source_signals=[
+            "groups.cc.total.metrics.credit_cards.yoy_pct",
+            "groups.cc.total.metrics.credit_cards.yoy_prior_pct",
+            "groups.cc.total.metrics.credit_cards.yoy_accel_pp",
+            "groups.cc.total.metrics.credit_cards.latest",
+        ],
+        chain=[
+            f"Credit cards outstanding up {yoy:.1f}% YoY — issuance momentum on a seasonally-clean basis",
+            f"YoY rate moved from {prior_yoy:.1f}% to {yoy:.1f}% — issuance is {trend}" if prior_yoy is not None else "Year-on-year removes seasonal distortion from the headline",
+            "YoY trajectory is the leading read on acquisition intensity — track activation rate alongside card count",
+        ],
+        signals_dict=s,
+    )
+
+
+def cc_spend_yoy(s, month) -> dict | None:
+    """CC ecommerce vs POS spend — YoY growth, seasonally clean."""
+    metrics = s["groups"]["cc"]["total"]["metrics"]
+    ecom    = metrics.get("cc_ecom_txn_vol", {})
+    pos     = metrics.get("cc_pos_txn_vol", {})
+    e_yoy   = ecom.get("yoy_pct")
+    p_yoy   = pos.get("yoy_pct")
+    if e_yoy is None or p_yoy is None:
+        return None
+    if abs(e_yoy) < 5 and abs(p_yoy) < 5:
+        return None  # nothing notable
+
+    online_leads = e_yoy > p_yoy
+    title = f"CC spend YoY — ecommerce {e_yoy:.1f}% vs in-store POS {p_yoy:.1f}%"
+    body  = (
+        f"On a year-on-year basis, credit card ecommerce transaction volume grew {e_yoy:.1f}% "
+        f"and in-store POS volume grew {p_yoy:.1f}% as of {month}. "
+        f"Year-on-year removes the heavy seasonality in the monthly numbers — "
+        f"{'online is outpacing in-store' if online_leads else 'in-store is outpacing online'} on a clean comparison."
+    )
+    implication = (
+        f"Credit card spend is growing across both channels year-on-year "
+        f"({'ecom faster' if online_leads else 'POS faster'}). "
+        "For credit-risk teams this matters: a spend mix tilting online means more "
+        "card-not-present volume, where fraud and dispute rates run higher — provisioning "
+        "and fraud models should track the channel mix, not just the headline spend growth."
+    )
+    return insight(
+        "cc-spend-yoy", "cc", "total", month, title, body,
+        effect={"highlight": ["Total"], "tab": "trend", "trendMode": "yoy", "focusCard": "cc_ecom"},
+        explore={"mode": "by_type"},
+        implication=implication,
+        source_signals=[
+            "groups.cc.total.metrics.cc_ecom_txn_vol.yoy_pct",
+            "groups.cc.total.metrics.cc_pos_txn_vol.yoy_pct",
+        ],
+        chain=[
+            f"CC ecommerce volume up {e_yoy:.1f}% YoY vs POS up {p_yoy:.1f}% YoY — both growing, seasonally clean",
+            f"{'Online (CNP) is the faster-growing channel' if online_leads else 'In-store POS is the faster-growing channel'} on a year-on-year basis",
+            "Channel mix shift changes the fraud and dispute profile — risk models must track mix, not just total spend",
+        ],
+        signals_dict=s,
+    )
+
+
+def dc_cards_yoy(s, month) -> dict | None:
+    """Debit cards outstanding — YoY growth rate + trajectory."""
+    m         = s["groups"]["dc"]["total"]["metrics"].get("debit_cards", {})
+    yoy       = m.get("yoy_pct")
+    prior_yoy = m.get("yoy_prior_pct")
+    accel     = m.get("yoy_accel_pp")
+    latest    = m.get("latest")
+    if yoy is None or (abs(yoy) < 2 and (accel is None or abs(accel) < 1)):
+        return None
+
+    trend = yoy_phrase(accel)
+    title = f"Debit card base {yoy:+.1f}% YoY — growth {trend}"
+    body  = (
+        f"Total debit cards outstanding stand at {fmt_num(latest)} in {month}, "
+        f"{yoy:+.1f}% year-on-year. "
+    )
+    if prior_yoy is not None and accel is not None:
+        body += (
+            f"The YoY rate was {prior_yoy:+.1f}% a month ago — the base is {trend} "
+            f"({sign(accel)}pp). "
+        )
+    body += "Year-on-year smooths the month-to-month volatility from card reissuance and account closures."
+    implication = (
+        f"The debit base is growing {yoy:.1f}% a year — far slower than credit cards. "
+        f"{'A decelerating debit YoY often reflects PSBs pruning dormant Jan Dhan accounts — healthy, but it shrinks the headline pool, not the active one.' if trend == 'decelerating' else 'Debit growth is structurally slow; the active-transacting subset, not the headline count, is the real first-credit pool.'}"
+    )
+    return insight(
+        "dc-cards-yoy", "dc", "total", month, title, body,
+        effect={"highlight": ["Total"], "tab": "trend", "trendMode": "yoy", "focusCard": "debit_cards"},
+        explore={"mode": "by_type"},
+        implication=implication,
+        source_signals=[
+            "groups.dc.total.metrics.debit_cards.yoy_pct",
+            "groups.dc.total.metrics.debit_cards.yoy_prior_pct",
+            "groups.dc.total.metrics.debit_cards.yoy_accel_pp",
+            "groups.dc.total.metrics.debit_cards.latest",
+        ],
+        chain=[
+            f"Debit cards outstanding {yoy:+.1f}% YoY — structurally slower than credit card growth",
+            f"YoY rate moved from {prior_yoy:+.1f}% to {yoy:+.1f}% — base is {trend}" if prior_yoy is not None else "Year-on-year smooths reissuance and closure volatility",
+            "Headline debit count is inflated by low-activity accounts — the active subset is the real credit opportunity",
+        ],
+        signals_dict=s,
+    )
+
+
+def infra_pos_yoy(s, month) -> dict | None:
+    """POS terminals — YoY growth + trajectory. Decelerating YoY = QR substitution."""
+    m         = s["groups"]["infra"]["total"]["metrics"].get("pos_terminals", {})
+    yoy       = m.get("yoy_pct")
+    prior_yoy = m.get("yoy_prior_pct")
+    accel     = m.get("yoy_accel_pp")
+    latest    = m.get("latest")
+    if yoy is None:
+        return None
+    # Fire on a clear deceleration story or material growth
+    if abs(yoy) < 2 and (accel is None or abs(accel) < 1.5):
+        return None
+
+    trend = yoy_phrase(accel)
+    title = f"POS terminal growth {yoy:+.1f}% YoY — deployment {trend}"
+    body  = (
+        f"POS terminals reached {fmt_num(latest)} in {month}, {yoy:+.1f}% year-on-year. "
+    )
+    if prior_yoy is not None and accel is not None:
+        body += (
+            f"A year-on-year basis a month ago showed {prior_yoy:+.1f}% — deployment is {trend} "
+            f"({sign(accel)}pp). "
+        )
+    body += "Year-on-year is the honest read on hardware expansion; monthly figures bounce on bank deployment cycles."
+    implication = (
+        f"POS terminal growth has slowed to {yoy:.1f}% a year. "
+        f"{'Decelerating POS deployment alongside fast UPI QR growth is the merchant acceptance shift in one number — card-terminal hardware is being replaced by QR.' if trend == 'decelerating' else 'Steady POS growth means the card-acceptance footprint is still expanding — merchant transaction data for working-capital lending keeps widening.'} "
+        "If you underwrite merchants on POS data, watch whether your coverage is migrating to QR rails you can't see."
+    )
+    return insight(
+        "infra-pos-yoy", "infra", "total", month, title, body,
+        effect={"highlight": ["Total"], "tab": "trend", "trendMode": "yoy", "focusCard": "pos_terminals"},
+        explore={"mode": "by_type"},
+        implication=implication,
+        source_signals=[
+            "groups.infra.total.metrics.pos_terminals.yoy_pct",
+            "groups.infra.total.metrics.pos_terminals.yoy_prior_pct",
+            "groups.infra.total.metrics.pos_terminals.yoy_accel_pp",
+            "groups.infra.total.metrics.pos_terminals.latest",
+        ],
+        chain=[
+            f"POS terminals {yoy:+.1f}% YoY — hardware acceptance growth on a seasonally-clean basis",
+            f"YoY rate moved from {prior_yoy:+.1f}% to {yoy:+.1f}% — deployment is {trend}" if prior_yoy is not None else "Year-on-year removes bank deployment-cycle noise",
+            "Decelerating POS growth signals merchant migration to UPI QR — POS-based merchant credit data coverage may be narrowing",
+        ],
+        signals_dict=s,
+    )
+
+
+def infra_upi_yoy(s, month) -> dict | None:
+    """UPI QR codes — YoY growth + trajectory. The acceptance-expansion engine."""
+    m         = s["groups"]["infra"]["total"]["metrics"].get("upi_qr", {})
+    yoy       = m.get("yoy_pct")
+    prior_yoy = m.get("yoy_prior_pct")
+    accel     = m.get("yoy_accel_pp")
+    latest    = m.get("latest")
+    if yoy is None or abs(yoy) < 3:
+        return None
+
+    trend = yoy_phrase(accel)
+    title = f"UPI QR acceptance up {yoy:.1f}% YoY — expansion {trend}"
+    body  = (
+        f"UPI QR codes deployed reached {fmt_num(latest)} in {month}, up {yoy:.1f}% year-on-year. "
+    )
+    if prior_yoy is not None and accel is not None:
+        body += (
+            f"The YoY rate was {prior_yoy:.1f}% a month ago — QR acceptance expansion is {trend} "
+            f"({sign(accel)}pp). "
+        )
+    body += "Year-on-year cuts through the monthly registration noise to show the true acceptance build-out."
+    implication = (
+        f"QR acceptance is expanding {yoy:.1f}% a year — far faster than POS hardware. "
+        "Every new QR is a merchant who becomes reachable for credit-on-UPI and merchant BNPL. "
+        "Any small-merchant lending product needs a QR-native distribution path; POS-only reach is shrinking by comparison."
+    )
+    return insight(
+        "infra-upi-yoy", "infra", "total", month, title, body,
+        effect={"highlight": ["Total"], "tab": "trend", "trendMode": "yoy", "focusCard": "upi_qr"},
+        explore={"mode": "by_type"},
+        implication=implication,
+        source_signals=[
+            "groups.infra.total.metrics.upi_qr.yoy_pct",
+            "groups.infra.total.metrics.upi_qr.yoy_prior_pct",
+            "groups.infra.total.metrics.upi_qr.yoy_accel_pp",
+            "groups.infra.total.metrics.upi_qr.latest",
+        ],
+        chain=[
+            f"UPI QR codes up {yoy:.1f}% YoY — acceptance footprint expanding far faster than POS hardware",
+            f"YoY rate moved from {prior_yoy:.1f}% to {yoy:.1f}% — expansion is {trend}" if prior_yoy is not None else "Year-on-year shows the true acceptance build-out beneath monthly noise",
+            "Each new QR is a reachable merchant for credit-on-UPI and BNPL — QR-native distribution is now the larger channel",
+        ],
+        signals_dict=s,
+    )
+
+
+# ══════════════════════════════════════════════════════════════════════════════
 # Orchestrate
 # ══════════════════════════════════════════════════════════════════════════════
 
@@ -1443,6 +1766,8 @@ RULES = [
     cc_ecom_vs_pos,
     cc_atm_withdrawal_trend,
     cc_cards_streak,
+    cc_cards_yoy,
+    cc_spend_yoy,
     cc_transaction_surge,
     cc_category_share_shift,
     cc_top_bank_concentration,
@@ -1454,6 +1779,7 @@ RULES = [
     dc_pos_cash_decline,
     dc_ecom_share,
     dc_cards_streak,
+    dc_cards_yoy,
     dc_category_dominance,
     dc_top_bank,
     # DC — gaps
@@ -1462,6 +1788,8 @@ RULES = [
     # Infra — insights
     infra_qr_per_pos,
     infra_pos_streak,
+    infra_pos_yoy,
+    infra_upi_yoy,
     infra_upi_vs_bharat_qr,
     infra_category_pos,
     infra_top_bank_pos,
@@ -1490,6 +1818,18 @@ def main():
             print(f"  ✗ {rule.__name__}: {e}")
 
     print(f"\n{len(insights)} insights generated.")
+
+    # LLM representation layer — override prose of anchored scalar insights with
+    # the LLM evaluation narrative (deterministic selection/routing preserved).
+    period = signals["meta"]["latest_period"]
+    eval_signals, prompt_version = load_eval_signals(period)
+    if eval_signals:
+        n = apply_llm_representation(insights, eval_signals, prompt_version)
+        print(f"  LLM representation applied to {n} scalar insight(s) "
+              f"(eval {period}, prompt {prompt_version}); rest deterministic.")
+    else:
+        print(f"  ⚠ no LLM evaluation found for {period} — all insights deterministic. "
+              f"Run: python3 analysis/generate_signal_history.py evaluate --pipeline atm_pos --period {period}")
 
     # Write
     OUT_PATH.parent.mkdir(parents=True, exist_ok=True)

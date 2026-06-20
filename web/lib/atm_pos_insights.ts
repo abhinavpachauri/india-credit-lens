@@ -8,7 +8,7 @@ export type InsightGroup = "cc" | "dc" | "infra";
 export interface InsightEffect {
   highlight:   string[];                        // series to keep visible (dim others)
   tab:         "trend" | "distribution";
-  trendMode?:  "absolute" | "mom";
+  trendMode?:  "absolute" | "mom" | "yoy";
   distMode?:   "absolute" | "pct";
   focusCard?:  string;                          // SECTION_DEF id to scroll to
 }

@@ -33,6 +33,7 @@ export interface ChartPoint {
 export interface SectionData {
   absoluteData: ChartPoint[];
   momData:      ChartPoint[];   // MoM % — null for first date
+  yoyData:      ChartPoint[];   // YoY % — null when no same-month year-ago point
   seriesNames:  string[];
 }
 
@@ -246,7 +247,33 @@ export function buildSectionData(
     return point;
   });
 
-  return { absoluteData, momData, seriesNames };
+  // yoyData — same month one year earlier (seasonally clean)
+  // Index sortedDates by "YYYY-MM" so we can resolve the year-ago period even
+  // when month-end days differ (28/29/30/31) or a month is missing.
+  const isoByMonth = new Map<string, string>();
+  for (const iso of sortedDates) isoByMonth.set(iso.slice(0, 7), iso);
+
+  const yoyData: ChartPoint[] = sortedDates.map((iso) => {
+    const point: ChartPoint = {
+      date: formatAtmDate(iso),
+      _ts:  new Date(iso + "T00:00:00Z").getTime(),
+    };
+    const [y, m]    = iso.slice(0, 7).split("-");
+    const priorKey  = `${Number(y) - 1}-${m}`;
+    const priorIso  = isoByMonth.get(priorKey);
+    for (const name of seriesNames) {
+      if (!priorIso) {
+        point[name] = null;
+      } else {
+        const curr = valMap.get(name)?.get(iso) ?? 0;
+        const prev = valMap.get(name)?.get(priorIso) ?? 0;
+        point[name] = prev !== 0 ? +((curr - prev) / prev * 100).toFixed(2) : null;
+      }
+    }
+    return point;
+  });
+
+  return { absoluteData, momData, yoyData, seriesNames };
 }
 
 // ── QoQ computation ────────────────────────────────────────────────────────────

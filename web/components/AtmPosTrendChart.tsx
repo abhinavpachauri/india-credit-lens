@@ -11,22 +11,39 @@ import type { ChartPoint } from "@/lib/atm_pos_data";
 interface AtmPosTrendChartProps {
   absoluteData: ChartPoint[];
   momData:      ChartPoint[];
+  yoyData:      ChartPoint[];
   seriesNames:  string[];
   unit:         string;
   hiddenSeries: Set<string>;
   chartId:      string;
-  chartMode:    "absolute" | "mom";
+  chartMode:    "absolute" | "mom" | "yoy";
 }
 
 export default function AtmPosTrendChart({
   absoluteData,
   momData,
+  yoyData,
   seriesNames,
   unit,
   hiddenSeries,
   chartMode,
 }: AtmPosTrendChartProps) {
-  const chartData = chartMode === "absolute" ? absoluteData : momData;
+  const rawData =
+    chartMode === "absolute" ? absoluteData : chartMode === "yoy" ? yoyData : momData;
+
+  // YoY/MoM have leading null rows (no year-ago / no prior point). Trim those so
+  // the x-axis starts at the first period that actually has a value.
+  const chartData =
+    chartMode === "absolute"
+      ? rawData
+      : rawData.slice(
+          Math.max(
+            0,
+            rawData.findIndex((pt) =>
+              seriesNames.some((n) => pt[n] != null),
+            ),
+          ),
+        );
 
   const formatY = (v: number) =>
     chartMode === "absolute" ? formatAtmValue(v, unit) : `${v.toFixed(1)}%`;
@@ -53,7 +70,7 @@ export default function AtmPosTrendChart({
               ? formatAtmValue(Number(p.value) || 0, unit)
               : p.value == null
               ? "—"
-              : `${Number(p.value).toFixed(1)}%`}
+              : `${Number(p.value) > 0 ? "+" : ""}${Number(p.value).toFixed(1)}%`}
           </p>
         ))}
       </div>
