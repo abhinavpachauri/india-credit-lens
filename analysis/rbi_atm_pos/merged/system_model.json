@@ -1891,6 +1891,15 @@
       "scope": "inter_group",
       "mechanism": "Other category is measurable but not sub-classified — prevents verification of whether transit NFC, UPI-credit, or other driver is causing the structural growth",
       "id": "e_spend_value_cc_other_txn_val__is_data_gap__gap_cc_other_composition"
+    },
+    {
+      "from": "e_cards_credit_cards",
+      "to": "risk_cc_market_concentration",
+      "type": "creates_risk",
+      "polarity": "-",
+      "scope": "inter_group",
+      "mechanism": "High top-5 / single-issuer concentration in credit cards outstanding means a shock to one major issuer (issuance freeze, lifecycle purge) propagates market-wide, as the Paytm debit step-down demonstrated.",
+      "id": "e_cards_credit_cards__creates_risk__risk_cc_market_concentration"
     }
   ],
   "force_instances": [

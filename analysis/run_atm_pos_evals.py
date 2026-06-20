@@ -278,6 +278,19 @@ def check_system_state():
     return ok2, f"state + opportunities @ {period}"
 
 
+def check_opportunity_traceability():
+    """Check 4f: opportunity number traceability (STRICT). Runs over the shared
+    opportunities_feed.json (both pipelines) — wired into BOTH gates so the L2
+    grounding contract is enforced identically for SIBC and payments (the L2
+    analog of Check 2g)."""
+    ok, out = run("opportunity_traceability",
+                  [sys.executable, str(ANALYSIS / "validate_opportunity_traceability.py"), "--strict"])
+    tline = [l.strip() for l in out.splitlines()
+             if "opportunit" in l.lower() and ("✓" in l or "⚠" in l or "✗" in l)]
+    note = (tline[0].lstrip("✓✗⚠ ").strip()[:60]) if tline else "ran"
+    return ok, note
+
+
 def check_system_model():
     """Stage 5c: regenerate the ATM/POS structural skeleton deterministically from the
     CSV + profile (preserving the authored behavioral layer), then validate the merged
@@ -428,6 +441,14 @@ def main():
         all_results.append(("5d. system_state + opportunities (S3)", passed, note))
     else:
         all_results.append(("5d. system_state + opportunities (S3)", None, "skipped — upstream failures"))
+
+    # Check 4f: opportunity number traceability (advisory) — same gate as SIBC
+    prior_ok = all(r[1] is True or r[1] is None for r in all_results)
+    if prior_ok:
+        passed, note = check_opportunity_traceability()
+        all_results.append(("4f. opportunity traceability (strict)", passed, note))
+    else:
+        all_results.append(("4f. opportunity traceability (strict)", None, "skipped — upstream failures"))
 
     # Stage 5.5: generate UI annotation JSON from evaluation output
     prior_ok = all(r[1] is True or r[1] is None for r in all_results)

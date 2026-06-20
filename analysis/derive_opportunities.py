@@ -106,7 +106,11 @@ def main():
             "scope": "pipeline",
             "status": status,
             "authored_status": n.get("status"),
+            # evidence = the firing subset (drives STATUS); evidence_all = the driver's
+            # full declared signal set (drives TRACEABILITY — a structural risk's numbers
+            # trace to its signals even when the driver isn't currently firing).
             "evidence": sorted(sigs & fire.get(cur, set())),
+            "evidence_all": sorted(sigs),
             "refs": {
                 "entities": sorted(set(entity_refs)),
                 "instances": sorted(set(instance_refs)),

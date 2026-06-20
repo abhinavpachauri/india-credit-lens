@@ -5,7 +5,8 @@ generate_opportunity_narrative.py — expository narrative step (COMPOSITION_SPE
 Enriches web/public/data/opportunities_feed.json with LLM-written, numbers-grounded copy:
 a sharp "For lenders" implication + a body that weaves in the LIVE signal figures from
 signals.db. Read-only over the model/state (it does NOT propose causal structure — that's
-S4); it only verbalises what S3 already computed. Uses the `claude -p` CLI (Pro, no API
+S4); it only verbalises what S3 already computed. Shares evaluate._call_llm — prefers the
+Anthropic API (ANTHROPIC_API_KEY) and falls back to the `claude -p` CLI (Pro, no API
 cost), mirroring evaluate.py. Cached by payload hash so re-runs are instant.
 
 Usage:  python3 analysis/generate_opportunity_narrative.py
@@ -75,15 +76,13 @@ def load_cache():
 
 
 def call_claude(payload):
+    """Single LLM call. Reuses evaluate._call_llm so this step shares ONE call
+    path with the signal-evaluation step: prefers the Anthropic API (SDK) when
+    ANTHROPIC_API_KEY is set, falls back to the `claude -p` CLI otherwise."""
+    from signals.evaluate import _call_llm  # API-preferred (key) / CLI (fallback)
     user = json.dumps(payload, ensure_ascii=False)
-    proc = subprocess.run(["claude", "-p", "--output-format", "text"],
-                          input=f"{SYSTEM}\n\n{'─'*50}\n\n{user}",
-                          capture_output=True, text=True, timeout=120)
-    if proc.returncode != 0:
-        raise RuntimeError(proc.stderr[:200])
-    txt = proc.stdout.strip()
-    a, b = txt.find("{"), txt.rfind("}")
-    return json.loads(txt[a:b + 1])
+    res, *_ = _call_llm(SYSTEM, user)
+    return res
 
 
 def main():

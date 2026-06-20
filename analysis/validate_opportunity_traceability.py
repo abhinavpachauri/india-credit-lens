@@ -72,7 +72,10 @@ def check(quiet: bool = False, strict: bool = False) -> int:
     for opp in _opps(feed):
         checked += 1
         oid = opp.get("id", "?")
-        evidence = opp.get("evidence") or []
+        # Traceability scopes to the driver's FULL declared signal set (evidence_all),
+        # not just the currently-firing subset (evidence) — a structural risk's numbers
+        # trace to its signals even when its driver isn't firing this period.
+        evidence = opp.get("evidence_all") or opp.get("evidence") or []
         texts = {
             "body":        opp.get("body", ""),
             "implication": opp.get("implication", ""),

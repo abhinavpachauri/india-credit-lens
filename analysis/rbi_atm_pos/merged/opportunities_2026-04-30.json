@@ -27,6 +27,15 @@
         "cc-private-share",
         "cc-psb-share"
       ],
+      "evidence_all": [
+        "cc-bank-scan",
+        "cc-category-share-scan",
+        "cc-outstanding-abs",
+        "cc-outstanding-streak",
+        "cc-outstanding-yoy",
+        "cc-private-share",
+        "cc-psb-share"
+      ],
       "refs": {
         "entities": [
           "icl:atm_pos/cards/credit_cards"
@@ -44,6 +53,10 @@
       "status": "active",
       "authored_status": "active",
       "evidence": [
+        "micro-atm-yoy",
+        "micro-atms-abs"
+      ],
+      "evidence_all": [
         "micro-atm-yoy",
         "micro-atms-abs"
       ],
@@ -67,6 +80,10 @@
         "cc-other-val-yoy",
         "cc-other-vol-yoy"
       ],
+      "evidence_all": [
+        "cc-other-val-yoy",
+        "cc-other-vol-yoy"
+      ],
       "refs": {
         "entities": [
           "icl:atm_pos/spend_value/cc_other_txn_val"
@@ -85,11 +102,30 @@
       "label": "Credit card market concentrated in top-5 private banks",
       "surface": "atm_pos",
       "scope": "pipeline",
-      "status": "closed",
+      "status": "active",
       "authored_status": "active",
-      "evidence": [],
+      "evidence": [
+        "cc-bank-scan",
+        "cc-category-share-scan",
+        "cc-outstanding-abs",
+        "cc-outstanding-streak",
+        "cc-outstanding-yoy",
+        "cc-private-share",
+        "cc-psb-share"
+      ],
+      "evidence_all": [
+        "cc-bank-scan",
+        "cc-category-share-scan",
+        "cc-outstanding-abs",
+        "cc-outstanding-streak",
+        "cc-outstanding-yoy",
+        "cc-private-share",
+        "cc-psb-share"
+      ],
       "refs": {
-        "entities": [],
+        "entities": [
+          "icl:atm_pos/cards/credit_cards"
+        ],
         "instances": [],
         "channels": []
       }
@@ -103,6 +139,15 @@
       "status": "active",
       "authored_status": "active",
       "evidence": [
+        "dc-bank-scan",
+        "dc-category-share-scan",
+        "dc-outstanding-abs",
+        "dc-outstanding-streak",
+        "dc-outstanding-yoy",
+        "dc-private-share",
+        "dc-psb-share"
+      ],
+      "evidence_all": [
         "dc-bank-scan",
         "dc-category-share-scan",
         "dc-outstanding-abs",
@@ -132,6 +177,17 @@
       "status": "active",
       "authored_status": "active",
       "evidence": [
+        "pos-bank-scan",
+        "pos-category-share-scan",
+        "pos-private-share",
+        "pos-psb-share",
+        "pos-terminals-abs",
+        "pos-terminals-pos-streak",
+        "pos-terminals-yoy",
+        "upi-qr-per-pos",
+        "upi-qr-yoy"
+      ],
+      "evidence_all": [
         "pos-bank-scan",
         "pos-category-share-scan",
         "pos-private-share",

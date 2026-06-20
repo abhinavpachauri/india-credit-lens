@@ -51,7 +51,7 @@ def extract_numbers(text: str) -> list[float]:
     """Standalone numeric values from text, excluding structural tokens
     (ISO dates, FY labels, quarters) that are not data claims."""
     t = re.sub(r"\b20\d\d-\d\d-\d\d\b", " ", text)   # ISO dates
-    t = re.sub(r"\bFY\s?\d{2,4}\b", " ", t, flags=re.I)  # FY25 / FY 2026
+    t = re.sub(r"\bFY\s?\d{2,4}(?:\s?[-/–]\s?\d{2,4})?\b", " ", t, flags=re.I)  # FY25 / FY 2026 / FY22-24
     t = re.sub(r"\b[Qq][1-4]\b", " ", t)             # quarters
     t = re.sub(r"\b(?:19|20|21)\d{2}\b", " ", t)     # standalone calendar years
     pattern = r"(?<![A-Za-z\d])[-+]?\d+(?:\.\d+)?(?![A-Za-z\d])"

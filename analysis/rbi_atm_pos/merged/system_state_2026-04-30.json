@@ -403,6 +403,13 @@
       "polarity": "+",
       "from": "e_infrastructure_micro_atms",
       "to": "opp_rural_cash_distribution"
+    },
+    "e_cards_credit_cards__creates_risk__risk_cc_market_concentration": {
+      "state": "reversed",
+      "type": "creates_risk",
+      "polarity": "-",
+      "from": "e_cards_credit_cards",
+      "to": "risk_cc_market_concentration"
     }
   },
   "loop_states": {

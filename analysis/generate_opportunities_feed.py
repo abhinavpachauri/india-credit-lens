@@ -147,6 +147,7 @@ def build_pipeline_items(pipeline, channels, models, chart_series):
             # internal context for the narrative step — not rendered on the card
             "_driver": inst["label"] if inst else None, "_via": chan["label"] if chan else None,
             "evidence": d.get("evidence", []),
+            "evidence_all": d.get("evidence_all", d.get("evidence", [])),
             "highlight": ref["highlight"] if ref else [],
             "charts": [ref] if ref else [],
         })
