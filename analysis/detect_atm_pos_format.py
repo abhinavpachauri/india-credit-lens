@@ -27,6 +27,7 @@ Exit codes:
 import argparse
 import calendar
 import json
+import re
 import sys
 from datetime import date, datetime
 from pathlib import Path
@@ -65,35 +66,64 @@ def _c(text, colour):
     return f"{colour}{text}{RESET}"
 
 
+def _month_num(token):
+    """Resolve a full OR abbreviated month name (case-insensitive) → 1-12, else None.
+    Older RBI files abbreviate ('Feb', 'Mar', 'Sept')."""
+    t = token.strip().rstrip(".").lower()
+    for name, num in MONTHS.items():
+        if name.lower() == t or (len(t) >= 3 and name.lower().startswith(t[:3])):
+            return num
+    return None
+
+
 def parse_sheet_date(sheet_name):
-    """'For Website March 2026' or 'March 2026' → ('2026-03-31', 'March 2026')"""
+    """'For Website March 2026' / 'March 2026' / 'For Website Feb 2024' → (iso, 'Month Year')."""
     suffix = sheet_name.replace(SHEET_PREFIX, "").strip()
     parts = suffix.split()
-    if len(parts) != 2 or parts[0] not in MONTHS:
-        raise ValueError(f"Cannot parse month/year from sheet name: '{sheet_name}'")
-    month = MONTHS[parts[0]]
-    year  = int(parts[1])
-    last  = calendar.monthrange(year, month)[1]
-    return date(year, month, last).isoformat(), suffix
+    if len(parts) == 2:
+        month = _month_num(parts[0])
+        year  = int(parts[1]) if parts[1].isdigit() else None
+        if month and year:
+            last = calendar.monthrange(year, month)[1]
+            full = next(k for k, v in MONTHS.items() if v == month)
+            return date(year, month, last).isoformat(), f"{full} {year}"
+    raise ValueError(f"Cannot parse month/year from sheet name: '{sheet_name}'")
+
+
+def date_from_filename(xlsx_path):
+    """Fallback when the sheet name carries no month (e.g. 'Card Statistics'):
+    read month + year from the file name. Returns (iso, 'Month Year') or None."""
+    name = Path(xlsx_path).stem.upper()
+    ym = re.search(r"(20\d\d)", name)
+    if not ym:
+        return None
+    year = int(ym.group(1))
+    # Full names first (so 'JUNE' isn't pre-empted by a 'JUN' prefix), then 3-letter.
+    for full, num in MONTHS.items():
+        if full.upper() in name:
+            return date(year, num, calendar.monthrange(year, num)[1]).isoformat(), f"{full} {year}"
+    for full, num in MONTHS.items():
+        if full.upper()[:3] in name:
+            return date(year, num, calendar.monthrange(year, num)[1]).isoformat(), f"{full} {year}"
+    return None
 
 
 def find_data_sheet(wb):
-    """Return the data sheet name, accepting both 'For Website {M} {Y}' and '{M} {Y}'."""
-    # Prefer newer "For Website" format first
+    """Data sheet by name ('For Website {M} {Y}' / '{M} {Y}', abbreviations ok), else by
+    content — the sheet whose header carries the 'ATM, Acceptance' title (older files
+    like Jan 2024 are named 'Card Statistics')."""
     for s in wb.sheet_names:
-        if s.startswith(SHEET_PREFIX):
-            parts = s.replace(SHEET_PREFIX, "").strip().split()
-            if len(parts) == 2 and parts[0] in MONTHS:
-                return s
-    # Fall back to bare "{Month} {Year}" format (older RBI files)
+        parts = s.replace(SHEET_PREFIX, "").strip().split()
+        if len(parts) == 2 and _month_num(parts[0]) and parts[1].isdigit():
+            return s
     for s in wb.sheet_names:
-        parts = s.strip().split()
-        if len(parts) == 2 and parts[0] in MONTHS:
-            try:
-                int(parts[1])
+        try:
+            head = wb.parse(s, header=None, nrows=4)
+            text = " ".join(str(c) for c in head.values.ravel() if c is not None).upper()
+            if "ATM, ACCEPTANCE" in text or "BANK NAME" in text:
                 return s
-            except ValueError:
-                pass
+        except Exception:
+            continue
     return None
 
 
@@ -112,9 +142,17 @@ def detect(xlsx_path):
 
     try:
         report_date, report_month = parse_sheet_date(sheet_name)
-    except ValueError as e:
-        issues.append(str(e))
-        return issues, warnings, {}
+    except ValueError:
+        fb = date_from_filename(xlsx_path)
+        if fb:
+            report_date, report_month = fb
+            warnings.append(
+                f"Sheet '{sheet_name}' has no month — date taken from filename: {report_month}")
+        else:
+            issues.append(
+                f"Could not determine date from sheet '{sheet_name}' or filename "
+                f"'{Path(xlsx_path).name}'")
+            return issues, warnings, {}
 
     df = wb.parse(sheet_name, header=None)
 

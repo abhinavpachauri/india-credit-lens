@@ -14,69 +14,341 @@
     "note": "PAYTM PAYMENTS BANK removed from April 2026 onward — RBI licence cancelled March 2024"
   },
   "banks": [
-    {"sr": 1,  "name": "BANK OF BARODA",                       "category": "Public Sector Banks"},
-    {"sr": 2,  "name": "BANK OF INDIA",                        "category": "Public Sector Banks"},
-    {"sr": 3,  "name": "BANK OF MAHARASHTRA",                  "category": "Public Sector Banks"},
-    {"sr": 4,  "name": "CANARA BANK",                          "category": "Public Sector Banks"},
-    {"sr": 5,  "name": "CENTRAL BANK OF INDIA",                "category": "Public Sector Banks"},
-    {"sr": 6,  "name": "INDIAN BANK",                          "category": "Public Sector Banks"},
-    {"sr": 7,  "name": "INDIAN OVERSEAS BANK",                 "category": "Public Sector Banks"},
-    {"sr": 8,  "name": "PUNJAB AND SIND BANK",                 "category": "Public Sector Banks"},
-    {"sr": 9,  "name": "PUNJAB NATIONAL BANK",                 "category": "Public Sector Banks"},
-    {"sr": 10, "name": "STATE BANK OF INDIA",                  "category": "Public Sector Banks"},
-    {"sr": 11, "name": "UCO BANK",                             "category": "Public Sector Banks"},
-    {"sr": 12, "name": "UNION BANK OF INDIA",                  "category": "Public Sector Banks"},
-    {"sr": 13, "name": "AXIS BANK LTD",                        "category": "Private Sector Banks"},
-    {"sr": 14, "name": "BANDHAN BANK LTD",                     "category": "Private Sector Banks"},
-    {"sr": 15, "name": "CITY UNION BANK LTD.",                 "category": "Private Sector Banks"},
-    {"sr": 16, "name": "CSB BANK LTD.",                        "category": "Private Sector Banks"},
-    {"sr": 17, "name": "DCB BANK LTD",                         "category": "Private Sector Banks"},
-    {"sr": 18, "name": "DHANALAXMI BANK LTD",                  "category": "Private Sector Banks"},
-    {"sr": 19, "name": "FEDERAL BANK LTD",                     "category": "Private Sector Banks"},
-    {"sr": 20, "name": "HDFC BANK LTD",                        "category": "Private Sector Banks"},
-    {"sr": 21, "name": "ICICI BANK LTD",                       "category": "Private Sector Banks"},
-    {"sr": 22, "name": "IDBI BANK LTD",                        "category": "Private Sector Banks"},
-    {"sr": 23, "name": "IDFC FIRST BANK LTD",                  "category": "Private Sector Banks"},
-    {"sr": 24, "name": "INDUSIND BANK LTD",                    "category": "Private Sector Banks"},
-    {"sr": 25, "name": "JAMMU AND KASHMIR BANK LTD",           "category": "Private Sector Banks"},
-    {"sr": 26, "name": "KARNATAKA BANK LTD",                   "category": "Private Sector Banks"},
-    {"sr": 27, "name": "KARUR VYSYA BANK LTD",                 "category": "Private Sector Banks"},
-    {"sr": 28, "name": "KOTAK MAHINDRA BANK LTD",              "category": "Private Sector Banks"},
-    {"sr": 29, "name": "NAINITAL BANK LTD",                    "category": "Private Sector Banks"},
-    {"sr": 30, "name": "RBL BANK LTD",                         "category": "Private Sector Banks"},
-    {"sr": 31, "name": "SOUTH INDIAN BANK",                    "category": "Private Sector Banks"},
-    {"sr": 32, "name": "TAMILNAD MERCANTILE BANK LTD",         "category": "Private Sector Banks"},
-    {"sr": 33, "name": "YES BANK LTD",                         "category": "Private Sector Banks"},
-    {"sr": 34, "name": "AMERICAN EXPRESS BANKING CORPORATION", "category": "Foreign Banks"},
-    {"sr": 35, "name": "BANK OF AMERICA",                      "category": "Foreign Banks"},
-    {"sr": 36, "name": "BANK OF BAHRAIN & KUWAIT B.S.C.",      "category": "Foreign Banks"},
-    {"sr": 37, "name": "BARCLAYS BANK PLC",                    "category": "Foreign Banks"},
-    {"sr": 38, "name": "CITI BANK",                            "category": "Foreign Banks"},
-    {"sr": 39, "name": "DBS INDIA BANK LTD",                   "category": "Foreign Banks"},
-    {"sr": 40, "name": "DEUTSCHE BANK LTD",                    "category": "Foreign Banks"},
-    {"sr": 41, "name": "DOHA BANK Q.P.S.C.",                   "category": "Foreign Banks"},
-    {"sr": 42, "name": "HSBC LTD",                             "category": "Foreign Banks"},
-    {"sr": 43, "name": "KEB HANA BANK",                        "category": "Foreign Banks"},
-    {"sr": 44, "name": "KOOKMIN BANK",                         "category": "Foreign Banks"},
-    {"sr": 45, "name": "SBM BANK INDIA LTD",                   "category": "Foreign Banks"},
-    {"sr": 46, "name": "STANDARD CHARTERED BANK LTD",          "category": "Foreign Banks"},
-    {"sr": 47, "name": "WOORI BANK",                           "category": "Foreign Banks"},
-    {"sr": 48, "name": "AIRTEL PAYMENTS BANK",                 "category": "Payment Banks"},
-    {"sr": 49, "name": "FINO PAYMENTS BANK",                   "category": "Payment Banks"},
-    {"sr": 50, "name": "INDIA POST PAYMENTS BANK",             "category": "Payment Banks"},
-    {"sr": 51, "name": "JIO PAYMENTS BANK",                    "category": "Payment Banks"},
-    {"sr": 52, "name": "NSDL PAYMENTS BANK",                   "category": "Payment Banks"},
-    {"sr": 53, "name": "PAYTM PAYMENTS BANK",                  "category": "Payment Banks",  "status": "closed", "closed_from": "2026-04-30", "note": "RBI cancelled licence March 2024; ceased operations; removed from RBI reporting from April 2026 onward"},
-    {"sr": 54, "name": "AU SMALL FINANCE BANK LTD",            "category": "Small Finance Banks"},
-    {"sr": 55, "name": "CAPITAL SMALL FINANCE BANK LTD",       "category": "Small Finance Banks"},
-    {"sr": 56, "name": "EQUITAS SMALL FINANCE BANK LTD",       "category": "Small Finance Banks"},
-    {"sr": 57, "name": "ESAF SMALL FINANCE BANK LTD",          "category": "Small Finance Banks"},
-    {"sr": 58, "name": "JANA SMALL FINANCE BANK LTD",          "category": "Small Finance Banks"},
-    {"sr": 59, "name": "SLICE SMALL FINANCE BANK LTD",         "category": "Small Finance Banks", "former_name": "NORTH EAST SMALL FINANCE BANK LTD", "renamed_from": "2025-05-31"},
-    {"sr": 60, "name": "SHIVALIK SMALL FINANCE BANK LTD",      "category": "Small Finance Banks"},
-    {"sr": 61, "name": "SURYODAY SMALL FINANCE BANK LTD",      "category": "Small Finance Banks"},
-    {"sr": 62, "name": "UJJIVAN SMALL FINANCE BANK LTD",       "category": "Small Finance Banks"},
-    {"sr": 63, "name": "UNITY SMALL FINANCE BANK LTD",         "category": "Small Finance Banks"},
-    {"sr": 64, "name": "UTKARSH SMALL FINANCE BANK LTD",       "category": "Small Finance Banks"}
+    {
+      "sr": 1,
+      "name": "BANK OF BARODA",
+      "category": "Public Sector Banks"
+    },
+    {
+      "sr": 2,
+      "name": "BANK OF INDIA",
+      "category": "Public Sector Banks"
+    },
+    {
+      "sr": 3,
+      "name": "BANK OF MAHARASHTRA",
+      "category": "Public Sector Banks"
+    },
+    {
+      "sr": 4,
+      "name": "CANARA BANK",
+      "category": "Public Sector Banks"
+    },
+    {
+      "sr": 5,
+      "name": "CENTRAL BANK OF INDIA",
+      "category": "Public Sector Banks"
+    },
+    {
+      "sr": 6,
+      "name": "INDIAN BANK",
+      "category": "Public Sector Banks"
+    },
+    {
+      "sr": 7,
+      "name": "INDIAN OVERSEAS BANK",
+      "category": "Public Sector Banks"
+    },
+    {
+      "sr": 8,
+      "name": "PUNJAB AND SIND BANK",
+      "category": "Public Sector Banks"
+    },
+    {
+      "sr": 9,
+      "name": "PUNJAB NATIONAL BANK",
+      "category": "Public Sector Banks"
+    },
+    {
+      "sr": 10,
+      "name": "STATE BANK OF INDIA",
+      "category": "Public Sector Banks"
+    },
+    {
+      "sr": 11,
+      "name": "UCO BANK",
+      "category": "Public Sector Banks"
+    },
+    {
+      "sr": 12,
+      "name": "UNION BANK OF INDIA",
+      "category": "Public Sector Banks"
+    },
+    {
+      "sr": 13,
+      "name": "AXIS BANK LTD",
+      "category": "Private Sector Banks"
+    },
+    {
+      "sr": 14,
+      "name": "BANDHAN BANK LTD",
+      "category": "Private Sector Banks"
+    },
+    {
+      "sr": 15,
+      "name": "CITY UNION BANK LTD.",
+      "category": "Private Sector Banks"
+    },
+    {
+      "sr": 16,
+      "name": "CSB BANK LTD.",
+      "category": "Private Sector Banks"
+    },
+    {
+      "sr": 17,
+      "name": "DCB BANK LTD",
+      "category": "Private Sector Banks"
+    },
+    {
+      "sr": 18,
+      "name": "DHANALAXMI BANK LTD",
+      "category": "Private Sector Banks",
+      "former_name": "DHANALAKSHMI BANK LTD",
+      "renamed_from": "2024-11-30",
+      "note": "RBI spelling changed DHANALAKSHMI -> DHANALAXMI from Nov 2024"
+    },
+    {
+      "sr": 19,
+      "name": "FEDERAL BANK LTD",
+      "category": "Private Sector Banks"
+    },
+    {
+      "sr": 20,
+      "name": "HDFC BANK LTD",
+      "category": "Private Sector Banks"
+    },
+    {
+      "sr": 21,
+      "name": "ICICI BANK LTD",
+      "category": "Private Sector Banks"
+    },
+    {
+      "sr": 22,
+      "name": "IDBI BANK LTD",
+      "category": "Private Sector Banks"
+    },
+    {
+      "sr": 23,
+      "name": "IDFC FIRST BANK LTD",
+      "category": "Private Sector Banks"
+    },
+    {
+      "sr": 24,
+      "name": "INDUSIND BANK LTD",
+      "category": "Private Sector Banks"
+    },
+    {
+      "sr": 25,
+      "name": "JAMMU AND KASHMIR BANK LTD",
+      "category": "Private Sector Banks"
+    },
+    {
+      "sr": 26,
+      "name": "KARNATAKA BANK LTD",
+      "category": "Private Sector Banks"
+    },
+    {
+      "sr": 27,
+      "name": "KARUR VYSYA BANK LTD",
+      "category": "Private Sector Banks"
+    },
+    {
+      "sr": 28,
+      "name": "KOTAK MAHINDRA BANK LTD",
+      "category": "Private Sector Banks"
+    },
+    {
+      "sr": 29,
+      "name": "NAINITAL BANK LTD",
+      "category": "Private Sector Banks"
+    },
+    {
+      "sr": 30,
+      "name": "RBL BANK LTD",
+      "category": "Private Sector Banks"
+    },
+    {
+      "sr": 31,
+      "name": "SOUTH INDIAN BANK",
+      "category": "Private Sector Banks"
+    },
+    {
+      "sr": 32,
+      "name": "TAMILNAD MERCANTILE BANK LTD",
+      "category": "Private Sector Banks"
+    },
+    {
+      "sr": 33,
+      "name": "YES BANK LTD",
+      "category": "Private Sector Banks"
+    },
+    {
+      "sr": 34,
+      "name": "AMERICAN EXPRESS BANKING CORPORATION",
+      "category": "Foreign Banks"
+    },
+    {
+      "sr": 35,
+      "name": "BANK OF AMERICA",
+      "category": "Foreign Banks"
+    },
+    {
+      "sr": 36,
+      "name": "BANK OF BAHRAIN & KUWAIT B.S.C.",
+      "category": "Foreign Banks"
+    },
+    {
+      "sr": 37,
+      "name": "BARCLAYS BANK PLC",
+      "category": "Foreign Banks"
+    },
+    {
+      "sr": 38,
+      "name": "CITI BANK",
+      "category": "Foreign Banks"
+    },
+    {
+      "sr": 39,
+      "name": "DBS INDIA BANK LTD",
+      "category": "Foreign Banks"
+    },
+    {
+      "sr": 40,
+      "name": "DEUTSCHE BANK LTD",
+      "category": "Foreign Banks"
+    },
+    {
+      "sr": 41,
+      "name": "DOHA BANK Q.P.S.C.",
+      "category": "Foreign Banks"
+    },
+    {
+      "sr": 42,
+      "name": "HSBC LTD",
+      "category": "Foreign Banks"
+    },
+    {
+      "sr": 43,
+      "name": "KEB HANA BANK",
+      "category": "Foreign Banks"
+    },
+    {
+      "sr": 44,
+      "name": "KOOKMIN BANK",
+      "category": "Foreign Banks"
+    },
+    {
+      "sr": 45,
+      "name": "SBM BANK INDIA LTD",
+      "category": "Foreign Banks"
+    },
+    {
+      "sr": 46,
+      "name": "STANDARD CHARTERED BANK LTD",
+      "category": "Foreign Banks"
+    },
+    {
+      "sr": 47,
+      "name": "WOORI BANK",
+      "category": "Foreign Banks"
+    },
+    {
+      "sr": 48,
+      "name": "AIRTEL PAYMENTS BANK",
+      "category": "Payment Banks"
+    },
+    {
+      "sr": 49,
+      "name": "FINO PAYMENTS BANK",
+      "category": "Payment Banks"
+    },
+    {
+      "sr": 50,
+      "name": "INDIA POST PAYMENTS BANK",
+      "category": "Payment Banks"
+    },
+    {
+      "sr": 51,
+      "name": "JIO PAYMENTS BANK",
+      "category": "Payment Banks"
+    },
+    {
+      "sr": 52,
+      "name": "NSDL PAYMENTS BANK",
+      "category": "Payment Banks"
+    },
+    {
+      "sr": 53,
+      "name": "PAYTM PAYMENTS BANK",
+      "category": "Payment Banks",
+      "status": "closed",
+      "closed_from": "2026-04-30",
+      "note": "RBI cancelled licence March 2024; ceased operations; removed from RBI reporting from April 2026 onward"
+    },
+    {
+      "sr": 54,
+      "name": "AU SMALL FINANCE BANK LTD",
+      "category": "Small Finance Banks"
+    },
+    {
+      "sr": 55,
+      "name": "CAPITAL SMALL FINANCE BANK LTD",
+      "category": "Small Finance Banks"
+    },
+    {
+      "sr": 56,
+      "name": "EQUITAS SMALL FINANCE BANK LTD",
+      "category": "Small Finance Banks"
+    },
+    {
+      "sr": 57,
+      "name": "ESAF SMALL FINANCE BANK LTD",
+      "category": "Small Finance Banks"
+    },
+    {
+      "sr": 58,
+      "name": "JANA SMALL FINANCE BANK LTD",
+      "category": "Small Finance Banks"
+    },
+    {
+      "sr": 59,
+      "name": "SLICE SMALL FINANCE BANK LTD",
+      "category": "Small Finance Banks",
+      "former_name": "NORTH EAST SMALL FINANCE BANK LTD",
+      "renamed_from": "2025-05-31"
+    },
+    {
+      "sr": 60,
+      "name": "SHIVALIK SMALL FINANCE BANK LTD",
+      "category": "Small Finance Banks"
+    },
+    {
+      "sr": 61,
+      "name": "SURYODAY SMALL FINANCE BANK LTD",
+      "category": "Small Finance Banks"
+    },
+    {
+      "sr": 62,
+      "name": "UJJIVAN SMALL FINANCE BANK LTD",
+      "category": "Small Finance Banks"
+    },
+    {
+      "sr": 63,
+      "name": "UNITY SMALL FINANCE BANK LTD",
+      "category": "Small Finance Banks"
+    },
+    {
+      "sr": 64,
+      "name": "UTKARSH SMALL FINANCE BANK LTD",
+      "category": "Small Finance Banks"
+    },
+    {
+      "sr": 65,
+      "name": "FINCARE SMALL FINANCE BANK LTD",
+      "category": "Small Finance Banks",
+      "status": "closed",
+      "closed_from": "2024-04-30",
+      "note": "Merged into AU Small Finance Bank, effective April 2024; present in ATM/POS data Jan-Mar 2024 only"
+    }
   ]
 }

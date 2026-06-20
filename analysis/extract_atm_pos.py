@@ -191,26 +191,24 @@ def main():
         if det.returncode != 0:
             sys.exit(1)
 
-    # Re-read format_report
-    import calendar
+    # Resolve sheet + date with the SAME robust logic as the detector — handles
+    # older formats: abbreviated months ('Feb'/'Mar') and Jan 2024's date-less
+    # 'Card Statistics' sheet (date then comes from the filename).
+    sys.path.insert(0, str(ANALYSIS))
+    import detect_atm_pos_format as _det
     wb2 = pd.ExcelFile(xlsx_path)
-    _months = ("January","February","March","April","May","June","July","August","September","October","November","December")
-    sheet_name = next(
-        (s for s in wb2.sheet_names if s.startswith("For Website ") or
-         (len(s.split()) == 2 and s.split()[0] in _months)),
-        None,
-    )
-    suffix = sheet_name.replace("For Website ", "").strip().split()
-    MONTHS = {
-        "January": 1, "February": 2, "March": 3, "April": 4,
-        "May": 5, "June": 6, "July": 7, "August": 8,
-        "September": 9, "October": 10, "November": 11, "December": 12,
-    }
-    month = MONTHS[suffix[0]]
-    year  = int(suffix[1])
-    last  = calendar.monthrange(year, month)[1]
-    from datetime import date
-    report_date = date(year, month, last).isoformat()
+    sheet_name = _det.find_data_sheet(wb2)
+    if not sheet_name:
+        print(f"{_c('ERROR', RED)}: no recognised data sheet in {xlsx_path.name}", file=sys.stderr)
+        sys.exit(1)
+    try:
+        report_date, _ = _det.parse_sheet_date(sheet_name)
+    except ValueError:
+        fb = _det.date_from_filename(xlsx_path)
+        if not fb:
+            print(f"{_c('ERROR', RED)}: cannot determine date for {xlsx_path.name}", file=sys.stderr)
+            sys.exit(1)
+        report_date = fb[0]
 
     period_dir   = ATM_POS_DIR / report_date
     report_path  = period_dir / "format_report.json"
