@@ -49,7 +49,7 @@ Live components only. Planned work lives in `STRATEGY_PLANNER.md`.
 | L1 annotation classification | **Done** — all 49 SIBC annotations classified: 26 L1 / 18 L2 / 5 L3; all 21 ATM/POS insights classified: 16 L1 / 3 L2 / 2 gaps |
 | Subsystem generation | **Live** — `generate_mermaid.py` → `.mmd` + `validate.py --check-subsystems` |
 | detect_format.py (Stage 0) | **Live** — flags format changes in new XLSX before extraction |
-| ATM/POS pipeline | **Live** — `rbi_atm_pos/` — Stages 0–3 + L1 compute (84 signals) + evaluate complete through **2026-04-30** (16 periods in DB). **Dashboard insights** come from a *separate deterministic path*: Stage 4a `compute_atm_pos_signals.py` → `rbi_atm_pos/signals.json` → Stage 4b `generate_atm_pos_insights.py` → `atm_pos_insights.json` (17 insights, Apr 2026). Both stages run inside `run_atm_pos_evals.py`. NB: `generate_atm_pos_analysis_report.py` (the db/eval-driven "Stage 5.5") is currently a **no-op** (it only updates `layer==1` items and 4b writes none) — 4b is authoritative until the dual paths are reconciled. |
+| ATM/POS pipeline | **Live** — `rbi_atm_pos/` — Stages 0–3 + L1 compute (84 signals) + evaluate. **28 periods Jan 2024 → Apr 2026** (2024 backfilled 2026-06-20 → YoY now computes for all 16 of 2025+2026, was 4). Detector handles older formats (abbreviated months, date-less sheets → filename, content-based sheet detection); canonical roster time-aware (Fincare merged Apr 2024, Dhanalaxmi rename Nov 2024). **Dashboard insights** come from a *separate deterministic path*: Stage 4a `compute_atm_pos_signals.py` → `rbi_atm_pos/signals.json` → Stage 4b `generate_atm_pos_insights.py` → `atm_pos_insights.json` (17 insights, Apr 2026). Both stages run inside `run_atm_pos_evals.py`. NB: `generate_atm_pos_analysis_report.py` (the db/eval-driven "Stage 5.5") is currently a **no-op** (it only updates `layer==1` items and 4b writes none) — 4b is authoritative until the dual paths are reconciled. |
 | AppShell + DLS | **Live** — shared Header (one instance), `dls/InsightCard`, `dls/InsightCTAStrip` used by both SIBC and Payments |
 | **Layer 2a system models (v4.0)** | **Live** — `system_model.json` for both pipelines (SIBC 85 entities, ATM/POS 35). Deterministic structural skeleton (`generate_skeleton.py`) + behavioral-causal split into shared **channels** (S2a) + dated **force_instances** (S2b). Specs: `analysis/SYSTEM_MODEL_SPEC.md` v3.0 + `analysis/COMPOSITION_SPEC.md` v1.0. Validated by `validate_system_model.py` in both gates. |
 | **Composition hub (Layer 2b)** | **Live** — `analysis/ontology/{concepts,channels}.json` shared across pipelines; entities carry global URNs + `concept_tags`. `derive_cross_links.py` derives cross-system candidates (stock↔flow + shared-channel); `cross_source/composition.json` holds confirmed cross-edges; `validate_composition.py` enforces the no-monolith rule. |
@@ -250,6 +250,8 @@ redesigned as an **annual** metric carrying its two FY-end YoY component rates (
 **Check 2g** insight traceability (every number in body/chain/implication traces to signals.db; scalar hard-fail) ·
 SIBC scan insights + all ATM/POS insights **deterministic** (grounded by construction); SIBC scalars LLM + validated ·
 ATM/POS Stage 4c now validates the chain too; payments card reads `basis.inferences`.
+
+**Latest session handoff:** `HANDOFF_2026-06-20.md` (full arc + prioritised open items).
 
 **Open Notes:**
 - **Layer 2 opportunity traceability — advisory, 5 warnings (Check 4f):** `validate_opportunity_traceability.py`
