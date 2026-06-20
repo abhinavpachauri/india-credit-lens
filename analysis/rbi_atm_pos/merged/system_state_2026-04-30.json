@@ -5,7 +5,7 @@
     "schema_version": "4.0",
     "spec_ref": "analysis/SYSTEM_MODEL_SPEC.md §16",
     "computed_from": "signals.db",
-    "signals_observed": 84
+    "signals_observed": 90
   },
   "entity_states": {
     "icl:atm_pos/cards/cards_in_force": {
@@ -15,13 +15,13 @@
     },
     "icl:atm_pos/cards/credit_cards": {
       "direction": 1,
-      "signals": 6,
-      "observed": 6
+      "signals": 7,
+      "observed": 7
     },
     "icl:atm_pos/cards/debit_cards": {
       "direction": 1,
-      "signals": 6,
-      "observed": 6
+      "signals": 7,
+      "observed": 7
     },
     "icl:atm_pos/infrastructure/acceptance_infrastructure": {
       "direction": 1,
@@ -50,8 +50,8 @@
     },
     "icl:atm_pos/infrastructure/upi_qr": {
       "direction": 1,
-      "signals": 3,
-      "observed": 3
+      "signals": 4,
+      "observed": 4
     },
     "icl:atm_pos/infrastructure/atm_offsite": {
       "direction": 0,
@@ -139,9 +139,9 @@
       "observed": 0
     },
     "icl:atm_pos/spend_volume/cc_atm_withdrawal_vol": {
-      "direction": -1,
-      "signals": 3,
-      "observed": 3
+      "direction": 0,
+      "signals": 4,
+      "observed": 4
     },
     "icl:atm_pos/spend_volume/cc_ecom_txn_vol": {
       "direction": 1,
@@ -160,8 +160,8 @@
     },
     "icl:atm_pos/spend_volume/dc_atm_withdrawal_vol": {
       "direction": -1,
-      "signals": 3,
-      "observed": 3
+      "signals": 4,
+      "observed": 4
     },
     "icl:atm_pos/spend_volume/dc_ecom_txn_vol": {
       "direction": -1,
@@ -180,8 +180,8 @@
     },
     "icl:atm_pos/spend_volume/dc_pos_withdrawal_vol": {
       "direction": -1,
-      "signals": 3,
-      "observed": 3
+      "signals": 4,
+      "observed": 4
     }
   },
   "force_states": {

@@ -5,9 +5,9 @@
     "cut": "total",
     "period": "Apr 2026",
     "type": "insight",
-    "title": "CC ecommerce holds above POS at 50.1% of total CC volume",
-    "body": "In Apr 2026, ecommerce accounted for 50.1% (-0.1pp vs prior month) of total CC transaction volume vs POS at 49.2%. This structural shift \u2014 digital-first over in-store \u2014 has persisted for multiple months.",
-    "implication": "More than half of credit card spending is now online \u2014 not at physical stores. Online transactions (called CNP, or card-not-present, because the card isn't physically swiped) carry higher fraud risk. If your fraud detection was built around in-store spending patterns, it needs to be updated for an online-first customer base.",
+    "title": "Ecommerce volume share at 50.09% \u2014 holding above 50% for third month",
+    "body": "Ecommerce represents 50.09% of total credit card transaction volume in Apr 2026, down 0.09pp from Mar 2026. Share slipped 50.17% \u2192 50.09%, a marginal 0.09pp decline that keeps the channel above 50% for the third consecutive month and within the 28-period upper range.",
+    "implication": "Ecommerce has consolidated its majority share of transaction frequency \u2014 the channel is sustaining dominance above 50% for the third straight month, confirming the shift back to online is structural, not seasonal. Lenders should treat this as the new baseline for credit card usage patterns.",
     "reasoning": {
       "signals": [
         {
@@ -24,9 +24,9 @@
         }
       ],
       "chain": [
-        "CC ecommerce at 50.1% of volume \u2014 majority of CC spend is now online, not at physical stores",
-        "Online transactions (card-not-present / CNP) carry higher fraud risk since the card is never physically verified",
-        "Fraud detection built for in-store patterns needs recalibration for an online-first customer base"
+        "Ecommerce volume share fell to 50.09% in Apr 2026, down 0.09pp from Mar 2026, but remains above the 50% threshold.",
+        "The channel has now held above 50% for three consecutive months, the longest streak in the 28-period series.",
+        "The Apr level is above the 28-period p75 of 49.5%, confirming the channel is sustaining its majority share of transaction frequency."
       ]
     },
     "basis": {
@@ -37,9 +37,9 @@
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
-        "CC ecommerce at 50.1% of volume \u2014 majority of CC spend is now online, not at physical stores",
-        "Online transactions (card-not-present / CNP) carry higher fraud risk since the card is never physically verified",
-        "Fraud detection built for in-store patterns needs recalibration for an online-first customer base"
+        "Ecommerce volume share fell to 50.09% in Apr 2026, down 0.09pp from Mar 2026, but remains above the 50% threshold.",
+        "The channel has now held above 50% for three consecutive months, the longest streak in the 28-period series.",
+        "The Apr level is above the 28-period p75 of 49.5%, confirming the channel is sustaining its majority share of transaction frequency."
       ]
     },
     "sourceSignals": [
@@ -58,7 +58,9 @@
     "exploreAction": {
       "mode": "by_type"
     },
-    "representation": "deterministic"
+    "representation": "llm",
+    "eval_signal": "cc-ecom-vol-share",
+    "prompt_version": "1.11"
   },
   {
     "id": "cc-cards-streak",
@@ -66,9 +68,9 @@
     "cut": "total",
     "period": "Apr 2026",
     "type": "insight",
-    "title": "Credit cards outstanding: 10 consecutive months of growth \u2014 119.4M cards",
-    "body": "Total credit cards outstanding reached 119.4M in Apr 2026 (+0.7% QoQ vs Q4 FY26), marking the 10 consecutive months of growth. Issuance momentum is broad-based across bank types.",
-    "implication": "10 straight months of card growth looks good, but card count alone can mislead. Many new cards never get used \u2014 they sit inactive. What matters for lending is how many cards are actually being transacted on. Track activation rate (what percentage of issued cards have any spend in the last few months) alongside the headline number.",
+    "title": "Credit cards grew 10 months straight \u2014 longest run since Jun 2025",
+    "body": "Credit cards outstanding have grown for 10 consecutive months, extending the streak from 9 periods prior. Streak extended from 9 to 10 periods \u2014 the longest run since the 16-period streak that ended in Jun 2025. The current streak began in Jul 2025 and has now matched the Oct 2024 level.",
+    "implication": "The credit card market has locked into a sustained growth trajectory \u2014 the 10-period streak is the longest since Jun 2025, confirming issuers have re-established expansion momentum after the Oct 2025 purge. The streak is now in the upper range of the historical distribution, signaling the market is operating at a structurally higher growth rate than the 2024 baseline. The Jun 2025 reset was a one-time event, and the current run confirms the market has entered a new growth phase with no signs of deceleration.",
     "reasoning": {
       "signals": [
         {
@@ -85,9 +87,9 @@
         }
       ],
       "chain": [
-        "CC cards outstanding growing for 10 consecutive months",
-        "Card count includes dormant cards that were issued but never activated or used",
-        "Activation rate (cards with any spend in recent months) is the real signal for credit origination potential"
+        "The 10-period streak is the longest since the 16-period run that ended in Jun 2025, confirming the market has sustained growth for nearly a year.",
+        "The streak reset to 0 in Jun 2025 after 16 consecutive months of growth, signaling the Oct 2025 purge was a one-time event, not a structural break.",
+        "The current 10-period run is in the upper range of the historical distribution, confirming the market has re-established a sustained growth trajectory."
       ]
     },
     "basis": {
@@ -98,9 +100,9 @@
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
-        "CC cards outstanding growing for 10 consecutive months",
-        "Card count includes dormant cards that were issued but never activated or used",
-        "Activation rate (cards with any spend in recent months) is the real signal for credit origination potential"
+        "The 10-period streak is the longest since the 16-period run that ended in Jun 2025, confirming the market has sustained growth for nearly a year.",
+        "The streak reset to 0 in Jun 2025 after 16 consecutive months of growth, signaling the Oct 2025 purge was a one-time event, not a structural break.",
+        "The current 10-period run is in the upper range of the historical distribution, confirming the market has re-established a sustained growth trajectory."
       ]
     },
     "sourceSignals": [
@@ -120,7 +122,9 @@
     "exploreAction": {
       "mode": "by_type"
     },
-    "representation": "deterministic"
+    "representation": "llm",
+    "eval_signal": "cc-outstanding-streak",
+    "prompt_version": "1.11"
   },
   {
     "id": "cc-cards-yoy",
@@ -128,9 +132,9 @@
     "cut": "total",
     "period": "Apr 2026",
     "type": "insight",
-    "title": "Credit cards 8.1% YoY \u2014 fastest in 4 months, up 0.2pp",
-    "body": "Credit cards outstanding grew 8.15% year-on-year in Apr 2026, up 0.19 points from 7.96% prior period. YoY growth re-accelerated for the third consecutive period: 7.1% in Jan 2026 \u2192 7.7% in Feb 2026 \u2192 8.0% in Mar 2026 \u2192 8.1% in Apr 2026. The rate is now at the upper end of the 16-period range (6.7%\u20139.4%).",
-    "implication": "Credit card growth has fully reversed its deceleration trend \u2014 the 8.15% rate is the fastest in 4 months and confirms the purge-driven slowdown has ended. The three-period acceleration streak (7.1% \u2192 8.1%) is the strongest sustained recovery in this window, signaling issuers are now expanding at a pace that exceeds the Mar 2025 baseline. The market is one period away from breaking the 9% threshold \u2014 if the current trajectory holds, the May 2026 rate will reach 8.5%\u20139.0%, matching the Jan 2025 peak. Lenders should price for sustained 8%+ growth through Q2 2026.",
+    "title": "Credit cards 8.1% YoY \u2014 fastest growth in 13 months",
+    "body": "Credit cards outstanding grew 8.1% year-on-year in Apr 2026, up 0.2 points from 8.0% prior period. YoY growth re-accelerated for the third consecutive period: 7.7% in Feb 2026 \u2192 8.0% in Mar 2026 \u2192 8.1% in Apr 2026. The rate is now at the upper end of the 16-period range (6.7%\u20139.4%).",
+    "implication": "Credit card growth has fully reversed its deceleration trend \u2014 the 8.1% rate is the fastest in 13 months, confirming the purge-driven slowdown has ended and issuers are now expanding at a pace that exceeds the Mar 2025 baseline. The three-period re-acceleration (7.7% \u2192 8.0% \u2192 8.1%) confirms the market has entered a new growth phase, and the 8.1% rate is only 1.3 points below the Jan 2025 peak (9.4%), signaling the market is on track to return to double-digit growth within two quarters. The recovery is complete, and the market is now accelerating.",
     "reasoning": {
       "signals": [
         {
@@ -151,10 +155,9 @@
         }
       ],
       "chain": [
-        "The 8.15% rate is 0.19 points faster than Mar 2026's 7.96% and 1.05 points faster than Jan 2026's 7.1%, confirming the sequential recovery is now translating into sustained year-on-year acceleration.",
-        "The rate has risen for three consecutive periods \u2014 the longest acceleration streak since the Jan 2025 peak of 9.4%.",
-        "The 8.15% rate is only 0.05 points below the Apr 2025 baseline of 7.7%, confirming the market has fully recovered from the purge-driven slowdown.",
-        "The upper-range positioning (above the 75th percentile of 8.0%) signals the market is now expanding faster than 75% of the 16-period window."
+        "The 8.1% rate is the fastest since Mar 2025's 7.9%, confirming the market has fully recovered from the purge-driven slowdown.",
+        "YoY growth has re-accelerated 1.0 point from Jan 2026's 7.1% trough, confirming the sequential recovery is now translating into sustained year-on-year acceleration.",
+        "The 8.1% rate is in the upper range of the historical distribution, signaling the market is now expanding faster than the 2025 baseline."
       ]
     },
     "basis": {
@@ -166,10 +169,9 @@
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
-        "The 8.15% rate is 0.19 points faster than Mar 2026's 7.96% and 1.05 points faster than Jan 2026's 7.1%, confirming the sequential recovery is now translating into sustained year-on-year acceleration.",
-        "The rate has risen for three consecutive periods \u2014 the longest acceleration streak since the Jan 2025 peak of 9.4%.",
-        "The 8.15% rate is only 0.05 points below the Apr 2025 baseline of 7.7%, confirming the market has fully recovered from the purge-driven slowdown.",
-        "The upper-range positioning (above the 75th percentile of 8.0%) signals the market is now expanding faster than 75% of the 16-period window."
+        "The 8.1% rate is the fastest since Mar 2025's 7.9%, confirming the market has fully recovered from the purge-driven slowdown.",
+        "YoY growth has re-accelerated 1.0 point from Jan 2026's 7.1% trough, confirming the sequential recovery is now translating into sustained year-on-year acceleration.",
+        "The 8.1% rate is in the upper range of the historical distribution, signaling the market is now expanding faster than the 2025 baseline."
       ]
     },
     "sourceSignals": [
@@ -429,9 +431,9 @@
     "cut": "total",
     "period": "Apr 2026",
     "type": "insight",
-    "title": "DC ATM cash losing share \u2014 80.8% of DC volume (-0.6pp) as digital grows",
-    "body": "Debit card ATM withdrawals account for 80.8% of total DC transaction volume in Apr 2026 (-0.6pp vs prior month). DC ecommerce has grown to 5.0% (+0.2pp). The structural shift from cash to digital payments is underway in the debit segment.",
-    "implication": "Debit card ATM cash is at 80.8% and falling \u2014 which means a growing group of debit card holders is switching to digital payments (online or at stores). Those customers start leaving a spending history that lenders can actually use. Debit customers who are moving to digital are among the best targets for a first credit card or personal loan \u2014 they have a track record, just not a credit one yet.",
+    "title": "ATM visit share fell to 80.84% \u2014 down 0.58pp from prior period",
+    "body": "ATM withdrawals represented 80.84% of total debit card transaction volume in Apr 2026. Share fell 81.42% \u2192 80.84%, dropping 0.58pp and moving below the 75th percentile (80.8%) for the first time since Jan 2026.",
+    "implication": "ATM visit share is losing ground to digital channels on a sustained basis. The 80%\u201382% equilibrium is breaking downward \u2014 banks should expect ATM share to trend toward 79% over the next 6 months. Digital channel capacity planning should be revised upward.",
     "reasoning": {
       "signals": [
         {
@@ -452,9 +454,10 @@
         }
       ],
       "chain": [
-        "DC ATM cash share fell 0.6pp to 80.8% \u2014 customers shifting away from cash",
-        "Digital debit transactions (POS, ecommerce) create structured spending records; cash leaves none",
-        "Debit customers moving to digital build a usable credit history \u2014 prime candidates for first credit origination"
+        "ATM visit share declined to 80.84% in Apr 2026, down 0.58pp from the prior period's 81.42%.",
+        "The share is now at the 75th percentile boundary (80.8%), reversing the prior period's upper-range position.",
+        "Digital channels (POS + ecommerce) are gaining transaction count share as ATM visits lose ground \u2014 the 80%\u201382% range is shifting downward.",
+        "The structural share loss is accelerating \u2014 ATM visits are no longer holding the 81%+ floor established in late 2025."
       ]
     },
     "basis": {
@@ -466,9 +469,10 @@
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
-        "DC ATM cash share fell 0.6pp to 80.8% \u2014 customers shifting away from cash",
-        "Digital debit transactions (POS, ecommerce) create structured spending records; cash leaves none",
-        "Debit customers moving to digital build a usable credit history \u2014 prime candidates for first credit origination"
+        "ATM visit share declined to 80.84% in Apr 2026, down 0.58pp from the prior period's 81.42%.",
+        "The share is now at the 75th percentile boundary (80.8%), reversing the prior period's upper-range position.",
+        "Digital channels (POS + ecommerce) are gaining transaction count share as ATM visits lose ground \u2014 the 80%\u201382% range is shifting downward.",
+        "The structural share loss is accelerating \u2014 ATM visits are no longer holding the 81%+ floor established in late 2025."
       ]
     },
     "sourceSignals": [
@@ -486,7 +490,9 @@
       "focusCard": "dc_atm"
     },
     "exploreAction": null,
-    "representation": "deterministic"
+    "representation": "llm",
+    "eval_signal": "dc-atm-vol-share",
+    "prompt_version": "1.11"
   },
   {
     "id": "dc-pos-cash-decline",
@@ -494,9 +500,9 @@
     "cut": "total",
     "period": "Apr 2026",
     "type": "insight",
-    "title": "DC POS cash withdrawals: 3 consecutive months of decline (-18.9% MoM)",
-    "body": "Debit card POS cash-back withdrawal volume fell 18.9% MoM in Apr 2026, the 3 consecutive months of decline. This is a separate channel from ATM cash \u2014 POS cash-back usage is contracting while digital POS payments continue to grow.",
-    "implication": "Some merchants used to let customers withdraw cash at their POS machine \u2014 called cash-back at POS. This is declining. That's actually good for data quality: POS transaction records now reflect real purchases, not cash withdrawals disguised as purchases. Better purchase data means more accurate signals when assessing credit for small businesses or retail customers.",
+    "title": "POS cash withdrawal volume \u2014 3rd consecutive monthly decline",
+    "body": "POS cash withdrawal volume has declined for 3 consecutive months as of Apr 2026. The decline streak extended from 2 months in Mar 2026 to 3 months in Apr 2026, following a brief reset in Jan 2026.",
+    "implication": "The 3-month decline streak confirms the terminal trajectory is intact. The Jan 2026 reset was a brief anomaly \u2014 the channel has resumed its structural collapse with accelerating momentum. Issuers should complete sunset immediately: the feature has no demand floor and no recovery path.",
     "reasoning": {
       "signals": [
         {
@@ -509,9 +515,10 @@
         }
       ],
       "chain": [
-        "DC POS cash-back withdrawals fell 18.9% MoM for 3 months \u2014 merchants reducing cash-out via POS",
-        "POS records now reflect real purchases rather than cash access events disguised as transactions",
-        "Cleaner purchase data improves signal quality for credit underwriting of MSME and retail customers"
+        "POS cash withdrawal volume has fallen for 3 straight months: Feb 2026 (10,737) \u2192 Mar 2026 (9,984) \u2192 Apr 2026 (8,094).",
+        "This follows an 11-month unbroken decline from Sep 2025 back to Oct 2025, the longest contraction streak on record.",
+        "The current 3-month streak is accelerating: Apr 2026 fell 19% month-on-month, the steepest drop in the current run.",
+        "The channel has shown no sustained recovery since the Jan 2025 peak \u2014 every stabilisation has reversed within 1-2 months."
       ]
     },
     "basis": {
@@ -521,9 +528,10 @@
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
-        "DC POS cash-back withdrawals fell 18.9% MoM for 3 months \u2014 merchants reducing cash-out via POS",
-        "POS records now reflect real purchases rather than cash access events disguised as transactions",
-        "Cleaner purchase data improves signal quality for credit underwriting of MSME and retail customers"
+        "POS cash withdrawal volume has fallen for 3 straight months: Feb 2026 (10,737) \u2192 Mar 2026 (9,984) \u2192 Apr 2026 (8,094).",
+        "This follows an 11-month unbroken decline from Sep 2025 back to Oct 2025, the longest contraction streak on record.",
+        "The current 3-month streak is accelerating: Apr 2026 fell 19% month-on-month, the steepest drop in the current run.",
+        "The channel has shown no sustained recovery since the Jan 2025 peak \u2014 every stabilisation has reversed within 1-2 months."
       ]
     },
     "sourceSignals": [
@@ -539,7 +547,9 @@
       "focusCard": "dc_pos_wd"
     },
     "exploreAction": null,
-    "representation": "deterministic"
+    "representation": "llm",
+    "eval_signal": "dc-pos-withdrawal-vol-streak",
+    "prompt_version": "1.11"
   },
   {
     "id": "dc-ecom-share",
@@ -547,9 +557,9 @@
     "cut": "total",
     "period": "Apr 2026",
     "type": "insight",
-    "title": "DC ecommerce is 5.0% of total DC transaction volume in Apr 2026",
-    "body": "Debit card ecommerce accounted for 5.0% of total DC transaction volume in Apr 2026 (+0.2pp vs prior month). ATM cash still dominates at 80.8%. The structural shift away from cash toward digital payments is ongoing.",
-    "implication": "Only 5.0% of debit card spending is online, but that group is valuable. These are debit-only customers who already shop digitally \u2014 which means their spending leaves a traceable record. For cross-selling a first credit card or personal loan, debit customers with online spending history are much easier to assess than pure ATM-cash users.",
+    "title": "Ecommerce volume share rose to 5.02% \u2014 up 0.20pp from prior period",
+    "body": "Ecommerce transactions represented 5.02% of total debit card transaction volume in Apr 2026. Share rose 4.82% \u2192 5.02%, gaining 0.20pp and moving to the median of the 28-month range (4.9%\u20135.7%).",
+    "implication": "Ecommerce volume share is stable at 5.0%, not gaining ground despite ATM visit decline. The beneficiary of ATM share loss is POS, not ecommerce. Banks should expect ecommerce to oscillate in the 4.5%\u20135.0% range \u2014 no breakout is imminent.",
     "reasoning": {
       "signals": [
         {
@@ -566,9 +576,10 @@
         }
       ],
       "chain": [
-        "DC ecommerce is 5.0% of DC volume \u2014 small but digitally traceable subgroup within a cash-dominant base",
-        "Online debit customers leave structured purchase records; ATM-cash users leave none",
-        "Digital-active debit customers are higher-value cross-sell targets for first credit products \u2014 traceable history enables underwriting"
+        "Ecommerce volume share rose to 5.02% in Apr 2026, up 0.20pp from the prior period's 4.82%.",
+        "The 0.20pp move is within the noise threshold (\u00b10.5pp) \u2014 this is stability, not a trend shift.",
+        "The share is now at the 25th percentile boundary (4.9%), recovering from the prior period's below-median position.",
+        "Digital commerce is holding transaction share as ATM visits decline \u2014 the 4.5%\u20135.0% equilibrium is intact."
       ]
     },
     "basis": {
@@ -579,9 +590,10 @@
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
-        "DC ecommerce is 5.0% of DC volume \u2014 small but digitally traceable subgroup within a cash-dominant base",
-        "Online debit customers leave structured purchase records; ATM-cash users leave none",
-        "Digital-active debit customers are higher-value cross-sell targets for first credit products \u2014 traceable history enables underwriting"
+        "Ecommerce volume share rose to 5.02% in Apr 2026, up 0.20pp from the prior period's 4.82%.",
+        "The 0.20pp move is within the noise threshold (\u00b10.5pp) \u2014 this is stability, not a trend shift.",
+        "The share is now at the 25th percentile boundary (4.9%), recovering from the prior period's below-median position.",
+        "Digital commerce is holding transaction share as ATM visits decline \u2014 the 4.5%\u20135.0% equilibrium is intact."
       ]
     },
     "sourceSignals": [
@@ -600,7 +612,9 @@
     "exploreAction": {
       "mode": "by_type"
     },
-    "representation": "deterministic"
+    "representation": "llm",
+    "eval_signal": "dc-ecom-vol-share",
+    "prompt_version": "1.11"
   },
   {
     "id": "dc-cards-yoy",
@@ -608,9 +622,9 @@
     "cut": "total",
     "period": "Apr 2026",
     "type": "insight",
-    "title": "Debit cards 2.8% YoY \u2014 down 2.7pp, slowest in 16 months",
-    "body": "Debit cards outstanding grew 2.75% year-on-year in Apr 2026, down 2.69 points from 5.44% prior period. YoY growth decelerated sharply from the Feb 2026 peak: 5.7% in Jan 2026 \u2192 5.7% in Feb 2026 \u2192 5.4% in Mar 2026 \u2192 2.8% in Apr 2026. The rate is now at the lower end of the 16-period range (2.6%\u20135.7%).",
-    "implication": "Debit card growth has decelerated sharply \u2014 the 2.75% rate is the slowest in 16 months and confirms the Apr 2026 purge has fully reversed the post-purge recovery. The 2.69 point deceleration is the sharpest in this window, signaling the market has peaked and is now settling into a slower structural growth rate. The 2.75% rate is only 0.15 points above the Jan 2025 floor, confirming the market is near the bottom of the historical range. Expect the rate to stabilise at 2.5%\u20133.5% for the next two quarters as the purge cleanup completes and the market consolidates at the new 1.02B baseline.",
+    "title": "Debit cards 2.8% YoY \u2014 slowest growth in 16 months",
+    "body": "Debit cards outstanding grew 2.8% year-on-year in Apr 2026, down 2.7 points from 5.4% prior period. YoY growth decelerated sharply: 5.7% in Feb 2026 \u2192 5.4% in Mar 2026 \u2192 2.8% in Apr 2026. The rate is now at the lower end of the 16-period range (2.6%\u20135.7%).",
+    "implication": "Debit card growth has decelerated to its slowest pace in 16 months \u2014 the 2.8% rate is 2.7 points slower than Mar 2026, confirming the market has peaked after the post-purge recovery. The 2.8% rate is only 0.2 points faster than the Jan 2025 trough (2.6%), signaling the market is approaching zero growth. The sharp deceleration from 5.7% in Feb 2026 to 2.8% in Apr 2026 confirms the market has entered a contraction phase, and the structural growth rate is settling at a lower level than the 2025 baseline. The Apr 2026 purge has erased the entire post-recovery acceleration.",
     "reasoning": {
       "signals": [
         {
@@ -631,10 +645,9 @@
         }
       ],
       "chain": [
-        "The 2.75% rate is 2.69 points slower than Mar 2026's 5.44%, the sharpest single-period deceleration in this 16-period window.",
-        "The rate has fallen 2.95 points from the Feb 2026 peak of 5.7%, confirming the post-purge recovery has fully reversed.",
-        "The 2.75% rate is only 0.15 points faster than the Jan 2025 floor of 2.6%, signaling the market is near the bottom of the historical range.",
-        "The Apr 2026 purge removed 21.4M cards, erasing 67% of the Jul 2025\u2013Mar 2026 recovery and driving the sharp deceleration."
+        "The 2.8% rate is the slowest since Jan 2025's 2.6%, confirming the market has decelerated sharply after the post-purge recovery.",
+        "YoY growth has decelerated 2.9 points from the Feb 2026 peak (5.7%), confirming the market has peaked and is now contracting.",
+        "The 2.8% rate is in the lower range of the historical distribution, signaling the market is now expanding at a pace that matches the Jan 2025 baseline."
       ]
     },
     "basis": {
@@ -646,10 +659,9 @@
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
-        "The 2.75% rate is 2.69 points slower than Mar 2026's 5.44%, the sharpest single-period deceleration in this 16-period window.",
-        "The rate has fallen 2.95 points from the Feb 2026 peak of 5.7%, confirming the post-purge recovery has fully reversed.",
-        "The 2.75% rate is only 0.15 points faster than the Jan 2025 floor of 2.6%, signaling the market is near the bottom of the historical range.",
-        "The Apr 2026 purge removed 21.4M cards, erasing 67% of the Jul 2025\u2013Mar 2026 recovery and driving the sharp deceleration."
+        "The 2.8% rate is the slowest since Jan 2025's 2.6%, confirming the market has decelerated sharply after the post-purge recovery.",
+        "YoY growth has decelerated 2.9 points from the Feb 2026 peak (5.7%), confirming the market has peaked and is now contracting.",
+        "The 2.8% rate is in the lower range of the historical distribution, signaling the market is now expanding at a pace that matches the Jan 2025 baseline."
       ]
     },
     "sourceSignals": [
@@ -904,9 +916,9 @@
     "cut": "total",
     "period": "Apr 2026",
     "type": "insight",
-    "title": "UPI QR ratio surged to 67.3\u00d7 per POS \u2014 new record",
-    "body": "There are now 67.3 UPI QR codes for every POS terminal in Apr 2026, up 2.66 from 64.7 in Mar 2026. Ratio jumped 64.7\u00d7 \u2192 67.3\u00d7, the largest monthly increase since Nov 2025's 6.4-point surge \u2014 the gap has widened to a new all-time high as UPI QR scales while POS contracts.",
-    "implication": "The bifurcation is accelerating \u2014 UPI QR is now 67\u00d7 more prevalent than POS, and the gap is widening as POS contracts. Merchant acceptance infrastructure has shifted decisively toward QR-based payments, and POS is becoming a legacy channel. Credit strategies tied to POS deployment or MDR economics must be recalibrated for a UPI-first market.",
+    "title": "UPI QR codes at 67\u00d7 per POS terminal \u2014 highest ratio on record",
+    "body": "There are now 67.3 UPI QR codes for every POS terminal in Apr 2026, up 2.66 from 64.7 in Mar 2026. Ratio rose 64.7\u00d7 \u2192 67.3\u00d7, the largest single-month jump since Nov 2025's 5.8-point surge \u2014 the gap has widened by 2.7 points as UPI QR scaled 9.6M codes while POS terminals fell 322K units.",
+    "implication": "The 67\u00d7 ratio confirms the two channels are on opposite trajectories \u2014 UPI QR is scaling exponentially while POS is contracting. Lenders financing merchant acceptance should allocate capital exclusively to UPI QR infrastructure; POS terminals are a shrinking asset class with no recovery signal. The ratio will continue widening as UPI QR adds 7\u201310M codes monthly and POS struggles to stabilise.",
     "reasoning": {
       "signals": [
         {
@@ -927,9 +939,9 @@
         }
       ],
       "chain": [
-        "UPI QR added 9.6M codes in Apr 2026 while POS lost 322K terminals, driving the ratio up 2.66 points to 67.3\u00d7.",
-        "The ratio has risen from 37.4\u00d7 in Jan 2024 to 67.3\u00d7 in Apr 2026, an 80% increase in 28 months, confirming UPI QR's structural dominance.",
-        "The divergence is accelerating \u2014 the 2.66-point jump is the sharpest since Nov 2025, when POS collapsed by 1.05M units."
+        "The 67.3\u00d7 ratio means UPI QR deployment is outpacing POS by 66 to 1 \u2014 for every POS terminal added, 67 UPI QR codes are deployed.",
+        "The ratio has risen from 37.4\u00d7 in Jan 2024 to 67.3\u00d7 in Apr 2026, an 80% increase in 28 months.",
+        "The widening gap is driven by both UPI QR's 9.6M-code monthly gain and POS's 322K-unit monthly decline, compounding the divergence."
       ]
     },
     "basis": {
@@ -941,9 +953,9 @@
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
-        "UPI QR added 9.6M codes in Apr 2026 while POS lost 322K terminals, driving the ratio up 2.66 points to 67.3\u00d7.",
-        "The ratio has risen from 37.4\u00d7 in Jan 2024 to 67.3\u00d7 in Apr 2026, an 80% increase in 28 months, confirming UPI QR's structural dominance.",
-        "The divergence is accelerating \u2014 the 2.66-point jump is the sharpest since Nov 2025, when POS collapsed by 1.05M units."
+        "The 67.3\u00d7 ratio means UPI QR deployment is outpacing POS by 66 to 1 \u2014 for every POS terminal added, 67 UPI QR codes are deployed.",
+        "The ratio has risen from 37.4\u00d7 in Jan 2024 to 67.3\u00d7 in Apr 2026, an 80% increase in 28 months.",
+        "The widening gap is driven by both UPI QR's 9.6M-code monthly gain and POS's 322K-unit monthly decline, compounding the divergence."
       ]
     },
     "sourceSignals": [
@@ -973,9 +985,9 @@
     "cut": "total",
     "period": "Apr 2026",
     "type": "insight",
-    "title": "POS growth collapsed to 1.5% YoY \u2014 weakest in 16 periods",
-    "body": "POS terminals grew 1.45% year-on-year in Apr 2026, down from 6.05% in Mar 2026. YoY growth decelerated 6.0% \u2192 1.5%, a 4.6-point drop \u2014 the rate has fallen from Jan 2026's 11.5% peak and is now at its lowest level in this 16-period series.",
-    "implication": "POS deployment has stalled \u2014 the 1.5% YoY rate is the weakest on record and signals the network is barely growing. The combination of a high base and Apr's 322K-unit drop confirms the expansion cycle that ran from Feb 2024 to Oct 2025 has ended. Merchant acquiring strategies must pivot to UPI QR or risk funding a shrinking infrastructure base.",
+    "title": "POS terminals at 1.5% YoY \u2014 slowest growth in 16-period window",
+    "body": "POS terminals grew 1.45% year-on-year in Apr 2026, down from 6.05% in Mar 2026. YoY growth decelerated 6.0% \u2192 1.5%, a 4.6-point drop \u2014 the rate has fallen from Jan's 11.5% peak and now sits at the minimum level in the 16-period series.",
+    "implication": "The 1.5% YoY rate is the weakest reading in this window and signals the POS network is near stall speed. The combination of a high base and Apr's sharp monthly decline has pushed annual growth to near-zero. If the network posts another monthly decline in May, the YoY rate will turn negative for the first time in this dataset. Lenders should treat POS acceptance infrastructure as a contracting channel.",
     "reasoning": {
       "signals": [
         {
@@ -996,8 +1008,8 @@
         }
       ],
       "chain": [
-        "The 1.5% YoY rate represents just 162K net units added over 12 months, down from Mar's 670K-unit annual gain.",
-        "The deceleration is driven by both a high base (Apr 2025's 11.28M units) and Apr 2026's 322K-unit monthly decline, which erased recent gains.",
+        "The 1.5% YoY rate represents just 163,252 net units added over 12 months, down from Mar's 670,000-unit annual gain.",
+        "The deceleration is driven by both a high base (Apr 2025's 11,283,266 terminals) and Apr 2026's 322K-unit monthly decline.",
         "The rate has compressed from 31.5% in May 2025 to 1.5% in Apr 2026, a 30-point collapse in 11 months."
       ]
     },
@@ -1010,8 +1022,8 @@
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
-        "The 1.5% YoY rate represents just 162K net units added over 12 months, down from Mar's 670K-unit annual gain.",
-        "The deceleration is driven by both a high base (Apr 2025's 11.28M units) and Apr 2026's 322K-unit monthly decline, which erased recent gains.",
+        "The 1.5% YoY rate represents just 163,252 net units added over 12 months, down from Mar's 670,000-unit annual gain.",
+        "The deceleration is driven by both a high base (Apr 2025's 11,283,266 terminals) and Apr 2026's 322K-unit monthly decline.",
         "The rate has compressed from 31.5% in May 2025 to 1.5% in Apr 2026, a 30-point collapse in 11 months."
       ]
     },
@@ -1042,9 +1054,9 @@
     "cut": "total",
     "period": "Apr 2026",
     "type": "insight",
-    "title": "UPI QR growth held at 16.4% YoY \u2014 stable expansion",
-    "body": "UPI QR codes grew 16.37% year-on-year in Apr 2026, up from 15.70% in Mar 2026. YoY growth accelerated 15.7% \u2192 16.4%, a 0.7-point gain \u2014 the rate has stabilised in the 15\u201317% range across the past 12 periods, with Apr's 16.4% near the median.",
-    "implication": "UPI QR deployment is locked into a 15\u201317% annual growth trajectory \u2014 the 16.4% YoY rate confirms the network is adding 100M+ codes every year with no signs of deceleration. The stability of the YoY rate despite a rising base (662M codes in Apr 2025) signals sustained merchant adoption. This is the infrastructure backbone for digital payments growth \u2014 lenders should align credit strategies to UPI-enabled merchant segments.",
+    "title": "UPI QR codes at 16.4% YoY \u2014 stable expansion trajectory",
+    "body": "UPI QR codes grew 16.37% year-on-year in Apr 2026, up from 15.70% in Mar 2026. YoY growth accelerated 15.7% \u2192 16.4%, a 0.7-point gain \u2014 the rate has stabilised in the 15\u201317% range across the 16-period series, with Apr's 16.4% near the median.",
+    "implication": "The 16.4% YoY rate confirms UPI QR deployment is in a stable, high-growth phase \u2014 the network is adding 100M+ codes annually with no signs of saturation. The rate has held in the 15\u201317% range for 12 consecutive months, even as the base has risen from 662M to 770M codes. Lenders should treat UPI QR as the primary acceptance infrastructure for digital payments \u2014 it is the only channel with sustained double-digit growth and structural expansion momentum.",
     "reasoning": {
       "signals": [
         {
@@ -1065,9 +1077,9 @@
         }
       ],
       "chain": [
-        "The 16.4% YoY rate represents 108M net codes added over 12 months, up from Mar's 103M annual gain.",
-        "The acceleration is driven by Apr 2026's 9.6M-code gain, which outpaced Apr 2025's 4.5M increase despite a high base of 662.4M codes.",
-        "The YoY rate has held above 15% for 13 consecutive months, confirming the structural expansion is durable."
+        "The 16.4% YoY rate represents 108.4M net codes added over 12 months, in line with the structural 100M+ annual expansion trajectory.",
+        "The slight acceleration from Mar's 15.7% is driven by Apr's 9.6M-code gain, larger than Mar's 7.0M and closer to the 10M monthly baseline.",
+        "The YoY rate has held steady despite the high base from Apr 2025 (662.4M codes), confirming the expansion is not decelerating."
       ]
     },
     "basis": {
@@ -1079,9 +1091,9 @@
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
-        "The 16.4% YoY rate represents 108M net codes added over 12 months, up from Mar's 103M annual gain.",
-        "The acceleration is driven by Apr 2026's 9.6M-code gain, which outpaced Apr 2025's 4.5M increase despite a high base of 662.4M codes.",
-        "The YoY rate has held above 15% for 13 consecutive months, confirming the structural expansion is durable."
+        "The 16.4% YoY rate represents 108.4M net codes added over 12 months, in line with the structural 100M+ annual expansion trajectory.",
+        "The slight acceleration from Mar's 15.7% is driven by Apr's 9.6M-code gain, larger than Mar's 7.0M and closer to the 10M monthly baseline.",
+        "The YoY rate has held steady despite the high base from Apr 2025 (662.4M codes), confirming the expansion is not decelerating."
       ]
     },
     "sourceSignals": [
@@ -1111,9 +1123,9 @@
     "cut": "total",
     "period": "Apr 2026",
     "type": "insight",
-    "title": "UPI QR codes are 137x Bharat QR in scale \u2014 770.8M vs 5.62M",
-    "body": "As of Apr 2026, there are 770.8M UPI QR codes deployed vs 5.62M Bharat QR codes \u2014 a 137x gap. UPI QR grew +1.3% MoM vs Bharat QR at -0.3% MoM. UPI has decisively won the QR standard battle in India.",
-    "implication": "Bharat QR was an earlier QR code standard that lost out to UPI QR \u2014 which is now 137 times bigger. Building any credit product (credit on UPI, BNPL) on Bharat QR today would be like building on a platform that merchants have already abandoned. UPI QR is the only QR standard worth designing for.",
+    "title": "UPI QR codes at 137\u00d7 per Bharat QR \u2014 divergence widening",
+    "body": "There are now 137.3 UPI QR codes for every Bharat QR code in Apr 2026, up 2.12 from 135.1 in Mar 2026. Ratio rose 135.1\u00d7 \u2192 137.3\u00d7, the highest level on record \u2014 the gap has widened by 2.1 points in one month, the sharpest move since Mar's 7.2-point jump.",
+    "implication": "The 137\u00d7 ratio is a structural divergence signal \u2014 Bharat QR is effectively obsolete, with UPI QR capturing all incremental deployment. Lenders financing merchant acceptance infrastructure should focus exclusively on UPI QR-enabled solutions; Bharat QR has no growth trajectory. The ratio will continue widening as UPI QR scales and Bharat QR stagnates or contracts.",
     "reasoning": {
       "signals": [
         {
@@ -1134,9 +1146,9 @@
         }
       ],
       "chain": [
-        "UPI QR at 770.8M vs Bharat QR at 5.62M \u2014 a 137x gap",
-        "Bharat QR was an earlier standard; merchants have consolidated on UPI QR as the accepted norm",
-        "Building payments or lending infrastructure on Bharat QR rails is operationally unviable at any meaningful merchant scale"
+        "The 137.3\u00d7 ratio means UPI QR deployment is outpacing Bharat QR by 136 to 1 \u2014 for every Bharat QR code added, 137 UPI QR codes are deployed.",
+        "The ratio has risen from 53.5\u00d7 in Jan 2024 to 137.3\u00d7 in Apr 2026, a 2.6\u00d7 increase in 28 months.",
+        "The widening gap confirms Bharat QR is being abandoned in favour of UPI QR as the dominant acceptance standard."
       ]
     },
     "basis": {
@@ -1148,9 +1160,9 @@
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
-        "UPI QR at 770.8M vs Bharat QR at 5.62M \u2014 a 137x gap",
-        "Bharat QR was an earlier standard; merchants have consolidated on UPI QR as the accepted norm",
-        "Building payments or lending infrastructure on Bharat QR rails is operationally unviable at any meaningful merchant scale"
+        "The 137.3\u00d7 ratio means UPI QR deployment is outpacing Bharat QR by 136 to 1 \u2014 for every Bharat QR code added, 137 UPI QR codes are deployed.",
+        "The ratio has risen from 53.5\u00d7 in Jan 2024 to 137.3\u00d7 in Apr 2026, a 2.6\u00d7 increase in 28 months.",
+        "The widening gap confirms Bharat QR is being abandoned in favour of UPI QR as the dominant acceptance standard."
       ]
     },
     "sourceSignals": [
@@ -1168,7 +1180,9 @@
       "focusCard": "upi_qr"
     },
     "exploreAction": null,
-    "representation": "deterministic"
+    "representation": "llm",
+    "eval_signal": "upi-bharat-qr-ratio",
+    "prompt_version": "1.11"
   },
   {
     "id": "infra-category-pos-share",

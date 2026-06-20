@@ -63,6 +63,7 @@
         "cc-bank-scan",
         "cc-category-share-scan",
         "cc-outstanding-abs",
+        "cc-outstanding-streak",
         "cc-outstanding-yoy",
         "cc-private-share",
         "cc-psb-share"
@@ -101,6 +102,7 @@
         "dc-bank-scan",
         "dc-category-share-scan",
         "dc-outstanding-abs",
+        "dc-outstanding-streak",
         "dc-outstanding-yoy",
         "dc-private-share",
         "dc-psb-share"
@@ -305,6 +307,7 @@
       "data_section": null,
       "data_series": null,
       "signal_ids": [
+        "upi-bharat-qr-ratio",
         "upi-qr-abs",
         "upi-qr-per-pos",
         "upi-qr-yoy"
@@ -911,6 +914,7 @@
       "signal_ids": [
         "cc-atm-vol-abs",
         "cc-atm-vol-share",
+        "cc-atm-vol-streak",
         "cc-atm-vol-yoy"
       ],
       "annotation_ids": [],
@@ -1051,6 +1055,7 @@
       "signal_ids": [
         "dc-atm-vol-abs",
         "dc-atm-vol-share",
+        "dc-atm-vol-streak",
         "dc-atm-vol-yoy"
       ],
       "annotation_ids": [],
@@ -1191,6 +1196,7 @@
       "signal_ids": [
         "dc-pos-withdrawal-vol-abs",
         "dc-pos-withdrawal-vol-share",
+        "dc-pos-withdrawal-vol-streak",
         "dc-pos-withdrawal-vol-yoy"
       ],
       "annotation_ids": [],

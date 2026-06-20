@@ -37,12 +37,25 @@ EVAL_DIR    = ROOT / "analysis/signals/evaluations/atm_pos"
 # narrative becomes its representation. Only 1:1 anchors with a registered signal
 # qualify; composed/ratio/scan insights are intentionally absent (stay deterministic).
 EVAL_ANCHOR = {
-    "cc-cards-yoy":     "cc-outstanding-yoy",
-    "dc-cards-yoy":     "dc-outstanding-yoy",
-    "infra-pos-yoy":    "pos-terminals-yoy",
-    "infra-upi-yoy":    "upi-qr-yoy",
-    "infra-pos-streak": "pos-terminals-pos-streak",
-    "infra-qr-per-pos": "upi-qr-per-pos",
+    # YoY scalar trajectory
+    "cc-cards-yoy":            "cc-outstanding-yoy",
+    "dc-cards-yoy":            "dc-outstanding-yoy",
+    "infra-pos-yoy":           "pos-terminals-yoy",
+    "infra-upi-yoy":           "upi-qr-yoy",
+    # streaks (consecutive-month runs) — registered csv_streak signals
+    "cc-cards-streak":         "cc-outstanding-streak",
+    "dc-cards-streak":         "dc-outstanding-streak",
+    "infra-pos-streak":        "pos-terminals-pos-streak",
+    "cc-atm-declining":        "cc-atm-vol-streak",
+    "dc-atm-declining":        "dc-atm-vol-streak",
+    "dc-pos-cash-decline":     "dc-pos-withdrawal-vol-streak",
+    # cross-metric ratios
+    "infra-qr-per-pos":        "upi-qr-per-pos",
+    "infra-upi-vs-bharat-qr":  "upi-bharat-qr-ratio",
+    # cross-metric volume shares (registered csv_ratio_sum signals)
+    "cc-ecom-vs-pos-share":    "cc-ecom-vol-share",
+    "dc-ecom-share":           "dc-ecom-vol-share",
+    "dc-atm-share-structural": "dc-atm-vol-share",
 }
 
 
