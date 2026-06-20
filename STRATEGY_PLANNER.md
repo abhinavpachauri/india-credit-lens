@@ -226,6 +226,26 @@ All 9 sources below passed the decision filter. Pipeline redesign required befor
 2. Does it unlock cross-report signals that aren't possible without it?
 3. Build data pipeline → run analysis prompt → update product monitor pages
 
+### Future data bets (parked — strategic context, not yet scheduled)
+
+Two forward bets, both about **expanding the data to unlock a new capability tier**:
+
+1. **Longer historical range → ML forecasting.** Today's signal layer is descriptive/causal
+   (what moved and why). With a longer ingested history (more periods per signal), the next
+   phase can add **predictive models that forecast the next period's numbers** — moving from
+   "explains the past" to "projects the future." Gating factor = depth of clean history in
+   `signals.db`; the freshness + traceability guards already make that history trustworthy
+   enough to model on. This is a Phase 3/4 capability (product differentiation), not near-term.
+
+2. **Bank-level analytics from quarterly/annual results.** Ingest individual banks' quarterly
+   and annual filings (P&L + balance sheet) to power **per-bank** intelligence — the keystone
+   "per-bank granularity" lever. **Open question to validate first:** whether the P&L / balance
+   sheet actually breaks out *lending* detail at the granularity we need (sectoral exposure,
+   asset quality, segment growth) — bank disclosures may only give aggregate advances. Verify
+   disclosure granularity on 2–3 sample filings before committing pipeline work. Pairs naturally
+   with the ATM/POS per-bank data we already have. (See "per-bank granularity = keystone build"
+   in the strategic levers.)
+
 ---
 
 ## 10. Revenue Model
