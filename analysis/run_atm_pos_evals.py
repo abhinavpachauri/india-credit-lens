@@ -343,6 +343,16 @@ def run_insight_stages():
     if not passed:
         return results
 
+    # Stage 4a-series: precompute the compact chart-series JSON the web loads (compute-once,
+    # ship-compact). Replaces client-side parsing of the 4.6 MB consolidated CSV on /payments.
+    passed, out = run(
+        "Stage 4a-series",
+        [sys.executable, str(ANALYSIS / "generate_chart_series.py"), "--pipeline", "atm_pos"],
+    )
+    results.append(("4a-series. Chart series JSON", passed, out))
+    if not passed:
+        return results
+
     # Stage 4b: generate insights
     passed, out = run(
         "Stage 4b",

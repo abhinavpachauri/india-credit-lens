@@ -2,14 +2,14 @@
 
 import { useState, useMemo } from "react";
 import { buildSectionData } from "@/lib/atm_pos_data";
-import type { SectionDef, AtmPosRow, FilterState, VolVal } from "@/lib/atm_pos_data";
+import type { SectionDef, AtmPosSeries, FilterState, VolVal } from "@/lib/atm_pos_data";
 import SectionCard          from "@/components/SectionCard";
 import AtmPosTrendChart     from "@/components/AtmPosTrendChart";
 import AtmPosDistributionChart from "@/components/AtmPosDistributionChart";
 
 interface AtmPosSectionCardProps {
   def:          SectionDef;
-  rows:         AtmPosRow[];
+  rows:         AtmPosSeries;
   filter:       FilterState;
   tab:          "trend" | "distribution";
   hiddenSeries: Set<string>;

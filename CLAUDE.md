@@ -27,6 +27,23 @@ No to all three → deprioritise.
 
 ---
 
+## Engineering Principle (non-negotiable) — Design for the long term
+
+This platform is **multi-pipeline by design** (SIBC, ATM/POS, future sources) and that count only
+grows. Every technical decision must scale to **multiple ingestion types and multiple pipelines** —
+never optimise for the single case in front of you.
+
+- **One generic mechanism per pipeline, not per-pipeline one-offs.** Both pipelines run the *same*
+  scripts/validators/gates; alignment is by construction, not parallel hand-maintenance.
+- **Compute once, ship compact.** Precompute artifacts at ingestion/build time; never make the
+  browser parse raw consolidated data or re-derive series client-side.
+- **Single source of truth.** No parallel copies that "agree today but could drift" — guard with a
+  deterministic freshness/traceability check.
+- Given "quick win vs proper fix", **default to the proper fix**; state it as the recommendation.
+- Test every design against: *does this still hold at N pipelines / N ingestion types?*
+
+---
+
 ## Current Platform State (June 2026)
 
 Live components only. Planned work lives in `STRATEGY_PLANNER.md`.

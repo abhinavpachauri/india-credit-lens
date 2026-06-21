@@ -45,6 +45,7 @@ DERIVED_GLOBS = [
     "analysis/cross_source/candidates.json",
     "analysis/cross_source/ecosystem_state_*.json",
     "web/public/data/opportunities_feed.json",
+    "web/public/data/atm_pos_chart_series.json",
 ]
 
 
@@ -78,6 +79,7 @@ def regenerate(quiet):
     ok &= run("compose_ecosystem", ["compose_ecosystem.py"], quiet)
     ok &= run("derive_cross_links", ["derive_cross_links.py"], quiet)
     ok &= run("opportunities_feed", ["generate_opportunities_feed.py"], quiet)
+    ok &= run("chart_series atm_pos", ["generate_chart_series.py", "--pipeline", "atm_pos"], quiet)
     return ok
 
 

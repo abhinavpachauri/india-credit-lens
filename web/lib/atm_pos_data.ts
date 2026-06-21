@@ -1,18 +1,15 @@
 "use client";
 
-import Papa from "papaparse";
-
 // ── Types ──────────────────────────────────────────────────────────────────────
 
-export interface AtmPosRow {
-  report_date:   string;
-  bank_name:     string;
-  bank_category: string;
-  record_type:   "bank" | "total";
-  metric:        string;
-  value:         number;
-  unit:          string;
-  data_status:   string;
+// Compact precomputed chart series (compute-once, ship-compact). Replaces the
+// 4.6 MB raw CSV + client-side PapaParse + 47k-row per-series filtering. Built by
+// analysis/generate_chart_series.py → web/public/data/atm_pos_chart_series.json.
+export interface AtmPosSeries {
+  _meta: { pipeline: string; periods: string[]; entity_count: number; metric_count: number };
+  entities: { name: string; category: string }[];
+  // metric → { total: [v per period], entity: [[v per period] aligned with entities] }
+  series: Record<string, { total: number[]; entity: number[][] }>;
 }
 
 export type FilterMode = "all" | "by_type" | "individual" | "top_n";
@@ -39,39 +36,23 @@ export interface SectionData {
 
 // ── CSV cache ──────────────────────────────────────────────────────────────────
 
-let _cache: AtmPosRow[] | null = null;
+let _cache: AtmPosSeries | null = null;
 
-export async function loadAtmPosData(): Promise<AtmPosRow[]> {
+export async function loadAtmPosData(): Promise<AtmPosSeries> {
   if (_cache) return _cache;
-  return new Promise((resolve, reject) => {
-    Papa.parse("/data/atm_pos_consolidated.csv", {
-      download:      true,
-      header:        true,
-      dynamicTyping: true,
-      skipEmptyLines: true,
-      complete: (result) => {
-        _cache = result.data as AtmPosRow[];
-        resolve(_cache);
-      },
-      error: reject,
-    });
-  });
+  const res = await fetch("/data/atm_pos_chart_series.json");
+  _cache = (await res.json()) as AtmPosSeries;
+  return _cache;
 }
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
 
-export function getAllBanks(rows: AtmPosRow[]): string[] {
-  const set = new Set<string>();
-  rows.forEach((r) => {
-    if (r.record_type === "bank") set.add(r.bank_name);
-  });
-  return Array.from(set).sort();
+export function getAllBanks(series: AtmPosSeries): string[] {
+  return series.entities.map((e) => e.name).sort();
 }
 
-export function getAvailableDates(rows: AtmPosRow[]): string[] {
-  const set = new Set<string>();
-  rows.forEach((r) => set.add(r.report_date));
-  return Array.from(set).sort();
+export function getAvailableDates(series: AtmPosSeries): string[] {
+  return series._meta.periods;   // already sorted by the generator
 }
 
 export function formatAtmDate(iso: string): string {
@@ -116,105 +97,66 @@ export const CATEGORY_FULL_TO_SHORT: Record<string, string> = {
 // ── buildSectionData ───────────────────────────────────────────────────────────
 
 export function buildSectionData(
-  rows:   AtmPosRow[],
+  s:      AtmPosSeries,
   metric: string | string[],
   filter: FilterState,
 ): SectionData {
-  const metrics    = Array.isArray(metric) ? metric : [metric];
-  const sortedDates = getAvailableDates(rows);
+  const metrics     = Array.isArray(metric) ? metric : [metric];
+  const sortedDates = s._meta.periods;            // already sorted
+  const np          = sortedDates.length;
+  const nE          = s.entities.length;
 
-  // Determine series names and how to aggregate
-  type SeriesAgg = { name: string; getValue: (date: string) => number };
-  const series: SeriesAgg[] = [];
+  // Sum the requested metric(s) into a Total array + per-entity matrix — cheap
+  // index math over the precomputed series, no row filtering.
+  const total: number[]    = new Array(np).fill(0);
+  const entity: number[][] = s.entities.map(() => new Array(np).fill(0));
+  for (const m of metrics) {
+    const ms = s.series[m];
+    if (!ms) continue;
+    for (let p = 0; p < np; p++) total[p] += ms.total[p] || 0;
+    for (let e = 0; e < nE; e++) {
+      const row = ms.entity[e];
+      if (!row) continue;
+      for (let p = 0; p < np; p++) entity[e][p] += row[p] || 0;
+    }
+  }
 
-  // Total series — used as the first chip in every mode
-  const totalSeries: SeriesAgg = {
-    name: "Total",
-    getValue: (date) =>
-      rows
-        .filter((r) => r.report_date === date && r.record_type === "total" && metrics.includes(r.metric))
-        .reduce((s, r) => s + (r.value || 0), 0),
-  };
+  // Pick which series to plot by filter mode → {name, values[]}.
+  const picked: { name: string; values: number[] }[] = [{ name: "Total", values: total }];
 
-  if (filter.mode === "all") {
-    series.push(totalSeries);
-  } else if (filter.mode === "by_type") {
-    series.push(totalSeries);
+  if (filter.mode === "by_type") {
     for (const shortLabel of ["PSB", "Private", "Foreign", "SFB", "Payments"]) {
       const fullCat = CATEGORY_SHORT_TO_FULL[shortLabel] ?? shortLabel;
-      series.push({
-        name: shortLabel,
-        getValue: (date) =>
-          rows
-            .filter(
-              (r) =>
-                r.report_date === date &&
-                r.record_type === "bank" &&
-                r.bank_category === fullCat &&
-                metrics.includes(r.metric),
-            )
-            .reduce((s, r) => s + (r.value || 0), 0),
+      const vals = new Array(np).fill(0);
+      s.entities.forEach((ent, e) => {
+        if (ent.category === fullCat) for (let p = 0; p < np; p++) vals[p] += entity[e][p];
       });
+      picked.push({ name: shortLabel, values: vals });
     }
   } else if (filter.mode === "individual") {
-    series.push(totalSeries);
     for (const bank of filter.selectedBanks) {
-      series.push({
-        name: bank,
-        getValue: (date) =>
-          rows
-            .filter(
-              (r) =>
-                r.report_date === date &&
-                r.record_type === "bank" &&
-                r.bank_name === bank &&
-                metrics.includes(r.metric),
-            )
-            .reduce((s, r) => s + (r.value || 0), 0),
-      });
+      const e = s.entities.findIndex((x) => x.name === bank);
+      picked.push({ name: bank, values: e >= 0 ? entity[e] : new Array(np).fill(0) });
     }
   } else if (filter.mode === "top_n") {
-    series.push(totalSeries);
-    // Rank banks by latest date total value
-    const latestDate = sortedDates[sortedDates.length - 1];
-    const bankTotals: Map<string, number> = new Map();
-    rows
-      .filter((r) => r.report_date === latestDate && r.record_type === "bank" && metrics.includes(r.metric))
-      .forEach((r) => {
-        bankTotals.set(r.bank_name, (bankTotals.get(r.bank_name) ?? 0) + (r.value || 0));
-      });
-    const topBanks = Array.from(bankTotals.entries())
-      .sort((a, b) => b[1] - a[1])
+    const latest = np - 1;
+    s.entities
+      .map((ent, e) => ({ name: ent.name, e, v: entity[e][latest] }))
+      .sort((a, b) => b.v - a.v)
       .slice(0, filter.topN)
-      .map(([name]) => name);
-    for (const bank of topBanks) {
-      series.push({
-        name: bank,
-        getValue: (date) =>
-          rows
-            .filter(
-              (r) =>
-                r.report_date === date &&
-                r.record_type === "bank" &&
-                r.bank_name === bank &&
-                metrics.includes(r.metric),
-            )
-            .reduce((s, r) => s + (r.value || 0), 0),
-      });
-    }
+      .forEach((r) => picked.push({ name: r.name, values: entity[r.e] }));
   }
+  // mode "all" → Total only (already pushed)
 
-  // Build per-date values map: seriesName → date → value
+  // Per-date value map (preserves the downstream chart builders verbatim).
   const valMap: Map<string, Map<string, number>> = new Map();
-  for (const s of series) {
+  for (const ser of picked) {
     const dateMap = new Map<string, number>();
-    for (const date of sortedDates) {
-      dateMap.set(date, s.getValue(date));
-    }
-    valMap.set(s.name, dateMap);
+    sortedDates.forEach((d, p) => dateMap.set(d, ser.values[p]));
+    valMap.set(ser.name, dateMap);
   }
 
-  const seriesNames = series.map((s) => s.name);
+  const seriesNames = picked.map((p) => p.name);
 
   // absoluteData
   const absoluteData: ChartPoint[] = sortedDates.map((iso) => {
@@ -392,16 +334,17 @@ export const GROUP_ACCENT: Record<string, string> = {
 
 // ── getTopNBanks ───────────────────────────────────────────────────────────────
 
-export function getTopNBanks(rows: AtmPosRow[], metric: string | string[], n: number): string[] {
-  const metrics    = Array.isArray(metric) ? metric : [metric];
-  const latestDate = getAvailableDates(rows).slice(-1)[0];
-  if (!latestDate) return [];
-  const bankTotals = new Map<string, number>();
-  rows
-    .filter((r) => r.report_date === latestDate && r.record_type === "bank" && metrics.includes(r.metric))
-    .forEach((r) => { bankTotals.set(r.bank_name, (bankTotals.get(r.bank_name) ?? 0) + (r.value || 0)); });
-  return Array.from(bankTotals.entries())
-    .sort((a, b) => b[1] - a[1])
+export function getTopNBanks(s: AtmPosSeries, metric: string | string[], n: number): string[] {
+  const metrics = Array.isArray(metric) ? metric : [metric];
+  const latest  = s._meta.periods.length - 1;
+  if (latest < 0) return [];
+  return s.entities
+    .map((ent, e) => {
+      let v = 0;
+      for (const m of metrics) v += s.series[m]?.entity[e]?.[latest] || 0;
+      return { name: ent.name, v };
+    })
+    .sort((a, b) => b.v - a.v)
     .slice(0, n)
-    .map(([name]) => name);
+    .map((x) => x.name);
 }

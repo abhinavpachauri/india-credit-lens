@@ -9,7 +9,7 @@ import {
   getAllBanks,
   getTopNBanks,
 } from "@/lib/atm_pos_data";
-import type { AtmPosRow, FilterState } from "@/lib/atm_pos_data";
+import type { AtmPosSeries, FilterState } from "@/lib/atm_pos_data";
 import {
   loadAtmPosInsights,
   filterInsights,
@@ -38,7 +38,7 @@ type TabId     = "trend" | "distribution";
 
 interface AtmPosGroupSectionProps {
   group: "cc" | "dc" | "infra";
-  rows:  AtmPosRow[];
+  rows:  AtmPosSeries;
 }
 
 const BTN = (active: boolean): React.CSSProperties => ({

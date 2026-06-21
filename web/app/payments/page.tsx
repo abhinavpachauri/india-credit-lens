@@ -5,13 +5,13 @@ import { loadAtmPosData }    from "@/lib/atm_pos_data";
 import { useAppShell }       from "@/components/AppShell";
 import AtmPosGroupSection    from "@/components/AtmPosGroupSection";
 import NewsletterCTA         from "@/components/NewsletterCTA";
-import type { AtmPosRow }   from "@/lib/atm_pos_data";
+import type { AtmPosSeries }   from "@/lib/atm_pos_data";
 
 const GROUPS = ["cc", "dc", "infra"] as const;
 
 export default function PaymentsPage() {
   const { setHeaderMetric } = useAppShell();
-  const [rows, setRows]     = useState<AtmPosRow[] | null>(null);
+  const [rows, setRows]     = useState<AtmPosSeries | null>(null);
 
   useEffect(() => {
     setHeaderMetric(null, "Mar 2026");
