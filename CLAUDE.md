@@ -157,7 +157,7 @@ handles formatting-only cases automatically.
 | `analysis/check_signal_freshness.py` | Check 2f/5b2: deterministic signals.db freshness — recompute all periods from CSV, fail on drift. Closes the staleness gap `check_derived_fresh.py` leaves (it excludes the binary DB). |
 | `analysis/validate_sibc_traceability.py` | Check 2g: every number in a SIBC insight's body/chain/implication must trace to a value in signals.db (scalar = hard fail; scan = deterministic so grounded by construction). Status-substring contradictions = non-blocking warnings. Ground truth = `query.signal_numbers`/`flat_numbers` (period-wide, unit-aware). |
 | `analysis/validate_atm_pos_insights.py` | Stage 4c: ATM/POS traceability — numbers in body/**chain**/implication must trace to `signals.json`. Mirror of Check 2g for the deterministic payments path. |
-| `analysis/validate_opportunity_traceability.py` | Check 4f: opportunity (Layer 2) number traceability — every number in an opportunity body/chain/implication must trace to its **declared `evidence` signals** (period-wide is vacuous at cross-pipeline scale). **Advisory by default** (`--strict` to hard-fail); flip to strict once `generate_opportunity_narrative.py` is fully grounded. |
+| `analysis/validate_opportunity_traceability.py` | Check 4f: opportunity (Layer 2) number traceability — every number in an opportunity body/chain/implication must trace to the driver's **full declared evidence set (`evidence_all`)** (period-wide is vacuous at cross-pipeline scale). **STRICT in both gates** (the L2 analog of Check 2g; `derive_opportunities` emits `evidence_all` = driver's full signal set so structural risks ground even when not firing). |
 | `analysis/generate_analysis_report.py` | Stage 5.5: eval JSON → `sibc_l1_annotations.json`. Scalar insights carry the LLM chain → `basis.inferences`; **scan insights generated deterministically** (`deterministic_scan_insight`). Attaches `basis.facts` from `signal_numbers`. |
 | `analysis/validate.py` | Checks 4, 5: system_model.json + subsystems.json |
 | `analysis/extract_sibc.py` | Stage 1: SIBC xlsx → sections.json + format_report.json |
@@ -254,13 +254,13 @@ ATM/POS Stage 4c now validates the chain too; payments card reads `basis.inferen
 **Latest session handoff:** `HANDOFF_2026-06-20.md` (full arc + prioritised open items).
 
 **Open Notes:**
-- **Layer 2 opportunity traceability — advisory, 5 warnings (Check 4f):** `validate_opportunity_traceability.py`
-  scopes each opportunity to its declared `evidence` signals and flags ungrounded numbers. Currently advisory
-  (non-blocking). Genuine issues: `risk_cc_market_concentration` cites numbers but declares **no evidence**
-  (add evidence sigs); the LLM narrative (`generate_opportunity_narrative.py`) sometimes rounds (−26→−24) or
-  the validator scope misses **entity-derived** signals the generator uses. **To hard-gate:** (a) align the
-  validator scope with the generator (`evidence` + `entity_signal_ids`), (b) add a grounding retry loop to the
-  narrative generator (prompt rule already added), then run Check 4f with `--strict`.
+- **Layer 2 opportunity traceability — Check 4f now STRICT (done 2026-06-20):** `validate_opportunity_traceability.py`
+  hard-fails in **both** gates. `derive_opportunities` emits `evidence_all` (the driver's full declared signal
+  set); Check 4f validates numbers vs `evidence_all` so structural risks ground even when their driver isn't
+  firing. The undriven `risk_cc_market_concentration` got a `creates_risk` edge; the FY-range regex bug
+  (`FY22-24`→`-24`) is fixed; `generate_opportunity_narrative` now uses the API (`evaluate._call_llm`). L2
+  findings = signals mapped onto the model, LLM narrates only — never independent inference. See S4 (Stage 8 in
+  PIPELINE_ARCHITECTURE.md) for how real-world nuance enters as sourced forces.
 - **3 SIBC status-substring warnings (non-blocking):** `validate_sibc_traceability.py` flags scalar
   implications whose wording may conflict with the computed status (`sibc-industry-yoy` "decelerat" vs
   strengthening; `sibc-msme-size-yoy-spread` "accelerat" vs weakening; `sibc-pl-share-advances-yoy`

@@ -31,7 +31,7 @@ v1.0 (extends `SYSTEM_MODEL_SPEC.md` v3.0). It refines the above into **five str
 | **S2a** causal structure | data-less channels over concepts | **shared hub** `analysis/ontology/{concepts,channels}.json` | authored, rarely changes |
 | **S2b** force instances | dated, sourced activations of a channel | `force_instances[]` in `system_model.json` | authored |
 | **S3** dynamic state | forces/edges/loops fire from live signals; opportunity status | `generate_system_state.py`, `derive_opportunities.py`, `compose_ecosystem.py` | computed, every ingestion |
-| **S4** inference | LLM proposes new channels/instances/cross-edges, gated by sourcing | (next build) | on pattern |
+| **S4** inference | detects unexplained L1 movements → LLM proposes candidate forces/channels/cross-edges (HYPOTHESES) → human sources + promotes into S2b | `run_inference.py` → `s4_proposals/{period}.json` | **live** — on-demand, manual review, never auto-promoted |
 
 Cross-system composition is **federated** (no monolith): each pipeline maps entities to the shared hub
 once; `derive_cross_links.py` derives cross-edges through shared concepts (stock↔flow + shared channel);
@@ -55,7 +55,9 @@ per-section **opportunity teasers** on the SIBC and Payments dashboards. The sha
 (`opportunitiesFor`) and deep-links to a specific opportunity card — `/opportunities#<opp.id>` —
 which carries a matching `id` anchor. Both pipelines' dashboards surface teasers identically;
 authored `rbi_sibc.ts` section opportunities are no longer the teaser source. Number traceability
-of opportunity copy is guarded by Check 4f (`validate_opportunity_traceability.py`, advisory).
+of opportunity copy is guarded by **Check 4f** (`validate_opportunity_traceability.py`) — **strict in
+both gates** (the L2 analog of Check 2g): every number in an opportunity body/chain/implication must
+trace to the driver's full declared evidence set (`evidence_all`).
 
 **Newsletter is an exception.** Newsletter generation is not yet standardised to this
 architecture. Do not modify newsletter scripts until the signal layer is complete across
@@ -94,7 +96,12 @@ Applies to every pipeline. Scripts differ; stage purpose and order do not.
            Update current_status + first_seen in registry.json
            No Claude involvement. No exceptions.
 
-[Stage 5]  Layer 2a — signal evaluate          (every period)
+[Stage 5]  Signal evaluate — LLM interpretation of L1 signals   (every period)
+           NB: this is the LLM REPRESENTATION of Layer-1 signals (it produces the per-signal
+           narrative that becomes the L1 dashboard annotations via Stage 5.5 / ATM-POS 4b). It is
+           NOT the Layer-2 evaluation — that is Stage 5.7 (S3, model-based, deterministic). Both
+           pipelines: deterministic compute (Stage 4) → LLM narrates the scalar signals here,
+           every number traceable (Check 2g / ATM-POS 4c).
            Load prior period evaluation JSON if it exists (auto-detected from signals.db)
            Inject prior signal narratives into prompt for narrative diff
            Call LLM (claude -p CLI); cache by payload hash + prompt_version
@@ -115,15 +122,41 @@ Applies to every pipeline. Scripts differ; stage purpose and order do not.
                     only updates layer==1 items; 4b writes none). See the ATM/POS pipeline
                     section's "Dashboard insight path" note. Writes atm_pos_insights.json.
 
+[Stage 5.7] Layer 2 — dynamic state + opportunities   (every period, inside the gate)
+           This is the L2 *ingestion* — deterministic, no LLM authoring:
+             a. generate_skeleton.py        — regenerate S1 structure from CSV (preserves S2 behavioral layer)
+             b. validate_system_model.py    — structural + D1/D2/D3 + force sourcing (Check 4/5 replacement)
+             c. generate_system_state.py    — S3: live L1 signal states map onto the model;
+                                              forces/edges/loops FIRE → system_state_{period}.json
+             d. derive_opportunities.py     — opportunity/risk STATUS (active|watch|closed) from driver firing
+             e. compose_ecosystem.py        — cross-system projection (L2b feed)
+             f. generate_opportunities_feed.py — build opportunities_feed.json (preserves prior LLM narrative)
+           Then (post-gate, LLM, free claude -p/API): generate_opportunity_narrative.py writes the grounded
+           plain-English copy. Check 4f (strict) gates every number. The LLM ONLY narrates what S3 computed;
+           it never invents causal structure (that is S4). Both gates run a–f each ingestion.
+
 [Stage 6]  Evals gate
-           Validates all artifacts produced by Stages 0–5.5:
-           data integrity, signal DB consistency, model structure (if present)
+           Validates all artifacts produced by Stages 0–5.7:
+           data integrity, signal DB consistency, model structure, opportunity traceability (Check 4f strict)
 
 [Stage 7]  Presentation promote
            Push validated insights to web (annotations, gaps, opportunities)
            Explicit promotion step — never a direct write
            SIBC: promote_annotations.py merges L1 (from sibc_l1_annotations.json)
                  with L2/L3 (from annotations_merged.ts) at makeSection() time
+
+[Stage 8]  S4 — inference loop                  (on-demand, MANUAL review — never auto-promoted)
+           python3 analysis/run_inference.py   (--no-llm = detection only)
+           1. DETECT — for every L1 signal that moved this period, check whether a force/edge in the
+              model explains it. Movements with no explanation → "unexplained" (review backlog).
+              Also flags edge-direction mismatches + unconfirmed cross-links.
+           2. PROPOSE (LLM) — drafts a candidate force/channel/cross-edge for an unexplained movement.
+              Written to s4_proposals/{period}.json as HYPOTHESES with claim_type='hypothesis'.
+           3. SOURCE + PROMOTE (human) — a proposal becomes a model force ONLY after a real external
+              source (URL + date + excerpt) is attached, per SYSTEM_MODEL_SPEC §11. Promotion edits
+              S2b (force_instances in system_model.json); then re-run Stage 5.7 + gate.
+           Real-world nuance enters the model HERE (or in a FOUNDATION/UPDATE pass) — as sourced
+           forces — never by the narrative LLM at insight time.
 
 ────────────────────── cross-pipeline boundary ──────────────────────────────────
 
@@ -506,8 +539,13 @@ run `promote_annotations.py --dry-run` and explicitly account for every removed 
 
 ### Signal IDs are permanent
 A signal `id` in `registry.json`, once created, is never renamed or deleted.
-Signals tagged `layer: 2` or `layer: 3` are preserved in the registry even before their
-evaluation layer is implemented — they carry `pending` status in history until then.
+
+**The registry holds only Layer-1 *computed* signals as active.** Layer-2/3 findings are NOT registry
+signals — they live in `system_model.json` (force/risk/opportunity/gap nodes) and surface via S3 +
+`derive_opportunities`. The legacy SIBC `layer: 2` inference signals (hand-authored trackers) were
+reconciled into the model and marked `current_status: retired` (2026-06-20) with a `migrated_to` pointer;
+they stay in the registry for id-permanence but are inert. ATM/POS never had registry L2 signals. Net:
+both pipelines' registries are **L1-computed-only-active** — L2 is the model's job, identically for both.
 
 ### Stage 3 self-validates
 `generate_merge.py` auto-runs `validate_sections.py --merged` after writing.
@@ -517,10 +555,12 @@ If post-merge validation fails, the script exits 1 and Stage 4 must not run.
 If Stage 3 produces a valid `sections_merged.json`, Stage 4 always runs.
 Layer 1 signal evaluation is not optional, not skippable, not conditioned on model state.
 
-### Layer 2a evaluate ≠ Layer 2a model update
-Running Stage 5 (Layer 2a evaluate) every period is mandatory when a model exists.
-Updating `system_model.json` (FOUNDATION or UPDATE) is a separate, explicitly triggered step.
-Never conflate the two.
+### Layer 2 evaluation ≠ Layer 2a model update
+The Layer-2 *evaluation* runs **every period** — Stage 5.7 (S3): live L1 signals fire onto the
+existing model (`generate_system_state` + `derive_opportunities`), deterministic. (Stage 5, the LLM
+signal interpretation, also runs every period but is L1 representation, not L2.) Updating
+`system_model.json` itself — adding/sourcing forces (FOUNDATION, UPDATE, or an S4 promotion) — is a
+separate, explicitly triggered authoring step. Never conflate evaluating the model with changing it.
 
 ### Promotion is automated, never manual
 `promote_annotations.py` verifies annotation IDs match before and after write.
