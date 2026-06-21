@@ -2783,6 +2783,30 @@
       "annotation_ids": [
         "co-lending-infrastructure"
       ]
+    },
+    {
+      "id": "gap_infra_subclassification",
+      "tier": "gap",
+      "gap_type": "measurement",
+      "label": "Infrastructure has no sub-classification despite being the largest industrial sub-sector",
+      "description": "Infrastructure is the single largest industrial sub-sector by credit outstanding, yet SIBC provides no breakdown (roads, power, telecom, etc.). Sector-level signals cannot attribute infrastructure credit moves to a specific segment, limiting causal interpretation of the infrastructure cycle.",
+      "claim_type": "fact",
+      "domain": "data_quality",
+      "annotation_ids": [
+        "infrastructure-sub-classification-absent"
+      ]
+    },
+    {
+      "id": "gap_industry_partition",
+      "tier": "gap",
+      "gap_type": "measurement",
+      "label": "Industry sub-types do not sum to the Industry total",
+      "description": "The by-type industry sub-categories in SIBC do not sum exactly to the reported Industry total (residual/unclassified credit). Sub-type shares and YoY computed against the total carry a small unattributed residual; partition-based decompositions are approximate.",
+      "claim_type": "fact",
+      "domain": "data_quality",
+      "annotation_ids": [
+        "industry-type-partition-not-exact"
+      ]
     }
   ],
   "edges": [
