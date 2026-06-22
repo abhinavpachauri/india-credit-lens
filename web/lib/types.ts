@@ -71,6 +71,8 @@ export interface ReportSection {
                                       // Food Credit + Non-food Credit sum to 100% correctly)
   pctLabel:     string;           // label for the % radio button in distribution view
   filterable?:  boolean;          // true → render with IndustryFilter (large series sets)
+  defaultHiddenSeries?: string[]; // trend series off by default in explore mode (e.g. the
+                                  // aggregate "Total" — shown but unselected so sub-series keep scale)
   annotations:  SectionAnnotations;
 }
 

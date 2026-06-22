@@ -18,6 +18,7 @@ interface TrendChartProps {
   pctLabel?:       string;
   mode:            "absolute" | "yoy" | "fy";  // owned by parent controls card
   visibleSeries?:  string[];                   // optional subset — used by IndustryFilter
+  initialHidden?:  string[];                   // series off by default in explore mode (e.g. "Total")
   highlightConfig?: AnnotationEffect | null;   // from active annotation
   preferredMode?:  "absolute" | "yoy" | "fy" | "share" | null; // annotation overrides parent mode ("share" is a distribution view → ignored here)
 }
@@ -41,14 +42,14 @@ type ViewMode = "absolute" | "yoy" | "fy";
 
 export default function TrendChart({
   absoluteData, growthData, fyData = [], seriesNames,
-  pctLabel = "% of Total", mode, visibleSeries, highlightConfig, preferredMode,
+  pctLabel = "% of Total", mode, visibleSeries, initialHidden, highlightConfig, preferredMode,
 }: TrendChartProps) {
   // When an annotation specifies a trend preferredMode, use it — otherwise use the
   // parent-controlled mode. "share" is a distribution view (handled by the parent
   // routing to DistributionChart), so it's ignored here.
   const effectiveMode: ViewMode =
     preferredMode && preferredMode !== "share" ? (preferredMode as ViewMode) : mode;
-  const [hidden, setHidden] = useState<Set<string>>(new Set());
+  const [hidden, setHidden] = useState<Set<string>>(() => new Set(initialHidden ?? []));
 
   // Which series to actually render
   const activeNames = useMemo(

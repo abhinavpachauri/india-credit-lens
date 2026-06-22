@@ -90,6 +90,7 @@ export default function SectionWithAnnotations({ section }: Props) {
         pctLabel={section.pctLabel}
         mode={trendMode}
         visibleSeries={visible}
+        initialHidden={section.defaultHiddenSeries}
         highlightConfig={ins.highlightConfig}
         preferredMode={pm}
       />

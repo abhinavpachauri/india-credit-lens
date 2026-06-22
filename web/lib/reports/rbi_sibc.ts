@@ -787,7 +787,7 @@ function makeSection(
   codes:       string[],
   labels:      Record<string, string>,
   pctLabel:    string,
-  opts:        { psl?: boolean; stmt?: string; distCodes?: string[] } = {},
+  opts:        { psl?: boolean; stmt?: string; distCodes?: string[]; defaultHidden?: string[] } = {},
   filterable = false
 ): ReportSection | null {
   if (codes.length === 0) return null;
@@ -808,6 +808,7 @@ function makeSection(
     fyData,
     seriesNames,
     ...(distributionSeriesNames ? { distributionSeriesNames } : {}),
+    ...(opts.defaultHidden ? { defaultHiddenSeries: opts.defaultHidden } : {}),
     pctLabel,
     filterable,
     annotations: mergeAnnotations(id),
@@ -830,40 +831,45 @@ export function buildSections(rows: CreditRow[]): ReportSection[] {
     { distCodes: ["II", "III"] }
   ));
 
-  // 2 — Main Sectors
+  // 2 — Main Sectors. Aggregate "Total" = Bank Credit (code I) — the official system
+  // total; the 4 sectors undercount it (~5% unclassified, see gap). Off by default so
+  // the sector lines keep their scale; excluded from the % distribution.
   sections.push(makeSection(
     rows,
     "mainSectors", "Main Sectors", "📊", 1,
-    ["1", "2", "3", "4"],
-    { "1": "Agriculture", "2": "Industry", "3": "Services", "4": "Personal Loans" },
-    "% Share"
+    ["1", "2", "3", "4", "I"],
+    { "1": "Agriculture", "2": "Industry", "3": "Services", "4": "Personal Loans", I: "Total" },
+    "% Share",
+    { distCodes: ["1", "2", "3", "4"], defaultHidden: ["Total"] }
   ));
 
-  // 3 — Industry by Size (children of code "2", Statement 1 only)
+  // 3 — Industry by Size (children of code "2", Statement 1 only). Total = code "2".
   const sec3 = childrenOf(rows, "2", { stmt: "Statement 1" });
   sections.push(makeSection(
     rows,
     "industryBySize", "Industry by Size", "🏭", 2,
-    sec3.codes, sec3.labels, "% of Industry",
-    { stmt: "Statement 1" }
+    [...sec3.codes, "2"], { ...sec3.labels, "2": "Total" }, "% of Industry",
+    { stmt: "Statement 1", distCodes: sec3.codes, defaultHidden: ["Total"] }
   ));
 
-  // 4 — Services sub-sectors (children of code "3")
+  // 4 — Services sub-sectors (children of code "3"). Total = code "3".
   const sec4 = childrenOf(rows, "3");
   Object.assign(sec4.labels, LABEL_OVERRIDES["services"] ?? {});
   sections.push(makeSection(
     rows,
     "services", "Services", "🛎️", 3,
-    sec4.codes, sec4.labels, "% of Services"
+    [...sec4.codes, "3"], { ...sec4.labels, "3": "Total" }, "% of Services",
+    { distCodes: sec4.codes, defaultHidden: ["Total"] }
   ));
 
-  // 5 — Personal Loans sub-categories (children of code "4")
+  // 5 — Personal Loans sub-categories (children of code "4"). Total = code "4".
   const sec5 = childrenOf(rows, "4");
   Object.assign(sec5.labels, LABEL_OVERRIDES["personalLoans"] ?? {});
   sections.push(makeSection(
     rows,
     "personalLoans", "Personal Loans", "💳", 4,
-    sec5.codes, sec5.labels, "% of Personal Loans"
+    [...sec5.codes, "4"], { ...sec5.labels, "4": "Total" }, "% of Personal Loans",
+    { distCodes: sec5.codes, defaultHidden: ["Total"] }
   ));
 
   // 6 — Priority Sector Lending (PSL memo rows)
