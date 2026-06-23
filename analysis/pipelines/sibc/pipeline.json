@@ -1,0 +1,52 @@
+{
+  "id": "sibc",
+  "name": "RBI SIBC — Bank Credit",
+  "paths": {
+    "data_dir": "analysis/rbi_sibc",
+    "consolidated_csv": "web/public/data/rbi_sibc_consolidated.csv",
+    "timeline": "analysis/rbi_sibc/timeline.json",
+    "skeleton_profile": "analysis/rbi_sibc/skeleton_profile.json",
+    "system_model": "analysis/rbi_sibc/merged/system_model.json",
+    "sections_merged": "analysis/rbi_sibc/merged/sections_merged.json",
+    "live_annotations": "web/lib/reports/rbi_sibc.ts"
+  },
+  "schema": {
+    "date_column": "date",
+    "value_column": "outstanding_cr",
+    "entity_columns": ["code", "parent_code"]
+  },
+  "modules": {
+    "detect_format": "detect_format.py",
+    "validate_sections": "validate_sections.py",
+    "validate_annotations": "validate_annotations.py",
+    "validate_content": "validate_content.py",
+    "validate_annotation_basis": "validate_annotation_basis.py",
+    "validate_web_series": "validate_web_series.py",
+    "insights": "generate_analysis_report.py",
+    "insights_validate": "validate_sibc_traceability.py"
+  },
+  "gate": [
+    { "id": "tests",            "label": "T.  unit tests (pytest)",        "builtin": "pytest" },
+    { "id": "timeline",         "label": "0.  timeline.json",             "core": "validate_timeline" },
+    { "id": "format",           "label": "0.5 format_report.json",        "pipeline": "detect_format", "skip_if": "merged" },
+    { "id": "sections",         "label": "1.  sections.json",             "pipeline": "validate_sections", "args": ["$SECTIONS_MERGED", "--merged"] },
+    { "id": "csv_integrity",    "label": "1b. web CSV integrity",         "builtin": "csv_integrity" },
+    { "id": "annotations_draft","label": "2.  annotations_draft.ts",      "pipeline": "validate_annotations", "args": ["$DATA_DIR/merged/annotations_draft.ts"], "skip_if": "missing:analysis/rbi_sibc/merged/annotations_draft.ts" },
+    { "id": "content",          "label": "2b. content accuracy",          "pipeline": "validate_content", "args": ["--merged"] },
+    { "id": "annotation_basis", "label": "2d. annotation basis",          "pipeline": "validate_annotation_basis" },
+    { "id": "signal_history",   "label": "2e. signal history integrity",  "core": "validate_signal_history" },
+    { "id": "freshness",        "label": "2f. signal freshness (DB)",     "core": "check_signal_freshness", "note": "signals.db" },
+    { "id": "traceability",     "label": "2g. insight traceability",      "pipeline": "insights_validate", "note": "traceability" },
+    { "id": "insights",         "label": "5.5 generate_analysis_report",  "pipeline": "insights" },
+    { "id": "annotations_live", "label": "3.  annotations live (rbi_sibc.ts)", "pipeline": "validate_annotations", "args": ["$LIVE_ANNOTATIONS", "--sections", "$SECTIONS_MERGED"] },
+    { "id": "web_series",       "label": "3b. web series names",          "pipeline": "validate_web_series" },
+    { "id": "skeleton",         "label": "4-pre. skeleton regen",         "core": "skeleton" },
+    { "id": "system_model",     "label": "4.  system_model.json",         "core": "validate_system_model", "requires": ["skeleton"] },
+    { "id": "system_state",     "label": "4b. system_state (S3)",         "core": "system_state", "requires": ["system_model"] },
+    { "id": "opportunities",    "label": "4c. opportunities (live)",      "core": "derive_opportunities", "requires": ["system_state"] },
+    { "id": "ecosystem",        "label": "4d. ecosystem projection",      "core": "compose_ecosystem" },
+    { "id": "feed",             "label": "4e. opportunities UI feed",     "core": "opportunities_feed", "requires": ["opportunities"] },
+    { "id": "opp_traceability", "label": "4f. opportunity traceability",  "core": "opportunity_traceability", "note": "opportunit" },
+    { "id": "build",            "label": "6.  tsc + npm run build",       "builtin": "web_build", "skip_if": "--skip-build" }
+  ]
+}
