@@ -285,6 +285,14 @@ principle); the plan groups scripts into `core/` (generic engines + one manifest
 35 subprocess refs in 4 files = tractable. Design on the 2 current pipelines; **validate with source #3** when
 it lands (don't co-change structure + add a source). Phased, git-revertible, verify gates each phase.
 
+**Queued — engineering-health / technical-design track.** See `HANDOFF_TECH_QUALITY.md`. We've optimised for
+*functional* correctness, not *technical*: gaps are an authoritative `ARCHITECTURE.md` (data-flow + lineage +
+module-dep + invariants — PIPELINE_ARCHITECTURE is stage-prose only), **unit tests for the deterministic core**
+(today: 1 file/9 tests, S3 only — the compute/date-rules/traceability/precompute are untested; highest
+correctness ROI; wire pytest into the gate), a perf pass, READMEs + naming consistency, and a **recurring
+design-system-coherence audit** (SIBC vs payments DLS drift). Recommended order: ARCHITECTURE.md → core unit
+tests → restructure → perf/READMEs → design-coherence cadence.
+
 **Open Notes:**
 - **Layer 2 opportunity traceability — Check 4f now STRICT (done 2026-06-20):** `validate_opportunity_traceability.py`
   hard-fails in **both** gates. `derive_opportunities` emits `evidence_all` (the driver's full declared signal
