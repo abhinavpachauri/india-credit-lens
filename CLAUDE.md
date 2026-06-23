@@ -278,20 +278,15 @@ bottleneck is distribution. Lead with the **payments pipeline** framed for finte
 reachable network), per the `project_distribution_reality` memory. Workflow: `analysis/newsletter/CLAUDE.md`
 → `generate_linkedin.py` (7-post packages). It's the one exception path not yet on the unified pipeline.
 
-**Queued — `analysis/` restructure for scalability (design done, execute in a fresh full-context session).**
-See `HANDOFF_RESTRUCTURE.md`. The ingestion/gate layer is copy-per-pipeline (violates the engineering
-principle); the plan groups scripts into `core/` (generic engines + one manifest-driven gate runner) +
-`pipelines/{name}/` (custom 10%) + `guards/`/`crosssource/`/`legacy/`. Low coupling, ~12 path-depth fixes +
-35 subprocess refs in 4 files = tractable. Design on the 2 current pipelines; **validate with source #3** when
-it lands (don't co-change structure + add a source). Phased, git-revertible, verify gates each phase.
-
-**Queued — engineering-health / technical-design track.** See `HANDOFF_TECH_QUALITY.md`. We've optimised for
-*functional* correctness, not *technical*: gaps are an authoritative `ARCHITECTURE.md` (data-flow + lineage +
-module-dep + invariants — PIPELINE_ARCHITECTURE is stage-prose only), **unit tests for the deterministic core**
-(today: 1 file/9 tests, S3 only — the compute/date-rules/traceability/precompute are untested; highest
-correctness ROI; wire pytest into the gate), a perf pass, READMEs + naming consistency, and a **recurring
-design-system-coherence audit** (SIBC vs payments DLS drift). Recommended order: ARCHITECTURE.md → core unit
-tests → restructure → perf/READMEs → design-coherence cadence.
+**Queued — engineering-health / technical-design track (non-functional).** See `HANDOFF_TECH_QUALITY.md` (the
+single authoritative backlog; the `analysis/` restructure is §4 of it). We've optimised for *functional*
+correctness, not *technical*. Gaps: authoritative `ARCHITECTURE.md` (data-flow + lineage + module-dep +
+invariants — PIPELINE_ARCHITECTURE is stage-prose only); **unit tests for the deterministic core** (today:
+1 file/9 tests, S3 only — compute/date-rules/traceability/precompute untested; highest correctness ROI; wire
+pytest into the gate); the **`analysis/` restructure** (ingestion/gate layer is copy-per-pipeline → `core/`
+generic engines + manifest-driven gate + `pipelines/{name}/`; design on the 2 pipelines, **validate with
+source #3**; phased, git-revertible); perf pass; READMEs + naming; **recurring design-system-coherence audit**
+(SIBC vs payments DLS drift). Order: ARCHITECTURE.md → core tests → restructure → perf/READMEs → design cadence.
 
 **Open Notes:**
 - **Layer 2 opportunity traceability — Check 4f now STRICT (done 2026-06-20):** `validate_opportunity_traceability.py`
