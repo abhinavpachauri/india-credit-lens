@@ -167,6 +167,46 @@ reusable `core/` engine or a `pipelines/upi/` module — localized, never an `if
 4. **Implementation order:** build `core/gate.py` + both manifests and prove byte-identical
    summaries against the current gates FIRST (on the current flat layout), THEN do the P1/P2
    file moves — so the convergence is verified before relocation. (Inverts the handoff's
-   P1→P3 order; safer because gate parity is checked on a known-good tree.)
+   P1→P3 order; safer because gate parity is checked on a known-good tree.) **DONE 2026-06-23
+   (commit 232fe40): gate.py + both manifests built, verdict parity verified on both gates.**
+
+## P1/P2 file-move execution map (coupling verified 2026-06-23 — for the fresh session)
+
+The moves are a COORDINATED CLUSTER, not isolated files. Verified surface:
+
+- **Import hub:** `generate_skeleton` is imported `as gs` by **9 modules**: compose_ecosystem,
+  derive_cross_links, validate_composition, generate_opportunities_feed,
+  generate_opportunity_narrative, generate_system_state, derive_opportunities,
+  validate_system_model, run_inference. Moving it ⇒ rewrite all 9 `import generate_skeleton`
+  sites (→ `from core import generate_skeleton as gs`; KEEP the filename to avoid rename churn).
+- **All other generic engines are subprocess-only (imported_by=0)** → moving them is pure
+  path-string updates. `check_signal_freshness` also imports `signals.db` + `signals.compute.engine`
+  (those stay under signals/, unaffected).
+- **Subprocess path-refs live in exactly:** `core/gate.py` (CORE_MAP — 11 entries),
+  `run_evals.py`, `run_atm_pos_evals.py`, `check_derived_fresh.py`, `git_hooks/pre-commit`,
+  `generate_merge.py`, `hook_validate.py`.
+- **sys.path note:** every moved script must carry the P0 bootstrap (adds `<repo>/analysis`
+  to sys.path) so `from core import …` / `from crosssource import …` resolve as namespace
+  packages from any depth. Verify each mover has it before moving.
+
+**Target dirs:** core/ ← generate_skeleton, validate_system_model, generate_system_state,
+derive_opportunities, generate_chart_series, generate_signal_history, run_inference.
+guards/ ← check_signal_freshness, validate_signal_history, check_derived_fresh.
+crosssource/ ← derive_cross_links, compose_ecosystem, validate_composition,
+generate_opportunities_feed, generate_opportunity_narrative.
+
+**Batch plan (verify the full matrix — both legacy gates + gate.py both pipelines +
+check_derived_fresh + reconcile + build + 74 tests — and commit after EACH):**
+1. `generate_skeleton` → core/ + rewrite the 9 import sites + path-refs. (Highest coupling; do first, alone.)
+2. Remaining core/ engines (subprocess-only) + repoint CORE_MAP + the 4 ref files.
+3. guards/ + crosssource/ groups + repoint.
+4. Achieve full-mode parity (SIBC per-period, ATM/POS xlsx-ingest), then retire run_evals /
+   run_atm_pos_evals (point any callers at gate.py).
+5. Behavior-merge the two diverged `extract_numbers` → core/traceability.py (SIBC strips
+   FY/ISO/quarter; ATM/POS handles B/M/K/x/% suffixes + REL_TOL 0.005 vs 0.02 — write
+   ATM/POS traceability tests FIRST, then a parameterized superset).
+6. pipelines/{id}/ for the per-pipeline modules + update each manifest's `modules` map.
+7. legacy/ the retired scripts; update docs (CLAUDE.md, PIPELINE_ARCHITECTURE.md, per-period
+   command lists) + add core/ to the architecture discoverer SCAN_DIRS.
 ```
 ```
