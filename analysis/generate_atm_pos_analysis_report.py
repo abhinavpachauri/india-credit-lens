@@ -18,7 +18,9 @@ import re
 import sys
 from pathlib import Path
 
-REPO      = Path(__file__).resolve().parent.parent
+import sys
+sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
+from core.paths import ROOT as REPO
 ANAL      = REPO / "analysis"
 EVALS     = ANAL / "signals" / "evaluations"
 INSIGHTS  = REPO / "web" / "public" / "data" / "atm_pos_insights.json"

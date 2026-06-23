@@ -22,7 +22,9 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from signals.query import signal_numbers, scan_distribution, _signal_type   # noqa: E402
 
-REPO  = Path(__file__).resolve().parent.parent
+import sys
+sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
+from core.paths import ROOT as REPO
 ANAL  = REPO / "analysis"
 SIG   = ANAL / "signals"
 EVALS = SIG / "evaluations"

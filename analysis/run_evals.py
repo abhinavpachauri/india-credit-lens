@@ -56,7 +56,9 @@ from datetime import date
 
 # ── Repo root ─────────────────────────────────────────────────────────────────
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
+import sys
+sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
+from core.paths import ROOT as REPO_ROOT
 ANALYSIS  = REPO_ROOT / "analysis"
 WEB       = REPO_ROOT / "web"
 

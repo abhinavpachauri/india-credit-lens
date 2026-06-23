@@ -37,7 +37,9 @@ GROWTH_TOLERANCE = 1.0   # ± percentage points (e.g. 13.8% cited, 13.7% actual 
 VALUE_TOLERANCE  = 0.05  # ± 5% of cited value (catches rounding to 1dp in L Cr)
 
 # ── Paths ─────────────────────────────────────────────────────────────────────
-REPO   = Path(__file__).resolve().parent.parent
+import sys
+sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
+from core.paths import ROOT as REPO
 ANALYSIS = REPO / "analysis"
 SIBC_DIR = ANALYSIS / "rbi_sibc"
 

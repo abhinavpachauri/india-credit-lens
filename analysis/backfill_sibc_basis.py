@@ -16,7 +16,9 @@ import sys
 import subprocess
 from pathlib import Path
 
-ROOT     = Path(__file__).resolve().parent.parent
+import sys
+sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
+from core.paths import ROOT
 ANN_FILE = ROOT / "analysis/rbi_sibc/merged/annotations_merged.ts"
 
 # ── Basis data keyed by annotation id ─────────────────────────────────────────

@@ -37,7 +37,9 @@ from pathlib import Path
 
 import pandas as pd
 
-REPO     = Path(__file__).resolve().parent.parent.parent.parent
+import sys
+sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
+from core.paths import ROOT as REPO
 CSV      = REPO / "web" / "public" / "data" / "rbi_sibc_consolidated.csv"
 TIMELINE = REPO / "analysis" / "rbi_sibc" / "timeline.json"
 

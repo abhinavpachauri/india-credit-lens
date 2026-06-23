@@ -36,7 +36,9 @@ import pandas as pd
 
 # ── Repo paths ────────────────────────────────────────────────────────────────
 
-REPO_ROOT    = Path(__file__).resolve().parent.parent
+import sys
+sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
+from core.paths import ROOT as REPO_ROOT
 ANALYSIS     = REPO_ROOT / "analysis"
 RBI_SIBC_LIB = ANALYSIS / "rbi_sibc" / "lib"
 WEB_DATA     = REPO_ROOT / "web" / "public" / "data"

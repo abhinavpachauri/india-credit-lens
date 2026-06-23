@@ -295,7 +295,9 @@ def validate(
 # ── Output ────────────────────────────────────────────────────────────────────
 
 def main():
-    repo = Path(__file__).parent.parent
+    import sys
+    sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
+    from core.paths import ROOT as repo
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--csv",         default=str(repo / "web/public/data/rbi_sibc_consolidated.csv"))
     parser.add_argument("--overrides",   default=str(repo / "web/lib/reports/rbi_sibc_label_overrides.json"))

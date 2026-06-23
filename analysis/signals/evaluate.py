@@ -27,7 +27,9 @@ import time
 from datetime import datetime
 from pathlib import Path
 
-REPO        = Path(__file__).resolve().parent.parent.parent
+import sys
+sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
+from core.paths import ROOT as REPO
 PROMPTS_DIR = Path(__file__).parent / "prompts"
 EVALS_DIR   = Path(__file__).parent / "evaluations"
 

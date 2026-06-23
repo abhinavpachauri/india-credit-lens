@@ -15,7 +15,9 @@ import re
 import sys
 from pathlib import Path
 
-ROOT       = Path(__file__).parent.parent
+import sys
+sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
+from core.paths import ROOT
 MERGED_TS  = ROOT / "analysis/rbi_sibc/merged/annotations_merged.ts"
 LIVE_TS    = ROOT / "web/lib/reports/rbi_sibc.ts"
 

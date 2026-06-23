@@ -8,8 +8,12 @@ from signals.db and formats them into a compact text payload per domain.
 from __future__ import annotations
 import json
 import sqlite3
+import sys
 from functools import lru_cache
 from pathlib import Path
+
+sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
+from core.paths import ANALYSIS
 
 
 # ── Period label translation ──────────────────────────────────────────────────
@@ -22,7 +26,7 @@ from pathlib import Path
 # true data date, so this is an identity no-op for them.
 
 _TIMELINES: dict[str, Path] = {
-    "sibc": Path(__file__).resolve().parent.parent / "rbi_sibc" / "timeline.json",
+    "sibc": ANALYSIS / "rbi_sibc" / "timeline.json",
 }
 
 

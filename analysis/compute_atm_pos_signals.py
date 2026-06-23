@@ -24,7 +24,9 @@ from pathlib import Path
 
 # ── Paths ─────────────────────────────────────────────────────────────────────
 
-ROOT      = Path(__file__).parent.parent
+import sys
+sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
+from core.paths import ROOT
 CSV_PATH  = ROOT / "web/public/data/atm_pos_consolidated.csv"
 OUT_PATH  = ROOT / "analysis/rbi_atm_pos/signals.json"
 WEB_PATH  = ROOT / "web/public/data/atm_pos_signals.json"
