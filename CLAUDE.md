@@ -278,6 +278,13 @@ bottleneck is distribution. Lead with the **payments pipeline** framed for finte
 reachable network), per the `project_distribution_reality` memory. Workflow: `analysis/newsletter/CLAUDE.md`
 → `generate_linkedin.py` (7-post packages). It's the one exception path not yet on the unified pipeline.
 
+**Queued — `analysis/` restructure for scalability (design done, execute in a fresh full-context session).**
+See `HANDOFF_RESTRUCTURE.md`. The ingestion/gate layer is copy-per-pipeline (violates the engineering
+principle); the plan groups scripts into `core/` (generic engines + one manifest-driven gate runner) +
+`pipelines/{name}/` (custom 10%) + `guards/`/`crosssource/`/`legacy/`. Low coupling, ~12 path-depth fixes +
+35 subprocess refs in 4 files = tractable. Design on the 2 current pipelines; **validate with source #3** when
+it lands (don't co-change structure + add a source). Phased, git-revertible, verify gates each phase.
+
 **Open Notes:**
 - **Layer 2 opportunity traceability — Check 4f now STRICT (done 2026-06-20):** `validate_opportunity_traceability.py`
   hard-fails in **both** gates. `derive_opportunities` emits `evidence_all` (the driver's full declared signal
