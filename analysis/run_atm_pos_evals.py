@@ -396,6 +396,14 @@ def main():
 
     all_results = []
 
+    # Deterministic-core unit tests (shared across pipelines) — run first.
+    ok, out = run("unit tests",
+                  [sys.executable, "-m", "pytest", str(ANALYSIS / "tests"), "-q"])
+    tnote = next((ln for ln in reversed(out.splitlines()) if ln.strip()), "")
+    all_results.append(("T.  unit tests (pytest)", ok, tnote[:60]))
+    if not ok:
+        print(out, file=sys.stderr)
+
     if args.xlsx:
         # Sort files by derived period date so older months go first
         files = sorted(args.xlsx, key=lambda f: (period_from_xlsx(f) or ""))

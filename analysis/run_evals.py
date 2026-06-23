@@ -429,6 +429,17 @@ def main():
 
     results = []
 
+    # ── Check T: deterministic-core unit tests (pytest) ───────────────────────
+    # The compute/date-normalisation/traceability core is consistency-gated but was
+    # otherwise unverified; these golden tests catch wrong-from-the-start logic.
+    passed, out, err = run_check(
+        "unit tests", [sys.executable, "-m", "pytest", str(ANALYSIS / "tests"), "-q"])
+    tnote = next((ln for ln in reversed((out + err).splitlines()) if ln.strip()), "")
+    results.append(("T.  unit tests (pytest)", passed, tnote[:60]))
+    if not passed:
+        print(out)
+        print(err, file=sys.stderr)
+
     # ── Check 0: timeline.json ────────────────────────────────────────────────
     passed, out, err = check_timeline()
     notes = one_line_summary(out, err, passed)
