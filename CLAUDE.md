@@ -260,15 +260,23 @@ chart highlight, cross-system 2-chart card) + plain-English narrative (preserved
 `current_status` synced (scan/bank-scan/share roll-up in `seed`+`append`; 0 unknowns). The whole
 `S1 → S2a/S2b → S3 → opportunities → ecosystem → UI` chain runs in the gates; S4 is a manual review step.
 
-**Done (this session — traceability + freshness, all pushed):** deterministic **signals.db freshness guard**
-(Check 2f/5b2 — recompute every period from CSV, fail on drift; in both gates + pre-commit) · FY-acceleration
-redesigned as an **annual** metric carrying its two FY-end YoY component rates (`fy_yoy` entity rows) ·
-**traceable inference chains** + ONE **shared insight schema** (`basis.{facts, inferences}`) across both pipelines ·
-**Check 2g** insight traceability (every number in body/chain/implication traces to signals.db; scalar hard-fail) ·
-SIBC scan insights + all ATM/POS insights **deterministic** (grounded by construction); SIBC scalars LLM + validated ·
-ATM/POS Stage 4c now validates the chain too; payments card reads `basis.inferences`.
+**Done (2026-06-23 session — dashboard/data front closed out, all pushed `63e07f9 → 3b7edc0`):**
+payments **YoY-trend insights** + a real YoY chart mode (parity with SIBC); YoY **sourced from the registered
+`*-yoy` signals.db** (no parallel recompute; drift-guarded) · payments **LLM-representation aligned with SIBC**
+(scalar = LLM eval prose via API, scan/share/composed = deterministic; **11 cards LLM-represented**; 6 new L1
+streak/ratio signals added) · **Check 4f STRICT in both gates** (`evidence_all` scope; L2 = signals-on-model,
+LLM narrates only) · **registry now L1-computed-only-active on both pipelines** (SIBC's 34 legacy L2 inference
+stubs retired/migrated → 2 new gap nodes) · **payments perf**: precomputed compact `atm_pos_chart_series.json`
+(330 KB) replaces the 4.6 MB client-side CSV parse (`generate_chart_series.py`, compute-once-ship-compact) ·
+**SIBC aggregate "Total" per card** (official parent row, off by default) · S4 + L1/L2 ingestion stages
+documented in PIPELINE_ARCHITECTURE.md (Stage 5.7, Stage 8). Both pipelines now aligned **by construction**.
 
-**Latest session handoff:** `HANDOFF_2026-06-20.md` (full arc + prioritised open items).
+**Latest session handoff:** `HANDOFF_2026-06-23.md` (full arc + open items + the LinkedIn pivot).
+
+**Immediately next — LinkedIn content for site engagement (new session).** The engine is mature; the
+bottleneck is distribution. Lead with the **payments pipeline** framed for fintech/product builders (the
+reachable network), per the `project_distribution_reality` memory. Workflow: `analysis/newsletter/CLAUDE.md`
+→ `generate_linkedin.py` (7-post packages). It's the one exception path not yet on the unified pipeline.
 
 **Open Notes:**
 - **Layer 2 opportunity traceability — Check 4f now STRICT (done 2026-06-20):** `validate_opportunity_traceability.py`
