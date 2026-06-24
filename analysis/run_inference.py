@@ -26,7 +26,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-import generate_skeleton as gs
+from core import generate_skeleton as gs
 
 ROOT = gs.ROOT
 OUT_DIR = ROOT / "analysis" / "s4_proposals"

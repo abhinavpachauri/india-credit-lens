@@ -38,7 +38,7 @@ CORE_MAP = {
     "validate_timeline":        ("validate_timeline.py", ["--path", "$TIMELINE"], "ANALYSIS"),
     "validate_signal_history":  ("validate_signal_history.py", [], "ROOT"),
     "check_signal_freshness":   ("check_signal_freshness.py", ["--pipeline", "$ID"], "ROOT"),
-    "skeleton":                 ("generate_skeleton.py", ["--pipeline", "$ID"], "ROOT"),
+    "skeleton":                 ("core/generate_skeleton.py", ["--pipeline", "$ID"], "ROOT"),
     "validate_system_model":    ("validate_system_model.py", ["--pipeline", "$ID"], "ANALYSIS"),
     "system_state":             ("generate_system_state.py", ["--pipeline", "$ID", "--period", "$LATEST"], "ROOT"),
     "derive_opportunities":     ("derive_opportunities.py", ["--pipeline", "$ID", "--period", "$LATEST"], "ROOT"),

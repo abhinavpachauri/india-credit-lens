@@ -15,7 +15,7 @@ import json
 import sys
 from pathlib import Path
 
-import generate_skeleton as gs
+from core import generate_skeleton as gs
 
 ROOT = gs.ROOT
 CROSS = ROOT / "analysis" / "cross_source"

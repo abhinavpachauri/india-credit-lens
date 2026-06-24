@@ -299,7 +299,7 @@ def check_system_model():
     system_model.json against SYSTEM_MODEL_SPEC v3.0."""
     gen_ok, gen_out = run(
         "skeleton",
-        [sys.executable, str(ANALYSIS / "generate_skeleton.py"), "--pipeline", "atm_pos"],
+        [sys.executable, str(ANALYSIS / "core" / "generate_skeleton.py"), "--pipeline", "atm_pos"],
     )
     if not gen_ok:
         return False, (gen_out.splitlines()[-1] if gen_out else "skeleton gen failed")[:60]

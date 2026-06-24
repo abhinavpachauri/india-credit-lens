@@ -73,7 +73,7 @@ def regenerate(quiet):
     ok = True
     for p in ("sibc", "atm_pos"):
         per = latest_period(p)
-        ok &= run(f"skeleton {p}", ["generate_skeleton.py", "--pipeline", p], quiet)
+        ok &= run(f"skeleton {p}", ["core/generate_skeleton.py", "--pipeline", p], quiet)
         ok &= run(f"system_state {p}", ["generate_system_state.py", "--pipeline", p, "--period", per], quiet)
         ok &= run(f"opportunities {p}", ["derive_opportunities.py", "--pipeline", p, "--period", per], quiet)
     ok &= run("compose_ecosystem", ["compose_ecosystem.py"], quiet)

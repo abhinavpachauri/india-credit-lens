@@ -23,7 +23,7 @@ from collections import defaultdict
 from itertools import combinations
 from pathlib import Path
 
-import generate_skeleton as gs
+from core import generate_skeleton as gs
 
 ROOT = gs.ROOT
 OUT_DIR = ROOT / "analysis" / "cross_source"

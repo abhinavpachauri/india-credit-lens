@@ -26,7 +26,7 @@ import sqlite3
 import sys
 from collections import defaultdict
 
-import generate_skeleton as gs
+from core import generate_skeleton as gs
 
 DB = gs.ANALYSIS / "signals" / "signals.db"
 # Direction map covering every status the L1 compute layer can emit: registry status_rules

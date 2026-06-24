@@ -32,7 +32,7 @@ import sys
 from pathlib import Path
 
 # reuse the deterministic profile/CSV plumbing from the emitter
-import generate_skeleton as gs  # noqa: E402  (same dir, run from analysis/ or repo root)
+from core import generate_skeleton as gs  # noqa: E402  (same dir, run from analysis/ or repo root)
 
 ROOT = gs.ROOT
 ADDITIVITY_TOL_PCT = 0.5

@@ -19,7 +19,7 @@ import json
 import sys
 from pathlib import Path
 
-import generate_skeleton as gs
+from core import generate_skeleton as gs
 
 # old draft entity-id  ->  (statement/partition, code) in the new skeleton
 ENTITY_MAPS = {

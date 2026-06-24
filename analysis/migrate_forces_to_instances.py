@@ -21,7 +21,7 @@ import argparse
 import json
 import sys
 
-import generate_skeleton as gs
+from core import generate_skeleton as gs
 
 FORCE_TO_CHANNEL = {
     "sibc": {

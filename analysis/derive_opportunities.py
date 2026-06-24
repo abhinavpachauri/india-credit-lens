@@ -23,7 +23,7 @@ import json
 import sqlite3
 import sys
 
-import generate_skeleton as gs
+from core import generate_skeleton as gs
 
 DB = gs.ANALYSIS / "signals" / "signals.db"
 NONFLAT = {"strengthening", "weakening", "declining", "active"}

@@ -20,7 +20,7 @@ import sqlite3
 import subprocess
 import sys
 
-import generate_skeleton as gs
+from core import generate_skeleton as gs
 
 ROOT = gs.ROOT
 FEED = ROOT / "web" / "public" / "data" / "opportunities_feed.json"

@@ -271,7 +271,7 @@ def check_system_model(period_dir):
     validate_system_model), and subsystems/mermaid checks — all retired with the v3 model."""
     gen = run_check(
         "skeleton",
-        [sys.executable, str(ANALYSIS / "generate_skeleton.py"), "--pipeline", "sibc"],
+        [sys.executable, str(ANALYSIS / "core" / "generate_skeleton.py"), "--pipeline", "sibc"],
         cwd=REPO_ROOT,
     )
     if not gen[0]:

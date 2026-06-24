@@ -14,7 +14,7 @@ Exit:   0 = pass, 1 = error(s).
 import json
 import sys
 
-import generate_skeleton as gs
+from core import generate_skeleton as gs
 
 ROOT = gs.ROOT
 

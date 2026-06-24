@@ -13,7 +13,7 @@ import json
 import sqlite3
 from pathlib import Path
 
-import generate_skeleton as gs
+from core import generate_skeleton as gs
 
 ROOT = gs.ROOT
 OUT = ROOT / "web" / "public" / "data" / "opportunities_feed.json"
