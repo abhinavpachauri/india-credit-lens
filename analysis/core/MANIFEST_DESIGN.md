@@ -230,9 +230,23 @@ check_derived_fresh + reconcile + build + 74 tests — and commit after EACH):**
    - Real remaining work (not a data blocker): (a) gate.py needs `--xlsx` plumbing to thread
      the file path into the format/extract stages; (b) SIBC manifest hardcodes `--merged` in
      several stage args, so per-period (non-merged) mode needs manifest work.
-   **Cutover plan:** add the `--xlsx` plumbing + per-period manifest args, prove verdict parity
-   by re-ingesting an existing period under both runners, THEN retire the legacy gates. Can be
-   done now OR folded into the next real ingestion (whichever comes first).
+   **4a ✅ DONE (5d95ea0):** gate.py `--xlsx` ingest mode + manifest `period_resolver`
+   (extract `--print-period`) + `$XLSX` stage args. ATM/POS ingest parity PROVEN by
+   re-ingesting 2026-04-30 under both runners → both ALL STAGES PASSED, same stage set,
+   idempotent. So gate.py now covers **sibc --merged · atm_pos --period revalidate ·
+   atm_pos --xlsx ingest**.
+   **4b/4c STILL OPEN — retirement deferred, by design:** the one remaining mode is SIBC
+   **per-period (non-merged)**, which is an AUTHORING-time check (validates a mid-authoring
+   `{period}/annotations_draft.ts`). It can't be parity-tested on committed state — the legacy
+   `run_evals --period 2026-04-30` itself FAILS there because a finalized period has no draft.
+   It needs (a) mode-conditional manifest args (sections/content stages drop `--merged` +
+   point at `{period}/sections.json`) and (b) a live authoring period to verify against.
+   **Cutover plan:** add the SIBC per-period manifest mode and prove it during the NEXT SIBC
+   authoring pass (where a real draft exists), THEN retire run_evals/run_atm_pos_evals + sweep
+   the per-period command lists in CLAUDE.md / CLAUDE.local.md / PIPELINE_ARCHITECTURE.md /
+   rbi_atm_pos/CLAUDE.md. Retiring now would strand the SIBC authoring check, so it waits.
+   NB: detect (both pipelines) is interactive-by-design (format-change / date-remap A/B gate);
+   gate.py feeds it via inherited stdin — unchanged, not bypassed.
 5. ✅ **DONE (e905f58)** — core/traceability.py: extract_numbers/matches/ratio_matches
    param'd by a NumberPolicy (SIBC vs ATM_POS). Both validators are now thin wrappers (names
    preserved). Tests-first (NEW test_traceability_atm_pos.py, 13 golden) + equivalence-proved
