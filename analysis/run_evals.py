@@ -278,7 +278,7 @@ def check_system_model(period_dir):
         return gen
     val = run_check(
         "system_model",
-        [sys.executable, str(ANALYSIS / "validate_system_model.py"), "--pipeline", "sibc"],
+        [sys.executable, str(ANALYSIS / "core" / "validate_system_model.py"), "--pipeline", "sibc"],
         cwd=ANALYSIS,
     )
     # combine: surface generator output alongside validation output
@@ -620,8 +620,8 @@ def main():
     latest = latest_db_period("sibc")
     if latest:
         for label, script, extra in [
-            ("4b. system_state (S3)", "generate_system_state.py", ["--pipeline", "sibc", "--period", latest]),
-            ("4c. opportunities (live)", "derive_opportunities.py", ["--pipeline", "sibc", "--period", latest]),
+            ("4b. system_state (S3)", "core/generate_system_state.py", ["--pipeline", "sibc", "--period", latest]),
+            ("4c. opportunities (live)", "core/derive_opportunities.py", ["--pipeline", "sibc", "--period", latest]),
             ("4d. ecosystem projection", "compose_ecosystem.py", []),
             ("4e. opportunities UI feed", "generate_opportunities_feed.py", []),
         ]:

@@ -31,8 +31,11 @@ import argparse
 import sys
 from pathlib import Path
 
+# Bootstrap: put <repo>/analysis on sys.path so `from core import …` resolves from any
+# cwd now that this script lives under core/. Move-safe via .git walk (see core/paths.py).
+sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
 # reuse the deterministic profile/CSV plumbing from the emitter
-from core import generate_skeleton as gs  # noqa: E402  (same dir, run from analysis/ or repo root)
+from core import generate_skeleton as gs  # noqa: E402
 
 ROOT = gs.ROOT
 ADDITIVITY_TOL_PCT = 0.5

@@ -74,12 +74,12 @@ def regenerate(quiet):
     for p in ("sibc", "atm_pos"):
         per = latest_period(p)
         ok &= run(f"skeleton {p}", ["core/generate_skeleton.py", "--pipeline", p], quiet)
-        ok &= run(f"system_state {p}", ["generate_system_state.py", "--pipeline", p, "--period", per], quiet)
-        ok &= run(f"opportunities {p}", ["derive_opportunities.py", "--pipeline", p, "--period", per], quiet)
+        ok &= run(f"system_state {p}", ["core/generate_system_state.py", "--pipeline", p, "--period", per], quiet)
+        ok &= run(f"opportunities {p}", ["core/derive_opportunities.py", "--pipeline", p, "--period", per], quiet)
     ok &= run("compose_ecosystem", ["compose_ecosystem.py"], quiet)
     ok &= run("derive_cross_links", ["derive_cross_links.py"], quiet)
     ok &= run("opportunities_feed", ["generate_opportunities_feed.py"], quiet)
-    ok &= run("chart_series atm_pos", ["generate_chart_series.py", "--pipeline", "atm_pos"], quiet)
+    ok &= run("chart_series atm_pos", ["core/generate_chart_series.py", "--pipeline", "atm_pos"], quiet)
     return ok
 
 

@@ -22,8 +22,12 @@ import argparse
 import json
 import sqlite3
 import sys
+from pathlib import Path
 
-from core import generate_skeleton as gs
+# Bootstrap: put <repo>/analysis on sys.path so `from core import …` resolves from any
+# cwd now that this script lives under core/. Move-safe via .git walk (see core/paths.py).
+sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
+from core import generate_skeleton as gs  # noqa: E402
 
 DB = gs.ANALYSIS / "signals" / "signals.db"
 NONFLAT = {"strengthening", "weakening", "declining", "active"}

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Unit tests for analysis/generate_system_state.py (stratum S3).
+Unit tests for analysis/core/generate_system_state.py (stratum S3).
 
 These cover the semantic logic the gate validators cannot catch — they would have
 caught the two defects fixed in the 2026-06-13 review:
@@ -16,7 +16,7 @@ from pathlib import Path
 import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-import generate_system_state as g3  # noqa: E402
+from core import generate_system_state as g3  # noqa: E402
 
 
 # --------------------------------------------------------------------------- #

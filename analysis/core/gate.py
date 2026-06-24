@@ -39,13 +39,13 @@ CORE_MAP = {
     "validate_signal_history":  ("validate_signal_history.py", [], "ROOT"),
     "check_signal_freshness":   ("check_signal_freshness.py", ["--pipeline", "$ID"], "ROOT"),
     "skeleton":                 ("core/generate_skeleton.py", ["--pipeline", "$ID"], "ROOT"),
-    "validate_system_model":    ("validate_system_model.py", ["--pipeline", "$ID"], "ANALYSIS"),
-    "system_state":             ("generate_system_state.py", ["--pipeline", "$ID", "--period", "$LATEST"], "ROOT"),
-    "derive_opportunities":     ("derive_opportunities.py", ["--pipeline", "$ID", "--period", "$LATEST"], "ROOT"),
+    "validate_system_model":    ("core/validate_system_model.py", ["--pipeline", "$ID"], "ANALYSIS"),
+    "system_state":             ("core/generate_system_state.py", ["--pipeline", "$ID", "--period", "$LATEST"], "ROOT"),
+    "derive_opportunities":     ("core/derive_opportunities.py", ["--pipeline", "$ID", "--period", "$LATEST"], "ROOT"),
     "compose_ecosystem":        ("compose_ecosystem.py", [], "ROOT"),
     "opportunities_feed":       ("generate_opportunities_feed.py", [], "ROOT"),
     "opportunity_traceability": ("validate_opportunity_traceability.py", ["--strict"], "ROOT"),
-    "chart_series":             ("generate_chart_series.py", ["--pipeline", "$ID"], "ROOT"),
+    "chart_series":             ("core/generate_chart_series.py", ["--pipeline", "$ID"], "ROOT"),
 }
 
 

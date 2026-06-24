@@ -32,7 +32,7 @@ def main():
     for pipe, cfg in gs.PIPELINES.items():
         st = latest_state(cfg)
         if not st:
-            print(f"  ⚠ no system_state for {pipe} — run generate_system_state.py first", file=sys.stderr)
+            print(f"  ⚠ no system_state for {pipe} — run core/generate_system_state.py first", file=sys.stderr)
             continue
         periods[pipe] = st["_meta"]["period"]
         for urn, s in st["entity_states"].items():

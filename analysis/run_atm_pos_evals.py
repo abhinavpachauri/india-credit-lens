@@ -271,11 +271,11 @@ def check_system_state():
     period = latest_db_period("atm_pos")
     if not period:
         return None, "no signals in db"
-    ok1, o1 = run("system_state", [sys.executable, str(ANALYSIS / "generate_system_state.py"),
+    ok1, o1 = run("system_state", [sys.executable, str(ANALYSIS / "core" / "generate_system_state.py"),
                                    "--pipeline", "atm_pos", "--period", period])
     if not ok1:
         return False, (o1.splitlines()[-1] if o1 else "state failed")[:55]
-    ok2, o2 = run("opportunities", [sys.executable, str(ANALYSIS / "derive_opportunities.py"),
+    ok2, o2 = run("opportunities", [sys.executable, str(ANALYSIS / "core" / "derive_opportunities.py"),
                                     "--pipeline", "atm_pos", "--period", period])
     return ok2, f"state + opportunities @ {period}"
 
@@ -305,7 +305,7 @@ def check_system_model():
         return False, (gen_out.splitlines()[-1] if gen_out else "skeleton gen failed")[:60]
     val_ok, val_out = run(
         "system_model",
-        [sys.executable, str(ANALYSIS / "validate_system_model.py"), "--pipeline", "atm_pos"],
+        [sys.executable, str(ANALYSIS / "core" / "validate_system_model.py"), "--pipeline", "atm_pos"],
     )
     summary = next((l.strip() for l in val_out.splitlines() if "PASS" in l or "FAIL" in l), "")
     return val_ok, (summary or val_out[:60])
@@ -349,7 +349,7 @@ def run_insight_stages():
     # ship-compact). Replaces client-side parsing of the 4.6 MB consolidated CSV on /payments.
     passed, out = run(
         "Stage 4a-series",
-        [sys.executable, str(ANALYSIS / "generate_chart_series.py"), "--pipeline", "atm_pos"],
+        [sys.executable, str(ANALYSIS / "core" / "generate_chart_series.py"), "--pipeline", "atm_pos"],
     )
     results.append(("4a-series. Chart series JSON", passed, out))
     if not passed:
