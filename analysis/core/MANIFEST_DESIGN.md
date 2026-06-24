@@ -220,6 +220,19 @@ check_derived_fresh + reconcile + build + 74 tests — and commit after EACH):**
    is green today because those dirs are simply out of scan scope).
 4. Achieve full-mode parity (SIBC per-period, ATM/POS xlsx-ingest), then retire run_evals /
    run_atm_pos_evals (point any callers at gate.py).
+   ⚠ **BLOCKED — verification ceiling (found 2026-06-24):** gate.py + manifests are proven for
+   the VALIDATION modes (sibc `--merged`, atm_pos `--period` revalidate). The remaining gap is
+   the two INGEST modes — and they can't be parity-checked this session:
+   - **ATM/POS `--xlsx` ingest is UNVERIFIABLE: there are 0 source .xlsx on disk** (raw RBI
+     files aren't tracked in the repo). gate.py also lacks `--xlsx` plumbing (manifest has the
+     format/extract/validate/consolidate stages, but no way to thread the xlsx path in). Can't
+     run the legacy path either → nothing to compare against.
+   - SIBC per-period (non-merged) IS verifiable (rbi_sibc/2026-04-30/sections.json exists) but
+     the manifest hardcodes `--merged` in several stage args, so per-period needs manifest work.
+   **Recommended cutover plan:** do NOT retire the legacy gates on faith. At the NEXT real
+   ingestion (user provides a new xlsx), run BOTH the legacy gate and gate.py on the same file,
+   confirm verdict parity on the live ingest path, THEN add the `--xlsx` plumbing + retire.
+   The relocation (batches 1-3) is done and green; this is the one step gated on real input.
 5. Behavior-merge the two diverged `extract_numbers` → core/traceability.py (SIBC strips
    FY/ISO/quarter; ATM/POS handles B/M/K/x/% suffixes + REL_TOL 0.005 vs 0.02 — write
    ATM/POS traceability tests FIRST, then a parameterized superset).
