@@ -48,9 +48,12 @@ ROOT = repo_root(Path(__file__))
 ANALYSIS = ROOT / "analysis"
 OUT = ANALYSIS / "architecture" / "graph.json"
 
-# Directories under analysis/ to scan for python sources.
+# Directories under analysis/ to scan for python sources. (`core`/`guards`/`crosssource`
+# are the §4 relocation targets — generic engines, freshness guards, cross-system pass.
+# NB `crosssource` is the CODE dir; `cross_source` is the DATA dir.)
 SCAN_DIRS = [ANALYSIS, ANALYSIS / "signals", ANALYSIS / "cross_source",
-             ANALYSIS / "newsletter", ANALYSIS / "signals" / "compute"]
+             ANALYSIS / "newsletter", ANALYSIS / "signals" / "compute",
+             ANALYSIS / "core", ANALYSIS / "guards", ANALYSIS / "crosssource"]
 
 # Tokens that mark a string literal as an artifact path worth tracking.
 PATH_TOKENS = ("web/public/data", "merged/", "rbi_sibc", "rbi_atm_pos",

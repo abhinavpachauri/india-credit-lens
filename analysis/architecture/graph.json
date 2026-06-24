@@ -16,68 +16,12 @@
     "build_behavioral_layer": {
       "path": "analysis/build_behavioral_layer.py",
       "imports": [
-        "generate_skeleton"
+        "core/generate_skeleton"
       ],
       "invokes": [],
       "reads": {},
       "writes": {},
       "doc_claims": []
-    },
-    "check_derived_fresh": {
-      "path": "analysis/check_derived_fresh.py",
-      "imports": [],
-      "invokes": [
-        "generate_skeleton",
-        "generate_system_state",
-        "derive_opportunities",
-        "compose_ecosystem",
-        "derive_cross_links",
-        "generate_opportunities_feed",
-        "generate_chart_series"
-      ],
-      "reads": {
-        "analysis/signals/signals.db": "low",
-        "analysis/rbi_sibc/merged/system_model.json": "low",
-        "analysis/rbi_atm_pos/merged/system_model.json": "low",
-        "analysis/rbi_sibc/merged/system_state_*.json": "low",
-        "analysis/rbi_atm_pos/merged/system_state_*.json": "low",
-        "analysis/rbi_sibc/merged/opportunities_*.json": "low",
-        "analysis/rbi_atm_pos/merged/opportunities_*.json": "low",
-        "analysis/cross_source/candidates.json": "low",
-        "analysis/cross_source/ecosystem_state_*.json": "low",
-        "web/public/data/opportunities_feed.json": "low",
-        "web/public/data/atm_pos_chart_series.json": "low"
-      },
-      "writes": {},
-      "doc_claims": []
-    },
-    "check_signal_freshness": {
-      "path": "analysis/check_signal_freshness.py",
-      "imports": [],
-      "invokes": [],
-      "reads": {
-        "analysis/signals/registry.json": "low"
-      },
-      "writes": {},
-      "doc_claims": []
-    },
-    "compose_ecosystem": {
-      "path": "analysis/compose_ecosystem.py",
-      "imports": [
-        "generate_skeleton"
-      ],
-      "invokes": [],
-      "reads": {
-        "system_state_*.json": "low",
-        "analysis/cross_source/composition.json": "low"
-      },
-      "writes": {},
-      "doc_claims": [
-        {
-          "kind": "output",
-          "text": "analysis/cross_source/ecosystem_state_{period}.json"
-        }
-      ]
     },
     "compute_atm_pos_signals": {
       "path": "analysis/compute_atm_pos_signals.py",
@@ -111,43 +55,6 @@
         "timeline.json": "high"
       },
       "doc_claims": []
-    },
-    "derive_cross_links": {
-      "path": "analysis/derive_cross_links.py",
-      "imports": [
-        "generate_skeleton"
-      ],
-      "invokes": [],
-      "reads": {
-        "analysis/ontology/channels.json": "low",
-        "analysis/COMPOSITION_SPEC.md": "low"
-      },
-      "writes": {
-        "analysis/cross_source/candidates.json": "high"
-      },
-      "doc_claims": [
-        {
-          "kind": "output",
-          "text": "analysis/cross_source/candidates.json (regenerable; never hand-edited)."
-        }
-      ]
-    },
-    "derive_opportunities": {
-      "path": "analysis/derive_opportunities.py",
-      "imports": [
-        "generate_skeleton"
-      ],
-      "invokes": [],
-      "reads": {
-        "analysis/signals/signals.db": "low"
-      },
-      "writes": {},
-      "doc_claims": [
-        {
-          "kind": "output",
-          "text": "analysis/{pipeline}/merged/opportunities_{period}.json"
-        }
-      ]
     },
     "detect_atm_pos_format": {
       "path": "analysis/detect_atm_pos_format.py",
@@ -266,23 +173,6 @@
         }
       ]
     },
-    "generate_chart_series": {
-      "path": "analysis/generate_chart_series.py",
-      "imports": [],
-      "invokes": [],
-      "reads": {
-        "web/public/data/atm_pos_consolidated.csv": "low"
-      },
-      "writes": {
-        "web/public/data/atm_pos_chart_series.json": "low"
-      },
-      "doc_claims": [
-        {
-          "kind": "output",
-          "text": "web/public/data/{pipeline}_chart_series.json"
-        }
-      ]
-    },
     "generate_delta": {
       "path": "analysis/generate_delta.py",
       "imports": [
@@ -338,38 +228,6 @@
         }
       ]
     },
-    "generate_opportunities_feed": {
-      "path": "analysis/generate_opportunities_feed.py",
-      "imports": [
-        "generate_skeleton"
-      ],
-      "invokes": [],
-      "reads": {
-        "analysis/signals/signals.db": "low",
-        "analysis/signals/registry.json": "low",
-        "ecosystem_state_*.json": "low",
-        "analysis/ontology/channels.json": "low"
-      },
-      "writes": {
-        "web/public/data/opportunities_feed.json": "high"
-      },
-      "doc_claims": []
-    },
-    "generate_opportunity_narrative": {
-      "path": "analysis/generate_opportunity_narrative.py",
-      "imports": [
-        "generate_skeleton"
-      ],
-      "invokes": [],
-      "reads": {
-        "analysis/signals/signals.db": "low"
-      },
-      "writes": {
-        "analysis/signals/narrative_cache.json": "high",
-        "web/public/data/opportunities_feed.json": "high"
-      },
-      "doc_claims": []
-    },
     "generate_signal_history": {
       "path": "analysis/generate_signal_history.py",
       "imports": [],
@@ -379,41 +237,6 @@
       },
       "writes": {},
       "doc_claims": []
-    },
-    "generate_skeleton": {
-      "path": "analysis/generate_skeleton.py",
-      "imports": [],
-      "invokes": [],
-      "reads": {
-        "skeleton_profile.json": "low",
-        "analysis/rbi_sibc/skeleton_profile.json": "low",
-        "analysis/rbi_atm_pos/skeleton_profile.json": "low",
-        "analysis/SYSTEM_MODEL_SPEC.md": "low",
-        "tmp_skeleton.json": "low"
-      },
-      "writes": {
-        "system_model.json": "low",
-        "analysis/rbi_sibc/merged/system_model.json": "low",
-        "analysis/rbi_atm_pos/merged/system_model.json": "low"
-      },
-      "doc_claims": []
-    },
-    "generate_system_state": {
-      "path": "analysis/generate_system_state.py",
-      "imports": [
-        "generate_skeleton"
-      ],
-      "invokes": [],
-      "reads": {
-        "analysis/signals/signals.db": "low"
-      },
-      "writes": {},
-      "doc_claims": [
-        {
-          "kind": "output",
-          "text": "analysis/{pipeline}/merged/system_state_{period}.json  (narrative:null slot for Stage 5.X)."
-        }
-      ]
     },
     "hook_validate": {
       "path": "analysis/hook_validate.py",
@@ -437,7 +260,7 @@
     "migrate_forces_to_instances": {
       "path": "analysis/migrate_forces_to_instances.py",
       "imports": [
-        "generate_skeleton"
+        "core/generate_skeleton"
       ],
       "invokes": [],
       "reads": {
@@ -467,15 +290,15 @@
         "extract_atm_pos",
         "validate_atm_pos",
         "consolidate_atm_pos",
-        "validate_signal_history",
-        "check_signal_freshness",
-        "generate_system_state",
-        "derive_opportunities",
+        "guards/validate_signal_history",
+        "guards/check_signal_freshness",
+        "core/generate_system_state",
+        "core/derive_opportunities",
         "validate_opportunity_traceability",
-        "generate_skeleton",
-        "validate_system_model",
+        "core/generate_skeleton",
+        "core/validate_system_model",
         "compute_atm_pos_signals",
-        "generate_chart_series",
+        "core/generate_chart_series",
         "generate_atm_pos_insights",
         "validate_atm_pos_insights",
         "validate_atm_pos_claims",
@@ -496,21 +319,17 @@
         "validate_timeline",
         "validate_sections",
         "validate_annotations",
-        "generate_skeleton",
-        "validate_system_model",
+        "core/generate_skeleton",
+        "core/validate_system_model",
         "validate_content",
         "validate_claims",
         "validate",
         "validate_annotation_basis",
-        "validate_signal_history",
-        "check_signal_freshness",
+        "guards/validate_signal_history",
+        "guards/check_signal_freshness",
         "validate_sibc_traceability",
         "generate_analysis_report",
         "validate_web_series",
-        "generate_system_state",
-        "derive_opportunities",
-        "compose_ecosystem",
-        "generate_opportunities_feed",
         "validate_opportunity_traceability"
       ],
       "reads": {
@@ -527,22 +346,6 @@
         "system_model.json": "low",
         "analysis/rbi_sibc/merged/system_model.json": "low",
         "analysis/rbi_sibc/merged/subsystems.json": "low"
-      },
-      "writes": {},
-      "doc_claims": []
-    },
-    "run_inference": {
-      "path": "analysis/run_inference.py",
-      "imports": [
-        "generate_skeleton"
-      ],
-      "invokes": [],
-      "reads": {
-        "system_state_*.json": "low",
-        "analysis/cross_source/candidates.json": "low",
-        "analysis/cross_source/composition.json": "low",
-        "analysis/ontology/channels.json": "low",
-        "analysis/*/merged/system_state_*.json": "low"
       },
       "writes": {},
       "doc_claims": []
@@ -650,18 +453,6 @@
       "writes": {},
       "doc_claims": []
     },
-    "validate_composition": {
-      "path": "analysis/validate_composition.py",
-      "imports": [
-        "generate_skeleton"
-      ],
-      "invokes": [],
-      "reads": {
-        "analysis/cross_source/composition.json": "low"
-      },
-      "writes": {},
-      "doc_claims": []
-    },
     "validate_content": {
       "path": "analysis/validate_content.py",
       "imports": [],
@@ -710,30 +501,6 @@
         "web/public/data/sibc_l1_annotations.json": "low",
         "analysis/signals/registry.json": "low",
         "analysis/signals/signals.db": "low"
-      },
-      "writes": {},
-      "doc_claims": []
-    },
-    "validate_signal_history": {
-      "path": "analysis/validate_signal_history.py",
-      "imports": [],
-      "invokes": [],
-      "reads": {
-        "analysis/signals/registry.json": "low",
-        "analysis/signals/signals.db": "low"
-      },
-      "writes": {},
-      "doc_claims": []
-    },
-    "validate_system_model": {
-      "path": "analysis/validate_system_model.py",
-      "imports": [
-        "generate_skeleton"
-      ],
-      "invokes": [],
-      "reads": {
-        "analysis/ontology/concepts.json": "low",
-        "analysis/ontology/channels.json": "low"
       },
       "writes": {},
       "doc_claims": []
@@ -951,6 +718,258 @@
         "web/public/data/rbi_sibc_consolidated.csv": "low",
         "timeline.json": "low",
         "analysis/rbi_sibc/timeline.json": "low"
+      },
+      "writes": {},
+      "doc_claims": []
+    },
+    "core/derive_opportunities": {
+      "path": "analysis/core/derive_opportunities.py",
+      "imports": [
+        "core/generate_skeleton"
+      ],
+      "invokes": [],
+      "reads": {
+        "analysis/signals/signals.db": "low"
+      },
+      "writes": {},
+      "doc_claims": [
+        {
+          "kind": "output",
+          "text": "analysis/{pipeline}/merged/opportunities_{period}.json"
+        }
+      ]
+    },
+    "core/gate": {
+      "path": "analysis/core/gate.py",
+      "imports": [],
+      "invokes": [
+        "validate_timeline",
+        "validate_opportunity_traceability"
+      ],
+      "reads": {
+        "analysis/signals/signals.db": "low",
+        "pipeline.json": "low",
+        "pipelines/pipeline.json": "low"
+      },
+      "writes": {},
+      "doc_claims": []
+    },
+    "core/generate_chart_series": {
+      "path": "analysis/core/generate_chart_series.py",
+      "imports": [],
+      "invokes": [],
+      "reads": {
+        "web/public/data/atm_pos_consolidated.csv": "low"
+      },
+      "writes": {
+        "web/public/data/atm_pos_chart_series.json": "low"
+      },
+      "doc_claims": [
+        {
+          "kind": "output",
+          "text": "web/public/data/{pipeline}_chart_series.json"
+        }
+      ]
+    },
+    "core/generate_skeleton": {
+      "path": "analysis/core/generate_skeleton.py",
+      "imports": [],
+      "invokes": [],
+      "reads": {
+        "skeleton_profile.json": "low",
+        "analysis/rbi_sibc/skeleton_profile.json": "low",
+        "analysis/rbi_atm_pos/skeleton_profile.json": "low",
+        "analysis/SYSTEM_MODEL_SPEC.md": "low",
+        "tmp_skeleton.json": "low"
+      },
+      "writes": {
+        "system_model.json": "low",
+        "analysis/rbi_sibc/merged/system_model.json": "low",
+        "analysis/rbi_atm_pos/merged/system_model.json": "low"
+      },
+      "doc_claims": []
+    },
+    "core/generate_system_state": {
+      "path": "analysis/core/generate_system_state.py",
+      "imports": [
+        "core/generate_skeleton"
+      ],
+      "invokes": [],
+      "reads": {
+        "analysis/signals/signals.db": "low"
+      },
+      "writes": {},
+      "doc_claims": [
+        {
+          "kind": "output",
+          "text": "analysis/{pipeline}/merged/system_state_{period}.json  (narrative:null slot for Stage 5.X)."
+        }
+      ]
+    },
+    "core/paths": {
+      "path": "analysis/core/paths.py",
+      "imports": [],
+      "invokes": [],
+      "reads": {},
+      "writes": {},
+      "doc_claims": []
+    },
+    "core/run_inference": {
+      "path": "analysis/core/run_inference.py",
+      "imports": [
+        "core/generate_skeleton"
+      ],
+      "invokes": [],
+      "reads": {
+        "system_state_*.json": "low",
+        "analysis/cross_source/candidates.json": "low",
+        "analysis/cross_source/composition.json": "low",
+        "analysis/ontology/channels.json": "low",
+        "analysis/*/merged/system_state_*.json": "low"
+      },
+      "writes": {},
+      "doc_claims": []
+    },
+    "core/traceability": {
+      "path": "analysis/core/traceability.py",
+      "imports": [],
+      "invokes": [],
+      "reads": {},
+      "writes": {},
+      "doc_claims": []
+    },
+    "core/validate_system_model": {
+      "path": "analysis/core/validate_system_model.py",
+      "imports": [
+        "core/generate_skeleton"
+      ],
+      "invokes": [],
+      "reads": {
+        "analysis/ontology/concepts.json": "low",
+        "analysis/ontology/channels.json": "low"
+      },
+      "writes": {},
+      "doc_claims": []
+    },
+    "guards/check_derived_fresh": {
+      "path": "analysis/guards/check_derived_fresh.py",
+      "imports": [],
+      "invokes": [],
+      "reads": {
+        "analysis/signals/signals.db": "low",
+        "analysis/rbi_sibc/merged/system_model.json": "low",
+        "analysis/rbi_atm_pos/merged/system_model.json": "low",
+        "analysis/rbi_sibc/merged/system_state_*.json": "low",
+        "analysis/rbi_atm_pos/merged/system_state_*.json": "low",
+        "analysis/rbi_sibc/merged/opportunities_*.json": "low",
+        "analysis/rbi_atm_pos/merged/opportunities_*.json": "low",
+        "analysis/cross_source/candidates.json": "low",
+        "analysis/cross_source/ecosystem_state_*.json": "low",
+        "web/public/data/opportunities_feed.json": "low",
+        "web/public/data/atm_pos_chart_series.json": "low"
+      },
+      "writes": {},
+      "doc_claims": []
+    },
+    "guards/check_signal_freshness": {
+      "path": "analysis/guards/check_signal_freshness.py",
+      "imports": [],
+      "invokes": [],
+      "reads": {
+        "analysis/signals/registry.json": "low"
+      },
+      "writes": {},
+      "doc_claims": []
+    },
+    "guards/validate_signal_history": {
+      "path": "analysis/guards/validate_signal_history.py",
+      "imports": [],
+      "invokes": [],
+      "reads": {
+        "analysis/signals/registry.json": "low",
+        "analysis/signals/signals.db": "low"
+      },
+      "writes": {},
+      "doc_claims": []
+    },
+    "crosssource/compose_ecosystem": {
+      "path": "analysis/crosssource/compose_ecosystem.py",
+      "imports": [
+        "core/generate_skeleton"
+      ],
+      "invokes": [],
+      "reads": {
+        "system_state_*.json": "low",
+        "analysis/cross_source/composition.json": "low"
+      },
+      "writes": {},
+      "doc_claims": [
+        {
+          "kind": "output",
+          "text": "analysis/cross_source/ecosystem_state_{period}.json"
+        }
+      ]
+    },
+    "crosssource/derive_cross_links": {
+      "path": "analysis/crosssource/derive_cross_links.py",
+      "imports": [
+        "core/generate_skeleton"
+      ],
+      "invokes": [],
+      "reads": {
+        "analysis/ontology/channels.json": "low",
+        "analysis/COMPOSITION_SPEC.md": "low"
+      },
+      "writes": {
+        "analysis/cross_source/candidates.json": "high"
+      },
+      "doc_claims": [
+        {
+          "kind": "output",
+          "text": "analysis/cross_source/candidates.json (regenerable; never hand-edited)."
+        }
+      ]
+    },
+    "crosssource/generate_opportunities_feed": {
+      "path": "analysis/crosssource/generate_opportunities_feed.py",
+      "imports": [
+        "core/generate_skeleton"
+      ],
+      "invokes": [],
+      "reads": {
+        "analysis/signals/signals.db": "low",
+        "analysis/signals/registry.json": "low",
+        "ecosystem_state_*.json": "low",
+        "analysis/ontology/channels.json": "low"
+      },
+      "writes": {
+        "web/public/data/opportunities_feed.json": "high"
+      },
+      "doc_claims": []
+    },
+    "crosssource/generate_opportunity_narrative": {
+      "path": "analysis/crosssource/generate_opportunity_narrative.py",
+      "imports": [
+        "core/generate_skeleton"
+      ],
+      "invokes": [],
+      "reads": {
+        "analysis/signals/signals.db": "low"
+      },
+      "writes": {
+        "analysis/signals/narrative_cache.json": "high",
+        "web/public/data/opportunities_feed.json": "high"
+      },
+      "doc_claims": []
+    },
+    "crosssource/validate_composition": {
+      "path": "analysis/crosssource/validate_composition.py",
+      "imports": [
+        "core/generate_skeleton"
+      ],
+      "invokes": [],
+      "reads": {
+        "analysis/cross_source/composition.json": "low"
       },
       "writes": {},
       "doc_claims": []
