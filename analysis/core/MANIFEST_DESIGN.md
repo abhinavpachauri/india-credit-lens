@@ -233,9 +233,11 @@ check_derived_fresh + reconcile + build + 74 tests — and commit after EACH):**
    **Cutover plan:** add the `--xlsx` plumbing + per-period manifest args, prove verdict parity
    by re-ingesting an existing period under both runners, THEN retire the legacy gates. Can be
    done now OR folded into the next real ingestion (whichever comes first).
-5. Behavior-merge the two diverged `extract_numbers` → core/traceability.py (SIBC strips
-   FY/ISO/quarter; ATM/POS handles B/M/K/x/% suffixes + REL_TOL 0.005 vs 0.02 — write
-   ATM/POS traceability tests FIRST, then a parameterized superset).
+5. ✅ **DONE (e905f58)** — core/traceability.py: extract_numbers/matches/ratio_matches
+   param'd by a NumberPolicy (SIBC vs ATM_POS). Both validators are now thin wrappers (names
+   preserved). Tests-first (NEW test_traceability_atm_pos.py, 13 golden) + equivalence-proved
+   vs both old impls (token battery + 20k random comparisons/pipeline, 0 diffs); identical
+   gate verdicts (SIBC 84/3-warn, ATM/POS 22 ALL CLEAR). 87 tests (74→87).
 6. pipelines/{id}/ for the per-pipeline modules + update each manifest's `modules` map.
 7. legacy/ the retired scripts; update docs (CLAUDE.md, PIPELINE_ARCHITECTURE.md, per-period
    command lists) + add core/ to the architecture discoverer SCAN_DIRS.
