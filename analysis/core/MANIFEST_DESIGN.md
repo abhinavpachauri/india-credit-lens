@@ -200,8 +200,16 @@ generate_opportunities_feed, generate_opportunity_narrative.
 **Batch plan (verify the full matrix — both legacy gates + gate.py both pipelines +
 check_derived_fresh + reconcile + build + 74 tests — and commit after EACH):**
 1. ✅ **DONE (6c6ca3c)** — `generate_skeleton` → core/ + rewrote 11 import sites + 4 path-refs. (Highest coupling; done first, alone.)
-2. Remaining core/ engines (subprocess-only) + repoint CORE_MAP + the 4 ref files.
-3. guards/ + crosssource/ groups + repoint.
+2. ✅ **DONE (20c05e2)** — moved the 4 gate-internal core/ engines (validate_system_model,
+   generate_system_state, derive_opportunities, generate_chart_series) + repointed CORE_MAP +
+   run_evals/run_atm_pos_evals/check_derived_fresh + fixed test_system_state import.
+   ⚠ **STILL TODO (2b, deferred):** `generate_signal_history` + `run_inference` are
+   USER-INVOKED CLI tools — moving them changes documented `append`/`evaluate` commands +
+   4 error-hint strings (check_signal_freshness, validate_signal_history,
+   generate_atm_pos_insights, compute_atm_pos_signals) + the per-period command lists in
+   CLAUDE.md/CLAUDE.local.md/PIPELINE_ARCHITECTURE.md/rbi_atm_pos/CLAUDE.md. Do as a
+   doc-coordinated move (fold into step 7's doc sweep), not a pure path-string repoint.
+3. guards/ + crosssource/ groups + repoint (also user-hint strings + check_derived_fresh refs).
 4. Achieve full-mode parity (SIBC per-period, ATM/POS xlsx-ingest), then retire run_evals /
    run_atm_pos_evals (point any callers at gate.py).
 5. Behavior-merge the two diverged `extract_numbers` → core/traceability.py (SIBC strips
