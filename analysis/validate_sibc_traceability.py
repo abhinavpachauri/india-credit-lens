@@ -29,14 +29,17 @@ from pathlib import Path
 ANALYSIS = Path(__file__).resolve().parent
 sys.path.insert(0, str(ANALYSIS))
 from signals.query import signal_numbers, flat_numbers, _signal_type   # noqa: E402
+from core.traceability import (                                          # noqa: E402
+    SIBC as _POLICY, extract_numbers as _extract,
+    matches as _matches_core, ratio_matches as _ratio_core,
+)
 
 ANNOT = ANALYSIS.parent / "web" / "public" / "data" / "sibc_l1_annotations.json"
 REG   = ANALYSIS / "signals" / "registry.json"
 DB    = ANALYSIS / "signals" / "signals.db"
 
-REL_TOL   = 0.02     # 2% — formatted text rounds (17.1 vs 17.0876)
-ABS_TOL   = 0.25     # absolute fallback for small values / shares
-MIN_CHECK = 0.5      # ignore trivial small integers
+# Number extraction + match tolerances live in core.traceability (SIBC policy); the three
+# thin wrappers below preserve this module's public surface (and Check 2g test access).
 
 # Direction words that must not appear in an implication when the signal's status
 # says the opposite. Keyed by status → forbidden words.
@@ -48,49 +51,17 @@ STATUS_CONTRADICTIONS = {
 
 
 def extract_numbers(text: str) -> list[float]:
-    """Standalone numeric values from text, excluding structural tokens
-    (ISO dates, FY labels, quarters) that are not data claims."""
-    t = re.sub(r"\b20\d\d-\d\d-\d\d\b", " ", text)   # ISO dates
-    t = re.sub(r"\bFY\s?\d{2,4}(?:\s?[-/–]\s?\d{2,4})?\b", " ", t, flags=re.I)  # FY25 / FY 2026 / FY22-24
-    t = re.sub(r"\b[Qq][1-4]\b", " ", t)             # quarters
-    t = re.sub(r"\b(?:19|20|21)\d{2}\b", " ", t)     # standalone calendar years
-    pattern = r"(?<![A-Za-z\d])[-+]?\d+(?:\.\d+)?(?![A-Za-z\d])"
-    out: list[float] = []
-    for m in re.finditer(pattern, t):
-        try:
-            v = float(m.group())
-        except ValueError:
-            continue
-        if abs(v) >= MIN_CHECK:
-            out.append(v)
-    return out
+    """SIBC-policy number extraction (strips ISO dates / FY / quarters / years)."""
+    return _extract(text, _POLICY)
 
 
 def matches(num: float, cands: list[float]) -> bool:
-    for v in cands:
-        if v == 0:
-            if abs(num) < ABS_TOL:
-                return True
-        else:
-            if abs(num - v) / max(abs(v), 1e-9) <= REL_TOL:
-                return True
-            if abs(num - v) <= ABS_TOL:
-                return True
-    return False
+    return _matches_core(num, cands, _POLICY)
 
 
 def ratio_matches(num: float, cands: list[float]) -> bool:
-    """True if num is a percentage-of-total or ratio of two grounded values —
-    e.g. '99.5% of total' = 100 * non-food / bank-credit. Bounded to the small
-    set of distinct level values to avoid spurious matches."""
-    levels = sorted({round(v, 4) for v in cands if abs(v) > 1})
-    for a in levels:
-        for b in levels:
-            if b and a != b:
-                for cand in (100 * a / b, a / b):
-                    if abs(num - cand) <= ABS_TOL or abs(num - cand) / max(abs(cand), 1e-9) <= REL_TOL:
-                        return True
-    return False
+    """True if num is a percentage-of-total or ratio of two grounded values (SIBC policy)."""
+    return _ratio_core(num, cands, _POLICY)
 
 
 def check(period: str | None = None, quiet: bool = False) -> int:

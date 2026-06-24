@@ -24,17 +24,17 @@ from pathlib import Path
 import sys
 sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
 from core.paths import ROOT
+from core.traceability import (
+    ATM_POS as _POLICY, extract_numbers as _extract,
+    matches as _matches_core, ratio_matches as _ratio_core,
+)
 SIGNALS_IN  = ROOT / "analysis/rbi_atm_pos/signals.json"
 INSIGHTS_IN = ROOT / "analysis/rbi_atm_pos/insights.json"
 DB_PATH     = ROOT / "analysis/signals/signals.db"
 REGISTRY    = ROOT / "analysis/signals/registry.json"
 
-# Relative tolerance: a text value of "81.4" matches a signals value of 81.42
-REL_TOL = 0.005   # 0.5%
-ABS_TOL = 0.6     # absolute fallback for values near 0
-
-# Minimum digits to bother checking (ignore trivial small integers)
-MIN_VALUE_TO_CHECK = 0.5
+# Number extraction + match tolerances live in core.traceability (ATM/POS policy); the thin
+# wrappers below preserve this module's public surface (and the Stage-4c test access).
 
 
 def check_yoy_matches_db(signals: dict) -> list[str]:
@@ -117,60 +117,17 @@ def load_signals_flat(signals: dict) -> dict[str, float]:
 
 
 def extract_numbers(text: str) -> list[float]:
-    """
-    Extract standalone numeric values from a text string.
-    Skips numbers that are:
-    - Embedded in alphanumeric tokens (e.g. "FY26", "Q4", "Tier2")
-    - Pure counts that are threshold descriptions (e.g. "over 1B" as a generic phrase)
-    """
-    # Require number is NOT preceded/followed by a letter (word-boundary-like)
-    pattern = r'(?<![A-Za-z])[-+]?\d+(?:\.\d+)?(?:[BMKx%])?(?![A-Za-z\d])'
-    nums = []
-    for m in re.finditer(pattern, text):
-        raw = m.group().rstrip("BMKx%+")
-        try:
-            val = float(raw)
-        except ValueError:
-            continue
-        # Convert suffixes
-        full = m.group()
-        if full.endswith("B"):
-            val *= 1e9
-        elif full.endswith("M"):
-            val *= 1e6
-        elif full.endswith("K"):
-            val *= 1e3
-        if abs(val) >= MIN_VALUE_TO_CHECK:
-            nums.append(val)
-    return nums
+    """ATM/POS-policy number extraction (scales B/M/K, strips x/%; no structural stripping)."""
+    return _extract(text, _POLICY)
 
 
 def _matches(num: float, candidates) -> bool:
-    for v in candidates:
-        if v == 0:
-            if abs(num) < ABS_TOL:
-                return True
-        else:
-            if abs(num - v) / max(abs(v), 1e-9) <= REL_TOL:
-                return True
-            if abs(num - v) <= ABS_TOL:   # absolute tolerance for small values (shares)
-                return True
-    return False
+    return _matches_core(num, candidates, _POLICY)
 
 
 def _ratio_matches(num: float, base_vals) -> bool:
-    """True if num is round(A/B) or ≈A/B for some ordered pair in base_vals."""
-    if not base_vals or len(base_vals) < 2:
-        return False
-    for a in base_vals:
-        for b in base_vals:
-            if b != 0 and a != b:
-                ratio = a / b
-                if abs(num - round(ratio)) <= ABS_TOL:
-                    return True
-                if abs(num - ratio) / max(abs(ratio), 1e-9) <= REL_TOL:
-                    return True
-    return False
+    """True if num is round(A/B) or ≈A/B for some ordered pair in base_vals (ATM/POS policy)."""
+    return _ratio_core(num, base_vals, _POLICY)
 
 
 def value_in_signals(num: float, flat_signals: dict[str, float],
