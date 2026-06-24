@@ -29,8 +29,11 @@ import subprocess
 import sys
 from pathlib import Path
 
-ANALYSIS = Path(__file__).resolve().parent
-ROOT = ANALYSIS.parent
+# Bootstrap: <repo>/analysis on sys.path so `from core…` resolves from any cwd now that
+# this guard lives under guards/. Move-safe via .git walk (not __file__.parent).
+sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
+from core.paths import ROOT                        # noqa: E402
+ANALYSIS = ROOT / "analysis"
 DB = ANALYSIS / "signals" / "signals.db"
 PIPELINES = {"sibc": "2026-05-29", "atm_pos": "2026-04-30"}  # fallback if DB empty
 
@@ -76,9 +79,9 @@ def regenerate(quiet):
         ok &= run(f"skeleton {p}", ["core/generate_skeleton.py", "--pipeline", p], quiet)
         ok &= run(f"system_state {p}", ["core/generate_system_state.py", "--pipeline", p, "--period", per], quiet)
         ok &= run(f"opportunities {p}", ["core/derive_opportunities.py", "--pipeline", p, "--period", per], quiet)
-    ok &= run("compose_ecosystem", ["compose_ecosystem.py"], quiet)
-    ok &= run("derive_cross_links", ["derive_cross_links.py"], quiet)
-    ok &= run("opportunities_feed", ["generate_opportunities_feed.py"], quiet)
+    ok &= run("compose_ecosystem", ["crosssource/compose_ecosystem.py"], quiet)
+    ok &= run("derive_cross_links", ["crosssource/derive_cross_links.py"], quiet)
+    ok &= run("opportunities_feed", ["crosssource/generate_opportunities_feed.py"], quiet)
     ok &= run("chart_series atm_pos", ["core/generate_chart_series.py", "--pipeline", "atm_pos"], quiet)
     return ok
 

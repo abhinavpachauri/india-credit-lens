@@ -36,14 +36,14 @@ GREEN, RED, YELLOW, BOLD, RESET = "\033[32m", "\033[31m", "\033[33m", "\033[1m",
 # this single map repoints to core/*.py — the manifests stay unchanged.
 CORE_MAP = {
     "validate_timeline":        ("validate_timeline.py", ["--path", "$TIMELINE"], "ANALYSIS"),
-    "validate_signal_history":  ("validate_signal_history.py", [], "ROOT"),
-    "check_signal_freshness":   ("check_signal_freshness.py", ["--pipeline", "$ID"], "ROOT"),
+    "validate_signal_history":  ("guards/validate_signal_history.py", [], "ROOT"),
+    "check_signal_freshness":   ("guards/check_signal_freshness.py", ["--pipeline", "$ID"], "ROOT"),
     "skeleton":                 ("core/generate_skeleton.py", ["--pipeline", "$ID"], "ROOT"),
     "validate_system_model":    ("core/validate_system_model.py", ["--pipeline", "$ID"], "ANALYSIS"),
     "system_state":             ("core/generate_system_state.py", ["--pipeline", "$ID", "--period", "$LATEST"], "ROOT"),
     "derive_opportunities":     ("core/derive_opportunities.py", ["--pipeline", "$ID", "--period", "$LATEST"], "ROOT"),
-    "compose_ecosystem":        ("compose_ecosystem.py", [], "ROOT"),
-    "opportunities_feed":       ("generate_opportunities_feed.py", [], "ROOT"),
+    "compose_ecosystem":        ("crosssource/compose_ecosystem.py", [], "ROOT"),
+    "opportunities_feed":       ("crosssource/generate_opportunities_feed.py", [], "ROOT"),
     "opportunity_traceability": ("validate_opportunity_traceability.py", ["--strict"], "ROOT"),
     "chart_series":             ("core/generate_chart_series.py", ["--pipeline", "$ID"], "ROOT"),
 }

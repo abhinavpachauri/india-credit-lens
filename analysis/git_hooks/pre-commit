@@ -25,10 +25,10 @@ SIGNAL_RE='(rbi_sibc_consolidated\.csv|atm_pos_consolidated\.csv|signals/registr
 rc=0
 if echo "$STAGED" | grep -Eq "$DERIVED_RE"; then
   echo "[pre-commit] source/derived files staged — checking derived-artifact freshness…"
-  python3 "$REPO_ROOT/analysis/check_derived_fresh.py" --quiet || rc=$?
+  python3 "$REPO_ROOT/analysis/guards/check_derived_fresh.py" --quiet || rc=$?
 fi
 if echo "$STAGED" | grep -Eq "$SIGNAL_RE"; then
   echo "[pre-commit] signal sources staged — checking signals.db freshness (recompute from CSV)…"
-  python3 "$REPO_ROOT/analysis/check_signal_freshness.py" --quiet || rc=$?
+  python3 "$REPO_ROOT/analysis/guards/check_signal_freshness.py" --quiet || rc=$?
 fi
 exit $rc

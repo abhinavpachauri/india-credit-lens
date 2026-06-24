@@ -35,7 +35,11 @@ import sys
 import tempfile
 from pathlib import Path
 
-ANALYSIS = Path(__file__).resolve().parent
+# Bootstrap: <repo>/analysis on sys.path so `from core…` / `from signals…` resolve from
+# any cwd now that this guard lives under guards/. Move-safe via .git walk.
+sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
+from core.paths import ROOT                        # noqa: E402
+ANALYSIS = ROOT / "analysis"
 REG = ANALYSIS / "signals" / "registry.json"
 
 from signals.db import init_db, DB_PATH           # noqa: E402

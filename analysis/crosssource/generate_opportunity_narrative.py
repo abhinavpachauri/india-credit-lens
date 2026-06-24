@@ -19,8 +19,12 @@ import re
 import sqlite3
 import subprocess
 import sys
+from pathlib import Path
 
-from core import generate_skeleton as gs
+# Bootstrap: <repo>/analysis on sys.path so `from core import …` resolves from any cwd now
+# that this script lives under crosssource/. Move-safe via .git walk (see core/paths.py).
+sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
+from core import generate_skeleton as gs  # noqa: E402
 
 ROOT = gs.ROOT
 FEED = ROOT / "web" / "public" / "data" / "opportunities_feed.json"

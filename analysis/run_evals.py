@@ -523,7 +523,7 @@ def main():
     # ── Check 2e: signal history integrity ────────────────────────────────────
     passed, out, err = run_check(
         "signal_history",
-        [sys.executable, str(ANALYSIS / "validate_signal_history.py")],
+        [sys.executable, str(ANALYSIS / "guards" / "validate_signal_history.py")],
         cwd=REPO_ROOT,
     )
     notes = one_line_summary(out, err, passed)
@@ -540,7 +540,7 @@ def main():
     # re-appended (root cause of the FY-acceleration phantom jump).
     passed, out, err = run_check(
         "signal_freshness",
-        [sys.executable, str(ANALYSIS / "check_signal_freshness.py"), "--pipeline", "sibc"],
+        [sys.executable, str(ANALYSIS / "guards" / "check_signal_freshness.py"), "--pipeline", "sibc"],
         cwd=REPO_ROOT,
     )
     notes = one_line_summary(out, err, passed)
@@ -622,8 +622,8 @@ def main():
         for label, script, extra in [
             ("4b. system_state (S3)", "core/generate_system_state.py", ["--pipeline", "sibc", "--period", latest]),
             ("4c. opportunities (live)", "core/derive_opportunities.py", ["--pipeline", "sibc", "--period", latest]),
-            ("4d. ecosystem projection", "compose_ecosystem.py", []),
-            ("4e. opportunities UI feed", "generate_opportunities_feed.py", []),
+            ("4d. ecosystem projection", "crosssource/compose_ecosystem.py", []),
+            ("4e. opportunities UI feed", "crosssource/generate_opportunities_feed.py", []),
         ]:
             passed, out, err = run_check(label, [sys.executable, str(ANALYSIS / script)] + extra, cwd=REPO_ROOT)
             results.append((label, passed, one_line_summary(out, err, passed)))

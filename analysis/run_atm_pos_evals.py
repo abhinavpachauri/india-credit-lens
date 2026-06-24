@@ -235,7 +235,7 @@ def check_signal_history():
     """Check 2e: signal history integrity — registry schema + history file consistency."""
     passed, out = run(
         "signal_history",
-        [sys.executable, str(ANALYSIS / "validate_signal_history.py")],
+        [sys.executable, str(ANALYSIS / "guards" / "validate_signal_history.py")],
     )
     # Extract a short summary line
     lines = out.splitlines()
@@ -249,7 +249,7 @@ def check_signal_freshness():
     re-appended (root cause of the FY-acceleration phantom jump)."""
     passed, out = run(
         "signal_freshness",
-        [sys.executable, str(ANALYSIS / "check_signal_freshness.py"), "--pipeline", "atm_pos"],
+        [sys.executable, str(ANALYSIS / "guards" / "check_signal_freshness.py"), "--pipeline", "atm_pos"],
     )
     line = next((l.strip() for l in out.splitlines() if "signals.db" in l), "")
     return passed, (line.lstrip("✓✗ ").strip()[:60] if line else (out[:60] if out else "passed"))

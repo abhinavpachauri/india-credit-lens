@@ -21,9 +21,13 @@ Usage:
 import json
 from collections import defaultdict
 from itertools import combinations
+import sys
 from pathlib import Path
 
-from core import generate_skeleton as gs
+# Bootstrap: <repo>/analysis on sys.path so `from core import …` resolves from any cwd now
+# that this script lives under crosssource/. Move-safe via .git walk (see core/paths.py).
+sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
+from core import generate_skeleton as gs  # noqa: E402
 
 ROOT = gs.ROOT
 OUT_DIR = ROOT / "analysis" / "cross_source"
@@ -142,7 +146,7 @@ def main():
             "description": "Derived cross-system candidate links (COMPOSITION_SPEC.md §6). "
                            "Regenerable — never hand-edit. Promote confirmed links into composition.json.",
             "spec_ref": "analysis/COMPOSITION_SPEC.md",
-            "generated_by": "analysis/derive_cross_links.py",
+            "generated_by": "analysis/crosssource/derive_cross_links.py",
         },
         "candidates": candidates,
     }
