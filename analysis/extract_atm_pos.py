@@ -156,15 +156,41 @@ def extract(xlsx_path, period_dir, format_report):
     return sections
 
 
+def resolve_period(xlsx_path):
+    """Derive the canonical YYYY-MM-DD period from the workbook — the SAME robust logic
+    extraction uses (sheet date, with filename fallback for date-less older formats). No
+    side effects; the generic gate calls this (via `--print-period`) to learn the period
+    of an xlsx before running the ingest stages."""
+    sys.path.insert(0, str(ANALYSIS))
+    import detect_atm_pos_format as _det
+    wb2 = pd.ExcelFile(xlsx_path)
+    sheet_name = _det.find_data_sheet(wb2)
+    if not sheet_name:
+        raise SystemExit(f"ERROR: no recognised data sheet in {Path(xlsx_path).name}")
+    try:
+        report_date, _ = _det.parse_sheet_date(sheet_name)
+    except ValueError:
+        fb = _det.date_from_filename(xlsx_path)
+        if not fb:
+            raise SystemExit(f"ERROR: cannot determine date for {Path(xlsx_path).name}")
+        report_date = fb[0]
+    return report_date
+
+
 def main():
     if len(sys.argv) < 2:
-        print("Usage: python3 extract_atm_pos.py path/to/file.xlsx", file=sys.stderr)
+        print("Usage: python3 extract_atm_pos.py path/to/file.xlsx [--print-period]", file=sys.stderr)
         sys.exit(1)
 
     xlsx_path = Path(sys.argv[1]).resolve()
     if not xlsx_path.exists():
         print(f"{_c('ERROR', RED)}: File not found: {xlsx_path}", file=sys.stderr)
         sys.exit(1)
+
+    # Resolve-only mode: print the period and exit (no detection, no extraction).
+    if "--print-period" in sys.argv:
+        print(resolve_period(xlsx_path))
+        return
 
     # Load format_report to find period_dir + confirm
     # Run detect first to get the report_date without re-running full detection
@@ -196,22 +222,7 @@ def main():
     # Resolve sheet + date with the SAME robust logic as the detector — handles
     # older formats: abbreviated months ('Feb'/'Mar') and Jan 2024's date-less
     # 'Card Statistics' sheet (date then comes from the filename).
-    sys.path.insert(0, str(ANALYSIS))
-    import detect_atm_pos_format as _det
-    wb2 = pd.ExcelFile(xlsx_path)
-    sheet_name = _det.find_data_sheet(wb2)
-    if not sheet_name:
-        print(f"{_c('ERROR', RED)}: no recognised data sheet in {xlsx_path.name}", file=sys.stderr)
-        sys.exit(1)
-    try:
-        report_date, _ = _det.parse_sheet_date(sheet_name)
-    except ValueError:
-        fb = _det.date_from_filename(xlsx_path)
-        if not fb:
-            print(f"{_c('ERROR', RED)}: cannot determine date for {xlsx_path.name}", file=sys.stderr)
-            sys.exit(1)
-        report_date = fb[0]
-
+    report_date  = resolve_period(xlsx_path)
     period_dir   = ATM_POS_DIR / report_date
     report_path  = period_dir / "format_report.json"
 

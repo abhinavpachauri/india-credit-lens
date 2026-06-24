@@ -162,15 +162,32 @@ def main():
     ap = argparse.ArgumentParser(description="Manifest-driven pipeline gate")
     ap.add_argument("--pipeline", required=True)
     ap.add_argument("--period")
+    ap.add_argument("--xlsx", help="Ingest a raw source file (runs the format/extract stages)")
     ap.add_argument("--merged", action="store_true")
     ap.add_argument("--skip-build", action="store_true")
     args = ap.parse_args()
 
     manifest = json.loads((ANALYSIS / "pipelines" / args.pipeline / "pipeline.json").read_text())
-    flags = {"merged": args.merged, "skip_build": args.skip_build,
-             "revalidate": bool(args.period)}
-    latest = args.period or latest_period(args.pipeline)
-    vars_ = {"$ID": args.pipeline, "$LATEST": latest or ""}
+
+    xlsx = str(Path(args.xlsx).resolve()) if args.xlsx else ""
+    if args.xlsx:
+        # Ingest mode: derive the period from the file via the pipeline's DECLARED resolver,
+        # so gate.py stays generic (it knows no sheet/date format). format/extract then run.
+        res = manifest.get("period_resolver")
+        if not res:
+            sys.exit(f"--xlsx given but pipeline '{args.pipeline}' declares no period_resolver")
+        rcmd = [sys.executable, str(ANALYSIS / manifest["modules"][res["module"]]), xlsx] \
+            + res.get("args", [])
+        rp = subprocess.run(rcmd, capture_output=True, text=True)
+        if rp.returncode != 0:
+            sys.exit(f"period_resolver failed: {(rp.stderr or rp.stdout).strip()}")
+        period, revalidate = rp.stdout.strip().splitlines()[-1].strip(), False
+    else:
+        period, revalidate = args.period, bool(args.period)
+
+    flags = {"merged": args.merged, "skip_build": args.skip_build, "revalidate": revalidate}
+    latest = period or latest_period(args.pipeline)
+    vars_ = {"$ID": args.pipeline, "$LATEST": latest or "", "$XLSX": xlsx}
     # Every manifest path key becomes a $VAR (e.g. "sections_merged" → $SECTIONS_MERGED).
     for key, rel in manifest["paths"].items():
         vars_["$" + key.upper()] = str(ROOT / rel)

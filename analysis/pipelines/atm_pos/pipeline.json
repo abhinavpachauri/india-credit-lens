@@ -2,6 +2,7 @@
   "id": "atm_pos",
   "name": "RBI ATM/POS — Payments",
   "on_fail": "stop",
+  "period_resolver": { "module": "extract", "args": ["--print-period"] },
   "paths": {
     "data_dir": "analysis/rbi_atm_pos",
     "consolidated_csv": "web/public/data/atm_pos_consolidated.csv",
@@ -27,8 +28,8 @@
   },
   "gate": [
     { "id": "tests",            "label": "T.  unit tests (pytest)",       "builtin": "pytest" },
-    { "id": "format",           "label": "0.  format detect",            "pipeline": "detect_format", "skip_if": "revalidate" },
-    { "id": "extract",          "label": "1.  extract",                  "pipeline": "extract", "skip_if": "revalidate" },
+    { "id": "format",           "label": "0.  format detect",            "pipeline": "detect_format", "args": ["$XLSX"], "skip_if": "revalidate" },
+    { "id": "extract",          "label": "1.  extract",                  "pipeline": "extract", "args": ["$XLSX"], "skip_if": "revalidate" },
     { "id": "validate_data",    "label": "2.  validate data",            "pipeline": "validate_data", "args": ["$LATEST"] },
     { "id": "consolidate",      "label": "3.  consolidate CSV",          "pipeline": "consolidate", "args": ["$LATEST"] },
     { "id": "signals_payload",  "label": "4a. refresh signals payload",  "pipeline": "signals_payload" },
