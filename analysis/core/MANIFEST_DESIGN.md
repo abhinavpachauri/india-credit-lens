@@ -203,12 +203,14 @@ check_derived_fresh + reconcile + build + 74 tests — and commit after EACH):**
 2. ✅ **DONE (20c05e2)** — moved the 4 gate-internal core/ engines (validate_system_model,
    generate_system_state, derive_opportunities, generate_chart_series) + repointed CORE_MAP +
    run_evals/run_atm_pos_evals/check_derived_fresh + fixed test_system_state import.
-   ⚠ **STILL TODO (2b, deferred):** `generate_signal_history` + `run_inference` are
-   USER-INVOKED CLI tools — moving them changes documented `append`/`evaluate` commands +
-   4 error-hint strings (check_signal_freshness, validate_signal_history,
-   generate_atm_pos_insights, compute_atm_pos_signals) + the per-period command lists in
-   CLAUDE.md/CLAUDE.local.md/PIPELINE_ARCHITECTURE.md/rbi_atm_pos/CLAUDE.md. Do as a
-   doc-coordinated move (fold into step 7's doc sweep), not a pure path-string repoint.
+   **2b: `run_inference` → core/ ✅ DONE (90919cb)** (zero external refs — clean).
+   ⚠ **`generate_signal_history` STILL DEFERRED:** it's the most-frequently-typed runbook
+   command (`append`/`evaluate` every period). Moving it rewrites 5 error-hint strings
+   (compute_atm_pos_signals, generate_atm_pos_insights, guards/check_signal_freshness ×2,
+   guards/validate_signal_history) + the per-period command lists in
+   CLAUDE.md/CLAUDE.local.md/PIPELINE_ARCHITECTURE.md/rbi_atm_pos/CLAUDE.md. Bundle with the
+   4b/4c retirement doc sweep (which rewrites the SAME command lists) so the runbook churns
+   once, not twice. No subprocess/import refs — purely a hint-string + doc move.
 3. ✅ **DONE (bcb292f)** — guards/ (check_signal_freshness, validate_signal_history,
    check_derived_fresh) + crosssource/ (derive_cross_links, compose_ecosystem,
    validate_composition, generate_opportunities_feed, generate_opportunity_narrative).
@@ -253,7 +255,13 @@ check_derived_fresh + reconcile + build + 74 tests — and commit after EACH):**
    vs both old impls (token battery + 20k random comparisons/pipeline, 0 diffs); identical
    gate verdicts (SIBC 84/3-warn, ATM/POS 22 ALL CLEAR). 87 tests (74→87).
 6. pipelines/{id}/ for the per-pipeline modules + update each manifest's `modules` map.
+   **Best done AFTER 4b/4c retirement** — these modules are referenced by the legacy gates;
+   moving them now means repointing soon-to-be-retired code (wasted churn). The legacy gates
+   must keep working until the authoring-cycle cutover, so this waits for that.
 7. legacy/ the retired scripts; update docs (CLAUDE.md, PIPELINE_ARCHITECTURE.md, per-period
    command lists) + add core/ to the architecture discoverer SCAN_DIRS.
+   **SCAN_DIRS ✅ DONE (90919cb)** — discoverer now scans core/guards/crosssource (68 scripts;
+   reconcile --strict green). Remaining: legacy/ move + the runbook doc sweep (bundled with 4b/4c
+   + generate_signal_history per the notes above).
 ```
 ```
