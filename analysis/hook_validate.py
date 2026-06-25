@@ -74,7 +74,7 @@ def main():
 
     elif name == "system_model.json" and p.exists():
         # Structure-only check (no annotation cross-check — annotations may not exist yet)
-        rc, out = run([sys.executable, str(ANALYSIS / "validate.py"), str(p)])
+        rc, out = run([sys.executable, str(ANALYSIS / "legacy" / "validate.py"), str(p)])
         print(f"[hook:system_model] {one_liner(out)}")
         returncode = rc
 

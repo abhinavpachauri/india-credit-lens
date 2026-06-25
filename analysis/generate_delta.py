@@ -153,7 +153,7 @@ def diff_stats(prev_nodes, curr_nodes):
 
 def derive_subsystem_fingerprints(model):
     """Return subsystem fingerprints: frozenset of (driver_ids, sector_ids) per subsystem."""
-    from generate_mermaid import derive_subsystems
+    from legacy.generate_mermaid import derive_subsystems  # retired helper, archived in legacy/
     subs = derive_subsystems(model)
     return {
         sub["id"]: {

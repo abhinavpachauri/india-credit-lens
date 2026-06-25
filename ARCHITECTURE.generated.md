@@ -8,7 +8,7 @@
 > Authored rationale (layer model, design principles, guard purposes) lives in the
 > hand-written `ARCHITECTURE.md`. This file is the structural, drift-guarded half.
 
-_Derived from 66 scripts._
+_Derived from 60 scripts._
 
 ## 1. Data-flow
 
@@ -34,7 +34,7 @@ flowchart LR
   n_analysis_signals_signals_db["signals.db"]
   n_web_public_data_atm_pos_chart_series_json["atm_pos_chart_series.json"]
   n_web_public_data_atm_pos_consolidated_csv["atm_pos_consolidated.csv"]
-  n_web_public_data_atm_pos_insights_json["atm_pos_insights.json"]
+  n_web_public_data_atm_pos_insights_json(["atm_pos_insights.json"])
   n_web_public_data_atm_pos_signals_json(["atm_pos_signals.json"])
   n_web_public_data_opportunities_feed_json["opportunities_feed.json"]
   n_web_public_data_sibc_l1_annotations_json["sibc_l1_annotations.json"]
@@ -72,25 +72,24 @@ exact per-artifact producer/consumer._
 
 Scripts each orchestrator launches as a subprocess, in execution order.
 
-### `hook_validate` → 4 steps
+### `hook_validate` → 3 steps
 1. `pipelines/sibc/validate_annotations`
-2. `validate`
-3. `validate_timeline`
-4. `pipelines/sibc/validate_sections`
+2. `validate_timeline`
+3. `pipelines/sibc/validate_sections`
 
 ## 3. Artifact lineage
 
 | Artifact | Kind | Producer(s) | Consumer(s) |
 |---|---|---|---|
 | `analysis/*/merged/system_state_*.json` | external/authored | — | `core/run_inference` |
-| `analysis/COMPOSITION_SPEC.md` | external/authored | — | `migrate_forces_to_instances`, `crosssource/derive_cross_links` |
+| `analysis/COMPOSITION_SPEC.md` | external/authored | — | `crosssource/derive_cross_links` |
 | `analysis/SYSTEM_MODEL_SPEC.md` | external/authored | — | `core/generate_skeleton` |
 | `analysis/cross_source/candidates.json` | derived | `crosssource/derive_cross_links` | `core/run_inference`, `guards/check_derived_fresh` |
 | `analysis/cross_source/composition.json` | external/authored | — | `core/run_inference`, `crosssource/compose_ecosystem`, `crosssource/validate_composition` |
 | `analysis/cross_source/ecosystem_state_*.json` | external/authored | — | `guards/check_derived_fresh` |
 | `analysis/newsletter/newsletter_config.json` | external/authored | — | `newsletter/generate_linkedin`, `newsletter/generate_newsletter`, `newsletter/validate_newsletter_config` |
 | `analysis/newsletter/newsletter_delta_brief.md` | derived | `newsletter/newsletter_delta_brief` | — |
-| `analysis/ontology/channels.json` | external/authored | — | `migrate_forces_to_instances`, `core/run_inference`, `core/validate_system_model`, `crosssource/derive_cross_links`, `crosssource/generate_opportunities_feed` |
+| `analysis/ontology/channels.json` | external/authored | — | `core/run_inference`, `core/validate_system_model`, `crosssource/derive_cross_links`, `crosssource/generate_opportunities_feed` |
 | `analysis/ontology/concepts.json` | external/authored | — | `core/validate_system_model` |
 | `analysis/rbi_atm_pos/insights.json` | derived | `pipelines/atm_pos/generate_atm_pos_insights` | `pipelines/atm_pos/validate_atm_pos_claims`, `pipelines/atm_pos/validate_atm_pos_insights` |
 | `analysis/rbi_atm_pos/merged/opportunities_*.json` | external/authored | — | `guards/check_derived_fresh` |
@@ -101,8 +100,7 @@ Scripts each orchestrator launches as a subprocess, in execution order.
 | `analysis/rbi_sibc/merged/annotations_merged.ts` | derived | `backfill_sibc_basis` | `pipelines/sibc/validate_annotation_basis` |
 | `analysis/rbi_sibc/merged/opportunities_*.json` | external/authored | — | `guards/check_derived_fresh` |
 | `analysis/rbi_sibc/merged/sections_merged.json` | external/authored | — | `hook_validate`, `newsletter/validate_newsletter_config`, `pipelines/sibc/detect_format`, `pipelines/sibc/generate_merge`, `pipelines/sibc/validate_content`, `pipelines/sibc/validate_web_series` |
-| `analysis/rbi_sibc/merged/subsystems.json` | external/authored | — | `generate_mermaid` |
-| `analysis/rbi_sibc/merged/system_model.json` | derived | `core/generate_skeleton` | `source_claims`, `validate_claims`, `guards/check_derived_fresh` |
+| `analysis/rbi_sibc/merged/system_model.json` | derived | `core/generate_skeleton` | `validate_claims`, `guards/check_derived_fresh` |
 | `analysis/rbi_sibc/merged/system_state_*.json` | external/authored | — | `guards/check_derived_fresh` |
 | `analysis/rbi_sibc/skeleton_profile.json` | external/authored | — | `core/generate_skeleton` |
 | `analysis/rbi_sibc/timeline.json` | external/authored | — | `validate_timeline`, `signals/query`, `newsletter/newsletter_delta_brief`, `signals/compute/sibc`, `pipelines/sibc/generate_merge` |
@@ -113,18 +111,17 @@ Scripts each orchestrator launches as a subprocess, in execution order.
 | `web/lib/reports/rbi_sibc_label_overrides.json` | external/authored | — | `pipelines/sibc/validate_web_series` |
 | `web/public/data/atm_pos_chart_series.json` | derived | `core/generate_chart_series` | `guards/check_derived_fresh` |
 | `web/public/data/atm_pos_consolidated.csv` | derived | `pipelines/atm_pos/consolidate_atm_pos` | `signals/evaluate`, `signals/compute/atm_pos`, `core/generate_chart_series`, `pipelines/atm_pos/compute_atm_pos_signals` |
-| `web/public/data/atm_pos_insights.json` | derived | `pipelines/atm_pos/generate_atm_pos_analysis_report` | `pipelines/atm_pos/generate_atm_pos_insights` |
+| `web/public/data/atm_pos_insights.json` | external/authored | — | `pipelines/atm_pos/generate_atm_pos_insights` |
 | `web/public/data/atm_pos_signals.json` | external/authored | — | `pipelines/atm_pos/compute_atm_pos_signals` |
 | `web/public/data/opportunities_feed.json` | derived | `crosssource/generate_opportunities_feed`, `crosssource/generate_opportunity_narrative` | `validate_opportunity_traceability`, `guards/check_derived_fresh` |
 | `web/public/data/rbi_sibc_consolidated.csv` | derived | `pipelines/sibc/update_web_data` | `signals/evaluate`, `signals/compute/sibc`, `pipelines/sibc/validate_web_series` |
-| `web/public/data/sibc_l1_annotations.json` | derived | `pipelines/sibc/generate_analysis_report` | `validate`, `pipelines/sibc/validate_sibc_traceability` |
+| `web/public/data/sibc_l1_annotations.json` | derived | `pipelines/sibc/generate_analysis_report` | `pipelines/sibc/validate_sibc_traceability` |
 
 ## 4. Module-dependency map
 
 Python import edges (sparse by design — the pipeline is subprocess-
 orchestrated, not import-coupled).
 
-- `build_behavioral_layer` → `core/generate_skeleton`
 - `core/derive_opportunities` → `core/generate_skeleton`
 - `core/generate_system_state` → `core/generate_skeleton`
 - `core/run_inference` → `core/generate_skeleton`
@@ -134,9 +131,6 @@ orchestrated, not import-coupled).
 - `crosssource/generate_opportunities_feed` → `core/generate_skeleton`
 - `crosssource/generate_opportunity_narrative` → `core/generate_skeleton`
 - `crosssource/validate_composition` → `core/generate_skeleton`
-- `generate_delta` → `generate_mermaid`
-- `generate_mermaid` → `validate`
-- `migrate_forces_to_instances` → `core/generate_skeleton`
 - `pipelines/atm_pos/extract_atm_pos` → `pipelines/atm_pos/detect_atm_pos_format`
 - `pipelines/sibc/extract_sibc` → `pipelines/sibc/detect_format`
 - `signals/compute/engine` → `signals/db`

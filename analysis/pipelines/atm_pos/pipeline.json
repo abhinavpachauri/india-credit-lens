@@ -23,8 +23,7 @@
     "signals_payload": "pipelines/atm_pos/compute_atm_pos_signals.py",
     "insights": "pipelines/atm_pos/generate_atm_pos_insights.py",
     "insights_validate": "pipelines/atm_pos/validate_atm_pos_insights.py",
-    "claims_validate": "pipelines/atm_pos/validate_atm_pos_claims.py",
-    "insights_report": "pipelines/atm_pos/generate_atm_pos_analysis_report.py"
+    "claims_validate": "pipelines/atm_pos/validate_atm_pos_claims.py"
   },
   "gate": [
     { "id": "tests",            "label": "T.  unit tests (pytest)",       "builtin": "pytest" },
@@ -45,7 +44,6 @@
     { "id": "system_state",     "label": "5d. system_state (S3)",        "core": "system_state" },
     { "id": "opportunities",    "label": "5d. opportunities (live)",     "core": "derive_opportunities" },
     { "id": "opp_traceability", "label": "4f. opportunity traceability",  "core": "opportunity_traceability", "note": "opportunit" },
-    { "id": "insights_report",  "label": "5.5 generate_atm_pos_report",  "pipeline": "insights_report" },
     { "id": "build",            "label": "6.  tsc + npm run build",      "builtin": "web_build", "skip_if": "--skip-build" }
   ]
 }
