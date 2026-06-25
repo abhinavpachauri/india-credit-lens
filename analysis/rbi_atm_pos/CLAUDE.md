@@ -16,13 +16,13 @@ Full architecture: see `PIPELINE_ARCHITECTURE.md`.
 | 3 | Consolidation | `consolidate_atm_pos.py` → CSV + timeline | ✓ Live · sections_merged.json pending |
 | 4 | Layer 1 signal evaluate | `generate_signal_history.py append` | ⚠ Presence/absence only · numeric compute specs pending |
 | 5 | Layer 2a signal evaluate | `generate_atm_pos_insights.py` (runs in gate for now) | ⚠ Insight script is Layer 2a — needs decoupling from gate |
-| 6 | Evals gate | `run_atm_pos_evals.py` | ✓ Live |
+| 6 | Evals gate | `core/gate.py --pipeline atm_pos` | ✓ Live |
 | 7 | Presentation promote | Direct write (no promotion step yet) | ⚠ Pending |
 
 ## Running the gate
 
 ```
-python3 analysis/run_atm_pos_evals.py --xlsx path/to/file.xlsx [file2.xlsx ...]
+python3 analysis/core/gate.py --pipeline atm_pos --xlsx path/to/file.xlsx
 ```
 
 Flags:
@@ -31,28 +31,29 @@ Flags:
 
 Step by step:
 ```
-Stage 0:  python3 analysis/detect_atm_pos_format.py {xlsx}     → {period}/format_report.json
-Stage 1:  python3 analysis/extract_atm_pos.py {xlsx}           → {period}/sections.json + raw/
-Stage 2:  python3 analysis/validate_atm_pos.py {YYYY-MM-DD}    → checks A–E
-Stage 3:  python3 analysis/consolidate_atm_pos.py {YYYY-MM-DD} → atm_pos_consolidated.csv + timeline.json
-[Stage 4]  python3 analysis/generate_signal_history.py append --pipeline atm_pos --period {YYYY-MM-DD}
-[Stage 4a] python3 analysis/compute_atm_pos_signals.py         → rbi_atm_pos/signals.json (refresh from latest CSV)
-[Stage 4b] python3 analysis/generate_atm_pos_insights.py       → web/public/data/atm_pos_insights.json
-[Stage 4c] python3 analysis/validate_atm_pos_insights.py       → numbers vs signals.json (±0.5%; incl. prior-period ratios)
-[Stage 4d] python3 analysis/validate_atm_pos_claims.py         → validates reasoning.chain (≥2 steps)
+Stage 0:  python3 analysis/pipelines/atm_pos/detect_atm_pos_format.py {xlsx}     → {period}/format_report.json
+Stage 1:  python3 analysis/pipelines/atm_pos/extract_atm_pos.py {xlsx}           → {period}/sections.json + raw/
+Stage 2:  python3 analysis/pipelines/atm_pos/validate_atm_pos.py {YYYY-MM-DD}    → checks A–E
+Stage 3:  python3 analysis/pipelines/atm_pos/consolidate_atm_pos.py {YYYY-MM-DD} → atm_pos_consolidated.csv + timeline.json
+[Stage 4]  python3 analysis/core/generate_signal_history.py append --pipeline atm_pos --period {YYYY-MM-DD}
+[Stage 4a] python3 analysis/pipelines/atm_pos/compute_atm_pos_signals.py         → rbi_atm_pos/signals.json (refresh from latest CSV)
+[Stage 4b] python3 analysis/pipelines/atm_pos/generate_atm_pos_insights.py       → web/public/data/atm_pos_insights.json
+[Stage 4c] python3 analysis/pipelines/atm_pos/validate_atm_pos_insights.py       → numbers vs signals.json (±0.5%; incl. prior-period ratios)
+[Stage 4d] python3 analysis/pipelines/atm_pos/validate_atm_pos_claims.py         → validates reasoning.chain (≥2 steps)
 Stage 6:   (automatic in gate) web CSV integrity check + tsc + npm run build
 ```
 
 > **Stage 4a is mandatory before 4b.** `generate_atm_pos_insights.py` reads
 > `rbi_atm_pos/signals.json`, which carries `meta.latest_month`. If you run 4b without
 > first running `compute_atm_pos_signals.py` (4a), the dashboard serves the **prior period**
-> silently. Both run inside `run_atm_pos_evals.py` (4a wired in 2026-06-13) — prefer the gate
-> over hand-running scripts. NB: `generate_atm_pos_analysis_report.py` (the db/eval "Stage 5.5")
-> is a **no-op** today (updates only `layer==1`; 4b writes none) — 4b is authoritative.
+> silently. Both run inside `core/gate.py --pipeline atm_pos` (4a wired in 2026-06-13) — prefer the gate
+> over hand-running scripts. NB: the old `generate_atm_pos_analysis_report.py` ("Stage 5.5") was a
+> **no-op** and was retired to `analysis/legacy/` in the §4 cutover — 4b is the single authoritative
+> payments insight generator.
 
 Re-validate an already-extracted period:
 ```
-python3 analysis/run_atm_pos_evals.py --period 2026-04-30
+python3 analysis/core/gate.py --pipeline atm_pos --period 2026-04-30
 ```
 
 ---
@@ -186,10 +187,10 @@ Columns: `report_date, bank_name, bank_category, record_type, metric, value, uni
 | Signal values in insights match atm_pos_signals.json ±0.5% | Stage 4c: validate_atm_pos_insights.py |
 | Each signal key declared in insight exists in signals.json | Stage 4d: validate_atm_pos_claims.py |
 | reasoning.chain must have ≥ 2 steps per insight | Stage 4d: validate_atm_pos_claims.py |
-| atm_pos_consolidated.csv has no duplicate (date, bank, metric) rows | Stage 5: run_atm_pos_evals.py |
-| All report_date values in CSV are canonical month-end | Stage 5: run_atm_pos_evals.py |
-| tsc --noEmit passes cleanly | Stage 6: run_atm_pos_evals.py |
-| npm run build completes without error | Stage 6: run_atm_pos_evals.py |
+| atm_pos_consolidated.csv has no duplicate (date, bank, metric) rows | Stage 5: core/gate.py --pipeline atm_pos |
+| All report_date values in CSV are canonical month-end | Stage 5: core/gate.py --pipeline atm_pos |
+| tsc --noEmit passes cleanly | Stage 6: core/gate.py --pipeline atm_pos |
+| npm run build completes without error | Stage 6: core/gate.py --pipeline atm_pos |
 
 ---
 
@@ -207,4 +208,4 @@ Columns: `report_date, bank_name, bank_category, record_type, metric, value, uni
 - No shared scripts — all ATM/POS scripts are prefixed `atm_pos_` or named `*_atm_pos.py`
 - No shared data files — output goes to `atm_pos_consolidated.csv`, not `rbi_sibc_consolidated.csv`
 - No shared timeline — `rbi_atm_pos/timeline.json` is independent
-- `run_evals.py` (SIBC gate) is never called — use `run_atm_pos_evals.py` only
+- `core/gate.py` (SIBC gate) is never called — use `core/gate.py --pipeline atm_pos` only

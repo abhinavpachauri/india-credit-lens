@@ -36,7 +36,7 @@ v1.0 (extends `SYSTEM_MODEL_SPEC.md` v3.0). It refines the above into **five str
 Cross-system composition is **federated** (no monolith): each pipeline maps entities to the shared hub
 once; `derive_cross_links.py` derives cross-edges through shared concepts (stock↔flow + shared channel);
 `cross_source/composition.json` holds confirmed edges; the combined view is **projected**, never authored.
-Both gates (`run_evals.py`, `run_atm_pos_evals.py`) run skeleton-regen + `validate_system_model.py` + S3 +
+Both gates (`core/gate.py`, `core/gate.py --pipeline atm_pos`) run skeleton-regen + `validate_system_model.py` + S3 +
 opportunities each ingestion. Legacy `validate.py` checks 4/5, `validate_claims.py`, `generate_mermaid.py`,
 `source_claims.py` are **retired** (detached from the gate).
 
@@ -109,7 +109,7 @@ Applies to every pipeline. Scripts differ; stage purpose and order do not.
            First period: no diff (no prior eval). Second period onward: diff is automatic.
 
 [Stage 5.5] Analysis report generation     (every period, after Stage 5)
-           SIBC:    python3 analysis/generate_analysis_report.py
+           SIBC:    python3 analysis/pipelines/sibc/generate_analysis_report.py
                     Reads evaluations/sibc/{period}.json + registry.json
                     Maps signals → UI sections via domain + signal-level routing
                     Composes body (observation+direction), implication (inference)
@@ -118,9 +118,10 @@ Applies to every pipeline. Scripts differ; stage purpose and order do not.
                     Writes web/public/data/sibc_l1_annotations.json
            ATM/POS: dashboard insights are produced by Stage 4a→4b inside the gate
                     (compute_atm_pos_signals.py → generate_atm_pos_insights.py), NOT here.
-                    generate_atm_pos_analysis_report.py exists but is a no-op today (it
-                    only updates layer==1 items; 4b writes none). See the ATM/POS pipeline
-                    section's "Dashboard insight path" note. Writes atm_pos_insights.json.
+                    (The old "Stage 5.5" generate_atm_pos_analysis_report.py was a no-op —
+                    4b is authoritative — and has been retired to analysis/legacy/; its gate
+                    stage is removed.) See the ATM/POS pipeline section's "Dashboard insight
+                    path" note. Writes atm_pos_insights.json.
 
 [Stage 5.7] Layer 2 — dynamic state + opportunities   (every period, inside the gate)
            This is the L2 *ingestion* — deterministic, no LLM authoring:
@@ -330,7 +331,7 @@ Current state (June 2026):
 
 ## SIBC Pipeline
 
-**Gate:** `python3 analysis/run_evals.py`
+**Gate:** `python3 analysis/core/gate.py --pipeline sibc`
 **Source:** RBI Sector/Industry-wise Bank Credit (monthly XLSX)
 **Cadence:** Monthly
 
@@ -361,7 +362,7 @@ Show the full remapping table (overrides + normalization) and wait for explicit 
 | 3 | `generate_merge.py` + `update_web_data.py` | `merged/sections_merged.json` + `rbi_sibc_consolidated.csv` |
 | 4 | `generate_signal_history.py append --pipeline sibc` | `signals/signals.db` + registry update |
 | 5 | `generate_signal_history.py evaluate --pipeline sibc` | `signals/evaluations/sibc/{period}.json` |
-| 6 | `run_evals.py --period merged --merged` | — |
+| 6 | `core/gate.py --period merged --merged` | — |
 | 7 | `promote_annotations.py` | `web/lib/reports/rbi_sibc.ts` |
 
 ### Layer 2a model — SIBC system model
@@ -372,7 +373,7 @@ Status: **Live** — updated to Mar 2026 (FOUNDATION pass complete)
 FOUNDATION trigger: March year-end file (`is_fy_end: true` in timeline.json)
 UPDATE trigger: Interim months where new signals emerge
 
-After any model update: run Stage 6 (`run_evals.py --period merged --merged`, which
+After any model update: run Stage 6 (`core/gate.py --period merged --merged`, which
 regenerates the skeleton and validates sourcing via `validate_system_model.py`) → run promote.
 (`source_claims.py` is RETIRED — sourcing is built into the v4.0 model gate.)
 
@@ -435,7 +436,7 @@ No system_model, subsystems, annotations_draft, or mermaid output in per-period 
 
 ## ATM/POS Pipeline
 
-**Gate:** `python3 analysis/run_atm_pos_evals.py`
+**Gate:** `python3 analysis/core/gate.py --pipeline atm_pos`
 **Source:** RBI ATM/Acceptance Infrastructure and Card Statistics (monthly XLSX)
 **Cadence:** Monthly
 
@@ -449,7 +450,7 @@ No system_model, subsystems, annotations_draft, or mermaid output in per-period 
 | 3 | `consolidate_atm_pos.py` → `atm_pos_consolidated.csv` | ✓ Live |
 | 4 | `generate_signal_history.py append --pipeline atm_pos` | ✓ Live — writes to signals.db + registry; **84 L1 signals, 16 periods** |
 | 5 | Layer 2a evaluate | ✓ Live — `evaluate` writes `evaluations/atm_pos/{period}.json` |
-| 6 | `run_atm_pos_evals.py` | ✓ Live |
+| 6 | `core/gate.py --pipeline atm_pos` | ✓ Live |
 | 7 | Presentation promote | direct write (dashboard insights, see below) |
 
 **ATM/POS Layer 1 compute reads directly from `atm_pos_consolidated.csv`** — no
@@ -459,7 +460,7 @@ entity rows stored in signals.db (1c signals store all ~60 banks per period, not
 #### Dashboard insight path (the live one — read this before any payments UI work)
 
 The payments dashboard (`atm_pos_insights.json`) is **NOT** driven by signals.db / the
-evaluation. It comes from a separate deterministic path, run inside `run_atm_pos_evals.py`:
+evaluation. It comes from a separate deterministic path, run inside `core/gate.py --pipeline atm_pos`:
 
 ```
 Stage 4a  compute_atm_pos_signals.py  → rbi_atm_pos/signals.json   (reads latest CSV; deterministic)
@@ -472,11 +473,12 @@ Stage 4d  validate_atm_pos_claims.py    (declared signal keys exist)
 the dashboard silently serves the prior period (this happened — found frozen at Mar 2026
 while data was Apr; fixed 2026-06-13 by wiring 4a into the gate).
 
-**Dual-generator caveat (tech debt):** `generate_atm_pos_analysis_report.py` (the db/eval-driven
-"Stage 5.5", analogous to SIBC's working Stage 5.5) is currently a **no-op** — it only updates
-`layer==1` insights and 4b writes no `layer` field. So 4b is authoritative for payments today.
-SIBC has one clean path (eval → `generate_analysis_report.py` → `sibc_l1_annotations.json`,
-84 L1 annotations). Reconciling the two payments generators is open debt.
+**Dual-generator caveat — RESOLVED (2026-06-25):** the db/eval-driven "Stage 5.5"
+`generate_atm_pos_analysis_report.py` was a **no-op** (it only updated `layer==1` insights and 4b
+writes no `layer` field), so 4b was already authoritative for payments. In the §4 cutover it was
+retired to `analysis/legacy/` and its gate stage removed — 4b is now the single payments insight
+generator. SIBC keeps its one clean path (eval → `pipelines/sibc/generate_analysis_report.py` →
+`sibc_l1_annotations.json`, 84 L1 annotations).
 
 ### Layer 2a model — ATM/POS system model
 
@@ -580,20 +582,20 @@ Never copy `annotations_merged.ts` → `rbi_sibc.ts` manually.
 
 ```
 □  Place xlsx in analysis/rbi_sibc/{dataDate}/raw/
-□  python3 analysis/detect_format.py {xlsx}
+□  python3 analysis/pipelines/sibc/detect_format.py {xlsx}
    — review format_report.json; confirm before proceeding
-□  python3 analysis/extract_sibc.py {xlsx}
-□  python3 analysis/update_web_data.py
+□  python3 analysis/pipelines/sibc/extract_sibc.py {xlsx}
+□  python3 analysis/pipelines/sibc/update_web_data.py
 □  Update timeline.json — add period entry, is_fy_end: false
 □  Claude: delta_brief.md  (150–200 words; see structure above)
-□  python3 analysis/run_evals.py --period {dataDate} --skip-build
+□  python3 analysis/core/gate.py --pipeline sibc --period {dataDate} --skip-build
    (Checks 0, 0.5, 1, 1b — data integrity only)
-□  python3 analysis/generate_merge.py
-□  python3 analysis/generate_signal_history.py append --pipeline sibc --period {dataDate}
+□  python3 analysis/pipelines/sibc/generate_merge.py
+□  python3 analysis/core/generate_signal_history.py append --pipeline sibc --period {dataDate}
    (Stage 4 — Layer 1 always runs here)
-□  python3 analysis/generate_signal_history.py evaluate --pipeline sibc --period {dataDate}
+□  python3 analysis/core/generate_signal_history.py evaluate --pipeline sibc --period {dataDate}
    (Stage 5 — LLM signal evaluate; always runs every period)
-□  python3 analysis/generate_analysis_report.py
+□  python3 analysis/pipelines/sibc/generate_analysis_report.py
    (Stage 5.5 — generate sibc_l1_annotations.json for UI from eval output)
 □  READ rbi_sibc/merged/system_model.json — is a model UPDATE warranted?
    If yes (new signals, material pattern shift): run Layer 2a model UPDATE pass
@@ -601,10 +603,10 @@ Never copy `annotations_merged.ts` → `rbi_sibc.ts` manually.
    — set _meta.mode = "update", bump _meta.last_updated
    — (source_claims.py + generate_mermaid.py are RETIRED — sourcing is enforced by
       validate_system_model.py inside the gate; do not run them)
-□  python3 analysis/run_evals.py --period merged --merged --skip-build
-□  python3 analysis/promote_annotations.py --dry-run
-□  python3 analysis/promote_annotations.py
-□  python3 analysis/run_evals.py --period merged --merged
+□  python3 analysis/core/gate.py --pipeline sibc --merged --skip-build
+□  python3 analysis/pipelines/sibc/promote_annotations.py --dry-run
+□  python3 analysis/pipelines/sibc/promote_annotations.py
+□  python3 analysis/core/gate.py --pipeline sibc --merged
 □  Commit per-period → merged → web/ separately
 □  git push
 ```
@@ -621,13 +623,13 @@ Never copy `annotations_merged.ts` → `rbi_sibc.ts` manually.
    — full rebuild of subsystems.json
    — full rewrite of annotations_merged.ts (ID guard applies — see Key Rules)
    — (source_claims.py RETIRED — sourcing enforced by validate_system_model.py in the gate)
-□  python3 analysis/generate_signal_history.py evaluate --pipeline sibc --period {dataDate}
+□  python3 analysis/core/generate_signal_history.py evaluate --pipeline sibc --period {dataDate}
    (re-run Stage 5 after model rebuild)
-□  python3 analysis/run_evals.py --period merged --merged --skip-build
+□  python3 analysis/core/gate.py --pipeline sibc --merged --skip-build
    (regenerates the skeleton + S3 + opportunities; generate_mermaid.py is RETIRED)
-□  python3 analysis/promote_annotations.py --dry-run  (REVIEW every removed ID)
-□  python3 analysis/promote_annotations.py
-□  python3 analysis/run_evals.py --period merged --merged
+□  python3 analysis/pipelines/sibc/promote_annotations.py --dry-run  (REVIEW every removed ID)
+□  python3 analysis/pipelines/sibc/promote_annotations.py
+□  python3 analysis/core/gate.py --pipeline sibc --merged
 □  Commit per-period → merged → web/ separately
 □  git push
 ```
@@ -636,15 +638,15 @@ Never copy `annotations_merged.ts` → `rbi_sibc.ts` manually.
 
 ```
 □  Place xlsx in analysis/rbi_atm_pos/incoming/
-□  python3 analysis/run_atm_pos_evals.py --xlsx {file}
+□  python3 analysis/core/gate.py --pipeline atm_pos --xlsx {file}
    (Stages 0–3 extract/validate/consolidate, THEN Stage 4a refresh signals.json →
     4b generate insights → 4c/4d validate → 5c skeleton+model → 5d S3+opportunities.
     The dashboard insight refresh (4a→4b) lives INSIDE this gate — see the
     "Dashboard insight path" note above. Do not hand-run generate_atm_pos_insights.py
     without first running compute_atm_pos_signals.py, or you serve a stale period.)
-□  python3 analysis/generate_signal_history.py append --pipeline atm_pos --period {YYYY-MM-DD}
+□  python3 analysis/core/generate_signal_history.py append --pipeline atm_pos --period {YYYY-MM-DD}
    (Stage 4 — Layer 1: writes all signals to signals.db + updates registry)
-□  python3 analysis/generate_signal_history.py evaluate --pipeline atm_pos --period {YYYY-MM-DD}
+□  python3 analysis/core/generate_signal_history.py evaluate --pipeline atm_pos --period {YYYY-MM-DD}
    (Stage 5 — LLM signal evaluate → evaluations/atm_pos/{period}.json)
    NB: generate_atm_pos_analysis_report.py ("5.5") is currently a no-op — see caveat above.
 □  Commit per-period → web/ separately
@@ -752,8 +754,8 @@ analysis/
 ├── output/
 │   └── mermaid/rbi_sibc/{YYYY-MM-DD}/   ← On-demand mermaid diagrams
 │
-├── run_evals.py                    ← SIBC gate (Stages 0–6)
-├── run_atm_pos_evals.py            ← ATM/POS gate (Stages 0–6)
+├── core/gate.py                    ← SIBC gate (Stages 0–6)
+├── core/gate.py --pipeline atm_pos            ← ATM/POS gate (Stages 0–6)
 ├── extract_sibc.py                 ← Stage 1 SIBC
 ├── extract_atm_pos.py              ← Stage 1 ATM/POS
 ├── detect_format.py                ← Stage 0 SIBC

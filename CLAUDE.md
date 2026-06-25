@@ -66,7 +66,7 @@ Live components only. Planned work lives in `STRATEGY_PLANNER.md`.
 | L1 annotation classification | **Done** — all 49 SIBC annotations classified: 26 L1 / 18 L2 / 5 L3; all 21 ATM/POS insights classified: 16 L1 / 3 L2 / 2 gaps |
 | Subsystem generation | **Live** — `generate_mermaid.py` → `.mmd` + `validate.py --check-subsystems` |
 | detect_format.py (Stage 0) | **Live** — flags format changes in new XLSX before extraction |
-| ATM/POS pipeline | **Live** — `rbi_atm_pos/` — Stages 0–3 + L1 compute (84 signals) + evaluate. **28 periods Jan 2024 → Apr 2026** (2024 backfilled 2026-06-20 → YoY now computes for all 16 of 2025+2026, was 4). Detector handles older formats (abbreviated months, date-less sheets → filename, content-based sheet detection); canonical roster time-aware (Fincare merged Apr 2024, Dhanalaxmi rename Nov 2024). **Dashboard insights** come from a *separate deterministic path*: Stage 4a `compute_atm_pos_signals.py` → `rbi_atm_pos/signals.json` → Stage 4b `generate_atm_pos_insights.py` → `atm_pos_insights.json` (17 insights, Apr 2026). Both stages run inside `run_atm_pos_evals.py`. NB: `generate_atm_pos_analysis_report.py` (the db/eval-driven "Stage 5.5") is currently a **no-op** (it only updates `layer==1` items and 4b writes none) — 4b is authoritative until the dual paths are reconciled. |
+| ATM/POS pipeline | **Live** — `rbi_atm_pos/` — Stages 0–3 + L1 compute (84 signals) + evaluate. **28 periods Jan 2024 → Apr 2026** (2024 backfilled 2026-06-20 → YoY now computes for all 16 of 2025+2026, was 4). Detector handles older formats (abbreviated months, date-less sheets → filename, content-based sheet detection); canonical roster time-aware (Fincare merged Apr 2024, Dhanalaxmi rename Nov 2024). **Dashboard insights** come from a *separate deterministic path*: Stage 4a `compute_atm_pos_signals.py` → `rbi_atm_pos/signals.json` → Stage 4b `generate_atm_pos_insights.py` → `atm_pos_insights.json` (17 insights, Apr 2026). Both stages run inside `core/gate.py --pipeline atm_pos`. 4b is the single authoritative payments insight generator — the old "Stage 5.5" `generate_atm_pos_analysis_report.py` (a no-op) was retired to `analysis/legacy/` in the §4 cutover. |
 | AppShell + DLS | **Live** — shared Header (one instance), `dls/InsightCard`, `dls/InsightCTAStrip` used by both SIBC and Payments |
 | **Layer 2a system models (v4.0)** | **Live** — `system_model.json` for both pipelines (SIBC 85 entities, ATM/POS 35). Deterministic structural skeleton (`generate_skeleton.py`) + behavioral-causal split into shared **channels** (S2a) + dated **force_instances** (S2b). Specs: `analysis/SYSTEM_MODEL_SPEC.md` v3.0 + `analysis/COMPOSITION_SPEC.md` v1.0. Validated by `validate_system_model.py` in both gates. |
 | **Composition hub (Layer 2b)** | **Live** — `analysis/ontology/{concepts,channels}.json` shared across pipelines; entities carry global URNs + `concept_tags`. `derive_cross_links.py` derives cross-system candidates (stock↔flow + shared-channel); `cross_source/composition.json` holds confirmed cross-edges; `validate_composition.py` enforces the no-monolith rule. |
@@ -91,20 +91,20 @@ Use CLI tools for all external service interactions — they are the most contex
 
 | Tool | Use for |
 |---|---|
-| `python3 analysis/run_evals.py` | SIBC gate — Stages 0–6 (data integrity + signal + model validation) |
-| `python3 analysis/run_atm_pos_evals.py --xlsx {file}` | ATM/POS gate — Stages 0–3 + L1 signal append + build |
-| `python3 analysis/promote_annotations.py` | Stage 7: verified copy annotations_merged.ts → rbi_sibc.ts — never `cp` or manual paste |
-| `python3 analysis/detect_format.py` | Stage 0: flag format changes before extraction (SIBC) |
-| ~~`python3 analysis/source_claims.py`~~ | **Legacy** — v2 claim sourcing; superseded by `validate_system_model.py` (sourcing built in). Detached from gate. |
+| `python3 analysis/core/gate.py --pipeline sibc` | SIBC gate — Stages 0–6 (data integrity + signal + model validation) |
+| `python3 analysis/core/gate.py --pipeline atm_pos --xlsx {file}` | ATM/POS gate — Stages 0–3 + L1 signal append + build |
+| `python3 analysis/pipelines/sibc/promote_annotations.py` | Stage 7: verified copy annotations_merged.ts → rbi_sibc.ts — never `cp` or manual paste |
+| `python3 analysis/pipelines/sibc/detect_format.py` | Stage 0: flag format changes before extraction (SIBC) |
+| ~~`python3 analysis/legacy/source_claims.py`~~ | **Legacy** — v2 claim sourcing; superseded by `validate_system_model.py` (sourcing built in). Detached from gate. |
 | `python3 analysis/generate_skeleton.py --pipeline {sibc\|atm_pos}` | Stage 4-struct: regenerate the deterministic skeleton (preserves behavioral layer + force_instances). Runs inside both gates. |
 | `python3 analysis/validate_system_model.py --pipeline {name}` | v4.0 model gate — structural + D1/D2/D3 discipline + force sourcing + URN/concept_tags. Replaces legacy checks 4/5/2c. |
 | `python3 analysis/generate_system_state.py --pipeline {name} --period {date}` | S3: compute dynamic state from `signals.db` → `system_state_{period}.json`. |
 | `python3 analysis/derive_opportunities.py --pipeline {name} --period {date}` | Derive live opportunity/risk status from S3 driver firing. |
 | `python3 analysis/derive_cross_links.py` · `compose_ecosystem.py` · `validate_composition.py` | Cross-system pass (Layer 2b): derive candidates → project ecosystem state → validate cross-edges. |
 | `python3 analysis/generate_opportunities_feed.py` then `generate_opportunity_narrative.py` | Presentation: build `opportunities_feed.json`, then add plain-English narrative (post-gate, cached). |
-| `python3 analysis/generate_signal_history.py append --pipeline {name} --period {date}` | Stage 4: Layer 1 signal compute → writes to signals.db + updates registry |
-| `python3 analysis/generate_signal_history.py evaluate --pipeline {name} --period {date}` | Stage 5: LLM signal evaluate → evaluations JSON; auto-loads prior period for narrative diff |
-| `python3 analysis/generate_signal_history.py status` | Print current signal states across all pipelines |
+| `python3 analysis/core/generate_signal_history.py append --pipeline {name} --period {date}` | Stage 4: Layer 1 signal compute → writes to signals.db + updates registry |
+| `python3 analysis/core/generate_signal_history.py evaluate --pipeline {name} --period {date}` | Stage 5: LLM signal evaluate → evaluations JSON; auto-loads prior period for narrative diff |
+| `python3 analysis/core/generate_signal_history.py status` | Print current signal states across all pipelines |
 | `python3 analysis/validate_signal_history.py` | Check 2e: signal history integrity — DB rows, registry schema, status sync vs DB |
 | `python3 analysis/check_signal_freshness.py [--pipeline {name}]` | Check 2f/5b2: signals.db freshness — recompute every period from the CSV and fail on any drift (value/status/missing/orphan). Deterministic guard; runs in both gates + pre-commit. Fix = re-append **every** period, not just the latest. |
 | `python3 analysis/newsletter/validate_newsletter_config.py` | Newsletter gate — exception path, not part of standard pipeline |
@@ -150,7 +150,7 @@ handles formatting-only cases automatically.
 ### Git / deployment
 - **Solo project — work directly on `main`. Never create feature branches or worktrees.**
 - Never auto-push to GitHub
-- Always run `python3 analysis/run_evals.py` (includes `npm run build`) before `git push`
+- Always run `python3 analysis/core/gate.py --pipeline sibc` (includes `npm run build`) before `git push`
 - Show results and wait for explicit confirmation
 
 ---
@@ -163,28 +163,28 @@ handles formatting-only cases automatically.
 | `STRATEGY_PLANNER.md` | Content ladder, revenue model, product roadmap |
 | `PIPELINE_ARCHITECTURE.md` | **Pipeline stages, system model cadence, adding-period checklist** |
 | `analysis/report_analysis_prompt.md` | Master prompt + analytical framework for all report analyses |
-| `analysis/run_evals.py` | Master eval gate — Stages 3 and 6 |
+| `analysis/core/gate.py` | Master eval gate — Stages 3 and 6 |
 | `analysis/validate_timeline.py` | Check 0: timeline.json schema + path existence |
-| `analysis/validate_sections.py` | Check 1: sections.json data integrity |
-| `analysis/validate_annotations.py` | Check 3: live rbi_sibc.ts structure (Checks A–H) |
-| `analysis/validate_content.py` | Check 2b: dates/values/growth in annotation bodies vs sections.json |
+| `analysis/pipelines/sibc/validate_sections.py` | Check 1: sections.json data integrity |
+| `analysis/pipelines/sibc/validate_annotations.py` | Check 3: live rbi_sibc.ts structure (Checks A–H) |
+| `analysis/pipelines/sibc/validate_content.py` | Check 2b: dates/values/growth in annotation bodies vs sections.json |
 | `analysis/validate_claims.py` | Check 2c: claim sourcing — every system model claim has a source |
-| `analysis/validate_annotation_basis.py` | Check 2d: basis completeness — inference/hypothesis annotations must have basis.inferences |
+| `analysis/pipelines/sibc/validate_annotation_basis.py` | Check 2d: basis completeness — inference/hypothesis annotations must have basis.inferences |
 | `analysis/validate_signal_history.py` | Check 2e: signal history integrity — DB rows, registry schema, status sync vs DB |
 | `analysis/check_signal_freshness.py` | Check 2f/5b2: deterministic signals.db freshness — recompute all periods from CSV, fail on drift. Closes the staleness gap `check_derived_fresh.py` leaves (it excludes the binary DB). |
-| `analysis/validate_sibc_traceability.py` | Check 2g: every number in a SIBC insight's body/chain/implication must trace to a value in signals.db (scalar = hard fail; scan = deterministic so grounded by construction). Status-substring contradictions = non-blocking warnings. Ground truth = `query.signal_numbers`/`flat_numbers` (period-wide, unit-aware). |
-| `analysis/validate_atm_pos_insights.py` | Stage 4c: ATM/POS traceability — numbers in body/**chain**/implication must trace to `signals.json`. Mirror of Check 2g for the deterministic payments path. |
+| `analysis/pipelines/sibc/validate_sibc_traceability.py` | Check 2g: every number in a SIBC insight's body/chain/implication must trace to a value in signals.db (scalar = hard fail; scan = deterministic so grounded by construction). Status-substring contradictions = non-blocking warnings. Ground truth = `query.signal_numbers`/`flat_numbers` (period-wide, unit-aware). |
+| `analysis/pipelines/atm_pos/validate_atm_pos_insights.py` | Stage 4c: ATM/POS traceability — numbers in body/**chain**/implication must trace to `signals.json`. Mirror of Check 2g for the deterministic payments path. |
 | `analysis/validate_opportunity_traceability.py` | Check 4f: opportunity (Layer 2) number traceability — every number in an opportunity body/chain/implication must trace to the driver's **full declared evidence set (`evidence_all`)** (period-wide is vacuous at cross-pipeline scale). **STRICT in both gates** (the L2 analog of Check 2g; `derive_opportunities` emits `evidence_all` = driver's full signal set so structural risks ground even when not firing). |
-| `analysis/generate_analysis_report.py` | Stage 5.5: eval JSON → `sibc_l1_annotations.json`. Scalar insights carry the LLM chain → `basis.inferences`; **scan insights generated deterministically** (`deterministic_scan_insight`). Attaches `basis.facts` from `signal_numbers`. |
-| `analysis/validate.py` | Checks 4, 5: system_model.json + subsystems.json |
-| `analysis/extract_sibc.py` | Stage 1: SIBC xlsx → sections.json + format_report.json |
-| `analysis/detect_format.py` | Stage 0: detect structural changes in new XLSX vs prior period (SIBC) |
-| `analysis/update_web_data.py` | Stage 3: all xlsx → rbi_sibc_consolidated.csv |
-| `analysis/generate_merge.py` | Stage 3: sections.json[] → sections_merged.json (auto-validates) |
-| `analysis/generate_mermaid.py` | On-demand: system_model → .mmd files (always after FOUNDATION; after UPDATE only if nodes/edges changed) |
-| `analysis/source_claims.py` | Post-model-update: source all claims in system_model.json |
-| `analysis/promote_annotations.py` | Stage 7: annotations_merged.ts → rbi_sibc.ts (verified copy + ID diff) |
-| `analysis/generate_signal_history.py` | Stage 4 (`append`) + Stage 5 (`evaluate`) + `status` + `seed` commands |
+| `analysis/pipelines/sibc/generate_analysis_report.py` | Stage 5.5: eval JSON → `sibc_l1_annotations.json`. Scalar insights carry the LLM chain → `basis.inferences`; **scan insights generated deterministically** (`deterministic_scan_insight`). Attaches `basis.facts` from `signal_numbers`. |
+| `analysis/legacy/validate.py` | Checks 4, 5: system_model.json + subsystems.json |
+| `analysis/pipelines/sibc/extract_sibc.py` | Stage 1: SIBC xlsx → sections.json + format_report.json |
+| `analysis/pipelines/sibc/detect_format.py` | Stage 0: detect structural changes in new XLSX vs prior period (SIBC) |
+| `analysis/pipelines/sibc/update_web_data.py` | Stage 3: all xlsx → rbi_sibc_consolidated.csv |
+| `analysis/pipelines/sibc/generate_merge.py` | Stage 3: sections.json[] → sections_merged.json (auto-validates) |
+| `analysis/legacy/generate_mermaid.py` | On-demand: system_model → .mmd files (always after FOUNDATION; after UPDATE only if nodes/edges changed) |
+| `analysis/legacy/source_claims.py` | Post-model-update: source all claims in system_model.json |
+| `analysis/pipelines/sibc/promote_annotations.py` | Stage 7: annotations_merged.ts → rbi_sibc.ts (verified copy + ID diff) |
+| `analysis/core/generate_signal_history.py` | Stage 4 (`append`) + Stage 5 (`evaluate`) + `status` + `seed` commands |
 | `analysis/signals/registry.json` | Universal signal catalog — 90 signals, layer 1/2/3 tagged; all Layer 1 signals have compute specs (SIBC + ATM/POS) |
 | `analysis/signals/signals.db` | **Primary signal store** — SQLite; (pipeline, period, metric_id, entity_type, entity_id) fact table + metric_ranges |
 | `analysis/signals/compute/` | Compute engine: engine.py dispatches; sibc.py + atm_pos.py implement all 1a/1b/1c/1d methods. Both read from consolidated CSVs. SIBC maps `dataDate → csv_date` via `timeline.json` before querying. |
@@ -303,9 +303,17 @@ source #3**; phased, git-revertible); perf pass; READMEs + naming; **recurring d
   language) — kept as a warning, not a gate failure. Review the wording; tighten the heuristic only if it
   proves noisy.
 
+**§4 ARCHITECTURE CUTOVER — DONE (2026-06-25).** `analysis/core/gate.py` is now the single
+manifest-driven gate for **both** pipelines and **all** modes (sibc `--merged` / sibc `--period` /
+atm_pos `--period` / atm_pos `--xlsx`). `run_evals.py` / `run_atm_pos_evals.py` and the 6 superseded
+scripts (`source_claims`, `generate_mermaid`, `validate`, `build_behavioral_layer`,
+`migrate_forces_to_instances`, `generate_atm_pos_analysis_report`) are archived in `analysis/legacy/`.
+Per-pipeline modules live in `analysis/pipelines/{sibc,atm_pos}/`; `generate_signal_history` is in
+`analysis/core/`. SIBC per-period parity was proven on the Dec 2025 backfill. Use the `gate.py`
+commands in the runbooks below.
+
 **Immediately next:**
-1. **Ingest next SIBC + ATM/POS period** — run full gate after ingestion (now also regenerates skeleton + S3 + opportunities).
-   - **⚠ ALSO DO THE §4 ARCHITECTURE CUTOVER THIS SESSION** (it was gated on exactly this — a live ingestion/authoring period). The `analysis/` relocation is ~85% done (`core/`, `guards/`, `crosssource/` engines moved; traceability number-core merged; `gate.py --xlsx` ingest at parity). What's left REQUIRES this live period to verify safely: **(a)** add the SIBC per-period (non-merged) mode to `gate.py` + the sibc manifest and prove parity vs `run_evals --period` on the real draft; **(b)** retire `run_evals.py`/`run_atm_pos_evals.py` (→ `legacy/`); **(c)** move per-pipeline modules → `pipelines/{id}/` and `generate_signal_history` → `core/`; **(d)** ONE runbook doc sweep (this file's command lists + `CLAUDE.local.md` + `PIPELINE_ARCHITECTURE.md` + `rbi_atm_pos/CLAUDE.md`) repointing to `gate.py`/new paths; **(e)** `git mv` the 6 retired scripts (`source_claims`, `generate_mermaid`, `validate`, `build_behavioral_layer`, `migrate_forces_to_instances`, `generate_atm_pos_analysis_report`) → `legacy/`. **Full plan + rationale: `analysis/core/MANIFEST_DESIGN.md` (batch plan steps 4b/4c/6/7).** Until then the legacy gates still work — keep using them this ingestion, then cut over.
+1. **Ingest next SIBC + ATM/POS period** — run the full gate after ingestion (regenerates skeleton + S3 + opportunities).
 2. **Layer 3 ecosystem strategic model** — authored ~6-monthly; consumes L2a/L2b causal graphs (next session).
 3. **Review S4 proposals** — `analysis/s4_proposals/{period}.json`: source + promote the worthwhile candidate channels.
 4. Newsletter standardisation: now unblocked by the Layer 2 model.
