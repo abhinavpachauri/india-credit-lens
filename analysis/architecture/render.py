@@ -21,7 +21,8 @@ GRAPH = ANALYSIS / "architecture" / "graph.json"
 OUT = ROOT / "ARCHITECTURE.generated.md"
 
 # Entry points to feature in the gate-sequence section, in this order.
-GATE_ROOTS = ["run_evals", "run_atm_pos_evals", "check_derived_fresh", "hook_validate"]
+# gate.py is the single manifest-driven gate (run_evals/run_atm_pos_evals retired to legacy/).
+GATE_ROOTS = ["gate", "check_derived_fresh", "hook_validate"]
 
 
 def load():

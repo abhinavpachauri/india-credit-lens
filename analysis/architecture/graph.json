@@ -51,8 +51,8 @@
         "sections.json": "low"
       },
       "writes": {
-        "web/public/data/atm_pos_consolidated.csv": "high",
-        "timeline.json": "high"
+        "timeline.json": "high",
+        "web/public/data/atm_pos_consolidated.csv": "high"
       },
       "doc_claims": []
     },
@@ -106,8 +106,8 @@
         "format_report.json": "low"
       },
       "writes": {
-        "sections.json": "high",
-        "date_overrides.json": "high"
+        "date_overrides.json": "high",
+        "sections.json": "high"
       },
       "doc_claims": []
     },
@@ -280,74 +280,6 @@
       "writes": {
         "web/lib/reports/rbi_sibc.ts": "high"
       },
-      "doc_claims": []
-    },
-    "run_atm_pos_evals": {
-      "path": "analysis/run_atm_pos_evals.py",
-      "imports": [],
-      "invokes": [
-        "detect_atm_pos_format",
-        "extract_atm_pos",
-        "validate_atm_pos",
-        "consolidate_atm_pos",
-        "guards/validate_signal_history",
-        "guards/check_signal_freshness",
-        "core/generate_system_state",
-        "core/derive_opportunities",
-        "validate_opportunity_traceability",
-        "core/generate_skeleton",
-        "core/validate_system_model",
-        "compute_atm_pos_signals",
-        "core/generate_chart_series",
-        "generate_atm_pos_insights",
-        "validate_atm_pos_insights",
-        "validate_atm_pos_claims",
-        "generate_atm_pos_analysis_report"
-      ],
-      "reads": {
-        "web/public/data/atm_pos_consolidated.csv": "low",
-        "analysis/signals/signals.db": "low"
-      },
-      "writes": {},
-      "doc_claims": []
-    },
-    "run_evals": {
-      "path": "analysis/run_evals.py",
-      "imports": [],
-      "invokes": [
-        "update_web_data",
-        "validate_timeline",
-        "validate_sections",
-        "validate_annotations",
-        "core/generate_skeleton",
-        "core/validate_system_model",
-        "validate_content",
-        "validate_claims",
-        "validate",
-        "validate_annotation_basis",
-        "guards/validate_signal_history",
-        "guards/check_signal_freshness",
-        "validate_sibc_traceability",
-        "generate_analysis_report",
-        "validate_web_series",
-        "validate_opportunity_traceability"
-      ],
-      "reads": {
-        "web/public/data/rbi_sibc_consolidated.csv": "low",
-        "timeline.json": "low",
-        "analysis/rbi_sibc/timeline.json": "low",
-        "format_report.json": "low",
-        "analysis/rbi_sibc/merged/sections_merged.json": "low",
-        "sections.json": "low",
-        "annotations_draft.ts": "low",
-        "web/lib/reports/rbi_sibc.ts": "low",
-        "analysis/signals/signals.db": "low",
-        "annotations_merged.ts": "low",
-        "system_model.json": "low",
-        "analysis/rbi_sibc/merged/system_model.json": "low",
-        "analysis/rbi_sibc/merged/subsystems.json": "low"
-      },
-      "writes": {},
       "doc_claims": []
     },
     "source_claims": {
@@ -957,8 +889,8 @@
         "analysis/signals/signals.db": "low"
       },
       "writes": {
-        "analysis/signals/narrative_cache.json": "high",
-        "web/public/data/opportunities_feed.json": "high"
+        "web/public/data/opportunities_feed.json": "high",
+        "analysis/signals/narrative_cache.json": "high"
       },
       "doc_claims": []
     },

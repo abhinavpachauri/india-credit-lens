@@ -13,7 +13,7 @@ What it does:
   6. Exits 0 on success, 1 on any verification failure
 
 Does NOT:
-  - Run tsc or npm run build (call run_evals.py for that)
+  - Run tsc or npm run build (call analysis/core/gate.py for that)
   - Commit or push to git
 
 Usage:
@@ -177,8 +177,8 @@ def main():
 
     print(f"  ✅ Verification passed — {len(written_ids)} annotation IDs match source")
     print(f"\n  Next steps:")
-    print(f"     python3 analysis/run_evals.py --period merged --merged")
-    print(f"     (or omit --skip-build to also run tsc + npm run build)\n")
+    print(f"     python3 analysis/core/gate.py --pipeline sibc --merged")
+    print(f"     (add --skip-build to skip tsc + npm run build)\n")
 
 
 if __name__ == "__main__":

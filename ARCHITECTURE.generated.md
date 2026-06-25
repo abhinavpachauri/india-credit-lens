@@ -8,7 +8,7 @@
 > Authored rationale (layer model, design principles, guard purposes) lives in the
 > hand-written `ARCHITECTURE.md`. This file is the structural, drift-guarded half.
 
-_Derived from 68 scripts._
+_Derived from 66 scripts._
 
 ## 1. Data-flow
 
@@ -72,43 +72,6 @@ exact per-artifact producer/consumer._
 
 Scripts each orchestrator launches as a subprocess, in execution order.
 
-### `run_evals` → 16 steps
-1. `update_web_data`
-2. `validate_timeline`
-3. `validate_sections`
-4. `validate_annotations`
-5. `core/generate_skeleton`
-6. `core/validate_system_model`
-7. `validate_content`
-8. `validate_claims`
-9. `validate`
-10. `validate_annotation_basis`
-11. `guards/validate_signal_history`
-12. `guards/check_signal_freshness`
-13. `validate_sibc_traceability`
-14. `generate_analysis_report`
-15. `validate_web_series`
-16. `validate_opportunity_traceability`
-
-### `run_atm_pos_evals` → 17 steps
-1. `detect_atm_pos_format`
-2. `extract_atm_pos`
-3. `validate_atm_pos`
-4. `consolidate_atm_pos`
-5. `guards/validate_signal_history`
-6. `guards/check_signal_freshness`
-7. `core/generate_system_state`
-8. `core/derive_opportunities`
-9. `validate_opportunity_traceability`
-10. `core/generate_skeleton`
-11. `core/validate_system_model`
-12. `compute_atm_pos_signals`
-13. `core/generate_chart_series`
-14. `generate_atm_pos_insights`
-15. `validate_atm_pos_insights`
-16. `validate_atm_pos_claims`
-17. `generate_atm_pos_analysis_report`
-
 ### `hook_validate` → 4 steps
 1. `validate_annotations`
 2. `validate`
@@ -137,23 +100,23 @@ Scripts each orchestrator launches as a subprocess, in execution order.
 | `analysis/rbi_atm_pos/skeleton_profile.json` | external/authored | — | `core/generate_skeleton` |
 | `analysis/rbi_sibc/merged/annotations_merged.ts` | derived | `backfill_sibc_basis` | `validate_annotation_basis` |
 | `analysis/rbi_sibc/merged/opportunities_*.json` | external/authored | — | `guards/check_derived_fresh` |
-| `analysis/rbi_sibc/merged/sections_merged.json` | external/authored | — | `detect_format`, `generate_merge`, `hook_validate`, `run_evals`, `validate_content`, `validate_web_series`, `newsletter/validate_newsletter_config` |
-| `analysis/rbi_sibc/merged/subsystems.json` | external/authored | — | `generate_mermaid`, `run_evals` |
-| `analysis/rbi_sibc/merged/system_model.json` | derived | `core/generate_skeleton` | `run_evals`, `source_claims`, `validate_claims`, `guards/check_derived_fresh` |
+| `analysis/rbi_sibc/merged/sections_merged.json` | external/authored | — | `detect_format`, `generate_merge`, `hook_validate`, `validate_content`, `validate_web_series`, `newsletter/validate_newsletter_config` |
+| `analysis/rbi_sibc/merged/subsystems.json` | external/authored | — | `generate_mermaid` |
+| `analysis/rbi_sibc/merged/system_model.json` | derived | `core/generate_skeleton` | `source_claims`, `validate_claims`, `guards/check_derived_fresh` |
 | `analysis/rbi_sibc/merged/system_state_*.json` | external/authored | — | `guards/check_derived_fresh` |
 | `analysis/rbi_sibc/skeleton_profile.json` | external/authored | — | `core/generate_skeleton` |
-| `analysis/rbi_sibc/timeline.json` | external/authored | — | `generate_merge`, `run_evals`, `validate_timeline`, `signals/query`, `newsletter/newsletter_delta_brief`, `signals/compute/sibc` |
+| `analysis/rbi_sibc/timeline.json` | external/authored | — | `generate_merge`, `validate_timeline`, `signals/query`, `newsletter/newsletter_delta_brief`, `signals/compute/sibc` |
 | `analysis/signals/narrative_cache.json` | derived | `crosssource/generate_opportunity_narrative` | — |
 | `analysis/signals/registry.json` | derived | `signals/apply_status_rules`, `signals/rebuild_atm_pos_signals`, `signals/rebuild_sibc_signals`, `signals/update_registry` | `compute_atm_pos_signals`, `generate_analysis_report`, `generate_signal_history`, `validate_atm_pos_insights`, `validate_opportunity_traceability`, `validate_sibc_traceability`, `guards/check_signal_freshness`, `guards/validate_signal_history`, `crosssource/generate_opportunities_feed` |
-| `analysis/signals/signals.db` | derived | `signals/db` | `compute_atm_pos_signals`, `generate_analysis_report`, `run_atm_pos_evals`, `run_evals`, `validate_atm_pos_insights`, `validate_opportunity_traceability`, `validate_sibc_traceability`, `core/derive_opportunities`, `core/gate`, `core/generate_system_state`, `guards/check_derived_fresh`, `guards/validate_signal_history`, `crosssource/generate_opportunities_feed`, `crosssource/generate_opportunity_narrative` |
-| `web/lib/reports/rbi_sibc.ts` | derived | `promote_annotations` | `hook_validate`, `run_evals`, `validate_annotation_basis`, `validate_web_series` |
+| `analysis/signals/signals.db` | derived | `signals/db` | `compute_atm_pos_signals`, `generate_analysis_report`, `validate_atm_pos_insights`, `validate_opportunity_traceability`, `validate_sibc_traceability`, `core/derive_opportunities`, `core/gate`, `core/generate_system_state`, `guards/check_derived_fresh`, `guards/validate_signal_history`, `crosssource/generate_opportunities_feed`, `crosssource/generate_opportunity_narrative` |
+| `web/lib/reports/rbi_sibc.ts` | derived | `promote_annotations` | `hook_validate`, `validate_annotation_basis`, `validate_web_series` |
 | `web/lib/reports/rbi_sibc_label_overrides.json` | external/authored | — | `validate_web_series` |
 | `web/public/data/atm_pos_chart_series.json` | derived | `core/generate_chart_series` | `guards/check_derived_fresh` |
-| `web/public/data/atm_pos_consolidated.csv` | derived | `consolidate_atm_pos` | `compute_atm_pos_signals`, `run_atm_pos_evals`, `signals/evaluate`, `signals/compute/atm_pos`, `core/generate_chart_series` |
+| `web/public/data/atm_pos_consolidated.csv` | derived | `consolidate_atm_pos` | `compute_atm_pos_signals`, `signals/evaluate`, `signals/compute/atm_pos`, `core/generate_chart_series` |
 | `web/public/data/atm_pos_insights.json` | derived | `generate_atm_pos_analysis_report` | `generate_atm_pos_insights` |
 | `web/public/data/atm_pos_signals.json` | external/authored | — | `compute_atm_pos_signals` |
 | `web/public/data/opportunities_feed.json` | derived | `crosssource/generate_opportunities_feed`, `crosssource/generate_opportunity_narrative` | `validate_opportunity_traceability`, `guards/check_derived_fresh` |
-| `web/public/data/rbi_sibc_consolidated.csv` | derived | `update_web_data` | `run_evals`, `validate_web_series`, `signals/evaluate`, `signals/compute/sibc` |
+| `web/public/data/rbi_sibc_consolidated.csv` | derived | `update_web_data` | `validate_web_series`, `signals/evaluate`, `signals/compute/sibc` |
 | `web/public/data/sibc_l1_annotations.json` | derived | `generate_analysis_report` | `validate`, `validate_sibc_traceability` |
 
 ## 4. Module-dependency map
