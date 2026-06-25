@@ -1,33 +1,6 @@
 {
   "root": "/Users/rishamjeetkaur/Downloads/abnvp/india-credit-lens",
   "scripts": {
-    "backfill_sibc_basis": {
-      "path": "analysis/backfill_sibc_basis.py",
-      "imports": [],
-      "invokes": [
-        "pipelines/sibc/promote_annotations"
-      ],
-      "reads": {},
-      "writes": {
-        "analysis/rbi_sibc/merged/annotations_merged.ts": "high"
-      },
-      "doc_claims": []
-    },
-    "generate_delta": {
-      "path": "analysis/generate_delta.py",
-      "imports": [],
-      "invokes": [],
-      "reads": {},
-      "writes": {
-        "timeline.json": "high"
-      },
-      "doc_claims": [
-        {
-          "kind": "output",
-          "text": "rbi_sibc/deltas/2026-02-27_to_2026-05-15.json"
-        }
-      ]
-    },
     "hook_validate": {
       "path": "analysis/hook_validate.py",
       "imports": [],
@@ -42,17 +15,6 @@
         "timeline.json": "low",
         "sections.json": "low",
         "analysis/rbi_sibc/merged/sections_merged.json": "low"
-      },
-      "writes": {},
-      "doc_claims": []
-    },
-    "validate_claims": {
-      "path": "analysis/validate_claims.py",
-      "imports": [],
-      "invokes": [],
-      "reads": {
-        "system_model.json": "low",
-        "analysis/rbi_sibc/merged/system_model.json": "low"
       },
       "writes": {},
       "doc_claims": []
@@ -556,8 +518,8 @@
         "format_report.json": "low"
       },
       "writes": {
-        "date_overrides.json": "high",
-        "sections.json": "high"
+        "sections.json": "high",
+        "date_overrides.json": "high"
       },
       "doc_claims": []
     },

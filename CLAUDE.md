@@ -56,7 +56,7 @@ Live components only. Planned work lives in `STRATEGY_PLANNER.md`.
 | Free newsletter generator | **Live** — `analysis/newsletter/generate_newsletter.py` (Issue #3 published) |
 | LinkedIn post generator | **Live** — `analysis/newsletter/generate_linkedin.py` (7-post package per cycle) |
 | validate_content.py (Check 2b) | **Live** — content accuracy eval on annotation bodies |
-| validate_claims.py (Check 2c) | **Live** — claim sourcing + citation layer on system model |
+| validate_claims.py (Check 2c) | **Retired** — superseded by `core/validate_system_model.py` (sourcing built in); archived in `analysis/legacy/` |
 | validate_annotation_basis.py (Check 2d) | **Live** — basis completeness check (inference/hypothesis → basis.inferences non-empty) |
 | promote_annotations.py (Stage 7) | **Live** — automated verified copy to web |
 | signal_registry.json | **Live** — 7 signals tracked across 3 issues (newsletter subsystem) |
@@ -168,7 +168,7 @@ handles formatting-only cases automatically.
 | `analysis/pipelines/sibc/validate_sections.py` | Check 1: sections.json data integrity |
 | `analysis/pipelines/sibc/validate_annotations.py` | Check 3: live rbi_sibc.ts structure (Checks A–H) |
 | `analysis/pipelines/sibc/validate_content.py` | Check 2b: dates/values/growth in annotation bodies vs sections.json |
-| `analysis/validate_claims.py` | Check 2c: claim sourcing — every system model claim has a source |
+| `analysis/legacy/validate_claims.py` | Check 2c (**retired** — archived): claim sourcing — superseded by `core/validate_system_model.py` |
 | `analysis/pipelines/sibc/validate_annotation_basis.py` | Check 2d: basis completeness — inference/hypothesis annotations must have basis.inferences |
 | `analysis/validate_signal_history.py` | Check 2e: signal history integrity — DB rows, registry schema, status sync vs DB |
 | `analysis/check_signal_freshness.py` | Check 2f/5b2: deterministic signals.db freshness — recompute all periods from CSV, fail on drift. Closes the staleness gap `check_derived_fresh.py` leaves (it excludes the binary DB). |

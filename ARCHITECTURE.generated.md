@@ -8,7 +8,7 @@
 > Authored rationale (layer model, design principles, guard purposes) lives in the
 > hand-written `ARCHITECTURE.md`. This file is the structural, drift-guarded half.
 
-_Derived from 60 scripts._
+_Derived from 57 scripts._
 
 ## 1. Data-flow
 
@@ -98,10 +98,10 @@ Scripts each orchestrator launches as a subprocess, in execution order.
 | `analysis/rbi_atm_pos/merged/system_state_*.json` | external/authored | — | `guards/check_derived_fresh` |
 | `analysis/rbi_atm_pos/signals.json` | derived | `pipelines/atm_pos/compute_atm_pos_signals` | `pipelines/atm_pos/generate_atm_pos_insights`, `pipelines/atm_pos/validate_atm_pos_claims`, `pipelines/atm_pos/validate_atm_pos_insights` |
 | `analysis/rbi_atm_pos/skeleton_profile.json` | external/authored | — | `core/generate_skeleton` |
-| `analysis/rbi_sibc/merged/annotations_merged.ts` | derived | `backfill_sibc_basis` | `pipelines/sibc/validate_annotation_basis` |
+| `analysis/rbi_sibc/merged/annotations_merged.ts` | external/authored | — | `pipelines/sibc/validate_annotation_basis` |
 | `analysis/rbi_sibc/merged/opportunities_*.json` | external/authored | — | `guards/check_derived_fresh` |
 | `analysis/rbi_sibc/merged/sections_merged.json` | external/authored | — | `hook_validate`, `newsletter/validate_newsletter_config`, `pipelines/sibc/detect_format`, `pipelines/sibc/generate_merge`, `pipelines/sibc/validate_content`, `pipelines/sibc/validate_web_series` |
-| `analysis/rbi_sibc/merged/system_model.json` | derived | `core/generate_skeleton` | `validate_claims`, `guards/check_derived_fresh` |
+| `analysis/rbi_sibc/merged/system_model.json` | derived | `core/generate_skeleton` | `guards/check_derived_fresh` |
 | `analysis/rbi_sibc/merged/system_state_*.json` | external/authored | — | `guards/check_derived_fresh` |
 | `analysis/rbi_sibc/skeleton_profile.json` | external/authored | — | `core/generate_skeleton` |
 | `analysis/rbi_sibc/timeline.json` | external/authored | — | `signals/query`, `newsletter/newsletter_delta_brief`, `signals/compute/sibc`, `core/validate_timeline`, `pipelines/sibc/generate_merge` |
@@ -144,7 +144,6 @@ orchestrated, not import-coupled).
 - `analysis/signals/registry.json` ← `signals/apply_status_rules`, `signals/rebuild_atm_pos_signals`, `signals/rebuild_sibc_signals`, `signals/update_registry`
 - `format_report.json` ← `pipelines/sibc/detect_format`, `pipelines/atm_pos/detect_atm_pos_format`
 - `sections.json` ← `pipelines/sibc/extract_sibc`, `pipelines/atm_pos/extract_atm_pos`
-- `timeline.json` ← `generate_delta`, `pipelines/atm_pos/consolidate_atm_pos`
 - `web/public/data/opportunities_feed.json` ← `crosssource/generate_opportunities_feed`, `crosssource/generate_opportunity_narrative`
 
 ### Internal artifacts produced but never read (potential dead output)
