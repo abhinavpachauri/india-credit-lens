@@ -46,6 +46,7 @@ CORE_MAP = {
     "opportunities_feed":       ("crosssource/generate_opportunities_feed.py", [], "ROOT"),
     "opportunity_traceability": ("core/validate_opportunity_traceability.py", ["--strict"], "ROOT"),
     "chart_series":             ("core/generate_chart_series.py", ["--pipeline", "$ID"], "ROOT"),
+    "reconcile":                ("architecture/reconcile.py", ["--strict"], "ROOT"),
 }
 
 

@@ -47,6 +47,7 @@
     { "id": "ecosystem",        "label": "4d. ecosystem projection",      "core": "compose_ecosystem" },
     { "id": "feed",             "label": "4e. opportunities UI feed",     "core": "opportunities_feed", "requires": ["opportunities"] },
     { "id": "opp_traceability", "label": "4f. opportunity traceability",  "core": "opportunity_traceability", "note": "opportunit" },
+    { "id": "reconcile",        "label": "5.  architecture reconcile",    "core": "reconcile", "note": "drift" },
     { "id": "build",            "label": "6.  tsc + npm run build",       "builtin": "web_build", "skip_if": "--skip-build" }
   ]
 }

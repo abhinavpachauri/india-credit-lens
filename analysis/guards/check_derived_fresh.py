@@ -49,6 +49,8 @@ DERIVED_GLOBS = [
     "analysis/cross_source/ecosystem_state_*.json",
     "web/public/data/opportunities_feed.json",
     "web/public/data/atm_pos_chart_series.json",
+    "analysis/architecture/graph.json",
+    "ARCHITECTURE.generated.md",
 ]
 
 
@@ -83,6 +85,9 @@ def regenerate(quiet):
     ok &= run("derive_cross_links", ["crosssource/derive_cross_links.py"], quiet)
     ok &= run("opportunities_feed", ["crosssource/generate_opportunities_feed.py"], quiet)
     ok &= run("chart_series atm_pos", ["core/generate_chart_series.py", "--pipeline", "atm_pos"], quiet)
+    # Architecture graph + generated doc are derived from code — regen so a stale commit is caught.
+    ok &= run("architecture discover", ["architecture/discover.py", "--quiet"], quiet)
+    ok &= run("architecture render", ["architecture/render.py"], quiet)
     return ok
 
 

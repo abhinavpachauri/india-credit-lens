@@ -84,6 +84,7 @@ Scripts each orchestrator launches as a subprocess, in execution order.
 | `analysis/*/merged/system_state_*.json` | external/authored | — | `core/run_inference` |
 | `analysis/COMPOSITION_SPEC.md` | external/authored | — | `crosssource/derive_cross_links` |
 | `analysis/SYSTEM_MODEL_SPEC.md` | external/authored | — | `core/generate_skeleton` |
+| `analysis/architecture/graph.json` | external/authored | — | `guards/check_derived_fresh` |
 | `analysis/cross_source/candidates.json` | derived | `crosssource/derive_cross_links` | `core/run_inference`, `guards/check_derived_fresh` |
 | `analysis/cross_source/composition.json` | external/authored | — | `core/run_inference`, `crosssource/compose_ecosystem`, `crosssource/validate_composition` |
 | `analysis/cross_source/ecosystem_state_*.json` | external/authored | — | `guards/check_derived_fresh` |
