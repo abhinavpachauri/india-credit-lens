@@ -324,7 +324,7 @@ if __name__ == "__main__":
     # immediately. Exits non-zero if validation fails so the caller knows the
     # merged file should not be used for downstream analysis.
     print(f"\n  Running post-merge validation (validate_sections.py --merged)...")
-    val_cmd = [sys.executable, str(ANALYSIS / "validate_sections.py"),
+    val_cmd = [sys.executable, str(ANALYSIS / "pipelines" / "sibc" / "validate_sections.py"),
                str(out_path), "--merged"]
     proc = subprocess.run(val_cmd, cwd=str(ANALYSIS), capture_output=True, text=True)
     # Print the last few lines of output (skip verbose per-section notes)

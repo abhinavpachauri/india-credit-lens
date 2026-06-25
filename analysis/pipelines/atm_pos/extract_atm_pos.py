@@ -196,7 +196,7 @@ def main():
     # Run detect first to get the report_date without re-running full detection
     import subprocess
     result = subprocess.run(
-        [sys.executable, str(ANALYSIS / "detect_atm_pos_format.py"), str(xlsx_path), "--check"],
+        [sys.executable, str(ANALYSIS / "pipelines" / "atm_pos" / "detect_atm_pos_format.py"), str(xlsx_path), "--check"],
         capture_output=True, text=True,
     )
     if result.returncode != 0:
@@ -214,7 +214,7 @@ def main():
             sys.exit(1)
         # Run detection interactively
         det = subprocess.run(
-            [sys.executable, str(ANALYSIS / "detect_atm_pos_format.py"), str(xlsx_path)],
+            [sys.executable, str(ANALYSIS / "pipelines" / "atm_pos" / "detect_atm_pos_format.py"), str(xlsx_path)],
         )
         if det.returncode != 0:
             sys.exit(1)

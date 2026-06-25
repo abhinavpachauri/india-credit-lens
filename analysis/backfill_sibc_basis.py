@@ -862,7 +862,7 @@ def main():
     print(f"\n  Written: {ANN_FILE}")
 
     # Run promote_annotations.py to sync to web/lib/reports/rbi_sibc.ts
-    promote = Path(__file__).parent / "promote_annotations.py"
+    promote = Path(__file__).parent / "pipelines" / "sibc" / "promote_annotations.py"
     if promote.exists():
         print("\n  Running promote_annotations.py …")
         result = subprocess.run(

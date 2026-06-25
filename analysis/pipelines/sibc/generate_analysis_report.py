@@ -19,11 +19,10 @@ import sqlite3
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent))
-from signals.query import signal_numbers, scan_distribution, _signal_type   # noqa: E402
-
-import sys
+# Add <repo>/analysis to sys.path (location-independent) so signals.* / core.* resolve
+# regardless of where this module lives (it moved to pipelines/sibc/ in the §4 cutover).
 sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
+from signals.query import signal_numbers, scan_distribution, _signal_type   # noqa: E402
 from core.paths import ROOT as REPO
 ANAL  = REPO / "analysis"
 SIG   = ANAL / "signals"

@@ -26,7 +26,9 @@ import sqlite3
 import sys
 from pathlib import Path
 
-ANALYSIS = Path(__file__).resolve().parent
+# Resolve the real <repo>/analysis dir (location-independent) — this module moved to
+# pipelines/sibc/ in the §4 cutover, so __file__.parent is no longer analysis/.
+ANALYSIS = next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"
 sys.path.insert(0, str(ANALYSIS))
 from signals.query import signal_numbers, flat_numbers, _signal_type   # noqa: E402
 from core.traceability import (                                          # noqa: E402

@@ -16,14 +16,14 @@
     "entity_columns": ["code", "parent_code"]
   },
   "modules": {
-    "detect_format": "detect_format.py",
-    "validate_sections": "validate_sections.py",
-    "validate_annotations": "validate_annotations.py",
-    "validate_content": "validate_content.py",
-    "validate_annotation_basis": "validate_annotation_basis.py",
-    "validate_web_series": "validate_web_series.py",
-    "insights": "generate_analysis_report.py",
-    "insights_validate": "validate_sibc_traceability.py"
+    "detect_format": "pipelines/sibc/detect_format.py",
+    "validate_sections": "pipelines/sibc/validate_sections.py",
+    "validate_annotations": "pipelines/sibc/validate_annotations.py",
+    "validate_content": "pipelines/sibc/validate_content.py",
+    "validate_annotation_basis": "pipelines/sibc/validate_annotation_basis.py",
+    "validate_web_series": "pipelines/sibc/validate_web_series.py",
+    "insights": "pipelines/sibc/generate_analysis_report.py",
+    "insights_validate": "pipelines/sibc/validate_sibc_traceability.py"
   },
   "gate": [
     { "id": "tests",            "label": "T.  unit tests (pytest)",        "builtin": "pytest" },

@@ -5,7 +5,7 @@
       "path": "analysis/backfill_sibc_basis.py",
       "imports": [],
       "invokes": [
-        "promote_annotations"
+        "pipelines/sibc/promote_annotations"
       ],
       "reads": {},
       "writes": {
@@ -23,156 +23,6 @@
       "writes": {},
       "doc_claims": []
     },
-    "compute_atm_pos_signals": {
-      "path": "analysis/compute_atm_pos_signals.py",
-      "imports": [],
-      "invokes": [],
-      "reads": {
-        "web/public/data/atm_pos_consolidated.csv": "low",
-        "web/public/data/atm_pos_signals.json": "low",
-        "analysis/signals/signals.db": "low",
-        "analysis/signals/registry.json": "low"
-      },
-      "writes": {
-        "analysis/rbi_atm_pos/signals.json": "high"
-      },
-      "doc_claims": [
-        {
-          "kind": "output",
-          "text": "analysis/rbi_atm_pos/signals.json"
-        }
-      ]
-    },
-    "consolidate_atm_pos": {
-      "path": "analysis/consolidate_atm_pos.py",
-      "imports": [],
-      "invokes": [],
-      "reads": {
-        "sections.json": "low"
-      },
-      "writes": {
-        "timeline.json": "high",
-        "web/public/data/atm_pos_consolidated.csv": "high"
-      },
-      "doc_claims": []
-    },
-    "detect_atm_pos_format": {
-      "path": "analysis/detect_atm_pos_format.py",
-      "imports": [],
-      "invokes": [],
-      "reads": {
-        "canonical_banks.json": "low"
-      },
-      "writes": {
-        "format_report.json": "high"
-      },
-      "doc_claims": []
-    },
-    "detect_format": {
-      "path": "analysis/detect_format.py",
-      "imports": [],
-      "invokes": [],
-      "reads": {
-        "analysis/rbi_sibc/merged/sections_merged.json": "low"
-      },
-      "writes": {
-        "format_report.json": "high"
-      },
-      "doc_claims": []
-    },
-    "extract_atm_pos": {
-      "path": "analysis/extract_atm_pos.py",
-      "imports": [
-        "detect_atm_pos_format"
-      ],
-      "invokes": [
-        "detect_atm_pos_format"
-      ],
-      "reads": {
-        "format_report.json": "low"
-      },
-      "writes": {
-        "sections.json": "high"
-      },
-      "doc_claims": []
-    },
-    "extract_sibc": {
-      "path": "analysis/extract_sibc.py",
-      "imports": [
-        "detect_format"
-      ],
-      "invokes": [],
-      "reads": {
-        "format_report.json": "low"
-      },
-      "writes": {
-        "sections.json": "high",
-        "date_overrides.json": "high"
-      },
-      "doc_claims": []
-    },
-    "generate_analysis_report": {
-      "path": "analysis/generate_analysis_report.py",
-      "imports": [],
-      "invokes": [],
-      "reads": {
-        "analysis/signals/registry.json": "low",
-        "analysis/signals/signals.db": "low",
-        "*.json": "low"
-      },
-      "writes": {
-        "web/public/data/sibc_l1_annotations.json": "high"
-      },
-      "doc_claims": [
-        {
-          "kind": "reads",
-          "text": "analysis/signals/evaluations/sibc/{period}.json"
-        },
-        {
-          "kind": "writes",
-          "text": "web/public/data/sibc_l1_annotations.json"
-        }
-      ]
-    },
-    "generate_atm_pos_analysis_report": {
-      "path": "analysis/generate_atm_pos_analysis_report.py",
-      "imports": [],
-      "invokes": [],
-      "reads": {
-        "*.json": "low"
-      },
-      "writes": {
-        "web/public/data/atm_pos_insights.json": "high"
-      },
-      "doc_claims": [
-        {
-          "kind": "reads",
-          "text": "analysis/signals/evaluations/atm_pos/{period}.json"
-        },
-        {
-          "kind": "writes",
-          "text": "web/public/data/atm_pos_insights.json  (in-place, L1 entries only)"
-        }
-      ]
-    },
-    "generate_atm_pos_insights": {
-      "path": "analysis/generate_atm_pos_insights.py",
-      "imports": [],
-      "invokes": [],
-      "reads": {
-        "analysis/rbi_atm_pos/signals.json": "low",
-        "web/public/data/atm_pos_insights.json": "low"
-      },
-      "writes": {
-        "analysis/rbi_atm_pos/insights.json": "high"
-      },
-      "doc_claims": [
-        {
-          "kind": "output",
-          "text": "analysis/rbi_atm_pos/insights.json"
-        }
-      ]
-    },
     "generate_delta": {
       "path": "analysis/generate_delta.py",
       "imports": [
@@ -189,22 +39,6 @@
           "text": "rbi_sibc/deltas/2026-02-27_to_2026-05-15.json"
         }
       ]
-    },
-    "generate_merge": {
-      "path": "analysis/generate_merge.py",
-      "imports": [],
-      "invokes": [
-        "validate_sections"
-      ],
-      "reads": {
-        "timeline.json": "low",
-        "analysis/rbi_sibc/timeline.json": "low",
-        "sections.json": "low",
-        "rbi_sibc/sections.json": "low",
-        "analysis/rbi_sibc/merged/sections_merged.json": "low"
-      },
-      "writes": {},
-      "doc_claims": []
     },
     "generate_mermaid": {
       "path": "analysis/generate_mermaid.py",
@@ -232,10 +66,10 @@
       "path": "analysis/hook_validate.py",
       "imports": [],
       "invokes": [
-        "validate_annotations",
+        "pipelines/sibc/validate_annotations",
         "validate",
         "validate_timeline",
-        "validate_sections"
+        "pipelines/sibc/validate_sections"
       ],
       "reads": {
         "web/lib/reports/rbi_sibc.ts": "low",
@@ -260,18 +94,6 @@
       "writes": {},
       "doc_claims": []
     },
-    "promote_annotations": {
-      "path": "analysis/promote_annotations.py",
-      "imports": [],
-      "invokes": [],
-      "reads": {
-        "annotations_merged.ts": "low"
-      },
-      "writes": {
-        "web/lib/reports/rbi_sibc.ts": "high"
-      },
-      "doc_claims": []
-    },
     "source_claims": {
       "path": "analysis/source_claims.py",
       "imports": [],
@@ -283,18 +105,6 @@
       "writes": {},
       "doc_claims": []
     },
-    "update_web_data": {
-      "path": "analysis/update_web_data.py",
-      "imports": [],
-      "invokes": [],
-      "reads": {
-        "*/date_overrides.json": "low"
-      },
-      "writes": {
-        "web/public/data/rbi_sibc_consolidated.csv": "high"
-      },
-      "doc_claims": []
-    },
     "validate": {
       "path": "analysis/validate.py",
       "imports": [],
@@ -302,64 +112,6 @@
       "reads": {
         "web/public/data/sibc_l1_annotations.json": "low",
         "validation_report.json": "low"
-      },
-      "writes": {},
-      "doc_claims": []
-    },
-    "validate_annotation_basis": {
-      "path": "analysis/validate_annotation_basis.py",
-      "imports": [],
-      "invokes": [],
-      "reads": {
-        "analysis/rbi_sibc/merged/annotations_merged.ts": "low",
-        "web/lib/reports/rbi_sibc.ts": "low",
-        "annotations_merged.ts": "low"
-      },
-      "writes": {},
-      "doc_claims": []
-    },
-    "validate_annotations": {
-      "path": "analysis/validate_annotations.py",
-      "imports": [],
-      "invokes": [],
-      "reads": {
-        "pre_generation_validation_report.json": "low"
-      },
-      "writes": {},
-      "doc_claims": []
-    },
-    "validate_atm_pos": {
-      "path": "analysis/validate_atm_pos.py",
-      "imports": [],
-      "invokes": [],
-      "reads": {
-        "canonical_banks.json": "low",
-        "sections.json": "low"
-      },
-      "writes": {},
-      "doc_claims": []
-    },
-    "validate_atm_pos_claims": {
-      "path": "analysis/validate_atm_pos_claims.py",
-      "imports": [],
-      "invokes": [],
-      "reads": {
-        "analysis/rbi_atm_pos/signals.json": "low",
-        "analysis/rbi_atm_pos/insights.json": "low",
-        "insights.json": "low"
-      },
-      "writes": {},
-      "doc_claims": []
-    },
-    "validate_atm_pos_insights": {
-      "path": "analysis/validate_atm_pos_insights.py",
-      "imports": [],
-      "invokes": [],
-      "reads": {
-        "analysis/rbi_atm_pos/signals.json": "low",
-        "analysis/rbi_atm_pos/insights.json": "low",
-        "analysis/signals/signals.db": "low",
-        "analysis/signals/registry.json": "low"
       },
       "writes": {},
       "doc_claims": []
@@ -375,52 +127,12 @@
       "writes": {},
       "doc_claims": []
     },
-    "validate_content": {
-      "path": "analysis/validate_content.py",
-      "imports": [],
-      "invokes": [],
-      "reads": {
-        "annotations_draft.ts": "low",
-        "annotations_merged.ts": "low",
-        "insights.md": "low",
-        "gaps.md": "low",
-        "opportunities.md": "low",
-        "analysis/rbi_sibc/merged/sections_merged.json": "low",
-        "sections.json": "low"
-      },
-      "writes": {},
-      "doc_claims": []
-    },
     "validate_opportunity_traceability": {
       "path": "analysis/validate_opportunity_traceability.py",
-      "imports": [
-        "validate_sibc_traceability"
-      ],
+      "imports": [],
       "invokes": [],
       "reads": {
         "web/public/data/opportunities_feed.json": "low",
-        "analysis/signals/registry.json": "low",
-        "analysis/signals/signals.db": "low"
-      },
-      "writes": {},
-      "doc_claims": []
-    },
-    "validate_sections": {
-      "path": "analysis/validate_sections.py",
-      "imports": [],
-      "invokes": [],
-      "reads": {
-        "validation_sections.json": "low"
-      },
-      "writes": {},
-      "doc_claims": []
-    },
-    "validate_sibc_traceability": {
-      "path": "analysis/validate_sibc_traceability.py",
-      "imports": [],
-      "invokes": [],
-      "reads": {
-        "web/public/data/sibc_l1_annotations.json": "low",
         "analysis/signals/registry.json": "low",
         "analysis/signals/signals.db": "low"
       },
@@ -434,19 +146,6 @@
       "reads": {
         "timeline.json": "low",
         "analysis/rbi_sibc/timeline.json": "low"
-      },
-      "writes": {},
-      "doc_claims": []
-    },
-    "validate_web_series": {
-      "path": "analysis/validate_web_series.py",
-      "imports": [],
-      "invokes": [],
-      "reads": {
-        "web/public/data/rbi_sibc_consolidated.csv": "low",
-        "web/lib/reports/rbi_sibc_label_overrides.json": "low",
-        "analysis/rbi_sibc/merged/sections_merged.json": "low",
-        "web/lib/reports/rbi_sibc.ts": "low"
       },
       "writes": {},
       "doc_claims": []
@@ -889,8 +588,8 @@
         "analysis/signals/signals.db": "low"
       },
       "writes": {
-        "analysis/signals/narrative_cache.json": "high",
-        "web/public/data/opportunities_feed.json": "high"
+        "web/public/data/opportunities_feed.json": "high",
+        "analysis/signals/narrative_cache.json": "high"
       },
       "doc_claims": []
     },
@@ -902,6 +601,305 @@
       "invokes": [],
       "reads": {
         "analysis/cross_source/composition.json": "low"
+      },
+      "writes": {},
+      "doc_claims": []
+    },
+    "pipelines/sibc/detect_format": {
+      "path": "analysis/pipelines/sibc/detect_format.py",
+      "imports": [],
+      "invokes": [],
+      "reads": {
+        "analysis/rbi_sibc/merged/sections_merged.json": "low"
+      },
+      "writes": {
+        "format_report.json": "high"
+      },
+      "doc_claims": []
+    },
+    "pipelines/sibc/extract_sibc": {
+      "path": "analysis/pipelines/sibc/extract_sibc.py",
+      "imports": [
+        "pipelines/sibc/detect_format"
+      ],
+      "invokes": [],
+      "reads": {
+        "format_report.json": "low"
+      },
+      "writes": {
+        "date_overrides.json": "high",
+        "sections.json": "high"
+      },
+      "doc_claims": []
+    },
+    "pipelines/sibc/generate_analysis_report": {
+      "path": "analysis/pipelines/sibc/generate_analysis_report.py",
+      "imports": [],
+      "invokes": [],
+      "reads": {
+        "analysis/signals/registry.json": "low",
+        "analysis/signals/signals.db": "low",
+        "*.json": "low"
+      },
+      "writes": {
+        "web/public/data/sibc_l1_annotations.json": "high"
+      },
+      "doc_claims": [
+        {
+          "kind": "reads",
+          "text": "analysis/signals/evaluations/sibc/{period}.json"
+        },
+        {
+          "kind": "writes",
+          "text": "web/public/data/sibc_l1_annotations.json"
+        }
+      ]
+    },
+    "pipelines/sibc/generate_merge": {
+      "path": "analysis/pipelines/sibc/generate_merge.py",
+      "imports": [],
+      "invokes": [
+        "pipelines/sibc/validate_sections"
+      ],
+      "reads": {
+        "timeline.json": "low",
+        "analysis/rbi_sibc/timeline.json": "low",
+        "sections.json": "low",
+        "rbi_sibc/sections.json": "low",
+        "analysis/rbi_sibc/merged/sections_merged.json": "low"
+      },
+      "writes": {},
+      "doc_claims": []
+    },
+    "pipelines/sibc/promote_annotations": {
+      "path": "analysis/pipelines/sibc/promote_annotations.py",
+      "imports": [],
+      "invokes": [],
+      "reads": {
+        "annotations_merged.ts": "low"
+      },
+      "writes": {
+        "web/lib/reports/rbi_sibc.ts": "high"
+      },
+      "doc_claims": []
+    },
+    "pipelines/sibc/update_web_data": {
+      "path": "analysis/pipelines/sibc/update_web_data.py",
+      "imports": [],
+      "invokes": [],
+      "reads": {
+        "*/date_overrides.json": "low"
+      },
+      "writes": {
+        "web/public/data/rbi_sibc_consolidated.csv": "high"
+      },
+      "doc_claims": []
+    },
+    "pipelines/sibc/validate_annotation_basis": {
+      "path": "analysis/pipelines/sibc/validate_annotation_basis.py",
+      "imports": [],
+      "invokes": [],
+      "reads": {
+        "analysis/rbi_sibc/merged/annotations_merged.ts": "low",
+        "web/lib/reports/rbi_sibc.ts": "low",
+        "annotations_merged.ts": "low"
+      },
+      "writes": {},
+      "doc_claims": []
+    },
+    "pipelines/sibc/validate_annotations": {
+      "path": "analysis/pipelines/sibc/validate_annotations.py",
+      "imports": [],
+      "invokes": [],
+      "reads": {
+        "pre_generation_validation_report.json": "low"
+      },
+      "writes": {},
+      "doc_claims": []
+    },
+    "pipelines/sibc/validate_content": {
+      "path": "analysis/pipelines/sibc/validate_content.py",
+      "imports": [],
+      "invokes": [],
+      "reads": {
+        "annotations_draft.ts": "low",
+        "annotations_merged.ts": "low",
+        "insights.md": "low",
+        "gaps.md": "low",
+        "opportunities.md": "low",
+        "analysis/rbi_sibc/merged/sections_merged.json": "low",
+        "sections.json": "low"
+      },
+      "writes": {},
+      "doc_claims": []
+    },
+    "pipelines/sibc/validate_sections": {
+      "path": "analysis/pipelines/sibc/validate_sections.py",
+      "imports": [],
+      "invokes": [],
+      "reads": {
+        "validation_sections.json": "low"
+      },
+      "writes": {},
+      "doc_claims": []
+    },
+    "pipelines/sibc/validate_sibc_traceability": {
+      "path": "analysis/pipelines/sibc/validate_sibc_traceability.py",
+      "imports": [],
+      "invokes": [],
+      "reads": {
+        "web/public/data/sibc_l1_annotations.json": "low",
+        "analysis/signals/registry.json": "low",
+        "analysis/signals/signals.db": "low"
+      },
+      "writes": {},
+      "doc_claims": []
+    },
+    "pipelines/sibc/validate_web_series": {
+      "path": "analysis/pipelines/sibc/validate_web_series.py",
+      "imports": [],
+      "invokes": [],
+      "reads": {
+        "web/public/data/rbi_sibc_consolidated.csv": "low",
+        "web/lib/reports/rbi_sibc_label_overrides.json": "low",
+        "analysis/rbi_sibc/merged/sections_merged.json": "low",
+        "web/lib/reports/rbi_sibc.ts": "low"
+      },
+      "writes": {},
+      "doc_claims": []
+    },
+    "pipelines/atm_pos/compute_atm_pos_signals": {
+      "path": "analysis/pipelines/atm_pos/compute_atm_pos_signals.py",
+      "imports": [],
+      "invokes": [],
+      "reads": {
+        "web/public/data/atm_pos_consolidated.csv": "low",
+        "web/public/data/atm_pos_signals.json": "low",
+        "analysis/signals/signals.db": "low",
+        "analysis/signals/registry.json": "low"
+      },
+      "writes": {
+        "analysis/rbi_atm_pos/signals.json": "high"
+      },
+      "doc_claims": [
+        {
+          "kind": "output",
+          "text": "analysis/rbi_atm_pos/signals.json"
+        }
+      ]
+    },
+    "pipelines/atm_pos/consolidate_atm_pos": {
+      "path": "analysis/pipelines/atm_pos/consolidate_atm_pos.py",
+      "imports": [],
+      "invokes": [],
+      "reads": {
+        "sections.json": "low"
+      },
+      "writes": {
+        "web/public/data/atm_pos_consolidated.csv": "high",
+        "timeline.json": "high"
+      },
+      "doc_claims": []
+    },
+    "pipelines/atm_pos/detect_atm_pos_format": {
+      "path": "analysis/pipelines/atm_pos/detect_atm_pos_format.py",
+      "imports": [],
+      "invokes": [],
+      "reads": {
+        "canonical_banks.json": "low"
+      },
+      "writes": {
+        "format_report.json": "high"
+      },
+      "doc_claims": []
+    },
+    "pipelines/atm_pos/extract_atm_pos": {
+      "path": "analysis/pipelines/atm_pos/extract_atm_pos.py",
+      "imports": [
+        "pipelines/atm_pos/detect_atm_pos_format"
+      ],
+      "invokes": [
+        "pipelines/atm_pos/detect_atm_pos_format"
+      ],
+      "reads": {
+        "format_report.json": "low"
+      },
+      "writes": {
+        "sections.json": "high"
+      },
+      "doc_claims": []
+    },
+    "pipelines/atm_pos/generate_atm_pos_analysis_report": {
+      "path": "analysis/pipelines/atm_pos/generate_atm_pos_analysis_report.py",
+      "imports": [],
+      "invokes": [],
+      "reads": {
+        "*.json": "low"
+      },
+      "writes": {
+        "web/public/data/atm_pos_insights.json": "high"
+      },
+      "doc_claims": [
+        {
+          "kind": "reads",
+          "text": "analysis/signals/evaluations/atm_pos/{period}.json"
+        },
+        {
+          "kind": "writes",
+          "text": "web/public/data/atm_pos_insights.json  (in-place, L1 entries only)"
+        }
+      ]
+    },
+    "pipelines/atm_pos/generate_atm_pos_insights": {
+      "path": "analysis/pipelines/atm_pos/generate_atm_pos_insights.py",
+      "imports": [],
+      "invokes": [],
+      "reads": {
+        "analysis/rbi_atm_pos/signals.json": "low",
+        "web/public/data/atm_pos_insights.json": "low"
+      },
+      "writes": {
+        "analysis/rbi_atm_pos/insights.json": "high"
+      },
+      "doc_claims": [
+        {
+          "kind": "output",
+          "text": "analysis/rbi_atm_pos/insights.json"
+        }
+      ]
+    },
+    "pipelines/atm_pos/validate_atm_pos": {
+      "path": "analysis/pipelines/atm_pos/validate_atm_pos.py",
+      "imports": [],
+      "invokes": [],
+      "reads": {
+        "canonical_banks.json": "low",
+        "sections.json": "low"
+      },
+      "writes": {},
+      "doc_claims": []
+    },
+    "pipelines/atm_pos/validate_atm_pos_claims": {
+      "path": "analysis/pipelines/atm_pos/validate_atm_pos_claims.py",
+      "imports": [],
+      "invokes": [],
+      "reads": {
+        "analysis/rbi_atm_pos/signals.json": "low",
+        "analysis/rbi_atm_pos/insights.json": "low",
+        "insights.json": "low"
+      },
+      "writes": {},
+      "doc_claims": []
+    },
+    "pipelines/atm_pos/validate_atm_pos_insights": {
+      "path": "analysis/pipelines/atm_pos/validate_atm_pos_insights.py",
+      "imports": [],
+      "invokes": [],
+      "reads": {
+        "analysis/rbi_atm_pos/signals.json": "low",
+        "analysis/rbi_atm_pos/insights.json": "low",
+        "analysis/signals/signals.db": "low",
+        "analysis/signals/registry.json": "low"
       },
       "writes": {},
       "doc_claims": []

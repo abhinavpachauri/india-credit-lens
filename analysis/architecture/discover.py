@@ -53,7 +53,8 @@ OUT = ANALYSIS / "architecture" / "graph.json"
 # NB `crosssource` is the CODE dir; `cross_source` is the DATA dir.)
 SCAN_DIRS = [ANALYSIS, ANALYSIS / "signals", ANALYSIS / "cross_source",
              ANALYSIS / "newsletter", ANALYSIS / "signals" / "compute",
-             ANALYSIS / "core", ANALYSIS / "guards", ANALYSIS / "crosssource"]
+             ANALYSIS / "core", ANALYSIS / "guards", ANALYSIS / "crosssource",
+             ANALYSIS / "pipelines" / "sibc", ANALYSIS / "pipelines" / "atm_pos"]
 
 # Tokens that mark a string literal as an artifact path worth tracking.
 PATH_TOKENS = ("web/public/data", "merged/", "rbi_sibc", "rbi_atm_pos",

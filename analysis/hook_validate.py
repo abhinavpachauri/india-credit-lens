@@ -68,7 +68,7 @@ def main():
 
     if name.endswith(".ts") and ("annotation" in name or name == "rbi_sibc.ts"):
         if p.exists():
-            rc, out = run([sys.executable, str(ANALYSIS / "validate_annotations.py"), str(p)])
+            rc, out = run([sys.executable, str(ANALYSIS / "pipelines" / "sibc" / "validate_annotations.py"), str(p)])
             print(f"[hook:annotations] {one_liner(out)}")
             returncode = rc
 
@@ -84,7 +84,7 @@ def main():
         returncode = rc
 
     elif (name == "sections.json" or name == "sections_merged.json") and p.exists():
-        cmd = [sys.executable, str(ANALYSIS / "validate_sections.py"), str(p)]
+        cmd = [sys.executable, str(ANALYSIS / "pipelines" / "sibc" / "validate_sections.py"), str(p)]
         if name == "sections_merged.json":
             cmd.append("--merged")
         rc, out = run(cmd)

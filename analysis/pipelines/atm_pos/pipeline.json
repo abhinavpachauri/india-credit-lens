@@ -16,15 +16,15 @@
     "entity_columns": ["bank_name", "bank_category"]
   },
   "modules": {
-    "detect_format": "detect_atm_pos_format.py",
-    "extract": "extract_atm_pos.py",
-    "validate_data": "validate_atm_pos.py",
-    "consolidate": "consolidate_atm_pos.py",
-    "signals_payload": "compute_atm_pos_signals.py",
-    "insights": "generate_atm_pos_insights.py",
-    "insights_validate": "validate_atm_pos_insights.py",
-    "claims_validate": "validate_atm_pos_claims.py",
-    "insights_report": "generate_atm_pos_analysis_report.py"
+    "detect_format": "pipelines/atm_pos/detect_atm_pos_format.py",
+    "extract": "pipelines/atm_pos/extract_atm_pos.py",
+    "validate_data": "pipelines/atm_pos/validate_atm_pos.py",
+    "consolidate": "pipelines/atm_pos/consolidate_atm_pos.py",
+    "signals_payload": "pipelines/atm_pos/compute_atm_pos_signals.py",
+    "insights": "pipelines/atm_pos/generate_atm_pos_insights.py",
+    "insights_validate": "pipelines/atm_pos/validate_atm_pos_insights.py",
+    "claims_validate": "pipelines/atm_pos/validate_atm_pos_claims.py",
+    "insights_report": "pipelines/atm_pos/generate_atm_pos_analysis_report.py"
   },
   "gate": [
     { "id": "tests",            "label": "T.  unit tests (pytest)",       "builtin": "pytest" },

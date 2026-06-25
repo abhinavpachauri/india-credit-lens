@@ -20,7 +20,7 @@ from pathlib import Path
 import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-import validate_sibc_traceability as v  # noqa: E402
+from pipelines.sibc import validate_sibc_traceability as v  # noqa: E402
 
 en = v.extract_numbers
 

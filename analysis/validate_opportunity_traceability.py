@@ -28,7 +28,25 @@ from pathlib import Path
 ANALYSIS = Path(__file__).resolve().parent
 sys.path.insert(0, str(ANALYSIS))
 from signals.query import signal_numbers, flat_numbers          # noqa: E402
-from validate_sibc_traceability import extract_numbers, matches, ratio_matches  # noqa: E402
+# Number-tracing core, bound to the SIBC NumberPolicy (was imported from
+# validate_sibc_traceability before it moved to pipelines/sibc/; this keeps the
+# cross-pipeline 4f validator dependent only on core/, never on a pipeline module).
+from core.traceability import (                                  # noqa: E402
+    SIBC as _POLICY, extract_numbers as _extract,
+    matches as _matches, ratio_matches as _ratio,
+)
+
+
+def extract_numbers(text):
+    return _extract(text, _POLICY)
+
+
+def matches(num, cands):
+    return _matches(num, cands, _POLICY)
+
+
+def ratio_matches(num, cands):
+    return _ratio(num, cands, _POLICY)
 
 FEED = ANALYSIS.parent / "web" / "public" / "data" / "opportunities_feed.json"
 REG  = ANALYSIS / "signals" / "registry.json"

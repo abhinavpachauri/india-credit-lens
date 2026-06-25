@@ -17,7 +17,7 @@ from pathlib import Path
 import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-import update_web_data as uwd  # noqa: E402
+from pipelines.sibc import update_web_data as uwd  # noqa: E402
 
 cme = uwd._canonical_month_end
 
