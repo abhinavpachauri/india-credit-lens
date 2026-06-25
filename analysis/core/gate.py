@@ -107,6 +107,12 @@ def builtin_web_build(manifest, vars_, flags):
     return run_cmd(["npm", "run", "build"], WEB)
 
 
+def builtin_web_tests(manifest, vars_, flags):
+    # Vitest unit tests for the web lib/ pure data-derivation functions. Cheap (~1s) and
+    # build-independent, so they run even under --skip-build (unlike web_build).
+    return run_cmd(["npm", "test"], WEB)
+
+
 def builtin_csv_integrity(manifest, vars_, flags):
     """Generic: CSV exists, non-empty, no duplicate periods on the schema date column."""
     import pandas as pd
@@ -121,7 +127,7 @@ def builtin_csv_integrity(manifest, vars_, flags):
 
 
 BUILTINS = {"pytest": builtin_pytest, "web_build": builtin_web_build,
-            "csv_integrity": builtin_csv_integrity}
+            "web_tests": builtin_web_tests, "csv_integrity": builtin_csv_integrity}
 
 
 # ── stage resolution + execution ────────────────────────────────────────────────

@@ -45,6 +45,7 @@
     { "id": "opportunities",    "label": "5d. opportunities (live)",     "core": "derive_opportunities" },
     { "id": "opp_traceability", "label": "4f. opportunity traceability",  "core": "opportunity_traceability", "note": "opportunit" },
     { "id": "reconcile",        "label": "5.  architecture reconcile",   "core": "reconcile", "note": "drift" },
+    { "id": "web_tests",        "label": "5b. web unit tests (vitest)",  "builtin": "web_tests", "note": "Tests" },
     { "id": "build",            "label": "6.  tsc + npm run build",      "builtin": "web_build", "skip_if": "--skip-build" }
   ]
 }
