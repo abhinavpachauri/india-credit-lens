@@ -424,19 +424,25 @@ def write_report(period_dir: Path, payload: dict):
 
 # ── Main ───────────────────────────────────────────────────────────────────────
 
-def detect(xlsx_path: Path, check_mode: bool = False, dry_run: bool = False) -> int:
+def detect(xlsx_path: Path, check_mode: bool = False, dry_run: bool = False,
+           period: str = None) -> int:
     """
     Run format detection.
     Returns 0 (OK/confirmed) or 1 (unsupported/aborted/missing).
     """
     # ── Check mode: just read the saved report ──────────────────────────────
     if check_mode:
-        report_date = parse_filename_date(xlsx_path)
-        if report_date is None:
-            print(f"  [detect_format] Cannot parse date from filename: {xlsx_path.name}",
-                  file=sys.stderr)
-            return 1
-        period_dir  = ANALYSIS / "rbi_sibc" / report_date.strftime("%Y-%m-%d")
+        # The period dir can be supplied directly (gate revalidate, no xlsx in hand) or
+        # derived from the source filename (post-ingest, run_evals).
+        if period is not None:
+            period_dir = ANALYSIS / "rbi_sibc" / period
+        else:
+            report_date = parse_filename_date(xlsx_path)
+            if report_date is None:
+                print(f"  [detect_format] Cannot parse date from filename: {xlsx_path.name}",
+                      file=sys.stderr)
+                return 1
+            period_dir = ANALYSIS / "rbi_sibc" / report_date.strftime("%Y-%m-%d")
         report_path = period_dir / "format_report.json"
         if not report_path.exists():
             print(f"  [detect_format] format_report.json missing for {period_dir.name} — "
@@ -571,15 +577,20 @@ def detect(xlsx_path: Path, check_mode: bool = False, dry_run: bool = False) -> 
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(description="Detect SIBC xlsx format before extraction")
-    ap.add_argument("xlsx",      help="Path to SIBC .xlsx file")
+    ap.add_argument("xlsx",      nargs="?", help="Path to SIBC .xlsx file (optional with --check --period)")
     ap.add_argument("--check",   action="store_true",
                     help="Non-interactive: read saved report and exit 0/1")
+    ap.add_argument("--period",  help="With --check: validate this period's saved report (no xlsx needed)")
     ap.add_argument("--dry-run", action="store_true",
                     help="Detect and print; do not write report or prompt")
     args = ap.parse_args()
 
+    if not args.xlsx and not (args.check and args.period):
+        ap.error("xlsx is required unless using --check --period")
+
     sys.exit(detect(
-        xlsx_path=Path(args.xlsx),
+        xlsx_path=Path(args.xlsx) if args.xlsx else None,
         check_mode=args.check,
         dry_run=args.dry_run,
+        period=args.period,
     ))

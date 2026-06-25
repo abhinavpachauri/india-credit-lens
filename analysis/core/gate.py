@@ -125,9 +125,17 @@ BUILTINS = {"pytest": builtin_pytest, "web_build": builtin_web_build,
 
 # ── stage resolution + execution ────────────────────────────────────────────────
 
-def resolve(stage, manifest, vars_):
-    """Return (cmd_list, cwd) for a script-backed stage, or (None, None) for builtins."""
-    extra = subst(stage.get("args", []), vars_)
+def resolve(stage, manifest, vars_, flags):
+    """Return (cmd_list, cwd) for a script-backed stage, or (None, None) for builtins.
+
+    A stage may carry mode-variant args: `args_merged` is used in merged mode (when present),
+    else `args`. This lets one manifest entry serve both the merged and per-period gates
+    (e.g. SIBC sections: merged validates sections_merged.json --merged; per-period validates
+    {period}/sections.json) without the gate inspecting the pipeline id.
+    """
+    raw_args = stage["args_merged"] if (flags.get("merged") and "args_merged" in stage) \
+        else stage.get("args", [])
+    extra = subst(raw_args, vars_)
     if "core" in stage:
         script, dargs, cwdname = CORE_MAP[stage["core"]]
         cwd = ANALYSIS if cwdname == "ANALYSIS" else ROOT
@@ -152,6 +160,14 @@ def should_skip(stage, flags, vars_, failed, stop):
         path = subst([cond[len("missing:"):]], vars_)[0]
         if not (ROOT / path).exists():
             return "skipped (file absent)"
+    # Skip only in per-period mode when the file is absent; merged mode always runs the stage.
+    # (SIBC content: per-period has no annotations_draft.ts to check, but merged validates
+    #  against annotations_merged.ts — so it must not skip there.)
+    if cond and cond.startswith("missing_unless_merged:"):
+        if not flags.get("merged"):
+            path = subst([cond[len("missing_unless_merged:"):]], vars_)[0]
+            if not (ROOT / path).exists():
+                return "skipped (file absent)"
     for req in stage.get("requires", []):
         if req in failed:
             return f"skipped (requires {req})"
@@ -186,8 +202,15 @@ def main():
         period, revalidate = args.period, bool(args.period)
 
     flags = {"merged": args.merged, "skip_build": args.skip_build, "revalidate": revalidate}
-    latest = period or latest_period(args.pipeline)
-    vars_ = {"$ID": args.pipeline, "$LATEST": latest or "", "$XLSX": xlsx}
+    # $LATEST = the most recent DB period — the live latest. The analytical layer (skeleton,
+    #   system_state, opportunities, …) always runs for it, regardless of which period is being
+    #   ingested/revalidated (a backfill of an OLDER period must not retarget S3 at itself).
+    # $PERIOD = the period directory under gate: "merged" in merged mode, the ingest/revalidate
+    #   period otherwise. Per-period file stages (sections/content/annotations_draft) read it.
+    db_latest = latest_period(args.pipeline)
+    latest = db_latest or period or ""
+    period_var = "merged" if args.merged else (period or db_latest or "")
+    vars_ = {"$ID": args.pipeline, "$LATEST": latest, "$PERIOD": period_var, "$XLSX": xlsx}
     # Every manifest path key becomes a $VAR (e.g. "sections_merged" → $SECTIONS_MERGED).
     for key, rel in manifest["paths"].items():
         vars_["$" + key.upper()] = str(ROOT / rel)
@@ -206,7 +229,7 @@ def main():
         if "builtin" in stage:
             passed, out, err = BUILTINS[stage["builtin"]](manifest, vars_, flags)
         else:
-            cmd, cwd = resolve(stage, manifest, vars_)
+            cmd, cwd = resolve(stage, manifest, vars_, flags)
             passed, out, err = run_cmd(cmd, cwd)
         if not passed:
             failed.add(sid)
