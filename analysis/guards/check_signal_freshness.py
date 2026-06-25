@@ -91,7 +91,7 @@ def _fmt(triple) -> str:
 
 def check(pipeline_filter=None, quiet=False) -> int:
     if not DB_PATH.exists():
-        print("  ✗ signals.db not found — run generate_signal_history.py append first", file=sys.stderr)
+        print("  ✗ signals.db not found — run core/generate_signal_history.py append first", file=sys.stderr)
         return 1
 
     registry = json.loads(REG.read_text())
@@ -145,7 +145,7 @@ def check(pipeline_filter=None, quiet=False) -> int:
         if len(drift) > 25:
             print(f"    ... and {len(drift) - 25} more", file=sys.stderr)
         print("\n  Fix: re-append EVERY period for the affected pipeline, e.g.\n"
-              "    python3 analysis/generate_signal_history.py append --pipeline <name> --period <YYYY-MM-DD>\n"
+              "    python3 analysis/core/generate_signal_history.py append --pipeline <name> --period <YYYY-MM-DD>\n"
               "  (run for all periods, not just the latest — that is the whole point of this check)",
               file=sys.stderr)
         return 1

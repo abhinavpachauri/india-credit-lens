@@ -142,7 +142,7 @@ def check_db(reg_signals: dict, known_pipelines: set[str]) -> sqlite3.Connection
     Returns the open connection for reuse, or None on failure.
     """
     if not DB.exists():
-        fail(f"signals.db not found at {DB} — run generate_signal_history.py append first")
+        fail(f"signals.db not found at {DB} — run core/generate_signal_history.py append first")
         return None
 
     try:

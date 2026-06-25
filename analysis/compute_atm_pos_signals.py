@@ -150,7 +150,7 @@ def load_db_yoy(latest_period: str, prior_period: str | None) -> dict[str, dict]
             raise SystemExit(
                 f"signals.db latest atm_pos period is {db_latest} but the CSV latest is "
                 f"{latest_period}. Append the period to signals.db before Stage 4a:\n"
-                f"  python3 analysis/generate_signal_history.py append --pipeline atm_pos "
+                f"  python3 analysis/core/generate_signal_history.py append --pipeline atm_pos "
                 f"--period {latest_period}"
             )
 

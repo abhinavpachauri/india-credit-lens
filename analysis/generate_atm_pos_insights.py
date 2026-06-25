@@ -1844,7 +1844,7 @@ def main():
               f"(eval {period}, prompt {prompt_version}); rest deterministic.")
     else:
         print(f"  ⚠ no LLM evaluation found for {period} — all insights deterministic. "
-              f"Run: python3 analysis/generate_signal_history.py evaluate --pipeline atm_pos --period {period}")
+              f"Run: python3 analysis/core/generate_signal_history.py evaluate --pipeline atm_pos --period {period}")
 
     # Write
     OUT_PATH.parent.mkdir(parents=True, exist_ok=True)

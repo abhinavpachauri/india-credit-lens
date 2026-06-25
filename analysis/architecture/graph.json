@@ -106,8 +106,8 @@
         "format_report.json": "low"
       },
       "writes": {
-        "date_overrides.json": "high",
-        "sections.json": "high"
+        "sections.json": "high",
+        "date_overrides.json": "high"
       },
       "doc_claims": []
     },
@@ -227,16 +227,6 @@
           "text": "output/mermaid/[report_id]/[period_date]/"
         }
       ]
-    },
-    "generate_signal_history": {
-      "path": "analysis/generate_signal_history.py",
-      "imports": [],
-      "invokes": [],
-      "reads": {
-        "analysis/signals/registry.json": "low"
-      },
-      "writes": {},
-      "doc_claims": []
     },
     "hook_validate": {
       "path": "analysis/hook_validate.py",
@@ -703,6 +693,16 @@
         }
       ]
     },
+    "core/generate_signal_history": {
+      "path": "analysis/core/generate_signal_history.py",
+      "imports": [],
+      "invokes": [],
+      "reads": {
+        "analysis/signals/registry.json": "low"
+      },
+      "writes": {},
+      "doc_claims": []
+    },
     "core/generate_skeleton": {
       "path": "analysis/core/generate_skeleton.py",
       "imports": [],
@@ -889,8 +889,8 @@
         "analysis/signals/signals.db": "low"
       },
       "writes": {
-        "web/public/data/opportunities_feed.json": "high",
-        "analysis/signals/narrative_cache.json": "high"
+        "analysis/signals/narrative_cache.json": "high",
+        "web/public/data/opportunities_feed.json": "high"
       },
       "doc_claims": []
     },
