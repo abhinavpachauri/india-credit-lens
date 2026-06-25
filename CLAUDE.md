@@ -164,7 +164,7 @@ handles formatting-only cases automatically.
 | `PIPELINE_ARCHITECTURE.md` | **Pipeline stages, system model cadence, adding-period checklist** |
 | `analysis/report_analysis_prompt.md` | Master prompt + analytical framework for all report analyses |
 | `analysis/core/gate.py` | Master eval gate — Stages 3 and 6 |
-| `analysis/validate_timeline.py` | Check 0: timeline.json schema + path existence |
+| `analysis/core/validate_timeline.py` | Check 0: timeline.json schema + path existence |
 | `analysis/pipelines/sibc/validate_sections.py` | Check 1: sections.json data integrity |
 | `analysis/pipelines/sibc/validate_annotations.py` | Check 3: live rbi_sibc.ts structure (Checks A–H) |
 | `analysis/pipelines/sibc/validate_content.py` | Check 2b: dates/values/growth in annotation bodies vs sections.json |
@@ -174,7 +174,7 @@ handles formatting-only cases automatically.
 | `analysis/check_signal_freshness.py` | Check 2f/5b2: deterministic signals.db freshness — recompute all periods from CSV, fail on drift. Closes the staleness gap `check_derived_fresh.py` leaves (it excludes the binary DB). |
 | `analysis/pipelines/sibc/validate_sibc_traceability.py` | Check 2g: every number in a SIBC insight's body/chain/implication must trace to a value in signals.db (scalar = hard fail; scan = deterministic so grounded by construction). Status-substring contradictions = non-blocking warnings. Ground truth = `query.signal_numbers`/`flat_numbers` (period-wide, unit-aware). |
 | `analysis/pipelines/atm_pos/validate_atm_pos_insights.py` | Stage 4c: ATM/POS traceability — numbers in body/**chain**/implication must trace to `signals.json`. Mirror of Check 2g for the deterministic payments path. |
-| `analysis/validate_opportunity_traceability.py` | Check 4f: opportunity (Layer 2) number traceability — every number in an opportunity body/chain/implication must trace to the driver's **full declared evidence set (`evidence_all`)** (period-wide is vacuous at cross-pipeline scale). **STRICT in both gates** (the L2 analog of Check 2g; `derive_opportunities` emits `evidence_all` = driver's full signal set so structural risks ground even when not firing). |
+| `analysis/core/validate_opportunity_traceability.py` | Check 4f: opportunity (Layer 2) number traceability — every number in an opportunity body/chain/implication must trace to the driver's **full declared evidence set (`evidence_all`)** (period-wide is vacuous at cross-pipeline scale). **STRICT in both gates** (the L2 analog of Check 2g; `derive_opportunities` emits `evidence_all` = driver's full signal set so structural risks ground even when not firing). |
 | `analysis/pipelines/sibc/generate_analysis_report.py` | Stage 5.5: eval JSON → `sibc_l1_annotations.json`. Scalar insights carry the LLM chain → `basis.inferences`; **scan insights generated deterministically** (`deterministic_scan_insight`). Attaches `basis.facts` from `signal_numbers`. |
 | `analysis/legacy/validate.py` | Checks 4, 5: system_model.json + subsystems.json |
 | `analysis/pipelines/sibc/extract_sibc.py` | Stage 1: SIBC xlsx → sections.json + format_report.json |

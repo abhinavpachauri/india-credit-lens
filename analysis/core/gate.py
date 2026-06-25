@@ -35,7 +35,7 @@ GREEN, RED, YELLOW, BOLD, RESET = "\033[32m", "\033[31m", "\033[33m", "\033[1m",
 # $VARS are substituted at run time. Pre-move these point at analysis/*.py; post-move
 # this single map repoints to core/*.py — the manifests stay unchanged.
 CORE_MAP = {
-    "validate_timeline":        ("validate_timeline.py", ["--path", "$TIMELINE"], "ANALYSIS"),
+    "validate_timeline":        ("core/validate_timeline.py", ["--path", "$TIMELINE"], "ANALYSIS"),
     "validate_signal_history":  ("guards/validate_signal_history.py", [], "ROOT"),
     "check_signal_freshness":   ("guards/check_signal_freshness.py", ["--pipeline", "$ID"], "ROOT"),
     "skeleton":                 ("core/generate_skeleton.py", ["--pipeline", "$ID"], "ROOT"),
@@ -44,7 +44,7 @@ CORE_MAP = {
     "derive_opportunities":     ("core/derive_opportunities.py", ["--pipeline", "$ID", "--period", "$LATEST"], "ROOT"),
     "compose_ecosystem":        ("crosssource/compose_ecosystem.py", [], "ROOT"),
     "opportunities_feed":       ("crosssource/generate_opportunities_feed.py", [], "ROOT"),
-    "opportunity_traceability": ("validate_opportunity_traceability.py", ["--strict"], "ROOT"),
+    "opportunity_traceability": ("core/validate_opportunity_traceability.py", ["--strict"], "ROOT"),
     "chart_series":             ("core/generate_chart_series.py", ["--pipeline", "$ID"], "ROOT"),
 }
 

@@ -79,7 +79,7 @@ def main():
         returncode = rc
 
     elif name == "timeline.json" and p.exists():
-        rc, out = run([sys.executable, str(ANALYSIS / "validate_timeline.py"), "--path", str(p)])
+        rc, out = run([sys.executable, str(ANALYSIS / "core" / "validate_timeline.py"), "--path", str(p)])
         print(f"[hook:timeline] {one_liner(out)}")
         returncode = rc
 

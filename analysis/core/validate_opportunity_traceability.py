@@ -25,7 +25,9 @@ import sqlite3
 import sys
 from pathlib import Path
 
-ANALYSIS = Path(__file__).resolve().parent
+# Real <repo>/analysis dir (location-independent) — this module lives in core/ after the
+# §4 cutover, so __file__.parent is no longer analysis/. FEED/REG/DB resolve off this.
+ANALYSIS = next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"
 sys.path.insert(0, str(ANALYSIS))
 from signals.query import signal_numbers, flat_numbers          # noqa: E402
 # Number-tracing core, bound to the SIBC NumberPolicy (was imported from
