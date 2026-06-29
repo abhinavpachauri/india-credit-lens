@@ -40,6 +40,11 @@ DOCS = [
     "CLAUDE.md", "CLAUDE.local.md", "PIPELINE_ARCHITECTURE.md", "ARCHITECTURE.md",
     "web/CLAUDE.md", "analysis/rbi_atm_pos/CLAUDE.md",
     "analysis/newsletter/CLAUDE.md",
+    # Per-directory READMEs — guarded so the navigational map can't drift from the tree.
+    "analysis/core/README.md", "analysis/guards/README.md",
+    "analysis/crosssource/README.md", "analysis/pipelines/README.md",
+    "analysis/signals/README.md", "analysis/architecture/README.md",
+    "analysis/legacy/README.md",
 ]
 
 # PY: not preceded by a word char or `*` (so the glob `*_atm_pos.py` isn't a ref).
