@@ -39,8 +39,16 @@ _df_cache: pd.DataFrame | None = None
 def _load_df() -> pd.DataFrame:
     global _df_cache
     if _df_cache is None:
-        _df_cache = pd.read_csv(CSV, parse_dates=["report_date"])
-        _df_cache["report_date"] = _df_cache["report_date"].dt.strftime("%Y-%m-%d")
+        df = pd.read_csv(CSV, parse_dates=["report_date"])
+        df["report_date"] = df["report_date"].dt.strftime("%Y-%m-%d")
+        # The hot path (_total_val/_category_val/scan/streak) filters by equality on these
+        # string columns thousands of times over a 27k-row frame. As object dtype that runs
+        # element-wise Python string comparison (the dominant gate cost); as `category` it
+        # compares integer codes — same results, ~30× faster. value stays numeric.
+        for col in ("report_date", "metric", "record_type", "bank_category", "bank_name"):
+            if col in df.columns:
+                df[col] = df[col].astype("category")
+        _df_cache = df
     return _df_cache
 
 

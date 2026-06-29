@@ -66,10 +66,16 @@ def resolve_csv_date(data_date: str) -> str | None:
 def _load_df() -> pd.DataFrame:
     global _df_cache
     if _df_cache is None:
-        _df_cache = pd.read_csv(CSV, dtype={"code": str, "parent_code": str})
-        _df_cache["date"] = pd.to_datetime(_df_cache["date"]).dt.strftime("%Y-%m-%d")
-        _df_cache["code"]        = _df_cache["code"].fillna("").str.strip()
-        _df_cache["parent_code"] = _df_cache["parent_code"].fillna("").str.strip()
+        df = pd.read_csv(CSV, dtype={"code": str, "parent_code": str})
+        df["date"] = pd.to_datetime(df["date"]).dt.strftime("%Y-%m-%d")
+        df["code"]        = df["code"].fillna("").str.strip()
+        df["parent_code"] = df["parent_code"].fillna("").str.strip()
+        # Hot-path filter columns → category dtype (integer-code equality, identical results,
+        # faster than object string comparison). Same optimization as atm_pos._load_df.
+        for col in ("date", "code", "statement", "parent_code"):
+            if col in df.columns:
+                df[col] = df[col].astype("category")
+        _df_cache = df
     return _df_cache
 
 
