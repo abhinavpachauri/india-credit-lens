@@ -11,14 +11,14 @@ const GROUPS = ["cc", "dc", "infra"] as const;
 
 export default function PaymentsPage() {
   const { setHeaderMetric } = useAppShell();
-  const [rows, setRows]     = useState<AtmPosSeries | null>(null);
+  const [series, setSeries]     = useState<AtmPosSeries | null>(null);
 
   useEffect(() => {
     setHeaderMetric(null, "Mar 2026");
-    loadAtmPosData().then(setRows);
+    loadAtmPosData().then(setSeries);
   }, [setHeaderMetric]);
 
-  if (!rows) {
+  if (!series) {
     return (
       <div
         className="flex items-center justify-center min-h-[60vh] text-sm"
@@ -32,7 +32,7 @@ export default function PaymentsPage() {
   return (
     <main className="max-w-6xl mx-auto px-3 sm:px-4 py-6">
       {GROUPS.map((group) => (
-        <AtmPosGroupSection key={group} group={group} rows={rows} />
+        <AtmPosGroupSection key={group} group={group} series={series} />
       ))}
 
       <div className="mt-10 mb-2">

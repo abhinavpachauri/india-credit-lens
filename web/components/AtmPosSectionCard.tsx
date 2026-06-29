@@ -9,7 +9,7 @@ import AtmPosDistributionChart from "@/components/AtmPosDistributionChart";
 
 interface AtmPosSectionCardProps {
   def:          SectionDef;
-  rows:         AtmPosSeries;
+  series:         AtmPosSeries;
   filter:       FilterState;
   tab:          "trend" | "distribution";
   hiddenSeries: Set<string>;
@@ -32,7 +32,7 @@ const INACTIVE_VOL_VAL: React.CSSProperties = {
 
 export default function AtmPosSectionCard({
   def,
-  rows,
+  series,
   filter,
   tab,
   hiddenSeries,
@@ -55,8 +55,8 @@ export default function AtmPosSectionCard({
   }, [def, volVal]);
 
   const { absoluteData, momData, yoyData, seriesNames } = useMemo(
-    () => buildSectionData(rows, activeMetric, filter),
-    [rows, activeMetric, filter],
+    () => buildSectionData(series, activeMetric, filter),
+    [series, activeMetric, filter],
   );
 
   return (

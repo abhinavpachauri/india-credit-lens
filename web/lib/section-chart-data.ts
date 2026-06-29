@@ -56,7 +56,7 @@ async function loadSibcChartMap(): Promise<SectionChartMap> {
 
 async function loadAtmPosChartMap(): Promise<SectionChartMap> {
   const { loadAtmPosData, buildSectionData } = await import("@/lib/atm_pos_data");
-  const rows = await loadAtmPosData();
+  const series = await loadAtmPosData();
   const map: SectionChartMap = new Map();
   // headline metric per opportunity group; charted as Total + by bank-type over time
   const GROUP_METRIC: Record<string, string> = {
@@ -69,7 +69,7 @@ async function loadAtmPosChartMap(): Promise<SectionChartMap> {
     topN: 5,
   };
   for (const [group, metric] of Object.entries(GROUP_METRIC)) {
-    const sd = buildSectionData(rows, metric, filter);
+    const sd = buildSectionData(series, metric, filter);
     map.set(chartKey("atm_pos", group), {
       absoluteData:            sd.absoluteData,
       growthData:              sd.momData,   // MoM % (no YoY/FY for the payments slice)

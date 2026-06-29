@@ -38,7 +38,7 @@ type TabId     = "trend" | "distribution";
 
 interface AtmPosGroupSectionProps {
   group: "cc" | "dc" | "infra";
-  rows:  AtmPosSeries;
+  series:  AtmPosSeries;
 }
 
 const BTN = (active: boolean): React.CSSProperties => ({
@@ -51,12 +51,12 @@ const DIVIDER_STYLE: React.CSSProperties = {
   width: 1, height: 20, background: "var(--border-card)", flexShrink: 0,
 };
 
-export default function AtmPosGroupSection({ group, rows }: AtmPosGroupSectionProps) {
+export default function AtmPosGroupSection({ group, series }: AtmPosGroupSectionProps) {
   const sections = useMemo(
     () => SECTION_DEFS.filter((d) => d.group === group),
     [group],
   );
-  const allBanks = useMemo(() => getAllBanks(rows), [rows]);
+  const allBanks = useMemo(() => getAllBanks(series), [series]);
 
   const [mode,          setMode]          = useState<GroupMode>("top_n");
   const [selectedBanks, setSelectedBanks] = useState<string[]>([]);
@@ -78,8 +78,8 @@ export default function AtmPosGroupSection({ group, rows }: AtmPosGroupSectionPr
   // Pre-compute top N banks at group level for consistent chips across all cards
   const topNBanks = useMemo(() => {
     if (mode !== "top_n") return [];
-    return getTopNBanks(rows, GROUP_PRIMARY[group] ?? "pos_terminals", topN);
-  }, [mode, topN, rows, group]);
+    return getTopNBanks(series, GROUP_PRIMARY[group] ?? "pos_terminals", topN);
+  }, [mode, topN, series, group]);
 
   // Series names that drive the chip row
   const seriesNames = useMemo<string[]>(() => {
@@ -410,7 +410,7 @@ export default function AtmPosGroupSection({ group, rows }: AtmPosGroupSectionPr
           <div key={def.id} data-card-id={def.id}>
             <AtmPosSectionCard
               def={def}
-              rows={rows}
+              series={series}
               filter={cardFilter}
               tab={tab}
               hiddenSeries={hiddenSeries}
