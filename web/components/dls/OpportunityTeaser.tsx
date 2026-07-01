@@ -65,7 +65,7 @@ export default function OpportunityTeaser({ pipeline, sectionId }: Props) {
           color:      "var(--font)",
           overflow:   "hidden",
           display:    "-webkit-box",
-          WebkitLineClamp: 1,
+          WebkitLineClamp: 2,   // wrap to 2 lines on narrow screens instead of clipping mid-phrase
           WebkitBoxOrient: "vertical",
         }}
       >
