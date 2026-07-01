@@ -122,7 +122,7 @@ _ART_GLOBS = [
 def artifact_index():
     arts = set()
     for pat in _ART_GLOBS:
-        for f in ROOT.glob(pat):
+        for f in sorted(ROOT.glob(pat)):   # sorted → deterministic scan order
             if f.is_file():
                 arts.add(str(f.relative_to(ROOT)))
     return arts
@@ -404,10 +404,12 @@ def main():
 
     graph = discover()
     if args.json:
-        print(json.dumps(graph, indent=2))
+        print(json.dumps(graph, indent=2, sort_keys=True))
         return 0
     OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(json.dumps(graph, indent=2, ensure_ascii=False))
+    # sort_keys → byte-stable output regardless of scan/glob order, so the freshness guard
+    # on graph.json is reproducible (a non-deterministic derived artifact can never be "fresh").
+    OUT.write_text(json.dumps(graph, indent=2, ensure_ascii=False, sort_keys=True))
     if not args.quiet:
         summarize(graph)
         print(f"\n→ wrote {OUT.relative_to(ROOT)}")

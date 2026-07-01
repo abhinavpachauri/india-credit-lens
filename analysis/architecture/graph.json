@@ -1,540 +1,524 @@
 {
   "root": "/Users/rishamjeetkaur/Downloads/abnvp/india-credit-lens",
   "scripts": {
-    "hook_validate": {
-      "path": "analysis/hook_validate.py",
-      "imports": [],
-      "invokes": [
-        "pipelines/sibc/validate_annotations",
-        "core/validate_timeline",
-        "pipelines/sibc/validate_sections"
-      ],
-      "reads": {
-        "web/lib/reports/rbi_sibc.ts": "low",
-        "system_model.json": "low",
-        "timeline.json": "low",
-        "sections.json": "low",
-        "analysis/rbi_sibc/merged/sections_merged.json": "low"
-      },
-      "writes": {},
-      "doc_claims": []
-    },
-    "signals/apply_status_rules": {
-      "path": "analysis/signals/apply_status_rules.py",
-      "imports": [],
-      "invokes": [],
-      "reads": {},
-      "writes": {
-        "analysis/signals/registry.json": "high"
-      },
-      "doc_claims": []
-    },
-    "signals/db": {
-      "path": "analysis/signals/db.py",
-      "imports": [],
-      "invokes": [],
-      "reads": {},
-      "writes": {
-        "analysis/signals/signals.db": "high"
-      },
-      "doc_claims": []
-    },
-    "signals/evaluate": {
-      "path": "analysis/signals/evaluate.py",
-      "imports": [
-        "signals/db",
-        "signals/query"
-      ],
-      "invokes": [],
-      "reads": {
-        "web/public/data/rbi_sibc_consolidated.csv": "low",
-        "web/public/data/atm_pos_consolidated.csv": "low"
-      },
-      "writes": {},
-      "doc_claims": []
-    },
-    "signals/migrate_to_db": {
-      "path": "analysis/signals/migrate_to_db.py",
-      "imports": [
-        "signals/db"
-      ],
-      "invokes": [],
-      "reads": {
-        "sibc.json": "low",
-        "atm_pos.json": "low"
-      },
-      "writes": {},
-      "doc_claims": []
-    },
-    "signals/query": {
-      "path": "analysis/signals/query.py",
-      "imports": [],
-      "invokes": [],
-      "reads": {
-        "timeline.json": "low",
-        "analysis/rbi_sibc/timeline.json": "low"
-      },
-      "writes": {},
-      "doc_claims": []
-    },
-    "signals/rebuild_atm_pos_signals": {
-      "path": "analysis/signals/rebuild_atm_pos_signals.py",
-      "imports": [],
-      "invokes": [],
-      "reads": {},
-      "writes": {
-        "analysis/signals/registry.json": "high"
-      },
-      "doc_claims": []
-    },
-    "signals/rebuild_sibc_signals": {
-      "path": "analysis/signals/rebuild_sibc_signals.py",
-      "imports": [],
-      "invokes": [],
-      "reads": {},
-      "writes": {
-        "analysis/signals/registry.json": "high"
-      },
-      "doc_claims": []
-    },
-    "signals/update_registry": {
-      "path": "analysis/signals/update_registry.py",
-      "imports": [],
-      "invokes": [],
-      "reads": {},
-      "writes": {
-        "analysis/signals/registry.json": "high"
-      },
-      "doc_claims": []
-    },
-    "newsletter/generate_images": {
-      "path": "analysis/newsletter/generate_images.py",
-      "imports": [],
-      "invokes": [],
-      "reads": {},
-      "writes": {},
-      "doc_claims": []
-    },
-    "newsletter/generate_linkedin": {
-      "path": "analysis/newsletter/generate_linkedin.py",
-      "imports": [],
-      "invokes": [],
-      "reads": {
-        "analysis/newsletter/newsletter_config.json": "low"
-      },
-      "writes": {
-        "schedule.md": "high"
-      },
-      "doc_claims": [
-        {
-          "kind": "output",
-          "text": "analysis/newsletter/output/linkedin/YYYY-MM-DD/"
-        }
-      ]
-    },
-    "newsletter/generate_newsletter": {
-      "path": "analysis/newsletter/generate_newsletter.py",
-      "imports": [],
-      "invokes": [],
-      "reads": {
-        "analysis/newsletter/newsletter_config.json": "low",
-        "system_model.json": "low"
-      },
-      "writes": {},
-      "doc_claims": [
-        {
-          "kind": "output",
-          "text": "output/newsletter_YYYY-MM-DD_substack.html  ← paste into Substack editor"
-        }
-      ]
-    },
-    "newsletter/newsletter_delta_brief": {
-      "path": "analysis/newsletter/newsletter_delta_brief.py",
-      "imports": [],
-      "invokes": [],
-      "reads": {
-        "timeline.json": "low",
-        "analysis/rbi_sibc/timeline.json": "low",
-        "insights.md": "low",
-        "gaps.md": "low",
-        "opportunities.md": "low"
-      },
-      "writes": {
-        "analysis/newsletter/newsletter_delta_brief.md": "high"
-      },
-      "doc_claims": [
-        {
-          "kind": "output",
-          "text": "analysis/newsletter/newsletter_delta_brief.md"
-        }
-      ]
-    },
-    "newsletter/validate_newsletter_config": {
-      "path": "analysis/newsletter/validate_newsletter_config.py",
-      "imports": [],
-      "invokes": [],
-      "reads": {
-        "analysis/rbi_sibc/merged/sections_merged.json": "low",
-        "analysis/newsletter/newsletter_config.json": "low"
-      },
-      "writes": {},
-      "doc_claims": []
-    },
-    "signals/compute/atm_pos": {
-      "path": "analysis/signals/compute/atm_pos.py",
-      "imports": [],
-      "invokes": [],
-      "reads": {
-        "web/public/data/atm_pos_consolidated.csv": "low"
-      },
-      "writes": {},
-      "doc_claims": []
-    },
-    "signals/compute/engine": {
-      "path": "analysis/signals/compute/engine.py",
-      "imports": [
-        "signals/db"
-      ],
-      "invokes": [],
-      "reads": {},
-      "writes": {},
-      "doc_claims": []
-    },
-    "signals/compute/sibc": {
-      "path": "analysis/signals/compute/sibc.py",
-      "imports": [],
-      "invokes": [],
-      "reads": {
-        "web/public/data/rbi_sibc_consolidated.csv": "low",
-        "timeline.json": "low",
-        "analysis/rbi_sibc/timeline.json": "low"
-      },
-      "writes": {},
-      "doc_claims": []
-    },
     "core/derive_opportunities": {
-      "path": "analysis/core/derive_opportunities.py",
-      "imports": [
-        "core/generate_skeleton"
-      ],
-      "invokes": [],
-      "reads": {
-        "analysis/signals/signals.db": "low"
-      },
-      "writes": {},
       "doc_claims": [
         {
           "kind": "output",
           "text": "analysis/{pipeline}/merged/opportunities_{period}.json"
         }
-      ]
+      ],
+      "imports": [
+        "core/generate_skeleton"
+      ],
+      "invokes": [],
+      "path": "analysis/core/derive_opportunities.py",
+      "reads": {
+        "analysis/signals/signals.db": "low"
+      },
+      "writes": {}
     },
     "core/gate": {
-      "path": "analysis/core/gate.py",
+      "doc_claims": [],
       "imports": [],
       "invokes": [],
+      "path": "analysis/core/gate.py",
       "reads": {
         "analysis/signals/signals.db": "low",
         "pipeline.json": "low",
         "pipelines/pipeline.json": "low"
       },
-      "writes": {},
-      "doc_claims": []
+      "writes": {}
     },
     "core/generate_chart_series": {
-      "path": "analysis/core/generate_chart_series.py",
-      "imports": [],
-      "invokes": [],
-      "reads": {
-        "web/public/data/atm_pos_consolidated.csv": "low"
-      },
-      "writes": {
-        "web/public/data/atm_pos_chart_series.json": "low"
-      },
       "doc_claims": [
         {
           "kind": "output",
           "text": "web/public/data/{pipeline}_chart_series.json"
         }
-      ]
-    },
-    "core/generate_signal_history": {
-      "path": "analysis/core/generate_signal_history.py",
+      ],
       "imports": [],
       "invokes": [],
+      "path": "analysis/core/generate_chart_series.py",
+      "reads": {
+        "web/public/data/atm_pos_consolidated.csv": "low"
+      },
+      "writes": {
+        "web/public/data/atm_pos_chart_series.json": "low"
+      }
+    },
+    "core/generate_signal_history": {
+      "doc_claims": [],
+      "imports": [],
+      "invokes": [],
+      "path": "analysis/core/generate_signal_history.py",
       "reads": {
         "analysis/signals/registry.json": "low"
       },
-      "writes": {},
-      "doc_claims": []
+      "writes": {}
     },
     "core/generate_skeleton": {
-      "path": "analysis/core/generate_skeleton.py",
+      "doc_claims": [],
       "imports": [],
       "invokes": [],
+      "path": "analysis/core/generate_skeleton.py",
       "reads": {
-        "skeleton_profile.json": "low",
-        "analysis/rbi_sibc/skeleton_profile.json": "low",
-        "analysis/rbi_atm_pos/skeleton_profile.json": "low",
         "analysis/SYSTEM_MODEL_SPEC.md": "low",
+        "analysis/rbi_atm_pos/skeleton_profile.json": "low",
+        "analysis/rbi_sibc/skeleton_profile.json": "low",
+        "skeleton_profile.json": "low",
         "tmp_skeleton.json": "low"
       },
       "writes": {
-        "system_model.json": "low",
+        "analysis/rbi_atm_pos/merged/system_model.json": "low",
         "analysis/rbi_sibc/merged/system_model.json": "low",
-        "analysis/rbi_atm_pos/merged/system_model.json": "low"
-      },
-      "doc_claims": []
+        "system_model.json": "low"
+      }
     },
     "core/generate_system_state": {
-      "path": "analysis/core/generate_system_state.py",
-      "imports": [
-        "core/generate_skeleton"
-      ],
-      "invokes": [],
-      "reads": {
-        "analysis/signals/signals.db": "low"
-      },
-      "writes": {},
       "doc_claims": [
         {
           "kind": "output",
           "text": "analysis/{pipeline}/merged/system_state_{period}.json  (narrative:null slot for Stage 5.X)."
         }
-      ]
-    },
-    "core/paths": {
-      "path": "analysis/core/paths.py",
-      "imports": [],
-      "invokes": [],
-      "reads": {},
-      "writes": {},
-      "doc_claims": []
-    },
-    "core/run_inference": {
-      "path": "analysis/core/run_inference.py",
+      ],
       "imports": [
         "core/generate_skeleton"
       ],
       "invokes": [],
+      "path": "analysis/core/generate_system_state.py",
       "reads": {
-        "system_state_*.json": "low",
+        "analysis/signals/signals.db": "low"
+      },
+      "writes": {}
+    },
+    "core/paths": {
+      "doc_claims": [],
+      "imports": [],
+      "invokes": [],
+      "path": "analysis/core/paths.py",
+      "reads": {},
+      "writes": {}
+    },
+    "core/run_inference": {
+      "doc_claims": [],
+      "imports": [
+        "core/generate_skeleton"
+      ],
+      "invokes": [],
+      "path": "analysis/core/run_inference.py",
+      "reads": {
+        "analysis/*/merged/system_state_*.json": "low",
         "analysis/cross_source/candidates.json": "low",
         "analysis/cross_source/composition.json": "low",
         "analysis/ontology/channels.json": "low",
-        "analysis/*/merged/system_state_*.json": "low"
+        "system_state_*.json": "low"
       },
-      "writes": {},
-      "doc_claims": []
+      "writes": {}
     },
     "core/traceability": {
-      "path": "analysis/core/traceability.py",
+      "doc_claims": [],
       "imports": [],
       "invokes": [],
+      "path": "analysis/core/traceability.py",
       "reads": {},
-      "writes": {},
-      "doc_claims": []
+      "writes": {}
     },
     "core/validate_opportunity_traceability": {
-      "path": "analysis/core/validate_opportunity_traceability.py",
+      "doc_claims": [],
       "imports": [],
       "invokes": [],
+      "path": "analysis/core/validate_opportunity_traceability.py",
       "reads": {
-        "web/public/data/opportunities_feed.json": "low",
         "analysis/signals/registry.json": "low",
-        "analysis/signals/signals.db": "low"
+        "analysis/signals/signals.db": "low",
+        "web/public/data/opportunities_feed.json": "low"
       },
-      "writes": {},
-      "doc_claims": []
+      "writes": {}
     },
     "core/validate_system_model": {
-      "path": "analysis/core/validate_system_model.py",
+      "doc_claims": [],
       "imports": [
         "core/generate_skeleton"
       ],
       "invokes": [],
+      "path": "analysis/core/validate_system_model.py",
       "reads": {
-        "analysis/ontology/concepts.json": "low",
-        "analysis/ontology/channels.json": "low"
+        "analysis/ontology/channels.json": "low",
+        "analysis/ontology/concepts.json": "low"
       },
-      "writes": {},
-      "doc_claims": []
+      "writes": {}
     },
     "core/validate_timeline": {
+      "doc_claims": [],
+      "imports": [],
+      "invokes": [],
       "path": "analysis/core/validate_timeline.py",
-      "imports": [],
-      "invokes": [],
       "reads": {
-        "timeline.json": "low",
-        "analysis/rbi_sibc/timeline.json": "low"
+        "analysis/rbi_sibc/timeline.json": "low",
+        "timeline.json": "low"
       },
-      "writes": {},
-      "doc_claims": []
-    },
-    "guards/check_derived_fresh": {
-      "path": "analysis/guards/check_derived_fresh.py",
-      "imports": [],
-      "invokes": [],
-      "reads": {
-        "analysis/signals/signals.db": "low",
-        "analysis/rbi_sibc/merged/system_model.json": "low",
-        "analysis/rbi_atm_pos/merged/system_model.json": "low",
-        "analysis/rbi_sibc/merged/system_state_*.json": "low",
-        "analysis/rbi_atm_pos/merged/system_state_*.json": "low",
-        "analysis/rbi_sibc/merged/opportunities_*.json": "low",
-        "analysis/rbi_atm_pos/merged/opportunities_*.json": "low",
-        "analysis/cross_source/candidates.json": "low",
-        "analysis/cross_source/ecosystem_state_*.json": "low",
-        "web/public/data/opportunities_feed.json": "low",
-        "web/public/data/atm_pos_chart_series.json": "low",
-        "analysis/architecture/graph.json": "low",
-        "ARCHITECTURE.generated.md": "low"
-      },
-      "writes": {},
-      "doc_claims": []
-    },
-    "guards/check_signal_freshness": {
-      "path": "analysis/guards/check_signal_freshness.py",
-      "imports": [],
-      "invokes": [],
-      "reads": {
-        "analysis/signals/registry.json": "low"
-      },
-      "writes": {},
-      "doc_claims": []
-    },
-    "guards/validate_signal_history": {
-      "path": "analysis/guards/validate_signal_history.py",
-      "imports": [],
-      "invokes": [],
-      "reads": {
-        "analysis/signals/registry.json": "low",
-        "analysis/signals/signals.db": "low"
-      },
-      "writes": {},
-      "doc_claims": []
+      "writes": {}
     },
     "crosssource/compose_ecosystem": {
-      "path": "analysis/crosssource/compose_ecosystem.py",
-      "imports": [
-        "core/generate_skeleton"
-      ],
-      "invokes": [],
-      "reads": {
-        "system_state_*.json": "low",
-        "analysis/cross_source/composition.json": "low"
-      },
-      "writes": {},
       "doc_claims": [
         {
           "kind": "output",
           "text": "analysis/cross_source/ecosystem_state_{period}.json"
         }
-      ]
-    },
-    "crosssource/derive_cross_links": {
-      "path": "analysis/crosssource/derive_cross_links.py",
+      ],
       "imports": [
         "core/generate_skeleton"
       ],
       "invokes": [],
+      "path": "analysis/crosssource/compose_ecosystem.py",
       "reads": {
-        "analysis/ontology/channels.json": "low",
-        "analysis/COMPOSITION_SPEC.md": "low"
+        "analysis/cross_source/composition.json": "low",
+        "system_state_*.json": "low"
       },
-      "writes": {
-        "analysis/cross_source/candidates.json": "high"
-      },
+      "writes": {}
+    },
+    "crosssource/derive_cross_links": {
       "doc_claims": [
         {
           "kind": "output",
           "text": "analysis/cross_source/candidates.json (regenerable; never hand-edited)."
         }
-      ]
-    },
-    "crosssource/generate_opportunities_feed": {
-      "path": "analysis/crosssource/generate_opportunities_feed.py",
+      ],
       "imports": [
         "core/generate_skeleton"
       ],
       "invokes": [],
+      "path": "analysis/crosssource/derive_cross_links.py",
       "reads": {
-        "analysis/signals/signals.db": "low",
-        "analysis/signals/registry.json": "low",
-        "ecosystem_state_*.json": "low",
+        "analysis/COMPOSITION_SPEC.md": "low",
         "analysis/ontology/channels.json": "low"
       },
       "writes": {
-        "web/public/data/opportunities_feed.json": "high"
-      },
-      "doc_claims": []
+        "analysis/cross_source/candidates.json": "high"
+      }
     },
-    "crosssource/generate_opportunity_narrative": {
-      "path": "analysis/crosssource/generate_opportunity_narrative.py",
+    "crosssource/generate_opportunities_feed": {
+      "doc_claims": [],
       "imports": [
         "core/generate_skeleton"
       ],
       "invokes": [],
+      "path": "analysis/crosssource/generate_opportunities_feed.py",
+      "reads": {
+        "analysis/ontology/channels.json": "low",
+        "analysis/signals/registry.json": "low",
+        "analysis/signals/signals.db": "low",
+        "ecosystem_state_*.json": "low"
+      },
+      "writes": {
+        "web/public/data/opportunities_feed.json": "high"
+      }
+    },
+    "crosssource/generate_opportunity_narrative": {
+      "doc_claims": [],
+      "imports": [
+        "core/generate_skeleton"
+      ],
+      "invokes": [],
+      "path": "analysis/crosssource/generate_opportunity_narrative.py",
       "reads": {
         "analysis/signals/signals.db": "low"
       },
       "writes": {
         "analysis/signals/narrative_cache.json": "high",
         "web/public/data/opportunities_feed.json": "high"
-      },
-      "doc_claims": []
+      }
     },
     "crosssource/validate_composition": {
-      "path": "analysis/crosssource/validate_composition.py",
+      "doc_claims": [],
       "imports": [
         "core/generate_skeleton"
       ],
       "invokes": [],
+      "path": "analysis/crosssource/validate_composition.py",
       "reads": {
         "analysis/cross_source/composition.json": "low"
       },
-      "writes": {},
-      "doc_claims": []
+      "writes": {}
     },
-    "pipelines/sibc/detect_format": {
-      "path": "analysis/pipelines/sibc/detect_format.py",
+    "guards/check_derived_fresh": {
+      "doc_claims": [],
       "imports": [],
       "invokes": [],
+      "path": "analysis/guards/check_derived_fresh.py",
+      "reads": {
+        "ARCHITECTURE.generated.md": "low",
+        "analysis/architecture/graph.json": "low",
+        "analysis/cross_source/candidates.json": "low",
+        "analysis/cross_source/ecosystem_state_*.json": "low",
+        "analysis/rbi_atm_pos/merged/opportunities_*.json": "low",
+        "analysis/rbi_atm_pos/merged/system_model.json": "low",
+        "analysis/rbi_atm_pos/merged/system_state_*.json": "low",
+        "analysis/rbi_sibc/merged/opportunities_*.json": "low",
+        "analysis/rbi_sibc/merged/system_model.json": "low",
+        "analysis/rbi_sibc/merged/system_state_*.json": "low",
+        "analysis/signals/signals.db": "low",
+        "web/public/data/atm_pos_chart_series.json": "low",
+        "web/public/data/opportunities_feed.json": "low"
+      },
+      "writes": {}
+    },
+    "guards/check_signal_freshness": {
+      "doc_claims": [],
+      "imports": [],
+      "invokes": [],
+      "path": "analysis/guards/check_signal_freshness.py",
+      "reads": {
+        "analysis/signals/registry.json": "low"
+      },
+      "writes": {}
+    },
+    "guards/validate_signal_history": {
+      "doc_claims": [],
+      "imports": [],
+      "invokes": [],
+      "path": "analysis/guards/validate_signal_history.py",
+      "reads": {
+        "analysis/signals/registry.json": "low",
+        "analysis/signals/signals.db": "low"
+      },
+      "writes": {}
+    },
+    "hook_validate": {
+      "doc_claims": [],
+      "imports": [],
+      "invokes": [
+        "pipelines/sibc/validate_annotations",
+        "core/validate_timeline",
+        "pipelines/sibc/validate_sections"
+      ],
+      "path": "analysis/hook_validate.py",
+      "reads": {
+        "analysis/rbi_sibc/merged/sections_merged.json": "low",
+        "sections.json": "low",
+        "system_model.json": "low",
+        "timeline.json": "low",
+        "web/lib/reports/rbi_sibc.ts": "low"
+      },
+      "writes": {}
+    },
+    "newsletter/generate_images": {
+      "doc_claims": [],
+      "imports": [],
+      "invokes": [],
+      "path": "analysis/newsletter/generate_images.py",
+      "reads": {},
+      "writes": {}
+    },
+    "newsletter/generate_linkedin": {
+      "doc_claims": [
+        {
+          "kind": "output",
+          "text": "analysis/newsletter/output/linkedin/YYYY-MM-DD/"
+        }
+      ],
+      "imports": [],
+      "invokes": [],
+      "path": "analysis/newsletter/generate_linkedin.py",
+      "reads": {
+        "analysis/newsletter/newsletter_config.json": "low"
+      },
+      "writes": {
+        "schedule.md": "high"
+      }
+    },
+    "newsletter/generate_newsletter": {
+      "doc_claims": [
+        {
+          "kind": "output",
+          "text": "output/newsletter_YYYY-MM-DD_substack.html  ← paste into Substack editor"
+        }
+      ],
+      "imports": [],
+      "invokes": [],
+      "path": "analysis/newsletter/generate_newsletter.py",
+      "reads": {
+        "analysis/newsletter/newsletter_config.json": "low",
+        "system_model.json": "low"
+      },
+      "writes": {}
+    },
+    "newsletter/newsletter_delta_brief": {
+      "doc_claims": [
+        {
+          "kind": "output",
+          "text": "analysis/newsletter/newsletter_delta_brief.md"
+        }
+      ],
+      "imports": [],
+      "invokes": [],
+      "path": "analysis/newsletter/newsletter_delta_brief.py",
+      "reads": {
+        "analysis/rbi_sibc/timeline.json": "low",
+        "gaps.md": "low",
+        "insights.md": "low",
+        "opportunities.md": "low",
+        "timeline.json": "low"
+      },
+      "writes": {
+        "analysis/newsletter/newsletter_delta_brief.md": "high"
+      }
+    },
+    "newsletter/validate_newsletter_config": {
+      "doc_claims": [],
+      "imports": [],
+      "invokes": [],
+      "path": "analysis/newsletter/validate_newsletter_config.py",
+      "reads": {
+        "analysis/newsletter/newsletter_config.json": "low",
+        "analysis/rbi_sibc/merged/sections_merged.json": "low"
+      },
+      "writes": {}
+    },
+    "pipelines/atm_pos/compute_atm_pos_signals": {
+      "doc_claims": [
+        {
+          "kind": "output",
+          "text": "analysis/rbi_atm_pos/signals.json"
+        }
+      ],
+      "imports": [],
+      "invokes": [],
+      "path": "analysis/pipelines/atm_pos/compute_atm_pos_signals.py",
+      "reads": {
+        "analysis/signals/registry.json": "low",
+        "analysis/signals/signals.db": "low",
+        "web/public/data/atm_pos_consolidated.csv": "low",
+        "web/public/data/atm_pos_signals.json": "low"
+      },
+      "writes": {
+        "analysis/rbi_atm_pos/signals.json": "high"
+      }
+    },
+    "pipelines/atm_pos/consolidate_atm_pos": {
+      "doc_claims": [],
+      "imports": [],
+      "invokes": [],
+      "path": "analysis/pipelines/atm_pos/consolidate_atm_pos.py",
+      "reads": {
+        "sections.json": "low"
+      },
+      "writes": {
+        "timeline.json": "high",
+        "web/public/data/atm_pos_consolidated.csv": "high"
+      }
+    },
+    "pipelines/atm_pos/detect_atm_pos_format": {
+      "doc_claims": [],
+      "imports": [],
+      "invokes": [],
+      "path": "analysis/pipelines/atm_pos/detect_atm_pos_format.py",
+      "reads": {
+        "canonical_banks.json": "low"
+      },
+      "writes": {
+        "format_report.json": "high"
+      }
+    },
+    "pipelines/atm_pos/extract_atm_pos": {
+      "doc_claims": [],
+      "imports": [
+        "pipelines/atm_pos/detect_atm_pos_format"
+      ],
+      "invokes": [
+        "pipelines/atm_pos/detect_atm_pos_format"
+      ],
+      "path": "analysis/pipelines/atm_pos/extract_atm_pos.py",
+      "reads": {
+        "format_report.json": "low"
+      },
+      "writes": {
+        "sections.json": "high"
+      }
+    },
+    "pipelines/atm_pos/generate_atm_pos_insights": {
+      "doc_claims": [
+        {
+          "kind": "output",
+          "text": "analysis/rbi_atm_pos/insights.json"
+        }
+      ],
+      "imports": [],
+      "invokes": [],
+      "path": "analysis/pipelines/atm_pos/generate_atm_pos_insights.py",
+      "reads": {
+        "analysis/rbi_atm_pos/signals.json": "low",
+        "web/public/data/atm_pos_insights.json": "low"
+      },
+      "writes": {
+        "analysis/rbi_atm_pos/insights.json": "high"
+      }
+    },
+    "pipelines/atm_pos/validate_atm_pos": {
+      "doc_claims": [],
+      "imports": [],
+      "invokes": [],
+      "path": "analysis/pipelines/atm_pos/validate_atm_pos.py",
+      "reads": {
+        "canonical_banks.json": "low",
+        "sections.json": "low"
+      },
+      "writes": {}
+    },
+    "pipelines/atm_pos/validate_atm_pos_claims": {
+      "doc_claims": [],
+      "imports": [],
+      "invokes": [],
+      "path": "analysis/pipelines/atm_pos/validate_atm_pos_claims.py",
+      "reads": {
+        "analysis/rbi_atm_pos/insights.json": "low",
+        "analysis/rbi_atm_pos/signals.json": "low",
+        "insights.json": "low"
+      },
+      "writes": {}
+    },
+    "pipelines/atm_pos/validate_atm_pos_insights": {
+      "doc_claims": [],
+      "imports": [],
+      "invokes": [],
+      "path": "analysis/pipelines/atm_pos/validate_atm_pos_insights.py",
+      "reads": {
+        "analysis/rbi_atm_pos/insights.json": "low",
+        "analysis/rbi_atm_pos/signals.json": "low",
+        "analysis/signals/registry.json": "low",
+        "analysis/signals/signals.db": "low"
+      },
+      "writes": {}
+    },
+    "pipelines/sibc/detect_format": {
+      "doc_claims": [],
+      "imports": [],
+      "invokes": [],
+      "path": "analysis/pipelines/sibc/detect_format.py",
       "reads": {
         "analysis/rbi_sibc/merged/sections_merged.json": "low"
       },
       "writes": {
         "format_report.json": "high"
-      },
-      "doc_claims": []
+      }
     },
     "pipelines/sibc/extract_sibc": {
-      "path": "analysis/pipelines/sibc/extract_sibc.py",
+      "doc_claims": [],
       "imports": [
         "pipelines/sibc/detect_format"
       ],
       "invokes": [],
+      "path": "analysis/pipelines/sibc/extract_sibc.py",
       "reads": {
         "format_report.json": "low"
       },
       "writes": {
-        "sections.json": "high",
-        "date_overrides.json": "high"
-      },
-      "doc_claims": []
+        "date_overrides.json": "high",
+        "sections.json": "high"
+      }
     },
     "pipelines/sibc/generate_analysis_report": {
-      "path": "analysis/pipelines/sibc/generate_analysis_report.py",
-      "imports": [],
-      "invokes": [],
-      "reads": {
-        "analysis/signals/registry.json": "low",
-        "analysis/signals/signals.db": "low",
-        "*.json": "low"
-      },
-      "writes": {
-        "web/public/data/sibc_l1_annotations.json": "high"
-      },
       "doc_claims": [
         {
           "kind": "reads",
@@ -544,235 +528,251 @@
           "kind": "writes",
           "text": "web/public/data/sibc_l1_annotations.json"
         }
-      ]
+      ],
+      "imports": [],
+      "invokes": [],
+      "path": "analysis/pipelines/sibc/generate_analysis_report.py",
+      "reads": {
+        "*.json": "low",
+        "analysis/signals/registry.json": "low",
+        "analysis/signals/signals.db": "low"
+      },
+      "writes": {
+        "web/public/data/sibc_l1_annotations.json": "high"
+      }
     },
     "pipelines/sibc/generate_merge": {
-      "path": "analysis/pipelines/sibc/generate_merge.py",
+      "doc_claims": [],
       "imports": [],
       "invokes": [
         "pipelines/sibc/validate_sections"
       ],
+      "path": "analysis/pipelines/sibc/generate_merge.py",
       "reads": {
-        "timeline.json": "low",
+        "analysis/rbi_sibc/merged/sections_merged.json": "low",
         "analysis/rbi_sibc/timeline.json": "low",
-        "sections.json": "low",
         "rbi_sibc/sections.json": "low",
-        "analysis/rbi_sibc/merged/sections_merged.json": "low"
+        "sections.json": "low",
+        "timeline.json": "low"
       },
-      "writes": {},
-      "doc_claims": []
+      "writes": {}
     },
     "pipelines/sibc/promote_annotations": {
-      "path": "analysis/pipelines/sibc/promote_annotations.py",
+      "doc_claims": [],
       "imports": [],
       "invokes": [],
+      "path": "analysis/pipelines/sibc/promote_annotations.py",
       "reads": {
         "annotations_merged.ts": "low"
       },
       "writes": {
         "web/lib/reports/rbi_sibc.ts": "high"
-      },
-      "doc_claims": []
+      }
     },
     "pipelines/sibc/update_web_data": {
-      "path": "analysis/pipelines/sibc/update_web_data.py",
+      "doc_claims": [],
       "imports": [],
       "invokes": [],
+      "path": "analysis/pipelines/sibc/update_web_data.py",
       "reads": {
         "*/date_overrides.json": "low"
       },
       "writes": {
         "web/public/data/rbi_sibc_consolidated.csv": "high"
-      },
-      "doc_claims": []
+      }
     },
     "pipelines/sibc/validate_annotation_basis": {
-      "path": "analysis/pipelines/sibc/validate_annotation_basis.py",
+      "doc_claims": [],
       "imports": [],
       "invokes": [],
+      "path": "analysis/pipelines/sibc/validate_annotation_basis.py",
       "reads": {
         "analysis/rbi_sibc/merged/annotations_merged.ts": "low",
-        "web/lib/reports/rbi_sibc.ts": "low",
-        "annotations_merged.ts": "low"
+        "annotations_merged.ts": "low",
+        "web/lib/reports/rbi_sibc.ts": "low"
       },
-      "writes": {},
-      "doc_claims": []
+      "writes": {}
     },
     "pipelines/sibc/validate_annotations": {
-      "path": "analysis/pipelines/sibc/validate_annotations.py",
+      "doc_claims": [],
       "imports": [],
       "invokes": [],
+      "path": "analysis/pipelines/sibc/validate_annotations.py",
       "reads": {
         "pre_generation_validation_report.json": "low"
       },
-      "writes": {},
-      "doc_claims": []
+      "writes": {}
     },
     "pipelines/sibc/validate_content": {
-      "path": "analysis/pipelines/sibc/validate_content.py",
+      "doc_claims": [],
       "imports": [],
       "invokes": [],
+      "path": "analysis/pipelines/sibc/validate_content.py",
       "reads": {
+        "analysis/rbi_sibc/merged/sections_merged.json": "low",
         "annotations_draft.ts": "low",
         "annotations_merged.ts": "low",
-        "insights.md": "low",
         "gaps.md": "low",
+        "insights.md": "low",
         "opportunities.md": "low",
-        "analysis/rbi_sibc/merged/sections_merged.json": "low",
         "sections.json": "low"
       },
-      "writes": {},
-      "doc_claims": []
+      "writes": {}
     },
     "pipelines/sibc/validate_sections": {
-      "path": "analysis/pipelines/sibc/validate_sections.py",
+      "doc_claims": [],
       "imports": [],
       "invokes": [],
+      "path": "analysis/pipelines/sibc/validate_sections.py",
       "reads": {
         "validation_sections.json": "low"
       },
-      "writes": {},
-      "doc_claims": []
+      "writes": {}
     },
     "pipelines/sibc/validate_sibc_traceability": {
-      "path": "analysis/pipelines/sibc/validate_sibc_traceability.py",
+      "doc_claims": [],
       "imports": [],
       "invokes": [],
+      "path": "analysis/pipelines/sibc/validate_sibc_traceability.py",
       "reads": {
-        "web/public/data/sibc_l1_annotations.json": "low",
         "analysis/signals/registry.json": "low",
-        "analysis/signals/signals.db": "low"
+        "analysis/signals/signals.db": "low",
+        "web/public/data/sibc_l1_annotations.json": "low"
       },
-      "writes": {},
-      "doc_claims": []
+      "writes": {}
     },
     "pipelines/sibc/validate_web_series": {
+      "doc_claims": [],
+      "imports": [],
+      "invokes": [],
       "path": "analysis/pipelines/sibc/validate_web_series.py",
-      "imports": [],
-      "invokes": [],
       "reads": {
-        "web/public/data/rbi_sibc_consolidated.csv": "low",
-        "web/lib/reports/rbi_sibc_label_overrides.json": "low",
         "analysis/rbi_sibc/merged/sections_merged.json": "low",
-        "web/lib/reports/rbi_sibc.ts": "low"
+        "web/lib/reports/rbi_sibc.ts": "low",
+        "web/lib/reports/rbi_sibc_label_overrides.json": "low",
+        "web/public/data/rbi_sibc_consolidated.csv": "low"
       },
-      "writes": {},
-      "doc_claims": []
+      "writes": {}
     },
-    "pipelines/atm_pos/compute_atm_pos_signals": {
-      "path": "analysis/pipelines/atm_pos/compute_atm_pos_signals.py",
+    "signals/apply_status_rules": {
+      "doc_claims": [],
       "imports": [],
       "invokes": [],
+      "path": "analysis/signals/apply_status_rules.py",
+      "reads": {},
+      "writes": {
+        "analysis/signals/registry.json": "high"
+      }
+    },
+    "signals/compute/atm_pos": {
+      "doc_claims": [],
+      "imports": [],
+      "invokes": [],
+      "path": "analysis/signals/compute/atm_pos.py",
+      "reads": {
+        "web/public/data/atm_pos_consolidated.csv": "low"
+      },
+      "writes": {}
+    },
+    "signals/compute/engine": {
+      "doc_claims": [],
+      "imports": [
+        "signals/db"
+      ],
+      "invokes": [],
+      "path": "analysis/signals/compute/engine.py",
+      "reads": {},
+      "writes": {}
+    },
+    "signals/compute/sibc": {
+      "doc_claims": [],
+      "imports": [],
+      "invokes": [],
+      "path": "analysis/signals/compute/sibc.py",
+      "reads": {
+        "analysis/rbi_sibc/timeline.json": "low",
+        "timeline.json": "low",
+        "web/public/data/rbi_sibc_consolidated.csv": "low"
+      },
+      "writes": {}
+    },
+    "signals/db": {
+      "doc_claims": [],
+      "imports": [],
+      "invokes": [],
+      "path": "analysis/signals/db.py",
+      "reads": {},
+      "writes": {
+        "analysis/signals/signals.db": "high"
+      }
+    },
+    "signals/evaluate": {
+      "doc_claims": [],
+      "imports": [
+        "signals/db",
+        "signals/query"
+      ],
+      "invokes": [],
+      "path": "analysis/signals/evaluate.py",
       "reads": {
         "web/public/data/atm_pos_consolidated.csv": "low",
-        "web/public/data/atm_pos_signals.json": "low",
-        "analysis/signals/signals.db": "low",
-        "analysis/signals/registry.json": "low"
+        "web/public/data/rbi_sibc_consolidated.csv": "low"
       },
-      "writes": {
-        "analysis/rbi_atm_pos/signals.json": "high"
-      },
-      "doc_claims": [
-        {
-          "kind": "output",
-          "text": "analysis/rbi_atm_pos/signals.json"
-        }
-      ]
+      "writes": {}
     },
-    "pipelines/atm_pos/consolidate_atm_pos": {
-      "path": "analysis/pipelines/atm_pos/consolidate_atm_pos.py",
-      "imports": [],
-      "invokes": [],
-      "reads": {
-        "sections.json": "low"
-      },
-      "writes": {
-        "web/public/data/atm_pos_consolidated.csv": "high",
-        "timeline.json": "high"
-      },
-      "doc_claims": []
-    },
-    "pipelines/atm_pos/detect_atm_pos_format": {
-      "path": "analysis/pipelines/atm_pos/detect_atm_pos_format.py",
-      "imports": [],
-      "invokes": [],
-      "reads": {
-        "canonical_banks.json": "low"
-      },
-      "writes": {
-        "format_report.json": "high"
-      },
-      "doc_claims": []
-    },
-    "pipelines/atm_pos/extract_atm_pos": {
-      "path": "analysis/pipelines/atm_pos/extract_atm_pos.py",
+    "signals/migrate_to_db": {
+      "doc_claims": [],
       "imports": [
-        "pipelines/atm_pos/detect_atm_pos_format"
+        "signals/db"
       ],
-      "invokes": [
-        "pipelines/atm_pos/detect_atm_pos_format"
-      ],
+      "invokes": [],
+      "path": "analysis/signals/migrate_to_db.py",
       "reads": {
-        "format_report.json": "low"
+        "atm_pos.json": "low",
+        "sibc.json": "low"
       },
+      "writes": {}
+    },
+    "signals/query": {
+      "doc_claims": [],
+      "imports": [],
+      "invokes": [],
+      "path": "analysis/signals/query.py",
+      "reads": {
+        "analysis/rbi_sibc/timeline.json": "low",
+        "timeline.json": "low"
+      },
+      "writes": {}
+    },
+    "signals/rebuild_atm_pos_signals": {
+      "doc_claims": [],
+      "imports": [],
+      "invokes": [],
+      "path": "analysis/signals/rebuild_atm_pos_signals.py",
+      "reads": {},
       "writes": {
-        "sections.json": "high"
-      },
-      "doc_claims": []
+        "analysis/signals/registry.json": "high"
+      }
     },
-    "pipelines/atm_pos/generate_atm_pos_insights": {
-      "path": "analysis/pipelines/atm_pos/generate_atm_pos_insights.py",
+    "signals/rebuild_sibc_signals": {
+      "doc_claims": [],
       "imports": [],
       "invokes": [],
-      "reads": {
-        "analysis/rbi_atm_pos/signals.json": "low",
-        "web/public/data/atm_pos_insights.json": "low"
-      },
+      "path": "analysis/signals/rebuild_sibc_signals.py",
+      "reads": {},
       "writes": {
-        "analysis/rbi_atm_pos/insights.json": "high"
-      },
-      "doc_claims": [
-        {
-          "kind": "output",
-          "text": "analysis/rbi_atm_pos/insights.json"
-        }
-      ]
+        "analysis/signals/registry.json": "high"
+      }
     },
-    "pipelines/atm_pos/validate_atm_pos": {
-      "path": "analysis/pipelines/atm_pos/validate_atm_pos.py",
+    "signals/update_registry": {
+      "doc_claims": [],
       "imports": [],
       "invokes": [],
-      "reads": {
-        "canonical_banks.json": "low",
-        "sections.json": "low"
-      },
-      "writes": {},
-      "doc_claims": []
-    },
-    "pipelines/atm_pos/validate_atm_pos_claims": {
-      "path": "analysis/pipelines/atm_pos/validate_atm_pos_claims.py",
-      "imports": [],
-      "invokes": [],
-      "reads": {
-        "analysis/rbi_atm_pos/signals.json": "low",
-        "analysis/rbi_atm_pos/insights.json": "low",
-        "insights.json": "low"
-      },
-      "writes": {},
-      "doc_claims": []
-    },
-    "pipelines/atm_pos/validate_atm_pos_insights": {
-      "path": "analysis/pipelines/atm_pos/validate_atm_pos_insights.py",
-      "imports": [],
-      "invokes": [],
-      "reads": {
-        "analysis/rbi_atm_pos/signals.json": "low",
-        "analysis/rbi_atm_pos/insights.json": "low",
-        "analysis/signals/signals.db": "low",
-        "analysis/signals/registry.json": "low"
-      },
-      "writes": {},
-      "doc_claims": []
+      "path": "analysis/signals/update_registry.py",
+      "reads": {},
+      "writes": {
+        "analysis/signals/registry.json": "high"
+      }
     }
   }
 }
