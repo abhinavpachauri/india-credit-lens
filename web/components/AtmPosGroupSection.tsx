@@ -193,8 +193,8 @@ export default function AtmPosGroupSection({ group, series }: AtmPosGroupSection
       <div className="flex items-center gap-2" style={{ marginTop: 32, marginBottom: 12 }}>
         <span className="text-lg leading-none">{GROUP_ICONS[group]}</span>
         <h2
-          className="text-xs font-semibold uppercase tracking-wider"
-          style={{ color: "var(--font-muted)" }}
+          className="text-sm font-bold leading-snug"
+          style={{ color: "var(--font)" }}
         >
           {GROUP_LABELS[group]}
         </h2>

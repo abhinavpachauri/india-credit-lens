@@ -118,7 +118,7 @@ Data source: `atm_pos_insights.json` loaded via `loadAtmPosInsights()`, filtered
 `filterInsights(allInsights, group, mode)`.
 
 Structural order (always):
-1. Group heading (icon + `text-xs font-semibold uppercase` label)
+1. Group heading (icon + `text-sm font-bold` sentence-case title — unified with SIBC)
 2. `<InsightCTAStrip>` (if insights exist)
 3. `<InsightCard key={activeIdx}>` (if active)
 4. Controls panel (mode / tab / chart-mode / top-N / chips / bank selector)

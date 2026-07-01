@@ -314,9 +314,9 @@ export const SECTION_DEFS: SectionDef[] = [
 ];
 
 export const GROUP_LABELS: Record<string, string> = {
-  cc:    "CREDIT CARD",
-  dc:    "DEBIT CARD",
-  infra: "DIGITAL INFRASTRUCTURE",
+  cc:    "Credit Card",
+  dc:    "Debit Card",
+  infra: "Digital Infrastructure",
 };
 
 export const GROUP_ICONS: Record<string, string> = {
