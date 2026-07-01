@@ -172,7 +172,7 @@ export default function SectionWithAnnotations({ section }: Props) {
                 ? (["absolute", "yoy", "fy"] as const).map((m) => (
                     <label
                       key={m}
-                      className="flex items-center gap-1.5 cursor-pointer"
+                      className="flex items-center gap-1.5 py-1.5 cursor-pointer"
                       style={{ color: "var(--font)" }}
                     >
                       <input
@@ -181,7 +181,7 @@ export default function SectionWithAnnotations({ section }: Props) {
                         value={m}
                         checked={trendMode === m}
                         onChange={() => setTrendMode(m)}
-                        className="accent-blue-500"
+                        className="accent-blue-500 w-4 h-4"
                       />
                       {m === "absolute" ? "Absolute" : m === "yoy" ? "YoY %" : "FY Cumul."}
                     </label>
@@ -189,7 +189,7 @@ export default function SectionWithAnnotations({ section }: Props) {
                 : (["absolute", "pct"] as const).map((m) => (
                     <label
                       key={m}
-                      className="flex items-center gap-1.5 cursor-pointer"
+                      className="flex items-center gap-1.5 py-1.5 cursor-pointer"
                       style={{ color: "var(--font)" }}
                     >
                       <input
@@ -198,7 +198,7 @@ export default function SectionWithAnnotations({ section }: Props) {
                         value={m}
                         checked={distMode === m}
                         onChange={() => setDistMode(m)}
-                        className="accent-blue-500"
+                        className="accent-blue-500 w-4 h-4"
                       />
                       {m === "absolute" ? "₹ Crore" : "% Share"}
                     </label>
