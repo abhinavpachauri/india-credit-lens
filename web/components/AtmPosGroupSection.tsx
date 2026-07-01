@@ -247,7 +247,8 @@ export default function AtmPosGroupSection({ group, series }: AtmPosGroupSection
         }}
       >
         {/* Top row: mode | tab | chart-mode | top-N selector */}
-        <div className="flex flex-wrap items-center gap-3">
+        {/* Tighter vertical gap when the row wraps on mobile; full gap from sm up. */}
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-2 sm:gap-3">
           {/* Mode buttons */}
           <div className="flex gap-1">
             {([["by_type", "By Type"], ["individual", "Individual"], ["top_n", "Top N"]] as const).map(
@@ -346,7 +347,7 @@ export default function AtmPosGroupSection({ group, series }: AtmPosGroupSection
 
         {/* Chips row */}
         {seriesNames.length > 0 && (
-          <div className="flex flex-wrap gap-1.5 mt-3">
+          <div className="flex flex-wrap gap-1.5 mt-2 sm:mt-3">
             {seriesNames.map((name, i) => {
               const color    = pickColor(name, i);
               const isHidden = hiddenSeries.has(name);
@@ -354,7 +355,7 @@ export default function AtmPosGroupSection({ group, series }: AtmPosGroupSection
                 <button
                   key={name}
                   onClick={() => toggleSeries(name)}
-                  className="text-sm font-medium px-3 py-1 rounded-full transition-all"
+                  className="text-xs sm:text-sm font-medium px-2.5 sm:px-3 py-1 rounded-full transition-all"
                   style={{
                     background: isHidden ? "transparent" : color,
                     border:     `1.5px solid ${color}`,

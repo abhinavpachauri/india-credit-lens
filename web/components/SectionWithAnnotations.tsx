@@ -145,8 +145,8 @@ export default function SectionWithAnnotations({ section }: Props) {
       {/* ── Controls card — hidden in insights mode (same as payments) ─────── */}
       {!ins.isActive && (
         <div style={CONTROLS_CARD}>
-          {/* Tab + chart-mode row */}
-          <div className="flex flex-wrap items-center gap-3">
+          {/* Tab + chart-mode row — tighter vertical gap when wrapped on mobile (matches payments) */}
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-2 sm:gap-3">
             {/* Tab buttons */}
             <div className="flex gap-1">
               {([
