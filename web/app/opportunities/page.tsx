@@ -13,11 +13,18 @@ type Status   = "active" | "watch" | "closed" | "retired";
 
 interface ChartRef { pipeline: Pipeline; section: string; highlight: string[]; caption?: string }
 
+// §23.2 explainability contract — the deterministic computed basis of an eco-driven card.
+// Never LLM-touched: it replays the meta-model computation (member signals → directions →
+// construct/loop state) so the operator can audit the insight without leaving the card.
+interface BasisMember { role: string; label: string; direction: number | null; value?: string }
+interface Basis { headline: string; coverage?: string; members?: BasisMember[]; chain: string[] }
+
 interface Item {
   id: string; pipeline?: Pipeline; scope: "pipeline" | "cross_source"; tier: "opportunity" | "risk";
   status: Status; section?: { id: string | null; title: string; icon: string };
   title: string; body: string; implication?: string | null; chain: string[];
   charts: ChartRef[]; badge?: string;
+  driver?: { kind: string; id: string }; basis?: Basis;
 }
 interface Feed {
   cross_system: Item[];
@@ -179,12 +186,72 @@ function FlipZone({ implication, chain, accent = OPP_COLOR, frontLabel = "For le
   );
 }
 
+// ── Why — computed basis (eco-driven cards, §23.4) ───────────────────────────
+
+const DIR_GLYPH: Record<string, { glyph: string; color: string }> = {
+  "1":  { glyph: "↑", color: "#16A34A" },
+  "-1": { glyph: "↓", color: "#DC2626" },
+  "0":  { glyph: "·", color: "var(--font-muted)" },
+};
+
+function BasisBlock({ basis }: { basis: Basis }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div style={{ marginTop: 14 }}>
+      <button onClick={() => setOpen((o) => !o)}
+        className="flex items-center gap-1.5 text-xs font-semibold"
+        style={{ color: "var(--font-muted)", background: "none", border: "none", padding: 0, cursor: "pointer" }}>
+        <span style={{ fontSize: 10 }}>{open ? "▾" : "▸"}</span> Why — computed basis
+      </button>
+      {open && (
+        <div style={{ marginTop: 8, border: "1px solid var(--border-card)", borderRadius: 8,
+          background: "var(--bg-page)", padding: "12px 14px" }}>
+          <p style={{ fontSize: 13, fontWeight: 700, color: "var(--font)" }}>{basis.headline}</p>
+          {basis.coverage && (
+            <p style={{ fontSize: 11, color: "var(--font-muted)", marginTop: 2 }}>{basis.coverage}</p>
+          )}
+          {(basis.members?.length ?? 0) > 0 && (
+            <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 5 }}>
+              {basis.members!.map((m, i) => {
+                const d = DIR_GLYPH[String(m.direction)] ?? { glyph: "?", color: "var(--font-muted)" };
+                return (
+                  <div key={i} className="flex items-baseline gap-2 flex-wrap" style={{ fontSize: 12.5 }}>
+                    <span style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase",
+                      letterSpacing: "0.05em", color: "var(--font-muted)", minWidth: 62, flexShrink: 0 }}>
+                      {m.role}
+                    </span>
+                    <span style={{ color: "var(--font)", flex: "1 1 140px" }}>{m.label}</span>
+                    <span style={{ fontWeight: 700, color: d.color, flexShrink: 0 }}>
+                      {d.glyph}{m.value ? ` ${m.value}` : ""}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+          <div style={{ height: 1, background: "var(--border-card)", margin: "10px 0" }} />
+          <ol style={{ paddingLeft: 0, listStyle: "none", margin: 0, display: "flex", flexDirection: "column", gap: 6 }}>
+            {basis.chain.map((step, i) => (
+              <li key={i} className="flex gap-2" style={{ lineHeight: 1.55 }}>
+                <span className="flex-shrink-0 font-bold"
+                  style={{ color: "var(--font-muted)", minWidth: 14, fontSize: 12 }}>{i + 1}.</span>
+                <span style={{ fontSize: 12.5, color: "var(--font)" }}>{step}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ── Card (opportunity + cross-system, unified) ──────────────────────────────
 
 function OppCard({ item, charts }: { item: Item; charts: ResolvedChart[] }) {
   const isCross = item.scope === "cross_source";
   const isRisk  = item.tier === "risk";
-  const accent  = isCross ? OPP_COLOR : isRisk ? RISK_COLOR : STATUS_META[item.status].color;
+  // risk styling wins even on cross-system cards (a violated data check is a red card)
+  const accent  = isRisk ? RISK_COLOR : isCross ? OPP_COLOR : STATUS_META[item.status].color;
   return (
     <div id={item.id} style={{
       background: "var(--bg-card)", border: `1px solid ${isCross ? OPP_COLOR : isRisk ? `${RISK_COLOR}55` : "var(--border-card)"}`,
@@ -205,7 +272,8 @@ function OppCard({ item, charts }: { item: Item; charts: ResolvedChart[] }) {
             )}
             {isCross ? (
               <span style={{ fontSize: 11, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.06em",
-                color: "#fff", background: "linear-gradient(90deg,#4e8ef7,#2ca02c)", borderRadius: 4, padding: "2px 8px" }}>
+                color: "#fff", borderRadius: 4, padding: "2px 8px",
+                background: isRisk ? RISK_COLOR : "linear-gradient(90deg,#4e8ef7,#2ca02c)" }}>
                 ✦ {item.badge ?? "Cross-system"}
               </span>
             ) : (
@@ -222,6 +290,7 @@ function OppCard({ item, charts }: { item: Item; charts: ResolvedChart[] }) {
           <p style={{ fontSize: 14, color: "var(--font)", lineHeight: 1.65 }}>{item.body}</p>
           <FlipZone implication={item.implication} chain={item.chain}
             accent={isRisk ? RISK_COLOR : OPP_COLOR} frontLabel={isRisk ? "Why it matters" : "For lenders"} />
+          {item.basis && <BasisBlock basis={item.basis} />}
         </div>
 
         {/* Charts (1 for opportunities, 2 for cross-system) */}

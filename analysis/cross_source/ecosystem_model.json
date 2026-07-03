@@ -1,0 +1,159 @@
+{
+  "_meta": {
+    "description": "Ecosystem meta-model (COMPOSITION_SPEC.md Part II, §13–§17). AUTHORED structure owning only what no pipeline can own: constructs (§14), eco_edges (§15), loops (§16), constraints (§17). Composes pipeline content by URN reference — never duplicates it. State is computed by compose_ecosystem.py, never stored here.",
+    "spec_ref": "analysis/COMPOSITION_SPEC.md",
+    "version": "1.1"
+  },
+  "constructs": [
+    {
+      "id": "unsecured_retail_appetite",
+      "urn": "icl:eco/unsecured_retail_appetite",
+      "label": "Unsecured retail credit appetite",
+      "definition": "The willingness of households to carry — and lenders to extend — unsecured retail credit. No pipeline measures it directly: SIBC measures the unsecured stock (credit-card outstanding, other personal loans, consumer durables), payments measures the flow (credit-card spend) and reach (cards in force). Together they bound the construct: when stock, flow and reach move together the appetite read is unambiguous; when they diverge, the divergence itself is the signal.",
+      "concept_anchor": {
+        "product": [
+          "credit_card",
+          "personal_loan",
+          "consumer_durable"
+        ],
+        "segment": "retail"
+      },
+      "members": [
+        {
+          "urn": "icl:sibc/Statement1/4.5",
+          "role": "measures",
+          "note": "credit-card outstanding — the unsecured revolving stock (₹)"
+        },
+        {
+          "urn": "icl:sibc/Statement1/4.9",
+          "role": "measures",
+          "note": "other personal loans — the largely-unsecured term stock (₹)"
+        },
+        {
+          "urn": "icl:sibc/Statement1/4.1",
+          "role": "measures",
+          "note": "consumer-durable loans — small-ticket unsecured stock (₹)"
+        },
+        {
+          "urn": "icl:atm_pos/spend_value/cc_spend_value",
+          "role": "measures",
+          "note": "credit-card spend — the flow expression of the same appetite"
+        },
+        {
+          "urn": "icl:atm_pos/cards/credit_cards",
+          "role": "proxies",
+          "note": "cards in force — issuance reach, not balance appetite"
+        }
+      ],
+      "lifecycle": "permanent"
+    },
+    {
+      "id": "card_consumption_activity",
+      "urn": "icl:eco/card_consumption_activity",
+      "label": "Card-based consumption activity",
+      "definition": "Household consumption as expressed through card rails. Payments measures the transaction flows (credit + debit card spend) directly; acceptance infrastructure (POS terminals) proxies the merchant side of the same activity; SIBC's consumer-durable and vehicle loan stocks proxy the credit-financed share of it.",
+      "concept_anchor": {
+        "product": [
+          "card_spend",
+          "consumer_durable",
+          "vehicle_loan",
+          "pos_acceptance"
+        ],
+        "segment": "retail"
+      },
+      "members": [
+        {
+          "urn": "icl:atm_pos/spend_value/cc_spend_value",
+          "role": "measures",
+          "note": "credit-card spend value"
+        },
+        {
+          "urn": "icl:atm_pos/spend_value/dc_spend_value",
+          "role": "measures",
+          "note": "debit-card spend value"
+        },
+        {
+          "urn": "icl:atm_pos/infrastructure/pos_terminals",
+          "role": "proxies",
+          "note": "acceptance capacity — merchants deploy terminals where card consumption grows"
+        },
+        {
+          "urn": "icl:sibc/Statement1/4.1",
+          "role": "proxies",
+          "note": "consumer-durable credit — the financed share of durable consumption"
+        },
+        {
+          "urn": "icl:sibc/Statement1/4.7",
+          "role": "proxies",
+          "note": "vehicle loans — the financed share of big-ticket consumption"
+        }
+      ],
+      "lifecycle": "permanent"
+    }
+  ],
+  "eco_edges": [
+    {
+      "id": "eco_cc_stock_feeds_appetite",
+      "from": "icl:sibc/Statement1/4.5",
+      "to": "icl:eco/unsecured_retail_appetite",
+      "type": "feeds",
+      "polarity": "+",
+      "mechanism": "Credit-card balances are a measured component of unsecured retail appetite: sustained balance growth is direct evidence that households are willing to carry unsecured debt and issuers are willing to extend it.",
+      "claim_type": "structural"
+    },
+    {
+      "id": "eco_appetite_drives_spend",
+      "from": "icl:eco/unsecured_retail_appetite",
+      "to": "icl:atm_pos/spend_value/cc_spend_value",
+      "type": "drives",
+      "polarity": "+",
+      "mechanism": "Appetite manifests as transactions: when households and issuers are willing to expand unsecured credit, card spending is where it appears first — the flow expression of the same appetite the stock measures.",
+      "claim_type": "structural"
+    }
+  ],
+  "loops": [
+    {
+      "id": "loop_unsecured_spend_stock",
+      "label": "Unsecured spend–stock cycle",
+      "type": "reinforcing",
+      "closure": "internal",
+      "member_edges": [
+        "eco:eco_appetite_drives_spend",
+        "x:x_cc_spend_leads_cc_stock",
+        "eco:eco_cc_stock_feeds_appetite"
+      ],
+      "description": "Appetite expresses as card spend (flow), spend accumulates into card balances (stock), and growing balances evidence the appetite that started the cycle. The loop fires only when all three segments move the same way — a clean composed read that the unsecured retail cycle is running (or, reversed, unwinding). Segments span both pipelines plus the confirmed flow→stock cross-edge."
+    }
+  ],
+  "constraints": [
+    {
+      "id": "cx_cc_balance_per_card",
+      "label": "Average balance per credit card (plausibility corridor)",
+      "kind": "reconciliation",
+      "op": "ratio",
+      "operands": [
+        {
+          "pipeline": "sibc",
+          "signal_id": "sibc-pl-cc-abs",
+          "scale": 10000000,
+          "note": "credit-card outstanding, ₹ crore → ₹"
+        },
+        {
+          "pipeline": "atm_pos",
+          "signal_id": "cc-outstanding-abs",
+          "note": "credit cards in force, count"
+        }
+      ],
+      "relation": "avg balance per card (₹) = SIBC credit-card outstanding (₹ crore × 1e7) ÷ payments cards-in-force count. The two sources must reconcile to a plausible per-card balance; a breach means a unit break, roster break, or unrevised source — not an economic event.",
+      "tolerance": {
+        "type": "corridor",
+        "value": [
+          8000,
+          60000
+        ]
+      },
+      "severity": "fail",
+      "note": "Turns the confirmed x_cc_count_corresponds_cc_stock structural edge into a live cross-pipeline data check (the Check-2f trust layer across source boundaries)."
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "_meta": {
+    "description": "Domain lenses (COMPOSITION_SPEC.md §18) — reading scopes over the ONE federated meta-model. A domain carries NO edges, loops, members, or state; deleting one changes nothing in the model. Consumed by Layer 3 narrative + UI grouping.",
+    "spec_ref": "analysis/COMPOSITION_SPEC.md §18",
+    "version": "1.1"
+  },
+  "domains": [
+    {
+      "id": "lending",
+      "label": "Lending ecosystem",
+      "concept_scope": [
+        "bank_credit",
+        "personal_loan",
+        "credit_card",
+        "consumer_durable",
+        "education_loan",
+        "vehicle_loan",
+        "housing",
+        "gold_loan",
+        "msme_credit",
+        "nbfc_credit",
+        "card_spend"
+      ],
+      "constructs": [
+        "icl:eco/unsecured_retail_appetite",
+        "icl:eco/card_consumption_activity"
+      ],
+      "narrative_cadence": "6-monthly"
+    }
+  ]
+}

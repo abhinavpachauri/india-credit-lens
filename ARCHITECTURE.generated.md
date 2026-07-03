@@ -20,6 +20,7 @@ flowchart LR
   n_analysis_COMPOSITION_SPEC_md(["COMPOSITION_SPEC.md"])
   n_analysis_SYSTEM_MODEL_SPEC_md(["SYSTEM_MODEL_SPEC.md"])
   n_analysis_cross_source_candidates_json["candidates.json"]
+  n_analysis_cross_source_ecosystem_model_json(["ecosystem_model.json"])
   n_analysis_newsletter_newsletter_delta_brief_md["newsletter_delta_brief.md"]
   n_analysis_ontology_channels_json(["channels.json"])
   n_analysis_rbi_atm_pos_insights_json["insights.json"]
@@ -41,6 +42,7 @@ flowchart LR
   n_analysis_COMPOSITION_SPEC_md -->|derive_cross_links| n_analysis_cross_source_candidates_json
   n_analysis_SYSTEM_MODEL_SPEC_md -->|generate_skeleton| n_analysis_rbi_atm_pos_merged_system_model_json
   n_analysis_SYSTEM_MODEL_SPEC_md -->|generate_skeleton| n_analysis_rbi_sibc_merged_system_model_json
+  n_analysis_cross_source_ecosystem_model_json -->|generate_opportunities_feed| n_web_public_data_opportunities_feed_json
   n_analysis_ontology_channels_json -->|derive_cross_links| n_analysis_cross_source_candidates_json
   n_analysis_ontology_channels_json -->|generate_opportunities_feed| n_web_public_data_opportunities_feed_json
   n_analysis_rbi_atm_pos_signals_json -->|generate_atm_pos_insights| n_analysis_rbi_atm_pos_insights_json
@@ -87,11 +89,13 @@ Scripts each orchestrator launches as a subprocess, in execution order.
 | `analysis/architecture/graph.json` | external/authored | — | `guards/check_derived_fresh` |
 | `analysis/cross_source/candidates.json` | derived | `crosssource/derive_cross_links` | `core/run_inference`, `guards/check_derived_fresh` |
 | `analysis/cross_source/composition.json` | external/authored | — | `core/run_inference`, `crosssource/compose_ecosystem`, `crosssource/validate_composition` |
+| `analysis/cross_source/ecosystem_model.json` | external/authored | — | `crosssource/compose_ecosystem`, `crosssource/generate_opportunities_feed`, `crosssource/validate_composition` |
 | `analysis/cross_source/ecosystem_state_*.json` | external/authored | — | `guards/check_derived_fresh` |
 | `analysis/newsletter/newsletter_config.json` | external/authored | — | `newsletter/generate_linkedin`, `newsletter/generate_newsletter`, `newsletter/validate_newsletter_config` |
 | `analysis/newsletter/newsletter_delta_brief.md` | derived | `newsletter/newsletter_delta_brief` | — |
 | `analysis/ontology/channels.json` | external/authored | — | `core/run_inference`, `core/validate_system_model`, `crosssource/derive_cross_links`, `crosssource/generate_opportunities_feed` |
-| `analysis/ontology/concepts.json` | external/authored | — | `core/validate_system_model` |
+| `analysis/ontology/concepts.json` | external/authored | — | `core/validate_system_model`, `crosssource/validate_composition` |
+| `analysis/ontology/domains.json` | external/authored | — | `crosssource/validate_composition` |
 | `analysis/rbi_atm_pos/insights.json` | derived | `pipelines/atm_pos/generate_atm_pos_insights` | `pipelines/atm_pos/validate_atm_pos_claims`, `pipelines/atm_pos/validate_atm_pos_insights` |
 | `analysis/rbi_atm_pos/merged/opportunities_*.json` | external/authored | — | `guards/check_derived_fresh` |
 | `analysis/rbi_atm_pos/merged/system_model.json` | derived | `core/generate_skeleton` | `guards/check_derived_fresh` |
@@ -106,8 +110,8 @@ Scripts each orchestrator launches as a subprocess, in execution order.
 | `analysis/rbi_sibc/skeleton_profile.json` | external/authored | — | `core/generate_skeleton` |
 | `analysis/rbi_sibc/timeline.json` | external/authored | — | `core/validate_timeline`, `newsletter/newsletter_delta_brief`, `pipelines/sibc/generate_merge`, `signals/compute/sibc`, `signals/query` |
 | `analysis/signals/narrative_cache.json` | derived | `crosssource/generate_opportunity_narrative` | — |
-| `analysis/signals/registry.json` | derived | `signals/apply_status_rules`, `signals/rebuild_atm_pos_signals`, `signals/rebuild_sibc_signals`, `signals/update_registry` | `core/generate_signal_history`, `core/validate_opportunity_traceability`, `crosssource/generate_opportunities_feed`, `guards/check_signal_freshness`, `guards/validate_signal_history`, `pipelines/atm_pos/compute_atm_pos_signals`, `pipelines/atm_pos/validate_atm_pos_insights`, `pipelines/sibc/generate_analysis_report`, `pipelines/sibc/validate_sibc_traceability` |
-| `analysis/signals/signals.db` | derived | `signals/db` | `core/derive_opportunities`, `core/gate`, `core/generate_system_state`, `core/validate_opportunity_traceability`, `crosssource/generate_opportunities_feed`, `crosssource/generate_opportunity_narrative`, `guards/check_derived_fresh`, `guards/validate_signal_history`, `pipelines/atm_pos/compute_atm_pos_signals`, `pipelines/atm_pos/validate_atm_pos_insights`, `pipelines/sibc/generate_analysis_report`, `pipelines/sibc/validate_sibc_traceability` |
+| `analysis/signals/registry.json` | derived | `signals/apply_status_rules`, `signals/rebuild_atm_pos_signals`, `signals/rebuild_sibc_signals`, `signals/update_registry` | `core/generate_signal_history`, `core/validate_opportunity_traceability`, `crosssource/generate_opportunities_feed`, `crosssource/validate_composition`, `guards/check_signal_freshness`, `guards/validate_signal_history`, `pipelines/atm_pos/compute_atm_pos_signals`, `pipelines/atm_pos/validate_atm_pos_insights`, `pipelines/sibc/generate_analysis_report`, `pipelines/sibc/validate_sibc_traceability` |
+| `analysis/signals/signals.db` | derived | `signals/db` | `core/derive_opportunities`, `core/gate`, `core/generate_system_state`, `core/validate_opportunity_traceability`, `crosssource/compose_ecosystem`, `crosssource/generate_opportunities_feed`, `crosssource/generate_opportunity_narrative`, `guards/check_derived_fresh`, `guards/validate_signal_history`, `pipelines/atm_pos/compute_atm_pos_signals`, `pipelines/atm_pos/validate_atm_pos_insights`, `pipelines/sibc/generate_analysis_report`, `pipelines/sibc/validate_sibc_traceability` |
 | `web/lib/reports/rbi_sibc.ts` | derived | `pipelines/sibc/promote_annotations` | `hook_validate`, `pipelines/sibc/validate_annotation_basis`, `pipelines/sibc/validate_web_series` |
 | `web/lib/reports/rbi_sibc_label_overrides.json` | external/authored | — | `pipelines/sibc/validate_web_series` |
 | `web/public/data/atm_pos_chart_series.json` | derived | `core/generate_chart_series` | `guards/check_derived_fresh` |

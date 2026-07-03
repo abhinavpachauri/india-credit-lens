@@ -2,7 +2,12 @@
   "id": "atm_pos",
   "name": "RBI ATM/POS — Payments",
   "on_fail": "stop",
-  "period_resolver": { "module": "extract", "args": ["--print-period"] },
+  "period_resolver": {
+    "module": "extract",
+    "args": [
+      "--print-period"
+    ]
+  },
   "paths": {
     "data_dir": "analysis/rbi_atm_pos",
     "consolidated_csv": "web/public/data/atm_pos_consolidated.csv",
@@ -13,7 +18,10 @@
   "schema": {
     "date_column": "report_date",
     "value_column": "value",
-    "entity_columns": ["bank_name", "bank_category"]
+    "entity_columns": [
+      "bank_name",
+      "bank_category"
+    ]
   },
   "modules": {
     "detect_format": "pipelines/atm_pos/detect_atm_pos_format.py",
@@ -26,26 +34,144 @@
     "claims_validate": "pipelines/atm_pos/validate_atm_pos_claims.py"
   },
   "gate": [
-    { "id": "tests",            "label": "T.  unit tests (pytest)",       "builtin": "pytest" },
-    { "id": "format",           "label": "0.  format detect",            "pipeline": "detect_format", "args": ["$XLSX"], "skip_if": "revalidate" },
-    { "id": "extract",          "label": "1.  extract",                  "pipeline": "extract", "args": ["$XLSX"], "skip_if": "revalidate" },
-    { "id": "validate_data",    "label": "2.  validate data",            "pipeline": "validate_data", "args": ["$LATEST"] },
-    { "id": "consolidate",      "label": "3.  consolidate CSV",          "pipeline": "consolidate", "args": ["$LATEST"] },
-    { "id": "signals_payload",  "label": "4a. refresh signals payload",  "pipeline": "signals_payload" },
-    { "id": "chart_series",     "label": "4a-series. chart series JSON",  "core": "chart_series" },
-    { "id": "insights",         "label": "4b. generate insights",        "pipeline": "insights" },
-    { "id": "insights_validate","label": "4c. validate insight numbers",  "pipeline": "insights_validate" },
-    { "id": "claims_validate",  "label": "4d. validate claims",           "pipeline": "claims_validate" },
-    { "id": "csv_integrity",    "label": "5.  web CSV integrity",        "builtin": "csv_integrity" },
-    { "id": "signal_history",   "label": "5b. signal history integrity", "core": "validate_signal_history" },
-    { "id": "freshness",        "label": "5b2. signal freshness (DB)",    "core": "check_signal_freshness", "note": "signals.db" },
-    { "id": "skeleton",         "label": "5c-pre. skeleton regen",       "core": "skeleton" },
-    { "id": "system_model",     "label": "5c. system_model.json",        "core": "validate_system_model" },
-    { "id": "system_state",     "label": "5d. system_state (S3)",        "core": "system_state" },
-    { "id": "opportunities",    "label": "5d. opportunities (live)",     "core": "derive_opportunities" },
-    { "id": "opp_traceability", "label": "4f. opportunity traceability",  "core": "opportunity_traceability", "note": "opportunit" },
-    { "id": "reconcile",        "label": "5.  architecture reconcile",   "core": "reconcile", "note": "drift" },
-    { "id": "web_tests",        "label": "5b. web unit tests (vitest)",  "builtin": "web_tests", "note": "Tests" },
-    { "id": "build",            "label": "6.  tsc + npm run build",      "builtin": "web_build", "skip_if": "--skip-build" }
+    {
+      "id": "tests",
+      "label": "T.  unit tests (pytest)",
+      "builtin": "pytest"
+    },
+    {
+      "id": "format",
+      "label": "0.  format detect",
+      "pipeline": "detect_format",
+      "args": [
+        "$XLSX"
+      ],
+      "skip_if": "revalidate"
+    },
+    {
+      "id": "extract",
+      "label": "1.  extract",
+      "pipeline": "extract",
+      "args": [
+        "$XLSX"
+      ],
+      "skip_if": "revalidate"
+    },
+    {
+      "id": "validate_data",
+      "label": "2.  validate data",
+      "pipeline": "validate_data",
+      "args": [
+        "$LATEST"
+      ]
+    },
+    {
+      "id": "consolidate",
+      "label": "3.  consolidate CSV",
+      "pipeline": "consolidate",
+      "args": [
+        "$LATEST"
+      ]
+    },
+    {
+      "id": "signals_payload",
+      "label": "4a. refresh signals payload",
+      "pipeline": "signals_payload"
+    },
+    {
+      "id": "chart_series",
+      "label": "4a-series. chart series JSON",
+      "core": "chart_series"
+    },
+    {
+      "id": "insights",
+      "label": "4b. generate insights",
+      "pipeline": "insights"
+    },
+    {
+      "id": "insights_validate",
+      "label": "4c. validate insight numbers",
+      "pipeline": "insights_validate"
+    },
+    {
+      "id": "claims_validate",
+      "label": "4d. validate claims",
+      "pipeline": "claims_validate"
+    },
+    {
+      "id": "csv_integrity",
+      "label": "5.  web CSV integrity",
+      "builtin": "csv_integrity"
+    },
+    {
+      "id": "signal_history",
+      "label": "5b. signal history integrity",
+      "core": "validate_signal_history"
+    },
+    {
+      "id": "freshness",
+      "label": "5b2. signal freshness (DB)",
+      "core": "check_signal_freshness",
+      "note": "signals.db"
+    },
+    {
+      "id": "skeleton",
+      "label": "5c-pre. skeleton regen",
+      "core": "skeleton"
+    },
+    {
+      "id": "system_model",
+      "label": "5c. system_model.json",
+      "core": "validate_system_model"
+    },
+    {
+      "id": "system_state",
+      "label": "5d. system_state (S3)",
+      "core": "system_state"
+    },
+    {
+      "id": "opportunities",
+      "label": "5d. opportunities (live)",
+      "core": "derive_opportunities"
+    },
+    {
+      "id": "composition",
+      "label": "5d2. composition + eco model",
+      "core": "validate_composition"
+    },
+    {
+      "id": "ecosystem",
+      "label": "5d3. ecosystem projection",
+      "core": "compose_ecosystem"
+    },
+    {
+      "id": "feed",
+      "label": "5d4. opportunities UI feed",
+      "core": "opportunities_feed"
+    },
+    {
+      "id": "opp_traceability",
+      "label": "4f. opportunity traceability",
+      "core": "opportunity_traceability",
+      "note": "opportunit"
+    },
+    {
+      "id": "reconcile",
+      "label": "5.  architecture reconcile",
+      "core": "reconcile",
+      "note": "drift"
+    },
+    {
+      "id": "web_tests",
+      "label": "5b. web unit tests (vitest)",
+      "builtin": "web_tests",
+      "note": "Tests"
+    },
+    {
+      "id": "build",
+      "label": "6.  tsc + npm run build",
+      "builtin": "web_build",
+      "skip_if": "--skip-build"
+    }
   ]
 }

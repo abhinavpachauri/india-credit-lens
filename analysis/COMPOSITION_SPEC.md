@@ -1,5 +1,7 @@
 # System Model Composition Specification — India Credit Lens
-> Version 1.0 | June 2026 | Extends `SYSTEM_MODEL_SPEC.md` v3.0
+> Version 1.1 | July 2026 | Extends `SYSTEM_MODEL_SPEC.md` v3.0
+> Part I (§1–§12, v1.0): federation, hub, cross-edges, projection — unchanged.
+> Part II (§13–§22, v1.1): the ecosystem meta-model — constructs, eco-edges, cross-pipeline loops, reconciliation constraints, domains, Layer 3 narrative.
 
 This document defines how **multiple pipeline system models compose** into one ecosystem view,
 and refines the v3.0 behavioral layer by splitting it into a **data-less causal structure** and a
@@ -288,4 +290,368 @@ payments POS contraction ⇒ *"unsecured origination headroom opening — route 
 
 ---
 
-*Composition Specification v1.0 — extends System Model Specification v3.0 — India Credit Lens*
+# Part II — The Ecosystem Meta-Model (v1.1)
+
+## 13. Motivation and design position
+
+v1.0 built **pairwise plumbing**: shared channels (S2a) give every pipeline the same mechanism
+vocabulary, and confirmed cross-edges (§6) connect entities in different pipelines. That is
+necessary but not sufficient for an ecosystem view. Three kinds of structure exist that **no
+single pipeline can own**, and v1.0 had no home for them:
+
+1. **Constructs** — real-world quantities like *unsecured retail appetite* that no pipeline
+   measures directly; each pipeline's entities are partial *measurements* of them.
+2. **Cross-pipeline loops** — feedback cycles whose segments live in different models
+   (spend flow → balance stock → credit availability → spend).
+3. **Cross-pipeline constraints** — numeric invariants that must hold *between* sources
+   (a flow must reconcile with the stock it accumulates into).
+
+**Design position (locked): there is ONE meta-model, thin and federated.** It owns *only* the
+three kinds of structure above, composing everything else by URN reference. It never duplicates
+or absorbs pipeline internals (the no-monolith rule now applies in both directions, §20).
+"Lending" vs "consumption" meta-models are **not** separate models — they are *domains*, reading
+lenses over the one meta-model that carry zero structure of their own (§18).
+
+The same three-stratum discipline as everywhere else applies, one level up:
+
+| Stratum | Meta-model element | Produced |
+|---|---|---|
+| authored structure (S2) | constructs, eco-edges, loops, constraints | authored / S4-proposed, sourcing-gated |
+| derived candidates | candidate construct members, candidate cross-links | deterministic from concept_tags |
+| dynamic state (S3) | construct/eco-edge/loop/constraint states | computed each compose run |
+
+### File conventions (additions to §9)
+
+| Item | Path |
+|---|---|
+| Ecosystem meta-model (authored: constructs, eco_edges, loops, constraints) | `analysis/cross_source/ecosystem_model.json` |
+| Domain lenses (zero structure) | `analysis/ontology/domains.json` |
+| Layer 3 strategic narrative + claims sidecar | `analysis/cross_source/strategic/{domain}/{period}.md` + `{period}_claims.json` |
+
+`composition.json` is **unchanged**: it holds confirmed *derived* pairwise links (mechanical
+provenance, §6). `ecosystem_model.json` holds *authored* meta-structure. The split is by
+provenance: derived-then-confirmed vs authored. `compose_ecosystem.py` consumes both.
+
+---
+
+## 14. Ecosystem constructs
+
+A **construct** is a named real-world quantity measured only indirectly, by entities across ≥2
+pipelines. It is a first-class node with a URN and computed state — the promotion of a concept
+from *tag* (vocabulary) to *node* (model).
+
+```
+construct := {
+  id, urn            : icl:eco/{id}          # permanent, never reissued (same rule as §3)
+  label,
+  definition         : prose — what real-world quantity this stands for and why these
+                       measurements bound it,
+  concept_anchor     : { product: [vocab...], measure?: class, segment?: vocab }
+                       # the concept coordinates this construct generalises — drives
+                       # candidate-member derivation when new pipelines arrive,
+  members            : [ { urn,                        # entity URN, any pipeline
+                           role   : measures | proxies | contra_indicates,
+                           weight : null | share,      # null = unit weight (sign vote)
+                           note } ],
+  lifecycle          : permanent | conditional,
+  claim_type?, source?, source_url?, source_verified_date?
+                       # required per v3.0 §13 iff the definition asserts a non-obvious
+                       # mechanism; pure "these measure the same thing" needs no source
+}
+```
+
+**Rules.**
+- Members must span **≥2 pipelines**. A single-pipeline construct is just that pipeline's
+  aggregate and belongs in its own model — validation error (§20).
+- **Candidate members are derived, never hunted:** when a new pipeline lands, any entity whose
+  `concept_tags` fall inside a construct's `concept_anchor` becomes a *candidate member*
+  (emitted by `derive_cross_links.py` alongside cross-link candidates). Confirmation is a
+  review step — candidates never auto-join. This preserves the M+N guarantee: constructs
+  gain coverage from new pipelines with zero edits to existing members.
+- Constructs may target/be targeted by **channels** (S2a) exactly as concepts are — a channel's
+  `target_concepts` may include a construct URN.
+
+**State (computed, sign-only — consistent with per-pipeline S3):**
+```
+role_sign  = -1 if role == contra_indicates else +1
+direction  = sign( Σ  member_direction × role_sign × (weight or 1) )    over observed members
+basis      = { observed, total, pipelines: {name: period, ...} }
+```
+Missing pipelines don't block computation; `basis` records coverage so downstream consumers
+(and the narrative layer) can see how much of the construct is actually observed.
+
+---
+
+## 15. Eco-edges — causality at the construct level
+
+Constructs participate in causality through **eco-edges** — behavioral edges whose endpoints may
+be constructs. Without them, constructs would be inert aggregates.
+
+```
+eco_edge := {
+  id,
+  from, to           : construct URN | entity URN,
+                       # at least one endpoint MUST be a construct — entity↔entity
+                       # cross-pipeline links belong in composition.json (§6), and
+                       # intra-pipeline links in that pipeline's model (§20)
+  type               : drives | suppresses | feeds | constrains,
+  polarity           : + | - | ~,
+  channel?           : channel id (S2a) this edge instantiates,
+  mechanism          : structural prose — HOW,
+  claim_type         : structural | inference | hypothesis,
+  source?, source_url?, source_verified_date?     # required iff claim_type != structural
+}
+```
+
+**State:** identical semantics to per-pipeline S3 behavioral edges — the from-node's direction
+vs polarity gives `active | reversed | dormant`. Sign-only; no magnitude (per the locked S3
+decision).
+
+**Structural constraints need no new node type.** A negative eco-edge (`polarity: "-"`,
+`type: constrains`) that is firing IS a binding cross-system constraint, and appears in
+`ecosystem_observations.binding_constraints` — exactly symmetric with how per-pipeline S3
+treats negative behavioral edges. §17 covers the *numeric* constraints only.
+
+---
+
+## 16. Ecosystem loops
+
+A **cross-pipeline loop** is a named feedback cycle whose member edges span models. The loop is
+authored (or S4-proposed); its firing is computed.
+
+```
+eco_loop := {
+  id, label,
+  type               : reinforcing | balancing,
+  closure            : internal | external,     closure_note?,
+  member_edges       : [ qualified refs ],
+  description        : the causal story, one paragraph
+}
+
+qualified ref := "{pipeline}:{edge_id}"     # intra-pipeline behavioral edge, e.g. "sibc:e_x__drives__e_y"
+              |  "x:{cross_edge_id}"        # confirmed cross-edge from composition.json
+              |  "eco:{eco_edge_id}"        # eco-edge from §15
+```
+
+**Rules.**
+- A loop must contain **≥1 cross-pipeline element** (an `x:` or `eco:` ref, or intra refs from
+  ≥2 pipelines). Otherwise it belongs in a pipeline model — validation error (§20).
+- `corresponds_to` cross-edges are **barred** from loops: they are structural identities, not
+  causal segments.
+- Loops may be *detected* as cycles in the composed graph and proposed via S4, but only
+  confirmed (authored) loops enter `ecosystem_model.json` — same promotion discipline as §8.
+
+**Firing (computed in compose, same rule as per-pipeline S3 step 5):** resolve each member
+edge's state — intra refs from that pipeline's latest `system_state` `edge_states`; `x:` refs
+mapped `aligned→active, divergent→reversed, dormant→dormant`; `eco:` refs per §15 — then:
+```
+all members active            → active_reinforcing | active_balancing (by type)
+any member active|reversed    → partial
+else                          → dormant
+```
+**Mixed periods:** pipelines publish on different cadences, so a loop's members may be observed
+at different periods. Compose records `input_periods` per pipeline on every loop state and sets
+`mixed_period: true` when they differ; a spread greater than one publication cycle emits a
+staleness warning. Never blocks — the ecosystem view is always the join of latest-known states.
+
+---
+
+## 17. Reconciliation constraints (the cross-pipeline trust layer)
+
+Numeric invariants that must hold **between** pipelines. These extend the freshness/traceability
+guard family (Check 2f, 2g, 4f) across source boundaries — they catch both data problems
+(one source revised, the other not) and model problems (a claimed flow→stock relationship that
+doesn't reconcile is a wrong edge).
+
+```
+constraint := {
+  id, label,
+  kind               : reconciliation,          # v1.1: numeric only — causal limits are §15
+  operands           : [ { pipeline, signal_id } | { urn, metric } ],
+  relation           : prose + explicit formula over the operands,
+  tolerance          : { type: pct | abs | corridor, value },
+  severity           : warn | fail,
+  note
+}
+```
+
+**Evaluation:** deterministic, every compose run, reading `signals.db` (period-aligned to each
+operand's latest common period). Results land in `ecosystem_state.constraint_states` as
+`holds | violated | unobservable` (+ the computed residual). `severity: fail` violations fail
+the gate via `validate_composition.py`; `warn` surfaces in observations. `unobservable`
+(an operand's pipeline not yet ingested for a comparable period) never blocks.
+
+---
+
+## 18. Domains — reading lenses, zero structure
+
+`analysis/ontology/domains.json`:
+```
+domain := { id, label,
+            concept_scope : [ product vocab values ],
+            constructs    : [ construct URNs ],
+            narrative_cadence : e.g. "6-monthly" }
+```
+A domain **carries no edges, loops, members, or state**. It exists so that Layer 3 narrative and
+the UI can scope the one meta-model to an audience-sized view ("lending ecosystem",
+"consumption & payments"). Validation checks only that refs resolve. Adding/removing a domain
+changes nothing in the model — that is the test that domains stayed lenses. `lending` is the
+first domain.
+
+---
+
+## 19. Layer 3 strategic narrative
+
+The ~6-monthly authored artifact (FY-end + mid-year), **per domain**, written *on top of* the
+computed projection — it is the interpretation of the meta-model's state, never the model itself.
+
+- **Placement:** `analysis/cross_source/strategic/{domain}/{period}.md`, with a claims sidecar
+  `{period}_claims.json` mapping every numbered claim in the narrative to its refs
+  (`construct | eco_loop | constraint | cross_edge | signal_ids`) — the Check-2g discipline at
+  Layer 3. A `validate_strategic_narrative.py` enforces it once the first narrative exists.
+- **Authoring order (non-negotiable):** run compose first; write the narrative against
+  `ecosystem_state_{period}.json`; every number traces to a signal, every causal statement to a
+  named edge/loop/channel.
+- **The narrative never introduces structure.** A pattern the narrative needs but the model
+  lacks goes through S4 → sourcing → `ecosystem_model.json` *first*, then gets narrated.
+
+---
+
+## 20. Validation additions (`validate_composition.py` v1.1)
+
+| Check | Rule |
+|---|---|
+| construct URNs | well-formed `icl:eco/{id}`, unique, permanent (never reissued) |
+| construct members | every member URN resolves to a live entity; members span ≥2 pipelines |
+| concept_anchor | all values in `concepts.json` vocabulary |
+| eco-edge endpoints | resolve to construct/entity URNs; ≥1 endpoint is a construct |
+| eco-edge sourcing | `claim_type != structural` ⇒ source fields present (v3.0 §13) |
+| loop membership | all qualified refs resolve; ≥1 cross-pipeline element; no `corresponds_to` refs |
+| constraint operands | every operand resolves to a registered signal in `registry.json` |
+| **no-monolith, both directions** | no pipeline `system_model.json` references an `icl:eco/` URN or another pipeline's entities (v1.0 rule); AND `ecosystem_model.json` contains no edge whose endpoints are both entities of the *same* pipeline |
+| domains | every `constructs` ref resolves; `concept_scope` values in vocabulary |
+
+---
+
+## 21. State computation additions (`compose_ecosystem.py` v1.1)
+
+```
+inputs  : (v1.0 inputs) + cross_source/ecosystem_model.json + ontology/domains.json
+outputs : ecosystem_state_{period}.json gains —
+  construct_states     : { urn: { direction, basis } }             (§14)
+  eco_edge_states      : { id: { state, from, to, polarity } }     (§15)
+  eco_loop_states      : { id: { state, live_edges, total_edges,
+                                 input_periods, mixed_period } }   (§16)
+  constraint_states    : { id: { state, residual, tolerance } }    (§17)
+  ecosystem_observations : dominant_constructs, binding_constraints (negative eco/cross
+                           edges firing), active_loops, reconciliation_violations
+```
+
+**Opportunity derivation extension (§12.3 unchanged in rule, wider in anchor):** a
+`scope: cross_source` opportunity may now anchor to an **eco-loop or construct** as its driver
+D, with the same firing→status rules and the same Check 4f `evidence_all` traceability (a
+construct's evidence set = the union of its members' signal sets; a loop's = the union of its
+member edges' endpoint signal sets).
+
+---
+
+## 22. Build order and seed content
+
+Validators before content; compose behind validators; author last — every stage lands green.
+
+1. **Schemas + validators** (§20) — empty `ecosystem_model.json` / `domains.json` validate PASS.
+2. **Compose extension** (§21) — with empty inputs, output gains empty state blocks; gate green.
+3. **Seed constructs (2–3, judgment work)** grounded in live data:
+   `unsecured_retail_appetite` (SIBC personal-loan + credit-card stock × payments CC spend flow,
+   card count), `consumption_payments_activity` (spend flows + acceptance infrastructure),
+   `gold_collateral_lending` (SIBC gold stock; gains its flow member when an originations
+   source lands — a deliberately partial construct proving `basis` coverage).
+4. **First eco-loop:** cc spend → cc stock → unsecured_retail_appetite → spend — exercises the
+   `x:` and `eco:` ref kinds (intra refs join with the first loop that routes through a
+   pipeline-internal behavioral segment).
+5. **First reconciliation constraint:** average-balance-per-card corridor over
+   `x_cc_count_corresponds_cc_stock` operands — turns that structural edge into a live check.
+6. **Insight path end-to-end (§23):** derivation → feed → narrative → `/opportunities` UI
+   (ASCII-approved). The meta-model is not "done" until its insights are reviewable on the
+   interface — this step is in scope of the initial build, not deferred.
+7. **`domains.json`** with `lending`; Layer 3 narrative (§19) at the next FY-end/mid-year mark.
+8. **The three-pipeline test:** when the next source (VAHAN) lands, its concept_tags must
+   produce candidate construct members and cross-links with *zero edits* to Part II content —
+   the M+N guarantee at N=3. If it doesn't, fix the derivation, never hand-patch.
+
+**Retail product tie-in (`ICL_RETAIL_90DAY_PLAN.md` EN-1):** `ticker_map.json` targets may be
+**construct URNs as well as entity URNs** — a construct is often the correct transmission anchor
+(e.g. `icl:eco/unsecured_retail_appetite` → SBI Cards) and inherits its evidence set for the
+call register's traceability.
+
+---
+
+## 23. The meta-model insight path (end-to-end, reviewable)
+
+**Principle: eco insights ride the existing opportunity chain — never a parallel path.** The
+chain `compose_ecosystem → opportunities feed → narrative → /opportunities UI` already exists
+for cross-edge-driven items; the meta-model widens what can be a *driver*, changes nothing
+about how insights flow. One generic mechanism, per the engineering principle.
+
+### 23.1 Derivation (compose, deterministic)
+
+The driver set for `scope: cross_source` opportunities/risks widens from `cross_edge` (v1.0) to:
+
+| Driver kind | Fires when | Example insight |
+|---|---|---|
+| `cross_edge` | v1.0 §12.3 rules (unchanged) | flow softening ahead of stock |
+| `construct` | direction ≠ 0 for ≥2 periods, or direction *flips* | "unsecured retail appetite turned negative" |
+| `eco_loop` | state ∈ active_reinforcing \| active_balancing, or transitions | "the spend→stock loop is running" |
+| `constraint` | state = violated | "card count and outstanding no longer reconcile" |
+
+Status (`active | watch | closed`) follows §12.3 exactly. Every item carries
+`refs {construct? | eco_loop? | constraint? | cross_edge?, entities: [urns]}`,
+`evidence` (the firing subset) and `evidence_all` (per §21: union of member signal sets) —
+so **Check 4f applies unchanged and strictly**.
+
+### 23.2 Explainability contract (what makes an eco insight reviewable)
+
+Every eco insight carries the **shared insight schema** `basis.{facts, inferences}`:
+
+- `basis.facts` — the member signals' current values/directions, pulled from `signals.db`
+  (traceable data points, as everywhere else).
+- `basis.inferences` — the chain, **deterministic by construction**, one step per level of the
+  computation: *member signals moved (named, with values) → member entity directions →
+  construct/loop state → why that state constitutes an opening/risk (the authored mechanism
+  prose from the eco-edge/channel)*. Each step cites its refs. Nothing in the chain is invented:
+  steps 1–3 are the §14/§16 computation replayed as prose; step 4 is authored structure quoted.
+- `representation: llm | deterministic` — same split as both pipelines: the deterministic chain
+  is always generated first and is the fallback; `generate_opportunity_narrative` may rewrite
+  the *prose* (plain-English body/implication/chain wording) with every number 4f-validated
+  against `evidence_all`. The LLM narrates; it never reasons structure into existence.
+
+### 23.3 Feed projection (`generate_opportunities_feed`)
+
+`refs → charts[]` using the existing `ChartRef` shape (`{pipeline, section, highlight, caption}`):
+a construct-driven item emits one chart per member entity that has a registered `chart_series`,
+**prioritised** `measures` before `proxies`, capped at 3 charts; a loop-driven item emits the
+charts of its segment endpoints. Cross-pipeline items already render multi-chart — no new UI
+data shape.
+
+### 23.4 UI surfacing (`/opportunities`, cross-system section)
+
+Eco-driven cards render in the existing cross-system section with:
+- badge = the driver kind (`Ecosystem · construct` / `Ecosystem · loop` / `Data check`) instead
+  of the pairwise `Credit ✕ Payments` badge;
+- the multi-chart panel (23.3) with per-chart highlights, as today;
+- a collapsible **"Why — computed basis"** block rendering `basis.inferences` steps with their
+  cited signals/values (`basis.facts`) — this is the review surface: the operator can follow
+  member signal → construct state → insight without leaving the card.
+- UI implementation follows the ASCII-first authoring rule (layout approved before code).
+
+### 23.5 Review loop (operator → model, gated)
+
+Review happens on the interface; corrections happen in **authored structure**, never in computed
+state: wrong membership/weight → edit `ecosystem_model.json` (constructs/eco_edges) and re-run
+compose; missing mechanism → S4 proposal → sourcing → promote; wrong number → it's a data/gate
+bug, fix the pipeline. `narrative: true` items keep their prose across regen (existing
+preservation behavior).
+
+---
+
+*Composition Specification v1.1 — extends System Model Specification v3.0 — India Credit Lens*

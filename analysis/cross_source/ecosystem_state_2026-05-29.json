@@ -1,7 +1,7 @@
 {
   "_meta": {
     "description": "Computed cross-system ecosystem projection (S3 composed). Never hand-edited.",
-    "spec_ref": "analysis/COMPOSITION_SPEC.md §7",
+    "spec_ref": "analysis/COMPOSITION_SPEC.md §7 + §21",
     "pipeline_periods": {
       "sibc": "2026-05-29",
       "atm_pos": "2026-04-30"
@@ -36,11 +36,159 @@
       "derived_from": "R3_corresponds"
     }
   ],
+  "construct_states": {
+    "icl:eco/unsecured_retail_appetite": {
+      "direction": 1,
+      "direction_prev": 1,
+      "label": "Unsecured retail credit appetite",
+      "basis": {
+        "observed": 5,
+        "total": 5,
+        "members": [
+          {
+            "urn": "icl:sibc/Statement1/4.5",
+            "role": "measures",
+            "note": "credit-card outstanding — the unsecured revolving stock (₹)",
+            "direction": 1
+          },
+          {
+            "urn": "icl:sibc/Statement1/4.9",
+            "role": "measures",
+            "note": "other personal loans — the largely-unsecured term stock (₹)",
+            "direction": 1
+          },
+          {
+            "urn": "icl:sibc/Statement1/4.1",
+            "role": "measures",
+            "note": "consumer-durable loans — small-ticket unsecured stock (₹)",
+            "direction": 1
+          },
+          {
+            "urn": "icl:atm_pos/spend_value/cc_spend_value",
+            "role": "measures",
+            "note": "credit-card spend — the flow expression of the same appetite",
+            "direction": -1
+          },
+          {
+            "urn": "icl:atm_pos/cards/credit_cards",
+            "role": "proxies",
+            "note": "cards in force — issuance reach, not balance appetite",
+            "direction": 1
+          }
+        ],
+        "pipelines": {
+          "atm_pos": "2026-04-30",
+          "sibc": "2026-05-29"
+        }
+      }
+    },
+    "icl:eco/card_consumption_activity": {
+      "direction": 1,
+      "direction_prev": 1,
+      "label": "Card-based consumption activity",
+      "basis": {
+        "observed": 5,
+        "total": 5,
+        "members": [
+          {
+            "urn": "icl:atm_pos/spend_value/cc_spend_value",
+            "role": "measures",
+            "note": "credit-card spend value",
+            "direction": -1
+          },
+          {
+            "urn": "icl:atm_pos/spend_value/dc_spend_value",
+            "role": "measures",
+            "note": "debit-card spend value",
+            "direction": -1
+          },
+          {
+            "urn": "icl:atm_pos/infrastructure/pos_terminals",
+            "role": "proxies",
+            "note": "acceptance capacity — merchants deploy terminals where card consumption grows",
+            "direction": 1
+          },
+          {
+            "urn": "icl:sibc/Statement1/4.1",
+            "role": "proxies",
+            "note": "consumer-durable credit — the financed share of durable consumption",
+            "direction": 1
+          },
+          {
+            "urn": "icl:sibc/Statement1/4.7",
+            "role": "proxies",
+            "note": "vehicle loans — the financed share of big-ticket consumption",
+            "direction": 1
+          }
+        ],
+        "pipelines": {
+          "atm_pos": "2026-04-30",
+          "sibc": "2026-05-29"
+        }
+      }
+    }
+  },
+  "eco_edge_states": {
+    "eco_cc_stock_feeds_appetite": {
+      "state": "active",
+      "from": "icl:sibc/Statement1/4.5",
+      "to": "icl:eco/unsecured_retail_appetite",
+      "polarity": "+",
+      "type": "feeds"
+    },
+    "eco_appetite_drives_spend": {
+      "state": "active",
+      "from": "icl:eco/unsecured_retail_appetite",
+      "to": "icl:atm_pos/spend_value/cc_spend_value",
+      "polarity": "+",
+      "type": "drives"
+    }
+  },
+  "eco_loop_states": {
+    "loop_unsecured_spend_stock": {
+      "state": "partial",
+      "type": "reinforcing",
+      "live_edges": 3,
+      "total_edges": 3,
+      "input_periods": {
+        "sibc": "2026-05-29",
+        "atm_pos": "2026-04-30"
+      },
+      "mixed_period": true
+    }
+  },
+  "constraint_states": {
+    "cx_cc_balance_per_card": {
+      "state": "holds",
+      "value": 24951.9,
+      "severity": "fail",
+      "tolerance": {
+        "type": "corridor",
+        "value": [
+          8000,
+          60000
+        ]
+      }
+    }
+  },
+  "ecosystem_observations": {
+    "dominant_constructs": [
+      "icl:eco/unsecured_retail_appetite",
+      "icl:eco/card_consumption_activity"
+    ],
+    "binding_constraints": [],
+    "active_loops": [],
+    "reconciliation_violations": []
+  },
   "cross_source_opportunities": [
     {
       "id": "xopp_x_cc_spend_leads_cc_stock",
       "scope": "cross_source",
       "surface": "opportunities",
+      "driver": {
+        "kind": "cross_edge",
+        "id": "x_cc_spend_leads_cc_stock"
+      },
       "status": "watch",
       "label": "Cross-system signal: credit_card flow softening ahead of stock",
       "refs": {
@@ -51,6 +199,230 @@
         ]
       },
       "mechanism": "Credit-card spend flow (payments) leads credit-card outstanding stock (SIBC): sustained spending growth precedes balance build-up. Confirmed cross-system instance of the flow→stock law."
+    },
+    {
+      "id": "xopp_eco_unsecured_retail_appetite",
+      "scope": "cross_source",
+      "surface": "opportunities",
+      "driver": {
+        "kind": "construct",
+        "id": "unsecured_retail_appetite"
+      },
+      "status": "active",
+      "label": "Unsecured retail credit appetite — expanding (5/5 measurements observed)",
+      "refs": {
+        "construct": "icl:eco/unsecured_retail_appetite",
+        "entities": [
+          "icl:sibc/Statement1/4.5",
+          "icl:sibc/Statement1/4.9",
+          "icl:sibc/Statement1/4.1",
+          "icl:atm_pos/spend_value/cc_spend_value",
+          "icl:atm_pos/cards/credit_cards"
+        ]
+      },
+      "mechanism": "The willingness of households to carry — and lenders to extend — unsecured retail credit. No pipeline measures it directly: SIBC measures the unsecured stock (credit-card outstanding, other personal loans, consumer durables), payments measures the flow (credit-card spend) and reach (cards in force). Together they bound the construct: when stock, flow and reach move together the appetite read is unambiguous; when they diverge, the divergence itself is the signal.",
+      "evidence": [
+        "sibc-pl-cc-abs",
+        "sibc-pl-cc-below10-streak",
+        "sibc-pl-cc-share",
+        "sibc-pl-cc-yoy",
+        "sibc-pl-other-share",
+        "sibc-pl-other-yoy",
+        "sibc-pl-consumer-durables-neg-streak",
+        "sibc-pl-consumer-durables-share",
+        "sibc-pl-consumer-durables-yoy",
+        "cc-atm-val-abs",
+        "cc-atm-val-share",
+        "cc-atm-val-yoy",
+        "cc-ecom-val-abs",
+        "cc-ecom-val-share",
+        "cc-ecom-val-yoy",
+        "cc-other-val-abs",
+        "cc-other-val-share",
+        "cc-other-val-yoy",
+        "cc-pos-val-abs",
+        "cc-pos-val-share",
+        "cc-pos-val-yoy",
+        "cc-bank-scan",
+        "cc-category-share-scan",
+        "cc-outstanding-abs",
+        "cc-outstanding-streak",
+        "cc-outstanding-yoy",
+        "cc-private-share",
+        "cc-psb-share"
+      ],
+      "evidence_all": [
+        "sibc-pl-cc-abs",
+        "sibc-pl-cc-below10-streak",
+        "sibc-pl-cc-share",
+        "sibc-pl-cc-yoy",
+        "sibc-pl-other-share",
+        "sibc-pl-other-yoy",
+        "sibc-pl-consumer-durables-neg-streak",
+        "sibc-pl-consumer-durables-share",
+        "sibc-pl-consumer-durables-yoy",
+        "cc-atm-val-abs",
+        "cc-atm-val-share",
+        "cc-atm-val-yoy",
+        "cc-ecom-val-abs",
+        "cc-ecom-val-share",
+        "cc-ecom-val-yoy",
+        "cc-other-val-abs",
+        "cc-other-val-share",
+        "cc-other-val-yoy",
+        "cc-pos-val-abs",
+        "cc-pos-val-share",
+        "cc-pos-val-yoy",
+        "cc-bank-scan",
+        "cc-category-share-scan",
+        "cc-outstanding-abs",
+        "cc-outstanding-streak",
+        "cc-outstanding-yoy",
+        "cc-private-share",
+        "cc-psb-share"
+      ]
+    },
+    {
+      "id": "xopp_eco_card_consumption_activity",
+      "scope": "cross_source",
+      "surface": "opportunities",
+      "driver": {
+        "kind": "construct",
+        "id": "card_consumption_activity"
+      },
+      "status": "active",
+      "label": "Card-based consumption activity — expanding (5/5 measurements observed)",
+      "refs": {
+        "construct": "icl:eco/card_consumption_activity",
+        "entities": [
+          "icl:atm_pos/spend_value/cc_spend_value",
+          "icl:atm_pos/spend_value/dc_spend_value",
+          "icl:atm_pos/infrastructure/pos_terminals",
+          "icl:sibc/Statement1/4.1",
+          "icl:sibc/Statement1/4.7"
+        ]
+      },
+      "mechanism": "Household consumption as expressed through card rails. Payments measures the transaction flows (credit + debit card spend) directly; acceptance infrastructure (POS terminals) proxies the merchant side of the same activity; SIBC's consumer-durable and vehicle loan stocks proxy the credit-financed share of it.",
+      "evidence": [
+        "cc-atm-val-abs",
+        "cc-atm-val-share",
+        "cc-atm-val-yoy",
+        "cc-ecom-val-abs",
+        "cc-ecom-val-share",
+        "cc-ecom-val-yoy",
+        "cc-other-val-abs",
+        "cc-other-val-share",
+        "cc-other-val-yoy",
+        "cc-pos-val-abs",
+        "cc-pos-val-share",
+        "cc-pos-val-yoy",
+        "dc-atm-val-abs",
+        "dc-atm-val-share",
+        "dc-atm-val-yoy",
+        "dc-ecom-val-abs",
+        "dc-ecom-val-share",
+        "dc-ecom-val-yoy",
+        "dc-other-val-abs",
+        "dc-other-val-share",
+        "dc-other-val-yoy",
+        "dc-pos-val-abs",
+        "dc-pos-val-share",
+        "dc-pos-val-yoy",
+        "dc-pos-withdrawal-val-abs",
+        "dc-pos-withdrawal-val-share",
+        "dc-pos-withdrawal-val-yoy",
+        "pos-bank-scan",
+        "pos-category-share-scan",
+        "pos-private-share",
+        "pos-psb-share",
+        "pos-terminals-abs",
+        "pos-terminals-pos-streak",
+        "pos-terminals-yoy",
+        "sibc-pl-consumer-durables-neg-streak",
+        "sibc-pl-consumer-durables-share",
+        "sibc-pl-consumer-durables-yoy",
+        "sibc-pl-vehicle-share",
+        "sibc-pl-vehicle-yoy"
+      ],
+      "evidence_all": [
+        "cc-atm-val-abs",
+        "cc-atm-val-share",
+        "cc-atm-val-yoy",
+        "cc-ecom-val-abs",
+        "cc-ecom-val-share",
+        "cc-ecom-val-yoy",
+        "cc-other-val-abs",
+        "cc-other-val-share",
+        "cc-other-val-yoy",
+        "cc-pos-val-abs",
+        "cc-pos-val-share",
+        "cc-pos-val-yoy",
+        "dc-atm-val-abs",
+        "dc-atm-val-share",
+        "dc-atm-val-yoy",
+        "dc-ecom-val-abs",
+        "dc-ecom-val-share",
+        "dc-ecom-val-yoy",
+        "dc-other-val-abs",
+        "dc-other-val-share",
+        "dc-other-val-yoy",
+        "dc-pos-val-abs",
+        "dc-pos-val-share",
+        "dc-pos-val-yoy",
+        "dc-pos-withdrawal-val-abs",
+        "dc-pos-withdrawal-val-share",
+        "dc-pos-withdrawal-val-yoy",
+        "pos-bank-scan",
+        "pos-category-share-scan",
+        "pos-private-share",
+        "pos-psb-share",
+        "pos-terminals-abs",
+        "pos-terminals-pos-streak",
+        "pos-terminals-yoy",
+        "sibc-pl-consumer-durables-neg-streak",
+        "sibc-pl-consumer-durables-share",
+        "sibc-pl-consumer-durables-yoy",
+        "sibc-pl-vehicle-share",
+        "sibc-pl-vehicle-yoy"
+      ]
+    },
+    {
+      "id": "xopp_loop_loop_unsecured_spend_stock",
+      "scope": "cross_source",
+      "surface": "opportunities",
+      "driver": {
+        "kind": "eco_loop",
+        "id": "loop_unsecured_spend_stock"
+      },
+      "status": "watch",
+      "label": "Unsecured spend–stock cycle — partially engaged (3/3 segments live)",
+      "refs": {
+        "eco_loop": "loop_unsecured_spend_stock",
+        "entities": [
+          "icl:atm_pos/spend_value/cc_spend_value",
+          "icl:sibc/Statement1/4.5"
+        ]
+      },
+      "mechanism": "Appetite expresses as card spend (flow), spend accumulates into card balances (stock), and growing balances evidence the appetite that started the cycle. The loop fires only when all three segments move the same way — a clean composed read that the unsecured retail cycle is running (or, reversed, unwinding). Segments span both pipelines plus the confirmed flow→stock cross-edge.",
+      "evidence": [],
+      "evidence_all": [
+        "cc-atm-val-abs",
+        "cc-atm-val-share",
+        "cc-atm-val-yoy",
+        "cc-ecom-val-abs",
+        "cc-ecom-val-share",
+        "cc-ecom-val-yoy",
+        "cc-other-val-abs",
+        "cc-other-val-share",
+        "cc-other-val-yoy",
+        "cc-pos-val-abs",
+        "cc-pos-val-share",
+        "cc-pos-val-yoy",
+        "sibc-pl-cc-abs",
+        "sibc-pl-cc-below10-streak",
+        "sibc-pl-cc-share",
+        "sibc-pl-cc-yoy"
+      ]
     }
   ]
 }

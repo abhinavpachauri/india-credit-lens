@@ -137,11 +137,18 @@ def main():
         for item in feed["pipelines"].get(pipe, []):
             if item["tier"] == "opportunity":
                 enrich(item, pipe, item.get("refs", {}).get("entities"))
-    # cross-system: enrich in place (no pipeline signals, prose polish only)
+    # cross-system: enrich in place. Eco-driven items (§23.2) carry deterministic
+    # basis.facts (signal values straight from signals.db) — pass them so the LLM can
+    # weave real numbers in; Check 4f validates every number against evidence_all.
+    # Plain cross-edge items keep the prose-polish-only path. Data-check risks stay
+    # fully deterministic (their numbers must be exact, not narrated).
     for c in feed.get("cross_system", []):
+        if c.get("tier") == "risk":
+            continue
         if c["status"] in ("active", "watch") and not c.get("narrative"):
             payload = {"title": c["title"], "description": c.get("body", ""),
-                       "driver": None, "via": None, "signals": []}
+                       "driver": None, "via": None,
+                       "signals": (c.get("basis") or {}).get("facts", [])}
             key = hashlib.sha1(json.dumps(payload, sort_keys=True).encode()).hexdigest()[:16]
             res = cache.get(key)
             if res is None and not args.no_llm:

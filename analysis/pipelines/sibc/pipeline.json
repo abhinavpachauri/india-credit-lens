@@ -13,7 +13,10 @@
   "schema": {
     "date_column": "date",
     "value_column": "outstanding_cr",
-    "entity_columns": ["code", "parent_code"]
+    "entity_columns": [
+      "code",
+      "parent_code"
+    ]
   },
   "modules": {
     "detect_format": "pipelines/sibc/detect_format.py",
@@ -26,29 +29,178 @@
     "insights_validate": "pipelines/sibc/validate_sibc_traceability.py"
   },
   "gate": [
-    { "id": "tests",            "label": "T.  unit tests (pytest)",        "builtin": "pytest" },
-    { "id": "timeline",         "label": "0.  timeline.json",             "core": "validate_timeline" },
-    { "id": "format",           "label": "0.5 format_report.json",        "pipeline": "detect_format", "args": ["--check", "--period", "$PERIOD"], "skip_if": "merged" },
-    { "id": "sections",         "label": "1.  sections.json",             "pipeline": "validate_sections", "args": ["$DATA_DIR/$PERIOD/sections.json"], "args_merged": ["$SECTIONS_MERGED", "--merged"] },
-    { "id": "csv_integrity",    "label": "1b. web CSV integrity",         "builtin": "csv_integrity" },
-    { "id": "annotations_draft","label": "2.  annotations_draft.ts",      "pipeline": "validate_annotations", "args": ["$DATA_DIR/$PERIOD/annotations_draft.ts"], "skip_if": "missing:analysis/rbi_sibc/$PERIOD/annotations_draft.ts" },
-    { "id": "content",          "label": "2b. content accuracy",          "pipeline": "validate_content", "args": ["--period", "$PERIOD"], "args_merged": ["--merged"], "skip_if": "missing_unless_merged:analysis/rbi_sibc/$PERIOD/annotations_draft.ts" },
-    { "id": "annotation_basis", "label": "2d. annotation basis",          "pipeline": "validate_annotation_basis" },
-    { "id": "signal_history",   "label": "2e. signal history integrity",  "core": "validate_signal_history" },
-    { "id": "freshness",        "label": "2f. signal freshness (DB)",     "core": "check_signal_freshness", "note": "signals.db" },
-    { "id": "traceability",     "label": "2g. insight traceability",      "pipeline": "insights_validate", "note": "traceability" },
-    { "id": "insights",         "label": "5.5 generate_analysis_report",  "pipeline": "insights" },
-    { "id": "annotations_live", "label": "3.  annotations live (rbi_sibc.ts)", "pipeline": "validate_annotations", "args": ["$LIVE_ANNOTATIONS", "--sections", "$SECTIONS_MERGED"] },
-    { "id": "web_series",       "label": "3b. web series names",          "pipeline": "validate_web_series" },
-    { "id": "skeleton",         "label": "4-pre. skeleton regen",         "core": "skeleton" },
-    { "id": "system_model",     "label": "4.  system_model.json",         "core": "validate_system_model", "requires": ["skeleton"] },
-    { "id": "system_state",     "label": "4b. system_state (S3)",         "core": "system_state", "requires": ["system_model"] },
-    { "id": "opportunities",    "label": "4c. opportunities (live)",      "core": "derive_opportunities", "requires": ["system_state"] },
-    { "id": "ecosystem",        "label": "4d. ecosystem projection",      "core": "compose_ecosystem" },
-    { "id": "feed",             "label": "4e. opportunities UI feed",     "core": "opportunities_feed", "requires": ["opportunities"] },
-    { "id": "opp_traceability", "label": "4f. opportunity traceability",  "core": "opportunity_traceability", "note": "opportunit" },
-    { "id": "reconcile",        "label": "5.  architecture reconcile",    "core": "reconcile", "note": "drift" },
-    { "id": "web_tests",        "label": "5b. web unit tests (vitest)",   "builtin": "web_tests", "note": "Tests" },
-    { "id": "build",            "label": "6.  tsc + npm run build",       "builtin": "web_build", "skip_if": "--skip-build" }
+    {
+      "id": "tests",
+      "label": "T.  unit tests (pytest)",
+      "builtin": "pytest"
+    },
+    {
+      "id": "timeline",
+      "label": "0.  timeline.json",
+      "core": "validate_timeline"
+    },
+    {
+      "id": "format",
+      "label": "0.5 format_report.json",
+      "pipeline": "detect_format",
+      "args": [
+        "--check",
+        "--period",
+        "$PERIOD"
+      ],
+      "skip_if": "merged"
+    },
+    {
+      "id": "sections",
+      "label": "1.  sections.json",
+      "pipeline": "validate_sections",
+      "args": [
+        "$DATA_DIR/$PERIOD/sections.json"
+      ],
+      "args_merged": [
+        "$SECTIONS_MERGED",
+        "--merged"
+      ]
+    },
+    {
+      "id": "csv_integrity",
+      "label": "1b. web CSV integrity",
+      "builtin": "csv_integrity"
+    },
+    {
+      "id": "annotations_draft",
+      "label": "2.  annotations_draft.ts",
+      "pipeline": "validate_annotations",
+      "args": [
+        "$DATA_DIR/$PERIOD/annotations_draft.ts"
+      ],
+      "skip_if": "missing:analysis/rbi_sibc/$PERIOD/annotations_draft.ts"
+    },
+    {
+      "id": "content",
+      "label": "2b. content accuracy",
+      "pipeline": "validate_content",
+      "args": [
+        "--period",
+        "$PERIOD"
+      ],
+      "args_merged": [
+        "--merged"
+      ],
+      "skip_if": "missing_unless_merged:analysis/rbi_sibc/$PERIOD/annotations_draft.ts"
+    },
+    {
+      "id": "annotation_basis",
+      "label": "2d. annotation basis",
+      "pipeline": "validate_annotation_basis"
+    },
+    {
+      "id": "signal_history",
+      "label": "2e. signal history integrity",
+      "core": "validate_signal_history"
+    },
+    {
+      "id": "freshness",
+      "label": "2f. signal freshness (DB)",
+      "core": "check_signal_freshness",
+      "note": "signals.db"
+    },
+    {
+      "id": "traceability",
+      "label": "2g. insight traceability",
+      "pipeline": "insights_validate",
+      "note": "traceability"
+    },
+    {
+      "id": "insights",
+      "label": "5.5 generate_analysis_report",
+      "pipeline": "insights"
+    },
+    {
+      "id": "annotations_live",
+      "label": "3.  annotations live (rbi_sibc.ts)",
+      "pipeline": "validate_annotations",
+      "args": [
+        "$LIVE_ANNOTATIONS",
+        "--sections",
+        "$SECTIONS_MERGED"
+      ]
+    },
+    {
+      "id": "web_series",
+      "label": "3b. web series names",
+      "pipeline": "validate_web_series"
+    },
+    {
+      "id": "skeleton",
+      "label": "4-pre. skeleton regen",
+      "core": "skeleton"
+    },
+    {
+      "id": "system_model",
+      "label": "4.  system_model.json",
+      "core": "validate_system_model",
+      "requires": [
+        "skeleton"
+      ]
+    },
+    {
+      "id": "system_state",
+      "label": "4b. system_state (S3)",
+      "core": "system_state",
+      "requires": [
+        "system_model"
+      ]
+    },
+    {
+      "id": "opportunities",
+      "label": "4c. opportunities (live)",
+      "core": "derive_opportunities",
+      "requires": [
+        "system_state"
+      ]
+    },
+    {
+      "id": "composition",
+      "label": "4d-pre. composition + eco model",
+      "core": "validate_composition"
+    },
+    {
+      "id": "ecosystem",
+      "label": "4d. ecosystem projection",
+      "core": "compose_ecosystem"
+    },
+    {
+      "id": "feed",
+      "label": "4e. opportunities UI feed",
+      "core": "opportunities_feed",
+      "requires": [
+        "opportunities"
+      ]
+    },
+    {
+      "id": "opp_traceability",
+      "label": "4f. opportunity traceability",
+      "core": "opportunity_traceability",
+      "note": "opportunit"
+    },
+    {
+      "id": "reconcile",
+      "label": "5.  architecture reconcile",
+      "core": "reconcile",
+      "note": "drift"
+    },
+    {
+      "id": "web_tests",
+      "label": "5b. web unit tests (vitest)",
+      "builtin": "web_tests",
+      "note": "Tests"
+    },
+    {
+      "id": "build",
+      "label": "6.  tsc + npm run build",
+      "builtin": "web_build",
+      "skip_if": "--skip-build"
+    }
   ]
 }

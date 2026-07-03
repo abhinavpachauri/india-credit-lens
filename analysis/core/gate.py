@@ -42,6 +42,7 @@ CORE_MAP = {
     "validate_system_model":    ("core/validate_system_model.py", ["--pipeline", "$ID"], "ANALYSIS"),
     "system_state":             ("core/generate_system_state.py", ["--pipeline", "$ID", "--period", "$LATEST"], "ROOT"),
     "derive_opportunities":     ("core/derive_opportunities.py", ["--pipeline", "$ID", "--period", "$LATEST"], "ROOT"),
+    "validate_composition":     ("crosssource/validate_composition.py", [], "ROOT"),
     "compose_ecosystem":        ("crosssource/compose_ecosystem.py", [], "ROOT"),
     "opportunities_feed":       ("crosssource/generate_opportunities_feed.py", [], "ROOT"),
     "opportunity_traceability": ("core/validate_opportunity_traceability.py", ["--strict"], "ROOT"),
