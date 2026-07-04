@@ -53,6 +53,7 @@ Live components only. Planned work lives in `STRATEGY_PLANNER.md`.
 | RBI SIBC dashboard | **Live** — 7 sections, 49 annotations (merged Jan 2024–Mar 2026) |
 | SEO layer | **Live** — metadata, OG image, sitemap, JSON-LD |
 | Email / Substack CTA | **Live** — `SubstackCTA.tsx` + `EmailGate.tsx` |
+| Reply desk (X distribution) | **Live (2026-07-05)** — `analysis/replydesk/` — assisted (never automated) daily reply ritual: Claude-in-Chrome reads the user's logged-in X tabs, `reply_desk.py brief` supplies grounded ammunition, `check` hard-gates drafts (traceability + SEBI lint), **human clicks Post**, `log` records for engagement learning. Ritual spec: `analysis/replydesk/CLAUDE.md` — read it before running "Reply desk". |
 | Newsletter v2 (2-post cadence) | **Live (2026-07-04)** — deterministic rendering over gate-validated artifacts: `generate_release_read.py` (L1, within 24h of release) + `generate_deep_read.py` (L2/L3 + ecosystem, mid-cycle). Self-gating traceability (`validate_newsletter.check_doc`: verbatim cards + declared-scope numbers, negative-tested). Output = .md + Substack-paste .html. v1 (config/mermaid/LinkedIn) retired to `legacy/newsletter_v1/` — LinkedIn posts are now written by the user in their own voice. |
 | validate_content.py (Check 2b) | **Live** — content accuracy eval on annotation bodies |
 | validate_claims.py (Check 2c) | **Retired** — superseded by `core/validate_system_model.py` (sourcing built in); archived in `analysis/legacy/` |
@@ -109,6 +110,7 @@ Use CLI tools for all external service interactions — they are the most contex
 | `python3 analysis/check_signal_freshness.py [--pipeline {name}]` | Check 2f/5b2: signals.db freshness — recompute every period from the CSV and fail on any drift (value/status/missing/orphan). Deterministic guard; runs in both gates + pre-commit. Fix = re-append **every** period, not just the latest. |
 | `python3 analysis/newsletter/generate_release_read.py [--pipeline atm_pos]` | Newsletter Post 1 (L1 release read) — self-gating; run after the ingestion gate is green |
 | `python3 analysis/newsletter/generate_deep_read.py` | Newsletter Post 2 (L2/L3 deep read) — self-gating; publish mid-cycle |
+| `python3 analysis/replydesk/reply_desk.py {brief\|check\|log}` | Reply desk: ammunition → draft gate (traceability + SEBI) → posted-reply log. Ritual: `analysis/replydesk/CLAUDE.md` |
 
 ---
 

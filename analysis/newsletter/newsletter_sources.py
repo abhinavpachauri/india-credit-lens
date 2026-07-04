@@ -173,31 +173,32 @@ def _chart_recipe(pipeline, section_key, highlight, mode):
     return " → ".join(parts)
 
 
-def insight_cards(pipeline, max_cards=6):
-    """One validated insight card per section/group, in fixed order — deterministic pick.
-    Each card carries its chart recipe so the letter can place a precise placeholder."""
+def insight_cards(pipeline, max_cards=6, per_section=1):
+    """Validated insight cards in fixed section order — deterministic pick.
+    The newsletter takes 1 per section (default); the reply desk asks for all
+    (per_section high) and filters by topic. Each card carries its chart recipe."""
     cards = []
     if pipeline == "sibc":
         feed = json.loads((DATA / "sibc_l1_annotations.json").read_text())
         for section, bucket in feed["sections"].items():
-            for it in bucket.get("insights", []):
+            for it in bucket.get("insights", [])[:per_section]:
                 cards.append({"where": section, "title": it["title"], "body": it["body"],
                               "implication": it.get("implication", ""),
                               "chart": _chart_recipe(pipeline, section,
                                                      (it.get("effect") or {}).get("highlight"),
                                                      it.get("preferredMode"))})
-                break                                   # first per section
     else:
         feed = json.loads((DATA / "atm_pos_insights.json").read_text())
-        seen = set()
+        count = {}
         for it in feed:
-            if it.get("type") != "insight" or it.get("group") in seen:
+            g = it.get("group", "")
+            if it.get("type") != "insight" or count.get(g, 0) >= per_section:
                 continue
-            seen.add(it.get("group"))
+            count[g] = count.get(g, 0) + 1
             eff = it.get("effect") or {}
-            cards.append({"where": it.get("group", ""), "title": it["title"], "body": it["body"],
+            cards.append({"where": g, "title": it["title"], "body": it["body"],
                           "implication": it.get("implication", ""),
-                          "chart": _chart_recipe(pipeline, it.get("group", ""),
+                          "chart": _chart_recipe(pipeline, g,
                                                  eff.get("highlight"), eff.get("trendMode"))})
     return cards[:max_cards]
 
