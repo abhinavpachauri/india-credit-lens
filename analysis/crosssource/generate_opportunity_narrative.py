@@ -145,6 +145,11 @@ def main():
     for c in feed.get("cross_system", []):
         if c.get("tier") == "risk":
             continue
+        # Loop cards stay deterministic: their story IS the segment-state mechanics,
+        # and an LLM paraphrase can contradict the computed state (observed: "partial,
+        # one segment reversed" narrated as "fully engaged"). Same rule as data checks.
+        if (c.get("driver") or {}).get("kind") == "eco_loop":
+            continue
         if c["status"] in ("active", "watch") and not c.get("narrative"):
             payload = {"title": c["title"], "description": c.get("body", ""),
                        "driver": None, "via": None,

@@ -624,6 +624,10 @@ Every eco insight carries the **shared insight schema** `basis.{facts, inference
   is always generated first and is the fallback; `generate_opportunity_narrative` may rewrite
   the *prose* (plain-English body/implication/chain wording) with every number 4f-validated
   against `evidence_all`. The LLM narrates; it never reasons structure into existence.
+  **Exceptions — never narrated:** constraint (data-check) cards and **eco-loop cards**. A
+  loop's story *is* its segment-state mechanics, and a paraphrase can contradict the computed
+  state (observed: "partial, one segment reversed" narrated as "fully engaged"). Deterministic
+  prose is authoritative for both.
 
 ### 23.3 Feed projection (`generate_opportunities_feed`)
 

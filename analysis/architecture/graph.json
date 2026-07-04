@@ -310,76 +310,74 @@
       },
       "writes": {}
     },
-    "newsletter/generate_images": {
-      "doc_claims": [],
-      "imports": [],
+    "newsletter/generate_deep_read": {
+      "doc_claims": [
+        {
+          "kind": "output",
+          "text": "analysis/newsletter/output/deep_read_{period}.md + .html"
+        }
+      ],
+      "imports": [
+        "newsletter/newsletter_render",
+        "newsletter/newsletter_sources",
+        "newsletter/validate_newsletter"
+      ],
       "invokes": [],
-      "path": "analysis/newsletter/generate_images.py",
+      "path": "analysis/newsletter/generate_deep_read.py",
       "reads": {},
       "writes": {}
     },
-    "newsletter/generate_linkedin": {
+    "newsletter/generate_release_read": {
       "doc_claims": [
         {
           "kind": "output",
-          "text": "analysis/newsletter/output/linkedin/YYYY-MM-DD/"
+          "text": "analysis/newsletter/output/release_read_{pipeline}_{period}.md + .html"
         }
       ],
-      "imports": [],
-      "invokes": [],
-      "path": "analysis/newsletter/generate_linkedin.py",
-      "reads": {
-        "analysis/newsletter/newsletter_config.json": "low"
-      },
-      "writes": {
-        "schedule.md": "high"
-      }
-    },
-    "newsletter/generate_newsletter": {
-      "doc_claims": [
-        {
-          "kind": "output",
-          "text": "output/newsletter_YYYY-MM-DD_substack.html  ← paste into Substack editor"
-        }
+      "imports": [
+        "newsletter/newsletter_render",
+        "newsletter/newsletter_sources",
+        "newsletter/validate_newsletter"
       ],
-      "imports": [],
       "invokes": [],
-      "path": "analysis/newsletter/generate_newsletter.py",
-      "reads": {
-        "analysis/newsletter/newsletter_config.json": "low",
-        "system_model.json": "low"
-      },
+      "path": "analysis/newsletter/generate_release_read.py",
+      "reads": {},
       "writes": {}
     },
-    "newsletter/newsletter_delta_brief": {
-      "doc_claims": [
-        {
-          "kind": "output",
-          "text": "analysis/newsletter/newsletter_delta_brief.md"
-        }
-      ],
-      "imports": [],
-      "invokes": [],
-      "path": "analysis/newsletter/newsletter_delta_brief.py",
-      "reads": {
-        "analysis/rbi_sibc/timeline.json": "low",
-        "gaps.md": "low",
-        "insights.md": "low",
-        "opportunities.md": "low",
-        "timeline.json": "low"
-      },
-      "writes": {
-        "analysis/newsletter/newsletter_delta_brief.md": "high"
-      }
-    },
-    "newsletter/validate_newsletter_config": {
+    "newsletter/newsletter_render": {
       "doc_claims": [],
       "imports": [],
       "invokes": [],
-      "path": "analysis/newsletter/validate_newsletter_config.py",
+      "path": "analysis/newsletter/newsletter_render.py",
+      "reads": {},
+      "writes": {}
+    },
+    "newsletter/newsletter_sources": {
+      "doc_claims": [],
+      "imports": [],
+      "invokes": [],
+      "path": "analysis/newsletter/newsletter_sources.py",
       "reads": {
-        "analysis/newsletter/newsletter_config.json": "low",
-        "analysis/rbi_sibc/merged/sections_merged.json": "low"
+        "analysis/signals/registry.json": "low",
+        "analysis/signals/signals.db": "low",
+        "web/public/data/atm_pos_insights.json": "low",
+        "web/public/data/opportunities_feed.json": "low",
+        "web/public/data/sibc_l1_annotations.json": "low"
+      },
+      "writes": {}
+    },
+    "newsletter/validate_newsletter": {
+      "doc_claims": [],
+      "imports": [
+        "newsletter/newsletter_sources"
+      ],
+      "invokes": [],
+      "path": "analysis/newsletter/validate_newsletter.py",
+      "reads": {
+        "analysis/signals/signals.db": "low",
+        "web/public/data/atm_pos_insights.json": "low",
+        "web/public/data/opportunities_feed.json": "low",
+        "web/public/data/sibc_l1_annotations.json": "low"
       },
       "writes": {}
     },

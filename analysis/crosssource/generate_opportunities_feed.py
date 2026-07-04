@@ -434,6 +434,10 @@ def main():
                 if it.get("narrative"):
                     narrated[it["id"]] = {k: it.get(k) for k in ("body", "implication", "chain")}
             for it in bundle["cross_system"] + [x for v in bundle["pipelines"].values() for x in v]:
+                # eco_loop cards are deterministic-only (never narrated) — don't resurrect
+                # a stale LLM paraphrase over their computed state
+                if (it.get("driver") or {}).get("kind") == "eco_loop":
+                    continue
                 if it["id"] in narrated:
                     it.update(narrated[it["id"]])
                     it["narrative"] = True

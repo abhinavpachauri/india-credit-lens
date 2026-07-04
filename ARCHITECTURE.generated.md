@@ -21,7 +21,6 @@ flowchart LR
   n_analysis_SYSTEM_MODEL_SPEC_md(["SYSTEM_MODEL_SPEC.md"])
   n_analysis_cross_source_candidates_json["candidates.json"]
   n_analysis_cross_source_ecosystem_model_json(["ecosystem_model.json"])
-  n_analysis_newsletter_newsletter_delta_brief_md["newsletter_delta_brief.md"]
   n_analysis_ontology_channels_json(["channels.json"])
   n_analysis_rbi_atm_pos_insights_json["insights.json"]
   n_analysis_rbi_atm_pos_merged_system_model_json["system_model.json"]
@@ -29,7 +28,6 @@ flowchart LR
   n_analysis_rbi_atm_pos_skeleton_profile_json(["skeleton_profile.json"])
   n_analysis_rbi_sibc_merged_system_model_json["system_model.json"]
   n_analysis_rbi_sibc_skeleton_profile_json(["skeleton_profile.json"])
-  n_analysis_rbi_sibc_timeline_json(["timeline.json"])
   n_analysis_signals_narrative_cache_json["narrative_cache.json"]
   n_analysis_signals_registry_json["registry.json"]
   n_analysis_signals_signals_db["signals.db"]
@@ -50,7 +48,6 @@ flowchart LR
   n_analysis_rbi_atm_pos_skeleton_profile_json -->|generate_skeleton| n_analysis_rbi_sibc_merged_system_model_json
   n_analysis_rbi_sibc_skeleton_profile_json -->|generate_skeleton| n_analysis_rbi_atm_pos_merged_system_model_json
   n_analysis_rbi_sibc_skeleton_profile_json -->|generate_skeleton| n_analysis_rbi_sibc_merged_system_model_json
-  n_analysis_rbi_sibc_timeline_json -->|newsletter_delta_brief| n_analysis_newsletter_newsletter_delta_brief_md
   n_analysis_signals_registry_json -->|compute_atm_pos_signals| n_analysis_rbi_atm_pos_signals_json
   n_analysis_signals_registry_json -->|generate_opportunities_feed| n_web_public_data_opportunities_feed_json
   n_analysis_signals_registry_json -->|generate_analysis_report| n_web_public_data_sibc_l1_annotations_json
@@ -91,8 +88,6 @@ Scripts each orchestrator launches as a subprocess, in execution order.
 | `analysis/cross_source/composition.json` | external/authored | — | `core/run_inference`, `crosssource/compose_ecosystem`, `crosssource/validate_composition` |
 | `analysis/cross_source/ecosystem_model.json` | external/authored | — | `crosssource/compose_ecosystem`, `crosssource/generate_opportunities_feed`, `crosssource/validate_composition` |
 | `analysis/cross_source/ecosystem_state_*.json` | external/authored | — | `guards/check_derived_fresh` |
-| `analysis/newsletter/newsletter_config.json` | external/authored | — | `newsletter/generate_linkedin`, `newsletter/generate_newsletter`, `newsletter/validate_newsletter_config` |
-| `analysis/newsletter/newsletter_delta_brief.md` | derived | `newsletter/newsletter_delta_brief` | — |
 | `analysis/ontology/channels.json` | external/authored | — | `core/run_inference`, `core/validate_system_model`, `crosssource/derive_cross_links`, `crosssource/generate_opportunities_feed` |
 | `analysis/ontology/concepts.json` | external/authored | — | `core/validate_system_model`, `crosssource/validate_composition` |
 | `analysis/ontology/domains.json` | external/authored | — | `crosssource/validate_composition` |
@@ -104,23 +99,23 @@ Scripts each orchestrator launches as a subprocess, in execution order.
 | `analysis/rbi_atm_pos/skeleton_profile.json` | external/authored | — | `core/generate_skeleton` |
 | `analysis/rbi_sibc/merged/annotations_merged.ts` | external/authored | — | `pipelines/sibc/validate_annotation_basis` |
 | `analysis/rbi_sibc/merged/opportunities_*.json` | external/authored | — | `guards/check_derived_fresh` |
-| `analysis/rbi_sibc/merged/sections_merged.json` | external/authored | — | `hook_validate`, `newsletter/validate_newsletter_config`, `pipelines/sibc/detect_format`, `pipelines/sibc/generate_merge`, `pipelines/sibc/validate_content`, `pipelines/sibc/validate_web_series` |
+| `analysis/rbi_sibc/merged/sections_merged.json` | external/authored | — | `hook_validate`, `pipelines/sibc/detect_format`, `pipelines/sibc/generate_merge`, `pipelines/sibc/validate_content`, `pipelines/sibc/validate_web_series` |
 | `analysis/rbi_sibc/merged/system_model.json` | derived | `core/generate_skeleton` | `guards/check_derived_fresh` |
 | `analysis/rbi_sibc/merged/system_state_*.json` | external/authored | — | `guards/check_derived_fresh` |
 | `analysis/rbi_sibc/skeleton_profile.json` | external/authored | — | `core/generate_skeleton` |
-| `analysis/rbi_sibc/timeline.json` | external/authored | — | `core/validate_timeline`, `newsletter/newsletter_delta_brief`, `pipelines/sibc/generate_merge`, `signals/compute/sibc`, `signals/query` |
+| `analysis/rbi_sibc/timeline.json` | external/authored | — | `core/validate_timeline`, `pipelines/sibc/generate_merge`, `signals/compute/sibc`, `signals/query` |
 | `analysis/signals/narrative_cache.json` | derived | `crosssource/generate_opportunity_narrative` | — |
-| `analysis/signals/registry.json` | derived | `signals/apply_status_rules`, `signals/rebuild_atm_pos_signals`, `signals/rebuild_sibc_signals`, `signals/update_registry` | `core/generate_signal_history`, `core/validate_opportunity_traceability`, `crosssource/generate_opportunities_feed`, `crosssource/validate_composition`, `guards/check_signal_freshness`, `guards/validate_signal_history`, `pipelines/atm_pos/compute_atm_pos_signals`, `pipelines/atm_pos/validate_atm_pos_insights`, `pipelines/sibc/generate_analysis_report`, `pipelines/sibc/validate_sibc_traceability` |
-| `analysis/signals/signals.db` | derived | `signals/db` | `core/derive_opportunities`, `core/gate`, `core/generate_system_state`, `core/validate_opportunity_traceability`, `crosssource/compose_ecosystem`, `crosssource/generate_opportunities_feed`, `crosssource/generate_opportunity_narrative`, `guards/check_derived_fresh`, `guards/validate_signal_history`, `pipelines/atm_pos/compute_atm_pos_signals`, `pipelines/atm_pos/validate_atm_pos_insights`, `pipelines/sibc/generate_analysis_report`, `pipelines/sibc/validate_sibc_traceability` |
+| `analysis/signals/registry.json` | derived | `signals/apply_status_rules`, `signals/rebuild_atm_pos_signals`, `signals/rebuild_sibc_signals`, `signals/update_registry` | `core/generate_signal_history`, `core/validate_opportunity_traceability`, `crosssource/generate_opportunities_feed`, `crosssource/validate_composition`, `guards/check_signal_freshness`, `guards/validate_signal_history`, `newsletter/newsletter_sources`, `pipelines/atm_pos/compute_atm_pos_signals`, `pipelines/atm_pos/validate_atm_pos_insights`, `pipelines/sibc/generate_analysis_report`, `pipelines/sibc/validate_sibc_traceability` |
+| `analysis/signals/signals.db` | derived | `signals/db` | `core/derive_opportunities`, `core/gate`, `core/generate_system_state`, `core/validate_opportunity_traceability`, `crosssource/compose_ecosystem`, `crosssource/generate_opportunities_feed`, `crosssource/generate_opportunity_narrative`, `guards/check_derived_fresh`, `guards/validate_signal_history`, `newsletter/newsletter_sources`, `newsletter/validate_newsletter`, `pipelines/atm_pos/compute_atm_pos_signals`, `pipelines/atm_pos/validate_atm_pos_insights`, `pipelines/sibc/generate_analysis_report`, `pipelines/sibc/validate_sibc_traceability` |
 | `web/lib/reports/rbi_sibc.ts` | derived | `pipelines/sibc/promote_annotations` | `hook_validate`, `pipelines/sibc/validate_annotation_basis`, `pipelines/sibc/validate_web_series` |
 | `web/lib/reports/rbi_sibc_label_overrides.json` | external/authored | — | `pipelines/sibc/validate_web_series` |
 | `web/public/data/atm_pos_chart_series.json` | derived | `core/generate_chart_series` | `guards/check_derived_fresh` |
 | `web/public/data/atm_pos_consolidated.csv` | derived | `pipelines/atm_pos/consolidate_atm_pos` | `core/generate_chart_series`, `pipelines/atm_pos/compute_atm_pos_signals`, `signals/compute/atm_pos`, `signals/evaluate` |
-| `web/public/data/atm_pos_insights.json` | external/authored | — | `pipelines/atm_pos/generate_atm_pos_insights` |
+| `web/public/data/atm_pos_insights.json` | external/authored | — | `newsletter/newsletter_sources`, `newsletter/validate_newsletter`, `pipelines/atm_pos/generate_atm_pos_insights` |
 | `web/public/data/atm_pos_signals.json` | external/authored | — | `pipelines/atm_pos/compute_atm_pos_signals` |
-| `web/public/data/opportunities_feed.json` | derived | `crosssource/generate_opportunities_feed`, `crosssource/generate_opportunity_narrative` | `core/validate_opportunity_traceability`, `guards/check_derived_fresh` |
+| `web/public/data/opportunities_feed.json` | derived | `crosssource/generate_opportunities_feed`, `crosssource/generate_opportunity_narrative` | `core/validate_opportunity_traceability`, `guards/check_derived_fresh`, `newsletter/newsletter_sources`, `newsletter/validate_newsletter` |
 | `web/public/data/rbi_sibc_consolidated.csv` | derived | `pipelines/sibc/update_web_data` | `pipelines/sibc/validate_web_series`, `signals/compute/sibc`, `signals/evaluate` |
-| `web/public/data/sibc_l1_annotations.json` | derived | `pipelines/sibc/generate_analysis_report` | `pipelines/sibc/validate_sibc_traceability` |
+| `web/public/data/sibc_l1_annotations.json` | derived | `pipelines/sibc/generate_analysis_report` | `newsletter/newsletter_sources`, `newsletter/validate_newsletter`, `pipelines/sibc/validate_sibc_traceability` |
 
 ## 4. Module-dependency map
 
@@ -136,6 +131,9 @@ orchestrated, not import-coupled).
 - `crosssource/generate_opportunities_feed` → `core/generate_skeleton`
 - `crosssource/generate_opportunity_narrative` → `core/generate_skeleton`
 - `crosssource/validate_composition` → `core/generate_skeleton`
+- `newsletter/generate_deep_read` → `newsletter/newsletter_render`, `newsletter/newsletter_sources`, `newsletter/validate_newsletter`
+- `newsletter/generate_release_read` → `newsletter/newsletter_render`, `newsletter/newsletter_sources`, `newsletter/validate_newsletter`
+- `newsletter/validate_newsletter` → `newsletter/newsletter_sources`
 - `pipelines/atm_pos/extract_atm_pos` → `pipelines/atm_pos/detect_atm_pos_format`
 - `pipelines/sibc/extract_sibc` → `pipelines/sibc/detect_format`
 - `signals/compute/engine` → `signals/db`
@@ -151,5 +149,4 @@ orchestrated, not import-coupled).
 - `web/public/data/opportunities_feed.json` ← `crosssource/generate_opportunities_feed`, `crosssource/generate_opportunity_narrative`
 
 ### Internal artifacts produced but never read (potential dead output)
-- `analysis/newsletter/newsletter_delta_brief.md` ← `newsletter/newsletter_delta_brief`
 - `analysis/signals/narrative_cache.json` ← `crosssource/generate_opportunity_narrative`

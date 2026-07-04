@@ -53,8 +53,7 @@ Live components only. Planned work lives in `STRATEGY_PLANNER.md`.
 | RBI SIBC dashboard | **Live** — 7 sections, 49 annotations (merged Jan 2024–Mar 2026) |
 | SEO layer | **Live** — metadata, OG image, sitemap, JSON-LD |
 | Email / Substack CTA | **Live** — `SubstackCTA.tsx` + `EmailGate.tsx` |
-| Free newsletter generator | **Live** — `analysis/newsletter/generate_newsletter.py` (Issue #3 published) |
-| LinkedIn post generator | **Live** — `analysis/newsletter/generate_linkedin.py` (7-post package per cycle) |
+| Newsletter v2 (2-post cadence) | **Live (2026-07-04)** — deterministic rendering over gate-validated artifacts: `generate_release_read.py` (L1, within 24h of release) + `generate_deep_read.py` (L2/L3 + ecosystem, mid-cycle). Self-gating traceability (`validate_newsletter.check_doc`: verbatim cards + declared-scope numbers, negative-tested). Output = .md + Substack-paste .html. v1 (config/mermaid/LinkedIn) retired to `legacy/newsletter_v1/` — LinkedIn posts are now written by the user in their own voice. |
 | validate_content.py (Check 2b) | **Live** — content accuracy eval on annotation bodies |
 | validate_claims.py (Check 2c) | **Retired** — superseded by `core/validate_system_model.py` (sourcing built in); archived in `analysis/legacy/` |
 | validate_annotation_basis.py (Check 2d) | **Live** — basis completeness check (inference/hypothesis → basis.inferences non-empty) |
@@ -108,7 +107,8 @@ Use CLI tools for all external service interactions — they are the most contex
 | `python3 analysis/core/generate_signal_history.py status` | Print current signal states across all pipelines |
 | `python3 analysis/validate_signal_history.py` | Check 2e: signal history integrity — DB rows, registry schema, status sync vs DB |
 | `python3 analysis/check_signal_freshness.py [--pipeline {name}]` | Check 2f/5b2: signals.db freshness — recompute every period from the CSV and fail on any drift (value/status/missing/orphan). Deterministic guard; runs in both gates + pre-commit. Fix = re-append **every** period, not just the latest. |
-| `python3 analysis/newsletter/validate_newsletter_config.py` | Newsletter gate — exception path, not part of standard pipeline |
+| `python3 analysis/newsletter/generate_release_read.py [--pipeline atm_pos]` | Newsletter Post 1 (L1 release read) — self-gating; run after the ingestion gate is green |
+| `python3 analysis/newsletter/generate_deep_read.py` | Newsletter Post 2 (L2/L3 deep read) — self-gating; publish mid-cycle |
 
 ---
 
@@ -214,14 +214,14 @@ handles formatting-only cases automatically.
 
 | File | Purpose |
 |---|---|
-| `analysis/newsletter/CLAUDE.md` | Newsletter + LinkedIn generation context — read before any content generation |
-| `analysis/newsletter/newsletter_config.json` | Current issue config — signals, hero narrative, image assignments |
-| `analysis/newsletter/signal_registry.json` | Cumulative signal tracker — update before each issue |
-| `analysis/newsletter/newsletter_delta_brief.py` | Generates delta_brief from merged outputs for newsletter authoring |
-| `analysis/newsletter/validate_newsletter_config.py` | Gate: validates config before generation |
-| `analysis/newsletter/generate_images.py` | Renders Mermaid .mmd → PNG for newsletter + LinkedIn |
-| `analysis/newsletter/generate_newsletter.py` | Renders newsletter HTML (standard + Substack) |
-| `analysis/newsletter/generate_linkedin.py` | Renders 7-post LinkedIn package (1 anchor + 6 signal posts) |
+| `analysis/newsletter/CLAUDE.md` | Newsletter v2 context — read before any content generation |
+| `analysis/newsletter/newsletter_sources.py` | Data layer — reads only gate-validated artifacts (signals.db + insight/opportunity feeds) |
+| `analysis/newsletter/newsletter_render.py` | Render layer — typed blocks → .md + Substack-paste .html |
+| `analysis/newsletter/validate_newsletter.py` | Self-gate: verbatim-card + declared-scope number traceability (`check_doc`) |
+| `analysis/newsletter/generate_release_read.py` | Post 1 (L1 release read, per pipeline) — run within 24h of release |
+| `analysis/newsletter/generate_deep_read.py` | Post 2 (L2/L3 + ecosystem deep read) — publish mid-cycle |
+| `analysis/newsletter/signal_registry.json` | Editorial record of every signal ever published |
+| `analysis/legacy/newsletter_v1/` | Retired v1: config-driven generator, LinkedIn + mermaid-image scripts |
 
 ---
 
@@ -233,7 +233,7 @@ handles formatting-only cases automatically.
 | `/merged-analysis` | Layer 2a model UPDATE or FOUNDATION pass — check `is_fy_end` in timeline first |
 | `/add-new-report` | Full walkthrough: adding a new SIBC period end-to-end |
 
-Newsletter and LinkedIn generation are an exception path — not yet standardised to the unified pipeline architecture. Run scripts directly per `analysis/newsletter/CLAUDE.md` only when explicitly resuming newsletter work.
+Newsletter v2 is a deterministic rendering layer over gate-validated artifacts (no longer an exception path) — see `analysis/newsletter/CLAUDE.md` for the 2-post cadence and paste-to-Substack workflow. LinkedIn posts are written by the user in their own voice; there is no LinkedIn generator.
 
 Use `Use a subagent to investigate X` when exploring data files — keeps main context clean.
 
