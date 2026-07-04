@@ -146,8 +146,10 @@ def data_facts(facts: dict, src_ref: dict) -> list[str]:
         out.append(f"{nice}: {_fmt_val(v, 'pct')}")
     rng = facts.get("range") or {}
     if rng.get("min") is not None and rng.get("max") is not None:
-        out.append(f"Range: {_fmt_val(rng['min'], u)} – {_fmt_val(rng['max'], u)} "
-                   f"over {rng.get('count', '?')} periods")
+        line = f"Range: {_fmt_val(rng['min'], u)} – {_fmt_val(rng['max'], u)}"
+        if rng.get("count"):                 # scans have no period count — omit, never print "?"
+            line += f" over {rng['count']} periods"
+        out.append(line)
     sf = src_ref.get("source_file", "")
     if sf:
         out.append(f"Source: {sf} ({src_ref.get('method', '')})")
@@ -171,46 +173,104 @@ def _scan_fmt(v: float, unit: str) -> str:
     return f"{v:.1f}%" if unit == "pct" else f"{v:,.0f}"
 
 
-def deterministic_scan_insight(dist: list[tuple], unit: str) -> tuple[str, str, list[str], str]:
+def deterministic_scan_insight(dist: list[tuple], unit: str, kind: str = "yoy",
+                               share_of: str | None = None) -> tuple[str, str, list[str], str]:
     """Return (title, body, chain, implication) for a scan distribution —
-    fully grounded in the ranked entity values."""
+    fully grounded in the ranked entity values.
+
+    `kind` is DECLARED by the registry spec (compute.method: *_scan_share →
+    "share", *_scan_yoy → "yoy") — never inferred from the values. The old
+    any-negative heuristic misread every all-positive growth scan as a share
+    distribution and summed growth rates into "top three hold X% of the total".
+    `share_of` is the spec's label for the share denominator (compute.share_of),
+    so share cards can say what the percentages are shares OF."""
     n  = len(dist)
     fv = lambda v: _scan_fmt(v, unit)
-    leaders  = dist[:2]
-    laggard  = dist[-1]
-    spread   = dist[0][1] - dist[-1][1] if n >= 2 else 0.0
-    n_pos    = sum(1 for _, v, _ in dist if v > 0)
-    signed   = any(v < 0 for _, v, _ in dist)        # yoy-type (growth) vs share-type
-    top3     = sum(v for _, v, _ in dist[:3])
+    spread = dist[0][1] - dist[-1][1] if n >= 2 else 0.0
+    gap = f"{spread:.1f} percentage points"
+    L0, Lv0 = _short(dist[0][0]), fv(dist[0][1])
+    W0, Wv0 = _short(dist[-1][0]), fv(dist[-1][1])
 
-    L0, Lv0 = _short(leaders[0][0]), fv(leaders[0][1])
-    W0, Wv0 = _short(laggard[0]),    fv(laggard[1])
+    if kind == "share":
+        of = f"of {share_of}" if share_of else "of the parent category"
+        top3 = sum(v for _, v, _ in dist[:3])
+        if n == 2:
+            # two break-outs: a comparison, not a leaderboard (no "top three",
+            # no duplicate listing of the same entity as runner-up AND lowest)
+            close = dist[-1][1] >= 0.75 * dist[0][1]
+            title = f"{L0} holds {Lv0} {of}; {W0} {Wv0}"
+            full = top3 >= 97          # the two break-outs ARE the whole parent
+            coverage = (f"Together the two break-outs cover {fv(top3)} {of} — the full category."
+                        if full else
+                        f"Together the two break-outs cover {fv(top3)} {of}; the rest "
+                        f"is not sub-classified in the RBI statement.")
+            body = (f"RBI breaks {share_of or 'this category'} into two sub-categories. "
+                    f"{L0} holds {Lv0} and {W0} {Wv0} — these are size shares, not growth "
+                    f"rates. " + coverage)
+            chain = [
+                f"{L0} is the larger break-out at {Lv0} {of}.",
+                f"{W0} holds {Wv0} — a {gap} gap between the only two break-outs.",
+                (f"Together they cover {fv(top3)} {of} — the full category."
+                 if full else
+                 f"Together they cover {fv(top3)} {of}; RBI does not sub-classify the rest."),
+            ]
+            implication = (
+                "Read this as size mix, not momentum: "
+                + (f"the two blocks are close in size — a move in either shifts {share_of or 'the mix'}. "
+                   if close else
+                   f"{L0} is clearly the bigger block. ")
+                + "Check the matching growth scan before positioning.")
+        else:
+            title = f"{L0} is the biggest slice {of} at {Lv0}"
+            body = (f"{L0} holds the largest share {of} at {Lv0}, "
+                    f"{_short(dist[1][0])} {fv(dist[1][1])}; {W0} is the smallest at {Wv0}. "
+                    f"These are size shares, not growth rates. "
+                    f"Top three hold {fv(top3)} {of}, spread {gap}.")
+            chain = [
+                f"{L0} is the largest block at {Lv0} {of}.",
+                f"{W0} is the smallest at {Wv0} — a {gap} spread across {n} sub-categories.",
+                f"The top three hold {fv(top3)} {of} — "
+                f"{'concentrated' if top3 > 60 else 'dispersed'} mix.",
+            ]
+            implication = (
+                f"Composition, not momentum: {L0} carries the most weight {of}. "
+                + ("Concentration means the big blocks drive the category — watch them first."
+                   if top3 > 60 else
+                   "A dispersed mix — no single block decides the category."))
+        return title, body, chain, implication
 
-    title = f"{L0} leads at {Lv0}; {W0} lowest at {Wv0}"
-
-    parts = [f"{L0} leads at {Lv0}"]
-    if n > 1:
-        parts.append(f"{_short(leaders[1][0])} at {fv(leaders[1][1])}")
-    body = ", ".join(parts) + f"; {W0} is lowest at {Wv0}. "
-    body += (f"{n_pos} of {n} categories positive, spread {fv(spread)}."
-             if signed else
-             f"Top three hold {fv(top3)} of the total, spread {fv(spread)}.")
-
-    chain = [
-        f"{L0} is the standout at {Lv0}.",
-        f"{W0} is the weakest at {Wv0} — a spread of {fv(spread)} across {n} categories.",
-        (f"{n_pos} of {n} categories are growing — "
-         f"{'broad-based' if n_pos > n / 2 else 'concentrated'} momentum."
-         if signed else
-         f"The top three hold {fv(top3)} of the total — "
-         f"{'concentrated' if top3 > 60 else 'dispersed'} mix."),
-    ]
+    # kind == "yoy" — growth rates; NEVER sum them into a "share of total"
+    n_pos = sum(1 for _, v, _ in dist if v > 0)
+    if n == 2:
+        title = f"{L0} growing at {Lv0} YoY; {W0} at {Wv0}"
+        body = (f"{L0} grew {Lv0} year-on-year against {W0} at {Wv0} — "
+                f"a {gap} growth gap between the two sub-categories RBI breaks out.")
+        direction = ("Both are growing — the gap is about pace, not direction."
+                     if n_pos == 2 else
+                     "One is growing while the other contracts — a direction split, not just pace."
+                     if n_pos == 1 else
+                     "Both are contracting.")
+        chain = [
+            f"{L0} is the faster of the two at {Lv0} YoY.",
+            f"{W0} is at {Wv0} — {gap} behind.",
+            direction,
+        ]
+    else:
+        title = f"{L0} growing fastest at {Lv0}; {W0} slowest at {Wv0}"
+        body = (f"{L0} leads YoY growth at {Lv0}, {_short(dist[1][0])} at {fv(dist[1][1])}; "
+                f"{W0} is slowest at {Wv0}. "
+                f"{n_pos} of {n} categories growing, spread {gap}.")
+        chain = [
+            f"{L0} is the standout at {Lv0} YoY.",
+            f"{W0} is the weakest at {Wv0} — a spread of {gap} across {n} categories.",
+            f"{n_pos} of {n} categories are growing — "
+            f"{'broad-based' if n_pos > n / 2 else 'concentrated'} momentum.",
+        ]
     implication = (
         f"Lenders can lean into {L0} ({Lv0}) and monitor {W0} ({Wv0}). "
         + ("Broad participation supports diversified deployment."
-           if (signed and n_pos > n / 2) else
-           "Narrow leadership argues for selective positioning.")
-    )
+           if n_pos > n / 2 else
+           "Narrow leadership argues for selective positioning."))
     return title, body, chain, implication
 
 
@@ -269,8 +329,14 @@ def main(period: str | None = None) -> int:
         # rests on), basis.inferences = the reasoning chain rendered by the card.
         if _signal_type(reg_sig) == "scan" and (dist := scan_distribution(conn, sid, "sibc", period)):
             # Scan distributions are generated deterministically (grounded by
-            # construction), not from the LLM narrative.
-            title, body, chain, inf = deterministic_scan_insight(dist, facts.get("unit") or "pct")
+            # construction), not from the LLM narrative. Semantics come from the
+            # SPEC: *_scan_share → size shares (with the spec's share_of label),
+            # *_scan_yoy → growth rates. Never inferred from the values.
+            comp = reg_sig.get("compute", {})
+            scan_kind = "share" if "share" in comp.get("method", "") else "yoy"
+            title, body, chain, inf = deterministic_scan_insight(
+                dist, facts.get("unit") or "pct",
+                kind=scan_kind, share_of=comp.get("share_of"))
             itype = "insight"
         else:
             obs   = se.get("observation", "")

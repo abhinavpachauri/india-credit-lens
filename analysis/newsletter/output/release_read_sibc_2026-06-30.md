@@ -69,11 +69,11 @@ Large corporates account for 67.3% of industry credit in May 2026, up 0.11pp fro
 ---
 
 
-**Housing Finance Companies leads at 17.7%; Public Financial Institutions lowest at 17.0%**
+**Housing Finance Companies holds 17.7% of NBFC credit; Public Financial Institutions 17.0%**
 
-Housing Finance Companies leads at 17.7%, Public Financial Institutions at 17.0%; Public Financial Institutions is lowest at 17.0%. Top three hold 34.7% of the total, spread 0.7%.
+RBI breaks NBFC credit into two sub-categories. Housing Finance Companies holds 17.7% and Public Financial Institutions 17.0% — these are size shares, not growth rates. Together the two break-outs cover 34.7% of NBFC credit; the rest is not sub-classified in the RBI statement.
 
-> So what: Lenders can lean into Housing Finance Companies (17.7%) and monitor Public Financial Institutions (17.0%). Narrow leadership argues for selective positioning.
+> So what: Read this as size mix, not momentum: the two blocks are close in size — a move in either shifts NBFC credit. Check the matching growth scan before positioning.
 
 
 > 📊 **[CHART — replace with screenshot]** indiacreditlens.com → Services → % Share (Distribution tab) view → highlight: NBFCs

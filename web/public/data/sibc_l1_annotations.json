@@ -794,9 +794,9 @@
         {
           "id": "sibc-nbfc-sub-share-scan",
           "layer": 1,
-          "title": "Housing Finance Companies leads at 17.7%; Public Financial Institutions lowest at 17.0%",
-          "body": "Housing Finance Companies leads at 17.7%, Public Financial Institutions at 17.0%; Public Financial Institutions is lowest at 17.0%. Top three hold 34.7% of the total, spread 0.7%.",
-          "implication": "Lenders can lean into Housing Finance Companies (17.7%) and monitor Public Financial Institutions (17.0%). Narrow leadership argues for selective positioning.",
+          "title": "Housing Finance Companies holds 17.7% of NBFC credit; Public Financial Institutions 17.0%",
+          "body": "RBI breaks NBFC credit into two sub-categories. Housing Finance Companies holds 17.7% and Public Financial Institutions 17.0% — these are size shares, not growth rates. Together the two break-outs cover 34.7% of NBFC credit; the rest is not sub-classified in the RBI statement.",
+          "implication": "Read this as size mix, not momentum: the two blocks are close in size — a move in either shifts NBFC credit. Check the matching growth scan before positioning.",
           "preferredMode": "share",
           "effect": {
             "highlight": [
@@ -806,22 +806,22 @@
           "claim_type": "data",
           "basis": {
             "facts": [
-              "Range: 17.0% – 17.7% over ? periods",
+              "Range: 17.0% – 17.7%",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_scan_share)"
             ],
             "inferences": [
-              "Housing Finance Companies is the standout at 17.7%.",
-              "Public Financial Institutions is the weakest at 17.0% — a spread of 0.7% across 2 categories.",
-              "The top three hold 34.7% of the total — dispersed mix."
+              "Housing Finance Companies is the larger break-out at 17.7% of NBFC credit.",
+              "Public Financial Institutions holds 17.0% — a 0.7 percentage points gap between the only two break-outs.",
+              "Together they cover 34.7% of NBFC credit; RBI does not sub-classify the rest."
             ]
           }
         },
         {
           "id": "sibc-nbfc-sub-yoy-scan",
           "layer": 1,
-          "title": "Public Financial Institutions leads at 71.8%; Housing Finance Companies lowest at 19.7%",
-          "body": "Public Financial Institutions leads at 71.8%, Housing Finance Companies at 19.7%; Housing Finance Companies is lowest at 19.7%. Top three hold 91.5% of the total, spread 52.0%.",
-          "implication": "Lenders can lean into Public Financial Institutions (71.8%) and monitor Housing Finance Companies (19.7%). Narrow leadership argues for selective positioning.",
+          "title": "Public Financial Institutions growing at 71.8% YoY; Housing Finance Companies at 19.7%",
+          "body": "Public Financial Institutions grew 71.8% year-on-year against Housing Finance Companies at 19.7% — a 52.0 percentage points growth gap between the two sub-categories RBI breaks out.",
+          "implication": "Lenders can lean into Public Financial Institutions (71.8%) and monitor Housing Finance Companies (19.7%). Broad participation supports diversified deployment.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -831,64 +831,64 @@
           "claim_type": "data",
           "basis": {
             "facts": [
-              "Range: 19.7% – 71.8% over ? periods",
+              "Range: 19.7% – 71.8%",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_scan_yoy)"
             ],
             "inferences": [
-              "Public Financial Institutions is the standout at 71.8%.",
-              "Housing Finance Companies is the weakest at 19.7% — a spread of 52.0% across 2 categories.",
-              "The top three hold 91.5% of the total — concentrated mix."
+              "Public Financial Institutions is the faster of the two at 71.8% YoY.",
+              "Housing Finance Companies is at 19.7% — 52.0 percentage points behind.",
+              "Both are growing — the gap is about pace, not direction."
             ]
           }
         },
         {
           "id": "sibc-services-share-scan",
           "layer": 1,
-          "title": "Non-Banking Financial Companies leads at 34.5%; Shipping lowest at 0.2%",
-          "body": "Non-Banking Financial Companies leads at 34.5%, Trade at 22.5%; Shipping is lowest at 0.2%. Top three hold 77.3% of the total, spread 34.4%.",
-          "implication": "Lenders can lean into Non-Banking Financial Companies (34.5%) and monitor Shipping (0.2%). Narrow leadership argues for selective positioning.",
+          "title": "Non-Banking Financial Companies is the biggest slice of services credit at 34.5%",
+          "body": "Non-Banking Financial Companies holds the largest share of services credit at 34.5%, Trade 22.5%; Shipping is the smallest at 0.2%. These are size shares, not growth rates. Top three hold 77.3% of services credit, spread 34.4 percentage points.",
+          "implication": "Composition, not momentum: Non-Banking Financial Companies carries the most weight of services credit. Concentration means the big blocks drive the category — watch them first.",
           "preferredMode": "share",
           "effect": {},
           "claim_type": "data",
           "basis": {
             "facts": [
-              "Range: 0.2% – 34.5% over ? periods",
+              "Range: 0.2% – 34.5%",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_scan_share)"
             ],
             "inferences": [
-              "Non-Banking Financial Companies is the standout at 34.5%.",
-              "Shipping is the weakest at 0.2% — a spread of 34.4% across 10 categories.",
-              "The top three hold 77.3% of the total — concentrated mix."
+              "Non-Banking Financial Companies is the largest block at 34.5% of services credit.",
+              "Shipping is the smallest at 0.2% — a 34.4 percentage points spread across 10 sub-categories.",
+              "The top three hold 77.3% of services credit — concentrated mix."
             ]
           }
         },
         {
           "id": "sibc-services-yoy-scan",
           "layer": 1,
-          "title": "Computer Software leads at 54.9%; Transport Operators lowest at 7.6%",
-          "body": "Computer Software leads at 54.9%, Shipping at 41.0%; Transport Operators is lowest at 7.6%. Top three hold 129.6% of the total, spread 47.3%.",
-          "implication": "Lenders can lean into Computer Software (54.9%) and monitor Transport Operators (7.6%). Narrow leadership argues for selective positioning.",
+          "title": "Computer Software growing fastest at 54.9%; Transport Operators slowest at 7.6%",
+          "body": "Computer Software leads YoY growth at 54.9%, Shipping at 41.0%; Transport Operators is slowest at 7.6%. 10 of 10 categories growing, spread 47.3 percentage points.",
+          "implication": "Lenders can lean into Computer Software (54.9%) and monitor Transport Operators (7.6%). Broad participation supports diversified deployment.",
           "preferredMode": "yoy",
           "effect": {},
           "claim_type": "data",
           "basis": {
             "facts": [
-              "Range: 7.6% – 54.9% over ? periods",
+              "Range: 7.6% – 54.9%",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_scan_yoy)"
             ],
             "inferences": [
-              "Computer Software is the standout at 54.9%.",
-              "Transport Operators is the weakest at 7.6% — a spread of 47.3% across 10 categories.",
-              "The top three hold 129.6% of the total — concentrated mix."
+              "Computer Software is the standout at 54.9% YoY.",
+              "Transport Operators is the weakest at 7.6% — a spread of 47.3 percentage points across 10 categories.",
+              "10 of 10 categories are growing — broad-based momentum."
             ]
           }
         },
         {
           "id": "sibc-trade-sub-share-scan",
           "layer": 1,
-          "title": "Wholesale Trade leads at 56.4%; Retail Trade lowest at 43.6%",
-          "body": "Wholesale Trade leads at 56.4%, Retail Trade at 43.6%; Retail Trade is lowest at 43.6%. Top three hold 100.0% of the total, spread 12.8%.",
-          "implication": "Lenders can lean into Wholesale Trade (56.4%) and monitor Retail Trade (43.6%). Narrow leadership argues for selective positioning.",
+          "title": "Wholesale Trade holds 56.4% of trade credit; Retail Trade 43.6%",
+          "body": "RBI breaks trade credit into two sub-categories. Wholesale Trade holds 56.4% and Retail Trade 43.6% — these are size shares, not growth rates. Together the two break-outs cover 100.0% of trade credit — the full category.",
+          "implication": "Read this as size mix, not momentum: the two blocks are close in size — a move in either shifts trade credit. Check the matching growth scan before positioning.",
           "preferredMode": "share",
           "effect": {
             "highlight": [
@@ -898,22 +898,22 @@
           "claim_type": "data",
           "basis": {
             "facts": [
-              "Range: 43.6% – 56.4% over ? periods",
+              "Range: 43.6% – 56.4%",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_scan_share)"
             ],
             "inferences": [
-              "Wholesale Trade is the standout at 56.4%.",
-              "Retail Trade is the weakest at 43.6% — a spread of 12.8% across 2 categories.",
-              "The top three hold 100.0% of the total — concentrated mix."
+              "Wholesale Trade is the larger break-out at 56.4% of trade credit.",
+              "Retail Trade holds 43.6% — a 12.8 percentage points gap between the only two break-outs.",
+              "Together they cover 100.0% of trade credit — the full category."
             ]
           }
         },
         {
           "id": "sibc-trade-sub-yoy-scan",
           "layer": 1,
-          "title": "Wholesale Trade leads at 22.3%; Retail Trade lowest at 11.3%",
-          "body": "Wholesale Trade leads at 22.3%, Retail Trade at 11.3%; Retail Trade is lowest at 11.3%. Top three hold 33.6% of the total, spread 10.9%.",
-          "implication": "Lenders can lean into Wholesale Trade (22.3%) and monitor Retail Trade (11.3%). Narrow leadership argues for selective positioning.",
+          "title": "Wholesale Trade growing at 22.3% YoY; Retail Trade at 11.3%",
+          "body": "Wholesale Trade grew 22.3% year-on-year against Retail Trade at 11.3% — a 10.9 percentage points growth gap between the two sub-categories RBI breaks out.",
+          "implication": "Lenders can lean into Wholesale Trade (22.3%) and monitor Retail Trade (11.3%). Broad participation supports diversified deployment.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -923,13 +923,13 @@
           "claim_type": "data",
           "basis": {
             "facts": [
-              "Range: 11.3% – 22.3% over ? periods",
+              "Range: 11.3% – 22.3%",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_scan_yoy)"
             ],
             "inferences": [
-              "Wholesale Trade is the standout at 22.3%.",
-              "Retail Trade is the weakest at 11.3% — a spread of 10.9% across 2 categories.",
-              "The top three hold 33.6% of the total — dispersed mix."
+              "Wholesale Trade is the faster of the two at 22.3% YoY.",
+              "Retail Trade is at 11.3% — 10.9 percentage points behind.",
+              "Both are growing — the gap is about pace, not direction."
             ]
           }
         }
@@ -1347,21 +1347,21 @@
         {
           "id": "sibc-pl-share-scan",
           "layer": 1,
-          "title": "Housing leads at 48.0%; Advances to Individuals against share, bonds, etc. lowest at 0.1%",
-          "body": "Housing leads at 48.0%, Other Personal Loans at 24.9%; Advances to Individuals against share, bonds, etc. is lowest at 0.1%. Top three hold 83.5% of the total, spread 47.9%.",
-          "implication": "Lenders can lean into Housing (48.0%) and monitor Advances to Individuals against share, bonds, etc. (0.1%). Narrow leadership argues for selective positioning.",
+          "title": "Housing is the biggest slice of personal loans at 48.0%",
+          "body": "Housing holds the largest share of personal loans at 48.0%, Other Personal Loans 24.9%; Advances to Individuals against share, bonds, etc. is the smallest at 0.1%. These are size shares, not growth rates. Top three hold 83.5% of personal loans, spread 47.9 percentage points.",
+          "implication": "Composition, not momentum: Housing carries the most weight of personal loans. Concentration means the big blocks drive the category — watch them first.",
           "preferredMode": "share",
           "effect": {},
           "claim_type": "data",
           "basis": {
             "facts": [
-              "Range: 0.1% – 48.0% over ? periods",
+              "Range: 0.1% – 48.0%",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_scan_share)"
             ],
             "inferences": [
-              "Housing is the standout at 48.0%.",
-              "Advances to Individuals against share, bonds, etc. is the weakest at 0.1% — a spread of 47.9% across 9 categories.",
-              "The top three hold 83.5% of the total — concentrated mix."
+              "Housing is the largest block at 48.0% of personal loans.",
+              "Advances to Individuals against share, bonds, etc. is the smallest at 0.1% — a 47.9 percentage points spread across 9 sub-categories.",
+              "The top three hold 83.5% of personal loans — concentrated mix."
             ]
           }
         },
@@ -1422,20 +1422,20 @@
         {
           "id": "sibc-pl-yoy-scan",
           "layer": 1,
-          "title": "Loans against gold jewellery leads at 105.5%; Consumer Durables lowest at -2.6%",
-          "body": "Loans against gold jewellery leads at 105.5%, Vehicle Loans at 17.3%; Consumer Durables is lowest at -2.6%. 8 of 9 categories positive, spread 108.1%.",
+          "title": "Loans against gold jewellery growing fastest at 105.5%; Consumer Durables slowest at -2.6%",
+          "body": "Loans against gold jewellery leads YoY growth at 105.5%, Vehicle Loans at 17.3%; Consumer Durables is slowest at -2.6%. 8 of 9 categories growing, spread 108.1 percentage points.",
           "implication": "Lenders can lean into Loans against gold jewellery (105.5%) and monitor Consumer Durables (-2.6%). Broad participation supports diversified deployment.",
           "preferredMode": "yoy",
           "effect": {},
           "claim_type": "data",
           "basis": {
             "facts": [
-              "Range: -2.6% – 105.5% over ? periods",
+              "Range: -2.6% – 105.5%",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_scan_yoy)"
             ],
             "inferences": [
-              "Loans against gold jewellery is the standout at 105.5%.",
-              "Consumer Durables is the weakest at -2.6% — a spread of 108.1% across 9 categories.",
+              "Loans against gold jewellery is the standout at 105.5% YoY.",
+              "Consumer Durables is the weakest at -2.6% — a spread of 108.1 percentage points across 9 categories.",
               "8 of 9 categories are growing — broad-based momentum."
             ]
           }
@@ -1857,20 +1857,20 @@
         {
           "id": "sibc-psl-yoy-scan",
           "layer": 1,
-          "title": "Social Infrastructure leads at 70.7%; Others lowest at -11.2%",
-          "body": "Social Infrastructure leads at 70.7%, Housing at 39.0%; Others is lowest at -11.2%. 8 of 10 categories positive, spread 81.9%.",
+          "title": "Social Infrastructure growing fastest at 70.7%; Others slowest at -11.2%",
+          "body": "Social Infrastructure leads YoY growth at 70.7%, Housing at 39.0%; Others is slowest at -11.2%. 8 of 10 categories growing, spread 81.9 percentage points.",
           "implication": "Lenders can lean into Social Infrastructure (70.7%) and monitor Others (-11.2%). Broad participation supports diversified deployment.",
           "preferredMode": "yoy",
           "effect": {},
           "claim_type": "data",
           "basis": {
             "facts": [
-              "Range: -11.2% – 70.7% over ? periods",
+              "Range: -11.2% – 70.7%",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_psl_scan_yoy)"
             ],
             "inferences": [
-              "Social Infrastructure is the standout at 70.7%.",
-              "Others is the weakest at -11.2% — a spread of 81.9% across 10 categories.",
+              "Social Infrastructure is the standout at 70.7% YoY.",
+              "Others is the weakest at -11.2% — a spread of 81.9 percentage points across 10 categories.",
               "8 of 10 categories are growing — broad-based momentum."
             ]
           }
@@ -1939,9 +1939,9 @@
         {
           "id": "sibc-basic-metal-sub-share-scan",
           "layer": 1,
-          "title": "Iron and Steel leads at 68.8%; Other Metal and Metal Product lowest at 31.2%",
-          "body": "Iron and Steel leads at 68.8%, Other Metal and Metal Product at 31.2%; Other Metal and Metal Product is lowest at 31.2%. Top three hold 100.0% of the total, spread 37.7%.",
-          "implication": "Lenders can lean into Iron and Steel (68.8%) and monitor Other Metal and Metal Product (31.2%). Narrow leadership argues for selective positioning.",
+          "title": "Iron and Steel holds 68.8% of basic-metals credit; Other Metal and Metal Product 31.2%",
+          "body": "RBI breaks basic-metals credit into two sub-categories. Iron and Steel holds 68.8% and Other Metal and Metal Product 31.2% — these are size shares, not growth rates. Together the two break-outs cover 100.0% of basic-metals credit — the full category.",
+          "implication": "Read this as size mix, not momentum: Iron and Steel is clearly the bigger block. Check the matching growth scan before positioning.",
           "preferredMode": "share",
           "effect": {
             "highlight": [
@@ -1951,22 +1951,22 @@
           "claim_type": "data",
           "basis": {
             "facts": [
-              "Range: 31.2% – 68.8% over ? periods",
+              "Range: 31.2% – 68.8%",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_scan_share)"
             ],
             "inferences": [
-              "Iron and Steel is the standout at 68.8%.",
-              "Other Metal and Metal Product is the weakest at 31.2% — a spread of 37.7% across 2 categories.",
-              "The top three hold 100.0% of the total — concentrated mix."
+              "Iron and Steel is the larger break-out at 68.8% of basic-metals credit.",
+              "Other Metal and Metal Product holds 31.2% — a 37.7 percentage points gap between the only two break-outs.",
+              "Together they cover 100.0% of basic-metals credit — the full category."
             ]
           }
         },
         {
           "id": "sibc-basic-metal-sub-yoy-scan",
           "layer": 1,
-          "title": "Iron and Steel leads at 22.6%; Other Metal and Metal Product lowest at 18.4%",
-          "body": "Iron and Steel leads at 22.6%, Other Metal and Metal Product at 18.4%; Other Metal and Metal Product is lowest at 18.4%. Top three hold 41.0% of the total, spread 4.2%.",
-          "implication": "Lenders can lean into Iron and Steel (22.6%) and monitor Other Metal and Metal Product (18.4%). Narrow leadership argues for selective positioning.",
+          "title": "Iron and Steel growing at 22.6% YoY; Other Metal and Metal Product at 18.4%",
+          "body": "Iron and Steel grew 22.6% year-on-year against Other Metal and Metal Product at 18.4% — a 4.2 percentage points growth gap between the two sub-categories RBI breaks out.",
+          "implication": "Lenders can lean into Iron and Steel (22.6%) and monitor Other Metal and Metal Product (18.4%). Broad participation supports diversified deployment.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -1976,22 +1976,22 @@
           "claim_type": "data",
           "basis": {
             "facts": [
-              "Range: 18.4% – 22.6% over ? periods",
+              "Range: 18.4% – 22.6%",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_scan_yoy)"
             ],
             "inferences": [
-              "Iron and Steel is the standout at 22.6%.",
-              "Other Metal and Metal Product is the weakest at 18.4% — a spread of 4.2% across 2 categories.",
-              "The top three hold 41.0% of the total — dispersed mix."
+              "Iron and Steel is the faster of the two at 22.6% YoY.",
+              "Other Metal and Metal Product is at 18.4% — 4.2 percentage points behind.",
+              "Both are growing — the gap is about pace, not direction."
             ]
           }
         },
         {
           "id": "sibc-chemicals-sub-share-scan",
           "layer": 1,
-          "title": "Others leads at 44.3%; Fertiliser lowest at 10.9%",
-          "body": "Others leads at 44.3%, Drugs and Pharmaceuticals at 32.8%; Fertiliser is lowest at 10.9%. Top three hold 89.1% of the total, spread 33.3%.",
-          "implication": "Lenders can lean into Others (44.3%) and monitor Fertiliser (10.9%). Narrow leadership argues for selective positioning.",
+          "title": "Others is the biggest slice of chemicals credit at 44.3%",
+          "body": "Others holds the largest share of chemicals credit at 44.3%, Drugs and Pharmaceuticals 32.8%; Fertiliser is the smallest at 10.9%. These are size shares, not growth rates. Top three hold 89.1% of chemicals credit, spread 33.3 percentage points.",
+          "implication": "Composition, not momentum: Others carries the most weight of chemicals credit. Concentration means the big blocks drive the category — watch them first.",
           "preferredMode": "share",
           "effect": {
             "highlight": [
@@ -2001,22 +2001,22 @@
           "claim_type": "data",
           "basis": {
             "facts": [
-              "Range: 10.9% – 44.3% over ? periods",
+              "Range: 10.9% – 44.3%",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_scan_share)"
             ],
             "inferences": [
-              "Others is the standout at 44.3%.",
-              "Fertiliser is the weakest at 10.9% — a spread of 33.3% across 4 categories.",
-              "The top three hold 89.1% of the total — concentrated mix."
+              "Others is the largest block at 44.3% of chemicals credit.",
+              "Fertiliser is the smallest at 10.9% — a 33.3 percentage points spread across 4 sub-categories.",
+              "The top three hold 89.1% of chemicals credit — concentrated mix."
             ]
           }
         },
         {
           "id": "sibc-chemicals-sub-yoy-scan",
           "layer": 1,
-          "title": "Drugs and Pharmaceuticals leads at 22.6%; Fertiliser lowest at 7.4%",
-          "body": "Drugs and Pharmaceuticals leads at 22.6%, Others at 21.8%; Fertiliser is lowest at 7.4%. Top three hold 58.6% of the total, spread 15.2%.",
-          "implication": "Lenders can lean into Drugs and Pharmaceuticals (22.6%) and monitor Fertiliser (7.4%). Narrow leadership argues for selective positioning.",
+          "title": "Drugs and Pharmaceuticals growing fastest at 22.6%; Fertiliser slowest at 7.4%",
+          "body": "Drugs and Pharmaceuticals leads YoY growth at 22.6%, Others at 21.8%; Fertiliser is slowest at 7.4%. 4 of 4 categories growing, spread 15.2 percentage points.",
+          "implication": "Lenders can lean into Drugs and Pharmaceuticals (22.6%) and monitor Fertiliser (7.4%). Broad participation supports diversified deployment.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -2027,22 +2027,22 @@
           "claim_type": "data",
           "basis": {
             "facts": [
-              "Range: 7.4% – 22.6% over ? periods",
+              "Range: 7.4% – 22.6%",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_scan_yoy)"
             ],
             "inferences": [
-              "Drugs and Pharmaceuticals is the standout at 22.6%.",
-              "Fertiliser is the weakest at 7.4% — a spread of 15.2% across 4 categories.",
-              "The top three hold 58.6% of the total — dispersed mix."
+              "Drugs and Pharmaceuticals is the standout at 22.6% YoY.",
+              "Fertiliser is the weakest at 7.4% — a spread of 15.2 percentage points across 4 categories.",
+              "4 of 4 categories are growing — broad-based momentum."
             ]
           }
         },
         {
           "id": "sibc-engineering-sub-share-scan",
           "layer": 1,
-          "title": "Others leads at 79.8%; Electronics lowest at 20.2%",
-          "body": "Others leads at 79.8%, Electronics at 20.2%; Electronics is lowest at 20.2%. Top three hold 100.0% of the total, spread 59.7%.",
-          "implication": "Lenders can lean into Others (79.8%) and monitor Electronics (20.2%). Narrow leadership argues for selective positioning.",
+          "title": "Others holds 79.8% of engineering credit; Electronics 20.2%",
+          "body": "RBI breaks engineering credit into two sub-categories. Others holds 79.8% and Electronics 20.2% — these are size shares, not growth rates. Together the two break-outs cover 100.0% of engineering credit — the full category.",
+          "implication": "Read this as size mix, not momentum: Others is clearly the bigger block. Check the matching growth scan before positioning.",
           "preferredMode": "share",
           "effect": {
             "highlight": [
@@ -2052,22 +2052,22 @@
           "claim_type": "data",
           "basis": {
             "facts": [
-              "Range: 20.2% – 79.8% over ? periods",
+              "Range: 20.2% – 79.8%",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_scan_share)"
             ],
             "inferences": [
-              "Others is the standout at 79.8%.",
-              "Electronics is the weakest at 20.2% — a spread of 59.7% across 2 categories.",
-              "The top three hold 100.0% of the total — concentrated mix."
+              "Others is the larger break-out at 79.8% of engineering credit.",
+              "Electronics holds 20.2% — a 59.7 percentage points gap between the only two break-outs.",
+              "Together they cover 100.0% of engineering credit — the full category."
             ]
           }
         },
         {
           "id": "sibc-engineering-sub-yoy-scan",
           "layer": 1,
-          "title": "Others leads at 38.3%; Electronics lowest at 23.9%",
-          "body": "Others leads at 38.3%, Electronics at 23.9%; Electronics is lowest at 23.9%. Top three hold 62.1% of the total, spread 14.4%.",
-          "implication": "Lenders can lean into Others (38.3%) and monitor Electronics (23.9%). Narrow leadership argues for selective positioning.",
+          "title": "Others growing at 38.3% YoY; Electronics at 23.9%",
+          "body": "Others grew 38.3% year-on-year against Electronics at 23.9% — a 14.4 percentage points growth gap between the two sub-categories RBI breaks out.",
+          "implication": "Lenders can lean into Others (38.3%) and monitor Electronics (23.9%). Broad participation supports diversified deployment.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -2077,22 +2077,22 @@
           "claim_type": "data",
           "basis": {
             "facts": [
-              "Range: 23.9% – 38.3% over ? periods",
+              "Range: 23.9% – 38.3%",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_scan_yoy)"
             ],
             "inferences": [
-              "Others is the standout at 38.3%.",
-              "Electronics is the weakest at 23.9% — a spread of 14.4% across 2 categories.",
-              "The top three hold 62.1% of the total — concentrated mix."
+              "Others is the faster of the two at 38.3% YoY.",
+              "Electronics is at 23.9% — 14.4 percentage points behind.",
+              "Both are growing — the gap is about pace, not direction."
             ]
           }
         },
         {
           "id": "sibc-food-processing-sub-share-scan",
           "layer": 1,
-          "title": "Others leads at 76.9%; Tea lowest at 2.0%",
-          "body": "Others leads at 76.9%, Edible Oils and Vanaspati at 11.3%; Tea is lowest at 2.0%. Top three hold 98.0% of the total, spread 74.9%.",
-          "implication": "Lenders can lean into Others (76.9%) and monitor Tea (2.0%). Narrow leadership argues for selective positioning.",
+          "title": "Others is the biggest slice of food-processing credit at 76.9%",
+          "body": "Others holds the largest share of food-processing credit at 76.9%, Edible Oils and Vanaspati 11.3%; Tea is the smallest at 2.0%. These are size shares, not growth rates. Top three hold 98.0% of food-processing credit, spread 74.9 percentage points.",
+          "implication": "Composition, not momentum: Others carries the most weight of food-processing credit. Concentration means the big blocks drive the category — watch them first.",
           "preferredMode": "share",
           "effect": {
             "highlight": [
@@ -2102,21 +2102,21 @@
           "claim_type": "data",
           "basis": {
             "facts": [
-              "Range: 2.0% – 76.9% over ? periods",
+              "Range: 2.0% – 76.9%",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_scan_share)"
             ],
             "inferences": [
-              "Others is the standout at 76.9%.",
-              "Tea is the weakest at 2.0% — a spread of 74.9% across 4 categories.",
-              "The top three hold 98.0% of the total — concentrated mix."
+              "Others is the largest block at 76.9% of food-processing credit.",
+              "Tea is the smallest at 2.0% — a 74.9 percentage points spread across 4 sub-categories.",
+              "The top three hold 98.0% of food-processing credit — concentrated mix."
             ]
           }
         },
         {
           "id": "sibc-food-processing-sub-yoy-scan",
           "layer": 1,
-          "title": "Edible Oils and Vanaspati leads at 41.8%; Sugar lowest at -1.6%",
-          "body": "Edible Oils and Vanaspati leads at 41.8%, Others at 13.4%; Sugar is lowest at -1.6%. 3 of 4 categories positive, spread 43.4%.",
+          "title": "Edible Oils and Vanaspati growing fastest at 41.8%; Sugar slowest at -1.6%",
+          "body": "Edible Oils and Vanaspati leads YoY growth at 41.8%, Others at 13.4%; Sugar is slowest at -1.6%. 3 of 4 categories growing, spread 43.4 percentage points.",
           "implication": "Lenders can lean into Edible Oils and Vanaspati (41.8%) and monitor Sugar (-1.6%). Broad participation supports diversified deployment.",
           "preferredMode": "yoy",
           "effect": {
@@ -2127,12 +2127,12 @@
           "claim_type": "data",
           "basis": {
             "facts": [
-              "Range: -1.6% – 41.8% over ? periods",
+              "Range: -1.6% – 41.8%",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_scan_yoy)"
             ],
             "inferences": [
-              "Edible Oils and Vanaspati is the standout at 41.8%.",
-              "Sugar is the weakest at -1.6% — a spread of 43.4% across 4 categories.",
+              "Edible Oils and Vanaspati is the standout at 41.8% YoY.",
+              "Sugar is the weakest at -1.6% — a spread of 43.4 percentage points across 4 categories.",
               "3 of 4 categories are growing — broad-based momentum."
             ]
           }
@@ -2140,51 +2140,51 @@
         {
           "id": "sibc-industry-type-share-scan",
           "layer": 1,
-          "title": "Infrastructure leads at 32.5%; Leather and Leather Products lowest at 0.3%",
-          "body": "Infrastructure leads at 32.5%, Basic Metal and Metal Product at 11.3%; Leather and Leather Products is lowest at 0.3%. Top three hold 51.4% of the total, spread 32.2%.",
-          "implication": "Lenders can lean into Infrastructure (32.5%) and monitor Leather and Leather Products (0.3%). Narrow leadership argues for selective positioning.",
+          "title": "Infrastructure is the biggest slice of industry credit at 32.5%",
+          "body": "Infrastructure holds the largest share of industry credit at 32.5%, Basic Metal and Metal Product 11.3%; Leather and Leather Products is the smallest at 0.3%. These are size shares, not growth rates. Top three hold 51.4% of industry credit, spread 32.2 percentage points.",
+          "implication": "Composition, not momentum: Infrastructure carries the most weight of industry credit. A dispersed mix — no single block decides the category.",
           "preferredMode": "share",
           "effect": {},
           "claim_type": "data",
           "basis": {
             "facts": [
-              "Range: 0.3% – 32.5% over ? periods",
+              "Range: 0.3% – 32.5%",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_scan_share)"
             ],
             "inferences": [
-              "Infrastructure is the standout at 32.5%.",
-              "Leather and Leather Products is the weakest at 0.3% — a spread of 32.2% across 19 categories.",
-              "The top three hold 51.4% of the total — dispersed mix."
+              "Infrastructure is the largest block at 32.5% of industry credit.",
+              "Leather and Leather Products is the smallest at 0.3% — a 32.2 percentage points spread across 19 sub-categories.",
+              "The top three hold 51.4% of industry credit — dispersed mix."
             ]
           }
         },
         {
           "id": "sibc-industry-type-yoy-scan",
           "layer": 1,
-          "title": "Petroleum, Coal Products and Nuclear Fuels leads at 40.9%; Leather and Leather Products lowest at 8.8%",
-          "body": "Petroleum, Coal Products and Nuclear Fuels leads at 40.9%, Gems and Jewellery at 35.5%; Leather and Leather Products is lowest at 8.8%. Top three hold 111.4% of the total, spread 32.0%.",
-          "implication": "Lenders can lean into Petroleum, Coal Products and Nuclear Fuels (40.9%) and monitor Leather and Leather Products (8.8%). Narrow leadership argues for selective positioning.",
+          "title": "Petroleum, Coal Products and Nuclear Fuels growing fastest at 40.9%; Leather and Leather Products slowest at 8.8%",
+          "body": "Petroleum, Coal Products and Nuclear Fuels leads YoY growth at 40.9%, Gems and Jewellery at 35.5%; Leather and Leather Products is slowest at 8.8%. 19 of 19 categories growing, spread 32.0 percentage points.",
+          "implication": "Lenders can lean into Petroleum, Coal Products and Nuclear Fuels (40.9%) and monitor Leather and Leather Products (8.8%). Broad participation supports diversified deployment.",
           "preferredMode": "yoy",
           "effect": {},
           "claim_type": "data",
           "basis": {
             "facts": [
-              "Range: 8.8% – 40.9% over ? periods",
+              "Range: 8.8% – 40.9%",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_scan_yoy)"
             ],
             "inferences": [
-              "Petroleum, Coal Products and Nuclear Fuels is the standout at 40.9%.",
-              "Leather and Leather Products is the weakest at 8.8% — a spread of 32.0% across 19 categories.",
-              "The top three hold 111.4% of the total — concentrated mix."
+              "Petroleum, Coal Products and Nuclear Fuels is the standout at 40.9% YoY.",
+              "Leather and Leather Products is the weakest at 8.8% — a spread of 32.0 percentage points across 19 categories.",
+              "19 of 19 categories are growing — broad-based momentum."
             ]
           }
         },
         {
           "id": "sibc-infra-sub-share-scan",
           "layer": 1,
-          "title": "Power leads at 57.0%; Railways lowest at 0.5%",
-          "body": "Power leads at 57.0%, Roads at 22.6%; Railways is lowest at 0.5%. Top three hold 91.9% of the total, spread 56.6%.",
-          "implication": "Lenders can lean into Power (57.0%) and monitor Railways (0.5%). Narrow leadership argues for selective positioning.",
+          "title": "Power is the biggest slice of infrastructure credit at 57.0%",
+          "body": "Power holds the largest share of infrastructure credit at 57.0%, Roads 22.6%; Railways is the smallest at 0.5%. These are size shares, not growth rates. Top three hold 91.9% of infrastructure credit, spread 56.6 percentage points.",
+          "implication": "Composition, not momentum: Power carries the most weight of infrastructure credit. Concentration means the big blocks drive the category — watch them first.",
           "preferredMode": "share",
           "effect": {
             "highlight": [
@@ -2194,21 +2194,21 @@
           "claim_type": "data",
           "basis": {
             "facts": [
-              "Range: 0.5% – 57.0% over ? periods",
+              "Range: 0.5% – 57.0%",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_scan_share)"
             ],
             "inferences": [
-              "Power is the standout at 57.0%.",
-              "Railways is the weakest at 0.5% — a spread of 56.6% across 7 categories.",
-              "The top three hold 91.9% of the total — concentrated mix."
+              "Power is the largest block at 57.0% of infrastructure credit.",
+              "Railways is the smallest at 0.5% — a 56.6 percentage points spread across 7 sub-categories.",
+              "The top three hold 91.9% of infrastructure credit — concentrated mix."
             ]
           }
         },
         {
           "id": "sibc-infra-sub-yoy-scan",
           "layer": 1,
-          "title": "Ports leads at 82.8%; Railways lowest at -37.6%",
-          "body": "Ports leads at 82.8%, Power at 23.8%; Railways is lowest at -37.6%. 3 of 7 categories positive, spread 120.4%.",
+          "title": "Ports growing fastest at 82.8%; Railways slowest at -37.6%",
+          "body": "Ports leads YoY growth at 82.8%, Power at 23.8%; Railways is slowest at -37.6%. 3 of 7 categories growing, spread 120.4 percentage points.",
           "implication": "Lenders can lean into Ports (82.8%) and monitor Railways (-37.6%). Narrow leadership argues for selective positioning.",
           "preferredMode": "yoy",
           "effect": {
@@ -2219,12 +2219,12 @@
           "claim_type": "data",
           "basis": {
             "facts": [
-              "Range: -37.6% – 82.8% over ? periods",
+              "Range: -37.6% – 82.8%",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_scan_yoy)"
             ],
             "inferences": [
-              "Ports is the standout at 82.8%.",
-              "Railways is the weakest at -37.6% — a spread of 120.4% across 7 categories.",
+              "Ports is the standout at 82.8% YoY.",
+              "Railways is the weakest at -37.6% — a spread of 120.4 percentage points across 7 categories.",
               "3 of 7 categories are growing — concentrated momentum."
             ]
           }
@@ -2232,9 +2232,9 @@
         {
           "id": "sibc-textiles-sub-share-scan",
           "layer": 1,
-          "title": "Other Textiles leads at 45.3%; Jute Textiles lowest at 1.7%",
-          "body": "Other Textiles leads at 45.3%, Cotton Textiles at 35.6%; Jute Textiles is lowest at 1.7%. Top three hold 98.3% of the total, spread 43.6%.",
-          "implication": "Lenders can lean into Other Textiles (45.3%) and monitor Jute Textiles (1.7%). Narrow leadership argues for selective positioning.",
+          "title": "Other Textiles is the biggest slice of textiles credit at 45.3%",
+          "body": "Other Textiles holds the largest share of textiles credit at 45.3%, Cotton Textiles 35.6%; Jute Textiles is the smallest at 1.7%. These are size shares, not growth rates. Top three hold 98.3% of textiles credit, spread 43.6 percentage points.",
+          "implication": "Composition, not momentum: Other Textiles carries the most weight of textiles credit. Concentration means the big blocks drive the category — watch them first.",
           "preferredMode": "share",
           "effect": {
             "highlight": [
@@ -2244,22 +2244,22 @@
           "claim_type": "data",
           "basis": {
             "facts": [
-              "Range: 1.7% – 45.3% over ? periods",
+              "Range: 1.7% – 45.3%",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_scan_share)"
             ],
             "inferences": [
-              "Other Textiles is the standout at 45.3%.",
-              "Jute Textiles is the weakest at 1.7% — a spread of 43.6% across 4 categories.",
-              "The top three hold 98.3% of the total — concentrated mix."
+              "Other Textiles is the largest block at 45.3% of textiles credit.",
+              "Jute Textiles is the smallest at 1.7% — a 43.6 percentage points spread across 4 sub-categories.",
+              "The top three hold 98.3% of textiles credit — concentrated mix."
             ]
           }
         },
         {
           "id": "sibc-textiles-sub-yoy-scan",
           "layer": 1,
-          "title": "Jute Textiles leads at 20.2%; Cotton Textiles lowest at 3.2%",
-          "body": "Jute Textiles leads at 20.2%, Other Textiles at 17.1%; Cotton Textiles is lowest at 3.2%. Top three hold 45.4% of the total, spread 17.0%.",
-          "implication": "Lenders can lean into Jute Textiles (20.2%) and monitor Cotton Textiles (3.2%). Narrow leadership argues for selective positioning.",
+          "title": "Jute Textiles growing fastest at 20.2%; Cotton Textiles slowest at 3.2%",
+          "body": "Jute Textiles leads YoY growth at 20.2%, Other Textiles at 17.1%; Cotton Textiles is slowest at 3.2%. 4 of 4 categories growing, spread 17.0 percentage points.",
+          "implication": "Lenders can lean into Jute Textiles (20.2%) and monitor Cotton Textiles (3.2%). Broad participation supports diversified deployment.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -2269,13 +2269,13 @@
           "claim_type": "data",
           "basis": {
             "facts": [
-              "Range: 3.2% – 20.2% over ? periods",
+              "Range: 3.2% – 20.2%",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_scan_yoy)"
             ],
             "inferences": [
-              "Jute Textiles is the standout at 20.2%.",
-              "Cotton Textiles is the weakest at 3.2% — a spread of 17.0% across 4 categories.",
-              "The top three hold 45.4% of the total — dispersed mix."
+              "Jute Textiles is the standout at 20.2% YoY.",
+              "Cotton Textiles is the weakest at 3.2% — a spread of 17.0 percentage points across 4 categories.",
+              "4 of 4 categories are growing — broad-based momentum."
             ]
           }
         }
