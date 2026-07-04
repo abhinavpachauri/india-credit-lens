@@ -102,9 +102,15 @@ def check_doc(doc, declared_ids, label="newsletter"):
                     failures.append(f"{label}: card {k} not found verbatim in any "
                                     f"validated feed: {v[:80]!r}")
             continue
-        text = b.get("text") or b.get("label") or ""
-        if b.get("label"):
-            text = f"{b['label']} {b.get('text', '')}"
+        if b["type"] == "chart":
+            continue            # placeholder recipe — series names only, never numbers
+        if b["type"] == "statgrid":
+            text = " ".join(f"{it.get('value', '')} {it.get('label', '')} {it.get('note', '')}"
+                            for it in b.get("items", []))
+        else:
+            text = b.get("text") or b.get("label") or ""
+            if b.get("label"):
+                text = f"{b['label']} {b.get('text', '')}"
         for num in extract_numbers(strip_presentation(text), POLICY):
             if not matches(num, legit_nums, POLICY) and not ratio_matches(num, legit_nums, POLICY):
                 failures.append(f"{label}: ungrounded number {num} in {b['type']!r} "

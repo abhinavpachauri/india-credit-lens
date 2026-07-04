@@ -9,20 +9,31 @@ Takes a document (a list of typed blocks) and renders it twice:
            copy, paste into the Substack editor. Formatting survives the paste.
 
 The generators own the words; this module owns only the shapes.
-Block types: h1 | h2 | p | li | stat | card | quote | hr | small
+Block types: h1 | h2 | p | li | stat | statgrid | card | quote | chart | hr | small
+
+`chart` is a PLACEHOLDER: the user replaces the dashed box with a dashboard
+screenshot while pasting into Substack. Its text is the exact recipe for which
+chart to grab (dashboard → section → mode → highlighted series) — no numbers,
+so placeholders never enter the traceability scope.
 """
 from html import escape
 
 STYLE = {
-    "h1": "font-size:26px;font-weight:800;margin:8px 0 4px;color:#111",
-    "h2": "font-size:19px;font-weight:700;margin:26px 0 8px;color:#111",
+    "h1": "font-size:26px;font-weight:800;margin:8px 0 4px;color:#111;line-height:1.25",
+    "h2": "font-size:19px;font-weight:700;margin:28px 0 10px;color:#111",
     "p":  "font-size:16px;line-height:1.6;margin:10px 0;color:#222",
-    "li": "font-size:16px;line-height:1.55;margin:6px 0;color:#222",
+    "li": "font-size:15.5px;line-height:1.55;margin:5px 0;color:#222",
     "stat": "font-size:16px;line-height:1.55;margin:6px 0;color:#222",
     "quote": ("font-size:15.5px;line-height:1.55;margin:10px 0;padding:10px 14px;"
               "border-left:3px solid #16A34A;background:#f4faf6;color:#222"),
     "small": "font-size:13px;line-height:1.5;margin:12px 0;color:#666",
-    "card_title": "font-size:17px;font-weight:700;margin:18px 0 4px;color:#111",
+    "card_title": "font-size:17px;font-weight:700;margin:22px 0 4px;color:#111",
+    "chart": ("font-size:13.5px;line-height:1.5;margin:14px 0;padding:18px 16px;"
+              "border:2px dashed #94a3b8;border-radius:8px;background:#f8fafc;"
+              "color:#475569;text-align:center"),
+    "statbox": ("margin:14px 0;padding:14px 18px;border:1px solid #e2e8f0;"
+                "border-radius:8px;background:#fafafa"),
+    "statline": "font-size:16px;line-height:1.7;margin:2px 0;color:#222",
 }
 
 
@@ -40,6 +51,14 @@ def md_render(doc):
             out.append(f"- {b['text']}")
         elif t == "stat":
             out.append(f"- **{b['label']}**: {b['text']}")
+        elif t == "statgrid":
+            out.append("")
+            for it in b["items"]:
+                out.append(f"- **{it['value']}** — {it['label']} ({it['note']})" if it.get("note")
+                           else f"- **{it['value']}** — {it['label']}")
+            out.append("")
+        elif t == "chart":
+            out.append(f"\n> 📊 **[CHART — replace with screenshot]** {b['text']}\n")
         elif t == "card":
             out.append(f"\n**{b['title']}**\n\n{b['body']}\n")
             if b.get("implication"):
@@ -68,6 +87,20 @@ def html_render(doc, title):
         elif t == "stat":
             body.append(f'<p style="{STYLE["stat"]}">•&nbsp; <b>{escape(b["label"])}</b>: '
                         f'{escape(b["text"])}</p>')
+        elif t == "statgrid":
+            rows = []
+            for it in b["items"]:
+                note = (f' <span style="color:#94a3b8">· {escape(it["note"])}</span>'
+                        if it.get("note") else "")
+                rows.append(f'<p style="{STYLE["statline"]}">'
+                            f'<b style="font-size:18px">{escape(it["value"])}</b>'
+                            f' &nbsp;<span style="color:#555">{escape(it["label"])}</span>{note}</p>')
+            body.append(f'<div style="{STYLE["statbox"]}">' + "".join(rows) + "</div>")
+        elif t == "chart":
+            body.append(f'<div style="{STYLE["chart"]}">📊 <b>CHART GOES HERE</b><br/>'
+                        f'{escape(b["text"])}<br/>'
+                        f'<span style="font-size:12px;color:#94a3b8">(take the screenshot, then '
+                        f'replace this box with it in Substack)</span></div>')
         elif t == "card":
             body.append(f'<p style="{STYLE["card_title"]}">{escape(b["title"])}</p>')
             body.append(f'<p style="{STYLE["p"]}">{escape(b["body"])}</p>')

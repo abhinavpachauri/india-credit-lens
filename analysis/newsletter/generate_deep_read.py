@@ -73,12 +73,26 @@ def build_doc():
                 "different: it reads the credit data and the payments data as one system — "
                 "where they agree, where they disagree, and what that means for lending. "
                 "The disagreements are usually the most useful part."})
+    doc.append({"type": "chart", "text":
+                "Hero — indiacreditlens.com/opportunities → screenshot the top cross-system card "
+                "(charts side by side)"})
+
+    def chart_recipe(item):
+        caps = [ch.get("caption") for ch in item.get("charts", []) if ch.get("caption")]
+        if not caps:
+            return None
+        return ("indiacreditlens.com/opportunities → this card → screenshot its chart panel "
+                f"({' + '.join(caps[:3])})")
 
     if cross:
         doc.append({"type": "h2", "text": "The cross-system reads"})
+        first = True
         for c in cross:
             if c["tier"] == "risk":
                 continue
+            if not first:
+                doc.append({"type": "hr"})
+            first = False
             doc.append({"type": "card", "title": c["title"], "body": c["body"],
                         "implication": c.get("implication", "")})
             basis = c.get("basis")
@@ -86,6 +100,9 @@ def build_doc():
                 doc.append({"type": "p", "text": "How this read is computed:"})
                 for line in basis_lines(basis):
                     doc.append({"type": "li", "text": line})
+            recipe = chart_recipe(c)
+            if recipe:
+                doc.append({"type": "chart", "text": recipe})
 
     for pl, items in live.items():
         if not items:

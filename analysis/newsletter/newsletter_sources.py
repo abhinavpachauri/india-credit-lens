@@ -152,15 +152,40 @@ def new_signals(pipeline, period):
             if s.get("pipeline") == pipeline and s.get("first_seen") == period]
 
 
+SECTION_NAME = {  # feed section/group key → the label the reader sees on the dashboard
+    "bankCredit": "Bank Credit", "mainSectors": "Main Sectors", "industryBySize": "Industry by Size",
+    "services": "Services", "personalLoans": "Personal Loans", "prioritySector": "Priority Sector",
+    "industryByType": "Industry by Type",
+    "cc": "Credit Cards", "dc": "Debit Cards", "infra": "Infrastructure",
+}
+MODE_NAME = {"absolute": "Absolute", "yoy": "YoY %", "fy": "FY Cumul.", "mom": "MoM %",
+             "share": "% Share (Distribution tab)", "pct": "% Share (Distribution tab)"}
+
+
+def _chart_recipe(pipeline, section_key, highlight, mode):
+    """The exact screenshot instruction for a card — dashboard → section → mode → series."""
+    dash = "indiacreditlens.com" if pipeline == "sibc" else "indiacreditlens.com/payments"
+    parts = [f"{dash} → {SECTION_NAME.get(section_key, section_key)}"]
+    if mode:
+        parts.append(f"{MODE_NAME.get(mode, mode)} view")
+    if highlight:
+        parts.append("highlight: " + ", ".join(highlight[:3]))
+    return " → ".join(parts)
+
+
 def insight_cards(pipeline, max_cards=6):
-    """One validated insight card per section/group, in fixed order — deterministic pick."""
+    """One validated insight card per section/group, in fixed order — deterministic pick.
+    Each card carries its chart recipe so the letter can place a precise placeholder."""
     cards = []
     if pipeline == "sibc":
         feed = json.loads((DATA / "sibc_l1_annotations.json").read_text())
         for section, bucket in feed["sections"].items():
             for it in bucket.get("insights", []):
                 cards.append({"where": section, "title": it["title"], "body": it["body"],
-                              "implication": it.get("implication", "")})
+                              "implication": it.get("implication", ""),
+                              "chart": _chart_recipe(pipeline, section,
+                                                     (it.get("effect") or {}).get("highlight"),
+                                                     it.get("preferredMode"))})
                 break                                   # first per section
     else:
         feed = json.loads((DATA / "atm_pos_insights.json").read_text())
@@ -169,8 +194,11 @@ def insight_cards(pipeline, max_cards=6):
             if it.get("type") != "insight" or it.get("group") in seen:
                 continue
             seen.add(it.get("group"))
+            eff = it.get("effect") or {}
             cards.append({"where": it.get("group", ""), "title": it["title"], "body": it["body"],
-                          "implication": it.get("implication", "")})
+                          "implication": it.get("implication", ""),
+                          "chart": _chart_recipe(pipeline, it.get("group", ""),
+                                                 eff.get("highlight"), eff.get("trendMode"))})
     return cards[:max_cards]
 
 

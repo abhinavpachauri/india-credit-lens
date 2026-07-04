@@ -54,20 +54,34 @@ def build_doc(pipeline, period):
                 "This issue covers what actually moved, what changed direction since last month, "
                 "and the reads that matter for anyone working in lending. Every number below is "
                 "machine-checked against the RBI source file before this issue is generated."})
+    if cards:
+        doc.append({"type": "chart", "text": f"Hero chart — {cards[0]['chart']}"})
 
     doc.append({"type": "h2", "text": "The headline numbers"})
-    for s in stats:
-        doc.append({"type": "stat", "label": s["title"],
-                    "text": f"{s['display']} — {s['status_word']}"})
+    doc.append({"type": "statgrid", "items": [
+        {"value": s["display"], "label": s["title"], "note": s["status_word"]} for s in stats]})
 
     if flips:
         doc.append({"type": "h2", "text": "What changed direction since last month"})
         doc.append({"type": "p", "text":
                     "These trackers read differently this month than last. A change here is "
                     "usually the earliest sign a trend is starting or ending."})
-        for f in flips:
-            doc.append({"type": "li",
-                        "text": f"{f['title']}: was {f['was']}, now {f['now']} ({f['display']})"})
+        GAINING = {"accelerating", "growing steadily", "improving"}
+        up = [f for f in flips if f["now"] in GAINING]
+        down = [f for f in flips if f["now"] not in GAINING]
+        cap = 6
+        if up:
+            doc.append({"type": "p", "text": "Picked up:"})
+            for f in up[:cap]:
+                doc.append({"type": "li", "text": f"↑ {f['title']} — now {f['now']} ({f['display']})"})
+            if len(up) > cap:
+                doc.append({"type": "small", "text": f"…and {len(up) - cap} more on the dashboard."})
+        if down:
+            doc.append({"type": "p", "text": "Slowed down:"})
+            for f in down[:cap]:
+                doc.append({"type": "li", "text": f"↓ {f['title']} — now {f['now']} ({f['display']})"})
+            if len(down) > cap:
+                doc.append({"type": "small", "text": f"…and {len(down) - cap} more on the dashboard."})
 
     if fresh:
         doc.append({"type": "h2", "text": "New trackers this cycle"})
@@ -75,9 +89,13 @@ def build_doc(pipeline, period):
             doc.append({"type": "li", "text": n["title"]})
 
     doc.append({"type": "h2", "text": "The reads that matter"})
-    for c in cards:
+    for i, c in enumerate(cards):
+        if i:
+            doc.append({"type": "hr"})
         doc.append({"type": "card", "title": c["title"], "body": c["body"],
                     "implication": c.get("implication", "")})
+        if i and c.get("chart"):        # card 0's chart is the hero — don't repeat it
+            doc.append({"type": "chart", "text": c["chart"]})
 
     doc.append({"type": "hr"})
     doc.append({"type": "p", "text":
