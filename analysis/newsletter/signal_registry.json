@@ -1,16 +1,31 @@
 {
   "_meta": {
     "report_id": "rbi_sibc",
-    "last_updated_issue": 3,
+    "last_updated_issue": 4,
     "description": "Cumulative tracker of every signal published across India Credit Lens issues. One entry per underlying story — story_arc names may evolve across issues. Add a history entry each time a signal is updated. Generator uses this for the Prior Signals section.",
     "status_values": {
-      "new":       "First appearance this issue — full card treatment",
+      "new": "First appearance this issue — full card treatment",
       "confirmed": "Prior claim confirmed as stated",
-      "stronger":  "Confirmed but came in stronger than signalled",
+      "stronger": "Confirmed but came in stronger than signalled",
       "unchanged": "No new data or direction unchanged",
       "weakening": "Signal showing early reversal",
-      "refuted":   "Prior claim shown to be factually wrong"
-    }
+      "refuted": "Prior claim shown to be factually wrong"
+    },
+    "issues": [
+      {
+        "issue": 4,
+        "format": "v2_release_read",
+        "pipeline": "sibc",
+        "data_period": "May 2026",
+        "published": "2026-07-05",
+        "url": "https://indiacreditlens.substack.com/p/rbi-credit-deployment-creport-for",
+        "distribution": {
+          "linkedin": "https://www.linkedin.com/posts/abhinav-pachauri-66733328_may-credit-deployment-activity-7479160860960153601-1bo7",
+          "x": "https://x.com/indiacreditlens/status/2073384866759274864"
+        },
+        "headline": "Bank credit ₹215.2L Cr — new all-time high, 17.7% YoY"
+      }
+    ]
   },
   "signals": [
     {
@@ -32,6 +47,13 @@
           "story_arc": "Gold Loans: Stock Effect Done, Flow Era Begins",
           "stat": "₹4.60L Cr — Mar 2026 FY-end (+123% YoY) — reclassification complete, FY27 is flow-only",
           "url": "https://indiacreditlens.substack.com/p/issue-3"
+        },
+        {
+          "issue": 4,
+          "status": "stronger",
+          "story_arc": "Gold Loans: Stock Effect Done, Flow Era Begins",
+          "stat": "₹5.14L Cr — May 2026, up from ₹4.61L Cr at FY-end Mar 2026",
+          "url": "https://indiacreditlens.substack.com/p/rbi-credit-deployment-creport-for"
         }
       ]
     },
