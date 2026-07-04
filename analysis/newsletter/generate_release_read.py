@@ -45,11 +45,12 @@ def build_doc(pipeline, period):
     # every signal whose values the template itself renders — the traceability scope
     declared = [s["id"] for s in stats] + [f["id"] for f in flips] + [n["id"] for n in fresh]
 
+    month = month_name(src.data_month(pipeline, period))   # the data month, not the release date
     doc = []
-    lead = cards[0]["title"] if cards else f"the {month_name(period)} numbers"
-    doc.append({"type": "h1", "text": f"RBI {RELEASE_NAME[pipeline]} data, {month_name(period)}: {lead}"})
+    lead = cards[0]["title"] if cards else f"the {month} numbers"
+    doc.append({"type": "h1", "text": f"RBI {RELEASE_NAME[pipeline]} data, {month}: {lead}"})
     doc.append({"type": "p", "text":
-                f"RBI has put out the {RELEASE_NAME[pipeline]} data for {month_name(period)}. "
+                f"RBI has put out the {RELEASE_NAME[pipeline]} data for {month}. "
                 "This issue covers what actually moved, what changed direction since last month, "
                 "and the reads that matter for anyone working in lending. Every number below is "
                 "machine-checked against the RBI source file before this issue is generated."})

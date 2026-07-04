@@ -61,9 +61,12 @@ def build_doc():
     declared = list(dict.fromkeys(
         s for it in included for s in (it.get("evidence_all") or it.get("evidence") or [])))
 
+    # label by the latest DATA month across pipelines, not the release date
+    data_months = [src.data_month(pl, p) for pl, p in periods.items() if p]
+    display = month_name(max(data_months)) if data_months else month_name(period)
     doc = []
     doc.append({"type": "h1", "text":
-                f"The deep read, {month_name(period)}: what credit and payments data "
+                f"The deep read, {display}: what credit and payments data "
                 "say when you read them together"})
     doc.append({"type": "p", "text":
                 "The release notes cover what each dataset says on its own. This one is "

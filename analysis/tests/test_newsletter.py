@@ -47,18 +47,28 @@ def test_md_render_card_shape():
     assert "**T**" in md and "> So what: I" in md
 
 
-def test_check_doc_gate_live_artifacts():
-    """Integration: the gate must reject invented numbers and reworded cards
-    against the real feeds/db, and accept grounded + verbatim content."""
+def test_check_doc_number_scoping(monkeypatch):
+    """The number gate must reject values outside the declared ground truth.
+    Ground truth is CONTROLLED here — a live-db fixture proved flaky (a new
+    period's series made an 'invented' number collide with a real ratio)."""
+    import validate_newsletter as vn
+
+    monkeypatch.setattr(vn, "declared_ground_truth", lambda ids: [16.0, 212.1])
+    bad = [{"type": "p", "text": "Bank credit grew 47.31% to ₹9,999.9L Cr."}]
+    assert vn.check_doc(bad, ["any"], "t")
+    good = [{"type": "p", "text": "Bank credit grew 16.0% to ₹212.1L Cr."}]
+    assert vn.check_doc(good, ["any"], "t") == []
+
+
+def test_check_doc_card_verbatim_live_artifacts():
+    """Cards must match a validated feed verbatim — reworded fails, verbatim passes.
+    Uses the live feed (stable within a run; text content is the fixture)."""
     import json
     from validate_newsletter import check_doc
 
     root = Path(__file__).resolve().parents[2]
     feed = json.loads((root / "web/public/data/sibc_l1_annotations.json").read_text())
     card = feed["sections"]["bankCredit"]["insights"][0]
-
-    bad_num = [{"type": "p", "text": "Bank credit grew 47.31% to ₹9,999.9L Cr."}]
-    assert check_doc(bad_num, ["sibc-bank-credit-yoy", "sibc-bank-credit-abs"], "t")
 
     reworded = [{"type": "card", "title": card["title"], "body": card["body"] + " Truly."}]
     assert check_doc(reworded, [], "t")

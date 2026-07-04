@@ -1,0 +1,320 @@
+{
+  "_meta": {
+    "pipeline": "sibc",
+    "period": "2026-06-30",
+    "spec_ref": "analysis/COMPOSITION_SPEC.md §12",
+    "periods_used": [
+      "2026-06-30",
+      "2026-05-29"
+    ],
+    "note": "status derived from S3 driver firing"
+  },
+  "items": [
+    {
+      "id": "opp_colending_infra",
+      "tier": "opportunity",
+      "label": "Co-lending & warehouse-financing infrastructure",
+      "surface": "opportunities",
+      "scope": "pipeline",
+      "status": "active",
+      "authored_status": "active",
+      "evidence": [
+        "sibc-msme-micro-small-fy-acceleration",
+        "sibc-msme-micro-small-share",
+        "sibc-msme-micro-small-yoy",
+        "sibc-msme-size-yoy-spread"
+      ],
+      "evidence_all": [
+        "sibc-msme-micro-small-fy-acceleration",
+        "sibc-msme-micro-small-share",
+        "sibc-msme-micro-small-yoy",
+        "sibc-msme-size-yoy-spread"
+      ],
+      "refs": {
+        "entities": [
+          "icl:sibc/Statement1/2.1"
+        ],
+        "instances": [
+          "force_msme_formalisation"
+        ],
+        "channels": [
+          "ch_formalisation_underwritability"
+        ]
+      }
+    },
+    {
+      "id": "opp_gold_loan_entry",
+      "tier": "opportunity",
+      "label": "Gold loan market entry / deepening for banks",
+      "surface": "opportunities",
+      "scope": "pipeline",
+      "status": "active",
+      "authored_status": "active",
+      "evidence": [
+        "sibc-pl-gold-pos-streak",
+        "sibc-pl-gold-yoy"
+      ],
+      "evidence_all": [
+        "sibc-pl-gold-pos-streak",
+        "sibc-pl-gold-yoy"
+      ],
+      "refs": {
+        "entities": [
+          "icl:sibc/Statement1/4.8"
+        ],
+        "instances": [
+          "force_gold_price_surge"
+        ],
+        "channels": [
+          "ch_collateral_price_secured"
+        ]
+      }
+    },
+    {
+      "id": "opp_msme_origination",
+      "tier": "opportunity",
+      "label": "MSME origination infrastructure investment window",
+      "surface": "opportunities",
+      "scope": "pipeline",
+      "status": "active",
+      "authored_status": "active",
+      "evidence": [
+        "sibc-msme-micro-small-fy-acceleration",
+        "sibc-msme-micro-small-share",
+        "sibc-msme-micro-small-yoy",
+        "sibc-msme-size-yoy-spread"
+      ],
+      "evidence_all": [
+        "sibc-msme-micro-small-fy-acceleration",
+        "sibc-msme-micro-small-share",
+        "sibc-msme-micro-small-yoy",
+        "sibc-msme-size-yoy-spread"
+      ],
+      "refs": {
+        "entities": [
+          "icl:sibc/Statement1/2.1"
+        ],
+        "instances": [
+          "force_msme_formalisation"
+        ],
+        "channels": [
+          "ch_formalisation_underwritability"
+        ]
+      }
+    },
+    {
+      "id": "opp_pli_supply_chain",
+      "tier": "opportunity",
+      "label": "PLI anchor-supplier chain finance",
+      "surface": "opportunities",
+      "scope": "pipeline",
+      "status": "active",
+      "authored_status": "active",
+      "evidence": [
+        "sibc-basic-metal-sub-yoy-scan",
+        "sibc-chemicals-sub-yoy-scan",
+        "sibc-engineering-sub-yoy-scan"
+      ],
+      "evidence_all": [
+        "sibc-basic-metal-sub-yoy-scan",
+        "sibc-chemicals-sub-yoy-scan",
+        "sibc-engineering-sub-yoy-scan"
+      ],
+      "refs": {
+        "entities": [
+          "icl:sibc/Statement2/2.13",
+          "icl:sibc/Statement2/2.14",
+          "icl:sibc/Statement2/2.9"
+        ],
+        "instances": [
+          "force_pli_manufacturing"
+        ],
+        "channels": [
+          "ch_industrial_capex_supplychain"
+        ]
+      }
+    },
+    {
+      "id": "opp_pslc_tooling",
+      "tier": "opportunity",
+      "label": "PSLC market depth from PSL reclassification surplus",
+      "surface": "opportunities",
+      "scope": "pipeline",
+      "status": "active",
+      "authored_status": "active",
+      "evidence": [
+        "sibc-psl-housing-yoy"
+      ],
+      "evidence_all": [
+        "sibc-psl-housing-yoy"
+      ],
+      "refs": {
+        "entities": [
+          "icl:sibc/Statement1/iv",
+          "icl:sibc/Statement1/viii"
+        ],
+        "instances": [
+          "force_psl_limit_revision"
+        ],
+        "channels": [
+          "ch_psl_threshold_reclassification"
+        ]
+      }
+    },
+    {
+      "id": "opp_renewable_energy",
+      "tier": "opportunity",
+      "label": "Renewable energy project finance — next capex wave",
+      "surface": "opportunities",
+      "scope": "pipeline",
+      "status": "active",
+      "authored_status": "emerging",
+      "evidence": [
+        "sibc-infra-sub-yoy-scan"
+      ],
+      "evidence_all": [
+        "sibc-infra-sub-yoy-scan"
+      ],
+      "refs": {
+        "entities": [
+          "icl:sibc/Statement2/2.18"
+        ],
+        "instances": [
+          "force_infra_cycle_maturing"
+        ],
+        "channels": [
+          "ch_project_lifecycle_origination"
+        ]
+      }
+    },
+    {
+      "id": "opp_services_entry",
+      "tier": "opportunity",
+      "label": "Services sector credit entry / scale-up",
+      "surface": "opportunities",
+      "scope": "pipeline",
+      "status": "active",
+      "authored_status": "active",
+      "evidence": [
+        "sibc-nbfc-sub-yoy-scan",
+        "sibc-sectors-positive-yoy-count",
+        "sibc-services-fy-acceleration",
+        "sibc-services-share",
+        "sibc-services-share-scan",
+        "sibc-services-yoy",
+        "sibc-services-yoy-scan"
+      ],
+      "evidence_all": [
+        "sibc-nbfc-sub-yoy-scan",
+        "sibc-sectors-positive-yoy-count",
+        "sibc-services-fy-acceleration",
+        "sibc-services-share",
+        "sibc-services-share-scan",
+        "sibc-services-yoy",
+        "sibc-services-yoy-scan"
+      ],
+      "refs": {
+        "entities": [
+          "icl:sibc/Statement1/3"
+        ],
+        "instances": [
+          "force_nbfc_regulatory_recovery"
+        ],
+        "channels": [
+          "ch_wholesale_funding_intermediation"
+        ]
+      }
+    },
+    {
+      "id": "opp_vehicle_ev",
+      "tier": "opportunity",
+      "label": "EV-specific vehicle credit products",
+      "surface": "opportunities",
+      "scope": "pipeline",
+      "status": "retired",
+      "authored_status": "retired",
+      "evidence": [
+        "sibc-pl-vehicle-share",
+        "sibc-pl-vehicle-yoy"
+      ],
+      "evidence_all": [
+        "sibc-pl-vehicle-share",
+        "sibc-pl-vehicle-yoy"
+      ],
+      "refs": {
+        "entities": [
+          "icl:sibc/Statement1/4.7"
+        ],
+        "instances": [],
+        "channels": []
+      }
+    },
+    {
+      "id": "risk_infrastructure_repayment",
+      "tier": "risk",
+      "label": "Infrastructure repayment wave with insufficient new origination pipeline",
+      "surface": "sibc",
+      "scope": "pipeline",
+      "status": "active",
+      "authored_status": "active",
+      "evidence": [
+        "sibc-infra-sub-share-scan",
+        "sibc-infra-sub-yoy-scan"
+      ],
+      "evidence_all": [
+        "sibc-infra-sub-share-scan",
+        "sibc-infra-sub-yoy-scan"
+      ],
+      "refs": {
+        "entities": [
+          "icl:sibc/Statement2/2.18"
+        ],
+        "instances": [
+          "force_infra_cycle_maturing"
+        ],
+        "channels": [
+          "ch_project_lifecycle_origination"
+        ]
+      }
+    },
+    {
+      "id": "risk_unsecured_migration",
+      "tier": "risk",
+      "label": "CIC reporting compliance gaps creating off-balance-sheet credit risk",
+      "surface": "sibc",
+      "scope": "pipeline",
+      "status": "active",
+      "authored_status": "watch",
+      "evidence": [
+        "sibc-pl-cc-abs",
+        "sibc-pl-cc-below10-streak",
+        "sibc-pl-cc-share",
+        "sibc-pl-cc-yoy",
+        "sibc-pl-consumer-durables-neg-streak",
+        "sibc-pl-consumer-durables-share",
+        "sibc-pl-consumer-durables-yoy"
+      ],
+      "evidence_all": [
+        "sibc-pl-cc-abs",
+        "sibc-pl-cc-below10-streak",
+        "sibc-pl-cc-share",
+        "sibc-pl-cc-yoy",
+        "sibc-pl-consumer-durables-neg-streak",
+        "sibc-pl-consumer-durables-share",
+        "sibc-pl-consumer-durables-yoy"
+      ],
+      "refs": {
+        "entities": [
+          "icl:sibc/Statement1/4.1",
+          "icl:sibc/Statement1/4.5"
+        ],
+        "instances": [
+          "force_rbi_unsecured_tightening"
+        ],
+        "channels": [
+          "ch_capital_weight_unsecured"
+        ]
+      }
+    }
+  ]
+}

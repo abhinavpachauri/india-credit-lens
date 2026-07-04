@@ -1,0 +1,216 @@
+{
+  "_meta": {
+    "pipeline": "atm_pos",
+    "period": "2026-05-31",
+    "spec_ref": "analysis/COMPOSITION_SPEC.md §12",
+    "periods_used": [
+      "2026-05-31",
+      "2026-04-30"
+    ],
+    "note": "status derived from S3 driver firing"
+  },
+  "items": [
+    {
+      "id": "opp_credit_card_deepening",
+      "tier": "opportunity",
+      "label": "Credit card penetration deepening — PSB share gap is the opening",
+      "surface": "opportunities",
+      "scope": "pipeline",
+      "status": "active",
+      "authored_status": "active",
+      "evidence": [
+        "cc-bank-scan",
+        "cc-category-share-scan",
+        "cc-outstanding-abs",
+        "cc-outstanding-streak",
+        "cc-outstanding-yoy",
+        "cc-private-share",
+        "cc-psb-share"
+      ],
+      "evidence_all": [
+        "cc-bank-scan",
+        "cc-category-share-scan",
+        "cc-outstanding-abs",
+        "cc-outstanding-streak",
+        "cc-outstanding-yoy",
+        "cc-private-share",
+        "cc-psb-share"
+      ],
+      "refs": {
+        "entities": [
+          "icl:atm_pos/cards/credit_cards"
+        ],
+        "instances": [],
+        "channels": []
+      }
+    },
+    {
+      "id": "opp_rural_cash_distribution",
+      "tier": "opportunity",
+      "label": "Rural cash distribution via Micro ATM / Business Correspondent networks",
+      "surface": "opportunities",
+      "scope": "pipeline",
+      "status": "active",
+      "authored_status": "active",
+      "evidence": [
+        "micro-atm-yoy",
+        "micro-atms-abs"
+      ],
+      "evidence_all": [
+        "micro-atm-yoy",
+        "micro-atms-abs"
+      ],
+      "refs": {
+        "entities": [
+          "icl:atm_pos/infrastructure/micro_atms"
+        ],
+        "instances": [],
+        "channels": []
+      }
+    },
+    {
+      "id": "opp_transit_payment_products",
+      "tier": "opportunity",
+      "label": "Embedded transit and tap-to-pay payment products",
+      "surface": "opportunities",
+      "scope": "pipeline",
+      "status": "active",
+      "authored_status": "emerging",
+      "evidence": [
+        "cc-other-val-yoy",
+        "cc-other-vol-yoy"
+      ],
+      "evidence_all": [
+        "cc-other-val-yoy",
+        "cc-other-vol-yoy"
+      ],
+      "refs": {
+        "entities": [
+          "icl:atm_pos/spend_value/cc_other_txn_val"
+        ],
+        "instances": [
+          "force_ncmc_transit_rollout"
+        ],
+        "channels": [
+          "ch_embedded_payment_card_other"
+        ]
+      }
+    },
+    {
+      "id": "risk_cc_market_concentration",
+      "tier": "risk",
+      "label": "Credit card market concentrated in top-5 private banks",
+      "surface": "atm_pos",
+      "scope": "pipeline",
+      "status": "active",
+      "authored_status": "active",
+      "evidence": [
+        "cc-bank-scan",
+        "cc-category-share-scan",
+        "cc-outstanding-abs",
+        "cc-outstanding-streak",
+        "cc-outstanding-yoy",
+        "cc-private-share",
+        "cc-psb-share"
+      ],
+      "evidence_all": [
+        "cc-bank-scan",
+        "cc-category-share-scan",
+        "cc-outstanding-abs",
+        "cc-outstanding-streak",
+        "cc-outstanding-yoy",
+        "cc-private-share",
+        "cc-psb-share"
+      ],
+      "refs": {
+        "entities": [
+          "icl:atm_pos/cards/credit_cards"
+        ],
+        "instances": [],
+        "channels": []
+      }
+    },
+    {
+      "id": "risk_debit_card_base_erosion",
+      "tier": "risk",
+      "label": "Debit card base structural decline reducing cash access for underbanked",
+      "surface": "atm_pos",
+      "scope": "pipeline",
+      "status": "active",
+      "authored_status": "active",
+      "evidence": [
+        "dc-bank-scan",
+        "dc-category-share-scan",
+        "dc-outstanding-abs",
+        "dc-outstanding-streak",
+        "dc-outstanding-yoy",
+        "dc-private-share",
+        "dc-psb-share"
+      ],
+      "evidence_all": [
+        "dc-bank-scan",
+        "dc-category-share-scan",
+        "dc-outstanding-abs",
+        "dc-outstanding-streak",
+        "dc-outstanding-yoy",
+        "dc-private-share",
+        "dc-psb-share"
+      ],
+      "refs": {
+        "entities": [
+          "icl:atm_pos/cards/debit_cards"
+        ],
+        "instances": [
+          "force_rbi_paytm_action"
+        ],
+        "channels": [
+          "ch_institutional_exit_card_stock"
+        ]
+      }
+    },
+    {
+      "id": "risk_infrastructure_bifurcation",
+      "tier": "risk",
+      "label": "Payment acceptance bifurcation: POS contracting while UPI grows",
+      "surface": "atm_pos",
+      "scope": "pipeline",
+      "status": "active",
+      "authored_status": "active",
+      "evidence": [
+        "pos-bank-scan",
+        "pos-category-share-scan",
+        "pos-private-share",
+        "pos-psb-share",
+        "pos-terminals-abs",
+        "pos-terminals-pos-streak",
+        "pos-terminals-yoy",
+        "upi-qr-per-pos",
+        "upi-qr-yoy"
+      ],
+      "evidence_all": [
+        "pos-bank-scan",
+        "pos-category-share-scan",
+        "pos-private-share",
+        "pos-psb-share",
+        "pos-terminals-abs",
+        "pos-terminals-pos-streak",
+        "pos-terminals-yoy",
+        "upi-qr-per-pos",
+        "upi-qr-yoy"
+      ],
+      "refs": {
+        "entities": [
+          "icl:atm_pos/infrastructure/pos_terminals",
+          "icl:atm_pos/infrastructure/upi_qr",
+          "icl:atm_pos/spend_value/dc_atm_withdrawal_val"
+        ],
+        "instances": [
+          "force_upi_zero_mdr"
+        ],
+        "channels": [
+          "ch_zero_mdr_acceptance_mix"
+        ]
+      }
+    }
+  ]
+}

@@ -58,6 +58,18 @@ def latest_period(pipeline):
     return row[0] if row else None
 
 
+def data_month(pipeline, period):
+    """The month the DATA is about — not the release date. SIBC periods are keyed by
+    dataDate (release day, e.g. 2026-06-30 for May data); the true data month is the
+    timeline's csv_date. Payments periods already are the data month."""
+    if pipeline == "sibc":
+        timeline = json.loads((ROOT / "analysis/rbi_sibc/timeline.json").read_text())
+        for e in timeline.get("periods", []):
+            if e.get("dataDate") == period:
+                return e.get("csv_date", period)
+    return period
+
+
 def prior_period(pipeline, period):
     con = _con()
     row = con.execute("select max(period) from signals where pipeline=? and period<?",

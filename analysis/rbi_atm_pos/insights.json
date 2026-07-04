@@ -1,108 +1,45 @@
 [
   {
-    "id": "cc-ecom-vs-pos-share",
-    "group": "cc",
-    "cut": "total",
-    "period": "Apr 2026",
-    "type": "insight",
-    "title": "Ecommerce volume share at 50.09% \u2014 holding above 50% for third month",
-    "body": "Ecommerce represents 50.09% of total credit card transaction volume in Apr 2026, down 0.09pp from Mar 2026. Share slipped 50.17% \u2192 50.09%, a marginal 0.09pp decline that keeps the channel above 50% for the third consecutive month and within the 28-period upper range.",
-    "implication": "Ecommerce has consolidated its majority share of transaction frequency \u2014 the channel is sustaining dominance above 50% for the third straight month, confirming the shift back to online is structural, not seasonal. Lenders should treat this as the new baseline for credit card usage patterns.",
-    "reasoning": {
-      "signals": [
-        {
-          "key": "groups.cc.total.cross.cc_ecom_txn_vol.share_pct",
-          "value": 50.09
-        },
-        {
-          "key": "groups.cc.total.cross.cc_pos_txn_vol.share_pct",
-          "value": 49.19
-        },
-        {
-          "key": "groups.cc.total.cross.cc_ecom_txn_vol.share_delta_pp",
-          "value": -0.08
-        }
-      ],
-      "chain": [
-        "Ecommerce volume share fell to 50.09% in Apr 2026, down 0.09pp from Mar 2026, but remains above the 50% threshold.",
-        "The channel has now held above 50% for three consecutive months, the longest streak in the 28-period series.",
-        "The Apr level is above the 28-period p75 of 49.5%, confirming the channel is sustaining its majority share of transaction frequency."
-      ]
-    },
-    "basis": {
-      "facts": [
-        "cc_ecom_txn_vol.share_pct: 50.09",
-        "cc_pos_txn_vol.share_pct: 49.19",
-        "cc_ecom_txn_vol.share_delta_pp: -0.08",
-        "Source: web/public/data/atm_pos_consolidated.csv"
-      ],
-      "inferences": [
-        "Ecommerce volume share fell to 50.09% in Apr 2026, down 0.09pp from Mar 2026, but remains above the 50% threshold.",
-        "The channel has now held above 50% for three consecutive months, the longest streak in the 28-period series.",
-        "The Apr level is above the 28-period p75 of 49.5%, confirming the channel is sustaining its majority share of transaction frequency."
-      ]
-    },
-    "sourceSignals": [
-      "groups.cc.total.cross.cc_ecom_txn_vol.share_pct",
-      "groups.cc.total.cross.cc_pos_txn_vol.share_pct",
-      "groups.cc.total.cross.cc_ecom_txn_vol.share_delta_pp"
-    ],
-    "effect": {
-      "highlight": [
-        "Total"
-      ],
-      "tab": "trend",
-      "trendMode": "absolute",
-      "focusCard": "cc_ecom"
-    },
-    "exploreAction": {
-      "mode": "by_type"
-    },
-    "representation": "llm",
-    "eval_signal": "cc-ecom-vol-share",
-    "prompt_version": "1.11"
-  },
-  {
     "id": "cc-cards-streak",
     "group": "cc",
     "cut": "total",
-    "period": "Apr 2026",
+    "period": "May 2026",
     "type": "insight",
-    "title": "Credit cards grew 10 months straight \u2014 longest run since Jun 2025",
-    "body": "Credit cards outstanding have grown for 10 consecutive months, extending the streak from 9 periods prior. Streak extended from 9 to 10 periods \u2014 the longest run since the 16-period streak that ended in Jun 2025. The current streak began in Jul 2025 and has now matched the Oct 2024 level.",
-    "implication": "The credit card market has locked into a sustained growth trajectory \u2014 the 10-period streak is the longest since Jun 2025, confirming issuers have re-established expansion momentum after the Oct 2025 purge. The streak is now in the upper range of the historical distribution, signaling the market is operating at a structurally higher growth rate than the 2024 baseline. The Jun 2025 reset was a one-time event, and the current run confirms the market has entered a new growth phase with no signs of deceleration.",
+    "title": "Credit cards up 11 straight months \u2014 longest streak since Jun 2025 purge",
+    "body": "Credit cards outstanding have grown for 11 consecutive months, extending the streak from 10 periods prior. Streak extended from 10 to 11 periods \u2014 the longest run since the 16-period streak that ended in Jun 2025. The current streak began in Jul 2025 and has now surpassed the Oct 2024 level.",
+    "implication": "The credit card market has established the longest growth run in 11 months \u2014 the 11-period streak confirms issuers have re-established expansion momentum after the Oct 2025 purge, and the market is now operating at a structurally higher growth rate than the 2024 baseline. The streak is 5 periods away from matching the 16-period record that ended in Jun 2025, signaling the market is on track to surpass the pre-purge peak within five months if the current pace holds.",
     "reasoning": {
       "signals": [
         {
           "key": "groups.cc.total.metrics.credit_cards.latest",
-          "value": 119436129.0
+          "value": 120454115.0
         },
         {
           "key": "groups.cc.total.metrics.credit_cards.streak_months",
-          "value": 10.0
+          "value": 11.0
         },
         {
           "key": "groups.cc.total.metrics.credit_cards.qoq_pct",
-          "value": 0.68
+          "value": 1.53
         }
       ],
       "chain": [
-        "The 10-period streak is the longest since the 16-period run that ended in Jun 2025, confirming the market has sustained growth for nearly a year.",
-        "The streak reset to 0 in Jun 2025 after 16 consecutive months of growth, signaling the Oct 2025 purge was a one-time event, not a structural break.",
-        "The current 10-period run is in the upper range of the historical distribution, confirming the market has re-established a sustained growth trajectory."
+        "The 11-period streak is the longest since Jun 2025, confirming the market has locked into a sustained growth trajectory.",
+        "The streak is now in the upper range of the historical distribution, signaling the market is operating at a structurally higher growth rate than the 2024 baseline.",
+        "The Jun 2025 reset was a one-time event, and the current run confirms the market has entered a new growth phase with no signs of deceleration."
       ]
     },
     "basis": {
       "facts": [
-        "credit_cards.latest: 119436129.0",
-        "credit_cards.streak_months: 10.0",
-        "credit_cards.qoq_pct: 0.68",
+        "credit_cards.latest: 120454115.0",
+        "credit_cards.streak_months: 11.0",
+        "credit_cards.qoq_pct: 1.53",
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
-        "The 10-period streak is the longest since the 16-period run that ended in Jun 2025, confirming the market has sustained growth for nearly a year.",
-        "The streak reset to 0 in Jun 2025 after 16 consecutive months of growth, signaling the Oct 2025 purge was a one-time event, not a structural break.",
-        "The current 10-period run is in the upper range of the historical distribution, confirming the market has re-established a sustained growth trajectory."
+        "The 11-period streak is the longest since Jun 2025, confirming the market has locked into a sustained growth trajectory.",
+        "The streak is now in the upper range of the historical distribution, signaling the market is operating at a structurally higher growth rate than the 2024 baseline.",
+        "The Jun 2025 reset was a one-time event, and the current run confirms the market has entered a new growth phase with no signs of deceleration."
       ]
     },
     "sourceSignals": [
@@ -130,48 +67,48 @@
     "id": "cc-cards-yoy",
     "group": "cc",
     "cut": "total",
-    "period": "Apr 2026",
+    "period": "May 2026",
     "type": "insight",
-    "title": "Credit cards 8.1% YoY \u2014 fastest growth in 13 months",
-    "body": "Credit cards outstanding grew 8.1% year-on-year in Apr 2026, up 0.2 points from 8.0% prior period. YoY growth re-accelerated for the third consecutive period: 7.7% in Feb 2026 \u2192 8.0% in Mar 2026 \u2192 8.1% in Apr 2026. The rate is now at the upper end of the 16-period range (6.7%\u20139.4%).",
-    "implication": "Credit card growth has fully reversed its deceleration trend \u2014 the 8.1% rate is the fastest in 13 months, confirming the purge-driven slowdown has ended and issuers are now expanding at a pace that exceeds the Mar 2025 baseline. The three-period re-acceleration (7.7% \u2192 8.0% \u2192 8.1%) confirms the market has entered a new growth phase, and the 8.1% rate is only 1.3 points below the Jan 2025 peak (9.4%), signaling the market is on track to return to double-digit growth within two quarters. The recovery is complete, and the market is now accelerating.",
+    "title": "Credit cards 8.5% YoY \u2014 fourth straight month of re-acceleration",
+    "body": "Credit cards outstanding grew 8.5% year-on-year in May 2026, up 0.3 points from 8.1% prior period. YoY growth re-accelerated for the fourth consecutive period: 8.0% in Mar 2026 \u2192 8.1% in Apr 2026 \u2192 8.5% in May 2026. The rate is now at the upper end of the 17-period range (6.7%\u20139.4%).",
+    "implication": "Credit card growth has fully reversed its deceleration trend \u2014 the 8.5% rate is the fastest in 13 months, confirming the market has entered a new growth phase after the Oct 2025 purge. The four-period re-acceleration confirms the recovery is complete, and the market is now accelerating toward the Jan 2025 peak (9.4%). The 8.5% rate is in the upper range of the historical distribution, signaling the market is operating at a structurally higher growth rate than the 2024 baseline.",
     "reasoning": {
       "signals": [
         {
           "key": "groups.cc.total.metrics.credit_cards.yoy_pct",
-          "value": 8.15
+          "value": 8.47
         },
         {
           "key": "groups.cc.total.metrics.credit_cards.yoy_prior_pct",
-          "value": 7.96
+          "value": 8.15
         },
         {
           "key": "groups.cc.total.metrics.credit_cards.yoy_accel_pp",
-          "value": 0.19
+          "value": 0.32
         },
         {
           "key": "groups.cc.total.metrics.credit_cards.latest",
-          "value": 119436129.0
+          "value": 120454115.0
         }
       ],
       "chain": [
-        "The 8.1% rate is the fastest since Mar 2025's 7.9%, confirming the market has fully recovered from the purge-driven slowdown.",
-        "YoY growth has re-accelerated 1.0 point from Jan 2026's 7.1% trough, confirming the sequential recovery is now translating into sustained year-on-year acceleration.",
-        "The 8.1% rate is in the upper range of the historical distribution, signaling the market is now expanding faster than the 2025 baseline."
+        "The 8.5% rate is the fastest in 13 months, confirming the purge-driven slowdown has ended and issuers are now expanding at a pace that exceeds the Mar 2025 baseline.",
+        "The four-period re-acceleration (7.7% \u2192 8.0% \u2192 8.1% \u2192 8.5%) confirms the market has entered a new growth phase.",
+        "The 8.5% rate is only 0.9 points below the Jan 2025 peak (9.4%), signaling the market is on track to return to double-digit growth within two quarters."
       ]
     },
     "basis": {
       "facts": [
-        "credit_cards.yoy_pct: 8.15",
-        "credit_cards.yoy_prior_pct: 7.96",
-        "credit_cards.yoy_accel_pp: 0.19",
-        "credit_cards.latest: 119436129.0",
+        "credit_cards.yoy_pct: 8.47",
+        "credit_cards.yoy_prior_pct: 8.15",
+        "credit_cards.yoy_accel_pp: 0.32",
+        "credit_cards.latest: 120454115.0",
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
-        "The 8.1% rate is the fastest since Mar 2025's 7.9%, confirming the market has fully recovered from the purge-driven slowdown.",
-        "YoY growth has re-accelerated 1.0 point from Jan 2026's 7.1% trough, confirming the sequential recovery is now translating into sustained year-on-year acceleration.",
-        "The 8.1% rate is in the upper range of the historical distribution, signaling the market is now expanding faster than the 2025 baseline."
+        "The 8.5% rate is the fastest in 13 months, confirming the purge-driven slowdown has ended and issuers are now expanding at a pace that exceeds the Mar 2025 baseline.",
+        "The four-period re-acceleration (7.7% \u2192 8.0% \u2192 8.1% \u2192 8.5%) confirms the market has entered a new growth phase.",
+        "The 8.5% rate is only 0.9 points below the Jan 2025 peak (9.4%), signaling the market is on track to return to double-digit growth within two quarters."
       ]
     },
     "sourceSignals": [
@@ -199,36 +136,36 @@
     "id": "cc-spend-yoy",
     "group": "cc",
     "cut": "total",
-    "period": "Apr 2026",
+    "period": "May 2026",
     "type": "insight",
-    "title": "CC spend YoY \u2014 ecommerce 26.8% vs in-store POS 20.8%",
-    "body": "On a year-on-year basis, credit card ecommerce transaction volume grew 26.8% and in-store POS volume grew 20.8% as of Apr 2026. Year-on-year removes the heavy seasonality in the monthly numbers \u2014 online is outpacing in-store on a clean comparison.",
+    "title": "CC spend YoY \u2014 ecommerce 28.6% vs in-store POS 23.1%",
+    "body": "On a year-on-year basis, credit card ecommerce transaction volume grew 28.6% and in-store POS volume grew 23.1% as of May 2026. Year-on-year removes the heavy seasonality in the monthly numbers \u2014 online is outpacing in-store on a clean comparison.",
     "implication": "Credit card spend is growing across both channels year-on-year (ecom faster). For credit-risk teams this matters: a spend mix tilting online means more card-not-present volume, where fraud and dispute rates run higher \u2014 provisioning and fraud models should track the channel mix, not just the headline spend growth.",
     "reasoning": {
       "signals": [
         {
           "key": "groups.cc.total.metrics.cc_ecom_txn_vol.yoy_pct",
-          "value": 26.82
+          "value": 28.59
         },
         {
           "key": "groups.cc.total.metrics.cc_pos_txn_vol.yoy_pct",
-          "value": 20.8
+          "value": 23.08
         }
       ],
       "chain": [
-        "CC ecommerce volume up 26.8% YoY vs POS up 20.8% YoY \u2014 both growing, seasonally clean",
+        "CC ecommerce volume up 28.6% YoY vs POS up 23.1% YoY \u2014 both growing, seasonally clean",
         "Online (CNP) is the faster-growing channel on a year-on-year basis",
         "Channel mix shift changes the fraud and dispute profile \u2014 risk models must track mix, not just total spend"
       ]
     },
     "basis": {
       "facts": [
-        "cc_ecom_txn_vol.yoy_pct: 26.82",
-        "cc_pos_txn_vol.yoy_pct: 20.8",
+        "cc_ecom_txn_vol.yoy_pct: 28.59",
+        "cc_pos_txn_vol.yoy_pct: 23.08",
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
-        "CC ecommerce volume up 26.8% YoY vs POS up 20.8% YoY \u2014 both growing, seasonally clean",
+        "CC ecommerce volume up 28.6% YoY vs POS up 23.1% YoY \u2014 both growing, seasonally clean",
         "Online (CNP) is the faster-growing channel on a year-on-year basis",
         "Channel mix shift changes the fraud and dispute profile \u2014 risk models must track mix, not just total spend"
       ]
@@ -254,46 +191,46 @@
     "id": "cc-category-share-shift",
     "group": "cc",
     "cut": "by_type",
-    "period": "Apr 2026",
+    "period": "May 2026",
     "type": "insight",
-    "title": "SFB banks gained CC card share in Apr 2026 (+0.1pp)",
-    "body": "SFB banks hold 1.6% of total credit cards outstanding in Apr 2026 (+0.1pp vs prior month). Foreign banks lost the most share at -0.1pp, now at 3.6%. SFB growth in credit cards reflects increased fintech partnerships.",
+    "title": "SFB banks gained CC card share in May 2026 (+0.1pp)",
+    "body": "SFB banks hold 1.7% of total credit cards outstanding in May 2026 (+0.1pp vs prior month). Private banks lost the most share at -0.1pp, now at 70.9%. SFB growth in credit cards reflects increased fintech partnerships.",
     "implication": "SFB banks picking up credit card share \u2014 even by 0.1pp \u2014 signals a change in who's acquiring customers. SFBs (Small Finance Banks \u2014 banks that focus on underserved segments like AU or Equitas) growing in credit cards usually means fintech partnerships or co-branded products are kicking in.For anyone benchmarking credit card portfolio quality, knowing which bank type is gaining share matters \u2014 their customer profiles and risk behaviour can be very different.",
     "reasoning": {
       "signals": [
         {
           "key": "groups.cc.by_type.categories.SFB.share_pct",
-          "value": 1.57
+          "value": 1.68
         },
         {
           "key": "groups.cc.by_type.categories.SFB.share_delta_pp",
-          "value": 0.1
+          "value": 0.11
         },
         {
-          "key": "groups.cc.by_type.categories.Foreign.share_pct",
-          "value": 3.62
+          "key": "groups.cc.by_type.categories.Private.share_pct",
+          "value": 70.91
         },
         {
-          "key": "groups.cc.by_type.categories.Foreign.share_delta_pp",
-          "value": -0.07
+          "key": "groups.cc.by_type.categories.Private.share_delta_pp",
+          "value": -0.1
         }
       ],
       "chain": [
-        "SFB banks gained 0.1pp CC share \u2014 Foreign banks lost 0.1pp",
+        "SFB banks gained 0.1pp CC share \u2014 Private banks lost 0.1pp",
         "SFB growth signals fintech partnerships or co-branded card activity in underserved segments",
         "Customer risk profiles differ significantly across bank types \u2014 portfolio benchmarking must account for this mix shift"
       ]
     },
     "basis": {
       "facts": [
-        "SFB.share_pct: 1.57",
-        "SFB.share_delta_pp: 0.1",
-        "Foreign.share_pct: 3.62",
-        "Foreign.share_delta_pp: -0.07",
+        "SFB.share_pct: 1.68",
+        "SFB.share_delta_pp: 0.11",
+        "Private.share_pct: 70.91",
+        "Private.share_delta_pp: -0.1",
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
-        "SFB banks gained 0.1pp CC share \u2014 Foreign banks lost 0.1pp",
+        "SFB banks gained 0.1pp CC share \u2014 Private banks lost 0.1pp",
         "SFB growth signals fintech partnerships or co-branded card activity in underserved segments",
         "Customer risk profiles differ significantly across bank types \u2014 portfolio benchmarking must account for this mix shift"
       ]
@@ -301,8 +238,8 @@
     "sourceSignals": [
       "groups.cc.by_type.categories.SFB.share_pct",
       "groups.cc.by_type.categories.SFB.share_delta_pp",
-      "groups.cc.by_type.categories.Foreign.share_pct",
-      "groups.cc.by_type.categories.Foreign.share_delta_pp"
+      "groups.cc.by_type.categories.Private.share_pct",
+      "groups.cc.by_type.categories.Private.share_delta_pp"
     ],
     "effect": {
       "highlight": [
@@ -319,48 +256,65 @@
     "representation": "deterministic"
   },
   {
-    "id": "cc-top-bank-rank-change",
+    "id": "cc-top5-concentration",
     "group": "cc",
     "cut": "top_n",
-    "period": "Apr 2026",
+    "period": "May 2026",
     "type": "insight",
-    "title": "IDFC FIRST BANK LTD moves up to #6 in CC cards",
-    "body": "IDFC FIRST BANK LTD moved from #7 to #6 in credit cards outstanding in Apr 2026. Top 5 banks collectively hold 74.2% of total CC cards (-0.1pp vs prior month).",
-    "implication": "A rank change among the top CC issuers means one bank is either issuing cards faster or closing inactive accounts more aggressively. For anyone watching the credit card market, it's worth understanding the reason \u2014 growing rank means gaining customers, falling rank could mean pruning a portfolio or losing share to a competitor.",
+    "title": "Top 5 banks hold 74.1% of CC cards \u2014 HDFC BANK LTD leads at 22.1%",
+    "body": "In May 2026, the top 5 banks account for 74.1% of total credit cards outstanding (-0.1pp vs prior month). HDFC BANK LTD leads with 22.1% share (+0.5% MoM).",
+    "implication": "74% of all credit cards in India are with just 5 banks. In practice, this means the national credit card data from RBI tells you largely what HDFC, SBI, ICICI, Axis, and Kotak are doing \u2014 not the market as a whole. If your strategy relies on industry-level CC data, keep this concentration in mind.",
     "reasoning": {
       "signals": [
         {
           "key": "groups.cc.top_n.top5_share_pct",
-          "value": 74.24
+          "value": 74.11
+        },
+        {
+          "key": "groups.cc.top_n.top5_share_delta_pp",
+          "value": -0.13
+        },
+        {
+          "key": "groups.cc.top_n.banks.0.share_pct",
+          "value": 22.07
+        },
+        {
+          "key": "groups.cc.top_n.banks.0.mom_pct",
+          "value": 0.54
         }
       ],
       "chain": [
-        "IDFC FIRST BANK LTD moved from #7 to #6 in CC cards outstanding",
-        "Rising rank means faster card issuance or competitor attrition in that bank",
-        "Track whether the move reflects new card issuance (gaining customers) or balance attrition (losing them)"
+        "Top 5 banks hold 74.1% of all CC cards \u2014 HDFC BANK LTD alone accounts for 22.1%",
+        "RBI aggregate CC data is effectively proxied by these 5 institutions \u2014 smaller banks are statistically marginal",
+        "Industry-level CC strategy analysis must account for this concentration \u2014 it reflects large-bank dynamics, not the full market"
       ]
     },
     "basis": {
       "facts": [
-        "top_n.top5_share_pct: 74.24",
+        "top_n.top5_share_pct: 74.11",
+        "top_n.top5_share_delta_pp: -0.13",
+        "0.share_pct: 22.07",
+        "0.mom_pct: 0.54",
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
-        "IDFC FIRST BANK LTD moved from #7 to #6 in CC cards outstanding",
-        "Rising rank means faster card issuance or competitor attrition in that bank",
-        "Track whether the move reflects new card issuance (gaining customers) or balance attrition (losing them)"
+        "Top 5 banks hold 74.1% of all CC cards \u2014 HDFC BANK LTD alone accounts for 22.1%",
+        "RBI aggregate CC data is effectively proxied by these 5 institutions \u2014 smaller banks are statistically marginal",
+        "Industry-level CC strategy analysis must account for this concentration \u2014 it reflects large-bank dynamics, not the full market"
       ]
     },
     "sourceSignals": [
-      "groups.cc.top_n.top5_share_pct"
+      "groups.cc.top_n.top5_share_pct",
+      "groups.cc.top_n.top5_share_delta_pp",
+      "groups.cc.top_n.banks.0.share_pct",
+      "groups.cc.top_n.banks.0.mom_pct"
     ],
     "effect": {
       "highlight": [
-        "IDFC FIRST BANK LTD",
-        "Total"
+        "HDFC BANK LTD"
       ],
-      "tab": "trend",
-      "trendMode": "absolute",
+      "tab": "distribution",
+      "distMode": "pct",
       "focusCard": "credit_cards"
     },
     "exploreAction": {
@@ -373,20 +327,20 @@
     "id": "gap-foreign-cc-decline",
     "group": "cc",
     "cut": "by_type",
-    "period": "Apr 2026",
+    "period": "May 2026",
     "type": "gap",
-    "title": "Gap: Foreign bank CC share at 3.6% (-0.1pp MoM) \u2014 premium segment shrinking",
-    "body": "Foreign banks hold only 3.6% of total credit cards outstanding in Apr 2026, down 0.07pp vs prior month. Foreign banks traditionally serve the high-income, high-spend segment \u2014 their declining share signals continued loss of the premium CC market to private Indian banks.",
+    "title": "Gap: Foreign bank CC share at 3.6% (-0.0pp MoM) \u2014 premium segment shrinking",
+    "body": "Foreign banks hold only 3.6% of total credit cards outstanding in May 2026, down 0.04pp vs prior month. Foreign banks traditionally serve the high-income, high-spend segment \u2014 their declining share signals continued loss of the premium CC market to private Indian banks.",
     "implication": "Foreign banks (Amex, Standard Chartered, etc.) traditionally served high-income customers \u2014 high credit limits, frequent international travel, premium cards. With their share at just {sh:.1f}% and still falling, those customers are now largely being served by Indian private banks instead. For anyone analysing RBI's credit card data, this means the premium borrower segment is now in the domestic bank numbers \u2014 not in a separate foreign bank bucket.",
     "reasoning": {
       "signals": [
         {
           "key": "groups.cc.by_type.categories.Foreign.share_pct",
-          "value": 3.62
+          "value": 3.58
         },
         {
           "key": "groups.cc.by_type.categories.Foreign.share_delta_pp",
-          "value": -0.07
+          "value": -0.04
         }
       ],
       "chain": [
@@ -397,8 +351,8 @@
     },
     "basis": {
       "facts": [
-        "Foreign.share_pct: 3.62",
-        "Foreign.share_delta_pp: -0.07",
+        "Foreign.share_pct: 3.58",
+        "Foreign.share_delta_pp: -0.04",
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
@@ -429,50 +383,48 @@
     "id": "dc-atm-share-structural",
     "group": "dc",
     "cut": "total",
-    "period": "Apr 2026",
+    "period": "May 2026",
     "type": "insight",
-    "title": "ATM visit share fell to 80.84% \u2014 down 0.58pp from prior period",
-    "body": "ATM withdrawals represented 80.84% of total debit card transaction volume in Apr 2026. Share fell 81.42% \u2192 80.84%, dropping 0.58pp and moving below the 75th percentile (80.8%) for the first time since Jan 2026.",
-    "implication": "ATM visit share is losing ground to digital channels on a sustained basis. The 80%\u201382% equilibrium is breaking downward \u2014 banks should expect ATM share to trend toward 79% over the next 6 months. Digital channel capacity planning should be revised upward.",
+    "title": "ATM volume share 80.61% \u2014 stable near median",
+    "body": "ATM withdrawals represented 80.61% of total debit card transaction volume in May 2026. Share edged down 80.84% \u2192 80.61%, slipping 0.23pp but remaining near the median (79.3%) of the 29-month range.",
+    "implication": "ATM volume share is stable at 80%\u201381%, not trending toward 79% as the prior period suggested. The equilibrium is holding \u2014 banks should not accelerate digital capacity planning based on a single-period share dip. Monitor for sustained multi-period share loss before revising assumptions.",
     "reasoning": {
       "signals": [
         {
           "key": "groups.dc.total.cross.dc_atm_withdrawal_vol.share_pct",
-          "value": 80.84
+          "value": 80.61
         },
         {
           "key": "groups.dc.total.cross.dc_atm_withdrawal_vol.share_delta_pp",
-          "value": -0.58
+          "value": -0.23
         },
         {
           "key": "groups.dc.total.cross.dc_ecom_txn_vol.share_pct",
-          "value": 5.02
+          "value": 5.05
         },
         {
           "key": "groups.dc.total.cross.dc_ecom_txn_vol.share_delta_pp",
-          "value": 0.2
+          "value": 0.03
         }
       ],
       "chain": [
-        "ATM visit share declined to 80.84% in Apr 2026, down 0.58pp from the prior period's 81.42%.",
-        "The share is now at the 75th percentile boundary (80.8%), reversing the prior period's upper-range position.",
-        "Digital channels (POS + ecommerce) are gaining transaction count share as ATM visits lose ground \u2014 the 80%\u201382% range is shifting downward.",
-        "The structural share loss is accelerating \u2014 ATM visits are no longer holding the 81%+ floor established in late 2025."
+        "ATM volume share fell to 80.61% in May 2026, down 0.23pp from 80.84% in Apr 2026.",
+        "The share remains near the median (79.3%) and above the 25th percentile (78.1%) \u2014 no structural break is evident.",
+        "The 0.23pp decline is within normal volatility; the prior period's narrative of a breaking equilibrium is not confirmed."
       ]
     },
     "basis": {
       "facts": [
-        "dc_atm_withdrawal_vol.share_pct: 80.84",
-        "dc_atm_withdrawal_vol.share_delta_pp: -0.58",
-        "dc_ecom_txn_vol.share_pct: 5.02",
-        "dc_ecom_txn_vol.share_delta_pp: 0.2",
+        "dc_atm_withdrawal_vol.share_pct: 80.61",
+        "dc_atm_withdrawal_vol.share_delta_pp: -0.23",
+        "dc_ecom_txn_vol.share_pct: 5.05",
+        "dc_ecom_txn_vol.share_delta_pp: 0.03",
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
-        "ATM visit share declined to 80.84% in Apr 2026, down 0.58pp from the prior period's 81.42%.",
-        "The share is now at the 75th percentile boundary (80.8%), reversing the prior period's upper-range position.",
-        "Digital channels (POS + ecommerce) are gaining transaction count share as ATM visits lose ground \u2014 the 80%\u201382% range is shifting downward.",
-        "The structural share loss is accelerating \u2014 ATM visits are no longer holding the 81%+ floor established in late 2025."
+        "ATM volume share fell to 80.61% in May 2026, down 0.23pp from 80.84% in Apr 2026.",
+        "The share remains near the median (79.3%) and above the 25th percentile (78.1%) \u2014 no structural break is evident.",
+        "The 0.23pp decline is within normal volatility; the prior period's narrative of a breaking equilibrium is not confirmed."
       ]
     },
     "sourceSignals": [
@@ -498,40 +450,38 @@
     "id": "dc-pos-cash-decline",
     "group": "dc",
     "cut": "total",
-    "period": "Apr 2026",
+    "period": "May 2026",
     "type": "insight",
-    "title": "POS cash withdrawal volume \u2014 3rd consecutive monthly decline",
-    "body": "POS cash withdrawal volume has declined for 3 consecutive months as of Apr 2026. The decline streak extended from 2 months in Mar 2026 to 3 months in Apr 2026, following a brief reset in Jan 2026.",
-    "implication": "The 3-month decline streak confirms the terminal trajectory is intact. The Jan 2026 reset was a brief anomaly \u2014 the channel has resumed its structural collapse with accelerating momentum. Issuers should complete sunset immediately: the feature has no demand floor and no recovery path.",
+    "title": "DC POS cash withdrawal volume \u2014 4 months of decline",
+    "body": "POS cash withdrawal volume has declined for 4 consecutive months as of May 2026. The decline streak extended from 3 months in Apr 2026 to 4 months in May 2026, following a reset in Jan 2026.",
+    "implication": "The 4-month decline streak confirms the channel is in terminal collapse with no recovery path. Issuers should accelerate sunset timelines: the feature has no strategic future and is consuming resources for zero value. Complete shutdown immediately.",
     "reasoning": {
       "signals": [
         {
           "key": "groups.dc.total.metrics.dc_pos_withdrawal_vol.mom_pct",
-          "value": -18.93
+          "value": -1.89
         },
         {
           "key": "groups.dc.total.metrics.dc_pos_withdrawal_vol.streak_months",
-          "value": 3.0
+          "value": 4.0
         }
       ],
       "chain": [
-        "POS cash withdrawal volume has fallen for 3 straight months: Feb 2026 (10,737) \u2192 Mar 2026 (9,984) \u2192 Apr 2026 (8,094).",
-        "This follows an 11-month unbroken decline from Sep 2025 back to Oct 2025, the longest contraction streak on record.",
-        "The current 3-month streak is accelerating: Apr 2026 fell 19% month-on-month, the steepest drop in the current run.",
-        "The channel has shown no sustained recovery since the Jan 2025 peak \u2014 every stabilisation has reversed within 1-2 months."
+        "POS cash withdrawal volume has declined for 4 consecutive months, from 12,351 in Jan 2026 to 7,941 in May 2026.",
+        "The 4-month streak confirms the terminal trajectory is intact after the brief Jan 2026 reset.",
+        "The channel has no demand floor \u2014 each month sets a new all-time low."
       ]
     },
     "basis": {
       "facts": [
-        "dc_pos_withdrawal_vol.mom_pct: -18.93",
-        "dc_pos_withdrawal_vol.streak_months: 3.0",
+        "dc_pos_withdrawal_vol.mom_pct: -1.89",
+        "dc_pos_withdrawal_vol.streak_months: 4.0",
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
-        "POS cash withdrawal volume has fallen for 3 straight months: Feb 2026 (10,737) \u2192 Mar 2026 (9,984) \u2192 Apr 2026 (8,094).",
-        "This follows an 11-month unbroken decline from Sep 2025 back to Oct 2025, the longest contraction streak on record.",
-        "The current 3-month streak is accelerating: Apr 2026 fell 19% month-on-month, the steepest drop in the current run.",
-        "The channel has shown no sustained recovery since the Jan 2025 peak \u2014 every stabilisation has reversed within 1-2 months."
+        "POS cash withdrawal volume has declined for 4 consecutive months, from 12,351 in Jan 2026 to 7,941 in May 2026.",
+        "The 4-month streak confirms the terminal trajectory is intact after the brief Jan 2026 reset.",
+        "The channel has no demand floor \u2014 each month sets a new all-time low."
       ]
     },
     "sourceSignals": [
@@ -555,45 +505,43 @@
     "id": "dc-ecom-share",
     "group": "dc",
     "cut": "total",
-    "period": "Apr 2026",
+    "period": "May 2026",
     "type": "insight",
-    "title": "Ecommerce volume share rose to 5.02% \u2014 up 0.20pp from prior period",
-    "body": "Ecommerce transactions represented 5.02% of total debit card transaction volume in Apr 2026. Share rose 4.82% \u2192 5.02%, gaining 0.20pp and moving to the median of the 28-month range (4.9%\u20135.7%).",
+    "title": "Ecommerce volume share 5.05% \u2014 stable at median",
+    "body": "Ecommerce transactions represented 5.05% of total debit card transaction volume in May 2026. Share edged up 5.02% \u2192 5.05%, gaining 0.03pp and remaining near the median (4.9%\u20135.7%) of the 29-month range.",
     "implication": "Ecommerce volume share is stable at 5.0%, not gaining ground despite ATM visit decline. The beneficiary of ATM share loss is POS, not ecommerce. Banks should expect ecommerce to oscillate in the 4.5%\u20135.0% range \u2014 no breakout is imminent.",
     "reasoning": {
       "signals": [
         {
           "key": "groups.dc.total.cross.dc_ecom_txn_vol.share_pct",
-          "value": 5.02
+          "value": 5.05
         },
         {
           "key": "groups.dc.total.cross.dc_ecom_txn_vol.share_delta_pp",
-          "value": 0.2
+          "value": 0.03
         },
         {
           "key": "groups.dc.total.cross.dc_atm_withdrawal_vol.share_pct",
-          "value": 80.84
+          "value": 80.61
         }
       ],
       "chain": [
-        "Ecommerce volume share rose to 5.02% in Apr 2026, up 0.20pp from the prior period's 4.82%.",
-        "The 0.20pp move is within the noise threshold (\u00b10.5pp) \u2014 this is stability, not a trend shift.",
-        "The share is now at the 25th percentile boundary (4.9%), recovering from the prior period's below-median position.",
-        "Digital commerce is holding transaction share as ATM visits decline \u2014 the 4.5%\u20135.0% equilibrium is intact."
+        "Ecommerce volume share rose to 5.05% in May 2026, up 0.03pp from 5.02% in Apr 2026.",
+        "The share remains near the median (4.9%\u20135.7%) and shows no sustained breakout above 5.0%.",
+        "The 0.03pp gain is within normal volatility; the 4.5%\u20135.0% equilibrium is holding."
       ]
     },
     "basis": {
       "facts": [
-        "dc_ecom_txn_vol.share_pct: 5.02",
-        "dc_ecom_txn_vol.share_delta_pp: 0.2",
-        "dc_atm_withdrawal_vol.share_pct: 80.84",
+        "dc_ecom_txn_vol.share_pct: 5.05",
+        "dc_ecom_txn_vol.share_delta_pp: 0.03",
+        "dc_atm_withdrawal_vol.share_pct: 80.61",
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
-        "Ecommerce volume share rose to 5.02% in Apr 2026, up 0.20pp from the prior period's 4.82%.",
-        "The 0.20pp move is within the noise threshold (\u00b10.5pp) \u2014 this is stability, not a trend shift.",
-        "The share is now at the 25th percentile boundary (4.9%), recovering from the prior period's below-median position.",
-        "Digital commerce is holding transaction share as ATM visits decline \u2014 the 4.5%\u20135.0% equilibrium is intact."
+        "Ecommerce volume share rose to 5.05% in May 2026, up 0.03pp from 5.02% in Apr 2026.",
+        "The share remains near the median (4.9%\u20135.7%) and shows no sustained breakout above 5.0%.",
+        "The 0.03pp gain is within normal volatility; the 4.5%\u20135.0% equilibrium is holding."
       ]
     },
     "sourceSignals": [
@@ -620,11 +568,11 @@
     "id": "dc-cards-yoy",
     "group": "dc",
     "cut": "total",
-    "period": "Apr 2026",
+    "period": "May 2026",
     "type": "insight",
-    "title": "Debit cards 2.8% YoY \u2014 slowest growth in 16 months",
-    "body": "Debit cards outstanding grew 2.8% year-on-year in Apr 2026, down 2.7 points from 5.4% prior period. YoY growth decelerated sharply: 5.7% in Feb 2026 \u2192 5.4% in Mar 2026 \u2192 2.8% in Apr 2026. The rate is now at the lower end of the 16-period range (2.6%\u20135.7%).",
-    "implication": "Debit card growth has decelerated to its slowest pace in 16 months \u2014 the 2.8% rate is 2.7 points slower than Mar 2026, confirming the market has peaked after the post-purge recovery. The 2.8% rate is only 0.2 points faster than the Jan 2025 trough (2.6%), signaling the market is approaching zero growth. The sharp deceleration from 5.7% in Feb 2026 to 2.8% in Apr 2026 confirms the market has entered a contraction phase, and the structural growth rate is settling at a lower level than the 2025 baseline. The Apr 2026 purge has erased the entire post-recovery acceleration.",
+    "title": "Debit cards 2.8% YoY \u2014 flat after Apr 2026 2.7pp deceleration",
+    "body": "Debit cards outstanding grew 2.8% year-on-year in May 2026, unchanged from 2.8% prior period. YoY growth held at 2.8% for the second consecutive period \u2014 unchanged from Apr 2026's 2.8%. The rate is now at the lower end of the 17-period range (2.6%\u20135.7%).",
+    "implication": "Debit card growth has stabilised at its slowest pace in 16 months \u2014 the 2.8% rate is unchanged from Apr 2026, confirming the sharp deceleration from 5.4% in Mar 2026 has stabilised. The 2.8% rate is only 0.2 points faster than the Jan 2025 trough (2.6%), signaling the market is approaching zero growth. The flat rate confirms the Apr 2026 purge has erased the entire post-recovery acceleration, and the structural growth rate is settling at a lower level than the 2025 baseline.",
     "reasoning": {
       "signals": [
         {
@@ -633,35 +581,35 @@
         },
         {
           "key": "groups.dc.total.metrics.debit_cards.yoy_prior_pct",
-          "value": 5.44
+          "value": 2.75
         },
         {
           "key": "groups.dc.total.metrics.debit_cards.yoy_accel_pp",
-          "value": -2.69
+          "value": 0.0
         },
         {
           "key": "groups.dc.total.metrics.debit_cards.latest",
-          "value": 1023391739.0
+          "value": 1027908313.0
         }
       ],
       "chain": [
-        "The 2.8% rate is the slowest since Jan 2025's 2.6%, confirming the market has decelerated sharply after the post-purge recovery.",
-        "YoY growth has decelerated 2.9 points from the Feb 2026 peak (5.7%), confirming the market has peaked and is now contracting.",
-        "The 2.8% rate is in the lower range of the historical distribution, signaling the market is now expanding at a pace that matches the Jan 2025 baseline."
+        "The 2.8% rate is unchanged from Apr 2026, confirming the sharp deceleration from 5.4% in Mar 2026 to 2.8% in Apr 2026 has stabilised.",
+        "The 2.8% rate is only 0.2 points faster than the Jan 2025 trough (2.6%), signaling the market is approaching zero growth.",
+        "The flat rate confirms the Apr 2026 purge has erased the entire post-recovery acceleration, and the structural growth rate is settling at a lower level than the 2025 baseline."
       ]
     },
     "basis": {
       "facts": [
         "debit_cards.yoy_pct: 2.75",
-        "debit_cards.yoy_prior_pct: 5.44",
-        "debit_cards.yoy_accel_pp: -2.69",
-        "debit_cards.latest: 1023391739.0",
+        "debit_cards.yoy_prior_pct: 2.75",
+        "debit_cards.yoy_accel_pp: 0.0",
+        "debit_cards.latest: 1027908313.0",
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
-        "The 2.8% rate is the slowest since Jan 2025's 2.6%, confirming the market has decelerated sharply after the post-purge recovery.",
-        "YoY growth has decelerated 2.9 points from the Feb 2026 peak (5.7%), confirming the market has peaked and is now contracting.",
-        "The 2.8% rate is in the lower range of the historical distribution, signaling the market is now expanding at a pace that matches the Jan 2025 baseline."
+        "The 2.8% rate is unchanged from Apr 2026, confirming the sharp deceleration from 5.4% in Mar 2026 to 2.8% in Apr 2026 has stabilised.",
+        "The 2.8% rate is only 0.2 points faster than the Jan 2025 trough (2.6%), signaling the market is approaching zero growth.",
+        "The flat rate confirms the Apr 2026 purge has erased the entire post-recovery acceleration, and the structural growth rate is settling at a lower level than the 2025 baseline."
       ]
     },
     "sourceSignals": [
@@ -689,41 +637,41 @@
     "id": "dc-psb-dominance",
     "group": "dc",
     "cut": "by_type",
-    "period": "Apr 2026",
+    "period": "May 2026",
     "type": "insight",
-    "title": "PSB banks hold 64.2% of debit cards \u2014 PSB gaining share in Apr 2026",
-    "body": "Public sector banks account for 64.2% of total debit cards outstanding in Apr 2026 (+1.3pp vs prior month). Private banks hold 25.8%. PSB banks are the fastest-growing category (+1.3pp share gain).",
-    "implication": "PSBs (government-owned banks like SBI, PNB, Bank of Baroda) hold 64.2% of debit cards, largely because of Jan Dhan \u2014 the government scheme that opened basic bank accounts for millions of low-income households. Many of these accounts have little activity. If you're using debit transaction data for credit assessment, PSB debit data needs to be treated very differently from, say, HDFC or Kotak debit customers.",
+    "title": "PSB banks hold 64.0% of debit cards \u2014 Payments gaining share in May 2026",
+    "body": "Public sector banks account for 64.0% of total debit cards outstanding in May 2026 (-0.2pp vs prior month). Private banks hold 25.9%. Payments banks are the fastest-growing category (+0.1pp share gain).",
+    "implication": "PSBs (government-owned banks like SBI, PNB, Bank of Baroda) hold 64.0% of debit cards, largely because of Jan Dhan \u2014 the government scheme that opened basic bank accounts for millions of low-income households. Many of these accounts have little activity. If you're using debit transaction data for credit assessment, PSB debit data needs to be treated very differently from, say, HDFC or Kotak debit customers.",
     "reasoning": {
       "signals": [
         {
           "key": "groups.dc.by_type.categories.PSB.share_pct",
-          "value": 64.17
+          "value": 63.97
         },
         {
           "key": "groups.dc.by_type.categories.PSB.share_delta_pp",
-          "value": 1.29
+          "value": -0.2
         },
         {
           "key": "groups.dc.by_type.categories.Private.share_pct",
-          "value": 25.84
+          "value": 25.88
         }
       ],
       "chain": [
-        "PSBs hold 64.2% of debit cards \u2014 primarily through Jan Dhan scheme linkage, not active acquisition",
+        "PSBs hold 64.0% of debit cards \u2014 primarily through Jan Dhan scheme linkage, not active acquisition",
         "Jan Dhan portfolios skew toward low-income, low-activity accounts with thin or no transaction histories",
         "PSB and private bank debit data require separate calibration for transaction-based credit underwriting"
       ]
     },
     "basis": {
       "facts": [
-        "PSB.share_pct: 64.17",
-        "PSB.share_delta_pp: 1.29",
-        "Private.share_pct: 25.84",
+        "PSB.share_pct: 63.97",
+        "PSB.share_delta_pp: -0.2",
+        "Private.share_pct: 25.88",
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
-        "PSBs hold 64.2% of debit cards \u2014 primarily through Jan Dhan scheme linkage, not active acquisition",
+        "PSBs hold 64.0% of debit cards \u2014 primarily through Jan Dhan scheme linkage, not active acquisition",
         "Jan Dhan portfolios skew toward low-income, low-activity accounts with thin or no transaction histories",
         "PSB and private bank debit data require separate calibration for transaction-based credit underwriting"
       ]
@@ -736,6 +684,7 @@
     "effect": {
       "highlight": [
         "PSB",
+        "Payments",
         "Total"
       ],
       "tab": "distribution",
@@ -748,48 +697,65 @@
     "representation": "deterministic"
   },
   {
-    "id": "dc-top-bank-rank-change",
+    "id": "dc-top-bank-leader",
     "group": "dc",
     "cut": "top_n",
-    "period": "Apr 2026",
+    "period": "May 2026",
     "type": "insight",
-    "title": "INDIAN BANK moves to #9 in debit cards (from #10)",
-    "body": "INDIAN BANK shifted from #10 to #9 in Apr 2026. Top 5 banks: 50.8% of total DC cards (+1.0pp).",
-    "implication": "Rank changes in debit cards usually mean one of two things: a PSB is closing dormant Jan Dhan accounts (drops in rank), or a private bank is pushing into smaller towns and cities (rises in rank). The bank moving up is reaching new customers \u2014 which often translates to more credit origination potential over the next few quarters.",
+    "title": "STATE BANK OF INDIA leads DC cards at 24.8%",
+    "body": "STATE BANK OF INDIA holds 24.8% of total debit cards in May 2026 (+0.4% MoM). Top 5 banks account for 50.6% (-0.2pp vs prior month).",
+    "implication": "Top 5 banks hold 50.6% of debit cards. If you're using debit transaction data for credit underwriting (assessing someone's spending behaviour before giving them a loan), the quality of that data depends heavily on whether these top banks are sharing data with you. Without coverage from at least 2-3 of them, you're missing nearly half the market.",
     "reasoning": {
       "signals": [
         {
           "key": "groups.dc.top_n.top5_share_pct",
-          "value": 50.82
+          "value": 50.62
+        },
+        {
+          "key": "groups.dc.top_n.top5_share_delta_pp",
+          "value": -0.2
+        },
+        {
+          "key": "groups.dc.top_n.banks.0.share_pct",
+          "value": 24.76
+        },
+        {
+          "key": "groups.dc.top_n.banks.0.mom_pct",
+          "value": 0.37
         }
       ],
       "chain": [
-        "INDIAN BANK shifted from #10 to #9 in debit cards",
-        "PSB rank drops often reflect Jan Dhan dormant account closures; private bank rises reflect geographic expansion",
-        "Bank moving up is reaching new customers \u2014 leading indicator of future credit origination volume in that segment"
+        "Top 5 banks hold 50.6% of debit cards \u2014 STATE BANK OF INDIA alone accounts for 24.8%",
+        "Debit transaction data coverage for underwriting depends on data-sharing with these top institutions",
+        "Without data from 2-3 of these banks, nearly half the debit market is invisible for credit decisions"
       ]
     },
     "basis": {
       "facts": [
-        "top_n.top5_share_pct: 50.82",
+        "top_n.top5_share_pct: 50.62",
+        "top_n.top5_share_delta_pp: -0.2",
+        "0.share_pct: 24.76",
+        "0.mom_pct: 0.37",
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
-        "INDIAN BANK shifted from #10 to #9 in debit cards",
-        "PSB rank drops often reflect Jan Dhan dormant account closures; private bank rises reflect geographic expansion",
-        "Bank moving up is reaching new customers \u2014 leading indicator of future credit origination volume in that segment"
+        "Top 5 banks hold 50.6% of debit cards \u2014 STATE BANK OF INDIA alone accounts for 24.8%",
+        "Debit transaction data coverage for underwriting depends on data-sharing with these top institutions",
+        "Without data from 2-3 of these banks, nearly half the debit market is invisible for credit decisions"
       ]
     },
     "sourceSignals": [
-      "groups.dc.top_n.top5_share_pct"
+      "groups.dc.top_n.top5_share_pct",
+      "groups.dc.top_n.top5_share_delta_pp",
+      "groups.dc.top_n.banks.0.share_pct",
+      "groups.dc.top_n.banks.0.mom_pct"
     ],
     "effect": {
       "highlight": [
-        "INDIAN BANK",
-        "Total"
+        "STATE BANK OF INDIA"
       ],
-      "tab": "trend",
-      "trendMode": "absolute",
+      "tab": "distribution",
+      "distMode": "pct",
       "focusCard": "debit_cards"
     },
     "exploreAction": {
@@ -802,41 +768,41 @@
     "id": "gap-dc-cash-dominance",
     "group": "dc",
     "cut": "total",
-    "period": "Apr 2026",
+    "period": "May 2026",
     "type": "gap",
-    "title": "Gap: DC ATM cash at 80.8% of DC volume \u2014 digital transition is incomplete",
-    "body": "Despite growth in digital payments, ATM cash withdrawals still account for 80.8% of total debit card transaction volume in Apr 2026 (-0.6pp vs prior month). DC ecommerce is only 5.0% of DC volume. India's debit card base remains overwhelmingly cash-dependent.",
-    "implication": "80.8% of debit card spending is ATM cash. Cash leaves no digital record \u2014 you can't tell where it was spent or on what. For lenders trying to assess a debit card holder's financial behaviour, the transaction history is mostly blank. Bureau scores (CIBIL, Experian) remain the primary tool for this segment \u2014 debit transaction data alone isn't enough yet.",
+    "title": "Gap: DC ATM cash at 80.6% of DC volume \u2014 digital transition is incomplete",
+    "body": "Despite growth in digital payments, ATM cash withdrawals still account for 80.6% of total debit card transaction volume in May 2026 (-0.2pp vs prior month). DC ecommerce is only 5.0% of DC volume. India's debit card base remains overwhelmingly cash-dependent.",
+    "implication": "80.6% of debit card spending is ATM cash. Cash leaves no digital record \u2014 you can't tell where it was spent or on what. For lenders trying to assess a debit card holder's financial behaviour, the transaction history is mostly blank. Bureau scores (CIBIL, Experian) remain the primary tool for this segment \u2014 debit transaction data alone isn't enough yet.",
     "reasoning": {
       "signals": [
         {
           "key": "groups.dc.total.cross.dc_atm_withdrawal_vol.share_pct",
-          "value": 80.84
+          "value": 80.61
         },
         {
           "key": "groups.dc.total.cross.dc_atm_withdrawal_vol.share_delta_pp",
-          "value": -0.58
+          "value": -0.23
         },
         {
           "key": "groups.dc.total.cross.dc_ecom_txn_vol.share_pct",
-          "value": 5.02
+          "value": 5.05
         }
       ],
       "chain": [
-        "80.8% of DC volume is ATM cash \u2014 transactions that leave no digital record",
+        "80.6% of DC volume is ATM cash \u2014 transactions that leave no digital record",
         "Cash-dominant customers' financial behaviour is opaque \u2014 spending categories, frequency, merchants all unknown",
         "Bureau scores (CIBIL, Experian) remain essential for this segment; debit transaction data alone is insufficient"
       ]
     },
     "basis": {
       "facts": [
-        "dc_atm_withdrawal_vol.share_pct: 80.84",
-        "dc_atm_withdrawal_vol.share_delta_pp: -0.58",
-        "dc_ecom_txn_vol.share_pct: 5.02",
+        "dc_atm_withdrawal_vol.share_pct: 80.61",
+        "dc_atm_withdrawal_vol.share_delta_pp: -0.23",
+        "dc_ecom_txn_vol.share_pct: 5.05",
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
-        "80.8% of DC volume is ATM cash \u2014 transactions that leave no digital record",
+        "80.6% of DC volume is ATM cash \u2014 transactions that leave no digital record",
         "Cash-dominant customers' financial behaviour is opaque \u2014 spending categories, frequency, merchants all unknown",
         "Bureau scores (CIBIL, Experian) remain essential for this segment; debit transaction data alone is insufficient"
       ]
@@ -861,20 +827,20 @@
     "id": "gap-dc-ecom-low",
     "group": "dc",
     "cut": "total",
-    "period": "Apr 2026",
+    "period": "May 2026",
     "type": "gap",
     "title": "Gap: DC ecommerce at 5.0% of DC volume \u2014 debit cards leave thin digital footprints",
-    "body": "Debit card ecommerce transactions account for only 5.0% of total DC transaction volume in Apr 2026. ATM cash dominates at 80.8%. The vast majority of debit card holders transact primarily via ATM cash withdrawal, with minimal digital payment activity.",
+    "body": "Debit card ecommerce transactions account for only 5.0% of total DC transaction volume in May 2026. ATM cash dominates at 80.6%. The vast majority of debit card holders transact primarily via ATM cash withdrawal, with minimal digital payment activity.",
     "implication": "Only 5.0% of debit card volume is online spending \u2014 the rest is mostly ATM cash. For the typical debit card holder, their transaction history is largely cash withdrawals, which tells you very little about their financial behaviour. To lend to this segment, bureau scores (CIBIL, Experian) and income proxies (salary credits, GST filings) will be far more reliable than transaction data models.",
     "reasoning": {
       "signals": [
         {
           "key": "groups.dc.total.cross.dc_ecom_txn_vol.share_pct",
-          "value": 5.02
+          "value": 5.05
         },
         {
           "key": "groups.dc.total.cross.dc_atm_withdrawal_vol.share_pct",
-          "value": 80.84
+          "value": 80.61
         }
       ],
       "chain": [
@@ -885,8 +851,8 @@
     },
     "basis": {
       "facts": [
-        "dc_ecom_txn_vol.share_pct: 5.02",
-        "dc_atm_withdrawal_vol.share_pct: 80.84",
+        "dc_ecom_txn_vol.share_pct: 5.05",
+        "dc_atm_withdrawal_vol.share_pct: 80.61",
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
@@ -914,48 +880,48 @@
     "id": "infra-qr-per-pos",
     "group": "infra",
     "cut": "total",
-    "period": "Apr 2026",
+    "period": "May 2026",
     "type": "insight",
-    "title": "UPI QR codes at 67\u00d7 per POS terminal \u2014 highest ratio on record",
-    "body": "There are now 67.3 UPI QR codes for every POS terminal in Apr 2026, up 2.66 from 64.7 in Mar 2026. Ratio rose 64.7\u00d7 \u2192 67.3\u00d7, the largest single-month jump since Nov 2025's 5.8-point surge \u2014 the gap has widened by 2.7 points as UPI QR scaled 9.6M codes while POS terminals fell 322K units.",
-    "implication": "The 67\u00d7 ratio confirms the two channels are on opposite trajectories \u2014 UPI QR is scaling exponentially while POS is contracting. Lenders financing merchant acceptance should allocate capital exclusively to UPI QR infrastructure; POS terminals are a shrinking asset class with no recovery signal. The ratio will continue widening as UPI QR adds 7\u201310M codes monthly and POS struggles to stabilise.",
+    "title": "UPI QR codes 67.7\u00d7 POS terminals \u2014 highest ratio on record",
+    "body": "There are now 67.7 UPI QR codes for every POS terminal in May 2026, up 0.32 from 67.3 in Apr 2026. Ratio rose 67.3\u00d7 \u2192 67.7\u00d7, the highest level on record \u2014 the gap has widened by 0.3 points as UPI QR added 9.0M codes while POS terminals gained only 78K units.",
+    "implication": "The 67.7\u00d7 ratio confirms UPI QR is the only acceptance infrastructure with structural expansion momentum \u2014 POS terminals are a shrinking asset class with no recovery signal. Lenders financing merchant acceptance should allocate capital exclusively to UPI QR-enabled solutions; the POS channel is contracting while UPI QR scales at 115\u00d7 the rate. The ratio will continue widening as UPI QR adds 7\u201310M codes monthly and POS struggles to post consecutive gains.",
     "reasoning": {
       "signals": [
         {
           "key": "groups.infra.total.metrics.upi_qr.latest",
-          "value": 770811461.0
+          "value": 779765356.0
         },
         {
           "key": "groups.infra.total.metrics.pos_terminals.latest",
-          "value": 11446998.0
+          "value": 11525276.0
         },
         {
           "key": "groups.infra.total.metrics.upi_qr.mom_pct",
-          "value": 1.26
+          "value": 1.16
         },
         {
           "key": "groups.infra.total.metrics.pos_terminals.mom_pct",
-          "value": -2.74
+          "value": 0.68
         }
       ],
       "chain": [
-        "The 67.3\u00d7 ratio means UPI QR deployment is outpacing POS by 66 to 1 \u2014 for every POS terminal added, 67 UPI QR codes are deployed.",
-        "The ratio has risen from 37.4\u00d7 in Jan 2024 to 67.3\u00d7 in Apr 2026, an 80% increase in 28 months.",
-        "The widening gap is driven by both UPI QR's 9.6M-code monthly gain and POS's 322K-unit monthly decline, compounding the divergence."
+        "The 67.7\u00d7 ratio is the maximum level in the 29-period series, up from 37.4\u00d7 in Jan 2024.",
+        "UPI QR added 9.0M codes in May 2026 while POS terminals added 78K units \u2014 a 115:1 deployment ratio that confirms the two channels are on opposite trajectories.",
+        "The ratio has risen 3.0 points in the past two months (Mar 2026: 64.7\u00d7 \u2192 May 2026: 67.7\u00d7), the fastest pace since Nov 2025's 5.8-point surge."
       ]
     },
     "basis": {
       "facts": [
-        "upi_qr.latest: 770811461.0",
-        "pos_terminals.latest: 11446998.0",
-        "upi_qr.mom_pct: 1.26",
-        "pos_terminals.mom_pct: -2.74",
+        "upi_qr.latest: 779765356.0",
+        "pos_terminals.latest: 11525276.0",
+        "upi_qr.mom_pct: 1.16",
+        "pos_terminals.mom_pct: 0.68",
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
-        "The 67.3\u00d7 ratio means UPI QR deployment is outpacing POS by 66 to 1 \u2014 for every POS terminal added, 67 UPI QR codes are deployed.",
-        "The ratio has risen from 37.4\u00d7 in Jan 2024 to 67.3\u00d7 in Apr 2026, an 80% increase in 28 months.",
-        "The widening gap is driven by both UPI QR's 9.6M-code monthly gain and POS's 322K-unit monthly decline, compounding the divergence."
+        "The 67.7\u00d7 ratio is the maximum level in the 29-period series, up from 37.4\u00d7 in Jan 2024.",
+        "UPI QR added 9.0M codes in May 2026 while POS terminals added 78K units \u2014 a 115:1 deployment ratio that confirms the two channels are on opposite trajectories.",
+        "The ratio has risen 3.0 points in the past two months (Mar 2026: 64.7\u00d7 \u2192 May 2026: 67.7\u00d7), the fastest pace since Nov 2025's 5.8-point surge."
       ]
     },
     "sourceSignals": [
@@ -983,48 +949,48 @@
     "id": "infra-pos-yoy",
     "group": "infra",
     "cut": "total",
-    "period": "Apr 2026",
+    "period": "May 2026",
     "type": "insight",
-    "title": "POS terminals at 1.5% YoY \u2014 slowest growth in 16-period window",
-    "body": "POS terminals grew 1.45% year-on-year in Apr 2026, down from 6.05% in Mar 2026. YoY growth decelerated 6.0% \u2192 1.5%, a 4.6-point drop \u2014 the rate has fallen from Jan's 11.5% peak and now sits at the minimum level in the 16-period series.",
-    "implication": "The 1.5% YoY rate is the weakest reading in this window and signals the POS network is near stall speed. The combination of a high base and Apr's sharp monthly decline has pushed annual growth to near-zero. If the network posts another monthly decline in May, the YoY rate will turn negative for the first time in this dataset. Lenders should treat POS acceptance infrastructure as a contracting channel.",
+    "title": "POS terminals -0.5% YoY \u2014 first contraction on record",
+    "body": "POS terminals contracted 0.48% year-on-year in May 2026, down from 1.45% growth in Apr 2026. YoY growth turned negative 1.5% \u2192 -0.5%, a 1.9-point drop \u2014 the first negative reading in the 17-period series and the minimum level on record.",
+    "implication": "The -0.5% YoY contraction is a structural break signal \u2014 the POS network is now smaller than it was a year ago, the first time this has occurred in the dataset. Lenders financing merchant acceptance infrastructure should treat POS terminals as a declining asset class with no recovery trajectory. The channel has lost 31.5 points of annual growth in 12 months and shows no signs of stabilising.",
     "reasoning": {
       "signals": [
         {
           "key": "groups.infra.total.metrics.pos_terminals.yoy_pct",
-          "value": 1.45
+          "value": -0.48
         },
         {
           "key": "groups.infra.total.metrics.pos_terminals.yoy_prior_pct",
-          "value": 6.05
+          "value": 1.45
         },
         {
           "key": "groups.infra.total.metrics.pos_terminals.yoy_accel_pp",
-          "value": -4.6
+          "value": -1.93
         },
         {
           "key": "groups.infra.total.metrics.pos_terminals.latest",
-          "value": 11446998.0
+          "value": 11525276.0
         }
       ],
       "chain": [
-        "The 1.5% YoY rate represents just 163,252 net units added over 12 months, down from Mar's 670,000-unit annual gain.",
-        "The deceleration is driven by both a high base (Apr 2025's 11,283,266 terminals) and Apr 2026's 322K-unit monthly decline.",
-        "The rate has compressed from 31.5% in May 2025 to 1.5% in Apr 2026, a 30-point collapse in 11 months."
+        "The -0.5% YoY rate is the first contraction in this dataset, breaking below Apr's 1.5% minimum.",
+        "The rate has fallen 32.0 points from May 2025's 31.5% peak, driven by a high base and two months of net declines in Q2 2026.",
+        "A negative YoY rate confirms the POS network is shrinking on an annual basis \u2014 the channel is in structural decline, not consolidation."
       ]
     },
     "basis": {
       "facts": [
-        "pos_terminals.yoy_pct: 1.45",
-        "pos_terminals.yoy_prior_pct: 6.05",
-        "pos_terminals.yoy_accel_pp: -4.6",
-        "pos_terminals.latest: 11446998.0",
+        "pos_terminals.yoy_pct: -0.48",
+        "pos_terminals.yoy_prior_pct: 1.45",
+        "pos_terminals.yoy_accel_pp: -1.93",
+        "pos_terminals.latest: 11525276.0",
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
-        "The 1.5% YoY rate represents just 163,252 net units added over 12 months, down from Mar's 670,000-unit annual gain.",
-        "The deceleration is driven by both a high base (Apr 2025's 11,283,266 terminals) and Apr 2026's 322K-unit monthly decline.",
-        "The rate has compressed from 31.5% in May 2025 to 1.5% in Apr 2026, a 30-point collapse in 11 months."
+        "The -0.5% YoY rate is the first contraction in this dataset, breaking below Apr's 1.5% minimum.",
+        "The rate has fallen 32.0 points from May 2025's 31.5% peak, driven by a high base and two months of net declines in Q2 2026.",
+        "A negative YoY rate confirms the POS network is shrinking on an annual basis \u2014 the channel is in structural decline, not consolidation."
       ]
     },
     "sourceSignals": [
@@ -1052,48 +1018,48 @@
     "id": "infra-upi-yoy",
     "group": "infra",
     "cut": "total",
-    "period": "Apr 2026",
+    "period": "May 2026",
     "type": "insight",
-    "title": "UPI QR codes at 16.4% YoY \u2014 stable expansion trajectory",
-    "body": "UPI QR codes grew 16.37% year-on-year in Apr 2026, up from 15.70% in Mar 2026. YoY growth accelerated 15.7% \u2192 16.4%, a 0.7-point gain \u2014 the rate has stabilised in the 15\u201317% range across the 16-period series, with Apr's 16.4% near the median.",
-    "implication": "The 16.4% YoY rate confirms UPI QR deployment is in a stable, high-growth phase \u2014 the network is adding 100M+ codes annually with no signs of saturation. The rate has held in the 15\u201317% range for 12 consecutive months, even as the base has risen from 662M to 770M codes. Lenders should treat UPI QR as the primary acceptance infrastructure for digital payments \u2014 it is the only channel with sustained double-digit growth and structural expansion momentum.",
+    "title": "UPI QR codes 16.4% YoY \u2014 stable high-growth phase",
+    "body": "UPI QR codes grew 16.43% year-on-year in May 2026, up from 16.37% in Apr 2026. YoY growth held steady 16.4% \u2192 16.4%, a 0.06-point gain \u2014 the rate has stabilised in the 15\u201317% range across the 17-period series, with May's 16.4% near the median.",
+    "implication": "The 16.4% YoY rate confirms UPI QR deployment is in a stable, high-growth phase \u2014 the network is adding 100M+ codes annually with no signs of saturation. Lenders should treat UPI QR as the primary acceptance infrastructure for digital payments, with a clear structural advantage over POS terminals. The channel is the only one with sustained double-digit growth and a path to 900M codes by mid-2027.",
     "reasoning": {
       "signals": [
         {
           "key": "groups.infra.total.metrics.upi_qr.yoy_pct",
-          "value": 16.37
+          "value": 16.43
         },
         {
           "key": "groups.infra.total.metrics.upi_qr.yoy_prior_pct",
-          "value": 15.7
+          "value": 16.37
         },
         {
           "key": "groups.infra.total.metrics.upi_qr.yoy_accel_pp",
-          "value": 0.67
+          "value": 0.06
         },
         {
           "key": "groups.infra.total.metrics.upi_qr.latest",
-          "value": 770811461.0
+          "value": 779765356.0
         }
       ],
       "chain": [
-        "The 16.4% YoY rate represents 108.4M net codes added over 12 months, in line with the structural 100M+ annual expansion trajectory.",
-        "The slight acceleration from Mar's 15.7% is driven by Apr's 9.6M-code gain, larger than Mar's 7.0M and closer to the 10M monthly baseline.",
-        "The YoY rate has held steady despite the high base from Apr 2025 (662.4M codes), confirming the expansion is not decelerating."
+        "The 16.4% YoY rate has held in the 15\u201317% range for 13 consecutive months, even as the base has risen from 662M to 780M codes.",
+        "The network is adding 110M codes annually at a stable rate, with no signs of saturation or deceleration.",
+        "The 16.4% rate is 16.9 points above POS terminals' -0.5% YoY contraction, confirming the two channels are on opposite trajectories."
       ]
     },
     "basis": {
       "facts": [
-        "upi_qr.yoy_pct: 16.37",
-        "upi_qr.yoy_prior_pct: 15.7",
-        "upi_qr.yoy_accel_pp: 0.67",
-        "upi_qr.latest: 770811461.0",
+        "upi_qr.yoy_pct: 16.43",
+        "upi_qr.yoy_prior_pct: 16.37",
+        "upi_qr.yoy_accel_pp: 0.06",
+        "upi_qr.latest: 779765356.0",
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
-        "The 16.4% YoY rate represents 108.4M net codes added over 12 months, in line with the structural 100M+ annual expansion trajectory.",
-        "The slight acceleration from Mar's 15.7% is driven by Apr's 9.6M-code gain, larger than Mar's 7.0M and closer to the 10M monthly baseline.",
-        "The YoY rate has held steady despite the high base from Apr 2025 (662.4M codes), confirming the expansion is not decelerating."
+        "The 16.4% YoY rate has held in the 15\u201317% range for 13 consecutive months, even as the base has risen from 662M to 780M codes.",
+        "The network is adding 110M codes annually at a stable rate, with no signs of saturation or deceleration.",
+        "The 16.4% rate is 16.9 points above POS terminals' -0.5% YoY contraction, confirming the two channels are on opposite trajectories."
       ]
     },
     "sourceSignals": [
@@ -1121,48 +1087,48 @@
     "id": "infra-upi-vs-bharat-qr",
     "group": "infra",
     "cut": "total",
-    "period": "Apr 2026",
+    "period": "May 2026",
     "type": "insight",
-    "title": "UPI QR codes at 137\u00d7 per Bharat QR \u2014 divergence widening",
-    "body": "There are now 137.3 UPI QR codes for every Bharat QR code in Apr 2026, up 2.12 from 135.1 in Mar 2026. Ratio rose 135.1\u00d7 \u2192 137.3\u00d7, the highest level on record \u2014 the gap has widened by 2.1 points in one month, the sharpest move since Mar's 7.2-point jump.",
-    "implication": "The 137\u00d7 ratio is a structural divergence signal \u2014 Bharat QR is effectively obsolete, with UPI QR capturing all incremental deployment. Lenders financing merchant acceptance infrastructure should focus exclusively on UPI QR-enabled solutions; Bharat QR has no growth trajectory. The ratio will continue widening as UPI QR scales and Bharat QR stagnates or contracts.",
+    "title": "UPI QR codes 139\u00d7 Bharat QR \u2014 widest gap on record",
+    "body": "There are now 139.1 UPI QR codes for every Bharat QR code in May 2026, up 1.87 from 137.3 in Apr 2026. Ratio rose 137.3\u00d7 \u2192 139.1\u00d7, the highest level on record \u2014 the gap has widened by 1.9 points, extending the structural divergence that began in Sep 2025.",
+    "implication": "The 139\u00d7 ratio confirms Bharat QR has no commercial relevance \u2014 UPI QR is the sole acceptance standard for digital payments. Lenders financing merchant infrastructure should allocate zero capital to Bharat QR solutions; the channel is in terminal decline. The ratio will continue widening as UPI QR scales toward 800M codes and Bharat QR remains frozen or shrinks.",
     "reasoning": {
       "signals": [
         {
           "key": "groups.infra.total.metrics.upi_qr.latest",
-          "value": 770811461.0
+          "value": 779765356.0
         },
         {
           "key": "groups.infra.total.metrics.bharat_qr.latest",
-          "value": 5616038.0
+          "value": 5604866.0
         },
         {
           "key": "groups.infra.total.metrics.upi_qr.mom_pct",
-          "value": 1.26
+          "value": 1.16
         },
         {
           "key": "groups.infra.total.metrics.bharat_qr.mom_pct",
-          "value": -0.3
+          "value": -0.2
         }
       ],
       "chain": [
-        "The 137.3\u00d7 ratio means UPI QR deployment is outpacing Bharat QR by 136 to 1 \u2014 for every Bharat QR code added, 137 UPI QR codes are deployed.",
-        "The ratio has risen from 53.5\u00d7 in Jan 2024 to 137.3\u00d7 in Apr 2026, a 2.6\u00d7 increase in 28 months.",
-        "The widening gap confirms Bharat QR is being abandoned in favour of UPI QR as the dominant acceptance standard."
+        "The 139.1\u00d7 ratio is the maximum level in the 29-period series, up from 53.5\u00d7 in Jan 2024.",
+        "The ratio has risen 16.8 points in the past 8 months (Sep 2025: 116.8\u00d7 \u2192 May 2026: 139.1\u00d7), accelerating from the 1.0\u20131.5 point monthly pace seen in H1 2025.",
+        "Bharat QR is effectively obsolete \u2014 UPI QR is capturing all incremental deployment while Bharat QR stagnates or contracts."
       ]
     },
     "basis": {
       "facts": [
-        "upi_qr.latest: 770811461.0",
-        "bharat_qr.latest: 5616038.0",
-        "upi_qr.mom_pct: 1.26",
-        "bharat_qr.mom_pct: -0.3",
+        "upi_qr.latest: 779765356.0",
+        "bharat_qr.latest: 5604866.0",
+        "upi_qr.mom_pct: 1.16",
+        "bharat_qr.mom_pct: -0.2",
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
-        "The 137.3\u00d7 ratio means UPI QR deployment is outpacing Bharat QR by 136 to 1 \u2014 for every Bharat QR code added, 137 UPI QR codes are deployed.",
-        "The ratio has risen from 53.5\u00d7 in Jan 2024 to 137.3\u00d7 in Apr 2026, a 2.6\u00d7 increase in 28 months.",
-        "The widening gap confirms Bharat QR is being abandoned in favour of UPI QR as the dominant acceptance standard."
+        "The 139.1\u00d7 ratio is the maximum level in the 29-period series, up from 53.5\u00d7 in Jan 2024.",
+        "The ratio has risen 16.8 points in the past 8 months (Sep 2025: 116.8\u00d7 \u2192 May 2026: 139.1\u00d7), accelerating from the 1.0\u20131.5 point monthly pace seen in H1 2025.",
+        "Bharat QR is effectively obsolete \u2014 UPI QR is capturing all incremental deployment while Bharat QR stagnates or contracts."
       ]
     },
     "sourceSignals": [
@@ -1185,83 +1151,27 @@
     "prompt_version": "1.11"
   },
   {
-    "id": "infra-category-pos-share",
-    "group": "infra",
-    "cut": "by_type",
-    "period": "Apr 2026",
-    "type": "insight",
-    "title": "PSB banks fastest-growing in POS terminal deployment in Apr 2026 (+0.5pp share)",
-    "body": "PSB banks hold 18.1% of total POS terminals in Apr 2026, gaining +0.5pp vs prior month. Private banks lost the most share.",
-    "implication": "PSB banks gaining POS share means they're building more merchant relationships in that segment. Banks that own the POS network also own the merchant's transaction data \u2014 daily sales, busy periods, average ticket size. That data is the foundation for merchant lending (small business loans based on sales history). Watch which bank type is expanding POS \u2014 they're positioning for merchant credit.",
-    "reasoning": {
-      "signals": [
-        {
-          "key": "groups.infra.by_type.categories.PSB.share_pct",
-          "value": 18.14
-        },
-        {
-          "key": "groups.infra.by_type.categories.PSB.share_delta_pp",
-          "value": 0.51
-        }
-      ],
-      "chain": [
-        "PSB banks gained 0.5pp POS share \u2014 building more merchant acquiring relationships",
-        "Banks owning the POS network own the merchant's transaction data (daily sales, ticket size, frequency)",
-        "POS share expansion is a leading indicator of positioning for merchant credit (working capital, cash advances)"
-      ]
-    },
-    "basis": {
-      "facts": [
-        "PSB.share_pct: 18.14",
-        "PSB.share_delta_pp: 0.51",
-        "Source: web/public/data/atm_pos_consolidated.csv"
-      ],
-      "inferences": [
-        "PSB banks gained 0.5pp POS share \u2014 building more merchant acquiring relationships",
-        "Banks owning the POS network own the merchant's transaction data (daily sales, ticket size, frequency)",
-        "POS share expansion is a leading indicator of positioning for merchant credit (working capital, cash advances)"
-      ]
-    },
-    "sourceSignals": [
-      "groups.infra.by_type.categories.PSB.share_pct",
-      "groups.infra.by_type.categories.PSB.share_delta_pp"
-    ],
-    "effect": {
-      "highlight": [
-        "PSB",
-        "Total"
-      ],
-      "tab": "distribution",
-      "distMode": "pct",
-      "focusCard": "pos_terminals"
-    },
-    "exploreAction": {
-      "mode": "by_type"
-    },
-    "representation": "deterministic"
-  },
-  {
     "id": "infra-top-bank-pos",
     "group": "infra",
     "cut": "top_n",
-    "period": "Apr 2026",
+    "period": "May 2026",
     "type": "insight",
-    "title": "RBL BANK LTD leads POS terminal deployment at 23.8% market share",
-    "body": "RBL BANK LTD has deployed 2.73M POS terminals in Apr 2026, accounting for 23.8% of total (+3.1% MoM). Top 5 banks hold 92.8% of all POS terminals (-0.2pp vs prior month). Notable: HDFC BANK LTD moved from #4 to #3.",
+    "title": "RBL BANK LTD leads POS terminal deployment at 24.0% market share",
+    "body": "RBL BANK LTD has deployed 2.76M POS terminals in May 2026, accounting for 24.0% of total (+1.3% MoM). Top 5 banks hold 92.8% of all POS terminals (+0.0pp vs prior month).",
     "implication": "5 banks own 92.8% of all POS machines in India. That also means merchant sales data \u2014 what shopkeepers sell, how much, how often \u2014 sits largely with those same 5 banks. If you want to lend to merchants and need their sales history to decide how much credit to give, you either need a data partnership with one of these banks or an alternate source like GST returns or UPI transaction feeds.",
     "reasoning": {
       "signals": [
         {
           "key": "groups.infra.top_n.top5_share_pct",
-          "value": 92.83
+          "value": 92.85
         },
         {
           "key": "groups.infra.top_n.banks.0.share_pct",
-          "value": 23.84
+          "value": 23.97
         },
         {
           "key": "groups.infra.top_n.banks.0.mom_pct",
-          "value": 3.13
+          "value": 1.26
         }
       ],
       "chain": [
@@ -1272,9 +1182,9 @@
     },
     "basis": {
       "facts": [
-        "top_n.top5_share_pct: 92.83",
-        "0.share_pct: 23.84",
-        "0.mom_pct: 3.13",
+        "top_n.top5_share_pct: 92.85",
+        "0.share_pct: 23.97",
+        "0.mom_pct: 1.26",
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
@@ -1306,20 +1216,20 @@
     "id": "gap-pos-concentration",
     "group": "infra",
     "cut": "top_n",
-    "period": "Apr 2026",
+    "period": "May 2026",
     "type": "gap",
     "title": "Gap: Top 5 banks hold 92.8% of POS terminals \u2014 acquiring market is highly concentrated",
-    "body": "In Apr 2026, the top 5 banks account for 92.8% of all deployed POS terminals in India. RBL BANK LTD leads at 23.8% market share. All remaining banks combined share less than 7.2% of merchant acquiring infrastructure.",
+    "body": "In May 2026, the top 5 banks account for 92.8% of all deployed POS terminals in India. RBL BANK LTD leads at 24.0% market share. All remaining banks combined share less than 7.2% of merchant acquiring infrastructure.",
     "implication": "92.8% of all POS machines in India are owned by just 5 banks \u2014 and so is most of the merchant transaction data that comes with them. If you're building merchant credit products (loans to shopkeepers or small businesses) and don't have data partnerships with these top banks, you're working with an incomplete picture. Alternate sources \u2014 GST filings, UPI transaction data \u2014 can partially fill this gap.",
     "reasoning": {
       "signals": [
         {
           "key": "groups.infra.top_n.top5_share_pct",
-          "value": 92.83
+          "value": 92.85
         },
         {
           "key": "groups.infra.top_n.banks.0.share_pct",
-          "value": 23.84
+          "value": 23.97
         }
       ],
       "chain": [
@@ -1330,8 +1240,8 @@
     },
     "basis": {
       "facts": [
-        "top_n.top5_share_pct: 92.83",
-        "0.share_pct: 23.84",
+        "top_n.top5_share_pct: 92.85",
+        "0.share_pct: 23.97",
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [

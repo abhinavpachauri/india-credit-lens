@@ -358,6 +358,7 @@
       "invokes": [],
       "path": "analysis/newsletter/newsletter_sources.py",
       "reads": {
+        "analysis/rbi_sibc/timeline.json": "low",
         "analysis/signals/registry.json": "low",
         "analysis/signals/signals.db": "low",
         "web/public/data/atm_pos_insights.json": "low",
