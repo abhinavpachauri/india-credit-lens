@@ -36,7 +36,7 @@ nothing architecturally novel.
 | Method | Detects | Rule (design the exact form) |
 |---|---|---|
 | **rotation** | who is *gaining/losing ground* | rank entities by Δshare (or Δgrowth) over a window → top gainers vs top losers |
-| **divergence** | a child contradicting its **parent/family** | flag entity whose direction ≠ parent's (consumer-durables ↓ while personal-loans ↑), or family members with opposite sign |
+| **divergence** | contradiction along **two axes** (see §Payments below) | **(i) hierarchy axis:** child vs parent (consumer-durables ↓ while personal-loans ↑; bank vs its bank_category). **(ii) metric axis:** two metrics of the *same* entity that should co-move but don't (cards ↑ but spends flat) |
 
 Both are **relational** (operate over an entity set / a parent-child relation) — like `scan`. **Extend
 the existing scan machinery; do not build a parallel one.** Must run generically on SIBC industries,
@@ -60,6 +60,65 @@ construct for this.**
 
 Plus a minor field on the emitted insight recording which method/structure produced it (extend the
 existing insight schema; do not restructure it).
+
+---
+
+## Payments is dimensionally richer than SIBC — design for it explicitly
+
+SIBC's entity space is essentially **sector-hierarchy × time**. Payments is a **cube**:
+`bank × bank_category × metric-family × (value|volume) × time`. The design must not assume SIBC's
+shape. Five consequences:
+
+**(a) Storage is already fine — the gap is the analysis layer.** `signals.db` already holds
+`entity_type='bank'` (**5,571 rows / 67 banks**) and `entity_type='bank_category'` (5 categories)
+alongside `aggregate`. Nothing about the storage spec needs revamping. What's missing: **nothing
+consumes those per-bank rows except scan summaries**, which collapse 67 banks into "X leads, Y lags"
+and stop. No per-entity trend tracking, no cross-metric relation.
+
+**(b) The hierarchy axis generalizes cleanly — this is the one-mechanism proof.**
+SIBC: sub-sector → sector → total. Payments: **bank → bank_category → total.** The *same* divergence
+operator must serve both (a bank diverging from its category is structurally identical to a
+sub-sector diverging from its sector). If it doesn't, the design is wrong.
+
+**(c) The metric axis is new and needs one small authored input.** "Cards growing but spends flat,"
+"POS deployed but transactions not following," "UPI QR up but volume not" — these compare two metrics
+of the *same* entity. That requires an authored relation declaring **which metric pairs are expected
+to co-move** (cards↔spends, POS↔transactions, QR↔UPI volume). Small, same character as the cluster
+groups — **not a new stratum**. Only declared pairs are ever compared (never arbitrary metric pairs).
+
+**(d) Per-bank metric coverage is currently partial — a registry fix, not a spec fix.**
+5,571 ÷ 67 banks ÷ 29 periods ≈ **3 metrics per bank** (the cc/dc/pos bank-scans). Real per-bank
+divergence needs more metrics computed at bank level → **add bank-scan registry entries**. No
+architecture change.
+
+**(e) Consumption model — anomaly-surfaced + on-demand, NOT 67 pre-generated.**
+67 banks × N metrics would drown the insight surface. Rule:
+- **Anomaly-surfaced:** only entities that actually diverge emit an insight (bounded, proactive).
+- **On-demand lookup:** everything else is queryable per entity (the reply-desk `lookup` pattern —
+  "what do we have on Utkarsh SFB", used at results season).
+
+### Cross-pipeline scope: payments joins **SIBC personal loans**, not the rest
+
+Payments is **consumer** data. The defensible join is with SIBC's **Personal Loans (code 4.x)** —
+credit cards (4.5), consumer durables (4.1), vehicle loans (4.7), other personal loans (4.9). **Do
+not** design joins from payments into industry / agriculture / services credit — those are corporate
+and business exposures with no consumer transmission.
+
+- *Validation:* the existing ecosystem constructs already obey this — `unsecured_retail_appetite`
+  and `card_consumption_activity` draw exclusively on 4.1/4.5/4.7/4.9 + payments. Keep that boundary.
+- *Secondary, weak:* acceptance infrastructure (POS/QR terminals) is **merchant-side**, so there is a
+  thin link to MSME/trade credit. Treat as secondary; **do not over-claim** it.
+
+### Hard limit: SIBC has no lender decomposition
+
+SIBC entity types are aggregate/industry_type/pl_category/psl_category/service_sector/trade — **no
+bank or bank-type dimension.** RBI publishes sectoral deployment *system-wide*. So a true bank-level
+cross-pipeline join **is impossible on the credit side** and must not be designed toward.
+
+What *is* possible: compare **payments-by-bank-type** against **SIBC system-total** (asymmetric, still
+useful — "private banks growing card issuance fastest while system card outstanding grows X").
+COMPOSITION_SPEC §4 already encodes this (`lender: 'all' = system-total (SIBC today); payments
+resolves lender`) — **document the asymmetry in the spec** so nobody designs a join that cannot exist.
 
 ---
 
@@ -127,8 +186,14 @@ sourcing bottleneck. Then **(b)** as an S4-fed layer. Do not block the feature o
   loans overall +15% → *"consumption credit bifurcating — mobility up, durable-financing contracting."*
 - **Cluster (existing, reuse):** Engineering +35%, Electronics +24%, Iron&Steel +23%, Basic Metal +21%,
   Vehicles +26% together above aggregate → the metals→engineering→electronics chain (existing PLI loop).
-- **ATM/POS analog:** rotation across bank categories / spend-categories; divergence of a bank vs its
-  category. Proves the mechanism is generic.
+- **ATM/POS — hierarchy axis:** rotation across bank categories / spend-categories; divergence of a
+  **bank vs its bank_category**. Proves the hierarchy operator is generic across both pipelines.
+- **ATM/POS — metric axis (new):** a bank whose **card issuance grows while spend stays flat**
+  (issuing without activation), or **POS terminals deployed without transaction growth**. Real
+  example in current data: several banks (AU SFB, SBM, HSBC, Utkarsh) carry large card bases with
+  **zero POS terminals** — issuer-only, no acquiring. NB: that particular pattern is *structural*
+  (issuer/acquirer split), so the meaning layer must label it as structure, **not** flag it as an
+  anomaly — a good test that the taxonomy distinguishes "structural" from "surprising."
 
 ---
 
@@ -138,8 +203,9 @@ sourcing bottleneck. Then **(b)** as an S4-fed layer. Do not block the feature o
    - `analysis/signals/README.md` — the two new compute methods + their conventions.
    - `analysis/COMPOSITION_SPEC.md` §4 — `economic_role` dimension + the label-vs-transmission rule.
    - `analysis/SYSTEM_MODEL_SPEC.md` — only if the channel usage needs a clarifying note; likely none.
-2. Implementation: registry entries + `core/` relational-insight engine + `economic_role` in
-   concepts/profiles + traceability extension. Both pipelines.
+2. Implementation: registry entries (incl. **additional ATM/POS bank-scans** for per-bank metric
+   coverage) + `core/` relational-insight engine (both divergence axes) + the metric-pair
+   co-movement relation + `economic_role` in concepts/profiles + traceability extension. Both pipelines.
 3. Unit tests (mirror `analysis/tests/test_scan_insight.py`) + both gates green incl. build.
 4. Update `CLAUDE.md` component table + `RESEARCH_BACKLOG.md` when live.
 
