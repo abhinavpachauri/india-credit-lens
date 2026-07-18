@@ -26,6 +26,27 @@ real world.
 
 ---
 
+## Consumption contract — the five dated outputs this must serve
+
+This capability is not abstract: it feeds a fixed monthly LinkedIn calendar (+ Substack). Design
+toward these named deliverables.
+
+| # | Date | Content | Capability that serves it | Today |
+|---|---|---|---|---|
+| 1 | 1st | SIBC + payments summary (full reports → Substack) | existing release reads (`generate_release_read.py`) | ✅ works |
+| 2 | 7th | **How the SIBC ecosystem is changing** | **rotation + divergence on SIBC sectors** | 🟡 this brief |
+| 3 | 14th | **How the payments ecosystem is changing** | **rotation + divergence on payments (bank_category level)** | 🟡 this brief |
+| 4 | 21st | **Bank-specific highlights** | **per-bank anomaly-surfacing + on-demand lookup** | 🔴 this brief |
+| 5 | ~28th | One key opportunity highlight | existing `/opportunities` feed + computed basis | ✅ works |
+
+**Publication-lag constraint (real, verified):** SIBC data for month M releases on the **last day of
+M+1** (clockwork — May data → Jun 30), so Post 1 on the 1st is always ~1 day fresh. **ATM/POS lags
+1–2 months and irregularly** (Mar data → Jun 4; Apr → Jul 3; May → Jul 4). Therefore:
+- Never assume both pipelines have the same data month on the 1st.
+- Payments-led output belongs on the **14th** (Post 3), which gives it buffer.
+- Where both appear together, the vintage must be **labelled honestly** ("May credit data, April
+  payments data"). Design the generators to carry each pipeline's data month explicitly.
+
 ## The three extensions (this is the whole scope)
 
 ### 1. Signal layer — two new compute methods
@@ -135,6 +156,24 @@ Distinct from *strata* — this is about **who produces what**:
 The LLM may **narrate** detected pattern + authored meaning in plain English (as scan/opportunity
 narration already does) but **must never invent the economics**. This is the failure mode behind the
 self-contradicting-card and "fully-engaged-loop" bugs — keep it out.
+
+### ⚠️ Hard constraint: deterministic prose must be publishable ON ITS OWN
+
+**There is no LLM narration budget for this work** (operator is not using the metered API, and has
+opted out of the `claude -p` CLI path). Consequences for the design — treat these as requirements,
+not preferences:
+
+- The **deterministic text is the product**, not a fallback. Rotation/divergence insight copy must be
+  good enough to publish to LinkedIn/Substack **unedited by any model**.
+- Precedent exists and should be the quality bar: the deterministic **scan** insights in
+  `generate_analysis_report.deterministic_scan_insight` (recently rewritten for share/yoy/N=2) read
+  cleanly — e.g. *"RBI breaks NBFC credit into two sub-categories. HFCs hold 17.7% and PFIs 17.0% —
+  these are size shares, not growth rates."* Match or beat that.
+- Invest the effort in **template quality**: plain conversational English, no jargon, the
+  `economic_role` label doing the real-world work, and an honest-edge clause where the read is
+  bounded. Do not write terse machine text on the assumption prose gets polished later.
+- Any LLM narration hook may be built, but must be **optional and off by default** — the pipeline
+  must produce complete, publishable output with zero LLM calls.
 
 ---
 
