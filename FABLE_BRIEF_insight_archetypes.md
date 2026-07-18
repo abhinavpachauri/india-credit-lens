@@ -97,6 +97,36 @@ SIBC industries, SIBC sub-sectors, ATM/POS banks, and ATM/POS spend-categories.
 
 ---
 
+## How the meaning layer is *determined* (the operator cannot author economics from scratch)
+
+"Authored once" does NOT mean the operator writes the economics from memory. The meaning layer
+splits into two, determined very differently — **design for both:**
+
+**(a) `economic_role` grouping labels — textbook, low-stakes, LLM-drafted + human sanity-checked.**
+These are standard industry classifications (Power/Petroleum/Ports → `energy_logistics_capex`;
+Textiles → `consumer_traditional`; Engineering → `capital_goods`; Vehicle loans →
+`consumer_mobility`). A wrong label is a *categorization* error, not a false claim. Flow: the LLM
+drafts the entity→role mapping from established taxonomy; the operator approves; it lands in the
+skeleton profile and regenerates deterministically. **No source required for a pure grouping label.**
+This layer alone powers **rotation** and **divergence** — which is ~80% of the value.
+
+**(b) Transmission claims — the S4 sourcing-gate pattern, NOT hand-authored.**
+A causal reading ("credit to `energy_logistics_capex` *leads* generation capex by ~N months") is a
+claim about the world and must be **sourced**. Do **not** ask the operator to author these. Reuse the
+existing **S4 loop** (`analysis/core/run_inference.py`, SYSTEM_MODEL_SPEC §13): the **LLM proposes the
+mechanism *with a citation*** (economic literature / RBI reports — "credit leads capex" is documented,
+not opinion) → the **sourcing gate validates** → the operator **reviews and promotes**. Never
+auto-promoted. Only transmission-claiming mappings need this; grouping labels do not.
+
+**The invariant (same as everywhere): propose ≠ promote.** The LLM proposing the *one-time* taxonomy
+through a sourcing gate is allowed (that's S4). The LLM inventing the reading *per period, unvalidated,
+into the output* is forbidden (freelancing). Once proposed → sourced → reviewed → promoted, a mapping
+is authored structure applied **deterministically** forever.
+
+Design consequence: ship **(a) first** (labels → rotation + divergence work immediately, no sourcing
+bottleneck), then **(b)** as an S4-fed layer for the leading-indicator archetype. Do not block the
+whole feature on authoring transmission claims.
+
 ## Hard boundaries (the epistemics — from the design conversation)
 
 - **Directional / leading reads only.** "Accelerating credit to X signals a capex upcycle forming in
