@@ -46,25 +46,38 @@ This is the **same bug family** as the eco-loop card ("fully engaged" vs compute
 patch only covered `eco_loop`; **cross-edge and construct cards have the same exposure** whenever
 their deterministic title flips direction (softening↔headroom, expanding↔contracting).
 
-## Proposed fix (general, not another one-off exception)
+## Approved fix design (Fable review, 2026-07-19 — supersedes the first proposal)
 
-**Preserve a narrative only if the deterministic title it was written against still matches.**
-The title already encodes the computed direction/status, so a title change *is* the staleness
-signal. In the preservation block:
+**Preserve a narrative only if BOTH the deterministic title AND the status it was written against
+still match.** Title alone (the first proposal) has a hole: *pipeline* opportunity titles are static
+model labels (`n["label"]` — never state-encoding), so a pipeline card's status can flip
+active↔watch while its title stays identical, and the stale narrative would survive. `(title,
+status)` closes both cases — in the observed bug, both changed (`softening…`→`…headroom`,
+watch→active); on pipeline cards, status is the state signal.
 
-1. When collecting `narrated` from the previous feed, also capture the prior `title`:
-   `narrated[it["id"]] = {..., "_title": it.get("title")}`.
-2. When re-applying, carry the narrative forward **only if** `new_item["title"] == prior "_title"`.
-   If the title changed, drop the preserved body (leave the deterministic template) so
-   `generate_opportunity_narrative` re-narrates it fresh against the current state.
+In the preservation block (`generate_opportunities_feed.py:429-445`):
 
-This is principle-aligned (`feedback_traceability_principle`: *treat derived data stale until
-proven fresh*) and fixes cross-edge **and** construct cards in one move — no per-driver special-casing.
-The existing `eco_loop` skip can stay or be subsumed (loop cards have no LLM body anyway).
+1. Collect: `narrated[it["id"]] = {body/implication/chain..., "_title": it.get("title"),
+   "_status": it.get("status")}`.
+2. Re-apply **only if** `new["title"] == _title and new["status"] == _status`. Else drop —
+   the item keeps its deterministic templated copy and is re-narrated on the next narrative run
+   (`generate_opportunity_narrative` picks it up because `narrative` is no longer set).
+3. Keep the existing `eco_loop` skip (loop cards are never narrated — spec §23.2 exception).
 
-Consider also: a small guard/test asserting **no cross-system card's body direction-word contradicts
-its title** (cheap substring check: title has "headroom/leading/expanding" ⇒ body must not contain
-"slowing/softening/shrinking/contracting", and vice-versa). Add to `tests/` so this regresses loudly.
+**Graceful degradation is part of the design (no-LLM budget):** when a stale narrative is dropped
+and the operator does NOT run the narrative step, the card shows its deterministic fallback copy —
+which exists for every item and is written to be publishable. Correct-but-plainer beats
+fluent-but-wrong; this is the deterministic-first principle applied.
+
+**Testing (deterministic, not fuzzy):** unit tests on the preservation behavior with synthetic
+prev/new feeds — (a) title+status match → narrative preserved; (b) title changed → dropped;
+(c) status changed, title same (the pipeline-card case) → dropped; (d) eco_loop → never preserved.
+The first proposal's direction-word substring guard is REJECTED as a production check (fuzzy,
+noisy — same reason the 2g status-substring heuristic is warning-only); the deterministic
+key comparison makes it unnecessary.
+
+Also regenerate the feed once after the fix so the live cc-spend card drops its stale body
+(deterministic copy until the next narrative run), and run Check 4f strict + the full sibc gate.
 
 ## Verify
 
