@@ -118,19 +118,38 @@ links are derived from shared coordinates (§6).
 | **segment** | `retail, msme, corporate, agri, government, financial_institution` | borrower class. |
 | **lender** | `psb, private, foreign, sfb, payment_bank, nbfc, all` | `all` = system-total (SIBC today); payments resolves lender. |
 | **geography** | `national, metro, non_metro, state:{code}` | mostly `national` today; deferred resolution until an ingestion provides it. |
+| **economic_role** | `energy_logistics_capex, capital_goods, industrial_inputs, construction_real_estate, agri_inputs, trade_channel, consumer_traditional, consumer_mobility, consumer_durables, consumer_finance, financial_intermediation, digital_payment_rails, cash_infrastructure` | the *real-world reading* — what activity this credit/infrastructure finances. Powers the relational insights (rotation/divergence, `signals/README.md`). **Optional** (null allowed); untagged = tagging gap. |
 
 ```
 concept_tags on an entity := {
-  product   : <vocab>        # required
-  measure   : <vocab>        # required
-  segment   : <vocab|null>
-  lender    : <vocab|null>   # 'all' for system-total pipelines
-  geography : <vocab|null>   # 'national' default
+  product       : <vocab>        # required
+  measure       : <vocab>        # required
+  segment       : <vocab|null>
+  lender        : <vocab|null>   # 'all' for system-total pipelines
+  geography     : <vocab|null>   # 'national' default
+  economic_role : <vocab|null>   # real-world reading; null = untagged (gap, not error)
 }
 ```
 Tags are declared in the **pipeline profile** (`skeleton_profile.json`, a new `concept_tags` block
 keyed by `(partition, code)`), so they regenerate with the skeleton and stay deterministic. An
 untagged entity is a **tagging gap** (audit output), not an error.
+
+**How `economic_role` is determined (labels vs transmission — keep these distinct):**
+- A role tag is a **grouping label** — standard industry classification (Power/Ports →
+  `energy_logistics_capex`; Textiles → `consumer_traditional`). Textbook, low-stakes; a wrong tag is
+  a categorization error, not a false claim. **No source required.** Drafted by the LLM from
+  established taxonomy, sanity-checked by the operator, then fixed in the profile.
+- A **transmission claim** built on a role ("credit to `energy_logistics_capex` *leads* generation
+  capex") is a **channel** (§2a) — it carries a source and enters via authoring or the S4 gate
+  (SYSTEM_MODEL_SPEC §13). The tag alone never licenses a causal statement; deterministic insight
+  templates may use tags for *composition* readings ("capital rotating toward energy & logistics
+  capex") but must not assert lead/lag transmission without a channel behind it.
+
+**Lender asymmetry (hard limit — do not design joins that cannot exist):** SIBC has **no lender
+decomposition** (`lender: all`, system-total only — RBI publishes sectoral deployment system-wide).
+Payments resolves lender per bank/category. Therefore bank-level cross-pipeline joins are
+**impossible on the credit side**; the only well-formed comparison is payments-by-bank-type vs
+SIBC-system-total, and any output pairing them must label the asymmetry.
 
 ---
 
