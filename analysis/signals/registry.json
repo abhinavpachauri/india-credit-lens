@@ -6516,7 +6516,8 @@
         "parent_statement": "Statement 1",
         "entity_type": "industry_type",
         "min_abs": 2.0,
-        "min_gap": 5.0
+        "min_gap": 5.0,
+        "subject": "industry credit"
       },
       "current_status": "active",
       "first_seen": "2025-02-28"
@@ -6537,7 +6538,8 @@
         "statement": "Statement 1",
         "entity_type": "service_sector",
         "min_abs": 2.0,
-        "min_gap": 5.0
+        "min_gap": 5.0,
+        "subject": "services credit"
       },
       "current_status": "unknown",
       "first_seen": "2025-02-28"
@@ -6558,7 +6560,8 @@
         "statement": "Statement 1",
         "entity_type": "pl_category",
         "min_abs": 2.0,
-        "min_gap": 5.0
+        "min_gap": 5.0,
+        "subject": "personal loans"
       },
       "current_status": "active",
       "first_seen": "2025-02-28"
@@ -6670,7 +6673,8 @@
         "metric": "credit_cards",
         "min_abs": 2.0,
         "min_gap": 5.0,
-        "min_base": 10000
+        "min_base": 10000,
+        "subject": "credit cards"
       },
       "current_status": "active",
       "first_seen": "2024-01-31"
@@ -6689,7 +6693,8 @@
         "metric": "debit_cards",
         "min_abs": 2.0,
         "min_gap": 5.0,
-        "min_base": 10000
+        "min_base": 10000,
+        "subject": "debit cards"
       },
       "current_status": "active",
       "first_seen": "2024-01-31"
@@ -6708,7 +6713,8 @@
         "metric": "pos_terminals",
         "min_abs": 2.0,
         "min_gap": 5.0,
-        "min_base": 1000
+        "min_base": 1000,
+        "subject": "POS terminals"
       },
       "current_status": "active",
       "first_seen": "2024-01-31"

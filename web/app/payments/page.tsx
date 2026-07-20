@@ -9,13 +9,23 @@ import type { AtmPosSeries }   from "@/lib/atm_pos_data";
 
 const GROUPS = ["cc", "dc", "infra"] as const;
 
+// "2026-05-31" → "May 2026" — the data's own latest period, never a hardcoded label.
+function latestMonthLabel(s: AtmPosSeries): string {
+  const iso = s._meta.periods[s._meta.periods.length - 1];
+  if (!iso) return "";
+  const d = new Date(`${iso}T00:00:00Z`);
+  return d.toLocaleString("en-US", { month: "short", year: "numeric", timeZone: "UTC" });
+}
+
 export default function PaymentsPage() {
   const { setHeaderMetric } = useAppShell();
   const [series, setSeries]     = useState<AtmPosSeries | null>(null);
 
   useEffect(() => {
-    setHeaderMetric(null, "Mar 2026");
-    loadAtmPosData().then(setSeries);
+    loadAtmPosData().then((s) => {
+      setSeries(s);
+      setHeaderMetric(null, latestMonthLabel(s));
+    });
   }, [setHeaderMetric]);
 
   if (!series) {
@@ -43,7 +53,7 @@ export default function PaymentsPage() {
         className="mt-6 pb-8 text-center text-xs"
         style={{ color: "var(--font-muted)" }}
       >
-        Source: Reserve Bank of India · ATM / POS Card Statistics · Latest: Mar 2026
+        Source: Reserve Bank of India · ATM / POS Card Statistics · Latest: {latestMonthLabel(series)}
       </footer>
     </main>
   );

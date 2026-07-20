@@ -1271,5 +1271,537 @@
       "topN": 5
     },
     "representation": "deterministic"
+  },
+  {
+    "id": "cc-category-rotation",
+    "group": "cc",
+    "cut": "by_type",
+    "period": "May 2026",
+    "type": "insight",
+    "title": "Credit cards mix rotating toward Small Finance Banks (+0.67 pp share in a year)",
+    "body": "Compared with the same month a year ago, the biggest share gains in credit cards came from Small Finance Banks +0.67 pp; Private Sector Banks +0.04 pp. The ground came from Foreign Banks -0.53 pp; Public Sector Banks -0.18 pp. In all, 0.70 pp of the mix changed hands.",
+    "implication": "This is a composition read: it says where the mix is shifting, not why and not what happens next. Watch whether Small Finance Banks holds its gains next month before reading the shift as a trend.",
+    "reasoning": {
+      "signals": [
+        {
+          "key": "cc-category-rotation:Small Finance Banks",
+          "value": 0.6679
+        },
+        {
+          "key": "cc-category-rotation:Private Sector Banks",
+          "value": 0.0369
+        },
+        {
+          "key": "cc-category-rotation:Payment Banks",
+          "value": 0.0
+        },
+        {
+          "key": "cc-category-rotation:Public Sector Banks",
+          "value": -0.1793
+        },
+        {
+          "key": "cc-category-rotation:Foreign Banks",
+          "value": -0.5255
+        }
+      ],
+      "chain": [
+        "Each segment's share of credit cards is compared with the same month a year earlier \u2014 the change is in percentage points of the mix.",
+        "Top gainer: Small Finance Banks at +0.67 pp. Biggest cession: Foreign Banks at -0.53 pp.",
+        "Rotation mass \u2014 the share that changed hands \u2014 is 0.70 pp."
+      ]
+    },
+    "basis": {
+      "facts": [
+        "Small Finance Banks: +0.67 pp share vs a year ago",
+        "Private Sector Banks: +0.04 pp share vs a year ago",
+        "Payment Banks: +0.00 pp share vs a year ago",
+        "Public Sector Banks: -0.18 pp share vs a year ago",
+        "Foreign Banks: -0.53 pp share vs a year ago",
+        "Rotation mass: 0.70 pp",
+        "Source: signals.db (cc-category-rotation)"
+      ],
+      "inferences": [
+        "Each segment's share of credit cards is compared with the same month a year earlier \u2014 the change is in percentage points of the mix.",
+        "Top gainer: Small Finance Banks at +0.67 pp. Biggest cession: Foreign Banks at -0.53 pp.",
+        "Rotation mass \u2014 the share that changed hands \u2014 is 0.70 pp."
+      ]
+    },
+    "sourceSignals": [
+      "cc-category-rotation"
+    ],
+    "effect": {
+      "highlight": [
+        "SFB",
+        "Total"
+      ],
+      "tab": "distribution",
+      "distMode": "pct",
+      "focusCard": "credit_cards"
+    },
+    "exploreAction": null,
+    "representation": "deterministic-db",
+    "insight_kind": "rotation"
+  },
+  {
+    "id": "dc-category-rotation",
+    "group": "dc",
+    "cut": "by_type",
+    "period": "May 2026",
+    "type": "insight",
+    "title": "Debit cards mix rotating toward Private Sector Banks (+0.54 pp share in a year)",
+    "body": "Compared with the same month a year ago, the biggest share gains in debit cards came from Private Sector Banks +0.54 pp; Small Finance Banks +0.49 pp; Public Sector Banks +0.27 pp. The ground came from Payment Banks -1.30 pp. In all, 1.31 pp of the mix changed hands.",
+    "implication": "This is a composition read: it says where the mix is shifting, not why and not what happens next. Watch whether Private Sector Banks holds its gains next month before reading the shift as a trend.",
+    "reasoning": {
+      "signals": [
+        {
+          "key": "dc-category-rotation:Private Sector Banks",
+          "value": 0.5405
+        },
+        {
+          "key": "dc-category-rotation:Small Finance Banks",
+          "value": 0.4913
+        },
+        {
+          "key": "dc-category-rotation:Public Sector Banks",
+          "value": 0.2748
+        },
+        {
+          "key": "dc-category-rotation:Foreign Banks",
+          "value": -0.0046
+        },
+        {
+          "key": "dc-category-rotation:Payment Banks",
+          "value": -1.302
+        }
+      ],
+      "chain": [
+        "Each segment's share of debit cards is compared with the same month a year earlier \u2014 the change is in percentage points of the mix.",
+        "Top gainer: Private Sector Banks at +0.54 pp. Biggest cession: Payment Banks at -1.30 pp.",
+        "Rotation mass \u2014 the share that changed hands \u2014 is 1.31 pp."
+      ]
+    },
+    "basis": {
+      "facts": [
+        "Private Sector Banks: +0.54 pp share vs a year ago",
+        "Small Finance Banks: +0.49 pp share vs a year ago",
+        "Public Sector Banks: +0.27 pp share vs a year ago",
+        "Foreign Banks: -0.00 pp share vs a year ago",
+        "Payment Banks: -1.30 pp share vs a year ago",
+        "Rotation mass: 1.31 pp",
+        "Source: signals.db (dc-category-rotation)"
+      ],
+      "inferences": [
+        "Each segment's share of debit cards is compared with the same month a year earlier \u2014 the change is in percentage points of the mix.",
+        "Top gainer: Private Sector Banks at +0.54 pp. Biggest cession: Payment Banks at -1.30 pp.",
+        "Rotation mass \u2014 the share that changed hands \u2014 is 1.31 pp."
+      ]
+    },
+    "sourceSignals": [
+      "dc-category-rotation"
+    ],
+    "effect": {
+      "highlight": [
+        "Private",
+        "Total"
+      ],
+      "tab": "distribution",
+      "distMode": "pct",
+      "focusCard": "debit_cards"
+    },
+    "exploreAction": null,
+    "representation": "deterministic-db",
+    "insight_kind": "rotation"
+  },
+  {
+    "id": "pos-category-rotation",
+    "group": "infra",
+    "cut": "by_type",
+    "period": "May 2026",
+    "type": "insight",
+    "title": "POS terminals mix rotating toward Public Sector Banks (+1.85 pp share in a year)",
+    "body": "Compared with the same month a year ago, the biggest share gains in POS terminals came from Public Sector Banks +1.85 pp. The ground came from Private Sector Banks -1.83 pp; Foreign Banks -0.03 pp. In all, 1.86 pp of the mix changed hands.",
+    "implication": "This is a composition read: it says where the mix is shifting, not why and not what happens next. Watch whether Public Sector Banks holds its gains next month before reading the shift as a trend.",
+    "reasoning": {
+      "signals": [
+        {
+          "key": "pos-category-rotation:Public Sector Banks",
+          "value": 1.8538
+        },
+        {
+          "key": "pos-category-rotation:Small Finance Banks",
+          "value": 0.0024
+        },
+        {
+          "key": "pos-category-rotation:Payment Banks",
+          "value": 0.0
+        },
+        {
+          "key": "pos-category-rotation:Foreign Banks",
+          "value": -0.0294
+        },
+        {
+          "key": "pos-category-rotation:Private Sector Banks",
+          "value": -1.8269
+        }
+      ],
+      "chain": [
+        "Each segment's share of POS terminals is compared with the same month a year earlier \u2014 the change is in percentage points of the mix.",
+        "Top gainer: Public Sector Banks at +1.85 pp. Biggest cession: Private Sector Banks at -1.83 pp.",
+        "Rotation mass \u2014 the share that changed hands \u2014 is 1.86 pp."
+      ]
+    },
+    "basis": {
+      "facts": [
+        "Public Sector Banks: +1.85 pp share vs a year ago",
+        "Small Finance Banks: +0.00 pp share vs a year ago",
+        "Payment Banks: +0.00 pp share vs a year ago",
+        "Foreign Banks: -0.03 pp share vs a year ago",
+        "Private Sector Banks: -1.83 pp share vs a year ago",
+        "Rotation mass: 1.86 pp",
+        "Source: signals.db (pos-category-rotation)"
+      ],
+      "inferences": [
+        "Each segment's share of POS terminals is compared with the same month a year earlier \u2014 the change is in percentage points of the mix.",
+        "Top gainer: Public Sector Banks at +1.85 pp. Biggest cession: Private Sector Banks at -1.83 pp.",
+        "Rotation mass \u2014 the share that changed hands \u2014 is 1.86 pp."
+      ]
+    },
+    "sourceSignals": [
+      "pos-category-rotation"
+    ],
+    "effect": {
+      "highlight": [
+        "PSB",
+        "Total"
+      ],
+      "tab": "distribution",
+      "distMode": "pct",
+      "focusCard": "pos_terminals"
+    },
+    "exploreAction": null,
+    "representation": "deterministic-db",
+    "insight_kind": "rotation"
+  },
+  {
+    "id": "cc-bank-divergence",
+    "group": "cc",
+    "cut": "by_bank",
+    "period": "May 2026",
+    "type": "insight",
+    "title": "Banks moving against the pack on credit cards \u2014 widest gap TAMILNAD MERCANTILE BANK LTD at -45.82 pp",
+    "body": "While credit cards overall moves one way, these banks are moving the other. Growing against a declining trend: SBM BANK INDIA LTD +24.69 pp; CITI BANK +20.65 pp; HSBC LTD +11.33 pp versus its category's pace. Declining against a growing trend: TAMILNAD MERCANTILE BANK LTD -45.82 pp; DHANALAXMI BANK LTD -23.82 pp; SOUTH INDIAN BANK -17.99 pp. 10 banks are flagged in all.",
+    "implication": "A bank moving against its family is an early divergence read, not a verdict: check whether it is a base effect, a reclassification, or a genuine shift before acting on it. The gap closing or widening next month is the signal to watch.",
+    "reasoning": {
+      "signals": [
+        {
+          "key": "cc-bank-divergence:SBM BANK INDIA LTD",
+          "value": 24.6943
+        },
+        {
+          "key": "cc-bank-divergence:CITI BANK",
+          "value": 20.6477
+        },
+        {
+          "key": "cc-bank-divergence:HSBC LTD",
+          "value": 11.3283
+        },
+        {
+          "key": "cc-bank-divergence:KOTAK MAHINDRA BANK LTD",
+          "value": -10.8785
+        },
+        {
+          "key": "cc-bank-divergence:RBL BANK LTD",
+          "value": -10.9769
+        },
+        {
+          "key": "cc-bank-divergence:INDIAN BANK",
+          "value": -12.461
+        },
+        {
+          "key": "cc-bank-divergence:INDUSIND BANK LTD",
+          "value": -14.6846
+        },
+        {
+          "key": "cc-bank-divergence:SOUTH INDIAN BANK",
+          "value": -17.9923
+        },
+        {
+          "key": "cc-bank-divergence:DHANALAXMI BANK LTD",
+          "value": -23.818
+        },
+        {
+          "key": "cc-bank-divergence:TAMILNAD MERCANTILE BANK LTD",
+          "value": -45.8204
+        }
+      ],
+      "chain": [
+        "Each bank's year-on-year growth is compared with its category's; a flag needs opposite directions and a material gap.",
+        "Widest gap: TAMILNAD MERCANTILE BANK LTD at -45.82 pp versus its category.",
+        "10 banks currently contradict their trend (3 above, 7 below)."
+      ]
+    },
+    "basis": {
+      "facts": [
+        "SBM BANK INDIA LTD: +24.69 pp vs its category's YoY pace",
+        "CITI BANK: +20.65 pp vs its category's YoY pace",
+        "HSBC LTD: +11.33 pp vs its category's YoY pace",
+        "KOTAK MAHINDRA BANK LTD: -10.88 pp vs its category's YoY pace",
+        "RBL BANK LTD: -10.98 pp vs its category's YoY pace",
+        "INDIAN BANK: -12.46 pp vs its category's YoY pace",
+        "INDUSIND BANK LTD: -14.68 pp vs its category's YoY pace",
+        "SOUTH INDIAN BANK: -17.99 pp vs its category's YoY pace",
+        "DHANALAXMI BANK LTD: -23.82 pp vs its category's YoY pace",
+        "TAMILNAD MERCANTILE BANK LTD: -45.82 pp vs its category's YoY pace",
+        "Source: signals.db (cc-bank-divergence)"
+      ],
+      "inferences": [
+        "Each bank's year-on-year growth is compared with its category's; a flag needs opposite directions and a material gap.",
+        "Widest gap: TAMILNAD MERCANTILE BANK LTD at -45.82 pp versus its category.",
+        "10 banks currently contradict their trend (3 above, 7 below)."
+      ]
+    },
+    "sourceSignals": [
+      "cc-bank-divergence"
+    ],
+    "effect": {
+      "highlight": [
+        "TAMILNAD MERCANTILE BANK LTD",
+        "Total"
+      ],
+      "tab": "trend",
+      "trendMode": "yoy",
+      "focusCard": "credit_cards"
+    },
+    "exploreAction": null,
+    "representation": "deterministic-db",
+    "insight_kind": "divergence_hierarchy"
+  },
+  {
+    "id": "dc-bank-divergence",
+    "group": "dc",
+    "cut": "by_bank",
+    "period": "May 2026",
+    "type": "insight",
+    "title": "Banks moving against the pack on debit cards \u2014 widest gap NSDL PAYMENTS BANK at +412.54 pp",
+    "body": "While debit cards overall moves one way, these banks are moving the other. Growing against a declining trend: NSDL PAYMENTS BANK +412.54 pp; JIO PAYMENTS BANK +122.29 pp; AIRTEL PAYMENTS BANK +92.20 pp versus its category's pace. Declining against a growing trend: NAINITAL BANK LTD -53.04 pp; UTKARSH SMALL FINANCE BANK LTD -41.86 pp; EQUITAS SMALL FINANCE BANK LTD -37.12 pp. 18 banks are flagged in all.",
+    "implication": "A bank moving against its family is an early divergence read, not a verdict: check whether it is a base effect, a reclassification, or a genuine shift before acting on it. The gap closing or widening next month is the signal to watch.",
+    "reasoning": {
+      "signals": [
+        {
+          "key": "dc-bank-divergence:NSDL PAYMENTS BANK",
+          "value": 412.538
+        },
+        {
+          "key": "dc-bank-divergence:JIO PAYMENTS BANK",
+          "value": 122.2859
+        },
+        {
+          "key": "dc-bank-divergence:AIRTEL PAYMENTS BANK",
+          "value": 92.2003
+        },
+        {
+          "key": "dc-bank-divergence:INDIA POST PAYMENTS BANK",
+          "value": 53.7355
+        },
+        {
+          "key": "dc-bank-divergence:FINO PAYMENTS BANK",
+          "value": 22.8109
+        },
+        {
+          "key": "dc-bank-divergence:DEUTSCHE BANK LTD",
+          "value": -5.2251
+        },
+        {
+          "key": "dc-bank-divergence:BANK OF BARODA",
+          "value": -6.5983
+        },
+        {
+          "key": "dc-bank-divergence:STANDARD CHARTERED BANK LTD",
+          "value": -8.3099
+        },
+        {
+          "key": "dc-bank-divergence:KARUR VYSYA BANK LTD",
+          "value": -9.068
+        },
+        {
+          "key": "dc-bank-divergence:IDBI BANK LTD",
+          "value": -9.9167
+        },
+        {
+          "key": "dc-bank-divergence:BANK OF MAHARASHTRA",
+          "value": -20.9652
+        },
+        {
+          "key": "dc-bank-divergence:CAPITAL SMALL FINANCE BANK LTD",
+          "value": -22.5342
+        },
+        {
+          "key": "dc-bank-divergence:UJJIVAN SMALL FINANCE BANK LTD",
+          "value": -23.935
+        },
+        {
+          "key": "dc-bank-divergence:ESAF SMALL FINANCE BANK LTD",
+          "value": -28.2845
+        },
+        {
+          "key": "dc-bank-divergence:SHIVALIK SMALL FINANCE BANK LTD",
+          "value": -33.7403
+        },
+        {
+          "key": "dc-bank-divergence:EQUITAS SMALL FINANCE BANK LTD",
+          "value": -37.1242
+        },
+        {
+          "key": "dc-bank-divergence:UTKARSH SMALL FINANCE BANK LTD",
+          "value": -41.8595
+        },
+        {
+          "key": "dc-bank-divergence:NAINITAL BANK LTD",
+          "value": -53.0399
+        }
+      ],
+      "chain": [
+        "Each bank's year-on-year growth is compared with its category's; a flag needs opposite directions and a material gap.",
+        "Widest gap: NSDL PAYMENTS BANK at +412.54 pp versus its category.",
+        "18 banks currently contradict their trend (5 above, 13 below)."
+      ]
+    },
+    "basis": {
+      "facts": [
+        "NSDL PAYMENTS BANK: +412.54 pp vs its category's YoY pace",
+        "JIO PAYMENTS BANK: +122.29 pp vs its category's YoY pace",
+        "AIRTEL PAYMENTS BANK: +92.20 pp vs its category's YoY pace",
+        "INDIA POST PAYMENTS BANK: +53.74 pp vs its category's YoY pace",
+        "FINO PAYMENTS BANK: +22.81 pp vs its category's YoY pace",
+        "DEUTSCHE BANK LTD: -5.23 pp vs its category's YoY pace",
+        "BANK OF BARODA: -6.60 pp vs its category's YoY pace",
+        "STANDARD CHARTERED BANK LTD: -8.31 pp vs its category's YoY pace",
+        "KARUR VYSYA BANK LTD: -9.07 pp vs its category's YoY pace",
+        "IDBI BANK LTD: -9.92 pp vs its category's YoY pace",
+        "BANK OF MAHARASHTRA: -20.97 pp vs its category's YoY pace",
+        "CAPITAL SMALL FINANCE BANK LTD: -22.53 pp vs its category's YoY pace",
+        "UJJIVAN SMALL FINANCE BANK LTD: -23.93 pp vs its category's YoY pace",
+        "ESAF SMALL FINANCE BANK LTD: -28.28 pp vs its category's YoY pace",
+        "SHIVALIK SMALL FINANCE BANK LTD: -33.74 pp vs its category's YoY pace",
+        "EQUITAS SMALL FINANCE BANK LTD: -37.12 pp vs its category's YoY pace",
+        "UTKARSH SMALL FINANCE BANK LTD: -41.86 pp vs its category's YoY pace",
+        "NAINITAL BANK LTD: -53.04 pp vs its category's YoY pace",
+        "Source: signals.db (dc-bank-divergence)"
+      ],
+      "inferences": [
+        "Each bank's year-on-year growth is compared with its category's; a flag needs opposite directions and a material gap.",
+        "Widest gap: NSDL PAYMENTS BANK at +412.54 pp versus its category.",
+        "18 banks currently contradict their trend (5 above, 13 below)."
+      ]
+    },
+    "sourceSignals": [
+      "dc-bank-divergence"
+    ],
+    "effect": {
+      "highlight": [
+        "NSDL PAYMENTS BANK",
+        "Total"
+      ],
+      "tab": "trend",
+      "trendMode": "yoy",
+      "focusCard": "debit_cards"
+    },
+    "exploreAction": null,
+    "representation": "deterministic-db",
+    "insight_kind": "divergence_hierarchy"
+  },
+  {
+    "id": "pos-bank-divergence",
+    "group": "infra",
+    "cut": "by_bank",
+    "period": "May 2026",
+    "type": "insight",
+    "title": "Banks moving against the pack on POS terminals \u2014 widest gap KARUR VYSYA BANK LTD at +410.61 pp",
+    "body": "While POS terminals overall moves one way, these banks are moving the other. Growing against a declining trend: KARUR VYSYA BANK LTD +410.61 pp; FEDERAL BANK LTD +23.66 pp; YES BANK LTD +18.37 pp versus its category's pace. Declining against a growing trend: UCO BANK -68.52 pp; UNION BANK OF INDIA -36.34 pp; CENTRAL BANK OF INDIA -19.15 pp. 10 banks are flagged in all.",
+    "implication": "A bank moving against its family is an early divergence read, not a verdict: check whether it is a base effect, a reclassification, or a genuine shift before acting on it. The gap closing or widening next month is the signal to watch.",
+    "reasoning": {
+      "signals": [
+        {
+          "key": "pos-bank-divergence:KARUR VYSYA BANK LTD",
+          "value": 410.6134
+        },
+        {
+          "key": "pos-bank-divergence:FEDERAL BANK LTD",
+          "value": 23.6626
+        },
+        {
+          "key": "pos-bank-divergence:YES BANK LTD",
+          "value": 18.3676
+        },
+        {
+          "key": "pos-bank-divergence:AXIS BANK LTD",
+          "value": 14.2777
+        },
+        {
+          "key": "pos-bank-divergence:BANDHAN BANK LTD",
+          "value": 9.6035
+        },
+        {
+          "key": "pos-bank-divergence:DHANALAXMI BANK LTD",
+          "value": 8.3893
+        },
+        {
+          "key": "pos-bank-divergence:HDFC BANK LTD",
+          "value": 5.977
+        },
+        {
+          "key": "pos-bank-divergence:CENTRAL BANK OF INDIA",
+          "value": -19.1476
+        },
+        {
+          "key": "pos-bank-divergence:UNION BANK OF INDIA",
+          "value": -36.3401
+        },
+        {
+          "key": "pos-bank-divergence:UCO BANK",
+          "value": -68.5227
+        }
+      ],
+      "chain": [
+        "Each bank's year-on-year growth is compared with its category's; a flag needs opposite directions and a material gap.",
+        "Widest gap: KARUR VYSYA BANK LTD at +410.61 pp versus its category.",
+        "10 banks currently contradict their trend (7 above, 3 below)."
+      ]
+    },
+    "basis": {
+      "facts": [
+        "KARUR VYSYA BANK LTD: +410.61 pp vs its category's YoY pace",
+        "FEDERAL BANK LTD: +23.66 pp vs its category's YoY pace",
+        "YES BANK LTD: +18.37 pp vs its category's YoY pace",
+        "AXIS BANK LTD: +14.28 pp vs its category's YoY pace",
+        "BANDHAN BANK LTD: +9.60 pp vs its category's YoY pace",
+        "DHANALAXMI BANK LTD: +8.39 pp vs its category's YoY pace",
+        "HDFC BANK LTD: +5.98 pp vs its category's YoY pace",
+        "CENTRAL BANK OF INDIA: -19.15 pp vs its category's YoY pace",
+        "UNION BANK OF INDIA: -36.34 pp vs its category's YoY pace",
+        "UCO BANK: -68.52 pp vs its category's YoY pace",
+        "Source: signals.db (pos-bank-divergence)"
+      ],
+      "inferences": [
+        "Each bank's year-on-year growth is compared with its category's; a flag needs opposite directions and a material gap.",
+        "Widest gap: KARUR VYSYA BANK LTD at +410.61 pp versus its category.",
+        "10 banks currently contradict their trend (7 above, 3 below)."
+      ]
+    },
+    "sourceSignals": [
+      "pos-bank-divergence"
+    ],
+    "effect": {
+      "highlight": [
+        "KARUR VYSYA BANK LTD",
+        "Total"
+      ],
+      "tab": "trend",
+      "trendMode": "yoy",
+      "focusCard": "pos_terminals"
+    },
+    "exploreAction": null,
+    "representation": "deterministic-db",
+    "insight_kind": "divergence_hierarchy"
   }
 ]

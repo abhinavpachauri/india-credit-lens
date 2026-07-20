@@ -843,6 +843,29 @@
           }
         },
         {
+          "id": "sibc-services-rotation",
+          "layer": 1,
+          "title": "Services credit mix rotating toward Non-Banking Financial Companies (+3.43 pp share in a year)",
+          "body": "Compared with the same month a year ago, the biggest share gains in services credit came from Non-Banking Financial Companies +3.43 pp; Computer Software +0.19 pp; Aviation +0.04 pp. The ground came from Other Services -2.13 pp; Trade -0.60 pp; Transport Operators -0.56 pp. In all, 3.72 pp of the mix changed hands. The gains concentrate in financial intermediation, the cessions in trade & distribution — the mix is tilting toward financial intermediation.",
+          "implication": "This is a composition read: it says where the mix is shifting, not why and not what happens next. The tilt toward financial intermediation is the line to watch — confirm it holds next month before treating it as a trend.",
+          "preferredMode": "yoy",
+          "effect": {},
+          "claim_type": "data",
+          "basis": {
+            "facts": [
+              "Range: -2.1pp – 3.7pp",
+              "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_rotation)"
+            ],
+            "inferences": [
+              "Each segment's share of services credit is compared with the same month a year earlier — the change is in percentage points of the mix.",
+              "Top gainer: Non-Banking Financial Companies at +3.43 pp. Biggest cession: Other Services at -2.13 pp.",
+              "Rotation mass — the share that changed hands — is 3.72 pp.",
+              "The gains concentrate in financial intermediation, the cessions in trade & distribution — the mix is tilting toward financial intermediation."
+            ]
+          },
+          "insight_kind": "rotation"
+        },
+        {
           "id": "sibc-services-share-scan",
           "layer": 1,
           "title": "Non-Banking Financial Companies is the biggest slice of services credit at 34.5%",
@@ -1074,6 +1097,27 @@
               "This segment is shrinking into irrelevance within retail credit."
             ]
           }
+        },
+        {
+          "id": "sibc-pl-divergence",
+          "layer": 1,
+          "title": "Consumer Durables is moving against personal loans (-18.01 pp vs the pace)",
+          "body": "Most segments move with their family; a divergence flag means one is moving against it. Consumer Durables is contracting while the rest grows — running -18.01 pp versus the personal loans trend's year-on-year pace, and it is the only segment flagged this month.",
+          "implication": "A segment moving against its family is an early divergence read, not a verdict: check whether it is a base effect, a reclassification, or a genuine shift before acting on it. The gap closing or widening next month is the signal to watch.",
+          "preferredMode": "yoy",
+          "effect": {},
+          "claim_type": "data",
+          "basis": {
+            "facts": [
+              "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_divergence)"
+            ],
+            "inferences": [
+              "Each segment's year-on-year growth is compared with the personal loans trend's; a flag needs opposite directions and a material gap.",
+              "Consumer Durables is -18.01 pp versus the personal loans trend — contracting while the rest grows.",
+              "No other segment currently contradicts the personal loans trend."
+            ]
+          },
+          "insight_kind": "divergence_hierarchy"
         },
         {
           "id": "sibc-pl-education-share",
@@ -1344,6 +1388,29 @@
               "Other PL is now growing faster than housing (10.9%) but slower than gold (105.5%) and vehicles."
             ]
           }
+        },
+        {
+          "id": "sibc-pl-rotation",
+          "layer": 1,
+          "title": "Personal loans mix rotating toward Loans against gold jewellery (+3.21 pp share in a year)",
+          "body": "Compared with the same month a year ago, the biggest share gains in personal loans came from Loans against gold jewellery +3.21 pp; Vehicle Loans +0.18 pp. The ground came from Housing -1.93 pp; Other Personal Loans -0.64 pp; Credit Card Outstanding -0.58 pp. In all, 3.39 pp of the mix changed hands. The cessions concentrate in consumer finance; the gains span several parts of the economy.",
+          "implication": "This is a composition read: it says where the mix is shifting, not why and not what happens next. With no single theme behind the movers, treat each segment's shift on its own terms rather than as one story.",
+          "preferredMode": "yoy",
+          "effect": {},
+          "claim_type": "data",
+          "basis": {
+            "facts": [
+              "Range: -1.9pp – 3.4pp",
+              "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_rotation)"
+            ],
+            "inferences": [
+              "Each segment's share of personal loans is compared with the same month a year earlier — the change is in percentage points of the mix.",
+              "Top gainer: Loans against gold jewellery at +3.21 pp. Biggest cession: Housing at -1.93 pp.",
+              "Rotation mass — the share that changed hands — is 3.39 pp.",
+              "The cessions concentrate in consumer finance; the gains span several parts of the economy."
+            ]
+          },
+          "insight_kind": "rotation"
         },
         {
           "id": "sibc-pl-share-advances-share",
@@ -2138,6 +2205,29 @@
               "3 of 4 categories are growing — broad-based momentum."
             ]
           }
+        },
+        {
+          "id": "sibc-industry-rotation",
+          "layer": 1,
+          "title": "Industry credit mix rotating toward All Engineering (+0.91 pp share in a year)",
+          "body": "Compared with the same month a year ago, the biggest share gains in industry credit came from All Engineering +0.91 pp; Petroleum, Coal Products and Nuclear Fuels +0.70 pp; Basic Metal and Metal Product +0.35 pp. The ground came from Infrastructure -1.73 pp; Textiles -0.43 pp; Food Processing -0.17 pp. In all, 2.83 pp of the mix changed hands. The cessions concentrate in traditional consumer sectors; the gains span several parts of the economy.",
+          "implication": "This is a composition read: it says where the mix is shifting, not why and not what happens next. With no single theme behind the movers, treat each segment's shift on its own terms rather than as one story.",
+          "preferredMode": "yoy",
+          "effect": {},
+          "claim_type": "data",
+          "basis": {
+            "facts": [
+              "Range: -1.7pp – 2.8pp",
+              "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_rotation)"
+            ],
+            "inferences": [
+              "Each segment's share of industry credit is compared with the same month a year earlier — the change is in percentage points of the mix.",
+              "Top gainer: All Engineering at +0.91 pp. Biggest cession: Infrastructure at -1.73 pp.",
+              "Rotation mass — the share that changed hands — is 2.83 pp.",
+              "The cessions concentrate in traditional consumer sectors; the gains span several parts of the economy."
+            ]
+          },
+          "insight_kind": "rotation"
         },
         {
           "id": "sibc-industry-type-share-scan",

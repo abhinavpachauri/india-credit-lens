@@ -11,7 +11,8 @@ from pathlib import Path
 import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from core.relational_insights import rotation_insight, _majority_role  # noqa: E402
+from core.relational_insights import (  # noqa: E402
+    rotation_insight, divergence_insight, _majority_role)
 
 ROLES = {
     "Power":       "energy_logistics_capex",
@@ -62,8 +63,10 @@ def test_theme_when_gainers_share_a_role():
     assert "energy & logistics capex" in ins["body"]
     assert "tilting toward energy & logistics capex" in ins["body"]
     assert "traditional consumer sectors" in ins["body"]
-    assert "+1.20pp" in ins["body"] and "-1.00pp" in ins["body"]
-    assert "2.00pp of the mix changed hands" in ins["body"]
+    # Spaced unit + signed values — the traceability extractors backtrack glued
+    # "1.20pp" to a bare "1", so the format is part of the contract.
+    assert "+1.20 pp" in ins["body"] and "-1.00 pp" in ins["body"]
+    assert "2.00 pp of the mix changed hands" in ins["body"]
     assert "composition read" in ins["implication"]
 
 
@@ -94,6 +97,35 @@ def test_steady_mix_is_the_finding():
 
 def test_empty_distribution_suppressed():
     assert rotation_insight([], mass=None, roles=ROLES, subject="x") is None
+
+
+# ── divergence_insight ────────────────────────────────────────────────────────
+
+def test_divergence_single_flag():
+    ins = divergence_insight([("Consumer Durables", -18.01, "active")],
+                             subject="personal loans")
+    assert ins["insight_kind"] == "divergence_hierarchy"
+    assert "Consumer Durables" in ins["title"]
+    assert "-18.01 pp" in ins["body"]          # signed, spaced — the row value
+    assert "only" in ins["body"]               # single-flag phrasing
+    assert "contracting while the rest grows" in ins["body"]
+
+
+def test_divergence_multi_flag_both_directions():
+    dist = [("SBM BANK INDIA LTD", 24.69, "active"),
+            ("CITI BANK", 20.65, "active"),
+            ("TAMILNAD MERCANTILE BANK LTD", -45.82, "active")]
+    ins = divergence_insight(dist, subject="credit cards", member_noun="bank",
+                             parent_is_per_entity=True)
+    assert "TAMILNAD MERCANTILE BANK" in ins["title"]   # widest |gap| leads
+    assert "-45.82 pp" in ins["title"]
+    assert "+24.69 pp" in ins["body"]
+    assert "3 banks are flagged" in ins["body"]
+    assert "its category" in ins["body"]
+
+
+def test_divergence_no_flags_suppressed():
+    assert divergence_insight([], subject="services credit") is None
 
 
 def test_no_lead_lag_language():

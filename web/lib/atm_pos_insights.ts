@@ -2,7 +2,7 @@
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
-export type InsightCut   = "total" | "by_type" | "top_n";
+export type InsightCut   = "total" | "by_type" | "top_n" | "by_bank";
 export type InsightGroup = "cc" | "dc" | "infra";
 
 export interface InsightEffect {
@@ -68,8 +68,8 @@ export async function loadAtmPosInsights(): Promise<AtmPosInsight[]> {
 /** Return the cuts relevant to a given group mode. */
 export function cutsForMode(mode: "by_type" | "individual" | "top_n"): InsightCut[] {
   if (mode === "by_type")    return ["total", "by_type"];
-  if (mode === "top_n")      return ["total", "top_n"];
-  return ["total"];   // individual — only total-level insights apply
+  if (mode === "top_n")      return ["total", "top_n", "by_bank"];
+  return ["total", "by_bank"];   // individual — total + single-bank stories (divergence)
 }
 
 export function filterInsights(

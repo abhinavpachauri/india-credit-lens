@@ -23,6 +23,9 @@ from pathlib import Path
 # regardless of where this module lives (it moved to pipelines/sibc/ in the §4 cutover).
 sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
 from signals.query import signal_numbers, scan_distribution, _signal_type   # noqa: E402
+from core.relational_insights import (                                       # noqa: E402
+    rotation_insight, divergence_insight, rotation_distribution,
+    entity_roles, _subject as relational_subject)
 from core.paths import ROOT as REPO
 ANAL  = REPO / "analysis"
 SIG   = ANAL / "signals"
@@ -44,6 +47,12 @@ DOMAIN_SECTION: dict[str, str] = {
 
 # Signals that belong to a different section than their domain default
 SIGNAL_SECTION_OVERRIDE: dict[str, str] = {
+    # relational signals describe the sub-sector mix, not the size partition
+    "sibc-industry-rotation":     "industryByType",
+    "sibc-industry-divergence":   "industryByType",
+    "sibc-services-rotation":     "services",
+    "sibc-services-divergence":   "services",
+
     # sector_mix signals that describe services sub-sectors → services section
     "sibc-services-yoy-scan":     "services",
     "sibc-services-share-scan":   "services",
@@ -316,13 +325,6 @@ def main(period: str | None = None) -> int:
         if not reg_sig or reg_sig.get("layer") != 1:
             continue
 
-        # Relational signals (rotation/divergence) have deterministic prose
-        # builders in core/relational_insights — deterministic prose is the
-        # product for them (signals/README.md), so they must never fall through
-        # to the LLM-represented branch below. Dashboard wiring is pending
-        # operator review; until then they are excluded from this output.
-        if _signal_type(reg_sig) in ("rotation", "divergence"):
-            continue
 
         domain  = se["_domain"]
         section = SIGNAL_SECTION_OVERRIDE.get(sid) or DOMAIN_SECTION.get(domain)
@@ -332,10 +334,29 @@ def main(period: str | None = None) -> int:
         method       = reg_sig.get("compute", {}).get("method", "")
         chart_series = reg_sig.get("chart_series", [])
         facts        = signal_numbers(conn, sid, reg_sig, "sibc", period)
+        stype        = _signal_type(reg_sig)
+        insight_kind = None
 
         # Shared schema: basis.facts = traceable data points (the numbers this
         # rests on), basis.inferences = the reasoning chain rendered by the card.
-        if _signal_type(reg_sig) == "scan" and (dist := scan_distribution(conn, sid, "sibc", period)):
+        if stype in ("rotation", "divergence"):
+            # Relational signals: deterministic prose is the product
+            # (signals/README.md) — never the LLM-eval branch. No rows for the
+            # period (window unavailable / nothing diverges) → no card.
+            if stype == "rotation":
+                dist, mass_val = rotation_distribution(conn, sid, "sibc", period)
+                rel = rotation_insight(dist, mass_val, entity_roles("sibc"),
+                                       relational_subject(reg_sig))
+            else:
+                dist = scan_distribution(conn, sid, "sibc", period)
+                rel = divergence_insight(dist, relational_subject(reg_sig))
+            if rel is None:
+                continue
+            title, body, chain, inf = (rel["title"], rel["body"],
+                                       rel["chain"], rel["implication"])
+            insight_kind = rel["insight_kind"]
+            itype = "insight"
+        elif stype == "scan" and (dist := scan_distribution(conn, sid, "sibc", period)):
             # Scan distributions are generated deterministically (grounded by
             # construction), not from the LLM narrative. Semantics come from the
             # SPEC: *_scan_share → size shares (with the spec's share_of label),
@@ -368,6 +389,8 @@ def main(period: str | None = None) -> int:
                 "inferences": chain,
             },
         }
+        if insight_kind:
+            annotation["insight_kind"] = insight_kind
 
         sections_out[section][itype + "s"].append(annotation)
 

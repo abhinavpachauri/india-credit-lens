@@ -29,6 +29,25 @@ sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / 
 from core.paths import ROOT
 SIGNALS_IN  = ROOT / "analysis/rbi_atm_pos/signals.json"
 INSIGHTS_IN = ROOT / "analysis/rbi_atm_pos/insights.json"
+DB_PATH     = ROOT / "analysis/signals/signals.db"
+
+
+def load_db_row_values(period: str) -> dict[str, float]:
+    """'{metric_id}:{entity_id}' → value for the period — resolves the
+    reasoning.signals keys of relational cards (representation
+    'deterministic-db'), whose ground truth is signals.db (kept honest by
+    Check 2f), not signals.json."""
+    import sqlite3
+    if not DB_PATH.exists():
+        return {}
+    con = sqlite3.connect(f"file:{DB_PATH}?mode=ro", uri=True)
+    try:
+        return {f"{r[0]}:{r[1]}": r[2] for r in con.execute(
+            "SELECT metric_id, entity_id, value FROM signals "
+            "WHERE pipeline='atm_pos' AND period=? AND value IS NOT NULL",
+            (period,)).fetchall()}
+    finally:
+        con.close()
 
 REL_TOL = 0.005   # 0.5% relative tolerance for value matching
 ABS_TOL = 0.6     # absolute fallback for values near zero
@@ -61,10 +80,12 @@ def values_match(declared: float, actual: float) -> bool:
     return rel <= REL_TOL or abs(declared - actual) <= ABS_TOL
 
 
-def validate_insight_claims(ins: dict, signals: dict) -> list[str]:
+def validate_insight_claims(ins: dict, signals: dict,
+                            db_rows: dict[str, float] | None = None) -> list[str]:
     errors   = []
     warnings = []
     iid      = ins.get("id", "?")
+    is_reldb = ins.get("representation") == "deterministic-db"
 
     reasoning = ins.get("reasoning")
 
@@ -86,10 +107,14 @@ def validate_insight_claims(ins: dict, signals: dict) -> list[str]:
         if not key:
             errors.append(f"[{iid}] EMPTY signal key in reasoning.signals")
             continue
-        actual = get_signal_value(signals, key)
+        # Relational cards key their rows '{metric_id}:{entity_id}' and resolve
+        # against signals.db; everything else dot-paths into signals.json.
+        actual = ((db_rows or {}).get(key) if is_reldb
+                  else get_signal_value(signals, key))
         if actual is None:
             errors.append(
-                f"[{iid}] INVALID signal key '{key}' — not found in signals.json"
+                f"[{iid}] INVALID signal key '{key}' — not found in "
+                f"{'signals.db (period rows)' if is_reldb else 'signals.json'}"
             )
         elif declared is None:
             errors.append(f"[{iid}] MISSING value for signal '{key}' in reasoning.signals")
@@ -127,12 +152,15 @@ def main():
 
     print(f"  Insights: {len(insights)} to validate\n")
 
+    db_rows = load_db_row_values(signals["meta"]["latest_period"]) \
+        if any(i.get("representation") == "deterministic-db" for i in insights) else {}
+
     all_errors   = []
     insight_count = sum(1 for i in insights if i.get("type") != "gap")
     gap_count     = sum(1 for i in insights if i.get("type") == "gap")
 
     for ins in insights:
-        errors = validate_insight_claims(ins, signals)
+        errors = validate_insight_claims(ins, signals, db_rows)
         itype  = ins.get("type", "insight")
 
         if errors:

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 relational_insights.py — deterministic insight builders for the relational
-signal methods (rotation; divergence builder to follow).
+signal methods (rotation_insight + divergence_insight).
 
 Spec: analysis/signals/README.md — "Relational signal methods". Deterministic
 prose is the product: the copy must be publishable with zero LLM calls (quality
@@ -109,7 +109,11 @@ def _majority_role(movers: list[tuple[str, float]],
 
 
 def _pp(v: float) -> str:
-    return f"{v:+.2f}pp"
+    # Signed, with a space before the unit: the traceability extractors parse
+    # "3.21 pp" as 3.21 but backtrack glued "3.21pp" to a bare "3" — and the
+    # sign must match the stored row value, so "below"-style prose still
+    # carries the signed figure.
+    return f"{v:+.2f} pp"
 
 
 def rotation_insight(dist: list[tuple], mass: float | None,
@@ -135,13 +139,13 @@ def rotation_insight(dist: list[tuple], mass: float | None,
 
     # Honest edge: a mix that barely moved is the finding, not a failure.
     if mass_v < 0.5:
-        title = f"{subject.capitalize()} mix steady — only {mass_v:.2f}pp changed hands in a year"
+        title = f"{subject.capitalize()} mix steady — only {mass_v:.2f} pp changed hands in a year"
         body = (f"Compared with the same month a year ago, the {subject} mix is "
-                f"essentially unchanged: {mass_v:.2f}pp of share moved between "
+                f"essentially unchanged: {mass_v:.2f} pp of share moved between "
                 f"segments in total. No segment gained or lost meaningful ground.")
         chain = [
             f"Each segment's share of {subject} is compared with the same month a year earlier.",
-            f"Rotation mass — the share that changed hands — is {mass_v:.2f}pp, "
+            f"Rotation mass — the share that changed hands — is {mass_v:.2f} pp, "
             f"below the half-point mark that would signal a real shift.",
         ]
         implication = ("A stable mix is information too: whatever is driving "
@@ -190,7 +194,7 @@ def rotation_insight(dist: list[tuple], mass: float | None,
     ]
     if losers:
         body_parts.append(f"The ground came from {lose_str}.")
-    body_parts.append(f"In all, {mass_v:.2f}pp of the mix changed hands."
+    body_parts.append(f"In all, {mass_v:.2f} pp of the mix changed hands."
                       + (f" {theme}" if theme else ""))
     body = " ".join(body_parts)
 
@@ -200,7 +204,7 @@ def rotation_insight(dist: list[tuple], mass: float | None,
         f"Top gainer: {L0} at {_pp(Lv0)}."
         + (f" Biggest cession: {_short(losers[0][0])} at {_pp(losers[0][1])}."
            if losers else ""),
-        f"Rotation mass — the share that changed hands — is {mass_v:.2f}pp.",
+        f"Rotation mass — the share that changed hands — is {mass_v:.2f} pp.",
     ]
     if theme:
         chain.append(theme)
@@ -221,6 +225,80 @@ def rotation_insight(dist: list[tuple], mass: float | None,
             "implication": implication, "insight_kind": "rotation"}
 
 
+def divergence_insight(dist: list[tuple], subject: str, member_noun: str = "segment",
+                       parent_is_per_entity: bool = False) -> dict | None:
+    """Deterministic divergence insight from the flagged-entity rows.
+
+    dist    — [(entity_id, gap_pp, status)] — value = child_yoy − parent_yoy;
+              a positive gap means growing while the parent declines, negative
+              the reverse (opposite signs are guaranteed by the flag rule)
+    subject — what is being measured ("personal loans", "credit cards")
+    member_noun — "segment" (sector trees) or "bank" (bank vs its category)
+    parent_is_per_entity — True when each entity contradicts its OWN parent
+              (bank vs bank_category) rather than one shared parent
+
+    Number policy: only the gap values (this signal's own rows) appear as
+    numerals — the underlying child/parent growth rates belong to other
+    signals and are described in words. No rows → None (nothing diverges —
+    the insight is suppressed, per spec).
+    """
+    if not dist:
+        return None
+
+    parent = "its category" if parent_is_per_entity else f"the {subject} trend"
+    up   = [(e, v) for e, v, _ in dist if v > 0]            # growing vs declining parent
+    down = [(e, v) for e, v, _ in sorted(dist, key=lambda r: r[1]) if v < 0]
+    lead_e, lead_v = max(dist, key=lambda r: abs(r[1]))[:2]
+    Llead = _short(lead_e)
+
+    def _list(pairs):
+        return "; ".join(f"{_short(e)} {_pp(v)}" for e, v in pairs[:3])
+
+    if len(dist) == 1:
+        side = "above" if lead_v > 0 else "below"
+        move = ("growing while the rest declines" if lead_v > 0
+                else "contracting while the rest grows")
+        title = f"{Llead} is moving against {subject} ({_pp(lead_v)} vs the pace)"
+        body = (f"Most {member_noun}s move with their family; a divergence flag "
+                f"means one is moving against it. {Llead} is {move} — running "
+                f"{_pp(lead_v)} versus {parent}'s year-on-year pace, and it "
+                f"is the only {member_noun} flagged this month.")
+        chain = [
+            f"Each {member_noun}'s year-on-year growth is compared with "
+            f"{parent}'s; a flag needs opposite directions and a material gap.",
+            f"{Llead} is {_pp(lead_v)} versus {parent} — {move}.",
+            f"No other {member_noun} currently contradicts {parent}.",
+        ]
+    else:
+        title = (f"{member_noun.capitalize()}s moving against the pack on "
+                 f"{subject} — widest gap {Llead} at {_pp(lead_v)}")
+        parts = [f"While {subject} overall moves one way, these {member_noun}s "
+                 f"are moving the other."]
+        if up:
+            parts.append(f"Growing against a declining trend: {_list(up)} "
+                         f"versus {parent}'s pace.")
+        if down:
+            parts.append(f"Declining against a growing trend: {_list(down)}.")
+        parts.append(f"{len(dist)} {member_noun}s are flagged in all.")
+        body = " ".join(parts)
+        chain = [
+            f"Each {member_noun}'s year-on-year growth is compared with "
+            f"{parent}'s; a flag needs opposite directions and a material gap.",
+            f"Widest gap: {Llead} at {_pp(lead_v)} versus {parent}.",
+            f"{len(dist)} {member_noun}s currently contradict their trend "
+            f"({len(up)} above, {len(down)} below).",
+        ]
+
+    implication = (
+        f"A {member_noun} moving against its family is an early divergence "
+        "read, not a verdict: check whether it is a base effect, a "
+        "reclassification, or a genuine shift before acting on it. The gap "
+        "closing or widening next month is the signal to watch.")
+
+    return {"title": title, "body": body, "chain": chain,
+            "implication": implication, "insight_kind": "divergence_hierarchy"}
+
+
 # ── review render (reads signals.db; writes nothing) ─────────────────────────
 
 def _rotation_signals(registry: dict, pipeline: str) -> list[tuple[str, dict]]:
@@ -239,7 +317,12 @@ METRIC_LABELS = {
 
 
 def _subject(sig: dict) -> str:
+    """The registry-declared subject of a relational signal: explicit
+    compute.subject (divergence), else share_of (SIBC rotation), else the
+    humanised metric label (ATM/POS rotation)."""
     comp = sig.get("compute", {})
+    if comp.get("subject"):
+        return comp["subject"]
     if comp.get("share_of"):
         return comp["share_of"]
     metric = comp.get("metric", "the mix")

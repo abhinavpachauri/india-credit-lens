@@ -84,6 +84,8 @@ def apply_llm_representation(insights: list, eval_signals: dict, prompt_version)
     converted to LLM representation."""
     converted = 0
     for ins in insights:
+        if ins.get("representation") == "deterministic-db":
+            continue   # relational cards: deterministic prose IS the product — never LLM
         ins["representation"] = "deterministic"
         anchor = EVAL_ANCHOR.get(ins["id"])
         se = eval_signals.get(anchor) if anchor else None
@@ -1776,6 +1778,105 @@ def infra_upi_yoy(s, month) -> dict | None:
 # Orchestrate
 # ══════════════════════════════════════════════════════════════════════════════
 
+# ══════════════════════════════════════════════════════════════════════════════
+# RELATIONAL CARDS (rotation + divergence — signals.db-sourced)
+# ══════════════════════════════════════════════════════════════════════════════
+# These read the registered relational signals from signals.db (kept honest by
+# Check 2f) rather than signals.json — deterministic prose is the product
+# (signals/README.md), built by core/relational_insights. Stage 4c validates
+# them against their own db rows (representation "deterministic-db").
+
+import sqlite3
+from core.relational_insights import (
+    rotation_insight, divergence_insight, rotation_distribution,
+    entity_roles, _subject as relational_subject)
+from signals.query import scan_distribution
+
+DB_PATH = ROOT / "analysis/signals/signals.db"
+REG_PATH = ROOT / "analysis/signals/registry.json"
+
+# UI category names (charts) for the db's full bank_category labels.
+CATEGORY_SHORT = {
+    "Public Sector Banks":  "PSB",
+    "Private Sector Banks": "Private",
+    "Foreign Banks":        "Foreign",
+    "Small Finance Banks":  "SFB",
+    "Payment Banks":        "Payments",
+}
+
+ROTATION_CARDS = [
+    # (signal_id, group, focusCard metric)
+    ("cc-category-rotation",  "cc",    "credit_cards"),
+    ("dc-category-rotation",  "dc",    "debit_cards"),
+    ("pos-category-rotation", "infra", "pos_terminals"),
+]
+DIVERGENCE_CARDS = [
+    ("cc-bank-divergence",  "cc",    "credit_cards"),
+    ("dc-bank-divergence",  "dc",    "debit_cards"),
+    ("pos-bank-divergence", "infra", "pos_terminals"),
+]
+
+
+def _relational_card(sid, group, cut, month, rel, effect, facts, rows):
+    # reasoning.signals carries the db rows this card rests on, keyed
+    # "{signal_id}:{entity_id}" — Stage 4d resolves these against signals.db
+    # (the deterministic-db analog of its signals.json key check).
+    reasoning_signals = [{"key": f"{sid}:{e}", "value": round(v, 4)}
+                         for e, v, _ in rows]
+    card = insight(sid, group, cut, month, rel["title"], rel["body"], effect,
+                   implication=rel["implication"])
+    card["basis"]          = {"facts": facts, "inferences": rel["chain"]}
+    card["reasoning"]      = {"signals": reasoning_signals, "chain": rel["chain"]}
+    card["sourceSignals"]  = [sid]
+    card["representation"] = "deterministic-db"
+    card["insight_kind"]   = rel["insight_kind"]
+    return card
+
+
+def relational_cards(s, month) -> list[dict]:
+    """Rotation + divergence cards for the current period. No rows (window
+    unavailable / nothing diverges) → no card, by construction."""
+    period   = s["meta"]["latest_period"]
+    registry = json.loads(REG_PATH.read_text())["signals"]
+    roles    = entity_roles("atm_pos")
+    conn = sqlite3.connect(f"file:{DB_PATH}?mode=ro", uri=True)
+    out: list[dict] = []
+
+    for sid, group, metric in ROTATION_CARDS:
+        dist, mass = rotation_distribution(conn, sid, "atm_pos", period)
+        rel = rotation_insight(dist, mass, roles, relational_subject(registry[sid]))
+        if rel is None:
+            continue
+        top = CATEGORY_SHORT.get(dist[0][0], dist[0][0])
+        facts = [f"{e}: {v:+.2f} pp share vs a year ago" for e, v, _ in dist]
+        if mass is not None:
+            facts.append(f"Rotation mass: {mass:.2f} pp")
+        facts.append(f"Source: signals.db ({sid})")
+        out.append(_relational_card(
+            sid, group, "by_type", month, rel,
+            effect={"highlight": [top, "Total"], "tab": "distribution",
+                    "distMode": "pct", "focusCard": metric},
+            facts=facts, rows=dist))
+
+    for sid, group, metric in DIVERGENCE_CARDS:
+        dist = scan_distribution(conn, sid, "atm_pos", period)
+        rel = divergence_insight(dist, relational_subject(registry[sid]),
+                                 member_noun="bank", parent_is_per_entity=True)
+        if rel is None:
+            continue
+        lead = max(dist, key=lambda r: abs(r[1]))[0]
+        facts = [f"{e}: {v:+.2f} pp vs its category's YoY pace" for e, v, _ in dist]
+        facts.append(f"Source: signals.db ({sid})")
+        out.append(_relational_card(
+            sid, group, "by_bank", month, rel,
+            effect={"highlight": [lead, "Total"], "tab": "trend",
+                    "trendMode": "yoy", "focusCard": metric},
+            facts=facts, rows=dist))
+
+    conn.close()
+    return out
+
+
 RULES = [
     # CC — insights
     cc_ecom_vs_pos,
@@ -1831,6 +1932,12 @@ def main():
                 print(f"  ✓ {result['id']} [{result['group']} / {result['cut']}]")
         except Exception as e:
             print(f"  ✗ {rule.__name__}: {e}")
+
+    # Relational cards (rotation/divergence) — signals.db-sourced, deterministic
+    # prose; never routed through the LLM representation layer below.
+    for card in relational_cards(signals, month):
+        insights.append(card)
+        print(f"  ✓ {card['id']} [{card['group']} / {card['cut']}] (relational)")
 
     print(f"\n{len(insights)} insights generated.")
 

@@ -469,6 +469,8 @@
       "path": "analysis/pipelines/atm_pos/generate_atm_pos_insights.py",
       "reads": {
         "analysis/rbi_atm_pos/signals.json": "low",
+        "analysis/signals/registry.json": "low",
+        "analysis/signals/signals.db": "low",
         "web/public/data/atm_pos_insights.json": "low"
       },
       "writes": {
@@ -494,6 +496,7 @@
       "reads": {
         "analysis/rbi_atm_pos/insights.json": "low",
         "analysis/rbi_atm_pos/signals.json": "low",
+        "analysis/signals/signals.db": "low",
         "insights.json": "low"
       },
       "writes": {}

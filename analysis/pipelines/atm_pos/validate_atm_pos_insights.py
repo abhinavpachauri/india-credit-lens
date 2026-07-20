@@ -202,14 +202,41 @@ def load_db_period_numbers(period: str) -> list[float]:
     return nums
 
 
+def load_db_own_numbers(period: str, sids: list[str]) -> dict[str, list[float]]:
+    """STRICT per-signal ground truth: the numbers each signal's own rows
+    produced for the period (via flat_numbers — row values, spread, counts,
+    mean). Used for relational cards (representation 'deterministic-db'),
+    which cite only their own distribution — the mirror of SIBC Check 2g's
+    scan-strict rule."""
+    if not DB_PATH.exists() or not sids:
+        return {}
+    sys.path.insert(0, str(ROOT / "analysis"))
+    from signals.query import signal_numbers, flat_numbers  # noqa: E402
+    with open(REGISTRY) as f:
+        reg = json.load(f)["signals"]
+    out: dict[str, list[float]] = {}
+    con = sqlite3.connect(f"file:{DB_PATH}?mode=ro", uri=True)
+    try:
+        for sid in sids:
+            sig = reg.get(sid)
+            if sig:
+                out[sid] = flat_numbers(signal_numbers(con, sid, sig, "atm_pos", period))
+    finally:
+        con.close()
+    return out
+
+
 def validate_insight(ins: dict, flat_signals: dict[str, float],
-                     db_period_nums: list[float] | None = None) -> list[str]:
+                     db_period_nums: list[float] | None = None,
+                     db_own_nums: dict[str, list[float]] | None = None) -> list[str]:
     """Return list of error strings for this insight (empty = OK).
 
     LLM-represented insights (representation=='llm') carry history-referencing
     prose, so their numbers are checked against the period-wide signals.db ground
-    truth (`db_period_nums`) + ratios — exactly like SIBC scalar insights. The
-    deterministic insights validate against signals.json as before."""
+    truth (`db_period_nums`) + ratios — exactly like SIBC scalar insights.
+    Relational cards (representation=='deterministic-db') check STRICTLY against
+    their own signal's db rows (`db_own_nums`). The remaining deterministic
+    insights validate against signals.json as before."""
     errors = []
     iid = ins.get("id", "?")
 
@@ -253,7 +280,13 @@ def validate_insight(ins: dict, flat_signals: dict[str, float],
     if chain:
         texts_to_check.append(("chain", " ".join(chain)))
 
-    is_llm = ins.get("representation") == "llm"
+    rep      = ins.get("representation")
+    is_llm   = rep == "llm"
+    is_reldb = rep == "deterministic-db"
+    own_pool: list[float] = []
+    if is_reldb:
+        for sid in src:
+            own_pool += (db_own_nums or {}).get(sid, [])
     for field_name, text in texts_to_check:
         nums = extract_numbers(text)
         for num in nums:
@@ -266,6 +299,11 @@ def validate_insight(ins: dict, flat_signals: dict[str, float],
                 pool = db_period_nums or []
                 ok = _matches(num, pool) or _ratio_matches(num, pool)
                 src_label = "signals.db (period-wide)"
+            elif is_reldb:
+                # Relational card → STRICT: only its own signal's row values
+                # (2g scan-strict mirror; no ratio derivation).
+                ok = _matches(num, own_pool)
+                src_label = f"signals.db (own rows: {', '.join(src)})"
             else:
                 ok = value_in_signals(num, flat_signals, source_vals, prior_vals)
                 src_label = "signals.json"
@@ -314,13 +352,21 @@ def main():
     else:
         print("  ✓ YoY values match the registered signals.db (no drift)\n")
 
+    # STRICT own-row ground truth for relational cards (deterministic-db).
+    rel_sids = sorted({sid for ins in insights
+                       if ins.get("representation") == "deterministic-db"
+                       for sid in (ins.get("sourceSignals") or [])})
+    db_own_nums = load_db_own_numbers(period, rel_sids)
+    if rel_sids:
+        print(f"  Relational cards: {len(rel_sids)} signal(s) verified vs their own db rows\n")
+
     all_errors:   list[str] = list(yoy_errors)
     warnings:     list[str] = []
     insight_count = 0
     gap_count     = 0
 
     for ins in insights:
-        errors = validate_insight(ins, flat_signals, db_period_nums)
+        errors = validate_insight(ins, flat_signals, db_period_nums, db_own_nums)
         itype = ins.get("type", "insight")
         if itype == "gap":
             gap_count += 1
