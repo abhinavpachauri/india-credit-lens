@@ -44,8 +44,11 @@ LLM calls (quality bar: `deterministic_scan_insight`).
   untagged entities abstain). Mixed roles → honest fallback ("no single theme"); a wholly untagged
   entity set (bank categories — a lender mix, not an economic one) gets **no** theme sentence.
   Steady mix (mass < 0.5pp) is reported as the finding. Composition reads only — no lead/lag claims
-  (COMPOSITION_SPEC §4). Dashboard/report wiring pending operator review — Stage 5.5 explicitly
-  excludes rotation/divergence signals until then.
+  (COMPOSITION_SPEC §4). `divergence_insight` (same module) renders the hierarchy-divergence cards,
+  citing ONLY the signal's own gap values. **Wired on both dashboards**: SIBC Stage 5.5 routes
+  rotation/divergence through these builders (like scan); payments Stage 4b emits them as
+  `representation: deterministic-db` cards validated strictly vs their own db rows (4c) with
+  `reasoning.signals` resolved against signals.db (4d).
 
 ### divergence, hierarchy axis — child contradicting its parent
 `csv_sector_divergence` (SIBC: children vs parent YoY) · `csv_bank_divergence` (ATM/POS: bank vs its
