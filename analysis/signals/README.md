@@ -35,7 +35,8 @@ LLM calls (quality bar: `deterministic_scan_insight`).
   `status_rules` (default: `> +0.15` strengthening / `< −0.15` weakening / else stable). Plus ONE
   `entity_type='aggregate', entity_id='total'` row — **rotation mass** = Σ|Δshare|/2 (pp of the mix
   that moved; precedent: fy-acceleration's mixed aggregate+component rows).
-- **Insight** (`core/relational_insights.py :: rotation_insight`): top gainers/losers by name +
+- **Insight** (`core/relational_insights.py :: rotation_insight` — planned, not yet built):
+  top gainers/losers by name +
   Δpp; the real-world line comes from the **majority `economic_role` of the top-3 gainers/losers**
   (roles resolved from the system model's `concept_tags`); mixed roles → honest fallback ("no single
   theme"). Composition reads only — no lead/lag claims (COMPOSITION_SPEC §4).

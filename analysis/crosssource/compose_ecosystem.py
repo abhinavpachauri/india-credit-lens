@@ -219,7 +219,13 @@ def main():
 
         # premium cross_source opportunity: an active 'leads' cross-edge is an opening
         if e["type"] == "leads" and fd != 0:
+            # Evidence = both endpoints' signals. The endpoints ARE the claim ("flow leads
+            # stock"), so the full set is also the firing set — and it gives the narrative
+            # step real numbers to reason over (Check 4f validates against evidence_all).
+            xsig = list(dict.fromkeys(
+                s for u in (e["from"], e["to"]) for s in sig_idx.get(u, [])))
             premium.append({
+                "evidence": xsig, "evidence_all": xsig,
                 "id": f"xopp_{e['id']}",
                 "scope": "cross_source", "surface": "opportunities",
                 "driver": {"kind": "cross_edge", "id": e["id"]},

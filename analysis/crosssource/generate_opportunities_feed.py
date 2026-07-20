@@ -179,6 +179,28 @@ def _member_fact(pipe, ent, db_cache):
     return None
 
 
+def _side_facts(pipe, ent, db_cache, evidence):
+    """Basis facts for one end of a cross-edge.
+
+    Prefer the entity's own headline YoY. Aggregates often have none — credit-card
+    spend, for instance, is only measured per channel (POS / e-com / ATM / other) —
+    so fall back to the channel-level YoY signals the edge already declares as
+    evidence. Components are the honest reading; we never synthesise a total that
+    no registered signal computes.
+    """
+    direct = _member_fact(pipe, ent, db_cache)
+    if direct:
+        return [{k: direct[k] for k in ("id", "value", "unit", "status")}], direct["display"]
+    facts, parts = [], []
+    for sid in evidence or []:
+        if not sid.endswith("-yoy") or (pipe, sid) not in db_cache:
+            continue
+        v = db_cache[(pipe, sid)]
+        facts.append({"id": sid, "value": v["value"], "unit": v["unit"], "status": v["status"]})
+        parts.append(f"{sid.split('-')[1]} {v['value']:+.1f}%")
+    return facts, (" · ".join(parts) + " YoY" if parts else "")
+
+
 def _db_latest_values(periods):
     """(pipeline, metric_id) → {value, unit, status} at that pipeline's latest period."""
     con = sqlite3.connect(gs.ANALYSIS / "signals" / "signals.db")
@@ -372,21 +394,45 @@ def build_cross_system(models, chart_series):
         elif kind == "constraint":
             built = _constraint_item(p, eco_state, eco_model, models, chart_series)
         else:
-            # cross-edge items — the v1.0 path, unchanged
+            # cross-edge items — charts + a computed basis over the two endpoints
             e = next((x for x in eco_state["cross_edge_states"] if x["id"] == p["refs"]["cross_edge"]), {})
-            charts = []
-            for urn in (e.get("from"), e.get("to")):
-                if urn in eidx:
-                    pipe, ent = eidx[urn]
-                    ref = chart_ref_for_entity(pipe, ent, chart_series, with_caption=True)
-                    if ref:
-                        charts.append(ref)
+            charts, rows, facts = [], [], []
+            for urn, role in ((e.get("from"), "leads"), (e.get("to"), "follows")):
+                if urn not in eidx:
+                    continue
+                pipe, ent = eidx[urn]
+                side_facts, display = _side_facts(pipe, ent, db_cache, p.get("evidence_all"))
+                facts.extend(side_facts)
+                rows.append({"role": role,
+                             "label": f"{ent['label']} ({PIPE_LABEL.get(pipe, pipe)})",
+                             "direction": e.get("from_direction" if role == "leads" else "to_direction"),
+                             "value": display or DIR_WORD.get(
+                                 e.get("from_direction" if role == "leads" else "to_direction"), "")})
+                ref = chart_ref_for_entity(pipe, ent, chart_series, with_caption=True)
+                if ref:
+                    charts.append(ref)
             # plain-English deterministic fallbacks (narrative step overrides with numbers).
             # These avoid jargon ("flow/stock/law") in case the LLM call fails.
             lead = charts[0]["caption"] if len(charts) == 2 else "the leading side"
             lag = charts[1]["caption"] if len(charts) == 2 else "the lagging side"
+            state_word = {"aligned": "moving together", "divergent": "pulling apart",
+                          "dormant": "flat", "linked": "structurally linked"}.get(e.get("state"), e.get("state", ""))
             built = {
-                "charts": charts, "basis": None,
+                "charts": charts,
+                "basis": {
+                    "headline": f"{lead} → {lag}: {state_word}",
+                    "coverage": " · ".join(
+                        f"{PIPE_LABEL.get(pl, pl)} @ {pd}" for pl, pd
+                        in (eco_state.get("_meta", {}).get("pipeline_periods") or {}).items()),
+                    "members": rows,
+                    "chain": [
+                        f"Leading side: {rows[0]['label']} {rows[0]['value']}." if rows else "",
+                        f"Lagging side: {rows[1]['label']} {rows[1]['value']}." if len(rows) > 1 else "",
+                        f"The two sides are {state_word} → this reads as "
+                        f"{'origination headroom' if e.get('from_direction', 0) > 0 else 'softening ahead of the stock side'}.",
+                    ],
+                    "facts": facts,
+                } if rows else None,
                 "chain": [
                     f"The early signal is on the leading side: {lead}.",
                     "What happens there tends to show up on the other side a little later.",
@@ -411,6 +457,63 @@ def build_cross_system(models, chart_series):
     return out
 
 
+NARRATIVE_FIELDS = ("body", "implication", "chain")
+
+
+def _all_items(bundle):
+    """Every opportunity in a feed bundle, cross-system first then per-pipeline."""
+    return list(bundle.get("cross_system", [])) + [
+        x for v in bundle.get("pipelines", {}).values() for x in v
+    ]
+
+
+def _state_key(it):
+    """The computed state a narrative was written against.
+
+    `title` catches direction flips on cross-system cards (their labels encode
+    direction); `status` catches active↔watch on pipeline cards (whose titles are
+    static model labels); `basis.facts` catches the numbers moving underneath an
+    otherwise-identical card — prose citing last period's YoY is stale even when
+    the headline reads the same.
+    """
+    facts = ((it.get("basis") or {}).get("facts")) or []
+    return (it.get("title"), it.get("status"),
+            tuple(sorted((f.get("id"), f.get("value")) for f in facts)))
+
+
+def preserve_narratives(prev, bundle):
+    """Carry LLM prose forward across a feed rebuild — but only where it still holds.
+
+    A narrative is written against one computed state, fingerprinted by _state_key.
+    If that state moved, the prose describes a period
+    that no longer exists — we drop it, the item keeps its deterministic templated copy,
+    and `generate_opportunity_narrative` re-narrates it because `narrative` is unset.
+    Correct-but-plainer beats fluent-but-wrong.
+
+    eco_loop cards are never narrated at all (COMPOSITION_SPEC §23.2 exception).
+    Returns the number of narratives preserved.
+    """
+    narrated = {
+        it["id"]: ({k: it.get(k) for k in NARRATIVE_FIELDS}, _state_key(it))
+        for it in _all_items(prev)
+        if it.get("narrative")
+    }
+    kept = 0
+    for it in _all_items(bundle):
+        if (it.get("driver") or {}).get("kind") == "eco_loop":
+            continue
+        was = narrated.get(it["id"])
+        if not was:
+            continue
+        prose, key = was
+        if key != _state_key(it):
+            continue  # state moved → stale prose, fall back to deterministic copy
+        it.update(prose)
+        it["narrative"] = True
+        kept += 1
+    return kept
+
+
 def main():
     channels = gs.load_json(ROOT / "analysis/ontology/channels.json")["channels"]
     chart_series = load_chart_series_index()
@@ -423,24 +526,11 @@ def main():
         "pipelines": {p: build_pipeline_items(p, channels, models, chart_series) for p in gs.PIPELINES},
     }
     # Preserve existing narrative across regeneration (so the gate's feed rebuild does not
-    # revert to templated copy). Carry forward body/implication/chain for items that were
-    # already narrated; new/changed items stay templated until generate_opportunity_narrative
-    # runs again (cached → fast). Same preserve-on-regen pattern as the skeleton.
+    # revert to templated copy) — state-checked, see preserve_narratives().
+    kept = 0
     if OUT.exists():
         try:
-            prev = gs.load_json(OUT)
-            narrated = {}
-            for it in prev.get("cross_system", []) + [x for v in prev.get("pipelines", {}).values() for x in v]:
-                if it.get("narrative"):
-                    narrated[it["id"]] = {k: it.get(k) for k in ("body", "implication", "chain")}
-            for it in bundle["cross_system"] + [x for v in bundle["pipelines"].values() for x in v]:
-                # eco_loop cards are deterministic-only (never narrated) — don't resurrect
-                # a stale LLM paraphrase over their computed state
-                if (it.get("driver") or {}).get("kind") == "eco_loop":
-                    continue
-                if it["id"] in narrated:
-                    it.update(narrated[it["id"]])
-                    it["narrative"] = True
+            kept = preserve_narratives(gs.load_json(OUT), bundle)
         except Exception:
             pass
 
@@ -448,6 +538,7 @@ def main():
     OUT.write_text(json.dumps(bundle, indent=2, ensure_ascii=False))
     n = sum(len(v) for v in bundle["pipelines"].values())
     print(f"opportunities_feed.json: {n} pipeline items + {len(bundle['cross_system'])} cross-system")
+    print(f"  narratives preserved: {kept} (dropped where title/status flipped)")
     for pipe, items in bundle["pipelines"].items():
         from collections import Counter
         print(f"  {pipe}: {dict(Counter(i['status'] for i in items))}")

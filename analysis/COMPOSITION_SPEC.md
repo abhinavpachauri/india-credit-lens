@@ -648,6 +648,22 @@ Every eco insight carries the **shared insight schema** `basis.{facts, inference
   state (observed: "partial, one segment reversed" narrated as "fully engaged"). Deterministic
   prose is authoritative for both.
 
+**Narrative preservation is state-scoped.** A narrative belongs to the computed state it was
+written against, not to the card's `id`. On feed regeneration, prose is carried forward **only
+if the deterministic `(title, status)` pair is unchanged** — that pair is the state's fingerprint:
+cross-system titles encode direction (`softening ahead of stock` ↔ `leading stock — origination
+headroom`), while pipeline titles are static model labels whose state signal is the status
+(`active` ↔ `watch`). If either moved, the narrative is dropped: the card falls back to its
+deterministic templated copy and is re-narrated on the next narrative run. A card may therefore
+render plainer prose until then — **correct-but-plainer beats fluent-but-wrong**, and every item's
+deterministic copy is written to be publishable, so a no-LLM budget degrades gracefully rather
+than pinning last period's story under this period's title. (Observed 2026-07-08 on
+`xopp_x_cc_spend_leads_cc_stock`: April's "spending slowing" body survived under June's
+"origination headroom" title.) Enforced in `generate_opportunities_feed.preserve_narratives`,
+pinned by `analysis/tests/test_feed_narrative_preservation.py`. Word-level direction checks on
+the prose are deliberately **not** used — fuzzy substring heuristics are warning-grade only
+(cf. the Check 2g status-substring warnings); the deterministic key comparison replaces them.
+
 ### 23.3 Feed projection (`generate_opportunities_feed`)
 
 `refs → charts[]` using the existing `ChartRef` shape (`{pipeline, section, highlight, caption}`):
