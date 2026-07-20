@@ -93,6 +93,25 @@
         "metro",
         "non_metro"
       ]
+    },
+    "economic_role": {
+      "required": false,
+      "description": "The real-world reading — what activity this credit/infrastructure finances. Powers the relational insights (rotation/divergence, signals/README.md). Optional: null = tagging gap, not an error. A role is a grouping label (textbook classification, no source); transmission claims built on a role are channels (§2a).",
+      "values": [
+        "energy_logistics_capex",
+        "capital_goods",
+        "industrial_inputs",
+        "construction_real_estate",
+        "agri_inputs",
+        "trade_channel",
+        "consumer_traditional",
+        "consumer_mobility",
+        "consumer_durables",
+        "consumer_finance",
+        "financial_intermediation",
+        "digital_payment_rails",
+        "cash_infrastructure"
+      ]
     }
   },
   "driver_concepts": {

@@ -18,6 +18,10 @@ Layer 1b methods (bank-category level):
 Layer 1c methods (entity scans — one row per entity, all entities):
   csv_category_scan_share — share for every bank_category
   csv_bank_scan           — value or YoY for every bank (full scan, no filtering)
+
+Relational methods (cross-segment — spec: signals/README.md):
+  csv_category_rotation   — Δshare_pp over an annual window per category + rotation mass
+  csv_bank_divergence     — banks whose YoY contradicts their category (flagged only)
 """
 
 from __future__ import annotations
@@ -398,6 +402,134 @@ def csv_streak(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
                  "periods")]
 
 
+# ── Relational methods — rotation & divergence (spec: signals/README.md) ──────
+
+def _month_back(period: str, months: int, available: set[str]) -> str | None:
+    """Month-end date `months` calendar months before period — None if absent
+    from available dates. Calendar-based so the annual window is honest even if
+    the consolidated CSV ever has coverage gaps (same rule as the SIBC module)."""
+    d = date.fromisoformat(period)
+    total = d.year * 12 + (d.month - 1) - months
+    y, m = divmod(total, 12)
+    m += 1
+    candidate = f"{y}-{m:02d}-{calendar.monthrange(y, m)[1]:02d}"
+    return candidate if candidate in available else None
+
+
+ROTATION_DEFAULT_RULES = [
+    {"if": "value > 0.15",  "then": "strengthening"},
+    {"if": "value < -0.15", "then": "weakening"},
+    {"if": "true",          "then": "stable"},
+]
+
+
+def _rotation_rows(cur_shares: list[dict], prior_shares: list[dict],
+                   rules: list) -> list[dict]:
+    """Shared rotation math: Δshare_pp per entity from two share-scan snapshots,
+    plus the aggregate 'rotation mass' row (Σ|Δ|/2 = pp of the mix that moved).
+    Entities must appear in both snapshots to rotate. Mirror of sibc._rotation_rows."""
+    prior = {r["entity_id"]: r["value"] for r in prior_shares
+             if r["value"] is not None}
+    out = []
+    for r in cur_shares:
+        eid = r["entity_id"]
+        if r["value"] is None or eid not in prior:
+            continue
+        delta = r["value"] - prior[eid]
+        out.append(_row(r["entity_type"], eid, delta,
+                        _eval_status(rules, delta, delta), "pp"))
+    if not out:
+        return []
+    out.sort(key=lambda r: r["value"], reverse=True)
+    mass = sum(abs(r["value"]) for r in out) / 2
+    out.append(_row("aggregate", "total", mass, "active", "pp"))
+    return out
+
+
+def csv_category_rotation(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
+    """
+    Δshare_pp over an annual window for every bank_category on a metric — who is
+    gaining/losing ground in the mix. Share basis reuses csv_category_scan_share
+    at the two endpoint dates (no parallel math).
+
+    params: as csv_category_scan_share, plus
+      window — calendar months back for the comparison date (default 12)
+    Emits one row per category (value = Δshare_pp, sorted desc) + one
+    aggregate/total 'rotation mass' row (Σ|Δ|/2). First `window` months emit no rows.
+    """
+    avail  = set(df["report_date"].unique())
+    window = int(params.get("window", 12))
+    prior_date = _month_back(period, window, avail)
+    if prior_date is None:
+        return []
+    return _rotation_rows(csv_category_scan_share(params, period, df),
+                          csv_category_scan_share(params, prior_date, df),
+                          params.get("status_rules") or ROTATION_DEFAULT_RULES)
+
+
+def csv_bank_divergence(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
+    """
+    Banks whose YoY on a metric contradicts their bank_category's YoY — flagged
+    banks only (anomaly-surfaced by construction; no flags → no rows). The
+    hierarchy operator: structurally identical to a SIBC sub-sector diverging
+    from its sector.
+
+    Flag rule: opposite YoY signs AND |bank_yoy| ≥ min_abs (default 2.0)
+    AND |bank_yoy − category_yoy| ≥ min_gap (default 5.0).
+
+    params:
+      metric   — metric name in the CSV
+      min_abs, min_gap — flag thresholds (pp)
+      min_base — both the bank's current and prior-year value must be ≥ this
+                 (default 1; excludes structural zeros — never flag structure)
+    value = bank_yoy − category_yoy (pp, signed — sign carries direction).
+    """
+    metric   = params["metric"]
+    min_abs  = float(params.get("min_abs", 2.0))
+    min_gap  = float(params.get("min_gap", 5.0))
+    min_base = float(params.get("min_base", 1))
+    avail    = set(df["report_date"].unique())
+    prior_yr = _prior_year(period, avail)
+    if prior_yr is None:
+        return []
+
+    cur_rows = df[(df["report_date"] == period) &
+                  (df["metric"] == metric) &
+                  (df["record_type"] == "bank")][["bank_name", "bank_category", "value"]].dropna(subset=["value"])
+    prev_rows = df[(df["report_date"] == prior_yr) &
+                   (df["metric"] == metric) &
+                   (df["record_type"] == "bank")][["bank_name", "value"]].dropna(subset=["value"])
+    if cur_rows.empty or prev_rows.empty:
+        return []
+
+    merged = cur_rows.merge(prev_rows, on="bank_name", suffixes=("_cur", "_prev"))
+    merged = merged[(merged["value_cur"] >= min_base) &
+                    (merged["value_prev"] >= min_base)]
+
+    # Category YoY per bank_category, from the same summed-bank basis as
+    # csv_category_yoy (no parallel math beyond the reuse of _category_val).
+    cat_yoy: dict[str, float] = {}
+    for cat in merged["bank_category"].unique():
+        cv = _category_val(df, period,   metric, cat)
+        pv = _category_val(df, prior_yr, metric, cat)
+        if cv is not None and pv:
+            cat_yoy[str(cat)] = (cv - pv) / pv * 100
+
+    out = []
+    for _, row in merged.iterrows():
+        cat = str(row["bank_category"])
+        if cat not in cat_yoy:
+            continue
+        bank_yoy = (row["value_cur"] - row["value_prev"]) / row["value_prev"] * 100
+        c_yoy    = cat_yoy[cat]
+        opposite = (bank_yoy > 0 > c_yoy) or (bank_yoy < 0 < c_yoy)
+        if (opposite and abs(bank_yoy) >= min_abs
+                and abs(bank_yoy - c_yoy) >= min_gap):
+            out.append(_row("bank", row["bank_name"],
+                            bank_yoy - c_yoy, "active", "pp"))
+    return sorted(out, key=lambda r: r["value"], reverse=True)
+
+
 # ── dispatch ──────────────────────────────────────────────────────────────────
 
 METHODS: dict = {
@@ -411,6 +543,9 @@ METHODS: dict = {
     "csv_category_scan_share": csv_category_scan_share,
     "csv_bank_scan":           csv_bank_scan,
     "csv_streak":              csv_streak,
+    # relational — cross-segment (spec: signals/README.md)
+    "csv_category_rotation":   csv_category_rotation,
+    "csv_bank_divergence":     csv_bank_divergence,
 }
 
 

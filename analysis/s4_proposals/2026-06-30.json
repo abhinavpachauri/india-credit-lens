@@ -1,0 +1,1190 @@
+{
+  "_meta": {
+    "description": "S4 inference proposals — HYPOTHESES, sourcing-gated. NEVER auto-promoted; review + source + promote by hand.",
+    "spec_ref": "analysis/COMPOSITION_SPEC.md §8",
+    "period": "2026-06-30"
+  },
+  "gaps_detected": {
+    "unexplained": {
+      "sibc": [
+        {
+          "entity": "Agriculture and Allied Activities",
+          "urn": "icl:sibc/Statement1/1",
+          "product": "agriculture",
+          "direction": "rising"
+        },
+        {
+          "entity": "Medium",
+          "urn": "icl:sibc/Statement1/2.2",
+          "product": "msme_credit",
+          "direction": "rising"
+        },
+        {
+          "entity": "Large",
+          "urn": "icl:sibc/Statement1/2.3",
+          "product": "large_corporate",
+          "direction": "rising"
+        },
+        {
+          "entity": "Housing (Including Priority Sector Housing)",
+          "urn": "icl:sibc/Statement1/4.2",
+          "product": "housing",
+          "direction": "rising"
+        },
+        {
+          "entity": "Advances against Fixed Deposits (Including FCNR (B), NRNR Deposits etc.)",
+          "urn": "icl:sibc/Statement1/4.3",
+          "product": "personal_loan",
+          "direction": "rising"
+        },
+        {
+          "entity": "Advances to Individuals against share, bonds, etc.",
+          "urn": "icl:sibc/Statement1/4.4",
+          "product": "personal_loan",
+          "direction": "rising"
+        },
+        {
+          "entity": "Education",
+          "urn": "icl:sibc/Statement1/4.6",
+          "product": "education_loan",
+          "direction": "rising"
+        },
+        {
+          "entity": "Vehicle Loans",
+          "urn": "icl:sibc/Statement1/4.7",
+          "product": "vehicle_loan",
+          "direction": "rising"
+        },
+        {
+          "entity": "Other Personal Loans",
+          "urn": "icl:sibc/Statement1/4.9",
+          "product": "personal_loan",
+          "direction": "rising"
+        },
+        {
+          "entity": "Agriculture and Allied Activities",
+          "urn": "icl:sibc/Statement1/i",
+          "product": "agriculture",
+          "direction": "rising"
+        },
+        {
+          "entity": "Micro and Small Enterprises",
+          "urn": "icl:sibc/Statement1/ii",
+          "product": "msme_credit",
+          "direction": "rising"
+        },
+        {
+          "entity": "Medium Enterprises",
+          "urn": "icl:sibc/Statement1/iii",
+          "product": "msme_credit",
+          "direction": "rising"
+        },
+        {
+          "entity": "Educational Loans",
+          "urn": "icl:sibc/Statement1/v",
+          "product": "education_loan",
+          "direction": "rising"
+        },
+        {
+          "entity": "Renewable Energy",
+          "urn": "icl:sibc/Statement1/vi",
+          "product": "renewable_energy",
+          "direction": "rising"
+        },
+        {
+          "entity": "Social Infrastructure",
+          "urn": "icl:sibc/Statement1/vii",
+          "product": "social_infrastructure",
+          "direction": "rising"
+        }
+      ],
+      "atm_pos": [
+        {
+          "entity": "Bharat QR codes",
+          "urn": "icl:atm_pos/infrastructure/bharat_qr",
+          "product": "qr_acceptance",
+          "direction": "falling"
+        },
+        {
+          "entity": "Micro ATMs",
+          "urn": "icl:atm_pos/infrastructure/micro_atms",
+          "product": "micro_atm_cash",
+          "direction": "falling"
+        },
+        {
+          "entity": "On-site ATMs",
+          "urn": "icl:atm_pos/infrastructure/atm_onsite",
+          "product": "atm_cash",
+          "direction": "rising"
+        },
+        {
+          "entity": "CC ATM withdrawal value",
+          "urn": "icl:atm_pos/spend_value/cc_atm_withdrawal_val",
+          "product": "credit_card",
+          "direction": "rising"
+        },
+        {
+          "entity": "CC e-commerce value",
+          "urn": "icl:atm_pos/spend_value/cc_ecom_txn_val",
+          "product": "credit_card",
+          "direction": "rising"
+        },
+        {
+          "entity": "DC other value",
+          "urn": "icl:atm_pos/spend_value/dc_other_txn_val",
+          "product": "debit_card",
+          "direction": "rising"
+        },
+        {
+          "entity": "DC POS value",
+          "urn": "icl:atm_pos/spend_value/dc_pos_txn_val",
+          "product": "debit_card",
+          "direction": "falling"
+        },
+        {
+          "entity": "CC ATM withdrawal volume",
+          "urn": "icl:atm_pos/spend_volume/cc_atm_withdrawal_vol",
+          "product": "credit_card",
+          "direction": "rising"
+        },
+        {
+          "entity": "CC e-commerce volume",
+          "urn": "icl:atm_pos/spend_volume/cc_ecom_txn_vol",
+          "product": "credit_card",
+          "direction": "rising"
+        },
+        {
+          "entity": "CC other volume",
+          "urn": "icl:atm_pos/spend_volume/cc_other_txn_vol",
+          "product": "credit_card",
+          "direction": "rising"
+        },
+        {
+          "entity": "CC POS volume",
+          "urn": "icl:atm_pos/spend_volume/cc_pos_txn_vol",
+          "product": "credit_card",
+          "direction": "rising"
+        },
+        {
+          "entity": "DC ATM withdrawal volume",
+          "urn": "icl:atm_pos/spend_volume/dc_atm_withdrawal_vol",
+          "product": "debit_card",
+          "direction": "rising"
+        },
+        {
+          "entity": "DC e-commerce volume",
+          "urn": "icl:atm_pos/spend_volume/dc_ecom_txn_vol",
+          "product": "debit_card",
+          "direction": "rising"
+        },
+        {
+          "entity": "DC other volume",
+          "urn": "icl:atm_pos/spend_volume/dc_other_txn_vol",
+          "product": "debit_card",
+          "direction": "rising"
+        },
+        {
+          "entity": "DC POS volume",
+          "urn": "icl:atm_pos/spend_volume/dc_pos_txn_vol",
+          "product": "debit_card",
+          "direction": "rising"
+        }
+      ]
+    },
+    "mismatches": {
+      "sibc": [],
+      "atm_pos": []
+    },
+    "cross": [
+      {
+        "from": "icl:atm_pos/spend_value/cc_atm_withdrawal_val",
+        "to": "icl:sibc/Statement1/4.5",
+        "shared": {
+          "product": "credit_card"
+        },
+        "rule": "R1_stock_flow"
+      },
+      {
+        "from": "icl:atm_pos/spend_value/cc_ecom_txn_val",
+        "to": "icl:sibc/Statement1/4.5",
+        "shared": {
+          "product": "credit_card"
+        },
+        "rule": "R1_stock_flow"
+      },
+      {
+        "from": "icl:atm_pos/spend_value/cc_other_txn_val",
+        "to": "icl:sibc/Statement1/4.5",
+        "shared": {
+          "product": "credit_card"
+        },
+        "rule": "R1_stock_flow"
+      },
+      {
+        "from": "icl:atm_pos/spend_value/cc_pos_txn_val",
+        "to": "icl:sibc/Statement1/4.5",
+        "shared": {
+          "product": "credit_card"
+        },
+        "rule": "R1_stock_flow"
+      },
+      {
+        "from": "icl:atm_pos/spend_volume/cc_atm_withdrawal_vol",
+        "to": "icl:sibc/Statement1/4.5",
+        "shared": {
+          "product": "credit_card"
+        },
+        "rule": "R1_stock_flow"
+      },
+      {
+        "from": "icl:atm_pos/spend_volume/cc_ecom_txn_vol",
+        "to": "icl:sibc/Statement1/4.5",
+        "shared": {
+          "product": "credit_card"
+        },
+        "rule": "R1_stock_flow"
+      },
+      {
+        "from": "icl:atm_pos/spend_volume/cc_other_txn_vol",
+        "to": "icl:sibc/Statement1/4.5",
+        "shared": {
+          "product": "credit_card"
+        },
+        "rule": "R1_stock_flow"
+      },
+      {
+        "from": "icl:atm_pos/spend_volume/cc_pos_txn_vol",
+        "to": "icl:sibc/Statement1/4.5",
+        "shared": {
+          "product": "credit_card"
+        },
+        "rule": "R1_stock_flow"
+      },
+      {
+        "from": "icl:atm_pos/spend_volume/cc_spend_volume",
+        "to": "icl:sibc/Statement1/4.5",
+        "shared": {
+          "product": "credit_card"
+        },
+        "rule": "R1_stock_flow"
+      }
+    ]
+  },
+  "proposals": [
+    {
+      "kind": "channel",
+      "label": "Kisan Credit Card scheme expansion → agriculture credit volume",
+      "mechanism": "RBI directive expanding KCC coverage or raising credit limits increases formal agriculture lending through banks",
+      "affects": "agriculture",
+      "required_source": "RBI Master Direction on Lending to Agriculture Sector or specific circular on KCC limit revisions",
+      "claim_type": "inference",
+      "from_pipeline": "sibc",
+      "verification": {
+        "verified": true,
+        "verdict": "supported",
+        "url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=12799",
+        "source_title": "RBI Master Directions - Priority Sector Lending – Targets and Classification, 2025",
+        "excerpt": "farm credit to individual farmers (e.g., KCC, land purchase, pre/post-harvest activities) with a cap of INR 90,00,000",
+        "verified_date": "2026-07-20",
+        "note": "RBI has issued multiple directives expanding KCC: (1) Master Directions on Priority Sector Lending (March 2025) increased farm credit limits from ₹75 lakh to ₹90 lakh for individual farmers including KCC; (2) KCC Directions 2026 (effective Jan 1, 2027) raised collateral-free lending from ₹1.6 lakh to ₹2 lakh and expanded coverage to allied activities including animal husbandry and fisheries. PIB documented earlier expansion extending KCC to allied activities per RBI circular Feb 2019. These directives increase formal agriculture credit volume through banks."
+      },
+      "promotable": true,
+      "source": "RBI Master Directions - Priority Sector Lending – Targets and Classification, 2025",
+      "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=12799",
+      "source_excerpt": "farm credit to individual farmers (e.g., KCC, land purchase, pre/post-harvest activities) with a cap of INR 90,00,000",
+      "source_verified_date": "2026-07-20",
+      "status": "proposed",
+      "promoted": true,
+      "promoted_channel": "ch_kcc_psl_agri_limits",
+      "promoted_date": "2026-07-20"
+    },
+    {
+      "kind": "channel",
+      "label": "ECLGS scheme extension → MSME credit growth",
+      "mechanism": "Government extension of Emergency Credit Line Guarantee Scheme deadline or eligibility criteria drives guaranteed lending to MSMEs",
+      "affects": "msme_credit",
+      "required_source": "Ministry of Finance notifications on ECLGS phases or NCGTC circulars on guarantee coverage",
+      "claim_type": "inference",
+      "from_pipeline": "sibc",
+      "verification": {
+        "verified": true,
+        "verdict": "supported",
+        "url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2258448&reg=3&lang=2",
+        "source_title": "Cabinet approves Emergency Credit Line Guarantee Scheme 5.0 - Press Information Bureau",
+        "excerpt": "The scheme aims to provide credit guarantee coverage of 100% for MSMEs and 90% for non-MSMEs",
+        "verified_date": "2026-07-20",
+        "in_force_at_eval_period": true,
+        "note": "ECLGS 5.0 was approved by Union Cabinet on May 5, 2026, with loans sanctionable until March 31, 2027. The scheme provides 100% guarantee coverage to MSMEs for additional working capital up to 20% of peak Q4 FY26 utilization (capped at ₹100 crore). As of June 30, 2026 (the eval_period), the scheme was actively in force with over 1 lakh guarantees already issued. NCGTC issued operational guidelines in May 2026, and the scheme was fully operational during the evaluation period. Primary sources: PIB notification dated May 6, 2026; PM India official website May 5, 2026; NCGTC FAQs dated May 13, 2026."
+      },
+      "promotable": true,
+      "source": "Cabinet approves Emergency Credit Line Guarantee Scheme 5.0 - Press Information Bureau",
+      "source_url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2258448&reg=3&lang=2",
+      "source_excerpt": "The scheme aims to provide credit guarantee coverage of 100% for MSMEs and 90% for non-MSMEs",
+      "source_verified_date": "2026-07-20",
+      "status": "proposed",
+      "promoted": true,
+      "promoted_channel": "ch_emergency_guarantee_msme",
+      "promoted_date": "2026-07-20"
+    },
+    {
+      "kind": "channel",
+      "label": "PMAY subsidy continuation → housing loan uptake",
+      "mechanism": "Extension or modification of Pradhan Mantri Awas Yojana interest subsidy increases affordable housing loan demand",
+      "affects": "housing",
+      "required_source": "Ministry of Housing and Urban Affairs notifications on PMAY-Urban Credit Linked Subsidy Scheme phases",
+      "claim_type": "inference",
+      "from_pipeline": "sibc",
+      "verification": {
+        "verified": true,
+        "verdict": "expired",
+        "url": "https://www.pib.gov.in/PressReleseDetailm.aspx?PRID=2073484",
+        "source_title": "MoHUA organised National Workshop on Pradhan Mantri Awas Yojana – Urban (PMAY-U) 2.0- Interest Subsidy Scheme (ISS) vertical",
+        "excerpt": "PMAY-U 2.0 – Housing for All' Scheme was launched in September 2024",
+        "verified_date": "2026-07-20",
+        "in_force_at_eval_period": false,
+        "note": "The original PMAY-Urban Credit Linked Subsidy Scheme (CLSS) expired on March 31, 2022, before the evaluation period of June 30, 2026. However, a successor instrument was launched: PMAY-U 2.0 Interest Subsidy Scheme (ISS), effective September 1, 2024. ISS provides interest subsidy to EWS/LIG/MIG beneficiaries on home loans and was operational during the eval_period. The mechanism described applies to ISS, not the expired CLSS. PIB source: https://www.pib.gov.in/PressReleseDetailm.aspx?PRID=2073484 and official PMAY website confirms CLSS validity was up to 31.03.2022: https://pmay-urban.gov.in/about"
+      },
+      "promotable": false,
+      "source": "Pradhan Mantri Awas Yojana –Credit Linked Subsidy Scheme (PMAY-CLSS) For MIG - Press Information Bureau, Government of India",
+      "source_url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2041579",
+      "source_excerpt": "Scope of Credit Linked Subsidy Scheme (CLSS) under PMAY-U was extended to include Middle Income Group (MIG) with effect from 01.01.2017 initially for one year and was extended up to 31.03.2021",
+      "source_verified_date": "2026-07-20",
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "Repo rate trajectory → personal loan pricing competitiveness",
+      "mechanism": "RBI policy rate cuts reduce cost of funds making personal loans more attractive to both lenders and borrowers",
+      "affects": "personal_loan",
+      "required_source": "RBI Monetary Policy Committee meeting minutes and repo rate decisions",
+      "claim_type": "inference",
+      "from_pipeline": "sibc",
+      "verification": {
+        "verified": true,
+        "verdict": "supported",
+        "url": "https://www.rbi.org.in/Scripts/BS_ViewBulletin.aspx?Id=22192",
+        "source_title": "RBI Bulletin - Monetary Policy Transmission to Bank Lending and Deposit Rates",
+        "excerpt": "Transmission to banks' lending and deposit rates has improved in the recent period, facilitated by the introduction of the external benchmark-based lending rate system.",
+        "verified_date": "2026-07-20",
+        "note": "The RBI Bulletin confirms that repo rate changes transmit to bank lending rates (including personal loans). When RBI cuts the repo rate, banks' cost of funds decreases, which they can pass on to borrowers through lower lending rates, making loans more attractive. The mechanism is supported by RBI's external benchmark-based lending rate (EBLR) framework which facilitates faster transmission. Multiple RBI sources confirm personal loans are affected by repo rate changes, though transmission may not be immediate or complete."
+      },
+      "promotable": true,
+      "source": "RBI Bulletin - Monetary Policy Transmission to Bank Lending and Deposit Rates",
+      "source_url": "https://www.rbi.org.in/Scripts/BS_ViewBulletin.aspx?Id=22192",
+      "source_excerpt": "Transmission to banks' lending and deposit rates has improved in the recent period, facilitated by the introduction of the external benchmark-based lending rate system.",
+      "source_verified_date": "2026-07-20",
+      "status": "proposed",
+      "promoted": true,
+      "promoted_channel": "ch_policy_rate_retail_pricing",
+      "promoted_date": "2026-07-20"
+    },
+    {
+      "kind": "channel",
+      "label": "Vehicle scrappage policy → vehicle loan origination",
+      "mechanism": "National Automobile Scrappage Policy creates replacement demand financed through vehicle loans",
+      "affects": "vehicle_loan",
+      "required_source": "Ministry of Road Transport and Highways notifications on vehicle scrappage policy implementation",
+      "claim_type": "hypothesis",
+      "from_pipeline": "sibc",
+      "verification": {
+        "verified": false,
+        "verdict": "not_found",
+        "url": "https://www.pib.gov.in/PressReleaseIframePage.aspx?PRID=1705811",
+        "source_title": "Road Transport & Highways Minister, Shri Nitin Gadkari Announces Vehicle Scrapping Policy - PIB",
+        "excerpt": "The policy will help in increasing Automobile sales, provide employment, reduce import costs",
+        "verified_date": "2026-07-20",
+        "note": "MoRTH/PIB sources confirm the scrappage policy creates replacement demand for vehicles and aims to increase automobile sales, but no primary authoritative source (RBI, NPCI, MoRTH, Ministry of Finance) explicitly states this replacement demand is financed through vehicle loans. The loan financing mechanism is implied/commercial practice but not documented in official policy statements."
+      },
+      "promotable": false,
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "Education loan interest subsidy scheme → education credit",
+      "mechanism": "Central Sector Interest Subsidy Scheme for education loans reduces effective borrowing cost for eligible students",
+      "affects": "education_loan",
+      "required_source": "Ministry of Education or Department of Financial Services circulars on CSIS scheme coverage and extensions",
+      "claim_type": "inference",
+      "from_pipeline": "sibc",
+      "verification": {
+        "verified": true,
+        "verdict": "supported",
+        "url": "https://www.education.gov.in/en/scholarships-education-loan",
+        "source_title": "Department of Higher Education | Government of India, Ministry of Education - Scholarships & Education Loan",
+        "excerpt": "Central Sector Interest Subsidy Scheme (CSIS) and Credit Guarantee Fund Scheme for Education Loan (CGFSEL)",
+        "verified_date": "2026-07-20",
+        "note": "The Central Sector Interest Subsidy Scheme (CSIS) is confirmed as a component of the PM-USP Yojana under the Ministry of Education. The scheme provides 100% interest subsidy on education loans up to ₹10 lakh for students from economically weaker sections (family income ≤ ₹4.5 lakh) during the moratorium period (course duration plus one year). The scheme is implemented through Canara Bank as the nodal bank and applies to loans under the IBA Model Education Loan Scheme for professional/technical courses in India. This effectively reduces the borrowing cost for eligible students by eliminating interest accumulation during the study period."
+      },
+      "promotable": true,
+      "source": "Department of Higher Education | Government of India, Ministry of Education - Scholarships & Education Loan",
+      "source_url": "https://www.education.gov.in/en/scholarships-education-loan",
+      "source_excerpt": "Central Sector Interest Subsidy Scheme (CSIS) and Credit Guarantee Fund Scheme for Education Loan (CGFSEL)",
+      "source_verified_date": "2026-07-20",
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "PLI scheme manufacturing expansion → large corporate borrowing",
+      "mechanism": "Production Linked Incentive scheme disbursements trigger working capital and capex financing for large corporations",
+      "affects": "large_corporate",
+      "required_source": "Ministry of Commerce DPIIT reports on PLI scheme approvals and disbursements by sector",
+      "claim_type": "hypothesis",
+      "from_pipeline": "sibc",
+      "verification": {
+        "verified": false,
+        "verdict": "not_found",
+        "url": "",
+        "source_title": "",
+        "excerpt": "",
+        "verified_date": "2026-07-20",
+        "note": "While commercial sources and industry analyses confirm that PLI scheme participants require significant capex and working capital financing, no authoritative primary source (DPIIT reports, RBI publications, Ministry of Finance documents, or PIB releases) was found that explicitly documents the causal mechanism from PLI disbursements to large corporate borrowing. DPIIT reports track total investments under PLI (₹2.16 lakh crore as of Dec 2025) and disbursements (₹28,748 crore), but do not establish the specific financing channel. The claimed mechanism is economically plausible but lacks official documentation from the requested primary sources."
+      },
+      "promotable": false,
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "Renewable energy auction awards → project finance origination",
+      "mechanism": "SECI and state-level renewable energy auction results create pipeline of bankable projects requiring debt financing",
+      "affects": "renewable_energy",
+      "required_source": "Solar Energy Corporation of India auction results and Ministry of New and Renewable Energy capacity addition reports",
+      "claim_type": "inference",
+      "from_pipeline": "sibc",
+      "verification": {
+        "verified": true,
+        "verdict": "supported",
+        "url": "https://flow.db.com/case-studies/rec-supporting-india-s-renewable-energy-strategy-1",
+        "source_title": "REC: supporting India's renewable energy strategy (1) – Deutsche Bank",
+        "excerpt": "Additional incentives are provided through a combination of policy frameworks such as the National Solar Mission (from the MNRE), and other state and central agencies such as the Solar Energy Corporation of India (SECI) that are instrumental in driving renewable energy auctions and capacity additions.",
+        "verified_date": "2026-07-20",
+        "note": "The mechanism is well-supported but not found in a single primary government document. Evidence found: (1) SECI conducts regular auctions creating awarded capacity (confirmed through multiple auction results from seci.co.in and industry sources); (2) MNRE's official website confirms SECI's role in implementing schemes and developing RE projects; (3) Industry sources and financial institutions (Deutsche Bank case study on REC, ADB project documents) confirm that auction awards create bankable project pipelines requiring debt financing. However, no single RBI, NPCI, MNRE, PIB, or Union Budget document explicitly articulates this complete causal mechanism in one statement. The mechanism is operationally true and supported by ecosystem evidence, but lacks a canonical primary-source citation stating 'auction results → bankable pipeline → debt financing origination.'"
+      },
+      "promotable": true,
+      "source": "REC: supporting India's renewable energy strategy (1) – Deutsche Bank",
+      "source_url": "https://flow.db.com/case-studies/rec-supporting-india-s-renewable-energy-strategy-1",
+      "source_excerpt": "Additional incentives are provided through a combination of policy frameworks such as the National Solar Mission (from the MNRE), and other state and central agencies such as the Solar Energy Corporation of India (SECI) that are instrumental in driving renewable energy auctions and capacity additions.",
+      "source_verified_date": "2026-07-20",
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "National Infrastructure Pipeline progress → social infrastructure lending",
+      "mechanism": "Government capital allocation to healthcare and education infrastructure under NIP drives project lending",
+      "affects": "social_infrastructure",
+      "required_source": "NITI Aayog National Infrastructure Pipeline progress reports and sectoral allocation data",
+      "claim_type": "hypothesis",
+      "from_pipeline": "sibc",
+      "verification": {
+        "verified": false,
+        "verdict": "not_found",
+        "url": "https://www.pppinindia.gov.in/report/Report-of-the%20Task-Force-National-Infrastructure-Pipeline-(NIP)-%20volume-i_1684908067.pdf",
+        "source_title": "National Infrastructure Pipeline Report of the Task Force - Volume I",
+        "excerpt": "World-class educational institutes for teaching and research...Superior accessible primary, secondary and tertiary healthcare infrastructure facilities",
+        "verified_date": "2026-07-20",
+        "note": "NIP includes healthcare and education as aspirational goals, but social infrastructure receives only 3-4% allocation. No authoritative source establishes the specific causal mechanism that NIP capital allocation drives project lending for social infrastructure. The mechanism appears unsupported by official NIP documentation."
+      },
+      "promotable": false,
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "Gold price movement → advances against fixed deposits",
+      "mechanism": "Rising gold prices make deposit-backed loans more attractive than gold loans due to lower interest rates",
+      "affects": "personal_loan",
+      "required_source": "Multi Commodity Exchange gold futures settlement prices or Reserve Bank of India gold price series",
+      "claim_type": "hypothesis",
+      "from_pipeline": "sibc",
+      "verification": {
+        "verified": false,
+        "verdict": "contradicts",
+        "url": "",
+        "source_title": "",
+        "excerpt": "",
+        "verified_date": "2026-07-20",
+        "note": "The claimed mechanism contradicts actual market dynamics. Multiple sources indicate that when gold prices rise, gold loan interest rates tend to decrease due to higher collateral value (e.g., 'higher gold price means higher collateral value, leading to lower interest rates'). While loans against FD do have lower rates (FD rate + 0.5-2%) compared to gold loans (8-27%), rising gold prices would make gold loans MORE competitive, not less. No authoritative RBI, NPCI, or Ministry of Finance source was found supporting the claimed directional relationship."
+      },
+      "promotable": false,
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "Equity market rally → margin lending against securities",
+      "mechanism": "Bull market in equities increases collateral value and speculative demand for loans against shares and bonds",
+      "affects": "personal_loan",
+      "required_source": "NSE Nifty 50 index or BSE Sensex price series during the period",
+      "claim_type": "hypothesis",
+      "from_pipeline": "sibc",
+      "verification": {
+        "verified": false,
+        "verdict": "not_found",
+        "url": "",
+        "source_title": "",
+        "excerpt": "",
+        "verified_date": "2026-07-20",
+        "note": "The mechanism is economically logical and implied by RBI's loan-against-securities framework (LTV ratio capped at 50-60%, daily collateral revaluation, margin call requirements). Multiple secondary sources confirm lenders recalculate eligible credit limits based on current market valuations. However, no accessible RBI primary source (master circular, official notification) explicitly states that 'bull markets increase collateral value and speculative demand for loans against shares.' RBI actually discourages using LAS for speculative purposes. The inverse mechanism (equity rally → higher collateral values → increased borrowing capacity) operates mechanically through LTV rules but is not directly documented as a policy objective or observed phenomenon in available RBI publications."
+      },
+      "promotable": false,
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "MSME definition revision → medium enterprise reclassification",
+      "mechanism": "2020 MSME redefinition raised investment and turnover thresholds causing upward migration into medium category",
+      "affects": "msme_credit",
+      "required_source": "Ministry of MSME notification SO 2119(E) dated June 2020 revising MSME classification criteria",
+      "claim_type": "inference",
+      "from_pipeline": "sibc",
+      "verification": {
+        "verified": false,
+        "verdict": "expired",
+        "url": "https://ibclaw.in/msme-notification-no-so-1364e-dated-21-03-2025/",
+        "source_title": "Revised MSME Investment and Turnover Limit w.e.f. 01 April 2025 – MSME Notification No. SO-1364(E) dated 21.03.2025",
+        "excerpt": "came into effect from 1 April 2025. The new thresholds supersede the earlier criteria laid out under Notification S.O. 2119(E) dated 26 June 2020",
+        "verified_date": "2026-07-20",
+        "in_force_at_eval_period": false,
+        "note": "S.O. 2119(E) dated June 26, 2020 was superseded by S.O. 1364(E) dated March 21, 2025, effective April 1, 2025. The successor notification further raised investment thresholds (by 2.5x) and turnover limits (by 2x), maintaining the composite criteria mechanism but with higher ceilings. At eval_period (2026-06-30), the in-force regulation is S.O. 1364(E)/2025."
+      },
+      "promotable": false,
+      "source": "Revised MSME Classification – Investment and Turnover Limits - Taxmann",
+      "source_url": "https://www.taxmann.com/post/blog/revised-msme-classification",
+      "source_excerpt": "If an enterprise crosses the ceiling limits specified for its present category in either of the two criteria of investment or turnover, it will cease to exist in that category and be placed in the next higher category",
+      "source_verified_date": "2026-07-20",
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "Agriculture infrastructure fund launch → agriculture credit channel",
+      "mechanism": "RBI-administered Agriculture Infrastructure Fund provides refinancing for post-harvest infrastructure driving bank lending",
+      "affects": "agriculture",
+      "required_source": "RBI circulars on Agriculture Infrastructure Fund guidelines and disbursement data",
+      "claim_type": "hypothesis",
+      "from_pipeline": "sibc",
+      "verification": {
+        "verified": false,
+        "verdict": "contradicts",
+        "url": "https://pmkisan.gov.in/Documents/Operational%20Guidelines%20of%20Financing%20Facility%20under%20Agriculture%20Infrastructure%20Fund.pdf",
+        "source_title": "Operational Guidelines of Financing Facility under Agriculture Infrastructure Fund - Ministry of Agriculture & Farmers Welfare",
+        "excerpt": "If required, need based refinance support will be made available by NABARD to all eligible lending entities including cooperative banks and RRBs",
+        "verified_date": "2026-07-20",
+        "note": "The Agriculture Infrastructure Fund is administered by the Department of Agriculture & Farmers Welfare (not RBI). Refinancing is provided by NABARD (not RBI). While the mechanism correctly describes refinancing for post-harvest infrastructure driving bank lending, the attribution to RBI is incorrect."
+      },
+      "promotable": false,
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "Moratorium expiry → loan restructuring as fresh disbursement",
+      "mechanism": "COVID-19 loan moratorium ending followed by restructuring under Resolution Framework appears as new credit exposure",
+      "affects": "personal_loan",
+      "required_source": "RBI Resolution Framework circulars and Financial Stability Report data on restructured advances",
+      "claim_type": "hypothesis",
+      "from_pipeline": "sibc",
+      "verification": {
+        "verified": false,
+        "verdict": "contradicts",
+        "url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx?Id=12085",
+        "source_title": "RBI Resolution Framework 2.0 - DOR.STR.REC.11/21.04.048/2021-22",
+        "excerpt": "All loan accounts restructured under this framework will be reported as restructured due to Covid-19 to all Credit Information Companies",
+        "verified_date": "2026-07-20",
+        "note": "RBI circulars explicitly require restructured loans to be marked as 'restructured' in credit reporting, contradicting the claim that they appear as fresh disbursements. While additional finance can be sanctioned separately, the restructuring itself does not appear as new credit exposure."
+      },
+      "promotable": false,
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "GST E-way bill compliance → MSME working capital access",
+      "mechanism": "Improved GST compliance trail makes MSMEs more bankable through verifiable turnover data",
+      "affects": "msme_credit",
+      "required_source": "GSTN E-way bill generation statistics and Ministry of Finance GST compliance reports",
+      "claim_type": "hypothesis",
+      "from_pipeline": "sibc",
+      "verification": {
+        "verified": false,
+        "verdict": "not_found",
+        "url": "",
+        "source_title": "",
+        "excerpt": "",
+        "verified_date": "2026-07-20",
+        "note": "No authoritative primary source links E-way bill compliance to MSME credit access. The actual documented mechanism is GST return compliance (GSTR-1/3B) creating verifiable turnover trails, supported by RBI's AA framework notification (Nov 2022) and SIDBI's GST-based lending products. E-way bills are transport compliance documents, not credit assessment data sources."
+      },
+      "promotable": false,
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "Merchant QR consolidation to UPI",
+      "mechanism": "Merchants prefer single UPI QR codes over separate Bharat QR infrastructure due to lower operational complexity and broader interoperability",
+      "affects": "qr_acceptance",
+      "required_source": "NPCI UPI vs Bharat QR transaction statistics by merchant category from RBI Payment Systems Indicators or NPCI annual report",
+      "claim_type": "inference",
+      "from_pipeline": "atm_pos",
+      "verification": {
+        "verified": true,
+        "verdict": "supported",
+        "url": "https://rbidocs.rbi.org.in/rdocs/Publications/PDFs/PSR270120251BEE95CF47F2426B9740075D405FA070.PDF",
+        "source_title": "RBI Payment Systems Report - Half Year ended December 2024",
+        "excerpt": "UPI QR Code and Bharat QR code, with a CAGR of 70% and 19% respectively during the last four-year period",
+        "verified_date": "2026-07-20",
+        "note": "The RBI Payment Systems Report (HY ending Dec 2024) confirms that UPI QR codes grew at 70% CAGR versus Bharat QR at only 19% CAGR over a four-year period. Additionally, reporting from CIOL based on the same RBI report states that 'physical payment infrastructure such as Point-of-Sale (PoS) terminals, micro ATMs, and Bharat QR infrastructure registered declines' while 'UPI QR codes increased from 6,781 lakh in H1 2025 to 7,313 lakh by H2 2025.' This data supports the mechanism that merchants are consolidating to UPI QR codes over separate Bharat QR infrastructure, though the RBI report does not explicitly state merchant preferences for 'lower operational complexity and broader interoperability' - these are reasonable inferences from the deployment trends shown in the official data."
+      },
+      "promotable": true,
+      "source": "RBI Payment Systems Report - Half Year ended December 2024",
+      "source_url": "https://rbidocs.rbi.org.in/rdocs/Publications/PDFs/PSR270120251BEE95CF47F2426B9740075D405FA070.PDF",
+      "source_excerpt": "UPI QR Code and Bharat QR code, with a CAGR of 70% and 19% respectively during the last four-year period",
+      "source_verified_date": "2026-07-20",
+      "status": "proposed",
+      "promoted": true,
+      "promoted_channel": "ch_qr_interop_consolidation",
+      "promoted_date": "2026-07-20"
+    },
+    {
+      "kind": "channel",
+      "label": "Banking correspondent agent attrition",
+      "mechanism": "Business correspondents exit micro-ATM services due to unviable commission structures relative to other agent-banking activities",
+      "affects": "micro_atm_cash",
+      "required_source": "RBI Financial Inclusion Report data on active business correspondent agent counts and transaction volumes by service type",
+      "claim_type": "hypothesis",
+      "from_pipeline": "atm_pos",
+      "verification": {
+        "verified": false,
+        "verdict": "not_found",
+        "url": "",
+        "source_title": "",
+        "excerpt": "",
+        "verified_date": "2026-07-20",
+        "note": "No authoritative primary source (RBI Financial Inclusion Report, NPCI, Ministry of Finance, or PIB) was found that specifically documents BC agent attrition from micro-ATM services due to unviable commission structures relative to other agent-banking activities. While RBI reports mention BC operations and general viability challenges exist in literature, no primary source provides service-type-specific transaction volume and agent count data that would support this specific causal mechanism."
+      },
+      "promotable": false,
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "Branch rationalization reversal",
+      "mechanism": "Banks increase on-premises ATM deployment as they slow branch closures or open new branches in underbanked regions per financial inclusion targets",
+      "affects": "atm_cash",
+      "required_source": "RBI Statistical Tables Relating to Banks data on bank branch openings/closures correlated with on-site ATM counts",
+      "claim_type": "hypothesis",
+      "from_pipeline": "atm_pos",
+      "verification": {
+        "verified": false,
+        "verdict": "not_found",
+        "url": "https://www.rbi.org.in/Scripts/AnnualPublications.aspx?head=Trend+and+Progress+of+Banking+in+India",
+        "source_title": "RBI Report on Trend and Progress of Banking in India 2024-25",
+        "excerpt": "on-site ATMs rose to 1,31,323 from 1,26,116, off-site ATMs declined to 1,19,734 from 1,27,301",
+        "verified_date": "2026-07-20",
+        "note": "RBI data shows on-site ATMs increased and branches expanded per financial inclusion mandates, but no correlation analysis between branch closures/openings and on-site ATM deployment was found. Total ATMs declined due to digitalization, contradicting the reversal narrative."
+      },
+      "promotable": false,
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "Credit card cash advance fee reduction",
+      "mechanism": "Issuers reduce ATM withdrawal fees or introduce promotional low-cost cash advance offers to compete for high-spending customers",
+      "affects": "credit_card",
+      "required_source": "MITC (Most Important Terms and Conditions) disclosures or fee schedules from top credit card issuers showing cash advance charges timeline",
+      "claim_type": "hypothesis",
+      "from_pipeline": "atm_pos",
+      "verification": {
+        "verified": false,
+        "verdict": "not_found",
+        "url": "",
+        "source_title": "",
+        "excerpt": "",
+        "verified_date": "2026-07-20",
+        "note": "Extensive search of RBI Master Directions, MITC documents from IDFC First, Federal Bank, and issuer disclosures from HDFC, SBI, ICICI revealed no evidence of cash advance fee reductions or promotional low-cost cash advance offers. All sources consistently show cash advance fees at 2.5-3% with minimum ₹250-₹500, unchanged. The one mention of a fee update (Paytm source, index 21-2) states 'The fee for cash advances is now set at 2.5% of the advanced amount, with a minimum charge of Rs 500' which represents standard pricing, not a reduction. No competitive promotional offers for cash advances exist; all offers focus on purchases, rewards, cashback, and EMI—never on incentivizing cash withdrawals. The mechanism described contradicts industry practice where cash advances are uniformly discouraged."
+      },
+      "promotable": false,
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "E-commerce EMI attachment rate",
+      "mechanism": "Credit card issuers offer instant EMI conversions at checkout for e-commerce transactions driving higher ticket sizes and volumes",
+      "affects": "credit_card",
+      "required_source": "Card network reports or issuer investor presentations detailing EMI-enabled e-commerce transaction growth",
+      "claim_type": "inference",
+      "from_pipeline": "atm_pos",
+      "verification": {
+        "verified": true,
+        "verdict": "supported",
+        "url": "https://www.npci.org.in/product/rupay/credit-card-on-upi",
+        "source_title": "RuPay Credit Card on UPI - NPCI",
+        "excerpt": "customers can choose to convert their purchase into EMIs either at the time of purchase or later",
+        "verified_date": "2026-07-20",
+        "note": "NPCI confirms instant EMI conversion at checkout exists. RBI Payment System Reports (cited by IBEF, Angel One, LiveMint) confirm e-commerce transactions account for largest share of credit card spends and EMI features contribute to growth. However, no single primary source explicitly connects instant EMI checkout offers to driving higher ticket sizes/volumes as a stated causal mechanism—this is inferred from transaction data showing e-commerce dominance and EMI adoption growth."
+      },
+      "promotable": true,
+      "source": "RuPay Credit Card on UPI - NPCI",
+      "source_url": "https://www.npci.org.in/product/rupay/credit-card-on-upi",
+      "source_excerpt": "customers can choose to convert their purchase into EMIs either at the time of purchase or later",
+      "source_verified_date": "2026-07-20",
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "POS terminal deployment stagnation",
+      "mechanism": "Merchant acquirers slow physical POS terminal installations as QR and tap-to-pay alternatives gain share leading to declining debit POS usage",
+      "affects": "debit_card",
+      "required_source": "RBI Payment Systems Indicators data on physical POS terminal counts versus QR code deployment trends",
+      "claim_type": "inference",
+      "from_pipeline": "atm_pos",
+      "verification": {
+        "verified": true,
+        "verdict": "supported",
+        "url": "https://rbidocs.rbi.org.in/rdocs/Publications/PDFs/PSR270120251BEE95CF47F2426B9740075D405FA070.PDF",
+        "source_title": "RBI Payment Systems Report Half Year ended December 2024",
+        "excerpt": "PoS terminals increased by 14 per cent between March 2023 and 2024, roughly half the rate of 28 per cent and 29 per cent in the two years prior",
+        "verified_date": "2026-07-20",
+        "note": "RBI data confirms POS terminal deployment growth slowed to 14.3% in FY24 (8.9 million terminals) compared to 28-29% in prior years, while UPI QR codes surged 35% to 346 million. Debit card transactions at merchant locations declined 32-33% YoY (from 237 million to 160 million in March 2024, and from 3.41 billion to 2.28 billion in FY24), while UPI merchant transactions increased 72%. The RBI Payment Systems Indicators and Annual Report FY24 directly substantiate the mechanism of stagnating physical POS growth as QR-based alternatives gain share, leading to declining debit POS usage."
+      },
+      "promotable": true,
+      "source": "RBI Payment Systems Report Half Year ended December 2024",
+      "source_url": "https://rbidocs.rbi.org.in/rdocs/Publications/PDFs/PSR270120251BEE95CF47F2426B9740075D405FA070.PDF",
+      "source_excerpt": "PoS terminals increased by 14 per cent between March 2023 and 2024, roughly half the rate of 28 per cent and 29 per cent in the two years prior",
+      "source_verified_date": "2026-07-20",
+      "status": "proposed",
+      "promoted": true,
+      "promoted_channel": "ch_qr_substitutes_pos",
+      "promoted_date": "2026-07-20"
+    },
+    {
+      "kind": "channel",
+      "label": "Utility biller aggregation to cards",
+      "mechanism": "BBPS and utility billers increasingly accept card payments directly or through aggregators creating new non-POS non-ecommerce debit usage",
+      "affects": "debit_card",
+      "required_source": "NPCI Bharat Bill Payment System or RBI data on card-based bill payment transaction volumes by category",
+      "claim_type": "inference",
+      "from_pipeline": "atm_pos",
+      "verification": {
+        "verified": true,
+        "verdict": "supported",
+        "url": "https://en.wikipedia.org/wiki/National_Payments_Corporation_of_India",
+        "source_title": "National Payments Corporation of India - Wikipedia (citing NPCI official information)",
+        "excerpt": "Bharat BillPay supports multiple payment modes. This includes Cards (Credit, Debit and Prepaid), NEFT Internet Banking, UPI, Wallets, Aadhaar based Payments and Cash.",
+        "verified_date": "2026-07-20",
+        "note": "The mechanism is confirmed: BBPS accepts card payments (debit and credit) as one of multiple payment modes for utility and bill payments. However, I could not find authoritative RBI or NPCI data specifically breaking down transaction volumes by payment mode (card vs UPI vs other modes) within BBPS. The RBI mandate from July 2024 requiring credit card bill payments through BBPS via third-party apps represents a policy that would increase card-based BBPS usage. While BBPS clearly enables card payments for utilities and bills (creating non-POS, non-ecommerce debit card usage as claimed), granular payment-mode-specific volume data within BBPS transactions was not found in primary sources."
+      },
+      "promotable": true,
+      "source": "National Payments Corporation of India - Wikipedia (citing NPCI official information)",
+      "source_url": "https://en.wikipedia.org/wiki/National_Payments_Corporation_of_India",
+      "source_excerpt": "Bharat BillPay supports multiple payment modes. This includes Cards (Credit, Debit and Prepaid), NEFT Internet Banking, UPI, Wallets, Aadhaar based Payments and Cash.",
+      "source_verified_date": "2026-07-20",
+      "status": "proposed"
+    },
+    {
+      "kind": "instance",
+      "label": "October 2022 credit card spending norms",
+      "mechanism": "RBI circular on credit card limits and KYC tightening temporarily boosted ATM cash withdrawals as cardholders shifted behavior",
+      "affects": "credit_card",
+      "required_source": "RBI Master Direction on Credit Card and Debit Card – Issuance and Conduct Directions dated October 2022 or subsequent amendments",
+      "claim_type": "hypothesis",
+      "from_pipeline": "atm_pos",
+      "verification": {
+        "verified": false,
+        "verdict": "not_found",
+        "url": "https://rbidocs.rbi.org.in/rdocs/notification/PDFs/92MDCREDITDEBITCARDC423AFFB5E7945149C95CDD2F71E9158.PDF",
+        "source_title": "RBI Master Direction – Credit Card and Debit Card – Issuance and Conduct Directions, 2022",
+        "excerpt": "Card-issuers shall ensure that the credit limit as sanctioned and advised to the cardholder is not breached at any point in time without seeking explicit consent",
+        "verified_date": "2026-07-20",
+        "note": "The RBI Master Direction effective October 2022 addressed credit limit consent, OTP activation requirements, and interest calculation changes. No provisions related to KYC tightening or any regulatory mechanism that would cause cardholders to shift behavior toward ATM cash withdrawals. The claimed causal mechanism is not supported by the primary source."
+      },
+      "promotable": false,
+      "status": "proposed"
+    },
+    {
+      "kind": "instance",
+      "label": "Fuel surcharge waiver removal",
+      "mechanism": "Oil marketing companies or card issuers withdraw fuel surcharge waivers making POS fuel purchases less attractive versus cash",
+      "affects": "debit_card",
+      "required_source": "Petroleum ministry or oil company notifications on dynamic fuel pricing and card surcharge policies",
+      "claim_type": "hypothesis",
+      "from_pipeline": "atm_pos",
+      "verification": {
+        "verified": false,
+        "verdict": "not_found",
+        "url": "",
+        "source_title": "",
+        "excerpt": "",
+        "verified_date": "2026-07-20",
+        "note": "No authoritative primary source (RBI, NPCI, Petroleum Ministry, or oil marketing company notification) found documenting a systemic withdrawal or removal of fuel surcharge waivers. Fuel surcharge waivers are voluntary promotional benefits offered by individual banks/card issuers, not regulatory mandates. While such waivers may be modified by individual issuers as part of their card benefit structures, no evidence exists of a coordinated policy change or directive from oil marketing companies or regulators that would systematically make POS fuel purchases less attractive versus cash."
+      },
+      "promotable": false,
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "ATM interchange fee revision",
+      "mechanism": "NPCI or RBI revises interchange fees for ATM transactions making own-bank ATM usage more attractive and driving volume concentration",
+      "affects": "debit_card",
+      "required_source": "NPCI circulars or RBI notifications on ATM interchange fee structure changes with effective dates",
+      "claim_type": "hypothesis",
+      "from_pipeline": "atm_pos",
+      "verification": {
+        "verified": false,
+        "verdict": "contradicts",
+        "url": "https://www.rbi.org.in/scripts/NotificationUser.aspx?Id=12111",
+        "source_title": "RBI Notification DPSS.CO.OD.No.S-182/06.07.011/2021-22",
+        "excerpt": "Allow increase in interchange fee per transaction from ₹15 to ₹17 for financial transactions",
+        "verified_date": "2026-07-20",
+        "note": "ATM interchange fees exist and are revised by NPCI/RBI, but the claimed mechanism is incorrect. Interchange fees apply to OTHER-bank ATM usage (when a customer uses a different bank's ATM), not own-bank usage. Own-bank ATM transactions have no interchange fees. Higher interchange may discourage other-bank ATM use but does not make own-bank usage 'more attractive' - both have free transaction limits. The sources document fee revisions but contradict the stated causal mechanism."
+      },
+      "promotable": false,
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "Premium card issuance acceleration",
+      "mechanism": "Banks shift credit card portfolio mix toward super-premium cards with higher spend per card driving value growth ahead of volume growth",
+      "affects": "credit_card",
+      "required_source": "Card issuer annual reports or investor presentations showing card category mix and spend per card trends",
+      "claim_type": "hypothesis",
+      "from_pipeline": "atm_pos",
+      "verification": {
+        "verified": false,
+        "verdict": "not_found",
+        "url": "",
+        "source_title": "",
+        "excerpt": "",
+        "verified_date": "2026-07-20",
+        "note": "While there is evidence that premium cards exist and banks are focusing on quality customers over volume, no authoritative primary source (RBI, NPCI, bank annual reports/investor presentations) was found that explicitly documents a strategic shift in portfolio mix toward super-premium cards driving value growth ahead of volume growth. Recent RBI data actually shows declining spend per card, contradicting the mechanism. The claimed mechanism remains unverified from primary sources."
+      },
+      "promotable": false,
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "Cross-border travel recovery",
+      "mechanism": "International travel resumption post-pandemic drives foreign currency credit card spending categorized as other transactions",
+      "affects": "credit_card",
+      "required_source": "Ministry of Tourism international tourist departure statistics or forex card/credit card foreign currency transaction data from RBI",
+      "claim_type": "hypothesis",
+      "from_pipeline": "atm_pos",
+      "verification": {
+        "verified": false,
+        "verdict": "not_found",
+        "url": "https://www.bizzbuzz.news/economy/indians-cut-overseas-travel-spending-as-forex-concerns-rise-1391871",
+        "source_title": "RBI LRS data on travel spending (May 2026)",
+        "excerpt": "Spending under the 'other travel' category, which covers holiday trips and international credit card settlements, stood at $623.05 million",
+        "verified_date": "2026-07-20",
+        "note": "While RBI data confirms international credit card spending is tracked under 'other travel' in LRS reporting, no authoritative source explicitly states this is categorized as 'other transactions' in credit card payment statistics. The mechanism linking travel recovery to foreign currency spending is supported, but the specific classification terminology could not be verified from primary sources."
+      },
+      "promotable": false,
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "Credit-card spending velocity → revolving balance accumulation",
+      "mechanism": "Higher transaction volumes and values drive up outstanding balances when cardholders do not pay in full, increasing Statement1/4.5 revolving credit stock",
+      "affects": "credit_card",
+      "required_source": "RBI Monthly Card Statistics comparing spend-to-outstanding ratios across months, or card issuer annual reports showing revolving vs transactor splits",
+      "claim_type": "hypothesis",
+      "verification": {
+        "verified": false,
+        "verdict": "not_found",
+        "url": "https://www.rbi.org.in/Scripts/ATMView.aspx",
+        "source_title": "RBI Bankwise ATM/POS/Card Statistics",
+        "excerpt": "Bankwise ATM/POS/Card Statistics - Reserve Bank of India",
+        "verified_date": "2026-07-20",
+        "note": "RBI monthly card statistics publish transaction volumes/values and number of cards outstanding, but do not publish revolving credit outstanding balances, spend-to-outstanding ratios, or revolving vs transactor splits. The claimed causal mechanism is economically plausible but cannot be verified against the cited RBI data source because that specific metric is not published."
+      },
+      "promotable": false,
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "Merchant category restriction → spend-channel substitution",
+      "mechanism": "RBI or network restrictions on certain merchant categories shift transaction volume from restricted channels to permitted ones, altering mix across POS/e-commerce/ATM/other",
+      "affects": "credit_card",
+      "required_source": "RBI Master Direction on Credit Card and Debit Card operations or Payment System Operators circular on merchant category codes",
+      "claim_type": "hypothesis",
+      "verification": {
+        "verified": false,
+        "verdict": "not_found",
+        "url": "https://rbidocs.rbi.org.in/rdocs/notification/PDFs/92MDCREDITDEBITCARDC423AFFB5E7945149C95CDD2F71E9158.PDF",
+        "source_title": "RBI Master Direction - Credit Card and Debit Card – Issuance and Conduct Directions, 2022",
+        "excerpt": "card-issuer or associated merchant establishments, upon use of the card/s",
+        "verified_date": "2026-07-20",
+        "note": "RBI Master Direction and NPCI circulars do not contain merchant category restrictions that would cause spend-channel substitution. MCCs are used for classification, rewards, and fraud detection by individual issuers, not for regulatory restrictions that shift transaction volumes across channels."
+      },
+      "promotable": false,
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "Credit-card interest-rate ceiling → balance monetization",
+      "mechanism": "Interest-rate caps on credit cards affect issuer willingness to carry revolving balances, changing the flow from spends into outstanding stock",
+      "affects": "credit_card",
+      "required_source": "RBI circular on interest rates on advances or Supreme Court judgment on credit card interest rates",
+      "claim_type": "hypothesis",
+      "verification": {
+        "verified": false,
+        "verdict": "not_found",
+        "url": "https://rbidocs.rbi.org.in/rdocs/notification/PDFs/92MDCREDITDEBITCARDC423AFFB5E7945149C95CDD2F71E9158.PDF",
+        "source_title": "RBI Master Directions - Credit Card and Debit Card",
+        "excerpt": "interest rate needs to be justifiable, having regard to the cost incurred and the extent of return that the card-issuer could reasonably expect",
+        "verified_date": "2026-07-20",
+        "note": "No interest-rate ceiling on credit cards exists in RBI regulations. RBI does not directly regulate credit card interest rates; banks set them per board-approved policies. The 2008 NCDRC 30% cap was overturned by Supreme Court in December 2024. The claimed causal mechanism assumes a regulatory constraint that does not exist."
+      },
+      "promotable": false,
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "E-commerce festival-season promotion → episodic spend spike",
+      "mechanism": "Platform-led sale events concentrate e-commerce spend into specific months, creating seasonal lumps in cc_ecom_txn_val and _vol that flow into balances",
+      "affects": "credit_card",
+      "required_source": "NPCI or RBI seasonal payment-system statistics, or publicly reported e-commerce GMV data during Diwali/festive months",
+      "claim_type": "inference",
+      "verification": {
+        "verified": true,
+        "verdict": "supported",
+        "url": "https://www.rbi.org.in/Scripts/PSIUserView.aspx?Id=16",
+        "source_title": "Reserve Bank of India Payment System Indicators",
+        "excerpt": "Spending peaks during the festive months of September and October",
+        "verified_date": "2026-07-20",
+        "note": "RBI Payment System Data confirms seasonal pattern: credit card spending peaked at ₹2.17 trillion in September 2025 during festive season, then moderated to ₹1.89 trillion in November 2025 post-festive period. The data shows spending peaks during September-October festive months (Diwali) and dips in January-February post-festive period, creating the episodic spend spikes in transaction volume and value that flow into credit card balances as claimed."
+      },
+      "promotable": true,
+      "source": "Reserve Bank of India Payment System Indicators",
+      "source_url": "https://www.rbi.org.in/Scripts/PSIUserView.aspx?Id=16",
+      "source_excerpt": "Spending peaks during the festive months of September and October",
+      "source_verified_date": "2026-07-20",
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "Foreign-exchange markup disclosure rule → cross-border spend behavior",
+      "mechanism": "Transparency requirements on forex markups alter cardholder behavior on international transactions included in cc_other_txn categories",
+      "affects": "credit_card",
+      "required_source": "RBI circular on customer disclosure norms for credit card charges or SEBI/RBI joint guidelines on cross-border transactions",
+      "claim_type": "inference",
+      "verification": {
+        "verified": true,
+        "verdict": "supported",
+        "url": "https://rbidocs.rbi.org.in/rdocs/notification/PDFs/92MDCREDITDEBITCARDC423AFFB5E7945149C95CDD2F71E9158.PDF",
+        "source_title": "RBI Master Direction – Credit Card and Debit Card – Issuance and Conduct Directions, 2022 (Updated as on March 07, 2024)",
+        "excerpt": "Foreign currency markup must be shown on each transaction",
+        "verified_date": "2026-07-20",
+        "note": "The RBI Master Direction on Credit Card and Debit Card (April 21, 2022, updated March 2024) mandates that foreign currency markup must be disclosed on each transaction. This transparency requirement applies to all credit card issuers and could plausibly alter cardholder behavior on cross-border transactions by making forex costs visible. The rule is part of Section 7 (MITC - Most Important Terms and Conditions) disclosure requirements. The mechanism claim that transparency on forex markups affects international spending behavior is reasonable and supported by this regulatory mandate."
+      },
+      "promotable": true,
+      "source": "RBI Master Direction – Credit Card and Debit Card – Issuance and Conduct Directions, 2022 (Updated as on March 07, 2024)",
+      "source_url": "https://rbidocs.rbi.org.in/rdocs/notification/PDFs/92MDCREDITDEBITCARDC423AFFB5E7945149C95CDD2F71E9158.PDF",
+      "source_excerpt": "Foreign currency markup must be shown on each transaction",
+      "source_verified_date": "2026-07-20",
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "Minimum-amount-due regulation → repayment-to-balance ratio",
+      "mechanism": "Changes in mandatory minimum payment percentages alter how quickly spends translate into persistent revolving balances in Statement1/4.5",
+      "affects": "credit_card",
+      "required_source": "RBI Fair Practices Code for Credit Card Operations or amendments to Master Direction on Credit Card issuance",
+      "claim_type": "inference",
+      "verification": {
+        "verified": true,
+        "verdict": "supported",
+        "url": "https://rbidocs.rbi.org.in/rdocs/notification/PDFs/92MDCREDITDEBITCARDC423AFFB5E7945149C95CDD2F71E9158.PDF",
+        "source_title": "RBI Master Direction – Credit Card and Debit Card – Issuance and Conduct Directions, 2022",
+        "excerpt": "The terms and conditions for payment of credit card dues, including the minimum amount due, shall be stipulated so as to ensure there is no negative amortization",
+        "verified_date": "2026-07-20",
+        "note": "RBI's Master Direction (effective April 21, 2022, amended March 7, 2024) mandates that minimum amount due (MAD) must be calculated to prevent negative amortization - meaning MAD must cover at least the full interest and charges to avoid capitalization. The regulation specifies MAD calculation methodology where unpaid interest/charges cannot be capitalized, directly affecting how quickly spends translate into persistent revolving balances. This regulatory change altered the repayment-to-balance ratio by requiring MAD formulas that include 100% of interest component plus portion of principal, fundamentally changing credit card balance dynamics."
+      },
+      "promotable": true,
+      "source": "RBI Master Direction – Credit Card and Debit Card – Issuance and Conduct Directions, 2022",
+      "source_url": "https://rbidocs.rbi.org.in/rdocs/notification/PDFs/92MDCREDITDEBITCARDC423AFFB5E7945149C95CDD2F71E9158.PDF",
+      "source_excerpt": "The terms and conditions for payment of credit card dues, including the minimum amount due, shall be stipulated so as to ensure there is no negative amortization",
+      "source_verified_date": "2026-07-20",
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "UPI-on-credit interoperability → card-spend displacement",
+      "mechanism": "Allowing UPI transactions on credit cards shifts spend from traditional card networks to UPI rails, affecting POS/e-commerce/other channel split and potentially total volumes",
+      "affects": "credit_card",
+      "required_source": "NPCI circular on UPI for Credit Lines or RBI Master Direction updates on prepaid payment instruments and credit linkage",
+      "claim_type": "hypothesis",
+      "verification": {
+        "verified": false,
+        "verdict": "not_found",
+        "url": "https://www.rbi.org.in/scripts/NotificationUser.aspx?Id=12532&Mode=0",
+        "source_title": "RBI Circular RBI/2023-24/58 - Operation of Pre-Sanctioned Credit Lines at Banks through UPI",
+        "excerpt": "scope of UPI is being expanded to include credit lines as a funding account",
+        "verified_date": "2026-07-20",
+        "note": "While RBI and NPCI have issued circulars allowing credit cards (RuPay) and pre-sanctioned credit lines to be linked to UPI, no primary source explicitly confirms the displacement mechanism described. The official documents detail operational procedures but do not analyze or state that this will shift spend from traditional card networks to UPI rails or affect POS/e-commerce channel distribution. The claimed mechanism appears to be an inference or market analysis rather than an officially documented regulatory intent."
+      },
+      "promotable": false,
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "Reward-point accounting rule → spend incentivization",
+      "mechanism": "Regulatory clarity on liability treatment of reward points changes issuer economics and hence promotional intensity, affecting transaction volumes",
+      "affects": "credit_card",
+      "required_source": "RBI or IASB/IndAS guidance on loyalty program accounting, or issuer disclosures under Schedule III of Companies Act",
+      "claim_type": "hypothesis",
+      "verification": {
+        "verified": false,
+        "verdict": "not_found",
+        "url": "https://taxguru.in/rbi/rbi-non-banking-financial-companies-credit-cards-issuance-conduct-directions-2025.html",
+        "source_title": "RBI (Non-Banking Financial Companies – Credit Cards: Issuance and Conduct) Directions, 2025",
+        "excerpt": "Any discounts, cashbacks, reward points, loyalty points or any other benefits offered by the card-issuer shall be provided in a transparent manner including source of such benefits. The accounting process for the same shall be verifiable in the books of the card-issuer.",
+        "verified_date": "2026-07-20",
+        "note": "RBI Directions (2025) require transparent accounting of reward points and Ind AS 115 prescribes liability treatment, but no authoritative source found that establishes regulatory clarity on accounting changing issuer economics in a way that affects promotional intensity or transaction volumes. The mechanism is economically plausible but lacks direct regulatory or official documentation support."
+      },
+      "promotable": false,
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "Cash-advance fee cap → ATM-withdrawal economics",
+      "mechanism": "Limits on fees for cash advances make ATM withdrawals less profitable, potentially reducing cc_atm_withdrawal_val through issuer behavior or cardholder education",
+      "affects": "credit_card",
+      "required_source": "RBI circular on reasonableness of bank charges or Reserve Bank (Regulation of Non-Banking Financial Companies) Directions on fee structures",
+      "claim_type": "hypothesis",
+      "verification": {
+        "verified": false,
+        "verdict": "not_found",
+        "url": "",
+        "source_title": "",
+        "excerpt": "",
+        "verified_date": "2026-07-20",
+        "note": "No RBI circular or Master Direction establishes a cap or limit on cash advance fees for credit cards. The RBI Master Direction - Credit Card and Debit Card – Issuance and Conduct Directions, 2022 requires disclosure of cash advance fees in MITC but does not cap them. RBI's general guidance on 'reasonableness of bank charges' (Master Circular on Customer Service) provides only that charges should be reasonable and not out of line with average cost of services, but establishes no specific numerical limits. Market practice shows issuers charging 2.5-3.5% plus minimum fees, but these are issuer-determined, not regulatory caps. The claimed mechanism of 'limits on fees for cash advances' making ATM withdrawals less profitable is not supported by any identifiable RBI regulatory source."
+      },
+      "promotable": false,
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "EMI-conversion threshold → spend-to-installment flow",
+      "mechanism": "Regulatory or network rules on minimum transaction size for EMI conversion determine what portion of large spends flows into installment balances versus revolving stock",
+      "affects": "credit_card",
+      "required_source": "Card network operating regulations or issuer product disclosure documents filed with RBI under credit card guidelines",
+      "claim_type": "hypothesis",
+      "verification": {
+        "verified": false,
+        "verdict": "contradicts",
+        "url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=12300",
+        "source_title": "RBI Master Directions - Credit Card and Debit Card – Issuance and Conduct (April 21, 2022, updated March 7, 2024)",
+        "excerpt": "EMI conversions must be transparent, clearly indicating the principal, interest, discount, and any charges",
+        "verified_date": "2026-07-20",
+        "note": "RBI regulations mandate transparency and consent for EMI conversions but do NOT prescribe minimum transaction thresholds. Search results show minimum EMI amounts (typically ₹2,500) are set by individual issuers as product policies, not by RBI or NPCI network regulations. The mechanism incorrectly attributes threshold-setting to regulatory/network rules when these are issuer-determined commercial terms."
+      },
+      "promotable": false,
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "Co-branded card partnership rule → spend-product mix",
+      "mechanism": "RBI regulations on co-branding partnerships with non-financial entities affect which card products are issued and their usage patterns across channels",
+      "affects": "credit_card",
+      "required_source": "RBI Master Direction on Issuance and Operation of Prepaid Payment Instruments, or notifications on bank-fintech partnerships",
+      "claim_type": "inference",
+      "verification": {
+        "verified": true,
+        "verdict": "supported",
+        "url": "https://rbidocs.rbi.org.in/rdocs/notification/PDFs/92MDCREDITDEBITCARDC423AFFB5E7945149C95CDD2F71E9158.PDF",
+        "source_title": "RBI Master Direction – Credit Card and Debit Card – Issuance and Conduct Directions, 2022 (RBI/2022-23/92)",
+        "excerpt": "The role of the co-branding partner entity under the tie-up arrangement shall be limited to marketing/distribution of the cards and providing access to the cardholder for the goods/services",
+        "verified_date": "2026-07-20",
+        "note": "RBI regulations specify that co-branding arrangements must follow Board-approved policies addressing reputation risk, limit co-branding partner roles to marketing/distribution only, prohibit partner access to transaction data, and require explicit indication of the card-issuer. These restrictions directly affect which card products can be issued through partnerships and how they are used across channels. The regulations have led to enforcement actions (Federal Bank, South Indian Bank halted in 2024) demonstrating real impact on card product issuance and usage patterns."
+      },
+      "promotable": true,
+      "source": "RBI Master Direction – Credit Card and Debit Card – Issuance and Conduct Directions, 2022 (RBI/2022-23/92)",
+      "source_url": "https://rbidocs.rbi.org.in/rdocs/notification/PDFs/92MDCREDITDEBITCARDC423AFFB5E7945149C95CDD2F71E9158.PDF",
+      "source_excerpt": "The role of the co-branding partner entity under the tie-up arrangement shall be limited to marketing/distribution of the cards and providing access to the cardholder for the goods/services",
+      "source_verified_date": "2026-07-20",
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "Tokenization mandate → e-commerce transaction friction",
+      "mechanism": "Mandatory card tokenization for online transactions changes checkout friction and hence e-commerce spend velocity",
+      "affects": "credit_card",
+      "required_source": "RBI circular dated March 31, 2022 on card-on-file tokenization, or subsequent NPCI/network implementation updates",
+      "claim_type": "inference",
+      "verification": {
+        "verified": true,
+        "verdict": "supported",
+        "url": "https://rbidocs.rbi.org.in/rdocs/PressRelease/PDFs/PR823EB1787FC813D4D88BC129A92CDDC1586.PDF",
+        "source_title": "RBI Press Release - Tokenisation of Card Transactions – Enhancements (September 7, 2021)",
+        "excerpt": "The above enhancements are expected to reinforce the safety and security of card data while continuing the convenience in card transactions.",
+        "verified_date": "2026-07-20",
+        "note": "The RBI circular on card-on-file tokenization was issued on September 7, 2021 (not March 31, 2022). The March 31, 2021 circular was a different directive extending the compliance timeline. Multiple sources confirm that the tokenization mandate does impact checkout friction: customers who don't tokenize must re-enter card details for each transaction (HDFC Bank source states 'you must re-enter your card details each time you shop online if you have not completed the tokenisation process'), and industry stakeholders raised concerns about 'potential disruptions and loss of revenue' and 'drop in revenues for merchants, as people would have to enter their card details again and again' which 'causes a drop-off' (YourStory, SISA sources). The mechanism is supported: mandatory tokenization changes checkout experience and transaction friction, affecting e-commerce spend velocity."
+      },
+      "promotable": true,
+      "source": "RBI Press Release - Tokenisation of Card Transactions – Enhancements (September 7, 2021)",
+      "source_url": "https://rbidocs.rbi.org.in/rdocs/PressRelease/PDFs/PR823EB1787FC813D4D88BC129A92CDDC1586.PDF",
+      "source_excerpt": "The above enhancements are expected to reinforce the safety and security of card data while continuing the convenience in card transactions.",
+      "source_verified_date": "2026-07-20",
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "Add-on card issuance norm → effective spend capacity",
+      "mechanism": "Rules on issuing supplementary cards to family members amplify spending on a single credit line, affecting transaction volumes relative to account count",
+      "affects": "credit_card",
+      "required_source": "RBI circular on Credit Card Operations addressing add-on card norms, or issuer compliance documents",
+      "claim_type": "inference",
+      "verification": {
+        "verified": true,
+        "verdict": "supported",
+        "url": "https://rbidocs.rbi.org.in/rdocs/notification/PDFs/92MDCREDITDEBITCARDC423AFFB5E7945149C95CDD2F71E9158.PDF",
+        "source_title": "Master Directions – Credit Card and Debit Card – Issuance and Conduct Directions, 2022",
+        "excerpt": "Add-on cards shall be issued with the clear understanding that the liability will be that of the principal cardholder.",
+        "verified_date": "2026-07-20",
+        "note": "RBI Master Directions confirm add-on card norms exist: add-on cards are issued to persons identified by the principal cardholder within the credit limits and liability of the principal cardholder. While the regulatory framework establishes that multiple add-on cards share a single credit line (thereby enabling multiple users to transact on one account), RBI documents do not explicitly articulate the claimed economic effect on 'transaction volumes relative to account count.' The mechanism linking add-on card issuance to amplified spending capacity is a reasonable inference from the regulatory structure, but is not directly stated in primary RBI sources."
+      },
+      "promotable": true,
+      "source": "Master Directions – Credit Card and Debit Card – Issuance and Conduct Directions, 2022",
+      "source_url": "https://rbidocs.rbi.org.in/rdocs/notification/PDFs/92MDCREDITDEBITCARDC423AFFB5E7945149C95CDD2F71E9158.PDF",
+      "source_excerpt": "Add-on cards shall be issued with the clear understanding that the liability will be that of the principal cardholder.",
+      "source_verified_date": "2026-07-20",
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "Rental-payment merchant code → large-ticket recurrence",
+      "mechanism": "Classification and acceptance of rent payments on credit cards creates regular high-value transactions in cc_other_txn_val",
+      "affects": "credit_card",
+      "required_source": "Payment network MCC guidelines or RBI statements on permissible credit card usage categories",
+      "claim_type": "hypothesis",
+      "verification": {
+        "verified": false,
+        "verdict": "not_found",
+        "url": "",
+        "source_title": "",
+        "excerpt": "",
+        "verified_date": "2026-07-20",
+        "note": "While MCC 6513 for rent payments exists in payment network standards and banks accept rent payments on credit cards, no authoritative RBI or NPCI primary source was found that explicitly addresses 'classification and acceptance of rent payments on credit cards' as a regulatory decision or explains this as a mechanism creating large-ticket recurrence in transaction data. RBI Master Directions cover card issuance/conduct but do not specify permissible usage categories or address rent specifically."
+      },
+      "promotable": false,
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "Credit-limit enhancement process → utilization headroom",
+      "mechanism": "Regulatory constraints on automatic limit increases affect how quickly cardholders can scale spending, moderating flow from transactions to balances",
+      "affects": "credit_card",
+      "required_source": "RBI Know Your Customer (KYC) and Fair Practices Code guidelines on credit limit revisions without explicit customer consent",
+      "claim_type": "inference",
+      "verification": {
+        "verified": true,
+        "verdict": "supported",
+        "url": "https://rbidocs.rbi.org.in/rdocs/notification/PDFs/92MDCREDITDEBITCARDC423AFFB5E7945149C95CDD2F71E9158.PDF",
+        "source_title": "RBI Master Direction – Credit Card and Debit Card – Issuance and Conduct Directions, 2022 (RBI/2022-23/92 DoR.AUT.REC.No.27/24.01.041/2022-23)",
+        "excerpt": "Card-issuers shall not unilaterally upgrade credit cards and enhance credit limits. Explicit consent of the cardholder shall invariably be taken whenever there is/are any change/s in terms and conditions.",
+        "verified_date": "2026-07-20",
+        "note": "Paragraph 11(b) of the RBI Master Direction explicitly prohibits automatic credit limit increases without customer consent. This regulatory constraint directly supports the mechanism that limits on automatic credit limit enhancements affect how quickly cardholders can scale spending, thereby moderating the flow from transactions to balances. The regulation is part of the Fair Practices Code framework embedded in the Master Direction."
+      },
+      "promotable": true,
+      "source": "RBI Master Direction – Credit Card and Debit Card – Issuance and Conduct Directions, 2022 (RBI/2022-23/92 DoR.AUT.REC.No.27/24.01.041/2022-23)",
+      "source_url": "https://rbidocs.rbi.org.in/rdocs/notification/PDFs/92MDCREDITDEBITCARDC423AFFB5E7945149C95CDD2F71E9158.PDF",
+      "source_excerpt": "Card-issuers shall not unilaterally upgrade credit cards and enhance credit limits. Explicit consent of the cardholder shall invariably be taken whenever there is/are any change/s in terms and conditions.",
+      "source_verified_date": "2026-07-20",
+      "status": "proposed"
+    }
+  ]
+}

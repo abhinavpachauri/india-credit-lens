@@ -89,7 +89,16 @@ METHOD_TYPE: dict[str, str] = {
     "csv_streak":              "streak",
     "csv_sector_fy_acceleration": "acceleration",
     "csv_sector_fy_delta":     "absolute",
+    # Relational — cross-segment (spec: signals/README.md)
+    "csv_sector_rotation":     "rotation",
+    "csv_category_rotation":   "rotation",
+    "csv_sector_divergence":   "divergence",
+    "csv_bank_divergence":     "divergence",
 }
+
+# Multi-entity signal types stored as one row per entity — payloads and
+# ground-truth numbers treat all three as full row distributions.
+SCAN_LIKE = {"scan", "rotation", "divergence"}
 
 def _signal_type(sig: dict) -> str:
     method = sig.get("compute", {}).get("method", "")
@@ -287,17 +296,26 @@ def _scalar_payload(conn: sqlite3.Connection, sig_id: str, sig: dict,
 
 def _scan_payload(conn: sqlite3.Connection, sig_id: str, sig: dict,
                   pipeline: str, period: str) -> str | None:
-    """Build context block for 1c scan signals (full entity distributions)."""
+    """Build context block for scan-like signals (full entity distributions).
+    Rotation signals also carry one aggregate/total 'rotation mass' row — kept
+    out of the ranked entity list and reported on its own line."""
     rows = conn.execute(
         """SELECT entity_id, value, status FROM signals
            WHERE pipeline=? AND period=? AND metric_id=?
-             AND value IS NOT NULL
+             AND value IS NOT NULL AND entity_type != 'aggregate'
            ORDER BY value DESC""",
         (pipeline, period, sig_id)
     ).fetchall()
 
     if not rows:
         return None
+
+    mass_row = conn.execute(
+        """SELECT value FROM signals
+           WHERE pipeline=? AND period=? AND metric_id=?
+             AND entity_type='aggregate' AND entity_id='total' AND value IS NOT NULL""",
+        (pipeline, period, sig_id)
+    ).fetchone()
 
     title    = sig.get("title", sig_id)
     sig_type = _signal_type(sig)
@@ -342,7 +360,11 @@ def _scan_payload(conn: sqlite3.Connection, sig_id: str, sig: dict,
     unit = unit_row[0] if unit_row else "pct"
 
     def _fmt(v: float) -> str:
-        return f"{v:.1f}%" if unit == "pct" else f"{v:,.0f}"
+        if unit == "pct":
+            return f"{v:.1f}%"
+        if unit == "pp":
+            return f"{v:+.2f}pp"
+        return f"{v:,.0f}"
 
     # Full distribution — every entity value, so the narrative can cite any real
     # figure (and never has to invent one for a middle entity).
@@ -355,6 +377,8 @@ def _scan_payload(conn: sqlite3.Connection, sig_id: str, sig: dict,
         f"All entities (ranked, cite ONLY these values): {all_str}",
         f"Spread: {_fmt(spread)}",
     ]
+    if mass_row is not None:
+        lines.append(f"Rotation mass (share of the mix that moved): {mass_row[0]:.2f}pp")
     if changed:
         lines.append(f"Status shifts: {'; '.join(changed[:5])}")
 
@@ -374,7 +398,7 @@ def signal_numbers(conn: sqlite3.Connection, sid: str, sig: dict,
     facts: dict = {"unit": None, "value": None, "prior": None, "status": None,
                    "series": [], "components": {}, "range": {}, "scan": []}
 
-    if stype == "scan":
+    if stype in SCAN_LIKE:
         rows = conn.execute(
             "SELECT entity_id, value FROM signals "
             "WHERE pipeline=? AND period=? AND metric_id=? AND value IS NOT NULL",
@@ -508,7 +532,7 @@ def build_domain_payload(conn: sqlite3.Connection, pipeline: str,
 
     for sid, sig in sorted(domain_signals):
         sig_type = _signal_type(sig)
-        if sig_type == "scan":
+        if sig_type in SCAN_LIKE:
             block = _scan_payload(conn, sid, sig, pipeline, period)
         else:
             block = _scalar_payload(conn, sid, sig, pipeline, period)

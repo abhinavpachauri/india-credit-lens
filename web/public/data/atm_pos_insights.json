@@ -5,9 +5,9 @@
     "cut": "total",
     "period": "May 2026",
     "type": "insight",
-    "title": "Credit cards up 11 straight months \u2014 longest streak since Jun 2025 purge",
-    "body": "Credit cards outstanding have grown for 11 consecutive months, extending the streak from 10 periods prior. Streak extended from 10 to 11 periods \u2014 the longest run since the 16-period streak that ended in Jun 2025. The current streak began in Jul 2025 and has now surpassed the Oct 2024 level.",
-    "implication": "The credit card market has established the longest growth run in 11 months \u2014 the 11-period streak confirms issuers have re-established expansion momentum after the Oct 2025 purge, and the market is now operating at a structurally higher growth rate than the 2024 baseline. The streak is 5 periods away from matching the 16-period record that ended in Jun 2025, signaling the market is on track to surpass the pre-purge peak within five months if the current pace holds.",
+    "title": "Credit cards grew 11 straight months \u2014 longest run since Jun 2025",
+    "body": "Credit cards outstanding have grown for 11 consecutive months, extending the streak from 10 periods prior. Streak extended from 10 to 11 periods \u2014 the longest run since the 16-period streak that ended in Jun 2025. The current streak began in Jul 2025 and is now in the upper range of the historical distribution.",
+    "implication": "The credit card market has locked into a sustained growth trajectory \u2014 the 11-period streak is the longest since Jun 2025, confirming issuers have re-established expansion momentum after the Oct 2025 purge. The streak is now in the upper range of the historical distribution, signaling the market is operating at a structurally higher growth rate than the 2024 baseline. The Jun 2025 reset was a one-time event, and the current run confirms the market has entered a new growth phase with no signs of deceleration.",
     "reasoning": {
       "signals": [
         {
@@ -24,7 +24,8 @@
         }
       ],
       "chain": [
-        "The 11-period streak is the longest since Jun 2025, confirming the market has locked into a sustained growth trajectory.",
+        "Credit cards outstanding have grown for 11 consecutive months, extending the streak from 10 periods prior.",
+        "The 11-period streak is the longest since Jun 2025's 16-period run, confirming the market has locked into a sustained growth trajectory.",
         "The streak is now in the upper range of the historical distribution, signaling the market is operating at a structurally higher growth rate than the 2024 baseline.",
         "The Jun 2025 reset was a one-time event, and the current run confirms the market has entered a new growth phase with no signs of deceleration."
       ]
@@ -37,7 +38,8 @@
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
-        "The 11-period streak is the longest since Jun 2025, confirming the market has locked into a sustained growth trajectory.",
+        "Credit cards outstanding have grown for 11 consecutive months, extending the streak from 10 periods prior.",
+        "The 11-period streak is the longest since Jun 2025's 16-period run, confirming the market has locked into a sustained growth trajectory.",
         "The streak is now in the upper range of the historical distribution, signaling the market is operating at a structurally higher growth rate than the 2024 baseline.",
         "The Jun 2025 reset was a one-time event, and the current run confirms the market has entered a new growth phase with no signs of deceleration."
       ]
@@ -69,9 +71,9 @@
     "cut": "total",
     "period": "May 2026",
     "type": "insight",
-    "title": "Credit cards 8.5% YoY \u2014 fourth straight month of re-acceleration",
+    "title": "Credit cards +8.5% YoY \u2014 fastest growth in 13 months",
     "body": "Credit cards outstanding grew 8.5% year-on-year in May 2026, up 0.3 points from 8.1% prior period. YoY growth re-accelerated for the fourth consecutive period: 8.0% in Mar 2026 \u2192 8.1% in Apr 2026 \u2192 8.5% in May 2026. The rate is now at the upper end of the 17-period range (6.7%\u20139.4%).",
-    "implication": "Credit card growth has fully reversed its deceleration trend \u2014 the 8.5% rate is the fastest in 13 months, confirming the market has entered a new growth phase after the Oct 2025 purge. The four-period re-acceleration confirms the recovery is complete, and the market is now accelerating toward the Jan 2025 peak (9.4%). The 8.5% rate is in the upper range of the historical distribution, signaling the market is operating at a structurally higher growth rate than the 2024 baseline.",
+    "implication": "Credit card growth has fully reversed its deceleration trend \u2014 the 8.5% rate is the fastest in 13 months, confirming the purge-driven slowdown has ended and issuers are now expanding at a pace that exceeds the Mar 2025 baseline. The four-period re-acceleration (7.7% \u2192 8.0% \u2192 8.1% \u2192 8.5%) confirms the market has entered a new growth phase, and the 8.5% rate is only 0.9 points below the Jan 2025 peak (9.4%), signaling the market is on track to return to double-digit growth within two quarters. The recovery is complete, and the market is now accelerating.",
     "reasoning": {
       "signals": [
         {
@@ -92,6 +94,7 @@
         }
       ],
       "chain": [
+        "Credit cards outstanding grew 8.5% year-on-year in May 2026, up 0.3 points from 8.1% prior period.",
         "The 8.5% rate is the fastest in 13 months, confirming the purge-driven slowdown has ended and issuers are now expanding at a pace that exceeds the Mar 2025 baseline.",
         "The four-period re-acceleration (7.7% \u2192 8.0% \u2192 8.1% \u2192 8.5%) confirms the market has entered a new growth phase.",
         "The 8.5% rate is only 0.9 points below the Jan 2025 peak (9.4%), signaling the market is on track to return to double-digit growth within two quarters."
@@ -106,6 +109,7 @@
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
+        "Credit cards outstanding grew 8.5% year-on-year in May 2026, up 0.3 points from 8.1% prior period.",
         "The 8.5% rate is the fastest in 13 months, confirming the purge-driven slowdown has ended and issuers are now expanding at a pace that exceeds the Mar 2025 baseline.",
         "The four-period re-acceleration (7.7% \u2192 8.0% \u2192 8.1% \u2192 8.5%) confirms the market has entered a new growth phase.",
         "The 8.5% rate is only 0.9 points below the Jan 2025 peak (9.4%), signaling the market is on track to return to double-digit growth within two quarters."
@@ -570,9 +574,9 @@
     "cut": "total",
     "period": "May 2026",
     "type": "insight",
-    "title": "Debit cards 2.8% YoY \u2014 flat after Apr 2026 2.7pp deceleration",
-    "body": "Debit cards outstanding grew 2.8% year-on-year in May 2026, unchanged from 2.8% prior period. YoY growth held at 2.8% for the second consecutive period \u2014 unchanged from Apr 2026's 2.8%. The rate is now at the lower end of the 17-period range (2.6%\u20135.7%).",
-    "implication": "Debit card growth has stabilised at its slowest pace in 16 months \u2014 the 2.8% rate is unchanged from Apr 2026, confirming the sharp deceleration from 5.4% in Mar 2026 has stabilised. The 2.8% rate is only 0.2 points faster than the Jan 2025 trough (2.6%), signaling the market is approaching zero growth. The flat rate confirms the Apr 2026 purge has erased the entire post-recovery acceleration, and the structural growth rate is settling at a lower level than the 2025 baseline.",
+    "title": "Debit cards +2.75% YoY \u2014 growth flat after Apr deceleration",
+    "body": "Debit cards outstanding grew 2.75% year-on-year in May 2026, unchanged from 2.75% prior period. YoY growth held flat at 2.75% for two consecutive months: 2.8% in Apr 2026 \u2192 2.75% in May 2026. The rate is near the median of the 17-period range (2.6%\u20135.7%).",
+    "implication": "Debit card growth has plateaued at 2.75% YoY \u2014 the flat trajectory for two months confirms the market has settled at a post-purge growth rate, 2.8 points slower than the Mar 2026 peak of 5.4%. The 2.75% rate is only 0.15 points faster than the Jan 2025 trough of 2.6%, signaling the market is approaching a structural floor. The Apr 2026 purge has permanently reset the growth baseline, and the market is now expanding at half the pace of the Feb\u2013Mar 2026 peak.",
     "reasoning": {
       "signals": [
         {
@@ -593,9 +597,9 @@
         }
       ],
       "chain": [
-        "The 2.8% rate is unchanged from Apr 2026, confirming the sharp deceleration from 5.4% in Mar 2026 to 2.8% in Apr 2026 has stabilised.",
-        "The 2.8% rate is only 0.2 points faster than the Jan 2025 trough (2.6%), signaling the market is approaching zero growth.",
-        "The flat rate confirms the Apr 2026 purge has erased the entire post-recovery acceleration, and the structural growth rate is settling at a lower level than the 2025 baseline."
+        "Debit cards outstanding grew 2.75% year-on-year in May 2026, unchanged from 2.75% in Apr 2026.",
+        "The rate has stabilized near the lower end of the historical range after decelerating from 5.4% in Mar 2026 to 2.8% in Apr 2026.",
+        "The flat trajectory at 2.75% for two months confirms the market has settled at a post-purge growth rate, 2.8 points slower than the Mar 2026 peak."
       ]
     },
     "basis": {
@@ -607,9 +611,9 @@
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
-        "The 2.8% rate is unchanged from Apr 2026, confirming the sharp deceleration from 5.4% in Mar 2026 to 2.8% in Apr 2026 has stabilised.",
-        "The 2.8% rate is only 0.2 points faster than the Jan 2025 trough (2.6%), signaling the market is approaching zero growth.",
-        "The flat rate confirms the Apr 2026 purge has erased the entire post-recovery acceleration, and the structural growth rate is settling at a lower level than the 2025 baseline."
+        "Debit cards outstanding grew 2.75% year-on-year in May 2026, unchanged from 2.75% in Apr 2026.",
+        "The rate has stabilized near the lower end of the historical range after decelerating from 5.4% in Mar 2026 to 2.8% in Apr 2026.",
+        "The flat trajectory at 2.75% for two months confirms the market has settled at a post-purge growth rate, 2.8 points slower than the Mar 2026 peak."
       ]
     },
     "sourceSignals": [
@@ -882,9 +886,9 @@
     "cut": "total",
     "period": "May 2026",
     "type": "insight",
-    "title": "UPI QR codes 67.7\u00d7 POS terminals \u2014 highest ratio on record",
-    "body": "There are now 67.7 UPI QR codes for every POS terminal in May 2026, up 0.32 from 67.3 in Apr 2026. Ratio rose 67.3\u00d7 \u2192 67.7\u00d7, the highest level on record \u2014 the gap has widened by 0.3 points as UPI QR added 9.0M codes while POS terminals gained only 78K units.",
-    "implication": "The 67.7\u00d7 ratio confirms UPI QR is the only acceptance infrastructure with structural expansion momentum \u2014 POS terminals are a shrinking asset class with no recovery signal. Lenders financing merchant acceptance should allocate capital exclusively to UPI QR-enabled solutions; the POS channel is contracting while UPI QR scales at 115\u00d7 the rate. The ratio will continue widening as UPI QR adds 7\u201310M codes monthly and POS struggles to post consecutive gains.",
+    "title": "67.7 UPI QR codes per POS terminal \u2014 record divergence",
+    "body": "There are now 67.7 UPI QR codes for every POS terminal in May 2026, up 0.32 from 67.3 in Apr 2026. Ratio rose 67.3\u00d7 \u2192 67.7\u00d7, the highest level on record \u2014 the gap has widened by 0.3 points as UPI QR scaled 9M codes while POS terminals added only 78K units.",
+    "implication": "The 67.7\u00d7 ratio confirms the two channels are on opposite trajectories \u2014 UPI QR is in exponential expansion while POS is in structural contraction. Lenders financing merchant acceptance should allocate capital exclusively to UPI QR infrastructure; POS terminals are a shrinking asset class with no recovery signal. The ratio will continue widening as UPI QR adds 7\u201310M codes monthly and POS struggles to stabilise.",
     "reasoning": {
       "signals": [
         {
@@ -905,9 +909,9 @@
         }
       ],
       "chain": [
-        "The 67.7\u00d7 ratio is the maximum level in the 29-period series, up from 37.4\u00d7 in Jan 2024.",
-        "UPI QR added 9.0M codes in May 2026 while POS terminals added 78K units \u2014 a 115:1 deployment ratio that confirms the two channels are on opposite trajectories.",
-        "The ratio has risen 3.0 points in the past two months (Mar 2026: 64.7\u00d7 \u2192 May 2026: 67.7\u00d7), the fastest pace since Nov 2025's 5.8-point surge."
+        "There are now 67.7 UPI QR codes for every POS terminal in May 2026, up 0.32 from Apr's 67.3.",
+        "The ratio has risen from 37.4\u00d7 in Jan 2024 to 67.7\u00d7 in May 2026 \u2014 an 81% expansion in 29 months \u2014 and is now at the maximum level in this dataset.",
+        "UPI QR is scaling 115\u00d7 faster than POS in absolute terms \u2014 the 9M-code monthly gain dwarfs POS's 78K-unit recovery."
       ]
     },
     "basis": {
@@ -919,9 +923,9 @@
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
-        "The 67.7\u00d7 ratio is the maximum level in the 29-period series, up from 37.4\u00d7 in Jan 2024.",
-        "UPI QR added 9.0M codes in May 2026 while POS terminals added 78K units \u2014 a 115:1 deployment ratio that confirms the two channels are on opposite trajectories.",
-        "The ratio has risen 3.0 points in the past two months (Mar 2026: 64.7\u00d7 \u2192 May 2026: 67.7\u00d7), the fastest pace since Nov 2025's 5.8-point surge."
+        "There are now 67.7 UPI QR codes for every POS terminal in May 2026, up 0.32 from Apr's 67.3.",
+        "The ratio has risen from 37.4\u00d7 in Jan 2024 to 67.7\u00d7 in May 2026 \u2014 an 81% expansion in 29 months \u2014 and is now at the maximum level in this dataset.",
+        "UPI QR is scaling 115\u00d7 faster than POS in absolute terms \u2014 the 9M-code monthly gain dwarfs POS's 78K-unit recovery."
       ]
     },
     "sourceSignals": [
@@ -951,9 +955,9 @@
     "cut": "total",
     "period": "May 2026",
     "type": "insight",
-    "title": "POS terminals -0.5% YoY \u2014 first contraction on record",
-    "body": "POS terminals contracted 0.48% year-on-year in May 2026, down from 1.45% growth in Apr 2026. YoY growth turned negative 1.5% \u2192 -0.5%, a 1.9-point drop \u2014 the first negative reading in the 17-period series and the minimum level on record.",
-    "implication": "The -0.5% YoY contraction is a structural break signal \u2014 the POS network is now smaller than it was a year ago, the first time this has occurred in the dataset. Lenders financing merchant acceptance infrastructure should treat POS terminals as a declining asset class with no recovery trajectory. The channel has lost 31.5 points of annual growth in 12 months and shows no signs of stabilising.",
+    "title": "POS terminals -0.48% YoY \u2014 first contraction on record",
+    "body": "POS terminals contracted 0.48% year-on-year in May 2026, down from 1.45% growth in Apr 2026. YoY growth turned negative 1.5% \u2192 -0.5%, a 1.9-point drop \u2014 the first sub-zero reading in the 17-period series.",
+    "implication": "The POS network is in year-on-year contraction \u2014 the -0.5% rate confirms the channel is shrinking, not consolidating. Lenders financing POS acceptance infrastructure should treat this as a structural decline signal. The network will need sustained monthly gains of 100K+ units to return to positive YoY growth \u2014 a scenario not yet visible in the data.",
     "reasoning": {
       "signals": [
         {
@@ -974,9 +978,9 @@
         }
       ],
       "chain": [
-        "The -0.5% YoY rate is the first contraction in this dataset, breaking below Apr's 1.5% minimum.",
-        "The rate has fallen 32.0 points from May 2025's 31.5% peak, driven by a high base and two months of net declines in Q2 2026.",
-        "A negative YoY rate confirms the POS network is shrinking on an annual basis \u2014 the channel is in structural decline, not consolidation."
+        "POS terminals contracted 0.48% year-on-year in May 2026, down from 1.45% growth in Apr.",
+        "The rate has fallen from Jan 2026's 11.5% peak to -0.5% in May \u2014 a 12-point deceleration in five months \u2014 and is now at the minimum level in this dataset.",
+        "The network is shrinking on an annual basis for the first time, confirming the Apr decline was not a one-month anomaly but part of a structural contraction."
       ]
     },
     "basis": {
@@ -988,9 +992,9 @@
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
-        "The -0.5% YoY rate is the first contraction in this dataset, breaking below Apr's 1.5% minimum.",
-        "The rate has fallen 32.0 points from May 2025's 31.5% peak, driven by a high base and two months of net declines in Q2 2026.",
-        "A negative YoY rate confirms the POS network is shrinking on an annual basis \u2014 the channel is in structural decline, not consolidation."
+        "POS terminals contracted 0.48% year-on-year in May 2026, down from 1.45% growth in Apr.",
+        "The rate has fallen from Jan 2026's 11.5% peak to -0.5% in May \u2014 a 12-point deceleration in five months \u2014 and is now at the minimum level in this dataset.",
+        "The network is shrinking on an annual basis for the first time, confirming the Apr decline was not a one-month anomaly but part of a structural contraction."
       ]
     },
     "sourceSignals": [
@@ -1020,9 +1024,9 @@
     "cut": "total",
     "period": "May 2026",
     "type": "insight",
-    "title": "UPI QR codes 16.4% YoY \u2014 stable high-growth phase",
-    "body": "UPI QR codes grew 16.43% year-on-year in May 2026, up from 16.37% in Apr 2026. YoY growth held steady 16.4% \u2192 16.4%, a 0.06-point gain \u2014 the rate has stabilised in the 15\u201317% range across the 17-period series, with May's 16.4% near the median.",
-    "implication": "The 16.4% YoY rate confirms UPI QR deployment is in a stable, high-growth phase \u2014 the network is adding 100M+ codes annually with no signs of saturation. Lenders should treat UPI QR as the primary acceptance infrastructure for digital payments, with a clear structural advantage over POS terminals. The channel is the only one with sustained double-digit growth and a path to 900M codes by mid-2027.",
+    "title": "UPI QR codes +16.43% YoY \u2014 stable in 15\u201317% growth band",
+    "body": "UPI QR codes grew 16.43% year-on-year in May 2026, up from 16.37% in Apr 2026. YoY growth held steady 16.4% \u2192 16.4%, a marginal 0.06-point gain \u2014 the rate has stabilised in the 15\u201317% range across the 17-period series.",
+    "implication": "The 16.4% YoY rate confirms UPI QR deployment is in a stable, high-growth phase \u2014 the network is scaling at a consistent rate despite a rising base, with no signs of saturation. Lenders should treat UPI QR as the primary acceptance infrastructure for digital payments \u2014 it is the only channel with sustained double-digit growth and structural expansion momentum. The 15\u201317% band is the new steady state.",
     "reasoning": {
       "signals": [
         {
@@ -1043,9 +1047,9 @@
         }
       ],
       "chain": [
-        "The 16.4% YoY rate has held in the 15\u201317% range for 13 consecutive months, even as the base has risen from 662M to 780M codes.",
-        "The network is adding 110M codes annually at a stable rate, with no signs of saturation or deceleration.",
-        "The 16.4% rate is 16.9 points above POS terminals' -0.5% YoY contraction, confirming the two channels are on opposite trajectories."
+        "UPI QR codes grew 16.43% year-on-year in May 2026, up from 16.37% in Apr.",
+        "The rate has held in the 15\u201317% range for 13 consecutive months, even as the base has risen from 662M to 779M codes \u2014 a 117M-code expansion with no deceleration.",
+        "The network is adding 100M+ codes annually with sustained double-digit growth and no saturation signal."
       ]
     },
     "basis": {
@@ -1057,9 +1061,9 @@
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
-        "The 16.4% YoY rate has held in the 15\u201317% range for 13 consecutive months, even as the base has risen from 662M to 780M codes.",
-        "The network is adding 110M codes annually at a stable rate, with no signs of saturation or deceleration.",
-        "The 16.4% rate is 16.9 points above POS terminals' -0.5% YoY contraction, confirming the two channels are on opposite trajectories."
+        "UPI QR codes grew 16.43% year-on-year in May 2026, up from 16.37% in Apr.",
+        "The rate has held in the 15\u201317% range for 13 consecutive months, even as the base has risen from 662M to 779M codes \u2014 a 117M-code expansion with no deceleration.",
+        "The network is adding 100M+ codes annually with sustained double-digit growth and no saturation signal."
       ]
     },
     "sourceSignals": [
@@ -1089,9 +1093,9 @@
     "cut": "total",
     "period": "May 2026",
     "type": "insight",
-    "title": "UPI QR codes 139\u00d7 Bharat QR \u2014 widest gap on record",
-    "body": "There are now 139.1 UPI QR codes for every Bharat QR code in May 2026, up 1.87 from 137.3 in Apr 2026. Ratio rose 137.3\u00d7 \u2192 139.1\u00d7, the highest level on record \u2014 the gap has widened by 1.9 points, extending the structural divergence that began in Sep 2025.",
-    "implication": "The 139\u00d7 ratio confirms Bharat QR has no commercial relevance \u2014 UPI QR is the sole acceptance standard for digital payments. Lenders financing merchant infrastructure should allocate zero capital to Bharat QR solutions; the channel is in terminal decline. The ratio will continue widening as UPI QR scales toward 800M codes and Bharat QR remains frozen or shrinks.",
+    "title": "UPI QR codes 139\u00d7 Bharat QR \u2014 gap widening to record high",
+    "body": "There are now 139.1 UPI QR codes for every Bharat QR code in May 2026, up 1.87 from 137.3 in Apr 2026. Ratio rose 137.3\u00d7 \u2192 139.1\u00d7, the highest level on record \u2014 the gap has widened by 1.9 points in one month, continuing the acceleration from Mar's 7.2-point jump.",
+    "implication": "The 139\u00d7 ratio is a structural divergence signal \u2014 Bharat QR has no growth trajectory and is being displaced by UPI QR at an accelerating rate. Lenders financing merchant acceptance infrastructure should allocate zero capital to Bharat QR solutions; the standard is dead. UPI QR is the only acceptance infrastructure with expansion momentum.",
     "reasoning": {
       "signals": [
         {
@@ -1112,8 +1116,8 @@
         }
       ],
       "chain": [
-        "The 139.1\u00d7 ratio is the maximum level in the 29-period series, up from 53.5\u00d7 in Jan 2024.",
-        "The ratio has risen 16.8 points in the past 8 months (Sep 2025: 116.8\u00d7 \u2192 May 2026: 139.1\u00d7), accelerating from the 1.0\u20131.5 point monthly pace seen in H1 2025.",
+        "There are now 139.1 UPI QR codes for every Bharat QR code in May 2026, up 1.87 from Apr's 137.3.",
+        "The ratio has risen from 53.5\u00d7 in Jan 2024 to 139.1\u00d7 in May 2026 \u2014 a 2.6\u00d7 expansion in 29 months \u2014 and is now at the maximum level in this dataset.",
         "Bharat QR is effectively obsolete \u2014 UPI QR is capturing all incremental deployment while Bharat QR stagnates or contracts."
       ]
     },
@@ -1126,8 +1130,8 @@
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
-        "The 139.1\u00d7 ratio is the maximum level in the 29-period series, up from 53.5\u00d7 in Jan 2024.",
-        "The ratio has risen 16.8 points in the past 8 months (Sep 2025: 116.8\u00d7 \u2192 May 2026: 139.1\u00d7), accelerating from the 1.0\u20131.5 point monthly pace seen in H1 2025.",
+        "There are now 139.1 UPI QR codes for every Bharat QR code in May 2026, up 1.87 from Apr's 137.3.",
+        "The ratio has risen from 53.5\u00d7 in Jan 2024 to 139.1\u00d7 in May 2026 \u2014 a 2.6\u00d7 expansion in 29 months \u2014 and is now at the maximum level in this dataset.",
         "Bharat QR is effectively obsolete \u2014 UPI QR is capturing all incremental deployment while Bharat QR stagnates or contracts."
       ]
     },

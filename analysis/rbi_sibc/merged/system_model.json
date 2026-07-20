@@ -42,7 +42,8 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
-        "product": "bank_credit"
+        "product": "bank_credit",
+        "economic_role": null
       }
     },
     {
@@ -73,7 +74,8 @@
         "lender": "all",
         "geography": "national",
         "segment": "government",
-        "product": "food_credit"
+        "product": "food_credit",
+        "economic_role": null
       }
     },
     {
@@ -109,7 +111,8 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
-        "product": "bank_credit"
+        "product": "bank_credit",
+        "economic_role": null
       }
     },
     {
@@ -141,7 +144,8 @@
         "lender": "all",
         "geography": "national",
         "segment": "agri",
-        "product": "agriculture"
+        "product": "agriculture",
+        "economic_role": "agri_inputs"
       }
     },
     {
@@ -177,7 +181,8 @@
         "lender": "all",
         "geography": "national",
         "segment": "corporate",
-        "product": "industry"
+        "product": "industry",
+        "economic_role": null
       }
     },
     {
@@ -198,7 +203,9 @@
       "data_series": null,
       "signal_ids": [
         "sibc-sectors-positive-yoy-count",
+        "sibc-services-divergence",
         "sibc-services-fy-acceleration",
+        "sibc-services-rotation",
         "sibc-services-share",
         "sibc-services-share-scan",
         "sibc-services-yoy",
@@ -212,7 +219,8 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
-        "product": "services"
+        "product": "services",
+        "economic_role": null
       }
     },
     {
@@ -236,11 +244,13 @@
         "sibc-personal-loans-yoy",
         "sibc-pl-cc-share",
         "sibc-pl-consumer-durables-share",
+        "sibc-pl-divergence",
         "sibc-pl-education-share",
         "sibc-pl-fd-advances-share",
         "sibc-pl-gold-share",
         "sibc-pl-housing-share",
         "sibc-pl-other-share",
+        "sibc-pl-rotation",
         "sibc-pl-share-advances-share",
         "sibc-pl-share-scan",
         "sibc-pl-vehicle-share",
@@ -255,7 +265,8 @@
         "lender": "all",
         "geography": "national",
         "segment": "retail",
-        "product": "personal_loan"
+        "product": "personal_loan",
+        "economic_role": null
       }
     },
     {
@@ -288,7 +299,8 @@
         "lender": "all",
         "geography": "national",
         "segment": "msme",
-        "product": "msme_credit"
+        "product": "msme_credit",
+        "economic_role": null
       }
     },
     {
@@ -319,7 +331,8 @@
         "lender": "all",
         "geography": "national",
         "segment": "msme",
-        "product": "msme_credit"
+        "product": "msme_credit",
+        "economic_role": null
       }
     },
     {
@@ -351,7 +364,8 @@
         "lender": "all",
         "geography": "national",
         "segment": "corporate",
-        "product": "large_corporate"
+        "product": "large_corporate",
+        "economic_role": null
       }
     },
     {
@@ -379,6 +393,7 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
+        "economic_role": "trade_channel",
         "product": "services"
       }
     },
@@ -407,7 +422,8 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
-        "product": "services"
+        "product": "services",
+        "economic_role": null
       }
     },
     {
@@ -435,6 +451,7 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
+        "economic_role": "consumer_traditional",
         "product": "services"
       }
     },
@@ -463,6 +480,7 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
+        "economic_role": "trade_channel",
         "product": "services"
       }
     },
@@ -491,6 +509,7 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
+        "economic_role": "consumer_mobility",
         "product": "services"
       }
     },
@@ -519,7 +538,8 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
-        "product": "services"
+        "product": "services",
+        "economic_role": null
       }
     },
     {
@@ -550,7 +570,8 @@
         "lender": "all",
         "geography": "national",
         "segment": "corporate",
-        "product": "trade_credit"
+        "product": "trade_credit",
+        "economic_role": "trade_channel"
       }
     },
     {
@@ -578,6 +599,7 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
+        "economic_role": "construction_real_estate",
         "product": "services"
       }
     },
@@ -609,7 +631,8 @@
         "lender": "all",
         "geography": "national",
         "segment": "financial_institution",
-        "product": "nbfc_credit"
+        "product": "nbfc_credit",
+        "economic_role": "financial_intermediation"
       }
     },
     {
@@ -637,7 +660,8 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
-        "product": "services"
+        "product": "services",
+        "economic_role": null
       }
     },
     {
@@ -669,7 +693,8 @@
         "lender": "all",
         "geography": "national",
         "segment": "retail",
-        "product": "consumer_durable"
+        "product": "consumer_durable",
+        "economic_role": "consumer_durables"
       }
     },
     {
@@ -700,7 +725,8 @@
         "lender": "all",
         "geography": "national",
         "segment": "retail",
-        "product": "housing"
+        "product": "housing",
+        "economic_role": "construction_real_estate"
       }
     },
     {
@@ -731,6 +757,7 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
+        "economic_role": "consumer_finance",
         "product": "personal_loan"
       }
     },
@@ -762,6 +789,7 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
+        "economic_role": "consumer_finance",
         "product": "personal_loan"
       }
     },
@@ -795,7 +823,8 @@
         "lender": "all",
         "geography": "national",
         "segment": "retail",
-        "product": "credit_card"
+        "product": "credit_card",
+        "economic_role": "consumer_finance"
       }
     },
     {
@@ -826,7 +855,8 @@
         "lender": "all",
         "geography": "national",
         "segment": "retail",
-        "product": "education_loan"
+        "product": "education_loan",
+        "economic_role": null
       }
     },
     {
@@ -857,7 +887,8 @@
         "lender": "all",
         "geography": "national",
         "segment": "retail",
-        "product": "vehicle_loan"
+        "product": "vehicle_loan",
+        "economic_role": "consumer_mobility"
       }
     },
     {
@@ -889,7 +920,8 @@
         "lender": "all",
         "geography": "national",
         "segment": "retail",
-        "product": "gold_loan"
+        "product": "gold_loan",
+        "economic_role": "consumer_finance"
       }
     },
     {
@@ -920,6 +952,7 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
+        "economic_role": "consumer_finance",
         "product": "personal_loan"
       }
     },
@@ -952,7 +985,8 @@
         "lender": "all",
         "geography": "national",
         "segment": "agri",
-        "product": "agriculture"
+        "product": "agriculture",
+        "economic_role": null
       }
     },
     {
@@ -985,7 +1019,8 @@
         "lender": "all",
         "geography": "national",
         "segment": "msme",
-        "product": "msme_credit"
+        "product": "msme_credit",
+        "economic_role": null
       }
     },
     {
@@ -1017,7 +1052,8 @@
         "lender": "all",
         "geography": "national",
         "segment": "msme",
-        "product": "msme_credit"
+        "product": "msme_credit",
+        "economic_role": null
       }
     },
     {
@@ -1049,7 +1085,8 @@
         "lender": "all",
         "geography": "national",
         "segment": "retail",
-        "product": "housing"
+        "product": "housing",
+        "economic_role": null
       }
     },
     {
@@ -1081,7 +1118,8 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
-        "product": "bank_credit"
+        "product": "bank_credit",
+        "economic_role": null
       }
     },
     {
@@ -1113,7 +1151,8 @@
         "lender": "all",
         "geography": "national",
         "segment": "retail",
-        "product": "education_loan"
+        "product": "education_loan",
+        "economic_role": null
       }
     },
     {
@@ -1146,7 +1185,8 @@
         "lender": "all",
         "geography": "national",
         "segment": "corporate",
-        "product": "renewable_energy"
+        "product": "renewable_energy",
+        "economic_role": null
       }
     },
     {
@@ -1178,7 +1218,8 @@
         "lender": "all",
         "geography": "national",
         "segment": "corporate",
-        "product": "social_infrastructure"
+        "product": "social_infrastructure",
+        "economic_role": null
       }
     },
     {
@@ -1210,7 +1251,8 @@
         "lender": "all",
         "geography": "national",
         "segment": "corporate",
-        "product": "export_credit"
+        "product": "export_credit",
+        "economic_role": null
       }
     },
     {
@@ -1242,7 +1284,8 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
-        "product": "weaker_sections"
+        "product": "weaker_sections",
+        "economic_role": null
       }
     },
     {
@@ -1270,7 +1313,8 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
-        "product": "trade_credit"
+        "product": "trade_credit",
+        "economic_role": "trade_channel"
       }
     },
     {
@@ -1298,7 +1342,8 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
-        "product": "trade_credit"
+        "product": "trade_credit",
+        "economic_role": "trade_channel"
       }
     },
     {
@@ -1326,7 +1371,8 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
-        "product": "nbfc_credit"
+        "product": "nbfc_credit",
+        "economic_role": "financial_intermediation"
       }
     },
     {
@@ -1354,7 +1400,8 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
-        "product": "nbfc_credit"
+        "product": "nbfc_credit",
+        "economic_role": "financial_intermediation"
       }
     },
     {
@@ -1382,6 +1429,7 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
+        "economic_role": "industrial_inputs",
         "product": "industry"
       }
     },
@@ -1413,6 +1461,7 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
+        "economic_role": "consumer_traditional",
         "product": "industry"
       }
     },
@@ -1441,6 +1490,7 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
+        "economic_role": "consumer_traditional",
         "product": "industry"
       }
     },
@@ -1472,6 +1522,7 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
+        "economic_role": "consumer_traditional",
         "product": "industry"
       }
     },
@@ -1500,6 +1551,7 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
+        "economic_role": "consumer_traditional",
         "product": "industry"
       }
     },
@@ -1528,6 +1580,7 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
+        "economic_role": "industrial_inputs",
         "product": "industry"
       }
     },
@@ -1556,6 +1609,7 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
+        "economic_role": "industrial_inputs",
         "product": "industry"
       }
     },
@@ -1584,6 +1638,7 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
+        "economic_role": "energy_logistics_capex",
         "product": "industry"
       }
     },
@@ -1615,6 +1670,7 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
+        "economic_role": "industrial_inputs",
         "product": "industry"
       }
     },
@@ -1643,6 +1699,7 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
+        "economic_role": "industrial_inputs",
         "product": "industry"
       }
     },
@@ -1671,6 +1728,7 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
+        "economic_role": "industrial_inputs",
         "product": "industry"
       }
     },
@@ -1699,6 +1757,7 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
+        "economic_role": "construction_real_estate",
         "product": "industry"
       }
     },
@@ -1730,6 +1789,7 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
+        "economic_role": "industrial_inputs",
         "product": "industry"
       }
     },
@@ -1761,6 +1821,7 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
+        "economic_role": "capital_goods",
         "product": "industry"
       }
     },
@@ -1789,6 +1850,7 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
+        "economic_role": "consumer_mobility",
         "product": "industry"
       }
     },
@@ -1817,6 +1879,7 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
+        "economic_role": "consumer_traditional",
         "product": "industry"
       }
     },
@@ -1845,6 +1908,7 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
+        "economic_role": "construction_real_estate",
         "product": "industry"
       }
     },
@@ -1876,7 +1940,8 @@
         "lender": "all",
         "geography": "national",
         "segment": "corporate",
-        "product": "infrastructure_credit"
+        "product": "infrastructure_credit",
+        "economic_role": "energy_logistics_capex"
       }
     },
     {
@@ -1904,7 +1969,8 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
-        "product": "industry"
+        "product": "industry",
+        "economic_role": null
       }
     },
     {
@@ -1932,6 +1998,7 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
+        "economic_role": "consumer_traditional",
         "product": "industry"
       }
     },
@@ -1960,6 +2027,7 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
+        "economic_role": "consumer_traditional",
         "product": "industry"
       }
     },
@@ -1988,6 +2056,7 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
+        "economic_role": "consumer_traditional",
         "product": "industry"
       }
     },
@@ -2016,6 +2085,7 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
+        "economic_role": "consumer_traditional",
         "product": "industry"
       }
     },
@@ -2044,6 +2114,7 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
+        "economic_role": "consumer_traditional",
         "product": "industry"
       }
     },
@@ -2072,6 +2143,7 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
+        "economic_role": "consumer_traditional",
         "product": "industry"
       }
     },
@@ -2100,6 +2172,7 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
+        "economic_role": "consumer_traditional",
         "product": "industry"
       }
     },
@@ -2128,6 +2201,7 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
+        "economic_role": "consumer_traditional",
         "product": "industry"
       }
     },
@@ -2156,6 +2230,7 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
+        "economic_role": "industrial_inputs",
         "product": "industry"
       }
     },
@@ -2184,6 +2259,7 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
+        "economic_role": "industrial_inputs",
         "product": "industry"
       }
     },
@@ -2212,6 +2288,7 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
+        "economic_role": "industrial_inputs",
         "product": "industry"
       }
     },
@@ -2240,6 +2317,7 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
+        "economic_role": "industrial_inputs",
         "product": "industry"
       }
     },
@@ -2268,6 +2346,7 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
+        "economic_role": "industrial_inputs",
         "product": "industry"
       }
     },
@@ -2296,6 +2375,7 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
+        "economic_role": "industrial_inputs",
         "product": "industry"
       }
     },
@@ -2324,6 +2404,7 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
+        "economic_role": "capital_goods",
         "product": "industry"
       }
     },
@@ -2352,6 +2433,7 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
+        "economic_role": "capital_goods",
         "product": "industry"
       }
     },
@@ -2380,7 +2462,8 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
-        "product": "infrastructure_credit"
+        "product": "infrastructure_credit",
+        "economic_role": "energy_logistics_capex"
       }
     },
     {
@@ -2408,7 +2491,8 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
-        "product": "infrastructure_credit"
+        "product": "infrastructure_credit",
+        "economic_role": "energy_logistics_capex"
       }
     },
     {
@@ -2436,7 +2520,8 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
-        "product": "infrastructure_credit"
+        "product": "infrastructure_credit",
+        "economic_role": "energy_logistics_capex"
       }
     },
     {
@@ -2464,7 +2549,8 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
-        "product": "infrastructure_credit"
+        "product": "infrastructure_credit",
+        "economic_role": "energy_logistics_capex"
       }
     },
     {
@@ -2492,7 +2578,8 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
-        "product": "infrastructure_credit"
+        "product": "infrastructure_credit",
+        "economic_role": "energy_logistics_capex"
       }
     },
     {
@@ -2520,7 +2607,8 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
-        "product": "infrastructure_credit"
+        "product": "infrastructure_credit",
+        "economic_role": "energy_logistics_capex"
       }
     },
     {
@@ -2548,7 +2636,8 @@
         "lender": "all",
         "geography": "national",
         "segment": "mixed",
-        "product": "infrastructure_credit"
+        "product": "infrastructure_credit",
+        "economic_role": "energy_logistics_capex"
       }
     },
     {
@@ -4148,6 +4237,32 @@
       "instance_of": "ch_project_lifecycle_origination",
       "scope_entities": [
         "icl:sibc/Statement2/2.18"
+      ]
+    },
+    {
+      "id": "force_eclgs5_guarantee_window",
+      "tier": "force_instance",
+      "force_type": "policy_action",
+      "label": "ECLGS 5.0 guarantee window (May 2026 – Mar 2027)",
+      "description": "Union Cabinet approved Emergency Credit Line Guarantee Scheme 5.0 on 5 May 2026 in response to West Asia crisis liquidity stress: 100% guarantee cover for MSMEs (90% non-MSMEs and airlines) on additional credit up to 20% of peak Q4 FY26 working-capital utilisation, capped at ₹100 crore, loans sanctionable until 31 March 2027 via NCGTC. Targets ~₹2.55 lakh crore of additional credit flow.",
+      "non_observable_reason": "A government guarantee scheme; not a time-series column in the SIBC CSV",
+      "claim_type": "inference",
+      "domain": "credit_growth",
+      "signal_evidence": [
+        "sibc-msme-micro-small-yoy",
+        "sibc-msme-medium-yoy",
+        "sibc-psl-msme-yoy"
+      ],
+      "source": "Cabinet approves Emergency Credit Line Guarantee Scheme 5.0 — Press Information Bureau",
+      "source_url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2258114&reg=3&lang=1",
+      "source_verified_date": "2026-07-20",
+      "source_excerpt": "The scheme aims to provide credit guarantee coverage of 100% for MSMEs and 90% for non-MSMEs",
+      "source_rationale": "PIB release (cross-checked pmindia.gov.in) confirms the scheme window covers the current data period; guarantee-driven MSME lending is the documented ECLGS mechanism from the 2020-23 phases",
+      "status": "active",
+      "instance_of": "ch_emergency_guarantee_msme",
+      "scope_entities": [
+        "icl:sibc/Statement1/2.1",
+        "icl:sibc/Statement1/2.2"
       ]
     }
   ],

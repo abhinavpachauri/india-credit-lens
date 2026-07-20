@@ -1,0 +1,276 @@
+#!/usr/bin/env python3
+"""
+relational_insights.py — deterministic insight builders for the relational
+signal methods (rotation; divergence builder to follow).
+
+Spec: analysis/signals/README.md — "Relational signal methods". Deterministic
+prose is the product: the copy must be publishable with zero LLM calls (quality
+bar: pipelines/sibc/generate_analysis_report.deterministic_scan_insight).
+
+The real-world line comes from the majority economic_role of the top gainers /
+losers, resolved from the system model's concept_tags (COMPOSITION_SPEC §4).
+Roles are grouping labels, so the insight may make COMPOSITION reads ("the mix
+is shifting toward energy & logistics capex") but never lead/lag transmission
+claims — those are channels (COMPOSITION_SPEC §2a) and enter via S2a/S4 only.
+Mixed or missing roles → the honest fallback ("no single theme").
+
+Numbers policy: every figure in the prose is a signal row value (Δshare_pp per
+entity, or the aggregate rotation-mass row); counts of periods/months are
+written in words ("a year") so the copy stays traceable to signals.db alone.
+
+Usage (review render — reads signals.db, writes nothing):
+    python3 analysis/core/relational_insights.py --pipeline sibc  --period 2026-06-30
+    python3 analysis/core/relational_insights.py --pipeline atm_pos --period 2026-05-31
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import sqlite3
+import sys
+from collections import Counter
+from pathlib import Path
+
+sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
+from core.paths import ROOT as REPO  # noqa: E402
+
+SIG = REPO / "analysis" / "signals"
+MODEL_PATH = {
+    "sibc":    REPO / "analysis" / "rbi_sibc"    / "merged" / "system_model.json",
+    "atm_pos": REPO / "analysis" / "rbi_atm_pos" / "merged" / "system_model.json",
+}
+
+# Human phrasing for the economic_role vocabulary (COMPOSITION_SPEC §4).
+ROLE_LABELS = {
+    "energy_logistics_capex":   "energy & logistics capex",
+    "capital_goods":            "capital goods",
+    "industrial_inputs":        "industrial inputs",
+    "construction_real_estate": "construction & real estate",
+    "agri_inputs":              "agriculture",
+    "trade_channel":            "trade & distribution",
+    "consumer_traditional":     "traditional consumer sectors",
+    "consumer_mobility":        "mobility",
+    "consumer_durables":        "consumer durables",
+    "consumer_finance":         "consumer finance",
+    "financial_intermediation": "financial intermediation",
+    "digital_payment_rails":    "digital payment rails",
+    "cash_infrastructure":      "cash infrastructure",
+}
+
+
+def entity_roles(pipeline: str) -> dict[str, str]:
+    """label → economic_role, resolved from the system model's concept_tags.
+    The model is the single source of role truth (regenerated with the skeleton
+    from skeleton_profile.json) — never re-declare roles here."""
+    model = json.loads(MODEL_PATH[pipeline].read_text())
+    out = {}
+    for n in model["nodes"]:
+        if n.get("tier") != "entity":
+            continue
+        role = (n.get("concept_tags") or {}).get("economic_role")
+        if role:
+            out[n["label"]] = role
+    return out
+
+
+def rotation_distribution(conn: sqlite3.Connection, sid: str, pipeline: str,
+                          period: str) -> tuple[list[tuple], float | None]:
+    """([(entity_id, Δshare_pp, status)] ranked desc, rotation_mass)."""
+    rows = [(r[0], r[1], r[2]) for r in conn.execute(
+        "SELECT entity_id, value, status FROM signals "
+        "WHERE pipeline=? AND period=? AND metric_id=? "
+        "AND value IS NOT NULL AND entity_type != 'aggregate' "
+        "ORDER BY value DESC", (pipeline, period, sid)).fetchall()]
+    mass = conn.execute(
+        "SELECT value FROM signals "
+        "WHERE pipeline=? AND period=? AND metric_id=? "
+        "AND entity_type='aggregate' AND entity_id='total'",
+        (pipeline, period, sid)).fetchone()
+    return rows, (mass[0] if mass else None)
+
+
+def _short(name: str) -> str:
+    """Trim parenthetical qualifiers from RBI sector names for prose."""
+    cut = name.split("(")[0].strip().rstrip(",")
+    return cut if cut else name
+
+
+def _majority_role(movers: list[tuple[str, float]],
+                   roles: dict[str, str]) -> str | None:
+    """Majority economic_role among the MATERIAL movers (|Δ| ≥ 0.15pp — the
+    same threshold the status rules use for strengthening/weakening), so a
+    +0.04pp bystander cannot outvote a +3.4pp shift. None when the tagged
+    material movers split (mixed roles → honest fallback) or none are tagged."""
+    tagged = [roles[e] for e, v in movers if abs(v) >= 0.15 and e in roles]
+    if not tagged:
+        return None
+    role, count = Counter(tagged).most_common(1)[0]
+    return role if count * 2 > len(tagged) else None
+
+
+def _pp(v: float) -> str:
+    return f"{v:+.2f}pp"
+
+
+def rotation_insight(dist: list[tuple], mass: float | None,
+                     roles: dict[str, str], subject: str) -> dict | None:
+    """Deterministic rotation insight from a ranked Δshare distribution.
+
+    dist    — [(entity_id, Δshare_pp, status)] sorted desc (no aggregate row)
+    mass    — the aggregate rotation-mass row's value (Σ|Δ|/2, pp)
+    roles   — label → economic_role (from entity_roles)
+    subject — what the shares are shares OF ("industry credit", "credit cards
+              by bank category") — the registry share_of / metric label
+
+    Returns {title, body, chain, implication, insight_kind} or None when the
+    distribution is empty (window not yet available → insight suppressed).
+    """
+    if not dist:
+        return None
+
+    # Movers below display precision (±0.01pp) are noise in prose — drop them.
+    gainers = [(e, v) for e, v, _ in dist if v >= 0.01][:3]
+    losers  = [(e, v) for e, v, _ in dist[::-1] if v <= -0.01][:3]   # worst first
+    mass_v  = mass if mass is not None else sum(abs(v) for _, v, _ in dist) / 2
+
+    # Honest edge: a mix that barely moved is the finding, not a failure.
+    if mass_v < 0.5:
+        title = f"{subject.capitalize()} mix steady — only {mass_v:.2f}pp changed hands in a year"
+        body = (f"Compared with the same month a year ago, the {subject} mix is "
+                f"essentially unchanged: {mass_v:.2f}pp of share moved between "
+                f"segments in total. No segment gained or lost meaningful ground.")
+        chain = [
+            f"Each segment's share of {subject} is compared with the same month a year earlier.",
+            f"Rotation mass — the share that changed hands — is {mass_v:.2f}pp, "
+            f"below the half-point mark that would signal a real shift.",
+        ]
+        implication = ("A stable mix is information too: whatever is driving "
+                       f"headline growth in {subject}, it is not a reallocation "
+                       "between segments. Watch for the first month this breaks.")
+        return {"title": title, "body": body, "chain": chain,
+                "implication": implication, "insight_kind": "rotation"}
+
+    role_g = _majority_role(gainers, roles)
+    role_l = _majority_role(losers, roles)
+
+    if not gainers:
+        return None   # a mix that only sheds share has no rotation story to lead with
+
+    # Entities with no economic_role at all (e.g. bank categories — a lender
+    # mix, not an economic one) get NO theme sentence: claiming "no economic
+    # theme" about a set that is not role-tagged would be a category error.
+    has_roles = any(e in roles for e, _, _ in dist)
+
+    L0, Lv0 = _short(gainers[0][0]), gainers[0][1]
+    theme = None
+    if role_g:
+        toward = ROLE_LABELS[role_g]
+        if role_l and role_l != role_g:
+            theme = (f"The gains concentrate in {toward}, the cessions in "
+                     f"{ROLE_LABELS[role_l]} — the mix is tilting toward {toward}.")
+        else:
+            theme = f"The gains concentrate in {toward} — the mix is tilting toward {toward}."
+    elif role_l:
+        theme = (f"The cessions concentrate in {ROLE_LABELS[role_l]}; "
+                 f"the gains span several parts of the economy.")
+    elif has_roles:
+        theme = ("No single economic theme unites the movers — the rotation is "
+                 "broad-based rather than a story about one part of the economy.")
+
+    title = (f"{subject[0].upper()}{subject[1:]} mix rotating toward {L0} "
+             f"({_pp(Lv0)} share in a year)")
+
+    # Entity names carry commas ("Petroleum, Coal Products…") — separate with
+    # semicolons so the list stays readable.
+    gain_str = "; ".join(f"{_short(e)} {_pp(v)}" for e, v in gainers)
+    lose_str = "; ".join(f"{_short(e)} {_pp(v)}" for e, v in losers)
+    body_parts = [
+        f"Compared with the same month a year ago, the biggest share gains in "
+        f"{subject} came from {gain_str}."
+    ]
+    if losers:
+        body_parts.append(f"The ground came from {lose_str}.")
+    body_parts.append(f"In all, {mass_v:.2f}pp of the mix changed hands."
+                      + (f" {theme}" if theme else ""))
+    body = " ".join(body_parts)
+
+    chain = [
+        f"Each segment's share of {subject} is compared with the same month a "
+        f"year earlier — the change is in percentage points of the mix.",
+        f"Top gainer: {L0} at {_pp(Lv0)}."
+        + (f" Biggest cession: {_short(losers[0][0])} at {_pp(losers[0][1])}."
+           if losers else ""),
+        f"Rotation mass — the share that changed hands — is {mass_v:.2f}pp.",
+    ]
+    if theme:
+        chain.append(theme)
+
+    if role_g:
+        watch = (f"The tilt toward {ROLE_LABELS[role_g]} is the line to watch — "
+                 f"confirm it holds next month before treating it as a trend.")
+    elif has_roles:
+        watch = ("With no single theme behind the movers, treat each segment's "
+                 "shift on its own terms rather than as one story.")
+    else:
+        watch = (f"Watch whether {L0} holds its gains next month before "
+                 "reading the shift as a trend.")
+    implication = ("This is a composition read: it says where the mix is "
+                   "shifting, not why and not what happens next. " + watch)
+
+    return {"title": title, "body": body, "chain": chain,
+            "implication": implication, "insight_kind": "rotation"}
+
+
+# ── review render (reads signals.db; writes nothing) ─────────────────────────
+
+def _rotation_signals(registry: dict, pipeline: str) -> list[tuple[str, dict]]:
+    return [(sid, s) for sid, s in registry["signals"].items()
+            if s["pipeline"] == pipeline
+            and s.get("compute", {}).get("method", "").endswith("_rotation")]
+
+
+METRIC_LABELS = {
+    "credit_cards":  "credit cards",
+    "debit_cards":   "debit cards",
+    "pos_terminals": "POS terminals",
+    "upi_qr":        "UPI QR codes",
+    "atms":          "ATMs",
+}
+
+
+def _subject(sig: dict) -> str:
+    comp = sig.get("compute", {})
+    if comp.get("share_of"):
+        return comp["share_of"]
+    metric = comp.get("metric", "the mix")
+    return METRIC_LABELS.get(metric, metric.replace("_", " "))
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(description="Render rotation insights for review.")
+    ap.add_argument("--pipeline", choices=["sibc", "atm_pos"], required=True)
+    ap.add_argument("--period", required=True, help="signals.db period (YYYY-MM-DD)")
+    args = ap.parse_args()
+
+    registry = json.loads((SIG / "registry.json").read_text())
+    roles = entity_roles(args.pipeline)
+    conn = sqlite3.connect(f"file:{SIG / 'signals.db'}?mode=ro", uri=True)
+
+    for sid, sig in _rotation_signals(registry, args.pipeline):
+        dist, mass = rotation_distribution(conn, sid, args.pipeline, args.period)
+        ins = rotation_insight(dist, mass, roles, _subject(sig))
+        print(f"═══ {sid} ═══")
+        if ins is None:
+            print("  (no rows for this period — window not available)\n")
+            continue
+        print(f"  TITLE: {ins['title']}")
+        print(f"  BODY : {ins['body']}")
+        for i, step in enumerate(ins["chain"], 1):
+            print(f"  CHAIN {i}. {step}")
+        print(f"  IMPL : {ins['implication']}\n")
+    conn.close()
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

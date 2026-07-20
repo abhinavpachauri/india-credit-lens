@@ -53,7 +53,7 @@ REG    = SIG / "registry.json"
 KNOWN_PIPELINES  = {"sibc", "atm_pos"}
 PIPELINE_SOURCES = list(KNOWN_PIPELINES)
 
-VALID_STATUSES = {"new", "active", "strengthening", "weakening", "declining", "reversed", "absent", "unknown", "pending"}
+VALID_STATUSES = {"new", "active", "strengthening", "weakening", "stable", "declining", "reversed", "absent", "unknown", "pending"}
 
 # ─── helpers ──────────────────────────────────────────────────────────────────
 
@@ -79,15 +79,26 @@ def sync_current_status_from_db(conn, registry: dict) -> int:
     for metric_id, period in latest.items():
         if metric_id not in registry["signals"]:
             continue
-        # entity_type='fy_yoy' rows are auxiliary component rates (e.g. the two
-        # FY-end YoY values behind an acceleration), not status-bearing — exclude
-        # them so they don't skew the roll-up away from the primary metric status.
-        statuses = [r[0] for r in conn.execute(
-            "SELECT status FROM signals WHERE metric_id=? AND period=? AND entity_type != 'fy_yoy'", (metric_id, period)
-        ).fetchall() if r[0] not in ("unknown", "absent", "pending")]
-        if not statuses:
-            continue
-        rolled = Counter(statuses).most_common(1)[0][0]
+        # An aggregate/total row, when present, IS the signal's status — scalars
+        # have only that row, and rotation signals carry it as the mass row over
+        # their per-entity rows. Check 2e (B5) validates registry status against
+        # the aggregate/total row, so preferring it keeps the two in lockstep.
+        agg = conn.execute(
+            "SELECT status FROM signals WHERE metric_id=? AND period=? "
+            "AND entity_type='aggregate' AND entity_id='total'", (metric_id, period)
+        ).fetchone()
+        if agg and agg[0] not in ("unknown", "absent", "pending", None):
+            rolled = agg[0]
+        else:
+            # entity_type='fy_yoy' rows are auxiliary component rates (e.g. the two
+            # FY-end YoY values behind an acceleration), not status-bearing — exclude
+            # them so they don't skew the roll-up away from the primary metric status.
+            statuses = [r[0] for r in conn.execute(
+                "SELECT status FROM signals WHERE metric_id=? AND period=? AND entity_type != 'fy_yoy'", (metric_id, period)
+            ).fetchall() if r[0] not in ("unknown", "absent", "pending")]
+            if not statuses:
+                continue
+            rolled = Counter(statuses).most_common(1)[0][0]
         if registry["signals"][metric_id].get("current_status") != rolled:
             registry["signals"][metric_id]["current_status"] = rolled
             updated += 1

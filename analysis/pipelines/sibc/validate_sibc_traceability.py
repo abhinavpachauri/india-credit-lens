@@ -30,7 +30,7 @@ from pathlib import Path
 # pipelines/sibc/ in the §4 cutover, so __file__.parent is no longer analysis/.
 ANALYSIS = next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"
 sys.path.insert(0, str(ANALYSIS))
-from signals.query import signal_numbers, flat_numbers, _signal_type   # noqa: E402
+from signals.query import signal_numbers, flat_numbers, _signal_type, SCAN_LIKE   # noqa: E402
 from core.traceability import (                                          # noqa: E402
     SIBC as _POLICY, extract_numbers as _extract,
     matches as _matches_core, ratio_matches as _ratio_core,
@@ -105,7 +105,7 @@ def check(period: str | None = None, quiet: bool = False) -> int:
                 # them STRICTLY against this signal's own entity values. Scalars
                 # may legitimately reference a related signal's number or a ratio,
                 # so they validate against the period-wide set + ratios.
-                is_scan  = _signal_type(sig) == "scan"
+                is_scan  = _signal_type(sig) in SCAN_LIKE
                 own      = flat_numbers(facts)
                 cand     = own if is_scan else period_numbers
 

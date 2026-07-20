@@ -16,7 +16,7 @@ deterministic compute engine, and the LLM evaluation layer.
   consolidated CSV; hot filter columns are `category`-dtype for speed). Both cache the CSV
   per process via `_load_df()`.
 
-## Relational signal methods — rotation & divergence (spec)
+## Relational signal methods — rotation & divergence
 
 Cross-segment L1 methods. Same architectural status as `csv_streak`/`csv_sector_scan_*`: registry
 spec → deterministic compute → per-entity rows in `signals.db` → deterministic insight builders.
@@ -28,18 +28,24 @@ LLM calls (quality bar: `deterministic_scan_insight`).
 `csv_sector_rotation` (SIBC) · `csv_category_rotation` (ATM/POS). METHOD_TYPE: `rotation`.
 
 - **Compute:** for each child of `parent_code` (SIBC) / each `bank_category` on a metric (ATM/POS):
-  `Δshare_pp = share(period) − share(period − window)`. `window: 12` periods default (annual —
-  avoids seasonality). Share basis reuses the existing share-scan computation at two periods —
-  no parallel math.
+  `Δshare_pp = share(period) − share(period − window)`. `window: 12` **calendar months** default
+  (annual — avoids seasonality). The window resolves calendar-wise (same month-end, `window` months
+  earlier, which must exist in the CSV), **not** by positional index — the SIBC CSV has coverage
+  gaps, and a positional 12-back would silently land 24 months out. Absent comparison month → no
+  rows. Share basis reuses the existing share-scan computation at two periods — no parallel math.
 - **Rows:** one per entity — `value = Δshare_pp` (unit `pp`), signed, sorted desc; `status` via
   `status_rules` (default: `> +0.15` strengthening / `< −0.15` weakening / else stable). Plus ONE
   `entity_type='aggregate', entity_id='total'` row — **rotation mass** = Σ|Δshare|/2 (pp of the mix
   that moved; precedent: fy-acceleration's mixed aggregate+component rows).
-- **Insight** (`core/relational_insights.py :: rotation_insight` — planned, not yet built):
-  top gainers/losers by name +
-  Δpp; the real-world line comes from the **majority `economic_role` of the top-3 gainers/losers**
-  (roles resolved from the system model's `concept_tags`); mixed roles → honest fallback ("no single
-  theme"). Composition reads only — no lead/lag claims (COMPOSITION_SPEC §4).
+- **Insight** (`core/relational_insights.py :: rotation_insight` — live): top gainers/losers by name
+  + Δpp; the real-world line comes from the **majority `economic_role` of the top-3 gainers/losers**
+  (roles resolved from the system model's `concept_tags`, majority taken over the *material* movers —
+  `|Δ| ≥ 0.15pp`, the status-rule threshold — so a +0.04pp bystander cannot outvote a +3.4pp shift;
+  untagged entities abstain). Mixed roles → honest fallback ("no single theme"); a wholly untagged
+  entity set (bank categories — a lender mix, not an economic one) gets **no** theme sentence.
+  Steady mix (mass < 0.5pp) is reported as the finding. Composition reads only — no lead/lag claims
+  (COMPOSITION_SPEC §4). Dashboard/report wiring pending operator review — Stage 5.5 explicitly
+  excludes rotation/divergence signals until then.
 
 ### divergence, hierarchy axis — child contradicting its parent
 `csv_sector_divergence` (SIBC: children vs parent YoY) · `csv_bank_divergence` (ATM/POS: bank vs its
@@ -52,7 +58,7 @@ diverging from its category is structurally identical to a sub-sector diverging 
   never produce 67 rows). `value = child_yoy − parent_yoy` (pp, signed; sign carries direction — no
   new status vocabulary). No flags → no rows → insight suppressed.
 
-### divergence, metric axis — declared co-movement pairs
+### divergence, metric axis — declared co-movement pairs (spec — not yet implemented)
 `csv_pair_divergence` (ATM/POS first). METHOD_TYPE: `divergence`.
 
 - **The authored pair list IS the registry**: one signal per pair (e.g. `cc-issuance-vs-spend-gap`

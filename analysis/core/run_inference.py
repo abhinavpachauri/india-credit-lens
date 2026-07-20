@@ -97,9 +97,17 @@ VERIFY_SYSTEM = (
     "You verify a proposed causal mechanism for India's credit/payments system. USE WEB SEARCH to "
     "find an authoritative PRIMARY source (RBI, NPCI, Ministry of Finance, PIB, Union Budget). Decide "
     "whether a real, citable source actually supports the claimed mechanism — do NOT invent a URL. If "
-    "you cannot find a real supporting source, say so. Return ONLY JSON: "
-    '{"verified":true/false,"verdict":"supported|not_found|contradicts","url":"","source_title":"",'
-    '"excerpt":"a short line quoted from the source","verified_date":"YYYY-MM-DD","note":""}.'
+    "you cannot find a real supporting source, say so. "
+    "TEMPORAL VALIDITY (hard rule): the payload's `eval_period` is the data period this mechanism is "
+    "proposed to explain. A time-bound scheme/instrument that has EXPIRED or been SUPERSEDED before "
+    "eval_period (e.g. a guarantee scheme that ended, a subsidy window that closed, a definition later "
+    "revised) cannot be 'supported' for it — verdict 'expired', and name the currently-in-force "
+    "successor instrument in `note` (with its own primary source in `url` if found). Standing "
+    "regulations still in force (Master Directions as amended, live mandates) are fine regardless of "
+    "issue date. Return ONLY JSON: "
+    '{"verified":true/false,"verdict":"supported|expired|not_found|contradicts","url":"","source_title":"",'
+    '"excerpt":"a short line quoted from the source","verified_date":"YYYY-MM-DD",'
+    '"in_force_at_eval_period":true/false,"note":""}.'
 )
 
 
@@ -145,17 +153,21 @@ def call_llm(payload):
     return []
 
 
-def verify_proposal(p):
+def verify_proposal(p, eval_period=None):
     """Web-verify a proposal's source. Returns the proposal with a `verification` block and a
-    `promotable` flag (true only when a real supporting source with a URL + excerpt is found)."""
+    `promotable` flag — true only when a real supporting source with a URL + excerpt is found
+    AND the instrument is in force at eval_period (an expired scheme cannot explain a current
+    movement; verdict 'expired' carries the in-force successor in its note instead)."""
     try:
         v = _claude_json(VERIFY_SYSTEM, {"label": p.get("label"), "mechanism": p.get("mechanism"),
                                          "affects": p.get("affects"),
+                                         "eval_period": eval_period,
                                          "source_to_check": p.get("required_source")}, web=True)
     except Exception as e:
         v = {"verified": False, "verdict": "error", "note": str(e)[:120]}
     p["verification"] = v
-    p["promotable"] = bool(v.get("verified") and v.get("verdict") == "supported" and v.get("url"))
+    p["promotable"] = bool(v.get("verified") and v.get("verdict") == "supported" and v.get("url")
+                           and v.get("in_force_at_eval_period", True))
     if p["promotable"]:
         p["claim_type"] = "inference"        # now externally sourced
         p["source"] = v.get("source_title", "")
@@ -204,7 +216,7 @@ def main():
     # web source-verification pass — turns "source needed" into verified/rejected (sourcing gate)
     if proposals and not args.no_llm and not args.no_verify:
         print(f"  verifying {len(proposals)} proposals against primary sources (web)…", file=sys.stderr)
-        proposals = [verify_proposal(p) for p in proposals]
+        proposals = [verify_proposal(p, eval_period=period) for p in proposals]
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     out = {

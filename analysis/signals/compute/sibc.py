@@ -25,6 +25,10 @@ Layer 1c methods (entity scans — one row per child):
   csv_sector_scan_share       — Share for every child of a parent code
   csv_psl_scan_yoy            — YoY for all PSL memo items
 
+Relational methods (cross-segment — spec: signals/README.md):
+  csv_sector_rotation         — Δshare_pp over an annual window per child + rotation mass
+  csv_sector_divergence       — children whose YoY contradicts the parent (flagged only)
+
 YoY momentum: status rules compare current YoY to prior-period YoY,
 both computed inline from the CSV. No external state required.
 """
@@ -547,6 +551,121 @@ def csv_sector_fy_delta(params: dict, period: str,
                  unit)]
 
 
+# ── Relational methods — rotation & divergence (spec: signals/README.md) ──────
+
+def _month_back(period: str, months: int, available: set[str]) -> str | None:
+    """Month-end date `months` calendar months before period — None if that month
+    is absent from the available dates. Calendar-based (not positional) so the
+    annual window survives gaps in the consolidated CSV's date coverage."""
+    d = date.fromisoformat(period)
+    total = d.year * 12 + (d.month - 1) - months
+    y, m = divmod(total, 12)
+    m += 1
+    candidate = f"{y}-{m:02d}-{calendar.monthrange(y, m)[1]:02d}"
+    return candidate if candidate in available else None
+
+
+ROTATION_DEFAULT_RULES = [
+    {"if": "value > 0.15",  "then": "strengthening"},
+    {"if": "value < -0.15", "then": "weakening"},
+    {"if": "true",          "then": "stable"},
+]
+
+
+def _rotation_rows(cur_shares: list[dict], prior_shares: list[dict],
+                   rules: list) -> list[dict]:
+    """Shared rotation math: Δshare_pp per entity from two share-scan snapshots,
+    plus the aggregate 'rotation mass' row (Σ|Δ|/2 = pp of the mix that moved).
+    Entities must appear in both snapshots to rotate."""
+    prior = {r["entity_id"]: r["value"] for r in prior_shares
+             if r["value"] is not None}
+    out = []
+    for r in cur_shares:
+        eid = r["entity_id"]
+        if r["value"] is None or eid not in prior:
+            continue
+        delta = r["value"] - prior[eid]
+        out.append(_row(r["entity_type"], eid, delta,
+                        _eval_status(rules, delta, delta), "pp"))
+    if not out:
+        return []
+    out.sort(key=lambda r: r["value"], reverse=True)
+    mass = sum(abs(r["value"]) for r in out) / 2
+    out.append(_row("aggregate", "total", mass, "active", "pp"))
+    return out
+
+
+def csv_sector_rotation(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
+    """
+    Δshare_pp over an annual window for every child of parent_code — who is
+    gaining/losing ground in the mix. Share basis reuses csv_sector_scan_share
+    at the two endpoint dates (no parallel math).
+
+    params: as csv_sector_scan_share, plus
+      window — calendar months back for the comparison date (default 12)
+    Emits one row per entity (value = Δshare_pp, sorted desc) + one
+    aggregate/total 'rotation mass' row. First `window` months emit no rows.
+    """
+    avail  = set(df["date"].unique())
+    window = int(params.get("window", 12))
+    prior_date = _month_back(period, window, avail)
+    if prior_date is None:
+        return []
+    cur   = csv_sector_scan_share(params, period, df)
+    prior = csv_sector_scan_share(params, prior_date, df)
+    return _rotation_rows(cur, prior,
+                          params.get("status_rules") or ROTATION_DEFAULT_RULES)
+
+
+def csv_sector_divergence(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
+    """
+    Children whose YoY contradicts their parent's — flagged entities only
+    (anomaly-surfaced by construction; no flags → no rows).
+
+    Flag rule: opposite YoY signs AND |child_yoy| ≥ min_abs (default 2.0)
+    AND |child_yoy − parent_yoy| ≥ min_gap (default 5.0).
+
+    params: parent_code, statement, child_level, entity_type (as scan_yoy), plus
+      parent_statement — statement for the parent lookup (default = statement)
+      min_abs, min_gap — flag thresholds (pp)
+    value = child_yoy − parent_yoy (pp, signed — sign carries direction).
+    """
+    parent_code = str(params["parent_code"])
+    stmt        = params.get("statement", "Statement 1")
+    parent_stmt = params.get("parent_statement", stmt)
+    child_level = params.get("child_level", 2)
+    entity_type = params.get("entity_type", "sector")
+    min_abs     = float(params.get("min_abs", 2.0))
+    min_gap     = float(params.get("min_gap", 5.0))
+    avail       = set(df["date"].unique())
+    exclude     = {str(c) for c in params.get("exclude_codes", [])}
+
+    parent_yoy, _ = _compute_yoy(df, period, parent_code, parent_stmt, avail)
+    if parent_yoy is None:
+        return []
+
+    children = df[
+        (df["date"] == period) &
+        (df["statement"] == stmt) &
+        (df["parent_code"] == parent_code) &
+        (df["level"] == child_level)
+    ]
+    out = []
+    for _, row in children.iterrows():
+        code = str(row["code"])
+        if code in exclude:
+            continue
+        child_yoy, _ = _compute_yoy(df, period, code, stmt, avail)
+        if child_yoy is None:
+            continue
+        opposite = (child_yoy > 0 > parent_yoy) or (child_yoy < 0 < parent_yoy)
+        if (opposite and abs(child_yoy) >= min_abs
+                and abs(child_yoy - parent_yoy) >= min_gap):
+            out.append(_row(entity_type, row["sector"],
+                            child_yoy - parent_yoy, "active", "pp"))
+    return sorted(out, key=lambda r: r["value"], reverse=True)
+
+
 # ── dispatch ──────────────────────────────────────────────────────────────────
 
 METHODS: dict = {
@@ -562,6 +681,9 @@ METHODS: dict = {
     "csv_streak":                   csv_streak,
     "csv_sector_fy_acceleration":   csv_sector_fy_acceleration,
     "csv_sector_fy_delta":          csv_sector_fy_delta,
+    # relational — cross-segment (spec: signals/README.md)
+    "csv_sector_rotation":          csv_sector_rotation,
+    "csv_sector_divergence":        csv_sector_divergence,
 }
 
 

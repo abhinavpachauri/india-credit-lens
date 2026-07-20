@@ -100,6 +100,20 @@
       "reads": {},
       "writes": {}
     },
+    "core/relational_insights": {
+      "doc_claims": [],
+      "imports": [],
+      "invokes": [],
+      "path": "analysis/core/relational_insights.py",
+      "reads": {
+        "analysis/rbi_atm_pos/merged/system_model.json": "low",
+        "analysis/rbi_sibc/merged/system_model.json": "low",
+        "analysis/signals/registry.json": "low",
+        "analysis/signals/signals.db": "low",
+        "system_model.json": "low"
+      },
+      "writes": {}
+    },
     "core/run_inference": {
       "doc_claims": [],
       "imports": [

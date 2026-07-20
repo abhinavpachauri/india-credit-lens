@@ -1,597 +1,11 @@
 {
   "pipeline": "atm_pos",
   "period": "2026-05-31",
-  "evaluated_at": "2026-07-04T08:43:42",
+  "evaluated_at": "2026-07-20T08:22:47",
   "prompt_version": "1.11",
   "model": "claude-sonnet-4-5-20250929",
   "prior_period": "2026-04-30",
   "domains": {
-    "cards_stock": {
-      "narrative": "The Apr 2026 debit card rebalancing — a record 0.69pp private gain and 1.29pp PSB surge — has diverged in May: privates held their ground at 25.88% (the highest in 29 periods), while PSBs gave back 0.21pp to 63.97%, partially unwinding the Apr spike. The minimal private gain (+0.05pp) and the PSB reversal suggest the Apr event was a stock cleanup (inactive card purges) rather than a demand shift, but privates have now sustained above 25.5% for two periods, confirming a structural break from the prior 25.1%–25.4% equilibrium. PSBs remain 0.80pp above their Jan–Feb 2026 floor but have not stabilised — if they fall below 63.5% in the next two periods, the 14-month erosion trend resumes. For lenders: privates have locked in a higher debit base with stronger transaction potential; PSB-focused strategies should plan for a 63.0%–64.0% share band, not a recovery above 64.5%.",
-      "signals": {
-        "cc-bank-scan": {
-          "title": "HDFC Bank 26.6M cards, SBI 22.4M, ICICI 19.4M — top three hold 68.4M (56.8%)",
-          "observation": "HDFC Bank holds 26.6M credit cards outstanding, SBI 22.4M, ICICI 19.4M — the three account for 68.4M cards out of 120.5M total (56.8% of market).",
-          "direction": "Top three concentration eased from 56.9% to 56.8% — a 0.1pp decline as the total market grew from 119.4M to 120.5M cards. HDFC added 183K cards: 26.4M → 26.6M. The remaining 60 banks now share 52.0M cards, up from 51.5M.",
-          "chain": [
-            "The top three banks hold 68.4M cards out of 120.5M total (56.8% share), down 0.1pp from 56.9% prior period.",
-            "The mid-tier 60 banks captured 54% of the 1.0M new cards issued in May 2026 (540K cards), while the top three captured 46% (460K cards).",
-            "This reverses Apr 2026's 55% top-three capture rate and confirms the de-concentration trend has resumed after a one-month pause.",
-            "The 56.8% concentration is back to the Mar 2026 level, signaling the competitive landscape is oscillating rather than re-polarising."
-          ],
-          "inference": "The oligopoly's Apr 2026 share recapture was a one-month blip — the top three have lost 0.1pp again, confirming mid-tier banks are reclaiming momentum. HDFC, SBI, and ICICI added 460K cards while the mid-tier added 540K, a return to the Mar 2026 pattern where mid-tier banks captured 65% of issuance. The 56.8% concentration matches Mar 2026, signaling the market is oscillating around a 56.8%–56.9% equilibrium rather than re-polarising. Slice Small Finance Bank's shift to strengthening confirms the mid-tier expansion is broadening beyond the top 10.",
-          "source_ref": {
-            "source_file": "web/public/data/atm_pos_consolidated.csv",
-            "method": "csv_bank_scan",
-            "record_type": "bank",
-            "metric": "credit_cards",
-            "value_type": "value"
-          }
-        },
-        "cc-category-share-scan": {
-          "title": "Private banks 70.9%, PSBs 23.8% — 47.1 point gap narrows 0.1pp",
-          "observation": "Private sector banks hold 70.9% of all credit cards outstanding, public sector banks 23.8%, foreign banks 3.6%.",
-          "direction": "Private banks' lead over PSBs narrowed to 47.1 points — down 0.1pp from 47.2 points prior period. Small finance banks and payment banks combined hold 1.7%, up 0.1pp from 1.6% prior period.",
-          "chain": [
-            "Private banks' 70.9% share is down 0.1pp from 71.0% prior period, while PSBs' 23.8% share is unchanged.",
-            "The 47.1 point gap is the narrowest since Apr 2026, confirming the Apr 2026 freeze was temporary.",
-            "Small finance banks gained 0.1pp to 1.7%, the highest level in this dataset, confirming the fringe is expanding at the expense of privates."
-          ],
-          "inference": "The private-PSB competitive landscape has resumed its slow convergence — the 47.1 point gap is 0.1pp narrower than Apr 2026's 47.2 point freeze, confirming the equilibrium was a one-month pause, not a structural shift. Private banks are losing share to small finance banks (up 0.1pp to 1.7%), not to PSBs, signaling the duopoly is stable but the fringe is expanding. The 70.9% private share is back to the Jan–May 2025 baseline, confirming the Sep–Nov 2025 peak (71.2%) was a temporary high.",
-          "source_ref": {
-            "source_file": "web/public/data/atm_pos_consolidated.csv",
-            "method": "csv_category_scan_share",
-            "record_type": "bank",
-            "metric": "credit_cards"
-          }
-        },
-        "cc-outstanding-abs": {
-          "title": "Credit cards at 120.5M — all-time high, up 1.0M cards in one month",
-          "observation": "Credit cards outstanding stand at 120.5M in May 2026, up 1.0M from 119.4M prior period.",
-          "direction": "Stock reached a new all-time high: 119.4M in Apr 2026 → 120.5M in May 2026. The market added 1.0M cards in one month, up 27% from prior period's 802K and the fastest gain since the Oct 2025 purge.",
-          "chain": [
-            "The 120.5M base is the highest on record, surpassing the Apr 2026 peak by 1.0M cards.",
-            "The 1.0M gain is 27% faster than Apr 2026's 802K, confirming the recovery is re-accelerating after a one-month moderation.",
-            "The market has now added 1.8M cards in two months (Mar–May 2026), matching the pre-purge expansion pace."
-          ],
-          "inference": "The credit card market has broken through its pre-purge ceiling — the 120.5M base is 1.1M cards above the Apr 2025 level, confirming issuers are now expanding beyond the pre-purge baseline. The 1.0M gain is the fastest since the Oct 2025 purge, signaling the Apr 2026 moderation (802K) was a one-month pause, not a trend break. The market is now adding cards at a pace that exceeds the pre-purge baseline, and the 120.5M level establishes a new floor for the expansion phase.",
-          "source_ref": {
-            "source_file": "web/public/data/atm_pos_consolidated.csv",
-            "method": "csv_total_abs",
-            "record_type": "total",
-            "metric": "credit_cards"
-          }
-        },
-        "cc-outstanding-streak": {
-          "title": "Credit cards up 11 straight months — longest streak since Jun 2025 purge",
-          "observation": "Credit cards outstanding have grown for 11 consecutive months, extending the streak from 10 periods prior.",
-          "direction": "Streak extended from 10 to 11 periods — the longest run since the 16-period streak that ended in Jun 2025. The current streak began in Jul 2025 and has now surpassed the Oct 2024 level.",
-          "chain": [
-            "The 11-period streak is the longest since Jun 2025, confirming the market has locked into a sustained growth trajectory.",
-            "The streak is now in the upper range of the historical distribution, signaling the market is operating at a structurally higher growth rate than the 2024 baseline.",
-            "The Jun 2025 reset was a one-time event, and the current run confirms the market has entered a new growth phase with no signs of deceleration."
-          ],
-          "inference": "The credit card market has established the longest growth run in 11 months — the 11-period streak confirms issuers have re-established expansion momentum after the Oct 2025 purge, and the market is now operating at a structurally higher growth rate than the 2024 baseline. The streak is 5 periods away from matching the 16-period record that ended in Jun 2025, signaling the market is on track to surpass the pre-purge peak within five months if the current pace holds.",
-          "source_ref": {
-            "source_file": "web/public/data/atm_pos_consolidated.csv",
-            "method": "csv_streak",
-            "record_type": "total",
-            "metric": "credit_cards"
-          }
-        },
-        "cc-outstanding-yoy": {
-          "title": "Credit cards 8.5% YoY — fourth straight month of re-acceleration",
-          "observation": "Credit cards outstanding grew 8.5% year-on-year in May 2026, up 0.3 points from 8.1% prior period.",
-          "direction": "YoY growth re-accelerated for the fourth consecutive period: 8.0% in Mar 2026 → 8.1% in Apr 2026 → 8.5% in May 2026. The rate is now at the upper end of the 17-period range (6.7%–9.4%).",
-          "chain": [
-            "The 8.5% rate is the fastest in 13 months, confirming the purge-driven slowdown has ended and issuers are now expanding at a pace that exceeds the Mar 2025 baseline.",
-            "The four-period re-acceleration (7.7% → 8.0% → 8.1% → 8.5%) confirms the market has entered a new growth phase.",
-            "The 8.5% rate is only 0.9 points below the Jan 2025 peak (9.4%), signaling the market is on track to return to double-digit growth within two quarters."
-          ],
-          "inference": "Credit card growth has fully reversed its deceleration trend — the 8.5% rate is the fastest in 13 months, confirming the market has entered a new growth phase after the Oct 2025 purge. The four-period re-acceleration confirms the recovery is complete, and the market is now accelerating toward the Jan 2025 peak (9.4%). The 8.5% rate is in the upper range of the historical distribution, signaling the market is operating at a structurally higher growth rate than the 2024 baseline.",
-          "source_ref": {
-            "source_file": "web/public/data/atm_pos_consolidated.csv",
-            "method": "csv_total_yoy",
-            "record_type": "total",
-            "metric": "credit_cards"
-          }
-        },
-        "cc-private-share": {
-          "title": "Private banks 70.9% share — down 0.1pp, two-month decline resumes",
-          "observation": "Private sector banks' share of credit cards outstanding stands at 70.9% in May 2026, down 0.1pp from 71.0% prior period.",
-          "direction": "Share declined from 71.0% to 70.9% — reversing the Apr 2026 stabilisation. The 0.1pp decline matches the Mar 2026 move (71.1% → 71.0%).",
-          "chain": [
-            "Private banks' 70.9% share is down 0.1pp from 71.0% prior period, confirming the Apr 2026 stabilisation was a one-month pause.",
-            "The 70.9% level matches the Jan–May 2025 baseline, signaling the Sep–Nov 2025 peak (71.2%) was a temporary high.",
-            "Private banks are losing share to small finance banks (up 0.1pp to 1.7%), not to PSBs, confirming the duopoly is stable but the fringe is expanding."
-          ],
-          "inference": "Private bank dominance has resumed its slow erosion — the 0.1pp decline to 70.9% confirms the Apr 2026 stabilisation at 71.0% was a one-month pause, not a structural shift. Private banks are capturing 70.9% of every new card issued, down from the Sep–Nov 2025 peak (71.2%), and the 0.1pp decline matches the Mar 2026 move, signaling the market is oscillating around a 70.9%–71.0% equilibrium. The share loss is going to small finance banks (up 0.1pp to 1.7%), not to PSBs, confirming the competitive landscape is shifting at the fringe, not at the top.",
-          "source_ref": {
-            "source_file": "web/public/data/atm_pos_consolidated.csv",
-            "method": "csv_category_share",
-            "record_type": "bank",
-            "metric": "credit_cards",
-            "bank_category": "Private Sector Banks"
-          }
-        },
-        "cc-psb-share": {
-          "title": "PSBs 23.8% share — flat for fifth straight month, floor confirmed",
-          "observation": "Public sector banks hold 23.8% of credit cards outstanding in May 2026, unchanged from 23.8% prior period.",
-          "direction": "Share held at 23.8% for the fifth consecutive period — unchanged from Jan–May 2026. The 0.03pp gain is within the noise threshold.",
-          "chain": [
-            "PSBs' 23.8% share is unchanged for the fifth consecutive period, confirming they have locked into a floor.",
-            "The 47.1 point gap vs private banks is 0.1pp narrower than Apr 2026's 47.2 point freeze, confirming the equilibrium is shifting slightly in PSBs' favour.",
-            "PSBs are capturing 23.8% of every new card issued, matching the Jan–May 2026 baseline, and the Mar 2026 share gain was a one-period blip, not a trend break."
-          ],
-          "inference": "PSBs have locked into a 23.8% share floor — the fifth consecutive period at this level confirms they are no longer losing share to privates, but they are also not reclaiming the Jun 2025 peak (24.2%). The 47.1 point gap vs private banks is 0.1pp narrower than Apr 2026, signaling the competitive landscape is shifting slightly in PSBs' favour, but the structural decline has paused, not reversed. PSBs are capturing 23.8% of every new card issued, matching the Jan–May 2026 baseline.",
-          "source_ref": {
-            "source_file": "web/public/data/atm_pos_consolidated.csv",
-            "method": "csv_category_share",
-            "record_type": "bank",
-            "metric": "credit_cards",
-            "bank_category": "Public Sector Banks"
-          }
-        },
-        "dc-bank-scan": {
-          "title": "SBI 254.5M debit cards, BoB 85.1M, HDFC 63.5M — top three 39.2% share",
-          "observation": "SBI holds 254.5M debit cards outstanding, Bank of Baroda 85.1M, HDFC Bank 63.5M — the three account for 403.1M cards out of 1.03B total (39.2% of market).",
-          "direction": "Top three concentration eased from 39.4% to 39.2% — a 0.2pp decline as the total market grew from 1.02B to 1.03B cards. SBI added 0.9M cards: 253.6M → 254.5M. The remaining 60 banks now share 624.8M cards, up from 619.4M.",
-          "chain": [
-            "The top three banks hold 403.1M cards out of 1.03B total (39.2% share), down 0.2pp from 39.4% prior period.",
-            "The mid-tier 60 banks captured 120% of the 4.5M new cards issued in May 2026 (5.4M cards), while the top three lost 0.9M cards.",
-            "This reverses Apr 2026's 0.9pp concentration surge and confirms the Apr 2026 purge was a one-time event, not a structural shift.",
-            "Four banks shifted status: Canara Bank and Punjab National Bank to strengthening, RBL Bank to strengthening, Slice Small Finance Bank to strengthening."
-          ],
-          "inference": "Debit card concentration has reversed its Apr 2026 surge — the top three lost 0.2pp share as the market expanded 4.5M cards, confirming the Apr 2026 purge was a one-time event that disproportionately hit mid-tier banks. SBI added 0.9M cards while the remaining 60 banks added 5.4M, signaling the mid-tier has resumed expansion after the Apr 2026 contraction. The four status shifts to strengthening (Canara Bank, Punjab National Bank, RBL Bank, Slice Small Finance Bank) confirm the mid-tier recovery is broadening, and the 39.2% concentration is back to the Feb 2026 level, signaling the market has returned to its pre-purge competitive landscape.",
-          "source_ref": {
-            "source_file": "web/public/data/atm_pos_consolidated.csv",
-            "method": "csv_bank_scan",
-            "record_type": "bank",
-            "metric": "debit_cards",
-            "value_type": "value"
-          }
-        },
-        "dc-category-share-scan": {
-          "title": "PSBs 64.0%, privates 25.9%, payment banks 6.1% — all three stable",
-          "observation": "Public sector banks hold 64.0% of all debit cards outstanding, private banks 25.9%, payment banks 6.1%.",
-          "direction": "PSBs lead private banks by 38.1 points in debit cards — down 0.3pp from 38.4 points prior period. Payment banks hold 6.1% share, up 0.1pp from 6.0% prior period, reversing the Apr 2026 2.3pp collapse.",
-          "chain": [
-            "PSBs' 64.0% share is down 0.2pp from 64.2% prior period, while privates' 25.9% share is up 0.1pp from 25.8%.",
-            "The 38.1 point PSB-private gap is 0.3pp narrower than Apr 2026's 38.4 point peak, confirming the Apr 2026 re-polarisation was a one-month event.",
-            "Payment banks gained 0.1pp to 6.1%, reversing the Apr 2026 2.3pp collapse, confirming the purge was a one-time event."
-          ],
-          "inference": "The debit card market has returned to its pre-purge competitive landscape — PSBs lost 0.2pp to 64.0%, privates gained 0.1pp to 25.9%, and payment banks gained 0.1pp to 6.1%, confirming the Apr 2026 re-polarisation was a one-time purge, not a structural shift. The 38.1 point PSB-private gap is 0.3pp narrower than Apr 2026's 38.4 point peak, signaling the market is reverting to its long-term convergence trend. Payment banks' 6.1% share is up 0.1pp from the Apr 2026 trough (6.0%), confirming they have stabilised after the 2.3pp collapse.",
-          "source_ref": {
-            "source_file": "web/public/data/atm_pos_consolidated.csv",
-            "method": "csv_category_scan_share",
-            "record_type": "bank",
-            "metric": "debit_cards"
-          }
-        },
-        "dc-outstanding-abs": {
-          "title": "Debit cards 1.03B — up 4.5M cards, recovery from Apr 2026 purge confirmed",
-          "observation": "Debit cards outstanding stand at 1.03B in May 2026, up 4.5M cards from 1.02B prior period.",
-          "direction": "Stock expanded for the first time since the Apr 2026 purge: 1.02B in Apr 2026 → 1.03B in May 2026. The market added 4.5M cards in one month, reversing the Apr 2026 21.4M decline.",
-          "chain": [
-            "The 1.03B base is up 4.5M cards from the Apr 2026 trough (1.02B), confirming the market has resumed expansion after the one-month purge.",
-            "The 4.5M gain is 21% of the Apr 2026 21.4M decline, signaling the market is recovering but has not yet reclaimed the Mar 2026 peak (1.04B).",
-            "The market is now in the upper range of the historical distribution, confirming the Apr 2026 purge was a one-time event, not a structural shift."
-          ],
-          "inference": "The debit card market has resumed expansion after the Apr 2026 purge — the 4.5M gain confirms the 21.4M decline was a one-time cleanup of inactive cards, not a structural contraction. The 1.03B base is still 17M cards below the Mar 2026 peak (1.04B), signaling the market has recovered 21% of the purge in one month. The market is now in the upper range of the historical distribution, confirming the Apr 2026 purge was an outlier, and the market has returned to its pre-purge expansion trajectory.",
-          "source_ref": {
-            "source_file": "web/public/data/atm_pos_consolidated.csv",
-            "method": "csv_total_abs",
-            "record_type": "total",
-            "metric": "debit_cards"
-          }
-        },
-        "dc-outstanding-streak": {
-          "title": "Debit cards up 1 month — streak resets after Apr 2026 purge",
-          "observation": "Debit cards outstanding have grown for 1 consecutive month, resetting from 0 periods prior.",
-          "direction": "Streak reset from 0 to 1 period — the first growth month since the Apr 2026 purge ended the 14-period streak. The current streak began in May 2026.",
-          "chain": [
-            "The 1-period streak confirms the market has resumed expansion after the Apr 2026 purge.",
-            "The streak is now at the minimum level in the historical distribution, signaling the market is in the early stages of a new growth phase.",
-            "The Apr 2026 reset was the highest signal moment in this dataset, and the May 2026 restart confirms the purge was a one-time event."
-          ],
-          "inference": "The debit card market has restarted its growth streak after the Apr 2026 purge — the 1-period streak confirms the 21.4M decline was a one-time cleanup, not a structural contraction. The market is now in the early stages of a new growth phase, and the streak is at the minimum level in the historical distribution. The Apr 2026 reset was the highest signal moment in this dataset, and the May 2026 restart confirms the market has returned to its pre-purge expansion trajectory.",
-          "source_ref": {
-            "source_file": "web/public/data/atm_pos_consolidated.csv",
-            "method": "csv_streak",
-            "record_type": "total",
-            "metric": "debit_cards"
-          }
-        },
-        "dc-outstanding-yoy": {
-          "title": "Debit cards 2.8% YoY — flat after Apr 2026 2.7pp deceleration",
-          "observation": "Debit cards outstanding grew 2.8% year-on-year in May 2026, unchanged from 2.8% prior period.",
-          "direction": "YoY growth held at 2.8% for the second consecutive period — unchanged from Apr 2026's 2.8%. The rate is now at the lower end of the 17-period range (2.6%–5.7%).",
-          "chain": [
-            "The 2.8% rate is unchanged from Apr 2026, confirming the sharp deceleration from 5.4% in Mar 2026 to 2.8% in Apr 2026 has stabilised.",
-            "The 2.8% rate is only 0.2 points faster than the Jan 2025 trough (2.6%), signaling the market is approaching zero growth.",
-            "The flat rate confirms the Apr 2026 purge has erased the entire post-recovery acceleration, and the structural growth rate is settling at a lower level than the 2025 baseline."
-          ],
-          "inference": "Debit card growth has stabilised at its slowest pace in 16 months — the 2.8% rate is unchanged from Apr 2026, confirming the sharp deceleration from 5.4% in Mar 2026 has stabilised. The 2.8% rate is only 0.2 points faster than the Jan 2025 trough (2.6%), signaling the market is approaching zero growth. The flat rate confirms the Apr 2026 purge has erased the entire post-recovery acceleration, and the structural growth rate is settling at a lower level than the 2025 baseline.",
-          "source_ref": {
-            "source_file": "web/public/data/atm_pos_consolidated.csv",
-            "method": "csv_total_yoy",
-            "record_type": "total",
-            "metric": "debit_cards"
-          }
-        },
-        "dc-private-share": {
-          "title": "Private debit share at 25.88% — Apr surge fully reversed",
-          "observation": "Private sector banks' share of debit cards outstanding stands at 25.88% in May 2026, up 0.05pp from 25.84% prior period.",
-          "direction": "Share rose from 25.84% in Apr 2026 to 25.88% in May 2026 — a 0.05pp gain. Currently at 25.88%, the highest level in 29 periods.",
-          "chain": [
-            "Private debit share rose 0.05pp to 25.88% in May 2026, extending the Apr 2026 record high of 25.84%.",
-            "The Apr 2026 surge (+0.69pp, the largest single-period jump in this dataset) has not reversed — privates held above 25.5% for a second consecutive period.",
-            "The May gain is minimal (+0.05pp), suggesting the Apr rebalancing event has stabilised rather than accelerated.",
-            "Privates now hold their strongest debit position in over two years, confirming the Apr 2026 break was structural, not a one-time adjustment."
-          ],
-          "inference": "The Apr 2026 share leap has held — privates sustained above 25.5% for two periods, confirming a structural break from the prior 25.1%–25.4% equilibrium. The minimal May gain (+0.05pp) indicates the rebalancing has stabilised. For lenders: privates have locked in a higher debit base; watch for acceleration in card-linked lending products (overdrafts, EMI conversions) as this cohort typically carries higher transaction velocity and credit appetite than PSB cardholders.",
-          "source_ref": {
-            "source_file": "web/public/data/atm_pos_consolidated.csv",
-            "method": "csv_category_share",
-            "record_type": "bank",
-            "metric": "debit_cards",
-            "bank_category": "Private Sector Banks"
-          }
-        },
-        "dc-psb-share": {
-          "title": "PSB debit share at 63.97% — Apr spike partially unwound",
-          "observation": "Public sector banks' share of debit cards outstanding stands at 63.97% in May 2026, down 0.21pp from 64.17% prior period.",
-          "direction": "Share fell from 64.17% in Apr 2026 to 63.97% in May 2026 — a 0.21pp decline. Currently at 63.97%, near the median of the historical range (p25=63.3%, p75=64.6%).",
-          "chain": [
-            "PSB debit share fell 0.21pp to 63.97% in May 2026, partially unwinding the Apr 2026 surge (+1.29pp, the largest single-period jump in 28 periods).",
-            "The Apr spike brought PSBs to 64.17%, erasing 10 months of erosion; the May decline suggests that gain was partly a stock cleanup event rather than sustained demand.",
-            "At 63.97%, PSBs remain 0.80pp above the Jan–Feb 2026 floor (62.88%) but 0.20pp below the Apr peak, indicating the rebalancing has not fully stabilised.",
-            "The 0.21pp May decline is the first reversal after the Apr recovery, signalling the prior erosion trend may resume if PSBs fall back toward 63.0%–63.5% in the next two periods."
-          ],
-          "inference": "The Apr 2026 share recovery has partially unwound — PSBs gave back 0.21pp in May, the first decline after the record 1.29pp surge. At 63.97%, they remain above the Jan–Feb floor but below the Apr peak, suggesting the rebalancing was a one-time stock adjustment rather than a demand-driven reversal. For lenders: if PSBs fall below 63.5% in the next two periods, the 14-month erosion trend (Jan 2024–Mar 2026) remains intact, and privates will continue gaining debit share. PSB-focused strategies should assume a 63.0%–64.0% equilibrium, not a sustained recovery above 64.5%.",
-          "source_ref": {
-            "source_file": "web/public/data/atm_pos_consolidated.csv",
-            "method": "csv_category_share",
-            "record_type": "bank",
-            "metric": "debit_cards",
-            "bank_category": "Public Sector Banks"
-          }
-        }
-      }
-    },
-    "infrastructure": {
-      "narrative": "India's acceptance infrastructure is undergoing a structural shift: UPI QR codes are scaling exponentially while POS terminals contract. UPI QR deployment hit 779.8M codes in May 2026, adding 9.0M units in a single month — 115× the 78K POS terminals added in the same period. The UPI-to-POS ratio reached 67.7×, the highest on record, while POS terminals posted their first YoY contraction at -0.5%, breaking a 17-period growth streak. Lenders financing merchant acceptance infrastructure should allocate capital exclusively to UPI QR-enabled solutions — POS is a declining asset class with no recovery signal, while UPI QR is on track to exceed 800M codes by Q3 2026. The 139× UPI-to-Bharat QR ratio confirms Bharat QR is commercially obsolete.",
-      "signals": {
-        "atm-offsite-abs": {
-          "title": "Offsite ATMs at 73,964 — second monthly gain extends recovery",
-          "observation": "Offsite ATM count stands at 73,964 in May 2026, up 107 units from Apr's 73,857.",
-          "direction": "Rose 73,857 → 73,964 in May — the second consecutive monthly gain, adding 271 units since Mar's 73,693 low.",
-          "chain": [
-            "Offsite ATMs rose 107 units in May to 73,964, the second monthly gain after a 15-period contraction streak ended in Apr.",
-            "The network has added 271 units over two months, the first sustained expansion since late 2024.",
-            "Two consecutive gains suggest the terminal decline may be stabilising as banks complete unprofitable location closures."
-          ],
-          "inference": "Two months of growth signal the offsite ATM contraction may be bottoming — banks have added 271 units since Mar, the first sustained expansion in 16 months. The network remains 21% below Jan 2024 levels, but the closure wave appears to be ending as banks complete exits from unprofitable locations. Monitor for a third consecutive gain to confirm stabilisation.",
-          "source_ref": {
-            "source_file": "web/public/data/atm_pos_consolidated.csv",
-            "method": "csv_total_abs",
-            "record_type": "total",
-            "metric": "atm_offsite"
-          }
-        },
-        "atm-offsite-yoy": {
-          "title": "Offsite ATM decline at -8.9% YoY — best reading in 17 periods",
-          "observation": "Offsite ATMs contracted 8.87% year-on-year in May 2026, improving 1.64 points from Apr's -10.50%.",
-          "direction": "YoY decline improved -10.5% → -8.9% in May, marking the best reading since Jan 2025's -8.1% and now in the upper range of the 17-period distribution.",
-          "chain": [
-            "The YoY contraction rate improved to -8.9% in May, the best reading in 17 periods and 5.3 points better than Dec 2025's -14.2% trough.",
-            "The improvement is driven by base effects as the 2025 closure wave rolls off comparisons.",
-            "At -8.9%, the decline is now approaching single digits and in the upper range of the historical distribution."
-          ],
-          "inference": "The offsite ATM contraction is moderating rapidly — the YoY rate improved 5.3 points in five months and is now at its best level since Jan 2025. Base effects will continue driving improvement toward single digits by mid-2026, but the network will not return to prior levels. The worst of the closure wave is behind us.",
-          "source_ref": {
-            "source_file": "web/public/data/atm_pos_consolidated.csv",
-            "method": "csv_total_yoy",
-            "record_type": "total",
-            "metric": "atm_offsite"
-          }
-        },
-        "atm-onsite-abs": {
-          "title": "Onsite ATMs at 136,150 — new all-time high for third month",
-          "observation": "Onsite ATM count stands at 136,150 in May 2026, up 24 units from Apr's 136,126.",
-          "direction": "Rose 136,126 → 136,150 in May — the network has set new all-time highs for three consecutive months, adding 2,065 units since Feb's 135,004.",
-          "chain": [
-            "Onsite ATMs rose 24 units in May to 136,150, the third consecutive monthly record high.",
-            "The network has added 2,065 units over three months at an average pace of 688 per month.",
-            "Branch-based terminals are now at their highest level on record, confirming banks are prioritising high-traffic locations."
-          ],
-          "inference": "Onsite ATM expansion continues at record levels — the network has set new highs for three straight months, adding 2,065 units since Feb. Banks are redirecting capital from offsite closures to branch-based terminals, which offer better utilisation and security. The expansion will continue as branch ATMs become the dominant infrastructure model.",
-          "source_ref": {
-            "source_file": "web/public/data/atm_pos_consolidated.csv",
-            "method": "csv_total_abs",
-            "record_type": "total",
-            "metric": "atm_onsite"
-          }
-        },
-        "atm-onsite-yoy": {
-          "title": "Onsite ATM growth at 1.0% YoY — lowest in 17 periods",
-          "observation": "Onsite ATMs grew 0.99% year-on-year in May 2026, down 2.71 points from Apr's 3.70%.",
-          "direction": "YoY growth decelerated 3.7% → 1.0% in May, marking the lowest reading in 17 periods and falling below the 25th percentile.",
-          "chain": [
-            "Onsite ATM YoY growth fell to 1.0% in May, the lowest reading in 17 periods and 2.7 points below Apr's 3.7%.",
-            "The deceleration is driven by a high base effect — May 2025 saw a 6.4% YoY surge, the strongest in this window.",
-            "Despite the slowdown, the absolute network is still at record highs, confirming expansion continues but at a slower pace."
-          ],
-          "inference": "Onsite ATM growth has decelerated sharply due to base effects — the YoY rate fell 2.7 points to 1.0%, the lowest in 17 periods, as May 2025's 6.4% surge creates a tough comparison. The absolute network is still at record highs, confirming expansion continues. Growth will likely rebound in coming months as the base normalises.",
-          "source_ref": {
-            "source_file": "web/public/data/atm_pos_consolidated.csv",
-            "method": "csv_total_yoy",
-            "record_type": "total",
-            "metric": "atm_onsite"
-          }
-        },
-        "bharat-qr-abs": {
-          "title": "Bharat QR at 5.60M codes — third monthly decline extends collapse",
-          "observation": "Bharat QR code deployment stands at 5,604,866 in May 2026, down 11,172 codes from Apr's 5,616,038.",
-          "direction": "Fell 5,616,038 → 5,604,866 in May — the third consecutive monthly decline, losing 292,494 codes since Feb's 5,897,360.",
-          "chain": [
-            "Bharat QR lost 11,172 codes in May to 5.60M, the third straight monthly decline and the lowest level in 29 periods.",
-            "The network has contracted 292K codes over three months, confirming Feb's recovery was a false signal.",
-            "At 5.60M, Bharat QR is now 130× smaller than UPI QR and has lost 18% of its network since Mar 2025's 6.72M peak."
-          ],
-          "inference": "Bharat QR is in terminal decline — the network has lost 292K codes in three months and is now at its lowest level on record. Banks are abandoning the standard as UPI QR dominates merchant acceptance with 130× more deployment. The contraction will continue as the standard becomes obsolete.",
-          "source_ref": {
-            "source_file": "web/public/data/atm_pos_consolidated.csv",
-            "method": "csv_total_abs",
-            "record_type": "total",
-            "metric": "bharat_qr"
-          }
-        },
-        "bharat-qr-yoy": {
-          "title": "Bharat QR down -15.6% YoY — collapse moderating slightly",
-          "observation": "Bharat QR codes contracted 15.62% year-on-year in May 2026, improving 0.11 points from Apr's -15.72%.",
-          "direction": "YoY decline improved -15.7% → -15.6% in May, a marginal 0.1-point gain but still in the lower range of the 17-period distribution.",
-          "chain": [
-            "The YoY contraction rate improved to -15.6% in May, 0.1 points better than Apr's -15.7% but still the second-worst reading in this window.",
-            "The marginal improvement is driven by base effects, not a recovery in deployment.",
-            "At -15.6%, the decline remains severe and in the lower range of the historical distribution."
-          ],
-          "inference": "The Bharat QR collapse is moderating marginally but remains severe — the YoY rate improved 0.1 points to -15.6%, still the second-worst reading in 17 periods. The standard is structurally obsolete and will continue contracting at double-digit rates as UPI QR dominates. No recovery is in sight.",
-          "source_ref": {
-            "source_file": "web/public/data/atm_pos_consolidated.csv",
-            "method": "csv_total_yoy",
-            "record_type": "total",
-            "metric": "bharat_qr"
-          }
-        },
-        "micro-atm-yoy": {
-          "title": "Micro-ATMs down -8.1% YoY — contraction worsening for second month",
-          "observation": "Micro-ATMs contracted 8.11% year-on-year in May 2026, worsening 0.93 points from Apr's -7.17%.",
-          "direction": "YoY decline worsened -7.2% → -8.1% in May, marking the second consecutive month of deterioration and now near the median of the 17-period distribution.",
-          "chain": [
-            "The YoY contraction rate worsened to -8.1% in May, 0.9 points worse than Apr's -7.2% and the second straight month of deterioration.",
-            "The worsening confirms Feb's moderation was temporary — the decline has accelerated 2.8 points from Feb's -5.3% to May's -8.1%.",
-            "Rural deployment economics remain unviable as UPI and bank correspondents dominate cash access."
-          ],
-          "inference": "Micro-ATM contraction is accelerating again — the YoY rate worsened 2.8 points over three months to -8.1%, confirming Feb's moderation was a false signal. Rural deployment economics remain unviable as UPI and bank correspondents dominate cash access. The structural decline will continue at a mid-to-high single-digit pace.",
-          "source_ref": {
-            "source_file": "web/public/data/atm_pos_consolidated.csv",
-            "method": "csv_total_yoy",
-            "record_type": "total",
-            "metric": "micro_atms"
-          }
-        },
-        "micro-atms-abs": {
-          "title": "Micro-ATMs at 1.36M — fourth monthly decline extends record low",
-          "observation": "Micro-ATM count stands at 1,358,241 in May 2026, down 9,748 units from Apr's 1,367,989.",
-          "direction": "Fell 1,367,989 → 1,358,241 in May — the fourth consecutive monthly decline, losing 31,277 units since Feb's 1,389,518.",
-          "chain": [
-            "Micro-ATMs fell 9,748 units in May to 1.36M, the fourth straight monthly decline and the lowest level in 29 periods.",
-            "The network has contracted 31K units over four months, confirming Mar's stabilisation was a false signal.",
-            "At 1.36M, the network is down 23% from Jan 2024's 1.76M peak and continues shrinking."
-          ],
-          "inference": "Micro-ATM contraction is accelerating — the network has lost 31K units in four months and is now at its lowest level on record. Rural cash access has shifted to UPI and bank correspondents, and the deployment model is no longer viable. The network will continue shrinking toward a stable floor below 1.35M.",
-          "source_ref": {
-            "source_file": "web/public/data/atm_pos_consolidated.csv",
-            "method": "csv_total_abs",
-            "record_type": "total",
-            "metric": "micro_atms"
-          }
-        },
-        "pos-bank-scan": {
-          "title": "RBL leads POS at 2.76M terminals — ICICI resumes contraction",
-          "observation": "RBL Bank operates 2,762,942 POS terminals in May 2026, the largest deployment among 63 banks, followed by Axis (2,550,866) and HDFC (1,871,796).",
-          "direction": "RBL rose to 2.76M from Apr's 2.73M, adding 34K terminals, while Axis fell 29K to 2.55M and HDFC rose 59K to 1.87M — RBL and HDFC are strengthening, Axis is strengthening. ICICI shifted from strengthening to weakening, falling 1K to 1.73M.",
-          "chain": [
-            "RBL and HDFC added 93K terminals in May, while Axis and ICICI lost 30K combined — private bank expansion is concentrating at RBL and HDFC.",
-            "ICICI shifted from strengthening to weakening, confirming Apr's 341K loss was not a one-time event.",
-            "The top three banks control 64.9% of all terminals, and concentration is intensifying as smaller private banks lose ground."
-          ],
-          "inference": "Private bank POS expansion is concentrating at RBL and HDFC — the two added 93K terminals in May, while ICICI resumed contraction after Apr's 341K loss. ICICI's shift to weakening confirms smaller private banks are losing ground to the top two. The top three control 65% of all terminals, and concentration will continue rising.",
-          "source_ref": {
-            "source_file": "web/public/data/atm_pos_consolidated.csv",
-            "method": "csv_bank_scan",
-            "record_type": "bank",
-            "metric": "pos_terminals",
-            "value_type": "value"
-          }
-        },
-        "pos-category-share-scan": {
-          "title": "Private banks hold 81.8% POS share — stabilising after Apr pullback",
-          "observation": "Private sector banks control 81.8% of all POS terminals in May 2026, up 0.1 points from Apr's 81.7%, while public sector banks hold 18.1%, down 0.1 points.",
-          "direction": "Private banks rose 81.7% → 81.8% in May, while PSBs fell 18.1% → 18.1% — both shares stabilised after Apr's 0.5-point reversal.",
-          "chain": [
-            "Private banks regained 0.1 points of POS share in May to 81.8%, stabilising after Apr's 0.5-point loss.",
-            "PSBs held 18.1% in May, unchanged from Apr, confirming the Apr gain was a one-time event.",
-            "Both shares are now stable near their recent ranges, with private banks at 81.8% and PSBs at 18.1%."
-          ],
-          "inference": "POS share is stabilising after Apr's reversal — private banks regained 0.1 points to 81.8%, while PSBs held at 18.1%. The Apr shift was a one-time event, not a sustained trend. Private banks remain dominant at 82% share, and the distribution will likely hold steady as both categories expand at similar paces.",
-          "source_ref": {
-            "source_file": "web/public/data/atm_pos_consolidated.csv",
-            "method": "csv_category_scan_share",
-            "record_type": "bank",
-            "metric": "pos_terminals"
-          }
-        },
-        "pos-private-share": {
-          "title": "Private bank POS share at 81.8% — stabilising after Apr loss",
-          "observation": "Private sector banks hold 81.81% of POS terminals in May 2026, up 0.07 points from Apr's 81.74%.",
-          "direction": "Share rose 81.7% → 81.8% in May, a marginal 0.1-point gain after Apr's 0.5-point decline from Mar's 82.2%.",
-          "chain": [
-            "Private banks regained 0.1 points of POS share in May to 81.8%, stabilising after Apr's 0.5-point loss.",
-            "The share is now 0.4 points below Mar's 82.2% and 2.4 points below Aug 2025's 84.2% peak.",
-            "The stabilisation suggests Apr's loss was a one-time event, not a sustained trend."
-          ],
-          "inference": "Private bank POS share is stabilising after Apr's pullback — the 0.1-point gain to 81.8% confirms Apr's 0.5-point loss was a one-time event. The share remains 2.4 points below Aug's peak but is holding steady near 82%. Private banks will likely maintain this level as both categories expand at similar paces.",
-          "source_ref": {
-            "source_file": "web/public/data/atm_pos_consolidated.csv",
-            "method": "csv_category_share",
-            "record_type": "bank",
-            "metric": "pos_terminals",
-            "bank_category": "Private Sector Banks"
-          }
-        },
-        "pos-psb-share": {
-          "title": "PSB POS share at 18.1% — holding Apr gains",
-          "observation": "Public sector banks hold 18.07% of POS terminals in May 2026, down 0.07 points from Apr's 18.14%.",
-          "direction": "Share fell 18.1% → 18.1% in May, a marginal 0.1-point decline after Apr's 0.5-point gain from Mar's 17.6%.",
-          "chain": [
-            "PSBs held 18.1% of POS share in May, down 0.1 points from Apr's 18.1% but still 0.5 points above Mar's 17.6%.",
-            "The marginal decline confirms Apr's 0.5-point gain was a one-time event, not a sustained trend.",
-            "PSBs are now holding steady near 18%, with no further gains in May."
-          ],
-          "inference": "PSB POS share is stabilising after Apr's gain — the marginal 0.1-point decline to 18.1% confirms Apr's 0.5-point jump was a one-time event. PSBs are now holding steady near 18%, with no further gains. The share will likely remain at this level as both categories expand at similar paces.",
-          "source_ref": {
-            "source_file": "web/public/data/atm_pos_consolidated.csv",
-            "method": "csv_category_share",
-            "record_type": "bank",
-            "metric": "pos_terminals",
-            "bank_category": "Public Sector Banks"
-          }
-        },
-        "pos-terminals-abs": {
-          "title": "POS terminals at 11.53M — first growth in two months",
-          "observation": "POS terminal count stands at 11,525,276 in May 2026, up 78,278 units from 11,446,998 in Apr 2026.",
-          "direction": "Rose 11,446,998 → 11,525,276, the first monthly gain since Mar 2026 and a reversal of Apr's 322,363-unit contraction.",
-          "chain": [
-            "POS terminals added 78,278 units in May 2026, the first monthly increase in two periods.",
-            "The gain recovers only 24% of Apr's 322,363-unit decline — the network remains 244,085 units below Mar's 11,769,361 level.",
-            "The recovery is too shallow to signal a trend reversal; the network is still 244K units below its recent peak and has not rebuilt momentum."
-          ],
-          "inference": "The 78K-unit gain is a stabilisation signal, not a recovery. The network remains structurally weaker than Q1 2026 levels and has not regained the expansion trajectory that ended in Oct 2025. Lenders should treat POS infrastructure as a contracting channel until the network posts consecutive monthly gains above 150K units and clears the Mar 2026 peak.",
-          "source_ref": {
-            "source_file": "web/public/data/atm_pos_consolidated.csv",
-            "method": "csv_total_abs",
-            "record_type": "total",
-            "metric": "pos_terminals"
-          }
-        },
-        "pos-terminals-pos-streak": {
-          "title": "POS terminals growth streak resets to 1 month",
-          "observation": "POS terminals recorded 1 consecutive period of growth in May 2026, up from 0 periods in Apr 2026.",
-          "direction": "Streak reset from 0 periods to 1 period, marking the first monthly gain since the 4-period run ended in Apr 2026.",
-          "chain": [
-            "The streak restarted at 1 period after Apr's reset to 0, following a 4-month recovery from Dec 2025 to Mar 2026.",
-            "The network has not sustained consecutive growth beyond 4 months since the 17-period expansion ended in Nov 2025.",
-            "A single-month streak is the weakest signal in this dataset — the network must extend to at least 3 consecutive periods to confirm a durable recovery."
-          ],
-          "inference": "The 1-period streak is a tentative stabilisation, not a trend confirmation. The network has failed to rebuild momentum beyond 4 months since Nov 2025's 17-period run ended. Lenders should wait for at least 3 consecutive months of growth before treating POS infrastructure as a viable expansion channel — the last two recovery attempts stalled at 4 months.",
-          "source_ref": {
-            "source_file": "web/public/data/atm_pos_consolidated.csv",
-            "method": "csv_streak",
-            "record_type": "total",
-            "metric": "pos_terminals"
-          }
-        },
-        "pos-terminals-yoy": {
-          "title": "POS terminals -0.5% YoY — first contraction on record",
-          "observation": "POS terminals contracted 0.48% year-on-year in May 2026, down from 1.45% growth in Apr 2026.",
-          "direction": "YoY growth turned negative 1.5% → -0.5%, a 1.9-point drop — the first negative reading in the 17-period series and the minimum level on record.",
-          "chain": [
-            "The -0.5% YoY rate is the first contraction in this dataset, breaking below Apr's 1.5% minimum.",
-            "The rate has fallen 32.0 points from May 2025's 31.5% peak, driven by a high base and two months of net declines in Q2 2026.",
-            "A negative YoY rate confirms the POS network is shrinking on an annual basis — the channel is in structural decline, not consolidation."
-          ],
-          "inference": "The -0.5% YoY contraction is a structural break signal — the POS network is now smaller than it was a year ago, the first time this has occurred in the dataset. Lenders financing merchant acceptance infrastructure should treat POS terminals as a declining asset class with no recovery trajectory. The channel has lost 31.5 points of annual growth in 12 months and shows no signs of stabilising.",
-          "source_ref": {
-            "source_file": "web/public/data/atm_pos_consolidated.csv",
-            "method": "csv_total_yoy",
-            "record_type": "total",
-            "metric": "pos_terminals"
-          }
-        },
-        "upi-bharat-qr-ratio": {
-          "title": "UPI QR codes 139× Bharat QR — widest gap on record",
-          "observation": "There are now 139.1 UPI QR codes for every Bharat QR code in May 2026, up 1.87 from 137.3 in Apr 2026.",
-          "direction": "Ratio rose 137.3× → 139.1×, the highest level on record — the gap has widened by 1.9 points, extending the structural divergence that began in Sep 2025.",
-          "chain": [
-            "The 139.1× ratio is the maximum level in the 29-period series, up from 53.5× in Jan 2024.",
-            "The ratio has risen 16.8 points in the past 8 months (Sep 2025: 116.8× → May 2026: 139.1×), accelerating from the 1.0–1.5 point monthly pace seen in H1 2025.",
-            "Bharat QR is effectively obsolete — UPI QR is capturing all incremental deployment while Bharat QR stagnates or contracts."
-          ],
-          "inference": "The 139× ratio confirms Bharat QR has no commercial relevance — UPI QR is the sole acceptance standard for digital payments. Lenders financing merchant infrastructure should allocate zero capital to Bharat QR solutions; the channel is in terminal decline. The ratio will continue widening as UPI QR scales toward 800M codes and Bharat QR remains frozen or shrinks.",
-          "source_ref": {
-            "source_file": "web/public/data/atm_pos_consolidated.csv",
-            "method": "csv_total_ratio",
-            "record_type": "total",
-            "metric": "upi_qr",
-            "denominator_metric": "bharat_qr"
-          }
-        },
-        "upi-qr-abs": {
-          "title": "UPI QR codes at 779.8M — highest on record",
-          "observation": "UPI QR code deployment reached 779,765,356 in May 2026, up 8,953,895 codes from 770,811,461 in Apr 2026.",
-          "direction": "Rose 770,811,461 → 779,765,356, the highest level on record — the 9.0M monthly gain is the second-largest in the past 4 months, behind only Apr's 9.6M increase.",
-          "chain": [
-            "UPI QR codes added 8.95M units in May 2026, sustaining the 7–10M monthly expansion pace established in Q1 2026.",
-            "The network has grown 110M codes in the past 12 months (May 2025: 669.7M → May 2026: 779.8M), a 16.4% annual increase.",
-            "The network is on track to exceed 800M codes by Aug 2026 if the current 9M monthly run rate holds."
-          ],
-          "inference": "UPI QR deployment is in full expansion mode — the 9M-code monthly gain confirms the channel is scaling without saturation. Lenders should treat UPI QR as the dominant acceptance infrastructure for digital payments, with a clear path to 800M codes by Q3 2026. The network is adding more codes in a single month than the entire POS terminal base has grown in the past year.",
-          "source_ref": {
-            "source_file": "web/public/data/atm_pos_consolidated.csv",
-            "method": "csv_total_abs",
-            "record_type": "total",
-            "metric": "upi_qr"
-          }
-        },
-        "upi-qr-per-pos": {
-          "title": "UPI QR codes 67.7× POS terminals — highest ratio on record",
-          "observation": "There are now 67.7 UPI QR codes for every POS terminal in May 2026, up 0.32 from 67.3 in Apr 2026.",
-          "direction": "Ratio rose 67.3× → 67.7×, the highest level on record — the gap has widened by 0.3 points as UPI QR added 9.0M codes while POS terminals gained only 78K units.",
-          "chain": [
-            "The 67.7× ratio is the maximum level in the 29-period series, up from 37.4× in Jan 2024.",
-            "UPI QR added 9.0M codes in May 2026 while POS terminals added 78K units — a 115:1 deployment ratio that confirms the two channels are on opposite trajectories.",
-            "The ratio has risen 3.0 points in the past two months (Mar 2026: 64.7× → May 2026: 67.7×), the fastest pace since Nov 2025's 5.8-point surge."
-          ],
-          "inference": "The 67.7× ratio confirms UPI QR is the only acceptance infrastructure with structural expansion momentum — POS terminals are a shrinking asset class with no recovery signal. Lenders financing merchant acceptance should allocate capital exclusively to UPI QR-enabled solutions; the POS channel is contracting while UPI QR scales at 115× the rate. The ratio will continue widening as UPI QR adds 7–10M codes monthly and POS struggles to post consecutive gains.",
-          "source_ref": {
-            "source_file": "web/public/data/atm_pos_consolidated.csv",
-            "method": "csv_total_ratio",
-            "record_type": "total",
-            "metric": "upi_qr",
-            "denominator_metric": "pos_terminals"
-          }
-        },
-        "upi-qr-yoy": {
-          "title": "UPI QR codes 16.4% YoY — stable high-growth phase",
-          "observation": "UPI QR codes grew 16.43% year-on-year in May 2026, up from 16.37% in Apr 2026.",
-          "direction": "YoY growth held steady 16.4% → 16.4%, a 0.06-point gain — the rate has stabilised in the 15–17% range across the 17-period series, with May's 16.4% near the median.",
-          "chain": [
-            "The 16.4% YoY rate has held in the 15–17% range for 13 consecutive months, even as the base has risen from 662M to 780M codes.",
-            "The network is adding 110M codes annually at a stable rate, with no signs of saturation or deceleration.",
-            "The 16.4% rate is 16.9 points above POS terminals' -0.5% YoY contraction, confirming the two channels are on opposite trajectories."
-          ],
-          "inference": "The 16.4% YoY rate confirms UPI QR deployment is in a stable, high-growth phase — the network is adding 100M+ codes annually with no signs of saturation. Lenders should treat UPI QR as the primary acceptance infrastructure for digital payments, with a clear structural advantage over POS terminals. The channel is the only one with sustained double-digit growth and a path to 900M codes by mid-2027.",
-          "source_ref": {
-            "source_file": "web/public/data/atm_pos_consolidated.csv",
-            "method": "csv_total_yoy",
-            "record_type": "total",
-            "metric": "upi_qr"
-          }
-        }
-      }
-    },
     "credit_card_txn": {
       "narrative": "Credit card POS transaction volume grew 23.1% YoY in May 2026, recovering from the 20.8% low in Apr 2026 and returning to near-median growth. The one-period deceleration did not signal a sustained trend break — offline retail card usage remains robust, growing at a pace consistent with the 17-period historical range. For issuers, this confirms that the structural shift toward ecommerce is not accelerating at the expense of POS: both channels are expanding in parallel, and offline retail continues to capture meaningful incremental volume. Underwriting and rewards strategies should maintain balanced exposure across physical and digital merchant networks.",
       "signals": {
@@ -1686,6 +1100,703 @@
             "method": "csv_total_yoy",
             "record_type": "total",
             "metric": "dc_pos_withdrawal_vol"
+          }
+        }
+      }
+    },
+    "infrastructure": {
+      "narrative": "India's digital acceptance infrastructure is bifurcating: UPI QR codes are in sustained expansion at 779.8M units (+16.4% YoY), adding 9M codes monthly, while POS terminals have entered year-on-year contraction at -0.5% — the first negative reading on record. The UPI-to-POS ratio hit 67.7×, a record divergence, as UPI QR scaled 115× faster than POS in absolute terms. Bharat QR is obsolete at 139× fewer codes than UPI QR. Lenders financing merchant acceptance should allocate exclusively to UPI QR infrastructure — POS is a shrinking asset class with no recovery signal, and the gap is widening every month.",
+      "signals": {
+        "atm-offsite-abs": {
+          "title": "Offsite ATMs at 73,964 — second monthly gain, still near record low",
+          "observation": "Offsite ATM count stands at 73,964 in May 2026, up 107 units from Apr's 73,857.",
+          "direction": "Rose 73,857 → 73,964 in May — the second consecutive monthly gain after a 15-period contraction streak ended in Apr.",
+          "chain": [
+            "Offsite ATMs added 107 units in May, following Apr's 164-unit gain — the first back-to-back increases since late 2024.",
+            "The network remains near its all-time low, down 20% from Jan 2024's 93,381, as banks have permanently closed unprofitable locations.",
+            "Two months of growth do not reverse the structural decline — digital channels continue absorbing transaction volumes, making offsite ATMs economically unviable."
+          ],
+          "inference": "The May gain extends Apr's pause but does not signal a reversal — offsite ATMs remain at their lowest level on record, and banks have no incentive to rebuild this network. The two-month stabilisation likely reflects the completion of the closure wave, not a strategic shift. Expect the network to plateau near 74K as banks redirect capital to onsite terminals.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_abs",
+            "record_type": "total",
+            "metric": "atm_offsite"
+          }
+        },
+        "atm-offsite-yoy": {
+          "title": "Offsite ATMs -8.87% YoY — contraction moderating for fifth straight month",
+          "observation": "Offsite ATMs contracted 8.87% year-on-year in May 2026, improving 1.64 points from Apr's -10.50%.",
+          "direction": "YoY decline improved -14.0% → -12.9% → -11.8% → -10.5% → -8.9% over five months, with May at -8.9% marking the best reading since Jan 2025's -8.1%.",
+          "chain": [
+            "The offsite ATM contraction improved 5.1 points from Jan to May, driven by base effects as the 2025 closure wave rolls off the comparison.",
+            "The YoY rate is now in the upper range of its historical distribution, near the -10.0% p75 threshold, signalling the decline is moderating toward single digits.",
+            "The network will not return to prior levels — banks have permanently exited unprofitable locations and will not redeploy capital to offsite infrastructure."
+          ],
+          "inference": "The offsite ATM contraction is moderating as expected — the YoY rate will continue improving toward mid-single digits by late 2026 as base effects compound. However, the network has structurally reset 20% lower, and no recovery is coming. Lenders should treat offsite ATMs as a declining asset class with no strategic value.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_yoy",
+            "record_type": "total",
+            "metric": "atm_offsite"
+          }
+        },
+        "atm-onsite-abs": {
+          "title": "Onsite ATMs at 136,150 — new all-time high, expansion continues",
+          "observation": "Onsite ATM count stands at 136,150 in May 2026, up 24 units from Apr's 136,126.",
+          "direction": "Rose 135,004 → 135,638 → 136,126 → 136,150 over four months, adding 1,146 units since Feb — the network is now at its highest level on record.",
+          "chain": [
+            "Onsite ATMs added 24 units in May, extending the expansion streak to four months and setting a new all-time high at 136,150.",
+            "The network has grown 9,908 units (+7.8%) from Jan 2024's 126,247, confirming branch-based terminals are a strategic priority as offsite closures redirect capital.",
+            "The expansion pace has slowed from Apr's 488-unit gain to May's 24-unit gain, but the trajectory remains positive."
+          ],
+          "inference": "Onsite ATM expansion is slowing but intact — the network hit a new record in May, confirming banks are prioritising high-traffic branch locations over offsite infrastructure. The slower pace suggests the network is approaching a natural ceiling as branch coverage saturates. Expect continued growth at a decelerating rate as banks optimise terminal density per branch.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_abs",
+            "record_type": "total",
+            "metric": "atm_onsite"
+          }
+        },
+        "atm-onsite-yoy": {
+          "title": "Onsite ATMs +0.99% YoY — growth decelerates sharply to weakest level",
+          "observation": "Onsite ATMs grew 0.99% year-on-year in May 2026, down 2.71 points from Apr's 3.70%.",
+          "direction": "YoY growth decelerated 2.4% → 2.2% → 3.3% → 3.7% → 1.0% over five months, with May at 1.0% marking the weakest reading in this 17-period window.",
+          "chain": [
+            "Onsite ATM growth collapsed 2.71 points from Apr to May, falling to 0.99% — the lowest YoY rate on record and a sharp reversal from Apr's 3.70%.",
+            "The deceleration reflects a base effect: May 2025 saw a 3,544-unit surge to 134,809, creating a high comparison base that suppressed May 2026's YoY rate despite the network hitting a new high.",
+            "The absolute network continues growing, but the YoY rate is now near zero, signalling the expansion pace is slowing as the network matures."
+          ],
+          "inference": "Onsite ATM growth is decelerating sharply — the YoY rate fell to 1.0% in May, the weakest reading in this window, despite the network hitting a new high. The slowdown reflects both base effects and a maturing network approaching saturation. Lenders should expect YoY growth to remain in the low single digits as banks optimise terminal density rather than aggressively expand.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_yoy",
+            "record_type": "total",
+            "metric": "atm_onsite"
+          }
+        },
+        "bharat-qr-abs": {
+          "title": "Bharat QR at 5.60M codes — third monthly decline, new record low",
+          "observation": "Bharat QR code deployment stands at 5,604,866 in May 2026, down 11,172 codes from Apr's 5,616,038.",
+          "direction": "Fell 5,897,360 → 5,633,027 → 5,616,038 → 5,604,866 over four months, losing 292,494 codes since Feb — the network is now at its lowest level in 29 periods.",
+          "chain": [
+            "Bharat QR lost 11,172 codes in May, the third consecutive monthly decline, confirming Feb's recovery was a false signal.",
+            "The network has contracted 292K codes in four months and is now 130× smaller than UPI QR, which dominates merchant acceptance with over 700M codes.",
+            "Banks are abandoning the failed standard as UPI QR offers superior interoperability and merchant adoption — Bharat QR has no strategic value."
+          ],
+          "inference": "Bharat QR is in terminal decline — the network hit a new record low in May, losing 292K codes in four months, and banks are actively decommissioning the standard. UPI QR has won the merchant acceptance battle, and Bharat QR will continue shrinking toward irrelevance. Lenders should treat Bharat QR as a dead infrastructure class with no recovery potential.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_abs",
+            "record_type": "total",
+            "metric": "bharat_qr"
+          }
+        },
+        "bharat-qr-yoy": {
+          "title": "Bharat QR -15.62% YoY — contraction stabilising near worst level",
+          "observation": "Bharat QR codes contracted 15.62% year-on-year in May 2026, improving 0.11 points from Apr's -15.72%.",
+          "direction": "YoY decline improved -9.3% → -9.9% → -16.2% → -15.7% → -15.6% over five months, with Mar at -16.2% marking the worst reading before a 0.6-point improvement to May.",
+          "chain": [
+            "The Bharat QR contraction improved 0.11 points from Apr to May, but the YoY rate remains near its worst level at -15.6%, well below the -9.6% p25 threshold.",
+            "The marginal improvement reflects base effects, not a recovery — the network continues losing codes in absolute terms and is at its lowest level on record.",
+            "The standard is structurally obsolete, and the YoY rate will remain in the -15% to -16% range as the network shrinks toward irrelevance."
+          ],
+          "inference": "The Bharat QR collapse is stabilising near its worst level — the YoY rate improved marginally to -15.6% but remains in the lower range of its distribution, confirming the standard has no merchant traction. The contraction will persist at double-digit rates as UPI QR dominates. No recovery is in sight — lenders should write off Bharat QR as a failed infrastructure bet.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_yoy",
+            "record_type": "total",
+            "metric": "bharat_qr"
+          }
+        },
+        "micro-atm-yoy": {
+          "title": "Micro-ATMs -8.11% YoY — contraction worsens for second straight month",
+          "observation": "Micro-ATMs contracted 8.11% year-on-year in May 2026, worsening 0.93 points from Apr's -7.17%.",
+          "direction": "YoY decline worsened -5.6% → -5.3% → -6.2% → -7.2% → -8.1% over five months, with May at -8.1% marking the worst reading since Jan's -5.6%.",
+          "chain": [
+            "Micro-ATM contraction worsened 2.5 points from Feb to May, confirming Feb's moderation was temporary and the structural decline is accelerating.",
+            "The YoY rate is now near the median of its historical distribution, signalling the contraction is entrenched at a mid-single-digit pace.",
+            "Rural deployment economics remain unviable as UPI and bank correspondents dominate rural cash access, and the network will continue shrinking."
+          ],
+          "inference": "Micro-ATM contraction is accelerating — the YoY rate worsened to -8.1% in May, the worst reading in five months, confirming the structural decline is not over. Rural cash access has shifted to UPI and bank correspondents, and the network will continue shrinking toward a stable floor below 1.35M. Lenders should treat Micro-ATMs as a declining asset class with no recovery potential.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_yoy",
+            "record_type": "total",
+            "metric": "micro_atms"
+          }
+        },
+        "micro-atms-abs": {
+          "title": "Micro-ATMs at 1.36M — fourth monthly decline, new record low",
+          "observation": "Micro-ATM count stands at 1,358,241 in May 2026, down 9,748 units from Apr's 1,367,989.",
+          "direction": "Fell 1,389,518 → 1,389,878 → 1,367,989 → 1,358,241 over four months, losing 31,277 units since Feb — the network is now at its lowest level in 29 periods.",
+          "chain": [
+            "Micro-ATMs lost 9,748 units in May, the fourth consecutive monthly decline, confirming Mar's stabilisation was a false signal.",
+            "The network has contracted 31K units in four months and is now 23% below Jan 2024's 1.76M, as rural deployment economics remain unviable.",
+            "UPI and bank correspondents have replaced Micro-ATMs as the dominant rural cash access channels, and the network will continue shrinking toward a stable floor."
+          ],
+          "inference": "Micro-ATMs are in structural decline — the network hit a new record low in May, losing 31K units in four months, and the deployment model is no longer viable. Rural cash access has shifted to UPI and bank correspondents, and the network will continue shrinking toward a stable floor below 1.35M. Lenders should treat Micro-ATMs as a dead infrastructure class with no strategic value.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_abs",
+            "record_type": "total",
+            "metric": "micro_atms"
+          }
+        },
+        "pos-bank-divergence": {
+          "title": "Karur Vysya +410.61pp vs category — extreme divergence on POS growth",
+          "observation": "Karur Vysya Bank's POS terminal growth diverges +410.61pp from its private sector bank category average in May 2026, the widest gap among 10 active banks.",
+          "direction": "Top divergers: Karur Vysya +410.61pp, Federal Bank +23.66pp, Yes Bank +18.37pp. Bottom divergers: UCO Bank -68.52pp, Union Bank -36.34pp, Central Bank -19.15pp.",
+          "chain": [
+            "Karur Vysya's +410.61pp divergence is an extreme outlier, indicating the bank is growing POS terminals at a rate 410 points faster than the private sector bank average.",
+            "The spread between the top and bottom divergers is 479.14pp, signalling massive variation in POS deployment strategies across banks.",
+            "Federal Bank (+23.66pp) and Yes Bank (+18.37pp) are also outpacing their category, while three PSBs (UCO, Union, Central) are contracting faster than their category average."
+          ],
+          "inference": "Karur Vysya is executing an aggressive POS expansion strategy that is radically outpacing its private bank peers — the +410.61pp divergence is unprecedented and signals a strategic bet on merchant acceptance infrastructure. Federal and Yes are also outperforming, while UCO, Union, and Central are lagging their PSB category. Lenders should investigate Karur Vysya's deployment model and merchant acquisition strategy as a potential best practice.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_bank_divergence",
+            "record_type": "total",
+            "metric": "pos_terminals"
+          }
+        },
+        "pos-bank-scan": {
+          "title": "RBL at 2.76M POS terminals — leads 63 banks, ICICI weakening",
+          "observation": "RBL Bank operates 2,762,942 POS terminals in May 2026, the largest deployment among 63 banks, followed by Axis (2,550,866) and HDFC (1,871,796).",
+          "direction": "RBL rose to 2.76M from Apr's 2.73M, adding 34K terminals, while Axis fell 29K to 2.55M and HDFC rose 59K to 1.87M. RBL shifted from weakening to weakening, Axis from strengthening to strengthening, HDFC from strengthening to strengthening. ICICI remains weakening at 1.73M.",
+          "chain": [
+            "RBL added 34K terminals in May, extending its lead as the largest POS deployer, while Axis contracted 29K and HDFC added 59K.",
+            "The top three banks (RBL, Axis, HDFC) control 6.19M terminals, or 56.5% of the total network, and concentration is intensifying.",
+            "ICICI remains weakening for the second straight month, signalling smaller private banks are losing ground to the top three deployers.",
+            "Five banks shifted status: RBL (strengthening→weakening), Punjab National (weakening→strengthening), South Indian (weakening→strengthening), IDBI (strengthening→weakening), Equitas (weakening→strengthening)."
+          ],
+          "inference": "Private bank POS expansion is concentrating at the top — RBL, Axis, and HDFC control 56.5% of all terminals, and the top three are pulling away from the rest. ICICI's continued weakening signals mid-tier private banks are losing ground. Lenders should focus on the top three deployers for merchant acceptance partnerships, as they dominate the network and are driving expansion.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_bank_scan",
+            "record_type": "bank",
+            "metric": "pos_terminals",
+            "value_type": "value"
+          }
+        },
+        "pos-category-rotation": {
+          "title": "PSBs +1.85pp share gain over 12 months — private banks losing ground",
+          "observation": "Public sector banks gained 1.85 percentage points of POS terminal share over the past 12 months, while private sector banks lost 1.83pp.",
+          "direction": "PSBs gained +1.85pp, private banks lost -1.83pp, foreign banks lost -0.03pp, small finance banks and payment banks held flat at +0.00pp. Rotation mass: 1.86pp.",
+          "chain": [
+            "PSBs gained 1.85pp of share over 12 months, the largest gain among all categories, while private banks lost 1.83pp — a near-perfect offset.",
+            "The rotation mass of 1.86pp indicates 1.86% of the total POS network shifted between categories over the past year, driven entirely by the PSB/private bank swap.",
+            "Foreign banks, small finance banks, and payment banks saw negligible share changes, confirming the rotation is a two-player dynamic between PSBs and private banks."
+          ],
+          "inference": "PSBs are gaining POS share at the expense of private banks — the 1.85pp gain over 12 months confirms PSBs are expanding terminals faster, driven by government-backed financial inclusion mandates and rural deployment. Private banks' share is eroding despite absolute growth, as PSBs prioritise semi-urban and rural merchant acceptance. Expect this rotation to continue as PSBs close the infrastructure gap.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_category_rotation",
+            "record_type": "total",
+            "metric": "pos_terminals"
+          }
+        },
+        "pos-category-share-scan": {
+          "title": "Private banks at 81.8% POS share — stable after Apr's pullback",
+          "observation": "Private sector banks control 81.8% of all POS terminals in May 2026, up 0.1 points from Apr's 81.7%, while public sector banks hold 18.1%, down 0.1 points.",
+          "direction": "Private banks rose 81.7% → 81.8% in May, while PSBs fell 18.1% → 18.1% — both shares stabilised after Apr's 0.5-point reversal from Mar.",
+          "chain": [
+            "Private banks regained 0.1pp of share in May after Apr's 0.5pp loss, signalling the Apr pullback was temporary and the share is stabilising near 81.8%.",
+            "PSBs lost 0.1pp in May after Apr's 0.5pp gain, confirming the Apr surge was a one-month event and the share is stabilising near 18.1%.",
+            "Both categories shifted from weakening/strengthening to active, indicating the rotation has paused and shares are consolidating."
+          ],
+          "inference": "POS share rotation has paused — private banks stabilised at 81.8% in May after Apr's pullback, and PSBs stabilised at 18.1%. The Apr reversal was a temporary event, not a trend break. Expect shares to consolidate near current levels as both categories expand at similar rates. The long-term rotation toward PSBs remains intact but is not accelerating.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_category_scan_share",
+            "record_type": "bank",
+            "metric": "pos_terminals"
+          }
+        },
+        "pos-private-share": {
+          "title": "Private banks hold 81.81% of POS — share stable at 81.7–81.8%",
+          "observation": "Private sector banks hold 81.81% of POS terminals in May 2026, up 0.07 points from Apr's 81.74%.",
+          "direction": "Share rose 81.7% → 81.8%, a marginal 0.07-point gain after Apr's 0.5-point decline from Mar's 82.2%.",
+          "chain": [
+            "Private banks hold 81.81% of POS terminals in May 2026, up 0.07 points from Apr's 81.74%.",
+            "The 0.07-point move is noise — well within the ±0.5pp threshold for structural shifts — and leaves the share in the 81.7–81.8% band where it has traded for three consecutive months.",
+            "The share remains 2.4 points below Aug 2025's 84.2% peak, confirming PSBs are still adding terminals faster than private banks, but the gap is no longer widening."
+          ],
+          "inference": "Private banks' POS share has stabilised in the 81.7–81.8% range after the Nov 2025 correction. The structural drift toward PSBs has paused — lenders can treat this as a steady-state allocation, with no immediate share shift risk.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_category_share",
+            "record_type": "bank",
+            "metric": "pos_terminals",
+            "bank_category": "Private Sector Banks"
+          }
+        },
+        "pos-psb-share": {
+          "title": "PSB share at 18.07% — stable after Apr's 0.5pp gain",
+          "observation": "Public sector banks hold 18.07% of POS terminals in May 2026, down 0.07 points from Apr's 18.14%.",
+          "direction": "Share fell 18.1% → 18.1%, a marginal 0.07-point decline after Apr's 0.5-point gain from Mar's 17.6%.",
+          "chain": [
+            "PSBs hold 18.07% of POS terminals in May 2026, down 0.07 points from Apr's 18.14%.",
+            "The 0.07-point move is noise — the share has held in the 18.0–18.1% band for two months, confirming Apr's 0.5-point gain was a one-time correction, not a new trend.",
+            "The share is now at its highest sustained level since Jan 2025, but the upward trajectory has stalled."
+          ],
+          "inference": "PSBs have stabilised their POS share at 18.0–18.1% after Apr's recovery. The structural gain from financial inclusion mandates has plateaued — lenders should not expect further share expansion unless PSBs accelerate rural deployment beyond current levels.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_category_share",
+            "record_type": "bank",
+            "metric": "pos_terminals",
+            "bank_category": "Public Sector Banks"
+          }
+        },
+        "pos-terminals-abs": {
+          "title": "POS terminals at 11.53M — first growth in two months",
+          "observation": "POS terminal count stands at 11,525,276 in May 2026, up 78,278 units from 11,446,998 in Apr 2026.",
+          "direction": "Rose 11,446,998 → 11,525,276, the first monthly gain since Mar 2026 and a reversal of Apr's 322,363-unit decline.",
+          "chain": [
+            "POS terminals rose to 11,525,276 in May 2026, up 78,278 units from Apr's 11,446,998.",
+            "The gain reverses Apr's 322,363-unit decline but recovers only 24% of the lost ground — the network remains 244,085 units below Mar's 11,769,361 peak.",
+            "The count is still below Dec 2025's 11,474,672 level, confirming the network has not yet exited the contraction zone."
+          ],
+          "inference": "The May gain is a stabilisation signal, not a recovery — the network added back only one-quarter of Apr's decline and remains structurally below its Q1 2026 peak. Lenders should treat this as a pause in the contraction, not a trend reversal. Watch for two consecutive months of gains before calling the bottom.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_abs",
+            "record_type": "total",
+            "metric": "pos_terminals"
+          }
+        },
+        "pos-terminals-pos-streak": {
+          "title": "POS terminals grew for 1 month — streak reset in Apr",
+          "observation": "POS terminals recorded 1 consecutive period of growth in May 2026, up from 0 periods in Apr 2026.",
+          "direction": "Streak rose from 0 periods to 1 period after Apr's reset ended the 4-month recovery run.",
+          "chain": [
+            "POS terminals have grown for 1 consecutive period in May 2026, up from 0 periods in Apr.",
+            "The streak reset in Apr after a 4-month run from Dec 2025 to Mar 2026 — the network is now rebuilding momentum from zero.",
+            "The longest streak on record was 17 periods (ending Nov 2025); the current 1-period run is at the minimum level in this dataset."
+          ],
+          "inference": "The network is in early-stage recovery — one month of growth is not enough to confirm a trend. Lenders should wait for at least 3 consecutive months of gains before treating POS infrastructure as a stable expansion channel. The Apr reset confirms the network is fragile and prone to reversals.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_streak",
+            "record_type": "total",
+            "metric": "pos_terminals"
+          }
+        },
+        "pos-terminals-yoy": {
+          "title": "POS terminals -0.48% YoY — first contraction on record",
+          "observation": "POS terminals contracted 0.48% year-on-year in May 2026, down from 1.45% growth in Apr 2026.",
+          "direction": "YoY growth turned negative 1.5% → -0.5%, a 1.9-point drop — the first sub-zero reading in the 17-period series.",
+          "chain": [
+            "POS terminals contracted 0.48% year-on-year in May 2026, down from 1.45% growth in Apr.",
+            "The rate has fallen from Jan 2026's 11.5% peak to -0.5% in May — a 12-point deceleration in five months — and is now at the minimum level in this dataset.",
+            "The network is shrinking on an annual basis for the first time, confirming the Apr decline was not a one-month anomaly but part of a structural contraction."
+          ],
+          "inference": "The POS network is in year-on-year contraction — the -0.5% rate confirms the channel is shrinking, not consolidating. Lenders financing POS acceptance infrastructure should treat this as a structural decline signal. The network will need sustained monthly gains of 100K+ units to return to positive YoY growth — a scenario not yet visible in the data.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_yoy",
+            "record_type": "total",
+            "metric": "pos_terminals"
+          }
+        },
+        "upi-bharat-qr-ratio": {
+          "title": "UPI QR codes 139× Bharat QR — gap widening to record high",
+          "observation": "There are now 139.1 UPI QR codes for every Bharat QR code in May 2026, up 1.87 from 137.3 in Apr 2026.",
+          "direction": "Ratio rose 137.3× → 139.1×, the highest level on record — the gap has widened by 1.9 points in one month, continuing the acceleration from Mar's 7.2-point jump.",
+          "chain": [
+            "There are now 139.1 UPI QR codes for every Bharat QR code in May 2026, up 1.87 from Apr's 137.3.",
+            "The ratio has risen from 53.5× in Jan 2024 to 139.1× in May 2026 — a 2.6× expansion in 29 months — and is now at the maximum level in this dataset.",
+            "Bharat QR is effectively obsolete — UPI QR is capturing all incremental deployment while Bharat QR stagnates or contracts."
+          ],
+          "inference": "The 139× ratio is a structural divergence signal — Bharat QR has no growth trajectory and is being displaced by UPI QR at an accelerating rate. Lenders financing merchant acceptance infrastructure should allocate zero capital to Bharat QR solutions; the standard is dead. UPI QR is the only acceptance infrastructure with expansion momentum.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_ratio",
+            "record_type": "total",
+            "metric": "upi_qr",
+            "denominator_metric": "bharat_qr"
+          }
+        },
+        "upi-qr-abs": {
+          "title": "UPI QR codes at 779.8M — 9M-code gain sustains expansion",
+          "observation": "UPI QR code deployment reached 779,765,356 in May 2026, up 8,953,895 codes from 770,811,461 in Apr 2026.",
+          "direction": "Rose 770,811,461 → 779,765,356, sustaining the 9M-code monthly gain from Apr and marking the highest absolute level on record.",
+          "chain": [
+            "UPI QR deployment reached 779,765,356 in May 2026, up 8,953,895 codes from Apr's 770,811,461.",
+            "The 9M-code gain matches Apr's 9.6M expansion — the network has now added 18.5M codes in two months, the fastest two-month pace since Jan–Feb 2026's 24.6M surge.",
+            "The network is on track to exceed 780M codes in the next period, with monthly gains consistently in the 7–10M range."
+          ],
+          "inference": "UPI QR deployment is in sustained expansion mode — the 9M-code monthly gain confirms the network is scaling at a stable, high rate with no saturation signal. Lenders should treat UPI QR as the dominant acceptance infrastructure for digital payments — it is adding more codes in one month than the entire POS network holds, and the gap is widening every period.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_abs",
+            "record_type": "total",
+            "metric": "upi_qr"
+          }
+        },
+        "upi-qr-per-pos": {
+          "title": "67.7 UPI QR codes per POS terminal — record divergence",
+          "observation": "There are now 67.7 UPI QR codes for every POS terminal in May 2026, up 0.32 from 67.3 in Apr 2026.",
+          "direction": "Ratio rose 67.3× → 67.7×, the highest level on record — the gap has widened by 0.3 points as UPI QR scaled 9M codes while POS terminals added only 78K units.",
+          "chain": [
+            "There are now 67.7 UPI QR codes for every POS terminal in May 2026, up 0.32 from Apr's 67.3.",
+            "The ratio has risen from 37.4× in Jan 2024 to 67.7× in May 2026 — an 81% expansion in 29 months — and is now at the maximum level in this dataset.",
+            "UPI QR is scaling 115× faster than POS in absolute terms — the 9M-code monthly gain dwarfs POS's 78K-unit recovery."
+          ],
+          "inference": "The 67.7× ratio confirms the two channels are on opposite trajectories — UPI QR is in exponential expansion while POS is in structural contraction. Lenders financing merchant acceptance should allocate capital exclusively to UPI QR infrastructure; POS terminals are a shrinking asset class with no recovery signal. The ratio will continue widening as UPI QR adds 7–10M codes monthly and POS struggles to stabilise.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_ratio",
+            "record_type": "total",
+            "metric": "upi_qr",
+            "denominator_metric": "pos_terminals"
+          }
+        },
+        "upi-qr-yoy": {
+          "title": "UPI QR codes +16.43% YoY — stable in 15–17% growth band",
+          "observation": "UPI QR codes grew 16.43% year-on-year in May 2026, up from 16.37% in Apr 2026.",
+          "direction": "YoY growth held steady 16.4% → 16.4%, a marginal 0.06-point gain — the rate has stabilised in the 15–17% range across the 17-period series.",
+          "chain": [
+            "UPI QR codes grew 16.43% year-on-year in May 2026, up from 16.37% in Apr.",
+            "The rate has held in the 15–17% range for 13 consecutive months, even as the base has risen from 662M to 779M codes — a 117M-code expansion with no deceleration.",
+            "The network is adding 100M+ codes annually with sustained double-digit growth and no saturation signal."
+          ],
+          "inference": "The 16.4% YoY rate confirms UPI QR deployment is in a stable, high-growth phase — the network is scaling at a consistent rate despite a rising base, with no signs of saturation. Lenders should treat UPI QR as the primary acceptance infrastructure for digital payments — it is the only channel with sustained double-digit growth and structural expansion momentum. The 15–17% band is the new steady state.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_yoy",
+            "record_type": "total",
+            "metric": "upi_qr"
+          }
+        }
+      }
+    },
+    "cards_stock": {
+      "narrative": "The debit card market has resumed growth after the Apr 2026 purge, adding 4.5M cards to reach 1.03B in May 2026, but YoY growth has plateaued at 2.75% — half the Mar 2026 peak of 5.4% — confirming the market has settled at a post-cleanup baseline. Private banks broke through to a new all-time high share of 25.88%, up 0.74pp in two months, the sharpest rise on record, while PSBs slipped to 63.97%, giving back 16% of the Apr 2026 spike and confirming the market is rebalancing toward privates after the payment bank purge. The 38.1 point PSB-private gap is the narrowest since the Apr reset, signaling privates are consolidating share gains while PSBs defend a lower floor than the 64.5%–65.0% baseline that prevailed in 2024.",
+      "signals": {
+        "cc-bank-divergence": {
+          "title": "SBM Bank +24.69pp ahead of category — Tamilnad -45.82pp behind",
+          "observation": "SBM Bank India grew credit cards 24.69pp faster than its category average, while Tamilnad Mercantile Bank lagged by 45.82pp — a 70.51pp spread across 10 banks.",
+          "direction": "The divergence spread widened from prior period's range, with SBM Bank, Citi Bank (+20.65pp), and HSBC (+11.33pp) outpacing their categories, while Tamilnad Mercantile, Dhanalaxmi (-23.82pp), and South Indian Bank (-17.99pp) fell furthest behind.",
+          "chain": [
+            "SBM Bank India grew 24.69pp faster than its category average, the widest positive gap among 10 banks.",
+            "Tamilnad Mercantile Bank lagged by 45.82pp — a 70.51pp spread between the fastest and slowest banks relative to their categories.",
+            "Three banks (SBM, Citi, HSBC) are pulling away from their category benchmarks, while five banks (Kotak, RBL, Indian Bank, IndusInd, South Indian) are falling behind by double digits.",
+            "The 70.51pp spread signals execution divergence within categories — some banks are capturing share while others lose ground despite operating in the same regulatory and competitive environment."
+          ],
+          "inference": "SBM Bank and Citi are executing a differentiated credit card strategy that is outpacing their category peers by 20+ points, while Tamilnad Mercantile and Dhanalaxmi are structurally underperforming. The 70.51pp spread confirms category membership no longer predicts growth — bank-level execution now dominates. Lenders should track SBM's playbook and avoid exposure to the five laggards, whose double-digit underperformance signals strategic or operational weakness.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_bank_divergence",
+            "record_type": "total",
+            "metric": "credit_cards"
+          }
+        },
+        "cc-bank-scan": {
+          "title": "HDFC 26.6M cards, SBI 22.4M, ICICI 19.4M — top three hold 56.8%",
+          "observation": "HDFC Bank holds 26.6M credit cards outstanding, SBI 22.4M, ICICI 19.4M — the three account for 68.4M cards out of 120.5M total (56.8% of market).",
+          "direction": "Top three concentration loosened from 56.9% to 56.8% — a 0.1pp decline as the total market grew from 119.4M to 120.5M cards. HDFC added 183K cards: 26.4M → 26.6M. The remaining 60 banks now share 52.0M cards, up from 51.5M. Slice Small Finance Bank shifted from active to strengthening.",
+          "chain": [
+            "HDFC Bank holds 26.6M credit cards, SBI 22.4M, ICICI 19.4M — the three account for 68.4M cards (56.8% of the 120.5M total).",
+            "The top three's share fell 0.1pp from 56.9% to 56.8% as the market added 1.02M cards — the mid-tier captured 52% of new issuance (533K cards) while the top three took 48% (485K).",
+            "Slice Small Finance Bank shifted to strengthening, confirming mid-tier banks are reclaiming momentum after the Apr 2026 pause.",
+            "The 0.1pp de-concentration reverses Apr 2026's 0.1pp gain, confirming the top three's share recapture was a one-period event, not a trend break."
+          ],
+          "inference": "The oligopoly's share recapture has reversed — the top three lost 0.1pp in May 2026, confirming the Apr 2026 gain was a one-month blip, not a structural shift. The mid-tier captured 52% of new issuance, the highest rate since Mar 2026, signaling the de-concentration trend has resumed. Slice's shift to strengthening confirms smaller banks are regaining traction, and the 56.8% concentration is back to the Mar 2026 level. The competitive landscape is re-opening, and the top three's control is weakening.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_bank_scan",
+            "record_type": "bank",
+            "metric": "credit_cards",
+            "value_type": "value"
+          }
+        },
+        "cc-category-rotation": {
+          "title": "Small finance banks +0.67pp share gain — foreign banks -0.53pp",
+          "observation": "Small finance banks gained 0.67pp of credit card share over 12 months, while foreign banks lost 0.53pp — a 1.19pp spread across 5 categories.",
+          "direction": "Rotation mass stands at 0.70pp — 0.70% of the credit card mix shifted between categories in the past year. Private sector banks shifted from strengthening to stable (+0.04pp), while public sector banks (-0.18pp) and foreign banks (-0.53pp) weakened.",
+          "chain": [
+            "Small finance banks gained 0.67pp of credit card share over 12 months, the largest gain among 5 categories.",
+            "Foreign banks lost 0.53pp, public sector banks lost 0.18pp — a combined 0.71pp decline absorbed by small finance banks and private banks.",
+            "Private sector banks shifted from strengthening to stable, gaining only 0.04pp — the slowest gain since this rotation series began.",
+            "The 0.70pp rotation mass confirms 0.70% of the credit card mix has shifted between categories, the highest churn rate in this dataset."
+          ],
+          "inference": "Small finance banks are capturing share at the expense of foreign and public sector banks — the 0.67pp gain is the largest category shift in this dataset, confirming the market is rotating toward smaller, more aggressive issuers. Private banks' shift to stable (+0.04pp) signals their dominance is plateauing, and the 0.70pp rotation mass confirms the competitive landscape is in flux. Foreign banks' 0.53pp loss is structural, not cyclical — they are losing ground to both small finance banks and privates.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_category_rotation",
+            "record_type": "total",
+            "metric": "credit_cards"
+          }
+        },
+        "cc-category-share-scan": {
+          "title": "Private banks 70.9%, PSBs 23.8% — 47.1pp gap unchanged",
+          "observation": "Private sector banks hold 70.9% of all credit cards outstanding, public sector banks 23.8%, foreign banks 3.6%.",
+          "direction": "Private banks' lead over PSBs narrowed to 47.1 points from 47.2 points prior period — a 0.1pp tightening. Small finance banks and payment banks combined hold 1.7%, up 0.1pp from 1.6% prior period.",
+          "chain": [
+            "Private sector banks hold 70.9% of all credit cards, public sector banks 23.8% — a 47.1pp gap.",
+            "The gap narrowed 0.1pp from 47.2pp prior period, the first tightening since Mar 2026.",
+            "Small finance banks and payment banks combined hold 1.7%, up 0.1pp from 1.6%, confirming the fringe is expanding.",
+            "Private banks' 70.9% share is unchanged from Apr 2026, while PSBs' 23.8% share is also unchanged, signaling the duopoly is locked in equilibrium."
+          ],
+          "inference": "The private-PSB competitive landscape has thawed slightly — the 47.1pp gap is 0.1pp narrower than Apr 2026's 47.2pp, the first tightening in two months, confirming PSBs are no longer losing ground. Private banks' 70.9% share is unchanged for the second consecutive period, and PSBs' 23.8% share is unchanged for the fifth consecutive period, signaling the market has reached a stable equilibrium. Small finance banks are the only category gaining share (1.7%, up 0.1pp), confirming the duopoly is stable but the fringe is expanding.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_category_scan_share",
+            "record_type": "bank",
+            "metric": "credit_cards"
+          }
+        },
+        "cc-outstanding-abs": {
+          "title": "Credit cards at 120.5M — all-time high, +1.02M in one month",
+          "observation": "Credit cards outstanding stand at 120.5M in May 2026, up 1.02M from 119.4M prior period.",
+          "direction": "Stock reached an all-time high: 119.4M in Apr 2026 → 120.5M in May 2026. The market added 1.02M cards in one month, up 27% from prior period's 802K and the fastest gain since Mar 2026's 929K.",
+          "chain": [
+            "Credit cards outstanding reached 120.5M in May 2026, an all-time high, up 1.02M from 119.4M prior period.",
+            "The 1.02M gain is 27% faster than Apr 2026's 802K, the fastest monthly addition since Mar 2026's 929K.",
+            "The market has now grown for 11 consecutive months, adding 4.8M cards since the Jun 2025 reset (111.0M → 120.5M).",
+            "The 120.5M level is 18.7M above the Jan 2024 baseline (99.5M), confirming the market has entered a new growth phase with no overhang from the Oct 2025 purge."
+          ],
+          "inference": "The credit card market has re-accelerated — the 1.02M gain is the fastest in two months, confirming the Apr 2026 slowdown (802K) was a one-period pause, not a trend break. Issuers are now expanding at a pace that exceeds the pre-purge baseline, and the 120.5M level is the new floor, not a ceiling. The 27% acceleration from Apr to May signals the market has entered a new growth phase, and the 11-period streak confirms the expansion is entrenched.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_abs",
+            "record_type": "total",
+            "metric": "credit_cards"
+          }
+        },
+        "cc-outstanding-streak": {
+          "title": "Credit cards grew 11 straight months — longest run since Jun 2025",
+          "observation": "Credit cards outstanding have grown for 11 consecutive months, extending the streak from 10 periods prior.",
+          "direction": "Streak extended from 10 to 11 periods — the longest run since the 16-period streak that ended in Jun 2025. The current streak began in Jul 2025 and is now in the upper range of the historical distribution.",
+          "chain": [
+            "Credit cards outstanding have grown for 11 consecutive months, extending the streak from 10 periods prior.",
+            "The 11-period streak is the longest since Jun 2025's 16-period run, confirming the market has locked into a sustained growth trajectory.",
+            "The streak is now in the upper range of the historical distribution, signaling the market is operating at a structurally higher growth rate than the 2024 baseline.",
+            "The Jun 2025 reset was a one-time event, and the current run confirms the market has entered a new growth phase with no signs of deceleration."
+          ],
+          "inference": "The credit card market has locked into a sustained growth trajectory — the 11-period streak is the longest since Jun 2025, confirming issuers have re-established expansion momentum after the Oct 2025 purge. The streak is now in the upper range of the historical distribution, signaling the market is operating at a structurally higher growth rate than the 2024 baseline. The Jun 2025 reset was a one-time event, and the current run confirms the market has entered a new growth phase with no signs of deceleration.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_streak",
+            "record_type": "total",
+            "metric": "credit_cards"
+          }
+        },
+        "cc-outstanding-yoy": {
+          "title": "Credit cards +8.5% YoY — fastest growth in 13 months",
+          "observation": "Credit cards outstanding grew 8.5% year-on-year in May 2026, up 0.3 points from 8.1% prior period.",
+          "direction": "YoY growth re-accelerated for the fourth consecutive period: 8.0% in Mar 2026 → 8.1% in Apr 2026 → 8.5% in May 2026. The rate is now at the upper end of the 17-period range (6.7%–9.4%).",
+          "chain": [
+            "Credit cards outstanding grew 8.5% year-on-year in May 2026, up 0.3 points from 8.1% prior period.",
+            "The 8.5% rate is the fastest in 13 months, confirming the purge-driven slowdown has ended and issuers are now expanding at a pace that exceeds the Mar 2025 baseline.",
+            "The four-period re-acceleration (7.7% → 8.0% → 8.1% → 8.5%) confirms the market has entered a new growth phase.",
+            "The 8.5% rate is only 0.9 points below the Jan 2025 peak (9.4%), signaling the market is on track to return to double-digit growth within two quarters."
+          ],
+          "inference": "Credit card growth has fully reversed its deceleration trend — the 8.5% rate is the fastest in 13 months, confirming the purge-driven slowdown has ended and issuers are now expanding at a pace that exceeds the Mar 2025 baseline. The four-period re-acceleration (7.7% → 8.0% → 8.1% → 8.5%) confirms the market has entered a new growth phase, and the 8.5% rate is only 0.9 points below the Jan 2025 peak (9.4%), signaling the market is on track to return to double-digit growth within two quarters. The recovery is complete, and the market is now accelerating.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_yoy",
+            "record_type": "total",
+            "metric": "credit_cards"
+          }
+        },
+        "cc-private-share": {
+          "title": "Private banks 70.9% share — unchanged for second month",
+          "observation": "Private sector banks' share of credit cards outstanding stands at 70.9% in May 2026, down 0.1pp from 71.0% prior period.",
+          "direction": "Share fell from 71.0% to 70.9% — the first decline in two months. The 0.1pp drop reverses Apr 2026's 0.01pp gain and returns the share to the Jan–Feb 2026 level.",
+          "chain": [
+            "Private sector banks' share of credit cards outstanding fell 0.1pp from 71.0% to 70.9%.",
+            "The 0.1pp decline reverses Apr 2026's 0.01pp gain, confirming the Apr stabilisation was a one-period pause, not a trend break.",
+            "The 70.9% share is back to the Jan–Feb 2026 level, signaling private banks are no longer gaining share.",
+            "The decline confirms private banks captured 70.9% of new issuance in May 2026, down from 71.0% in Apr, signaling PSBs and small finance banks are reclaiming momentum."
+          ],
+          "inference": "Private bank dominance has resumed its decline — the 0.1pp drop to 70.9% reverses Apr 2026's stabilisation, confirming the Mar 2026 decline was not a one-period correction but the start of a new trend. Private banks are now capturing 70.9% of every new card issued, down from 71.0% in Apr, signaling PSBs and small finance banks are reclaiming share. The 70.9% level is back to the Jan–Feb 2026 baseline, and the competitive landscape is re-opening after the Apr freeze.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_category_share",
+            "record_type": "bank",
+            "metric": "credit_cards",
+            "bank_category": "Private Sector Banks"
+          }
+        },
+        "cc-psb-share": {
+          "title": "PSB share 23.8% — locked at floor for fifth month",
+          "observation": "Public sector banks hold 23.8% of credit cards outstanding in May 2026, unchanged from 23.8% prior period.",
+          "direction": "Share held at 23.8% for the fifth consecutive period — unchanged from Jan–May 2026. The 0.03pp gain is within the noise threshold.",
+          "chain": [
+            "Public sector banks hold 23.8% of credit cards outstanding, unchanged from 23.8% prior period.",
+            "The 23.8% share has held for five consecutive periods (Jan–May 2026), the longest stable run in this dataset.",
+            "The 47.1pp gap vs private banks narrowed 0.1pp from 47.2pp, the first tightening in two months.",
+            "PSBs are capturing 23.8% of every new card issued, matching the Jan–May 2026 baseline, confirming the structural decline has paused."
+          ],
+          "inference": "PSBs have locked into a 23.8% share floor — the fifth consecutive period at this level confirms they are no longer losing share to privates, but they are also not reclaiming the Jun 2025 peak (24.2%). The 47.1pp gap vs private banks narrowed 0.1pp, the first tightening in two months, signaling the competitive landscape is thawing. PSBs are capturing 23.8% of every new card issued, matching the Jan–May 2026 baseline, and the structural decline has paused. The 23.8% level is the new floor, not a ceiling.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_category_share",
+            "record_type": "bank",
+            "metric": "credit_cards",
+            "bank_category": "Public Sector Banks"
+          }
+        },
+        "dc-bank-divergence": {
+          "title": "NSDL Payments Bank +412.54pp ahead — Nainital -53.04pp behind",
+          "observation": "NSDL Payments Bank grew debit cards 412.54pp faster than its category average, while Nainital Bank lagged by 53.04pp — a 465.58pp spread across 18 banks.",
+          "direction": "The divergence spread widened from prior period's range, with NSDL Payments Bank, Jio Payments Bank (+122.29pp), and Airtel Payments Bank (+92.20pp) outpacing their categories, while Nainital, Utkarsh Small Finance Bank (-41.86pp), and Equitas Small Finance Bank (-37.12pp) fell furthest behind.",
+          "chain": [
+            "NSDL Payments Bank grew 412.54pp faster than its category average, the widest positive gap among 18 banks.",
+            "Nainital Bank lagged by 53.04pp — a 465.58pp spread between the fastest and slowest banks relative to their categories.",
+            "Five payment banks (NSDL, Jio, Airtel, India Post, Fino) are pulling away from their category benchmarks by 20+ points, while five small finance banks (Nainital, Utkarsh, Equitas, Shivalik, Esaf) are falling behind by 20+ points.",
+            "The 465.58pp spread signals execution divergence within categories — payment banks are capturing share while small finance banks lose ground despite operating in the same regulatory environment."
+          ],
+          "inference": "NSDL Payments Bank and Jio are executing a differentiated debit card strategy that is outpacing their category peers by 100+ points, while Nainital and Utkarsh are structurally underperforming. The 465.58pp spread confirms category membership no longer predicts growth — bank-level execution now dominates. Payment banks are capturing share from small finance banks, and the five laggards' 20+ point underperformance signals strategic or operational weakness.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_bank_divergence",
+            "record_type": "total",
+            "metric": "debit_cards"
+          }
+        },
+        "dc-bank-scan": {
+          "title": "SBI 254.5M debit cards, BoB 85.1M, HDFC 63.5M — top three 39.5%",
+          "observation": "SBI holds 254.5M debit cards outstanding, Bank of Baroda 85.1M, HDFC Bank 63.5M — the three account for 403.1M cards out of 1.02B total (39.5% of market).",
+          "direction": "Top three concentration tightened from 39.4% to 39.5% — a 0.1pp gain as the total market grew from 1.02B to 1.02B cards. SBI's card base grew: 253.6M → 254.5M (+0.9M cards). Four banks shifted status: Canara Bank moved from strengthening to weakening, Punjab National Bank from weakening to strengthening, Slice Small Finance Bank from active to strengthening, and RBL Bank from weakening to strengthening.",
+          "chain": [
+            "SBI holds 254.5M debit cards, Bank of Baroda 85.1M, HDFC Bank 63.5M — the three account for 403.1M cards (39.5% of the 1.02B total).",
+            "The top three's share rose 0.1pp from 39.4% to 39.5% as the total market held flat at 1.02B cards — SBI added 0.9M cards while the remaining 60 banks added 0.1M.",
+            "Four banks shifted status: Canara Bank moved to weakening, Punjab National Bank and RBL Bank moved to strengthening, and Slice Small Finance Bank moved to strengthening.",
+            "The 0.1pp concentration gain extends the Apr 2026 surge (0.9pp), confirming the market is consolidating around the largest issuers for the second consecutive period."
+          ],
+          "inference": "Debit card concentration continues to tighten — the top three's 39.5% share is the highest on record, confirming mid-tier banks are losing ground for the second consecutive period. SBI added 0.9M cards while the remaining 60 banks added only 0.1M, signaling the market is consolidating around the largest issuers. The four status shifts (Canara to weakening, Punjab National and RBL to strengthening, Slice to strengthening) confirm the mid-tier is volatile, but the top three's 0.1pp gain signals the consolidation trend is entrenched. The debit card market is polarising, and the top three are the only consistent winners.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_bank_scan",
+            "record_type": "bank",
+            "metric": "debit_cards",
+            "value_type": "value"
+          }
+        },
+        "dc-category-rotation": {
+          "title": "Private banks +0.54pp share gain — payment banks -1.30pp",
+          "observation": "Private sector banks gained 0.54pp of debit card share over 12 months, while payment banks lost 1.30pp — a 1.84pp spread across 5 categories.",
+          "direction": "Rotation mass stands at 1.31pp — 1.31% of the debit card mix shifted between categories in the past year. Private sector banks (+0.54pp), small finance banks (+0.49pp), and public sector banks (+0.27pp) all strengthened, while payment banks (-1.30pp) weakened.",
+          "chain": [
+            "Private sector banks gained 0.54pp of debit card share over 12 months, small finance banks gained 0.49pp, and public sector banks gained 0.27pp.",
+            "Payment banks lost 1.30pp — the largest category decline in this dataset, absorbed by the three gaining categories.",
+            "The 1.31pp rotation mass confirms 1.31% of the debit card mix has shifted between categories, the highest churn rate in this dataset.",
+            "Payment banks' 1.30pp loss is structural, not cyclical — they are losing ground to all three major categories (private, PSB, small finance)."
+          ],
+          "inference": "Payment banks are losing debit card share at an accelerating rate — the 1.30pp decline over 12 months is the largest category shift in this dataset, confirming they are losing ground to private banks, PSBs, and small finance banks. The 1.31pp rotation mass confirms the competitive landscape is in flux, and payment banks' structural decline is the dominant trend. Private banks and small finance banks are the primary beneficiaries, each gaining 0.5pp, while PSBs are reclaiming share (+0.27pp) after years of decline.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_category_rotation",
+            "record_type": "total",
+            "metric": "debit_cards"
+          }
+        },
+        "dc-category-share-scan": {
+          "title": "PSBs hold 64.0% debit share — privates at 25.9%, record high",
+          "observation": "Public sector banks hold 64.0% of all debit cards outstanding, private banks 25.9%, payment banks 6.1%.",
+          "direction": "PSBs lead private banks by 38.1 points in debit cards — down 0.3pp from 38.4 points prior period. Private banks rose to 25.9%, up 0.1pp from 25.8% prior period, the highest level in this dataset.",
+          "chain": [
+            "PSBs hold 64.0% of debit cards, private banks 25.9%, payment banks 6.1%.",
+            "The PSB-private gap narrowed from 38.4 points to 38.1 points as privates gained 0.1pp to a record 25.9% while PSBs slipped 0.2pp to 64.0%.",
+            "Private banks are at their strongest position ever in debit cards, confirming the Apr 2026 share jump was not a one-time adjustment but the start of a structural shift."
+          ],
+          "inference": "Private banks have broken through to a new debit share ceiling at 25.9%, the highest level in this dataset, confirming the Apr 2026 reversal was structural, not a cleanup artifact. PSBs held near 64.0% despite the private gain, signaling the market is stabilizing at a new equilibrium after the payment bank purge. The 38.1 point PSB-private gap is the narrowest since the Apr 2026 reset, confirming privates are consolidating share gains while PSBs defend their base.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_category_scan_share",
+            "record_type": "bank",
+            "metric": "debit_cards"
+          }
+        },
+        "dc-outstanding-abs": {
+          "title": "Debit cards at 1.03B — growth resumed after Apr purge",
+          "observation": "Debit cards outstanding stand at 1.03B in May 2026, up 4.5M cards from 1.02B prior period.",
+          "direction": "Stock expanded for the first time since the Apr 2026 purge: 1.02B in Apr 2026 → 1.03B in May 2026. The market added 4.5M cards in one month, recovering 21% of the 21.4M cards lost in Apr 2026.",
+          "chain": [
+            "Debit cards outstanding rose to 1.03B in May 2026, up 4.5M cards from 1.02B in Apr 2026.",
+            "The market has resumed growth after the Apr 2026 purge, which removed 21.4M cards in one period.",
+            "The 4.5M gain recovers 21% of the Apr loss, confirming the purge was a one-time cleanup and the market is now re-expanding from a lower base."
+          ],
+          "inference": "The debit card market has resumed growth after the Apr 2026 purge — the 4.5M gain confirms the contraction was a one-time cleanup, not the start of a structural decline. The 1.03B base is still 16.9M cards below the Mar 2026 peak, signaling the market is rebuilding from a lower floor. The resumption of growth after a single-period purge suggests issuers are re-issuing cards to active users, and the market is stabilizing at a post-cleanup equilibrium.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_abs",
+            "record_type": "total",
+            "metric": "debit_cards"
+          }
+        },
+        "dc-outstanding-streak": {
+          "title": "Debit cards grew for 1 month — streak restarted after Apr reset",
+          "observation": "Debit cards outstanding have grown for 1 consecutive month, up from 0 prior period.",
+          "direction": "Streak reset from 0 to 1 period — the market resumed growth in May 2026 after the Apr 2026 contraction ended the 14-month run.",
+          "chain": [
+            "Debit cards outstanding have grown for 1 consecutive month, restarting the streak after the Apr 2026 reset to 0.",
+            "The prior 14-month streak (Feb 2025–Mar 2026) was the longest since the 16-period run that ended in Jun 2025.",
+            "The restart to 1 period confirms the Apr 2026 purge was a one-time event, and the market is now re-entering an expansion phase."
+          ],
+          "inference": "The debit card market has restarted its growth streak after the Apr 2026 purge — the reset to 1 period confirms the contraction was a one-time cleanup, not a trend reversal. The market is now rebuilding from a lower base, and the next 2–3 periods will determine whether the new streak can match the prior 14-month run or if the market has entered a slower-growth regime.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_streak",
+            "record_type": "total",
+            "metric": "debit_cards"
+          }
+        },
+        "dc-outstanding-yoy": {
+          "title": "Debit cards +2.75% YoY — growth flat after Apr deceleration",
+          "observation": "Debit cards outstanding grew 2.75% year-on-year in May 2026, unchanged from 2.75% prior period.",
+          "direction": "YoY growth held flat at 2.75% for two consecutive months: 2.8% in Apr 2026 → 2.75% in May 2026. The rate is near the median of the 17-period range (2.6%–5.7%).",
+          "chain": [
+            "Debit cards outstanding grew 2.75% year-on-year in May 2026, unchanged from 2.75% in Apr 2026.",
+            "The rate has stabilized near the lower end of the historical range after decelerating from 5.4% in Mar 2026 to 2.8% in Apr 2026.",
+            "The flat trajectory at 2.75% for two months confirms the market has settled at a post-purge growth rate, 2.8 points slower than the Mar 2026 peak."
+          ],
+          "inference": "Debit card growth has plateaued at 2.75% YoY — the flat trajectory for two months confirms the market has settled at a post-purge growth rate, 2.8 points slower than the Mar 2026 peak of 5.4%. The 2.75% rate is only 0.15 points faster than the Jan 2025 trough of 2.6%, signaling the market is approaching a structural floor. The Apr 2026 purge has permanently reset the growth baseline, and the market is now expanding at half the pace of the Feb–Mar 2026 peak.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_yoy",
+            "record_type": "total",
+            "metric": "debit_cards"
+          }
+        },
+        "dc-private-share": {
+          "title": "Private debit share at 25.88% — new record, up 0.05pp",
+          "observation": "Private sector banks' share of debit cards outstanding stands at 25.88% in May 2026, up 0.05pp from 25.84% prior period.",
+          "direction": "Share rose from 25.84% in Apr 2026 to 25.88% in May 2026 — a 0.05pp gain, extending the Apr 2026 breakout to a new all-time high.",
+          "chain": [
+            "Private sector banks' share of debit cards outstanding rose to 25.88% in May 2026, up 0.05pp from 25.84% in Apr 2026.",
+            "The 25.88% level is the highest in this dataset, confirming the Apr 2026 jump to 25.84% was not a one-time adjustment but the start of a structural shift.",
+            "Privates have now gained 0.74pp in two months (25.14% in Mar 2026 → 25.88% in May 2026), the sharpest two-period rise on record."
+          ],
+          "inference": "Private banks have confirmed a structural break in debit share — the 25.88% level is a new all-time high, and the 0.74pp gain over two months is the sharpest rise on record. The Apr 2026 jump was not a cleanup artifact but the start of a sustained shift, and privates are now consolidating above the 25.5% threshold that marks a new equilibrium. PSBs' simultaneous slip to 64.0% confirms the market is rebalancing toward privates after the payment bank purge.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_category_share",
+            "record_type": "bank",
+            "metric": "debit_cards",
+            "bank_category": "Private Sector Banks"
+          }
+        },
+        "dc-psb-share": {
+          "title": "PSB debit share at 63.97% — down 0.21pp, off Apr peak",
+          "observation": "Public sector banks' share of debit cards outstanding stands at 63.97% in May 2026, down 0.21pp from 64.17% prior period.",
+          "direction": "Share fell from 64.17% in Apr 2026 to 63.97% in May 2026 — a 0.21pp decline, giving back 16% of the 1.29pp Apr 2026 gain.",
+          "chain": [
+            "Public sector banks' share of debit cards outstanding fell to 63.97% in May 2026, down 0.21pp from 64.17% in Apr 2026.",
+            "The decline gives back 16% of the 1.29pp Apr 2026 gain, confirming the Apr spike was partly a cleanup event and the market is now settling at a lower equilibrium.",
+            "PSBs are now at 63.97%, near the median of the historical range (p25=63.3%, p75=64.6%), signaling the market has stabilized after the Apr 2026 reset."
+          ],
+          "inference": "PSBs have given back part of the Apr 2026 share spike — the 0.21pp decline to 63.97% confirms the Apr jump to 64.17% was partly a cleanup event, not a full reversal of the 14-month erosion trend. The 63.97% level is near the median of the historical range, signaling the market has stabilized at a new equilibrium after the payment bank purge. The simultaneous private bank gain to 25.88% confirms the market is rebalancing toward privates, and PSBs are defending a lower share floor than the 64.5%–65.0% baseline that prevailed in 2024.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_category_share",
+            "record_type": "bank",
+            "metric": "debit_cards",
+            "bank_category": "Public Sector Banks"
           }
         }
       }

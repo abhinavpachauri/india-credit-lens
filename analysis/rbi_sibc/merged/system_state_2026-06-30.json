@@ -5,7 +5,7 @@
     "schema_version": "4.0",
     "spec_ref": "analysis/SYSTEM_MODEL_SPEC.md §16",
     "computed_from": "signals.db",
-    "signals_observed": 85
+    "signals_observed": 89
   },
   "entity_states": {
     "icl:sibc/Statement1/I": {
@@ -35,13 +35,13 @@
     },
     "icl:sibc/Statement1/3": {
       "direction": 1,
-      "signals": 6,
-      "observed": 6
+      "signals": 8,
+      "observed": 7
     },
     "icl:sibc/Statement1/4": {
       "direction": 1,
-      "signals": 14,
-      "observed": 14
+      "signals": 16,
+      "observed": 16
     },
     "icl:sibc/Statement1/2.1": {
       "direction": 1,
@@ -498,6 +498,14 @@
       "evidence_total": 1,
       "authored_status": "active",
       "mismatch": false
+    },
+    "force_eclgs5_guarantee_window": {
+      "state": "active",
+      "instance_of": "ch_emergency_guarantee_msme",
+      "evidence_observed": 3,
+      "evidence_total": 3,
+      "authored_status": "active",
+      "mismatch": false
     }
   },
   "edge_states": {
@@ -754,7 +762,8 @@
       "force_msme_formalisation",
       "force_nbfc_regulatory_recovery",
       "force_msp_procurement_growth",
-      "force_infra_cycle_maturing"
+      "force_infra_cycle_maturing",
+      "force_eclgs5_guarantee_window"
     ],
     "binding_constraints": [],
     "active_reinforcing_loops": [

@@ -274,6 +274,82 @@
       "polarity": "~",
       "lifecycle": "permanent",
       "promoted_from": "S4 inference (source-verified)"
+    },
+    {
+      "id": "ch_kcc_psl_agri_limits",
+      "label": "KCC / PSL credit-limit expansion → agriculture credit volume",
+      "driver_type": "policy_action",
+      "source_concept": "policy:psl_kcc_limits",
+      "target_concepts": [
+        {
+          "product": "agriculture"
+        }
+      ],
+      "mechanism": "RBI directives expanding Kisan Credit Card coverage or raising PSL farm-credit limits increase formal agriculture lending through banks by widening the eligible borrower pool and per-borrower headroom.",
+      "polarity": "+",
+      "lifecycle": "permanent",
+      "promoted_from": "S4 inference (source-verified)"
+    },
+    {
+      "id": "ch_emergency_guarantee_msme",
+      "label": "Emergency credit-guarantee cover → MSME credit growth",
+      "driver_type": "policy_action",
+      "source_concept": "policy:credit_guarantee_cover",
+      "target_concepts": [
+        {
+          "product": "msme_credit"
+        }
+      ],
+      "mechanism": "A sovereign-guaranteed emergency credit window (ECLGS-family, via NCGTC) removes lender default risk on incremental MSME working-capital loans, driving guaranteed lending above the unassisted trend while a scheme window is open.",
+      "polarity": "+",
+      "lifecycle": "conditional",
+      "promoted_from": "S4 inference (source-verified)"
+    },
+    {
+      "id": "ch_policy_rate_retail_pricing",
+      "label": "Policy-rate transmission → retail loan pricing",
+      "driver_type": "macro_factor",
+      "source_concept": "macro:policy_rate",
+      "target_concepts": [
+        {
+          "product": "personal_loan"
+        }
+      ],
+      "mechanism": "Repo-rate changes transmit to banks' cost of funds and lending rates; cuts make retail loans cheaper for borrowers and more attractive for lenders to originate, hikes do the reverse. Polarity stated with respect to the rate.",
+      "polarity": "-",
+      "lifecycle": "permanent",
+      "promoted_from": "S4 inference (source-verified)"
+    },
+    {
+      "id": "ch_qr_interop_consolidation",
+      "label": "Interoperable UPI QR → merchant QR consolidation",
+      "driver_type": "structural_shift",
+      "source_concept": "structure:qr_interoperability",
+      "target_concepts": [
+        {
+          "product": "qr_acceptance"
+        }
+      ],
+      "mechanism": "Merchants prefer a single interoperable UPI QR over separate Bharat QR infrastructure (lower operational complexity, broader reach), shifting the acceptance mix toward UPI QR and marginalising parallel QR rails.",
+      "polarity": "~",
+      "lifecycle": "permanent",
+      "promoted_from": "S4 inference (source-verified)"
+    },
+    {
+      "id": "ch_qr_substitutes_pos",
+      "label": "QR acceptance economics → POS deployment slowdown",
+      "driver_type": "structural_shift",
+      "source_concept": "structure:acceptance_cost_asymmetry",
+      "target_concepts": [
+        {
+          "product": "pos_acceptance"
+        }
+      ],
+      "mechanism": "Near-zero-cost QR (and tap-to-pay) acceptance undercuts the economics of deploying physical POS terminals; acquirers slow installations as QR gains share, dampening terminal growth and debit-at-POS usage.",
+      "polarity": "-",
+      "lifecycle": "permanent",
+      "cross_system_note": "Spans payments acceptance infrastructure (POS terminals) and debit-card POS transaction flow.",
+      "promoted_from": "S4 inference (source-verified)"
     }
   ]
 }

@@ -2,7 +2,7 @@
   "_meta": {
     "schema_version": "1.0",
     "description": "Signal registry — permanent catalog of every tracked signal across all ingestion pipelines. Signal IDs are immutable once created. Add new signals; never rename or delete. layer: 1 = per-chart data signal (algorithmically computed), 2 = cross-chart synthesis (authored per period from data), 3 = lending ecosystem expert model (generated ~6-monthly, strict claim validation).",
-    "last_updated": "2026-07-04"
+    "last_updated": "2026-07-20"
   },
   "pipelines": {
     "sibc": {
@@ -6391,6 +6391,327 @@
       "chart_series": [
         "Credit Card Outstanding"
       ]
+    },
+    "sibc-industry-rotation": {
+      "id": "sibc-industry-rotation",
+      "title": "Rotation — industry types (Δ share of industry credit, 12m, pp)",
+      "type": "data",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1e",
+      "domain": "industry",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_sector_rotation",
+        "parent_code": "2",
+        "child_level": 2,
+        "statement": "Statement 2",
+        "denominator_code": "2",
+        "denominator_statement": "Statement 1",
+        "entity_type": "industry_type",
+        "window": 12,
+        "status_rules": [
+          {
+            "if": "value > 0.15",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < -0.15",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "stable"
+          }
+        ],
+        "share_of": "industry credit"
+      },
+      "current_status": "active",
+      "first_seen": "2025-02-28"
+    },
+    "sibc-services-rotation": {
+      "id": "sibc-services-rotation",
+      "title": "Rotation — services sub-sectors (Δ share of services credit, 12m, pp)",
+      "type": "data",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1e",
+      "domain": "sector_mix",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_sector_rotation",
+        "parent_code": "3",
+        "child_level": 2,
+        "statement": "Statement 1",
+        "entity_type": "service_sector",
+        "window": 12,
+        "status_rules": [
+          {
+            "if": "value > 0.15",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < -0.15",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "stable"
+          }
+        ],
+        "share_of": "services credit"
+      },
+      "current_status": "active",
+      "first_seen": "2025-02-28"
+    },
+    "sibc-pl-rotation": {
+      "id": "sibc-pl-rotation",
+      "title": "Rotation — personal-loan categories (Δ share of personal loans, 12m, pp)",
+      "type": "data",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1e",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_sector_rotation",
+        "parent_code": "4",
+        "child_level": 2,
+        "statement": "Statement 1",
+        "entity_type": "pl_category",
+        "window": 12,
+        "status_rules": [
+          {
+            "if": "value > 0.15",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < -0.15",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "stable"
+          }
+        ],
+        "share_of": "personal loans"
+      },
+      "current_status": "active",
+      "first_seen": "2025-02-28"
+    },
+    "sibc-industry-divergence": {
+      "id": "sibc-industry-divergence",
+      "title": "Divergence — industry types contradicting industry credit YoY (pp gap)",
+      "type": "data",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1e",
+      "domain": "industry",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_sector_divergence",
+        "parent_code": "2",
+        "child_level": 2,
+        "statement": "Statement 2",
+        "parent_statement": "Statement 1",
+        "entity_type": "industry_type",
+        "min_abs": 2.0,
+        "min_gap": 5.0
+      },
+      "current_status": "active",
+      "first_seen": "2025-02-28"
+    },
+    "sibc-services-divergence": {
+      "id": "sibc-services-divergence",
+      "title": "Divergence — services sub-sectors contradicting services credit YoY (pp gap)",
+      "type": "data",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1e",
+      "domain": "sector_mix",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_sector_divergence",
+        "parent_code": "3",
+        "child_level": 2,
+        "statement": "Statement 1",
+        "entity_type": "service_sector",
+        "min_abs": 2.0,
+        "min_gap": 5.0
+      },
+      "current_status": "unknown",
+      "first_seen": "2025-02-28"
+    },
+    "sibc-pl-divergence": {
+      "id": "sibc-pl-divergence",
+      "title": "Divergence — personal-loan categories contradicting personal loans YoY (pp gap)",
+      "type": "data",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1e",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_sector_divergence",
+        "parent_code": "4",
+        "child_level": 2,
+        "statement": "Statement 1",
+        "entity_type": "pl_category",
+        "min_abs": 2.0,
+        "min_gap": 5.0
+      },
+      "current_status": "active",
+      "first_seen": "2025-02-28"
+    },
+    "cc-category-rotation": {
+      "id": "cc-category-rotation",
+      "title": "Rotation — credit-card share by bank category (Δ share, 12m, pp)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1e",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_category_rotation",
+        "metric": "credit_cards",
+        "window": 12,
+        "status_rules": [
+          {
+            "if": "value > 0.15",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < -0.15",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "stable"
+          }
+        ]
+      },
+      "current_status": "active",
+      "first_seen": "2024-01-31"
+    },
+    "dc-category-rotation": {
+      "id": "dc-category-rotation",
+      "title": "Rotation — debit-card share by bank category (Δ share, 12m, pp)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1e",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_category_rotation",
+        "metric": "debit_cards",
+        "window": 12,
+        "status_rules": [
+          {
+            "if": "value > 0.15",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < -0.15",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "stable"
+          }
+        ]
+      },
+      "current_status": "active",
+      "first_seen": "2024-01-31"
+    },
+    "pos-category-rotation": {
+      "id": "pos-category-rotation",
+      "title": "Rotation — POS-terminal share by bank category (Δ share, 12m, pp)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1e",
+      "domain": "infrastructure",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_category_rotation",
+        "metric": "pos_terminals",
+        "window": 12,
+        "status_rules": [
+          {
+            "if": "value > 0.15",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < -0.15",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "stable"
+          }
+        ]
+      },
+      "current_status": "active",
+      "first_seen": "2024-01-31"
+    },
+    "cc-bank-divergence": {
+      "id": "cc-bank-divergence",
+      "title": "Divergence — banks contradicting their category on credit cards YoY (pp gap)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1e",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_bank_divergence",
+        "metric": "credit_cards",
+        "min_abs": 2.0,
+        "min_gap": 5.0,
+        "min_base": 10000
+      },
+      "current_status": "active",
+      "first_seen": "2024-01-31"
+    },
+    "dc-bank-divergence": {
+      "id": "dc-bank-divergence",
+      "title": "Divergence — banks contradicting their category on debit cards YoY (pp gap)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1e",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_bank_divergence",
+        "metric": "debit_cards",
+        "min_abs": 2.0,
+        "min_gap": 5.0,
+        "min_base": 10000
+      },
+      "current_status": "active",
+      "first_seen": "2024-01-31"
+    },
+    "pos-bank-divergence": {
+      "id": "pos-bank-divergence",
+      "title": "Divergence — banks contradicting their category on POS terminals YoY (pp gap)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1e",
+      "domain": "infrastructure",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_bank_divergence",
+        "metric": "pos_terminals",
+        "min_abs": 2.0,
+        "min_gap": 5.0,
+        "min_base": 1000
+      },
+      "current_status": "active",
+      "first_seen": "2024-01-31"
     }
   }
 }

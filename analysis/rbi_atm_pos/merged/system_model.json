@@ -40,7 +40,8 @@
         "geography": "national",
         "segment": "mixed",
         "measure": "count.value",
-        "product": null
+        "product": null,
+        "economic_role": null
       }
     },
     {
@@ -60,7 +61,9 @@
       "data_section": null,
       "data_series": null,
       "signal_ids": [
+        "cc-bank-divergence",
         "cc-bank-scan",
+        "cc-category-rotation",
         "cc-category-share-scan",
         "cc-outstanding-abs",
         "cc-outstanding-streak",
@@ -79,7 +82,8 @@
         "geography": "national",
         "segment": "retail",
         "measure": "count.value",
-        "product": "credit_card"
+        "product": "credit_card",
+        "economic_role": "consumer_finance"
       }
     },
     {
@@ -99,7 +103,9 @@
       "data_section": null,
       "data_series": null,
       "signal_ids": [
+        "dc-bank-divergence",
         "dc-bank-scan",
+        "dc-category-rotation",
         "dc-category-share-scan",
         "dc-outstanding-abs",
         "dc-outstanding-streak",
@@ -118,7 +124,8 @@
         "geography": "national",
         "segment": "retail",
         "measure": "count.value",
-        "product": "debit_card"
+        "product": "debit_card",
+        "economic_role": "digital_payment_rails"
       }
     },
     {
@@ -149,7 +156,8 @@
         "geography": "national",
         "segment": "mixed",
         "measure": "count.value",
-        "product": null
+        "product": null,
+        "economic_role": null
       }
     },
     {
@@ -180,7 +188,8 @@
         "geography": "national",
         "segment": "mixed",
         "measure": "count.value",
-        "product": "atm_cash"
+        "product": "atm_cash",
+        "economic_role": "cash_infrastructure"
       }
     },
     {
@@ -214,7 +223,8 @@
         "geography": "national",
         "segment": "mixed",
         "measure": "count.value",
-        "product": "qr_acceptance"
+        "product": "qr_acceptance",
+        "economic_role": "digital_payment_rails"
       }
     },
     {
@@ -248,7 +258,8 @@
         "geography": "national",
         "segment": "mixed",
         "measure": "count.value",
-        "product": "micro_atm_cash"
+        "product": "micro_atm_cash",
+        "economic_role": "cash_infrastructure"
       }
     },
     {
@@ -268,7 +279,9 @@
       "data_section": null,
       "data_series": null,
       "signal_ids": [
+        "pos-bank-divergence",
         "pos-bank-scan",
+        "pos-category-rotation",
         "pos-category-share-scan",
         "pos-private-share",
         "pos-psb-share",
@@ -287,7 +300,8 @@
         "geography": "national",
         "segment": "mixed",
         "measure": "count.value",
-        "product": "pos_acceptance"
+        "product": "pos_acceptance",
+        "economic_role": "digital_payment_rails"
       }
     },
     {
@@ -323,7 +337,8 @@
         "geography": "national",
         "segment": "mixed",
         "measure": "count.value",
-        "product": "qr_acceptance"
+        "product": "qr_acceptance",
+        "economic_role": "digital_payment_rails"
       }
     },
     {
@@ -357,7 +372,8 @@
         "geography": "national",
         "segment": "mixed",
         "measure": "count.value",
-        "product": "atm_cash"
+        "product": "atm_cash",
+        "economic_role": "cash_infrastructure"
       }
     },
     {
@@ -391,7 +407,8 @@
         "geography": "national",
         "segment": "mixed",
         "measure": "count.value",
-        "product": "atm_cash"
+        "product": "atm_cash",
+        "economic_role": "cash_infrastructure"
       }
     },
     {
@@ -422,7 +439,8 @@
         "geography": "national",
         "segment": "mixed",
         "measure": "flow.value",
-        "product": null
+        "product": null,
+        "economic_role": null
       }
     },
     {
@@ -453,7 +471,8 @@
         "geography": "national",
         "segment": "mixed",
         "measure": "flow.value",
-        "product": "credit_card"
+        "product": "credit_card",
+        "economic_role": "consumer_finance"
       }
     },
     {
@@ -484,7 +503,8 @@
         "geography": "national",
         "segment": "mixed",
         "measure": "flow.value",
-        "product": "debit_card"
+        "product": "debit_card",
+        "economic_role": "digital_payment_rails"
       }
     },
     {
@@ -519,7 +539,8 @@
         "geography": "national",
         "segment": "mixed",
         "measure": "flow.value",
-        "product": "credit_card"
+        "product": "credit_card",
+        "economic_role": "consumer_finance"
       }
     },
     {
@@ -554,7 +575,8 @@
         "geography": "national",
         "segment": "mixed",
         "measure": "flow.value",
-        "product": "credit_card"
+        "product": "credit_card",
+        "economic_role": "consumer_finance"
       }
     },
     {
@@ -589,7 +611,8 @@
         "geography": "national",
         "segment": "mixed",
         "measure": "flow.value",
-        "product": "credit_card"
+        "product": "credit_card",
+        "economic_role": "consumer_finance"
       }
     },
     {
@@ -624,7 +647,8 @@
         "geography": "national",
         "segment": "mixed",
         "measure": "flow.value",
-        "product": "credit_card"
+        "product": "credit_card",
+        "economic_role": "consumer_finance"
       }
     },
     {
@@ -659,7 +683,8 @@
         "geography": "national",
         "segment": "mixed",
         "measure": "flow.value",
-        "product": "debit_card"
+        "product": "debit_card",
+        "economic_role": "digital_payment_rails"
       }
     },
     {
@@ -694,7 +719,8 @@
         "geography": "national",
         "segment": "mixed",
         "measure": "flow.value",
-        "product": "debit_card"
+        "product": "debit_card",
+        "economic_role": "digital_payment_rails"
       }
     },
     {
@@ -729,7 +755,8 @@
         "geography": "national",
         "segment": "mixed",
         "measure": "flow.value",
-        "product": "debit_card"
+        "product": "debit_card",
+        "economic_role": "digital_payment_rails"
       }
     },
     {
@@ -764,7 +791,8 @@
         "geography": "national",
         "segment": "mixed",
         "measure": "flow.value",
-        "product": "debit_card"
+        "product": "debit_card",
+        "economic_role": "digital_payment_rails"
       }
     },
     {
@@ -799,7 +827,8 @@
         "geography": "national",
         "segment": "mixed",
         "measure": "flow.value",
-        "product": "debit_card"
+        "product": "debit_card",
+        "economic_role": "digital_payment_rails"
       }
     },
     {
@@ -830,7 +859,8 @@
         "geography": "national",
         "segment": "mixed",
         "measure": "flow.volume",
-        "product": null
+        "product": null,
+        "economic_role": null
       }
     },
     {
@@ -861,7 +891,8 @@
         "geography": "national",
         "segment": "mixed",
         "measure": "flow.volume",
-        "product": "credit_card"
+        "product": "credit_card",
+        "economic_role": "consumer_finance"
       }
     },
     {
@@ -892,7 +923,8 @@
         "geography": "national",
         "segment": "mixed",
         "measure": "flow.volume",
-        "product": "debit_card"
+        "product": "debit_card",
+        "economic_role": "digital_payment_rails"
       }
     },
     {
@@ -928,7 +960,8 @@
         "geography": "national",
         "segment": "mixed",
         "measure": "flow.volume",
-        "product": "credit_card"
+        "product": "credit_card",
+        "economic_role": "consumer_finance"
       }
     },
     {
@@ -963,7 +996,8 @@
         "geography": "national",
         "segment": "mixed",
         "measure": "flow.volume",
-        "product": "credit_card"
+        "product": "credit_card",
+        "economic_role": "consumer_finance"
       }
     },
     {
@@ -998,7 +1032,8 @@
         "geography": "national",
         "segment": "mixed",
         "measure": "flow.volume",
-        "product": "credit_card"
+        "product": "credit_card",
+        "economic_role": "consumer_finance"
       }
     },
     {
@@ -1033,7 +1068,8 @@
         "geography": "national",
         "segment": "mixed",
         "measure": "flow.volume",
-        "product": "credit_card"
+        "product": "credit_card",
+        "economic_role": "consumer_finance"
       }
     },
     {
@@ -1069,7 +1105,8 @@
         "geography": "national",
         "segment": "mixed",
         "measure": "flow.volume",
-        "product": "debit_card"
+        "product": "debit_card",
+        "economic_role": "digital_payment_rails"
       }
     },
     {
@@ -1104,7 +1141,8 @@
         "geography": "national",
         "segment": "mixed",
         "measure": "flow.volume",
-        "product": "debit_card"
+        "product": "debit_card",
+        "economic_role": "digital_payment_rails"
       }
     },
     {
@@ -1139,7 +1177,8 @@
         "geography": "national",
         "segment": "mixed",
         "measure": "flow.volume",
-        "product": "debit_card"
+        "product": "debit_card",
+        "economic_role": "digital_payment_rails"
       }
     },
     {
@@ -1174,7 +1213,8 @@
         "geography": "national",
         "segment": "mixed",
         "measure": "flow.volume",
-        "product": "debit_card"
+        "product": "debit_card",
+        "economic_role": "digital_payment_rails"
       }
     },
     {
@@ -1210,7 +1250,8 @@
         "geography": "national",
         "segment": "mixed",
         "measure": "flow.volume",
-        "product": "debit_card"
+        "product": "debit_card",
+        "economic_role": "digital_payment_rails"
       }
     },
     {

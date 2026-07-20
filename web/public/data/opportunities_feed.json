@@ -203,7 +203,9 @@
         "cc-pos-val-abs",
         "cc-pos-val-share",
         "cc-pos-val-yoy",
+        "cc-bank-divergence",
         "cc-bank-scan",
+        "cc-category-rotation",
         "cc-category-share-scan",
         "cc-outstanding-abs",
         "cc-outstanding-streak",
@@ -233,7 +235,9 @@
         "cc-pos-val-abs",
         "cc-pos-val-share",
         "cc-pos-val-yoy",
+        "cc-bank-divergence",
         "cc-bank-scan",
+        "cc-category-rotation",
         "cc-category-share-scan",
         "cc-outstanding-abs",
         "cc-outstanding-streak",
@@ -383,7 +387,9 @@
         "dc-pos-withdrawal-val-abs",
         "dc-pos-withdrawal-val-share",
         "dc-pos-withdrawal-val-yoy",
+        "pos-bank-divergence",
         "pos-bank-scan",
+        "pos-category-rotation",
         "pos-category-share-scan",
         "pos-private-share",
         "pos-psb-share",
@@ -424,7 +430,9 @@
         "dc-pos-withdrawal-val-abs",
         "dc-pos-withdrawal-val-share",
         "dc-pos-withdrawal-val-yoy",
+        "pos-bank-divergence",
         "pos-bank-scan",
+        "pos-category-rotation",
         "pos-category-share-scan",
         "pos-private-share",
         "pos-psb-share",
@@ -903,6 +911,7 @@
           "sibc-nbfc-sub-yoy-scan",
           "sibc-sectors-positive-yoy-count",
           "sibc-services-fy-acceleration",
+          "sibc-services-rotation",
           "sibc-services-share",
           "sibc-services-share-scan",
           "sibc-services-yoy",
@@ -911,7 +920,9 @@
         "evidence_all": [
           "sibc-nbfc-sub-yoy-scan",
           "sibc-sectors-positive-yoy-count",
+          "sibc-services-divergence",
           "sibc-services-fy-acceleration",
+          "sibc-services-rotation",
           "sibc-services-share",
           "sibc-services-share-scan",
           "sibc-services-yoy",
@@ -1089,7 +1100,9 @@
         "_driver": null,
         "_via": null,
         "evidence": [
+          "cc-bank-divergence",
           "cc-bank-scan",
+          "cc-category-rotation",
           "cc-category-share-scan",
           "cc-outstanding-abs",
           "cc-outstanding-streak",
@@ -1098,7 +1111,9 @@
           "cc-psb-share"
         ],
         "evidence_all": [
+          "cc-bank-divergence",
           "cc-bank-scan",
+          "cc-category-rotation",
           "cc-category-share-scan",
           "cc-outstanding-abs",
           "cc-outstanding-streak",
@@ -1227,7 +1242,9 @@
         "_driver": null,
         "_via": null,
         "evidence": [
+          "cc-bank-divergence",
           "cc-bank-scan",
+          "cc-category-rotation",
           "cc-category-share-scan",
           "cc-outstanding-abs",
           "cc-outstanding-streak",
@@ -1236,7 +1253,9 @@
           "cc-psb-share"
         ],
         "evidence_all": [
+          "cc-bank-divergence",
           "cc-bank-scan",
+          "cc-category-rotation",
           "cc-category-share-scan",
           "cc-outstanding-abs",
           "cc-outstanding-streak",
@@ -1279,7 +1298,9 @@
         "_driver": "RBI enforcement action against Paytm Payments Bank (Jan–Apr 2026)",
         "_via": "Enforcement-driven institutional exit → card stock",
         "evidence": [
+          "dc-bank-divergence",
           "dc-bank-scan",
+          "dc-category-rotation",
           "dc-category-share-scan",
           "dc-outstanding-abs",
           "dc-outstanding-streak",
@@ -1288,7 +1309,9 @@
           "dc-psb-share"
         ],
         "evidence_all": [
+          "dc-bank-divergence",
           "dc-bank-scan",
+          "dc-category-rotation",
           "dc-category-share-scan",
           "dc-outstanding-abs",
           "dc-outstanding-streak",
@@ -1331,7 +1354,9 @@
         "_driver": "Zero MDR policy on UPI transactions (NPCI/GoI)",
         "_via": "Zero MDR → acceptance-infrastructure mix",
         "evidence": [
+          "pos-bank-divergence",
           "pos-bank-scan",
+          "pos-category-rotation",
           "pos-category-share-scan",
           "pos-private-share",
           "pos-psb-share",
@@ -1342,7 +1367,9 @@
           "upi-qr-yoy"
         ],
         "evidence_all": [
+          "pos-bank-divergence",
           "pos-bank-scan",
+          "pos-category-rotation",
           "pos-category-share-scan",
           "pos-private-share",
           "pos-psb-share",

@@ -316,6 +316,14 @@ def main(period: str | None = None) -> int:
         if not reg_sig or reg_sig.get("layer") != 1:
             continue
 
+        # Relational signals (rotation/divergence) have deterministic prose
+        # builders in core/relational_insights — deterministic prose is the
+        # product for them (signals/README.md), so they must never fall through
+        # to the LLM-represented branch below. Dashboard wiring is pending
+        # operator review; until then they are excluded from this output.
+        if _signal_type(reg_sig) in ("rotation", "divergence"):
+            continue
+
         domain  = se["_domain"]
         section = SIGNAL_SECTION_OVERRIDE.get(sid) or DOMAIN_SECTION.get(domain)
         if not section or section not in sections_out:
