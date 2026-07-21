@@ -54,7 +54,7 @@ Live components only. Planned work lives in `STRATEGY_PLANNER.md`.
 | SEO layer | **Live** — metadata, OG image, sitemap, JSON-LD |
 | Email / Substack CTA | **Live** — `SubstackCTA.tsx` + `EmailGate.tsx` |
 | Reply desk (X distribution) | **Retired (2026-07-21)** → `analysis/legacy/replydesk/` — distribution serves Substack + LinkedIn; X is reactive and needs its own design. Never used (`reply_log.json` never created in 17 days). Its SEBI guardrail was salvaged into `distribution/slot_render.lint_compliance` (blurbs + design prompts) — it was the only one in the codebase. |
-| Newsletter v2 (2-post cadence) | **Live (2026-07-04)** — deterministic rendering over gate-validated artifacts: `generate_release_read.py` (L1, within 24h of release) + `generate_deep_read.py` (L2/L3 + ecosystem, mid-cycle). Self-gating traceability (`validate_newsletter.check_doc`: verbatim cards + declared-scope numbers, negative-tested). Output = .md + Substack-paste .html. v1 (config/mermaid/LinkedIn) retired to `legacy/newsletter_v1/` — LinkedIn posts are now written by the user in their own voice. |
+| Long-form / Substack (2-post cadence) | **Live** — folded into `analysis/distribution/` on 2026-07-21 (it is a channel, not a system). Deterministic rendering over gate-validated artifacts: `issues/merged_issue.py` (L1, within 24h of release) + `issues/deep_read.py` (L2/L3 + ecosystem, mid-cycle). Self-gating traceability (`validate_distribution.check_doc`: verbatim cards + **per-block** declared scope — the pooled version measured 0% catch, see the gate docstring). Output = .md + Substack-paste .html. v1 (config/mermaid/LinkedIn) retired to `legacy/newsletter_v1/` — LinkedIn posts are now written by the user in their own voice. |
 | validate_content.py (Check 2b) | **Live** — content accuracy eval on annotation bodies |
 | validate_claims.py (Check 2c) | **Retired** — superseded by `core/validate_system_model.py` (sourcing built in); archived in `analysis/legacy/` |
 | validate_annotation_basis.py (Check 2d) | **Live** — basis completeness check (inference/hypothesis → basis.inferences non-empty) |
@@ -109,8 +109,9 @@ Use CLI tools for all external service interactions — they are the most contex
 | `python3 analysis/core/generate_signal_history.py status` | Print current signal states across all pipelines |
 | `python3 analysis/validate_signal_history.py` | Check 2e: signal history integrity — DB rows, registry schema, status sync vs DB |
 | `python3 analysis/check_signal_freshness.py [--pipeline {name}]` | Check 2f/5b2: signals.db freshness — recompute every period from the CSV and fail on any drift (value/status/missing/orphan). Deterministic guard; runs in both gates + pre-commit. Fix = re-append **every** period, not just the latest. |
-| `python3 analysis/newsletter/generate_release_read.py [--pipeline atm_pos]` | Newsletter Post 1 (L1 release read) — self-gating; run after the ingestion gate is green |
-| `python3 analysis/newsletter/generate_deep_read.py` | Newsletter Post 2 (L2/L3 deep read) — self-gating; publish mid-cycle |
+| `python3 analysis/distribution/issues/merged_issue.py [--pipeline atm_pos]` | Long-form Post 1 (L1 release read) — self-gating; run after the ingestion gate is green |
+| `python3 analysis/distribution/issues/deep_read.py` | Long-form Post 2 (L2/L3 deep read) — self-gating; publish mid-cycle |
+| `python3 analysis/measure_groundedness.py` | Measure any traceability gate by injection — catch rate + false-rejection rate |
 
 ---
 
@@ -212,19 +213,6 @@ handles formatting-only cases automatically.
 | `analysis/rbi_atm_pos/CLAUDE.md` | ATM/POS pipeline context — read before any ATM/POS work |
 | `analysis/rbi_atm_pos/timeline.json` | Registry of ingested ATM/POS months |
 
-### Newsletter subsystem
-
-| File | Purpose |
-|---|---|
-| `analysis/newsletter/CLAUDE.md` | Newsletter v2 context — read before any content generation |
-| `analysis/newsletter/newsletter_sources.py` | Data layer — reads only gate-validated artifacts (signals.db + insight/opportunity feeds) |
-| `analysis/newsletter/newsletter_render.py` | Render layer — typed blocks → .md + Substack-paste .html |
-| `analysis/newsletter/validate_newsletter.py` | Self-gate: verbatim-card + declared-scope number traceability (`check_doc`) |
-| `analysis/newsletter/generate_release_read.py` | Post 1 (L1 release read, per pipeline) — run within 24h of release |
-| `analysis/newsletter/generate_deep_read.py` | Post 2 (L2/L3 + ecosystem deep read) — publish mid-cycle |
-| `analysis/newsletter/signal_registry.json` | Editorial record of every signal ever published |
-| `analysis/legacy/newsletter_v1/` | Retired v1: config-driven generator, LinkedIn + mermaid-image scripts |
-
 ### Distribution subsystem
 
 **Live (2026-07-21)** — one renderer over the categories partition; every slot self-gates and
@@ -235,11 +223,16 @@ Claude never writes a finished post (each slot emits a *closed* design prompt + 
 | `analysis/distribution/DISTRIBUTION_SPEC.md` | **Design v1.1** — 10-category taxonomy, monthly slot map + fallbacks, per-slot output contract, blurb voice, AI PM track. §13 records the Fable-brief reconciliation + the measured data-month offset. Read before any distribution work. |
 | `analysis/distribution/generate_slot.py` | **The generator** — `--slot {1st,7th,14th,21st,28th}` or `--all`. Calendar → category (primary, then fallback) → slate → gate → `output/{date}_{slot}_{cat}/{design_prompt,blurb}.md` → ledger. Empty primary *and* fallback = skip, recorded. |
 | `analysis/distribution/categories.py` | The §3 partition in code: compute method → category, precedence for multi-signal cards. An unclassified method fails the run. |
-| `analysis/distribution/distribution_sources.py` | Data layer — generalises `newsletter_sources` (imports it, never copies it). Claims by category, data vintage read fresh per run, turns/corrections/watchlist. |
+| `analysis/distribution/distribution_sources.py` | Data layer for every channel — absorbed `newsletter_sources` on 2026-07-21. Claims by category, data vintage read fresh per run, turns/corrections/watchlist. |
 | `analysis/distribution/slot_render.py` | Slate → closed design prompt (+ machine-readable supplied-numbers block) + blurb; §10 voice lint. |
 | `analysis/distribution/validate_distribution.py` | The gate — verbatim feed prose, per-claim number scope, declared derived numbers, voice lint. Uses the tighter `core.traceability.DISTRIBUTION` policy (no ratio grounding). |
 | `analysis/distribution/ledger.py` | `distribution_ledger.json` — verifies the partition held (signal reused within 20 days), records skips, snapshots statuses so C9 can catch our own reversals. `python3 analysis/distribution/ledger.py` audits. |
 | `analysis/signals/proximity.py` | **C8 net-new compute** — distance from each signal to its next status flip, ranked by the signal's own typical monthly move. Signal-layer, registry-driven; dashboard + reply desk are the next consumers. |
+| `analysis/distribution/issues/{merged_issue,deep_read}.py` | The two long-form (Substack) issues — 1st and 14th. Formerly `newsletter/generate_*`. |
+| `analysis/distribution/longform_render.py` | Long-form render layer — typed blocks → .md + Substack-paste .html |
+| `analysis/distribution/NEWSLETTER_CONTEXT.md` | Long-form channel context — read before content generation |
+| `analysis/distribution/signal_registry.json` | Editorial record of every signal ever published (distinct from the mechanical ledger) |
+| `analysis/measure_groundedness.py` | Gate measurement harness — inject fakes, report catch + false-rejection rate. AI PM topic #1. |
 | `analysis/distribution/ai_pm_register.json` | AI PM learning register — 20-topic curriculum, one active per month, measurements appended as build work produces them |
 
 **AI PM active topic: #1 Groundedness / hallucination measurement (2026-08).**
@@ -258,7 +251,7 @@ measurement needs a value and a source file.
 | `/merged-analysis` | Layer 2a model UPDATE or FOUNDATION pass — check `is_fy_end` in timeline first |
 | `/add-new-report` | Full walkthrough: adding a new SIBC period end-to-end |
 
-Newsletter v2 is a deterministic rendering layer over gate-validated artifacts (no longer an exception path) — see `analysis/newsletter/CLAUDE.md` for the 2-post cadence and paste-to-Substack workflow.
+The long-form (Substack) channel lives in `analysis/distribution/issues/` — see `analysis/distribution/NEWSLETTER_CONTEXT.md` for the 2-post cadence and paste-to-Substack workflow. It shares the source layer and the gate with the LinkedIn slots; there is no separate newsletter system.
 
 **Distribution (LinkedIn/X/newsletter) is live** — `python3 analysis/distribution/generate_slot.py --slot {1st|7th|14th|21st|28th}`; spec `analysis/distribution/DISTRIBUTION_SPEC.md`. Claude never writes finished LinkedIn posts: each slot emits a *design prompt* (for a separate Claude design session to build a one-pager) plus a *blurb* in plain Indian conversational English. The design session sits outside the gate, so the prompt is closed — supplied numbers only, invent nothing. The 21st (C10, AI PM) has no generator by design; it is assembled by hand from `ai_pm_register.json`.
 
@@ -306,7 +299,7 @@ documented in PIPELINE_ARCHITECTURE.md (Stage 5.7, Stage 8). Both pipelines now 
 
 **Immediately next — LinkedIn content for site engagement (new session).** The engine is mature; the
 bottleneck is distribution. Lead with the **payments pipeline** framed for fintech/product builders (the
-reachable network), per the `project_distribution_reality` memory. Workflow: `analysis/newsletter/CLAUDE.md`
+reachable network), per the `project_distribution_reality` memory. Workflow: `analysis/distribution/NEWSLETTER_CONTEXT.md`
 → `generate_linkedin.py` (7-post packages). It's the one exception path not yet on the unified pipeline.
 
 **Queued — engineering-health / technical-design track (non-functional).** See `HANDOFF_TECH_QUALITY.md` (the

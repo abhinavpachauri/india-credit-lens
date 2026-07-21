@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-generate_deep_read.py — newsletter Post 2: the deep read (L2/L3)
+deep_read.py — the 14th-of-month issue: the deep read (L2/L3)
 -----------------------------------------------------------------
 Prepared the same day as the release read, published mid-cycle. Composes the
 cross-system view from opportunities_feed.json — the ecosystem cards (constructs,
@@ -10,8 +10,8 @@ are live this cycle. This is the content only the composed model can produce.
 The card prose was already validated by Check 4f when the feed was built; the
 self-gating traceability check here guards the template's own words.
 
-Output: analysis/newsletter/output/deep_read_{period}.md + .html
-Usage:  python3 analysis/newsletter/generate_deep_read.py
+Output: analysis/distribution/output_longform/deep_read_{period}.md + .html
+Usage:  python3 analysis/distribution/issues/deep_read.py
 """
 import sys
 from datetime import datetime
@@ -19,13 +19,12 @@ from pathlib import Path
 
 ROOT = next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir())
 sys.path.insert(0, str(ROOT / "analysis"))
-sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-import newsletter_sources as src                      # noqa: E402
-from newsletter_render import html_render, md_render  # noqa: E402
-from validate_newsletter import check_doc             # noqa: E402
+from distribution import distribution_sources as src   # noqa: E402
+from distribution.longform_render import html_render, md_render  # noqa: E402
+from distribution.validate_distribution import check_doc         # noqa: E402
 
-OUT = Path(__file__).resolve().parent / "output"
+OUT = ROOT / "analysis" / "distribution" / "output_longform"
 OPPS_URL = "https://indiacreditlens.com/opportunities"
 
 

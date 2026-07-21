@@ -6,9 +6,10 @@ DISTRIBUTION_SPEC §1: distribution is a rendering problem over artifacts the pi
 already compute. This module is the single read path. Every channel renderer sits on
 top of it, and no renderer re-derives a number.
 
-It is a generalisation of `newsletter/newsletter_sources.py`, not a second copy of it —
-that module is imported for the parts it already owns (db access, period arithmetic,
-value formatting, status wording), and this one adds what distribution needs on top:
+It absorbed `newsletter/newsletter_sources.py` on 2026-07-21 — the newsletter was never a
+separate system, only the long-form channel of this one. The first half below is what that
+module owned (db access, period arithmetic, value formatting, status wording); the second
+half is what distribution adds:
 
   claims by CATEGORY   the §3 partition applied to validated feed cards
   data vintage         each pipeline's own data month, read fresh every run (§13.2)
@@ -20,25 +21,208 @@ signal ids behind it, and the numbers it states. That is the only shape the rend
 """
 import json
 import re
+import sqlite3
 import sys
 from pathlib import Path
 
 ROOT = next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir())
 sys.path.insert(0, str(ROOT / "analysis"))
-sys.path.insert(0, str(ROOT / "analysis" / "newsletter"))
 
-import newsletter_sources as ns                                    # noqa: E402
 from core.traceability import SIBC as POLICY, extract_numbers      # noqa: E402
 from distribution import categories as cats
 from distribution import slot_render                        # noqa: E402
 from signals import proximity                                      # noqa: E402
 
-DATA = ROOT / "web" / "public" / "data"
 PIPELINES = ("sibc", "atm_pos")
-PIPE_LABEL = {"sibc": "credit", "atm_pos": "payments"}
 
 MONTH_NAME = ["", "January", "February", "March", "April", "May", "June",
               "July", "August", "September", "October", "November", "December"]
+
+
+DB = ROOT / "analysis" / "signals" / "signals.db"
+REGISTRY = ROOT / "analysis" / "signals" / "registry.json"
+DATA = ROOT / "web" / "public" / "data"
+
+PIPE_LABEL = {"sibc": "Credit", "atm_pos": "Payments"}
+
+# What leads each release read, per pipeline. Order matters; missing signals are skipped.
+HEADLINE_SIGNALS = {
+    "sibc": ["sibc-bank-credit-abs", "sibc-bank-credit-yoy", "sibc-nonfood-credit-yoy",
+             "sibc-personal-loans-yoy"],
+    "atm_pos": ["cc-outstanding-abs", "cc-outstanding-yoy", "dc-outstanding-abs",
+                "pos-terminals-abs", "pos-terminals-yoy"],
+}
+
+# Plain words for signal statuses — no analyst jargon on the reader's side.
+STATUS_WORD = {
+    "strengthening": "accelerating", "active": "growing steadily", "weakening": "slowing",
+    "declining": "falling", "stable": "steady", "improving": "improving",
+    "unknown": "no clear read",
+}
+
+
+def load_registry():
+    return json.loads(REGISTRY.read_text())["signals"]
+
+
+def _con():
+    return sqlite3.connect(f"file:{DB}?mode=ro", uri=True)
+
+
+def latest_period(pipeline):
+    con = _con()
+    row = con.execute("select max(period) from signals where pipeline=?", (pipeline,)).fetchone()
+    con.close()
+    return row[0] if row else None
+
+
+def data_month(pipeline, period):
+    """The month the DATA is about — not the release date. SIBC periods are keyed by
+    dataDate (release day, e.g. 2026-06-30 for May data); the true data month is the
+    timeline's csv_date. Payments periods already are the data month."""
+    if pipeline == "sibc":
+        timeline = json.loads((ROOT / "analysis/rbi_sibc/timeline.json").read_text())
+        for e in timeline.get("periods", []):
+            if e.get("dataDate") == period:
+                return e.get("csv_date", period)
+    return period
+
+
+def prior_period(pipeline, period):
+    con = _con()
+    row = con.execute("select max(period) from signals where pipeline=? and period<?",
+                      (pipeline, period)).fetchone()
+    con.close()
+    return row[0] if row else None
+
+
+def total_values(pipeline, period):
+    """metric_id → (value, unit, status) at total level for one period."""
+    con = _con()
+    out = {m: (v, u, s) for m, v, u, s in con.execute(
+        "select metric_id, value, unit, status from signals "
+        "where pipeline=? and period=? and (entity_type='total' or entity_id='total')",
+        (pipeline, period))}
+    con.close()
+    return out
+
+
+def fmt_value(value, unit):
+    """Render a db value the way the dashboards do — same rounding the checks accept."""
+    if value is None:
+        return ""
+    if unit == "pct":
+        return f"{value:.1f}%"
+    if unit == "pp":
+        return f"{value:.1f}pp"
+    if unit == "lcr_cr":                       # stored in ₹ crore → shown in lakh crore
+        return f"₹{value / 1e5:.1f}L Cr"
+    if unit == "count":
+        if abs(value) >= 1e7:
+            return f"{value / 1e7:.1f} crore"
+        if abs(value) >= 1e5:
+            return f"{value / 1e5:.1f} lakh"
+        return f"{value:,.0f}"
+    return f"{value:,.1f}"
+
+
+def headline_stats(pipeline, period):
+    """The 3-5 numbers the issue opens with."""
+    registry = load_registry()
+    vals = total_values(pipeline, period)
+    out = []
+    for sid in HEADLINE_SIGNALS.get(pipeline, []):
+        if sid in vals and sid in registry:
+            v, u, s = vals[sid]
+            out.append({"id": sid, "title": registry[sid]["title"],
+                        "display": fmt_value(v, u), "status": s,
+                        "status_word": STATUS_WORD.get(s, s)})
+    return out
+
+
+def status_flips(pipeline, period, prior):
+    """Signals whose status changed between the two periods — the 'what changed' list."""
+    registry = load_registry()
+    con = _con()
+    rows = con.execute(
+        "select a.metric_id, b.status, a.status, a.value, a.unit from signals a "
+        "join signals b on a.metric_id=b.metric_id and a.pipeline=b.pipeline "
+        "  and a.entity_type=b.entity_type and a.entity_id=b.entity_id "
+        "where a.pipeline=? and a.period=? and b.period=? "
+        "  and (a.entity_type='total' or a.entity_id='total') and a.status != b.status "
+        "order by a.metric_id", (pipeline, period, prior)).fetchall()
+    con.close()
+    out = []
+    for mid, was, now, value, unit in rows:
+        sig = registry.get(mid)
+        if not sig or sig.get("current_status") == "retired":
+            continue
+        out.append({"id": mid, "title": sig["title"],
+                    "was": STATUS_WORD.get(was, was), "now": STATUS_WORD.get(now, now),
+                    "display": fmt_value(value, unit)})
+    return out
+
+
+def new_signals(pipeline, period):
+    """Trackers added to the registry this cycle (first_seen == period)."""
+    return [{"id": sid, "title": s["title"]}
+            for sid, s in load_registry().items()
+            if s.get("pipeline") == pipeline and s.get("first_seen") == period]
+
+
+SECTION_NAME = {  # feed section/group key → the label the reader sees on the dashboard
+    "bankCredit": "Bank Credit", "mainSectors": "Main Sectors", "industryBySize": "Industry by Size",
+    "services": "Services", "personalLoans": "Personal Loans", "prioritySector": "Priority Sector",
+    "industryByType": "Industry by Type",
+    "cc": "Credit Cards", "dc": "Debit Cards", "infra": "Infrastructure",
+}
+MODE_NAME = {"absolute": "Absolute", "yoy": "YoY %", "fy": "FY Cumul.", "mom": "MoM %",
+             "share": "% Share (Distribution tab)", "pct": "% Share (Distribution tab)"}
+
+
+def _chart_recipe(pipeline, section_key, highlight, mode):
+    """The exact screenshot instruction for a card — dashboard → section → mode → series."""
+    dash = "indiacreditlens.com" if pipeline == "sibc" else "indiacreditlens.com/payments"
+    parts = [f"{dash} → {SECTION_NAME.get(section_key, section_key)}"]
+    if mode:
+        parts.append(f"{MODE_NAME.get(mode, mode)} view")
+    if highlight:
+        parts.append("highlight: " + ", ".join(highlight[:3]))
+    return " → ".join(parts)
+
+
+def insight_cards(pipeline, max_cards=6, per_section=1):
+    """Validated insight cards in fixed section order — deterministic pick.
+    The newsletter takes 1 per section (default); the reply desk asks for all
+    (per_section high) and filters by topic. Each card carries its chart recipe."""
+    cards = []
+    if pipeline == "sibc":
+        feed = json.loads((DATA / "sibc_l1_annotations.json").read_text())
+        for section, bucket in feed["sections"].items():
+            for it in bucket.get("insights", [])[:per_section]:
+                cards.append({"where": section, "title": it["title"], "body": it["body"],
+                              "implication": it.get("implication", ""),
+                              "chart": _chart_recipe(pipeline, section,
+                                                     (it.get("effect") or {}).get("highlight"),
+                                                     it.get("preferredMode"))})
+    else:
+        feed = json.loads((DATA / "atm_pos_insights.json").read_text())
+        count = {}
+        for it in feed:
+            g = it.get("group", "")
+            if it.get("type") != "insight" or count.get(g, 0) >= per_section:
+                continue
+            count[g] = count.get(g, 0) + 1
+            eff = it.get("effect") or {}
+            cards.append({"where": g, "title": it["title"], "body": it["body"],
+                          "implication": it.get("implication", ""),
+                          "chart": _chart_recipe(pipeline, g,
+                                                 eff.get("highlight"), eff.get("trendMode"))})
+    return cards[:max_cards]
+
+
+def opportunities_feed():
+    return json.loads((DATA / "opportunities_feed.json").read_text())
 
 
 # ── Vintage ───────────────────────────────────────────────────────────────────
@@ -53,10 +237,10 @@ def data_vintage():
     """Each pipeline's latest period, the month its DATA is about, and the gap between them."""
     out = {}
     for pl in PIPELINES:
-        period = ns.latest_period(pl)
+        period = latest_period(pl)
         if not period:
             continue
-        month = ns.data_month(pl, period)
+        month = data_month(pl, period)
         out[pl] = {"period": period, "data_month": month, "label": _month_label(month)}
     if len(out) == 2:
         a, b = (out[p]["data_month"] for p in PIPELINES)
@@ -124,7 +308,7 @@ CUT_CATEGORY = {"top_n": "C4", "by_type": "C4", "distribution": "C4", "total": "
 
 def cards(pipeline, registry=None):
     """Every validated insight card for a pipeline, each tagged with its category."""
-    registry = registry or ns.load_registry()
+    registry = registry or load_registry()
     out = []
     if pipeline == "sibc":
         feed = json.loads((DATA / "sibc_l1_annotations.json").read_text())
@@ -153,7 +337,7 @@ def cards(pipeline, registry=None):
 
 def cards_for_category(category, registry=None):
     """All validated cards belonging to one category, both pipelines, credit first."""
-    registry = registry or ns.load_registry()
+    registry = registry or load_registry()
     return [c for pl in PIPELINES for c in cards(pl, registry) if c.get("category") == category]
 
 
@@ -190,7 +374,7 @@ def prioritise(claims, preferred_ids):
 def headline_ids():
     """The signals a monthly summary opens with — the newsletter already decided these,
     and a second list that drifts from it is exactly the parallel copy we don't allow."""
-    return [sid for pl in PIPELINES for sid in ns.HEADLINE_SIGNALS.get(pl, [])]
+    return [sid for pl in PIPELINES for sid in HEADLINE_SIGNALS.get(pl, [])]
 
 
 # ── C5 Turns — computed from history, not from cards ──────────────────────────
@@ -199,11 +383,11 @@ def turns():
     """Status flips since the prior period, both pipelines. The 'what changed direction' list."""
     out = []
     for pl in PIPELINES:
-        period = ns.latest_period(pl)
-        prior = ns.prior_period(pl, period) if period else None
+        period = latest_period(pl)
+        prior = prior_period(pl, period) if period else None
         if not prior:
             continue
-        for f in ns.status_flips(pl, period, prior):
+        for f in status_flips(pl, period, prior):
             out.append({
                 "id": f["id"], "pipeline": pl, "category": "C5",
                 "title": f["title"],
@@ -233,7 +417,7 @@ def _lede(title, body):
 
 def opportunity_claims(cross_system):
     """C7 when cross_system, else C6. Openings and risks are model output, never inference."""
-    feed = ns.opportunities_feed()
+    feed = opportunities_feed()
     items = (feed.get("cross_system", []) if cross_system
              else [x for v in feed.get("pipelines", {}).values() for x in v])
     out = []
@@ -281,7 +465,7 @@ def corrections(ledger_entries):
     """Two honest sources: a published claim whose signal has since flipped, and a
     tracker we retired. Both are facts about our own record, so the ledger is an input
     here — the one place it feeds generation rather than only verifying it."""
-    registry = ns.load_registry()
+    registry = load_registry()
     out, seen = [], set()
 
     published = {}
@@ -301,8 +485,8 @@ def corrections(ledger_entries):
                 "id": sid, "pipeline": sig.get("pipeline", ""), "category": "C9",
                 "title": sig.get("title", sid),
                 "body": (f"On {entry.get('date')} we published this as "
-                         f"{ns.STATUS_WORD.get(was, was)}. It now reads "
-                         f"{ns.STATUS_WORD.get(now, now)}."),
+                         f"{STATUS_WORD.get(was, was)}. It now reads "
+                         f"{STATUS_WORD.get(now, now)}."),
                 "implication": "", "signal_ids": [sid], "numbers": [],
                 "source": f"distribution_ledger.json → {entry.get('date')}",
                 "verbatim": False,
@@ -324,5 +508,5 @@ def corrections(ledger_entries):
 
 def current_statuses(signal_ids):
     """Status snapshot to record in the ledger, so C9 can later detect our own reversals."""
-    registry = ns.load_registry()
+    registry = load_registry()
     return {sid: registry[sid].get("current_status") for sid in signal_ids if sid in registry}

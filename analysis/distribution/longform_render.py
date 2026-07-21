@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-newsletter_render.py — the newsletter's render layer (v2)
----------------------------------------------------------
+longform_render.py — the long-form (Substack) render layer
+-----------------------------------------------------------
 Takes a document (a list of typed blocks) and renders it twice:
 
   .md    — the canonical, diffable output

@@ -1,4 +1,9 @@
-# Newsletter — India Credit Lens (v2)
+# Long-form channel (Substack) — India Credit Lens
+
+> **Moved into `analysis/distribution/` on 2026-07-21.** The newsletter was never a
+> separate system — it is this layer's long-form channel, sitting beside LinkedIn.
+> It now shares the source layer, the gate, and the output contract with every other
+> channel. Old paths (`analysis/newsletter/*`) are gone; see the file table below.
 
 > Execution context for the professional Substack newsletter (indiacreditlens.substack.com).
 > Audience: credit & product professionals in fintech/lending. NEVER mentions tickers/stocks —
@@ -13,8 +18,8 @@ use. No LLM calls, no hand-authored stats, no retired artifacts. Two posts per d
 
 | Post | Script | Published | Content |
 |---|---|---|---|
-| **Release read** | `generate_release_read.py --pipeline {sibc\|atm_pos}` | within 24h of the RBI release | L1: headline stats, status flips vs prior period, new trackers, one validated insight card per section |
-| **Deep read** | `generate_deep_read.py` | mid-cycle (~2 weeks later) | L2/L3: cross-system ecosystem cards with computed basis, live openings, watch-outs |
+| **Release read** | `issues/merged_issue.py --pipeline {sibc\|atm_pos}` | within 24h of the RBI release | L1: headline stats, status flips vs prior period, new trackers, one validated insight card per section |
+| **Deep read** | `issues/deep_read.py` | mid-cycle (~2 weeks later) | L2/L3: cross-system ecosystem cards with computed basis, live openings, watch-outs |
 
 Both are prepared from the same gate run; publishing is staggered so one monthly cycle
 gives a fortnightly presence.
@@ -29,18 +34,18 @@ own voice (deliberate decision, 2026-07-03) — there is no LinkedIn generator.
 ## Architecture (mirrors the pipeline discipline)
 
 ```
-newsletter_sources.py    data layer — reads ONLY validated artifacts:
+distribution_sources.py  data layer (shared with every channel) — reads ONLY validated artifacts:
                            signals.db                → headline stats, status flips, new trackers
                            sibc_l1_annotations.json  → SIBC cards   (Check 2g validated)
                            atm_pos_insights.json     → payments cards (Stage 4c validated)
                            opportunities_feed.json   → L2/L3 cards  (Check 4f validated)
-newsletter_render.py     render layer — typed blocks → .md (canonical) + .html (Substack paste)
-validate_newsletter.py   the gate — check_doc() runs BEFORE any file is written:
+longform_render.py       render layer — typed blocks → .md (canonical) + .html (Substack paste)
+validate_distribution.py the gate (shared with every channel) — check_doc() runs BEFORE any file is written:
                            1. card blocks must match a validated feed VERBATIM (curate, never alter)
                            2. numbers in a template block must trace to the signals THAT BLOCK
                               declares — no issue-wide pool, no fallback (see below)
-generate_release_read.py Post 1 — one generic generator, pipeline-parameterized
-generate_deep_read.py    Post 2 — cross-system, reads the opportunities feed
+issues/merged_issue.py   Post 1 — one generic generator, pipeline-parameterized
+issues/deep_read.py      Post 2 — cross-system, reads the opportunities feed
 ```
 
 A failing issue is **never written** (self-gating). Negative-tested: invented template
@@ -80,11 +85,11 @@ tone needs fixing, fix the **eval prompt** upstream (next cycle), never the card
 
 ```
 □  Ingestion gate green for the release (this regenerates every input this layer reads)
-□  python3 analysis/newsletter/generate_release_read.py [--pipeline atm_pos]
+□  python3 analysis/distribution/issues/merged_issue.py [--pipeline atm_pos]
 □  Open output/release_read_*.html in a browser → select all → copy → paste into Substack
 □  Add charts manually in Substack (screenshot the dashboard section, or skip)
 □  Publish within 24h of the RBI release
-□  ~2 weeks later: python3 analysis/newsletter/generate_deep_read.py → same paste flow
+□  ~2 weeks later: python3 analysis/distribution/issues/deep_read.py → same paste flow
 □  Update signal_registry.json if a published signal was confirmed/refuted (editorial record)
 ```
 
@@ -92,11 +97,11 @@ tone needs fixing, fix the **eval prompt** upstream (next cycle), never the card
 
 | File | Purpose |
 |---|---|
-| `newsletter_sources.py` | Data layer (see above) |
-| `newsletter_render.py` | md + Substack-HTML renderers |
-| `validate_newsletter.py` | Traceability gate (`check_doc`) |
-| `generate_release_read.py` | Post 1 generator |
-| `generate_deep_read.py` | Post 2 generator |
+| `distribution_sources.py` | Data layer, shared with LinkedIn slots |
+| `longform_render.py` | md + Substack-HTML renderers |
+| `validate_distribution.py` | Traceability gate (`check_doc` + `check_slate`) |
+| `issues/merged_issue.py` | Post 1 generator |
+| `issues/deep_read.py` | Post 2 generator |
 | `signal_registry.json` | Editorial record of every signal ever published (kept from v1) |
-| `output/` | Rendered issues (`release_read_*`, `deep_read_*`) + v1 history |
+| `output_longform/` | Rendered issues (`release_read_*`, `deep_read_*`) + v1 history |
 | `../legacy/newsletter_v1/` | Retired v1: config-driven generator, LinkedIn/images scripts |

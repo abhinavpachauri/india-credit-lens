@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """
-Unit tests for the newsletter v2 rendering + traceability layer.
+Unit tests for the long-form (Substack) channel of the distribution layer.
+Moved from analysis/newsletter/ on 2026-07-21 — the newsletter was never a separate
+system, only this layer's long-form channel.
 
 Covers the semantics the generators rely on:
   - fmt_value unit rendering (the numbers readers see must match what checks accept)
@@ -14,10 +16,9 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "newsletter"))
 
-from newsletter_render import md_render                    # noqa: E402
-from newsletter_sources import STATUS_WORD, fmt_value      # noqa: E402
+from distribution.longform_render import md_render                    # noqa: E402
+from distribution.distribution_sources import STATUS_WORD, fmt_value  # noqa: E402
 
 
 def test_fmt_value_units():
@@ -51,7 +52,7 @@ def test_check_doc_number_scoping(monkeypatch):
     """The number gate must reject values outside the declared ground truth.
     Ground truth is CONTROLLED here — a live-db fixture proved flaky (a new
     period's series made an 'invented' number collide with a real ratio)."""
-    import validate_newsletter as vn
+    from distribution import validate_distribution as vn
 
     monkeypatch.setattr(vn, "declared_ground_truth", lambda ids: [16.0, 212.1])
     bad = [{"type": "p", "text": "Bank credit grew 47.31% to ₹9,999.9L Cr."}]
@@ -64,7 +65,7 @@ def test_check_doc_card_verbatim_live_artifacts():
     """Cards must match a validated feed verbatim — reworded fails, verbatim passes.
     Uses the live feed (stable within a run; text content is the fixture)."""
     import json
-    from validate_newsletter import check_doc
+    from distribution.validate_distribution import check_doc
 
     root = Path(__file__).resolve().parents[2]
     feed = json.loads((root / "web/public/data/sibc_l1_annotations.json").read_text())
@@ -85,8 +86,8 @@ def test_check_doc_card_verbatim_live_artifacts():
 
 def test_a_block_is_judged_only_by_the_signals_it_declares():
     """A stat cannot be justified by a neighbouring stat's value."""
-    from validate_newsletter import check_doc
-    import newsletter_sources as ns
+    from distribution.validate_distribution import check_doc
+    from distribution import distribution_sources as ns
     sibc, atm = "sibc-bank-credit-yoy", "cc-outstanding-yoy"
     vals = ns.total_values("sibc", ns.latest_period("sibc"))
     if sibc not in vals:
@@ -101,13 +102,13 @@ def test_a_block_is_judged_only_by_the_signals_it_declares():
 
 def test_an_undeclared_block_grounds_nothing():
     """No fall-back to the issue-wide pool: connective prose carries no figures."""
-    from validate_newsletter import check_doc
+    from distribution.validate_distribution import check_doc
     doc = [{"type": "p", "text": "The figure stood at 47.3% this month."}]
     assert check_doc(doc, ["sibc-bank-credit-yoy"]) != []
 
 
 def test_meta_blocks_count_the_document_not_the_data():
-    from validate_newsletter import check_doc
+    from distribution.validate_distribution import check_doc
     assert check_doc([{"type": "small", "meta": True,
                        "text": "…and 10 more on the dashboard."}], []) == []
     assert check_doc([{"type": "small", "text": "…and 10 more on the dashboard."}], []) != []
@@ -116,7 +117,7 @@ def test_meta_blocks_count_the_document_not_the_data():
 def test_headline_keeps_its_quoted_card_after_ungluing():
     """Card text is stripped BEFORE the magnitude unglue — reversing the order made
     the H1's quoted card title read as an ungrounded claim of the template's own."""
-    from validate_newsletter import check_doc, legit_card_texts
+    from distribution.validate_distribution import check_doc, legit_card_texts
     card = next((c for c in legit_card_texts() if "L Cr" in c), None)
     if not card:
         return
@@ -126,11 +127,11 @@ def test_headline_keeps_its_quoted_card_after_ungluing():
 def test_rendered_magnitudes_are_grounded_by_the_renderer_itself():
     """"₹2.9L Cr" is the reader's form of 294534.6 — the gate accepts it because
     fmt_value produced it, not because a tolerance happened to be wide enough."""
-    from validate_newsletter import declared_ground_truth
+    from distribution.validate_distribution import declared_ground_truth
     from core.traceability import DISTRIBUTION, extract_numbers, matches
     sid = "sibc-pl-cc-abs"
     gt = declared_ground_truth([sid])
-    import newsletter_sources as ns
+    from distribution import distribution_sources as ns
     vals = ns.total_values("sibc", ns.latest_period("sibc"))
     if sid not in vals:
         return
@@ -142,10 +143,10 @@ def test_rendered_magnitudes_are_grounded_by_the_renderer_itself():
 def test_live_issues_still_pass_their_own_gate():
     """The generators must survive the tightening — a gate that blocks true issues
     gets switched off, which is worse than a loose one."""
-    import newsletter_sources as ns
-    import generate_release_read as release
-    import generate_deep_read as deep
-    from validate_newsletter import check_doc
+    from distribution import distribution_sources as ns
+    from distribution.issues import merged_issue as release
+    from distribution.issues import deep_read as deep
+    from distribution.validate_distribution import check_doc
     for pipeline in ("sibc", "atm_pos"):
         period = ns.latest_period(pipeline)
         if not period:

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-generate_release_read.py — newsletter Post 1: the release read (L1)
+merged_issue.py — the 1st-of-month issue: the release read (L1)
 --------------------------------------------------------------------
 Runs within 24h of an RBI release. Fully deterministic: composes the issue from
 signals.db (headline stats, status flips, new trackers) and the gate-validated
@@ -10,8 +10,8 @@ English — short sentences, no consulting words.
 Self-gating: the issue is validated for number traceability BEFORE any file is
 written. A failing issue is never written.
 
-Output: analysis/newsletter/output/release_read_{pipeline}_{period}.md + .html
-Usage:  python3 analysis/newsletter/generate_release_read.py [--pipeline sibc|atm_pos] [--period YYYY-MM-DD]
+Output: analysis/distribution/output_longform/release_read_{pipeline}_{period}.md + .html
+Usage:  python3 analysis/distribution/issues/merged_issue.py [--pipeline sibc|atm_pos] [--period YYYY-MM-DD]
 """
 import argparse
 import sys
@@ -20,13 +20,12 @@ from pathlib import Path
 
 ROOT = next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir())
 sys.path.insert(0, str(ROOT / "analysis"))
-sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-import newsletter_sources as src                      # noqa: E402
-from newsletter_render import html_render, md_render  # noqa: E402
-from validate_newsletter import check_doc             # noqa: E402
+from distribution import distribution_sources as src   # noqa: E402
+from distribution.longform_render import html_render, md_render  # noqa: E402
+from distribution.validate_distribution import check_doc         # noqa: E402
 
-OUT = Path(__file__).resolve().parent / "output"
+OUT = ROOT / "analysis" / "distribution" / "output_longform"
 
 RELEASE_NAME = {"sibc": "sectoral bank credit (SIBC)", "atm_pos": "ATM/POS and card"}
 DASHBOARD = {"sibc": "https://indiacreditlens.com", "atm_pos": "https://indiacreditlens.com/payments"}

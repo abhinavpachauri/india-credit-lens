@@ -39,7 +39,8 @@ GRAPH = ANALYSIS / "architecture" / "graph.json"
 DOCS = [
     "CLAUDE.md", "CLAUDE.local.md", "PIPELINE_ARCHITECTURE.md", "ARCHITECTURE.md",
     "web/CLAUDE.md", "analysis/rbi_atm_pos/CLAUDE.md",
-    "analysis/newsletter/CLAUDE.md",
+    "analysis/distribution/NEWSLETTER_CONTEXT.md",
+    "analysis/distribution/DISTRIBUTION_SPEC.md",
     # Per-directory READMEs — guarded so the navigational map can't drift from the tree.
     "analysis/core/README.md", "analysis/guards/README.md",
     "analysis/crosssource/README.md", "analysis/pipelines/README.md",

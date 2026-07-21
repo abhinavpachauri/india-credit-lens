@@ -4,7 +4,7 @@
 > Status: **built** (2026-07-21) — §12 steps 1–4 live; §8 register wiring is the monthly habit.
 > Run it: `python3 analysis/distribution/generate_slot.py --slot 7th` (or `--all` to rehearse
 > a whole month). Every slot self-gates; see `validate_distribution.py`.
-> Related: `analysis/newsletter/CLAUDE.md` (v2 newsletter, live) · `analysis/legacy/replydesk/` (X, retired — see §9)
+> Related: `NEWSLETTER_CONTEXT.md` (long-form channel) · `analysis/legacy/replydesk/` (X, retired — see §9)
 
 ---
 
@@ -16,11 +16,12 @@ second content system. One content spine per monthly cycle, many renderings. The
 
 This means:
 
-- One shared source layer (a generalisation of `newsletter/newsletter_sources.py`) reads only
+- One shared source layer (`distribution_sources.py`, which absorbed the newsletter's) reads only
   gate-validated artifacts: `signals.db`, `sibc_l1_annotations.json`, `atm_pos_insights.json`,
   `opportunities_feed.json`, `ecosystem_model.json`.
 - Per-channel renderers sit on top. No renderer re-derives a number.
-- One traceability gate (`validate_newsletter.check_doc`, generalised) covers all channels.
+- One traceability gate (`validate_distribution.py` — `check_doc` for long-form, `check_slate`
+  for slots) covers all channels.
 
 Test it against the standing rule: *does this hold at N channels and N pipelines?* Adding a channel
 must mean adding a renderer, never a second source path.

@@ -35,7 +35,7 @@ from signals import proximity                           # noqa: E402
 
 def test_every_compute_method_is_classified():
     """A new compute method must be given a category, not defaulted into one."""
-    assert cats.unclassified_methods(src.ns.load_registry()) == []
+    assert cats.unclassified_methods(src.load_registry()) == []
 
 
 def test_precedence_picks_the_question_not_the_data():
@@ -116,10 +116,11 @@ def test_pp_is_spaced_so_the_extractor_can_read_it():
 def test_real_watchlist_sentences_are_never_falsely_rejected():
     """The gate must bite on invention without biting on the truth — a false rejection
     takes down the whole slot, so this is the half that keeps the calendar running."""
-    from distribution.validate_distribution import _ungrounded, legit_card_texts, signal_ground_truth
+    from distribution.validate_distribution import (_ungrounded, declared_ground_truth,
+                                                    legit_card_texts)
     cards = legit_card_texts()
     for row in proximity.ranked(limit=15):
-        legit = signal_ground_truth([row["signal_id"]]) + [
+        legit = declared_ground_truth([row["signal_id"]]) + [
             row["value"], row["threshold_value"], row["distance"],
             row["typical_move"], row["prev_value"]]
         assert _ungrounded(proximity.sentence(row), legit, cards, row["signal_id"]) == []
@@ -347,7 +348,7 @@ def test_skips_are_recorded_not_forgotten(tmp_path, monkeypatch):
 # ── Corrections (C9) read our own record ──────────────────────────────────────
 
 def test_correction_appears_when_a_published_signal_has_since_flipped():
-    registry = src.ns.load_registry()
+    registry = src.load_registry()
     sid = next(s for s, v in registry.items()
                if v.get("layer") == 1 and v.get("current_status") not in (None, "retired"))
     entry = {"date": "2026-06-01", "signal_ids": [sid],
@@ -357,7 +358,7 @@ def test_correction_appears_when_a_published_signal_has_since_flipped():
 
 
 def test_no_correction_when_the_read_still_holds():
-    registry = src.ns.load_registry()
+    registry = src.load_registry()
     sid = next(s for s, v in registry.items()
                if v.get("layer") == 1 and v.get("current_status") not in (None, "retired"))
     entry = {"date": "2026-06-01", "signal_ids": [sid],

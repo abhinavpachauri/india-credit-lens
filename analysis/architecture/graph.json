@@ -324,76 +324,12 @@
       },
       "writes": {}
     },
-    "newsletter/generate_deep_read": {
-      "doc_claims": [
-        {
-          "kind": "output",
-          "text": "analysis/newsletter/output/deep_read_{period}.md + .html"
-        }
-      ],
-      "imports": [
-        "newsletter/newsletter_render",
-        "newsletter/newsletter_sources",
-        "newsletter/validate_newsletter"
-      ],
-      "invokes": [],
-      "path": "analysis/newsletter/generate_deep_read.py",
-      "reads": {},
-      "writes": {}
-    },
-    "newsletter/generate_release_read": {
-      "doc_claims": [
-        {
-          "kind": "output",
-          "text": "analysis/newsletter/output/release_read_{pipeline}_{period}.md + .html"
-        }
-      ],
-      "imports": [
-        "newsletter/newsletter_render",
-        "newsletter/newsletter_sources",
-        "newsletter/validate_newsletter"
-      ],
-      "invokes": [],
-      "path": "analysis/newsletter/generate_release_read.py",
-      "reads": {},
-      "writes": {}
-    },
-    "newsletter/newsletter_render": {
+    "measure_groundedness": {
       "doc_claims": [],
       "imports": [],
       "invokes": [],
-      "path": "analysis/newsletter/newsletter_render.py",
+      "path": "analysis/measure_groundedness.py",
       "reads": {},
-      "writes": {}
-    },
-    "newsletter/newsletter_sources": {
-      "doc_claims": [],
-      "imports": [],
-      "invokes": [],
-      "path": "analysis/newsletter/newsletter_sources.py",
-      "reads": {
-        "analysis/rbi_sibc/timeline.json": "low",
-        "analysis/signals/registry.json": "low",
-        "analysis/signals/signals.db": "low",
-        "web/public/data/atm_pos_insights.json": "low",
-        "web/public/data/opportunities_feed.json": "low",
-        "web/public/data/sibc_l1_annotations.json": "low"
-      },
-      "writes": {}
-    },
-    "newsletter/validate_newsletter": {
-      "doc_claims": [],
-      "imports": [
-        "newsletter/newsletter_sources"
-      ],
-      "invokes": [],
-      "path": "analysis/newsletter/validate_newsletter.py",
-      "reads": {
-        "analysis/signals/signals.db": "low",
-        "web/public/data/atm_pos_insights.json": "low",
-        "web/public/data/opportunities_feed.json": "low",
-        "web/public/data/sibc_l1_annotations.json": "low"
-      },
       "writes": {}
     },
     "pipelines/atm_pos/compute_atm_pos_signals": {
@@ -753,6 +689,17 @@
       "reads": {
         "atm_pos.json": "low",
         "sibc.json": "low"
+      },
+      "writes": {}
+    },
+    "signals/proximity": {
+      "doc_claims": [],
+      "imports": [],
+      "invokes": [],
+      "path": "analysis/signals/proximity.py",
+      "reads": {
+        "analysis/signals/registry.json": "low",
+        "analysis/signals/signals.db": "low"
       },
       "writes": {}
     },

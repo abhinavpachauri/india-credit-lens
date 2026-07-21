@@ -38,7 +38,6 @@ from typing import Callable
 
 ROOT = next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir())
 sys.path.insert(0, str(ROOT / "analysis"))
-sys.path.insert(0, str(ROOT / "analysis" / "newsletter"))
 
 SEED = 7
 INJECTIONS = 200
@@ -110,13 +109,13 @@ def measure(target, n=INJECTIONS, seed=SEED):
             "attacks": results}
 
 
-# ── Gate: the newsletter (validate_newsletter.check_doc) ──────────────────────
+# ── Gate: the long-form issues (validate_distribution.check_doc) ──────────────
 
 def _newsletter_target():
-    import newsletter_sources as ns
-    from validate_newsletter import check_doc
-    import generate_release_read as release
-    import generate_deep_read as deep
+    from distribution import distribution_sources as ns
+    from distribution.validate_distribution import check_doc
+    from distribution.issues import merged_issue as release
+    from distribution.issues import deep_read as deep
     from core.traceability import SIBC, extract_numbers
 
     def cases():

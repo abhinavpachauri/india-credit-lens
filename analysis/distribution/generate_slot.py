@@ -186,7 +186,7 @@ def main():
     if not (args.slot or args.all):
         ap.error("pass --slot or --all")
 
-    registry_gap = cats.unclassified_methods(src.ns.load_registry())
+    registry_gap = cats.unclassified_methods(src.load_registry())
     if registry_gap:
         print("FAIL: compute methods missing from the category partition: "
               + ", ".join(registry_gap))
