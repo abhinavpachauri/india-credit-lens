@@ -65,6 +65,14 @@ diverging from its category is structurally identical to a sub-sector diverging 
 `csv_pair_divergence` (ATM/POS). METHOD_TYPE: `pair` at total level, `divergence` at bank level —
 one method, two shapes, so the ground truth for each is the right shape (below).
 
+**Not applicable to SIBC, by the shape of the source.** The metric axis needs two co-moving
+*measures*; the SIBC CSV carries exactly one (`outstanding_cr`) — sector, statement and level are
+dimensions of it. Comparing two SIBC sectors is rotation (share) or hierarchy divergence (child vs
+parent), both already live, so a SIBC "pair" would be an existing operator under a second name.
+This is a property of the source, not a backlog item: it changes only if a future ingestion carries
+a second measure per entity. If one does, generalise then — the pair math (two bundles → two YoYs →
+gap) is already pipeline-agnostic; only the metric-bundle resolver reads pipeline-specific columns.
+
 - **The authored pair list IS the registry**: one signal per pair (e.g. `cc-issuance-vs-spend-gap`
   = cards YoY vs spend YoY). Only registered pairs are ever compared — "declared pairs only" falls
   out of the registry-is-the-spec rule; no separate relation file. **Live pairs (5):**
