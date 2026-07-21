@@ -1788,8 +1788,8 @@ def infra_upi_yoy(s, month) -> dict | None:
 
 import sqlite3
 from core.relational_insights import (
-    rotation_insight, divergence_insight, rotation_distribution,
-    entity_roles, _subject as relational_subject)
+    rotation_insight, divergence_insight, pair_divergence_insight,
+    rotation_distribution, entity_roles, _subject as relational_subject)
 from signals.query import scan_distribution
 
 DB_PATH = ROOT / "analysis/signals/signals.db"
@@ -1815,19 +1815,30 @@ DIVERGENCE_CARDS = [
     ("dc-bank-divergence",  "dc",    "debit_cards"),
     ("pos-bank-divergence", "infra", "pos_terminals"),
 ]
+# Declared co-movement pairs: (total-gap signal, bank-level signal | None,
+# group, focusCard section). The bank-level signal, where one is registered,
+# names where the total gap actually lives.
+PAIR_CARDS = [
+    ("cc-issuance-vs-spend-gap",    "cc-issuance-vs-spend-bank-gap", "cc",    "credit_cards"),
+    ("dc-issuance-vs-spend-gap",    None,                            "dc",    "debit_cards"),
+    ("pos-fleet-vs-spend-gap",      None,                            "infra", "pos_terminals"),
+    ("atm-fleet-vs-withdrawal-gap", None,                            "infra", "atms"),
+]
 
 
-def _relational_card(sid, group, cut, month, rel, effect, facts, rows):
-    # reasoning.signals carries the db rows this card rests on, keyed
-    # "{signal_id}:{entity_id}" — Stage 4d resolves these against signals.db
-    # (the deterministic-db analog of its signals.json key check).
-    reasoning_signals = [{"key": f"{sid}:{e}", "value": round(v, 4)}
-                         for e, v, _ in rows]
+def _relational_card(sid, group, cut, month, rel, effect, facts, sources):
+    # sources — [(signal_id, rows)]: every db signal the card rests on. Usually
+    # one; a pair card rests on its total gap AND the bank-level rows behind it.
+    # reasoning.signals carries those rows keyed "{signal_id}:{entity_id}" —
+    # Stage 4d resolves these against signals.db (the deterministic-db analog
+    # of its signals.json key check).
+    reasoning_signals = [{"key": f"{s}:{e}", "value": round(v, 4)}
+                         for s, rows in sources for e, v, _ in rows]
     card = insight(sid, group, cut, month, rel["title"], rel["body"], effect,
                    implication=rel["implication"])
     card["basis"]          = {"facts": facts, "inferences": rel["chain"]}
     card["reasoning"]      = {"signals": reasoning_signals, "chain": rel["chain"]}
-    card["sourceSignals"]  = [sid]
+    card["sourceSignals"]  = [s for s, _ in sources]
     card["representation"] = "deterministic-db"
     card["insight_kind"]   = rel["insight_kind"]
     return card
@@ -1856,7 +1867,7 @@ def relational_cards(s, month) -> list[dict]:
             sid, group, "by_type", month, rel,
             effect={"highlight": [top, "Total"], "tab": "distribution",
                     "distMode": "pct", "focusCard": metric},
-            facts=facts, rows=dist))
+            facts=facts, sources=[(sid, dist)]))
 
     for sid, group, metric in DIVERGENCE_CARDS:
         dist = scan_distribution(conn, sid, "atm_pos", period)
@@ -1871,9 +1882,53 @@ def relational_cards(s, month) -> list[dict]:
             sid, group, "by_bank", month, rel,
             effect={"highlight": [lead, "Total"], "tab": "trend",
                     "trendMode": "yoy", "focusCard": metric},
-            facts=facts, rows=dist))
+            facts=facts, sources=[(sid, dist)]))
 
+    out += pair_cards(conn, registry, period, month)
     conn.close()
+    return out
+
+
+def pair_cards(conn, registry, period, month) -> list[dict]:
+    """Declared co-movement pairs (metric axis of divergence). A pair earns a
+    card only when its two sides have come apart — a 'stable' gap means they
+    are still moving together, and the insight builder suppresses it."""
+    out: list[dict] = []
+    for total_sid, bank_sid, group, metric in PAIR_CARDS:
+        rows = dict(conn.execute(
+            "SELECT entity_id, value FROM signals WHERE pipeline='atm_pos' "
+            "AND period=? AND metric_id=? AND entity_type IN ('aggregate','pair_side')",
+            (period, total_sid)).fetchall())
+        status_row = conn.execute(
+            "SELECT status FROM signals WHERE pipeline='atm_pos' AND period=? "
+            "AND metric_id=? AND entity_type='aggregate'",
+            (period, total_sid)).fetchone()
+        if "total" not in rows or status_row is None:
+            continue
+        gap, status = rows["total"], status_row[0]
+        flagged = scan_distribution(conn, bank_sid, "atm_pos", period) if bank_sid else []
+        comp = registry[total_sid]["compute"]
+        rel = pair_divergence_insight(gap, status, comp["a"]["label"],
+                                      comp["b"]["label"],
+                                      rows.get("a"), rows.get("b"), flagged)
+        if rel is None:
+            continue
+        facts = [f"{comp['a']['label']} vs {comp['b']['label']}: "
+                 f"{gap:+.2f} pp apart year on year",
+                 f"{comp['a']['label']}: {rows.get('a', float('nan')):+.2f}% YoY",
+                 f"{comp['b']['label']}: {rows.get('b', float('nan')):+.2f}% YoY"]
+        facts += [f"{e}: {v:+.2f} pp — issuance ahead of spend on its own book"
+                  for e, v, _ in flagged]
+        facts.append(f"Source: signals.db ({total_sid}"
+                     + (f", {bank_sid})" if bank_sid else ")"))
+        sources = [(total_sid, [(e, v, status) for e, v in rows.items()])]
+        if flagged:
+            sources.append((bank_sid, flagged))
+        out.append(_relational_card(
+            total_sid, group, "total", month, rel,
+            effect={"highlight": ["Total"], "tab": "trend",
+                    "trendMode": "yoy", "focusCard": metric},
+            facts=facts, sources=sources))
     return out
 
 

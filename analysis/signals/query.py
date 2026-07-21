@@ -94,6 +94,7 @@ METHOD_TYPE: dict[str, str] = {
     "csv_category_rotation":   "rotation",
     "csv_sector_divergence":   "divergence",
     "csv_bank_divergence":     "divergence",
+    "csv_pair_divergence":     "pair",
 }
 
 # Multi-entity signal types stored as one row per entity — payloads and
@@ -101,7 +102,15 @@ METHOD_TYPE: dict[str, str] = {
 SCAN_LIKE = {"scan", "rotation", "divergence"}
 
 def _signal_type(sig: dict) -> str:
-    method = sig.get("compute", {}).get("method", "")
+    comp   = sig.get("compute", {})
+    method = comp.get("method", "")
+    # A declared pair has two shapes under one method: at total level it is a
+    # scalar gap with its two side rates as components (so the ground truth is
+    # value + series + components, never a "distribution" whose cumulative sums
+    # would mix pp with pct); at bank level it is a flagged-entity distribution
+    # like any other divergence.
+    if method == "csv_pair_divergence":
+        return "divergence" if comp.get("level") == "bank" else "pair"
     return METHOD_TYPE.get(method, "yoy")
 
 

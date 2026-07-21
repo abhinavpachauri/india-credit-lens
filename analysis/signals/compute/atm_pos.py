@@ -22,6 +22,7 @@ Layer 1c methods (entity scans — one row per entity, all entities):
 Relational methods (cross-segment — spec: signals/README.md):
   csv_category_rotation   — Δshare_pp over an annual window per category + rotation mass
   csv_bank_divergence     — banks whose YoY contradicts their category (flagged only)
+  csv_pair_divergence     — declared co-movement pairs: gap between two metrics' YoY
 """
 
 from __future__ import annotations
@@ -416,6 +417,17 @@ def _month_back(period: str, months: int, available: set[str]) -> str | None:
     return candidate if candidate in available else None
 
 
+# A pair's sides normally move together, so the gap between their YoY rates is
+# the finding. Reuses the rotation vocabulary — no new status words: side A
+# pulling ahead is "strengthening", falling behind "weakening", together
+# "stable". The 3pp band is the materiality floor: below it, two rates that
+# differ are the same story told twice.
+PAIR_DEFAULT_RULES = [
+    {"if": "value > 3.0",  "then": "strengthening"},
+    {"if": "value < -3.0", "then": "weakening"},
+    {"if": "true",         "then": "stable"},
+]
+
 ROTATION_DEFAULT_RULES = [
     {"if": "value > 0.15",  "then": "strengthening"},
     {"if": "value < -0.15", "then": "weakening"},
@@ -530,6 +542,101 @@ def csv_bank_divergence(params: dict, period: str, df: pd.DataFrame) -> list[dic
     return sorted(out, key=lambda r: r["value"], reverse=True)
 
 
+def _metrics_total(df: pd.DataFrame, period: str, metrics: list[str]) -> float | None:
+    """Σ of the total rows for a metric bundle — the level operand of a pair
+    side (e.g. card spend = POS value + e-com value). None if nothing is
+    reported, so a missing side suppresses the pair rather than reading zero."""
+    vals = [_total_val(df, period, m) for m in metrics]
+    present = [v for v in vals if v is not None]
+    return sum(present) if present else None
+
+
+def _metrics_by_bank(df: pd.DataFrame, period: str,
+                     metrics: list[str]) -> dict[str, float]:
+    """bank_name → Σ of the bundle's metrics for that bank. Banks reporting
+    none of the metrics are absent (not zero) — the min_base rule then decides
+    what counts as a base, rather than silently reading structure as collapse."""
+    rows = df[(df["report_date"] == period) &
+              (df["metric"].isin(metrics)) &
+              (df["record_type"] == "bank")][["bank_name", "value"]].dropna(subset=["value"])
+    if rows.empty:
+        return {}
+    return {str(k): float(v) for k, v in
+            rows.groupby("bank_name", observed=True)["value"].sum().items()}
+
+
+def _yoy(cur: float | None, prev: float | None) -> float | None:
+    return ((cur - prev) / prev * 100) if (cur is not None and prev) else None
+
+
+def csv_pair_divergence(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
+    """
+    Declared co-movement pairs — the metric axis of divergence. Two metric
+    bundles that normally move together (cards issued vs cards spent on; the
+    acceptance fleet vs what is transacted across it); the signal is the gap
+    between their year-on-year rates.
+
+    The authored pair list IS the registry: only pairs someone declared are
+    ever compared (signals/README.md).
+
+    params:
+      a, b     — {metrics: [...], label: "..."} — each side's metric bundle
+      level    — 'total' (one aggregate row, always emitted) | 'bank'
+                 (flagged banks only, anomaly-surfaced like csv_bank_divergence)
+      a_min, b_max, min_gap — bank-level flag thresholds: side A growing at
+                 least a_min, side B at most b_max, and a gap of min_gap or more
+      min_base — both sides must have a base of at least this on both dates.
+                 The structural-vs-surprising rule: an issuer-only bank (cards
+                 but no acquiring) is structure, excluded by construction —
+                 never flagged as an anomaly.
+    value = yoy_a − yoy_b (pp, signed: positive = side A running ahead).
+    """
+    a_metrics = params["a"]["metrics"]
+    b_metrics = params["b"]["metrics"]
+    level     = params.get("level", "total")
+    rules     = params.get("status_rules") or PAIR_DEFAULT_RULES
+    prior     = _prior_year(period, set(df["report_date"].unique()))
+    if prior is None:
+        return []
+
+    if level == "total":
+        yoy_a = _yoy(_metrics_total(df, period, a_metrics),
+                     _metrics_total(df, prior,  a_metrics))
+        yoy_b = _yoy(_metrics_total(df, period, b_metrics),
+                     _metrics_total(df, prior,  b_metrics))
+        if yoy_a is None or yoy_b is None:
+            return []
+        gap = yoy_a - yoy_b
+        # The gap alone cannot tell you whether both sides grew, both shrank, or
+        # they split — and those are three different stories. Each side's rate
+        # is stored alongside it as a component row (the fy_yoy precedent) so
+        # the insight builder reads direction from data rather than assuming.
+        return [_row("aggregate",  "total", gap, _eval_status(rules, gap, gap), "pp"),
+                _row("pair_side", "a", yoy_a, "active", "pct"),
+                _row("pair_side", "b", yoy_b, "active", "pct")]
+
+    a_min    = float(params.get("a_min", 2.0))
+    b_max    = float(params.get("b_max", 0.0))
+    min_gap  = float(params.get("min_gap", 5.0))
+    min_base = float(params.get("min_base", 1))
+
+    cur_a, prev_a = (_metrics_by_bank(df, p, a_metrics) for p in (period, prior))
+    cur_b, prev_b = (_metrics_by_bank(df, p, b_metrics) for p in (period, prior))
+
+    out = []
+    for bank in sorted(set(cur_a) & set(prev_a) & set(cur_b) & set(prev_b)):
+        bases = (cur_a[bank], prev_a[bank], cur_b[bank], prev_b[bank])
+        if any(v < min_base for v in bases):
+            continue
+        yoy_a = _yoy(cur_a[bank], prev_a[bank])
+        yoy_b = _yoy(cur_b[bank], prev_b[bank])
+        if yoy_a is None or yoy_b is None:
+            continue
+        if yoy_a >= a_min and yoy_b <= b_max and (yoy_a - yoy_b) >= min_gap:
+            out.append(_row("bank", bank, yoy_a - yoy_b, "active", "pp"))
+    return sorted(out, key=lambda r: r["value"], reverse=True)
+
+
 # ── dispatch ──────────────────────────────────────────────────────────────────
 
 METHODS: dict = {
@@ -546,6 +653,7 @@ METHODS: dict = {
     # relational — cross-segment (spec: signals/README.md)
     "csv_category_rotation":   csv_category_rotation,
     "csv_bank_divergence":     csv_bank_divergence,
+    "csv_pair_divergence":     csv_pair_divergence,
 }
 
 

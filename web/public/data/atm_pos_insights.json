@@ -1803,5 +1803,179 @@
     "exploreAction": null,
     "representation": "deterministic-db",
     "insight_kind": "divergence_hierarchy"
+  },
+  {
+    "id": "dc-issuance-vs-spend-gap",
+    "group": "dc",
+    "cut": "total",
+    "period": "May 2026",
+    "type": "insight",
+    "title": "Debit cards in force grew while debit card spend fell (+7.08 pp apart over a year)",
+    "body": "Debit cards in force and debit card spend normally move together \u2014 they are two readings of the same activity. Over the past year they have come apart. Debit cards in force grew over the year; debit card spend fell. Measured as debit cards in force minus debit card spend, the two year-on-year rates are +7.08 pp apart.",
+    "implication": "A gap between debit cards in force and debit card spend is a question, not a conclusion: the two sides can part company because behaviour changed, because one side has a base effect, or because reporting shifted. Watch whether the gap closes next month \u2014 a pair that stays apart for several months is telling you the relationship itself has changed.",
+    "reasoning": {
+      "signals": [
+        {
+          "key": "dc-issuance-vs-spend-gap:total",
+          "value": 7.0834
+        },
+        {
+          "key": "dc-issuance-vs-spend-gap:a",
+          "value": 2.7528
+        },
+        {
+          "key": "dc-issuance-vs-spend-gap:b",
+          "value": -4.3306
+        }
+      ],
+      "chain": [
+        "Debit cards in force and debit card spend are a declared pair: each side's growth is measured against the same month a year earlier.",
+        "Debit cards in force grew over the year; debit card spend fell.",
+        "The gap between the two rates \u2014 debit cards in force minus debit card spend \u2014 is +7.08 pp, wide enough to count as a divergence rather than ordinary drift."
+      ]
+    },
+    "basis": {
+      "facts": [
+        "debit cards in force vs debit card spend: +7.08 pp apart year on year",
+        "debit cards in force: +2.75% YoY",
+        "debit card spend: -4.33% YoY",
+        "Source: signals.db (dc-issuance-vs-spend-gap)"
+      ],
+      "inferences": [
+        "Debit cards in force and debit card spend are a declared pair: each side's growth is measured against the same month a year earlier.",
+        "Debit cards in force grew over the year; debit card spend fell.",
+        "The gap between the two rates \u2014 debit cards in force minus debit card spend \u2014 is +7.08 pp, wide enough to count as a divergence rather than ordinary drift."
+      ]
+    },
+    "sourceSignals": [
+      "dc-issuance-vs-spend-gap"
+    ],
+    "effect": {
+      "highlight": [
+        "Total"
+      ],
+      "tab": "trend",
+      "trendMode": "yoy",
+      "focusCard": "debit_cards"
+    },
+    "exploreAction": null,
+    "representation": "deterministic-db",
+    "insight_kind": "divergence_pair"
+  },
+  {
+    "id": "pos-fleet-vs-spend-gap",
+    "group": "infra",
+    "cut": "total",
+    "period": "May 2026",
+    "type": "insight",
+    "title": "Value transacted at POS grew while POS terminals deployed fell (-4.66 pp apart over a year)",
+    "body": "POS terminals deployed and value transacted at POS normally move together \u2014 they are two readings of the same activity. Over the past year they have come apart. Value transacted at POS grew over the year; POS terminals deployed fell. Measured as POS terminals deployed minus value transacted at POS, the two year-on-year rates are -4.66 pp apart.",
+    "implication": "A gap between POS terminals deployed and value transacted at POS is a question, not a conclusion: the two sides can part company because behaviour changed, because one side has a base effect, or because reporting shifted. Watch whether the gap closes next month \u2014 a pair that stays apart for several months is telling you the relationship itself has changed.",
+    "reasoning": {
+      "signals": [
+        {
+          "key": "pos-fleet-vs-spend-gap:total",
+          "value": -4.6581
+        },
+        {
+          "key": "pos-fleet-vs-spend-gap:a",
+          "value": -0.4826
+        },
+        {
+          "key": "pos-fleet-vs-spend-gap:b",
+          "value": 4.1756
+        }
+      ],
+      "chain": [
+        "POS terminals deployed and value transacted at POS are a declared pair: each side's growth is measured against the same month a year earlier.",
+        "Value transacted at POS grew over the year; POS terminals deployed fell.",
+        "The gap between the two rates \u2014 POS terminals deployed minus value transacted at POS \u2014 is -4.66 pp, wide enough to count as a divergence rather than ordinary drift."
+      ]
+    },
+    "basis": {
+      "facts": [
+        "POS terminals deployed vs value transacted at POS: -4.66 pp apart year on year",
+        "POS terminals deployed: -0.48% YoY",
+        "value transacted at POS: +4.18% YoY",
+        "Source: signals.db (pos-fleet-vs-spend-gap)"
+      ],
+      "inferences": [
+        "POS terminals deployed and value transacted at POS are a declared pair: each side's growth is measured against the same month a year earlier.",
+        "Value transacted at POS grew over the year; POS terminals deployed fell.",
+        "The gap between the two rates \u2014 POS terminals deployed minus value transacted at POS \u2014 is -4.66 pp, wide enough to count as a divergence rather than ordinary drift."
+      ]
+    },
+    "sourceSignals": [
+      "pos-fleet-vs-spend-gap"
+    ],
+    "effect": {
+      "highlight": [
+        "Total"
+      ],
+      "tab": "trend",
+      "trendMode": "yoy",
+      "focusCard": "pos_terminals"
+    },
+    "exploreAction": null,
+    "representation": "deterministic-db",
+    "insight_kind": "divergence_pair"
+  },
+  {
+    "id": "atm-fleet-vs-withdrawal-gap",
+    "group": "infra",
+    "cut": "total",
+    "period": "May 2026",
+    "type": "insight",
+    "title": "Cash withdrawn at ATMs shrank faster than ATMs deployed (+3.35 pp apart over a year)",
+    "body": "ATMs deployed and cash withdrawn at ATMs normally move together \u2014 they are two readings of the same activity. Over the past year they have come apart. Both shrank over the year, cash withdrawn at ATMs the faster of the two. Measured as ATMs deployed minus cash withdrawn at ATMs, the two year-on-year rates are +3.35 pp apart.",
+    "implication": "A gap between ATMs deployed and cash withdrawn at ATMs is a question, not a conclusion: the two sides can part company because behaviour changed, because one side has a base effect, or because reporting shifted. Watch whether the gap closes next month \u2014 a pair that stays apart for several months is telling you the relationship itself has changed.",
+    "reasoning": {
+      "signals": [
+        {
+          "key": "atm-fleet-vs-withdrawal-gap:total",
+          "value": 3.3456
+        },
+        {
+          "key": "atm-fleet-vs-withdrawal-gap:a",
+          "value": -2.7119
+        },
+        {
+          "key": "atm-fleet-vs-withdrawal-gap:b",
+          "value": -6.0576
+        }
+      ],
+      "chain": [
+        "ATMs deployed and cash withdrawn at ATMs are a declared pair: each side's growth is measured against the same month a year earlier.",
+        "Both shrank over the year, cash withdrawn at ATMs the faster of the two.",
+        "The gap between the two rates \u2014 ATMs deployed minus cash withdrawn at ATMs \u2014 is +3.35 pp, wide enough to count as a divergence rather than ordinary drift."
+      ]
+    },
+    "basis": {
+      "facts": [
+        "ATMs deployed vs cash withdrawn at ATMs: +3.35 pp apart year on year",
+        "ATMs deployed: -2.71% YoY",
+        "cash withdrawn at ATMs: -6.06% YoY",
+        "Source: signals.db (atm-fleet-vs-withdrawal-gap)"
+      ],
+      "inferences": [
+        "ATMs deployed and cash withdrawn at ATMs are a declared pair: each side's growth is measured against the same month a year earlier.",
+        "Both shrank over the year, cash withdrawn at ATMs the faster of the two.",
+        "The gap between the two rates \u2014 ATMs deployed minus cash withdrawn at ATMs \u2014 is +3.35 pp, wide enough to count as a divergence rather than ordinary drift."
+      ]
+    },
+    "sourceSignals": [
+      "atm-fleet-vs-withdrawal-gap"
+    ],
+    "effect": {
+      "highlight": [
+        "Total"
+      ],
+      "tab": "trend",
+      "trendMode": "yoy",
+      "focusCard": "atms"
+    },
+    "exploreAction": null,
+    "representation": "deterministic-db",
+    "insight_kind": "divergence_pair"
   }
 ]

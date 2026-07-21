@@ -2,7 +2,7 @@
   "_meta": {
     "schema_version": "1.0",
     "description": "Signal registry — permanent catalog of every tracked signal across all ingestion pipelines. Signal IDs are immutable once created. Add new signals; never rename or delete. layer: 1 = per-chart data signal (algorithmically computed), 2 = cross-chart synthesis (authored per period from data), 3 = lending ecosystem expert model (generated ~6-monthly, strict claim validation).",
-    "last_updated": "2026-07-20"
+    "last_updated": "2026-07-21"
   },
   "pipelines": {
     "sibc": {
@@ -6715,6 +6715,226 @@
         "min_gap": 5.0,
         "min_base": 1000,
         "subject": "POS terminals"
+      },
+      "current_status": "active",
+      "first_seen": "2024-01-31"
+    },
+    "cc-issuance-vs-spend-gap": {
+      "id": "cc-issuance-vs-spend-gap",
+      "title": "Pair divergence — credit cards issued vs spent on (YoY gap, pp)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1e",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_pair_divergence",
+        "a": {
+          "metrics": [
+            "credit_cards"
+          ],
+          "label": "credit cards in force"
+        },
+        "b": {
+          "metrics": [
+            "cc_pos_txn_val",
+            "cc_ecom_txn_val"
+          ],
+          "label": "credit card spend"
+        },
+        "level": "total",
+        "status_rules": [
+          {
+            "if": "value > 3.0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < -3.0",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "stable"
+          }
+        ]
+      },
+      "current_status": "stable",
+      "first_seen": "2024-01-31"
+    },
+    "dc-issuance-vs-spend-gap": {
+      "id": "dc-issuance-vs-spend-gap",
+      "title": "Pair divergence — debit cards issued vs spent on (YoY gap, pp)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1e",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_pair_divergence",
+        "a": {
+          "metrics": [
+            "debit_cards"
+          ],
+          "label": "debit cards in force"
+        },
+        "b": {
+          "metrics": [
+            "dc_pos_txn_val",
+            "dc_ecom_txn_val"
+          ],
+          "label": "debit card spend"
+        },
+        "level": "total",
+        "status_rules": [
+          {
+            "if": "value > 3.0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < -3.0",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "stable"
+          }
+        ]
+      },
+      "current_status": "strengthening",
+      "first_seen": "2024-01-31"
+    },
+    "pos-fleet-vs-spend-gap": {
+      "id": "pos-fleet-vs-spend-gap",
+      "title": "Pair divergence — POS fleet vs value transacted across it (YoY gap, pp)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1e",
+      "domain": "infrastructure",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_pair_divergence",
+        "a": {
+          "metrics": [
+            "pos_terminals"
+          ],
+          "label": "POS terminals deployed"
+        },
+        "b": {
+          "metrics": [
+            "cc_pos_txn_val",
+            "dc_pos_txn_val"
+          ],
+          "label": "value transacted at POS"
+        },
+        "level": "total",
+        "status_rules": [
+          {
+            "if": "value > 3.0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < -3.0",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "stable"
+          }
+        ]
+      },
+      "current_status": "weakening",
+      "first_seen": "2024-01-31"
+    },
+    "atm-fleet-vs-withdrawal-gap": {
+      "id": "atm-fleet-vs-withdrawal-gap",
+      "title": "Pair divergence — ATM fleet vs cash withdrawn from it (YoY gap, pp)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1e",
+      "domain": "infrastructure",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_pair_divergence",
+        "a": {
+          "metrics": [
+            "atm_onsite",
+            "atm_offsite"
+          ],
+          "label": "ATMs deployed"
+        },
+        "b": {
+          "metrics": [
+            "cc_atm_withdrawal_val",
+            "dc_atm_withdrawal_val"
+          ],
+          "label": "cash withdrawn at ATMs"
+        },
+        "level": "total",
+        "status_rules": [
+          {
+            "if": "value > 3.0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < -3.0",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "stable"
+          }
+        ]
+      },
+      "current_status": "strengthening",
+      "first_seen": "2024-01-31"
+    },
+    "cc-issuance-vs-spend-bank-gap": {
+      "id": "cc-issuance-vs-spend-bank-gap",
+      "title": "Pair divergence — banks issuing credit cards faster than they are spent on (YoY gap, pp)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1e",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_pair_divergence",
+        "a": {
+          "metrics": [
+            "credit_cards"
+          ],
+          "label": "credit cards in force"
+        },
+        "b": {
+          "metrics": [
+            "cc_pos_txn_val",
+            "cc_ecom_txn_val"
+          ],
+          "label": "credit card spend"
+        },
+        "level": "bank",
+        "status_rules": [
+          {
+            "if": "value > 3.0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < -3.0",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "stable"
+          }
+        ],
+        "a_min": 5.0,
+        "b_max": 0.0,
+        "min_gap": 10.0,
+        "min_base": 10000
       },
       "current_status": "active",
       "first_seen": "2024-01-31"

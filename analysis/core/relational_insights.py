@@ -299,6 +299,109 @@ def divergence_insight(dist: list[tuple], subject: str, member_noun: str = "segm
             "implication": implication, "insight_kind": "divergence_hierarchy"}
 
 
+def _cap(s: str) -> str:
+    return f"{s[0].upper()}{s[1:]}" if s else s
+
+
+def pair_divergence_insight(gap: float | None, status: str | None,
+                            a_label: str, b_label: str,
+                            yoy_a: float | None = None,
+                            yoy_b: float | None = None,
+                            flagged: list[tuple] | None = None) -> dict | None:
+    """Deterministic insight for a declared co-movement pair (metric axis).
+
+    gap      — the aggregate row's value: yoy_a − yoy_b (pp, signed;
+               positive = side A running ahead of side B)
+    status   — that row's status ('strengthening' | 'weakening' | 'stable')
+    a_label / b_label — the registry-declared names of the two sides
+    yoy_a / yoy_b — each side's own growth rate (the pair_side component rows).
+               The gap alone cannot distinguish "both grew, A faster" from
+               "both shrank, B faster" from "A grew while B fell" — three
+               different stories with the same arithmetic, so direction is read
+               from these rather than assumed.
+    flagged  — bank-level rows [(bank, gap_pp, status)] when the pair also has
+               a bank-level signal; the named banks are where the total gap
+               lives
+
+    A pair only earns a card when the two sides have come apart: a 'stable'
+    gap means they are still moving together, which is the null result, not a
+    finding. Number policy: the gap is the only figure stated — the side rates
+    inform the wording but are described in words, so nothing in the prose
+    depends on a reader parsing two rates and a difference.
+    """
+    if gap is None or status == "stable":
+        return None
+
+    ahead, behind = (a_label, b_label) if gap > 0 else (b_label, a_label)
+
+    # Direction of each side, when known. "Ahead" means the higher growth rate,
+    # which in a shrinking pair means shrinking more slowly — never call that
+    # growth.
+    if yoy_a is not None and yoy_b is not None and max(yoy_a, yoy_b) <= 0:
+        shape = "both_shrinking"
+    elif yoy_a is not None and yoy_b is not None and min(yoy_a, yoy_b) < 0:
+        shape = "split"
+    elif yoy_a is not None and yoy_b is not None:
+        shape = "both_growing"
+    else:
+        shape = "unknown"
+
+    # Past-tense verbs throughout: the side labels are authored noun phrases of
+    # mixed grammatical number ("debit cards in force" / "cash withdrawn at
+    # ATMs"), and grew/fell/shrank agree with both — so one template stays
+    # grammatical without the registry having to declare number.
+    if shape == "both_shrinking":
+        title = (f"{_cap(behind)} shrank faster than {ahead} "
+                 f"({_pp(gap)} apart over a year)")
+        move  = f"Both shrank over the year, {behind} the faster of the two."
+    elif shape == "split":
+        title = (f"{_cap(ahead)} grew while {behind} fell "
+                 f"({_pp(gap)} apart over a year)")
+        move  = f"{_cap(ahead)} grew over the year; {behind} fell."
+    elif shape == "both_growing":
+        title = (f"{_cap(ahead)} grew faster than {behind} "
+                 f"({_pp(gap)} apart over a year)")
+        move  = f"Both grew over the year, {ahead} the faster of the two."
+    else:
+        title = f"{_cap(ahead)} outpaced {behind} ({_pp(gap)} apart over a year)"
+        move  = f"{_cap(ahead)} outpaced {behind} over the year."
+
+    body_parts = [
+        f"{_cap(a_label)} and {b_label} normally move together — they are two "
+        f"readings of the same activity. Over the past year they have come "
+        f"apart. {move} Measured as {a_label} minus {b_label}, the two "
+        f"year-on-year rates are {_pp(gap)} apart.",
+    ]
+    chain = [
+        f"{_cap(a_label)} and {b_label} are a declared pair: each side's growth "
+        f"is measured against the same month a year earlier.",
+        f"{move}",
+        f"The gap between the two rates — {a_label} minus {b_label} — is "
+        f"{_pp(gap)}, wide enough to count as a divergence rather than "
+        f"ordinary drift.",
+    ]
+
+    if flagged:
+        names = "; ".join(f"{_short(e)} {_pp(v)}" for e, v, _ in flagged[:3])
+        body_parts.append(
+            f"At the bank level the gap is concentrated, not general: "
+            f"{len(flagged)} {'bank' if len(flagged) == 1 else 'banks'} are "
+            f"flagged — {names}.")
+        chain.append(f"{len(flagged)} {'bank' if len(flagged) == 1 else 'banks'} "
+                     f"show the same split on their own books, the widest at "
+                     f"{_pp(flagged[0][1])}.")
+
+    implication = (
+        f"A gap between {a_label} and {b_label} is a question, not a conclusion: "
+        "the two sides can part company because behaviour changed, because one "
+        "side has a base effect, or because reporting shifted. Watch whether the "
+        "gap closes next month — a pair that stays apart for several months is "
+        "telling you the relationship itself has changed.")
+
+    return {"title": title, "body": " ".join(body_parts), "chain": chain,
+            "implication": implication, "insight_kind": "divergence_pair"}
+
+
 # ── review render (reads signals.db; writes nothing) ─────────────────────────
 
 def _rotation_signals(registry: dict, pipeline: str) -> list[tuple[str, dict]]:

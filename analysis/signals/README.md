@@ -61,18 +61,35 @@ diverging from its category is structurally identical to a sub-sector diverging 
   never produce 67 rows). `value = child_yoy − parent_yoy` (pp, signed; sign carries direction — no
   new status vocabulary). No flags → no rows → insight suppressed.
 
-### divergence, metric axis — declared co-movement pairs (spec — not yet implemented)
-`csv_pair_divergence` (ATM/POS first). METHOD_TYPE: `divergence`.
+### divergence, metric axis — declared co-movement pairs
+`csv_pair_divergence` (ATM/POS). METHOD_TYPE: `pair` at total level, `divergence` at bank level —
+one method, two shapes, so the ground truth for each is the right shape (below).
 
 - **The authored pair list IS the registry**: one signal per pair (e.g. `cc-issuance-vs-spend-gap`
   = cards YoY vs spend YoY). Only registered pairs are ever compared — "declared pairs only" falls
-  out of the registry-is-the-spec rule; no separate relation file.
-- **Params:** `a`/`b` metric specs, `level: total|bank`, flag thresholds (`a_min`, `b_max`,
+  out of the registry-is-the-spec rule; no separate relation file. **Live pairs (5):**
+  `cc-issuance-vs-spend-gap` · `dc-issuance-vs-spend-gap` · `pos-fleet-vs-spend-gap` ·
+  `atm-fleet-vs-withdrawal-gap` (total) + `cc-issuance-vs-spend-bank-gap` (bank).
+- **Params:** `a`/`b` metric bundles (`{metrics: [...], label}` — a side may sum several CSV
+  metrics, e.g. card spend = POS + e-com), `level: total|bank`, flag thresholds (`a_min`, `b_max`,
   `min_gap`), and **`min_base`** — both metrics must have a nonzero base for the entity.
   `min_base` is the structural-vs-surprising rule: issuer-only banks (cards > 0, POS = 0 —
   AU/HSBC/Utkarsh pattern) are *structure*, excluded by construction, never flagged as anomalies.
-- **Rows:** `level: total` → one aggregate row (`value = yoy_a − yoy_b` pp). `level: bank` →
-  flagged banks only.
+- **Rows:** `level: total` → one aggregate row (`value = yoy_a − yoy_b` pp) **plus two
+  `entity_type='pair_side'` component rows** carrying each side's own YoY. The gap alone cannot
+  tell "both grew, A faster" from "both shrank, B faster" from "A grew while B fell" — three
+  different stories with identical arithmetic — so direction is read from data, never inferred
+  from the sign. `level: bank` → flagged banks only.
+- **Ground truth:** total-level pairs are **scalar-shaped** (value + series + the two side rows as
+  `components`), *not* scan-shaped: a "distribution" of one pp gap and two pct rates would let
+  cumulative-sum derivations admit numbers that mean nothing. Negative-tested — an invented gap in
+  body or chain fails Stage 4c.
+- **Insight** (`core/relational_insights.py :: pair_divergence_insight` — live): a pair earns a
+  card only when the sides have come apart; a `stable` gap (inside ±3 pp) is the null result and is
+  suppressed. Only the gap is stated as a figure; the side rates set the wording. Verbs are
+  past-tense (grew/fell/shrank) so one template stays grammatical across authored labels of mixed
+  number. Payments Stage 4b renders them as `deterministic-db` cards (`insight_kind:
+  divergence_pair`), sourcing the bank-level rows too where a pair has them.
 
 ### Conventions shared by all three
 - **Coverage additions are registry entries, not architecture** (e.g. per-bank spend rows for the

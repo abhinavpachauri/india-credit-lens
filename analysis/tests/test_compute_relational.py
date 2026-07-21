@@ -220,3 +220,94 @@ def test_ap_divergence_min_base_excludes_structural_zero():
 
 def test_ap_divergence_no_prior_year_no_rows():
     assert ap.csv_bank_divergence(AP_DIV, "2025-04-30", _ap_df()) == []
+
+
+# ── ATM/POS pair divergence (metric axis) ─────────────────────────────────────
+#
+# Pair fixture (metrics "cards" and "spend"; two annual dates):
+#     bank   cat   cards 2025 → 2026        spend 2025 → 2026
+#     A      PSB     350  →  400  (+14.29%)   1000 →  900  (−10.00%)
+#     B      PSB     300  →  320  (+ 6.67%)    800 →  840  (+ 5.00%)
+#     C      PVT     350  →  480  (+37.14%)    600 →  600  (  0.00%)
+#     Z      PVT       5  →    9  (+80.00%)      0 →    0   (issuer-only)
+#     totals         1005 → 1209  (+20.30%)   2400 → 2340  (− 2.50%)
+# Total gap = 20.2985 − (−2.50) = +22.7985pp
+
+PAIR_P = "2026-04-30"
+
+
+def _pair_df():
+    def row(d, name, cat, metric, v, rt="bank"):
+        return {"report_date": d, "bank_name": name, "bank_category": cat,
+                "record_type": rt, "metric": metric, "value": v,
+                "unit": "count", "data_status": "actual"}
+
+    cards = {"A": (350, 400), "B": (300, 320), "C": (350, 480), "Z": (5, 9)}
+    spend = {"A": (1000, 900), "B": (800, 840), "C": (600, 600), "Z": (0, 0)}
+    cat   = {"A": "PSB", "B": "PSB", "C": "PVT", "Z": "PVT"}
+    rows  = []
+    for metric, data in (("cards", cards), ("spend", spend)):
+        for bank, (prev, cur) in data.items():
+            rows.append(row("2025-04-30", bank, cat[bank], metric, float(prev)))
+            rows.append(row("2026-04-30", bank, cat[bank], metric, float(cur)))
+        rows.append(row("2025-04-30", "", "", metric,
+                        float(sum(p for p, _ in data.values())), rt="total"))
+        rows.append(row("2026-04-30", "", "", metric,
+                        float(sum(c for _, c in data.values())), rt="total"))
+    return pd.DataFrame(rows)
+
+
+PAIR_TOTAL = {"method": "csv_pair_divergence", "level": "total",
+              "a": {"metrics": ["cards"], "label": "cards"},
+              "b": {"metrics": ["spend"], "label": "spend"}}
+PAIR_BANK = dict(PAIR_TOTAL, level="bank", a_min=5.0, b_max=0.0,
+                 min_gap=10.0, min_base=10)
+
+
+def test_ap_pair_total_gap_and_side_rows():
+    rows = ap.csv_pair_divergence(PAIR_TOTAL, PAIR_P, _pair_df())
+    by_id = {r["entity_id"]: r for r in rows}
+    assert by_id["total"]["value"] == pytest.approx(22.7985, abs=1e-3)
+    assert by_id["total"]["entity_type"] == "aggregate"
+    assert by_id["total"]["unit"] == "pp"
+    # Each side's own rate travels with the gap — the builder reads direction
+    # from these rather than guessing it from the sign of the difference.
+    assert by_id["a"]["value"] == pytest.approx(20.2985, abs=1e-3)
+    assert by_id["b"]["value"] == pytest.approx(-2.50, abs=1e-3)
+    assert {by_id["a"]["unit"], by_id["b"]["unit"]} == {"pct"}
+
+
+def test_ap_pair_total_status_band():
+    rows = ap.csv_pair_divergence(PAIR_TOTAL, PAIR_P, _pair_df())
+    assert rows[0]["status"] == "strengthening"        # +22.8pp, side A ahead
+
+
+def test_ap_pair_total_stable_inside_band():
+    # Sides moving together (gap inside ±3pp) is the null result, not a finding.
+    df = _pair_df()
+    df.loc[(df.report_date == "2026-04-30") & (df.metric == "spend") &
+           (df.record_type == "total"), "value"] = 2400 * 1.19
+    rows = ap.csv_pair_divergence(PAIR_TOTAL, PAIR_P, df)
+    assert rows[0]["status"] == "stable"
+
+
+def test_ap_pair_bank_level_flags_only_declared_rule():
+    rows = ap.csv_pair_divergence(PAIR_BANK, PAIR_P, _pair_df())
+    by_id = {r["entity_id"]: r for r in rows}
+    # A: cards +14.29 ≥ 5, spend −10 ≤ 0, gap 24.29 ≥ 10 → flagged
+    assert by_id["A"]["value"] == pytest.approx(24.2857, abs=1e-3)
+    assert by_id["A"]["entity_type"] == "bank"
+    # B: spend grew (+5 > b_max) → not flagged. C: gap 37.14 ≥ 10, spend flat → flagged
+    assert "B" not in by_id
+    assert "C" in by_id
+
+
+def test_ap_pair_min_base_excludes_issuer_only_bank():
+    # Z issues cards but does no acquiring: structure, not an anomaly. It must
+    # never be flagged, however fast its card count grows.
+    flagged = {r["entity_id"] for r in ap.csv_pair_divergence(PAIR_BANK, PAIR_P, _pair_df())}
+    assert "Z" not in flagged
+
+
+def test_ap_pair_no_prior_year_no_rows():
+    assert ap.csv_pair_divergence(PAIR_TOTAL, "2025-04-30", _pair_df()) == []
