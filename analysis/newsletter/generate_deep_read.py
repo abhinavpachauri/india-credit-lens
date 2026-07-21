@@ -98,8 +98,10 @@ def build_doc():
             basis = c.get("basis")
             if basis:
                 doc.append({"type": "p", "text": "How this read is computed:"})
+                # basis lines quote member values — scoped to that card's own evidence
+                scope = c.get("evidence_all") or c.get("evidence") or []
                 for line in basis_lines(basis):
-                    doc.append({"type": "li", "text": line})
+                    doc.append({"type": "li", "signals": scope, "text": line})
             recipe = chart_recipe(c)
             if recipe:
                 doc.append({"type": "chart", "text": recipe})

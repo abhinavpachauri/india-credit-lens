@@ -68,6 +68,34 @@
      "date": "2026-07-21",
      "how_measured": "Ran the real, uncorrupted watchlist sentence for the 25 nearest-to-flip signals through the same check. The 3 failures were the glued-'pp' extractor backtrack (1.9pp -> 1), fixed by the spaced format; locked by test_real_watchlist_sentences_are_never_falsely_rejected.",
      "source": "analysis/tests/test_distribution.py"
+    },
+    {
+     "metric": "newsletter gate (validate_newsletter.check_doc) catch rate — BEFORE rescoping",
+     "value": "0.0% near-miss, 0.0% in-range (0 false rejections)",
+     "date": "2026-07-21",
+     "how_measured": "analysis/measure_groundedness.py, 200 injections per attack across the 3 live issues (release read x2 + deep read), seed 7. Verified by hand: the gate passed 9.1%, 47.3% and 812.6% injected into a body paragraph, and only rejected a 5-figure absurdity.",
+     "source": "analysis/measure_groundedness.py --gate newsletter"
+    },
+    {
+     "metric": "newsletter gate catch rate — AFTER per-block scoping + DISTRIBUTION policy",
+     "value": "100.0% near-miss, 99.5% in-range (0 false rejections)",
+     "date": "2026-07-21",
+     "how_measured": "Same harness, same seed, same issues. Three changes: per-block scope with NO issue-wide fallback; core.traceability.DISTRIBUTION policy (rounding width, no ratio grounding); ground truth includes each value as fmt_value renders it. Rendered .md output byte-identical before and after.",
+     "source": "analysis/newsletter/validate_newsletter.py"
+    },
+    {
+     "metric": "scope width — values a single paragraph was checked against",
+     "value": "735 (289 distinct) → 0 for undeclared blocks, ~10-35 for declared ones",
+     "date": "2026-07-21",
+     "how_measured": "declared_ground_truth() on a release read's 21 declared signals, before vs after per-block scoping.",
+     "source": "analysis/newsletter/validate_newsletter.py"
+    },
+    {
+     "metric": "distribution gate catch rate — same harness, for comparison",
+     "value": "82.6% near-miss, 68.3% in-range (0 false rejections)",
+     "date": "2026-07-21",
+     "how_measured": "analysis/measure_groundedness.py --gate distribution. Weaker than the newsletter because a claim's scope includes its full period series and ranges, which prose legitimately references ('16-period range'). Next tightening target.",
+     "source": "analysis/measure_groundedness.py"
     }
    ],
    "observations": [
@@ -75,7 +103,10 @@
     "First newsletter traceability cut was vacuous — period-wide scope let invented numbers pass. Rescoping to declared signals only was the fix. Same lesson as Check 4f's evidence_all rescoping.",
     "Negative testing must target the artifact the validator actually reads. The pair-divergence negative test only worked after editing analysis/rbi_atm_pos/insights.json rather than the web copy.",
     "Loosening a gate can be invisible: the distribution gate initially inherited the card policy (abs_tol=0.25 plus ratio grounding) and passed every negative test I threw at it — not because the text was grounded but because a 29-value pool spawns ~800 candidate ratios and a quarter-point tolerance covers most of the number line worth inventing. Catch rate 41.5%. The same check, scoped to rounding width and with ratio grounding removed, catches 95.7%. A gate that never fails is not evidence of correctness; measure the catch rate.",
-    "Groundedness has two error rates, and only measuring one is how you ship a gate that blocks the truth. Tightening tolerance took false rejections from 0 to 3/25 until the formatting quirk behind them was fixed; both numbers belong in the measurement."
+    "Groundedness has two error rates, and only measuring one is how you ship a gate that blocks the truth. Tightening tolerance took false rejections from 0 to 3/25 until the formatting quirk behind them was fixed; both numbers belong in the measurement.",
+    "The gate guarding the subscriber-facing newsletter caught 0% of invented numbers, and had passed every hand-written negative test since it was built. Hand-written negative tests select for numbers the author already suspects; an injection harness does not. Every gate needs a measured catch rate before it can be described as working.",
+    "A defensive default is a hole. When per-block scoping was added, blocks with no declared signals fell back to the issue-wide pool 'so nothing breaks' — that single fallback dropped the in-range catch rate from 91.9% to 42.4%, because the injection site was exactly such a block. Removing the fallback took it to 99.5%. Scope defaults should fail closed.",
+    "Tightening surfaced two real bugs that the loose gate had been hiding, both display-format rather than data problems: values rendered for the reader (₹2.9L Cr, 12.0 crore) did not match their stored form, and ratio grounding had been silently accepting them as a/b of other values. The fix — ground the value through the same renderer the issue uses — is exact rather than a tolerance guess."
    ],
    "open_questions": [
     "Breadth-based (period-wide) checks let an in-range invented number pass. What is the cheapest scoping that closes this for free prose, not just structured values?",

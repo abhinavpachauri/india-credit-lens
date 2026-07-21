@@ -58,8 +58,10 @@ def build_doc(pipeline, period):
         doc.append({"type": "chart", "text": f"Hero chart — {cards[0]['chart']}"})
 
     doc.append({"type": "h2", "text": "The headline numbers"})
+    # each stat carries its own signal — the scope the gate judges that number by
     doc.append({"type": "statgrid", "items": [
-        {"value": s["display"], "label": s["title"], "note": s["status_word"]} for s in stats]})
+        {"value": s["display"], "label": s["title"], "note": s["status_word"],
+         "signal": s["id"]} for s in stats]})
 
     if flips:
         doc.append({"type": "h2", "text": "What changed direction since last month"})
@@ -73,20 +75,24 @@ def build_doc(pipeline, period):
         if up:
             doc.append({"type": "p", "text": "Picked up:"})
             for f in up[:cap]:
-                doc.append({"type": "li", "text": f"↑ {f['title']} — now {f['now']} ({f['display']})"})
+                doc.append({"type": "li", "signals": [f["id"]],
+                            "text": f"↑ {f['title']} — now {f['now']} ({f['display']})"})
             if len(up) > cap:
-                doc.append({"type": "small", "text": f"…and {len(up) - cap} more on the dashboard."})
+                doc.append({"type": "small", "meta": True,
+                            "text": f"…and {len(up) - cap} more on the dashboard."})
         if down:
             doc.append({"type": "p", "text": "Slowed down:"})
             for f in down[:cap]:
-                doc.append({"type": "li", "text": f"↓ {f['title']} — now {f['now']} ({f['display']})"})
+                doc.append({"type": "li", "signals": [f["id"]],
+                            "text": f"↓ {f['title']} — now {f['now']} ({f['display']})"})
             if len(down) > cap:
-                doc.append({"type": "small", "text": f"…and {len(down) - cap} more on the dashboard."})
+                doc.append({"type": "small", "meta": True,
+                            "text": f"…and {len(down) - cap} more on the dashboard."})
 
     if fresh:
         doc.append({"type": "h2", "text": "New trackers this cycle"})
         for n in fresh:
-            doc.append({"type": "li", "text": n["title"]})
+            doc.append({"type": "li", "signals": [n["id"]], "text": n["title"]})
 
     doc.append({"type": "h2", "text": "The reads that matter"})
     for i, c in enumerate(cards):

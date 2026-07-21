@@ -1,4 +1,4 @@
-# RBI ATM/POS and card data, May 2026: Credit cards up 11 straight months — longest streak since Jun 2025 purge
+# RBI ATM/POS and card data, May 2026: Credit cards grew 11 straight months — longest run since Jun 2025
 
 RBI has put out the ATM/POS and card data for May 2026. This issue covers what actually moved, what changed direction since last month, and the reads that matter for anyone working in lending. Every number below is machine-checked against the RBI source file before this issue is generated.
 
@@ -33,16 +33,17 @@ Picked up:
 Slowed down:
 
 - ↓ DC POS share of total DC transaction value (%) — now slowing (8.4%)
+- ↓ Pair divergence — POS fleet vs value transacted across it (YoY gap, pp) — now slowing (-4.7pp)
 - ↓ POS terminals YoY growth (%) — now falling (-0.5%)
 
 ## The reads that matter
 
 
-**Credit cards up 11 straight months — longest streak since Jun 2025 purge**
+**Credit cards grew 11 straight months — longest run since Jun 2025**
 
-Credit cards outstanding have grown for 11 consecutive months, extending the streak from 10 periods prior. Streak extended from 10 to 11 periods — the longest run since the 16-period streak that ended in Jun 2025. The current streak began in Jul 2025 and has now surpassed the Oct 2024 level.
+Credit cards outstanding have grown for 11 consecutive months, extending the streak from 10 periods prior. Streak extended from 10 to 11 periods — the longest run since the 16-period streak that ended in Jun 2025. The current streak began in Jul 2025 and is now in the upper range of the historical distribution.
 
-> So what: The credit card market has established the longest growth run in 11 months — the 11-period streak confirms issuers have re-established expansion momentum after the Oct 2025 purge, and the market is now operating at a structurally higher growth rate than the 2024 baseline. The streak is 5 periods away from matching the 16-period record that ended in Jun 2025, signaling the market is on track to surpass the pre-purge peak within five months if the current pace holds.
+> So what: The credit card market has locked into a sustained growth trajectory — the 11-period streak is the longest since Jun 2025, confirming issuers have re-established expansion momentum after the Oct 2025 purge. The streak is now in the upper range of the historical distribution, signaling the market is operating at a structurally higher growth rate than the 2024 baseline. The Jun 2025 reset was a one-time event, and the current run confirms the market has entered a new growth phase with no signs of deceleration.
 
 ---
 
@@ -59,11 +60,11 @@ ATM withdrawals represented 80.61% of total debit card transaction volume in May
 ---
 
 
-**UPI QR codes 67.7× POS terminals — highest ratio on record**
+**67.7 UPI QR codes per POS terminal — record divergence**
 
-There are now 67.7 UPI QR codes for every POS terminal in May 2026, up 0.32 from 67.3 in Apr 2026. Ratio rose 67.3× → 67.7×, the highest level on record — the gap has widened by 0.3 points as UPI QR added 9.0M codes while POS terminals gained only 78K units.
+There are now 67.7 UPI QR codes for every POS terminal in May 2026, up 0.32 from 67.3 in Apr 2026. Ratio rose 67.3× → 67.7×, the highest level on record — the gap has widened by 0.3 points as UPI QR scaled 9M codes while POS terminals added only 78K units.
 
-> So what: The 67.7× ratio confirms UPI QR is the only acceptance infrastructure with structural expansion momentum — POS terminals are a shrinking asset class with no recovery signal. Lenders financing merchant acceptance should allocate capital exclusively to UPI QR-enabled solutions; the POS channel is contracting while UPI QR scales at 115× the rate. The ratio will continue widening as UPI QR adds 7–10M codes monthly and POS struggles to post consecutive gains.
+> So what: The 67.7× ratio confirms the two channels are on opposite trajectories — UPI QR is in exponential expansion while POS is in structural contraction. Lenders financing merchant acceptance should allocate capital exclusively to UPI QR infrastructure; POS terminals are a shrinking asset class with no recovery signal. The ratio will continue widening as UPI QR adds 7–10M codes monthly and POS struggles to stabilise.
 
 
 > 📊 **[CHART — replace with screenshot]** indiacreditlens.com/payments → Infrastructure → Absolute view → highlight: Total

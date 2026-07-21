@@ -57,14 +57,14 @@ All four main credit sectors — agriculture, industry, services, retail — pos
 ---
 
 
-**Large corporates hold 67.3% of industry credit — share stable**
+**Large corporates surged 14.4% YoY — highest in 9 periods**
 
-Large corporates account for 67.3% of industry credit in May 2026, up 0.11pp from the prior period. Share compressed from 71.0% in Jan 2025 to 67.3% in May 2026, losing 3.7 percentage points over 16 months.
+Large corporate credit grew 14.4% YoY in May 2026, the strongest reading in this nine-period window. Growth accelerated from 10.0% last period to 14.4%, extending a recovery that began at 5.5% in Jan 2026. The 4.34pp jump is the sharpest single-period acceleration on record.
 
-> So what: Large corporates have lost 3.7pp of share but the decline has plateaued. The segment is no longer bleeding share, but it is not reclaiming lost ground either. Lenders overweight to large corporates are capturing a smaller slice of incremental industry credit — the growth opportunity has shifted to MSME borrowers.
+> So what: Large corporates are re-accelerating sharply — the 14.4% pace is the highest in nine periods and confirms the segment is back in growth mode. However, the 14.4% pace is insufficient to defend market share against 26.2% Micro & Small growth and 21.2% Medium growth. Lenders here are capturing healthy flow, but the incremental credit opportunity is overwhelmingly in MSME segments.
 
 
-> 📊 **[CHART — replace with screenshot]** indiacreditlens.com → Industry by Size → % Share (Distribution tab) view → highlight: Large
+> 📊 **[CHART — replace with screenshot]** indiacreditlens.com → Industry by Size → YoY % view → highlight: Large
 
 ---
 
@@ -85,7 +85,7 @@ RBI breaks NBFC credit into two sub-categories. Housing Finance Companies holds 
 
 Credit card outstanding fell to ₹2.95L Cr in May 2026, down ₹3,481 Cr from ₹2.98L Cr in Apr 2026. Volume declined ₹2.98L Cr → ₹2.95L Cr, the second consecutive monthly drop after peaking in Apr 2026.
 
-> So what: Credit card portfolios are contracting in absolute terms — lenders are de-risking, not just pausing growth. This is a structural retreat from unsecured lending. Expect continued volume declines through H1 FY27.
+> So what: The Apr 2026 uptick was a false dawn — card lending is contracting again. Lenders should treat this as confirmation that the low-growth regime is entrenched, not transitional. Focus on portfolio quality and yield, not volume recovery.
 
 
 > 📊 **[CHART — replace with screenshot]** indiacreditlens.com → Personal Loans → Absolute view → highlight: Credit Card Outstanding

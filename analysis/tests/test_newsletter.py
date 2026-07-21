@@ -76,3 +76,81 @@ def test_check_doc_card_verbatim_live_artifacts():
     verbatim = [{"type": "card", "title": card["title"], "body": card["body"],
                  "implication": card["implication"]}]
     assert check_doc(verbatim, [], "t") == []
+
+
+# ── Per-block scoping (rescoped 2026-07-21) ───────────────────────────────────
+# The gate used to pool every declared signal for the whole issue and match with the
+# card policy's ratio grounding. Measured, it caught 0% of injections. These lock the
+# properties that fixed it, because the failure was invisible to hand-written tests.
+
+def test_a_block_is_judged_only_by_the_signals_it_declares():
+    """A stat cannot be justified by a neighbouring stat's value."""
+    from validate_newsletter import check_doc
+    import newsletter_sources as ns
+    sibc, atm = "sibc-bank-credit-yoy", "cc-outstanding-yoy"
+    vals = ns.total_values("sibc", ns.latest_period("sibc"))
+    if sibc not in vals:
+        return
+    real = ns.fmt_value(*vals[sibc][:2])
+    # correct signal → grounded; someone else's signal → not
+    ok = [{"type": "statgrid", "items": [{"value": real, "label": "x", "signal": sibc}]}]
+    bad = [{"type": "statgrid", "items": [{"value": real, "label": "x", "signal": atm}]}]
+    assert check_doc(ok, [sibc]) == []
+    assert check_doc(bad, [atm]) != []
+
+
+def test_an_undeclared_block_grounds_nothing():
+    """No fall-back to the issue-wide pool: connective prose carries no figures."""
+    from validate_newsletter import check_doc
+    doc = [{"type": "p", "text": "The figure stood at 47.3% this month."}]
+    assert check_doc(doc, ["sibc-bank-credit-yoy"]) != []
+
+
+def test_meta_blocks_count_the_document_not_the_data():
+    from validate_newsletter import check_doc
+    assert check_doc([{"type": "small", "meta": True,
+                       "text": "…and 10 more on the dashboard."}], []) == []
+    assert check_doc([{"type": "small", "text": "…and 10 more on the dashboard."}], []) != []
+
+
+def test_headline_keeps_its_quoted_card_after_ungluing():
+    """Card text is stripped BEFORE the magnitude unglue — reversing the order made
+    the H1's quoted card title read as an ungrounded claim of the template's own."""
+    from validate_newsletter import check_doc, legit_card_texts
+    card = next((c for c in legit_card_texts() if "L Cr" in c), None)
+    if not card:
+        return
+    assert check_doc([{"type": "h1", "text": f"RBI data, May 2026: {card}"}], []) == []
+
+
+def test_rendered_magnitudes_are_grounded_by_the_renderer_itself():
+    """"₹2.9L Cr" is the reader's form of 294534.6 — the gate accepts it because
+    fmt_value produced it, not because a tolerance happened to be wide enough."""
+    from validate_newsletter import declared_ground_truth
+    from core.traceability import DISTRIBUTION, extract_numbers, matches
+    sid = "sibc-pl-cc-abs"
+    gt = declared_ground_truth([sid])
+    import newsletter_sources as ns
+    vals = ns.total_values("sibc", ns.latest_period("sibc"))
+    if sid not in vals:
+        return
+    shown = ns.fmt_value(vals[sid][0], vals[sid][1])          # e.g. "₹2.9L Cr"
+    for num in extract_numbers(shown.replace("L Cr", " L Cr"), DISTRIBUTION):
+        assert matches(num, gt, DISTRIBUTION), f"{num} from {shown!r} not grounded"
+
+
+def test_live_issues_still_pass_their_own_gate():
+    """The generators must survive the tightening — a gate that blocks true issues
+    gets switched off, which is worse than a loose one."""
+    import newsletter_sources as ns
+    import generate_release_read as release
+    import generate_deep_read as deep
+    from validate_newsletter import check_doc
+    for pipeline in ("sibc", "atm_pos"):
+        period = ns.latest_period(pipeline)
+        if not period:
+            continue
+        doc, declared = release.build_doc(pipeline, period)
+        assert check_doc(doc, declared, label=pipeline) == []
+    doc, _, declared = deep.build_doc()
+    assert check_doc(doc, declared, label="deep") == []

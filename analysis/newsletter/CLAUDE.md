@@ -37,14 +37,36 @@ newsletter_sources.py    data layer — reads ONLY validated artifacts:
 newsletter_render.py     render layer — typed blocks → .md (canonical) + .html (Substack paste)
 validate_newsletter.py   the gate — check_doc() runs BEFORE any file is written:
                            1. card blocks must match a validated feed VERBATIM (curate, never alter)
-                           2. numbers in template blocks must trace to the DECLARED signals'
-                              flat numbers (scoped like Check 4f — period-wide is vacuous)
+                           2. numbers in a template block must trace to the signals THAT BLOCK
+                              declares — no issue-wide pool, no fallback (see below)
 generate_release_read.py Post 1 — one generic generator, pipeline-parameterized
 generate_deep_read.py    Post 2 — cross-system, reads the opportunities feed
 ```
 
 A failing issue is **never written** (self-gating). Negative-tested: invented template
 number → fail; reworded card → fail. Unit tests: `analysis/tests/test_newsletter.py`.
+
+### The gate was rescoped 2026-07-21 — and why that mattered
+
+Measured with `analysis/measure_groundedness.py`, the original gate caught **0%** of
+injected numbers. It passed 9.1%, 47.3% and 812.6% into a body paragraph. Not a bug in
+the check — a bug in its ground truth: one pool of every signal the issue declared
+(735 values), matched with the card policy's ratio grounding, accounts for essentially
+any number. It had passed every hand-written negative test since it was built, because
+those test the numbers the author already suspects.
+
+Now: **each block declares its own signals** (`{"signals": [...]}`, or `"signal"` per
+statgrid item) and is judged only by those; a block that declares none grounds nothing;
+tolerance is `core.traceability.DISTRIBUTION` (rounding width, no ratios); and values
+are grounded through `fmt_value` itself, so "₹2.9L Cr" is accepted because the renderer
+produced it. **100% / 99.5% catch, 0 false rejections, output byte-identical.**
+
+Two rules for anyone editing the generators:
+- **A block that states a number must declare its signals.** No declaration means no
+  grounding, which is correct — connective prose carries no figures.
+- **A block that counts the document rather than the data** ("…and 10 more on the
+  dashboard") is marked `"meta": True`. Explicit at the point of authorship, so the
+  exemption is auditable.
 
 ## Voice rules (template strings)
 
