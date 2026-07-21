@@ -1,4 +1,29 @@
-# Reply Desk — X distribution ritual
+# Reply Desk — X distribution ritual  ⛔ RETIRED 2026-07-21
+
+> **Retired, not deleted.** The distribution layer serves Substack and LinkedIn; X is a
+> reactive channel that needs a different treatment, and this ritual never took hold —
+> `reply_log.json` was never created, so no reply was ever run through it in the 17 days
+> it existed. Rather than carry an unused ritual (and an obligation to route every new
+> signal family into its `TOPICS` table), it moves here until X gets a design of its own.
+>
+> **What was salvaged:** `SEBI_BANNED` — the only investment-advice guardrail in the
+> codebase — now lives in `analysis/distribution/slot_render.py` as `lint_compliance`,
+> applied to blurbs *and* design prompts. It was a compliance control that happened to be
+> introduced by a channel; it had to outlive that channel.
+>
+> **What was not salvaged:** the `TOPICS` routing table (topic keywords → signals → cards)
+> and the on-demand lookup pattern. If per-entity lookup is ever wanted again — "what do we
+> have on Utkarsh SFB" — rebuild it over `distribution_sources.py`; it is a small job and
+> the table here is a usable starting point. Note the table was never updated for the 17
+> relational signals, so it is stale as written.
+>
+> **Note for anyone reviving this:** `check` used the `SIBC` number policy with ratio
+> grounding — the configuration measured at a 41.5% catch rate on 2026-07-21. Any revival
+> should use `core.traceability.DISTRIBUTION` instead.
+
+---
+
+## Original context (historical)
 
 > The daily 10-minute assisted reply routine (@indiacreditlens on X). A session
 > ritual + a gated drafting module — NOT an automation. A human posts every reply.

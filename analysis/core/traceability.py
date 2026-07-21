@@ -48,6 +48,19 @@ ATM_POS = NumberPolicy(
     forbid_digit_prefix=False, ratio_percent_of_total=False,
 )
 
+# The distribution layer (DISTRIBUTION_SPEC §5) never computes a number in prose — it
+# quotes values that already exist, formatted to one decimal. So the only honest gap
+# between what it prints and what the db stores is display rounding: ±0.05. The card
+# policies above are deliberately looser because a card may reason in prose about
+# magnitudes; here that slack would just be a wider net. At abs_tol=0.25 a claim on a
+# pp scale is "grounded" by anything within a quarter point of any declared value,
+# which on a 29-value pool is most of the number line worth inventing.
+DISTRIBUTION = NumberPolicy(
+    rel_tol=0.005, abs_tol=0.05, min_check=0.5,
+    strip_structural=True, handle_suffixes=False,
+    forbid_digit_prefix=True, ratio_percent_of_total=False,
+)
+
 
 def _pattern(policy: NumberPolicy) -> str:
     lookbehind = r"(?<![A-Za-z\d])" if policy.forbid_digit_prefix else r"(?<![A-Za-z])"

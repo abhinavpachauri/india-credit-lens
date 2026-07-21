@@ -1,0 +1,413 @@
+{
+ "_meta": {
+  "purpose": "Learning register for the AI PM content track. One topic per month, anchored at the 21st LinkedIn slot. Spec: analysis/distribution/DISTRIBUTION_SPEC.md §8.",
+  "version": "1.0",
+  "created": "2026-07-21",
+  "active_topic": 1,
+  "admission_rule": "No entry is marked published without at least one measurement carrying a value AND a source file. Prose alone does not qualify.",
+  "capture_rule": "When any session produces a number that measures the active topic, append it to that topic's measurements[] before the session ends. The active topic is named in CLAUDE.md so it is always in context.",
+  "measurement_schema": {
+   "metric": "what was measured",
+   "value": "the number, with unit",
+   "date": "YYYY-MM-DD",
+   "how_measured": "the procedure, specific enough to repeat",
+   "source": "file path or command that produced it"
+  },
+  "status_values": [
+   "queued",
+   "active",
+   "published"
+  ],
+  "opening_sequence": [
+   {
+    "month": 1,
+    "topic_id": 1,
+    "why": "Most evidence already exists. Zero new build, strongest differentiation."
+   },
+   {
+    "month": 2,
+    "topic_id": 5,
+    "why": "Natural sequel; the LLM-vs-deterministic split per pipeline is the number."
+   },
+   {
+    "month": 3,
+    "topic_id": 2,
+    "why": "Forces a build already owed — deterministic-core unit tests are on the engineering-health backlog."
+   }
+  ]
+ },
+ "topics": [
+  {
+   "id": 1,
+   "group": "Evaluation & quality",
+   "topic": "Groundedness / hallucination measurement",
+   "status": "active",
+   "month_active": "2026-08",
+   "candidate_metrics": [
+    "traceability pass rate (share of published numbers that resolve to a computed signal)",
+    "negative-test catch rate (share of deliberately corrupted values the gate rejects)",
+    "scope tightness (period-wide vs declared-scope: how many invented-but-in-range values survive)"
+   ],
+   "grounding_artifacts": [
+    "analysis/pipelines/sibc/validate_sibc_traceability.py (Check 2g)",
+    "analysis/pipelines/atm_pos/validate_atm_pos_insights.py (Stage 4c)",
+    "analysis/core/validate_opportunity_traceability.py (Check 4f, evidence_all scoping)",
+    "analysis/newsletter/validate_newsletter.py (check_doc, declared-scope rescoping)"
+   ],
+   "measurements": [
+    {
+     "metric": "negative-test catch rate — distribution gate, tolerance/ratio policy",
+     "value": "95.7% (was 41.5% under the card-insight policy)",
+     "date": "2026-07-21",
+     "how_measured": "1,000 injected plausible pp/% values (seeded uniform 0.6–80.0) across the 25 nearest-to-flip signals, each scoped to that signal's own declared ground truth; measured the share the gate rejected under two policies — core.traceability.SIBC with ratio grounding vs the new DISTRIBUTION policy without it.",
+     "source": "analysis/core/traceability.py (DISTRIBUTION policy) + analysis/distribution/validate_distribution.py"
+    },
+    {
+     "metric": "false-rejection rate on true statements — same gate",
+     "value": "0/25 (was 3/25)",
+     "date": "2026-07-21",
+     "how_measured": "Ran the real, uncorrupted watchlist sentence for the 25 nearest-to-flip signals through the same check. The 3 failures were the glued-'pp' extractor backtrack (1.9pp -> 1), fixed by the spaced format; locked by test_real_watchlist_sentences_are_never_falsely_rejected.",
+     "source": "analysis/tests/test_distribution.py"
+    }
+   ],
+   "observations": [
+    "The +9.99 pp incident (2026-07-21): an invented pair-divergence value PASSED the first negative test because the signal was classified scan-like, pooling a pp gap with two pct rates and deriving cumulative sums. Fixing the classification made the same corruption hard-fail. Lesson: a groundedness check is only as good as the ground-truth shape it compares against.",
+    "First newsletter traceability cut was vacuous — period-wide scope let invented numbers pass. Rescoping to declared signals only was the fix. Same lesson as Check 4f's evidence_all rescoping.",
+    "Negative testing must target the artifact the validator actually reads. The pair-divergence negative test only worked after editing analysis/rbi_atm_pos/insights.json rather than the web copy.",
+    "Loosening a gate can be invisible: the distribution gate initially inherited the card policy (abs_tol=0.25 plus ratio grounding) and passed every negative test I threw at it — not because the text was grounded but because a 29-value pool spawns ~800 candidate ratios and a quarter-point tolerance covers most of the number line worth inventing. Catch rate 41.5%. The same check, scoped to rounding width and with ratio grounding removed, catches 95.7%. A gate that never fails is not evidence of correctness; measure the catch rate.",
+    "Groundedness has two error rates, and only measuring one is how you ship a gate that blocks the truth. Tightening tolerance took false rejections from 0 to 3/25 until the formatting quirk behind them was fixed; both numbers belong in the measurement."
+   ],
+   "open_questions": [
+    "Breadth-based (period-wide) checks let an in-range invented number pass. What is the cheapest scoping that closes this for free prose, not just structured values?",
+    "Can groundedness be measured as a single rate across both pipelines, or is it inherently per-check?"
+   ],
+   "published_as": null
+  },
+  {
+   "id": 2,
+   "group": "Evaluation & quality",
+   "topic": "Eval set design & regression detection",
+   "status": "queued",
+   "candidate_metrics": [
+    "eval suite size",
+    "pass rate",
+    "injected-regression catch rate",
+    "time from regression introduced to regression caught"
+   ],
+   "grounding_artifacts": [
+    "analysis/tests/ (unit suite)",
+    "analysis/check_signal_freshness.py (Check 2f — deterministic recompute-and-diff, an eval in all but name)"
+   ],
+   "measurements": [],
+   "observations": [],
+   "open_questions": [],
+   "published_as": null
+  },
+  {
+   "id": 3,
+   "group": "Evaluation & quality",
+   "topic": "LLM-as-judge reliability",
+   "status": "queued",
+   "candidate_metrics": [
+    "judge-to-human agreement rate",
+    "verbosity bias (does longer output score higher)",
+    "position bias in pairwise comparison"
+   ],
+   "grounding_artifacts": [],
+   "measurements": [],
+   "observations": [],
+   "open_questions": [],
+   "published_as": null
+  },
+  {
+   "id": 4,
+   "group": "Evaluation & quality",
+   "topic": "Human-in-the-loop review design",
+   "status": "queued",
+   "candidate_metrics": [
+    "review time per item",
+    "override rate (share of generated items the human changes)",
+    "share of overrides that indicate a mechanism bug vs a taste difference"
+   ],
+   "grounding_artifacts": [
+    "analysis/replydesk/ (human always clicks Post)",
+    "analysis/s4_proposals/ (sourcing-gated proposals, never auto-promoted)"
+   ],
+   "measurements": [],
+   "observations": [],
+   "open_questions": [],
+   "published_as": null
+  },
+  {
+   "id": 5,
+   "group": "Model behaviour & control",
+   "topic": "Determinism vs judgment boundary",
+   "status": "queued",
+   "candidate_metrics": [
+    "share of published output produced deterministically vs generated, per pipeline",
+    "count of cards that moved from LLM to deterministic representation (or back) and why"
+   ],
+   "grounding_artifacts": [
+    "analysis/pipelines/sibc/generate_analysis_report.py (scalar = LLM chain, scan = deterministic)",
+    "analysis/pipelines/atm_pos/generate_atm_pos_insights.py (EVAL_ANCHOR map)",
+    "analysis/core/relational_insights.py (fully deterministic prose)"
+   ],
+   "measurements": [],
+   "observations": [
+    "The split is not a style choice — it tracks whether the output shape is mechanical. Scans and distributions are grounded by construction; scalars need judgment about what the movement means."
+   ],
+   "open_questions": [],
+   "published_as": null
+  },
+  {
+   "id": 6,
+   "group": "Model behaviour & control",
+   "topic": "Prompt engineering & versioning",
+   "status": "queued",
+   "candidate_metrics": [
+    "version-over-version delta on a fixed eval set",
+    "count of prompt rules added in response to an observed failure (rule provenance)"
+   ],
+   "grounding_artifacts": [
+    "analysis/signals/prompts/domain_eval_system.txt (v1.11; v1.12 tone rule pending)"
+   ],
+   "measurements": [],
+   "observations": [
+    "Prompt rules here are almost all reactive — 'no invented seasonality' and the traceability rules each trace to a specific observed failure. That provenance is the interesting content, not the prompt text."
+   ],
+   "open_questions": [],
+   "published_as": null
+  },
+  {
+   "id": 7,
+   "group": "Model behaviour & control",
+   "topic": "Structured outputs / schema enforcement",
+   "status": "queued",
+   "candidate_metrics": [
+    "schema violation rate",
+    "retry rate",
+    "cost of retries as share of total"
+   ],
+   "grounding_artifacts": [],
+   "measurements": [],
+   "observations": [],
+   "open_questions": [],
+   "published_as": null
+  },
+  {
+   "id": 8,
+   "group": "Model behaviour & control",
+   "topic": "Context engineering",
+   "status": "queued",
+   "candidate_metrics": [
+    "tokens per evaluate call",
+    "output quality across context sizes",
+    "share of payload the model actually uses"
+   ],
+   "grounding_artifacts": [
+    "analysis/signals/query.py (builds the evaluate payload — full period series + scan distribution)"
+   ],
+   "measurements": [],
+   "observations": [],
+   "open_questions": [],
+   "published_as": null
+  },
+  {
+   "id": 9,
+   "group": "Model behaviour & control",
+   "topic": "Sampling & reproducibility",
+   "status": "queued",
+   "candidate_metrics": [
+    "output variance across identical runs",
+    "share of variance that survives the gate"
+   ],
+   "grounding_artifacts": [],
+   "measurements": [],
+   "observations": [],
+   "open_questions": [],
+   "published_as": null
+  },
+  {
+   "id": 10,
+   "group": "Systems",
+   "topic": "Agent loops & tool use",
+   "status": "queued",
+   "candidate_metrics": [
+    "steps to completion",
+    "tool-call error rate",
+    "when an agent beat a pipeline and when it did not"
+   ],
+   "grounding_artifacts": [],
+   "measurements": [],
+   "observations": [],
+   "open_questions": [],
+   "published_as": null
+  },
+  {
+   "id": 11,
+   "group": "Systems",
+   "topic": "Retrieval / RAG quality",
+   "status": "queued",
+   "candidate_metrics": [
+    "recall@k",
+    "attribution rate",
+    "share of answers grounded in retrieved context"
+   ],
+   "grounding_artifacts": [],
+   "measurements": [],
+   "observations": [],
+   "open_questions": [],
+   "published_as": null
+  },
+  {
+   "id": 12,
+   "group": "Systems",
+   "topic": "Caching & cost architecture",
+   "status": "queued",
+   "candidate_metrics": [
+    "cost per unit of output",
+    "cache hit rate",
+    "cost avoided by caching"
+   ],
+   "grounding_artifacts": [
+    "analysis/signals/evaluate.py (llm_cache table)"
+   ],
+   "measurements": [],
+   "observations": [],
+   "open_questions": [],
+   "published_as": null
+  },
+  {
+   "id": 13,
+   "group": "Systems",
+   "topic": "Latency & throughput",
+   "status": "queued",
+   "candidate_metrics": [
+    "p50/p95 latency",
+    "tokens per second",
+    "wall-clock for a full gate run"
+   ],
+   "grounding_artifacts": [],
+   "measurements": [],
+   "observations": [],
+   "open_questions": [],
+   "published_as": null
+  },
+  {
+   "id": 14,
+   "group": "Systems",
+   "topic": "Failure modes & graceful degradation",
+   "status": "queued",
+   "candidate_metrics": [
+    "fallback rate",
+    "blast radius when the model is wrong",
+    "share of failures caught before publication"
+   ],
+   "grounding_artifacts": [
+    "analysis/pipelines/atm_pos/generate_atm_pos_insights.py (falls back to deterministic when no eval exists)"
+   ],
+   "measurements": [],
+   "observations": [],
+   "open_questions": [],
+   "published_as": null
+  },
+  {
+   "id": 15,
+   "group": "Product & economics",
+   "topic": "Unit economics of an LLM feature",
+   "status": "queued",
+   "candidate_metrics": [
+    "cost per insight",
+    "cost per published report",
+    "share of pipeline cost that is LLM"
+   ],
+   "grounding_artifacts": [],
+   "measurements": [],
+   "observations": [],
+   "open_questions": [],
+   "published_as": null
+  },
+  {
+   "id": 16,
+   "group": "Product & economics",
+   "topic": "Model selection & routing",
+   "status": "queued",
+   "candidate_metrics": [
+    "cost-quality frontier per task type",
+    "share of tasks correctly routed"
+   ],
+   "grounding_artifacts": [],
+   "measurements": [],
+   "observations": [
+    "This project already runs an informal routing policy: Opus for run/render work, Fable for mechanism work. Whether that policy is right is measurable."
+   ],
+   "open_questions": [],
+   "published_as": null
+  },
+  {
+   "id": 17,
+   "group": "Product & economics",
+   "topic": "Trust & UX for probabilistic output",
+   "status": "queued",
+   "candidate_metrics": [
+    "correction rate",
+    "how uncertainty is surfaced",
+    "user response to shown-vs-hidden basis"
+   ],
+   "grounding_artifacts": [
+    "web/app/opportunities (the 'Why — computed basis' block)"
+   ],
+   "measurements": [],
+   "observations": [],
+   "open_questions": [],
+   "published_as": null
+  },
+  {
+   "id": 18,
+   "group": "Product & economics",
+   "topic": "Data flywheel design",
+   "status": "queued",
+   "candidate_metrics": [
+    "usage-to-quality lift",
+    "share of improvements traceable to observed usage"
+   ],
+   "grounding_artifacts": [],
+   "measurements": [],
+   "observations": [],
+   "open_questions": [],
+   "published_as": null
+  },
+  {
+   "id": 19,
+   "group": "Product & economics",
+   "topic": "Safety & policy boundaries in product",
+   "status": "queued",
+   "candidate_metrics": [
+    "refusal rate",
+    "false-positive refusal rate"
+   ],
+   "grounding_artifacts": [
+    "analysis/replydesk/ (SEBI lint)"
+   ],
+   "measurements": [],
+   "observations": [],
+   "open_questions": [],
+   "published_as": null
+  },
+  {
+   "id": 20,
+   "group": "Product & economics",
+   "topic": "Versioning & model migration",
+   "status": "queued",
+   "candidate_metrics": [
+    "eval delta on model swap",
+    "time to revalidate after a model change"
+   ],
+   "grounding_artifacts": [],
+   "measurements": [],
+   "observations": [],
+   "open_questions": [],
+   "published_as": null
+  }
+ ]
+}
