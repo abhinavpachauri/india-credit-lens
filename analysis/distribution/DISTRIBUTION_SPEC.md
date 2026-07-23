@@ -1,7 +1,10 @@
-# Distribution Spec v1.1
+# Distribution Spec v1.2
 
 > Authored design for content distribution across newsletter, LinkedIn, X, and the AI PM track.
 > Status: **built** (2026-07-21) — §12 steps 1–4 live; §8 register wiring is the monthly habit.
+> **v1.2 (2026-07-23):** §11.1 monthly-issue template aligned (design session, build later) —
+> no forced cross-read, two data-shaped halves, deterministic measured "reads" selector,
+> per-output gate contract. §11.2 deep read still pending its own alignment session.
 > Run it: `python3 analysis/distribution/generate_slot.py --slot 7th` (or `--all` to rehearse
 > a whole month). Every slot self-gates; see `validate_distribution.py`.
 > Related: `NEWSLETTER_CONTEXT.md` (long-form channel) · `analysis/legacy/replydesk/` (X, retired — see §9)
@@ -296,22 +299,150 @@ lands, blurbs generated from card text will inherit the register problem.
 
 ## 11. Newsletter
 
-### 11.1 Post 1 — merged monthly summary (1st)
+### 11.1 Post 1 — monthly issue (1st)
 
-SIBC and payments in **one issue**. For a list this size, two issues split attention for no gain.
+**Template aligned 2026-07-23 (design session; build is a later session).** The per-pipeline
+`--pipeline sibc|atm_pos` generator is now **legacy** — it produced one issue per pipeline; the
+monthly issue is a single issue with a credit half and a payments half. Retire the per-pipeline
+path to `legacy/` at build time (same as the reply desk and newsletter v1); it is not a fallback.
 
-Two conditions:
+**Design decision — no forced cross-read (reverses the earlier v1.1 rule).** The prior spec
+mandated one cross-system paragraph "that neither pipeline could produce alone." We dropped it: a
+forced merge paragraph is worse than none, and the genuine cross-system material already has two
+proper homes — `/opportunities` and the deep read (§11.2). The monthly issue is **two sections,
+each shaped by its own data**, under one masthead. The merge is in the *envelope*, not forced into
+the prose.
 
-1. **State the data-month offset.** The pipelines run on different release clocks. If the issue is
-   "credit through May, payments through April", say so in the issue. Do not smooth it over.
-   Confirm the actual offset before finalising the template.
-2. **The merge must be earned.** Two stapled halves is worse than two emails. The thing only a
-   merged issue can do is the **cross-read** — constructs, eco-edges, the CC-balance-per-card
-   reconciliation constraint. Structure: two clearly dated halves + one cross-system paragraph
-   that neither pipeline could produce alone. That paragraph is the reason the merge exists.
+**What it is.** The one email a lending subscriber gets on the 1st: what RBI's credit and payments
+data said this cycle. **Backward-looking only** — no watch, no proximity, no "could turn next
+month" (that is the deep read and the 28th slot). ~4 minutes.
 
-Template/structure review is a separate working session, done against actual current output rather
-than in the abstract.
+**Reader.** Someone in lending — credit / product / risk at an NBFC, bank, or fintech — who did not
+open the dashboard. Assume they know what a personal loan and a POS terminal are; do **not** assume
+they know "non-food credit," "base effect," or "yield."
+
+**Opening.** `India Credit Lens — credit and payments, {month}` + a vintage line stating both data
+months and that the two RBI releases run on different clocks. Offset is read per run, never assumed
+(§13.2).
+
+#### Credit half
+
+The dataset is **one measure (outstanding ₹) over a hierarchy**, so its only question is *which part
+of the tree is moving*.
+
+1. **The level** — 3 tiles: **Bank credit** (total) · **Personal loans** YoY · **Industry** YoY.
+   No food/non-food anywhere — it is jargon. (Confirm the exact industry-total YoY signal id at
+   build; there are by-size and by-type cuts.)
+2. **What moved** — a **full table of every YoY status flip this cycle, grouped by parent sector**,
+   direction marked. Not a top-N and not the current "6 shown + …and 10 more" dump. Grouping *is*
+   the organisation: the reader sees all of it, sorted, not an arbitrary cut. Bank credit shown.
+3. **Where the mix is shifting** — rotation (`csv_sector_rotation`). Honest-null below 0.5pp mass.
+4. **The reads** — top **2** by the is-news score (below) + one chart each. Verbatim from validated
+   cards.
+
+#### Payments half
+
+The dataset is **many measures over the same entities**, so its question is the opposite one: *do
+the measures agree*, and *which banks stand out*.
+
+5. **The level** — 3 total tiles (cards in force · card spend · POS terminals) + a **top-5-banks**
+   sub-line on the same dimensions.
+6. **Fleet vs usage** — pair gaps (`csv_pair_divergence`), **overall + top-5 banks**. e.g. POS fleet
+   −0.48% YoY vs POS spend +9.32% — fewer machines, more through each. No equivalent in the credit
+   half. Honest-null when no pair is outside the ±3pp band.
+7. **Top banks** — top 5 per dimension (cards / spend / terminals). **No divergence framing** in the
+   issue — divergence (a bank pulling away from its own category) is subtler and belongs in the deep
+   read if used at all. RBI does not publish sectoral credit per bank, so this section has no credit
+   equivalent.
+8. **The reads** — top **2** by is-news score + chart.
+
+**Closing.** Dashboard link · How this is made.
+
+#### The reads selector — deterministic and measured
+
+Today's generator takes feed order; that is the weakest part of it. A card qualifies as a *read*
+only if it is **news**, scored on three factors, all computable from `signals.db`:
+
+1. **Record / extreme** — all-time high/low, longest streak.
+2. **Status flip** — the signal changed direction this cycle.
+3. **Proximity — just crossed** — a threshold was crossed this period (the backward twin of C8).
+
+Rank by the score, take the top 2 per half. A structural template ("Power is 57% of infrastructure",
+true every month) scores zero on all three and never surfaces. This is the same *is-this-news*
+problem the dashboard read-mode notes flagged; the classifier built here is the one the dashboard
+reuses. **Per the standing AI PM rule it ships with a measured catch / false-rejection rate** — no
+selector gate lands on prose alone.
+
+#### Honest nulls
+
+Every section can come up empty — rotation below 0.5pp, no pair gap outside ±3pp, fewer than 2 cards
+clearing the is-news floor. When it does, **say so plainly and move on. Never pad a section because
+the template has a slot for it**, and never fake a read.
+
+#### Partition — mechanical, not editorial
+
+The issue reads `signals.db` (**Layer 1 only**). It never contains: forward-looking claims,
+system-model items (constructs / loops / opportunities / risks), or a spine. Enforced by
+compute-method + layer, exactly as `categories.py` enforces the slot partition — not by editorial
+judgment. The within-Substack no-overlap rule against the deep read (§11.2) holds **by construction**
+because the deep read is Layer 2/3.
+
+#### Prose
+
+Indian conversational English. Short sentences, one idea each. Lakh/crore, never billion. State the
+number, say what is odd about it, stop. No consulting register (§10 banned list), no advice voice
+("lenders should…"). The renderer **never hand-edits validated card text** — register problems in
+card bodies are fixed upstream at eval prompt v1.12, not scrubbed here.
+
+#### What's checked (this output's gate contract)
+
+| Axis | How | Honest limit |
+|---|---|---|
+| **Numbers** | Every figure traces to `signals.db`, **per-block scoped**, via `check_doc` + the `DISTRIBUTION` policy. | The measurement harness only ever injected the **first** `p` block (handoff §1.1). **Fix `measure_groundedness.py` to inject every eligible block before any before/after** — the current 100%/99.5% measures one decision point, not the issue. |
+| **Word-vs-number agreement** | **New check.** A status word next to a value must not contradict it (the `up, −2.6% YoY` class — see §11.2 / the direction-render decision). | A traces-but-contradicts defect is invisible to the number gate; this is the first non-number-tracing check since Check 2g. |
+| **Prose** | Banned-register + no-advice lint. | Machine floor only; the source fix is upstream (v1.12). Lint scope across surfaces is still being settled (§14). |
+| **The reads selector** | Its own catch / false-rejection rate, before and after. | — |
+
+#### Measurement & reporting obligation (AI PM topic #1)
+
+The gate contract above says *what is checked*. This says *what must be measured and logged* — they
+are different, and the second is the standing rule (CLAUDE.md §8.5): **topic #1 is ground-truth
+scoping, and no number that measures it may be left unlogged.** Building the monthly issue produces
+exactly such numbers, so building it without appending them is an incomplete build.
+
+Report these per build, per half (credit / payments) and **per decision point — never one
+issue-level headline** (a pooled number is the exact mistake the gate has no pooled ground truth to
+avoid):
+
+| Metric | What it answers | Where it comes from |
+|---|---|---|
+| **Scope width per block/claim** | Is the candidate set small enough for a pass to *mean* something? Any block scoping to four figures is **unmeasured, not safe**. | `declared_ground_truth` per block — cheap, no injection. The *leading* indicator. |
+| **Catch rate** — near-miss + in-range | Share of injected fabrications the gate rejects. **Injected at every eligible block**, not the first (handoff §1.1 — fix the harness before trusting any number). | `measure_groundedness.py`, per decision point + per scope band. The *lagging* indicator. |
+| **False-rejection rate** | Share of legitimate numbers the gate wrongly rejects. | same harness. |
+| **The reads selector** — catch / false-rejection | Does the is-news score admit real news and reject templates? | the selector's own negative test. |
+| **Word-vs-number agreement** — catch rate | Does the new contradiction check fire on the `up, −2.6%` class? | the new check's negative test. |
+
+**Append to `ai_pm_register.json` `topics[].measurements[]` at build time**, each with
+`metric / value / date / how_measured / source`. **Admission rule: a value AND a source file — no
+entry on prose alone.** Anything qualitative (a failure mode found, a harness bias) goes to
+`observations[]`, not `measurements[]`.
+
+**Logging is not retrospective.** The register fills as a byproduct of the build that produces the
+numbers — it is not backfilled from prior analysis. The plan is to add the logging *mechanism* while
+auditing decision gates and ground truths during the build, so the entries are generated where they
+are measured. (The one standing exception the spec still names is the D2 correction — that the
+existing 100% / 99.5% figures measured **decision point D2, one zero-scope block per doc, not the
+gate**. It is C9 corrections material for the distribution track regardless of whether it is entered
+into the register. Whether to log it is a build-time call, not a debt this template asserts.)
+
+#### Open at build (not blocking the spec)
+
+- **Tile status word.** A tile shows a *level* (`1.2 crore POS terminals`); today it prints
+  `(accelerating)` next to a level whose *rate* is falling — same contradiction class as the
+  direction bug. Likely resolution: tiles show **level + YoY, no standalone status word**. Decide at
+  build.
+- **Industry YoY signal id** — confirm which registered signal is the industry total (by-size vs
+  by-type cut).
 
 ### 11.2 Post 2 — deep read (14th)
 
