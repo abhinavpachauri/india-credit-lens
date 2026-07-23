@@ -1,10 +1,14 @@
-# Distribution Spec v1.2
+# Distribution Spec v1.3
 
 > Authored design for content distribution across newsletter, LinkedIn, X, and the AI PM track.
 > Status: **built** (2026-07-21) — §12 steps 1–4 live; §8 register wiring is the monthly habit.
-> **v1.2 (2026-07-23):** §11.1 monthly-issue template aligned (design session, build later) —
-> no forced cross-read, two data-shaped halves, deterministic measured "reads" selector,
-> per-output gate contract. §11.2 deep read still pending its own alignment session.
+> **v1.2 (2026-07-23):** §11.1 monthly-issue template aligned — no forced cross-read, two
+> data-shaped halves, deterministic measured "reads" selector, per-output gate contract.
+> **v1.3 (2026-07-23):** §11.2 deep-read template aligned — computed floor (bank rotation/
+> divergence) + editorial spine(s) chosen from a machine-ranked option list; two gated source
+> refs per spine (bank-level why + independent corroboration); mermaid for loops/constraints;
+> theme-level non-repetition. Screenshot-placeholder convention specced for both formats.
+> Both are design sessions — the builds (harness fix first) are still ahead.
 > Run it: `python3 analysis/distribution/generate_slot.py --slot 7th` (or `--all` to rehearse
 > a whole month). Every slot self-gates; see `validate_distribution.py`.
 > Related: `NEWSLETTER_CONTEXT.md` (long-form channel) · `analysis/legacy/replydesk/` (X, retired — see §9)
@@ -358,6 +362,13 @@ the measures agree*, and *which banks stand out*.
 
 **Closing.** Dashboard link · How this is made.
 
+#### Charts are screenshot placeholders
+
+Every chart in the issue is a **placeholder carrying a reproducible recipe** — dashboard path + view
++ highlight (e.g. `indiacreditlens.com → Industry by Size → YoY % view → highlight: Large`) — so the
+editor takes the exact screenshot before sending. The generator never embeds an image; it emits the
+recipe and a `> 📊 [CHART — replace with screenshot]` marker. Same convention in the deep read (§11.2).
+
 #### The reads selector — deterministic and measured
 
 Today's generator takes feed order; that is the weakest part of it. A card qualifies as a *read*
@@ -446,14 +457,129 @@ into the register. Whether to log it is a build-time call, not a debt this templ
 
 ### 11.2 Post 2 — deep read (14th)
 
-The current generator renders what fired. That is a feed, not an essay. The design gap is
-**selection**.
+**Template aligned 2026-07-23 (design session; build is a later session).** The deep read is **not
+entirely automatable, by design** — it is an editorial product with a human editor. Structurally it
+is **a computed floor plus an editorial spine**: one part always computes and needs no judgment; the
+other is a question (or questions) the editor chooses from a machine-ranked list.
 
-Structure: **one spine question + three supporting movements + one thing we're watching.**
+**What it is.** Not a second scan — the 1st already reported what moved. The deep read takes **one or
+more questions that have been building across the data** and answers each with sourced evidence.
+~7 minutes.
 
-The spine is human-chosen from a deterministically ranked candidate list (largest status flips,
-widest relational gaps, newly-active opportunities). Everything beneath it is grounded cards. The
-machine shortlists; the human picks; nothing ungrounded enters.
+**Reader.** The same lending reader, opted into depth on the 14th. Still no jargon.
+
+**Why it can't overlap the 1st.** It reads the **system model** (Layer 2/3) — forces, opportunities,
+risks, loops, constructs, constraints — plus bank-level L1 rotation/divergence that the monthly issue
+deliberately does *not* carry. The binding rule is **non-repetition** (a signal appears in at most one
+Substack post per month; a spine *kind* does not repeat within ~6 months), not a rigid layer wall.
+Because bank rotation/divergence was dropped from the 1st (§11.1 §7), it is free to anchor the deep
+read.
+
+#### Part A — Banks this month (fixed, computed, no human decision)
+
+Always present. Fully deterministic from L1 bank signals (`csv_bank_divergence`,
+`csv_category_rotation`, bank scans). The **only** build-time input is *which banks to show* — a
+priority ranking (biggest divergence, biggest share move), not an editorial call.
+
+- **Who's rotating** — bank-category share shifts.
+- **Who's diverging** — banks pulling away from their own category (flagged rows only).
+
+#### Part B — The spine(s) (editorial; the editor chooses)
+
+Human-in-the-loop on purpose — *which question matters this month* is judgment (the
+determinism-vs-judgment boundary, AI PM topic #5).
+
+1. **Options — machine.** `deep_read.py --shortlist` hands the editor a **ranked list of candidate
+   spines** drawn from L2/L3, each tagged with the question, the elements that support it, whether it
+   rests on a loop/constraint (→ diagram), and its **freshness** (down-ranked if the same *kind* ran
+   recently). Sample:
+
+   ```
+   SPINE OPTIONS — deep read, May 2026 (ranked)
+
+   1. [eco-loop]   "Is the card boom real, or just existing users spending more?"
+      supports: unsecured spend–stock loop (running) · CC flow-leads-stock ·
+                PSB card under-issuance (23.8% vs 70.9%)
+      diagram: YES (reinforcing loop)     fresh: not done in 6 months
+   2. [force]      "Why are banks eating finance companies' gold-loan lunch?"
+      supports: gold-price-surge force (RBI SGB) · risk-weight-hike force ·
+                gold loans +105% / 12-month streak
+      diagram: no                         fresh: SPINE USED Mar 2026 → down-ranked
+   3. [constraint] "₹24,951 outstanding per card — stretched or normal?"
+      supports: cc-balance-per-card constraint · CC outstanding · cards in force
+      diagram: YES (reconciliation constraint)   fresh: never used
+   ```
+
+2. **Pick — editor.** `--spine <id>` — **one or more.** The editor may run several spines in one issue.
+3. **Enrich — machine.** For each chosen spine, attach the two source references below.
+4. **Diagram — machine.** If the spine rests on a **loop or constraint**, render a **mermaid diagram**
+   inline to explain it (not a screenshot).
+5. **Guard — machine.** Enforce no repeat of the same spine *kind* vs recent issues — ledger-tracked,
+   ~6-month window. A long-running "active" opportunity falls down the shortlist the longer it runs
+   unless its *story* changed.
+
+#### Two source references per spine (both gated — never a raw LLM claim)
+
+Beyond the computed basis, every spine carries:
+
+1. **Bank-level sourced claim** — the *why* behind a featured bank's move, sourced for key banks
+   (top 5 public + top 5 private, count tuned to API cost). **The one genuinely new build.**
+2. **Independent corroborating reference** — a second reliable external source saying the same or a
+   similar thing (RBI bulletin, rating-agency note, mainstream financial press). The point is
+   triangulation: *we are not the only ones seeing this.*
+
+Both go through the **S4 sourcing gate** (URL, excerpt, verified date; never auto-promoted, never an
+ungrounded paraphrase). The template reserves both slots now; the bank-level sourcing engine is a
+follow-on (Fable-tier mechanism work). Until it lands, a spine falls back to its computed basis + the
+system-model force already attached, and the corroborating reference is added by hand.
+
+#### Published shape
+
+```
+Masthead + the chosen spine question(s)
+  Why this question now   spine card + sourced why + corroborating ref
+                          + [mermaid diagram if loop/constraint]
+  Bank angle              sourced claims for key public + private banks
+  [second spine, if chosen — same shape]
+── Banks this month ──    Part A, always present: who's rotating · who's diverging
+  What we're watching     one C8 proximity line (level edges only)
+  Closing                 /opportunities link · How this is made
+```
+
+#### Charts and diagrams
+
+Charts follow the **screenshot-placeholder** convention of §11.1 — a reproducible recipe plus a
+`> 📊 [CHART — replace with screenshot]` marker, so the editor takes the exact screenshot. Mermaid
+diagrams for loops/constraints render **inline** (they are generated, not screenshotted).
+
+**Mermaid render lives in the distribution layer — not referenced from legacy.** The deep-read
+diagram needs only a small loop/constraint renderer, not the 32 KB system-model/subsystem generator
+in `analysis/legacy/generate_mermaid.py`. Build it *into* the distribution layer (a focused render in
+the distribution module), salvaging whatever is useful from the legacy script, and **retire the
+legacy file** once done — no lingering cross-reference into `legacy/`. Same discipline the platform
+applied to the reply desk and newsletter v1: a capability that becomes live moves into the live
+layer; it is not consumed from the archive.
+
+#### Honest nulls · prose · direction render · gate · measurement
+
+- **Honest nulls** — if no spine kind is fresh, or Part A has no flagged divergence, say so plainly.
+  Never pad a movement or invent a spine to fill the shape.
+- **Prose** — identical to §11.1 (Indian conversational, short sentences, lakh/crore, no consulting
+  register, no advice voice).
+- **Direction render** — the "how we know" basis lines show the **observed** value; when a member is
+  moving *against* its authored polarity, tag it `(moving against)` rather than printing a word that
+  contradicts the number. Fixes the live `up, −2.6% YoY` bug.
+- **Gate contract** — same table as §11.1, **plus the D1 scope fix**: each basis line scopes to the
+  member's *own* signal, not the driver's whole `evidence_all` (handoff §2, D1 — the widest scope in
+  the pipeline, med 2,258 values). Expect numbers that pass loosely today to start failing; that is
+  the gate working, and the prose tightens in the same increment.
+- **Measurement/logging** — same obligation as §11.1: built-time, per decision point, non-retrospective.
+
+#### Known blocker (carried)
+
+`generate_opportunity_narrative` prints raw floats (`120454115.0 credit cards`, `1358241.0 micro
+ATMs`, `12.0 periods`). Worst in this format because it is opportunity-narrative prose. Fix is
+upstream formatting, not this template (§14).
 
 ---
 
