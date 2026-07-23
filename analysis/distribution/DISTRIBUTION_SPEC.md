@@ -1,4 +1,4 @@
-# Distribution Spec v1.3
+# Distribution Spec v1.4
 
 > Authored design for content distribution across newsletter, LinkedIn, X, and the AI PM track.
 > Status: **built** (2026-07-21) — §12 steps 1–4 live; §8 register wiring is the monthly habit.
@@ -9,6 +9,10 @@
 > refs per spine (bank-level why + independent corroboration); mermaid for loops/constraints;
 > theme-level non-repetition. Screenshot-placeholder convention specced for both formats.
 > Both are design sessions — the builds (harness fix first) are still ahead.
+> **v1.4 (2026-07-23):** §5 LinkedIn slot content aligned — vintage honesty, "so what" = observation
+> not advice/forecast, and §5.3 resolves lint scope across surfaces (design prompt gets the full
+> prose lint; no-forecast hard-fails; warn-card / fail-ours split; SEBI precision-fix-first). All
+> three formats now specced. Next: build, harness fix first.
 > Run it: `python3 analysis/distribution/generate_slot.py --slot 7th` (or `--all` to rehearse
 > a whole month). Every slot self-gates; see `validate_distribution.py`.
 > Related: `NEWSLETTER_CONTEXT.md` (long-form channel) · `analysis/legacy/replydesk/` (X, retired — see §9)
@@ -112,8 +116,16 @@ The prompt pasted into a separate Claude design session to produce a one-or-more
 
 Must contain:
 - the category and the slot date
+- a **vintage line** stating each pipeline's data month and the gap between them — read per run,
+  never assumed (§13.2). Do **not** print "both halves are on the same data month" as a template
+  constant; that is true only when the two releases happen to coincide.
 - the grounded numbers, **verbatim** from validated artifacts, each with its label and unit
 - the intended narrative arc for the pager
+- for each claim, a **"so what" line that is an *observation*, not advice and not a forecast** —
+  it says what is *notable* ("gold's share is climbing fastest"), never a recommendation ("banks
+  should…") and never a prediction ("on track to double digits within two quarters"). Same prose
+  rule as the newsletters (§11). Deterministic cards (rotation/scan) already read this way; LLM
+  scalar cards inherit consulting-speak and forecasts until eval prompt v1.12 lands.
 - page count
 - a hard constraint block: **use only the numbers in this prompt; invent nothing; do not
   compute new figures from these numbers**
@@ -121,7 +133,11 @@ Must contain:
 **The design session sits outside the gate.** Every other public surface on this platform is
 number-traced. A pager built in a fresh session is the one place a fabricated figure could reach
 the feed. Therefore the prompt must be *closed* — self-contained, with no invitation to look
-anything up or derive anything.
+anything up or derive anything. And because the pager **is** a public surface, the prompt's own
+prose is linted, not just its numbers — see §5.3.
+
+No screenshot placeholder here (unlike the newsletters, §11): the design session builds *original*
+visuals, so the prompt is a brief, not a slot to drop a dashboard screenshot into.
 
 Future hardening (not v1): a checker that the returned pager's number set is a subset of the
 number set the prompt supplied. Design the prompt format now so that check is possible later —
@@ -129,7 +145,35 @@ i.e. emit the supplied numbers as a machine-readable block alongside the prose.
 
 ### 5.2 `blurb.md`
 
-The LinkedIn copy that accompanies the pager. Generated, not hand-written.
+The LinkedIn copy that accompanies the pager. Generated, not hand-written. Voice is §10 — opener as
+a plain statement, 3–4 one-idea lines, close on an observation or the Substack funnel. §10 voice is
+largely working today; the weak spot is C6/C7, which inherit raw floats from
+`generate_opportunity_narrative` (§14) and read mechanically.
+
+### 5.3 Lint scope — which rule applies to which surface (aligned 2026-07-23)
+
+A rule attaches to a **risk**, not to whichever surface happened to introduce it. Three risks, three
+scopes — the design prompt is in scope for all of them because it becomes a **public pager**:
+
+| Rule | Risk it guards | Blurb | Design prompt | How a hit is treated |
+|---|---|---|---|---|
+| **SEBI / compliance** | reads as investment advice | ✅ | ✅ | hard fail (see note on precision below) |
+| **No-forecast** | predicts, on a surface that declares "no forecasts" | ✅ | ✅ **hard fail** | self-consistency failure — the prompt's own constraint block forbids it |
+| **No-advice** | recommendation voice ("banks should…") | ✅ | ✅ | **warn** inside a verbatim card body (feeds the v1.12 fix list); **hard fail** in generated so-what/blurb text |
+| **Banned register** | consultant-speak (§10) | ✅ | ✅ | same warn-card / fail-ours split |
+| **Unformatted number** | raw float reaches a reader (`1358241.0`) | ✅ | ✅ | hard fail everywhere — no case where a raw float is correct |
+
+The warn-vs-fail split is the same one the newsletters use: a hit inside **verbatim card prose**
+(eval output, which §11 forbids hand-editing) is a **warning** carrying the card id, so it feeds the
+eval-prompt v1.12 fix; a hit in text the **renderer generated** (so-what lines, blurb) is a **hard
+fail**, because that text is ours to fix now.
+
+**SEBI precision is a prerequisite, not done here.** The current list is substring-matched and trips
+on ordinary lending English (`buy cars`, `invest in systems`, `cross-sell`, `buy-now-pay-later`) while
+its securities-specific terms (`multibagger`, `target price`, `stop loss`) are safe. Widening the SEBI
+lint onto a new surface must be preceded by the precision fix (require an advice frame, not a bare
+substring) and **measured — catch + false-rejection rate, before and after** (the standing AI PM
+rule). Until then the SEBI lint stays where it already is; do not widen it blind.
 
 ---
 
