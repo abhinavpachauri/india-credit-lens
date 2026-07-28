@@ -34,7 +34,53 @@ PROMPTS_DIR = Path(__file__).parent / "prompts"
 EVALS_DIR   = Path(__file__).parent / "evaluations"
 
 MODEL          = "claude-sonnet-4-5-20250929"
-PROMPT_VERSION = "1.11"
+PROMPT_VERSION = "1.12"
+
+
+# ── Deterministic unit normalisation (v1.12) ──────────────────────────────────
+# Unit formatting is mechanical, not judgment, so it must not be left to the model —
+# which reliably reverts to "120.5M / 78K" however firmly the prompt asks for lakh/crore.
+# This converts every M/K/B and million/billion token in the eval prose to Indian
+# lakh/crore AFTER the model returns, so the stored narratives are clean by construction.
+# The traceability policies scale "crore"/"lakh" too (core.traceability), so the converted
+# value still traces to signals.db.
+import re as _re
+
+_MKB = {"K": 1e3, "M": 1e6, "B": 1e9, "MILLION": 1e6, "BILLION": 1e9}
+
+
+def _to_lakh_crore(raw: float) -> str:
+    if abs(raw) >= 1e7:
+        return f"{raw / 1e7:.2f}".rstrip("0").rstrip(".") + " crore"
+    if abs(raw) >= 1e5:
+        return f"{raw / 1e5:.2f}".rstrip("0").rstrip(".") + " lakh"
+    return f"{raw:,.0f}"
+
+
+def normalize_units(text: str) -> str:
+    """M/K/B and million/billion counts → lakh/crore. Leaves %, x, ₹ L Cr, dates alone."""
+    if not isinstance(text, str):
+        return text
+
+    def repl(m):
+        return _to_lakh_crore(float(m.group(1)) * _MKB[m.group(2).upper()])
+
+    text = _re.sub(r"(?<![A-Za-z\d.])(\d+(?:\.\d+)?)\s?([MKB])\b", repl, text)
+    text = _re.sub(r"(?<![A-Za-z\d.])(\d+(?:\.\d+)?)\s?(million|billion)\b", repl, text,
+                   flags=_re.I)
+    return text
+
+
+def _normalize_output(output: dict) -> None:
+    """Walk the assembled eval and normalise units in every prose field, in place."""
+    for domain in output.get("domains", {}).values():
+        domain["narrative"] = normalize_units(domain.get("narrative", ""))
+        for sig in domain.get("signals", {}).values():
+            for k in ("title", "observation", "direction", "inference"):
+                if k in sig:
+                    sig[k] = normalize_units(sig[k])
+            if isinstance(sig.get("chain"), list):
+                sig["chain"] = [normalize_units(s) for s in sig["chain"]]
 # CLI is fragile with large outputs; API is reliable — larger chunks = fewer calls
 CHUNK_SIZE_CLI = 8
 CHUNK_SIZE_API = 12
@@ -615,6 +661,10 @@ def run_evaluate(pipeline: str, period: str,
                         tag += f"  (cached {cache_read:,})"
 
             print(f"  {domain:<22} {len(ids):>2} signals  {tag}  ({elapsed:.1f}s)")
+
+    # Units are deterministic — normalise M/K/B → lakh/crore before writing, so the stored
+    # narratives never depend on the model getting the format right (v1.12).
+    _normalize_output(output)
 
     # Write output file
     out_path = EVALS_DIR / pipeline / f"{period}.json"

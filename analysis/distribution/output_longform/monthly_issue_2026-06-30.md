@@ -2,7 +2,7 @@
 
 Both halves are on the same data month: May 2026 credit data and May 2026 payments data.
 
-Total bank credit outstanding reached ₹215.2L Cr in May 2026, the highest level on record. Volume rose ₹3.0L Cr period-on-period (₹212.1L Cr → ₹215.2L Cr), reversing April's post-year-end dip and resuming the climb from ₹178.7L Cr in January 2025.
+Total bank credit outstanding reached ₹215.2L Cr in May 2026, the highest level on record. Volume climbed ₹3.0L Cr period-on-period (₹212.1L Cr → ₹215.2L Cr), reversing April's ₹1.5L Cr decline and resuming the upward trajectory from ₹178.7L Cr in January 2025.
 
 
 ## Credit — May 2026
@@ -65,20 +65,20 @@ Within services lending, the mix is tilting toward Non-Banking Financial Compani
 ## The reads that matter
 
 
-**Large corporates surged 14.4% YoY — highest in 9 periods**
+**Credit card outstanding fell to ₹2.95L Cr — second straight decline**
 
-Large corporate credit grew 14.4% YoY in May 2026, the strongest reading in this nine-period window. Growth accelerated from 10.0% last period to 14.4%, extending a recovery that began at 5.5% in Jan 2026. The 4.34pp jump is the sharpest single-period acceleration on record.
-
-
-> 📊 **[CHART — replace with screenshot]** indiacreditlens.com → Industry by Size → YoY % view → highlight: Large
-
-
-**Credit card outstanding at ₹2.95L Cr — down ₹3,481 Cr**
-
-Credit card outstanding fell to ₹2.95L Cr in May 2026, down ₹3,481 Cr from ₹2.98L Cr in Apr 2026. Volume declined ₹2.98L Cr → ₹2.95L Cr, the second consecutive monthly drop after peaking in Apr 2026.
+Credit card outstanding stood at ₹2.95L Cr in May 2026, down ₹3,481 crore from Apr 2026. Outstanding declined for the second consecutive period: ₹2.98L Cr in Apr 2026 → ₹2.95L Cr in May 2026.
 
 
 > 📊 **[CHART — replace with screenshot]** indiacreditlens.com → Personal Loans → Absolute view → highlight: Credit Card Outstanding
+
+
+**PSL Agriculture 13.8% YoY — sharp deceleration from 17.3%**
+
+PSL Agriculture credit grew 13.84% year-on-year in May 2026, down from 17.33% in Apr 2026. Growth decelerated sharply by 3.49 points, from 17.3% → 13.8%, breaking a six-period climb from 11.0% in Mar 2025.
+
+
+> 📊 **[CHART — replace with screenshot]** indiacreditlens.com → Priority Sector → YoY % view → highlight: Agriculture
 
 
 ## Payments — May 2026
@@ -133,17 +133,17 @@ The ATMs deployed and the cash withdrawn from them have pulled apart this year. 
 ## The reads that matter
 
 
-**ATM volume share 80.61% — stable near median**
+**ATM volume share 80.61% — holding near median**
 
-ATM withdrawals represented 80.61% of total debit card transaction volume in May 2026. Share edged down 80.84% → 80.61%, slipping 0.23pp but remaining near the median (79.3%) of the 29-month range.
+ATM withdrawals represented 80.61% of total debit card transaction volume in May 2026. Share edged down 80.84% → 80.61%, slipping 0.23pp but remaining near the median (80.1%) of the 29-month range.
 
 
 > 📊 **[CHART — replace with screenshot]** indiacreditlens.com/payments → Debit Cards → Absolute view → highlight: Total
 
 
-**67.7 UPI QR codes per POS terminal — record divergence**
+**67.7 UPI QR codes per POS terminal — ratio at record high**
 
-There are now 67.7 UPI QR codes for every POS terminal in May 2026, up 0.32 from 67.3 in Apr 2026. Ratio rose 67.3× → 67.7×, the highest level on record — the gap has widened by 0.3 points as UPI QR scaled 9M codes while POS terminals added only 78K units.
+There are now 67.7 UPI QR codes for every POS terminal in May 2026, up 0.32 from 67.3 in Apr 2026. Ratio rose 67.3× → 67.7×, the highest level on record — the gap has widened by 0.3 points as UPI QR scaled 90 lakh codes while POS terminals added 78,278 units.
 
 
 > 📊 **[CHART — replace with screenshot]** indiacreditlens.com/payments → Infrastructure → Absolute view → highlight: Total

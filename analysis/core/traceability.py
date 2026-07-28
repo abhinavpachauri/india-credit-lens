@@ -75,6 +75,15 @@ def extract_numbers(text: str, policy: NumberPolicy) -> list[float]:
     claims; ATM/POS scales magnitude suffixes (B/M/K) and strips x/%. A decimal glued to a
     trailing letter backtracks to its integer part (a quirk both pipelines share and pin)."""
     t = text
+    if policy.handle_suffixes:
+        # Indian units are first-class: "12.05 crore" / "1.47 lakh" are how counts read after
+        # deterministic normalisation (evaluate.normalize_units). Convert to the raw value here
+        # so they trace to signals.db exactly like the "12.05M" the model used to write. "L Cr"
+        # (lakh-crore, a ₹ magnitude) is intentionally NOT touched — it is a different scale.
+        t = re.sub(r"(\d+(?:\.\d+)?)\s*crore\b", lambda m: f"{float(m.group(1)) * 1e7:.0f}", t,
+                   flags=re.I)
+        t = re.sub(r"(\d+(?:\.\d+)?)\s*(?:lakh|lac)\b(?!\s*cr)",
+                   lambda m: f"{float(m.group(1)) * 1e5:.0f}", t, flags=re.I)
     if policy.strip_structural:
         t = re.sub(r"\b20\d\d-\d\d-\d\d\b", " ", t)                              # ISO dates
         t = re.sub(r"\bFY\s?\d{2,4}(?:\s?[-/–]\s?\d{2,4})?\b", " ", t, flags=re.I)  # FY25 / FY22-24
