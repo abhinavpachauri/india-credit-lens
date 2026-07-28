@@ -86,9 +86,10 @@ def _sector_table(doc, period, prior):
         for s in secs:
             rows.append({"cells": [s["name"], s["yoy"], s["mark"]], "signals": s["signals"]})
             declared += s["signals"]
-    doc.append({"type": "table", "columns": ["Sector", "YoY growth", ""], "rows": rows,
-                "caption": "▲/▼ marks a sector that turned — grew↔shrank — this cycle, "
-                           "not a change of pace."})
+    doc.append({"type": "table", "columns": ["Sector", "YoY growth", "Trend"], "rows": rows,
+                "caption": "Trend shows momentum in the growth rate: ↗ accelerating (rate rose "
+                           "vs last month), ↘ decelerating (rate fell), → steady. 'turned' marks "
+                           "the rarer event — a sector that flipped between growing and shrinking."})
     return declared
 
 
@@ -126,7 +127,7 @@ def build_doc(credit_picks=None, payments_picks=None):
     lead = _reads(credit_cards + pay_cards, registry, conn, k=1)
     if lead:
         doc.append({"type": "p", "signals": lead[0]["card"].get("signal_ids", []),
-                    "text": lead[0]["card"]["body"]})
+                    "text": lead[0]["card"]["body"], "verbatim": True})   # quoted eval prose
 
     # ── Credit half ───────────────────────────────────────────────────────────
     doc.append({"type": "h2", "text": f"Credit — {smonth}"})

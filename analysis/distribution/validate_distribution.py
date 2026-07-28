@@ -258,7 +258,7 @@ def word_number_conflicts(doc):
             if all(s != cue for s in signs):      # every rate contradicts the word
                 msg = (f"direction says {'up' if up else 'down'} but rate is "
                        f"{'negative' if cue > 0 else 'positive'}: {text.strip()[:90]!r}")
-                (warn if b["type"] == "card" else hard).append(msg)
+                (warn if (b["type"] == "card" or b.get("verbatim")) else hard).append(msg)
     return hard, warn
 
 
@@ -271,18 +271,27 @@ _ADVICE = re.compile(r"\b(?:should(?:\s+not)?|must(?:\s+not)?|need to|ought to|"
 _FORECAST = re.compile(r"\b(?:will\s+(?:continue|keep|likely|remain|widen|persist)|"
                        r"on track to|set to|poised to|expected to|going to|"
                        r"through fy\d{2}|next (?:quarter|few quarters|year)|coming months)\b", re.I)
+# Counts in millions/billions or M/K/B suffixes — this platform speaks lakh and crore, never
+# "9M codes". "L"/"L Cr" (lakh crore) is what we WANT, so it is excluded. Our own generated
+# text already renders lakh/crore via fmt_value; this hard-fails if it ever regresses, and
+# warns on the eval card prose that still says "9M / 78K" (a v1.12 fix, not a hand-edit).
+_BIGUNIT = re.compile(r"\b\d+(?:\.\d+)?\s?(?:million|billion|mn|bn)\b|"
+                      r"(?<![A-Za-z])\d+(?:\.\d+)?[MKB]\b")
 
 
 def prose_lint(doc):
-    """(hard_fails, warnings) for §10 register + advice + forecast voice. Same warn/fail
-    split as §5.3: a hit in our generated prose is a hard fail; a hit in a verbatim card
-    body warns and feeds the eval-prompt v1.12 fix list — card text is never hand-edited."""
+    """(hard_fails, warnings) for §10 register + advice + forecast + unit voice. Same warn/fail
+    split as §5.3: a hit in our generated prose is a hard fail; a hit in verbatim card/quoted
+    prose warns and feeds the eval-prompt v1.12 fix list — that text is never hand-edited."""
     hard, warn = [], []
     for b in doc:
         if b.get("meta") or b["type"] == "chart":
             continue
-        card = b["type"] == "card"
-        text = (f"{b.get('title','')} {b.get('body','')} {b.get('implication','')}" if card
+        # A `p` that merely quotes a validated card (the month-in-one-line lead) is verbatim
+        # eval prose, so it warns like a card rather than hard-failing as our own words.
+        card = b["type"] == "card" or b.get("verbatim")
+        text = (f"{b.get('title','')} {b.get('body','')} {b.get('implication','')}"
+                if b["type"] == "card"
                 else f"{b.get('label','')} {b.get('text','')}")
         sink = warn if card else hard
         tag = "card" if card else "ours"
@@ -296,6 +305,9 @@ def prose_lint(doc):
             sink.append(f"{tag}: advice voice: {_ADVICE.search(text).group(0)!r}: {text[:70]!r}")
         if _FORECAST.search(text):
             sink.append(f"{tag}: forecast: {_FORECAST.search(text).group(0)!r}: {text[:70]!r}")
+        for m in _BIGUNIT.finditer(text):
+            sink.append(f"{tag}: millions/M-K units — say it in lakh/crore: "
+                        f"{m.group(0)!r} in {text[:60]!r}")
     return hard, warn
 
 

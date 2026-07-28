@@ -16,45 +16,45 @@ Total bank credit outstanding reached ₹215.2L Cr in May 2026, the highest leve
 ## How each sector is growing
 
 
-| Sector | YoY growth |  |
+| Sector | YoY growth | Trend |
 | --- | --- | --- |
 | **Bank Credit** |  |  |
-| Food Credit | 94.1% |  |
-| Bank Credit | 17.7% |  |
-| Non-food Credit | 17.4% |  |
+| Food Credit | 94.1% | ↗ accelerating |
+| Bank Credit | 17.7% | ↗ accelerating |
+| Non-food Credit | 17.4% | ↗ accelerating |
 | **Agriculture** |  |  |
-| Agriculture | 14.9% |  |
+| Agriculture | 14.9% | ↗ accelerating |
 | **Industry** |  |  |
-| Micro and Small | 26.2% |  |
-| Medium | 21.2% |  |
-| Industry | 17.5% |  |
-| Large | 14.4% |  |
+| Micro and Small | 26.2% | ↘ decelerating |
+| Medium | 21.2% | ↗ accelerating |
+| Industry | 17.5% | ↗ accelerating |
+| Large | 14.4% | ↗ accelerating |
 | **Services** |  |  |
-| Services | 20.4% |  |
+| Services | 20.4% | ↗ accelerating |
 | **Personal Loans** |  |  |
-| Gold Loans | 105.5% |  |
-| Vehicle Loans | 17.3% |  |
-| Personal Loans | 15.4% |  |
-| Education Loans | 14.0% |  |
-| Other Personal Loans | 12.5% |  |
-| Housing | 10.9% |  |
-| Advances vs Shares/Bonds | 8.3% | ▲ turned up |
-| Advances vs Fixed Deposits | 8.1% |  |
-| Credit Card Outstanding | 1.3% |  |
-| Consumer Durables | -2.6% |  |
+| Gold Loans | 105.5% | ↘ decelerating |
+| Vehicle Loans | 17.3% | ↘ decelerating |
+| Personal Loans | 15.4% | ↘ decelerating |
+| Education Loans | 14.0% | ↗ accelerating |
+| Other Personal Loans | 12.5% | ↘ decelerating |
+| Housing | 10.9% | ↘ decelerating |
+| Advances vs Shares/Bonds | 8.3% | ↗ accelerating · turned |
+| Advances vs Fixed Deposits | 8.1% | ↘ decelerating |
+| Credit Card Outstanding | 1.3% | ↘ decelerating |
+| Consumer Durables | -2.6% | ↗ accelerating |
 | **Priority Sector** |  |  |
-| Social Infrastructure | 70.7% |  |
-| Housing | 39.0% |  |
-| Micro and Small Enterprises | 23.7% |  |
-| Education Loans | 22.6% |  |
-| Medium Enterprises | 17.8% |  |
-| Renewable Energy | 17.5% |  |
-| Agriculture | 13.8% |  |
-| Weaker Sections | 9.1% |  |
-| Export Credit | -9.7% |  |
-| Others | -11.2% |  |
+| Social Infrastructure | 70.7% | ↗ accelerating |
+| Housing | 39.0% | ↘ decelerating |
+| Micro and Small Enterprises | 23.7% | ↘ decelerating |
+| Education Loans | 22.6% | ↘ decelerating |
+| Medium Enterprises | 17.8% | ↗ accelerating |
+| Renewable Energy | 17.5% | ↗ accelerating |
+| Agriculture | 13.8% | ↘ decelerating |
+| Weaker Sections | 9.1% | ↘ decelerating |
+| Export Credit | -9.7% | ↗ accelerating |
+| Others | -11.2% | ↗ accelerating |
 
-*▲/▼ marks a sector that turned — grew↔shrank — this cycle, not a change of pace.*
+*Trend shows momentum in the growth rate: ↗ accelerating (rate rose vs last month), ↘ decelerating (rate fell), → steady. 'turned' marks the rarer event — a sector that flipped between growing and shrinking.*
 
 
 ## Where the mix is shifting

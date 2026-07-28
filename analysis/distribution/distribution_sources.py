@@ -743,13 +743,7 @@ def sector_growth_table(period, prior):
     from signals.is_news import REGIME
     reg = load_registry()
     vals = total_values("sibc", period)
-    con = _con()
-    prior_status = {}
-    if prior:
-        prior_status = {m: s for m, s in con.execute(
-            "select metric_id, status from signals where pipeline='sibc' and period=? "
-            "  and (entity_type='total' or entity_id='total')", (prior,))}
-    con.close()
+    prior_vals = total_values("sibc", prior) if prior else {}
 
     groups = {}
     for sid, sig in reg.items():
@@ -758,15 +752,24 @@ def sector_growth_table(period, prior):
         if sid not in vals:
             continue
         v, u, s = vals[sid]
-        was = prior_status.get(sid)
+        pv, _, was = prior_vals.get(sid, (None, None, None))
+        # Momentum arrow — is the YoY rate itself rising (accelerating) or falling
+        # (decelerating) vs last month. A DIFFERENT axis from the value sign: a sector can
+        # be at -2.6% YoY yet accelerating (shrinking less). So use ↗/↘, never ↑/↓, which
+        # this platform reserves for the value's own direction.
+        if pv is None or abs(v - pv) < 0.1:
+            trend = "→ steady"
+        elif v > pv:
+            trend = "↗ accelerating"
+        else:
+            trend = "↘ decelerating"
+        # A regime turn (grew↔shrank) is the rarer, stronger event — flag it alongside.
         turned = bool(was and REGIME.get(was) and REGIME.get(s) and REGIME[was] != REGIME[s])
-        mark = ""
         if turned:
-            mark = ("▲ turned up" if REGIME.get(s) == "grow"
-                    else "▼ turned down" if REGIME.get(s) == "shrink" else "→ turned flat")
+            trend += " · turned"
         name = (sig.get("chart_series") or [None])[0] or sig["title"].replace(" YoY growth (%)", "")
         groups.setdefault(_prefix_parent(sid), []).append(
-            {"name": name, "yoy": fmt_value(v, u), "mark": mark, "signals": [sid], "_v": v})
+            {"name": name, "yoy": fmt_value(v, u), "mark": trend, "signals": [sid], "_v": v})
     order = ["Bank Credit", "Agriculture", "Industry", "Services", "Personal Loans",
              "Priority Sector", "Other"]
     return [(g, sorted(groups[g], key=lambda r: -r["_v"])) for g in order if g in groups]
