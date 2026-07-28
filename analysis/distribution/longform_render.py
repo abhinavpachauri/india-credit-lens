@@ -9,7 +9,11 @@ Takes a document (a list of typed blocks) and renders it twice:
            copy, paste into the Substack editor. Formatting survives the paste.
 
 The generators own the words; this module owns only the shapes.
-Block types: h1 | h2 | p | li | stat | statgrid | card | quote | chart | hr | small
+Block types: h1 | h2 | p | li | stat | statgrid | table | card | quote | chart | hr | small
+
+`table` renders a grid: {"columns":[...], "rows":[{"cells":[...], "signals":[...],
+"header": bool}], "caption": str}. A `header` row is a group divider (bold, spans the
+table). Number scoping is per row via `signals`, judged in check_doc like a statgrid item.
 
 `chart` is a PLACEHOLDER: the user replaces the dashed box with a dashboard
 screenshot while pasting into Substack. Its text is the exact recipe for which
@@ -34,6 +38,12 @@ STYLE = {
     "statbox": ("margin:14px 0;padding:14px 18px;border:1px solid #e2e8f0;"
                 "border-radius:8px;background:#fafafa"),
     "statline": "font-size:16px;line-height:1.7;margin:2px 0;color:#222",
+    "table": "border-collapse:collapse;width:100%;margin:12px 0;font-size:15px",
+    "th": ("text-align:left;padding:7px 10px;border-bottom:2px solid #cbd5e1;"
+           "color:#475569;font-weight:700;font-size:13.5px"),
+    "td": "padding:6px 10px;border-bottom:1px solid #eef2f6;color:#222",
+    "tr_head": "background:#f1f5f9;font-weight:700;color:#111",
+    "caption": "font-size:13px;color:#666;margin:4px 0 0",
 }
 
 
@@ -56,6 +66,19 @@ def md_render(doc):
             for it in b["items"]:
                 out.append(f"- **{it['value']}** — {it['label']} ({it['note']})" if it.get("note")
                            else f"- **{it['value']}** — {it['label']}")
+            out.append("")
+        elif t == "table":
+            cols = b["columns"]
+            out.append("")
+            out.append("| " + " | ".join(cols) + " |")
+            out.append("| " + " | ".join("---" for _ in cols) + " |")
+            for row in b["rows"]:
+                cells = row["cells"]
+                if row.get("header"):            # group header — bold the first cell
+                    cells = [f"**{cells[0]}**"] + list(cells[1:])
+                out.append("| " + " | ".join(str(c) for c in cells) + " |")
+            if b.get("caption"):
+                out.append(f"\n*{b['caption']}*")
             out.append("")
         elif t == "chart":
             out.append(f"\n> 📊 **[CHART — replace with screenshot]** {b['text']}\n")
@@ -96,6 +119,24 @@ def html_render(doc, title):
                             f'<b style="font-size:18px">{escape(it["value"])}</b>'
                             f' &nbsp;<span style="color:#555">{escape(it["label"])}</span>{note}</p>')
             body.append(f'<div style="{STYLE["statbox"]}">' + "".join(rows) + "</div>")
+        elif t == "table":
+            cols = "".join(f'<th style="{STYLE["th"]}">{escape(str(c))}</th>'
+                           for c in b["columns"])
+            trs = [f"<tr>{cols}</tr>"]
+            for row in b["rows"]:
+                cells = row["cells"]
+                if row.get("header"):
+                    span = len(b["columns"])
+                    trs.append(f'<tr style="{STYLE["tr_head"]}">'
+                               f'<td style="{STYLE["td"]}" colspan="{span}">'
+                               f'{escape(str(cells[0]))}</td></tr>')
+                else:
+                    tds = "".join(f'<td style="{STYLE["td"]}">{escape(str(c))}</td>'
+                                  for c in cells)
+                    trs.append(f"<tr>{tds}</tr>")
+            cap = (f'<p style="{STYLE["caption"]}">{escape(b["caption"])}</p>'
+                   if b.get("caption") else "")
+            body.append(f'<table style="{STYLE["table"]}">' + "".join(trs) + "</table>" + cap)
         elif t == "chart":
             body.append(f'<div style="{STYLE["chart"]}">📊 <b>CHART GOES HERE</b><br/>'
                         f'{escape(b["text"])}<br/>'

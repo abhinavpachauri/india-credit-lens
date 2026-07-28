@@ -96,6 +96,62 @@
      "date": "2026-07-21",
      "how_measured": "analysis/measure_groundedness.py --gate distribution. Weaker than the newsletter because a claim's scope includes its full period series and ranges, which prose legitimately references ('16-period range'). Next tightening target.",
      "source": "analysis/measure_groundedness.py"
+    },
+    {
+     "metric": "newsletter gate catch rate by decision point — D1 (per-block scope, the real test)",
+     "value": "near-miss 99.1%, in-range 92.8% (0/44 false rejections)",
+     "date": "2026-07-23",
+     "how_measured": "measure_groundedness.py rewritten to inject at EVERY eligible block (was: first p block only). 50 injections per attack per site over 44 D1 blocks across the 3 long-form issues; each block scoped to exactly the signals it declares. near-miss = a real value nudged past rounding; in-range = a fresh value from the doc's own range, caught only by scope.",
+     "source": "analysis/measure_groundedness.py (post-rewrite)"
+    },
+    {
+     "metric": "newsletter gate in-range catch rate by scope band — the scope-width/leak relationship, measured",
+     "value": "1-50 vals: 100.0% · 51-200: 99.8% · 201-1k: 79.5% · 1k+: 79.0%",
+     "date": "2026-07-23",
+     "how_measured": "same run, D1 blocks bucketed by distinct candidate-value count. in-range fabrications (the scope-only attack) are caught ~100% at narrow scope and fall to ~79% once a block's ground truth runs to hundreds/thousands of values — the deep read's basis lines (scope up to 2306) are the wide band. near-miss stays high (tolerance catches it) regardless of width. This is the leading indicator the old harness could not see.",
+     "source": "analysis/measure_groundedness.py --scope + full run"
+    },
+    {
+     "metric": "distribution gate catch rate by decision point — D3 per-claim + D4 blurb (current data)",
+     "value": "D3 100.0%/100.0%, D4 100.0%/100.0% (0 false rejections); only 1 generated claim exists this vintage (other slots all-verbatim)",
+     "date": "2026-07-23",
+     "how_measured": "same harness, check_slate. Today only the 28th (C8 watchlist) emits a non-verbatim claim; 1st/7th/14th are all verbatim feed cards (number-checked upstream at D5), so the slot number-injection surface is legitimately thin — scope width 67, both bands narrow, everything caught.",
+     "source": "analysis/measure_groundedness.py --gate distribution"
+    },
+    {
+     "metric": "is-news reads selector — template-reject + catch (non-circular)",
+     "value": "template-reject 100.0% (4/4 static share signals below the read floor); catch 54.5% (12/22 magnitude outliers scored >= floor 2.0)",
+     "date": "2026-07-23",
+     "how_measured": "analysis/signals/is_news.py --measure. Selector scores each L1 signal 2*record + 2*regime-flip + 1*crossed; a read must clear floor 2.0 (a strong factor). Ground truth is INDEPENDENT of the score: templates = share-method signals that also barely moved (<0.5x typical monthly move) -> must score below floor; news = magnitude outliers (>2x typical move) -> should clear floor. Magnitude is deliberately NOT a selector factor, so catch<100% is by design (a big move inside an established trend that sets no record and flips no regime is not a 'read').",
+     "source": "analysis/signals/is_news.py"
+    },
+    {
+     "metric": "merged monthly issue — number gate catch by decision point (D1 per-block)",
+     "value": "near-miss 98.9%, in-range 92.5% (0/38 false rejections)",
+     "date": "2026-07-23",
+     "how_measured": "analysis/measure_groundedness.py --gate newsletter, over the two live long-form cases (merged monthly_issue + deep_read), injecting at EVERY eligible block. D1 = blocks that declare signals; each scoped to exactly those signals.",
+     "source": "analysis/measure_groundedness.py + analysis/distribution/issues/monthly_issue.py"
+    },
+    {
+     "metric": "merged monthly issue — number gate catch by scope band (the width/leak curve)",
+     "value": "1-50 vals 100.0% · 51-200 99.5% · 201-1k 87.8% · 1k+ 80.4% (in-range)",
+     "date": "2026-07-23",
+     "how_measured": "same run, D1 blocks bucketed by distinct candidate-value count. Same relationship the harness fix first exposed: narrow scope catches ~everything, wide scope leaks ~1-in-5 in-range fabrications. The monthly issue's own blocks are narrow (tiles 1-2 signals, flip lines 1 signal); the 1k+ band is the deep read's evidence_all basis lines (step-3 D1 fix target).",
+     "source": "analysis/measure_groundedness.py"
+    },
+    {
+     "metric": "merged monthly issue — word-vs-number agreement check (NEW, first non-number-tracing check since 2g)",
+     "value": "catch 100.0% (11/11 injected direction/rate contradictions), 0 false positives on the clean issue",
+     "date": "2026-07-23",
+     "how_measured": "negate the rate sign on each generated flip line (the real 'status says up, YoY is -2.6%' class); validate_distribution.word_number_conflicts must hard-fail each. Clean doc must produce 0 conflicts. The check reads only %/pp rates (a level like Rs 2.95L Cr has no direction) and fires when a line's single direction cue disagrees with its rate; conflicts in verbatim card prose warn instead of fail (fixed upstream at v1.12).",
+     "source": "analysis/distribution/validate_distribution.py word_number_conflicts"
+    },
+    {
+     "metric": "merged monthly issue (§11.1 REVISED, with sector/bank tables) — number gate catch by decision point",
+     "value": "D1 per-block near-miss 99.6%, in-range 96.0% (0/68 false rejections); bands 1-50→99.9%, 201-1k→93.1%, 1k+→85.0% in-range",
+     "date": "2026-07-23",
+     "how_measured": "analysis/measure_groundedness.py --gate newsletter after the §11.1 revision (flip-list→sector growth table, banks→3 tables, fleet→prose). Harness extended to inject into the NEW `table` block type (per-row, scoped to the row's own signal) — without that the table numbers, most of the issue's figures, went unattacked (D1 sites 24→68). Supersedes the pre-revision merged-issue entry. The narrow table rows (1 signal each) catch ~100%; the 1k+ band that leaks ~15% in-range is the deep read's evidence_all basis lines (step-3 D1 fix target), not the monthly issue.",
+     "source": "analysis/measure_groundedness.py + analysis/distribution/issues/monthly_issue.py"
     }
    ],
    "observations": [
@@ -106,7 +162,13 @@
     "Groundedness has two error rates, and only measuring one is how you ship a gate that blocks the truth. Tightening tolerance took false rejections from 0 to 3/25 until the formatting quirk behind them was fixed; both numbers belong in the measurement.",
     "The gate guarding the subscriber-facing newsletter caught 0% of invented numbers, and had passed every hand-written negative test since it was built. Hand-written negative tests select for numbers the author already suspects; an injection harness does not. Every gate needs a measured catch rate before it can be described as working.",
     "A defensive default is a hole. When per-block scoping was added, blocks with no declared signals fell back to the issue-wide pool 'so nothing breaks' — that single fallback dropped the in-range catch rate from 91.9% to 42.4%, because the injection site was exactly such a block. Removing the fallback took it to 99.5%. Scope defaults should fail closed.",
-    "Tightening surfaced two real bugs that the loose gate had been hiding, both display-format rather than data problems: values rendered for the reader (₹2.9L Cr, 12.0 crore) did not match their stored form, and ratio grounding had been silently accepting them as a/b of other values. The fix — ground the value through the same renderer the issue uses — is exact rather than a tolerance guess."
+    "Tightening surfaced two real bugs that the loose gate had been hiding, both display-format rather than data problems: values rendered for the reader (₹2.9L Cr, 12.0 crore) did not match their stored form, and ratio grounding had been silently accepting them as a/b of other values. The fix — ground the value through the same renderer the issue uses — is exact rather than a tolerance guess.",
+    "CORRECTION to the 2026-07-21 newsletter entries (100.0%/99.5% near-miss/in-range): those numbers measured decision point D2, not the gate. The old measure_groundedness.py:138 injected into the FIRST p block then broke; in the deep read that block is the signal-less intro, which grounds nothing and fails closed. All 200 injections hit one always-fail block. The blocks that can actually leak — basis lines scoped to thousands of values — were never attacked. This is the FOURTH appearance of the narrow-negative-test failure class (Check 4f period-wide -> newsletter v1 -> distribution -> the harness itself). Fixed 2026-07-23: inject every eligible block, report per decision point and per scope band, never one pooled number.",
+    "The honest newsletter picture after the fix: D1 in-range catch is 92.8% pooled but that pooling hides the real story — it is 100% up to ~200 candidate values and 79% beyond 1000. Scope width, not tolerance, is what a wide-scope gate leaks on. This is the empirical case for the deep-read D1 scope fix (basis lines -> member's own signal instead of the driver's whole evidence_all set): narrowing scope is expected to move those wide-band blocks from 79% back toward 100%.",
+    "Method lesson banked for the track: automating a negative test freezes the author's choice of injection SITE, not just their choice of value. A catch rate is only trustworthy sliced by the scope of the site attacked; a single artifact-level number is the same vacuity as a single period-wide ground-truth pool, one level up.",
+    "is-news selector design: the first cut flipped on ~50% of signals because status wobbles accelerating<->decelerating (strengthening<->active) every noisy month while still growing. Fixed by counting a flip only on a REGIME change (growing<->shrinking<->flat), not the within-regime wobble; the wobble is demoted to the weakest factor (crossed, weight 1) and can never make something a read alone. Second finding: labelling ALL share signals as templates was too coarse -- a share at an all-time reversal record (credit-cards' share of personal loans) is a legitimate read, not a template. The clean template is a share that ALSO didn't move.",
+    "Building the merged monthly issue surfaced 6 advice/forecast warnings in verbatim card prose (the is-news reads inherit LLM-eval consulting-speak: 'Lenders should allocate capital exclusively to UPI QR', 'the ratio will continue widening through FY27'). These are WARNINGS not failures by design (Sec 11.1 / Sec 5.3): card prose is the eval's, fixed upstream at prompt v1.12, never hand-edited in the renderer. The new prose_lint's advice+forecast detectors make that fix list visible for the first time -- 6 concrete card-prose items feeding v1.12.",
+    "is-news + magnitude factor (reco b): adding magnitude (>2x typical move, weight 2) surfaced large-corporate +14.4% YoY as a credit read it would have missed on record/regime alone. Trade-off measured: selectivity rose to 48.7% of signals clearing the read floor this cycle (a broad-growth month) -- the top-2 reads stay unambiguous but 'a read is the exception' weakens; tunable via MAGNITUDE_MULT. Template-reject held at 100%. Second note: the word-vs-number check had a false-positive class on legitimate 'fell 4.3%' prose (word carries the sign, magnitude is unsigned); fixed by firing only on EXPLICITLY-signed rates (the real 'up, -2.6%' bug), plus word-boundary cues so bare up/down fire without tripping on group/update."
    ],
    "open_questions": [
     "Breadth-based (period-wide) checks let an in-range invented number pass. What is the cheapest scoping that closes this for free prose, not just structured values?",

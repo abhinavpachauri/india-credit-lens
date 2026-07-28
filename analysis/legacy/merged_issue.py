@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
 """
+merged_issue.py — RETIRED 2026-07-23 → superseded by distribution/issues/monthly_issue.py
+--------------------------------------------------------------------
+This was the PER-PIPELINE release read (`--pipeline sibc|atm_pos`), one issue per
+pipeline. DISTRIBUTION_SPEC §11.1 replaced it with a single MERGED monthly issue (credit
+half + payments half, one masthead). Kept here for reference only; it is not a fallback
+and nothing live imports it. Do not run.
+--------------------------------------------------------------------
 merged_issue.py — the 1st-of-month issue: the release read (L1)
 --------------------------------------------------------------------
 Runs within 24h of an RBI release. Fully deterministic: composes the issue from

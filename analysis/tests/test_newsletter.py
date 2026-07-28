@@ -143,15 +143,15 @@ def test_rendered_magnitudes_are_grounded_by_the_renderer_itself():
 def test_live_issues_still_pass_their_own_gate():
     """The generators must survive the tightening — a gate that blocks true issues
     gets switched off, which is worse than a loose one."""
-    from distribution import distribution_sources as ns
-    from distribution.issues import merged_issue as release
+    from distribution.issues import monthly_issue as monthly
     from distribution.issues import deep_read as deep
-    from distribution.validate_distribution import check_doc
-    for pipeline in ("sibc", "atm_pos"):
-        period = ns.latest_period(pipeline)
-        if not period:
-            continue
-        doc, declared = release.build_doc(pipeline, period)
-        assert check_doc(doc, declared, label=pipeline) == []
+    from distribution.validate_distribution import (
+        check_doc, word_number_conflicts, prose_lint)
+    doc, declared, period = monthly.build_doc()
+    assert check_doc(doc, declared, label="monthly") == []
+    # The merged issue's own two extra gates: no number/word conflict and no advice
+    # register in OUR generated text (verbatim card prose warns instead, so is excluded).
+    assert word_number_conflicts(doc)[0] == []
+    assert prose_lint(doc)[0] == []
     doc, _, declared = deep.build_doc()
     assert check_doc(doc, declared, label="deep") == []

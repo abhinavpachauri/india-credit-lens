@@ -349,10 +349,19 @@ lands, blurbs generated from card text will inherit the register problem.
 
 ### 11.1 Post 1 — monthly issue (1st)
 
-**Template aligned 2026-07-23 (design session; build is a later session).** The per-pipeline
+**BUILT 2026-07-23** — `analysis/distribution/issues/monthly_issue.py` (merged, two halves, no
+forced cross-read). Reads selector is the deterministic `signals/is_news.py`. Word-vs-number
+agreement + advice/forecast prose lint live in `validate_distribution.py`
+(`word_number_conflicts`, `prose_lint`). The per-pipeline `merged_issue.py` is retired to
+`analysis/legacy/`. Industry-total YoY signal confirmed = `sibc-industry-yoy`; tiles show level +
+YoY, no standalone status word. Measured (per decision point + scope band) and logged to
+`ai_pm_register` topic #1. **Built to spec (the full grouped flip table, Option A);** the
+flip-table noise finding is recorded in §14 as an improvement, not silently changed.
+
+**Template aligned 2026-07-23 (design session).** The per-pipeline
 `--pipeline sibc|atm_pos` generator is now **legacy** — it produced one issue per pipeline; the
-monthly issue is a single issue with a credit half and a payments half. Retire the per-pipeline
-path to `legacy/` at build time (same as the reply desk and newsletter v1); it is not a fallback.
+monthly issue is a single issue with a credit half and a payments half. Retired to `legacy/` (not
+a fallback).
 
 **Design decision — no forced cross-read (reverses the earlier v1.1 rule).** The prior spec
 mandated one cross-system paragraph "that neither pipeline could produce alone." We dropped it: a
@@ -381,12 +390,31 @@ of the tree is moving*.
 1. **The level** — 3 tiles: **Bank credit** (total) · **Personal loans** YoY · **Industry** YoY.
    No food/non-food anywhere — it is jargon. (Confirm the exact industry-total YoY signal id at
    build; there are by-size and by-type cuts.)
-2. **What moved** — a **full table of every YoY status flip this cycle, grouped by parent sector**,
-   direction marked. Not a top-N and not the current "6 shown + …and 10 more" dump. Grouping *is*
-   the organisation: the reader sees all of it, sorted, not an arbitrary cut. Bank credit shown.
-3. **Where the mix is shifting** — rotation (`csv_sector_rotation`). Honest-null below 0.5pp mass.
-4. **The reads** — top **2** by the is-news score (below) + one chart each. Verbatim from validated
-   cards.
+2. **How each sector is growing** (revised 2026-07-23) — a **table grouped by parent sector**
+   (Bank Credit · Agriculture · Industry · Services · Personal Loans · Priority Sector), one row per
+   sub-sector showing **YoY growth %**, with a marker (▲/▼ *turned*) on the sub-sectors that changed
+   **regime** (grew↔shrank) this cycle — NOT the accelerate↔decelerate wobble, which fires on ~half
+   the signals every month and is noise (§14). Everything is shown, grouped; the movers are flagged,
+   not isolated. This replaces the earlier "every status flip" list (that list was mostly wobble and
+   was not what a reader expects — they expect the state of every sector, with rates). A **volume
+   column (₹ L Cr)** is a fast follow: it needs per-sector `-abs` signals (only four sectors carry one
+   today), so v1 ships YoY-only and adds volume once those signals exist.
+3. **Where the mix is shifting** — rotation (`csv_sector_rotation`), honest-null below 0.5pp mass.
+   Written as **fuller conversational prose, not a terse template** (revised 2026-07-23): name the
+   biggest gainer and giver, say the direction in plain words, and add a "put simply" gloss — e.g.
+   "Within services lending the mix is tilting toward NBFCs: their slice grew 3.4 points over the
+   year while other services gave up 2.1. Put simply, a bigger share of every rupee lent to services
+   now goes to finance companies."
+4. **The reads** — **editor-picked from a machine-ranked shortlist** (revised 2026-07-23), one chart
+   each. The is-news score (below) *ranks* the candidate cards; it does not auto-select them. The
+   generator runs `--shortlist`, which lists the ranked candidates per half; the editor picks a couple
+   with `--credit`/`--payments` (same human-in-the-loop pattern as the deep read's `--spine`, and the
+   same determinism-vs-judgment boundary, AI PM topic #5). *Which* reads carry the issue is editorial
+   judgment; the machine only says which changed most. Unattended (no picks), it falls back to the top
+   2 by score so the pipeline still runs. Verbatim card **title + body only — the prescriptive "So
+   what" implication is dropped**: the monthly issue is descriptive and backward-looking, so an advice
+   line ("lenders should…") is out of place and out of voice here. Prescription lives in the deep read
+   and /opportunities.
 
 #### Payments half
 
@@ -395,14 +423,20 @@ the measures agree*, and *which banks stand out*.
 
 5. **The level** — 3 total tiles (cards in force · card spend · POS terminals) + a **top-5-banks**
    sub-line on the same dimensions.
-6. **Fleet vs usage** — pair gaps (`csv_pair_divergence`), **overall + top-5 banks**. e.g. POS fleet
-   −0.48% YoY vs POS spend +9.32% — fewer machines, more through each. No equivalent in the credit
-   half. Honest-null when no pair is outside the ±3pp band.
-7. **Top banks** — top 5 per dimension (cards / spend / terminals). **No divergence framing** in the
-   issue — divergence (a bank pulling away from its own category) is subtler and belongs in the deep
-   read if used at all. RBI does not publish sectoral credit per bank, so this section has no credit
-   equivalent.
-8. **The reads** — top **2** by is-news score + chart.
+6. **Fleet vs usage** — pair gaps (`csv_pair_divergence`), overall. Written as **prose, not raw
+   signal titles** (revised 2026-07-23): each pair carries two plain-language side labels and a "what
+   the gap means" clause — "Banks kept issuing debit cards, but people are using them less: the number
+   of cards grew 2.8% over the year while spending on them fell 4.3%, a 7-point gap between having a
+   card and using it." Never the registry title with "(YoY gap, pp)" showing through. Honest-null
+   outside the ±3pp band.
+7. **The biggest banks** — top 5 banks per dimension, rendered as a **table** (revised 2026-07-23).
+   The three dimensions are **credit cards in force · debit cards in force · POS terminals** — all
+   per-bank *counts* (`cc/dc/pos-bank-scan`). There is **no per-bank (or total) card-spend signal**,
+   so there is no spend column (§14); the earlier "cards issued / card spend" labels were wrong — the
+   scans are stocks in force, not flows or value. **No divergence framing** here — that is deep-read
+   material. RBI does not publish sectoral credit per bank, so no credit equivalent.
+8. **The reads** — editor-picked from the is-news shortlist + chart, exactly as the credit half (#4).
+   Title + body only, implication dropped.
 
 **Closing.** Dashboard link · How this is made.
 
@@ -416,17 +450,28 @@ recipe and a `> 📊 [CHART — replace with screenshot]` marker. Same conventio
 #### The reads selector — deterministic and measured
 
 Today's generator takes feed order; that is the weakest part of it. A card qualifies as a *read*
-only if it is **news**, scored on three factors, all computable from `signals.db`:
+only if it is **news**, scored on four factors, all computable from `signals.db`:
 
-1. **Record / extreme** — all-time high/low, longest streak.
-2. **Status flip** — the signal changed direction this cycle.
-3. **Proximity — just crossed** — a threshold was crossed this period (the backward twin of C8).
+1. **Record / extreme** — all-time high/low **on a reversal-capable series**. A new high on a
+   monotonic series (total outstanding rises every month) is arithmetic, not news, and scores zero.
+2. **Regime flip** — status crossed grew↔shrank↔flat this cycle. **Not** the accelerate↔decelerate
+   wobble within the growing regime, which fires on ~half the signals every month (§14).
+3. **Just crossed** — a status threshold was crossed this period (the backward twin of C8).
+4. **Magnitude** (added 2026-07-23, reco (b)) — the signal moved much more than its own typical
+   month (> 2× its median period-over-period move). Without it the selector answers *"did this change
+   state"* but misses a big, genuinely interesting move that sets no record and flips no regime —
+   measured, the three-factor version caught only **54.5%** of the month's largest movers. Magnitude
+   closes the gap between "changed state" and "moved a lot", which is what a reader means by a
+   headline read.
 
-Rank by the score, take the top 2 per half. A structural template ("Power is 57% of infrastructure",
-true every month) scores zero on all three and never surfaces. This is the same *is-this-news*
-problem the dashboard read-mode notes flagged; the classifier built here is the one the dashboard
-reuses. **Per the standing AI PM rule it ships with a measured catch / false-rejection rate** — no
-selector gate lands on prose alone.
+**Score = 2·record + 2·regime-flip + 2·magnitude + 1·crossed.** The score **ranks** candidates; it
+does not auto-select. The editor picks the couple that carry the issue from the ranked shortlist
+(`--shortlist` → `--credit`/`--payments`) — the machine says what changed most, the human says what
+matters. A read must clear a **strong** factor (floor 2.0) to appear on the shortlist as news —
+`just crossed` alone is never a read; a structural template ("Power is 57% of infrastructure") scores
+zero on all four and never surfaces. Unattended, the top 2 by score are used as a fallback. This is the same *is-this-news* problem the dashboard read-mode notes flagged; the
+classifier built here is the one the dashboard reuses. **Per the standing AI PM rule it ships with a
+measured catch / template-reject rate** — no selector gate lands on prose alone.
 
 #### Honest nulls
 
@@ -715,7 +760,18 @@ states both months explicitly, and states the gap in months when there is one.
 
 ## 14. Open items
 
-- Eval prompt v1.12 tone rule — blocks clean blurb voice (§10).
+- **Flip-table noise — RESOLVED in the §11.1 revision (2026-07-23).** The full "every status flip"
+  list was mostly accelerate↔decelerate wobble (May 2026: 14 flips, only 1 a regime change). Replaced
+  by the grouped **sector growth table** (all sectors, YoY, regime-turned flagged). The is-news
+  selector's regime/wobble distinction is now the shared rule.
+- **Payments "card spend" — RESOLVED (dropped) in the §11.1 revision.** There is no per-bank or total
+  card-spend signal (spend is split POS/ecom/atm/other). Tiles use cards-in-force / debit-cards /
+  POS-terminals; the bank table uses the three per-bank *count* scans. A total-spend signal remains a
+  possible future compute add, but the templates no longer claim a tile with no signal.
+- **Per-sector volume (₹ L Cr) column — deferred.** The sector growth table ships YoY-only; a volume
+  column needs per-sector `-abs` signals (only four sectors carry one). Small compute add when wanted.
+- Eval prompt v1.12 tone rule — blocks clean blurb voice (§10). The monthly issue's `prose_lint`
+  now surfaces the exact fix list: 6 advice/forecast hits in verbatim reads-card prose this cycle.
 - Design-prompt subset checker (§5.1) — deferred; the prompt now emits a machine-readable
   `supplied numbers` block, so the check is buildable without changing the format.
 - **Upstream: `generate_opportunity_narrative` prints raw floats** ("120454115.0 credit cards",

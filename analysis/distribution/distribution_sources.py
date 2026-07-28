@@ -202,6 +202,7 @@ def insight_cards(pipeline, max_cards=6, per_section=1):
             for it in bucket.get("insights", [])[:per_section]:
                 cards.append({"where": section, "title": it["title"], "body": it["body"],
                               "implication": it.get("implication", ""),
+                              "signal_ids": [it["id"]],   # SIBC feed is one card per signal
                               "chart": _chart_recipe(pipeline, section,
                                                      (it.get("effect") or {}).get("highlight"),
                                                      it.get("preferredMode"))})
@@ -216,6 +217,7 @@ def insight_cards(pipeline, max_cards=6, per_section=1):
             eff = it.get("effect") or {}
             cards.append({"where": g, "title": it["title"], "body": it["body"],
                           "implication": it.get("implication", ""),
+                          "signal_ids": _atm_signal_ids(it),
                           "chart": _chart_recipe(pipeline, g,
                                                  eff.get("highlight"), eff.get("trendMode"))})
     return cards[:max_cards]
@@ -510,3 +512,261 @@ def current_statuses(signal_ids):
     """Status snapshot to record in the ledger, so C9 can later detect our own reversals."""
     registry = load_registry()
     return {sid: registry[sid].get("current_status") for sid in signal_ids if sid in registry}
+
+
+# ── The merged monthly issue (§11.1) — two halves, one masthead ───────────────
+# Helpers below serve issues/monthly_issue.py. Each returns statgrid items or claim-shaped
+# dicts carrying the signal ids that scope their numbers, so the gate judges every figure
+# against exactly the signals it came from — never a period-wide pool.
+
+def tiles(period, specs):
+    """The level tiles for one half. `specs` = [(label, level_id, yoy_id_or_None)].
+
+    A tile shows level + YoY and NO standalone status word: printing "(accelerating)" next
+    to a level whose rate is falling is the same contradiction the direction bug is. Each
+    tile declares exactly the one or two signals whose numbers it prints, so its scope is
+    those signals and nothing else."""
+    reg = load_registry()
+    out = []
+    for label, level_id, yoy_id in specs:
+        pl = reg.get(level_id, {}).get("pipeline") or reg.get(yoy_id, {}).get("pipeline")
+        v = total_values(pl, period)
+        signals, value, note = [], "", ""
+        if level_id and level_id in v:
+            lv, lu, _ = v[level_id]
+            value = fmt_value(lv, lu)
+            signals.append(level_id)
+        if yoy_id and yoy_id in v:
+            yv, yu, _ = v[yoy_id]
+            yoy = fmt_value(yv, yu)
+            note = f"{yoy} YoY" if value else ""
+            if not value:                       # a YoY-only tile leads with the rate
+                value = f"{yoy} YoY"
+            signals.append(yoy_id)
+        out.append({"value": value, "label": label, "note": note, "signals": signals})
+    return out
+
+
+# The reader-facing parent group for a signal. Single source: the dashboard feed already
+# files every SIBC card under a section; reuse that, and fall back to the id prefix only for
+# the handful of signals that carry no card.
+_PREFIX_SECTION = [
+    ("sibc-bank-credit", "Bank Credit"), ("sibc-nonfood", "Bank Credit"),
+    ("sibc-food", "Bank Credit"), ("sibc-psl", "Priority Sector"),
+    ("sibc-personal-loans", "Personal Loans"),
+    ("sibc-pl", "Personal Loans"), ("sibc-services", "Services"),
+    ("sibc-trade", "Services"), ("sibc-industry", "Industry"),
+    ("sibc-large-corporate", "Industry"), ("sibc-msme", "Industry"),
+    ("sibc-agriculture", "Agriculture"),
+]
+
+_SECTION_CACHE = {}
+
+
+def _section_map():
+    """signal id → reader section label, from the feed's own card placement."""
+    if _SECTION_CACHE:
+        return _SECTION_CACHE
+    feed = json.loads((DATA / "sibc_l1_annotations.json").read_text())
+    for section, bucket in feed["sections"].items():
+        for it in bucket.get("insights", []):
+            _SECTION_CACHE[it["id"]] = SECTION_NAME.get(section, section)
+    return _SECTION_CACHE
+
+
+def _parent_section(signal_id):
+    section = _section_map().get(signal_id)
+    if section:
+        return section
+    return _prefix_parent(signal_id)
+
+
+def _prefix_parent(signal_id):
+    """Clean, complete parent from the id prefix alone — every signal lands in one of the
+    six reader groups. Used for the sector growth table, where the dashboard's finer section
+    labels ('Main Sectors', 'Industry by Size') would fragment the grouping."""
+    for prefix, label in _PREFIX_SECTION:
+        if signal_id.startswith(prefix):
+            return label
+    return "Other"
+
+
+GAINING = {"accelerating", "growing steadily", "improving"}
+
+
+def yoy_flips_grouped(pipeline, period, prior):
+    """Every YoY status flip this cycle, grouped by parent sector, direction marked (§11.1).
+
+    The full table, not a top-N — grouping IS the organisation. Reuses `status_flips` (which
+    already returns total-level status changes) and keeps only the YoY signals."""
+    groups = {}
+    for f in status_flips(pipeline, period, prior):
+        if not f["id"].endswith("-yoy"):
+            continue
+        f["dir"] = "↑" if f["now"] in GAINING else "↓"
+        groups.setdefault(_parent_section(f["id"]), []).append(f)
+    # Stable, reader-friendly order; unknown groups after the known ones.
+    order = ["Bank Credit", "Agriculture", "Industry", "Services", "Personal Loans",
+             "Priority Sector", "Other"]
+    return [(g, sorted(groups[g], key=lambda x: x["title"]))
+            for g in order if g in groups]
+
+
+def rotation_line(pipeline, period, min_mass=0.5):
+    """One deterministic sentence on where the mix moved, or None below the mass floor.
+
+    Reads the rotation signal's own rows: the aggregate is the rotation mass (pp), the
+    per-entity rows are each part's Δshare. Honest-null under `min_mass` (§11.1)."""
+    reg = load_registry()
+    con = _con()
+    best = None
+    for sid, sig in reg.items():
+        if sig.get("pipeline") != pipeline or not sid.endswith("-rotation"):
+            continue
+        rows = con.execute(
+            "select entity_type, entity_id, value, unit from signals "
+            "where pipeline=? and metric_id=? and period=? order by value",
+            (pipeline, sid, period)).fetchall()
+        mass = next((v for et, _, v, _ in rows if et == "aggregate"), None)
+        movers = [(eid, v, u) for et, eid, v, u in rows if et != "aggregate"]
+        if mass is None or not movers or abs(mass) < min_mass:
+            continue
+        if best is None or abs(mass) > abs(best["mass"]):
+            gain = max(movers, key=lambda m: m[1])
+            give = min(movers, key=lambda m: m[1])
+            best = {"sid": sid, "mass": mass, "gain": gain, "give": give,
+                    "subject": _parent_section(sid) if pipeline == "sibc" else sid}
+    con.close()
+    if not best:
+        return None
+    g, gv, gu = best["gain"]
+    l, lv, lu = best["give"]
+    subject = best["subject"].lower()
+    return {
+        "text": (f"Within {subject} lending, the mix is tilting toward {g}. Its slice of "
+                 f"{subject} credit grew by {fmt_value(abs(gv), gu)} over the year, while "
+                 f"{l} gave up {fmt_value(abs(lv), lu)}. Put simply — a bigger share of every "
+                 f"rupee lent to {subject} now goes to {g}."),
+        "signals": [best["sid"]],
+    }
+
+
+def top_banks(scan_metric, period, n=5):
+    """The n largest banks on one scan dimension this period — value + share of the shown set.
+
+    Per-bank rows only (the scan's total rolls them up). Numbers scope to the scan signal."""
+    con = _con()
+    rows = con.execute(
+        "select entity_id, value, unit from signals where metric_id=? and period=? "
+        "  and entity_type='bank' and value is not null order by value desc limit ?",
+        (scan_metric, period, n)).fetchall()
+    con.close()
+    return {"signal": scan_metric,
+            "banks": [{"name": e, "value": fmt_value(v, u)} for e, v, u in rows]}
+
+
+def pair_gaps(pipeline, period, band=3.0):
+    """Fleet-vs-usage pair gaps outside the ±`band` pp null zone (§11.1), each with the two
+    sides' own YoY so the reader sees direction, not just the gap.
+
+    Total-level pair signals only here; the bank-level gap is a separate call in the issue."""
+    reg = load_registry()
+    con = _con()
+    out = []
+    for sid, sig in reg.items():
+        if sig.get("pipeline") != pipeline or sig.get("compute", {}).get("method") != "csv_pair_divergence":
+            continue
+        rows = con.execute(
+            "select entity_type, entity_id, value, unit from signals "
+            "where pipeline=? and metric_id=? and period=?", (pipeline, sid, period)).fetchall()
+        gap = next((v for et, _, v, _ in rows if et == "aggregate"), None)
+        sides = {eid: (v, u) for et, eid, v, u in rows if et == "pair_side"}
+        if gap is None or abs(gap) < band or "a" not in sides or "b" not in sides:
+            continue
+        out.append({"signal": sid, "title": sig["title"],
+                    "gap": fmt_value(gap, "pp"), "gap_val": gap,
+                    "side_a": fmt_value(sides["a"][0], sides["a"][1]), "a_val": sides["a"][0],
+                    "side_b": fmt_value(sides["b"][0], sides["b"][1]), "b_val": sides["b"][0],
+                    "signals": [sid]})
+    con.close()
+    return out
+
+
+# Plain-language labels for each pair so the reader never sees the registry title with
+# "(YoY gap, pp)" showing through (§11.1). (a-side label, b-side label, what the gap is
+# the space between). The bank-level pair has no monthly-issue line — it is deep-read material.
+PAIR_PROSE = {
+    "cc-issuance-vs-spend-gap": ("the number of credit cards", "spending on them",
+                                 "having a card and using it"),
+    "dc-issuance-vs-spend-gap": ("the number of debit cards", "spending on them",
+                                 "having a card and using it"),
+    "pos-fleet-vs-spend-gap": ("the POS machines deployed", "the money flowing through them",
+                               "how many machines there are and how much they handle"),
+    "atm-fleet-vs-withdrawal-gap": ("the ATMs deployed", "the cash withdrawn from them",
+                                    "the size of the ATM fleet and how much it dispenses"),
+}
+
+
+def _dir_word(v):
+    return "grew" if v > 0 else "shrank" if v < 0 else "was flat"
+
+
+def pair_lines(pipeline, period, band=3.0):
+    """Fleet-vs-usage gaps as conversational prose (§11.1) — never the raw signal title."""
+    out = []
+    for g in pair_gaps(pipeline, period, band):
+        prose = PAIR_PROSE.get(g["signal"])
+        if not prose:
+            continue                              # unlabelled pair (e.g. bank-gap) → not here
+        a_lab, b_lab, meaning = prose
+        a, b = g["a_val"], g["b_val"]
+        cap = a_lab[0].upper() + a_lab[1:]       # first letter only — keep POS / ATM casing
+        # Signed values with a neutral verb: the number keeps the sign the database stores
+        # (so it traces), and "moved by" carries no direction word to disagree with it.
+        out.append({
+            "text": (f"{cap} and {b_lab} have pulled apart this year. "
+                     f"{cap} moved by {a:+.1f}% while {b_lab} moved by "
+                     f"{b:+.1f}% — a gap of {g['gap']}, which is the space between {meaning}."),
+            "signals": g["signals"]})
+    return out
+
+
+# ── Credit half: the sector growth table (§11.1) ──────────────────────────────
+
+def sector_growth_table(period, prior):
+    """Every SIBC sector's YoY growth, grouped by parent, with a regime-turned marker.
+
+    The full state of credit, grouped — not just the sub-sectors that flipped. The marker
+    fires only on a REGIME change (grew↔shrank↔flat), never the accelerate↔decelerate
+    wobble that most 'status flips' are (§14). Rows carry their own signal so each rate is
+    scoped to exactly the signal it came from."""
+    from signals.is_news import REGIME
+    reg = load_registry()
+    vals = total_values("sibc", period)
+    con = _con()
+    prior_status = {}
+    if prior:
+        prior_status = {m: s for m, s in con.execute(
+            "select metric_id, status from signals where pipeline='sibc' and period=? "
+            "  and (entity_type='total' or entity_id='total')", (prior,))}
+    con.close()
+
+    groups = {}
+    for sid, sig in reg.items():
+        if sig.get("pipeline") != "sibc" or not sid.endswith("-yoy") or sig.get("layer") != 1:
+            continue
+        if sid not in vals:
+            continue
+        v, u, s = vals[sid]
+        was = prior_status.get(sid)
+        turned = bool(was and REGIME.get(was) and REGIME.get(s) and REGIME[was] != REGIME[s])
+        mark = ""
+        if turned:
+            mark = ("▲ turned up" if REGIME.get(s) == "grow"
+                    else "▼ turned down" if REGIME.get(s) == "shrink" else "→ turned flat")
+        name = (sig.get("chart_series") or [None])[0] or sig["title"].replace(" YoY growth (%)", "")
+        groups.setdefault(_prefix_parent(sid), []).append(
+            {"name": name, "yoy": fmt_value(v, u), "mark": mark, "signals": [sid], "_v": v})
+    order = ["Bank Credit", "Agriculture", "Industry", "Services", "Personal Loans",
+             "Priority Sector", "Other"]
+    return [(g, sorted(groups[g], key=lambda r: -r["_v"])) for g in order if g in groups]

@@ -181,9 +181,18 @@ def check_doc(doc, declared_ids, label="newsletter"):
         # A statgrid is many claims in one block: each stat is checked against its own
         # signal, so a headline number cannot be justified by a neighbouring stat.
         if b["type"] == "statgrid":
+            # Each stat is judged by its own signal(s): a single `signal`, a `signals` list
+            # (a level+YoY tile carries both), else the grid's shared scope. A tile is never
+            # justified by a neighbouring tile's number.
             parts = [(f"{it.get('value', '')} {it.get('label', '')} {it.get('note', '')}",
-                      [it["signal"]] if it.get("signal") else b.get("signals"))
-                     for it in b.get("items", [])]  # each stat judged by its own signal
+                      ([it["signal"]] if it.get("signal") else it.get("signals")) or b.get("signals"))
+                     for it in b.get("items", [])]
+        elif b["type"] == "table":
+            # Each row is judged by its own signals — a group-header/meta row carries no
+            # number, and a data row's cells trace to that row's signals, never a neighbour's.
+            parts = [(" ".join(str(c) for c in row.get("cells", [])),
+                      row.get("signals") or b.get("signals"))
+                     for row in b.get("rows", []) if not (row.get("header") or row.get("meta"))]
         else:
             text = b.get("text") or b.get("label") or ""
             if b.get("label"):
@@ -197,6 +206,97 @@ def check_doc(doc, declared_ids, label="newsletter"):
                     failures.append(f"{label}: ungrounded number {num} in {b['type']!r} "
                                     f"block: {text[:70]!r}")
     return failures
+
+
+# ── Word-vs-number agreement (§11.1) — the first non-number-tracing check since 2g ──
+# A number can trace perfectly and still be printed next to a word that contradicts it:
+# "↑ … −2.6% YoY". Both tokens are grounded, so the number gate is blind to it. This
+# reads the *rate* sign (only %/pp numbers — a level like ₹2.95L Cr has no direction) and
+# the direction cue in the same line, and flags a disagreement.
+
+# Word-boundaried so bare "up"/"down" fire (the spec's "up, −2.6%" example) without
+# tripping on "group"/"update"/"download". The ↑/↓ glyphs match directly.
+_UP_RE = re.compile(r"↑|\b(?:accelerat\w*|strengthen\w*|gained|picked up|rose|higher|"
+                    r"faster|up)\b", re.I)
+_DOWN_RE = re.compile(r"↓|\b(?:slow\w*|declin\w*|fell|falling|gave up|lower|shrank|"
+                      r"shrink\w*|down)\b", re.I)
+# ONLY explicitly-signed rates. "fell 4.3%" is correct English — the word carries the sign,
+# and 4.3 is the magnitude, not a claim that the rate is +4.3. The genuine bug is a rate shown
+# WITH its sign ("up, −2.6% YoY"): there the −2.6 is the value itself and the word contradicts
+# it. So the check fires only on a leading + or −, never on a bare magnitude beside a verb.
+_RATE = re.compile(r"(?<![A-Za-z\d])([-+])(\d+(?:\.\d+)?)\s?(?:%|pp)(?![A-Za-z])")
+
+
+def _rate_signs(text):
+    """Signs of the EXPLICITLY-SIGNED rate numbers (%/pp) in a line — see _RATE."""
+    return [(-1 if m.group(1) == "-" else 1) for m in _RATE.finditer(text)
+            if abs(float(m.group(2))) >= 0.05]
+
+
+def word_number_conflicts(doc):
+    """(hard_fails, warnings). A line whose direction cue disagrees with its own rate sign.
+
+    A conflict in text this layer GENERATED (flip lines, our own prose) is a hard fail —
+    ours to fix now. A conflict inside a VERBATIM card body is a warning carrying the card:
+    that prose is the eval's, fixed upstream at v1.12, never hand-edited here (§11.1)."""
+    hard, warn = [], []
+    for b in doc:
+        if b.get("meta") or b["type"] == "chart":
+            continue
+        texts = ([f"{b.get('title','')} {b.get('body','')} {b.get('implication','')}"]
+                 if b["type"] == "card"
+                 else [f"{b.get('label','')} {b.get('text','')}"])
+        for text in texts:
+            up = bool(_UP_RE.search(text))
+            down = bool(_DOWN_RE.search(text))
+            if up == down:                        # neither, or ambiguous both → skip
+                continue
+            signs = _rate_signs(text)
+            if not signs:
+                continue
+            cue = 1 if up else -1
+            if all(s != cue for s in signs):      # every rate contradicts the word
+                msg = (f"direction says {'up' if up else 'down'} but rate is "
+                       f"{'negative' if cue > 0 else 'positive'}: {text.strip()[:90]!r}")
+                (warn if b["type"] == "card" else hard).append(msg)
+    return hard, warn
+
+
+# Advice voice — a recommendation to the reader ("lenders should…"). Analysis states what
+# is; it does not tell a lender what to do. Forecast — a claim about the future ("will
+# continue", "on track to"). §11.1 is backward-looking; the eval cards are not, so both fire
+# on card prose today and warn until v1.12.
+_ADVICE = re.compile(r"\b(?:should(?:\s+not)?|must(?:\s+not)?|need to|ought to|"
+                     r"focus on|prepare for|watch for|allocate|treat this as)\b", re.I)
+_FORECAST = re.compile(r"\b(?:will\s+(?:continue|keep|likely|remain|widen|persist)|"
+                       r"on track to|set to|poised to|expected to|going to|"
+                       r"through fy\d{2}|next (?:quarter|few quarters|year)|coming months)\b", re.I)
+
+
+def prose_lint(doc):
+    """(hard_fails, warnings) for §10 register + advice + forecast voice. Same warn/fail
+    split as §5.3: a hit in our generated prose is a hard fail; a hit in a verbatim card
+    body warns and feeds the eval-prompt v1.12 fix list — card text is never hand-edited."""
+    hard, warn = [], []
+    for b in doc:
+        if b.get("meta") or b["type"] == "chart":
+            continue
+        card = b["type"] == "card"
+        text = (f"{b.get('title','')} {b.get('body','')} {b.get('implication','')}" if card
+                else f"{b.get('label','')} {b.get('text','')}")
+        sink = warn if card else hard
+        tag = "card" if card else "ours"
+        for p in slot_render.lint_compliance(text):
+            sink.append(f"{tag}: {p}: {text[:70]!r}")
+        low = text.lower()
+        for phrase in slot_render.BANNED:
+            if phrase in low:
+                sink.append(f"{tag}: banned register {phrase!r}: {text[:70]!r}")
+        if _ADVICE.search(text):
+            sink.append(f"{tag}: advice voice: {_ADVICE.search(text).group(0)!r}: {text[:70]!r}")
+        if _FORECAST.search(text):
+            sink.append(f"{tag}: forecast: {_FORECAST.search(text).group(0)!r}: {text[:70]!r}")
+    return hard, warn
 
 
 def _strip_presentation(text, cards):
