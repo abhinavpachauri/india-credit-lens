@@ -229,7 +229,13 @@ def _newsletter_target():
         out = []
         doc, declared, period = monthly.build_doc()
         out.append({"doc": doc, "declared": declared, "label": f"monthly_issue {period}"})
-        doc, _, declared = deep.build_doc()
+        # Measure the actual deliverable — the chosen spine (#8, the POS/UPI risk), not just
+        # the unattended top pick — so the grounded, voice-rendered blocks are under test.
+        from distribution import distribution_sources as _src
+        cands = _src.spine_candidates()
+        idx = next((i for i, c in enumerate(cands, 1)
+                    if c["id"] == "risk_infrastructure_bifurcation"), None)
+        doc, _, declared, _ = deep.build_doc(spine_picks=[idx] if idx else None)
         out.append({"doc": doc, "declared": declared, "label": "deep_read"})
         return out
 
@@ -265,7 +271,7 @@ def _newsletter_target():
     def sites(case):
         out = []
         for bi, b in enumerate(case["doc"]):
-            if b.get("meta") or b["type"] in ("card", "chart"):
+            if b.get("meta") or b["type"] in ("card", "chart", "mermaid"):
                 continue
             if b["type"] == "statgrid":
                 for ii, it in enumerate(b.get("items", [])):

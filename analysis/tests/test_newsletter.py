@@ -153,5 +153,7 @@ def test_live_issues_still_pass_their_own_gate():
     # register in OUR generated text (verbatim card prose warns instead, so is excluded).
     assert word_number_conflicts(doc)[0] == []
     assert prose_lint(doc)[0] == []
-    doc, _, declared = deep.build_doc()
+    doc, _, declared, _ = deep.build_doc()
     assert check_doc(doc, declared, label="deep") == []
+    assert word_number_conflicts(doc)[0] == []
+    assert prose_lint(doc)[0] == []

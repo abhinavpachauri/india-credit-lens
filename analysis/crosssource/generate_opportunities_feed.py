@@ -239,6 +239,9 @@ def _construct_item(p, eco_state, eco_model, eidx, chart_series, db_cache):
             facts.append({k: fact[k] for k in ("id", "value", "unit", "status")})
         rows.append({"role": m.get("role"), "label": f"{ent['label']} ({PIPE_LABEL.get(pipe, pipe)})",
                      "direction": m.get("direction"),
+                     # the member's OWN signal, so a reader-facing basis line scopes to the
+                     # signal its number came from — not the driver's whole evidence set (§11.2 D1)
+                     "signals": [fact["id"]] if fact else [],
                      "value": fact["display"] if fact else DIR_WORD.get(m.get("direction"), "")})
         if len(charts) < 3:
             ref = chart_ref_for_entity(pipe, ent, chart_series, with_caption=True)
@@ -305,6 +308,8 @@ def _loop_item(p, eco_state, eco_model, eidx, chart_series):
             continue
         rows.append({"role": "segment", "label": f"{urn_label(frm)} → {urn_label(to)}",
                      "direction": 1 if st == "active" else -1 if st == "reversed" else 0,
+                     "state": st,                 # loop diagram reads this (§11.2)
+                     "signals": [],               # segment values are words, not numbers
                      "value": LOOP_SEG_WORD.get(st, st)})
 
     charts = []
@@ -406,6 +411,9 @@ def build_cross_system(models, chart_series):
                 rows.append({"role": role,
                              "label": f"{ent['label']} ({PIPE_LABEL.get(pipe, pipe)})",
                              "direction": e.get("from_direction" if role == "leads" else "to_direction"),
+                             # this side's own component signals — the numbers in `display`
+                             # come from exactly these, so a basis line scopes to them (§11.2 D1)
+                             "signals": [f["id"] for f in side_facts],
                              "value": display or DIR_WORD.get(
                                  e.get("from_direction" if role == "leads" else "to_direction"), "")})
                 ref = chart_ref_for_entity(pipe, ent, chart_series, with_caption=True)

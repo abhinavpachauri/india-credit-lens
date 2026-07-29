@@ -88,12 +88,21 @@
             "role": "leads",
             "label": "Credit card spend (value) (Payments)",
             "direction": 1,
+            "signals": [
+              "cc-atm-val-yoy",
+              "cc-ecom-val-yoy",
+              "cc-other-val-yoy",
+              "cc-pos-val-yoy"
+            ],
             "value": "atm -1.0% · ecom +5.0% · other +2366.0% · pos +9.3% YoY"
           },
           {
             "role": "follows",
             "label": "Credit Card Outstanding (Credit)",
             "direction": 1,
+            "signals": [
+              "sibc-pl-cc-yoy"
+            ],
             "value": "+1.3% YoY"
           }
         ],
@@ -253,30 +262,43 @@
             "role": "measures",
             "label": "Credit Card Outstanding (Credit)",
             "direction": 1,
+            "signals": [
+              "sibc-pl-cc-yoy"
+            ],
             "value": "+1.3% YoY"
           },
           {
             "role": "measures",
             "label": "Other Personal Loans (Credit)",
             "direction": 1,
+            "signals": [
+              "sibc-pl-other-yoy"
+            ],
             "value": "+12.5% YoY"
           },
           {
             "role": "measures",
             "label": "Consumer Durables (Credit)",
             "direction": 1,
+            "signals": [
+              "sibc-pl-consumer-durables-yoy"
+            ],
             "value": "-2.6% YoY"
           },
           {
             "role": "measures",
             "label": "Credit card spend (value) (Payments)",
             "direction": 1,
+            "signals": [],
             "value": "rising"
           },
           {
             "role": "proxies",
             "label": "Credit cards outstanding (Payments)",
             "direction": 1,
+            "signals": [
+              "cc-outstanding-yoy"
+            ],
             "value": "+8.5% YoY"
           }
         ],
@@ -453,30 +475,41 @@
             "role": "measures",
             "label": "Credit card spend (value) (Payments)",
             "direction": 1,
+            "signals": [],
             "value": "rising"
           },
           {
             "role": "measures",
             "label": "Debit card spend (value) (Payments)",
             "direction": -1,
+            "signals": [],
             "value": "falling"
           },
           {
             "role": "proxies",
             "label": "POS terminals (Payments)",
             "direction": 1,
+            "signals": [
+              "pos-terminals-yoy"
+            ],
             "value": "-0.5% YoY"
           },
           {
             "role": "proxies",
             "label": "Consumer Durables (Credit)",
             "direction": 1,
+            "signals": [
+              "sibc-pl-consumer-durables-yoy"
+            ],
             "value": "-2.6% YoY"
           },
           {
             "role": "proxies",
             "label": "Vehicle Loans (Credit)",
             "direction": 1,
+            "signals": [
+              "sibc-pl-vehicle-yoy"
+            ],
             "value": "+17.3% YoY"
           }
         ],
@@ -589,18 +622,24 @@
             "role": "segment",
             "label": "Unsecured retail credit appetite → Credit card spend (value)",
             "direction": 1,
+            "state": "active",
+            "signals": [],
             "value": "running"
           },
           {
             "role": "segment",
             "label": "Credit card spend (value) → Credit Card Outstanding",
             "direction": 1,
+            "state": "active",
+            "signals": [],
             "value": "running"
           },
           {
             "role": "segment",
             "label": "Credit Card Outstanding → Unsecured retail credit appetite",
             "direction": 1,
+            "state": "active",
+            "signals": [],
             "value": "running"
           }
         ],

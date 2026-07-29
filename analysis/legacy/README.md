@@ -9,7 +9,7 @@ in the current engines.
 |---|---|
 | `run_evals.py`, `run_atm_pos_evals.py` | `core/gate.py` (single manifest-driven gate, all modes) |
 | `validate.py` (checks 4/5), `validate_claims.py`, `source_claims.py` | `core/validate_system_model.py` (sourcing built in) |
-| `generate_mermaid.py` | retired (subsystem diagrams detached from the gate) |
+| ~~generate_mermaid~~ | **deleted 2026-07-28** — the deep read draws its own loop/constraint diagrams via `analysis/distribution/mermaid.py` |
 | `build_behavioral_layer.py`, `migrate_forces_to_instances.py` | one-time v4.0 build helpers (done) |
 | `generate_atm_pos_analysis_report.py` | Stage 4b (`pipelines/atm_pos/generate_atm_pos_insights.py`) — the no-op "Stage 5.5" |
 | `generate_delta.py`, `backfill_sibc_basis.py` | one-off / orphan tools |

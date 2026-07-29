@@ -1,4 +1,4 @@
-# Distribution Spec v1.4
+# Distribution Spec v1.5
 
 > Authored design for content distribution across newsletter, LinkedIn, X, and the AI PM track.
 > Status: **built** (2026-07-21) — §12 steps 1–4 live; §8 register wiring is the monthly habit.
@@ -13,6 +13,11 @@
 > not advice/forecast, and §5.3 resolves lint scope across surfaces (design prompt gets the full
 > prose lint; no-forecast hard-fails; warn-card / fail-ours split; SEBI precision-fix-first). All
 > three formats now specced. Next: build, harness fix first.
+> **v1.5 (2026-07-29):** §11.2-R deep-read revision — the read must read like a person wrote it.
+> One shared prose/voice layer across all surfaces (build once, reuse); the diagram is representation
+> over the system model, never synthesised; bank "why" is tiered S4a sourcing (official / reputed
+> reports / named-press allowlist), WebFetch-verified, cost paid once and cached. Design agreed;
+> Part 1 (prose + diagram) then Part 2 (S4a sourcing) — builds ahead.
 > Run it: `python3 analysis/distribution/generate_slot.py --slot 7th` (or `--all` to rehearse
 > a whole month). Every slot self-gates; see `validate_distribution.py`.
 > Related: `NEWSLETTER_CONTEXT.md` (long-form channel) · `analysis/legacy/replydesk/` (X, retired — see §9)
@@ -546,10 +551,14 @@ into the register. Whether to log it is a build-time call, not a debt this templ
 
 ### 11.2 Post 2 — deep read (14th)
 
-**Template aligned 2026-07-23 (design session; build is a later session).** The deep read is **not
-entirely automatable, by design** — it is an editorial product with a human editor. Structurally it
-is **a computed floor plus an editorial spine**: one part always computes and needs no judgment; the
-other is a question (or questions) the editor chooses from a machine-ranked list.
+**BUILT 2026-07-28** (template aligned 2026-07-23). `analysis/distribution/issues/deep_read.py` —
+`--shortlist` ranks spine candidates, `--spine 1,3` picks, no pick → top spine (unattended). Part A
+computed, Part B editorial. Self-gated (per-block traceability incl. the D1 basis-scope fix + the
+word/number + prose lints + the bank-sourcing store gate), measured (basis-line scope cut ~35× to a
+65-value median with 99.7% in-range catch held), 14 unit tests. The deep read is **not entirely
+automatable, by design** — it is an editorial product with a human editor. Structurally it is **a
+computed floor plus an editorial spine**: one part always computes and needs no judgment; the other is
+a question (or questions) the editor chooses from a machine-ranked list.
 
 **What it is.** Not a second scan — the 1st already reported what moved. The deep read takes **one or
 more questions that have been building across the data** and answers each with sourced evidence.
@@ -641,13 +650,11 @@ Charts follow the **screenshot-placeholder** convention of §11.1 — a reproduc
 `> 📊 [CHART — replace with screenshot]` marker, so the editor takes the exact screenshot. Mermaid
 diagrams for loops/constraints render **inline** (they are generated, not screenshotted).
 
-**Mermaid render lives in the distribution layer — not referenced from legacy.** The deep-read
-diagram needs only a small loop/constraint renderer, not the 32 KB system-model/subsystem generator
-in `analysis/legacy/generate_mermaid.py`. Build it *into* the distribution layer (a focused render in
-the distribution module), salvaging whatever is useful from the legacy script, and **retire the
-legacy file** once done — no lingering cross-reference into `legacy/`. Same discipline the platform
-applied to the reply desk and newsletter v1: a capability that becomes live moves into the live
-layer; it is not consumed from the archive.
+**Mermaid render lives in the distribution layer — not referenced from legacy.** DONE (2026-07-28):
+`analysis/distribution/mermaid.py` is a focused loop/constraint renderer (two shapes, ~120 lines);
+the 821-line legacy system-model/subsystem generator was **deleted**, not archived — no lingering
+cross-reference into `legacy/`. Same discipline the platform applied to the reply desk and newsletter
+v1: a capability that becomes live moves into the live layer; it is not consumed from the archive.
 
 #### Honest nulls · prose · direction render · gate · measurement
 
@@ -669,6 +676,171 @@ layer; it is not consumed from the archive.
 `generate_opportunity_narrative` prints raw floats (`120454115.0 credit cards`, `1358241.0 micro
 ATMs`, `12.0 periods`). Worst in this format because it is opportunity-narrative prose. Fix is
 upstream formatting, not this template (§14).
+
+---
+
+### 11.2-R — v1.5 revision (2026-07-29): the read must read like a person wrote it
+
+The first build (2026-07-28) got the *skeleton* right — computed floor, editorial spine, gated
+numbers — but the *prose* still read like machine output: `A → B: running` basis lines, a terse
+jargon "so what", a 3-node triangle drawn as if it were an insight, and an empty "Bank angle" with
+no real sourcing. A 7-minute editorial read for a lending audience cannot read that way. Three
+mechanisms fix it, and each is **built once and reused**, not bolted onto this one template.
+
+#### R1 — One prose layer, every surface (`analysis/core/voice.py`)
+
+The voice is not a deep-read concern; it is the platform's reader-facing voice, and it appears in the
+two monthly issues, the LinkedIn blurbs, the deep read, **and** the LLM-sourced why (R3). Today its
+rules are scattered — `slot_render.lint_compliance`/`BANNED`, `validate_distribution.prose_lint`,
+`relational_insights` prose, `core.traceability`. That is exactly the parallel-copy the platform
+forbids. Consolidate into **one voice layer** that every generator calls:
+
+- **The voice, defined once.** Indian conversational English; short sentences; lakh/crore never
+  million/billion; no consulting register (`BANNED`); no advice or forecast verbs in the machine's own
+  words; understandable by a reader with basic lending experience and no analyst jargon
+  (`non-food`, `base effect`, `yield`, `entrenched`, `firing on all cylinders` are all out).
+- **The lint, once.** `voice.lint(text, mode) → (hard, warn)` subsumes both existing linters. Every
+  surface — deterministic template *and* LLM output post-check — runs the same lint.
+- **Conversational builders, once.** Small helpers turn a *gated fact* into a plain sentence
+  (`voice.change(...)`, `voice.level(...)`, direction phrasing, "put simply"). The deep read's basis,
+  intros and "so what"; the monthly issue's rotation/pair lines; `relational_insights` — all render
+  through these, so the voice cannot drift between surfaces.
+- **What does NOT move**: number grounding stays `core.traceability`; measurement stays
+  `measure_groundedness`. Voice sits beside them, not on top.
+
+Applied to the deep read:
+
+- **Basis → sentences.** `Unsecured retail credit appetite → Credit card spend: running` becomes
+  *"Appetite for unsecured credit is showing up as more card spending; that spending piles up as
+  bigger card balances; and those balances are themselves a sign the appetite is real."* Numbers stay
+  scoped to their own member signal (the D1 fix holds); only the *wording* changes.
+- **"So what" = a plain observation, not a prescription.** The machine says what it means for a
+  lender, in plain words, with no advice/forecast verb. The sharp, prescriptive take stays the
+  **editor's** — the handwritten/reMarkable layer (the machine deliberately withholds it; that gap is
+  the human's, per the strategic note). This is a design boundary, not a limitation.
+- **What is replaced vs kept.** The machine-y basis lines (`A → B: running`) and the boilerplate
+  implication (`Move on this while the trend is still running in your favour` — backwards on a risk)
+  are **dropped**, replaced by the voice-rendered read + the plain "so what". The one thing kept
+  verbatim is the **substantive validated body** — for #8, *"merchants who drop POS terminals cannot
+  accept international cards, EMI, premium credit-card features…"* — because that is real, gated depth,
+  not consulting-speak, and rewording it would forfeit the verbatim guarantee. Consulting register
+  that does slip into a body still **warns** (never hand-edited; fixed upstream at eval v1.12). The
+  title is dropped (the heading names the subject; the feed title carries a dashboard-state suffix).
+
+**Ground truth + control (non-negotiable, same as everywhere).** Every voice-rendered block carries
+its signal scope; the injection harness measures catch across **all** surfaces, reported per surface;
+the voice lint is negative-tested. No prose ships on "reads nicely" — it ships on a measured catch
+rate and a passing lint, like every number does.
+
+#### R2 — The diagram is representation, not generation (model → mermaid)
+
+A diagram must show the **real structure the system model already holds**, not a shape synthesised in
+the distribution layer. `mermaid.py` is demoted to a pure renderer: it takes `(nodes, edges, note)`
+and draws; it never invents a node. The **graph is extracted from `system_model.json` /
+`ecosystem_model.json`** for the chosen spine:
+
+- **loop** → the loop's constructs **plus their member signals** and the loop edges (the rich graph,
+  not the 3-segment triangle);
+- **construct** → the construct and the series that measure it;
+- **risk / opportunity** → the sourced **force → mechanism node → affected signals** subgraph (e.g.
+  #8: `force_upi_zero_mdr → acceptance infrastructure → POS/UPI divergence`);
+- **constraint** → the two operand sources → ratio → corridor.
+
+The diagram earns its place when that extracted subgraph is non-trivial (more than a bare edge). **If
+the model cannot produce a diagram worth showing, that is a model gap to revisit** — not a cue to
+draw a decorative triangle. This resurrects the *intent* of the deleted `generate_mermaid` (draw the
+model) as a focused, per-spine representation, without its 821-line weight.
+
+#### R3 — Bank "why": tiered S4a sourcing, cost paid once and cached
+
+The bank angle carries a real, sourced *why* for the featured banks — and a why is a claim about the
+world, so it is sourced and verified, never inferred. The engine and its trust contract:
+
+- **Tiered source registry (extends S4).** S4 today validates forces against **Tier 1** only. It is
+  widened to a per-tier **allowlist** — a source not on the list is *rejected*, so "reputed" is
+  auditable, not a judgment call:
+  - **Tier 1 — Official/regulatory**: RBI, PIB/Cabinet, Union Budget, SEBI, NPCI, bank regulatory
+    filings/disclosures.
+  - **Tier 2 — Reputed structured reports**: credit bureaus (CIBIL/TransUnion, CRIF, Equifax), rating
+    agencies (CRISIL, ICRA, CARE), RBI bulletins, industry bodies (PCI, IBA), payments processors'
+    published reports (e.g. Worldline India Digital Payments Report).
+  - **Tier 3 — Named financial press**: a fixed allowlist (see §11.2-R allowlist below), never "any
+    article".
+- **Every entry**: `bank`, `dimension`, `why`, `url`, **verbatim `excerpt`**, `date`, `tier`,
+  `status`. Publishing requires `status: verified` **and** a WebFetch check that the excerpt
+  **literally appears on the page** — the deterministic, free step that kills the hallucinated-URL
+  risk. Nothing is auto-trusted (`bank_sourcing.validate_entry`, already built, extends to carry the
+  tier + the fetch check).
+- **Cost is paid once, at the S4a step, then cached.** The LLM proposes the why + candidate sources
+  (web-search enabled) and WebFetch verifies them; the verified result is written to the gated store.
+  **Deep read generation reads the store deterministically — zero API cost per render**, however many
+  times the issue is regenerated or the spine re-picked. Re-sourcing runs on a cadence (monthly, or
+  when a new bank diverges), bounded to the featured banks (~top 3 public + 3 private per dimension).
+  Estimated cost per sourcing run: ~₹0 via the `claude -p` CLI path the evals use, up to ~$2 on the
+  Opus API — amortised to ≈0 per read.
+- **Tier discipline in the render.** A Tier-1/2 source publishes as the primary *why*; a Tier-3 press
+  source is labelled as such and is preferred as the **corroborating** second reference ("others are
+  seeing it too"). No verified source in any tier → the honest fallback: the computed divergence is
+  the read, and the post says so. **A why is never paraphrased from the model or invented to fill the
+  slot.**
+- **Negative-tested**: a fabricated URL (excerpt not on the page) is rejected; a source off the
+  allowlist is rejected; a `status: verified` entry missing its excerpt fails the store gate.
+
+**Built + measured (2026-07-29).** The engine is live in `bank_sourcing.py`: tiered allowlist +
+`tier_of` + `validate_entry` (host-on-allowlist + declared-tier match + excerpt-verified + status) +
+`excerpt_on_page` (the pure verification) + `add_bank_claim` (verify → gate → write) + an `add` CLI.
+Six unit tests cover tier resolution, excerpt verification, the gated writer, and a tier-lie.
+
+**Operational finding — the verification channel matters as much as the allowlist.** On the first
+live run for #8, the automated fetch (Claude Code WebFetch, i.e. Anthropic's crawler) was **403'd by
+essentially every relevant Indian source** — PIB, NPCI, Business Standard — and `web.archive.org` is
+unreachable to it; a permissive control (Wikipedia) fetched fine, so the tool works and the *sites*
+block the crawler. The gate behaved correctly: **it published nothing**, because nothing could be
+verified. The Anthropic API's own `web_search` uses the same crawler identity, so a "direct API" path
+does not get past this; spoofing a browser user-agent to evade a site's bot block is out of scope. The
+resolution (decided with the user): the excerpt is verified against page text obtained through a
+channel the sites permit — **the editor's own logged-in browser** (Claude-in-Chrome → `get_page_text`)
+or a paste — fed to the same `excerpt_on_page` anchor. `add_bank_claim(entry, page_text)` is agnostic
+to how the text was obtained, so this is a channel choice, not an engine change. Until a source is
+verified through such a channel, the Bank angle renders its honest fallback.
+
+**Live population succeeded via the editor's Chrome (2026-07-29).** With the user's browser connected,
+#8 earned **two verified corroborations**, each excerpt confirmed literally on the page via
+`get_page_text` → `excerpt_on_page`: a **Tier-1 official** PIB release ("Advancing Cashless India")
+grounding the zero-MDR driver, and a **Tier-3 press** Business Standard piece ("…may hurt PoS machines
+deployment") triangulating the POS side. The deep read renders the official one as "On the official
+record" and the press one as "Others are seeing it too", each tier-labelled with its link. Per-bank
+POS-divergence *whys* were searched and none met the bar (no citable third-party source per bank), so
+the Bank angle stays its honest fallback — the mechanism publishing what verifies and refusing what
+does not. Two presentation-only leaks surfaced and were fixed at the strip (URLs and FY/budget-year
+ranges are locators/dates, not figures).
+
+#### Build sequence (agreed 2026-07-29)
+
+Part 1 (no API): R1 prose layer + R2 model-sourced diagram, on the chosen spine (**#8 — POS acceptance
+contracting while UPI grows**). Part 2: R3 — extend S4 to the tiered registry, run S4a sourcing on
+#8's featured banks with LLM + WebFetch, cache to the store; the deep read then renders the cache for
+free. Each part self-gated and measured before the next.
+
+#### §11.2-R Tier-3 press allowlist
+
+The **only** general-press mastheads admissible as a Tier-3 source, by URL host. Anything not on this
+list is rejected by the S4 gate regardless of how the LLM proposes it:
+
+| Masthead | Host(s) |
+|---|---|
+| The Economic Times | economictimes.indiatimes.com |
+| Business Standard | business-standard.com |
+| Mint | livemint.com |
+| The Hindu BusinessLine | thehindubusinessline.com |
+| Financial Express | financialexpress.com |
+| Moneycontrol | moneycontrol.com |
+| Reuters | reuters.com |
+| Bloomberg | bloomberg.com |
+
+Adding a masthead is a deliberate edit to this table (and the gate's allowlist), never an inline
+call. Tier-3 is always labelled press in the render and never outranks a Tier-1/2 source for the same
+claim.
 
 ---
 

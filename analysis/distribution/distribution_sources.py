@@ -773,3 +773,205 @@ def sector_growth_table(period, prior):
     order = ["Bank Credit", "Agriculture", "Industry", "Services", "Personal Loans",
              "Priority Sector", "Other"]
     return [(g, sorted(groups[g], key=lambda r: -r["_v"])) for g in order if g in groups]
+
+
+# ── Deep read Part A: banks this month (§11.2) — computed, no editorial call ───
+# Bank rotation + divergence are the L1 payments signals the monthly issue deliberately
+# drops (§11.1 §7), freed to anchor the deep read. SIBC has no per-bank data, so Part A is
+# a payments section by construction. The one build-time input is WHICH banks to show —
+# a priority ranking by size of move, never a judgement about which story matters.
+
+_ACRONYMS = {"SBM", "HSBC", "RBL", "SBI", "HDFC", "ICICI", "IDBI", "IDFC", "CSB", "DCB",
+             "AU", "YES", "IDFC", "RBL", "NKGSB", "TJSB", "AB", "ESAF", "UCO", "NSDL"}
+
+
+def bank_name(raw):
+    """A db bank name ('SBM BANK INDIA LTD') in reader case ('SBM Bank India'). Keeps known
+    acronyms upper, drops the corporate-suffix noise."""
+    words = []
+    for w in raw.replace(".", "").split():
+        if w in ("LTD", "LIMITED", "THE"):
+            continue
+        words.append(w if w in _ACRONYMS else w.title())
+    return " ".join(words)
+
+
+# The three payments dimensions, in reader order. Each has a category-rotation signal
+# (bank-category share shifts) and a bank-divergence signal (banks vs their own category).
+BANK_DIMENSIONS = [
+    ("Credit cards", "cc-category-rotation", "cc-bank-divergence"),
+    ("Debit cards", "dc-category-rotation", "dc-bank-divergence"),
+    ("POS terminals", "pos-category-rotation", "pos-bank-divergence"),
+]
+
+
+def bank_rotation(period, min_mass=0.3):
+    """Who's rotating — bank-category share shifts per dimension, gain vs give.
+
+    Reads each category-rotation signal's own rows: aggregate = rotation mass (pp), the
+    bank_category rows = each category's Δshare. Honest-null under `min_mass`. Each returned
+    line scopes to its rotation signal so its numbers trace to exactly that signal."""
+    con = _con()
+    out = []
+    for dim, rot_sid, _ in BANK_DIMENSIONS:
+        rows = con.execute(
+            "select entity_type, entity_id, value, unit from signals "
+            "where pipeline='atm_pos' and metric_id=? and period=? order by value desc",
+            (rot_sid, period)).fetchall()
+        mass = next((v for et, _, v, _ in rows if et == "aggregate"), None)
+        movers = [(eid, v, u) for et, eid, v, u in rows if et == "bank_category"]
+        if mass is None or abs(mass) < min_mass or not movers:
+            continue
+        gain, give = movers[0], movers[-1]
+        out.append({"dimension": dim, "signal": rot_sid,
+                    "gain": {"category": gain[0], "delta": fmt_value(abs(gain[1]), gain[2])},
+                    "give": {"category": give[0], "delta": fmt_value(abs(give[1]), give[2])},
+                    "signals": [rot_sid]})
+    con.close()
+    return out
+
+
+def bank_divergence(period, n=3):
+    """Who's diverging — banks pulling away from (or falling behind) their own category.
+
+    Flagged rows only (the compute already thresholds). Ranks by gap size and shows the `n`
+    biggest on each side per dimension. Each row scopes to its divergence signal."""
+    con = _con()
+    out = []
+    for dim, _, div_sid in BANK_DIMENSIONS:
+        rows = con.execute(
+            "select entity_id, value, unit from signals "
+            "where pipeline='atm_pos' and metric_id=? and period=? and entity_type='bank' "
+            "  and value is not null order by value desc", (div_sid, period)).fetchall()
+        if not rows:
+            continue
+        ahead = [{"bank": bank_name(e), "gap": fmt_value(v, u), "_v": v} for e, v, u in rows if v > 0][:n]
+        behind = [{"bank": bank_name(e), "gap": fmt_value(v, u), "_v": v}
+                  for e, v, u in rows if v < 0][-n:]
+        out.append({"dimension": dim, "signal": div_sid,
+                    "pulling_away": ahead, "falling_behind": behind, "signals": [div_sid]})
+    con.close()
+    return out
+
+
+# ── Deep read Part B: the spine shortlist (§11.2) — machine ranks, editor picks ─
+# Candidates are drawn from the composed model (L2/L3): the cross-system reads (loops,
+# constructs, cross-edges), the live pipeline openings and risks (each carrying its sourced
+# force), and the reconciliation constraints (always a valid "is this normal?" question).
+# The machine says what changed and how fresh it is; the human says which one matters.
+
+# Base weight per spine kind — a fresh cross-system read or a firing loop is the strongest
+# candidate; a long-running pipeline opening is weaker unless its story just changed. This is
+# the ranking, not a filter: the editor sees every candidate and can override.
+_SPINE_WEIGHT = {"eco_loop": 5.0, "constraint": 4.5, "cross_edge": 4.0, "construct": 3.5,
+                 "risk": 3.0, "opportunity": 2.5}
+
+# Spine kinds that rest on a loop or a reconciliation constraint earn an inline diagram (§11.2).
+_DIAGRAM_KINDS = {"eco_loop", "constraint"}
+
+
+def _clean_spine_label(title):
+    """The subject of a cross-system card, without the state suffix a title carries for the
+    dashboard ('… — running (3/3 segments live)'). Used only for the question heading."""
+    return re.split(r"\s+[—–-]\s+", title)[0].split("(")[0].strip()
+
+
+def _spine_question(kind, item):
+    """A plain, backward-looking question heading for a candidate — never a number, never a
+    forecast. The published spine card quotes the item's own gate-validated prose; this is
+    only the shortlist label and the section heading."""
+    title = (item.get("title") or "").strip()
+    label = item.get("_label") or title
+    if kind == "eco_loop":
+        return f"Is the {label.lower()} really running, or is one side just moving on its own?"
+    if kind == "construct":
+        return f"Is {label.lower()} broad-based, or is one series doing all the work?"
+    if kind == "cross_edge":
+        return f"{title} — is that a real opening or just timing?"
+    if kind == "constraint":
+        return f"{label} — stretched, or normal?"
+    if kind == "risk":
+        return f"{title} — how real is this risk?"
+    driver = item.get("_driver")
+    return f"{driver}: is it a durable opening?" if driver else f"{title} — does it hold up?"
+
+
+def _constraint_candidates(registry):
+    """Reconciliation constraints as spine candidates — always available, firing or not,
+    because 'is ₹X per card normal?' is a good question whether or not the check breached."""
+    st = sorted((ROOT / "analysis" / "cross_source").glob("ecosystem_state_*.json"))
+    model_p = ROOT / "analysis" / "cross_source" / "ecosystem_model.json"
+    if not st or not model_p.exists():
+        return []
+    state = json.loads(st[-1].read_text()).get("constraint_states", {})
+    model = {c["id"]: c for c in json.loads(model_p.read_text()).get("constraints", [])}
+    out = []
+    for cid, cx in model.items():
+        cs = state.get(cid, {})
+        operands = cx.get("operands", [])
+        out.append({
+            "id": cid, "kind": "constraint",
+            "_label": cx.get("label", cid),
+            "title": cx.get("label", cid),
+            "state": cs.get("state", "unknown"),
+            "signals": [op.get("signal_id") for op in operands if op.get("signal_id")],
+            "operands": operands,
+            "supports": [cx.get("relation", "")[:90]],
+        })
+    return out
+
+
+def spine_candidates():
+    """Every deep-read spine candidate, ranked (freshest strong kind first). Down-ranks a
+    spine KIND used within the ledger's ~6-month window (§11.2 §5). Deterministic — the
+    editor reads this and picks."""
+    from distribution import ledger
+    feed = opportunities_feed()
+    recent = ledger.recent_spine_kinds()          # {kind: months_ago}
+    cands = []
+
+    for c in feed.get("cross_system", []):
+        if c.get("status") in ("closed", "retired"):
+            continue
+        kind = (c.get("driver") or {}).get("kind", "cross_edge")
+        basis = c.get("basis") or {}
+        cands.append({
+            "id": c.get("id"), "kind": kind, "_label": _clean_spine_label(c.get("title", "")),
+            "title": c.get("title", ""), "item": c,
+            "signals": c.get("evidence_all") or c.get("evidence") or [],
+            "supports": [m.get("label", "") for m in basis.get("members", [])][:4],
+            "diagram": kind in _DIAGRAM_KINDS,
+        })
+
+    for pl, items in feed.get("pipelines", {}).items():
+        for it in items:
+            if it.get("status") in ("closed", "retired"):
+                continue
+            kind = "risk" if it.get("tier") == "risk" else "opportunity"
+            cands.append({
+                "id": it.get("id"), "kind": kind, "_label": it.get("title", ""),
+                "title": it.get("title", ""), "item": it, "_driver": it.get("_driver"),
+                "signals": it.get("evidence_all") or it.get("evidence") or [],
+                "supports": [x for x in ([it.get("_driver"), it.get("_via")] if kind == "opportunity"
+                                         else (it.get("chain") or [])[:2]) if x],
+                "diagram": False,
+            })
+
+    for cx in _constraint_candidates(load_registry()):
+        cx["item"] = cx
+        cx["diagram"] = True
+        cands.append(cx)
+
+    from distribution import model_graph
+    for c in cands:
+        months_ago = recent.get(c["kind"])
+        fresh_penalty = 0.0 if months_ago is None else max(0.0, 3.0 - 0.4 * months_ago)
+        c["question"] = _spine_question(c["kind"], c)
+        # The diagram flag now reflects what the MODEL can actually draw (§11.2-R2): a spine
+        # earns a diagram only if its subgraph is non-trivial, not because of its kind.
+        c["diagram"] = model_graph.subgraph_for(c) is not None
+        c["fresh"] = ("never used recently" if months_ago is None
+                      else f"same kind ran {months_ago} month(s) ago → down-ranked")
+        c["score"] = _SPINE_WEIGHT.get(c["kind"], 1.0) - fresh_penalty
+    cands.sort(key=lambda c: (-c["score"], c.get("id") or ""))
+    return cands

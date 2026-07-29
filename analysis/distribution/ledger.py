@@ -97,6 +97,44 @@ def record_skip(slot, category, fallback_category, reason, when=None):
     save(ledger)
 
 
+# How long a deep-read spine KIND must rest before it should lead again (§11.2 §5). Longer
+# than the signal reuse window: a spine is an editorial angle, and running the same kind of
+# argument two months running is repetitive even when the underlying signals differ.
+SPINE_FRESH_MONTHS = 6
+
+
+def _months_between(a, b):
+    ay, am = int(a[:4]), int(a[5:7])
+    by, bm = int(b[:4]), int(b[5:7])
+    return abs((ay * 12 + am) - (by * 12 + bm))
+
+
+def record_spines(kinds, when=None):
+    """Record which spine KINDS a deep read ran, so `recent_spine_kinds` can down-rank a
+    repeat. Idempotent per date — re-running the generator replaces that day's record."""
+    ledger = load()
+    when = when or date.today().isoformat()
+    hist = [h for h in ledger.get("spine_history", []) if h.get("date") != when]
+    hist.append({"date": when, "kinds": sorted(set(kinds)),
+                 "recorded_at": datetime.now().isoformat(timespec="seconds")})
+    hist.sort(key=lambda h: h["date"])
+    ledger["spine_history"] = hist
+    save(ledger)
+
+
+def recent_spine_kinds(when=None, window_months=SPINE_FRESH_MONTHS):
+    """{spine_kind: months_ago} for kinds run inside the freshness window. Absence from the
+    map means the kind is fresh (never run recently)."""
+    when = when or date.today().isoformat()
+    out = {}
+    for h in load().get("spine_history", []):
+        gap = _months_between(h["date"], when)
+        if 0 < gap <= window_months:
+            for k in h.get("kinds", []):
+                out[k] = min(gap, out.get(k, gap))
+    return out
+
+
 def _days_between(a, b):
     return abs((date.fromisoformat(a) - date.fromisoformat(b)).days)
 

@@ -159,6 +159,55 @@
      "date": "2026-07-23",
      "how_measured": "grep advice/forecast/million patterns in evaluations/{sibc,atm_pos}/*.json before vs after v1.12. Units fixed DETERMINISTICALLY (evaluate.normalize_units at write, not the prompt) since the model reverts to M/K however firmly asked; core.traceability extended to scale crore/lakh so the converted values still trace (Check 2g: 89 insights, 4c: 10 LLM cards — both PASS through the units refactor; golden tests unchanged).",
      "source": "analysis/signals/evaluate.py normalize_units + analysis/core/traceability.py + analysis/signals/prompts/domain_eval_system.txt"
+    },
+    {
+     "metric": "deep read D1 basis-line scope tightening (§11.2) — width + catch",
+     "value": "median candidate-value scope per basis line dropped from ~2,258 (driver-wide evidence_all, handoff §2 D1) to 65 (max 461) once each 'how we know' line scoped to its OWN member signal. In-range catch held at 99.7% and near-miss at 99.9% across 71 D1 sites (both long-form issues); false-rejection 1/71; the untouched deep read passes the gate whole (0 failures).",
+     "date": "2026-07-28",
+     "how_measured": "measure_groundedness.py (injects EVERY block) — scope-width report + n=50 near-miss/in-range injections per site, seed 7. Enabled by attaching per-member `signals` upstream in generate_opportunities_feed.py so a basis line grounds against exactly the signal its number came from.",
+     "source": "analysis/measure_groundedness.py · analysis/crosssource/generate_opportunities_feed.py · analysis/distribution/issues/deep_read.py::basis_lines"
+    },
+    {
+     "metric": "deep read negative test — planted number into a member-scoped basis line",
+     "value": "a fabricated 91.7% appended to a construct-spine basis line (scoped to its member's own -yoy signal, ~1-50 candidate values) is REJECTED by check_doc; without the D1 tightening it would have grounded in the ~2,258-wide evidence_all pool.",
+     "date": "2026-07-28",
+     "how_measured": "unit test test_deep_read.py::test_tightened_basis_scope_catches_a_planted_number (deterministic, not synthetic).",
+     "source": "analysis/tests/test_deep_read.py"
+    },
+    {
+     "metric": "bank 'why' sourcing gate — never-auto-trusted (§11.2)",
+     "value": "3/3 negative cases blocked: a status!='verified' entry never publishes; a 'verified' entry missing its URL fails validate_store; the shipped store is empty and passes its own gate (0 fails) → deep read falls back to computed basis. No fabricated source can reach the reader.",
+     "date": "2026-07-28",
+     "how_measured": "bank_sourcing.validate_entry/validate_store + unit tests (unverified, verified-but-incomplete, empty-store-clean).",
+     "source": "analysis/distribution/bank_sourcing.py · analysis/tests/test_deep_read.py"
+    },
+    {
+     "metric": "shared voice layer (§11.2-R1) — deep read #8 conversational prose, measured",
+     "value": "The machine-y basis lines and terse so-what were replaced by voice-rendered plain prose over gated facts. Groundedness held: D1 per-block catch 100% near-miss / 99.0% in-range across 73 sites, false-rej 1/73; the #8 grounded YoY blocks (scope band 1-50) catch 100%/99.6%; the untouched deep read passes whole (0/2). Voice lint (advice/forecast/banned) hard-fails on our own words — #8 renders with 0 hard prose failures.",
+     "date": "2026-07-29",
+     "how_measured": "measure_groundedness.py now injects the CHOSEN spine (#8) not just the top pick. voice.lint consolidates slot_render + validate_distribution rules into one layer that every surface calls (validate_distribution.prose_lint/word_number_conflicts now delegate); 233 unit tests green.",
+     "source": "analysis/core/voice.py · analysis/distribution/validate_distribution.py · analysis/measure_groundedness.py"
+    },
+    {
+     "metric": "model-sourced diagram (§11.2-R2) — every node/edge from the system model",
+     "value": "The #8 diagram is a 5-node SIGNED subgraph extracted from system_model.json (force_upi_zero_mdr --drives(+)--> UPI QR, --suppresses(-)--> POS terminals, --creates_risk--> the bifurcation), 0 nodes synthesised in the distribution layer. mermaid.py demoted to a pure renderer of (nodes, edges). Trivial subgraphs (< 3 nodes / < 2 edges) are suppressed — negative-tested — so a spine the model can't draw gets no diagram rather than a decorative triangle.",
+     "date": "2026-07-29",
+     "how_measured": "model_graph.subgraph_for + mermaid.render; unit tests test_chosen_spine_diagram_comes_from_the_model + test_trivial_subgraph_is_suppressed.",
+     "source": "analysis/distribution/model_graph.py · analysis/distribution/mermaid.py · analysis/tests/test_deep_read.py"
+    },
+    {
+     "metric": "S4a bank-sourcing gate (§11.2-R3) — tiered allowlist + WebFetch excerpt-verification, negative-tested",
+     "value": "The engine publishes a bank 'why' only if: host is on the tier allowlist (T1 official / T2 reputed reports / T3 named press), declared tier matches the host, AND the verbatim excerpt literally appears on the fetched page. 6 unit tests: fabricated excerpt REJECTED, off-allowlist host REJECTED, tier-lie REJECTED, real-excerpt-on-allowlisted-host WRITTEN. Store ships empty and passes its own gate (0 fails).",
+     "date": "2026-07-29",
+     "how_measured": "analysis/tests/test_deep_read.py tiered-gate tests; bank_sourcing.validate_entry + excerpt_on_page + add_bank_claim.",
+     "source": "analysis/distribution/bank_sourcing.py · analysis/tests/test_deep_read.py"
+    },
+    {
+     "metric": "S4a live population (§11.2-R3) — real verified sources for #8 via the editor's Chrome",
+     "value": "2 corroborations written, both excerpt-verified literally on the page: PIB 'Advancing Cashless India' (Tier-1 official, grounds zero-MDR) + Business Standard 'may hurt PoS machines deployment' (Tier-3 press, triangulates POS decline). Fetched through the user's logged-in Chrome (get_page_text) because the automated crawler is 403'd. Per-bank whys: 0 met the bar (no citable per-bank source) -> honest fallback. Store: 0 bank_claims, 2 corroborations, validate_store clean.",
+     "date": "2026-07-29",
+     "how_measured": "bank_sourcing.add_corroboration(entry, page_text) with excerpt_on_page verification; store audited by validate_store; deep read renders both, tier-labelled.",
+     "source": "analysis/distribution/bank_sourcing.json · analysis/distribution/bank_sourcing.py"
     }
    ],
    "observations": [
@@ -176,7 +225,23 @@
     "is-news selector design: the first cut flipped on ~50% of signals because status wobbles accelerating<->decelerating (strengthening<->active) every noisy month while still growing. Fixed by counting a flip only on a REGIME change (growing<->shrinking<->flat), not the within-regime wobble; the wobble is demoted to the weakest factor (crossed, weight 1) and can never make something a read alone. Second finding: labelling ALL share signals as templates was too coarse -- a share at an all-time reversal record (credit-cards' share of personal loans) is a legitimate read, not a template. The clean template is a share that ALSO didn't move.",
     "Building the merged monthly issue surfaced 6 advice/forecast warnings in verbatim card prose (the is-news reads inherit LLM-eval consulting-speak: 'Lenders should allocate capital exclusively to UPI QR', 'the ratio will continue widening through FY27'). These are WARNINGS not failures by design (Sec 11.1 / Sec 5.3): card prose is the eval's, fixed upstream at prompt v1.12, never hand-edited in the renderer. The new prose_lint's advice+forecast detectors make that fix list visible for the first time -- 6 concrete card-prose items feeding v1.12.",
     "is-news + magnitude factor (reco b): adding magnitude (>2x typical move, weight 2) surfaced large-corporate +14.4% YoY as a credit read it would have missed on record/regime alone. Trade-off measured: selectivity rose to 48.7% of signals clearing the read floor this cycle (a broad-growth month) -- the top-2 reads stay unambiguous but 'a read is the exception' weakens; tunable via MAGNITUDE_MULT. Template-reject held at 100%. Second note: the word-vs-number check had a false-positive class on legitimate 'fell 4.3%' prose (word carries the sign, magnitude is unsigned); fixed by firing only on EXPLICITLY-signed rates (the real 'up, -2.6%' bug), plus word-boundary cues so bare up/down fire without tripping on group/update.",
-    "Determinism-vs-judgment lesson (seeds topic #5): unit formatting is MECHANICAL and must not be an LLM job — v1.12's prose rule 'counts in lakh/crore, never millions' leaked badly (120.5M, 1.02M, 147K all over atm_pos) however firmly stated, because the model reliably reverts to M/K. Moving it to a deterministic post-pass (normalize_units at eval write) fixed it 100% by construction. Prose voice/advice/forecast, which IS judgment, correctly stayed a prompt fix. Also found: a prompt can defeat its own rule — v1.12 banned 'entrenched' on one line while the streak-type guide taught 'long streak = entrenched trend' on another; fixing the contradiction cut entrenched 7→1."
+    "Determinism-vs-judgment lesson (seeds topic #5): unit formatting is MECHANICAL and must not be an LLM job — v1.12's prose rule 'counts in lakh/crore, never millions' leaked badly (120.5M, 1.02M, 147K all over atm_pos) however firmly stated, because the model reliably reverts to M/K. Moving it to a deterministic post-pass (normalize_units at eval write) fixed it 100% by construction. Prose voice/advice/forecast, which IS judgment, correctly stayed a prompt fix. Also found: a prompt can defeat its own rule — v1.12 banned 'entrenched' on one line while the streak-type guide taught 'long streak = entrenched trend' on another; fixing the contradiction cut entrenched 7→1.",
+    {
+     "date": "2026-07-28",
+     "note": "Direction-render bug ('up, -2.6% YoY') fixed at the RIGHT layer: the render shows the OBSERVED value and tags a member '(moving against)' when its observed sign opposes its authored polarity — it never derives an up/down WORD from authored direction. word_number_conflicts hard-fails = 0 in generated deep-read text. Both tokens used to trace, so the number gate was structurally blind to it; the fix is a new agreement rule, not a tolerance change. This is the same class as the monthly issue's word-vs-number check — a defect can trace perfectly and still contradict itself."
+    },
+    {
+     "date": "2026-07-28",
+     "note": "The gate biting is the deliverable, not a regression. Attaching per-member signals cut the deep read's basis-line scope ~35x (2,258→65) with no measurable catch loss — evidence that the earlier wide-pool pass rate was partly vacuous breadth, the 4f/newsletter lesson recurring. Determinism-vs-judgment (AI PM #5) shows up structurally here too: Part A (banks) is fully computed, the spine is a machine-ranked shortlist the human picks — the same 'machine ranks, editor picks' seam as the monthly reads."
+    },
+    {
+     "date": "2026-07-29",
+     "note": "Prose is now a BUILD-ONCE-REUSE mechanism, not a deep-read patch (user steer): core/voice.py owns the voice (register/advice/forecast/units/direction) + conversational builders; the gate's prose_lint/word_number_conflicts delegate to it, so monthly issues, LinkedIn and the deep read ask their prose identical questions. The FY-range date leak ('2022-23' -> stray -23) resurfaced in the sourcing citation and was fixed at the presentation strip (the same class as Check 2g's FY22-24). Diagram design settled the user's 'representation not generation' point: the model already held the signed causal graph; the shallow triangle was a generation bug, not a model gap."
+    },
+    {
+     "date": "2026-07-29",
+     "note": "S4a live-fetch finding: the verification CHANNEL constrains the mechanism more than the allowlist. Anthropic's crawler (WebFetch, and the API web_search which shares the identity) is 403'd by PIB, NPCI, Business Standard; web.archive.org unreachable; Wikipedia fetched fine (tool works, sites block). The gate did the right thing — published NOTHING rather than an unverifiable claim. Resolution: verify the excerpt against page text from a channel the sites permit (the editor's logged-in Chrome via Claude-in-Chrome, or a paste); excerpt_on_page is agnostic to how the text was obtained. Not fabricating a 'verified' stamp and not spoofing a UA to evade bot blocks are both first-order honesty constraints here. The mechanism 'earns its place' precisely by refusing."
+    }
    ],
    "open_questions": [
     "Breadth-based (period-wide) checks let an in-range invented number pass. What is the cheapest scoping that closes this for free prose, not just structured values?",

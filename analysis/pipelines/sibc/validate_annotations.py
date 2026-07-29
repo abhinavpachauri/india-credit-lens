@@ -668,7 +668,6 @@ def print_report(result, ts_path, sections):
     if result.passed:
         print(f"  ✅  PASSED — annotations are ready for system model generation")
         print(f"  →  Run report_analysis_prompt.md with Claude to generate system_model.json")
-        print(f"  →  Then run: python3 generate_mermaid.py [path]/system_model.json")
     else:
         print(f"  ❌  FAILED — {len(result.errors)} error(s) must be resolved first")
     print(f"{'═' * w}\n")

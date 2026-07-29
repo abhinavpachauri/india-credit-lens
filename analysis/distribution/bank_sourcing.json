@@ -1,0 +1,36 @@
+{
+ "_meta": {
+  "purpose": "Verified, sourced 'why' claims for featured banks and independent corroborating references for deep-read spines. Every entry is S4-gated: URL + verbatim excerpt + verified date, status must be 'verified' to publish. Starts empty — a why is sourced, never inferred or invented.",
+  "spec": "analysis/distribution/DISTRIBUTION_SPEC.md §11.2",
+  "gate": "analysis/distribution/bank_sourcing.py :: validate_entry"
+ },
+ "bank_claims": [],
+ "corroborations": [
+  {
+   "spine_id": "risk_infrastructure_bifurcation",
+   "source": "Ministry of Finance / Press Information Bureau — 'Advancing Cashless India'",
+   "publisher": "Press Information Bureau",
+   "excerpt": "Since January 2020, to promote digital transactions, MDR has been made zero for RuPay Debit Card and BHIM-UPI transactions",
+   "url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2114335&reg=48&lang=2",
+   "date": "2025-03-24",
+   "verified_date": "2026-07-29",
+   "verified_via": "editor's logged-in Chrome (Claude-in-Chrome get_page_text) — crawler is 403'd",
+   "excerpt_verified": true,
+   "tier": "official",
+   "status": "verified"
+  },
+  {
+   "spine_id": "risk_infrastructure_bifurcation",
+   "source": "Business Standard — 'Doing away with charge levied on merchants may hurt PoS machines deployment'",
+   "publisher": "Business Standard",
+   "excerpt": "the move to do away with the merchant discount rate (MDR) in the Union Budget",
+   "url": "https://www.business-standard.com/article/finance/doing-away-with-charge-levied-on-merchants-may-hurt-pos-machines-deployment-119073001662_1.html",
+   "date": "2019-07-30",
+   "verified_date": "2026-07-29",
+   "verified_via": "editor's logged-in Chrome (Claude-in-Chrome get_page_text)",
+   "excerpt_verified": true,
+   "tier": "press",
+   "status": "verified"
+  }
+ ]
+}
