@@ -17,23 +17,31 @@ Each block below is verbatim from a gate-validated artifact. Use the wording as 
 
 Small business credit is growing at 26.2% this year and now makes up 23.1% of all business lending. Growth in micro and small business loans jumped by 23.8pp because government systems like UDYAM registration and GST data now let lenders check if tiny businesses are real and can pay back. Banks cannot reach thousands of small borrowers alone, so they lend through partners who find customers and do the checking.
 
+*So what:* Lenders who can work with partners to reach small businesses now have data to judge whether those businesses will repay, opening a large and fast-growing segment that was hard to serve before.
+
 <sub>source: opportunities_feed.json · signals: sibc-msme-micro-small-fy-acceleration, sibc-msme-micro-small-share, sibc-msme-micro-small-yoy, sibc-msme-size-yoy-spread</sub>
 
 ### Rural cash distribution via Micro ATM / Business Correspondent networks
 
-India has 13.6 lakh micro ATMs that let villagers withdraw cash without visiting a full branch, but the number fell -8.1% recently. These machines are closing or fewer are being added even though people in small towns still need cash every day. A micro ATM costs far less to run than opening a real branch.
+India has 13.6 lakh micro ATMs that let villagers withdraw cash without visiting a full bank branch, but the count fell -8.1% recently. These machines cost far less to operate than opening a real branch, yet the network is shrinking even though people in small towns still depend on cash for daily transactions.
+
+*So what:* A lender relying on business correspondents and micro ATMs to reach rural customers now has fewer touch-points, which may slow deposit collection and loan disbursement in villages where branches are scarce.
 
 <sub>source: opportunities_feed.json · signals: micro-atm-yoy, micro-atms-abs</sub>
 
 ### Cross-system signal: credit_card flow leading stock — origination headroom
 
-Credit card spending at shops (POS) is up 9.32 percent and online (e-commerce) is up 4.97 percent, but the actual credit card loans outstanding grew only 1.33 percent. ATM cash withdrawals on cards fell 1.0 percent. People are swiping cards more but not borrowing much more yet, which means there is room to lend.
+Credit card spending at shops (POS) is up 9.32 percent and online (e-commerce) is up 4.97 percent, but the actual credit card loans outstanding grew only 1.33 percent. ATM cash withdrawals on cards fell 1.0 percent. People are swiping cards more but not borrowing much more yet.
+
+*So what:* The gap between rising card usage and slow loan growth suggests many cardholders are paying off balances quickly, leaving room for lenders to offer more credit to those who might carry balances.
 
 <sub>source: opportunities_feed.json · signals: cc-atm-val-abs, cc-atm-val-share, cc-atm-val-yoy, cc-ecom-val-abs, cc-ecom-val-share, cc-ecom-val-yoy, cc-other-val-abs, cc-other-val-share, cc-other-val-yoy, cc-pos-val-abs, cc-pos-val-share, cc-pos-val-yoy, sibc-pl-cc-abs, sibc-pl-cc-below10-streak, sibc-pl-cc-share, sibc-pl-cc-yoy</sub>
 
 ### Gold loan market entry / deepening for banks
 
-Banks are growing gold loans by 105.5% compared to last year, and this growth has continued for 12 straight periods. Gold prices jumped sharply between 2023 and 2026, so customers can now borrow much more money using the same gold jewelry or coins as security. Banks are winning customers from finance companies because they have local branches where staff can check the gold is real and store it safely, plus they charge lower interest rates.
+Banks are growing their gold loan books by 105.5% compared to last year, and this growth has now continued for 12 straight periods. Gold prices jumped sharply between 2023 and 2026, so customers can borrow much more money using the same gold jewelry or coins as security. Banks are winning customers from finance companies because they have local branches where staff can check the gold is real and store it safely, plus they charge lower interest rates.
+
+*So what:* The 12-period winning streak and 105.5% growth rate show banks are steadily taking market share in gold lending, which is notable because the collateral itself has become more valuable and banks can offer safer storage and lower rates than competitors.
 
 <sub>source: opportunities_feed.json · signals: sibc-pl-gold-pos-streak, sibc-pl-gold-yoy</sub>
 

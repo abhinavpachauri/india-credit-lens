@@ -131,7 +131,7 @@ orchestrated, not import-coupled).
 - `crosssource/compose_ecosystem` → `core/generate_skeleton`
 - `crosssource/derive_cross_links` → `core/generate_skeleton`
 - `crosssource/generate_opportunities_feed` → `core/generate_skeleton`
-- `crosssource/generate_opportunity_narrative` → `core/generate_skeleton`
+- `crosssource/generate_opportunity_narrative` → `core/generate_skeleton`, `core/voice`
 - `crosssource/validate_composition` → `core/generate_skeleton`
 - `pipelines/atm_pos/extract_atm_pos` → `pipelines/atm_pos/detect_atm_pos_format`
 - `pipelines/sibc/extract_sibc` → `pipelines/sibc/detect_format`

@@ -144,9 +144,11 @@ def build_pipeline_items(pipeline, channels, models, chart_series):
             "tier": n["tier"], "status": d["status"], "authored_status": d.get("authored_status"),
             "section": {"id": ref["section"] if ref else None, "title": sec[0], "icon": sec[1]},
             "title": n["label"], "body": n.get("description", ""),
-            # plain fallback so "For lenders" is never empty if the narrative LLM call fails;
-            # the narrative step overrides this with sharper, numbers-grounded copy.
-            "implication": "Move on this while the trend is still running in your favour.",
+            # No boilerplate fallback: the old "Move on this while the trend is still running in
+            # your favour" was advice, and backwards on a risk. An implication is filled only when
+            # the narrative step writes a real OBSERVATION; otherwise it stays empty (risks and any
+            # un-narrated item show no machine "so what" — the prescriptive call is the editor's).
+            "implication": "",
             "chain": chain,
             # internal context for the narrative step — not rendered on the card
             "_driver": inst["label"] if inst else None, "_via": chan["label"] if chan else None,

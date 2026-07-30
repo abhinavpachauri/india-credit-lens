@@ -222,6 +222,13 @@
      "date": "2026-07-29",
      "how_measured": "re-ran generate_opportunity_narrative (API, 10 regenerated); scanned feed for UNFORMATTED (0); 4f strict PASS; generate_slot --all (14th passes with 4 verbatim-advice warnings). test_distribution fmt_value + UNFORMATTED regression tests.",
      "source": "analysis/core/render.py · analysis/core/validate_opportunity_traceability.py · analysis/crosssource/generate_opportunity_narrative.py"
+    },
+    {
+     "metric": "opportunity-narrative advice removed at source — prompt + deterministic guard",
+     "value": "The narrative's `implication` asked the LLM for 'what the bank should do' (advice) — the source of every C6/C7 slot warning and /opportunities' prescriptive 'For lenders' line. Changed the prompt to demand an OBSERVATION, and added _observation_only() (core.voice.advice/forecasts) that DROPS any implication still carrying advice/forecast — the LLM ignored the instruction on 3 cross-system items, the guard caught all 3. Also removed the backwards fallback implication ('Move on this while the trend is still running in your favour') that showed on every risk. Result: 0 advice/forecast implications across the feed (was ≥7), 0 §5.3 slot warnings (was 4 on the 14th). Signal-eval v1.12 already clean (monthly issue + deep read = 0 warnings).",
+     "date": "2026-07-29",
+     "how_measured": "scan feed implications for should/must/need-to/move-on-this (0); generate_slot 14th (0 warnings); prose_lint on monthly+deep read (0). Enforce-don't-trust: the guard is deterministic, not prompt-dependent.",
+     "source": "analysis/crosssource/generate_opportunity_narrative.py::_observation_only · analysis/crosssource/generate_opportunities_feed.py"
     }
    ],
    "observations": [
@@ -259,6 +266,10 @@
     {
      "date": "2026-07-29",
      "note": "§5.3 lint EXPOSED the §14 upstream blocker as a hard gate: the 14th slot (C6/C7 openings/risks) hard-fails on raw floats (1358241.0 micro ATMs, 12.0 periods) that generate_opportunity_narrative leaks — the LLM is told to copy exact signal values verbatim so they trace under Check 4f, and 4f accepts only raw flat_numbers, not the lakh/crore reader form. So the fix chain is: 4f must accept as-rendered forms (like the distribution gate's _as_rendered), THEN the narrative can pass the LLM display values, THEN re-run the narrative LLM + regen feed. That is a core-gate + LLM-rerun change affecting /opportunities + deep read + slots — a distinct workstream from the LinkedIn §5 changes. 4/5 slots (1st/7th/28th pass, 21st skips by design) are clean; only C6/C7 is gated, correctly, on real debt."
+    },
+    {
+     "date": "2026-07-29",
+     "note": "Prompt instructions are necessary but not sufficient — the LLM emitted 'the bank should push...' on 3 cross-system items despite an explicit 'never say should'. The fix that held was the DETERMINISTIC guard (drop advice implications via core.voice), consistent with the platform's traceable-not-assumed principle: enforce in code, don't trust the model. Also a caching lesson: cross-system enrichment was narrative-flag-gated, so a preserved narrative:True blocked re-narration after the prompt change — switched it to cache-gated (like the pipeline path) so a cache clear forces a fresh run. Machine implications are now observations or empty; the prescriptive 'so what' is the editor's on every surface (/opportunities included)."
     }
    ],
    "open_questions": [

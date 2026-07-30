@@ -952,8 +952,18 @@ states both months explicitly, and states the gap in months when there is one.
   possible future compute add, but the templates no longer claim a tile with no signal.
 - **Per-sector volume (₹ L Cr) column — deferred.** The sector growth table ships YoY-only; a volume
   column needs per-sector `-abs` signals (only four sectors carry one). Small compute add when wanted.
-- Eval prompt v1.12 tone rule — blocks clean blurb voice (§10). The monthly issue's `prose_lint`
-  now surfaces the exact fix list: 6 advice/forecast hits in verbatim reads-card prose this cycle.
+- ~~Eval prompt tone rule — advice/forecast in machine prose~~ **DONE 2026-07-29.** Two prompts,
+  both clean now: (a) the SIGNAL-eval prompt (`domain_eval_system.txt`, v1.12) — the monthly issue
+  and deep read now surface **0** prose warnings; (b) the OPPORTUNITY-narrative prompt
+  (`generate_opportunity_narrative`) — its `implication` used to ask the LLM for "what the bank
+  should do" (advice), which fed /opportunities' "For lenders" line and every C6/C7 distribution
+  warning. Now the prompt asks for an **observation, never a recommendation**, and — because the LLM
+  is not trusted to obey — a **deterministic guard** (`_observation_only` via `core.voice`) drops any
+  implication still carrying advice/forecast. The backwards fallback ("Move on this while the trend
+  is still running in your favour", nonsensical on a risk) is gone; a non-narrated item (risk) simply
+  shows no machine "so what". Result: 0 advice/forecast implications across the whole feed, 0 §5.3
+  warnings on any slot. Re-ran the narrative LLM + regenerated the feed; /opportunities implications
+  are now observations (or empty), the prescriptive call left to the editor.
 - Design-prompt subset checker (§5.1) — deferred; the prompt now emits a machine-readable
   `supplied numbers` block, so the check is buildable without changing the format.
 - ~~**Upstream: `generate_opportunity_narrative` prints raw floats**~~ **DONE 2026-07-29.** The

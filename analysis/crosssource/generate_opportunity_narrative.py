@@ -3,7 +3,8 @@
 generate_opportunity_narrative.py — expository narrative step (COMPOSITION_SPEC §12, option 2)
 ---------------------------------------------------------------------------------------------
 Enriches web/public/data/opportunities_feed.json with LLM-written, numbers-grounded copy:
-a sharp "For lenders" implication + a body that weaves in the LIVE signal figures from
+an OBSERVATION of what is most notable (never a recommendation — the prescriptive call is
+the editor's) + a body that weaves in the LIVE signal figures from
 signals.db. Read-only over the model/state (it does NOT propose causal structure — that's
 S4); it only verbalises what S3 already computed. Shares evaluate._call_llm — prefers the
 Anthropic API (ANTHROPIC_API_KEY) and falls back to the `claude -p` CLI (Pro, no API
@@ -25,7 +26,15 @@ from pathlib import Path
 # that this script lives under crosssource/. Move-safe via .git walk (see core/paths.py).
 sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
 from core import generate_skeleton as gs  # noqa: E402
+from core import voice                     # noqa: E402
 from core.render import fmt_value          # noqa: E402
+
+
+def _observation_only(imp):
+    """Enforce the OBSERVATION rule deterministically — the prompt asks for it, but the LLM is
+    not trusted to obey. An implication that still carries advice or a forecast is dropped
+    (machine never asserts a recommendation; the prescriptive call is the editor's)."""
+    return "" if (voice.advice(imp) or voice.forecasts(imp)) else imp
 
 ROOT = gs.ROOT
 FEED = ROOT / "web" / "public" / "data" / "opportunities_feed.json"
@@ -35,7 +44,9 @@ SYSTEM = (
     "You explain a lending opportunity to a smart person who is NOT a finance expert. "
     "Use plain, everyday English and short sentences. Include the actual numbers given, and "
     "say what they mean in normal words. Explain WHAT is happening, WHY it is happening, and "
-    "WHAT a bank should do — concretely. "
+    "WHAT is most notable about it for a lender — as an OBSERVATION, never a recommendation. "
+    "Do NOT tell anyone what they 'should' or 'must' do; state what is notable and let the "
+    "reader draw the conclusion (the prescriptive call is the editor's, not yours). "
     "TRACEABILITY (strict): every number you write — in body, implication, and chain — must be "
     "copied verbatim from the `display` field of one of the signals provided below (e.g. write "
     "'13.6 lakh', '8.5%', '₹5.1L Cr' exactly as the `display` string shows it). Never write the "
@@ -52,7 +63,8 @@ SYSTEM = (
     "(what's happening → why → what it leads to). The chain MUST NOT contain signal codes, "
     "metric IDs (like 'sibc-pl-gold-yoy'), or jargon — just plain reasoning. No hype, no "
     'preamble. Return ONLY minified JSON: {"body":"2-3 plain sentences with the numbers",'
-    '"implication":"one plain sentence saying what the bank should do",'
+    '"implication":"one plain sentence stating what is most notable about this — an '
+    'observation, NEVER a recommendation, and never the words should/must/need to/ought to",'
     '"chain":["step 1","step 2","step 3"]}.'
 )
 
@@ -132,7 +144,7 @@ def main():
         if res.get("implication"):
             # the card already renders a "For lenders" header — strip any duplicate prefix
             imp = re.sub(r"^\s*for lenders\s*[:\-—]\s*", "", res["implication"], flags=re.I)
-            item["implication"] = imp[0].upper() + imp[1:] if imp else imp
+            item["implication"] = _observation_only(imp[0].upper() + imp[1:] if imp else imp)
         if res.get("chain"):
             item["chain"] = res["chain"]
         item["narrative"] = True
@@ -154,7 +166,9 @@ def main():
         # one segment reversed" narrated as "fully engaged"). Same rule as data checks.
         if (c.get("driver") or {}).get("kind") == "eco_loop":
             continue
-        if c["status"] in ("active", "watch") and not c.get("narrative"):
+        # Cache-gated (not narrative-flag-gated): a preserved `narrative:True` from an earlier
+        # feed must NOT block re-narration after a prompt change — the cache key handles cost.
+        if c["status"] in ("active", "watch"):
             payload = {"title": c["title"], "description": c.get("body", ""),
                        "driver": None, "via": None,
                        "signals": (c.get("basis") or {}).get("facts", [])}
@@ -169,7 +183,7 @@ def main():
                 c["body"] = res.get("body", c["body"])
                 if res.get("implication"):
                     imp = re.sub(r"^\s*for lenders\s*[:\-—]\s*", "", res["implication"], flags=re.I)
-                    c["implication"] = imp[0].upper() + imp[1:] if imp else imp
+                    c["implication"] = _observation_only(imp[0].upper() + imp[1:] if imp else imp)
                 if res.get("chain"):
                     c["chain"] = res["chain"]
                 c["narrative"] = True
