@@ -180,6 +180,16 @@ lint onto a new surface must be preceded by the precision fix (require an advice
 substring) and **measured — catch + false-rejection rate, before and after** (the standing AI PM
 rule). Until then the SEBI lint stays where it already is; do not widen it blind.
 
+**Built 2026-07-29.** `check_slate` now applies the full prose lint to the design prompt via
+`core.voice` (§11.2-R1's shared layer): SEBI + forecast + unformatted are **hard** on the whole
+pager; advice + banned register are **hard** in generated text (blurb, a generated claim) and
+**warn** inside a verbatim card body (`slate_voice_warnings`, feeding v1.12). The "so what" now
+drops any advice/forecast implication and renders observation-only (§5.1). Measured: planted-hit
+catch 11/11 in generated text, verbatim-card advice warns 4/4, 0 §5.3 false-rejections on clean
+prose. **SEBI was not widened** — the precision fix remains the prerequisite. Rehearsal: 4 of 5
+slots pass clean (1st/7th/28th; 21st skips by design); the 14th (C6/C7) is the one gated — on the
+raw-float debt below, which is the check working, not a regression.
+
 ---
 
 ## 6. Net-new compute required
@@ -946,10 +956,17 @@ states both months explicitly, and states the gap in months when there is one.
   now surfaces the exact fix list: 6 advice/forecast hits in verbatim reads-card prose this cycle.
 - Design-prompt subset checker (§5.1) — deferred; the prompt now emits a machine-readable
   `supplied numbers` block, so the check is buildable without changing the format.
-- **Upstream: `generate_opportunity_narrative` prints raw floats** ("120454115.0 credit cards",
-  "12.0 periods"). The blurb lint (`slot_render.UNFORMATTED`) rejects those outright, and `_lede`
-  quotes a different sentence rather than tidying one — but the fix belongs in the narrative
-  generator's formatting, not here. Until then some C6/C7 sentences are simply unquotable.
+- ~~**Upstream: `generate_opportunity_narrative` prints raw floats**~~ **DONE 2026-07-29.** The
+  narrative said "1358241.0 micro ATMs" because the LLM was told to copy exact signal values
+  verbatim (so they trace under Check 4f), and 4f accepted only the raw `flat_numbers`. Fixed as
+  one chain around a single shared `fmt_value` (`analysis/core/render.py`): (1) 4f's `_numbers_for`
+  now also accepts the as-rendered form (`_as_rendered`, like the distribution gate); (2)
+  `db_signal_values` gives the LLM a `display` string and the SYSTEM prompt tells it to copy that
+  ("13.6 lakh"), never the raw `value`; (3) `fmt_value` renders integers without a trailing `.0`
+  and `slot_render.UNFORMATTED` allows `N.0` before magnitude/percent words. Re-ran the narrative
+  LLM + regenerated the feed. Result: 0 unformatted numbers across all feed narratives, 4f strict
+  green, and **all five LinkedIn slots pass** (the 14th publishes, with the opportunity implications
+  warned for v1.12). Improved `/opportunities` + the deep read at the same time.
 - **C10 has no generator, by design.** The AI PM post is assembled by hand from
   `ai_pm_register.json` (§8.1); `select("C10")` returns nothing, so the 21st falls back to C9 and,
   when that is empty too, skips and records the skip. That is correct behaviour, not a gap —

@@ -181,10 +181,28 @@ def _live_slate(slot, categories):
 
 
 def test_live_slots_pass_the_gate():
-    for slot, cat in (("1st", ["C1", "C5"]), ("7th", ["C2", "C3"]), ("28th", ["C8"])):
+    # The 14th (C6/C7 openings/risks) is included now: once the opportunity narrative renders
+    # reader forms (lakh/crore, §14 fix chain), its raw floats are gone and the slot publishes.
+    for slot, cat in (("1st", ["C1", "C5"]), ("7th", ["C2", "C3"]),
+                      ("14th", ["C6", "C7"]), ("28th", ["C8"])):
         slate = _live_slate(slot, cat)
         assert slate, f"{slot} produced no slate"
         assert check_slate(slate) == [], f"{slot} failed: {check_slate(slate)}"
+
+
+def test_fmt_value_renders_integers_without_a_trailing_zero():
+    from core.render import fmt_value
+    assert fmt_value(12.0, "streak") == "12"           # not "12.0"
+    assert fmt_value(67.7, "ratio") == "67.7"
+    assert fmt_value(120000000, "count") == "12.0 crore"
+    assert fmt_value(1358241, "count") == "13.6 lakh"
+
+
+def test_unformatted_allows_magnitude_and_percent_words_but_not_bare_floats():
+    assert not slot_render.UNFORMATTED.search("12.0 crore cards")     # a formatted reader form
+    assert not slot_render.UNFORMATTED.search("fell 1.0 percent")     # percent in words
+    assert slot_render.UNFORMATTED.search("12.0 periods")             # bare N.0 + a plain word
+    assert slot_render.UNFORMATTED.search("1358241 micro ATMs")       # a 7-digit raw count
 
 
 def test_reworded_feed_card_fails():
@@ -302,6 +320,51 @@ def test_design_prompt_carries_the_vintage():
     prompt = slot_render.design_prompt(_live_slate("1st", ["C1", "C5"]))
     assert "Data vintage:" in prompt
     assert "2026" in prompt
+
+
+# ── §5.3 — the design prompt is a public pager, so its prose is linted ─────────
+
+def _mk_slate(claims):
+    return {"category": "C6", "slot": "14th", "date": "2026-08-14", "pages": 1,
+            "is_fallback": False, "claims": claims, "vintage": {},
+            "vintage_sentence": "May 2026 credit data, May 2026 payments data."}
+
+
+def _mk_claim(cid, body, implication="", verbatim=False):
+    return {"id": cid, "title": cid, "body": body, "implication": implication,
+            "source": "test", "signal_ids": [], "numbers": [], "verbatim": verbatim}
+
+
+def test_so_what_is_an_observation_not_advice():
+    """§5.1: the 'so what' says what is notable, never a recommendation. An advice implication
+    is dropped from the pager; an observation is kept."""
+    advice = _mk_claim("a", "Gold loans grew.", "Banks should open more gold-loan branches.")
+    obs = _mk_claim("b", "Card share moved.", "Gold's share is climbing the fastest of the lot.")
+    prompt = slot_render.design_prompt(_mk_slate([advice, obs]))
+    assert "should open more gold-loan branches" not in prompt      # advice dropped
+    assert "climbing the fastest" in prompt                          # observation kept
+
+
+def test_5_3_forecast_hard_fails_on_the_pager():
+    """No-forecast is a self-consistency failure: the prompt's own constraint block forbids it."""
+    c = _mk_claim("f", "The gap will continue to widen next quarter.")
+    assert any("forecast" in f for f in check_slate(_mk_slate([c])))
+
+
+def test_5_3_unformatted_raw_float_hard_fails_on_the_pager():
+    c = _mk_claim("u", "There are 1358241.0 micro ATMs in the country.")
+    assert any("unformatted" in f for f in check_slate(_mk_slate([c])))
+
+
+def test_5_3_advice_in_generated_text_hard_fails_but_verbatim_card_only_warns():
+    from distribution.validate_distribution import slate_voice_warnings
+    generated = _mk_claim("g", "Banks should lend more to small firms.", verbatim=False)
+    assert any("advice" in f for f in check_slate(_mk_slate([generated])))   # ours → hard fail
+
+    verbatim = _mk_claim("v", "Banks should lend more to small firms.", verbatim=True)
+    warns = slate_voice_warnings(_mk_slate([verbatim]))
+    assert any("advice" in w for w in warns)                                 # card → warn
+    assert not any("advice" in f for f in check_slate(_mk_slate([verbatim])))  # not a hard fail
 
 
 # ── The ledger (§7) ───────────────────────────────────────────────────────────

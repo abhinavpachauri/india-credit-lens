@@ -25,6 +25,7 @@ from pathlib import Path
 # that this script lives under crosssource/. Move-safe via .git walk (see core/paths.py).
 sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
 from core import generate_skeleton as gs  # noqa: E402
+from core.render import fmt_value          # noqa: E402
 
 ROOT = gs.ROOT
 FEED = ROOT / "web" / "public" / "data" / "opportunities_feed.json"
@@ -36,9 +37,11 @@ SYSTEM = (
     "say what they mean in normal words. Explain WHAT is happening, WHY it is happening, and "
     "WHAT a bank should do — concretely. "
     "TRACEABILITY (strict): every number you write — in body, implication, and chain — must be "
-    "one of the exact signal values provided below, copied verbatim (do not round, approximate, "
-    "average, or invent a figure). If you have no number for a point, state it in words without a "
-    "number. A check rejects any figure not present in the provided values. "
+    "copied verbatim from the `display` field of one of the signals provided below (e.g. write "
+    "'13.6 lakh', '8.5%', '₹5.1L Cr' exactly as the `display` string shows it). Never write the "
+    "raw `value` (no '1358241.0', no '12.0'), never round, average, or invent a figure. If you "
+    "have no number for a point, state it in words without a number. A check rejects any figure "
+    "not present in the provided display strings. "
     "BANNED words/phrases (never use): moat, tailwind, headwind, structural, secular, "
     "intermediated, intermediation, bifurcated, disproportionate, durable, leverage, capture, "
     "deploy, land-grab, synergy, accretive, value accretion, deepening, ecosystem, "
@@ -62,7 +65,8 @@ def db_signal_values(pipeline, period, metric_ids):
          f"and metric_id in ({','.join('?' * len(metric_ids))})")
     rows = con.execute(q, (pipeline, period, *metric_ids)).fetchall()
     con.close()
-    return [{"id": m, "value": round(v, 2) if isinstance(v, float) else v, "unit": u, "status": s}
+    return [{"id": m, "value": round(v, 2) if isinstance(v, float) else v, "unit": u,
+             "status": s, "display": fmt_value(v, u)}       # the reader form the LLM must copy
             for m, v, u, s in rows]
 
 

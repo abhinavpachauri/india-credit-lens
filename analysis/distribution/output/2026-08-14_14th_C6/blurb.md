@@ -1,11 +1,11 @@
 What this opens up, and what to watch.
 
-Co-lending & warehouse-financing infrastructure — Small business credit is growing at 26.18 percent this year and now represents 23.06 percent of all business lending.
+Co-lending & warehouse-financing infrastructure — Small business credit is growing at 26.2% this year and now makes up 23.1% of all business lending.
 
-Rural cash distribution via Micro ATM / Business Correspondent networks — The number of these machines dropped -8.11 percent recently, meaning fewer are being added or some are closing.
+Rural cash distribution via Micro ATM / Business Correspondent networks — India has 13.6 lakh micro ATMs that let villagers withdraw cash without visiting a full branch, but the number fell -8.1% recently.
 
 Cross-system signal: credit_card flow leading stock — origination headroom — Credit card spending at shops (POS) is up 9.32 percent and online (e-commerce) is up 4.97 percent, but the actual credit card loans outstanding grew only 1.33 percent.
 
-Gold loan market entry / deepening for banks — Gold prices jumped sharply between 2023 and 2026, so customers can now borrow much more money using the same gold jewelry or coins as security.
+Gold loan market entry / deepening for banks — Banks are growing gold loans by 105.5% compared to last year, and this growth has continued for 12 straight periods.
 
 Full deep read on Substack.

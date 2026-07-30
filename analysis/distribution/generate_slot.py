@@ -29,7 +29,7 @@ from distribution import categories as cats           # noqa: E402
 from distribution import distribution_sources as src  # noqa: E402
 from distribution import ledger as ledger_mod         # noqa: E402
 from distribution import slot_render                  # noqa: E402
-from distribution.validate_distribution import check_slate  # noqa: E402
+from distribution.validate_distribution import check_slate, slate_voice_warnings  # noqa: E402
 
 OUT = ROOT / "analysis" / "distribution" / "output"
 
@@ -151,6 +151,12 @@ def run_slot(slot, when, dry_run=False):
             for f in failures:
                 print("    -", f)
             return 1
+        warnings = slate_voice_warnings(slate)          # §5.3: advice/register in verbatim cards
+        if warnings:
+            print(f"  ⚠ {len(warnings)} warning(s) in verbatim card prose — fix upstream at eval "
+                  f"prompt v1.12, not here:")
+            for w in warnings[:8]:
+                print("    ⚠", w)
 
         folder, _, blurb = write_slot(slate, dry_run)
         label = " (fallback)" if is_fallback else ""

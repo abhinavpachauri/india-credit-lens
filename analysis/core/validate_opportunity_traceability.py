@@ -37,6 +37,7 @@ from core.traceability import (                                  # noqa: E402
     SIBC as _POLICY, extract_numbers as _extract,
     matches as _matches, ratio_matches as _ratio,
 )
+from core.render import fmt_value                                # noqa: E402
 
 
 def extract_numbers(text):
@@ -61,15 +62,23 @@ def _latest_periods(conn) -> dict:
 
 
 def _numbers_for(conn, registry, latest, sids) -> list[float]:
-    """Union of flat_numbers for the given signal ids (each at its pipeline's latest)."""
+    """Union of grounded numbers for the given signal ids (each at its pipeline's latest):
+    the raw `flat_numbers`, PLUS those values as the reader sees them (lakh/crore/%). The
+    narrative now writes the reader form ("13.6 lakh"), so the rendered form has to trace too
+    — the same `_as_rendered` the distribution gate already does, via the one shared fmt_value."""
     nums: list[float] = []
     for sid in sids:
         sig = registry.get(sid)
         if not sig:
             continue
         pl = sig.get("pipeline")
-        if pl in latest:
-            nums += flat_numbers(signal_numbers(conn, sid, sig, pl, latest[pl]))
+        if pl not in latest:
+            continue
+        nums += flat_numbers(signal_numbers(conn, sid, sig, pl, latest[pl]))
+        for v, u in conn.execute(
+                "SELECT value, unit FROM signals WHERE pipeline=? AND metric_id=? AND period=? "
+                "  AND value IS NOT NULL", (pl, sid, latest[pl])):
+            nums += extract_numbers(fmt_value(v, u))
     return nums
 
 

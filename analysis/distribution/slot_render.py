@@ -145,6 +145,7 @@ def _provenance_note(claims):
 
 def design_prompt(slate):
     """The closed prompt pasted into a separate Claude design session (§5.1)."""
+    from core import voice          # lazy — voice imports this module for the SEBI lint
     cat = slate["category"]
     lines = [
         f"# Design prompt — {slate['date']} · {cats.label(cat)} ({cat})",
@@ -166,8 +167,13 @@ def design_prompt(slate):
     ]
     for c in slate["claims"]:
         lines += [f"### {c['title']}", "", c["body"]]
-        if c.get("implication"):
-            lines += ["", f"*So what:* {c['implication']}"]
+        # The "so what" is an OBSERVATION, never advice or a forecast (§5.1). An opportunity's
+        # implication is a recommendation ("banks should…"); the machine does not assert it —
+        # that prescriptive take is the editor's. So render the implication only when it reads
+        # as an observation; drop it otherwise (the observational body + numbers carry the pager).
+        impl = c.get("implication")
+        if impl and not (voice.advice(impl) or voice.forecasts(impl)):
+            lines += ["", f"*So what:* {impl}"]
         lines += ["", f"<sub>source: {c['source']} · signals: "
                       f"{', '.join(c.get('signal_ids', [])) or '—'}</sub>", ""]
 
@@ -236,7 +242,8 @@ def blurb(slate):
 # A number a machine printed rather than a person: a bare 7+ digit integer where §10
 # asks for lakh/crore, or a float that kept its ".0" outside a percentage. Upstream
 # narrative text carries a few of these, and they must never reach a published blurb.
-UNFORMATTED = re.compile(r"\b\d{7,}\b|\b\d+\.0\b(?!\s*(?:%|pp))")
+UNFORMATTED = re.compile(
+    r"\b\d{7,}\b|\b\d+\.0\b(?!\s*(?:%|pp|crore|lakh|L\s?Cr|per\s?cent|percent))", re.I)
 
 
 def is_presentable(text):

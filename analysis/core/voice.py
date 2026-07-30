@@ -49,21 +49,36 @@ _BIGUNIT = re.compile(r"\b\d+(?:\.\d+)?\s?(?:million|billion|mn|bn)\b|"
                       r"(?<![A-Za-z])\d+(?:\.\d+)?[MKB]\b")
 
 
+def advice(text):
+    """Advice-voice hits ('banks should…') — a recommendation, not an observation."""
+    return [m.group(0) for m in _ADVICE.finditer(text or "")]
+
+
+def forecasts(text):
+    """Forecast hits ('on track to…', 'will continue') — a claim about the future."""
+    return [m.group(0) for m in _FORECAST.finditer(text or "")]
+
+
+def banned(text):
+    """Banned-register hits — consultant-speak from the §10 list."""
+    low = (text or "").lower()
+    return [p for p in BANNED if p in low]
+
+
+def big_units(text):
+    """Millions/billions or M/K/B suffixes where the reader is owed lakh/crore."""
+    return [m.group(0) for m in _BIGUNIT.finditer(text or "")]
+
+
 def lint(text):
     """Every §10 voice problem in one string: SEBI/compliance + banned register + advice +
     forecast + unit voice. Returns a list of human-readable problems ([] = clean). Callers
     decide whether a hit hard-fails (our own words) or warns (verbatim card/quoted prose)."""
     problems = list(slot_render.lint_compliance(text))
-    low = text.lower()
-    for phrase in BANNED:
-        if phrase in low:
-            problems.append(f"banned register {phrase!r}")
-    if _ADVICE.search(text):
-        problems.append(f"advice voice: {_ADVICE.search(text).group(0)!r}")
-    if _FORECAST.search(text):
-        problems.append(f"forecast: {_FORECAST.search(text).group(0)!r}")
-    for m in _BIGUNIT.finditer(text):
-        problems.append(f"millions/M-K units — say it in lakh/crore: {m.group(0)!r}")
+    problems += [f"banned register {p!r}" for p in banned(text)]
+    problems += [f"advice voice: {h!r}" for h in advice(text)]
+    problems += [f"forecast: {h!r}" for h in forecasts(text)]
+    problems += [f"millions/M-K units — say it in lakh/crore: {h!r}" for h in big_units(text)]
     return problems
 
 

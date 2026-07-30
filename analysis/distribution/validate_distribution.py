@@ -320,13 +320,45 @@ def check_slate(slate):
     failures += _ungrounded(text, legit, cards, "blurb")
     failures += [f"blurb voice: {p}" for p in slot_render.lint_blurb(text)]
 
-    # The design prompt leaves the gate and becomes a public pager, so the compliance
-    # guardrail follows it out. Card prose is validated for *numbers* upstream; nobody
-    # was checking it for advice language on the way to a design session.
-    failures += [f"design prompt: {p}"
-                 for p in slot_render.lint_compliance(slot_render.design_prompt(slate))]
+    # §5.3 — the design prompt is a public pager, so its prose is linted, not just its numbers.
+    # Three risks, three scopes. HARD everywhere on the pager (no case where they are correct):
+    # SEBI/compliance, forecast (the prompt's own constraint forbids it — self-consistency), and
+    # unformatted raw floats. Advice + banned register are HARD in text the renderer generated
+    # (the blurb, a generated claim) and only WARN inside verbatim card prose (that is the eval's,
+    # fixed upstream at v1.12, never hand-edited) — see slate_voice_warnings.
+    # Lint the reader PROSE of the pager — not the machine-readable ```json supplied_numbers```
+    # block, which is a data supply list (bare tokens like "1.0" are legitimate there; the design
+    # session renders them into reader form). Strip that fenced block before the prose scan.
+    prompt = re.sub(r"```json.*?```", " ", slot_render.design_prompt(slate), flags=re.S)
+    failures += [f"design prompt: {p}" for p in slot_render.lint_compliance(prompt)]      # SEBI
+    failures += [f"design prompt: forecast {h!r}" for h in voice.forecasts(prompt)]
+    failures += [f"design prompt: unformatted number {m.group(0)!r}"
+                 for m in slot_render.UNFORMATTED.finditer(prompt)]
+    blurb_text = slot_render.blurb(slate)
+    failures += [f"blurb: advice voice {h!r}" for h in voice.advice(blurb_text)]           # generated
+    failures += [f"blurb: banned register {h!r}" for h in voice.banned(blurb_text)]
+    for c in slate["claims"]:                      # a GENERATED claim's advice/register is ours
+        if c.get("verbatim"):
+            continue
+        gen = " ".join(x for x in (c.get("body"), c.get("implication")) if x)
+        failures += [f"claim {c['id']}: advice voice {h!r}" for h in voice.advice(gen)]
+        failures += [f"claim {c['id']}: banned register {h!r}" for h in voice.banned(gen)]
 
     return failures
+
+
+def slate_voice_warnings(slate):
+    """(§5.3) Advice/register that sits inside VERBATIM card prose — a warning, not a failure:
+    that text is the eval's and is fixed upstream at prompt v1.12, never hand-edited here. Same
+    warn-card / fail-ours split the long-form issues use. Returns a list of warning strings."""
+    warn = []
+    for c in slate["claims"]:
+        if not c.get("verbatim"):
+            continue
+        text = " ".join(x for x in (c.get("body"), c.get("implication")) if x)
+        warn += [f"claim {c['id']} (verbatim card → v1.12): advice {h!r}" for h in voice.advice(text)]
+        warn += [f"claim {c['id']} (verbatim card → v1.12): register {h!r}" for h in voice.banned(text)]
+    return warn
 
 
 def main():

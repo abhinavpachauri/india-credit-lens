@@ -208,6 +208,20 @@
      "date": "2026-07-29",
      "how_measured": "bank_sourcing.add_corroboration(entry, page_text) with excerpt_on_page verification; store audited by validate_store; deep read renders both, tier-labelled.",
      "source": "analysis/distribution/bank_sourcing.json · analysis/distribution/bank_sourcing.py"
+    },
+    {
+     "metric": "LinkedIn §5.3 design-prompt prose lint — catch + warn/fail split, measured",
+     "value": "The design prompt (a public pager) now gets the full prose lint, reusing core.voice. Planted-hit catch in GENERATED text (hard fail): advice 4/4, forecast 4/4, unformatted raw float 3/3 = 11/11. Verbatim-card advice → WARN not fail 4/4 (feeds v1.12). §5.3 prose false-rejections on number-free clean generated text = 0. SEBI lint deliberately NOT widened (kept lint_compliance as-is) — the precision fix is a prerequisite per §5.3, not done here. So-what now drops advice/forecast implications (observation-only, §5.1).",
+     "date": "2026-07-29",
+     "how_measured": "targeted injection over check_slate + slate_voice_warnings (4 advice / 4 forecast / 3 unformatted phrases); test_distribution.py §5.3 tests (43 pass, was 39).",
+     "source": "analysis/distribution/validate_distribution.py::check_slate + slate_voice_warnings · analysis/core/voice.py · analysis/distribution/slot_render.py"
+    },
+    {
+     "metric": "§14 raw-float fix chain — opportunity narrative now reader-formatted, C6/C7 slot unblocked",
+     "value": "One shared fmt_value (core/render.py) now feeds three layers: the narrative LLM gets a `display` string and copies it verbatim ('13.6 lakh micro ATMs', not '1358241.0'); Check 4f accepts the as-rendered form (added _as_rendered to _numbers_for) so the reader number still traces; UNFORMATTED allows N.0 before magnitude/percent words. Result: 0 unformatted hits across all feed narratives (was ≥4), 4f strict still green (20 opps), and all 5 LinkedIn slots now pass (14th was the one gated). 245 tests (was 217 at session start).",
+     "date": "2026-07-29",
+     "how_measured": "re-ran generate_opportunity_narrative (API, 10 regenerated); scanned feed for UNFORMATTED (0); 4f strict PASS; generate_slot --all (14th passes with 4 verbatim-advice warnings). test_distribution fmt_value + UNFORMATTED regression tests.",
+     "source": "analysis/core/render.py · analysis/core/validate_opportunity_traceability.py · analysis/crosssource/generate_opportunity_narrative.py"
     }
    ],
    "observations": [
@@ -241,6 +255,10 @@
     {
      "date": "2026-07-29",
      "note": "S4a live-fetch finding: the verification CHANNEL constrains the mechanism more than the allowlist. Anthropic's crawler (WebFetch, and the API web_search which shares the identity) is 403'd by PIB, NPCI, Business Standard; web.archive.org unreachable; Wikipedia fetched fine (tool works, sites block). The gate did the right thing — published NOTHING rather than an unverifiable claim. Resolution: verify the excerpt against page text from a channel the sites permit (the editor's logged-in Chrome via Claude-in-Chrome, or a paste); excerpt_on_page is agnostic to how the text was obtained. Not fabricating a 'verified' stamp and not spoofing a UA to evade bot blocks are both first-order honesty constraints here. The mechanism 'earns its place' precisely by refusing."
+    },
+    {
+     "date": "2026-07-29",
+     "note": "§5.3 lint EXPOSED the §14 upstream blocker as a hard gate: the 14th slot (C6/C7 openings/risks) hard-fails on raw floats (1358241.0 micro ATMs, 12.0 periods) that generate_opportunity_narrative leaks — the LLM is told to copy exact signal values verbatim so they trace under Check 4f, and 4f accepts only raw flat_numbers, not the lakh/crore reader form. So the fix chain is: 4f must accept as-rendered forms (like the distribution gate's _as_rendered), THEN the narrative can pass the LLM display values, THEN re-run the narrative LLM + regen feed. That is a core-gate + LLM-rerun change affecting /opportunities + deep read + slots — a distinct workstream from the LinkedIn §5 changes. 4/5 slots (1st/7th/28th pass, 21st skips by design) are clean; only C6/C7 is gated, correctly, on real debt."
     }
    ],
    "open_questions": [

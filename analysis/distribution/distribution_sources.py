@@ -107,23 +107,8 @@ def total_values(pipeline, period):
     return out
 
 
-def fmt_value(value, unit):
-    """Render a db value the way the dashboards do — same rounding the checks accept."""
-    if value is None:
-        return ""
-    if unit == "pct":
-        return f"{value:.1f}%"
-    if unit == "pp":
-        return f"{value:.1f}pp"
-    if unit == "lcr_cr":                       # stored in ₹ crore → shown in lakh crore
-        return f"₹{value / 1e5:.1f}L Cr"
-    if unit == "count":
-        if abs(value) >= 1e7:
-            return f"{value / 1e7:.1f} crore"
-        if abs(value) >= 1e5:
-            return f"{value / 1e5:.1f} lakh"
-        return f"{value:,.0f}"
-    return f"{value:,.1f}"
+from core.render import fmt_value       # single source (§ core/render.py) — re-exported here
+                                        # so every `src.fmt_value` caller keeps working  # noqa: E402,F401
 
 
 def headline_stats(pipeline, period):
