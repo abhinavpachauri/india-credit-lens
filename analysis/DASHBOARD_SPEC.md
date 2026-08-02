@@ -1,0 +1,522 @@
+# Dashboard Read-Mode — Design Spec v0.1 (DRAFT for approval)
+
+> Status: **design only, no code**. Authoring rule: ASCII layout → explicit approval → implement.
+> Supersedes the design-discussion block in `CLAUDE.local.md` (2026-07-21). Nothing here changes a
+> ground-truth gate — this is a **presentation-layer** redesign. Check 2g / Stage 4c / 4f untouched.
+> Companion: `DISTRIBUTION_SPEC.md` (the same curation engine, a different surface).
+
+---
+
+## 1. Why — the problem, measured (not estimated)
+
+Both dashboards render **every signal as its own card, in generation order, with no ranking anywhere
+in the web layer** (only sort in `components/`+`lib/` is Top-N banks by value, `lib/atm_pos_data.ts:145`).
+
+- SIBC = **84 insights** over 7 sections (personalLoans **23**, industryByType **15**).
+- Payments = **29 insights** over 3 groups.
+- `/opportunities` = **20 items** (cross-system + per-pipeline).
+
+"Too many cards" is **three different problems**. Ranking alone fixes none of them:
+
+| # | Problem | Evidence | Fix plane |
+|---|---|---|---|
+| 1 | **Card unit is the signal, not the subject.** Reader asks "what's happening with credit cards?"; answer is spread over 4 carousel positions. | 84 SIBC cards → 36 subjects, 26 multi-card (credit cards 4, gold loans 3). One-signal-one-card was a *compute-layer* convention that leaked into presentation. | Subjects plane (nest) |
+| 2 | **Much of it isn't news.** "Power is 57% of infrastructure" is true every month. | ~12 of 15 Industry-by-Type cards are structural. A different *class*, not a lower rank. | Composition plane (demote to caption) |
+| 3 | **Only the residue is a ranking problem.** | est. 15–25 cards, not 131. | Read plane (rank) |
+
+**Core principle:** one card per signal is correct for the **ground truth** (one card = one traceable
+value; keeps Check 2g / Stage 4c honest). It is wrong for the **reader**. So we **nest and rank at the
+presentation layer, and never merge cards** — every existing card stays addressable and individually
+gated.
+
+---
+
+## 2. The three planes
+
+The redesign replaces "one flat carousel per section" with three planes that answer three different
+reader questions.
+
+| Plane | Reader question | Source | Render |
+|---|---|---|---|
+| **The read** | *What changed this month?* | `is_news.ranked()` over the section's signals, floor 2.0 | Ranked list above the chart, ≤ ~3–5 per pipeline |
+| **Subjects** | *What's happening with X?* | subject resolver (`effect.highlight` SIBC / `effect.focusCard` payments) | Accordion; cards nest under their subject; **all 84 stay addressable** |
+| **Composition** | *What's the structure?* | share/structural signals (`csv_*_share`, distributions) | **Caption on the Distribution tab** — NOT cards. The distribution chart already *is* the composition plane. |
+
+Two facts already in the code (reuse, don't rebuild):
+- **Subject resolution already exists per pipeline:** SIBC `effect.highlight`, payments
+  `effect.focusCard` (`credit_cards`, `cc_ecom`). One interface, two resolvers — same shape as the
+  chart-highlight path today.
+- **`is_news.py` is the ranking engine**, built for the newsletter, explicitly designed to be reused
+  here. `select_reads(k, floor)` already picks reads; `ranked()` returns the full scored list.
+
+---
+
+## 3. The plane classifier — the one net-new compute (measured, AI PM-gated)
+
+`categories.py` **cannot** classify the planes (it answers *which question* a signal asks, not *does it
+change*): C1 holds both `csv_sector_yoy` (pure delta) and `csv_sector_share` (pure structure). The
+read↔composition split needs its **own rule**, and per the standing AI PM rule it **ships with a
+measured catch / false-rejection rate, not before**.
+
+- **Read (news):** `is_news.score ≥ 2.0` (clears a strong factor — record / regime-flip / magnitude).
+  Engine done; already `--measure`d (template-reject 100%, catch 54.5% by design — magnitude-blind).
+- **Composition (structural):** the residue — a signal whose trailing-12m range sits inside its
+  per-unit materiality band **and** whose status has been stable (candidate rule; both computable from
+  signals.db). This is the classifier to **build + measure** (AI PM topic #1 / #2). Do not ship it
+  without the number.
+- **Subject:** everything is addressable in the accordion regardless of plane — the classifier only
+  decides what gets *promoted* (read) vs *demoted* (caption). Nothing is hidden.
+
+---
+
+## 4. Depth ladder → the paid seam (this is where Opportunities lands)
+
+Depth maps onto the pipeline's **own** layer architecture, so the paid seam falls out of the
+architecture instead of being invented for it (same pattern as `OPPORTUNITIES_GATED`):
+
+```
+  Brief   →  L1   the read line + value          (headline, always free)
+  Full    →  L1+  the card body + inference chain (basis.inferences / reasoning.chain)
+  Deep ⌁  →  L2/L3  why it moved + what it opens   (opportunities, forces, loops, constraints)
+```
+
+**Decision — where Opportunities live (recommend Option B):**
+
+- **A — Fold fully into the dashboard, kill `/opportunities`.** Loses the cross-system page that no
+  single pipeline can produce (constructs, eco-edges, cc-balance constraint). ✗
+- **B — Opportunities = the `Deep ⌁` (L2/L3) plane of the *same* dashboard, per subject; `/opportunities`
+  stays as the cross-system standalone.** ✓ **Recommended.** A subject's `Deep ⌁` expansion pulls its
+  live opportunity/risk from `opportunities_feed.json` (already keyed to entities). The dashboard
+  becomes the *pull* surface for L2/L3; `/opportunities` remains the *cross-system* view. One engine,
+  two entry points, no new compute.
+- **C — Keep them fully separate (status quo).** Two disconnected surfaces; the reader never sees "cards
+  fell → here's the opening that creates" in one place. ✗
+
+**The paid pivot, deferred honestly:** build the depth seam now (`Deep ⌁` is a distinct render tier),
+**gate nothing yet.** At <10 visitors/day, gating fights reach — same call already made for
+`OPPORTUNITIES_GATED` (public, Clerk dormant). When users arrive, `Deep ⌁` flips behind the *existing*
+`NEXT_PUBLIC_GATE_*` flag with **zero restructuring**. "Pivot later when we have users" = the seam is
+architected, the gate is a one-line env flip. **Revisit trigger = real signups, not a date.**
+
+---
+
+## 5. Information hierarchy (read this before the wireframe)
+
+The page answers **three reader questions in priority order**. Prominence = position: Tier 1 is what
+the eye hits first. Everything is still reachable — the hierarchy decides *emphasis*, never *access*.
+
+```
+                        ONE PIPELINE PAGE  (e.g. SIBC · Credit deployment)
+
+ ┌── TIER 1 · THE READ ───────────────────────────── most prominent · top ──┐
+ │  Q: "What changed this month?"                                            │
+ │  The 3–5 signals that actually MOVED. Ranked, not generation order.       │
+ │  Source: is_news.ranked()   glyphs: ▲ rose   ▼ fell   ⌁ crossed a line    │
+ └───────────────────────────────────────────────────────────────────────────┘
+                    │  click a read  ─────────────────┐
+                    ▼                        it DRIVES ▼
+ ┌── TIER 2 · THE CHART ──────────────────────────── centre · always on ────┐
+ │  Q: "Show me the evidence."                                               │
+ │  Trend / Distribution of the selected read OR subject.                    │
+ │  COMPOSITION (structure — "Power is 57% of infra") lives HERE as a        │
+ │  one-line caption, NOT as its own cards. The chart already IS structure.  │
+ └───────────────────────────────────────────────────────────────────────────┘
+                    ▲  select a subject  ─────────────┘
+                    │
+ ┌── TIER 3 · SUBJECTS ───────────────────────────── drill-down · retains all ┐
+ │  Q: "What's happening with X?"                                            │
+ │  Accordion of ~36 subjects; the 84 cards NEST under them (never merged).  │
+ │  The read PROMOTES a few; the accordion RETAINS every one. Nothing hidden.│
+ └───────────────────────────────────────────────────────────────────────────┘
+
+ DEPTH — a control that cross-cuts all three tiers (maps to the pipeline's own layers):
+
+        Brief ─────────── Full ─────────── Deep ⌁
+         L1                L1+               L2 / L3
+        headline + value  + inference chain  + the opening/risk it drives
+        (free)            (free)             (opportunities_feed · paid seam later)
+```
+
+The three planes from §2 are exactly these three tiers. **Read = rank · Chart = evidence + composition
+caption · Subjects = nest.** Depth is orthogonal: it deepens whatever tier you're looking at.
+
+---
+
+## 6. Layout — desktop wireframe (SIBC shown; payments identical shape)
+
+```
+┌──────────────────────────────────────────────────────────────────────────┐
+│ ICL · SIBC Credit deployment                    Apr 2026 · released May 29 │  ← AppShell header
+├──────────────────────────────────────────────────────────────────────────┤
+│ [ ● Read    ○ Explore ]                                                    │  ← PAGE MODE toggle
+├──────────────────────────────────────────────────────────────────────────┤
+│ THE READ · 3 moved this month                       Brief · Full · Deep ⌁ │  ← TIER 1 + depth
+│ ┌──────────────────────────────────────────────────────────────────────┐ │
+│ │ ▲  Large corporates     +14.4% YoY · fastest in 11 months            │ │  ranked by is_news;
+│ │ ▼  Credit-card o/s        fell · 2nd straight month                  │ │  click → drives chart
+│ │ ⌁  Gold loans             crossed 7% of personal loans               │ │
+│ └──────────────────────────────────────────────────────────────────────┘ │
+├─────────────────────────┬────────────────────────────────────────────────┤
+│ SUBJECTS      (Tier 3)  │ CHART  (Tier 2)          📈 Trend  📊 Distrib.  │  ← controls ALWAYS
+│ ─────────────────────── │ ┌────────────────────────────────────────────┐ │    visible (fixes the
+│ ▸ Bank credit           │ │                                            │ │    AGENTS.md step-4
+│ ▾ Personal loans   (23) │ │            selected series                 │ │    "hidden in insights
+│   ▾ Credit cards    (4)●─┼─▶                                           │ │    mode" conflict)
+│     ▼ outstanding       │ │                                            │ │
+│     ▲ YoY               │ └────────────────────────────────────────────┘ │
+│     · e-com share       │ Composition:  Power 57 · Roads 18 · Telecom 9 % │  ← caption, not cards
+│     · per-card balance  │                                                │
+│   ▸ Gold loans      (3) │ ⌁ DEEP  (only when depth = Deep)                │
+│ ▸ Industry (by size)    │ ┌────────────────────────────────────────────┐ │
+│ ▸ Services              │ │ Opening: services-entry · active           │ │  ← from opportunities_
+│ ▸ Priority sector       │ │ Why → 3-step computed basis                │ │    feed.json, keyed to
+│ ▸ Industry (by type)    │ └────────────────────────────────────────────┘ │    the subject
+└─────────────────────────┴────────────────────────────────────────────────┘
+   ~⅓ width                  ~⅔ width
+```
+
+Proportions & rules:
+- **Tier 1 (full width, top)** — max ~5 rows. Overflow is **not** "…and 79 more"; the rest live in
+  Subjects. A row = glyph + subject + one clause.
+- **Tier 3 (~⅓, left)** — accordion; indent = hierarchy (Personal loans ▸ Credit cards ▸ its 4
+  signals). Count badge on collapsed parents. Selecting any leaf highlights its series in the chart.
+- **Tier 2 (~⅔, right)** — controls **always visible**; the read *drives* the chart, never hides it. A
+  user chart-touch overrides the mode but never dismisses the read. Composition = one caption line.
+- `⌁ DEEP` block appears only at depth = Deep, per selected subject.
+
+---
+
+## 7. Layout — one subject expanded (the nest + depth, the least obvious part)
+
+Selecting **Credit cards** in the accordion. This is what "cards nest, never merge" means in practice:
+its 4 signals stay 4 individually-gated cards, but they collapse under one subject and deepen together.
+
+```
+ SUBJECT ▾ Credit cards                              depth: Brief · Full · Deep ⌁
+ ────────────────────────────────────────────────────────────────────────────────
+                              Brief          Full                    Deep ⌁
+  ▼ outstanding      →  ▼ o/s fell 2nd mo   + body + inference       + risk_cc_market_
+  ▲ YoY              →  ▲ +8.1% YoY         chain (basis.inferences)   concentration
+  · e-com share      →  · 34% e-com          — one expander per        · the opening this
+  · per-card balance →  · ₹24.9k / card        card, still 1:1 gated     subject drives
+                                                                        (opportunities_feed)
+  each row is still ONE signal = ONE Check-2g-traceable card. Nesting is visual only.
+```
+
+- **Brief** = one line per signal (the read glyph + value). Free.
+- **Full** = each line expands to its card body + `basis.inferences` chain. Free.
+- **Deep ⌁** = the subject's live opening/risk from `opportunities_feed.json` (Option B, §4). The paid
+  seam — public now, one env flag away from gated later.
+
+---
+
+## 8. Layout — mobile (375px, stacked; test before "done")
+
+```
+┌────────────────────────────┐
+│ ICL · SIBC   Apr 2026       │  header
+├────────────────────────────┤
+│ THE READ                    │
+│  [Brief][Full][Deep⌁]       │  depth segmented control
+│ ┌────────────────────────┐  │
+│ │▲ Large corp +14.4% YoY │  │  read cards swipe H (existing
+│ │  fastest in 11 months  │  │  InsightCard swipe pattern)
+│ └────────────────────────┘  │  ● ○ ○   1 of 3
+├────────────────────────────┤
+│ 📈 Trend   📊 Distribution  │  controls (always visible)
+│ ┌────────────────────────┐  │
+│ │      chart              │  │  chart of the active read/subject
+│ └────────────────────────┘  │
+│ Power 57% · Roads 18% …     │  composition caption
+├────────────────────────────┤
+│ SUBJECTS                ▾   │  accordion collapses below the fold
+│  ▸ Bank credit              │  (tap a subject → scrolls chart up,
+│  ▾ Personal loans      (23) │   loads its series)
+│    ▸ Credit cards       (4) │
+└────────────────────────────┘
+```
+
+Mobile keeps the **read → chart → subjects** vertical order (read is the value proposition; subjects
+are the drill-down). Reuse the existing `InsightCard` horizontal swipe for the read stack.
+
+---
+
+## 9. What changes vs what does not
+
+**Changes (presentation only):**
+- New `useReadMode(section)` layer over the existing `useSectionInsights` — adds `ranked` (from
+  is_news), `subjects` (grouped by resolver), `plane` per card.
+- Controls card **no longer hidden in insights mode** (AGENTS.md step 4) — the read *drives*
+  `preferredMode` + `effect.highlight`; a user chart-touch overrides the mode but **never dismisses the
+  read**. This is the one behavioural conflict to resolve at build.
+- Subjects accordion component (nest, don't merge).
+- Depth ladder render tier; `Deep ⌁` pulls from `opportunities_feed.json`.
+
+**Does NOT change:**
+- Any ground-truth gate (Check 2g, Stage 4c, 4f) — cards nest, never merge; each stays 1:1 with its
+  signal and individually traceable.
+- The compute layer, signals.db, the eval path, the distribution surface.
+- Explore mode of each pipeline (see §9 — stays as-is).
+
+---
+
+## 10. Measurement obligations (AI PM topic #1/#2, non-negotiable)
+
+No classifier ships on prose. Before/after, logged to `ai_pm_register.json`:
+- **Plane classifier** — catch rate (a known structural card is demoted) + false-rejection rate (a
+  known news card is wrongly demoted). Reuse `is_news.measure()` as the harness template.
+- **Read selector** — the `is_news` catch/false-rej already measured; re-report on the dashboard's
+  candidate set.
+- **Prominence formula** — inputs available: is_news score, `proximity.py` distance + `typical_move`,
+  record/extreme, share materiality. Pick the weighting, then measure it doesn't invert obvious cases.
+
+---
+
+## 11. Read ⇄ Explore — two modes on one page
+
+The three tiers are the **Read** mode: a curated "what changed" view. It does **not** replace
+exploration — a page-level toggle sits under the header (`● Read  ○ Explore`):
+
+- **Read (default)** — the three tiers (§5). The curation layer.
+- **Explore** — today's dashboard **exactly as it is**: every section, all controls/filters, the full
+  card set in generation order. Untouched by this spec. It is the escape hatch for "I want to see
+  everything myself."
+
+Read mode is a lens *over* the same data Explore already renders — not a fork of it. Both read from the
+same annotations JSON + chart series; Read adds ranking/nesting, Explore adds nothing and removes
+nothing. **Mode is sticky** (localStorage, like depth and `icl-dark`).
+
+### Decided / out of scope (from the 2026-07-21 discussion — do not re-litigate)
+
+- **Explore mode stays AS-IS.** Each pipeline renders its own data its own way; the design system stays
+  shared. No series index, no cross-pipeline basket, no free-form picker. Revisit trigger = several more
+  pipelines ingested ("design on 2, validate with #3"). Known drift to fix then: payments ships
+  precomputed `atm_pos_chart_series.json` while SIBC still ships raw CSV client-side — two chart-data
+  mechanisms.
+- **DROPPED — ✎ "note a finding" on the dashboard.** Public page, no login; authoring belongs in S4.
+
+---
+
+## 12. Decisions — RESOLVED (2026-07-31)
+
+1. **Opportunities placement — Option B.** ✅ Deep plane in-dashboard + `/opportunities` standalone
+   survives. (§4)
+2. **Depth stickiness — sticky.** ✅ localStorage, same pattern as `icl-dark`. Page mode (Read/Explore)
+   is sticky too. (§11)
+3. **Prominence weighting — `is_news.score` alone for v1.** ✅ Order the read by the existing score;
+   do **not** build a blended materiality/proximity formula speculatively. Review the ordering on live
+   data; add a materiality tiebreak only if it reads wrong. (Measure-first, §8.)
+4. **Read-plane cap — floor + soft cap.** ✅ Show all rows with `is_news.score ≥ 2.0`, visibly capped at
+   ~5 with a "+N more moved →" expander. Never pads a quiet month, never buries a busy one.
+5. **Deep inline vs page — inline first, retire `/opportunities` only after review.** ✅ v1 = `⌁ Deep`
+   expands **inline** under the subject; `/opportunities` **stays**. Decision to retire the standalone
+   page is a follow-up, gated on "does the inline fold read cleanly" — taken deliberately, not now.
+
+---
+
+## 13. Build order (after ASCII approval)
+
+1. ✅ **DONE (2026-07-31)** — the classifier + its measurement (§3, §8), the gate on everything else.
+   `analysis/signals/planes.py` (read/composition/subject; reuses is_news + proximity). Measured
+   **catch 100% / false-reject 0%**, partition read 73 / composition 19 / subject 100. 19 unit tests
+   (`tests/test_planes.py`), logged to ai_pm_register topic #1 (26 measurements). Two design
+   corrections earned by the measurement (share pp-band; dropped the status-stable gate — see the
+   module docstring).
+2. ✅ **DONE (2026-07-31)** — the data bridge. `analysis/signals/stamp_planes.py` precomputes each
+   card's plane into a compact **sidecar** (compute-once-ship-compact); wired into the SIBC gate
+   (stage 5.6) + `check_derived_fresh` (freshness-guarded like other derived artifacts). SIBC gate
+   ALL STAGES PASSED.
+
+   **DATA CONTRACT for the web layer** — join on card `id`:
+   ```
+   web/public/data/{sibc,atm_pos}_planes.json
+     { "_meta": {...},
+       "planes": { "<card id>": { "plane": "read"|"composition"|"subject",
+                                  "news_score": <float|null>,  // is_news score; ranks the read tier
+                                  "subject": "<chart series / focusCard>",
+                                  "reason": "record"|"reversal"|"surge"|"shift"|null, // read chip
+                                  "direction": "up"|"down"|"flat"|null } } }          // read glyph
+   ```
+   Every card in `sibc_l1_annotations.json` / `atm_pos_insights.json` has an entry. `plane` drives the
+   tier; `news_score` orders the read tier (floor 2.0 + soft cap ~5); `subject` groups the accordion;
+   `reason`/`direction` populate the read card's chip + ▲▼ glyph (reads only, else null).
+
+--- everything below is the WEB build (next chunk — React/Next.js, presentation only) ---
+
+3. `useReadMode` data layer over `useSectionInsights` — join the planes sidecar onto the cards; expose
+   `reads` (plane==read, sorted by news_score, floor+cap), `subjects` (grouped by `subject`),
+   `composition` (plane==composition → caption text).
+4. **Page-level `Read ⇄ Explore` toggle** (§11) — Explore renders today's dashboard unchanged; Read
+   renders the tiers. Mode sticky in localStorage.
+5. Subjects accordion (nest) + read plane render (floor + soft cap); controls-always-visible refactor
+   (§7 conflict).
+6. Depth ladder (Brief/Full/Deep, sticky) + `Deep ⌁` **inline** wiring to `opportunities_feed.json`
+   (Option B, decision 5).
+7. Payments parity (same shape, `effect.focusCard` resolver) — MUST follow §14 representation exactly.
+8. Measure, log to ai_pm_register, then `npm run build` + preview at 375px before push.
+
+---
+
+## 14. Representation — the LOCKED visual layout (Option A · both pipelines) ⭐
+
+The reference every read surface renders to — SIBC first, **payments must match this** so the two
+dashboards read as one system. Presentation only; the tiers (§5) and planes (§3) are unchanged.
+
+### 14.1 Shell + panes (fixes the ~30% desktop whitespace)
+
+- **Read mode shell = `max-w-[1440px] px-6`** (Explore stays `max-w-5xl` — a single column doesn't want
+  1440px). This roughly halves today's dead side margins.
+- **Two-pane on `lg`+**: left **rail 360px fixed**, right **detail `flex-1`** (chart pane ≈ 1040px on a
+  1440 canvas — far bigger than today's whole column), `gap-6`, detail is `lg:sticky lg:top-6`.
+- **Below `lg` → ONE column**, source order **reads → detail → subjects** (tap a read, its detail is the
+  next block). Achieved with CSS-grid placement so mobile needs no separate markup. The 360px is a
+  desktop-only track; it never applies on mobile. Everything wraps, nothing truncates, test at 375px.
+
+```
+ max-w-[1440px]  ·  lg:grid-cols-[360px_minmax(0,1fr)]  gap-6
+┌──────────────────────────┬────────────────────────────────────────────────┐
+│ LEFT RAIL (360px)        │ DETAIL (flex-1, sticky)                          │
+│ THE READ · N moved       │ {Section kicker}                                 │
+│ ┌──────────────────────┐ │ {Card title}                                    │
+│ │▎ Subject      VALUE   │ │ ┌────────────────────────────────────────────┐ │
+│ │▎ ▲ record · Absolute  │ │ │  chart — subject series highlighted        │ │
+│ └──────────────────────┘ │ └────────────────────────────────────────────┘ │
+│ … cards …  +N more ▾     │ Composition: … (muted one-liner)                │
+│ ──────────               │ {body}    Why this reads → ① ② ③   ⌁ Opens: … → │
+│ SUBJECTS (accordion)     │                                                 │
+└──────────────────────────┴────────────────────────────────────────────────┘
+   mobile: reads → detail → subjects, stacked, full width
+```
+
+### 14.2 Colour language — **colour = section** (reuse `SEC_COLORS`, no new colours)
+
+A card's section colour is also its chart-line colour, so a purple Services card *is* the purple line.
+Colour appears ONLY as: read-card left spine, the headline value, the detail kicker, the chain number
+markers, the Deep link, and the subject-row spine. Everything else uses the two neutral tokens
+(`--font`, `--font-muted`) over `--bg-card`. Works in both themes (tint the section colour over the card
+bg; selected read card bg = section @ ~8% light / ~16% dark).
+
+### 14.3 Type scale (readable desktop AND mobile — headlines a touch larger)
+
+| Element | Size / weight | Colour |
+|---|---|---|
+| Rail eyebrow ("THE READ · N moved") | 12px / 600 / uppercase / tracking 0.06em | `--font-muted` |
+| Read-card subject | 14px / 500 | `--font` |
+| Read-card **value** | 17px / 700 | **section** |
+| Read-card sub-line (`▲ reason · mode`) | 12px / 500 | `--font-muted` (glyph tinted) |
+| Detail kicker (section name) | 12px / 600 / uppercase | **section** |
+| Detail title | 22px / 700 | `--font` |
+| Composition caption | 13px / 400 | `--font-muted` |
+| Detail body | 15px / 400 / lh 1.6 | `--font` |
+| "Why this reads" — heading / steps | 12px·600 / 14px·400 | steps `--font`; ①②③ markers **section** |
+| Deep opening link | 14px / 600 | **section** |
+| Subject accordion — title / count | 14px·600 / 12px | `--font`; row spine **section** |
+
+### 14.4 Read card anatomy (better than a plain tag)
+
+```
+ idle                             selected
+┌────────────────────────────┐   ┌────────────────────────────┐
+│▎ Services          20.4%   │   │▎ Services          20.4%   │  ▎ 3px spine = section
+│▎ ▲ record · YoY            │   │▎ ▲ record · YoY            │  value 17px 700 in section colour
+└────────────────────────────┘   └━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛  selected: bg section@8% + bold spine
+```
+
+- **Section = colour** (spine + value tint), NOT a repeated text pill.
+- **Chip = why it surfaced**, from the sidecar `reason`: `▲/▼ record · ⇄ reversal · ⚡ surge · • shift`
+  (glyph = `direction`), then the chart `mode`. This tells the reader *why it's news* — a section name
+  never does. The section name lives once, large, on the detail kicker.
+
+### 14.8 Navigation — three controls for three navs (chip strip)
+
+The rail must NOT do all three navigations at once (browse items + switch dimension + be a 7-way
+accordion) — that overloads it. Each nav gets one control:
+
+```
+ ‹ Credit dashboard                                        Brief · Full · Deep⌁     ← nav 3 + depth
+ ‹ [★ What moved ·▲27][🏦 Bank Credit ·▲5][📊 Main Sectors ·▲2][🏭…][🛎…][💳…] ›   ← nav 2 (chips)
+ ┌───────────────────────────────┬────────────────────────────────────────────┐
+ │ PERSONAL LOANS · 29 · ▲11      │  detail (kicker / title / chart / body …)   │
+ │ ▾ Credit cards                 │                                             │   ← nav 1: the rail =
+ │   ▲ Advances 8.3% YoY  ●       │                                             │      ONE list's items
+ │ … only this dimension's cards… │                                             │
+ └───────────────────────────────┴────────────────────────────────────────────┘
+```
+
+- **nav 1 · between items** — the left rail shows **one list only**: either a dimension's cards
+  (subjects → cards, ▲ on movers) or the reads. Clicking a card changes the detail; the list stays.
+- **nav 2 · switch list** — the **horizontal chip strip**: `★ What moved` (the reads, pinned first) +
+  one chip per dimension, coloured by section, active chip filled, `▲ K` badge. It **does not wrap** —
+  it scrolls horizontally with `‹ ›` arrows (`overflow-x:auto`, scrollbar hidden; the active chip
+  auto-scrolls into view). The reads are just another selectable list, reachable from anywhere.
+- **nav 3 · to the dashboard** — the `‹ {homeLabel}` breadcrumb → the grid front door.
+
+This **supersedes the in-rail dimension accordion** (and the §14.7 "single-open on select" rule, now
+moot — there is no accordion). Payments uses the same strip: `★ What moved` + cc/dc/infra chips.
+
+### 14.6 Grid front-door (the landing state)
+
+Read mode opens on a **grid overview**, not straight into the detail — this is what makes the
+dimensions visibly a browsable layer (the earlier plain list buried them). Two states, one component:
+
+- **GRID (landing, `view="grid"`):** the reads ("what changed") as a responsive card grid on top
+  (`sm:2 / lg:3` cols), then **`Browse · N dimensions · M insights`** and the dimensions as a card grid
+  (`2 / sm:3 / lg:4`). Each **dimension card** = section-colour spine + icon + title + `N insights` and,
+  when it has news, `▲ K moved` in the section colour. Nothing selected, no chart mounted.
+- **DETAIL (`view="detail"`):** click any read or dimension card → **220ms crossfade** into the §14.1
+  two-pane. A **`‹ All dimensions`** link returns to the grid.
+
+Why a plain crossfade suffices (not a layout-morph): the detail rail *already* carries the dimension
+directory, so you switch dimensions **in the rail**, not by bouncing back to the grid — the grid is a
+front door passed through ~once per session. Entering a dimension opens **only** that one in the rail
+directory (`openSections = {entered}`), so the rail reads as a directory, not a wall of expanded cards.
+No `framer-motion`; the chart simply mounts fresh in the detail pane (a morph is where jank would live).
+If frequent overview↔detail bouncing is ever wanted, add `framer-motion` `layout` for a glide — deferred.
+
+### 14.7 Interaction + polish rules (apply to BOTH pipelines)
+
+- **Hover:** every clickable card lifts/highlights — read cards + rail rows get `box-shadow` + a
+  section-colour border on hover; dimension tiles also translateY(-2px); the back link + Deep links
+  darken. **Card border/spine/background MUST live in the CSS class, NOT inline** — an inline `border`
+  or `box-shadow` wins specificity over the `:hover` rule and silently kills the hover (this bit us).
+  Only the dynamic `--sec` (section colour) + `--sel` (selected tint) custom props go inline; the
+  `.rm-card` / `.rm-flat` classes read them, and `.sel` marks the selected state.
+- **Single-open on select.** Clicking a card (read or rail row) sets the open dimension set to JUST that
+  card's dimension — the other dimensions collapse. (Expanding via a dimension *header* still allows
+  multiple open for browsing; committing to a card focuses one.) Picking also scrolls the detail/chart
+  into view (all viewports), since the pick may come from deep in the rail.
+- **Grid resets the reads.** The "+N more" reads expansion is local to a visit — returning to the grid
+  front door resets it to the top-5 overview.
+- **Home label:** the back link reads **`‹ {homeLabel}`** — a prop: "Credit dashboard" (SIBC),
+  "Payments dashboard" (payments). Never hard-code "All dimensions".
+- **Detail is NOT sticky.** The detail pane scrolls with its own content so chart → composition → body
+  → why read as one motion. (Sticky pinned a tall pane and cut off the body, and made scrolling feel
+  like it moved the left rail — removed.)
+- **Left column bundles reads + dimensions** in one flex column (`lg:grid-cols-[360px_1fr]`, left =
+  reads then the dimension directory, right = detail). Do NOT use a `row-span` detail with the
+  dimensions in a separate grid row — a detail taller than the rail inflates the row and strands the
+  dimensions far down with a blank gap. A short sidebar with clean whitespace beneath it is correct.
+- **Enter on the news, not the first card.** Opening a dimension selects its top *read* if it has one,
+  else its first card — so a "3 moved" dimension lands on something that moved.
+- **Mark the movers.** Inside an expanded dimension, cards that are reads carry a leading **▲** in the
+  section colour and bold weight; the dimension header shows a **`▲ K`** badge. Structural/quiet cards
+  are unmarked — so "which of these actually moved" is visible without opening each.
+- **Depth must be self-evident.** The Brief/Full/Deep ladder was invisible in use (default Full, and
+  Deep changed nothing where there was no opportunity). Three rules: (1) a live descriptor under the
+  ladder — `Detail: chart only` / `with the reasoning` / `with what it opens`; (2) **Deep is only
+  offered where an opportunity exists** — elsewhere the ladder shows Brief/Full only, and a sticky
+  `deep` preference renders as Full (`effDepth`); (3) **on a depth increase, scroll the newly-revealed
+  block into view and flash it** (Web Animations background pulse) so the reader sees what the level
+  added. Brief = title+chart+composition · Full = +body+"Why this reads" · Deep = +"What this opens".
+- **No chart controls in read mode — a static view label.** The insight's `preferredMode` already
+  overrides the mode radios (they were dead), so the whole control strip is gone. Instead show one muted
+  label of what's displayed — `📈 Trend · YoY %` / `📈 Trend · ₹ absolute` / `📈 Trend · FY cumulative`
+  / `📊 Distribution · % share` — derived from the insight. The chart renders the insight's own view;
+  the series legend stays display-only. Exploring other modes is what Explore mode is for.
+
+### 14.5 Payments binding (so parity is mechanical, not a redesign)
+
+Payments renders the SAME three DOM blocks + §14.1 shell + §14.2–14.4 styling. Only the resolvers
+differ: subject = `effect.focusCard`; section colour = `GROUP_ACCENT[group]` (cc blue / dc green / infra
+orange) instead of `SEC_COLORS`; cards come from the flat `atm_pos_insights.json` grouped by cc/dc/infra;
+chart = `AtmPosTrendChart`. Everything else — spine/value/chip/kicker/type scale/pane grid — is shared.

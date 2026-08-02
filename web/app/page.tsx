@@ -2,20 +2,27 @@
 
 import { useEffect, useState } from "react";
 import { loadReport }           from "@/lib/reports/rbi_sibc";
+import { loadPlanes, type PlanesMap } from "@/lib/planes";
 import { useAppShell }          from "@/components/AppShell";
 import SectionWithAnnotations   from "@/components/SectionWithAnnotations";
+import ReadModeView             from "@/components/read/ReadModeView";
+import ModeToggle               from "@/components/read/ModeToggle";
+import { usePersistent }        from "@/hooks/usePersistent";
 import NewsletterCTA             from "@/components/NewsletterCTA";
 import type { Report }          from "@/lib/types";
 
 export default function Dashboard() {
   const { setHeaderMetric } = useAppShell();
   const [report, setReport] = useState<Report | null>(null);
+  const [planes, setPlanes] = useState<PlanesMap>({});
+  const [mode, setMode] = usePersistent<"read" | "explore">("icl-mode", "read");
 
   useEffect(() => {
     loadReport().then((r) => {
       setReport(r);
       setHeaderMetric(r.totalBankCredit, r.latestDate);
     });
+    loadPlanes("sibc").then(setPlanes);
   }, [setHeaderMetric]);
 
   if (!report) {
@@ -29,11 +36,20 @@ export default function Dashboard() {
     );
   }
 
+  // Read mode uses a wider shell (two panes need the room, §14.1); Explore stays a single column.
+  const shell = mode === "read" ? "max-w-[1440px] px-6" : "max-w-5xl px-4";
+
   return (
-    <main className="max-w-5xl mx-auto px-4 py-6">
-      {report.sections.map((section) => (
-        <SectionWithAnnotations key={section.id} section={section} />
-      ))}
+    <main className={`${shell} mx-auto py-6`}>
+      <ModeToggle mode={mode} setMode={setMode} />
+
+      {mode === "read" ? (
+        <ReadModeView report={report} planes={planes} homeLabel="Credit dashboard" />
+      ) : (
+        report.sections.map((section) => (
+          <SectionWithAnnotations key={section.id} section={section} />
+        ))
+      )}
 
       <div className="mt-10 mb-2">
         <NewsletterCTA variant="banner" />

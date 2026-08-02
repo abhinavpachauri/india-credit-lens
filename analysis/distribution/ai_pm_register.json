@@ -229,6 +229,13 @@
      "date": "2026-07-29",
      "how_measured": "scan feed implications for should/must/need-to/move-on-this (0); generate_slot 14th (0 warnings); prose_lint on monthly+deep read (0). Enforce-don't-trust: the guard is deterministic, not prompt-dependent.",
      "source": "analysis/crosssource/generate_opportunity_narrative.py::_observation_only · analysis/crosssource/generate_opportunities_feed.py"
+    },
+    {
+     "metric": "dashboard read-mode composition/structural plane classifier — catch + false-rejection",
+     "value": "Built analysis/signals/planes.py, the one net-new compute in the dashboard read-mode redesign (DASHBOARD_SPEC.md step 1): sorts every L1 signal into read (is_news.score>=2.0) / composition (structural, shown once as a caption) / subject. The composition rule is its own judgement because categories.py answers which-question not does-it-change (C1 holds both csv_sector_yoy and csv_sector_share). Rule: value spread over trailing 12 within a per-unit materiality band (3pp for rates/shares, 5% relative otherwise), read-first priority excludes movers. Measured non-circularly: independent structural label = a share flat to <1pp over ALL history (blind to the band); independent mover label = is_news magnitude outlier (>2x typical move). Result: catch 10/10 = 100% (structural shares -> composition; +2 truly-still shares correctly filed read because they flipped THIS period, not misses); false-reject 0/22 = 0% (no mover miscalled structure). Partition read 73 / composition 19 / subject 100 — composition ~10%, the intended not-news residue. Two design corrections earned by the measurement: (1) shares carry unit=None but are pp-scale, so share methods use an absolute 3pp band not the relative one (catch 41.7%->66.7%); (2) dropped the spec-draft AND status-stable gate — it dropped genuinely-still shares whose status LABEL wobbles on knife-edge noise, e.g. personal-loans-share at ~33% all year (catch 66.7%->100%).",
+     "date": "2026-07-31",
+     "how_measured": "python3 analysis/signals/planes.py --measure — catch = truly-still-non-read signals filed composition; false-reject = magnitude-outlier signals wrongly filed composition. Both labels independent of the classifier (raw full-history spread; behavioural magnitude), so agreement is a real question, per the narrow-negative-test lesson.",
+     "source": "analysis/signals/planes.py (measure()); reuses signals/is_news.py + signals/proximity.py"
     }
    ],
    "observations": [

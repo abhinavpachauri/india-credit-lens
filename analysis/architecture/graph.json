@@ -298,7 +298,9 @@
         "analysis/rbi_sibc/merged/system_state_*.json": "low",
         "analysis/signals/signals.db": "low",
         "web/public/data/atm_pos_chart_series.json": "low",
-        "web/public/data/opportunities_feed.json": "low"
+        "web/public/data/atm_pos_planes.json": "low",
+        "web/public/data/opportunities_feed.json": "low",
+        "web/public/data/sibc_planes.json": "low"
       },
       "writes": {}
     },
@@ -719,6 +721,17 @@
       },
       "writes": {}
     },
+    "signals/planes": {
+      "doc_claims": [],
+      "imports": [
+        "signals/is_news",
+        "signals/proximity"
+      ],
+      "invokes": [],
+      "path": "analysis/signals/planes.py",
+      "reads": {},
+      "writes": {}
+    },
     "signals/proximity": {
       "doc_claims": [],
       "imports": [],
@@ -760,6 +773,21 @@
       "writes": {
         "analysis/signals/registry.json": "high"
       }
+    },
+    "signals/stamp_planes": {
+      "doc_claims": [],
+      "imports": [
+        "signals/planes",
+        "signals/proximity"
+      ],
+      "invokes": [],
+      "path": "analysis/signals/stamp_planes.py",
+      "reads": {
+        "analysis/DASHBOARD_SPEC.md": "low",
+        "web/public/data/atm_pos_insights.json": "low",
+        "web/public/data/sibc_l1_annotations.json": "low"
+      },
+      "writes": {}
     },
     "signals/update_registry": {
       "doc_claims": [],

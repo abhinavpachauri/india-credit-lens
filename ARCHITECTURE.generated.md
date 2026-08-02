@@ -8,7 +8,7 @@
 > Authored rationale (layer model, design principles, guard purposes) lives in the
 > hand-written `ARCHITECTURE.md`. This file is the structural, drift-guarded half.
 
-_Derived from 58 scripts._
+_Derived from 60 scripts._
 
 ## 1. Data-flow
 
@@ -84,6 +84,7 @@ Scripts each orchestrator launches as a subprocess, in execution order.
 |---|---|---|---|
 | `analysis/*/merged/system_state_*.json` | external/authored | — | `core/run_inference` |
 | `analysis/COMPOSITION_SPEC.md` | external/authored | — | `crosssource/derive_cross_links` |
+| `analysis/DASHBOARD_SPEC.md` | external/authored | — | `signals/stamp_planes` |
 | `analysis/SYSTEM_MODEL_SPEC.md` | external/authored | — | `core/generate_skeleton` |
 | `analysis/architecture/graph.json` | external/authored | — | `guards/check_derived_fresh` |
 | `analysis/cross_source/candidates.json` | derived | `crosssource/derive_cross_links` | `core/run_inference`, `guards/check_derived_fresh` |
@@ -113,11 +114,13 @@ Scripts each orchestrator launches as a subprocess, in execution order.
 | `web/lib/reports/rbi_sibc_label_overrides.json` | external/authored | — | `pipelines/sibc/validate_web_series` |
 | `web/public/data/atm_pos_chart_series.json` | derived | `core/generate_chart_series` | `guards/check_derived_fresh` |
 | `web/public/data/atm_pos_consolidated.csv` | derived | `pipelines/atm_pos/consolidate_atm_pos` | `core/generate_chart_series`, `pipelines/atm_pos/compute_atm_pos_signals`, `signals/compute/atm_pos`, `signals/evaluate` |
-| `web/public/data/atm_pos_insights.json` | external/authored | — | `pipelines/atm_pos/generate_atm_pos_insights` |
+| `web/public/data/atm_pos_insights.json` | external/authored | — | `pipelines/atm_pos/generate_atm_pos_insights`, `signals/stamp_planes` |
+| `web/public/data/atm_pos_planes.json` | external/authored | — | `guards/check_derived_fresh` |
 | `web/public/data/atm_pos_signals.json` | external/authored | — | `pipelines/atm_pos/compute_atm_pos_signals` |
 | `web/public/data/opportunities_feed.json` | derived | `crosssource/generate_opportunities_feed`, `crosssource/generate_opportunity_narrative` | `core/validate_opportunity_traceability`, `guards/check_derived_fresh` |
 | `web/public/data/rbi_sibc_consolidated.csv` | derived | `pipelines/sibc/update_web_data` | `pipelines/sibc/validate_web_series`, `signals/compute/sibc`, `signals/evaluate` |
-| `web/public/data/sibc_l1_annotations.json` | derived | `pipelines/sibc/generate_analysis_report` | `pipelines/sibc/validate_sibc_traceability` |
+| `web/public/data/sibc_l1_annotations.json` | derived | `pipelines/sibc/generate_analysis_report` | `pipelines/sibc/validate_sibc_traceability`, `signals/stamp_planes` |
+| `web/public/data/sibc_planes.json` | external/authored | — | `guards/check_derived_fresh` |
 
 ## 4. Module-dependency map
 
@@ -139,6 +142,8 @@ orchestrated, not import-coupled).
 - `signals/evaluate` → `signals/db`, `signals/query`
 - `signals/is_news` → `signals/proximity`
 - `signals/migrate_to_db` → `signals/db`
+- `signals/planes` → `signals/is_news`, `signals/proximity`
+- `signals/stamp_planes` → `signals/planes`, `signals/proximity`
 
 ## 5. Findings (drift signals)
 

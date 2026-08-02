@@ -13,10 +13,14 @@ export default function SectionCard({ title, icon, accentColor, bare, children }
     <div
       className="rounded-xl mb-6 overflow-hidden"
       style={{
+        // All-longhand borders: mixing `border` shorthand with a `borderLeft` override warns and
+        // can bug when the accent changes on rerender (read-mode re-tints this card per selection).
         background: "var(--bg-card)",
-        border: "1px solid var(--border-card)",
+        borderStyle: "solid",
+        borderTopWidth: 1, borderRightWidth: 1, borderBottomWidth: 1, borderLeftWidth: 4,
+        borderTopColor: "var(--border-card)", borderRightColor: "var(--border-card)",
+        borderBottomColor: "var(--border-card)", borderLeftColor: accentColor,
         boxShadow: "0 2px 8px var(--shadow)",
-        borderLeft: `4px solid ${accentColor}`,
       }}
     >
       {/* Card header — omitted when bare=true (heading rendered above) */}

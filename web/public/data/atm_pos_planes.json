@@ -1,0 +1,165 @@
+{
+ "_meta": {
+  "pipeline": "atm_pos",
+  "purpose": "Per-card read/composition/subject plane for the dashboard read-mode. Derived from the card artifact + signals.db by planes.py — join on card id. Regenerated every gate; freshness-guarded with --check.",
+  "spec": "analysis/DASHBOARD_SPEC.md",
+  "classifier": "analysis/signals/planes.py"
+ },
+ "planes": {
+  "cc-cards-streak": {
+   "plane": "subject",
+   "news_score": 0.0,
+   "subject": "credit_cards"
+  },
+  "cc-cards-yoy": {
+   "plane": "subject",
+   "news_score": 0.0,
+   "subject": "credit_cards"
+  },
+  "cc-spend-yoy": {
+   "plane": "subject",
+   "news_score": null,
+   "subject": "cc_ecom"
+  },
+  "cc-category-share-shift": {
+   "plane": "subject",
+   "news_score": null,
+   "subject": "credit_cards"
+  },
+  "cc-top5-concentration": {
+   "plane": "subject",
+   "news_score": null,
+   "subject": "credit_cards"
+  },
+  "gap-foreign-cc-decline": {
+   "plane": "subject",
+   "news_score": null,
+   "subject": "credit_cards"
+  },
+  "dc-atm-share-structural": {
+   "plane": "read",
+   "news_score": 3.0,
+   "subject": "dc_atm",
+   "reason": "reversal",
+   "direction": "down"
+  },
+  "dc-pos-cash-decline": {
+   "plane": "subject",
+   "news_score": 0.0,
+   "subject": "dc_pos_wd"
+  },
+  "dc-ecom-share": {
+   "plane": "subject",
+   "news_score": 0.0,
+   "subject": "dc_ecom"
+  },
+  "dc-cards-yoy": {
+   "plane": "subject",
+   "news_score": 1.0,
+   "subject": "debit_cards"
+  },
+  "dc-psb-dominance": {
+   "plane": "subject",
+   "news_score": null,
+   "subject": "debit_cards"
+  },
+  "dc-top-bank-leader": {
+   "plane": "subject",
+   "news_score": null,
+   "subject": "debit_cards"
+  },
+  "gap-dc-cash-dominance": {
+   "plane": "subject",
+   "news_score": null,
+   "subject": "dc_atm"
+  },
+  "gap-dc-ecom-low": {
+   "plane": "subject",
+   "news_score": null,
+   "subject": "dc_ecom"
+  },
+  "infra-qr-per-pos": {
+   "plane": "read",
+   "news_score": 2.0,
+   "subject": "upi_qr",
+   "reason": "record",
+   "direction": "up"
+  },
+  "infra-pos-yoy": {
+   "plane": "read",
+   "news_score": 5.0,
+   "subject": "pos_terminals",
+   "reason": "record",
+   "direction": "down"
+  },
+  "infra-upi-yoy": {
+   "plane": "subject",
+   "news_score": 0.0,
+   "subject": "upi_qr"
+  },
+  "infra-upi-vs-bharat-qr": {
+   "plane": "read",
+   "news_score": 2.0,
+   "subject": "upi_qr",
+   "reason": "record",
+   "direction": "up"
+  },
+  "infra-top-bank-pos": {
+   "plane": "subject",
+   "news_score": null,
+   "subject": "pos_terminals"
+  },
+  "gap-pos-concentration": {
+   "plane": "subject",
+   "news_score": null,
+   "subject": "pos_terminals"
+  },
+  "cc-category-rotation": {
+   "plane": "subject",
+   "news_score": 0.0,
+   "subject": "credit_cards"
+  },
+  "dc-category-rotation": {
+   "plane": "subject",
+   "news_score": 0.0,
+   "subject": "debit_cards"
+  },
+  "pos-category-rotation": {
+   "plane": "subject",
+   "news_score": 0.0,
+   "subject": "pos_terminals"
+  },
+  "cc-bank-divergence": {
+   "plane": "subject",
+   "news_score": null,
+   "subject": "credit_cards"
+  },
+  "dc-bank-divergence": {
+   "plane": "subject",
+   "news_score": null,
+   "subject": "debit_cards"
+  },
+  "pos-bank-divergence": {
+   "plane": "subject",
+   "news_score": null,
+   "subject": "pos_terminals"
+  },
+  "dc-issuance-vs-spend-gap": {
+   "plane": "subject",
+   "news_score": 0.0,
+   "subject": "debit_cards"
+  },
+  "pos-fleet-vs-spend-gap": {
+   "plane": "read",
+   "news_score": 5.0,
+   "subject": "pos_terminals",
+   "reason": "record",
+   "direction": "down"
+  },
+  "atm-fleet-vs-withdrawal-gap": {
+   "plane": "subject",
+   "news_score": 0.0,
+   "subject": "atms"
+  }
+ }
+}
