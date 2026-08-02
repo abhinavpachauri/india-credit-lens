@@ -68,11 +68,16 @@ def test_mermaid_render_is_pure_structure():
     assert "Zero MDR" in code and "UPI QR" in code
 
 
+# A model-backed risk spine, addressed by its permanent model node rather than by whichever
+# spine happens to be live this period — the invariant is that the model can DRAW it, which does
+# not depend on the risk firing in the current opportunities feed.
+MODEL_RISK_SPINE = {"id": "risk_infrastructure_bifurcation", "kind": "risk",
+                    "item": {"pipeline": "atm_pos"}}
+
+
 def test_chosen_spine_diagram_comes_from_the_model():
     """The #8 diagram is a real signed subgraph the model holds — not a synthesised triangle."""
-    cand = next(c for c in src.spine_candidates()
-                if c["id"] == "risk_infrastructure_bifurcation")
-    sub = model_graph.subgraph_for(cand)
+    sub = model_graph.subgraph_for(MODEL_RISK_SPINE)
     assert sub and len(sub["nodes"]) >= 4          # force + QR + POS + risk, at least
     assert any(n["kind"] == "force" for n in sub["nodes"])
     assert any(e.get("against") for e in sub["edges"])     # the suppressed side is signed
@@ -100,9 +105,7 @@ def test_chosen_spine_mermaid_labels_are_parser_safe():
     """Node labels must carry no character that breaks the mermaid grammar even inside quotes
     (parens/colons/slashes/pipes) — the reason #8's force + risk labels are softened."""
     import re as _re
-    cand = next(c for c in src.spine_candidates()
-                if c["id"] == "risk_infrastructure_bifurcation")
-    code = mermaid.render(*[model_graph.subgraph_for(cand)[k] for k in ("nodes", "edges")])
+    code = mermaid.render(*[model_graph.subgraph_for(MODEL_RISK_SPINE)[k] for k in ("nodes", "edges")])
     assert ".->|" not in code
     for m in _re.finditer(r'"([^"]*)"', code):
         assert not _re.search(r"[()/:|{}\[\]]", m.group(1)), m.group(1)
@@ -125,8 +128,9 @@ def test_spine_candidates_ranked_and_diagram_flagged():
         # The diagram flag now tracks what the MODEL can draw (§11.2-R2), not the spine kind.
         assert c["diagram"] == (model_graph.subgraph_for(c) is not None)
         assert "?" in c["question"]               # every candidate is phrased as a question
-    # #8 (a risk) earns a diagram from its model subgraph — the point of the R2 change.
-    assert next(c for c in cands if c["id"] == "risk_infrastructure_bifurcation")["diagram"]
+    # A risk earns a diagram from its model subgraph — the point of the R2 change. Asserted on the
+    # permanent model node so the invariant holds in any period, whether or not it is live now.
+    assert model_graph.subgraph_for(MODEL_RISK_SPINE) is not None
 
 
 def test_recent_spine_kind_is_downranked(tmp_path, monkeypatch):
@@ -173,6 +177,15 @@ def test_source_tiers_resolve_by_host():
     assert bank_sourcing.tier_of("https://www.crisil.com/x") == "report"
     assert bank_sourcing.tier_of("https://www.business-standard.com/x") == "press"
     assert bank_sourcing.tier_of("https://randomblog.example/x") is None
+    # 2026-08-02 additions: the four RBI-licensed bureaus are all reachable now (CIBIL/CRIF were
+    # already in; Equifax + Experian complete the set), plus policy ministries and press mastheads.
+    assert bank_sourcing.tier_of("https://www.equifax.co.in/x") == "report"
+    assert bank_sourcing.tier_of("https://experian.in/x") == "report"
+    assert bank_sourcing.tier_of("https://indiaratings.co.in/x") == "report"
+    assert bank_sourcing.tier_of("https://www.meity.gov.in/x") == "official"
+    assert bank_sourcing.tier_of("https://www.ndtvprofit.com/x") == "press"
+    # an off-list host is still rejected — the list stays controlled, not a judgment call.
+    assert bank_sourcing.tier_of("https://medium.com/@someone/post") is None
 
 
 def test_excerpt_must_literally_appear_on_the_page():

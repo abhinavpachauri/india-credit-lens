@@ -1,13 +1,13 @@
-RBI's May 2026 credit numbers are out.
+RBI's June 2026 credit numbers are out.
 
-Bank credit at ₹215.2L Cr — new all-time high.
+Bank credit at ₹219.3L Cr — highest on record.
 
-Personal loans 15.38% YoY — easing from peak.
+Personal loans at 15.76% YoY — re-accelerating after May dip.
 
-Credit cards +8.5% YoY — fastest growth in 12 months.
+Credit cards +9.57% YoY — fastest growth in 17 months.
 
-POS terminals -0.48% YoY — first contraction on record.
+POS terminals -15.8% YoY — steepest contraction on record.
 
-Both halves are on the same data month: May 2026 credit data and May 2026 payments data.
+Both halves are on the same data month: June 2026 credit data and June 2026 payments data.
 
 Full breakdown on Substack.

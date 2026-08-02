@@ -2,7 +2,7 @@
 
 **Slot:** 28th of the month
 **Question this answers:** What could flip next month
-**Data vintage:** Both halves are on the same data month: May 2026 credit data and May 2026 payments data.
+**Data vintage:** Both halves are on the same data month: June 2026 credit data and June 2026 payments data.
 **Pages:** 1
 
 ## The arc
@@ -13,17 +13,17 @@ A distance-to-the-line layout: current value, the threshold, and the gap between
 
 Each block below was written deterministically from signals.db — the wording is the generator's, the numbers are the database's. Use the wording as the source of truth for what is being said; you may shorten for the page, but you may not change a number or add a qualifier that is not here.
 
-### Pair divergence — ATM fleet vs cash withdrawn from it (YoY gap, pp)
+### Pair divergence — debit cards issued vs spent on (YoY gap, pp)
 
-Pair divergence — ATM fleet vs cash withdrawn from it (YoY gap, pp) is 3.3 pp and reads accelerating. A fall to 3.0 pp would change that reading to steady — a move of 0.3 pp, against a typical monthly move of 2.5 pp.
+Pair divergence — debit cards issued vs spent on (YoY gap, pp) is 3.3 pp and reads accelerating. A fall to 3.0 pp would change that reading to steady — a move of 0.3 pp, against a typical monthly move of 2.5 pp.
 
-<sub>source: signals/proximity.py — distance to the next status flip · signals: atm-fleet-vs-withdrawal-gap</sub>
+<sub>source: signals/proximity.py — distance to the next status flip · signals: dc-issuance-vs-spend-gap</sub>
 
-### POS terminals YoY growth (%)
+### Consumer Durables YoY growth (%)
 
-POS terminals YoY growth (%) is -0.5% and reads falling. A rise to 0.0% would change that reading to accelerating — a move of 0.5%, against a typical monthly move of 2.6%.
+Consumer Durables YoY growth (%) is -0.6% and reads falling. A rise to 0.0% would change that reading to accelerating — a move of 0.6%, against a typical monthly move of 3.6%.
 
-<sub>source: signals/proximity.py — distance to the next status flip · signals: pos-terminals-yoy</sub>
+<sub>source: signals/proximity.py — distance to the next status flip · signals: sibc-pl-consumer-durables-yoy</sub>
 
 ## The numbers you may use
 
@@ -34,58 +34,58 @@ This is the complete set. Nothing outside it may appear on the pager.
  "supplied_numbers": [
   {
    "value": "3.3 pp",
-   "claim": "atm-fleet-vs-withdrawal-gap",
+   "claim": "dc-issuance-vs-spend-gap",
    "signals": [
-    "atm-fleet-vs-withdrawal-gap"
+    "dc-issuance-vs-spend-gap"
    ]
   },
   {
    "value": "3.0 pp",
-   "claim": "atm-fleet-vs-withdrawal-gap",
+   "claim": "dc-issuance-vs-spend-gap",
    "signals": [
-    "atm-fleet-vs-withdrawal-gap"
+    "dc-issuance-vs-spend-gap"
    ]
   },
   {
    "value": "0.3 pp",
-   "claim": "atm-fleet-vs-withdrawal-gap",
+   "claim": "dc-issuance-vs-spend-gap",
    "signals": [
-    "atm-fleet-vs-withdrawal-gap"
+    "dc-issuance-vs-spend-gap"
    ]
   },
   {
    "value": "2.5 pp",
-   "claim": "atm-fleet-vs-withdrawal-gap",
+   "claim": "dc-issuance-vs-spend-gap",
    "signals": [
-    "atm-fleet-vs-withdrawal-gap"
+    "dc-issuance-vs-spend-gap"
    ]
   },
   {
-   "value": "-0.5%",
-   "claim": "pos-terminals-yoy",
+   "value": "-0.6%",
+   "claim": "sibc-pl-consumer-durables-yoy",
    "signals": [
-    "pos-terminals-yoy"
+    "sibc-pl-consumer-durables-yoy"
    ]
   },
   {
    "value": "0.0%",
-   "claim": "pos-terminals-yoy",
+   "claim": "sibc-pl-consumer-durables-yoy",
    "signals": [
-    "pos-terminals-yoy"
+    "sibc-pl-consumer-durables-yoy"
    ]
   },
   {
-   "value": "0.5%",
-   "claim": "pos-terminals-yoy",
+   "value": "0.6%",
+   "claim": "sibc-pl-consumer-durables-yoy",
    "signals": [
-    "pos-terminals-yoy"
+    "sibc-pl-consumer-durables-yoy"
    ]
   },
   {
-   "value": "2.6%",
-   "claim": "pos-terminals-yoy",
+   "value": "3.6%",
+   "claim": "sibc-pl-consumer-durables-yoy",
    "signals": [
-    "pos-terminals-yoy"
+    "sibc-pl-consumer-durables-yoy"
    ]
   }
  ]

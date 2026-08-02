@@ -25,7 +25,7 @@
    ],
    "statuses": {
     "sibc-bank-credit-abs": "strengthening",
-    "sibc-personal-loans-yoy": "active",
+    "sibc-personal-loans-yoy": "strengthening",
     "cc-outstanding-yoy": "active",
     "pos-terminals-yoy": "declining"
    },
@@ -34,7 +34,7 @@
     "analysis/distribution/output/2026-08-01_1st_C1/blurb.md"
    ],
    "link": null,
-   "recorded_at": "2026-07-30T07:15:07"
+   "recorded_at": "2026-08-03T00:07:43"
   },
   {
    "date": "2026-08-07",
@@ -65,7 +65,7 @@
     "analysis/distribution/output/2026-08-07_7th_C2/blurb.md"
    ],
    "link": null,
-   "recorded_at": "2026-07-30T07:15:07"
+   "recorded_at": "2026-08-03T00:07:43"
   },
   {
    "date": "2026-08-14",
@@ -112,22 +112,22 @@
     "sibc-msme-size-yoy-spread": "weakening",
     "micro-atm-yoy": "declining",
     "micro-atms-abs": "weakening",
-    "cc-atm-val-abs": "strengthening",
+    "cc-atm-val-abs": "weakening",
     "cc-atm-val-share": "active",
-    "cc-atm-val-yoy": "declining",
+    "cc-atm-val-yoy": "active",
     "cc-ecom-val-abs": "strengthening",
-    "cc-ecom-val-share": "active",
+    "cc-ecom-val-share": "strengthening",
     "cc-ecom-val-yoy": "active",
-    "cc-other-val-abs": "strengthening",
+    "cc-other-val-abs": "weakening",
     "cc-other-val-share": "active",
     "cc-other-val-yoy": "active",
-    "cc-pos-val-abs": "strengthening",
-    "cc-pos-val-share": "active",
+    "cc-pos-val-abs": "weakening",
+    "cc-pos-val-share": "weakening",
     "cc-pos-val-yoy": "active",
-    "sibc-pl-cc-abs": "weakening",
+    "sibc-pl-cc-abs": "strengthening",
     "sibc-pl-cc-below10-streak": "strengthening",
     "sibc-pl-cc-share": "active",
-    "sibc-pl-cc-yoy": "active",
+    "sibc-pl-cc-yoy": "strengthening",
     "sibc-pl-gold-pos-streak": "strengthening",
     "sibc-pl-gold-yoy": "active"
    },
@@ -136,7 +136,7 @@
     "analysis/distribution/output/2026-08-14_14th_C6/blurb.md"
    ],
    "link": null,
-   "recorded_at": "2026-07-30T07:15:07"
+   "recorded_at": "2026-08-03T00:07:43"
   },
   {
    "date": "2026-08-28",
@@ -145,23 +145,23 @@
    "category": "C8",
    "is_fallback": false,
    "claim_ids": [
-    "atm-fleet-vs-withdrawal-gap",
-    "pos-terminals-yoy"
+    "dc-issuance-vs-spend-gap",
+    "sibc-pl-consumer-durables-yoy"
    ],
    "signal_ids": [
-    "atm-fleet-vs-withdrawal-gap",
-    "pos-terminals-yoy"
+    "dc-issuance-vs-spend-gap",
+    "sibc-pl-consumer-durables-yoy"
    ],
    "statuses": {
-    "atm-fleet-vs-withdrawal-gap": "strengthening",
-    "pos-terminals-yoy": "declining"
+    "dc-issuance-vs-spend-gap": "strengthening",
+    "sibc-pl-consumer-durables-yoy": "declining"
    },
    "artifacts": [
     "analysis/distribution/output/2026-08-28_28th_C8/design_prompt.md",
     "analysis/distribution/output/2026-08-28_28th_C8/blurb.md"
    ],
    "link": null,
-   "recorded_at": "2026-07-30T07:15:07"
+   "recorded_at": "2026-08-03T00:07:43"
   }
  ],
  "skips": [
@@ -171,7 +171,7 @@
    "category": "C10",
    "fallback_category": "C9",
    "reason": "primary C10 empty and fallback C9 empty",
-   "recorded_at": "2026-07-30T07:15:07"
+   "recorded_at": "2026-08-03T00:07:43"
   }
  ],
  "spine_history": [
@@ -195,6 +195,20 @@
     "risk"
    ],
    "recorded_at": "2026-07-30T07:15:08"
+  },
+  {
+   "date": "2026-08-02",
+   "kinds": [
+    "constraint"
+   ],
+   "recorded_at": "2026-08-02T23:34:34"
+  },
+  {
+   "date": "2026-08-03",
+   "kinds": [
+    "constraint"
+   ],
+   "recorded_at": "2026-08-03T00:07:43"
   }
  ]
 }

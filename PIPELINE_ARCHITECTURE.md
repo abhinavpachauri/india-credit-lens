@@ -190,6 +190,22 @@ the per-period gate. When a model update runs, it must be followed by a full eva
 - Any interim period where new nodes or signals emerge
 - Never restructure existing nodes/edges in UPDATE mode
 
+**Standard cadence (decided 2026-08-02): every current-period ingestion runs an L2a UPDATE pass**
+for each pipeline — it is not optional, and not "rare". The pass is:
+1. `run_inference.py --no-verify` → S4 hypotheses for the period's unexplained movements.
+2. Review the hypotheses against real, in-force drivers; **source the worthwhile ones via the
+   editor's logged-in Chrome** (Claude-in-Chrome `get_page_text`/`find`), because the automated
+   crawler is 403'd by PIB/NPCI/press. The excerpt anchor (`bank_sourcing.excerpt_on_page`) must
+   literally appear on a **whitelisted** page (`bank_sourcing.ALLOWLIST`, tiered official/report/press).
+3. Promote only source-verified forces into `force_instances[]` (each carries url + verbatim excerpt +
+   verified date, in force at the eval period). A period with nothing new that clears the bar is an
+   **honest null** — record it in `_meta.update_note`, never fabricate a force to fill the pass.
+4. Set `_meta.mode="update"` + `last_updated`, then re-run the gate (skeleton regen preserves the
+   behavioral layer) so the new force flows through S3 → opportunities → feed → distribution.
+
+Backdated/historical ingests remain **backfill-only** (skip the costly authoring) unless enough
+periods accumulate to batch — see the `feedback_backdated_period_authoring` rule.
+
 **Guard in `_meta`:**
 ```json
 {

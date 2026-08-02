@@ -6,10 +6,11 @@
     "spec_ref": "analysis/SYSTEM_MODEL_SPEC.md",
     "skeleton_node_count": 85,
     "skeleton_generated_by": "analysis/generate_skeleton.py",
-    "mode": "foundation",
+    "mode": "update",
     "last_foundation_date": "2026-06-11",
     "behavioral_source_draft": "analysis/rbi_sibc/merged/system_model_v3_draft.json",
-    "composition_spec_ref": "analysis/COMPOSITION_SPEC.md"
+    "composition_spec_ref": "analysis/COMPOSITION_SPEC.md",
+    "last_updated": "2026-07-31"
   },
   "nodes": [
     {
@@ -4040,6 +4041,16 @@
       "polarity": "+",
       "scope": "inter_group",
       "mechanism": "Driver trajectory opens this strategic window."
+    },
+    {
+      "from": "force_kcc_collateral_limit",
+      "to": "e_S1_1",
+      "type": "drives",
+      "polarity": "+",
+      "scope": "inter_group",
+      "mechanism": "A higher collateral-free ceiling widens the eligible borrower pool and per-borrower headroom, expanding formal agriculture lending without new collateral",
+      "id": "force_kcc_collateral_limit__drives__e_S1_1",
+      "channel": "ch_kcc_psl_agri_limits"
     }
   ],
   "force_instances": [
@@ -4263,6 +4274,30 @@
       "scope_entities": [
         "icl:sibc/Statement1/2.1",
         "icl:sibc/Statement1/2.2"
+      ]
+    },
+    {
+      "id": "force_kcc_collateral_limit",
+      "tier": "force_instance",
+      "force_type": "policy_action",
+      "label": "Collateral-free agri loan limit raised to ₹2 lakh (RBI, eff. Jan 2025)",
+      "description": "RBI raised the ceiling for collateral-free agricultural loans (including allied activities) from ₹1.6 lakh to ₹2 lakh per borrower, effective 1 January 2025 and in force through the June 2026 period. A higher collateral-free ceiling widens the eligible borrower pool and lifts per-borrower headroom under the Kisan Credit Card / PSL farm-credit route, expanding formal agriculture lending without new collateral. Policy activation of ch_kcc_psl_agri_limits.",
+      "non_observable_reason": "A regulatory ceiling change on collateral-free farm credit; not a time-series column in the SIBC CSV",
+      "claim_type": "inference",
+      "domain": "credit_headline",
+      "signal_evidence": [
+        "sibc-agriculture-yoy",
+        "sibc-psl-agri-yoy"
+      ],
+      "source": "PIB — 'Kisan Credit Card: Fueling Growth in Agriculture', 11 March 2026",
+      "source_url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2238004&reg=3&lang=1",
+      "source_verified_date": "2026-08-02",
+      "source_excerpt": "increased from Rs 1.6 lakh to Rs 2 lakh per borrower",
+      "source_rationale": "PIB (official) confirms the collateral-free agri credit ceiling rose to ₹2 lakh/borrower effective 1 Jan 2025; the record PSL-agriculture (19.95% YoY) and agriculture (16.82% YoY) readings in June 2026 are the observable effect of the widened eligible pool.",
+      "status": "active",
+      "instance_of": "ch_kcc_psl_agri_limits",
+      "scope_entities": [
+        "icl:sibc/Statement1/1"
       ]
     }
   ],

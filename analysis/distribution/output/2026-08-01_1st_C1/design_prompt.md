@@ -2,7 +2,7 @@
 
 **Slot:** 1st of the month
 **Question this answers:** What are the numbers
-**Data vintage:** Both halves are on the same data month: May 2026 credit data and May 2026 payments data.
+**Data vintage:** Both halves are on the same data month: June 2026 credit data and June 2026 payments data.
 **Pages:** 1
 
 ## The arc
@@ -13,33 +13,33 @@ Open with the headline level, then the two or three numbers that qualify it. The
 
 Each block below is verbatim from a gate-validated artifact. Use the wording as the source of truth for what is being said; you may shorten for the page, but you may not change a number or add a qualifier that is not here.
 
-### Bank credit at ₹215.2L Cr — new all-time high
+### Bank credit at ₹219.3L Cr — highest on record
 
-Total bank credit outstanding reached ₹215.2L Cr in May 2026, the highest level on record. Volume climbed ₹3.0L Cr period-on-period (₹212.1L Cr → ₹215.2L Cr), reversing April's ₹1.5L Cr decline and resuming the upward trajectory from ₹178.7L Cr in January 2025.
+Total bank credit outstanding reached ₹219.3L Cr in June 2026, the highest level on record. Volume climbed ₹4.1L Cr period-on-period (₹215.2L Cr → ₹219.3L Cr), the largest monthly gain in this ten-period window and a continuation of the upward trajectory from ₹178.7L Cr in January 2025.
 
-*So what:* The April correction was a brief post-year-end adjustment. May's ₹3.0L Cr gain confirms the credit cycle remains in expansion mode, with the book now at its highest level in this dataset.
+*So what:* June's ₹4.1L Cr gain is the largest monthly addition in this dataset, pushing the book to a new all-time high. The credit cycle is expanding at an accelerating pace, with no sign of the post-year-end correction that briefly slowed April.
 
 <sub>source: sibc_l1_annotations.json → bankCredit · signals: sibc-bank-credit-abs</sub>
 
-### Personal loans 15.38% YoY — easing from peak
+### Personal loans at 15.76% YoY — re-accelerating after May dip
 
-Personal loans credit grew 15.38% YoY in May 2026, down from 16.01% last period. Growth decelerated 0.64pp from 16.01% to 15.38%, slipping from above the 75th percentile (15.7%) toward the median.
+Personal loans credit grew 15.76% YoY in Jun 2026, up from 15.38% last period. Growth re-accelerated 0.38pp from 15.38% to 15.76%, reversing the prior period's deceleration and climbing back near the 75th percentile (15.8%).
 
-*So what:* Personal loans are decelerating from the Apr 2026 peak — the 15.38% rate is still solid but no longer at the top of the range. The sector may be plateauing after a strong run; unsecured exposure warrants monitoring as growth stabilizes.
+*So what:* Personal loans have bounced back from the May 2026 dip — the re-acceleration to 15.76% confirms the prior slowdown was a pause, not a trend break. The sector remains in a solid growth phase, though no longer at the top of the range.
 
 <sub>source: sibc_l1_annotations.json → mainSectors · signals: sibc-personal-loans-yoy</sub>
 
-### Credit cards +8.5% YoY — fastest growth in 12 months
+### Credit cards +9.57% YoY — fastest growth in 17 months
 
-Credit cards outstanding grew 8.47% year-on-year in May 2026, up 0.32 points from 8.15% prior period. YoY growth re-accelerated for the fourth consecutive period: 7.7% in Feb 2026 → 8.0% in Mar 2026 → 8.1% in Apr 2026 → 8.5% in May 2026. The rate is now at the upper end of the 17-period range (6.7%–9.4%).
+Credit cards outstanding grew 9.57% year-on-year in Jun 2026, up 1.10 points from 8.47% prior period. YoY growth re-accelerated for the fifth consecutive period: 7.7% in Feb 2026 → 8.0% in Mar 2026 → 8.1% in Apr 2026 → 8.5% in May 2026 → 9.6% in Jun 2026. The rate is now at the upper end of the 18-period range (6.7%–9.6%).
 
 <sub>source: atm_pos_insights.json → cc · signals: cc-outstanding-yoy</sub>
 
-### POS terminals -0.48% YoY — first contraction on record
+### POS terminals -15.8% YoY — steepest contraction on record
 
-POS terminals contracted 0.48% year-on-year in May 2026, down from 1.45% growth in Apr 2026. YoY growth turned negative 1.5% → -0.5%, a 1.9-point drop — the rate has fallen from Jan's 11.5% peak and is now negative for the first time in the 17-period series.
+POS terminals contracted 15.79% year-on-year in Jun 2026, down from -0.48% in May 2026. YoY growth fell -0.5% → -15.8%, a 15.3-point drop — the steepest monthly deterioration in the 18-period series and the weakest reading on record.
 
-*So what:* The -0.5% YoY rate is the first contraction on record and confirms the POS network is shrinking year-on-year. The rate has fallen 12 points from Jan's 11.5% peak, and the network now holds fewer terminals than it did a year ago. This is a structural decline signal — the POS channel is contracting, not consolidating.
+*So what:* The -15.8% YoY rate is the steepest contraction on record and confirms the POS network is in structural collapse. The network now holds 15.8% fewer terminals than it did a year ago, the first double-digit contraction in the dataset. The 15.3-point deterioration in one month is the steepest on record and signals the contraction is accelerating, not stabilising. This is a network collapse event — the POS channel is shrinking at an unprecedented rate.
 
 <sub>source: atm_pos_insights.json → infra · signals: pos-terminals-yoy</sub>
 
@@ -51,28 +51,21 @@ This is the complete set. Nothing outside it may appear on the pager.
 {
  "supplied_numbers": [
   {
+   "value": "₹219.3L Cr",
+   "claim": "sibc-bank-credit-abs",
+   "signals": [
+    "sibc-bank-credit-abs"
+   ]
+  },
+  {
+   "value": "₹4.1L Cr",
+   "claim": "sibc-bank-credit-abs",
+   "signals": [
+    "sibc-bank-credit-abs"
+   ]
+  },
+  {
    "value": "₹215.2L Cr",
-   "claim": "sibc-bank-credit-abs",
-   "signals": [
-    "sibc-bank-credit-abs"
-   ]
-  },
-  {
-   "value": "₹3.0L Cr",
-   "claim": "sibc-bank-credit-abs",
-   "signals": [
-    "sibc-bank-credit-abs"
-   ]
-  },
-  {
-   "value": "₹212.1L Cr",
-   "claim": "sibc-bank-credit-abs",
-   "signals": [
-    "sibc-bank-credit-abs"
-   ]
-  },
-  {
-   "value": "₹1.5L Cr",
    "claim": "sibc-bank-credit-abs",
    "signals": [
     "sibc-bank-credit-abs"
@@ -86,6 +79,13 @@ This is the complete set. Nothing outside it may appear on the pager.
    ]
   },
   {
+   "value": "15.76%",
+   "claim": "sibc-personal-loans-yoy",
+   "signals": [
+    "sibc-personal-loans-yoy"
+   ]
+  },
+  {
    "value": "15.38%",
    "claim": "sibc-personal-loans-yoy",
    "signals": [
@@ -93,14 +93,7 @@ This is the complete set. Nothing outside it may appear on the pager.
    ]
   },
   {
-   "value": "16.01%",
-   "claim": "sibc-personal-loans-yoy",
-   "signals": [
-    "sibc-personal-loans-yoy"
-   ]
-  },
-  {
-   "value": "0.64pp",
+   "value": "0.38pp",
    "claim": "sibc-personal-loans-yoy",
    "signals": [
     "sibc-personal-loans-yoy"
@@ -114,21 +107,28 @@ This is the complete set. Nothing outside it may appear on the pager.
    ]
   },
   {
-   "value": "15.7%",
+   "value": "15.8%",
    "claim": "sibc-personal-loans-yoy",
    "signals": [
     "sibc-personal-loans-yoy"
    ]
   },
   {
-   "value": "8.5%",
+   "value": "9.57%",
    "claim": "cc-cards-yoy",
    "signals": [
     "cc-outstanding-yoy"
    ]
   },
   {
-   "value": "12",
+   "value": "17",
+   "claim": "cc-cards-yoy",
+   "signals": [
+    "cc-outstanding-yoy"
+   ]
+  },
+  {
+   "value": "1.10",
    "claim": "cc-cards-yoy",
    "signals": [
     "cc-outstanding-yoy"
@@ -136,20 +136,6 @@ This is the complete set. Nothing outside it may appear on the pager.
   },
   {
    "value": "8.47%",
-   "claim": "cc-cards-yoy",
-   "signals": [
-    "cc-outstanding-yoy"
-   ]
-  },
-  {
-   "value": "0.32",
-   "claim": "cc-cards-yoy",
-   "signals": [
-    "cc-outstanding-yoy"
-   ]
-  },
-  {
-   "value": "8.15%",
    "claim": "cc-cards-yoy",
    "signals": [
     "cc-outstanding-yoy"
@@ -177,7 +163,21 @@ This is the complete set. Nothing outside it may appear on the pager.
    ]
   },
   {
-   "value": "17",
+   "value": "8.5%",
+   "claim": "cc-cards-yoy",
+   "signals": [
+    "cc-outstanding-yoy"
+   ]
+  },
+  {
+   "value": "9.6%",
+   "claim": "cc-cards-yoy",
+   "signals": [
+    "cc-outstanding-yoy"
+   ]
+  },
+  {
+   "value": "18",
    "claim": "cc-cards-yoy",
    "signals": [
     "cc-outstanding-yoy"
@@ -191,6 +191,13 @@ This is the complete set. Nothing outside it may appear on the pager.
    ]
   },
   {
+   "value": "0.2",
+   "claim": "cc-cards-yoy",
+   "signals": [
+    "cc-outstanding-yoy"
+   ]
+  },
+  {
    "value": "9.4%",
    "claim": "cc-cards-yoy",
    "signals": [
@@ -198,35 +205,21 @@ This is the complete set. Nothing outside it may appear on the pager.
    ]
   },
   {
-   "value": "0.9",
-   "claim": "cc-cards-yoy",
+   "value": "-15.8%",
+   "claim": "infra-pos-yoy",
    "signals": [
-    "cc-outstanding-yoy"
+    "pos-terminals-yoy"
+   ]
+  },
+  {
+   "value": "15.79%",
+   "claim": "infra-pos-yoy",
+   "signals": [
+    "pos-terminals-yoy"
    ]
   },
   {
    "value": "-0.48%",
-   "claim": "infra-pos-yoy",
-   "signals": [
-    "pos-terminals-yoy"
-   ]
-  },
-  {
-   "value": "0.48%",
-   "claim": "infra-pos-yoy",
-   "signals": [
-    "pos-terminals-yoy"
-   ]
-  },
-  {
-   "value": "1.45%",
-   "claim": "infra-pos-yoy",
-   "signals": [
-    "pos-terminals-yoy"
-   ]
-  },
-  {
-   "value": "1.5%",
    "claim": "infra-pos-yoy",
    "signals": [
     "pos-terminals-yoy"
@@ -240,28 +233,21 @@ This is the complete set. Nothing outside it may appear on the pager.
    ]
   },
   {
-   "value": "1.9",
+   "value": "15.3",
    "claim": "infra-pos-yoy",
    "signals": [
     "pos-terminals-yoy"
    ]
   },
   {
-   "value": "11.5%",
+   "value": "18",
    "claim": "infra-pos-yoy",
    "signals": [
     "pos-terminals-yoy"
    ]
   },
   {
-   "value": "17",
-   "claim": "infra-pos-yoy",
-   "signals": [
-    "pos-terminals-yoy"
-   ]
-  },
-  {
-   "value": "12",
+   "value": "15.8%",
    "claim": "infra-pos-yoy",
    "signals": [
     "pos-terminals-yoy"

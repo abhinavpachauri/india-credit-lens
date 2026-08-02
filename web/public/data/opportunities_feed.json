@@ -3,8 +3,8 @@
     "spec_ref": "analysis/COMPOSITION_SPEC.md §12",
     "generated_by": "analysis/crosssource/generate_opportunities_feed.py",
     "periods": {
-      "sibc": "2026-06-30",
-      "atm_pos": "2026-05-31"
+      "sibc": "2026-07-31",
+      "atm_pos": "2026-06-30"
     }
   },
   "cross_system": [
@@ -14,12 +14,12 @@
       "tier": "opportunity",
       "status": "active",
       "title": "Cross-system signal: credit_card flow leading stock — origination headroom",
-      "body": "Credit card spending at shops (POS) is up 9.32 percent and online (e-commerce) is up 4.97 percent, but the actual credit card loans outstanding grew only 1.33 percent. ATM cash withdrawals on cards fell 1.0 percent. People are swiping cards more but not borrowing much more yet.",
-      "implication": "The gap between rising card usage and slow loan growth suggests many cardholders are paying off balances quickly, leaving room for lenders to offer more credit to those who might carry balances.",
+      "body": "Credit card spend (value) (Payments) is the early signal; Credit Card Outstanding (Credit) usually follows it a few months later. Reading the two together gives an early view of where the slower side is heading.",
+      "implication": "Use the leading side to plan ahead for the lagging side, before it shows up there.",
       "chain": [
-        "Card spending at shops and online is climbing while outstanding loans barely budge",
-        "Cardholders are using cards more but not letting balances pile up",
-        "Lenders have space to extend more credit to customers who may want to borrow"
+        "The early signal is on the leading side: Credit card spend (value) (Payments).",
+        "What happens there tends to show up on the other side a little later.",
+        "So expect the other side to follow: Credit Card Outstanding (Credit)."
       ],
       "badge": "Credit ✕ Payments",
       "driver": {
@@ -82,7 +82,7 @@
       ],
       "basis": {
         "headline": "Credit card spend (value) (Payments) → Credit Card Outstanding (Credit): moving together",
-        "coverage": "Credit @ 2026-06-30 · Payments @ 2026-05-31",
+        "coverage": "Credit @ 2026-07-31 · Payments @ 2026-06-30",
         "members": [
           {
             "role": "leads",
@@ -94,7 +94,7 @@
               "cc-other-val-yoy",
               "cc-pos-val-yoy"
             ],
-            "value": "atm -1.0% · ecom +5.0% · other +2366.0% · pos +9.3% YoY"
+            "value": "atm +3.4% · ecom +9.9% · other +342.1% · pos +10.1% YoY"
           },
           {
             "role": "follows",
@@ -103,48 +103,47 @@
             "signals": [
               "sibc-pl-cc-yoy"
             ],
-            "value": "+1.3% YoY"
+            "value": "+1.9% YoY"
           }
         ],
         "chain": [
-          "Leading side: Credit card spend (value) (Payments) atm -1.0% · ecom +5.0% · other +2366.0% · pos +9.3% YoY.",
-          "Lagging side: Credit Card Outstanding (Credit) +1.3% YoY.",
+          "Leading side: Credit card spend (value) (Payments) atm +3.4% · ecom +9.9% · other +342.1% · pos +10.1% YoY.",
+          "Lagging side: Credit Card Outstanding (Credit) +1.9% YoY.",
           "The two sides are moving together → this reads as origination headroom."
         ],
         "facts": [
           {
             "id": "cc-atm-val-yoy",
-            "value": -1.0,
+            "value": 3.38,
             "unit": "pct",
-            "status": "declining"
+            "status": "active"
           },
           {
             "id": "cc-ecom-val-yoy",
-            "value": 4.97,
+            "value": 9.86,
             "unit": "pct",
             "status": "active"
           },
           {
             "id": "cc-other-val-yoy",
-            "value": 2365.96,
+            "value": 342.14,
             "unit": "pct",
             "status": "active"
           },
           {
             "id": "cc-pos-val-yoy",
-            "value": 9.32,
+            "value": 10.07,
             "unit": "pct",
             "status": "active"
           },
           {
             "id": "sibc-pl-cc-yoy",
-            "value": 1.33,
+            "value": 1.94,
             "unit": "pct",
-            "status": "active"
+            "status": "strengthening"
           }
         ]
-      },
-      "narrative": true
+      }
     },
     {
       "id": "xopp_eco_unsecured_retail_appetite",
@@ -152,12 +151,12 @@
       "tier": "opportunity",
       "status": "active",
       "title": "Unsecured retail credit appetite — expanding (5/5 measurements observed)",
-      "body": "Personal loans for credit cards grew 1.33 percent year-on-year, while other personal loans expanded 12.5 percent. Credit card balances outstanding rose 8.47 percent. Consumer durable loans fell 2.64 percent. Most unsecured lending is growing, meaning banks are lending more to people without collateral.",
-      "implication": "Banks see enough demand and manageable risk to expand unsecured lending across most categories, even though one segment (consumer durables) is shrinking.",
+      "body": "Unsecured retail credit appetite is expanding. It is not one series — it is credit and payments data read together, and right now most of its measurements are moving the same way. The computed basis below shows exactly which inputs drive the read.",
+      "implication": "Treat this as the combined read across credit and payments — check the basis to see which side is doing the work before acting on it.",
       "chain": [
-        "Banks are growing personal loans and credit card balances without requiring collateral from borrowers",
-        "This happens because they believe people will repay and the demand for such loans is strong",
-        "The result is that unsecured retail credit is expanding in most areas, showing banks' confidence in consumer creditworthiness"
+        "Measured inputs: Credit Card Outstanding +1.9% YoY, Other Personal Loans +14.2% YoY, Consumer Durables -0.6% YoY, Credit card spend rising, Credit cards outstanding +9.6% YoY.",
+        "Member directions combine — measures and proxies count as-is, contra-indicators flipped — giving an expanding read on 5 of 5 measurements.",
+        "Direction sustained across two composed periods → status active."
       ],
       "badge": "Ecosystem · construct",
       "driver": {
@@ -256,7 +255,7 @@
       ],
       "basis": {
         "headline": "Unsecured retail credit appetite → expanding",
-        "coverage": "5/5 measurements observed · Payments @ 2026-05-31 · Credit @ 2026-06-30",
+        "coverage": "5/5 measurements observed · Payments @ 2026-06-30 · Credit @ 2026-07-31",
         "members": [
           {
             "role": "measures",
@@ -265,7 +264,7 @@
             "signals": [
               "sibc-pl-cc-yoy"
             ],
-            "value": "+1.3% YoY"
+            "value": "+1.9% YoY"
           },
           {
             "role": "measures",
@@ -274,7 +273,7 @@
             "signals": [
               "sibc-pl-other-yoy"
             ],
-            "value": "+12.5% YoY"
+            "value": "+14.2% YoY"
           },
           {
             "role": "measures",
@@ -283,7 +282,7 @@
             "signals": [
               "sibc-pl-consumer-durables-yoy"
             ],
-            "value": "-2.6% YoY"
+            "value": "-0.6% YoY"
           },
           {
             "role": "measures",
@@ -299,11 +298,11 @@
             "signals": [
               "cc-outstanding-yoy"
             ],
-            "value": "+8.5% YoY"
+            "value": "+9.6% YoY"
           }
         ],
         "chain": [
-          "Measured inputs: Credit Card Outstanding +1.3% YoY, Other Personal Loans +12.5% YoY, Consumer Durables -2.6% YoY, Credit card spend rising, Credit cards outstanding +8.5% YoY.",
+          "Measured inputs: Credit Card Outstanding +1.9% YoY, Other Personal Loans +14.2% YoY, Consumer Durables -0.6% YoY, Credit card spend rising, Credit cards outstanding +9.6% YoY.",
           "Member directions combine — measures and proxies count as-is, contra-indicators flipped — giving an expanding read on 5 of 5 measurements.",
           "The willingness of households to carry — and lenders to extend — unsecured retail credit. No pipeline measures it directly: SIBC measures the unsecured stock (credit-card outstanding, other personal loans, consumer durables), payments measures the flow (credit-card spend) and reach (cards in force). Together they bound the construct: when stock, flow and reach move together the appetite read is unambiguous; when they diverge, the divergence itself is the signal.",
           "Direction sustained across two composed periods → status active."
@@ -311,31 +310,30 @@
         "facts": [
           {
             "id": "sibc-pl-cc-yoy",
-            "value": 1.33,
+            "value": 1.94,
             "unit": "pct",
-            "status": "active"
+            "status": "strengthening"
           },
           {
             "id": "sibc-pl-other-yoy",
-            "value": 12.5,
+            "value": 14.22,
             "unit": "pct",
-            "status": "active"
+            "status": "strengthening"
           },
           {
             "id": "sibc-pl-consumer-durables-yoy",
-            "value": -2.64,
+            "value": -0.64,
             "unit": "pct",
             "status": "declining"
           },
           {
             "id": "cc-outstanding-yoy",
-            "value": 8.47,
+            "value": 9.57,
             "unit": "pct",
             "status": "active"
           }
         ]
-      },
-      "narrative": true
+      }
     },
     {
       "id": "xopp_eco_card_consumption_activity",
@@ -343,12 +341,12 @@
       "tier": "opportunity",
       "status": "active",
       "title": "Card-based consumption activity — expanding (5/5 measurements observed)",
-      "body": "Card terminals fell 0.48 percent, vehicle loans jumped 17.33 percent, and consumer durable loans dropped 2.64 percent. People are borrowing much more to buy cars and trucks but less to finance fridges and TVs, while card infrastructure shrank slightly.",
-      "implication": "Households are choosing transport over home goods, so lenders see strong demand for vehicle finance but weaker appetite for consumer durable loans.",
+      "body": "Card-based consumption activity is expanding. It is not one series — it is credit and payments data read together, and right now most of its measurements are moving the same way. The computed basis below shows exactly which inputs drive the read.",
+      "implication": "Treat this as the combined read across credit and payments — check the basis to see which side is doing the work before acting on it.",
       "chain": [
-        "Vehicle loan growth at 17.33 percent shows people prioritising cars and trucks",
-        "Consumer durable loans fell 2.64 percent as households skip financing for appliances and electronics",
-        "Lenders face uneven demand: vehicle finance is hot while consumer goods lending cools"
+        "Measured inputs: Credit card spend rising, Debit card spend falling, POS terminals -15.8% YoY, Consumer Durables -0.6% YoY, Vehicle Loans +17.3% YoY.",
+        "Member directions combine — measures and proxies count as-is, contra-indicators flipped — giving an expanding read on 5 of 5 measurements.",
+        "Direction sustained across two composed periods → status active."
       ],
       "badge": "Ecosystem · construct",
       "driver": {
@@ -409,15 +407,6 @@
         "dc-pos-withdrawal-val-abs",
         "dc-pos-withdrawal-val-share",
         "dc-pos-withdrawal-val-yoy",
-        "pos-bank-divergence",
-        "pos-bank-scan",
-        "pos-category-rotation",
-        "pos-category-share-scan",
-        "pos-private-share",
-        "pos-psb-share",
-        "pos-terminals-abs",
-        "pos-terminals-pos-streak",
-        "pos-terminals-yoy",
         "sibc-pl-consumer-durables-neg-streak",
         "sibc-pl-consumer-durables-share",
         "sibc-pl-consumer-durables-yoy",
@@ -469,7 +458,7 @@
       ],
       "basis": {
         "headline": "Card-based consumption activity → expanding",
-        "coverage": "5/5 measurements observed · Payments @ 2026-05-31 · Credit @ 2026-06-30",
+        "coverage": "5/5 measurements observed · Payments @ 2026-06-30 · Credit @ 2026-07-31",
         "members": [
           {
             "role": "measures",
@@ -488,11 +477,11 @@
           {
             "role": "proxies",
             "label": "POS terminals (Payments)",
-            "direction": 1,
+            "direction": 0,
             "signals": [
               "pos-terminals-yoy"
             ],
-            "value": "-0.5% YoY"
+            "value": "-15.8% YoY"
           },
           {
             "role": "proxies",
@@ -501,7 +490,7 @@
             "signals": [
               "sibc-pl-consumer-durables-yoy"
             ],
-            "value": "-2.6% YoY"
+            "value": "-0.6% YoY"
           },
           {
             "role": "proxies",
@@ -514,7 +503,7 @@
           }
         ],
         "chain": [
-          "Measured inputs: Credit card spend rising, Debit card spend falling, POS terminals -0.5% YoY, Consumer Durables -2.6% YoY, Vehicle Loans +17.3% YoY.",
+          "Measured inputs: Credit card spend rising, Debit card spend falling, POS terminals -15.8% YoY, Consumer Durables -0.6% YoY, Vehicle Loans +17.3% YoY.",
           "Member directions combine — measures and proxies count as-is, contra-indicators flipped — giving an expanding read on 5 of 5 measurements.",
           "Household consumption as expressed through card rails. Payments measures the transaction flows (credit + debit card spend) directly; acceptance infrastructure (POS terminals) proxies the merchant side of the same activity; SIBC's consumer-durable and vehicle loan stocks proxy the credit-financed share of it.",
           "Direction sustained across two composed periods → status active."
@@ -522,25 +511,24 @@
         "facts": [
           {
             "id": "pos-terminals-yoy",
-            "value": -0.48,
+            "value": -15.79,
             "unit": "pct",
             "status": "declining"
           },
           {
             "id": "sibc-pl-consumer-durables-yoy",
-            "value": -2.64,
+            "value": -0.64,
             "unit": "pct",
             "status": "declining"
           },
           {
             "id": "sibc-pl-vehicle-yoy",
-            "value": 17.33,
+            "value": 17.34,
             "unit": "pct",
-            "status": "active"
+            "status": "strengthening"
           }
         ]
-      },
-      "narrative": true
+      }
     },
     {
       "id": "xopp_loop_loop_unsecured_spend_stock",
@@ -616,7 +604,7 @@
       ],
       "basis": {
         "headline": "Unsecured spend–stock cycle → active reinforcing",
-        "coverage": "3/3 segments live · Credit @ 2026-06-30 · Payments @ 2026-05-31",
+        "coverage": "3/3 segments live · Credit @ 2026-07-31 · Payments @ 2026-06-30",
         "members": [
           {
             "role": "segment",
@@ -1129,13 +1117,9 @@
           "icon": "💳"
         },
         "title": "Credit card penetration deepening — PSB share gap is the opening",
-        "body": "India has 12.0 crore credit cards growing at 8.5% a year. Private banks hold 70.9% of all credit cards, while public sector banks hold only 23.8%. Public banks control about 64% of debit cards, which means they already have millions of customers who could be offered credit cards at much lower cost than finding completely new customers.",
-        "implication": "Public banks have a large base of existing debit card customers they can convert to credit cards without the high cost of acquiring entirely new customers, while private banks already dominate the credit card market at 70.9%.",
-        "chain": [
-          "Public banks hold only 23.8% of credit cards but control most debit cards in India",
-          "Converting existing debit card customers to credit cards costs much less than finding brand new customers",
-          "This gives public banks a cheaper path to grow their small 23.8% share of the credit card market"
-        ],
+        "body": "Credit cards outstanding (~119M) represents approximately 11-12% of the debit card base (~1B+). PSBs hold ~64% of debit cards but only ~29% of credit cards — a structural share gap exploitable through debit-to-credit card upgrade offers to existing bank customers. The acquisition cost of upgrading an existing debit card customer to a credit card is materially lower than cold acquisition.",
+        "implication": "",
+        "chain": [],
         "_driver": null,
         "_via": null,
         "evidence": [
@@ -1171,8 +1155,7 @@
               "Total"
             ]
           }
-        ],
-        "narrative": true
+        ]
       },
       {
         "id": "opp_rural_cash_distribution",
@@ -1187,13 +1170,9 @@
           "icon": "🏗️"
         },
         "title": "Rural cash distribution via Micro ATM / Business Correspondent networks",
-        "body": "India has 13.6 lakh micro ATMs that let villagers withdraw cash without visiting a full bank branch, but the count fell -8.1% recently. These machines cost far less to operate than opening a real branch, yet the network is shrinking even though people in small towns still depend on cash for daily transactions.",
-        "implication": "A lender relying on business correspondents and micro ATMs to reach rural customers now has fewer touch-points, which may slow deposit collection and loan disbursement in villages where branches are scarce.",
-        "chain": [
-          "The number of micro ATMs dropped -8.1%, meaning fewer cash-withdrawal points in rural areas.",
-          "Villages still run on cash for most daily spending, so people need these machines to access their money.",
-          "Fewer machines mean a lender's agent network has less infrastructure to serve customers, making it harder to collect repayments or disburse small loans quickly in remote spots."
-        ],
+        "body": "Micro ATM growth counter-trending against overall ATM network contraction signals persistent rural and semi-urban cash demand at a scale below the economics of full ATM deployment. Banks and fintechs expanding Business Correspondent channels with micro ATM deployment can serve this demand at lower capex than branch or full ATM infrastructure.",
+        "implication": "",
+        "chain": [],
         "_driver": null,
         "_via": null,
         "evidence": [
@@ -1215,8 +1194,7 @@
               "Total"
             ]
           }
-        ],
-        "narrative": true
+        ]
       },
       {
         "id": "opp_transit_payment_products",
@@ -1231,12 +1209,11 @@
           "icon": "💳"
         },
         "title": "Embedded transit and tap-to-pay payment products",
-        "body": "Credit card spending in the 'other' category jumped 2366.0% in value and 714.0% in volume year-on-year. Millions of people are now tapping cards at metro gates, vending machines, and small shops that just installed tap-to-pay terminals. This is not existing cardholders spending more — it is people using cards in completely new places for the first time.",
-        "implication": "The surge shows cards are becoming a payment method in everyday, small-ticket settings where they were rarely used before, which means lenders may see a wave of new, frequent, low-value transactions from customers who previously only swiped cards for big purchases.",
+        "body": "The structural embedding of a new credit card use case (the 'other' category) signals a platform land-grab window for card issuers and acquirers who integrate with the winning infrastructure — whether transit NFC or UPI-linked credit. The opportunity is real regardless of which force hypothesis is confirmed; the appropriate platform strategy differs based on which force is validated.",
+        "implication": "",
         "chain": [
-          "Metro gates and small shops install tap-to-pay terminals that accept cards",
-          "People who already own cards start using them for bus rides, snacks, and daily errands instead of cash or wallets",
-          "Card transaction volume explodes because each person now swipes many times a day in places that never took cards before"
+          "A new embedded payment use case (transit NFC tap-to-pay or RuPay-credit-on-UPI) creates a structurally growing card-spend channel in the unclassified 'other' category. Driver composition is unresolved (hypothesis).",
+          "This is being driven by Embedded card payment infrastructure rollout (transit NFC or RuPay-credit-on-UPI)."
         ],
         "_driver": "Embedded card payment infrastructure rollout (transit NFC or RuPay-credit-on-UPI)",
         "_via": "Embedded payment rails → new card-spend surface",
@@ -1259,8 +1236,7 @@
               "Total"
             ]
           }
-        ],
-        "narrative": true
+        ]
       },
       {
         "id": "risk_cc_market_concentration",

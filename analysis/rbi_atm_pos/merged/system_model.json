@@ -6,10 +6,12 @@
     "spec_ref": "analysis/SYSTEM_MODEL_SPEC.md",
     "skeleton_node_count": 35,
     "skeleton_generated_by": "analysis/generate_skeleton.py",
-    "mode": "foundation",
+    "mode": "update",
     "last_foundation_date": "2026-06-11",
     "behavioral_source_draft": "analysis/rbi_atm_pos/merged/system_model_draft.json",
-    "composition_spec_ref": "analysis/COMPOSITION_SPEC.md"
+    "composition_spec_ref": "analysis/COMPOSITION_SPEC.md",
+    "last_updated": "2026-06-30",
+    "update_note": "2026-08-02 UPDATE pass: S4 detection + review found June movements (UPI-QR record, e-commerce share, DC base decline) already explained by existing sourced forces (force_upi_zero_mdr, force_rbi_card_lifecycle_norms, fi_rupay_incentive_debit_ecom, retired force_rbi_paytm_action). No new force met the source-verification bar — honest null, not fabricated."
   },
   "nodes": [
     {

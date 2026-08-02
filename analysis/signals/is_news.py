@@ -283,7 +283,13 @@ def measure():
         if sid not in rows:
             continue
         method = (sig.get("compute") or {}).get("method")
-        if method in STRUCTURAL_METHODS and _magnitude_outlier(conn, sid, sig, mult=0.5) is False:
+        # A template is a SHARE that sits still AND is not otherwise newsworthy. A share can
+        # barely move yet still print an all-time record (a slow asymptotic approach to a new
+        # extreme) — that record IS news (the docstring's "record share is not a template"),
+        # so a record-setter is excluded from the template set regardless of its move size.
+        if (method in STRUCTURAL_METHODS
+                and _magnitude_outlier(conn, sid, sig, mult=0.5) is False
+                and not rows[sid]["factors"].get("record")):
             templates.append(sid)
         if _magnitude_outlier(conn, sid, sig):
             outliers.append(sid)

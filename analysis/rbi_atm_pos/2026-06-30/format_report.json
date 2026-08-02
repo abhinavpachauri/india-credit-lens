@@ -1,0 +1,17 @@
+{
+  "format_id": "atm_pos_monthly",
+  "description": "Monthly ATM/POS/Card Statistics",
+  "sheet_name": "June 2026",
+  "report_date": "2026-06-30",
+  "report_month": "June 2026",
+  "column_count": 29,
+  "bank_count": 63,
+  "supported": true,
+  "confirmed_by_user": true,
+  "detected_at": "2026-08-02T22:45:51",
+  "source_file": "ATMJUNE202645433E9084A94D24825EE044323E189E.XLSX",
+  "issues": [],
+  "warnings": [
+    "Bank count: expected 64, found 63. May be a merger or new entrant \u2014 verify canonical_banks.json."
+  ]
+}

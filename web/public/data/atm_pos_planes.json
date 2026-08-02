@@ -6,15 +6,22 @@
   "classifier": "analysis/signals/planes.py"
  },
  "planes": {
+  "cc-ecom-vs-pos-share": {
+   "plane": "composition",
+   "news_score": 0.0,
+   "subject": "cc_ecom"
+  },
   "cc-cards-streak": {
    "plane": "subject",
    "news_score": 0.0,
    "subject": "credit_cards"
   },
   "cc-cards-yoy": {
-   "plane": "subject",
-   "news_score": 0.0,
-   "subject": "credit_cards"
+   "plane": "read",
+   "news_score": 4.0,
+   "subject": "credit_cards",
+   "reason": "record",
+   "direction": "up"
   },
   "cc-spend-yoy": {
    "plane": "subject",
@@ -26,7 +33,7 @@
    "news_score": null,
    "subject": "credit_cards"
   },
-  "cc-top5-concentration": {
+  "cc-top-bank-rank-change": {
    "plane": "subject",
    "news_score": null,
    "subject": "credit_cards"
@@ -37,11 +44,9 @@
    "subject": "credit_cards"
   },
   "dc-atm-share-structural": {
-   "plane": "read",
-   "news_score": 3.0,
-   "subject": "dc_atm",
-   "reason": "reversal",
-   "direction": "down"
+   "plane": "composition",
+   "news_score": 0.0,
+   "subject": "dc_atm"
   },
   "dc-pos-cash-decline": {
    "plane": "subject",
@@ -80,14 +85,14 @@
   },
   "infra-qr-per-pos": {
    "plane": "read",
-   "news_score": 2.0,
+   "news_score": 4.0,
    "subject": "upi_qr",
    "reason": "record",
    "direction": "up"
   },
   "infra-pos-yoy": {
    "plane": "read",
-   "news_score": 5.0,
+   "news_score": 4.0,
    "subject": "pos_terminals",
    "reason": "record",
    "direction": "down"
@@ -99,15 +104,30 @@
   },
   "infra-upi-vs-bharat-qr": {
    "plane": "read",
-   "news_score": 2.0,
+   "news_score": 4.0,
    "subject": "upi_qr",
    "reason": "record",
    "direction": "up"
+  },
+  "infra-category-pos-share": {
+   "plane": "subject",
+   "news_score": null,
+   "subject": "pos_terminals"
   },
   "infra-top-bank-pos": {
    "plane": "subject",
    "news_score": null,
    "subject": "pos_terminals"
+  },
+  "gap-bharat-qr-contraction": {
+   "plane": "subject",
+   "news_score": null,
+   "subject": "bharat_qr"
+  },
+  "gap-atm-offsite-decline": {
+   "plane": "subject",
+   "news_score": null,
+   "subject": "atm_offsite"
   },
   "gap-pos-concentration": {
    "plane": "subject",
@@ -115,9 +135,11 @@
    "subject": "pos_terminals"
   },
   "cc-category-rotation": {
-   "plane": "subject",
-   "news_score": 0.0,
-   "subject": "credit_cards"
+   "plane": "read",
+   "news_score": 4.0,
+   "subject": "credit_cards",
+   "reason": "record",
+   "direction": "up"
   },
   "dc-category-rotation": {
    "plane": "subject",
@@ -125,9 +147,11 @@
    "subject": "debit_cards"
   },
   "pos-category-rotation": {
-   "plane": "subject",
-   "news_score": 0.0,
-   "subject": "pos_terminals"
+   "plane": "read",
+   "news_score": 2.0,
+   "subject": "pos_terminals",
+   "reason": "surge",
+   "direction": "up"
   },
   "cc-bank-divergence": {
    "plane": "subject",
@@ -145,13 +169,15 @@
    "subject": "pos_terminals"
   },
   "dc-issuance-vs-spend-gap": {
-   "plane": "subject",
-   "news_score": 0.0,
-   "subject": "debit_cards"
+   "plane": "read",
+   "news_score": 2.0,
+   "subject": "debit_cards",
+   "reason": "record",
+   "direction": "down"
   },
   "pos-fleet-vs-spend-gap": {
    "plane": "read",
-   "news_score": 5.0,
+   "news_score": 4.0,
    "subject": "pos_terminals",
    "reason": "record",
    "direction": "down"

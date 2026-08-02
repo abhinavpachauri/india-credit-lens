@@ -2,7 +2,7 @@
 
 **Slot:** 14th of the month
 **Question this answers:** So what, and for whom
-**Data vintage:** Both halves are on the same data month: May 2026 credit data and May 2026 payments data.
+**Data vintage:** Both halves are on the same data month: June 2026 credit data and June 2026 payments data.
 **Pages:** 1
 
 ## The arc
@@ -23,17 +23,15 @@ Small business credit is growing at 26.2% this year and now makes up 23.1% of al
 
 ### Rural cash distribution via Micro ATM / Business Correspondent networks
 
-India has 13.6 lakh micro ATMs that let villagers withdraw cash without visiting a full bank branch, but the count fell -8.1% recently. These machines cost far less to operate than opening a real branch, yet the network is shrinking even though people in small towns still depend on cash for daily transactions.
-
-*So what:* A lender relying on business correspondents and micro ATMs to reach rural customers now has fewer touch-points, which may slow deposit collection and loan disbursement in villages where branches are scarce.
+Micro ATM growth counter-trending against overall ATM network contraction signals persistent rural and semi-urban cash demand at a scale below the economics of full ATM deployment. Banks and fintechs expanding Business Correspondent channels with micro ATM deployment can serve this demand at lower capex than branch or full ATM infrastructure.
 
 <sub>source: opportunities_feed.json · signals: micro-atm-yoy, micro-atms-abs</sub>
 
 ### Cross-system signal: credit_card flow leading stock — origination headroom
 
-Credit card spending at shops (POS) is up 9.32 percent and online (e-commerce) is up 4.97 percent, but the actual credit card loans outstanding grew only 1.33 percent. ATM cash withdrawals on cards fell 1.0 percent. People are swiping cards more but not borrowing much more yet.
+Credit card spend (value) (Payments) is the early signal; Credit Card Outstanding (Credit) usually follows it a few months later. Reading the two together gives an early view of where the slower side is heading.
 
-*So what:* The gap between rising card usage and slow loan growth suggests many cardholders are paying off balances quickly, leaving room for lenders to offer more credit to those who might carry balances.
+*So what:* Use the leading side to plan ahead for the lagging side, before it shows up there.
 
 <sub>source: opportunities_feed.json · signals: cc-atm-val-abs, cc-atm-val-share, cc-atm-val-yoy, cc-ecom-val-abs, cc-ecom-val-share, cc-ecom-val-yoy, cc-other-val-abs, cc-other-val-share, cc-other-val-yoy, cc-pos-val-abs, cc-pos-val-share, cc-pos-val-yoy, sibc-pl-cc-abs, sibc-pl-cc-below10-streak, sibc-pl-cc-share, sibc-pl-cc-yoy</sub>
 
@@ -80,110 +78,6 @@ This is the complete set. Nothing outside it may appear on the pager.
     "sibc-msme-micro-small-share",
     "sibc-msme-micro-small-yoy",
     "sibc-msme-size-yoy-spread"
-   ]
-  },
-  {
-   "value": "13.6 lakh",
-   "claim": "opp_rural_cash_distribution",
-   "signals": [
-    "micro-atm-yoy",
-    "micro-atms-abs"
-   ]
-  },
-  {
-   "value": "-8.1%",
-   "claim": "opp_rural_cash_distribution",
-   "signals": [
-    "micro-atm-yoy",
-    "micro-atms-abs"
-   ]
-  },
-  {
-   "value": "9.32",
-   "claim": "xopp_x_cc_spend_leads_cc_stock",
-   "signals": [
-    "cc-atm-val-abs",
-    "cc-atm-val-share",
-    "cc-atm-val-yoy",
-    "cc-ecom-val-abs",
-    "cc-ecom-val-share",
-    "cc-ecom-val-yoy",
-    "cc-other-val-abs",
-    "cc-other-val-share",
-    "cc-other-val-yoy",
-    "cc-pos-val-abs",
-    "cc-pos-val-share",
-    "cc-pos-val-yoy",
-    "sibc-pl-cc-abs",
-    "sibc-pl-cc-below10-streak",
-    "sibc-pl-cc-share",
-    "sibc-pl-cc-yoy"
-   ]
-  },
-  {
-   "value": "4.97",
-   "claim": "xopp_x_cc_spend_leads_cc_stock",
-   "signals": [
-    "cc-atm-val-abs",
-    "cc-atm-val-share",
-    "cc-atm-val-yoy",
-    "cc-ecom-val-abs",
-    "cc-ecom-val-share",
-    "cc-ecom-val-yoy",
-    "cc-other-val-abs",
-    "cc-other-val-share",
-    "cc-other-val-yoy",
-    "cc-pos-val-abs",
-    "cc-pos-val-share",
-    "cc-pos-val-yoy",
-    "sibc-pl-cc-abs",
-    "sibc-pl-cc-below10-streak",
-    "sibc-pl-cc-share",
-    "sibc-pl-cc-yoy"
-   ]
-  },
-  {
-   "value": "1.33",
-   "claim": "xopp_x_cc_spend_leads_cc_stock",
-   "signals": [
-    "cc-atm-val-abs",
-    "cc-atm-val-share",
-    "cc-atm-val-yoy",
-    "cc-ecom-val-abs",
-    "cc-ecom-val-share",
-    "cc-ecom-val-yoy",
-    "cc-other-val-abs",
-    "cc-other-val-share",
-    "cc-other-val-yoy",
-    "cc-pos-val-abs",
-    "cc-pos-val-share",
-    "cc-pos-val-yoy",
-    "sibc-pl-cc-abs",
-    "sibc-pl-cc-below10-streak",
-    "sibc-pl-cc-share",
-    "sibc-pl-cc-yoy"
-   ]
-  },
-  {
-   "value": "1.0",
-   "claim": "xopp_x_cc_spend_leads_cc_stock",
-   "signals": [
-    "cc-atm-val-abs",
-    "cc-atm-val-share",
-    "cc-atm-val-yoy",
-    "cc-ecom-val-abs",
-    "cc-ecom-val-share",
-    "cc-ecom-val-yoy",
-    "cc-other-val-abs",
-    "cc-other-val-share",
-    "cc-other-val-yoy",
-    "cc-pos-val-abs",
-    "cc-pos-val-share",
-    "cc-pos-val-yoy",
-    "sibc-pl-cc-abs",
-    "sibc-pl-cc-below10-streak",
-    "sibc-pl-cc-share",
-    "sibc-pl-cc-yoy"
    ]
   },
   {

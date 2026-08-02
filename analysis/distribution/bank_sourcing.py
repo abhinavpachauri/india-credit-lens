@@ -43,15 +43,27 @@ REQUIRED = ("url", "excerpt", "verified_date", "tier")
 ALLOWLIST = {
     # T1 — official / regulatory
     "official": {"rbi.org.in", "pib.gov.in", "indiabudget.gov.in", "sebi.gov.in",
-                 "npci.org.in", "bseindia.com", "nseindia.com", "finmin.nic.in"},
+                 "npci.org.in", "bseindia.com", "nseindia.com", "finmin.nic.in",
+                 # ministries/agencies whose releases back existing forces (MSME formalisation,
+                 # UPI/digital-payments policy, macro stats) — added 2026-08-02.
+                 "mospi.gov.in", "dea.gov.in", "meity.gov.in", "msme.gov.in",
+                 "mca.gov.in", "data.gov.in", "cga.nic.in"},
     # T2 — reputed structured reports (bureaus, rating agencies, industry bodies, processors)
     "report": {"cibil.com", "transunioncibil.com", "crifhighmark.com", "crisil.com",
                "icra.in", "careedge.in", "careratings.com", "worldline.com",
-               "iba.org.in", "pcipolicy.org", "npci.org.in"},
+               "iba.org.in", "pcipolicy.org", "npci.org.in",
+               # completes the four RBI-licensed credit bureaus (Equifax, Experian) and the
+               # rating-agency set (India Ratings/Fitch); MFIN = microfinance SRO; apex industry
+               # bodies — added 2026-08-02.
+               "equifax.co.in", "experian.in", "indiaratings.co.in", "mfinindia.com",
+               "ficci.in", "assocham.org", "cii.in"},
     # T3 — named financial press (the fixed masthead allowlist, §11.2-R)
     "press": {"economictimes.indiatimes.com", "business-standard.com", "livemint.com",
               "thehindubusinessline.com", "financialexpress.com", "moneycontrol.com",
-              "reuters.com", "bloomberg.com"},
+              "reuters.com", "bloomberg.com",
+              # additional named financial-press mastheads at the same bar — added 2026-08-02.
+              "ndtvprofit.com", "cnbctv18.com", "thehindu.com", "indianexpress.com",
+              "fortuneindia.com", "forbesindia.com"},
 }
 TIER_LABEL = {"official": "official/regulatory", "report": "reputed report",
               "press": "financial press"}

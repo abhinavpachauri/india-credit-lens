@@ -8,7 +8,7 @@
  "planes": {
   "sibc-bank-credit-abs": {
    "plane": "read",
-   "news_score": 5.0,
+   "news_score": 2.0,
    "subject": "Bank Credit",
    "reason": "record",
    "direction": "up"
@@ -25,26 +25,26 @@
   },
   "sibc-bank-credit-yoy": {
    "plane": "read",
-   "news_score": 3.0,
+   "news_score": 4.0,
    "subject": "Bank Credit",
    "reason": "record",
    "direction": "up"
   },
   "sibc-food-credit-abs": {
    "plane": "read",
-   "news_score": 4.0,
+   "news_score": 3.0,
    "subject": "Food Credit",
-   "reason": "record",
-   "direction": "up"
+   "reason": "reversal",
+   "direction": "down"
   },
   "sibc-food-credit-yoy": {
    "plane": "subject",
-   "news_score": 1.0,
+   "news_score": 0.0,
    "subject": "Food Credit"
   },
   "sibc-nonfood-credit-abs": {
    "plane": "read",
-   "news_score": 5.0,
+   "news_score": 2.0,
    "subject": "Non-food Credit",
    "reason": "record",
    "direction": "up"
@@ -56,15 +56,10 @@
   },
   "sibc-nonfood-credit-yoy": {
    "plane": "read",
-   "news_score": 3.0,
+   "news_score": 4.0,
    "subject": "Non-food Credit",
    "reason": "record",
    "direction": "up"
-  },
-  "sibc-sectors-positive-yoy-count": {
-   "plane": "composition",
-   "news_score": 0.0,
-   "subject": "Agriculture"
   },
   "sibc-agriculture-share": {
    "plane": "composition",
@@ -72,9 +67,11 @@
    "subject": "Agriculture"
   },
   "sibc-agriculture-yoy": {
-   "plane": "subject",
-   "news_score": 1.0,
-   "subject": "Agriculture"
+   "plane": "read",
+   "news_score": 2.0,
+   "subject": "Agriculture",
+   "reason": "record",
+   "direction": "up"
   },
   "sibc-industry-fy-acceleration": {
    "plane": "composition",
@@ -82,9 +79,11 @@
    "subject": "Industry"
   },
   "sibc-industry-share": {
-   "plane": "composition",
-   "news_score": 0.0,
-   "subject": "Industry"
+   "plane": "read",
+   "news_score": 2.0,
+   "subject": "Industry",
+   "reason": "surge",
+   "direction": "up"
   },
   "sibc-industry-yoy": {
    "plane": "read",
@@ -100,7 +99,7 @@
   },
   "sibc-personal-loans-yoy": {
    "plane": "subject",
-   "news_score": 0.0,
+   "news_score": 1.0,
    "subject": "Personal Loans"
   },
   "sibc-services-fy-acceleration": {
@@ -115,10 +114,15 @@
   },
   "sibc-services-yoy": {
    "plane": "read",
-   "news_score": 5.0,
+   "news_score": 2.0,
    "subject": "Services",
    "reason": "record",
    "direction": "up"
+  },
+  "sibc-sectors-positive-yoy-count": {
+   "plane": "composition",
+   "news_score": 0.0,
+   "subject": "Agriculture"
   },
   "sibc-large-corporate-share": {
    "plane": "subject",
@@ -127,20 +131,24 @@
   },
   "sibc-large-corporate-yoy": {
    "plane": "read",
-   "news_score": 4.0,
+   "news_score": 2.0,
    "subject": "Large",
    "reason": "record",
    "direction": "up"
   },
   "sibc-msme-medium-share": {
-   "plane": "composition",
-   "news_score": 0.0,
-   "subject": "Medium"
+   "plane": "read",
+   "news_score": 4.0,
+   "subject": "Medium",
+   "reason": "record",
+   "direction": "up"
   },
   "sibc-msme-medium-yoy": {
-   "plane": "subject",
-   "news_score": 1.0,
-   "subject": "Medium"
+   "plane": "read",
+   "news_score": 4.0,
+   "subject": "Medium",
+   "reason": "record",
+   "direction": "up"
   },
   "sibc-msme-micro-small-fy-acceleration": {
    "plane": "composition",
@@ -148,23 +156,21 @@
    "subject": "Micro and Small"
   },
   "sibc-msme-micro-small-share": {
+   "plane": "read",
+   "news_score": 2.0,
+   "subject": "Micro and Small",
+   "reason": "surge",
+   "direction": "down"
+  },
+  "sibc-msme-micro-small-yoy": {
    "plane": "subject",
    "news_score": 0.0,
    "subject": "Micro and Small"
   },
-  "sibc-msme-micro-small-yoy": {
-   "plane": "read",
-   "news_score": 2.0,
-   "subject": "Micro and Small",
-   "reason": "surge",
-   "direction": "down"
-  },
   "sibc-msme-size-yoy-spread": {
-   "plane": "read",
-   "news_score": 2.0,
-   "subject": "Micro and Small",
-   "reason": "surge",
-   "direction": "down"
+   "plane": "subject",
+   "news_score": 0.0,
+   "subject": "Micro and Small"
   },
   "sibc-nbfc-sub-share-scan": {
    "plane": "subject",
@@ -177,11 +183,9 @@
    "subject": "NBFCs"
   },
   "sibc-services-rotation": {
-   "plane": "read",
-   "news_score": 4.0,
-   "subject": null,
-   "reason": "record",
-   "direction": "up"
+   "plane": "subject",
+   "news_score": 0.0,
+   "subject": null
   },
   "sibc-services-share-scan": {
    "plane": "subject",
@@ -205,10 +209,10 @@
   },
   "sibc-pl-cc-abs": {
    "plane": "read",
-   "news_score": 3.0,
+   "news_score": 5.0,
    "subject": "Credit Card Outstanding",
-   "reason": "reversal",
-   "direction": "down"
+   "reason": "record",
+   "direction": "up"
   },
   "sibc-pl-cc-below10-streak": {
    "plane": "subject",
@@ -223,47 +227,31 @@
    "direction": "down"
   },
   "sibc-pl-cc-yoy": {
-   "plane": "read",
-   "news_score": 3.0,
-   "subject": "Credit Card Outstanding",
-   "reason": "surge",
-   "direction": "down"
-  },
-  "sibc-pl-consumer-durables-share": {
-   "plane": "composition",
-   "news_score": 0.0,
-   "subject": "Consumer Durables"
-  },
-  "sibc-pl-divergence": {
    "plane": "subject",
-   "news_score": null,
-   "subject": null
+   "news_score": 1.0,
+   "subject": "Credit Card Outstanding"
   },
   "sibc-pl-education-share": {
-   "plane": "composition",
-   "news_score": 0.0,
-   "subject": "Education Loans"
+   "plane": "read",
+   "news_score": 4.0,
+   "subject": "Education Loans",
+   "reason": "record",
+   "direction": "down"
   },
   "sibc-pl-education-yoy": {
-   "plane": "read",
-   "news_score": 3.0,
-   "subject": "Education Loans",
-   "reason": "surge",
-   "direction": "up"
+   "plane": "subject",
+   "news_score": 1.0,
+   "subject": "Education Loans"
   },
   "sibc-pl-fd-advances-share": {
-   "plane": "read",
-   "news_score": 2.0,
-   "subject": "Advances vs Fixed Deposits",
-   "reason": "record",
-   "direction": "down"
+   "plane": "composition",
+   "news_score": 0.0,
+   "subject": "Advances vs Fixed Deposits"
   },
   "sibc-pl-fd-advances-yoy": {
-   "plane": "read",
-   "news_score": 2.0,
-   "subject": "Advances vs Fixed Deposits",
-   "reason": "record",
-   "direction": "down"
+   "plane": "subject",
+   "news_score": 1.0,
+   "subject": "Advances vs Fixed Deposits"
   },
   "sibc-pl-gold-pos-streak": {
    "plane": "subject",
@@ -276,11 +264,9 @@
    "subject": "Gold Loans"
   },
   "sibc-pl-gold-yoy": {
-   "plane": "read",
-   "news_score": 2.0,
-   "subject": "Gold Loans",
-   "reason": "surge",
-   "direction": "down"
+   "plane": "subject",
+   "news_score": 0.0,
+   "subject": "Gold Loans"
   },
   "sibc-pl-housing-share": {
    "plane": "read",
@@ -290,11 +276,9 @@
    "direction": "down"
   },
   "sibc-pl-housing-yoy": {
-   "plane": "read",
-   "news_score": 2.0,
-   "subject": "Housing",
-   "reason": "surge",
-   "direction": "down"
+   "plane": "subject",
+   "news_score": 1.0,
+   "subject": "Housing"
   },
   "sibc-pl-other-share": {
    "plane": "composition",
@@ -302,9 +286,11 @@
    "subject": "Other Personal Loans"
   },
   "sibc-pl-other-yoy": {
-   "plane": "subject",
-   "news_score": 0.0,
-   "subject": "Other Personal Loans"
+   "plane": "read",
+   "news_score": 5.0,
+   "subject": "Other Personal Loans",
+   "reason": "record",
+   "direction": "up"
   },
   "sibc-pl-rotation": {
    "plane": "subject",
@@ -314,6 +300,11 @@
   "sibc-pl-share-advances-share": {
    "plane": "composition",
    "news_score": 0.0,
+   "subject": "Advances vs Shares/Bonds"
+  },
+  "sibc-pl-share-advances-yoy": {
+   "plane": "subject",
+   "news_score": 1.0,
    "subject": "Advances vs Shares/Bonds"
   },
   "sibc-pl-share-scan": {
@@ -328,7 +319,7 @@
   },
   "sibc-pl-vehicle-yoy": {
    "plane": "subject",
-   "news_score": 0.0,
+   "news_score": 1.0,
    "subject": "Vehicle Loans"
   },
   "sibc-pl-yoy-scan": {
@@ -343,39 +334,41 @@
    "reason": "record",
    "direction": "up"
   },
+  "sibc-pl-consumer-durables-share": {
+   "plane": "composition",
+   "news_score": 0.0,
+   "subject": "Consumer Durables"
+  },
   "sibc-pl-consumer-durables-yoy": {
    "plane": "subject",
    "news_score": 0.0,
    "subject": "Consumer Durables"
   },
-  "sibc-pl-share-advances-yoy": {
-   "plane": "read",
-   "news_score": 5.0,
-   "subject": "Advances vs Shares/Bonds",
-   "reason": "reversal",
-   "direction": "up"
-  },
   "sibc-psl-agri-yoy": {
    "plane": "read",
-   "news_score": 3.0,
+   "news_score": 5.0,
    "subject": "Agriculture",
-   "reason": "surge",
-   "direction": "down"
+   "reason": "record",
+   "direction": "up"
   },
   "sibc-psl-education-yoy": {
    "plane": "subject",
-   "news_score": 1.0,
+   "news_score": 0.0,
    "subject": "Education Loans"
   },
   "sibc-psl-housing-yoy": {
-   "plane": "subject",
-   "news_score": 1.0,
-   "subject": "Housing"
+   "plane": "read",
+   "news_score": 2.0,
+   "subject": "Housing",
+   "reason": "surge",
+   "direction": "down"
   },
   "sibc-psl-medium-yoy": {
-   "plane": "subject",
-   "news_score": 1.0,
-   "subject": "Medium Enterprises"
+   "plane": "read",
+   "news_score": 4.0,
+   "subject": "Medium Enterprises",
+   "reason": "record",
+   "direction": "up"
   },
   "sibc-psl-msme-fy-acceleration": {
    "plane": "composition",
@@ -383,11 +376,9 @@
    "subject": "Micro and Small Enterprises"
   },
   "sibc-psl-msme-yoy": {
-   "plane": "read",
-   "news_score": 2.0,
-   "subject": "Micro and Small Enterprises",
-   "reason": "surge",
-   "direction": "down"
+   "plane": "subject",
+   "news_score": 1.0,
+   "subject": "Micro and Small Enterprises"
   },
   "sibc-psl-renewable-pos-streak": {
    "plane": "subject",
@@ -396,22 +387,20 @@
   },
   "sibc-psl-renewable-yoy": {
    "plane": "subject",
-   "news_score": 1.0,
+   "news_score": 0.0,
    "subject": "Renewable Energy"
   },
   "sibc-psl-social-infra-yoy": {
-   "plane": "read",
-   "news_score": 2.0,
-   "subject": "Social Infrastructure",
-   "reason": "record",
-   "direction": "up"
+   "plane": "subject",
+   "news_score": 1.0,
+   "subject": "Social Infrastructure"
   },
   "sibc-psl-weaker-sections-yoy": {
    "plane": "read",
-   "news_score": 2.0,
+   "news_score": 5.0,
    "subject": "Weaker Sections",
    "reason": "record",
-   "direction": "down"
+   "direction": "up"
   },
   "sibc-psl-yoy-scan": {
    "plane": "subject",
@@ -424,9 +413,11 @@
    "subject": "Export Credit"
   },
   "sibc-psl-others-yoy": {
-   "plane": "subject",
-   "news_score": 0.0,
-   "subject": "Others"
+   "plane": "read",
+   "news_score": 2.0,
+   "subject": "Others",
+   "reason": "record",
+   "direction": "up"
   },
   "sibc-basic-metal-sub-share-scan": {
    "plane": "subject",
