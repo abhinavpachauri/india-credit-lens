@@ -5,7 +5,7 @@ import { loadReport }           from "@/lib/reports/rbi_sibc";
 import { loadPlanes, type PlanesMap } from "@/lib/planes";
 import { useAppShell }          from "@/components/AppShell";
 import SectionWithAnnotations   from "@/components/SectionWithAnnotations";
-import ReadModeView             from "@/components/read/ReadModeView";
+import SibcReadMode             from "@/components/read/SibcReadMode";
 import ModeToggle               from "@/components/read/ModeToggle";
 import { usePersistent }        from "@/hooks/usePersistent";
 import NewsletterCTA             from "@/components/NewsletterCTA";
@@ -44,7 +44,7 @@ export default function Dashboard() {
       <ModeToggle mode={mode} setMode={setMode} />
 
       {mode === "read" ? (
-        <ReadModeView report={report} planes={planes} homeLabel="Credit dashboard" />
+        <SibcReadMode report={report} planes={planes} />
       ) : (
         report.sections.map((section) => (
           <SectionWithAnnotations key={section.id} section={section} />
