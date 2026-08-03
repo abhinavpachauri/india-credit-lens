@@ -4,7 +4,52 @@
   "spec": "analysis/distribution/DISTRIBUTION_SPEC.md §11.2",
   "gate": "analysis/distribution/bank_sourcing.py :: validate_entry"
  },
- "bank_claims": [],
+ "bank_claims": [
+  {
+   "bank": "HDFC Bank",
+   "dimension": "credit cards",
+   "why": "HDFC is the largest card issuer and held up better than peers as spends cooled, nudging its share of the concentrated market higher.",
+   "excerpt": "supported by a relatively softer decline in spends",
+   "url": "https://www.business-standard.com/finance/personal-finance/ticket-size-squeeze-average-spend-per-credit-card-falls-13-to-17-060-yoy-126022600164_1.html",
+   "verified_date": "2026-08-03",
+   "excerpt_verified": true,
+   "tier": "press",
+   "status": "verified"
+  },
+  {
+   "bank": "SBI",
+   "dimension": "credit cards",
+   "why": "SBI Card, one of the dominant issuers, ceded ground this cycle as its card spends fell fastest among the leaders, yet stays in the top tier.",
+   "excerpt": "The top four banks (HDFC Bank, SBI, ICICI Bank, and Axis Bank) continued to dominate",
+   "url": "https://www.business-standard.com/finance/personal-finance/ticket-size-squeeze-average-spend-per-credit-card-falls-13-to-17-060-yoy-126022600164_1.html",
+   "verified_date": "2026-08-03",
+   "excerpt_verified": true,
+   "tier": "press",
+   "status": "verified"
+  },
+  {
+   "bank": "ICICI Bank",
+   "dimension": "credit cards",
+   "why": "ICICI slipped within the concentrated leading pack as its card spends declined.",
+   "excerpt": "The top four banks (HDFC Bank, SBI, ICICI Bank, and Axis Bank) continued to dominate",
+   "url": "https://www.business-standard.com/finance/personal-finance/ticket-size-squeeze-average-spend-per-credit-card-falls-13-to-17-060-yoy-126022600164_1.html",
+   "verified_date": "2026-08-03",
+   "excerpt_verified": true,
+   "tier": "press",
+   "status": "verified"
+  },
+  {
+   "bank": "Axis Bank",
+   "dimension": "credit cards",
+   "why": "Axis remains one of the dominant issuers in a highly concentrated credit-card market.",
+   "excerpt": "The top four banks (HDFC Bank, SBI, ICICI Bank, and Axis Bank) continued to dominate",
+   "url": "https://www.business-standard.com/finance/personal-finance/ticket-size-squeeze-average-spend-per-credit-card-falls-13-to-17-060-yoy-126022600164_1.html",
+   "verified_date": "2026-08-03",
+   "excerpt_verified": true,
+   "tier": "press",
+   "status": "verified"
+  }
+ ],
  "corroborations": [
   {
    "spine_id": "risk_infrastructure_bifurcation",
