@@ -32,6 +32,20 @@ from core.traceability import SIBC as POLICY, extract_numbers      # noqa: E402
 from distribution import categories as cats
 from distribution import slot_render                        # noqa: E402
 from signals import proximity                                      # noqa: E402
+from signals.dominance import move_dominance, short_entity         # noqa: E402
+
+# Fleet-vs-usage pairs whose fleet side is a per-entity count that can suffer a single-issuer
+# reporting jump → the honest gap check is the dominance guard on that count's YoY signal.
+_PAIR_FLEET_METRIC = {"pos-fleet-vs-spend-gap": "pos-terminals-yoy"}
+
+
+def _artifact(pipeline, agg_metric, period):
+    """The single-entity dominance verdict for a metric, or None — shared by tiles + pair lines
+    so a reporting artifact never renders as a market move (see signals/dominance.py)."""
+    if not agg_metric:
+        return None
+    dom = move_dominance(pipeline, agg_metric, period)
+    return dom if (dom and dom.dominant) else None
 
 PIPELINES = ("sibc", "atm_pos")
 
@@ -528,6 +542,12 @@ def tiles(period, specs):
             if not value:                       # a YoY-only tile leads with the rate
                 value = f"{yoy} YoY"
             signals.append(yoy_id)
+            # A single-issuer artifact keeps its real headline number but is labelled with the driver
+            # so a reader never mistakes it for a market move (why-over-what).
+            art = _artifact(pl, yoy_id, period)
+            if art:
+                who = short_entity(art.top_entity) or "one issuer"
+                note = f"{note} — {who}'s reporting change, not the market".lstrip(" —")
         out.append({"value": value, "label": label, "note": note, "signals": signals})
     return out
 
@@ -706,6 +726,19 @@ def pair_lines(pipeline, period, band=3.0):
         a_lab, b_lab, meaning = prose
         a, b = g["a_val"], g["b_val"]
         cap = a_lab[0].upper() + a_lab[1:]       # first letter only — keep POS / ATM casing
+        # If the fleet side is a single-issuer reporting artifact, the "gap" is spurious — the two
+        # sides did not really pull apart. Replace the divergence line with a grounded caveat that
+        # names the driver (number-free: the fleet number is not a market move, so no gap is narrated).
+        art = _artifact(pipeline, _PAIR_FLEET_METRIC.get(g["signal"]), period)
+        if art:
+            who = short_entity(art.top_entity) or "one issuer"
+            out.append({
+                "text": (f"{cap} look like they pulled away from {b_lab} this year, but almost the "
+                         f"entire fall in the fleet is {who}'s reported count — across every other "
+                         f"bank it held steady. This gap is a reporting artifact, not a real "
+                         f"divergence, so we are not reading a fleet-vs-usage story into it."),
+                "signals": g["signals"]})
+            continue
         # Signed values with a neutral verb: the number keeps the sign the database stores
         # (so it traces), and "moved by" carries no direction word to disagree with it.
         out.append({

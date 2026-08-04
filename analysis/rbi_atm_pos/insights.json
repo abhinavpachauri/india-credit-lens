@@ -932,9 +932,9 @@
     "cut": "total",
     "period": "Jun 2026",
     "type": "insight",
-    "title": "UPI QR 79.9\u00d7 POS \u2014 gap widens 12.2 points, highest on record",
-    "body": "There are now 79.9 UPI QR codes for every POS terminal in Jun 2026, up 12.22 from 67.7 in May 2026. Ratio rose 67.7\u00d7 \u2192 79.9\u00d7, the highest level on record \u2014 the gap has widened by 12.2 points as UPI QR scaled 1.28 crore codes while POS terminals fell 16.03 lakh units.",
-    "implication": "The 79.9\u00d7 ratio is the highest on record and confirms UPI QR is the dominant acceptance infrastructure channel, while POS is in terminal decline. The 12.2-point widening in one month is the steepest on record and signals the divergence is accelerating, not stabilising. UPI QR added 1.28 crore codes while POS lost 16.03 lakh units \u2014 an 8\u00d7 difference in absolute growth and the largest single-month divergence in the dataset.",
+    "title": "India now has UPI QR codes per POS terminal \u2014 the jump is ICICI Bank's count, not a real shift",
+    "body": "This ratio looks like it hit a record, but the move is almost entirely its denominator: ICICI Bank's reported count fell sharply in a single month while the numerator barely changed. Across every other bank the denominator held steady, so the ratio's jump is a reporting artifact, not the market pulling apart.",
+    "implication": "Discount the record \u2014 the ratio moved because ICICI Bank's reported count changed, not because the two sides really diverged.",
     "reasoning": {
       "signals": [
         {
@@ -955,10 +955,8 @@
         }
       ],
       "chain": [
-        "The 79.9\u00d7 ratio is the highest on record and confirms the two channels are on divergent trajectories \u2014 UPI QR is scaling exponentially while POS is contracting at an unprecedented rate.",
-        "UPI QR added 1.28 crore codes in Jun while POS lost 16.03 lakh units, a 8\u00d7 difference in absolute growth and the largest single-month divergence in the dataset.",
-        "The ratio has more than doubled from Jan 2024's 37.4\u00d7 to Jun 2026's 79.9\u00d7, with the gap widening at the fastest pace on record.",
-        "This signals UPI QR is the dominant acceptance infrastructure channel, while POS is in terminal decline."
+        "This ratio looks like it hit a record, but the move is almost entirely its denominator: ICICI Bank's reported count fell sharply in a single month while the numerator barely changed. Across every other bank the denominator held steady, so the ratio's jump is a reporting artifact, not the market pulling apart.",
+        "Discount the record \u2014 the ratio moved because ICICI Bank's reported count changed, not because the two sides really diverged."
       ]
     },
     "basis": {
@@ -967,13 +965,23 @@
         "pos_terminals.latest: 9922126.0",
         "upi_qr.mom_pct: 1.64",
         "pos_terminals.mom_pct: -13.91",
-        "Source: web/public/data/atm_pos_consolidated.csv"
+        "Source: web/public/data/atm_pos_consolidated.csv",
+        {
+          "metric": "upi-qr-per-pos",
+          "scan_metric": "pos-bank-scan",
+          "dominant": true,
+          "top_entity": "ICICI BANK LTD",
+          "top_move_share": 0.9765,
+          "mom_pct": -13.91,
+          "ex_top_yoy_pct": 1.29,
+          "agg_value": 79.88,
+          "period": "2026-06-30",
+          "via_denominator": true
+        }
       ],
       "inferences": [
-        "The 79.9\u00d7 ratio is the highest on record and confirms the two channels are on divergent trajectories \u2014 UPI QR is scaling exponentially while POS is contracting at an unprecedented rate.",
-        "UPI QR added 1.28 crore codes in Jun while POS lost 16.03 lakh units, a 8\u00d7 difference in absolute growth and the largest single-month divergence in the dataset.",
-        "The ratio has more than doubled from Jan 2024's 37.4\u00d7 to Jun 2026's 79.9\u00d7, with the gap widening at the fastest pace on record.",
-        "This signals UPI QR is the dominant acceptance infrastructure channel, while POS is in terminal decline."
+        "This ratio looks like it hit a record, but the move is almost entirely its denominator: ICICI Bank's reported count fell sharply in a single month while the numerator barely changed. Across every other bank the denominator held steady, so the ratio's jump is a reporting artifact, not the market pulling apart.",
+        "Discount the record \u2014 the ratio moved because ICICI Bank's reported count changed, not because the two sides really diverged."
       ]
     },
     "sourceSignals": [
@@ -993,9 +1001,9 @@
     "exploreAction": {
       "mode": "by_type"
     },
-    "representation": "llm",
-    "eval_signal": "upi-qr-per-pos",
-    "prompt_version": "1.12"
+    "representation": "deterministic-dominance",
+    "single_entity_artifact": true,
+    "eval_signal": "upi-qr-per-pos"
   },
   {
     "id": "infra-pos-yoy",
@@ -1003,9 +1011,9 @@
     "cut": "total",
     "period": "Jun 2026",
     "type": "insight",
-    "title": "POS terminals -15.8% YoY \u2014 steepest contraction on record",
-    "body": "POS terminals contracted 15.79% year-on-year in Jun 2026, down from -0.48% in May 2026. YoY growth fell -0.5% \u2192 -15.8%, a 15.3-point drop \u2014 the steepest monthly deterioration in the 18-period series and the weakest reading on record.",
-    "implication": "The -15.8% YoY rate is the steepest contraction on record and confirms the POS network is in structural collapse. The network now holds 15.8% fewer terminals than it did a year ago, the first double-digit contraction in the dataset. The 15.3-point deterioration in one month is the steepest on record and signals the contraction is accelerating, not stabilising. This is a network collapse event \u2014 the POS channel is shrinking at an unprecedented rate.",
+    "title": "POS terminal growth -15.8% YoY \u2014 but it's ICICI Bank, not the market",
+    "body": "The headline -15.8% year-on-year move is almost entirely ICICI Bank: its reported count fell sharply in a single month and accounts for nearly all of the change, while across every other bank the fleet edged up over the year. This looks like a base or reporting change at ICICI Bank \u2014 most likely a reclassification of how terminals are counted \u2014 not a market-wide shift. (The specific reason is not yet sourced; the concentration is straight from the bank-level data.)",
+    "implication": "Read the market signal off the other banks \u2014 flat-to-steady \u2014 not the headline, which is ICICI Bank's reporting change.",
     "reasoning": {
       "signals": [
         {
@@ -1026,10 +1034,8 @@
         }
       ],
       "chain": [
-        "The -15.8% YoY rate is the steepest contraction on record, breaking below May's -0.5% and confirming the network is shrinking year-on-year at an accelerating pace.",
-        "The rate has fallen 27.3 points from Jan's 11.5% peak, the largest cumulative decline in the dataset.",
-        "The network now holds 15.8% fewer terminals than it did a year ago, the first double-digit contraction on record.",
-        "This is a structural collapse signal \u2014 the POS channel is contracting at an unprecedented rate, with no sign of stabilisation."
+        "The headline -15.8% year-on-year move is almost entirely ICICI Bank: its reported count fell sharply in a single month and accounts for nearly all of the change, while across every other bank the fleet edged up over the year. This looks like a base or reporting change at ICICI Bank \u2014 most likely a reclassification of how terminals are counted \u2014 not a market-wide shift. (The specific reason is not yet sourced; the concentration is straight from the bank-level data.)",
+        "Read the market signal off the other banks \u2014 flat-to-steady \u2014 not the headline, which is ICICI Bank's reporting change."
       ]
     },
     "basis": {
@@ -1038,13 +1044,23 @@
         "pos_terminals.yoy_prior_pct: -0.48",
         "pos_terminals.yoy_accel_pp: -15.31",
         "pos_terminals.latest: 9922126.0",
-        "Source: web/public/data/atm_pos_consolidated.csv"
+        "Source: web/public/data/atm_pos_consolidated.csv",
+        {
+          "metric": "pos-terminals-yoy",
+          "scan_metric": "pos-bank-scan",
+          "dominant": true,
+          "top_entity": "ICICI BANK LTD",
+          "top_move_share": 0.9765,
+          "mom_pct": -13.91,
+          "ex_top_yoy_pct": 1.29,
+          "agg_value": -15.79,
+          "period": "2026-06-30",
+          "via_denominator": false
+        }
       ],
       "inferences": [
-        "The -15.8% YoY rate is the steepest contraction on record, breaking below May's -0.5% and confirming the network is shrinking year-on-year at an accelerating pace.",
-        "The rate has fallen 27.3 points from Jan's 11.5% peak, the largest cumulative decline in the dataset.",
-        "The network now holds 15.8% fewer terminals than it did a year ago, the first double-digit contraction on record.",
-        "This is a structural collapse signal \u2014 the POS channel is contracting at an unprecedented rate, with no sign of stabilisation."
+        "The headline -15.8% year-on-year move is almost entirely ICICI Bank: its reported count fell sharply in a single month and accounts for nearly all of the change, while across every other bank the fleet edged up over the year. This looks like a base or reporting change at ICICI Bank \u2014 most likely a reclassification of how terminals are counted \u2014 not a market-wide shift. (The specific reason is not yet sourced; the concentration is straight from the bank-level data.)",
+        "Read the market signal off the other banks \u2014 flat-to-steady \u2014 not the headline, which is ICICI Bank's reporting change."
       ]
     },
     "sourceSignals": [
@@ -1064,9 +1080,9 @@
     "exploreAction": {
       "mode": "by_type"
     },
-    "representation": "llm",
-    "eval_signal": "pos-terminals-yoy",
-    "prompt_version": "1.12"
+    "representation": "deterministic-dominance",
+    "single_entity_artifact": true,
+    "eval_signal": "pos-terminals-yoy"
   },
   {
     "id": "infra-upi-yoy",

@@ -88,7 +88,7 @@ PSL Agriculture credit grew 19.95% year-on-year in Jun 2026, the highest reading
 
 - **12.2 crore** — Credit cards in force (9.6% YoY)
 - **103.2 crore** — Debit cards in force (2.7% YoY)
-- **99.2 lakh** — POS terminals (-15.8% YoY)
+- **99.2 lakh** — POS terminals (-15.8% YoY — ICICI Bank's reporting change, not the market)
 
 
 ## Fleet vs usage
@@ -97,7 +97,7 @@ A few things that usually move together have come apart this year:
 
 The number of debit cards and spending on them have pulled apart this year. The number of debit cards moved by +2.7% while spending on them moved by -0.7% — a gap of 3.3pp, which is the space between having a card and using it.
 
-The POS machines deployed and the money flowing through them have pulled apart this year. The POS machines deployed moved by -15.8% while the money flowing through them moved by +6.0% — a gap of -21.8pp, which is the space between how many machines there are and how much they handle.
+The POS machines deployed look like they pulled away from the money flowing through them this year, but almost the entire fall in the fleet is ICICI Bank's reported count — across every other bank it held steady. This gap is a reporting artifact, not a real divergence, so we are not reading a fleet-vs-usage story into it.
 
 The ATMs deployed and the cash withdrawn from them have pulled apart this year. The ATMs deployed moved by -0.1% while the cash withdrawn from them moved by -5.4% — a gap of 5.3pp, which is the space between the size of the ATM fleet and how much it dispenses.
 
@@ -135,13 +135,13 @@ The ATMs deployed and the cash withdrawn from them have pulled apart this year. 
 ## The reads that matter
 
 
-**UPI QR 79.9× POS — gap widens 12.2 points, highest on record**
+**Ecommerce volume share at 50.19% — up 0.42pp from May**
 
 
-There are now 79.9 UPI QR codes for every POS terminal in Jun 2026, up 12.22 from 67.7 in May 2026. Ratio rose 67.7× → 79.9×, the highest level on record — the gap has widened by 12.2 points as UPI QR scaled 1.28 crore codes while POS terminals fell 16.03 lakh units.
+Ecommerce represents 50.19% of total credit card transaction volume in Jun 2026, up 0.42pp from May 2026. Share rose 49.77% → 50.19%, a 0.42pp gain that moves the channel above 50% and above the 30-period p75 in the upper range.
 
 
-> 📊 **[CHART — replace with screenshot]** indiacreditlens.com/payments → Infrastructure → Absolute view → highlight: Total
+> 📊 **[CHART — replace with screenshot]** indiacreditlens.com/payments → Credit Cards → Absolute view → highlight: Total
 
 ---
 

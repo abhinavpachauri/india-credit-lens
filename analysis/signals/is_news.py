@@ -47,6 +47,7 @@ ROOT = next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()
 sys.path.insert(0, str(ROOT / "analysis"))
 
 from signals import proximity                                   # noqa: E402
+from signals.dominance import move_dominance                     # noqa: E402
 
 # Weights. Records, regime flips and outsized moves are the strong signals of news, each
 # enough on its own to make a read; a fresh threshold crossing corroborates but rarely
@@ -153,14 +154,26 @@ def score(conn, sid, sig):
     move = proximity.typical_move(values)
     magnitude = bool(move and abs(values[-1] - values[-2]) > MAGNITUDE_MULT * move)
 
+    # Single-entity dominance guard. A raw aggregate driven by one issuer's reporting change is still
+    # news — but as an issuer story, not a market move — so we KEEP it rankable and only flag it; the
+    # insight layer names the entity. A *derived ratio* riding such a denominator is different: its
+    # "record" is arithmetically spurious (the numerator barely moved), so that one is zeroed and never
+    # ranks. Traceable to the bank scan; see signals/dominance.py.
+    artifact = False
+    dom = move_dominance(pipeline, sid, period, conn=conn)
+    if dom and dom.dominant:
+        artifact = True
+        if dom.via_denominator:
+            is_record, magnitude = False, False
+
     s = (W_RECORD * is_record + W_FLIP * flipped
          + W_MAGNITUDE * magnitude + W_CROSSED * crossed)
     return {
         "signal_id": sid, "pipeline": pipeline, "title": sig.get("title", sid),
         "period": period, "score": s,
         "factors": {"record": bool(is_record), "flip": flipped,
-                    "magnitude": magnitude, "crossed": crossed},
-        "record_kind": record_kind, "was": was, "now": now,
+                    "magnitude": magnitude, "crossed": crossed, "artifact": artifact},
+        "record_kind": record_kind if not artifact else None, "was": was, "now": now,
     }
 
 

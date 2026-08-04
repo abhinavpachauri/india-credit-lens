@@ -204,7 +204,8 @@ def build_doc(credit_picks=None, payments_picks=None):
     return doc, declared, period
 
 
-_GLYPH = {"record": "record", "flip": "regime-flip", "magnitude": "big-move", "crossed": "crossed"}
+_GLYPH = {"record": "record", "flip": "regime-flip", "magnitude": "big-move", "crossed": "crossed",
+          "artifact": "single-issuer"}
 
 
 def _print_shortlist():

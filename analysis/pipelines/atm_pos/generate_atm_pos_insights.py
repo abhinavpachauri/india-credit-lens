@@ -15,12 +15,14 @@ Usage:
 """
 
 import json
+import re
 import shutil
 from pathlib import Path
 
 import sys
 sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
 from core.paths import ROOT
+from signals.dominance import move_dominance, short_entity
 SIGNALS_IN  = ROOT / "analysis/rbi_atm_pos/signals.json"
 OUT_PATH    = ROOT / "analysis/rbi_atm_pos/insights.json"
 WEB_PATH    = ROOT / "web/public/data/atm_pos_insights.json"
@@ -77,11 +79,63 @@ def load_eval_signals(period: str) -> tuple[dict, str | None]:
     return flat, ev.get("prompt_version")
 
 
-def apply_llm_representation(insights: list, eval_signals: dict, prompt_version) -> int:
+def _dominance_caveat(ins: dict, dom) -> None:
+    """Rewrite an anchored insight whose aggregate move is a single-entity artifact. The headline
+    number is real and kept; the narrative that would call it a market signal is replaced with a
+    grounded, number-free caveat (the concentration facts land in basis.facts, which trace to the
+    bank scan). This is why-over-what: the aggregate fell, but the *why* is one issuer's reporting,
+    not the market — so we do not let the LLM narrate a 'collapse'."""
+    entity = short_entity(dom.top_entity) or "one issuer"
+    rose = dom.ex_top_yoy_pct is not None and dom.ex_top_yoy_pct > 0.5
+    rest = ("edged up over the year" if rose else
+            "was essentially flat over the year" if dom.ex_top_yoy_pct is not None and abs(dom.ex_top_yoy_pct) <= 0.5
+            else "barely moved over the year")
+    base = re.sub(r"[-+]?\d[\d.,]*\s*%?\s*(YoY|×|x)?", "", ins.get("title", "").split(" — ")[0]).strip(" —")
+    if dom.via_denominator:
+        # A ratio: the jump is the denominator (a per-entity count) lurching at one issuer, not the
+        # numerator outpacing the market — the "record" is arithmetically spurious.
+        ins["title"] = f"{base} — the jump is {entity}'s count, not a real shift"
+        ins["body"] = (
+            f"This ratio looks like it hit a record, but the move is almost entirely its denominator: "
+            f"{entity}'s reported count fell sharply in a single month while the numerator barely "
+            f"changed. Across every other bank the denominator held steady, so the ratio's jump is a "
+            f"reporting artifact, not the market pulling apart.")
+        ins["implication"] = (f"Discount the record — the ratio moved because {entity}'s reported count "
+                              f"changed, not because the two sides really diverged.")
+    else:
+        # A raw aggregate: keep it as a real read, but attribute it — this is the issuer story, and
+        # the market-level reading is what the rest of the banks did. We name the driver (a fact from
+        # the bank scan); we hedge the cause, which we have not sourced.
+        pct = f"{dom.agg_value:+.1f}%" if dom.agg_value is not None else "sharply"
+        ins["title"] = f"{base} {pct} YoY — but it's {entity}, not the market"
+        ins["body"] = (
+            f"The headline {pct} year-on-year move is almost entirely {entity}: its reported count fell "
+            f"sharply in a single month and accounts for nearly all of the change, while across every "
+            f"other bank the fleet {rest}. This looks like a base or reporting change at {entity} — most "
+            f"likely a reclassification of how terminals are counted — not a market-wide shift. (The "
+            f"specific reason is not yet sourced; the concentration is straight from the bank-level data.)")
+        ins["implication"] = (f"Read the market signal off the other banks — flat-to-steady — not the "
+                              f"headline, which is {entity}'s reporting change.")
+    ins.setdefault("basis", {}).setdefault("facts", [])
+    ins["basis"]["facts"] = [f for f in ins["basis"].get("facts", [])] + [dom.as_facts()]
+    ins.setdefault("reasoning", {"signals": []})["chain"] = [ins["body"], ins["implication"]]
+    if ins.get("basis"):
+        ins["basis"]["inferences"] = ins["reasoning"]["chain"]
+    ins["representation"] = "deterministic-dominance"
+    ins["single_entity_artifact"] = True
+    ins["eval_signal"] = dom.metric   # keep the signal link so the card can still be ranked/traced
+
+
+def apply_llm_representation(insights: list, eval_signals: dict, prompt_version, period=None) -> int:
     """Override the prose (title/body/implication/chain) of anchored scalar
     insights with the LLM narrative; keep deterministic selection, UI routing
     (effect/exploreAction), sourceSignals and basis.facts. Returns the count
-    converted to LLM representation."""
+    converted to LLM representation.
+
+    Before the LLM narrative is trusted, a single-entity dominance guard runs: if the anchored
+    metric's move is an artifact of one entity's reporting (see signals/dominance.py), the LLM
+    narrative is discarded in favour of a grounded caveat — an aggregate that isn't a real market
+    move must never be narrated as one."""
     converted = 0
     for ins in insights:
         if ins.get("representation") == "deterministic-db":
@@ -91,6 +145,10 @@ def apply_llm_representation(insights: list, eval_signals: dict, prompt_version)
         se = eval_signals.get(anchor) if anchor else None
         if not se:
             continue
+        dom = move_dominance("atm_pos", anchor, period) if (anchor and period) else None
+        if dom and dom.dominant:
+            _dominance_caveat(ins, dom)
+            continue   # grounded caveat replaces the LLM 'market signal' narrative
         body  = " ".join(x for x in [se.get("observation", ""), se.get("direction", "")] if x).strip()
         chain = se.get("chain") or []
         impl  = se.get("inference") or ins.get("implication")
@@ -2001,7 +2059,7 @@ def main():
     period = signals["meta"]["latest_period"]
     eval_signals, prompt_version = load_eval_signals(period)
     if eval_signals:
-        n = apply_llm_representation(insights, eval_signals, prompt_version)
+        n = apply_llm_representation(insights, eval_signals, prompt_version, period)
         print(f"  LLM representation applied to {n} scalar insight(s) "
               f"(eval {period}, prompt {prompt_version}); rest deterministic.")
     else:
