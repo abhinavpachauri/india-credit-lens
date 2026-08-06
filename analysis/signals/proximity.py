@@ -29,6 +29,7 @@ Deterministic, registry-driven, no LLM, reads signals.db only.
 """
 import argparse
 import json
+import re
 import sqlite3
 import statistics
 import sys
@@ -170,7 +171,10 @@ def proximity(conn, sid, sig):
 
     moves_away = best["distance"] / move
     return {
-        "signal_id": sid, "pipeline": pipeline, "title": sig.get("title", sid),
+        # Display title: drop the registry's trailing unit annotation ("… (YoY gap, pp)", "… (%)")
+        # — it reads as clutter in a watchlist headline or a LinkedIn line. Display use only.
+        "signal_id": sid, "pipeline": pipeline,
+        "title": re.sub(r"\s*\([^)]*\)\s*$", "", sig.get("title", sid)).strip(),
         "period": period, "value": value, "prev_value": hist[-2][1],
         "unit": sig.get("unit", ""), "current_status": current,
         "typical_move": move, "moves_away": moves_away,

@@ -467,7 +467,9 @@ def watchlist(top_n=3):
     for row in proximity.ranked(limit=top_n):
         out.append({
             "id": row["signal_id"], "pipeline": row["pipeline"], "category": "C8",
-            "title": row["title"],
+            # Registry titles carry a trailing unit annotation ("… (YoY gap, pp)", "… (%)") that
+            # reads as clutter in a headline — strip it; the value + unit live in the body/lede.
+            "title": re.sub(r"\s*\([^)]*\)\s*$", "", row["title"]).strip(),
             "body": proximity.sentence(row),
             "implication": "", "signal_ids": [row["signal_id"]],
             "numbers": extract_numbers(proximity.sentence(row), POLICY),

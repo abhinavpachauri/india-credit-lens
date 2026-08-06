@@ -230,7 +230,7 @@ def main():
                 "scope": "cross_source", "surface": "opportunities",
                 "driver": {"kind": "cross_edge", "id": e["id"]},
                 "status": "active" if fd > 0 else "watch",
-                "label": f"Cross-system signal: {e['shared'].get('product')} "
+                "label": f"Cross-system signal: {e['shared'].get('product', '').replace('_', ' ')} "
                          f"{'flow leading stock — origination headroom' if fd > 0 else 'flow softening ahead of stock'}",
                 "refs": {"cross_edge": e["id"], "entities": [e["from"], e["to"]]},
                 "mechanism": e.get("mechanism"),

@@ -684,6 +684,16 @@
         "analysis/signals/signals.db": "high"
       }
     },
+    "signals/dominance": {
+      "doc_claims": [],
+      "imports": [],
+      "invokes": [],
+      "path": "analysis/signals/dominance.py",
+      "reads": {
+        "analysis/signals/signals.db": "low"
+      },
+      "writes": {}
+    },
     "signals/evaluate": {
       "doc_claims": [],
       "imports": [

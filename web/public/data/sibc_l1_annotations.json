@@ -2035,9 +2035,9 @@
         {
           "id": "sibc-chemicals-sub-share-scan",
           "layer": 1,
-          "title": "Others is the biggest slice of chemicals credit at 44.2%",
-          "body": "Others holds the largest share of chemicals credit at 44.2%, Drugs and Pharmaceuticals 32.1%; Fertiliser is the smallest at 11.3%. These are size shares, not growth rates. Top three hold 88.7% of chemicals credit, spread 33.0 percentage points.",
-          "implication": "Composition, not momentum: Others carries the most weight of chemicals credit. Concentration means the big blocks drive the category — watch them first.",
+          "title": "Drugs and Pharmaceuticals leads the named chemicals credit at 32.1%",
+          "body": "Among the sub-sectors RBI actually breaks out, Drugs and Pharmaceuticals holds the largest share of chemicals credit at 32.1%, Petro Chemicals 12.3%; Fertiliser is the smallest at 11.3%. A further 44.2% is the unclassified 'Others' residual — these are size shares, not growth rates.",
+          "implication": "Composition among the classified sub-sectors: Drugs and Pharmaceuticals carries the most weight. But 44.2% is unclassified — read the named mix with that caveat.",
           "preferredMode": "share",
           "effect": {
             "highlight": [
@@ -2051,18 +2051,18 @@
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_scan_share)"
             ],
             "inferences": [
-              "Others is the largest block at 44.2% of chemicals credit.",
-              "Fertiliser is the smallest at 11.3% — a 33.0 percentage points spread across 4 sub-categories.",
-              "The top three hold 88.7% of chemicals credit — concentrated mix."
+              "Drugs and Pharmaceuticals is the largest named block at 32.1% of chemicals credit.",
+              "Fertiliser is the smallest named block at 11.3%.",
+              "RBI leaves 44.2% of chemicals credit in an unclassified 'Others' residual."
             ]
           }
         },
         {
           "id": "sibc-chemicals-sub-yoy-scan",
           "layer": 1,
-          "title": "Others growing fastest at 22.4%; Fertiliser slowest at 16.2%",
-          "body": "Others leads YoY growth at 22.4%, Drugs and Pharmaceuticals at 22.2%; Fertiliser is slowest at 16.2%. 4 of 4 categories growing, spread 6.2 percentage points.",
-          "implication": "Lenders can lean into Others (22.4%) and monitor Fertiliser (16.2%). Broad participation supports diversified deployment.",
+          "title": "Drugs and Pharmaceuticals is the fastest-growing named sub-sector at 22.2%",
+          "body": "Among the sub-sectors RBI names, Drugs and Pharmaceuticals leads YoY growth at 22.2%, Fertiliser slowest at 16.2%. The unclassified 'Others' residual grew 22.4%.",
+          "implication": "Momentum among the classified sub-sectors: Drugs and Pharmaceuticals is pulling ahead. The 'Others' residual moved too, but it is unclassified — don't read a sector into it.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -2077,18 +2077,18 @@
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_scan_yoy)"
             ],
             "inferences": [
-              "Others is the standout at 22.4% YoY.",
-              "Fertiliser is the weakest at 16.2% — a spread of 6.2 percentage points across 4 categories.",
-              "4 of 4 categories are growing — broad-based momentum."
+              "Drugs and Pharmaceuticals is the fastest named block at 22.2% YoY.",
+              "Fertiliser is the slowest named block at 16.2%.",
+              "The 'Others' residual grew 22.4% — a black-box mover, not a sector signal."
             ]
           }
         },
         {
           "id": "sibc-engineering-sub-share-scan",
           "layer": 1,
-          "title": "Others holds 79.2% of engineering credit; Electronics 20.8%",
-          "body": "RBI breaks engineering credit into two sub-categories. Others holds 79.2% and Electronics 20.8% — these are size shares, not growth rates. Together the two break-outs cover 100.0% of engineering credit — the full category.",
-          "implication": "Read this as size mix, not momentum: Others is clearly the bigger block. Check the matching growth scan before positioning.",
+          "title": "RBI breaks out only Electronics of engineering credit — the rest is unclassified",
+          "body": "Electronics is the one named sub-sector RBI reports of engineering credit, at 20.8%. The remaining 79.2% sits in an unclassified 'Others' residual — these are size shares, not growth rates.",
+          "implication": "Only Electronics is visible of engineering credit; most of the category is an unclassified block. Read it as data coverage, not composition.",
           "preferredMode": "share",
           "effect": {
             "highlight": [
@@ -2102,18 +2102,18 @@
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_scan_share)"
             ],
             "inferences": [
-              "Others is the larger break-out at 79.2% of engineering credit.",
-              "Electronics holds 20.8% — a 58.4 percentage points gap between the only two break-outs.",
-              "Together they cover 100.0% of engineering credit — the full category."
+              "Electronics is the only broken-out sub-sector at 20.8% of engineering credit.",
+              "The residual 'Others' holds 79.2% of engineering credit — RBI names nothing else.",
+              "A lone named block beside a large residual is a coverage gap, not a mix."
             ]
           }
         },
         {
           "id": "sibc-engineering-sub-yoy-scan",
           "layer": 1,
-          "title": "Others growing at 40.1% YoY; Electronics at 28.7%",
-          "body": "Others grew 40.1% year-on-year against Electronics at 28.7% — a 11.4 percentage points growth gap between the two sub-categories RBI breaks out.",
-          "implication": "Lenders can lean into Others (40.1%) and monitor Electronics (28.7%). Broad participation supports diversified deployment.",
+          "title": "Electronics is RBI's only named sub-sector — grew 28.7% YoY",
+          "body": "Electronics is the only sub-sector RBI breaks out , and it grew 28.7% year-on-year. The unclassified 'Others' residual grew 40.1% — a black-box mover, not a sector signal.",
+          "implication": "Only Electronics's momentum is legible; the rest is an unclassified block. Read it as coverage, not a sector call.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -2127,18 +2127,18 @@
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_scan_yoy)"
             ],
             "inferences": [
-              "Others is the faster of the two at 40.1% YoY.",
-              "Electronics is at 28.7% — 11.4 percentage points behind.",
-              "Both are growing — the gap is about pace, not direction."
+              "Electronics is the only named sub-sector, at 28.7% YoY.",
+              "The 'Others' residual grew 40.1% — RBI names nothing else here.",
+              "One named block beside a large residual is a coverage gap, not a mix."
             ]
           }
         },
         {
           "id": "sibc-food-processing-sub-share-scan",
           "layer": 1,
-          "title": "Others is the biggest slice of food-processing credit at 77.4%",
-          "body": "Others holds the largest share of food-processing credit at 77.4%, Edible Oils and Vanaspati 12.0%; Tea is the smallest at 2.1%. These are size shares, not growth rates. Top three hold 97.9% of food-processing credit, spread 75.3 percentage points.",
-          "implication": "Composition, not momentum: Others carries the most weight of food-processing credit. Concentration means the big blocks drive the category — watch them first.",
+          "title": "Edible Oils and Vanaspati leads the named food-processing credit at 12.0%",
+          "body": "Among the sub-sectors RBI actually breaks out, Edible Oils and Vanaspati holds the largest share of food-processing credit at 12.0%, Sugar 8.4%; Tea is the smallest at 2.1%. A further 77.4% is the unclassified 'Others' residual — these are size shares, not growth rates.",
+          "implication": "Composition among the classified sub-sectors: Edible Oils and Vanaspati carries the most weight. But 77.4% is unclassified — read the named mix with that caveat.",
           "preferredMode": "share",
           "effect": {
             "highlight": [
@@ -2152,9 +2152,9 @@
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_scan_share)"
             ],
             "inferences": [
-              "Others is the largest block at 77.4% of food-processing credit.",
-              "Tea is the smallest at 2.1% — a 75.3 percentage points spread across 4 sub-categories.",
-              "The top three hold 97.9% of food-processing credit — concentrated mix."
+              "Edible Oils and Vanaspati is the largest named block at 12.0% of food-processing credit.",
+              "Tea is the smallest named block at 2.1%.",
+              "RBI leaves 77.4% of food-processing credit in an unclassified 'Others' residual."
             ]
           }
         },

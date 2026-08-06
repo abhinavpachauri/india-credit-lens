@@ -178,6 +178,13 @@ def _short(name: str) -> str:
     return name.strip()
 
 
+def _is_residual(name: str) -> bool:
+    """RBI's catch-all 'Others' bucket — the sub-sectors it does not break out. It is a residual,
+    not a sector, so it must never headline a leaderboard ('Others is the biggest slice of X'). When
+    it is large, the real signal is a classification gap, not a composition read."""
+    return _short(name).strip().lower() in {"others", "other"}
+
+
 def _scan_fmt(v: float, unit: str) -> str:
     return f"{v:.1f}%" if unit == "pct" else f"{v:,.0f}"
 
@@ -202,6 +209,40 @@ def deterministic_scan_insight(dist: list[tuple], unit: str, kind: str = "yoy",
 
     if kind == "share":
         of = f"of {share_of}" if share_of else "of the parent category"
+        residual = next((d for d in dist if _is_residual(d[0])), None)
+        named = [d for d in dist if not _is_residual(d[0])]
+        if residual and named:
+            # RBI's 'Others' residual is in the mix — never headline it as a sector. Lead with the
+            # biggest NAMED sub-sector; the residual's size is the classification-coverage story.
+            rv = fv(residual[1])
+            nL0, nLv0 = _short(named[0][0]), fv(named[0][1])
+            if len(named) == 1:
+                title = f"RBI breaks out only {nL0} {of} — the rest is unclassified"
+                body = (f"{nL0} is the one named sub-sector RBI reports {of}, at {nLv0}. The remaining "
+                        f"{rv} sits in an unclassified 'Others' residual — these are size shares, not "
+                        f"growth rates.")
+                chain = [
+                    f"{nL0} is the only broken-out sub-sector at {nLv0} {of}.",
+                    f"The residual 'Others' holds {rv} {of} — RBI names nothing else.",
+                    "A lone named block beside a large residual is a coverage gap, not a mix.",
+                ]
+                implication = (f"Only {nL0} is visible {of}; most of the category is an unclassified "
+                               "block. Read it as data coverage, not composition.")
+            else:
+                nW0, nWv0 = _short(named[-1][0]), fv(named[-1][1])
+                title = f"{nL0} leads the named {share_of or 'sub-sectors'} at {nLv0}"
+                body = (f"Among the sub-sectors RBI actually breaks out, {nL0} holds the largest share "
+                        f"{of} at {nLv0}, {_short(named[1][0])} {fv(named[1][1])}; {nW0} is the smallest "
+                        f"at {nWv0}. A further {rv} is the unclassified 'Others' residual — these are "
+                        f"size shares, not growth rates.")
+                chain = [
+                    f"{nL0} is the largest named block at {nLv0} {of}.",
+                    f"{nW0} is the smallest named block at {nWv0}.",
+                    f"RBI leaves {rv} {of} in an unclassified 'Others' residual.",
+                ]
+                implication = (f"Composition among the classified sub-sectors: {nL0} carries the most "
+                               f"weight. But {rv} is unclassified — read the named mix with that caveat.")
+            return title, body, chain, implication
         top3 = sum(v for _, v, _ in dist[:3])
         if n == 2:
             # two break-outs: a comparison, not a leaderboard (no "top three",
@@ -249,6 +290,42 @@ def deterministic_scan_insight(dist: list[tuple], unit: str, kind: str = "yoy",
         return title, body, chain, implication
 
     # kind == "yoy" — growth rates; NEVER sum them into a "share of total"
+    residual = next((d for d in dist if _is_residual(d[0])), None)
+    named = [d for d in dist if not _is_residual(d[0])]
+    # Only reframe when the residual would otherwise headline (it is the fastest mover, or it is one of
+    # only two break-outs). A named sub-sector already leading needs no help.
+    if residual and named and (_is_residual(dist[0][0]) or len(named) == 1):
+        rv = fv(residual[1])
+        if len(named) == 1:
+            # a two-way split of one named sub-sector vs the residual — lead with the named one.
+            nL0, nLv0 = _short(named[0][0]), fv(named[0][1])
+            sub = f"sub-sector of {share_of}" if share_of else "sub-sector"
+            title = f"{nL0} is RBI's only named {sub} — grew {nLv0} YoY"
+            body = (f"{nL0} is the only sub-sector RBI breaks out {('of ' + share_of) if share_of else ''}, "
+                    f"and it grew {nLv0} year-on-year. The unclassified 'Others' residual grew {rv} — a "
+                    f"black-box mover, not a sector signal.")
+            chain = [
+                f"{nL0} is the only named sub-sector, at {nLv0} YoY.",
+                f"The 'Others' residual grew {rv} — RBI names nothing else here.",
+                "One named block beside a large residual is a coverage gap, not a mix.",
+            ]
+            implication = (f"Only {nL0}'s momentum is legible; the rest is an unclassified block. Read "
+                           "it as coverage, not a sector call.")
+        else:
+            # >=2 named, but the residual is the fastest — lead with the fastest NAMED sub-sector.
+            L0, Lv0 = _short(named[0][0]), fv(named[0][1])
+            W0, Wv0 = _short(named[-1][0]), fv(named[-1][1])
+            title = f"{L0} is the fastest-growing named {share_of or 'sub-sector'} at {Lv0}"
+            body = (f"Among the sub-sectors RBI names, {L0} leads YoY growth at {Lv0}, {W0} slowest at "
+                    f"{Wv0}. The unclassified 'Others' residual grew {rv}.")
+            chain = [
+                f"{L0} is the fastest named block at {Lv0} YoY.",
+                f"{W0} is the slowest named block at {Wv0}.",
+                f"The 'Others' residual grew {rv} — a black-box mover, not a sector signal.",
+            ]
+            implication = (f"Momentum among the classified sub-sectors: {L0} is pulling ahead. The "
+                           "'Others' residual moved too, but it is unclassified — don't read a sector into it.")
+        return title, body, chain, implication
     n_pos = sum(1 for _, v, _ in dist if v > 0)
     if n == 2:
         title = f"{L0} growing at {Lv0} YoY; {W0} at {Wv0}"
