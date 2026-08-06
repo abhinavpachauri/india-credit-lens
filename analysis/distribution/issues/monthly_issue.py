@@ -103,6 +103,17 @@ def _reads_block(doc, reads):
             doc.append({"type": "chart", "text": c["chart"]})
 
 
+def _read_candidates(pipeline):
+    """The read-candidate pool for a half. Payments gets a WIDER pool (all insight cards, not one
+    per group) so a genuinely strong read that isn't its group's first card — e.g. the POS
+    single-issuer story living in the infra group — is still offerable to the editor. Credit's
+    one-per-section pool already surfaces its records, and widening it would renumber the editor's
+    existing --credit picks, so it stays as-is."""
+    if pipeline == "atm_pos":
+        return src.insight_cards(pipeline, max_cards=30, per_section=20)
+    return src.insight_cards(pipeline, max_cards=8)
+
+
 def build_doc(credit_picks=None, payments_picks=None):
     from signals import proximity
     registry = src.load_registry()
@@ -122,8 +133,8 @@ def build_doc(credit_picks=None, payments_picks=None):
     doc.append({"type": "p", "text": src.vintage_sentence(vintage)})
 
     # The month in one line — the single strongest read across both halves.
-    credit_cards = src.insight_cards("sibc", max_cards=8)
-    pay_cards = src.insight_cards("atm_pos", max_cards=8)
+    credit_cards = _read_candidates("sibc")
+    pay_cards = _read_candidates("atm_pos")
     lead = _reads(credit_cards + pay_cards, registry, conn, k=1)
     if lead:
         doc.append({"type": "p", "signals": lead[0]["card"].get("signal_ids", []),
@@ -214,7 +225,7 @@ def _print_shortlist():
     registry = src.load_registry()
     conn = proximity._con()
     for half, pipeline in (("CREDIT", "sibc"), ("PAYMENTS", "atm_pos")):
-        cards = src.insight_cards(pipeline, max_cards=8)
+        cards = _read_candidates(pipeline)
         ranked = is_news.shortlist(cards, registry, conn)
         print(f"\n══ {half} — read candidates (is-news ranked) ══")
         print(f"  {'#':>2}  {'score':>5}  factors                     title")

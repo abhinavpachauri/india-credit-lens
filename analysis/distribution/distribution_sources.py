@@ -179,10 +179,29 @@ MODE_NAME = {"absolute": "Absolute", "yoy": "YoY %", "fy": "FY Cumul.", "mom": "
              "share": "% Share (Distribution tab)", "pct": "% Share (Distribution tab)"}
 
 
-def _chart_recipe(pipeline, section_key, highlight, mode):
-    """The exact screenshot instruction for a card — dashboard → section → mode → series."""
+# The payments dashboard nests a subject card inside each group (Credit Cards → eCommerce
+# Transactions, Infrastructure → POS Terminals, …). A recipe that names only the group sends the
+# reader to the wrong chart — the eCommerce-share read pointed at "Credit Cards → Total". Name the
+# focusCard so the instruction lands on the actual card. Source of truth: SECTION_DEFS in
+# web/lib/atm_pos_data.ts.
+FOCUS_CARD_TITLE = {
+    "credit_cards": "Cards Outstanding", "cc_pos": "POS Transactions",
+    "cc_ecom": "eCommerce Transactions", "cc_atm": "ATM Cash Withdrawals",
+    "cc_other": "Other Transactions", "debit_cards": "Cards Outstanding",
+    "dc_atm": "ATM Cash Withdrawals", "dc_pos": "POS Transactions",
+    "dc_ecom": "eCommerce Transactions", "dc_pos_wd": "POS Cash Withdrawals",
+    "dc_other": "Other Transactions", "pos_terminals": "POS Terminals",
+    "upi_qr": "UPI QR Codes", "atms": "ATMs (On-site + Off-site)",
+    "micro_atms": "Micro ATMs", "bharat_qr": "Bharat QR Codes",
+}
+
+
+def _chart_recipe(pipeline, section_key, highlight, mode, focus_card=None):
+    """The exact screenshot instruction for a card — dashboard → section → [subject card] → mode → series."""
     dash = "indiacreditlens.com" if pipeline == "sibc" else "indiacreditlens.com/payments"
     parts = [f"{dash} → {SECTION_NAME.get(section_key, section_key)}"]
+    if focus_card and FOCUS_CARD_TITLE.get(focus_card):
+        parts.append(FOCUS_CARD_TITLE[focus_card])       # the subject card within the group (payments)
     if mode:
         parts.append(f"{MODE_NAME.get(mode, mode)} view")
     if highlight:
@@ -217,8 +236,8 @@ def insight_cards(pipeline, max_cards=6, per_section=1):
             cards.append({"where": g, "title": it["title"], "body": it["body"],
                           "implication": it.get("implication", ""),
                           "signal_ids": _atm_signal_ids(it),
-                          "chart": _chart_recipe(pipeline, g,
-                                                 eff.get("highlight"), eff.get("trendMode"))})
+                          "chart": _chart_recipe(pipeline, g, eff.get("highlight"),
+                                                 eff.get("trendMode"), eff.get("focusCard"))})
     return cards[:max_cards]
 
 

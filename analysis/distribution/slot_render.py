@@ -22,6 +22,40 @@ import re
 
 from distribution import categories as cats
 
+# The LinkedIn carousel spec the design session was missing. It is design direction, not content —
+# the numbers rule below still governs every figure that appears. Kept here so a change to the house
+# style is one edit, not a re-brief every month.
+FORMAT_BLOCK = (
+    "- **LinkedIn carousel PDF, portrait 1080×1350 (4:5)** — fills the mobile feed. Not landscape.\n"
+    "- **{slides} slides**, one idea per slide. Slide 1 is the hook; the last slide signs off + invites a subscribe.\n"
+    "- **Mobile-first:** legible held at arm's length — the number is the hero, the headline ≤ 7 words,\n"
+    "  the body ≤ 25 words. Nothing on a slide should be hard to read on a phone.\n"
+    "- **Fill the canvas** — no slide more than ~30% empty; centre the content, don't strand it top-left."
+)
+
+VISUAL_SYSTEM = (
+    "- **Brand:** India Credit Lens. A small wordmark + `indiacreditlens.com` and a page counter on every\n"
+    "  slide, same position each time. Quiet, consistent, not loud.\n"
+    "- **Palette:** ink `#0f1720` for text; **credit-blue `#1f6feb`** as the accent for numbers/trends; a\n"
+    "  distinct **muted sand `#efe7dc`** reserved *only* for the one 'looks-right-but-isn't' caveat slide\n"
+    "  (so it reads differently at a glance); off-white `#f4f7fb` background; one dark closing slide.\n"
+    "- **Type:** one strong grotesk/sans. Stats set huge (the hero of the slide); eyebrow labels in small\n"
+    "  caps; body two–three lines max. Consistent margins and eyebrow position on every slide.\n"
+    "- **Charts:** clean and axis-light — a sparkline, a short bar run, or two lines and the gap between\n"
+    "  them. Colour the one series that matters; grey the rest. No gridlines-as-decoration, no 3-D, no legends\n"
+    "  a caption can replace."
+)
+
+LAYOUT_KIT = (
+    "Pick a layout per slide and **vary them** — the failure mode is one template repeated. Menu:\n"
+    "1. **Hook** — the headline sentence big, plus 2–3 stat chips. (slide 1)\n"
+    "2. **Big-stat + sparkline** — one hero number with its trailing trend beneath it.\n"
+    "3. **Chart-focus** — a supplied series as a bar/line, minimal words, the takeaway as one caption.\n"
+    "4. **Caveat callout** — the 'headline says X, the data says Y' slide, on the sand background, with the\n"
+    "   comparison shown (e.g. the one entity vs everyone else). This is the most valuable slide — give it room.\n"
+    "5. **Sign-off** — dark slide, wordmark, one-line what-you-just-read, subscribe invite."
+)
+
 # §10 banned register. A blurb saying any of these has stopped sounding like a person.
 BANNED = [
     "firing on all cylinders", "robust", "yield optimisation", "yield optimization",
@@ -86,6 +120,35 @@ ARCS = {
 }
 
 
+def _claim_series(claims, n=13):
+    """The trailing history of each claim's primary signal, straight from signals.db — so the design
+    can draw a REAL sparkline/bar run instead of a wall of text. This is grounded by construction (the
+    points are the database's) and the 'plot only these' rule keeps the session from inventing any.
+    Returns [] silently if the signal layer isn't reachable — the prompt still renders, just text-only."""
+    try:
+        from signals import proximity
+        registry = proximity.load_registry()
+        conn = proximity._con()
+    except Exception:
+        return []
+    out = []
+    try:
+        for c in claims:
+            sid = next((s for s in c.get("signal_ids", []) if s in registry), None)
+            if not sid:
+                continue
+            sig = registry[sid]
+            hist = proximity.series(conn, sig.get("pipeline"), sid)
+            if len(hist) < 3:
+                continue
+            pts = [{"period": p, "value": round(v, 2)} for p, v in hist[-n:]]
+            out.append({"claim": c["id"], "signal": sid,
+                        "unit": sig.get("unit") or "", "series": pts})
+    finally:
+        conn.close()
+    return out
+
+
 def _numbers_block(claims):
     """Every number the design session is allowed to use, with where it came from."""
     supplied = []
@@ -147,6 +210,7 @@ def design_prompt(slate):
     """The closed prompt pasted into a separate Claude design session (§5.1)."""
     from core import voice          # lazy — voice imports this module for the SEBI lint
     cat = slate["category"]
+    slides = len(slate["claims"]) + 2          # a slide per claim, plus the hook and the sign-off
     lines = [
         f"# Design prompt — {slate['date']} · {cats.label(cat)} ({cat})",
         "",
@@ -154,13 +218,26 @@ def design_prompt(slate):
         + ("  ·  **this is the fallback category for this slot**" if slate.get("is_fallback") else ""),
         f"**Question this answers:** {cats.question(cat)}",
         f"**Data vintage:** {slate['vintage_sentence']}",
-        f"**Pages:** {slate.get('pages', 1)}",
+        "",
+        "## Format",
+        "",
+        FORMAT_BLOCK.format(slides=slides),
+        "",
+        "## Visual system",
+        "",
+        VISUAL_SYSTEM,
         "",
         "## The arc",
         "",
         ARCS.get(cat, ""),
         "",
+        "## Layout kit",
+        "",
+        LAYOUT_KIT,
+        "",
         "## The claims",
+        "",
+        "One slide each, in this order (plus the hook slide and the sign-off).",
         "",
         _provenance_note(slate["claims"]),
         "",
@@ -178,13 +255,17 @@ def design_prompt(slate):
                       f"{', '.join(c.get('signal_ids', [])) or '—'}</sub>", ""]
 
     supplied = _numbers_block(slate["claims"])
+    chart_series = _claim_series(slate["claims"])
     lines += [
         "## The numbers you may use",
         "",
-        "This is the complete set. Nothing outside it may appear on the pager.",
+        "This is the complete set. Nothing outside it may appear on the pager. `supplied_numbers` are the "
+        "figures you may print; `chart_series` are the trailing histories you may **plot** — one array per "
+        "claim, already in reading order. Plot these points as given; do not add, interpolate, or extend them.",
         "",
         "```json",
-        json.dumps({"supplied_numbers": supplied}, indent=1, ensure_ascii=False),
+        json.dumps({"supplied_numbers": supplied, "chart_series": chart_series},
+                   indent=1, ensure_ascii=False),
         "```",
         "",
         "## Hard constraints",
@@ -192,9 +273,12 @@ def design_prompt(slate):
         "- Use **only** the numbers listed above. Invent nothing.",
         "- Do **not** compute new figures from these numbers — no totals, no differences, "
         "no percentages of percentages, no annualising.",
+        "- **Charts:** plot only the points in `chart_series`; label axes from those values; add no point, "
+        "trendline, or projection that is not in the data.",
         "- Do not look anything up. This prompt is the whole world for this pager.",
         "- Do not add forecasts, targets, or attributions to any policy or event.",
         "- Keep the data vintage line on the pager exactly as given above.",
+        "- **One idea per slide; headline ≤ 7 words; body ≤ 25 words.** Vary the layouts (see the kit).",
         "- If something seems missing, leave it out rather than filling the gap.",
         "",
         f"<sub>generated by analysis/distribution/generate_slot.py · category {cat} · "

@@ -6,7 +6,38 @@
  },
  "entries": [
   {
-   "date": "2026-08-03",
+   "date": "2026-08-01",
+   "slot": "1st",
+   "channel": "newsletter+linkedin",
+   "category": "C1",
+   "is_fallback": false,
+   "claim_ids": [
+    "sibc-bank-credit-yoy",
+    "sibc-agriculture-share",
+    "sibc-large-corporate-share",
+    "sibc-pl-education-share"
+   ],
+   "signal_ids": [
+    "sibc-agriculture-share",
+    "sibc-bank-credit-yoy",
+    "sibc-large-corporate-share",
+    "sibc-pl-education-share"
+   ],
+   "statuses": {
+    "sibc-bank-credit-yoy": "strengthening",
+    "sibc-agriculture-share": "active",
+    "sibc-large-corporate-share": "active",
+    "sibc-pl-education-share": "active"
+   },
+   "artifacts": [
+    "analysis/distribution/output/2026-08-01_1st_C1/design_prompt.md",
+    "analysis/distribution/output/2026-08-01_1st_C1/blurb.md"
+   ],
+   "link": null,
+   "recorded_at": "2026-08-06T08:01:55"
+  },
+  {
+   "date": "2026-08-04",
    "slot": "1st",
    "channel": "newsletter+linkedin",
    "category": "C1",
@@ -30,11 +61,11 @@
     "pos-terminals-yoy": "declining"
    },
    "artifacts": [
-    "analysis/distribution/output/2026-08-03_1st_C1/design_prompt.md",
-    "analysis/distribution/output/2026-08-03_1st_C1/blurb.md"
+    "analysis/distribution/output/2026-08-04_1st_C1/design_prompt.md",
+    "analysis/distribution/output/2026-08-04_1st_C1/blurb.md"
    ],
    "link": null,
-   "recorded_at": "2026-08-03T23:37:43"
+   "recorded_at": "2026-08-04T13:47:05"
   },
   {
    "date": "2026-08-07",
@@ -65,7 +96,7 @@
     "analysis/distribution/output/2026-08-07_7th_C2/blurb.md"
    ],
    "link": null,
-   "recorded_at": "2026-08-03T00:07:43"
+   "recorded_at": "2026-08-06T08:01:55"
   },
   {
    "date": "2026-08-14",
@@ -136,7 +167,7 @@
     "analysis/distribution/output/2026-08-14_14th_C6/blurb.md"
    ],
    "link": null,
-   "recorded_at": "2026-08-03T00:07:43"
+   "recorded_at": "2026-08-06T08:01:55"
   },
   {
    "date": "2026-08-28",
@@ -161,7 +192,7 @@
     "analysis/distribution/output/2026-08-28_28th_C8/blurb.md"
    ],
    "link": null,
-   "recorded_at": "2026-08-03T00:07:43"
+   "recorded_at": "2026-08-06T08:01:56"
   }
  ],
  "skips": [
@@ -171,7 +202,7 @@
    "category": "C10",
    "fallback_category": "C9",
    "reason": "primary C10 empty and fallback C9 empty",
-   "recorded_at": "2026-08-03T00:07:43"
+   "recorded_at": "2026-08-06T08:01:55"
   }
  ],
  "spine_history": [

@@ -135,13 +135,13 @@ The ATMs deployed and the cash withdrawn from them have pulled apart this year. 
 ## The reads that matter
 
 
-**Ecommerce volume share at 50.19% — up 0.42pp from May**
+**POS terminal growth -15.8% YoY — but it's ICICI Bank, not the market**
 
 
-Ecommerce represents 50.19% of total credit card transaction volume in Jun 2026, up 0.42pp from May 2026. Share rose 49.77% → 50.19%, a 0.42pp gain that moves the channel above 50% and above the 30-period p75 in the upper range.
+The headline -15.8% year-on-year move is almost entirely ICICI Bank: its reported count fell sharply in a single month and accounts for nearly all of the change, while across every other bank the fleet edged up over the year. This looks like a base or reporting change at ICICI Bank — most likely a reclassification of how terminals are counted — not a market-wide shift. (The specific reason is not yet sourced; the concentration is straight from the bank-level data.)
 
 
-> 📊 **[CHART — replace with screenshot]** indiacreditlens.com/payments → Credit Cards → Absolute view → highlight: Total
+> 📊 **[CHART — replace with screenshot]** indiacreditlens.com/payments → Infrastructure → POS Terminals → YoY % view → highlight: Total
 
 ---
 
