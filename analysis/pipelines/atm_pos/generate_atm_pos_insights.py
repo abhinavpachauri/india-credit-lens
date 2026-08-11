@@ -345,7 +345,7 @@ class Card:
     body: object
     implication: object
     chain: object
-    effect: dict
+    effect: object          # a dict, or a callable given the read values
     explore: dict | None = None
     type: str = "insight"
     metric: str | None = None
@@ -419,10 +419,13 @@ def render_card(spec: Card, s: dict, month: str) -> dict | None:
     v.update({name: read_raw(s, path) for name, path in spec.label_paths().items()})
     if not spec.fires_when(v):
         return None
+    # `effect` is usually a fixed dict, but a card that highlights a named bank only knows
+    # which one after reading the data — so a callable is allowed too.
+    effect = spec.effect(v) if callable(spec.effect) else spec.effect
     return insight(
         spec.id, spec.group, spec.cut, month,
         spec.title(v, month), spec.body(v, month),
-        effect=spec.effect, explore=spec.explore, type_=spec.type,
+        effect=effect, explore=spec.explore, type_=spec.type,
         implication=spec.implication(v, month),
         source_signals=list(paths.values()),   # derived from what it reads — cannot drift
         chain=spec.chain(v, month),
@@ -704,86 +707,6 @@ def cc_category_share_shift(s, month) -> dict | None:
     )
 
 
-def cc_top_bank_concentration(s, month) -> dict | None:
-    """Top 5 CC concentration or notable rank change."""
-    topn   = s["groups"]["cc"]["top_n"]
-    banks  = topn["banks"]
-    top5sh = topn.get("top5_share_pct")
-    delta  = topn.get("top5_share_delta_pp")
-    rank_changes = topn.get("rank_changes", [])
-    leader = banks[0] if banks else None
-
-    if not leader:
-        return None
-
-    if rank_changes:
-        rc = rank_changes[0]
-        direction = "up" if rc["to_rank"] < rc["from_rank"] else "down"
-        title = f"{rc['name']} moves {'up' if direction == 'up' else 'down'} to #{rc['to_rank']} in CC cards"
-        body = (
-            f"{rc['name']} moved from #{rc['from_rank']} to #{rc['to_rank']} in credit cards outstanding "
-            f"in {month}. "
-        )
-        if top5sh:
-            body += f"Top 5 banks collectively hold {top5sh:.1f}% of total CC cards"
-            if delta:
-                body += f" ({sign(delta)}pp vs prior month)"
-            body += "."
-        implication = (
-            f"A rank change among the top CC issuers means one bank is either issuing cards faster "
-            f"or closing inactive accounts more aggressively. For anyone watching the credit card market, "
-            f"it's worth understanding the reason — growing rank means gaining customers, falling rank "
-            f"could mean pruning a portfolio or losing share to a competitor."
-        )
-        return insight(
-            "cc-top-bank-rank-change", "cc", "top_n", month, title, body,
-            effect={"highlight": [rc["name"], "Total"], "tab": "trend", "trendMode": "absolute", "focusCard": "credit_cards"},
-            explore={"mode": "top_n", "topN": 10},
-            implication=implication,
-            source_signals=["groups.cc.top_n.top5_share_pct"],
-            chain=[
-                f"{rc['name']} moved from #{rc['from_rank']} to #{rc['to_rank']} in CC cards outstanding",
-                f"{'Rising rank means faster card issuance or competitor attrition in that bank' if direction == 'up' else 'Falling rank suggests portfolio pruning or losing acquisition pace to competitors'}",
-                "Track whether the move reflects new card issuance (gaining customers) or balance attrition (losing them)",
-            ],
-            signals_dict=s,
-        )
-    else:
-        if top5sh is None:
-            return None
-        title = f"Top 5 banks hold {top5sh:.1f}% of CC cards — {leader['name']} leads at {leader['share_pct']:.1f}%"
-        body = (
-            f"In {month}, the top 5 banks account for {top5sh:.1f}% of total credit cards outstanding"
-            f"{f' ({sign(delta)}pp vs prior month)' if delta else ''}. "
-            f"{leader['name']} leads with {leader['share_pct']:.1f}% share "
-            f"({leader['mom_pct']:+.1f}% MoM)."
-        )
-        implication = (
-            f"74% of all credit cards in India are with just 5 banks. "
-            "In practice, this means the national credit card data from RBI tells you largely "
-            "what HDFC, SBI, ICICI, Axis, and Kotak are doing — not the market as a whole. "
-            "If your strategy relies on industry-level CC data, keep this concentration in mind."
-        )
-        return insight(
-            "cc-top5-concentration", "cc", "top_n", month, title, body,
-            effect={"highlight": [leader["name"]], "tab": "distribution", "distMode": "pct", "focusCard": "credit_cards"},
-            explore={"mode": "top_n", "topN": 10},
-            implication=implication,
-            source_signals=[
-                "groups.cc.top_n.top5_share_pct",
-                "groups.cc.top_n.top5_share_delta_pp",
-                "groups.cc.top_n.banks.0.share_pct",
-                "groups.cc.top_n.banks.0.mom_pct",
-            ],
-            chain=[
-                f"Top 5 banks hold {top5sh:.1f}% of all CC cards — {leader['name']} alone accounts for {leader['share_pct']:.1f}%",
-                "RBI aggregate CC data is effectively proxied by these 5 institutions — smaller banks are statistically marginal",
-                "Industry-level CC strategy analysis must account for this concentration — it reflects large-bank dynamics, not the full market",
-            ],
-            signals_dict=s,
-        )
-
-
 # ══════════════════════════════════════════════════════════════════════════════
 # DC RULES
 # ══════════════════════════════════════════════════════════════════════════════
@@ -966,77 +889,6 @@ def dc_category_dominance(s, month) -> dict | None:
     )
 
 
-def dc_top_bank(s, month) -> dict | None:
-    """Top DC bank + concentration."""
-    topn   = s["groups"]["dc"]["top_n"]
-    banks  = topn["banks"]
-    top5sh = topn.get("top5_share_pct")
-    delta  = topn.get("top5_share_delta_pp")
-    leader = banks[0] if banks else None
-    rank_changes = topn.get("rank_changes", [])
-
-    if not leader:
-        return None
-
-    if rank_changes:
-        rc = rank_changes[0]
-        title = f"{rc['name']} moves to #{rc['to_rank']} in debit cards (from #{rc['from_rank']})"
-        body = f"{rc['name']} shifted from #{rc['from_rank']} to #{rc['to_rank']} in {month}. "
-        if top5sh:
-            body += f"Top 5 banks: {top5sh:.1f}% of total DC cards{f' ({sign(delta)}pp)' if delta else ''}."
-        implication = (
-            "Rank changes in debit cards usually mean one of two things: a PSB is closing "
-            "dormant Jan Dhan accounts (drops in rank), or a private bank is pushing into "
-            "smaller towns and cities (rises in rank). "
-            "The bank moving up is reaching new customers — which often translates to more "
-            "credit origination potential over the next few quarters."
-        )
-        return insight(
-            "dc-top-bank-rank-change", "dc", "top_n", month, title, body,
-            effect={"highlight": [rc["name"], "Total"], "tab": "trend", "trendMode": "absolute", "focusCard": "debit_cards"},
-            explore={"mode": "top_n", "topN": 10},
-            implication=implication,
-            source_signals=["groups.dc.top_n.top5_share_pct"],
-            chain=[
-                f"{rc['name']} shifted from #{rc['from_rank']} to #{rc['to_rank']} in debit cards",
-                "PSB rank drops often reflect Jan Dhan dormant account closures; private bank rises reflect geographic expansion",
-                "Bank moving up is reaching new customers — leading indicator of future credit origination volume in that segment",
-            ],
-            signals_dict=s,
-        )
-
-    title = f"{leader['name']} leads DC cards at {leader['share_pct']:.1f}%"
-    body = (
-        f"{leader['name']} holds {leader['share_pct']:.1f}% of total debit cards in {month} "
-        f"({leader['mom_pct']:+.1f}% MoM). "
-        f"Top 5 banks account for {top5sh:.1f}%{f' ({sign(delta)}pp vs prior month)' if delta else ''}."
-    )
-    implication = (
-        f"Top 5 banks hold {top5sh:.1f}% of debit cards. If you're using debit transaction data "
-        "for credit underwriting (assessing someone's spending behaviour before giving them a loan), "
-        "the quality of that data depends heavily on whether these top banks are sharing data with you. "
-        "Without coverage from at least 2-3 of them, you're missing nearly half the market."
-    )
-    return insight(
-        "dc-top-bank-leader", "dc", "top_n", month, title, body,
-        effect={"highlight": [leader["name"]], "tab": "distribution", "distMode": "pct", "focusCard": "debit_cards"},
-        explore={"mode": "top_n", "topN": 10},
-        implication=implication,
-        source_signals=[
-            "groups.dc.top_n.top5_share_pct",
-            "groups.dc.top_n.top5_share_delta_pp",
-            "groups.dc.top_n.banks.0.share_pct",
-            "groups.dc.top_n.banks.0.mom_pct",
-        ],
-        chain=[
-            f"Top 5 banks hold {top5sh:.1f}% of debit cards — {leader['name']} alone accounts for {leader['share_pct']:.1f}%",
-            "Debit transaction data coverage for underwriting depends on data-sharing with these top institutions",
-            "Without data from 2-3 of these banks, nearly half the debit market is invisible for credit decisions",
-        ],
-        signals_dict=s,
-    )
-
-
 # ══════════════════════════════════════════════════════════════════════════════
 # INFRA RULES
 # ══════════════════════════════════════════════════════════════════════════════
@@ -1187,57 +1039,6 @@ def infra_category_pos(s, month) -> dict | None:
             f"{gainer} banks gained {g_delta:.1f}pp POS share — building more merchant acquiring relationships",
             "Banks owning the POS network own the merchant's transaction data (daily sales, ticket size, frequency)",
             "POS share expansion is a leading indicator of positioning for merchant credit (working capital, cash advances)",
-        ],
-        signals_dict=s,
-    )
-
-
-def infra_top_bank_pos(s, month) -> dict | None:
-    """Top bank in POS deployment — often counterintuitive (RBL)."""
-    topn   = s["groups"]["infra"]["top_n"]
-    banks  = topn["banks"]
-    top5sh = topn.get("top5_share_pct")
-    delta  = topn.get("top5_share_delta_pp")
-    leader = banks[0] if banks else None
-    rank_changes = topn.get("rank_changes", [])
-
-    if not leader:
-        return None
-
-    title = f"{leader['name']} leads POS terminal deployment at {leader['share_pct']:.1f}% market share"
-    body = (
-        f"{leader['name']} has deployed {fmt_num(leader['value'])} POS terminals in {month}, "
-        f"accounting for {leader['share_pct']:.1f}% of total ({leader['mom_pct']:+.1f}% MoM). "
-    )
-    if top5sh:
-        body += f"Top 5 banks hold {top5sh:.1f}% of all POS terminals{f' ({sign(delta)}pp vs prior month)' if delta else ''}."
-    if rank_changes:
-        rc = rank_changes[0]
-        body += f" Notable: {rc['name']} moved from #{rc['from_rank']} to #{rc['to_rank']}."
-
-    top5sh_val = top5sh or 0
-    implication = (
-        f"5 banks own {top5sh_val:.1f}% of all POS machines in India. "
-        "That also means merchant sales data — what shopkeepers sell, how much, how often — "
-        "sits largely with those same 5 banks. "
-        "If you want to lend to merchants and need their sales history to decide how much credit to give, "
-        "you either need a data partnership with one of these banks or an alternate source "
-        "like GST returns or UPI transaction feeds."
-    )
-    return insight(
-        "infra-top-bank-pos", "infra", "top_n", month, title, body,
-        effect={"highlight": [leader["name"]], "tab": "distribution", "distMode": "pct", "focusCard": "pos_terminals"},
-        explore={"mode": "top_n", "topN": 10},
-        implication=implication,
-        source_signals=[
-            "groups.infra.top_n.top5_share_pct",
-            "groups.infra.top_n.banks.0.share_pct",
-            "groups.infra.top_n.banks.0.mom_pct",
-        ],
-        chain=[
-            f"Top 5 banks own {top5sh_val:.1f}% of POS terminals — merchant acquiring infrastructure is highly concentrated",
-            "Merchant transaction data (sales history for credit underwriting) sits with the same institutions",
-            "Merchant credit without data partnerships with these banks requires alternate sources — GST returns, UPI transaction feeds",
         ],
         signals_dict=s,
     )
@@ -1816,6 +1617,195 @@ STREAK = {c.id: c for c in STREAK_CARDS}
 
 
 # ══════════════════════════════════════════════════════════════════════════════
+# TOP-BANK CARDS — declared (see Card / render_card above)
+# ══════════════════════════════════════════════════════════════════════════════
+# Who leads a market and how concentrated it is. Two of these used to be a single function with
+# a hidden fork: if any bank changed rank this month, emit the rank-change card, otherwise emit
+# the concentration card — two different ids and two different chart routings from one producer.
+# That fork is now two declarations whose conditions are mutually exclusive, which is the same
+# behaviour said out loud. It also means the branch that is NOT firing this month is still
+# visible in the file rather than buried in an else.
+
+def _has_rank_change(v) -> bool:
+    return bool(v.get("rank_changes"))
+
+
+def _rc(v) -> dict:
+    """The most notable rank change this month."""
+    return (v.get("rank_changes") or [{}])[0]
+
+
+TOP_BANK_CARDS = [
+    Card(
+        id="cc-top-bank-rank-change", group="cc", cut="top_n",
+        reads={"top5": "groups.cc.top_n.top5_share_pct"},
+        labels={"rank_changes": "groups.cc.top_n.rank_changes",
+                "delta": "groups.cc.top_n.top5_share_delta_pp"},
+        fires_when=_has_rank_change,
+        title=lambda v, m:
+            f"{_rc(v)['name']} moves "
+            f"{'up' if _rc(v)['to_rank'] < _rc(v)['from_rank'] else 'down'} "
+            f"to #{_rc(v)['to_rank']} in CC cards",
+        body=lambda v, m:
+            f"{_rc(v)['name']} moved from #{_rc(v)['from_rank']} to #{_rc(v)['to_rank']} in credit cards outstanding "
+            f"in {m}. "
+            + (f"Top 5 banks collectively hold {v['top5']:.1f}% of total CC cards"
+               + (f" ({sign(v['delta'])}pp vs prior month)" if v["delta"] else "") + "."
+               if v["top5"] else ""),
+        implication=lambda v, m:
+            "A rank change among the top CC issuers means one bank is either issuing cards faster "
+            "or closing inactive accounts more aggressively. For anyone watching the credit card market, "
+            "it's worth understanding the reason — growing rank means gaining customers, falling rank "
+            "could mean pruning a portfolio or losing share to a competitor.",
+        chain=lambda v, m: [
+            f"{_rc(v)['name']} moved from #{_rc(v)['from_rank']} to #{_rc(v)['to_rank']} in CC cards outstanding",
+            ("Rising rank means faster card issuance or competitor attrition in that bank"
+             if _rc(v)["to_rank"] < _rc(v)["from_rank"] else
+             "Falling rank suggests portfolio pruning or losing acquisition pace to competitors"),
+            "Track whether the move reflects new card issuance (gaining customers) or balance attrition (losing them)",
+        ],
+        effect=lambda v: {"highlight": [_rc(v)["name"], "Total"], "tab": "trend", "trendMode": "absolute", "focusCard": "credit_cards"},
+        explore={"mode": "top_n", "topN": 10},
+    ),
+
+    Card(
+        id="cc-top5-concentration", group="cc", cut="top_n",
+        reads={
+            "top5": "groups.cc.top_n.top5_share_pct",
+            "delta": "groups.cc.top_n.top5_share_delta_pp",
+            "leader_share": "groups.cc.top_n.banks.0.share_pct",
+            "leader_mom": "groups.cc.top_n.banks.0.mom_pct",
+        },
+        labels={"rank_changes": "groups.cc.top_n.rank_changes",
+                "leader": "groups.cc.top_n.banks.0.name"},
+        # The other half of the old fork: only when nothing changed rank.
+        fires_when=lambda v: not _has_rank_change(v) and v["top5"] is not None and v["leader"],
+        title=lambda v, m:
+            f"Top 5 banks hold {v['top5']:.1f}% of CC cards — {v['leader']} leads at {v['leader_share']:.1f}%",
+        body=lambda v, m:
+            f"In {m}, the top 5 banks account for {v['top5']:.1f}% of total credit cards outstanding"
+            + (f" ({sign(v['delta'])}pp vs prior month)" if v["delta"] else "") + ". "
+            + f"{v['leader']} leads with {v['leader_share']:.1f}% share ({v['leader_mom']:+.1f}% MoM).",
+        # The share used to be hardcoded as "74%" in this sentence while the number beside it was
+        # computed — frozen prose that would have gone stale the moment concentration moved.
+        implication=lambda v, m:
+            f"{v['top5']:.1f}% of all credit cards in India are with just 5 banks. "
+            "In practice, this means the national credit card data from RBI tells you largely "
+            "what HDFC, SBI, ICICI, Axis, and Kotak are doing — not the market as a whole. "
+            "If your strategy relies on industry-level CC data, keep this concentration in mind.",
+        chain=lambda v, m: [
+            f"Top 5 banks hold {v['top5']:.1f}% of all CC cards — {v['leader']} alone accounts for {v['leader_share']:.1f}%",
+            "RBI aggregate CC data is effectively proxied by these 5 institutions — smaller banks are statistically marginal",
+            "Industry-level CC strategy analysis must account for this concentration — it reflects large-bank dynamics, not the full market",
+        ],
+        effect=lambda v: {"highlight": [v["leader"]], "tab": "distribution", "distMode": "pct", "focusCard": "credit_cards"},
+        explore={"mode": "top_n", "topN": 10},
+    ),
+
+    Card(
+        id="dc-top-bank-rank-change", group="dc", cut="top_n",
+        reads={"top5": "groups.dc.top_n.top5_share_pct"},
+        labels={"rank_changes": "groups.dc.top_n.rank_changes",
+                "delta": "groups.dc.top_n.top5_share_delta_pp"},
+        fires_when=_has_rank_change,
+        title=lambda v, m:
+            f"{_rc(v)['name']} moves to #{_rc(v)['to_rank']} in debit cards (from #{_rc(v)['from_rank']})",
+        body=lambda v, m:
+            f"{_rc(v)['name']} shifted from #{_rc(v)['from_rank']} to #{_rc(v)['to_rank']} in {m}. "
+            + (f"Top 5 banks: {v['top5']:.1f}% of total DC cards"
+               + (f" ({sign(v['delta'])}pp)" if v["delta"] else "") + "."
+               if v["top5"] else ""),
+        implication=lambda v, m:
+            "Rank changes in debit cards usually mean one of two things: a PSB is closing "
+            "dormant Jan Dhan accounts (drops in rank), or a private bank is pushing into "
+            "smaller towns and cities (rises in rank). "
+            "The bank moving up is reaching new customers — which often translates to more "
+            "credit origination potential over the next few quarters.",
+        chain=lambda v, m: [
+            f"{_rc(v)['name']} shifted from #{_rc(v)['from_rank']} to #{_rc(v)['to_rank']} in debit cards",
+            "PSB rank drops often reflect Jan Dhan dormant account closures; private bank rises reflect geographic expansion",
+            "Bank moving up is reaching new customers — leading indicator of future credit origination volume in that segment",
+        ],
+        effect=lambda v: {"highlight": [_rc(v)["name"], "Total"], "tab": "trend", "trendMode": "absolute", "focusCard": "debit_cards"},
+        explore={"mode": "top_n", "topN": 10},
+    ),
+
+    Card(
+        id="dc-top-bank-leader", group="dc", cut="top_n",
+        reads={
+            "top5": "groups.dc.top_n.top5_share_pct",
+            "delta": "groups.dc.top_n.top5_share_delta_pp",
+            "leader_share": "groups.dc.top_n.banks.0.share_pct",
+            "leader_mom": "groups.dc.top_n.banks.0.mom_pct",
+        },
+        labels={"rank_changes": "groups.dc.top_n.rank_changes",
+                "leader": "groups.dc.top_n.banks.0.name"},
+        fires_when=lambda v: not _has_rank_change(v) and v["leader"] and v["top5"] is not None,
+        title=lambda v, m: f"{v['leader']} leads DC cards at {v['leader_share']:.1f}%",
+        body=lambda v, m:
+            f"{v['leader']} holds {v['leader_share']:.1f}% of total debit cards in {m} "
+            f"({v['leader_mom']:+.1f}% MoM). "
+            f"Top 5 banks account for {v['top5']:.1f}%"
+            + (f" ({sign(v['delta'])}pp vs prior month)" if v["delta"] else "") + ".",
+        implication=lambda v, m:
+            f"Top 5 banks hold {v['top5']:.1f}% of debit cards. If you're using debit transaction data "
+            "for credit underwriting (assessing someone's spending behaviour before giving them a loan), "
+            "the quality of that data depends heavily on whether these top banks are sharing data with you. "
+            "Without coverage from at least 2-3 of them, you're missing nearly half the market.",
+        chain=lambda v, m: [
+            f"Top 5 banks hold {v['top5']:.1f}% of debit cards — {v['leader']} alone accounts for {v['leader_share']:.1f}%",
+            "Debit transaction data coverage for underwriting depends on data-sharing with these top institutions",
+            "Without data from 2-3 of these banks, nearly half the debit market is invisible for credit decisions",
+        ],
+        effect=lambda v: {"highlight": [v["leader"]], "tab": "distribution", "distMode": "pct", "focusCard": "debit_cards"},
+        explore={"mode": "top_n", "topN": 10},
+    ),
+
+    Card(
+        id="infra-top-bank-pos", group="infra", cut="top_n",
+        reads={
+            "top5": "groups.infra.top_n.top5_share_pct",
+            "leader_share": "groups.infra.top_n.banks.0.share_pct",
+            "leader_mom": "groups.infra.top_n.banks.0.mom_pct",
+        },
+        labels={"rank_changes": "groups.infra.top_n.rank_changes",
+                "leader": "groups.infra.top_n.banks.0.name",
+                "delta": "groups.infra.top_n.top5_share_delta_pp",
+                "leader_value": "groups.infra.top_n.banks.0.value"},
+        # Unlike the card pair above, this one always shows the leader and folds any rank change
+        # into a trailing sentence rather than becoming a different card.
+        fires_when=lambda v: bool(v["leader"]),
+        title=lambda v, m:
+            f"{v['leader']} leads POS terminal deployment at {v['leader_share']:.1f}% market share",
+        body=lambda v, m:
+            f"{v['leader']} has deployed {fmt_num(v['leader_value'])} POS terminals in {m}, "
+            f"accounting for {v['leader_share']:.1f}% of total ({v['leader_mom']:+.1f}% MoM). "
+            + (f"Top 5 banks hold {v['top5']:.1f}% of all POS terminals"
+               + (f" ({sign(v['delta'])}pp vs prior month)" if v["delta"] else "") + "."
+               if v["top5"] else "")
+            + (f" Notable: {_rc(v)['name']} moved from #{_rc(v)['from_rank']} to #{_rc(v)['to_rank']}."
+               if _has_rank_change(v) else ""),
+        implication=lambda v, m:
+            f"5 banks own {(v['top5'] or 0):.1f}% of all POS machines in India. "
+            "That also means merchant sales data — what shopkeepers sell, how much, how often — "
+            "sits largely with those same 5 banks. "
+            "If you want to lend to merchants and need their sales history to decide how much credit to give, "
+            "you either need a data partnership with one of these banks or an alternate source "
+            "like GST returns or UPI transaction feeds.",
+        chain=lambda v, m: [
+            f"Top 5 banks own {(v['top5'] or 0):.1f}% of POS terminals — merchant acquiring infrastructure is highly concentrated",
+            "Merchant transaction data (sales history for credit underwriting) sits with the same institutions",
+            "Merchant credit without data partnerships with these banks requires alternate sources — GST returns, UPI transaction feeds",
+        ],
+        effect=lambda v: {"highlight": [v["leader"]], "tab": "distribution", "distMode": "pct", "focusCard": "pos_terminals"},
+        explore={"mode": "top_n", "topN": 10},
+    ),
+]
+
+TOP_BANK = {c.id: c for c in TOP_BANK_CARDS}
+
+
+# ══════════════════════════════════════════════════════════════════════════════
 # GAP CARDS — declared, not hand-written (see GapCard / render_gap above)
 # ══════════════════════════════════════════════════════════════════════════════
 # Read these as a list of standing questions the data cannot answer, each with the condition
@@ -2026,7 +2016,8 @@ RULES = [
     cc_spend_yoy,
     cc_transaction_surge,
     cc_category_share_shift,
-    cc_top_bank_concentration,
+    TOP_BANK["cc-top-bank-rank-change"],
+    TOP_BANK["cc-top5-concentration"],
     GAP["gap-foreign-cc-decline"],
     # DC
     dc_atm_trend,
@@ -2036,7 +2027,8 @@ RULES = [
     STREAK["dc-cards-streak"],
     YOY["dc-cards-yoy"],
     dc_category_dominance,
-    dc_top_bank,
+    TOP_BANK["dc-top-bank-rank-change"],
+    TOP_BANK["dc-top-bank-leader"],
     GAP["gap-dc-cash-dominance"],
     GAP["gap-dc-ecom-low"],
     # Infra
@@ -2046,7 +2038,7 @@ RULES = [
     YOY["infra-upi-yoy"],
     infra_upi_vs_bharat_qr,
     infra_category_pos,
-    infra_top_bank_pos,
+    TOP_BANK["infra-top-bank-pos"],
     GAP["gap-bharat-qr-contraction"],
     GAP["gap-atm-offsite-decline"],
     GAP["gap-pos-concentration"],

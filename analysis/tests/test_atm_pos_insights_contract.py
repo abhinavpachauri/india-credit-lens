@@ -157,3 +157,49 @@ def test_representation_is_declared(generated):
     valid = {"llm", "deterministic", "deterministic-db", "deterministic-dominance"}
     for card in SHIPPED:
         assert card.get("representation") in valid, card["id"]
+
+
+# ── The branch that is not firing this month ──────────────────────────────────
+# A characterisation golden can only pin cards that actually render, so a card behind a
+# condition that is false today is invisible to every test above. The concentration cards are
+# exactly that: they only appear in a month where no bank changed rank. They used to be the
+# `else` of another card's function, which is why a stale hardcoded number survived in one of
+# them unnoticed.
+
+def _with_ranks(group: str, changes: list) -> dict:
+    """This month's signals with the rank-change list forced either way. Both states have to be
+    constructed: whether any bank moved rank is a property of the month, and asserting against
+    whichever happened to be true in June would test the data, not the code."""
+    import copy
+    signals = copy.deepcopy(SIGNALS)
+    signals["groups"][group]["top_n"]["rank_changes"] = changes
+    return signals
+
+
+A_RANK_CHANGE = [{"name": "SOME BANK LTD", "from_rank": 6, "to_rank": 5}]
+
+
+@pytest.mark.parametrize("group,rank_card,quiet_card", [
+    ("cc", "cc-top-bank-rank-change", "cc-top5-concentration"),
+    ("dc", "dc-top-bank-rank-change", "dc-top-bank-leader"),
+])
+def test_rank_and_concentration_cards_are_mutually_exclusive(gen, group, rank_card, quiet_card):
+    """These two were one function with a hidden fork. Splitting them is only faithful if
+    exactly one can ever fire."""
+    month = SIGNALS["meta"]["latest_month"]
+    moved = _with_ranks(group, A_RANK_CHANGE)
+    still = _with_ranks(group, [])
+    fired = lambda sig: [bool(gen.render_card(gen.TOP_BANK[c], sig, month)) for c in (rank_card, quiet_card)]
+    assert fired(moved) == [True, False], f"{group}: wrong card(s) fired when a bank moved rank"
+    assert fired(still) == [False, True], f"{group}: wrong card(s) fired when ranks were still"
+
+
+def test_concentration_prose_reads_the_real_share(gen):
+    """The CC concentration card used to open with a hardcoded '74%' while the number printed
+    beside it was computed — frozen prose that would drift the moment concentration moved."""
+    month = SIGNALS["meta"]["latest_month"]
+    quiet = _with_ranks("cc", [])
+    card = gen.render_card(gen.TOP_BANK["cc-top5-concentration"], quiet, month)
+    share = quiet["groups"]["cc"]["top_n"]["top5_share_pct"]
+    assert f"{share:.1f}%" in card["implication"]
+    assert "74%" not in card["implication"] or abs(share - 74) < 0.05
