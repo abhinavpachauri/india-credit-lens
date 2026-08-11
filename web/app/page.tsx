@@ -8,7 +8,6 @@ import SectionWithAnnotations   from "@/components/SectionWithAnnotations";
 import SibcReadMode             from "@/components/read/SibcReadMode";
 import ModeToggle               from "@/components/read/ModeToggle";
 import { usePersistent }        from "@/hooks/usePersistent";
-import NewsletterCTA             from "@/components/NewsletterCTA";
 import type { Report }          from "@/lib/types";
 
 export default function Dashboard() {
@@ -51,11 +50,7 @@ export default function Dashboard() {
         ))
       )}
 
-      <div className="mt-10 mb-2">
-        <NewsletterCTA variant="banner" />
-      </div>
-
-      <footer className="mt-6 pb-8 text-center text-xs" style={{ color: "var(--font-muted)" }}>
+      <footer className="mt-10 pb-8 text-center text-xs" style={{ color: "var(--font-muted)" }}>
         <p>
           Source: {report.source} · Values in ₹ Crore ·
           Latest data: <strong>{report.latestDate}</strong>

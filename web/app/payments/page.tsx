@@ -9,7 +9,6 @@ import AtmPosGroupSection    from "@/components/AtmPosGroupSection";
 import AtmReadMode           from "@/components/read/AtmReadMode";
 import ModeToggle            from "@/components/read/ModeToggle";
 import { usePersistent }     from "@/hooks/usePersistent";
-import NewsletterCTA         from "@/components/NewsletterCTA";
 import type { AtmPosSeries }   from "@/lib/atm_pos_data";
 import type { AtmPosInsight }  from "@/lib/atm_pos_insights";
 
@@ -60,11 +59,7 @@ export default function PaymentsPage() {
         GROUPS.map((group) => <AtmPosGroupSection key={group} group={group} series={series} />)
       )}
 
-      <div className="mt-10 mb-2">
-        <NewsletterCTA variant="banner" />
-      </div>
-
-      <footer className="mt-6 pb-8 text-center text-xs" style={{ color: "var(--font-muted)" }}>
+      <footer className="mt-10 pb-8 text-center text-xs" style={{ color: "var(--font-muted)" }}>
         Source: Reserve Bank of India · ATM / POS Card Statistics · Latest: {latestMonthLabel(series)}
       </footer>
     </main>
