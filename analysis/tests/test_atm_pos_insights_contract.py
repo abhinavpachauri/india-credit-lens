@@ -9,9 +9,9 @@ check — otherwise a card can quietly vanish or change routing and nobody notic
 dashboard looks wrong.
 
 These tests do not describe what the generator *should* do. They pin what it *does* today,
-against the committed insights.json, so any behaviour change during the migration has to be
-deliberate: either the code is wrong, or the golden file gets updated in the same commit
-with a reason.
+against a golden file kept OUTSIDE the generated artifact, so any behaviour change during the
+migration has to be deliberate: either the code is wrong, or the golden is refreshed in the
+same commit with a stated reason.
 
 Deliberately NOT pinned: the prose of LLM-represented cards. That text comes from the
 evaluation JSON and changes when the eval re-runs, which is expected and not a regression.
@@ -26,8 +26,14 @@ import pytest
 ROOT = next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir())
 sys.path.insert(0, str(ROOT / "analysis"))
 
-COMMITTED = json.loads((ROOT / "analysis/rbi_atm_pos/insights.json").read_text())
+# The expectation lives in its own file, NOT in the generated artifact. Comparing generator
+# output against analysis/rbi_atm_pos/insights.json would be circular — the generator rewrites
+# that file, so regenerating would silently redefine what "unchanged" means. Refreshing the
+# golden is a deliberate act: analysis/tests/golden/refresh_atm_pos_cards.py.
+GOLDEN = json.loads((ROOT / "analysis/tests/golden/atm_pos_cards.json").read_text())
+EXPECTED = GOLDEN["cards"]
 SIGNALS = json.loads((ROOT / "analysis/rbi_atm_pos/signals.json").read_text())
+SHIPPED = json.loads((ROOT / "analysis/rbi_atm_pos/insights.json").read_text())
 
 
 @pytest.fixture(scope="module")
@@ -43,11 +49,11 @@ def generated(gen):
     evaluation file, which is not what this contract is about."""
     month = SIGNALS["meta"]["latest_month"]
     cards, failures = [], []
-    for rule in gen.RULES:
+    for producer in gen.RULES:
         try:
-            result = rule(SIGNALS, month)
+            result = gen.produce(producer, SIGNALS, month)
         except Exception as exc:                       # noqa: BLE001 — reported, not swallowed
-            failures.append(f"{rule.__name__}: {exc}")
+            failures.append(f"{gen.producer_name(producer)}: {exc}")
             continue
         if result:
             cards.append(result)
@@ -75,12 +81,12 @@ def test_dominance_guard_runs_without_any_evaluation(gen, generated):
 def _routing(card):
     """Everything that decides where a card lands in the UI. Prose may change; this must not."""
     effect = card.get("effect") or {}
-    return (card["id"], card["group"], card["cut"], card["type"],
+    return (card["group"], card["cut"], card["type"],
             effect.get("focusCard"), effect.get("tab"), effect.get("trendMode"),
             tuple(effect.get("highlight") or ()))
 
 
-def test_no_rule_raises(generated):
+def test_no_producer_raises(generated):
     """main() catches per-rule exceptions and prints them, but still exits 0 — so a card can
     disappear from the dashboard without failing the gate. Until that is fixed, this test is
     the thing that notices."""
@@ -90,7 +96,13 @@ def test_no_rule_raises(generated):
 
 def test_card_inventory_is_unchanged(generated):
     cards, _ = generated
-    assert {c["id"] for c in cards} == {c["id"] for c in COMMITTED}
+    assert {c["id"] for c in cards} == set(EXPECTED)
+
+
+def test_card_order_is_unchanged(generated):
+    """Order is what the dashboard shows, so migrating a card must not reshuffle the page."""
+    cards, _ = generated
+    assert [c["id"] for c in cards] == GOLDEN["order"]
 
 
 def test_no_duplicate_card_ids(generated):
@@ -102,23 +114,33 @@ def test_no_duplicate_card_ids(generated):
 def test_routing_is_unchanged(generated):
     """Group, cut, type and every chart-driving field, per card."""
     cards, _ = generated
-    assert {_routing(c) for c in cards} == {_routing(c) for c in COMMITTED}
+    for card in cards:
+        assert _routing(card) == _routing(EXPECTED[card["id"]]), f"{card['id']} routing changed"
+
+
+def test_cited_evidence_is_unchanged(generated):
+    """A card cites the signals it used. During the gap migration these stopped being typed out
+    by hand and became derived from the paths the card reads — so this is the assertion that the
+    derivation produces exactly what the hand-written list did."""
+    cards, _ = generated
+    for card in cards:
+        want = EXPECTED[card["id"]]["sourceSignals"]
+        assert card.get("sourceSignals") == want, f"{card['id']} cites different signals"
 
 
 def test_deterministic_prose_is_unchanged(generated):
     """Cards the LLM never touches must render identical text — these are pure functions of
     signals.json, so any diff here is a real behaviour change."""
     cards, _ = generated
-    committed = {c["id"]: c for c in COMMITTED if c.get("representation") != "llm"}
     for card in cards:
-        want = committed.get(card["id"])
-        if want is None:                    # an LLM-represented card — prose not pinned
+        want = EXPECTED[card["id"]]
+        if want["title"] is None:           # an LLM-represented card — prose not pinned
             continue
         assert card["title"] == want["title"], f"{card['id']} title changed"
         assert card["body"] == want["body"], f"{card['id']} body changed"
 
 
-@pytest.mark.parametrize("card", COMMITTED, ids=lambda c: c["id"])
+@pytest.mark.parametrize("card", SHIPPED, ids=lambda c: c["id"])
 def test_every_card_carries_its_evidence(card):
     """The platform's standing rule: a card states where its numbers came from. Enforced at
     the gate by Stage 4c; asserted here so a refactor cannot quietly drop the linkage."""
@@ -131,5 +153,5 @@ def test_representation_is_declared(generated):
     """Every card says how its prose was produced — llm, or one of the deterministic kinds.
     The migration must preserve this, because Stage 4c validates the two differently."""
     valid = {"llm", "deterministic", "deterministic-db", "deterministic-dominance"}
-    for card in COMMITTED:
+    for card in SHIPPED:
         assert card.get("representation") in valid, card["id"]

@@ -20,6 +20,7 @@ import shutil
 from pathlib import Path
 
 import sys
+from dataclasses import dataclass, field
 sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
 from core.paths import ROOT
 from signals.dominance import move_dominance, short_entity
@@ -303,6 +304,125 @@ def build_basis(s: dict, keys: list, chain: list) -> dict:
             facts.append(f"{label}: {round(val, 2)}")
     facts.append("Source: web/public/data/atm_pos_consolidated.csv")
     return {"facts": facts, "inferences": chain}
+
+
+# ── Gap cards, declared rather than hand-written ──────────────────────────────
+# A "gap" is the platform saying what the data cannot tell you: cash that leaves no digital
+# record, a premium segment that has migrated out of view, acquiring infrastructure held by
+# five banks. Each one used to be its own ~45-line function, and all six repeated the same
+# four steps — walk a dot-path, test a threshold, interpolate the numbers, assemble the card.
+#
+# Only two of those steps carry any judgment: WHEN a gap is worth raising, and WHAT it means
+# for someone lending money. Those stay as authored Python, because they are authored: the
+# "so what" on cash dominance is a claim about bureau scores, not something a template could
+# derive. Everything mechanical is now done once, below.
+#
+# The reason this is worth doing beyond line count: `sourceSignals` used to be typed out a
+# second time, by hand, next to the paths the function had already read. Two lists that must
+# agree and nothing checking that they do. Here a card reads its values THROUGH its
+# declaration, so what it cites is what it used, by construction.
+
+@dataclass(frozen=True)
+class GapCard:
+    """One gap card, as data.
+
+    reads       — local name → dot-path into signals.json. Doubles as the card's sourceSignals.
+    fires_when  — given the read values, is this gap worth raising this month? Returns False to
+                  stay silent; a gap that is not currently true must not be published.
+    title/body/implication/chain — authored prose, handed the same values.
+    """
+    id: str
+    group: str
+    cut: str
+    reads: dict
+    fires_when: object
+    title: object
+    body: object
+    implication: object
+    chain: object
+    effect: dict
+    explore: dict | None = None
+    # Display-only, non-numeric reads (a bank name). Deliberately separate from `reads`: these
+    # are prose, and a card's cited sourceSignals must all be traceable numbers.
+    labels: dict = field(default_factory=dict)
+
+
+def read_raw(s: dict, key: str):
+    """Traverse a dot-path and return whatever is there — a bank name, a label, anything.
+    `get_signal_value` deliberately returns None for non-numbers, because a card's cited
+    sourceSignals must all be traceable numbers; a name is prose, not evidence."""
+    node = s
+    for part in key.split("."):
+        if isinstance(node, dict):
+            node = node.get(part)
+        elif isinstance(node, list):
+            try:
+                node = node[int(part)]
+            except (ValueError, IndexError):
+                return None
+        else:
+            return None
+        if node is None:
+            return None
+    return node
+
+
+def render_gap(spec: GapCard, s: dict, month: str) -> dict | None:
+    """Resolve a declaration against this month's signals — or return None if it stays silent."""
+    v = {name: get_signal_value(s, path) for name, path in spec.reads.items()}
+    v.update({name: read_raw(s, path) for name, path in spec.labels.items()})
+    if not spec.fires_when(v):
+        return None
+    return insight(
+        spec.id, spec.group, spec.cut, month,
+        spec.title(v, month), spec.body(v, month),
+        effect=spec.effect, explore=spec.explore, type_="gap",
+        implication=spec.implication(v, month),
+        source_signals=list(spec.reads.values()),   # derived from the reads — cannot drift
+        chain=spec.chain(v, month),
+        signals_dict=s,
+    )
+
+
+def produce(producer, s: dict, month: str) -> dict | None:
+    """Run one card producer, whichever kind it is. Functions are the cards not yet migrated;
+    GapCard declarations are the ones that are."""
+    if isinstance(producer, GapCard):
+        return render_gap(producer, s, month)
+    return producer(s, month)
+
+
+def producer_name(producer) -> str:
+    return producer.id if isinstance(producer, GapCard) else producer.__name__
+
+
+def _pp(delta) -> str:
+    """A parenthetical month-on-month move, or nothing at all when there is no prior value."""
+    return f" ({sign(delta)}pp vs prior month)" if delta else ""
+
+
+def _mom_pp(delta) -> str:
+    """" (-0.12pp MoM)" — or nothing when there is no prior month to compare."""
+    return f" ({sign(delta)}pp MoM)" if delta else ""
+
+
+def _fell_pp(delta) -> str:
+    """", down 0.12pp vs prior month" — only when it actually fell."""
+    return f", down {abs(delta):.2f}pp vs prior month" if delta and delta < 0 else ""
+
+
+def _ratio_gap(numerator, denominator) -> str:
+    """" (150x gap)" — omitted when either side is missing or the denominator is zero."""
+    if not (numerator and denominator and denominator > 0):
+        return ""
+    return f" ({round(numerator / denominator)}x gap)"
+
+
+def _leader_line(name, share) -> str:
+    """"HDFC Bank leads at 31.2% market share. " — omitted when there is no leader to name."""
+    if not name or share is None:
+        return ""
+    return f"{name} leads at {share:.1f}% market share. "
 
 
 def insight(id_, group, cut, period, title, body, effect, explore=None,
@@ -1360,259 +1480,6 @@ def dc_pos_cash_decline(s, month) -> dict | None:
 # GAP RULES  (type_="gap" — structural blind spots or underserved areas)
 # ══════════════════════════════════════════════════════════════════════════════
 
-def gap_dc_cash_dominance(s, month) -> dict | None:
-    """DC ATM cash still >75% of DC vol — digital transition is incomplete."""
-    cross  = s["groups"]["dc"]["total"]["cross"]
-    atm_sh = cross.get("dc_atm_withdrawal_vol", {}).get("share_pct")
-    atm_dt = cross.get("dc_atm_withdrawal_vol", {}).get("share_delta_pp")
-    if atm_sh is None or atm_sh < 75:
-        return None
-    ecom_sh = cross.get("dc_ecom_txn_vol", {}).get("share_pct")
-    title = f"Gap: DC ATM cash at {atm_sh:.1f}% of DC volume — digital transition is incomplete"
-    body = (
-        f"Despite growth in digital payments, ATM cash withdrawals still account for {atm_sh:.1f}% "
-        f"of total debit card transaction volume in {month}"
-        f"{f' ({sign(atm_dt)}pp vs prior month)' if atm_dt else ''}. "
-        f"DC ecommerce is only {ecom_sh:.1f}% of DC volume. "
-        f"India's debit card base remains overwhelmingly cash-dependent."
-    )
-    implication = (
-        f"{atm_sh:.1f}% of debit card spending is ATM cash. Cash leaves no digital record — "
-        "you can't tell where it was spent or on what. "
-        "For lenders trying to assess a debit card holder's financial behaviour, the transaction "
-        "history is mostly blank. Bureau scores (CIBIL, Experian) remain the primary tool "
-        "for this segment — debit transaction data alone isn't enough yet."
-    )
-    return insight(
-        "gap-dc-cash-dominance", "dc", "total", month, title, body,
-        effect={"highlight": ["Total"], "tab": "trend", "trendMode": "absolute", "focusCard": "dc_atm"},
-        type_="gap",
-        implication=implication,
-        source_signals=[
-            "groups.dc.total.cross.dc_atm_withdrawal_vol.share_pct",
-            "groups.dc.total.cross.dc_atm_withdrawal_vol.share_delta_pp",
-            "groups.dc.total.cross.dc_ecom_txn_vol.share_pct",
-        ],
-        chain=[
-            f"{atm_sh:.1f}% of DC volume is ATM cash — transactions that leave no digital record",
-            "Cash-dominant customers' financial behaviour is opaque — spending categories, frequency, merchants all unknown",
-            "Bureau scores (CIBIL, Experian) remain essential for this segment; debit transaction data alone is insufficient",
-        ],
-        signals_dict=s,
-    )
-
-
-def gap_bharat_qr_contraction(s, month) -> dict | None:
-    """Bharat QR declining MoM — infrastructure investment at risk."""
-    m_bqr   = s["groups"]["infra"]["total"]["metrics"].get("bharat_qr", {})
-    m_upi   = s["groups"]["infra"]["total"]["metrics"].get("upi_qr", {})
-    bqr_mom = m_bqr.get("mom_pct")
-    bqr_v   = m_bqr.get("latest")
-    upi_v   = m_upi.get("latest")
-    if bqr_mom is None or bqr_mom > -1:
-        return None  # only flag meaningful decline
-    ratio = round(upi_v / bqr_v) if (upi_v and bqr_v and bqr_v > 0) else None
-    title = f"Gap: Bharat QR contracting {bqr_mom:.1f}% MoM — {fmt_num(bqr_v)} vs {fmt_num(upi_v)} UPI QR"
-    body = (
-        f"Bharat QR codes fell {abs(bqr_mom):.1f}% MoM in {month}, now at {fmt_num(bqr_v)} — "
-        f"compared to {fmt_num(upi_v)} UPI QR codes"
-        f"{f' ({ratio}x gap)' if ratio else ''}. "
-        f"Merchant preference has consolidated on UPI QR as the dominant QR acceptance standard."
-    )
-    implication = (
-        f"Bharat QR is shrinking {abs(bqr_mom):.1f}% every month — merchants are removing it. "
-        "If any part of your lending or payments product depends on Bharat QR acceptance, "
-        "that's a real problem. Move everything to UPI QR. "
-        "There is no viable future for Bharat QR as a payments or credit infrastructure."
-    )
-    return insight(
-        "gap-bharat-qr-contraction", "infra", "total", month, title, body,
-        effect={"highlight": ["Total"], "tab": "trend", "trendMode": "mom", "focusCard": "bharat_qr"},
-        type_="gap",
-        implication=implication,
-        source_signals=[
-            "groups.infra.total.metrics.bharat_qr.mom_pct",
-            "groups.infra.total.metrics.bharat_qr.latest",
-            "groups.infra.total.metrics.upi_qr.latest",
-        ],
-        chain=[
-            f"Bharat QR declining {abs(bqr_mom):.1f}% MoM — merchants are actively removing it, not seasonal dip",
-            f"UPI QR at {fmt_num(upi_v)} vs Bharat QR at {fmt_num(bqr_v)} — gap structural and widening",
-            "Any payments or lending product built on Bharat QR infrastructure faces accelerating merchant disengagement",
-        ],
-        signals_dict=s,
-    )
-
-
-def gap_atm_offsite_decline(s, month) -> dict | None:
-    """Offsite ATMs declining — rural cash access concern."""
-    m_off = s["groups"]["infra"]["total"]["metrics"].get("atm_offsite", {})
-    m_on  = s["groups"]["infra"]["total"]["metrics"].get("atm_onsite", {})
-    off_mom = m_off.get("mom_pct")
-    on_mom  = m_on.get("mom_pct")
-    off_v   = m_off.get("latest")
-    if off_mom is None or off_mom >= 0:
-        return None  # only fire when offsite is declining
-    title = f"Gap: Offsite ATMs declining {off_mom:.1f}% MoM — rural cash access contracting"
-    body = (
-        f"Offsite ATMs fell {abs(off_mom):.1f}% MoM in {month} (now {fmt_num(off_v)})"
-        f"{f', while onsite ATMs grew {on_mom:+.1f}% MoM' if on_mom and on_mom > 0 else ''}. "
-        f"Offsite ATMs serve rural and semi-urban populations where branch presence is limited — "
-        f"their decline reduces physical cash access for underserved geographies."
-    )
-    implication = (
-        "Offsite ATMs are standalone machines in villages, petrol pumps, small towns — "
-        "placed away from bank branches specifically to serve rural areas. "
-        "When these decline and digital payments haven't reached those areas yet, "
-        "rural borrowers lose their easiest way to access cash for repayment. "
-        "If you have loans in rural geographies, check whether ATM coverage in those areas is shrinking — "
-        "it can make EMI collection harder."
-    )
-    return insight(
-        "gap-atm-offsite-decline", "infra", "total", month, title, body,
-        effect={"highlight": ["Total"], "tab": "trend", "trendMode": "mom", "focusCard": "atm_offsite"},
-        type_="gap",
-        implication=implication,
-        source_signals=[
-            "groups.infra.total.metrics.atm_offsite.mom_pct",
-            "groups.infra.total.metrics.atm_offsite.latest",
-            "groups.infra.total.metrics.atm_onsite.mom_pct",
-        ],
-        chain=[
-            f"Offsite ATMs (standalone machines in rural/semi-urban areas away from branches) fell {abs(off_mom):.1f}% MoM",
-            "Rural borrowers without digital payment access rely on offsite ATMs as primary cash access point for loan repayment",
-            "Declining offsite ATM coverage can impair EMI collection in areas where digital payment penetration is still low",
-        ],
-        signals_dict=s,
-    )
-
-
-def gap_pos_concentration(s, month) -> dict | None:
-    """Top 5 banks hold >85% of POS — structural exclusion for smaller banks."""
-    topn   = s["groups"]["infra"]["top_n"]
-    top5sh = topn.get("top5_share_pct")
-    if top5sh is None or top5sh < 85:
-        return None
-    leader = topn["banks"][0] if topn["banks"] else None
-    title = f"Gap: Top 5 banks hold {top5sh:.1f}% of POS terminals — acquiring market is highly concentrated"
-    leader_str = f"{leader['name']} leads at {leader['share_pct']:.1f}% market share. " if leader else ""
-    body = (
-        f"In {month}, the top 5 banks account for {top5sh:.1f}% of all deployed POS terminals in India. "
-        f"{leader_str}"
-        f"All remaining banks combined share less than {100 - top5sh:.1f}% of merchant acquiring infrastructure."
-    )
-    implication = (
-        f"{top5sh:.1f}% of all POS machines in India are owned by just 5 banks — "
-        "and so is most of the merchant transaction data that comes with them. "
-        "If you're building merchant credit products (loans to shopkeepers or small businesses) "
-        "and don't have data partnerships with these top banks, you're working with an incomplete picture. "
-        "Alternate sources — GST filings, UPI transaction data — can partially fill this gap."
-    )
-    return insight(
-        "gap-pos-concentration", "infra", "top_n", month, title, body,
-        effect={"highlight": ["Total"], "tab": "trend", "trendMode": "absolute", "focusCard": "pos_terminals"},
-        explore={"mode": "top_n", "topN": 5},
-        type_="gap",
-        implication=implication,
-        source_signals=[
-            "groups.infra.top_n.top5_share_pct",
-            "groups.infra.top_n.banks.0.share_pct",
-        ],
-        chain=[
-            f"Top 5 banks own {top5sh:.1f}% of POS terminals — merchant acquiring infrastructure highly concentrated",
-            "Merchant transaction data (sales history needed for credit underwriting) controlled by the same 5 institutions",
-            "Merchant credit underwriting without data partnerships with these banks requires alternates — GST filings, UPI feeds",
-        ],
-        signals_dict=s,
-    )
-
-
-def gap_foreign_cc_decline(s, month) -> dict | None:
-    """Foreign bank CC share small and declining — premium segment thinning."""
-    by_type = s["groups"]["cc"]["by_type"]
-    cats    = by_type.get("categories", {})
-    foreign = cats.get("Foreign", {})
-    sh      = foreign.get("share_pct")
-    delta   = foreign.get("share_delta_pp")
-    if sh is None:
-        return None
-    if sh >= 5 and (delta is None or delta >= -0.1):
-        return None  # only flag when small or declining
-    title = f"Gap: Foreign bank CC share at {sh:.1f}%{f' ({sign(delta)}pp MoM)' if delta else ''} — premium segment shrinking"
-    body = (
-        f"Foreign banks hold only {sh:.1f}% of total credit cards outstanding in {month}"
-        f"{f', down {abs(delta):.2f}pp vs prior month' if delta and delta < 0 else ''}. "
-        f"Foreign banks traditionally serve the high-income, high-spend segment — their declining "
-        f"share signals continued loss of the premium CC market to private Indian banks."
-    )
-    implication = (
-        f"Foreign banks (Amex, Standard Chartered, etc.) traditionally served high-income customers — "
-        "high credit limits, frequent international travel, premium cards. "
-        "With their share at just {sh:.1f}% and still falling, those customers are now largely "
-        "being served by Indian private banks instead. "
-        "For anyone analysing RBI's credit card data, this means the premium borrower segment "
-        "is now in the domestic bank numbers — not in a separate foreign bank bucket."
-    )
-    return insight(
-        "gap-foreign-cc-decline", "cc", "by_type", month, title, body,
-        effect={"highlight": ["Foreign", "Total"], "tab": "distribution", "distMode": "pct", "focusCard": "credit_cards"},
-        explore={"mode": "by_type"},
-        type_="gap",
-        implication=implication,
-        source_signals=[
-            "groups.cc.by_type.categories.Foreign.share_pct",
-            "groups.cc.by_type.categories.Foreign.share_delta_pp",
-        ],
-        chain=[
-            f"Foreign banks hold only {sh:.1f}% of CC cards and declining — premium card segment exiting to Indian private banks",
-            "Foreign banks (Amex, Standard Chartered) traditionally served high-income, high-limit, internationally-active customers",
-            "Premium cardholder behaviour is under-represented in RBI aggregate CC data — now consolidated into private bank numbers",
-        ],
-        signals_dict=s,
-    )
-
-
-def gap_dc_ecom_low(s, month) -> dict | None:
-    """DC ecom <10% of DC vol — debit card digital footprint is thin."""
-    cross   = s["groups"]["dc"]["total"]["cross"]
-    ecom    = cross.get("dc_ecom_txn_vol", {})
-    ecom_sh = ecom.get("share_pct")
-    atm_sh  = cross.get("dc_atm_withdrawal_vol", {}).get("share_pct")
-    if ecom_sh is None or ecom_sh >= 10:
-        return None
-    title = f"Gap: DC ecommerce at {ecom_sh:.1f}% of DC volume — debit cards leave thin digital footprints"
-    body = (
-        f"Debit card ecommerce transactions account for only {ecom_sh:.1f}% of total DC transaction "
-        f"volume in {month}. "
-        f"{f'ATM cash dominates at {atm_sh:.1f}%. ' if atm_sh else ''}"
-        f"The vast majority of debit card holders transact primarily via ATM cash withdrawal, "
-        f"with minimal digital payment activity."
-    )
-    implication = (
-        f"Only {ecom_sh:.1f}% of debit card volume is online spending — the rest is mostly ATM cash. "
-        "For the typical debit card holder, their transaction history is largely cash withdrawals, "
-        "which tells you very little about their financial behaviour. "
-        "To lend to this segment, bureau scores (CIBIL, Experian) and income proxies "
-        "(salary credits, GST filings) will be far more reliable than transaction data models."
-    )
-    return insight(
-        "gap-dc-ecom-low", "dc", "total", month, title, body,
-        effect={"highlight": ["Total"], "tab": "trend", "trendMode": "absolute", "focusCard": "dc_ecom"},
-        type_="gap",
-        implication=implication,
-        source_signals=[
-            "groups.dc.total.cross.dc_ecom_txn_vol.share_pct",
-            "groups.dc.total.cross.dc_atm_withdrawal_vol.share_pct",
-        ],
-        chain=[
-            f"DC ecommerce at only {ecom_sh:.1f}% of DC volume — debit history is predominantly ATM cash withdrawals",
-            "Cash withdrawal records reveal nothing about spending behaviour — categories, merchants, frequency unknown",
-            "Income proxies (salary credits, GST filings) and bureau scores are more reliable than transaction models for this segment",
-        ],
-        signals_dict=s,
-    )
-
-
 # ══════════════════════════════════════════════════════════════════════════════
 # YoY TRAJECTORY RULES  (seasonally-clean — unlocked by the 2024 backfill)
 # Year-on-year strips the seasonal swings (March FY-end, festive spikes) that
@@ -2011,8 +1878,204 @@ def pair_cards(conn, registry, period, month) -> list[dict]:
     return out
 
 
+# ══════════════════════════════════════════════════════════════════════════════
+# GAP CARDS — declared, not hand-written (see GapCard / render_gap above)
+# ══════════════════════════════════════════════════════════════════════════════
+# Read these as a list of standing questions the data cannot answer, each with the condition
+# that makes it worth raising this month. The prose stays authored because it is a claim about
+# lending, not a formatting of numbers.
+
+GAPS = [
+    GapCard(
+        id="gap-foreign-cc-decline", group="cc", cut="by_type",
+        reads={
+            "share": "groups.cc.by_type.categories.Foreign.share_pct",
+            "delta": "groups.cc.by_type.categories.Foreign.share_delta_pp",
+        },
+        # Small OR shrinking. A foreign-bank share that is both sizeable and steady is not a gap
+        # in the data — it is just a fact about the market.
+        fires_when=lambda v: v["share"] is not None and (
+            v["share"] < 5 or (v["delta"] is not None and v["delta"] < -0.1)),
+        title=lambda v, m:
+            f"Gap: Foreign bank CC share at {v['share']:.1f}%{_mom_pp(v['delta'])}"
+            f" — premium segment shrinking",
+        body=lambda v, m:
+            f"Foreign banks hold only {v['share']:.1f}% of total credit cards outstanding in {m}"
+            f"{_fell_pp(v['delta'])}. "
+            f"Foreign banks traditionally serve the high-income, high-spend segment — their declining "
+            f"share signals continued loss of the premium CC market to private Indian banks.",
+        implication=lambda v, m:
+            f"Foreign banks (Amex, Standard Chartered, etc.) traditionally served high-income customers — "
+            f"high credit limits, frequent international travel, premium cards. "
+            f"With their share at just {v['share']:.1f}% and still falling, those customers are now largely "
+            f"being served by Indian private banks instead. "
+            f"For anyone analysing RBI's credit card data, this means the premium borrower segment "
+            f"is now in the domestic bank numbers — not in a separate foreign bank bucket.",
+        chain=lambda v, m: [
+            f"Foreign banks hold only {v['share']:.1f}% of CC cards and declining — premium card segment exiting to Indian private banks",
+            "Foreign banks (Amex, Standard Chartered) traditionally served high-income, high-limit, internationally-active customers",
+            "Premium cardholder behaviour is under-represented in RBI aggregate CC data — now consolidated into private bank numbers",
+        ],
+        effect={"highlight": ["Foreign", "Total"], "tab": "distribution", "distMode": "pct",
+                "focusCard": "credit_cards"},
+        explore={"mode": "by_type"},
+    ),
+
+    GapCard(
+        id="gap-dc-cash-dominance", group="dc", cut="total",
+        reads={
+            "atm_share": "groups.dc.total.cross.dc_atm_withdrawal_vol.share_pct",
+            "atm_delta": "groups.dc.total.cross.dc_atm_withdrawal_vol.share_delta_pp",
+            "ecom_share": "groups.dc.total.cross.dc_ecom_txn_vol.share_pct",
+        },
+        fires_when=lambda v: v["atm_share"] is not None and v["atm_share"] >= 75,
+        title=lambda v, m:
+            f"Gap: DC ATM cash at {v['atm_share']:.1f}% of DC volume — digital transition is incomplete",
+        body=lambda v, m:
+            f"Despite growth in digital payments, ATM cash withdrawals still account for {v['atm_share']:.1f}% "
+            f"of total debit card transaction volume in {m}{_pp(v['atm_delta'])}. "
+            f"DC ecommerce is only {v['ecom_share']:.1f}% of DC volume. "
+            f"India's debit card base remains overwhelmingly cash-dependent.",
+        implication=lambda v, m:
+            f"{v['atm_share']:.1f}% of debit card spending is ATM cash. Cash leaves no digital record — "
+            "you can't tell where it was spent or on what. "
+            "For lenders trying to assess a debit card holder's financial behaviour, the transaction "
+            "history is mostly blank. Bureau scores (CIBIL, Experian) remain the primary tool "
+            "for this segment — debit transaction data alone isn't enough yet.",
+        chain=lambda v, m: [
+            f"{v['atm_share']:.1f}% of DC volume is ATM cash — transactions that leave no digital record",
+            "Cash-dominant customers' financial behaviour is opaque — spending categories, frequency, merchants all unknown",
+            "Bureau scores (CIBIL, Experian) remain essential for this segment; debit transaction data alone is insufficient",
+        ],
+        effect={"highlight": ["Total"], "tab": "trend", "trendMode": "absolute", "focusCard": "dc_atm"},
+    ),
+
+    GapCard(
+        id="gap-dc-ecom-low", group="dc", cut="total",
+        reads={
+            "ecom_share": "groups.dc.total.cross.dc_ecom_txn_vol.share_pct",
+            "atm_share": "groups.dc.total.cross.dc_atm_withdrawal_vol.share_pct",
+        },
+        fires_when=lambda v: v["ecom_share"] is not None and v["ecom_share"] < 10,
+        title=lambda v, m:
+            f"Gap: DC ecommerce at {v['ecom_share']:.1f}% of DC volume — debit cards leave thin digital footprints",
+        body=lambda v, m:
+            f"Debit card ecommerce transactions account for only {v['ecom_share']:.1f}% of total DC transaction "
+            f"volume in {m}. "
+            + (f"ATM cash dominates at {v['atm_share']:.1f}%. " if v["atm_share"] else "")
+            + f"The vast majority of debit card holders transact primarily via ATM cash withdrawal, "
+              f"with minimal digital payment activity.",
+        implication=lambda v, m:
+            f"Only {v['ecom_share']:.1f}% of debit card volume is online spending — the rest is mostly ATM cash. "
+            "For the typical debit card holder, their transaction history is largely cash withdrawals, "
+            "which tells you very little about their financial behaviour. "
+            "To lend to this segment, bureau scores (CIBIL, Experian) and income proxies "
+            "(salary credits, GST filings) will be far more reliable than transaction data models.",
+        chain=lambda v, m: [
+            f"DC ecommerce at only {v['ecom_share']:.1f}% of DC volume — debit history is predominantly ATM cash withdrawals",
+            "Cash withdrawal records reveal nothing about spending behaviour — categories, merchants, frequency unknown",
+            "Income proxies (salary credits, GST filings) and bureau scores are more reliable than transaction models for this segment",
+        ],
+        effect={"highlight": ["Total"], "tab": "trend", "trendMode": "absolute", "focusCard": "dc_ecom"},
+    ),
+
+    GapCard(
+        id="gap-bharat-qr-contraction", group="infra", cut="total",
+        reads={
+            "bqr_mom": "groups.infra.total.metrics.bharat_qr.mom_pct",
+            "bqr": "groups.infra.total.metrics.bharat_qr.latest",
+            "upi": "groups.infra.total.metrics.upi_qr.latest",
+        },
+        # Only a meaningful decline. A flat month is not merchants walking away.
+        fires_when=lambda v: v["bqr_mom"] is not None and v["bqr_mom"] <= -1,
+        title=lambda v, m:
+            f"Gap: Bharat QR contracting {v['bqr_mom']:.1f}% MoM — "
+            f"{fmt_num(v['bqr'])} vs {fmt_num(v['upi'])} UPI QR",
+        body=lambda v, m:
+            f"Bharat QR codes fell {abs(v['bqr_mom']):.1f}% MoM in {m}, now at {fmt_num(v['bqr'])} — "
+            f"compared to {fmt_num(v['upi'])} UPI QR codes{_ratio_gap(v['upi'], v['bqr'])}. "
+            f"Merchant preference has consolidated on UPI QR as the dominant QR acceptance standard.",
+        implication=lambda v, m:
+            f"Bharat QR is shrinking {abs(v['bqr_mom']):.1f}% every month — merchants are removing it. "
+            "If any part of your lending or payments product depends on Bharat QR acceptance, "
+            "that's a real problem. Move everything to UPI QR. "
+            "There is no viable future for Bharat QR as a payments or credit infrastructure.",
+        chain=lambda v, m: [
+            f"Bharat QR declining {abs(v['bqr_mom']):.1f}% MoM — merchants are actively removing it, not seasonal dip",
+            f"UPI QR at {fmt_num(v['upi'])} vs Bharat QR at {fmt_num(v['bqr'])} — gap structural and widening",
+            "Any payments or lending product built on Bharat QR infrastructure faces accelerating merchant disengagement",
+        ],
+        effect={"highlight": ["Total"], "tab": "trend", "trendMode": "mom", "focusCard": "bharat_qr"},
+    ),
+
+    GapCard(
+        id="gap-atm-offsite-decline", group="infra", cut="total",
+        reads={
+            "off_mom": "groups.infra.total.metrics.atm_offsite.mom_pct",
+            "off": "groups.infra.total.metrics.atm_offsite.latest",
+            "on_mom": "groups.infra.total.metrics.atm_onsite.mom_pct",
+        },
+        fires_when=lambda v: v["off_mom"] is not None and v["off_mom"] < 0,
+        title=lambda v, m:
+            f"Gap: Offsite ATMs declining {v['off_mom']:.1f}% MoM — rural cash access contracting",
+        body=lambda v, m:
+            f"Offsite ATMs fell {abs(v['off_mom']):.1f}% MoM in {m} (now {fmt_num(v['off'])})"
+            + (f", while onsite ATMs grew {v['on_mom']:+.1f}% MoM" if v["on_mom"] and v["on_mom"] > 0 else "")
+            + f". Offsite ATMs serve rural and semi-urban populations where branch presence is limited — "
+              f"their decline reduces physical cash access for underserved geographies.",
+        implication=lambda v, m:
+            "Offsite ATMs are standalone machines in villages, petrol pumps, small towns — "
+            "placed away from bank branches specifically to serve rural areas. "
+            "When these decline and digital payments haven't reached those areas yet, "
+            "rural borrowers lose their easiest way to access cash for repayment. "
+            "If you have loans in rural geographies, check whether ATM coverage in those areas is shrinking — "
+            "it can make EMI collection harder.",
+        chain=lambda v, m: [
+            f"Offsite ATMs (standalone machines in rural/semi-urban areas away from branches) fell {abs(v['off_mom']):.1f}% MoM",
+            "Rural borrowers without digital payment access rely on offsite ATMs as primary cash access point for loan repayment",
+            "Declining offsite ATM coverage can impair EMI collection in areas where digital payment penetration is still low",
+        ],
+        effect={"highlight": ["Total"], "tab": "trend", "trendMode": "mom", "focusCard": "atm_offsite"},
+    ),
+
+    GapCard(
+        id="gap-pos-concentration", group="infra", cut="top_n",
+        reads={
+            "top5": "groups.infra.top_n.top5_share_pct",
+            "leader_share": "groups.infra.top_n.banks.0.share_pct",
+        },
+        labels={"leader": "groups.infra.top_n.banks.0.name"},
+        fires_when=lambda v: v["top5"] is not None and v["top5"] >= 85,
+        title=lambda v, m:
+            f"Gap: Top 5 banks hold {v['top5']:.1f}% of POS terminals — acquiring market is highly concentrated",
+        body=lambda v, m:
+            f"In {m}, the top 5 banks account for {v['top5']:.1f}% of all deployed POS terminals in India. "
+            f"{_leader_line(v['leader'], v['leader_share'])}"
+            f"All remaining banks combined share less than {100 - v['top5']:.1f}% of merchant acquiring infrastructure.",
+        implication=lambda v, m:
+            f"{v['top5']:.1f}% of all POS machines in India are owned by just 5 banks — "
+            "and so is most of the merchant transaction data that comes with them. "
+            "If you're building merchant credit products (loans to shopkeepers or small businesses) "
+            "and don't have data partnerships with these top banks, you're working with an incomplete picture. "
+            "Alternate sources — GST filings, UPI transaction data — can partially fill this gap.",
+        chain=lambda v, m: [
+            f"Top 5 banks own {v['top5']:.1f}% of POS terminals — merchant acquiring infrastructure highly concentrated",
+            "Merchant transaction data (sales history needed for credit underwriting) controlled by the same 5 institutions",
+            "Merchant credit underwriting without data partnerships with these banks requires alternates — GST filings, UPI feeds",
+        ],
+        effect={"highlight": ["Total"], "tab": "trend", "trendMode": "absolute", "focusCard": "pos_terminals"},
+        explore={"mode": "top_n", "topN": 5},
+    ),
+]
+
+GAP = {g.id: g for g in GAPS}
+
+
+# The ordered list of card producers. A producer is either a function (not yet migrated) or a
+# GapCard declaration; main() dispatches on which. Keeping them in ONE list preserves the order
+# cards appear on the dashboard, so migrating a card cannot silently reshuffle the page.
 RULES = [
-    # CC — insights
+    # CC
     cc_ecom_vs_pos,
     cc_atm_withdrawal_trend,
     cc_cards_streak,
@@ -2021,9 +2084,8 @@ RULES = [
     cc_transaction_surge,
     cc_category_share_shift,
     cc_top_bank_concentration,
-    # CC — gaps
-    gap_foreign_cc_decline,
-    # DC — insights
+    GAP["gap-foreign-cc-decline"],
+    # DC
     dc_atm_trend,
     dc_atm_share_structural,
     dc_pos_cash_decline,
@@ -2032,10 +2094,9 @@ RULES = [
     dc_cards_yoy,
     dc_category_dominance,
     dc_top_bank,
-    # DC — gaps
-    gap_dc_cash_dominance,
-    gap_dc_ecom_low,
-    # Infra — insights
+    GAP["gap-dc-cash-dominance"],
+    GAP["gap-dc-ecom-low"],
+    # Infra
     infra_qr_per_pos,
     infra_pos_streak,
     infra_pos_yoy,
@@ -2043,10 +2104,9 @@ RULES = [
     infra_upi_vs_bharat_qr,
     infra_category_pos,
     infra_top_bank_pos,
-    # Infra — gaps
-    gap_bharat_qr_contraction,
-    gap_atm_offsite_decline,
-    gap_pos_concentration,
+    GAP["gap-bharat-qr-contraction"],
+    GAP["gap-atm-offsite-decline"],
+    GAP["gap-pos-concentration"],
 ]
 
 
@@ -2058,9 +2118,9 @@ def main():
     print(f"Generating insights for {month}…")
 
     insights, broken = [], []
-    for rule in RULES:
+    for producer in RULES:
         try:
-            result = rule(signals, month)
+            result = produce(producer, signals, month)
             if result:
                 insights.append(result)
                 print(f"  ✓ {result['id']} [{result['group']} / {result['cut']}]")
@@ -2068,8 +2128,8 @@ def main():
             # Reported AND fatal (see the exit at the end of main). A rule that raises means a
             # card silently disappears from the dashboard; printing it while exiting 0 meant the
             # gate stayed green and nobody found out until the page looked wrong.
-            broken.append(f"{rule.__name__}: {e}")
-            print(f"  ✗ {rule.__name__}: {e}")
+            broken.append(f"{producer_name(producer)}: {e}")
+            print(f"  ✗ {producer_name(producer)}: {e}")
 
     # Relational cards (rotation/divergence) — signals.db-sourced, deterministic
     # prose; never routed through the LLM representation layer below.
