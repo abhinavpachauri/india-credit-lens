@@ -105,7 +105,7 @@ def test_rotating_share_is_not_structural():
 
 def test_streak_is_never_structural():
     conn = _db(_months([1.0, 2.0, 3.0, 4.0]))
-    out = planes.is_structural(conn, "S-streak", _sig(method="csv_streak", unit="periods"))
+    out = planes.is_structural(conn, "S-streak", _sig(method="csv_mom_streak", unit="periods"))
     assert out["structural"] is False and "momentum" in out["reason"]
 
 

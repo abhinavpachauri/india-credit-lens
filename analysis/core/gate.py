@@ -8,9 +8,10 @@ ordered stage list. Each stage targets a generic `core.*` engine, a per-pipeline
 ONLY place the gate sequence is declared; this file holds no pipeline-specific logic and
 never inspects the pipeline id (see analysis/core/MANIFEST_DESIGN.md).
 
-Status: P3 increment 1 — runs alongside the legacy gates for parity verification before the
-P1/P2 file moves. CORE_MAP resolves logical names to the CURRENT (pre-move) script paths;
-at move-time only CORE_MAP + each manifest's `modules` map change.
+This is the only gate. The legacy per-pipeline runners were retired in the §4 cutover
+(2026-06-25) and live in analysis/legacy/. Stage resolution — the logical-name → script map
+and the $VAR substitution — lives in core/manifest.py, shared with the freshness guard so
+that "what the gate regenerates" is stated once.
 
 Usage:
     python3 analysis/core/gate.py --pipeline sibc --merged --skip-build
@@ -25,31 +26,13 @@ from pathlib import Path
 
 sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
 from core.paths import ROOT, ANALYSIS  # noqa: E402
+from core import manifest as manifest_mod  # noqa: E402
+from core.manifest import CORE_MAP, subst, resolve  # noqa: E402,F401
 
 WEB = ROOT / "web"
 DB = ANALYSIS / "signals" / "signals.db"
 
 GREEN, RED, YELLOW, BOLD, RESET = "\033[32m", "\033[31m", "\033[33m", "\033[1m", "\033[0m"
-
-# Logical core-engine name → (script relative to ANALYSIS, default args, cwd).
-# $VARS are substituted at run time. Pre-move these point at analysis/*.py; post-move
-# this single map repoints to core/*.py — the manifests stay unchanged.
-CORE_MAP = {
-    "validate_timeline":        ("core/validate_timeline.py", ["--path", "$TIMELINE"], "ANALYSIS"),
-    "validate_signal_history":  ("guards/validate_signal_history.py", [], "ROOT"),
-    "check_signal_freshness":   ("guards/check_signal_freshness.py", ["--pipeline", "$ID"], "ROOT"),
-    "skeleton":                 ("core/generate_skeleton.py", ["--pipeline", "$ID"], "ROOT"),
-    "validate_system_model":    ("core/validate_system_model.py", ["--pipeline", "$ID"], "ANALYSIS"),
-    "system_state":             ("core/generate_system_state.py", ["--pipeline", "$ID", "--period", "$LATEST"], "ROOT"),
-    "derive_opportunities":     ("core/derive_opportunities.py", ["--pipeline", "$ID", "--period", "$LATEST"], "ROOT"),
-    "validate_composition":     ("crosssource/validate_composition.py", [], "ROOT"),
-    "compose_ecosystem":        ("crosssource/compose_ecosystem.py", [], "ROOT"),
-    "opportunities_feed":       ("crosssource/generate_opportunities_feed.py", [], "ROOT"),
-    "opportunity_traceability": ("core/validate_opportunity_traceability.py", ["--strict"], "ROOT"),
-    "chart_series":             ("core/generate_chart_series.py", ["--pipeline", "$ID"], "ROOT"),
-    "stamp_planes":             ("signals/stamp_planes.py", ["--pipeline", "$ID"], "ROOT"),
-    "reconcile":                ("architecture/reconcile.py", ["--strict"], "ROOT"),
-}
 
 
 def latest_period(pipeline):
@@ -60,14 +43,6 @@ def latest_period(pipeline):
     con.close()
     return row[0] if row else None
 
-
-def subst(args, vars_):
-    out = []
-    for a in args:
-        for k, v in vars_.items():
-            a = a.replace(k, str(v))
-        out.append(a)
-    return out
 
 
 def run_cmd(cmd, cwd):
@@ -134,27 +109,6 @@ BUILTINS = {"pytest": builtin_pytest, "web_build": builtin_web_build,
 
 # ── stage resolution + execution ────────────────────────────────────────────────
 
-def resolve(stage, manifest, vars_, flags):
-    """Return (cmd_list, cwd) for a script-backed stage, or (None, None) for builtins.
-
-    A stage may carry mode-variant args: `args_merged` is used in merged mode (when present),
-    else `args`. This lets one manifest entry serve both the merged and per-period gates
-    (e.g. SIBC sections: merged validates sections_merged.json --merged; per-period validates
-    {period}/sections.json) without the gate inspecting the pipeline id.
-    """
-    raw_args = stage["args_merged"] if (flags.get("merged") and "args_merged" in stage) \
-        else stage.get("args", [])
-    extra = subst(raw_args, vars_)
-    if "core" in stage:
-        script, dargs, cwdname = CORE_MAP[stage["core"]]
-        cwd = ANALYSIS if cwdname == "ANALYSIS" else ROOT
-        return [sys.executable, str(ANALYSIS / script)] + subst(dargs, vars_) + extra, cwd
-    if "pipeline" in stage:
-        script = manifest["modules"][stage["pipeline"]]
-        return [sys.executable, str(ANALYSIS / script)] + extra, ROOT
-    return None, None  # builtin
-
-
 def should_skip(stage, flags, vars_, failed, stop):
     if stop:                       # global on_fail:stop — an earlier stage failed
         return "skipped (upstream failure)"
@@ -192,7 +146,7 @@ def main():
     ap.add_argument("--skip-build", action="store_true")
     args = ap.parse_args()
 
-    manifest = json.loads((ANALYSIS / "pipelines" / args.pipeline / "pipeline.json").read_text())
+    manifest = manifest_mod.load(args.pipeline)
 
     xlsx = str(Path(args.xlsx).resolve()) if args.xlsx else ""
     if args.xlsx:

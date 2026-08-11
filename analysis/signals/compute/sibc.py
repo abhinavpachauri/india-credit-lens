@@ -41,6 +41,8 @@ from pathlib import Path
 
 import pandas as pd
 
+from . import common
+
 import sys
 sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
 from core.paths import ROOT as REPO
@@ -125,19 +127,8 @@ def _val(df: pd.DataFrame, date_str: str, code: str,
 # ── Status evaluation ─────────────────────────────────────────────────────────
 
 def _eval_status(rules: list, value: float, prev: float) -> str:
-    if value is None:
-        return "unknown"
-    ctx = {"value": value, "prev_value": prev if prev is not None else value}
-    for rule in rules:
-        cond = rule["if"]
-        if cond == "true":
-            return rule["then"]
-        try:
-            if eval(cond, {"__builtins__": {}}, ctx):   # noqa: S307
-                return rule["then"]
-        except Exception:
-            continue
-    return "unknown"
+    """Shared across pipelines — see compute/common.py."""
+    return common.eval_status(rules, value, prev)
 
 
 def _row(entity_type: str, entity_id: str, value, status: str, unit: str) -> dict:
@@ -394,10 +385,13 @@ def _fy_end_dates(avail: set[str]) -> list[str]:
     return sorted(d for d in avail if d.endswith("-03-31"))
 
 
-def csv_streak(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
+def csv_yoy_streak(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
     """
     Count consecutive periods (going back from current) where a YoY
     condition holds.
+
+    Named for its comparison basis: ATM/POS has a streak method too, but it counts
+    month-on-month level moves. They share a shape, not a meaning.
 
     params:
       code       — sector code
@@ -678,7 +672,7 @@ METHODS: dict = {
     "csv_sector_scan_share":        csv_sector_scan_share,
     "csv_psl_scan_yoy":             csv_psl_scan_yoy,
     # 1d — multi-period
-    "csv_streak":                   csv_streak,
+    "csv_yoy_streak":               csv_yoy_streak,
     "csv_sector_fy_acceleration":   csv_sector_fy_acceleration,
     "csv_sector_fy_delta":          csv_sector_fy_delta,
     # relational — cross-segment (spec: signals/README.md)

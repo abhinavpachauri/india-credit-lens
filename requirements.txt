@@ -1,0 +1,30 @@
+# India Credit Lens — Python dependencies
+#
+# Until 2026-08-11 there was no dependency file of any kind: the environment was implicit,
+# so the gate was reproducible only on the machine that happened to have the right packages.
+# Pinned to the versions the pipelines were built and verified against.
+#
+#   python3 -m pip install -r requirements.txt
+#
+# Python 3.12 (3.12.2 in use). Third-party imports are deliberately few — the pipelines are
+# stdlib + pandas by design, and the signal store is SQLite from the standard library.
+
+# ── Ingestion + compute ───────────────────────────────────────────────────────
+pandas==2.2.2          # every compute module; the consolidated CSVs are DataFrames
+numpy==1.26.4          # pandas' own dependency, pinned so the pair stays compatible
+openpyxl==3.1.2        # reads the RBI .xlsx releases (pandas' Excel engine)
+
+# ── LLM evaluation (Stage 5) ──────────────────────────────────────────────────
+# Optional at run time: evaluate.py prefers the SDK when ANTHROPIC_API_KEY is set and falls
+# back to the `claude` CLI. Both gates run without it — no gate stage calls an LLM.
+anthropic==0.86.0
+
+# ── Tests ─────────────────────────────────────────────────────────────────────
+# Not optional: pytest is the gate's first stage on both pipelines.
+pytest==7.4.4
+
+# ── Legacy only ───────────────────────────────────────────────────────────────
+# analysis/rbi_sibc/lib/dashboard.py is a pre-Next.js Streamlit prototype, kept for reference
+# and not part of any gate. Install these two only if you want to run it.
+# plotly==5.22.0
+# streamlit==1.32.0

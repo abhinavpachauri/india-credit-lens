@@ -1,6 +1,6 @@
 {
  "id": "sibc",
- "name": "RBI SIBC — Bank Credit",
+ "name": "RBI SIBC \u2014 Bank Credit",
  "paths": {
   "data_dir": "analysis/rbi_sibc",
   "consolidated_csv": "web/public/data/rbi_sibc_consolidated.csv",
@@ -114,12 +114,18 @@
   {
    "id": "insights",
    "label": "5.5 generate_analysis_report",
-   "pipeline": "insights"
+   "pipeline": "insights",
+   "derived": [
+    "web/public/data/sibc_l1_annotations.json"
+   ]
   },
   {
    "id": "stamp_planes",
    "label": "5.6 dashboard planes (read-mode)",
-   "core": "stamp_planes"
+   "core": "stamp_planes",
+   "derived": [
+    "web/public/data/sibc_planes.json"
+   ]
   },
   {
    "id": "annotations_live",
@@ -139,7 +145,10 @@
   {
    "id": "skeleton",
    "label": "4-pre. skeleton regen",
-   "core": "skeleton"
+   "core": "skeleton",
+   "derived": [
+    "analysis/rbi_sibc/merged/system_model.json"
+   ]
   },
   {
    "id": "system_model",
@@ -155,6 +164,9 @@
    "core": "system_state",
    "requires": [
     "system_model"
+   ],
+   "derived": [
+    "analysis/rbi_sibc/merged/system_state_*.json"
    ]
   },
   {
@@ -163,6 +175,9 @@
    "core": "derive_opportunities",
    "requires": [
     "system_state"
+   ],
+   "derived": [
+    "analysis/rbi_sibc/merged/opportunities_*.json"
    ]
   },
   {
@@ -173,7 +188,10 @@
   {
    "id": "ecosystem",
    "label": "4d. ecosystem projection",
-   "core": "compose_ecosystem"
+   "core": "compose_ecosystem",
+   "derived": [
+    "analysis/cross_source/ecosystem_state_*.json"
+   ]
   },
   {
    "id": "feed",
@@ -181,6 +199,9 @@
    "core": "opportunities_feed",
    "requires": [
     "opportunities"
+   ],
+   "derived": [
+    "web/public/data/opportunities_feed.json"
    ]
   },
   {

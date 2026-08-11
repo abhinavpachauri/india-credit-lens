@@ -150,21 +150,21 @@ def test_csv_sector_count_positive_yoy():
 
 # ── multi-period: streak ──────────────────────────────────────────────────────
 
-def test_csv_streak_positive():
-    r = _val(sibc.csv_streak({"code": "S", "condition": "positive"}, P, _df()))
+def test_csv_yoy_streak_positive():
+    r = _val(sibc.csv_yoy_streak({"code": "S", "condition": "positive"}, P, _df()))
     assert r["value"] == pytest.approx(2.0)   # 2026✓ 2025✓; 2024 no prior-yr
     assert r["unit"] == "periods"
 
 
-def test_csv_streak_breaks_on_negative():
+def test_csv_yoy_streak_breaks_on_negative():
     # D declined in 2026 → positive streak is 0 → unknown
-    r = _val(sibc.csv_streak({"code": "D", "condition": "positive"}, P, _df()))
+    r = _val(sibc.csv_yoy_streak({"code": "D", "condition": "positive"}, P, _df()))
     assert r["value"] is None and r["status"] == "unknown"
 
 
-def test_csv_streak_threshold_condition():
+def test_csv_yoy_streak_threshold_condition():
     # S YoY: 2026=20, 2025=10. condition above:15 → only 2026 qualifies → 1
-    r = _val(sibc.csv_streak({"code": "S", "condition": "above:15"}, P, _df()))
+    r = _val(sibc.csv_yoy_streak({"code": "S", "condition": "above:15"}, P, _df()))
     assert r["value"] == pytest.approx(1.0)
 
 

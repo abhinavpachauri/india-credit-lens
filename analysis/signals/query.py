@@ -85,8 +85,10 @@ METHOD_TYPE: dict[str, str] = {
     "csv_sector_scan_share":   "scan",
     "csv_psl_scan_yoy":        "scan",
     "csv_bank_scan":           "scan",
-    # Layer 1d — multi-period
-    "csv_streak":              "streak",
+    # Layer 1d — multi-period. Both streak methods produce the same SHAPE (a scalar count of
+    # periods), which is all this map cares about; they differ in what they compare.
+    "csv_yoy_streak":          "streak",
+    "csv_mom_streak":          "streak",
     "csv_sector_fy_acceleration": "acceleration",
     "csv_sector_fy_delta":     "absolute",
     # Relational — cross-segment (spec: signals/README.md)

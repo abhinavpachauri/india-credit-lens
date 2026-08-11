@@ -64,7 +64,8 @@ METHOD_CATEGORY = {
     "csv_sector_count_positive_yoy": "C4",
     "csv_sector_yoy_spread":         "C4",
     # C5 — direction changing: runs, and growth measured against its own past growth
-    "csv_streak":                    "C5",
+    "csv_yoy_streak":                "C5",
+    "csv_mom_streak":                "C5",
     "csv_sector_fy_acceleration":    "C5",
     "csv_sector_fy_delta":           "C5",
 }

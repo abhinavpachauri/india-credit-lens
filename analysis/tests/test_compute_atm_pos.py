@@ -126,14 +126,14 @@ def test_category_yoy():
 # ── streak (MoM direction) ────────────────────────────────────────────────────
 
 def test_streak_growth():
-    r = _val(ap.csv_streak(
+    r = _val(ap.csv_mom_streak(
         {"metric": "cards", "condition": "value > prev_value"}, P, _df()))
     assert r["value"] == pytest.approx(2.0)   # 1200>1100>1000; 2025 no prior
 
 
 def test_streak_contraction_is_zero_not_unknown():
     # cards grew, so a contraction streak is 0 (valid result, not unknown)
-    r = _val(ap.csv_streak(
+    r = _val(ap.csv_mom_streak(
         {"metric": "cards", "condition": "value < prev_value"}, P, _df()))
     assert r["value"] == pytest.approx(0.0)
 

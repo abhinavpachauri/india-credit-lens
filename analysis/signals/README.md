@@ -18,7 +18,7 @@ deterministic compute engine, and the LLM evaluation layer.
 
 ## Relational signal methods — rotation & divergence
 
-Cross-segment L1 methods. Same architectural status as `csv_streak`/`csv_sector_scan_*`: registry
+Cross-segment L1 methods. Same architectural status as `csv_yoy_streak`/`csv_mom_streak`/`csv_sector_scan_*`: registry
 spec → deterministic compute → per-entity rows in `signals.db` → deterministic insight builders.
 They serve the fixed monthly outputs in `FABLE_BRIEF_cross_segment_insights.md` (posts 2/3/4).
 **Deterministic prose is the product** — the insight builders must emit publishable copy with zero

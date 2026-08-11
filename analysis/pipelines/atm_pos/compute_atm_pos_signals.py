@@ -545,8 +545,11 @@ def main():
     prev_q = sorted_qs[-2] if len(sorted_qs) >= 2 else None
 
     signals = {
+        # No wall-clock stamp. This artifact is committed and freshness-guarded, so it must be
+        # a pure function of the CSV — a `generated_at` of utcnow() made every regeneration
+        # differ from the committed copy, which would fire check_derived_fresh on every run and
+        # train everyone to ignore it. Git already records when the file changed.
         "meta": {
-            "generated_at":  datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
             "latest_period": latest,
             "latest_month":  fmt_month(latest),
             "prior_period":  prior,

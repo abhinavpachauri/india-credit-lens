@@ -1,6 +1,6 @@
 {
  "id": "atm_pos",
- "name": "RBI ATM/POS — Payments",
+ "name": "RBI ATM/POS \u2014 Payments",
  "on_fail": "stop",
  "period_resolver": {
   "module": "extract",
@@ -76,17 +76,28 @@
   {
    "id": "signals_payload",
    "label": "4a. refresh signals payload",
-   "pipeline": "signals_payload"
+   "pipeline": "signals_payload",
+   "derived": [
+    "analysis/rbi_atm_pos/signals.json",
+    "web/public/data/atm_pos_signals.json"
+   ]
   },
   {
    "id": "chart_series",
    "label": "4a-series. chart series JSON",
-   "core": "chart_series"
+   "core": "chart_series",
+   "derived": [
+    "web/public/data/atm_pos_chart_series.json"
+   ]
   },
   {
    "id": "insights",
    "label": "4b. generate insights",
-   "pipeline": "insights"
+   "pipeline": "insights",
+   "derived": [
+    "analysis/rbi_atm_pos/insights.json",
+    "web/public/data/atm_pos_insights.json"
+   ]
   },
   {
    "id": "insights_validate",
@@ -96,7 +107,10 @@
   {
    "id": "stamp_planes",
    "label": "5.6 dashboard planes (read-mode)",
-   "core": "stamp_planes"
+   "core": "stamp_planes",
+   "derived": [
+    "web/public/data/atm_pos_planes.json"
+   ]
   },
   {
    "id": "claims_validate",
@@ -122,7 +136,10 @@
   {
    "id": "skeleton",
    "label": "5c-pre. skeleton regen",
-   "core": "skeleton"
+   "core": "skeleton",
+   "derived": [
+    "analysis/rbi_atm_pos/merged/system_model.json"
+   ]
   },
   {
    "id": "system_model",
@@ -132,12 +149,18 @@
   {
    "id": "system_state",
    "label": "5d. system_state (S3)",
-   "core": "system_state"
+   "core": "system_state",
+   "derived": [
+    "analysis/rbi_atm_pos/merged/system_state_*.json"
+   ]
   },
   {
    "id": "opportunities",
    "label": "5d. opportunities (live)",
-   "core": "derive_opportunities"
+   "core": "derive_opportunities",
+   "derived": [
+    "analysis/rbi_atm_pos/merged/opportunities_*.json"
+   ]
   },
   {
    "id": "composition",
@@ -147,12 +170,18 @@
   {
    "id": "ecosystem",
    "label": "5d3. ecosystem projection",
-   "core": "compose_ecosystem"
+   "core": "compose_ecosystem",
+   "derived": [
+    "analysis/cross_source/ecosystem_state_*.json"
+   ]
   },
   {
    "id": "feed",
    "label": "5d4. opportunities UI feed",
-   "core": "opportunities_feed"
+   "core": "opportunities_feed",
+   "derived": [
+    "web/public/data/opportunities_feed.json"
+   ]
   },
   {
    "id": "opp_traceability",

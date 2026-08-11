@@ -126,7 +126,11 @@ def update_timeline(sections, period_dir):
         "report_date": report_date,
         "data_status": sections["data_status"],
         "bank_count":  sections["bank_count"],
-        "consolidated_at": datetime.now().isoformat(timespec="seconds"),
+        # When this period FIRST entered the platform — real provenance, so it is preserved on
+        # a re-run. Stamping it afresh every time made it mean "last re-consolidated", which is
+        # not information, and dirtied timeline.json on every gate run.
+        "consolidated_at": (existing or {}).get("consolidated_at")
+                           or datetime.now().isoformat(timespec="seconds"),
         "paths": {
             "sections":      f"rbi_atm_pos/{report_date}/sections.json",
             "format_report": f"rbi_atm_pos/{report_date}/format_report.json",

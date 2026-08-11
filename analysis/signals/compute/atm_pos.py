@@ -33,6 +33,8 @@ from typing import Any
 
 import pandas as pd
 
+from . import common
+
 import sys
 sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
 from core.paths import ROOT as REPO
@@ -106,19 +108,8 @@ def _category_val(df: pd.DataFrame, period: str, metric: str, category: str) -> 
 
 
 def _eval_status(rules: list, value: float, prev: float) -> str:
-    if value is None:
-        return "unknown"
-    ctx = {"value": value, "prev_value": prev if prev is not None else value}
-    for rule in rules:
-        cond = rule["if"]
-        if cond == "true":
-            return rule["then"]
-        try:
-            if eval(cond, {"__builtins__": {}}, ctx):   # noqa: S307
-                return rule["then"]
-        except Exception:
-            continue
-    return "unknown"
+    """Shared across pipelines — see compute/common.py."""
+    return common.eval_status(rules, value, prev)
 
 
 def _row(entity_type: str, entity_id: str, value, status: str, unit: str) -> dict:
@@ -344,10 +335,13 @@ def csv_bank_scan(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
 
 # ── Layer 1d ──────────────────────────────────────────────────────────────────
 
-def csv_streak(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
+def csv_mom_streak(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
     """
     Count consecutive periods (going backwards from current) where a
     month-over-month condition holds on the total metric value.
+
+    Named for its comparison basis: SIBC has a streak method too, but it counts periods
+    where a YoY condition holds. They share a shape, not a meaning.
 
     params:
       metric    — metric name in the CSV
@@ -649,7 +643,7 @@ METHODS: dict = {
     "csv_category_yoy":        csv_category_yoy,
     "csv_category_scan_share": csv_category_scan_share,
     "csv_bank_scan":           csv_bank_scan,
-    "csv_streak":              csv_streak,
+    "csv_mom_streak":         csv_mom_streak,
     # relational — cross-segment (spec: signals/README.md)
     "csv_category_rotation":   csv_category_rotation,
     "csv_bank_divergence":     csv_bank_divergence,
