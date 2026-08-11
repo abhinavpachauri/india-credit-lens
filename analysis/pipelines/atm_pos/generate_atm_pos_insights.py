@@ -126,29 +126,50 @@ def _dominance_caveat(ins: dict, dom) -> None:
     ins["eval_signal"] = dom.metric   # keep the signal link so the card can still be ranked/traced
 
 
+def apply_dominance_guard(insights: list, period: str | None) -> int:
+    """Rewrite any anchored insight whose aggregate move is one entity's artifact. Returns the
+    count guarded.
+
+    This runs on its OWN, before and independent of the LLM layer, and that independence is the
+    point. The guard used to live inside apply_llm_representation, after the `if not se: continue`
+    that skips a card with no evaluation entry — so it only fired when the LLM had something to
+    say. A period with no evaluation got no guard at all, and the POS "−15.8% collapse" that was
+    98% one issuer would have published unattributed. A deterministic guard must not be
+    conditional on a non-deterministic step having run.
+    """
+    if not period:
+        return 0
+    guarded = 0
+    for ins in insights:
+        if ins.get("representation") == "deterministic-db":
+            continue   # relational cards carry their own grounded prose
+        anchor = EVAL_ANCHOR.get(ins["id"])
+        if not anchor:
+            continue
+        dom = move_dominance("atm_pos", anchor, period)
+        if dom and dom.dominant:
+            _dominance_caveat(ins, dom)
+            guarded += 1
+    return guarded
+
+
 def apply_llm_representation(insights: list, eval_signals: dict, prompt_version, period=None) -> int:
     """Override the prose (title/body/implication/chain) of anchored scalar
     insights with the LLM narrative; keep deterministic selection, UI routing
     (effect/exploreAction), sourceSignals and basis.facts. Returns the count
     converted to LLM representation.
 
-    Before the LLM narrative is trusted, a single-entity dominance guard runs: if the anchored
-    metric's move is an artifact of one entity's reporting (see signals/dominance.py), the LLM
-    narrative is discarded in favour of a grounded caveat — an aggregate that isn't a real market
-    move must never be narrated as one."""
+    Cards already rewritten by the dominance guard keep that grounded caveat — an aggregate that
+    isn't a real market move must never be narrated as one."""
     converted = 0
     for ins in insights:
-        if ins.get("representation") == "deterministic-db":
-            continue   # relational cards: deterministic prose IS the product — never LLM
+        if ins.get("representation") in ("deterministic-db", "deterministic-dominance"):
+            continue   # prose already settled: relational, or a single-entity artifact
         ins["representation"] = "deterministic"
         anchor = EVAL_ANCHOR.get(ins["id"])
         se = eval_signals.get(anchor) if anchor else None
         if not se:
             continue
-        dom = move_dominance("atm_pos", anchor, period) if (anchor and period) else None
-        if dom and dom.dominant:
-            _dominance_caveat(ins, dom)
-            continue   # grounded caveat replaces the LLM 'market signal' narrative
         body  = " ".join(x for x in [se.get("observation", ""), se.get("direction", "")] if x).strip()
         chain = se.get("chain") or []
         impl  = se.get("inference") or ins.get("implication")
@@ -2036,7 +2057,7 @@ def main():
     month = signals["meta"]["latest_month"]
     print(f"Generating insights for {month}…")
 
-    insights = []
+    insights, broken = [], []
     for rule in RULES:
         try:
             result = rule(signals, month)
@@ -2044,6 +2065,10 @@ def main():
                 insights.append(result)
                 print(f"  ✓ {result['id']} [{result['group']} / {result['cut']}]")
         except Exception as e:
+            # Reported AND fatal (see the exit at the end of main). A rule that raises means a
+            # card silently disappears from the dashboard; printing it while exiting 0 meant the
+            # gate stayed green and nobody found out until the page looked wrong.
+            broken.append(f"{rule.__name__}: {e}")
             print(f"  ✗ {rule.__name__}: {e}")
 
     # Relational cards (rotation/divergence) — signals.db-sourced, deterministic
@@ -2054,9 +2079,16 @@ def main():
 
     print(f"\n{len(insights)} insights generated.")
 
+    # Single-entity dominance guard — deterministic, so it runs unconditionally and BEFORE the
+    # LLM layer. A move that is one issuer's reporting artifact gets attributed here whether or
+    # not an evaluation exists for this period.
+    period = signals["meta"]["latest_period"]
+    guarded = apply_dominance_guard(insights, period)
+    if guarded:
+        print(f"  dominance guard: {guarded} card(s) attributed to a single entity.")
+
     # LLM representation layer — override prose of anchored scalar insights with
     # the LLM evaluation narrative (deterministic selection/routing preserved).
-    period = signals["meta"]["latest_period"]
     eval_signals, prompt_version = load_eval_signals(period)
     if eval_signals:
         n = apply_llm_representation(insights, eval_signals, prompt_version, period)
@@ -2081,6 +2113,13 @@ def main():
     for k, v in sorted(counts.items()):
         print(f"  {k}: {v}")
 
+    if broken:
+        print(f"\n✗ {len(broken)} rule(s) failed — those cards are MISSING from the dashboard:")
+        for b in broken:
+            print(f"    {b}")
+        return 1
+    return 0
+
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
