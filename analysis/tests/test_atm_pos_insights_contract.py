@@ -1,12 +1,11 @@
 """
 A characterisation net around the payments insight generator, so it can be refactored.
 
-`generate_atm_pos_insights.py` is the largest module in the repo (2,086 lines) and had no
-direct tests. It is also the least generic: ~30 hand-written functions, one per dashboard
-card, where SIBC derives its cards from the registry. Migrating it onto the registry-driven
-path is worthwhile but only safe if "the output did not change" is something a machine can
-check — otherwise a card can quietly vanish or change routing and nobody notices until the
-dashboard looks wrong.
+`generate_atm_pos_insights.py` was the largest module in the repo and had no direct tests. It
+was also the least generic: ~30 hand-written functions, one per dashboard card, where SIBC
+derives its cards from the registry. Migrating it was only safe because "the output did not
+change" is something these tests can answer — otherwise a card can quietly vanish or change
+routing and nobody notices until the dashboard looks wrong.
 
 These tests do not describe what the generator *should* do. They pin what it *does* today,
 against a golden file kept OUTSIDE the generated artifact, so any behaviour change during the
@@ -51,11 +50,11 @@ def generated(gen):
     evaluation file, which is not what this contract is about."""
     month = SIGNALS["meta"]["latest_month"]
     cards, failures = [], []
-    for producer in gen.RULES:
+    for spec in gen.CARDS:
         try:
-            result = gen.produce(producer, SIGNALS, month)
+            result = gen.render_card(spec, SIGNALS, month)
         except Exception as exc:                       # noqa: BLE001 — reported, not swallowed
-            failures.append(f"{gen.producer_name(producer)}: {exc}")
+            failures.append(f"{spec.id}: {exc}")
             continue
         if result:
             cards.append(result)
@@ -203,3 +202,36 @@ def test_concentration_prose_reads_the_real_share(gen):
     share = quiet["groups"]["cc"]["top_n"]["top5_share_pct"]
     assert f"{share:.1f}%" in card["implication"]
     assert "74%" not in card["implication"] or abs(share - 74) < 0.05
+
+
+# ── The cash-trend forks ──────────────────────────────────────────────────────
+# Two more functions that were each secretly two cards, split on the direction of a streak.
+# Same risk as the top-bank pair: if the conditions overlap, a month could publish both halves
+# of a contradiction — "cash is falling, customers are becoming visible" beside "cash is
+# rising, customers are in liquidity stress".
+
+@pytest.mark.parametrize("falling,rising,metric_path", [
+    ("cc-atm-declining", "cc-atm-rising", "groups.cc.total.metrics.cc_atm_withdrawal_vol"),
+    ("dc-atm-declining", "dc-atm-rising", "groups.dc.total.metrics.dc_atm_withdrawal_vol"),
+])
+def test_cash_trend_directions_cannot_both_fire(gen, falling, rising, metric_path):
+    import copy
+    month = SIGNALS["meta"]["latest_month"]
+    group, metric = metric_path.split(".")[1], metric_path.split(".")[-1]
+
+    def with_streak(direction, months, mom):
+        sig = copy.deepcopy(SIGNALS)
+        node = sig["groups"][group]["total"]["metrics"][metric]
+        node["streak_dir"], node["streak_months"], node["mom_pct"] = direction, months, mom
+        return sig
+
+    for state in (with_streak("down", 5, -8.0), with_streak("up", 5, 9.0), with_streak("flat", 1, 0.1)):
+        fired = [c for c in (falling, rising) if gen.render_card(gen.CASH[c], state, month)]
+        assert len(fired) <= 1, f"both directions fired at once: {fired}"
+
+
+def test_every_card_id_is_unique_in_the_declaration_list(gen):
+    """CARDS is now the whole dashboard in one list, so a copy-paste that duplicates an id would
+    render the same card twice."""
+    ids = [c.id for c in gen.CARDS]
+    assert len(ids) == len(set(ids))

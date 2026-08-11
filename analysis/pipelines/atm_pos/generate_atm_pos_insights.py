@@ -476,6 +476,12 @@ def _fell_pp(delta) -> str:
     return f", down {abs(delta):.2f}pp vs prior month" if delta and delta < 0 else ""
 
 
+def _avg_mom(v) -> float:
+    """Mean month-on-month move across the transaction channels that reported one."""
+    moves = [v[k] for k in ("pos", "ecom", "atm", "other") if v.get(k) is not None]
+    return sum(moves) / len(moves) if moves else 0.0
+
+
 def _per(numerator, denominator) -> float:
     """One side per the other, rounded — "80 QR codes per terminal", "150x Bharat QR"."""
     if not (numerator and denominator):
@@ -524,212 +530,13 @@ def insight(id_, group, cut, period, title, body, effect, explore=None,
 # CC RULES
 # ══════════════════════════════════════════════════════════════════════════════
 
-def cc_atm_withdrawal_trend(s, month) -> dict | None:
-    """CC ATM cash withdrawal declining = going cashless signal."""
-    m = s["groups"]["cc"]["total"]["metrics"].get("cc_atm_withdrawal_vol", {})
-    cross = s["groups"]["cc"]["total"]["cross"]
-    atm_sh = cross.get("cc_atm_withdrawal_vol", {}).get("share_pct")
-    atm_delta = cross.get("cc_atm_withdrawal_vol", {}).get("share_delta_pp")
-    mom = m.get("mom_pct")
-    streak = m.get("streak_months", 1)
-    streak_dir = m.get("streak_dir", "flat")
-
-    if mom is None:
-        return None
-
-    if streak_dir == "down" and streak >= 2:
-        title = f"CC ATM cash withdrawals declining — {streak_label(streak, 'down')}"
-        body = (
-            f"CC ATM withdrawal volume fell {abs(mom):.1f}% MoM in {month}, "
-            f"the {streak_label(streak, 'down')}. "
-        )
-        if atm_sh is not None:
-            body += f"ATM cash now accounts for {atm_sh:.1f}% of total CC transaction volume"
-            if atm_delta:
-                body += f" ({sign(atm_delta)}pp vs prior month)"
-            body += ". Credit cards are increasingly used for purchases, not cash."
-        implication = (
-            "Declining CC ATM cash advances reduce high-rate revolving exposure in CC portfolios. "
-            "Lenders benefit from a cleaner credit mix; however, the shift also signals growing "
-            "customer preference for digital payments over liquidity access — a proxy for financial literacy improvement."
-        )
-        return insight(
-            "cc-atm-declining", "cc", "total", month, title, body,
-            effect={"highlight": ["Total"], "tab": "trend", "trendMode": "mom", "focusCard": "cc_atm"},
-            implication=implication,
-            source_signals=[
-                "groups.cc.total.metrics.cc_atm_withdrawal_vol.mom_pct",
-                "groups.cc.total.metrics.cc_atm_withdrawal_vol.streak_months",
-                "groups.cc.total.cross.cc_atm_withdrawal_vol.share_pct",
-            ],
-            chain=[
-                f"CC ATM cash declining for {streak} months — customers using credit cards for purchases, not cash",
-                "Lower cash advance usage reduces high-interest revolving exposure in CC portfolios",
-                "Shift signals growing digital payment preference — proxy for improving financial literacy in the base",
-            ],
-            signals_dict=s,
-        )
-
-    if streak_dir == "up" and streak >= 3 and mom > 3:
-        title = f"CC ATM cash withdrawals rising — {streak_label(streak, 'up')} ({mom:+.1f}% MoM)"
-        body = (
-            f"CC ATM withdrawal volume grew {mom:.1f}% MoM in {month}, "
-            f"the {streak_label(streak, 'up')}. "
-        )
-        if atm_sh:
-            body += f"Cash accounts for {atm_sh:.1f}% of CC transaction volume."
-        implication = (
-            f"When credit card holders keep withdrawing cash from ATMs over {streak} months, it usually means they're struggling with liquidity — using credit cards as a cash loan. "
-            "Cash advances on credit cards are expensive (higher interest, no interest-free period). "
-            "Watch for higher default risk in customer segments where this pattern shows up."
-        )
-        return insight(
-            "cc-atm-rising", "cc", "total", month, title, body,
-            effect={"highlight": ["Total"], "tab": "trend", "trendMode": "mom", "focusCard": "cc_atm"},
-            implication=implication,
-            source_signals=[
-                "groups.cc.total.metrics.cc_atm_withdrawal_vol.mom_pct",
-                "groups.cc.total.metrics.cc_atm_withdrawal_vol.streak_months",
-                "groups.cc.total.cross.cc_atm_withdrawal_vol.share_pct",
-            ],
-            chain=[
-                f"CC ATM cash growing for {streak} months — customers using credit cards as liquidity access, not for purchases",
-                "Cash advances carry higher interest and no interest-free period — expensive revolving behaviour",
-                "Sustained cash advance growth signals liquidity stress; monitor for elevated default risk in these segments",
-            ],
-            signals_dict=s,
-        )
-    return None
-
-
 # ══════════════════════════════════════════════════════════════════════════════
 # DC RULES
 # ══════════════════════════════════════════════════════════════════════════════
 
-def dc_atm_trend(s, month) -> dict | None:
-    """DC ATM withdrawal trend — cash usage signal."""
-    m      = s["groups"]["dc"]["total"]["metrics"].get("dc_atm_withdrawal_vol", {})
-    cross  = s["groups"]["dc"]["total"]["cross"]
-    atm_sh = cross.get("dc_atm_withdrawal_vol", {}).get("share_pct")
-    atm_dt = cross.get("dc_atm_withdrawal_vol", {}).get("share_delta_pp")
-    mom    = m.get("mom_pct")
-    streak = m.get("streak_months", 1)
-    sd     = m.get("streak_dir", "flat")
-
-    if mom is None:
-        return None
-
-    if sd == "down" and streak >= 2:
-        title = f"DC ATM cash withdrawals: {streak_label(streak, 'down')} — cash usage shifting"
-        body = f"Debit card ATM withdrawal volume fell {abs(mom):.1f}% MoM in {month}, "
-        body += f"the {streak_label(streak, 'down')}. "
-        if atm_sh:
-            body += f"ATM cash is {atm_sh:.1f}% of total DC transaction volume"
-            if atm_dt:
-                body += f" ({sign(atm_dt)}pp)"
-            body += ". Debit cards are increasingly used for digital payments, not just ATM cash."
-        implication = (
-            "Debit card holders who are shifting from ATM cash to digital payments (POS or online) "
-            "start leaving a traceable spending history. That history is exactly what lenders need "
-            "to assess someone's first credit application. So fewer ATM withdrawals is actually "
-            "good news for expanding the pool of underwritable debit customers."
-        )
-        return insight(
-            "dc-atm-declining", "dc", "total", month, title, body,
-            effect={"highlight": ["Total"], "tab": "trend", "trendMode": "mom", "focusCard": "dc_atm"},
-            implication=implication,
-            source_signals=[
-                "groups.dc.total.metrics.dc_atm_withdrawal_vol.mom_pct",
-                "groups.dc.total.metrics.dc_atm_withdrawal_vol.streak_months",
-                "groups.dc.total.cross.dc_atm_withdrawal_vol.share_pct",
-            ],
-            chain=[
-                f"DC ATM cash withdrawals declining for {streak} months — customers shifting to digital debit payments",
-                "Digital debit transactions (POS, ecommerce) leave structured spending records vs cash which leaves none",
-                "Debit customers moving to digital build a transaction history lenders can use to assess first credit applications",
-            ],
-            signals_dict=s,
-        )
-
-    if sd == "up" and streak >= 3:
-        title = f"DC ATM withdrawals rising — {streak_label(streak, 'up')} ({mom:+.1f}% MoM)"
-        body = f"Debit card ATM withdrawal volume grew {mom:.1f}% MoM in {month}. "
-        if atm_sh:
-            body += f"Cash accounts for {atm_sh:.1f}% of total DC volume."
-        implication = (
-            f"Debit card ATM cash growing for {streak} straight months means a large part of "
-            "the debit base is still cash-first — their spending leaves no digital trail. "
-            "For lenders using transaction data to underwrite, this segment is essentially invisible. "
-            "Bureau scores (CIBIL, Experian) and physical income verification remain the only reliable tools here."
-        )
-        return insight(
-            "dc-atm-rising", "dc", "total", month, title, body,
-            effect={"highlight": ["Total"], "tab": "trend", "trendMode": "mom", "focusCard": "dc_atm"},
-            implication=implication,
-            source_signals=[
-                "groups.dc.total.metrics.dc_atm_withdrawal_vol.mom_pct",
-                "groups.dc.total.metrics.dc_atm_withdrawal_vol.streak_months",
-                "groups.dc.total.cross.dc_atm_withdrawal_vol.share_pct",
-            ],
-            chain=[
-                f"DC ATM cash growing for {streak} months — debit base is cash-first, not digitally active",
-                "Cash transactions leave no digital record — financial behaviour is opaque to transaction-data models",
-                "Bureau scores (CIBIL, Experian) and physical income verification are the primary underwriting tools for this segment",
-            ],
-            signals_dict=s,
-        )
-    return None
-
-
 # ══════════════════════════════════════════════════════════════════════════════
 # INFRA RULES
 # ══════════════════════════════════════════════════════════════════════════════
-
-def cc_transaction_surge(s, month) -> dict | None:
-    """All CC transaction types up strongly in same month — year-end / seasonal signal."""
-    metrics   = s["groups"]["cc"]["total"]["metrics"]
-    txn_keys  = ["cc_pos_txn_vol", "cc_ecom_txn_vol", "cc_atm_withdrawal_vol", "cc_other_txn_vol"]
-    moms      = {k: metrics.get(k, {}).get("mom_pct") for k in txn_keys}
-    valid     = {k: v for k, v in moms.items() if v is not None}
-    if not valid:
-        return None
-    avg_mom = sum(valid.values()) / len(valid)
-    if not all(v > 10 for v in valid.values()) or avg_mom < 12:
-        return None  # only fire when all types surge together
-
-    title = f"All CC transaction types surged in {month} — avg {avg_mom:.1f}% MoM"
-    body = (
-        f"All four CC transaction types grew strongly in {month}: "
-        f"POS +{moms['cc_pos_txn_vol']:.1f}%, "
-        f"eCommerce +{moms['cc_ecom_txn_vol']:.1f}%, "
-        f"ATM +{moms['cc_atm_withdrawal_vol']:.1f}%, "
-        f"Other +{moms['cc_other_txn_vol']:.1f}%. "
-        f"March year-end spending typically drives broad-based CC transaction growth."
-    )
-    implication = (
-        f"March always spikes — it's financial year-end and people tend to spend more. "
-        f"An average {avg_mom:.1f}% jump this month is seasonal, not a sign customers suddenly have more money. "
-        "If you're assessing how much credit a customer can repay, don't use March spend as your baseline — "
-        "it will make their repayment capacity look higher than it actually is."
-    )
-    return insight(
-        "cc-txn-surge", "cc", "total", month, title, body,
-        effect={"highlight": ["Total"], "tab": "trend", "trendMode": "mom", "focusCard": "cc_pos"},
-        implication=implication,
-        source_signals=[
-            "groups.cc.total.metrics.cc_pos_txn_vol.mom_pct",
-            "groups.cc.total.metrics.cc_ecom_txn_vol.mom_pct",
-            "groups.cc.total.metrics.cc_atm_withdrawal_vol.mom_pct",
-            "groups.cc.total.metrics.cc_other_txn_vol.mom_pct",
-        ],
-        chain=[
-            f"All 4 CC transaction types grew simultaneously — avg {avg_mom:.1f}% MoM in March",
-            "March is financial year-end in India — broad-based spending surge is a recurring seasonal pattern",
-            "Seasonal spike overstates true credit utilisation; normalise March volumes before assessing repayment capacity",
-        ],
-        signals_dict=s,
-    )
-
 
 # ══════════════════════════════════════════════════════════════════════════════
 # GAP RULES  (type_="gap" — structural blind spots or underserved areas)
@@ -1698,6 +1505,163 @@ CHANNEL = {c.id: c for c in CHANNEL_CARDS}
 
 
 # ══════════════════════════════════════════════════════════════════════════════
+# CASH-TREND CARDS — declared (see Card / render_card above)
+# ══════════════════════════════════════════════════════════════════════════════
+# Cash withdrawal on a card, rising or falling. Each direction is a different card because it is
+# a different story — falling cash means a customer becoming visible to underwriting, rising cash
+# means liquidity stress — and they were previously the two halves of one function.
+
+def _cash(group: str, metric: str) -> dict:
+    return {
+        "mom": f"groups.{group}.total.metrics.{metric}.mom_pct",
+        "streak": f"groups.{group}.total.metrics.{metric}.streak_months",
+        "share": f"groups.{group}.total.cross.{metric}.share_pct",
+    }
+
+
+def _falling(v) -> bool:
+    return v["streak_dir"] == "down" and (v["streak"] or 0) >= 2 and v["mom"] is not None
+
+
+CASH_CARDS = [
+    Card(
+        id="cc-atm-declining", group="cc", cut="total",
+        reads=_cash("cc", "cc_atm_withdrawal_vol"),
+        labels={"streak_dir": "groups.cc.total.metrics.cc_atm_withdrawal_vol.streak_dir",
+                "share_delta": "groups.cc.total.cross.cc_atm_withdrawal_vol.share_delta_pp"},
+        fires_when=_falling,
+        title=lambda v, m: f"CC ATM cash withdrawals declining — {streak_label(int(v['streak']), 'down')}",
+        body=lambda v, m:
+            f"CC ATM withdrawal volume fell {abs(v['mom']):.1f}% MoM in {m}, "
+            f"the {streak_label(int(v['streak']), 'down')}. "
+            + (f"ATM cash now accounts for {v['share']:.1f}% of total CC transaction volume"
+               + (f" ({sign(v['share_delta'])}pp vs prior month)" if v["share_delta"] else "")
+               + ". Credit cards are increasingly used for purchases, not cash."
+               if v["share"] is not None else ""),
+        implication=lambda v, m:
+            "Declining CC ATM cash advances reduce high-rate revolving exposure in CC portfolios. "
+            "Lenders benefit from a cleaner credit mix; however, the shift also signals growing "
+            "customer preference for digital payments over liquidity access — a proxy for financial literacy improvement.",
+        chain=lambda v, m: [
+            f"CC ATM cash declining for {int(v['streak'])} months — customers using credit cards for purchases, not cash",
+            "Lower cash advance usage reduces high-interest revolving exposure in CC portfolios",
+            "Shift signals growing digital payment preference — proxy for improving financial literacy in the base",
+        ],
+        effect={"highlight": ["Total"], "tab": "trend", "trendMode": "mom", "focusCard": "cc_atm"},
+    ),
+
+    Card(
+        id="cc-atm-rising", group="cc", cut="total",
+        reads=_cash("cc", "cc_atm_withdrawal_vol"),
+        labels={"streak_dir": "groups.cc.total.metrics.cc_atm_withdrawal_vol.streak_dir"},
+        # A higher bar than the falling case, and it must still be rising this month.
+        fires_when=lambda v: v["streak_dir"] == "up" and (v["streak"] or 0) >= 3 and (v["mom"] or 0) > 3,
+        title=lambda v, m:
+            f"CC ATM cash withdrawals rising — {streak_label(int(v['streak']), 'up')} ({v['mom']:+.1f}% MoM)",
+        body=lambda v, m:
+            f"CC ATM withdrawal volume grew {v['mom']:.1f}% MoM in {m}, "
+            f"the {streak_label(int(v['streak']), 'up')}. "
+            + (f"Cash accounts for {v['share']:.1f}% of CC transaction volume." if v["share"] else ""),
+        implication=lambda v, m:
+            f"When credit card holders keep withdrawing cash from ATMs over {int(v['streak'])} months, it usually means they're struggling with liquidity — using credit cards as a cash loan. "
+            "Cash advances on credit cards are expensive (higher interest, no interest-free period). "
+            "Watch for higher default risk in customer segments where this pattern shows up.",
+        chain=lambda v, m: [
+            f"CC ATM cash growing for {int(v['streak'])} months — customers using credit cards as liquidity access, not for purchases",
+            "Cash advances carry higher interest and no interest-free period — expensive revolving behaviour",
+            "Sustained cash advance growth signals liquidity stress; monitor for elevated default risk in these segments",
+        ],
+        effect={"highlight": ["Total"], "tab": "trend", "trendMode": "mom", "focusCard": "cc_atm"},
+    ),
+
+    Card(
+        id="dc-atm-declining", group="dc", cut="total",
+        reads=_cash("dc", "dc_atm_withdrawal_vol"),
+        labels={"streak_dir": "groups.dc.total.metrics.dc_atm_withdrawal_vol.streak_dir",
+                "share_delta": "groups.dc.total.cross.dc_atm_withdrawal_vol.share_delta_pp"},
+        fires_when=_falling,
+        title=lambda v, m:
+            f"DC ATM cash withdrawals: {streak_label(int(v['streak']), 'down')} — cash usage shifting",
+        body=lambda v, m:
+            f"Debit card ATM withdrawal volume fell {abs(v['mom']):.1f}% MoM in {m}, "
+            f"the {streak_label(int(v['streak']), 'down')}. "
+            + (f"ATM cash is {v['share']:.1f}% of total DC transaction volume"
+               + (f" ({sign(v['share_delta'])}pp)" if v["share_delta"] else "")
+               + ". Debit cards are increasingly used for digital payments, not just ATM cash."
+               if v["share"] else ""),
+        implication=lambda v, m:
+            "Debit card holders who are shifting from ATM cash to digital payments (POS or online) "
+            "start leaving a traceable spending history. That history is exactly what lenders need "
+            "to assess someone's first credit application. So fewer ATM withdrawals is actually "
+            "good news for expanding the pool of underwritable debit customers.",
+        chain=lambda v, m: [
+            f"DC ATM cash withdrawals declining for {int(v['streak'])} months — customers shifting to digital debit payments",
+            "Digital debit transactions (POS, ecommerce) leave structured spending records vs cash which leaves none",
+            "Debit customers moving to digital build a transaction history lenders can use to assess first credit applications",
+        ],
+        effect={"highlight": ["Total"], "tab": "trend", "trendMode": "mom", "focusCard": "dc_atm"},
+    ),
+
+    Card(
+        id="dc-atm-rising", group="dc", cut="total",
+        reads=_cash("dc", "dc_atm_withdrawal_vol"),
+        labels={"streak_dir": "groups.dc.total.metrics.dc_atm_withdrawal_vol.streak_dir"},
+        fires_when=lambda v: v["streak_dir"] == "up" and (v["streak"] or 0) >= 3 and v["mom"] is not None,
+        title=lambda v, m:
+            f"DC ATM withdrawals rising — {streak_label(int(v['streak']), 'up')} ({v['mom']:+.1f}% MoM)",
+        body=lambda v, m:
+            f"Debit card ATM withdrawal volume grew {v['mom']:.1f}% MoM in {m}. "
+            + (f"Cash accounts for {v['share']:.1f}% of total DC volume." if v["share"] else ""),
+        implication=lambda v, m:
+            f"Debit card ATM cash growing for {int(v['streak'])} straight months means a large part of "
+            "the debit base is still cash-first — their spending leaves no digital trail. "
+            "For lenders using transaction data to underwrite, this segment is essentially invisible. "
+            "Bureau scores (CIBIL, Experian) and physical income verification remain the only reliable tools here.",
+        chain=lambda v, m: [
+            f"DC ATM cash growing for {int(v['streak'])} months — debit base is cash-first, not digitally active",
+            "Cash transactions leave no digital record — financial behaviour is opaque to transaction-data models",
+            "Bureau scores (CIBIL, Experian) and physical income verification are the primary underwriting tools for this segment",
+        ],
+        effect={"highlight": ["Total"], "tab": "trend", "trendMode": "mom", "focusCard": "dc_atm"},
+    ),
+
+    Card(
+        id="cc-txn-surge", group="cc", cut="total",
+        reads={
+            "pos": "groups.cc.total.metrics.cc_pos_txn_vol.mom_pct",
+            "ecom": "groups.cc.total.metrics.cc_ecom_txn_vol.mom_pct",
+            "atm": "groups.cc.total.metrics.cc_atm_withdrawal_vol.mom_pct",
+            "other": "groups.cc.total.metrics.cc_other_txn_vol.mom_pct",
+        },
+        # Only when EVERY channel surges together — one channel jumping is a channel story, all
+        # four jumping is the calendar.
+        fires_when=lambda v: (
+            (moves := [v[k] for k in ("pos", "ecom", "atm", "other") if v[k] is not None])
+            and all(x > 10 for x in moves) and sum(moves) / len(moves) >= 12),
+        title=lambda v, m: f"All CC transaction types surged in {m} — avg {_avg_mom(v):.1f}% MoM",
+        body=lambda v, m:
+            f"All four CC transaction types grew strongly in {m}: "
+            f"POS +{v['pos']:.1f}%, eCommerce +{v['ecom']:.1f}%, ATM +{v['atm']:.1f}%, "
+            f"Other +{v['other']:.1f}%. "
+            f"March year-end spending typically drives broad-based CC transaction growth.",
+        implication=lambda v, m:
+            f"March always spikes — it's financial year-end and people tend to spend more. "
+            f"An average {_avg_mom(v):.1f}% jump this month is seasonal, not a sign customers suddenly have more money. "
+            "If you're assessing how much credit a customer can repay, don't use March spend as your baseline — "
+            "it will make their repayment capacity look higher than it actually is.",
+        chain=lambda v, m: [
+            f"All 4 CC transaction types grew simultaneously — avg {_avg_mom(v):.1f}% MoM in March",
+            "March is financial year-end in India — broad-based spending surge is a recurring seasonal pattern",
+            "Seasonal spike overstates true credit utilisation; normalise March volumes before assessing repayment capacity",
+        ],
+        effect={"highlight": ["Total"], "tab": "trend", "trendMode": "mom", "focusCard": "cc_pos"},
+    ),
+]
+
+CASH = {c.id: c for c in CASH_CARDS}
+
+
+# ══════════════════════════════════════════════════════════════════════════════
 # GAP CARDS — declared, not hand-written (see GapCard / render_gap above)
 # ══════════════════════════════════════════════════════════════════════════════
 # Read these as a list of standing questions the data cannot answer, each with the condition
@@ -1896,23 +1860,26 @@ GAPS = [
 GAP = {g.id: g for g in GAPS}
 
 
-# The ordered list of card producers. A producer is either a function (not yet migrated) or a
-# GapCard declaration; main() dispatches on which. Keeping them in ONE list preserves the order
-# cards appear on the dashboard, so migrating a card cannot silently reshuffle the page.
-RULES = [
+# Every card on the payments dashboard, in the order it appears there. This list was thirty
+# hand-written functions; it is now thirty-three declarations, because two of those functions
+# were each secretly two cards. The order is load-bearing — it is what the page renders — so it
+# is stated here once rather than emerging from where a function happened to sit in the file.
+CARDS = [
     # CC
     TWO_METRIC["cc-ecom-vs-pos-share"],
-    cc_atm_withdrawal_trend,
+    CASH["cc-atm-declining"],
+    CASH["cc-atm-rising"],
     STREAK["cc-cards-streak"],
     YOY["cc-cards-yoy"],
     TWO_METRIC["cc-spend-yoy"],
-    cc_transaction_surge,
+    CASH["cc-txn-surge"],
     CATEGORY["cc-category-share-shift"],
     TOP_BANK["cc-top-bank-rank-change"],
     TOP_BANK["cc-top5-concentration"],
     GAP["gap-foreign-cc-decline"],
     # DC
-    dc_atm_trend,
+    CASH["dc-atm-declining"],
+    CASH["dc-atm-rising"],
     CHANNEL["dc-atm-share-structural"],
     CHANNEL["dc-pos-cash-decline"],
     CHANNEL["dc-ecom-share"],
@@ -1945,9 +1912,9 @@ def main():
     print(f"Generating insights for {month}…")
 
     insights, broken = [], []
-    for producer in RULES:
+    for spec in CARDS:
         try:
-            result = produce(producer, signals, month)
+            result = render_card(spec, signals, month)
             if result:
                 insights.append(result)
                 print(f"  ✓ {result['id']} [{result['group']} / {result['cut']}]")
@@ -1955,8 +1922,8 @@ def main():
             # Reported AND fatal (see the exit at the end of main). A rule that raises means a
             # card silently disappears from the dashboard; printing it while exiting 0 meant the
             # gate stayed green and nobody found out until the page looked wrong.
-            broken.append(f"{producer_name(producer)}: {e}")
-            print(f"  ✗ {producer_name(producer)}: {e}")
+            broken.append(f"{spec.id}: {e}")
+            print(f"  ✗ {spec.id}: {e}")
 
     # Relational cards (rotation/divergence) — signals.db-sourced, deterministic
     # prose; never routed through the LLM representation layer below.
