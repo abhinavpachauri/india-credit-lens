@@ -704,6 +704,10 @@
         {
           "key": "groups.dc.by_type.categories.Private.share_pct",
           "value": 25.87
+        },
+        {
+          "key": "groups.dc.by_type.categories.SFB.share_delta_pp",
+          "value": 0.1
         }
       ],
       "chain": [
@@ -717,6 +721,7 @@
         "PSB.share_pct: 63.79",
         "PSB.share_delta_pp: -0.18",
         "Private.share_pct: 25.87",
+        "SFB.share_delta_pp: 0.1",
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
@@ -728,7 +733,8 @@
     "sourceSignals": [
       "groups.dc.by_type.categories.PSB.share_pct",
       "groups.dc.by_type.categories.PSB.share_delta_pp",
-      "groups.dc.by_type.categories.Private.share_pct"
+      "groups.dc.by_type.categories.Private.share_pct",
+      "groups.dc.by_type.categories.SFB.share_delta_pp"
     ],
     "effect": {
       "highlight": [

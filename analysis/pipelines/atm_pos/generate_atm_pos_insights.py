@@ -327,7 +327,9 @@ class Card:
     """One dashboard card, as data.
 
     reads       — local name → dot-path into signals.json. Doubles as the card's sourceSignals,
-                  so what a card cites is what it used.
+                  so what a card cites is what it used. May instead be a callable taking the
+                  resolved labels, for cards whose paths depend on what they find: "whichever
+                  bank category gained the most share" is only a path once you know the name.
     metric      — shorthand for the commonest case: a single metric's YoY block. Expands to the
                   four paths every trajectory card reads (yoy, yoy_prior, yoy_accel, latest)
                   under groups.{group}.total.metrics.{metric}, and merges with `reads`.
@@ -339,7 +341,7 @@ class Card:
     id: str
     group: str
     cut: str
-    reads: dict
+    reads: object           # {name: path}, or a callable given the resolved labels
     fires_when: object
     title: object
     body: object
@@ -357,8 +359,13 @@ class Card:
     def _base(self) -> str:
         return f"groups.{self.group}.total.metrics.{self.metric or self.streak}"
 
-    def paths(self) -> dict:
-        """Every numeric path this card reads, shorthand expanded."""
+    def paths(self, labels: dict | None = None) -> dict:
+        """Every numeric path this card reads, shorthand expanded.
+
+        `labels` are resolved first so a card can point at a path it had to look up — the
+        top-gaining category, say — rather than one fixed when the card was written.
+        """
+        reads = self.reads(labels or {}) if callable(self.reads) else dict(self.reads)
         if self.metric:
             base = self._base()
             return {
@@ -366,15 +373,15 @@ class Card:
                 "prior_yoy": f"{base}.yoy_prior_pct",
                 "accel": f"{base}.yoy_accel_pp",
                 "latest": f"{base}.latest",
-            } | dict(self.reads)
+            } | reads
         if self.streak:
             base = self._base()
             return {
                 "latest": f"{base}.latest",
                 "streak": f"{base}.streak_months",
                 "qoq": f"{base}.qoq_pct",
-            } | dict(self.reads)
-        return dict(self.reads)
+            } | reads
+        return reads
 
     def label_paths(self) -> dict:
         """Non-numeric reads — a direction word, a quarter name. Never cited as evidence.
@@ -414,9 +421,11 @@ def read_raw(s: dict, key: str):
 
 def render_card(spec: Card, s: dict, month: str) -> dict | None:
     """Resolve a declaration against this month's signals — or return None if it stays silent."""
-    paths = spec.paths()
+    # Labels first: they are what a dynamic path is built from.
+    labels = {name: read_raw(s, path) for name, path in spec.label_paths().items()}
+    paths = spec.paths(labels)
     v = {name: get_signal_value(s, path) for name, path in paths.items()}
-    v.update({name: read_raw(s, path) for name, path in spec.label_paths().items()})
+    v.update(labels)
     if not spec.fires_when(v):
         return None
     # `effect` is usually a fixed dict, but a card that highlights a named bank only knows
@@ -651,62 +660,6 @@ def cc_atm_withdrawal_trend(s, month) -> dict | None:
     return None
 
 
-def cc_category_share_shift(s, month) -> dict | None:
-    """Category gaining/losing CC share — surface the biggest mover."""
-    by_type = s["groups"]["cc"]["by_type"]
-    cats    = by_type["categories"]
-    gainer  = by_type.get("top_gainer")
-    loser   = by_type.get("top_loser")
-
-    if not gainer or not loser:
-        return None
-    g_delta = cats[gainer].get("share_delta_pp", 0) or 0
-    l_delta = cats[loser].get("share_delta_pp", 0) or 0
-
-    if abs(g_delta) < 0.05 and abs(l_delta) < 0.05:
-        return None  # too small to call out
-
-    g_sh = cats[gainer].get("share_pct", 0)
-    l_sh = cats[loser].get("share_pct", 0)
-    title = f"{gainer} banks gained CC card share in {month} (+{g_delta:.1f}pp)"
-    body = (
-        f"{gainer} banks hold {g_sh:.1f}% of total credit cards outstanding in {month} "
-        f"({sign(g_delta)}pp vs prior month). "
-        f"{loser} banks lost the most share at {sign(l_delta)}pp, now at {l_sh:.1f}%. "
-        f"{'SFB growth in credit cards reflects increased fintech partnerships.' if gainer == 'SFB' else ''}"
-        f"{'Private bank CC dominance continues to compound.' if gainer == 'Private' else ''}"
-    )
-    implication = (
-        f"{gainer} banks picking up credit card share — even by {g_delta:.1f}pp — signals a change in who's acquiring customers. "
-        f"{'SFBs (Small Finance Banks — banks that focus on underserved segments like AU or Equitas) growing in credit cards usually means fintech partnerships or co-branded products are kicking in.' if gainer == 'SFB' else ''}"
-        f"{'Private banks compounding their lead means the premium card market is further consolidating.' if gainer == 'Private' else ''}"
-        "For anyone benchmarking credit card portfolio quality, knowing which bank type is gaining share matters — their customer profiles and risk behaviour can be very different."
-    )
-    return insight(
-        "cc-category-share-shift", "cc", "by_type", month, title, body,
-        effect={
-            "highlight": [gainer, "Total"],
-            "tab": "distribution",
-            "distMode": "pct",
-            "focusCard": "credit_cards",
-        },
-        explore={"mode": "by_type"},
-        implication=implication,
-        source_signals=[
-            f"groups.cc.by_type.categories.{gainer}.share_pct",
-            f"groups.cc.by_type.categories.{gainer}.share_delta_pp",
-            f"groups.cc.by_type.categories.{loser}.share_pct",
-            f"groups.cc.by_type.categories.{loser}.share_delta_pp",
-        ],
-        chain=[
-            f"{gainer} banks gained {g_delta:.1f}pp CC share — {loser} banks lost {abs(l_delta):.1f}pp",
-            f"{'SFB growth signals fintech partnerships or co-branded card activity in underserved segments' if gainer == 'SFB' else 'Private bank lead compounding as premium card market consolidates further'}",
-            "Customer risk profiles differ significantly across bank types — portfolio benchmarking must account for this mix shift",
-        ],
-        signals_dict=s,
-    )
-
-
 # ══════════════════════════════════════════════════════════════════════════════
 # DC RULES
 # ══════════════════════════════════════════════════════════════════════════════
@@ -835,60 +788,6 @@ def dc_ecom_share(s, month) -> dict | None:
     )
 
 
-def dc_category_dominance(s, month) -> dict | None:
-    """PSB dominance in debit cards — structural story."""
-    by_type = s["groups"]["dc"]["by_type"]
-    cats    = by_type["categories"]
-    psb     = cats.get("PSB", {})
-    private = cats.get("Private", {})
-    gainer  = by_type.get("top_gainer")
-    loser   = by_type.get("top_loser")
-
-    psb_sh    = psb.get("share_pct")
-    psb_delta = psb.get("share_delta_pp")
-    priv_sh   = private.get("share_pct")
-
-    if psb_sh is None:
-        return None
-
-    title = f"PSB banks hold {psb_sh:.1f}% of debit cards — {gainer} gaining share in {month}"
-    body = (
-        f"Public sector banks account for {psb_sh:.1f}% of total debit cards outstanding in {month}"
-        f"{f' ({sign(psb_delta)}pp vs prior month)' if psb_delta else ''}. "
-        f"Private banks hold {priv_sh:.1f}%. "
-        f"{(gainer + ' banks are the fastest-growing category (' + sign(cats[gainer].get('share_delta_pp',0)) + 'pp share gain).') if gainer else ''}"
-    )
-    implication = (
-        f"PSBs (government-owned banks like SBI, PNB, Bank of Baroda) hold {psb_sh:.1f}% of debit cards, "
-        "largely because of Jan Dhan — the government scheme that opened basic bank accounts "
-        "for millions of low-income households. Many of these accounts have little activity. "
-        "If you're using debit transaction data for credit assessment, PSB debit data needs to be "
-        "treated very differently from, say, HDFC or Kotak debit customers."
-    )
-    return insight(
-        "dc-psb-dominance", "dc", "by_type", month, title, body,
-        effect={
-            "highlight": ["PSB", gainer, "Total"] if gainer and gainer != "PSB" else ["PSB", "Total"],
-            "tab": "distribution",
-            "distMode": "pct",
-            "focusCard": "debit_cards",
-        },
-        explore={"mode": "by_type"},
-        implication=implication,
-        source_signals=[
-            "groups.dc.by_type.categories.PSB.share_pct",
-            "groups.dc.by_type.categories.PSB.share_delta_pp",
-            "groups.dc.by_type.categories.Private.share_pct",
-        ],
-        chain=[
-            f"PSBs hold {psb_sh:.1f}% of debit cards — primarily through Jan Dhan scheme linkage, not active acquisition",
-            "Jan Dhan portfolios skew toward low-income, low-activity accounts with thin or no transaction histories",
-            "PSB and private bank debit data require separate calibration for transaction-based credit underwriting",
-        ],
-        signals_dict=s,
-    )
-
-
 # ══════════════════════════════════════════════════════════════════════════════
 # INFRA RULES
 # ══════════════════════════════════════════════════════════════════════════════
@@ -994,51 +893,6 @@ def infra_upi_vs_bharat_qr(s, month) -> dict | None:
             f"UPI QR at {fmt_num(upi_v)} vs Bharat QR at {fmt_num(bqr_v)} — a {ratio:.0f}x gap",
             "Bharat QR was an earlier standard; merchants have consolidated on UPI QR as the accepted norm",
             "Building payments or lending infrastructure on Bharat QR rails is operationally unviable at any meaningful merchant scale",
-        ],
-        signals_dict=s,
-    )
-
-
-def infra_category_pos(s, month) -> dict | None:
-    """Category gaining POS share."""
-    by_type = s["groups"]["infra"]["by_type"]
-    cats    = by_type["categories"]
-    gainer  = by_type.get("top_gainer")
-    loser   = by_type.get("top_loser")
-
-    if not gainer:
-        return None
-    g_delta = (cats[gainer].get("share_delta_pp") or 0)
-    if abs(g_delta) < 0.2:
-        return None
-
-    g_sh = cats[gainer].get("share_pct", 0)
-    title = f"{gainer} banks fastest-growing in POS terminal deployment in {month} ({sign(g_delta)}pp share)"
-    body = (
-        f"{gainer} banks hold {g_sh:.1f}% of total POS terminals in {month}, "
-        f"gaining {sign(g_delta)}pp vs prior month. "
-        f"{loser + ' banks lost the most share.' if loser and loser != gainer else ''}"
-    )
-    implication = (
-        f"{gainer} banks gaining POS share means they're building more merchant relationships in that segment. "
-        "Banks that own the POS network also own the merchant's transaction data — daily sales, "
-        "busy periods, average ticket size. "
-        "That data is the foundation for merchant lending (small business loans based on sales history). "
-        "Watch which bank type is expanding POS — they're positioning for merchant credit."
-    )
-    return insight(
-        "infra-category-pos-share", "infra", "by_type", month, title, body,
-        effect={"highlight": [gainer, "Total"], "tab": "distribution", "distMode": "pct", "focusCard": "pos_terminals"},
-        explore={"mode": "by_type"},
-        implication=implication,
-        source_signals=[
-            f"groups.infra.by_type.categories.{gainer}.share_pct",
-            f"groups.infra.by_type.categories.{gainer}.share_delta_pp",
-        ],
-        chain=[
-            f"{gainer} banks gained {g_delta:.1f}pp POS share — building more merchant acquiring relationships",
-            "Banks owning the POS network own the merchant's transaction data (daily sales, ticket size, frequency)",
-            "POS share expansion is a leading indicator of positioning for merchant credit (working capital, cash advances)",
         ],
         signals_dict=s,
     )
@@ -1806,6 +1660,127 @@ TOP_BANK = {c.id: c for c in TOP_BANK_CARDS}
 
 
 # ══════════════════════════════════════════════════════════════════════════════
+# CATEGORY-SHARE CARDS — declared (see Card / render_card above)
+# ══════════════════════════════════════════════════════════════════════════════
+# Which kind of bank — public sector, private, foreign, small finance — is gaining ground. These
+# are the cards whose paths are not known when the card is written: "the category that gained the
+# most share" is a name you have to look up first. Hence `reads` as a callable over the labels.
+
+def _cat(group: str, name: str, field: str) -> str:
+    return f"groups.{group}.by_type.categories.{name}.{field}"
+
+
+CATEGORY_CARDS = [
+    Card(
+        id="cc-category-share-shift", group="cc", cut="by_type",
+        labels={"gainer": "groups.cc.by_type.top_gainer", "loser": "groups.cc.by_type.top_loser"},
+        reads=lambda lab: {
+            "g_share": _cat("cc", lab.get("gainer"), "share_pct"),
+            "g_delta": _cat("cc", lab.get("gainer"), "share_delta_pp"),
+            "l_share": _cat("cc", lab.get("loser"), "share_pct"),
+            "l_delta": _cat("cc", lab.get("loser"), "share_delta_pp"),
+        },
+        # Both movers must exist, and at least one must have moved enough to be worth saying.
+        fires_when=lambda v: bool(v["gainer"] and v["loser"]) and not (
+            abs(v["g_delta"] or 0) < 0.05 and abs(v["l_delta"] or 0) < 0.05),
+        title=lambda v, m: f"{v['gainer']} banks gained CC card share in {m} (+{(v['g_delta'] or 0):.1f}pp)",
+        body=lambda v, m:
+            f"{v['gainer']} banks hold {(v['g_share'] or 0):.1f}% of total credit cards outstanding in {m} "
+            f"({sign(v['g_delta'] or 0)}pp vs prior month). "
+            f"{v['loser']} banks lost the most share at {sign(v['l_delta'] or 0)}pp, now at {(v['l_share'] or 0):.1f}%. "
+            + ("SFB growth in credit cards reflects increased fintech partnerships." if v["gainer"] == "SFB" else "")
+            + ("Private bank CC dominance continues to compound." if v["gainer"] == "Private" else ""),
+        implication=lambda v, m:
+            f"{v['gainer']} banks picking up credit card share — even by {(v['g_delta'] or 0):.1f}pp — signals a change in who's acquiring customers. "
+            + ("SFBs (Small Finance Banks — banks that focus on underserved segments like AU or Equitas) growing in credit cards usually means fintech partnerships or co-branded products are kicking in."
+               if v["gainer"] == "SFB" else "")
+            + ("Private banks compounding their lead means the premium card market is further consolidating."
+               if v["gainer"] == "Private" else "")
+            + "For anyone benchmarking credit card portfolio quality, knowing which bank type is gaining share matters — their customer profiles and risk behaviour can be very different.",
+        chain=lambda v, m: [
+            f"{v['gainer']} banks gained {(v['g_delta'] or 0):.1f}pp CC share — {v['loser']} banks lost {abs(v['l_delta'] or 0):.1f}pp",
+            ("SFB growth signals fintech partnerships or co-branded card activity in underserved segments"
+             if v["gainer"] == "SFB" else
+             "Private bank lead compounding as premium card market consolidates further"),
+            "Customer risk profiles differ significantly across bank types — portfolio benchmarking must account for this mix shift",
+        ],
+        effect=lambda v: {"highlight": [v["gainer"], "Total"], "tab": "distribution",
+                          "distMode": "pct", "focusCard": "credit_cards"},
+        explore={"mode": "by_type"},
+    ),
+
+    Card(
+        id="dc-psb-dominance", group="dc", cut="by_type",
+        labels={"gainer": "groups.dc.by_type.top_gainer"},
+        reads=lambda lab: {
+            "psb_share": _cat("dc", "PSB", "share_pct"),
+            "psb_delta": _cat("dc", "PSB", "share_delta_pp"),
+            "priv_share": _cat("dc", "Private", "share_pct"),
+            "gainer_delta": _cat("dc", lab.get("gainer"), "share_delta_pp"),
+        },
+        fires_when=lambda v: v["psb_share"] is not None,
+        title=lambda v, m:
+            f"PSB banks hold {v['psb_share']:.1f}% of debit cards — {v['gainer']} gaining share in {m}",
+        body=lambda v, m:
+            f"Public sector banks account for {v['psb_share']:.1f}% of total debit cards outstanding in {m}"
+            + (f" ({sign(v['psb_delta'])}pp vs prior month)" if v["psb_delta"] else "") + ". "
+            + f"Private banks hold {v['priv_share']:.1f}%. "
+            + (f"{v['gainer']} banks are the fastest-growing category ({sign(v['gainer_delta'] or 0)}pp share gain)."
+               if v["gainer"] else ""),
+        implication=lambda v, m:
+            f"PSBs (government-owned banks like SBI, PNB, Bank of Baroda) hold {v['psb_share']:.1f}% of debit cards, "
+            "largely because of Jan Dhan — the government scheme that opened basic bank accounts "
+            "for millions of low-income households. Many of these accounts have little activity. "
+            "If you're using debit transaction data for credit assessment, PSB debit data needs to be "
+            "treated very differently from, say, HDFC or Kotak debit customers.",
+        chain=lambda v, m: [
+            f"PSBs hold {v['psb_share']:.1f}% of debit cards — primarily through Jan Dhan scheme linkage, not active acquisition",
+            "Jan Dhan portfolios skew toward low-income, low-activity accounts with thin or no transaction histories",
+            "PSB and private bank debit data require separate calibration for transaction-based credit underwriting",
+        ],
+        effect=lambda v: {
+            "highlight": ["PSB", v["gainer"], "Total"] if v["gainer"] and v["gainer"] != "PSB" else ["PSB", "Total"],
+            "tab": "distribution", "distMode": "pct", "focusCard": "debit_cards",
+        },
+        explore={"mode": "by_type"},
+    ),
+
+    Card(
+        id="infra-category-pos-share", group="infra", cut="by_type",
+        labels={"gainer": "groups.infra.by_type.top_gainer", "loser": "groups.infra.by_type.top_loser"},
+        reads=lambda lab: {
+            "g_share": _cat("infra", lab.get("gainer"), "share_pct"),
+            "g_delta": _cat("infra", lab.get("gainer"), "share_delta_pp"),
+        },
+        fires_when=lambda v: bool(v["gainer"]) and abs(v["g_delta"] or 0) >= 0.2,
+        title=lambda v, m:
+            f"{v['gainer']} banks fastest-growing in POS terminal deployment in {m} "
+            f"({sign(v['g_delta'] or 0)}pp share)",
+        body=lambda v, m:
+            f"{v['gainer']} banks hold {(v['g_share'] or 0):.1f}% of total POS terminals in {m}, "
+            f"gaining {sign(v['g_delta'] or 0)}pp vs prior month. "
+            + (f"{v['loser']} banks lost the most share." if v["loser"] and v["loser"] != v["gainer"] else ""),
+        implication=lambda v, m:
+            f"{v['gainer']} banks gaining POS share means they're building more merchant relationships in that segment. "
+            "Banks that own the POS network also own the merchant's transaction data — daily sales, "
+            "busy periods, average ticket size. "
+            "That data is the foundation for merchant lending (small business loans based on sales history). "
+            "Watch which bank type is expanding POS — they're positioning for merchant credit.",
+        chain=lambda v, m: [
+            f"{v['gainer']} banks gained {(v['g_delta'] or 0):.1f}pp POS share — building more merchant acquiring relationships",
+            "Banks owning the POS network own the merchant's transaction data (daily sales, ticket size, frequency)",
+            "POS share expansion is a leading indicator of positioning for merchant credit (working capital, cash advances)",
+        ],
+        effect=lambda v: {"highlight": [v["gainer"], "Total"], "tab": "distribution",
+                          "distMode": "pct", "focusCard": "pos_terminals"},
+        explore={"mode": "by_type"},
+    ),
+]
+
+CATEGORY = {c.id: c for c in CATEGORY_CARDS}
+
+
+# ══════════════════════════════════════════════════════════════════════════════
 # GAP CARDS — declared, not hand-written (see GapCard / render_gap above)
 # ══════════════════════════════════════════════════════════════════════════════
 # Read these as a list of standing questions the data cannot answer, each with the condition
@@ -2015,7 +1990,7 @@ RULES = [
     YOY["cc-cards-yoy"],
     cc_spend_yoy,
     cc_transaction_surge,
-    cc_category_share_shift,
+    CATEGORY["cc-category-share-shift"],
     TOP_BANK["cc-top-bank-rank-change"],
     TOP_BANK["cc-top5-concentration"],
     GAP["gap-foreign-cc-decline"],
@@ -2026,7 +2001,7 @@ RULES = [
     dc_ecom_share,
     STREAK["dc-cards-streak"],
     YOY["dc-cards-yoy"],
-    dc_category_dominance,
+    CATEGORY["dc-psb-dominance"],
     TOP_BANK["dc-top-bank-rank-change"],
     TOP_BANK["dc-top-bank-leader"],
     GAP["gap-dc-cash-dominance"],
@@ -2037,7 +2012,7 @@ RULES = [
     YOY["infra-pos-yoy"],
     YOY["infra-upi-yoy"],
     infra_upi_vs_bharat_qr,
-    infra_category_pos,
+    CATEGORY["infra-category-pos-share"],
     TOP_BANK["infra-top-bank-pos"],
     GAP["gap-bharat-qr-contraction"],
     GAP["gap-atm-offsite-decline"],
