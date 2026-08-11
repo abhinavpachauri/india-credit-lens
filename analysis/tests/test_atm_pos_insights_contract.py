@@ -13,9 +13,11 @@ against a golden file kept OUTSIDE the generated artifact, so any behaviour chan
 migration has to be deliberate: either the code is wrong, or the golden is refreshed in the
 same commit with a stated reason.
 
-Deliberately NOT pinned: the prose of LLM-represented cards. That text comes from the
-evaluation JSON and changes when the eval re-runs, which is expected and not a regression.
-Their *routing* is pinned like everything else.
+What is captured is the DETERMINISTIC output — the cards as the rules, relational builders and
+dominance guard produce them, before the LLM layer rewrites the prose of anchored cards. That is
+deliberate: reading the shipped insights.json would leave anchored cards' text unpinned, and those
+are exactly the cards being migrated. Every deterministic sentence stays under the net; evaluation
+text, which legitimately changes when an eval re-runs, never enters the golden.
 """
 import json
 import sys
@@ -134,10 +136,10 @@ def test_deterministic_prose_is_unchanged(generated):
     cards, _ = generated
     for card in cards:
         want = EXPECTED[card["id"]]
-        if want["title"] is None:           # an LLM-represented card — prose not pinned
-            continue
         assert card["title"] == want["title"], f"{card['id']} title changed"
         assert card["body"] == want["body"], f"{card['id']} body changed"
+        assert card.get("implication") == want["implication"], f"{card['id']} implication changed"
+        assert (card.get("reasoning") or {}).get("chain") == want["chain"], f"{card['id']} chain changed"
 
 
 @pytest.mark.parametrize("card", SHIPPED, ids=lambda c: c["id"])
