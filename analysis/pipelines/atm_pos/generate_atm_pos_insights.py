@@ -349,21 +349,47 @@ class Card:
     explore: dict | None = None
     type: str = "insight"
     metric: str | None = None
+    streak: str | None = None
     # Display-only, non-numeric reads (a bank name). Deliberately separate from `reads`: these
     # are prose, and a card's cited sourceSignals must all be traceable numbers.
     labels: dict = field(default_factory=dict)
 
+    def _base(self) -> str:
+        return f"groups.{self.group}.total.metrics.{self.metric or self.streak}"
+
     def paths(self) -> dict:
         """Every numeric path this card reads, shorthand expanded."""
-        if not self.metric:
-            return dict(self.reads)
-        base = f"groups.{self.group}.total.metrics.{self.metric}"
-        return {
-            "yoy": f"{base}.yoy_pct",
-            "prior_yoy": f"{base}.yoy_prior_pct",
-            "accel": f"{base}.yoy_accel_pp",
-            "latest": f"{base}.latest",
-        } | dict(self.reads)
+        if self.metric:
+            base = self._base()
+            return {
+                "yoy": f"{base}.yoy_pct",
+                "prior_yoy": f"{base}.yoy_prior_pct",
+                "accel": f"{base}.yoy_accel_pp",
+                "latest": f"{base}.latest",
+            } | dict(self.reads)
+        if self.streak:
+            base = self._base()
+            return {
+                "latest": f"{base}.latest",
+                "streak": f"{base}.streak_months",
+                "qoq": f"{base}.qoq_pct",
+            } | dict(self.reads)
+        return dict(self.reads)
+
+    def label_paths(self) -> dict:
+        """Non-numeric reads — a direction word, a quarter name. Never cited as evidence.
+
+        `streak_dir` belongs here and not in `reads`: it is the string "up"/"down", and a
+        card's sourceSignals are supposed to be numbers a reader could check.
+        """
+        out = dict(self.labels)
+        if self.streak:
+            out = {
+                "streak_dir": f"{self._base()}.streak_dir",
+                "prev_q": "meta.prev_quarter",
+                "curr_q": "meta.curr_quarter",
+            } | out
+        return out
 
 
 def read_raw(s: dict, key: str):
@@ -390,7 +416,7 @@ def render_card(spec: Card, s: dict, month: str) -> dict | None:
     """Resolve a declaration against this month's signals — or return None if it stays silent."""
     paths = spec.paths()
     v = {name: get_signal_value(s, path) for name, path in paths.items()}
-    v.update({name: read_raw(s, path) for name, path in spec.labels.items()})
+    v.update({name: read_raw(s, path) for name, path in spec.label_paths().items()})
     if not spec.fires_when(v):
         return None
     return insight(
@@ -419,6 +445,13 @@ def producer_name(producer) -> str:
 def _pp(delta) -> str:
     """A parenthetical month-on-month move, or nothing at all when there is no prior value."""
     return f" ({sign(delta)}pp vs prior month)" if delta else ""
+
+
+def _qoq(v) -> str:
+    """" (+1.2% QoQ vs Q1 FY26)" — omitted when there is no quarter-on-quarter figure."""
+    if v.get("qoq") is None:
+        return ""
+    return f" ({sign(v['qoq'])}% QoQ vs {v.get('prev_q') or 'prior quarter'})"
 
 
 def _mom_pp(delta) -> str:
@@ -613,60 +646,6 @@ def cc_atm_withdrawal_trend(s, month) -> dict | None:
             signals_dict=s,
         )
     return None
-
-
-def cc_cards_streak(s, month) -> dict | None:
-    """CC cards outstanding — streak if ≥ 3 months."""
-    m          = s["groups"]["cc"]["total"]["metrics"].get("credit_cards", {})
-    streak     = m.get("streak_months", 1)
-    streak_dir = m.get("streak_dir", "flat")
-    latest     = m.get("latest")
-    qoq        = m.get("qoq_pct")
-    curr_q     = s["meta"].get("curr_quarter", "latest quarter")
-    prev_q     = s["meta"].get("prev_quarter", "prior quarter")
-
-    if streak < 3 or streak_dir == "flat":
-        return None
-
-    latest_fmt = fmt_num(latest)
-    qoq_str    = f" ({sign(qoq)}% QoQ vs {prev_q})" if qoq is not None else ""
-    title = f"Credit cards outstanding: {streak_label(streak, streak_dir)} — {latest_fmt} cards"
-    body = (
-        f"Total credit cards outstanding reached {latest_fmt} in {month}{qoq_str}, "
-        f"marking the {streak_label(streak, streak_dir)}. "
-        f"{'Issuance momentum is broad-based across bank types.' if streak_dir == 'up' else 'Card attrition or issuance slowdown is underway.'}"
-    )
-    if streak_dir == "up":
-        implication = (
-            f"{streak} straight months of card growth looks good, but card count alone can mislead. "
-            "Many new cards never get used — they sit inactive. "
-            "What matters for lending is how many cards are actually being transacted on. "
-            "Track activation rate (what percentage of issued cards have any spend in the last few months) alongside the headline number."
-        )
-    else:
-        implication = (
-            f"{streak} straight months of card decline could mean two things: banks are intentionally closing inactive or loss-making accounts (which is healthy), "
-            "or they're losing customers to competitors (which is a red flag). "
-            "Before drawing conclusions, check whether the decline is coming from one bank type or spread across all."
-        )
-    return insight(
-        "cc-cards-streak", "cc", "total", month, title, body,
-        effect={"highlight": ["Total"], "tab": "trend", "trendMode": "absolute", "focusCard": "credit_cards"},
-        explore={"mode": "by_type"},
-        implication=implication,
-        source_signals=[
-            "groups.cc.total.metrics.credit_cards.latest",
-            "groups.cc.total.metrics.credit_cards.streak_months",
-            "groups.cc.total.metrics.credit_cards.streak_dir",
-            "groups.cc.total.metrics.credit_cards.qoq_pct",
-        ],
-        chain=[
-            f"CC cards outstanding {'growing' if streak_dir == 'up' else 'declining'} for {streak} consecutive months",
-            "Card count includes dormant cards that were issued but never activated or used",
-            "Activation rate (cards with any spend in recent months) is the real signal for credit origination potential",
-        ],
-        signals_dict=s,
-    )
 
 
 def cc_category_share_shift(s, month) -> dict | None:
@@ -933,52 +912,6 @@ def dc_ecom_share(s, month) -> dict | None:
     )
 
 
-def dc_cards_streak(s, month) -> dict | None:
-    """DC cards outstanding streak."""
-    m      = s["groups"]["dc"]["total"]["metrics"].get("debit_cards", {})
-    streak = m.get("streak_months", 1)
-    sd     = m.get("streak_dir", "flat")
-    latest = m.get("latest")
-    qoq    = m.get("qoq_pct")
-    curr_q = s["meta"].get("curr_quarter", "latest quarter")
-    prev_q = s["meta"].get("prev_quarter", "prior quarter")
-
-    if streak < 4 or sd == "flat":
-        return None  # higher bar for DC (slower moving)
-
-    qoq_str = f" ({sign(qoq)}% QoQ vs {prev_q})" if qoq is not None else ""
-    title = f"Debit cards: {streak_label(streak, sd)} — {fmt_num(latest)} outstanding"
-    body = (
-        f"Total debit cards outstanding reached {fmt_num(latest)} in {month}{qoq_str}, "
-        f"the {streak_label(streak, sd)}. "
-        f"{'India debit base continues to expand.' if latest > 1e9 else ''}"
-    )
-    implication = (
-        f"India has {fmt_num(latest)} debit cards — but that number is misleading as a credit opportunity. "
-        "A large chunk are Jan Dhan accounts (zero-balance accounts opened under the government's "
-        "financial inclusion scheme) that see very little activity. "
-        "The real pool for first-time credit products is much smaller — focus on debit card holders "
-        "who are actually transacting, not just account holders."
-    )
-    return insight(
-        "dc-cards-streak", "dc", "total", month, title, body,
-        effect={"highlight": ["Total"], "tab": "trend", "trendMode": "absolute", "focusCard": "debit_cards"},
-        explore={"mode": "by_type"},
-        implication=implication,
-        source_signals=[
-            "groups.dc.total.metrics.debit_cards.latest",
-            "groups.dc.total.metrics.debit_cards.streak_months",
-            "groups.dc.total.metrics.debit_cards.qoq_pct",
-        ],
-        chain=[
-            f"Debit card base at {fmt_num(latest)} — large headline number includes substantial Jan Dhan zero-balance accounts",
-            "Jan Dhan accounts (government financial inclusion scheme) skew toward low-income, low-activity customers",
-            "Addressable credit opportunity is a fraction of total card count — active-transacting subset is the real pool",
-        ],
-        signals_dict=s,
-    )
-
-
 def dc_category_dominance(s, month) -> dict | None:
     """PSB dominance in debit cards — structural story."""
     by_type = s["groups"]["dc"]["by_type"]
@@ -1160,59 +1093,6 @@ def infra_qr_per_pos(s, month) -> dict | None:
             f"{latest:.0f} UPI QR codes per POS terminal — QR acceptance vastly outnumbers hardware deployment",
             "Typical small merchant (kirana, auto, vendor) accepts via QR only — no POS terminal",
             "Credit products for small merchants (BNPL, business loans) must work over UPI QR to reach this majority",
-        ],
-        signals_dict=s,
-    )
-
-
-def infra_pos_streak(s, month) -> dict | None:
-    """POS terminal growth streak."""
-    m      = s["groups"]["infra"]["total"]["metrics"].get("pos_terminals", {})
-    streak = m.get("streak_months", 1)
-    sd     = m.get("streak_dir", "flat")
-    latest = m.get("latest")
-    qoq    = m.get("qoq_pct")
-    prev_q = s["meta"].get("prev_quarter", "prior quarter")
-
-    if streak < 3 or sd == "flat":
-        return None
-
-    qoq_str = f" ({sign(qoq)}% QoQ vs {prev_q})" if qoq is not None else ""
-    title = f"POS terminals: {streak_label(streak, sd)} — {fmt_num(latest)} deployed"
-    body = (
-        f"POS terminals reached {fmt_num(latest)} in {month}{qoq_str}, "
-        f"the {streak_label(streak, sd)}. "
-        f"{'Physical acceptance infrastructure continues to expand.' if sd == 'up' else 'POS terminal count is contracting — QR-first acceptance may be replacing hardware.'}"
-    )
-    if sd == "up":
-        implication = (
-            f"Every new POS machine deployed ({fmt_num(latest)} and growing) is a merchant "
-            "who starts building a transaction history — how much they sell, how often, which days. "
-            "That data is exactly what lenders use to assess working capital loans (short-term "
-            "business credit based on daily sales). More POS terminals means more merchants "
-            "who can be lent to based on their actual business performance."
-        )
-    else:
-        implication = (
-            "POS terminal count falling likely means merchants are switching to UPI QR codes "
-            "instead — cheaper, no hardware needed. If you use POS transaction data to assess "
-            "merchant creditworthiness, your data coverage may be quietly shrinking as merchant "
-            "activity shifts to QR rails where you may not have visibility."
-        )
-    return insight(
-        "infra-pos-streak", "infra", "total", month, title, body,
-        effect={"highlight": ["Total"], "tab": "trend", "trendMode": "absolute", "focusCard": "pos_terminals"},
-        explore={"mode": "by_type"},
-        implication=implication,
-        source_signals=[
-            "groups.infra.total.metrics.pos_terminals.latest",
-            "groups.infra.total.metrics.pos_terminals.streak_months",
-            "groups.infra.total.metrics.pos_terminals.qoq_pct",
-        ],
-        chain=[
-            f"POS terminals {'growing' if sd == 'up' else 'declining'} for {streak} months — now at {fmt_num(latest)}",
-            f"{'Each new POS terminal generates merchant transaction history (sales volume, frequency, ticket size)' if sd == 'up' else 'Declining POS likely means merchant migration to UPI QR — cheaper and no hardware needed'}",
-            f"{'Growing POS base expands pool of merchants underwritable for working capital or merchant cash advances' if sd == 'up' else 'POS-based merchant credit data coverage may be quietly shrinking as activity migrates to QR rails'}",
         ],
         signals_dict=s,
     )
@@ -1836,6 +1716,106 @@ YOY = {c.id: c for c in YOY_CARDS}
 
 
 # ══════════════════════════════════════════════════════════════════════════════
+# STREAK CARDS — declared (see Card / render_card above)
+# ══════════════════════════════════════════════════════════════════════════════
+# A run of consecutive months moving the same way. The bar differs by metric — debit cards move
+# slowly, so four months means what three means for credit cards — and so does the reading: a
+# growing card base is an activation question, a shrinking POS fleet is a QR-migration question.
+
+STREAK_CARDS = [
+    Card(
+        id="cc-cards-streak", group="cc", cut="total", streak="credit_cards", reads={},
+        fires_when=lambda v: v["streak"] is not None and v["streak"] >= 3 and v["streak_dir"] != "flat",
+        title=lambda v, m:
+            f"Credit cards outstanding: {streak_label(int(v['streak']), v['streak_dir'])} — "
+            f"{fmt_num(v['latest'])} cards",
+        body=lambda v, m:
+            f"Total credit cards outstanding reached {fmt_num(v['latest'])} in {m}{_qoq(v)}, "
+            f"marking the {streak_label(int(v['streak']), v['streak_dir'])}. "
+            + ("Issuance momentum is broad-based across bank types." if v["streak_dir"] == "up"
+               else "Card attrition or issuance slowdown is underway."),
+        implication=lambda v, m:
+            (f"{int(v['streak'])} straight months of card growth looks good, but card count alone can mislead. "
+             "Many new cards never get used — they sit inactive. "
+             "What matters for lending is how many cards are actually being transacted on. "
+             "Track activation rate (what percentage of issued cards have any spend in the last few months) alongside the headline number.")
+            if v["streak_dir"] == "up" else
+            (f"{int(v['streak'])} straight months of card decline could mean two things: banks are intentionally closing inactive or loss-making accounts (which is healthy), "
+             "or they're losing customers to competitors (which is a red flag). "
+             "Before drawing conclusions, check whether the decline is coming from one bank type or spread across all."),
+        chain=lambda v, m: [
+            f"CC cards outstanding {'growing' if v['streak_dir'] == 'up' else 'declining'} for {int(v['streak'])} consecutive months",
+            "Card count includes dormant cards that were issued but never activated or used",
+            "Activation rate (cards with any spend in recent months) is the real signal for credit origination potential",
+        ],
+        effect={"highlight": ["Total"], "tab": "trend", "trendMode": "absolute", "focusCard": "credit_cards"},
+        explore={"mode": "by_type"},
+    ),
+
+    Card(
+        id="dc-cards-streak", group="dc", cut="total", streak="debit_cards", reads={},
+        # A higher bar than credit cards: the debit base moves slowly, so three months is noise.
+        fires_when=lambda v: v["streak"] is not None and v["streak"] >= 4 and v["streak_dir"] != "flat",
+        title=lambda v, m:
+            f"Debit cards: {streak_label(int(v['streak']), v['streak_dir'])} — {fmt_num(v['latest'])} outstanding",
+        body=lambda v, m:
+            f"Total debit cards outstanding reached {fmt_num(v['latest'])} in {m}{_qoq(v)}, "
+            f"the {streak_label(int(v['streak']), v['streak_dir'])}. "
+            + ("India debit base continues to expand." if v["latest"] and v["latest"] > 1e9 else ""),
+        implication=lambda v, m:
+            f"India has {fmt_num(v['latest'])} debit cards — but that number is misleading as a credit opportunity. "
+            "A large chunk are Jan Dhan accounts (zero-balance accounts opened under the government's "
+            "financial inclusion scheme) that see very little activity. "
+            "The real pool for first-time credit products is much smaller — focus on debit card holders "
+            "who are actually transacting, not just account holders.",
+        chain=lambda v, m: [
+            f"Debit card base at {fmt_num(v['latest'])} — large headline number includes substantial Jan Dhan zero-balance accounts",
+            "Jan Dhan accounts (government financial inclusion scheme) skew toward low-income, low-activity customers",
+            "Addressable credit opportunity is a fraction of total card count — active-transacting subset is the real pool",
+        ],
+        effect={"highlight": ["Total"], "tab": "trend", "trendMode": "absolute", "focusCard": "debit_cards"},
+        explore={"mode": "by_type"},
+    ),
+
+    Card(
+        id="infra-pos-streak", group="infra", cut="total", streak="pos_terminals", reads={},
+        fires_when=lambda v: v["streak"] is not None and v["streak"] >= 3 and v["streak_dir"] != "flat",
+        title=lambda v, m:
+            f"POS terminals: {streak_label(int(v['streak']), v['streak_dir'])} — {fmt_num(v['latest'])} deployed",
+        body=lambda v, m:
+            f"POS terminals reached {fmt_num(v['latest'])} in {m}{_qoq(v)}, "
+            f"the {streak_label(int(v['streak']), v['streak_dir'])}. "
+            + ("Physical acceptance infrastructure continues to expand." if v["streak_dir"] == "up"
+               else "POS terminal count is contracting — QR-first acceptance may be replacing hardware."),
+        implication=lambda v, m:
+            (f"Every new POS machine deployed ({fmt_num(v['latest'])} and growing) is a merchant "
+             "who starts building a transaction history — how much they sell, how often, which days. "
+             "That data is exactly what lenders use to assess working capital loans (short-term "
+             "business credit based on daily sales). More POS terminals means more merchants "
+             "who can be lent to based on their actual business performance.")
+            if v["streak_dir"] == "up" else
+            ("POS terminal count falling likely means merchants are switching to UPI QR codes "
+             "instead — cheaper, no hardware needed. If you use POS transaction data to assess "
+             "merchant creditworthiness, your data coverage may be quietly shrinking as merchant "
+             "activity shifts to QR rails where you may not have visibility."),
+        chain=lambda v, m: [
+            f"POS terminals {'growing' if v['streak_dir'] == 'up' else 'declining'} for {int(v['streak'])} months — now at {fmt_num(v['latest'])}",
+            ("Each new POS terminal generates merchant transaction history (sales volume, frequency, ticket size)"
+             if v["streak_dir"] == "up" else
+             "Declining POS likely means merchant migration to UPI QR — cheaper and no hardware needed"),
+            ("Growing POS base expands pool of merchants underwritable for working capital or merchant cash advances"
+             if v["streak_dir"] == "up" else
+             "POS-based merchant credit data coverage may be quietly shrinking as activity migrates to QR rails"),
+        ],
+        effect={"highlight": ["Total"], "tab": "trend", "trendMode": "absolute", "focusCard": "pos_terminals"},
+        explore={"mode": "by_type"},
+    ),
+]
+
+STREAK = {c.id: c for c in STREAK_CARDS}
+
+
+# ══════════════════════════════════════════════════════════════════════════════
 # GAP CARDS — declared, not hand-written (see GapCard / render_gap above)
 # ══════════════════════════════════════════════════════════════════════════════
 # Read these as a list of standing questions the data cannot answer, each with the condition
@@ -2041,7 +2021,7 @@ RULES = [
     # CC
     cc_ecom_vs_pos,
     cc_atm_withdrawal_trend,
-    cc_cards_streak,
+    STREAK["cc-cards-streak"],
     YOY["cc-cards-yoy"],
     cc_spend_yoy,
     cc_transaction_surge,
@@ -2053,7 +2033,7 @@ RULES = [
     dc_atm_share_structural,
     dc_pos_cash_decline,
     dc_ecom_share,
-    dc_cards_streak,
+    STREAK["dc-cards-streak"],
     YOY["dc-cards-yoy"],
     dc_category_dominance,
     dc_top_bank,
@@ -2061,7 +2041,7 @@ RULES = [
     GAP["gap-dc-ecom-low"],
     # Infra
     infra_qr_per_pos,
-    infra_pos_streak,
+    STREAK["infra-pos-streak"],
     YOY["infra-pos-yoy"],
     YOY["infra-upi-yoy"],
     infra_upi_vs_bharat_qr,
