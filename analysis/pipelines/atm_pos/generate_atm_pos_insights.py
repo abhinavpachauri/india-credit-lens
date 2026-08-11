@@ -681,55 +681,6 @@ def dc_atm_trend(s, month) -> dict | None:
     return None
 
 
-def dc_ecom_share(s, month) -> dict | None:
-    """DC ecom share of total DC vol — digital shift in debit."""
-    cross  = s["groups"]["dc"]["total"]["cross"]
-    ecom   = cross.get("dc_ecom_txn_vol", {})
-    ecom_sh  = ecom.get("share_pct")
-    ecom_pr  = ecom.get("prior_share_pct")
-    delta    = ecom.get("share_delta_pp")
-
-    if ecom_sh is None:
-        return None
-    if ecom_sh < 2 and (delta is None or abs(delta) < 0.3):
-        return None  # too small
-
-    atm_sh = cross.get("dc_atm_withdrawal_vol", {}).get("share_pct")
-
-    title = f"DC ecommerce is {ecom_sh:.1f}% of total DC transaction volume in {month}"
-    body = (
-        f"Debit card ecommerce accounted for {ecom_sh:.1f}% of total DC transaction volume in {month}"
-        f"{f' ({sign(delta)}pp vs prior month)' if delta else ''}. "
-    )
-    if atm_sh:
-        body += f"ATM cash still dominates at {atm_sh:.1f}%. "
-    body += "The structural shift away from cash toward digital payments is ongoing."
-
-    implication = (
-        f"Only {ecom_sh:.1f}% of debit card spending is online, but that group is valuable. "
-        "These are debit-only customers who already shop digitally — which means their spending "
-        "leaves a traceable record. For cross-selling a first credit card or personal loan, "
-        "debit customers with online spending history are much easier to assess than pure ATM-cash users."
-    )
-    return insight(
-        "dc-ecom-share", "dc", "total", month, title, body,
-        effect={"highlight": ["Total"], "tab": "trend", "trendMode": "absolute", "focusCard": "dc_ecom"},
-        explore={"mode": "by_type"},
-        implication=implication,
-        source_signals=[
-            "groups.dc.total.cross.dc_ecom_txn_vol.share_pct",
-            "groups.dc.total.cross.dc_ecom_txn_vol.share_delta_pp",
-            "groups.dc.total.cross.dc_atm_withdrawal_vol.share_pct",
-        ],
-        chain=[
-            f"DC ecommerce is {ecom_sh:.1f}% of DC volume — small but digitally traceable subgroup within a cash-dominant base",
-            "Online debit customers leave structured purchase records; ATM-cash users leave none",
-            "Digital-active debit customers are higher-value cross-sell targets for first credit products — traceable history enables underwriting",
-        ],
-        signals_dict=s,
-    )
-
-
 # ══════════════════════════════════════════════════════════════════════════════
 # INFRA RULES
 # ══════════════════════════════════════════════════════════════════════════════
@@ -775,93 +726,6 @@ def cc_transaction_surge(s, month) -> dict | None:
             f"All 4 CC transaction types grew simultaneously — avg {avg_mom:.1f}% MoM in March",
             "March is financial year-end in India — broad-based spending surge is a recurring seasonal pattern",
             "Seasonal spike overstates true credit utilisation; normalise March volumes before assessing repayment capacity",
-        ],
-        signals_dict=s,
-    )
-
-
-def dc_atm_share_structural(s, month) -> dict | None:
-    """DC ATM cash losing share to digital — structural shift signal."""
-    cross     = s["groups"]["dc"]["total"]["cross"]
-    atm       = cross.get("dc_atm_withdrawal_vol", {})
-    ecom      = cross.get("dc_ecom_txn_vol", {})
-    atm_sh    = atm.get("share_pct")
-    atm_delta = atm.get("share_delta_pp")
-    ecom_sh   = ecom.get("share_pct")
-    ecom_delta= ecom.get("share_delta_pp")
-
-    if atm_sh is None or atm_delta is None or atm_delta >= 0:
-        return None  # only fire when ATM share declining
-
-    title = f"DC ATM cash losing share — {atm_sh:.1f}% of DC volume ({sign(atm_delta)}pp) as digital grows"
-    body  = (
-        f"Debit card ATM withdrawals account for {atm_sh:.1f}% of total DC transaction volume in {month} "
-        f"({sign(atm_delta)}pp vs prior month). "
-    )
-    if ecom_sh and ecom_delta:
-        body += f"DC ecommerce has grown to {ecom_sh:.1f}% ({sign(ecom_delta)}pp). "
-    body += "The structural shift from cash to digital payments is underway in the debit segment."
-    implication = (
-        f"Debit card ATM cash is at {atm_sh:.1f}% and falling — which means a growing group of "
-        "debit card holders is switching to digital payments (online or at stores). "
-        "Those customers start leaving a spending history that lenders can actually use. "
-        "Debit customers who are moving to digital are among the best targets for a first credit card "
-        "or personal loan — they have a track record, just not a credit one yet."
-    )
-    return insight(
-        "dc-atm-share-structural", "dc", "total", month, title, body,
-        effect={"highlight": ["Total"], "tab": "trend", "trendMode": "absolute", "focusCard": "dc_atm"},
-        implication=implication,
-        source_signals=[
-            "groups.dc.total.cross.dc_atm_withdrawal_vol.share_pct",
-            "groups.dc.total.cross.dc_atm_withdrawal_vol.share_delta_pp",
-            "groups.dc.total.cross.dc_ecom_txn_vol.share_pct",
-            "groups.dc.total.cross.dc_ecom_txn_vol.share_delta_pp",
-        ],
-        chain=[
-            f"DC ATM cash share fell {abs(atm_delta):.1f}pp to {atm_sh:.1f}% — customers shifting away from cash",
-            "Digital debit transactions (POS, ecommerce) create structured spending records; cash leaves none",
-            "Debit customers moving to digital build a usable credit history — prime candidates for first credit origination",
-        ],
-        signals_dict=s,
-    )
-
-
-def dc_pos_cash_decline(s, month) -> dict | None:
-    """DC POS cash withdrawals declining — distinct from ATM cash trend."""
-    m      = s["groups"]["dc"]["total"]["metrics"].get("dc_pos_withdrawal_vol", {})
-    streak = m.get("streak_months", 1)
-    sd     = m.get("streak_dir", "flat")
-    mom    = m.get("mom_pct")
-
-    if sd != "down" or streak < 2 or mom is None:
-        return None
-
-    title = f"DC POS cash withdrawals: {streak_label(streak, 'down')} ({mom:.1f}% MoM)"
-    body  = (
-        f"Debit card POS cash-back withdrawal volume fell {abs(mom):.1f}% MoM in {month}, "
-        f"the {streak_label(streak, 'down')}. "
-        f"This is a separate channel from ATM cash — POS cash-back usage is contracting "
-        f"while digital POS payments continue to grow."
-    )
-    implication = (
-        "Some merchants used to let customers withdraw cash at their POS machine — called cash-back at POS. "
-        "This is declining. That's actually good for data quality: POS transaction records now reflect "
-        "real purchases, not cash withdrawals disguised as purchases. "
-        "Better purchase data means more accurate signals when assessing credit for small businesses or retail customers."
-    )
-    return insight(
-        "dc-pos-cash-decline", "dc", "total", month, title, body,
-        effect={"highlight": ["Total"], "tab": "trend", "trendMode": "mom", "focusCard": "dc_pos_wd"},
-        implication=implication,
-        source_signals=[
-            "groups.dc.total.metrics.dc_pos_withdrawal_vol.mom_pct",
-            "groups.dc.total.metrics.dc_pos_withdrawal_vol.streak_months",
-        ],
-        chain=[
-            f"DC POS cash-back withdrawals fell {abs(mom):.1f}% MoM for {streak} months — merchants reducing cash-out via POS",
-            "POS records now reflect real purchases rather than cash access events disguised as transactions",
-            "Cleaner purchase data improves signal quality for credit underwriting of MSME and retail customers",
         ],
         signals_dict=s,
     )
@@ -1725,6 +1589,115 @@ TWO_METRIC = {c.id: c for c in TWO_METRIC_CARDS}
 
 
 # ══════════════════════════════════════════════════════════════════════════════
+# CHANNEL-SHARE CARDS — declared (see Card / render_card above)
+# ══════════════════════════════════════════════════════════════════════════════
+# How a card base splits its volume between channels — ATM cash, in-store, online — and which way
+# that split is moving. The recurring reading: cash leaves no record, digital does, and a debit
+# holder moving from one to the other is becoming underwritable.
+
+def _cross(group: str, metric: str, field: str) -> str:
+    return f"groups.{group}.total.cross.{metric}.{field}"
+
+
+CHANNEL_CARDS = [
+    Card(
+        id="dc-ecom-share", group="dc", cut="total",
+        reads={
+            "ecom": _cross("dc", "dc_ecom_txn_vol", "share_pct"),
+            "delta": _cross("dc", "dc_ecom_txn_vol", "share_delta_pp"),
+            "atm": _cross("dc", "dc_atm_withdrawal_vol", "share_pct"),
+        },
+        fires_when=lambda v: v["ecom"] is not None and not (
+            v["ecom"] < 2 and (v["delta"] is None or abs(v["delta"]) < 0.3)),
+        title=lambda v, m: f"DC ecommerce is {v['ecom']:.1f}% of total DC transaction volume in {m}",
+        body=lambda v, m:
+            f"Debit card ecommerce accounted for {v['ecom']:.1f}% of total DC transaction volume in {m}"
+            + (f" ({sign(v['delta'])}pp vs prior month)" if v["delta"] else "") + ". "
+            + (f"ATM cash still dominates at {v['atm']:.1f}%. " if v["atm"] else "")
+            + "The structural shift away from cash toward digital payments is ongoing.",
+        implication=lambda v, m:
+            f"Only {v['ecom']:.1f}% of debit card spending is online, but that group is valuable. "
+            "These are debit-only customers who already shop digitally — which means their spending "
+            "leaves a traceable record. For cross-selling a first credit card or personal loan, "
+            "debit customers with online spending history are much easier to assess than pure ATM-cash users.",
+        chain=lambda v, m: [
+            f"DC ecommerce is {v['ecom']:.1f}% of DC volume — small but digitally traceable subgroup within a cash-dominant base",
+            "Online debit customers leave structured purchase records; ATM-cash users leave none",
+            "Digital-active debit customers are higher-value cross-sell targets for first credit products — traceable history enables underwriting",
+        ],
+        effect={"highlight": ["Total"], "tab": "trend", "trendMode": "absolute", "focusCard": "dc_ecom"},
+        explore={"mode": "by_type"},
+    ),
+
+    Card(
+        id="dc-atm-share-structural", group="dc", cut="total",
+        reads={
+            "atm": _cross("dc", "dc_atm_withdrawal_vol", "share_pct"),
+            "atm_delta": _cross("dc", "dc_atm_withdrawal_vol", "share_delta_pp"),
+            "ecom": _cross("dc", "dc_ecom_txn_vol", "share_pct"),
+            "ecom_delta": _cross("dc", "dc_ecom_txn_vol", "share_delta_pp"),
+        },
+        # Only when cash is actually losing ground — a rising ATM share is a different story.
+        fires_when=lambda v: v["atm"] is not None and v["atm_delta"] is not None and v["atm_delta"] < 0,
+        title=lambda v, m:
+            f"DC ATM cash losing share — {v['atm']:.1f}% of DC volume ({sign(v['atm_delta'])}pp) as digital grows",
+        body=lambda v, m:
+            f"Debit card ATM withdrawals account for {v['atm']:.1f}% of total DC transaction volume in {m} "
+            f"({sign(v['atm_delta'])}pp vs prior month). "
+            + (f"DC ecommerce has grown to {v['ecom']:.1f}% ({sign(v['ecom_delta'])}pp). "
+               if v["ecom"] and v["ecom_delta"] else "")
+            + "The structural shift from cash to digital payments is underway in the debit segment.",
+        implication=lambda v, m:
+            f"Debit card ATM cash is at {v['atm']:.1f}% and falling — which means a growing group of "
+            "debit card holders is switching to digital payments (online or at stores). "
+            "Those customers start leaving a spending history that lenders can actually use. "
+            "Debit customers who are moving to digital are among the best targets for a first credit card "
+            "or personal loan — they have a track record, just not a credit one yet.",
+        chain=lambda v, m: [
+            f"DC ATM cash share fell {abs(v['atm_delta']):.1f}pp to {v['atm']:.1f}% — customers shifting away from cash",
+            "Digital debit transactions (POS, ecommerce) create structured spending records; cash leaves none",
+            "Debit customers moving to digital build a usable credit history — prime candidates for first credit origination",
+        ],
+        effect={"highlight": ["Total"], "tab": "trend", "trendMode": "absolute", "focusCard": "dc_atm"},
+    ),
+
+    Card(
+        id="dc-pos-cash-decline", group="dc", cut="total",
+        # NOT the `streak=` shorthand, though it gates on a streak. That shorthand also reads a
+        # level and a QoQ move, and this card uses neither — taking it would have made the card
+        # cite two numbers it never looks at. A shorthand that has to be stretched is the wrong
+        # shorthand for the card.
+        reads={
+            "mom": "groups.dc.total.metrics.dc_pos_withdrawal_vol.mom_pct",
+            "streak": "groups.dc.total.metrics.dc_pos_withdrawal_vol.streak_months",
+        },
+        labels={"streak_dir": "groups.dc.total.metrics.dc_pos_withdrawal_vol.streak_dir"},
+        fires_when=lambda v: v["streak_dir"] == "down" and (v["streak"] or 0) >= 2 and v["mom"] is not None,
+        title=lambda v, m:
+            f"DC POS cash withdrawals: {streak_label(int(v['streak']), 'down')} ({v['mom']:.1f}% MoM)",
+        body=lambda v, m:
+            f"Debit card POS cash-back withdrawal volume fell {abs(v['mom']):.1f}% MoM in {m}, "
+            f"the {streak_label(int(v['streak']), 'down')}. "
+            f"This is a separate channel from ATM cash — POS cash-back usage is contracting "
+            f"while digital POS payments continue to grow.",
+        implication=lambda v, m:
+            "Some merchants used to let customers withdraw cash at their POS machine — called cash-back at POS. "
+            "This is declining. That's actually good for data quality: POS transaction records now reflect "
+            "real purchases, not cash withdrawals disguised as purchases. "
+            "Better purchase data means more accurate signals when assessing credit for small businesses or retail customers.",
+        chain=lambda v, m: [
+            f"DC POS cash-back withdrawals fell {abs(v['mom']):.1f}% MoM for {int(v['streak'])} months — merchants reducing cash-out via POS",
+            "POS records now reflect real purchases rather than cash access events disguised as transactions",
+            "Cleaner purchase data improves signal quality for credit underwriting of MSME and retail customers",
+        ],
+        effect={"highlight": ["Total"], "tab": "trend", "trendMode": "mom", "focusCard": "dc_pos_wd"},
+    ),
+]
+
+CHANNEL = {c.id: c for c in CHANNEL_CARDS}
+
+
+# ══════════════════════════════════════════════════════════════════════════════
 # GAP CARDS — declared, not hand-written (see GapCard / render_gap above)
 # ══════════════════════════════════════════════════════════════════════════════
 # Read these as a list of standing questions the data cannot answer, each with the condition
@@ -1940,9 +1913,9 @@ RULES = [
     GAP["gap-foreign-cc-decline"],
     # DC
     dc_atm_trend,
-    dc_atm_share_structural,
-    dc_pos_cash_decline,
-    dc_ecom_share,
+    CHANNEL["dc-atm-share-structural"],
+    CHANNEL["dc-pos-cash-decline"],
+    CHANNEL["dc-ecom-share"],
     STREAK["dc-cards-streak"],
     YOY["dc-cards-yoy"],
     CATEGORY["dc-psb-dominance"],
