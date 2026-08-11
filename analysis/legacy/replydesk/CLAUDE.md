@@ -32,7 +32,7 @@
 
 ## What this is
 
-The reply-guy strategy from `ICL_RETAIL_90DAY_PLAN.md` (Phase 1 distribution), made
+The reply strategy now recorded in `DISTRIBUTION_SPEC.md` §15.2, made
 fast and safe: Claude reads the user's logged-in X tabs via the **Claude-in-Chrome
 extension**, shortlists reply-worthy tweets, drafts grounded replies from the
 validated engine, and the **user presses Post** on each. No X API, no scraping,

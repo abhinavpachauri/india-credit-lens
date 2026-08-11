@@ -7,7 +7,8 @@
 
 > Execution context for the professional Substack newsletter (indiacreditlens.substack.com).
 > Audience: credit & product professionals in fintech/lending. NEVER mentions tickers/stocks —
-> that content belongs to the retail publication (see `ICL_RETAIL_90DAY_PLAN.md`).
+> that content belongs to the retail publication (see `STRATEGY_PLANNER.md` §17 and
+> `DISTRIBUTION_SPEC.md` §15).
 
 ---
 

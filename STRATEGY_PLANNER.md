@@ -414,5 +414,115 @@ See `CLAUDE.md → Next Builds` for the current prioritised execution queue acro
 
 ---
 
+## 17. ICL-Retail — the retail-investor track
+
+*Merged here 2026-08-11 from `ICL_RETAIL_90DAY_PLAN.md` (archived). That file mixed three
+concerns; each now lives with its own kind. **Strategy + product + pricing = this section.**
+Content mechanics → `analysis/distribution/DISTRIBUTION_SPEC.md` §15. Engineering artifacts
+(EN-1/EN-2/EN-4) → `PLAN_2026-08-11.md` parked backlog. **Status: not currently being executed** —
+the platform is in a refactor cycle; this is the strategic destination, not the live task list.*
+
+**Thesis.** Government data (RBI + the wider govt-data pool) → sector → listed-stock transmission
+intelligence for Indian retail investors. Working positioning line: *"See what government data says
+about your stocks — before the market reads the PDF."*
+
+**Why it is a different track, not a rename.** `indiacreditlens.com` is credit-scoped and sells to
+lenders (§8, §10). ICL-Retail is govt-data-scoped and sells to direct-equity retail investors. It
+reuses the same engine and the same repo; the audience, the packaging and the price point differ.
+
+**ICP.** Active Indian retail investor, direct-equity holder, already pays (or would) for
+screener.in / Trendlyne premium at ₹3–5k/yr, lives on X-fintwit, YouTube, r/IndianStockMarket.
+
+**The product is not "insights"** — anyone with an LLM can generate correlations. It is three things:
+1. **The transmission layer** — systematic mapping of govt-data releases → specific listed names.
+   Screener/Trendlyne do fundamentals, not data-flow.
+2. **A dated, public, scoreable call register** — the moat an LLM can't fake, compounding over time.
+3. **Monitoring** — "your stocks × these signals" alerts: a recurring relationship, not a one-off read.
+
+**SEBI guardrail (non-negotiable).** Analytics and monitoring language only. *"EPFO payroll growth
+turned negative for these 12 consumer names"* is fine; *"Buy Muthoot, target ₹2,400"* is Research
+Analyst territory. No buy/sell/target-price language anywhere, free or paid. Revisit RA registration
+only if the product ever moves to recommendations. Enforced deterministically by a forbidden-language
+lint before the first note ships — judgment stays human, the floor is mechanical. (The existing
+`SEBI_BANNED` list in `distribution/slot_render.lint_compliance` is the seed.)
+
+**Asset audit — ~70% of the hard engineering already exists.** The pivot is packaging and audience,
+not a rebuild:
+
+| Built asset | Reuse in the retail product |
+|---|---|
+| RBI SIBC pipeline | Bank credit by sector → banks, gold-loan NBFCs (Muthoot, Manappuram), MSME lenders, housing financiers |
+| RBI ATM/POS pipeline | Consumption/payments proxy → SBI Cards, banks' fee income, consumption names |
+| `signals.db` + compute engine + traceability gates | The alert engine and the "every number traces" trust layer — *directly* the paid product's backbone |
+| Causal system model (v4.0) | The transmission maps — anchored to tickers via a mapping artifact, never a model edit |
+| Distribution generators | Repoint at an investor audience |
+
+### 17.1 Pricing — single source for all copy
+
+Standard paid tier: **₹1,999 per half-year**, or **₹3,999/yr** (₹333/mo billed annually).
+Founding members: **the first 100 get the annual plan at ₹1,999/yr, locked for life** — a year at
+the half-year price. Anchored just under screener premium. All retail pricing copy anywhere derives
+from this paragraph. (Distinct from the lender-side pricing in §8/§10.)
+
+Paid tier includes: unlimited tickers, event-triggered alerts, full history, the monthly sector
+deep-dive, and register access. Free tier deliberately limited (3 tickers, current period only, no
+alerts) to create upgrade pressure.
+
+### 17.2 The 90-day shape and its decision gates
+
+Budget assumed ~30% time ≈ 12–14 hrs/week (≈6 build / 5 content / 2 ops). Starting audience: zero —
+the plan *manufactures* distribution rather than assuming it.
+
+| Stage | Weeks | Substance | Gate |
+|---|---|---|---|
+| Aim | 1–2 | ICP, release calendar, first 3 transmission maps, public call register live (empty is fine) | calendar built, maps chosen, accounts created |
+| Prove in public | 3–6 | 4 weekly Signal Notes (§15 of the distribution spec) | **DG1:** ≥100 Substack emails **or** ≥300 X followers **or** one note with clear organic spread |
+| Product v0 | 7–10 | Ticker→signal web view, weekly automated digest, +1 new data source | **DG2:** ≥300 emails, ≥25% open rate |
+| First revenue | 11–13 | Price test to the list only, founding-member framing | **DG3:** ≥20 paying subscribers |
+
+Gate failure semantics matter more than the numbers: **DG1 fail = the packaging is wrong, not the
+thesis** (test sharper formats for two weeks before touching product code). **DG2 fail = a
+distribution problem** (divert to content/collabs before building paid). **DG3 <5 on a 500+ engaged
+list = the willingness-to-pay hypothesis is wrong for this ICP — stop and reassess before building
+more.** That last one is the honest kill-switch and should not be quietly softened.
+
+First 3 transmission maps, all on already-built data: SIBC gold-loan credit → Muthoot/Manappuram/
+IIFL Fin · SIBC sectoral bank credit → specific PSU/private banks · ATM/POS card spend → SBI Cards
+and the consumption basket.
+
+### 17.3 Data-source expansion ladder (post-90-day, ranked by signal-per-effort)
+
+✅ RBI SIBC, ATM/POS (built) → VAHAN/FADA autos → GST collections → TRAI telecom subs → EPFO payroll
+→ POSOCO power demand → rail freight + ports cargo → DGCA aviation → trade (commerce ministry) →
+govt capex/tenders.
+
+Each new source = new sectors covered = new content surface = new subscriber pool.
+
+**Note the open conflict with the credit-side roadmap:** this ladder puts **VAHAN/FADA** as the next
+source (and the archived plan named it "source #3" deliberately, as the test of whether the generic
+gate absorbs a non-RBI source). The credit-side roadmap in `PLAN_2026-08-11.md` recommends **Cluster
+B, price of credit** instead. Both are defensible; they serve different audiences. **Unresolved —
+decide when source work actually starts, not before.**
+
+### 17.4 Operating model — division of labour
+
+| 👤 User only (never the model) | 🔧 Model |
+|---|---|
+| Create X/Substack accounts, post, reply, collab asks | Release-calendar draft, register page + validator |
+| Sign off calendar dates and date remaps | `ticker_map.json` + validator, derived stock↔signal artifact |
+| Pricing and launch decisions; SEBI final review of every note | Web app v0, digest automation, new pipelines, alert engine |
+| Source new data files (XLSX/CSV downloads) | Note drafts, charts, distribution packages via generators |
+
+### 17.5 Explicitly out of scope for the 90 days
+
+No mobile app · no portfolio import or broker integration · no Hindi · no YouTube until text formats
+prove out · no institutional SaaS (conflicts with the lender-side offer) · no buy/sell calls (SEBI) ·
+no rebrand debate before week 6.
+
+**And one rule that outlived its own document:** *"no new strategy documents — the next artifact is
+Signal Note #1."* Worth keeping. This section is a consolidation of an existing document, not a new one.
+
+---
+
 *Next review: August 2026 | Track against Phase 1 milestones*
 *Model inspiration: BankRegData (US) — 1,275 clients, 2–3 people, 16 years, no funding*

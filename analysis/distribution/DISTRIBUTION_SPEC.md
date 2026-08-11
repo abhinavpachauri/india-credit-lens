@@ -981,3 +981,65 @@ states both months explicitly, and states the gap in months when there is one.
   `ai_pm_register.json` (§8.1); `select("C10")` returns nothing, so the 21st falls back to C9 and,
   when that is empty too, skips and records the skip. That is correct behaviour, not a gap —
   but it means the 21st needs a human before it publishes.
+
+---
+
+## 15. ICL-Retail content mechanics (merged 2026-08-11, NOT currently live)
+
+*Merged from the archived `ICL_RETAIL_90DAY_PLAN.md`, which mixed strategy, content and engineering.
+The strategy/product/pricing half now lives in `STRATEGY_PLANNER.md` §17; this section holds only
+the **content and channel mechanics**, because that is what this spec governs.*
+
+**Status: specified, not built, not scheduled.** The platform is in a refactor cycle. Nothing in
+this section has a generator today, and none of it should be built before §14's open items and the
+current refactor work are closed. It is recorded here so it is not re-derived.
+
+**Audience note — this is a different track from §3–§11.** Everything above this section targets
+lenders (CPOs, CROs, credit analysts) via LinkedIn and Substack. This section targets **retail
+equity investors** via X and Reddit. Same engine, same gates, different reader and different voice.
+Do not blend the two calendars; if this track ever goes live it gets its own slots.
+
+### 15.1 The unit: a "Signal Note", one per week
+
+Anatomy — designed to be produced in one sitting given the existing pipelines:
+
+1. **One chart from our own signals** — traceable, branded.
+2. **The transmission chain in three steps**: data → sector mechanism → listed names affected.
+3. **One dated, checkable, quantified observation — never advice.** e.g. *"Gold-loan credit grew
+   41% YoY for a third month; the two listed pure-plays' combined AUM guidance implies X.
+   Review: Sep SIBC release."* Note the shape: a number, a mechanism, and **a named future date on
+   which the claim can be scored**.
+4. **Logged in the public call register** the moment it ships (see `STRATEGY_PLANNER.md` §17 and the
+   `call_register.json` artifact in `PLAN_2026-08-11.md`'s parked backlog).
+5. Closes with: follow + free Substack.
+
+The register entry is not optional decoration — it is the moat. A note that is not logged has not
+shipped.
+
+### 15.2 Channel mechanics
+
+- **X thread + LinkedIn post per note**, reusing the generator pipeline, published **within 24h of
+  the underlying government release** — the news window is the distribution.
+- **One Reddit post/week** in r/IndianStockMarket or r/DalalStreetTalks where the rules allow,
+  posted as analysis rather than promotion.
+- **Reply strategy: ~15 min/day** replying *with data* to large fintwit accounts discussing our
+  sectors. Recorded in the source plan as the highest-ROI cold-start channel.
+- **Collab ask** to 2–3 mid-size fintwit accounts from note #3 onward — they need content and our
+  charts are content.
+
+### 15.3 How this relates to §9 (X out of scope) and the pending X blurb feed
+
+§9 retired the reply desk and put X out of scope *for the lender track*, on the evidence that it was
+never used. That judgment stands for §3–§11. This section is a **different, unbuilt** proposition
+for a **different audience**, and the separately-requested per-bank **X blurb feed** (payments data,
+machine writes the blurb, the editor screenshots and posts) is a **third** thing again.
+
+All three must not be conflated when X work resumes. The blurb feed is the nearest term of them and
+is the one with data in hand today; a decision to build it does not revive this section.
+
+### 15.4 The guardrail carries over unchanged
+
+The SEBI constraint in `STRATEGY_PLANNER.md` §17 is stricter for an investor audience than the
+existing `lint_compliance` list is for a lender audience: **no buy/sell/target-price/accumulate/
+book-profit vocabulary anywhere**, free or paid. If this track is ever built, that lint hardens
+*before* note #1 ships, not after — same precision-fix-first rule as §5.3.
