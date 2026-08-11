@@ -19,6 +19,10 @@
           "value": 49.08
         },
         {
+          "key": "groups.cc.total.cross.cc_ecom_txn_vol.prior_share_pct",
+          "value": 49.77
+        },
+        {
           "key": "groups.cc.total.cross.cc_ecom_txn_vol.share_delta_pp",
           "value": 0.42
         }
@@ -33,6 +37,7 @@
       "facts": [
         "cc_ecom_txn_vol.share_pct: 50.19",
         "cc_pos_txn_vol.share_pct: 49.08",
+        "cc_ecom_txn_vol.prior_share_pct: 49.77",
         "cc_ecom_txn_vol.share_delta_pp: 0.42",
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
@@ -45,6 +50,7 @@
     "sourceSignals": [
       "groups.cc.total.cross.cc_ecom_txn_vol.share_pct",
       "groups.cc.total.cross.cc_pos_txn_vol.share_pct",
+      "groups.cc.total.cross.cc_ecom_txn_vol.prior_share_pct",
       "groups.cc.total.cross.cc_ecom_txn_vol.share_delta_pp"
     ],
     "effect": {
@@ -951,6 +957,14 @@
           "value": 9922126.0
         },
         {
+          "key": "groups.infra.total.metrics.upi_qr.prior",
+          "value": 779765356.0
+        },
+        {
+          "key": "groups.infra.total.metrics.pos_terminals.prior",
+          "value": 11525276.0
+        },
+        {
           "key": "groups.infra.total.metrics.upi_qr.mom_pct",
           "value": 1.64
         },
@@ -968,6 +982,8 @@
       "facts": [
         "upi_qr.latest: 792573747.0",
         "pos_terminals.latest: 9922126.0",
+        "upi_qr.prior: 779765356.0",
+        "pos_terminals.prior: 11525276.0",
         "upi_qr.mom_pct: 1.64",
         "pos_terminals.mom_pct: -13.91",
         "Source: web/public/data/atm_pos_consolidated.csv",
@@ -992,6 +1008,8 @@
     "sourceSignals": [
       "groups.infra.total.metrics.upi_qr.latest",
       "groups.infra.total.metrics.pos_terminals.latest",
+      "groups.infra.total.metrics.upi_qr.prior",
+      "groups.infra.total.metrics.pos_terminals.prior",
       "groups.infra.total.metrics.upi_qr.mom_pct",
       "groups.infra.total.metrics.pos_terminals.mom_pct"
     ],

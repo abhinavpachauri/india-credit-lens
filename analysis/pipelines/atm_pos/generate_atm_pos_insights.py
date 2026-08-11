@@ -476,6 +476,13 @@ def _fell_pp(delta) -> str:
     return f", down {abs(delta):.2f}pp vs prior month" if delta and delta < 0 else ""
 
 
+def _per(numerator, denominator) -> float:
+    """One side per the other, rounded — "80 QR codes per terminal", "150x Bharat QR"."""
+    if not (numerator and denominator):
+        return 0.0
+    return round(numerator / denominator)
+
+
 def _ratio_gap(numerator, denominator) -> str:
     """" (150x gap)" — omitted when either side is missing or the denominator is zero."""
     if not (numerator and denominator and denominator > 0):
@@ -516,71 +523,6 @@ def insight(id_, group, cut, period, title, body, effect, explore=None,
 # ══════════════════════════════════════════════════════════════════════════════
 # CC RULES
 # ══════════════════════════════════════════════════════════════════════════════
-
-def cc_ecom_vs_pos(s, month) -> dict | None:
-    """CC ecommerce share of total volume vs POS — milestone if > 50%."""
-    cross = s["groups"]["cc"]["total"]["cross"]
-    ecom  = cross.get("cc_ecom_txn_vol", {})
-    pos   = cross.get("cc_pos_txn_vol", {})
-    ecom_sh  = ecom.get("share_pct")
-    pos_sh   = pos.get("share_pct")
-    ecom_pr  = ecom.get("prior_share_pct")
-    delta    = ecom.get("share_delta_pp")
-
-    if ecom_sh is None or pos_sh is None:
-        return None
-
-    if ecom_sh >= 50:
-        title = (
-            f"CC ecommerce exceeds POS for the {'first time' if ecom_pr and ecom_pr < 50 else f'{round(ecom_sh,1)}% of total CC volume'}"
-            if ecom_pr and ecom_pr < 50
-            else f"CC ecommerce holds above POS at {ecom_sh:.1f}% of total CC volume"
-        )
-        delta_str = f" ({sign(delta)}pp vs prior month)" if delta is not None else ""
-        body = (
-            f"In {month}, ecommerce accounted for {ecom_sh:.1f}%{delta_str} of total CC transaction volume "
-            f"vs POS at {pos_sh:.1f}%. "
-            f"This structural shift — digital-first over in-store — has persisted for "
-            f"{'multiple months' if (ecom_pr and ecom_pr >= 50) else 'the first time in this data series'}."
-        )
-    else:
-        if delta is not None and delta > 0.5:
-            title = f"CC ecommerce closing in on POS — now {ecom_sh:.1f}% of total volume"
-            body = (
-                f"In {month}, CC ecommerce is {ecom_sh:.1f}% of total CC transaction volume vs POS at {pos_sh:.1f}%. "
-                f"Ecom gained {sign(delta)}pp vs prior month. The gap to POS is {pos_sh - ecom_sh:.1f}pp."
-            )
-        else:
-            return None  # no notable move
-
-    implication = (
-        f"More than half of credit card spending is now online — not at physical stores. "
-        f"Online transactions (called CNP, or card-not-present, because the card isn't physically swiped) carry higher fraud risk. "
-        f"If your fraud detection was built around in-store spending patterns, it needs to be updated for an online-first customer base."
-    )
-    return insight(
-        "cc-ecom-vs-pos-share", "cc", "total", month, title, body,
-        effect={
-            "highlight": ["Total"],
-            "tab": "trend",
-            "trendMode": "absolute",
-            "focusCard": "cc_ecom",
-        },
-        explore={"mode": "by_type"},
-        implication=implication,
-        source_signals=[
-            "groups.cc.total.cross.cc_ecom_txn_vol.share_pct",
-            "groups.cc.total.cross.cc_pos_txn_vol.share_pct",
-            "groups.cc.total.cross.cc_ecom_txn_vol.share_delta_pp",
-        ],
-        chain=[
-            f"CC ecommerce at {ecom_sh:.1f}% of volume — majority of CC spend is now online, not at physical stores",
-            "Online transactions (card-not-present / CNP) carry higher fraud risk since the card is never physically verified",
-            "Fraud detection built for in-store patterns needs recalibration for an online-first customer base",
-        ],
-        signals_dict=s,
-    )
-
 
 def cc_atm_withdrawal_trend(s, month) -> dict | None:
     """CC ATM cash withdrawal declining = going cashless signal."""
@@ -792,112 +734,6 @@ def dc_ecom_share(s, month) -> dict | None:
 # INFRA RULES
 # ══════════════════════════════════════════════════════════════════════════════
 
-def infra_qr_per_pos(s, month) -> dict | None:
-    """UPI QR codes per POS terminal — infrastructure tipping point."""
-    metrics = s["groups"]["infra"]["total"]["metrics"]
-    upi_sig = metrics.get("upi_qr", {})
-    pos_sig = metrics.get("pos_terminals", {})
-    upi_v   = upi_sig.get("latest")
-    pos_v   = pos_sig.get("latest")
-    upi_pr  = upi_sig.get("prior")
-    pos_pr  = pos_sig.get("prior")
-    upi_mom = upi_sig.get("mom_pct")
-    pos_mom = pos_sig.get("mom_pct")
-
-    if upi_v is None or pos_v is None or pos_v == 0:
-        return None
-
-    latest = round(upi_v / pos_v)
-    prior  = round(upi_pr / pos_pr) if (upi_pr and pos_pr and pos_pr > 0) else None
-
-    title = f"India now has {latest:.0f} UPI QR codes per POS terminal"
-    body = (
-        f"As of {month}, there are {latest:.0f} UPI QR codes ({fmt_num(upi_sig.get('latest',0))}) "
-        f"for every POS terminal ({fmt_num(pos_sig.get('latest',0))}). "
-    )
-    if prior:
-        body += f"This ratio was {prior:.0f} in the prior month. "
-    if upi_mom is not None and pos_mom is not None:
-        body += (
-            f"UPI QR grew {upi_mom:+.1f}% MoM vs POS terminals at {pos_mom:+.1f}% MoM — "
-            f"digital acceptance infrastructure is {'outpacing' if upi_mom > pos_mom else 'growing in line with'} hardware deployment."
-        )
-    implication = (
-        f"There are {latest:.0f} UPI QR codes for every POS (card swipe) machine in India. "
-        "This means the typical small merchant — kirana store, auto driver, vegetable vendor — "
-        "accepts payments through a QR code on their phone, not a card machine. "
-        "Any credit product designed for small merchants (small business loans, BNPL for vendors) "
-        "needs to work over UPI QR, not just over POS terminals."
-    )
-    return insight(
-        "infra-qr-per-pos", "infra", "total", month, title, body,
-        effect={"highlight": ["Total"], "tab": "trend", "trendMode": "absolute", "focusCard": "upi_qr"},
-        explore={"mode": "by_type"},
-        implication=implication,
-        source_signals=[
-            "groups.infra.total.metrics.upi_qr.latest",
-            "groups.infra.total.metrics.pos_terminals.latest",
-            "groups.infra.total.metrics.upi_qr.mom_pct",
-            "groups.infra.total.metrics.pos_terminals.mom_pct",
-        ],
-        chain=[
-            f"{latest:.0f} UPI QR codes per POS terminal — QR acceptance vastly outnumbers hardware deployment",
-            "Typical small merchant (kirana, auto, vendor) accepts via QR only — no POS terminal",
-            "Credit products for small merchants (BNPL, business loans) must work over UPI QR to reach this majority",
-        ],
-        signals_dict=s,
-    )
-
-
-def infra_upi_vs_bharat_qr(s, month) -> dict | None:
-    """UPI QR vs Bharat QR divergence."""
-    m_upi   = s["groups"]["infra"]["total"]["metrics"].get("upi_qr", {})
-    m_bqr   = s["groups"]["infra"]["total"]["metrics"].get("bharat_qr", {})
-    upi_v   = m_upi.get("latest")
-    bqr_v   = m_bqr.get("latest")
-    upi_mom = m_upi.get("mom_pct")
-    bqr_mom = m_bqr.get("mom_pct")
-
-    if upi_v is None or bqr_v is None or upi_v == 0:
-        return None
-
-    ratio = upi_v / bqr_v if bqr_v > 0 else None
-    if ratio is None:
-        return None
-
-    title = f"UPI QR codes are {ratio:.0f}x Bharat QR in scale — {fmt_num(upi_v)} vs {fmt_num(bqr_v)}"
-    body = (
-        f"As of {month}, there are {fmt_num(upi_v)} UPI QR codes deployed vs {fmt_num(bqr_v)} Bharat QR codes — "
-        f"a {ratio:.0f}x gap. "
-    )
-    if upi_mom is not None and bqr_mom is not None:
-        body += f"UPI QR grew {upi_mom:+.1f}% MoM vs Bharat QR at {bqr_mom:+.1f}% MoM. "
-    body += "UPI has decisively won the QR standard battle in India."
-    implication = (
-        f"Bharat QR was an earlier QR code standard that lost out to UPI QR — which is now {ratio:.0f} times bigger. "
-        "Building any credit product (credit on UPI, BNPL) on Bharat QR today would be like "
-        "building on a platform that merchants have already abandoned. "
-        "UPI QR is the only QR standard worth designing for."
-    )
-    return insight(
-        "infra-upi-vs-bharat-qr", "infra", "total", month, title, body,
-        effect={"highlight": ["Total"], "tab": "trend", "trendMode": "absolute", "focusCard": "upi_qr"},
-        implication=implication,
-        source_signals=[
-            "groups.infra.total.metrics.upi_qr.latest",
-            "groups.infra.total.metrics.bharat_qr.latest",
-            "groups.infra.total.metrics.upi_qr.mom_pct",
-            "groups.infra.total.metrics.bharat_qr.mom_pct",
-        ],
-        chain=[
-            f"UPI QR at {fmt_num(upi_v)} vs Bharat QR at {fmt_num(bqr_v)} — a {ratio:.0f}x gap",
-            "Bharat QR was an earlier standard; merchants have consolidated on UPI QR as the accepted norm",
-            "Building payments or lending infrastructure on Bharat QR rails is operationally unviable at any meaningful merchant scale",
-        ],
-        signals_dict=s,
-    )
-
-
 def cc_transaction_surge(s, month) -> dict | None:
     """All CC transaction types up strongly in same month — year-end / seasonal signal."""
     metrics   = s["groups"]["cc"]["total"]["metrics"]
@@ -1041,51 +877,6 @@ def dc_pos_cash_decline(s, month) -> dict | None:
 # dominate MoM. These rules report the YoY rate AND whether it is accelerating or
 # decelerating vs the prior month's YoY rate — a trajectory MoM/streak can't show.
 # ══════════════════════════════════════════════════════════════════════════════
-
-def cc_spend_yoy(s, month) -> dict | None:
-    """CC ecommerce vs POS spend — YoY growth, seasonally clean."""
-    metrics = s["groups"]["cc"]["total"]["metrics"]
-    ecom    = metrics.get("cc_ecom_txn_vol", {})
-    pos     = metrics.get("cc_pos_txn_vol", {})
-    e_yoy   = ecom.get("yoy_pct")
-    p_yoy   = pos.get("yoy_pct")
-    if e_yoy is None or p_yoy is None:
-        return None
-    if abs(e_yoy) < 5 and abs(p_yoy) < 5:
-        return None  # nothing notable
-
-    online_leads = e_yoy > p_yoy
-    title = f"CC spend YoY — ecommerce {e_yoy:.1f}% vs in-store POS {p_yoy:.1f}%"
-    body  = (
-        f"On a year-on-year basis, credit card ecommerce transaction volume grew {e_yoy:.1f}% "
-        f"and in-store POS volume grew {p_yoy:.1f}% as of {month}. "
-        f"Year-on-year removes the heavy seasonality in the monthly numbers — "
-        f"{'online is outpacing in-store' if online_leads else 'in-store is outpacing online'} on a clean comparison."
-    )
-    implication = (
-        f"Credit card spend is growing across both channels year-on-year "
-        f"({'ecom faster' if online_leads else 'POS faster'}). "
-        "For credit-risk teams this matters: a spend mix tilting online means more "
-        "card-not-present volume, where fraud and dispute rates run higher — provisioning "
-        "and fraud models should track the channel mix, not just the headline spend growth."
-    )
-    return insight(
-        "cc-spend-yoy", "cc", "total", month, title, body,
-        effect={"highlight": ["Total"], "tab": "trend", "trendMode": "yoy", "focusCard": "cc_ecom"},
-        explore={"mode": "by_type"},
-        implication=implication,
-        source_signals=[
-            "groups.cc.total.metrics.cc_ecom_txn_vol.yoy_pct",
-            "groups.cc.total.metrics.cc_pos_txn_vol.yoy_pct",
-        ],
-        chain=[
-            f"CC ecommerce volume up {e_yoy:.1f}% YoY vs POS up {p_yoy:.1f}% YoY — both growing, seasonally clean",
-            f"{'Online (CNP) is the faster-growing channel' if online_leads else 'In-store POS is the faster-growing channel'} on a year-on-year basis",
-            "Channel mix shift changes the fraud and dispute profile — risk models must track mix, not just total spend",
-        ],
-        signals_dict=s,
-    )
-
 
 # ══════════════════════════════════════════════════════════════════════════════
 # Orchestrate
@@ -1781,6 +1572,159 @@ CATEGORY = {c.id: c for c in CATEGORY_CARDS}
 
 
 # ══════════════════════════════════════════════════════════════════════════════
+# TWO-METRIC CARDS — declared (see Card / render_card above)
+# ══════════════════════════════════════════════════════════════════════════════
+# Cards that compare two things: QR codes against card terminals, online spend against in-store.
+# The comparison is the point, so both sides are read explicitly. No `pair=` shorthand: two of
+# these read the metrics tree and two read the cross tree with different field names, so a
+# shorthand would serve two cards and mislead about the third. `metric=` and `streak=` earned
+# their keep across four and three cards; this would not.
+
+TWO_METRIC_CARDS = [
+    Card(
+        id="infra-qr-per-pos", group="infra", cut="total",
+        reads={
+            "upi": "groups.infra.total.metrics.upi_qr.latest",
+            "pos": "groups.infra.total.metrics.pos_terminals.latest",
+            "upi_prior": "groups.infra.total.metrics.upi_qr.prior",
+            "pos_prior": "groups.infra.total.metrics.pos_terminals.prior",
+            "upi_mom": "groups.infra.total.metrics.upi_qr.mom_pct",
+            "pos_mom": "groups.infra.total.metrics.pos_terminals.mom_pct",
+        },
+        fires_when=lambda v: v["upi"] is not None and v["pos"],
+        title=lambda v, m: f"India now has {_per(v['upi'], v['pos']):.0f} UPI QR codes per POS terminal",
+        body=lambda v, m:
+            f"As of {m}, there are {_per(v['upi'], v['pos']):.0f} UPI QR codes ({fmt_num(v['upi'])}) "
+            f"for every POS terminal ({fmt_num(v['pos'])}). "
+            + (f"This ratio was {_per(v['upi_prior'], v['pos_prior']):.0f} in the prior month. "
+               if v["upi_prior"] and v["pos_prior"] else "")
+            + (f"UPI QR grew {v['upi_mom']:+.1f}% MoM vs POS terminals at {v['pos_mom']:+.1f}% MoM — "
+               f"digital acceptance infrastructure is "
+               f"{'outpacing' if v['upi_mom'] > v['pos_mom'] else 'growing in line with'} hardware deployment."
+               if v["upi_mom"] is not None and v["pos_mom"] is not None else ""),
+        implication=lambda v, m:
+            f"There are {_per(v['upi'], v['pos']):.0f} UPI QR codes for every POS (card swipe) machine in India. "
+            "This means the typical small merchant — kirana store, auto driver, vegetable vendor — "
+            "accepts payments through a QR code on their phone, not a card machine. "
+            "Any credit product designed for small merchants (small business loans, BNPL for vendors) "
+            "needs to work over UPI QR, not just over POS terminals.",
+        chain=lambda v, m: [
+            f"{_per(v['upi'], v['pos']):.0f} UPI QR codes per POS terminal — QR acceptance vastly outnumbers hardware deployment",
+            "Typical small merchant (kirana, auto, vendor) accepts via QR only — no POS terminal",
+            "Credit products for small merchants (BNPL, business loans) must work over UPI QR to reach this majority",
+        ],
+        effect={"highlight": ["Total"], "tab": "trend", "trendMode": "absolute", "focusCard": "upi_qr"},
+        explore={"mode": "by_type"},
+    ),
+
+    Card(
+        id="infra-upi-vs-bharat-qr", group="infra", cut="total",
+        reads={
+            "upi": "groups.infra.total.metrics.upi_qr.latest",
+            "bqr": "groups.infra.total.metrics.bharat_qr.latest",
+            "upi_mom": "groups.infra.total.metrics.upi_qr.mom_pct",
+            "bqr_mom": "groups.infra.total.metrics.bharat_qr.mom_pct",
+        },
+        fires_when=lambda v: bool(v["upi"]) and v["bqr"] is not None and v["bqr"] > 0,
+        title=lambda v, m:
+            f"UPI QR codes are {_per(v['upi'], v['bqr']):.0f}x Bharat QR in scale — "
+            f"{fmt_num(v['upi'])} vs {fmt_num(v['bqr'])}",
+        body=lambda v, m:
+            f"As of {m}, there are {fmt_num(v['upi'])} UPI QR codes deployed vs {fmt_num(v['bqr'])} Bharat QR codes — "
+            f"a {_per(v['upi'], v['bqr']):.0f}x gap. "
+            + (f"UPI QR grew {v['upi_mom']:+.1f}% MoM vs Bharat QR at {v['bqr_mom']:+.1f}% MoM. "
+               if v["upi_mom"] is not None and v["bqr_mom"] is not None else "")
+            + "UPI has decisively won the QR standard battle in India.",
+        implication=lambda v, m:
+            f"Bharat QR was an earlier QR code standard that lost out to UPI QR — which is now "
+            f"{_per(v['upi'], v['bqr']):.0f} times bigger. "
+            "Building any credit product (credit on UPI, BNPL) on Bharat QR today would be like "
+            "building on a platform that merchants have already abandoned. "
+            "UPI QR is the only QR standard worth designing for.",
+        chain=lambda v, m: [
+            f"UPI QR at {fmt_num(v['upi'])} vs Bharat QR at {fmt_num(v['bqr'])} — a {_per(v['upi'], v['bqr']):.0f}x gap",
+            "Bharat QR was an earlier standard; merchants have consolidated on UPI QR as the accepted norm",
+            "Building payments or lending infrastructure on Bharat QR rails is operationally unviable at any meaningful merchant scale",
+        ],
+        effect={"highlight": ["Total"], "tab": "trend", "trendMode": "absolute", "focusCard": "upi_qr"},
+    ),
+
+    Card(
+        id="cc-ecom-vs-pos-share", group="cc", cut="total",
+        reads={
+            "ecom": "groups.cc.total.cross.cc_ecom_txn_vol.share_pct",
+            "pos": "groups.cc.total.cross.cc_pos_txn_vol.share_pct",
+            "ecom_prior": "groups.cc.total.cross.cc_ecom_txn_vol.prior_share_pct",
+            "delta": "groups.cc.total.cross.cc_ecom_txn_vol.share_delta_pp",
+        },
+        # Either ecommerce has taken the majority, or it moved enough to be closing the gap.
+        fires_when=lambda v: v["ecom"] is not None and v["pos"] is not None and (
+            v["ecom"] >= 50 or (v["delta"] is not None and v["delta"] > 0.5)),
+        title=lambda v, m:
+            (f"CC ecommerce exceeds POS for the first time"
+             if v["ecom"] >= 50 and v["ecom_prior"] and v["ecom_prior"] < 50 else
+             f"CC ecommerce holds above POS at {v['ecom']:.1f}% of total CC volume" if v["ecom"] >= 50 else
+             f"CC ecommerce closing in on POS — now {v['ecom']:.1f}% of total volume"),
+        body=lambda v, m:
+            (f"In {m}, ecommerce accounted for {v['ecom']:.1f}%"
+             + (f" ({sign(v['delta'])}pp vs prior month)" if v["delta"] is not None else "")
+             + f" of total CC transaction volume vs POS at {v['pos']:.1f}%. "
+             + "This structural shift — digital-first over in-store — has persisted for "
+             + ("multiple months." if v["ecom_prior"] and v["ecom_prior"] >= 50
+                else "the first time in this data series.")
+             ) if v["ecom"] >= 50 else
+            (f"In {m}, CC ecommerce is {v['ecom']:.1f}% of total CC transaction volume vs POS at {v['pos']:.1f}%. "
+             f"Ecom gained {sign(v['delta'])}pp vs prior month. The gap to POS is {v['pos'] - v['ecom']:.1f}pp."),
+        implication=lambda v, m:
+            "More than half of credit card spending is now online — not at physical stores. "
+            "Online transactions (called CNP, or card-not-present, because the card isn't physically swiped) carry higher fraud risk. "
+            "If your fraud detection was built around in-store spending patterns, it needs to be updated for an online-first customer base.",
+        chain=lambda v, m: [
+            f"CC ecommerce at {v['ecom']:.1f}% of volume — majority of CC spend is now online, not at physical stores",
+            "Online transactions (card-not-present / CNP) carry higher fraud risk since the card is never physically verified",
+            "Fraud detection built for in-store patterns needs recalibration for an online-first customer base",
+        ],
+        effect={"highlight": ["Total"], "tab": "trend", "trendMode": "absolute", "focusCard": "cc_ecom"},
+        explore={"mode": "by_type"},
+    ),
+
+    Card(
+        id="cc-spend-yoy", group="cc", cut="total",
+        reads={
+            "ecom_yoy": "groups.cc.total.metrics.cc_ecom_txn_vol.yoy_pct",
+            "pos_yoy": "groups.cc.total.metrics.cc_pos_txn_vol.yoy_pct",
+        },
+        fires_when=lambda v: v["ecom_yoy"] is not None and v["pos_yoy"] is not None and (
+            abs(v["ecom_yoy"]) >= 5 or abs(v["pos_yoy"]) >= 5),
+        title=lambda v, m:
+            f"CC spend YoY — ecommerce {v['ecom_yoy']:.1f}% vs in-store POS {v['pos_yoy']:.1f}%",
+        body=lambda v, m:
+            f"On a year-on-year basis, credit card ecommerce transaction volume grew {v['ecom_yoy']:.1f}% "
+            f"and in-store POS volume grew {v['pos_yoy']:.1f}% as of {m}. "
+            f"Year-on-year removes the heavy seasonality in the monthly numbers — "
+            + ("online is outpacing in-store" if v["ecom_yoy"] > v["pos_yoy"] else "in-store is outpacing online")
+            + " on a clean comparison.",
+        implication=lambda v, m:
+            "Credit card spend is growing across both channels year-on-year "
+            + ("(ecom faster). " if v["ecom_yoy"] > v["pos_yoy"] else "(POS faster). ")
+            + "For credit-risk teams this matters: a spend mix tilting online means more "
+            "card-not-present volume, where fraud and dispute rates run higher — provisioning "
+            "and fraud models should track the channel mix, not just the headline spend growth.",
+        chain=lambda v, m: [
+            f"CC ecommerce volume up {v['ecom_yoy']:.1f}% YoY vs POS up {v['pos_yoy']:.1f}% YoY — both growing, seasonally clean",
+            ("Online (CNP) is the faster-growing channel" if v["ecom_yoy"] > v["pos_yoy"]
+             else "In-store POS is the faster-growing channel") + " on a year-on-year basis",
+            "Channel mix shift changes the fraud and dispute profile — risk models must track mix, not just total spend",
+        ],
+        effect={"highlight": ["Total"], "tab": "trend", "trendMode": "yoy", "focusCard": "cc_ecom"},
+        explore={"mode": "by_type"},
+    ),
+]
+
+TWO_METRIC = {c.id: c for c in TWO_METRIC_CARDS}
+
+
+# ══════════════════════════════════════════════════════════════════════════════
 # GAP CARDS — declared, not hand-written (see GapCard / render_gap above)
 # ══════════════════════════════════════════════════════════════════════════════
 # Read these as a list of standing questions the data cannot answer, each with the condition
@@ -1984,11 +1928,11 @@ GAP = {g.id: g for g in GAPS}
 # cards appear on the dashboard, so migrating a card cannot silently reshuffle the page.
 RULES = [
     # CC
-    cc_ecom_vs_pos,
+    TWO_METRIC["cc-ecom-vs-pos-share"],
     cc_atm_withdrawal_trend,
     STREAK["cc-cards-streak"],
     YOY["cc-cards-yoy"],
-    cc_spend_yoy,
+    TWO_METRIC["cc-spend-yoy"],
     cc_transaction_surge,
     CATEGORY["cc-category-share-shift"],
     TOP_BANK["cc-top-bank-rank-change"],
@@ -2007,11 +1951,11 @@ RULES = [
     GAP["gap-dc-cash-dominance"],
     GAP["gap-dc-ecom-low"],
     # Infra
-    infra_qr_per_pos,
+    TWO_METRIC["infra-qr-per-pos"],
     STREAK["infra-pos-streak"],
     YOY["infra-pos-yoy"],
     YOY["infra-upi-yoy"],
-    infra_upi_vs_bharat_qr,
+    TWO_METRIC["infra-upi-vs-bharat-qr"],
     CATEGORY["infra-category-pos-share"],
     TOP_BANK["infra-top-bank-pos"],
     GAP["gap-bharat-qr-contraction"],

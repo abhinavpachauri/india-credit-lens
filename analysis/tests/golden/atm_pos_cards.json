@@ -23,6 +23,7 @@
       "sourceSignals": [
         "groups.cc.total.cross.cc_ecom_txn_vol.share_pct",
         "groups.cc.total.cross.cc_pos_txn_vol.share_pct",
+        "groups.cc.total.cross.cc_ecom_txn_vol.prior_share_pct",
         "groups.cc.total.cross.cc_ecom_txn_vol.share_delta_pp"
       ],
       "title": "CC ecommerce exceeds POS for the first time",
@@ -433,6 +434,8 @@
       "sourceSignals": [
         "groups.infra.total.metrics.upi_qr.latest",
         "groups.infra.total.metrics.pos_terminals.latest",
+        "groups.infra.total.metrics.upi_qr.prior",
+        "groups.infra.total.metrics.pos_terminals.prior",
         "groups.infra.total.metrics.upi_qr.mom_pct",
         "groups.infra.total.metrics.pos_terminals.mom_pct"
       ],
