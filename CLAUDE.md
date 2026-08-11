@@ -136,9 +136,16 @@ in `update_web_data.py`; specific edge cases live in `{period}/date_overrides.js
 | Mar 1–7 | Feb 28/29 | Early-March Bank Credit = February data — captured in `date_overrides.json` for the period |
 | Any other date | Last day of same month | Mid-month sector snapshot → month-end |
 
-**Before `update_web_data.py` writes the CSV:** always show the full remapping table
-(overrides applied + normalization applied) and wait for explicit user confirmation.
-This is the same A/B gate as `detect_format.py` — never skip it.
+**The remapping is gated in code, not by habit (2026-08-11).** It used to be a rule in this
+document with nothing enforcing it — `update_web_data.py` printed the table and wrote the CSV
+regardless. Now `--check` recomputes the remapping and fails if it differs from the approved
+record in `analysis/rbi_sibc/date_remap.json`, whether a date MOVED or a raw date appeared that
+nobody has classified. It runs as gate stage **1a**, before CSV integrity.
+
+To approve a new or changed remap: review the table, then
+`python3 analysis/pipelines/sibc/update_web_data.py --approve` (it asks first). A remap decides
+which *month* a number belongs to — get it wrong and the data is misdated rather than broken,
+so nothing downstream notices.
 
 When a new XLSX introduces dates not covered by the rules above, ask the user to classify
 each raw date before proceeding. Document the decision in `{period}/date_overrides.json`

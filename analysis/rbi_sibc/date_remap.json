@@ -1,0 +1,37 @@
+{
+  "_meta": {
+    "what": "Raw RBI publication date \u2192 the month-end it is counted as.",
+    "why": "A remap decides which MONTH a number belongs to; getting it wrong misdates the data rather than breaking it, so nothing downstream would notice. update_web_data.py --check fails if the computed remapping ever differs from this.",
+    "baseline": "Captured 2026-08-11 from the already-committed consolidated CSV, which had passed every gate. Not a fresh judgment \u2014 the status quo, written down. Any date added or moved from here on stops the pipeline for a human.",
+    "approved_dates": 27
+  },
+  "remap": {
+    "2023-12-29": "2023-12-31",
+    "2024-01-26": "2024-01-31",
+    "2024-02-23": "2024-02-29",
+    "2024-02-29": "2024-02-29",
+    "2024-03-22": "2024-03-31",
+    "2024-03-31": "2024-03-31",
+    "2024-04-19": "2024-04-30",
+    "2024-05-03": "2024-04-30",
+    "2024-05-31": "2024-05-31",
+    "2024-06-28": "2024-06-30",
+    "2024-12-27": "2024-12-31",
+    "2025-01-24": "2025-01-31",
+    "2025-02-21": "2025-02-28",
+    "2025-02-28": "2025-02-28",
+    "2025-03-21": "2025-03-31",
+    "2025-03-31": "2025-03-31",
+    "2025-04-18": "2025-04-30",
+    "2025-05-02": "2025-04-30",
+    "2025-05-30": "2025-05-31",
+    "2025-06-27": "2025-06-30",
+    "2025-12-31": "2025-12-31",
+    "2026-01-31": "2026-01-31",
+    "2026-02-28": "2026-02-28",
+    "2026-03-31": "2026-03-31",
+    "2026-04-30": "2026-04-30",
+    "2026-05-31": "2026-05-31",
+    "2026-06-30": "2026-06-30"
+  }
+}

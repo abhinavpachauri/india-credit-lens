@@ -26,7 +26,8 @@
   "validate_annotation_basis": "pipelines/sibc/validate_annotation_basis.py",
   "validate_web_series": "pipelines/sibc/validate_web_series.py",
   "insights": "pipelines/sibc/generate_analysis_report.py",
-  "insights_validate": "pipelines/sibc/validate_sibc_traceability.py"
+  "insights_validate": "pipelines/sibc/validate_sibc_traceability.py",
+  "consolidate": "pipelines/sibc/update_web_data.py"
  },
  "gate": [
   {
@@ -61,6 +62,15 @@
     "$SECTIONS_MERGED",
     "--merged"
    ]
+  },
+  {
+   "id": "date_remap",
+   "label": "1a. SIBC date remapping",
+   "pipeline": "consolidate",
+   "args": [
+    "--check"
+   ],
+   "note": "remapping"
   },
   {
    "id": "csv_integrity",

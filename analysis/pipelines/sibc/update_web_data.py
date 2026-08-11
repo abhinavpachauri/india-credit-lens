@@ -221,7 +221,96 @@ def load_and_apply_overrides(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def main(dry_run: bool = False):
+# ── The date remapping, as a reviewable artifact ──────────────────────────────
+# RBI publishes Statement 1 fortnightly, always on a Friday, which can land in the first week of
+# the FOLLOWING month — so 2026-04-03 is March data. Getting that wrong silently misdates every
+# number downstream, which is why CLAUDE.md calls the remapping table a hard gate that a human
+# must confirm.
+#
+# It was a gate in the documentation only. Nothing in this file ever asked, and nothing checked
+# afterwards: the table was printed into the console and the CSV was written regardless. So the
+# safest step in the pipeline was the one step with no machine holding it.
+#
+# The approval is now an artifact. `--approve` shows the table and records what was agreed;
+# `--check` recomputes it and fails if today's remapping differs from the recorded one, or if a
+# raw date appears that nobody has classified. The gate runs --check, so an unreviewed remap
+# stops the pipeline instead of quietly reaching the dashboard.
+
+REMAP_FILE = ANALYSIS / "rbi_sibc" / "date_remap.json"
+
+
+def compute_remap(df_before: "pd.DataFrame", df_after: "pd.DataFrame") -> dict:
+    """raw publication date → the period-end date it was mapped to."""
+    pairs = {}
+    for raw, mapped in zip(df_before["date"], df_after["date"]):
+        pairs[str(raw)] = str(mapped)
+    return dict(sorted(pairs.items()))
+
+
+def print_remap_table(remap: dict) -> None:
+    moved = {k: v for k, v in remap.items() if k != v}
+    print(f"\n  Date remapping — {len(remap)} raw date(s), {len(moved)} remapped:")
+    for raw, mapped in remap.items():
+        marker = "  →" if raw != mapped else "   "
+        print(f"    {raw}{marker}  {mapped}" + ("" if raw != mapped else "   (unchanged)"))
+
+
+def load_approved_remap() -> dict:
+    if not REMAP_FILE.exists():
+        return {}
+    return json.loads(REMAP_FILE.read_text()).get("remap", {})
+
+
+def check_remap(remap: dict) -> int:
+    """Compare today's remapping against what a human approved. Returns an exit code."""
+    approved = load_approved_remap()
+    if not approved:
+        print_remap_table(remap)
+        print(f"\n  ✗ No approved remapping on record ({REMAP_FILE.name} missing).\n"
+              f"    Review the table above, then run:\n"
+              f"      python3 analysis/pipelines/sibc/update_web_data.py --approve",
+              file=sys.stderr)
+        return 1
+    new = {k: v for k, v in remap.items() if k not in approved}
+    changed = {k: (approved[k], v) for k, v in remap.items() if k in approved and approved[k] != v}
+    if not new and not changed:
+        print(f"  ✓ date remapping matches the approved record "
+              f"({len(remap)} raw date(s), {sum(1 for k, v in remap.items() if k != v)} remapped)")
+        return 0
+    print_remap_table(remap)
+    if new:
+        print("\n  ✗ Raw date(s) nobody has classified yet:", file=sys.stderr)
+        for k, v in new.items():
+            print(f"      {k}  →  {v}   (proposed)", file=sys.stderr)
+    if changed:
+        print("\n  ✗ Remapping CHANGED for date(s) already approved:", file=sys.stderr)
+        for k, (was, now) in changed.items():
+            print(f"      {k}:  approved {was}  →  now {now}", file=sys.stderr)
+    print(f"\n    A remap decides which MONTH a number belongs to. Review, then re-approve:\n"
+          f"      python3 analysis/pipelines/sibc/update_web_data.py --approve", file=sys.stderr)
+    return 1
+
+
+def approve_remap(remap: dict) -> int:
+    print_remap_table(remap)
+    answer = input("\n  Record this remapping as approved? [y/N] ").strip().lower()
+    if answer != "y":
+        print("  Not approved — nothing written.")
+        return 1
+    REMAP_FILE.write_text(json.dumps({
+        "_meta": {
+            "what": "Raw RBI publication date → the month-end it is counted as.",
+            "why": "A remap decides which month a number belongs to. Approved by a human; "
+                   "update_web_data.py --check fails if the computed remapping ever differs.",
+            "approved_dates": len(remap),
+        },
+        "remap": remap,
+    }, indent=2) + "\n")
+    print(f"  ✓ approved → {REMAP_FILE.relative_to(REPO_ROOT)}")
+    return 0
+
+
+def main(dry_run: bool = False, check: bool = False, approve: bool = False):
     # ── Discover xlsx files ───────────────────────────────────────────────────
     xlsx_files = sorted(set(
         list(ANALYSIS.glob("rbi_sibc/*/raw/SIBC*.xlsx")) +
@@ -262,6 +351,8 @@ def main(dry_run: bool = False):
     # formatting (e.g. 2024-03-08 is actually February data → 2024-02-29).
     df = load_and_apply_overrides(df)
 
+    raw_dates = df[["date"]].copy()          # before any remapping, for the audit table
+
     # ── Step 2: Normalize to canonical period-end dates ───────────────────────
     # Maps all weekly snapshot dates to the last day of their month, and maps
     # early-April Bank Credit fortnightly dates (Apr 1–7) to March 31.
@@ -269,6 +360,20 @@ def main(dry_run: bool = False):
     # the dashboard — no split between e.g. 2024-03-22 (sectors) and
     # 2024-04-05 (Bank Credit total) for the same March 2024 snapshot.
     df = normalize_to_period_end(df)
+
+    # ── The date gate ────────────────────────────────────────────────────────
+    # Every raw publication date and the month-end it now counts as. Checked against the
+    # approved record BEFORE anything is written, because a wrong remap misdates the data
+    # rather than breaking it — nothing downstream would notice.
+    remap = compute_remap(raw_dates, df)
+    if approve:
+        return approve_remap(remap)
+    rc = check_remap(remap)
+    if rc != 0:
+        print("\n  Nothing written — the consolidated CSV is unchanged.", file=sys.stderr)
+        return rc
+    if check:
+        return 0
 
     # ── Step 3: Deduplicate at month level ───────────────────────────────────
     df = deduplicate_by_month(df)
@@ -281,10 +386,15 @@ def main(dry_run: bool = False):
     print(f"  Sectors : {df['code'].nunique()} unique codes")
 
     print(f"\n  ✅ Dashboard data updated — {len(xlsx_files)} file(s) consolidated")
+    return 0
 
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(description="Regenerate consolidated CSV and update web dashboard data")
     ap.add_argument("--dry-run", action="store_true", help="Show what would happen, do not write files")
+    ap.add_argument("--check", action="store_true",
+                    help="Verify the date remapping against the approved record; write nothing")
+    ap.add_argument("--approve", action="store_true",
+                    help="Show the remapping table and record it as approved (asks first)")
     args = ap.parse_args()
-    main(dry_run=args.dry_run)
+    sys.exit(main(dry_run=args.dry_run, check=args.check, approve=args.approve) or 0)
