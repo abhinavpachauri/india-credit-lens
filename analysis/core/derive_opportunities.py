@@ -50,6 +50,24 @@ def firing_signals(pipeline, period):
     return {m for m, s in rows if s in NONFLAT}
 
 
+def opportunity_status(fires_now: bool, fires_prior: bool, node_status: str | None = None) -> str:
+    """The rule that decides whether an opportunity is live, and the only judgment this file makes.
+
+    Two periods rather than one, deliberately: a single firing period is noise as often as it is
+    a signal, so one period earns `watch` and two consecutive earn `active`.
+
+    `retired` is a lifecycle decision made by a human in the model. Data must never resurrect it —
+    a retired node whose driver starts firing again stays retired until someone says otherwise.
+    """
+    if node_status == "retired":
+        return "retired"
+    if fires_now and fires_prior:
+        return "active"
+    if fires_now or fires_prior:
+        return "watch"
+    return "closed"
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--pipeline", required=True, choices=list(gs.PIPELINES))
@@ -87,14 +105,7 @@ def main():
         sigs = set().union(*[driver_signals(d) for d in info["drivers"]]) if info["drivers"] else set()
         fires_now = bool(sigs & fire.get(cur, set())) if cur else False
         fires_prior = bool(sigs & fire.get(prior, set())) if prior else False
-        if n.get("status") == "retired":
-            status = "retired"          # lifecycle decision — never data-resurrected
-        elif fires_now and fires_prior:
-            status = "active"
-        elif fires_now or fires_prior:
-            status = "watch"
-        else:
-            status = "closed"
+        status = opportunity_status(fires_now, fires_prior, n.get("status"))
         # references for the UI (§12.2)
         entity_refs, instance_refs, channel_refs = [], [], []
         for d in info["drivers"]:
