@@ -39,10 +39,11 @@ import pandas as pd
 import sys
 sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
 from core.paths import ROOT as REPO_ROOT
+from core import manifest
 ANALYSIS     = REPO_ROOT / "analysis"
 RBI_SIBC_LIB = ANALYSIS / "rbi_sibc" / "lib"
 WEB_DATA     = REPO_ROOT / "web" / "public" / "data"
-WEB_CSV      = WEB_DATA / "rbi_sibc_consolidated.csv"
+WEB_CSV      = manifest.consolidated_csv("sibc")   # the writer reads the declaration too
 
 sys.path.insert(0, str(RBI_SIBC_LIB))
 

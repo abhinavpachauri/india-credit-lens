@@ -31,8 +31,6 @@ flowchart LR
   n_analysis_signals_narrative_cache_json["narrative_cache.json"]
   n_analysis_signals_registry_json["registry.json"]
   n_analysis_signals_signals_db["signals.db"]
-  n_web_public_data_atm_pos_chart_series_json["atm_pos_chart_series.json"]
-  n_web_public_data_atm_pos_consolidated_csv["atm_pos_consolidated.csv"]
   n_web_public_data_atm_pos_insights_json(["atm_pos_insights.json"])
   n_web_public_data_atm_pos_signals_json(["atm_pos_signals.json"])
   n_web_public_data_opportunities_feed_json["opportunities_feed.json"]
@@ -58,8 +56,6 @@ flowchart LR
   n_analysis_signals_signals_db -->|generate_opportunities_feed| n_web_public_data_opportunities_feed_json
   n_analysis_signals_signals_db -->|generate_opportunity_narrative| n_web_public_data_opportunities_feed_json
   n_analysis_signals_signals_db -->|generate_analysis_report| n_web_public_data_sibc_l1_annotations_json
-  n_web_public_data_atm_pos_consolidated_csv -->|compute_atm_pos_signals| n_analysis_rbi_atm_pos_signals_json
-  n_web_public_data_atm_pos_consolidated_csv -->|generate_chart_series| n_web_public_data_atm_pos_chart_series_json
   n_web_public_data_atm_pos_insights_json -->|generate_atm_pos_insights| n_analysis_rbi_atm_pos_insights_json
   n_web_public_data_atm_pos_signals_json -->|compute_atm_pos_signals| n_analysis_rbi_atm_pos_signals_json
 ```
@@ -109,11 +105,9 @@ Scripts each orchestrator launches as a subprocess, in execution order.
 | `web/lib/reports/rbi_sibc.ts` | derived | `pipelines/sibc/promote_annotations` | `hook_validate`, `pipelines/sibc/validate_annotation_basis`, `pipelines/sibc/validate_web_series` |
 | `web/lib/reports/rbi_sibc_label_overrides.json` | external/authored | — | `pipelines/sibc/validate_web_series` |
 | `web/public/data/atm_pos_chart_series.json` | derived | `core/generate_chart_series` | — |
-| `web/public/data/atm_pos_consolidated.csv` | derived | `pipelines/atm_pos/consolidate_atm_pos` | `core/generate_chart_series`, `pipelines/atm_pos/compute_atm_pos_signals`, `signals/compute/atm_pos`, `signals/evaluate` |
 | `web/public/data/atm_pos_insights.json` | external/authored | — | `pipelines/atm_pos/generate_atm_pos_insights`, `signals/stamp_planes` |
 | `web/public/data/atm_pos_signals.json` | external/authored | — | `pipelines/atm_pos/compute_atm_pos_signals` |
 | `web/public/data/opportunities_feed.json` | derived | `crosssource/generate_opportunities_feed`, `crosssource/generate_opportunity_narrative` | `core/validate_opportunity_traceability` |
-| `web/public/data/rbi_sibc_consolidated.csv` | derived | `pipelines/sibc/update_web_data` | `pipelines/sibc/validate_web_series`, `signals/compute/sibc`, `signals/evaluate` |
 | `web/public/data/sibc_l1_annotations.json` | derived | `pipelines/sibc/generate_analysis_report` | `pipelines/sibc/validate_sibc_traceability`, `signals/stamp_planes` |
 
 ## 4. Module-dependency map
@@ -123,6 +117,7 @@ orchestrated, not import-coupled).
 
 - `core/derive_opportunities` → `core/generate_skeleton`
 - `core/gate` → `core/manifest`
+- `core/generate_chart_series` → `core/manifest`
 - `core/generate_system_state` → `core/generate_skeleton`
 - `core/run_inference` → `core/generate_skeleton`
 - `core/validate_system_model` → `core/generate_skeleton`
@@ -132,10 +127,17 @@ orchestrated, not import-coupled).
 - `crosssource/generate_opportunity_narrative` → `core/generate_skeleton`, `core/voice`
 - `crosssource/validate_composition` → `core/generate_skeleton`
 - `guards/check_derived_fresh` → `core/manifest`
+- `pipelines/atm_pos/compute_atm_pos_signals` → `core/manifest`
+- `pipelines/atm_pos/consolidate_atm_pos` → `core/manifest`
 - `pipelines/atm_pos/extract_atm_pos` → `pipelines/atm_pos/detect_atm_pos_format`
+- `pipelines/atm_pos/generate_atm_pos_insights` → `core/manifest`
 - `pipelines/sibc/extract_sibc` → `pipelines/sibc/detect_format`
+- `pipelines/sibc/update_web_data` → `core/manifest`
+- `pipelines/sibc/validate_web_series` → `core/manifest`
+- `signals/compute/atm_pos` → `core/manifest`
 - `signals/compute/engine` → `signals/db`
-- `signals/evaluate` → `signals/db`, `signals/query`
+- `signals/compute/sibc` → `core/manifest`
+- `signals/evaluate` → `core/manifest`, `signals/db`, `signals/query`
 - `signals/is_news` → `signals/proximity`
 - `signals/migrate_to_db` → `signals/db`
 - `signals/planes` → `signals/is_news`, `signals/proximity`

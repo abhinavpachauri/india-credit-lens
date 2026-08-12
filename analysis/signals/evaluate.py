@@ -30,6 +30,7 @@ from pathlib import Path
 import sys
 sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
 from core.paths import ROOT as REPO
+from core import manifest
 PROMPTS_DIR = Path(__file__).parent / "prompts"
 EVALS_DIR   = Path(__file__).parent / "evaluations"
 
@@ -473,11 +474,11 @@ def _evaluate_domain(pipeline: str, period: str, domain: str,
 
 # ── Source reference ─────────────────────────────────────────────────────────
 
-# Canonical source files per pipeline (relative to repo root)
-_SOURCE_FILE: dict[str, str] = {
-    "sibc":    "web/public/data/rbi_sibc_consolidated.csv",
-    "atm_pos": "web/public/data/atm_pos_consolidated.csv",
-}
+def _source_file(pipeline: str) -> str:
+    """The pipeline's consolidated CSV, repo-relative, as cited in a signal's source reference.
+    Read from the manifest rather than restated here — this used to be a second copy of a path
+    the manifest already declares."""
+    return str(manifest.consolidated_csv(pipeline).relative_to(REPO))
 
 
 def _source_ref(sig: dict) -> dict:
@@ -499,7 +500,7 @@ def _source_ref(sig: dict) -> dict:
     sub_layer = sig.get("sub_layer", "1a")
 
     ref: dict = {
-        "source_file": _SOURCE_FILE.get(pipeline, ""),
+        "source_file": _source_file(pipeline),
         "method":      compute.get("method", ""),
     }
 

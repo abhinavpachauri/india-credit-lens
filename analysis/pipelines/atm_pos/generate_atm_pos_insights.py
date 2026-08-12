@@ -23,6 +23,7 @@ import sys
 from dataclasses import dataclass, field
 sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
 from core.paths import ROOT
+from core import manifest
 from signals.dominance import move_dominance, short_entity
 SIGNALS_IN  = ROOT / "analysis/rbi_atm_pos/signals.json"
 OUT_PATH    = ROOT / "analysis/rbi_atm_pos/insights.json"
@@ -302,7 +303,9 @@ def build_basis(s: dict, keys: list, chain: list) -> dict:
         if val is not None:
             label = ".".join(key.split(".")[-2:])    # short, readable
             facts.append(f"{label}: {round(val, 2)}")
-    facts.append("Source: web/public/data/atm_pos_consolidated.csv")
+    # The provenance line a reader sees on the card — from the manifest, so if the file ever
+    # moves the card says where it actually is.
+    facts.append(f"Source: {manifest.consolidated_csv('atm_pos').relative_to(ROOT)}")
     return {"facts": facts, "inferences": chain}
 
 

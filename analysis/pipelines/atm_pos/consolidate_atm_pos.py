@@ -29,10 +29,11 @@ from pathlib import Path
 import sys
 sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
 from core.paths import ROOT as REPO_ROOT
+from core import manifest
 ANALYSIS    = REPO_ROOT / "analysis"
 ATM_POS_DIR = ANALYSIS / "rbi_atm_pos"
 WEB_DATA    = REPO_ROOT / "web" / "public" / "data"
-CSV_PATH    = WEB_DATA / "atm_pos_consolidated.csv"
+CSV_PATH    = manifest.consolidated_csv("atm_pos")
 TIMELINE    = ATM_POS_DIR / "timeline.json"
 
 GREEN  = "\033[32m"

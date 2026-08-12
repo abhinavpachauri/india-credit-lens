@@ -38,7 +38,8 @@ from . import common
 import sys
 sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
 from core.paths import ROOT as REPO
-CSV     = REPO / "web" / "public" / "data" / "atm_pos_consolidated.csv"
+from core import manifest
+CSV     = manifest.consolidated_csv("atm_pos")   # declared in pipelines/atm_pos/pipeline.json
 
 _df_cache: pd.DataFrame | None = None
 

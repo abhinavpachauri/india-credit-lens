@@ -8,6 +8,7 @@ of the artifact list, and it silently fell behind. `sibc_l1_annotations.json` an
 `atm_pos_insights.json` — the two largest artifacts the gate writes — went unguarded for
 months. A test that simply asserts they are declared would have caught it the day it happened.
 """
+import re
 import sys
 from pathlib import Path
 
@@ -97,3 +98,40 @@ def test_ingestion_stages_declare_nothing_derived():
         if stage.get("skip_if") == "revalidate":
             assert "derived" not in stage, (
                 f"{stage['id']} needs the source file, so the freshness guard cannot replay it")
+
+
+# ── Declared paths must be read, not restated ─────────────────────────────────
+# The manifest has always carried `consolidated_csv`, and until 2026-08-11 six live modules
+# hardcoded the same path instead — so the declaration was decorative and moving the file was a
+# six-file edit. This is the test that keeps it read.
+
+LIVE_DIRS = ("core", "signals", "pipelines", "crosssource", "guards", "distribution")
+CSV_LITERAL = re.compile(r"[\"'][^\"'\n]*(?:rbi_sibc|atm_pos)_consolidated\.csv[\"']")
+
+
+def _live_modules():
+    for d in LIVE_DIRS:
+        for f in (ANALYSIS / d).rglob("*.py"):
+            if "__pycache__" not in str(f):
+                yield f
+
+
+def test_no_live_module_hardcodes_a_consolidated_csv_path():
+    """Use core.manifest.consolidated_csv(pipeline). A path in two places is a path that can
+    disagree with itself — and this one is the source every Layer-1 signal is computed from."""
+    offenders = []
+    for f in _live_modules():
+        for line in f.read_text().splitlines():
+            stripped = line.strip()
+            if stripped.startswith("#") or '"""' in line:
+                continue          # prose and docstrings may name the file
+            if CSV_LITERAL.search(line) and "consolidated_csv(" not in line:
+                offenders.append(f"{f.relative_to(ANALYSIS)}: {stripped[:70]}")
+    assert not offenders, "hardcoded consolidated-CSV path(s):\n  " + "\n  ".join(offenders)
+
+
+@pytest.mark.parametrize("pipeline", manifest.PIPELINE_IDS)
+def test_consolidated_csv_resolves_to_a_real_file(pipeline):
+    csv = manifest.consolidated_csv(pipeline)
+    assert csv.exists(), f"{pipeline} declares {csv}, which does not exist"
+    assert csv.stat().st_size > 0

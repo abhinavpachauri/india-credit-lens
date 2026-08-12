@@ -27,7 +27,8 @@ from pathlib import Path
 import sys
 sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
 from core.paths import ROOT
-CSV_PATH  = ROOT / "web/public/data/atm_pos_consolidated.csv"
+from core import manifest
+CSV_PATH  = manifest.consolidated_csv("atm_pos")
 OUT_PATH  = ROOT / "analysis/rbi_atm_pos/signals.json"
 WEB_PATH  = ROOT / "web/public/data/atm_pos_signals.json"
 

@@ -28,12 +28,13 @@ from pathlib import Path
 import sys
 sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
 from core.paths import ROOT
+from core import manifest
 
 # Per-pipeline column mapping — the only authored input. Add a pipeline here to
 # onboard it; no other code changes.
 PIPELINES = {
     "atm_pos": {
-        "csv":      ROOT / "web/public/data/atm_pos_consolidated.csv",
+        "csv":      manifest.consolidated_csv("atm_pos"),
         "out":      ROOT / "web/public/data/atm_pos_chart_series.json",
         "date_col": "report_date",
         "entity_col":   "bank_name",

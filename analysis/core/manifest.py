@@ -96,6 +96,22 @@ def resolve(stage, manifest, vars_, flags=None):
     return None, None  # builtin
 
 
+def path(pipeline: str, key: str) -> Path:
+    """A declared path for a pipeline, absolute.
+
+    The manifest has always carried these — `consolidated_csv`, `timeline`, `system_model` — and
+    almost nobody read them. Six live modules hardcoded the consolidated CSV instead, which meant
+    the declaration was decorative and moving the file was a six-file edit. Read it from here and
+    the manifest becomes the single place a path is decided.
+    """
+    return ROOT / load(pipeline)["paths"][key]
+
+
+def consolidated_csv(pipeline: str) -> Path:
+    """The pipeline's consolidated CSV — the source every Layer-1 signal is computed from."""
+    return path(pipeline, "consolidated_csv")
+
+
 def regenerating_stages(manifest) -> list[dict]:
     """The stages that rewrite committed artifacts — those declaring `derived`.
 
