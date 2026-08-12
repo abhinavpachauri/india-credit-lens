@@ -20,7 +20,7 @@ deterministic compute engine, and the LLM evaluation layer.
 
 Cross-segment L1 methods. Same architectural status as `csv_yoy_streak`/`csv_mom_streak`/`csv_sector_scan_*`: registry
 spec → deterministic compute → per-entity rows in `signals.db` → deterministic insight builders.
-They serve the fixed monthly outputs in `FABLE_BRIEF_cross_segment_insights.md` (posts 2/3/4).
+They serve the fixed monthly outputs in `archive/docs/FABLE_BRIEF_cross_segment_insights.md` (posts 2/3/4).
 **Deterministic prose is the product** — the insight builders must emit publishable copy with zero
 LLM calls (quality bar: `deterministic_scan_insight`).
 

@@ -26,7 +26,7 @@ Both are prepared from the same gate run; publishing is staggered so one monthly
 gives a fortnightly presence.
 
 **v1 (config-authored + mermaid images + LinkedIn packages) is retired** to
-`analysis/legacy/newsletter_v1/` — it depended on subsystems.json and Stage-4 mermaid,
+`archive/analysis/newsletter_v1/` — it depended on subsystems.json and Stage-4 mermaid,
 both retired in the v4.0 cutover. LinkedIn posts are now written by the user in their
 own voice (deliberate decision, 2026-07-03) — there is no LinkedIn generator.
 
@@ -105,4 +105,4 @@ tone needs fixing, fix the **eval prompt** upstream (next cycle), never the card
 | `issues/deep_read.py` | Post 2 generator |
 | `signal_registry.json` | Editorial record of every signal ever published (kept from v1) |
 | `output_longform/` | Rendered issues (`release_read_*`, `deep_read_*`) + v1 history |
-| `../legacy/newsletter_v1/` | Retired v1: config-driven generator, LinkedIn/images scripts |
+| `archive/analysis/newsletter_v1/` | Retired v1: config-driven generator, LinkedIn/images scripts (archived 2026-08-11) |

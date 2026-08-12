@@ -889,7 +889,7 @@ exactly how two slots would start telling the same story.
 
 ## 13. Reconciliations (closed 2026-07-21)
 
-### 13.1 `FABLE_BRIEF_cross_segment_insights.md` posts 2/3/4 — resolved
+### 13.1 `archive/docs/FABLE_BRIEF_cross_segment_insights.md` posts 2/3/4 — resolved
 
 The brief's consumption contract predates this spec and its calendar conflicts with §4. Resolution:
 

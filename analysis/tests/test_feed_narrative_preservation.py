@@ -6,7 +6,7 @@ Unit tests for narrative preservation across an opportunities-feed rebuild
 An LLM narrative is written against one computed state. The deterministic
 (title, status) pair fingerprints that state: cross-system titles encode
 direction, pipeline titles are static labels whose state signal is the status.
-These tests pin the four cases from HANDOFF_NARRATIVE_STALENESS_BUG.md:
+These tests pin the four cases from archive/docs/HANDOFF_NARRATIVE_STALENESS_BUG.md:
   (a) title+status unchanged  → preserved
   (b) title flipped           → dropped (the observed cc-spend bug)
   (c) status flipped, same title → dropped (the pipeline-card hole)

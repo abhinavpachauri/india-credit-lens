@@ -54,7 +54,7 @@ Live components only. Planned work lives in `STRATEGY_PLANNER.md`.
 | SEO layer | **Live** — metadata, OG image, sitemap, JSON-LD |
 | Email / Substack CTA | **Live** — `SubstackCTA.tsx` + `EmailGate.tsx` |
 | Reply desk (X distribution) | **Retired (2026-07-21)** → `analysis/legacy/replydesk/` — distribution serves Substack + LinkedIn; X is reactive and needs its own design. Never used (`reply_log.json` never created in 17 days). Its SEBI guardrail was salvaged into `distribution/slot_render.lint_compliance` (blurbs + design prompts) — it was the only one in the codebase. |
-| Long-form / Substack (2-post cadence) | **Live** — folded into `analysis/distribution/` on 2026-07-21 (it is a channel, not a system). Deterministic rendering over gate-validated artifacts: `issues/merged_issue.py` (L1, within 24h of release) + `issues/deep_read.py` (L2/L3 + ecosystem, mid-cycle). Self-gating traceability (`validate_distribution.check_doc`: verbatim cards + **per-block** declared scope — the pooled version measured 0% catch, see the gate docstring). Output = .md + Substack-paste .html. v1 (config/mermaid/LinkedIn) retired to `legacy/newsletter_v1/` — LinkedIn posts are now written by the user in their own voice. |
+| Long-form / Substack (2-post cadence) | **Live** — folded into `analysis/distribution/` on 2026-07-21 (it is a channel, not a system). Deterministic rendering over gate-validated artifacts: `issues/merged_issue.py` (L1, within 24h of release) + `issues/deep_read.py` (L2/L3 + ecosystem, mid-cycle). Self-gating traceability (`validate_distribution.check_doc`: verbatim cards + **per-block** declared scope — the pooled version measured 0% catch, see the gate docstring). Output = .md + Substack-paste .html. v1 (config/mermaid/LinkedIn) archived to `archive/analysis/newsletter_v1/` — LinkedIn posts are now written by the user in their own voice. |
 | validate_content.py (Check 2b) | **Live** — content accuracy eval on annotation bodies |
 | validate_claims.py (Check 2c) | **Retired** — superseded by `core/validate_system_model.py` (sourcing built in); archived in `analysis/legacy/` |
 | validate_annotation_basis.py (Check 2d) | **Live** — basis completeness check (inference/hypothesis → basis.inferences non-empty) |
@@ -302,14 +302,14 @@ stubs retired/migrated → 2 new gap nodes) · **payments perf**: precomputed co
 **SIBC aggregate "Total" per card** (official parent row, off by default) · S4 + L1/L2 ingestion stages
 documented in PIPELINE_ARCHITECTURE.md (Stage 5.7, Stage 8). Both pipelines now aligned **by construction**.
 
-**Latest session handoff:** `HANDOFF_2026-06-23.md` (full arc + open items + the LinkedIn pivot).
+**Latest session handoff:** `archive/docs/HANDOFF_2026-06-23.md` (archived 2026-08-11 — a finished-work snapshot).
 
 **Immediately next — LinkedIn content for site engagement (new session).** The engine is mature; the
 bottleneck is distribution. Lead with the **payments pipeline** framed for fintech/product builders (the
 reachable network), per the `project_distribution_reality` memory. Workflow: `analysis/distribution/NEWSLETTER_CONTEXT.md`
 → `generate_linkedin.py` (7-post packages). It's the one exception path not yet on the unified pipeline.
 
-**Queued — engineering-health / technical-design track (non-functional).** See `HANDOFF_TECH_QUALITY.md` (the
+**Queued — engineering-health / technical-design track (non-functional).** See `archive/docs/HANDOFF_TECH_QUALITY.md` (the
 single authoritative backlog; the `analysis/` restructure is §4 of it). We've optimised for *functional*
 correctness, not *technical*. Gaps: authoritative `ARCHITECTURE.md` (data-flow + lineage + module-dep +
 invariants — PIPELINE_ARCHITECTURE is stage-prose only); **unit tests for the deterministic core** (today:
