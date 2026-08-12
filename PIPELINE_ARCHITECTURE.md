@@ -366,8 +366,16 @@ release. The publication date is always a Friday — which can fall in the first
 | Mar 1–7 | Feb 28/29 | `date_overrides.json` in the Feb/Mar period dir | Early-March Bank Credit = Feb data |
 | All other dates | last day of same month | normalization fallback | Mid-month sector snapshots |
 
-**Always ask for confirmation before `update_web_data.py` writes the CSV.**
-Show the full remapping table (overrides + normalization) and wait for explicit sign-off.
+**The remapping is enforced in code, not by habit (2026-08-11).** `update_web_data.py --check`
+recomputes the remapping and fails if it differs from the approved record in
+`analysis/rbi_sibc/date_remap.json` — whether a date moved, or a raw date appeared that nobody has
+classified. It runs as gate stage **1a**, and `--xlsx` ingestion stops at stage **0.7** before the
+CSV is written. To approve a new or changed remap: review the table it prints, then
+`python3 analysis/pipelines/sibc/update_web_data.py --approve` (it asks first).
+
+A remap decides which *month* a number belongs to. Get it wrong and the data is misdated rather
+than broken, so every downstream check still passes — which is why this one is enforced rather
+than remembered.
 
 ### Scripts per stage
 
@@ -600,9 +608,10 @@ Never copy `annotations_merged.ts` → `rbi_sibc.ts` manually.
 ```
 □  Place xlsx in analysis/rbi_sibc/{dataDate}/raw/
 □  python3 analysis/pipelines/sibc/detect_format.py {xlsx}
-   — review format_report.json; confirm before proceeding
-□  python3 analysis/pipelines/sibc/extract_sibc.py {xlsx}
-□  python3 analysis/pipelines/sibc/update_web_data.py
+   — review format_report.json; confirm before proceeding (interactive A/B)
+□  python3 analysis/core/gate.py --pipeline sibc --xlsx {xlsx} --skip-build
+   — resolves the period from the file, then runs format-check → extract → consolidate → validate.
+     Stops at 0.7 if the date remapping is unapproved; then `update_web_data.py --approve` and re-run.
 □  Update timeline.json — add period entry, is_fy_end: false
 □  Claude: delta_brief.md  (150–200 words; see structure above)
 □  python3 analysis/core/gate.py --pipeline sibc --period {dataDate} --skip-build

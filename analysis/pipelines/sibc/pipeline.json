@@ -27,7 +27,8 @@
   "validate_web_series": "pipelines/sibc/validate_web_series.py",
   "insights": "pipelines/sibc/generate_analysis_report.py",
   "insights_validate": "pipelines/sibc/validate_sibc_traceability.py",
-  "consolidate": "pipelines/sibc/update_web_data.py"
+  "consolidate": "pipelines/sibc/update_web_data.py",
+  "extract": "pipelines/sibc/extract_sibc.py"
  },
  "gate": [
   {
@@ -50,6 +51,22 @@
     "$PERIOD"
    ],
    "skip_if": "merged"
+  },
+  {
+   "id": "extract",
+   "label": "0.6 extract \u2192 sections.json",
+   "pipeline": "extract",
+   "args": [
+    "$XLSX"
+   ],
+   "skip_if": "ingest_only"
+  },
+  {
+   "id": "consolidate",
+   "label": "0.7 consolidate \u2192 CSV",
+   "pipeline": "consolidate",
+   "skip_if": "ingest_only",
+   "note": "Wrote"
   },
   {
    "id": "sections",
@@ -238,5 +255,11 @@
    "builtin": "web_build",
    "skip_if": "--skip-build"
   }
- ]
+ ],
+ "period_resolver": {
+  "module": "extract",
+  "args": [
+   "--print-period"
+  ]
+ }
 }

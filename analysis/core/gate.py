@@ -117,6 +117,11 @@ def should_skip(stage, flags, vars_, failed, stop):
         return "skipped (merged)"
     if cond == "revalidate" and flags.get("revalidate"):
         return "skipped (revalidate — period already extracted)"
+    # An ingest stage consumes a source file. With no --xlsx there is nothing to ingest, so it
+    # must not run at all — not in merged mode, not when re-validating a stored period. Stating
+    # it as "needs a file" rather than enumerating the modes means a new mode cannot forget it.
+    if cond == "ingest_only" and not flags.get("ingesting"):
+        return "skipped (no --xlsx — nothing to ingest)"
     if cond == "--skip-build" and flags.get("skip_build"):
         return "skipped (--skip-build)"
     if cond and cond.startswith("missing:"):
@@ -164,7 +169,8 @@ def main():
     else:
         period, revalidate = args.period, bool(args.period)
 
-    flags = {"merged": args.merged, "skip_build": args.skip_build, "revalidate": revalidate}
+    flags = {"merged": args.merged, "skip_build": args.skip_build, "revalidate": revalidate,
+             "ingesting": bool(args.xlsx)}
     # $LATEST = the most recent DB period — the live latest. The analytical layer (skeleton,
     #   system_state, opportunities, …) always runs for it, regardless of which period is being
     #   ingested/revalidated (a backfill of an OLDER period must not retarget S3 at itself).

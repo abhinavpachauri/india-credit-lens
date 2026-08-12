@@ -662,6 +662,21 @@ def extract(xlsx_path: Path, out_dir: "Path | None" = None, dry_run: bool = Fals
     return payload
 
 
+def resolve_period(xlsx_path: Path) -> str:
+    """The canonical YYYY-MM-DD period for a workbook, with no side effects.
+
+    The generic gate calls this (via `--print-period`) to learn which period an xlsx belongs to
+    before running any ingest stage — it cannot know that itself, because reading a date out of
+    an RBI file is pipeline knowledge. SIBC carries the date in the filename; payments reads it
+    from the sheet. Same contract, different answer, which is the point of declaring a resolver
+    per pipeline rather than teaching the gate about filenames.
+    """
+    report_date = parse_filename_date(xlsx_path)
+    if report_date is None:
+        raise SystemExit(f"ERROR: cannot parse a report date from {Path(xlsx_path).name}")
+    return report_date.strftime("%Y-%m-%d")
+
+
 # ── CLI ───────────────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
@@ -669,7 +684,13 @@ if __name__ == "__main__":
     ap.add_argument("xlsx",      help="Path to SIBC .xlsx file")
     ap.add_argument("--out-dir", help="Output directory (default: analysis/rbi_sibc/{date}/)")
     ap.add_argument("--dry-run", action="store_true", help="Parse and print, do not write files")
+    ap.add_argument("--print-period", action="store_true",
+                    help="Print the period this file belongs to and exit (no extraction)")
     args = ap.parse_args()
+
+    if args.print_period:
+        print(resolve_period(Path(args.xlsx)))
+        raise SystemExit(0)
 
     extract(
         xlsx_path=Path(args.xlsx),
