@@ -66,11 +66,8 @@ def invalidate_cache() -> None:
 
 
 def _prior_year(period: str, available: set[str]) -> str | None:
-    d = date.fromisoformat(period)
-    py = d.year - 1
-    last_day = calendar.monthrange(py, d.month)[1]
-    candidate = f"{py}-{d.month:02d}-{last_day:02d}"
-    return candidate if candidate in available else None
+    """Shared — see compute/common.py."""
+    return common.prior_year(period, available)
 
 
 def _prior_period(period: str, available: set[str]) -> str | None:
@@ -114,9 +111,8 @@ def _eval_status(rules: list, value: float, prev: float) -> str:
 
 
 def _row(entity_type: str, entity_id: str, value, status: str, unit: str) -> dict:
-    return {"entity_type": entity_type, "entity_id": entity_id,
-            "value": round(float(value), 4) if value is not None else None,
-            "status": status, "unit": unit}
+    """Shared row shape — see compute/common.py."""
+    return common.row(entity_type, entity_id, value, status, unit)
 
 
 def _unknown() -> list[dict]:
@@ -432,25 +428,8 @@ ROTATION_DEFAULT_RULES = [
 
 def _rotation_rows(cur_shares: list[dict], prior_shares: list[dict],
                    rules: list) -> list[dict]:
-    """Shared rotation math: Δshare_pp per entity from two share-scan snapshots,
-    plus the aggregate 'rotation mass' row (Σ|Δ|/2 = pp of the mix that moved).
-    Entities must appear in both snapshots to rotate. Mirror of sibc._rotation_rows."""
-    prior = {r["entity_id"]: r["value"] for r in prior_shares
-             if r["value"] is not None}
-    out = []
-    for r in cur_shares:
-        eid = r["entity_id"]
-        if r["value"] is None or eid not in prior:
-            continue
-        delta = r["value"] - prior[eid]
-        out.append(_row(r["entity_type"], eid, delta,
-                        _eval_status(rules, delta, delta), "pp"))
-    if not out:
-        return []
-    out.sort(key=lambda r: r["value"], reverse=True)
-    mass = sum(abs(r["value"]) for r in out) / 2
-    out.append(_row("aggregate", "total", mass, "active", "pp"))
-    return out
+    """Shared rotation math — see compute/common.py."""
+    return common.rotation_rows(cur_shares, prior_shares, rules)
 
 
 def csv_category_rotation(params: dict, period: str, df: pd.DataFrame) -> list[dict]:

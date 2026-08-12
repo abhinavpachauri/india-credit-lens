@@ -12,6 +12,8 @@ third pipeline inherits them instead of copying them a third time.
 """
 from __future__ import annotations
 
+import calendar
+from datetime import date
 from typing import Callable, Sequence
 
 
@@ -42,6 +44,23 @@ def eval_status(rules: list, value: float, prev: float) -> str:
     return "unknown"
 
 
+def row(entity_type: str, entity_id: str, value, status: str, unit: str) -> dict:
+    """One computed signal row, as it is stored.
+
+    Both modules defined this identically — the 65% text similarity between them was purely
+    whitespace. It is the shape every signal in signals.db takes, so it belongs in one place:
+    a rounding difference between the two would be a rounding difference between the two
+    dashboards.
+    """
+    return {
+        "entity_type": entity_type,
+        "entity_id":   entity_id,
+        "value":       round(float(value), 4) if value is not None else None,
+        "status":      status,
+        "unit":        unit,
+    }
+
+
 def count_streak(dates: Sequence[str], end_idx: int, holds: Callable[[int], bool]) -> int:
     """How many consecutive periods, counting back from `end_idx`, satisfy `holds`.
 
@@ -55,3 +74,48 @@ def count_streak(dates: Sequence[str], end_idx: int, holds: Callable[[int], bool
             break
         streak += 1
     return streak
+
+
+def prior_year(period: str, available: set[str]) -> str | None:
+    """The same month one year earlier, or None if that period was never ingested.
+
+    Both pipelines walk to the year-ago month-end the same way, so they shared this by
+    copy-paste. Year-on-year is the backbone of nearly every signal; the two copies agreeing
+    was luck rather than design.
+    """
+    d = date.fromisoformat(period)
+    py = d.year - 1
+    last_day = calendar.monthrange(py, d.month)[1]
+    target = f"{py}-{d.month:02d}-{last_day:02d}"
+    return target if target in available else None
+
+
+def rotation_rows(cur_shares: list[dict], prior_shares: list[dict],
+                  rules: list) -> list[dict]:
+    """Δshare_pp per entity between two share-scan snapshots, plus the aggregate
+    "rotation mass" row (Σ|Δ|/2 — the share of the mix that actually moved).
+
+    Entities must appear in BOTH snapshots to rotate: something that only exists in one of
+    them has no Δ, it has an arrival or a departure, which is a different fact.
+
+    This was duplicated verbatim in both compute modules — identical but for one docstring
+    line. Rotation is a claim about how a mix shifted; two copies of that arithmetic is two
+    chances for the credit and payments dashboards to mean different things by the same word.
+    """
+
+    prior = {r["entity_id"]: r["value"] for r in prior_shares
+             if r["value"] is not None}
+    out = []
+    for r in cur_shares:
+        eid = r["entity_id"]
+        if r["value"] is None or eid not in prior:
+            continue
+        delta = r["value"] - prior[eid]
+        out.append(row(r["entity_type"], eid, delta,
+                       eval_status(rules, delta, delta), "pp"))
+    if not out:
+        return []
+    out.sort(key=lambda r: r["value"], reverse=True)
+    mass = sum(abs(r["value"]) for r in out) / 2
+    out.append(row("aggregate", "total", mass, "active", "pp"))
+    return out
