@@ -8,7 +8,7 @@
 > Authored rationale (layer model, design principles, guard purposes) lives in the
 > hand-written `ARCHITECTURE.md`. This file is the structural, drift-guarded half.
 
-_Derived from 63 scripts._
+_Derived from 61 scripts._
 
 ## 1. Data-flow
 
@@ -97,13 +97,14 @@ Scripts each orchestrator launches as a subprocess, in execution order.
 | `analysis/rbi_atm_pos/merged/system_model.json` | derived | `core/generate_skeleton` | `core/relational_insights` |
 | `analysis/rbi_atm_pos/signals.json` | derived | `pipelines/atm_pos/compute_atm_pos_signals` | `pipelines/atm_pos/generate_atm_pos_insights`, `pipelines/atm_pos/validate_atm_pos_claims`, `pipelines/atm_pos/validate_atm_pos_insights` |
 | `analysis/rbi_atm_pos/skeleton_profile.json` | external/authored | — | `core/generate_skeleton` |
+| `analysis/rbi_sibc/date_remap.json` | derived | `pipelines/sibc/update_web_data` | — |
 | `analysis/rbi_sibc/merged/annotations_merged.ts` | external/authored | — | `pipelines/sibc/validate_annotation_basis` |
 | `analysis/rbi_sibc/merged/sections_merged.json` | external/authored | — | `hook_validate`, `pipelines/sibc/detect_format`, `pipelines/sibc/generate_merge`, `pipelines/sibc/validate_content`, `pipelines/sibc/validate_web_series` |
 | `analysis/rbi_sibc/merged/system_model.json` | derived | `core/generate_skeleton` | `core/relational_insights` |
 | `analysis/rbi_sibc/skeleton_profile.json` | external/authored | — | `core/generate_skeleton` |
 | `analysis/rbi_sibc/timeline.json` | external/authored | — | `core/validate_timeline`, `pipelines/sibc/generate_merge`, `signals/compute/sibc`, `signals/query` |
 | `analysis/signals/narrative_cache.json` | derived | `crosssource/generate_opportunity_narrative` | — |
-| `analysis/signals/registry.json` | derived | `signals/apply_status_rules`, `signals/rebuild_atm_pos_signals`, `signals/rebuild_sibc_signals`, `signals/update_registry` | `core/generate_signal_history`, `core/relational_insights`, `core/validate_opportunity_traceability`, `crosssource/generate_opportunities_feed`, `crosssource/validate_composition`, `guards/check_signal_freshness`, `guards/validate_signal_history`, `pipelines/atm_pos/compute_atm_pos_signals`, `pipelines/atm_pos/generate_atm_pos_insights`, `pipelines/atm_pos/validate_atm_pos_insights`, `pipelines/sibc/generate_analysis_report`, `pipelines/sibc/validate_sibc_traceability`, `signals/proximity` |
+| `analysis/signals/registry.json` | derived | `signals/apply_status_rules`, `signals/update_registry` | `core/generate_signal_history`, `core/relational_insights`, `core/validate_opportunity_traceability`, `crosssource/generate_opportunities_feed`, `crosssource/validate_composition`, `guards/check_signal_freshness`, `guards/validate_signal_history`, `pipelines/atm_pos/compute_atm_pos_signals`, `pipelines/atm_pos/generate_atm_pos_insights`, `pipelines/atm_pos/validate_atm_pos_insights`, `pipelines/sibc/generate_analysis_report`, `pipelines/sibc/validate_sibc_traceability`, `signals/proximity` |
 | `analysis/signals/signals.db` | derived | `signals/db` | `core/derive_opportunities`, `core/gate`, `core/generate_system_state`, `core/relational_insights`, `core/validate_opportunity_traceability`, `crosssource/compose_ecosystem`, `crosssource/generate_opportunities_feed`, `crosssource/generate_opportunity_narrative`, `guards/check_derived_fresh`, `guards/validate_signal_history`, `pipelines/atm_pos/compute_atm_pos_signals`, `pipelines/atm_pos/generate_atm_pos_insights`, `pipelines/atm_pos/validate_atm_pos_claims`, `pipelines/atm_pos/validate_atm_pos_insights`, `pipelines/sibc/generate_analysis_report`, `pipelines/sibc/validate_sibc_traceability`, `signals/dominance`, `signals/proximity` |
 | `web/lib/reports/rbi_sibc.ts` | derived | `pipelines/sibc/promote_annotations` | `hook_validate`, `pipelines/sibc/validate_annotation_basis`, `pipelines/sibc/validate_web_series` |
 | `web/lib/reports/rbi_sibc_label_overrides.json` | external/authored | — | `pipelines/sibc/validate_web_series` |
@@ -143,10 +144,11 @@ orchestrated, not import-coupled).
 ## 5. Findings (drift signals)
 
 ### Multiple writers (verify intentional vs. dual-path smell)
-- `analysis/signals/registry.json` ← `signals/apply_status_rules`, `signals/rebuild_atm_pos_signals`, `signals/rebuild_sibc_signals`, `signals/update_registry`
+- `analysis/signals/registry.json` ← `signals/apply_status_rules`, `signals/update_registry`
 - `format_report.json` ← `pipelines/atm_pos/detect_atm_pos_format`, `pipelines/sibc/detect_format`
 - `sections.json` ← `pipelines/atm_pos/extract_atm_pos`, `pipelines/sibc/extract_sibc`
 - `web/public/data/opportunities_feed.json` ← `crosssource/generate_opportunities_feed`, `crosssource/generate_opportunity_narrative`
 
 ### Internal artifacts produced but never read (potential dead output)
+- `analysis/rbi_sibc/date_remap.json` ← `pipelines/sibc/update_web_data`
 - `analysis/signals/narrative_cache.json` ← `crosssource/generate_opportunity_narrative`

@@ -555,9 +555,11 @@
       "invokes": [],
       "path": "analysis/pipelines/sibc/update_web_data.py",
       "reads": {
-        "*/date_overrides.json": "low"
+        "*/date_overrides.json": "low",
+        "date_remap.json": "low"
       },
       "writes": {
+        "analysis/rbi_sibc/date_remap.json": "high",
         "web/public/data/rbi_sibc_consolidated.csv": "high"
       }
     },
@@ -773,26 +775,6 @@
         "timeline.json": "low"
       },
       "writes": {}
-    },
-    "signals/rebuild_atm_pos_signals": {
-      "doc_claims": [],
-      "imports": [],
-      "invokes": [],
-      "path": "analysis/signals/rebuild_atm_pos_signals.py",
-      "reads": {},
-      "writes": {
-        "analysis/signals/registry.json": "high"
-      }
-    },
-    "signals/rebuild_sibc_signals": {
-      "doc_claims": [],
-      "imports": [],
-      "invokes": [],
-      "path": "analysis/signals/rebuild_sibc_signals.py",
-      "reads": {},
-      "writes": {
-        "analysis/signals/registry.json": "high"
-      }
     },
     "signals/stamp_planes": {
       "doc_claims": [],
