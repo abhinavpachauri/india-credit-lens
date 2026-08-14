@@ -6,7 +6,8 @@
 import { useMemo } from "react";
 import type { Report, Annotation, ReportSection } from "@/lib/types";
 import { organizeReadMode, type PlanesMap } from "@/lib/planes";
-import { opportunitiesFor } from "@/lib/opportunities";
+import { hasDeepReading } from "@/lib/opportunities";
+import DeepReading from "./DeepReading";
 import { SEC_COLORS } from "@/lib/theme";
 import SectionCard from "@/components/SectionCard";
 import TrendChart from "@/components/TrendChart";
@@ -78,19 +79,12 @@ export default function SibcReadMode({ report, planes }: { report: Report; plane
     );
   }
 
-  const hasDeep = (dimId: string) => opportunitiesFor("sibc", dimId).length > 0;
+  const dimTitle = (dimId: string) => model.dimensions.find((d) => d.id === dimId)?.title ?? "";
+  const hasDeep = (dimId: string) => hasDeepReading("sibc", dimId, dimTitle(dimId));
   function renderDeep(dimId: string, color: string) {
-    const opps = opportunitiesFor("sibc", dimId);
-    if (!opps.length) return null;
     return (
-      <div style={{ marginTop: 16, paddingTop: 14, borderTop: "1px solid var(--border-card)" }}>
-        <div style={{ ...EYEBROW, letterSpacing: "0.05em" }}>⌁ What this opens</div>
-        {opps.map((o) => (
-          <a key={o.id} href={`/opportunities#${o.id}`} className="rm-link block mt-1.5" style={{ fontSize: 15, fontWeight: 600, color }}>
-            {o.title} <span style={{ color: "var(--font-muted)", fontWeight: 400 }}>· {o.status}</span>
-          </a>
-        ))}
-      </div>
+      <DeepReading pipeline="sibc" sectionId={dimId} sectionTitle={dimTitle(dimId)}
+                   color={color} otherLabel="payments" />
     );
   }
 

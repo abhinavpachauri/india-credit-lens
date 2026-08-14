@@ -11,7 +11,8 @@ import {
 } from "@/lib/atm_pos_data";
 import type { AtmPosInsight } from "@/lib/atm_pos_insights";
 import type { PlanesMap } from "@/lib/planes";
-import { opportunitiesFor } from "@/lib/opportunities";
+import { hasDeepReading } from "@/lib/opportunities";
+import DeepReading from "./DeepReading";
 import SectionCard from "@/components/SectionCard";
 import AtmPosTrendChart from "@/components/AtmPosTrendChart";
 import AtmPosDistributionChart from "@/components/AtmPosDistributionChart";
@@ -102,19 +103,12 @@ export default function AtmReadMode(
     );
   }
 
-  const hasDeep = (dimId: string) => opportunitiesFor("atm_pos", dimId).length > 0;
+  const dimTitle = (dimId: string) => model.dimensions.find((d) => d.id === dimId)?.title ?? "";
+  const hasDeep = (dimId: string) => hasDeepReading("atm_pos", dimId, dimTitle(dimId));
   function renderDeep(dimId: string, color: string) {
-    const opps = opportunitiesFor("atm_pos", dimId);
-    if (!opps.length) return null;
     return (
-      <div style={{ marginTop: 16, paddingTop: 14, borderTop: "1px solid var(--border-card)" }}>
-        <div style={{ ...EYEBROW, letterSpacing: "0.05em" }}>⌁ What this opens</div>
-        {opps.map((o) => (
-          <a key={o.id} href={`/opportunities#${o.id}`} className="rm-link block mt-1.5" style={{ fontSize: 15, fontWeight: 600, color }}>
-            {o.title} <span style={{ color: "var(--font-muted)", fontWeight: 400 }}>· {o.status}</span>
-          </a>
-        ))}
-      </div>
+      <DeepReading pipeline="atm_pos" sectionId={dimId} sectionTitle={dimTitle(dimId)}
+                   color={color} otherLabel="credit" />
     );
   }
 

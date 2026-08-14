@@ -64,7 +64,7 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
 
   const deepAvailable = selDim ? hasDeep(selDim.id) : false;
   const effDepth: Depth = depth === "deep" && !deepAvailable ? "full" : depth;
-  const DEPTH_HINT: Record<Depth, string> = { brief: "chart only", full: "with the reasoning", deep: "with what it opens" };
+  const DEPTH_HINT: Record<Depth, string> = { brief: "chart only", full: "with the reasoning", deep: "the deeper reading" };
 
   useEffect(() => {
     if (view !== "detail") return;

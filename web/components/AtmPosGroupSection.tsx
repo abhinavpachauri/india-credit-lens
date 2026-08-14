@@ -18,8 +18,6 @@ import type { AtmPosInsight } from "@/lib/atm_pos_insights";
 import { pickColor } from "@/lib/theme";
 import InsightCard   from "@/components/dls/InsightCard";
 import InsightCTAStrip from "@/components/dls/InsightCTAStrip";
-import OpportunityTeaser from "@/components/dls/OpportunityTeaser";
-import { opportunitiesFor } from "@/lib/opportunities";
 import AtmPosSectionCard from "@/components/AtmPosSectionCard";
 
 // Primary metric per group — used to rank banks for Top N
@@ -207,7 +205,7 @@ export default function AtmPosGroupSection({ group, series }: AtmPosGroupSection
           counts={{
             insight:     insightCount,
             gap:         gapCount,
-            opportunity: opportunitiesFor("atm_pos", group).length,
+            opportunity: 0,   // depth lives in read mode
           }}
           isActive={insightsMode}
           activeIdx={activeIdx}
@@ -217,8 +215,6 @@ export default function AtmPosGroupSection({ group, series }: AtmPosGroupSection
         />
       )}
 
-      {/* ── Opportunity teaser (DLS) — feed-sourced, deep-links to /opportunities */}
-      <OpportunityTeaser pipeline="atm_pos" sectionId={group} />
 
       {/* ── Insight card (DLS) — key resets internal chain-expand on navigation */}
       {insightsMode && activeInsight && (

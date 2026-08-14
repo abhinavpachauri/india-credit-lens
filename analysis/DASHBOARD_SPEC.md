@@ -80,6 +80,16 @@ architecture instead of being invented for it (same pattern as `OPPORTUNITIES_GA
   Deep ⌁  →  L2/L3  why it moved + what it opens   (opportunities, forces, loops, constraints)
 ```
 
+> **SUPERSEDED 2026-08-12 — Option A was taken after all.** The reasoning below stands as the
+> record of why B looked right at the time, and the objection that overturned it is worth keeping:
+> *a separate surface turns a **depth** into a **category***. An opportunity is not a different
+> kind of thing from an insight — it is a deeper reading of the same subject, and giving it its
+> own page told the reader there was another section rather than showing them another layer.
+> Option A's stated cost ("loses the cross-system page that no single pipeline can produce") was
+> answered rather than accepted: cross-system findings now attach to every dimension holding one
+> of their member signals, each with the local measurement that anchors it there. The register
+> changed with it — we report what the data shows and why, we do not suggest moves. See §12.1.
+
 **Decision — where Opportunities live (recommend Option B):**
 
 - **A — Fold fully into the dashboard, kill `/opportunities`.** Loses the cross-system page that no
@@ -299,8 +309,9 @@ nothing. **Mode is sticky** (localStorage, like depth and `icl-dark`).
 
 ## 12. Decisions — RESOLVED (2026-07-31)
 
-1. **Opportunities placement — Option B.** ✅ Deep plane in-dashboard + `/opportunities` standalone
-   survives. (§4)
+1. **Opportunities placement — ~~Option B~~ → Option A (revised 2026-08-12).** The Deep plane is
+   in-dashboard and `/opportunities` is **retired** (archived; the route redirects to `/`). See
+   §12.1 for what changed and why.
 2. **Depth stickiness — sticky.** ✅ localStorage, same pattern as `icl-dark`. Page mode (Read/Explore)
    is sticky too. (§11)
 3. **Prominence weighting — `is_news.score` alone for v1.** ✅ Order the read by the existing score;
@@ -308,8 +319,11 @@ nothing. **Mode is sticky** (localStorage, like depth and `icl-dark`).
    data; add a materiality tiebreak only if it reads wrong. (Measure-first, §8.)
 4. **Read-plane cap — floor + soft cap.** ✅ Show all rows with `is_news.score ≥ 2.0`, visibly capped at
    ~5 with a "+N more moved →" expander. Never pads a quiet month, never buries a busy one.
-5. **Deep inline vs page — inline first, retire `/opportunities` only after review.** ✅ v1 = `⌁ Deep`
-   expands **inline** under the subject; `/opportunities` **stays**. Decision to retire the standalone
+5. **Deep inline vs page — ~~inline first, retire only after review~~ → retired (2026-08-12).** The
+   review happened and found the fold was never actually inline: it rendered a list of *links out*
+   to the page, so the condition for retiring was never met and the content had no home but the
+   page. It is now genuinely inline. Original text below.
+   ~~✅ v1 = `⌁ Deep` expands **inline** under the subject; `/opportunities` **stays**. Decision to retire the standalone
    page is a follow-up, gated on "does the inline fold read cleanly" — taken deliberately, not now.
 
 ---
@@ -520,3 +534,51 @@ Payments renders the SAME three DOM blocks + §14.1 shell + §14.2–14.4 stylin
 differ: subject = `effect.focusCard`; section colour = `GROUP_ACCENT[group]` (cc blue / dc green / infra
 orange) instead of `SEC_COLORS`; cards come from the flat `atm_pos_insights.json` grouped by cc/dc/infra;
 chart = `AtmPosTrendChart`. Everything else — spine/value/chip/kicker/type scale/pane grid — is shared.
+
+---
+
+## 12.1 The deeper reading, in the insight (2026-08-12)
+
+`/opportunities` is retired. Layer 2 findings now render at the `Deep ⌁` rung of the dimension
+they belong to, and the page redirects to `/` (a published deep-read post links to the old URL).
+
+**Why.** A separate surface made a *depth* look like a *category*. The reader was told there was
+another section rather than shown another layer of what they were already reading — and the same
+framing pushed the machine into suggesting moves, which is not the register this platform wants.
+We stay at analyst level: what the data shows, and the mechanism behind it.
+
+**Register.** The model keeps `tier: opportunity | risk` — that is how the system model classifies
+a node, and rewriting it would touch the spec, the validators and S3 for no reader benefit. It is
+deliberately *not* what the reader sees:
+
+| Was | Is | Why |
+|---|---|---|
+| `⌁ What this opens` | **Deeper reading** | states depth, not action |
+| Opportunity / Risk badge | *dropped* | model vocabulary, not reader vocabulary |
+| `For lenders` | **The mechanism** | explains rather than advises |
+| `Why — computed basis` | **How we know** | plainer, same content |
+| — | `· active` / `· watch` chip | descriptive of driver firing, not a call |
+
+**Cross-system findings** attach to every dimension holding one of their member signals, each with
+an anchor line — "On this dimension: Vehicle Loans, +17.3% YoY" — so five appearances of one
+construct are five locally specific readings rather than the same paragraph five times. They sit
+under a *Read together with credit/payments* sub-heading, which names why something spanning both
+datasets is showing up here.
+
+**What did not change.** Nothing in `analysis/`. The chain from system model → S3 →
+`derive_opportunities` → feed → narrative is untouched, and Check 4f still validates every number
+in every finding. This was a presentation change end to end.
+
+**Gating** moved from route to rung: `OPPORTUNITIES_GATED` now hides the `Deep ⌁` step rather than
+a URL. The reader reaches the subject they care about and finds another layer, instead of being
+told about a section they cannot open.
+
+**Explore mode** no longer surfaces L2 at all — no teaser, and the CTA strip's opportunity count is
+zero. Explore is the raw-series surface; depth belongs to read.
+
+**One bug found while verifying**, same class as the long-form `up, -2.6%` issue fixed in July:
+`BasisBlock` drew its arrow from `member.direction`, which is the member's *contribution* to the
+construct, not the sign of its number — so a contra-indicator or a member moving against the read
+rendered as "Consumer Durables ▲ −0.6% YoY". The glyph now reads off the observed value (mirroring
+`core.voice.observed_dir`), and a member whose observed direction opposes its contribution is
+labelled *· moving against the read* rather than given an arrow that argues with the figure.
