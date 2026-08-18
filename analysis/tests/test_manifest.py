@@ -105,7 +105,7 @@ def test_ingestion_stages_declare_nothing_derived():
 # hardcoded the same path instead — so the declaration was decorative and moving the file was a
 # six-file edit. This is the test that keeps it read.
 
-LIVE_DIRS = ("core", "signals", "pipelines", "crosssource", "guards", "distribution")
+LIVE_DIRS = ("core", "signals", "pipelines", "cross", "guards", "distribution")
 CSV_LITERAL = re.compile(r"[\"'][^\"'\n]*(?:rbi_sibc|atm_pos)_consolidated\.csv[\"']")
 
 

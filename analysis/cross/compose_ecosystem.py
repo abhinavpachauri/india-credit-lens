@@ -19,7 +19,7 @@ projected state + confirmed/authored structure; never re-derives pipeline intern
 
 Output: analysis/cross_source/ecosystem_state_{period}.json
 
-Usage:  python3 analysis/crosssource/compose_ecosystem.py
+Usage:  python3 analysis/cross/compose_ecosystem.py
 """
 import json
 import sqlite3
@@ -27,7 +27,7 @@ import sys
 from pathlib import Path
 
 # Bootstrap: <repo>/analysis on sys.path so `from core import …` resolves from any cwd now
-# that this script lives under crosssource/. Move-safe via .git walk (see core/paths.py).
+# that this script lives under cross/. Move-safe via .git walk (see core/paths.py).
 sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
 from core import generate_skeleton as gs  # noqa: E402
 

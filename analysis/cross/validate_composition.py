@@ -19,7 +19,7 @@ Part II (v1.1, §20) — ecosystem_model.json + domains.json:
     tolerance + severity well-formed,
   - domains: pure lenses — construct refs resolve, concept_scope in vocabulary.
 
-Usage:  python3 analysis/crosssource/validate_composition.py
+Usage:  python3 analysis/cross/validate_composition.py
 Exit:   0 = pass, 1 = error(s).
 """
 import json
@@ -27,7 +27,7 @@ import sys
 from pathlib import Path
 
 # Bootstrap: <repo>/analysis on sys.path so `from core import …` resolves from any cwd now
-# that this script lives under crosssource/. Move-safe via .git walk (see core/paths.py).
+# that this script lives under cross/. Move-safe via .git walk (see core/paths.py).
 sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
 from core import generate_skeleton as gs  # noqa: E402
 

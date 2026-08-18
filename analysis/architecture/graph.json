@@ -201,7 +201,7 @@
       "reads": {},
       "writes": {}
     },
-    "crosssource/compose_ecosystem": {
+    "cross/compose_ecosystem": {
       "doc_claims": [
         {
           "kind": "output",
@@ -212,7 +212,7 @@
         "core/generate_skeleton"
       ],
       "invokes": [],
-      "path": "analysis/crosssource/compose_ecosystem.py",
+      "path": "analysis/cross/compose_ecosystem.py",
       "reads": {
         "analysis/cross_source/composition.json": "low",
         "analysis/cross_source/ecosystem_model.json": "low",
@@ -221,7 +221,7 @@
       },
       "writes": {}
     },
-    "crosssource/derive_cross_links": {
+    "cross/derive_cross_links": {
       "doc_claims": [
         {
           "kind": "output",
@@ -232,7 +232,7 @@
         "core/generate_skeleton"
       ],
       "invokes": [],
-      "path": "analysis/crosssource/derive_cross_links.py",
+      "path": "analysis/cross/derive_cross_links.py",
       "reads": {
         "analysis/COMPOSITION_SPEC.md": "low",
         "analysis/ontology/channels.json": "low"
@@ -241,13 +241,13 @@
         "analysis/cross_source/candidates.json": "high"
       }
     },
-    "crosssource/generate_opportunities_feed": {
+    "cross/generate_opportunities_feed": {
       "doc_claims": [],
       "imports": [
         "core/generate_skeleton"
       ],
       "invokes": [],
-      "path": "analysis/crosssource/generate_opportunities_feed.py",
+      "path": "analysis/cross/generate_opportunities_feed.py",
       "reads": {
         "analysis/cross_source/ecosystem_model.json": "low",
         "analysis/ontology/channels.json": "low",
@@ -259,14 +259,14 @@
         "web/public/data/opportunities_feed.json": "high"
       }
     },
-    "crosssource/generate_opportunity_narrative": {
+    "cross/generate_opportunity_narrative": {
       "doc_claims": [],
       "imports": [
         "core/generate_skeleton",
         "core/voice"
       ],
       "invokes": [],
-      "path": "analysis/crosssource/generate_opportunity_narrative.py",
+      "path": "analysis/cross/generate_opportunity_narrative.py",
       "reads": {
         "analysis/signals/signals.db": "low"
       },
@@ -275,13 +275,13 @@
         "web/public/data/opportunities_feed.json": "high"
       }
     },
-    "crosssource/validate_composition": {
+    "cross/validate_composition": {
       "doc_claims": [],
       "imports": [
         "core/generate_skeleton"
       ],
       "invokes": [],
-      "path": "analysis/crosssource/validate_composition.py",
+      "path": "analysis/cross/validate_composition.py",
       "reads": {
         "analysis/cross_source/composition.json": "low",
         "analysis/cross_source/ecosystem_model.json": "low",

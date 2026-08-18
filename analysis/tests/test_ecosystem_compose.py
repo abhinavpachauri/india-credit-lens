@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Unit tests for analysis/crosssource/compose_ecosystem.py (COMPOSITION_SPEC Part II).
+Unit tests for analysis/cross/compose_ecosystem.py (COMPOSITION_SPEC Part II).
 
 Covers the pure state functions of the ecosystem meta-model — the semantic layer
 the composition validator (reference integrity only) cannot catch:
@@ -15,7 +15,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from crosssource.compose_ecosystem import (      # noqa: E402
+from cross.compose_ecosystem import (      # noqa: E402
     X_STATE_AS_EDGE, construct_direction, eco_edge_state, eval_constraint, loop_state,
 )
 

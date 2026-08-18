@@ -15,7 +15,7 @@ import sys
 from pathlib import Path
 
 # Bootstrap: <repo>/analysis on sys.path so `from core import …` resolves from any cwd now
-# that this script lives under crosssource/. Move-safe via .git walk (see core/paths.py).
+# that this script lives under cross/. Move-safe via .git walk (see core/paths.py).
 sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
 from core import generate_skeleton as gs  # noqa: E402
 
@@ -530,7 +530,7 @@ def main():
     models = {p: gs.load_json(cfg["model"]) for p, cfg in gs.PIPELINES.items()}
     bundle = {
         "_meta": {"spec_ref": "analysis/COMPOSITION_SPEC.md §12",
-                  "generated_by": "analysis/crosssource/generate_opportunities_feed.py",
+                  "generated_by": "analysis/cross/generate_opportunities_feed.py",
                   "periods": {p: latest_period(p) for p in gs.PIPELINES}},
         "cross_system": build_cross_system(models, chart_series),
         "pipelines": {p: build_pipeline_items(p, channels, models, chart_series) for p in gs.PIPELINES},

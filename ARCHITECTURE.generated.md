@@ -79,16 +79,16 @@ Scripts each orchestrator launches as a subprocess, in execution order.
 | Artifact | Kind | Producer(s) | Consumer(s) |
 |---|---|---|---|
 | `analysis/*/merged/system_state_*.json` | external/authored | — | `core/run_inference` |
-| `analysis/COMPOSITION_SPEC.md` | external/authored | — | `crosssource/derive_cross_links` |
+| `analysis/COMPOSITION_SPEC.md` | external/authored | — | `cross/derive_cross_links` |
 | `analysis/DASHBOARD_SPEC.md` | external/authored | — | `signals/stamp_planes` |
 | `analysis/SYSTEM_MODEL_SPEC.md` | external/authored | — | `core/generate_skeleton` |
 | `analysis/architecture/graph.json` | external/authored | — | `guards/check_derived_fresh` |
-| `analysis/cross_source/candidates.json` | derived | `crosssource/derive_cross_links` | `core/run_inference`, `guards/check_derived_fresh` |
-| `analysis/cross_source/composition.json` | external/authored | — | `core/run_inference`, `crosssource/compose_ecosystem`, `crosssource/validate_composition` |
-| `analysis/cross_source/ecosystem_model.json` | external/authored | — | `crosssource/compose_ecosystem`, `crosssource/generate_opportunities_feed`, `crosssource/validate_composition` |
-| `analysis/ontology/channels.json` | external/authored | — | `core/run_inference`, `core/validate_system_model`, `crosssource/derive_cross_links`, `crosssource/generate_opportunities_feed` |
-| `analysis/ontology/concepts.json` | external/authored | — | `core/validate_system_model`, `crosssource/validate_composition` |
-| `analysis/ontology/domains.json` | external/authored | — | `crosssource/validate_composition` |
+| `analysis/cross_source/candidates.json` | derived | `cross/derive_cross_links` | `core/run_inference`, `guards/check_derived_fresh` |
+| `analysis/cross_source/composition.json` | external/authored | — | `core/run_inference`, `cross/compose_ecosystem`, `cross/validate_composition` |
+| `analysis/cross_source/ecosystem_model.json` | external/authored | — | `cross/compose_ecosystem`, `cross/generate_opportunities_feed`, `cross/validate_composition` |
+| `analysis/ontology/channels.json` | external/authored | — | `core/run_inference`, `core/validate_system_model`, `cross/derive_cross_links`, `cross/generate_opportunities_feed` |
+| `analysis/ontology/concepts.json` | external/authored | — | `core/validate_system_model`, `cross/validate_composition` |
+| `analysis/ontology/domains.json` | external/authored | — | `cross/validate_composition` |
 | `analysis/rbi_atm_pos/insights.json` | derived | `pipelines/atm_pos/generate_atm_pos_insights` | `pipelines/atm_pos/validate_atm_pos_claims`, `pipelines/atm_pos/validate_atm_pos_insights` |
 | `analysis/rbi_atm_pos/merged/system_model.json` | derived | `core/generate_skeleton` | `core/relational_insights` |
 | `analysis/rbi_atm_pos/signals.json` | derived | `pipelines/atm_pos/compute_atm_pos_signals` | `pipelines/atm_pos/generate_atm_pos_insights`, `pipelines/atm_pos/validate_atm_pos_claims`, `pipelines/atm_pos/validate_atm_pos_insights` |
@@ -99,15 +99,15 @@ Scripts each orchestrator launches as a subprocess, in execution order.
 | `analysis/rbi_sibc/merged/system_model.json` | derived | `core/generate_skeleton` | `core/relational_insights` |
 | `analysis/rbi_sibc/skeleton_profile.json` | external/authored | — | `core/generate_skeleton` |
 | `analysis/rbi_sibc/timeline.json` | external/authored | — | `core/validate_timeline`, `pipelines/sibc/generate_merge`, `signals/compute/sibc`, `signals/query` |
-| `analysis/signals/narrative_cache.json` | derived | `crosssource/generate_opportunity_narrative` | — |
-| `analysis/signals/registry.json` | derived | `signals/apply_status_rules`, `signals/update_registry` | `core/generate_signal_history`, `core/relational_insights`, `core/validate_opportunity_traceability`, `crosssource/generate_opportunities_feed`, `crosssource/validate_composition`, `guards/check_signal_freshness`, `guards/validate_signal_history`, `pipelines/atm_pos/compute_atm_pos_signals`, `pipelines/atm_pos/generate_atm_pos_insights`, `pipelines/atm_pos/validate_atm_pos_insights`, `pipelines/sibc/generate_analysis_report`, `pipelines/sibc/validate_sibc_traceability`, `signals/proximity` |
-| `analysis/signals/signals.db` | derived | `signals/db` | `core/derive_opportunities`, `core/gate`, `core/generate_system_state`, `core/relational_insights`, `core/validate_opportunity_traceability`, `crosssource/compose_ecosystem`, `crosssource/generate_opportunities_feed`, `crosssource/generate_opportunity_narrative`, `guards/check_derived_fresh`, `guards/validate_signal_history`, `pipelines/atm_pos/compute_atm_pos_signals`, `pipelines/atm_pos/generate_atm_pos_insights`, `pipelines/atm_pos/validate_atm_pos_claims`, `pipelines/atm_pos/validate_atm_pos_insights`, `pipelines/sibc/generate_analysis_report`, `pipelines/sibc/validate_sibc_traceability`, `signals/dominance`, `signals/proximity` |
+| `analysis/signals/narrative_cache.json` | derived | `cross/generate_opportunity_narrative` | — |
+| `analysis/signals/registry.json` | derived | `signals/apply_status_rules`, `signals/update_registry` | `core/generate_signal_history`, `core/relational_insights`, `core/validate_opportunity_traceability`, `cross/generate_opportunities_feed`, `cross/validate_composition`, `guards/check_signal_freshness`, `guards/validate_signal_history`, `pipelines/atm_pos/compute_atm_pos_signals`, `pipelines/atm_pos/generate_atm_pos_insights`, `pipelines/atm_pos/validate_atm_pos_insights`, `pipelines/sibc/generate_analysis_report`, `pipelines/sibc/validate_sibc_traceability`, `signals/proximity` |
+| `analysis/signals/signals.db` | derived | `signals/db` | `core/derive_opportunities`, `core/gate`, `core/generate_system_state`, `core/relational_insights`, `core/validate_opportunity_traceability`, `cross/compose_ecosystem`, `cross/generate_opportunities_feed`, `cross/generate_opportunity_narrative`, `guards/check_derived_fresh`, `guards/validate_signal_history`, `pipelines/atm_pos/compute_atm_pos_signals`, `pipelines/atm_pos/generate_atm_pos_insights`, `pipelines/atm_pos/validate_atm_pos_claims`, `pipelines/atm_pos/validate_atm_pos_insights`, `pipelines/sibc/generate_analysis_report`, `pipelines/sibc/validate_sibc_traceability`, `signals/dominance`, `signals/proximity` |
 | `web/lib/reports/rbi_sibc.ts` | derived | `pipelines/sibc/promote_annotations` | `hook_validate`, `pipelines/sibc/validate_annotation_basis`, `pipelines/sibc/validate_web_series` |
 | `web/lib/reports/rbi_sibc_label_overrides.json` | external/authored | — | `pipelines/sibc/validate_web_series` |
 | `web/public/data/atm_pos_chart_series.json` | derived | `core/generate_chart_series` | — |
 | `web/public/data/atm_pos_insights.json` | external/authored | — | `pipelines/atm_pos/generate_atm_pos_insights`, `signals/stamp_planes` |
 | `web/public/data/atm_pos_signals.json` | external/authored | — | `pipelines/atm_pos/compute_atm_pos_signals` |
-| `web/public/data/opportunities_feed.json` | derived | `crosssource/generate_opportunities_feed`, `crosssource/generate_opportunity_narrative` | `core/validate_opportunity_traceability` |
+| `web/public/data/opportunities_feed.json` | derived | `cross/generate_opportunities_feed`, `cross/generate_opportunity_narrative` | `core/validate_opportunity_traceability` |
 | `web/public/data/sibc_l1_annotations.json` | derived | `pipelines/sibc/generate_analysis_report` | `pipelines/sibc/validate_sibc_traceability`, `signals/stamp_planes` |
 
 ## 4. Module-dependency map
@@ -121,11 +121,11 @@ orchestrated, not import-coupled).
 - `core/generate_system_state` → `core/generate_skeleton`
 - `core/run_inference` → `core/generate_skeleton`
 - `core/validate_system_model` → `core/generate_skeleton`
-- `crosssource/compose_ecosystem` → `core/generate_skeleton`
-- `crosssource/derive_cross_links` → `core/generate_skeleton`
-- `crosssource/generate_opportunities_feed` → `core/generate_skeleton`
-- `crosssource/generate_opportunity_narrative` → `core/generate_skeleton`, `core/voice`
-- `crosssource/validate_composition` → `core/generate_skeleton`
+- `cross/compose_ecosystem` → `core/generate_skeleton`
+- `cross/derive_cross_links` → `core/generate_skeleton`
+- `cross/generate_opportunities_feed` → `core/generate_skeleton`
+- `cross/generate_opportunity_narrative` → `core/generate_skeleton`, `core/voice`
+- `cross/validate_composition` → `core/generate_skeleton`
 - `guards/check_derived_fresh` → `core/manifest`
 - `pipelines/atm_pos/compute_atm_pos_signals` → `core/manifest`
 - `pipelines/atm_pos/consolidate_atm_pos` → `core/manifest`
@@ -149,8 +149,8 @@ orchestrated, not import-coupled).
 - `analysis/signals/registry.json` ← `signals/apply_status_rules`, `signals/update_registry`
 - `format_report.json` ← `pipelines/atm_pos/detect_atm_pos_format`, `pipelines/sibc/detect_format`
 - `sections.json` ← `pipelines/atm_pos/extract_atm_pos`, `pipelines/sibc/extract_sibc`
-- `web/public/data/opportunities_feed.json` ← `crosssource/generate_opportunities_feed`, `crosssource/generate_opportunity_narrative`
+- `web/public/data/opportunities_feed.json` ← `cross/generate_opportunities_feed`, `cross/generate_opportunity_narrative`
 
 ### Internal artifacts produced but never read (potential dead output)
 - `analysis/rbi_sibc/date_remap.json` ← `pipelines/sibc/update_web_data`
-- `analysis/signals/narrative_cache.json` ← `crosssource/generate_opportunity_narrative`
+- `analysis/signals/narrative_cache.json` ← `cross/generate_opportunity_narrative`

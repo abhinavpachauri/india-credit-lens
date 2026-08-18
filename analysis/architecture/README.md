@@ -4,7 +4,7 @@ Structural architecture facts are **derived from code**, not hand-maintained —
 prose copy would drift, which is the exact anti-pattern the engineering principle forbids.
 
 - **`discover.py`** — derive the architecture graph from code: AST import graph + subprocess
-  gate call-graph + artifact read/write lineage. Scans `SCAN_DIRS` (core, guards, crosssource,
+  gate call-graph + artifact read/write lineage. Scans `SCAN_DIRS` (core, guards, cross,
   pipelines/{sibc,atm_pos}, signals, …) → `graph.json`.
 - **`render.py`** — `graph.json` → `ARCHITECTURE.generated.md` (data-flow diagram, gate
   call-graph, artifact lineage, dependency map, drift findings). Generated — never hand-edit.

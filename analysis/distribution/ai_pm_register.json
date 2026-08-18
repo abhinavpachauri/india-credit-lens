@@ -165,7 +165,7 @@
           "value": "median candidate-value scope per basis line dropped from ~2,258 (driver-wide evidence_all, handoff §2 D1) to 65 (max 461) once each 'how we know' line scoped to its OWN member signal. In-range catch held at 99.7% and near-miss at 99.9% across 71 D1 sites (both long-form issues); false-rejection 1/71; the untouched deep read passes the gate whole (0 failures).",
           "date": "2026-07-28",
           "how_measured": "measure_groundedness.py (injects EVERY block) — scope-width report + n=50 near-miss/in-range injections per site, seed 7. Enabled by attaching per-member `signals` upstream in generate_opportunities_feed.py so a basis line grounds against exactly the signal its number came from.",
-          "source": "analysis/measure_groundedness.py · analysis/crosssource/generate_opportunities_feed.py · analysis/distribution/issues/deep_read.py::basis_lines"
+          "source": "analysis/measure_groundedness.py · analysis/cross/generate_opportunities_feed.py · analysis/distribution/issues/deep_read.py::basis_lines"
         },
         {
           "metric": "deep read negative test — planted number into a member-scoped basis line",
@@ -221,14 +221,14 @@
           "value": "One shared fmt_value (core/render.py) now feeds three layers: the narrative LLM gets a `display` string and copies it verbatim ('13.6 lakh micro ATMs', not '1358241.0'); Check 4f accepts the as-rendered form (added _as_rendered to _numbers_for) so the reader number still traces; UNFORMATTED allows N.0 before magnitude/percent words. Result: 0 unformatted hits across all feed narratives (was ≥4), 4f strict still green (20 opps), and all 5 LinkedIn slots now pass (14th was the one gated). 245 tests (was 217 at session start).",
           "date": "2026-07-29",
           "how_measured": "re-ran generate_opportunity_narrative (API, 10 regenerated); scanned feed for UNFORMATTED (0); 4f strict PASS; generate_slot --all (14th passes with 4 verbatim-advice warnings). test_distribution fmt_value + UNFORMATTED regression tests.",
-          "source": "analysis/core/render.py · analysis/core/validate_opportunity_traceability.py · analysis/crosssource/generate_opportunity_narrative.py"
+          "source": "analysis/core/render.py · analysis/core/validate_opportunity_traceability.py · analysis/cross/generate_opportunity_narrative.py"
         },
         {
           "metric": "opportunity-narrative advice removed at source — prompt + deterministic guard",
           "value": "The narrative's `implication` asked the LLM for 'what the bank should do' (advice) — the source of every C6/C7 slot warning and /opportunities' prescriptive 'For lenders' line. Changed the prompt to demand an OBSERVATION, and added _observation_only() (core.voice.advice/forecasts) that DROPS any implication still carrying advice/forecast — the LLM ignored the instruction on 3 cross-system items, the guard caught all 3. Also removed the backwards fallback implication ('Move on this while the trend is still running in your favour') that showed on every risk. Result: 0 advice/forecast implications across the feed (was ≥7), 0 §5.3 slot warnings (was 4 on the 14th). Signal-eval v1.12 already clean (monthly issue + deep read = 0 warnings).",
           "date": "2026-07-29",
           "how_measured": "scan feed implications for should/must/need-to/move-on-this (0); generate_slot 14th (0 warnings); prose_lint on monthly+deep read (0). Enforce-don't-trust: the guard is deterministic, not prompt-dependent.",
-          "source": "analysis/crosssource/generate_opportunity_narrative.py::_observation_only · analysis/crosssource/generate_opportunities_feed.py"
+          "source": "analysis/cross/generate_opportunity_narrative.py::_observation_only · analysis/cross/generate_opportunities_feed.py"
         },
         {
           "metric": "dashboard read-mode composition/structural plane classifier — catch + false-rejection",

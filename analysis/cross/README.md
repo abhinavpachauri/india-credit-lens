@@ -1,4 +1,4 @@
-# `crosssource/` — Layer 2b cross-pipeline composition
+# `cross/` — Layer 2b cross-pipeline composition
 
 The **federated** composition layer: each pipeline maps its entities to the shared ontology
 hub (`analysis/ontology/{concepts,channels}.json`) once; cross-system edges are *derived* and

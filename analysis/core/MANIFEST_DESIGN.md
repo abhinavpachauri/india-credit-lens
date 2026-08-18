@@ -188,13 +188,13 @@ The moves are a COORDINATED CLUSTER, not isolated files. Verified surface:
   `run_evals.py`, `run_atm_pos_evals.py`, `check_derived_fresh.py`, `git_hooks/pre-commit`,
   `generate_merge.py`, `hook_validate.py`.
 - **sys.path note:** every moved script must carry the P0 bootstrap (adds `<repo>/analysis`
-  to sys.path) so `from core import …` / `from crosssource import …` resolve as namespace
+  to sys.path) so `from core import …` / `from cross import …` resolve as namespace
   packages from any depth. Verify each mover has it before moving.
 
 **Target dirs:** core/ ← generate_skeleton, validate_system_model, generate_system_state,
 derive_opportunities, generate_chart_series, generate_signal_history, run_inference.
 guards/ ← check_signal_freshness, validate_signal_history, check_derived_fresh.
-crosssource/ ← derive_cross_links, compose_ecosystem, validate_composition,
+cross/ ← derive_cross_links, compose_ecosystem, validate_composition,
 generate_opportunities_feed, generate_opportunity_narrative.
 
 **Batch plan (verify the full matrix — both legacy gates + gate.py both pipelines +
@@ -212,12 +212,12 @@ check_derived_fresh + reconcile + build + 74 tests — and commit after EACH):**
    4b/4c retirement doc sweep (which rewrites the SAME command lists) so the runbook churns
    once, not twice. No subprocess/import refs — purely a hint-string + doc move.
 3. ✅ **DONE (bcb292f)** — guards/ (check_signal_freshness, validate_signal_history,
-   check_derived_fresh) + crosssource/ (derive_cross_links, compose_ecosystem,
+   check_derived_fresh) + cross/ (derive_cross_links, compose_ecosystem,
    validate_composition, generate_opportunities_feed, generate_opportunity_narrative).
    Rewrote the two __file__.parent path roots → .git-walk; bootstrap-injected the rest;
    repointed CORE_MAP + run_evals + run_atm_pos_evals + check_derived_fresh orchestration +
    the pre-commit symlink; updated 2 `generated_by` provenance strings. NB: the architecture
-   discoverer SCAN_DIRS does NOT yet scan core/guards/crosssource — adding them may surface
+   discoverer SCAN_DIRS does NOT yet scan core/guards/cross — adding them may surface
    new "undocumented module" drift, so it's deferred to step 7's doc sweep (reconcile --strict
    is green today because those dirs are simply out of scan scope).
 4. Achieve full-mode parity (SIBC per-period, ATM/POS xlsx-ingest), then retire run_evals /
@@ -260,7 +260,7 @@ check_derived_fresh + reconcile + build + 74 tests — and commit after EACH):**
    must keep working until the authoring-cycle cutover, so this waits for that.
 7. legacy/ the retired scripts; update docs (CLAUDE.md, PIPELINE_ARCHITECTURE.md, per-period
    command lists) + add core/ to the architecture discoverer SCAN_DIRS.
-   **SCAN_DIRS ✅ DONE (90919cb)** — discoverer now scans core/guards/crosssource (68 scripts;
+   **SCAN_DIRS ✅ DONE (90919cb)** — discoverer now scans core/guards/cross (68 scripts;
    reconcile --strict green). Remaining: legacy/ move + the runbook doc sweep (bundled with 4b/4c
    + generate_signal_history per the notes above).
 ```

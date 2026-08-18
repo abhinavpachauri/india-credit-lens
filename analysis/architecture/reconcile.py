@@ -48,7 +48,7 @@ DOCS = [
     "analysis/distribution/DISTRIBUTION_SPEC.md",
     # Per-directory READMEs — guarded so the navigational map can't drift from the tree.
     "analysis/core/README.md", "analysis/guards/README.md",
-    "analysis/crosssource/README.md", "analysis/pipelines/README.md",
+    "analysis/cross/README.md", "analysis/pipelines/README.md",
     "analysis/signals/README.md", "analysis/architecture/README.md",
     "analysis/legacy/README.md",
 ]

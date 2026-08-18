@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Unit tests for narrative preservation across an opportunities-feed rebuild
-(analysis/crosssource/generate_opportunities_feed.preserve_narratives).
+(analysis/cross/generate_opportunities_feed.preserve_narratives).
 
 An LLM narrative is written against one computed state. The deterministic
 (title, status) pair fingerprints that state: cross-system titles encode
@@ -18,7 +18,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from crosssource.generate_opportunities_feed import preserve_narratives  # noqa: E402
+from cross.generate_opportunities_feed import preserve_narratives  # noqa: E402
 
 
 def cross(**kw):
