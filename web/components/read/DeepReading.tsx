@@ -12,6 +12,7 @@
 import { useState } from "react";
 import BasisBlock from "@/components/dls/BasisBlock";
 import { crossSystemFor, opportunitiesFor, type CrossFinding, type OppFeedItem } from "@/lib/opportunities";
+import { FS } from "@/lib/tokens";
 
 const STATUS_COLOR: Record<string, string> = {
   active: "#16A34A",
@@ -22,7 +23,7 @@ const STATUS_COLOR: Record<string, string> = {
 function StatusChip({ status }: { status: string }) {
   const color = STATUS_COLOR[status] ?? "var(--font-muted)";
   return (
-    <span style={{ fontSize: 11, fontWeight: 600, color, whiteSpace: "nowrap" }}>
+    <span style={{ fontSize: FS.meta, fontWeight: 600, color, whiteSpace: "nowrap" }}>
       · {status}
     </span>
   );
@@ -36,7 +37,7 @@ function Mechanism({ chain }: { chain: string[] }) {
     <div style={{ marginTop: 10 }}>
       <div
         style={{
-          fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em",
+          fontSize: FS.meta, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em",
           color: "var(--font-muted)", marginBottom: 5,
         }}
       >
@@ -45,10 +46,10 @@ function Mechanism({ chain }: { chain: string[] }) {
       <ol style={{ paddingLeft: 0, listStyle: "none", margin: 0, display: "flex", flexDirection: "column", gap: 5 }}>
         {shown.map((step, i) => (
           <li key={i} className="flex gap-2" style={{ lineHeight: 1.55 }}>
-            <span className="flex-shrink-0 font-bold" style={{ color: "var(--font-muted)", minWidth: 16, fontSize: 12 }}>
+            <span className="flex-shrink-0 font-bold" style={{ color: "var(--font-muted)", minWidth: 16, fontSize: FS.label }}>
               {i + 1}
             </span>
-            <span style={{ fontSize: 13.5, color: "var(--font)" }}>{step}</span>
+            <span style={{ fontSize: FS.note, color: "var(--font)" }}>{step}</span>
           </li>
         ))}
       </ol>
@@ -75,14 +76,14 @@ function Finding({ item, color, anchor }: { item: OppFeedItem; color: string; an
       }}
     >
       <div className="flex items-baseline gap-2 flex-wrap">
-        <span style={{ fontSize: 15.5, fontWeight: 700, color: "var(--font)" }}>{item.title}</span>
+        <span style={{ fontSize: FS.lead, fontWeight: 700, color: "var(--font)" }}>{item.title}</span>
         <StatusChip status={item.status} />
       </div>
       {item.body && (
-        <p style={{ fontSize: 14, lineHeight: 1.6, color: "var(--font)", marginTop: 6 }}>{item.body}</p>
+        <p style={{ fontSize: FS.body, lineHeight: 1.6, color: "var(--font)", marginTop: 6 }}>{item.body}</p>
       )}
       {anchor && (
-        <p style={{ fontSize: 12.5, color: "var(--font-muted)", marginTop: 6 }}>
+        <p style={{ fontSize: FS.note, color: "var(--font-muted)", marginTop: 6 }}>
           On this dimension: {anchor}
         </p>
       )}
@@ -112,13 +113,13 @@ export default function DeepReading({ pipeline, sectionId, sectionTitle, color, 
       <div className="flex items-baseline justify-between">
         <div
           style={{
-            fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.07em",
+            fontSize: FS.label, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.07em",
             color: "var(--font-muted)",
           }}
         >
           Deeper reading
         </div>
-        <div style={{ fontSize: 11, color: "var(--font-muted)" }}>
+        <div style={{ fontSize: FS.meta, color: "var(--font-muted)" }}>
           {total} finding{total === 1 ? "" : "s"}
         </div>
       </div>
@@ -131,7 +132,7 @@ export default function DeepReading({ pipeline, sectionId, sectionTitle, color, 
         <>
           <div
             style={{
-              fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em",
+              fontSize: FS.meta, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em",
               color: "var(--font-muted)", marginTop: 22, paddingTop: 12,
               borderTop: "1px solid var(--border-card)",
             }}

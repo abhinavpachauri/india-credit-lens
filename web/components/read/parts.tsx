@@ -4,6 +4,8 @@
 // payments both render these; only the data model (below) + the chart/deep renderers differ per
 // pipeline. Colour = section/group (a card's colour is also its chart-line colour).
 
+import { FS, R, GLYPH } from "@/lib/tokens";
+
 export type ReadReason = "record" | "reversal" | "surge" | "shift";
 export type Direction = "up" | "down" | "flat";
 
@@ -43,6 +45,10 @@ export interface RMModel { reads: RMRead[]; dimensions: RMDimension[] }
 // ── styling ────────────────────────────────────────────────────────────────────
 // Card visuals live in CSS so :hover applies (inline border/box-shadow win specificity and kill it).
 // Dynamic bits come in as the --sec (section colour) / --sel (selected tint) custom props.
+// The colour spine is drawn INSIDE the card's box, so a card that wants even optical padding
+// has to add the spine's width back on the left. Naming it keeps that arithmetic legible.
+export const SPINE = 3;
+
 export const STYLE = `
 @keyframes rmfade{from{opacity:0}to{opacity:1}}
 .rm-card{border:1px solid var(--border-card);box-shadow:inset 3px 0 0 var(--sec);background:var(--bg-card);transition:box-shadow .12s ease,border-color .12s ease,transform .12s ease}
@@ -63,10 +69,10 @@ export const STYLE = `
 `;
 
 export const PANEL: React.CSSProperties = {
-  background: "var(--bg-card)", border: "1px solid var(--border-card)", borderRadius: 12, padding: 18,
+  background: "var(--bg-card)", border: "1px solid var(--border-card)", borderRadius: R.lg, padding: 18,
 };
 export const EYEBROW: React.CSSProperties = {
-  fontSize: 13, fontWeight: 600, letterSpacing: "0.06em", color: "var(--font-muted)", textTransform: "uppercase",
+  fontSize: FS.note, fontWeight: 600, letterSpacing: "0.06em", color: "var(--font-muted)", textTransform: "uppercase",
 };
 export const READS_COLOR = "#4e8ef7";
 
@@ -94,9 +100,9 @@ export function ReadCard({ read, selected, onClick }: { read: RMRead; selected: 
   const col = read.color;
   return (
     <button onClick={onClick} className={`rm-card w-full h-full text-left rounded-xl${selected ? " sel" : ""}`}
-            style={{ ...vars(col, tint(col, 0.08)), padding: "12px 15px 12px 17px" }}>
-      <div style={{ fontSize: 15, fontWeight: 600, lineHeight: 1.35, color: "var(--font)" }}>{read.title}</div>
-      <div className="flex items-center gap-1.5 mt-1.5" style={{ fontSize: 13, color: "var(--font-muted)" }}>
+            style={{ ...vars(col, tint(col, 0.08)), padding: `12px 16px 12px ${16 + SPINE}px` }}>
+      <div style={{ fontSize: FS.lead, fontWeight: 600, lineHeight: 1.35, color: "var(--font)" }}>{read.title}</div>
+      <div className="flex items-center gap-1.5 mt-1.5" style={{ fontSize: FS.note, color: "var(--font-muted)" }}>
         <span style={{ color: col }}>{glyph(read.direction)}</span>
         {read.reason && <span>{REASON[read.reason]}</span>}
         <span>·</span><span>{read.mode}</span>
@@ -111,11 +117,11 @@ export function DimensionCard({ dim, onClick }: { dim: RMDimension; onClick: () 
   return (
     <button onClick={onClick} className="rm-card rm-tile text-left rounded-xl"
             style={{ ...vars(col), padding: "16px 18px" }}>
-      <div style={{ fontSize: 24, lineHeight: 1 }}>{dim.icon}</div>
-      <div style={{ fontSize: 16, fontWeight: 600, color: "var(--font)", marginTop: 10, lineHeight: 1.25 }}>{dim.title}</div>
+      <div style={{ fontSize: GLYPH.dimension, lineHeight: 1 }}>{dim.icon}</div>
+      <div style={{ fontSize: FS.card, fontWeight: 600, color: "var(--font)", marginTop: 10, lineHeight: 1.25 }}>{dim.title}</div>
       <div className="flex items-center gap-2 mt-2">
-        <span style={{ fontSize: 13, color: "var(--font-muted)" }}>{dim.cardCount} insights</span>
-        {dim.moved > 0 && <span style={{ fontSize: 13, fontWeight: 600, color: col }}>▲ {dim.moved} moved</span>}
+        <span style={{ fontSize: FS.note, color: "var(--font-muted)" }}>{dim.cardCount} insights</span>
+        {dim.moved > 0 && <span style={{ fontSize: FS.note, fontWeight: 600, color: col }}>▲ {dim.moved} moved</span>}
       </div>
     </button>
   );
@@ -130,18 +136,18 @@ export function ChipStrip({ chips, active, stripRef, onPick }: {
   return (
     <div className="flex items-center gap-1">
       <button onClick={() => scroll(-1)} className="rm-link px-1 shrink-0"
-              style={{ fontSize: 20, color: "var(--font-muted)" }} aria-label="scroll left">‹</button>
+              style={{ fontSize: GLYPH.arrow, color: "var(--font-muted)" }} aria-label="scroll left">‹</button>
       <div ref={stripRef} className="rm-strip flex gap-2 overflow-x-auto py-1">
         {chips.map((c) => (
           <button key={c.id} data-on={c.id === active} onClick={() => onPick(c.id)}
                   className={`rm-chip whitespace-nowrap rounded-full shrink-0${c.id === active ? " on" : ""}`}
-                  style={{ ...vars(c.color, tint(c.color, 0.14)), fontSize: 13.5, fontWeight: 600, padding: "6px 14px" }}>
+                  style={{ ...vars(c.color, tint(c.color, 0.14)), fontSize: FS.note, fontWeight: 600, padding: "6px 14px" }}>
             {c.icon} {c.title}{c.moved > 0 ? ` · ▲ ${c.moved}` : ""}
           </button>
         ))}
       </div>
       <button onClick={() => scroll(1)} className="rm-link px-1 shrink-0"
-              style={{ fontSize: 20, color: "var(--font-muted)" }} aria-label="scroll right">›</button>
+              style={{ fontSize: GLYPH.arrow, color: "var(--font-muted)" }} aria-label="scroll right">›</button>
     </div>
   );
 }
@@ -154,7 +160,7 @@ export function DepthLadder({ depth, setDepth, deepAvailable }: { depth: Depth; 
     <div className="flex gap-1">
       {levels.map((d) => (
         <button key={d} onClick={() => setDepth(d)} className="rounded-full transition-colors"
-                style={{ fontSize: 12.5, padding: "5px 11px", ...chipStyle(depth === d) }}>
+                style={{ fontSize: FS.note, padding: "6px 12px", ...chipStyle(depth === d) }}>
           {d === "brief" ? "Brief" : d === "full" ? "Full" : "Deep ⌁"}
         </button>
       ))}

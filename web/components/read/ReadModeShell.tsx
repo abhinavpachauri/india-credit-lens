@@ -11,6 +11,7 @@ import {
   ReadCard, DimensionCard, ChipStrip, DepthLadder,
   type RMModel, type RMCard, type RMDimension, type Depth, type ChipItem,
 } from "./parts";
+import { FS, R } from "@/lib/tokens";
 
 const READS = "reads";
 const READ_CAP = 5;
@@ -111,14 +112,14 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
           <h2 style={{ ...EYEBROW, marginBottom: 14 }}>The read · {model.reads.length} moved this {period}</h2>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {shownReads.length === 0 && (
-              <p style={{ ...PANEL, fontSize: 15, color: "var(--font-muted)" }}>
+              <p style={{ ...PANEL, fontSize: FS.lead, color: "var(--font-muted)" }}>
                 Nothing crossed the news threshold this {period} — a quiet month. Browse dimensions below.
               </p>
             )}
             {shownReads.map((r) => <ReadCard key={r.id} read={r} selected={false} onClick={() => enterDetail(READS, r.id)} />)}
           </div>
           {overflow > 0 && !showAll && (
-            <button className="py-1 mt-2" style={{ fontSize: 14, fontWeight: 600, color: READS_COLOR }}
+            <button className="py-1 mt-2" style={{ fontSize: FS.body, fontWeight: 600, color: READS_COLOR }}
                     onClick={() => setShowAll(true)}>+{overflow} more moved →</button>
           )}
 
@@ -140,10 +141,10 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
       <div key="detail" style={{ animation: "rmfade 220ms ease" }}>
         <div className="flex items-center justify-between mb-3">
           <button onClick={() => { setShowAll(false); setView("grid"); }} className="rm-link"
-                  style={{ fontSize: 14, fontWeight: 600, color: "var(--font-muted)" }}>‹ {homeLabel}</button>
+                  style={{ fontSize: FS.body, fontWeight: 600, color: "var(--font-muted)" }}>‹ {homeLabel}</button>
           <div className="flex flex-col items-end">
             <DepthLadder depth={effDepth} setDepth={setDepth} deepAvailable={deepAvailable} />
-            <span style={{ fontSize: 11.5, color: "var(--font-muted)", marginTop: 4 }}>Detail: {DEPTH_HINT[effDepth]}</span>
+            <span style={{ fontSize: FS.meta, color: "var(--font-muted)", marginTop: 4 }}>Detail: {DEPTH_HINT[effDepth]}</span>
           </div>
         </div>
 
@@ -158,7 +159,7 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
                 <div className="flex flex-col gap-2.5">
                   {shownReads.map((r) => <ReadCard key={r.id} read={r} selected={r.id === selId} onClick={() => selectCard(r.id)} />)}
                   {overflow > 0 && !showAll && (
-                    <button className="text-left py-1" style={{ fontSize: 14, fontWeight: 600, color: READS_COLOR }}
+                    <button className="text-left py-1" style={{ fontSize: FS.body, fontWeight: 600, color: READS_COLOR }}
                             onClick={() => setShowAll(true)}>+{overflow} more moved →</button>
                   )}
                 </div>
@@ -171,14 +172,14 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
                 <div className="flex flex-col gap-1.5">
                   {activeDim.subjects.map((sub) => (
                     <div key={sub.name || "_"} className="mb-1">
-                      {sub.name && <div style={{ fontSize: 11.5, fontWeight: 600, color: "var(--font-muted)", margin: "6px 0 5px 2px" }}>{sub.name}</div>}
+                      {sub.name && <div style={{ fontSize: FS.label, fontWeight: 600, color: "var(--font-muted)", margin: "6px 0 5px 2px" }}>{sub.name}</div>}
                       {sub.cards.map((c) => {
                         const isSel = c.id === selId;
                         return (
                           <button key={c.id} onClick={() => selectCard(c.id)}
                                   className={`rm-flat w-full text-left rounded-md px-3 py-2 mb-1.5 flex items-start gap-2${isSel ? " sel" : ""}`}
-                                  style={{ ...vars(activeDim.color, tint(activeDim.color, 0.1)), fontSize: 14.5, fontWeight: isSel || c.isRead ? 600 : 400, color: "var(--font)" }}>
-                            {c.isRead && <span style={{ color: activeDim.color, fontSize: 12, lineHeight: 1.6 }}>▲</span>}
+                                  style={{ ...vars(activeDim.color, tint(activeDim.color, 0.1)), fontSize: FS.body, fontWeight: isSel || c.isRead ? 600 : 400, color: "var(--font)" }}>
+                            {c.isRead && <span style={{ color: activeDim.color, fontSize: FS.label, lineHeight: 1.6 }}>▲</span>}
                             <span>{c.title}</span>
                           </button>
                         );
@@ -194,28 +195,28 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
           <div ref={detailRef} className="mt-6 lg:mt-0 lg:col-start-2">
             <div style={{ ...PANEL, padding: 20, borderTop: `3px solid ${secColor}` }}>
               <div style={{ ...EYEBROW, color: secColor, letterSpacing: "0.05em" }}>{selDim?.icon} {selDim?.title}</div>
-              <h3 style={{ fontSize: 24, fontWeight: 700, lineHeight: 1.25, color: "var(--font)", margin: "6px 0 14px" }}>
+              <h3 style={{ fontSize: FS.title, fontWeight: 700, lineHeight: 1.25, color: "var(--font)", margin: "6px 0 14px" }}>
                 {selCard?.title ?? "Select a read"}
               </h3>
 
               {selCard && selDim && renderChart(selCard, selDim)}
 
               {selDim && selDim.compositionTitles.length > 0 && (
-                <p style={{ fontSize: 13.5, lineHeight: 1.55, color: "var(--font-muted)", marginTop: 12 }}>
+                <p style={{ fontSize: FS.note, lineHeight: 1.55, color: "var(--font-muted)", marginTop: 12 }}>
                   <span style={{ fontWeight: 600 }}>Composition: </span>{selDim.compositionTitles.join(" · ")}
                 </p>
               )}
 
               {effDepth !== "brief" && selCard && (
-                <div ref={whyRef} style={{ borderRadius: 8 }}>
-                  {selCard.body && <p style={{ fontSize: 16, lineHeight: 1.65, color: "var(--font)", marginTop: 16 }}>{selCard.body}</p>}
-                  {selCard.implication && <p style={{ fontSize: 14.5, lineHeight: 1.6, color: "var(--font-muted)", marginTop: 10 }}>{selCard.implication}</p>}
+                <div ref={whyRef} style={{ borderRadius: R.md }}>
+                  {selCard.body && <p style={{ fontSize: FS.card, lineHeight: 1.65, color: "var(--font)", marginTop: 16 }}>{selCard.body}</p>}
+                  {selCard.implication && <p style={{ fontSize: FS.body, lineHeight: 1.6, color: "var(--font-muted)", marginTop: 10 }}>{selCard.implication}</p>}
                   {selCard.chain?.length ? (
                     <div style={{ marginTop: 16 }}>
                       <div style={{ ...EYEBROW, letterSpacing: "0.05em" }}>Why this reads</div>
                       <ol style={{ marginTop: 6 }}>
                         {selCard.chain.map((s, i) => (
-                          <li key={i} className="flex gap-2.5" style={{ fontSize: 15, lineHeight: 1.55, color: "var(--font)", marginTop: 6 }}>
+                          <li key={i} className="flex gap-2.5" style={{ fontSize: FS.lead, lineHeight: 1.55, color: "var(--font)", marginTop: 6 }}>
                             <span style={{ color: secColor, fontWeight: 700 }}>{i + 1}.</span><span>{s}</span>
                           </li>
                         ))}
@@ -224,7 +225,7 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
                   ) : null}
                 </div>
               )}
-              {effDepth === "deep" && selDim && <div ref={deepRef} style={{ borderRadius: 8 }}>{renderDeep(selDim.id, secColor)}</div>}
+              {effDepth === "deep" && selDim && <div ref={deepRef} style={{ borderRadius: R.md }}>{renderDeep(selDim.id, secColor)}</div>}
             </div>
           </div>
         </div>

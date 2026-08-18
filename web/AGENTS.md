@@ -164,6 +164,33 @@ Single shared card shell used by both SIBC and Payments.
 
 ---
 
+## Type and radius scale (`lib/tokens.ts`)
+
+Sizes come from `FS` / `R` / `GLYPH`. Never write a raw number — `lib/tokens.test.ts` fails the
+build on any literal `fontSize` or `borderRadius` outside that module, because the scale this one
+replaced lived in `globals.css`, declared itself mandatory, had no consumers, and quietly grew to
+fifteen font sizes (five of them half-points) and seven radii.
+
+| Step | px | Role |
+|---|---|---|
+| `FS.micro` | 10 | Uppercase role labels, disclosure carets, tiny badges |
+| `FS.meta` | 11 | Coverage lines, chart axis ticks, depth hints |
+| `FS.label` | 12 | Uppercase group headers, chain markers, chart legends |
+| `FS.note` | 13 | Card meta, chip labels, eyebrows, chart tooltips |
+| `FS.body` | 14 | Body text, controls, breadcrumbs, rail rows |
+| `FS.lead` | 15 | Read-card titles, chain steps |
+| `FS.card` | 16 | Dimension titles, detail body, CTA strip |
+| `FS.section` | 18 | Section headers (explore mode) |
+| `FS.title` | 24 | The detail pane's title — one per screen |
+| `R.sm` / `R.md` / `R.lg` | 4 / 8 / 12 | Badges / cards+chips / panels (`rounded-full` unchanged) |
+| `GLYPH.arrow` / `GLYPH.dimension` | 20 / 24 | Chip-strip arrows, dimension emoji — sized beside text, not as text |
+
+Reach for the **role**, not the pixel value. Adding a step is a design decision — make it in
+`tokens.ts`, in the open, or not at all. `app/opengraph-image.tsx` is exempt: Satori renders it on
+a 1200×630 canvas, a different medium with its own proportions.
+
+---
+
 ## Mobile-first rules
 
 All new components must be mobile-ready by default:

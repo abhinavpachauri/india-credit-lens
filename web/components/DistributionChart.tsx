@@ -9,6 +9,7 @@ import { formatCr } from "@/lib/data";
 import { pickColor } from "@/lib/theme";
 import ChartLegend from "./ChartLegend";
 import type { ChartPoint, AnnotationEffect } from "@/lib/types";
+import { FS, R } from "@/lib/tokens";
 
 interface DistributionChartProps {
   absoluteData:     ChartPoint[];
@@ -105,12 +106,12 @@ export default function DistributionChart({
           <CartesianGrid strokeDasharray="3 3" stroke="var(--grid)" />
           <XAxis
             dataKey="date"
-            tick={{ fontSize: 12, fill: "var(--font-muted)" }}
+            tick={{ fontSize: FS.label, fill: "var(--font-muted)" }}
             tickLine={false}
           />
           <YAxis
             tickFormatter={formatY}
-            tick={{ fontSize: 12, fill: "var(--font-muted)" }}
+            tick={{ fontSize: FS.label, fill: "var(--font-muted)" }}
             tickLine={false}
             axisLine={false}
             width={96}
@@ -120,8 +121,8 @@ export default function DistributionChart({
             contentStyle={{
               background:   "var(--bg-card)",
               border:       "1px solid var(--border-card)",
-              borderRadius: 8,
-              fontSize:     13,
+              borderRadius: R.md,
+              fontSize: FS.note,
               color:        "var(--font)",
             }}
           />

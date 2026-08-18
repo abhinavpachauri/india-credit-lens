@@ -9,6 +9,7 @@ import { formatCr, formatGrowth } from "@/lib/data";
 import { pickColor } from "@/lib/theme";
 import ChartLegend from "./ChartLegend";
 import type { ChartPoint, AnnotationEffect } from "@/lib/types";
+import { FS, R } from "@/lib/tokens";
 
 interface TrendChartProps {
   absoluteData:    ChartPoint[];
@@ -126,7 +127,7 @@ export default function TrendChart({
     const ts   = Number(label);
     const note = dateNotes[ts];
     return (
-      <div style={{ background: "var(--bg-card)", border: "1px solid var(--border-card)", borderRadius: 8, fontSize: 13, color: "var(--font)", padding: "10px 14px" }}>
+      <div style={{ background: "var(--bg-card)", border: "1px solid var(--border-card)", borderRadius: R.md, fontSize: FS.note, color: "var(--font)", padding: "10px 14px" }}>
         <p style={{ marginBottom: 4, fontWeight: 600 }}>
           {new Date(ts).toLocaleDateString("en-IN", { month: "short", year: "numeric" })}
           {note ? "*" : ""}
@@ -137,7 +138,7 @@ export default function TrendChart({
           </p>
         ))}
         {note && (
-          <p style={{ color: "var(--font-muted)", fontSize: 11, marginTop: 6, fontStyle: "italic", borderTop: "1px solid var(--border-card)", paddingTop: 4 }}>
+          <p style={{ color: "var(--font-muted)", fontSize: FS.meta, marginTop: 6, fontStyle: "italic", borderTop: "1px solid var(--border-card)", paddingTop: 4 }}>
             {note}
           </p>
         )}
@@ -161,12 +162,12 @@ export default function TrendChart({
             tickFormatter={(ts: number) =>
               new Date(ts).toLocaleDateString("en-IN", { month: "short", year: "numeric" })
             }
-            tick={{ fontSize: 12, fill: "var(--font-muted)" }}
+            tick={{ fontSize: FS.label, fill: "var(--font-muted)" }}
             tickLine={false}
           />
           <YAxis
             tickFormatter={formatY}
-            tick={{ fontSize: 12, fill: "var(--font-muted)" }}
+            tick={{ fontSize: FS.label, fill: "var(--font-muted)" }}
             tickLine={false}
             axisLine={false}
             width={96}

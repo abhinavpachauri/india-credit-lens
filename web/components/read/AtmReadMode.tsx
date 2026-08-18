@@ -18,6 +18,7 @@ import AtmPosTrendChart from "@/components/AtmPosTrendChart";
 import AtmPosDistributionChart from "@/components/AtmPosDistributionChart";
 import ReadModeShell from "./ReadModeShell";
 import { EYEBROW, type RMModel, type RMCard, type RMDimension } from "./parts";
+import { FS } from "@/lib/tokens";
 
 const GROUPS = ["cc", "dc", "infra"] as const;
 const TOP_N: FilterState = { mode: "top_n", selectedTypes: [], selectedBanks: [], topN: 5 };
@@ -89,7 +90,7 @@ export default function AtmReadMode(
       : `📈 Trend · ${chartMode === "yoy" ? "YoY %" : chartMode === "mom" ? "MoM %" : "Absolute"}`;
     return (
       <>
-        <div className="mb-3" style={{ fontSize: 13, fontWeight: 600, color: "var(--font-muted)" }}>{label}</div>
+        <div className="mb-3" style={{ fontSize: FS.note, fontWeight: 600, color: "var(--font-muted)" }}>{label}</div>
         <SectionCard accentColor={dim.color} bare>
           {isDist ? (
             <AtmPosDistributionChart absoluteData={data.absoluteData} seriesNames={data.seriesNames}

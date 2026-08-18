@@ -14,6 +14,7 @@
 import { useEffect, useState } from "react";
 import type { InsightType } from "./InsightCard";
 import { TYPE_COLOR } from "./InsightCard";
+import { FS, R } from "@/lib/tokens";
 
 const ACCENT = "#4e8ef7";
 
@@ -42,7 +43,7 @@ const STRIP_STYLE: React.CSSProperties = {
   background:   "#4e8ef712",
   border:       "1.5px solid #4e8ef740",
   borderLeft:   "5px solid #4e8ef7",
-  borderRadius: "0 10px 10px 0",
+  borderRadius: `0 ${R.md}px ${R.md}px 0`,
   padding:      "14px 16px",
 };
 
@@ -51,7 +52,7 @@ const ARROW_STYLE: React.CSSProperties = {
   height:     34,
   background: ACCENT,
   color:      "#fff",
-  fontSize:   16,
+  fontSize: FS.card,
   flexShrink: 0,
 };
 

@@ -14,6 +14,7 @@ import TrendChart from "@/components/TrendChart";
 import DistributionChart from "@/components/DistributionChart";
 import ReadModeShell from "./ReadModeShell";
 import { EYEBROW, type RMModel, type RMCard, type RMDimension } from "./parts";
+import { FS } from "@/lib/tokens";
 
 const modeLabel = (pm?: string | null) =>
   pm === "share" ? "Share" : pm === "yoy" ? "YoY" : pm === "fy" ? "FY" : "Absolute";
@@ -62,7 +63,7 @@ export default function SibcReadMode({ report, planes }: { report: Report; plane
       : `📈 Trend · ${trendMode === "yoy" ? "YoY %" : trendMode === "fy" ? "FY cumulative" : "₹ absolute"}`;
     return (
       <>
-        <div className="mb-3" style={{ fontSize: 13, fontWeight: 600, color: "var(--font-muted)" }}>{label}</div>
+        <div className="mb-3" style={{ fontSize: FS.note, fontWeight: 600, color: "var(--font-muted)" }}>{label}</div>
         <SectionCard accentColor={dim.color} bare>
           {isDist ? (
             <DistributionChart absoluteData={section.absoluteData}

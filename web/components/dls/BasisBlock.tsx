@@ -11,6 +11,7 @@
 
 import { useState } from "react";
 import type { Basis } from "@/lib/opportunities";
+import { FS, R } from "@/lib/tokens";
 
 const DIR_GLYPH: Record<string, { glyph: string; color: string }> = {
   "1":  { glyph: "▲", color: "#16A34A" },
@@ -49,18 +50,18 @@ export default function BasisBlock({ basis }: { basis: Basis }) {
         className="flex items-center gap-1.5 text-xs font-semibold"
         style={{ color: "var(--font-muted)", background: "none", border: "none", padding: 0, cursor: "pointer" }}
       >
-        <span style={{ fontSize: 10 }}>{open ? "▾" : "▸"}</span> How we know
+        <span style={{ fontSize: FS.micro }}>{open ? "▾" : "▸"}</span> How we know
       </button>
       {open && (
         <div
           style={{
-            marginTop: 8, border: "1px solid var(--border-card)", borderRadius: 8,
+            marginTop: 8, border: "1px solid var(--border-card)", borderRadius: R.md,
             background: "var(--bg-page)", padding: "12px 14px",
           }}
         >
-          <p style={{ fontSize: 13, fontWeight: 700, color: "var(--font)" }}>{basis.headline}</p>
+          <p style={{ fontSize: FS.note, fontWeight: 700, color: "var(--font)" }}>{basis.headline}</p>
           {basis.coverage && (
-            <p style={{ fontSize: 11, color: "var(--font-muted)", marginTop: 2 }}>{basis.coverage}</p>
+            <p style={{ fontSize: FS.meta, color: "var(--font-muted)", marginTop: 2 }}>{basis.coverage}</p>
           )}
           {(basis.members?.length ?? 0) > 0 && (
             <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 5 }}>
@@ -71,10 +72,10 @@ export default function BasisBlock({ basis }: { basis: Basis }) {
                 // Contributes one way, moves the other — worth saying, not worth hiding.
                 const against = observed !== null && m.direction !== null && observed !== m.direction;
                 return (
-                  <div key={i} className="flex items-baseline gap-2 flex-wrap" style={{ fontSize: 12.5 }}>
+                  <div key={i} className="flex items-baseline gap-2 flex-wrap" style={{ fontSize: FS.note }}>
                     <span
                       style={{
-                        fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em",
+                        fontSize: FS.micro, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em",
                         color: "var(--font-muted)", minWidth: 62, flexShrink: 0,
                       }}
                     >
@@ -98,10 +99,10 @@ export default function BasisBlock({ basis }: { basis: Basis }) {
           <ol style={{ paddingLeft: 0, listStyle: "none", margin: 0, display: "flex", flexDirection: "column", gap: 6 }}>
             {basis.chain.map((step, i) => (
               <li key={i} className="flex gap-2" style={{ lineHeight: 1.55 }}>
-                <span className="flex-shrink-0 font-bold" style={{ color: "var(--font-muted)", minWidth: 14, fontSize: 12 }}>
+                <span className="flex-shrink-0 font-bold" style={{ color: "var(--font-muted)", minWidth: 14, fontSize: FS.label }}>
                   {i + 1}.
                 </span>
-                <span style={{ fontSize: 12.5, color: "var(--font)" }}>{step}</span>
+                <span style={{ fontSize: FS.note, color: "var(--font)" }}>{step}</span>
               </li>
             ))}
           </ol>

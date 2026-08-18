@@ -13,6 +13,7 @@
  */
 
 import { useState } from "react";
+import { FS, R } from "@/lib/tokens";
 
 export type InsightType = "insight" | "gap" | "opportunity";
 
@@ -68,7 +69,7 @@ export default function InsightCard({
         background:   "var(--bg-card)",
         border:       "1px solid var(--border-card)",
         borderLeft:   `4px solid ${color}`,
-        borderRadius: "0 10px 10px 0",
+        borderRadius: `0 ${R.md}px ${R.md}px 0`,
         padding:      "14px 16px",
       }}
       onTouchStart={handleTouchStart}
@@ -142,7 +143,7 @@ export default function InsightCard({
                     display:    "inline-block",
                     transition: "transform 0.2s",
                     transform:  showChain ? "rotate(90deg)" : "rotate(0deg)",
-                    fontSize:   9,
+                    fontSize: FS.micro,
                   }}
                 >
                   ▶

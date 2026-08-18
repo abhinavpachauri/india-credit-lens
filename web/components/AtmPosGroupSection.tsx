@@ -19,6 +19,7 @@ import { pickColor } from "@/lib/theme";
 import InsightCard   from "@/components/dls/InsightCard";
 import InsightCTAStrip from "@/components/dls/InsightCTAStrip";
 import AtmPosSectionCard from "@/components/AtmPosSectionCard";
+import { R } from "@/lib/tokens";
 
 // Primary metric per group — used to rank banks for Top N
 const GROUP_PRIMARY: Record<string, string> = {
@@ -237,7 +238,7 @@ export default function AtmPosGroupSection({ group, series }: AtmPosGroupSection
         style={{
           background:   "var(--bg-card)",
           border:       "1px solid var(--border-card)",
-          borderRadius: 10,
+          borderRadius: R.md,
           padding:      "12px 16px",
           marginBottom: 16,
         }}

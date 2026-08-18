@@ -10,6 +10,7 @@ import TrendChart               from "./TrendChart";
 import DistributionChart        from "./DistributionChart";
 import IndustryFilter           from "./IndustryFilter";
 import type { ReportSection }   from "@/lib/types";
+import { R } from "@/lib/tokens";
 
 type TabId      = "trend" | "distribution";
 type TrendMode  = "absolute" | "yoy" | "fy";
@@ -23,7 +24,7 @@ interface Props {
 const CONTROLS_CARD: React.CSSProperties = {
   background:   "var(--bg-card)",
   border:       "1px solid var(--border-card)",
-  borderRadius: 10,
+  borderRadius: R.md,
   padding:      "12px 16px",
   marginBottom: 16,
 };
