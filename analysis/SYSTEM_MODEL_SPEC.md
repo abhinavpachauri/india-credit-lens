@@ -323,6 +323,12 @@ Computed by `analysis/generate_system_state.py --pipeline {p} --period {date}` a
 
 **Step 2 — Mechanical propagation (skeleton).** Propagate leaf directions up each `composes_into` chain, share-weighted, to compute aggregate entity directions. Deterministic. Alternate decompositions computed independently; never summed. Reclassification entities computed from their own signals, not propagated into the primary tree.
 
+**Step 2a — Coherence of every propagated direction (added 2026-08-19).** A parent's direction is a *summary of children who may disagree*, and today nothing records whether they did. Alongside each aggregate `direction`, emit `coherence = |Σ child_delta| / Σ|child_delta|` ∈ [0,1] over the children that produced it — the same quantity Layer 1 already computes for the same hierarchy (`signals/README.md`, movement methods), so this is a read, not a second calculation.
+
+`direction: +1, coherence: 1.00` (all children rising) and `direction: +1, coherence: 0.12` (children in near-cancellation, one issuer reclassifying) are currently **indistinguishable in the state file**, and every downstream consumer — edge firing, loop state, opportunity status, narrative — inherits that blindness. Measured 2026-08-19 on ATM/POS `pos_terminals` bank categories: coherence **0.120** on a window where private banks shed 257,290 terminals while public banks added 204,595. The parent direction was a true statement about a fact that mattered far less than the transfer underneath it.
+
+**Coherence qualifies a direction; it never suppresses one.** Low coherence is a finding (the parts are trading places), not a defect. Consumers that state a direction in prose must state its coherence regime with it.
+
 **Step 3 — Force states.** For each force, read `signal_evidence` → `active` | `latent`.
 
 **Step 4 — Behavioral edge states.** For each behavioral edge (polarity `+`/`-`/`~`): `active` | `dominant` | `dormant` | `reversed` per from-node direction and polarity.

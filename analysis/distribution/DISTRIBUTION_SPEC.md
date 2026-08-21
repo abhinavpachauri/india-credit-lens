@@ -64,10 +64,10 @@ repetition structurally hard.
 | ID | Category | Question it answers | Source artifacts |
 |---|---|---|---|
 | C1 | **Headline levels** | What are the numbers | L1 scalars, both pipelines |
-| C2 | **Rotation** | What's gaining ground, at whose expense | `csv_sector_rotation`, `csv_category_rotation` |
+| C2 | **Rotation** | What's gaining ground, at whose expense | `csv_sector_rotation`, `csv_category_rotation`, `csv_*_momentum`, `csv_*_allocation` |
 | C3 | **Divergence** | What used to move together and no longer does | `csv_sector_divergence`, `csv_bank_divergence`, `csv_pair_divergence` |
 | C4 | **Spread** | Broad-based, or a few names carrying it | scan signals, concentration signals |
-| C5 | **Turns** | What changed direction — accel/decel, streaks breaking, status flips | trajectory signals, period-over-period status deltas |
+| C5 | **Turns** | What changed direction — accel/decel, streaks breaking, status flips | trajectory signals, period-over-period status deltas, `csv_*_acceleration` |
 | C6 | **Openings & risks** | So what, and for whom | S3 → `derive_opportunities` → `opportunities_feed.json` |
 | C7 | **Cross-system** | What credit + payments say together that neither says alone | constructs, eco-edges, cross-pipeline loops, reconciliation constraints |
 | C8 | **Watchlist** | What could flip next month | `signals/proximity.py` — distance to the next status flip (§6) |
@@ -82,6 +82,14 @@ repetition structurally hard.
 - C2 is about *share* moving. C3 is about *co-movement breaking*. A single sector growing faster
   than another is C2 if you're framing mix, C3 only if the two are a declared pair or a
   parent/child hierarchy.
+- **C2 covers movement in every coherence regime** (`signals/README.md`, router table). "Of every
+  Rs 100 of new credit, services took Rs 33.80" (aligned) and "private banks shed 257,290 POS
+  terminals while public added 204,595" (handover) are both C2 — same question, *at whose expense*,
+  answered in the unit the regime permits. A low-coherence window is not a weaker C2 claim; it is
+  usually the stronger one.
+- **Acceleration is C5, not C2.** "Personal loans accelerated least" answers *what changed
+  direction*, not *who gained ground* — even though the two are routinely quoted in one sentence
+  (and must be; see §5.3).
 - C6 is model-driven (opportunity nodes), never an LLM inference over C1–C5.
 
 ---
@@ -167,6 +175,24 @@ scopes — the design prompt is in scope for all of them because it becomes a **
 | **No-advice** | recommendation voice ("banks should…") | ✅ | ✅ | **warn** inside a verbatim card body (feeds the v1.12 fix list); **hard fail** in generated so-what/blurb text |
 | **Banned register** | consultant-speak (§10) | ✅ | ✅ | same warn-card / fail-ours split |
 | **Unformatted number** | raw float reaches a reader (`1358241.0`) | ✅ | ✅ | hard fail everywhere — no case where a raw float is correct |
+| **Unpaired allocation** | a share-of-new-credit figure published without its speed + acceleration | ✅ | ✅ | **hard fail everywhere** — the figure asserts the opposite of the truth when unpaired (see below) |
+
+**The unpaired-allocation rule (added 2026-08-19).** An `alloc` figure — "X% of new credit went
+here" — is the most misreadable number the signal layer produces, because a *falling share of a
+faster-growing flow* reads as decline. Measured case: personal loans fell 44.7% → 30.1% of new SIBC
+credit while growing **15.8% YoY, accelerating**, taking **Rs 6.4 L Cr → Rs 9.7 L Cr**. Published
+alone, that figure states the reverse of what happened. It misled the author of this rule for an
+hour before acceleration caught it.
+
+So: any surface carrying an `alloc` figure must carry that entity's **speed (YoY) and acceleration**
+in the same block. This is a *content-completeness* check, not a voice check — it is the only lint
+in the table that fails a claim for what it **omits** rather than what it says. Enforced in the
+insight builder (`signals/README.md`, pairing rule) and again at the publish gate, because the
+design prompt leaves the gate and a design session cannot restore a number it was never given.
+
+Coherence regime also binds the wording: an allocation sentence may not be emitted for a contested
+or handover window, nor a handover sentence for an aligned one (`signals/README.md`, router table).
+
 
 The warn-vs-fail split is the same one the newsletters use: a hit inside **verbatim card prose**
 (eval output, which §11 forbids hand-editing) is a **warning** carrying the card id, so it feeds the

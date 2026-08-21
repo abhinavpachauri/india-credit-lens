@@ -218,6 +218,63 @@ the v3.0 §13 Force Identification Protocol (external source + ≥1 L1 signal ch
 mechanism). **Unvalidated proposals never enter the source of truth.** This is the single, gated
 path by which non-deterministic inference improves the deterministic backbone.
 
+### 8.1 Retrieval and verification — the measured bottleneck (added 2026-08-19)
+
+The gate is sound; **retrieval is where proposals die.** Measured 2026-08-19 across the two most
+recent runs: `s4_proposals/2026-06-30.json` **42 proposals → 5 promoted**;
+`s4_proposals/2026-07-31.json` **36 proposals → 1 promoted**. All 78 still carry
+`status: "proposed"` and **zero** carry a verdict, an attempted URL, or a rejection reason.
+
+Four distinct failures, previously merged into one informal "sourcing is hard":
+
+- **R1 — Retrieval is blocked far more narrowly than recorded.** The prior note ("PIB/NPCI/
+  Business Standard 403 the crawler; Chrome is the only path") was **generalised from a
+  WebFetch-tool block to a site-wide one, and that is wrong.** Probed 2026-08-19 with plain `curl`
+  and the **default user agent** (no spoofing):
+
+  | host | result |
+  |---|---|
+  | `www.rbi.org.in` (HTML) | **200, real content**, no bot interstitial |
+  | `www.pib.gov.in` (HTML, follow redirect) | **200, 73k chars** — and the KCC force's own excerpt, *"increased from Rs 1.6 lakh to Rs 2 lakh"*, verifies verbatim |
+  | `rbidocs.rbi.org.in` (PDF host) | 200 but serves an **Imperva bot interstitial**, not the PDF |
+  | `npci.org.in` | **403** |
+
+  So the block is on the **document host and NPCI**, not on the official tier as such. RBI and PIB
+  HTML — which carry most circulars, press releases and Master Direction landing pages — are
+  directly reachable, and the KCC excerpt that was hand-verified through the editor's Chrome on
+  2026-08-02 could have been machine-verified. **The editor's logged-in browser stays the documented
+  path for bot-protected hosts only** (`rbidocs` PDFs, NPCI), supplying page text to
+  `bank_sourcing.excerpt_on_page` (pure by design — it does not care how the text was obtained).
+  **Never spoof a user agent to evade a bot block**; the successful probes above needed no UA at all.
+  *Evidence strength: four URLs at one moment, not a survey — re-probe before relying on it at
+  volume, and treat a future 403 as a site decision to respect, not a bug to route around.*
+- **R2 — No PDF text path, and this blocker is smaller than recorded.** `excerpt_on_page` needs
+  text; RBI's authoritative material (Master Directions, FSR, bulletins, circulars) is PDF.
+  `PLAN_2026-08-11.md` records "no PDF extraction anywhere… its own project" — that **conflates two
+  problems**. Table extraction into an *ingestion pipeline* is a project. Extracting text to verify
+  an excerpt is one command: demonstrated 2026-08-19 with `pdftotext -layout` on the RBI PSL Master
+  Direction (RBI/FIDD/2024-25/128), which yielded the targets table verbatim. `pdftotext` and
+  `pypdf` are already available. **The sourcing half of that blocker should be closed, not planned.**
+- **R3 — `required_source` is a single named target with no fallback ladder.** e.g. *"RBI Financial
+  Stability Report section on corporate leverage ratios and credit growth by firm size."* If that
+  exact section does not exist or is unreachable, the proposal dies rather than degrading. This is
+  what happened to the large-corporate force: the FSR release addressed stability, not
+  large-corporate credit, and the nearest figure was a different aggregate on a non-allowlisted
+  host. **A proposal must carry a ranked ladder** — named document → same-issuer alternative
+  (bulletin / circular / press release) → Tier-2 report → Tier-3 press corroboration — so a miss at
+  the top rung degrades instead of terminating. The Protocol's evidence bar does not move; only the
+  search does.
+- **R4 — Negative results are discarded.** With no attempted-URL or rejection record, the same
+  failing search re-runs every period at full cost and learns nothing. Proposals must accumulate
+  `attempts: [{url, tier, verdict, date, note}]`. **A rejection is evidence about the world and is
+  retained**; it is also the honest input to C9 corrections (DISTRIBUTION_SPEC §3).
+
+**Why this is scheduled with the movement signals, not after them.** Movement methods
+(`signals/README.md`) produce the platform's strongest why-candidates — an acceleration that leads
+its peers, or a low-coherence handover such as *"public sector banks took over POS deployment from
+private banks"*. Every one of them arrives at this layer. Widening the signal surface while
+retrieval converts at ~3% raises the count of unexplained findings, not the count of explained ones.
+
 ---
 
 ## 9. File conventions (additions to v3.0 §19)
@@ -394,10 +451,24 @@ construct := {
 ```
 role_sign  = -1 if role == contra_indicates else +1
 direction  = sign( Σ  member_direction × role_sign × (weight or 1) )    over observed members
-basis      = { observed, total, pipelines: {name: period, ...} }
+coherence  = | Σ signed_member_delta | / Σ | signed_member_delta |      over observed members
+basis      = { observed, total, coherence, pipelines: {name: period, ...} }
 ```
 Missing pipelines don't block computation; `basis` records coverage so downstream consumers
 (and the narrative layer) can see how much of the construct is actually observed.
+
+**`coherence` added 2026-08-19 — `direction` alone cannot distinguish unanimity from a near-tie.**
+A construct with 5 members up and 0 down and one with 3 up and 2 down both emit `direction: +1`.
+`basis` records how many members were *observed*; nothing records whether they *agreed*. This is
+the same blindness as SYSTEM_MODEL_SPEC §16 Step 2 and the same quantity Layer 1 computes for
+hierarchies (`signals/README.md`, movement methods) — one definition, three strata.
+
+It is load-bearing here because of §23.1: a construct fires an opportunity when `direction ≠ 0`
+for ≥2 periods. **Without `coherence`, a 3–2 split can raise a live card on `/opportunities` and
+nothing in the record says it was nearly a tie.** Every eco-driven opportunity therefore carries
+its driver's coherence in `basis`, and the narrative layer must not assert a construct-wide
+direction in prose when coherence < 0.50 — at that point the members are trading places, which is
+a different and usually better claim (`signals/README.md`, router table).
 
 ---
 

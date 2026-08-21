@@ -111,6 +111,142 @@ gap) is already pipeline-agnostic; only the metric-bundle resolver reads pipelin
 - **Consumption**: anomaly-surfaced insights on the dashboards; everything else on-demand via the
   reply-desk `lookup` pattern. Never pre-generate per-bank cards.
 
+## Movement signal methods — momentum, acceleration & allocation
+
+The Layer-1 vocabulary for *how a distribution is changing*, distinct from what it is. Same
+architectural status as the relational methods: registry spec → deterministic compute →
+per-entity rows in `signals.db` → deterministic insight builders.
+
+**Why these exist.** We compute a thing's **size** (`csv_*_abs`) and its **speed** (`csv_*_yoy`),
+and `rotation` computes the displacement of its *share*. Nothing computes how many units actually
+moved, nor whether the speed itself is changing. That is why a material reallocation can run for
+a year and read as a flat share chart. Measured 2026-08-18 on SIBC main sectors: a **14.8 pp**
+swing in where new credit went registered as **1.63 pp** of rotation, and in the turning month
+rotation read **0.09 pp** — under the 0.15 pp materiality band, i.e. filed as noise by our own rule.
+
+**These are re-expressions, not new information.** `alloc = rotation ÷ f + weight`, where
+`f = net movement ÷ total`; reconstruction error 4.4e-16. They earn their place because `f` ranges
+**6.45–12.81** across the observed window, so rotation states real decisions in a unit where they
+look like rounding error. Build for legibility and threshold calibration — never claim new facts.
+
+### momentum — how many units actually moved
+`csv_sector_momentum` (SIBC) · `csv_category_momentum` (ATM/POS). METHOD_TYPE: `momentum`.
+
+- **Compute:** per child of `parent_code` / per `bank_category` on a metric:
+  `delta = value(period) - value(period - window)`. `window: 12` **calendar months**, resolved by
+  the same calendar rule as rotation — never positional (the SIBC CSV has coverage gaps, and a
+  positional 12-back silently lands 24 months out).
+- **Rows:** one per entity, `value = delta` in the **metric's own unit**, signed. Plus THREE
+  `entity_type='aggregate'` rows: `net_movement` (sum of deltas), `gross_movement` (sum of
+  |deltas|), and `coherence` (`|net| / gross`, unit `ratio`, range [0,1]).
+- **Unconditional.** No division by a derived quantity, so momentum cannot blow up in a
+  contracting or churning system. It is the safe backbone every other movement number rests on.
+- **Why momentum and not just speed.** Speed discards scale. Measured 2026-06: agriculture grew
+  **16.8%** and personal loans **15.8%** — agriculture looks faster — but agriculture added
+  **Rs 3.9 L Cr** against personal's **Rs 9.7 L Cr**. Both readings are true; only both together
+  are honest.
+- **Why net AND gross.** They are equal only when every entity moves the same way. Measured on
+  ATM/POS `pos_terminals`, 12m to 2026-05: private banks **-257,290**, public banks **+204,595** —
+  net **-55,885**, gross **465,615**. "A great deal happened; nothing net happened" is a finding,
+  not an error, and one total alone cannot say it.
+
+### coherence — the ROUTER (never a gate)
+Emitted by `momentum`, consumed by `allocation`. Not its own registry signal.
+
+- `coherence = |sum of deltas| / sum of |deltas|`, in [0,1]. **1.0 = every entity moving the same
+  direction.**
+- **Load-bearing property (provable, verified both pipelines):**
+  `max |share of net movement| <= 1 / coherence`. Coherence bounds the distortion *before* any
+  share is computed. Observed 2026-08-18 — SIBC main 1.000 → worst share 45% · SIBC industry types
+  0.825 (bound 121%) → 23% · payments credit cards 0.935 (bound 107%) → 75% · **payments POS
+  terminals 0.120 (bound 833%) → 460%.** The bound held in every one of 132 windows.
+- **Coherence ROUTES to a different story. It never suppresses one.** This is the load-bearing
+  design decision, and it reverses an earlier draft that specced coherence as a publish gate. A
+  gate would have silenced exactly the most valuable windows: the two lowest-coherence windows in
+  the whole dataset are a **POS-deployment handover from private to public sector banks** and a
+  **debit-card e-commerce consolidation into private banks** — both invisible in the net number,
+  both stronger stories than any high-coherence window produced.
+
+| coherence | regime | the sentence that is true |
+|---|---|---|
+| `>= 0.90` | aligned | *"Of every Rs 100 of new credit, services took Rs 33.80."* — allocation reading |
+| `0.50 - 0.90` | contested | *"Card spend grew Rs X — but foreign banks moved against it."* — net direction holds, name the dissenters |
+| `< 0.50` | handover | *"POS terminals barely moved on net — private shed 257,290 while public added 204,595."* — the transfer IS the story |
+
+- **Observed distribution (132 windows, both pipelines, 2026-08-18):** `= 1.000` 35.6% ·
+  `0.95-0.999` 43.2% · `0.80-0.95` 12.9% · `0.50-0.80` 6.1% · `< 0.50` 2.3%.
+- **`coherence_min` default `0.90` is a SENTENCE-SELECTOR, not a publish switch.** Its only
+  justification is the bound (no share beyond +/-111%). Per the standing AI PM rule it still ships
+  with a measured catch / false-rejection rate — but nothing is silenced while that is pending.
+- **Report net and gross always; never "flag" their divergence.** A footnote that fires
+  occasionally gets ignored; two totals side by side are self-explanatory.
+
+### acceleration — is the speed itself changing
+`csv_sector_acceleration` (SIBC) · `csv_category_acceleration` (ATM/POS).
+METHOD_TYPE: `acceleration`.
+
+- **Compute:** `delta_speed = yoy(period) - yoy(prior period)`, per entity. Unit `pp`.
+- **Distinct from `csv_sector_fy_acceleration`**, which is annual and FY-end-only (5 signals).
+  This is per-period and general.
+- **It is the only member of the family that separates *slowing down* from *being overtaken*, and
+  it is not optional for that reason.** Measured 2026-08-18: personal loans' share of new SIBC
+  credit fell 44.7% → 30.1%, which reads as retreat. Acceleration shows personal at **+4.1 pp**
+  against industry **+12.9** and services **+12.6** — nothing decelerated; personal accelerated
+  least. The allocation number alone asserts the opposite of the truth.
+
+### allocation — where the new units went
+`csv_sector_allocation` (SIBC) · `csv_category_allocation` (ATM/POS). METHOD_TYPE: `allocation`.
+
+- **Rows, two kinds, distinguished by `entity_type`:**
+  - `contribution` — `100 * delta_i / gross`. **Always emitted, every regime.** Answers "of all
+    the movement, how much was this one." Bounded by construction (cannot exceed 100%); valid in
+    growth, contraction and churn alike.
+  - `alloc` — `100 * delta_i / net`. **Emitted when `coherence >= coherence_min`.** Answers "of
+    the net new units, how many went here." Sums to 100 across entities.
+- **Below `coherence_min` there is no honest null and no silence** — `contribution` rows stand and
+  the insight switches to the contested/handover sentence per the router table above.
+- **The 12-calendar-month window is mandatory, not a preference.** Month-on-month is not merely
+  noisier, it is undefined: measured on SIBC main sectors, **5 of 20** monthly steps produced
+  impossible shares (137.4%, -366%), two of them because the book **contracted** in April — in
+  both 2025 and 2026, a March year-end effect that unwinds. The annual window cancels it; **14/14**
+  annual windows clean.
+- **Depth is not the constraint; the source is.** An earlier draft claimed deep SIBC cuts break —
+  that was an artefact of a strict [0,100] validity test which rejects a harmless -0.3% share.
+  Measured coherence: SIBC main sectors **1.000** (14/14), industry-by-type min **0.825**,
+  services+PL sub-categories min **0.995**. **SIBC is coherent at every depth.** Low coherence is
+  payments-specific and episodic (bank-category cuts where one issuer reclassifies).
+
+### Insight rules — the pairing rule is non-negotiable
+`core/relational_insights.py :: movement_insight`.
+
+- **An `alloc` figure is NEVER rendered without that entity's speed and acceleration beside it.**
+  Alone, "personal loans fell from 44.7% to 30.1% of new credit" reads as contraction; the same
+  entity grew **15.8% YoY, accelerating**, taking **Rs 6.4 L Cr → Rs 9.7 L Cr**. A falling share of
+  a faster-growing flow is the most misreadable number in this family — it misled the author of
+  this section for an hour before acceleration caught it. **Enforce in the builder, not in review.**
+- **Momentum is quoted in the metric's own unit**, never as a bare percentage — restoring the scale
+  that speed discards is the entire point of momentum.
+- The router table decides the sentence. A builder must never emit an allocation sentence in a
+  contested or handover regime, nor a handover sentence in an aligned one.
+- Composition reads only — no lead/lag or causal claims (COMPOSITION_SPEC §4).
+
+### Conventions
+- Applicability: **momentum, acceleration and `contribution` are unconditional** — every cut, both
+  pipelines, any future source. Only the *`alloc` sentence* is coherence-routed.
+- Backfill: append every period on introduction (Check 2f recomputes all); the first `window`
+  periods legitimately emit no momentum rows.
+- Traceability: rows land in `signals.db` → Check 2g / Stage 4c period-wide ground truth covers
+  them. `query.signal_numbers` treats `momentum`/`allocation` like `scan` (full row distribution);
+  `acceleration` is scalar-shaped per entity.
+- Insight schema: `insight_kind: movement_momentum | movement_allocation` (additive field).
+- **Coverage gap this closes:** `csv_sector_rotation` is registered for industry, services and
+  personal-loan sub-cuts only. The four main SIBC sectors — the one cut with coherence 1.000 in all
+  14 observed windows — have **no rotation signal at all**, and are the blindest spot in the
+  registry.
+- **Coherence does not stop at Layer 1.** The same "do the parts agree?" question is unanswered in
+  SYSTEM_MODEL_SPEC §16 Step 2 (mechanical propagation) and COMPOSITION_SPEC §14 (construct
+  direction). Compute it once here; both consume it. See those sections.
+
 ## Evaluate + query
 - **`evaluate.py`** — Stage 5 LLM evaluation: builds domain payloads from `signals.db`, calls
   the model, writes `evaluations/{pipeline}/{period}.json`. Caches by payload hash + prompt
