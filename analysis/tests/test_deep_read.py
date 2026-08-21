@@ -188,6 +188,22 @@ def test_source_tiers_resolve_by_host():
     assert bank_sourcing.tier_of("https://medium.com/@someone/post") is None
 
 
+def test_every_allowlisted_host_resolves_to_its_own_tier():
+    """Property over the WHOLE list, not a hand-picked sample.
+
+    The spot-check above passed for a year while `worldline.com` was rejected by its own
+    allowlist (the `lstrip("www.")` bug). Hand-written cases select for the hosts the author
+    already suspects — the same failure class as the newsletter gate that measured 0% catch
+    against nine hand-written negatives. Enumerate the set instead."""
+    for tier, hosts in bank_sourcing.ALLOWLIST.items():
+        for host in hosts:
+            for url in (f"https://{host}/x", f"https://www.{host}/x"):
+                got = bank_sourcing.tier_of(url)
+                assert got is not None, f"{host} is allowlisted but tier_of({url}) is None"
+                assert bank_sourcing.ALLOWLIST[got] is not None
+                assert host in bank_sourcing.ALLOWLIST[got], f"{url} resolved to wrong tier {got}"
+
+
 def test_excerpt_must_literally_appear_on_the_page():
     page = "Zero MDR removes the merchant revenue incentive to maintain POS terminal infrastructure."
     assert bank_sourcing.excerpt_on_page("removes the merchant revenue incentive to maintain POS", page)

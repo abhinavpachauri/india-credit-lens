@@ -70,8 +70,13 @@ TIER_LABEL = {"official": "official/regulatory", "report": "reputed report",
 
 
 def _host(url):
+    """Hostname, lowercased, with a leading `www.` removed.
+
+    NB `removeprefix`, not `lstrip("www.")` — lstrip strips leading *characters* from the set
+    {w, .}, so it silently turned `worldline.com` into `orldline.com` and made an allowlisted
+    host fail its own gate (fixed 2026-08-19; `test_every_allowlisted_host_resolves` pins it)."""
     from urllib.parse import urlparse
-    return (urlparse(url).hostname or "").lower().lstrip("www.")
+    return (urlparse(url).hostname or "").lower().removeprefix("www.")
 
 
 def tier_of(url):
