@@ -299,6 +299,158 @@ def divergence_insight(dist: list[tuple], subject: str, member_noun: str = "segm
             "implication": implication, "insight_kind": "divergence_hierarchy"}
 
 
+# ── movement: where the new units went, and how fast ──────────────────────────
+
+ALIGNED_MIN   = 0.90   # sentence-selector, never a publish gate (signals/README.md)
+CONTESTED_MIN = 0.50
+
+
+def _regime(coherence: float) -> str:
+    """Which sentence about this window is true — the router, not a gate.
+
+    Nothing is suppressed at low coherence; the story changes. The two lowest-coherence
+    windows in the observed data are a POS-deployment handover and an e-commerce
+    consolidation — the best material the layer produces, not the worst."""
+    if coherence >= ALIGNED_MIN:
+        return "aligned"
+    return "contested" if coherence >= CONTESTED_MIN else "handover"
+
+
+def _pct(v: float) -> str:
+    return f"{v:.1f}%"
+
+
+def _speed_clause(name: str, speed: dict, accel: dict) -> str | None:
+    """The pairing rule, enforced structurally rather than by review.
+
+    An allocation figure alone reads as decline when a sector's share of new credit
+    falls: personal loans went 44.7% -> 30.1% while GROWING 15.8% YoY and accelerating.
+    So a share is never rendered without its own speed and acceleration — and when
+    either is missing the caller must drop the entity from prose, not print a bare share.
+    """
+    sp, ac = speed.get(name), accel.get(name)
+    if sp is None or ac is None:
+        return None
+    moving = "accelerating" if ac > 0.05 else ("slowing" if ac < -0.05 else "steady")
+    return f"growing {_pct(sp)} a year and {moving} ({_pp(ac)})"
+
+
+def movement_insight(alloc: dict, contribution: dict, momentum: dict,
+                     net: float | None, gross: float | None, coherence: float | None,
+                     accel: dict, speed: dict, subject: str) -> dict | None:
+    """Deterministic movement insight — where the new units went, routed by coherence.
+
+    alloc/contribution/momentum/accel/speed — {entity: value} from signals.db rows
+    subject — what is being added to ("bank credit")
+
+    Returns {title, body, chain, implication, insight_kind} or None when the annual
+    window is not yet available.
+    """
+    if not momentum or coherence is None or not gross:
+        return None
+    regime = _regime(coherence)
+    ranked = sorted(momentum.items(), key=lambda kv: kv[1], reverse=True)
+    risers = [(e, v) for e, v in ranked if v > 0]
+    fallers = [(e, v) for e, v in ranked if v < 0][::-1]      # most negative first
+
+    if regime == "aligned" and alloc:
+        top = sorted(alloc.items(), key=lambda kv: kv[1], reverse=True)
+        lead, lead_v = top[0]
+        # Pairing rule: only entities carrying BOTH speed and acceleration reach prose.
+        quotable = [(e, v) for e, v in top if _speed_clause(e, speed, accel)]
+        if not quotable:
+            return None
+        lead, lead_v = quotable[0]
+        least = min(quotable, key=lambda kv: accel[kv[0]])
+
+        title = (f"{_short(lead)} took {_pct(lead_v)} of all new {subject} in the past year")
+        parts = [
+            f"Of the {subject} added over the past twelve months, {_short(lead)} took "
+            f"{_pct(lead_v)} — the largest share of the new money — {_speed_clause(lead, speed, accel)}."
+        ]
+        if len(quotable) > 1:
+            rest = "; ".join(f"{_short(e)} {_pct(v)}" for e, v in quotable[1:])
+            parts.append(f"The rest went to {rest}.")
+        # The correction that earns this whole family: least-accelerating is not shrinking.
+        if least[0] != lead:
+            parts.append(
+                f"{_cap(_short(least[0]))} took {_pct(least[1])} while {_speed_clause(least[0], speed, accel)} "
+                f"— a smaller slice of a faster-growing total, not a retreat."
+            )
+        body = " ".join(parts)
+        chain = [
+            f"Every sector's {subject} is compared with the same month a year earlier, "
+            f"and each one's share of the total increase is taken.",
+            f"{_short(lead)} accounts for {_pct(lead_v)} of the increase.",
+            f"All sectors moved the same way this window, so the shares of the net "
+            f"increase are bounded and sum to a hundred.",
+        ]
+        implication = (
+            "Shares of new lending move far faster than shares of the book, so this is the "
+            "earlier read of the two. It says where the money went, not why — and a falling "
+            "share alongside rising growth means the others grew faster, not that this one shrank."
+        )
+        return {"title": title, "body": body, "chain": chain,
+                "implication": implication, "insight_kind": "movement_allocation"}
+
+    if regime == "contested" and risers and fallers:
+        lead, _lv = risers[0]
+        dissent = [_short(e) for e, _ in fallers[:2]]
+        lead_share = contribution.get(lead)
+        title = (f"{subject.capitalize()} grew, but {' and '.join(dissent)} moved against it")
+        body = (
+            f"{_cap(subject)} rose over the past year, but not everywhere: "
+            f"{' and '.join(dissent)} contracted while the rest expanded. "
+            + (f"{_short(lead)} accounts for {_pct(lead_share)} of all the movement in the period. "
+               if lead_share is not None else "")
+            + f"Because parts moved in opposite directions, only {_pct(100 * coherence)} of the "
+              f"total movement shows up in the net figure."
+        )
+        chain = [
+            "Each sector's change over the year is measured, then compared with the total "
+            "movement ignoring direction.",
+            f"Coherence — the net change divided by the total movement — is {coherence:.2f}.",
+            "Below one, some sectors are cancelling others out, so shares of the NET change "
+            "would overstate; shares of total movement are reported instead.",
+        ]
+        implication = (
+            "A growing total with contracting members is a different claim from broad growth. "
+            "Read the members, not the headline."
+        )
+        return {"title": title, "body": body, "chain": chain,
+                "implication": implication, "insight_kind": "movement_momentum"}
+
+    if risers and fallers:
+        up, _ = risers[0]
+        dn, _ = fallers[0]
+        up_c, dn_c = contribution.get(up), contribution.get(dn)
+        title = f"{_short(dn)} shed ground to {_short(up)} — the net barely moved"
+        body = (
+            f"{_cap(subject)} shows almost no net change over the year, but a great deal "
+            f"happened underneath it: {_short(up)} expanded while {_short(dn)} contracted by a "
+            f"similar amount. "
+            + (f"{_short(up)} accounts for {_pct(up_c)} of the total movement and {_short(dn)} "
+               f"for {_pct(dn_c)}. " if up_c is not None and dn_c is not None else "")
+            + f"Only {_pct(100 * coherence)} of the movement survives into the net figure — "
+              f"this period is a transfer, not a change in size."
+        )
+        chain = [
+            "Each sector's change over the year is measured, then compared with the total "
+            "movement ignoring direction.",
+            f"Coherence — the net change divided by the total movement — is {coherence:.2f}, "
+            f"meaning gains and losses very nearly cancel.",
+            "At this level a share of the NET change is not meaningful, so the reading is the "
+            "transfer between members.",
+        ]
+        implication = (
+            "The headline number is the least informative part of this period. The reallocation "
+            "between members is the finding."
+        )
+        return {"title": title, "body": body, "chain": chain,
+                "implication": implication, "insight_kind": "movement_momentum"}
+    return None
+
+
 def _cap(s: str) -> str:
     return f"{s[0].upper()}{s[1:]}" if s else s
 

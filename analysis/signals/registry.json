@@ -1,8 +1,8 @@
 {
   "_meta": {
     "schema_version": "1.0",
-    "description": "Signal registry \u2014 permanent catalog of every tracked signal across all ingestion pipelines. Signal IDs are immutable once created. Add new signals; never rename or delete. layer: 1 = per-chart data signal (algorithmically computed), 2 = cross-chart synthesis (authored per period from data), 3 = lending ecosystem expert model (generated ~6-monthly, strict claim validation).",
-    "last_updated": "2026-08-02"
+    "description": "Signal registry — permanent catalog of every tracked signal across all ingestion pipelines. Signal IDs are immutable once created. Add new signals; never rename or delete. layer: 1 = per-chart data signal (algorithmically computed), 2 = cross-chart synthesis (authored per period from data), 3 = lending ecosystem expert model (generated ~6-monthly, strict claim validation).",
+    "last_updated": "2026-08-21"
   },
   "pipelines": {
     "sibc": {
@@ -26,21 +26,21 @@
     }
   },
   "domains": {
-    "credit_growth": "Credit expansion \u2014 sector acceleration, new highs, positive trend breaks",
+    "credit_growth": "Credit expansion — sector acceleration, new highs, positive trend breaks",
     "credit_stress": "Credit contraction, deceleration, stress proxies, policy-driven decline",
     "market_structure": "Market share shifts, bank-type competition, concentration, new entrants",
     "infrastructure": "ATM, POS, QR code deployment, utilisation, digital acceptance infrastructure",
     "policy": "PSL, regulatory mandates, RBI policy effects, PSLC trading, PLI schemes",
     "data_quality": "Methodological gaps, reclassifications, double-counting, opacity in source data",
     "cross_pipeline": "Signals that require data from more than one ingestion source to interpret",
-    "credit_headline": "System-level bank credit \u2014 total volume, YoY growth, breadth across sectors",
-    "sector_mix": "Main sector composition \u2014 Agriculture, Industry, Services, Personal Loans: YoY and share",
-    "industry": "Industry credit detail \u2014 by size (Micro/Small/Medium/Large) and by type (all industry segments)",
-    "retail": "Personal loans detail \u2014 Housing, Gold, Credit Cards, Vehicle, Education: YoY and share",
-    "psl": "Priority sector lending \u2014 Agriculture, MSME, Housing, Renewable Energy: YoY growth",
-    "cards_stock": "Cards outstanding \u2014 credit and debit card counts by issuer category",
-    "credit_card_txn": "Credit card transaction flows \u2014 POS, ecommerce, ATM withdrawal: value and channel mix",
-    "debit_card_txn": "Debit card transaction flows \u2014 ATM cash, POS, ecommerce: value and channel mix"
+    "credit_headline": "System-level bank credit — total volume, YoY growth, breadth across sectors",
+    "sector_mix": "Main sector composition — Agriculture, Industry, Services, Personal Loans: YoY and share",
+    "industry": "Industry credit detail — by size (Micro/Small/Medium/Large) and by type (all industry segments)",
+    "retail": "Personal loans detail — Housing, Gold, Credit Cards, Vehicle, Education: YoY and share",
+    "psl": "Priority sector lending — Agriculture, MSME, Housing, Renewable Energy: YoY growth",
+    "cards_stock": "Cards outstanding — credit and debit card counts by issuer category",
+    "credit_card_txn": "Credit card transaction flows — POS, ecommerce, ATM withdrawal: value and channel mix",
+    "debit_card_txn": "Debit card transaction flows — ATM cash, POS, ecommerce: value and channel mix"
   },
   "signals": {
     "three-year-credit-trajectory": {
@@ -49,8 +49,8 @@
       "domain": "credit_growth",
       "type": "inference",
       "first_seen": "2026-03-30",
-      "current_status": "retired",
-      "title": "Bank credit added \u20b953L Cr in two years \u2014 compounding",
+      "current_status": "pending",
+      "title": "Bank credit added ₹53L Cr in two years — compounding",
       "layer": 2,
       "retire_period": "2026-04-30",
       "migrated_to": "L1 entity-level trend (annotation)",
@@ -62,8 +62,8 @@
       "domain": "data_quality",
       "type": "inference",
       "first_seen": "2026-03-30",
-      "current_status": "retired",
-      "title": "Food credit cycle growing \u2014 5\u00d7 in two years at March",
+      "current_status": "pending",
+      "title": "Food credit cycle growing — 5× in two years at March",
       "layer": 2,
       "retire_period": "2026-04-30",
       "migrated_to": "gap_jan_series_nulls",
@@ -75,8 +75,8 @@
       "domain": "credit_growth",
       "type": "inference",
       "first_seen": "2026-03-30",
-      "current_status": "retired",
-      "title": "\u20b929.6L Cr added in one year \u2014 largest annual absolute addition",
+      "current_status": "pending",
+      "title": "₹29.6L Cr added in one year — largest annual absolute addition",
       "layer": 2,
       "retire_period": "2026-04-30",
       "migrated_to": "L1 entity-level trend (annotation)",
@@ -88,8 +88,8 @@
       "domain": "credit_growth",
       "type": "inference",
       "first_seen": "2026-03-30",
-      "current_status": "retired",
-      "title": "Services hit 19.0% YoY in FY26 \u2014 fastest main sector",
+      "current_status": "pending",
+      "title": "Services hit 19.0% YoY in FY26 — fastest main sector",
       "layer": 2,
       "retire_period": "2026-04-30",
       "migrated_to": "opp_services_entry",
@@ -101,8 +101,8 @@
       "domain": "credit_growth",
       "type": "inference",
       "first_seen": "2026-03-30",
-      "current_status": "retired",
-      "title": "Industry YoY jumped from 8.2% to 15.0% \u2014 biggest acceleration",
+      "current_status": "pending",
+      "title": "Industry YoY jumped from 8.2% to 15.0% — biggest acceleration",
       "layer": 2,
       "retire_period": "2026-04-30",
       "migrated_to": "force_pli_manufacturing",
@@ -114,7 +114,7 @@
       "domain": "credit_growth",
       "type": "inference",
       "first_seen": "2026-03-30",
-      "current_status": "retired",
+      "current_status": "pending",
       "title": "Services sector credit is the fastest-growing main sector entry point",
       "layer": 2,
       "retire_period": "2026-04-30",
@@ -127,8 +127,8 @@
       "domain": "credit_growth",
       "type": "inference",
       "first_seen": "2026-03-30",
-      "current_status": "retired",
-      "title": "Micro & Small: 9.6% \u2192 33.1% YoY over one year \u2014 inflection",
+      "current_status": "pending",
+      "title": "Micro & Small: 9.6% → 33.1% YoY over one year — inflection",
       "layer": 2,
       "retire_period": "2026-04-30",
       "migrated_to": "opp_msme_origination",
@@ -140,8 +140,8 @@
       "domain": "credit_growth",
       "type": "inference",
       "first_seen": "2026-03-30",
-      "current_status": "retired",
-      "title": "Medium enterprises: +21.7% YoY \u2014 structurally preferred tier",
+      "current_status": "pending",
+      "title": "Medium enterprises: +21.7% YoY — structurally preferred tier",
       "layer": 2,
       "retire_period": "2026-04-30",
       "migrated_to": "opp_msme_origination",
@@ -153,7 +153,7 @@
       "domain": "data_quality",
       "type": "inference",
       "first_seen": "2026-03-30",
-      "current_status": "retired",
+      "current_status": "pending",
       "title": "MSME size boundaries shift with regulatory revisions",
       "layer": 2,
       "retire_period": "2026-04-30",
@@ -167,7 +167,7 @@
       "type": "inference",
       "first_seen": "2026-03-30",
       "current_status": "pending",
-      "title": "Alt-data MSME underwriting now essential \u2014 first cycle window",
+      "title": "Alt-data MSME underwriting now essential — first cycle window",
       "layer": 3
     },
     "nbfc-risk-weight-cycle-complete": {
@@ -176,8 +176,8 @@
       "domain": "market_structure",
       "type": "inference",
       "first_seen": "2026-03-30",
-      "current_status": "retired",
-      "title": "NBFC credit +26.3% YoY \u2014 2023 risk-weight cycle now complete",
+      "current_status": "pending",
+      "title": "NBFC credit +26.3% YoY — 2023 risk-weight cycle now complete",
       "layer": 2,
       "retire_period": "2026-04-30",
       "migrated_to": "force_nbfc_regulatory_recovery",
@@ -189,7 +189,7 @@
       "domain": "credit_growth",
       "type": "inference",
       "first_seen": "2026-03-30",
-      "current_status": "retired",
+      "current_status": "pending",
       "title": "Computer Software credit: 3 consecutive periods of acceleration",
       "layer": 2,
       "retire_period": "2026-04-30",
@@ -202,8 +202,8 @@
       "domain": "credit_stress",
       "type": "inference",
       "first_seen": "2026-03-30",
-      "current_status": "retired",
-      "title": "Transport Operators growth collapsed: 12% \u2192 4.3% YoY",
+      "current_status": "pending",
+      "title": "Transport Operators growth collapsed: 12% → 4.3% YoY",
       "layer": 2,
       "retire_period": "2026-04-30",
       "migrated_to": "L1 entity-level trend (annotation)",
@@ -215,8 +215,8 @@
       "domain": "credit_growth",
       "type": "inference",
       "first_seen": "2026-03-30",
-      "current_status": "retired",
-      "title": "CRE and Trade both accelerating: 14% \u2192 16% YoY",
+      "current_status": "pending",
+      "title": "CRE and Trade both accelerating: 14% → 16% YoY",
       "layer": 2,
       "retire_period": "2026-04-30",
       "migrated_to": "L1 entity-level trend (annotation)",
@@ -228,7 +228,7 @@
       "domain": "data_quality",
       "type": "inference",
       "first_seen": "2026-03-30",
-      "current_status": "retired",
+      "current_status": "pending",
       "title": "Bank credit to NBFCs is double-counted in system totals",
       "layer": 2,
       "retire_period": "2026-04-30",
@@ -251,8 +251,8 @@
       "domain": "credit_growth",
       "type": "inference",
       "first_seen": "2026-03-30",
-      "current_status": "retired",
-      "title": "Trade credit at \u20b913.1L Cr, 16% YoY \u2014 services compounder",
+      "current_status": "pending",
+      "title": "Trade credit at ₹13.1L Cr, 16% YoY — services compounder",
       "layer": 2,
       "retire_period": "2026-04-30",
       "migrated_to": "L1 entity-level trend (annotation)",
@@ -264,8 +264,8 @@
       "domain": "credit_growth",
       "type": "inference",
       "first_seen": "2026-03-30",
-      "current_status": "retired",
-      "title": "Gold loans 5\u00d7 in 24 months \u2014 \u20b90.93L Cr to \u20b94.60L Cr",
+      "current_status": "pending",
+      "title": "Gold loans 5× in 24 months — ₹0.93L Cr to ₹4.60L Cr",
       "layer": 2,
       "retire_period": "2026-04-30",
       "migrated_to": "opp_gold_loan_entry",
@@ -277,8 +277,8 @@
       "domain": "credit_stress",
       "type": "inference",
       "first_seen": "2026-03-30",
-      "current_status": "retired",
-      "title": "Credit cards: +3.5% YoY in FY26 \u2014 policy-constrained",
+      "current_status": "pending",
+      "title": "Credit cards: +3.5% YoY in FY26 — policy-constrained",
       "layer": 2,
       "retire_period": "2026-04-30",
       "migrated_to": "L1 entity-level trend (annotation)",
@@ -290,8 +290,8 @@
       "domain": "credit_growth",
       "type": "inference",
       "first_seen": "2026-03-30",
-      "current_status": "retired",
-      "title": "Vehicle loans growth doubled: 8.6% \u2192 18.6% YoY in FY26",
+      "current_status": "pending",
+      "title": "Vehicle loans growth doubled: 8.6% → 18.6% YoY in FY26",
       "layer": 2,
       "retire_period": "2026-04-30",
       "migrated_to": "opp_vehicle_ev",
@@ -303,8 +303,8 @@
       "domain": "credit_stress",
       "type": "inference",
       "first_seen": "2026-03-30",
-      "current_status": "retired",
-      "title": "Consumer durables: -5.3% YoY in FY26 \u2014 three consecutive declines",
+      "current_status": "pending",
+      "title": "Consumer durables: -5.3% YoY in FY26 — three consecutive declines",
       "layer": 2,
       "retire_period": "2026-04-30",
       "migrated_to": "L1 entity-level trend (annotation)",
@@ -316,7 +316,7 @@
       "domain": "data_quality",
       "type": "inference",
       "first_seen": "2026-03-30",
-      "current_status": "retired",
+      "current_status": "pending",
       "title": "Gold loans 123% growth overstates real disbursement demand",
       "layer": 2,
       "retire_period": "2026-04-30",
@@ -329,8 +329,8 @@
       "domain": "market_structure",
       "type": "inference",
       "first_seen": "2026-03-30",
-      "current_status": "retired",
-      "title": "Gold lending market being re-segmented \u2014 banks vs NBFCs",
+      "current_status": "pending",
+      "title": "Gold lending market being re-segmented — banks vs NBFCs",
       "layer": 2,
       "retire_period": "2026-04-30",
       "migrated_to": "opp_gold_loan_entry",
@@ -342,8 +342,8 @@
       "domain": "credit_growth",
       "type": "inference",
       "first_seen": "2026-03-30",
-      "current_status": "retired",
-      "title": "Vehicle loans +18.6% \u2014 EV-specific credit is the new signal",
+      "current_status": "pending",
+      "title": "Vehicle loans +18.6% — EV-specific credit is the new signal",
       "layer": 2,
       "retire_period": "2026-04-30",
       "migrated_to": "opp_vehicle_ev",
@@ -355,8 +355,8 @@
       "domain": "policy",
       "type": "inference",
       "first_seen": "2026-03-30",
-      "current_status": "retired",
-      "title": "PSL Housing +39.8% YoY \u2014 definition change or real surge",
+      "current_status": "pending",
+      "title": "PSL Housing +39.8% YoY — definition change or real surge",
       "layer": 2,
       "retire_period": "2026-04-30",
       "migrated_to": "gap_psl_reclassification",
@@ -368,8 +368,8 @@
       "domain": "credit_stress",
       "type": "inference",
       "first_seen": "2026-03-30",
-      "current_status": "retired",
-      "title": "Export credit: +4.2% FY25, -13.0% FY26 \u2014 structural reversal",
+      "current_status": "pending",
+      "title": "Export credit: +4.2% FY25, -13.0% FY26 — structural reversal",
       "layer": 2,
       "retire_period": "2026-04-30",
       "migrated_to": "L1 entity-level trend (annotation)",
@@ -381,7 +381,7 @@
       "domain": "data_quality",
       "type": "inference",
       "first_seen": "2026-03-30",
-      "current_status": "retired",
+      "current_status": "pending",
       "title": "PSL housing data contaminated by a regulatory reclassification",
       "layer": 2,
       "retire_period": "2026-04-30",
@@ -394,8 +394,8 @@
       "domain": "data_quality",
       "type": "inference",
       "first_seen": "2026-03-30",
-      "current_status": "retired",
-      "title": "PSL category totals cannot be summed \u2014 Weaker Sections overlap",
+      "current_status": "pending",
+      "title": "PSL category totals cannot be summed — Weaker Sections overlap",
       "layer": 2,
       "retire_period": "2026-04-30",
       "migrated_to": "gap_psl_totals_methodology",
@@ -407,8 +407,8 @@
       "domain": "policy",
       "type": "inference",
       "first_seen": "2026-03-30",
-      "current_status": "retired",
-      "title": "Renewable energy PSL: \u20b90.14L Cr for a \u20b920L Cr annual opportunity",
+      "current_status": "pending",
+      "title": "Renewable energy PSL: ₹0.14L Cr for a ₹20L Cr annual opportunity",
       "layer": 2,
       "retire_period": "2026-04-30",
       "migrated_to": "opp_renewable_energy",
@@ -421,7 +421,7 @@
       "type": "inference",
       "first_seen": "2026-03-30",
       "current_status": "pending",
-      "title": "PSLC trading volume rising \u2014 banks need automated tooling",
+      "title": "PSLC trading volume rising — banks need automated tooling",
       "layer": 3
     },
     "pli-capex-broadening-confirmed": {
@@ -430,7 +430,7 @@
       "domain": "policy",
       "type": "inference",
       "first_seen": "2026-03-30",
-      "current_status": "retired",
+      "current_status": "pending",
       "title": "PLI capex broadened in FY26: Engineering +32%, Petroleum +32.5%",
       "layer": 2,
       "retire_period": "2026-04-30",
@@ -443,8 +443,8 @@
       "domain": "credit_growth",
       "type": "inference",
       "first_seen": "2026-03-30",
-      "current_status": "retired",
-      "title": "Gems & Jewellery up 40% YoY \u2014 gold price proxy in credit data",
+      "current_status": "pending",
+      "title": "Gems & Jewellery up 40% YoY — gold price proxy in credit data",
       "layer": 2,
       "retire_period": "2026-04-30",
       "migrated_to": "force_gold_price_surge",
@@ -456,8 +456,8 @@
       "domain": "credit_stress",
       "type": "inference",
       "first_seen": "2026-03-30",
-      "current_status": "retired",
-      "title": "Infrastructure at +9.5% YoY in FY26 \u2014 supercycle losing steam",
+      "current_status": "pending",
+      "title": "Infrastructure at +9.5% YoY in FY26 — supercycle losing steam",
       "layer": 2,
       "retire_period": "2026-04-30",
       "migrated_to": "risk_infrastructure_repayment",
@@ -469,8 +469,8 @@
       "domain": "credit_growth",
       "type": "inference",
       "first_seen": "2026-03-30",
-      "current_status": "retired",
-      "title": "Chemicals +14.9%, Petroleum +32.5% YoY \u2014 specialised capex cycle",
+      "current_status": "pending",
+      "title": "Chemicals +14.9%, Petroleum +32.5% YoY — specialised capex cycle",
       "layer": 2,
       "retire_period": "2026-04-30",
       "migrated_to": "force_pli_manufacturing",
@@ -482,7 +482,7 @@
       "domain": "data_quality",
       "type": "inference",
       "first_seen": "2026-03-30",
-      "current_status": "retired",
+      "current_status": "pending",
       "title": "Infrastructure is largest industrial sub-sector with no breakdown",
       "layer": 2,
       "retire_period": "2026-04-30",
@@ -495,7 +495,7 @@
       "domain": "data_quality",
       "type": "inference",
       "first_seen": "2026-03-30",
-      "current_status": "retired",
+      "current_status": "pending",
       "title": "Industry sub-types do not sum to the Industry total exactly",
       "layer": 2,
       "retire_period": "2026-04-30",
@@ -509,7 +509,7 @@
       "type": "inference",
       "first_seen": "2026-03-30",
       "current_status": "pending",
-      "title": "PLI supply chains: one anchor yields 50\u2013100 supplier financing opportunities",
+      "title": "PLI supply chains: one anchor yields 50–100 supplier financing opportunities",
       "layer": 3
     },
     "basic-metal-capex-lending": {
@@ -518,8 +518,8 @@
       "domain": "credit_growth",
       "type": "inference",
       "first_seen": "2026-03-30",
-      "current_status": "retired",
-      "title": "Basic Metal +19.4% YoY \u2014 steel and aluminium capex lending window",
+      "current_status": "pending",
+      "title": "Basic Metal +19.4% YoY — steel and aluminium capex lending window",
       "layer": 2,
       "retire_period": "2026-04-30",
       "migrated_to": "force_pli_manufacturing",
@@ -560,7 +560,7 @@
       ]
     },
     "sibc-bank-credit-abs": {
-      "title": "Bank credit absolute volume (\u20b9Cr)",
+      "title": "Bank credit absolute volume (₹Cr)",
       "pipeline": "sibc",
       "layer": 1,
       "sub_layer": "1a",
@@ -629,7 +629,7 @@
       ]
     },
     "sibc-nonfood-credit-abs": {
-      "title": "Non-food credit absolute volume (\u20b9Cr)",
+      "title": "Non-food credit absolute volume (₹Cr)",
       "pipeline": "sibc",
       "layer": 1,
       "sub_layer": "1a",
@@ -1644,7 +1644,7 @@
       ]
     },
     "sibc-industry-type-yoy-scan": {
-      "title": "YoY growth scan \u2014 all industry types (%)",
+      "title": "YoY growth scan — all industry types (%)",
       "pipeline": "sibc",
       "layer": 1,
       "sub_layer": "1c",
@@ -1678,7 +1678,7 @@
       "chart_series": []
     },
     "sibc-industry-type-share-scan": {
-      "title": "Share scan \u2014 all industry types (% of industry credit)",
+      "title": "Share scan — all industry types (% of industry credit)",
       "pipeline": "sibc",
       "layer": 1,
       "sub_layer": "1c",
@@ -1715,7 +1715,7 @@
       "chart_series": []
     },
     "sibc-services-yoy-scan": {
-      "title": "YoY growth scan \u2014 all services sub-sectors (%)",
+      "title": "YoY growth scan — all services sub-sectors (%)",
       "pipeline": "sibc",
       "layer": 1,
       "sub_layer": "1c",
@@ -1749,7 +1749,7 @@
       "chart_series": []
     },
     "sibc-services-share-scan": {
-      "title": "Share scan \u2014 all services sub-sectors (% of services credit)",
+      "title": "Share scan — all services sub-sectors (% of services credit)",
       "pipeline": "sibc",
       "layer": 1,
       "sub_layer": "1c",
@@ -1784,7 +1784,7 @@
       "chart_series": []
     },
     "sibc-pl-yoy-scan": {
-      "title": "YoY growth scan \u2014 all personal loan sub-categories (%)",
+      "title": "YoY growth scan — all personal loan sub-categories (%)",
       "pipeline": "sibc",
       "layer": 1,
       "sub_layer": "1c",
@@ -1818,7 +1818,7 @@
       "chart_series": []
     },
     "sibc-pl-share-scan": {
-      "title": "Share scan \u2014 all personal loan sub-categories (% of PL)",
+      "title": "Share scan — all personal loan sub-categories (% of PL)",
       "pipeline": "sibc",
       "layer": 1,
       "sub_layer": "1c",
@@ -1853,7 +1853,7 @@
       "chart_series": []
     },
     "sibc-psl-yoy-scan": {
-      "title": "YoY growth scan \u2014 all PSL sub-categories (%)",
+      "title": "YoY growth scan — all PSL sub-categories (%)",
       "pipeline": "sibc",
       "layer": 1,
       "sub_layer": "1c",
@@ -1884,7 +1884,7 @@
       "chart_series": []
     },
     "atm-onsite-abs": {
-      "title": "Onsite ATMs \u2014 absolute count",
+      "title": "Onsite ATMs — absolute count",
       "type": "data",
       "pipeline": "atm_pos",
       "layer": 1,
@@ -1944,7 +1944,7 @@
       "first_seen": "2025-01-31"
     },
     "atm-offsite-abs": {
-      "title": "Offsite ATMs \u2014 absolute count",
+      "title": "Offsite ATMs — absolute count",
       "type": "data",
       "pipeline": "atm_pos",
       "layer": 1,
@@ -2004,7 +2004,7 @@
       "first_seen": "2025-01-31"
     },
     "pos-terminals-abs": {
-      "title": "POS terminals \u2014 absolute count",
+      "title": "POS terminals — absolute count",
       "type": "data",
       "pipeline": "atm_pos",
       "layer": 1,
@@ -2758,7 +2758,7 @@
       "first_seen": "2024-01-31"
     },
     "cc-category-share-scan": {
-      "title": "CC outstanding share \u2014 every bank category (%)",
+      "title": "CC outstanding share — every bank category (%)",
       "type": "data",
       "pipeline": "atm_pos",
       "layer": 1,
@@ -2788,7 +2788,7 @@
       "first_seen": "2024-01-31"
     },
     "dc-category-share-scan": {
-      "title": "DC outstanding share \u2014 every bank category (%)",
+      "title": "DC outstanding share — every bank category (%)",
       "type": "data",
       "pipeline": "atm_pos",
       "layer": 1,
@@ -2818,7 +2818,7 @@
       "first_seen": "2024-01-31"
     },
     "pos-category-share-scan": {
-      "title": "POS terminal share \u2014 every bank category (%)",
+      "title": "POS terminal share — every bank category (%)",
       "type": "data",
       "pipeline": "atm_pos",
       "layer": 1,
@@ -2848,7 +2848,7 @@
       "first_seen": "2024-01-31"
     },
     "cc-bank-scan": {
-      "title": "CC outstanding \u2014 every bank (absolute count)",
+      "title": "CC outstanding — every bank (absolute count)",
       "type": "data",
       "pipeline": "atm_pos",
       "layer": 1,
@@ -2879,7 +2879,7 @@
       "first_seen": "2024-01-31"
     },
     "pos-bank-scan": {
-      "title": "POS terminals \u2014 every bank (absolute count)",
+      "title": "POS terminals — every bank (absolute count)",
       "type": "data",
       "pipeline": "atm_pos",
       "layer": 1,
@@ -2945,7 +2945,7 @@
     },
     "sibc-food-credit-abs": {
       "id": "sibc-food-credit-abs",
-      "title": "Food credit outstanding (\u20b9L Cr)",
+      "title": "Food credit outstanding (₹L Cr)",
       "pipeline": "sibc",
       "layer": 1,
       "sub_layer": "1a",
@@ -3536,7 +3536,7 @@
     },
     "sibc-trade-sub-yoy-scan": {
       "id": "sibc-trade-sub-yoy-scan",
-      "title": "YoY growth scan \u2014 Trade (Wholesale/Retail) sub-sectors (%)",
+      "title": "YoY growth scan — Trade (Wholesale/Retail) sub-sectors (%)",
       "pipeline": "sibc",
       "layer": 1,
       "sub_layer": "1c",
@@ -3572,7 +3572,7 @@
     },
     "sibc-trade-sub-share-scan": {
       "id": "sibc-trade-sub-share-scan",
-      "title": "Share scan \u2014 Trade (Wholesale/Retail) sub-sectors (% of parent)",
+      "title": "Share scan — Trade (Wholesale/Retail) sub-sectors (% of parent)",
       "pipeline": "sibc",
       "layer": 1,
       "sub_layer": "1c",
@@ -3611,7 +3611,7 @@
     },
     "sibc-nbfc-sub-yoy-scan": {
       "id": "sibc-nbfc-sub-yoy-scan",
-      "title": "YoY growth scan \u2014 NBFC (HFCs/PFIs) sub-sectors (%)",
+      "title": "YoY growth scan — NBFC (HFCs/PFIs) sub-sectors (%)",
       "pipeline": "sibc",
       "layer": 1,
       "sub_layer": "1c",
@@ -3647,7 +3647,7 @@
     },
     "sibc-nbfc-sub-share-scan": {
       "id": "sibc-nbfc-sub-share-scan",
-      "title": "Share scan \u2014 NBFC (HFCs/PFIs) sub-sectors (% of parent)",
+      "title": "Share scan — NBFC (HFCs/PFIs) sub-sectors (% of parent)",
       "pipeline": "sibc",
       "layer": 1,
       "sub_layer": "1c",
@@ -3686,7 +3686,7 @@
     },
     "sibc-infra-sub-yoy-scan": {
       "id": "sibc-infra-sub-yoy-scan",
-      "title": "YoY growth scan \u2014 Infrastructure (Power/Roads/Telecom etc.) (%)",
+      "title": "YoY growth scan — Infrastructure (Power/Roads/Telecom etc.) (%)",
       "pipeline": "sibc",
       "layer": 1,
       "sub_layer": "1c",
@@ -3722,7 +3722,7 @@
     },
     "sibc-infra-sub-share-scan": {
       "id": "sibc-infra-sub-share-scan",
-      "title": "Share scan \u2014 Infrastructure (Power/Roads/Telecom etc.) (% of parent)",
+      "title": "Share scan — Infrastructure (Power/Roads/Telecom etc.) (% of parent)",
       "pipeline": "sibc",
       "layer": 1,
       "sub_layer": "1c",
@@ -3761,7 +3761,7 @@
     },
     "sibc-basic-metal-sub-yoy-scan": {
       "id": "sibc-basic-metal-sub-yoy-scan",
-      "title": "YoY growth scan \u2014 Basic Metal (Iron & Steel / Other) (%)",
+      "title": "YoY growth scan — Basic Metal (Iron & Steel / Other) (%)",
       "pipeline": "sibc",
       "layer": 1,
       "sub_layer": "1c",
@@ -3797,7 +3797,7 @@
     },
     "sibc-basic-metal-sub-share-scan": {
       "id": "sibc-basic-metal-sub-share-scan",
-      "title": "Share scan \u2014 Basic Metal (Iron & Steel / Other) (% of parent)",
+      "title": "Share scan — Basic Metal (Iron & Steel / Other) (% of parent)",
       "pipeline": "sibc",
       "layer": 1,
       "sub_layer": "1c",
@@ -3836,7 +3836,7 @@
     },
     "sibc-engineering-sub-yoy-scan": {
       "id": "sibc-engineering-sub-yoy-scan",
-      "title": "YoY growth scan \u2014 All Engineering (Electronics / Other) (%)",
+      "title": "YoY growth scan — All Engineering (Electronics / Other) (%)",
       "pipeline": "sibc",
       "layer": 1,
       "sub_layer": "1c",
@@ -3872,7 +3872,7 @@
     },
     "sibc-engineering-sub-share-scan": {
       "id": "sibc-engineering-sub-share-scan",
-      "title": "Share scan \u2014 All Engineering (Electronics / Other) (% of parent)",
+      "title": "Share scan — All Engineering (Electronics / Other) (% of parent)",
       "pipeline": "sibc",
       "layer": 1,
       "sub_layer": "1c",
@@ -3911,7 +3911,7 @@
     },
     "sibc-food-processing-sub-yoy-scan": {
       "id": "sibc-food-processing-sub-yoy-scan",
-      "title": "YoY growth scan \u2014 Food Processing (Sugar/Oils/Tea etc.) (%)",
+      "title": "YoY growth scan — Food Processing (Sugar/Oils/Tea etc.) (%)",
       "pipeline": "sibc",
       "layer": 1,
       "sub_layer": "1c",
@@ -3947,7 +3947,7 @@
     },
     "sibc-food-processing-sub-share-scan": {
       "id": "sibc-food-processing-sub-share-scan",
-      "title": "Share scan \u2014 Food Processing (Sugar/Oils/Tea etc.) (% of parent)",
+      "title": "Share scan — Food Processing (Sugar/Oils/Tea etc.) (% of parent)",
       "pipeline": "sibc",
       "layer": 1,
       "sub_layer": "1c",
@@ -3986,7 +3986,7 @@
     },
     "sibc-textiles-sub-yoy-scan": {
       "id": "sibc-textiles-sub-yoy-scan",
-      "title": "YoY growth scan \u2014 Textiles (Cotton/Jute/Man-Made etc.) (%)",
+      "title": "YoY growth scan — Textiles (Cotton/Jute/Man-Made etc.) (%)",
       "pipeline": "sibc",
       "layer": 1,
       "sub_layer": "1c",
@@ -4022,7 +4022,7 @@
     },
     "sibc-textiles-sub-share-scan": {
       "id": "sibc-textiles-sub-share-scan",
-      "title": "Share scan \u2014 Textiles (Cotton/Jute/Man-Made etc.) (% of parent)",
+      "title": "Share scan — Textiles (Cotton/Jute/Man-Made etc.) (% of parent)",
       "pipeline": "sibc",
       "layer": 1,
       "sub_layer": "1c",
@@ -4061,7 +4061,7 @@
     },
     "sibc-chemicals-sub-yoy-scan": {
       "id": "sibc-chemicals-sub-yoy-scan",
-      "title": "YoY growth scan \u2014 Chemicals (Pharma/Fertiliser/Petro etc.) (%)",
+      "title": "YoY growth scan — Chemicals (Pharma/Fertiliser/Petro etc.) (%)",
       "pipeline": "sibc",
       "layer": 1,
       "sub_layer": "1c",
@@ -4098,7 +4098,7 @@
     },
     "sibc-chemicals-sub-share-scan": {
       "id": "sibc-chemicals-sub-share-scan",
-      "title": "Share scan \u2014 Chemicals (Pharma/Fertiliser/Petro etc.) (% of parent)",
+      "title": "Share scan — Chemicals (Pharma/Fertiliser/Petro etc.) (% of parent)",
       "pipeline": "sibc",
       "layer": 1,
       "sub_layer": "1c",
@@ -4278,7 +4278,7 @@
     },
     "sibc-bank-credit-fy-acceleration": {
       "id": "sibc-bank-credit-fy-acceleration",
-      "title": "Bank credit FY YoY acceleration (pp, FY25\u2192FY26)",
+      "title": "Bank credit FY YoY acceleration (pp, FY25→FY26)",
       "pipeline": "sibc",
       "layer": 1,
       "sub_layer": "1d",
@@ -4454,7 +4454,7 @@
     },
     "sibc-bank-credit-fy-delta": {
       "id": "sibc-bank-credit-fy-delta",
-      "title": "Bank credit FY absolute add (\u20b9L Cr)",
+      "title": "Bank credit FY absolute add (₹L Cr)",
       "pipeline": "sibc",
       "layer": 1,
       "sub_layer": "1d",
@@ -4489,7 +4489,7 @@
     },
     "sibc-nonfood-credit-fy-delta": {
       "id": "sibc-nonfood-credit-fy-delta",
-      "title": "Non-food credit FY absolute add (\u20b9L Cr)",
+      "title": "Non-food credit FY absolute add (₹L Cr)",
       "pipeline": "sibc",
       "layer": 1,
       "sub_layer": "1d",
@@ -4524,7 +4524,7 @@
     },
     "micro-atms-abs": {
       "id": "micro-atms-abs",
-      "title": "Micro ATMs \u2014 absolute count",
+      "title": "Micro ATMs — absolute count",
       "type": "data",
       "pipeline": "atm_pos",
       "layer": 1,
@@ -4554,7 +4554,7 @@
     },
     "bharat-qr-abs": {
       "id": "bharat-qr-abs",
-      "title": "Bharat QR codes \u2014 absolute count",
+      "title": "Bharat QR codes — absolute count",
       "type": "data",
       "pipeline": "atm_pos",
       "layer": 1,
@@ -4584,7 +4584,7 @@
     },
     "upi-qr-abs": {
       "id": "upi-qr-abs",
-      "title": "UPI QR codes \u2014 absolute count",
+      "title": "UPI QR codes — absolute count",
       "type": "data",
       "pipeline": "atm_pos",
       "layer": 1,
@@ -4614,7 +4614,7 @@
     },
     "cc-outstanding-abs": {
       "id": "cc-outstanding-abs",
-      "title": "Credit cards outstanding \u2014 absolute count",
+      "title": "Credit cards outstanding — absolute count",
       "type": "data",
       "pipeline": "atm_pos",
       "layer": 1,
@@ -4644,7 +4644,7 @@
     },
     "dc-outstanding-abs": {
       "id": "dc-outstanding-abs",
-      "title": "Debit cards outstanding \u2014 absolute count",
+      "title": "Debit cards outstanding — absolute count",
       "type": "data",
       "pipeline": "atm_pos",
       "layer": 1,
@@ -4674,7 +4674,7 @@
     },
     "cc-atm-val-abs": {
       "id": "cc-atm-val-abs",
-      "title": "CC ATM cash withdrawals \u2014 absolute value (\u20b9 thousands)",
+      "title": "CC ATM cash withdrawals — absolute value (₹ thousands)",
       "type": "data",
       "pipeline": "atm_pos",
       "layer": 1,
@@ -4705,7 +4705,7 @@
     },
     "cc-ecom-val-abs": {
       "id": "cc-ecom-val-abs",
-      "title": "CC ecommerce transactions \u2014 absolute value (\u20b9 thousands)",
+      "title": "CC ecommerce transactions — absolute value (₹ thousands)",
       "type": "data",
       "pipeline": "atm_pos",
       "layer": 1,
@@ -4736,7 +4736,7 @@
     },
     "cc-pos-val-abs": {
       "id": "cc-pos-val-abs",
-      "title": "CC POS transactions \u2014 absolute value (\u20b9 thousands)",
+      "title": "CC POS transactions — absolute value (₹ thousands)",
       "type": "data",
       "pipeline": "atm_pos",
       "layer": 1,
@@ -4767,7 +4767,7 @@
     },
     "cc-other-val-abs": {
       "id": "cc-other-val-abs",
-      "title": "CC other transactions \u2014 absolute value (\u20b9 thousands)",
+      "title": "CC other transactions — absolute value (₹ thousands)",
       "type": "data",
       "pipeline": "atm_pos",
       "layer": 1,
@@ -4930,7 +4930,7 @@
     },
     "cc-atm-vol-abs": {
       "id": "cc-atm-vol-abs",
-      "title": "CC ATM cash withdrawals \u2014 absolute volume (transactions)",
+      "title": "CC ATM cash withdrawals — absolute volume (transactions)",
       "type": "data",
       "pipeline": "atm_pos",
       "layer": 1,
@@ -5027,7 +5027,7 @@
     },
     "cc-ecom-vol-abs": {
       "id": "cc-ecom-vol-abs",
-      "title": "CC ecommerce transactions \u2014 absolute volume (transactions)",
+      "title": "CC ecommerce transactions — absolute volume (transactions)",
       "type": "data",
       "pipeline": "atm_pos",
       "layer": 1,
@@ -5124,7 +5124,7 @@
     },
     "cc-pos-vol-abs": {
       "id": "cc-pos-vol-abs",
-      "title": "CC POS transactions \u2014 absolute volume (transactions)",
+      "title": "CC POS transactions — absolute volume (transactions)",
       "type": "data",
       "pipeline": "atm_pos",
       "layer": 1,
@@ -5221,7 +5221,7 @@
     },
     "cc-other-vol-abs": {
       "id": "cc-other-vol-abs",
-      "title": "CC other transactions \u2014 absolute volume (transactions)",
+      "title": "CC other transactions — absolute volume (transactions)",
       "type": "data",
       "pipeline": "atm_pos",
       "layer": 1,
@@ -5288,7 +5288,7 @@
     },
     "dc-atm-val-abs": {
       "id": "dc-atm-val-abs",
-      "title": "DC ATM withdrawals \u2014 absolute value (\u20b9 thousands)",
+      "title": "DC ATM withdrawals — absolute value (₹ thousands)",
       "type": "data",
       "pipeline": "atm_pos",
       "layer": 1,
@@ -5319,7 +5319,7 @@
     },
     "dc-ecom-val-abs": {
       "id": "dc-ecom-val-abs",
-      "title": "DC ecommerce transactions \u2014 absolute value (\u20b9 thousands)",
+      "title": "DC ecommerce transactions — absolute value (₹ thousands)",
       "type": "data",
       "pipeline": "atm_pos",
       "layer": 1,
@@ -5350,7 +5350,7 @@
     },
     "dc-pos-val-abs": {
       "id": "dc-pos-val-abs",
-      "title": "DC POS transactions \u2014 absolute value (\u20b9 thousands)",
+      "title": "DC POS transactions — absolute value (₹ thousands)",
       "type": "data",
       "pipeline": "atm_pos",
       "layer": 1,
@@ -5381,7 +5381,7 @@
     },
     "dc-other-val-abs": {
       "id": "dc-other-val-abs",
-      "title": "DC other transactions \u2014 absolute value (\u20b9 thousands)",
+      "title": "DC other transactions — absolute value (₹ thousands)",
       "type": "data",
       "pipeline": "atm_pos",
       "layer": 1,
@@ -5412,7 +5412,7 @@
     },
     "dc-pos-withdrawal-val-abs": {
       "id": "dc-pos-withdrawal-val-abs",
-      "title": "DC POS cash withdrawals \u2014 absolute value (\u20b9 thousands)",
+      "title": "DC POS cash withdrawals — absolute value (₹ thousands)",
       "type": "data",
       "pipeline": "atm_pos",
       "layer": 1,
@@ -5644,7 +5644,7 @@
     },
     "dc-atm-vol-abs": {
       "id": "dc-atm-vol-abs",
-      "title": "DC ATM withdrawals \u2014 absolute volume (transactions)",
+      "title": "DC ATM withdrawals — absolute volume (transactions)",
       "type": "data",
       "pipeline": "atm_pos",
       "layer": 1,
@@ -5742,7 +5742,7 @@
     },
     "dc-ecom-vol-abs": {
       "id": "dc-ecom-vol-abs",
-      "title": "DC ecommerce transactions \u2014 absolute volume (transactions)",
+      "title": "DC ecommerce transactions — absolute volume (transactions)",
       "type": "data",
       "pipeline": "atm_pos",
       "layer": 1,
@@ -5840,7 +5840,7 @@
     },
     "dc-pos-vol-abs": {
       "id": "dc-pos-vol-abs",
-      "title": "DC POS transactions \u2014 absolute volume (transactions)",
+      "title": "DC POS transactions — absolute volume (transactions)",
       "type": "data",
       "pipeline": "atm_pos",
       "layer": 1,
@@ -5938,7 +5938,7 @@
     },
     "dc-other-vol-abs": {
       "id": "dc-other-vol-abs",
-      "title": "DC other transactions \u2014 absolute volume (transactions)",
+      "title": "DC other transactions — absolute volume (transactions)",
       "type": "data",
       "pipeline": "atm_pos",
       "layer": 1,
@@ -6036,7 +6036,7 @@
     },
     "dc-pos-withdrawal-vol-abs": {
       "id": "dc-pos-withdrawal-vol-abs",
-      "title": "DC POS cash withdrawals \u2014 absolute volume (transactions)",
+      "title": "DC POS cash withdrawals — absolute volume (transactions)",
       "type": "data",
       "pipeline": "atm_pos",
       "layer": 1,
@@ -6104,7 +6104,7 @@
     },
     "dc-bank-scan": {
       "id": "dc-bank-scan",
-      "title": "DC outstanding \u2014 every bank (absolute count)",
+      "title": "DC outstanding — every bank (absolute count)",
       "type": "data",
       "pipeline": "atm_pos",
       "layer": 1,
@@ -6135,7 +6135,7 @@
     },
     "pos-terminals-pos-streak": {
       "id": "pos-terminals-pos-streak",
-      "title": "POS terminals \u2014 consecutive months of growth",
+      "title": "POS terminals — consecutive months of growth",
       "type": "data",
       "pipeline": "atm_pos",
       "layer": 1,
@@ -6166,7 +6166,7 @@
       "first_seen": "2024-02-29"
     },
     "cc-outstanding-streak": {
-      "title": "Credit cards outstanding \u2014 consecutive months of growth",
+      "title": "Credit cards outstanding — consecutive months of growth",
       "type": "data",
       "pipeline": "atm_pos",
       "layer": 1,
@@ -6198,7 +6198,7 @@
       "first_seen": "2024-02-29"
     },
     "dc-outstanding-streak": {
-      "title": "Debit cards outstanding \u2014 consecutive months of growth",
+      "title": "Debit cards outstanding — consecutive months of growth",
       "type": "data",
       "pipeline": "atm_pos",
       "layer": 1,
@@ -6230,7 +6230,7 @@
       "first_seen": "2024-02-29"
     },
     "cc-atm-vol-streak": {
-      "title": "CC ATM withdrawal volume \u2014 consecutive months of decline",
+      "title": "CC ATM withdrawal volume — consecutive months of decline",
       "type": "data",
       "pipeline": "atm_pos",
       "layer": 1,
@@ -6262,7 +6262,7 @@
       "first_seen": "2024-02-29"
     },
     "dc-atm-vol-streak": {
-      "title": "DC ATM withdrawal volume \u2014 consecutive months of decline",
+      "title": "DC ATM withdrawal volume — consecutive months of decline",
       "type": "data",
       "pipeline": "atm_pos",
       "layer": 1,
@@ -6294,7 +6294,7 @@
       "first_seen": "2024-02-29"
     },
     "dc-pos-withdrawal-vol-streak": {
-      "title": "DC POS cash withdrawal volume \u2014 consecutive months of decline",
+      "title": "DC POS cash withdrawal volume — consecutive months of decline",
       "type": "data",
       "pipeline": "atm_pos",
       "layer": 1,
@@ -6358,7 +6358,7 @@
       "first_seen": "2024-01-31"
     },
     "sibc-pl-cc-abs": {
-      "title": "Credit card outstanding absolute volume (\u20b9Cr)",
+      "title": "Credit card outstanding absolute volume (₹Cr)",
       "pipeline": "sibc",
       "layer": 1,
       "sub_layer": "1a",
@@ -6394,7 +6394,7 @@
     },
     "sibc-industry-rotation": {
       "id": "sibc-industry-rotation",
-      "title": "Rotation \u2014 industry types (\u0394 share of industry credit, 12m, pp)",
+      "title": "Rotation — industry types (Δ share of industry credit, 12m, pp)",
       "type": "data",
       "pipeline": "sibc",
       "layer": 1,
@@ -6431,7 +6431,7 @@
     },
     "sibc-services-rotation": {
       "id": "sibc-services-rotation",
-      "title": "Rotation \u2014 services sub-sectors (\u0394 share of services credit, 12m, pp)",
+      "title": "Rotation — services sub-sectors (Δ share of services credit, 12m, pp)",
       "type": "data",
       "pipeline": "sibc",
       "layer": 1,
@@ -6466,7 +6466,7 @@
     },
     "sibc-pl-rotation": {
       "id": "sibc-pl-rotation",
-      "title": "Rotation \u2014 personal-loan categories (\u0394 share of personal loans, 12m, pp)",
+      "title": "Rotation — personal-loan categories (Δ share of personal loans, 12m, pp)",
       "type": "data",
       "pipeline": "sibc",
       "layer": 1,
@@ -6501,7 +6501,7 @@
     },
     "sibc-industry-divergence": {
       "id": "sibc-industry-divergence",
-      "title": "Divergence \u2014 industry types contradicting industry credit YoY (pp gap)",
+      "title": "Divergence — industry types contradicting industry credit YoY (pp gap)",
       "type": "data",
       "pipeline": "sibc",
       "layer": 1,
@@ -6524,7 +6524,7 @@
     },
     "sibc-services-divergence": {
       "id": "sibc-services-divergence",
-      "title": "Divergence \u2014 services sub-sectors contradicting services credit YoY (pp gap)",
+      "title": "Divergence — services sub-sectors contradicting services credit YoY (pp gap)",
       "type": "data",
       "pipeline": "sibc",
       "layer": 1,
@@ -6546,7 +6546,7 @@
     },
     "sibc-pl-divergence": {
       "id": "sibc-pl-divergence",
-      "title": "Divergence \u2014 personal-loan categories contradicting personal loans YoY (pp gap)",
+      "title": "Divergence — personal-loan categories contradicting personal loans YoY (pp gap)",
       "type": "data",
       "pipeline": "sibc",
       "layer": 1,
@@ -6568,7 +6568,7 @@
     },
     "cc-category-rotation": {
       "id": "cc-category-rotation",
-      "title": "Rotation \u2014 credit-card share by bank category (\u0394 share, 12m, pp)",
+      "title": "Rotation — credit-card share by bank category (Δ share, 12m, pp)",
       "type": "data",
       "pipeline": "atm_pos",
       "layer": 1,
@@ -6599,7 +6599,7 @@
     },
     "dc-category-rotation": {
       "id": "dc-category-rotation",
-      "title": "Rotation \u2014 debit-card share by bank category (\u0394 share, 12m, pp)",
+      "title": "Rotation — debit-card share by bank category (Δ share, 12m, pp)",
       "type": "data",
       "pipeline": "atm_pos",
       "layer": 1,
@@ -6630,7 +6630,7 @@
     },
     "pos-category-rotation": {
       "id": "pos-category-rotation",
-      "title": "Rotation \u2014 POS-terminal share by bank category (\u0394 share, 12m, pp)",
+      "title": "Rotation — POS-terminal share by bank category (Δ share, 12m, pp)",
       "type": "data",
       "pipeline": "atm_pos",
       "layer": 1,
@@ -6661,7 +6661,7 @@
     },
     "cc-bank-divergence": {
       "id": "cc-bank-divergence",
-      "title": "Divergence \u2014 banks contradicting their category on credit cards YoY (pp gap)",
+      "title": "Divergence — banks contradicting their category on credit cards YoY (pp gap)",
       "type": "data",
       "pipeline": "atm_pos",
       "layer": 1,
@@ -6681,7 +6681,7 @@
     },
     "dc-bank-divergence": {
       "id": "dc-bank-divergence",
-      "title": "Divergence \u2014 banks contradicting their category on debit cards YoY (pp gap)",
+      "title": "Divergence — banks contradicting their category on debit cards YoY (pp gap)",
       "type": "data",
       "pipeline": "atm_pos",
       "layer": 1,
@@ -6701,7 +6701,7 @@
     },
     "pos-bank-divergence": {
       "id": "pos-bank-divergence",
-      "title": "Divergence \u2014 banks contradicting their category on POS terminals YoY (pp gap)",
+      "title": "Divergence — banks contradicting their category on POS terminals YoY (pp gap)",
       "type": "data",
       "pipeline": "atm_pos",
       "layer": 1,
@@ -6721,7 +6721,7 @@
     },
     "cc-issuance-vs-spend-gap": {
       "id": "cc-issuance-vs-spend-gap",
-      "title": "Pair divergence \u2014 credit cards issued vs spent on (YoY gap, pp)",
+      "title": "Pair divergence — credit cards issued vs spent on (YoY gap, pp)",
       "type": "data",
       "pipeline": "atm_pos",
       "layer": 1,
@@ -6764,7 +6764,7 @@
     },
     "dc-issuance-vs-spend-gap": {
       "id": "dc-issuance-vs-spend-gap",
-      "title": "Pair divergence \u2014 debit cards issued vs spent on (YoY gap, pp)",
+      "title": "Pair divergence — debit cards issued vs spent on (YoY gap, pp)",
       "type": "data",
       "pipeline": "atm_pos",
       "layer": 1,
@@ -6807,7 +6807,7 @@
     },
     "pos-fleet-vs-spend-gap": {
       "id": "pos-fleet-vs-spend-gap",
-      "title": "Pair divergence \u2014 POS fleet vs value transacted across it (YoY gap, pp)",
+      "title": "Pair divergence — POS fleet vs value transacted across it (YoY gap, pp)",
       "type": "data",
       "pipeline": "atm_pos",
       "layer": 1,
@@ -6850,7 +6850,7 @@
     },
     "atm-fleet-vs-withdrawal-gap": {
       "id": "atm-fleet-vs-withdrawal-gap",
-      "title": "Pair divergence \u2014 ATM fleet vs cash withdrawn from it (YoY gap, pp)",
+      "title": "Pair divergence — ATM fleet vs cash withdrawn from it (YoY gap, pp)",
       "type": "data",
       "pipeline": "atm_pos",
       "layer": 1,
@@ -6894,7 +6894,7 @@
     },
     "cc-issuance-vs-spend-bank-gap": {
       "id": "cc-issuance-vs-spend-bank-gap",
-      "title": "Pair divergence \u2014 banks issuing credit cards faster than they are spent on (YoY gap, pp)",
+      "title": "Pair divergence — banks issuing credit cards faster than they are spent on (YoY gap, pp)",
       "type": "data",
       "pipeline": "atm_pos",
       "layer": 1,
@@ -6938,6 +6938,129 @@
       },
       "current_status": "active",
       "first_seen": "2024-01-31"
+    },
+    "sibc-main-momentum": {
+      "id": "sibc-main-momentum",
+      "title": "Movement — main sectors (units added over 12m, + net/gross/coherence)",
+      "type": "data",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1e",
+      "domain": "sector_mix",
+      "spec_version": "1.0",
+      "compute": {
+        "parent_code": "III",
+        "statement": "Statement 1",
+        "child_level": 1,
+        "entity_type": "sector",
+        "window": 12,
+        "method": "csv_sector_momentum",
+        "unit": "rs_cr",
+        "status_rules": [
+          {
+            "if": "value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < 0",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "stable"
+          }
+        ]
+      },
+      "current_status": "strengthening",
+      "first_seen": "2025-02-28"
+    },
+    "sibc-main-acceleration": {
+      "id": "sibc-main-acceleration",
+      "title": "Acceleration — main sectors (change in YoY vs prior period, pp)",
+      "type": "data",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1e",
+      "domain": "sector_mix",
+      "spec_version": "1.0",
+      "compute": {
+        "parent_code": "III",
+        "statement": "Statement 1",
+        "child_level": 1,
+        "entity_type": "sector",
+        "window": 12,
+        "method": "csv_sector_acceleration",
+        "status_rules": [
+          {
+            "if": "value > 0.5",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < -0.5",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "stable"
+          }
+        ]
+      },
+      "current_status": "strengthening",
+      "first_seen": "2025-02-28"
+    },
+    "sibc-main-allocation": {
+      "id": "sibc-main-allocation",
+      "title": "Allocation — main sectors (share of new credit over 12m, %)",
+      "type": "data",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1e",
+      "domain": "sector_mix",
+      "spec_version": "1.0",
+      "compute": {
+        "parent_code": "III",
+        "statement": "Statement 1",
+        "child_level": 1,
+        "entity_type": "sector",
+        "window": 12,
+        "method": "csv_sector_allocation",
+        "coherence_min": 0.9
+      },
+      "current_status": "active",
+      "first_seen": "2025-02-28"
+    },
+    "sibc-main-yoy-scan": {
+      "id": "sibc-main-yoy-scan",
+      "title": "Speed — main sectors (YoY % per sector)",
+      "type": "data",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1b",
+      "domain": "sector_mix",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_sector_scan_yoy",
+        "parent_code": "III",
+        "child_level": 1,
+        "statement": "Statement 1",
+        "entity_type": "sector",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      },
+      "current_status": "strengthening",
+      "first_seen": "2025-02-28"
     }
   }
 }

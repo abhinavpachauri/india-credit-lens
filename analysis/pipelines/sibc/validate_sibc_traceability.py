@@ -109,6 +109,24 @@ def check(period: str | None = None, quiet: bool = False) -> int:
                 own      = flat_numbers(facts)
                 cand     = own if is_scan else period_numbers
 
+                # A card may legitimately read across signals — the movement card
+                # quotes a sector's share of new credit next to its growth rate and
+                # acceleration, because a share published alone reads as decline
+                # (signals/README.md, pairing rule). Such a card DECLARES what it
+                # reads in `sourceSignals`, and scope becomes exactly that union:
+                # wider than one signal, far tighter than period-wide, and explicit
+                # rather than inherited. An undeclared read still fails.
+                declared = ann.get("sourceSignals") or []
+                if declared:
+                    own = []
+                    for dsid in declared:
+                        dsig = registry.get(dsid)
+                        if dsig:
+                            own += flat_numbers(
+                                facts_by_sid.get(dsid)
+                                or signal_numbers(conn, dsid, dsig, "sibc", ann_period))
+                    cand, is_scan = own, True
+
                 # 1) Number traceability across body + chain + implication.
                 basis = ann.get("basis", {})
                 texts = {

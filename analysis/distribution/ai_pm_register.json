@@ -250,6 +250,20 @@
           "date": "2026-08-11",
           "how_measured": "Extended reconcile.py with a count check (registry signals, test functions) and an evidence-pointer check over declared JSON; planted a wrong count and a missing source file, confirmed exit 1 each time and exit 0 restored.",
           "source": "analysis/architecture/reconcile.py (check_counts, check_evidence_pointers)"
+        },
+        {
+          "metric": "Check 2g declared-scope tightening (movement card)",
+          "value": "18x (54 vs 948 candidate values)",
+          "date": "2026-08-19",
+          "how_measured": "A card that legitimately reads across four signals declares them in sourceSignals; Check 2g scopes to that union instead of the period-wide set. Counted distinct rounded candidate values for both scopes at period 2026-07-31.",
+          "source": "analysis/pipelines/sibc/validate_sibc_traceability.py"
+        },
+        {
+          "metric": "Check 2g in-range injection catch, declared-scope path",
+          "value": "100% (4/4)",
+          "date": "2026-08-19",
+          "how_measured": "Injected four in-range invented numbers (47.3%, 9.1%, +3.71 pp, 62.8%) into the movement card body in sibc_l1_annotations.json; each run of Check 2g must exit non-zero. In-range fakes are the attack only SCOPE catches, not tolerance.",
+          "source": "analysis/pipelines/sibc/validate_sibc_traceability.py"
         }
       ],
       "observations": [
@@ -292,7 +306,15 @@
           "date": "2026-07-29",
           "note": "Prompt instructions are necessary but not sufficient — the LLM emitted 'the bank should push...' on 3 cross-system items despite an explicit 'never say should'. The fix that held was the DETERMINISTIC guard (drop advice implications via core.voice), consistent with the platform's traceable-not-assumed principle: enforce in code, don't trust the model. Also a caching lesson: cross-system enrichment was narrative-flag-gated, so a preserved narrative:True blocked re-narration after the prompt change — switched it to cache-gated (like the pipeline path) so a cache clear forces a fresh run. Machine implications are now observations or empty; the prescriptive 'so what' is the editor's on every surface (/opportunities included)."
         },
-        "Path references in prose were guarded from the start; COUNTS in the same prose were not, and rotted exactly as you would expect — one file claimed two different signal totals, neither correct. A number stated about the system is a claim like any other and decays the same way. Cheap to check once you have the real source; the hard part was noticing the asymmetry between what was guarded and what was merely written down."
+        "Path references in prose were guarded from the start; COUNTS in the same prose were not, and rotted exactly as you would expect — one file claimed two different signal totals, neither correct. A number stated about the system is a claim like any other and decays the same way. Cheap to check once you have the real source; the hard part was noticing the asymmetry between what was guarded and what was merely written down.",
+        {
+          "date": "2026-08-19",
+          "observation": "Widening scope to make a legitimate cross-signal card pass is the moment a traceability gate quietly dies. Making the card DECLARE its reads keeps scope explicit and 18x tighter than the period-wide fallback that would otherwise have been reached for - the same shape as Check 4f's evidence_all and the payments sourceSignals convention."
+        },
+        {
+          "date": "2026-08-19",
+          "observation": "A gate can be correct and still be the wrong mechanism. Coherence was specced as a publish gate for allocation shares; measuring it showed the two lowest-coherence windows in the dataset carry the strongest stories (a POS-deployment handover, an e-commerce consolidation). Re-specced as a ROUTER selecting which sentence is true. Suppression would have silenced exactly the best material."
+        }
       ],
       "open_questions": [
         "Breadth-based (period-wide) checks let an in-range invented number pass. What is the cheapest scoping that closes this for free prose, not just structured values?",

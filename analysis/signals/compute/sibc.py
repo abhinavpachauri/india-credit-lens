@@ -586,6 +586,193 @@ def csv_sector_rotation(params: dict, period: str, df: pd.DataFrame) -> list[dic
                           params.get("status_rules") or ROTATION_DEFAULT_RULES)
 
 
+# ── movement: momentum / acceleration / allocation ────────────────────────────
+# See signals/README.md "Movement signal methods". Rotation answers *how far the mix
+# has shifted*; these answer *how much actually moved, how fast, and where it went* —
+# the units a lending decision is actually made in.
+
+MOMENTUM_DEFAULT_RULES = [
+    {"if": "value > 0",  "then": "strengthening"},
+    {"if": "value < 0",  "then": "weakening"},
+    {"if": "true",       "then": "stable"},
+]
+
+ACCEL_DEFAULT_RULES = [
+    {"if": "value > 0.5",  "then": "strengthening"},
+    {"if": "value < -0.5", "then": "weakening"},
+    {"if": "true",         "then": "stable"},
+]
+
+COHERENCE_MIN = 0.90   # sentence-selector, never a publish gate — see README
+
+
+def _children_at(params: dict, period: str, df: pd.DataFrame) -> dict[str, float]:
+    """{sector name: value} for every child of parent_code at child_level on `period`."""
+    parent_code = str(params["parent_code"])
+    stmt        = params.get("statement", "Statement 1")
+    child_level = params.get("child_level", 2)
+    exclude     = {str(c) for c in params.get("exclude_codes", [])}
+    rows = df[
+        (df["date"] == period) &
+        (df["statement"] == stmt) &
+        (df["parent_code"] == parent_code) &
+        (df["level"] == child_level)
+    ]
+    out: dict[str, float] = {}
+    for _, r in rows.iterrows():
+        if str(r["code"]) in exclude:
+            continue
+        v = _val(df, period, str(r["code"]), stmt)
+        if v is not None:
+            out[r["sector"]] = float(v)
+    return out
+
+
+def _deltas(params: dict, period: str, df: pd.DataFrame):
+    """(deltas, net, gross) over the annual window, or None when the window is absent.
+
+    `net` is the resultant; `gross` is total movement ignoring direction. They are equal
+    only when every child moves the same way — that difference is what `coherence` measures
+    and what decides which sentence about the period is true."""
+    window = int(params.get("window", 12))
+    prior_date = _month_back(period, window, set(df["date"].unique()))
+    if prior_date is None:
+        return None
+    cur, prior = _children_at(params, period, df), _children_at(params, prior_date, df)
+    shared = [k for k in cur if k in prior]
+    if not shared:
+        return None
+    deltas = {k: cur[k] - prior[k] for k in shared}
+    net    = sum(deltas.values())
+    gross  = sum(abs(v) for v in deltas.values())
+    return deltas, net, gross
+
+
+def csv_sector_momentum(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
+    """
+    How many units each child actually added or lost over the annual window — the
+    quantity speed discards. A sector growing 16.8% and one growing 15.8% look ranked
+    until you see they moved Rs 3.9L Cr and Rs 9.7L Cr.
+
+    params: parent_code, statement, child_level, entity_type, window (default 12),
+            unit (default "rs_cr"), status_rules
+    Emits one row per child (value = delta) plus three aggregate rows:
+      total          — net movement (this is the signal's status; see B5 roll-up)
+      gross_movement — total movement ignoring direction
+      coherence      — |net| / gross in [0,1]; 1.0 = every child moving the same way.
+                       Stored as a VALUE, never a status: the regime it implies
+                       (aligned / contested / handover) is a rendering decision the
+                       insight builder derives, so the shared status vocabulary is
+                       not extended by a data characteristic.
+    """
+    got = _deltas(params, period, df)
+    if got is None:
+        return []
+    deltas, net, gross = got
+    entity_type = params.get("entity_type", "sector")
+    unit        = params.get("unit", "rs_cr")
+    rules       = params.get("status_rules") or MOMENTUM_DEFAULT_RULES
+
+    out = [_row(entity_type, name, val, _eval_status(rules, val, 0.0), unit)
+           for name, val in deltas.items()]
+    out.sort(key=lambda r: r["value"], reverse=True)
+    out.append(_row("aggregate", "total", net, _eval_status(rules, net, 0.0), unit))
+    out.append(_row("aggregate", "gross_movement", gross, "active", unit))
+    if gross:
+        out.append(_row("aggregate", "coherence", abs(net) / gross, "active", "ratio"))
+    return out
+
+
+def csv_sector_acceleration(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
+    """
+    Change in each child's YoY rate since the prior period — is the speed itself moving.
+
+    The only member of the family that separates *slowing down* from *being overtaken*:
+    personal loans' share of new credit fell 44.7% -> 30.1% while accelerating +4.1pp,
+    because industry and services accelerated +12.9 and +12.6. Without this row the
+    allocation number asserts the opposite of what happened.
+
+    params: parent_code, statement, child_level, entity_type, status_rules
+    value = yoy(period) - yoy(prior period), unit pp. Emits per child + aggregate/total
+    (the parent's own acceleration).
+    """
+    stmt        = params.get("statement", "Statement 1")
+    parent_code = str(params["parent_code"])
+    parent_stmt = params.get("parent_statement", stmt)
+    entity_type = params.get("entity_type", "sector")
+    rules       = params.get("status_rules") or ACCEL_DEFAULT_RULES
+    avail       = set(df["date"].unique())
+    prior       = _prior_period(period, avail)
+    if prior is None:
+        return []
+
+    def accel(code: str, statement: str):
+        now, _  = _compute_yoy(df, period, code, statement, avail)
+        was, _  = _compute_yoy(df, prior, code, statement, avail)
+        return None if now is None or was is None else now - was
+
+    out = []
+    for name, _v in _children_at(params, period, df).items():
+        code = df[(df["date"] == period) & (df["statement"] == stmt) &
+                  (df["sector"] == name)]["code"]
+        if code.empty:
+            continue
+        a = accel(str(code.iloc[0]), stmt)
+        if a is not None:
+            out.append(_row(entity_type, name, a, _eval_status(rules, a, 0.0), "pp"))
+    if not out:
+        return []
+    out.sort(key=lambda r: r["value"], reverse=True)
+    pa = accel(parent_code, parent_stmt)
+    if pa is not None:
+        out.append(_row("aggregate", "total", pa, _eval_status(rules, pa, 0.0), "pp"))
+    return out
+
+
+def csv_sector_allocation(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
+    """
+    Where the new units went — the answer to "of every Rs 100 added, how much here".
+
+    Two row kinds, distinguished by entity_type (precedent: pair_side, fy_yoy):
+      contribution — 100 * delta / gross. ALWAYS emitted; bounded by construction,
+                     valid whether the system is growing, shrinking or churning.
+      alloc        — 100 * delta / net. Emitted only when coherence >= coherence_min,
+                     because max |share| <= 1/coherence: at coherence 0.12 a share can
+                     legitimately read 833%, which is how payments POS produced 460%.
+
+    Below the threshold this is NOT an honest null — the contribution rows stand and the
+    insight switches to the contested/handover sentence (README router table). Nothing
+    computed is ever suppressed.
+
+    params: as momentum, plus coherence_min (default 0.90).
+    """
+    got = _deltas(params, period, df)
+    if got is None:
+        return []
+    deltas, net, gross = got
+    if not gross:
+        return []
+    coherence = abs(net) / gross
+    cmin      = float(params.get("coherence_min", COHERENCE_MIN))
+
+    out = [_row("contribution", name, 100.0 * val / gross, "active", "pct")
+           for name, val in deltas.items()]
+    out.sort(key=lambda r: r["value"], reverse=True)
+    # The signal needs ONE scalar per period: its status row, its news score and its
+    # watchlist distance are all read from entity_id='total'. Concentration — the largest
+    # share any single child took of the total movement — is the honest choice: it is
+    # defined in every regime (gross never vanishes when anything moved), it is bounded,
+    # and a record in it is real news (new lending never this concentrated / this spread).
+    out.append(_row("aggregate", "total", max(abs(r["value"]) for r in out),
+                    "active", "pct"))
+    if coherence >= cmin and net:
+        alloc = [_row("alloc", name, 100.0 * val / net, "active", "pct")
+                 for name, val in deltas.items()]
+        alloc.sort(key=lambda r: r["value"], reverse=True)
+        out.extend(alloc)
+    return out
+
+
 def csv_sector_divergence(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
     """
     Children whose YoY contradicts their parent's — flagged entities only
@@ -652,6 +839,9 @@ METHODS: dict = {
     "csv_sector_fy_delta":          csv_sector_fy_delta,
     # relational — cross-segment (spec: signals/README.md)
     "csv_sector_rotation":          csv_sector_rotation,
+    "csv_sector_momentum":          csv_sector_momentum,
+    "csv_sector_acceleration":      csv_sector_acceleration,
+    "csv_sector_allocation":        csv_sector_allocation,
     "csv_sector_divergence":        csv_sector_divergence,
 }
 

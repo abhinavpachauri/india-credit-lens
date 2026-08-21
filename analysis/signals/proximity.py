@@ -87,11 +87,18 @@ def eval_status(rules, value, prev_value):
 
 
 def series(conn, pipeline, metric_id):
-    """Chronological (period, value) for the signal's total-level row."""
+    """Chronological (period, value) for the signal's total-level row.
+
+    Keyed on `entity_id='total'`, NOT on entity_type — a signal may carry several
+    aggregate rows (momentum stores net, gross and coherence side by side), and matching
+    on the type returned three values per period, which silently corrupts `typical_move`
+    and every record test built on it. `total` is already the convention that decides a
+    signal's status (see generate_signal_history.sync_current_status_from_db and Check
+    2e/B5), so one row per period per signal is the rule everywhere else too."""
     rows = conn.execute(
         "select period, value from signals where pipeline=? and metric_id=? "
-        "  and (entity_type in ('total','aggregate') or entity_id='total') "
-        "  and value is not null order by period", (pipeline, metric_id)).fetchall()
+        "  and entity_id='total' and value is not null order by period",
+        (pipeline, metric_id)).fetchall()
     return [(p, float(v)) for p, v in rows]
 
 
@@ -201,6 +208,25 @@ def _unit_of(conn, pipeline, sid):
     return row[0] if row else ""
 
 
+# Units that measure an unbounded LEVEL rather than a rate, a ratio or a run length.
+LEVEL_UNITS = {"rs_cr", "lcr_cr", "rs_thousands", "count", "transactions"}
+
+
+def _unreachable_zero(row) -> bool:
+    """True when the only threshold is zero and the value is an unbounded level.
+
+    A watchlist promises "this could flip next month". For a rate, crossing zero is
+    exactly that — growth turning to contraction, a few points away. For a level it is
+    not: `sibc-main-momentum` would have to fall by the whole 32 lakh crore it added,
+    i.e. bank credit would have to stop growing outright, to "flip". That is a tautology
+    dressed as a warning, and it renders a comma-grouped figure that no ground truth can
+    match. Rates, ratios and streak counts keep their zero crossings.
+    """
+    return (abs(row["threshold_value"]) < 1e-6
+            and row["unit"] in LEVEL_UNITS
+            and abs(abs(row["value"]) - row["distance"]) < 1e-6)
+
+
 def ranked(pipeline=None, limit=None, kind="level"):
     """Measurable signals, nearest flip first.
 
@@ -217,6 +243,8 @@ def ranked(pipeline=None, limit=None, kind="level"):
         row = proximity(conn, sid, sig)
         if row and (kind is None or row["flip_kind"] == kind):
             row["unit"] = _unit_of(conn, row["pipeline"], sid)
+            if _unreachable_zero(row):
+                continue
             out.append(row)
     conn.close()
     out.sort(key=lambda r: r["moves_away"])

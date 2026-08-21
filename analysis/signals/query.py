@@ -73,6 +73,11 @@ METHOD_TYPE: dict[str, str] = {
     "yoy_spread":              "spread",
     "yoy_spread_named":        "spread",
     "csv_sector_yoy_spread":   "spread",
+    # movement family (signals/README.md) — row distributions, like scans, so the
+    # traceability ground truth is the full set of rows rather than one scalar
+    "csv_sector_momentum":     "scan",
+    "csv_sector_acceleration": "scan",
+    "csv_sector_allocation":   "scan",
     "csv_total_ratio":         "ratio",
     "count_positive_yoy":      "breadth",
     "csv_sector_count_positive_yoy": "breadth",

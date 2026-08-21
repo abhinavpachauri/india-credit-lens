@@ -57,8 +57,16 @@ def _cards(pipeline, doc):
 
 
 def _signal_ids(card, registry):
-    """The registry signals a card stands on — eval_signal first, then its own id."""
-    return [sid for sid in (card.get("eval_signal"), card.get("id"))
+    """The registry signals a card stands on — eval_signal, its own id, and any it declares.
+
+    `sourceSignals` is added because a card may legitimately rest on more than the signal
+    it is named after: the SIBC movement card is filed under its allocation signal but
+    reads momentum, acceleration and speed alongside it, and its news lives in the
+    momentum row. Scoring it on its id alone buried a record-setting card in the subject
+    plane. Entries that are not registry ids are ignored, so the ATM/POS convention of
+    naming dot-paths into signals.json passes through harmlessly."""
+    declared = card.get("sourceSignals") or []
+    return [sid for sid in (card.get("eval_signal"), card.get("id"), *declared)
             if sid and sid in registry]
 
 

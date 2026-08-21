@@ -25,7 +25,7 @@ sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / 
 from signals.query import signal_numbers, scan_distribution, _signal_type   # noqa: E402
 from core.relational_insights import (                                       # noqa: E402
     rotation_insight, divergence_insight, rotation_distribution,
-    entity_roles, _subject as relational_subject)
+    movement_insight, entity_roles, _subject as relational_subject)
 from core.paths import ROOT as REPO
 ANAL  = REPO / "analysis"
 SIG   = ANAL / "signals"
@@ -362,6 +362,72 @@ def deterministic_scan_insight(dist: list[tuple], unit: str, kind: str = "yoy",
 
 # ── Main ──────────────────────────────────────────────────────────────────────
 
+# The four main sectors carry short display names on the chart; signals.db carries
+# the CSV's full RBI names. One map, declared once.
+MAIN_SECTOR_SERIES = {
+    "Agriculture and Allied Activities": "Agriculture",
+    "Industry (Micro and Small, Medium and Large)": "Industry",
+    "Services": "Services",
+    "Personal Loans": "Personal Loans",
+}
+
+
+def movement_annotation(conn, period: str, registry: dict) -> dict | None:
+    """The movement card — where the new credit went, how fast, and speeding up or not.
+
+    Deliberately built OUTSIDE the evaluation loop. The movement family's prose is
+    deterministic by design (signals/README.md), so making the card conditional on an LLM
+    evaluation having run would be backwards — and would silently drop the card in any
+    period evaluated before these signals existed.
+
+    Three registry signals, ONE card: allocation is the headline, momentum and
+    acceleration are read alongside it. Emitting three cards would say one thing three
+    times on a dashboard that already renders too many.
+    """
+    def rows(metric_id: str, entity_type: str) -> dict:
+        return {e: v for e, v in conn.execute(
+            "SELECT entity_id, value FROM signals WHERE pipeline='sibc' AND period=? "
+            "AND metric_id=? AND entity_type=?", (period, metric_id, entity_type))}
+
+    momentum = rows("sibc-main-momentum", "sector")
+    if not momentum:
+        return None
+    agg      = rows("sibc-main-momentum", "aggregate")
+    alloc    = rows("sibc-main-allocation", "alloc")
+    contrib  = rows("sibc-main-allocation", "contribution")
+    accel    = rows("sibc-main-acceleration", "sector")
+    speed    = rows("sibc-main-yoy-scan", "sector")
+
+    ins = movement_insight(alloc, contrib, momentum, agg.get("total"),
+                           agg.get("gross_movement"), agg.get("coherence"),
+                           accel, speed, "bank credit")
+    if ins is None:
+        return None
+
+    lead = max(alloc or momentum, key=(alloc or momentum).get)
+    reg_sig = registry.get("sibc-main-allocation", {})
+    facts = signal_numbers(conn, "sibc-main-allocation", reg_sig, "sibc", period)
+    return {
+        "id":            "sibc-main-allocation",
+        "layer":         1,
+        "title":         ins["title"],
+        "body":          ins["body"],
+        "implication":   ins["implication"],
+        "preferredMode": "yoy",
+        "effect":        {"highlight": [MAIN_SECTOR_SERIES[lead]]} if lead in MAIN_SECTOR_SERIES else {},
+        "claim_type":    "data",
+        "insight_kind":  ins["insight_kind"],
+        # Declared reads — the card quotes allocation next to speed and acceleration,
+        # so Check 2g scopes to exactly these four signals (see the validator).
+        "sourceSignals": ["sibc-main-allocation", "sibc-main-momentum",
+                          "sibc-main-acceleration", "sibc-main-yoy-scan"],
+        "basis": {
+            "facts":      data_facts(facts, {}),
+            "inferences": ins["chain"],
+        },
+    }
+
+
 def main(period: str | None = None) -> int:
     with open(REG) as f:
         registry = json.load(f)["signals"]
@@ -470,6 +536,10 @@ def main(period: str | None = None) -> int:
             annotation["insight_kind"] = insight_kind
 
         sections_out[section][itype + "s"].append(annotation)
+
+    movement = movement_annotation(conn, period, registry)
+    if movement:
+        sections_out["mainSectors"]["insights"].append(movement)
 
     output = {
         "pipeline":     "sibc",

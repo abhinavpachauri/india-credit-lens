@@ -51,6 +51,10 @@ METHOD_CATEGORY = {
     # C2 — share of the mix moving between entities
     "csv_sector_rotation":           "C2",
     "csv_category_rotation":         "C2",
+    # movement: same question as rotation — who is gaining ground, at whose expense —
+    # answered in units of the new money rather than of the book (DISTRIBUTION_SPEC §3)
+    "csv_sector_momentum":           "C2",
+    "csv_sector_allocation":         "C2",
     # C3 — declared co-movement breaking (hierarchy axis and metric axis)
     "csv_sector_divergence":         "C3",
     "csv_bank_divergence":           "C3",
@@ -67,6 +71,7 @@ METHOD_CATEGORY = {
     "csv_yoy_streak":                "C5",
     "csv_mom_streak":                "C5",
     "csv_sector_fy_acceleration":    "C5",
+    "csv_sector_acceleration":       "C5",
     "csv_sector_fy_delta":           "C5",
 }
 
