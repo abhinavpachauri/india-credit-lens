@@ -8,12 +8,6 @@
     "unexplained": {
       "sibc": [
         {
-          "entity": "Agriculture and Allied Activities",
-          "urn": "icl:sibc/Statement1/1",
-          "product": "agriculture",
-          "direction": "rising"
-        },
-        {
           "entity": "Large",
           "urn": "icl:sibc/Statement1/2.3",
           "product": "large_corporate",
@@ -273,351 +267,2089 @@
   "proposals": [
     {
       "kind": "channel",
-      "label": "Large corporate deleveraging reversal → large corporate credit growth",
-      "mechanism": "End of balance-sheet repair cycle drives large corporates to resume borrowing for capex and working capital expansion",
-      "affects": "large_corporate",
-      "required_source": "RBI Financial Stability Report section on corporate leverage ratios and credit growth by firm size",
-      "claim_type": "hypothesis",
-      "from_pipeline": "sibc",
-      "status": "proposed"
-    },
-    {
-      "kind": "channel",
-      "label": "Housing price cycle → housing loan demand",
-      "mechanism": "Rising residential property prices in tier-1 and tier-2 cities increase transaction values and loan ticket sizes",
+      "label": "PMAY subsidy disbursement → housing credit growth",
+      "mechanism": "Extended Pradhan Mantri Awas Yojana subsidy eligibility or accelerated disbursement increases affordable housing loan demand and bank origination",
       "affects": "housing",
-      "required_source": "NHB RESIDEX or RBI residential property price index quarterly series",
+      "required_source": "Ministry of Housing and Urban Affairs PMAY scheme extension notification or subsidy disbursement data",
+      "source_ladder": [
+        "MoHUA official PMAY scheme circular/notification on eligibility expansion or subsidy extension",
+        "MoHUA annual report or press release on PMAY disbursement trends",
+        "Economic Survey chapter on housing schemes or Business Standard/LiveMint coverage of PMAY updates"
+      ],
       "claim_type": "hypothesis",
       "from_pipeline": "sibc",
-      "status": "proposed"
+      "status": "proposed",
+      "attempts": [
+        {
+          "rung": 1,
+          "target": "Ministry of Housing and Urban Affairs PMAY scheme extension notification or subsidy disbursement data",
+          "url": "https://www.pib.gov.in/PressReleaseIframePage.aspx?PRID=2043927",
+          "tier": "official",
+          "verdict": "excerpt_verified",
+          "llm_verdict": "expired",
+          "date": "2026-08-23",
+          "note": "The original PMAY Credit Linked Subsidy Scheme (CLSS) ended 31.03.2022 per official MoHUA website (pmay-urban.gov.in/about). It was superseded by the Interest Subsidy Scheme (ISS) under PMAY-U 2.0, ap",
+          "retryable": false
+        },
+        {
+          "rung": 2,
+          "target": "MoHUA official PMAY scheme circular/notification on eligibility expansion or subsidy extension",
+          "url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2073484",
+          "tier": "official",
+          "verdict": "excerpt_verified",
+          "llm_verdict": "expired",
+          "date": "2026-08-23",
+          "note": "The original PMAY CLSS (Credit Linked Subsidy Scheme) expired on 31 March 2022 per official MoHUA website (pmay-urban.gov.in/about). The mechanism has been superseded by the Interest Subsidy Scheme (I",
+          "retryable": false
+        },
+        {
+          "rung": 3,
+          "target": "MoHUA annual report or press release on PMAY disbursement trends",
+          "url": "https://www.pib.gov.in/PressReleaseIframePage.aspx?PRID=2041579",
+          "tier": "official",
+          "verdict": "excerpt_verified",
+          "llm_verdict": "expired",
+          "date": "2026-08-23",
+          "note": "The CLSS (Credit Linked Subsidy Scheme) component of PMAY-U, which provided interest subsidies on housing loans and directly drove bank loan demand, expired on 31.03.2022 for EWS/LIG and 31.03.2021 fo",
+          "retryable": false
+        }
+      ],
+      "verification": {
+        "verified": false,
+        "verdict": "expired",
+        "url": "https://www.pib.gov.in/PressReleaseIframePage.aspx?PRID=2041579",
+        "source_title": "Credit Linked Subsidy Scheme (PMAY-CLSS) For MIG - Press Information Bureau, Government of India",
+        "excerpt": "CLSS vertical for EWS/LIG was up to 31.03.2022",
+        "verified_date": "2026-08-22",
+        "in_force_at_eval_period": false,
+        "note": "The CLSS (Credit Linked Subsidy Scheme) component of PMAY-U, which provided interest subsidies on housing loans and directly drove bank loan demand, expired on 31.03.2022 for EWS/LIG and 31.03.2021 for MIG categories. While PMAY-U 2.0 was launched in September 2024 with ₹10 lakh crore outlay for 1 crore houses, it focuses on direct construction assistance (BLC, AHP, ISSR) rather than credit-linked interest subsidies. The currently in-force successor is PMAY-U 2.0 (approved 09.08.2024, launched 01.09.2024) which provides direct financial assistance up to ₹2.50 lakh per family for construction/purchase but does NOT include the CLSS interest subsidy vertical that would accelerate housing loan origination. Primary source: https://pmay-urban.gov.in/about",
+        "source_check": "excerpt_verified",
+        "tier": "official",
+        "rung": 3
+      },
+      "promotable": false
     },
     {
       "kind": "channel",
-      "label": "Equity market wealth effect → securities-backed lending",
-      "mechanism": "Bull market increases portfolio values enabling larger loans against shares and bonds as collateral",
-      "affects": "personal_loan",
-      "required_source": "NSE/BSE market capitalization series and SEBI data on demat account holdings",
-      "claim_type": "hypothesis",
-      "from_pipeline": "sibc",
-      "status": "proposed"
-    },
-    {
-      "kind": "channel",
-      "label": "Vehicle GST rate reduction → vehicle loan origination",
-      "mechanism": "Lower GST on automobiles reduces on-road prices making vehicles more affordable and stimulating loan demand",
+      "label": "Vehicle scrappage policy → replacement vehicle loan demand",
+      "mechanism": "National Vehicle Scrappage Policy incentives for old vehicle retirement drive new vehicle purchases financed through loans",
       "affects": "vehicle_loan",
-      "required_source": "GST Council meeting minutes and notifications on vehicle tax rate changes",
-      "claim_type": "hypothesis",
+      "required_source": "Ministry of Road Transport and Highways vehicle scrappage policy implementation notification or incentive structure",
+      "source_ladder": [
+        "MoRTH notification on National Vehicle Scrappage Policy implementation dates and incentive structure",
+        "MoRTH press release or policy document on scrappage scheme rollout",
+        "Automotive industry report (SIAM) or Economic Times coverage of scrappage policy impact"
+      ],
+      "claim_type": "inference",
       "from_pipeline": "sibc",
-      "status": "proposed"
+      "status": "proposed",
+      "attempts": [
+        {
+          "rung": 1,
+          "target": "Ministry of Road Transport and Highways vehicle scrappage policy implementation notification or incentive structure",
+          "url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2042966",
+          "tier": "official",
+          "verdict": "excerpt_verified",
+          "llm_verdict": "supported",
+          "date": "2026-08-23",
+          "note": "Policy confirmed in force through eval_period with documented incentives (road tax concessions up to 25%, registration fee waiver, manufacturer discounts) that drive new vehicle purchases. However, pr",
+          "retryable": false
+        }
+      ],
+      "verification": {
+        "verified": true,
+        "verdict": "supported",
+        "url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2042966",
+        "source_title": "Vehicle Scrappage Policy, 2021 - Press Information Bureau",
+        "excerpt": "MoRTH has issued GSR 720 (E) dated 5th October 2021 to provide concession in the Motor Vehicle Tax of up to 25% in case of non-transport vehicles",
+        "verified_date": "2026-08-22",
+        "in_force_at_eval_period": true,
+        "note": "Policy confirmed in force through eval_period with documented incentives (road tax concessions up to 25%, registration fee waiver, manufacturer discounts) that drive new vehicle purchases. However, primary sources do not explicitly link incentives to loan financing - they are tax/fee concessions. The causal pathway to vehicle loan demand is indirect (new purchases may be financed via loans) rather than policy-mandated.",
+        "source_check": "excerpt_verified",
+        "tier": "official",
+        "rung": 1
+      },
+      "promotable": true,
+      "source": "Vehicle Scrappage Policy, 2021 - Press Information Bureau",
+      "source_url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2042966",
+      "source_excerpt": "MoRTH has issued GSR 720 (E) dated 5th October 2021 to provide concession in the Motor Vehicle Tax of up to 25% in case of non-transport vehicles",
+      "source_verified_date": "2026-08-22"
     },
     {
       "kind": "channel",
-      "label": "Farm income support scheme → agricultural credit demand",
-      "mechanism": "Direct benefit transfers under PM-KISAN improve farm cash flows reducing distress borrowing while enabling investment credit",
-      "affects": "agriculture",
-      "required_source": "Ministry of Agriculture PM-KISAN disbursement data and NABARD rural credit survey",
-      "claim_type": "hypothesis",
-      "from_pipeline": "sibc",
-      "status": "proposed"
-    },
-    {
-      "kind": "channel",
-      "label": "Education fee inflation → education loan ticket size",
-      "mechanism": "Rising higher education costs especially in private institutions and abroad increase per-student loan amounts",
+      "label": "NEP skill-loan guarantee → education loan expansion",
+      "mechanism": "National Education Policy implementation with credit guarantee for skill development courses expands lender confidence in education loans beyond traditional degrees",
       "affects": "education_loan",
-      "required_source": "MHRD/UGC annual survey on college fee structures or forex remittances for education",
+      "required_source": "Ministry of Education NEP implementation notification on credit guarantee scheme for skill courses",
+      "source_ladder": [
+        "Ministry of Education circular on credit guarantee scheme for skill/vocational education under NEP 2020",
+        "Department of Financial Services notification on education loan guarantee framework",
+        "Indian Express or Times of India coverage of NEP skill-loan guarantee rollout"
+      ],
       "claim_type": "hypothesis",
       "from_pipeline": "sibc",
-      "status": "proposed"
+      "status": "proposed",
+      "attempts": [
+        {
+          "rung": 1,
+          "target": "Ministry of Education NEP implementation notification on credit guarantee scheme for skill courses",
+          "url": "",
+          "tier": null,
+          "verdict": "no_url",
+          "llm_verdict": "not_found",
+          "date": "2026-08-23",
+          "note": "No Ministry of Education NEP implementation notification establishing a credit guarantee scheme for skill courses was found. The Credit Guarantee Fund for Skill Development (CGFSSD) exists but is admi",
+          "retryable": false
+        },
+        {
+          "rung": 2,
+          "target": "Ministry of Education circular on credit guarantee scheme for skill/vocational education under NEP 2020",
+          "url": "https://www.ncgtc.in/en/product-details/CGFSD/Credit-Guarantee-Fund-Scheme-for-Skill-Development-(CGFSD)",
+          "tier": null,
+          "verdict": "off_allowlist",
+          "llm_verdict": "not_found",
+          "date": "2026-08-23",
+          "note": "No Ministry of Education circular or primary source found establishing a NEP 2020-specific credit guarantee scheme that expands education loans to skill/vocational courses. CGFSD is a separate skill l",
+          "retryable": false
+        },
+        {
+          "rung": 3,
+          "target": "Department of Financial Services notification on education loan guarantee framework",
+          "url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2037145",
+          "tier": "official",
+          "verdict": "excerpt_verified",
+          "llm_verdict": "not_found",
+          "date": "2026-08-23",
+          "note": "A skill loan guarantee scheme exists (MSDE's Credit Guarantee Fund Scheme for Skill Development, notified July 9, 2024) providing 70-75% guarantee for skill development loans up to ₹7.5 lakh. However,",
+          "retryable": false
+        }
+      ],
+      "verification": {
+        "verified": false,
+        "verdict": "not_found",
+        "url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2037145",
+        "source_title": "PIB Press Release - Model Skill Loan Scheme Launch, July 25, 2024",
+        "excerpt": "NBFCs, Micro Finance Institutions, and Small Finance Banks will also be eligible to extend loans which will be backed by guarantee against default up to 75% of the loan disbursed",
+        "verified_date": "2026-08-22",
+        "in_force_at_eval_period": true,
+        "note": "A skill loan guarantee scheme exists (MSDE's Credit Guarantee Fund Scheme for Skill Development, notified July 9, 2024) providing 70-75% guarantee for skill development loans up to ₹7.5 lakh. However, no primary source found supporting the claimed mechanism that this expands traditional 'education loans' beyond degrees. The skill loan scheme and education loan scheme (RBI/IBA Model Education Loan Scheme) are separate frameworks serving different purposes. The requested 'Department of Financial Services notification on education loan guarantee framework' was not found.",
+        "source_check": "excerpt_verified",
+        "tier": "official",
+        "rung": 3
+      },
+      "promotable": false
     },
     {
       "kind": "channel",
-      "label": "Renewable energy PLI scheme → renewable project finance",
-      "mechanism": "Production-linked incentives for solar manufacturing improve project economics driving solar installation credit",
-      "affects": "renewable_energy",
-      "required_source": "Ministry of New and Renewable Energy PLI scheme notification and MNRE solar capacity addition data",
+      "label": "PLI sectoral expansion → large corporate capex credit",
+      "mechanism": "Production Linked Incentive scheme expansion to new sectors triggers large corporate capex cycles requiring working capital and term loan financing",
+      "affects": "large_corporate",
+      "required_source": "DPIIT notification on PLI scheme sectoral expansion or Ministry of Commerce PLI allocation data",
+      "source_ladder": [
+        "Department for Promotion of Industry and Internal Trade (DPIIT) notification on new PLI sectors or expanded allocations",
+        "Ministry of Commerce and Industry press release on PLI scheme performance and expansion",
+        "CRISIL or ICRA report on PLI-linked corporate capex or Financial Express coverage of PLI expansion"
+      ],
       "claim_type": "hypothesis",
       "from_pipeline": "sibc",
-      "status": "proposed"
+      "status": "proposed",
+      "attempts": [
+        {
+          "rung": 1,
+          "target": "DPIIT notification on PLI scheme sectoral expansion or Ministry of Commerce PLI allocation data",
+          "url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2201280&reg=3&lang=1",
+          "tier": "official",
+          "verdict": "excerpt_not_on_page",
+          "llm_verdict": "contradicts",
+          "date": "2026-08-23",
+          "note": "The PLI scheme remained at 14 sectors throughout 2025-2026 with no sectoral expansion. The scheme was expanded from 1 to 14 sectors in November 2020 and has remained at 14 sectors since. While PLI did",
+          "retryable": false
+        },
+        {
+          "rung": 2,
+          "target": "Department for Promotion of Industry and Internal Trade (DPIIT) notification on new PLI sectors or expanded allocations",
+          "url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2230621",
+          "tier": "official",
+          "verdict": "excerpt_verified",
+          "llm_verdict": "not_found",
+          "date": "2026-08-23",
+          "note": "No DPIIT notification found announcing PLI expansion to new (15th+) sectors by July 2026. The PLI scheme remains at 14 sectors as of the eval_period. DPIIT Secretary stated in Jan 2024 that new sector",
+          "retryable": false
+        },
+        {
+          "rung": 3,
+          "target": "Ministry of Commerce and Industry press release on PLI scheme performance and expansion",
+          "url": "https://www.pib.gov.in/PressReleaseIframePage.aspx?PRID=1945155",
+          "tier": "official",
+          "verdict": "excerpt_verified",
+          "llm_verdict": "contradicts",
+          "date": "2026-08-23",
+          "note": "The PLI scheme continues to operate across the same 14 sectors approved in 2020-2021. No sectoral expansion has occurred as of July 2026 evaluation period. While budget allocations within existing sec",
+          "retryable": false
+        }
+      ],
+      "verification": {
+        "verified": false,
+        "verdict": "contradicts",
+        "url": "https://www.pib.gov.in/PressReleaseIframePage.aspx?PRID=1945155",
+        "source_title": "Production Linked Incentive Schemes for 14 key sectors aim to enhance India's manufacturing capabilities and exports - Press Information Bureau",
+        "excerpt": "As on date, Union Cabinet has not approved any proposal to add any new sectors under PLI Schemes.",
+        "verified_date": "2026-08-22",
+        "in_force_at_eval_period": true,
+        "note": "The PLI scheme continues to operate across the same 14 sectors approved in 2020-2021. No sectoral expansion has occurred as of July 2026 evaluation period. While budget allocations within existing sectors have increased (e.g., Electronics from ₹5,777 cr to ₹9,000 cr in FY2025-26 per PIB), and investment commitments have grown to over ₹2.16 lakh crore, the claimed trigger of 'expansion to new sectors' is factually incorrect. The mechanism may apply to deepening within existing sectors or to initial sector approvals (2020-2021), but not to new sectoral expansion during the evaluation period.",
+        "source_check": "excerpt_verified",
+        "tier": "official",
+        "rung": 3
+      },
+      "promotable": false
     },
     {
       "kind": "channel",
-      "label": "PMAY subsidy extension → affordable housing credit",
-      "mechanism": "Pradhan Mantri Awas Yojana interest subsidy continuation sustains demand for priority sector housing loans",
-      "affects": "housing",
-      "required_source": "Ministry of Housing and Urban Affairs PMAY scheme guidelines and CLSS disbursement reports",
-      "claim_type": "hypothesis",
-      "from_pipeline": "sibc",
-      "status": "proposed"
-    },
-    {
-      "kind": "channel",
-      "label": "Social infrastructure asset classification → reporting reclassification",
-      "mechanism": "RBI clarification on infrastructure lending classification brings health and education projects under social infrastructure reporting",
-      "affects": "social_infrastructure",
-      "required_source": "RBI Master Direction on Infrastructure Lending and DBOD circulars on asset classification",
-      "claim_type": "hypothesis",
-      "from_pipeline": "sibc",
-      "status": "proposed"
-    },
-    {
-      "kind": "channel",
-      "label": "Jan Dhan account maturity → weaker section credit access",
-      "mechanism": "Aging of PMJDY accounts creates credit history enabling first-time formal credit to previously unbanked weaker sections",
-      "affects": "weaker_sections",
-      "required_source": "PMJDY progress reports from Department of Financial Services and RBI CRILC data on new-to-credit borrowers",
-      "claim_type": "hypothesis",
-      "from_pipeline": "sibc",
-      "status": "proposed"
-    },
-    {
-      "kind": "channel",
-      "label": "ECLGS eligibility expansion → MSME credit surge",
-      "mechanism": "Extension and expansion of Emergency Credit Line Guarantee Scheme coverage and tenor encourages banks to lend to MSMEs",
-      "affects": "msme_credit",
-      "required_source": "Ministry of Finance ECLGS notifications and National Credit Guarantee Trustee Company disbursement data",
-      "claim_type": "hypothesis",
-      "from_pipeline": "sibc",
-      "status": "proposed"
-    },
-    {
-      "kind": "channel",
-      "label": "Personal loan competition intensity → other personal loan growth",
-      "mechanism": "Fintech partnerships and digital origination reduce customer acquisition costs driving aggressive unsecured personal loan growth",
+      "label": "Loan-against-securities margin relaxation → share-backed lending uptake",
+      "mechanism": "SEBI or RBI relaxation of margin requirements or loan-to-value ratios for securities-backed lending increases individual borrowing against share holdings",
       "affects": "personal_loan",
-      "required_source": "RBI Report on Trend and Progress of Banking or Financial Stability Report section on unsecured retail credit growth",
+      "required_source": "SEBI or RBI circular on loan-against-securities margin norms or LTV ratio changes",
+      "source_ladder": [
+        "RBI Master Direction on Loans and Advances update on securities-backed lending norms",
+        "SEBI circular on margin financing or stock broker lending regulations",
+        "Mint or Business Line coverage of changes in loan-against-securities regulations"
+      ],
       "claim_type": "hypothesis",
       "from_pipeline": "sibc",
-      "status": "proposed"
+      "status": "proposed",
+      "attempts": [
+        {
+          "rung": 1,
+          "target": "SEBI or RBI circular on loan-against-securities margin norms or LTV ratio changes",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true,
+          "retries": 2
+        },
+        {
+          "rung": 2,
+          "target": "RBI Master Direction on Loans and Advances update on securities-backed lending norms",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        },
+        {
+          "rung": 3,
+          "target": "SEBI circular on margin financing or stock broker lending regulations",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        }
+      ],
+      "verification": {
+        "verified": false,
+        "verdict": "error",
+        "note": "",
+        "source_check": "check_error",
+        "tier": null,
+        "rung": 1
+      },
+      "promotable": false
     },
     {
       "kind": "channel",
-      "label": "ATM interchange fee revision → off-site ATM economics",
-      "mechanism": "Reduced interchange revenue makes off-site ATM deployment less profitable for independent deployers relative to on-site bank branches",
-      "affects": "atm_offsite, atm_onsite",
-      "required_source": "RBI circular on ATM interchange fee structure or NPCI ATM interchange revision notification",
+      "label": "Kisan Credit Card interest subvention → agriculture credit volume",
+      "mechanism": "Enhanced interest subvention rate or extended coverage for Kisan Credit Card reduces effective borrowing cost and increases agriculture credit uptake",
+      "affects": "agriculture",
+      "required_source": "Department of Agriculture notification on KCC interest subvention rate revision or coverage expansion",
+      "source_ladder": [
+        "Department of Agriculture, Cooperation and Farmers Welfare notification on KCC interest subvention scheme changes",
+        "Union Budget agriculture credit allocation or NABARD circular on KCC parameters",
+        "Hindu BusinessLine or Deccan Herald coverage of KCC interest subvention updates"
+      ],
+      "claim_type": "hypothesis",
+      "from_pipeline": "sibc",
+      "status": "proposed",
+      "attempts": [
+        {
+          "rung": 1,
+          "target": "Department of Agriculture notification on KCC interest subvention rate revision or coverage expansion",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true,
+          "retries": 2
+        },
+        {
+          "rung": 2,
+          "target": "Department of Agriculture, Cooperation and Farmers Welfare notification on KCC interest subvention scheme changes",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        },
+        {
+          "rung": 3,
+          "target": "Union Budget agriculture credit allocation or NABARD circular on KCC parameters",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        }
+      ],
+      "verification": {
+        "verified": false,
+        "verdict": "error",
+        "note": "",
+        "source_check": "check_error",
+        "tier": null,
+        "rung": 1
+      },
+      "promotable": false
+    },
+    {
+      "kind": "channel",
+      "label": "ECLGS extension → MSME credit expansion",
+      "mechanism": "Emergency Credit Line Guarantee Scheme extension or enhancement expands guaranteed credit availability to MSMEs beyond original pandemic relief window",
+      "affects": "msme_credit",
+      "required_source": "Ministry of Finance or Department of Financial Services notification on ECLGS extension or limit enhancement",
+      "source_ladder": [
+        "Department of Financial Services official notification on ECLGS scheme extension dates and revised limits",
+        "Ministry of Finance press release on ECLGS performance and extension decisions",
+        "SIDBI report on ECLGS utilization or Economic Times coverage of ECLGS extension announcements"
+      ],
+      "claim_type": "hypothesis",
+      "from_pipeline": "sibc",
+      "status": "proposed",
+      "attempts": [
+        {
+          "rung": 1,
+          "target": "Ministry of Finance or Department of Financial Services notification on ECLGS extension or limit enhancement",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true,
+          "retries": 2
+        },
+        {
+          "rung": 2,
+          "target": "Department of Financial Services official notification on ECLGS scheme extension dates and revised limits",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        },
+        {
+          "rung": 3,
+          "target": "Ministry of Finance press release on ECLGS performance and extension decisions",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        }
+      ],
+      "verification": {
+        "verified": false,
+        "verdict": "error",
+        "note": "",
+        "source_check": "check_error",
+        "tier": null,
+        "rung": 1
+      },
+      "promotable": false
+    },
+    {
+      "kind": "channel",
+      "label": "Green energy priority-sector classification → renewable energy credit flow",
+      "mechanism": "RBI inclusion or expanded definition of renewable energy projects under priority sector lending increases bank origination to meet PSL targets",
+      "affects": "renewable_energy",
+      "required_source": "RBI Master Direction on Priority Sector Lending update on renewable energy classification or sub-targets",
+      "source_ladder": [
+        "RBI Master Direction on Priority Sector Lending – Targets and Classification amendment on renewable energy",
+        "RBI annual report section on priority sector lending classification changes",
+        "BloombergQuint or Mint coverage of RBI priority sector classification updates for green energy"
+      ],
+      "claim_type": "hypothesis",
+      "from_pipeline": "sibc",
+      "status": "proposed",
+      "attempts": [
+        {
+          "rung": 1,
+          "target": "RBI Master Direction on Priority Sector Lending update on renewable energy classification or sub-targets",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true,
+          "retries": 2
+        },
+        {
+          "rung": 2,
+          "target": "RBI Master Direction on Priority Sector Lending – Targets and Classification amendment on renewable energy",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        },
+        {
+          "rung": 3,
+          "target": "RBI annual report section on priority sector lending classification changes",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        }
+      ],
+      "verification": {
+        "verified": false,
+        "verdict": "error",
+        "note": "",
+        "source_check": "check_error",
+        "tier": null,
+        "rung": 1
+      },
+      "promotable": false
+    },
+    {
+      "kind": "channel",
+      "label": "Social-infrastructure viability-gap funding → project credit demand",
+      "mechanism": "Government viability gap funding allocation for social infrastructure projects (health, education facilities) improves project economics and triggers associated credit demand",
+      "affects": "social_infrastructure",
+      "required_source": "DEA notification on VGF allocation for social sector projects or Ministry of Health/Education infrastructure funding announcements",
+      "source_ladder": [
+        "Department of Economic Affairs notification on Viability Gap Funding scheme allocation to social infrastructure",
+        "Union Budget infrastructure allocation document with social sector breakout",
+        "CRISIL Infrastructure Advisory report or Financial Express coverage of social infrastructure funding schemes"
+      ],
+      "claim_type": "hypothesis",
+      "from_pipeline": "sibc",
+      "status": "proposed",
+      "attempts": [
+        {
+          "rung": 1,
+          "target": "DEA notification on VGF allocation for social sector projects or Ministry of Health/Education infrastructure funding announcements",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true,
+          "retries": 2
+        },
+        {
+          "rung": 2,
+          "target": "Department of Economic Affairs notification on Viability Gap Funding scheme allocation to social infrastructure",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        },
+        {
+          "rung": 3,
+          "target": "Union Budget infrastructure allocation document with social sector breakout",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        }
+      ],
+      "verification": {
+        "verified": false,
+        "verdict": "error",
+        "note": "",
+        "source_check": "check_error",
+        "tier": null,
+        "rung": 1
+      },
+      "promotable": false
+    },
+    {
+      "kind": "channel",
+      "label": "Weaker-section income-threshold revision → PSL eligibility expansion",
+      "mechanism": "RBI upward revision of income thresholds defining weaker sections for priority lending expands eligible borrower population and reported PSL credit",
+      "affects": "weaker_sections",
+      "required_source": "RBI Master Direction on Priority Sector Lending update on weaker section income threshold definitions",
+      "source_ladder": [
+        "RBI Master Direction on Priority Sector Lending – Targets and Classification revision on weaker section income limits",
+        "RBI monetary policy report or financial stability report discussing PSL threshold updates",
+        "Hindu BusinessLine or LiveMint coverage of RBI weaker section definition changes"
+      ],
+      "claim_type": "hypothesis",
+      "from_pipeline": "sibc",
+      "status": "proposed",
+      "attempts": [
+        {
+          "rung": 1,
+          "target": "RBI Master Direction on Priority Sector Lending update on weaker section income threshold definitions",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true,
+          "retries": 2
+        },
+        {
+          "rung": 2,
+          "target": "RBI Master Direction on Priority Sector Lending – Targets and Classification revision on weaker section income limits",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        },
+        {
+          "rung": 3,
+          "target": "RBI monetary policy report or financial stability report discussing PSL threshold updates",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        }
+      ],
+      "verification": {
+        "verified": false,
+        "verdict": "error",
+        "note": "",
+        "source_check": "check_error",
+        "tier": null,
+        "rung": 1
+      },
+      "promotable": false
+    },
+    {
+      "kind": "channel",
+      "label": "Deposit insurance coverage increase → fixed-deposit pledging behavior",
+      "mechanism": "DICGC deposit insurance limit increase reduces depositor risk perception and increases willingness to pledge fixed deposits as loan collateral",
+      "affects": "personal_loan",
+      "required_source": "DICGC or RBI notification on deposit insurance coverage limit revision",
+      "source_ladder": [
+        "Deposit Insurance and Credit Guarantee Corporation notification on insurance coverage limit increase",
+        "RBI circular communicating DICGC coverage changes to banks",
+        "Moneycontrol or Economic Times coverage of deposit insurance limit revisions"
+      ],
+      "claim_type": "hypothesis",
+      "from_pipeline": "sibc",
+      "status": "proposed",
+      "attempts": [
+        {
+          "rung": 1,
+          "target": "DICGC or RBI notification on deposit insurance coverage limit revision",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true,
+          "retries": 2
+        },
+        {
+          "rung": 2,
+          "target": "Deposit Insurance and Credit Guarantee Corporation notification on insurance coverage limit increase",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        },
+        {
+          "rung": 3,
+          "target": "RBI circular communicating DICGC coverage changes to banks",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        }
+      ],
+      "verification": {
+        "verified": false,
+        "verdict": "error",
+        "note": "",
+        "source_check": "check_error",
+        "tier": null,
+        "rung": 1
+      },
+      "promotable": false
+    },
+    {
+      "kind": "channel",
+      "label": "Personal-loan risk-weight increase → secured-product substitution",
+      "mechanism": "RBI increased risk weights on unsecured personal loans make them less capital-efficient, shifting bank origination focus toward secured products like housing and vehicle loans",
+      "affects": "personal_loan",
+      "required_source": "RBI Master Direction on Basel III Capital Regulations update on personal loan risk weights",
+      "source_ladder": [
+        "RBI Master Direction – Reserve Bank of India (Basel III Capital Regulations) amendment on consumer credit risk weights",
+        "RBI Financial Stability Report discussing consumer credit risk weight changes",
+        "ICRA or CARE Ratings analysis of RBI consumer credit risk weight revisions or Mint coverage"
+      ],
+      "claim_type": "hypothesis",
+      "from_pipeline": "sibc",
+      "status": "proposed",
+      "attempts": [
+        {
+          "rung": 1,
+          "target": "RBI Master Direction on Basel III Capital Regulations update on personal loan risk weights",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true,
+          "retries": 2
+        },
+        {
+          "rung": 2,
+          "target": "RBI Master Direction – Reserve Bank of India (Basel III Capital Regulations) amendment on consumer credit risk weights",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        },
+        {
+          "rung": 3,
+          "target": "RBI Financial Stability Report discussing consumer credit risk weight changes",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        }
+      ],
+      "verification": {
+        "verified": false,
+        "verdict": "error",
+        "note": "",
+        "source_check": "check_error",
+        "tier": null,
+        "rung": 1
+      },
+      "promotable": false
+    },
+    {
+      "kind": "channel",
+      "label": "ATM interchange fee revision → off-site ATM viability",
+      "mechanism": "Reduction in ATM interchange fees makes off-site ATM deployment uneconomical while on-site ATMs remain viable through cross-subsidy from branch operations",
+      "affects": "atm_cash",
+      "required_source": "RBI circular on ATM interchange fee structure revision",
+      "source_ladder": [
+        "RBI circular DPSS series on ATM interchange fee revision (2021-2023)",
+        "RBI Payment Systems Vision document discussing ATM fee rationalization",
+        "IBA or Banking Technology journal reports on ATM interchange economics"
+      ],
       "claim_type": "hypothesis",
       "from_pipeline": "atm_pos",
-      "status": "proposed"
+      "status": "proposed",
+      "attempts": [
+        {
+          "rung": 1,
+          "target": "RBI circular on ATM interchange fee structure revision",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true,
+          "retries": 2
+        },
+        {
+          "rung": 2,
+          "target": "RBI circular DPSS series on ATM interchange fee revision (2021-2023)",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        },
+        {
+          "rung": 3,
+          "target": "RBI Payment Systems Vision document discussing ATM fee rationalization",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        }
+      ],
+      "verification": {
+        "verified": false,
+        "verdict": "error",
+        "note": "",
+        "source_check": "check_error",
+        "tier": null,
+        "rung": 1
+      },
+      "promotable": false
     },
     {
       "kind": "channel",
-      "label": "Micro ATM subsidy expiry → deployment slowdown",
-      "mechanism": "Government financial inclusion subsidy programs for micro ATM deployment expired causing reduced new installations and maintenance",
+      "label": "Micro ATM commission structure change → business correspondent deployment",
+      "mechanism": "Revised commission rates for micro ATM transactions reduce economic incentive for business correspondents to maintain micro ATM infrastructure",
       "affects": "micro_atm_cash",
-      "required_source": "Ministry of Finance or PMJDY subsidy scheme notifications for micro ATM deployment",
+      "required_source": "RBI or NPCI circular on micro ATM transaction charges and business correspondent compensation",
+      "source_ladder": [
+        "RBI circular on Business Correspondent compensation framework",
+        "NPCI operational circular on micro ATM charges",
+        "Ministry of Finance financial inclusion report on BC remuneration"
+      ],
       "claim_type": "hypothesis",
       "from_pipeline": "atm_pos",
-      "status": "proposed"
+      "status": "proposed",
+      "attempts": [
+        {
+          "rung": 1,
+          "target": "RBI or NPCI circular on micro ATM transaction charges and business correspondent compensation",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true,
+          "retries": 2
+        },
+        {
+          "rung": 2,
+          "target": "RBI circular on Business Correspondent compensation framework",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        },
+        {
+          "rung": 3,
+          "target": "NPCI operational circular on micro ATM charges",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        }
+      ],
+      "verification": {
+        "verified": false,
+        "verdict": "error",
+        "note": "",
+        "source_check": "check_error",
+        "tier": null,
+        "rung": 1
+      },
+      "promotable": false
     },
     {
       "kind": "channel",
-      "label": "UPI QR dominance → Bharat QR obsolescence",
-      "mechanism": "UPI QR codes offering simpler integration and zero MDR made Bharat QR redundant for merchant acceptance",
+      "label": "Credit card cash advance MDR/fee floor → ATM withdrawal shift",
+      "mechanism": "Minimum merchant discount rate or fee floor on credit card ATM withdrawals makes cash advance more expensive but still attractive relative to alternatives, driving volume up while merchants avoid acceptance",
+      "affects": "credit_card",
+      "required_source": "RBI or card network circular on credit card cash advance charges and interchange",
+      "source_ladder": [
+        "RBI circular on credit card fee disclosure and cash advance charges",
+        "Card network (Visa/Mastercard/RuPay) operating regulations on cash advance interchange",
+        "BCSBI or banking ombudsman report on credit card charge complaints"
+      ],
+      "claim_type": "hypothesis",
+      "from_pipeline": "atm_pos",
+      "status": "proposed",
+      "attempts": [
+        {
+          "rung": 1,
+          "target": "RBI or card network circular on credit card cash advance charges and interchange",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true,
+          "retries": 2
+        },
+        {
+          "rung": 2,
+          "target": "RBI circular on credit card fee disclosure and cash advance charges",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        },
+        {
+          "rung": 3,
+          "target": "Card network (Visa/Mastercard/RuPay) operating regulations on cash advance interchange",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        }
+      ],
+      "verification": {
+        "verified": false,
+        "verdict": "error",
+        "note": "",
+        "source_check": "check_error",
+        "tier": null,
+        "rung": 1
+      },
+      "promotable": false
+    },
+    {
+      "kind": "channel",
+      "label": "Bharat QR sunset/UPI QR dominance → QR infrastructure rationalization",
+      "mechanism": "NPCI or merchant preference shifts to UPI QR codes as dominant standard causes banks and merchants to discontinue Bharat QR infrastructure investment",
       "affects": "qr_acceptance",
-      "required_source": "NPCI transaction statistics comparing UPI QR vs Bharat QR adoption trends",
+      "required_source": "NPCI circular or technical specification update on Bharat QR vs UPI QR deployment priority",
+      "source_ladder": [
+        "NPCI product circular on Bharat QR specifications or deployment guidelines",
+        "NPCI annual report discussing QR code standard adoption trends",
+        "Payment Council of India or merchant association report on QR code preference"
+      ],
       "claim_type": "hypothesis",
       "from_pipeline": "atm_pos",
-      "status": "proposed"
+      "status": "proposed",
+      "attempts": [
+        {
+          "rung": 1,
+          "target": "NPCI circular or technical specification update on Bharat QR vs UPI QR deployment priority",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true,
+          "retries": 2
+        },
+        {
+          "rung": 2,
+          "target": "NPCI product circular on Bharat QR specifications or deployment guidelines",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        },
+        {
+          "rung": 3,
+          "target": "NPCI annual report discussing QR code standard adoption trends",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        }
+      ],
+      "verification": {
+        "verified": false,
+        "verdict": "error",
+        "note": "",
+        "source_check": "check_error",
+        "tier": null,
+        "rung": 1
+      },
+      "promotable": false
     },
     {
       "kind": "channel",
-      "label": "Credit card cash advance fee increase → ATM withdrawal economics",
-      "mechanism": "Higher cash advance fees or revised MDR structure changed consumer economics of credit card ATM usage",
-      "affects": "credit_card",
-      "required_source": "RBI Master Direction on Credit Card and Debit Card operations or card network fee schedules",
-      "claim_type": "hypothesis",
-      "from_pipeline": "atm_pos",
-      "status": "proposed"
-    },
-    {
-      "kind": "channel",
-      "label": "E-commerce GST compliance → digital payment routing",
-      "mechanism": "Stricter GST compliance and invoice-matching requirements pushed e-commerce platforms toward credit card acceptance over debit",
-      "affects": "debit_card, credit_card",
-      "required_source": "CBIC circulars on e-commerce GST compliance or payment reconciliation requirements",
-      "claim_type": "hypothesis",
-      "from_pipeline": "atm_pos",
-      "status": "proposed"
-    },
-    {
-      "kind": "channel",
-      "label": "Tokenisation mandate → debit e-commerce friction",
-      "mechanism": "RBI card tokenisation requirements created temporary friction in debit card e-commerce checkout flows",
+      "label": "Debit card e-commerce additional authentication → friction-driven decline",
+      "mechanism": "Mandatory additional factor authentication or transaction limit rules for debit card e-commerce create friction that diverts volume to UPI or credit cards",
       "affects": "debit_card",
-      "required_source": "RBI circular on card tokenisation (RBI/2021-22/24) implementation timeline and compliance data",
+      "required_source": "RBI circular on debit card e-commerce transaction authentication or limits",
+      "source_ladder": [
+        "RBI Payment and Settlement Systems Act notifications on card-not-present authentication",
+        "RBI Master Direction on card transactions updated provisions",
+        "Ministry of Electronics and IT cybersecurity framework for digital payments"
+      ],
       "claim_type": "hypothesis",
       "from_pipeline": "atm_pos",
-      "status": "proposed"
+      "status": "proposed",
+      "attempts": [
+        {
+          "rung": 1,
+          "target": "RBI circular on debit card e-commerce transaction authentication or limits",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true,
+          "retries": 2
+        },
+        {
+          "rung": 2,
+          "target": "RBI Payment and Settlement Systems Act notifications on card-not-present authentication",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        },
+        {
+          "rung": 3,
+          "target": "RBI Master Direction on card transactions updated provisions",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        }
+      ],
+      "verification": {
+        "verified": false,
+        "verdict": "error",
+        "note": "",
+        "source_check": "check_error",
+        "tier": null,
+        "rung": 1
+      },
+      "promotable": false
     },
     {
       "kind": "channel",
-      "label": "POS device migration mandate → deployment pause",
-      "mechanism": "EMV chip-and-PIN or contactless upgrade mandates caused merchants to pause POS deployment during transition",
-      "affects": "dc_pos_txn_val, dc_pos_txn_vol",
-      "required_source": "RBI or NPCI circular on POS terminal certification or EMV migration deadlines",
-      "claim_type": "hypothesis",
-      "from_pipeline": "atm_pos",
-      "status": "proposed"
-    },
-    {
-      "kind": "channel",
-      "label": "WhatsApp payment launch → DC other-channel growth",
-      "mechanism": "WhatsApp Pay integration created new debit card usage channel classified under 'other' category",
+      "label": "Debit card POS merchant category restriction → volume channel shift",
+      "mechanism": "RBI restrictions on debit card usage for specific merchant categories (fuel, utilities, government) or transaction types push volume to other channels",
       "affects": "debit_card",
-      "required_source": "NPCI WhatsApp Pay authorization letter and monthly UPI participant transaction data",
+      "required_source": "RBI circular on merchant category restrictions for debit card POS transactions",
+      "source_ladder": [
+        "RBI circular on permitted merchant categories for card transactions",
+        "Petroleum Ministry or state government notification on fuel payment methods",
+        "Banking trade journal reports on POS merchant category code restrictions"
+      ],
       "claim_type": "hypothesis",
       "from_pipeline": "atm_pos",
-      "status": "proposed"
+      "status": "proposed",
+      "attempts": [
+        {
+          "rung": 1,
+          "target": "RBI circular on merchant category restrictions for debit card POS transactions",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true,
+          "retries": 2
+        },
+        {
+          "rung": 2,
+          "target": "RBI circular on permitted merchant categories for card transactions",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        },
+        {
+          "rung": 3,
+          "target": "Petroleum Ministry or state government notification on fuel payment methods",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        }
+      ],
+      "verification": {
+        "verified": false,
+        "verdict": "error",
+        "note": "",
+        "source_check": "check_error",
+        "tier": null,
+        "rung": 1
+      },
+      "promotable": false
     },
     {
       "kind": "channel",
-      "label": "Credit-on-UPI launch → CC POS volume shift",
-      "mechanism": "RuPay credit card linking to UPI enabled credit payments at POS terminals with QR codes",
+      "label": "Credit card reward point regulation → category spend reallocation",
+      "mechanism": "RBI caps or disclosure requirements on credit card reward points for specific categories shift cardholder spend patterns between POS, e-commerce, and other channels",
       "affects": "credit_card",
-      "required_source": "RBI circular on credit line on UPI (June 2023) and NPCI RuPay credit-on-UPI statistics",
+      "required_source": "RBI circular on credit card reward program structure or caps",
+      "source_ladder": [
+        "RBI circular on credit card charges, fees, and reward program regulation",
+        "RBI Master Direction on credit card operations updated provisions",
+        "Consumer Affairs Ministry guidelines on reward point disclosure"
+      ],
       "claim_type": "hypothesis",
       "from_pipeline": "atm_pos",
-      "status": "proposed"
+      "status": "proposed",
+      "attempts": [
+        {
+          "rung": 1,
+          "target": "RBI circular on credit card reward program structure or caps",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true,
+          "retries": 2
+        },
+        {
+          "rung": 2,
+          "target": "RBI circular on credit card charges, fees, and reward program regulation",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        },
+        {
+          "rung": 3,
+          "target": "RBI Master Direction on credit card operations updated provisions",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        }
+      ],
+      "verification": {
+        "verified": false,
+        "verdict": "error",
+        "note": "",
+        "source_check": "check_error",
+        "tier": null,
+        "rung": 1
+      },
+      "promotable": false
     },
     {
       "kind": "channel",
-      "label": "Fuel surcharge waiver removal → CC other-channel decline",
-      "mechanism": "Removal of credit card fuel surcharge waivers shifted fuel payments away from 'other' channels",
-      "affects": "credit_card",
-      "required_source": "Card network communications on fuel surcharge policy changes or petroleum ministry notifications",
+      "label": "Fuel surcharge waiver withdrawal → debit card fuel transaction decline",
+      "mechanism": "Removal of fuel surcharge waivers or MDR subsidies for debit cards at fuel merchants makes debit POS at fuel stations uneconomical",
+      "affects": "debit_card",
+      "required_source": "Petroleum Ministry or RBI notification on fuel transaction surcharge/MDR treatment",
+      "source_ladder": [
+        "Ministry of Petroleum and Natural Gas order on payment method surcharges at fuel outlets",
+        "RBI circular on MDR applicability at fuel merchants",
+        "Indian Oil or fuel retailer association circulars on payment acceptance policy"
+      ],
       "claim_type": "hypothesis",
       "from_pipeline": "atm_pos",
-      "status": "proposed"
+      "status": "proposed",
+      "attempts": [
+        {
+          "rung": 1,
+          "target": "Petroleum Ministry or RBI notification on fuel transaction surcharge/MDR treatment",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true,
+          "retries": 2
+        },
+        {
+          "rung": 2,
+          "target": "Ministry of Petroleum and Natural Gas order on payment method surcharges at fuel outlets",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        },
+        {
+          "rung": 3,
+          "target": "RBI circular on MDR applicability at fuel merchants",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        }
+      ],
+      "verification": {
+        "verified": false,
+        "verdict": "error",
+        "note": "",
+        "source_check": "check_error",
+        "tier": null,
+        "rung": 1
+      },
+      "promotable": false
     },
     {
       "kind": "channel",
-      "label": "ATM cash withdrawal limit revision → on-site preference",
-      "mechanism": "Increased daily withdrawal limits made bank on-site ATMs more attractive for large withdrawals than off-site with lower limits",
-      "affects": "atm_onsite, atm_offsite",
-      "required_source": "RBI circular on ATM cash withdrawal limits per transaction or per day",
+      "label": "Cross-border transaction limit tightening → DC/CC other category compression",
+      "mechanism": "RBI restrictions on Liberalised Remittance Scheme or cross-border card transaction limits reduce volume in other (international) transaction categories",
+      "affects": "debit_card",
+      "required_source": "RBI FEMA notification on credit/debit card overseas transaction limits",
+      "source_ladder": [
+        "RBI FEMA notification on Liberalised Remittance Scheme limits",
+        "RBI circular on international card transaction monitoring or limits",
+        "Reserve Bank's Annual Report on capital account transactions"
+      ],
       "claim_type": "hypothesis",
       "from_pipeline": "atm_pos",
-      "status": "proposed"
+      "status": "proposed",
+      "attempts": [
+        {
+          "rung": 1,
+          "target": "RBI FEMA notification on credit/debit card overseas transaction limits",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true,
+          "retries": 2
+        },
+        {
+          "rung": 2,
+          "target": "RBI FEMA notification on Liberalised Remittance Scheme limits",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        },
+        {
+          "rung": 3,
+          "target": "RBI circular on international card transaction monitoring or limits",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        }
+      ],
+      "verification": {
+        "verified": false,
+        "verdict": "error",
+        "note": "",
+        "source_check": "check_error",
+        "tier": null,
+        "rung": 1
+      },
+      "promotable": false
     },
     {
       "kind": "channel",
-      "label": "Business correspondent regulation tightening → micro ATM decline",
-      "mechanism": "Stricter KYC and audit requirements for business correspondents increased compliance costs for micro ATM operation",
-      "affects": "micro_atm_cash",
-      "required_source": "RBI Master Direction on Business Correspondents or amendments to BC regulatory framework",
+      "label": "UPI credit line → credit card POS/e-commerce substitution",
+      "mechanism": "Launch and scaling of UPI-linked credit lines diverts transaction volume from credit card POS and e-commerce as merchants and consumers shift to UPI rails",
+      "affects": "credit_card",
+      "required_source": "NPCI circular on UPI credit line product launch and adoption metrics",
+      "source_ladder": [
+        "NPCI product circular on Credit Line on UPI feature rollout",
+        "RBI guidelines on pre-sanctioned credit line linkage to UPI",
+        "NPCI monthly UPI transaction statistics report showing credit-linked UPI volume"
+      ],
       "claim_type": "hypothesis",
       "from_pipeline": "atm_pos",
-      "status": "proposed"
+      "status": "proposed",
+      "attempts": [
+        {
+          "rung": 1,
+          "target": "NPCI circular on UPI credit line product launch and adoption metrics",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true,
+          "retries": 2
+        },
+        {
+          "rung": 2,
+          "target": "NPCI product circular on Credit Line on UPI feature rollout",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        },
+        {
+          "rung": 3,
+          "target": "RBI guidelines on pre-sanctioned credit line linkage to UPI",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        }
+      ],
+      "verification": {
+        "verified": false,
+        "verdict": "error",
+        "note": "",
+        "source_check": "check_error",
+        "tier": null,
+        "rung": 1
+      },
+      "promotable": false
     },
     {
       "kind": "channel",
-      "label": "Credit-card revolving-fee cap → outstanding stock",
-      "mechanism": "RBI caps on late fees or penal charges reduce net revolving profitability and cause issuers to tighten credit lines or close inactive high-risk accounts, compressing reported outstanding balances",
+      "label": "Tokenization mandate → temporary card acceptance disruption",
+      "mechanism": "RBI's card tokenization mandate creates implementation friction at merchants causing temporary decline in card acceptance infrastructure and transaction volume",
       "affects": "credit_card",
-      "required_source": "RBI Master Direction on Credit Card and Debit Card – Issuance and Conduct Directions 2022 or subsequent amendments on penal/late fee caps",
+      "required_source": "RBI circular on card tokenization compliance deadline and merchant readiness",
+      "source_ladder": [
+        "RBI circular DPSS series on tokenization of card transactions",
+        "RBI press release on tokenization implementation timeline extensions",
+        "Payment gateway provider or merchant association report on tokenization compliance status"
+      ],
       "claim_type": "hypothesis",
-      "status": "proposed"
+      "from_pipeline": "atm_pos",
+      "status": "proposed",
+      "attempts": [
+        {
+          "rung": 1,
+          "target": "RBI circular on card tokenization compliance deadline and merchant readiness",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true,
+          "retries": 2
+        },
+        {
+          "rung": 2,
+          "target": "RBI circular DPSS series on tokenization of card transactions",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        },
+        {
+          "rung": 3,
+          "target": "RBI press release on tokenization implementation timeline extensions",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        }
+      ],
+      "verification": {
+        "verified": false,
+        "verdict": "error",
+        "note": "",
+        "source_check": "check_error",
+        "tier": null,
+        "rung": 1
+      },
+      "promotable": false
     },
     {
       "kind": "channel",
-      "label": "Co-branded card RBI guideline → card issuance strategy",
-      "mechanism": "RBI clarifications on co-branding arrangements or data-sharing norms for fintech partnerships alter issuer distribution economics and slow premium co-branded card issuance",
+      "label": "Credit card cash-withdrawal fee structure → ATM-withdrawal economics",
+      "mechanism": "Change in interchange or issuer fee treatment for credit-card ATM withdrawals alters their profitability relative to point-of-sale transactions, shifting issuer incentives and cardholder behavior.",
       "affects": "credit_card",
-      "required_source": "RBI circular on Credit Card Operations or co-branding/fintech partnership guidelines issued 2022–2024",
+      "required_source": "RBI circular or card-network bulletin specifying interchange or fee treatment for credit-card ATM cash withdrawals",
+      "source_ladder": [
+        "RBI Master Direction on Card and Paper Based Payment Systems (updated annex or circular on ATM interchange)",
+        "RBI Master Circular on Fees and Charges (section on credit-card cash-advance fees)",
+        "National Payments Corporation of India (NPCI) or card-network (Visa/Mastercard/RuPay) circular on ATM interchange schedules"
+      ],
       "claim_type": "hypothesis",
-      "status": "proposed"
+      "status": "proposed",
+      "attempts": [
+        {
+          "rung": 1,
+          "target": "RBI circular or card-network bulletin specifying interchange or fee treatment for credit-card ATM cash withdrawals",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true,
+          "retries": 2
+        },
+        {
+          "rung": 2,
+          "target": "RBI Master Direction on Card and Paper Based Payment Systems (updated annex or circular on ATM interchange)",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        },
+        {
+          "rung": 3,
+          "target": "RBI Master Circular on Fees and Charges (section on credit-card cash-advance fees)",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        }
+      ],
+      "verification": {
+        "verified": false,
+        "verdict": "error",
+        "note": "",
+        "source_check": "check_error",
+        "tier": null,
+        "rung": 1
+      },
+      "promotable": false
     },
     {
       "kind": "channel",
-      "label": "Unsecured-loan risk-weight increase → credit-card line compression",
-      "mechanism": "Higher risk weights on unsecured consumer credit raise capital cost per rupee of credit-card exposure, prompting issuers to cut unutilised limits and reduce outstanding balances",
+      "label": "E-commerce platform co-branded card penetration → e-commerce transaction volume",
+      "mechanism": "Partnership schemes between issuers and e-commerce platforms drive dedicated card issuance and preferential spend on those platforms, concentrating e-commerce transaction growth.",
       "affects": "credit_card",
-      "required_source": "RBI notification on Risk Weights for Consumer Credit Exposure, November 2023 or later amendments",
+      "required_source": "Card-network or issuer disclosures on co-branded card issuance volume and platform-specific spend incentives",
+      "source_ladder": [
+        "Listed issuer quarterly investor presentations or annual reports (co-branded card portfolio breakdown)",
+        "Card-network India market reports (segment data on co-branded or affinity cards)",
+        "Economic Times, Business Standard, or Mint articles citing specific co-branded card launches with transaction-volume claims"
+      ],
       "claim_type": "hypothesis",
-      "status": "proposed"
+      "status": "proposed",
+      "attempts": [
+        {
+          "rung": 1,
+          "target": "Card-network or issuer disclosures on co-branded card issuance volume and platform-specific spend incentives",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true,
+          "retries": 2
+        },
+        {
+          "rung": 2,
+          "target": "Listed issuer quarterly investor presentations or annual reports (co-branded card portfolio breakdown)",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        },
+        {
+          "rung": 3,
+          "target": "Card-network India market reports (segment data on co-branded or affinity cards)",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        }
+      ],
+      "verification": {
+        "verified": false,
+        "verdict": "error",
+        "note": "",
+        "source_check": "check_error",
+        "tier": null,
+        "rung": 1
+      },
+      "promotable": false
     },
     {
       "kind": "channel",
-      "label": "UPI credit-line-on-UPI → spend channel substitution",
-      "mechanism": "NPCI launch of credit lines on UPI allows cardholders to route spend through UPI apps instead of physical/virtual card rails, depressing recorded card transaction volumes",
+      "label": "Fuel surcharge waiver extension → POS fuel-transaction concentration",
+      "mechanism": "Regulatory or network-mandated waiver of merchant discount or surcharge on fuel purchases makes credit cards economically attractive for fuel spend, concentrating POS value in that category.",
       "affects": "credit_card",
-      "required_source": "NPCI press release or circular on UPI credit feature rollout and monthly UPI transaction statistics from NPCI",
+      "required_source": "RBI or Ministry of Petroleum notification on fuel-transaction surcharges or MDR treatment",
+      "source_ladder": [
+        "RBI circular or Department of Financial Services notification on fuel-transaction MDR or surcharge caps",
+        "Ministry of Petroleum and Natural Gas press release or gazette notification on payment-mode surcharges",
+        "Petroleum Planning and Analysis Cell (PPAC) bulletin or financial press article on fuel-payment economics"
+      ],
       "claim_type": "hypothesis",
-      "status": "proposed"
+      "status": "proposed",
+      "attempts": [
+        {
+          "rung": 1,
+          "target": "RBI or Ministry of Petroleum notification on fuel-transaction surcharges or MDR treatment",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true,
+          "retries": 2
+        },
+        {
+          "rung": 2,
+          "target": "RBI circular or Department of Financial Services notification on fuel-transaction MDR or surcharge caps",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        },
+        {
+          "rung": 3,
+          "target": "Ministry of Petroleum and Natural Gas press release or gazette notification on payment-mode surcharges",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        }
+      ],
+      "verification": {
+        "verified": false,
+        "verdict": "error",
+        "note": "",
+        "source_check": "check_error",
+        "tier": null,
+        "rung": 1
+      },
+      "promotable": false
+    },
+    {
+      "kind": "channel",
+      "label": "Credit-card reward-point redemption rule → reported spend composition",
+      "mechanism": "Change in reward-accrual caps or redemption eligibility by transaction category shifts reported spend across ATM, POS, e-commerce, or other buckets as cardholders optimize.",
+      "affects": "credit_card",
+      "required_source": "Card-network or issuer terms-and-conditions update specifying reward accrual or redemption caps by transaction type",
+      "source_ladder": [
+        "Issuer cardholder agreement addendum or circular on reward-program terms (transaction-category exclusions)",
+        "Card-network (Visa/Mastercard/RuPay) program rules or bulletins on reward-point eligibility",
+        "Financial press article summarizing issuer reward-program changes with transaction-category detail"
+      ],
+      "claim_type": "hypothesis",
+      "status": "proposed",
+      "attempts": [
+        {
+          "rung": 1,
+          "target": "Card-network or issuer terms-and-conditions update specifying reward accrual or redemption caps by transaction type",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true,
+          "retries": 2
+        },
+        {
+          "rung": 2,
+          "target": "Issuer cardholder agreement addendum or circular on reward-program terms (transaction-category exclusions)",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        },
+        {
+          "rung": 3,
+          "target": "Card-network (Visa/Mastercard/RuPay) program rules or bulletins on reward-point eligibility",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        }
+      ],
+      "verification": {
+        "verified": false,
+        "verdict": "error",
+        "note": "",
+        "source_check": "check_error",
+        "tier": null,
+        "rung": 1
+      },
+      "promotable": false
+    },
+    {
+      "kind": "channel",
+      "label": "EMI-at-checkout availability → e-commerce high-ticket spend",
+      "mechanism": "Availability of instant EMI conversion at e-commerce checkout lowers effective payment friction for high-value transactions, concentrating e-commerce transaction value.",
+      "affects": "credit_card",
+      "required_source": "Card-network or payment-gateway documentation on EMI-at-checkout integration and merchant adoption",
+      "source_ladder": [
+        "Payment-gateway (Razorpay, Paytm, Pine Labs) product documentation or merchant circulars on EMI-at-checkout availability",
+        "Card-network India market update or issuer investor presentation on EMI transaction volume",
+        "Economic Times or Business Standard article on EMI-at-checkout adoption with platform or transaction-value data"
+      ],
+      "claim_type": "hypothesis",
+      "status": "proposed",
+      "attempts": [
+        {
+          "rung": 1,
+          "target": "Card-network or payment-gateway documentation on EMI-at-checkout integration and merchant adoption",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true,
+          "retries": 2
+        },
+        {
+          "rung": 2,
+          "target": "Payment-gateway (Razorpay, Paytm, Pine Labs) product documentation or merchant circulars on EMI-at-checkout availability",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        },
+        {
+          "rung": 3,
+          "target": "Card-network India market update or issuer investor presentation on EMI transaction volume",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        }
+      ],
+      "verification": {
+        "verified": false,
+        "verdict": "error",
+        "note": "",
+        "source_check": "check_error",
+        "tier": null,
+        "rung": 1
+      },
+      "promotable": false
+    },
+    {
+      "kind": "channel",
+      "label": "Cross-border transaction regulatory-reporting threshold → 'other' transaction classification",
+      "mechanism": "Change in reporting or authorization thresholds for international credit-card transactions shifts their classification into 'other' vs domestic categories.",
+      "affects": "credit_card",
+      "required_source": "RBI Foreign Exchange Management Act (FEMA) circular on Liberalised Remittance Scheme or cross-border card-transaction reporting",
+      "source_ladder": [
+        "RBI FEMA circular on Liberalised Remittance Scheme (LRS) thresholds or card-transaction reporting",
+        "RBI Master Direction on Miscellaneous Remittances from India (cross-border payment instruments)",
+        "Financial press article on RBI LRS compliance or cross-border card-transaction monitoring"
+      ],
+      "claim_type": "hypothesis",
+      "status": "proposed",
+      "attempts": [
+        {
+          "rung": 1,
+          "target": "RBI Foreign Exchange Management Act (FEMA) circular on Liberalised Remittance Scheme or cross-border card-transaction reporting",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true,
+          "retries": 2
+        },
+        {
+          "rung": 2,
+          "target": "RBI FEMA circular on Liberalised Remittance Scheme (LRS) thresholds or card-transaction reporting",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        },
+        {
+          "rung": 3,
+          "target": "RBI Master Direction on Miscellaneous Remittances from India (cross-border payment instruments)",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        }
+      ],
+      "verification": {
+        "verified": false,
+        "verdict": "error",
+        "note": "",
+        "source_check": "check_error",
+        "tier": null,
+        "rung": 1
+      },
+      "promotable": false
+    },
+    {
+      "kind": "channel",
+      "label": "Contactless fraud-liability rule → contactless vs chip-PIN transaction mix",
+      "mechanism": "Shift in fraud-liability allocation between issuer and merchant for contactless transactions alters issuer risk appetite and merchant acceptance, changing POS transaction-type distribution.",
+      "affects": "credit_card",
+      "required_source": "Card-network liability-shift bulletin or RBI circular on contactless-transaction fraud liability",
+      "source_ladder": [
+        "Card-network (Visa/Mastercard/RuPay) bulletin on contactless fraud-liability rules for India",
+        "RBI circular or Master Direction update on liability allocation for card-not-present or contactless fraud",
+        "Payment Council of India or financial press article on contactless fraud-liability framework"
+      ],
+      "claim_type": "hypothesis",
+      "status": "proposed",
+      "attempts": [
+        {
+          "rung": 1,
+          "target": "Card-network liability-shift bulletin or RBI circular on contactless-transaction fraud liability",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true,
+          "retries": 2
+        },
+        {
+          "rung": 2,
+          "target": "Card-network (Visa/Mastercard/RuPay) bulletin on contactless fraud-liability rules for India",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        },
+        {
+          "rung": 3,
+          "target": "RBI circular or Master Direction update on liability allocation for card-not-present or contactless fraud",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        }
+      ],
+      "verification": {
+        "verified": false,
+        "verdict": "error",
+        "note": "",
+        "source_check": "check_error",
+        "tier": null,
+        "rung": 1
+      },
+      "promotable": false
+    },
+    {
+      "kind": "channel",
+      "label": "UPI-credit-on-RuPay pilot → credit-card spend-channel substitution",
+      "mechanism": "RBI pilot enabling UPI transactions on RuPay credit cards shifts spend from traditional card rails (POS, e-commerce) to UPI-QR or P2M, reclassifying reported transaction types.",
+      "affects": "credit_card",
+      "required_source": "RBI or NPCI circular on UPI-on-credit pilot, including transaction-classification guidance",
+      "source_ladder": [
+        "RBI press release or circular on UPI-on-RuPay-credit pilot (transaction-reporting framework)",
+        "NPCI circular or product documentation on UPI-credit transaction flow and settlement",
+        "Business Standard or Economic Times article on UPI-credit pilot with transaction-volume or classification detail"
+      ],
+      "claim_type": "hypothesis",
+      "status": "proposed",
+      "attempts": [
+        {
+          "rung": 1,
+          "target": "RBI or NPCI circular on UPI-on-credit pilot, including transaction-classification guidance",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true,
+          "retries": 2
+        },
+        {
+          "rung": 2,
+          "target": "RBI press release or circular on UPI-on-RuPay-credit pilot (transaction-reporting framework)",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        },
+        {
+          "rung": 3,
+          "target": "NPCI circular or product documentation on UPI-credit transaction flow and settlement",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        }
+      ],
+      "verification": {
+        "verified": false,
+        "verdict": "error",
+        "note": "",
+        "source_check": "check_error",
+        "tier": null,
+        "rung": 1
+      },
+      "promotable": false
     },
     {
       "kind": "instance",
-      "label": "Festival-season spend surge → Q3 POS/e-commerce spike",
-      "mechanism": "Diwali and year-end shopping festivals concentrate credit-card spending in October–December, creating predictable quarterly peaks in ATM withdrawal, POS, and e-commerce transaction values",
+      "label": "Festival-season promotion concentration in e-commerce",
+      "mechanism": "Issuer or platform cashback campaigns during Diwali, Dussehra, or year-end sales concentrate e-commerce transaction volume in specific months, creating seasonal spikes.",
       "affects": "credit_card",
-      "required_source": "RBI Database on Indian Economy (DBIE) Table 41: Credit Card Transactions monthly data or NPCI quarterly transaction reports",
+      "required_source": "E-commerce platform or issuer press release on festival-season card offers with transaction-volume or GMV claims",
+      "source_ladder": [
+        "Amazon Great Indian Festival, Flipkart Big Billion Days, or issuer press release on festival-season card spend",
+        "Card-network India market report with seasonal transaction-volume breakdown",
+        "Economic Times, Mint, or Business Standard article on festival e-commerce sales with payment-mode data"
+      ],
       "claim_type": "hypothesis",
-      "status": "proposed"
+      "status": "proposed",
+      "attempts": [
+        {
+          "rung": 1,
+          "target": "E-commerce platform or issuer press release on festival-season card offers with transaction-volume or GMV claims",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true,
+          "retries": 2
+        },
+        {
+          "rung": 2,
+          "target": "Amazon Great Indian Festival, Flipkart Big Billion Days, or issuer press release on festival-season card spend",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        },
+        {
+          "rung": 3,
+          "target": "Card-network India market report with seasonal transaction-volume breakdown",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        }
+      ],
+      "verification": {
+        "verified": false,
+        "verdict": "error",
+        "note": "",
+        "source_check": "check_error",
+        "tier": null,
+        "rung": 1
+      },
+      "promotable": false
     },
     {
       "kind": "channel",
-      "label": "GST-input-credit digitisation → commercial-card B2B spend",
-      "mechanism": "Businesses shift procurement to credit cards to streamline GST input-tax-credit reconciliation via digital trails, raising commercial-card POS and other transaction values",
+      "label": "Rental-payment acceptance via credit card → 'other' transaction-category growth",
+      "mechanism": "Emergence of platforms enabling rent payment via credit card (often routed through payment processors) shifts large recurring transactions into 'other' or miscellaneous categories.",
       "affects": "credit_card",
-      "required_source": "GSTN monthly e-way bill or e-invoice statistics and industry surveys on payment-method adoption for B2B transactions",
+      "required_source": "Payment-platform (NoBroker, MagicBricks, CRED) product documentation or circular on rent-payment via credit card",
+      "source_ladder": [
+        "Rent-payment platform terms-and-conditions or FAQ on credit-card acceptance and processing fees",
+        "Payment-gateway or issuer bulletin on utility or rent-payment transaction categorization",
+        "Mint, Economic Times, or Business Standard article on rent-payment fintech with transaction-volume claims"
+      ],
       "claim_type": "hypothesis",
-      "status": "proposed"
+      "status": "proposed",
+      "attempts": [
+        {
+          "rung": 1,
+          "target": "Payment-platform (NoBroker, MagicBricks, CRED) product documentation or circular on rent-payment via credit card",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true,
+          "retries": 2
+        },
+        {
+          "rung": 2,
+          "target": "Rent-payment platform terms-and-conditions or FAQ on credit-card acceptance and processing fees",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        },
+        {
+          "rung": 3,
+          "target": "Payment-gateway or issuer bulletin on utility or rent-payment transaction categorization",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        }
+      ],
+      "verification": {
+        "verified": false,
+        "verdict": "error",
+        "note": "",
+        "source_check": "check_error",
+        "tier": null,
+        "rung": 1
+      },
+      "promotable": false
     },
     {
       "kind": "channel",
-      "label": "Merchant-discount-rate negotiation → POS vs e-commerce mix",
-      "mechanism": "Card networks and issuers adjust MDR splits, making e-commerce transactions relatively cheaper for merchants and shifting acceptance incentives away from physical POS",
+      "label": "Dynamic currency conversion opt-in rule → cross-border transaction economics",
+      "mechanism": "Regulatory or network rule on dynamic currency conversion disclosure or opt-in at merchant terminals changes cardholder behavior and reported international transaction volume.",
       "affects": "credit_card",
-      "required_source": "RBI Report on Trend and Progress of Banking or NPCI/card-network published MDR schedules and merchant-acceptance surveys",
+      "required_source": "RBI or card-network circular on dynamic currency conversion (DCC) disclosure or merchant-acquirer obligations",
+      "source_ladder": [
+        "RBI circular on cross-border card-transaction disclosure or DCC opt-in requirements",
+        "Card-network (Visa/Mastercard) bulletin on DCC merchant obligations in India",
+        "Financial press article on DCC regulatory changes with cardholder or merchant impact"
+      ],
       "claim_type": "hypothesis",
-      "status": "proposed"
+      "status": "proposed",
+      "attempts": [
+        {
+          "rung": 1,
+          "target": "RBI or card-network circular on dynamic currency conversion (DCC) disclosure or merchant-acquirer obligations",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true,
+          "retries": 2
+        },
+        {
+          "rung": 2,
+          "target": "RBI circular on cross-border card-transaction disclosure or DCC opt-in requirements",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        },
+        {
+          "rung": 3,
+          "target": "Card-network (Visa/Mastercard) bulletin on DCC merchant obligations in India",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        }
+      ],
+      "verification": {
+        "verified": false,
+        "verdict": "error",
+        "note": "",
+        "source_check": "check_error",
+        "tier": null,
+        "rung": 1
+      },
+      "promotable": false
     },
     {
       "kind": "channel",
-      "label": "Foreign-transaction markup transparency rule → cross-border spend behavior",
-      "mechanism": "RBI mandates upfront disclosure of forex markup on international card transactions, causing cardholders to reduce foreign ATM withdrawals and shift to lower-cost channels",
+      "label": "Credit-card tokenization for recurring transactions → e-commerce subscription spend",
+      "mechanism": "RBI mandate on card tokenization for recurring e-commerce transactions changes merchant acceptance and cardholder convenience, concentrating subscription or SaaS spend.",
       "affects": "credit_card",
-      "required_source": "RBI Master Direction on Credit Card and Debit Card or consumer-protection circular on forex-markup disclosure effective date",
+      "required_source": "RBI circular on card tokenization for recurring transactions, including merchant compliance timeline",
+      "source_ladder": [
+        "RBI circular dated 2021 or 2022 on card-on-file tokenization (recurring-transaction framework)",
+        "Payment Aggregators and Payment Gateways (PA-PG) guidelines on tokenization implementation",
+        "NPCI, card-network, or Payments Council of India bulletin on tokenization for recurring mandates"
+      ],
       "claim_type": "hypothesis",
-      "status": "proposed"
-    },
-    {
-      "kind": "channel",
-      "label": "Tokenisation mandate → e-commerce transaction friction",
-      "mechanism": "RBI card-tokenisation requirements for online merchants add authentication steps, temporarily depressing e-commerce transaction volumes until merchant compliance stabilises",
-      "affects": "credit_card",
-      "required_source": "RBI circular on Card-on-File Tokenisation dated September 2021 and subsequent deadline extensions, cross-checked with monthly e-commerce transaction data",
-      "claim_type": "hypothesis",
-      "status": "proposed"
-    },
-    {
-      "kind": "channel",
-      "label": "Buy-now-pay-later regulation → short-tenor unsecured substitution",
-      "mechanism": "RBI classification of BNPL as loans or tightening of digital-lending norms causes migration between BNPL and credit-card revolving balances, shifting outstanding stock",
-      "affects": "credit_card",
-      "required_source": "RBI guidelines on Digital Lending and BNPL dated 2022–2023 or updates to Master Direction on Non-Banking Financial Company regulations",
-      "claim_type": "hypothesis",
-      "status": "proposed"
-    },
-    {
-      "kind": "cross_edge",
-      "label": "Crude-oil price → transport-fuel card spend",
-      "mechanism": "Petrol and diesel price movements directly drive credit-card POS transaction value at fuel stations, which form a material share of overall POS spend",
-      "affects": "credit_card",
-      "required_source": "Petroleum Planning and Analysis Cell daily retail fuel price series and RBI monthly card-spend breakdowns by merchant category",
-      "claim_type": "hypothesis",
-      "status": "proposed"
-    },
-    {
-      "kind": "cross_edge",
-      "label": "Equity-market index → discretionary card spend",
-      "mechanism": "Wealth effects from equity-market gains increase high-net-worth discretionary spending on travel, dining, and retail, lifting credit-card transaction values",
-      "affects": "credit_card",
-      "required_source": "NSE Nifty 50 or BSE Sensex monthly closing levels and household-finance surveys or card-issuer portfolio segmentation data",
-      "claim_type": "hypothesis",
-      "status": "proposed"
+      "status": "proposed",
+      "attempts": [
+        {
+          "rung": 1,
+          "target": "RBI circular on card tokenization for recurring transactions, including merchant compliance timeline",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true,
+          "retries": 2
+        },
+        {
+          "rung": 2,
+          "target": "RBI circular dated 2021 or 2022 on card-on-file tokenization (recurring-transaction framework)",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        },
+        {
+          "rung": 3,
+          "target": "Payment Aggregators and Payment Gateways (PA-PG) guidelines on tokenization implementation",
+          "url": "",
+          "tier": null,
+          "verdict": "check_error",
+          "llm_verdict": "error",
+          "date": "2026-08-23",
+          "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
+          "retryable": true
+        }
+      ],
+      "verification": {
+        "verified": false,
+        "verdict": "error",
+        "note": "",
+        "source_check": "check_error",
+        "tier": null,
+        "rung": 1
+      },
+      "promotable": false
     }
   ]
 }

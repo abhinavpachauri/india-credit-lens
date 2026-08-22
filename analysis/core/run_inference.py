@@ -242,13 +242,36 @@ def verify_proposal(p, eval_period=None):
             v = {"verified": False, "verdict": "error", "note": str(e)[:120]}
 
         url, excerpt = v.get("url", ""), v.get("excerpt", "")
-        checked, check_verdict, tier = check_source(url, excerpt)
+        # An infrastructure failure is NOT a negative result. A 400 from the API, a timeout, a
+        # rate limit — none of them are evidence that no source exists, and recording them as
+        # `no_url` alongside genuine dead ends poisons the very record R4 exists to build. On
+        # 2026-08-19 an exhausted API balance produced 93 such attempts; read as sourcing
+        # verdicts they would have said "the LLM cannot find URLs", which is not what happened.
+        if v.get("verdict") == "error":
+            checked, check_verdict, tier = False, "check_error", None
+        else:
+            checked, check_verdict, tier = check_source(url, excerpt)
         v["source_check"], v["tier"], v["rung"] = check_verdict, tier, rung
-        p.setdefault("attempts", []).append({
+        attempt = {
             "rung": rung, "target": target, "url": url, "tier": tier,
             "verdict": check_verdict, "llm_verdict": v.get("verdict"),
             "date": date.today().isoformat(), "note": (v.get("note") or "")[:200],
-        })
+            # Retryable = we never actually learned anything. Settled = we did, good or bad.
+            "retryable": check_verdict == "check_error",
+        }
+        # A failed retry is the SAME non-event as the one before it. Appending each one turns
+        # the record into a log of an outage rather than a record of what we learned about the
+        # world — so a repeated check_error on the same rung updates in place with a count.
+        prior = p.setdefault("attempts", [])
+        same = next((a for a in prior if a.get("retryable") and a.get("rung") == rung
+                     and a.get("target") == target), None)
+        if same and check_verdict == "check_error":
+            same.update(attempt)
+            same["retries"] = same.get("retries", 1) + 1
+        else:
+            prior.append(attempt)
+        if check_verdict == "check_error":
+            break                                    # stop burning rungs on a broken channel
         if checked and v.get("verdict") == "supported":
             break                                    # first rung that actually holds up
 
@@ -313,6 +336,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--no-llm", action="store_true")
     ap.add_argument("--no-verify", action="store_true", help="skip the web source-verification pass")
+    ap.add_argument("--verify-only", metavar="FILE", dest="verify_file",
+                    help="verify the proposals already in FILE — no regeneration")
     ap.add_argument("--worklist", metavar="FILE", help="print the proposals a Chrome session must settle")
     ap.add_argument("--resolve", metavar="FILE", dest="file", help="record a Chrome-sourced verification")
     ap.add_argument("--index", type=int, help="proposal index (with --resolve)")
@@ -324,6 +349,30 @@ def main():
     period = max(filter(None, (
         Path(f).stem.replace("system_state_", "")
         for f in glob.glob(str(ROOT / "analysis/*/merged/system_state_*.json")))), default="latest")
+
+    if args.verify_file:
+        # Generation and verification are separable because they fail differently and cost
+        # differently. Re-running the whole command to verify would discard a good proposal set
+        # and pay for it again — and the proposals are the part a human has already read.
+        path = Path(args.verify_file)
+        doc = json.loads(path.read_text())
+        ps = doc.get("proposals", [])
+        def settled(p):
+            """Already told us something — don't pay for it twice. An attempt that only ever
+            hit a broken channel is not settled, which is what makes a resumed run cheap."""
+            att = p.get("attempts") or []
+            return bool(att) and not all(a.get("retryable") for a in att)
+
+        todo = [p for p in ps if not settled(p)]
+        print(f"verifying {len(todo)} of {len(ps)} proposals in {path.name} "
+              f"({len(ps) - len(todo)} already settled) …", file=sys.stderr)
+        period = doc.get("_meta", {}).get("period")
+        doc["proposals"] = [verify_proposal(p, eval_period=period) if p in todo else p
+                            for p in ps]
+        path.write_text(json.dumps(doc, indent=2, ensure_ascii=False))
+        ok = [p for p in doc["proposals"] if p.get("promotable")]
+        print(f"  → {len(ok)} promotable of {len(ps)}")
+        return 0
 
     if args.worklist:
         rows = worklist(args.worklist)

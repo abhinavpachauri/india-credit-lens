@@ -174,3 +174,42 @@ def test_worklist_lists_what_the_crawler_could_not_settle(tmp_path):
     rows = ri.worklist(f)
     assert [r[0] for r in rows] == [1, 2], "the settled one is not queued for a human"
     assert rows[0][1] == "blocked"
+
+
+def test_an_api_failure_is_not_recorded_as_a_sourcing_verdict(monkeypatch):
+    """An exhausted API balance produced 93 attempts on 2026-08-19. Recorded as `no_url` they
+    read as "no source exists" — the opposite of the truth, in the very record R4 builds so
+    that a negative result means something. Infrastructure failure must be retryable, and must
+    stop the ladder rather than burn two more rungs on a channel that is down."""
+    calls = []
+
+    def broken(system, payload, **kw):
+        calls.append(payload["source_to_check"])
+        raise RuntimeError("Error code: 400 - Your credit balance is too low")
+    monkeypatch.setattr(ri, "_claude_json", broken)
+
+    p = ri.verify_proposal({"label": "x", "required_source": "r1",
+                            "source_ladder": ["r2", "r3"]})
+    assert [a["verdict"] for a in p["attempts"]] == ["check_error"]
+    assert p["attempts"][0]["retryable"] is True
+    assert calls == ["r1"], "a broken channel stops the ladder — rungs 2 and 3 are not paid for"
+    assert p["promotable"] is False
+
+
+def test_a_real_negative_is_settled_and_not_retried(monkeypatch):
+    monkeypatch.setattr(ri, "_claude_json", lambda *a, **k: {
+        "verified": False, "verdict": "not_found", "url": "", "excerpt": ""})
+    p = ri.verify_proposal({"label": "x", "required_source": "r1"})
+    assert p["attempts"][0]["retryable"] is False, "we learned something — do not pay again"
+
+
+def test_a_repeated_outage_updates_in_place_instead_of_stacking(monkeypatch):
+    """attempts[] is a record of what we learned about the world, not a log of an outage.
+    Two failed resumes left 31 duplicate rows on 2026-08-19; a third would have left 62."""
+    monkeypatch.setattr(ri, "_claude_json", lambda *a, **k: (_ for _ in ()).throw(
+        RuntimeError("Error code: 400 - Your credit balance is too low")))
+    p = {"label": "x", "required_source": "r1"}
+    for _ in range(3):
+        ri.verify_proposal(p)
+    assert len(p["attempts"]) == 1
+    assert p["attempts"][0]["retries"] == 3
