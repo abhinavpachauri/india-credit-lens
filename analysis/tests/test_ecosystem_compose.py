@@ -16,7 +16,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from cross.compose_ecosystem import (      # noqa: E402
-    X_STATE_AS_EDGE, construct_direction, eco_edge_state, eval_constraint, loop_state,
+    X_STATE_AS_EDGE, agreement_word, construct_direction, eco_edge_state, eval_constraint, loop_state,
 )
 
 
@@ -31,6 +31,54 @@ def test_construct_all_measures_up():
     d, basis = construct_direction(c, {"a": 1, "b": 1})
     assert d == 1
     assert basis["observed"] == 2 and basis["total"] == 2
+
+
+def test_coherence_separates_unanimity_from_a_majority():
+    """The whole point: `direction` alone cannot tell these two apart, and until
+    2026-08-19 the published card called both of them "expanding (5/5 measurements
+    observed)". Modelled on the live pair — unsecured_retail_appetite (5 up) versus
+    card_consumption_activity (3 up, 1 down, 1 flat)."""
+    five_up = {"members": [{"urn": u, "role": "measures"} for u in "abcde"]}
+    d, basis = construct_direction(five_up, {u: 1 for u in "abcde"})
+    assert (d, basis["coherence"], basis["agree"]) == (1, 1.0, "aligned")
+
+    d, basis = construct_direction(five_up, {"a": 1, "b": -1, "c": 0, "d": 1, "e": 1})
+    assert d == 1, "direction is unchanged — coherence qualifies it, never suppresses it"
+    assert basis["coherence"] == 0.5
+    assert basis["agree"] == "contested"
+    assert basis["observed"] == 5, "coverage is still full — agreement is a different question"
+
+
+def test_coherence_is_none_when_nothing_moved():
+    """Undefined, not perfect. A construct whose members are all flat has no agreement
+    to report, and claiming 1.0 would read as unanimity."""
+    c = {"members": [{"urn": "a", "role": "measures"}, {"urn": "b", "role": "measures"}]}
+    d, basis = construct_direction(c, {"a": 0, "b": 0})
+    assert (d, basis["coherence"], basis["agree"]) == (0, None, "still")
+
+
+def test_a_true_split_is_named_split_not_contested():
+    c = {"members": [{"urn": "a", "role": "measures"}, {"urn": "b", "role": "measures"}]}
+    d, basis = construct_direction(c, {"a": 1, "b": -1})
+    assert basis["coherence"] == 0.0 and basis["agree"] == "split"
+
+
+def test_agreement_word_boundaries_match_the_layer_1_router():
+    assert agreement_word(1.0) == "aligned"
+    assert agreement_word(0.90) == "aligned"
+    assert agreement_word(0.8999) == "contested"
+    assert agreement_word(0.50) == "contested"
+    assert agreement_word(0.4999) == "split"
+    assert agreement_word(None) == "still"
+
+
+def test_contra_indicator_counts_toward_agreement_after_its_sign_flips():
+    """A contra-indicator moving DOWN agrees with a construct moving up — coherence is
+    measured on contributions, after role_sign, not on raw member directions."""
+    c = {"members": [{"urn": "a", "role": "measures"},
+                     {"urn": "b", "role": "contra_indicates"}]}
+    d, basis = construct_direction(c, {"a": 1, "b": -1})
+    assert (d, basis["coherence"], basis["agree"]) == (1, 1.0, "aligned")
 
 
 def test_construct_contra_indicates_flips_sign():

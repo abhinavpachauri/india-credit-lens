@@ -11,7 +11,9 @@
     "icl:atm_pos/cards/cards_in_force": {
       "direction": 1,
       "signals": 0,
-      "observed": 0
+      "observed": 0,
+      "coherence": 1.0,
+      "children": 2
     },
     "icl:atm_pos/cards/credit_cards": {
       "direction": 1,
@@ -26,12 +28,16 @@
     "icl:atm_pos/infrastructure/acceptance_infrastructure": {
       "direction": 1,
       "signals": 0,
-      "observed": 0
+      "observed": 0,
+      "coherence": 0.9835,
+      "children": 5
     },
     "icl:atm_pos/infrastructure/atms": {
       "direction": 1,
       "signals": 0,
-      "observed": 0
+      "observed": 0,
+      "coherence": 0.2998,
+      "children": 2
     },
     "icl:atm_pos/infrastructure/bharat_qr": {
       "direction": -1,
@@ -66,17 +72,23 @@
     "icl:atm_pos/spend_value/card_spend_value": {
       "direction": 0,
       "signals": 0,
-      "observed": 0
+      "observed": 0,
+      "coherence": 0.0,
+      "children": 2
     },
     "icl:atm_pos/spend_value/cc_spend_value": {
       "direction": 1,
       "signals": 0,
-      "observed": 0
+      "observed": 0,
+      "coherence": 0.2637,
+      "children": 4
     },
     "icl:atm_pos/spend_value/dc_spend_value": {
       "direction": -1,
       "signals": 0,
-      "observed": 0
+      "observed": 0,
+      "coherence": 0.8919,
+      "children": 5
     },
     "icl:atm_pos/spend_value/cc_atm_withdrawal_val": {
       "direction": 1,
@@ -126,17 +138,23 @@
     "icl:atm_pos/spend_volume/card_spend_volume": {
       "direction": 0,
       "signals": 0,
-      "observed": 0
+      "observed": 0,
+      "coherence": 0.0,
+      "children": 2
     },
     "icl:atm_pos/spend_volume/cc_spend_volume": {
       "direction": 1,
       "signals": 0,
-      "observed": 0
+      "observed": 0,
+      "coherence": 0.9876,
+      "children": 4
     },
     "icl:atm_pos/spend_volume/dc_spend_volume": {
       "direction": -1,
       "signals": 0,
-      "observed": 0
+      "observed": 0,
+      "coherence": 0.9984,
+      "children": 5
     },
     "icl:atm_pos/spend_volume/cc_atm_withdrawal_vol": {
       "direction": 1,

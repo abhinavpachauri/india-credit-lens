@@ -54,8 +54,23 @@ def _pipe_of(urn):
 # ── §14 / §15 / §16 / §17 — pure state functions (unit-tested) ────────────────
 
 def construct_direction(construct, urn_dir):
-    """Sign-only construct state from member entity directions (§14)."""
+    """Sign-only construct state from member entity directions, plus how much the
+    members AGREED (§14).
+
+    `direction` alone cannot tell unanimity from a near-tie: five members up and a
+    three-up/one-down/one-flat split both emit +1. `observed`/`total` records how many
+    members we could SEE, which is coverage, not agreement — and a card reading
+    "expanding (5/5 measurements observed)" invites exactly that misreading.
+
+    `coherence` = |Σ contributions| / Σ|contributions| over the observed members, the
+    same quantity Layer 1 computes for a hierarchy (signals/README.md, movement methods).
+    1.0 = every member pulling the same way; 0.5 = half the movement cancels. None when
+    nothing moved at all, because agreement is undefined rather than perfect.
+
+    It qualifies a direction, never suppresses one — §23.1 still fires on direction.
+    """
     total, observed, acc = 0, 0, 0.0
+    gross = 0.0
     members = []
     for m in construct.get("members", []):
         total += 1
@@ -65,9 +80,24 @@ def construct_direction(construct, urn_dir):
             members.append({**m, "direction": None})
             continue
         observed += 1
-        acc += d * role_sign * (m.get("weight") or 1)
+        contribution = d * role_sign * (m.get("weight") or 1)
+        acc += contribution
+        gross += abs(contribution)
         members.append({**m, "direction": d})
-    return sign(acc), {"observed": observed, "total": total, "members": members}
+    coherence = (abs(acc) / gross) if gross else None
+    return sign(acc), {"observed": observed, "total": total,
+                       "coherence": round(coherence, 4) if coherence is not None else None,
+                       "agree": agreement_word(coherence),
+                       "members": members}
+
+
+def agreement_word(coherence):
+    """The regime a coherence value names — same three the Layer 1 router uses."""
+    if coherence is None:
+        return "still"
+    if coherence >= 0.90:
+        return "aligned"
+    return "contested" if coherence >= 0.50 else "split"
 
 
 def eco_edge_state(edge, node_dir):
@@ -311,8 +341,13 @@ def main():
             "scope": "cross_source", "surface": "opportunities",
             "driver": {"kind": "construct", "id": c["id"]},
             "status": status,
+            # Coverage ("5/5 observed") reads as agreement to anyone who is not holding
+            # the spec. State the agreement when the members are NOT aligned.
             "label": f"{c.get('label', c['id'])} — {word} "
-                     f"({st['basis']['observed']}/{st['basis']['total']} measurements observed)",
+                     + (f"({st['basis']['observed']}/{st['basis']['total']} measurements observed)"
+                        if st["basis"].get("agree") == "aligned"
+                        else f"({st['basis']['observed']}/{st['basis']['total']} measurements, "
+                             f"{st['basis'].get('agree')})"),
             "refs": {"construct": urn, "entities": [m["urn"] for m in c.get("members", [])]},
             "mechanism": c.get("definition"),
             "evidence": evidence, "evidence_all": evidence_all,

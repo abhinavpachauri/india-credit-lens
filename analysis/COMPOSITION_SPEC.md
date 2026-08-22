@@ -451,8 +451,12 @@ construct := {
 ```
 role_sign  = -1 if role == contra_indicates else +1
 direction  = sign( Σ  member_direction × role_sign × (weight or 1) )    over observed members
-coherence  = | Σ signed_member_delta | / Σ | signed_member_delta |      over observed members
-basis      = { observed, total, coherence, pipelines: {name: period, ...} }
+coherence  = | Σ contribution | / Σ | contribution |        over OBSERVED members
+             where contribution = member_direction × role_sign × (weight or 1)
+             — measured AFTER role_sign, so a contra-indicator falling AGREES with a
+               construct rising; None when nothing moved (undefined, not perfect)
+agree      = aligned (≥0.90) | contested (0.50–0.90) | split (<0.50) | still (None)
+basis      = { observed, total, coherence, agree, members, pipelines: {name: period, ...} }
 ```
 Missing pipelines don't block computation; `basis` records coverage so downstream consumers
 (and the narrative layer) can see how much of the construct is actually observed.
@@ -469,6 +473,19 @@ nothing in the record says it was nearly a tie.** Every eco-driven opportunity t
 its driver's coherence in `basis`, and the narrative layer must not assert a construct-wide
 direction in prose when coherence < 0.50 — at that point the members are trading places, which is
 a different and usually better claim (`signals/README.md`, router table).
+
+**Implemented 2026-08-19.** `compose_ecosystem.construct_direction` emits `coherence` + `agree`;
+`generate_opportunities_feed` states agreement in the coverage line, the chain and the body, and
+`compose_ecosystem` names it in the published label when the members are not aligned. The live pair
+is the argument for it: `unsecured_retail_appetite` (5 members, all rising, coherence 1.00) and
+`card_consumption_activity` (3 rising, 1 falling, 1 flat, coherence 0.50) both read
+`direction: +1` and both published as *"expanding (5/5 measurements observed)"* — identical wording
+for a unanimous read and a majority one, with "5/5" (coverage) inviting the reading "they agree".
+
+**No numeric coherence reaches published prose.** It is computed in the ecosystem state, not in
+`signals.db`, so Check 4f cannot ground it — negative-tested 2026-08-19, invented values of 0.73 and
+0.31 both passed. The regime WORD carries the meaning and the member rows show every direction
+individually. A number no gate can check does not belong in a published sentence.
 
 ---
 

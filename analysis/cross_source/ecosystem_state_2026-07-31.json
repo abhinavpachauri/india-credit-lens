@@ -44,6 +44,8 @@
       "basis": {
         "observed": 5,
         "total": 5,
+        "coherence": 1.0,
+        "agree": "aligned",
         "members": [
           {
             "urn": "icl:sibc/Statement1/4.5",
@@ -89,6 +91,8 @@
       "basis": {
         "observed": 5,
         "total": 5,
+        "coherence": 0.5,
+        "agree": "contested",
         "members": [
           {
             "urn": "icl:atm_pos/spend_value/cc_spend_value",
@@ -333,7 +337,7 @@
         "id": "card_consumption_activity"
       },
       "status": "active",
-      "label": "Card-based consumption activity — expanding (5/5 measurements observed)",
+      "label": "Card-based consumption activity — expanding (5/5 measurements, contested)",
       "refs": {
         "construct": "icl:eco/card_consumption_activity",
         "entities": [

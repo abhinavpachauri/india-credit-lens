@@ -129,12 +129,26 @@ def compute(model, sig_dir, weights=None):
         # share-weighted within a decomposition (dominant children win); decompositions
         # combined by sign of their weighted directions. Falls back to unit weights.
         by_dec = defaultdict(float)
+        contrib = defaultdict(list)     # decomposition -> [signed child contributions]
         for cid, dec in kids:
             d = resolve(cid, seen)
-            by_dec[dec] += d * (weights.get(cid, 0.0) or 1.0)
+            c = d * (weights.get(cid, 0.0) or 1.0)
+            by_dec[dec] += c
+            contrib[dec].append(c)
         own = entity_dir.get(nid, 0)
         agg = sign(sum(sign(v) for v in by_dec.values()))
         entity_dir[nid] = own if own != 0 else agg
+
+        # How much did the children AGREE? A parent reading +1 because every child rose
+        # and one reading +1 because three rose while two fell are the same number today,
+        # and every downstream consumer — edge firing, loop state, opportunity status,
+        # narrative — inherits that blindness. Measured on the PRIMARY decomposition:
+        # the alternates are other views of the same total, so pooling them double-counts.
+        prim = contrib.get("primary") or next(iter(contrib.values()), [])
+        gross = sum(abs(c) for c in prim)
+        if gross:
+            entity_basis.setdefault(nid, {})["coherence"] = round(abs(sum(prim)) / gross, 4)
+            entity_basis[nid]["children"] = len(prim)
         return entity_dir[nid]
 
     for n in entities:

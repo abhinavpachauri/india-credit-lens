@@ -327,6 +327,8 @@ Computed by `analysis/generate_system_state.py --pipeline {p} --period {date}` a
 
 `direction: +1, coherence: 1.00` (all children rising) and `direction: +1, coherence: 0.12` (children in near-cancellation, one issuer reclassifying) are currently **indistinguishable in the state file**, and every downstream consumer — edge firing, loop state, opportunity status, narrative — inherits that blindness. Measured 2026-08-19 on ATM/POS `pos_terminals` bank categories: coherence **0.120** on a window where private banks shed 257,290 terminals while public banks added 204,595. The parent direction was a true statement about a fact that mattered far less than the transfer underneath it.
 
+**Implemented 2026-08-19** in `generate_system_state.compute`: each aggregate entity's `entity_states[urn]` gains `coherence` + `children`, measured on the **primary** decomposition only — the alternates are other views of the same total, so pooling them would double-count. All five SIBC aggregates currently read 1.000, which is the honest answer while every sector is growing.
+
 **Coherence qualifies a direction; it never suppresses one.** Low coherence is a finding (the parts are trading places), not a defect. Consumers that state a direction in prose must state its coherence regime with it.
 
 **Step 3 — Force states.** For each force, read `signal_evidence` → `active` | `latent`.

@@ -253,7 +253,16 @@ def _construct_item(p, eco_state, eco_model, eidx, chart_series, db_cache):
     inputs = ", ".join(f"{r['label'].split(' (')[0]} {r['value'] or DIR_WORD.get(r['direction'], '')}"
                        for r in rows)
     sustained = cstate.get("direction_prev") == d and d != 0
-    coverage = (f"{b.get('observed', 0)}/{b.get('total', 0)} measurements observed · "
+    # Coverage answers "how much could we see"; agreement answers "did it point one way".
+    # Printing only the first invites the second to be assumed — see compose_ecosystem
+    # .construct_direction. Both are stated, always.
+    agree, coh = b.get("agree"), b.get("coherence")
+    agree_txt = {"aligned": "all pulling the same way",
+                 "contested": "but some members move against it",
+                 "split": "members are split, gains and losses nearly cancel",
+                 "still": "nothing moved"}.get(agree, "")
+    coverage = (f"{b.get('observed', 0)}/{b.get('total', 0)} measurements observed"
+                + (f" · {agree_txt}" if agree_txt else "") + " · "
                 + " · ".join(f"{PIPE_LABEL.get(pl, pl)} @ {pd}"
                              for pl, pd in (b.get("pipelines") or {}).items()))
     basis = {
@@ -265,15 +274,32 @@ def _construct_item(p, eco_state, eco_model, eidx, chart_series, db_cache):
             "Member directions combine — measures and proxies count as-is, contra-indicators "
             f"flipped — giving {'an' if word[0] in 'aeiou' else 'a'} {word} read on "
             f"{b.get('observed', 0)} of {b.get('total', 0)} measurements.",
+            # Deliberately NO numeric coherence here. It is computed in the ecosystem
+            # state, not in signals.db, so Check 4f cannot ground it — negative-tested
+            # 2026-08-19: invented values of 0.73 and 0.31 both passed. A number a gate
+            # cannot check does not belong in published prose; the regime word carries
+            # the meaning and the member rows below show every direction individually.
+            ("Those members are pulling the same way." if agree == "aligned"
+             else "Those members are NOT all pulling the same way — some move against the "
+                  "direction, so part of the movement cancels and the read rests on a "
+                  "majority rather than a consensus."
+             if agree in ("contested", "split")
+             else "No member moved this period, so there is no agreement to measure."),
             construct.get("definition", ""),
             ("Direction sustained across two composed periods → status active."
              if sustained else "Direction is new or flipped this period → status watch."),
         ],
         "facts": facts,
     }
+    # The old body asserted "most of its measurements are moving the same way" for every
+    # construct, which is simply false at coherence 0.50. Say what is actually true.
     body = (f"{construct.get('label', 'This measure')} is {word}. It is not one series — it is "
-            "credit and payments data read together, and right now most of its measurements are "
-            "moving the same way. The computed basis below shows exactly which inputs drive the read.")
+            "credit and payments data read together. "
+            + ("Right now its measurements are moving the same way. "
+               if agree == "aligned" else
+               "Right now its measurements do NOT all move the same way — the direction is a "
+               "majority read, not a consensus, so check which inputs dissent before leaning on it. ")
+            + "The computed basis below shows exactly which inputs drive the read.")
     implication = ("Treat this as the combined read across credit and payments — check the basis "
                    "to see which side is doing the work before acting on it.")
     return {"basis": basis, "charts": charts, "body": body, "implication": implication,

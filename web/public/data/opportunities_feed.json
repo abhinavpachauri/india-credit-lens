@@ -151,12 +151,12 @@
       "tier": "opportunity",
       "status": "active",
       "title": "Unsecured retail credit appetite — expanding (5/5 measurements observed)",
-      "body": "Unsecured retail credit appetite is expanding. It is not one series — it is credit and payments data read together, and right now most of its measurements are moving the same way. The computed basis below shows exactly which inputs drive the read.",
+      "body": "Unsecured retail credit appetite is expanding. It is not one series — it is credit and payments data read together. Right now its measurements are moving the same way. The computed basis below shows exactly which inputs drive the read.",
       "implication": "Treat this as the combined read across credit and payments — check the basis to see which side is doing the work before acting on it.",
       "chain": [
         "Measured inputs: Credit Card Outstanding +1.9% YoY, Other Personal Loans +14.2% YoY, Consumer Durables -0.6% YoY, Credit card spend rising, Credit cards outstanding +9.6% YoY.",
         "Member directions combine — measures and proxies count as-is, contra-indicators flipped — giving an expanding read on 5 of 5 measurements.",
-        "Direction sustained across two composed periods → status active."
+        "The willingness of households to carry — and lenders to extend — unsecured retail credit. No pipeline measures it directly: SIBC measures the unsecured stock (credit-card outstanding, other personal loans, consumer durables), payments measures the flow (credit-card spend) and reach (cards in force). Together they bound the construct: when stock, flow and reach move together the appetite read is unambiguous; when they diverge, the divergence itself is the signal."
       ],
       "badge": "Ecosystem · construct",
       "driver": {
@@ -255,7 +255,7 @@
       ],
       "basis": {
         "headline": "Unsecured retail credit appetite → expanding",
-        "coverage": "5/5 measurements observed · Payments @ 2026-06-30 · Credit @ 2026-07-31",
+        "coverage": "5/5 measurements observed · all pulling the same way · Payments @ 2026-06-30 · Credit @ 2026-07-31",
         "members": [
           {
             "role": "measures",
@@ -304,6 +304,7 @@
         "chain": [
           "Measured inputs: Credit Card Outstanding +1.9% YoY, Other Personal Loans +14.2% YoY, Consumer Durables -0.6% YoY, Credit card spend rising, Credit cards outstanding +9.6% YoY.",
           "Member directions combine — measures and proxies count as-is, contra-indicators flipped — giving an expanding read on 5 of 5 measurements.",
+          "Those members are pulling the same way.",
           "The willingness of households to carry — and lenders to extend — unsecured retail credit. No pipeline measures it directly: SIBC measures the unsecured stock (credit-card outstanding, other personal loans, consumer durables), payments measures the flow (credit-card spend) and reach (cards in force). Together they bound the construct: when stock, flow and reach move together the appetite read is unambiguous; when they diverge, the divergence itself is the signal.",
           "Direction sustained across two composed periods → status active."
         ],
@@ -340,13 +341,13 @@
       "scope": "cross_source",
       "tier": "opportunity",
       "status": "active",
-      "title": "Card-based consumption activity — expanding (5/5 measurements observed)",
-      "body": "Card-based consumption activity is expanding. It is not one series — it is credit and payments data read together, and right now most of its measurements are moving the same way. The computed basis below shows exactly which inputs drive the read.",
+      "title": "Card-based consumption activity — expanding (5/5 measurements, contested)",
+      "body": "Card-based consumption activity is expanding. It is not one series — it is credit and payments data read together. Right now its measurements do NOT all move the same way — the direction is a majority read, not a consensus, so check which inputs dissent before leaning on it. The computed basis below shows exactly which inputs drive the read.",
       "implication": "Treat this as the combined read across credit and payments — check the basis to see which side is doing the work before acting on it.",
       "chain": [
         "Measured inputs: Credit card spend rising, Debit card spend falling, POS terminals -15.8% YoY, Consumer Durables -0.6% YoY, Vehicle Loans +17.3% YoY.",
         "Member directions combine — measures and proxies count as-is, contra-indicators flipped — giving an expanding read on 5 of 5 measurements.",
-        "Direction sustained across two composed periods → status active."
+        "Household consumption as expressed through card rails. Payments measures the transaction flows (credit + debit card spend) directly; acceptance infrastructure (POS terminals) proxies the merchant side of the same activity; SIBC's consumer-durable and vehicle loan stocks proxy the credit-financed share of it."
       ],
       "badge": "Ecosystem · construct",
       "driver": {
@@ -458,7 +459,7 @@
       ],
       "basis": {
         "headline": "Card-based consumption activity → expanding",
-        "coverage": "5/5 measurements observed · Payments @ 2026-06-30 · Credit @ 2026-07-31",
+        "coverage": "5/5 measurements observed · but some members move against it · Payments @ 2026-06-30 · Credit @ 2026-07-31",
         "members": [
           {
             "role": "measures",
@@ -505,6 +506,7 @@
         "chain": [
           "Measured inputs: Credit card spend rising, Debit card spend falling, POS terminals -15.8% YoY, Consumer Durables -0.6% YoY, Vehicle Loans +17.3% YoY.",
           "Member directions combine — measures and proxies count as-is, contra-indicators flipped — giving an expanding read on 5 of 5 measurements.",
+          "Those members are NOT all pulling the same way — some move against the direction, so part of the movement cancels and the read rests on a majority rather than a consensus.",
           "Household consumption as expressed through card rails. Payments measures the transaction flows (credit + debit card spend) directly; acceptance infrastructure (POS terminals) proxies the merchant side of the same activity; SIBC's consumer-durable and vehicle loan stocks proxy the credit-financed share of it.",
           "Direction sustained across two composed periods → status active."
         ],
