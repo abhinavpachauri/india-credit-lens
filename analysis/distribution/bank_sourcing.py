@@ -254,13 +254,14 @@ def _cmd_add(a):
     if a.page_file:
         page = Path(a.page_file).read_text(errors="ignore")
     else:
-        import urllib.request
-        try:
-            req = urllib.request.Request(a.url, headers={"User-Agent": "curl/8"})
-            page = urllib.request.urlopen(req, timeout=20).read().decode("utf-8", "ignore")
-        except Exception as e:                        # a 403/timeout is an honest 'unverifiable'
-            print(f"could not fetch {a.url}: {e}\n→ provide --page-file from a browser that can "
-                  f"reach it (the crawler is blocked; that is the point of the check).")
+        # core.source_fetch is the ONE way a URL becomes checkable text — it strips tags and
+        # entities (a substring check fails on raw markup) and reads PDFs, which is most of
+        # what RBI publishes. S4 uses the same function, so both stores verify identically.
+        from core.source_fetch import fetch_text
+        page, verdict = fetch_text(a.url)
+        if page is None:                              # blocked/unreachable is an honest 'unverifiable'
+            print(f"could not read {a.url}: {verdict}\n→ provide --page-file from a browser that "
+                  f"can reach it (some hosts refuse automated reads; that is their call to make).")
             return 1
     entry = {"bank": a.bank, "dimension": a.dimension, "why": a.why, "url": a.url,
              "excerpt": a.excerpt, "verified_date": date.today().isoformat(), "date": a.date}

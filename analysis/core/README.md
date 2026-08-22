@@ -22,7 +22,14 @@ parameterized by `--pipeline {id}` and reads the per-pipeline manifest
   to its driver's evidence (binds the SIBC `NumberPolicy` off `traceability.py`).
 - **`generate_chart_series.py`** — compact precomputed chart series (compute-once-ship-compact).
 - **`generate_signal_history.py`** — Stage 4/5 `append` / `evaluate` / `status` / `seed`.
-- **`run_inference.py`** — S4 sourcing-gated proposals (never auto-promoted).
+- **`run_inference.py`** — S4 sourcing-gated proposals (never auto-promoted). `verify_proposal`
+  walks the proposal's source LADDER (rung 1 primary doc → same-issuer alternative → report/press,
+  capped at 3), and `check_source` gates each rung on host-is-allowlisted + page-is-retrievable +
+  **excerpt is literally on the page**. Every rung is appended to `attempts[]` whatever the outcome.
+- **`source_fetch.py`** — the ONE way a source URL becomes checkable text: HTML stripped to visible
+  text (a substring check fails on raw markup) and PDFs read via `pdftotext -layout`, which is most
+  of what RBI publishes. Shared with `distribution/bank_sourcing`, so both stores verify identically.
+  Returns `(text, verdict)` and never raises — an unreadable source is a recorded outcome.
 - **`validate_timeline.py`** — Check 0: timeline.json schema + path existence.
 - **`traceability.py`** — shared number-tracing core (`extract_numbers` / `matches` /
   `ratio_matches`) parameterized by a `NumberPolicy` (SIBC vs ATM_POS); the per-pipeline

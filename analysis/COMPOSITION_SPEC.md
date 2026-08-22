@@ -269,6 +269,67 @@ Four distinct failures, previously merged into one informal "sourcing is hard":
   `attempts: [{url, tier, verdict, date, note}]`. **A rejection is evidence about the world and is
   retained**; it is also the honest input to C9 corrections (DISTRIBUTION_SPEC §3).
 
+**Built 2026-08-19 (R1/R2/R3/R4).** `core/source_fetch.fetch_text` is the single URL→text path
+(HTML stripped to visible text; PDFs via `pdftotext -layout`; returns `(text, verdict)` and never
+raises), shared with `distribution/bank_sourcing` so both stores verify identically.
+`run_inference.check_source` gates every claimed source on **host-on-allowlist → page-retrievable →
+excerpt literally on the page**, and `verify_proposal` walks the ladder (`required_source` +
+`source_ladder`, capped at 3 rungs) stopping at the first rung that holds. Every rung appends to
+`attempts[]` — including `no_source_named` when a proposal names nothing, because a silent drop is
+the discard R4 exists to stop.
+
+**Reachability census — all 47 allowlisted hosts probed 2026-08-19, not a sample.** An earlier
+note in this section rested on four hand-picked hosts, which is the same narrow-negative-test
+failure this project keeps re-learning. The whole list:
+
+| verdict | hosts | meaning |
+|---|---|---|
+| `ok` | 19 | readable by `fetch_text` |
+| `empty` | 6 | **inconclusive** — a JS-shell homepage. `pib.gov.in` reports `empty` at `/` and **68,504 chars** at an article URL, so a homepage probe under-reports a site's real availability |
+| `blocked` | 11 | genuine 403 |
+| `unreachable` | 11 | connection failure |
+
+**Chrome is not a fallback for the long tail — it is the only path for a large part of the
+allowlist.** `business-standard.com` is blocked, and it is the source of **all four** existing
+`bank_claims`; so are `financialexpress.com`, `reuters.com`, `bloomberg.com`, `ndtvprofit.com`,
+and, in the report tier, `cibil.com`, `transunioncibil.com`, `ficci.in`, `cii.in`, `worldline.com`.
+Automated verification cannot reproduce the sourcing the store already holds. Rung 1 (official) is
+where the automated path pays; rungs 2–3 will frequently land on `blocked`, and the correct outcome
+there is a recorded attempt plus a human with `--page-file`, never a weaker claim.
+
+**The verification it replaces was self-report.** The prompt said "do NOT invent a URL", which is an
+instruction, not a check; nothing fetched the page, compared the excerpt, or consulted the
+allowlist. Proven end-to-end on the KCC force: its own excerpt — hand-verified through the editor's
+Chrome on 2026-08-02 — now verifies automatically from `pib.gov.in`, while a fabricated excerpt on
+the same page is rejected. **Correction to the conversion figure quoted above: the 2026-07-31 run
+used `--no-verify`, so verification never ran at all; 0 of 78 proposals carry a verification block
+and the single promotion was manual. The 3% was the rate a human did the work, not a rejection rate.**
+
+**Chrome is a first-class channel, not a fallback (2026-08-19).** The census above is the reason:
+19 of 47 hosts readable, and every masthead this project has actually sourced from refuses an
+automated read. So the flow is *crawler where it works, browser where it does not, same check
+either way*:
+
+```
+run_inference.py                         # rung-1 official sources verify automatically
+run_inference.py --worklist FILE         # what the crawler could not settle, with targets + urls
+run_inference.py --resolve FILE --index N --url U --excerpt E --page-file P
+```
+
+`--resolve` runs `check_source` with the browser's text instead of the crawler's. It earns
+nothing: host must still be allowlisted, excerpt must still be literally on the page, and the
+attempt is recorded either way. Verified end-to-end — a real PIB excerpt passes, a fabricated
+excerpt on that same page fails, and an off-allowlist host fails before anything is read.
+
+**Two failure-handling fixes this exposed.** (1) The proposal call had a hardcoded
+`max_tokens=2000`; adding `source_ladder` to the schema pushed the JSON past it, every domain came
+back truncated, and the run wrote **0 proposals over 36 good ones** while printing three parse
+warnings. A warning that does not stop the write is the same bug class as a rule that raises and is
+ignored — the writer now refuses to replace a non-empty file with an empty result, negative-tested.
+(2) `required_source` targets in the existing file are descriptions, not findable documents
+("RBI Financial Stability Report section on corporate leverage ratios and credit growth by firm
+size"), which is R3 in concrete form and why the ladder exists.
+
 **Why this is scheduled with the movement signals, not after them.** Movement methods
 (`signals/README.md`) produce the platform's strongest why-candidates — an acceleration that leads
 its peers, or a low-coherence handover such as *"public sector banks took over POS deployment from

@@ -19,6 +19,7 @@ Usage:  python3 analysis/run_inference.py            # all pipelines, latest per
         python3 analysis/run_inference.py --no-llm   # detection only (no proposals)
 """
 import argparse
+from datetime import date
 import glob
 import json
 import os
@@ -43,10 +44,21 @@ SYSTEM = (
     "price series) that someone would have to check to confirm it — proposals are hypotheses until "
     "sourced and will NOT be added to the model without that source. Do not propose anything an "
     "existing channel already covers. Be concrete and plain. Return ONLY JSON: "
+    "Name the source as a LADDER, most authoritative first, not a single target: a proposal whose "
+    "one named document turns out not to say what you expected should degrade to the next rung, "
+    "not die. Rung 1 = the specific primary document; rung 2 = a different document from the same "
+    "issuer (bulletin, circular, press release); rung 3 = a reputed report or named financial "
+    "press. Two to three rungs. The evidence bar does not move — only where we look. "
+    "Return ONLY JSON: "
     '{"proposals":[{"kind":"channel|instance|cross_edge","label":"...","mechanism":"plain '
     'one-sentence how","affects":"which product/entity","required_source":"the exact source to '
-    'check","claim_type":"hypothesis"}]}.'
+    'check","source_ladder":["rung 1","rung 2","rung 3"],"claim_type":"hypothesis"}]}.'
 )
+
+
+from core.source_fetch import fetch_text                                   # noqa: E402
+from distribution.bank_sourcing import (                                  # noqa: E402
+    MIN_EXCERPT_CHARS, excerpt_on_page, tier_of)
 
 
 def latest_state(cfg):
@@ -112,6 +124,7 @@ VERIFY_SYSTEM = (
 
 
 MODEL = "claude-sonnet-4-5-20250929"
+MAX_RUNGS = 3        # each rung is an LLM call with web search — bounded, not exhaustive
 
 
 def _parse_json(text):
@@ -119,14 +132,19 @@ def _parse_json(text):
     return json.loads(text[a:b + 1])
 
 
-def _claude_json(system, payload, web=False, timeout=240):
+def _claude_json(system, payload, web=False, timeout=240, max_tokens=2000):
     """Prefer the Anthropic API (reliable, supports the web_search server tool) when
     ANTHROPIC_API_KEY is set; fall back to the `claude -p` CLI otherwise. The CLI is
-    rate-gated on the Pro subscription, so the API path is the default for S4."""
+    rate-gated on the Pro subscription, so the API path is the default for S4.
+
+    `max_tokens` is a parameter because the proposal call emits a list and the verify call
+    emits one object. Adding `source_ladder` to the proposal schema pushed the list past a
+    hardcoded 2000 and every domain came back as truncated JSON — three parse warnings, zero
+    proposals, and the run still wrote its empty result over a good file."""
     if os.environ.get("ANTHROPIC_API_KEY"):
         import anthropic
         client = anthropic.Anthropic()
-        kwargs = dict(model=MODEL, max_tokens=2000, system=system,
+        kwargs = dict(model=MODEL, max_tokens=max_tokens, system=system,
                       messages=[{"role": "user", "content": json.dumps(payload, ensure_ascii=False)}])
         if web:
             kwargs["tools"] = [{"type": "web_search_20250305", "name": "web_search", "max_uses": 4}]
@@ -146,41 +164,159 @@ def call_llm(payload):
     # one retry — the generation call occasionally returns malformed JSON
     for attempt in range(2):
         try:
-            return _claude_json(SYSTEM, payload).get("proposals", [])
+            return _claude_json(SYSTEM, payload, max_tokens=8000).get("proposals", [])
         except (json.JSONDecodeError, ValueError):
             if attempt == 1:
                 raise
     return []
 
 
+def check_source(url, excerpt, page_text=None):
+    """Is the claimed excerpt actually on the page at the claimed URL, on an allowed host?
+
+    `page_text` lets the caller supply text obtained some other way — in practice the editor's
+    logged-in Chrome. That is not a workaround: measured across all 47 allowlisted hosts, only
+    19 are readable by an automated fetch, and every masthead this project has actually sourced
+    from (Business Standard above all) refuses one. The trust anchor is identical either way —
+    the excerpt must be literally on the page — so the channel the text came through changes
+    nothing about how hard the claim is checked.
+
+    Until 2026-08-19 S4 asked this of nobody. It took the model's word for both the URL and
+    the quote — the prompt says "do NOT invent a URL", which is an instruction, not a check —
+    while `bank_sourcing.excerpt_on_page`, the trust anchor that makes the bank-claims store
+    trustworthy, sat one import away and unused. The allowlist was not consulted either, so a
+    force could be sourced to any site on the internet.
+
+    Returns (ok, verdict, tier). Verdicts are recorded whether they pass or fail: a rejection
+    is evidence about the world and the reason the same dead search stops being re-run.
+    """
+    if not url:
+        return False, "no_url", None
+    tier = tier_of(url)
+    if tier is None:
+        return False, "off_allowlist", None
+    if not excerpt or len(excerpt.strip()) < MIN_EXCERPT_CHARS:
+        return False, "no_excerpt", tier
+    text, fetch_verdict = (page_text, "ok") if page_text else fetch_text(url)
+    if text is None:
+        return False, fetch_verdict, tier          # blocked | unreachable | empty | no_pdf_tool
+    if not excerpt_on_page(excerpt, text):
+        return False, "excerpt_not_on_page", tier
+    return True, "excerpt_verified", tier
+
+
 def verify_proposal(p, eval_period=None):
-    """Web-verify a proposal's source. Returns the proposal with a `verification` block and a
-    `promotable` flag — true only when a real supporting source with a URL + excerpt is found
-    AND the instrument is in force at eval_period (an expired scheme cannot explain a current
-    movement; verdict 'expired' carries the in-force successor in its note instead)."""
-    try:
-        v = _claude_json(VERIFY_SYSTEM, {"label": p.get("label"), "mechanism": p.get("mechanism"),
-                                         "affects": p.get("affects"),
-                                         "eval_period": eval_period,
-                                         "source_to_check": p.get("required_source")}, web=True)
-    except Exception as e:
-        v = {"verified": False, "verdict": "error", "note": str(e)[:120]}
+    """Web-verify a proposal's source, then CHECK what came back.
+
+    `promotable` now requires all of: the model reports a supporting source; the host is on the
+    tiered allowlist; the page is actually retrievable; the claimed excerpt is literally on it;
+    and the instrument is in force at eval_period (an expired scheme cannot explain a current
+    movement — verdict 'expired' carries the in-force successor in its note instead).
+
+    Every attempt is appended to `attempts[]` whatever the outcome, so a negative result is
+    retained rather than discarded and re-paid for next period.
+    """
+    # R3 — a ladder, not one named target. The large-corporate force died because the FSR
+    # release it named turned out to be about stability rather than large-corporate credit,
+    # and there was no rung below "the exact document I asked for". Capped, because each rung
+    # is an LLM call with web search.
+    ladder = [r for r in ([p.get("required_source")] + list(p.get("source_ladder") or []))
+              if r][:MAX_RUNGS]
+    v, checked = {"verified": False, "verdict": "not_found", "note": "no source named"}, False
+    if not ladder:
+        # Record it. "Nothing to check" is itself a finding about the proposal — a hypothesis
+        # that names no source can never be promoted, and silently leaving no trace is exactly
+        # the discard R4 exists to stop.
+        p.setdefault("attempts", []).append({
+            "rung": 0, "target": None, "url": "", "tier": None,
+            "verdict": "no_source_named", "llm_verdict": None,
+            "date": date.today().isoformat(), "note": "proposal named no source to check",
+        })
+    for rung, target in enumerate(ladder, 1):
+        try:
+            v = _claude_json(VERIFY_SYSTEM, {"label": p.get("label"), "mechanism": p.get("mechanism"),
+                                             "affects": p.get("affects"),
+                                             "eval_period": eval_period,
+                                             "source_to_check": target}, web=True)
+        except Exception as e:
+            v = {"verified": False, "verdict": "error", "note": str(e)[:120]}
+
+        url, excerpt = v.get("url", ""), v.get("excerpt", "")
+        checked, check_verdict, tier = check_source(url, excerpt)
+        v["source_check"], v["tier"], v["rung"] = check_verdict, tier, rung
+        p.setdefault("attempts", []).append({
+            "rung": rung, "target": target, "url": url, "tier": tier,
+            "verdict": check_verdict, "llm_verdict": v.get("verdict"),
+            "date": date.today().isoformat(), "note": (v.get("note") or "")[:200],
+        })
+        if checked and v.get("verdict") == "supported":
+            break                                    # first rung that actually holds up
+
     p["verification"] = v
-    p["promotable"] = bool(v.get("verified") and v.get("verdict") == "supported" and v.get("url")
-                           and v.get("in_force_at_eval_period", True))
+    p["promotable"] = bool(v.get("verified") and v.get("verdict") == "supported"
+                           and v.get("in_force_at_eval_period", True) and checked)
     if p["promotable"]:
-        p["claim_type"] = "inference"        # now externally sourced
+        p["claim_type"] = "inference"        # now externally sourced AND excerpt-verified
         p["source"] = v.get("source_title", "")
-        p["source_url"] = v.get("url", "")
-        p["source_excerpt"] = v.get("excerpt", "")
+        p["source_url"] = url
+        p["source_excerpt"] = excerpt
         p["source_verified_date"] = v.get("verified_date", "")
     return p
+
+
+def worklist(path):
+    """Proposals the automated path could not settle — the handoff to a Chrome session.
+
+    A blocked host is not a dead end, it is a queue. Printing it is what turns `attempts[]`
+    from a record into something a person can act on in one pass.
+    """
+    doc = json.loads(Path(path).read_text())
+    out = []
+    for i, p in enumerate(doc.get("proposals", [])):
+        if p.get("promotable"):
+            continue
+        last = (p.get("attempts") or [{}])[-1]
+        if last.get("verdict") in ("excerpt_verified",):
+            continue
+        out.append((i, last.get("verdict", "unverified"), last.get("url", ""),
+                    last.get("target") or p.get("required_source", ""), p.get("label", "")))
+    return out
+
+
+def cmd_resolve(args):
+    """Record a Chrome-sourced verification against the SAME excerpt check as the crawler."""
+    path = Path(args.file)
+    doc = json.loads(path.read_text())
+    p = doc["proposals"][args.index]
+    page = Path(args.page_file).read_text(errors="ignore")
+    # A browser hands over rendered HTML; reduce it the same way the fetcher does so the
+    # substring check behaves identically whichever channel supplied the text.
+    from core.source_fetch import html_to_text
+    text = html_to_text(page) if "<" in page[:400] else page
+    ok, verdict, tier = check_source(args.url, args.excerpt, page_text=text)
+    p.setdefault("attempts", []).append({
+        "rung": "chrome", "target": p.get("required_source"), "url": args.url, "tier": tier,
+        "verdict": verdict, "llm_verdict": None, "date": date.today().isoformat(),
+        "note": "verified via editor browser (host refuses automated reads)",
+    })
+    if ok:
+        p["promotable"] = True
+        p["claim_type"] = "inference"
+        p["source_url"], p["source_excerpt"] = args.url, args.excerpt
+        p["source_verified_date"] = date.today().isoformat()
+    path.write_text(json.dumps(doc, indent=2, ensure_ascii=False))
+    print(("✓ verified + recorded: " if ok else "✗ not recorded: ") + verdict)
+    return 0 if ok else 1
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--no-llm", action="store_true")
     ap.add_argument("--no-verify", action="store_true", help="skip the web source-verification pass")
+    ap.add_argument("--worklist", metavar="FILE", help="print the proposals a Chrome session must settle")
+    ap.add_argument("--resolve", metavar="FILE", dest="file", help="record a Chrome-sourced verification")
+    ap.add_argument("--index", type=int, help="proposal index (with --resolve)")
+    ap.add_argument("--url"); ap.add_argument("--excerpt"); ap.add_argument("--page-file")
     args = ap.parse_args()
 
     channels = gs.load_json(ROOT / "analysis/ontology/channels.json")["channels"]
@@ -188,6 +324,18 @@ def main():
     period = max(filter(None, (
         Path(f).stem.replace("system_state_", "")
         for f in glob.glob(str(ROOT / "analysis/*/merged/system_state_*.json")))), default="latest")
+
+    if args.worklist:
+        rows = worklist(args.worklist)
+        print(f"{len(rows)} proposal(s) need the editor's browser:\n")
+        for i, verdict, url, target, label in rows:
+            print(f"  [{i:>2}] {verdict:20} {label[:58]}")
+            print(f"       target: {target[:90]}")
+            if url:
+                print(f"       url:    {url}")
+        return 0
+    if args.file:
+        return cmd_resolve(args)
 
     gaps, proposals = {"unexplained": {}, "mismatches": {}, "cross": []}, []
     for pipe, cfg in gs.PIPELINES.items():
@@ -227,6 +375,19 @@ def main():
         "proposals": [{**p, "status": "proposed"} for p in proposals],
     }
     out_path = OUT_DIR / f"{period}.json"
+    # A run that produced nothing must not overwrite a file that has something. The
+    # source_ladder schema change truncated every domain's JSON on 2026-08-19; the run printed
+    # three parse warnings, carried on, and wrote 0 proposals over 36 good ones. Warnings that
+    # do not stop the write are the same class of bug as a rule that raises and is ignored.
+    if not proposals and out_path.exists():
+        try:
+            prior = len(json.loads(out_path.read_text()).get("proposals", []))
+        except Exception:
+            prior = 0
+        if prior:
+            print(f"✗ generated 0 proposals but {out_path.name} already holds {prior} — refusing "
+                  f"to overwrite. Check the parse warnings above.", file=sys.stderr)
+            return 1
     out_path.write_text(json.dumps(out, indent=2, ensure_ascii=False))
 
     nun = sum(len(v) for v in gaps["unexplained"].values())
