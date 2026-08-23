@@ -335,7 +335,11 @@ def cmd_resolve(args):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--no-llm", action="store_true")
-    ap.add_argument("--no-verify", action="store_true", help="skip the web source-verification pass")
+    ap.add_argument("--verify-api", action="store_true",
+                    help="also run the API web-search source hunt (costs credit; only rung-1 "
+                         "official hosts pay off — see COMPOSITION_SPEC §8.1 census)")
+    ap.add_argument("--no-verify", action="store_true",
+                    help="(default behaviour; kept so existing runbooks do not break)")
     ap.add_argument("--verify-only", metavar="FILE", dest="verify_file",
                     help="verify the proposals already in FILE — no regeneration")
     ap.add_argument("--worklist", metavar="FILE", help="print the proposals a Chrome session must settle")
@@ -365,7 +369,8 @@ def main():
 
         todo = [p for p in ps if not settled(p)]
         print(f"verifying {len(todo)} of {len(ps)} proposals in {path.name} "
-              f"({len(ps) - len(todo)} already settled) …", file=sys.stderr)
+              f"({len(ps) - len(todo)} already settled) — API web-search hunt, costs credit. "
+              f"For the browser path use --worklist then --resolve.", file=sys.stderr)
         period = doc.get("_meta", {}).get("period")
         doc["proposals"] = [verify_proposal(p, eval_period=period) if p in todo else p
                             for p in ps]
@@ -411,7 +416,13 @@ def main():
             print(f"  ⚠ cross: {e}", file=sys.stderr)
 
     # web source-verification pass — turns "source needed" into verified/rejected (sourcing gate)
-    if proposals and not args.no_llm and not args.no_verify:
+    # Source-finding is OPT-IN, not the default. Generation needs a model — there is no page to
+    # read, it is invention. Source-finding is reading pages, and measured across all 47
+    # allowlisted hosts only 19 are readable by an automated fetch; every masthead this project
+    # has actually sourced from refuses one. So the browser is the channel, `--worklist` and
+    # `--resolve` are the path, and the API hunt is an opportunistic extra for rung-1 official
+    # targets. Defaulting it ON spent credit re-measuring something already known.
+    if proposals and not args.no_llm and args.verify_api:
         print(f"  verifying {len(proposals)} proposals against primary sources (web)…", file=sys.stderr)
         proposals = [verify_proposal(p, eval_period=period) for p in proposals]
 
