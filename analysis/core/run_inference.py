@@ -56,6 +56,7 @@ SYSTEM = (
 )
 
 
+from core.llm_budget import require_approval                               # noqa: E402
 from core.source_fetch import fetch_text                                   # noqa: E402
 from distribution.bank_sourcing import (                                  # noqa: E402
     MIN_EXCERPT_CHARS, excerpt_on_page, tier_of)
@@ -164,6 +165,7 @@ def call_llm(payload):
     # one retry — the generation call occasionally returns malformed JSON
     for attempt in range(2):
         try:
+            require_approval("S4 proposal generation", 3)
             return _claude_json(SYSTEM, payload, max_tokens=8000).get("proposals", [])
         except (json.JSONDecodeError, ValueError):
             if attempt == 1:
@@ -222,6 +224,8 @@ def verify_proposal(p, eval_period=None):
     # is an LLM call with web search.
     ladder = [r for r in ([p.get("required_source")] + list(p.get("source_ladder") or []))
               if r][:MAX_RUNGS]
+    if ladder:
+        require_approval("S4 source-finding (web search)", f"up to {len(ladder)} per proposal")
     v, checked = {"verified": False, "verdict": "not_found", "note": "no source named"}, False
     if not ladder:
         # Record it. "Nothing to check" is itself a finding about the proposal — a hypothesis
@@ -464,5 +468,25 @@ def main():
     return 0
 
 
+def _main_guarded():
+    """A refusal is a decision point, not a crash — print it plainly, exit 1, bill nothing."""
+    from core.llm_budget import LLMSpendNotApproved
+    try:
+        return main()
+    except LLMSpendNotApproved as e:
+        print(f"\n⛔ {e}", file=sys.stderr)
+        return 1
+
+
+def _main_guarded():
+    """A refusal is a decision point, not a crash — print it plainly, exit 1, bill nothing."""
+    from core.llm_budget import LLMSpendNotApproved
+    try:
+        return main()
+    except LLMSpendNotApproved as e:
+        print(f"\n⛔ {e}", file=sys.stderr)
+        return 1
+
+
 if __name__ == "__main__":
-    raise SystemExit(main())
+    raise SystemExit(_main_guarded())

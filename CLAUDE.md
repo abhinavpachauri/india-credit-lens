@@ -159,6 +159,26 @@ handles formatting-only cases automatically.
 - **Layer 2a model has two modes — read `PIPELINE_ARCHITECTURE.md` before every model update pass.** FY-end (March file) = FOUNDATION. All other months = UPDATE. Wrong mode = wrong depth of analysis. Signal evaluation (Stage 5) runs every period regardless of mode.
 - Stage 7 always uses `promote_annotations.py` — never manual copy.
 
+### API spend (non-negotiable)
+
+**Never make a paid model call without explicit approval in the current conversation.** Not
+"the user approved something similar last session", not "this run is cheap", not "it is part of
+the agreed plan". Ask, name the size, wait.
+
+This is enforced in code, because the rule alone kept failing across sessions:
+`analysis/core/llm_budget.require_approval` gates every billing path and refuses unless
+`ICL_LLM_OK=1` is set **for that invocation**. Consent is per-process by design — "you said yes
+last week" is exactly the reasoning that caused the problem. `test_llm_budget.py` asserts the
+property over every module, so a new paid call site cannot skip it.
+
+Which work is paid: Stage 5 `evaluate`, S4 proposal generation, S4 `--verify-api` source-hunt,
+`generate_opportunity_narrative`. Everything else — computes, gates, validators, the Chrome
+sourcing path (`--worklist` / `--resolve`) — costs nothing and needs no approval.
+
+**Prefer the free channel.** Source verification runs through the editor's browser: only 19 of
+47 allowlisted hosts are readable by an automated fetch, so the API hunt is opportunistic, not
+the default (COMPOSITION_SPEC §8.1).
+
 ### Git / deployment
 - **Solo project — work directly on `main`. Never create feature branches or worktrees.**
 - Never auto-push to GitHub

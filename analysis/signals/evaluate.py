@@ -13,6 +13,8 @@ Determinism guarantees:
 
 Usage:
   from analysis.signals.evaluate import run_evaluate
+
+from core.llm_budget import require_approval  # noqa: E402
   result = run_evaluate(pipeline, period, conn, registry)
 """
 
@@ -234,6 +236,7 @@ def _call_llm(system_prompt: str, user_content: str) -> tuple[dict, int, int, in
         raise RuntimeError("pip install anthropic  (or install Claude Code)")
 
     client = anthropic.Anthropic(api_key=api_key)
+    require_approval("Stage 5 signal evaluation", "1 per domain")
     msg = client.messages.create(
         model=MODEL,
         max_tokens=8000,

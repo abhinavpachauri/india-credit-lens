@@ -16,6 +16,14 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import core.run_inference as ri                       # noqa: E402
 from core import source_fetch                         # noqa: E402
 
+@pytest.fixture(autouse=True)
+def _authorise_stubbed_llm(monkeypatch):
+    """These tests stub `_claude_json`, so nothing can bill — but the budget guard cannot know
+    that, and it is right not to guess. Authorise explicitly rather than weaken the guard: a
+    test that had to disable the guard to pass would be testing a different program."""
+    monkeypatch.setenv("ICL_LLM_OK", "1")
+
+
 PIB = "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2238004"
 EXCERPT = "increased from Rs 1.6 lakh to Rs 2 lakh per borrower"
 PAGE = f"Kisan Credit Card backgrounder. The limit was {EXCERPT} with effect from January 2025."
