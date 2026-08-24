@@ -88,8 +88,17 @@
       "invokes": [],
       "path": "analysis/core/generate_system_state.py",
       "reads": {
+        "analysis/signals/registry.json": "low",
         "analysis/signals/signals.db": "low"
       },
+      "writes": {}
+    },
+    "core/llm_budget": {
+      "doc_claims": [],
+      "imports": [],
+      "invokes": [],
+      "path": "analysis/core/llm_budget.py",
+      "reads": {},
       "writes": {}
     },
     "core/manifest": {
@@ -147,6 +156,14 @@
         "analysis/ontology/channels.json": "low",
         "system_state_*.json": "low"
       },
+      "writes": {}
+    },
+    "core/source_fetch": {
+      "doc_claims": [],
+      "imports": [],
+      "invokes": [],
+      "path": "analysis/core/source_fetch.py",
+      "reads": {},
       "writes": {}
     },
     "core/traceability": {

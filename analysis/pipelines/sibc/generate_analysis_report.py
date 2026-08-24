@@ -362,8 +362,22 @@ def deterministic_scan_insight(dist: list[tuple], unit: str, kind: str = "yoy",
 
 # ── Main ──────────────────────────────────────────────────────────────────────
 
-# The four main sectors carry short display names on the chart; signals.db carries
-# the CSV's full RBI names. One map, declared once.
+# Movement cuts: one card per dashboard dimension. Each names the section it belongs to, the
+# speed signal that satisfies the pairing rule, and the noun the prose adds to ("...of all new
+# {subject}"). Adding a cut is a row here plus its registry entries — no new code.
+MOVEMENT_CUTS = [
+    # slug,        section,           speed signal,                    subject
+    ("main",       "mainSectors",     "sibc-main-yoy-scan",            "bank credit"),
+    ("ind-type",   "industryByType",  "sibc-industry-type-yoy-scan",   "industry credit"),
+    ("ind-size",   "industryBySize",  "sibc-ind-size-yoy-scan",        "industry credit"),
+    ("svcs",       "services",        "sibc-services-yoy-scan",        "services credit"),
+    ("pl",         "personalLoans",   "sibc-pl-yoy-scan",              "personal loans"),
+    ("psl",        "prioritySector",  "sibc-psl-yoy-scan",             "priority sector credit"),
+    ("infra-sub",  "industryByType",  "sibc-infra-sub-yoy-scan",       "infrastructure credit"),
+]
+
+# The four main sectors carry short display names on the chart; signals.db carries the CSV's
+# full RBI names. Only this cut needs translating — the deeper cuts already match their series.
 MAIN_SECTOR_SERIES = {
     "Agriculture and Allied Activities": "Agriculture",
     "Industry (Micro and Small, Medium and Large)": "Industry",
@@ -372,60 +386,67 @@ MAIN_SECTOR_SERIES = {
 }
 
 
-def movement_annotation(conn, period: str, registry: dict) -> dict | None:
-    """The movement card — where the new credit went, how fast, and speeding up or not.
+def movement_annotations(conn, period: str, registry: dict) -> list[tuple[str, dict]]:
+    """One movement card per cut — where the new credit went, how fast, speeding up or not.
 
-    Deliberately built OUTSIDE the evaluation loop. The movement family's prose is
-    deterministic by design (signals/README.md), so making the card conditional on an LLM
-    evaluation having run would be backwards — and would silently drop the card in any
-    period evaluated before these signals existed.
+    Deliberately built OUTSIDE the evaluation loop. The movement family's prose is deterministic
+    by design (signals/README.md), so making a card conditional on an LLM evaluation having run
+    would be backwards, and would silently drop it in any period evaluated before these signals
+    existed.
 
-    Three registry signals, ONE card: allocation is the headline, momentum and
-    acceleration are read alongside it. Emitting three cards would say one thing three
-    times on a dashboard that already renders too many.
+    Three registry signals plus a speed scan, ONE card per cut. Emitting them separately would
+    say one thing three times on a dashboard that already renders too many.
     """
     def rows(metric_id: str, entity_type: str) -> dict:
         return {e: v for e, v in conn.execute(
             "SELECT entity_id, value FROM signals WHERE pipeline='sibc' AND period=? "
             "AND metric_id=? AND entity_type=?", (period, metric_id, entity_type))}
 
-    momentum = rows("sibc-main-momentum", "sector")
-    if not momentum:
-        return None
-    agg      = rows("sibc-main-momentum", "aggregate")
-    alloc    = rows("sibc-main-allocation", "alloc")
-    contrib  = rows("sibc-main-allocation", "contribution")
-    accel    = rows("sibc-main-acceleration", "sector")
-    speed    = rows("sibc-main-yoy-scan", "sector")
+    out: list[tuple[str, dict]] = []
+    for slug, section, speed_sid, subject in MOVEMENT_CUTS:
+        mom_sid, acc_sid, alloc_sid = (f"sibc-{slug}-momentum", f"sibc-{slug}-acceleration",
+                                       f"sibc-{slug}-allocation")
+        et = (registry.get(mom_sid, {}).get("compute", {}) or {}).get("entity_type")
+        if not et:
+            continue
+        momentum = rows(mom_sid, et)
+        if not momentum:
+            continue
+        agg     = rows(mom_sid, "aggregate")
+        alloc   = rows(alloc_sid, "alloc")
+        contrib = rows(alloc_sid, "contribution")
+        accel   = rows(acc_sid, et)
+        speed_et = (registry.get(speed_sid, {}).get("compute", {}) or {}).get("entity_type", et)
+        speed   = rows(speed_sid, speed_et)
 
-    ins = movement_insight(alloc, contrib, momentum, agg.get("total"),
-                           agg.get("gross_movement"), agg.get("coherence"),
-                           accel, speed, "bank credit")
-    if ins is None:
-        return None
+        ins = movement_insight(alloc, contrib, momentum, agg.get("total"),
+                               agg.get("gross_movement"), agg.get("coherence"),
+                               accel, speed, subject)
+        if ins is None:
+            continue
 
-    lead = max(alloc or momentum, key=(alloc or momentum).get)
-    reg_sig = registry.get("sibc-main-allocation", {})
-    facts = signal_numbers(conn, "sibc-main-allocation", reg_sig, "sibc", period)
-    return {
-        "id":            "sibc-main-allocation",
-        "layer":         1,
-        "title":         ins["title"],
-        "body":          ins["body"],
-        "implication":   ins["implication"],
-        "preferredMode": "yoy",
-        "effect":        {"highlight": [MAIN_SECTOR_SERIES[lead]]} if lead in MAIN_SECTOR_SERIES else {},
-        "claim_type":    "data",
-        "insight_kind":  ins["insight_kind"],
-        # Declared reads — the card quotes allocation next to speed and acceleration,
-        # so Check 2g scopes to exactly these four signals (see the validator).
-        "sourceSignals": ["sibc-main-allocation", "sibc-main-momentum",
-                          "sibc-main-acceleration", "sibc-main-yoy-scan"],
-        "basis": {
-            "facts":      data_facts(facts, {}),
-            "inferences": ins["chain"],
-        },
-    }
+        lead = max(alloc or momentum, key=(alloc or momentum).get)
+        highlight = MAIN_SECTOR_SERIES.get(lead, lead) if slug == "main" else lead
+        facts = signal_numbers(conn, alloc_sid, registry.get(alloc_sid, {}), "sibc", period)
+        out.append((section, {
+            "id":            alloc_sid,
+            "layer":         1,
+            "title":         ins["title"],
+            "body":          ins["body"],
+            "implication":   ins["implication"],
+            "preferredMode": "yoy",
+            "effect":        {"highlight": [highlight]},
+            "claim_type":    "data",
+            "insight_kind":  ins["insight_kind"],
+            # Declared reads — the card quotes allocation next to speed and acceleration, so
+            # Check 2g scopes to exactly these signals rather than falling back to period-wide.
+            "sourceSignals": [alloc_sid, mom_sid, acc_sid, speed_sid],
+            "basis": {
+                "facts":      data_facts(facts, {}),
+                "inferences": ins["chain"],
+            },
+        }))
+    return out
 
 
 def main(period: str | None = None) -> int:
@@ -537,9 +558,9 @@ def main(period: str | None = None) -> int:
 
         sections_out[section][itype + "s"].append(annotation)
 
-    movement = movement_annotation(conn, period, registry)
-    if movement:
-        sections_out["mainSectors"]["insights"].append(movement)
+    for section, card in movement_annotations(conn, period, registry):
+        if section in sections_out:
+            sections_out[section]["insights"].append(card)
 
     output = {
         "pipeline":     "sibc",

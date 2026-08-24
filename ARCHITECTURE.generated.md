@@ -8,7 +8,7 @@
 > Authored rationale (layer model, design principles, guard purposes) lives in the
 > hand-written `ARCHITECTURE.md`. This file is the structural, drift-guarded half.
 
-_Derived from 61 scripts._
+_Derived from 63 scripts._
 
 ## 1. Data-flow
 
@@ -100,7 +100,7 @@ Scripts each orchestrator launches as a subprocess, in execution order.
 | `analysis/rbi_sibc/skeleton_profile.json` | external/authored | — | `core/generate_skeleton` |
 | `analysis/rbi_sibc/timeline.json` | external/authored | — | `core/validate_timeline`, `pipelines/sibc/generate_merge`, `signals/compute/sibc`, `signals/query` |
 | `analysis/signals/narrative_cache.json` | derived | `cross/generate_opportunity_narrative` | — |
-| `analysis/signals/registry.json` | derived | `signals/apply_status_rules`, `signals/update_registry` | `core/generate_signal_history`, `core/relational_insights`, `core/validate_opportunity_traceability`, `cross/generate_opportunities_feed`, `cross/validate_composition`, `guards/check_signal_freshness`, `guards/validate_signal_history`, `pipelines/atm_pos/compute_atm_pos_signals`, `pipelines/atm_pos/generate_atm_pos_insights`, `pipelines/atm_pos/validate_atm_pos_insights`, `pipelines/sibc/generate_analysis_report`, `pipelines/sibc/validate_sibc_traceability`, `signals/proximity` |
+| `analysis/signals/registry.json` | derived | `signals/apply_status_rules`, `signals/update_registry` | `core/generate_signal_history`, `core/generate_system_state`, `core/relational_insights`, `core/validate_opportunity_traceability`, `cross/generate_opportunities_feed`, `cross/validate_composition`, `guards/check_signal_freshness`, `guards/validate_signal_history`, `pipelines/atm_pos/compute_atm_pos_signals`, `pipelines/atm_pos/generate_atm_pos_insights`, `pipelines/atm_pos/validate_atm_pos_insights`, `pipelines/sibc/generate_analysis_report`, `pipelines/sibc/validate_sibc_traceability`, `signals/proximity` |
 | `analysis/signals/signals.db` | derived | `signals/db` | `core/derive_opportunities`, `core/gate`, `core/generate_system_state`, `core/relational_insights`, `core/validate_opportunity_traceability`, `cross/compose_ecosystem`, `cross/generate_opportunities_feed`, `cross/generate_opportunity_narrative`, `guards/check_derived_fresh`, `guards/validate_signal_history`, `pipelines/atm_pos/compute_atm_pos_signals`, `pipelines/atm_pos/generate_atm_pos_insights`, `pipelines/atm_pos/validate_atm_pos_claims`, `pipelines/atm_pos/validate_atm_pos_insights`, `pipelines/sibc/generate_analysis_report`, `pipelines/sibc/validate_sibc_traceability`, `signals/dominance`, `signals/proximity` |
 | `web/lib/reports/rbi_sibc.ts` | derived | `pipelines/sibc/promote_annotations` | `hook_validate`, `pipelines/sibc/validate_annotation_basis`, `pipelines/sibc/validate_web_series` |
 | `web/lib/reports/rbi_sibc_label_overrides.json` | external/authored | — | `pipelines/sibc/validate_web_series` |

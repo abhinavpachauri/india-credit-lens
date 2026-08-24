@@ -166,10 +166,14 @@
       "parent_code": "III",
       "parent_statement": "Statement 1",
       "additive": true,
-      "registry_domain": "sector_mix",
+      "registry_domain": "industry",
       "data_section": null,
       "data_series": null,
       "signal_ids": [
+        "sibc-ind-size-acceleration",
+        "sibc-ind-size-allocation",
+        "sibc-ind-size-momentum",
+        "sibc-ind-size-yoy-scan",
         "sibc-industry-fy-acceleration",
         "sibc-industry-share",
         "sibc-industry-yoy",
@@ -214,7 +218,10 @@
         "sibc-services-share",
         "sibc-services-share-scan",
         "sibc-services-yoy",
-        "sibc-services-yoy-scan"
+        "sibc-services-yoy-scan",
+        "sibc-svcs-acceleration",
+        "sibc-svcs-allocation",
+        "sibc-svcs-momentum"
       ],
       "annotation_ids": [],
       "description": "Services — structural node (Statement 1 3).",
@@ -247,6 +254,8 @@
       "signal_ids": [
         "sibc-personal-loans-share",
         "sibc-personal-loans-yoy",
+        "sibc-pl-acceleration",
+        "sibc-pl-allocation",
         "sibc-pl-cc-share",
         "sibc-pl-consumer-durables-share",
         "sibc-pl-divergence",
@@ -254,6 +263,7 @@
         "sibc-pl-fd-advances-share",
         "sibc-pl-gold-share",
         "sibc-pl-housing-share",
+        "sibc-pl-momentum",
         "sibc-pl-other-share",
         "sibc-pl-rotation",
         "sibc-pl-share-advances-share",
@@ -1934,6 +1944,9 @@
       "data_section": null,
       "data_series": null,
       "signal_ids": [
+        "sibc-infra-sub-acceleration",
+        "sibc-infra-sub-allocation",
+        "sibc-infra-sub-momentum",
         "sibc-infra-sub-share-scan",
         "sibc-infra-sub-yoy-scan"
       ],

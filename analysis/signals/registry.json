@@ -2,7 +2,7 @@
   "_meta": {
     "schema_version": "1.0",
     "description": "Signal registry — permanent catalog of every tracked signal across all ingestion pipelines. Signal IDs are immutable once created. Add new signals; never rename or delete. layer: 1 = per-chart data signal (algorithmically computed), 2 = cross-chart synthesis (authored per period from data), 3 = lending ecosystem expert model (generated ~6-monthly, strict claim validation).",
-    "last_updated": "2026-08-21"
+    "last_updated": "2026-08-24"
   },
   "pipelines": {
     "sibc": {
@@ -7044,6 +7044,573 @@
         "child_level": 1,
         "statement": "Statement 1",
         "entity_type": "sector",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      },
+      "current_status": "strengthening",
+      "first_seen": "2025-02-28"
+    },
+    "sibc-ind-type-momentum": {
+      "id": "sibc-ind-type-momentum",
+      "title": "Movement — industry types (units added over 12m, + net/gross/coherence)",
+      "type": "data",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1e",
+      "domain": "industry",
+      "spec_version": "1.0",
+      "compute": {
+        "parent_code": "2",
+        "statement": "Statement 2",
+        "child_level": 2,
+        "entity_type": "industry_type",
+        "method": "csv_sector_momentum",
+        "unit": "rs_cr",
+        "window": 12,
+        "status_rules": [
+          {
+            "if": "value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < 0",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "stable"
+          }
+        ]
+      },
+      "current_status": "strengthening",
+      "first_seen": "2025-02-28"
+    },
+    "sibc-ind-type-acceleration": {
+      "id": "sibc-ind-type-acceleration",
+      "title": "Acceleration — industry types (change in YoY vs prior period, pp)",
+      "type": "data",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1e",
+      "domain": "industry",
+      "spec_version": "1.0",
+      "compute": {
+        "parent_code": "2",
+        "statement": "Statement 2",
+        "child_level": 2,
+        "entity_type": "industry_type",
+        "method": "csv_sector_acceleration",
+        "status_rules": [
+          {
+            "if": "value > 0.5",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < -0.5",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "stable"
+          }
+        ]
+      },
+      "current_status": "strengthening",
+      "first_seen": "2025-02-28"
+    },
+    "sibc-ind-type-allocation": {
+      "id": "sibc-ind-type-allocation",
+      "title": "Allocation — industry types (share of new credit over 12m, %)",
+      "type": "data",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1e",
+      "domain": "industry",
+      "spec_version": "1.0",
+      "compute": {
+        "parent_code": "2",
+        "statement": "Statement 2",
+        "child_level": 2,
+        "entity_type": "industry_type",
+        "method": "csv_sector_allocation",
+        "window": 12,
+        "coherence_min": 0.9
+      },
+      "current_status": "active",
+      "first_seen": "2025-02-28"
+    },
+    "sibc-ind-size-momentum": {
+      "id": "sibc-ind-size-momentum",
+      "title": "Movement — industry by size (units added over 12m, + net/gross/coherence)",
+      "type": "data",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1e",
+      "domain": "industry",
+      "spec_version": "1.0",
+      "compute": {
+        "parent_code": "2",
+        "statement": "Statement 1",
+        "child_level": 2,
+        "entity_type": "size_band",
+        "method": "csv_sector_momentum",
+        "unit": "rs_cr",
+        "window": 12,
+        "status_rules": [
+          {
+            "if": "value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < 0",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "stable"
+          }
+        ]
+      },
+      "current_status": "strengthening",
+      "first_seen": "2025-02-28"
+    },
+    "sibc-ind-size-acceleration": {
+      "id": "sibc-ind-size-acceleration",
+      "title": "Acceleration — industry by size (change in YoY vs prior period, pp)",
+      "type": "data",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1e",
+      "domain": "industry",
+      "spec_version": "1.0",
+      "compute": {
+        "parent_code": "2",
+        "statement": "Statement 1",
+        "child_level": 2,
+        "entity_type": "size_band",
+        "method": "csv_sector_acceleration",
+        "status_rules": [
+          {
+            "if": "value > 0.5",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < -0.5",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "stable"
+          }
+        ]
+      },
+      "current_status": "strengthening",
+      "first_seen": "2025-02-28"
+    },
+    "sibc-ind-size-allocation": {
+      "id": "sibc-ind-size-allocation",
+      "title": "Allocation — industry by size (share of new credit over 12m, %)",
+      "type": "data",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1e",
+      "domain": "industry",
+      "spec_version": "1.0",
+      "compute": {
+        "parent_code": "2",
+        "statement": "Statement 1",
+        "child_level": 2,
+        "entity_type": "size_band",
+        "method": "csv_sector_allocation",
+        "window": 12,
+        "coherence_min": 0.9
+      },
+      "current_status": "active",
+      "first_seen": "2025-02-28"
+    },
+    "sibc-svcs-momentum": {
+      "id": "sibc-svcs-momentum",
+      "title": "Movement — services (units added over 12m, + net/gross/coherence)",
+      "type": "data",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1e",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "compute": {
+        "parent_code": "3",
+        "statement": "Statement 1",
+        "child_level": 2,
+        "entity_type": "service_sector",
+        "method": "csv_sector_momentum",
+        "unit": "rs_cr",
+        "window": 12,
+        "status_rules": [
+          {
+            "if": "value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < 0",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "stable"
+          }
+        ]
+      },
+      "current_status": "strengthening",
+      "first_seen": "2025-02-28"
+    },
+    "sibc-svcs-acceleration": {
+      "id": "sibc-svcs-acceleration",
+      "title": "Acceleration — services (change in YoY vs prior period, pp)",
+      "type": "data",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1e",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "compute": {
+        "parent_code": "3",
+        "statement": "Statement 1",
+        "child_level": 2,
+        "entity_type": "service_sector",
+        "method": "csv_sector_acceleration",
+        "status_rules": [
+          {
+            "if": "value > 0.5",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < -0.5",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "stable"
+          }
+        ]
+      },
+      "current_status": "strengthening",
+      "first_seen": "2025-02-28"
+    },
+    "sibc-svcs-allocation": {
+      "id": "sibc-svcs-allocation",
+      "title": "Allocation — services (share of new credit over 12m, %)",
+      "type": "data",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1e",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "compute": {
+        "parent_code": "3",
+        "statement": "Statement 1",
+        "child_level": 2,
+        "entity_type": "service_sector",
+        "method": "csv_sector_allocation",
+        "window": 12,
+        "coherence_min": 0.9
+      },
+      "current_status": "active",
+      "first_seen": "2025-02-28"
+    },
+    "sibc-pl-momentum": {
+      "id": "sibc-pl-momentum",
+      "title": "Movement — personal loans (units added over 12m, + net/gross/coherence)",
+      "type": "data",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1e",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "compute": {
+        "parent_code": "4",
+        "statement": "Statement 1",
+        "child_level": 2,
+        "entity_type": "pl_category",
+        "method": "csv_sector_momentum",
+        "unit": "rs_cr",
+        "window": 12,
+        "status_rules": [
+          {
+            "if": "value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < 0",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "stable"
+          }
+        ]
+      },
+      "current_status": "strengthening",
+      "first_seen": "2025-02-28"
+    },
+    "sibc-pl-acceleration": {
+      "id": "sibc-pl-acceleration",
+      "title": "Acceleration — personal loans (change in YoY vs prior period, pp)",
+      "type": "data",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1e",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "compute": {
+        "parent_code": "4",
+        "statement": "Statement 1",
+        "child_level": 2,
+        "entity_type": "pl_category",
+        "method": "csv_sector_acceleration",
+        "status_rules": [
+          {
+            "if": "value > 0.5",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < -0.5",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "stable"
+          }
+        ]
+      },
+      "current_status": "stable",
+      "first_seen": "2025-02-28"
+    },
+    "sibc-pl-allocation": {
+      "id": "sibc-pl-allocation",
+      "title": "Allocation — personal loans (share of new credit over 12m, %)",
+      "type": "data",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1e",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "compute": {
+        "parent_code": "4",
+        "statement": "Statement 1",
+        "child_level": 2,
+        "entity_type": "pl_category",
+        "method": "csv_sector_allocation",
+        "window": 12,
+        "coherence_min": 0.9
+      },
+      "current_status": "active",
+      "first_seen": "2025-02-28"
+    },
+    "sibc-psl-momentum": {
+      "id": "sibc-psl-momentum",
+      "title": "Movement — priority sector (units added over 12m, + net/gross/coherence)",
+      "type": "data",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1e",
+      "domain": "psl",
+      "spec_version": "1.0",
+      "compute": {
+        "psl_memo": true,
+        "statement": "Statement 1",
+        "child_level": 2,
+        "entity_type": "psl_category",
+        "method": "csv_sector_momentum",
+        "unit": "rs_cr",
+        "window": 12,
+        "status_rules": [
+          {
+            "if": "value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < 0",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "stable"
+          }
+        ]
+      },
+      "current_status": "strengthening",
+      "first_seen": "2025-02-28"
+    },
+    "sibc-psl-acceleration": {
+      "id": "sibc-psl-acceleration",
+      "title": "Acceleration — priority sector (change in YoY vs prior period, pp)",
+      "type": "data",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1e",
+      "domain": "psl",
+      "spec_version": "1.0",
+      "compute": {
+        "psl_memo": true,
+        "statement": "Statement 1",
+        "child_level": 2,
+        "entity_type": "psl_category",
+        "method": "csv_sector_acceleration",
+        "status_rules": [
+          {
+            "if": "value > 0.5",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < -0.5",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "stable"
+          }
+        ]
+      },
+      "current_status": "strengthening",
+      "first_seen": "2025-02-28"
+    },
+    "sibc-psl-allocation": {
+      "id": "sibc-psl-allocation",
+      "title": "Allocation — priority sector (share of new credit over 12m, %)",
+      "type": "data",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1e",
+      "domain": "psl",
+      "spec_version": "1.0",
+      "compute": {
+        "psl_memo": true,
+        "statement": "Statement 1",
+        "child_level": 2,
+        "entity_type": "psl_category",
+        "method": "csv_sector_allocation",
+        "window": 12,
+        "coherence_min": 0.9
+      },
+      "current_status": "active",
+      "first_seen": "2025-02-28"
+    },
+    "sibc-infra-sub-momentum": {
+      "id": "sibc-infra-sub-momentum",
+      "title": "Movement — infrastructure sub-types (units added over 12m, + net/gross/coherence)",
+      "type": "data",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1e",
+      "domain": "industry",
+      "spec_version": "1.0",
+      "compute": {
+        "parent_code": "2.18",
+        "statement": "Statement 2",
+        "child_level": 3,
+        "entity_type": "infra_sub",
+        "method": "csv_sector_momentum",
+        "unit": "rs_cr",
+        "window": 12,
+        "status_rules": [
+          {
+            "if": "value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < 0",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "stable"
+          }
+        ]
+      },
+      "current_status": "strengthening",
+      "first_seen": "2025-02-28"
+    },
+    "sibc-infra-sub-acceleration": {
+      "id": "sibc-infra-sub-acceleration",
+      "title": "Acceleration — infrastructure sub-types (change in YoY vs prior period, pp)",
+      "type": "data",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1e",
+      "domain": "industry",
+      "spec_version": "1.0",
+      "compute": {
+        "parent_code": "2.18",
+        "statement": "Statement 2",
+        "child_level": 3,
+        "entity_type": "infra_sub",
+        "method": "csv_sector_acceleration",
+        "status_rules": [
+          {
+            "if": "value > 0.5",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < -0.5",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "stable"
+          }
+        ]
+      },
+      "current_status": "weakening",
+      "first_seen": "2025-02-28"
+    },
+    "sibc-infra-sub-allocation": {
+      "id": "sibc-infra-sub-allocation",
+      "title": "Allocation — infrastructure sub-types (share of new credit over 12m, %)",
+      "type": "data",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1e",
+      "domain": "industry",
+      "spec_version": "1.0",
+      "compute": {
+        "parent_code": "2.18",
+        "statement": "Statement 2",
+        "child_level": 3,
+        "entity_type": "infra_sub",
+        "method": "csv_sector_allocation",
+        "window": 12,
+        "coherence_min": 0.9
+      },
+      "current_status": "active",
+      "first_seen": "2025-02-28"
+    },
+    "sibc-ind-size-yoy-scan": {
+      "id": "sibc-ind-size-yoy-scan",
+      "title": "Speed — industry by size (YoY % per band)",
+      "type": "data",
+      "pipeline": "sibc",
+      "layer": 1,
+      "sub_layer": "1b",
+      "domain": "industry",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_sector_scan_yoy",
+        "parent_code": "2",
+        "statement": "Statement 1",
+        "child_level": 2,
+        "entity_type": "size_band",
         "status_rules": [
           {
             "if": "value > prev_value and value > 0",

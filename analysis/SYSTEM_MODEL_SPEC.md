@@ -331,6 +331,62 @@ Computed by `analysis/generate_system_state.py --pipeline {p} --period {date}` a
 
 **Coherence qualifies a direction; it never suppresses one.** Low coherence is a finding (the parts are trading places), not a defect. Consumers that state a direction in prose must state its coherence regime with it.
 
+**Step 2b — Mix state (added 2026-08-19). Layer 2 reads the movement family, not just a sign.**
+
+Steps 1–2 reduce every signal to `direction ∈ {+1, 0, −1}`. That discards magnitude, speed, tilt
+and agreement — so the causal layer cannot express the one thing a credit mix is actually doing,
+which is being *managed*. The Layer-1 movement methods (`signals/README.md`) compute the raw
+quantities; this step is where Layer 2 consumes them. **No new registry signals** — the registry
+stays L1-computed-only (the June 2026 decision that retired 34 L2 stubs); mix state is a computed
+field on the hierarchy node, exactly as `coherence` is in Step 2a.
+
+For each entity that has children carrying movement signals, read from `signals.db`:
+
+```
+tilt_i     = alloc_i − weight_i          share of the new units minus the child's existing weight
+coherence  = |Σ delta| / Σ|delta|        Step 2a, already computed
+toward     = argmax  tilt_i              the child the new money is FAVOURING
+away_from  = argmin  tilt_i              the child it is being taken from
+
+mix_state =
+  steered       coherence ≥ 0.90, `toward` unchanged for ≥2 windows, and tilt_toward material
+  drifting      coherence ≥ 0.90, but no child holds a material tilt across two windows
+  contested     0.50 ≤ coherence < 0.90 — direction rests on a majority, not a consensus
+  reallocating  coherence < 0.50 — members are trading places; the net is the least of it
+```
+
+**"Material" is self-calibrating, never a constant.** Max |tilt| scales with the number of
+children — measured 2026-08-19, median max-tilt is **5.6 pp** on the four main sectors and
+**23.7 pp** on the nineteen industry types. An absolute threshold would call the same behaviour
+material in one cut and noise in another. A tilt is material when it exceeds **that cut's own
+median max-tilt over its history**, the idiom `proximity.typical_move` already uses for the same
+reason.
+
+**Two windows, not one** — the same noise filter `derive_opportunities` applies before an
+opportunity may reach `active`. One month of tilt is a month, not management.
+
+**`toward`, not `argmax |tilt|`.** The largest tilt in either direction would name the biggest
+mover and call it the destination — measured 2026-08-19, the main-sector cut's largest |tilt| is
+Personal Loans at **−4.9 pp**, i.e. the child money is moving AWAY from. Reporting that as the lead
+would invert the finding. Both ends are emitted; only the positive one decides `steered`.
+
+**Keyed by CUT, not by entity.** Industry carries two decompositions — by size (Statement 1) and by
+type (Statement 2) — hanging off the same node. They are different mixes with different states, so
+keying by entity would silently drop one. Each entry carries its `entity_urn` and `decomposition`.
+
+**Known coverage gap: the PSL memo block has no parent entity node** (its rows carry an empty
+`parent_code`), so it computes movement signals but no mix state. Closing it means giving the
+skeleton a PSL node, which is a skeleton-profile change, not a mix-state change.
+
+**Measured on SIBC at 2026-07-31:** main sectors **steered** toward Services (+4.9 pp) away from
+Personal Loans; services **steered** toward NBFCs (+15.9 pp); industry by size, industry by type and
+personal loans **drifting**; infrastructure sub-types **contested** (coherence 0.778).
+
+**What consumes it.** `mix_state` is evidence available to force firing and to
+`derive_opportunities`; a force claiming to steer the mix can be checked against whether the mix
+is in fact `steered`, and toward which child. It qualifies, it does not fire on its own —
+consistent with Step 2a, coherence never suppresses a direction.
+
 **Step 3 — Force states.** For each force, read `signal_evidence` → `active` | `latent`.
 
 **Step 4 — Behavioral edge states.** For each behavioral edge (polarity `+`/`-`/`~`): `active` | `dominant` | `dormant` | `reversed` per from-node direction and polarity.

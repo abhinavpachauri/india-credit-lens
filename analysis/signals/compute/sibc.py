@@ -607,17 +607,22 @@ COHERENCE_MIN = 0.90   # sentence-selector, never a publish gate — see README
 
 
 def _children_at(params: dict, period: str, df: pd.DataFrame) -> dict[str, float]:
-    """{sector name: value} for every child of parent_code at child_level on `period`."""
-    parent_code = str(params["parent_code"])
+    """{sector name: value} for every child of parent_code at child_level on `period`.
+
+    `psl_memo: true` selects the priority-sector memo block instead. PSL is not a child of any
+    code — its rows carry an EMPTY parent_code and are flagged `is_priority_sector_memo` — so a
+    parent_code selector cannot reach it, and PSL is a dimension the dashboard renders.
+    """
     stmt        = params.get("statement", "Statement 1")
     child_level = params.get("child_level", 2)
     exclude     = {str(c) for c in params.get("exclude_codes", [])}
-    rows = df[
-        (df["date"] == period) &
-        (df["statement"] == stmt) &
-        (df["parent_code"] == parent_code) &
-        (df["level"] == child_level)
-    ]
+    base = (df["date"] == period) & (df["statement"] == stmt) & (df["level"] == child_level)
+    if params.get("psl_memo"):
+        rows = df[base & (df["is_priority_sector_memo"] == True)]          # noqa: E712
+    else:
+        parent_code = str(params["parent_code"])
+        rows = df[base & (df["parent_code"] == parent_code)
+                  & (df["is_priority_sector_memo"] == False)]              # noqa: E712
     out: dict[str, float] = {}
     for _, r in rows.iterrows():
         if str(r["code"]) in exclude:
@@ -697,7 +702,7 @@ def csv_sector_acceleration(params: dict, period: str, df: pd.DataFrame) -> list
     (the parent's own acceleration).
     """
     stmt        = params.get("statement", "Statement 1")
-    parent_code = str(params["parent_code"])
+    parent_code = str(params.get("parent_code", ""))
     parent_stmt = params.get("parent_statement", stmt)
     entity_type = params.get("entity_type", "sector")
     rules       = params.get("status_rules") or ACCEL_DEFAULT_RULES
@@ -723,9 +728,13 @@ def csv_sector_acceleration(params: dict, period: str, df: pd.DataFrame) -> list
     if not out:
         return []
     out.sort(key=lambda r: r["value"], reverse=True)
-    pa = accel(parent_code, parent_stmt)
-    if pa is not None:
-        out.append(_row("aggregate", "total", pa, _eval_status(rules, pa, 0.0), "pp"))
+    # The PSL memo block is not a child of any code, so it has no parent row to accelerate
+    # against. Its status rolls up from the children instead (Counter path in
+    # sync_current_status_from_db) rather than inventing a parent that does not exist.
+    if not params.get("psl_memo"):
+        pa = accel(parent_code, parent_stmt)
+        if pa is not None:
+            out.append(_row("aggregate", "total", pa, _eval_status(rules, pa, 0.0), "pp"))
     return out
 
 
@@ -765,6 +774,18 @@ def csv_sector_allocation(params: dict, period: str, df: pd.DataFrame) -> list[d
     # and a record in it is real news (new lending never this concentrated / this spread).
     out.append(_row("aggregate", "total", max(abs(r["value"]) for r in out),
                     "active", "pct"))
+    # The child's share of the parent at the START of the window. Stored, not left to be
+    # recomputed, because `tilt = alloc - weight` is what Layer 2 reads to decide whether a mix
+    # is being steered (SYSTEM_MODEL_SPEC §16 Step 2b) — and because a tilt quoted in prose has
+    # to be derivable from rows a gate can check.
+    window = int(params.get("window", 12))
+    prior_date = _month_back(period, window, set(df["date"].unique()))
+    if prior_date:
+        base = _children_at(params, prior_date, df)
+        tot = sum(base.values())
+        if tot:
+            out.extend(_row("weight", name, 100.0 * v / tot, "active", "pct")
+                       for name, v in base.items())
     if coherence >= cmin and net:
         alloc = [_row("alloc", name, 100.0 * val / net, "active", "pct")
                  for name, val in deltas.items()]

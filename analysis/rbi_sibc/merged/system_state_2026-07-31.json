@@ -5,7 +5,7 @@
     "schema_version": "4.0",
     "spec_ref": "analysis/SYSTEM_MODEL_SPEC.md §16",
     "computed_from": "signals.db",
-    "signals_observed": 92
+    "signals_observed": 111
   },
   "entity_states": {
     "icl:sibc/Statement1/I": {
@@ -34,22 +34,22 @@
     },
     "icl:sibc/Statement1/2": {
       "direction": 1,
-      "signals": 7,
-      "observed": 7,
+      "signals": 11,
+      "observed": 11,
       "coherence": 1.0,
       "children": 3
     },
     "icl:sibc/Statement1/3": {
       "direction": 1,
-      "signals": 8,
-      "observed": 7,
+      "signals": 11,
+      "observed": 10,
       "coherence": 1.0,
       "children": 10
     },
     "icl:sibc/Statement1/4": {
       "direction": 1,
-      "signals": 16,
-      "observed": 15,
+      "signals": 19,
+      "observed": 18,
       "coherence": 1.0,
       "children": 9
     },
@@ -319,9 +319,9 @@
       "observed": 0
     },
     "icl:sibc/Statement2/2.18": {
-      "direction": 0,
-      "signals": 2,
-      "observed": 2
+      "direction": -1,
+      "signals": 5,
+      "observed": 5
     },
     "icl:sibc/Statement2/2.19": {
       "direction": 0,
@@ -703,7 +703,7 @@
       "to": "opp_renewable_energy"
     },
     "e_S2_2_18__creates_risk__risk_infrastructure_repayment": {
-      "state": "dormant",
+      "state": "active",
       "type": "creates_risk",
       "polarity": "-",
       "from": "e_S2_2_18",
@@ -791,13 +791,77 @@
       "force_eclgs5_guarantee_window",
       "force_kcc_collateral_limit"
     ],
-    "binding_constraints": [],
+    "binding_constraints": [
+      "e_S2_2_18__creates_risk__risk_infrastructure_repayment"
+    ],
     "active_reinforcing_loops": [
       "pli_supply_chain_R",
       "msme_formalisation_R"
     ],
     "active_balancing_loops": [],
     "authored_vs_observed_mismatches": []
+  },
+  "mix_states": {
+    "sibc-main-momentum": {
+      "entity_urn": "icl:sibc/Statement1/III",
+      "decomposition": "Statement 1",
+      "mix_state": "steered",
+      "coherence": 1.0,
+      "toward": "Services",
+      "away_from": "Personal Loans",
+      "toward_tilt_pp": 4.88,
+      "children": 4
+    },
+    "sibc-ind-type-momentum": {
+      "entity_urn": "icl:sibc/Statement1/2",
+      "decomposition": "Statement 2",
+      "mix_state": "drifting",
+      "coherence": 1.0,
+      "toward": "All Engineering",
+      "away_from": "Infrastructure",
+      "toward_tilt_pp": 5.93,
+      "children": 19
+    },
+    "sibc-ind-size-momentum": {
+      "entity_urn": "icl:sibc/Statement1/2",
+      "decomposition": "Statement 1",
+      "mix_state": "drifting",
+      "coherence": 1.0,
+      "toward": "Medium",
+      "away_from": "Large",
+      "toward_tilt_pp": 5.17,
+      "children": 3
+    },
+    "sibc-svcs-momentum": {
+      "entity_urn": "icl:sibc/Statement1/3",
+      "decomposition": "Statement 1",
+      "mix_state": "steered",
+      "coherence": 1.0,
+      "toward": "Non-Banking Financial Companies (NBFCs)",
+      "away_from": "Other Services",
+      "toward_tilt_pp": 15.88,
+      "children": 10
+    },
+    "sibc-pl-momentum": {
+      "entity_urn": "icl:sibc/Statement1/4",
+      "decomposition": "Statement 1",
+      "mix_state": "drifting",
+      "coherence": 0.9997,
+      "toward": "Loans against gold jewellery",
+      "away_from": "Housing (Including Priority Sector Housing)",
+      "toward_tilt_pp": 22.28,
+      "children": 9
+    },
+    "sibc-infra-sub-momentum": {
+      "entity_urn": "icl:sibc/Statement2/2.18",
+      "decomposition": "Statement 2",
+      "mix_state": "contested",
+      "coherence": 0.7776,
+      "toward": null,
+      "away_from": null,
+      "toward_tilt_pp": null,
+      "children": 0
+    }
   },
   "narrative": null
 }

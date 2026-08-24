@@ -403,13 +403,18 @@ def movement_insight(alloc: dict, contribution: dict, momentum: dict,
             f"{' and '.join(dissent)} contracted while the rest expanded. "
             + (f"{_short(lead)} accounts for {_pct(lead_share)} of all the movement in the period. "
                if lead_share is not None else "")
-            + f"Because parts moved in opposite directions, only {_pct(100 * coherence)} of the "
-              f"total movement shows up in the net figure."
+            + "Because parts moved in opposite directions, much of the movement cancels out "
+              "and the net figure understates how much actually shifted."
         )
         chain = [
             "Each sector's change over the year is measured, then compared with the total "
             "movement ignoring direction.",
-            f"Coherence — the net change divided by the total movement — is {coherence:.2f}.",
+            # No numeric coherence in published prose: it is a ratio derived from the movement
+            # rows, not a stored value, so Check 2g cannot ground it — the same rule applied to
+            # the cross-system cards. The regime word carries the meaning; the shares below are
+            # real stored rows and do the quantitative work.
+            "Coherence — the net change divided by the total movement ignoring direction — "
+            "measures whether the parts agree.",
             "Below one, some sectors are cancelling others out, so shares of the NET change "
             "would overstate; shares of total movement are reported instead.",
         ]
@@ -431,14 +436,14 @@ def movement_insight(alloc: dict, contribution: dict, momentum: dict,
             f"similar amount. "
             + (f"{_short(up)} accounts for {_pct(up_c)} of the total movement and {_short(dn)} "
                f"for {_pct(dn_c)}. " if up_c is not None and dn_c is not None else "")
-            + f"Only {_pct(100 * coherence)} of the movement survives into the net figure — "
-              f"this period is a transfer, not a change in size."
+            + "Almost none of that movement survives into the net figure — this period is a "
+              "transfer between members, not a change in size."
         )
         chain = [
             "Each sector's change over the year is measured, then compared with the total "
             "movement ignoring direction.",
-            f"Coherence — the net change divided by the total movement — is {coherence:.2f}, "
-            f"meaning gains and losses very nearly cancel.",
+            "Coherence — the net change divided by the total movement ignoring direction — is "
+            "near zero here, meaning gains and losses very nearly cancel.",
             "At this level a share of the NET change is not meaningful, so the reading is the "
             "transfer between members.",
         ]

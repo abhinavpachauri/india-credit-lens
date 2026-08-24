@@ -179,6 +179,13 @@
    "news_score": 0.0,
    "subject": "Micro and Small"
   },
+  "sibc-ind-size-allocation": {
+   "plane": "read",
+   "news_score": 2.0,
+   "subject": "Large",
+   "reason": "record",
+   "direction": "up"
+  },
   "sibc-nbfc-sub-share-scan": {
    "plane": "subject",
    "news_score": null,
@@ -213,6 +220,13 @@
    "plane": "subject",
    "news_score": null,
    "subject": "Trade"
+  },
+  "sibc-svcs-allocation": {
+   "plane": "read",
+   "news_score": 2.0,
+   "subject": "Non-Banking Financial Companies (NBFCs)",
+   "reason": "record",
+   "direction": "up"
   },
   "sibc-pl-cc-abs": {
    "plane": "read",
@@ -334,6 +348,13 @@
    "news_score": null,
    "subject": null
   },
+  "sibc-pl-allocation": {
+   "plane": "read",
+   "news_score": 3.0,
+   "subject": "Housing (Including Priority Sector Housing)",
+   "reason": "reversal",
+   "direction": "up"
+  },
   "sibc-pl-consumer-durables-neg-streak": {
    "plane": "read",
    "news_score": 2.0,
@@ -413,6 +434,13 @@
    "plane": "subject",
    "news_score": null,
    "subject": null
+  },
+  "sibc-psl-allocation": {
+   "plane": "read",
+   "news_score": 4.0,
+   "subject": "Micro and Small Enterprises",
+   "reason": "record",
+   "direction": "up"
   },
   "sibc-psl-export-yoy": {
    "plane": "subject",
@@ -502,6 +530,20 @@
    "plane": "subject",
    "news_score": null,
    "subject": "Textiles"
+  },
+  "sibc-ind-type-allocation": {
+   "plane": "read",
+   "news_score": 2.0,
+   "subject": "Infrastructure",
+   "reason": "record",
+   "direction": "up"
+  },
+  "sibc-infra-sub-allocation": {
+   "plane": "read",
+   "news_score": 3.0,
+   "subject": "Power",
+   "reason": "reversal",
+   "direction": "down"
   }
  }
 }

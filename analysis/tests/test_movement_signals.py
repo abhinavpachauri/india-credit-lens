@@ -110,7 +110,10 @@ def test_handover_regime_leads_with_the_transfer_not_the_net():
                               net, gross, abs(net) / gross, ACCEL, SPEED, "POS terminals")
     assert ins["insight_kind"] == "movement_momentum"
     assert "shed ground to" in ins["title"]
-    assert "transfer, not a change in size" in ins["body"]
+    assert "transfer between members, not a change in size" in ins["body"]
+    # No numeric coherence in published prose — Check 2g cannot ground a derived
+    # ratio, and it caught exactly this on the infrastructure card (77.8 = 100 x 0.778).
+    assert "%" not in ins["chain"][1]
 
 
 def test_regime_boundaries_are_exactly_the_documented_thresholds():
@@ -136,3 +139,43 @@ def test_least_accelerating_sector_is_stated_as_overtaken_not_shrinking():
     ins = RI.movement_insight(_alloc(FOUR, net), _alloc(FOUR, net), FOUR,
                               net, net, 1.0, ACCEL, SPEED, "bank credit")
     assert "not a retreat" in ins["body"]
+
+
+# ── Layer 2: mix state (SYSTEM_MODEL_SPEC §16 Step 2b) ────────────────────────
+
+def test_mix_state_names_where_money_is_going_not_the_biggest_mover():
+    """`toward` must be the biggest POSITIVE tilt. argmax|tilt| on the main-sector cut picks
+    Personal Loans at -4.9pp — the child money is moving AWAY from — and reporting that as the
+    lead inverts the finding this whole family exists to state."""
+    import json
+    from pathlib import Path
+    root = Path(__file__).resolve().parents[1]
+    st = json.loads((root / "rbi_sibc" / "merged" / "system_state_2026-07-31.json").read_text())
+    main = st["mix_states"]["sibc-main-momentum"]
+    assert main["toward"] == "Services"
+    assert main["away_from"] == "Personal Loans"
+    assert main["toward_tilt_pp"] > 0
+    assert main["mix_state"] == "steered"
+
+
+def test_mix_states_are_keyed_by_cut_so_both_industry_decompositions_survive():
+    """Industry by size (Statement 1) and by type (Statement 2) hang off the SAME entity node.
+    Keying by entity would drop one of two genuinely different mixes."""
+    import json
+    from pathlib import Path
+    root = Path(__file__).resolve().parents[1]
+    ms = json.loads((root / "rbi_sibc" / "merged" / "system_state_2026-07-31.json").read_text())["mix_states"]
+    size, typ = ms["sibc-ind-size-momentum"], ms["sibc-ind-type-momentum"]
+    assert size["entity_urn"] == typ["entity_urn"], "same node — that is the point"
+    assert size["decomposition"] != typ["decomposition"]
+
+
+def test_a_contested_cut_reports_no_destination():
+    """Below the aligned threshold there is no honest 'steered toward' — the parts disagree."""
+    import json
+    from pathlib import Path
+    root = Path(__file__).resolve().parents[1]
+    ms = json.loads((root / "rbi_sibc" / "merged" / "system_state_2026-07-31.json").read_text())["mix_states"]
+    infra = ms["sibc-infra-sub-momentum"]
+    assert infra["mix_state"] == "contested"
+    assert infra["toward"] is None and infra["toward_tilt_pp"] is None

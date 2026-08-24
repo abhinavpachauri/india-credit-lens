@@ -99,6 +99,95 @@ def load_entity_weights(cfg):
     return weights
 
 
+ALIGNED_MIN, CONTESTED_MIN = 0.90, 0.50
+MIX_PERSISTENCE = 2       # same noise filter derive_opportunities uses before `active`
+
+
+def mix_states(pipeline: str, period: str, model: dict) -> dict:
+    """§16 Step 2b — is this hierarchy's mix being MANAGED, and toward what?
+
+    Steps 1-2 reduce every signal to a sign, which cannot express the one thing a credit mix
+    actually does. This reads the Layer-1 movement rows (signals/README.md) straight from
+    signals.db and returns a state per parent entity. No new registry signals: the registry
+    stays L1-computed-only, and this is a computed field on the node, like `coherence`.
+
+    Joined declaratively — a momentum signal's `compute.parent_code` + `statement` name the
+    entity whose children it measures, so adding a cut is a registry entry and nothing else.
+    """
+    registry = gs.load_json(gs.ANALYSIS / "signals" / "registry.json")["signals"]
+    # Code is unique across the skeleton (industry-by-type children hang off the same
+    # Statement-1 industry node as industry-by-size), so join on code alone.
+    by_code = {str(n.get("code")): n
+               for n in model["nodes"] if n.get("tier") == "entity" and n.get("code")}
+    con = sqlite3.connect(DB)
+    out: dict[str, dict] = {}
+    try:
+        for sid, sig in registry.items():
+            comp = sig.get("compute", {})
+            if sig.get("pipeline") != pipeline or comp.get("method") != "csv_sector_momentum":
+                continue
+            node = by_code.get(str(comp.get("parent_code")))
+            if node is None:
+                continue          # e.g. the PSL memo block is a child of no code
+            alloc_sid = sid.replace("-momentum", "-allocation")
+
+            def rows(metric, etype, per=period):
+                return {e: v for e, v in con.execute(
+                    "SELECT entity_id, value FROM signals WHERE pipeline=? AND period=? "
+                    "AND metric_id=? AND entity_type=?", (pipeline, per, metric, etype))}
+
+            coh = rows(sid, "aggregate").get("coherence")
+            alloc, weight = rows(alloc_sid, "alloc"), rows(alloc_sid, "weight")
+            if coh is None or not weight:
+                continue
+            tilt = {k: alloc[k] - weight[k] for k in alloc if k in weight}
+
+            state, toward, toward_tilt, away = "drifting", None, None, None
+            if coh < CONTESTED_MIN:
+                state = "reallocating"
+            elif coh < ALIGNED_MIN:
+                state = "contested"
+            elif tilt:
+                # `toward` is the biggest POSITIVE tilt — the child the new money is favouring.
+                # argmax|tilt| would name the biggest mover in either direction, so a mix
+                # steered AWAY from something would be reported as steered toward it.
+                toward = max(tilt, key=lambda k: tilt[k])
+                away   = min(tilt, key=lambda k: tilt[k])
+                toward_tilt = tilt[toward]
+                # "Material" is measured against THIS cut's own history, never a constant: max
+                # |tilt| scales with the number of children (5.6pp median across 4 main sectors,
+                # 23.7pp across 19 industry types), so one threshold would call the same
+                # behaviour material in one cut and noise in another.
+                hist, periods = [], [r[0] for r in con.execute(
+                    "SELECT DISTINCT period FROM signals WHERE pipeline=? AND metric_id=? "
+                    "ORDER BY period", (pipeline, alloc_sid))]
+                leads = []
+                for per in periods:
+                    a, w = rows(alloc_sid, "alloc", per), rows(alloc_sid, "weight", per)
+                    t = {k: a[k] - w[k] for k in a if k in w}
+                    if t:
+                        top = max(t, key=lambda k: t[k])
+                        hist.append(t[top]); leads.append((per, top))
+                typical = sorted(hist)[len(hist) // 2] if hist else 0.0
+                held = sum(1 for _, l in leads[-MIX_PERSISTENCE:] if l == toward)
+                if toward_tilt >= typical and held >= MIX_PERSISTENCE:
+                    state = "steered"
+            # Keyed by CUT, not by entity: industry carries two decompositions (by size on
+            # Statement 1, by type on Statement 2) that hang off the same node, and they are
+            # different mixes with different states. Keying by entity would silently drop one.
+            out[sid] = {
+                "entity_urn": node.get("urn") or node["id"],
+                "decomposition": comp.get("statement"),
+                "mix_state": state, "coherence": round(coh, 4),
+                "toward": toward, "away_from": away,
+                "toward_tilt_pp": round(toward_tilt, 2) if toward_tilt is not None else None,
+                "children": len(tilt),
+            }
+    finally:
+        con.close()
+    return out
+
+
 def compute(model, sig_dir, weights=None):
     weights = weights or {}
     entities = [n for n in model["nodes"] if n.get("tier") == "entity"]
@@ -246,6 +335,7 @@ def main():
 
     weights = load_entity_weights(cfg)
     state = compute(model, sig_dir, weights)
+    state["mix_states"] = mix_states(args.pipeline, args.period, model)
     out = {
         "_meta": {
             "pipeline": args.pipeline, "period": args.period,
