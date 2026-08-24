@@ -221,3 +221,27 @@ def test_a_repeated_outage_updates_in_place_instead_of_stacking(monkeypatch):
         ri.verify_proposal(p)
     assert len(p["attempts"]) == 1
     assert p["attempts"][0]["retries"] == 3
+
+
+def test_the_browser_path_cannot_promote_without_the_temporal_assertion(tmp_path, monkeypatch):
+    """The crawler requires in_force_at_eval_period; an expired scheme cannot explain a current
+    movement. A manual --resolve that skipped it would make the browser the weaker door — the
+    excerpt is still recorded, it simply does not promote."""
+    import argparse
+    f = tmp_path / "s4.json"
+    f.write_text(json.dumps({"proposals": [{"label": "x", "required_source": "r"}]}))
+    page = tmp_path / "p.txt"; page.write_text(PAGE)
+
+    def run(in_force):
+        a = argparse.Namespace(file=str(f), index=0, url=PIB, excerpt=EXCERPT,
+                               page_file=str(page), in_force=in_force)
+        ri.cmd_resolve(a)
+        return json.loads(f.read_text())["proposals"][0]
+
+    p = run(False)
+    assert p.get("promotable") is not True
+    assert p["attempts"][-1]["verdict"] == "excerpt_verified_temporal_unchecked"
+
+    p = run(True)
+    assert p["promotable"] is True
+    assert p["attempts"][-1]["verdict"] == "excerpt_verified"

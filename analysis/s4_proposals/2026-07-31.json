@@ -934,7 +934,7 @@
         "RBI Financial Stability Report discussing consumer credit risk weight changes",
         "ICRA or CARE Ratings analysis of RBI consumer credit risk weight revisions or Mint coverage"
       ],
-      "claim_type": "hypothesis",
+      "claim_type": "inference",
       "from_pipeline": "sibc",
       "status": "proposed",
       "attempts": [
@@ -971,6 +971,17 @@
           "date": "2026-08-23",
           "note": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too lo",
           "retryable": true
+        },
+        {
+          "rung": "chrome",
+          "target": "RBI Master Direction on Basel III Capital Regulations update on personal loan risk weights",
+          "url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx?Id=12567&Mode=0",
+          "tier": "official",
+          "verdict": "excerpt_verified",
+          "llm_verdict": null,
+          "date": "2026-08-23",
+          "retryable": false,
+          "note": "verified via editor browser (host refuses automated reads)"
         }
       ],
       "verification": {
@@ -981,7 +992,10 @@
         "tier": null,
         "rung": 1
       },
-      "promotable": false
+      "promotable": true,
+      "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx?Id=12567&Mode=0",
+      "source_excerpt": "increase the risk weights in respect of consumer credit exposure of commercial banks (outstanding as well as new), including personal loans, but excluding housing loans, education loans, vehicle loans and loans secured by gold and gold jewellery, by 25 percentage points to 125%",
+      "source_verified_date": "2026-08-23"
     },
     {
       "kind": "channel",

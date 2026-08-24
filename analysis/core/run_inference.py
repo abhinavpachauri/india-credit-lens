@@ -321,9 +321,17 @@ def cmd_resolve(args):
     from core.source_fetch import html_to_text
     text = html_to_text(page) if "<" in page[:400] else page
     ok, verdict, tier = check_source(args.url, args.excerpt, page_text=text)
+    # The crawler path requires in_force_at_eval_period — an expired instrument cannot explain a
+    # current movement (v3.0 §13). The browser path must not be the weaker door: promotion needs
+    # the same assertion, made explicitly by the person who just read the page. Without --in-force
+    # the attempt is still recorded, so the excerpt work is never lost; it simply does not promote.
+    if ok and not args.in_force:
+        verdict = "excerpt_verified_temporal_unchecked"
+        ok = False
     p.setdefault("attempts", []).append({
         "rung": "chrome", "target": p.get("required_source"), "url": args.url, "tier": tier,
         "verdict": verdict, "llm_verdict": None, "date": date.today().isoformat(),
+        "retryable": False,
         "note": "verified via editor browser (host refuses automated reads)",
     })
     if ok:
@@ -350,6 +358,10 @@ def main():
     ap.add_argument("--resolve", metavar="FILE", dest="file", help="record a Chrome-sourced verification")
     ap.add_argument("--index", type=int, help="proposal index (with --resolve)")
     ap.add_argument("--url"); ap.add_argument("--excerpt"); ap.add_argument("--page-file")
+    ap.add_argument("--in-force", action="store_true",
+                    help="assert the instrument is still in force at the eval period — required "
+                         "to promote, because the crawler path checks this and the browser path "
+                         "must not be the weaker door")
     args = ap.parse_args()
 
     channels = gs.load_json(ROOT / "analysis/ontology/channels.json")["channels"]
