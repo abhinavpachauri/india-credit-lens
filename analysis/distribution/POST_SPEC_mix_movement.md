@@ -15,17 +15,15 @@ hand.
 
 ---
 
-## POST 1 — "The mix didn't move. The money did."
+## POST 1 — "The mix didn't move. Look one level down."
 
 ### The one claim
-India's bank credit mix has looked frozen for three years. It wasn't. The *stock* barely moved
-because a large reallocation ran in one direction and then reversed — and the two halves cancel.
+The chart everyone looks at — four sectors, share of the book — is the **one cut where India's
+credit mix moved least**. Go one level down and the same three years show swings of 7 to 27 points.
 
 ### The numbers (verbatim — do not recompute)
 
-Bank credit book: **₹152 L Cr → ₹207 L Cr** (Dec 2023 → Jun 2026).
-
-Share of the book — this is the chart everyone looks at:
+**Level 1, the chart everyone shows.** Book grew **₹152 L Cr → ₹207 L Cr** (Dec 2023 → Jun 2026):
 
 | sector | Dec 2023 | Jun 2026 | change |
 |---|---|---|---|
@@ -34,39 +32,51 @@ Share of the book — this is the chart everyone looks at:
 | Services | 28.95% | 29.68% | +0.73 pp |
 | Personal Loans | 34.13% | 34.31% | +0.19 pp |
 
-Share of **new** credit (trailing 12 months) — this is the chart nobody looks at:
+**Level 2, where the money actually went.** "Tilt" = a segment's share of *new* lending minus its
+share of the existing book. Swing = how far that tilt travelled, Feb 2025 → Jul 2026:
 
-| 12m ending | Personal Loans | Industry |
-|---|---|---|
-| Dec 2024 | 37.9% | 16.4% |
-| May 2025 | **44.9%** | **14.5%** |
-| Jun 2025 | 44.7% | 16.6% |
-| Dec 2025 | 35.2% | 21.9% |
-| Mar 2026 | 33.5% | 20.7% |
-| Jun 2026 | **30.1%** | **24.0%** |
+| cut | gained most | swing | lost most | swing |
+|---|---|---|---|---|
+| **Services** | **NBFCs** | **+27.2 pp** | Other Services | −14.7 pp |
+| Priority Sector | Housing | +12.4 pp | Weaker Sections | −9.0 pp |
+| Industry by type | Infrastructure | +11.4 pp | Basic Metal | −6.5 pp |
+| Personal Loans | Gold loans | +10.5 pp | Housing | −11.6 pp |
+| Main sectors | Industry | +7.3 pp | Personal Loans | −7.0 pp |
+| Industry by size | Large | +3.6 pp | Medium | −4.8 pp |
 
-They cross around **Dec 2025**. Swing: personal loans **−14.8 points**, industry **+9.5 points**.
+NBFCs went from taking **11.3 points less** than their weight to **15.9 points more**. The
+main-sector pair — the one the headline chart shows — is the **smallest** move in the table.
 
-The correction that makes the post honest: personal loans grew **15.76% YoY** in Jun 2026 and were
-still **accelerating (+0.38 pp)**, taking **₹6.4 L Cr → ₹9.7 L Cr** of new money.
+**And in payments, the extreme case.** POS terminals, 12 months to May 2026:
+
+| bank category | terminals |
+|---|---|
+| Public Sector Banks | **+204,595** |
+| Small Finance Banks | +270 |
+| Foreign Banks | −3,460 |
+| Private Sector Banks | **−257,290** |
+| **net** | **−55,885** |
+| **total movement** | **465,615** |
+
+**465,615 terminals changed hands to produce a headline that says the fleet shrank by 55,885.**
 
 ### Suggested arc (6 slides)
 1. **Hook** — the four shares, three years apart, all within a point. "Nothing happened."
-2. **Turn** — the same period, share of *new* lending. Personal 37.9 → 44.9 → 30.1.
-3. **The mirror** — industry 16.4 → 14.5 → 24.0. Crossing Dec 2025.
-4. **Why it hides** — the two phases cancel; a year's lending is only ~15% of the book, so even a
-   large tilt moves the stock slowly, and a reversal gives it back.
-5. **The caveat slide** *(sand background — see design brief)* — "personal loans collapsed" is
-   wrong. They grew 15.76%, accelerating, ₹6.4 → ₹9.7 L Cr. A smaller slice of a much bigger pie.
+2. **One level down** — the swing table. NBFCs +27.2. Same three years, same book.
+3. **Why level 1 can't show it** — a year's lending is ~15% of the book, and moves that reverse
+   cancel. The mix is an average of movements going opposite ways.
+4. **The extreme** — POS terminals. 465,615 moved; the headline says −55,885.
+5. **Caveat slide** *(sand background)* — "personal loans collapsed" is wrong. They grew **15.76%
+   YoY**, still accelerating **(+0.38 pp)**, ₹6.4 L Cr → ₹9.7 L Cr. A smaller slice of a bigger pie.
 6. **Sign-off.**
 
 ### Traps — do not write these
-- ❌ "Banks pulled back from personal loans." They didn't. Growth *accelerated*.
-- ❌ "Industry is booming." Industry's share of new credit rose; say that, not more.
-- ❌ Any claim about *why*. This is a composition read. The cause is not in this data.
+- ❌ "Banks pulled back from personal loans." They didn't. Growth **accelerated**.
+- ❌ "The mix is frozen." It is the opposite — the *summary* is flat, the mix is not.
+- ❌ Any claim about *why*. This is a composition read; the cause is not in this data.
 - ❌ Forecasts. Nothing about next quarter.
-
----
+- ❌ Naming the issuer behind the POS move. The category-level fact stands on its own; the
+  attribution is a separate, sourced claim.
 
 ## POST 2 — "Do the parts agree? That's arithmetic, not a judgement."
 
@@ -91,6 +101,14 @@ Across the seven cuts of Indian bank credit (Jun 2026):
 | main sectors, industry ×2, services, personal loans | 1.000 |
 | priority sector | 0.993 |
 | **infrastructure sub-types** | **0.778** |
+
+And across payments, over 18 windows each — this is where the vocabulary earns itself:
+
+| metric | aligned | contested | handover |
+|---|---|---|---|
+| credit cards | 18 | — | — |
+| debit cards | 12 | 6 | — |
+| **POS terminals** | 12 | 5 | **1** |
 
 Resulting states: **2 steered, 4 drifting, 1 contested.** Main sectors are *steered* toward Services
 (**+4.9 pp** tilt) away from Personal Loans; services *steered* toward NBFCs (**+15.9 pp**).
@@ -145,36 +163,37 @@ Both posts use the house system already defined in `slot_render.py`. Give the de
 **POST 1**
 
 ```
-SLIDE 1 (hook)                     SLIDE 2 (the turn)
+SLIDE 1 (hook)                     SLIDE 2 (one level down)
 +---------------------------+      +---------------------------+
-| INDIA CREDIT LENS      1/6|      | SHARE OF NEW LENDING   2/6|
-|                           |      |                           |
-|  Three years.             |      |   44.9%  ->  30.1%        |
-|  Four sectors.            |      |   ^^^^^^^^^^^^^^^^        |
-|  Nothing moved.           |      |   personal loans, share   |
-|                           |      |   of every new rupee lent |
-|  13.1 -> 13.0             |      |                           |
-|  23.8 -> 23.0             |      |  [line: 14 points,        |
-|  29.0 -> 29.7             |      |   peak May-25, fall to    |
-|  34.1 -> 34.3             |      |   Jun-26, blue]           |
-|                           |      |                           |
-|  ...or did it?            |      |  The same three years.    |
+| INDIA CREDIT LENS      1/6|      | SAME BOOK, ONE LEVEL   2/6|
+|                           |      | DOWN                      |
+|  Three years.             |      |                           |
+|  Four sectors.            |      |   NBFCs        +27.2 pp   |
+|  Nothing moved.           |      |   PSL Housing  +12.4 pp   |
+|                           |      |   Gold loans   +10.5 pp   |
+|  13.1 -> 13.0             |      |   ------------------------|
+|  23.8 -> 23.0             |      |   Main sectors  +7.3 pp   |
+|  29.0 -> 29.7             |      |   <- the chart on slide 1 |
+|  34.1 -> 34.3             |      |                           |
+|                           |      |  [h-bars, NBFC blue and   |
+|  ...that's the summary.   |      |   longest, main-sector    |
+|     Not the mix.          |      |   bar grey and shortest]  |
 +---------------------------+      +---------------------------+
 
-SLIDE 3 (the mirror)               SLIDE 4 (why it hides)
+SLIDE 3 (why it hides)             SLIDE 4 (the extreme)
 +---------------------------+      +---------------------------+
-| THE OTHER SIDE         3/6|      | WHY THE CHART LIES     4/6|
-|                           |      |                           |
-|  Industry                 |      |  A year's lending is only |
-|  16.4%  ->  24.0%         |      |  a sixth of the book.     |
-|                           |      |                           |
-|  [two lines crossing,     |      |  [small diagram: big      |
-|   personal falling blue,  |      |   circle = book, thin      |
-|   industry rising blue,   |      |   ring = one year]        |
-|   crossover marked        |      |                           |
-|   Dec 2025, rest grey]    |      |  Tilt one way, then back, |
-|                           |      |  and the stock ends where |
-|  They crossed Dec 2025.   |      |  it started.              |
+| WHY THE TOP LINE     3/6  |      | 465,615 MOVED          4/6|
+| CAN'T SHOW IT             |      |                           |
+|                           |      |   Public banks  +204,595  |
+|  A year's lending is only |      |   Private banks -257,290  |
+|  a sixth of the book.     |      |   ----------------------- |
+|                           |      |   Headline       -55,885  |
+|  And a tilt that reverses |      |                           |
+|  gives back what it took. |      |  POS terminals, year to   |
+|                           |      |  May 2026.                |
+|  [two arrows, opposite,   |      |                           |
+|   cancelling to a stub]   |      |  Nearly half a million    |
+|                           |      |  changed hands.           |
 +---------------------------+      +---------------------------+
 
 SLIDE 5 (caveat -- SAND bg)        SLIDE 6 (sign-off -- DARK)
@@ -183,10 +202,10 @@ SLIDE 5 (caveat -- SAND bg)        SLIDE 6 (sign-off -- DARK)
 |                           |      |   INDIA CREDIT LENS       |
 |  "Personal loans          |      |                           |
 |   collapsed."             |      |   The mix didn't move.    |
-|                           |      |   The money did.          |
-|  They grew 15.76%.        |      |                           |
-|  Still accelerating.      |      |   RBI SIBC data, read     |
-|  Rs 6.4 L Cr -> 9.7 L Cr  |      |   monthly.                |
+|                           |      |   Look one level down.    |
+|  They grew 15.76% YoY.    |      |                           |
+|  Still accelerating.      |      |   RBI SIBC + ATM/POS,     |
+|  Rs 6.4 L Cr -> 9.7 L Cr  |      |   read monthly.           |
 |                           |      |                           |
 |  A smaller slice of a     |      |   indiacreditlens.com     |
 |  much bigger pie.         |      |                           |
