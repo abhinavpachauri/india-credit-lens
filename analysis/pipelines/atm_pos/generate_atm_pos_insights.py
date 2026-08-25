@@ -97,7 +97,13 @@ def _dominance_caveat(ins: dict, dom) -> None:
     rest = ("edged up over the year" if rose else
             "was essentially flat over the year" if dom.ex_top_yoy_pct is not None and abs(dom.ex_top_yoy_pct) <= 0.5
             else "barely moved over the year")
-    base = re.sub(r"[-+]?\d[\d.,]*\s*%?\s*(YoY|×|x)?", "", ins.get("title", "").split(" — ")[0]).strip(" —")
+    # Strip only a TRAILING rate — "POS terminal growth -15.8% YoY" → "POS terminal growth" —
+    # because the guard re-states that figure in its own clause. It used to strip EVERY number
+    # in the headline, which silently emptied a title whose number was its subject: "India now
+    # has 80 UPI QR codes per POS terminal" shipped as "India now has UPI QR codes per POS
+    # terminal" and sat on the dashboard that way.
+    base = re.sub(r"\s*[-+]?\d[\d.,]*\s*(?:%|×|x)\s*(?:YoY)?\s*$", "",
+                  ins.get("title", "").split(" — ")[0]).strip(" —")
     if dom.via_denominator:
         # A ratio: the jump is the denominator (a per-entity count) lurching at one issuer, not the
         # numerator outpacing the market — the "record" is arithmetically spurious.
@@ -235,15 +241,18 @@ METRIC_UNIT_LABEL = {
 
 
 def fmt_num(v: float, metric: str = "") -> str:
-    """Format large numbers with B/M/K suffix."""
-    if v >= 1e9:
-        return f"{v/1e9:.2f}B"
+    """A count, in the units this platform speaks.
+
+    Lakh and crore, not M/K/B. The eval layer already normalises LLM prose this way
+    (`evaluate.normalize_units`) and `core.voice.big_units` flags the M/K form as a
+    voice problem — but the deterministic payments cards were the one surface still
+    writing "792.6M UPI QR codes", so the dashboard said it two different ways
+    depending on which card you were reading.
+    """
     if v >= 1e7:
-        return f"{v/1e6:.1f}M"
-    if v >= 1e6:
-        return f"{v/1e6:.2f}M"
-    if v >= 1e3:
-        return f"{v/1e3:.1f}K"
+        return f"{v/1e7:.2f} crore" if v < 1e8 else f"{v/1e7:.1f} crore"
+    if v >= 1e5:
+        return f"{v/1e5:.2f} lakh" if v < 1e6 else f"{v/1e5:.1f} lakh"
     return f"{v:,.0f}"
 
 
@@ -926,8 +935,8 @@ STREAK_CARDS = [
             f"India has {fmt_num(v['latest'])} debit cards — but that number is misleading as a credit opportunity. "
             "A large chunk are Jan Dhan accounts (zero-balance accounts opened under the government's "
             "financial inclusion scheme) that see very little activity. "
-            "The real pool for first-time credit products is much smaller — focus on debit card holders "
-            "who are actually transacting, not just account holders.",
+            "The real pool for first-time credit products is much smaller: the transacting subset, "
+            "not the account count.",
         chain=lambda v, m: [
             f"Debit card base at {fmt_num(v['latest'])} — large headline number includes substantial Jan Dhan zero-balance accounts",
             "Jan Dhan accounts (government financial inclusion scheme) skew toward low-income, low-activity customers",
@@ -1146,11 +1155,10 @@ TOP_BANK_CARDS = [
                if _has_rank_change(v) else ""),
         implication=lambda v, m:
             f"5 banks own {(v['top5'] or 0):.1f}% of all POS machines in India. "
-            "That also means merchant sales data — what shopkeepers sell, how much, how often — "
+            "That also means merchant transaction data — what each shop turns over, how often — "
             "sits largely with those same 5 banks. "
-            "If you want to lend to merchants and need their sales history to decide how much credit to give, "
-            "you either need a data partnership with one of these banks or an alternate source "
-            "like GST returns or UPI transaction feeds.",
+            "Merchant credit underwritten on sales history therefore rests on a data relationship with "
+            "one of them, or on an alternate source such as GST returns or UPI transaction feeds.",
         chain=lambda v, m: [
             f"Top 5 banks own {(v['top5'] or 0):.1f}% of POS terminals — merchant acquiring infrastructure is highly concentrated",
             "Merchant transaction data (sales history for credit underwriting) sits with the same institutions",
@@ -1201,7 +1209,8 @@ CATEGORY_CARDS = [
                if v["gainer"] == "SFB" else "")
             + ("Private banks compounding their lead means the premium card market is further consolidating."
                if v["gainer"] == "Private" else "")
-            + "For anyone benchmarking credit card portfolio quality, knowing which bank type is gaining share matters — their customer profiles and risk behaviour can be very different.",
+            + " Which bank type is gaining share is itself a portfolio-quality signal — customer "
+            "profiles and risk behaviour differ sharply between them.",
         chain=lambda v, m: [
             f"{v['gainer']} banks gained {(v['g_delta'] or 0):.1f}pp CC share — {v['loser']} banks lost {abs(v['l_delta'] or 0):.1f}pp",
             ("SFB growth signals fintech partnerships or co-branded card activity in underserved segments"
@@ -1421,9 +1430,9 @@ TWO_METRIC_CARDS = [
         implication=lambda v, m:
             "Credit card spend is growing across both channels year-on-year "
             + ("(ecom faster). " if v["ecom_yoy"] > v["pos_yoy"] else "(POS faster). ")
-            + "For credit-risk teams this matters: a spend mix tilting online means more "
-            "card-not-present volume, where fraud and dispute rates run higher — provisioning "
-            "and fraud models should track the channel mix, not just the headline spend growth.",
+            + "A spend mix tilting online is a mix of more card-not-present volume, where fraud and "
+            "dispute rates run higher — so the channel mix carries risk information the headline "
+            "spend growth does not.",
         chain=lambda v, m: [
             f"CC ecommerce volume up {v['ecom_yoy']:.1f}% YoY vs POS up {v['pos_yoy']:.1f}% YoY — both growing, seasonally clean",
             ("Online (CNP) is the faster-growing channel" if v["ecom_yoy"] > v["pos_yoy"]
@@ -1825,10 +1834,9 @@ GAPS = [
             f"compared to {fmt_num(v['upi'])} UPI QR codes{_ratio_gap(v['upi'], v['bqr'])}. "
             f"Merchant preference has consolidated on UPI QR as the dominant QR acceptance standard.",
         implication=lambda v, m:
-            f"Bharat QR is shrinking {abs(v['bqr_mom']):.1f}% every month — merchants are removing it. "
-            "If any part of your lending or payments product depends on Bharat QR acceptance, "
-            "that's a real problem. Move everything to UPI QR. "
-            "There is no viable future for Bharat QR as a payments or credit infrastructure.",
+            f"Bharat QR is shrinking {abs(v['bqr_mom']):.1f}% a month while UPI QR keeps growing — "
+            "merchants are taking the older standard down. Anything that depends on Bharat QR "
+            "acceptance is resting on a shrinking base.",
         chain=lambda v, m: [
             f"Bharat QR declining {abs(v['bqr_mom']):.1f}% MoM — merchants are actively removing it, not seasonal dip",
             f"UPI QR at {fmt_num(v['upi'])} vs Bharat QR at {fmt_num(v['bqr'])} — gap structural and widening",

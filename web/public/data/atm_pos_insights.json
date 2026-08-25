@@ -233,7 +233,7 @@
     "type": "insight",
     "title": "CC spend YoY \u2014 ecommerce 30.6% vs in-store POS 22.1%",
     "body": "On a year-on-year basis, credit card ecommerce transaction volume grew 30.6% and in-store POS volume grew 22.1% as of Jun 2026. Year-on-year removes the heavy seasonality in the monthly numbers \u2014 online is outpacing in-store on a clean comparison.",
-    "implication": "Credit card spend is growing across both channels year-on-year (ecom faster). For credit-risk teams this matters: a spend mix tilting online means more card-not-present volume, where fraud and dispute rates run higher \u2014 provisioning and fraud models should track the channel mix, not just the headline spend growth.",
+    "implication": "Credit card spend is growing across both channels year-on-year (ecom faster). A spend mix tilting online is a mix of more card-not-present volume, where fraud and dispute rates run higher \u2014 so the channel mix carries risk information the headline spend growth does not.",
     "reasoning": {
       "signals": [
         {
@@ -295,7 +295,7 @@
     "type": "insight",
     "title": "SFB banks gained CC card share in Jun 2026 (+0.1pp)",
     "body": "SFB banks hold 1.8% of total credit cards outstanding in Jun 2026 (+0.1pp vs prior month). Private banks lost the most share at -0.1pp, now at 70.8%. SFB growth in credit cards reflects increased fintech partnerships.",
-    "implication": "SFB banks picking up credit card share \u2014 even by 0.1pp \u2014 signals a change in who's acquiring customers. SFBs (Small Finance Banks \u2014 banks that focus on underserved segments like AU or Equitas) growing in credit cards usually means fintech partnerships or co-branded products are kicking in.For anyone benchmarking credit card portfolio quality, knowing which bank type is gaining share matters \u2014 their customer profiles and risk behaviour can be very different.",
+    "implication": "SFB banks picking up credit card share \u2014 even by 0.1pp \u2014 signals a change in who's acquiring customers. SFBs (Small Finance Banks \u2014 banks that focus on underserved segments like AU or Equitas) growing in credit cards usually means fintech partnerships or co-branded products are kicking in. Which bank type is gaining share is itself a portfolio-quality signal \u2014 customer profiles and risk behaviour differ sharply between them.",
     "reasoning": {
       "signals": [
         {
@@ -1037,7 +1037,7 @@
     "cut": "total",
     "period": "Jun 2026",
     "type": "insight",
-    "title": "India now has UPI QR codes per POS terminal \u2014 the jump is ICICI Bank's count, not a real shift",
+    "title": "India now has 80 UPI QR codes per POS terminal \u2014 the jump is ICICI Bank's count, not a real shift",
     "body": "This ratio looks like it hit a record, but the move is almost entirely its denominator: ICICI Bank's reported count fell sharply in a single month while the numerator barely changed. Across every other bank the denominator held steady, so the ratio's jump is a reporting artifact, not the market pulling apart.",
     "implication": "Discount the record \u2014 the ratio moved because ICICI Bank's reported count changed, not because the two sides really diverged.",
     "reasoning": {
@@ -1462,8 +1462,8 @@
     "period": "Jun 2026",
     "type": "insight",
     "title": "RBL BANK LTD leads POS terminal deployment at 26.7% market share",
-    "body": "RBL BANK LTD has deployed 2.65M POS terminals in Jun 2026, accounting for 26.7% of total (-4.1% MoM). Top 5 banks hold 91.4% of all POS terminals (+12.5pp vs prior month). Notable: YES BANK LTD moved from #6 to #5.",
-    "implication": "5 banks own 91.4% of all POS machines in India. That also means merchant sales data \u2014 what shopkeepers sell, how much, how often \u2014 sits largely with those same 5 banks. If you want to lend to merchants and need their sales history to decide how much credit to give, you either need a data partnership with one of these banks or an alternate source like GST returns or UPI transaction feeds.",
+    "body": "RBL BANK LTD has deployed 26.5 lakh POS terminals in Jun 2026, accounting for 26.7% of total (-4.1% MoM). Top 5 banks hold 91.4% of all POS terminals (+12.5pp vs prior month). Notable: YES BANK LTD moved from #6 to #5.",
+    "implication": "5 banks own 91.4% of all POS machines in India. That also means merchant transaction data \u2014 what each shop turns over, how often \u2014 sits largely with those same 5 banks. Merchant credit underwritten on sales history therefore rests on a data relationship with one of them, or on an alternate source such as GST returns or UPI transaction feeds.",
     "reasoning": {
       "signals": [
         {
@@ -1527,9 +1527,9 @@
     "cut": "total",
     "period": "Jun 2026",
     "type": "gap",
-    "title": "Gap: Bharat QR contracting -6.0% MoM \u2014 5.27M vs 792.6M UPI QR",
-    "body": "Bharat QR codes fell 6.0% MoM in Jun 2026, now at 5.27M \u2014 compared to 792.6M UPI QR codes (151x gap). Merchant preference has consolidated on UPI QR as the dominant QR acceptance standard.",
-    "implication": "Bharat QR is shrinking 6.0% every month \u2014 merchants are removing it. If any part of your lending or payments product depends on Bharat QR acceptance, that's a real problem. Move everything to UPI QR. There is no viable future for Bharat QR as a payments or credit infrastructure.",
+    "title": "Gap: Bharat QR contracting -6.0% MoM \u2014 52.7 lakh vs 79.3 crore UPI QR",
+    "body": "Bharat QR codes fell 6.0% MoM in Jun 2026, now at 52.7 lakh \u2014 compared to 79.3 crore UPI QR codes (151x gap). Merchant preference has consolidated on UPI QR as the dominant QR acceptance standard.",
+    "implication": "Bharat QR is shrinking 6.0% a month while UPI QR keeps growing \u2014 merchants are taking the older standard down. Anything that depends on Bharat QR acceptance is resting on a shrinking base.",
     "reasoning": {
       "signals": [
         {
@@ -1547,7 +1547,7 @@
       ],
       "chain": [
         "Bharat QR declining 6.0% MoM \u2014 merchants are actively removing it, not seasonal dip",
-        "UPI QR at 792.6M vs Bharat QR at 5.27M \u2014 gap structural and widening",
+        "UPI QR at 79.3 crore vs Bharat QR at 52.7 lakh \u2014 gap structural and widening",
         "Any payments or lending product built on Bharat QR infrastructure faces accelerating merchant disengagement"
       ]
     },
@@ -1560,7 +1560,7 @@
       ],
       "inferences": [
         "Bharat QR declining 6.0% MoM \u2014 merchants are actively removing it, not seasonal dip",
-        "UPI QR at 792.6M vs Bharat QR at 5.27M \u2014 gap structural and widening",
+        "UPI QR at 79.3 crore vs Bharat QR at 52.7 lakh \u2014 gap structural and widening",
         "Any payments or lending product built on Bharat QR infrastructure faces accelerating merchant disengagement"
       ]
     },
@@ -1594,7 +1594,7 @@
     "period": "Jun 2026",
     "type": "gap",
     "title": "Gap: Offsite ATMs declining -0.7% MoM \u2014 rural cash access contracting",
-    "body": "Offsite ATMs fell 0.7% MoM in Jun 2026 (now 73.4K), while onsite ATMs grew +0.1% MoM. Offsite ATMs serve rural and semi-urban populations where branch presence is limited \u2014 their decline reduces physical cash access for underserved geographies.",
+    "body": "Offsite ATMs fell 0.7% MoM in Jun 2026 (now 73,426), while onsite ATMs grew +0.1% MoM. Offsite ATMs serve rural and semi-urban populations where branch presence is limited \u2014 their decline reduces physical cash access for underserved geographies.",
     "implication": "Offsite ATMs are standalone machines in villages, petrol pumps, small towns \u2014 placed away from bank branches specifically to serve rural areas. When these decline and digital payments haven't reached those areas yet, rural borrowers lose their easiest way to access cash for repayment. If you have loans in rural geographies, check whether ATM coverage in those areas is shrinking \u2014 it can make EMI collection harder.",
     "reasoning": {
       "signals": [

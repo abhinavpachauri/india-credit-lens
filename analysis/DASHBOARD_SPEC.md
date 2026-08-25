@@ -789,21 +789,46 @@ Fails on: a cut that resolves to no series · a declared series absent from the 
 Measured like every other gate here — catch rate and false-rejection rate by injection via
 `measure_groundedness.py`, appended to `ai_pm_register.json` topic #1 before the work is called done.
 
-### 15.8 Out of scope — separate, real, not fixed by this
+### 15.8 Prose defects — BUILT 2026-08-26
 
-Three prose defects found in the same audit. They are content, not representation, and belong to L1
-insight generation (`signals/README` + `core.voice`) — listing them so they are not lost:
+Content, not representation, and fixed in L1 insight generation (`signals/README` + `core.voice`).
+Recorded here because the audit found them and the fixes belong together.
 
-1. `deterministic_scan_insight` ends every YoY scan with *"Lenders can lean into {fastest}"* with no
-   size context: *"lean into Jute Textiles (21.4%)"* — Jute is 1.7% of textiles, ₹5,354 Cr; *"lean
-   into Ports (75.9%)"* — 0.6% of infrastructure. This is the exact inverse of the pairing rule the
-   movement builder already enforces (`_speed_clause`: never a share without its speed), and it
-   needs to generalise to scan signals.
-2. The same sentence is **advice**, which `core.voice` bans on distribution surfaces — dashboard
-   card prose is linted by nothing.
-3. `infra-qr-per-pos` is live on the payments dashboard with its number missing: *"India now has UPI
-   QR codes per POS terminal"*. The dominance guard removed the ratio value without the sentence
-   being re-rendered.
+**A speed is never published without its size.** The growth scan's so-what now reads the cut's own
+share scan and names what the leader carries — *"Jute Textiles is the fastest at 21.4% but holds
+1.7% of textiles credit; the largest block, Other Textiles at 45.5%, grew 19.6%"*. The card declares
+both signals in `sourceSignals`, so Check 2g scopes to their union (22 candidate values, 78× tighter
+than period-wide) rather than falling back. Two SIBC cuts have no share scan and lose the size
+clause rather than gain a fabricated one.
+
+**A new gate, stage 5.8** (`guards/validate_card_prose.py`, both pipelines). `core.voice` had linted
+the distribution surfaces for a year while the dashboard — the surface most people read — was linted
+by nothing. Who owns the words decides the severity, per §5.3: prose we generate **hard-fails**; the
+eval's narration **warns** and goes on the next prompt's fix list, because hand-editing a validated
+artifact is the thing this project does not do. SEBI hits warn in both cases until the precision fix
+§5.3 already calls for — the substring list trips on "what shopkeepers sell".
+
+This required SIBC cards to start carrying `representation`, which CLAUDE.md had described since
+June and the generator never emitted. Without it the gate cannot tell our sentences from the eval's.
+
+The original three, all now closed:
+
+1. ~~*"Lenders can lean into {fastest}"* with no size context.~~ Replaced by the pairing sentence
+   above, in an observation register.
+2. ~~The same sentence is advice, and dashboard prose is linted by nothing.~~ Stage 5.8. The audit
+   also found worse than the lint could see: a card instructed the reader to *"Move everything to
+   UPI QR"* and asserted *"there is no viable future for Bharat QR"* — neither phrase was in the
+   advice or forecast lists. Both lists widened, each addition evidenced by a live hit; a bare
+   `will be` was tried and dropped for firing on ordinary comparative prose.
+3. ~~`infra-qr-per-pos` live with its number missing.~~ The dominance guard stripped **every**
+   number from a headline rather than a trailing stale rate, so a title whose number was its
+   subject shipped empty. Now anchored to the end and to rate-shaped tokens.
+
+**Two more found while fixing those.** Deterministic payments prose spoke M/K/B while the eval layer
+normalises to lakh and crore and `core.voice` flags the M/K form — the dashboard said it both ways
+depending on the card. `fmt_num` now speaks Indian units, which surfaced that
+`traceability.extract_numbers` read "73,426" as two numbers and rejected both; digit-grouping commas
+are collapsed first, narrowly enough that "In 2026, 45% of…" is untouched.
 
 ### 15.9 Build order
 

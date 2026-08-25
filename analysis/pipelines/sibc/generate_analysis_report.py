@@ -191,7 +191,8 @@ def _scan_fmt(v: float, unit: str) -> str:
 
 
 def deterministic_scan_insight(dist: list[tuple], unit: str, kind: str = "yoy",
-                               share_of: str | None = None) -> tuple[str, str, list[str], str]:
+                               share_of: str | None = None,
+                               sizes: dict | None = None) -> tuple[str, str, list[str], str]:
     """Return (title, body, chain, implication) for a scan distribution —
     fully grounded in the ranked entity values.
 
@@ -353,15 +354,72 @@ def deterministic_scan_insight(dist: list[tuple], unit: str, kind: str = "yoy",
             f"{n_pos} of {n} categories are growing — "
             f"{'broad-based' if n_pos > n / 2 else 'concentrated'} momentum.",
         ]
-    implication = (
-        f"Lenders can lean into {L0} ({Lv0}) and monitor {W0} ({Wv0}). "
-        + ("Broad participation supports diversified deployment."
-           if n_pos > n / 2 else
-           "Narrow leadership argues for selective positioning."))
+    # A growth leaderboard read alone says a fast-growing sliver is the story. Jute
+    # Textiles led textiles at 21.4% on 1.7% of the book (₹5,354 Cr); Ports led
+    # infrastructure at 75.9% on 0.6%. This is the inverse of the pairing rule the
+    # movement family already enforces — there, a share is never published without its
+    # speed, because a falling share alone reads as decline. Here, a speed is never
+    # published without its size, because a rate alone reads as scale.
+    #
+    # The sizes come from this cut's OWN share scan, declared in the card's
+    # sourceSignals so Check 2g scopes to both signals rather than falling back to
+    # period-wide. Two SIBC cuts have no share scan; they lose the size clause rather
+    # than gain a fabricated one.
+    implication = _pace_and_size(dist, sizes, fv, share_of, L0, Lv0, W0, Wv0, n, n_pos)
     return title, body, chain, implication
 
 
+def _pace_and_size(dist, sizes, fv, share_of, L0, Lv0, W0, Wv0, n, n_pos) -> str:
+    """The growth scan's so-what: who is fastest, and how much of the book they carry.
+
+    An observation, not a recommendation. The prescriptive call belongs to the editor
+    (DISTRIBUTION_SPEC §5.1); the machine says what is.
+    """
+    of = f"of {share_of}" if share_of else "of the category"
+    breadth = ("Most of the category is growing."
+               if n_pos > n / 2 else
+               "Growth is confined to a few blocks.")
+    if not sizes:
+        return f"{L0} is the fastest at {Lv0}; {W0} the slowest at {Wv0}. {breadth}"
+
+    lead_share = sizes.get(dist[0][0])
+    biggest, big_share = max(sizes.items(), key=lambda kv: kv[1])
+    big_yoy = next((v for e, v, _ in dist if e == biggest), None)
+
+    if lead_share is None:
+        return f"{L0} is the fastest at {Lv0}; {W0} the slowest at {Wv0}. {breadth}"
+    if biggest == dist[0][0] or big_yoy is None:
+        return (f"{L0} is the fastest at {Lv0} and the largest block at {fv(lead_share)} {of} — "
+                f"pace and weight point the same way. {breadth}")
+    return (f"{L0} is the fastest at {Lv0} but holds {fv(lead_share)} {of}; the largest block, "
+            f"{_short(biggest)} at {fv(big_share)}, grew {fv(big_yoy)}. "
+            f"Growth rank and size rank are different questions. {breadth}")
+
+
 # ── Main ──────────────────────────────────────────────────────────────────────
+
+def _sibling_share_scan(registry: dict, sid: str, sig: dict) -> str | None:
+    """This cut's own share scan, if it has one.
+
+    Matched on the cut the two signals share — same pipeline, parent, depth and
+    statement — never on a name. Two SIBC cuts (main sectors, industry by size) have no
+    share scan at all, and get None rather than a near-miss: an early version matched on
+    the compute keys alone and paired the PSL scan, whose keys are all None, with three
+    payments signals.
+    """
+    c = sig.get("compute", {})
+    if c.get("parent_code") is None:
+        return None
+    key = (sig.get("pipeline"), c.get("parent_code"), c.get("child_level"), c.get("statement"))
+    for other_id, other in registry.items():
+        oc = other.get("compute", {})
+        if other_id == sid or "scan_share" not in oc.get("method", ""):
+            continue
+        if (other.get("pipeline"), oc.get("parent_code"),
+                oc.get("child_level"), oc.get("statement")) == key:
+            return other_id
+    return None
+
 
 # Movement cuts: one card per dashboard dimension. Each names the section it belongs to, the
 # speed signal that satisfies the pairing rule, and the noun the prose adds to ("...of all new
@@ -438,6 +496,7 @@ def movement_annotations(conn, period: str, registry: dict, sections: dict) -> l
             "effect":        {"highlight": [highlight] if highlight else [],
                               "cut": cut.as_json()},
             "claim_type":    "data",
+            "representation": "deterministic",   # the movement family's prose is ours
             "insight_kind":  ins["insight_kind"],
             # Declared reads — the card quotes allocation next to speed and acceleration, so
             # Check 2g scopes to exactly these signals rather than falling back to period-wide.
@@ -535,15 +594,24 @@ def main(period: str | None = None) -> int:
             insight_kind = rel["insight_kind"]
             itype = "insight"
         elif stype == "scan" and (dist := scan_distribution(conn, sid, "sibc", period)):
+            share_sid = _sibling_share_scan(registry, sid, reg_sig)
             # Scan distributions are generated deterministically (grounded by
             # construction), not from the LLM narrative. Semantics come from the
             # SPEC: *_scan_share → size shares (with the spec's share_of label),
             # *_scan_yoy → growth rates. Never inferred from the values.
             comp = reg_sig.get("compute", {})
             scan_kind = "share" if "share" in comp.get("method", "") else "yoy"
+            sizes = None
+            share_label = comp.get("share_of")
+            if scan_kind == "yoy" and share_sid:
+                sizes = {e: v for e, v, _ in scan_distribution(conn, share_sid, "sibc", period)}
+                # A growth signal has no `share_of` of its own — the denominator is a
+                # property of the share scan. Borrowing it is what lets the sentence say
+                # "1.7% of textiles credit" instead of "of the category".
+                share_label = registry[share_sid]["compute"].get("share_of") or share_label
             title, body, chain, inf = deterministic_scan_insight(
                 dist, facts.get("unit") or "pct",
-                kind=scan_kind, share_of=comp.get("share_of"))
+                kind=scan_kind, share_of=share_label, sizes=sizes)
             itype = "insight"
         else:
             obs   = se.get("observation", "")
@@ -563,6 +631,12 @@ def main(period: str | None = None) -> int:
             "effect":        {**({"highlight": chart_series} if chart_series else {}),
                               "cut": cut.as_json()},
             "claim_type":    "data",
+            # Which layer wrote these words. CLAUDE.md has described SIBC cards as carrying
+            # this since June; they did not, and without it the prose gate cannot tell our
+            # own sentences (fixable here, hard-fail) from the eval's (fixable only in the
+            # prompt, warn). Scans and relational cards are deterministic by design; a
+            # scalar's prose is the LLM chain.
+            "representation": "deterministic" if stype in ("scan", "rotation", "divergence") else "llm",
             "basis":         {
                 "facts":      data_facts(facts, se.get("source_ref", {})),
                 "inferences": chain,
@@ -570,6 +644,10 @@ def main(period: str | None = None) -> int:
         }
         if insight_kind:
             annotation["insight_kind"] = insight_kind
+        if stype == "scan" and locals().get("sizes"):
+            # The card quotes a size beside a growth rate, so it declares BOTH reads and
+            # Check 2g scopes to their union — the same contract the movement cards use.
+            annotation["sourceSignals"] = [sid, share_sid]
 
         sections_out[section][itype + "s"].append(annotation)
 

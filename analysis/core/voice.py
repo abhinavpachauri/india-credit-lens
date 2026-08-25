@@ -37,21 +37,44 @@ BANNED = slot_render.BANNED
 # Advice — telling the reader what to DO. Analysis states what is; the prescriptive call is
 # the editor's (the handwritten layer), never the machine's own words.
 _ADVICE = re.compile(r"\b(?:should(?:\s+not)?|must(?:\s+not)?|need to|ought to|"
-                     r"focus on|prepare for|watch for|allocate|treat this as)\b", re.I)
+                     r"focus on|prepare for|watch for|allocate|treat this as|"
+                     # Added 2026-08-26 after an audit of dashboard card prose, where the
+                     # register was giving instructions the list did not name: "Lenders can
+                     # lean into Jute Textiles", "Move everything to UPI QR". Each phrase is
+                     # an imperative or a recommendation in its own right, so widening here
+                     # is a precision fix, not a broadening — measured at 0 false positives
+                     # over all 128 cards and every long-form output on disk.
+                     r"lean into|move everything|you either need)\b", re.I)
 # Forecast — a claim about the future. The reads are backward-looking; the machine does not
 # predict.
 _FORECAST = re.compile(r"\b(?:will\s+(?:continue|keep|likely|remain|widen|persist)|"
                        r"on track to|set to|poised to|expected to|going to|"
-                       r"through fy\d{2}|next (?:quarter|few quarters|year)|coming months)\b", re.I)
+                       r"through fy\d{2}|next (?:quarter|few quarters|year)|coming months|"
+                       # "There is no viable future for Bharat QR" is a claim about the
+                       # future stated as fact — the strongest forecast on the dashboard,
+                       # and the list did not name it. A bare "will be" was tried and
+                       # dropped: it fires on ordinary comparative prose ("bureau scores
+                       # will be far more reliable"), which is the brittleness the SEBI
+                       # list already demonstrates. Precision first, per DISTRIBUTION_SPEC §5.3.
+                       r"no viable future|has no future)\b", re.I)
 # Millions/billions or M/K/B — this platform speaks lakh and crore. "L"/"L Cr" (lakh crore)
 # is what we want, so it is excluded.
 _BIGUNIT = re.compile(r"\b\d+(?:\.\d+)?\s?(?:million|billion|mn|bn)\b|"
                       r"(?<![A-Za-z])\d+(?:\.\d+)?[MKB]\b")
 
 
+# A relative clause DESCRIBES a third party; it does not instruct the reader. "banks that
+# focus on underserved segments" is a definition of what small finance banks are, and the
+# bare verb list flagged it as advice. Narrowed rather than dropped: "lenders should focus
+# on X" still fires on `should`, and "focus on the transacting subset" still fires.
+_DESCRIBES = re.compile(r"\b(?:that|which|who|whose)\s+$", re.I)
+
+
 def advice(text):
     """Advice-voice hits ('banks should…') — a recommendation, not an observation."""
-    return [m.group(0) for m in _ADVICE.finditer(text or "")]
+    t = text or ""
+    return [m.group(0) for m in _ADVICE.finditer(t)
+            if not _DESCRIBES.search(t[:m.start()])]
 
 
 def forecasts(text):

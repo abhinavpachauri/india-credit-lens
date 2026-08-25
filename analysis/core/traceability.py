@@ -75,6 +75,12 @@ def extract_numbers(text: str, policy: NumberPolicy) -> list[float]:
     claims; ATM/POS scales magnitude suffixes (B/M/K) and strips x/%. A decimal glued to a
     trailing letter backtracks to its integer part (a quirk both pipelines share and pin)."""
     t = text
+    # Digit-grouping commas, collapsed before anything else looks at the string. "73,426"
+    # is one number; the pattern below has no comma in it, so it read that as 73 and 426
+    # and rejected both. Deliberately narrow — a comma is only a grouping comma when it
+    # sits between digits with exactly three following, so "In 2026, 45% of ..." is
+    # untouched and does not merge into one number.
+    t = re.sub(r"(?<=\d),(?=\d{3}(?!\d))", "", t)
     if policy.handle_suffixes:
         # Indian units are first-class: "12.05 crore" / "1.47 lakh" are how counts read after
         # deterministic normalisation (evaluate.normalize_units). Convert to the raw value here

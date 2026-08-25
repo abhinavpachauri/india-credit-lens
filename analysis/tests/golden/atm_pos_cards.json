@@ -68,8 +68,8 @@
         "groups.cc.total.metrics.credit_cards.streak_months",
         "groups.cc.total.metrics.credit_cards.qoq_pct"
       ],
-      "title": "Credit cards outstanding: 12 consecutive months of growth — 121.6M cards",
-      "body": "Total credit cards outstanding reached 121.6M in Jun 2026 (+2.5% QoQ vs Q4 FY26), marking the 12 consecutive months of growth. Issuance momentum is broad-based across bank types.",
+      "title": "Credit cards outstanding: 12 consecutive months of growth — 12.2 crore cards",
+      "body": "Total credit cards outstanding reached 12.2 crore in Jun 2026 (+2.5% QoQ vs Q4 FY26), marking the 12 consecutive months of growth. Issuance momentum is broad-based across bank types.",
       "implication": "12 straight months of card growth looks good, but card count alone can mislead. Many new cards never get used — they sit inactive. What matters for lending is how many cards are actually being transacted on. Track activation rate (what percentage of issued cards have any spend in the last few months) alongside the headline number.",
       "chain": [
         "CC cards outstanding growing for 12 consecutive months",
@@ -103,7 +103,7 @@
         "groups.cc.total.metrics.credit_cards.latest"
       ],
       "title": "Credit cards growing 9.6% YoY — issuance accelerating",
-      "body": "Total credit cards outstanding reached 121.6M in Jun 2026, up 9.6% year-on-year. The YoY growth rate was 8.5% a month ago, so issuance is accelerating (+1.1pp). Year-on-year strips out the seasonal swings — March year-end and festive spikes — that distort month-on-month.",
+      "body": "Total credit cards outstanding reached 12.2 crore in Jun 2026, up 9.6% year-on-year. The YoY growth rate was 8.5% a month ago, so issuance is accelerating (+1.1pp). Year-on-year strips out the seasonal swings — March year-end and festive spikes — that distort month-on-month.",
       "implication": "Credit card issuance is running at 9.6% a year — a cleaner read on portfolio growth than any single month, which is skewed by seasonality. A steady-to-accelerating YoY rate signals issuers are still leaning into acquisition; track activation, not just card count.",
       "chain": [
         "Credit cards outstanding up 9.6% YoY — issuance momentum on a seasonally-clean basis",
@@ -137,7 +137,7 @@
       ],
       "title": "CC spend YoY — ecommerce 30.6% vs in-store POS 22.1%",
       "body": "On a year-on-year basis, credit card ecommerce transaction volume grew 30.6% and in-store POS volume grew 22.1% as of Jun 2026. Year-on-year removes the heavy seasonality in the monthly numbers — online is outpacing in-store on a clean comparison.",
-      "implication": "Credit card spend is growing across both channels year-on-year (ecom faster). For credit-risk teams this matters: a spend mix tilting online means more card-not-present volume, where fraud and dispute rates run higher — provisioning and fraud models should track the channel mix, not just the headline spend growth.",
+      "implication": "Credit card spend is growing across both channels year-on-year (ecom faster). A spend mix tilting online is a mix of more card-not-present volume, where fraud and dispute rates run higher — so the channel mix carries risk information the headline spend growth does not.",
       "chain": [
         "CC ecommerce volume up 30.6% YoY vs POS up 22.1% YoY — both growing, seasonally clean",
         "Online (CNP) is the faster-growing channel on a year-on-year basis",
@@ -170,7 +170,7 @@
       ],
       "title": "SFB banks gained CC card share in Jun 2026 (+0.1pp)",
       "body": "SFB banks hold 1.8% of total credit cards outstanding in Jun 2026 (+0.1pp vs prior month). Private banks lost the most share at -0.1pp, now at 70.8%. SFB growth in credit cards reflects increased fintech partnerships.",
-      "implication": "SFB banks picking up credit card share — even by 0.1pp — signals a change in who's acquiring customers. SFBs (Small Finance Banks — banks that focus on underserved segments like AU or Equitas) growing in credit cards usually means fintech partnerships or co-branded products are kicking in.For anyone benchmarking credit card portfolio quality, knowing which bank type is gaining share matters — their customer profiles and risk behaviour can be very different.",
+      "implication": "SFB banks picking up credit card share — even by 0.1pp — signals a change in who's acquiring customers. SFBs (Small Finance Banks — banks that focus on underserved segments like AU or Equitas) growing in credit cards usually means fintech partnerships or co-branded products are kicking in. Which bank type is gaining share is itself a portfolio-quality signal — customer profiles and risk behaviour differ sharply between them.",
       "chain": [
         "SFB banks gained 0.1pp CC share — Private banks lost 0.1pp",
         "SFB growth signals fintech partnerships or co-branded card activity in underserved segments",
@@ -371,7 +371,7 @@
         "groups.dc.total.metrics.debit_cards.latest"
       ],
       "title": "Debit card base +2.6% YoY — growth holding steady",
-      "body": "Total debit cards outstanding stand at 1.03B in Jun 2026, +2.6% year-on-year. The YoY rate was +2.8% a month ago — the base is holding steady (-0.1pp). Year-on-year smooths the month-to-month volatility from card reissuance and account closures.",
+      "body": "Total debit cards outstanding stand at 103.2 crore in Jun 2026, +2.6% year-on-year. The YoY rate was +2.8% a month ago — the base is holding steady (-0.1pp). Year-on-year smooths the month-to-month volatility from card reissuance and account closures.",
       "implication": "The debit base is growing 2.6% a year — far slower than credit cards. Debit growth is structurally slow; the active-transacting subset, not the headline count, is the real first-credit pool.",
       "chain": [
         "Debit cards outstanding +2.6% YoY — structurally slower than credit card growth",
@@ -529,6 +529,20 @@
           "metrics": [
             "pos_terminals",
             "upi_qr"
+          ],
+          "sides": [
+            {
+              "label": "",
+              "metrics": [
+                "upi_qr"
+              ]
+            },
+            {
+              "label": "",
+              "metrics": [
+                "pos_terminals"
+              ]
+            }
           ]
         }
       },
@@ -540,7 +554,7 @@
         "groups.infra.total.metrics.upi_qr.mom_pct",
         "groups.infra.total.metrics.pos_terminals.mom_pct"
       ],
-      "title": "India now has UPI QR codes per POS terminal — the jump is ICICI Bank's count, not a real shift",
+      "title": "India now has 80 UPI QR codes per POS terminal — the jump is ICICI Bank's count, not a real shift",
       "body": "This ratio looks like it hit a record, but the move is almost entirely its denominator: ICICI Bank's reported count fell sharply in a single month while the numerator barely changed. Across every other bank the denominator held steady, so the ratio's jump is a reporting artifact, not the market pulling apart.",
       "implication": "Discount the record — the ratio moved because ICICI Bank's reported count changed, not because the two sides really diverged.",
       "chain": [
@@ -607,7 +621,7 @@
         "groups.infra.total.metrics.upi_qr.latest"
       ],
       "title": "UPI QR acceptance up 16.9% YoY — expansion holding steady",
-      "body": "UPI QR codes deployed reached 792.6M in Jun 2026, up 16.9% year-on-year. The YoY rate was 16.4% a month ago — QR acceptance expansion is holding steady (+0.4pp). Year-on-year cuts through the monthly registration noise to show the true acceptance build-out.",
+      "body": "UPI QR codes deployed reached 79.3 crore in Jun 2026, up 16.9% year-on-year. The YoY rate was 16.4% a month ago — QR acceptance expansion is holding steady (+0.4pp). Year-on-year cuts through the monthly registration noise to show the true acceptance build-out.",
       "implication": "QR acceptance is expanding 16.9% a year — far faster than POS hardware. Every new QR is a merchant who becomes reachable for credit-on-UPI and merchant BNPL. Any small-merchant lending product needs a QR-native distribution path; POS-only reach is shrinking by comparison.",
       "chain": [
         "UPI QR codes up 16.9% YoY — acceptance footprint expanding far faster than POS hardware",
@@ -632,6 +646,20 @@
           "metrics": [
             "bharat_qr",
             "upi_qr"
+          ],
+          "sides": [
+            {
+              "label": "",
+              "metrics": [
+                "upi_qr"
+              ]
+            },
+            {
+              "label": "",
+              "metrics": [
+                "bharat_qr"
+              ]
+            }
           ]
         }
       },
@@ -641,11 +669,11 @@
         "groups.infra.total.metrics.upi_qr.mom_pct",
         "groups.infra.total.metrics.bharat_qr.mom_pct"
       ],
-      "title": "UPI QR codes are 151x Bharat QR in scale — 792.6M vs 5.27M",
-      "body": "As of Jun 2026, there are 792.6M UPI QR codes deployed vs 5.27M Bharat QR codes — a 151x gap. UPI QR grew +1.6% MoM vs Bharat QR at -6.0% MoM. UPI has decisively won the QR standard battle in India.",
+      "title": "UPI QR codes are 151x Bharat QR in scale — 79.3 crore vs 52.7 lakh",
+      "body": "As of Jun 2026, there are 79.3 crore UPI QR codes deployed vs 52.7 lakh Bharat QR codes — a 151x gap. UPI QR grew +1.6% MoM vs Bharat QR at -6.0% MoM. UPI has decisively won the QR standard battle in India.",
       "implication": "Bharat QR was an earlier QR code standard that lost out to UPI QR — which is now 151 times bigger. Building any credit product (credit on UPI, BNPL) on Bharat QR today would be like building on a platform that merchants have already abandoned. UPI QR is the only QR standard worth designing for.",
       "chain": [
-        "UPI QR at 792.6M vs Bharat QR at 5.27M — a 151x gap",
+        "UPI QR at 79.3 crore vs Bharat QR at 52.7 lakh — a 151x gap",
         "Bharat QR was an earlier standard; merchants have consolidated on UPI QR as the accepted norm",
         "Building payments or lending infrastructure on Bharat QR rails is operationally unviable at any meaningful merchant scale"
       ]
@@ -704,8 +732,8 @@
         "groups.infra.top_n.banks.0.mom_pct"
       ],
       "title": "RBL BANK LTD leads POS terminal deployment at 26.7% market share",
-      "body": "RBL BANK LTD has deployed 2.65M POS terminals in Jun 2026, accounting for 26.7% of total (-4.1% MoM). Top 5 banks hold 91.4% of all POS terminals (+12.5pp vs prior month). Notable: YES BANK LTD moved from #6 to #5.",
-      "implication": "5 banks own 91.4% of all POS machines in India. That also means merchant sales data — what shopkeepers sell, how much, how often — sits largely with those same 5 banks. If you want to lend to merchants and need their sales history to decide how much credit to give, you either need a data partnership with one of these banks or an alternate source like GST returns or UPI transaction feeds.",
+      "body": "RBL BANK LTD has deployed 26.5 lakh POS terminals in Jun 2026, accounting for 26.7% of total (-4.1% MoM). Top 5 banks hold 91.4% of all POS terminals (+12.5pp vs prior month). Notable: YES BANK LTD moved from #6 to #5.",
+      "implication": "5 banks own 91.4% of all POS machines in India. That also means merchant transaction data — what each shop turns over, how often — sits largely with those same 5 banks. Merchant credit underwritten on sales history therefore rests on a data relationship with one of them, or on an alternate source such as GST returns or UPI transaction feeds.",
       "chain": [
         "Top 5 banks own 91.4% of POS terminals — merchant acquiring infrastructure is highly concentrated",
         "Merchant transaction data (sales history for credit underwriting) sits with the same institutions",
@@ -737,12 +765,12 @@
         "groups.infra.total.metrics.bharat_qr.latest",
         "groups.infra.total.metrics.upi_qr.latest"
       ],
-      "title": "Gap: Bharat QR contracting -6.0% MoM — 5.27M vs 792.6M UPI QR",
-      "body": "Bharat QR codes fell 6.0% MoM in Jun 2026, now at 5.27M — compared to 792.6M UPI QR codes (151x gap). Merchant preference has consolidated on UPI QR as the dominant QR acceptance standard.",
-      "implication": "Bharat QR is shrinking 6.0% every month — merchants are removing it. If any part of your lending or payments product depends on Bharat QR acceptance, that's a real problem. Move everything to UPI QR. There is no viable future for Bharat QR as a payments or credit infrastructure.",
+      "title": "Gap: Bharat QR contracting -6.0% MoM — 52.7 lakh vs 79.3 crore UPI QR",
+      "body": "Bharat QR codes fell 6.0% MoM in Jun 2026, now at 52.7 lakh — compared to 79.3 crore UPI QR codes (151x gap). Merchant preference has consolidated on UPI QR as the dominant QR acceptance standard.",
+      "implication": "Bharat QR is shrinking 6.0% a month while UPI QR keeps growing — merchants are taking the older standard down. Anything that depends on Bharat QR acceptance is resting on a shrinking base.",
       "chain": [
         "Bharat QR declining 6.0% MoM — merchants are actively removing it, not seasonal dip",
-        "UPI QR at 792.6M vs Bharat QR at 5.27M — gap structural and widening",
+        "UPI QR at 79.3 crore vs Bharat QR at 52.7 lakh — gap structural and widening",
         "Any payments or lending product built on Bharat QR infrastructure faces accelerating merchant disengagement"
       ]
     },
@@ -772,7 +800,7 @@
         "groups.infra.total.metrics.atm_onsite.mom_pct"
       ],
       "title": "Gap: Offsite ATMs declining -0.7% MoM — rural cash access contracting",
-      "body": "Offsite ATMs fell 0.7% MoM in Jun 2026 (now 73.4K), while onsite ATMs grew +0.1% MoM. Offsite ATMs serve rural and semi-urban populations where branch presence is limited — their decline reduces physical cash access for underserved geographies.",
+      "body": "Offsite ATMs fell 0.7% MoM in Jun 2026 (now 73,426), while onsite ATMs grew +0.1% MoM. Offsite ATMs serve rural and semi-urban populations where branch presence is limited — their decline reduces physical cash access for underserved geographies.",
       "implication": "Offsite ATMs are standalone machines in villages, petrol pumps, small towns — placed away from bank branches specifically to serve rural areas. When these decline and digital payments haven't reached those areas yet, rural borrowers lose their easiest way to access cash for repayment. If you have loans in rural geographies, check whether ATM coverage in those areas is shrinking — it can make EMI collection harder.",
       "chain": [
         "Offsite ATMs (standalone machines in rural/semi-urban areas away from branches) fell 0.7% MoM",
@@ -1020,6 +1048,21 @@
             "dc_ecom_txn_val",
             "dc_pos_txn_val",
             "debit_cards"
+          ],
+          "sides": [
+            {
+              "label": "debit cards in force",
+              "metrics": [
+                "debit_cards"
+              ]
+            },
+            {
+              "label": "debit card spend",
+              "metrics": [
+                "dc_pos_txn_val",
+                "dc_ecom_txn_val"
+              ]
+            }
           ]
         }
       },
@@ -1053,6 +1096,21 @@
             "cc_pos_txn_val",
             "dc_pos_txn_val",
             "pos_terminals"
+          ],
+          "sides": [
+            {
+              "label": "POS terminals deployed",
+              "metrics": [
+                "pos_terminals"
+              ]
+            },
+            {
+              "label": "value transacted at POS",
+              "metrics": [
+                "cc_pos_txn_val",
+                "dc_pos_txn_val"
+              ]
+            }
           ]
         }
       },
@@ -1087,6 +1145,22 @@
             "atm_onsite",
             "cc_atm_withdrawal_val",
             "dc_atm_withdrawal_val"
+          ],
+          "sides": [
+            {
+              "label": "ATMs deployed",
+              "metrics": [
+                "atm_onsite",
+                "atm_offsite"
+              ]
+            },
+            {
+              "label": "cash withdrawn at ATMs",
+              "metrics": [
+                "cc_atm_withdrawal_val",
+                "dc_atm_withdrawal_val"
+              ]
+            }
           ]
         }
       },

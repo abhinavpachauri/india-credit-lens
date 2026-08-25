@@ -299,6 +299,27 @@
           "date": "2026-08-26",
           "how_measured": "Ran the check over every rendered card in both pipelines after the charts gained the three \u00a715.6 render shapes. C1 23\u21920, C2 6\u21920, C3 11\u21920, C4 13\u21920, C5 0. Verified strict exits 1 on an injected fault and 0 on the live feeds; both gates ALL STAGES PASSED including tsc + npm run build.",
           "source": "analysis/guards/validate_card_cuts.py"
+        },
+        {
+          "metric": "Dashboard card prose \u2014 voice problems in prose we generate",
+          "value": "9 \u2192 0 across 128 cards (3 warnings remain, all eval-authored)",
+          "date": "2026-08-26",
+          "how_measured": "Ran core.voice.lint over title/body/implication of every rendered card in both pipelines before and after the \u00a715.8 fixes. Severity split by the card's own `representation` field: deterministic hard-fails, llm warns. Stage 5.8 strict in both gates.",
+          "source": "analysis/guards/validate_card_prose.py"
+        },
+        {
+          "metric": "Advice/forecast lint widening \u2014 false-rejection rate",
+          "value": "0 real catches lost (1 suppression over 409 texts, and it was the false positive)",
+          "date": "2026-08-26",
+          "how_measured": "Compared the old and new advice matchers over 384 card fields plus 25 long-form documents on disk. The relative-clause rule ('banks that focus on underserved segments' describes, it does not instruct) suppressed exactly one hit \u2014 the false positive it was written for. Each widened phrase is evidenced by a live hit; a bare 'will be' was tried and dropped for firing on ordinary comparative prose.",
+          "source": "analysis/core/voice.py"
+        },
+        {
+          "metric": "Growth-scan pairing \u2014 Check 2g scope on a card quoting size beside speed",
+          "value": "22 candidate values vs 1,728 period-wide (78x tighter); in-range injection catch 3/4",
+          "date": "2026-08-26",
+          "how_measured": "The card declares both the growth scan and its sibling share scan in sourceSignals, so Check 2g scopes to their union. Injected four in-range invented shares into the textiles card; three failed the gate. The miss (2.8) landed within the SIBC policy's 0.25 absolute tolerance of a legitimate 3.0 in the candidate set \u2014 a pre-existing property of the tolerance, not of the scope.",
+          "source": "analysis/pipelines/sibc/generate_analysis_report.py"
         }
       ],
       "observations": [
@@ -377,6 +398,14 @@
         {
           "date": "2026-08-26",
           "observation": "Third time in one build that fixing a defect untested the check that caught it. Five tests across steps 2 and 3 asserted live defects and silently became assertions that nothing is wrong. The durable shape is a pair: drive the check synthetically for the logic, and assert separately that the live feed is clean. Worth a standing habit rather than a per-case correction."
+        },
+        {
+          "date": "2026-08-26",
+          "observation": "A lint can only catch what its list names, and the list was written from what its author already suspected. core.voice missed the two strongest instructions on the dashboard \u2014 'Move everything to UPI QR' and 'there is no viable future for Bharat QR' \u2014 while catching a milder 'should' three cards away. Auditing the prose by reading it found defects the linter could not; the linter was then widened from those findings, not from imagination. Same shape as the hand-written negative tests that kept passing while the property failed."
+        },
+        {
+          "date": "2026-08-26",
+          "observation": "CLAUDE.md had described SIBC cards as carrying `representation` since June; the generator never emitted it. Nothing failed, because nothing read it \u2014 until the prose gate needed to tell our sentences from the eval's. Documentation describing behaviour the code does not have is the same failure as an unwired signal: it reads as a capability and is an absence. reconcile.py guards paths and counts, not claims."
         }
       ],
       "open_questions": [

@@ -299,3 +299,76 @@ def test_every_sibc_sub_cut_a_card_declares_is_drawable():
     assert "2.13" in secs["industryByType"]["sub_cuts"]     # Basic Metal → Iron & Steel / Other
     assert "3.9" in secs["services"]["sub_cuts"]            # NBFCs → HFCs / PFIs
     assert secs["industryByType"]["sub_cuts"]["2.13"]["child_level"] == 3
+
+
+# ── §15.8: the prose fixes ────────────────────────────────────────────────────
+
+def test_a_growth_scan_names_the_leader_size():
+    """The inverse of the movement family's pairing rule. There a share is never
+    published without its speed, because a falling share alone reads as decline; here a
+    speed is never published without its size, because a rate alone reads as scale.
+    Jute Textiles led textiles at 21.4% on 1.7% of the book — ₹5,354 Cr."""
+    feed = json.loads((vcc.REPO / "web/public/data/sibc_l1_annotations.json").read_text())
+    card = next(c for b in feed["sections"].values() for k in b for c in b[k]
+                if c["id"] == "sibc-textiles-sub-yoy-scan")
+    assert "1.7% of textiles credit" in card["implication"]
+    assert "Other Textiles at 45.5%" in card["implication"]
+    # and the size it quotes is declared, so Check 2g scopes to both signals
+    assert card["sourceSignals"] == ["sibc-textiles-sub-yoy-scan", "sibc-textiles-sub-share-scan"]
+
+
+def test_a_cut_with_no_share_scan_loses_the_size_clause_rather_than_inventing_one():
+    """Two SIBC cuts have no share scan at all. An honest null beats a near-miss: an
+    early version matched on the compute keys alone and paired the PSL scan, whose keys
+    are all None, with three payments signals."""
+    reg = json.loads((ANALYSIS / "signals/registry.json").read_text())["signals"]
+    from pipelines.sibc.generate_analysis_report import _sibling_share_scan
+    assert _sibling_share_scan(reg, "sibc-psl-yoy-scan", reg["sibc-psl-yoy-scan"]) is None
+    assert _sibling_share_scan(reg, "sibc-textiles-sub-yoy-scan",
+                               reg["sibc-textiles-sub-yoy-scan"]) == "sibc-textiles-sub-share-scan"
+
+
+def test_no_card_tells_the_reader_what_to_do():
+    """`core.voice` has linted the distribution surfaces for a year; the dashboard — the
+    surface most people read — was linted by nothing, and a card said "Move everything to
+    UPI QR". Our own prose hard-fails; the eval's warns, because the fix there is the
+    prompt, not a hand-edit of a validated artifact."""
+    from guards import validate_card_prose as vcp
+    for pipeline in ("sibc", "atm_pos"):
+        fails, _ = vcp.check(pipeline)
+        assert fails == [], f"{pipeline}: {fails}"
+
+
+def test_a_relative_clause_is_not_advice():
+    """"banks that focus on underserved segments" defines what small finance banks are.
+    Measured before narrowing: one suppression across 409 texts, and it was this one."""
+    from core import voice
+    assert voice.advice("banks that focus on underserved segments") == []
+    assert voice.advice("lenders should focus on gold loans")
+
+
+def test_digit_grouping_commas_are_one_number():
+    """"73,426" is one number; the extractor's pattern has no comma in it, so it read 73
+    and 426 and rejected both. Narrow by design — a comma is a grouping comma only
+    between digits with exactly three following."""
+    from core.traceability import extract_numbers, ATM_POS
+    assert extract_numbers("now 73,426), while onsite", ATM_POS) == [73426.0]
+    assert extract_numbers("In 2026, 45% of the total", ATM_POS) == [2026.0, 45.0]
+
+
+def test_the_dominance_guard_keeps_a_number_that_is_the_subject():
+    """It stripped EVERY number from a headline, not just a trailing stale rate, so
+    "India now has 80 UPI QR codes per POS terminal" shipped with no number at all."""
+    feed = json.loads((vcc.REPO / "web/public/data/atm_pos_insights.json").read_text())
+    cards = feed["insights"] if isinstance(feed, dict) else feed
+    title = next(c["title"] for c in cards if c["id"] == "infra-qr-per-pos")
+    assert any(ch.isdigit() for ch in title.split(" — ")[0]), title
+
+
+def test_counts_read_in_lakh_and_crore():
+    """The eval layer normalises LLM prose to Indian units and core.voice flags M/K as a
+    voice problem, but the deterministic payments cards were still writing "792.6M"."""
+    from pipelines.atm_pos.generate_atm_pos_insights import fmt_num
+    assert fmt_num(792_600_000) == "79.3 crore"
+    assert fmt_num(5_270_000) == "52.7 lakh"
+    assert fmt_num(73_426) == "73,426"
