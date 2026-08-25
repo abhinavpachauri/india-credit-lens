@@ -56,6 +56,10 @@ class Cut:
     statement:   str | None = None
     denominator: str | None = None
     metrics:     tuple = ()          # payments: the metrics the claim is made of
+    # A pair's two sides, each a bundle with the name the card's own prose uses
+    # ("value transacted at POS" is CC POS value + DC POS value). Flattening the
+    # sides into one metric list drew three unlabelled lines for a two-sided claim.
+    sides:       tuple = ()
 
     def as_json(self) -> dict:
         """The wire form carried on a card's `effect.cut`. Omits what does not
@@ -66,6 +70,12 @@ class Cut:
                 d[k] = getattr(self, k)
         if self.codes:   d["codes"]   = list(self.codes)
         if self.metrics: d["metrics"] = list(self.metrics)
+        # Sides are stored as sorted tuples so the Cut stays hashable; JSON needs lists,
+        # and a tuple left in here compares unequal to the list that round-trips back
+        # through the feed — which C5 correctly reported as drift.
+        if self.sides:
+            d["sides"] = [{"label": dict(s)["label"], "metrics": list(dict(s)["metrics"])}
+                          for s in self.sides]
         return d
 
 
@@ -102,17 +112,27 @@ def atm_pos_cut(compute: dict) -> Cut:
     actually made out of. A share needs its whole denominator; a pair needs both
     sides, because the gap a pair card quotes is the distance between two lines.
     """
-    metrics, shape = set(), "level"
+    metrics, shape, sides = set(), "level", []
     if compute.get("metric"):
         metrics.add(compute["metric"])
     if compute.get("denominator_metrics"):
         metrics.update(compute["denominator_metrics"]); shape = "share_of"
     if compute.get("denominator_metric"):
-        metrics.add(compute["denominator_metric"]);     shape = "pair"
-    for side in ("a", "b"):
-        if isinstance(compute.get(side), dict):
-            metrics.update(compute[side].get("metrics", [])); shape = "pair"
-    return Cut(shape=shape, metrics=tuple(sorted(metrics)))
+        # A ratio is a two-sided claim whose sides are single metrics.
+        metrics.add(compute["denominator_metric"]); shape = "pair"
+        sides = [_side(None, [compute["metric"]]), _side(None, [compute["denominator_metric"]])]
+    for key in ("a", "b"):
+        side = compute.get(key)
+        if isinstance(side, dict):
+            metrics.update(side.get("metrics", [])); shape = "pair"
+            sides.append(_side(side.get("label"), side.get("metrics", [])))
+    return Cut(shape=shape, metrics=tuple(sorted(metrics)),
+               sides=tuple(sides) if shape == "pair" else ())
+
+
+def _side(label: str | None, metrics: list) -> tuple:
+    """One side of a pair, as sorted key/value pairs so the Cut stays hashable."""
+    return tuple(sorted({"label": label or "", "metrics": tuple(metrics)}.items()))
 
 
 def cut_of(pipeline: str, compute: dict) -> Cut:
@@ -164,8 +184,21 @@ def sibc_sections(rows: list[dict] | None = None) -> dict[str, dict]:
         labels = {r["code"]: r["sector"] for r in mine}
         labels.update(d.get("labels", {}))     # rbi_sibc.ts fixed maps (bankCredit, mainSectors)
         labels.update(_overrides(sec))         # display overrides (NBFCs, Housing, …)
+        # The sub-cuts this section's chart can also draw (§15.6a): every code in it
+        # that RBI breaks down further. `buildSubCuts` in rbi_sibc.ts builds exactly
+        # this set from the same rule, so the check's model of the chart tracks the
+        # chart. Without it, cards the chart now renders correctly would keep being
+        # reported — and a gate that reports fixed defects is a gate people learn to
+        # ignore.
+        kids = {}
+        for code in {r["code"] for r in mine}:
+            children = [r for r in scoped if r["parent_code"] == code]
+            if children:
+                kids[code] = {"parent_code": code,
+                              "child_level": int(children[0]["level"]),
+                              "statement":   stmt}
         out[sec] = {**d, "codes": {r["code"] for r in mine},
-                    "labels": labels, "csv_names": csv_names}
+                    "labels": labels, "csv_names": csv_names, "sub_cuts": kids}
     return out
 
 

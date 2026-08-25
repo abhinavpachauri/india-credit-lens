@@ -1119,6 +1119,20 @@
         "metrics": [
           "pos_terminals",
           "upi_qr"
+        ],
+        "sides": [
+          {
+            "label": "",
+            "metrics": [
+              "upi_qr"
+            ]
+          },
+          {
+            "label": "",
+            "metrics": [
+              "pos_terminals"
+            ]
+          }
         ]
       }
     },
@@ -1359,6 +1373,20 @@
         "metrics": [
           "bharat_qr",
           "upi_qr"
+        ],
+        "sides": [
+          {
+            "label": "",
+            "metrics": [
+              "upi_qr"
+            ]
+          },
+          {
+            "label": "",
+            "metrics": [
+              "bharat_qr"
+            ]
+          }
         ]
       }
     },
@@ -2292,6 +2320,21 @@
           "dc_ecom_txn_val",
           "dc_pos_txn_val",
           "debit_cards"
+        ],
+        "sides": [
+          {
+            "label": "debit cards in force",
+            "metrics": [
+              "debit_cards"
+            ]
+          },
+          {
+            "label": "debit card spend",
+            "metrics": [
+              "dc_pos_txn_val",
+              "dc_ecom_txn_val"
+            ]
+          }
         ]
       }
     },
@@ -2358,6 +2401,21 @@
           "cc_pos_txn_val",
           "dc_pos_txn_val",
           "pos_terminals"
+        ],
+        "sides": [
+          {
+            "label": "POS terminals deployed",
+            "metrics": [
+              "pos_terminals"
+            ]
+          },
+          {
+            "label": "value transacted at POS",
+            "metrics": [
+              "cc_pos_txn_val",
+              "dc_pos_txn_val"
+            ]
+          }
         ]
       }
     },
@@ -2425,6 +2483,22 @@
           "atm_onsite",
           "cc_atm_withdrawal_val",
           "dc_atm_withdrawal_val"
+        ],
+        "sides": [
+          {
+            "label": "ATMs deployed",
+            "metrics": [
+              "atm_onsite",
+              "atm_offsite"
+            ]
+          },
+          {
+            "label": "cash withdrawn at ATMs",
+            "metrics": [
+              "cc_atm_withdrawal_val",
+              "dc_atm_withdrawal_val"
+            ]
+          }
         ]
       }
     },

@@ -40,8 +40,10 @@ first hand-audit of this produced a false positive.
 
 Mode
 ────
-Advisory until the §15.2 contract lands and cards carry derived cuts; `--strict`
-turns findings into a gate failure. Same staging Check 4f used.
+STRICT in both gates since 2026-08-26, when §15.6 gave the charts the ability to
+render every declared cut and the findings reached zero on both pipelines. It ran
+advisory while that was built — the same staging Check 4f used — because a check
+that reports defects nobody can yet fix is a check people learn to scroll past.
 
 Usage:
     python3 analysis/guards/validate_card_cuts.py --pipeline sibc [--strict]
@@ -131,9 +133,11 @@ def check_sibc(strict: bool = False, feed: dict | None = None) -> list[str]:
                 # right when the chart draws that parent's children; a pair or a
                 # named set is right when the chart can draw every entity it names.
                 if cut.shape in ("decomposition", "share_of"):
-                    same = (cut.parent_code == chart.get("parent_code")
-                            and cut.child_level == chart.get("child_level")
-                            and cut.statement   == chart.get("statement"))
+                    drawable = [chart, *chart.get("sub_cuts", {}).values()]
+                    same = any(cut.parent_code == c.get("parent_code")
+                               and cut.child_level == c.get("child_level")
+                               and cut.statement   == c.get("statement")
+                               for c in drawable)
                     if not same:
                         found.append(
                             f"[C1:{sec}.{card['id']}] card is about "
@@ -185,11 +189,16 @@ def check_atm_pos(strict: bool = False, cards: list | None = None) -> list[str]:
                 found.append(f"[C5:{card['id']}] declares {declared}; "
                              f"its signal computed {computed} — regenerate the feed")
         cut = _cut_from(declared)
+        # §15.6 b/c: a share or a pair whose metrics reach beyond the section is now
+        # rendered on its own metrics (buildShareData / buildPairData in AtmReadMode),
+        # so the section's metric list is not the only thing the chart can draw. A
+        # `level` claim has no such builder and must still sit on its own section.
+        renders_own_metrics = cut.shape in ("share_of", "pair")
         missing = [m for m in cut.metrics if m not in chart["metrics"]]
-        if missing:
+        if missing and not renders_own_metrics:
             found.append(
-                f"[{'C3' if cut.shape == 'share_of' else 'C1'}:{card['id']}] "
-                f"{cut.shape} claim needs {missing} — chart draws only {chart['metrics']}")
+                f"[C1:{card['id']}] {cut.shape} claim needs {missing} — "
+                f"chart draws only {chart['metrics']}")
     return found
 
 
@@ -203,7 +212,7 @@ def run(pipeline: str, strict: bool) -> int:
         return 0
     for f in found:
         print(f"  {'✗' if strict else '⚠'}  {f}")
-    print(f"\n  {len(found)} finding(s) — {'FAIL' if strict else 'advisory (§15.9 step 1)'}")
+    print(f"\n  {len(found)} finding(s) — {'FAIL' if strict else 'advisory'}")
     return 1 if strict else 0
 
 

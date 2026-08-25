@@ -698,7 +698,7 @@ Resolution has exactly two outcomes: **resolved**, or **hard fail**. Rendering t
 resolvable ancestor is prohibited — that behaviour is the defect, and it is worse than a blank
 chart because it looks like an answer.
 
-### 15.6 Render shapes — NEEDS ASCII APPROVAL BEFORE CODE
+### 15.6 Render shapes — BUILT 2026-08-26 (approved in session)
 
 Three shapes need a layout (`level` renders as today, unchanged). All three reuse the existing
 `TrendChart` / `DistributionChart` / `AtmPosTrendChart` with the section's normal Absolute / YoY /
@@ -814,9 +814,23 @@ insight generation (`signals/README` + `core.voice`) — listing them so they ar
    `core/cuts.py`, shared with the check so the two cannot drift (guarded by C5). Findings
    52 → 38: **C2 6 → 0, C4 13 → 0, C5 0**. What remains is C1/C3 — the charts that cannot yet draw
    the cut, which is step 3's job and is now visible rather than silent.
-3. §15.6 render shapes (after ASCII approval).
-4. §15.8 prose fixes — independent, any time.
-5. Flip stage 5.7 to `--strict` once step 3 lands and the C1/C3 findings reach zero.
+3. ~~§15.6 render shapes.~~ **DONE 2026-08-26.** SIBC sections carry a `subCuts` entry for every
+   code RBI breaks down further (`buildSubCuts`, one level deep — RBI publishes no fourth), and the
+   payments read surface renders `share_of` on its own denominator (`buildShareData`) and `pair` on
+   its two named sides (`buildPairData`). **Findings 38 → 0 on both pipelines.**
+4. ~~Flip stage 5.7 to `--strict`.~~ **DONE 2026-08-26**, the moment the count reached zero.
+5. §15.8 prose fixes — independent, still open.
+
+**A pair's sides are bundles, not metrics.** `csv_pair_divergence` authors a label per side, and one
+side can be several metrics — "value transacted at POS" is credit-card POS value plus debit-card POS
+value. The first cut flattened both sides into one metric list and drew three unlabelled lines under
+a two-sided claim; the Cut now carries `sides`, so the chart plots one line per side under the name
+the card's own prose uses.
+
+**One remount rule worth keeping.** `TrendChart` seeds its hidden-series state once via `useState`,
+so a sub-cut inherited whichever legend toggles the parent chart was left in — its defaulted-off
+"Total" came back. The charts are keyed by the cut's id: same key within a section, so a reader's own
+toggles survive switching cards; new key on a sub-cut, so its defaults apply.
 
 **Fixed outright in step 2** (no chart change needed): 7 highlights that rendered nothing, 1 card
 highlighting a series from a different industry, and `gap-atm-offsite-decline`, which pointed at

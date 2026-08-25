@@ -778,6 +778,39 @@ export const ANNOTATIONS: Record<string, SectionAnnotations> = {
 
 // ── Internal helper ───────────────────────────────────────────────────────────
 
+/**
+ * A chart for every code in this section that RBI breaks down further — DASHBOARD_SPEC §15.6.
+ *
+ * These entities have always been in the CSV with the same 21 periods as their parents; no
+ * section rendered them, so twelve cards computed over them were charted one level up and read
+ * as a contradiction ("Iron and Steel holds 69.0%" above a line at 11.2%). Each sub-cut is an
+ * ordinary section — same builders, same chart components, same three modes — differing only in
+ * which codes feed it and what its percentages are out of.
+ *
+ * `noSubCuts` stops the recursion at one level; RBI publishes no fourth.
+ */
+function buildSubCuts(
+  rows: CreditRow[], codes: string[], labels: Record<string, string>,
+  parentId: string, icon: string, accentIndex: number,
+  opts: { psl?: boolean; stmt?: string },
+): Record<string, ReportSection> {
+  const out: Record<string, ReportSection> = {};
+  for (const code of codes) {
+    const kids = childrenOf(rows, code, { stmt: opts.stmt });
+    if (kids.codes.length === 0) continue;
+    const parentLabel = labels[code] ?? code;
+    const sub = makeSection(
+      rows, `${parentId}::${code}`, parentLabel, icon, accentIndex,
+      [...kids.codes, code], { ...kids.labels, [code]: "Total" },
+      `% of ${parentLabel}`,
+      { stmt: opts.stmt, distCodes: kids.codes, defaultHidden: ["Total"], noSubCuts: true },
+    );
+    if (sub) out[code] = { ...sub, parentLabel };
+  }
+  return out;
+}
+
+
 function makeSection(
   rows:        CreditRow[],
   id:          string,
@@ -787,7 +820,7 @@ function makeSection(
   codes:       string[],
   labels:      Record<string, string>,
   pctLabel:    string,
-  opts:        { psl?: boolean; stmt?: string; distCodes?: string[]; defaultHidden?: string[] } = {},
+  opts:        { psl?: boolean; stmt?: string; distCodes?: string[]; defaultHidden?: string[]; noSubCuts?: boolean } = {},
   filterable = false
 ): ReportSection | null {
   if (codes.length === 0) return null;
@@ -797,6 +830,7 @@ function makeSection(
   const fyData:       ChartPoint[] = buildGrowthSeries(rows, codes, labels, "fy",  opts);
   const seriesNames:  string[]     = codes.map((c) => labels[c] ?? c);
   const distributionSeriesNames    = opts.distCodes?.map((c) => labels[c] ?? c);
+  const subCuts = opts.noSubCuts ? undefined : buildSubCuts(rows, codes, labels, id, icon, accentIndex, opts);
 
   return {
     id,
@@ -809,6 +843,7 @@ function makeSection(
     seriesNames,
     ...(distributionSeriesNames ? { distributionSeriesNames } : {}),
     ...(opts.defaultHidden ? { defaultHiddenSeries: opts.defaultHidden } : {}),
+    ...(subCuts && Object.keys(subCuts).length ? { subCuts } : {}),
     pctLabel,
     filterable,
     annotations: mergeAnnotations(id),

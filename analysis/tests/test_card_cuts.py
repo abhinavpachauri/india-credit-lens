@@ -61,10 +61,22 @@ def test_atm_pos_ratio_denominator_is_part_of_the_claim():
 
 # ── the live defects this was built for ───────────────────────────────────────
 
-def test_catches_the_defect_that_started_this():
-    """Iron & Steel (children of 2.13) charted as Basic Metal (a child of 2)."""
-    found = vcc.check_sibc(strict=False)
-    assert any("sibc-basic-metal-sub-share-scan" in f and f.startswith("[C1") for f in found)
+def test_catches_a_cut_the_chart_cannot_draw():
+    """The defect that started this — Iron & Steel (children of 2.13) charted as Basic
+    Metal (a child of 2) — is fixed in §15.6a, so this drives the check synthetically
+    with a cut no chart in the section can render: the children of Power (2.18.1),
+    which RBI does not break down."""
+    feed = {"sections": {"industryByType": {"insights": [{
+        "id": "sibc-industry-type-share-scan",
+        "effect": {"cut": {"shape": "decomposition", "parent_code": "2.18.1",
+                           "child_level": 4, "statement": "Statement 2"}}}]}}}
+    assert any(f.startswith("[C1") for f in vcc.check_sibc(feed=feed))
+
+
+def test_the_card_that_started_this_is_now_charted_on_its_own_cut():
+    """Iron and Steel holds 69.0% of basic-metals credit — and the chart under it now
+    draws the two sub-types that share out to 69/31, not the parent's 11.2% of industry."""
+    assert not [f for f in vcc.check_sibc() if "sibc-basic-metal-sub-share-scan" in f]
 
 
 def test_catches_a_highlight_that_renders_nothing():
@@ -101,9 +113,17 @@ def test_no_live_card_points_at_a_section_that_does_not_exist():
         assert "is not a section that renders a chart" not in f
 
 
-def test_catches_a_pair_charted_one_sided():
-    found = vcc.check_atm_pos(strict=False)
-    assert any("pos-fleet-vs-spend-gap" in f and "pair" in f for f in found)
+def test_catches_a_level_claim_reaching_outside_its_section():
+    """A share or a pair renders on its own metrics now (§15.6 b/c), but a `level` claim
+    has no such builder — it must sit on a section that actually draws it."""
+    found = vcc.check_atm_pos(cards=[{"id": "made-up", "effect": {
+        "focusCard": "upi_qr",
+        "cut": {"shape": "level", "metrics": ["pos_terminals"]}}}])
+    assert any(f.startswith("[C1") for f in found)
+
+
+def test_live_pair_cards_now_chart_both_sides():
+    assert not [f for f in vcc.check_atm_pos() if "pos-fleet-vs-spend-gap" in f]
 
 
 def test_catches_an_undeclared_cut():
@@ -228,3 +248,54 @@ def test_a_named_set_keeps_every_entity_it_names():
     cut = C.sibc_cut({"method": "csv_sector_count_positive_yoy",
                       "child_codes": ["1", "2", "3", "4"], "statement": "Statement 1"})
     assert cut.shape == "level" and len(cut.codes) == 4
+
+
+# ── §15.6: the charts render the cut ──────────────────────────────────────────
+
+def test_both_pipelines_are_clean_so_the_check_can_be_strict():
+    """Step 3 gave the charts the ability to draw every declared cut, which is what
+    lets stage 5.7 run strict. If this fails, the gate fails — deliberately."""
+    assert vcc.check_sibc() == []
+    assert vcc.check_atm_pos() == []
+
+
+def test_strict_actually_fails():
+    """A strict flag that never returns non-zero is decoration."""
+    feed = {"sections": {"industryByType": {"insights": [{
+        "id": "sibc-basic-metal-sub-share-scan",
+        "effect": {"highlight": ["Power"],
+                   "cut": {"shape": "decomposition", "parent_code": "2.13",
+                           "child_level": 3, "statement": "Statement 2"}}}]}}}
+    assert vcc.check_sibc(feed=feed)          # the dead highlight is still reported
+
+
+def test_a_pair_keeps_its_two_sides():
+    """A side can be a BUNDLE — "value transacted at POS" is CC POS value plus DC POS
+    value. Flattening the sides into one metric list drew three unlabelled lines for a
+    two-sided claim, and lost the labels the card's own prose uses."""
+    cut = C.atm_pos_cut({
+        "a": {"metrics": ["pos_terminals"], "label": "POS terminals deployed"},
+        "b": {"metrics": ["cc_pos_txn_val", "dc_pos_txn_val"], "label": "value transacted at POS"},
+    })
+    sides = cut.as_json()["sides"]
+    assert [s["label"] for s in sides] == ["POS terminals deployed", "value transacted at POS"]
+    assert sides[1]["metrics"] == ["cc_pos_txn_val", "dc_pos_txn_val"]
+
+
+def test_side_metrics_serialise_as_lists():
+    """Sides are stored as tuples to keep the Cut hashable. A tuple left in the wire
+    form compares unequal to the list that round-trips back through the feed, which C5
+    correctly reported as drift on two live cards."""
+    cut = C.atm_pos_cut({"metric": "upi_qr", "denominator_metric": "bharat_qr"})
+    for side in cut.as_json()["sides"]:
+        assert isinstance(side["metrics"], list)
+
+
+def test_every_sibc_sub_cut_a_card_declares_is_drawable():
+    """§15.6a: the section's chart gained a sub-cut for every code RBI breaks down
+    further, and the check's model of the chart tracks it. A card declaring a cut the
+    chart cannot draw is the original defect."""
+    secs = C.sibc_sections()
+    assert "2.13" in secs["industryByType"]["sub_cuts"]     # Basic Metal → Iron & Steel / Other
+    assert "3.9" in secs["services"]["sub_cuts"]            # NBFCs → HFCs / PFIs
+    assert secs["industryByType"]["sub_cuts"]["2.13"]["child_level"] == 3

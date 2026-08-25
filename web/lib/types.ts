@@ -12,8 +12,32 @@ export interface ChartPoint {
 
 // ── Annotations ───────────────────────────────────────────────────────────────
 
+/**
+ * What a card is a claim about — DASHBOARD_SPEC §15. Emitted by the generator from the
+ * signal's own compute spec, so the chart can render the thing the card actually says
+ * rather than the nearest series that happens to already be drawn.
+ *
+ *   level          one entity's own series, or a named set of them
+ *   decomposition  the children of `parent_code`
+ *   share_of       those children as a share of `denominator`
+ *   pair           two named sides, and the gap between them
+ */
+export interface CardCut {
+  shape:        "level" | "decomposition" | "share_of" | "pair";
+  codes?:       string[];   // SIBC entity codes a level/pair cut names
+  parent_code?: string;
+  child_level?: number;
+  statement?:   string;
+  denominator?: string;
+  metrics?:     string[];   // payments: the metrics the claim is made of
+  /** A pair's two sides, each named as the card's own prose names it. A side can be a
+   *  bundle: "value transacted at POS" is credit-card POS value plus debit-card POS value. */
+  sides?:       { label: string; metrics: string[] }[];
+}
+
 /** Visual effect applied to the chart when this annotation is active. */
 export interface AnnotationEffect {
+  cut?:       CardCut;      // §15: what this card is a claim about
   highlight?: string[];     // series names — bold, full opacity
   dim?:       string[];     // series names — faded to 20% opacity
   dash?:      string[];     // series names — dashed stroke
@@ -73,6 +97,14 @@ export interface ReportSection {
   filterable?:  boolean;          // true → render with IndustryFilter (large series sets)
   defaultHiddenSeries?: string[]; // trend series off by default in explore mode (e.g. the
                                   // aggregate "Total" — shown but unselected so sub-series keep scale)
+  /**
+   * One entry per code in this section that RBI breaks down further — DASHBOARD_SPEC §15.6.
+   * Keyed by the parent's code, so a card declaring `cut.parent_code` can be charted at the
+   * level it is actually about. Precomputed here rather than derived in the view: the section
+   * is built once from the CSV and the read surface never sees rows.
+   */
+  subCuts?:     Record<string, ReportSection>;
+  parentLabel?: string;           // set on a sub-cut: what its parent is called on the chart above
   annotations:  SectionAnnotations;
 }
 

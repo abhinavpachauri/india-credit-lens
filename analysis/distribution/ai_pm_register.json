@@ -292,6 +292,13 @@
           "date": "2026-08-25",
           "how_measured": "Regenerated sibc_l1_annotations.json with highlights derived from the section's own label vocabulary instead of the registry's hand-typed chart_series, then diffed every card field against the committed feed. Exactly 7 highlights changed, all corrections; title/body/implication/basis/sourceSignals byte-identical on all 95 cards. Re-ran the \u00a715.7 check: C2 findings 6 \u2192 0.",
           "source": "analysis/core/cuts.py"
+        },
+        {
+          "metric": "Card\u2194chart cut check (\u00a715.7) \u2014 findings after \u00a715.6 rendered the cuts",
+          "value": "52 \u2192 0 across both pipelines; stage 5.7 now STRICT in both gates",
+          "date": "2026-08-26",
+          "how_measured": "Ran the check over every rendered card in both pipelines after the charts gained the three \u00a715.6 render shapes. C1 23\u21920, C2 6\u21920, C3 11\u21920, C4 13\u21920, C5 0. Verified strict exits 1 on an injected fault and 0 on the live feeds; both gates ALL STAGES PASSED including tsc + npm run build.",
+          "source": "analysis/guards/validate_card_cuts.py"
         }
       ],
       "observations": [
@@ -362,6 +369,14 @@
         {
           "date": "2026-08-25",
           "observation": "Fixing a defect can silently untest the check that found it. Three tests asserted the live defects (a dead 'Power' highlight, a raw CSV name, an undeclared cut); \u00a715.4 fixed all three and the tests began asserting the absence of what they were written to detect. Rewritten to drive the check with synthetic cards, with separate tests asserting the live feeds are clean \u2014 the same lesson as 'a characterisation golden can only pin cards that RENDER'."
+        },
+        {
+          "date": "2026-08-26",
+          "observation": "An advisory gate has to be able to go strict, and the moment to do it is when the count reaches zero \u2014 not later. Stage 5.7 ran advisory for exactly as long as the charts could not render what cards declared; leaving it advisory after that would have made a green line in the gate output that means nothing. A check that reports defects nobody can yet fix is a check people learn to scroll past."
+        },
+        {
+          "date": "2026-08-26",
+          "observation": "Third time in one build that fixing a defect untested the check that caught it. Five tests across steps 2 and 3 asserted live defects and silently became assertions that nothing is wrong. The durable shape is a pair: drive the check synthetically for the logic, and assert separately that the live feed is clean. Worth a standing habit rather than a per-case correction."
         }
       ],
       "open_questions": [

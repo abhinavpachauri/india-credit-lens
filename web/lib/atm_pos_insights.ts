@@ -5,12 +5,15 @@
 export type InsightCut   = "total" | "by_type" | "top_n" | "by_bank";
 export type InsightGroup = "cc" | "dc" | "infra";
 
+import type { CardCut } from "@/lib/types";
+
 export interface InsightEffect {
   highlight:   string[];                        // series to keep visible (dim others)
   tab:         "trend" | "distribution";
   trendMode?:  "absolute" | "mom" | "yoy";
   distMode?:   "absolute" | "pct";
   focusCard?:  string;                          // SECTION_DEF id to scroll to
+  cut?:        CardCut;                         // §15: what this card is a claim about
 }
 
 export interface InsightExploreAction {

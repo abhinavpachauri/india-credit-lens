@@ -61,6 +61,9 @@ export function formatAtmDate(iso: string): string {
 }
 
 export function formatAtmValue(value: number, unit: string): string {
+  // A share chart (§15.6b) plots percentages in the absolute mode, so the axis has to
+  // say so — without this it falls through to the count branch and reads "60" for 60%.
+  if (unit === "pct") return `${value.toFixed(0)}%`;
   if (unit === "rs_thousands") {
     const crore = value / 100; // rs_thousands → crore: 1 crore = 100 thousands? No: 1 crore = 10,000 thousands
     // rs_thousands: divide by 10000 to get crore
@@ -331,6 +334,94 @@ export const GROUP_ACCENT: Record<string, string> = {
   dc:    "#2ca02c",   // green
   infra: "#f0912a",   // orange
 };
+
+// ── Cut charts (DASHBOARD_SPEC §15.6 b/c) ─────────────────────────────────────
+
+/**
+ * Readable names for the metrics a cut names. A pair card says "UPI QR is 150.5x Bharat QR";
+ * the chart under it has to say which line is which, and the metric key is not a label.
+ */
+export const METRIC_LABELS: Record<string, string> = {
+  credit_cards: "Credit cards", debit_cards: "Debit cards",
+  cc_pos_txn_vol: "CC in-store POS (volume)",  cc_pos_txn_val: "CC in-store POS (value)",
+  cc_ecom_txn_vol: "CC eCommerce (volume)",    cc_ecom_txn_val: "CC eCommerce (value)",
+  cc_atm_withdrawal_vol: "CC ATM cash (volume)", cc_atm_withdrawal_val: "CC ATM cash (value)",
+  cc_other_txn_vol: "CC other (volume)",       cc_other_txn_val: "CC other (value)",
+  dc_pos_txn_vol: "DC in-store POS (volume)",  dc_pos_txn_val: "DC in-store POS (value)",
+  dc_ecom_txn_vol: "DC eCommerce (volume)",    dc_ecom_txn_val: "DC eCommerce (value)",
+  dc_atm_withdrawal_vol: "DC ATM cash (volume)", dc_atm_withdrawal_val: "DC ATM cash (value)",
+  dc_pos_withdrawal_vol: "DC POS cash (volume)", dc_pos_withdrawal_val: "DC POS cash (value)",
+  dc_other_txn_vol: "DC other (volume)",       dc_other_txn_val: "DC other (value)",
+  pos_terminals: "POS terminals", upi_qr: "UPI QR codes", bharat_qr: "Bharat QR codes",
+  atm_onsite: "On-site ATMs", atm_offsite: "Off-site ATMs", micro_atms: "Micro ATMs",
+};
+
+export const metricLabel = (m: string) => METRIC_LABELS[m] ?? m;
+
+/**
+ * One line per metric, summed across banks — the chart a `pair` card needs.
+ *
+ * `buildSectionData` sums the metrics it is given into a single Total, which is right for a
+ * section (on-site + off-site ATMs are one fleet) and wrong for a pair, where the whole claim
+ * is the distance between two lines. A pair card charted through the section builder drew one
+ * side and dropped the other.
+ */
+export function buildPairData(
+  s: AtmPosSeries,
+  sides: { label: string; metrics: string[] }[],
+): SectionData {
+  const dates = s._meta.periods;
+  const names = sides.map((side, i) => side.label || side.metrics.map(metricLabel).join(" + ") || `Side ${i + 1}`);
+  const series: Record<string, number[]> = {};
+  sides.forEach((side, i) => {
+    // A side can be a BUNDLE — "value transacted at POS" is CC POS value plus DC POS
+    // value — so its metrics sum into one line. One line per side, because the gap the
+    // card quotes is the distance between two sides, not between every metric involved.
+    series[names[i]] = dates.map((_, p) =>
+      side.metrics.reduce((t, m) => t + (s.series[m]?.total[p] || 0), 0));
+  });
+  return seriesToChartPoints(dates, names, series);
+}
+
+/**
+ * A part against its whole, over time — the chart a `share_of` card needs.
+ *
+ * The card's number IS the percentage ("eCommerce is 50.19% of credit card volume"), and the
+ * section chart plots the numerator's raw transaction count, where that percentage appears
+ * nowhere. Every component of the denominator is plotted too, so "50% of what" is answerable
+ * from the chart rather than only from the sentence.
+ */
+export function buildShareData(s: AtmPosSeries, denominator: string[]): SectionData {
+  const dates = s._meta.periods;
+  const totals = denominator.map((m) => s.series[m]?.total ?? new Array(dates.length).fill(0));
+  const names = denominator.map(metricLabel);
+  const series: Record<string, number[]> = {};
+  names.forEach((n, i) => {
+    series[n] = dates.map((_, p) => {
+      const whole = totals.reduce((t, arr) => t + (arr[p] || 0), 0);
+      return whole ? ((totals[i][p] || 0) / whole) * 100 : 0;
+    });
+  });
+  return seriesToChartPoints(dates, names, series);
+}
+
+function seriesToChartPoints(dates: string[], names: string[], series: Record<string, number[]>): SectionData {
+  const point = (p: number): ChartPoint =>
+    ({ date: formatAtmDate(dates[p]), _ts: new Date(dates[p] + "T00:00:00Z").getTime() });
+  const absoluteData = dates.map((_, p) => {
+    const pt = point(p);
+    for (const n of names) pt[n] = series[n][p] ?? null;
+    return pt;
+  });
+  const pct = (cur: number, prev: number) => (prev ? +(((cur - prev) / prev) * 100).toFixed(2) : null);
+  const growth = (lag: number) => dates.map((_, p) => {
+    const pt = point(p);
+    for (const n of names) pt[n] = p >= lag ? pct(series[n][p], series[n][p - lag]) : null;
+    return pt;
+  });
+  return { absoluteData, momData: growth(1), yoyData: growth(12), seriesNames: names };
+}
+
 
 // ── getTopNBanks ───────────────────────────────────────────────────────────────
 

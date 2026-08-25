@@ -50,7 +50,7 @@ CORE_MAP = {
     "opportunity_traceability": ("core/validate_opportunity_traceability.py", ["--strict"], "ROOT"),
     "chart_series":             ("core/generate_chart_series.py", ["--pipeline", "$ID"], "ROOT"),
     "stamp_planes":             ("signals/stamp_planes.py", ["--pipeline", "$ID"], "ROOT"),
-    "card_cuts":                ("guards/validate_card_cuts.py", ["--pipeline", "$ID"], "ROOT"),
+    "card_cuts":                ("guards/validate_card_cuts.py", ["--pipeline", "$ID", "--strict"], "ROOT"),
     "architecture_discover":    ("architecture/discover.py", ["--quiet"], "ROOT"),
     "architecture_render":      ("architecture/render.py", [], "ROOT"),
     "reconcile":                ("architecture/reconcile.py", ["--strict"], "ROOT"),

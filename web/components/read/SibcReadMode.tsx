@@ -16,6 +16,42 @@ import ReadModeShell from "./ReadModeShell";
 import { EYEBROW, type RMModel, type RMCard, type RMDimension } from "./parts";
 import { FS } from "@/lib/tokens";
 
+/** The last non-null value of one series in a ChartPoint[]. */
+function lastValue(points: { date: string; [k: string]: string | number | null }[], name: string): number | null {
+  for (let i = points.length - 1; i >= 0; i--) {
+    const v = points[i]?.[name];
+    if (typeof v === "number" && Number.isFinite(v)) return v;
+  }
+  return null;
+}
+
+/**
+ * The parent's own numbers, kept — §15.6(a). Charting the sub-cut answers the card, but the
+ * figures the reader had before (the parent's share of its section, and its growth) are real
+ * and were the only thing on screen until now. They belong underneath as context, not gone.
+ */
+function ParentContext(
+  { section, sub, color }: { section: ReportSection; sub: ReportSection; color: string },
+) {
+  const name = sub.parentLabel ?? "";
+  const share = lastValue(section.absoluteData, name);
+  // Out of the section's OWN total — the same denominator the chart above it uses, which
+  // for a section built from childrenOf() is the sum of its children, not a separate row.
+  const total = section.seriesNames.reduce(
+    (t, n) => t + (n === "Total" ? 0 : (lastValue(section.absoluteData, n) ?? 0)), 0);
+  const yoy = lastValue(section.growthData, name);
+  if (share == null || !total) return null;
+  return (
+    <div className="mt-2" style={{ fontSize: FS.note, color: "var(--font-muted)" }}>
+      <span style={{ color }}>{name}</span>{" is "}
+      <strong>{((share / total) * 100).toFixed(1)}%</strong>{" of "}
+      {section.pctLabel.replace(/^%\s*(of\s*)?/i, "") || section.title}
+      {yoy != null && <>{", growing "}<strong>{yoy.toFixed(1)}%</strong>{" YoY"}</>}
+      {" — the level above this chart."}
+    </div>
+  );
+}
+
 const modeLabel = (pm?: string | null) =>
   pm === "share" ? "Share" : pm === "yoy" ? "YoY" : pm === "fy" ? "FY" : "Absolute";
 
@@ -52,30 +88,67 @@ export default function SibcReadMode({ report, planes }: { report: Report; plane
     return { model, annById, sectionById };
   }, [report, planes]);
 
+  /**
+   * The chart for one card — DASHBOARD_SPEC §15.6(a).
+   *
+   * A card computed over a sub-cut (the children of one industry, one service line) is charted
+   * on that cut, not on its parent's level. The parent's own figures move to a footer line, so
+   * the number the reader sees today is kept as context instead of being replaced by a rival.
+   */
   function renderChart(card: RMCard, dim: RMDimension) {
     const ann = annById.get(card.id);
     const section = sectionById.get(dim.id);
     if (!section) return null;
+
+    // §15.5: resolve, or render the section as it is. Never quietly substitute an ancestor
+    // and present it as the card's evidence — that silent fallback is the whole defect.
+    const cut = ann?.effect?.cut;
+    const sub = cut?.parent_code ? section.subCuts?.[cut.parent_code] : undefined;
+    const chart = sub ?? section;
+
     const pm = ann?.preferredMode ?? null;
     const isDist = pm === "share";
     const trendMode: "absolute" | "yoy" | "fy" = pm === "yoy" || pm === "fy" ? pm : "absolute";
-    const label = isDist ? "📊 Distribution · % share"
+    const denom = sub ? `% of ${sub.parentLabel}` : "% share";
+    const label = isDist ? `📊 Distribution · ${denom}`
       : `📈 Trend · ${trendMode === "yoy" ? "YoY %" : trendMode === "fy" ? "FY cumulative" : "₹ absolute"}`;
+
+    // On a sub-cut the card names its own children, not the parent the generator had to
+    // fall back to while no chart could draw them (§15.4).
+    const effect = sub ? { ...(ann?.effect ?? {}), highlight: undefined } : (ann?.effect ?? null);
+
     return (
       <>
-        <div className="mb-3" style={{ fontSize: FS.note, fontWeight: 600, color: "var(--font-muted)" }}>{label}</div>
+        <div className="mb-3 flex flex-wrap items-baseline gap-x-3 gap-y-1"
+             style={{ fontSize: FS.note, fontWeight: 600, color: "var(--font-muted)" }}>
+          <span>{label}</span>
+          {sub && (
+            <span style={{ fontWeight: 500, color: dim.color }}>
+              {sub.parentLabel} · {sub.seriesNames.length - 1} sub-types
+            </span>
+          )}
+        </div>
         <SectionCard accentColor={dim.color} bare>
+          {/*
+            Keyed by the chart's own id: a sub-cut is a different set of series, and
+            TrendChart seeds its hidden-series state once via useState, so without a
+            remount the sub-cut inherits whichever toggles the parent chart was left
+            in — which is how its "Total" line came back after being defaulted off.
+            Same id within a section, so switching cards still keeps the reader's own
+            legend toggles.
+          */}
           {isDist ? (
-            <DistributionChart absoluteData={section.absoluteData}
-              seriesNames={section.distributionSeriesNames ?? section.seriesNames}
-              pctLabel={section.pctLabel} mode="pct" highlightConfig={ann?.effect ?? null} preferredMode={pm} />
+            <DistributionChart key={chart.id} absoluteData={chart.absoluteData}
+              seriesNames={chart.distributionSeriesNames ?? chart.seriesNames}
+              pctLabel={chart.pctLabel} mode="pct" highlightConfig={effect} preferredMode={pm} />
           ) : (
-            <TrendChart absoluteData={section.absoluteData} growthData={section.growthData}
-              fyData={section.fyData} seriesNames={section.seriesNames} pctLabel={section.pctLabel}
-              mode={trendMode} initialHidden={section.defaultHiddenSeries}
-              highlightConfig={ann?.effect ?? null} preferredMode={pm} />
+            <TrendChart key={chart.id} absoluteData={chart.absoluteData} growthData={chart.growthData}
+              fyData={chart.fyData} seriesNames={chart.seriesNames} pctLabel={chart.pctLabel}
+              mode={trendMode} initialHidden={chart.defaultHiddenSeries}
+              highlightConfig={effect} preferredMode={pm} />
           )}
         </SectionCard>
+        {sub && <ParentContext section={section} sub={sub} color={dim.color} />}
       </>
     );
   }

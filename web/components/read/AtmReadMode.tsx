@@ -6,7 +6,8 @@
 
 import { useMemo } from "react";
 import {
-  buildSectionData, SECTION_DEFS, GROUP_LABELS, GROUP_ICONS, GROUP_ACCENT,
+  buildSectionData, buildPairData, buildShareData, metricLabel,
+  SECTION_DEFS, GROUP_LABELS, GROUP_ICONS, GROUP_ACCENT,
   type AtmPosSeries, type FilterState, type SectionDef,
 } from "@/lib/atm_pos_data";
 import type { AtmPosInsight } from "@/lib/atm_pos_insights";
@@ -74,18 +75,71 @@ export default function AtmReadMode(
     return { model, insById };
   }, [series, insights, planes]);
 
+  /**
+   * The chart for one card — DASHBOARD_SPEC §15.6 (b) share_of and (c) pair.
+   *
+   * A `share_of` card's number IS a percentage and a `pair` card's number IS the distance
+   * between two lines. Charted through the section builder, the first plotted the numerator's
+   * raw count (the percentage appeared nowhere) and the second plotted one side and dropped
+   * the other. Both now render what the card actually claims, per-bank detail giving way to
+   * the metrics the claim is made of.
+   */
   function renderChart(card: RMCard, dim: RMDimension) {
     const ins = insById.get(card.id);
     if (!ins) return null;
     const def = defFor(ins, dim.id);
     const metric = def?.metric ?? def?.volMetric;
     if (!def || !metric) return null;
+
+    const cut = ins.effect.cut;
+    const sectionMetrics = new Set([def.metric, def.volMetric, def.valMetric].flat().filter(Boolean) as string[]);
+    // Only take over the chart when the claim reaches OUTSIDE what this section draws.
+    // A share whose denominator is already on screen needs no second chart.
+    const beyond = (cut?.metrics ?? []).filter((m: string) => !sectionMetrics.has(m));
+    const isShare = cut?.shape === "share_of" && beyond.length > 0;
+    const isPair  = cut?.shape === "pair" && beyond.length > 0 && !!cut?.sides?.length;
+
+    const chartMode = ins.effect.trendMode ?? "absolute";
+    if (isShare || isPair) {
+      const metrics = cut!.metrics!;
+      const sides = cut!.sides ?? [];
+      const data = isShare ? buildShareData(series, metrics) : buildPairData(series, sides);
+      // A share is already a percentage — growth modes would be a rate of a rate.
+      const mode = isShare ? "absolute" : chartMode;
+
+      const label = isShare
+        ? `📊 Share · % of ${GROUP_LABELS[dim.id] ?? dim.title} volume`
+        : `📈 Trend · ${mode === "yoy" ? "YoY %" : mode === "mom" ? "MoM %" : "Absolute"} · both sides`;
+      const sideNames = data.seriesNames;
+      return (
+        <>
+          <div className="mb-3 flex flex-wrap items-baseline gap-x-3 gap-y-1"
+               style={{ fontSize: FS.note, fontWeight: 600, color: "var(--font-muted)" }}>
+            <span>{label}</span>
+            <span style={{ fontWeight: 500, color: dim.color }}>
+              {isShare ? `${metrics.length} components` : sideNames.join(" vs ")}
+            </span>
+          </div>
+          <SectionCard accentColor={dim.color} bare>
+            <AtmPosTrendChart key={`${card.id}:cut`} absoluteData={data.absoluteData}
+              momData={data.momData} yoyData={data.yoyData} seriesNames={data.seriesNames}
+              unit={isShare ? "pct" : (def.unit ?? def.volUnit ?? "count")}
+              hiddenSeries={new Set()} chartId={`${card.id}:cut`} chartMode={mode} />
+          </SectionCard>
+          <div className="mt-2" style={{ fontSize: FS.note, color: "var(--font-muted)" }}>
+            {isShare
+              ? <>Out of <span style={{ color: dim.color }}>{metrics.map(metricLabel).join(" + ")}</span> — the whole this share is measured against.</>
+              : <>The card quotes the gap between these two lines.</>}
+          </div>
+        </>
+      );
+    }
+
     const unit = def.unit ?? def.volUnit ?? "count";
     const data = buildSectionData(series, metric, TOP_N);
     const highlighted = new Set(ins.effect.highlight ?? []);
     const hidden = new Set(data.seriesNames.filter((n) => highlighted.size > 0 && !highlighted.has(n)));
     const isDist = ins.effect.tab === "distribution";
-    const chartMode = ins.effect.trendMode ?? "absolute";
     const label = isDist ? "📊 Distribution · % share"
       : `📈 Trend · ${chartMode === "yoy" ? "YoY %" : chartMode === "mom" ? "MoM %" : "Absolute"}`;
     return (
