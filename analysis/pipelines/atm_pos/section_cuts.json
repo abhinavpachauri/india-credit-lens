@@ -1,0 +1,21 @@
+{
+  "_comment": "What each payments section's chart actually renders — DASHBOARD_SPEC.md §15.5. Mirrors SECTION_DEFS in web/lib/atm_pos_data.ts; verified against atm_pos_chart_series.json by guards/validate_card_cuts.py so the two cannot drift. NB a payments cut has two axes (§15.3): the bank aggregation (total/by_type/top_n, already carried on the card as `cut`) and the quantity below.",
+  "sections": {
+    "credit_cards":  { "metrics": ["credit_cards"] },
+    "cc_pos":        { "metrics": ["cc_pos_txn_vol", "cc_pos_txn_val"] },
+    "cc_ecom":       { "metrics": ["cc_ecom_txn_vol", "cc_ecom_txn_val"] },
+    "cc_atm":        { "metrics": ["cc_atm_withdrawal_vol", "cc_atm_withdrawal_val"] },
+    "cc_other":      { "metrics": ["cc_other_txn_vol", "cc_other_txn_val"] },
+    "debit_cards":   { "metrics": ["debit_cards"] },
+    "dc_atm":        { "metrics": ["dc_atm_withdrawal_vol", "dc_atm_withdrawal_val"] },
+    "dc_pos":        { "metrics": ["dc_pos_txn_vol", "dc_pos_txn_val"] },
+    "dc_ecom":       { "metrics": ["dc_ecom_txn_vol", "dc_ecom_txn_val"] },
+    "dc_pos_wd":     { "metrics": ["dc_pos_withdrawal_vol", "dc_pos_withdrawal_val"] },
+    "dc_other":      { "metrics": ["dc_other_txn_vol", "dc_other_txn_val"] },
+    "pos_terminals": { "metrics": ["pos_terminals"] },
+    "upi_qr":        { "metrics": ["upi_qr"] },
+    "atms":          { "metrics": ["atm_onsite", "atm_offsite"] },
+    "micro_atms":    { "metrics": ["micro_atms"] },
+    "bharat_qr":     { "metrics": ["bharat_qr"] }
+  }
+}

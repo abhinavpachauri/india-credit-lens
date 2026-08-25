@@ -1,0 +1,62 @@
+{
+  "_comment": "What each dashboard section's chart actually renders \u2014 DASHBOARD_SPEC.md \u00a715.5. Declared, not inferred from labels: the first audit threw a false positive purely from string-matching a cut name against a section name. Verified against the consolidated CSV by guards/validate_card_cuts.py, so a drift between this and buildSections() fails a gate rather than silently mis-charting a card.",
+  "sections": {
+    "bankCredit": {
+      "kind": "codes",
+      "codes": [
+        "I",
+        "II",
+        "III"
+      ],
+      "statement": "Statement 1",
+      "labels": {
+        "I": "Bank Credit",
+        "II": "Food Credit",
+        "III": "Non-food Credit"
+      }
+    },
+    "mainSectors": {
+      "kind": "parent",
+      "parent_code": "III",
+      "child_level": 1,
+      "statement": "Statement 1",
+      "labels": {
+        "1": "Agriculture",
+        "2": "Industry",
+        "3": "Services",
+        "4": "Personal Loans"
+      }
+    },
+    "industryBySize": {
+      "kind": "parent",
+      "parent_code": "2",
+      "child_level": 2,
+      "statement": "Statement 1"
+    },
+    "services": {
+      "kind": "parent",
+      "parent_code": "3",
+      "child_level": 2,
+      "statement": "Statement 1"
+    },
+    "personalLoans": {
+      "kind": "parent",
+      "parent_code": "4",
+      "child_level": 2,
+      "statement": "Statement 1"
+    },
+    "prioritySector": {
+      "kind": "psl",
+      "parent_code": "PSL",
+      "child_level": 2,
+      "statement": "Statement 1"
+    },
+    "industryByType": {
+      "kind": "parent",
+      "parent_code": "2",
+      "child_level": 2,
+      "statement": "Statement 2"
+    }
+  },
+  "_labels_note": "`labels` is declared only where rbi_sibc.ts uses a fixed code->label map instead of the CSV sector name (bankCredit, mainSectors). Every other section takes the CSV name plus rbi_sibc_label_overrides.json. Codes are NOT unique across statements \u2014 2.3 is 'Large' in Statement 1 and 'Beverage and Tobacco' in Statement 2 \u2014 so a label lookup must always be scoped by statement."
+}

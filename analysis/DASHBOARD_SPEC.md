@@ -582,3 +582,222 @@ construct, not the sign of its number — so a contra-indicator or a member movi
 rendered as "Consumer Durables ▲ −0.6% YoY". The glyph now reads off the observed value (mirroring
 `core.voice.observed_dir`), and a member whose observed direction opposes its contribution is
 labelled *· moving against the read* rather than given an arrow that argues with the figure.
+
+---
+
+## 15. The card↔chart cut contract (v0.2 — DRAFT for approval, 2026-08-25) ⭐
+
+> **Status: spec only, no code.** Two of the four sub-sections below (§15.6 render shapes) need
+> ASCII approval before any chart code is written. §15.1–§15.5 and §15.7 are mechanism, not layout.
+> Applies to **both pipelines by construction** — a per-section fix is explicitly out of scope.
+
+### 15.1 The defect, measured
+
+A card is generated from a signal computed over some **cut** of the data — a set of entities and,
+where the number is a share or a ratio, the total it is measured against. The chart under the card
+is supposed to be that claim, drawn.
+
+Today a card does not describe its cut. It writes down **the name of a series the chart already
+renders** — `chart_series` in SIBC, `effect.focusCard` in payments. A name can only point at
+something already on the chart, so when a card is about something the chart cannot draw, the name
+degrades to the nearest thing that *is* drawable — the parent, or one side of a pair — and the
+reader is shown a different quantity from the one the card claims. **Nothing in either gate
+notices**, because a pointer that resolves to the wrong series and a pointer that resolves to the
+right one are the same shape.
+
+Enumerated over every card in both pipelines at 2026-06-30 (not sampled):
+
+| Pipeline | Cards carrying a cut | Chart matches the claim | **Mismatched** | Cut not declared at all |
+|---|---|---|---|---|
+| SIBC | 32 | 15 | **17** | 0 |
+| ATM/POS | 20 | 12 | **8** | **13** (card-declared rules, no registered signal) |
+
+The 13 undeclared payments cards are not a clean bill of health — the check cannot evaluate them.
+That is the same failure shape as the mismatches: *absence of a declaration reads as compliance.*
+
+Worked example (the report that started this):
+
+```
+card   Iron and Steel holds 69.0% of basic-metals credit; Other Metal 31.0%
+       cut = children of 2.13, out of 2.13
+chart  Basic Metal and Metal Product — 11.2%
+       cut = children of 2,    out of 2      ← different entities, different denominator
+```
+
+Both figures are correct. Neither the page nor the card says the denominator changed.
+
+### 15.2 The contract
+
+**A card declares the cut it is a claim about. The chart renders that cut. A cut that cannot be
+resolved is a hard failure, never a fallback to an ancestor.**
+
+The cut is not new information — every signal already records it at compute time. It is discarded
+at the card boundary and replaced with a guessed series name. This contract connects what exists;
+it does not add a new authored field to maintain.
+
+### 15.3 Cut shapes — the enumerated set
+
+Four shapes cover every card in both pipelines today. A fifth requires a spec revision, not a
+special case in code.
+
+| Shape | Means | SIBC source | ATM/POS source |
+|---|---|---|---|
+| `level` | one entity's own series | scalar signals (`csv_sector_yoy`, `csv_sector_abs`, …) | `csv_total_yoy`, `csv_mom_streak` |
+| `decomposition` | the children of one parent | `parent_code` + `child_level` + `statement` | bank `cut` (`total` / `by_type` / `top_n`) |
+| `share_of` | a part against a named total | `denominator_code` (+ `denominator_statement`) | `denominator_metrics[]` |
+| `pair` | two named sides compared | — (SIBC carries one measure; closed, see `signals/README`) | `a.metrics[]` / `b.metrics[]`, `denominator_metric` |
+
+`level` is the already-working case and is included so the contract is total: every card has a
+shape, so "no cut" stops being expressible.
+
+Note the two axes are independent and both already exist in payments: `cut` there means *which bank
+aggregation* (§14.5), which is orthogonal to *which quantity*. A payments cut is therefore a pair —
+(bank aggregation, quantity) — and today only the first half is declared.
+
+### 15.4 Derivation, per pipeline
+
+The cut is **derived, never hand-typed.** Hand-typing is what produced the two live defects below,
+and a derived cut makes both unrepresentable:
+
+- `sibc-chemicals-sub-yoy-scan` declares `chart_series: ["Chemicals and Chemical Products",
+  "Petroleum, Coal Products and Nuclear Fuels"]`. Petroleum is code `2.8` — a different industry
+  type, not part of chemicals (`2.9`). The chart highlights a line the card never mentions.
+- `sibc-infra-sub-allocation` declares `highlight: ["Power"]`. `Power` is code `2.18.1` and is on
+  no chart in the dashboard, so the highlight renders nothing at all.
+
+| Pipeline | Where the cut comes from |
+|---|---|
+| SIBC | the signal's `compute` block in `registry.json` — already carries `parent_code`, `child_level`, `statement`, `denominator_code`, `denominator_statement` |
+| ATM/POS, registry-backed | the signal's `compute` block — `metric`, `denominator_metric(s)`, `a`/`b` sides |
+| ATM/POS, card-declared (13 cards) | the `Card` declaration, beside `reads` — these have no registered signal, so the declaration **is** the spec |
+
+`chart_series` and `effect.focusCard` become **derived outputs** of the cut, retained only as the
+wire format the web layer already consumes. Neither is authored again.
+
+### 15.5 Resolution — and the ban on falling back
+
+The web layer resolves a cut to concrete series at build time. Sections declare their own cut
+identity so a match is an equality test on declared values, never string-matching a label — the
+audit above threw one false positive (`sibc-psl-allocation`, cut `PSL` vs section `psl`) purely
+from inferring identity out of names.
+
+Resolution has exactly two outcomes: **resolved**, or **hard fail**. Rendering the nearest
+resolvable ancestor is prohibited — that behaviour is the defect, and it is worse than a blank
+chart because it looks like an answer.
+
+### 15.6 Render shapes — NEEDS ASCII APPROVAL BEFORE CODE
+
+Three shapes need a layout (`level` renders as today, unchanged). All three reuse the existing
+`TrendChart` / `DistributionChart` / `AtmPosTrendChart` with the section's normal Absolute / YoY /
+Share controls over the full period series — a cut changes *which codes feed the chart*, never how
+a chart behaves. Every L3 child carries the full 21-period history its parent does, so no shape
+degrades to a single value.
+
+**(a) `decomposition`** — 17 SIBC cards
+
+```
+┌─ INDUSTRY BY TYPE ─────────────────────────────────────────────────┐
+│ Iron and Steel holds 69.0% of basic-metals credit;                 │
+│ Other Metal and Metal Product 31.0%                                │
+│                                                                     │
+│ [ Basic Metal — 2 sub-types ▾ ]        ‹ all 19 industry types      │
+│ ( ) Absolute   ( ) YoY %   (•) Share      · % of basic-metals credit│
+│                                                                     │
+│  72% ┤●─●─●─●                                                       │
+│  69% ┤       ●─●─●──●                                    ●──●  69.0 │
+│  66% ┤              ●──●──●──●──●──●──●──●──●──●──●─●               │
+│  33% ┤              ○──○──○──○──○──○──○──○──○──○──○─○               │
+│  30% ┤       ○─○─○──○                                    ○──○  31.0 │
+│  27% ┤○─○─○─○                                                       │
+│      └──────────────────────────────────────────────────────────    │
+│       Dec 23        Jun 24      Mar 25        Dec 25      Jun 26    │
+│       ● Iron and Steel      ○ Other Metal and Metal Product         │
+│                                                                     │
+│ Basic Metal is 11.2% of industry credit, growing 20.9% YoY ›        │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+The footer keeps the parent's own figures — what the reader sees today — as *context with a link
+back*, so the fix adds a level rather than replacing one.
+
+**(b) `share_of`** — 3 payments cards (`cc-ecom-vs-pos-share`, `dc-atm-share-structural`,
+`dc-ecom-share`) + 2 gap cards. The claim is a percentage; today the chart plots the numerator's
+raw transaction count.
+
+```
+┌─ CREDIT CARD · eCommerce Transactions ─────────────────────────────┐
+│ Ecommerce volume share at 50.19% — up 0.42pp from May              │
+│                                                                     │
+│ ( ) Absolute   ( ) YoY %   (•) Share    · % of credit card volume  │
+│                                                                     │
+│  50% ┤                                              ●──●──●   50.19 │
+│  45% ┤                              ●──●──●──●──●                   │
+│  40% ┤        ●──●──●──●──●──●──●                                   │
+│      └──────────────────────────────────────────────────────────    │
+│       ● eCommerce      ▫ in-store POS  ▫ ATM  ▫ other  (the total)  │
+│                                                                     │
+│ Denominator: POS + eCommerce + ATM + other CC volume ›              │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+The denominator's components are named and individually toggleable, because "50% of *what*" is the
+question the card cannot currently answer.
+
+**(c) `pair`** — 5 payments cards. The claim is a comparison; today one side is missing entirely.
+
+```
+┌─ DIGITAL INFRASTRUCTURE · POS Terminals ───────────────────────────┐
+│ Value transacted at POS grew while POS terminals deployed fell     │
+│ (-21.76 pp apart over a year)                                      │
+│                                                                     │
+│ ( ) Absolute   (•) YoY %   [ both sides ▾ ]                         │
+│                                                                     │
+│ +20% ┤                    ●──●──●──●  value transacted   +6.0%      │
+│   0% ┼────────────────────────────────────────────────────          │
+│ −20% ┤    ○──○──○──○──○──○──○──○──○   terminals deployed −15.8%    │
+│      └──────────────────────────────────────────────────────────    │
+│                                          gap: −21.76 pp             │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+Both sides plot on one axis in YoY, because the gap the card quotes is the distance between the two
+lines — a claim that is only legible when both are drawn.
+
+### 15.7 The gate check — write this first
+
+A new check in **both** gates, standalone rather than folded into Check 2g or Stage 4c: those
+validate that a card's *numbers* trace to `signals.db`; this validates that a card's *chart routing*
+resolves. Different ground truth, and 2g is currently precise — overloading it would blunt it.
+
+Fails on: a cut that resolves to no series · a declared series absent from the resolved cut
+(catches the Petroleum and Power defects) · a card carrying no cut declaration at all (catches the
+13 payments rules) · a cut whose denominator is not the one the signal computed against.
+
+Measured like every other gate here — catch rate and false-rejection rate by injection via
+`measure_groundedness.py`, appended to `ai_pm_register.json` topic #1 before the work is called done.
+
+### 15.8 Out of scope — separate, real, not fixed by this
+
+Three prose defects found in the same audit. They are content, not representation, and belong to L1
+insight generation (`signals/README` + `core.voice`) — listing them so they are not lost:
+
+1. `deterministic_scan_insight` ends every YoY scan with *"Lenders can lean into {fastest}"* with no
+   size context: *"lean into Jute Textiles (21.4%)"* — Jute is 1.7% of textiles, ₹5,354 Cr; *"lean
+   into Ports (75.9%)"* — 0.6% of infrastructure. This is the exact inverse of the pairing rule the
+   movement builder already enforces (`_speed_clause`: never a share without its speed), and it
+   needs to generalise to scan signals.
+2. The same sentence is **advice**, which `core.voice` bans on distribution surfaces — dashboard
+   card prose is linted by nothing.
+3. `infra-qr-per-pos` is live on the payments dashboard with its number missing: *"India now has UPI
+   QR codes per POS terminal"*. The dominance guard removed the ratio value without the sentence
+   being re-rendered.
+
+### 15.9 Build order
+
+1. **§15.7 gate check** — before any fix. Turns "25 mismatches" from a count I made by reading JSON
+   into an enumerated set both gates maintain, and fails loudly while the rest is built.
+2. §15.2–§15.5 contract + one resolver per pipeline.
+3. §15.6 render shapes (after ASCII approval).
+4. §15.8 prose fixes — independent, any time.
+
+At every step: both gates green, both pipelines, no per-section branches.
