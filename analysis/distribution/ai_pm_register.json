@@ -285,6 +285,13 @@
           "date": "2026-08-25",
           "how_measured": "Enumerated over every rendered card in both pipelines (95 SIBC, 33 payments), not sampled. A card is counted when the cut recorded in its signal's compute spec differs from the cut its section's chart renders.",
           "source": "analysis/guards/validate_card_cuts.py"
+        },
+        {
+          "metric": "\u00a715.4 derived highlights \u2014 dead-highlight count after the fix",
+          "value": "7 \u2192 0 (SIBC), 1 wrong-series highlight removed, 0 prose changes across 95 cards",
+          "date": "2026-08-25",
+          "how_measured": "Regenerated sibc_l1_annotations.json with highlights derived from the section's own label vocabulary instead of the registry's hand-typed chart_series, then diffed every card field against the committed feed. Exactly 7 highlights changed, all corrections; title/body/implication/basis/sourceSignals byte-identical on all 95 cards. Re-ran the \u00a715.7 check: C2 findings 6 \u2192 0.",
+          "source": "analysis/core/cuts.py"
         }
       ],
       "observations": [
@@ -347,6 +354,14 @@
         {
           "date": "2026-08-25",
           "observation": "Two silent fallbacks turned the defect into something plausible rather than something visible: a SIBC card that cannot name its own entities falls back to naming its parent, and AtmReadMode resolves an unknown focusCard to the first section of the group (`?? SECTION_DEFS.find(d => d.group === group)`), so a card about offsite ATMs draws POS terminals. A blank chart would have been reported in week one. Fifth instance of failure-that-looks-like-absence."
+        },
+        {
+          "date": "2026-08-25",
+          "observation": "An authored field can conceal a missing concept. \u00a715.3 claimed SIBC had no `pair` shape because SIBC carries one measure \u2014 true of the metric axis, false of the entity axis, where csv_sector_yoy_spread names code_a and code_b and quotes the distance between them. It stayed invisible because a hand-typed chart_series had been carrying both names correctly for months. Deriving the cut is what exposed it, on the first run, by dropping a highlight that had been right. The same run surfaced a second unmodelled shape (child_codes, a named set). Enumerating the shapes on paper found four; deriving them found six."
+        },
+        {
+          "date": "2026-08-25",
+          "observation": "Fixing a defect can silently untest the check that found it. Three tests asserted the live defects (a dead 'Power' highlight, a raw CSV name, an undeclared cut); \u00a715.4 fixed all three and the tests began asserting the absence of what they were written to detect. Rewritten to drive the check with synthetic cards, with separate tests asserting the live feeds are clean \u2014 the same lesson as 'a characterisation golden can only pin cards that RENDER'."
         }
       ],
       "open_questions": [

@@ -22,6 +22,11 @@ from pathlib import Path
 import sys
 from dataclasses import dataclass, field
 sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
+from core.cuts import atm_pos_cut                                       # noqa: E402
+from core.paths import ROOT as _ROOT                                    # noqa: E402
+
+# Read once — the cut derivation consults it for every card.
+_REGISTRY = json.loads((_ROOT / "analysis/signals/registry.json").read_text())["signals"]
 from core.paths import ROOT
 from core import manifest
 from signals.dominance import move_dominance, short_entity
@@ -434,6 +439,7 @@ def render_card(spec: Card, s: dict, month: str) -> dict | None:
     # `effect` is usually a fixed dict, but a card that highlights a named bank only knows
     # which one after reading the data — so a callable is allowed too.
     effect = spec.effect(v) if callable(spec.effect) else spec.effect
+    effect = {**effect, "cut": cut_of_card(spec.id, paths)}
     return insight(
         spec.id, spec.group, spec.cut, month,
         spec.title(v, month), spec.body(v, month),
@@ -504,6 +510,37 @@ def _leader_line(name, share) -> str:
     if not name or share is None:
         return ""
     return f"{name} leads at {share:.1f}% market share. "
+
+
+
+# ── the cut a card is a claim about (DASHBOARD_SPEC §15) ──────────────────────
+
+_METRIC_IN_PATH = re.compile(r"\.(?:metrics|cross)\.([a-z0-9_]+)\.")
+
+
+def cut_of_card(card_id: str, paths: dict) -> dict:
+    """What this card is a claim about, in metrics — derived, never declared.
+
+    Two sources, in order. A card anchored to a registered signal takes the cut the
+    signal recorded when it computed. Everything else reads it off the card's own
+    `reads` paths, which already name every metric the card touches — the same
+    derivation `sourceSignals` uses, for the same reason: a second hand-kept list is
+    a list that drifts.
+
+    A payments cut has two axes (§15.3). `Card.cut` is the bank aggregation
+    (total / by_type / top_n); this is the quantity, and only the second was missing.
+    """
+    anchored = EVAL_ANCHOR.get(card_id, card_id)
+    sig = _REGISTRY.get(anchored) or {}
+    if sig.get("compute"):
+        return atm_pos_cut(sig["compute"]).as_json()
+
+    metrics = sorted({m for p in paths.values() for m in _METRIC_IN_PATH.findall(p)})
+    # A share read (`cross.{metric}.share_pct`) is a claim against the whole group's
+    # volume, not against the metrics the card happens to name.
+    shape = ("share_of" if any(".cross." in p and "share" in p for p in paths.values())
+             else "pair" if len(metrics) > 1 else "level")
+    return {"shape": shape, "metrics": metrics}
 
 
 def insight(id_, group, cut, period, title, body, effect, explore=None,
@@ -612,6 +649,9 @@ def _relational_card(sid, group, cut, month, rel, effect, facts, sources):
     # of its signals.json key check).
     reasoning_signals = [{"key": f"{s}:{e}", "value": round(v, 4)}
                          for s, rows in sources for e, v, _ in rows]
+    # Relational cards are always registry-backed, so their cut comes straight off
+    # the signal that computed them — same source as every other card (§15.4).
+    effect = {**effect, "cut": cut_of_card(sid, {})}
     card = insight(sid, group, cut, month, rel["title"], rel["body"], effect,
                    implication=rel["implication"])
     card["basis"]          = {"facts": facts, "inferences": rel["chain"]}
@@ -1825,7 +1865,11 @@ GAPS = [
             "Rural borrowers without digital payment access rely on offsite ATMs as primary cash access point for loan repayment",
             "Declining offsite ATM coverage can impair EMI collection in areas where digital payment penetration is still low",
         ],
-        effect={"highlight": ["Total"], "tab": "trend", "trendMode": "mom", "focusCard": "atm_offsite"},
+        # "atms" — the section that draws on-site and off-site together, which is what
+        # this card reads. 'atm_offsite' is a METRIC, not a section: AtmReadMode resolves
+        # an unknown focusCard to the first section of the group, so this card about
+        # off-site ATMs was rendering a chart of POS terminals.
+        effect={"highlight": ["Total"], "tab": "trend", "trendMode": "mom", "focusCard": "atms"},
         type="gap",
     ),
 

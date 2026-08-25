@@ -27,6 +27,7 @@ from core.relational_insights import (                                       # n
     rotation_insight, divergence_insight, rotation_distribution,
     movement_insight, entity_roles, _subject as relational_subject)
 from core.paths import ROOT as REPO
+from core.cuts import sibc_cut, sibc_sections, chart_label   # noqa: E402
 ANAL  = REPO / "analysis"
 SIG   = ANAL / "signals"
 EVALS = SIG / "evaluations"
@@ -376,17 +377,7 @@ MOVEMENT_CUTS = [
     ("infra-sub",  "industryByType",  "sibc-infra-sub-yoy-scan",       "infrastructure credit"),
 ]
 
-# The four main sectors carry short display names on the chart; signals.db carries the CSV's
-# full RBI names. Only this cut needs translating — the deeper cuts already match their series.
-MAIN_SECTOR_SERIES = {
-    "Agriculture and Allied Activities": "Agriculture",
-    "Industry (Micro and Small, Medium and Large)": "Industry",
-    "Services": "Services",
-    "Personal Loans": "Personal Loans",
-}
-
-
-def movement_annotations(conn, period: str, registry: dict) -> list[tuple[str, dict]]:
+def movement_annotations(conn, period: str, registry: dict, sections: dict) -> list[tuple[str, dict]]:
     """One movement card per cut — where the new credit went, how fast, speeding up or not.
 
     Deliberately built OUTSIDE the evaluation loop. The movement family's prose is deterministic
@@ -425,8 +416,17 @@ def movement_annotations(conn, period: str, registry: dict) -> list[tuple[str, d
         if ins is None:
             continue
 
+        # The chart's vocabulary, looked up — never the compute layer's. signals.db
+        # carries the CSV's full RBI names ("Non-Banking Financial Companies (NBFCs)")
+        # while the chart draws the override ("NBFCs"), and a hand-kept map covering
+        # only the main cut left the services and personal-loan cards highlighting a
+        # series that does not exist. A lead the chart cannot draw at all — an
+        # infrastructure sub-type, say — falls back to the cut's parent, which it can,
+        # until §15.6 lets the chart render the sub-cut itself.
         lead = max(alloc or momentum, key=(alloc or momentum).get)
-        highlight = MAIN_SECTOR_SERIES.get(lead, lead) if slug == "main" else lead
+        cut  = sibc_cut(registry.get(alloc_sid, {}).get("compute", {}))
+        highlight = (chart_label(sections, section, lead)
+                     or chart_label(sections, section, cut.parent_code or ""))
         facts = signal_numbers(conn, alloc_sid, registry.get(alloc_sid, {}), "sibc", period)
         out.append((section, {
             "id":            alloc_sid,
@@ -435,7 +435,8 @@ def movement_annotations(conn, period: str, registry: dict) -> list[tuple[str, d
             "body":          ins["body"],
             "implication":   ins["implication"],
             "preferredMode": "yoy",
-            "effect":        {"highlight": [highlight]},
+            "effect":        {"highlight": [highlight] if highlight else [],
+                              "cut": cut.as_json()},
             "claim_type":    "data",
             "insight_kind":  ins["insight_kind"],
             # Declared reads — the card quotes allocation next to speed and acceleration, so
@@ -484,6 +485,10 @@ def main(period: str | None = None) -> int:
     ]
     sections_out: dict[str, dict] = {s: {"insights": [], "gaps": [], "opportunities": []} for s in all_sections}
 
+    # What each section's chart actually draws, and what it calls each series
+    # (core.cuts, shared with the gate that checks this). Resolved once.
+    sections = sibc_sections()
+
     for sid, se in eval_signals.items():
         reg_sig = registry.get(sid)
         if not reg_sig or reg_sig.get("layer") != 1:
@@ -496,7 +501,16 @@ def main(period: str | None = None) -> int:
             continue
 
         method       = reg_sig.get("compute", {}).get("method", "")
-        chart_series = reg_sig.get("chart_series", [])
+        cut          = sibc_cut(reg_sig.get("compute", {}))
+        # DERIVED, never the registry's hand-typed `chart_series` (§15.4). Typing it
+        # by hand produced highlights that render nothing: 'Education Loans' where the
+        # chart draws 'Education', 'Power' where the chart has no such series at all.
+        # A card about a sub-cut still highlights its parent — the only thing this
+        # chart can draw — and now DECLARES the cut it is really about, so the gap is
+        # visible to the gate instead of silent until §15.6 closes it.
+        named        = (cut.codes if cut.shape in ("level", "pair")
+                        else (cut.parent_code or "",))
+        chart_series = [l for l in (chart_label(sections, section, c) for c in named) if l]
         facts        = signal_numbers(conn, sid, reg_sig, "sibc", period)
         stype        = _signal_type(reg_sig)
         insight_kind = None
@@ -546,7 +560,8 @@ def main(period: str | None = None) -> int:
             "body":          body,
             "implication":   inf,
             "preferredMode": preferred_mode(method),
-            "effect":        {"highlight": chart_series} if chart_series else {},
+            "effect":        {**({"highlight": chart_series} if chart_series else {}),
+                              "cut": cut.as_json()},
             "claim_type":    "data",
             "basis":         {
                 "facts":      data_facts(facts, se.get("source_ref", {})),
@@ -558,7 +573,7 @@ def main(period: str | None = None) -> int:
 
         sections_out[section][itype + "s"].append(annotation)
 
-    for section, card in movement_annotations(conn, period, registry):
+    for section, card in movement_annotations(conn, period, registry, sections):
         if section in sections_out:
             sections_out[section]["insights"].append(card)
 

@@ -59,7 +59,16 @@
       ],
       "tab": "trend",
       "trendMode": "absolute",
-      "focusCard": "cc_ecom"
+      "focusCard": "cc_ecom",
+      "cut": {
+        "shape": "share_of",
+        "metrics": [
+          "cc_atm_withdrawal_vol",
+          "cc_ecom_txn_vol",
+          "cc_other_txn_vol",
+          "cc_pos_txn_vol"
+        ]
+      }
     },
     "exploreAction": {
       "mode": "by_type"
@@ -124,7 +133,13 @@
       ],
       "tab": "trend",
       "trendMode": "absolute",
-      "focusCard": "credit_cards"
+      "focusCard": "credit_cards",
+      "cut": {
+        "shape": "level",
+        "metrics": [
+          "credit_cards"
+        ]
+      }
     },
     "exploreAction": {
       "mode": "by_type"
@@ -195,7 +210,13 @@
       ],
       "tab": "trend",
       "trendMode": "yoy",
-      "focusCard": "credit_cards"
+      "focusCard": "credit_cards",
+      "cut": {
+        "shape": "level",
+        "metrics": [
+          "credit_cards"
+        ]
+      }
     },
     "exploreAction": {
       "mode": "by_type"
@@ -252,7 +273,14 @@
       ],
       "tab": "trend",
       "trendMode": "yoy",
-      "focusCard": "cc_ecom"
+      "focusCard": "cc_ecom",
+      "cut": {
+        "shape": "pair",
+        "metrics": [
+          "cc_ecom_txn_vol",
+          "cc_pos_txn_vol"
+        ]
+      }
     },
     "exploreAction": {
       "mode": "by_type"
@@ -320,7 +348,11 @@
       ],
       "tab": "distribution",
       "distMode": "pct",
-      "focusCard": "credit_cards"
+      "focusCard": "credit_cards",
+      "cut": {
+        "shape": "level",
+        "metrics": []
+      }
     },
     "exploreAction": {
       "mode": "by_type"
@@ -370,7 +402,11 @@
       ],
       "tab": "trend",
       "trendMode": "absolute",
-      "focusCard": "credit_cards"
+      "focusCard": "credit_cards",
+      "cut": {
+        "shape": "level",
+        "metrics": []
+      }
     },
     "exploreAction": {
       "mode": "top_n",
@@ -427,7 +463,11 @@
       ],
       "tab": "distribution",
       "distMode": "pct",
-      "focusCard": "credit_cards"
+      "focusCard": "credit_cards",
+      "cut": {
+        "shape": "level",
+        "metrics": []
+      }
     },
     "exploreAction": {
       "mode": "by_type"
@@ -494,7 +534,17 @@
       ],
       "tab": "trend",
       "trendMode": "absolute",
-      "focusCard": "dc_atm"
+      "focusCard": "dc_atm",
+      "cut": {
+        "shape": "share_of",
+        "metrics": [
+          "dc_atm_withdrawal_vol",
+          "dc_ecom_txn_vol",
+          "dc_other_txn_vol",
+          "dc_pos_txn_vol",
+          "dc_pos_withdrawal_vol"
+        ]
+      }
     },
     "exploreAction": null,
     "representation": "llm",
@@ -549,7 +599,13 @@
       ],
       "tab": "trend",
       "trendMode": "mom",
-      "focusCard": "dc_pos_wd"
+      "focusCard": "dc_pos_wd",
+      "cut": {
+        "shape": "level",
+        "metrics": [
+          "dc_pos_withdrawal_vol"
+        ]
+      }
     },
     "exploreAction": null,
     "representation": "llm",
@@ -610,7 +666,17 @@
       ],
       "tab": "trend",
       "trendMode": "absolute",
-      "focusCard": "dc_ecom"
+      "focusCard": "dc_ecom",
+      "cut": {
+        "shape": "share_of",
+        "metrics": [
+          "dc_atm_withdrawal_vol",
+          "dc_ecom_txn_vol",
+          "dc_other_txn_vol",
+          "dc_pos_txn_vol",
+          "dc_pos_withdrawal_vol"
+        ]
+      }
     },
     "exploreAction": {
       "mode": "by_type"
@@ -679,7 +745,13 @@
       ],
       "tab": "trend",
       "trendMode": "yoy",
-      "focusCard": "debit_cards"
+      "focusCard": "debit_cards",
+      "cut": {
+        "shape": "level",
+        "metrics": [
+          "debit_cards"
+        ]
+      }
     },
     "exploreAction": {
       "mode": "by_type"
@@ -750,7 +822,11 @@
       ],
       "tab": "distribution",
       "distMode": "pct",
-      "focusCard": "debit_cards"
+      "focusCard": "debit_cards",
+      "cut": {
+        "shape": "level",
+        "metrics": []
+      }
     },
     "exploreAction": {
       "mode": "by_type"
@@ -817,7 +893,11 @@
       ],
       "tab": "distribution",
       "distMode": "pct",
-      "focusCard": "debit_cards"
+      "focusCard": "debit_cards",
+      "cut": {
+        "shape": "level",
+        "metrics": []
+      }
     },
     "exploreAction": {
       "mode": "top_n",
@@ -879,7 +959,14 @@
       ],
       "tab": "trend",
       "trendMode": "absolute",
-      "focusCard": "dc_atm"
+      "focusCard": "dc_atm",
+      "cut": {
+        "shape": "share_of",
+        "metrics": [
+          "dc_atm_withdrawal_vol",
+          "dc_ecom_txn_vol"
+        ]
+      }
     },
     "exploreAction": null,
     "representation": "deterministic"
@@ -932,7 +1019,14 @@
       ],
       "tab": "trend",
       "trendMode": "absolute",
-      "focusCard": "dc_ecom"
+      "focusCard": "dc_ecom",
+      "cut": {
+        "shape": "share_of",
+        "metrics": [
+          "dc_atm_withdrawal_vol",
+          "dc_ecom_txn_vol"
+        ]
+      }
     },
     "exploreAction": null,
     "representation": "deterministic"
@@ -1019,7 +1113,14 @@
       ],
       "tab": "trend",
       "trendMode": "absolute",
-      "focusCard": "upi_qr"
+      "focusCard": "upi_qr",
+      "cut": {
+        "shape": "pair",
+        "metrics": [
+          "pos_terminals",
+          "upi_qr"
+        ]
+      }
     },
     "exploreAction": {
       "mode": "by_type"
@@ -1098,7 +1199,13 @@
       ],
       "tab": "trend",
       "trendMode": "yoy",
-      "focusCard": "pos_terminals"
+      "focusCard": "pos_terminals",
+      "cut": {
+        "shape": "level",
+        "metrics": [
+          "pos_terminals"
+        ]
+      }
     },
     "exploreAction": {
       "mode": "by_type"
@@ -1169,7 +1276,13 @@
       ],
       "tab": "trend",
       "trendMode": "yoy",
-      "focusCard": "upi_qr"
+      "focusCard": "upi_qr",
+      "cut": {
+        "shape": "level",
+        "metrics": [
+          "upi_qr"
+        ]
+      }
     },
     "exploreAction": {
       "mode": "by_type"
@@ -1240,7 +1353,14 @@
       ],
       "tab": "trend",
       "trendMode": "absolute",
-      "focusCard": "upi_qr"
+      "focusCard": "upi_qr",
+      "cut": {
+        "shape": "pair",
+        "metrics": [
+          "bharat_qr",
+          "upi_qr"
+        ]
+      }
     },
     "exploreAction": null,
     "representation": "llm",
@@ -1296,7 +1416,11 @@
       ],
       "tab": "distribution",
       "distMode": "pct",
-      "focusCard": "pos_terminals"
+      "focusCard": "pos_terminals",
+      "cut": {
+        "shape": "level",
+        "metrics": []
+      }
     },
     "exploreAction": {
       "mode": "by_type"
@@ -1357,7 +1481,11 @@
       ],
       "tab": "distribution",
       "distMode": "pct",
-      "focusCard": "pos_terminals"
+      "focusCard": "pos_terminals",
+      "cut": {
+        "shape": "level",
+        "metrics": []
+      }
     },
     "exploreAction": {
       "mode": "top_n",
@@ -1419,7 +1547,14 @@
       ],
       "tab": "trend",
       "trendMode": "mom",
-      "focusCard": "bharat_qr"
+      "focusCard": "bharat_qr",
+      "cut": {
+        "shape": "pair",
+        "metrics": [
+          "bharat_qr",
+          "upi_qr"
+        ]
+      }
     },
     "exploreAction": null,
     "representation": "deterministic"
@@ -1478,7 +1613,14 @@
       ],
       "tab": "trend",
       "trendMode": "mom",
-      "focusCard": "atm_offsite"
+      "focusCard": "atms",
+      "cut": {
+        "shape": "pair",
+        "metrics": [
+          "atm_offsite",
+          "atm_onsite"
+        ]
+      }
     },
     "exploreAction": null,
     "representation": "deterministic"
@@ -1531,7 +1673,11 @@
       ],
       "tab": "trend",
       "trendMode": "absolute",
-      "focusCard": "pos_terminals"
+      "focusCard": "pos_terminals",
+      "cut": {
+        "shape": "level",
+        "metrics": []
+      }
     },
     "exploreAction": {
       "mode": "top_n",
@@ -1603,7 +1749,13 @@
       ],
       "tab": "distribution",
       "distMode": "pct",
-      "focusCard": "credit_cards"
+      "focusCard": "credit_cards",
+      "cut": {
+        "shape": "level",
+        "metrics": [
+          "credit_cards"
+        ]
+      }
     },
     "exploreAction": null,
     "representation": "deterministic-db",
@@ -1673,7 +1825,13 @@
       ],
       "tab": "distribution",
       "distMode": "pct",
-      "focusCard": "debit_cards"
+      "focusCard": "debit_cards",
+      "cut": {
+        "shape": "level",
+        "metrics": [
+          "debit_cards"
+        ]
+      }
     },
     "exploreAction": null,
     "representation": "deterministic-db",
@@ -1743,7 +1901,13 @@
       ],
       "tab": "distribution",
       "distMode": "pct",
-      "focusCard": "pos_terminals"
+      "focusCard": "pos_terminals",
+      "cut": {
+        "shape": "level",
+        "metrics": [
+          "pos_terminals"
+        ]
+      }
     },
     "exploreAction": null,
     "representation": "deterministic-db",
@@ -1827,7 +1991,13 @@
       ],
       "tab": "trend",
       "trendMode": "yoy",
-      "focusCard": "credit_cards"
+      "focusCard": "credit_cards",
+      "cut": {
+        "shape": "level",
+        "metrics": [
+          "credit_cards"
+        ]
+      }
     },
     "exploreAction": null,
     "representation": "deterministic-db",
@@ -1951,7 +2121,13 @@
       ],
       "tab": "trend",
       "trendMode": "yoy",
-      "focusCard": "debit_cards"
+      "focusCard": "debit_cards",
+      "cut": {
+        "shape": "level",
+        "metrics": [
+          "debit_cards"
+        ]
+      }
     },
     "exploreAction": null,
     "representation": "deterministic-db",
@@ -2045,7 +2221,13 @@
       ],
       "tab": "trend",
       "trendMode": "yoy",
-      "focusCard": "pos_terminals"
+      "focusCard": "pos_terminals",
+      "cut": {
+        "shape": "level",
+        "metrics": [
+          "pos_terminals"
+        ]
+      }
     },
     "exploreAction": null,
     "representation": "deterministic-db",
@@ -2103,7 +2285,15 @@
       ],
       "tab": "trend",
       "trendMode": "yoy",
-      "focusCard": "debit_cards"
+      "focusCard": "debit_cards",
+      "cut": {
+        "shape": "pair",
+        "metrics": [
+          "dc_ecom_txn_val",
+          "dc_pos_txn_val",
+          "debit_cards"
+        ]
+      }
     },
     "exploreAction": null,
     "representation": "deterministic-db",
@@ -2161,7 +2351,15 @@
       ],
       "tab": "trend",
       "trendMode": "yoy",
-      "focusCard": "pos_terminals"
+      "focusCard": "pos_terminals",
+      "cut": {
+        "shape": "pair",
+        "metrics": [
+          "cc_pos_txn_val",
+          "dc_pos_txn_val",
+          "pos_terminals"
+        ]
+      }
     },
     "exploreAction": null,
     "representation": "deterministic-db",
@@ -2219,7 +2417,16 @@
       ],
       "tab": "trend",
       "trendMode": "yoy",
-      "focusCard": "atms"
+      "focusCard": "atms",
+      "cut": {
+        "shape": "pair",
+        "metrics": [
+          "atm_offsite",
+          "atm_onsite",
+          "cc_atm_withdrawal_val",
+          "dc_atm_withdrawal_val"
+        ]
+      }
     },
     "exploreAction": null,
     "representation": "deterministic-db",

@@ -18,7 +18,16 @@
         ],
         "tab": "trend",
         "trendMode": "absolute",
-        "focusCard": "cc_ecom"
+        "focusCard": "cc_ecom",
+        "cut": {
+          "shape": "share_of",
+          "metrics": [
+            "cc_atm_withdrawal_vol",
+            "cc_ecom_txn_vol",
+            "cc_other_txn_vol",
+            "cc_pos_txn_vol"
+          ]
+        }
       },
       "sourceSignals": [
         "groups.cc.total.cross.cc_ecom_txn_vol.share_pct",
@@ -46,7 +55,13 @@
         ],
         "tab": "trend",
         "trendMode": "absolute",
-        "focusCard": "credit_cards"
+        "focusCard": "credit_cards",
+        "cut": {
+          "shape": "level",
+          "metrics": [
+            "credit_cards"
+          ]
+        }
       },
       "sourceSignals": [
         "groups.cc.total.metrics.credit_cards.latest",
@@ -73,7 +88,13 @@
         ],
         "tab": "trend",
         "trendMode": "yoy",
-        "focusCard": "credit_cards"
+        "focusCard": "credit_cards",
+        "cut": {
+          "shape": "level",
+          "metrics": [
+            "credit_cards"
+          ]
+        }
       },
       "sourceSignals": [
         "groups.cc.total.metrics.credit_cards.yoy_pct",
@@ -101,7 +122,14 @@
         ],
         "tab": "trend",
         "trendMode": "yoy",
-        "focusCard": "cc_ecom"
+        "focusCard": "cc_ecom",
+        "cut": {
+          "shape": "pair",
+          "metrics": [
+            "cc_ecom_txn_vol",
+            "cc_pos_txn_vol"
+          ]
+        }
       },
       "sourceSignals": [
         "groups.cc.total.metrics.cc_ecom_txn_vol.yoy_pct",
@@ -128,7 +156,11 @@
         ],
         "tab": "distribution",
         "distMode": "pct",
-        "focusCard": "credit_cards"
+        "focusCard": "credit_cards",
+        "cut": {
+          "shape": "level",
+          "metrics": []
+        }
       },
       "sourceSignals": [
         "groups.cc.by_type.categories.SFB.share_pct",
@@ -157,7 +189,11 @@
         ],
         "tab": "trend",
         "trendMode": "absolute",
-        "focusCard": "credit_cards"
+        "focusCard": "credit_cards",
+        "cut": {
+          "shape": "level",
+          "metrics": []
+        }
       },
       "sourceSignals": [
         "groups.cc.top_n.top5_share_pct"
@@ -183,7 +219,11 @@
         ],
         "tab": "distribution",
         "distMode": "pct",
-        "focusCard": "credit_cards"
+        "focusCard": "credit_cards",
+        "cut": {
+          "shape": "level",
+          "metrics": []
+        }
       },
       "sourceSignals": [
         "groups.cc.by_type.categories.Foreign.share_pct",
@@ -209,7 +249,17 @@
         ],
         "tab": "trend",
         "trendMode": "absolute",
-        "focusCard": "dc_atm"
+        "focusCard": "dc_atm",
+        "cut": {
+          "shape": "share_of",
+          "metrics": [
+            "dc_atm_withdrawal_vol",
+            "dc_ecom_txn_vol",
+            "dc_other_txn_vol",
+            "dc_pos_txn_vol",
+            "dc_pos_withdrawal_vol"
+          ]
+        }
       },
       "sourceSignals": [
         "groups.dc.total.cross.dc_atm_withdrawal_vol.share_pct",
@@ -237,7 +287,13 @@
         ],
         "tab": "trend",
         "trendMode": "mom",
-        "focusCard": "dc_pos_wd"
+        "focusCard": "dc_pos_wd",
+        "cut": {
+          "shape": "level",
+          "metrics": [
+            "dc_pos_withdrawal_vol"
+          ]
+        }
       },
       "sourceSignals": [
         "groups.dc.total.metrics.dc_pos_withdrawal_vol.mom_pct",
@@ -263,7 +319,17 @@
         ],
         "tab": "trend",
         "trendMode": "absolute",
-        "focusCard": "dc_ecom"
+        "focusCard": "dc_ecom",
+        "cut": {
+          "shape": "share_of",
+          "metrics": [
+            "dc_atm_withdrawal_vol",
+            "dc_ecom_txn_vol",
+            "dc_other_txn_vol",
+            "dc_pos_txn_vol",
+            "dc_pos_withdrawal_vol"
+          ]
+        }
       },
       "sourceSignals": [
         "groups.dc.total.cross.dc_ecom_txn_vol.share_pct",
@@ -290,7 +356,13 @@
         ],
         "tab": "trend",
         "trendMode": "yoy",
-        "focusCard": "debit_cards"
+        "focusCard": "debit_cards",
+        "cut": {
+          "shape": "level",
+          "metrics": [
+            "debit_cards"
+          ]
+        }
       },
       "sourceSignals": [
         "groups.dc.total.metrics.debit_cards.yoy_pct",
@@ -320,7 +392,11 @@
         ],
         "tab": "distribution",
         "distMode": "pct",
-        "focusCard": "debit_cards"
+        "focusCard": "debit_cards",
+        "cut": {
+          "shape": "level",
+          "metrics": []
+        }
       },
       "sourceSignals": [
         "groups.dc.by_type.categories.PSB.share_pct",
@@ -348,7 +424,11 @@
         ],
         "tab": "distribution",
         "distMode": "pct",
-        "focusCard": "debit_cards"
+        "focusCard": "debit_cards",
+        "cut": {
+          "shape": "level",
+          "metrics": []
+        }
       },
       "sourceSignals": [
         "groups.dc.top_n.top5_share_pct",
@@ -376,7 +456,14 @@
         ],
         "tab": "trend",
         "trendMode": "absolute",
-        "focusCard": "dc_atm"
+        "focusCard": "dc_atm",
+        "cut": {
+          "shape": "share_of",
+          "metrics": [
+            "dc_atm_withdrawal_vol",
+            "dc_ecom_txn_vol"
+          ]
+        }
       },
       "sourceSignals": [
         "groups.dc.total.cross.dc_atm_withdrawal_vol.share_pct",
@@ -403,7 +490,14 @@
         ],
         "tab": "trend",
         "trendMode": "absolute",
-        "focusCard": "dc_ecom"
+        "focusCard": "dc_ecom",
+        "cut": {
+          "shape": "share_of",
+          "metrics": [
+            "dc_atm_withdrawal_vol",
+            "dc_ecom_txn_vol"
+          ]
+        }
       },
       "sourceSignals": [
         "groups.dc.total.cross.dc_ecom_txn_vol.share_pct",
@@ -429,7 +523,14 @@
         ],
         "tab": "trend",
         "trendMode": "absolute",
-        "focusCard": "upi_qr"
+        "focusCard": "upi_qr",
+        "cut": {
+          "shape": "pair",
+          "metrics": [
+            "pos_terminals",
+            "upi_qr"
+          ]
+        }
       },
       "sourceSignals": [
         "groups.infra.total.metrics.upi_qr.latest",
@@ -458,7 +559,13 @@
         ],
         "tab": "trend",
         "trendMode": "yoy",
-        "focusCard": "pos_terminals"
+        "focusCard": "pos_terminals",
+        "cut": {
+          "shape": "level",
+          "metrics": [
+            "pos_terminals"
+          ]
+        }
       },
       "sourceSignals": [
         "groups.infra.total.metrics.pos_terminals.yoy_pct",
@@ -485,7 +592,13 @@
         ],
         "tab": "trend",
         "trendMode": "yoy",
-        "focusCard": "upi_qr"
+        "focusCard": "upi_qr",
+        "cut": {
+          "shape": "level",
+          "metrics": [
+            "upi_qr"
+          ]
+        }
       },
       "sourceSignals": [
         "groups.infra.total.metrics.upi_qr.yoy_pct",
@@ -513,7 +626,14 @@
         ],
         "tab": "trend",
         "trendMode": "absolute",
-        "focusCard": "upi_qr"
+        "focusCard": "upi_qr",
+        "cut": {
+          "shape": "pair",
+          "metrics": [
+            "bharat_qr",
+            "upi_qr"
+          ]
+        }
       },
       "sourceSignals": [
         "groups.infra.total.metrics.upi_qr.latest",
@@ -542,7 +662,11 @@
         ],
         "tab": "distribution",
         "distMode": "pct",
-        "focusCard": "pos_terminals"
+        "focusCard": "pos_terminals",
+        "cut": {
+          "shape": "level",
+          "metrics": []
+        }
       },
       "sourceSignals": [
         "groups.infra.by_type.categories.PSB.share_pct",
@@ -568,7 +692,11 @@
         ],
         "tab": "distribution",
         "distMode": "pct",
-        "focusCard": "pos_terminals"
+        "focusCard": "pos_terminals",
+        "cut": {
+          "shape": "level",
+          "metrics": []
+        }
       },
       "sourceSignals": [
         "groups.infra.top_n.top5_share_pct",
@@ -595,7 +723,14 @@
         ],
         "tab": "trend",
         "trendMode": "mom",
-        "focusCard": "bharat_qr"
+        "focusCard": "bharat_qr",
+        "cut": {
+          "shape": "pair",
+          "metrics": [
+            "bharat_qr",
+            "upi_qr"
+          ]
+        }
       },
       "sourceSignals": [
         "groups.infra.total.metrics.bharat_qr.mom_pct",
@@ -622,7 +757,14 @@
         ],
         "tab": "trend",
         "trendMode": "mom",
-        "focusCard": "atm_offsite"
+        "focusCard": "atms",
+        "cut": {
+          "shape": "pair",
+          "metrics": [
+            "atm_offsite",
+            "atm_onsite"
+          ]
+        }
       },
       "sourceSignals": [
         "groups.infra.total.metrics.atm_offsite.mom_pct",
@@ -649,7 +791,11 @@
         ],
         "tab": "trend",
         "trendMode": "absolute",
-        "focusCard": "pos_terminals"
+        "focusCard": "pos_terminals",
+        "cut": {
+          "shape": "level",
+          "metrics": []
+        }
       },
       "sourceSignals": [
         "groups.infra.top_n.top5_share_pct",
@@ -676,7 +822,13 @@
         ],
         "tab": "distribution",
         "distMode": "pct",
-        "focusCard": "credit_cards"
+        "focusCard": "credit_cards",
+        "cut": {
+          "shape": "level",
+          "metrics": [
+            "credit_cards"
+          ]
+        }
       },
       "sourceSignals": [
         "cc-category-rotation"
@@ -702,7 +854,13 @@
         ],
         "tab": "distribution",
         "distMode": "pct",
-        "focusCard": "debit_cards"
+        "focusCard": "debit_cards",
+        "cut": {
+          "shape": "level",
+          "metrics": [
+            "debit_cards"
+          ]
+        }
       },
       "sourceSignals": [
         "dc-category-rotation"
@@ -728,7 +886,13 @@
         ],
         "tab": "distribution",
         "distMode": "pct",
-        "focusCard": "pos_terminals"
+        "focusCard": "pos_terminals",
+        "cut": {
+          "shape": "level",
+          "metrics": [
+            "pos_terminals"
+          ]
+        }
       },
       "sourceSignals": [
         "pos-category-rotation"
@@ -754,7 +918,13 @@
         ],
         "tab": "trend",
         "trendMode": "yoy",
-        "focusCard": "credit_cards"
+        "focusCard": "credit_cards",
+        "cut": {
+          "shape": "level",
+          "metrics": [
+            "credit_cards"
+          ]
+        }
       },
       "sourceSignals": [
         "cc-bank-divergence"
@@ -780,7 +950,13 @@
         ],
         "tab": "trend",
         "trendMode": "yoy",
-        "focusCard": "debit_cards"
+        "focusCard": "debit_cards",
+        "cut": {
+          "shape": "level",
+          "metrics": [
+            "debit_cards"
+          ]
+        }
       },
       "sourceSignals": [
         "dc-bank-divergence"
@@ -806,7 +982,13 @@
         ],
         "tab": "trend",
         "trendMode": "yoy",
-        "focusCard": "pos_terminals"
+        "focusCard": "pos_terminals",
+        "cut": {
+          "shape": "level",
+          "metrics": [
+            "pos_terminals"
+          ]
+        }
       },
       "sourceSignals": [
         "pos-bank-divergence"
@@ -831,7 +1013,15 @@
         ],
         "tab": "trend",
         "trendMode": "yoy",
-        "focusCard": "debit_cards"
+        "focusCard": "debit_cards",
+        "cut": {
+          "shape": "pair",
+          "metrics": [
+            "dc_ecom_txn_val",
+            "dc_pos_txn_val",
+            "debit_cards"
+          ]
+        }
       },
       "sourceSignals": [
         "dc-issuance-vs-spend-gap"
@@ -856,7 +1046,15 @@
         ],
         "tab": "trend",
         "trendMode": "yoy",
-        "focusCard": "pos_terminals"
+        "focusCard": "pos_terminals",
+        "cut": {
+          "shape": "pair",
+          "metrics": [
+            "cc_pos_txn_val",
+            "dc_pos_txn_val",
+            "pos_terminals"
+          ]
+        }
       },
       "sourceSignals": [
         "pos-fleet-vs-spend-gap"
@@ -881,7 +1079,16 @@
         ],
         "tab": "trend",
         "trendMode": "yoy",
-        "focusCard": "atms"
+        "focusCard": "atms",
+        "cut": {
+          "shape": "pair",
+          "metrics": [
+            "atm_offsite",
+            "atm_onsite",
+            "cc_atm_withdrawal_val",
+            "dc_atm_withdrawal_val"
+          ]
+        }
       },
       "sourceSignals": [
         "atm-fleet-vs-withdrawal-gap"

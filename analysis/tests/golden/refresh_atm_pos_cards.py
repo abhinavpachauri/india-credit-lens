@@ -29,7 +29,10 @@ def deterministic_cards() -> list[dict]:
 
     signals = json.loads((ROOT / "analysis/rbi_atm_pos/signals.json").read_text())
     month = signals["meta"]["latest_month"]
-    cards = [c for c in (gen.produce(p, signals, month) for p in gen.RULES) if c]
+    # `CARDS` + `render_card` since B1 finished — the old `RULES`/`produce()` pair was
+    # deleted when the last hand-written rule was migrated, and this script kept calling
+    # them, so refreshing the golden had been broken and silently unused since.
+    cards = [c for c in (gen.render_card(spec, signals, month) for spec in gen.CARDS) if c]
     cards.extend(gen.relational_cards(signals, month))
     gen.apply_dominance_guard(cards, signals["meta"]["latest_period"])
     return cards

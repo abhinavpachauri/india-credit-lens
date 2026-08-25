@@ -645,10 +645,23 @@ special case in code.
 | `level` | one entity's own series | scalar signals (`csv_sector_yoy`, `csv_sector_abs`, …) | `csv_total_yoy`, `csv_mom_streak` |
 | `decomposition` | the children of one parent | `parent_code` + `child_level` + `statement` | bank `cut` (`total` / `by_type` / `top_n`) |
 | `share_of` | a part against a named total | `denominator_code` (+ `denominator_statement`) | `denominator_metrics[]` |
-| `pair` | two named sides compared | — (SIBC carries one measure; closed, see `signals/README`) | `a.metrics[]` / `b.metrics[]`, `denominator_metric` |
+| `pair` | two named sides compared | `code_a` / `code_b` (a spread) | `a.metrics[]` / `b.metrics[]`, `denominator_metric` |
 
 `level` is the already-working case and is included so the contract is total: every card has a
-shape, so "no cut" stops being expressible.
+shape, so "no cut" stops being expressible. It covers a *named set* as well as a single entity —
+`child_codes`, as in "how many of these four sectors grew", is a claim about all four.
+
+**Correction, forced by the derivation (2026-08-25).** This table first read "SIBC has no pair
+shape — it carries one measure, so there is nothing to pair". That was true of the *metric* axis
+and false of the *entity* axis: `csv_sector_yoy_spread` names `code_a` and `code_b` and quotes the
+distance between them, which is the same claim shape as a payments pair. It went unnoticed because
+a hand-typed `chart_series` had been carrying both names all along — the authored field was
+concealing a shape the spec did not have. Deriving the cuts is what surfaced it, on the first run,
+by dropping a highlight that had been correct.
+
+So `pair` spans two axes: **entities** on one measure (SIBC spreads) and **metrics** on one entity
+(payments ratios and gaps). Both render as two lines with the gap between them, which is why they
+are one shape and not two.
 
 Note the two axes are independent and both already exist in payments: `cut` there means *which bank
 aggregation* (§14.5), which is orthogonal to *which quantity*. A payments cut is therefore a pair —
@@ -794,10 +807,20 @@ insight generation (`signals/README` + `core.voice`) — listing them so they ar
 
 ### 15.9 Build order
 
-1. **§15.7 gate check** — before any fix. Turns "25 mismatches" from a count I made by reading JSON
-   into an enumerated set both gates maintain, and fails loudly while the rest is built.
-2. §15.2–§15.5 contract + one resolver per pipeline.
+1. ~~**§15.7 gate check** — before any fix.~~ **DONE 2026-08-25.** `guards/validate_card_cuts.py`,
+   advisory as stage 5.7 in both gates. Catch 100% (98/98 injections), false rejection 0%.
+2. ~~§15.2–§15.5 contract + one resolver per pipeline.~~ **DONE 2026-08-26.** All 95 SIBC and 33
+   payments cards declare `effect.cut`; `chart_series` and `focusCard` are derived from
+   `core/cuts.py`, shared with the check so the two cannot drift (guarded by C5). Findings
+   52 → 38: **C2 6 → 0, C4 13 → 0, C5 0**. What remains is C1/C3 — the charts that cannot yet draw
+   the cut, which is step 3's job and is now visible rather than silent.
 3. §15.6 render shapes (after ASCII approval).
 4. §15.8 prose fixes — independent, any time.
+5. Flip stage 5.7 to `--strict` once step 3 lands and the C1/C3 findings reach zero.
+
+**Fixed outright in step 2** (no chart change needed): 7 highlights that rendered nothing, 1 card
+highlighting a series from a different industry, and `gap-atm-offsite-decline`, which pointed at
+`atm_offsite` — a metric, not a section — so `AtmReadMode`'s `?? SECTION_DEFS.find(d => d.group ===
+group)` drew POS terminals under a card about off-site ATMs.
 
 At every step: both gates green, both pipelines, no per-section branches.

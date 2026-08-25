@@ -59,100 +59,37 @@ REPO     = ANALYSIS.parent
 REG      = ANALYSIS / "signals" / "registry.json"
 
 sys.path.insert(0, str(ANALYSIS))
-from core.manifest import path as _mpath, consolidated_csv  # noqa: E402
+from core.cuts import (                                      # noqa: E402
+    Cut, sibc_cut, atm_pos_cut, sibc_sections, section_cuts, chart_label, AGGREGATE,
+)
 
 
-def _section_cuts(pipeline: str) -> dict:
-    """Declared per pipeline and reached through the manifest — the path lives in
-    one place, so source #3 declares its own and neither this file nor the gate
-    learns a new name."""
-    return json.loads(_mpath(pipeline, "section_cuts").read_text())
 
 
-# ── the cut a signal was computed over ────────────────────────────────────────
-
-def sibc_cut(compute: dict) -> dict | None:
-    """A SIBC cut, read off the signal's own compute spec.
-
-    `parent_code` + `child_level` is a decomposition; `denominator_code` names
-    the total a share is measured against. A signal with neither is a `level`
-    card — one entity's own series — which is the already-working case.
-    """
-    parent, level = compute.get("parent_code"), compute.get("child_level")
-    if parent is None or level is None:
-        return None
-    return {
-        "shape":       "share_of" if compute.get("denominator_code") else "decomposition",
-        "parent_code": parent,
-        "child_level": level,
-        "statement":   compute.get("statement", "Statement 1"),
-        "denominator": compute.get("denominator_code"),
-    }
-
-
-def atm_pos_cut(compute: dict) -> dict | None:
-    """An ATM/POS cut: which metrics the claim is actually made out of.
-
-    A share needs its whole denominator on the chart, and a pair needs both
-    sides — quoting the distance between two lines while drawing one of them is
-    the payments form of the same defect.
-    """
-    metrics, shape = set(), "level"
-    if compute.get("metric"):
-        metrics.add(compute["metric"])
-    if compute.get("denominator_metrics"):
-        metrics.update(compute["denominator_metrics"]); shape = "share_of"
-    if compute.get("denominator_metric"):
-        metrics.add(compute["denominator_metric"]);     shape = "pair"
-    for side in ("a", "b"):
-        if isinstance(compute.get(side), dict):
-            metrics.update(compute[side].get("metrics", [])); shape = "pair"
-    return {"shape": shape, "metrics": sorted(metrics)} if metrics else None
-
-
-# ── what each section's chart renders ─────────────────────────────────────────
-
-def sibc_section_series(cuts: dict, rows: list[dict]) -> dict[str, dict]:
-    """Resolve each declared section cut to the codes its chart draws.
-
-    Resolved from the CSV, so a section_cuts.json that no longer describes what
-    buildSections() renders fails here instead of mis-charting a card quietly.
-    """
-    out = {}
-    for sec, d in cuts["sections"].items():
-        stmt = d["statement"]
-        # Codes are only unique WITHIN a statement — 2.3 is "Large" in Statement 1 and
-        # "Beverage and Tobacco" in Statement 2 — so every lookup is statement-scoped.
-        scoped = [r for r in rows if r["statement"] == stmt]
-        if d["kind"] == "codes":
-            mine = [r for r in scoped if r["code"] in set(d["codes"])]
-        elif d["kind"] == "psl":
-            mine = [r for r in scoped if r["is_priority_sector_memo"] == "True"]
-        else:
-            mine = [r for r in scoped if r["parent_code"] == d["parent_code"]]
-
-        # A section's rendered names: the CSV sector name, unless rbi_sibc.ts substitutes
-        # a fixed map (bankCredit/mainSectors) or a display override.
-        labels = {r["code"]: r["sector"] for r in mine}
-        labels.update(d.get("labels", {}))
-        labels.update(_overrides(sec))
-        out[sec] = {**d, "codes": {r["code"] for r in mine}, "labels": labels}
-    return out
-
-
-def _overrides(section: str) -> dict:
-    p = REPO / "web/lib/reports/rbi_sibc_label_overrides.json"
-    return (json.loads(p.read_text()) if p.exists() else {}).get(section, {})
+# The cut definitions and the section vocabulary live in core.cuts, shared with the
+# generators that emit them. Two copies that agree today is exactly the drift this
+# check exists to catch, so it does not keep its own.
+def _cut_from(declared: dict) -> Cut:
+    """A declared cut, back as the shared type. The card carries the wire form; every
+    comparison below is against the same class the generators emitted from."""
+    return Cut(shape=declared["shape"],
+               codes=tuple(declared.get("codes", ())),
+               parent_code=declared.get("parent_code"),
+               child_level=declared.get("child_level"),
+               statement=declared.get("statement"),
+               denominator=declared.get("denominator"),
+               metrics=tuple(declared.get("metrics", ())))
 
 
 # ── the checks ────────────────────────────────────────────────────────────────
 
-def check_sibc(strict: bool) -> list[str]:
+def check_sibc(strict: bool = False, feed: dict | None = None) -> list[str]:
     reg   = json.loads(REG.read_text())["signals"]
-    cuts  = _section_cuts("sibc")
-    rows  = list(csv.DictReader(open(consolidated_csv("sibc"))))
-    feed  = json.loads((REPO / "web/public/data/sibc_l1_annotations.json").read_text())
-    secs  = sibc_section_series(cuts, rows)
+    # `feed` is injectable so the checks can be driven with a card that does not
+    # exist in the live feed. A check tested only by the defects it once found
+    # stops being tested the moment they are fixed.
+    feed  = feed or json.loads((REPO / "web/public/data/sibc_l1_annotations.json").read_text())
+    secs  = sibc_sections()
     found = []
 
     for sec, bucket in feed["sections"].items():
@@ -162,49 +99,67 @@ def check_sibc(strict: bool) -> list[str]:
             continue
         for kind in ("insights", "gaps", "opportunities"):
             for card in bucket.get(kind, []):
-                sig = reg.get(card["id"])
-                if sig is None:
-                    found.append(f"[C4:{sec}.{card['id']}] no registered signal — cut undeclarable")
-                    continue
-                cut = sibc_cut(sig.get("compute", {}))
-                names = (card.get("effect") or {}).get("highlight") or []
+                # C2 first, and unconditionally: a card can name a series the chart
+                # does not draw whether or not it declares a cut, and skipping the
+                # name check on an undeclared card would hide the louder defect
+                # behind the quieter one.
+                rendered = set(chart["labels"].values()) | {AGGREGATE}
+                for n in (card.get("effect") or {}).get("highlight") or []:
+                    if n in rendered:
+                        continue
+                    fix = chart_label(secs, sec, n)
+                    found.append(
+                        f"[C2:{sec}.{card['id']}] names '{n}' — not a series on this chart"
+                        + (f"; the chart draws it as '{fix}'" if fix else ""))
 
-                if cut is not None:
-                    # C1 — is the card's cut the one this chart draws?
-                    same = (cut["parent_code"] == chart.get("parent_code")
-                            and cut["child_level"] == chart.get("child_level")
-                            and cut["statement"]   == chart.get("statement"))
+                declared = (card.get("effect") or {}).get("cut")
+                if not declared:
+                    found.append(f"[C4:{sec}.{card['id']}] declares no cut")
+                    continue
+                # The declaration is the contract; the registry is the cross-check.
+                # They are derived from one definition in core.cuts, so a disagreement
+                # means the emitted feed is stale — the drift this check exists to see.
+                sig = reg.get(card["id"])
+                if sig is not None:
+                    computed = sibc_cut(sig.get("compute", {})).as_json()
+                    if computed != declared:
+                        found.append(f"[C5:{sec}.{card['id']}] declares {declared}; "
+                                     f"its signal computed {computed} — regenerate the feed")
+                cut = _cut_from(declared)
+
+                # C1/C3 read differently per shape (§15.3): a decomposition is
+                # right when the chart draws that parent's children; a pair or a
+                # named set is right when the chart can draw every entity it names.
+                if cut.shape in ("decomposition", "share_of"):
+                    same = (cut.parent_code == chart.get("parent_code")
+                            and cut.child_level == chart.get("child_level")
+                            and cut.statement   == chart.get("statement"))
                     if not same:
                         found.append(
                             f"[C1:{sec}.{card['id']}] card is about "
-                            f"{cut['parent_code']}/L{cut['child_level']}/{cut['statement']}; "
+                            f"{cut.parent_code}/L{cut.child_level}/{cut.statement}; "
                             f"chart draws {chart.get('parent_code')}/L{chart.get('child_level')}"
                             f"/{chart.get('statement')} — different entities")
-                    # C3 — a share measured against a total the chart does not imply
-                    if cut["shape"] == "share_of" and not same:
+                    if cut.shape == "share_of" and not same:
                         found.append(
-                            f"[C3:{sec}.{card['id']}] share is out of {cut['denominator']}; "
+                            f"[C3:{sec}.{card['id']}] share is out of {cut.denominator}; "
                             f"chart's total is {chart.get('parent_code')}")
+                elif cut.codes:
+                    absent = [c for c in cut.codes if chart_label(secs, sec, c) is None]
+                    if absent:
+                        found.append(
+                            f"[C1:{sec}.{card['id']}] {cut.shape} claim names {absent} — "
+                            f"not drawable on this chart")
 
-                # C2 — every named series must be on this chart
-                for n in names:
-                    if n not in chart["labels"].values() and n not in _short_labels(sec):
-                        found.append(f"[C2:{sec}.{card['id']}] names '{n}' — not a series on this chart")
     return found
 
 
-def _short_labels(section: str) -> set[str]:
-    """The aggregate 'Total' line every section can draw — not a CSV row, so it
-    is never in the resolved cut, but it is a legitimate thing for a card to name."""
-    return {"Total"}
-
-
-def check_atm_pos(strict: bool) -> list[str]:
+def check_atm_pos(strict: bool = False, cards: list | None = None) -> list[str]:
     reg    = json.loads(REG.read_text())["signals"]
-    cuts   = _section_cuts("atm_pos")["sections"]
+    cuts   = section_cuts("atm_pos")
     series = json.loads((REPO / "web/public/data/atm_pos_chart_series.json").read_text())["series"]
     feed   = json.loads((REPO / "web/public/data/atm_pos_insights.json").read_text())
-    cards  = feed["insights"] if isinstance(feed, dict) else feed
+    cards  = cards if cards is not None else (feed["insights"] if isinstance(feed, dict) else feed)
     found  = []
 
     # the declaration must describe the artifact the chart is actually drawn from
@@ -219,18 +174,22 @@ def check_atm_pos(strict: bool) -> list[str]:
         if chart is None:
             found.append(f"[C1:{card['id']}] focusCard '{focus}' is not a section that renders a chart")
             continue
+        declared = (card.get("effect") or {}).get("cut")
+        if not declared:
+            found.append(f"[C4:{card['id']}] declares no cut")
+            continue
         sig = reg.get(card.get("eval_signal") or card["id"])
-        if sig is None:
-            found.append(f"[C4:{card['id']}] card-declared rule with no cut — §15.4 requires one")
-            continue
-        cut = atm_pos_cut(sig.get("compute", {}))
-        if cut is None:
-            continue
-        missing = [m for m in cut["metrics"] if m not in chart["metrics"]]
+        if sig is not None and sig.get("compute"):
+            computed = atm_pos_cut(sig["compute"]).as_json()
+            if computed != declared:
+                found.append(f"[C5:{card['id']}] declares {declared}; "
+                             f"its signal computed {computed} — regenerate the feed")
+        cut = _cut_from(declared)
+        missing = [m for m in cut.metrics if m not in chart["metrics"]]
         if missing:
             found.append(
-                f"[{'C3' if cut['shape'] == 'share_of' else 'C1'}:{card['id']}] "
-                f"{cut['shape']} claim needs {missing} — chart draws only {chart['metrics']}")
+                f"[{'C3' if cut.shape == 'share_of' else 'C1'}:{card['id']}] "
+                f"{cut.shape} claim needs {missing} — chart draws only {chart['metrics']}")
     return found
 
 
