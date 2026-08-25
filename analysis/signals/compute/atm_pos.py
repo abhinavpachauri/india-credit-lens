@@ -242,6 +242,31 @@ def csv_category_yoy(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
 
 # ── Layer 1c ──────────────────────────────────────────────────────────────────
 
+def csv_category_scan_yoy(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
+    """YoY% for EVERY bank_category on a metric — the speed half of the pairing rule.
+
+    `csv_category_yoy` already existed but takes one named category and had no registered
+    users; a share published next to its own growth rate needs all of them at once
+    (signals/README.md — an allocation figure is never rendered without speed and acceleration).
+    """
+    metric = params["metric"]
+    avail  = set(df["report_date"].unique())
+    prior  = _prior_year(period, avail)
+    if prior is None:
+        return []
+    rules = params.get("status_rules", [])
+    out = []
+    for cat in df[(df["report_date"] == period) & (df["metric"] == metric) &
+                  (df["record_type"] == "bank")]["bank_category"].unique():
+        v  = _category_val(df, period, metric, cat)
+        pv = _category_val(df, prior,  metric, cat)
+        if v is None or not pv:
+            continue
+        yoy = (v - pv) / pv * 100
+        out.append(_row("bank_category", cat, yoy, _eval_status(rules, yoy, None), "pct"))
+    return sorted(out, key=lambda r: r["value"], reverse=True)
+
+
 def csv_category_scan_share(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
     """Share of total for every bank_category — status compares to prior period (MoM)."""
     metric  = params["metric"]
@@ -453,6 +478,133 @@ def csv_category_rotation(params: dict, period: str, df: pd.DataFrame) -> list[d
                           params.get("status_rules") or ROTATION_DEFAULT_RULES)
 
 
+# ── movement: momentum / acceleration / allocation (payments) ─────────────────
+# Same family as SIBC (signals/README.md). The operator is identical — how many units
+# each member added, how fast, and where the new ones went — but payments is where the
+# CONTESTED and HANDOVER regimes actually live: SIBC runs 0.99-1.00 everywhere, while a
+# single issuer reclassifying its POS estate drives coherence to 0.12.
+
+MOMENTUM_DEFAULT_RULES = [
+    {"if": "value > 0",  "then": "strengthening"},
+    {"if": "value < 0",  "then": "weakening"},
+    {"if": "true",       "then": "stable"},
+]
+ACCEL_DEFAULT_RULES = [
+    {"if": "value > 0.5",  "then": "strengthening"},
+    {"if": "value < -0.5", "then": "weakening"},
+    {"if": "true",         "then": "stable"},
+]
+COHERENCE_MIN = 0.90
+
+
+def _cat_values(params: dict, period: str, df: pd.DataFrame) -> dict[str, float]:
+    """{bank_category: value} on a metric for `period`."""
+    metric = params["metric"]
+    cats = df[(df["report_date"] == period) & (df["metric"] == metric) &
+              (df["record_type"] == "bank")]["bank_category"].unique()
+    out = {}
+    for cat in cats:
+        v = _category_val(df, period, metric, cat)
+        if v is not None:
+            out[cat] = float(v)
+    return out
+
+
+def _cat_deltas(params: dict, period: str, df: pd.DataFrame):
+    """(deltas, net, gross) over the annual window, or None when it is absent."""
+    window = int(params.get("window", 12))
+    prior_date = _month_back(period, window, set(df["report_date"].unique()))
+    if prior_date is None:
+        return None
+    cur, prior = _cat_values(params, period, df), _cat_values(params, prior_date, df)
+    shared = [k for k in cur if k in prior]
+    if not shared:
+        return None
+    deltas = {k: cur[k] - prior[k] for k in shared}
+    return deltas, sum(deltas.values()), sum(abs(v) for v in deltas.values())
+
+
+def csv_category_momentum(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
+    """Units each bank_category added or lost over the annual window, + net/gross/coherence.
+
+    Unconditional — no division by a derived quantity, so it holds up in a contracting or
+    churning system, which payments frequently is.
+    """
+    got = _cat_deltas(params, period, df)
+    if got is None:
+        return []
+    deltas, net, gross = got
+    unit  = params.get("unit", "count")
+    rules = params.get("status_rules") or MOMENTUM_DEFAULT_RULES
+    out = [_row("bank_category", k, v, _eval_status(rules, v, 0.0), unit)
+           for k, v in deltas.items()]
+    out.sort(key=lambda r: r["value"], reverse=True)
+    out.append(_row("aggregate", "total", net, _eval_status(rules, net, 0.0), unit))
+    out.append(_row("aggregate", "gross_movement", gross, "active", unit))
+    if gross:
+        out.append(_row("aggregate", "coherence", abs(net) / gross, "active", "ratio"))
+    return out
+
+
+def csv_category_acceleration(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
+    """Change in each category's YoY since the prior period — speed of the speed."""
+    metric = params["metric"]
+    rules  = params.get("status_rules") or ACCEL_DEFAULT_RULES
+    avail  = set(df["report_date"].unique())
+    prior  = _prior_period(period, avail)
+    if prior is None:
+        return []
+
+    def yoy(per, cat):
+        back = _month_back(per, 12, avail)
+        if back is None:
+            return None
+        now, was = _category_val(df, per, metric, cat), _category_val(df, back, metric, cat)
+        return None if not was else (now - was) / was * 100
+
+    out = []
+    for cat in _cat_values(params, period, df):
+        a, b = yoy(period, cat), yoy(prior, cat)
+        if a is not None and b is not None:
+            out.append(_row("bank_category", cat, a - b, _eval_status(rules, a - b, 0.0), "pp"))
+    if not out:
+        return []
+    out.sort(key=lambda r: r["value"], reverse=True)
+    return out
+
+
+def csv_category_allocation(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
+    """Where the new units went. `contribution` always; `alloc` only when coherent.
+
+    Below `coherence_min` this is not an honest null — the contribution rows stand and the
+    insight switches to the contested/handover sentence. Nothing computed is suppressed.
+    """
+    got = _cat_deltas(params, period, df)
+    if got is None:
+        return []
+    deltas, net, gross = got
+    if not gross:
+        return []
+    coherence = abs(net) / gross
+    cmin = float(params.get("coherence_min", COHERENCE_MIN))
+    out = [_row("contribution", k, 100.0 * v / gross, "active", "pct")
+           for k, v in deltas.items()]
+    out.sort(key=lambda r: r["value"], reverse=True)
+    out.append(_row("aggregate", "total", max(abs(r["value"]) for r in out), "active", "pct"))
+    if coherence >= cmin and net:
+        alloc = [_row("alloc", k, 100.0 * v / net, "active", "pct") for k, v in deltas.items()]
+        alloc.sort(key=lambda r: r["value"], reverse=True)
+        out.extend(alloc)
+        window = int(params.get("window", 12))
+        prior_date = _month_back(period, window, set(df["report_date"].unique()))
+        base = _cat_values(params, prior_date, df) if prior_date else {}
+        tot = sum(base.values())
+        if tot:
+            out.extend(_row("weight", k, 100.0 * v / tot, "active", "pct")
+                       for k, v in base.items())
+    return out
+
+
 def csv_bank_divergence(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
     """
     Banks whose YoY on a metric contradicts their bank_category's YoY — flagged
@@ -626,15 +778,32 @@ METHODS: dict = {
     "csv_mom_streak":         csv_mom_streak,
     # relational — cross-segment (spec: signals/README.md)
     "csv_category_rotation":   csv_category_rotation,
+    # movement family (signals/README.md) — payments is where the contested and
+    # handover regimes actually fire; SIBC runs 0.99-1.00 at every depth
+    "csv_category_scan_yoy":   csv_category_scan_yoy,
+    "csv_category_momentum":   csv_category_momentum,
+    "csv_category_acceleration": csv_category_acceleration,
+    "csv_category_allocation": csv_category_allocation,
     "csv_bank_divergence":     csv_bank_divergence,
     "csv_pair_divergence":     csv_pair_divergence,
 }
 
 
 def compute(metric_id: str, params: dict, period: str, df: pd.DataFrame) -> list[dict]:
-    fn = METHODS.get(params.get("method", ""))
+    """Dispatch one registry signal to its compute method.
+
+    An UNKNOWN method is a wiring bug, not a data gap, so it raises. Returning _unknown() made
+    the two indistinguishable: on 2026-08-19 twelve registered payments signals were added whose
+    methods never reached METHODS, every one produced zero rows, and the freshness check passed
+    because the DB and the recompute were equally empty. Check 2e would have said "no rows" as a
+    non-blocking warning. Silence is the wrong answer to a name the engine cannot resolve.
+    """
+    method = params.get("method", "")
+    fn = METHODS.get(method)
     if fn is None:
-        return _unknown()
+        raise KeyError(
+            f"{metric_id}: compute method '{method}' is not registered in METHODS — "
+            f"the registry declares it but the engine cannot dispatch it.")
     try:
         return fn(params, period, df) or _unknown()
     except Exception:

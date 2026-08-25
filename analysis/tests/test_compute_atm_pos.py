@@ -140,6 +140,11 @@ def test_streak_contraction_is_zero_not_unknown():
 
 # ── dispatcher safety ─────────────────────────────────────────────────────────
 
-def test_compute_unknown_method_is_safe():
-    r = _val(ap.compute("x", {"method": "nope"}, P, _df()))
-    assert r["status"] == "unknown"
+def test_an_unregistered_method_raises_instead_of_returning_unknown():
+    """Mirror of the SIBC contract. A method the registry names but the engine cannot dispatch
+    is a wiring bug — twelve payments signals produced zero rows behind a green freshness check
+    on 2026-08-19 because `unknown` and `not wired` looked the same."""
+    with pytest.raises(KeyError, match="not registered in METHODS"):
+        ap.compute("x", {"method": "no_such_method"}, P, _df())
+
+

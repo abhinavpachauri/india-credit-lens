@@ -869,9 +869,20 @@ METHODS: dict = {
 
 def compute(metric_id: str, params: dict, period: str,
             df: pd.DataFrame) -> list[dict]:
-    fn = METHODS.get(params.get("method", ""))
+    """Dispatch one registry signal to its compute method.
+
+    An UNKNOWN method is a wiring bug, not a data gap, so it raises. Returning _unknown() made
+    the two indistinguishable: on 2026-08-19 twelve registered payments signals were added whose
+    methods never reached METHODS, every one produced zero rows, and the freshness check passed
+    because the DB and the recompute were equally empty. Check 2e would have said "no rows" as a
+    non-blocking warning. Silence is the wrong answer to a name the engine cannot resolve.
+    """
+    method = params.get("method", "")
+    fn = METHODS.get(method)
     if fn is None:
-        return _unknown()
+        raise KeyError(
+            f"{metric_id}: compute method '{method}' is not registered in METHODS — "
+            f"the registry declares it but the engine cannot dispatch it.")
     try:
         return fn(params, period, df) or _unknown()
     except Exception:

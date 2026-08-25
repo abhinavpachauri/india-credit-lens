@@ -55,6 +55,8 @@ METHOD_CATEGORY = {
     # answered in units of the new money rather than of the book (DISTRIBUTION_SPEC §3)
     "csv_sector_momentum":           "C2",
     "csv_sector_allocation":         "C2",
+    "csv_category_momentum":         "C2",
+    "csv_category_allocation":       "C2",
     # C3 — declared co-movement breaking (hierarchy axis and metric axis)
     "csv_sector_divergence":         "C3",
     "csv_bank_divergence":           "C3",
@@ -65,6 +67,7 @@ METHOD_CATEGORY = {
     "csv_psl_scan_yoy":              "C4",
     "csv_bank_scan":                 "C4",
     "csv_category_scan_share":       "C4",
+    "csv_category_scan_yoy":         "C4",
     "csv_sector_count_positive_yoy": "C4",
     "csv_sector_yoy_spread":         "C4",
     # C5 — direction changing: runs, and growth measured against its own past growth
@@ -72,6 +75,7 @@ METHOD_CATEGORY = {
     "csv_mom_streak":                "C5",
     "csv_sector_fy_acceleration":    "C5",
     "csv_sector_acceleration":       "C5",
+    "csv_category_acceleration":     "C5",
     "csv_sector_fy_delta":           "C5",
 }
 

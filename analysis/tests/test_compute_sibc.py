@@ -170,6 +170,18 @@ def test_csv_yoy_streak_threshold_condition():
 
 # ── dispatcher swallows unknown method → _unknown, never raises ────────────────
 
-def test_compute_unknown_method_is_safe():
-    r = _val(sibc.compute("x", {"method": "no_such_method"}, P, _df()))
-    assert r["status"] == "unknown"
+def test_an_unregistered_method_raises_instead_of_returning_unknown():
+    """A method name the engine cannot dispatch is a WIRING BUG, not a data gap.
+
+    Returning `unknown` made the two indistinguishable and it cost us: on 2026-08-19 twelve
+    registered payments signals were added whose methods never reached METHODS. Every one
+    produced zero rows, and check_signal_freshness went GREEN — it compares the DB against a
+    recompute, and both sides were equally empty. Only a non-blocking Check 2e warning noticed,
+    sitting beside one that was there legitimately.
+
+    Safe for the engine to swallow is not safe for the store. The engine already skips signals
+    with no compute block at all (engine.run_append), so reaching here means the registry named
+    a method and meant it.
+    """
+    with pytest.raises(KeyError, match="not registered in METHODS"):
+        sibc.compute("x", {"method": "no_such_method"}, P, _df())

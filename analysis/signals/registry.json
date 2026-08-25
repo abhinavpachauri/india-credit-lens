@@ -2,7 +2,7 @@
   "_meta": {
     "schema_version": "1.0",
     "description": "Signal registry — permanent catalog of every tracked signal across all ingestion pipelines. Signal IDs are immutable once created. Add new signals; never rename or delete. layer: 1 = per-chart data signal (algorithmically computed), 2 = cross-chart synthesis (authored per period from data), 3 = lending ecosystem expert model (generated ~6-monthly, strict claim validation).",
-    "last_updated": "2026-08-24"
+    "last_updated": "2026-08-25"
   },
   "pipelines": {
     "sibc": {
@@ -7631,6 +7631,336 @@
       },
       "current_status": "strengthening",
       "first_seen": "2025-02-28"
+    },
+    "cc-category-momentum": {
+      "id": "cc-category-momentum",
+      "title": "Movement — credit cards in force by bank category (units added over 12m, + net/gross/coherence)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1e",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_category_momentum",
+        "metric": "credit_cards",
+        "unit": "count",
+        "window": 12,
+        "status_rules": [
+          {
+            "if": "value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < 0",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "stable"
+          }
+        ]
+      },
+      "current_status": "strengthening",
+      "first_seen": "2024-01-31"
+    },
+    "cc-category-acceleration": {
+      "id": "cc-category-acceleration",
+      "title": "Acceleration — credit cards in force by bank category (change in YoY, pp)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1e",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_category_acceleration",
+        "metric": "credit_cards",
+        "status_rules": [
+          {
+            "if": "value > 0.5",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < -0.5",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "stable"
+          }
+        ]
+      },
+      "current_status": "strengthening",
+      "first_seen": "2024-01-31"
+    },
+    "cc-category-allocation": {
+      "id": "cc-category-allocation",
+      "title": "Allocation — credit cards in force by bank category (share of new units over 12m, %)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1e",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_category_allocation",
+        "metric": "credit_cards",
+        "window": 12,
+        "coherence_min": 0.9
+      },
+      "current_status": "active",
+      "first_seen": "2024-01-31"
+    },
+    "cc-category-yoy-scan": {
+      "id": "cc-category-yoy-scan",
+      "title": "Speed — credit cards in force by bank category (YoY %)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1e",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_category_scan_yoy",
+        "metric": "credit_cards",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      },
+      "current_status": "active",
+      "first_seen": "2024-01-31"
+    },
+    "dc-category-momentum": {
+      "id": "dc-category-momentum",
+      "title": "Movement — debit cards in force by bank category (units added over 12m, + net/gross/coherence)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1e",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_category_momentum",
+        "metric": "debit_cards",
+        "unit": "count",
+        "window": 12,
+        "status_rules": [
+          {
+            "if": "value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < 0",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "stable"
+          }
+        ]
+      },
+      "current_status": "strengthening",
+      "first_seen": "2024-01-31"
+    },
+    "dc-category-acceleration": {
+      "id": "dc-category-acceleration",
+      "title": "Acceleration — debit cards in force by bank category (change in YoY, pp)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1e",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_category_acceleration",
+        "metric": "debit_cards",
+        "status_rules": [
+          {
+            "if": "value > 0.5",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < -0.5",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "stable"
+          }
+        ]
+      },
+      "current_status": "stable",
+      "first_seen": "2024-01-31"
+    },
+    "dc-category-allocation": {
+      "id": "dc-category-allocation",
+      "title": "Allocation — debit cards in force by bank category (share of new units over 12m, %)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1e",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_category_allocation",
+        "metric": "debit_cards",
+        "window": 12,
+        "coherence_min": 0.9
+      },
+      "current_status": "active",
+      "first_seen": "2024-01-31"
+    },
+    "dc-category-yoy-scan": {
+      "id": "dc-category-yoy-scan",
+      "title": "Speed — debit cards in force by bank category (YoY %)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1e",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_category_scan_yoy",
+        "metric": "debit_cards",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      },
+      "current_status": "active",
+      "first_seen": "2024-01-31"
+    },
+    "pos-category-momentum": {
+      "id": "pos-category-momentum",
+      "title": "Movement — POS terminals by bank category (units added over 12m, + net/gross/coherence)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1e",
+      "domain": "infrastructure",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_category_momentum",
+        "metric": "pos_terminals",
+        "unit": "count",
+        "window": 12,
+        "status_rules": [
+          {
+            "if": "value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < 0",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "stable"
+          }
+        ]
+      },
+      "current_status": "weakening",
+      "first_seen": "2024-01-31"
+    },
+    "pos-category-acceleration": {
+      "id": "pos-category-acceleration",
+      "title": "Acceleration — POS terminals by bank category (change in YoY, pp)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1e",
+      "domain": "infrastructure",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_category_acceleration",
+        "metric": "pos_terminals",
+        "status_rules": [
+          {
+            "if": "value > 0.5",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < -0.5",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "stable"
+          }
+        ]
+      },
+      "current_status": "stable",
+      "first_seen": "2024-01-31"
+    },
+    "pos-category-allocation": {
+      "id": "pos-category-allocation",
+      "title": "Allocation — POS terminals by bank category (share of new units over 12m, %)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1e",
+      "domain": "infrastructure",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_category_allocation",
+        "metric": "pos_terminals",
+        "window": 12,
+        "coherence_min": 0.9
+      },
+      "current_status": "active",
+      "first_seen": "2024-01-31"
+    },
+    "pos-category-yoy-scan": {
+      "id": "pos-category-yoy-scan",
+      "title": "Speed — POS terminals by bank category (YoY %)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1e",
+      "domain": "infrastructure",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_category_scan_yoy",
+        "metric": "pos_terminals",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      },
+      "current_status": "active",
+      "first_seen": "2024-01-31"
     }
   }
 }
