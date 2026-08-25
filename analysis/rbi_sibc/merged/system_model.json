@@ -4,7 +4,7 @@
     "report_name": "RBI Sector/Industry-wise Bank Credit — System Model",
     "schema_version": "4.0",
     "spec_ref": "analysis/SYSTEM_MODEL_SPEC.md",
-    "skeleton_node_count": 85,
+    "skeleton_node_count": 86,
     "skeleton_generated_by": "analysis/generate_skeleton.py",
     "mode": "update",
     "last_foundation_date": "2026-06-11",
@@ -281,6 +281,39 @@
         "geography": "national",
         "segment": "retail",
         "product": "personal_loan",
+        "economic_role": null
+      }
+    },
+    {
+      "id": "e_S1_PSL",
+      "tier": "entity",
+      "label": "Priority Sector Lending (memo)",
+      "claim_type": "fact",
+      "code": "PSL",
+      "statement": "Statement 1",
+      "structural_role": "root",
+      "level": 1,
+      "decomposition": "psl_lens",
+      "parent_code": null,
+      "parent_statement": null,
+      "additive": false,
+      "registry_domain": "psl",
+      "data_section": null,
+      "data_series": null,
+      "signal_ids": [
+        "sibc-psl-acceleration",
+        "sibc-psl-allocation",
+        "sibc-psl-momentum"
+      ],
+      "annotation_ids": [],
+      "description": "Priority Sector Lending (memo) — structural node (Statement 1 PSL).",
+      "urn": "icl:sibc/Statement1/PSL",
+      "concept_tags": {
+        "measure": "stock.balance",
+        "lender": "all",
+        "geography": "national",
+        "segment": "mixed",
+        "product": null,
         "economic_role": null
       }
     },
@@ -3683,6 +3716,96 @@
       "scope": "intra_group",
       "basis": "PSL-native cross-cutting classification (incl. net PSLC- SF/MF).",
       "additive": false
+    },
+    {
+      "id": "composes_into__e_S1_i__e_S1_PSL",
+      "type": "composes_into",
+      "from": "e_S1_i",
+      "to": "e_S1_PSL",
+      "polarity": "structural",
+      "scope": "intra_group",
+      "decomposition": "psl_lens"
+    },
+    {
+      "id": "composes_into__e_S1_ii__e_S1_PSL",
+      "type": "composes_into",
+      "from": "e_S1_ii",
+      "to": "e_S1_PSL",
+      "polarity": "structural",
+      "scope": "intra_group",
+      "decomposition": "psl_lens"
+    },
+    {
+      "id": "composes_into__e_S1_iii__e_S1_PSL",
+      "type": "composes_into",
+      "from": "e_S1_iii",
+      "to": "e_S1_PSL",
+      "polarity": "structural",
+      "scope": "intra_group",
+      "decomposition": "psl_lens"
+    },
+    {
+      "id": "composes_into__e_S1_iv__e_S1_PSL",
+      "type": "composes_into",
+      "from": "e_S1_iv",
+      "to": "e_S1_PSL",
+      "polarity": "structural",
+      "scope": "intra_group",
+      "decomposition": "psl_lens"
+    },
+    {
+      "id": "composes_into__e_S1_ix__e_S1_PSL",
+      "type": "composes_into",
+      "from": "e_S1_ix",
+      "to": "e_S1_PSL",
+      "polarity": "structural",
+      "scope": "intra_group",
+      "decomposition": "psl_lens"
+    },
+    {
+      "id": "composes_into__e_S1_v__e_S1_PSL",
+      "type": "composes_into",
+      "from": "e_S1_v",
+      "to": "e_S1_PSL",
+      "polarity": "structural",
+      "scope": "intra_group",
+      "decomposition": "psl_lens"
+    },
+    {
+      "id": "composes_into__e_S1_vi__e_S1_PSL",
+      "type": "composes_into",
+      "from": "e_S1_vi",
+      "to": "e_S1_PSL",
+      "polarity": "structural",
+      "scope": "intra_group",
+      "decomposition": "psl_lens"
+    },
+    {
+      "id": "composes_into__e_S1_vii__e_S1_PSL",
+      "type": "composes_into",
+      "from": "e_S1_vii",
+      "to": "e_S1_PSL",
+      "polarity": "structural",
+      "scope": "intra_group",
+      "decomposition": "psl_lens"
+    },
+    {
+      "id": "composes_into__e_S1_viii__e_S1_PSL",
+      "type": "composes_into",
+      "from": "e_S1_viii",
+      "to": "e_S1_PSL",
+      "polarity": "structural",
+      "scope": "intra_group",
+      "decomposition": "psl_lens"
+    },
+    {
+      "id": "composes_into__e_S1_x__e_S1_PSL",
+      "type": "composes_into",
+      "from": "e_S1_x",
+      "to": "e_S1_PSL",
+      "polarity": "structural",
+      "scope": "intra_group",
+      "decomposition": "psl_lens"
     },
     {
       "from": "force_gold_price_surge",

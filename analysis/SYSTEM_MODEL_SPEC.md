@@ -374,13 +374,21 @@ would invert the finding. Both ends are emitted; only the positive one decides `
 type (Statement 2) — hanging off the same node. They are different mixes with different states, so
 keying by entity would silently drop one. Each entry carries its `entity_urn` and `decomposition`.
 
-**Known coverage gap: the PSL memo block has no parent entity node** (its rows carry an empty
-`parent_code`), so it computes movement signals but no mix state. Closing it means giving the
-skeleton a PSL node, which is a skeleton-profile change, not a mix-state change.
+**The PSL lens node (closed 2026-08-19).** Priority-sector entities are emitted as
+`reclassification` leaves with `parent_code: null` — ten orphans with nothing to belong to, and a
+list of their ids that the generator collected and never used. So PSL could carry movement cards
+but no mix state. The skeleton now emits a **`Priority Sector Lending (memo)`** node (`code: PSL`,
+`structural_role: root`, `decomposition: psl_lens`) and composes the ten into it.
+
+`additive: false`, because PSL is a **lens over the primary tree, not a partition of it** — its
+Agriculture is the same rupees as the main cut's Agriculture, so summing would double-count. `root`
+rather than `aggregate` because it is the top of its own decomposition and has no parent, which is
+precisely the shape the tree check reserves a null `parent_code` for.
 
 **Measured on SIBC at 2026-07-31:** main sectors **steered** toward Services (+4.9 pp) away from
 Personal Loans; services **steered** toward NBFCs (+15.9 pp); industry by size, industry by type and
-personal loans **drifting**; infrastructure sub-types **contested** (coherence 0.778).
+personal loans **drifting**; priority sector **drifting** toward Micro & Small Enterprises
+(+5.5 pp); infrastructure sub-types **contested** (coherence 0.778). All seven SIBC cuts covered.
 
 **What consumes it.** `mix_state` is evidence available to force firing and to
 `derive_opportunities`; a force claiming to steer the mix can be checked against whether the mix

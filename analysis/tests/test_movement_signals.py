@@ -179,3 +179,27 @@ def test_a_contested_cut_reports_no_destination():
     infra = ms["sibc-infra-sub-momentum"]
     assert infra["mix_state"] == "contested"
     assert infra["toward"] is None and infra["toward_tilt_pp"] is None
+
+
+def test_priority_sector_has_a_node_to_belong_to_and_therefore_a_mix_state():
+    """PSL entities are reclassification leaves with parent_code null — ten orphans. Without a
+    lens node to compose into, a dimension the dashboard renders could carry movement cards but
+    no Layer-2 state. `additive: false` because PSL is a lens over the primary tree, not a
+    partition of it: its Agriculture is the same rupees as the main cut's."""
+    import json
+    from pathlib import Path
+    root = Path(__file__).resolve().parents[1]
+    model = json.loads((root / "rbi_sibc" / "merged" / "system_model.json").read_text())
+    lens = next(n for n in model["nodes"] if n.get("code") == "PSL")
+    assert lens["additive"] is False
+    assert lens["structural_role"] == "root" and lens["parent_code"] is None
+    kids = [e for e in model["edges"]
+            if e["type"] == "composes_into" and e["to"] == lens["id"]]
+    assert len(kids) == 10
+    assert {e.get("decomposition") for e in kids} == {"psl_lens"}, \
+        "its own decomposition — the primary roll-up must never sum a lens"
+
+    ms = json.loads((root / "rbi_sibc" / "merged" /
+                     "system_state_2026-07-31.json").read_text())["mix_states"]
+    assert ms["sibc-psl-momentum"]["entity_urn"].endswith("PSL")
+    assert len(ms) == 7, "every SIBC cut now carries a mix state"

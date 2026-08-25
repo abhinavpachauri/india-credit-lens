@@ -53,6 +53,13 @@
       "coherence": 1.0,
       "children": 9
     },
+    "icl:sibc/Statement1/PSL": {
+      "direction": 1,
+      "signals": 3,
+      "observed": 3,
+      "coherence": 1.0,
+      "children": 10
+    },
     "icl:sibc/Statement1/2.1": {
       "direction": 1,
       "signals": 4,
@@ -851,6 +858,16 @@
       "away_from": "Housing (Including Priority Sector Housing)",
       "toward_tilt_pp": 22.28,
       "children": 9
+    },
+    "sibc-psl-momentum": {
+      "entity_urn": "icl:sibc/Statement1/PSL",
+      "decomposition": "Statement 1",
+      "mix_state": "drifting",
+      "coherence": 0.9932,
+      "toward": "Micro and Small Enterprises",
+      "away_from": "Weaker Sections including net PSLC- SF/MF",
+      "toward_tilt_pp": 5.45,
+      "children": 10
     },
     "sibc-infra-sub-momentum": {
       "entity_urn": "icl:sibc/Statement2/2.18",

@@ -241,6 +241,7 @@ def emit_skeleton_csv(profile, signal_index, domain_index):
 
     # --- reclassification lens entities ---
     psl_lens_ids = []
+    reclass_keys = sorted(reclass_keys, key=lambda k: (k[0], _codesort(k[1])))
     for key in sorted(reclass_keys, key=lambda k: (k[0], _codesort(k[1]))):
         partition, code = key
         r = raw[key]
@@ -264,6 +265,29 @@ def emit_skeleton_csv(profile, signal_index, domain_index):
             edges.append(_edge(
                 entity_id(partition, code), None, "reclassifies",
                 basis=ent.get("basis", ""), additive=False))
+
+    # The PSL lens node. The reclassification entities were emitted with parent_code=None, so
+    # priority-sector lending had no node to BE — it was ten orphans and a list of ids collected
+    # and never used. That is a dimension the dashboard renders and the movement family measures,
+    # and with nothing to attach to it could carry cards but no Layer-2 mix state (§16 Step 2b).
+    #
+    # `additive: false`, because PSL is a lens over the primary tree and not a partition of it —
+    # its Agriculture is the same rupees as the main cut's Agriculture. Its own `psl_lens`
+    # decomposition keeps it out of the primary roll-up, which never sums alternates anyway.
+    if psl_lens_ids:
+        lens_partition = raw[reclass_keys[0]][cols["partition"]] if reclass_keys else "Statement 1"
+        lens_id = entity_id(lens_partition, "PSL")
+        nodes.append(_entity_node(
+            eid=lens_id, label="Priority Sector Lending (memo)", code="PSL",
+            # `root`, not `aggregate`: it is the top of its OWN decomposition and has no
+            # parent in the primary tree — which is exactly the shape the tree check reserves a
+            # null parent_code for.
+            statement=lens_partition, role="root", level=1,
+            decomposition="psl_lens", parent_code=None, additive=False,
+            signal_ids=sorted(signal_index.get((lens_partition, "PSL"), set())),
+            registry_domain="psl"))
+        for cid in psl_lens_ids:
+            edges.append(_edge(cid, lens_id, "composes_into", decomposition="psl_lens"))
 
     return nodes, edges
 
