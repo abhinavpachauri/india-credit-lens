@@ -27,6 +27,7 @@ from core.relational_insights import (                                       # n
     rotation_insight, divergence_insight, rotation_distribution,
     movement_insight, entity_roles, _subject as relational_subject)
 from core.paths import ROOT as REPO
+from core import residuals                                              # noqa: E402
 from core.cuts import sibc_cut, sibc_sections, chart_label   # noqa: E402
 ANAL  = REPO / "analysis"
 SIG   = ANAL / "signals"
@@ -180,10 +181,13 @@ def _short(name: str) -> str:
 
 
 def _is_residual(name: str) -> bool:
-    """RBI's catch-all 'Others' bucket — the sub-sectors it does not break out. It is a residual,
-    not a sector, so it must never headline a leaderboard ('Others is the biggest slice of X'). When
-    it is large, the real signal is a classification gap, not a composition read."""
-    return _short(name).strip().lower() in {"others", "other"}
+    """RBI's bare 'Others' bucket — the one that says nothing about what is inside it.
+
+    The "unclassified" language below is reserved for this. `core.residuals` owns the wider
+    set: "Other Textiles" and "Other Personal Loans" are remainders too, barred from
+    headlining, but calling them unclassified would be less accurate than naming them.
+    """
+    return residuals.kind(_short(name)) == "pure"
 
 
 def _scan_fmt(v: float, unit: str) -> str:
@@ -273,6 +277,34 @@ def deterministic_scan_insight(dist: list[tuple], unit: str, kind: str = "yoy",
                    f"{L0} is clearly the bigger block. ")
                 + "Check the matching growth scan before positioning.")
         else:
+            # A remainder must never headline. "Other Textiles is the biggest slice of
+            # textiles credit at 45.5%" reads as a block leading a leaderboard, and it is
+            # the leftovers — textiles that are not cotton, jute or man-made. Lead with the
+            # biggest NAMED block and state the remainder's size, which is the real news
+            # when it is this large. `core.residuals` decides what counts.
+            rem = residuals.materiality(dist)
+            head = residuals.named_only(dist) if rem else dist
+            if rem and head:
+                R0, Rv0 = _short(rem[0]), fv(rem[1])
+                H0, Hv0 = _short(head[0][0]), fv(head[0][1])
+                HW, HWv = _short(head[-1][0]), fv(head[-1][1])
+                title = f"{H0} is the biggest named block {of} at {Hv0}"
+                body = (f"{H0} holds the largest share {of} among the blocks RBI names, at {Hv0}"
+                        + (f", {_short(head[1][0])} {fv(head[1][1])}" if len(head) > 2 else "")
+                        + f"; {HW} is the smallest at {HWv}. A further {Rv0} sits in {R0}, "
+                          f"which RBI does not break down. These are size shares, not growth rates.")
+                chain = [
+                    f"{H0} is the largest named block at {Hv0} {of}.",
+                    f"{HW} is the smallest named block at {HWv}.",
+                    f"{R0} holds {Rv0} {of} and is not broken down further.",
+                ]
+                implication = (
+                    f"Composition among the named blocks: {H0} carries the most weight {of}. "
+                    + (f"But {Rv0} sits in {R0} — more than any named block — so the mix is only "
+                       "partly readable."
+                       if rem[1] >= head[0][1] else
+                       f"Read it with {Rv0} in {R0}, which the statement does not split."))
+                return title, body, chain, implication
             title = f"{L0} is the biggest slice {of} at {Lv0}"
             body = (f"{L0} holds the largest share {of} at {Lv0}, "
                     f"{_short(dist[1][0])} {fv(dist[1][1])}; {W0} is the smallest at {Wv0}. "
@@ -344,10 +376,21 @@ def deterministic_scan_insight(dist: list[tuple], unit: str, kind: str = "yoy",
             direction,
         ]
     else:
+        # The runner-up slot names a real sector, not the remainder. "Edible Oils leads at
+        # 50.6%, Others at 18.7%" listed a bucket holding 77.4% of food-processing credit
+        # as though it were the second-placed block; how fast a remainder grew is a fact
+        # about reclassification as much as about lending. The remainder still appears —
+        # in its own clause, labelled — because a large one moving IS news.
+        runners = [d for d in dist[1:] if not residuals.is_catch_all(d[0])]
+        runner = runners[0] if runners else (dist[1] if n > 1 else None)
+        rem = residuals.materiality(dist)
         title = f"{L0} growing fastest at {Lv0}; {W0} slowest at {Wv0}"
-        body = (f"{L0} leads YoY growth at {Lv0}, {_short(dist[1][0])} at {fv(dist[1][1])}; "
-                f"{W0} is slowest at {Wv0}. "
-                f"{n_pos} of {n} categories growing, spread {gap}.")
+        body = (f"{L0} leads YoY growth at {Lv0}"
+                + (f", {_short(runner[0])} at {fv(runner[1])}" if runner else "")
+                + f"; {W0} is slowest at {Wv0}. "
+                + (f"{_short(rem[0])}, which RBI does not break down, grew {fv(rem[1])}. "
+                   if rem else "")
+                + f"{n_pos} of {n} categories growing, spread {gap}.")
         chain = [
             f"{L0} is the standout at {Lv0} YoY.",
             f"{W0} is the weakest at {Wv0} — a spread of {gap} across {n} categories.",

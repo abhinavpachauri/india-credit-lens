@@ -1168,7 +1168,7 @@
           "id": "sibc-services-rotation",
           "layer": 1,
           "title": "Services credit mix rotating toward Non-Banking Financial Companies (+2.80 pp share in a year)",
-          "body": "Compared with the same month a year ago, the biggest share gains in services credit came from Non-Banking Financial Companies +2.80 pp; Computer Software +0.16 pp; Commercial Real Estate +0.06 pp. The ground came from Other Services -1.65 pp; Transport Operators -0.60 pp; Trade -0.55 pp. In all, 3.08 pp of the mix changed hands. The gains concentrate in financial intermediation, the cessions in trade & distribution — the mix is tilting toward financial intermediation.",
+          "body": "Compared with the same month a year ago, the biggest share gains in services credit came from Non-Banking Financial Companies +2.80 pp; Computer Software +0.16 pp; Commercial Real Estate +0.06 pp. The ground came from Other Services (not broken down) -1.65 pp; Transport Operators -0.60 pp; Trade -0.55 pp. In all, 3.08 pp of the mix changed hands. The gains concentrate in financial intermediation, the cessions in trade & distribution — the mix is tilting toward financial intermediation.",
           "implication": "This is a composition read: it says where the mix is shifting, not why and not what happens next. The tilt toward financial intermediation is the line to watch — confirm it holds next month before treating it as a trend.",
           "preferredMode": "yoy",
           "effect": {
@@ -1198,9 +1198,9 @@
         {
           "id": "sibc-services-share-scan",
           "layer": 1,
-          "title": "Non-Banking Financial Companies is the biggest slice of services credit at 34.3%",
-          "body": "Non-Banking Financial Companies holds the largest share of services credit at 34.3%, Trade 22.5%; Shipping is the smallest at 0.2%. These are size shares, not growth rates. Top three hold 77.1% of services credit, spread 34.1 percentage points.",
-          "implication": "Composition, not momentum: Non-Banking Financial Companies carries the most weight of services credit. Concentration means the big blocks drive the category — watch them first.",
+          "title": "Non-Banking Financial Companies is the biggest named block of services credit at 34.3%",
+          "body": "Non-Banking Financial Companies holds the largest share of services credit among the blocks RBI names, at 34.3%, Trade 22.5%; Shipping is the smallest at 0.2%. A further 20.3% sits in Other Services, which RBI does not break down. These are size shares, not growth rates.",
+          "implication": "Composition among the named blocks: Non-Banking Financial Companies carries the most weight of services credit. Read it with 20.3% in Other Services, which the statement does not split.",
           "preferredMode": "share",
           "effect": {
             "cut": {
@@ -1218,9 +1218,9 @@
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_scan_share)"
             ],
             "inferences": [
-              "Non-Banking Financial Companies is the largest block at 34.3% of services credit.",
-              "Shipping is the smallest at 0.2% — a 34.1 percentage points spread across 10 sub-categories.",
-              "The top three hold 77.1% of services credit — concentrated mix."
+              "Non-Banking Financial Companies is the largest named block at 34.3% of services credit.",
+              "Shipping is the smallest named block at 0.2%.",
+              "Other Services holds 20.3% of services credit and is not broken down further."
             ]
           }
         },
@@ -1228,7 +1228,7 @@
           "id": "sibc-services-yoy-scan",
           "layer": 1,
           "title": "Computer Software growing fastest at 48.7%; Transport Operators slowest at 7.7%",
-          "body": "Computer Software leads YoY growth at 48.7%, Non-Banking Financial Companies at 32.2%; Transport Operators is slowest at 7.7%. 10 of 10 categories growing, spread 41.0 percentage points.",
+          "body": "Computer Software leads YoY growth at 48.7%, Non-Banking Financial Companies at 32.2%; Transport Operators is slowest at 7.7%. Other Services, which RBI does not break down, grew 12.3%. 10 of 10 categories growing, spread 41.0 percentage points.",
           "implication": "Computer Software is the fastest at 48.7% but holds 0.9% of services credit; the largest block, Non-Banking Financial Companies at 34.3%, grew 32.2%. Growth rank and size rank are different questions. Most of the category is growing.",
           "preferredMode": "yoy",
           "effect": {
@@ -1330,7 +1330,7 @@
           "id": "sibc-svcs-allocation",
           "layer": 1,
           "title": "Non-Banking Financial Companies took 47.4% of all new services credit in the past year",
-          "body": "Of the services credit added over the past twelve months, Non-Banking Financial Companies took 47.4% — the largest share of the new money — growing 32.2% a year and slowing (-1.46 pp). The rest went to Trade 20.0%; Other Services 12.6%; Commercial Real Estate 11.1%; Professional Services 2.7%; Tourism, Hotels and Restaurants 1.9%; Transport Operators 1.9%; Computer Software 1.6%; Aviation 0.6%; Shipping 0.2%. Aviation took 0.6% while growing 12.6% a year and slowing (-13.21 pp) — a smaller slice of a faster-growing total, not a retreat.",
+          "body": "Of the services credit added over the past twelve months, Non-Banking Financial Companies took 47.4% — the largest share of the new money — growing 32.2% a year and slowing (-1.46 pp). The rest went to Trade 20.0%; Other Services (not broken down) 12.6%; Commercial Real Estate 11.1%; Professional Services 2.7%; Tourism, Hotels and Restaurants 1.9%; Transport Operators 1.9%; Computer Software 1.6%; Aviation 0.6%; Shipping 0.2%. Aviation took 0.6% while growing 12.6% a year and slowing (-13.21 pp) — a smaller slice of a faster-growing total, not a retreat.",
           "implication": "Shares of new lending move far faster than shares of the book, so this is the earlier read of the two. It says where the money went, not why — and a falling share alongside rising growth means the others grew faster, not that this one shrank.",
           "preferredMode": "yoy",
           "effect": {
@@ -1899,7 +1899,7 @@
           "id": "sibc-pl-rotation",
           "layer": 1,
           "title": "Personal loans mix rotating toward Loans against gold jewellery (+3.03 pp share in a year)",
-          "body": "Compared with the same month a year ago, the biggest share gains in personal loans came from Loans against gold jewellery +3.03 pp; Vehicle Loans +0.14 pp. The ground came from Housing -2.06 pp; Credit Card Outstanding -0.57 pp; Other Personal Loans -0.33 pp. In all, 3.18 pp of the mix changed hands. The gains concentrate in consumer finance — the mix is tilting toward consumer finance.",
+          "body": "Compared with the same month a year ago, the biggest share gains in personal loans came from Loans against gold jewellery +3.03 pp; Vehicle Loans +0.14 pp. The ground came from Housing -2.06 pp; Credit Card Outstanding -0.57 pp; Other Personal Loans (not broken down) -0.33 pp. In all, 3.18 pp of the mix changed hands. The gains concentrate in consumer finance — the mix is tilting toward consumer finance.",
           "implication": "This is a composition read: it says where the mix is shifting, not why and not what happens next. The tilt toward consumer finance is the line to watch — confirm it holds next month before treating it as a trend.",
           "preferredMode": "yoy",
           "effect": {
@@ -1999,9 +1999,9 @@
         {
           "id": "sibc-pl-share-scan",
           "layer": 1,
-          "title": "Housing is the biggest slice of personal loans at 47.8%",
-          "body": "Housing holds the largest share of personal loans at 47.8%, Other Personal Loans 24.8%; Advances to Individuals against share, bonds, etc. is the smallest at 0.1%. These are size shares, not growth rates. Top three hold 83.3% of personal loans, spread 47.7 percentage points.",
-          "implication": "Composition, not momentum: Housing carries the most weight of personal loans. Concentration means the big blocks drive the category — watch them first.",
+          "title": "Housing is the biggest named block of personal loans at 47.8%",
+          "body": "Housing holds the largest share of personal loans among the blocks RBI names, at 47.8%, Vehicle Loans 10.6%; Advances to Individuals against share, bonds, etc. is the smallest at 0.1%. A further 24.8% sits in Other Personal Loans, which RBI does not break down. These are size shares, not growth rates.",
+          "implication": "Composition among the named blocks: Housing carries the most weight of personal loans. Read it with 24.8% in Other Personal Loans, which the statement does not split.",
           "preferredMode": "share",
           "effect": {
             "cut": {
@@ -2019,9 +2019,9 @@
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_scan_share)"
             ],
             "inferences": [
-              "Housing is the largest block at 47.8% of personal loans.",
-              "Advances to Individuals against share, bonds, etc. is the smallest at 0.1% — a 47.7 percentage points spread across 9 sub-categories.",
-              "The top three hold 83.3% of personal loans — concentrated mix."
+              "Housing is the largest named block at 47.8% of personal loans.",
+              "Advances to Individuals against share, bonds, etc. is the smallest named block at 0.1%.",
+              "Other Personal Loans holds 24.8% of personal loans and is not broken down further."
             ]
           }
         },
@@ -2099,7 +2099,7 @@
           "id": "sibc-pl-yoy-scan",
           "layer": 1,
           "title": "Loans against gold jewellery growing fastest at 93.8%; Consumer Durables slowest at -0.6%",
-          "body": "Loans against gold jewellery leads YoY growth at 93.8%, Vehicle Loans at 17.3%; Consumer Durables is slowest at -0.6%. 8 of 9 categories growing, spread 94.5 percentage points.",
+          "body": "Loans against gold jewellery leads YoY growth at 93.8%, Vehicle Loans at 17.3%; Consumer Durables is slowest at -0.6%. Other Personal Loans, which RBI does not break down, grew 14.2%. 8 of 9 categories growing, spread 94.5 percentage points.",
           "implication": "Loans against gold jewellery is the fastest at 93.8% but holds 7.5% of personal loans; the largest block, Housing at 47.8%, grew 11.0%. Growth rank and size rank are different questions. Most of the category is growing.",
           "preferredMode": "yoy",
           "effect": {
@@ -2132,7 +2132,7 @@
           "id": "sibc-pl-allocation",
           "layer": 1,
           "title": "Housing took 34.8% of all new personal loans in the past year",
-          "body": "Of the personal loans added over the past twelve months, Housing took 34.8% — the largest share of the new money — growing 11.0% a year and accelerating (+0.06 pp). The rest went to Loans against gold jewellery 26.8%; Other Personal Loans 22.7%; Vehicle Loans 11.5%; Education 1.9%; Advances against Fixed Deposits 1.7%; Credit Card Outstanding 0.6%; Advances to Individuals against share, bonds, etc. 0.0%; Consumer Durables -0.0%. Loans against gold jewellery took 26.8% while growing 93.8% a year and slowing (-11.66 pp) — a smaller slice of a faster-growing total, not a retreat.",
+          "body": "Of the personal loans added over the past twelve months, Housing took 34.8% — the largest share of the new money — growing 11.0% a year and accelerating (+0.06 pp). The rest went to Loans against gold jewellery 26.8%; Other Personal Loans (not broken down) 22.7%; Vehicle Loans 11.5%; Education 1.9%; Advances against Fixed Deposits 1.7%; Credit Card Outstanding 0.6%; Advances to Individuals against share, bonds, etc. 0.0%; Consumer Durables -0.0%. Loans against gold jewellery took 26.8% while growing 93.8% a year and slowing (-11.66 pp) — a smaller slice of a faster-growing total, not a retreat.",
           "implication": "Shares of new lending move far faster than shares of the book, so this is the earlier read of the two. It says where the money went, not why — and a falling share alongside rising growth means the others grew faster, not that this one shrank.",
           "preferredMode": "yoy",
           "effect": {
@@ -2634,7 +2634,7 @@
           "id": "sibc-psl-yoy-scan",
           "layer": 1,
           "title": "Social Infrastructure growing fastest at 57.8%; Export Credit slowest at -10.7%",
-          "body": "Social Infrastructure leads YoY growth at 57.8%, Medium Enterprises at 27.5%; Export Credit is slowest at -10.7%. 8 of 10 categories growing, spread 68.5 percentage points.",
+          "body": "Social Infrastructure leads YoY growth at 57.8%, Medium Enterprises at 27.5%; Export Credit is slowest at -10.7%. Others, which RBI does not break down, grew -9.4%. 8 of 10 categories growing, spread 68.5 percentage points.",
           "implication": "Social Infrastructure is the fastest at 57.8%; Export Credit the slowest at -10.7%. Most of the category is growing.",
           "preferredMode": "yoy",
           "effect": {
@@ -2661,7 +2661,7 @@
           "id": "sibc-psl-allocation",
           "layer": 1,
           "title": "Micro and Small Enterprises took 35.6% of all new priority sector credit in the past year",
-          "body": "Of the priority sector credit added over the past twelve months, Micro and Small Enterprises took 35.6% — the largest share of the new money — growing 24.5% a year and accelerating (+0.85 pp). The rest went to Agriculture and Allied Activities 26.8%; Weaker Sections including net PSLC- SF/MF 16.5%; Housing 10.8%; Medium Enterprises 9.6%; Educational Loans 0.8%; Renewable Energy 0.1%; Social Infrastructure 0.0%; Export Credit -0.1%; Others -0.3%. Housing took 10.8% while growing 21.3% a year and slowing (-17.71 pp) — a smaller slice of a faster-growing total, not a retreat.",
+          "body": "Of the priority sector credit added over the past twelve months, Micro and Small Enterprises took 35.6% — the largest share of the new money — growing 24.5% a year and accelerating (+0.85 pp). The rest went to Agriculture and Allied Activities 26.8%; Weaker Sections including net PSLC- SF/MF 16.5%; Housing 10.8%; Medium Enterprises 9.6%; Educational Loans 0.8%; Renewable Energy 0.1%; Social Infrastructure 0.0%; Export Credit -0.1%; Others (not broken down) -0.3%. Housing took 10.8% while growing 21.3% a year and slowing (-17.71 pp) — a smaller slice of a faster-growing total, not a retreat.",
           "implication": "Shares of new lending move far faster than shares of the book, so this is the earlier read of the two. It says where the money went, not why — and a falling share alongside rising growth means the others grew faster, not that this one shrank.",
           "preferredMode": "yoy",
           "effect": {
@@ -3016,7 +3016,7 @@
           "id": "sibc-food-processing-sub-yoy-scan",
           "layer": 1,
           "title": "Edible Oils and Vanaspati growing fastest at 50.6%; Sugar slowest at -1.5%",
-          "body": "Edible Oils and Vanaspati leads YoY growth at 50.6%, Others at 18.7%; Sugar is slowest at -1.5%. 3 of 4 categories growing, spread 52.1 percentage points.",
+          "body": "Edible Oils and Vanaspati leads YoY growth at 50.6%, Tea at 14.0%; Sugar is slowest at -1.5%. Others, which RBI does not break down, grew 18.7%. 3 of 4 categories growing, spread 52.1 percentage points.",
           "implication": "Edible Oils and Vanaspati is the fastest at 50.6% but holds 12.0% of food-processing credit; the largest block, Others at 77.4%, grew 18.7%. Growth rank and size rank are different questions. Most of the category is growing.",
           "preferredMode": "yoy",
           "effect": {
@@ -3052,7 +3052,7 @@
           "id": "sibc-industry-rotation",
           "layer": 1,
           "title": "Industry credit mix rotating toward All Engineering (+0.96 pp share in a year)",
-          "body": "Compared with the same month a year ago, the biggest share gains in industry credit came from All Engineering +0.96 pp; Petroleum, Coal Products and Nuclear Fuels +0.95 pp; Other Industries +0.61 pp. The ground came from Infrastructure -2.39 pp; Textiles -0.45 pp; Rubber, Plastic and their Products -0.13 pp. In all, 3.23 pp of the mix changed hands. No single economic theme unites the movers — the rotation is broad-based rather than a story about one part of the economy.",
+          "body": "Compared with the same month a year ago, the biggest share gains in industry credit came from All Engineering +0.96 pp; Petroleum, Coal Products and Nuclear Fuels +0.95 pp; Other Industries (not broken down) +0.61 pp. The ground came from Infrastructure -2.39 pp; Textiles -0.45 pp; Rubber, Plastic and their Products -0.13 pp. In all, 3.23 pp of the mix changed hands. No single economic theme unites the movers — the rotation is broad-based rather than a story about one part of the economy.",
           "implication": "This is a composition read: it says where the mix is shifting, not why and not what happens next. With no single theme behind the movers, treat each segment's shift on its own terms rather than as one story.",
           "preferredMode": "yoy",
           "effect": {
@@ -3083,9 +3083,9 @@
         {
           "id": "sibc-industry-type-share-scan",
           "layer": 1,
-          "title": "Infrastructure is the biggest slice of industry credit at 31.7%",
-          "body": "Infrastructure holds the largest share of industry credit at 31.7%, Basic Metal and Metal Product 11.2%; Leather and Leather Products is the smallest at 0.3%. These are size shares, not growth rates. Top three hold 50.7% of industry credit, spread 31.4 percentage points.",
-          "implication": "Composition, not momentum: Infrastructure carries the most weight of industry credit. A dispersed mix — no single block decides the category.",
+          "title": "Infrastructure is the biggest named block of industry credit at 31.7%",
+          "body": "Infrastructure holds the largest share of industry credit among the blocks RBI names, at 31.7%, Basic Metal and Metal Product 11.2%; Leather and Leather Products is the smallest at 0.3%. A further 7.8% sits in Other Industries, which RBI does not break down. These are size shares, not growth rates.",
+          "implication": "Composition among the named blocks: Infrastructure carries the most weight of industry credit. Read it with 7.8% in Other Industries, which the statement does not split.",
           "preferredMode": "share",
           "effect": {
             "cut": {
@@ -3104,9 +3104,9 @@
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_scan_share)"
             ],
             "inferences": [
-              "Infrastructure is the largest block at 31.7% of industry credit.",
-              "Leather and Leather Products is the smallest at 0.3% — a 31.4 percentage points spread across 19 sub-categories.",
-              "The top three hold 50.7% of industry credit — dispersed mix."
+              "Infrastructure is the largest named block at 31.7% of industry credit.",
+              "Leather and Leather Products is the smallest named block at 0.3%.",
+              "Other Industries holds 7.8% of industry credit and is not broken down further."
             ]
           }
         },
@@ -3114,7 +3114,7 @@
           "id": "sibc-industry-type-yoy-scan",
           "layer": 1,
           "title": "Petroleum, Coal Products and Nuclear Fuels growing fastest at 48.5%; Beverage and Tobacco slowest at 8.8%",
-          "body": "Petroleum, Coal Products and Nuclear Fuels leads YoY growth at 48.5%, All Engineering at 37.6%; Beverage and Tobacco is slowest at 8.8%. 19 of 19 categories growing, spread 39.8 percentage points.",
+          "body": "Petroleum, Coal Products and Nuclear Fuels leads YoY growth at 48.5%, All Engineering at 37.6%; Beverage and Tobacco is slowest at 8.8%. Other Industries, which RBI does not break down, grew 29.2%. 19 of 19 categories growing, spread 39.8 percentage points.",
           "implication": "Petroleum, Coal Products and Nuclear Fuels is the fastest at 48.5% but holds 4.8% of industry credit; the largest block, Infrastructure at 31.7%, grew 10.9%. Growth rank and size rank are different questions. Most of the category is growing.",
           "preferredMode": "yoy",
           "effect": {
@@ -3146,9 +3146,9 @@
         {
           "id": "sibc-infra-sub-share-scan",
           "layer": 1,
-          "title": "Power is the biggest slice of infrastructure credit at 57.4%",
-          "body": "Power holds the largest share of infrastructure credit at 57.4%, Roads 22.6%; Railways is the smallest at 0.5%. These are size shares, not growth rates. Top three hold 92.0% of infrastructure credit, spread 57.0 percentage points.",
-          "implication": "Composition, not momentum: Power carries the most weight of infrastructure credit. Concentration means the big blocks drive the category — watch them first.",
+          "title": "Power is the biggest named block of infrastructure credit at 57.4%",
+          "body": "Power holds the largest share of infrastructure credit among the blocks RBI names, at 57.4%, Roads 22.6%; Railways is the smallest at 0.5%. A further 11.9% sits in Other Infrastructure, which RBI does not break down. These are size shares, not growth rates.",
+          "implication": "Composition among the named blocks: Power carries the most weight of infrastructure credit. Read it with 11.9% in Other Infrastructure, which the statement does not split.",
           "preferredMode": "share",
           "effect": {
             "highlight": [
@@ -3170,9 +3170,9 @@
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_scan_share)"
             ],
             "inferences": [
-              "Power is the largest block at 57.4% of infrastructure credit.",
-              "Railways is the smallest at 0.5% — a 57.0 percentage points spread across 7 sub-categories.",
-              "The top three hold 92.0% of infrastructure credit — concentrated mix."
+              "Power is the largest named block at 57.4% of infrastructure credit.",
+              "Railways is the smallest named block at 0.5%.",
+              "Other Infrastructure holds 11.9% of infrastructure credit and is not broken down further."
             ]
           }
         },
@@ -3180,7 +3180,7 @@
           "id": "sibc-infra-sub-yoy-scan",
           "layer": 1,
           "title": "Ports growing fastest at 75.9%; Railways slowest at -38.1%",
-          "body": "Ports leads YoY growth at 75.9%, Power at 23.2%; Railways is slowest at -38.1%. 3 of 7 categories growing, spread 114.0 percentage points.",
+          "body": "Ports leads YoY growth at 75.9%, Power at 23.2%; Railways is slowest at -38.1%. Other Infrastructure, which RBI does not break down, grew 1.0%. 3 of 7 categories growing, spread 114.0 percentage points.",
           "implication": "Ports is the fastest at 75.9% but holds 0.6% of infrastructure credit; the largest block, Power at 57.4%, grew 23.2%. Growth rank and size rank are different questions. Growth is confined to a few blocks.",
           "preferredMode": "yoy",
           "effect": {
@@ -3215,9 +3215,9 @@
         {
           "id": "sibc-textiles-sub-share-scan",
           "layer": 1,
-          "title": "Other Textiles is the biggest slice of textiles credit at 45.5%",
-          "body": "Other Textiles holds the largest share of textiles credit at 45.5%, Cotton Textiles 35.5%; Jute Textiles is the smallest at 1.7%. These are size shares, not growth rates. Top three hold 98.3% of textiles credit, spread 43.8 percentage points.",
-          "implication": "Composition, not momentum: Other Textiles carries the most weight of textiles credit. Concentration means the big blocks drive the category — watch them first.",
+          "title": "Cotton Textiles is the biggest named block of textiles credit at 35.5%",
+          "body": "Cotton Textiles holds the largest share of textiles credit among the blocks RBI names, at 35.5%, Man-Made Textiles 17.3%; Jute Textiles is the smallest at 1.7%. A further 45.5% sits in Other Textiles, which RBI does not break down. These are size shares, not growth rates.",
+          "implication": "Composition among the named blocks: Cotton Textiles carries the most weight of textiles credit. But 45.5% sits in Other Textiles — more than any named block — so the mix is only partly readable.",
           "preferredMode": "share",
           "effect": {
             "highlight": [
@@ -3239,9 +3239,9 @@
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_scan_share)"
             ],
             "inferences": [
-              "Other Textiles is the largest block at 45.5% of textiles credit.",
-              "Jute Textiles is the smallest at 1.7% — a 43.8 percentage points spread across 4 sub-categories.",
-              "The top three hold 98.3% of textiles credit — concentrated mix."
+              "Cotton Textiles is the largest named block at 35.5% of textiles credit.",
+              "Jute Textiles is the smallest named block at 1.7%.",
+              "Other Textiles holds 45.5% of textiles credit and is not broken down further."
             ]
           }
         },
@@ -3249,7 +3249,7 @@
           "id": "sibc-textiles-sub-yoy-scan",
           "layer": 1,
           "title": "Jute Textiles growing fastest at 21.4%; Cotton Textiles slowest at 3.6%",
-          "body": "Jute Textiles leads YoY growth at 21.4%, Other Textiles at 19.6%; Cotton Textiles is slowest at 3.6%. 4 of 4 categories growing, spread 17.8 percentage points.",
+          "body": "Jute Textiles leads YoY growth at 21.4%, Man-Made Textiles at 8.1%; Cotton Textiles is slowest at 3.6%. Other Textiles, which RBI does not break down, grew 19.6%. 4 of 4 categories growing, spread 17.8 percentage points.",
           "implication": "Jute Textiles is the fastest at 21.4% but holds 1.7% of textiles credit; the largest block, Other Textiles at 45.5%, grew 19.6%. Growth rank and size rank are different questions. Most of the category is growing.",
           "preferredMode": "yoy",
           "effect": {
@@ -3285,7 +3285,7 @@
           "id": "sibc-ind-type-allocation",
           "layer": 1,
           "title": "Infrastructure took 19.3% of all new industry credit in the past year",
-          "body": "Of the industry credit added over the past twelve months, Infrastructure took 19.3% — the largest share of the new money — growing 10.9% a year and slowing (-0.74 pp). The rest went to All Engineering 12.1%; Basic Metal and Metal Product 12.0%; Other Industries 11.0%; Petroleum, Coal Products and Nuclear Fuels 9.7%; Chemicals and Chemical Products 7.5%; Food Processing 5.7%; Textiles 4.1%; Vehicles, Vehicle Parts and Transport Equipment 4.1%; Construction 4.0%; Gems and Jewellery 3.8%; Rubber, Plastic and their Products 1.8%; Cement and Cement Products 1.3%; Paper and Paper Products 1.2%; Mining and Quarrying 0.9%; Wood and Wood Products 0.6%; Glass and Glassware 0.4%; Beverage and Tobacco 0.4%; Leather and Leather Products 0.2%. Gems and Jewellery took 3.8% while growing 32.7% a year and slowing (-2.76 pp) — a smaller slice of a faster-growing total, not a retreat.",
+          "body": "Of the industry credit added over the past twelve months, Infrastructure took 19.3% — the largest share of the new money — growing 10.9% a year and slowing (-0.74 pp). The rest went to All Engineering 12.1%; Basic Metal and Metal Product 12.0%; Other Industries (not broken down) 11.0%; Petroleum, Coal Products and Nuclear Fuels 9.7%; Chemicals and Chemical Products 7.5%; Food Processing 5.7%; Textiles 4.1%; Vehicles, Vehicle Parts and Transport Equipment 4.1%; Construction 4.0%; Gems and Jewellery 3.8%; Rubber, Plastic and their Products 1.8%; Cement and Cement Products 1.3%; Paper and Paper Products 1.2%; Mining and Quarrying 0.9%; Wood and Wood Products 0.6%; Glass and Glassware 0.4%; Beverage and Tobacco 0.4%; Leather and Leather Products 0.2%. Gems and Jewellery took 3.8% while growing 32.7% a year and slowing (-2.76 pp) — a smaller slice of a faster-growing total, not a retreat.",
           "implication": "Shares of new lending move far faster than shares of the book, so this is the earlier read of the two. It says where the money went, not why — and a falling share alongside rising growth means the others grew faster, not that this one shrank.",
           "preferredMode": "yoy",
           "effect": {

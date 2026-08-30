@@ -320,6 +320,27 @@
           "date": "2026-08-26",
           "how_measured": "The card declares both the growth scan and its sibling share scan in sourceSignals, so Check 2g scopes to their union. Injected four in-range invented shares into the textiles card; three failed the gate. The miss (2.8) landed within the SIBC policy's 0.25 absolute tolerance of a legitimate 3.0 in the candidate set \u2014 a pre-existing property of the tolerance, not of the scope.",
           "source": "analysis/pipelines/sibc/generate_analysis_report.py"
+        },
+        {
+          "metric": "Catch-all (residual) disclosure on dashboard cards",
+          "value": "5 of 21 \u2192 26 of 29 cards; headlined remainders 1 \u2192 0",
+          "date": "2026-08-26",
+          "how_measured": "Enumerated every card naming one of the 7 catch-all entities before and after. The 3 still undisclosed are eval-authored and parked for the prompt by decision; the 4th apparent miss says 'the two break-outs cover 100%', which is the disclosure in other words.",
+          "source": "analysis/core/residuals.py"
+        },
+        {
+          "metric": "Headlined-remainder check \u2014 injection catch and false rejection",
+          "value": "catch 100% (21/21), false rejection 0% (0/60)",
+          "date": "2026-08-26",
+          "how_measured": "Injected every catch-all into all three headline forms \u2014 'is the biggest slice', 'rotating toward', 'took N% of all new credit' \u2014 21 titles, all caught. Then the same three forms over 60 real entity names taken from live card titles: none flagged.",
+          "source": "analysis/guards/validate_card_prose.py"
+        },
+        {
+          "metric": "Catch-all detection \u2014 structural rather than a name list",
+          "value": "9 of 9 'Other\u2026' entities are leaves in all 21 periods; 0 exceptions",
+          "date": "2026-08-26",
+          "how_measured": "Enumerated every entity in the consolidated CSV. RBI's naming convention AND never-decomposed identify the set exactly, so a new source inherits the rule instead of a maintained list. Payments returns the empty set \u2014 its 'Other Transactions' is 0.62% of card volume and correctly triggers nothing.",
+          "source": "analysis/core/residuals.py"
         }
       ],
       "observations": [
@@ -406,6 +427,14 @@
         {
           "date": "2026-08-26",
           "observation": "CLAUDE.md had described SIBC cards as carrying `representation` since June; the generator never emitted it. Nothing failed, because nothing read it \u2014 until the prose gate needed to tell our sentences from the eval's. Documentation describing behaviour the code does not have is the same failure as an unwired signal: it reads as a capability and is an absence. reconcile.py guards paths and counts, not claims."
+        },
+        {
+          "date": "2026-08-26",
+          "observation": "The guard's own docstring described the defect it failed to prevent. `_is_residual` said a residual 'must never headline a leaderboard (Others is the biggest slice of X)' and matched the literal words others/other, so 'Other Textiles is the biggest slice of textiles credit at 45.5%' shipped. The rule was right, written down, and scoped to three of nine cases. Third population failure this week: a check's logic can be correct and its population still be a silent design decision."
+        },
+        {
+          "date": "2026-08-26",
+          "observation": "Binary would have been wrong in both directions. Payments' 'Other Transactions' is 0.62% of card volume \u2014 caveating it is noise; engineering's 'Others' is 79.2% \u2014 the classification gap IS the story. And 'Others' differs from 'Other Textiles': the first says nothing about what it holds, the second names it, so applying the word 'unclassified' to both would have made one card less accurate than it already was. The distinction came from reading the data, not from the rule."
         }
       ],
       "open_questions": [

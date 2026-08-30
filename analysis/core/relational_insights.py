@@ -32,6 +32,7 @@ from collections import Counter
 from pathlib import Path
 
 sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
+from core import residuals
 from core.paths import ROOT as REPO  # noqa: E402
 
 SIG = REPO / "analysis" / "signals"
@@ -165,7 +166,13 @@ def rotation_insight(dist: list[tuple], mass: float | None,
     # theme" about a set that is not role-tagged would be a category error.
     has_roles = any(e in roles for e, _, _ in dist)
 
-    L0, Lv0 = _short(gainers[0][0]), gainers[0][1]
+    # A remainder must not headline. "The mix is rotating toward Other Personal Loans"
+    # asserts a destination, and RBI does not say what is in that bucket — the honest
+    # headline is the biggest block that IS named. No card leads with one this period;
+    # the guard is here because nothing stopped next period's from doing so.
+    named_gainers = [g for g in gainers if not residuals.is_catch_all(g[0])]
+    head = named_gainers[0] if named_gainers else gainers[0]
+    L0, Lv0 = _short(head[0]), head[1]
     theme = None
     if role_g:
         toward = ROLE_LABELS[role_g]
@@ -186,8 +193,16 @@ def rotation_insight(dist: list[tuple], mass: float | None,
 
     # Entity names carry commas ("Petroleum, Coal Products…") — separate with
     # semicolons so the list stays readable.
-    gain_str = "; ".join(f"{_short(e)} {_pp(v)}" for e, v in gainers)
-    lose_str = "; ".join(f"{_short(e)} {_pp(v)}" for e, v in losers)
+    # A remainder is named, never silently listed as a peer. RBI does not break
+    # "Other Personal Loans" or "Other Services" down, so a share it gains or sheds
+    # is as much a reclassification as a lending decision — the reader is owed that
+    # once, inline, rather than left to infer it from the word "Other".
+    def _entity(e: str) -> str:
+        n = _short(e)
+        return f"{n} (not broken down)" if residuals.is_catch_all(e) else n
+
+    gain_str = "; ".join(f"{_entity(e)} {_pp(v)}" for e, v in gainers)
+    lose_str = "; ".join(f"{_entity(e)} {_pp(v)}" for e, v in losers)
     body_parts = [
         f"Compared with the same month a year ago, the biggest share gains in "
         f"{subject} came from {gain_str}."
@@ -369,7 +384,12 @@ def movement_insight(alloc: dict, contribution: dict, momentum: dict,
             f"{_pct(lead_v)} — the largest share of the new money — {_speed_clause(lead, speed, accel)}."
         ]
         if len(quotable) > 1:
-            rest = "; ".join(f"{_short(e)} {_pct(v)}" for e, v in quotable[1:])
+            # A remainder is labelled where it appears. "Other Personal Loans 24.8%"
+            # in a list of destinations reads as a choice lenders made; RBI does not
+            # break that bucket down, so part of it is reclassification.
+            rest = "; ".join(
+                f"{_short(e)}{' (not broken down)' if residuals.is_catch_all(e) else ''} {_pct(v)}"
+                for e, v in quotable[1:])
             parts.append(f"The rest went to {rest}.")
         # The correction that earns this whole family: least-accelerating is not shrinking.
         if least[0] != lead:

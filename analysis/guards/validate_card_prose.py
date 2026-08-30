@@ -27,13 +27,14 @@ Usage:
 """
 import argparse
 import json
+import re
 import sys
 from pathlib import Path
 
 ANALYSIS = next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"
 REPO     = ANALYSIS.parent
 sys.path.insert(0, str(ANALYSIS))
-from core import voice   # noqa: E402
+from core import residuals, voice   # noqa: E402
 
 FIELDS = ("title", "body", "implication")
 
@@ -51,6 +52,34 @@ def _cards(pipeline: str):
             yield card.get("group", ""), card
 
 
+def _residual_problems(card: dict, pipeline: str) -> list[str]:
+    """A remainder read as a sector.
+
+    `core.residuals` states the rule the old name-list could not enforce: RBI's
+    "Other…" buckets are what it did not classify, so a card may name one but must
+    never HEADLINE one. "Other Textiles is the biggest slice of textiles credit at
+    45.5%" was live — the exact sentence `_is_residual`'s docstring forbade, missed
+    because the bucket is called "Other Textiles" and not "Others".
+
+    Only the title is checked. A remainder in the body is usually the disclosure
+    itself ("A further 45.5% sits in Other Textiles, which RBI does not break down"),
+    and failing that would push the generator back toward hiding it.
+    """
+    title = card.get("title") or ""
+    out = []
+    for name in residuals.catch_alls(pipeline):
+        # "biggest / largest / fastest <name>" — a superlative attached to a bucket.
+        # "rotating toward X" and "X took N% of all new credit" are headline claims too —
+        # they name a destination, and a remainder is not a destination anyone chose.
+        if re.search(r"\b(?:biggest|largest|fastest|leads?|leading|top|towards?)\b[^.]{0,40}"
+                     + re.escape(name), title, re.I) or \
+           re.search(re.escape(name) + r"[^.]{0,30}\b(?:is the (?:biggest|largest|fastest)|leads|took)\b",
+                     title, re.I):
+            out.append(f"headlines {name!r}, which RBI does not break down — "
+                       "a remainder is not a block (core.residuals)")
+    return out
+
+
 def check(pipeline: str) -> tuple[list[str], list[str]]:
     """(hard failures, warnings)."""
     fails, warns = [], []
@@ -58,6 +87,9 @@ def check(pipeline: str) -> tuple[list[str], list[str]]:
         # Absent means nobody declared it. Treated as ours — the stricter reading, so a
         # new generator cannot opt out of the voice rules by forgetting a field.
         ours = card.get("representation", "deterministic") != "llm"
+        for problem in _residual_problems(card, pipeline):
+            line = f"[{where}.{card['id']}] title: {problem}"
+            (fails if ours else warns).append(line)
         for field in FIELDS:
             for problem in voice.lint(card.get(field) or ""):
                 line = f"[{where}.{card['id']}] {field}: {problem}"

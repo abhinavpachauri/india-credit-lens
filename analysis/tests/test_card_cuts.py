@@ -372,3 +372,71 @@ def test_counts_read_in_lakh_and_crore():
     assert fmt_num(792_600_000) == "79.3 crore"
     assert fmt_num(5_270_000) == "52.7 lakh"
     assert fmt_num(73_426) == "73,426"
+
+
+# ── residuals: a remainder is not a sector ────────────────────────────────────
+
+def test_catch_alls_are_detected_structurally_not_by_a_list():
+    """RBI's naming convention AND never broken down. Measured over the whole CSV:
+    every "Other…" entity is a leaf in all 21 periods, so the two conditions together
+    identify the set exactly and source #3 inherits the rule."""
+    from core import residuals
+    found = residuals.catch_alls("sibc")
+    for name in ("Others", "Other Textiles", "Other Personal Loans", "Other Services",
+                 "Other Industries", "Other Infrastructure", "Other Metal and Metal Product"):
+        assert name in found, name
+    for name in ("Cotton Textiles", "Wholesale Trade", "Loans against gold jewellery",
+                 "Power", "Housing"):
+        assert name not in found, name
+
+
+def test_pure_others_and_a_named_remainder_read_differently():
+    """"Others" says nothing about what is inside it; "Other Textiles" says the noun.
+    Calling the second unclassified would be LESS accurate than the card already is."""
+    from core import residuals
+    assert residuals.kind("Others") == "pure"
+    assert residuals.kind("Other Textiles") == "named_remainder"
+    assert residuals.kind("Cotton Textiles") is None
+
+
+def test_a_remainder_never_headlines():
+    """The defect: "Other Textiles is the biggest slice of textiles credit at 45.5%" —
+    the exact sentence `_is_residual`'s docstring forbade, live for months because the
+    bucket is called "Other Textiles" and the matcher tested for "Others"."""
+    feed = json.loads((vcc.REPO / "web/public/data/sibc_l1_annotations.json").read_text())
+    card = next(c for b in feed["sections"].values() for k in b for c in b[k]
+                if c["id"] == "sibc-textiles-sub-share-scan")
+    assert card["title"] == "Cotton Textiles is the biggest named block of textiles credit at 35.5%"
+    assert "45.5% sits in Other Textiles, which RBI does not break down" in card["body"]
+
+
+def test_a_remainder_is_not_quoted_as_a_peer_in_a_growth_scan():
+    """"Edible Oils leads at 50.6%, Others at 18.7%" put a bucket holding 77.4% of
+    food-processing credit in the runner-up slot. The remainder still appears — in its
+    own clause, labelled — because a large one moving is real news."""
+    feed = json.loads((vcc.REPO / "web/public/data/sibc_l1_annotations.json").read_text())
+    card = next(c for b in feed["sections"].values() for k in b for c in b[k]
+                if c["id"] == "sibc-food-processing-sub-yoy-scan")
+    assert "Others at 18.7%;" not in card["body"]
+    assert "Others, which RBI does not break down, grew 18.7%" in card["body"]
+
+
+def test_the_gate_catches_a_headlined_remainder():
+    """Driven synthetically — the live defects are fixed, and a check tested only by
+    them stops being tested."""
+    from guards.validate_card_prose import _residual_problems
+    for title in ("Other Textiles is the biggest slice of textiles credit at 45.5%",
+                  "Personal loans mix rotating toward Other Personal Loans (+1.2 pp)",
+                  "Other Personal Loans took 24.8% of all new personal loans"):
+        assert _residual_problems({"title": title}, "sibc"), title
+    for title in ("Cotton Textiles is the biggest named block of textiles credit at 35.5%",
+                  "Housing took 34.8% of all new personal loans in the past year",
+                  "Services credit mix rotating toward Non-Banking Financial Companies"):
+        assert not _residual_problems({"title": title}, "sibc"), title
+
+
+def test_payments_has_the_shape_but_it_does_not_bite():
+    """"Other Transactions" is 0.62% of credit-card volume. A binary rule would caveat
+    it; the consequence scales with what is unclassified, so nothing fires there."""
+    from core import residuals
+    assert residuals.catch_alls("atm_pos") == frozenset()
