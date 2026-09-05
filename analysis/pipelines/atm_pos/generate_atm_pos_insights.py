@@ -23,6 +23,7 @@ import sys
 from dataclasses import dataclass, field
 sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
 from core.cuts import atm_pos_cut                                       # noqa: E402
+from core.movement_cards import MovementCut, reading as movement_reading  # noqa: E402
 from core.paths import ROOT as _ROOT                                    # noqa: E402
 
 # Read once — the cut derivation consults it for every card.
@@ -634,6 +635,20 @@ ROTATION_CARDS = [
     ("dc-category-rotation",  "dc",    "debit_cards"),
     ("pos-category-rotation", "infra", "pos_terminals"),
 ]
+# Movement cuts — the payments half of the family SIBC has run since August. The signals,
+# their rows and their coherence have been computed here every period since; nothing read
+# them, so the dashboard never said where new cards or terminals actually went. Payments is
+# where the regimes are: debit cards run at coherence 0.525, POS at 0.864, against SIBC's
+# 0.99-1.00 at every depth — so the contested sentence renders here first, against real data.
+MOVEMENT_CUTS = [
+    MovementCut("category", "cc",    "cc-category-yoy-scan",  "credit cards"),
+    MovementCut("category", "dc",    "dc-category-yoy-scan",  "debit cards"),
+    MovementCut("category", "infra", "pos-category-yoy-scan", "POS terminals"),
+]
+# The signal-id prefix per cut — payments names its cuts by product, not by a shared stem.
+MOVEMENT_PREFIX = {"cc": "cc-", "dc": "dc-", "infra": "pos-"}
+MOVEMENT_FOCUS  = {"cc": "credit_cards", "dc": "debit_cards", "infra": "pos_terminals"}
+
 DIVERGENCE_CARDS = [
     ("cc-bank-divergence",  "cc",    "credit_cards"),
     ("dc-bank-divergence",  "dc",    "debit_cards"),
@@ -711,9 +726,70 @@ def relational_cards(s, month) -> list[dict]:
                     "trendMode": "yoy", "focusCard": metric},
             facts=facts, sources=[(sid, dist)]))
 
+    out += movement_cards(conn, registry, period, month)
     out += pair_cards(conn, registry, period, month)
     conn.close()
     return out
+
+
+def movement_cards(conn, registry, period, month) -> list[dict]:
+    """Where new cards and terminals went over the past year, by bank category.
+
+    One card per group from four signals, through the same reader SIBC uses
+    (`core.movement_cards`) — the pairing rule and the coherence routing come with it,
+    so a share of new volume is never published without that category's own speed.
+    """
+    out: list[dict] = []
+    for cut in MOVEMENT_CUTS:
+        group = cut.section
+        r = movement_reading(conn, "atm_pos", period, registry, cut,
+                             prefix=MOVEMENT_PREFIX[group])
+        if r is None:
+            continue
+        # The chart draws bank categories by their short labels; signals.db carries the
+        # full names. Looked up, never typed — the SIBC version of this was a hand-kept
+        # map covering one cut, and the cards it did not cover highlighted nothing.
+        lead = CATEGORY_SHORT.get(r["lead"], r["lead"])
+        # Momentum rows, not allocation: allocation writes each category three times
+        # (alloc / contribution / weight) and the reasoning key '{signal}:{entity}'
+        # cannot tell them apart. Momentum's members are unambiguous, and units added
+        # is the card's underlying quantity anyway.
+        rows = _momentum_rows(conn, period, r["alloc_sid"].replace("-allocation", "-momentum"))
+        shares = dict((e, v) for e, v, _ in _contribution_rows(conn, period, r["alloc_sid"]))
+        facts = [f"{CATEGORY_SHORT.get(e, e)}: {v:+,.0f} added, "
+                 f"{shares.get(e, 0):+.1f}% of the total movement" for e, v, _ in rows]
+        facts.append(f"Source: signals.db ({', '.join(r['sources'])})")
+        card = _relational_card(
+            r["alloc_sid"], group, "by_type", month, r["insight"],
+            effect={"highlight": [lead, "Total"], "tab": "distribution",
+                    "distMode": "pct", "focusCard": MOVEMENT_FOCUS[group]},
+            facts=facts, sources=[(r["alloc_sid"].replace("-allocation", "-momentum"), rows)])
+        # The card quotes a share of new volume beside that category's own speed and
+        # acceleration, so it DECLARES all four reads and Stage 4c scopes to their union.
+        # `_relational_card` would otherwise cite only the rows it was handed, which is
+        # right for a one-signal card and too narrow for this one.
+        card["sourceSignals"] = r["sources"]
+        out.append(card)
+    return out
+
+
+def _momentum_rows(conn, period: str, mom_sid: str) -> list[tuple]:
+    """Units each category added over the window — the card's underlying quantity, and
+    the one whose reasoning key is unambiguous."""
+    return list(conn.execute(
+        "SELECT entity_id, value, status FROM signals WHERE pipeline='atm_pos' AND period=? "
+        "AND metric_id=? AND entity_type='bank_category' ORDER BY value DESC",
+        (period, mom_sid)))
+
+
+def _contribution_rows(conn, period: str, alloc_sid: str) -> list[tuple]:
+    """Each category's share of the total movement, ranked. Contribution rather than
+    `alloc`: it is defined in every regime, where a share of the NET is withheld when
+    members cancel."""
+    return list(conn.execute(
+        "SELECT entity_id, value, status FROM signals WHERE pipeline='atm_pos' AND period=? "
+        "AND metric_id=? AND entity_type='contribution' ORDER BY value DESC",
+        (period, alloc_sid)))
 
 
 def pair_cards(conn, registry, period, month) -> list[dict]:

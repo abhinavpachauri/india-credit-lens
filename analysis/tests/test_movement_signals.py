@@ -203,3 +203,85 @@ def test_priority_sector_has_a_node_to_belong_to_and_therefore_a_mix_state():
                      "system_state_2026-07-31.json").read_text())["mix_states"]
     assert ms["sibc-psl-momentum"]["entity_urn"].endswith("PSL")
     assert len(ms) == 7, "every SIBC cut now carries a mix state"
+
+
+# ── payments movement: the regimes SIBC never renders ─────────────────────────
+
+def test_contested_prose_follows_the_sign_of_the_net():
+    """The branch read "grew"/"rose" unconditionally and named the FALLERS as the
+    dissenters. Correct for SIBC — credit grows in every window, and every SIBC cut runs
+    coherence 0.99-1.00 so the branch never rendered. Payments POS terminals is the first
+    real contested window with a negative net: the fleet shrank 1.86M while public banks
+    expanded, and the card said "POS terminals rose over the past year"."""
+    from core.relational_insights import movement_insight
+    momentum = {"Private Sector Banks": -2_003_950, "Public Sector Banks": 146_358,
+                "Small Finance Banks": 274, "Foreign Banks": -3_510}
+    contribution = {k: 100.0 * v / 2_154_092 for k, v in momentum.items()}
+    ins = movement_insight({}, contribution, momentum, net=-1_860_828,
+                           gross=2_154_092, coherence=0.864, accel={},
+                           speed={}, subject="POS terminals")
+    assert "shrank" in ins["title"] and "rose" not in ins["body"]
+    assert "fell over the past year" in ins["body"]
+    # the dissenters are whoever moved AGAINST the total, so risers when it falls
+    assert "Public Sector Banks" in ins["title"]
+    assert "Private Sector Banks" not in ins["title"]
+
+
+def test_a_share_of_gross_movement_is_a_magnitude():
+    """Gross ignores direction by construction, so printing a signed share of it read
+    "-93.0% of all the movement" — not a quantity anyone can picture."""
+    from core.relational_insights import movement_insight
+    momentum = {"A": -930.0, "B": 70.0}
+    ins = movement_insight({}, {"A": -93.0, "B": 7.0}, momentum, net=-860.0,
+                           gross=1000.0, coherence=0.86, accel={}, speed={},
+                           subject="terminals")
+    assert "-93.0%" not in ins["body"] and "93.0% of all the movement" in ins["body"]
+
+
+def test_subject_capitalisation_preserves_existing_capitals():
+    """`subject.capitalize()` lowercases the rest — "POS terminals" became "Pos terminals"."""
+    from core.relational_insights import movement_insight
+    ins = movement_insight({}, {"A": -93.0, "B": 7.0}, {"A": -930.0, "B": 70.0},
+                           net=-860.0, gross=1000.0, coherence=0.86,
+                           accel={}, speed={}, subject="POS terminals")
+    assert ins["title"].startswith("POS terminals")
+
+
+def test_weight_is_emitted_in_every_regime():
+    """A category's share of the parent at the START of the window is direction-free and
+    always computable. Payments emitted it INSIDE the coherence branch, so it vanished
+    exactly when the mix was contested — and Layer 2 reads `tilt = alloc - weight`, so
+    payments' two most interesting mixes (debit 0.525, POS 0.864) produced no mix state
+    at all. Coherence routes; it does not gate."""
+    import sqlite3
+    from core.paths import ROOT
+    con = sqlite3.connect(ROOT / "analysis/signals/signals.db")
+    try:
+        for sid in ("cc-category-allocation", "dc-category-allocation",
+                    "pos-category-allocation"):
+            n = con.execute(
+                "SELECT COUNT(*) FROM signals WHERE pipeline='atm_pos' AND period=? "
+                "AND metric_id=? AND entity_type='weight'", ("2026-06-30", sid)).fetchone()[0]
+            assert n > 0, f"{sid} has no weight rows — contested mixes lose their mix state"
+    finally:
+        con.close()
+
+
+def test_every_payments_cut_carries_a_mix_state():
+    import json
+    from core.paths import ROOT
+    state = json.loads((ROOT / "analysis/rbi_atm_pos/merged/system_state_2026-06-30.json").read_text())
+    mix = state.get("mix_states") or {}
+    assert set(mix) == {"cc-category-momentum", "dc-category-momentum", "pos-category-momentum"}
+    assert mix["dc-category-momentum"]["mix_state"] == "contested"
+
+
+def test_an_ambiguous_reasoning_key_refuses_rather_than_guesses():
+    """'{metric_id}:{entity_id}' cannot tell alloc from contribution from weight, and the
+    resolver kept whichever row came last — a card citing its contribution was compared
+    against a weight and reported STALE. Same class as the proximity.series bug, where a
+    signal with several aggregate rows silently returned three values per period."""
+    from pipelines.atm_pos.validate_atm_pos_claims import load_db_row_values
+    rows = load_db_row_values("2026-06-30")
+    assert rows["cc-category-allocation:Private Sector Banks"] is None    # ambiguous
+    assert rows["cc-category-momentum:Private Sector Banks"] is not None  # unique

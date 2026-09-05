@@ -591,17 +591,27 @@ def csv_category_allocation(params: dict, period: str, df: pd.DataFrame) -> list
            for k, v in deltas.items()]
     out.sort(key=lambda r: r["value"], reverse=True)
     out.append(_row("aggregate", "total", max(abs(r["value"]) for r in out), "active", "pct"))
+    # `weight` — each category's share of the parent at the START of the window — is
+    # emitted in EVERY regime, like SIBC's. It is direction-free and always computable, so
+    # withholding it when coherence is low is coherence GATING rather than routing, which
+    # this project decided against. The consequence was silent: Layer 2 reads
+    # `tilt = alloc - weight` and skips a cut with no weight rows, so payments' contested
+    # mixes — debit cards at 0.525, POS at 0.864, the two most interesting on the platform —
+    # produced no mix state at all while SIBC's contested infra cut produced one.
+    window = int(params.get("window", 12))
+    prior_date = _month_back(period, window, set(df["report_date"].unique()))
+    base = _cat_values(params, prior_date, df) if prior_date else {}
+    tot = sum(base.values())
+    if tot:
+        out.extend(_row("weight", k, 100.0 * v / tot, "active", "pct")
+                   for k, v in base.items())
+    # `alloc` — share of the NET — stays gated, and that is routing not suppression: when
+    # members cancel, a share of a small net is unbounded and misleading. `contribution`
+    # (share of gross) carries the quantitative work in those windows.
     if coherence >= cmin and net:
         alloc = [_row("alloc", k, 100.0 * v / net, "active", "pct") for k, v in deltas.items()]
         alloc.sort(key=lambda r: r["value"], reverse=True)
         out.extend(alloc)
-        window = int(params.get("window", 12))
-        prior_date = _month_back(period, window, set(df["report_date"].unique()))
-        base = _cat_values(params, prior_date, df) if prior_date else {}
-        tot = sum(base.values())
-        if tot:
-            out.extend(_row("weight", k, 100.0 * v / tot, "active", "pct")
-                       for k, v in base.items())
     return out
 
 

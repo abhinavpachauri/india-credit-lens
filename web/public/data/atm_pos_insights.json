@@ -2262,6 +2262,240 @@
     "insight_kind": "divergence_hierarchy"
   },
   {
+    "id": "cc-category-allocation",
+    "group": "cc",
+    "cut": "by_type",
+    "period": "Jun 2026",
+    "type": "insight",
+    "title": "Private Sector Banks took 71.9% of all new credit cards in the past year",
+    "body": "Of the credit cards added over the past twelve months, Private Sector Banks took 71.9% \u2014 the largest share of the new money \u2014 growing 9.7% a year and accelerating (+1.20 pp). The rest went to Public Sector Banks 20.9%; Small Finance Banks 9.7%; Foreign Banks -2.5%. Foreign Banks took -2.5% while growing -5.9% a year and slowing (-0.45 pp) \u2014 a smaller slice of a faster-growing total, not a retreat.",
+    "implication": "Shares of new lending move far faster than shares of the book, so this is the earlier read of the two. It says where the money went, not why \u2014 and a falling share alongside rising growth means the others grew faster, not that this one shrank.",
+    "reasoning": {
+      "signals": [
+        {
+          "key": "cc-category-momentum:Private Sector Banks",
+          "value": 7632947.0
+        },
+        {
+          "key": "cc-category-momentum:Public Sector Banks",
+          "value": 2222179.0
+        },
+        {
+          "key": "cc-category-momentum:Small Finance Banks",
+          "value": 1033012.0
+        },
+        {
+          "key": "cc-category-momentum:Payment Banks",
+          "value": 0.0
+        },
+        {
+          "key": "cc-category-momentum:Foreign Banks",
+          "value": -266799.0
+        }
+      ],
+      "chain": [
+        "Every sector's credit cards is compared with the same month a year earlier, and each one's share of the total increase is taken.",
+        "Private Sector Banks accounts for 71.9% of the increase.",
+        "All sectors moved the same way this window, so the shares of the net increase are bounded and sum to a hundred."
+      ]
+    },
+    "basis": {
+      "facts": [
+        "Private: +7,632,947 added, +68.4% of the total movement",
+        "PSB: +2,222,179 added, +19.9% of the total movement",
+        "SFB: +1,033,012 added, +9.3% of the total movement",
+        "Payments: +0 added, +0.0% of the total movement",
+        "Foreign: -266,799 added, -2.4% of the total movement",
+        "Source: signals.db (cc-category-allocation, cc-category-momentum, cc-category-acceleration, cc-category-yoy-scan)"
+      ],
+      "inferences": [
+        "Every sector's credit cards is compared with the same month a year earlier, and each one's share of the total increase is taken.",
+        "Private Sector Banks accounts for 71.9% of the increase.",
+        "All sectors moved the same way this window, so the shares of the net increase are bounded and sum to a hundred."
+      ]
+    },
+    "sourceSignals": [
+      "cc-category-allocation",
+      "cc-category-momentum",
+      "cc-category-acceleration",
+      "cc-category-yoy-scan"
+    ],
+    "effect": {
+      "highlight": [
+        "Private",
+        "Total"
+      ],
+      "tab": "distribution",
+      "distMode": "pct",
+      "focusCard": "credit_cards",
+      "cut": {
+        "shape": "level",
+        "metrics": [
+          "credit_cards"
+        ]
+      }
+    },
+    "exploreAction": null,
+    "representation": "deterministic-db",
+    "insight_kind": "movement_allocation"
+  },
+  {
+    "id": "dc-category-allocation",
+    "group": "dc",
+    "cut": "by_type",
+    "period": "Jun 2026",
+    "type": "insight",
+    "title": "Debit cards grew, but Payment Banks moved against it",
+    "body": "Debit cards rose over the past year, but not everywhere: Payment Banks contracted while the rest expanded. Public Sector Banks accounts for 39.7% of all the movement in the period. Because parts moved in opposite directions, much of the movement cancels out and the net figure understates how much actually shifted.",
+    "implication": "A growing total with members moving the other way is a different claim from broad growth. Read the members, not the headline.",
+    "reasoning": {
+      "signals": [
+        {
+          "key": "dc-category-momentum:Public Sector Banks",
+          "value": 20152772.0
+        },
+        {
+          "key": "dc-category-momentum:Private Sector Banks",
+          "value": 11608900.0
+        },
+        {
+          "key": "dc-category-momentum:Small Finance Banks",
+          "value": 6902862.0
+        },
+        {
+          "key": "dc-category-momentum:Foreign Banks",
+          "value": 84173.0
+        },
+        {
+          "key": "dc-category-momentum:Payment Banks",
+          "value": -12063047.0
+        }
+      ],
+      "chain": [
+        "Each sector's change over the year is measured, then compared with the total movement ignoring direction.",
+        "Coherence \u2014 the net change divided by the total movement ignoring direction \u2014 measures whether the parts agree.",
+        "Below one, some sectors are cancelling others out, so shares of the NET change would overstate; shares of total movement are reported instead."
+      ]
+    },
+    "basis": {
+      "facts": [
+        "PSB: +20,152,772 added, +39.7% of the total movement",
+        "Private: +11,608,900 added, +22.8% of the total movement",
+        "SFB: +6,902,862 added, +13.6% of the total movement",
+        "Foreign: +84,173 added, +0.2% of the total movement",
+        "Payments: -12,063,047 added, -23.7% of the total movement",
+        "Source: signals.db (dc-category-allocation, dc-category-momentum, dc-category-acceleration, dc-category-yoy-scan)"
+      ],
+      "inferences": [
+        "Each sector's change over the year is measured, then compared with the total movement ignoring direction.",
+        "Coherence \u2014 the net change divided by the total movement ignoring direction \u2014 measures whether the parts agree.",
+        "Below one, some sectors are cancelling others out, so shares of the NET change would overstate; shares of total movement are reported instead."
+      ]
+    },
+    "sourceSignals": [
+      "dc-category-allocation",
+      "dc-category-momentum",
+      "dc-category-acceleration",
+      "dc-category-yoy-scan"
+    ],
+    "effect": {
+      "highlight": [
+        "PSB",
+        "Total"
+      ],
+      "tab": "distribution",
+      "distMode": "pct",
+      "focusCard": "debit_cards",
+      "cut": {
+        "shape": "level",
+        "metrics": [
+          "debit_cards"
+        ]
+      }
+    },
+    "exploreAction": null,
+    "representation": "deterministic-db",
+    "insight_kind": "movement_momentum"
+  },
+  {
+    "id": "pos-category-allocation",
+    "group": "infra",
+    "cut": "by_type",
+    "period": "Jun 2026",
+    "type": "insight",
+    "title": "POS terminals shrank, but Public Sector Banks and Small Finance Banks moved against it",
+    "body": "POS terminals fell over the past year, but not everywhere: Public Sector Banks and Small Finance Banks expanded while the rest contracted. Private Sector Banks accounts for 93.0% of all the movement in the period. Because parts moved in opposite directions, much of the movement cancels out and the net figure understates how much actually shifted.",
+    "implication": "A shrinking total with members moving the other way is a different claim from broad decline. Read the members, not the headline.",
+    "reasoning": {
+      "signals": [
+        {
+          "key": "pos-category-momentum:Public Sector Banks",
+          "value": 146358.0
+        },
+        {
+          "key": "pos-category-momentum:Small Finance Banks",
+          "value": 274.0
+        },
+        {
+          "key": "pos-category-momentum:Payment Banks",
+          "value": 0.0
+        },
+        {
+          "key": "pos-category-momentum:Foreign Banks",
+          "value": -3510.0
+        },
+        {
+          "key": "pos-category-momentum:Private Sector Banks",
+          "value": -2003950.0
+        }
+      ],
+      "chain": [
+        "Each sector's change over the year is measured, then compared with the total movement ignoring direction.",
+        "Coherence \u2014 the net change divided by the total movement ignoring direction \u2014 measures whether the parts agree.",
+        "Below one, some sectors are cancelling others out, so shares of the NET change would overstate; shares of total movement are reported instead."
+      ]
+    },
+    "basis": {
+      "facts": [
+        "PSB: +146,358 added, +6.8% of the total movement",
+        "SFB: +274 added, +0.0% of the total movement",
+        "Payments: +0 added, +0.0% of the total movement",
+        "Foreign: -3,510 added, -0.2% of the total movement",
+        "Private: -2,003,950 added, -93.0% of the total movement",
+        "Source: signals.db (pos-category-allocation, pos-category-momentum, pos-category-acceleration, pos-category-yoy-scan)"
+      ],
+      "inferences": [
+        "Each sector's change over the year is measured, then compared with the total movement ignoring direction.",
+        "Coherence \u2014 the net change divided by the total movement ignoring direction \u2014 measures whether the parts agree.",
+        "Below one, some sectors are cancelling others out, so shares of the NET change would overstate; shares of total movement are reported instead."
+      ]
+    },
+    "sourceSignals": [
+      "pos-category-allocation",
+      "pos-category-momentum",
+      "pos-category-acceleration",
+      "pos-category-yoy-scan"
+    ],
+    "effect": {
+      "highlight": [
+        "PSB",
+        "Total"
+      ],
+      "tab": "distribution",
+      "distMode": "pct",
+      "focusCard": "pos_terminals",
+      "cut": {
+        "shape": "level",
+        "metrics": [
+          "pos_terminals"
+        ]
+      }
+    },
+    "exploreAction": null,
+    "representation": "deterministic-db",
+    "insight_kind": "movement_momentum"
+  },
+  {
     "id": "dc-issuance-vs-spend-gap",
     "group": "dc",
     "cut": "total",

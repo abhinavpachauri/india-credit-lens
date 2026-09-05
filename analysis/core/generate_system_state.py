@@ -103,6 +103,13 @@ ALIGNED_MIN, CONTESTED_MIN = 0.90, 0.50
 MIX_PERSISTENCE = 2       # same noise filter derive_opportunities uses before `active`
 
 
+# Momentum across every pipeline's own decomposition. Payments computed these from the
+# day the family shipped; nothing read them, so `mix_states` returned {} for the pipeline
+# whose mixes actually move — SIBC runs coherence 0.99-1.00 at every depth while debit
+# cards sit at 0.525 and POS terminals at 0.864.
+MOMENTUM_METHODS = ("csv_sector_momentum", "csv_category_momentum")
+
+
 def mix_states(pipeline: str, period: str, model: dict) -> dict:
     """§16 Step 2b — is this hierarchy's mix being MANAGED, and toward what?
 
@@ -124,9 +131,14 @@ def mix_states(pipeline: str, period: str, model: dict) -> dict:
     try:
         for sid, sig in registry.items():
             comp = sig.get("compute", {})
-            if sig.get("pipeline") != pipeline or comp.get("method") != "csv_sector_momentum":
+            if sig.get("pipeline") != pipeline or comp.get("method") not in MOMENTUM_METHODS:
                 continue
-            node = by_code.get(str(comp.get("parent_code")))
+            # A momentum signal names the node whose mix it measures in one of two ways,
+            # because the two pipelines decompose differently: SIBC splits a parent CODE
+            # into child sectors, payments splits one METRIC across bank categories. Both
+            # resolve against the same node index — payments entity nodes carry the metric
+            # name as their code — so this is a second key, not a second mechanism.
+            node = by_code.get(str(comp.get("parent_code") or comp.get("metric")))
             if node is None:
                 continue          # e.g. the PSL memo block is a child of no code
             alloc_sid = sid.replace("-momentum", "-allocation")

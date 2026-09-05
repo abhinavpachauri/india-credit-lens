@@ -42,10 +42,24 @@ def load_db_row_values(period: str) -> dict[str, float]:
         return {}
     con = sqlite3.connect(f"file:{DB_PATH}?mode=ro", uri=True)
     try:
-        return {f"{r[0]}:{r[1]}": r[2] for r in con.execute(
-            "SELECT metric_id, entity_id, value FROM signals "
-            "WHERE pipeline='atm_pos' AND period=? AND value IS NOT NULL",
-            (period,)).fetchall()}
+        # A signal can write the same entity under SEVERAL entity types — allocation
+        # emits alloc, contribution and weight for every category. This map is keyed
+        # '{metric_id}:{entity_id}', so those collide, and a plain dict comprehension
+        # kept whichever row came last: a card citing its contribution was silently
+        # compared against a weight and reported STALE. An ambiguous key now resolves
+        # to None, which surfaces as INVALID — the collision states itself instead of
+        # producing a confidently wrong number.
+        out: dict[str, float | None] = {}
+        for metric_id, entity_id, value in con.execute(
+                "SELECT metric_id, entity_id, value FROM signals "
+                "WHERE pipeline='atm_pos' AND period=? AND value IS NOT NULL",
+                (period,)).fetchall():
+            key = f"{metric_id}:{entity_id}"
+            if key in out and out[key] != value:
+                out[key] = None          # ambiguous — refuse rather than guess
+            elif key not in out:
+                out[key] = value
+        return out
     finally:
         con.close()
 

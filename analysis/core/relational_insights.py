@@ -414,15 +414,30 @@ def movement_insight(alloc: dict, contribution: dict, momentum: dict,
                 "implication": implication, "insight_kind": "movement_allocation"}
 
     if regime == "contested" and risers and fallers:
-        lead, _lv = risers[0]
-        dissent = [_short(e) for e, _ in fallers[:2]]
+        # "Moved against it" is relative to where the TOTAL went, and the total can fall.
+        # This branch read "grew"/"rose" unconditionally and named the fallers as the
+        # dissenters — correct for SIBC, where credit grows in every window and every cut
+        # runs coherence 0.99-1.00 so the branch never rendered. Payments POS terminals is
+        # the first real contested window with a NEGATIVE net: the fleet shrank by 1.86M
+        # while public banks expanded, and the card said "POS terminals rose over the past
+        # year". The dissenters are whoever moved the other way from the total.
+        fell = (net or 0) < 0
+        movers = risers if fell else fallers
+        lead, _lv = (fallers if fell else risers)[0]
+        dissent = [_short(e) for e, _ in movers[:2]]
         lead_share = contribution.get(lead)
-        title = (f"{subject.capitalize()} grew, but {' and '.join(dissent)} moved against it")
+        verb, past = ("shrank", "fell") if fell else ("grew", "rose")
+        against = "expanded" if fell else "contracted"
+        rest = "contracted" if fell else "expanded"
+        title = (f"{_cap(subject)} {verb}, but {' and '.join(dissent)} moved against it")
         body = (
-            f"{_cap(subject)} rose over the past year, but not everywhere: "
-            f"{' and '.join(dissent)} contracted while the rest expanded. "
-            + (f"{_short(lead)} accounts for {_pct(lead_share)} of all the movement in the period. "
-               if lead_share is not None else "")
+            f"{_cap(subject)} {past} over the past year, but not everywhere: "
+            f"{' and '.join(dissent)} {against} while the rest {rest}. "
+            # Gross movement ignores direction by construction, so a share OF it is a
+            # magnitude. Printed signed, it read "-93.0% of all the movement", which is
+            # not a quantity anyone can picture; the direction is already in the sentence.
+            + (f"{_short(lead)} accounts for {_pct(abs(lead_share))} of all the movement "
+               "in the period. " if lead_share is not None else "")
             + "Because parts moved in opposite directions, much of the movement cancels out "
               "and the net figure understates how much actually shifted."
         )
@@ -439,7 +454,8 @@ def movement_insight(alloc: dict, contribution: dict, momentum: dict,
             "would overstate; shares of total movement are reported instead.",
         ]
         implication = (
-            "A growing total with contracting members is a different claim from broad growth. "
+            f"A {'shrinking' if fell else 'growing'} total with members moving the other way is a "
+            f"different claim from broad {'decline' if fell else 'growth'}. "
             "Read the members, not the headline."
         )
         return {"title": title, "body": body, "chain": chain,

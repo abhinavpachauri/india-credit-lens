@@ -1,6 +1,16 @@
 {
   "root": "/Users/rishamjeetkaur/Downloads/abnvp/india-credit-lens",
   "scripts": {
+    "core/cuts": {
+      "doc_claims": [],
+      "imports": [],
+      "invokes": [],
+      "path": "analysis/core/cuts.py",
+      "reads": {
+        "web/lib/reports/rbi_sibc_label_overrides.json": "low"
+      },
+      "writes": {}
+    },
     "core/derive_opportunities": {
       "doc_claims": [
         {
@@ -112,6 +122,14 @@
       },
       "writes": {}
     },
+    "core/movement_cards": {
+      "doc_claims": [],
+      "imports": [],
+      "invokes": [],
+      "path": "analysis/core/movement_cards.py",
+      "reads": {},
+      "writes": {}
+    },
     "core/paths": {
       "doc_claims": [],
       "imports": [],
@@ -122,7 +140,9 @@
     },
     "core/relational_insights": {
       "doc_claims": [],
-      "imports": [],
+      "imports": [
+        "core/residuals"
+      ],
       "invokes": [],
       "path": "analysis/core/relational_insights.py",
       "reads": {
@@ -139,6 +159,14 @@
       "imports": [],
       "invokes": [],
       "path": "analysis/core/render.py",
+      "reads": {},
+      "writes": {}
+    },
+    "core/residuals": {
+      "doc_claims": [],
+      "imports": [],
+      "invokes": [],
+      "path": "analysis/core/residuals.py",
       "reads": {},
       "writes": {}
     },
@@ -330,6 +358,33 @@
       "path": "analysis/guards/check_signal_freshness.py",
       "reads": {
         "analysis/signals/registry.json": "low"
+      },
+      "writes": {}
+    },
+    "guards/validate_card_cuts": {
+      "doc_claims": [],
+      "imports": [],
+      "invokes": [],
+      "path": "analysis/guards/validate_card_cuts.py",
+      "reads": {
+        "analysis/signals/registry.json": "low",
+        "web/public/data/atm_pos_chart_series.json": "low",
+        "web/public/data/atm_pos_insights.json": "low",
+        "web/public/data/sibc_l1_annotations.json": "low"
+      },
+      "writes": {}
+    },
+    "guards/validate_card_prose": {
+      "doc_claims": [],
+      "imports": [
+        "core/residuals",
+        "core/voice"
+      ],
+      "invokes": [],
+      "path": "analysis/guards/validate_card_prose.py",
+      "reads": {
+        "web/public/data/atm_pos_insights.json": "low",
+        "web/public/data/sibc_l1_annotations.json": "low"
       },
       "writes": {}
     },
@@ -530,7 +585,9 @@
           "text": "web/public/data/sibc_l1_annotations.json"
         }
       ],
-      "imports": [],
+      "imports": [
+        "core/residuals"
+      ],
       "invokes": [],
       "path": "analysis/pipelines/sibc/generate_analysis_report.py",
       "reads": {

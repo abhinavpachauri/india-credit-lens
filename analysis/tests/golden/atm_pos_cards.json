@@ -1030,6 +1030,111 @@
         "10 banks currently contradict their trend (7 above, 3 below)."
       ]
     },
+    "cc-category-allocation": {
+      "group": "cc",
+      "cut": "by_type",
+      "type": "insight",
+      "representation": "deterministic-db",
+      "effect": {
+        "highlight": [
+          "Private",
+          "Total"
+        ],
+        "tab": "distribution",
+        "distMode": "pct",
+        "focusCard": "credit_cards",
+        "cut": {
+          "shape": "level",
+          "metrics": [
+            "credit_cards"
+          ]
+        }
+      },
+      "sourceSignals": [
+        "cc-category-allocation",
+        "cc-category-momentum",
+        "cc-category-acceleration",
+        "cc-category-yoy-scan"
+      ],
+      "title": "Private Sector Banks took 71.9% of all new credit cards in the past year",
+      "body": "Of the credit cards added over the past twelve months, Private Sector Banks took 71.9% — the largest share of the new money — growing 9.7% a year and accelerating (+1.20 pp). The rest went to Public Sector Banks 20.9%; Small Finance Banks 9.7%; Foreign Banks -2.5%. Foreign Banks took -2.5% while growing -5.9% a year and slowing (-0.45 pp) — a smaller slice of a faster-growing total, not a retreat.",
+      "implication": "Shares of new lending move far faster than shares of the book, so this is the earlier read of the two. It says where the money went, not why — and a falling share alongside rising growth means the others grew faster, not that this one shrank.",
+      "chain": [
+        "Every sector's credit cards is compared with the same month a year earlier, and each one's share of the total increase is taken.",
+        "Private Sector Banks accounts for 71.9% of the increase.",
+        "All sectors moved the same way this window, so the shares of the net increase are bounded and sum to a hundred."
+      ]
+    },
+    "dc-category-allocation": {
+      "group": "dc",
+      "cut": "by_type",
+      "type": "insight",
+      "representation": "deterministic-db",
+      "effect": {
+        "highlight": [
+          "PSB",
+          "Total"
+        ],
+        "tab": "distribution",
+        "distMode": "pct",
+        "focusCard": "debit_cards",
+        "cut": {
+          "shape": "level",
+          "metrics": [
+            "debit_cards"
+          ]
+        }
+      },
+      "sourceSignals": [
+        "dc-category-allocation",
+        "dc-category-momentum",
+        "dc-category-acceleration",
+        "dc-category-yoy-scan"
+      ],
+      "title": "Debit cards grew, but Payment Banks moved against it",
+      "body": "Debit cards rose over the past year, but not everywhere: Payment Banks contracted while the rest expanded. Public Sector Banks accounts for 39.7% of all the movement in the period. Because parts moved in opposite directions, much of the movement cancels out and the net figure understates how much actually shifted.",
+      "implication": "A growing total with members moving the other way is a different claim from broad growth. Read the members, not the headline.",
+      "chain": [
+        "Each sector's change over the year is measured, then compared with the total movement ignoring direction.",
+        "Coherence — the net change divided by the total movement ignoring direction — measures whether the parts agree.",
+        "Below one, some sectors are cancelling others out, so shares of the NET change would overstate; shares of total movement are reported instead."
+      ]
+    },
+    "pos-category-allocation": {
+      "group": "infra",
+      "cut": "by_type",
+      "type": "insight",
+      "representation": "deterministic-db",
+      "effect": {
+        "highlight": [
+          "PSB",
+          "Total"
+        ],
+        "tab": "distribution",
+        "distMode": "pct",
+        "focusCard": "pos_terminals",
+        "cut": {
+          "shape": "level",
+          "metrics": [
+            "pos_terminals"
+          ]
+        }
+      },
+      "sourceSignals": [
+        "pos-category-allocation",
+        "pos-category-momentum",
+        "pos-category-acceleration",
+        "pos-category-yoy-scan"
+      ],
+      "title": "POS terminals shrank, but Public Sector Banks and Small Finance Banks moved against it",
+      "body": "POS terminals fell over the past year, but not everywhere: Public Sector Banks and Small Finance Banks expanded while the rest contracted. Private Sector Banks accounts for 93.0% of all the movement in the period. Because parts moved in opposite directions, much of the movement cancels out and the net figure understates how much actually shifted.",
+      "implication": "A shrinking total with members moving the other way is a different claim from broad decline. Read the members, not the headline.",
+      "chain": [
+        "Each sector's change over the year is measured, then compared with the total movement ignoring direction.",
+        "Coherence — the net change divided by the total movement ignoring direction — measures whether the parts agree.",
+        "Below one, some sectors are cancelling others out, so shares of the NET change would overstate; shares of total movement are reported instead."
+      ]
+    },
     "dc-issuance-vs-spend-gap": {
       "group": "dc",
       "cut": "total",
@@ -1208,6 +1313,9 @@
     "cc-bank-divergence",
     "dc-bank-divergence",
     "pos-bank-divergence",
+    "cc-category-allocation",
+    "dc-category-allocation",
+    "pos-category-allocation",
     "dc-issuance-vs-spend-gap",
     "pos-fleet-vs-spend-gap",
     "atm-fleet-vs-withdrawal-gap"

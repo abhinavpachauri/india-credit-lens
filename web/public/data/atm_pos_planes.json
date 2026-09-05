@@ -166,6 +166,25 @@
    "news_score": null,
    "subject": "pos_terminals"
   },
+  "cc-category-allocation": {
+   "plane": "read",
+   "news_score": 4.0,
+   "subject": "credit_cards",
+   "reason": "record",
+   "direction": "up"
+  },
+  "dc-category-allocation": {
+   "plane": "subject",
+   "news_score": 0.0,
+   "subject": "debit_cards"
+  },
+  "pos-category-allocation": {
+   "plane": "read",
+   "news_score": 4.0,
+   "subject": "pos_terminals",
+   "reason": "record",
+   "direction": "up"
+  },
   "dc-issuance-vs-spend-gap": {
    "plane": "read",
    "news_score": 2.0,

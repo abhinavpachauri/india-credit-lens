@@ -341,6 +341,27 @@
           "date": "2026-08-26",
           "how_measured": "Enumerated every entity in the consolidated CSV. RBI's naming convention AND never-decomposed identify the set exactly, so a new source inherits the rule instead of a maintained list. Payments returns the empty set \u2014 its 'Other Transactions' is 0.62% of card volume and correctly triggers nothing.",
           "source": "analysis/core/residuals.py"
+        },
+        {
+          "metric": "Payments movement family \u2014 cards rendered vs signals computed",
+          "value": "0 \u2192 3 cards; mix_states {} \u2192 3 of 3 cuts",
+          "date": "2026-09-05",
+          "how_measured": "Payments computed momentum, acceleration, allocation and coherence every period since the family shipped in August; nothing read them. Wiring the shared reader emits one card per group and mix_states now resolves all three cuts (cc steered 0.952, dc contested 0.525, pos contested 0.864). SIBC output byte-identical through the refactor.",
+          "source": "analysis/core/movement_cards.py"
+        },
+        {
+          "metric": "Contested-branch prose \u2014 first render against a negative net",
+          "value": "1 of 3 payments movement cards was factually wrong before the fix",
+          "date": "2026-09-05",
+          "how_measured": "POS terminals: net -1,860,828 over the window, coherence 0.864. The contested branch hardcoded 'grew'/'rose' and named the fallers as dissenters, so the card read 'POS terminals rose over the past year' while the fleet shrank. SIBC never exposed it \u2014 credit grows in every window and every SIBC cut runs 0.99-1.00, so the branch had never rendered. Now driven by the sign of net, with four tests covering both directions.",
+          "source": "analysis/core/relational_insights.py"
+        },
+        {
+          "metric": "Ambiguous reasoning-key resolution \u2014 silent wrong answer \u2192 explicit refusal",
+          "value": "4 STALE errors that were comparing a contribution against a weight",
+          "date": "2026-09-05",
+          "how_measured": "Stage 4d resolves '{metric_id}:{entity_id}' by dict comprehension over all rows. Allocation writes each category three times (alloc/contribution/weight), so the key collides and the last row won. An ambiguous key now resolves to None and surfaces as INVALID rather than a confidently wrong comparison. Pinned by a test asserting the allocation key is ambiguous and the momentum key is not.",
+          "source": "analysis/pipelines/atm_pos/validate_atm_pos_claims.py"
         }
       ],
       "observations": [
@@ -435,6 +456,14 @@
         {
           "date": "2026-08-26",
           "observation": "Binary would have been wrong in both directions. Payments' 'Other Transactions' is 0.62% of card volume \u2014 caveating it is noise; engineering's 'Others' is 79.2% \u2014 the classification gap IS the story. And 'Others' differs from 'Other Textiles': the first says nothing about what it holds, the second names it, so applying the word 'unclassified' to both would have made one card less accurate than it already was. The distinction came from reading the data, not from the rule."
+        },
+        {
+          "date": "2026-09-05",
+          "observation": "Coherence gated something after all. The rule this project set is that coherence ROUTES and never gates \u2014 it picks which sentence is true, and nothing computed is suppressed. SIBC's allocation compute honours it: `weight` (a category's share at the START of the window) is emitted in every regime, and only `alloc` (share of the net) is withheld. The payments implementation of the same method family emitted weight INSIDE the coherence branch, so it vanished exactly when the mix was contested \u2014 and Layer 2 reads tilt = alloc - weight, so payments' two most interesting mixes produced no mix state at all. Two implementations of one declared method drifted on the one rule the family was designed around."
+        },
+        {
+          "date": "2026-09-05",
+          "observation": "A branch that has never rendered is not tested by the data, however green the gate. The contested movement branch shipped in August with tests driving it synthetically; against live data it had never once fired, because SIBC's coherence is 0.99-1.00 everywhere. Its first real render \u2014 payments POS terminals, negative net \u2014 produced a false sentence ('POS terminals rose over the past year' while the fleet shrank 1.86M). Third time this project has met the shape: the hardcoded '74%' that only rendered in a month with no rank change, the dominance guard behind an LLM-narrative check, and now this."
         }
       ],
       "open_questions": [

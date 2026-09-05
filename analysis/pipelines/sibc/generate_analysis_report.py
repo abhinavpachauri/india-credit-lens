@@ -28,6 +28,7 @@ from core.relational_insights import (                                       # n
     movement_insight, entity_roles, _subject as relational_subject)
 from core.paths import ROOT as REPO
 from core import residuals                                              # noqa: E402
+from core.movement_cards import MovementCut, reading as movement_reading   # noqa: E402
 from core.cuts import sibc_cut, sibc_sections, chart_label   # noqa: E402
 ANAL  = REPO / "analysis"
 SIG   = ANAL / "signals"
@@ -468,15 +469,15 @@ def _sibling_share_scan(registry: dict, sid: str, sig: dict) -> str | None:
 # speed signal that satisfies the pairing rule, and the noun the prose adds to ("...of all new
 # {subject}"). Adding a cut is a row here plus its registry entries — no new code.
 MOVEMENT_CUTS = [
-    # slug,        section,           speed signal,                    subject
-    ("main",       "mainSectors",     "sibc-main-yoy-scan",            "bank credit"),
-    ("ind-type",   "industryByType",  "sibc-industry-type-yoy-scan",   "industry credit"),
-    ("ind-size",   "industryBySize",  "sibc-ind-size-yoy-scan",        "industry credit"),
-    ("svcs",       "services",        "sibc-services-yoy-scan",        "services credit"),
-    ("pl",         "personalLoans",   "sibc-pl-yoy-scan",              "personal loans"),
-    ("psl",        "prioritySector",  "sibc-psl-yoy-scan",             "priority sector credit"),
-    ("infra-sub",  "industryByType",  "sibc-infra-sub-yoy-scan",       "infrastructure credit"),
+    MovementCut("main",      "mainSectors",    "sibc-main-yoy-scan",          "bank credit"),
+    MovementCut("ind-type",  "industryByType", "sibc-industry-type-yoy-scan", "industry credit"),
+    MovementCut("ind-size",  "industryBySize", "sibc-ind-size-yoy-scan",      "industry credit"),
+    MovementCut("svcs",      "services",       "sibc-services-yoy-scan",      "services credit"),
+    MovementCut("pl",        "personalLoans",  "sibc-pl-yoy-scan",            "personal loans"),
+    MovementCut("psl",       "prioritySector", "sibc-psl-yoy-scan",           "priority sector credit"),
+    MovementCut("infra-sub", "industryByType", "sibc-infra-sub-yoy-scan",     "infrastructure credit"),
 ]
+
 
 def movement_annotations(conn, period: str, registry: dict, sections: dict) -> list[tuple[str, dict]]:
     """One movement card per cut — where the new credit went, how fast, speeding up or not.
@@ -489,33 +490,12 @@ def movement_annotations(conn, period: str, registry: dict, sections: dict) -> l
     Three registry signals plus a speed scan, ONE card per cut. Emitting them separately would
     say one thing three times on a dashboard that already renders too many.
     """
-    def rows(metric_id: str, entity_type: str) -> dict:
-        return {e: v for e, v in conn.execute(
-            "SELECT entity_id, value FROM signals WHERE pipeline='sibc' AND period=? "
-            "AND metric_id=? AND entity_type=?", (period, metric_id, entity_type))}
-
     out: list[tuple[str, dict]] = []
-    for slug, section, speed_sid, subject in MOVEMENT_CUTS:
-        mom_sid, acc_sid, alloc_sid = (f"sibc-{slug}-momentum", f"sibc-{slug}-acceleration",
-                                       f"sibc-{slug}-allocation")
-        et = (registry.get(mom_sid, {}).get("compute", {}) or {}).get("entity_type")
-        if not et:
+    for cut_def in MOVEMENT_CUTS:
+        r = movement_reading(conn, "sibc", period, registry, cut_def, prefix="sibc-")
+        if r is None:
             continue
-        momentum = rows(mom_sid, et)
-        if not momentum:
-            continue
-        agg     = rows(mom_sid, "aggregate")
-        alloc   = rows(alloc_sid, "alloc")
-        contrib = rows(alloc_sid, "contribution")
-        accel   = rows(acc_sid, et)
-        speed_et = (registry.get(speed_sid, {}).get("compute", {}) or {}).get("entity_type", et)
-        speed   = rows(speed_sid, speed_et)
-
-        ins = movement_insight(alloc, contrib, momentum, agg.get("total"),
-                               agg.get("gross_movement"), agg.get("coherence"),
-                               accel, speed, subject)
-        if ins is None:
-            continue
+        ins, alloc_sid, section = r["insight"], r["alloc_sid"], cut_def.section
 
         # The chart's vocabulary, looked up — never the compute layer's. signals.db
         # carries the CSV's full RBI names ("Non-Banking Financial Companies (NBFCs)")
@@ -524,7 +504,7 @@ def movement_annotations(conn, period: str, registry: dict, sections: dict) -> l
         # series that does not exist. A lead the chart cannot draw at all — an
         # infrastructure sub-type, say — falls back to the cut's parent, which it can,
         # until §15.6 lets the chart render the sub-cut itself.
-        lead = max(alloc or momentum, key=(alloc or momentum).get)
+        lead = r["lead"]
         cut  = sibc_cut(registry.get(alloc_sid, {}).get("compute", {}))
         highlight = (chart_label(sections, section, lead)
                      or chart_label(sections, section, cut.parent_code or ""))
@@ -543,7 +523,7 @@ def movement_annotations(conn, period: str, registry: dict, sections: dict) -> l
             "insight_kind":  ins["insight_kind"],
             # Declared reads — the card quotes allocation next to speed and acceleration, so
             # Check 2g scopes to exactly these signals rather than falling back to period-wide.
-            "sourceSignals": [alloc_sid, mom_sid, acc_sid, speed_sid],
+            "sourceSignals": r["sources"],
             "basis": {
                 "facts":      data_facts(facts, {}),
                 "inferences": ins["chain"],
