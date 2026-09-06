@@ -1,0 +1,1997 @@
+{
+  "pipeline": "atm_pos",
+  "period": "2026-07-31",
+  "evaluated_at": "2026-09-06T07:34:27",
+  "prompt_version": "1.12",
+  "model": "claude-sonnet-4-5-20250929",
+  "prior_period": "2026-06-30",
+  "domains": {
+    "infrastructure": {
+      "narrative": "UPI QR codes continue to expand at a steady 16.7% YoY in Jul 2026, the 15th consecutive month in the 15–18% range — the network is adding 11–12 crore codes annually with no signs of saturation. This is the only acceptance infrastructure channel with sustained double-digit growth and structural expansion momentum. The rate has stabilised near the median of 16.3% across the 19-period series, indicating the channel is absorbing new merchant adoption at a steady pace despite the large installed base now exceeding 80 crore codes.",
+      "signals": {
+        "atm-fleet-vs-withdrawal-gap": {
+          "title": "ATM fleet outpacing withdrawals by 6.2pp — gap widening",
+          "observation": "The ATM fleet is growing 6.2 percentage points faster year-on-year than the value of cash withdrawn from it in Jul 2026.",
+          "direction": "The gap widened from 5.3pp in Jun to 6.2pp in Jul, continuing the expansion that began in Jun and now sitting in the upper range of the 19-period window.",
+          "chain": [
+            "The ATM fleet is growing 6.2 percentage points faster than cash withdrawals in Jul 2026.",
+            "This gap has widened 0.9 points from Jun's 5.3pp, extending the Jun reversal of the Apr-May plateau.",
+            "Banks are deploying ATMs ahead of withdrawal demand, and the gap is now in the upper range of the historical distribution."
+          ],
+          "inference": "The gap widened for the second consecutive month, adding 0.9 points to reach 6.2pp — banks are deploying ATMs faster than withdrawal growth justifies. The Jun reversal of the Apr-May plateau has now extended into Jul, confirming that ATM expansion is running ahead of utilisation.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_pair_divergence",
+            "record_type": "total"
+          }
+        },
+        "atm-offsite-abs": {
+          "title": "Offsite ATMs at 73,475 — first gain in 19 months",
+          "observation": "Offsite ATM count stands at 73,475 in Jul 2026, up 49 units from Jun's 73,426.",
+          "direction": "Rose from 73,426 to 73,475 in Jul, adding 49 units — the first month-on-month gain since Dec 2024, though the network remains in the lower range of the 31-period window.",
+          "chain": [
+            "Offsite ATMs added 49 units in Jul 2026, the first gain in 19 months.",
+            "The network had contracted every month from Jan 2024 through Jun 2026, losing 19,906 units over that span.",
+            "This is the first signal that the closure cycle may be stabilising, though the network is still near its record low."
+          ],
+          "inference": "Offsite ATMs added 49 units in Jul, the first gain in 19 months, ending a 19-month contraction that erased 19,906 units. This is the first evidence that the closure cycle may be stabilising, though the network remains near its record low and one month does not confirm a reversal.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_abs",
+            "record_type": "total",
+            "metric": "atm_offsite"
+          }
+        },
+        "atm-offsite-yoy": {
+          "title": "Offsite ATMs -4.38% YoY — contraction moderating to best level",
+          "observation": "Offsite ATMs contracted 4.38% year-on-year in Jul 2026, improving 2.44 points from Jun's -6.82%.",
+          "direction": "YoY decline improved from -6.82% in Jun to -4.38% in Jul, marking the best reading in this 19-period window and the seventh consecutive month of improvement.",
+          "chain": [
+            "Offsite ATMs contracted 4.38% YoY in Jul 2026, the best reading in this 19-period window.",
+            "The YoY rate has improved 9.5 points over seven months, from -13.9% in Jan to -4.38% in Jul.",
+            "Base effects are masking the closure cycle — the absolute count added 49 units in Jul, the first gain in 19 months."
+          ],
+          "inference": "The YoY rate improved to -4.38%, the best reading in this window, and the absolute count added 49 units in Jul — the first gain in 19 months. Base effects have been masking the closure cycle, but Jul's absolute gain suggests the contraction may be stabilising.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_yoy",
+            "record_type": "total",
+            "metric": "atm_offsite"
+          }
+        },
+        "atm-onsite-abs": {
+          "title": "Onsite ATMs at 136,337 — record high for fifth month",
+          "observation": "Onsite ATM count stands at 136,337 in Jul 2026, up 30 units from Jun's 136,307.",
+          "direction": "Rose from 136,307 to 136,337 in Jul, adding 30 units — the network is now at its all-time high for the fifth consecutive period.",
+          "chain": [
+            "Onsite ATMs added 30 units in Jul 2026, reaching 136,337 — a record high for the fifth straight month.",
+            "The network has added 1,528 units over five months, from 134,809 in May 2025 to 136,337 in Jul 2026.",
+            "Banks are sustaining onsite expansion at a steady pace, prioritising branch-adjacent locations over offsite deployments."
+          ],
+          "inference": "Onsite ATMs added 30 units in Jul, reaching a record high for the fifth consecutive month. The network has added 1,528 units over five months, and the steady pace confirms banks are prioritising branch-adjacent locations over offsite deployments.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_abs",
+            "record_type": "total",
+            "metric": "atm_onsite"
+          }
+        },
+        "atm-onsite-yoy": {
+          "title": "Onsite ATMs +3.90% YoY — holding near median",
+          "observation": "Onsite ATMs grew 3.90% year-on-year in Jul 2026, down 0.02 points from Jun's 3.92%.",
+          "direction": "YoY growth held steady at 3.90% in Jul, down just 0.02 points from Jun's 3.92%, and remains near the median for this 19-period window.",
+          "chain": [
+            "Onsite ATMs grew 3.90% YoY in Jul 2026, down 0.02 points from Jun's 3.92%.",
+            "The YoY rate has held between 2.2% and 6.4% over the past 19 months, with Jul near the median of 2.9%.",
+            "Banks are sustaining onsite expansion at a consistent pace, with no acceleration or deceleration in Jul."
+          ],
+          "inference": "Onsite ATM growth held steady at 3.90% YoY in Jul, down just 0.02 points from Jun, and remains near the median for this window. The YoY rate has been stable for 19 months, and Jul's reading confirms banks are sustaining onsite expansion at a consistent pace.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_yoy",
+            "record_type": "total",
+            "metric": "atm_onsite"
+          }
+        },
+        "bharat-qr-abs": {
+          "title": "Bharat QR at 52.69 lakh — stabilising after Jun collapse",
+          "observation": "Bharat QR code deployment stands at 52.69 lakh in Jul 2026, up 3,627 codes from Jun's 52.66 lakh.",
+          "direction": "Rose from 52.66 lakh to 52.69 lakh in Jul, adding 3,627 codes — the first gain in four months, though the network remains in the lower range of the 31-period window.",
+          "chain": [
+            "Bharat QR codes added 3,627 units in Jul 2026, the first gain in four months.",
+            "The network had lost 4.34 lakh codes over the prior four months, from 60.71 lakh in Sep 2025 to 52.66 lakh in Jun 2026.",
+            "Jul's gain is marginal, but it is the first signal that the collapse may be stabilising."
+          ],
+          "inference": "Bharat QR codes added 3,627 units in Jul, the first gain in four months, after losing 4.34 lakh codes from Sep 2025 to Jun 2026. The gain is marginal, but it is the first evidence that the collapse may be stabilising, though the network remains near its record low.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_abs",
+            "record_type": "total",
+            "metric": "bharat_qr"
+          }
+        },
+        "bharat-qr-yoy": {
+          "title": "Bharat QR -20.66% YoY — contraction moderating slightly",
+          "observation": "Bharat QR codes contracted 20.66% year-on-year in Jul 2026, improving 0.74 points from Jun's -21.39%.",
+          "direction": "YoY decline improved from -21.39% in Jun to -20.66% in Jul, marking the first improvement in three months, though the rate remains in the lower range of the 19-period window.",
+          "chain": [
+            "Bharat QR codes contracted 20.66% YoY in Jul 2026, improving 0.74 points from Jun's -21.39%.",
+            "The YoY rate had worsened 11.5 points over six months, from -9.3% in Jan to -21.39% in Jun.",
+            "Jul's improvement is marginal, but it aligns with the absolute count's first gain in four months."
+          ],
+          "inference": "Bharat QR contraction improved to -20.66% YoY in Jul, the first improvement in three months, after worsening 11.5 points from Jan to Jun. The improvement is marginal, but it aligns with Jul's absolute gain and suggests the collapse may be stabilising.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_yoy",
+            "record_type": "total",
+            "metric": "bharat_qr"
+          }
+        },
+        "micro-atm-yoy": {
+          "title": "Micro-ATMs -9.44% YoY — contraction worsening to lower range",
+          "observation": "Micro-ATMs contracted 9.44% year-on-year in Jul 2026, worsening 1.04 points from Jun's -8.39%.",
+          "direction": "YoY decline worsened from -8.39% in Jun to -9.44% in Jul, marking the fourth consecutive month of deterioration and now sitting in the lower range of the 19-period window.",
+          "chain": [
+            "Micro-ATMs contracted 9.44% YoY in Jul 2026, worsening 1.04 points from Jun's -8.39%.",
+            "The YoY rate has worsened 4.1 points over four months, from -5.3% in Feb to -9.44% in Jul.",
+            "The contraction is accelerating, and the network is now near the lower range of the historical distribution."
+          ],
+          "inference": "Micro-ATM contraction worsened to -9.44% YoY in Jul, the fourth consecutive month of deterioration, and is now in the lower range of the 19-period window. The YoY rate has worsened 4.1 points over four months, and the contraction is accelerating as rural deployment economics remain unviable.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_yoy",
+            "record_type": "total",
+            "metric": "micro_atms"
+          }
+        },
+        "micro-atms-abs": {
+          "title": "Micro-ATMs at 13.28 lakh — seventh straight monthly decline",
+          "observation": "Micro-ATM count stands at 13.28 lakh in Jul 2026, down 8,486 units from Jun's 13.37 lakh.",
+          "direction": "Fell from 13.37 lakh to 13.28 lakh in Jul, losing 8,486 units — the network is now at its lowest level in this 31-period window, marking the seventh consecutive month of contraction.",
+          "chain": [
+            "Micro-ATMs lost 8,486 units in Jul 2026, the seventh consecutive month of contraction.",
+            "The network has lost 61,272 units over seven months, from 13.90 lakh in Feb 2026 to 13.28 lakh in Jul 2026.",
+            "The deployment model is no longer viable as UPI and bank correspondents dominate rural cash access."
+          ],
+          "inference": "Micro-ATMs lost 8,486 units in Jul, the seventh consecutive month of contraction, and are now at their lowest level in this dataset. The network has lost 61,272 units over seven months, and the deployment model is no longer viable as UPI and bank correspondents dominate rural cash access.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_abs",
+            "record_type": "total",
+            "metric": "micro_atms"
+          }
+        },
+        "pos-bank-divergence": {
+          "title": "Karur Vysya +426pp divergence — widest gap among 11 banks",
+          "observation": "Karur Vysya Bank's POS terminal growth diverges from its category (Private Sector Banks) by +426.12 percentage points in Jul 2026, the widest gap among 11 active banks.",
+          "direction": "The spread across all 11 banks is 504.82pp, from Karur Vysya's +426.12pp to UCO Bank's -78.70pp — Karur Vysya's divergence narrowed from +484.32pp in Jun to +426.12pp in Jul.",
+          "chain": [
+            "Karur Vysya Bank's POS terminal growth diverges from its Private Sector peer group by +426.12pp in Jul 2026.",
+            "The bank's divergence narrowed 58.20 points from Jun's +484.32pp, but remains the widest gap among 11 active banks.",
+            "The spread across all banks is 504.82pp, indicating POS expansion is highly concentrated among a few aggressive deployers."
+          ],
+          "inference": "Karur Vysya's divergence narrowed 58.20 points to +426.12pp in Jul, but remains the widest gap among 11 banks. The spread across all banks is 504.82pp, and POS expansion is highly concentrated among a few aggressive deployers, with Karur Vysya far ahead of its Private Sector peer group.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_bank_divergence",
+            "record_type": "total",
+            "metric": "pos_terminals"
+          }
+        },
+        "pos-bank-scan": {
+          "title": "RBL at 27.20 lakh POS terminals — largest fleet, now strengthening",
+          "observation": "RBL Bank operates 27.20 lakh POS terminals in Jul 2026, the largest deployment among 63 banks, followed by Axis (25.56 lakh) and HDFC (19.39 lakh).",
+          "direction": "RBL rose from 26.50 lakh in Jun to 27.20 lakh in Jul, adding 69,611 terminals and shifting from weakening to strengthening, while Axis fell from 25.60 lakh to 25.56 lakh and HDFC rose from 19.36 lakh to 19.39 lakh.",
+          "chain": [
+            "RBL Bank added 69,611 terminals in Jul 2026, reversing Jun's 1.13 lakh loss and shifting from weakening to strengthening.",
+            "RBL now operates 27.20 lakh terminals, the largest fleet among 63 banks, followed by Axis (25.56 lakh) and HDFC (19.39 lakh).",
+            "The top three banks control 65.3% of all POS terminals, and RBL's Jul gain suggests it has resumed deployment after Jun's sharp drop."
+          ],
+          "inference": "RBL added 69,611 terminals in Jul, reversing Jun's 1.13 lakh loss and shifting from weakening to strengthening. The bank now operates 27.20 lakh terminals, the largest fleet among 63 banks, and the Jul gain suggests it has resumed deployment after Jun's anomaly. Jammu and Kashmir Bank and DBS India Bank also shifted from weakening to strengthening in Jul.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_bank_scan",
+            "record_type": "bank",
+            "metric": "pos_terminals",
+            "value_type": "value"
+          }
+        },
+        "pos-category-allocation": {
+          "title": "Private banks captured 92.17% of new POS units over 12 months",
+          "observation": "Private Sector Banks captured 92.17% of net new POS terminals deployed over the past 12 months in Jul 2026.",
+          "direction": "The share fell from 93.03% in Jun to 92.17% in Jul, down 0.86 points, and remains in the upper range of the 19-period window.",
+          "chain": [
+            "Private Sector Banks captured 92.17% of net new POS terminals deployed over the past 12 months in Jul 2026.",
+            "The share fell 0.86 points from Jun's 93.03%, but remains in the upper range of the 19-period window.",
+            "Private banks continue to dominate POS expansion, with Public Sector Banks capturing just 7.83% of new units."
+          ],
+          "inference": "Private Sector Banks captured 92.17% of net new POS terminals over the past 12 months, down 0.86 points from Jun but still in the upper range of the 19-period window. Private banks continue to dominate POS expansion, with Public Sector Banks capturing just 7.83% of new units.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_category_allocation",
+            "record_type": "total",
+            "metric": "pos_terminals"
+          }
+        },
+        "pos-category-momentum": {
+          "title": "POS net adds -18.85 lakh units YoY — weakest on record",
+          "observation": "POS terminals recorded a net decline of 18.85 lakh units over the past 12 months in Jul 2026.",
+          "direction": "Net adds fell -18.61 lakh → -18.85 lakh, deteriorating by 24,638 units — the weakest reading in the 19-period series.",
+          "chain": [
+            "POS terminals recorded a net decline of 18.85 lakh units over the past 12 months in Jul 2026, the weakest reading on record.",
+            "The network has been in sustained contraction since Jun 2026, when net adds first turned negative at -18.61 lakh units.",
+            "The 24,638-unit deterioration in one month confirms the contraction is deepening, not stabilising."
+          ],
+          "inference": "The -18.85 lakh net decline is the weakest reading on record and confirms the POS network is in sustained structural collapse. The network has now contracted for two consecutive months, with no sign of stabilisation — the trajectory has shifted from high-volume expansion (2.94 lakh net adds in Jul 2025) to the steepest contraction in the dataset.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_category_momentum",
+            "record_type": "total",
+            "metric": "pos_terminals"
+          }
+        },
+        "pos-category-rotation": {
+          "title": "PSBs gained 4.69pp POS share in 12m — rotation mass 4.70pp",
+          "observation": "Public Sector Banks gained 4.69 percentage points of POS terminal share over the past 12 months, while Private Sector Banks lost 4.69pp.",
+          "direction": "Public banks rose +4.69pp, Private banks fell -4.69pp, Small Finance Banks rose +0.01pp, Payment Banks held at +0.00pp, and Foreign Banks fell -0.01pp — the rotation mass is 4.70pp.",
+          "chain": [
+            "Public Sector Banks gained 4.69 percentage points of POS terminal share over the past 12 months, while Private Sector Banks lost 4.69pp.",
+            "The rotation mass of 4.70pp is the largest in the dataset, indicating the most significant structural shift in deployment leadership on record.",
+            "The 4.69pp gain vs -4.69pp loss is a 0.20pp acceleration from Jun's 4.49pp vs -4.49pp, confirming the rotation is intensifying."
+          ],
+          "inference": "The 4.70pp rotation mass is the largest in the dataset and confirms PSBs are taking POS terminal share from Private Sector Banks at an accelerating pace. The 4.69pp gain vs -4.69pp loss is a 0.20pp acceleration from Jun's 4.49pp vs -4.49pp, signaling the structural shift in deployment leadership is intensifying, not stabilising.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_category_rotation",
+            "record_type": "total",
+            "metric": "pos_terminals"
+          }
+        },
+        "pos-category-share-scan": {
+          "title": "Private banks 79.2%, PSBs 20.6% — shares stabilised after Jun shift",
+          "observation": "Private sector banks hold 79.2% of all POS terminals in Jul 2026, while public sector banks hold 20.6%.",
+          "direction": "Private banks held steady at 79.3% → 79.2%, a 0.03pp decline; PSBs held steady at 20.6% → 20.6%, a 0.03pp gain — shares have stabilised after Jun's 2.5-point redistribution event.",
+          "chain": [
+            "Private sector banks hold 79.2% of all POS terminals in Jul 2026, while public sector banks hold 20.6%.",
+            "Shares have stabilised after Jun's 2.5-point redistribution event, with Private banks at 79.2% (down 0.03pp) and PSBs at 20.6% (up 0.03pp).",
+            "The 79.2% private share remains below the p25 threshold (80.5%), while the 20.6% PSB share remains at the maximum of the historical distribution."
+          ],
+          "inference": "The share distribution has stabilised after Jun's 2.5-point redistribution event, with Private banks at 79.2% and PSBs at 20.6%. The 0.03pp movements are noise, but the structural shift is locked in — Private banks remain below the p25 threshold for the second consecutive month, while PSBs remain at the maximum of the historical distribution. The redistribution is complete, not reversing.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_category_scan_share",
+            "record_type": "bank",
+            "metric": "pos_terminals"
+          }
+        },
+        "pos-fleet-vs-spend-gap": {
+          "title": "POS spend lags fleet by 19.7pp — utilisation collapse moderating",
+          "observation": "Transaction value growth across POS terminals lags fleet growth by 19.7 percentage points in Jul 2026.",
+          "direction": "Gap narrowed from -21.8pp in Jun to -19.7pp in Jul, a 2.1-point improvement — the spread remains sharply negative but is moderating from Jun's record low.",
+          "chain": [
+            "Transaction value growth across POS terminals lags fleet growth by 19.7 percentage points in Jul 2026.",
+            "The gap narrowed from -21.8pp in Jun to -19.7pp in Jul, a 2.1-point improvement, but remains sharply negative.",
+            "The -19.7pp gap is still below the p25 threshold and confirms per-terminal productivity remains depressed despite the modest improvement."
+          ],
+          "inference": "The -19.7pp gap is moderating from Jun's -21.8pp record low, but the utilisation collapse is far from resolved. The 2.1-point improvement is the first sign of stabilisation after Jun's 17.1-point deterioration, but the gap remains sharply negative and below the p25 threshold — per-terminal productivity is still depressed, with the POS network growing in count but shrinking in transaction value.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_pair_divergence",
+            "record_type": "total"
+          }
+        },
+        "pos-private-share": {
+          "title": "Private bank POS share 79.24% — stabilised below p25",
+          "observation": "Private sector banks hold 79.24% of POS terminals in Jul 2026, down 0.03 points from Jun's 79.26%.",
+          "direction": "Share held steady at 79.3% → 79.2%, a 0.03-point decline — shares have stabilised after Jun's 2.5-point drop, but remain below the p25 threshold (80.5%).",
+          "chain": [
+            "Private sector banks hold 79.24% of POS terminals in Jul 2026, down 0.03 points from Jun's 79.26%.",
+            "The 0.03-point decline is noise, but the 79.2% share remains below the p25 threshold (80.5%) for the second consecutive month.",
+            "The share has stabilised after Jun's 2.5-point drop, the steepest monthly decline on record, confirming the structural retreat is complete."
+          ],
+          "inference": "The 79.2% share has stabilised after Jun's 2.5-point drop, but remains below the p25 threshold for the second consecutive month. The 0.03-point decline is noise, but the structural retreat is locked in — private banks are no longer expanding their POS footprint, and the 79.2% share is the lowest sustained level since Apr 2024.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_category_share",
+            "record_type": "bank",
+            "metric": "pos_terminals",
+            "bank_category": "Private Sector Banks"
+          }
+        },
+        "pos-psb-share": {
+          "title": "PSB POS share 20.61% — stabilised at record high",
+          "observation": "Public sector banks hold 20.61% of POS terminals in Jul 2026, up 0.03 points from Jun's 20.59%.",
+          "direction": "Share held steady at 20.6% → 20.6%, a 0.03-point gain — shares have stabilised after Jun's 2.5-point surge, remaining at the maximum of the historical distribution.",
+          "chain": [
+            "Public sector banks hold 20.61% of POS terminals in Jul 2026, up 0.03 points from Jun's 20.59%.",
+            "The 0.03-point gain is noise, but the 20.6% share remains at the maximum of the historical distribution for the second consecutive month.",
+            "The share has stabilised after Jun's 2.5-point surge, the largest single-month increase on record, confirming the structural expansion is complete."
+          ],
+          "inference": "The 20.6% share has stabilised after Jun's 2.5-point surge, remaining at the maximum of the historical distribution for the second consecutive month. The 0.03-point gain is noise, but the structural expansion is locked in — PSBs have captured the largest share of POS terminals on record, and the 20.6% level is now the new baseline.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_category_share",
+            "record_type": "bank",
+            "metric": "pos_terminals",
+            "bank_category": "Public Sector Banks"
+          }
+        },
+        "pos-terminals-abs": {
+          "title": "POS terminals 1.00 crore — up 1.05 lakh units in Jul",
+          "observation": "POS terminal count stands at 1.00 crore in Jul 2026, up 1.05 lakh units from 99.22 lakh in Jun 2026.",
+          "direction": "Rose 99.2 lakh → 1.00 crore, a 1.05 lakh-unit gain — the first monthly increase since May 2026, but the count remains near the median of the historical distribution.",
+          "chain": [
+            "POS terminal count stands at 1.00 crore in Jul 2026, up 1.05 lakh units from 99.22 lakh in Jun 2026.",
+            "The 1.05 lakh-unit gain is the first monthly increase since May 2026, ending a two-month contraction phase.",
+            "The count remains near the median of the historical distribution, well below the Oct 2025 peak of 1.23 crore units."
+          ],
+          "inference": "The 1.05 lakh-unit gain is the first monthly increase since May 2026, ending a two-month contraction phase that saw the network lose 16.03 lakh units in Jun alone. The count has recovered to 1.00 crore, but remains near the median of the historical distribution and well below the Oct 2025 peak of 1.23 crore units — this is a stabilisation, not a recovery.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_abs",
+            "record_type": "total",
+            "metric": "pos_terminals"
+          }
+        },
+        "pos-terminals-pos-streak": {
+          "title": "POS terminals grew 1 month — streak reset after Jun decline",
+          "observation": "POS terminals recorded 1 consecutive period of growth in Jul 2026, up from 0 periods in Jun 2026.",
+          "direction": "Streak reset from 0 periods to 1 — the network has resumed growth after Jun's 16.03 lakh-unit decline, but the streak remains at the minimum level.",
+          "chain": [
+            "POS terminals recorded 1 consecutive period of growth in Jul 2026, up from 0 periods in Jun 2026.",
+            "The streak reset from 0 to 1 confirms the network has resumed growth after Jun's 16.03 lakh-unit decline.",
+            "The 1-period streak is at the minimum level and confirms the network is in a stop-start phase, with no sustained expansion trajectory."
+          ],
+          "inference": "The streak reset from 0 to 1 confirms the network has resumed growth after Jun's 16.03 lakh-unit decline, but the 1-period streak is at the minimum level and confirms the network is in a stop-start phase. The network has failed to sustain growth beyond 1 month in the last eight months, and the 17-period run that ended in Nov 2025 remains the longest on record — this is a stabilisation, not a recovery.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_mom_streak",
+            "record_type": "total",
+            "metric": "pos_terminals"
+          }
+        },
+        "pos-terminals-yoy": {
+          "title": "POS terminals -15.83% YoY — contraction unchanged from Jun",
+          "observation": "POS terminals contracted 15.83% year-on-year in Jul 2026, down 0.03 points from -15.79% in Jun 2026.",
+          "direction": "YoY growth held steady at -15.8% → -15.8%, a 0.03-point deterioration — the contraction rate has stabilised at the weakest level on record.",
+          "chain": [
+            "POS terminals contracted 15.83% year-on-year in Jul 2026, down 0.03 points from -15.79% in Jun 2026.",
+            "The 0.03-point deterioration is noise, but the -15.8% YoY rate remains the weakest reading on record.",
+            "The contraction rate has stabilised after Jun's 15.3-point deterioration, confirming the network is no longer accelerating its decline."
+          ],
+          "inference": "The -15.8% YoY rate has stabilised after Jun's 15.3-point deterioration, confirming the network is no longer accelerating its decline. The 0.03-point deterioration is noise, but the -15.8% rate remains the weakest reading on record — the network now holds 15.8% fewer terminals than it did a year ago, and the contraction is locked in, not reversing.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_yoy",
+            "record_type": "total",
+            "metric": "pos_terminals"
+          }
+        },
+        "upi-bharat-qr-ratio": {
+          "title": "UPI QR 152.4× Bharat QR — gap widened 1.88 points in Jul",
+          "observation": "There are now 152.4 UPI QR codes for every Bharat QR code in Jul 2026, up 1.88 from 150.5 in Jun 2026.",
+          "direction": "Ratio rose 150.5× → 152.4×, the highest level on record — the gap has widened by 1.9 points, continuing the sustained divergence.",
+          "chain": [
+            "There are now 152.4 UPI QR codes for every Bharat QR code in Jul 2026, up 1.88 from 150.5 in Jun 2026.",
+            "The 152.4× ratio is the highest level on record, extending the sustained divergence that began in Sep 2025.",
+            "The 1.9-point widening is slower than Jun's 11.4-point surge, but confirms Bharat QR is in terminal decline with no sign of recovery."
+          ],
+          "inference": "The 152.4× ratio is the highest level on record and confirms Bharat QR is effectively obsolete — UPI QR is capturing all incremental deployment, with the gap widening by 1.9 points in Jul. The pace is slower than Jun's 11.4-point surge, but the divergence is sustained and structural — Bharat QR is in terminal decline, with no sign of recovery.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_ratio",
+            "record_type": "total",
+            "metric": "upi_qr",
+            "denominator_metric": "bharat_qr"
+          }
+        },
+        "upi-qr-abs": {
+          "title": "UPI QR codes 80.30 crore — up 1.05 crore in Jul",
+          "observation": "UPI QR code deployment reached 80.30 crore in Jul 2026, up 1.05 crore codes from 79.26 crore in Jun 2026.",
+          "direction": "Rose 79.26 crore → 80.30 crore, decelerating from Jun's 1.28 crore-code gain — the 1.05 crore monthly increase is the second-largest in the 31-period series.",
+          "chain": [
+            "UPI QR code deployment reached 80.30 crore in Jul 2026, up 1.05 crore codes from 79.26 crore in Jun 2026.",
+            "The 1.05 crore-code gain is the second-largest single-month increase on record, decelerating from Jun's 1.28 crore-code gain.",
+            "The two-month total of 2.33 crore codes is the fastest pace in the dataset, confirming UPI QR deployment is in sustained high-volume expansion."
+          ],
+          "inference": "The 1.05 crore-code gain is the second-largest single-month increase on record and confirms UPI QR deployment is in sustained high-volume expansion. The two-month total of 2.33 crore codes is the fastest pace in the dataset, and the network has now exceeded 80 crore codes — UPI QR is the only acceptance infrastructure channel with structural expansion momentum, while POS is contracting at an unprecedented rate.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_abs",
+            "record_type": "total",
+            "metric": "upi_qr"
+          }
+        },
+        "upi-qr-per-pos": {
+          "title": "UPI QR 80.1× POS terminals — gap widened 0.20 points in Jul",
+          "observation": "There are now 80.1 UPI QR codes for every POS terminal in Jul 2026, up 0.20 from 79.9 in Jun 2026.",
+          "direction": "Ratio rose 79.9× → 80.1×, the highest level on record — the gap has widened by 0.2 points as UPI QR scaled 1.05 crore codes while POS terminals rose 1.05 lakh units.",
+          "chain": [
+            "There are now 80.1 UPI QR codes for every POS terminal in Jul 2026, up 0.20 from 79.9 in Jun 2026.",
+            "The 80.1× ratio is the highest level on record, extending the sustained divergence that began in Nov 2025.",
+            "UPI QR added 1.05 crore codes while POS added 1.05 lakh units — a 10× difference in absolute growth, confirming UPI QR is the dominant acceptance infrastructure channel."
+          ],
+          "inference": "The 80.1× ratio is the highest level on record and confirms UPI QR is the dominant acceptance infrastructure channel, while POS is in terminal decline. The 0.2-point widening is slower than Jun's 12.2-point surge, but the divergence is sustained and structural — UPI QR added 1.05 crore codes while POS added 1.05 lakh units, a 10× difference in absolute growth.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_ratio",
+            "record_type": "total",
+            "metric": "upi_qr",
+            "denominator_metric": "pos_terminals"
+          }
+        },
+        "upi-qr-yoy": {
+          "title": "UPI QR codes 16.7% YoY — stable growth, 14-month run",
+          "observation": "UPI QR codes grew 16.72% year-on-year in Jul 2026, down 0.15 points from 16.87% in Jun 2026.",
+          "direction": "YoY growth eased 16.9% → 16.7%, a marginal 0.2-point decline — the rate has held in the 15–18% range for 15 consecutive months, with Jul's 16.7% near the median of 16.3%.",
+          "chain": [
+            "UPI QR codes grew 16.72% YoY in Jul 2026, the 15th consecutive month in the 15–18% range.",
+            "The rate has stabilised near the median of 16.3% across the 19-period series, with no acceleration or deceleration trend visible since Apr 2025.",
+            "This sustained mid-teens growth indicates the network is adding 11–12 crore codes annually without saturation, even as the installed base has risen above 80 crore codes."
+          ],
+          "inference": "The 16.7% YoY rate confirms UPI QR deployment remains in a stable, high-growth phase — the longest sustained expansion run in the acceptance infrastructure dataset. The rate has neither accelerated nor decelerated materially for over a year, suggesting the channel is absorbing new merchant adoption at a steady pace despite the large base. UPI QR is the only acceptance infrastructure segment with sustained double-digit growth.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_yoy",
+            "record_type": "total",
+            "metric": "upi_qr"
+          }
+        }
+      }
+    },
+    "credit_card_txn": {
+      "narrative": "Credit card POS volume growth has decelerated for four consecutive months, falling from 23.1% in May 2026 to 20.7% in July — the weakest rate in 19 months and now below the historical lower range. The 23–24% band that characterised 2025 has broken down. Offline retail card spending is losing momentum steadily, with no stabilisation yet visible. For card issuers, this marks a structural shift: the growth trajectory that held firm through 2025 is now compressing toward the bottom of the range.",
+      "signals": {
+        "cc-atm-val-abs": {
+          "title": "CC ATM cash at ₹0.37L Cr — up 4.4% from Jun 2026",
+          "observation": "Credit card ATM cash withdrawals totalled ₹0.37L Cr in Jul 2026, up ₹0.016L Cr from Jun 2026.",
+          "direction": "Value rose ₹3.57L Cr → ₹3.72L Cr, a 4.4% gain that reverses the Jun decline and remains near the 31-period median.",
+          "chain": [
+            "ATM cash value rose 4.4% to ₹0.37L Cr in Jul 2026, the first sequential gain in three months.",
+            "The level remains near the 31-period median, well below the Jan 2024 peak of ₹0.45L Cr.",
+            "The channel has stabilised after 18 months of structural contraction, but has not recovered meaningfully."
+          ],
+          "inference": "ATM cash has posted its first sequential gain in three months at ₹0.37L Cr, up 4.4% from Jun — the channel has stabilised near the median after 18 months of decline, but remains far below its Jan 2024 peak of ₹0.45L Cr. This is a pause in the contraction, not a reversal.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_abs",
+            "record_type": "total",
+            "metric": "cc_atm_withdrawal_val"
+          }
+        },
+        "cc-atm-val-share": {
+          "title": "CC ATM cash share flat at 0.18% — fourth month at record low",
+          "observation": "ATM cash withdrawals account for 0.18% of total credit card transaction value in Jul 2026, unchanged from Jun 2026.",
+          "direction": "Share held flat at 0.18%, matching the Apr–Jul minimum and remaining below the 31-period p25 in the lower range.",
+          "chain": [
+            "ATM cash share has held at 0.18% for four consecutive months, the longest run at this level.",
+            "The share is below the 31-period p25, marking the lower range of the historical distribution.",
+            "The channel's structural irrelevance to credit card value flows is now entrenched."
+          ],
+          "inference": "ATM cash share remains cemented at 0.18% for the fourth month running, the lowest on record — the channel is structurally marginal for credit card value flows, with no sign of recovery despite the Jul volume uptick.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_ratio_sum",
+            "record_type": "total",
+            "metric": "cc_atm_withdrawal_val",
+            "denominator_metrics": [
+              "cc_pos_txn_val",
+              "cc_ecom_txn_val",
+              "cc_atm_withdrawal_val",
+              "cc_other_txn_val"
+            ]
+          }
+        },
+        "cc-atm-val-yoy": {
+          "title": "CC ATM cash YoY at 2.92% — second positive reading on record",
+          "observation": "Credit card ATM cash withdrawal value grew 2.92% year-on-year in Jul 2026.",
+          "direction": "YoY growth decelerated 3.38% → 2.92%, a 0.46pp decline that remains positive and above the 19-period p75 in the upper range.",
+          "chain": [
+            "ATM cash YoY held positive at 2.92% in Jul 2026, the second consecutive expansion after 17 months of contraction.",
+            "The rate is above the 19-period p75, marking the upper range of the historical distribution.",
+            "The channel has stopped shrinking year-on-year, but growth remains modest and the absolute level is near the 31-period median."
+          ],
+          "inference": "ATM cash YoY has held positive at 2.92% for the second month running, the strongest two-month run on record — the channel has stopped shrinking year-on-year, confirming the Jun inflection was not a one-month anomaly. Growth remains modest, and the absolute level is still near the median.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_yoy",
+            "record_type": "total",
+            "metric": "cc_atm_withdrawal_val"
+          }
+        },
+        "cc-atm-vol-abs": {
+          "title": "CC ATM volume at 6.53 lakh — up 3.6% from Jun 2026",
+          "observation": "Credit card ATM withdrawals totalled 6.53 lakh transactions in Jul 2026, up 22,575 from Jun 2026.",
+          "direction": "Volume rose 6.30 lakh → 6.53 lakh, a 3.6% gain that reverses the Jun decline and remains below the 31-period p25 in the lower range.",
+          "chain": [
+            "ATM volume rose 3.6% to 6.53 lakh in Jul 2026, the first sequential gain in three months.",
+            "The level remains below the 31-period p25, marking the lower range of the historical distribution.",
+            "The channel has stabilised after 18 months of structural contraction, but has not recovered meaningfully."
+          ],
+          "inference": "ATM volume has posted its first sequential gain in three months at 6.53 lakh, up 3.6% from Jun — the channel has stabilised in the lower range after 18 months of decline, but remains far below its Jan 2024 peak of 8.26 lakh. This is a pause in the contraction, not a reversal.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_abs",
+            "record_type": "total",
+            "metric": "cc_atm_withdrawal_vol"
+          }
+        },
+        "cc-atm-vol-share": {
+          "title": "CC ATM volume share flat at 0.11% — fifth month at record low",
+          "observation": "ATM cash withdrawals represent 0.11% of total credit card transaction volume in Jul 2026, unchanged from Jun 2026.",
+          "direction": "Share held flat at 0.11%, matching the Apr–Jul minimum and remaining below the 31-period p25 in the lower range.",
+          "chain": [
+            "ATM volume share has held at 0.11% for five consecutive months, the longest run at this level.",
+            "The share is below the 31-period p25, marking the lower range of the historical distribution.",
+            "The channel's structural irrelevance to credit card transaction frequency is now entrenched."
+          ],
+          "inference": "ATM volume share remains at 0.11% for the fifth month running, the lowest on record — the channel is structurally marginal for credit card transaction frequency, with no sign of recovery despite the Jul volume uptick.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_ratio_sum",
+            "record_type": "total",
+            "metric": "cc_atm_withdrawal_vol",
+            "denominator_metrics": [
+              "cc_atm_withdrawal_vol",
+              "cc_ecom_txn_vol",
+              "cc_pos_txn_vol",
+              "cc_other_txn_vol"
+            ]
+          }
+        },
+        "cc-atm-vol-streak": {
+          "title": "CC ATM volume streak reset to 0 — decline ended after one month",
+          "observation": "Credit card ATM withdrawal volume has declined for 0 consecutive periods as of Jul 2026.",
+          "direction": "The decline streak reset from 1 in Jun 2026 to 0 in Jul 2026, marking the end of the one-month contraction.",
+          "chain": [
+            "The decline streak reset to 0 in Jul 2026 after one month of contraction in Jun.",
+            "This is the minimum streak value, indicating the channel posted sequential growth in Jul.",
+            "The reset confirms the Jun decline was a one-month pause, not the resumption of a sustained downtrend."
+          ],
+          "inference": "ATM volume streak has reset to 0 after one month of decline — the Jul uptick confirms the Jun contraction was a one-month pause, not the resumption of the structural downtrend. The channel has stabilised, but remains in the lower range.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_mom_streak",
+            "record_type": "total",
+            "metric": "cc_atm_withdrawal_vol"
+          }
+        },
+        "cc-atm-vol-yoy": {
+          "title": "CC ATM volume YoY at -1.51% — turned negative after one month",
+          "observation": "Credit card ATM withdrawal volume fell 1.51% year-on-year in Jul 2026.",
+          "direction": "YoY growth decelerated 0.37% → -1.51%, a 1.88pp decline that turns negative and moves above the 19-period p75 in the upper range.",
+          "chain": [
+            "ATM volume YoY turned negative at -1.51% in Jul 2026, the first contraction after one month of expansion in Jun.",
+            "The rate is above the 19-period p75, marking the upper range of the historical distribution.",
+            "The channel has resumed year-on-year contraction, but the decline is modest compared to the -24.3% trough in Apr 2025."
+          ],
+          "inference": "ATM volume YoY has turned negative at -1.51% after one month of expansion — the Jun inflection was a one-month anomaly, not a sustained reversal. The channel has resumed year-on-year contraction, but the decline is modest compared to the -24.3% trough in Apr 2025.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_yoy",
+            "record_type": "total",
+            "metric": "cc_atm_withdrawal_vol"
+          }
+        },
+        "cc-ecom-val-abs": {
+          "title": "CC ecommerce value at ₹132.3L Cr — up 4.2% from Jun 2026",
+          "observation": "Credit card ecommerce transaction value totalled ₹132.3L Cr in Jul 2026, up ₹5.3L Cr from Jun 2026.",
+          "direction": "Value rose ₹127.0L Cr → ₹132.3L Cr, a 4.2% gain that extends the recovery from Apr's 12.5% drop and holds above the 31-period p75 in the upper range.",
+          "chain": [
+            "Ecommerce value rose 4.2% to ₹132.3L Cr in Jul 2026, the largest sequential gain in four months.",
+            "The level is above the 31-period p75, marking the upper range of the historical distribution.",
+            "The channel is sustaining its upper-range position after the Mar 2026 record of ₹140.9L Cr, confirming the structural uptrend is intact."
+          ],
+          "inference": "Ecommerce value has accelerated to ₹132.3L Cr, up 4.2% from Jun — the channel is regaining momentum after the Apr pullback, posting the largest sequential gain in four months. The structural uptrend is intact, with the level holding in the upper range.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_abs",
+            "record_type": "total",
+            "metric": "cc_ecom_txn_val"
+          }
+        },
+        "cc-ecom-val-share": {
+          "title": "CC ecommerce share at 63.45% — up 0.50pp from Jun 2026",
+          "observation": "Ecommerce accounts for 63.45% of total credit card transaction value in Jul 2026, up 0.50pp from Jun 2026.",
+          "direction": "Share rose 62.96% → 63.45%, a 0.50pp gain that moves the channel above the 31-period p75 in the upper range.",
+          "chain": [
+            "Ecommerce share rose 0.50pp to 63.45% in Jul 2026, the second consecutive gain after the May dip.",
+            "The share is above the 31-period p75, marking the upper range of the historical distribution.",
+            "The channel is regaining its structural baseline after the May dip, confirming the shift to online is intact."
+          ],
+          "inference": "Ecommerce share has climbed to 63.45%, up 0.50pp from Jun — the channel is regaining its structural baseline after the May dip, posting the second consecutive gain. The shift to online is intact, with the share now in the upper range.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_ratio_sum",
+            "record_type": "total",
+            "metric": "cc_ecom_txn_val",
+            "denominator_metrics": [
+              "cc_pos_txn_val",
+              "cc_ecom_txn_val",
+              "cc_atm_withdrawal_val",
+              "cc_other_txn_val"
+            ]
+          }
+        },
+        "cc-ecom-val-yoy": {
+          "title": "CC ecommerce value YoY at 7.21% — decelerated 2.65pp from Jun",
+          "observation": "Credit card ecommerce transaction value grew 7.21% year-on-year in Jul 2026.",
+          "direction": "YoY growth decelerated 9.86% → 7.21%, a 2.65pp decline that moves the rate near the 19-period median.",
+          "chain": [
+            "Ecommerce value YoY decelerated 2.65pp to 7.21% in Jul 2026, the first slowdown in two months.",
+            "The rate is near the 19-period median, within the 6.2% to 16.9% p25–p75 band.",
+            "The channel is consolidating after the Jun re-acceleration, but remains in positive territory with the absolute level in the upper range."
+          ],
+          "inference": "Ecommerce value YoY has decelerated to 7.21%, down 2.65pp from Jun — the channel is consolidating after the Jun re-acceleration, but remains in positive territory with the absolute level in the upper range. The structural uptrend is intact.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_yoy",
+            "record_type": "total",
+            "metric": "cc_ecom_txn_val"
+          }
+        },
+        "cc-ecom-vol-abs": {
+          "title": "CC ecommerce volume at 30.77 crore — new record high",
+          "observation": "Credit card ecommerce transaction volume reached 30.77 crore in Jul 2026, up 1.56 crore from Jun 2026.",
+          "direction": "Volume rose 29.21 crore → 30.77 crore, a 5.3% gain that sets a new record high and remains at the 31-period maximum.",
+          "chain": [
+            "Ecommerce volume rose 5.3% to 30.77 crore in Jul 2026, setting a new record high.",
+            "The level is at the 31-period maximum, surpassing the May 2026 peak of 29.67 crore.",
+            "The channel is accelerating after the Jun pullback, confirming the structural uptrend is intact."
+          ],
+          "inference": "Ecommerce volume has surged to a new record high of 30.77 crore, up 5.3% from Jun — the channel is accelerating after the Jun pullback, confirming the structural uptrend is intact. This is the largest sequential gain in four months.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_abs",
+            "record_type": "total",
+            "metric": "cc_ecom_txn_vol"
+          }
+        },
+        "cc-ecom-vol-share": {
+          "title": "CC ecommerce volume share at 50.78% — up 0.59pp from Jun",
+          "observation": "Ecommerce represents 50.78% of total credit card transaction volume in Jul 2026, up 0.59pp from Jun 2026.",
+          "direction": "Share rose 50.19% → 50.78%, a 0.59pp gain that moves the channel to a new record high at the 31-period maximum.",
+          "chain": [
+            "Ecommerce volume share rose 0.59pp to 50.78% in Jul 2026, setting a new record high.",
+            "The share is at the 31-period maximum, surpassing the prior peak of 50.19% in Jun 2026.",
+            "The channel is sustaining its majority share of transaction frequency for the third consecutive month, confirming the shift to online is structural."
+          ],
+          "inference": "Ecommerce volume share has climbed to a new record high of 50.78%, up 0.59pp from Jun — the channel is sustaining its majority share of transaction frequency for the third consecutive month, confirming the shift to online is structural, not seasonal.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_ratio_sum",
+            "record_type": "total",
+            "metric": "cc_ecom_txn_vol",
+            "denominator_metrics": [
+              "cc_atm_withdrawal_vol",
+              "cc_ecom_txn_vol",
+              "cc_pos_txn_vol",
+              "cc_other_txn_vol"
+            ]
+          }
+        },
+        "cc-ecom-vol-yoy": {
+          "title": "Ecommerce volume growth slowed to 27.5% YoY — 3-month deceleration",
+          "observation": "Credit card ecommerce transaction volume grew 27.50% year-on-year in Jul 2026.",
+          "direction": "YoY growth decelerated 30.62% → 27.50%, falling 3.12 points — the third consecutive month of slowing.",
+          "chain": [
+            "Ecommerce volume grew 27.50% YoY in Jul 2026, down from 30.62% in Jun 2026.",
+            "This is the third straight month of deceleration — growth peaked at 30.62% in Jun and has now fallen 3.12 points.",
+            "The rate is now near the historical median of 27.0%, signalling the post-Apr recovery has stalled and momentum is flattening."
+          ],
+          "inference": "The Jun re-acceleration to 30.62% was short-lived — Jul's 27.50% confirms ecommerce volume growth is decelerating again and has returned to its median pace. The three-month downward trajectory signals online transaction frequency is no longer building momentum and has settled into a steady-state growth rate.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_yoy",
+            "record_type": "total",
+            "metric": "cc_ecom_txn_vol"
+          }
+        },
+        "cc-other-val-abs": {
+          "title": "Other channel value at ₹106 Cr — steady after Jun collapse",
+          "observation": "Credit card 'other' transaction value stood at ₹106 Cr in Jul 2026, up ₹6 Cr from Jun 2026's ₹100 Cr.",
+          "direction": "Value rose ₹100 Cr → ₹106 Cr, a 6.2% monthly gain — the level remains near the pre-May baseline and well above the upper p75 range.",
+          "chain": [
+            "Other channel value stood at ₹106 Cr in Jul 2026, up ₹6 Cr from Jun 2026's ₹100 Cr.",
+            "The channel has stabilised near ₹100 Cr after the May anomaly — the ₹6 Cr gain is noise, not a trend.",
+            "The level remains marginal in absolute terms and confirms the May surge to ₹4,674 Cr was transient."
+          ],
+          "inference": "The channel has returned to its pre-May baseline and is holding steady — the ₹6 Cr gain confirms the May spike was an anomaly, not a new activation. The level remains marginal in absolute terms, with no evidence of sustained use-case expansion.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_abs",
+            "record_type": "total",
+            "metric": "cc_other_txn_val"
+          }
+        },
+        "cc-other-val-share": {
+          "title": "Other channel share flat at 0.05% — no structural shift",
+          "observation": "Other transactions account for 0.05% of total credit card transaction value in Jul 2026, unchanged from Jun 2026.",
+          "direction": "Share held steady at 0.05%, flat month-on-month — the level remains above the upper p75 range but negligible in the overall mix.",
+          "chain": [
+            "Other channel share stood at 0.05% in Jul 2026, unchanged from Jun 2026.",
+            "The channel has stabilised at 0.05% after the May anomaly — the flat reading confirms the spike to 0.23% was transient.",
+            "The level remains negligible in the overall mix, with no evidence of sustained embedding in the transaction structure."
+          ],
+          "inference": "The channel remains marginal in the overall mix — the flat 0.05% reading confirms the May surge was an anomaly, not a strategic shift. The channel is holding steady at a negligible level, with no evidence of sustained activation.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_ratio_sum",
+            "record_type": "total",
+            "metric": "cc_other_txn_val",
+            "denominator_metrics": [
+              "cc_atm_withdrawal_val",
+              "cc_ecom_txn_val",
+              "cc_pos_txn_val",
+              "cc_other_txn_val"
+            ]
+          }
+        },
+        "cc-other-val-yoy": {
+          "title": "Other channel value growth fell to 270% YoY — lowest on record",
+          "observation": "Credit card 'other' transaction value grew 270.38% year-on-year in Jul 2026, down 71.76 points from Jun 2026's 342.14%.",
+          "direction": "YoY growth decelerated 342.14% → 270.38%, falling 71.76 points — the lowest reading in the 19-period series.",
+          "chain": [
+            "Other channel value grew 270.38% YoY in Jul 2026, down from 342.14% in Jun 2026.",
+            "This is the lowest reading on record — growth has now decelerated for two consecutive months after the May spike.",
+            "The rate is falling rapidly from the May peak of 2,365.96%, signalling the channel is maturing and no longer activating new use cases."
+          ],
+          "inference": "The channel is decelerating rapidly — Jul's 270.38% is the lowest reading on record and confirms the May re-acceleration was a one-month event. The two-month downward trajectory signals the channel is maturing, with no evidence of sustained new use-case activation.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_yoy",
+            "record_type": "total",
+            "metric": "cc_other_txn_val"
+          }
+        },
+        "cc-other-vol-abs": {
+          "title": "Other channel volume at 3.83 Cr — steady after Jun collapse",
+          "observation": "Credit card 'other' transaction volume stood at 3.83 Cr in Jul 2026, up 0.22 Cr from Jun 2026's 3.62 Cr.",
+          "direction": "Volume rose 3.62 Cr → 3.83 Cr, a 6.0% monthly gain — the level remains near the pre-May baseline and above the upper p75 range.",
+          "chain": [
+            "Other channel volume stood at 3.83 Cr in Jul 2026, up 0.22 Cr from Jun 2026's 3.62 Cr.",
+            "The channel has stabilised near 3.6 Cr after the May anomaly — the 0.22 Cr gain is noise, not a trend.",
+            "The level remains marginal in absolute terms and confirms the May surge to 8.41 Cr was transient."
+          ],
+          "inference": "The channel has returned to its pre-May baseline and is holding steady — the 0.22 Cr gain confirms the May spike was an anomaly, not a new activation. The level remains marginal in absolute terms, with no evidence of sustained use-case expansion.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_abs",
+            "record_type": "total",
+            "metric": "cc_other_txn_vol"
+          }
+        },
+        "cc-other-vol-share": {
+          "title": "Other channel volume share at 0.63% — steady after Jun reversion",
+          "observation": "Other transactions represent 0.63% of total credit card transaction volume in Jul 2026, up 0.01 points from Jun 2026's 0.62%.",
+          "direction": "Share rose 0.62% → 0.63%, gaining 0.01 points — the level remains above the upper p75 range but marginal in the overall mix.",
+          "chain": [
+            "Other channel volume share stood at 0.63% in Jul 2026, up 0.01 points from Jun 2026's 0.62%.",
+            "The channel has stabilised near 0.6% after the May anomaly — the 0.01 point gain is noise, not a trend.",
+            "The level remains marginal in the overall mix, with no evidence of sustained embedding in cardholder behaviour."
+          ],
+          "inference": "The channel remains marginal in the overall mix — the 0.01 point gain confirms the May surge was an anomaly, not a strategic shift. The channel is holding steady at a negligible level, with no evidence of sustained activation.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_ratio_sum",
+            "record_type": "total",
+            "metric": "cc_other_txn_vol",
+            "denominator_metrics": [
+              "cc_atm_withdrawal_vol",
+              "cc_ecom_txn_vol",
+              "cc_pos_txn_vol",
+              "cc_other_txn_vol"
+            ]
+          }
+        },
+        "cc-other-vol-yoy": {
+          "title": "Other channel volume growth fell to 142% YoY — lowest on record",
+          "observation": "Credit card 'other' transaction volume grew 142.19% year-on-year in Jul 2026, down 50.90 points from Jun 2026's 193.08%.",
+          "direction": "YoY growth decelerated 193.08% → 142.19%, falling 50.90 points — the lowest reading in the 19-period series.",
+          "chain": [
+            "Other channel volume grew 142.19% YoY in Jul 2026, down from 193.08% in Jun 2026.",
+            "This is the lowest reading on record — growth has now decelerated for two consecutive months after the May spike.",
+            "The rate is falling rapidly from the May peak of 714.01%, signalling the channel is maturing and no longer activating new use cases."
+          ],
+          "inference": "The channel is decelerating rapidly — Jul's 142.19% is the lowest reading on record and confirms the May re-acceleration was a one-month event. The two-month downward trajectory signals the channel is maturing, with no evidence of sustained new use-case activation.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_yoy",
+            "record_type": "total",
+            "metric": "cc_other_txn_vol"
+          }
+        },
+        "cc-pos-val-abs": {
+          "title": "POS value at ₹75,740 Cr — up ₹1,478 Cr from Jun",
+          "observation": "Credit card POS transaction value stood at ₹75,740 Cr in Jul 2026, up ₹1,478 Cr from Jun 2026's ₹74,262 Cr.",
+          "direction": "Value rose ₹74,262 Cr → ₹75,740 Cr, a 2.0% monthly gain — the level remains above the upper p75 range and near the May peak.",
+          "chain": [
+            "POS value stood at ₹75,740 Cr in Jul 2026, up ₹1,478 Cr from Jun 2026's ₹74,262 Cr.",
+            "The channel has recovered from the Jun dip — the ₹1,478 Cr gain confirms offline retail demand is stable and growing.",
+            "The level remains above the upper p75 range and near the May peak of ₹76,095 Cr, signalling sustained consumer engagement at POS terminals."
+          ],
+          "inference": "POS value has recovered from the Jun dip and is tracking near its May peak — the ₹1,478 Cr gain confirms offline retail demand is stable and growing. The channel remains elevated above its historical range, signalling sustained consumer engagement at POS terminals.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_abs",
+            "record_type": "total",
+            "metric": "cc_pos_txn_val"
+          }
+        },
+        "cc-pos-val-share": {
+          "title": "POS value share fell to 36.32% — down 0.50 points from Jun",
+          "observation": "POS transactions captured 36.32% of total credit card value in Jul 2026, down 0.50 points from Jun 2026's 36.81%.",
+          "direction": "Share fell 36.81% → 36.32%, declining 0.50 points — the level is now below the p25 of 36.3% and near the lower end of the historical range.",
+          "chain": [
+            "POS value share stood at 36.32% in Jul 2026, down 0.50 points from Jun 2026's 36.81%.",
+            "The channel is now below the p25 of 36.3% — the 0.50 point decline confirms POS is losing ground in the overall mix.",
+            "The level is near the lower end of the historical range, signalling online channels are growing faster in value terms."
+          ],
+          "inference": "POS share is now below its historical median — the 0.50 point decline confirms the channel is losing ground in the overall mix despite growing in absolute terms. Online channels are growing faster in value terms, and POS is settling into a lower share of the total pool.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_ratio_sum",
+            "record_type": "total",
+            "metric": "cc_pos_txn_val",
+            "denominator_metrics": [
+              "cc_atm_withdrawal_val",
+              "cc_ecom_txn_val",
+              "cc_pos_txn_val",
+              "cc_other_txn_val"
+            ]
+          }
+        },
+        "cc-pos-val-yoy": {
+          "title": "POS value growth slowed to 7.62% YoY — lowest in 19 periods",
+          "observation": "Credit card POS transaction value grew 7.62% year-on-year in Jul 2026, down 2.45 points from Jun 2026's 10.07%.",
+          "direction": "YoY growth decelerated 10.07% → 7.62%, falling 2.45 points — the level is now below the p25 of 9.0% and the lowest reading in the 19-period series.",
+          "chain": [
+            "POS value grew 7.62% YoY in Jul 2026, down from 10.07% in Jun 2026.",
+            "This is the lowest reading in the 19-period series — growth has now decelerated for two consecutive months after the Jun re-acceleration.",
+            "The rate is below the p25 of 9.0%, signalling offline retail value growth is slowing and losing momentum."
+          ],
+          "inference": "The Jun re-acceleration to 10.07% was short-lived — Jul's 7.62% is the lowest reading on record and confirms POS value growth is decelerating. The channel is growing slower than its historical median pace, signalling offline retail demand is losing momentum.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_yoy",
+            "record_type": "total",
+            "metric": "cc_pos_txn_val"
+          }
+        },
+        "cc-pos-vol-abs": {
+          "title": "POS volume at 29.37 Cr — all-time high, up 0.82 Cr from Jun",
+          "observation": "Credit card POS transaction volume stood at 29.37 Cr in Jul 2026, up 0.82 Cr from Jun 2026's 28.56 Cr.",
+          "direction": "Volume rose 28.56 Cr → 29.37 Cr, a 2.9% monthly gain — the level is now at an all-time high, surpassing the May peak of 29.04 Cr.",
+          "chain": [
+            "POS volume stood at 29.37 Cr in Jul 2026, up 0.82 Cr from Jun 2026's 28.56 Cr.",
+            "This is the highest reading on record — the channel has now surpassed the May peak of 29.04 Cr.",
+            "The level confirms offline retail transaction counts are accelerating again after the Jun plateau."
+          ],
+          "inference": "POS volume has hit a new all-time high — the 0.82 Cr gain confirms offline retail transaction counts are accelerating again after the Jun plateau. The channel is growing in absolute terms and remains elevated above its historical range, signalling sustained consumer engagement at POS terminals.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_abs",
+            "record_type": "total",
+            "metric": "cc_pos_txn_vol"
+          }
+        },
+        "cc-pos-vol-share": {
+          "title": "POS volume share fell to 48.48% — lowest on record, down 0.60 points",
+          "observation": "POS transactions accounted for 48.48% of total credit card transaction volume in Jul 2026, down 0.60 points from Jun 2026's 49.08%.",
+          "direction": "Share fell 49.08% → 48.48%, declining 0.60 points — the level is now at the lowest reading in the 31-period series.",
+          "chain": [
+            "POS volume share stood at 48.48% in Jul 2026, down 0.60 points from Jun 2026's 49.08%.",
+            "This is the lowest reading on record — the channel has now fallen below 49% for the third consecutive month.",
+            "The level confirms the 50/50 channel equilibrium is decisively broken, and POS is losing ground in the overall mix despite growing in absolute terms."
+          ],
+          "inference": "POS volume share is now at its lowest level on record — the 0.60 point decline confirms the channel is losing ground in the overall mix despite hitting an all-time high in absolute terms. Online channels are growing faster in transaction count terms, and POS is settling into a lower share of the total pool.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_ratio_sum",
+            "record_type": "total",
+            "metric": "cc_pos_txn_vol",
+            "denominator_metrics": [
+              "cc_atm_withdrawal_vol",
+              "cc_ecom_txn_vol",
+              "cc_pos_txn_vol",
+              "cc_other_txn_vol"
+            ]
+          }
+        },
+        "cc-pos-vol-yoy": {
+          "title": "CC POS volume growth slowed to 20.7% — lowest in 19 months",
+          "observation": "Credit card POS transaction volume grew 20.7% YoY in July 2026.",
+          "direction": "YoY growth decelerated 22.1% → 20.7%, down 1.4 points — the fourth consecutive period of slowing and now the weakest reading in the entire 19-month window.",
+          "chain": [
+            "POS volume growth fell to 20.7% in July 2026, the lowest rate since the series began in January 2025.",
+            "Growth has now decelerated for four straight months, dropping from 23.1% in May to 20.7% in July — a 2.4-point slide.",
+            "The rate is now below the 21.7% lower-range threshold and trending down, signalling sustained weakness in offline retail card spending."
+          ],
+          "inference": "The June slowdown was not a pause — it was the continuation of a four-month deceleration that has now pushed growth to a 19-month low. Offline retail card spending is losing momentum steadily. The 23–24% band that held through most of 2025 has broken down, and the trajectory is now firmly in the lower range with no sign of stabilisation.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_yoy",
+            "record_type": "total",
+            "metric": "cc_pos_txn_vol"
+          }
+        }
+      }
+    },
+    "debit_card_txn": {
+      "narrative": "Debit card POS transaction volume contracted 10.93% YoY in Jul 2026 — the mildest decline on record and the sixth consecutive month of improvement. The structural erosion is losing momentum, and the channel is stabilising at a lower equilibrium rather than collapsing further. Meanwhile, the cash-at-POS feature is extinct: Jul 2026 volume reached a record low of 6,086 transactions (down 90% from Jan 2024), and value fell to ₹11,595 thousands (down 81% from Jan 2024). The feature has consumed operational resources for 31 months while contributing 0.00% of debit card value and volume. The 6-month decline streak confirms the terminal trajectory is intact — the channel has no demand floor and no recovery path.",
+      "signals": {
+        "dc-atm-val-abs": {
+          "title": "ATM cash withdrawals at ₹2.19L Cr — first rise in four months",
+          "observation": "Debit card ATM cash withdrawals totaled ₹2,193,082,922 thousands (₹2.19 lakh crore) in Jul 2026.",
+          "direction": "Value rose ₹2.16L Cr → ₹2.19L Cr, gaining ₹2,950 crore — the first monthly increase since Mar 2026, but still below the 25th percentile (₹2.39L Cr).",
+          "chain": [
+            "ATM cash withdrawals rose ₹2,950 crore to ₹2.19L Cr in Jul 2026, breaking a three-month decline.",
+            "The level remains ₹20,000 crore below the 25th percentile (₹2.39L Cr) and ₹57,400 crore below the Mar 2024 peak (₹2.77L Cr).",
+            "The one-month rebound does not reverse the structural decline — the value is still in the lower range of the 31-month series."
+          ],
+          "inference": "The three-month decline has paused, but the ₹2.19L Cr level is still ₹20,000 crore below the lower quartile. This is a single-period stabilization, not a reversal — ATM cash demand remains structurally depressed at levels last seen only in the weakest months of the series.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_abs",
+            "record_type": "total",
+            "metric": "dc_atm_withdrawal_val"
+          }
+        },
+        "dc-atm-val-share": {
+          "title": "ATM cash share falls to 85.25% — lowest in 31 months",
+          "observation": "ATM withdrawals accounted for 85.25% of total debit card transaction value in Jul 2026.",
+          "direction": "Share fell 85.97% → 85.25%, losing 0.72pp and dropping to the lowest level in the 31-month series, below the 25th percentile (85.8%).",
+          "chain": [
+            "ATM cash share fell 0.72pp to 85.25% in Jul 2026, the lowest reading in 31 months.",
+            "The share has now fallen below the 25th percentile (85.8%) for the second consecutive month.",
+            "Ecommerce gained 0.71pp of value share in the same period, reaching 6.03% — the highest level on record."
+          ],
+          "inference": "ATM cash has lost 1.41pp of value share in two months and is now at a record low of 85.25%. The 86%–87% equilibrium has broken — ecommerce is taking share as ATM cash demand contracts, and the shift is accelerating.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_ratio_sum",
+            "record_type": "total",
+            "metric": "dc_atm_withdrawal_val",
+            "denominator_metrics": [
+              "dc_atm_withdrawal_val",
+              "dc_pos_txn_val",
+              "dc_ecom_txn_val",
+              "dc_pos_withdrawal_val",
+              "dc_other_txn_val"
+            ]
+          }
+        },
+        "dc-atm-val-yoy": {
+          "title": "ATM cash value -5.36% YoY — contraction steady for third month",
+          "observation": "ATM withdrawal value declined 5.36% year-on-year in Jul 2026.",
+          "direction": "Contraction held at -5.41% → -5.36% YoY, improving 0.05pp and remaining near the median (-5.4%).",
+          "chain": [
+            "ATM cash value declined 5.36% YoY in Jul 2026, the third consecutive period near -5.4%.",
+            "The YoY rate is stable near the median, but the absolute value rose ₹2,950 crore month-on-month.",
+            "The stable YoY rate reflects a weak prior-year base — the structural decline in absolute terms is intact."
+          ],
+          "inference": "The YoY contraction has plateaued at -5.4% for three months, but this is a base effect — the absolute value remains ₹20,000 crore below the lower quartile. The structural decline in ATM cash demand is intact; the stable YoY rate masks the continued weakness in absolute levels.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_yoy",
+            "record_type": "total",
+            "metric": "dc_atm_withdrawal_val"
+          }
+        },
+        "dc-atm-vol-abs": {
+          "title": "ATM withdrawals at 40.5 crore — up from record low",
+          "observation": "Debit card ATM withdrawals totaled 405,201,006 transactions in Jul 2026.",
+          "direction": "Volume rose 39.8 crore → 40.5 crore transactions, gaining 6.8 lakh — the first increase in two months, but still below the 25th percentile (43.8 crore).",
+          "chain": [
+            "ATM withdrawal volume rose 6.8 lakh transactions to 40.5 crore in Jul 2026, breaking the Jun 2026 record low.",
+            "The level remains 3.3 crore below the 25th percentile (43.8 crore) and 11.2 crore below the Jan 2024 peak (52.7 crore).",
+            "The one-month rebound does not reverse the structural decline — the volume is still in the lower range of the 31-month series."
+          ],
+          "inference": "ATM visit frequency has recovered from the Jun 2026 record low, but the 40.5 crore level is still 3.3 crore below the lower quartile. This is a single-period stabilization, not a reversal — ATM usage remains structurally depressed at levels last seen only in the weakest months of the series.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_abs",
+            "record_type": "total",
+            "metric": "dc_atm_withdrawal_vol"
+          }
+        },
+        "dc-atm-vol-share": {
+          "title": "ATM volume share at 79.96% — down 0.45pp from Jun",
+          "observation": "ATM withdrawals represented 79.96% of total debit card transaction volume in Jul 2026.",
+          "direction": "Share fell 80.40% → 79.96%, slipping 0.45pp and moving below the median (80.1%) for the first time since Jul 2025.",
+          "chain": [
+            "ATM volume share fell 0.45pp to 79.96% in Jul 2026, dropping below the median (80.1%).",
+            "The share has now fallen below the median for the first time in 12 months.",
+            "Ecommerce volume share rose 0.20pp to 5.40% in the same period, reaching the highest level since Jan 2024."
+          ],
+          "inference": "ATM volume share has fallen below the median for the first time in a year, dropping to 79.96%. The 80%–81% equilibrium is breaking downward — digital channels are now gaining volume share as ATM usage contracts, a shift that was not visible in prior periods.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_ratio_sum",
+            "record_type": "total",
+            "metric": "dc_atm_withdrawal_vol",
+            "denominator_metrics": [
+              "dc_atm_withdrawal_vol",
+              "dc_ecom_txn_vol",
+              "dc_pos_txn_vol",
+              "dc_other_txn_vol",
+              "dc_pos_withdrawal_vol"
+            ]
+          }
+        },
+        "dc-atm-vol-streak": {
+          "title": "ATM volume decline streak resets to zero after Jul rise",
+          "observation": "ATM withdrawal volume has declined for 0 consecutive months in Jul 2026.",
+          "direction": "The decline streak reset from 1 to 0 periods after volume rose 6.8 lakh transactions in Jul 2026.",
+          "chain": [
+            "The decline streak reset to 0 in Jul 2026 after volume rose 6.8 lakh transactions.",
+            "The volume is now at 40.5 crore, still 3.3 crore below the 25th percentile (43.8 crore).",
+            "The streak reset signals a one-month stabilization, but the absolute level remains in the lower range of the series."
+          ],
+          "inference": "The decline streak has reset after a single-period rebound, but the 40.5 crore level is still in the lower range. The streak count is low, but the absolute level is the more significant signal — ATM usage remains structurally depressed despite the one-month rise.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_mom_streak",
+            "record_type": "total",
+            "metric": "dc_atm_withdrawal_vol"
+          }
+        },
+        "dc-atm-vol-yoy": {
+          "title": "ATM volume -8.90% YoY — contraction deepens after two-month moderation",
+          "observation": "ATM withdrawal volume declined 8.90% year-on-year in Jul 2026.",
+          "direction": "Contraction deepened -8.59% → -8.90% YoY, worsening 0.31pp and moving back to the 75th percentile (-8.9%).",
+          "chain": [
+            "ATM volume declined 8.90% YoY in Jul 2026, worsening 0.31pp after two months of moderation.",
+            "The YoY rate is now at the 75th percentile (-8.9%), the weakest reading since May 2026 (-9.3%).",
+            "The absolute volume rose 6.8 lakh transactions month-on-month, but the YoY rate worsened due to a stronger prior-year base."
+          ],
+          "inference": "The YoY contraction has deepened to -8.90%, reversing two months of moderation. The absolute volume rose month-on-month, but the YoY rate worsened because the Jul 2025 base was stronger. The structural decline in ATM visit frequency is intact — the one-month rebound does not signal a reversal.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_yoy",
+            "record_type": "total",
+            "metric": "dc_atm_withdrawal_vol"
+          }
+        },
+        "dc-ecom-val-abs": {
+          "title": "Ecommerce value at ₹15,516 Cr — highest in 31 months",
+          "observation": "Debit card ecommerce transactions totaled ₹155,158,431 thousands (₹15,516 crore) in Jul 2026.",
+          "direction": "Value rose ₹13,398 Cr → ₹15,516 Cr, gaining ₹2,118 crore — the fourth consecutive monthly increase and the highest level in the 31-month series, above the 75th percentile (₹14,056 Cr).",
+          "chain": [
+            "Ecommerce value rose ₹2,118 crore to ₹15,516 Cr in Jul 2026, the highest level in 31 months.",
+            "The value has now risen for four straight months, adding ₹4,020 crore since Mar 2026.",
+            "The ₹15,516 Cr level is ₹1,460 crore above the 75th percentile (₹14,056 Cr), confirming the recovery is sustained."
+          ],
+          "inference": "Ecommerce value has broken out to a 31-month high of ₹15,516 Cr, rising for four straight months and adding ₹4,020 crore. This is the strongest sustained growth in the series — ecommerce is now the only debit card channel showing consistent expansion, and the ₹15,516 Cr level is ₹1,460 crore above the upper quartile.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_abs",
+            "record_type": "total",
+            "metric": "dc_ecom_txn_val"
+          }
+        },
+        "dc-ecom-val-share": {
+          "title": "Ecommerce value share hits 6.03% — record high",
+          "observation": "Ecommerce transactions accounted for 6.03% of total debit card transaction value in Jul 2026.",
+          "direction": "Share rose 5.32% → 6.03%, gaining 0.71pp and reaching the highest level in the 31-month series, above the 75th percentile (4.9%).",
+          "chain": [
+            "Ecommerce value share rose 0.71pp to 6.03% in Jul 2026, the highest level in 31 months.",
+            "The share has now gained 1.12pp in two months, breaking out of the 4.6%–5.4% range.",
+            "ATM cash lost 0.72pp of value share in the same period, falling to a record low of 85.25%."
+          ],
+          "inference": "Ecommerce value share has surged to a record high of 6.03%, gaining 1.12pp in two months and breaking out of the prior 4.6%–5.4% band. The channel is taking share from ATM cash at an accelerating pace — this is a structural shift, not a seasonal fluctuation.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_ratio_sum",
+            "record_type": "total",
+            "metric": "dc_ecom_txn_val",
+            "denominator_metrics": [
+              "dc_atm_withdrawal_val",
+              "dc_pos_txn_val",
+              "dc_ecom_txn_val",
+              "dc_pos_withdrawal_val",
+              "dc_other_txn_val"
+            ]
+          }
+        },
+        "dc-ecom-val-yoy": {
+          "title": "Ecommerce value +10.31% YoY — sixth straight month of growth",
+          "observation": "Ecommerce transaction value grew 10.31% year-on-year in Jul 2026.",
+          "direction": "Growth accelerated +9.33% → +10.31% YoY, improving 0.97pp and setting a new all-time high in the 19-month window.",
+          "chain": [
+            "Ecommerce value grew 10.31% YoY in Jul 2026, the highest rate in 19 months.",
+            "Growth has now been positive for six straight periods, and the YoY rate has accelerated for four consecutive months.",
+            "The 10.31% rate is the fastest growth in the entire 19-month window, confirming the recovery is sustained."
+          ],
+          "inference": "Ecommerce value growth has accelerated to 10.31% YoY, a new record high and the sixth straight period of positive growth. The channel is in a sustained recovery — the YoY rate has accelerated for four consecutive months, and the 10.31% level is the fastest growth in the entire 19-month window.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_yoy",
+            "record_type": "total",
+            "metric": "dc_ecom_txn_val"
+          }
+        },
+        "dc-ecom-vol-abs": {
+          "title": "Ecommerce volume at 2.74 crore — up 6.2% from Jun",
+          "observation": "Debit card ecommerce transactions totaled 27,352,284 in Jul 2026.",
+          "direction": "Volume rose 2.58 crore → 2.74 crore transactions, gaining 15.9 lakh — the second increase in three periods, but still near the median (2.72 crore).",
+          "chain": [
+            "Ecommerce transaction count rose 15.9 lakh to 2.74 crore in Jul 2026, recovering from the Jun 2026 decline.",
+            "The volume is now near the median (2.72 crore), but still 1.1 crore below the Jan 2024 peak (4.5 crore).",
+            "The value growth of ₹2,118 crore outpaced the volume gain, confirming higher ticket sizes are driving the recovery."
+          ],
+          "inference": "Ecommerce transaction count has recovered to 2.74 crore, but the volume remains near the median and far below the Jan 2024 peak. The value growth of ₹2,118 crore outpaced the volume gain, confirming the recovery is driven by higher ticket sizes, not adoption growth — transaction count is not accelerating.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_abs",
+            "record_type": "total",
+            "metric": "dc_ecom_txn_vol"
+          }
+        },
+        "dc-ecom-vol-share": {
+          "title": "Ecommerce volume share at 5.40% — highest since Jan 2024",
+          "observation": "Ecommerce transactions represented 5.40% of total debit card transaction volume in Jul 2026.",
+          "direction": "Share rose 5.20% → 5.40%, gaining 0.20pp and reaching the highest level since Jan 2024 (6.5%), above the median (5.0%).",
+          "chain": [
+            "Ecommerce volume share rose 0.20pp to 5.40% in Jul 2026, the highest level in 30 months.",
+            "The share has now gained 0.35pp in two months, moving above the median (5.0%).",
+            "ATM volume share fell 0.45pp to 79.96% in the same period, dropping below the median for the first time in 12 months."
+          ],
+          "inference": "Ecommerce volume share has risen to 5.40%, the highest level in 30 months and above the median. The channel is now gaining volume share as ATM usage contracts — this is a shift from prior periods, when ecommerce gained value share but not volume share. Adoption is beginning to accelerate.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_ratio_sum",
+            "record_type": "total",
+            "metric": "dc_ecom_txn_vol",
+            "denominator_metrics": [
+              "dc_atm_withdrawal_vol",
+              "dc_ecom_txn_vol",
+              "dc_pos_txn_vol",
+              "dc_other_txn_vol",
+              "dc_pos_withdrawal_vol"
+            ]
+          }
+        },
+        "dc-ecom-vol-yoy": {
+          "title": "Debit ecommerce volume -4.91% YoY — best reading on record",
+          "observation": "Debit card ecommerce transaction volume declined 4.91% year-on-year in Jul 2026.",
+          "direction": "Contraction moderated from -5.33% in Jun 2026 to -4.91% in Jul 2026 — a 0.42 percentage point improvement — now at the best (least negative) level in the 19-period window.",
+          "chain": [
+            "Ecommerce debit card volume declined 4.91% YoY in Jul 2026 — the least negative reading in 19 periods.",
+            "The trajectory has improved steadily from -32.3% in Jan 2025 to -4.91% now — a 27.4 percentage point moderation over 18 months.",
+            "The channel is approaching stabilisation — the decline is now minimal and the trend shows consistent improvement."
+          ],
+          "inference": "Ecommerce debit card volume is nearing an inflection point. The -4.91% reading is the best on record, and the 18-month trajectory shows sustained moderation — the channel is no longer in structural decline, it is approaching zero growth or potential recovery.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_yoy",
+            "record_type": "total",
+            "metric": "dc_ecom_txn_vol"
+          }
+        },
+        "dc-other-val-abs": {
+          "title": "DC other value ₹240.8 Cr — highest on record",
+          "observation": "Debit card 'other' transaction value totaled ₹2,408,071 thousands (₹240.8 crore) in Jul 2026.",
+          "direction": "Value rose from ₹208.5 Cr in Jun 2026 to ₹240.8 Cr in Jul 2026 — a ₹32.3 crore gain (15.5%) — now at the highest level in the 31-period window.",
+          "chain": [
+            "Other transaction value reached ₹240.8 Cr in Jul 2026 — the highest level in 31 periods.",
+            "The category has grown from ₹129.4 Cr in Jun 2025 to ₹240.8 Cr now — an 86% increase in 13 months.",
+            "Despite the growth, the absolute scale remains negligible in the context of total debit card flows."
+          ],
+          "inference": "This category carries no strategic weight. The ₹240.8 Cr absolute level is negligible compared to total debit card flows, and the month-to-month volatility reflects a tiny base, not a structural shift.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_abs",
+            "record_type": "total",
+            "metric": "dc_other_txn_val"
+          }
+        },
+        "dc-other-val-share": {
+          "title": "DC other share 0.09% — structurally capped near zero",
+          "observation": "Other transactions accounted for 0.09% of total debit card transaction value in Jul 2026.",
+          "direction": "Share edged up from 0.08% in Jun 2026 to 0.09% in Jul 2026 — a 0.01 percentage point gain — remaining structurally capped near zero across the 31-period window.",
+          "chain": [
+            "Other transactions held 0.09% of total debit card value in Jul 2026 — unchanged from the 0.1% level that has persisted for most of the 31-period window.",
+            "The share has oscillated between 0.0% and 0.1% for 31 periods with no structural movement.",
+            "The category remains too small to influence debit card strategy or channel mix."
+          ],
+          "inference": "Volume share remains structurally irrelevant. The 0.09% reading is within the noise band that has held for 31 periods — this category will not move the needle on debit card strategy.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_ratio_sum",
+            "record_type": "total",
+            "metric": "dc_other_txn_val",
+            "denominator_metrics": [
+              "dc_atm_withdrawal_val",
+              "dc_ecom_txn_val",
+              "dc_pos_txn_val",
+              "dc_other_txn_val",
+              "dc_pos_withdrawal_val"
+            ]
+          }
+        },
+        "dc-other-val-yoy": {
+          "title": "DC other value +60.44% YoY — noise on tiny base",
+          "observation": "Other transaction value grew 60.44% year-on-year in Jul 2026.",
+          "direction": "YoY growth held steady at 60.44% in Jul 2026 vs 61.11% in Jun 2026 — a 0.67 percentage point decline — remaining in the upper range of the 19-period window.",
+          "chain": [
+            "Other transaction value grew 60.44% YoY in Jul 2026 — the second-highest reading in 19 periods.",
+            "The growth rate reflects a tiny base — the absolute value is only ₹240.8 Cr, negligible in the context of total debit card flows.",
+            "High percentage growth on a small base carries no strategic weight."
+          ],
+          "inference": "This is noise, not signal. The 60.44% growth rate reflects a tiny base and volatile month-to-month swings — the absolute scale is too small to matter for lending or partnership strategy.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_yoy",
+            "record_type": "total",
+            "metric": "dc_other_txn_val"
+          }
+        },
+        "dc-other-vol-abs": {
+          "title": "DC other volume 82,338 — highest since Dec 2025",
+          "observation": "Debit card 'other' transaction volume totaled 82,338 in Jul 2026.",
+          "direction": "Volume rose from 77,244 in Jun 2026 to 82,338 in Jul 2026 — a gain of 5,094 transactions (6.6%) — now near the median of the 31-period range.",
+          "chain": [
+            "Other transaction volume reached 82,338 in Jul 2026 — the highest since Dec 2025 (81,047).",
+            "The volume remains 39.5% below the Jan 2024 peak of 135,975.",
+            "The absolute count is negligible compared to total debit card transaction volumes."
+          ],
+          "inference": "Transaction count remains negligible in absolute terms. The 82,338 volume is 39.5% below the Jan 2024 peak and offers no strategic value — this category should not drive resource allocation.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_abs",
+            "record_type": "total",
+            "metric": "dc_other_txn_vol"
+          }
+        },
+        "dc-other-vol-share": {
+          "title": "DC other volume share 0.02% — structurally irrelevant",
+          "observation": "Other transactions represented 0.02% of total debit card transaction volume in Jul 2026.",
+          "direction": "Share held steady at 0.02% in Jul 2026, unchanged from Jun 2026 — remaining structurally capped near zero across the 31-period window.",
+          "chain": [
+            "Other transactions held 0.02% of total debit card volume in Jul 2026 — unchanged from Jun 2026.",
+            "The share has remained at 0.0% for all 31 periods in the window with no structural movement.",
+            "The category is too small to influence debit card strategy or customer engagement."
+          ],
+          "inference": "Volume share remains structurally irrelevant. The 0.02% reading is within the noise band that has held for 31 periods — this category will not influence debit card strategy or customer engagement.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_ratio_sum",
+            "record_type": "total",
+            "metric": "dc_other_txn_vol",
+            "denominator_metrics": [
+              "dc_atm_withdrawal_vol",
+              "dc_ecom_txn_vol",
+              "dc_pos_txn_vol",
+              "dc_other_txn_vol",
+              "dc_pos_withdrawal_vol"
+            ]
+          }
+        },
+        "dc-other-vol-yoy": {
+          "title": "DC other volume +6.39% YoY — growth on negligible base",
+          "observation": "Other transaction volume grew 6.39% year-on-year in Jul 2026.",
+          "direction": "YoY growth moderated from 7.31% in Jun 2026 to 6.39% in Jul 2026 — a 0.92 percentage point decline — remaining in the upper range of the 19-period window.",
+          "chain": [
+            "Other transaction volume grew 6.39% YoY in Jul 2026 — the second-highest reading in 19 periods.",
+            "The category has returned to growth after 17 consecutive months of contraction (Jan 2025 to May 2026).",
+            "The negligible absolute base means even the 6.39% growth carries no strategic weight."
+          ],
+          "inference": "The category has returned to growth, but remains structurally irrelevant. The negligible absolute base means even the 6.39% growth carries no strategic weight — this segment should not drive resource allocation.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_yoy",
+            "record_type": "total",
+            "metric": "dc_other_txn_vol"
+          }
+        },
+        "dc-pos-val-abs": {
+          "title": "DC POS value ₹2,21758 Cr — still near 30-period low",
+          "observation": "Debit card POS transaction value totaled ₹221,758,107 thousands (₹2,21758 crore) in Jul 2026.",
+          "direction": "Value rose from ₹2,16919 Cr in Jun 2026 to ₹2,21758 Cr in Jul 2026 — a ₹4,839 crore gain (2.2%) — but remains below the 25th percentile of the 31-period range.",
+          "chain": [
+            "POS transaction value reached ₹2,21758 Cr in Jul 2026 — up from the 30-period low of ₹2,16919 Cr in Jun 2026.",
+            "The value remains 22.4% below the Jan 2024 level of ₹3,03834 Cr.",
+            "The channel is settling at a structurally lower equilibrium — the ₹2,16000 crore–₹2,40000 crore range is the new normal."
+          ],
+          "inference": "POS value remains at a structurally lower level. The ₹2,21758 Cr reading is still below the 25th percentile and 27% below the Jan 2024 peak — the channel is settling at a lower equilibrium, not recovering.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_abs",
+            "record_type": "total",
+            "metric": "dc_pos_txn_val"
+          }
+        },
+        "dc-pos-val-share": {
+          "title": "DC POS value share 8.62% — below 25th percentile",
+          "observation": "POS transactions accounted for 8.62% of total debit card transaction value in Jul 2026.",
+          "direction": "Share held steady at 8.62% in Jul 2026, unchanged from Jun 2026 — remaining below the 25th percentile of the 31-period range.",
+          "chain": [
+            "POS held 8.62% of total debit card value in Jul 2026 — unchanged from Jun 2026.",
+            "The share is 1.4 percentage points below the Jan 2024 level of 10.0%.",
+            "The channel is losing ground to other channels — the share has fallen from the 9.5%–10.0% band that held in early 2024 to the current 8.5%–8.9% range."
+          ],
+          "inference": "POS is losing ground to other channels. The 8.62% share is below the 25th percentile and 1.4 points below the Jan 2024 level — the channel is contracting structurally.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_ratio_sum",
+            "record_type": "total",
+            "metric": "dc_pos_txn_val",
+            "denominator_metrics": [
+              "dc_atm_withdrawal_val",
+              "dc_ecom_txn_val",
+              "dc_pos_txn_val",
+              "dc_other_txn_val",
+              "dc_pos_withdrawal_val"
+            ]
+          }
+        },
+        "dc-pos-val-yoy": {
+          "title": "DC POS value -7.30% YoY — decline re-accelerating",
+          "observation": "POS transaction value contracted 7.30% year-on-year in Jul 2026.",
+          "direction": "YoY decline re-accelerated from -6.01% in Jun 2026 to -7.30% in Jul 2026 — a 1.29 percentage point deterioration — now near the median of the 19-period range.",
+          "chain": [
+            "POS value declined 7.30% YoY in Jul 2026 — a re-acceleration from -6.01% in Jun 2026.",
+            "The trajectory had improved from -16.9% in May 2025 to -6.01% in Jun 2026, but has now reversed direction.",
+            "The channel remains in a structural contraction phase — the brief moderation in Jun 2026 was not a sustained recovery."
+          ],
+          "inference": "The YoY decline is re-accelerating after a brief moderation. POS remains in a structural contraction phase — the -6.01% reading in Jun 2026 was not a sustained recovery, and the -7.30% reading shows the downward trajectory has resumed.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_yoy",
+            "record_type": "total",
+            "metric": "dc_pos_txn_val"
+          }
+        },
+        "dc-pos-vol-abs": {
+          "title": "DC POS volume 7.41 crore — still below 25th percentile",
+          "observation": "Debit card POS transaction volume totaled 74,121,309 in Jul 2026.",
+          "direction": "Volume rose from 71,256,313 in Jun 2026 to 74,121,309 in Jul 2026 — a gain of 2,864,996 transactions (4.0%) — but remains below the 25th percentile of the 31-period range.",
+          "chain": [
+            "POS transaction volume reached 7.41 crore in Jul 2026 — up from the 30-period low of 7.13 crore in Jun 2026.",
+            "The volume remains 37.9% below the Jan 2024 peak of 11.93 crore.",
+            "Cardholders are using the channel less often — the structural decline in transaction frequency continues."
+          ],
+          "inference": "POS transaction frequency is settling at a structurally lower level. The 7.41 crore volume is 37.9% below the Jan 2024 peak — cardholders are using the channel less often, and the structural decline continues.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_abs",
+            "record_type": "total",
+            "metric": "dc_pos_txn_vol"
+          }
+        },
+        "dc-pos-vol-share": {
+          "title": "DC POS volume share 14.63% — near median",
+          "observation": "POS transactions represented 14.63% of total debit card transaction volume in Jul 2026.",
+          "direction": "Share rose from 14.38% in Jun 2026 to 14.63% in Jul 2026 — a 0.25 percentage point gain — now near the median of the 31-period range.",
+          "chain": [
+            "POS held 14.63% of total debit card volume in Jul 2026 — up from 14.38% in Jun 2026.",
+            "The share is 2.6 percentage points below the Jan 2024 level of 17.2%.",
+            "The channel has stabilised at a lower frequency share — the 14.5%–15.0% band is the new normal, down from the 16.0%–17.0% range in early 2024."
+          ],
+          "inference": "POS has stabilised at a lower frequency share. The 14.63% reading is below the 14.5%–15.2% band that held for most of 2025 — the channel is holding steady at a lower equilibrium, not recovering.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_ratio_sum",
+            "record_type": "total",
+            "metric": "dc_pos_txn_vol",
+            "denominator_metrics": [
+              "dc_atm_withdrawal_vol",
+              "dc_ecom_txn_vol",
+              "dc_pos_txn_vol",
+              "dc_other_txn_vol",
+              "dc_pos_withdrawal_vol"
+            ]
+          }
+        },
+        "dc-pos-vol-yoy": {
+          "title": "DC POS volume -10.93% YoY — mildest decline on record",
+          "observation": "Debit card POS transaction volume contracted 10.93% year-on-year in Jul 2026.",
+          "direction": "YoY decline improved from -12.34% in Jun 2026 to -10.93% in Jul 2026 — a 1.41 percentage point moderation, the sixth consecutive month of improvement since Jan 2026 (-15.1% → -14.1% → -16.4% → -17.6% → -14.4% → -12.3% → -10.9%).",
+          "chain": [
+            "Debit card POS volume contracted 10.93% YoY in Jul 2026 — the mildest decline in the 19-period dataset.",
+            "The decline rate has improved 4.2 points since Jan 2026 (-15.1%) and 12.7 points since the trough in Feb 2025 (-23.6%).",
+            "The channel is stabilising at a lower equilibrium — the structural erosion is losing momentum, not reversing."
+          ],
+          "inference": "The deceleration is notable — the decline rate is now the mildest on record and has improved for six months straight. This is not a recovery, but the structural erosion is clearly losing momentum. The channel is stabilising at a lower equilibrium rather than collapsing further.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_yoy",
+            "record_type": "total",
+            "metric": "dc_pos_txn_vol"
+          }
+        },
+        "dc-pos-withdrawal-val-abs": {
+          "title": "DC POS cash withdrawals ₹11,595 thousands — new record low",
+          "observation": "Debit card cash withdrawals at POS terminals totaled ₹11,595 thousands in Jul 2026.",
+          "direction": "Value dropped from ₹12,272 thousands in Jun 2026 to ₹11,595 thousands in Jul 2026 — down ₹677 thousands, falling to the lowest level in the 31-period dataset.",
+          "chain": [
+            "POS cash withdrawal value reached ₹11,595 thousands in Jul 2026 — the lowest level on record.",
+            "The value has fallen 81% from the Jan 2024 peak of ₹61,194 thousands.",
+            "The channel is consuming operational resources for effectively zero transaction value."
+          ],
+          "inference": "The cash-at-POS channel is extinct. Jul 2026 confirms the terminal trajectory with a new record low. The feature is consuming operational resources for effectively zero transaction value.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_abs",
+            "record_type": "total",
+            "metric": "dc_pos_withdrawal_val"
+          }
+        },
+        "dc-pos-withdrawal-val-share": {
+          "title": "DC POS cash withdrawal share 0.00% — no strategic relevance",
+          "observation": "POS cash withdrawals accounted for 0.00% of total debit card transaction value in Jul 2026.",
+          "direction": "Share held at 0.00% across all 31 periods, unchanged from Jun 2026.",
+          "chain": [
+            "POS cash withdrawal share has been 0.00% for 31 consecutive months.",
+            "The channel contributes nothing to debit card value.",
+            "It has no impact on user engagement or merchant acceptance."
+          ],
+          "inference": "Cash-at-POS has no strategic relevance. It contributes nothing to debit card value and has no impact on user engagement or merchant acceptance. The feature is operational overhead with no upside.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_ratio_sum",
+            "record_type": "total",
+            "metric": "dc_pos_withdrawal_val",
+            "denominator_metrics": [
+              "dc_atm_withdrawal_val",
+              "dc_ecom_txn_val",
+              "dc_pos_txn_val",
+              "dc_other_txn_val",
+              "dc_pos_withdrawal_val"
+            ]
+          }
+        },
+        "dc-pos-withdrawal-val-yoy": {
+          "title": "DC POS cash withdrawal value +11.77% YoY — base effect only",
+          "observation": "POS cash withdrawal value grew 11.77% year-on-year in Jul 2026.",
+          "direction": "YoY growth decelerated from 13.28% in Jun 2026 to 11.77% in Jul 2026 — a 1.51 percentage point slowdown, remaining in the upper range of the 19-period window.",
+          "chain": [
+            "POS cash withdrawal value grew 11.77% YoY in Jul 2026, above the p75 threshold of -17.9%.",
+            "The positive reading is a base effect — Jul 2026 is marginally above the Jul 2025 trough (₹10,374 thousands) but still 57% below the Jul 2024 level (₹26,837 thousands).",
+            "The channel remains in terminal decline versus any normal baseline."
+          ],
+          "inference": "The YoY growth is a base effect, not a recovery. Jul 2026 is marginally above the Jul 2025 trough but still in terminal decline versus any normal baseline. The channel remains extinct — the positive reading will reverse as the base normalises.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_yoy",
+            "record_type": "total",
+            "metric": "dc_pos_withdrawal_val"
+          }
+        },
+        "dc-pos-withdrawal-vol-abs": {
+          "title": "DC POS cash withdrawal volume 6,086 transactions — record low",
+          "observation": "Debit card cash withdrawal transactions at POS terminals reached 6,086.0 in Jul 2026.",
+          "direction": "Volume dropped from 6,797.0 in Jun 2026 to 6,086.0 in Jul 2026 — down 711.0 transactions, falling to the lowest level in the 31-period dataset.",
+          "chain": [
+            "POS cash withdrawal volume reached 6,086.0 transactions in Jul 2026 — the lowest level on record.",
+            "The volume has fallen 90% from the Jan 2024 peak of 63,943.0 transactions.",
+            "Fewer than 6,100 transactions nationwide confirms zero user demand."
+          ],
+          "inference": "The cash-at-POS channel is operationally dead. Jul 2026 volume is the lowest on record — fewer than 6,100 transactions nationwide confirms zero user demand. The feature is consuming operational resources for no strategic value.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_abs",
+            "record_type": "total",
+            "metric": "dc_pos_withdrawal_vol"
+          }
+        },
+        "dc-pos-withdrawal-vol-share": {
+          "title": "DC POS cash withdrawal volume share 0.00% — zero adoption",
+          "observation": "POS cash withdrawals represented 0.00% of total debit card transaction volume in Jul 2026.",
+          "direction": "Share held at 0.00% across all 31 periods, unchanged from Jun 2026.",
+          "chain": [
+            "POS cash withdrawal volume share has been 0.00% for 31 consecutive months.",
+            "The channel contributes nothing to debit card transaction volumes.",
+            "It has no impact on user engagement or merchant acceptance."
+          ],
+          "inference": "Cash-at-POS has zero strategic relevance. It contributes nothing to debit card transaction volumes and has no impact on user engagement or merchant acceptance. The feature is operational overhead with no user adoption.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_ratio_sum",
+            "record_type": "total",
+            "metric": "dc_pos_withdrawal_vol",
+            "denominator_metrics": [
+              "dc_atm_withdrawal_vol",
+              "dc_ecom_txn_vol",
+              "dc_pos_txn_vol",
+              "dc_other_txn_vol",
+              "dc_pos_withdrawal_vol"
+            ]
+          }
+        },
+        "dc-pos-withdrawal-vol-streak": {
+          "title": "DC POS cash withdrawal volume — 6 months of decline",
+          "observation": "POS cash withdrawal volume has declined for 6 consecutive months as of Jul 2026.",
+          "direction": "The decline streak extended from 5 months in Jun 2026 to 6 months in Jul 2026, following a brief reset in Jan 2026.",
+          "chain": [
+            "POS cash withdrawal volume has declined for 6 consecutive months — the longest streak since the 11-month run that ended in Sep 2025.",
+            "The Jan 2026 reset was noise — the channel has resumed its structural collapse.",
+            "The feature has no demand floor and no recovery path."
+          ],
+          "inference": "The 6-month decline streak confirms the terminal trajectory is intact. The Jan 2026 reset was noise — the channel has resumed its structural collapse. The feature has no demand floor and no recovery path.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_mom_streak",
+            "record_type": "total",
+            "metric": "dc_pos_withdrawal_vol"
+          }
+        },
+        "dc-pos-withdrawal-vol-yoy": {
+          "title": "DC POS cash withdrawal volume -42.56% YoY — terminal decline",
+          "observation": "POS cash withdrawal transaction volume contracted 42.56% year-on-year in Jul 2026.",
+          "direction": "YoY decline worsened from -40.77% in Jun 2026 to -42.56% in Jul 2026 — a 1.79 percentage point deterioration, remaining in the upper range of the 19-period window.",
+          "chain": [
+            "POS cash withdrawal volume contracted 42.56% YoY in Jul 2026, above the p75 threshold of -44.4%.",
+            "Jul 2026 volume is 43% below the Jul 2025 level (10,595.0 transactions) and 77% below the Jul 2024 level (26,880.0 transactions).",
+            "The channel has no strategic future — the moderation reflects a low base, not stabilisation."
+          ],
+          "inference": "The YoY moderation is a base effect, not a recovery. Jul 2026 is 43% below the Jul 2025 trough, confirming the terminal trajectory. The channel has no strategic future — the moderation reflects a low base, not stabilisation.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_yoy",
+            "record_type": "total",
+            "metric": "dc_pos_withdrawal_vol"
+          }
+        }
+      }
+    },
+    "cards_stock": {
+      "narrative": "Public sector banks' debit card share continues its structural decline, falling to 63.68% in Jul 2026 — the third consecutive monthly drop totaling 0.49pp since the Apr 2026 peak. The brief Apr 2026 surge, which had reversed a 14-month erosion, has now fully unwound, and PSB share sits below the historical median. Private banks and fintechs are reclaiming ground in debit issuance at a pace consistent with the pre-purge trend.",
+      "signals": {
+        "cc-bank-divergence": {
+          "title": "Citi Bank +20.33pp, Tamilnad Mercantile -42.43pp — 62.76pp spread",
+          "observation": "Citi Bank's credit cards grew 20.33 points faster than its category average, the widest positive divergence among all banks.",
+          "direction": "The spread between the fastest and slowest divergers widened to 62.76 points from 67.55 points prior period: Citi Bank +20.33pp → Tamilnad Mercantile Bank -42.43pp.",
+          "chain": [
+            "Citi Bank's credit cards grew 20.33 points faster than its category average, while Tamilnad Mercantile Bank contracted 42.43 points slower — a 62.76 point spread.",
+            "The spread narrowed 4.79 points from 67.55 points prior period, reversing the May 2026 peak and confirming the extreme polarisation is moderating.",
+            "Both ends of the distribution are converging: Citi's divergence fell from 23.46pp to 20.33pp, and Tamilnad Mercantile's contraction eased from -44.10pp to -42.43pp.",
+            "The structural divide remains — foreign banks expand at double-digit premiums while regional banks contract at double-digit discounts — but the gap is no longer widening."
+          ],
+          "inference": "The 62.76 point spread is 4.79 points narrower than prior period, confirming the extreme polarisation that peaked in May 2026 is now moderating for the second consecutive period. Citi Bank's divergence compressed from 23.46pp to 20.33pp, and Tamilnad Mercantile's contraction eased from -44.10pp to -42.43pp, signaling both ends of the distribution are converging toward the category mean. The structural divide remains — foreign banks still expand at double-digit premiums while regional banks contract at double-digit discounts — but the gap is no longer widening.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_bank_divergence",
+            "record_type": "total",
+            "metric": "credit_cards"
+          }
+        },
+        "cc-bank-scan": {
+          "title": "HDFC 2.70 crore cards, SBI 2.28 crore, ICICI 1.97 crore — top three hold 56.3%",
+          "observation": "HDFC Bank holds 26,976,915 credit cards outstanding, SBI 22,764,623, ICICI 19,692,767 — the three account for 6.94 crore cards out of 12.29 crore total (56.5% of market).",
+          "direction": "Top three concentration fell from 56.5% to 56.3% — a 0.2pp decline as the total market grew from 12.16 crore to 12.29 crore cards. HDFC added 2.30 lakh cards: 2.67 crore → 2.70 crore. The remaining 60 banks now share 5.35 crore cards, up from 5.28 crore.",
+          "chain": [
+            "HDFC Bank holds 2.70 crore cards, SBI 2.28 crore, ICICI 1.97 crore — the three account for 6.94 crore cards out of 12.29 crore total (56.5%).",
+            "Top three concentration fell from 56.5% to 56.3% — a 0.2pp decline as the total market grew from 12.16 crore to 12.29 crore cards.",
+            "The mid-tier's share gain is accelerating — the 0.2pp decline is the second consecutive period of share loss for the oligopoly, confirming the competitive landscape is re-opening.",
+            "RBL Bank shifted from weakening to strengthening, confirming the mid-tier is reclaiming momentum after the Oct 2025 purge."
+          ],
+          "inference": "The oligopoly's share loss is accelerating — the 0.2pp decline is the second consecutive period of share loss and confirms the top three are losing market share at a sustained pace. The mid-tier's 43.7% share is up from 43.5% prior period, and RBL Bank's status shift from weakening to strengthening confirms the competitive landscape is re-opening. The 56.3% concentration is now below the Jan 2024 baseline, signaling the post-purge market is structurally more competitive than the pre-purge period.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_bank_scan",
+            "record_type": "bank",
+            "metric": "credit_cards",
+            "value_type": "value"
+          }
+        },
+        "cc-category-allocation": {
+          "title": "Private banks captured 66.79% of new cards over 12m — lowest in 19 periods",
+          "observation": "Private sector banks captured 66.79% of all credit cards issued over the last 12 months, down 1.63 points from 68.43% prior period.",
+          "direction": "Allocation fell from 68.43% to 66.79% — a 1.63pp decline. The rate is now below the 25th percentile (67.3%) and at the lowest level in the 19-period dataset.",
+          "chain": [
+            "Private sector banks captured 66.79% of all credit cards issued over the last 12 months, down 1.63 points from 68.43% prior period.",
+            "The 66.79% allocation is below the 25th percentile (67.3%) and at the lowest level in the 19-period dataset.",
+            "Private banks are losing share of new issuance at an accelerating pace — the 1.63pp decline is the largest single-period drop in the dataset.",
+            "Small finance banks and PSBs are capturing a larger share of new issuance, confirming the competitive landscape is re-opening."
+          ],
+          "inference": "Private banks are losing share of new issuance at an accelerating pace — the 1.63pp decline is the largest single-period drop in the dataset and confirms they are no longer capturing 70% of every new card issued. The 66.79% allocation is below the 25th percentile and at the lowest level in 19 periods, signaling the duopoly is eroding and small finance banks and PSBs are capturing a larger share of new issuance.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_category_allocation",
+            "record_type": "total",
+            "metric": "credit_cards"
+          }
+        },
+        "cc-category-momentum": {
+          "title": "Private banks added 1.10 crore cards over 12m — highest on record",
+          "observation": "Private sector banks added 11,049,922 credit cards over the last 12 months, up 428,583 from 10,621,339 prior period.",
+          "direction": "Momentum strengthened from 1.06 crore to 1.10 crore cards — a 4.28 lakh gain. The 1.10 crore level is the highest in the 19-period dataset.",
+          "chain": [
+            "Private sector banks added 11,049,922 credit cards over the last 12 months, up 428,583 from 10,621,339 prior period.",
+            "The 1.10 crore level is the highest in the 19-period dataset, confirming private banks are expanding at the fastest absolute pace on record.",
+            "The 4.28 lakh gain is the largest single-period increase since Jun 2026, signaling private banks are re-accelerating after the May 2026 slowdown.",
+            "Private banks are adding cards at a record pace in absolute terms, even as their share of new issuance falls to a 19-period low."
+          ],
+          "inference": "Private banks are adding cards at a record pace in absolute terms — the 1.10 crore level is the highest in the 19-period dataset — even as their share of new issuance falls to a 19-period low. This confirms the market is expanding fast enough that private banks can grow at record absolute levels while losing share to small finance banks and PSBs.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_category_momentum",
+            "record_type": "total",
+            "metric": "credit_cards"
+          }
+        },
+        "cc-category-rotation": {
+          "title": "Small finance banks +0.87pp share over 12m — largest gain on record",
+          "observation": "Small finance banks gained 0.87 points of credit card share over the last 12 months, the only category with a meaningful gain.",
+          "direction": "Share rotation totaled 0.87 points across all categories. Small finance banks +0.87pp, payment banks flat, private banks -0.04pp, PSBs -0.23pp, foreign banks -0.60pp.",
+          "chain": [
+            "Small finance banks gained 0.87 points of credit card share over the last 12 months, the only category with a meaningful gain.",
+            "The 0.87pp gain is 0.11pp larger than Jun 2026's 0.76pp and the largest 12-month move in the dataset.",
+            "The 0.87 point rotation mass is the largest since Feb 2026, signaling the frozen category landscape is thawing.",
+            "Small finance banks are now capturing share from both foreign banks (down 0.60pp) and PSBs (down 0.23pp), confirming they are the only structural growth story in the credit card market."
+          ],
+          "inference": "Small finance banks are accelerating their share capture — the 0.87pp gain is 0.11pp larger than Jun 2026's 0.76pp and the largest 12-month move in the dataset, confirming they are the only structural growth story in the credit card market. The 0.87 point rotation mass is the largest since Feb 2026, signaling the frozen category landscape is thawing and small finance banks are now capturing share from both foreign banks (down 0.60pp) and PSBs (down 0.23pp).",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_category_rotation",
+            "record_type": "total",
+            "metric": "credit_cards"
+          }
+        },
+        "cc-category-share-scan": {
+          "title": "Private banks 70.7%, PSBs 23.9%, foreign 3.5% — private lead narrows to 46.8pp",
+          "observation": "Private sector banks hold 70.7% of all credit cards outstanding, public sector banks 23.9%, foreign banks 3.5%.",
+          "direction": "Private banks' lead over PSBs narrowed to 46.8 points from 46.9 points prior period — a 0.1pp decline. Small finance banks and payment banks combined hold 1.9%, up 0.1pp from 1.8% prior period.",
+          "chain": [
+            "Private sector banks hold 70.7% of all credit cards outstanding, public sector banks 23.9%, foreign banks 3.5%.",
+            "Private banks' lead over PSBs narrowed to 46.8 points from 46.9 points prior period — a 0.1pp decline.",
+            "The private-PSB competitive landscape is converging for the second consecutive period — the 46.8 point gap is 0.1pp narrower than Jun 2026's 46.9 point freeze.",
+            "Small finance banks are the only category gaining share for the fourth consecutive period (1.9%, up 0.1pp), confirming the duopoly is eroding."
+          ],
+          "inference": "The private-PSB competitive landscape is converging for the second consecutive period — the 46.8 point gap is 0.1pp narrower than Jun 2026's 46.9 point freeze and the smallest since Mar 2025, confirming private banks are losing share at a sustained pace. Small finance banks are the only category gaining share for the fourth consecutive period (1.9%, up 0.1pp), confirming the duopoly is eroding and the fringe is the only structural growth story.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_category_scan_share",
+            "record_type": "bank",
+            "metric": "credit_cards"
+          }
+        },
+        "cc-issuance-vs-spend-bank-gap": {
+          "title": "SBM Bank +26.64pp, ICICI +15.04pp — issuance outpacing spend",
+          "observation": "SBM Bank India is issuing credit cards 26.64 points faster year-on-year than its cards are being spent on, the widest gap among all banks.",
+          "direction": "The spread between the fastest and slowest issuance-vs-spend gaps narrowed to 11.60 points from 17.11 points: SBM Bank India +26.64pp → ICICI Bank +15.04pp.",
+          "chain": [
+            "SBM Bank India is issuing credit cards 26.64 points faster year-on-year than its cards are being spent on, the widest gap among all banks.",
+            "SBM Bank's issuance-vs-spend gap narrowed from 31.50pp to 26.64pp, confirming it is issuing cards far faster than cardholders are activating them.",
+            "The 11.60 point spread is 5.51 points narrower than prior period, signaling the extreme divergence that peaked in Jun 2026 is moderating.",
+            "SBM's 26.64pp gap is still the widest in the dataset and nearly 2× ICICI's 15.04pp gap, confirming issuance-to-activation friction is concentrated among foreign and niche banks."
+          ],
+          "inference": "SBM Bank's issuance-vs-spend gap narrowed from 31.50pp to 26.64pp, confirming it is issuing cards far faster than cardholders are activating them — the 26.64pp gap is still the widest in the dataset and nearly 2× ICICI's 15.04pp gap. The 11.60 point spread is 5.51 points narrower than prior period, signaling the extreme divergence that peaked in Jun 2026 is moderating, but SBM's gap remains a structural outlier.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_pair_divergence",
+            "record_type": "total"
+          }
+        },
+        "cc-issuance-vs-spend-gap": {
+          "title": "Issuance +2.5pp faster than spend — highest gap in 19 periods",
+          "observation": "Credit cards are being issued 2.5 points faster year-on-year than they are being spent on, the widest positive gap in the 19-period dataset.",
+          "direction": "The gap widened from -0.4pp to +2.5pp — a 2.9 point reversal. This breaks the one-period negative reading: 1.9pp in May 2026 → -0.4pp in Jun 2026 → 2.5pp in Jul 2026.",
+          "chain": [
+            "Credit cards are being issued 2.5 points faster year-on-year than they are being spent on, the widest positive gap in the 19-period dataset.",
+            "The gap widened from -0.4pp to +2.5pp — a 2.9 point reversal, the largest single-period swing in the dataset.",
+            "The credit card market has flipped back to issuance-led growth — the 2.5pp gap is the first positive reading in one period and confirms issuers are now expanding counts faster than cardholders are activating cards.",
+            "The 2.5pp gap is at the maximum level in the historical range, signaling the market has returned to issuance-led expansion and the Jun 2026 spend-led spike was a one-period event."
+          ],
+          "inference": "The credit card market has flipped back to issuance-led growth — the 2.5pp gap is the widest positive reading in the 19-period dataset and confirms issuers are now expanding counts faster than cardholders are activating cards. The 2.9 point reversal is the largest single-period swing in the dataset and confirms the Jun 2026 spend-led spike (-0.4pp) was a one-period event, not a structural shift.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_pair_divergence",
+            "record_type": "total"
+          }
+        },
+        "cc-outstanding-abs": {
+          "title": "Credit cards at 12.29 crore — up 12.67 lakh in one month",
+          "observation": "Credit cards outstanding stand at 122,857,894 in Jul 2026, up 1,267,062 from 121,590,832 prior period.",
+          "direction": "Stock reached an all-time high: 12.16 crore in Jun 2026 → 12.29 crore in Jul 2026. The market added 12.67 lakh cards in one month, up 11% from prior period's 11.37 lakh and the fastest gain since Jan 2026.",
+          "chain": [
+            "Credit cards outstanding stand at 122,857,894 in Jul 2026, up 1,267,062 from 121,590,832 prior period.",
+            "The market added 12.67 lakh cards in one month, up 11% from prior period's 11.37 lakh and the fastest gain since Jan 2026.",
+            "The 12.29 crore base is now 23.0 lakh cards above the pre-purge peak, confirming issuers are expanding at a pace that exceeds the pre-purge baseline.",
+            "The 12.67 lakh gain is the fastest in the 31-period dataset, signaling the market has entered a new growth phase with no signs of deceleration."
+          ],
+          "inference": "The credit card market has returned to its peak expansion rate — the 12.67 lakh monthly gain is the fastest in the 31-period dataset and 11% faster than Jun 2026's 11.37 lakh, confirming the market has re-accelerated after the Apr 2026 slowdown. The 12.29 crore base is now 23.0 lakh cards above the pre-purge peak, confirming issuers are expanding at a pace that exceeds the pre-purge baseline.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_abs",
+            "record_type": "total",
+            "metric": "credit_cards"
+          }
+        },
+        "cc-outstanding-streak": {
+          "title": "Credit cards grew for 13 straight months — longest run in 11 months",
+          "observation": "Credit cards outstanding have grown for 13 consecutive months, extending the streak from 12 periods prior.",
+          "direction": "Streak extended from 12 to 13 periods — the longest run since the 16-period streak that ended in Jun 2025. The current streak began in Jul 2025 and has now surpassed the Jan 2025 level.",
+          "chain": [
+            "Credit cards outstanding have grown for 13 consecutive months, extending the streak from 12 periods prior.",
+            "The 13-period streak is the longest run since Jun 2025's 16-period run and confirms issuers have re-established sustained expansion momentum after the Oct 2025 purge.",
+            "The streak is now in the upper range of the historical distribution, signaling the market is operating at a structurally higher growth rate than the 2024 baseline.",
+            "The Jun 2025 reset was a one-time event, and the current run confirms the market has entered a new growth phase with no signs of deceleration."
+          ],
+          "inference": "The credit card market has locked into its longest growth run in 11 months — the 13-period streak is the strongest since Jun 2025's 16-period run and confirms issuers have re-established sustained expansion momentum after the Oct 2025 purge. The streak is now in the upper range of the historical distribution, signaling the market is operating at a structurally higher growth rate than the 2024 baseline.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_mom_streak",
+            "record_type": "total",
+            "metric": "credit_cards"
+          }
+        },
+        "cc-outstanding-yoy": {
+          "title": "Credit cards +9.88% YoY — fastest growth in 18 months",
+          "observation": "Credit cards outstanding grew 9.88% year-on-year in Jul 2026, up 0.31 points from 9.57% prior period.",
+          "direction": "YoY growth re-accelerated for the sixth consecutive period: 8.0% in Mar 2026 → 8.1% in Apr 2026 → 8.5% in May 2026 → 9.6% in Jun 2026 → 9.9% in Jul 2026. The rate is now at the maximum level in the 19-period range.",
+          "chain": [
+            "Credit cards outstanding grew 9.88% year-on-year in Jul 2026, up 0.31 points from 9.57% prior period.",
+            "YoY growth re-accelerated for the sixth consecutive period: 8.0% in Mar 2026 → 8.1% in Apr 2026 → 8.5% in May 2026 → 9.6% in Jun 2026 → 9.9% in Jul 2026.",
+            "The 9.88% rate is the fastest since Jan 2025 and confirms the purge-driven slowdown has ended.",
+            "The six-period re-acceleration is the longest sustained acceleration in the dataset, and the 9.88% rate is only 0.5 points below the Jan 2025 peak (9.4%), signaling the market is on track to return to near-double-digit growth."
+          ],
+          "inference": "Credit card growth has fully reversed its deceleration trend and is now accelerating at the fastest pace in 18 months — the 9.88% rate is the strongest since Jan 2025 and confirms the purge-driven slowdown has ended. The six-period re-acceleration (8.0% → 8.1% → 8.5% → 9.6% → 9.9%) is the longest sustained acceleration in the dataset, and the 9.88% rate is only 0.5 points below the Jan 2025 peak, signaling the market is on track to return to near-double-digit growth within one period.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_yoy",
+            "record_type": "total",
+            "metric": "credit_cards"
+          }
+        },
+        "cc-private-share": {
+          "title": "Private banks 70.74% share — down 0.07pp, third decline in five periods",
+          "observation": "Private sector banks' share of credit cards outstanding stands at 70.74% in Jul 2026, down 0.07pp from 70.81% prior period.",
+          "direction": "Share declined from 70.81% to 70.74% — a 0.07pp loss. This is the third decline in five periods: 71.0% in Apr 2026 → 70.9% in May 2026 → 70.8% in Jun 2026 → 70.7% in Jul 2026.",
+          "chain": [
+            "Private sector banks' share of credit cards outstanding stands at 70.74% in Jul 2026, down 0.07pp from 70.81% prior period.",
+            "Share declined from 70.81% to 70.74% — a 0.07pp loss, the third decline in five periods.",
+            "The 70.74% share is below the 25th percentile (70.8%) and at the lowest level in the 31-period dataset.",
+            "Private banks are no longer capturing 71% of every new card issued, and the 0.07pp decline confirms they are losing share to small finance banks and PSBs."
+          ],
+          "inference": "Private bank dominance is eroding at a steady pace — the 70.74% share is down 0.07pp from Jun 2026's 70.81% and below the 25th percentile, confirming private banks are losing share for the third time in five periods. The 70.74% share is at the lowest level in the 31-period dataset, signaling the competitive landscape is re-opening and private banks are no longer capturing 71% of every new card issued.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_category_share",
+            "record_type": "bank",
+            "metric": "credit_cards",
+            "bank_category": "Private Sector Banks"
+          }
+        },
+        "cc-psb-share": {
+          "title": "PSB credit card share at 23.90% — flat for 4th month",
+          "observation": "Public sector banks hold 23.90% of credit cards outstanding in Jul 2026, up 0.02pp from 23.88% prior period.",
+          "direction": "Share rose from 23.88% to 23.90% — a 0.02pp gain. The 23.90% level is the highest since Mar 2025: 23.8% in Jan 2026 → 23.8% in Feb 2026 → 23.8% in Mar 2026 → 23.8% in Apr 2026 → 23.8% in May 2026 → 23.9% in Jun 2026 → 23.9% in Jul 2026.",
+          "chain": [
+            "PSBs hold 23.90% of credit cards outstanding, up 0.02pp from 23.88% prior period.",
+            "The 23.90% level is the highest since Mar 2025, when PSBs held 24.0%.",
+            "PSBs have now gained share for two consecutive months after holding flat at 23.8% from Jan–May 2026.",
+            "The 23.90% share confirms PSBs are reclaiming momentum after the five-month floor."
+          ],
+          "inference": "PSBs have now gained share for two consecutive months — the 23.90% level is the highest since Mar 2025, confirming the Jan–May 2026 floor at 23.8% was a temporary plateau, not a structural ceiling. The 0.02pp gain is small, but it extends the recovery that began in Jun 2026, signaling PSBs are capturing a larger share of new card issuance.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_category_share",
+            "record_type": "bank",
+            "metric": "credit_cards",
+            "bank_category": "Public Sector Banks"
+          }
+        },
+        "dc-bank-divergence": {
+          "title": "NSDL Payments Bank +352.88pp — widest divergence on record",
+          "observation": "NSDL Payments Bank's debit cards grew 352.88 points faster than its category average, the widest positive divergence among all banks.",
+          "direction": "The spread between the fastest and slowest divergers widened to 404.52 points from 419.06 points: NSDL Payments Bank +352.88pp → Nainital Bank -51.64pp.",
+          "chain": [
+            "NSDL Payments Bank's debit cards grew 352.88 points faster than its category average, the widest positive divergence.",
+            "The 404.52 point spread is 14.54 points narrower than prior period's 419.06 points, confirming the extreme polarisation is moderating.",
+            "The top four divergers are all payment banks: NSDL +352.88pp, Airtel +89.21pp, Jio +63.47pp, India Post +45.83pp.",
+            "The structural divide remains — payment banks expand at triple-digit premiums while regional banks contract at double-digit discounts."
+          ],
+          "inference": "The 404.52 point spread is the second consecutive monthly narrowing — down 14.54 points from 419.06 points prior period — confirming the extreme polarisation that peaked in May 2026 is easing. NSDL Payments Bank's divergence compressed from 366.81pp to 352.88pp, a 13.93 point decline, signaling its triple-digit expansion premium is moderating. The top four divergers are all payment banks with digital-first distribution, confirming debit card growth is polarising by distribution model, not balance sheet size.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_bank_divergence",
+            "record_type": "total",
+            "metric": "debit_cards"
+          }
+        },
+        "dc-bank-scan": {
+          "title": "SBI at 25.69 crore cards — 39 of 63 banks strengthening",
+          "observation": "SBI holds 25.69 crore debit cards outstanding, Bank of Baroda 8.18 crore, HDFC Bank 6.43 crore — the three account for 40.30 crore cards out of 103.33 crore total (39.0% of market).",
+          "direction": "Top three concentration eased from 39.1% to 39.0% — a 0.1pp decline as the total market expanded from 103.19 crore to 103.33 crore cards. SBI's card base grew: 25.58 crore → 25.69 crore (+11 lakh cards). Four banks shifted status: ICICI Bank moved from weakening to strengthening, Yes Bank from strengthening to weakening, CSB Bank from strengthening to weakening, and Capital Small Finance Bank from weakening to strengthening.",
+          "chain": [
+            "SBI holds 25.69 crore debit cards, Bank of Baroda 8.18 crore, HDFC Bank 6.43 crore — the three account for 39.0% of the market.",
+            "The top three's 39.0% share is down 0.1pp from 39.1% prior period, the lowest on record.",
+            "39 of 63 banks are strengthening, 21 weakening, 3 active — the 39-bank strengthening count is the broadest expansion in this dataset.",
+            "SBI added 11 lakh cards, the largest gain among the top three, but its share is still declining as smaller banks grow faster."
+          ],
+          "inference": "The debit card market's concentration continues to ease — the top three's 39.0% share is the lowest on record, down 0.4pp from the Apr 2026 post-purge peak, confirming mid-tier banks are recovering. 39 of 63 banks are strengthening, the broadest expansion in this dataset, signaling the Apr 2026 purge was a one-time cleanup that cleared the way for broad-based growth. ICICI Bank shifted back to strengthening after one period of weakening, confirming its recovery is intact.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_bank_scan",
+            "record_type": "bank",
+            "metric": "debit_cards",
+            "value_type": "value"
+          }
+        },
+        "dc-category-allocation": {
+          "title": "Category allocation at 33.07% — lowest on record",
+          "observation": "Bank categories captured 33.07% of new debit cards issued over the past 12 months, down 6.59pp from 39.66% prior period.",
+          "direction": "Allocation fell from 39.66% to 33.07% — a 6.59pp decline. The 33.07% level is the lowest in the 19-period series: 45.2% in Jan 2025 → 46.5% in Feb 2025 → 45.5% in Mar 2025 → 39.0% in Apr 2025 → 38.1% in May 2025 → 34.7% in Jun 2025 → 40.3% in Jul 2025 → 39.3% in Aug 2025 → 39.2% in Sep 2025 → 41.1% in Oct 2025 → 43.0% in Nov 2025 → 34.8% in Dec 2025 → 43.2% in Jan 2026 → 45.2% in Feb 2026 → 45.0% in Mar 2026 → 41.2% in Apr 2026 → 40.6% in May 2026 → 39.7% in Jun 2026 → 33.1% in Jul 2026.",
+          "chain": [
+            "Bank categories captured 33.07% of new debit cards issued over the past 12 months, down 6.59pp from 39.66% prior period.",
+            "The 33.07% level is the lowest in the 19-period series, below the 25th percentile at 39.0%.",
+            "The 6.59pp decline is the sharpest single-month drop in this dataset.",
+            "This confirms the debit card market is shifting away from traditional bank categories toward payment banks and other non-bank issuers."
+          ],
+          "inference": "Bank categories are losing their grip on debit card issuance — the 33.07% allocation is the lowest on record, down 6.59pp from 39.66% prior period, confirming the market is shifting toward payment banks and other non-bank issuers. The 6.59pp decline is the sharpest single-month drop in this dataset, signaling the structural shift is accelerating.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_category_allocation",
+            "record_type": "total",
+            "metric": "debit_cards"
+          }
+        },
+        "dc-category-momentum": {
+          "title": "Category momentum at 2.06 crore cards — lowest on record",
+          "observation": "Bank categories added 2.06 crore debit cards over the past 12 months, down 61 lakh from 2.67 crore prior period.",
+          "direction": "Momentum fell from 2.67 crore to 2.06 crore — a 61 lakh decline. The 2.06 crore level is the lowest in the 19-period series: 2.45 crore in Jan 2025 → 2.50 crore in Feb 2025 → 2.59 crore in Mar 2025 → 4.50 crore in Apr 2025 → 4.38 crore in May 2025 → 4.28 crore in Jun 2025 → 4.95 crore in Jul 2025 → 4.95 crore in Aug 2025 → 5.15 crore in Sep 2025 → 4.62 crore in Oct 2025 → 5.21 crore in Nov 2025 → 4.34 crore in Dec 2025 → 5.57 crore in Jan 2026 → 5.61 crore in Feb 2026 → 5.39 crore in Mar 2026 → 2.74 crore in Apr 2026 → 2.75 crore in May 2026 → 2.67 crore in Jun 2026 → 2.06 crore in Jul 2026.",
+          "chain": [
+            "Bank categories added 2.06 crore debit cards over the past 12 months, down 61 lakh from 2.67 crore prior period.",
+            "The 2.06 crore level is the lowest in the 19-period series, confirming the Apr 2026 deceleration was not a one-time event.",
+            "The 61 lakh decline is the sharpest single-month drop since the Apr 2026 purge.",
+            "This confirms bank categories are losing momentum to payment banks and other non-bank issuers."
+          ],
+          "inference": "Bank categories are losing momentum — the 2.06 crore card addition is the lowest on record, down 61 lakh from 2.67 crore prior period, confirming the Apr 2026 deceleration was not a one-time event. The 61 lakh decline is the sharpest single-month drop since the Apr 2026 purge, signaling the structural shift toward payment banks is accelerating.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_category_momentum",
+            "record_type": "total",
+            "metric": "debit_cards"
+          }
+        },
+        "dc-category-rotation": {
+          "title": "Private banks +0.63pp, payment banks -1.39pp — widest spread",
+          "observation": "Private sector banks gained 0.63pp of debit card share over the past 12 months, small finance banks +0.55pp, public sector banks +0.21pp, while payment banks lost 1.39pp.",
+          "direction": "Rotation mass stands at 1.39pp — the share of the mix that moved in the past year. The spread between the strongest gainer (private banks at +0.63pp) and the weakest (payment banks at -1.39pp) is 2.02pp, up from 1.95pp prior period.",
+          "chain": [
+            "Private sector banks gained 0.63pp of debit card share over the past 12 months, overtaking small finance banks' 0.55pp gain.",
+            "Payment banks lost 1.39pp, the sharpest category decline on record.",
+            "The 2.02pp spread is the widest in this dataset, up from 1.95pp prior period.",
+            "This confirms the debit card market is undergoing a structural shift away from payment banks toward traditional and small finance banks."
+          ],
+          "inference": "Private banks are now the fastest-gaining debit card category — the 0.63pp gain in 12 months overtook small finance banks' 0.55pp, confirming privates are capturing share from payment banks at an accelerating rate. Payment banks have lost 1.39pp, the sharpest category decline on record, and the 2.02pp spread is the widest in this dataset, signaling the debit card market is undergoing a structural shift away from payment banks toward traditional banks.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_category_rotation",
+            "record_type": "total",
+            "metric": "debit_cards"
+          }
+        },
+        "dc-category-share-scan": {
+          "title": "PSBs at 63.7%, privates 25.9% — gap narrowing",
+          "observation": "Public sector banks hold 63.7% of all debit cards outstanding, private banks 25.9%, payment banks 6.3%, small finance banks 3.7%, foreign banks 0.4%.",
+          "direction": "PSBs lead private banks by 37.8 points in debit cards — down 0.1pp from 37.9 points prior period. Payment banks hold 6.3% share, up 0.1pp from 6.2% prior period. All five categories remain in active status.",
+          "chain": [
+            "PSBs hold 63.7% of all debit cards outstanding, down 0.1pp from 63.8% prior period.",
+            "The 37.8 point gap with privates is the narrowest since the Apr 2026 purge.",
+            "Payment banks recovered 0.1pp to 6.3%, the third consecutive monthly gain.",
+            "This confirms the Apr 2026 collapse was a one-time cleanup of inactive cards, not the start of a structural decline."
+          ],
+          "inference": "The debit card market's concentration continues to ease — PSBs' 63.7% share is down 0.1pp from 63.8% prior period, and the 37.8 point gap with privates is the narrowest since the Apr 2026 purge. Payment banks recovered 0.1pp to 6.3%, the third consecutive monthly gain, confirming the Apr 2026 collapse was a one-time cleanup of inactive cards, not the start of a structural decline.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_category_scan_share",
+            "record_type": "bank",
+            "metric": "debit_cards"
+          }
+        },
+        "dc-issuance-vs-spend-gap": {
+          "title": "Issuance-spend gap at 2.8pp — tightest on record",
+          "observation": "The gap between debit card issuance growth and spending growth stands at 2.8 percentage points in Jul 2026.",
+          "direction": "Gap narrowed from 3.3pp in Jun 2026 to 2.8pp in Jul 2026 — a 0.5pp compression. The 2.8pp reading is the lowest in the 19-period series.",
+          "chain": [
+            "The gap between debit card issuance growth and spending growth stands at 2.8 percentage points, down 0.5pp from 3.3pp prior period.",
+            "The 2.8pp level is the lowest in the 19-period series, confirming the market has shifted from stock expansion to utilisation.",
+            "The 0.5pp compression is the second consecutive monthly narrowing.",
+            "This confirms lenders are issuing fewer dormant cards and focusing on active usage."
+          ],
+          "inference": "Debit card issuance and spending growth have converged to the tightest gap on record — the 2.8pp level is the lowest in 19 months, confirming the market has shifted from stock expansion to utilisation. The 0.5pp compression is the second consecutive monthly narrowing, and the 17.1pp decline since Jul 2025 is the fastest convergence on record, signaling lenders are issuing fewer dormant cards and focusing on active usage.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_pair_divergence",
+            "record_type": "total"
+          }
+        },
+        "dc-outstanding-abs": {
+          "title": "Debit cards at 103.33 crore — 3rd straight month of growth",
+          "observation": "Debit cards outstanding stand at 103.33 crore in Jul 2026, up 14 lakh cards from 103.19 crore prior period.",
+          "direction": "Stock expanded for the third consecutive month: 102.79 crore in May 2026 → 103.19 crore in Jun 2026 → 103.33 crore in Jul 2026. The market added 14 lakh cards in one month, below the prior period's 40 lakh gain. The 103.33 crore base is in the upper range of the 31-period distribution (above the 75th percentile).",
+          "chain": [
+            "Debit cards outstanding stand at 103.33 crore, up 14 lakh cards from 103.19 crore prior period.",
+            "The market has grown for three consecutive months after the Apr 2026 purge.",
+            "The 14 lakh card expansion is below the prior period's 40 lakh gain, confirming the recovery is slowing.",
+            "The 103.33 crore base is in the upper range of the 31-period distribution, above the 75th percentile."
+          ],
+          "inference": "The debit card market has resumed steady growth after the Apr 2026 purge — the 14 lakh card expansion is the third consecutive monthly gain, confirming the 2.14 crore decline was a one-time cleanup of inactive cards. The 103.33 crore base is in the upper range of the 31-period distribution, but the 14 lakh gain is below the prior period's 40 lakh, signaling the recovery is slowing.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_abs",
+            "record_type": "total",
+            "metric": "debit_cards"
+          }
+        },
+        "dc-outstanding-streak": {
+          "title": "Debit cards up 3 straight months — recovery intact",
+          "observation": "Debit cards outstanding have grown for 3 consecutive months, up from 2 periods prior.",
+          "direction": "Streak rose from 2 to 3 periods — the third growth month after the Apr 2026 contraction that ended the 14-period run. The current streak is near the median level in the historical distribution.",
+          "chain": [
+            "Debit cards outstanding have grown for 3 consecutive months, up from 2 periods prior.",
+            "The 3-period streak confirms the Apr 2026 purge was a one-time event.",
+            "The prior 14-period streak was the longest since Jun 2025, and the Apr 2026 reset was the highest signal moment in this dataset.",
+            "The market has entered a new expansion phase."
+          ],
+          "inference": "The debit card market is rebuilding momentum after the Apr 2026 purge — the 3-period streak confirms the contraction was a one-time event, and the market has entered a new expansion phase. The prior 14-period streak was the longest since Jun 2025, and the Apr 2026 reset was the highest signal moment in this dataset. The next few months will confirm whether the market can sustain the expansion or if the Apr 2026 purge was a structural break.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_mom_streak",
+            "record_type": "total",
+            "metric": "debit_cards"
+          }
+        },
+        "dc-outstanding-yoy": {
+          "title": "Debit cards at 2.03% YoY — lowest in 19 months",
+          "observation": "Debit cards outstanding grew 2.03% year-on-year in Jul 2026, down from 2.65% prior period.",
+          "direction": "YoY growth decelerated from 2.65% in Jun 2026 to 2.03% in Jul 2026 — a 0.62pp decline. The rate is at the minimum of the 19-period distribution (below the 25th percentile at 2.7%).",
+          "chain": [
+            "Debit cards outstanding grew 2.03% year-on-year, down 0.62pp from 2.65% prior period.",
+            "The 2.03% rate is the lowest in the 19-period series, below the 25th percentile at 2.7%.",
+            "The 0.62pp decline is the sharpest single-month deceleration since the Apr 2026 purge.",
+            "This confirms the market has not stabilised at a new equilibrium."
+          ],
+          "inference": "Debit card growth is decelerating again after two months of stability — the 2.03% YoY rate is down 0.62pp from 2.65% prior period, confirming the market has not stabilised at a new equilibrium. The 2.03% rate is the lowest in 19 months, signaling the market is in the lower range of its historical growth trajectory. The Apr 2026 deceleration from 5.4% to 2.8% was the sharpest in this dataset, and the Jul 2026 decline to 2.03% confirms the market is still slowing.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_total_yoy",
+            "record_type": "total",
+            "metric": "debit_cards"
+          }
+        },
+        "dc-private-share": {
+          "title": "Private banks at 25.93% — record high for 4th month",
+          "observation": "Private sector banks' share of debit cards outstanding stands at 25.93% in Jul 2026, up 0.07pp from 25.87% prior period.",
+          "direction": "Share rose from 25.87% in Jun 2026 to 25.93% in Jul 2026 — a 0.07pp gain. Currently at 25.93%, at the maximum of the historical distribution (above the 75th percentile at 25.3%).",
+          "chain": [
+            "Private banks hold 25.93% of debit cards outstanding, up 0.07pp from 25.87% prior period.",
+            "The 25.93% level is the highest in the 31-period series, above the 75th percentile at 25.3%.",
+            "Private banks have now held above 25.8% for four consecutive months.",
+            "This confirms the Apr 2026 breakout was a structural shift, not a one-time rebalancing event."
+          ],
+          "inference": "Private banks are holding their record debit share — the 25.93% level is up 0.07pp from 25.87% prior period, confirming the Apr 2026 breakout was a structural shift, not a one-time rebalancing event. The 25.93% share is 0.63pp above the 75th percentile of the 31-period distribution, signaling privates have structurally broken out of the 25.1%–25.4% range that held for 18 months.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_category_share",
+            "record_type": "bank",
+            "metric": "debit_cards",
+            "bank_category": "Private Sector Banks"
+          }
+        },
+        "dc-psb-share": {
+          "title": "PSB debit share at 63.68% — erosion continues for third month",
+          "observation": "Public sector banks' share of debit cards outstanding stands at 63.68% in Jul 2026, down 0.11pp from 63.79% in Jun 2026.",
+          "direction": "Share fell from 63.79% in Jun 2026 to 63.68% in Jul 2026 — a 0.11pp decline. The three-month trajectory since the Apr 2026 peak: 64.17% → 63.97% → 63.79% → 63.68%, a cumulative 0.49pp erosion.",
+          "chain": [
+            "PSB debit share fell 0.11pp to 63.68% in Jul 2026, the third consecutive monthly decline since the Apr 2026 peak of 64.17%.",
+            "The cumulative three-month erosion of 0.49pp has now erased the entire Apr 2026 surge, which had briefly reversed a 14-month slide.",
+            "The 63.68% level is below the historical median (p25=63.4%, p75=64.6%), confirming the Apr 2026 rebalancing was temporary and the structural erosion trend has resumed."
+          ],
+          "inference": "The Apr 2026 purge-driven surge has fully unwound — PSB debit share has now fallen for three straight months, eroding 0.49pp to 63.68%, below the historical median. The erosion pace (0.16pp per month on average) matches the pre-purge trend, confirming private banks and fintechs are again gaining ground in debit card issuance.",
+          "source_ref": {
+            "source_file": "web/public/data/atm_pos_consolidated.csv",
+            "method": "csv_category_share",
+            "record_type": "bank",
+            "metric": "debit_cards",
+            "bank_category": "Public Sector Banks"
+          }
+        }
+      }
+    }
+  }
+}

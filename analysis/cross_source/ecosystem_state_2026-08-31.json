@@ -3,10 +3,10 @@
     "description": "Computed cross-system ecosystem projection (S3 composed). Never hand-edited.",
     "spec_ref": "analysis/COMPOSITION_SPEC.md §7 + §21",
     "pipeline_periods": {
-      "sibc": "2026-07-31",
+      "sibc": "2026-08-31",
       "atm_pos": "2026-07-31"
     },
-    "period": "2026-07-31"
+    "period": "2026-08-31"
   },
   "cross_edge_states": [
     {
@@ -80,7 +80,7 @@
         ],
         "pipelines": {
           "atm_pos": "2026-07-31",
-          "sibc": "2026-07-31"
+          "sibc": "2026-08-31"
         }
       }
     },
@@ -127,7 +127,7 @@
         ],
         "pipelines": {
           "atm_pos": "2026-07-31",
-          "sibc": "2026-07-31"
+          "sibc": "2026-08-31"
         }
       }
     }
@@ -155,16 +155,16 @@
       "live_edges": 3,
       "total_edges": 3,
       "input_periods": {
-        "sibc": "2026-07-31",
+        "sibc": "2026-08-31",
         "atm_pos": "2026-07-31"
       },
-      "mixed_period": false
+      "mixed_period": true
     }
   },
   "constraint_states": {
     "cx_cc_balance_per_card": {
       "state": "holds",
-      "value": 24278.49,
+      "value": 24235.81,
       "severity": "fail",
       "tolerance": {
         "type": "corridor",

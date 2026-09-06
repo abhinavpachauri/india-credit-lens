@@ -3,8 +3,8 @@
     "spec_ref": "analysis/COMPOSITION_SPEC.md §12",
     "generated_by": "analysis/cross/generate_opportunities_feed.py",
     "periods": {
-      "sibc": "2026-07-31",
-      "atm_pos": "2026-06-30"
+      "sibc": "2026-08-31",
+      "atm_pos": "2026-07-31"
     }
   },
   "cross_system": [
@@ -14,12 +14,12 @@
       "tier": "opportunity",
       "status": "active",
       "title": "Cross-system signal: credit card flow leading stock — origination headroom",
-      "body": "Credit card spend (value) (Payments) is the early signal; Credit Card Outstanding (Credit) usually follows it a few months later. Reading the two together gives an early view of where the slower side is heading.",
-      "implication": "Use the leading side to plan ahead for the lagging side, before it shows up there.",
+      "body": "Credit card spending at ATMs grew 2.92%, e-commerce transactions rose 7.21%, and point-of-sale purchases increased 7.62% over the past year. Meanwhile, the actual credit card loan book grew only 2.29%. Spending is running ahead of the outstanding balance, which means people are using their cards more but the total amount they owe is growing more slowly.",
+      "implication": "Card users are transacting more but not carrying higher balances, which suggests either faster repayment or lower utilisation — both point to headroom for lenders to grow the book if they can encourage customers to borrow more or revolve balances.",
       "chain": [
-        "The early signal is on the leading side: Credit card spend (value) (Payments).",
-        "What happens there tends to show up on the other side a little later.",
-        "So expect the other side to follow: Credit Card Outstanding (Credit)."
+        "Card spending across channels is growing faster than the outstanding loan book",
+        "This gap means customers are using cards but paying down balances quickly or not maxing out limits",
+        "Lenders have room to grow the book by increasing credit limits or encouraging revolving credit"
       ],
       "badge": "Credit ✕ Payments",
       "driver": {
@@ -82,7 +82,7 @@
       ],
       "basis": {
         "headline": "Credit card spend (value) (Payments) → Credit Card Outstanding (Credit): moving together",
-        "coverage": "Credit @ 2026-07-31 · Payments @ 2026-06-30",
+        "coverage": "Credit @ 2026-08-31 · Payments @ 2026-07-31",
         "members": [
           {
             "role": "leads",
@@ -94,7 +94,7 @@
               "cc-other-val-yoy",
               "cc-pos-val-yoy"
             ],
-            "value": "atm +3.4% · ecom +9.9% · other +342.1% · pos +10.1% YoY"
+            "value": "atm +2.9% · ecom +7.2% · other +270.4% · pos +7.6% YoY"
           },
           {
             "role": "follows",
@@ -103,47 +103,48 @@
             "signals": [
               "sibc-pl-cc-yoy"
             ],
-            "value": "+1.9% YoY"
+            "value": "+2.3% YoY"
           }
         ],
         "chain": [
-          "Leading side: Credit card spend (value) (Payments) atm +3.4% · ecom +9.9% · other +342.1% · pos +10.1% YoY.",
-          "Lagging side: Credit Card Outstanding (Credit) +1.9% YoY.",
+          "Leading side: Credit card spend (value) (Payments) atm +2.9% · ecom +7.2% · other +270.4% · pos +7.6% YoY.",
+          "Lagging side: Credit Card Outstanding (Credit) +2.3% YoY.",
           "The two sides are moving together → this reads as origination headroom."
         ],
         "facts": [
           {
             "id": "cc-atm-val-yoy",
-            "value": 3.38,
+            "value": 2.92,
             "unit": "pct",
             "status": "active"
           },
           {
             "id": "cc-ecom-val-yoy",
-            "value": 9.86,
+            "value": 7.21,
             "unit": "pct",
             "status": "active"
           },
           {
             "id": "cc-other-val-yoy",
-            "value": 342.14,
+            "value": 270.38,
             "unit": "pct",
             "status": "active"
           },
           {
             "id": "cc-pos-val-yoy",
-            "value": 10.07,
+            "value": 7.62,
             "unit": "pct",
             "status": "active"
           },
           {
             "id": "sibc-pl-cc-yoy",
-            "value": 1.94,
+            "value": 2.29,
             "unit": "pct",
             "status": "strengthening"
           }
         ]
-      }
+      },
+      "narrative": true
     },
     {
       "id": "xopp_eco_unsecured_retail_appetite",
@@ -151,12 +152,12 @@
       "tier": "opportunity",
       "status": "active",
       "title": "Unsecured retail credit appetite — expanding (5/5 measurements observed)",
-      "body": "Unsecured retail credit appetite is expanding. It is not one series — it is credit and payments data read together. Right now its measurements are moving the same way. The computed basis below shows exactly which inputs drive the read.",
-      "implication": "Treat this as the combined read across credit and payments — check the basis to see which side is doing the work before acting on it.",
+      "body": "Personal loans for credit cards and other purposes grew 2.3% and 14.7% year-on-year, while consumer durable loans rose 0.4%. Credit card outstanding balances are up 9.9% from last year. All four measures are moving in the same direction — upward — which means people are borrowing more for everyday spending and purchases without putting up collateral.",
+      "implication": "Unsecured retail lending is expanding across multiple categories at once, which is notable because it shows broad-based appetite for consumption credit rather than isolated strength in one product.",
       "chain": [
-        "Measured inputs: Credit Card Outstanding +1.9% YoY, Other Personal Loans +14.2% YoY, Consumer Durables -0.6% YoY, Credit card spend rising, Credit cards outstanding +9.6% YoY.",
-        "Member directions combine — measures and proxies count as-is, contra-indicators flipped — giving an expanding read on 5 of 5 measurements.",
-        "The willingness of households to carry — and lenders to extend — unsecured retail credit. No pipeline measures it directly: SIBC measures the unsecured stock (credit-card outstanding, other personal loans, consumer durables), payments measures the flow (credit-card spend) and reach (cards in force). Together they bound the construct: when stock, flow and reach move together the appetite read is unambiguous; when they diverge, the divergence itself is the signal."
+        "People are taking more personal loans and using credit cards more heavily, with balances rising across the board",
+        "This happens when consumers feel confident enough to spend on credit without backing it with assets",
+        "Broad expansion across all unsecured categories signals widespread demand, making it a meaningful trend rather than a one-off spike in a single product"
       ],
       "badge": "Ecosystem · construct",
       "driver": {
@@ -263,7 +264,7 @@
       ],
       "basis": {
         "headline": "Unsecured retail credit appetite → expanding",
-        "coverage": "5/5 measurements observed · all pulling the same way · Payments @ 2026-06-30 · Credit @ 2026-07-31",
+        "coverage": "5/5 measurements observed · all pulling the same way · Payments @ 2026-07-31 · Credit @ 2026-08-31",
         "members": [
           {
             "role": "measures",
@@ -272,7 +273,7 @@
             "signals": [
               "sibc-pl-cc-yoy"
             ],
-            "value": "+1.9% YoY"
+            "value": "+2.3% YoY"
           },
           {
             "role": "measures",
@@ -281,7 +282,7 @@
             "signals": [
               "sibc-pl-other-yoy"
             ],
-            "value": "+14.2% YoY"
+            "value": "+14.7% YoY"
           },
           {
             "role": "measures",
@@ -290,7 +291,7 @@
             "signals": [
               "sibc-pl-consumer-durables-yoy"
             ],
-            "value": "-0.6% YoY"
+            "value": "+0.4% YoY"
           },
           {
             "role": "measures",
@@ -306,11 +307,11 @@
             "signals": [
               "cc-outstanding-yoy"
             ],
-            "value": "+9.6% YoY"
+            "value": "+9.9% YoY"
           }
         ],
         "chain": [
-          "Measured inputs: Credit Card Outstanding +1.9% YoY, Other Personal Loans +14.2% YoY, Consumer Durables -0.6% YoY, Credit card spend rising, Credit cards outstanding +9.6% YoY.",
+          "Measured inputs: Credit Card Outstanding +2.3% YoY, Other Personal Loans +14.7% YoY, Consumer Durables +0.4% YoY, Credit card spend rising, Credit cards outstanding +9.9% YoY.",
           "Member directions combine — measures and proxies count as-is, contra-indicators flipped — giving an expanding read on 5 of 5 measurements.",
           "Those members are pulling the same way.",
           "The willingness of households to carry — and lenders to extend — unsecured retail credit. No pipeline measures it directly: SIBC measures the unsecured stock (credit-card outstanding, other personal loans, consumer durables), payments measures the flow (credit-card spend) and reach (cards in force). Together they bound the construct: when stock, flow and reach move together the appetite read is unambiguous; when they diverge, the divergence itself is the signal.",
@@ -319,30 +320,31 @@
         "facts": [
           {
             "id": "sibc-pl-cc-yoy",
-            "value": 1.94,
+            "value": 2.29,
             "unit": "pct",
             "status": "strengthening"
           },
           {
             "id": "sibc-pl-other-yoy",
-            "value": 14.22,
+            "value": 14.71,
             "unit": "pct",
             "status": "strengthening"
           },
           {
             "id": "sibc-pl-consumer-durables-yoy",
-            "value": -0.64,
+            "value": 0.39,
             "unit": "pct",
-            "status": "declining"
+            "status": "strengthening"
           },
           {
             "id": "cc-outstanding-yoy",
-            "value": 9.57,
+            "value": 9.88,
             "unit": "pct",
             "status": "active"
           }
         ]
-      }
+      },
+      "narrative": true
     },
     {
       "id": "xopp_eco_card_consumption_activity",
@@ -350,12 +352,12 @@
       "tier": "opportunity",
       "status": "active",
       "title": "Card-based consumption activity — expanding (5/5 measurements, contested)",
-      "body": "Card-based consumption activity is expanding. It is not one series — it is credit and payments data read together. Right now its measurements do NOT all move the same way — the direction is a majority read, not a consensus, so check which inputs dissent before leaning on it. The computed basis below shows exactly which inputs drive the read.",
-      "implication": "Treat this as the combined read across credit and payments — check the basis to see which side is doing the work before acting on it.",
+      "body": "Card-based consumption activity is expanding, but the picture is mixed. Personal loans for consumer durables grew 0.39% year-on-year, and vehicle loans jumped 18.78%. At the same time, the number of card payment terminals fell 15.83%. The direction is a majority read — not all the numbers agree.",
+      "implication": "The growth in consumer-durable and vehicle lending is notable, but the drop in payment terminals suggests the expansion is uneven and may not be as broad-based as the loan numbers alone would imply.",
       "chain": [
-        "Measured inputs: Credit card spend rising, Debit card spend falling, POS terminals -15.8% YoY, Consumer Durables -0.6% YoY, Vehicle Loans +17.3% YoY.",
-        "Member directions combine — measures and proxies count as-is, contra-indicators flipped — giving an expanding read on 5 of 5 measurements.",
-        "Household consumption as expressed through card rails. Payments measures the transaction flows (credit + debit card spend) directly; acceptance infrastructure (POS terminals) proxies the merchant side of the same activity; SIBC's consumer-durable and vehicle loan stocks proxy the credit-financed share of it."
+        "Loans for big-ticket items like durables and vehicles are growing, with vehicles up 18.78%",
+        "But the number of card terminals is down 15.83%, meaning fewer places accept card payments",
+        "The lending growth is real, yet the infrastructure for card-based spending is shrinking, so the expansion is patchy"
       ],
       "badge": "Ecosystem · construct",
       "driver": {
@@ -484,7 +486,7 @@
       ],
       "basis": {
         "headline": "Card-based consumption activity → expanding",
-        "coverage": "5/5 measurements observed · but some members move against it · Payments @ 2026-06-30 · Credit @ 2026-07-31",
+        "coverage": "5/5 measurements observed · but some members move against it · Payments @ 2026-07-31 · Credit @ 2026-08-31",
         "members": [
           {
             "role": "measures",
@@ -516,7 +518,7 @@
             "signals": [
               "sibc-pl-consumer-durables-yoy"
             ],
-            "value": "-0.6% YoY"
+            "value": "+0.4% YoY"
           },
           {
             "role": "proxies",
@@ -525,11 +527,11 @@
             "signals": [
               "sibc-pl-vehicle-yoy"
             ],
-            "value": "+17.3% YoY"
+            "value": "+18.8% YoY"
           }
         ],
         "chain": [
-          "Measured inputs: Credit card spend rising, Debit card spend falling, POS terminals -15.8% YoY, Consumer Durables -0.6% YoY, Vehicle Loans +17.3% YoY.",
+          "Measured inputs: Credit card spend rising, Debit card spend falling, POS terminals -15.8% YoY, Consumer Durables +0.4% YoY, Vehicle Loans +18.8% YoY.",
           "Member directions combine — measures and proxies count as-is, contra-indicators flipped — giving an expanding read on 5 of 5 measurements.",
           "Those members are NOT all pulling the same way — some move against the direction, so part of the movement cancels and the read rests on a majority rather than a consensus.",
           "Household consumption as expressed through card rails. Payments measures the transaction flows (credit + debit card spend) directly; acceptance infrastructure (POS terminals) proxies the merchant side of the same activity; SIBC's consumer-durable and vehicle loan stocks proxy the credit-financed share of it.",
@@ -538,24 +540,25 @@
         "facts": [
           {
             "id": "pos-terminals-yoy",
-            "value": -15.79,
+            "value": -15.83,
             "unit": "pct",
             "status": "declining"
           },
           {
             "id": "sibc-pl-consumer-durables-yoy",
-            "value": -0.64,
+            "value": 0.39,
             "unit": "pct",
-            "status": "declining"
+            "status": "strengthening"
           },
           {
             "id": "sibc-pl-vehicle-yoy",
-            "value": 17.34,
+            "value": 18.78,
             "unit": "pct",
             "status": "strengthening"
           }
         ]
-      }
+      },
+      "narrative": true
     },
     {
       "id": "xopp_loop_loop_unsecured_spend_stock",
@@ -631,7 +634,7 @@
       ],
       "basis": {
         "headline": "Unsecured spend–stock cycle → active reinforcing",
-        "coverage": "3/3 segments live · Credit @ 2026-07-31 · Payments @ 2026-06-30",
+        "coverage": "3/3 segments live · Credit @ 2026-08-31 · Payments @ 2026-07-31",
         "members": [
           {
             "role": "segment",
@@ -682,12 +685,12 @@
           "icon": "🏭"
         },
         "title": "Co-lending & warehouse-financing infrastructure",
-        "body": "Small business credit is growing at 26.2% this year and now makes up 23.1% of all business lending. Growth in micro and small business loans jumped by 23.8pp because government systems like UDYAM registration and GST data now let lenders check if tiny businesses are real and can pay back. Banks cannot reach thousands of small borrowers alone, so they lend through partners who find customers and do the checking.",
-        "implication": "Lenders who can work with partners to reach small businesses now have data to judge whether those businesses will repay, opening a large and fast-growing segment that was hard to serve before.",
+        "body": "Micro and small business lending jumped from 8.9% growth to 32.7% growth, an acceleration of 23.8pp. These loans now make up 22.8% of all MSME credit and are growing at 22.6% year-on-year. The gap between small-business loan growth and larger MSME loan growth is 4.9pp.",
+        "implication": "Banks that set up co-lending partnerships and warehouse-financing arrangements with NBFCs can tap into fast-growing small-borrower volumes that their own branch networks struggle to reach efficiently.",
         "chain": [
-          "Government systems like UDYAM and GST create digital records that prove small businesses exist and show their sales",
-          "These records let lenders check creditworthiness of tiny borrowers who had no formal history before",
-          "Banks lend through partners who can find and assess thousands of small customers, driving 26.2% growth in a segment now worth 23.1% of all business lending"
+          "UDYAM registration and GST data make micro and small businesses easier to underwrite, so credit to them is accelerating sharply",
+          "Banks' own branches cannot cost-effectively originate thousands of small loans in every town and village",
+          "NBFCs that specialise in local origination need funding, so banks that provide warehouse lines or co-lend capture the volume without building expensive last-mile distribution"
         ],
         "_driver": "MSME formalisation via UDYAM registration + GST data",
         "_via": "Formalisation infrastructure → small-borrower underwritability",
@@ -730,12 +733,12 @@
           "icon": "💳"
         },
         "title": "Gold loan market entry / deepening for banks",
-        "body": "Banks are growing their gold loan books by 105.5% compared to last year, and this growth has now continued for 12 straight periods. Gold prices jumped sharply between 2023 and 2026, so customers can borrow much more money using the same gold jewelry or coins as security. Banks are winning customers from finance companies because they have local branches where staff can check the gold is real and store it safely, plus they charge lower interest rates.",
-        "implication": "The 12-period winning streak and 105.5% growth rate show banks are steadily taking market share in gold lending, which is notable because the collateral itself has become more valuable and banks can offer safer storage and lower rates than competitors.",
+        "body": "Banks' gold loans grew 88.1% in the past year, and this growth has now continued for 16 straight periods. Banks are taking market share from NBFCs because they have branch networks that can test gold purity, store it safely, and handle cash — advantages that are hard to copy. Gold prices have surged since 2023, which means the same piece of gold now backs a bigger loan, so banks can lend more against it.",
+        "implication": "The notable point for a lender is that this is not a short-term spike — 16 consecutive periods of growth signals that customers are shifting where they borrow against gold, and banks with physical branches have a lasting edge in capturing this business.",
         "chain": [
-          "Gold prices rose sharply from 2023 to 2026, making the same jewelry or coins worth more as collateral",
-          "Customers can now borrow larger amounts against their gold, and banks offer lower interest rates and safer storage than finance companies",
-          "Banks have grown gold lending by 105.5% year-on-year for 12 periods in a row, steadily winning market share"
+          "Gold prices have risen sharply since 2023, so each gram of gold can now secure a larger loan than before",
+          "Banks with branch networks can test, store, and disburse gold loans on the spot, which NBFCs without branches struggle to match",
+          "This advantage has driven 88.1% year-on-year growth and sustained expansion for 16 periods in a row, showing customers are moving their gold-backed borrowing to banks"
         ],
         "_driver": "Gold price surge (2023–2026)",
         "_via": "Collateral price → secured-lending capacity",
@@ -774,12 +777,12 @@
           "icon": "🏭"
         },
         "title": "MSME origination infrastructure investment window",
-        "body": "Small business lending is growing at 32.7% per year, and these tiny businesses now make up 23.1% of all MSME lending. Their growth rate jumped by 23.8pp recently, while bigger MSME borrowers are growing much slower—the gap is 11.8pp. Banks can now check if these small businesses can repay loans using government registration systems and GST records, which makes lending safer and faster.",
-        "implication": "The smallest businesses are suddenly borrowing much faster than larger ones because lenders can now verify their income and operations through digital records, making a segment that was once hard to assess now easier to lend to at scale.",
+        "body": "Micro and small business lending grew 22.6% year-on-year and now makes up 22.8% of all MSME credit. Growth accelerated by 23.8pp, jumping from 8.9% to 32.7%. Banks that built UDYAM-linked underwriting and GST-based cash flow tools between 2022 and 2024 are now lending to these smaller borrowers at scale.",
+        "implication": "Banks without this origination infrastructure are falling behind in the fastest-growing segment of MSME lending, and the window to catch up is narrowing as early movers harvest returns from their systems.",
         "chain": [
-          "Government systems like UDYAM registration and GST filings now create digital trails for very small businesses that previously had no formal records",
-          "Lenders can use these trails to check creditworthiness quickly, turning businesses that were once invisible into borrowers they can assess",
-          "Small business lending accelerates sharply while larger MSME growth stays flat, creating an 11.8pp gap as lenders chase the newly visible segment"
+          "UDYAM registration and GST data made micro and small businesses easier to assess for credit",
+          "Banks that invested in systems to use this data can now underwrite borrowers they couldn't reach before",
+          "Those banks are capturing the 22.6% growth in this segment while others without the tools are missing out"
         ],
         "_driver": "MSME formalisation via UDYAM registration + GST data",
         "_via": "Formalisation infrastructure → small-borrower underwritability",
@@ -822,12 +825,12 @@
           "icon": "🔩"
         },
         "title": "PLI anchor-supplier chain finance",
-        "body": "The government is paying large manufacturers to build new factories under the PLI scheme, and those manufacturers are ordering more parts from smaller suppliers. Lending to suppliers in basic metals grew 22.6% and 18.4%, chemicals grew 22.6% and 21.8% and 14.2% and 7.4%, and engineering grew 23.9% and 38.3%. These suppliers have signed contracts with big established companies that guarantee they will get paid.",
-        "implication": "Suppliers with firm purchase orders from PLI manufacturers carry lower payment risk because the end buyer is a large, creditworthy company building a government-backed factory.",
+        "body": "Bank credit to basic metals is growing at 24.5%, to chemicals at 30.0%, and to engineering at 40.1%. These sectors are home to many PLI scheme recipients now building factories and buying equipment. As these anchor companies ramp up, their suppliers—often smaller firms—need working capital to deliver parts, materials, and services on time.",
+        "implication": "Supply chain finance tied to these PLI anchors is notable because the repayment comes from a large, creditworthy buyer rather than the small supplier alone, lowering the lender's risk compared to a standalone loan to the same small firm.",
         "chain": [
-          "Government pays big manufacturers to build factories under PLI, so those manufacturers place large orders with smaller suppliers for parts and materials",
-          "Suppliers sign contracts with these big manufacturers, which means they have guaranteed buyers and predictable cash flow",
-          "Lenders see lower risk because the supplier's customer is a large, stable company with government backing, making the loan safer"
+          "PLI companies in metals, chemicals, and engineering are drawing down capital and placing large orders with suppliers",
+          "Suppliers need cash to fulfill those orders but may lack strong standalone credit profiles",
+          "Lenders can finance the supplier against the anchor's purchase order or invoice, so repayment flows from the anchor, not the supplier"
         ],
         "_driver": "PLI scheme capex drawdown phase (FY25–26)",
         "_via": "Industrial-policy capex → supply-chain credit",
@@ -868,12 +871,12 @@
           "icon": "⭐"
         },
         "title": "PSLC market depth from PSL reclassification surplus",
-        "body": "Housing loans counted toward priority sector lending jumped 39.0% in one year. The Reserve Bank raised the ceiling in October 2024, so banks moved existing housing loans into the priority bucket without making new loans. Banks that now have more priority sector credits than required can sell the surplus to banks that fall short of their targets.",
-        "implication": "A large one-time reclassification creates more priority sector lending certificates for sale, so banks needing to meet targets can buy credits instead of originating new priority loans.",
+        "body": "In October 2024 the RBI raised the ceiling for housing loans that count toward Priority Sector Lending targets. Banks that already had many loans just below the old ceiling suddenly saw those loans reclassified as PSL-eligible, giving them a surplus. Banks with a surplus can sell PSL Certificates to banks that are short on their targets. Housing loan growth under PSL rules is running at 10.6% year-on-year, so the pool of tradable certificates has expanded.",
+        "implication": "A one-time reclassification has created a deeper secondary market for PSL Certificates, meaning banks with surplus PSL credit can monetise it by selling to banks that need to meet targets, and banks short on PSL now have more supply to buy from.",
         "chain": [
-          "The regulator raised the housing loan ceiling for priority sector classification, so banks reclassified existing loans into that bucket",
-          "This reclassification created a 39.0% jump in reported priority housing loans without any new lending",
-          "Banks with surplus priority credits can now sell certificates to other banks, increasing the supply in the certificate market"
+          "The RBI raised the housing loan ceiling for PSL eligibility in October 2024, so loans that were previously too large to count now qualify.",
+          "Banks holding many of these loans saw an instant reclassification surplus without making new loans.",
+          "Banks with surplus can sell PSL Certificates to banks falling short, expanding the secondary market and creating a monetisation opportunity."
         ],
         "_driver": "RBI PSL housing loan ceiling revision (Oct 2024)",
         "_via": "PSL classification threshold → reported reclassification",
@@ -910,12 +913,12 @@
           "icon": "🔩"
         },
         "title": "Renewable energy project finance — next capex wave",
-        "body": "Lending to older infrastructure projects is falling sharply: one sector dropped -37.6% and another fell -14.5% this year. Meanwhile, renewable energy lending surged 82.8% in one category and 23.8% in another. Banks that spent years financing highways and power plants are now applying the same long-term project-finance methods to solar, wind, and green hydrogen projects.",
-        "implication": "The same banks and skill sets are simply moving from old infrastructure to new energy projects, so lenders with project-finance experience have a clear opening in a fast-growing segment.",
+        "body": "Traditional infrastructure lending is slowing — some segments are down 31.6% year-on-year, others falling 13.2% or 0.8%. Meanwhile, renewable energy project lending is growing 58.4% and 21.6% in key categories. Banks that built project finance teams for roads and power over the past few years now have a new pipeline: solar, wind, and green hydrogen projects backed by government targets.",
+        "implication": "Lenders with infrastructure project finance experience can shift that capability to renewable energy deals, where growth is running at 58.4% while older infrastructure segments are shrinking.",
         "chain": [
-          "Big infrastructure projects from the past few years are being repaid or need less new money",
-          "Government and private money is now going into renewable energy instead, creating new large projects that need financing",
-          "Banks already know how to lend against long-term projects with steady cash flows, so they can use that experience on solar and wind farms"
+          "Traditional infrastructure projects (roads, conventional power) are maturing and repaying loans, so those loan books are shrinking.",
+          "Government renewable energy targets are creating a large new pipeline of solar, wind, and hydrogen projects that need financing.",
+          "Banks that already know how to evaluate and finance big infrastructure projects can use the same skills on renewable deals, capturing growth in a new but similar market."
         ],
         "_driver": "Infrastructure supercycle completing (FY22–24)",
         "_via": "Project lifecycle phase → new origination vs repayment",
@@ -952,12 +955,12 @@
           "icon": "📊"
         },
         "title": "Services sector credit entry / scale-up",
-        "body": "Services sector lending is growing at 20.4% per year and now accounts for 28.3% of all bank credit. Banks are lending more through NBFCs that serve services companies — this channel grew 19.7% and is getting stronger. Three services sub-sectors are growing extremely fast: one at 54.9%, another at 41.0%, and a third at 33.7% per year.",
-        "implication": "The NBFC channel is recovering after recent rule changes, and a few services sub-sectors are growing three to five times faster than the overall services book — meaning lenders who can reach those pockets through NBFCs are seeing much faster volume growth than the market average.",
+        "body": "Services sector credit is growing at 22.9%, much faster than other sectors, and has picked up speed by 7.0pp in the past year (from 12.0% to 19.0%). Within services, NBFC lending is surging at 79.5% year-on-year, and commercial real estate credit is up 43.3%. Services now makes up 28.2% of all bank credit.",
+        "implication": "A lender without a services book — especially NBFC and commercial real estate — is missing the fastest-growing part of the credit market, which is pulling ahead by several percentage points every year.",
         "chain": [
-          "Services lending is growing at 20.4% and now makes up over a quarter of all bank credit",
-          "Banks are routing more of this through NBFCs, which grew 19.7% and is strengthening",
-          "A handful of services sub-sectors are growing at 33.7% to 54.9%, pulling the overall services book higher and creating fast-growing pockets for lenders with the right NBFC partners"
+          "Services credit is growing at 22.9%, well above the overall credit market, and accelerating.",
+          "Within services, NBFC lending (79.5% growth) and commercial real estate (43.3% growth) are the main drivers.",
+          "Lenders focused elsewhere are under-represented in the segment that is expanding fastest and taking a bigger share of total credit."
         ],
         "_driver": "NBFC credit channel recovery post risk-weight cycle",
         "_via": "Bank→NBFC exposure rule → intermediated credit",
@@ -1115,7 +1118,6 @@
           "sibc-pl-cc-below10-streak",
           "sibc-pl-cc-share",
           "sibc-pl-cc-yoy",
-          "sibc-pl-consumer-durables-neg-streak",
           "sibc-pl-consumer-durables-share",
           "sibc-pl-consumer-durables-yoy"
         ],
@@ -1156,9 +1158,13 @@
           "icon": "💳"
         },
         "title": "Credit card penetration deepening — PSB share gap is the opening",
-        "body": "Credit cards outstanding (~119M) represents approximately 11-12% of the debit card base (~1B+). PSBs hold ~64% of debit cards but only ~29% of credit cards — a structural share gap exploitable through debit-to-credit card upgrade offers to existing bank customers. The acquisition cost of upgrading an existing debit card customer to a credit card is materially lower than cold acquisition.",
-        "implication": "",
-        "chain": [],
+        "body": "Public sector banks hold 23.9% of all credit cards but 64% of debit cards — a gap of roughly 40 percentage points. Private banks hold 70.7% of credit cards. Total credit cards outstanding are 12.3 crore and growing at 9.9% year-on-year. The biggest recent gains came from private banks (1.1 crore new cards) while public sector banks lost 2.9 lakh cards.",
+        "implication": "Public sector banks have a large pool of existing debit card customers who do not yet have credit cards, and converting these customers costs less than finding entirely new ones — so the gap is an opening for lenders who can reach those customers.",
+        "chain": [
+          "Public sector banks serve most debit card holders but issue far fewer credit cards than private banks",
+          "Upgrading an existing customer from debit to credit card is cheaper than acquiring a stranger",
+          "The 40-point share gap means millions of potential credit card customers are already banked but underserved"
+        ],
         "_driver": null,
         "_via": null,
         "evidence": [
@@ -1202,7 +1208,8 @@
               "Total"
             ]
           }
-        ]
+        ],
+        "narrative": true
       },
       {
         "id": "opp_rural_cash_distribution",
@@ -1217,9 +1224,13 @@
           "icon": "🏗️"
         },
         "title": "Rural cash distribution via Micro ATM / Business Correspondent networks",
-        "body": "Micro ATM growth counter-trending against overall ATM network contraction signals persistent rural and semi-urban cash demand at a scale below the economics of full ATM deployment. Banks and fintechs expanding Business Correspondent channels with micro ATM deployment can serve this demand at lower capex than branch or full ATM infrastructure.",
-        "implication": "",
-        "chain": [],
+        "body": "India has 13.3 lakh micro ATMs, down -9.4% from last year. These are small cash-dispensing devices run by local agents in villages and small towns. Even as the overall ATM network shrinks, micro ATMs remain at over 13 lakh units because many rural areas still need cash but cannot support the cost of a full ATM or bank branch.",
+        "implication": "The 13.3 lakh micro ATM base, despite a -9.4% decline, shows that rural cash demand persists at a level where low-cost agent networks are more viable than building full infrastructure — notable for lenders who want rural reach without heavy branch investment.",
+        "chain": [
+          "Rural areas need cash access but full ATMs and branches cost too much to run there",
+          "Micro ATMs let local agents handle cash at much lower cost so over 13 lakh are still operating",
+          "Lenders can reach these customers by partnering with agent networks instead of building their own branches"
+        ],
         "_driver": null,
         "_via": null,
         "evidence": [
@@ -1241,7 +1252,8 @@
               "Total"
             ]
           }
-        ]
+        ],
+        "narrative": true
       },
       {
         "id": "opp_transit_payment_products",
@@ -1256,11 +1268,12 @@
           "icon": "💳"
         },
         "title": "Embedded transit and tap-to-pay payment products",
-        "body": "The structural embedding of a new credit card use case (the 'other' category) signals a platform land-grab window for card issuers and acquirers who integrate with the winning infrastructure — whether transit NFC or UPI-linked credit. The opportunity is real regardless of which force hypothesis is confirmed; the appropriate platform strategy differs based on which force is validated.",
-        "implication": "",
+        "body": "Credit card spending in the 'other' category jumped 270.4% by value and 142.2% by volume in the past year. This category includes transit tap-to-pay and embedded payment products that let people use cards in new everyday situations — buses, metros, and UPI-linked credit transactions. The value is growing much faster than the number of transactions, which means people are using these new payment methods for bigger purchases once they get comfortable with them.",
+        "implication": "A new everyday use case for credit cards is taking hold quickly, and the gap between value growth (270.4%) and volume growth (142.2%) shows that early adopters are increasing how much they spend through these channels, not just how often.",
         "chain": [
-          "A new embedded payment use case (transit NFC tap-to-pay or RuPay-credit-on-UPI) creates a structurally growing card-spend channel in the unclassified 'other' category. Driver composition is unresolved (hypothesis).",
-          "This is being driven by Embedded card payment infrastructure rollout (transit NFC or RuPay-credit-on-UPI)."
+          "New payment infrastructure (transit NFC, UPI-linked credit) makes it possible to use credit cards in places that previously only took cash or debit",
+          "People try the new method for small purchases first, then use it for larger amounts as they get comfortable",
+          "Value grows faster than volume because each user is spending more per transaction over time, signaling the behaviour is sticking"
         ],
         "_driver": "Embedded card payment infrastructure rollout (transit NFC or RuPay-credit-on-UPI)",
         "_via": "Embedded payment rails → new card-spend surface",
@@ -1283,7 +1296,8 @@
               "Total"
             ]
           }
-        ]
+        ],
+        "narrative": true
       },
       {
         "id": "risk_cc_market_concentration",
