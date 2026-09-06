@@ -58,3 +58,31 @@ def test_is_news_keeps_raw_metric_but_zeroes_the_corrupted_ratio():
         assert is_news.score(conn, "cc-outstanding-yoy", reg["cc-outstanding-yoy"])["factors"]["record"] is True
     finally:
         conn.close()
+
+
+def test_the_guard_covers_the_window_the_metric_spans():
+    """A guard only protects the window it measures.
+
+    The MoM check flags the month a single issuer lurches; a YoY metric then carries that lurch
+    for another eleven months. Jun 2026 is the lurch (ICICI, 97.7% of that month's move); by
+    Jul 2026 the MoM move is an ordinary +1.1% while the headline still reads -15.8% YoY. Before
+    the year window was tested, Jul went unflagged and the card published the artifact as a market
+    trend. Both months are asserted so neither window can lapse unnoticed.
+    """
+    lurch = move_dominance("atm_pos", "pos-terminals-yoy", "2026-06-30")
+    assert lurch.dominant and lurch.window == "mom"
+    assert "ICICI" in lurch.top_entity
+
+    after = move_dominance("atm_pos", "pos-terminals-yoy", "2026-07-31")
+    assert after.dominant, "the artifact is still in the YoY headline a month later"
+    assert after.window == "yoy"
+    assert "ICICI" in after.top_entity
+    # the honest market read: excluding that issuer, the fleet GREW over the year
+    assert after.ex_top_yoy_pct > 0
+
+
+def test_an_ordinary_month_is_not_flagged():
+    """The guard must stay quiet when no single entity drives the move — otherwise every card
+    acquires a caveat and the caveat stops meaning anything."""
+    calm = move_dominance("atm_pos", "pos-terminals-yoy", "2026-05-31")
+    assert calm is not None and not calm.dominant and calm.top_entity is None

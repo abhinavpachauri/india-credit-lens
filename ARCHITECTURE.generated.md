@@ -125,7 +125,7 @@ orchestrated, not import-coupled).
 - `cross/compose_ecosystem` → `core/generate_skeleton`
 - `cross/derive_cross_links` → `core/generate_skeleton`
 - `cross/generate_opportunities_feed` → `core/generate_skeleton`
-- `cross/generate_opportunity_narrative` → `core/generate_skeleton`, `core/voice`
+- `cross/generate_opportunity_narrative` → `core/generate_skeleton`, `core/voice`, `signals/evaluate`
 - `cross/validate_composition` → `core/generate_skeleton`
 - `guards/check_derived_fresh` → `core/manifest`
 - `guards/validate_card_prose` → `core/residuals`, `core/voice`

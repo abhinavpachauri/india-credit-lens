@@ -28,6 +28,7 @@ Exit codes:
 import argparse
 import json
 import math
+import shutil
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -659,6 +660,20 @@ def extract(xlsx_path: Path, out_dir: "Path | None" = None, dry_run: bool = Fals
 
     print(f"\n  ✅ Written: {out_path}")
     print(f"  Sections : {[s['id'] for s in sections]}")
+
+    # Archive the source XLSX into {period}/raw/, the way the payments extractor does.
+    # consolidate (update_web_data.py) globs ONLY these raw dirs, so an unarchived source
+    # meant the new month was absent from the CSV while the gate still reported PASS —
+    # the ingest looked like it had run and produced nothing.
+    raw_dir = resolved_out_dir / "raw"
+    raw_dir.mkdir(exist_ok=True)
+    dest = raw_dir / xlsx_path.name
+    if not dest.exists():
+        shutil.copy2(xlsx_path, dest)
+        print(f"  ✅ XLSX archived → {dest.relative_to(REPO_ROOT)}")
+    else:
+        print(f"  ⚠  XLSX already in raw/ — not overwriting")
+
     return payload
 
 

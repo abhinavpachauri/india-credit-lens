@@ -44,6 +44,19 @@ class MovementCut:
 # total/gross_movement/coherence; allocation splits into alloc/contribution/weight.
 _NON_MEMBER = ("aggregate", "alloc", "contribution", "weight", "pair_side", "fy_yoy")
 
+# The compute methods this module OWNS. A signal computed by one of these is rendered as part of
+# the single movement card for its cut — never on its own — so the generic annotation path must
+# skip it. Stated here, beside the reader, so the two cannot drift into different opinions about
+# which signals belong to the family.
+#
+# Why this is a list and not a substring test: `csv_sector_fy_acceleration` is a DIFFERENT family
+# (the FY step-up cards) that legitimately publishes on its own, and "acceleration" in a name is
+# not membership.
+MOVEMENT_METHODS = (
+    "csv_sector_momentum",   "csv_sector_acceleration",   "csv_sector_allocation",
+    "csv_category_momentum", "csv_category_acceleration", "csv_category_allocation",
+)
+
 
 def _member_type(conn, pipeline: str, period: str, metric_id: str) -> str | None:
     """The entity type this signal's MEMBER rows carry — sectors, bank categories, whatever

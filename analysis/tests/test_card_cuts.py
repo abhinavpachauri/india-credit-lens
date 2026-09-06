@@ -6,6 +6,7 @@ asserts it is reported; the clean-baseline tests assert the check does not
 invent findings on cards that are already correct.
 """
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -311,8 +312,11 @@ def test_a_growth_scan_names_the_leader_size():
     feed = json.loads((vcc.REPO / "web/public/data/sibc_l1_annotations.json").read_text())
     card = next(c for b in feed["sections"].values() for k in b for c in b[k]
                 if c["id"] == "sibc-textiles-sub-yoy-scan")
-    assert "1.7% of textiles credit" in card["implication"]
-    assert "Other Textiles at 45.5%" in card["implication"]
+    # Structure, not this month's shares (they moved on the Jul 2026 ingest): the fastest mover
+    # is quoted WITH its size, and the largest block is named with its own share and growth.
+    imp = card["implication"]
+    assert re.search(r"is the fastest at \d+\.\d% but holds \d+\.\d% of textiles credit", imp), imp
+    assert re.search(r"the largest block, .+ at \d+\.\d%, grew \d+\.\d%", imp), imp
     # and the size it quotes is declared, so Check 2g scopes to both signals
     assert card["sourceSignals"] == ["sibc-textiles-sub-yoy-scan", "sibc-textiles-sub-share-scan"]
 
@@ -406,8 +410,13 @@ def test_a_remainder_never_headlines():
     feed = json.loads((vcc.REPO / "web/public/data/sibc_l1_annotations.json").read_text())
     card = next(c for b in feed["sections"].values() for k in b for c in b[k]
                 if c["id"] == "sibc-textiles-sub-share-scan")
-    assert card["title"] == "Cotton Textiles is the biggest named block of textiles credit at 35.5%"
-    assert "45.5% sits in Other Textiles, which RBI does not break down" in card["body"]
+    # Assert the SHAPE, not this month's percentages. Pinning "35.5%" made the test fail on the
+    # Jul 2026 ingest purely because the share moved to 34.9% — a passing month says nothing
+    # about the defect, and a failing one sends the reader after a bug that is not there.
+    assert card["title"].startswith("Cotton Textiles is the biggest named block of textiles credit at")
+    assert re.search(r"\d+\.\d%$", card["title"]), "the leader is still quoted with its size"
+    assert "sits in Other Textiles, which RBI does not break down" in card["body"]
+    assert not card["title"].startswith("Other Textiles"), "a remainder must never headline"
 
 
 def test_a_remainder_is_not_quoted_as_a_peer_in_a_growth_scan():
@@ -417,8 +426,11 @@ def test_a_remainder_is_not_quoted_as_a_peer_in_a_growth_scan():
     feed = json.loads((vcc.REPO / "web/public/data/sibc_l1_annotations.json").read_text())
     card = next(c for b in feed["sections"].values() for k in b for c in b[k]
                 if c["id"] == "sibc-food-processing-sub-yoy-scan")
-    assert "Others at 18.7%;" not in card["body"]
-    assert "Others, which RBI does not break down, grew 18.7%" in card["body"]
+    # Again: the clause, not the number. The remainder must never sit in a peer slot, and must
+    # still be reported in its own labelled clause.
+    assert not re.search(r"Others at \d", card["body"]), "the remainder is back in a peer slot"
+    assert re.search(r"Others, which RBI does not break down, (grew|shrank|fell)",
+                     card["body"]), card["body"]
 
 
 def test_the_gate_catches_a_headlined_remainder():

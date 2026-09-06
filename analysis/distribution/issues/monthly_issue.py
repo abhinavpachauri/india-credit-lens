@@ -130,7 +130,11 @@ def build_doc(credit_picks=None, payments_picks=None):
 
     # ── Masthead ──────────────────────────────────────────────────────────────
     doc.append({"type": "h1", "text": f"India Credit Lens — credit and payments"})
-    doc.append({"type": "p", "text": src.vintage_sentence(vintage)})
+    # Counts the two RELEASES, not the data — the month gap between them is a fact
+    # about the documents, so it is out of the number gate's scope (same rule as the
+    # other meta blocks). The gap-bearing branch first rendered in Jul 2026, when the
+    # halves stopped coinciding; until then only the "same data month" branch ran.
+    doc.append({"type": "p", "meta": True, "text": src.vintage_sentence(vintage)})
 
     # The month in one line — the single strongest read across both halves.
     credit_cards = _read_candidates("sibc")

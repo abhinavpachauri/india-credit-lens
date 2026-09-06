@@ -285,3 +285,40 @@ def test_an_ambiguous_reasoning_key_refuses_rather_than_guesses():
     rows = load_db_row_values("2026-06-30")
     assert rows["cc-category-allocation:Private Sector Banks"] is None    # ambiguous
     assert rows["cc-category-momentum:Private Sector Banks"] is not None  # unique
+
+
+def test_the_movement_family_publishes_once_per_cut_and_not_as_scans():
+    """One card per cut — never also as three separate scan cards.
+
+    These signals had no evaluation until Jul 2026 (the family was built after the previous eval
+    ran), so the generic annotation path had never seen them. The first eval that covered them
+    produced duplicate ids in the same section, cards routed to the wrong dimension (services
+    cards under Personal Loans), aggregate ROW NAMES rendered as entities — "gross_movement
+    growing fastest at 798,500", "total growing fastest at 84.7%" — and `coherence` quoted in
+    published prose, which is barred because no gate can ground it.
+    """
+    import json
+    from pathlib import Path
+    root = Path(__file__).resolve().parents[2]
+    feed = json.loads((root / "web/public/data/sibc_l1_annotations.json").read_text())
+
+    cards = [(sec, c) for sec, v in feed["sections"].items()
+             for c in v["insights"] + v.get("gaps", [])]
+
+    ids = [c["id"] for _, c in cards]
+    assert len(ids) == len(set(ids)), \
+        f"a signal published twice: {sorted({i for i in ids if ids.count(i) > 1})}"
+
+    # The compute layer's internal row names are not entities and must never reach a reader.
+    for sec, c in cards:
+        blob = json.dumps(c)
+        for leaked in ("gross_movement", "coherence", "net_movement"):
+            assert leaked not in blob, f"{c['id']} in {sec} leaks the internal row name {leaked!r}"
+
+    # Every cut that publishes a movement card publishes it in its OWN section.
+    from pipelines.sibc.generate_analysis_report import MOVEMENT_CUTS
+    section_of = {cut.slug: cut.section for cut in MOVEMENT_CUTS}
+    for slug, section in section_of.items():
+        placed = [sec for sec, c in cards if c["id"] == f"sibc-{slug}-allocation"]
+        assert placed in ([], [section]), \
+            f"the {slug} movement card belongs in {section}, found in {placed}"

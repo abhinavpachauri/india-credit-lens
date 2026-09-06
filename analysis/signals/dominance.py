@@ -63,6 +63,7 @@ class Dominance:
     agg_value: float | None        # the aggregate metric's own value at `period` (the headline number)
     period: str
     via_denominator: bool = False  # True when the flag is inherited from a ratio's denominator
+    window: str = "mom"            # which window the dominance was found in: "mom" or "yoy"
 
     def as_facts(self) -> dict:
         return asdict(self)
@@ -90,9 +91,18 @@ def _year_ago(period: str, periods: list[str]) -> str | None:
 def move_dominance(pipeline: str, agg_metric: str, period: str, conn=None) -> Dominance | None:
     """How concentrated is `agg_metric`'s recent move in a single entity, and what did the rest do?
     Returns None when the metric has no per-bank scan (nothing to decompose) or the history is too
-    short to judge."""
+    short to judge.
+
+    Two windows are tested, because a guard only protects the window it measures. The original
+    check was month-on-month, which flags the month a single issuer lurches — but a YoY metric
+    carries that lurch for another eleven months. ICICI's POS reclassification landed in Jun 2026
+    (97.7% of that month's move); by Jul 2026 the MoM move was an ordinary +1.1% while the headline
+    still read -15.8% YoY, and the card published it as a market trend with no attribution. So the
+    year window is tested too, and `window` records which test fired.
+    """
     via_denominator = agg_metric in RATIO_DENOMINATOR
-    scan_metric = SCAN_FOR.get(RATIO_DENOMINATOR.get(agg_metric, agg_metric))
+    base_metric = RATIO_DENOMINATOR.get(agg_metric, agg_metric)
+    scan_metric = SCAN_FOR.get(base_metric)
     if not scan_metric:
         return None
     own = conn or sqlite3.connect(DB)
@@ -103,18 +113,47 @@ def move_dominance(pipeline: str, agg_metric: str, period: str, conn=None) -> Do
             return None
         cur = scan[period]
         prev = scan[periods[periods.index(period) - 1]]
-        agg_move = sum(cur.values()) - sum(prev.values())
         prev_total = sum(prev.values())
-        if not prev_total or agg_move == 0:
+        if not prev_total:
             return None
-        # top mover this month, by absolute change
-        deltas = {b: cur.get(b, 0) - prev.get(b, 0) for b in set(cur) | set(prev)}
-        top = max(deltas, key=lambda b: abs(deltas[b]))
-        top_share = deltas[top] / agg_move
-        mom_pct = 100 * agg_move / prev_total
+        mom_pct = 100 * (sum(cur.values()) - prev_total) / prev_total
+
+        def _top_of(base_scan):
+            """The biggest mover between `base_scan` and `cur`, and its share of that move."""
+            move = sum(cur.values()) - sum(base_scan.values())
+            if not move:
+                return None, None
+            deltas = {b: cur.get(b, 0) - base_scan.get(b, 0) for b in set(cur) | set(base_scan)}
+            t = max(deltas, key=lambda b: abs(deltas[b]))
+            return t, deltas[t] / move
+
+        # MoM window — the month of the lurch.
+        mom_top, mom_share = _top_of(prev)
+        mom_hit = (mom_share is not None and abs(mom_share) >= DOMINANCE_SHARE
+                   and abs(mom_pct) >= MATERIAL_MOM_PCT)
+
+        # YoY window — the eleven months in which the lurch keeps distorting the headline.
         ya = _year_ago(period, periods)
-        ex_top_yoy = None
+        yoy_top = yoy_share = yoy_pct = None
         if ya:
+            base_total = sum(scan[ya].values())
+            yoy_top, yoy_share = _top_of(scan[ya])
+            if base_total:
+                yoy_pct = 100 * (sum(cur.values()) - base_total) / base_total
+        yoy_hit = (yoy_share is not None and abs(yoy_share) >= DOMINANCE_SHARE
+                   and yoy_pct is not None and abs(yoy_pct) >= MATERIAL_MOM_PCT)
+
+        # The month of the lurch reports as "mom" — the sharper, more local story. The trailing
+        # months report as "yoy": same artifact, still in the headline, no longer in this month.
+        if mom_hit:
+            window, top, top_share, dominant = "mom", mom_top, mom_share, True
+        elif yoy_hit:
+            window, top, top_share, dominant = "yoy", yoy_top, yoy_share, True
+        else:
+            window, top, top_share, dominant = "mom", mom_top, mom_share, False
+
+        ex_top_yoy = None
+        if ya and top is not None:
             base = sum(v for b, v in scan[ya].items() if b != top)
             now = sum(v for b, v in cur.items() if b != top)
             if base:
@@ -123,11 +162,11 @@ def move_dominance(pipeline: str, agg_metric: str, period: str, conn=None) -> Do
             "SELECT value FROM signals WHERE pipeline=? AND metric_id=? AND period=? "
             "AND entity_type IN ('aggregate','total') LIMIT 1", (pipeline, agg_metric, period)).fetchone()
         agg_value = agg_row[0] if agg_row else None
-        dominant = abs(top_share) >= DOMINANCE_SHARE and abs(mom_pct) >= MATERIAL_MOM_PCT
         return Dominance(agg_metric, scan_metric, dominant, top if dominant else None,
-                         round(top_share, 4) if dominant else None,
+                         round(top_share, 4) if dominant and top_share is not None else None,
                          round(mom_pct, 2), round(ex_top_yoy, 2) if ex_top_yoy is not None else None,
-                         round(agg_value, 2) if agg_value is not None else None, period, via_denominator)
+                         round(agg_value, 2) if agg_value is not None else None, period,
+                         via_denominator, window)
     finally:
         if conn is None:
             own.close()

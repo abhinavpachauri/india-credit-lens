@@ -23,6 +23,7 @@ from pathlib import Path
 # regardless of where this module lives (it moved to pipelines/sibc/ in the §4 cutover).
 sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
 from signals.query import signal_numbers, scan_distribution, _signal_type   # noqa: E402
+from core.movement_cards import MOVEMENT_METHODS                            # noqa: E402
 from core.relational_insights import (                                       # noqa: E402
     rotation_insight, divergence_insight, rotation_distribution,
     movement_insight, entity_roles, _subject as relational_subject)
@@ -550,6 +551,17 @@ def main(period: str | None = None) -> int:
         eval_path = files[-1]
         period = eval_path.stem
 
+    # An evaluation older than the data is the quietest way for a dashboard to go stale: the
+    # charts move to the new month, the cards keep last month's words, and every gate still
+    # passes because each artifact is internally consistent. Say it out loud.
+    latest_data = conn.execute(
+        "SELECT MAX(period) FROM signals WHERE pipeline='sibc'").fetchone()[0]
+    if latest_data and period < latest_data:
+        print(f"  ⚠  STALE NARRATIVE LAYER: newest signals are {latest_data} but the newest "
+              f"evaluation is {period}.\n"
+              f"     Cards will describe {period} while the charts show {latest_data}. "
+              f"Run Stage 5 evaluate for {latest_data} to catch them up.")
+
     print(f"Reading evaluation: {eval_path}")
     with open(eval_path) as f:
         ev = json.load(f)
@@ -583,6 +595,16 @@ def main(period: str | None = None) -> int:
             continue
 
         method       = reg_sig.get("compute", {}).get("method", "")
+        # The movement family is rendered by movement_annotations() as ONE card per cut. Left to
+        # the generic path it also publishes as three separate scan cards, which is both the
+        # duplication that design decision explicitly rejected and nonsense prose: the scan
+        # renderer reads a momentum signal's AGGREGATE rows as if they were entities
+        # ("gross_movement growing fastest at 798,500", "total growing fastest at 84.7%") and
+        # quotes `coherence`, a number no gate can ground and which is barred from published
+        # prose. It never showed until Jul 2026 because these signals had never been through an
+        # evaluation — the family was built after the last eval ran.
+        if method in MOVEMENT_METHODS:
+            continue
         cut          = sibc_cut(reg_sig.get("compute", {}))
         # DERIVED, never the registry's hand-typed `chart_series` (§15.4). Typing it
         # by hand produced highlights that render nothing: 'Education Loans' where the

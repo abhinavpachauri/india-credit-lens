@@ -71,8 +71,9 @@
       "label": "3.  consolidate CSV",
       "pipeline": "consolidate",
       "args": [
-        "$LATEST"
-      ]
+        "$PERIOD"
+      ],
+      "note_why": "Ingestion runs for the period being INGESTED, not $LATEST. $LATEST is the newest period already in signals.db, and the timeline is only updated BY consolidate \u2014 so on a genuinely new month $LATEST was still last month and the new data was silently dropped while the gate reported PASS."
     },
     {
       "id": "signals_payload",

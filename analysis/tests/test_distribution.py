@@ -226,12 +226,17 @@ def test_invented_number_in_generated_text_fails():
 def test_undeclared_derived_number_fails():
     """A threshold is legitimate only because the claim declares it.
 
-    Built from a synthetic slate rather than a live slot: which watchlist rows survive
-    depends on the ledger, and a negative test whose bite depends on this month's
-    publishing history is not a test. Same claim twice — the only difference is whether
-    the derived numbers were declared.
+    The row is SYNTHETIC, not the top-ranked live one. Taking the live leader made the
+    bite depend on which signal happened to rank first: in Jul 2026 that became
+    sibc-pl-acceleration, whose threshold and typical move both round to values already
+    present in its own series, so undeclaring them removed nothing and the negative test
+    passed while asserting nothing. Derived numbers here are chosen to be absent from any
+    signal's ground truth, so the only difference between the two slates is the
+    declaration itself.
     """
-    row = proximity.ranked(limit=1)[0]
+    row = dict(proximity.ranked(limit=1)[0])
+    row.update(value=61.7, threshold_value=88.3, distance=26.6, typical_move=42.9,
+               prev_value=73.1)
     claim = {
         "id": row["signal_id"], "pipeline": row["pipeline"], "category": "C8",
         "title": row["title"], "body": proximity.sentence(row), "implication": "",
@@ -247,6 +252,23 @@ def test_undeclared_derived_number_fails():
     undeclared = copy.deepcopy(slate)
     undeclared["claims"][0]["extra_numbers"] = []
     assert any("ungrounded number" in f for f in check_slate(undeclared))
+
+
+def test_live_watchlist_row_declares_its_own_derived_numbers():
+    """The companion to the synthetic test above: the logic is pinned there, and here we
+    assert only that the real top-ranked row passes its own gate this period."""
+    row = proximity.ranked(limit=1)[0]
+    claim = {
+        "id": row["signal_id"], "pipeline": row["pipeline"], "category": "C8",
+        "title": row["title"], "body": proximity.sentence(row), "implication": "",
+        "signal_ids": [row["signal_id"]], "verbatim": False, "where": None,
+        "source": "signals/proximity.py",
+        "extra_numbers": [row["value"], row["threshold_value"], row["distance"],
+                          row["typical_move"], row["prev_value"]],
+    }
+    slate = {"slot": "28th", "date": "2026-08-28", "category": "C8",
+             "claims": [claim], "vintage": {}, "vintage_sentence": "", "pages": 1}
+    assert check_slate(slate) == [], check_slate(slate)
 
 
 def test_banned_register_fails_the_lint():

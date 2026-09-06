@@ -2080,6 +2080,13 @@ def main():
         print(f"  LLM representation applied to {n} scalar insight(s) "
               f"(eval {period}, prompt {prompt_version}); rest deterministic.")
     else:
+        # A card must declare how its prose was produced whether or not an eval exists — with no
+        # eval every card IS deterministic, and saying so is not the LLM layer's job. Stamping it
+        # only inside the `if eval_signals` branch left a whole period's cards with no
+        # `representation` at all, which Stage 4c and the voice gate both read to tell our prose
+        # from the eval's. Same shape as the dominance guard that used to hide behind `if not se`.
+        for ins in insights:
+            ins.setdefault("representation", "deterministic")
         print(f"  ⚠ no LLM evaluation found for {period} — all insights deterministic. "
               f"Run: python3 analysis/core/generate_signal_history.py evaluate --pipeline atm_pos --period {period}")
 
