@@ -56,7 +56,7 @@ SYSTEM = (
 )
 
 
-from core.llm_budget import require_approval                               # noqa: E402
+from core.llm_budget import require_approval, estimate_usd                 # noqa: E402
 from core.source_fetch import fetch_text                                   # noqa: E402
 from distribution.bank_sourcing import (                                  # noqa: E402
     MIN_EXCERPT_CHARS, excerpt_on_page, tier_of)
@@ -126,6 +126,9 @@ VERIFY_SYSTEM = (
 
 MODEL = "claude-sonnet-4-5-20250929"
 MAX_RUNGS = 3        # each rung is an LLM call with web search — bounded, not exhaustive
+# Observed size of one S4 call (generation, and a web-search rung). Used only to price the run
+# for approval — the guard needs an amount, and an amount needs a token count.
+S4_TOKENS_PER_CALL = 12_000
 
 
 def _parse_json(text):
@@ -165,7 +168,9 @@ def call_llm(payload):
     # one retry — the generation call occasionally returns malformed JSON
     for attempt in range(2):
         try:
-            require_approval("S4 proposal generation", 3)
+            require_approval("S4 proposal generation", 3,
+                             est_usd=estimate_usd(3 * S4_TOKENS_PER_CALL),
+                             basis=f"3 calls x {S4_TOKENS_PER_CALL:,} tokens (observed generation size)")
             return _claude_json(SYSTEM, payload, max_tokens=8000).get("proposals", [])
         except (json.JSONDecodeError, ValueError):
             if attempt == 1:
@@ -225,7 +230,9 @@ def verify_proposal(p, eval_period=None):
     ladder = [r for r in ([p.get("required_source")] + list(p.get("source_ladder") or []))
               if r][:MAX_RUNGS]
     if ladder:
-        require_approval("S4 source-finding (web search)", f"up to {len(ladder)} per proposal")
+        require_approval("S4 source-finding (web search)", f"up to {len(ladder)} per proposal",
+                         est_usd=estimate_usd(len(ladder) * S4_TOKENS_PER_CALL),
+                         basis=f"{len(ladder)} rung(s) x {S4_TOKENS_PER_CALL:,} tokens per search call")
     v, checked = {"verified": False, "verdict": "not_found", "note": "no source named"}, False
     if not ladder:
         # Record it. "Nothing to check" is itself a finding about the proposal — a hypothesis

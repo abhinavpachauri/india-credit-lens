@@ -13,8 +13,6 @@ Determinism guarantees:
 
 Usage:
   from analysis.signals.evaluate import run_evaluate
-
-from core.llm_budget import require_approval  # noqa: E402
   result = run_evaluate(pipeline, period, conn, registry)
 """
 
@@ -33,10 +31,16 @@ import sys
 sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
 from core.paths import ROOT as REPO
 from core import manifest
+from core.llm_budget import require_approval, estimate_usd, LLMSpendNotApproved
 PROMPTS_DIR = Path(__file__).parent / "prompts"
 EVALS_DIR   = Path(__file__).parent / "evaluations"
 
 MODEL          = "claude-sonnet-4-5-20250929"
+
+# The run's cost estimate, filled in by `evaluate_period` before any billing call. Held at module
+# level because the estimate is a property of the RUN (domains × recorded tokens/domain), while
+# the guard sits at the single call site.
+_EST: dict = {}
 PROMPT_VERSION = "1.12"
 
 
@@ -120,6 +124,30 @@ PIPELINE_DOMAINS: dict[str, list[str]] = {
 def _payload_hash(payload: dict) -> str:
     canonical = json.dumps(payload, sort_keys=True, separators=(",", ":"))
     return hashlib.sha256(canonical.encode()).hexdigest()
+
+
+def expected_tokens_per_call(conn: sqlite3.Connection, pipeline: str) -> float:
+    """What one CALL has actually cost this pipeline, from our own recorded usage.
+
+    One row of llm_cache is one chunk call, so this is per call, not per domain.
+
+    A cost estimate built from a guessed token count is barely better than no estimate, and this
+    project already stores the real figure on every call it has ever made. Falls back to a
+    deliberately HIGH constant when a pipeline has no history, so a first run over-states rather
+    than under-states what the editor is approving.
+    """
+    # The RECENT average, not all-time. Averaging every row ever written pulled the figure down
+    # with small retry/sub-chunk calls and old, narrower payloads: the Jul 2026 run was estimated
+    # at $0.29 and cost about $0.45. Payloads grow as the registry grows, so the newest periods
+    # are the honest guide. Falls back to a deliberately HIGH constant with no history, so a
+    # first run over-states rather than under-states what is being approved.
+    row = conn.execute(
+        """SELECT AVG(tokens_used) FROM (
+               SELECT tokens_used FROM llm_cache
+               WHERE pipeline=? AND tokens_used > 0
+               ORDER BY created_at DESC LIMIT 12)""",
+        (pipeline,)).fetchone()
+    return (row[0] if row and row[0] else 0) or 20000.0
 
 
 def _cache_get(conn: sqlite3.Connection, input_hash: str) -> dict | None:
@@ -236,7 +264,8 @@ def _call_llm(system_prompt: str, user_content: str) -> tuple[dict, int, int, in
         raise RuntimeError("pip install anthropic  (or install Claude Code)")
 
     client = anthropic.Anthropic(api_key=api_key)
-    require_approval("Stage 5 signal evaluation", "1 per domain")
+    require_approval("Stage 5 signal evaluation", "1 per domain",
+                     est_usd=_EST.get("usd"), basis=_EST.get("basis", ""))
     msg = client.messages.create(
         model=MODEL,
         max_tokens=8000,
@@ -433,6 +462,11 @@ def _evaluate_domain(pipeline: str, period: str, domain: str,
                 prior_period=prior_period,
                 prior_signals=prior_signals,
             )
+        except LLMSpendNotApproved:
+            # Not a payload problem, so splitting it cannot help. Propagate untouched: an
+            # unapproved run must stop, loudly, rather than descend into the retry path below
+            # and come back out wearing a cache hit's clothes.
+            raise
         except Exception as exc:
             # Truncation guard: if a chunk fails, split it in half and retry each half
             if len(chunk_ids) <= 2:
@@ -443,6 +477,8 @@ def _evaluate_domain(pipeline: str, period: str, domain: str,
             result = {}
             tokens = cache_read = cache_created = 0
             from_cache = True
+            sub_failed = False
+            sub_reason = "no reason recorded"
             for sub_idx, (sub_payload, sub_ids) in enumerate(sub_chunks):
                 try:
                     sub_result, sub_cache, sub_tok, sub_read, sub_created = _evaluate_chunk(
@@ -453,9 +489,17 @@ def _evaluate_domain(pipeline: str, period: str, domain: str,
                         prior_period=prior_period,
                         prior_signals=prior_signals,
                     )
-                except Exception:
-                    # Sub-chunk also failed — skip it rather than killing the domain
-                    sub_result, sub_cache = {}, True
+                except LLMSpendNotApproved:
+                    raise
+                except Exception as sub_exc:
+                    sub_reason = f"{type(sub_exc).__name__}: {str(sub_exc).splitlines()[0][:200]}"
+                    # Sub-chunk also failed. Skip it rather than killing the domain — but do NOT
+                    # call it a cache hit. `sub_cache = True` here meant every failure (an outage,
+                    # an exhausted balance, a refused spend) was reported as the cheapest, most
+                    # reassuring outcome there is: "cache hit, 0 tokens". A whole period once
+                    # evaluated to five empty domains and printed "✓ ... Cache hits: 5".
+                    sub_result, sub_cache = {}, False
+                    sub_failed = True
                     sub_tok = sub_read = sub_created = 0
                 result.update(sub_result)
                 tokens      += sub_tok
@@ -463,6 +507,11 @@ def _evaluate_domain(pipeline: str, period: str, domain: str,
                 cache_created += sub_created
                 if not sub_cache:
                     from_cache = False
+            if sub_failed and not result:
+                # Every sub-chunk failed: there is no narrative for this domain. Say so, and say
+                # WHY — a generic "it failed" sends the reader hunting for the real cause.
+                raise RuntimeError(
+                    f"{domain}: all sub-chunks failed after splitting — {sub_reason}")
 
         # Accumulate signal entries; last chunk's _domain_narrative wins
         merged.update(result)
@@ -578,6 +627,19 @@ def run_evaluate(pipeline: str, period: str,
     mode = "parallel" if not USE_CLI else "sequential"
     print(f"  Evaluating {n_domains} domain(s) [{mode}, chunk_size={CHUNK_SIZE}] ...")
 
+    # Price the run BEFORE anything can bill, from this pipeline's own recorded usage. A domain
+    # already in cache costs nothing, so the estimate counts only the work that would really be
+    # sent; the guard at the call site refuses if this was never computed.
+    # Count CHUNKS, not domains. A domain is split into chunks of CHUNK_SIZE signals and each
+    # chunk is its own call — industry alone is 3 — so pricing per domain understated the bill
+    # roughly two-fold. The recorded tokens_used is likewise per chunk, so the two line up.
+    n_chunks = sum(max(1, -(-len(ids) // CHUNK_SIZE)) for _, _, ids in domain_work)
+    per_chunk = expected_tokens_per_call(conn, pipeline)
+    _EST["usd"] = estimate_usd(per_chunk * max(n_chunks, 1), MODEL)
+    _EST["basis"] = (f"{n_chunks} call(s) across {n_domains} domain(s) x {per_chunk:,.0f} "
+                     f"tokens/call (this pipeline's recorded average), {MODEL} list price")
+    print(f"  Estimated cost: ~${_EST['usd']:,.2f}  ({_EST['basis']})")
+
     output: dict = {
         "pipeline":       pipeline,
         "period":         period,
@@ -588,6 +650,7 @@ def run_evaluate(pipeline: str, period: str,
         "domains":        {},
     }
 
+    _FAILURES: dict[str, str] = {}
     total_signals  = 0
     cache_hits     = 0
     api_calls      = 0
@@ -611,6 +674,9 @@ def run_evaluate(pipeline: str, period: str,
             )
             return domain, result, from_cache, tokens, cache_read, 0, time.monotonic() - t0
         except Exception as exc:
+            # Carry the reason out. "ERROR" alone sends the reader hunting; the actual cause is
+            # usually immediately actionable (spend not approved, no credit, bad JSON).
+            _FAILURES[domain] = f"{type(exc).__name__}: {str(exc).splitlines()[0][:160]}"
             return domain, None, False, 0, 0, 1, time.monotonic() - t0
 
     # ── Parallel evaluation (API) or sequential (CLI) ─────────────────────────
@@ -627,7 +693,8 @@ def run_evaluate(pipeline: str, period: str,
             domain_desc, result, from_cache, tokens, cache_read, err, elapsed = future.result()
 
             if err or result is None:
-                print(f"  {domain:<22} ERROR ({elapsed:.1f}s)")
+                why = _FAILURES.get(domain, "")
+                print(f"  {domain:<22} ERROR ({elapsed:.1f}s)" + (f"  {why}" if why else ""))
                 errors += 1
                 continue
 
@@ -665,6 +732,22 @@ def run_evaluate(pipeline: str, period: str,
                         tag += f"  (cached {cache_read:,})"
 
             print(f"  {domain:<22} {len(ids):>2} signals  {tag}  ({elapsed:.1f}s)")
+
+    # An evaluation with no content is not an evaluation. Refuse to WRITE one: Stage 5.5 and the
+    # insight layer read this file and cannot tell "the model said nothing" from "nothing moved",
+    # so an empty file here becomes a silently unnarrated period downstream.
+    if not output["domains"]:
+        raise RuntimeError(
+            f"{pipeline}/{period}: no domain produced an evaluation ({errors} failed) — "
+            f"nothing was written.")
+    empty = [d for d, v in output["domains"].items()
+             if not v.get("narrative") and not v.get("signals")]
+    if empty and len(empty) == len(output["domains"]):
+        raise RuntimeError(
+            f"{pipeline}/{period}: every domain came back empty ({', '.join(empty)}) — "
+            f"nothing was written. This is a failed run, not a cheap one.")
+    if empty:
+        print(f"  ⚠ {len(empty)} domain(s) produced no narrative: {', '.join(empty)}")
 
     # Units are deterministic — normalise M/K/B → lakh/crore before writing, so the stored
     # narratives never depend on the model getting the format right (v1.12).

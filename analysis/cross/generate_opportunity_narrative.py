@@ -99,9 +99,16 @@ def call_claude(payload):
     """Single LLM call. Reuses evaluate._call_llm so this step shares ONE call
     path with the signal-evaluation step: prefers the Anthropic API (SDK) when
     ANTHROPIC_API_KEY is set, falls back to the `claude -p` CLI otherwise."""
-    from signals.evaluate import _call_llm  # API-preferred (key) / CLI (fallback)
+    from signals import evaluate as _ev            # API-preferred (key) / CLI (fallback)
+    from core.llm_budget import estimate_usd
     user = json.dumps(payload, ensure_ascii=False)
-    res, *_ = _call_llm(SYSTEM, user)
+    # Price THIS call before it can bill. The guard lives at evaluate's single call site and
+    # reads the run estimate from there, so a caller that reuses that path must set one — a
+    # step that cannot say what it costs cannot be approved.
+    tokens = (len(SYSTEM) + len(user)) / 3.5 + 1200        # ~3.5 chars/token, plus the reply
+    _ev._EST["usd"] = estimate_usd(tokens, _ev.MODEL)
+    _ev._EST["basis"] = f"1 narrative call, ~{tokens:,.0f} tokens (payload size)"
+    res, *_ = _ev._call_llm(SYSTEM, user)
     return res
 
 
