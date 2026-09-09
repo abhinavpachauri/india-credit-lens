@@ -51,6 +51,44 @@ STATUS_CONTRADICTIONS = {
     "strengthening": ["contracting", "shrinking", "decelerat", "weakening"],
 }
 
+# A cue word does not contradict the status when the clause it sits in REVERSES it.
+# "Lenders have stopped shrinking the book" and "after reversing a five-period
+# deceleration" both agree with a `strengthening` status while containing the words
+# `shrinking` and `decelerat`. Both were live warnings for months.
+#
+# This is the precision fix the SEBI lint taught (DISTRIBUTION_SPEC §5.3): narrow
+# where a substring test overreaches, and measure it, rather than widening blind.
+# Measured 2026-09-09: false positives 2 -> 0, catch preserved 96/96 on injection.
+REVERSAL_MARKERS = (
+    "stopped", "stops", "halted", "ends", "ended", "ending", "end of",
+    "no longer", "reversing", "reversed", "reversal", "snapped", "broke",
+    "broken", "out of", "exited", "emerging from", "came out of",
+)
+
+# How far back a marker may sit and still govern the cue. Wide enough for
+# "ends the longest contraction streak", short enough not to reach the previous clause.
+_REVERSAL_WINDOW = 60
+
+
+def contradicting_cues(status: str, text: str) -> list[str]:
+    """Cues in `text` that contradict `status`, ignoring ones a reversal governs.
+
+    Returns the cue strings that stand, so the caller can report them. A cue is
+    dropped when a reversal marker appears before it, within the same sentence and
+    within `_REVERSAL_WINDOW` characters.
+    """
+    status, text = (status or "").lower(), (text or "").lower()
+    hits = []
+    for cue in STATUS_CONTRADICTIONS.get(status, []):
+        for m in re.finditer(re.escape(cue), text):
+            start = m.start()
+            sentence_start = max(text.rfind(".", 0, start), text.rfind(";", 0, start)) + 1
+            window = text[max(sentence_start, start - _REVERSAL_WINDOW):start]
+            if not any(marker in window for marker in REVERSAL_MARKERS):
+                hits.append(cue)
+                break          # one report per cue is enough
+    return hits
+
 
 def extract_numbers(text: str) -> list[float]:
     """SIBC-policy number extraction (strips ISO dates / FY / quarters / years)."""
@@ -146,11 +184,10 @@ def check(period: str | None = None, quiet: bool = False) -> int:
                 #    can trip on hedged/conditional language → warn, don't block).
                 status = (facts.get("status") or "").lower()
                 impl   = ann.get("implication", "").lower()
-                for bad in STATUS_CONTRADICTIONS.get(status, []):
-                    if bad in impl:
-                        warnings.append(
-                            f"{sid} [implication] says '{bad}…' but signal status is '{status}'"
-                        )
+                for bad in contradicting_cues(status, impl):
+                    warnings.append(
+                        f"{sid} [implication] says '{bad}…' but signal status is '{status}'"
+                    )
 
     conn.close()
 

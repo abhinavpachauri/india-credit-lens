@@ -322,3 +322,61 @@ def test_the_movement_family_publishes_once_per_cut_and_not_as_scans():
         placed = [sec for sec, c in cards if c["id"] == f"sibc-{slug}-allocation"]
         assert placed in ([], [section]), \
             f"the {slug} movement card belongs in {section}, found in {placed}"
+
+
+# ── the coherence threshold's outcome, not the threshold ──────────────────────
+
+def test_no_published_alloc_exceeds_the_whole_it_is_a_share_of():
+    """The live invariant `coherence_min` exists to produce.
+
+    `alloc` = 100 * delta_i / net. When entities move against each other the net
+    shrinks toward zero while the numerators do not, so one entity's share of the
+    net can pass 100% — "of every Rs 100 of new credit, telecoms took Rs 137" is
+    arithmetically true and reads as impossible.
+
+    Measured over all 134 momentum windows (measure_coherence_threshold.py): the
+    threshold catches 16 of 16 unsafe windows, at a 7.6% false-rejection cost. But
+    the highest coherence carrying an unsafe window is 0.864 against a threshold of
+    0.90, so a new cut could land in that 0.036 gap. This asserts the outcome
+    directly rather than trusting the threshold to keep producing it.
+    """
+    import sqlite3
+    from core.paths import ROOT
+    con = sqlite3.connect(ROOT / "analysis/signals/signals.db")
+    try:
+        bad = con.execute(
+            "SELECT metric_id, period, entity_id, value FROM signals "
+            "WHERE entity_type='alloc' AND ABS(value) > 100.0"
+        ).fetchall()
+    finally:
+        con.close()
+    assert not bad, f"impossible allocation shares published: {bad[:3]}"
+
+
+def test_the_allocation_guard_rejects_an_impossible_share():
+    """Drive the rule synthetically, so fixing the data can never untest the check.
+
+    Three tests in the 2026-08-25 build became assertions that nothing is wrong once
+    the defect they described was fixed. The durable shape is this pair: the live
+    feed is asserted clean above, and the LOGIC is driven here against rows that will
+    never exist in the database.
+    """
+    def offending(rows):
+        return [r for r in rows if r["entity_type"] == "alloc" and abs(r["value"]) > 100.0]
+
+    aligned = [{"entity_type": "alloc", "entity_id": "Services", "value": 33.8},
+               {"entity_type": "alloc", "entity_id": "Industry", "value": 66.2}]
+    assert offending(aligned) == []
+
+    # A handover window: the net nearly cancels, so a share of it blows past 100.
+    handover = [{"entity_type": "alloc", "entity_id": "Private", "value": -460.4},
+                {"entity_type": "alloc", "entity_id": "Public", "value": 366.1}]
+    assert len(offending(handover)) == 2, "a share larger than the whole must be rejected"
+
+    # 100.0 exactly is the boundary and is legitimate — one entity took all the net.
+    boundary = [{"entity_type": "alloc", "entity_id": "Services", "value": 100.0}]
+    assert offending(boundary) == []
+
+    # contribution rows are shares of GROSS, bounded by construction, never in scope
+    contribution = [{"entity_type": "contribution", "entity_id": "Private", "value": 93.0}]
+    assert offending(contribution) == []

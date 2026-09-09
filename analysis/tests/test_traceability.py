@@ -94,3 +94,45 @@ def test_ratio_matches_percent_of_total():
 
 def test_ratio_matches_rejects_ungrounded():
     assert not v.ratio_matches(50.0, [212.0, 211.0])
+
+
+# ── status-contradiction heuristic: the reversal precision fix ────────────────
+#
+# The check asks whether an implication's wording fights the signal's computed
+# status. It was a bare substring test, so it fired on any sentence CONTAINING a
+# direction word — including sentences saying that direction had ENDED. Two such
+# warnings stood for months ("Lenders have stopped shrinking the book" on a
+# strengthening signal). Measured 2026-09-09 after the fix: live false positives
+# 2 -> 0, catch 49/49 on injected contradictions.
+#
+# Driven synthetically: fixing the two live cards must never become the thing
+# that tests this rule.
+
+def test_a_reversal_marker_disarms_the_cue_it_governs():
+    for text in (
+        "Lenders have stopped shrinking the book.",
+        "The turn to positive growth ends the longest contraction streak.",
+        "Back-to-back highs after reversing a five-period deceleration.",
+        "The segment is no longer decelerating.",
+    ):
+        assert v.contradicting_cues("strengthening", text) == [], text
+
+
+def test_an_ungoverned_cue_still_contradicts():
+    assert v.contradicting_cues("strengthening", "Growth is decelerating sharply.") == ["decelerat"]
+    assert v.contradicting_cues("declining", "The segment is surging.") == ["surging"]
+
+
+def test_a_reversal_in_an_earlier_sentence_does_not_shield_a_later_cue():
+    """The window is clause-scoped on purpose.
+
+    'The contraction ended last year. Growth is now decelerating' is a genuine
+    contradiction on a strengthening signal; the earlier reversal is about a
+    different clause and must not launder the later cue.
+    """
+    text = "The contraction ended last year. Growth is now decelerating sharply."
+    assert v.contradicting_cues("strengthening", text) == ["decelerat"]
+
+
+def test_a_status_with_no_declared_cues_never_warns():
+    assert v.contradicting_cues("unknown", "decelerating, shrinking, surging") == []

@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "purpose": "Learning register for the AI PM content track. One topic per month, anchored at the 21st LinkedIn slot. Spec: analysis/distribution/DISTRIBUTION_SPEC.md \u00a78.",
+    "purpose": "Learning register for the AI PM content track. One topic per month, anchored at the 21st LinkedIn slot. Spec: analysis/distribution/DISTRIBUTION_SPEC.md §8.",
     "version": "1.0",
     "created": "2026-07-21",
     "active_topic": 1,
@@ -32,7 +32,7 @@
       {
         "month": 3,
         "topic_id": 2,
-        "why": "Forces a build already owed \u2014 deterministic-core unit tests are on the engineering-health backlog."
+        "why": "Forces a build already owed — deterministic-core unit tests are on the engineering-health backlog."
       }
     ]
   },
@@ -56,196 +56,196 @@
       ],
       "measurements": [
         {
-          "metric": "negative-test catch rate \u2014 distribution gate, tolerance/ratio policy",
+          "metric": "negative-test catch rate — distribution gate, tolerance/ratio policy",
           "value": "95.7% (was 41.5% under the card-insight policy)",
           "date": "2026-07-21",
-          "how_measured": "1,000 injected plausible pp/% values (seeded uniform 0.6\u201380.0) across the 25 nearest-to-flip signals, each scoped to that signal's own declared ground truth; measured the share the gate rejected under two policies \u2014 core.traceability.SIBC with ratio grounding vs the new DISTRIBUTION policy without it.",
+          "how_measured": "1,000 injected plausible pp/% values (seeded uniform 0.6–80.0) across the 25 nearest-to-flip signals, each scoped to that signal's own declared ground truth; measured the share the gate rejected under two policies — core.traceability.SIBC with ratio grounding vs the new DISTRIBUTION policy without it.",
           "source": "analysis/core/traceability.py (DISTRIBUTION policy) + analysis/distribution/validate_distribution.py"
         },
         {
-          "metric": "false-rejection rate on true statements \u2014 same gate",
+          "metric": "false-rejection rate on true statements — same gate",
           "value": "0/25 (was 3/25)",
           "date": "2026-07-21",
           "how_measured": "Ran the real, uncorrupted watchlist sentence for the 25 nearest-to-flip signals through the same check. The 3 failures were the glued-'pp' extractor backtrack (1.9pp -> 1), fixed by the spaced format; locked by test_real_watchlist_sentences_are_never_falsely_rejected.",
           "source": "analysis/tests/test_distribution.py"
         },
         {
-          "metric": "newsletter gate (validate_newsletter.check_doc) catch rate \u2014 BEFORE rescoping",
+          "metric": "newsletter gate (validate_newsletter.check_doc) catch rate — BEFORE rescoping",
           "value": "0.0% near-miss, 0.0% in-range (0 false rejections)",
           "date": "2026-07-21",
           "how_measured": "analysis/measure_groundedness.py, 200 injections per attack across the 3 live issues (release read x2 + deep read), seed 7. Verified by hand: the gate passed 9.1%, 47.3% and 812.6% injected into a body paragraph, and only rejected a 5-figure absurdity.",
           "source": "analysis/measure_groundedness.py --gate newsletter"
         },
         {
-          "metric": "newsletter gate catch rate \u2014 AFTER per-block scoping + DISTRIBUTION policy",
+          "metric": "newsletter gate catch rate — AFTER per-block scoping + DISTRIBUTION policy",
           "value": "100.0% near-miss, 99.5% in-range (0 false rejections)",
           "date": "2026-07-21",
           "how_measured": "Same harness, same seed, same issues. Three changes: per-block scope with NO issue-wide fallback; core.traceability.DISTRIBUTION policy (rounding width, no ratio grounding); ground truth includes each value as fmt_value renders it. Rendered .md output byte-identical before and after.",
           "source": "analysis/distribution/validate_distribution.py (the newsletter's check_doc, folded into distribution/ on 2026-07-21)"
         },
         {
-          "metric": "scope width \u2014 values a single paragraph was checked against",
-          "value": "735 (289 distinct) \u2192 0 for undeclared blocks, ~10-35 for declared ones",
+          "metric": "scope width — values a single paragraph was checked against",
+          "value": "735 (289 distinct) → 0 for undeclared blocks, ~10-35 for declared ones",
           "date": "2026-07-21",
           "how_measured": "declared_ground_truth() on a release read's 21 declared signals, before vs after per-block scoping.",
           "source": "analysis/distribution/validate_distribution.py (the newsletter's check_doc, folded into distribution/ on 2026-07-21)"
         },
         {
-          "metric": "distribution gate catch rate \u2014 same harness, for comparison",
+          "metric": "distribution gate catch rate — same harness, for comparison",
           "value": "82.6% near-miss, 68.3% in-range (0 false rejections)",
           "date": "2026-07-21",
           "how_measured": "analysis/measure_groundedness.py --gate distribution. Weaker than the newsletter because a claim's scope includes its full period series and ranges, which prose legitimately references ('16-period range'). Next tightening target.",
           "source": "analysis/measure_groundedness.py"
         },
         {
-          "metric": "newsletter gate catch rate by decision point \u2014 D1 (per-block scope, the real test)",
+          "metric": "newsletter gate catch rate by decision point — D1 (per-block scope, the real test)",
           "value": "near-miss 99.1%, in-range 92.8% (0/44 false rejections)",
           "date": "2026-07-23",
           "how_measured": "measure_groundedness.py rewritten to inject at EVERY eligible block (was: first p block only). 50 injections per attack per site over 44 D1 blocks across the 3 long-form issues; each block scoped to exactly the signals it declares. near-miss = a real value nudged past rounding; in-range = a fresh value from the doc's own range, caught only by scope.",
           "source": "analysis/measure_groundedness.py (post-rewrite)"
         },
         {
-          "metric": "newsletter gate in-range catch rate by scope band \u2014 the scope-width/leak relationship, measured",
-          "value": "1-50 vals: 100.0% \u00b7 51-200: 99.8% \u00b7 201-1k: 79.5% \u00b7 1k+: 79.0%",
+          "metric": "newsletter gate in-range catch rate by scope band — the scope-width/leak relationship, measured",
+          "value": "1-50 vals: 100.0% · 51-200: 99.8% · 201-1k: 79.5% · 1k+: 79.0%",
           "date": "2026-07-23",
-          "how_measured": "same run, D1 blocks bucketed by distinct candidate-value count. in-range fabrications (the scope-only attack) are caught ~100% at narrow scope and fall to ~79% once a block's ground truth runs to hundreds/thousands of values \u2014 the deep read's basis lines (scope up to 2306) are the wide band. near-miss stays high (tolerance catches it) regardless of width. This is the leading indicator the old harness could not see.",
+          "how_measured": "same run, D1 blocks bucketed by distinct candidate-value count. in-range fabrications (the scope-only attack) are caught ~100% at narrow scope and fall to ~79% once a block's ground truth runs to hundreds/thousands of values — the deep read's basis lines (scope up to 2306) are the wide band. near-miss stays high (tolerance catches it) regardless of width. This is the leading indicator the old harness could not see.",
           "source": "analysis/measure_groundedness.py --scope + full run"
         },
         {
-          "metric": "distribution gate catch rate by decision point \u2014 D3 per-claim + D4 blurb (current data)",
+          "metric": "distribution gate catch rate by decision point — D3 per-claim + D4 blurb (current data)",
           "value": "D3 100.0%/100.0%, D4 100.0%/100.0% (0 false rejections); only 1 generated claim exists this vintage (other slots all-verbatim)",
           "date": "2026-07-23",
-          "how_measured": "same harness, check_slate. Today only the 28th (C8 watchlist) emits a non-verbatim claim; 1st/7th/14th are all verbatim feed cards (number-checked upstream at D5), so the slot number-injection surface is legitimately thin \u2014 scope width 67, both bands narrow, everything caught.",
+          "how_measured": "same harness, check_slate. Today only the 28th (C8 watchlist) emits a non-verbatim claim; 1st/7th/14th are all verbatim feed cards (number-checked upstream at D5), so the slot number-injection surface is legitimately thin — scope width 67, both bands narrow, everything caught.",
           "source": "analysis/measure_groundedness.py --gate distribution"
         },
         {
-          "metric": "is-news reads selector \u2014 template-reject + catch (non-circular)",
+          "metric": "is-news reads selector — template-reject + catch (non-circular)",
           "value": "template-reject 100.0% (4/4 static share signals below the read floor); catch 54.5% (12/22 magnitude outliers scored >= floor 2.0)",
           "date": "2026-07-23",
           "how_measured": "analysis/signals/is_news.py --measure. Selector scores each L1 signal 2*record + 2*regime-flip + 1*crossed; a read must clear floor 2.0 (a strong factor). Ground truth is INDEPENDENT of the score: templates = share-method signals that also barely moved (<0.5x typical monthly move) -> must score below floor; news = magnitude outliers (>2x typical move) -> should clear floor. Magnitude is deliberately NOT a selector factor, so catch<100% is by design (a big move inside an established trend that sets no record and flips no regime is not a 'read').",
           "source": "analysis/signals/is_news.py"
         },
         {
-          "metric": "merged monthly issue \u2014 number gate catch by decision point (D1 per-block)",
+          "metric": "merged monthly issue — number gate catch by decision point (D1 per-block)",
           "value": "near-miss 98.9%, in-range 92.5% (0/38 false rejections)",
           "date": "2026-07-23",
           "how_measured": "analysis/measure_groundedness.py --gate newsletter, over the two live long-form cases (merged monthly_issue + deep_read), injecting at EVERY eligible block. D1 = blocks that declare signals; each scoped to exactly those signals.",
           "source": "analysis/measure_groundedness.py + analysis/distribution/issues/monthly_issue.py"
         },
         {
-          "metric": "merged monthly issue \u2014 number gate catch by scope band (the width/leak curve)",
-          "value": "1-50 vals 100.0% \u00b7 51-200 99.5% \u00b7 201-1k 87.8% \u00b7 1k+ 80.4% (in-range)",
+          "metric": "merged monthly issue — number gate catch by scope band (the width/leak curve)",
+          "value": "1-50 vals 100.0% · 51-200 99.5% · 201-1k 87.8% · 1k+ 80.4% (in-range)",
           "date": "2026-07-23",
           "how_measured": "same run, D1 blocks bucketed by distinct candidate-value count. Same relationship the harness fix first exposed: narrow scope catches ~everything, wide scope leaks ~1-in-5 in-range fabrications. The monthly issue's own blocks are narrow (tiles 1-2 signals, flip lines 1 signal); the 1k+ band is the deep read's evidence_all basis lines (step-3 D1 fix target).",
           "source": "analysis/measure_groundedness.py"
         },
         {
-          "metric": "merged monthly issue \u2014 word-vs-number agreement check (NEW, first non-number-tracing check since 2g)",
+          "metric": "merged monthly issue — word-vs-number agreement check (NEW, first non-number-tracing check since 2g)",
           "value": "catch 100.0% (11/11 injected direction/rate contradictions), 0 false positives on the clean issue",
           "date": "2026-07-23",
           "how_measured": "negate the rate sign on each generated flip line (the real 'status says up, YoY is -2.6%' class); validate_distribution.word_number_conflicts must hard-fail each. Clean doc must produce 0 conflicts. The check reads only %/pp rates (a level like Rs 2.95L Cr has no direction) and fires when a line's single direction cue disagrees with its rate; conflicts in verbatim card prose warn instead of fail (fixed upstream at v1.12).",
           "source": "analysis/distribution/validate_distribution.py word_number_conflicts"
         },
         {
-          "metric": "merged monthly issue (\u00a711.1 REVISED, with sector/bank tables) \u2014 number gate catch by decision point",
-          "value": "D1 per-block near-miss 99.6%, in-range 96.0% (0/68 false rejections); bands 1-50\u219299.9%, 201-1k\u219293.1%, 1k+\u219285.0% in-range",
+          "metric": "merged monthly issue (§11.1 REVISED, with sector/bank tables) — number gate catch by decision point",
+          "value": "D1 per-block near-miss 99.6%, in-range 96.0% (0/68 false rejections); bands 1-50→99.9%, 201-1k→93.1%, 1k+→85.0% in-range",
           "date": "2026-07-23",
-          "how_measured": "analysis/measure_groundedness.py --gate newsletter after the \u00a711.1 revision (flip-list\u2192sector growth table, banks\u21923 tables, fleet\u2192prose). Harness extended to inject into the NEW `table` block type (per-row, scoped to the row's own signal) \u2014 without that the table numbers, most of the issue's figures, went unattacked (D1 sites 24\u219268). Supersedes the pre-revision merged-issue entry. The narrow table rows (1 signal each) catch ~100%; the 1k+ band that leaks ~15% in-range is the deep read's evidence_all basis lines (step-3 D1 fix target), not the monthly issue.",
+          "how_measured": "analysis/measure_groundedness.py --gate newsletter after the §11.1 revision (flip-list→sector growth table, banks→3 tables, fleet→prose). Harness extended to inject into the NEW `table` block type (per-row, scoped to the row's own signal) — without that the table numbers, most of the issue's figures, went unattacked (D1 sites 24→68). Supersedes the pre-revision merged-issue entry. The narrow table rows (1 signal each) catch ~100%; the 1k+ band that leaks ~15% in-range is the deep read's evidence_all basis lines (step-3 D1 fix target), not the monthly issue.",
           "source": "analysis/measure_groundedness.py + analysis/distribution/issues/monthly_issue.py"
         },
         {
-          "metric": "eval prompt v1.11\u2192v1.12 delta \u2014 advice/forecast/millions in card prose",
-          "value": "sibc 'lenders should' 3\u21920, 'entrenched' 7\u21921; atm_pos millions/M-K tokens (120.5M/1.02M/147K\u2026) \u2192 0 (all lakh/crore); advice \u2192 0. Both gates green, 217 tests pass.",
+          "metric": "eval prompt v1.11→v1.12 delta — advice/forecast/millions in card prose",
+          "value": "sibc 'lenders should' 3→0, 'entrenched' 7→1; atm_pos millions/M-K tokens (120.5M/1.02M/147K…) → 0 (all lakh/crore); advice → 0. Both gates green, 217 tests pass.",
           "date": "2026-07-23",
-          "how_measured": "grep advice/forecast/million patterns in evaluations/{sibc,atm_pos}/*.json before vs after v1.12. Units fixed DETERMINISTICALLY (evaluate.normalize_units at write, not the prompt) since the model reverts to M/K however firmly asked; core.traceability extended to scale crore/lakh so the converted values still trace (Check 2g: 89 insights, 4c: 10 LLM cards \u2014 both PASS through the units refactor; golden tests unchanged).",
+          "how_measured": "grep advice/forecast/million patterns in evaluations/{sibc,atm_pos}/*.json before vs after v1.12. Units fixed DETERMINISTICALLY (evaluate.normalize_units at write, not the prompt) since the model reverts to M/K however firmly asked; core.traceability extended to scale crore/lakh so the converted values still trace (Check 2g: 89 insights, 4c: 10 LLM cards — both PASS through the units refactor; golden tests unchanged).",
           "source": "analysis/signals/evaluate.py normalize_units + analysis/core/traceability.py + analysis/signals/prompts/domain_eval_system.txt"
         },
         {
-          "metric": "deep read D1 basis-line scope tightening (\u00a711.2) \u2014 width + catch",
-          "value": "median candidate-value scope per basis line dropped from ~2,258 (driver-wide evidence_all, handoff \u00a72 D1) to 65 (max 461) once each 'how we know' line scoped to its OWN member signal. In-range catch held at 99.7% and near-miss at 99.9% across 71 D1 sites (both long-form issues); false-rejection 1/71; the untouched deep read passes the gate whole (0 failures).",
+          "metric": "deep read D1 basis-line scope tightening (§11.2) — width + catch",
+          "value": "median candidate-value scope per basis line dropped from ~2,258 (driver-wide evidence_all, handoff §2 D1) to 65 (max 461) once each 'how we know' line scoped to its OWN member signal. In-range catch held at 99.7% and near-miss at 99.9% across 71 D1 sites (both long-form issues); false-rejection 1/71; the untouched deep read passes the gate whole (0 failures).",
           "date": "2026-07-28",
-          "how_measured": "measure_groundedness.py (injects EVERY block) \u2014 scope-width report + n=50 near-miss/in-range injections per site, seed 7. Enabled by attaching per-member `signals` upstream in generate_opportunities_feed.py so a basis line grounds against exactly the signal its number came from.",
-          "source": "analysis/measure_groundedness.py \u00b7 analysis/cross/generate_opportunities_feed.py \u00b7 analysis/distribution/issues/deep_read.py::basis_lines"
+          "how_measured": "measure_groundedness.py (injects EVERY block) — scope-width report + n=50 near-miss/in-range injections per site, seed 7. Enabled by attaching per-member `signals` upstream in generate_opportunities_feed.py so a basis line grounds against exactly the signal its number came from.",
+          "source": "analysis/measure_groundedness.py · analysis/cross/generate_opportunities_feed.py · analysis/distribution/issues/deep_read.py::basis_lines"
         },
         {
-          "metric": "deep read negative test \u2014 planted number into a member-scoped basis line",
+          "metric": "deep read negative test — planted number into a member-scoped basis line",
           "value": "a fabricated 91.7% appended to a construct-spine basis line (scoped to its member's own -yoy signal, ~1-50 candidate values) is REJECTED by check_doc; without the D1 tightening it would have grounded in the ~2,258-wide evidence_all pool.",
           "date": "2026-07-28",
           "how_measured": "unit test test_deep_read.py::test_tightened_basis_scope_catches_a_planted_number (deterministic, not synthetic).",
           "source": "analysis/tests/test_deep_read.py"
         },
         {
-          "metric": "bank 'why' sourcing gate \u2014 never-auto-trusted (\u00a711.2)",
-          "value": "3/3 negative cases blocked: a status!='verified' entry never publishes; a 'verified' entry missing its URL fails validate_store; the shipped store is empty and passes its own gate (0 fails) \u2192 deep read falls back to computed basis. No fabricated source can reach the reader.",
+          "metric": "bank 'why' sourcing gate — never-auto-trusted (§11.2)",
+          "value": "3/3 negative cases blocked: a status!='verified' entry never publishes; a 'verified' entry missing its URL fails validate_store; the shipped store is empty and passes its own gate (0 fails) → deep read falls back to computed basis. No fabricated source can reach the reader.",
           "date": "2026-07-28",
           "how_measured": "bank_sourcing.validate_entry/validate_store + unit tests (unverified, verified-but-incomplete, empty-store-clean).",
-          "source": "analysis/distribution/bank_sourcing.py \u00b7 analysis/tests/test_deep_read.py"
+          "source": "analysis/distribution/bank_sourcing.py · analysis/tests/test_deep_read.py"
         },
         {
-          "metric": "shared voice layer (\u00a711.2-R1) \u2014 deep read #8 conversational prose, measured",
-          "value": "The machine-y basis lines and terse so-what were replaced by voice-rendered plain prose over gated facts. Groundedness held: D1 per-block catch 100% near-miss / 99.0% in-range across 73 sites, false-rej 1/73; the #8 grounded YoY blocks (scope band 1-50) catch 100%/99.6%; the untouched deep read passes whole (0/2). Voice lint (advice/forecast/banned) hard-fails on our own words \u2014 #8 renders with 0 hard prose failures.",
+          "metric": "shared voice layer (§11.2-R1) — deep read #8 conversational prose, measured",
+          "value": "The machine-y basis lines and terse so-what were replaced by voice-rendered plain prose over gated facts. Groundedness held: D1 per-block catch 100% near-miss / 99.0% in-range across 73 sites, false-rej 1/73; the #8 grounded YoY blocks (scope band 1-50) catch 100%/99.6%; the untouched deep read passes whole (0/2). Voice lint (advice/forecast/banned) hard-fails on our own words — #8 renders with 0 hard prose failures.",
           "date": "2026-07-29",
           "how_measured": "measure_groundedness.py now injects the CHOSEN spine (#8) not just the top pick. voice.lint consolidates slot_render + validate_distribution rules into one layer that every surface calls (validate_distribution.prose_lint/word_number_conflicts now delegate); 233 unit tests green.",
-          "source": "analysis/core/voice.py \u00b7 analysis/distribution/validate_distribution.py \u00b7 analysis/measure_groundedness.py"
+          "source": "analysis/core/voice.py · analysis/distribution/validate_distribution.py · analysis/measure_groundedness.py"
         },
         {
-          "metric": "model-sourced diagram (\u00a711.2-R2) \u2014 every node/edge from the system model",
-          "value": "The #8 diagram is a 5-node SIGNED subgraph extracted from system_model.json (force_upi_zero_mdr --drives(+)--> UPI QR, --suppresses(-)--> POS terminals, --creates_risk--> the bifurcation), 0 nodes synthesised in the distribution layer. mermaid.py demoted to a pure renderer of (nodes, edges). Trivial subgraphs (< 3 nodes / < 2 edges) are suppressed \u2014 negative-tested \u2014 so a spine the model can't draw gets no diagram rather than a decorative triangle.",
+          "metric": "model-sourced diagram (§11.2-R2) — every node/edge from the system model",
+          "value": "The #8 diagram is a 5-node SIGNED subgraph extracted from system_model.json (force_upi_zero_mdr --drives(+)--> UPI QR, --suppresses(-)--> POS terminals, --creates_risk--> the bifurcation), 0 nodes synthesised in the distribution layer. mermaid.py demoted to a pure renderer of (nodes, edges). Trivial subgraphs (< 3 nodes / < 2 edges) are suppressed — negative-tested — so a spine the model can't draw gets no diagram rather than a decorative triangle.",
           "date": "2026-07-29",
           "how_measured": "model_graph.subgraph_for + mermaid.render; unit tests test_chosen_spine_diagram_comes_from_the_model + test_trivial_subgraph_is_suppressed.",
-          "source": "analysis/distribution/model_graph.py \u00b7 analysis/distribution/mermaid.py \u00b7 analysis/tests/test_deep_read.py"
+          "source": "analysis/distribution/model_graph.py · analysis/distribution/mermaid.py · analysis/tests/test_deep_read.py"
         },
         {
-          "metric": "S4a bank-sourcing gate (\u00a711.2-R3) \u2014 tiered allowlist + WebFetch excerpt-verification, negative-tested",
+          "metric": "S4a bank-sourcing gate (§11.2-R3) — tiered allowlist + WebFetch excerpt-verification, negative-tested",
           "value": "The engine publishes a bank 'why' only if: host is on the tier allowlist (T1 official / T2 reputed reports / T3 named press), declared tier matches the host, AND the verbatim excerpt literally appears on the fetched page. 6 unit tests: fabricated excerpt REJECTED, off-allowlist host REJECTED, tier-lie REJECTED, real-excerpt-on-allowlisted-host WRITTEN. Store ships empty and passes its own gate (0 fails).",
           "date": "2026-07-29",
           "how_measured": "analysis/tests/test_deep_read.py tiered-gate tests; bank_sourcing.validate_entry + excerpt_on_page + add_bank_claim.",
-          "source": "analysis/distribution/bank_sourcing.py \u00b7 analysis/tests/test_deep_read.py"
+          "source": "analysis/distribution/bank_sourcing.py · analysis/tests/test_deep_read.py"
         },
         {
-          "metric": "S4a live population (\u00a711.2-R3) \u2014 real verified sources for #8 via the editor's Chrome",
+          "metric": "S4a live population (§11.2-R3) — real verified sources for #8 via the editor's Chrome",
           "value": "2 corroborations written, both excerpt-verified literally on the page: PIB 'Advancing Cashless India' (Tier-1 official, grounds zero-MDR) + Business Standard 'may hurt PoS machines deployment' (Tier-3 press, triangulates POS decline). Fetched through the user's logged-in Chrome (get_page_text) because the automated crawler is 403'd. Per-bank whys: 0 met the bar (no citable per-bank source) -> honest fallback. Store: 0 bank_claims, 2 corroborations, validate_store clean.",
           "date": "2026-07-29",
           "how_measured": "bank_sourcing.add_corroboration(entry, page_text) with excerpt_on_page verification; store audited by validate_store; deep read renders both, tier-labelled.",
-          "source": "analysis/distribution/bank_sourcing.json \u00b7 analysis/distribution/bank_sourcing.py"
+          "source": "analysis/distribution/bank_sourcing.json · analysis/distribution/bank_sourcing.py"
         },
         {
-          "metric": "LinkedIn \u00a75.3 design-prompt prose lint \u2014 catch + warn/fail split, measured",
-          "value": "The design prompt (a public pager) now gets the full prose lint, reusing core.voice. Planted-hit catch in GENERATED text (hard fail): advice 4/4, forecast 4/4, unformatted raw float 3/3 = 11/11. Verbatim-card advice \u2192 WARN not fail 4/4 (feeds v1.12). \u00a75.3 prose false-rejections on number-free clean generated text = 0. SEBI lint deliberately NOT widened (kept lint_compliance as-is) \u2014 the precision fix is a prerequisite per \u00a75.3, not done here. So-what now drops advice/forecast implications (observation-only, \u00a75.1).",
+          "metric": "LinkedIn §5.3 design-prompt prose lint — catch + warn/fail split, measured",
+          "value": "The design prompt (a public pager) now gets the full prose lint, reusing core.voice. Planted-hit catch in GENERATED text (hard fail): advice 4/4, forecast 4/4, unformatted raw float 3/3 = 11/11. Verbatim-card advice → WARN not fail 4/4 (feeds v1.12). §5.3 prose false-rejections on number-free clean generated text = 0. SEBI lint deliberately NOT widened (kept lint_compliance as-is) — the precision fix is a prerequisite per §5.3, not done here. So-what now drops advice/forecast implications (observation-only, §5.1).",
           "date": "2026-07-29",
-          "how_measured": "targeted injection over check_slate + slate_voice_warnings (4 advice / 4 forecast / 3 unformatted phrases); test_distribution.py \u00a75.3 tests (43 pass, was 39).",
-          "source": "analysis/distribution/validate_distribution.py::check_slate + slate_voice_warnings \u00b7 analysis/core/voice.py \u00b7 analysis/distribution/slot_render.py"
+          "how_measured": "targeted injection over check_slate + slate_voice_warnings (4 advice / 4 forecast / 3 unformatted phrases); test_distribution.py §5.3 tests (43 pass, was 39).",
+          "source": "analysis/distribution/validate_distribution.py::check_slate + slate_voice_warnings · analysis/core/voice.py · analysis/distribution/slot_render.py"
         },
         {
-          "metric": "\u00a714 raw-float fix chain \u2014 opportunity narrative now reader-formatted, C6/C7 slot unblocked",
-          "value": "One shared fmt_value (core/render.py) now feeds three layers: the narrative LLM gets a `display` string and copies it verbatim ('13.6 lakh micro ATMs', not '1358241.0'); Check 4f accepts the as-rendered form (added _as_rendered to _numbers_for) so the reader number still traces; UNFORMATTED allows N.0 before magnitude/percent words. Result: 0 unformatted hits across all feed narratives (was \u22654), 4f strict still green (20 opps), and all 5 LinkedIn slots now pass (14th was the one gated). 245 tests (was 217 at session start).",
+          "metric": "§14 raw-float fix chain — opportunity narrative now reader-formatted, C6/C7 slot unblocked",
+          "value": "One shared fmt_value (core/render.py) now feeds three layers: the narrative LLM gets a `display` string and copies it verbatim ('13.6 lakh micro ATMs', not '1358241.0'); Check 4f accepts the as-rendered form (added _as_rendered to _numbers_for) so the reader number still traces; UNFORMATTED allows N.0 before magnitude/percent words. Result: 0 unformatted hits across all feed narratives (was ≥4), 4f strict still green (20 opps), and all 5 LinkedIn slots now pass (14th was the one gated). 245 tests (was 217 at session start).",
           "date": "2026-07-29",
           "how_measured": "re-ran generate_opportunity_narrative (API, 10 regenerated); scanned feed for UNFORMATTED (0); 4f strict PASS; generate_slot --all (14th passes with 4 verbatim-advice warnings). test_distribution fmt_value + UNFORMATTED regression tests.",
-          "source": "analysis/core/render.py \u00b7 analysis/core/validate_opportunity_traceability.py \u00b7 analysis/cross/generate_opportunity_narrative.py"
+          "source": "analysis/core/render.py · analysis/core/validate_opportunity_traceability.py · analysis/cross/generate_opportunity_narrative.py"
         },
         {
-          "metric": "opportunity-narrative advice removed at source \u2014 prompt + deterministic guard",
-          "value": "The narrative's `implication` asked the LLM for 'what the bank should do' (advice) \u2014 the source of every C6/C7 slot warning and /opportunities' prescriptive 'For lenders' line. Changed the prompt to demand an OBSERVATION, and added _observation_only() (core.voice.advice/forecasts) that DROPS any implication still carrying advice/forecast \u2014 the LLM ignored the instruction on 3 cross-system items, the guard caught all 3. Also removed the backwards fallback implication ('Move on this while the trend is still running in your favour') that showed on every risk. Result: 0 advice/forecast implications across the feed (was \u22657), 0 \u00a75.3 slot warnings (was 4 on the 14th). Signal-eval v1.12 already clean (monthly issue + deep read = 0 warnings).",
+          "metric": "opportunity-narrative advice removed at source — prompt + deterministic guard",
+          "value": "The narrative's `implication` asked the LLM for 'what the bank should do' (advice) — the source of every C6/C7 slot warning and /opportunities' prescriptive 'For lenders' line. Changed the prompt to demand an OBSERVATION, and added _observation_only() (core.voice.advice/forecasts) that DROPS any implication still carrying advice/forecast — the LLM ignored the instruction on 3 cross-system items, the guard caught all 3. Also removed the backwards fallback implication ('Move on this while the trend is still running in your favour') that showed on every risk. Result: 0 advice/forecast implications across the feed (was ≥7), 0 §5.3 slot warnings (was 4 on the 14th). Signal-eval v1.12 already clean (monthly issue + deep read = 0 warnings).",
           "date": "2026-07-29",
           "how_measured": "scan feed implications for should/must/need-to/move-on-this (0); generate_slot 14th (0 warnings); prose_lint on monthly+deep read (0). Enforce-don't-trust: the guard is deterministic, not prompt-dependent.",
-          "source": "analysis/cross/generate_opportunity_narrative.py::_observation_only \u00b7 analysis/cross/generate_opportunities_feed.py"
+          "source": "analysis/cross/generate_opportunity_narrative.py::_observation_only · analysis/cross/generate_opportunities_feed.py"
         },
         {
-          "metric": "dashboard read-mode composition/structural plane classifier \u2014 catch + false-rejection",
-          "value": "Built analysis/signals/planes.py, the one net-new compute in the dashboard read-mode redesign (DASHBOARD_SPEC.md step 1): sorts every L1 signal into read (is_news.score>=2.0) / composition (structural, shown once as a caption) / subject. The composition rule is its own judgement because categories.py answers which-question not does-it-change (C1 holds both csv_sector_yoy and csv_sector_share). Rule: value spread over trailing 12 within a per-unit materiality band (3pp for rates/shares, 5% relative otherwise), read-first priority excludes movers. Measured non-circularly: independent structural label = a share flat to <1pp over ALL history (blind to the band); independent mover label = is_news magnitude outlier (>2x typical move). Result: catch 10/10 = 100% (structural shares -> composition; +2 truly-still shares correctly filed read because they flipped THIS period, not misses); false-reject 0/22 = 0% (no mover miscalled structure). Partition read 73 / composition 19 / subject 100 \u2014 composition ~10%, the intended not-news residue. Two design corrections earned by the measurement: (1) shares carry unit=None but are pp-scale, so share methods use an absolute 3pp band not the relative one (catch 41.7%->66.7%); (2) dropped the spec-draft AND status-stable gate \u2014 it dropped genuinely-still shares whose status LABEL wobbles on knife-edge noise, e.g. personal-loans-share at ~33% all year (catch 66.7%->100%).",
+          "metric": "dashboard read-mode composition/structural plane classifier — catch + false-rejection",
+          "value": "Built analysis/signals/planes.py, the one net-new compute in the dashboard read-mode redesign (DASHBOARD_SPEC.md step 1): sorts every L1 signal into read (is_news.score>=2.0) / composition (structural, shown once as a caption) / subject. The composition rule is its own judgement because categories.py answers which-question not does-it-change (C1 holds both csv_sector_yoy and csv_sector_share). Rule: value spread over trailing 12 within a per-unit materiality band (3pp for rates/shares, 5% relative otherwise), read-first priority excludes movers. Measured non-circularly: independent structural label = a share flat to <1pp over ALL history (blind to the band); independent mover label = is_news magnitude outlier (>2x typical move). Result: catch 10/10 = 100% (structural shares -> composition; +2 truly-still shares correctly filed read because they flipped THIS period, not misses); false-reject 0/22 = 0% (no mover miscalled structure). Partition read 73 / composition 19 / subject 100 — composition ~10%, the intended not-news residue. Two design corrections earned by the measurement: (1) shares carry unit=None but are pp-scale, so share methods use an absolute 3pp band not the relative one (catch 41.7%->66.7%); (2) dropped the spec-draft AND status-stable gate — it dropped genuinely-still shares whose status LABEL wobbles on knife-edge noise, e.g. personal-loans-share at ~33% all year (catch 66.7%->100%).",
           "date": "2026-07-31",
-          "how_measured": "python3 analysis/signals/planes.py --measure \u2014 catch = truly-still-non-read signals filed composition; false-reject = magnitude-outlier signals wrongly filed composition. Both labels independent of the classifier (raw full-history spread; behavioural magnitude), so agreement is a real question, per the narrow-negative-test lesson.",
+          "how_measured": "python3 analysis/signals/planes.py --measure — catch = truly-still-non-read signals filed composition; false-reject = magnitude-outlier signals wrongly filed composition. Both labels independent of the classifier (raw full-history spread; behavioural magnitude), so agreement is a real question, per the narrow-negative-test lesson.",
           "source": "analysis/signals/planes.py (measure()); reuses signals/is_news.py + signals/proximity.py"
         },
         {
-          "metric": "single-entity artifact guard \u2014 catch / false-flag",
-          "value": "catch 2/2 (POS terminals YoY at 0.977 single-issuer share + its dependent UPI-QR-per-POS ratio); false-flag 0/2 on healthy aggregates (cc/dc outstanding); is_news score suppressed 4.0\u21920.0 for both artifacts",
+          "metric": "single-entity artifact guard — catch / false-flag",
+          "value": "catch 2/2 (POS terminals YoY at 0.977 single-issuer share + its dependent UPI-QR-per-POS ratio); false-flag 0/2 on healthy aggregates (cc/dc outstanding); is_news score suppressed 4.0→0.0 for both artifacts",
           "date": "2026-08-03",
           "how_measured": "signals/dominance.py move_dominance() over the 4 dominance-eligible atm_pos metrics for 2026-06-30, vs the known ICICI POS reclassification; is_news.score before/after",
           "source": "analysis/tests/test_dominance.py (5 tests) + analysis/signals/dominance.py"
         },
         {
-          "metric": "doc-drift guard \u2014 stated counts and JSON evidence pointers",
+          "metric": "doc-drift guard — stated counts and JSON evidence pointers",
           "value": "2/2 stale counts caught (CLAUDE.md said 225 and 90 signals; actual 230); 2/2 dead evidence pointers caught; 0 false positives across 16 living docs and 27 register measurements; both negative-tested",
           "date": "2026-08-11",
           "how_measured": "Extended reconcile.py with a count check (registry signals, test functions) and an evidence-pointer check over declared JSON; planted a wrong count and a missing source file, confirmed exit 1 each time and exit 0 restored.",
@@ -266,17 +266,17 @@
           "source": "analysis/pipelines/sibc/validate_sibc_traceability.py"
         },
         {
-          "metric": "Card\u2194chart cut check (\u00a715.7) \u2014 injection catch rate",
+          "metric": "Card↔chart cut check (§15.7) — injection catch rate",
           "value": "100% (98/98)",
           "date": "2026-08-25",
           "how_measured": "Enumerated every card whose chart was clean at baseline (73 SIBC + 12 payments), then injected one fault at a time in three shapes: repoint a SIBC card's cut at a parent the section does not draw; name a series that is on no chart; point a payments card at a section drawing a different metric. 98 injections, each requiring the check to report that card. Source files md5-verified byte-identical after restore.",
           "source": "analysis/guards/validate_card_cuts.py"
         },
         {
-          "metric": "Card\u2194chart cut check (\u00a715.7) \u2014 false-rejection rate",
+          "metric": "Card↔chart cut check (§15.7) — false-rejection rate",
           "value": "0% (0/52 findings)",
           "date": "2026-08-25",
-          "how_measured": "All 52 baseline findings were checked by hand against the CSV, the registry compute spec and the rendered chart. Every one is a real mismatch: 23 C1 (card's entities absent from its chart), 11 C3 (share measured against a total the chart does not draw), 6 C2 (a highlight naming a series that renders nothing), 12 C4 (no cut declared). One false positive found during development \u2014 a cut matched to a section by NAME (PSL vs psl) \u2014 was fixed by declaring section cuts rather than inferring them.",
+          "how_measured": "All 52 baseline findings were checked by hand against the CSV, the registry compute spec and the rendered chart. Every one is a real mismatch: 23 C1 (card's entities absent from its chart), 11 C3 (share measured against a total the chart does not draw), 6 C2 (a highlight naming a series that renders nothing), 12 C4 (no cut declared). One false positive found during development — a cut matched to a section by NAME (PSL vs psl) — was fixed by declaring section cuts rather than inferring them.",
           "source": "analysis/tests/test_card_cuts.py"
         },
         {
@@ -287,106 +287,141 @@
           "source": "analysis/guards/validate_card_cuts.py"
         },
         {
-          "metric": "\u00a715.4 derived highlights \u2014 dead-highlight count after the fix",
-          "value": "7 \u2192 0 (SIBC), 1 wrong-series highlight removed, 0 prose changes across 95 cards",
+          "metric": "§15.4 derived highlights — dead-highlight count after the fix",
+          "value": "7 → 0 (SIBC), 1 wrong-series highlight removed, 0 prose changes across 95 cards",
           "date": "2026-08-25",
-          "how_measured": "Regenerated sibc_l1_annotations.json with highlights derived from the section's own label vocabulary instead of the registry's hand-typed chart_series, then diffed every card field against the committed feed. Exactly 7 highlights changed, all corrections; title/body/implication/basis/sourceSignals byte-identical on all 95 cards. Re-ran the \u00a715.7 check: C2 findings 6 \u2192 0.",
+          "how_measured": "Regenerated sibc_l1_annotations.json with highlights derived from the section's own label vocabulary instead of the registry's hand-typed chart_series, then diffed every card field against the committed feed. Exactly 7 highlights changed, all corrections; title/body/implication/basis/sourceSignals byte-identical on all 95 cards. Re-ran the §15.7 check: C2 findings 6 → 0.",
           "source": "analysis/core/cuts.py"
         },
         {
-          "metric": "Card\u2194chart cut check (\u00a715.7) \u2014 findings after \u00a715.6 rendered the cuts",
-          "value": "52 \u2192 0 across both pipelines; stage 5.7 now STRICT in both gates",
+          "metric": "Card↔chart cut check (§15.7) — findings after §15.6 rendered the cuts",
+          "value": "52 → 0 across both pipelines; stage 5.7 now STRICT in both gates",
           "date": "2026-08-26",
-          "how_measured": "Ran the check over every rendered card in both pipelines after the charts gained the three \u00a715.6 render shapes. C1 23\u21920, C2 6\u21920, C3 11\u21920, C4 13\u21920, C5 0. Verified strict exits 1 on an injected fault and 0 on the live feeds; both gates ALL STAGES PASSED including tsc + npm run build.",
+          "how_measured": "Ran the check over every rendered card in both pipelines after the charts gained the three §15.6 render shapes. C1 23→0, C2 6→0, C3 11→0, C4 13→0, C5 0. Verified strict exits 1 on an injected fault and 0 on the live feeds; both gates ALL STAGES PASSED including tsc + npm run build.",
           "source": "analysis/guards/validate_card_cuts.py"
         },
         {
-          "metric": "Dashboard card prose \u2014 voice problems in prose we generate",
-          "value": "9 \u2192 0 across 128 cards (3 warnings remain, all eval-authored)",
+          "metric": "Dashboard card prose — voice problems in prose we generate",
+          "value": "9 → 0 across 128 cards (3 warnings remain, all eval-authored)",
           "date": "2026-08-26",
-          "how_measured": "Ran core.voice.lint over title/body/implication of every rendered card in both pipelines before and after the \u00a715.8 fixes. Severity split by the card's own `representation` field: deterministic hard-fails, llm warns. Stage 5.8 strict in both gates.",
+          "how_measured": "Ran core.voice.lint over title/body/implication of every rendered card in both pipelines before and after the §15.8 fixes. Severity split by the card's own `representation` field: deterministic hard-fails, llm warns. Stage 5.8 strict in both gates.",
           "source": "analysis/guards/validate_card_prose.py"
         },
         {
-          "metric": "Advice/forecast lint widening \u2014 false-rejection rate",
+          "metric": "Advice/forecast lint widening — false-rejection rate",
           "value": "0 real catches lost (1 suppression over 409 texts, and it was the false positive)",
           "date": "2026-08-26",
-          "how_measured": "Compared the old and new advice matchers over 384 card fields plus 25 long-form documents on disk. The relative-clause rule ('banks that focus on underserved segments' describes, it does not instruct) suppressed exactly one hit \u2014 the false positive it was written for. Each widened phrase is evidenced by a live hit; a bare 'will be' was tried and dropped for firing on ordinary comparative prose.",
+          "how_measured": "Compared the old and new advice matchers over 384 card fields plus 25 long-form documents on disk. The relative-clause rule ('banks that focus on underserved segments' describes, it does not instruct) suppressed exactly one hit — the false positive it was written for. Each widened phrase is evidenced by a live hit; a bare 'will be' was tried and dropped for firing on ordinary comparative prose.",
           "source": "analysis/core/voice.py"
         },
         {
-          "metric": "Growth-scan pairing \u2014 Check 2g scope on a card quoting size beside speed",
+          "metric": "Growth-scan pairing — Check 2g scope on a card quoting size beside speed",
           "value": "22 candidate values vs 1,728 period-wide (78x tighter); in-range injection catch 3/4",
           "date": "2026-08-26",
-          "how_measured": "The card declares both the growth scan and its sibling share scan in sourceSignals, so Check 2g scopes to their union. Injected four in-range invented shares into the textiles card; three failed the gate. The miss (2.8) landed within the SIBC policy's 0.25 absolute tolerance of a legitimate 3.0 in the candidate set \u2014 a pre-existing property of the tolerance, not of the scope.",
+          "how_measured": "The card declares both the growth scan and its sibling share scan in sourceSignals, so Check 2g scopes to their union. Injected four in-range invented shares into the textiles card; three failed the gate. The miss (2.8) landed within the SIBC policy's 0.25 absolute tolerance of a legitimate 3.0 in the candidate set — a pre-existing property of the tolerance, not of the scope.",
           "source": "analysis/pipelines/sibc/generate_analysis_report.py"
         },
         {
           "metric": "Catch-all (residual) disclosure on dashboard cards",
-          "value": "5 of 21 \u2192 26 of 29 cards; headlined remainders 1 \u2192 0",
+          "value": "5 of 21 → 26 of 29 cards; headlined remainders 1 → 0",
           "date": "2026-08-26",
           "how_measured": "Enumerated every card naming one of the 7 catch-all entities before and after. The 3 still undisclosed are eval-authored and parked for the prompt by decision; the 4th apparent miss says 'the two break-outs cover 100%', which is the disclosure in other words.",
           "source": "analysis/core/residuals.py"
         },
         {
-          "metric": "Headlined-remainder check \u2014 injection catch and false rejection",
+          "metric": "Headlined-remainder check — injection catch and false rejection",
           "value": "catch 100% (21/21), false rejection 0% (0/60)",
           "date": "2026-08-26",
-          "how_measured": "Injected every catch-all into all three headline forms \u2014 'is the biggest slice', 'rotating toward', 'took N% of all new credit' \u2014 21 titles, all caught. Then the same three forms over 60 real entity names taken from live card titles: none flagged.",
+          "how_measured": "Injected every catch-all into all three headline forms — 'is the biggest slice', 'rotating toward', 'took N% of all new credit' — 21 titles, all caught. Then the same three forms over 60 real entity names taken from live card titles: none flagged.",
           "source": "analysis/guards/validate_card_prose.py"
         },
         {
-          "metric": "Catch-all detection \u2014 structural rather than a name list",
-          "value": "9 of 9 'Other\u2026' entities are leaves in all 21 periods; 0 exceptions",
+          "metric": "Catch-all detection — structural rather than a name list",
+          "value": "9 of 9 'Other…' entities are leaves in all 21 periods; 0 exceptions",
           "date": "2026-08-26",
-          "how_measured": "Enumerated every entity in the consolidated CSV. RBI's naming convention AND never-decomposed identify the set exactly, so a new source inherits the rule instead of a maintained list. Payments returns the empty set \u2014 its 'Other Transactions' is 0.62% of card volume and correctly triggers nothing.",
+          "how_measured": "Enumerated every entity in the consolidated CSV. RBI's naming convention AND never-decomposed identify the set exactly, so a new source inherits the rule instead of a maintained list. Payments returns the empty set — its 'Other Transactions' is 0.62% of card volume and correctly triggers nothing.",
           "source": "analysis/core/residuals.py"
         },
         {
-          "metric": "Payments movement family \u2014 cards rendered vs signals computed",
-          "value": "0 \u2192 3 cards; mix_states {} \u2192 3 of 3 cuts",
+          "metric": "Payments movement family — cards rendered vs signals computed",
+          "value": "0 → 3 cards; mix_states {} → 3 of 3 cuts",
           "date": "2026-09-05",
           "how_measured": "Payments computed momentum, acceleration, allocation and coherence every period since the family shipped in August; nothing read them. Wiring the shared reader emits one card per group and mix_states now resolves all three cuts (cc steered 0.952, dc contested 0.525, pos contested 0.864). SIBC output byte-identical through the refactor.",
           "source": "analysis/core/movement_cards.py"
         },
         {
-          "metric": "Contested-branch prose \u2014 first render against a negative net",
+          "metric": "Contested-branch prose — first render against a negative net",
           "value": "1 of 3 payments movement cards was factually wrong before the fix",
           "date": "2026-09-05",
-          "how_measured": "POS terminals: net -1,860,828 over the window, coherence 0.864. The contested branch hardcoded 'grew'/'rose' and named the fallers as dissenters, so the card read 'POS terminals rose over the past year' while the fleet shrank. SIBC never exposed it \u2014 credit grows in every window and every SIBC cut runs 0.99-1.00, so the branch had never rendered. Now driven by the sign of net, with four tests covering both directions.",
+          "how_measured": "POS terminals: net -1,860,828 over the window, coherence 0.864. The contested branch hardcoded 'grew'/'rose' and named the fallers as dissenters, so the card read 'POS terminals rose over the past year' while the fleet shrank. SIBC never exposed it — credit grows in every window and every SIBC cut runs 0.99-1.00, so the branch had never rendered. Now driven by the sign of net, with four tests covering both directions.",
           "source": "analysis/core/relational_insights.py"
         },
         {
-          "metric": "Ambiguous reasoning-key resolution \u2014 silent wrong answer \u2192 explicit refusal",
+          "metric": "Ambiguous reasoning-key resolution — silent wrong answer → explicit refusal",
           "value": "4 STALE errors that were comparing a contribution against a weight",
           "date": "2026-09-05",
           "how_measured": "Stage 4d resolves '{metric_id}:{entity_id}' by dict comprehension over all rows. Allocation writes each category three times (alloc/contribution/weight), so the key collides and the last row won. An ambiguous key now resolves to None and surfaces as INVALID rather than a confidently wrong comparison. Pinned by a test asserting the allocation key is ambiguous and the momentum key is not.",
           "source": "analysis/pipelines/atm_pos/validate_atm_pos_claims.py"
+        },
+        {
+          "metric": "coherence_min = 0.90 (movement allocation sentence-selector) — catch / false-rejection",
+          "value": "catch 100.0% (16/16), false rejection 7.6% (9/118), over all 134 momentum windows in both pipelines",
+          "date": "2026-09-09",
+          "how_measured": "Enumerated every momentum window in signals.db (134; not sampled) and reconstructed the counterfactual alloc = 100*delta_i/net from the stored per-entity deltas and the 'total' aggregate — which is the only way to score windows the threshold WITHHELD. A window is unsafe when some |alloc| exceeds 100% of net, i.e. a share larger than the whole it is a share of ('of every Rs 100 of new credit, telecoms took Rs 137'), which reads as impossible. 16 windows are unsafe; all 16 are withheld. The worst |alloc| that actually publishes is 94.8%, inside the bound 1/coherence = 111.1%. Threshold read from the registry's own compute.coherence_min, never hardcoded, so this measures what ships.",
+          "source": "analysis/measure_coherence_threshold.py"
+        },
+        {
+          "metric": "coherence_min = 0.90 — is the value itself well-chosen (threshold sweep)",
+          "value": "empirical floor 0.864; 0.90 is the lowest round threshold reaching 100% catch, and 0.95 buys 0 extra catch for +6.0pp false rejection",
+          "date": "2026-09-09",
+          "how_measured": "Swept 0.50-0.95 over the same 134 windows. Catch climbs 12.5 -> 43.8 -> 62.5 -> 81.2 -> 93.8 -> 100% at 0.90 and stays 100% at 0.95, while false rejection is flat at 7.6% from 0.85 to 0.90 then jumps to 13.6%. The highest coherence carrying an unsafe window is 0.864, so any threshold at or below it publishes an impossible share. 0.90 sits at the knee and clears the floor by 0.036 — narrow, and derived from 134 windows, so a new cut could land between 0.864 and 0.90. That margin is the reason to keep the invariant guarded rather than trusted.",
+          "source": "analysis/measure_coherence_threshold.py"
+        },
+        {
+          "metric": "Check 2g status-contradiction heuristic — precision fix (reversal-governed cues)",
+          "value": "live false positives 2 -> 0; catch preserved 49/49 (100%) on injected contradictions",
+          "date": "2026-09-09",
+          "how_measured": "The check was a bare substring test, so it fired on any implication CONTAINING a direction word — including sentences saying that direction had ENDED ('Lenders have stopped shrinking the book' and 'after reversing a five-period deceleration', both on strengthening signals, both standing warnings for months). A cue is now dropped when a reversal marker governs it: same sentence, within 60 characters before it. Measured by enumerating all 96 SIBC insights: 49 carry a status with declared cues; every one still fires when a genuine contradiction is appended, and none fires on its real prose. A reversal in a PRIOR sentence is verified not to shield a later cue, so the window cannot launder a real contradiction.",
+          "source": "analysis/pipelines/sibc/validate_sibc_traceability.py"
+        },
+        {
+          "metric": "Check 2e population — anomaly-surfaced signals distinguished from unwired ones",
+          "value": "standing warnings 1 -> 0, with a new FAIL path proven to fire (3 failures on a dead method)",
+          "date": "2026-09-09",
+          "how_measured": "'sibc-services-divergence has no rows' had been a non-blocking WARN for months. Recompute over all 11 periods shows the signal examines all 10 services children and flags none: csv_sector_divergence requires OPPOSITE YoY signs and every services sub-sector is growing, so zero rows is its honest null. But zero rows is also what an unwired signal looks like. B2 now accepts the null only when the method is demonstrably alive — some signal on that method has rows somewhere — and FAILS otherwise. Negative-tested by deleting the 9 rows of the two sibling divergence signals: exit 1 with 3 failures naming the dead method; database restored md5-identical.",
+          "source": "analysis/guards/validate_signal_history.py"
+        },
+        {
+          "metric": "Source-verification channel — pib.gov.in automated fetch",
+          "value": "2 characters returned for 5 of 5 PIB article URLs, including the one that verified cleanly on 2026-08-02",
+          "date": "2026-09-09",
+          "how_measured": "Enumerated five URL forms (bare host and www, with and without reg/lang params, both PIB page handlers) through core.source_fetch.fetch_text, including PRID 2238004 which is force_kcc_collateral_limit's own recorded source and fetched successfully five weeks earlier. All five returned 2 characters, so the block is the host rather than the URL shape or the source. The browser path still reads the same pages in full: the replacement excerpt for force_msp_procurement_growth (PRID 2260618) verified verbatim, while a fabricated excerpt AND a true-but-paraphrased excerpt were both rejected.",
+          "source": "analysis/COMPOSITION_SPEC.md §8.1"
         }
       ],
       "observations": [
         "The +9.99 pp incident (2026-07-21): an invented pair-divergence value PASSED the first negative test because the signal was classified scan-like, pooling a pp gap with two pct rates and deriving cumulative sums. Fixing the classification made the same corruption hard-fail. Lesson: a groundedness check is only as good as the ground-truth shape it compares against.",
-        "First newsletter traceability cut was vacuous \u2014 period-wide scope let invented numbers pass. Rescoping to declared signals only was the fix. Same lesson as Check 4f's evidence_all rescoping.",
+        "First newsletter traceability cut was vacuous — period-wide scope let invented numbers pass. Rescoping to declared signals only was the fix. Same lesson as Check 4f's evidence_all rescoping.",
         "Negative testing must target the artifact the validator actually reads. The pair-divergence negative test only worked after editing analysis/rbi_atm_pos/insights.json rather than the web copy.",
-        "Loosening a gate can be invisible: the distribution gate initially inherited the card policy (abs_tol=0.25 plus ratio grounding) and passed every negative test I threw at it \u2014 not because the text was grounded but because a 29-value pool spawns ~800 candidate ratios and a quarter-point tolerance covers most of the number line worth inventing. Catch rate 41.5%. The same check, scoped to rounding width and with ratio grounding removed, catches 95.7%. A gate that never fails is not evidence of correctness; measure the catch rate.",
+        "Loosening a gate can be invisible: the distribution gate initially inherited the card policy (abs_tol=0.25 plus ratio grounding) and passed every negative test I threw at it — not because the text was grounded but because a 29-value pool spawns ~800 candidate ratios and a quarter-point tolerance covers most of the number line worth inventing. Catch rate 41.5%. The same check, scoped to rounding width and with ratio grounding removed, catches 95.7%. A gate that never fails is not evidence of correctness; measure the catch rate.",
         "Groundedness has two error rates, and only measuring one is how you ship a gate that blocks the truth. Tightening tolerance took false rejections from 0 to 3/25 until the formatting quirk behind them was fixed; both numbers belong in the measurement.",
         "The gate guarding the subscriber-facing newsletter caught 0% of invented numbers, and had passed every hand-written negative test since it was built. Hand-written negative tests select for numbers the author already suspects; an injection harness does not. Every gate needs a measured catch rate before it can be described as working.",
-        "A defensive default is a hole. When per-block scoping was added, blocks with no declared signals fell back to the issue-wide pool 'so nothing breaks' \u2014 that single fallback dropped the in-range catch rate from 91.9% to 42.4%, because the injection site was exactly such a block. Removing the fallback took it to 99.5%. Scope defaults should fail closed.",
-        "Tightening surfaced two real bugs that the loose gate had been hiding, both display-format rather than data problems: values rendered for the reader (\u20b92.9L Cr, 12.0 crore) did not match their stored form, and ratio grounding had been silently accepting them as a/b of other values. The fix \u2014 ground the value through the same renderer the issue uses \u2014 is exact rather than a tolerance guess.",
-        "CORRECTION to the 2026-07-21 newsletter entries (100.0%/99.5% near-miss/in-range): those numbers measured decision point D2, not the gate. The old measure_groundedness.py:138 injected into the FIRST p block then broke; in the deep read that block is the signal-less intro, which grounds nothing and fails closed. All 200 injections hit one always-fail block. The blocks that can actually leak \u2014 basis lines scoped to thousands of values \u2014 were never attacked. This is the FOURTH appearance of the narrow-negative-test failure class (Check 4f period-wide -> newsletter v1 -> distribution -> the harness itself). Fixed 2026-07-23: inject every eligible block, report per decision point and per scope band, never one pooled number.",
-        "The honest newsletter picture after the fix: D1 in-range catch is 92.8% pooled but that pooling hides the real story \u2014 it is 100% up to ~200 candidate values and 79% beyond 1000. Scope width, not tolerance, is what a wide-scope gate leaks on. This is the empirical case for the deep-read D1 scope fix (basis lines -> member's own signal instead of the driver's whole evidence_all set): narrowing scope is expected to move those wide-band blocks from 79% back toward 100%.",
+        "A defensive default is a hole. When per-block scoping was added, blocks with no declared signals fell back to the issue-wide pool 'so nothing breaks' — that single fallback dropped the in-range catch rate from 91.9% to 42.4%, because the injection site was exactly such a block. Removing the fallback took it to 99.5%. Scope defaults should fail closed.",
+        "Tightening surfaced two real bugs that the loose gate had been hiding, both display-format rather than data problems: values rendered for the reader (₹2.9L Cr, 12.0 crore) did not match their stored form, and ratio grounding had been silently accepting them as a/b of other values. The fix — ground the value through the same renderer the issue uses — is exact rather than a tolerance guess.",
+        "CORRECTION to the 2026-07-21 newsletter entries (100.0%/99.5% near-miss/in-range): those numbers measured decision point D2, not the gate. The old measure_groundedness.py:138 injected into the FIRST p block then broke; in the deep read that block is the signal-less intro, which grounds nothing and fails closed. All 200 injections hit one always-fail block. The blocks that can actually leak — basis lines scoped to thousands of values — were never attacked. This is the FOURTH appearance of the narrow-negative-test failure class (Check 4f period-wide -> newsletter v1 -> distribution -> the harness itself). Fixed 2026-07-23: inject every eligible block, report per decision point and per scope band, never one pooled number.",
+        "The honest newsletter picture after the fix: D1 in-range catch is 92.8% pooled but that pooling hides the real story — it is 100% up to ~200 candidate values and 79% beyond 1000. Scope width, not tolerance, is what a wide-scope gate leaks on. This is the empirical case for the deep-read D1 scope fix (basis lines -> member's own signal instead of the driver's whole evidence_all set): narrowing scope is expected to move those wide-band blocks from 79% back toward 100%.",
         "Method lesson banked for the track: automating a negative test freezes the author's choice of injection SITE, not just their choice of value. A catch rate is only trustworthy sliced by the scope of the site attacked; a single artifact-level number is the same vacuity as a single period-wide ground-truth pool, one level up.",
         "is-news selector design: the first cut flipped on ~50% of signals because status wobbles accelerating<->decelerating (strengthening<->active) every noisy month while still growing. Fixed by counting a flip only on a REGIME change (growing<->shrinking<->flat), not the within-regime wobble; the wobble is demoted to the weakest factor (crossed, weight 1) and can never make something a read alone. Second finding: labelling ALL share signals as templates was too coarse -- a share at an all-time reversal record (credit-cards' share of personal loans) is a legitimate read, not a template. The clean template is a share that ALSO didn't move.",
         "Building the merged monthly issue surfaced 6 advice/forecast warnings in verbatim card prose (the is-news reads inherit LLM-eval consulting-speak: 'Lenders should allocate capital exclusively to UPI QR', 'the ratio will continue widening through FY27'). These are WARNINGS not failures by design (Sec 11.1 / Sec 5.3): card prose is the eval's, fixed upstream at prompt v1.12, never hand-edited in the renderer. The new prose_lint's advice+forecast detectors make that fix list visible for the first time -- 6 concrete card-prose items feeding v1.12.",
         "is-news + magnitude factor (reco b): adding magnitude (>2x typical move, weight 2) surfaced large-corporate +14.4% YoY as a credit read it would have missed on record/regime alone. Trade-off measured: selectivity rose to 48.7% of signals clearing the read floor this cycle (a broad-growth month) -- the top-2 reads stay unambiguous but 'a read is the exception' weakens; tunable via MAGNITUDE_MULT. Template-reject held at 100%. Second note: the word-vs-number check had a false-positive class on legitimate 'fell 4.3%' prose (word carries the sign, magnitude is unsigned); fixed by firing only on EXPLICITLY-signed rates (the real 'up, -2.6%' bug), plus word-boundary cues so bare up/down fire without tripping on group/update.",
-        "Determinism-vs-judgment lesson (seeds topic #5): unit formatting is MECHANICAL and must not be an LLM job \u2014 v1.12's prose rule 'counts in lakh/crore, never millions' leaked badly (120.5M, 1.02M, 147K all over atm_pos) however firmly stated, because the model reliably reverts to M/K. Moving it to a deterministic post-pass (normalize_units at eval write) fixed it 100% by construction. Prose voice/advice/forecast, which IS judgment, correctly stayed a prompt fix. Also found: a prompt can defeat its own rule \u2014 v1.12 banned 'entrenched' on one line while the streak-type guide taught 'long streak = entrenched trend' on another; fixing the contradiction cut entrenched 7\u21921.",
+        "Determinism-vs-judgment lesson (seeds topic #5): unit formatting is MECHANICAL and must not be an LLM job — v1.12's prose rule 'counts in lakh/crore, never millions' leaked badly (120.5M, 1.02M, 147K all over atm_pos) however firmly stated, because the model reliably reverts to M/K. Moving it to a deterministic post-pass (normalize_units at eval write) fixed it 100% by construction. Prose voice/advice/forecast, which IS judgment, correctly stayed a prompt fix. Also found: a prompt can defeat its own rule — v1.12 banned 'entrenched' on one line while the streak-type guide taught 'long streak = entrenched trend' on another; fixing the contradiction cut entrenched 7→1.",
         {
           "date": "2026-07-28",
-          "note": "Direction-render bug ('up, -2.6% YoY') fixed at the RIGHT layer: the render shows the OBSERVED value and tags a member '(moving against)' when its observed sign opposes its authored polarity \u2014 it never derives an up/down WORD from authored direction. word_number_conflicts hard-fails = 0 in generated deep-read text. Both tokens used to trace, so the number gate was structurally blind to it; the fix is a new agreement rule, not a tolerance change. This is the same class as the monthly issue's word-vs-number check \u2014 a defect can trace perfectly and still contradict itself."
+          "note": "Direction-render bug ('up, -2.6% YoY') fixed at the RIGHT layer: the render shows the OBSERVED value and tags a member '(moving against)' when its observed sign opposes its authored polarity — it never derives an up/down WORD from authored direction. word_number_conflicts hard-fails = 0 in generated deep-read text. Both tokens used to trace, so the number gate was structurally blind to it; the fix is a new agreement rule, not a tolerance change. This is the same class as the monthly issue's word-vs-number check — a defect can trace perfectly and still contradict itself."
         },
         {
           "date": "2026-07-28",
-          "note": "The gate biting is the deliverable, not a regression. Attaching per-member signals cut the deep read's basis-line scope ~35x (2,258\u219265) with no measurable catch loss \u2014 evidence that the earlier wide-pool pass rate was partly vacuous breadth, the 4f/newsletter lesson recurring. Determinism-vs-judgment (AI PM #5) shows up structurally here too: Part A (banks) is fully computed, the spine is a machine-ranked shortlist the human picks \u2014 the same 'machine ranks, editor picks' seam as the monthly reads."
+          "note": "The gate biting is the deliverable, not a regression. Attaching per-member signals cut the deep read's basis-line scope ~35x (2,258→65) with no measurable catch loss — evidence that the earlier wide-pool pass rate was partly vacuous breadth, the 4f/newsletter lesson recurring. Determinism-vs-judgment (AI PM #5) shows up structurally here too: Part A (banks) is fully computed, the spine is a machine-ranked shortlist the human picks — the same 'machine ranks, editor picks' seam as the monthly reads."
         },
         {
           "date": "2026-07-29",
@@ -394,17 +429,17 @@
         },
         {
           "date": "2026-07-29",
-          "note": "S4a live-fetch finding: the verification CHANNEL constrains the mechanism more than the allowlist. Anthropic's crawler (WebFetch, and the API web_search which shares the identity) is 403'd by PIB, NPCI, Business Standard; web.archive.org unreachable; Wikipedia fetched fine (tool works, sites block). The gate did the right thing \u2014 published NOTHING rather than an unverifiable claim. Resolution: verify the excerpt against page text from a channel the sites permit (the editor's logged-in Chrome via Claude-in-Chrome, or a paste); excerpt_on_page is agnostic to how the text was obtained. Not fabricating a 'verified' stamp and not spoofing a UA to evade bot blocks are both first-order honesty constraints here. The mechanism 'earns its place' precisely by refusing."
+          "note": "S4a live-fetch finding: the verification CHANNEL constrains the mechanism more than the allowlist. Anthropic's crawler (WebFetch, and the API web_search which shares the identity) is 403'd by PIB, NPCI, Business Standard; web.archive.org unreachable; Wikipedia fetched fine (tool works, sites block). The gate did the right thing — published NOTHING rather than an unverifiable claim. Resolution: verify the excerpt against page text from a channel the sites permit (the editor's logged-in Chrome via Claude-in-Chrome, or a paste); excerpt_on_page is agnostic to how the text was obtained. Not fabricating a 'verified' stamp and not spoofing a UA to evade bot blocks are both first-order honesty constraints here. The mechanism 'earns its place' precisely by refusing."
         },
         {
           "date": "2026-07-29",
-          "note": "\u00a75.3 lint EXPOSED the \u00a714 upstream blocker as a hard gate: the 14th slot (C6/C7 openings/risks) hard-fails on raw floats (1358241.0 micro ATMs, 12.0 periods) that generate_opportunity_narrative leaks \u2014 the LLM is told to copy exact signal values verbatim so they trace under Check 4f, and 4f accepts only raw flat_numbers, not the lakh/crore reader form. So the fix chain is: 4f must accept as-rendered forms (like the distribution gate's _as_rendered), THEN the narrative can pass the LLM display values, THEN re-run the narrative LLM + regen feed. That is a core-gate + LLM-rerun change affecting /opportunities + deep read + slots \u2014 a distinct workstream from the LinkedIn \u00a75 changes. 4/5 slots (1st/7th/28th pass, 21st skips by design) are clean; only C6/C7 is gated, correctly, on real debt."
+          "note": "§5.3 lint EXPOSED the §14 upstream blocker as a hard gate: the 14th slot (C6/C7 openings/risks) hard-fails on raw floats (1358241.0 micro ATMs, 12.0 periods) that generate_opportunity_narrative leaks — the LLM is told to copy exact signal values verbatim so they trace under Check 4f, and 4f accepts only raw flat_numbers, not the lakh/crore reader form. So the fix chain is: 4f must accept as-rendered forms (like the distribution gate's _as_rendered), THEN the narrative can pass the LLM display values, THEN re-run the narrative LLM + regen feed. That is a core-gate + LLM-rerun change affecting /opportunities + deep read + slots — a distinct workstream from the LinkedIn §5 changes. 4/5 slots (1st/7th/28th pass, 21st skips by design) are clean; only C6/C7 is gated, correctly, on real debt."
         },
         {
           "date": "2026-07-29",
-          "note": "Prompt instructions are necessary but not sufficient \u2014 the LLM emitted 'the bank should push...' on 3 cross-system items despite an explicit 'never say should'. The fix that held was the DETERMINISTIC guard (drop advice implications via core.voice), consistent with the platform's traceable-not-assumed principle: enforce in code, don't trust the model. Also a caching lesson: cross-system enrichment was narrative-flag-gated, so a preserved narrative:True blocked re-narration after the prompt change \u2014 switched it to cache-gated (like the pipeline path) so a cache clear forces a fresh run. Machine implications are now observations or empty; the prescriptive 'so what' is the editor's on every surface (/opportunities included)."
+          "note": "Prompt instructions are necessary but not sufficient — the LLM emitted 'the bank should push...' on 3 cross-system items despite an explicit 'never say should'. The fix that held was the DETERMINISTIC guard (drop advice implications via core.voice), consistent with the platform's traceable-not-assumed principle: enforce in code, don't trust the model. Also a caching lesson: cross-system enrichment was narrative-flag-gated, so a preserved narrative:True blocked re-narration after the prompt change — switched it to cache-gated (like the pipeline path) so a cache clear forces a fresh run. Machine implications are now observations or empty; the prescriptive 'so what' is the editor's on every surface (/opportunities included)."
         },
-        "Path references in prose were guarded from the start; COUNTS in the same prose were not, and rotted exactly as you would expect \u2014 one file claimed two different signal totals, neither correct. A number stated about the system is a claim like any other and decays the same way. Cheap to check once you have the real source; the hard part was noticing the asymmetry between what was guarded and what was merely written down.",
+        "Path references in prose were guarded from the start; COUNTS in the same prose were not, and rotted exactly as you would expect — one file claimed two different signal totals, neither correct. A number stated about the system is a claim like any other and decays the same way. Cheap to check once you have the real source; the hard part was noticing the asymmetry between what was guarded and what was merely written down.",
         {
           "date": "2026-08-19",
           "observation": "Widening scope to make a legitimate cross-signal card pass is the moment a traceability gate quietly dies. Making the card DECLARE its reads keeps scope explicit and 18x tighter than the period-wide fallback that would otherwise have been reached for - the same shape as Check 4f's evidence_all and the payments sourceSignals convention."
@@ -415,11 +450,11 @@
         },
         {
           "date": "2026-08-25",
-          "observation": "Every traceability gate here asks 'is this number true?' \u2014 none asked 'is this number the answer to the question on screen?'. On the mis-charted cards both figures trace to signals.db perfectly (69.0% of basic metals, 11.2% of industry); the error is in the RELATIONSHIP between two individually-correct artifacts, and no check we own compares two artifacts. Reported by a reader, not by a gate, after months live."
+          "observation": "Every traceability gate here asks 'is this number true?' — none asked 'is this number the answer to the question on screen?'. On the mis-charted cards both figures trace to signals.db perfectly (69.0% of basic metals, 11.2% of industry); the error is in the RELATIONSHIP between two individually-correct artifacts, and no check we own compares two artifacts. Reported by a reader, not by a gate, after months live."
         },
         {
           "date": "2026-08-25",
-          "observation": "The guard for this exact defect already existed and was green. validate_web_series Check W2 verifies that every annotation effect name is a real series in its section \u2014 but it parses the authored rbi_sibc.ts, and the L1 computed cards live in sibc_l1_annotations.json and are merged in at runtime. The computed path was added beside the guard and the guard was never widened to it. A check's population is as much a design decision as its logic, and nothing measures population."
+          "observation": "The guard for this exact defect already existed and was green. validate_web_series Check W2 verifies that every annotation effect name is a real series in its section — but it parses the authored rbi_sibc.ts, and the L1 computed cards live in sibc_l1_annotations.json and are merged in at runtime. The computed path was added beside the guard and the guard was never widened to it. A check's population is as much a design decision as its logic, and nothing measures population."
         },
         {
           "date": "2026-08-25",
@@ -427,15 +462,15 @@
         },
         {
           "date": "2026-08-25",
-          "observation": "An authored field can conceal a missing concept. \u00a715.3 claimed SIBC had no `pair` shape because SIBC carries one measure \u2014 true of the metric axis, false of the entity axis, where csv_sector_yoy_spread names code_a and code_b and quotes the distance between them. It stayed invisible because a hand-typed chart_series had been carrying both names correctly for months. Deriving the cut is what exposed it, on the first run, by dropping a highlight that had been right. The same run surfaced a second unmodelled shape (child_codes, a named set). Enumerating the shapes on paper found four; deriving them found six."
+          "observation": "An authored field can conceal a missing concept. §15.3 claimed SIBC had no `pair` shape because SIBC carries one measure — true of the metric axis, false of the entity axis, where csv_sector_yoy_spread names code_a and code_b and quotes the distance between them. It stayed invisible because a hand-typed chart_series had been carrying both names correctly for months. Deriving the cut is what exposed it, on the first run, by dropping a highlight that had been right. The same run surfaced a second unmodelled shape (child_codes, a named set). Enumerating the shapes on paper found four; deriving them found six."
         },
         {
           "date": "2026-08-25",
-          "observation": "Fixing a defect can silently untest the check that found it. Three tests asserted the live defects (a dead 'Power' highlight, a raw CSV name, an undeclared cut); \u00a715.4 fixed all three and the tests began asserting the absence of what they were written to detect. Rewritten to drive the check with synthetic cards, with separate tests asserting the live feeds are clean \u2014 the same lesson as 'a characterisation golden can only pin cards that RENDER'."
+          "observation": "Fixing a defect can silently untest the check that found it. Three tests asserted the live defects (a dead 'Power' highlight, a raw CSV name, an undeclared cut); §15.4 fixed all three and the tests began asserting the absence of what they were written to detect. Rewritten to drive the check with synthetic cards, with separate tests asserting the live feeds are clean — the same lesson as 'a characterisation golden can only pin cards that RENDER'."
         },
         {
           "date": "2026-08-26",
-          "observation": "An advisory gate has to be able to go strict, and the moment to do it is when the count reaches zero \u2014 not later. Stage 5.7 ran advisory for exactly as long as the charts could not render what cards declared; leaving it advisory after that would have made a green line in the gate output that means nothing. A check that reports defects nobody can yet fix is a check people learn to scroll past."
+          "observation": "An advisory gate has to be able to go strict, and the moment to do it is when the count reaches zero — not later. Stage 5.7 ran advisory for exactly as long as the charts could not render what cards declared; leaving it advisory after that would have made a green line in the gate output that means nothing. A check that reports defects nobody can yet fix is a check people learn to scroll past."
         },
         {
           "date": "2026-08-26",
@@ -443,11 +478,11 @@
         },
         {
           "date": "2026-08-26",
-          "observation": "A lint can only catch what its list names, and the list was written from what its author already suspected. core.voice missed the two strongest instructions on the dashboard \u2014 'Move everything to UPI QR' and 'there is no viable future for Bharat QR' \u2014 while catching a milder 'should' three cards away. Auditing the prose by reading it found defects the linter could not; the linter was then widened from those findings, not from imagination. Same shape as the hand-written negative tests that kept passing while the property failed."
+          "observation": "A lint can only catch what its list names, and the list was written from what its author already suspected. core.voice missed the two strongest instructions on the dashboard — 'Move everything to UPI QR' and 'there is no viable future for Bharat QR' — while catching a milder 'should' three cards away. Auditing the prose by reading it found defects the linter could not; the linter was then widened from those findings, not from imagination. Same shape as the hand-written negative tests that kept passing while the property failed."
         },
         {
           "date": "2026-08-26",
-          "observation": "CLAUDE.md had described SIBC cards as carrying `representation` since June; the generator never emitted it. Nothing failed, because nothing read it \u2014 until the prose gate needed to tell our sentences from the eval's. Documentation describing behaviour the code does not have is the same failure as an unwired signal: it reads as a capability and is an absence. reconcile.py guards paths and counts, not claims."
+          "observation": "CLAUDE.md had described SIBC cards as carrying `representation` since June; the generator never emitted it. Nothing failed, because nothing read it — until the prose gate needed to tell our sentences from the eval's. Documentation describing behaviour the code does not have is the same failure as an unwired signal: it reads as a capability and is an absence. reconcile.py guards paths and counts, not claims."
         },
         {
           "date": "2026-08-26",
@@ -455,15 +490,31 @@
         },
         {
           "date": "2026-08-26",
-          "observation": "Binary would have been wrong in both directions. Payments' 'Other Transactions' is 0.62% of card volume \u2014 caveating it is noise; engineering's 'Others' is 79.2% \u2014 the classification gap IS the story. And 'Others' differs from 'Other Textiles': the first says nothing about what it holds, the second names it, so applying the word 'unclassified' to both would have made one card less accurate than it already was. The distinction came from reading the data, not from the rule."
+          "observation": "Binary would have been wrong in both directions. Payments' 'Other Transactions' is 0.62% of card volume — caveating it is noise; engineering's 'Others' is 79.2% — the classification gap IS the story. And 'Others' differs from 'Other Textiles': the first says nothing about what it holds, the second names it, so applying the word 'unclassified' to both would have made one card less accurate than it already was. The distinction came from reading the data, not from the rule."
         },
         {
           "date": "2026-09-05",
-          "observation": "Coherence gated something after all. The rule this project set is that coherence ROUTES and never gates \u2014 it picks which sentence is true, and nothing computed is suppressed. SIBC's allocation compute honours it: `weight` (a category's share at the START of the window) is emitted in every regime, and only `alloc` (share of the net) is withheld. The payments implementation of the same method family emitted weight INSIDE the coherence branch, so it vanished exactly when the mix was contested \u2014 and Layer 2 reads tilt = alloc - weight, so payments' two most interesting mixes produced no mix state at all. Two implementations of one declared method drifted on the one rule the family was designed around."
+          "observation": "Coherence gated something after all. The rule this project set is that coherence ROUTES and never gates — it picks which sentence is true, and nothing computed is suppressed. SIBC's allocation compute honours it: `weight` (a category's share at the START of the window) is emitted in every regime, and only `alloc` (share of the net) is withheld. The payments implementation of the same method family emitted weight INSIDE the coherence branch, so it vanished exactly when the mix was contested — and Layer 2 reads tilt = alloc - weight, so payments' two most interesting mixes produced no mix state at all. Two implementations of one declared method drifted on the one rule the family was designed around."
         },
         {
           "date": "2026-09-05",
-          "observation": "A branch that has never rendered is not tested by the data, however green the gate. The contested movement branch shipped in August with tests driving it synthetically; against live data it had never once fired, because SIBC's coherence is 0.99-1.00 everywhere. Its first real render \u2014 payments POS terminals, negative net \u2014 produced a false sentence ('POS terminals rose over the past year' while the fleet shrank 1.86M). Third time this project has met the shape: the hardcoded '74%' that only rendered in a month with no rank change, the dominance guard behind an LLM-narrative check, and now this."
+          "observation": "A branch that has never rendered is not tested by the data, however green the gate. The contested movement branch shipped in August with tests driving it synthetically; against live data it had never once fired, because SIBC's coherence is 0.99-1.00 everywhere. Its first real render — payments POS terminals, negative net — produced a false sentence ('POS terminals rose over the past year' while the fleet shrank 1.86M). Third time this project has met the shape: the hardcoded '74%' that only rendered in a month with no rank change, the dominance guard behind an LLM-narrative check, and now this."
+        },
+        {
+          "date": "2026-09-09",
+          "observation": "A threshold shipped with a proof still needs a measurement, and the measurement answers a different question. coherence_min came with a provable bound (max|share| <= 1/coherence) which is why it was allowed to ship unmeasured for three weeks. The proof says the published number cannot exceed 111%; it says nothing about whether 0.90 is the right place to stand. Measuring it produced the fact the proof could not: the empirical floor is 0.864, so 0.90 is very nearly the MINIMUM threshold achieving full catch, and pushing to 0.95 costs 6pp of false rejections for nothing. A bound justifies a threshold's existence; only a measurement justifies its value."
+        },
+        {
+          "date": "2026-09-09",
+          "observation": "A false rejection is not always the same cost, and saying so changes what a good rate is. This project's other gates fail closed on a publish decision, so a false rejection there is a lost claim. coherence_min ROUTES rather than gates: a withheld window still publishes its contribution rows and switches to the contested/handover sentence. So the 7.6% false-rejection rate costs a less direct sentence, not silence, while a miss would put an impossible-looking number on the dashboard. The asymmetry is what makes 100%/7.6% the right operating point instead of a balanced one — worth stating explicitly whenever a rate is reported, because 7.6% read against a gate's standards looks worse than it is."
+        },
+        {
+          "date": "2026-09-09",
+          "observation": "A long-standing warning is a decision that was deferred, and deferring it costs precision twice. Both surviving Check 2g status warnings turned out to be false positives of one narrow kind — the cue word sat inside a clause that reversed it — and the single Check 2e warning turned out to be an honest null the check had no way to express. Neither needed judgement about the data; both needed the check to say something it could not yet say. While they stood, every reader of the gate output had to remember which warnings to ignore, which is exactly how a gate becomes noise and then becomes unread. The cheap discipline is that a warning either gets fixed or gets a written reason it stands, and 'long-standing' is not a reason."
+        },
+        {
+          "date": "2026-09-09",
+          "observation": "An empty fetch makes a true excerpt and a fabricated one produce identical verdicts. With pib.gov.in blocked, excerpt_on_page returns False for the real quote and False for an invented one, for the same reason, and nothing in the return value says which. The gate fails closed so nothing is wrongly promoted — but the same silence would also mark an ALREADY-VERIFIED source as unverifiable if a re-verification pass ever ran, which is the inverse harm and the one nobody would think to test for. S4 already learned this exact lesson at the proposal layer, where 93 credit-balance errors were recorded as 'searched, found nothing'; the force store has not learned it yet. A verification primitive should distinguish 'the page does not contain this' from 'there was no page'."
         }
       ],
       "open_questions": [
@@ -485,7 +536,7 @@
       ],
       "grounding_artifacts": [
         "analysis/tests/ (unit suite)",
-        "analysis/check_signal_freshness.py (Check 2f \u2014 deterministic recompute-and-diff, an eval in all but name)"
+        "analysis/check_signal_freshness.py (Check 2f — deterministic recompute-and-diff, an eval in all but name)"
       ],
       "measurements": [],
       "observations": [],
@@ -543,7 +594,7 @@
       ],
       "measurements": [],
       "observations": [
-        "The split is not a style choice \u2014 it tracks whether the output shape is mechanical. Scans and distributions are grounded by construction; scalars need judgment about what the movement means."
+        "The split is not a style choice — it tracks whether the output shape is mechanical. Scans and distributions are grounded by construction; scalars need judgment about what the movement means."
       ],
       "open_questions": [],
       "published_as": null
@@ -562,7 +613,7 @@
       ],
       "measurements": [],
       "observations": [
-        "Prompt rules here are almost all reactive \u2014 'no invented seasonality' and the traceability rules each trace to a specific observed failure. That provenance is the interesting content, not the prompt text."
+        "Prompt rules here are almost all reactive — 'no invented seasonality' and the traceability rules each trace to a specific observed failure. That provenance is the interesting content, not the prompt text."
       ],
       "open_questions": [],
       "published_as": null
@@ -594,7 +645,7 @@
         "share of payload the model actually uses"
       ],
       "grounding_artifacts": [
-        "analysis/signals/query.py (builds the evaluate payload \u2014 full period series + scan distribution)"
+        "analysis/signals/query.py (builds the evaluate payload — full period series + scan distribution)"
       ],
       "measurements": [],
       "observations": [],
@@ -744,7 +795,7 @@
         "user response to shown-vs-hidden basis"
       ],
       "grounding_artifacts": [
-        "web/app/opportunities (the 'Why \u2014 computed basis' block)"
+        "web/app/opportunities (the 'Why — computed basis' block)"
       ],
       "measurements": [],
       "observations": [],

@@ -171,12 +171,50 @@ def check_db(reg_signals: dict, known_pipelines: set[str]) -> sqlite3.Connection
         "SELECT DISTINCT metric_id FROM signals"
     ).fetchall()}
 
+    # Some methods are ANOMALY-SURFACED: they emit a row only when something is
+    # worth flagging, so zero rows is their honest null, not a continuity gap.
+    # `sibc-services-divergence` sat as a standing WARN for months for exactly
+    # this reason — verified 2026-09-09 by recompute: it examines all 10 services
+    # children in every period and flags none, because the flag rule requires
+    # OPPOSITE YoY signs and every services sub-sector is growing.
+    #
+    # But "no rows" is also what an unwired signal looks like, and this project
+    # has met that costume ten times. So the null is only accepted when the
+    # method is demonstrably alive somewhere: if NO signal on the method has a
+    # single row anywhere in the DB, the method itself is dead and that FAILS.
+    # Declared here, beside the reader, so the two cannot drift.
+    ANOMALY_SURFACED = {
+        "csv_sector_divergence",   # child contradicts parent — flagged rows only
+        "csv_bank_divergence",     # bank contradicts its category
+    }
+
+    def method_of(sig_id: str) -> str:
+        return ((reg_signals.get(sig_id, {}).get("compute") or {}).get("method", ""))
+
+    live_methods = {
+        method_of(mid) for mid in db_metric_ids if method_of(mid)
+    }
+
     missing_from_db = compute_signals - db_metric_ids
-    if missing_from_db:
-        for sid in sorted(missing_from_db)[:10]:
-            warn(f"Layer-1 compute signal '{sid}' has no rows in signals.db")
-        if len(missing_from_db) > 10:
-            warn(f"  ... and {len(missing_from_db) - 10} more layer-1 signals not in DB")
+    unexplained, honest_nulls = [], []
+    for sid in sorted(missing_from_db):
+        method = method_of(sid)
+        if method in ANOMALY_SURFACED:
+            if method in live_methods:
+                honest_nulls.append(sid)          # flagged nothing; the method works
+            else:
+                fail(f"'{sid}' has no rows AND no signal on method '{method}' has "
+                     f"any — the method is not producing, which is indistinguishable "
+                     f"from an honest null unless we say so")
+        else:
+            unexplained.append(sid)
+
+    for sid in unexplained[:10]:
+        warn(f"Layer-1 compute signal '{sid}' has no rows in signals.db")
+    if len(unexplained) > 10:
+        warn(f"  ... and {len(unexplained) - 10} more layer-1 signals not in DB")
+    for sid in honest_nulls:
+        print(f"     B · {sid}: 0 rows — anomaly-surfaced, nothing flagged (expected)")
 
     # B3: orphaned metric_ids in DB not in registry
     all_reg_ids = set(reg_signals.keys())
@@ -222,6 +260,34 @@ def check_db(reg_signals: dict, known_pipelines: set[str]) -> sqlite3.Connection
             )
             status_mismatches += 1
 
+    # B6: no published `alloc` may exceed the whole it is a share of
+    #
+    # `alloc` = 100 * delta_i / net answers "of the net new units, how many went
+    # here". When entities move against each other the net shrinks toward zero
+    # while the numerators do not, so one entity's share of the net can exceed
+    # 100% — "of every Rs 100 of new credit, telecoms took Rs 137" is
+    # arithmetically true and reads as impossible.
+    #
+    # `coherence_min` is what stops that reaching a card, and it is measured:
+    # catch 100% (16/16 unsafe windows withheld), false rejection 7.6%, over all
+    # 134 momentum windows (analysis/measure_coherence_threshold.py). But the
+    # margin is thin — the highest coherence carrying an unsafe window is 0.864
+    # against a threshold of 0.90 — so a new cut could land in that gap. This
+    # asserts the OUTCOME the threshold exists to produce, instead of trusting
+    # the threshold to keep producing it.
+    impossible = conn.execute(
+        """SELECT pipeline, metric_id, period, entity_id, value
+           FROM signals
+           WHERE entity_type='alloc' AND ABS(value) > 100.0
+           ORDER BY ABS(value) DESC"""
+    ).fetchall()
+    for pl, mid, per, eid, val in impossible[:5]:
+        fail(
+            f"impossible allocation share — {mid} {per} ({pl}): "
+            f"'{eid}' at {val:.1f}% of net. A share cannot exceed the whole; "
+            f"coherence_min should have withheld this window."
+        )
+
     # Summary
     total_rows   = conn.execute("SELECT COUNT(*) FROM signals").fetchone()[0]
     total_ranges = conn.execute("SELECT COUNT(*) FROM metric_ranges").fetchone()[0]
@@ -232,10 +298,15 @@ def check_db(reg_signals: dict, known_pipelines: set[str]) -> sqlite3.Connection
     print(f"     B ✓ {total_rows} signal rows, {total_ranges} ranges")
     for pl, n_periods, n_rows in pipeline_rows:
         print(f"       {pl}: {n_periods} period(s), {n_rows} rows")
-    if not missing_from_db:
-        print(f"     B ✓ continuity: all {len(compute_signals)} L1 compute signals present in DB")
+    if not unexplained:
+        print(f"     B ✓ continuity: all {len(compute_signals)} L1 compute signals accounted for")
     if not status_mismatches:
         print(f"     B ✓ status sync: registry matches DB latest for all L1 signals")
+    if not impossible:
+        n_alloc = conn.execute(
+            "SELECT COUNT(*) FROM signals WHERE entity_type='alloc'"
+        ).fetchone()[0]
+        print(f"     B ✓ allocation sanity: all {n_alloc} alloc shares within 100% of net")
 
     return conn
 
