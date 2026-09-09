@@ -29,13 +29,24 @@ from core.movement_cards import _NON_MEMBER
 
 @dataclass(frozen=True)
 class Cell:
-    """One number as it will be read, plus the raw value for ordering only."""
+    """One number as it will be read, the raw value for ordering only, and the whole series
+    it is the latest reading of.
+
+    Every cell in this table is the top of a stored series — that is what the table IS, and
+    it is why a cell can open its own chart. The history ships WITH the cell rather than
+    being fetched per click: the browser already holds the file, and a second round trip to
+    draw eleven numbers it could have been handed is a request nobody needs to make.
+
+    `series` is aligned to the column's own period list, with null where a part has no
+    reading — an entity that arrived late must not silently slide its history a month left.
+    """
     display: str
     sort: float | None
+    series: list[float | None] | None = None
 
     @staticmethod
-    def of(value: float | None, fmt) -> "Cell | None":
-        return None if value is None else Cell(fmt(value), value)
+    def of(value: float | None, fmt, series: list[float | None] | None = None) -> "Cell | None":
+        return None if value is None else Cell(fmt(value), value, series)
 
 
 def _rs(v: float) -> str:
@@ -93,12 +104,52 @@ def _member_type(conn, pipeline, period, metric_id) -> str | None:
     return row[0] if row else None
 
 
-def _series(conn, pipeline, metric_id, entity_id, entity_type, n=8):
-    """The last n readings for one part — the Run column. Ordered by period, values only;
-    the periods are implicit in the sparkline and explicit when the row opens."""
-    return [v for _, v in conn.execute(
-        "SELECT period, value FROM signals WHERE pipeline=? AND metric_id=? AND entity_id=? "
-        "AND entity_type=? ORDER BY period", (pipeline, metric_id, entity_id, entity_type))][-n:]
+def _history(conn, pipeline, metric_id, entity_type):
+    """{entity_id: {period: value}} — every reading this signal holds, for every part.
+
+    ONE query per column rather than one per cell: a cut has up to thirty parts and six
+    columns, and a hundred and eighty round trips to SQLite to build one table is a cost
+    paid on every gate run for no reason.
+    """
+    out: dict[str, dict[str, float]] = {}
+    for eid, period, v in conn.execute(
+            "SELECT entity_id, period, value FROM signals WHERE pipeline=? AND metric_id=? "
+            "AND entity_type=? AND value IS NOT NULL ORDER BY period",
+            (pipeline, metric_id, entity_type)):
+        out.setdefault(eid, {})[period] = v
+    return out
+
+
+def _periods_of(hist: dict[str, dict[str, float]]) -> list[str]:
+    """The column's own period list — the union over its parts, sorted.
+
+    A column's depth is its OWN, not the table's: payments stores thirty-one readings of a
+    level and nineteen of its YoY, because a year-on-year rate cannot exist until a year has
+    passed. One axis for the whole table would have to either invent the missing readings or
+    throw away the ones that exist.
+    """
+    return sorted({p for rows in hist.values() for p in rows})
+
+
+def _label(period: str, pipeline: str) -> str:
+    """The month a reading is ABOUT, as a chart axis will show it.
+
+    SIBC keys the store by RBI's release date, which can fall a month after the data it
+    reports; every other surface translates before showing it and so does this one. An axis
+    tick is a published number like any other — rendered here, never in a browser.
+    """
+    from signals.query import display_date
+    d = display_date(period, pipeline)
+    return f"{_MONTH[int(d[5:7]) - 1]} {d[2:4]}" if len(d) >= 7 and d[5:7].isdigit() else d
+
+
+_MONTH = ("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+
+
+def _aligned(hist, entity_id, periods):
+    rows = hist.get(entity_id) or {}
+    vals = [rows.get(p) for p in periods]
+    return [None if v is None else round(v, 4) for v in vals] if any(v is not None for v in vals) else None
 
 
 def build(conn, pipeline: str, period: str, stem: str, unit: str = "rs_cr",
@@ -117,64 +168,81 @@ def build(conn, pipeline: str, period: str, stem: str, unit: str = "rs_cr",
         return None
 
     growth_id = f"{stem}-yoy-scan"
+    book_id   = f"{stem}-share-of-credit-scan"
+    accel_id  = f"{stem}-acceleration"
+    alloc_id  = f"{stem}-allocation"
     g_type = _member_type(conn, pipeline, period, growth_id) or etype
-    growth = _rows(conn, pipeline, period, growth_id, g_type)
-    pace   = _rows(conn, pipeline, period, f"{stem}-acceleration",
-                   _member_type(conn, pipeline, period, f"{stem}-acceleration") or etype)
-    alloc  = _rows(conn, pipeline, period, f"{stem}-allocation", "alloc")
-    ofcut  = _rows(conn, pipeline, period, f"{stem}-allocation", "weight_now")
-    ofbook = _rows(conn, pipeline, period, f"{stem}-share-of-credit-scan",
-                   _member_type(conn, pipeline, period, f"{stem}-share-of-credit-scan") or etype)
+    a_type = _member_type(conn, pipeline, period, accel_id) or etype
+    b_type = _member_type(conn, pipeline, period, book_id) or etype
+
+    # ── Each column, with its whole history ──────────────────────────────────────────
+    # (metric, entity_type, the aggregate row that belongs to the parent). A column is read
+    # once, for every part and every period it holds; the latest reading is the cell and the
+    # rest is what the cell opens into.
+    COLS = {
+        "size":    (size_id,  etype,        ("aggregate", "total")),
+        "of_cut":  (alloc_id, "weight_now", None),
+        "of_book": (book_id,  b_type,       ("aggregate", "total")),
+        "growth":  (growth_id, g_type,      None),
+        "pace":    (accel_id, a_type,       ("aggregate", "total")),
+        "new":     (alloc_id, "alloc",      None),
+    }
+    hist    = {c: _history(conn, pipeline, mid, et) for c, (mid, et, _) in COLS.items()}
+    periods = {c: _periods_of(h) for c, h in hist.items()}
+    # The parent's growth is NOT one of this cut's signals — it belongs to the level above,
+    # which the cut declares (the same field the state band reads).
+    par_hist = {
+        "growth":  _history(conn, pipeline, parent_yoy, "aggregate") if parent_yoy else {},
+        "size":    _history(conn, pipeline, size_id,  "aggregate"),
+        "pace":    _history(conn, pipeline, accel_id, "aggregate"),
+        "of_book": _history(conn, pipeline, book_id,  "aggregate"),
+    }
+    par_periods = {c: _periods_of(h) for c, h in par_hist.items()}
 
     fmt = UNIT_FMT.get(unit, _count)
-    val = lambda d, k: d[k][0] if k in d else None
+    FMT = {"size": fmt, "of_cut": _pct, "of_book": _pct,
+           "growth": _pct, "pace": _pp, "new": _pct}
+    def at(col, name):
+        return hist[col].get(name, {}).get(period)
 
     parts = []
     for name in sorted(size, key=lambda k: -size[k][0]):
-        sz, gr = val(size, name), val(growth, name)
+        sz, gr = at("size", name), at("growth", name)
         # THE PAIRING RULE, enforced here rather than remembered. A share of the new money is
         # never drawn without the speed that explains it: alone, "took 25% of the growth" reads
         # as a verdict on the entity when it may only mean its peers grew faster. The one
         # exemption is a part with NO SIZE — Payment Banks holds zero cards since Paytm exited,
         # so there is no rate to pair with and a share of nothing asserts nothing.
-        share = val(alloc, name) if (gr is not None or not sz) else None
-        parts.append({
+        drop_new = not (gr is not None or not sz)
+        row = {
             "entity":  name,
             # The cut this part decomposes into, when it has one (§19). Resolved HERE — code to
             # CSV name to row entity is a mapping the compute layer already holds, and doing it
             # again in a browser would be a second implementation of it.
             "sub_cut": (sub_cuts or {}).get(name),
-            "size":    Cell.of(sz, fmt),
-            "of_cut":  Cell.of(val(ofcut, name), _pct),
-            "of_book": Cell.of(val(ofbook, name), _pct),
-            "growth":  Cell.of(gr, _pct),
-            "pace":    Cell.of(val(pace, name), _pp),
-            "new":     Cell.of(share, _pct),
-            "run":     [round(v, 4) for v in _series(conn, pipeline, growth_id, name, g_type)],
-        })
+        }
+        for col in COLS:
+            v = None if (col == "new" and drop_new) else at(col, name)
+            row[col] = Cell.of(v, FMT[col], _aligned(hist[col], name, periods[col]))
+        parts.append(row)
 
-    # The cut's own row: its total summed from the parts (the denominator `of_cut` uses),
-    # and the parent's own growth and pace, which the cut's signals already store as
-    # `aggregate`/`total`. A cut whose parent has no published rate loses those cells
-    # rather than borrowing a part's.
-    agg_size  = _rows(conn, pipeline, period, size_id, "aggregate").get("total")
-    agg_pace  = _rows(conn, pipeline, period, f"{stem}-acceleration", "aggregate").get("total")
-    # The parent's own growth is NOT one of the cut's signals — it belongs to the level above,
-    # and the cut declares which signal that is (the same field the state band reads). Without
-    # it the parent row shows a dash for Growth directly beneath a band stating the number,
-    # which reads as broken rather than as absent.
-    agg_growth = _rows(conn, pipeline, period, parent_yoy, "aggregate").get("total") if parent_yoy else None
-    total = {
-        "entity": None,
-        "size":   Cell.of(agg_size[0] if agg_size else None, fmt),
-        # NOT "100%": that is the definition of the denominator, not a measured value, and
-        # a cell whose number traces to nothing is the thing every gate here exists to stop.
-        "of_cut": None,
-        "of_book": None,
-        "growth": Cell.of(agg_growth[0] if agg_growth else None, _pct),
-        "pace":   Cell.of(agg_pace[0] if agg_pace else None, _pp),
-        "new": None, "run": [],
-    }
+    # The cut's own row: its total summed from the parts (the denominator `of_cut` uses), the
+    # parent's own growth, pace and — since this build — its share of the book. A cut whose
+    # parent has no published rate loses those cells rather than borrowing a part's.
+    total = {"entity": None}
+    for col in COLS:
+        agg = COLS[col][2]
+        if not agg or col not in par_hist:
+            # NOT "100%" for of_cut: that is the definition of the denominator, not a measured
+            # value, and a cell whose number traces to nothing is what every gate here stops.
+            total[col] = None
+            continue
+        h = par_hist[col]
+        total[col] = Cell.of(h.get(agg[1], {}).get(period), FMT[col],
+                             _aligned(h, agg[1], par_periods[col]))
+    total["growth"] = Cell.of(
+        par_hist["growth"].get("total", {}).get(period), _pct,
+        _aligned(par_hist["growth"], "total", par_periods["growth"])) if parent_yoy else None
 
     # What the `new` column MEANS depends on the sign of the net: a share of the growth, or a
     # share of the contraction. The band already says "took 25% of the contraction"; a column
@@ -186,13 +254,25 @@ def build(conn, pipeline: str, period: str, stem: str, unit: str = "rs_cr",
         (pipeline, period, f"{stem}-momentum"))), None)
     flow_label = "Of fall" if (net is not None and net < 0) else "New"
 
-    declared = [size_id, growth_id, f"{stem}-acceleration", f"{stem}-allocation",
-                f"{stem}-share-of-credit-scan"] + ([parent_yoy] if parent_yoy else [])
+    declared = [size_id, growth_id, accel_id, alloc_id, book_id] + ([parent_yoy] if parent_yoy else [])
+    cells = lambda r: {k: (asdict(v) if isinstance(v, Cell) else v) for k, v in r.items()}
     return {
         "cut": stem,
         "flow_label": flow_label,
-        "parts": [{k: (asdict(v) if isinstance(v, Cell) else v) for k, v in p.items()} for p in parts],
-        "total": {k: (asdict(v) if isinstance(v, Cell) else v) for k, v in total.items()},
+        "parts": [cells(p) for p in parts],
+        "total": cells(total),
+        # WHICH SIGNAL EACH COLUMN IS, declared for the gate. Scoping a growth cell to the
+        # union of the cut's signals would let a share pass as a rate; scoping it to the
+        # growth signal is the check §17.5 was asking for and did not have.
+        "columns": {c: COLS[c][0] for c in COLS},
+        "parent_columns": {c: (parent_yoy if c == "growth" else COLS[c][0])
+                           for c in ("size", "pace", "of_book", "growth") if total.get(c)},
+        # The x-axis of every cell chart, rendered here like every other string. Per column,
+        # because a column's depth is its own; `parent` where the parent row's history runs
+        # over a different period set than the parts'.
+        "periods": {c: [_label(p, pipeline) for p in ps] for c, ps in periods.items() if ps},
+        "parent_periods": {c: [_label(p, pipeline) for p in ps]
+                           for c, ps in par_periods.items() if ps and total.get(c)},
         # Declared reads, so the gate scopes to this cut at this period rather than falling
         # back to period-wide — the fallback is how a traceability gate quietly dies.
         "source_signals": declared,

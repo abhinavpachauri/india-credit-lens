@@ -330,8 +330,33 @@ def csv_sector_scan_share(params: dict, period: str, df: pd.DataFrame) -> list[d
         out.append(_row(entity_type, row["sector"], share,
                         _eval_status(params.get("status_rules", []), share, pshare),
                         "pct"))
-    return sorted(out, key=lambda r: r["value"] if r["value"] is not None else -999,
-                  reverse=True)
+    out.sort(key=lambda r: r["value"] if r["value"] is not None else -999, reverse=True)
+
+    # The CUT'S OWN share of the denominator — "industry is one rupee in every five of all
+    # bank credit" — emitted only when the denominator sits ABOVE the parent. Where the two
+    # are the same code the answer is definitionally 100%, and a cell whose number traces to
+    # a definition rather than to a measurement is the thing these gates exist to stop.
+    #
+    # The numerator is the parent's OWN published row, not the sum of the parts: the table's
+    # parent row describes the parent, and for main sectors those differ by 4.9% because RBI
+    # attributes Rs 10.72L crore to no sector. A parent row carrying the sum would be a
+    # different question answered in the same cell.
+    if denom_code != parent_code:
+        # Where the parent's OWN row is published, which is not always where its parts are:
+        # industry's parts are Statement 2 and industry's total is Statement 1, and Statement 2
+        # carries no code "2" at all. Declared rather than guessed — a fallback that searched
+        # the other statement would find "Beverage and Tobacco" the day a code collides.
+        own_stmt = params.get("parent_statement", stmt)
+        own = _val(df, period, parent_code, own_stmt)
+        if own is not None:
+            # Status "active", like the size scan's own total row and for the same reason:
+            # this row is the table's denominator, not a reading anyone watches. Scored, it
+            # made three structural shares flip status every month — the scan's headline
+            # status is a roll-up over its PARTS, and an aggregate row quietly takes that
+            # over (the roll-up keys on entity_id='total'). A bookkeeping row must not be
+            # able to change what a signal is reported to be doing.
+            out.append(_row("aggregate", "total", own / parent_val * 100, "active", "pct"))
+    return out
 
 
 def csv_sector_scan_abs(params: dict, period: str, df: pd.DataFrame) -> list[dict]:

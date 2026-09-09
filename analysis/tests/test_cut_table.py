@@ -88,21 +88,60 @@ def test_the_flow_column_says_which_direction_it_is_a_share_of():
         "no contracting cut in the live feed — this test would be vacuous"
 
 
-def test_the_run_is_the_signals_own_series_not_a_recomputation():
-    """The Run column must come from the growth signal's stored rows, so the sparkline and
-    the Growth cell can never tell different stories."""
+def test_every_cell_carries_its_whole_stored_history():
+    """A cell is the top of a series (§20), and the series it ships must be the signal's own
+    stored rows — so the chart a cell opens and the cell itself can never tell different
+    stories. Asserted over EVERY column, not the one that used to be the sparkline."""
     con = sqlite3.connect(DB)
     try:
-        t = T.build(con, "sibc", "2026-08-31", "sibc-ind-size")
+        t = T.build(con, "sibc", "2026-08-31", "sibc-ind-size",
+                    parent_yoy="sibc-industry-yoy")
         large = next(p for p in t["parts"] if p["entity"] == "Large")
-        stored = [v for (v,) in con.execute(
-            "SELECT value FROM signals WHERE pipeline='sibc' AND metric_id='sibc-ind-size-yoy-scan' "
-            "AND entity_id='Large' ORDER BY period")]
+        for col, metric in t["columns"].items():
+            cell = large.get(col)
+            if not cell or not cell.get("series"):
+                continue
+            etype = "alloc" if col == "new" else ("weight_now" if col == "of_cut" else None)
+            q = ("SELECT value FROM signals WHERE pipeline='sibc' AND metric_id=? "
+                 "AND entity_id='Large'" + (" AND entity_type=?" if etype else "") + " ORDER BY period")
+            stored = [round(v, 4) for (v,) in con.execute(q, (metric,) + ((etype,) if etype else ()))]
+            drawn = [v for v in cell["series"] if v is not None]
+            assert drawn == stored, f"{col} chart is not {metric}'s own rows"
+            assert abs(drawn[-1] - cell["sort"]) < 1e-6, f"{col} cell is not the top of its series"
+            assert len(cell["series"]) == len(t["periods"][col]), \
+                f"{col} series and axis are different lengths"
     finally:
         con.close()
-    assert large["run"] == [round(v, 4) for v in stored][-len(large["run"]):]
-    assert abs(large["run"][-1] - large["growth"]["sort"]) < 1e-6, \
-        "the last reading and the Growth cell are the same number"
+
+
+def test_a_columns_depth_is_its_own():
+    """Payments stores 31 readings of a level and 19 of its YoY, because a year-on-year rate
+    cannot exist until a year has passed. One axis for the whole table would have to invent
+    the missing readings or discard the ones that exist."""
+    con = sqlite3.connect(DB)
+    try:
+        t = T.build(con, "atm_pos", "2026-07-31", "cc-category")
+    finally:
+        con.close()
+    assert len(t["periods"]["size"]) > len(t["periods"]["growth"]), \
+        "the level and its YoY have the same depth — this test has stopped measuring anything"
+
+
+def test_the_parent_row_states_its_share_of_the_book():
+    """Industry is 21.7% of all bank credit, and until this build the parent row said "—"
+    while the row for the same sector in Main Sectors said 21.7%. The number is the PARENT'S
+    OWN published row over the denominator, never the sum of the parts: for main sectors
+    those differ by 4.9% because RBI attributes Rs 10.72L crore to no sector."""
+    con = sqlite3.connect(DB)
+    try:
+        t = T.build(con, "sibc", "2026-08-31", "sibc-ind-size", parent_yoy="sibc-industry-yoy")
+        main = T.build(con, "sibc", "2026-08-31", "sibc-main")
+    finally:
+        con.close()
+    assert t["total"]["of_book"], "the cut's own share of the book is missing"
+    same = next(p for p in main["parts"] if p["entity"].startswith("Industry"))
+    assert t["total"]["of_book"]["display"] == same["of_book"]["display"], \
+        "the same sector reads differently as a parent row and as a part"
 
 
 def test_the_pairing_rule_is_structural():

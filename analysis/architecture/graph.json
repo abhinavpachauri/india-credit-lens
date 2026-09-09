@@ -202,6 +202,14 @@
       "reads": {},
       "writes": {}
     },
+    "core/table_rows": {
+      "doc_claims": [],
+      "imports": [],
+      "invokes": [],
+      "path": "analysis/core/table_rows.py",
+      "reads": {},
+      "writes": {}
+    },
     "core/traceability": {
       "doc_claims": [],
       "imports": [],
@@ -377,6 +385,8 @@
       "invokes": [],
       "path": "analysis/guards/check_signal_freshness.py",
       "reads": {
+        "analysis/rbi_atm_pos/timeline.json": "low",
+        "analysis/rbi_sibc/timeline.json": "low",
         "analysis/signals/registry.json": "low"
       },
       "writes": {}
@@ -405,6 +415,19 @@
       "reads": {
         "web/public/data/atm_pos_insights.json": "low",
         "web/public/data/sibc_l1_annotations.json": "low"
+      },
+      "writes": {}
+    },
+    "guards/validate_cut_table": {
+      "doc_claims": [],
+      "imports": [
+        "core/table_rows"
+      ],
+      "invokes": [],
+      "path": "analysis/guards/validate_cut_table.py",
+      "reads": {
+        "analysis/signals/registry.json": "low",
+        "analysis/signals/signals.db": "low"
       },
       "writes": {}
     },
@@ -920,6 +943,19 @@
       "invokes": [],
       "path": "analysis/signals/stamp_state.py",
       "reads": {
+        "analysis/signals/signals.db": "low"
+      },
+      "writes": {}
+    },
+    "signals/stamp_table": {
+      "doc_claims": [],
+      "imports": [
+        "core/table_rows"
+      ],
+      "invokes": [],
+      "path": "analysis/signals/stamp_table.py",
+      "reads": {
+        "analysis/signals/registry.json": "low",
         "analysis/signals/signals.db": "low"
       },
       "writes": {}
