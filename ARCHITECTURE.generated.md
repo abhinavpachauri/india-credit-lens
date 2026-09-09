@@ -8,7 +8,7 @@
 > Authored rationale (layer model, design principles, guard purposes) lives in the
 > hand-written `ARCHITECTURE.md`. This file is the structural, drift-guarded half.
 
-_Derived from 69 scripts._
+_Derived from 70 scripts._
 
 ## 1. Data-flow
 
@@ -90,13 +90,13 @@ Scripts each orchestrator launches as a subprocess, in execution order.
 | `analysis/ontology/concepts.json` | external/authored | — | `core/validate_system_model`, `cross/validate_composition` |
 | `analysis/ontology/domains.json` | external/authored | — | `cross/validate_composition` |
 | `analysis/rbi_atm_pos/insights.json` | derived | `pipelines/atm_pos/generate_atm_pos_insights` | `pipelines/atm_pos/validate_atm_pos_claims`, `pipelines/atm_pos/validate_atm_pos_insights` |
-| `analysis/rbi_atm_pos/merged/system_model.json` | derived | `core/generate_skeleton` | `core/relational_insights` |
+| `analysis/rbi_atm_pos/merged/system_model.json` | derived | `core/generate_skeleton` | `core/relational_insights`, `guards/audit_force_sources` |
 | `analysis/rbi_atm_pos/signals.json` | derived | `pipelines/atm_pos/compute_atm_pos_signals` | `pipelines/atm_pos/generate_atm_pos_insights`, `pipelines/atm_pos/validate_atm_pos_claims`, `pipelines/atm_pos/validate_atm_pos_insights` |
 | `analysis/rbi_atm_pos/skeleton_profile.json` | external/authored | — | `core/generate_skeleton` |
 | `analysis/rbi_sibc/date_remap.json` | derived | `pipelines/sibc/update_web_data` | — |
 | `analysis/rbi_sibc/merged/annotations_merged.ts` | external/authored | — | `pipelines/sibc/validate_annotation_basis` |
 | `analysis/rbi_sibc/merged/sections_merged.json` | external/authored | — | `hook_validate`, `pipelines/sibc/detect_format`, `pipelines/sibc/generate_merge`, `pipelines/sibc/validate_content`, `pipelines/sibc/validate_web_series` |
-| `analysis/rbi_sibc/merged/system_model.json` | derived | `core/generate_skeleton` | `core/relational_insights` |
+| `analysis/rbi_sibc/merged/system_model.json` | derived | `core/generate_skeleton` | `core/relational_insights`, `guards/audit_force_sources` |
 | `analysis/rbi_sibc/skeleton_profile.json` | external/authored | — | `core/generate_skeleton` |
 | `analysis/rbi_sibc/timeline.json` | external/authored | — | `core/validate_timeline`, `pipelines/sibc/generate_merge`, `signals/compute/sibc`, `signals/query` |
 | `analysis/signals/narrative_cache.json` | derived | `cross/generate_opportunity_narrative` | — |

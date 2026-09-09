@@ -4225,7 +4225,9 @@
       "instance_of": "ch_collateral_price_secured",
       "scope_entities": [
         "icl:sibc/Statement1/4.8"
-      ]
+      ],
+      "source_verified": false,
+      "source_audit_note": "2026-09-09 audit: excerpt not on cited page. Press release prid=55327 returns no substantive content. The excerpt is an assembled series of gold prices across three dates, i.e. an authored summary rather than a quotation, so it could never have verified."
     },
     {
       "id": "force_rbi_unsecured_tightening",
@@ -4241,11 +4243,11 @@
         "sibc-pl-cc-below10-streak",
         "sibc-pl-consumer-durables-neg-streak"
       ],
-      "source": "RBI Circular RBI/2023-24/89, 'Risk Weights for Consumer Credit and Credit Card Receivables', 16 Nov 2023",
-      "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx?Id=12569",
-      "source_verified_date": "2026-04-19",
-      "source_excerpt": "Risk weight on consumer credit increased from 100% to 125%; credit card receivables from 125% to 150%.",
-      "source_rationale": "RBI circular directly states the risk-weight changes; compression of credit card and consumer durables YoY growth in subsequent periods confirms the effect",
+      "source": "RBI/2023-24/85 DOR.STR.REC.57/21.06.001/2023-24 — 'Regulatory measures towards consumer credit and bank credit to NBFCs', 16 November 2023",
+      "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx?Id=12567&Mode=0",
+      "source_verified_date": "2026-09-09",
+      "source_excerpt": "it has been decided to increase the risk weights in respect of consumer credit exposure of commercial banks (outstanding as well as new), including personal loans, but excluding housing loans, education loans, vehicle loans and loans secured by gold and gold jewellery, by 25 percentage points to 125%",
+      "source_rationale": "Corrected 2026-09-09. The force previously cited NotificationUser Id=12569, which carries no risk-weight content at all; the circular is Id=12567. The claim was right and the citation was wrong, and nothing checked it because no gate verifies a force's excerpt against its page. Excerpt now verbatim and machine-verified.",
       "status": "active",
       "instance_of": "ch_capital_weight_unsecured",
       "scope_entities": [
@@ -4275,7 +4277,9 @@
       "scope_entities": [
         "icl:sibc/Statement1/iv",
         "icl:sibc/Statement1/viii"
-      ]
+      ],
+      "source_verified": false,
+      "source_audit_note": "2026-09-09 audit: excerpt not on cited page. MORE THAN A CITATION PROBLEM: the excerpt claims PSL housing loan limits were revised to metro ₹45L / non-metro ₹35L, but the cited Master Direction states loans up to ₹35 lakh in metropolitan centres and ₹25 lakh in other centres, with ₹45 lakh and ₹30 lakh being the DWELLING-UNIT COST caps. The force appears to have read cost caps as loan limits. Needs re-sourcing against the current PSL Master Direction before the claim is relied on."
     },
     {
       "id": "force_pli_manufacturing",
@@ -4302,7 +4306,9 @@
         "icl:sibc/Statement2/2.13",
         "icl:sibc/Statement2/2.14",
         "icl:sibc/Statement2/2.9"
-      ]
+      ],
+      "source_verified": false,
+      "source_audit_note": "2026-09-09 audit: excerpt not on cited page. The cited PIB page carries PLI investment figures (₹67,690 cr automobile, ₹48,120 cr solar PV, ₹8,910 cr food processing) but not the ₹1.76 lakh crore the excerpt states. Number needs re-sourcing."
     },
     {
       "id": "force_msme_formalisation",
@@ -4326,27 +4332,30 @@
       "instance_of": "ch_formalisation_underwritability",
       "scope_entities": [
         "icl:sibc/Statement1/2.1"
-      ]
+      ],
+      "source_verified": false,
+      "source_audit_note": "2026-09-09 audit: excerpt not on cited page. Two problems: sidbi.in is NOT on the allowlist (tier resolves to None), and the URL is a landing page carrying no quotable text. The excerpt is an authored generalisation."
     },
     {
       "id": "force_nbfc_regulatory_recovery",
       "tier": "force_instance",
-      "force_type": "institutional_behavior",
-      "label": "NBFC credit channel recovery post risk-weight cycle",
-      "description": "RBI raised risk weights on bank-to-NBFC lending in November 2023, temporarily suppressing bank credit flows to NBFCs. The channel recovery — as banks normalized NBFC exposures within new risk-weight economics — amplifies all NBFC-intermediated lending across sectors. January SIBC files do not report NBFC sub-classification; verification limited to March-end periods.",
+      "force_type": "policy_action",
+      "label": "Bank→NBFC risk weights restored to external-rating basis (RBI, eff. 1 Apr 2025)",
+      "description": "RBI raised risk weights on scheduled commercial banks' exposures to NBFCs by 25 percentage points in November 2023 (RBI/2023-24/85, Paragraph 2.B), raising the capital cost of the wholesale funding channel that NBFCs depend on. On 25 February 2025 RBI RESTORED those risk weights to the plain external-rating basis of the Basel III Master Circular, effective 1 April 2025 — reversing the constraint rather than easing it. Cheaper bank capital against NBFC exposure restores the wholesale funding channel, and bank credit to NBFCs is the SIBC line that records it. NBFC credit stood at 35.65% YoY (₹21.3 L Cr) at 2026-07-31, the fastest large block in the services cut, and the services mix is steered toward NBFCs (+15.9pp tilt). The restoration is in force across the whole of the July 2026 movement window.",
       "non_observable_reason": "Aggregate NBFC channel capacity and credit availability; not measurable as a single isolated column in the SIBC CSV",
-      "claim_type": "hypothesis",
+      "claim_type": "inference",
       "domain": "sector_mix",
       "signal_evidence": [
         "sibc-services-yoy",
-        "sibc-nbfc-sub-yoy-scan"
+        "sibc-nbfc-sub-yoy-scan",
+        "sibc-svcs-momentum"
       ],
-      "source": "RBI Circular DOR.STR.REC.57/21.06.001/2023-24 (November 16, 2023)",
-      "source_url": "https://www.rbi.org.in/scripts/NotificationUser.aspx?Id=12567&Mode=0",
-      "source_verified_date": "2026-04-20",
-      "source_excerpt": "RBI/2023-24/85 – Regulatory measures towards consumer credit and bank-NBFC exposures (Nov 2023)",
-      "source_rationale": "Risk weight circular verified; channel recovery claim needs NBFC-specific data to promote to inference. Cycle 1 of hypothesis clock starts at this FOUNDATION.",
-      "status": "watch",
+      "source": "RBI/2024-25/120 DOR.STR.REC.61/21.06.001/2024-25 — 'Exposures of Scheduled Commercial Banks (SCBs) to Non-Banking Financial Companies (NBFCs) – Review of Risk Weights', 25 February 2025",
+      "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx?Id=12787&Mode=0",
+      "source_verified_date": "2026-09-09",
+      "source_excerpt": "it has been decided to restore the risk weights applicable to such exposures and the same shall be as per the external rating",
+      "source_rationale": "Promoted hypothesis → inference 2026-09-09. The force was authored at FOUNDATION citing only the November 2023 circular that IMPOSED the constraint, with a rationale saying the recovery claim 'needs NBFC-specific data to promote to inference', and an excerpt that was a citation line rather than a quote (it does not appear on the page). The missing evidence was the reversal: RBI/2024-25/120 restores the risk weights effective 1 April 2025. Excerpt verbatim and machine-verified; the same page states 'The above instructions shall come into effect from April 01, 2025.', so the instrument is in force for the entire trailing-12-month window ending July 2026. Distinct from RBI/2024-25/119 of the same date, which covers microfinance only.",
+      "status": "active",
       "instance_of": "ch_wholesale_funding_intermediation",
       "scope_entities": [
         "icl:sibc/Statement1/3"
@@ -4398,7 +4407,9 @@
       "instance_of": "ch_project_lifecycle_origination",
       "scope_entities": [
         "icl:sibc/Statement2/2.18"
-      ]
+      ],
+      "source_verified": false,
+      "source_audit_note": "2026-09-09 audit: excerpt not on cited page. NOT EXTERNALLY SOURCED AT ALL: source_url is the bare RBI press-release landing page with no release id, and the source field names 'RBI SIBC merged series — Infrastructure sub-sector YoY', i.e. our own data. The excerpt describes our computed finding, so the force cites its own effect as its cause — the same defect force_msp_procurement_growth carried until it was sourced on 2026-09-09."
     },
     {
       "id": "force_eclgs5_guarantee_window",

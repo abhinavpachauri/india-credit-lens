@@ -2009,7 +2009,9 @@
       "instance_of": "ch_institutional_exit_card_stock",
       "scope_entities": [
         "icl:atm_pos/cards/debit_cards"
-      ]
+      ],
+      "source_verified": false,
+      "source_audit_note": "2026-09-09 audit: excerpt not on cited page. Press release prid=57403 now returns only site navigation — the release appears to have moved. Claim is widely documented; the CITATION needs replacing."
     },
     {
       "id": "force_rbi_card_lifecycle_norms",
@@ -2032,7 +2034,9 @@
       "instance_of": "ch_card_lifecycle_norms",
       "scope_entities": [
         "icl:atm_pos/cards/credit_cards"
-      ]
+      ],
+      "source_verified": false,
+      "source_audit_note": "2026-09-09 audit: excerpt not on cited page. source_url points at a PPI Master Direction, which does not contain the credit-card inactivity-closure rule the excerpt quotes. Wrong document; the rule lives in the Credit Card and Debit Card Master Direction."
     },
     {
       "id": "force_ncmc_transit_rollout",
@@ -2122,8 +2126,8 @@
       "domain": "credit_card_txn",
       "source": "RBI Circular DPSS.CO.PD No.752/02.14.003/2020-21 dated December 4, 2020 - Card transactions in Contactless mode",
       "source_url": "https://www.rbi.org.in/Scripts/NotificationUser.aspx?Id=11999&Mode=0",
-      "source_verified_date": "2026-06-13",
-      "source_excerpt": "Additional Factor of Authentication (AFA) requirement was relaxed for values up to ₹ 2,000/- per transaction for card transactions in contactless mode at Points of Sale (PoS) terminals. It has been decided to increase the per transaction limit to ₹ 5,000/-",
+      "source_verified_date": "2026-09-09",
+      "source_excerpt": "Additional Factor of Authentication (AFA) requirement was relaxed for values up to ₹ 2,000/- per transaction for card transactions in contactless mode at Points of Sale (PoS) terminals",
       "source_rationale": "Promoted from S4 after web source-verification.",
       "claim_type": "inference",
       "status": "active"

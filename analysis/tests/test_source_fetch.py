@@ -246,3 +246,42 @@ def test_the_browser_path_cannot_promote_without_the_temporal_assertion(tmp_path
     p = run(True)
     assert p["promotable"] is True
     assert p["attempts"][-1]["verdict"] == "excerpt_verified"
+
+
+# ── force-source audit: an unreachable page is not a bad excerpt ──────────────
+
+def test_audit_separates_an_unreachable_page_from_a_missing_excerpt(monkeypatch):
+    """The distinction the whole audit rests on.
+
+    On 2026-09-09 a probe bug made every host look blocked, and the false reading
+    reached a spec and a commit message before a control caught it. An unreachable
+    page says nothing about the quote, so the audit must never fold the two into one
+    verdict — otherwise a network outage silently indicts every source we hold.
+    """
+    import guards.audit_force_sources as A
+
+    monkeypatch.setattr(A, "fetch_text", lambda url: ("", "blocked"))
+    outcome, _ = A.audit_force({"source_url": "https://rbi.org.in/x", "source_excerpt": "anything"})
+    assert outcome == A.UNREACHABLE
+
+    monkeypatch.setattr(A, "fetch_text", lambda url: ("the page says something else entirely", "ok"))
+    outcome, _ = A.audit_force({"source_url": "https://rbi.org.in/x", "source_excerpt": "a quote that is absent"})
+    assert outcome == A.NOT_ON_PAGE
+
+    monkeypatch.setattr(A, "fetch_text", lambda url: ("… it has been decided to restore the risk weights …", "ok"))
+    outcome, _ = A.audit_force({"source_url": "https://rbi.org.in/x",
+                                "source_excerpt": "it has been decided to restore the risk weights"})
+    assert outcome == A.VERIFIES
+
+
+def test_audit_reports_a_force_with_no_source_as_its_own_outcome(monkeypatch):
+    """A force nobody ever sourced is not the same finding as one whose quote is wrong."""
+    import guards.audit_force_sources as A
+    outcome, _ = A.audit_force({"id": "f"})
+    assert outcome == A.NO_SOURCE
+
+
+def test_strict_mode_never_fails_on_an_unreachable_page(monkeypatch):
+    """--strict gates on NOT ON PAGE only, so a flaky network cannot fail a build."""
+    import guards.audit_force_sources as A
+    assert A.UNREACHABLE != A.NOT_ON_PAGE

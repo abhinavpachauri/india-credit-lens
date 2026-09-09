@@ -337,6 +337,17 @@
       },
       "writes": {}
     },
+    "guards/audit_force_sources": {
+      "doc_claims": [],
+      "imports": [],
+      "invokes": [],
+      "path": "analysis/guards/audit_force_sources.py",
+      "reads": {
+        "analysis/rbi_atm_pos/merged/system_model.json": "low",
+        "analysis/rbi_sibc/merged/system_model.json": "low"
+      },
+      "writes": {}
+    },
     "guards/check_derived_fresh": {
       "doc_claims": [],
       "imports": [

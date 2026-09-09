@@ -397,6 +397,20 @@
           "date": "2026-09-09",
           "how_measured": "core.source_fetch.fetch_text over PIB article URLs and an RBI notification URL, unpacking the (text, verdict) tuple it actually returns. Then excerpt_on_page against the fetched text for every force instance carrying a source: KCC, MSP and vehicle scrappage all verify verbatim without a browser. Supersedes a retracted measurement from the same day which reported PIB as blocked.",
           "source": "analysis/COMPOSITION_SPEC.md §8.1"
+        },
+        {
+          "metric": "Force-source excerpt verity — does a force's quote appear on the page it cites?",
+          "value": "11 of 18 force excerpts were not on their cited page at audit start; 7 remain after fixes (verifies 7 → 9)",
+          "date": "2026-09-09",
+          "how_measured": "Enumerated every force_instance in both system models — not sampled — fetching each source_url and running the same excerpt_on_page anchor the sourcing paths use. Outcomes kept separate: verifies / NOT ON PAGE / unreachable / no source, because an unreachable page is a verdict about the network and not about the quote. Every failing force carried claim_type 'inference', i.e. the model treated it as sourced. The seven that passed were, without exception, sourced AFTER excerpt_on_page was built on 2026-07-29.",
+          "source": "analysis/guards/audit_force_sources.py"
+        },
+        {
+          "metric": "Force-source audit — what the failures actually were, once classified",
+          "value": "2 wrong URL, 1 self-citing (source = our own series), 1 non-allowlisted landing page, 1 substantively contradicted by its source, 1 truncated quote, 2 authored summaries",
+          "date": "2026-09-09",
+          "how_measured": "Per-force inspection rather than a single pass/fail. Vocabulary overlap and longest verbatim run separated authored summaries (high vocabulary, zero verbatim run) from citations pointing at the wrong document (low vocabulary). Two were repaired to verbatim quotes from the correct page (force_rbi_unsecured_tightening cited Id=12569 which carries no risk-weight text at all; the circular is Id=12567), one was a quote truncated mid-phrase, and force_psl_limit_revision was found to CONTRADICT its source — it reports ₹45L/₹35L as revised PSL housing loan limits where the Master Direction gives ₹35L/₹25L as loan limits and ₹45L/₹30L as dwelling-cost caps.",
+          "source": "analysis/guards/audit_force_sources.py"
         }
       ],
       "observations": [
@@ -515,6 +529,10 @@
         {
           "date": "2026-09-09",
           "observation": "I diagnosed a host-wide block from an API misuse, and only a control caught it. fetch_text returns a (text, verdict) tuple; len() on it is 2 for every URL, so five PIB pages answering '2' read as a blocked host — plausible, because the census three weeks earlier had found eleven genuinely blocked hosts. The false finding reached the spec, the register, a commit message and the session notes, and had already changed a design conclusion: I told the user an unattended crawler could not serve the arc-3 regulatory watch. What broke it was putting example.com and Wikipedia through the same probe and getting '2' back. A probe that returns the SAME answer for every input is reporting on itself, not on the inputs — and the control that would have shown this cost one command."
+        },
+        {
+          "date": "2026-09-09",
+          "observation": "A trust anchor only covers what it was pointed at, and nobody re-points it backwards. excerpt_on_page was built on 2026-07-29 and every source added since verifies; every force authored before it fails, 11 of 18 at audit start, all of them carrying claim_type 'inference'. validate_system_model runs on both gates every ingestion and could never have caught this, because it checks that sourcing is PRESENT and verity needs the network. So the causal layer accumulated citations nobody could check while two gates reported green — including one force whose source is our own SIBC series, i.e. it cites its own effect as its cause, and one whose numbers contradict the document it points at. Third instance this session of the same shape: a check's population is a design decision, and nothing measures population."
         }
       ],
       "open_questions": [
