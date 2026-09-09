@@ -278,7 +278,12 @@
       ],
       "claim_type": "hypothesis",
       "from_pipeline": "sibc",
-      "status": "proposed"
+      "status": "proposed",
+      "triage": {
+        "verdict": "not_a_force",
+        "note": "NHB Residex is a price index - an observable series we could ingest as a signal, not an external non-observable driver.",
+        "decided_on": "2026-09-09"
+      }
     },
     {
       "kind": "channel",
@@ -293,7 +298,12 @@
       ],
       "claim_type": "hypothesis",
       "from_pipeline": "sibc",
-      "status": "proposed"
+      "status": "proposed",
+      "triage": {
+        "verdict": "not_a_force",
+        "note": "SEBI margin-trading exposure is a published series, not a driver.",
+        "decided_on": "2026-09-09"
+      }
     },
     {
       "kind": "channel",
@@ -323,7 +333,12 @@
       ],
       "claim_type": "hypothesis",
       "from_pipeline": "sibc",
-      "status": "proposed"
+      "status": "proposed",
+      "triage": {
+        "verdict": "duplicate",
+        "note": "Already carried by force_pli_manufacturing.",
+        "decided_on": "2026-09-09"
+      }
     },
     {
       "kind": "channel",
@@ -353,7 +368,12 @@
       ],
       "claim_type": "hypothesis",
       "from_pipeline": "sibc",
-      "status": "proposed"
+      "status": "proposed",
+      "triage": {
+        "verdict": "duplicate",
+        "note": "Already carried by force_msp_procurement_growth, sourced 2026-09-09 to PIB PRID 2260618.",
+        "decided_on": "2026-09-09"
+      }
     },
     {
       "kind": "channel",
@@ -368,7 +388,12 @@
       ],
       "claim_type": "hypothesis",
       "from_pipeline": "sibc",
-      "status": "proposed"
+      "status": "proposed",
+      "triage": {
+        "verdict": "duplicate",
+        "note": "Already carried by force_eclgs5_guarantee_window (Cabinet 2026-05-05, window to 2027-03-31).",
+        "decided_on": "2026-09-09"
+      }
     },
     {
       "kind": "channel",
@@ -428,7 +453,12 @@
       ],
       "claim_type": "hypothesis",
       "from_pipeline": "sibc",
-      "status": "proposed"
+      "status": "proposed",
+      "triage": {
+        "verdict": "not_a_force",
+        "note": "CPI is a published series; if it drives credit the force is the policy response, not the index.",
+        "decided_on": "2026-09-09"
+      }
     },
     {
       "kind": "channel",
@@ -548,7 +578,12 @@
       ],
       "claim_type": "hypothesis",
       "from_pipeline": "atm_pos",
-      "status": "proposed"
+      "status": "proposed",
+      "triage": {
+        "verdict": "not_a_force",
+        "note": "Festival-season demand is seasonality, which the eval prompt explicitly bars as an invented explanation.",
+        "decided_on": "2026-09-09"
+      }
     },
     {
       "kind": "channel",
@@ -563,7 +598,12 @@
       ],
       "claim_type": "hypothesis",
       "from_pipeline": "atm_pos",
-      "status": "proposed"
+      "status": "proposed",
+      "triage": {
+        "verdict": "expired",
+        "note": "RBI card-on-file tokenisation enforcement completed 30 Sep 2022, four years before this movement window; a reporting reclassification then cannot explain a move now.",
+        "decided_on": "2026-09-09"
+      }
     },
     {
       "kind": "cross_edge",
@@ -677,7 +717,12 @@
         "Moneycontrol or Mint article on end of fuel surcharge waiver by credit-card issuers"
       ],
       "claim_type": "hypothesis",
-      "status": "proposed"
+      "status": "proposed",
+      "triage": {
+        "verdict": "unsourceable",
+        "note": "Issuer card terms (hdfcbank/sbicard/icicibank) are not on the allowlist and change without a dated public instrument.",
+        "decided_on": "2026-09-09"
+      }
     },
     {
       "kind": "channel",
@@ -691,7 +736,12 @@
         "Livemint or Economic Times article on credit-card lounge access cuts"
       ],
       "claim_type": "hypothesis",
-      "status": "proposed"
+      "status": "proposed",
+      "triage": {
+        "verdict": "unsourceable",
+        "note": "Visa/Mastercard scheme entitlements are private network rules; no allowlisted host carries them.",
+        "decided_on": "2026-09-09"
+      }
     },
     {
       "kind": "channel",
@@ -719,7 +769,12 @@
         "Mint or Economic Times article on RBI capping unsecured loan growth or credit-card limits"
       ],
       "claim_type": "hypothesis",
-      "status": "proposed"
+      "status": "proposed",
+      "triage": {
+        "verdict": "duplicate",
+        "note": "Already carried by force_rbi_unsecured_tightening (RBI/2023-24/85 risk-weight increase).",
+        "decided_on": "2026-09-09"
+      }
     },
     {
       "kind": "instance",
@@ -733,7 +788,12 @@
         "Business Today or ET Retail article on festival-season timing and retail sales"
       ],
       "claim_type": "hypothesis",
-      "status": "proposed"
+      "status": "proposed",
+      "triage": {
+        "verdict": "not_a_force",
+        "note": "Festival timing is a calendar fact, not an external driver.",
+        "decided_on": "2026-09-09"
+      }
     },
     {
       "kind": "instance",
@@ -747,7 +807,12 @@
         "Livemint or Business Standard article on international travel recovery and credit-card spends"
       ],
       "claim_type": "hypothesis",
-      "status": "proposed"
+      "status": "proposed",
+      "triage": {
+        "verdict": "not_a_force",
+        "note": "DGCA passenger traffic is an observable series.",
+        "decided_on": "2026-09-09"
+      }
     },
     {
       "kind": "channel",
@@ -761,7 +826,12 @@
         "Economic Times or Mint article on credit-card tokenization impacting e-commerce checkout"
       ],
       "claim_type": "hypothesis",
-      "status": "proposed"
+      "status": "proposed",
+      "triage": {
+        "verdict": "expired",
+        "note": "Same instrument as [19]; the proposal itself dates it to the March 2020 circular.",
+        "decided_on": "2026-09-09"
+      }
     }
   ]
 }

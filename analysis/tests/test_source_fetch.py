@@ -179,9 +179,10 @@ def test_worklist_lists_what_the_crawler_could_not_settle(tmp_path):
          "attempts": [{"verdict": "blocked", "url": "https://business-standard.com/x"}]},
         {"label": "never sourced", "attempts": [{"verdict": "no_source_named"}]},
     ]}))
-    rows = ri.worklist(f)
+    rows, ruled = ri.worklist(f)
     assert [r[0] for r in rows] == [1, 2], "the settled one is not queued for a human"
     assert rows[0][1] == "blocked"
+    assert ruled == [], "nothing here has been ruled out editorially"
 
 
 def test_an_api_failure_is_not_recorded_as_a_sourcing_verdict(monkeypatch):

@@ -298,23 +298,78 @@ def verify_proposal(p, eval_period=None):
     return p
 
 
+# Why a proposal can leave the queue WITHOUT being sourced.
+#
+# S4 converts at roughly one in forty. Most proposals are meant to die, and until now
+# there was no way to say so: the verdict vocabulary is all about SOURCING
+# (supported/expired/not_found/contradicts), so "we already model this" and "this is not
+# a force at all" had nowhere to go. Every proposal therefore stayed on the worklist
+# forever, and an unworked one looked exactly like a rejected one.
+#
+# Triage is editorial and never promotes anything — it only removes from the queue, with
+# a reason attached. Sourcing remains the ONLY route into the model.
+TRIAGE_VERDICTS = {
+    # the mechanism is already carried by a force instance — `note` must name its id
+    "duplicate":    "already modelled as an existing force",
+    # SYSTEM_MODEL_SPEC: a force is EXTERNAL and NON-OBSERVABLE. A price index, a traffic
+    # statistic or a festival date is a series we could ingest, or seasonality — not a driver.
+    "not_a_force":  "an observable series or seasonality, not an external driver",
+    # no allowlisted host can carry it (issuer T&Cs, card-scheme rules, paywalled trade press)
+    "unsourceable": "no allowlisted host can carry the evidence",
+    # the instrument predates the movement window, so it cannot explain a move inside it
+    "expired":      "instrument predates the movement window",
+}
+
+
+def triaged(p: dict) -> dict | None:
+    """The triage block on a proposal, if a human has ruled on it."""
+    t = p.get("triage")
+    return t if isinstance(t, dict) and t.get("verdict") in TRIAGE_VERDICTS else None
+
+
 def worklist(path):
     """Proposals the automated path could not settle — the handoff to a Chrome session.
 
     A blocked host is not a dead end, it is a queue. Printing it is what turns `attempts[]`
     from a record into something a person can act on in one pass.
+
+    Triaged proposals are removed from the queue but NOT from the record: the caller
+    reports them as counts by reason, because a queue that silently shrinks is how a
+    decision becomes indistinguishable from an omission.
     """
     doc = json.loads(Path(path).read_text())
-    out = []
+    out, ruled = [], []
     for i, p in enumerate(doc.get("proposals", [])):
         if p.get("promotable"):
+            continue
+        t = triaged(p)
+        if t:
+            ruled.append((i, t["verdict"], t.get("note", ""), p.get("label", "")))
             continue
         last = (p.get("attempts") or [{}])[-1]
         if last.get("verdict") in ("excerpt_verified",):
             continue
         out.append((i, last.get("verdict", "unverified"), last.get("url", ""),
                     last.get("target") or p.get("required_source", ""), p.get("label", "")))
-    return out
+    return out, ruled
+
+
+def cmd_triage(args):
+    """Record an editorial ruling that takes a proposal off the queue. Promotes nothing."""
+    if args.as_verdict not in TRIAGE_VERDICTS:
+        raise SystemExit(f"--as must be one of {sorted(TRIAGE_VERDICTS)}")
+    if not args.note:
+        raise SystemExit("--note is required: a ruling without a reason is just a deletion")
+    if args.as_verdict == "duplicate" and "force_" not in args.note and "fi_" not in args.note:
+        raise SystemExit("a 'duplicate' ruling must name the force instance it duplicates")
+    path = Path(args.triage_file)
+    doc = json.loads(path.read_text())
+    p = doc["proposals"][args.index]
+    p["triage"] = {"verdict": args.as_verdict, "note": args.note,
+                   "decided_on": date.today().isoformat()}
+    path.write_text(json.dumps(doc, indent=2, ensure_ascii=False))
+    print(f"[{args.index}] {p.get('label','')[:60]} → {args.as_verdict}: {args.note}")
+    return 0
 
 
 def cmd_resolve(args):
@@ -362,6 +417,11 @@ def main():
     ap.add_argument("--verify-only", metavar="FILE", dest="verify_file",
                     help="verify the proposals already in FILE — no regeneration")
     ap.add_argument("--worklist", metavar="FILE", help="print the proposals a Chrome session must settle")
+    ap.add_argument("--triage", metavar="FILE", dest="triage_file",
+                    help="record an editorial ruling that takes a proposal off the queue "
+                         "(promotes nothing — sourcing is still the only route into the model)")
+    ap.add_argument("--as", dest="as_verdict", help=f"triage verdict: {sorted(TRIAGE_VERDICTS)}")
+    ap.add_argument("--note", help="why (required with --triage; a 'duplicate' must name the force)")
     ap.add_argument("--resolve", metavar="FILE", dest="file", help="record a Chrome-sourced verification")
     ap.add_argument("--index", type=int, help="proposal index (with --resolve)")
     ap.add_argument("--url"); ap.add_argument("--excerpt"); ap.add_argument("--page-file")
@@ -403,14 +463,27 @@ def main():
         return 0
 
     if args.worklist:
-        rows = worklist(args.worklist)
+        rows, ruled = worklist(args.worklist)
         print(f"{len(rows)} proposal(s) need the editor's browser:\n")
         for i, verdict, url, target, label in rows:
             print(f"  [{i:>2}] {verdict:20} {label[:58]}")
             print(f"       target: {target[:90]}")
             if url:
                 print(f"       url:    {url}")
+        # Ruled-out proposals are reported, never merely absent — a queue that shrinks
+        # silently makes a decision look like an omission.
+        if ruled:
+            by = {}
+            for _, v, _, _ in ruled:
+                by[v] = by.get(v, 0) + 1
+            summary = ", ".join(f"{n} {v}" for v, n in sorted(by.items()))
+            print(f"\n{len(ruled)} ruled out and off the queue ({summary}):\n")
+            for i, v, note, label in ruled:
+                print(f"  [{i:>2}] {v:14} {label[:56]}")
+                print(f"       {note[:96]}")
         return 0
+    if args.triage_file:
+        return cmd_triage(args)
     if args.file:
         return cmd_resolve(args)
 
