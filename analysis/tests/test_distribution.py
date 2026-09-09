@@ -344,6 +344,25 @@ def test_design_prompt_carries_the_vintage():
     assert "2026" in prompt
 
 
+def test_design_prompt_names_the_page_size_and_how_to_check_it():
+    """A carousel that exports landscape is unreadable in a phone feed, and the design session
+    cannot see that it happened. "Portrait 1080x1350" alone did not prevent it once — the fix is
+    that the brief carries the @page rule AND the pts the finished export must measure, so the
+    session has something to verify rather than merely agree with."""
+    prompt = slot_render.design_prompt(_live_slate("1st", ["C1", "C5"]))
+    assert "@page { size: 1080px 1350px; margin: 0 }" in prompt
+    assert "810 × 1012.5 pts" in prompt
+
+
+def test_format_block_braces_survive_the_slide_count_substitution():
+    """FORMAT_BLOCK is consumed through .format(), so the CSS braces in the @page rule have to be
+    doubled in the source. Getting that wrong raises at generation time for every slot at once."""
+    rendered = slot_render.FORMAT_BLOCK.format(slides=7)
+    assert "@page { size: 1080px 1350px; margin: 0 }" in rendered
+    assert "**7 slides**" in rendered
+    assert "{{" not in rendered and "{slides}" not in rendered
+
+
 # ── §5.3 — the design prompt is a public pager, so its prose is linted ─────────
 
 def _mk_slate(claims):

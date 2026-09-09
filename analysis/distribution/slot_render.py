@@ -25,11 +25,30 @@ from distribution import categories as cats
 # The LinkedIn carousel spec the design session was missing. It is design direction, not content —
 # the numbers rule below still governs every figure that appears. Kept here so a change to the house
 # style is one edit, not a re-brief every month.
+#
+# The page-size lines earn their keep: "portrait 1080×1350" alone was an instruction with nothing
+# verifying it, and a session that agreed with it still shipped a 720×404.88 pt landscape PDF,
+# because Chrome's print default overrides a CSS-less page and nobody looked at the export. On a
+# phone LinkedIn fits that to the feed width and the type lands at about a third of its drawn size.
+# So the brief now names the @page rule AND the number to check the export against — an instruction
+# the session can confirm it followed beats one it can only agree with.
+#
+# NB the braces below are doubled: this block is consumed as FORMAT_BLOCK.format(slides=...).
 FORMAT_BLOCK = (
     "- **LinkedIn carousel PDF, portrait 1080×1350 (4:5)** — fills the mobile feed. Not landscape.\n"
+    "  Set the page size in CSS — `@page {{ size: 1080px 1350px; margin: 0 }}` — and give the slide\n"
+    "  container exactly `width: 1080px; height: 1350px`. The print dialog's default is landscape and\n"
+    "  will silently win otherwise. Content runs to a 72px margin on all four sides and uses the full\n"
+    "  width inside that; never a centred narrow column with the page empty either side.\n"
+    "- **Check the export before handing it back:** the PDF's page size must read **810 × 1012.5 pts**\n"
+    "  (1080 × 1350 px at 96dpi). If it reads anything else, the page rule did not take and nothing\n"
+    "  else about the design matters — fix it and re-export.\n"
     "- **{slides} slides**, one idea per slide. Slide 1 is the hook; the last slide signs off + invites a subscribe.\n"
     "- **Mobile-first:** legible held at arm's length — the number is the hero, the headline ≤ 7 words,\n"
-    "  the body ≤ 25 words. Nothing on a slide should be hard to read on a phone.\n"
+    "  the body ≤ 25 words. Nothing on a slide should be hard to read on a phone. Type is sized for a\n"
+    "  1080px canvas, not a browser window: view a finished slide at 25% zoom — roughly its size in a\n"
+    "  phone feed — and if the hero number, the headline or a chart label is not readable there, it is\n"
+    "  too small.\n"
     "- **Fill the canvas** — no slide more than ~30% empty; centre the content, don't strand it top-left."
 )
 
