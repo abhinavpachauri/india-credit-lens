@@ -342,7 +342,7 @@
       ],
       "claim_type": "inference",
       "from_pipeline": "sibc",
-      "status": "proposed",
+      "status": "promoted",
       "attempts": [
         {
           "rung": 1,
@@ -373,7 +373,10 @@
       "source": "Vehicle Scrappage Policy, 2021 - Press Information Bureau",
       "source_url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2042966",
       "source_excerpt": "MoRTH has issued GSR 720 (E) dated 5th October 2021 to provide concession in the Motor Vehicle Tax of up to 25% in case of non-transport vehicles",
-      "source_verified_date": "2026-08-22"
+      "source_verified_date": "2026-08-22",
+      "promoted_as": "force_vehicle_scrappage_replacement",
+      "promoted_on": "2026-09-09",
+      "promotion_note": "Authored into the SIBC system model as a structural_shift on new channel ch_asset_retirement_replacement, driving e_S1_4_7 (Vehicle Loans). Excerpt re-verified verbatim on the live PIB page 2026-09-09, in the browser and through the unattended fetch path."
     },
     {
       "kind": "channel",

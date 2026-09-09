@@ -392,10 +392,10 @@
           "source": "analysis/guards/validate_signal_history.py"
         },
         {
-          "metric": "Source-verification channel — pib.gov.in automated fetch",
-          "value": "2 characters returned for 5 of 5 PIB article URLs, including the one that verified cleanly on 2026-08-02",
+          "metric": "Source-verification channel — are the rung-1 official hosts machine-readable?",
+          "value": "OPEN: pib.gov.in 9,320 / 42,879 / 68,483 chars on three article URLs, rbi.org.in 11,185, all verdict ok; all 3 sourced SIBC forces re-verify unattended",
           "date": "2026-09-09",
-          "how_measured": "Enumerated five URL forms (bare host and www, with and without reg/lang params, both PIB page handlers) through core.source_fetch.fetch_text, including PRID 2238004 which is force_kcc_collateral_limit's own recorded source and fetched successfully five weeks earlier. All five returned 2 characters, so the block is the host rather than the URL shape or the source. The browser path still reads the same pages in full: the replacement excerpt for force_msp_procurement_growth (PRID 2260618) verified verbatim, while a fabricated excerpt AND a true-but-paraphrased excerpt were both rejected.",
+          "how_measured": "core.source_fetch.fetch_text over PIB article URLs and an RBI notification URL, unpacking the (text, verdict) tuple it actually returns. Then excerpt_on_page against the fetched text for every force instance carrying a source: KCC, MSP and vehicle scrappage all verify verbatim without a browser. Supersedes a retracted measurement from the same day which reported PIB as blocked.",
           "source": "analysis/COMPOSITION_SPEC.md §8.1"
         }
       ],
@@ -514,7 +514,7 @@
         },
         {
           "date": "2026-09-09",
-          "observation": "An empty fetch makes a true excerpt and a fabricated one produce identical verdicts. With pib.gov.in blocked, excerpt_on_page returns False for the real quote and False for an invented one, for the same reason, and nothing in the return value says which. The gate fails closed so nothing is wrongly promoted — but the same silence would also mark an ALREADY-VERIFIED source as unverifiable if a re-verification pass ever ran, which is the inverse harm and the one nobody would think to test for. S4 already learned this exact lesson at the proposal layer, where 93 credit-balance errors were recorded as 'searched, found nothing'; the force store has not learned it yet. A verification primitive should distinguish 'the page does not contain this' from 'there was no page'."
+          "observation": "I diagnosed a host-wide block from an API misuse, and only a control caught it. fetch_text returns a (text, verdict) tuple; len() on it is 2 for every URL, so five PIB pages answering '2' read as a blocked host — plausible, because the census three weeks earlier had found eleven genuinely blocked hosts. The false finding reached the spec, the register, a commit message and the session notes, and had already changed a design conclusion: I told the user an unattended crawler could not serve the arc-3 regulatory watch. What broke it was putting example.com and Wikipedia through the same probe and getting '2' back. A probe that returns the SAME answer for every input is reporting on itself, not on the inputs — and the control that would have shown this cost one command."
         }
       ],
       "open_questions": [

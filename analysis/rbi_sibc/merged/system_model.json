@@ -4192,6 +4192,14 @@
       "mechanism": "A higher collateral-free ceiling widens the eligible borrower pool and per-borrower headroom, expanding formal agriculture lending without new collateral",
       "id": "force_kcc_collateral_limit__drives__e_S1_1",
       "channel": "ch_kcc_psl_agri_limits"
+    },
+    {
+      "from": "force_vehicle_scrappage_replacement",
+      "to": "e_S1_4_7",
+      "type": "drives",
+      "polarity": "+",
+      "scope": "inter_group",
+      "mechanism": "Tax and registration concessions claimable only against a Certificate of Deposit make replacing an end-of-life vehicle cheaper than keeping it; the replacement is typically financed, raising vehicle loan origination."
     }
   ],
   "force_instances": [
@@ -4367,7 +4375,7 @@
       "scope_entities": [
         "icl:sibc/Statement1/II"
       ],
-      "source_verification": "excerpt verified verbatim on the live PIB page via the editor's browser (automated fetch is blocked — see note)"
+      "source_verification": "excerpt verified verbatim against the live PIB page (re-verified through the unattended fetch path 2026-09-09)"
     },
     {
       "id": "force_infra_cycle_maturing",
@@ -4440,6 +4448,29 @@
       "instance_of": "ch_kcc_psl_agri_limits",
       "scope_entities": [
         "icl:sibc/Statement1/1"
+      ]
+    },
+    {
+      "id": "force_vehicle_scrappage_replacement",
+      "tier": "force_instance",
+      "force_type": "structural_shift",
+      "label": "Vehicle Scrappage Policy incentives → replacement vehicle purchases (MoRTH, in force since Oct 2021)",
+      "description": "MoRTH's end-of-life vehicle regime pays owners to replace rather than retain. GSR 720(E) (5 Oct 2021) concedes up to 25% of motor vehicle tax on non-transport and 15% on transport vehicles bought against a Certificate of Deposit, and GSR 714(E) (4 Oct 2021) waives the registration fee on the same condition. The incentive is only claimable on a REPLACEMENT purchase, and replacement purchases are typically financed, so the regime lifts vehicle loan origination without any change in underlying demand for vehicles. It is modelled as a structural shift rather than a policy action because the instruments are standing rules whose bite grows with the scrapping network: 62 Registered Vehicle Scrapping Facilities established as at the source date, and MoEFCC's End-of-Life Vehicles (Management) Rules 2024 (S.O. 367(E), 30 Jan 2024) added Extended Producer Responsibility, putting scrapping obligations on vehicle producers. CAVEAT: the SIBC series reports vehicle loans as one line and cannot separate replacement demand from new demand, so this force is directional and cannot be sized from the data it explains.",
+      "non_observable_reason": "A statutory scrapping-incentive regime and the build-out of scrapping facilities; neither is a time-series column in the SIBC CSV",
+      "claim_type": "inference",
+      "domain": "credit_headline",
+      "signal_evidence": [
+        "sibc-pl-vehicle-yoy"
+      ],
+      "source": "PIB — 'Vehicle Scrappage Policy, 2021', Ministry of Road Transport & Highways, 8 August 2024 (Lok Sabha written reply)",
+      "source_url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2042966",
+      "source_verified_date": "2026-09-09",
+      "source_excerpt": "MoRTH has issued GSR 720 (E) dated 5th October 2021 to provide concession in the Motor Vehicle Tax of up to 25% in case of non-transport vehicles",
+      "source_rationale": "PIB (official) records the standing scrapping incentives and confirms they remain in force, with the 2024 EPR rules extending the regime rather than withdrawing it. Vehicle loans grew 18.78% YoY to ₹7.65L Cr at 2026-07-31. Excerpt re-verified verbatim on the live page 2026-09-09, both in the browser and through the unattended fetch path.",
+      "status": "active",
+      "instance_of": "ch_asset_retirement_replacement",
+      "scope_entities": [
+        "icl:sibc/Statement1/4.7"
       ]
     }
   ],

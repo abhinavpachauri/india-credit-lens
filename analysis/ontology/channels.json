@@ -350,6 +350,21 @@
       "lifecycle": "permanent",
       "cross_system_note": "Spans payments acceptance infrastructure (POS terminals) and debit-card POS transaction flow.",
       "promoted_from": "S4 inference (source-verified)"
+    },
+    {
+      "id": "ch_asset_retirement_replacement",
+      "label": "Mandated asset retirement → replacement-purchase credit",
+      "driver_type": "policy_action",
+      "source_concept": "policy:asset_retirement_mandate",
+      "target_concepts": [
+        {
+          "product": "vehicle_loans"
+        }
+      ],
+      "mechanism": "A statutory end-of-life regime — scrapping mandates, registration or tax concessions conditional on surrendering an old asset — converts a stock of ageing assets into dated replacement purchases. The replacement is typically financed, so the mandate raises secured retail origination without any change in underlying demand for the asset class.",
+      "polarity": "+",
+      "lifecycle": "permanent",
+      "promoted_from": "S4 inference (source-verified)"
     }
   ]
 }

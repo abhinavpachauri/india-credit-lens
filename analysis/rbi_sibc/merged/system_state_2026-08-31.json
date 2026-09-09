@@ -531,6 +531,14 @@
       "evidence_total": 2,
       "authored_status": "active",
       "mismatch": false
+    },
+    "force_vehicle_scrappage_replacement": {
+      "state": "active",
+      "instance_of": "ch_asset_retirement_replacement",
+      "evidence_observed": 1,
+      "evidence_total": 1,
+      "authored_status": "active",
+      "mismatch": false
     }
   },
   "edge_states": {
@@ -757,6 +765,13 @@
       "polarity": "+",
       "from": "force_kcc_collateral_limit",
       "to": "e_S1_1"
+    },
+    "force_vehicle_scrappage_replacement->e_S1_4_7": {
+      "state": "active",
+      "type": "drives",
+      "polarity": "+",
+      "from": "force_vehicle_scrappage_replacement",
+      "to": "e_S1_4_7"
     }
   },
   "loop_states": {
@@ -796,7 +811,8 @@
       "force_msp_procurement_growth",
       "force_infra_cycle_maturing",
       "force_eclgs5_guarantee_window",
-      "force_kcc_collateral_limit"
+      "force_kcc_collateral_limit",
+      "force_vehicle_scrappage_replacement"
     ],
     "binding_constraints": [
       "e_S2_2_18__creates_risk__risk_infrastructure_repayment"

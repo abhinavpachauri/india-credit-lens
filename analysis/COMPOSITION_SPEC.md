@@ -220,31 +220,25 @@ path by which non-deterministic inference improves the deterministic backbone.
 
 ### 8.1 Retrieval and verification — the measured bottleneck (added 2026-08-19)
 
-> **REGRESSION, measured 2026-09-09 — `pib.gov.in` now blocks the automated fetch.**
-> `core.source_fetch.fetch_text` returns **2 characters** for every PIB article URL tried,
-> including **PRID 2238004 — the KCC force's own source, which fetched and verified cleanly on
-> 2026-08-02**. Five URL forms tested (bare/www, with and without `reg`/`lang`, both page
-> handlers); all 2 chars. So this is the host, not the URL shape, and not that source going bad.
+> **CORRECTION, 2026-09-09 — an earlier note in this section claimed `pib.gov.in` had begun
+> blocking the automated fetch. That was FALSE and is retracted.**
+> `core.source_fetch.fetch_text` returns a **tuple** `(text, verdict)`. The probe called `len()`
+> on the return value, so every host answered "2" — the length of a two-element tuple — and five
+> PIB URLs answering "2" looked exactly like a host-wide block. A control was not run until later;
+> Wikipedia and `example.com` answered "2" as well, which is what exposed it.
 >
-> Two consequences worth carrying:
-> 1. **Re-verification would now mark good sources bad.** Any pass that re-checks existing
->    `source_excerpt`s against a live fetch will fail the KCC force and any future PIB-sourced
->    force. A blocked channel must never be recorded as a failed excerpt — the `check_error` /
->    `retryable` distinction S4 already learned applies to the *force store* too, where it is not
->    yet implemented.
-> 2. **An empty fetch makes a real excerpt and a fabricated one indistinguishable** — both return
->    False from `excerpt_on_page`, for the same reason. The gate fails closed, which is correct,
->    but it fails *silently*, which is the project's recurring shape. `fetch_text` returning
->    near-empty should be a loud, distinct outcome, not a falsy page.
+> Measured correctly, both primary official hosts are **fully open**: PIB returns 9,320 / 42,879 /
+> 68,483 characters on three article URLs and `rbi.org.in` returns 11,185 on a notification URL,
+> all with verdict `ok`. All three currently sourced SIBC forces — KCC, MSP and vehicle scrappage —
+> re-verify their excerpts through the unattended path.
 >
-> The browser path is unaffected and is now the ONLY path for PIB: page text captured from the
-> editor's browser, verified through the same `excerpt_on_page` anchor. Demonstrated 2026-09-09
-> sourcing `force_msp_procurement_growth` (PIB PRID 2260618) — verbatim excerpt verified,
-> fabricated excerpt rejected, and a true-but-paraphrased excerpt also rejected.
+> **So rung 1 is machine-verifiable and the arc-3 regulatory watch may rely on it.** The 2026-08-19
+> finding above stands unchanged and is the real constraint: what needs a browser is *finding which
+> instrument*, not fetching it.
 >
-> **This is a live constraint on the arc-3 regulatory watch** (`PLAN_2026-09-09.md`): a design
-> that assumes an unattended crawler can verify PIB is already wrong. `rbi.org.in` was not
-> re-probed this session and may still be open.
+> The lesson is the one this section already teaches, turned on its author: an observation became a
+> diagnosis without a control, and the untested diagnosis was about to redirect a build.
+
 
 
 The gate is sound; **retrieval is where proposals die.** Measured 2026-08-19 across the two most
