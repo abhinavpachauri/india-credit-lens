@@ -418,6 +418,17 @@
       },
       "writes": {}
     },
+    "measure_coherence_threshold": {
+      "doc_claims": [],
+      "imports": [],
+      "invokes": [],
+      "path": "analysis/measure_coherence_threshold.py",
+      "reads": {
+        "analysis/signals/registry.json": "low",
+        "analysis/signals/signals.db": "low"
+      },
+      "writes": {}
+    },
     "measure_groundedness": {
       "doc_claims": [],
       "imports": [],

@@ -10,7 +10,8 @@
     "last_foundation_date": "2026-06-11",
     "behavioral_source_draft": "analysis/rbi_sibc/merged/system_model_v3_draft.json",
     "composition_spec_ref": "analysis/COMPOSITION_SPEC.md",
-    "last_updated": "2026-07-31"
+    "last_updated": "2026-08-31",
+    "update_note": "2026-09-09 L2a UPDATE for dataDate 2026-08-31 (July 2026 data). S4 surfaced 29 unexplained movements / 34 proposals. One promotion: force_msp_procurement_growth moved hypothesis → inference, sourced to PIB PRID 2260618 (CCEA kharif MSP, 13 May 2026) — it had carried a 'NEEDS SOURCING' note since authoring because its only evidence was the SIBC series itself, i.e. the effect. No NEW force cleared the source bar this period; the rest of the worklist stays unresolved rather than fabricated."
   },
   "nodes": [
     {
@@ -4348,24 +4349,25 @@
       "tier": "force_instance",
       "force_type": "structural_shift",
       "label": "MSP procurement volumes growing year-on-year",
-      "description": "Government MSP procurement agencies (FCI, state agencies) draw increasing bank credit each kharif season to finance grain purchases. As MSP prices and procurement quantities grow each year, the food credit cycle's peak and trough both rise — creating a secular upward trend on top of the mechanistic seasonal pattern. NEEDS SOURCING: current evidence is the SIBC data itself (the effect). Requires FCI Annual Report or CACP MSP press release as external force evidence.",
+      "description": "Government MSP procurement agencies (FCI, state agencies) draw increasing bank credit each kharif season to finance grain purchases. As MSP prices and procurement quantities grow each year, the food credit cycle's peak and trough both rise — creating a secular upward trend on top of the mechanistic seasonal pattern. SOURCED 2026-09-09: the CCEA approved higher MSP for all 14 kharif crops for Marketing Season 2026-27 on 13 May 2026 (in force across the July 2026 data month), and the same release quantifies the procurement growth this force asserts — 8746 LMT of kharif crops procured over 2014-15 to 2025-26 against 4679 LMT over the preceding decade, with MSP paid to kharif growers rising from Rs 4.75 lakh crore to Rs 18.99 lakh crore across the same two periods. Both the price decision and the volume trend are external to the SIBC series.",
       "non_observable_reason": "Government procurement volumes and MSP price decisions are external policy inputs; not a time-series column in the SIBC CSV",
-      "claim_type": "hypothesis",
+      "claim_type": "inference",
       "domain": "credit_headline",
       "signal_evidence": [
         "sibc-food-credit-yoy",
         "sibc-food-credit-abs"
       ],
-      "source": "RBI SIBC series — food credit sub-category (note: this is the effect, not external force evidence)",
-      "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx",
-      "source_verified_date": "2026-05-07",
-      "source_excerpt": "Food credit shows mechanistic seasonal pattern with secular growth across periods",
+      "source": "PIB — 'Cabinet approves Minimum Support Prices (MSP) for Kharif Crops for Marketing Season 2026-27', Ministry of Agriculture & Farmers Welfare, 13 May 2026",
+      "source_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2260618&reg=3&lang=2",
+      "source_verified_date": "2026-09-09",
+      "source_excerpt": "During the period 2014-15 to 2025-26, procurement of 14 Kharif crops was 8746 LMT while during the period 2004-05 to 2013-14, procurement was 4679 LMT.",
       "source_rationale": "SIBC data confirms the seasonal pattern and secular trend; FCI/CACP external source needed to promote to inference. Cycle 1 of hypothesis clock starts at this FOUNDATION.",
       "status": "active",
       "instance_of": "ch_procurement_policy_food",
       "scope_entities": [
         "icl:sibc/Statement1/II"
-      ]
+      ],
+      "source_verification": "excerpt verified verbatim on the live PIB page via the editor's browser (automated fetch is blocked — see note)"
     },
     {
       "id": "force_infra_cycle_maturing",
