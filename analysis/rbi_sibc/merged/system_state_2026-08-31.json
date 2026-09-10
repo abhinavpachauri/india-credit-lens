@@ -5,7 +5,7 @@
     "schema_version": "4.0",
     "spec_ref": "analysis/SYSTEM_MODEL_SPEC.md §16",
     "computed_from": "signals.db",
-    "signals_observed": 110
+    "signals_observed": 111
   },
   "entity_states": {
     "icl:sibc/Statement1/I": {
@@ -217,8 +217,8 @@
     },
     "icl:sibc/Statement1/x": {
       "direction": 1,
-      "signals": 2,
-      "observed": 2
+      "signals": 3,
+      "observed": 3
     },
     "icl:sibc/Statement1/3.7.1": {
       "direction": 0,
@@ -473,7 +473,7 @@
       "instance_of": "ch_psl_threshold_reclassification",
       "evidence_observed": 1,
       "evidence_total": 1,
-      "authored_status": "watch",
+      "authored_status": "active",
       "mismatch": false
     },
     "force_pli_manufacturing": {
@@ -535,6 +535,22 @@
     "force_vehicle_scrappage_replacement": {
       "state": "active",
       "instance_of": "ch_asset_retirement_replacement",
+      "evidence_observed": 1,
+      "evidence_total": 1,
+      "authored_status": "active",
+      "mismatch": false
+    },
+    "force_psl_education_limit": {
+      "state": "active",
+      "instance_of": "ch_psl_threshold_reclassification",
+      "evidence_observed": 1,
+      "evidence_total": 1,
+      "authored_status": "active",
+      "mismatch": false
+    },
+    "force_psl_renewable_limit": {
+      "state": "active",
+      "instance_of": "ch_psl_threshold_reclassification",
       "evidence_observed": 1,
       "evidence_total": 1,
       "authored_status": "active",
@@ -772,6 +788,20 @@
       "polarity": "+",
       "from": "force_vehicle_scrappage_replacement",
       "to": "e_S1_4_7"
+    },
+    "force_psl_education_limit->e_S1_v": {
+      "state": "active",
+      "type": "drives",
+      "polarity": "+",
+      "from": "force_psl_education_limit",
+      "to": "e_S1_v"
+    },
+    "force_psl_renewable_limit->e_S1_vi": {
+      "state": "active",
+      "type": "drives",
+      "polarity": "+",
+      "from": "force_psl_renewable_limit",
+      "to": "e_S1_vi"
     }
   },
   "loop_states": {
@@ -812,7 +842,9 @@
       "force_infra_cycle_maturing",
       "force_eclgs5_guarantee_window",
       "force_kcc_collateral_limit",
-      "force_vehicle_scrappage_replacement"
+      "force_vehicle_scrappage_replacement",
+      "force_psl_education_limit",
+      "force_psl_renewable_limit"
     ],
     "binding_constraints": [
       "e_S2_2_18__creates_risk__risk_infrastructure_repayment"

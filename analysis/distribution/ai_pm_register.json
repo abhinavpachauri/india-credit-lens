@@ -425,6 +425,13 @@
           "date": "2026-09-10",
           "how_measured": "Per-force inspection against the correct document. The credit-card force's excerpt carried a second clause — 'and shall not count such cards in their outstanding card base' — and the Directions contain none of 'card base', 'outstanding card', 'number of cards' or 'shall not count'. That clause was invented, and it is the clause the force's whole mechanism rested on; the closure rule is real, so the reporting effect is now stated as our inference rather than attributed to RBI. The Paytm force cited 29 February 2024, a deadline superseded by the 16 February release extending it to 15 March 2024. Separately, my own 2026-09-09 audit wrongly reported PLI's ₹1.76 lakh crore as absent — a regex splitting on the decimal point — so the audit produced a false negative of the same shape as the tuple bug the day before.",
           "source": "analysis/rbi_atm_pos/merged/system_model.json"
+        },
+        {
+          "metric": "Force-source audit — end state after the full sourcing pass",
+          "value": "NOT ON PAGE 11 → 1 (and that one is a hypothesis); verifies 7 → 17 of 20 forces; forces claiming 'inference' without a verified quote: 0",
+          "date": "2026-09-10",
+          "how_measured": "audit_force_sources.py over all force instances in both models after repointing, restructuring and re-sourcing. The single remaining not-on-page force is force_infra_cycle_maturing, correctly demoted to hypothesis because it cites our own SIBC series. The other two non-verifying outcomes are a force with no source at all (hypothesis) and one whose host, npci.org.in, is genuinely blocked — reported apart from the excerpt verdict.",
+          "source": "analysis/guards/audit_force_sources.py"
         }
       ],
       "observations": [
@@ -551,6 +558,14 @@
         {
           "date": "2026-09-10",
           "observation": "An unverifiable citation hides two different defects, and only reading each one tells you which. Of eleven force excerpts that failed the anchor, most were harmless paraphrase — but inside them sat a clause that was simply invented ('shall not count such cards in their outstanding card base', absent from the Directions in every wording), a claim that contradicted its own source (cost caps read as loan limits), a force citing its own effect as its cause, and a superseded regulatory date still being asserted. A blanket demotion would have treated all eleven alike and taught nothing; a blanket pass had been the status quo for months. The useful unit of work is per-claim reading, and the audit's value is that it produces the shortlist, not the verdict."
+        },
+        {
+          "date": "2026-09-10",
+          "observation": "Three of my own probes produced false negatives in two days, and each was invisible until something else contradicted it. len() on a (text, verdict) tuple made every host look blocked; a regex splitting on the decimal point made PLI's ₹1.76 lakh crore look absent from a page that contains it; a region-finder that skipped the first 2000 characters made an SGB press release look empty when it carries its own price sentence. All three were written down as findings before being checked, and one of them changed a design recommendation. The audit's verdicts are only as good as the probe underneath them, and a verification tool is exactly the kind of code where a false negative is most expensive — it indicts real evidence. Controls are cheap: one known-good input per probe would have caught all three."
+        },
+        {
+          "date": "2026-09-10",
+          "observation": "A proposal can be right about the effect and wrong about the instrument, and the sourcing pass is where that gets settled. S4 asked for an education interest-subvention renewal and an MNRE rooftop-solar subsidy; neither was the change that actually falls in this window, and MNRE is not even allowlisted. The instrument for both was the same document — RBI's PSL Directions 2025, effective 1 April 2025 — raising the education ceiling ₹20L→₹25L and the renewable ceiling ₹30cr→₹35cr. The same document also settled a third force that had been demoted the previous day on my own mistaken reading. Searching for the proposal's named target would have found nothing three times; searching for what changed in the window found one document that served all three."
         }
       ],
       "open_questions": [

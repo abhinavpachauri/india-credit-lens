@@ -358,7 +358,10 @@
       ],
       "claim_type": "hypothesis",
       "from_pipeline": "sibc",
-      "status": "proposed"
+      "status": "promoted",
+      "promoted_as": "force_psl_education_limit",
+      "promoted_on": "2026-09-10",
+      "promotion_note": "Promoted 2026-09-10 — but NOT via the instrument proposed. The proposal sought an education interest-subvention renewal; the change that actually falls in this window is the PSL education ceiling rising ₹20L → ₹25L in the RBI PSL Directions 2025, effective 1 Apr 2025."
     },
     {
       "kind": "channel",
@@ -413,7 +416,10 @@
       ],
       "claim_type": "hypothesis",
       "from_pipeline": "sibc",
-      "status": "proposed"
+      "status": "promoted",
+      "promoted_as": "force_psl_renewable_limit",
+      "promoted_on": "2026-09-10",
+      "promotion_note": "Promoted 2026-09-10 — but NOT via the instrument proposed. The proposal sought an MNRE rooftop-solar subsidy (mnre.gov.in is not allowlisted); the better-evidenced driver on an official host is the PSL renewable ceiling rising ₹30cr → ₹35cr, effective 1 Apr 2025."
     },
     {
       "kind": "channel",
@@ -443,7 +449,17 @@
       ],
       "claim_type": "hypothesis",
       "from_pipeline": "sibc",
-      "status": "proposed"
+      "status": "proposed",
+      "attempts": [
+        {
+          "rung": "chrome",
+          "date": "2026-09-10",
+          "verdict": "not_found",
+          "retryable": false,
+          "target": "NABARD SHG-Bank Linkage expansion instrument",
+          "note": "Honest null. nabard.org is not on the allowlist, and the RBI PSL Directions 2025 (id=12799) restate Weaker Sections at para 17.1 without a change in this window that would drive the 15.18% YoY. Not fabricated; needs either an allowlist decision on NABARD or a PIB release carrying a dated SHG-linkage change."
+        }
+      ]
     },
     {
       "kind": "channel",

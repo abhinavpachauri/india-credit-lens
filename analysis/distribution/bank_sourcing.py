@@ -56,7 +56,12 @@ ALLOWLIST = {
                # rating-agency set (India Ratings/Fitch); MFIN = microfinance SRO; apex industry
                # bodies — added 2026-08-02.
                "equifax.co.in", "experian.in", "indiaratings.co.in", "mfinindia.com",
-               "ficci.in", "assocham.org", "cii.in"},
+               "ficci.in", "assocham.org", "cii.in",
+               # SIDBI — added 2026-09-10. The institution is statutory (SIDBI Act, 1989), but what
+               # we cite from it is research: MSME Pulse, co-produced with TransUnion CIBIL. Filed
+               # as T2 rather than T1 deliberately, so a research report can never satisfy a
+               # requirement for an official instrument.
+               "sidbi.in"},
     # T3 — named financial press (the fixed masthead allowlist, §11.2-R)
     "press": {"economictimes.indiatimes.com", "business-standard.com", "livemint.com",
               "thehindubusinessline.com", "financialexpress.com", "moneycontrol.com",

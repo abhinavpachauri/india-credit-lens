@@ -1322,6 +1322,7 @@
       "data_series": null,
       "signal_ids": [
         "sibc-psl-weaker-sections-yoy",
+        "sibc-psl-weaker-yoy",
         "sibc-psl-yoy-scan"
       ],
       "annotation_ids": [],
@@ -4200,6 +4201,22 @@
       "polarity": "+",
       "scope": "inter_group",
       "mechanism": "Tax and registration concessions claimable only against a Certificate of Deposit make replacing an end-of-life vehicle cheaper than keeping it; the replacement is typically financed, raising vehicle loan origination."
+    },
+    {
+      "from": "force_psl_education_limit",
+      "to": "e_S1_v",
+      "type": "drives",
+      "polarity": "+",
+      "scope": "inter_group",
+      "mechanism": "A higher PSL ceiling brings larger education loans inside priority-sector classification, so reported PSL education credit rises partly by reclassification rather than by new lending."
+    },
+    {
+      "from": "force_psl_renewable_limit",
+      "to": "e_S1_vi",
+      "type": "drives",
+      "polarity": "+",
+      "scope": "inter_group",
+      "mechanism": "A higher PSL ceiling admits larger renewable-energy projects to priority-sector classification, lifting reported PSL renewable credit through eligibility as well as origination."
     }
   ],
   "force_instances": [
@@ -4208,7 +4225,7 @@
       "tier": "force_instance",
       "force_type": "macro_factor",
       "label": "Gold price surge (2023–2026)",
-      "description": "A sustained multi-year increase in gold prices in INR terms, driven by global safe-haven demand and rupee depreciation. Increases the effective LTV of gold-backed collateral, expanding the pool of eligible borrowers and the maximum loan amount per gram. Affects all lenders with gold loan exposure. An external commodity price not captured in the SIBC CSV.",
+      "description": "Gold collateral is priced daily, so a rising gold price raises the loan value of an unchanged quantity of pledged jewellery. The book can therefore grow without a single additional borrower or gram — which is why gold loan growth cannot be read as demand. RBI's own Sovereign Gold Bond issue-price releases give the benchmark: the IBJA 999-purity average worked out to ₹5,611 per gram at the March 2023 issue and ₹6,263 per gram at the February 2024 issue, and gold has continued appreciating since. Loans against gold jewellery is the 'toward' entity in the personal-loans mix, so this force is load-bearing for that reading.",
       "non_observable_reason": "An external commodity market price; not a time-series column in the SIBC CSV",
       "claim_type": "inference",
       "domain": "retail",
@@ -4216,18 +4233,18 @@
         "sibc-pl-gold-yoy",
         "sibc-pl-gold-pos-streak"
       ],
-      "source": "RBI Press Releases – Sovereign Gold Bond Scheme (March 2023: prid=55327; Feb 2024: prid=57299; Feb 2026 redemption)",
-      "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx?prid=55327",
-      "source_verified_date": "2026-04-20",
-      "source_excerpt": "Gold price per gram: ₹5,611 (Mar 2023) → ₹6,263 (Feb 2024) → ₹15,440 redemption price (Feb 2026)",
-      "source_rationale": "RBI SGB redemption prices confirm the price trajectory; LTV expansion mechanism is standard secured lending practice",
+      "source": "RBI Press Release, 'Sovereign Gold Bond Scheme 2023-24 Series IV – Issue Price', 9 February 2024 (anchor); compared against 'Sovereign Gold Bond Scheme 2022-23 Series IV – Issue Price', 3 March 2023",
+      "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx?prid=57299",
+      "source_verified_date": "2026-09-10",
+      "source_excerpt": "works out to ₹6,263/- (Rupees Six thousand two hundred and sixty three only) per gram of gold",
+      "source_rationale": "Restructured 2026-09-10, not re-sourced — the figures were always real. The old excerpt asserted a PRICE SERIES across three dates, which single-page verbatim verification can never satisfy however true it is: an excerpt is checked against one page. The anchor is now one verbatim sentence from the February 2024 release, with the March 2023 release carried as a corroboration pair so the comparison stays auditable rather than asserted. NB the 2026-09-09 audit note claimed prid=55327 'returns no substantive content'; that was wrong — the page returns 7,413 characters including its own price sentence, and the note was a false negative of the audit's own region-finding. The third figure in the old excerpt (a ₹15,440 February 2026 redemption price) is NOT carried forward because it was not verified; add a current SGB release as a fresher anchor when one is to hand.",
       "status": "active",
       "instance_of": "ch_collateral_price_secured",
       "scope_entities": [
         "icl:sibc/Statement1/4.8"
       ],
-      "source_verified": false,
-      "source_audit_note": "2026-09-09 audit: excerpt not on cited page. Press release prid=55327 returns no substantive content. The excerpt is an assembled series of gold prices across three dates, i.e. an authored summary rather than a quotation, so it could never have verified."
+      "source_corroboration_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx?prid=55327",
+      "source_corroboration_excerpt": "works out to ₹5,611/- (Rupees Five thousand six hundred eleven only) per gram of gold"
     },
     {
       "id": "force_rbi_unsecured_tightening",
@@ -4259,20 +4276,20 @@
       "id": "force_psl_limit_revision",
       "tier": "force_instance",
       "force_type": "policy_action",
-      "label": "RBI PSL housing loan ceiling revision (Oct 2024)",
-      "description": "RBI revised PSL-eligible housing loan ceilings upward (metro: ₹35L → ₹45L; non-metro: ₹25L → ₹35L). The revision reclassifies existing below-threshold on-book loans into PSL, creating a structural one-time step-up in reported PSL housing credit. Also ripples into export credit eligibility. A policy action that distorts reported growth without representing new lending.",
+      "label": "PSL housing loan ceilings raised (RBI PSL Directions 2025, eff. 1 Apr 2025)",
+      "description": "Raising a PSL ceiling reclassifies existing lending rather than creating new lending: a loan already on the book becomes priority-sector eligible the day the limit passes it. The 2025 Directions replaced the 2020 limits of ₹35 lakh (metropolitan) and ₹25 lakh (other centres) with a three-band table — ₹50 lakh for centres of 50 lakh population and above, ₹45 lakh for 10–50 lakh, ₹35 lakh below 10 lakh, against dwelling-cost caps of ₹63/₹57/₹44 lakh — effective 1 April 2025, inside the trailing-12-month window. Reported PSL housing growth therefore mixes reclassification with origination, which is what gap_psl_reclassification records.",
       "non_observable_reason": "A discrete regulatory amendment to the PSL Master Direction; not a time-series column in the SIBC CSV",
-      "claim_type": "hypothesis",
+      "claim_type": "inference",
       "domain": "psl",
       "signal_evidence": [
         "sibc-psl-housing-yoy"
       ],
-      "source": "RBI Master Direction – Priority Sector Lending (Targets and Classification), Amendment Oct 2024",
-      "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=11959",
-      "source_verified_date": "2026-04-19",
-      "source_excerpt": "Housing loan limits under PSL revised: metro ₹35L→₹45L, non-metro ₹25L→₹35L, effective Oct 2024.",
-      "source_rationale": "DEMOTED inference → hypothesis 2026-09-10. The force asserts PSL housing loan limits were revised to ₹45L metro / ₹35L non-metro. The cited Master Direction gives ₹35 lakh (metropolitan) and ₹25 lakh (other centres) as LOAN limits, with ₹45 lakh and ₹30 lakh as DWELLING-UNIT COST caps — the force read cost caps as loan limits. The causal claim (a PSL threshold change drives reported housing reclassification) may well hold, but it cannot stand as a sourced inference on a citation that contradicts it. Re-source against the current PSL Master Direction.",
-      "status": "watch",
+      "source": "RBI Master Direction — Reserve Bank of India (Priority Sector Lending – Targets and Classification) Directions, 2025, 24 March 2025, effective 1 April 2025",
+      "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=12799",
+      "source_verified_date": "2026-09-10",
+      "source_excerpt": "Centres with population of 10 lakh and above but below 50 lakh 45 57",
+      "source_rationale": "Corrected and restored 2026-09-10. The force cited the SUPERSEDED 2020 Directions (id=11959) and dated the change October 2024; the operative instrument is the 2025 Directions (id=12799), effective 1 April 2025. NB the 2026-09-09 audit demoted this force on the reasoning that it had read dwelling-cost caps as loan limits — that reasoning was WRONG. Checked against the 2025 Directions, its ₹45L/₹35L figures are the new LOAN limits for the 10–50 lakh and sub-10-lakh bands. The claim was right and the citation was stale, so claim_type returns to inference.",
+      "status": "active",
       "instance_of": "ch_psl_threshold_reclassification",
       "scope_entities": [
         "icl:sibc/Statement1/iv",
@@ -4313,7 +4330,7 @@
       "tier": "force_instance",
       "force_type": "structural_shift",
       "label": "MSME formalisation via UDYAM registration + GST data",
-      "description": "Progressive expansion of UDYAM registration and GST transaction data has made MSMEs underwritable at scale for the first time. Banks that invested in MSME origination infrastructure (UDYAM-linked underwriting, GST-based cash flow analysis) can now originate credit at volumes previously unachievable due to information asymmetry. A structural shift in credit market access, not a cyclical phenomenon.",
+      "description": "Formalisation makes small borrowers underwritable. The Udyam Registration Portal (from 1 July 2020) and the Udyam Assist Platform (from 11 January 2023) have brought 7.83 crore enterprises onto a government register as at 28 February 2026, giving lenders a verifiable identity and size classification where previously there was none. A registered enterprise can be underwritten, guaranteed and classified as priority sector; an unregistered one largely cannot. This is the mechanism behind Micro and Small credit growth that is not explained by demand alone. NOTE ON SCOPE: the register itself is the sourced part. The further claim that major private banks have adopted GST-linked underwriting is OUR inference about market practice, not something the cited release states, and it is deliberately not attributed to the source.",
       "non_observable_reason": "Aggregate improvement in MSME underwritability via registry and tax data; not a time-series column in the SIBC CSV",
       "claim_type": "inference",
       "domain": "industry",
@@ -4321,18 +4338,16 @@
         "sibc-msme-micro-small-yoy",
         "sibc-msme-micro-small-fy-acceleration"
       ],
-      "source": "SIDBI MSME Pulse Special Edition Report, June 2025",
-      "source_url": "https://www.sidbi.in/msme-pulse",
-      "source_verified_date": "2026-04-20",
-      "source_excerpt": "Formal credit penetration rising among UDYAM-registered MSMEs; GST-linked underwriting adopted by major private banks",
-      "source_rationale": "SIDBI directly confirms UDYAM + GST as the underwriting mechanism; MSME credit acceleration in SIBC data is the observable effect",
+      "source": "PIB — Ministry of Micro, Small and Medium Enterprises, 'Formalisation of MSMEs' (Udyam Registration Portal / Udyam Assist Platform), 30 March 2026",
+      "source_url": "https://pib.gov.in/PressReleasePage.aspx?PRID=2246892&reg=3&lang=1",
+      "source_verified_date": "2026-09-10",
+      "source_excerpt": "over 7.83 crore enterprises have registered on URP and UAP as of 28.02.2026",
+      "source_rationale": "Re-sourced 2026-09-10. Previously cited sidbi.in/msme-pulse, a landing page with no quotable text, on a host that was not then allowlisted. SIDBI is now on the allowlist at T2 (statutory institution, but MSME Pulse is research, not a regulatory instrument); this force is nonetheless better served by the official register itself. Excerpt verbatim and machine-verified. The GST-underwriting half of the old excerpt was an authored generalisation and has been moved into the description as our own inference.",
       "status": "active",
       "instance_of": "ch_formalisation_underwritability",
       "scope_entities": [
         "icl:sibc/Statement1/2.1"
-      ],
-      "source_verified": false,
-      "source_audit_note": "2026-09-09 audit: excerpt not on cited page. Two problems: sidbi.in is NOT on the allowlist (tier resolves to None), and the URL is a landing page carrying no quotable text. The excerpt is an authored generalisation."
+      ]
     },
     {
       "id": "force_nbfc_regulatory_recovery",
@@ -4480,6 +4495,52 @@
       "instance_of": "ch_asset_retirement_replacement",
       "scope_entities": [
         "icl:sibc/Statement1/4.7"
+      ]
+    },
+    {
+      "id": "force_psl_education_limit",
+      "tier": "force_instance",
+      "force_type": "policy_action",
+      "label": "PSL education loan ceiling raised ₹20L → ₹25L (RBI PSL Directions 2025, eff. 1 Apr 2025)",
+      "description": "A higher PSL ceiling brings larger education loans inside priority-sector classification, so reported PSL education credit rises partly by reclassification rather than by new lending. The 2025 Directions raise the per-individual limit from ₹20 lakh under the 2020 Directions to ₹25 lakh, effective 1 April 2025 — inside the trailing-12-month window. PSL educational loans grew 16.70% YoY at 2026-07-31 against 13.71% for the personal-loans education line, and the gap between the two is where the reclassification sits.",
+      "non_observable_reason": "A regulatory classification threshold; not a time-series column in the SIBC CSV",
+      "claim_type": "inference",
+      "domain": "psl",
+      "signal_evidence": [
+        "sibc-psl-education-yoy"
+      ],
+      "source": "RBI Master Direction — Reserve Bank of India (Priority Sector Lending – Targets and Classification) Directions, 2025, 24 March 2025, effective 1 April 2025",
+      "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=12799",
+      "source_excerpt": "not exceeding ₹25 lakh will be considered as eligible for priority sector classification",
+      "source_verified_date": "2026-09-10",
+      "source_rationale": "Authored 2026-09-10 from S4 proposal [4] (2026-08-31), which sought an education interest-subvention instrument. The subvention was not the change in this window; the PSL ceiling was. Baseline ₹20 lakh verified on the superseded 2020 Directions (id=11959); excerpt machine-verified.",
+      "status": "active",
+      "instance_of": "ch_psl_threshold_reclassification",
+      "scope_entities": [
+        "icl:sibc/Statement1/v"
+      ]
+    },
+    {
+      "id": "force_psl_renewable_limit",
+      "tier": "force_instance",
+      "force_type": "policy_action",
+      "label": "PSL renewable-energy loan ceiling raised ₹30cr → ₹35cr (RBI PSL Directions 2025, eff. 1 Apr 2025)",
+      "description": "A higher PSL ceiling admits larger renewable-energy projects to priority-sector classification, lifting reported PSL renewable credit through eligibility as well as origination. The 2025 Directions raise the per-borrower limit for renewable-energy power generators and public utilities from ₹30 crore under the 2020 Directions to ₹35 crore, effective 1 April 2025 — inside the trailing-12-month window; the individual-household limit stays ₹10 lakh. PSL renewable energy grew 31.70% YoY at 2026-07-31, the fastest PSL sub-category, though on a small ₹16,014 crore book — the speed should never be published without that size.",
+      "non_observable_reason": "A regulatory classification threshold; not a time-series column in the SIBC CSV",
+      "claim_type": "inference",
+      "domain": "psl",
+      "signal_evidence": [
+        "sibc-psl-renewable-yoy"
+      ],
+      "source": "RBI Master Direction — Reserve Bank of India (Priority Sector Lending – Targets and Classification) Directions, 2025, 24 March 2025, effective 1 April 2025",
+      "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=12799",
+      "source_excerpt": "Bank loans up to a limit of ₹35 crore to borrowers for renewable energy-based power generators",
+      "source_verified_date": "2026-09-10",
+      "source_rationale": "Authored 2026-09-10 from S4 proposal [7] (2026-08-31), which sought a rooftop-solar subsidy instrument (MNRE, not allowlisted). The PSL ceiling is the better-evidenced driver and is on an official host. Baseline ₹30 crore verified on the superseded 2020 Directions (id=11959).",
+      "status": "active",
+      "instance_of": "ch_psl_threshold_reclassification",
+      "scope_entities": [
+        "icl:sibc/Statement1/vi"
       ]
     }
   ],
