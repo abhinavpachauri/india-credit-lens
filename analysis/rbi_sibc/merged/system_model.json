@@ -4262,7 +4262,7 @@
       "label": "RBI PSL housing loan ceiling revision (Oct 2024)",
       "description": "RBI revised PSL-eligible housing loan ceilings upward (metro: ₹35L → ₹45L; non-metro: ₹25L → ₹35L). The revision reclassifies existing below-threshold on-book loans into PSL, creating a structural one-time step-up in reported PSL housing credit. Also ripples into export credit eligibility. A policy action that distorts reported growth without representing new lending.",
       "non_observable_reason": "A discrete regulatory amendment to the PSL Master Direction; not a time-series column in the SIBC CSV",
-      "claim_type": "inference",
+      "claim_type": "hypothesis",
       "domain": "psl",
       "signal_evidence": [
         "sibc-psl-housing-yoy"
@@ -4271,8 +4271,8 @@
       "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=11959",
       "source_verified_date": "2026-04-19",
       "source_excerpt": "Housing loan limits under PSL revised: metro ₹35L→₹45L, non-metro ₹25L→₹35L, effective Oct 2024.",
-      "source_rationale": "Amendment directly states the revised ceilings; the reclassification effect is inferred from the step-up in PSL housing data coinciding with the amendment date",
-      "status": "active",
+      "source_rationale": "DEMOTED inference → hypothesis 2026-09-10. The force asserts PSL housing loan limits were revised to ₹45L metro / ₹35L non-metro. The cited Master Direction gives ₹35 lakh (metropolitan) and ₹25 lakh (other centres) as LOAN limits, with ₹45 lakh and ₹30 lakh as DWELLING-UNIT COST caps — the force read cost caps as loan limits. The causal claim (a PSL threshold change drives reported housing reclassification) may well hold, but it cannot stand as a sourced inference on a citation that contradicts it. Re-source against the current PSL Master Direction.",
+      "status": "watch",
       "instance_of": "ch_psl_threshold_reclassification",
       "scope_entities": [
         "icl:sibc/Statement1/iv",
@@ -4297,18 +4297,16 @@
       ],
       "source": "PIB Press Note – PLI Scheme: Powering India's Industrial Renaissance, NoteId 155082, March 2025",
       "source_url": "https://www.pib.gov.in/PressNoteDetails.aspx?NoteId=155082&ModuleId=3&reg=3&lang=2",
-      "source_verified_date": "2026-04-20",
-      "source_excerpt": "Projects implemented over 2-3 years; by 2025 realized investments rose to ₹1.76 lakh crore as projects shifted to active implementation",
-      "source_rationale": "PIB confirms 2-3yr implementation lag and FY25 capex surge; simultaneous strengthening across engineering/chemicals/metals sub-sectors confirms PLI as common driver",
+      "source_verified_date": "2026-09-10",
+      "source_excerpt": "This momentum carried into 2025, with realized investments rising to about ₹1.76 lakh crore with 806 approved applications as more projects shifted from approval to active implementation",
+      "source_rationale": "Excerpt corrected 2026-09-10 to the page's own sentence. The 2026-09-09 audit first reported ₹1.76 lakh crore as absent from the page; that was a regex artefact of splitting on the decimal point — the figure is present and the force's claim was substantively right, only paraphrased. Machine-verified.",
       "status": "active",
       "instance_of": "ch_industrial_capex_supplychain",
       "scope_entities": [
         "icl:sibc/Statement2/2.13",
         "icl:sibc/Statement2/2.14",
         "icl:sibc/Statement2/2.9"
-      ],
-      "source_verified": false,
-      "source_audit_note": "2026-09-09 audit: excerpt not on cited page. The cited PIB page carries PLI investment figures (₹67,690 cr automobile, ₹48,120 cr solar PV, ₹8,910 cr food processing) but not the ₹1.76 lakh crore the excerpt states. Number needs re-sourcing."
+      ]
     },
     {
       "id": "force_msme_formalisation",
@@ -4393,7 +4391,7 @@
       "label": "Infrastructure supercycle completing (FY22–24)",
       "description": "Large infrastructure projects (highways, ports, power, urban) awarded in FY22-24 are transitioning from the construction/drawdown phase to the operations/repayment phase. This structural shift suppresses new credit origination even as existing project books remain large, creating a net drag on infrastructure credit growth. The next capex cycle (renewables, data centres) has not yet scaled to replace it.",
       "non_observable_reason": "Infrastructure project lifecycle phases are not captured as a CSV column; the transition is visible only through aggregate credit deceleration",
-      "claim_type": "inference",
+      "claim_type": "hypothesis",
       "domain": "industry",
       "signal_evidence": [
         "sibc-infra-sub-yoy-scan"
@@ -4402,8 +4400,8 @@
       "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx",
       "source_verified_date": "2026-04-19",
       "source_excerpt": "Infrastructure credit FY growth sustained below system average across ≥3 consecutive periods",
-      "source_rationale": "Multi-period underperformance pattern is consistent with the operations-phase rotation hypothesis; CRISIL/ICRA infrastructure sector report would strengthen external evidence",
-      "status": "active",
+      "source_rationale": "DEMOTED inference → hypothesis 2026-09-10. Not externally sourced: source_url is the bare RBI press-release landing page with no release id, and the source field names our own SIBC merged series, so the force offers its own effect as its cause. A maturing project cycle is a real hypothesis and is kept as one; it becomes an inference when an external instrument or report evidences the capex phase.",
+      "status": "watch",
       "instance_of": "ch_project_lifecycle_origination",
       "scope_entities": [
         "icl:sibc/Statement2/2.18"

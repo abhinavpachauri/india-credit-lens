@@ -411,6 +411,20 @@
           "date": "2026-09-09",
           "how_measured": "Per-force inspection rather than a single pass/fail. Vocabulary overlap and longest verbatim run separated authored summaries (high vocabulary, zero verbatim run) from citations pointing at the wrong document (low vocabulary). Two were repaired to verbatim quotes from the correct page (force_rbi_unsecured_tightening cited Id=12569 which carries no risk-weight text at all; the circular is Id=12567), one was a quote truncated mid-phrase, and force_psl_limit_revision was found to CONTRADICT its source — it reports ₹45L/₹35L as revised PSL housing loan limits where the Master Direction gives ₹35L/₹25L as loan limits and ₹45L/₹30L as dwelling-cost caps.",
           "source": "analysis/guards/audit_force_sources.py"
+        },
+        {
+          "metric": "Force-source audit — after the repointing/demotion pass",
+          "value": "NOT ON PAGE 11 → 4; verifies 7 → 12; forces still claiming 'inference' without a verifiable quote: 2",
+          "date": "2026-09-10",
+          "how_measured": "Re-ran audit_force_sources.py over all 18 force instances. Three were repointed to the correct document and machine-verified (credit-card lifecycle to the Credit Card MD id=12300, Paytm to prid=57345, PLI excerpt corrected to the page's own sentence). Two were demoted inference → hypothesis because the defect is in the CLAIM, not the citation. The remaining two that still claim to be sourced (gold price surge, MSME formalisation) need an editorial decision rather than a search: one quotes an assembled price series that no single page can carry, the other cites a non-allowlisted landing page.",
+          "source": "analysis/guards/audit_force_sources.py"
+        },
+        {
+          "metric": "Force-source audit — fabricated vs paraphrased, once each failure was read",
+          "value": "1 invented clause, 2 wrong documents, 1 superseded date, 1 self-citing force, 1 claim contradicting its source, 1 false-negative of my own audit",
+          "date": "2026-09-10",
+          "how_measured": "Per-force inspection against the correct document. The credit-card force's excerpt carried a second clause — 'and shall not count such cards in their outstanding card base' — and the Directions contain none of 'card base', 'outstanding card', 'number of cards' or 'shall not count'. That clause was invented, and it is the clause the force's whole mechanism rested on; the closure rule is real, so the reporting effect is now stated as our inference rather than attributed to RBI. The Paytm force cited 29 February 2024, a deadline superseded by the 16 February release extending it to 15 March 2024. Separately, my own 2026-09-09 audit wrongly reported PLI's ₹1.76 lakh crore as absent — a regex splitting on the decimal point — so the audit produced a false negative of the same shape as the tuple bug the day before.",
+          "source": "analysis/rbi_atm_pos/merged/system_model.json"
         }
       ],
       "observations": [
@@ -533,6 +547,10 @@
         {
           "date": "2026-09-09",
           "observation": "A trust anchor only covers what it was pointed at, and nobody re-points it backwards. excerpt_on_page was built on 2026-07-29 and every source added since verifies; every force authored before it fails, 11 of 18 at audit start, all of them carrying claim_type 'inference'. validate_system_model runs on both gates every ingestion and could never have caught this, because it checks that sourcing is PRESENT and verity needs the network. So the causal layer accumulated citations nobody could check while two gates reported green — including one force whose source is our own SIBC series, i.e. it cites its own effect as its cause, and one whose numbers contradict the document it points at. Third instance this session of the same shape: a check's population is a design decision, and nothing measures population."
+        },
+        {
+          "date": "2026-09-10",
+          "observation": "An unverifiable citation hides two different defects, and only reading each one tells you which. Of eleven force excerpts that failed the anchor, most were harmless paraphrase — but inside them sat a clause that was simply invented ('shall not count such cards in their outstanding card base', absent from the Directions in every wording), a claim that contradicted its own source (cost caps read as loan limits), a force citing its own effect as its cause, and a superseded regulatory date still being asserted. A blanket demotion would have treated all eleven alike and taught nothing; a blanket pass had been the status quo for months. The useful unit of work is per-claim reading, and the audit's value is that it produces the shortlist, not the verdict."
         }
       ],
       "open_questions": [

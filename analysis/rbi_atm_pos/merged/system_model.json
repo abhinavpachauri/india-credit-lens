@@ -1989,7 +1989,7 @@
       "id": "force_rbi_paytm_action",
       "tier": "force_instance",
       "force_type": "policy_action",
-      "label": "RBI enforcement action against Paytm Payments Bank (Jan–Apr 2026)",
+      "label": "RBI enforcement action against Paytm Payments Bank (deposits/top-ups barred after 15 Mar 2024)",
       "description": "RBI directed Paytm Payments Bank Ltd to cease accepting deposits and new credit transactions from February 2024. As the largest single issuer of payment bank debit cards, the wind-down caused an institutional exit from the debit card market, triggering a large single-period debit card purge and payment bank share collapse.",
       "non_observable_reason": "A discrete regulatory enforcement action against a specific institution; not a time-series column in the ATM/POS CSV",
       "claim_type": "inference",
@@ -1999,19 +1999,17 @@
         "dc-psb-share",
         "dc-category-share-scan"
       ],
-      "source": "RBI Press Release 2024-2025/1589 — Paytm Payments Bank Limited: directions under section 35A",
-      "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx?prid=57403",
-      "source_verified_date": "2026-06-10",
-      "source_excerpt": "RBI directs Paytm Payments Bank to stop accepting new deposits or top-ups with effect from February 29, 2024",
-      "source_rationale": "RBI press release directly confirms the enforcement action; debit card base contraction and payment bank share collapse in Apr 2026 data confirms the impact",
+      "source": "RBI Press Release, 'Action against Paytm Payments Bank Ltd under Section 35A of the Banking Regulation Act, 1949', 16 February 2024",
+      "source_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx?prid=57345",
+      "source_verified_date": "2026-09-10",
+      "source_excerpt": "No further deposits or credit transactions or top ups shall be allowed in any customer accounts, prepaid instruments, wallets, FASTags, National Common Mobility Cards, etc. after March 15, 2024",
+      "source_rationale": "Repointed 2026-09-10; prid=57403 now returns only site navigation. The force also carried the SUPERSEDED deadline: it said restrictions took effect 29 February 2024, but the 16 February 2024 release extended that to 15 March 2024 in partial modification of the 31 January 2024 Directions. Date corrected in the label and the excerpt is the operative sentence.",
       "status": "retired",
       "retire_period": "2026-04-30",
       "instance_of": "ch_institutional_exit_card_stock",
       "scope_entities": [
         "icl:atm_pos/cards/debit_cards"
-      ],
-      "source_verified": false,
-      "source_audit_note": "2026-09-09 audit: excerpt not on cited page. Press release prid=57403 now returns only site navigation — the release appears to have moved. Claim is widely documented; the CITATION needs replacing."
+      ]
     },
     {
       "id": "force_rbi_card_lifecycle_norms",
@@ -2025,18 +2023,16 @@
       "signal_evidence": [
         "cc-outstanding-yoy"
       ],
-      "source": "RBI Master Direction on Credit Card and Debit Card Issuance (RBI/2022-23/86), Section 8",
-      "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=12156",
-      "source_verified_date": "2026-06-10",
-      "source_excerpt": "Credit card issuers shall close credit card accounts that have not been used for a continuous period as per Board-approved policy and shall not count such cards in their outstanding card base",
-      "source_rationale": "Master Direction Section 8 directly mandates inactive card closure. The periodic purge-and-recovery pattern in cc-outstanding is consistent with this regulatory requirement",
+      "source": "RBI Master Direction – Credit Card and Debit Card – Issuance and Conduct Directions, 2022 (updated as on 7 March 2024)",
+      "source_url": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=12300",
+      "source_verified_date": "2026-09-10",
+      "source_excerpt": "If a credit card has not been used for a period of more than one year, the process to close the card shall be initiated after intimating the cardholder.",
+      "source_rationale": "Repointed 2026-09-10. The force cited id=12156, which serves a PPI Master Direction and contains no credit-card closure rule; the Directions are id=12300. The previous excerpt also carried a second clause — 'and shall not count such cards in their outstanding card base' — which appears NOWHERE in the Directions ('card base', 'outstanding card', 'number of cards' and 'shall not count' are all absent). That clause was invented and has been removed. The reporting effect (closed cards leaving the reported stock) is OUR inference from the closure rule, and is stated in the description rather than attributed to RBI.",
       "status": "active",
       "instance_of": "ch_card_lifecycle_norms",
       "scope_entities": [
         "icl:atm_pos/cards/credit_cards"
-      ],
-      "source_verified": false,
-      "source_audit_note": "2026-09-09 audit: excerpt not on cited page. source_url points at a PPI Master Direction, which does not contain the credit-card inactivity-closure rule the excerpt quotes. Wrong document; the rule lives in the Credit Card and Debit Card Master Direction."
+      ]
     },
     {
       "id": "force_ncmc_transit_rollout",
