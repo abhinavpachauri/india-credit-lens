@@ -432,6 +432,13 @@
           "date": "2026-09-10",
           "how_measured": "audit_force_sources.py over all force instances in both models after repointing, restructuring and re-sourcing. The single remaining not-on-page force is force_infra_cycle_maturing, correctly demoted to hypothesis because it cites our own SIBC series. The other two non-verifying outcomes are a force with no source at all (hypothesis) and one whose host, npci.org.in, is genuinely blocked — reported apart from the excerpt verdict.",
           "source": "analysis/guards/audit_force_sources.py"
+        },
+        {
+          "metric": "Force-source audit — closed state",
+          "value": "20 forces: 18 verify, 2 carry no source and both are hypotheses; 0 not-on-page, 0 unreachable (from 11 not-on-page at audit start)",
+          "date": "2026-09-10",
+          "how_measured": "audit_force_sources.py after re-sourcing force_upi_zero_mdr off npci.org.in — allowlisted but genuinely blocked, re-confirmed with the tuple unpacked correctly — onto PIB PRID 2114335, whose excerpt was already verified in bank_sourcing.json. force_infra_cycle_maturing had its citation CLEARED rather than patched: it carried a bare landing-page URL and an excerpt restating our own series, which made an unaudited force look sourced. Both remaining no-source forces are hypotheses by design, one awaiting external capex-cycle evidence and one awaiting discrimination between two competing mechanisms.",
+          "source": "analysis/guards/audit_force_sources.py"
         }
       ],
       "observations": [
@@ -566,6 +573,10 @@
         {
           "date": "2026-09-10",
           "observation": "A proposal can be right about the effect and wrong about the instrument, and the sourcing pass is where that gets settled. S4 asked for an education interest-subvention renewal and an MNRE rooftop-solar subsidy; neither was the change that actually falls in this window, and MNRE is not even allowlisted. The instrument for both was the same document — RBI's PSL Directions 2025, effective 1 April 2025 — raising the education ceiling ₹20L→₹25L and the renewable ceiling ₹30cr→₹35cr. The same document also settled a third force that had been demoted the previous day on my own mistaken reading. Searching for the proposal's named target would have found nothing three times; searching for what changed in the window found one document that served all three."
+        },
+        {
+          "date": "2026-09-10",
+          "observation": "Widening an allowlist does not create evidence, and it is worth checking which of the two you actually needed. NABARD was added at the user's instruction and is reachable, but the SHG-Bank Linkage material it carries is annual PDFs through FY2023-24 — outside the movement window, and a published statistic rather than a policy instrument, which by the model's own external-and-non-observable test makes it a candidate SIGNAL and not a force. So the proposal stays an honest null for a better reason than before: not 'we cannot reach the source' but 'the source is not the kind of thing a force is made of'. The allowlist decision was still right, and it is now recorded why it did not settle this one."
         }
       ],
       "open_questions": [

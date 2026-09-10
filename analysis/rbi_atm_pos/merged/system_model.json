@@ -1972,11 +1972,11 @@
         "upi-qr-per-pos",
         "pos-terminals-yoy"
       ],
-      "source": "Union Budget 2022-23 — MDR waiver provisions for UPI and RuPay; NPCI product overview",
-      "source_url": "https://www.npci.org.in/what-we-do/upi/product-overview",
-      "source_verified_date": "2026-06-10",
-      "source_excerpt": "NPCI confirms zero MDR for UPI transactions for merchants; merchant discount rate not applicable to UPI-based payments",
-      "source_rationale": "Zero MDR creates a direct economic incentive for merchant QR preference over POS. 16-period trend shows UPI QR growing 131M while POS contracted from peak — confirming the policy effect",
+      "source": "PIB — 'Advancing Cashless India' (Ministry of Finance), zero MDR on RuPay Debit and BHIM-UPI",
+      "source_url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2114335&reg=48&lang=2",
+      "source_verified_date": "2026-09-10",
+      "source_excerpt": "Since January 2020, to promote digital transactions, MDR has been made zero for RuPay Debit Card and BHIM-UPI transactions",
+      "source_rationale": "Re-sourced 2026-09-10 off npci.org.in (https://www.npci.org.in/what-we-do/upi/product-overview), which is allowlisted but genuinely refuses automated reads — verdict 'blocked', 0 chars, re-confirmed with the tuple unpacked correctly rather than inferred from a probe artefact. PIB carries the same policy on an official host and the excerpt was already verified in bank_sourcing.json. Machine-verified here.",
       "status": "active",
       "instance_of": "ch_zero_mdr_acceptance_mix",
       "scope_entities": [

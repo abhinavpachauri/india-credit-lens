@@ -47,7 +47,11 @@ ALLOWLIST = {
                  # ministries/agencies whose releases back existing forces (MSME formalisation,
                  # UPI/digital-payments policy, macro stats) — added 2026-08-02.
                  "mospi.gov.in", "dea.gov.in", "meity.gov.in", "msme.gov.in",
-                 "mca.gov.in", "data.gov.in", "cga.nic.in"},
+                 "mca.gov.in", "data.gov.in", "cga.nic.in",
+                 # NABARD — added 2026-09-10. Statutory apex development bank (NABARD Act, 1981);
+                 # its SHG-Bank Linkage and refinance statistics are the official record for
+                 # weaker-sections and agriculture credit, which no other allowlisted host carries.
+                 "nabard.org"},
     # T2 — reputed structured reports (bureaus, rating agencies, industry bodies, processors)
     "report": {"cibil.com", "transunioncibil.com", "crifhighmark.com", "crisil.com",
                "icra.in", "careedge.in", "careratings.com", "worldline.com",
