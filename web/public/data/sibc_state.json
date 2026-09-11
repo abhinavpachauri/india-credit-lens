@@ -1,0 +1,139 @@
+{
+ "_meta": {
+  "pipeline": "sibc",
+  "period": "2026-08-31",
+  "purpose": "Standing state band per dashboard dimension — Layer-1 speed + Layer-2 mix state, rendered as sentences. Join on dimension id.",
+  "spec": "analysis/DASHBOARD_SPEC.md §16",
+  "renderer": "analysis/core/state_lines.py"
+ },
+ "dimensions": {
+  "mainSectors": [
+   {
+    "dimension": "mainSectors",
+    "cut": "main",
+    "subject": "Non-food credit",
+    "speed": "Non-food credit growing 19.1% YoY, accelerating.",
+    "speed_short": "19.1% YoY · accelerating",
+    "speed_dir": "up",
+    "mix": "Steered toward Services — it took 34.5% of the growth while holding 28.7% of the total. Away from Personal Loans.",
+    "mix_state": "steered",
+    "toward": "Services",
+    "toward_entity": "Services",
+    "source_signals": [
+     "sibc-main-allocation",
+     "sibc-main-momentum",
+     "sibc-nonfood-credit-yoy"
+    ]
+   }
+  ],
+  "industryByType": [
+   {
+    "dimension": "industryByType",
+    "cut": "ind-type",
+    "subject": "Industry credit",
+    "speed": "Industry credit growing 20.0% YoY, accelerating.",
+    "speed_short": "20.0% YoY · accelerating",
+    "speed_dir": "up",
+    "mix": "Drifting toward All Engineering — it took 11.4% of the growth while holding 6.3% of the total. Away from Infrastructure.",
+    "mix_state": "drifting",
+    "toward": "All Engineering",
+    "toward_entity": "All Engineering",
+    "source_signals": [
+     "sibc-ind-type-allocation",
+     "sibc-ind-type-momentum",
+     "sibc-industry-yoy"
+    ]
+   },
+   {
+    "dimension": "industryByType",
+    "cut": "infra-sub",
+    "subject": "Infrastructure credit",
+    "speed": "Infrastructure credit growing 10.2% YoY, but slowing.",
+    "speed_short": "10.2% YoY · slowing",
+    "speed_dir": "up",
+    "mix": "Contested — parts are moving in opposite directions, with no single destination.",
+    "mix_state": "contested",
+    "toward": null,
+    "toward_entity": null,
+    "source_signals": [
+     "sibc-infra-yoy"
+    ]
+   }
+  ],
+  "industryBySize": [
+   {
+    "dimension": "industryBySize",
+    "cut": "ind-size",
+    "subject": "Industry credit",
+    "speed": "Industry credit growing 20.0% YoY, accelerating.",
+    "speed_short": "20.0% YoY · accelerating",
+    "speed_dir": "up",
+    "mix": "Drifting toward Medium — it took 14.0% of the growth while holding 9.2% of the total. Away from Large.",
+    "mix_state": "drifting",
+    "toward": "Medium",
+    "toward_entity": "Medium",
+    "source_signals": [
+     "sibc-ind-size-allocation",
+     "sibc-ind-size-momentum",
+     "sibc-industry-yoy"
+    ]
+   }
+  ],
+  "services": [
+   {
+    "dimension": "services",
+    "cut": "svcs",
+    "subject": "Services credit",
+    "speed": "Services credit growing 22.9% YoY, accelerating.",
+    "speed_short": "22.9% YoY · accelerating",
+    "speed_dir": "up",
+    "mix": "Steered toward Non-Banking Financial Companies — it took 48.3% of the growth while holding 31.1% of the total. Away from Other Services.",
+    "mix_state": "steered",
+    "toward": "Non-Banking Financial Companies",
+    "toward_entity": "Non-Banking Financial Companies (NBFCs)",
+    "source_signals": [
+     "sibc-services-yoy",
+     "sibc-svcs-allocation",
+     "sibc-svcs-momentum"
+    ]
+   }
+  ],
+  "personalLoans": [
+   {
+    "dimension": "personalLoans",
+    "cut": "pl",
+    "subject": "Personal loans",
+    "speed": "Personal loans growing 16.2% YoY, at a steady pace.",
+    "speed_short": "16.2% YoY",
+    "speed_dir": "up",
+    "mix": "Drifting toward Loans against gold jewellery — it took 25.8% of the growth while holding 4.8% of the total. Away from Housing.",
+    "mix_state": "drifting",
+    "toward": "Loans against gold jewellery",
+    "toward_entity": "Loans against gold jewellery",
+    "source_signals": [
+     "sibc-personal-loans-yoy",
+     "sibc-pl-allocation",
+     "sibc-pl-momentum"
+    ]
+   }
+  ],
+  "prioritySector": [
+   {
+    "dimension": "prioritySector",
+    "cut": "psl",
+    "subject": "Priority sector credit",
+    "speed": null,
+    "speed_short": null,
+    "speed_dir": null,
+    "mix": "Drifting toward Micro and Small Enterprises — it took 37.2% of the growth while holding 30.0% of the total. Away from Housing.",
+    "mix_state": "drifting",
+    "toward": "Micro and Small Enterprises",
+    "toward_entity": "Micro and Small Enterprises",
+    "source_signals": [
+     "sibc-psl-allocation",
+     "sibc-psl-momentum"
+    ]
+   }
+  ]
+ }
+}

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { loadAtmPosData }    from "@/lib/atm_pos_data";
 import { loadAtmPosInsights } from "@/lib/atm_pos_insights";
 import { loadPlanes, type PlanesMap } from "@/lib/planes";
+import { loadStateBands, type StateMap } from "@/lib/state";
 import { useAppShell }       from "@/components/AppShell";
 import AtmPosGroupSection    from "@/components/AtmPosGroupSection";
 import AtmReadMode           from "@/components/read/AtmReadMode";
@@ -27,6 +28,7 @@ export default function PaymentsPage() {
   const [series, setSeries]     = useState<AtmPosSeries | null>(null);
   const [insights, setInsights] = useState<AtmPosInsight[]>([]);
   const [planes, setPlanes]     = useState<PlanesMap>({});
+  const [state, setState]       = useState<StateMap>({});
   const [mode, setMode] = usePersistent<"read" | "explore">("icl-mode", "read");
 
   useEffect(() => {
@@ -36,6 +38,7 @@ export default function PaymentsPage() {
     });
     loadAtmPosInsights().then(setInsights);
     loadPlanes("atm_pos").then(setPlanes);
+    loadStateBands("atm_pos").then(setState);
   }, [setHeaderMetric]);
 
   if (!series) {
@@ -54,7 +57,7 @@ export default function PaymentsPage() {
       <ModeToggle mode={mode} setMode={setMode} />
 
       {mode === "read" && insights.length > 0 ? (
-        <AtmReadMode series={series} insights={insights} planes={planes} />
+        <AtmReadMode series={series} insights={insights} planes={planes} state={state} />
       ) : (
         GROUPS.map((group) => <AtmPosGroupSection key={group} group={group} series={series} />)
       )}

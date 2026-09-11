@@ -1,0 +1,64 @@
+{
+ "_meta": {
+  "pipeline": "atm_pos",
+  "period": "2026-07-31",
+  "purpose": "Standing state band per dashboard dimension — Layer-1 speed + Layer-2 mix state, rendered as sentences. Join on dimension id.",
+  "spec": "analysis/DASHBOARD_SPEC.md §16",
+  "renderer": "analysis/core/state_lines.py"
+ },
+ "dimensions": {
+  "cc": [
+   {
+    "dimension": "cc",
+    "cut": "category",
+    "subject": "Credit cards in force",
+    "speed": "Credit cards in force growing 9.9% YoY, at a steady pace.",
+    "speed_short": "9.9% YoY",
+    "speed_dir": "up",
+    "mix": "Steered toward Small Finance Banks — it took 10.7% of the growth while holding 1.0% of the total. Away from Foreign Banks.",
+    "mix_state": "steered",
+    "toward": "Small Finance Banks",
+    "toward_entity": "Small Finance Banks",
+    "source_signals": [
+     "cc-category-allocation",
+     "cc-category-momentum",
+     "cc-outstanding-yoy"
+    ]
+   }
+  ],
+  "dc": [
+   {
+    "dimension": "dc",
+    "cut": "category",
+    "subject": "Debit cards in force",
+    "speed": "Debit cards in force growing 2.0% YoY, but slowing.",
+    "speed_short": "2.0% YoY · slowing",
+    "speed_dir": "up",
+    "mix": "Reallocating — gains and losses very nearly cancel.",
+    "mix_state": "reallocating",
+    "toward": null,
+    "toward_entity": null,
+    "source_signals": [
+     "dc-outstanding-yoy"
+    ]
+   }
+  ],
+  "infra": [
+   {
+    "dimension": "infra",
+    "cut": "category",
+    "subject": "POS terminals",
+    "speed": "POS terminals at -15.8% YoY — but it's ICICI Bank, not the market.",
+    "speed_short": "-15.8% YoY · ICICI Bank, not the market",
+    "speed_dir": "down",
+    "mix": "Contested — parts are moving in opposite directions, with no single destination.",
+    "mix_state": "contested",
+    "toward": null,
+    "toward_entity": null,
+    "source_signals": [
+     "pos-terminals-yoy"
+    ]
+   }
+  ]
+ }
+}

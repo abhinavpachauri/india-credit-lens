@@ -5,7 +5,7 @@
     "schema_version": "4.0",
     "spec_ref": "analysis/SYSTEM_MODEL_SPEC.md §16",
     "computed_from": "signals.db",
-    "signals_observed": 111
+    "signals_observed": 112
   },
   "entity_states": {
     "icl:sibc/Statement1/I": {
@@ -326,9 +326,9 @@
       "observed": 0
     },
     "icl:sibc/Statement2/2.18": {
-      "direction": -1,
-      "signals": 5,
-      "observed": 5
+      "direction": 0,
+      "signals": 6,
+      "observed": 6
     },
     "icl:sibc/Statement2/2.19": {
       "direction": 0,
@@ -734,7 +734,7 @@
       "to": "opp_renewable_energy"
     },
     "e_S2_2_18__creates_risk__risk_infrastructure_repayment": {
-      "state": "active",
+      "state": "dormant",
       "type": "creates_risk",
       "polarity": "-",
       "from": "e_S2_2_18",
@@ -846,9 +846,7 @@
       "force_psl_education_limit",
       "force_psl_renewable_limit"
     ],
-    "binding_constraints": [
-      "e_S2_2_18__creates_risk__risk_infrastructure_repayment"
-    ],
+    "binding_constraints": [],
     "active_reinforcing_loops": [
       "pli_supply_chain_R",
       "msme_formalisation_R"

@@ -38,6 +38,12 @@ class MovementCut:
     section: str    # the dashboard section/group the card belongs to
     speed:   str    # the YoY scan that satisfies the pairing rule
     subject: str    # the noun the prose adds to: "…of all new {subject}"
+    # The cut's PARENT level, for the standing state band (DASHBOARD_SPEC §16). Declared rather
+    # than derived: the parent of a decomposition is not always the thing a reader calls it —
+    # the four main sectors sum to NON-FOOD credit, not to bank credit — and two cuts have no
+    # parent signal at all (the PSL memo lens has no total). None renders no speed line.
+    parent_yoy:   str | None = None   # the registered YoY signal for the parent level
+    parent_label: str | None = None   # the noun that signal is called in prose
 
 
 # The row types a movement signal writes ALONGSIDE its members. `aggregate` carries

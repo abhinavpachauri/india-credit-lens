@@ -863,3 +863,446 @@ highlighting a series from a different industry, and `gap-atm-offsite-decline`, 
 group)` drew POS terminals under a card about off-site ATMs.
 
 At every step: both gates green, both pipelines, no per-section branches.
+
+---
+
+## 16. The standing state tier (v1.0 — BUILT 2026-09-11) ⭐
+
+> Arc 1 of `PLAN_2026-09-09.md`. **Rendering only.** Every number below is already computed,
+> already gate-validated, and has never reached a browser.
+
+### 16.1 The problem this answers
+
+The top tier of read mode is *what is news*. This period that is **29 of 96** SIBC cards
+(planes: 29 read / 17 composition / 50 subject; payments 9 / 1 / 22). Twenty-nine cards is
+not an answer to "what is happening" — and in a quiet month the honest answer is *nothing
+crossed the threshold*, which leaves the reader with a directory.
+
+Meanwhile `system_state_{period}.json` computes, every ingestion, a **mix state per cut**:
+`steered` / `drifting` / `contested` / `reallocating`, with `toward`, `away_from` and the
+tilt in pp. It is validated by both gates and ships nowhere.
+
+**So: add a tier above the reads. Do not redesign.** The §14 layout and the §15 cut contract
+stay exactly as they are.
+
+### 16.2 What the tier says — the layer boundary, made legible
+
+Two sentences per cut, present **every period whether or not anything is news**:
+
+```
+speed   Non-food credit growing 19.1% YoY, accelerating.        ← L1: how fast
+mix     Steered toward Services (+5.8pp), away from Personal    ← L2: is anyone steering
+        Loans.
+```
+
+That contrast is the whole point of the tier. L1 is the speed; L2 is whether the mix is
+being managed. A reader sees the two layers doing different jobs in one block.
+
+### 16.3 Sentence grammar (deterministic, rendered in Python)
+
+**speed** — needs the cut's declared `parent_yoy` signal. The pace word comes from that
+signal's own last two readings, not from the movement family's acceleration row: that row is
+keyed to the momentum signal's parent code, which is absent for two cuts, and a clause that
+appears for one industry cut and not the other reads as a finding when it is a lookup gap.
+The band is ±0.5 pp — deliberately the same band `ACCEL_DEFAULT_RULES` uses.
+
+| Case | Renders |
+|---|---|
+| rate up more than 0.5 pp | `Industry credit growing 20.0% YoY, accelerating.` |
+| rate within ±0.5 pp | `Personal loans growing 16.2% YoY, at a steady pace.` |
+| rate down more than 0.5 pp | `Infrastructure credit growing 10.2% YoY, but slowing.` |
+| negative rate | `POS terminals at -15.8% YoY, contracting.` |
+| **no `parent_yoy`** | **whole line omitted** |
+| **dominance-guarded** | `POS terminals at -15.8% YoY — but it's ICICI Bank, not the market.` |
+
+**Every rate is SIGNED.** "shrinking 15.8%" reads more naturally and was the first thing the
+traceability stage rejected: the stored row is `-15.8269`, so the unsigned figure traces to
+nothing. Direction lives in the verb *and* in the number, which is the only version a gate
+can check.
+
+**mix** — needs the cut's `mix_states` entry.
+
+| State | Renders |
+|---|---|
+| `steered` | `Steered toward Medium — it took 14.0% of the growth while holding 9.2% of the total. Away from Large.` |
+| `drifting` | `Drifting toward …` (same shape) |
+| `contested` | `Contested — parts are moving in opposite directions, with no single destination.` |
+| `reallocating` | `Reallocating — gains and losses very nearly cancel.` |
+
+**The tilt is never printed as a pp figure.** It is `alloc − weight` — a subtraction, which
+traces to nothing. Both operands *are* stored rows, so the sentence quotes those instead. That
+is simultaneously the checkable version and the plainer English one: "+4.9 pp" asks the reader
+to decode a tilt; "took 14.0% of the growth while holding 9.2% of the total" *is* the tilt.
+
+**The growth/contraction noun is read off the stored net**, never assumed. A coherent cut can
+be one in which every part is shrinking, and "took 14% of the growth" would then be the exact
+inversion of what happened — the mistake the movement family's contested branch already made
+once, on POS terminals.
+
+**No third line, and no coherence number.** The regime *word* carries the meaning (decision #4:
+coherence lives in a state file, not signals.db, so no gate can ground it — an invented `0.73`
+PASSED). A "4 of 4 parts agree" count was considered and dropped: `children` is `0` in every
+contested/reallocating window (`alloc` is withheld below 0.90), so the count would read "0 of 4"
+exactly where the finding is most interesting.
+
+### 16.4 Page 1 — the grid front door (desktop 1440)
+
+Every value below is real, read off `sibc_l1_annotations.json` + `sibc_planes.json` +
+`system_state_2026-08-31.json` on 2026-09-11. **Bold = net-new in this arc; everything
+else is on screen today.**
+
+```
+╔══════════════════════════════════════════════════════════════════════════════════════════╗
+║  India Credit Lens · RBI Sectoral Deployment                       [Read ⇄ Explore]  ☾   ║
+╚══════════════════════════════════════════════════════════════════════════════════════════╝
+
+  THE READ · 29 MOVED THIS AUGUST
+  ┌──────────────────────────┐ ┌──────────────────────────┐ ┌──────────────────────────┐
+  │▎Vehicle loans at 18.78%  │ │▎Medium Enterprises 29.20%│ │▎PSL Others -1.12% YoY —  │
+  │ YoY — highest in this    │ │ YoY — highest on record, │ │ least severe contraction │
+  │ window                   │ │ up 1.66pp                │ │ on record, up 8.28pp     │
+  │ ▲ record · YoY  Personal │ │ ▲ record · YoY   Priority│ │ ▲ record · YoY   Priority│
+  └──────────────────────────┘ └──────────────────────────┘ └──────────────────────────┘
+  ┌──────────────────────────┐ ┌──────────────────────────┐
+  │▎Credit card outstanding  │ │▎Consumer Durables turned │      +24 more moved →
+  │ fell to ₹2.98L Cr —      │ │ positive at 0.39% YoY —  │
+  │ first decline in 2 per.  │ │ first growth in 11 per.  │
+  │ ▼ reversal · Abs Personal│ │ ▲ reversal · YoY Personal│
+  └──────────────────────────┘ └──────────────────────────┘
+
+  BROWSE · 7 DIMENSIONS · 96 INSIGHTS
+  ┌────────────────────────────┐ ┌────────────────────────────┐ ┌────────────────────────────┐
+  │ 🏦                         │ │ 📊                         │ │ 🏭                         │
+  │ Bank Credit                │ │ Main Sectors               │ │ Industry by Size           │
+  │                            │ │                            │ │                            │
+  │ ── no mix cut ──           │ │ ▲ 19.1% YoY · accelerating │ │ ▲ 20.0% YoY · accelerating │  ← ★ NEW
+  │                            │ │ ⇢ steered → Services       │ │ ⇢ drifting → Medium        │  ← ★ NEW
+  │                            │ │                            │ │                            │
+  │ 9 insights      ▲ 4 moved  │ │ 13 insights     ▲ 5 moved  │ │ 10 insights     ▲ 4 moved  │
+  └────────────────────────────┘ └────────────────────────────┘ └────────────────────────────┘
+  ┌────────────────────────────┐ ┌────────────────────────────┐ ┌────────────────────────────┐
+  │ 🛎️                         │ │ 💳                         │ │ ⭐                         │
+  │ Services                   │ │ Personal Loans             │ │ Priority Sector            │
+  │                            │ │                            │ │                            │
+  │ ▲ 22.9% YoY · accelerating │ │ ▲ 16.2% YoY · steady pace  │ │ ── speed not published ──  │  ← honest
+  │ ⇢ steered → NBFCs          │ │ ⇢ drifting → gold jewellery│ │ ⇢ drifting → Micro & Small │    absence
+  │                            │ │                            │ │                            │
+  │ 8 insights      ▲ 1 moved  │ │ 25 insights     ▲ 9 moved  │ │ 14 insights     ▲ 4 moved  │
+  └────────────────────────────┘ └────────────────────────────┘ └────────────────────────────┘
+  ┌────────────────────────────┐
+  │ 🔩                         │
+  │ Industry by Type           │
+  │                            │
+  │ ▲ 20.0% YoY                │      ← no acceleration row for code 2 on Statement 2:
+  │ ⇢ drifting → All Engineer. │        the clause is dropped, not invented
+  │ ⇢ contested (infra sub)    │      ← a dimension carrying TWO cuts shows two ⇢ rows
+  │ 17 insights     ▲ 2 moved  │
+  └────────────────────────────┘
+```
+
+**What changes on this page:** two rows inside each dimension tile. Nothing else. The read
+grid, the ordering, the counts, the chrome are all untouched.
+
+**What it buys:** the browse grid stops being a directory. Today a reader who sees "Services ·
+8 insights · ▲ 1 moved" learns only that services is quiet. Now they learn services credit is
+growing **22.9% and accelerating**, and that its mix is being **steered toward NBFCs** — which
+is the single most consequential thing in the SIBC data this period, and it was invisible
+because it is not news, it is *state*.
+
+**Three honest absences visible on one page** — Bank Credit has no mix cut at all (it is the
+top level: food vs non-food); Priority Sector is a memo lens with no total, so no speed exists
+to publish; Industry by Type has a speed but no acceleration row. Each renders as an omission
+or a dash, never a placeholder number.
+
+---
+
+### 16.5 Page 2 — click "Industry by Size" (desktop 1440)
+
+This is the worked example, because it is the one where **the state band changes how the top
+card reads**.
+
+```
+  ‹ Credit dashboard                                    [Brief] [·Full·] [Deep ⌁]
+                                                        Detail: with the reasoning
+
+  ‹ ★ What moved·▲29 │🏦 Bank Credit·▲4│📊 Main Sectors·▲5│【🏭 Industry by Size·▲4】│🛎️ Serv… ›
+
+  ┌─ RAIL (360px) ────────────┐  ┌─ DETAIL ──────────────────────────────────────────────┐
+  │ INDUSTRY BY SIZE ·        │  │▎🏭 INDUSTRY BY SIZE                                   │
+  │ 10 INSIGHTS · ▲ 4 MOVED   │  │                                                       │
+  │                           │  │ ┌───────────────────────────────────────────────────┐ │ ★
+  │ ┌───────────────────────┐ │  │ │ THE STATE · every month, news or not              │ │ ★
+  │ │ Medium growing        │ │  │ │                                                   │ │ ★
+  │ │ fastest at 30.5%;     │ │  │ │ speed   Industry credit growing 20.0% YoY,        │ │ ★
+  │ │ Large slowest 17.7%   │ │  │ │         accelerating.                             │ │ ★
+  │ └───────────────────────┘ │  │ │                                                   │ │ ★
+  │                           │  │ │ mix     Drifting toward Medium (+4.9pp), away     │ │ ★
+  │  Large                    │  │ │         from Large.                               │ │ ★
+  │ ┌───────────────────────┐ │  │ └───────────────────────────────────────────────────┘ │ ★
+  │ │ Large corporates at   │ │  │                                                       │
+  │ │ 67.3% — down 0.18pp   │ │  │ Large took 60.8% of all new industry credit in the    │
+  │ └───────────────────────┘ │  │ past year                                             │
+  │ ┌───────────────────────┐ │  │                                                       │
+  │ │▲Large corporate credit│ │  │  ○ Absolute  ● YoY %  ○ Share      [Total: off]       │
+  │ │ at 17.7% YoY —        │ │  │ ┌───────────────────────────────────────────────────┐ │
+  │ │ highest on record     │ │  │ │ 32│              ╭──── Medium 30.5%               │ │
+  │ └───────────────────────┘ │  │ │ 28│        ╭─────╯                                │ │
+  │ ┌───────────────────────┐ │  │ │ 24│   ╭────╯   ╭──── Micro & Small 22.6%          │ │
+  │ │▲Large took 60.8% of   │ │  │ │ 20│───╯   ╭────╯                                  │ │
+  │ │ all new industry      │ │  │ │ 16│━━━━━━━━━━━━━━━ LARGE 17.7%  ← highlighted     │ │
+  │ │ credit ◀ SELECTED     │ │  │ │   └──────────────────────────────────────────────  │ │
+  │ └───────────────────────┘ │  │ │    Sep25  Nov25  Jan26  Mar26  May26  Jul26        │ │
+  │                           │  │ └───────────────────────────────────────────────────┘ │
+  │  Medium                   │  │                                                       │
+  │ ┌───────────────────────┐ │  │ Composition: Micro & Small grew 8.9% in FY25, 32.7%   │
+  │ │▲Medium enterprises at │ │  │ in FY26 — 23.8pp step-up                              │
+  │ │ 10.0% share — record  │ │  │                                                       │
+  │ └───────────────────────┘ │  │ Of the industry credit added over the past twelve     │
+  │ ┌───────────────────────┐ │  │ months, Large took 60.8% — the largest share of the   │
+  │ │▲Medium enterprises at │ │  │ new money — growing 17.7% and accelerating. The rest  │
+  │ │ 30.5% YoY — record    │ │  │ went to Micro and Small 25.2%; Medium 14.0%. …        │
+  │ └───────────────────────┘ │  │                                                       │
+  │                           │  │ WHY THIS READS                                        │
+  │  Micro and Small          │  │ 1. Every sector's industry credit is compared with    │
+  │ ┌───────────────────────┐ │  │    the same month a year earlier, and each one's      │
+  │ │ Micro & Small grew    │ │  │    share of the total increase is taken.              │
+  │ │ 8.9% FY25, 32.7% FY26 │ │  │ 2. Large accounts for 60.8% of the increase.          │
+  │ └───────────────────────┘ │  │ 3. All sectors moved the same way this window, so     │
+  │ ┌───────────────────────┐ │  │    the shares are bounded and sum to a hundred.       │
+  │ │ Micro & Small at      │ │  │                                                       │
+  │ │ 22.8% share — off     │ │  └───────────────────────────────────────────────────────┘
+  │ │ five-period plateau   │ │
+  │ └───────────────────────┘ │
+  │ ┌───────────────────────┐ │   ★ = net-new. Everything else renders today,
+  │ │ Micro & Small 22.6%   │ │       unchanged, in this exact position.
+  │ │ YoY — 4th straight    │ │
+  │ │ deceleration          │ │
+  │ └───────────────────────┘ │
+  │ ┌───────────────────────┐ │
+  │ │ MSME-Large spread at  │ │
+  │ │ 4.9pp — narrowest     │ │
+  │ │ since Mar 2025        │ │
+  │ └───────────────────────┘ │
+  └───────────────────────────┘
+```
+
+#### Why this example is the argument for the whole tier
+
+Read the selected card alone: **"Large took 60.8% of all new industry credit — highest on
+record."** The natural reading is *lenders are concentrating into large corporates.*
+
+Now read the state band above it: **the mix is drifting toward Medium, away from Large.**
+
+Both are true, and the band is what makes the card readable:
+
+| | Large | Medium | Micro & Small |
+|---|---|---|---|
+| share of the **book** (weight) | 68.6% | 9.2% | 22.3% |
+| share of the **new money** (alloc) | 60.8% | 14.0% | 25.2% |
+| **tilt** | **−7.8pp** | **+4.9pp** | +2.9pp |
+
+Large takes most of the new money **because it is most of the book** — and it is taking
+*less* than its weight. That is the L1/L2 boundary in one screen: **L1 is where the money
+went; L2 is whether that changed the shape of the book.** No amount of ranking or re-ordering
+of cards produces that sentence. It has been computed every period since August and has never
+been rendered.
+
+#### Behaviour rules
+
+- The band belongs to the **dimension**, so it does **not** change as the reader clicks
+  between the 10 cards in the rail. The chart and card below it change; the state stands.
+- It renders at **every depth** — `Brief` collapses the card body and the why-chain, never
+  the state. A reader on Brief gets chart + state, which is the fastest honest answer.
+- It is **not** a card: no id, no plane, no news score, never in the rail, never in
+  `+24 more moved`. It is chrome for the dimension.
+
+---
+
+### 16.5b The same page, two other dimensions (the branches that differ)
+
+**Industry by Type — two cuts on one dimension, stacked and named:**
+
+```
+  │ ┌───────────────────────────────────────────────────┐ │
+  │ │ THE STATE · every month, news or not              │ │
+  │ │                                                   │ │
+  │ │ Industry credit                                   │ │
+  │ │ speed   Industry credit growing 20.0% YoY.        │ │  ← no accel row → clause dropped
+  │ │ mix     Drifting toward All Engineering (+5.1pp), │ │
+  │ │         away from Infrastructure.                 │ │
+  │ │ ────────────────────────────────────────────────  │ │
+  │ │ Infrastructure sub-types                          │ │
+  │ │ mix     Contested — parts are moving in opposite  │ │  ← no speed line at all;
+  │ │         directions, with no single destination.   │ │    the mix line stands alone
+  │ └───────────────────────────────────────────────────┘ │
+```
+
+The cut name is shown **only when a dimension carries more than one** — a single-cut
+dimension would be repeating its own title.
+
+**Payments / POS Terminals — the dominance guard, which is why this is not optional:**
+
+```
+  │ ┌───────────────────────────────────────────────────┐ │
+  │ │ THE STATE · every month, news or not              │ │
+  │ │                                                   │ │
+  │ │ speed   POS terminals down 15.8% YoY — but that   │ │
+  │ │         is ICICI Bank, not the market.            │ │
+  │ │ mix     Contested — parts are moving in opposite  │ │
+  │ │         directions, with no single destination.   │ │
+  │ └───────────────────────────────────────────────────┘ │
+```
+
+−15.8% YoY is the figure this project already established is ~98% one issuer's
+reclassification. A *standing* line publishes it **every month, forever**, so the speed clause
+routes through `signals/dominance.py` — whose `SCAN_FOR` already maps all three payments
+parent signals. Without that, this arc would re-introduce the exact defect
+[[feedback_why_over_what]] was written about.
+
+---
+
+### 16.6 Mobile — 375px
+
+```
+┌───────────────────────────────┐   ┌───────────────────────────────┐
+│ India Credit Lens        ☾    │   │ ‹ Credit dashboard            │
+│ [Read ⇄ Explore]              │   │ [Brief] [·Full·] [Deep ⌁]     │
+│                               │   │                               │
+│ THE READ · 29 MOVED           │   │ ‹ ★│🏦│📊│【🏭】│🛎️│💳 ›       │
+│ ┌───────────────────────────┐ │   │                               │
+│ │▎Vehicle loans at 18.78%   │ │   │▎🏭 INDUSTRY BY SIZE           │
+│ │ YoY — highest in window   │ │   │ ┌───────────────────────────┐ │
+│ │ ▲ record · YoY   Personal │ │   │ │ THE STATE                 │ │ ★
+│ └───────────────────────────┘ │   │ │                           │ │ ★
+│ ┌───────────────────────────┐ │   │ │ speed                     │ │ ★
+│ │▎Medium Enterprises 29.20% │ │   │ │   Industry credit growing │ │ ★
+│ │ ▲ record · YoY   Priority │ │   │ │   20.0% YoY, accelerating.│ │ ★
+│ └───────────────────────────┘ │   │ │                           │ │ ★
+│           …                   │ │  │ │ mix                       │ │ ★
+│ +24 more moved →              │   │ │   Drifting toward Medium  │ │ ★
+│                               │   │ │   (+4.9pp), away from     │ │ ★
+│ BROWSE · 7 DIMENSIONS         │   │ │   Large.                  │ │ ★
+│ ┌────────────┐ ┌────────────┐ │   │ └───────────────────────────┘ │ ★
+│ │ 🏦         │ │ 📊         │ │   │                               │
+│ │ Bank Credit│ │ Main Sect. │ │   │ Large took 60.8% of all new   │
+│ │            │ │            │ │   │ industry credit in the past   │
+│ │ ── no cut  │ │ ▲ 19.1% ·  │ │   │ year                          │
+│ │            │ │   accel.   │ │   │                               │
+│ │            │ │ ⇢ steered →│ │   │ ○ Abs ● YoY ○ Share           │
+│ │            │ │   Services │ │   │ ┌───────────────────────────┐ │
+│ │ 9 · ▲4     │ │ 13 · ▲5    │ │   │ │      [ chart ]            │ │
+│ └────────────┘ └────────────┘ │   │ └───────────────────────────┘ │
+│ ┌────────────┐ ┌────────────┐ │   │ Composition: …                │
+│ │ 🏭         │ │ 🛎️         │ │   │ Of the industry credit added… │
+│ │ Industry   │ │ Services   │ │   │                               │
+│ │ by Size    │ │            │ │   │ WHY THIS READS                │
+│ │ ▲ 20.0% ·  │ │ ▲ 22.9% ·  │ │   │ 1. Every sector's industry…   │
+│ │   accel.   │ │   accel.   │ │   │                               │
+│ │ ⇢ drifting │ │ ⇢ steered →│ │   │ ── rail moves BELOW ──        │
+│ │   → Medium │ │   NBFCs    │ │   │  Large                        │
+│ │ 10 · ▲4    │ │ 8 · ▲1     │ │   │  ▸ Large corporates at 67.3%  │
+│ └────────────┘ └────────────┘ │   │  ▸ ▲Large corporate credit …  │
+└───────────────────────────────┘   └───────────────────────────────┘
+       grid, 2 columns                    detail, single column
+```
+
+Mobile rules: the label column (`speed` / `mix`) **stacks above** its sentence below 640px.
+Tiles stay 2-up; the state rows wrap to two lines each and the tile grows — acceptable,
+because the tile is now carrying the answer rather than a count. No horizontal scroll at
+375px (the existing hard rule).
+
+### 16.7 What it says today, all ten cuts (real values, 2026-09-11)
+
+| Cut | speed | mix |
+|---|---|---|
+| Main sectors | growing 19.1% YoY, accelerating | **steered** → Services (+5.8pp), away Personal Loans |
+| Industry by size | growing 20.0% YoY, accelerating | drifting → Medium (+4.9pp), away Large |
+| Industry by type | growing 20.0% YoY | drifting → All Engineering (+5.1pp), away Infrastructure |
+| Services | growing 22.9% YoY, accelerating | **steered** → NBFCs (+17.2pp), away Other Services |
+| Personal loans | growing 16.2% YoY, holding its pace | drifting → gold jewellery (+21.0pp), away Housing |
+| Priority sector | *(no parent signal — omitted)* | drifting → Micro & Small (+7.2pp), away Housing |
+| Infrastructure sub-types | *(no parent signal — omitted)* | **contested** |
+| Credit cards | growing 9.9% YoY | **steered** → Small Finance Banks (+9.7pp), away Foreign Banks |
+| Debit cards | growing 2.0% YoY | **reallocating** |
+| POS terminals | down 15.8% YoY — **but that is ICICI Bank, not the market** | **contested** |
+
+Three things to read off that table:
+
+1. **Payments is where the regimes fire.** Every SIBC cut runs coherence 0.99–1.00; payments
+   gives the tier its first live `contested` and `reallocating` renders.
+2. **The dominance guard is load-bearing here, not optional.** POS terminals at −15.8% YoY is
+   the exact number this project already established is ~98% one issuer's reclassification.
+   A standing line would republish it every month. The tier therefore routes its speed clause
+   through `signals/dominance.py` (`SCAN_FOR` already maps all three payments parent signals).
+3. **Two cuts have no parent-YoY signal** — PSL (a memo lens with no total, `additive: false`)
+   and infrastructure sub-types (code `2.18` has no `csv_sector_yoy` entry). PSL is a genuine
+   absence. Infra is one registry entry away; see the open decision in 16.10.
+
+### 16.8 What was built
+
+| Piece | File |
+|---|---|
+| The one renderer, both pipelines | `analysis/core/state_lines.py` |
+| Two declared fields per cut | `MovementCut.parent_yoy` / `.parent_label` in `core/movement_cards.py`, filled in each pipeline's own `MOVEMENT_CUTS` |
+| The parent signal infrastructure lacked | **`sibc-infra-yoy`** (code `2.18`, Statement 2) — registry 266 → 267, 11 periods backfilled |
+| The sidecar | `analysis/signals/stamp_state.py` → `web/public/data/{pipeline}_state.json`, `--check` freshness guard |
+| The gate stages | **5.9** `stamp_state` + **5.9b** `state_band` (`analysis/guards/validate_state_band.py`), both pipelines, placed after `system_state` because that is what computes the mix |
+| The band | `StateBand` in `components/read/parts.tsx` — shared, so both pipelines inherit one design |
+| The tile rows | `DimensionCard` in the same file |
+| Data layer | `web/lib/state.ts` |
+
+**Sentences are rendered in Python and shipped as strings; the browser formats nothing.**
+That is not only compute-once-ship-compact — it is what makes the band checkable at all. A
+browser that formats numbers is a publishing surface no validator can see, and this is the
+first place the dashboard publishes a Layer-2 reading.
+
+**Freshness came free.** `check_derived_fresh` is manifest-driven, so declaring `derived` on
+the new stage took the watched-artifact count from 19 to 21 with no edit to the guard.
+
+### 16.8b Measurement (AI PM topic #1)
+
+Injection over **every** block and **every** number in both sidecars — enumerated, not sampled.
+
+| | |
+|---|---|
+| near-miss catch (nudged past display rounding) | **23/23 = 100%** |
+| in-range catch (a fresh value from the block's own span) | **20/20 = 100%** |
+| false rejection (untouched text) | **0/23 = 0%** |
+
+Two things the measurement changed, both worth keeping:
+
+1. **Scope, not tolerance, was the whole game.** Ground truth first used `flat_numbers`, which
+   returns a signal's entire history — pools of 160–309 values. Four near-misses survived, none
+   through tolerance slack: each landed on one of the signal's *own past readings*. The band
+   never quotes history, so the scope narrowed to *this period's rows for the entity the
+   sentence names*, taking pools to single digits and catch to 100%. Same lesson as Check 2g's
+   `sourceSignals` and 4f's `evidence_all`: **a traceability gate is its scope.**
+2. **Three "misses" were the harness reporting on itself.** Where a block's pool holds one
+   value, `[lo, hi]` is a point and the only drawable number is the true one — so the harness
+   was injecting the real value and scoring the gate for accepting it. Excluded as undefined.
+   Fourth instance in three days of a probe producing a false negative; the tell each time is
+   a probe that returns the same answer regardless of input.
+
+### 16.9 Constraints carried in (non-negotiable)
+
+- The regime **word** only, never the coherence number.
+- Never a derived number: a subtraction traces to nothing, so its operands are quoted instead.
+- An absent input renders **nothing** — never a placeholder, a zero, or a neighbour's number.
+- A dominated aggregate is **attributed, not suppressed** — the figure is real, the market
+  reading is not.
+- Cards **nest, never merge**. Checks 2g / 4c / 5.7 / 5.8 untouched. Presentation layer.
+
+### 16.10 Decisions taken (user, 2026-09-11)
+
+1. **Label style** — `speed` / `mix`, not `L1 speed` / `L2 mix`. The layer boundary is taught
+   by the two lines doing visibly different jobs, not by naming the layers at the reader.
+2. **`sibc-infra-yoy` added** rather than accepting the absence, so infrastructure sub-types
+   carry a speed line. Priority Sector keeps its absence — it is a memo lens with no total,
+   which is a fact about the data, not a gap in the registry.
+3. **Grid tiles grow.** The browse grid stops being a directory; that is worth two rows.
+
+### 16.11 Still open
+
+- **SIBC ships its raw CSV for the browser to parse** while payments ships a compact artifact.
+  Untouched here (the band is a new sidecar, not a change to how the charts get their data),
+  but it remains the one compute-once-ship-compact violation on the dashboard.

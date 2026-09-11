@@ -5,6 +5,7 @@
 // pipeline. Colour = section/group (a card's colour is also its chart-line colour).
 
 import { FS, R, GLYPH } from "@/lib/tokens";
+import { tileMix, type StateBlock } from "@/lib/state";
 
 export type ReadReason = "record" | "reversal" | "surge" | "shift";
 export type Direction = "up" | "down" | "flat";
@@ -112,13 +113,30 @@ export function ReadCard({ read, selected, onClick }: { read: RMRead; selected: 
   );
 }
 
-export function DimensionCard({ dim, onClick }: { dim: RMDimension; onClick: () => void }) {
+export function DimensionCard({ dim, state = [], onClick }:
+  { dim: RMDimension; state?: StateBlock[]; onClick: () => void }) {
   const col = dim.color;
   return (
     <button onClick={onClick} className="rm-card rm-tile text-left rounded-xl"
             style={{ ...vars(col), padding: "16px 18px" }}>
       <div style={{ fontSize: GLYPH.dimension, lineHeight: 1 }}>{dim.icon}</div>
       <div style={{ fontSize: FS.card, fontWeight: 600, color: "var(--font)", marginTop: 10, lineHeight: 1.25 }}>{dim.title}</div>
+      {/* The standing state (§16). A dimension with no movement cut shows NOTHING here —
+          an absence, not an empty row: Bank Credit is the top level and has no mix to state. */}
+      {state.length > 0 && (
+        <div className="mt-2.5 flex flex-col gap-1">
+          {state.map((b) => (
+            <div key={b.cut} style={{ fontSize: FS.note, lineHeight: 1.4 }}>
+              {b.speed_short && (
+                <div style={{ color: "var(--font)" }}>
+                  <span style={{ color: col }}>{b.speed_dir === "down" ? "▼" : "▲"} </span>{b.speed_short}
+                </div>
+              )}
+              {tileMix(b) && <div style={{ color: "var(--font-muted)" }}>⇢ {tileMix(b)}</div>}
+            </div>
+          ))}
+        </div>
+      )}
       <div className="flex items-center gap-2 mt-2">
         <span style={{ fontSize: FS.note, color: "var(--font-muted)" }}>{dim.cardCount} insights</span>
         {dim.moved > 0 && <span style={{ fontSize: FS.note, fontWeight: 600, color: col }}>▲ {dim.moved} moved</span>}
@@ -163,6 +181,55 @@ export function DepthLadder({ depth, setDepth, deepAvailable }: { depth: Depth; 
                 style={{ fontSize: FS.note, padding: "6px 12px", ...chipStyle(depth === d) }}>
           {d === "brief" ? "Brief" : d === "full" ? "Full" : "Deep ⌁"}
         </button>
+      ))}
+    </div>
+  );
+}
+
+/**
+ * The standing state band (DASHBOARD_SPEC §16) — the tier above the reads.
+ *
+ * It belongs to the DIMENSION, not the selected card, so it does not change as the reader
+ * clicks between the cards beneath it. Two labelled lines: `speed` is Layer 1 (how fast the
+ * parent is growing) and `mix` is Layer 2 (whether anyone is steering the mix). Read together
+ * they separate where the money went from whether that changed the shape of the book — the
+ * distinction no single card can carry, and the reason this tier exists.
+ *
+ * Every sentence arrives pre-rendered from `analysis/core/state_lines.py` and gate-checked by
+ * stage 5.9b. Nothing here formats a number; a missing line is simply absent.
+ */
+export function StateBand({ blocks, color }: { blocks: StateBlock[]; color: string }) {
+  if (blocks.length === 0) return null;
+  const named = blocks.length > 1;   // two cuts on one dimension need telling apart
+  return (
+    <div className="mb-4" style={{
+      background: tint(color, 0.06), border: `1px solid ${tint(color, 0.22)}`,
+      borderRadius: R.md, padding: "14px 16px",
+    }}>
+      <div style={{ ...EYEBROW, color, letterSpacing: "0.05em" }}>
+        The state · every month, news or not
+      </div>
+      {blocks.map((b, i) => (
+        <div key={b.cut} style={{ marginTop: i === 0 ? 10 : 12,
+                                  borderTop: i === 0 ? undefined : `1px solid ${tint(color, 0.22)}`,
+                                  paddingTop: i === 0 ? undefined : 12 }}>
+          {named && (
+            <div style={{ fontSize: FS.label, fontWeight: 600, color: "var(--font)", marginBottom: 6 }}>
+              {b.subject}
+            </div>
+          )}
+          {([["speed", b.speed], ["mix", b.mix]] as const).map(([label, text]) =>
+            text ? (
+              <div key={label} className="flex flex-col sm:flex-row sm:gap-3" style={{ marginTop: 4 }}>
+                <span className="shrink-0" style={{
+                  fontSize: FS.meta, fontWeight: 600, color: "var(--font-muted)",
+                  textTransform: "uppercase", letterSpacing: "0.06em",
+                  width: 44, lineHeight: 1.9,
+                }}>{label}</span>
+                <span style={{ fontSize: FS.body, lineHeight: 1.55, color: "var(--font)" }}>{text}</span>
+              </div>
+            ) : null)}
+        </div>
       ))}
     </div>
   );

@@ -470,13 +470,22 @@ def _sibling_share_scan(registry: dict, sid: str, sig: dict) -> str | None:
 # speed signal that satisfies the pairing rule, and the noun the prose adds to ("...of all new
 # {subject}"). Adding a cut is a row here plus its registry entries — no new code.
 MOVEMENT_CUTS = [
-    MovementCut("main",      "mainSectors",    "sibc-main-yoy-scan",          "bank credit"),
-    MovementCut("ind-type",  "industryByType", "sibc-industry-type-yoy-scan", "industry credit"),
-    MovementCut("ind-size",  "industryBySize", "sibc-ind-size-yoy-scan",      "industry credit"),
-    MovementCut("svcs",      "services",       "sibc-services-yoy-scan",      "services credit"),
-    MovementCut("pl",        "personalLoans",  "sibc-pl-yoy-scan",            "personal loans"),
+    # parent_yoy/parent_label feed the standing state band only (DASHBOARD_SPEC §16). The main
+    # cut's parent is NON-FOOD credit — its four children sum to that, not to bank credit — and
+    # the PSL memo lens has no total at all, so it declares none and publishes no speed line.
+    MovementCut("main",      "mainSectors",    "sibc-main-yoy-scan",          "bank credit",
+                parent_yoy="sibc-nonfood-credit-yoy",   parent_label="Non-food credit"),
+    MovementCut("ind-type",  "industryByType", "sibc-industry-type-yoy-scan", "industry credit",
+                parent_yoy="sibc-industry-yoy",         parent_label="Industry credit"),
+    MovementCut("ind-size",  "industryBySize", "sibc-ind-size-yoy-scan",      "industry credit",
+                parent_yoy="sibc-industry-yoy",         parent_label="Industry credit"),
+    MovementCut("svcs",      "services",       "sibc-services-yoy-scan",      "services credit",
+                parent_yoy="sibc-services-yoy",         parent_label="Services credit"),
+    MovementCut("pl",        "personalLoans",  "sibc-pl-yoy-scan",            "personal loans",
+                parent_yoy="sibc-personal-loans-yoy",   parent_label="Personal loans"),
     MovementCut("psl",       "prioritySector", "sibc-psl-yoy-scan",           "priority sector credit"),
-    MovementCut("infra-sub", "industryByType", "sibc-infra-sub-yoy-scan",     "infrastructure credit"),
+    MovementCut("infra-sub", "industryByType", "sibc-infra-sub-yoy-scan",     "infrastructure credit",
+                parent_yoy="sibc-infra-yoy",            parent_label="Infrastructure credit"),
 ]
 
 

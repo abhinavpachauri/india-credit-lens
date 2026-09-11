@@ -6,6 +6,7 @@
 import { useMemo } from "react";
 import type { Report, Annotation, ReportSection } from "@/lib/types";
 import { organizeReadMode, type PlanesMap } from "@/lib/planes";
+import type { StateMap } from "@/lib/state";
 import { hasDeepReading } from "@/lib/opportunities";
 import DeepReading from "./DeepReading";
 import { SEC_COLORS } from "@/lib/theme";
@@ -55,7 +56,9 @@ function ParentContext(
 const modeLabel = (pm?: string | null) =>
   pm === "share" ? "Share" : pm === "yoy" ? "YoY" : pm === "fy" ? "FY" : "Absolute";
 
-export default function SibcReadMode({ report, planes }: { report: Report; planes: PlanesMap }) {
+export default function SibcReadMode(
+  { report, planes, state }: { report: Report; planes: PlanesMap; state: StateMap },
+) {
   const { model, annById, sectionById } = useMemo(() => {
     const org = organizeReadMode(report, planes);
     const readIds = new Set(org.reads.map((r) => r.card.id));
@@ -164,7 +167,7 @@ export default function SibcReadMode({ report, planes }: { report: Report; plane
 
   const period = report.latestDate?.split(" ")[0] ?? "period";
   return (
-    <ReadModeShell model={model} homeLabel="Credit dashboard" period={period}
+    <ReadModeShell model={model} homeLabel="Credit dashboard" period={period} state={state}
                    renderChart={renderChart} hasDeep={hasDeep} renderDeep={renderDeep} />
   );
 }

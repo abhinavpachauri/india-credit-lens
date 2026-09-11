@@ -439,6 +439,20 @@
           "date": "2026-09-10",
           "how_measured": "audit_force_sources.py after re-sourcing force_upi_zero_mdr off npci.org.in — allowlisted but genuinely blocked, re-confirmed with the tuple unpacked correctly — onto PIB PRID 2114335, whose excerpt was already verified in bank_sourcing.json. force_infra_cycle_maturing had its citation CLEARED rather than patched: it carried a bare landing-page URL and an excerpt restating our own series, which made an unaudited force look sourced. Both remaining no-source forces are hypotheses by design, one awaiting external capex-cycle evidence and one awaiting discrimination between two competing mechanisms.",
           "source": "analysis/guards/audit_force_sources.py"
+        },
+        {
+          "metric": "State band traceability (gate stage 5.9b) — catch / false rejection",
+          "value": "near-miss catch 23/23 = 100%; in-range catch 20/20 = 100%; false rejection 0/23 = 0%, over EVERY block and every number in both pipelines' sidecars",
+          "date": "2026-09-11",
+          "how_measured": "Injection over the enumerated set, not a sample: for each of the 10 state blocks and each number in its speed/speed_short/mix strings, (a) nudge the real value past display rounding, (b) draw a fresh value from the block's own candidate span. The first pass built ground truth with query.flat_numbers and caught only 19/23 near-misses — NOT through tolerance slack: all four survivors landed on one of the signal's OWN past readings, in pools of 160-309 values, because flat_numbers returns a signal's whole history. The band never quotes history, so the scope narrowed to this period's rows for the entity the sentence names; pools fell to single digits and catch reached 100%.",
+          "source": "analysis/guards/validate_state_band.py"
+        },
+        {
+          "metric": "Layer-2 surface area actually rendered",
+          "value": "mix_states: 10 of 10 cuts computed, 0 shipped to the browser before this change, 10 after",
+          "date": "2026-09-11",
+          "how_measured": "Enumerated web/public/data/ against the mix_states blocks in system_state_{period}.json for both pipelines. The causal layer has been computed every ingestion and gate-validated since August 2026 and had never reached a reader; the only Layer 2 on screen was 4 cross-system items rendered inline as Deep.",
+          "source": "web/public/data/sibc_state.json"
         }
       ],
       "observations": [
@@ -577,6 +591,18 @@
         {
           "date": "2026-09-10",
           "observation": "Widening an allowlist does not create evidence, and it is worth checking which of the two you actually needed. NABARD was added at the user's instruction and is reachable, but the SHG-Bank Linkage material it carries is annual PDFs through FY2023-24 — outside the movement window, and a published statistic rather than a policy instrument, which by the model's own external-and-non-observable test makes it a candidate SIGNAL and not a force. So the proposal stays an honest null for a better reason than before: not 'we cannot reach the source' but 'the source is not the kind of thing a force is made of'. The allowlist decision was still right, and it is now recorded why it did not settle this one."
+        },
+        {
+          "date": "2026-09-11",
+          "observation": "A traceability gate is its SCOPE, and the scope should be what the surface can actually SAY — not what its signals happen to hold. Ground truth for the state band started as query.flat_numbers, the same helper Check 2g uses, which returns a signal's full history. That is right for a card that may reason about a sixteen-period range and wrong for a band that only ever quotes this period's value for one named entity: it inflated pools to 160-309 values and let four of twenty-three near-miss injections through by collision with the signal's own past. Narrowing the scope to the sentence's actual vocabulary took catch to 100% with no change in tolerance. The generalisation: before choosing a ground-truth helper, ask what the text is permitted to say, and scope to that."
+        },
+        {
+          "date": "2026-09-11",
+          "observation": "Fourth probe-produced false negative in three days, and the tell was the same as the other three: an attack that cannot fail to be caught, being scored as though it could. Three of the state band's twenty-three in-range injections 'passed' — but those blocks hold exactly ONE candidate value, so the draw interval [lo,hi] is a point and the only drawable number is the true one. The harness was injecting the real value and marking the gate down for accepting it. After len()-on-a-tuple, a regex splitting on a decimal point, and a region-finder skipping the first 2000 chars, the standing habit is earned: run one known-good and one known-bad control through every measurement harness before believing a number it produces about a gate."
+        },
+        {
+          "date": "2026-09-11",
+          "observation": "The un-groundable number was the wrong thing to fight. The state band wanted to publish the mix tilt, which is alloc minus weight — a subtraction, so no gate can ground it, the same structural problem as coherence. The reflex was to store tilt as a new row. The better answer was to stop printing it: both operands ARE stored, so the sentence became 'it took 14.0% of the growth while holding 9.2% of the total', which traces completely AND explains what a tilt is instead of asking the reader to decode +4.9 pp. When a number cannot be grounded, check whether the sentence is better without it before adding a row to make it legal."
         }
       ],
       "open_questions": [

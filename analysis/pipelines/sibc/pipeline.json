@@ -1,6 +1,6 @@
 {
   "id": "sibc",
-  "name": "RBI SIBC \u2014 Bank Credit",
+  "name": "RBI SIBC — Bank Credit",
   "paths": {
     "data_dir": "analysis/rbi_sibc",
     "consolidated_csv": "web/public/data/rbi_sibc_consolidated.csv",
@@ -55,7 +55,7 @@
     },
     {
       "id": "extract",
-      "label": "0.6 extract \u2192 sections.json",
+      "label": "0.6 extract → sections.json",
       "pipeline": "extract",
       "args": [
         "$XLSX"
@@ -64,7 +64,7 @@
     },
     {
       "id": "consolidate",
-      "label": "0.7 consolidate \u2192 CSV",
+      "label": "0.7 consolidate → CSV",
       "pipeline": "consolidate",
       "skip_if": "ingest_only",
       "note": "Wrote"
@@ -157,7 +157,7 @@
     },
     {
       "id": "card_cuts",
-      "label": "5.7 card\u2194chart cut check (DASHBOARD_SPEC \u00a715.7)",
+      "label": "5.7 card↔chart cut check (DASHBOARD_SPEC §15.7)",
       "core": "card_cuts"
     },
     {
@@ -206,6 +206,19 @@
       "derived": [
         "analysis/rbi_sibc/merged/system_state_*.json"
       ]
+    },
+    {
+      "id": "stamp_state",
+      "label": "5.9 dashboard state band (DASHBOARD_SPEC §16)",
+      "core": "stamp_state",
+      "derived": [
+        "web/public/data/sibc_state.json"
+      ]
+    },
+    {
+      "id": "state_band",
+      "label": "5.9b state band traceability",
+      "core": "state_band"
     },
     {
       "id": "opportunities",

@@ -12,6 +12,7 @@ import {
 } from "@/lib/atm_pos_data";
 import type { AtmPosInsight } from "@/lib/atm_pos_insights";
 import type { PlanesMap } from "@/lib/planes";
+import type { StateMap } from "@/lib/state";
 import { hasDeepReading } from "@/lib/opportunities";
 import DeepReading from "./DeepReading";
 import SectionCard from "@/components/SectionCard";
@@ -33,7 +34,8 @@ function defFor(ins: AtmPosInsight, group: string): SectionDef | undefined {
 }
 
 export default function AtmReadMode(
-  { series, insights, planes }: { series: AtmPosSeries; insights: AtmPosInsight[]; planes: PlanesMap },
+  { series, insights, planes, state }:
+    { series: AtmPosSeries; insights: AtmPosInsight[]; planes: PlanesMap; state: StateMap },
 ) {
   const { model, insById } = useMemo(() => {
     const plane = (id: string) => planes[id]?.plane ?? "subject";
@@ -171,7 +173,7 @@ export default function AtmReadMode(
   const period = iso ? new Date(`${iso}T00:00:00Z`).toLocaleString("en-US", { month: "short", timeZone: "UTC" }) : "period";
 
   return (
-    <ReadModeShell model={model} homeLabel="Payments dashboard" period={period}
+    <ReadModeShell model={model} homeLabel="Payments dashboard" period={period} state={state}
                    renderChart={renderChart} hasDeep={hasDeep} renderDeep={renderDeep} />
   );
 }

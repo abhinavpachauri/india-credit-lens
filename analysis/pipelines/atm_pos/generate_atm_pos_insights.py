@@ -641,9 +641,15 @@ ROTATION_CARDS = [
 # where the regimes are: debit cards run at coherence 0.525, POS at 0.864, against SIBC's
 # 0.99-1.00 at every depth — so the contested sentence renders here first, against real data.
 MOVEMENT_CUTS = [
-    MovementCut("category", "cc",    "cc-category-yoy-scan",  "credit cards"),
-    MovementCut("category", "dc",    "dc-category-yoy-scan",  "debit cards"),
-    MovementCut("category", "infra", "pos-category-yoy-scan", "POS terminals"),
+    # parent_yoy/parent_label feed the standing state band only (DASHBOARD_SPEC §16). All three
+    # parents are per-entity counts, so all three are covered by dominance.SCAN_FOR — which is
+    # what keeps the POS line from republishing one issuer's reclassification every month.
+    MovementCut("category", "cc",    "cc-category-yoy-scan",  "credit cards",
+                parent_yoy="cc-outstanding-yoy", parent_label="Credit cards in force"),
+    MovementCut("category", "dc",    "dc-category-yoy-scan",  "debit cards",
+                parent_yoy="dc-outstanding-yoy", parent_label="Debit cards in force"),
+    MovementCut("category", "infra", "pos-category-yoy-scan", "POS terminals",
+                parent_yoy="pos-terminals-yoy",  parent_label="POS terminals"),
 ]
 # The signal-id prefix per cut — payments names its cuts by product, not by a shared stem.
 MOVEMENT_PREFIX = {"cc": "cc-", "dc": "dc-", "infra": "pos-"}

@@ -1,6 +1,6 @@
 {
   "id": "atm_pos",
-  "name": "RBI ATM/POS \u2014 Payments",
+  "name": "RBI ATM/POS — Payments",
   "on_fail": "stop",
   "period_resolver": {
     "module": "extract",
@@ -73,7 +73,7 @@
       "args": [
         "$PERIOD"
       ],
-      "note_why": "Ingestion runs for the period being INGESTED, not $LATEST. $LATEST is the newest period already in signals.db, and the timeline is only updated BY consolidate \u2014 so on a genuinely new month $LATEST was still last month and the new data was silently dropped while the gate reported PASS."
+      "note_why": "Ingestion runs for the period being INGESTED, not $LATEST. $LATEST is the newest period already in signals.db, and the timeline is only updated BY consolidate — so on a genuinely new month $LATEST was still last month and the new data was silently dropped while the gate reported PASS."
     },
     {
       "id": "signals_payload",
@@ -116,7 +116,7 @@
     },
     {
       "id": "card_cuts",
-      "label": "5.7 card\u2194chart cut check (DASHBOARD_SPEC \u00a715.7)",
+      "label": "5.7 card↔chart cut check (DASHBOARD_SPEC §15.7)",
       "core": "card_cuts"
     },
     {
@@ -165,6 +165,19 @@
       "derived": [
         "analysis/rbi_atm_pos/merged/system_state_*.json"
       ]
+    },
+    {
+      "id": "stamp_state",
+      "label": "5.9 dashboard state band (DASHBOARD_SPEC §16)",
+      "core": "stamp_state",
+      "derived": [
+        "web/public/data/atm_pos_state.json"
+      ]
+    },
+    {
+      "id": "state_band",
+      "label": "5.9b state band traceability",
+      "core": "state_band"
     },
     {
       "id": "opportunities",

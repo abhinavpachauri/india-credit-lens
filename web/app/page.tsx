@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { loadReport }           from "@/lib/reports/rbi_sibc";
 import { loadPlanes, type PlanesMap } from "@/lib/planes";
+import { loadStateBands, type StateMap } from "@/lib/state";
 import { useAppShell }          from "@/components/AppShell";
 import SectionWithAnnotations   from "@/components/SectionWithAnnotations";
 import SibcReadMode             from "@/components/read/SibcReadMode";
@@ -14,6 +15,7 @@ export default function Dashboard() {
   const { setHeaderMetric } = useAppShell();
   const [report, setReport] = useState<Report | null>(null);
   const [planes, setPlanes] = useState<PlanesMap>({});
+  const [state, setState]   = useState<StateMap>({});
   const [mode, setMode] = usePersistent<"read" | "explore">("icl-mode", "read");
 
   useEffect(() => {
@@ -22,6 +24,7 @@ export default function Dashboard() {
       setHeaderMetric(r.totalBankCredit, r.latestDate);
     });
     loadPlanes("sibc").then(setPlanes);
+    loadStateBands("sibc").then(setState);
   }, [setHeaderMetric]);
 
   if (!report) {
@@ -43,7 +46,7 @@ export default function Dashboard() {
       <ModeToggle mode={mode} setMode={setMode} />
 
       {mode === "read" ? (
-        <SibcReadMode report={report} planes={planes} />
+        <SibcReadMode report={report} planes={planes} state={state} />
       ) : (
         report.sections.map((section) => (
           <SectionWithAnnotations key={section.id} section={section} />

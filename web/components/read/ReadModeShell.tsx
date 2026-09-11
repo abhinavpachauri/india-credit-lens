@@ -8,10 +8,11 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { usePersistent } from "@/hooks/usePersistent";
 import {
   STYLE, PANEL, EYEBROW, READS_COLOR, tint, vars, glyph, REASON,
-  ReadCard, DimensionCard, ChipStrip, DepthLadder,
+  ReadCard, DimensionCard, ChipStrip, DepthLadder, StateBand,
   type RMModel, type RMCard, type RMDimension, type Depth, type ChipItem,
 } from "./parts";
 import { FS, R } from "@/lib/tokens";
+import type { StateMap } from "@/lib/state";
 
 const READS = "reads";
 const READ_CAP = 5;
@@ -24,9 +25,11 @@ export interface ReadModeShellProps {
   renderChart: (card: RMCard, dim: RMDimension) => React.ReactNode;
   hasDeep: (dimId: string) => boolean;
   renderDeep: (dimId: string, color: string) => React.ReactNode;
+  /** dimension id → its standing state blocks (§16). Absent dimensions simply show none. */
+  state?: StateMap;
 }
 
-export default function ReadModeShell({ model, homeLabel, period, renderChart, hasDeep, renderDeep }: ReadModeShellProps) {
+export default function ReadModeShell({ model, homeLabel, period, renderChart, hasDeep, renderDeep, state = {} }: ReadModeShellProps) {
   const cardById = useMemo(() => {
     const m = new Map<string, { card: RMCard; dim: RMDimension }>();
     for (const dim of model.dimensions)
@@ -125,7 +128,9 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
 
           <h2 style={{ ...EYEBROW, margin: "34px 0 14px" }}>Browse · {model.dimensions.length} dimensions · {totalInsights} insights</h2>
           <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
-            {model.dimensions.map((d) => <DimensionCard key={d.id} dim={d} onClick={() => enterDetail(d.id)} />)}
+            {model.dimensions.map((d) => (
+              <DimensionCard key={d.id} dim={d} state={state[d.id]} onClick={() => enterDetail(d.id)} />
+            ))}
           </div>
         </div>
       </>
@@ -194,7 +199,12 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
           {/* RIGHT · DETAIL */}
           <div ref={detailRef} className="mt-6 lg:mt-0 lg:col-start-2">
             <div style={{ ...PANEL, padding: 20, borderTop: `3px solid ${secColor}` }}>
-              <div style={{ ...EYEBROW, color: secColor, letterSpacing: "0.05em" }}>{selDim?.icon} {selDim?.title}</div>
+              <div style={{ ...EYEBROW, color: secColor, letterSpacing: "0.05em", marginBottom: 12 }}>{selDim?.icon} {selDim?.title}</div>
+
+              {/* §16 — the dimension's standing state, above the card it frames. Rendered at
+                  every depth including Brief: chart + state is the fastest honest answer. */}
+              <StateBand blocks={selDim ? (state[selDim.id] ?? []) : []} color={secColor} />
+
               <h3 style={{ fontSize: FS.title, fontWeight: 700, lineHeight: 1.25, color: "var(--font)", margin: "6px 0 14px" }}>
                 {selCard?.title ?? "Select a read"}
               </h3>

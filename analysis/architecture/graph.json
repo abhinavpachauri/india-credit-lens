@@ -194,6 +194,14 @@
       "reads": {},
       "writes": {}
     },
+    "core/state_lines": {
+      "doc_claims": [],
+      "imports": [],
+      "invokes": [],
+      "path": "analysis/core/state_lines.py",
+      "reads": {},
+      "writes": {}
+    },
     "core/traceability": {
       "doc_claims": [],
       "imports": [],
@@ -405,6 +413,17 @@
       "imports": [],
       "invokes": [],
       "path": "analysis/guards/validate_signal_history.py",
+      "reads": {
+        "analysis/signals/registry.json": "low",
+        "analysis/signals/signals.db": "low"
+      },
+      "writes": {}
+    },
+    "guards/validate_state_band": {
+      "doc_claims": [],
+      "imports": [],
+      "invokes": [],
+      "path": "analysis/guards/validate_state_band.py",
       "reads": {
         "analysis/signals/registry.json": "low",
         "analysis/signals/signals.db": "low"
@@ -890,6 +909,18 @@
         "analysis/DASHBOARD_SPEC.md": "low",
         "web/public/data/atm_pos_insights.json": "low",
         "web/public/data/sibc_l1_annotations.json": "low"
+      },
+      "writes": {}
+    },
+    "signals/stamp_state": {
+      "doc_claims": [],
+      "imports": [
+        "core/state_lines"
+      ],
+      "invokes": [],
+      "path": "analysis/signals/stamp_state.py",
+      "reads": {
+        "analysis/signals/signals.db": "low"
       },
       "writes": {}
     },
