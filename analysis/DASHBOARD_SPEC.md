@@ -975,7 +975,7 @@ else is on screen today.**
   │ 🏦                         │ │ 📊                         │ │ 🏭                         │
   │ Bank Credit                │ │ Main Sectors               │ │ Industry by Size           │
   │                            │ │                            │ │                            │
-  │ ── no mix cut ──           │ │ ▲ 19.1% YoY · accelerating │ │ ▲ 20.0% YoY · accelerating │  ← ★ NEW
+  │ ▲ 19.3% YoY · accelerating │ │ ▲ 19.1% YoY · accelerating │ │ ▲ 20.0% YoY · accelerating │  ← ★ NEW
   │                            │ │ ⇢ steered → Services       │ │ ⇢ drifting → Medium        │  ← ★ NEW
   │                            │ │                            │ │                            │
   │ 9 insights      ▲ 4 moved  │ │ 13 insights     ▲ 5 moved  │ │ 10 insights     ▲ 4 moved  │
@@ -984,8 +984,8 @@ else is on screen today.**
   │ 🛎️                         │ │ 💳                         │ │ ⭐                         │
   │ Services                   │ │ Personal Loans             │ │ Priority Sector            │
   │                            │ │                            │ │                            │
-  │ ▲ 22.9% YoY · accelerating │ │ ▲ 16.2% YoY · steady pace  │ │ ── speed not published ──  │  ← honest
-  │ ⇢ steered → NBFCs          │ │ ⇢ drifting → gold jewellery│ │ ⇢ drifting → Micro & Small │    absence
+  │ ▲ 22.9% YoY · accelerating │ │ ▲ 16.2% YoY                │ │                            │
+  │ ⇢ steered → NBFCs          │ │ ⇢ drifting → gold jewellery│ │ ⇢ drifting → Micro & Small │  ← no rate exists
   │                            │ │                            │ │                            │
   │ 8 insights      ▲ 1 moved  │ │ 25 insights     ▲ 9 moved  │ │ 14 insights     ▲ 4 moved  │
   └────────────────────────────┘ └────────────────────────────┘ └────────────────────────────┘
@@ -1009,10 +1009,17 @@ growing **22.9% and accelerating**, and that its mix is being **steered toward N
 is the single most consequential thing in the SIBC data this period, and it was invisible
 because it is not news, it is *state*.
 
-**Three honest absences visible on one page** — Bank Credit has no mix cut at all (it is the
-top level: food vs non-food); Priority Sector is a memo lens with no total, so no speed exists
-to publish; Industry by Type has a speed but no acceleration row. Each renders as an omission
-or a dash, never a placeholder number.
+**Every dimension carries the band — that is the point of a standing tier.** A band that
+appears on some sections and not others reads as a feature, not as furniture, and the reader
+cannot tell a section with nothing to say from one that failed to load. So each dimension has
+a block, and each block answers both questions — with a reading, or with a stated reason.
+
+Two dimensions can only half-answer, and both say so in the detail pane rather than going
+quiet: **Bank Credit** is the whole book, whose only split at that level is food vs non-food —
+an accounting line, not a mix anyone steers; **Priority Sector** is a memo lens over the main
+tree rather than a slice of it, so RBI publishes no total for it to grow at. Those reasons are
+DECLARED on the cut, never inferred — a silently short block is indistinguishable from a
+broken one.
 
 ---
 
@@ -1140,6 +1147,28 @@ been rendered.
 The cut name is shown **only when a dimension carries more than one** — a single-cut
 dimension would be repeating its own title.
 
+**Bank Credit and Priority Sector — a row that carries its reason instead of a number:**
+
+```
+  │ ┌───────────────────────────────────────────────────┐ │
+  │ │ THE STATE · every month, news or not              │ │
+  │ │                                                   │ │
+  │ │ SPEED   Bank credit growing 19.3% YoY,            │ │
+  │ │         accelerating.                             │ │
+  │ │ MIX     — This is the whole book — its only split │ │   ← muted italic,
+  │ │           here is food vs non-food credit, which  │ │     a stated fact
+  │ │           is an accounting line rather than a mix │ │     about the data
+  │ │           anyone steers.                          │ │
+  │ └───────────────────────────────────────────────────┘ │
+
+  │ │ SPEED   — Priority sector is a memo lens over the │ │
+  │ │           main tree, not a slice of it, so RBI    │ │
+  │ │           publishes no total for it to grow at.   │ │
+  │ │ MIX     Drifting toward Micro and Small           │ │
+  │ │         Enterprises — it took 37.2% of the growth │ │
+  │ │         while holding 30.0% of the total. …       │ │
+```
+
 **Payments / POS Terminals — the dominance guard, which is why this is not optional:**
 
 ```
@@ -1215,13 +1244,14 @@ because the tile is now carrying the answer rather than a count. No horizontal s
 
 | Cut | speed | mix |
 |---|---|---|
+| **Bank Credit** | growing 19.3% YoY, accelerating | *no mix — the only split here is food vs non-food* |
 | Main sectors | growing 19.1% YoY, accelerating | **steered** → Services (+5.8pp), away Personal Loans |
 | Industry by size | growing 20.0% YoY, accelerating | drifting → Medium (+4.9pp), away Large |
 | Industry by type | growing 20.0% YoY | drifting → All Engineering (+5.1pp), away Infrastructure |
 | Services | growing 22.9% YoY, accelerating | **steered** → NBFCs (+17.2pp), away Other Services |
 | Personal loans | growing 16.2% YoY, holding its pace | drifting → gold jewellery (+21.0pp), away Housing |
-| Priority sector | *(no parent signal — omitted)* | drifting → Micro & Small (+7.2pp), away Housing |
-| Infrastructure sub-types | *(no parent signal — omitted)* | **contested** |
+| Priority sector | *no total — a memo lens, not a slice* | drifting → Micro & Small, away Housing |
+| Infrastructure sub-types | growing 10.2% YoY, but slowing | **contested** |
 | Credit cards | growing 9.9% YoY | **steered** → Small Finance Banks (+9.7pp), away Foreign Banks |
 | Debit cards | growing 2.0% YoY | **reallocating** |
 | POS terminals | down 15.8% YoY — **but that is ICICI Bank, not the market** | **contested** |
@@ -1234,9 +1264,11 @@ Three things to read off that table:
    the exact number this project already established is ~98% one issuer's reclassification.
    A standing line would republish it every month. The tier therefore routes its speed clause
    through `signals/dominance.py` (`SCAN_FOR` already maps all three payments parent signals).
-3. **Two cuts have no parent-YoY signal** — PSL (a memo lens with no total, `additive: false`)
-   and infrastructure sub-types (code `2.18` has no `csv_sector_yoy` entry). PSL is a genuine
-   absence. Infra is one registry entry away; see the open decision in 16.10.
+3. **The only genuine absences are facts about the data, and they are stated.** PSL has no
+   total because it is a memo lens (`additive: false`); Bank Credit has no mix because its only
+   split is food vs non-food. Infrastructure sub-types looked like a third but was a real gap —
+   closed by adding `sibc-infra-yoy`, which now reads **10.2% YoY but slowing** against a
+   **contested** mix, one of the better lines on the board.
 
 ### 16.8 What was built
 
@@ -1247,7 +1279,8 @@ Three things to read off that table:
 | The parent signal infrastructure lacked | **`sibc-infra-yoy`** (code `2.18`, Statement 2) — registry 266 → 267, 11 periods backfilled |
 | The sidecar | `analysis/signals/stamp_state.py` → `web/public/data/{pipeline}_state.json`, `--check` freshness guard |
 | The gate stages | **5.9** `stamp_state` + **5.9b** `state_band` (`analysis/guards/validate_state_band.py`), both pipelines, placed after `system_state` because that is what computes the mix |
-| The band | `StateBand` in `components/read/parts.tsx` — shared, so both pipelines inherit one design |
+| The band | `StateBand` in `components/read/parts.tsx` — shared, so both pipelines inherit one design. Renders BOTH rows always; an empty one carries its declared reason |
+| Dimensions with a rate but no mix | `RateOnlyCut` + each pipeline's `STATE_RATE_ONLY`, declared beside `MOVEMENT_CUTS` |
 | The tile rows | `DimensionCard` in the same file |
 | Data layer | `web/lib/state.ts` |
 
@@ -1287,7 +1320,9 @@ Two things the measurement changed, both worth keeping:
 
 - The regime **word** only, never the coherence number.
 - Never a derived number: a subtraction traces to nothing, so its operands are quoted instead.
-- An absent input renders **nothing** — never a placeholder, a zero, or a neighbour's number.
+- An absent input renders its **declared reason**, never a placeholder, a zero, or a neighbour's
+  number — and never silence: this is standing furniture, so a row that vanishes reads as broken.
+- **Every dimension has a band.** Enforced by a test over the live artifacts, not by review.
 - A dominated aggregate is **attributed, not suppressed** — the figure is real, the market
   reading is not.
 - Cards **nest, never merge**. Checks 2g / 4c / 5.7 / 5.8 untouched. Presentation layer.

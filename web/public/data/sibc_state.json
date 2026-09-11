@@ -16,6 +16,8 @@
     "speed_short": "19.1% YoY · accelerating",
     "speed_dir": "up",
     "mix": "Steered toward Services — it took 34.5% of the growth while holding 28.7% of the total. Away from Personal Loans.",
+    "no_speed_note": null,
+    "no_mix_note": null,
     "mix_state": "steered",
     "toward": "Services",
     "toward_entity": "Services",
@@ -35,6 +37,8 @@
     "speed_short": "20.0% YoY · accelerating",
     "speed_dir": "up",
     "mix": "Drifting toward All Engineering — it took 11.4% of the growth while holding 6.3% of the total. Away from Infrastructure.",
+    "no_speed_note": null,
+    "no_mix_note": null,
     "mix_state": "drifting",
     "toward": "All Engineering",
     "toward_entity": "All Engineering",
@@ -52,6 +56,8 @@
     "speed_short": "10.2% YoY · slowing",
     "speed_dir": "up",
     "mix": "Contested — parts are moving in opposite directions, with no single destination.",
+    "no_speed_note": null,
+    "no_mix_note": null,
     "mix_state": "contested",
     "toward": null,
     "toward_entity": null,
@@ -69,6 +75,8 @@
     "speed_short": "20.0% YoY · accelerating",
     "speed_dir": "up",
     "mix": "Drifting toward Medium — it took 14.0% of the growth while holding 9.2% of the total. Away from Large.",
+    "no_speed_note": null,
+    "no_mix_note": null,
     "mix_state": "drifting",
     "toward": "Medium",
     "toward_entity": "Medium",
@@ -88,6 +96,8 @@
     "speed_short": "22.9% YoY · accelerating",
     "speed_dir": "up",
     "mix": "Steered toward Non-Banking Financial Companies — it took 48.3% of the growth while holding 31.1% of the total. Away from Other Services.",
+    "no_speed_note": null,
+    "no_mix_note": null,
     "mix_state": "steered",
     "toward": "Non-Banking Financial Companies",
     "toward_entity": "Non-Banking Financial Companies (NBFCs)",
@@ -107,6 +117,8 @@
     "speed_short": "16.2% YoY",
     "speed_dir": "up",
     "mix": "Drifting toward Loans against gold jewellery — it took 25.8% of the growth while holding 4.8% of the total. Away from Housing.",
+    "no_speed_note": null,
+    "no_mix_note": null,
     "mix_state": "drifting",
     "toward": "Loans against gold jewellery",
     "toward_entity": "Loans against gold jewellery",
@@ -126,12 +138,33 @@
     "speed_short": null,
     "speed_dir": null,
     "mix": "Drifting toward Micro and Small Enterprises — it took 37.2% of the growth while holding 30.0% of the total. Away from Housing.",
+    "no_speed_note": "Priority sector is a memo lens over the main tree, not a slice of it, so RBI publishes no total for it to grow at.",
+    "no_mix_note": null,
     "mix_state": "drifting",
     "toward": "Micro and Small Enterprises",
     "toward_entity": "Micro and Small Enterprises",
     "source_signals": [
      "sibc-psl-allocation",
      "sibc-psl-momentum"
+    ]
+   }
+  ],
+  "bankCredit": [
+   {
+    "dimension": "bankCredit",
+    "cut": "bankCredit",
+    "subject": "Bank credit",
+    "speed": "Bank credit growing 19.3% YoY, accelerating.",
+    "speed_short": "19.3% YoY · accelerating",
+    "speed_dir": "up",
+    "mix": null,
+    "no_speed_note": null,
+    "no_mix_note": "This is the whole book — its only split here is food vs non-food credit, which is an accounting line rather than a mix anyone steers.",
+    "mix_state": null,
+    "toward": null,
+    "toward_entity": null,
+    "source_signals": [
+     "sibc-bank-credit-yoy"
     ]
    }
   ]

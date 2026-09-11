@@ -44,6 +44,11 @@ class MovementCut:
     # parent signal at all (the PSL memo lens has no total). None renders no speed line.
     parent_yoy:   str | None = None   # the registered YoY signal for the parent level
     parent_label: str | None = None   # the noun that signal is called in prose
+    # Why a band line is missing, in the reader's words. DECLARED, never inferred: the band is
+    # standing furniture, so a silently short block is indistinguishable from a broken one, and
+    # "priority sector has no published total" is a fact about the data worth saying once a month.
+    no_speed_note: str | None = None
+    no_mix_note:   str | None = None
 
 
 # The row types a movement signal writes ALONGSIDE its members. `aggregate` carries

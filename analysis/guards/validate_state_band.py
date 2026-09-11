@@ -75,7 +75,7 @@ def validate(pipeline: str) -> list[str]:
         for dim, blocks in doc["dimensions"].items():
             for b in blocks:
                 cands = candidates(conn, registry, pipeline, period, b)
-                for field in ("speed", "speed_short", "mix"):
+                for field in ("speed", "speed_short", "mix", "no_speed_note", "no_mix_note"):
                     text = b.get(field)
                     if not text:
                         continue

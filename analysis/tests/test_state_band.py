@@ -17,6 +17,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "guards"))
 
 from core import state_lines as SL                      # noqa: E402
 from core.movement_cards import MovementCut             # noqa: E402
+from core.state_lines import RateOnlyCut                # noqa: E402
 import validate_state_band as VSB                       # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -154,6 +155,53 @@ def test_a_section_keyed_prefix_map_resolves_per_cut():
                     {"cc-category-momentum": {"mix_state": "steered", "toward": "SFB",
                                               "away_from": "Foreign Banks"}})
     assert len(out) == 1 and "10.7%" in out[0].mix
+
+
+def test_a_rate_only_dimension_still_gets_a_band():
+    """Bank Credit has the most-quoted rate on the site and no decomposition to state a mix
+    for. Before this it had no band at all, which made the band look like a feature of some
+    sections rather than standing furniture."""
+    con = _db(_yoy(18.6, 19.3, sid="bc-yoy"))
+    only = RateOnlyCut("bankCredit", "bc-yoy", "Bank credit", no_mix_note="only food vs non-food")
+    out = SL.blocks(con, "t", "2026-02-30", [], "p-", {}, rate_only=[only])
+    assert len(out) == 1
+    b = out[0]
+    assert b.dimension == "bankCredit"
+    assert b.speed == "Bank credit growing 19.3% YoY, accelerating."
+    assert b.mix is None and b.no_mix_note == "only food vs non-food"
+
+
+def test_a_missing_reading_carries_its_declared_reason():
+    """Declared, never inferred: a silently short block is indistinguishable from a broken one."""
+    cut = MovementCut("psl", "prioritySector", "s", "priority sector credit",
+                      no_speed_note="a memo lens with no published total")
+    rows = [("t", "P", "p-psl-allocation", "alloc",     "MSE", 37.2, "active"),
+            ("t", "P", "p-psl-allocation", "weight",    "MSE", 30.0, "active"),
+            ("t", "P", "p-psl-momentum",   "aggregate", "total", 1.0, "active")]
+    out = SL.blocks(_db(rows), "t", "P", [cut], "p-",
+                    {"p-psl-momentum": {"mix_state": "drifting", "toward": "MSE",
+                                        "away_from": "Housing"}})
+    assert out[0].speed is None
+    assert out[0].no_speed_note == "a memo lens with no published total"
+
+
+def test_every_live_dimension_carries_a_band_with_both_rows_filled():
+    """The property the tier exists for: it is STANDING furniture. Every dashboard dimension
+    has a block, and every block answers both questions — with a reading or with a stated
+    reason, never with silence."""
+    for pipeline, card_file, dims in (
+        ("sibc", "sibc_l1_annotations.json", None),
+        ("atm_pos", "atm_pos_insights.json", None),
+    ):
+        cards = json.loads((DATA / card_file).read_text())
+        live = (set(cards["sections"]) if pipeline == "sibc"
+                else {c["group"] for c in cards})
+        band = json.loads((DATA / f"{pipeline}_state.json").read_text())["dimensions"]
+        assert live == set(band), f"{pipeline}: dimensions without a state band: {live - set(band)}"
+        for dim, blocks in band.items():
+            for b in blocks:
+                assert b["speed"] or b["no_speed_note"], f"{pipeline}/{dim}: speed row is silent"
+                assert b["mix"] or b["no_mix_note"], f"{pipeline}/{dim}: mix row is silent"
 
 
 # ── the gate ──────────────────────────────────────────────────────────────────

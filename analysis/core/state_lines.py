@@ -54,6 +54,24 @@ PACE_BAND_PP = 0.5
 
 
 @dataclass(frozen=True)
+class RateOnlyCut:
+    """A dashboard dimension that has a parent RATE but no mix to state.
+
+    Bank Credit is the whole book: the only split at that level is food vs non-food, which is
+    an accounting distinction rather than a mix anyone steers. It still has the most-quoted
+    growth rate on the site, and leaving the dimension with no band at all made the band look
+    like a feature of some sections — which is the opposite of standing furniture.
+    """
+    section: str
+    parent_yoy: str
+    parent_label: str
+    no_mix_note: str
+    subject: str = ""
+    slug: str = ""
+    no_speed_note: str | None = None
+
+
+@dataclass(frozen=True)
 class StateBlock:
     """One cut's standing state, ready to render. `speed`/`mix` are None where the
     cut has no such input — the band drops the line rather than inventing one."""
@@ -67,6 +85,10 @@ class StateBlock:
     speed_short: str | None
     speed_dir: str | None     # "up" | "down" — the tile glyph, from the SIGN of the rate
     mix: str | None
+    # Why a line is absent, when it is. The band always renders both rows; an empty one carries
+    # the reason instead of a number, so a reader never has to wonder whether it broke.
+    no_speed_note: str | None
+    no_mix_note: str | None
     mix_state: str | None     # the regime word, for the compact tile form
     toward: str | None        # the destination, shortened for display
     # The destination's RAW signals.db entity id. Display trims RBI's parenthetical
@@ -201,7 +223,7 @@ def mix_line(conn, pipeline: str, period: str, alloc_sid: str, mom_sid: str,
 # ── the band ──────────────────────────────────────────────────────────────────
 
 def blocks(conn, pipeline: str, period: str, cuts, prefix,
-           mix_states: dict) -> list[StateBlock]:
+           mix_states: dict, rate_only=()) -> list[StateBlock]:
     """Every cut's state block for one pipeline, in the cut table's own order.
 
     `cuts` is the pipeline's `MOVEMENT_CUTS` — the same table that already decides
@@ -216,7 +238,17 @@ def blocks(conn, pipeline: str, period: str, cuts, prefix,
     """
     stem = (lambda c: prefix) if isinstance(prefix, str) else (lambda c: prefix[c.section])
     out: list[StateBlock] = []
-    for cut in cuts:
+    for cut in [*cuts, *rate_only]:
+        if isinstance(cut, RateOnlyCut):
+            sp = speed_line(conn, pipeline, period, cut.parent_yoy, cut.parent_label)
+            if sp is None:
+                continue
+            out.append(StateBlock(
+                dimension=cut.section, cut=cut.section, subject=cut.parent_label,
+                speed=sp[0], speed_short=sp[1], speed_dir=sp[2],
+                mix=None, no_speed_note=None, no_mix_note=cut.no_mix_note,
+                mix_state=None, toward=None, toward_entity=None, source_signals=sp[3]))
+            continue
         mom_sid = f"{stem(cut)}{cut.slug}-momentum"
         alloc_sid = f"{stem(cut)}{cut.slug}-allocation"
         sp = speed_line(conn, pipeline, period, cut.parent_yoy, cut.parent_label or cut.subject)
@@ -232,6 +264,8 @@ def blocks(conn, pipeline: str, period: str, cuts, prefix,
             speed_short=sp[1] if sp else None,
             speed_dir=sp[2] if sp else None,
             mix=mx[0] if mx else None,
+            no_speed_note=None if sp else cut.no_speed_note,
+            no_mix_note=None if mx else cut.no_mix_note,
             mix_state=mix.get("mix_state"),
             toward=_short(mix["toward"]) if mix.get("toward") else None,
             toward_entity=mix.get("toward") if mx else None,

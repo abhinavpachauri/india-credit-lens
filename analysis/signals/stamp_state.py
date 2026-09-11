@@ -39,13 +39,15 @@ SIDECAR = {p: DATA / f"{p}_state.json" for p in ("sibc", "atm_pos")}
 
 
 def _cuts(pipeline):
-    """The pipeline's movement cut table + signal-id stem. Imported from the generator
-    that already owns it — a second table here is the drift this project keeps paying for."""
+    """The pipeline's movement cut table, signal-id stem, and its rate-only dimensions.
+    Imported from the generator that already owns them — a second table here is the drift this
+    project keeps paying for."""
     if pipeline == "sibc":
-        from pipelines.sibc.generate_analysis_report import MOVEMENT_CUTS
-        return MOVEMENT_CUTS, "sibc-"
+        from pipelines.sibc.generate_analysis_report import MOVEMENT_CUTS, STATE_RATE_ONLY
+        return MOVEMENT_CUTS, "sibc-", STATE_RATE_ONLY
     from pipelines.atm_pos.generate_atm_pos_insights import MOVEMENT_CUTS, MOVEMENT_PREFIX
-    return MOVEMENT_CUTS, MOVEMENT_PREFIX
+    # Every payments dimension decomposes by bank category, so none is rate-only.
+    return MOVEMENT_CUTS, MOVEMENT_PREFIX, []
 
 
 def latest_period(pipeline: str) -> str:
@@ -72,10 +74,10 @@ def _mix_states(pipeline: str, period: str) -> dict:
 def build(pipeline: str) -> dict:
     """The sidecar payload: dimension id → the ordered state blocks under it."""
     period = latest_period(pipeline)
-    cuts, prefix = _cuts(pipeline)
+    cuts, prefix, rate_only = _cuts(pipeline)
     with sqlite3.connect(DB) as con:
         blocks = state_lines.blocks(con, pipeline, period, cuts, prefix,
-                                    _mix_states(pipeline, period))
+                                    _mix_states(pipeline, period), rate_only)
     by_dim: dict[str, list[dict]] = {}
     for b in blocks:
         by_dim.setdefault(b.dimension, []).append(b.as_dict())

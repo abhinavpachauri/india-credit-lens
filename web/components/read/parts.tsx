@@ -132,7 +132,9 @@ export function DimensionCard({ dim, state = [], onClick }:
                   <span style={{ color: col }}>{b.speed_dir === "down" ? "▼" : "▲"} </span>{b.speed_short}
                 </div>
               )}
-              {tileMix(b) && <div style={{ color: "var(--font-muted)" }}>⇢ {tileMix(b)}</div>}
+              {tileMix(b)
+                ? <div style={{ color: "var(--font-muted)" }}>⇢ {tileMix(b)}</div>
+                : !b.speed_short && <div style={{ color: "var(--font-muted)" }}>⇢ no mix at this level</div>}
             </div>
           ))}
         </div>
@@ -218,15 +220,22 @@ export function StateBand({ blocks, color }: { blocks: StateBlock[]; color: stri
               {b.subject}
             </div>
           )}
-          {([["speed", b.speed], ["mix", b.mix]] as const).map(([label, text]) =>
-            text ? (
+          {/* BOTH rows, always. Where a reading does not exist the row carries the reason
+              instead of a number — a standing element that silently loses a line reads as
+              broken, and "priority sector has no published total" is worth saying. */}
+          {([["speed", b.speed, b.no_speed_note],
+             ["mix", b.mix, b.no_mix_note]] as const).map(([label, text, note]) =>
+            text || note ? (
               <div key={label} className="flex flex-col sm:flex-row sm:gap-3" style={{ marginTop: 4 }}>
                 <span className="shrink-0" style={{
                   fontSize: FS.meta, fontWeight: 600, color: "var(--font-muted)",
                   textTransform: "uppercase", letterSpacing: "0.06em",
                   width: 44, lineHeight: 1.9,
                 }}>{label}</span>
-                <span style={{ fontSize: FS.body, lineHeight: 1.55, color: "var(--font)" }}>{text}</span>
+                {text
+                  ? <span style={{ fontSize: FS.body, lineHeight: 1.55, color: "var(--font)" }}>{text}</span>
+                  : <span style={{ fontSize: FS.body, lineHeight: 1.55, color: "var(--font-muted)",
+                                   fontStyle: "italic" }}>— {note}</span>}
               </div>
             ) : null)}
         </div>

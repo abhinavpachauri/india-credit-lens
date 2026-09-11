@@ -29,7 +29,8 @@ from core.relational_insights import (                                       # n
     movement_insight, entity_roles, _subject as relational_subject)
 from core.paths import ROOT as REPO
 from core import residuals                                              # noqa: E402
-from core.movement_cards import MovementCut, reading as movement_reading   # noqa: E402
+from core.movement_cards import MovementCut, reading as movement_reading
+from core.state_lines import RateOnlyCut   # noqa: E402
 from core.cuts import sibc_cut, sibc_sections, chart_label   # noqa: E402
 ANAL  = REPO / "analysis"
 SIG   = ANAL / "signals"
@@ -483,9 +484,21 @@ MOVEMENT_CUTS = [
                 parent_yoy="sibc-services-yoy",         parent_label="Services credit"),
     MovementCut("pl",        "personalLoans",  "sibc-pl-yoy-scan",            "personal loans",
                 parent_yoy="sibc-personal-loans-yoy",   parent_label="Personal loans"),
-    MovementCut("psl",       "prioritySector", "sibc-psl-yoy-scan",           "priority sector credit"),
+    MovementCut("psl",       "prioritySector", "sibc-psl-yoy-scan",           "priority sector credit",
+                no_speed_note="Priority sector is a memo lens over the main tree, not a slice of "
+                              "it, so RBI publishes no total for it to grow at."),
     MovementCut("infra-sub", "industryByType", "sibc-infra-sub-yoy-scan",     "infrastructure credit",
                 parent_yoy="sibc-infra-yoy",            parent_label="Infrastructure credit"),
+]
+
+
+# Dimensions the state band covers that have NO decomposition to state a mix for
+# (DASHBOARD_SPEC §16). Kept beside MOVEMENT_CUTS because a reader of one needs the other:
+# together they are the answer to "which sections carry a state band", which is ALL of them.
+STATE_RATE_ONLY = [
+    RateOnlyCut("bankCredit", "sibc-bank-credit-yoy", "Bank credit",
+                no_mix_note="This is the whole book — its only split here is food vs non-food "
+                            "credit, which is an accounting line rather than a mix anyone steers."),
 ]
 
 

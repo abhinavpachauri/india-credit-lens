@@ -21,6 +21,11 @@ export interface StateBlock {
   speed_short:    string | null; // the same reading, tile-sized — also rendered in Python
   speed_dir:      "up" | "down" | null;  // the tile glyph, from the sign of the rate
   mix:            string | null; // Layer 2 — whether the mix is being steered
+  // Why a row is empty, when it is. The band always renders both lines: a standing element
+  // that silently loses a row is indistinguishable from a broken one, and "priority sector
+  // has no published total" is a fact about the data worth stating once a month.
+  no_speed_note:  string | null;
+  no_mix_note:    string | null;
   mix_state:      MixState | null;
   toward:         string | null;
   toward_entity:  string | null;
