@@ -1,0 +1,4702 @@
+{
+ "_meta": {
+  "pipeline": "atm_pos",
+  "period": "2026-07-31",
+  "purpose": "One Layer 1 table per cut — every part of the cut with size, share, growth, pace, the run of readings, and its share of the new money. Numbers are rendered here and shipped as strings; `sort` orders and is never drawn. Regenerated every gate; freshness-guarded with --check.",
+  "spec": "analysis/DASHBOARD_SPEC.md §17"
+ },
+ "cuts": {
+  "atm-offsite-category": {
+   "cut": "atm-offsite-category",
+   "flow_label": "Of fall",
+   "parts": [
+    {
+     "entity": "Public Sector Banks",
+     "size": {
+      "display": "51,342",
+      "sort": 51342.0
+     },
+     "of_cut": {
+      "display": "69.9%",
+      "sort": 69.8768
+     },
+     "of_book": null,
+     "growth": {
+      "display": "0.9%",
+      "sort": 0.91
+     },
+     "pace": {
+      "display": "+2.17 pp",
+      "sort": 2.1652
+     },
+     "new": null,
+     "run": [
+      -9.1819,
+      -9.2113,
+      -7.5965,
+      -5.7453,
+      -4.4159,
+      -3.1916,
+      -1.2552,
+      0.91
+     ]
+    },
+    {
+     "entity": "Private Sector Banks",
+     "size": {
+      "display": "21,738",
+      "sort": 21738.0
+     },
+     "of_cut": {
+      "display": "29.6%",
+      "sort": 29.5856
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-14.9%",
+      "sort": -14.8898
+     },
+     "pace": {
+      "display": "+2.77 pp",
+      "sort": 2.773
+     },
+     "new": null,
+     "run": [
+      -23.3127,
+      -22.8316,
+      -22.7331,
+      -22.8438,
+      -21.9416,
+      -19.0879,
+      -17.6628,
+      -14.8898
+     ]
+    },
+    {
+     "entity": "Foreign Banks",
+     "size": {
+      "display": "365",
+      "sort": 365.0
+     },
+     "of_cut": {
+      "display": "0.5%",
+      "sort": 0.4968
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-8.1%",
+      "sort": -8.0605
+     },
+     "pace": {
+      "display": "-0.54 pp",
+      "sort": -0.5417
+     },
+     "new": null,
+     "run": [
+      -5.8394,
+      -6.6176,
+      -6.6339,
+      -6.8966,
+      -7.1782,
+      -42.1705,
+      -7.5188,
+      -8.0605
+     ]
+    },
+    {
+     "entity": "Small Finance Banks",
+     "size": {
+      "display": "30",
+      "sort": 30.0
+     },
+     "of_cut": {
+      "display": "0.0%",
+      "sort": 0.0408
+     },
+     "of_book": null,
+     "growth": {
+      "display": "30.4%",
+      "sort": 30.4348
+     },
+     "pace": {
+      "display": "+26.99 pp",
+      "sort": 26.9865
+     },
+     "new": null,
+     "run": [
+      10.7143,
+      13.7931,
+      13.7931,
+      13.7931,
+      6.6667,
+      0.0,
+      3.4483,
+      30.4348
+     ]
+    },
+    {
+     "entity": "Payment Banks",
+     "size": {
+      "display": "0",
+      "sort": 0.0
+     },
+     "of_cut": {
+      "display": "0.0%",
+      "sort": 0.0
+     },
+     "of_book": null,
+     "growth": null,
+     "pace": null,
+     "new": null,
+     "run": [
+      -100.0,
+      -100.0
+     ]
+    }
+   ],
+   "total": {
+    "entity": null,
+    "size": {
+     "display": "73,475",
+     "sort": 73475.0
+    },
+    "of_cut": null,
+    "of_book": null,
+    "growth": null,
+    "pace": null,
+    "new": null,
+    "run": []
+   },
+   "source_signals": [
+    "atm-offsite-category-size-scan",
+    "atm-offsite-category-yoy-scan",
+    "atm-offsite-category-acceleration",
+    "atm-offsite-category-allocation",
+    "atm-offsite-category-share-of-credit-scan"
+   ]
+  },
+  "atm-onsite-category": {
+   "cut": "atm-onsite-category",
+   "flow_label": "New",
+   "parts": [
+    {
+     "entity": "Public Sector Banks",
+     "size": {
+      "display": "83,317",
+      "sort": 83317.0
+     },
+     "of_cut": {
+      "display": "61.1%",
+      "sort": 61.1111
+     },
+     "of_book": null,
+     "growth": {
+      "display": "3.8%",
+      "sort": 3.8386
+     },
+     "pace": {
+      "display": "-0.61 pp",
+      "sort": -0.6108
+     },
+     "new": {
+      "display": "60.2%",
+      "sort": 60.2268
+     },
+     "run": [
+      6.0091,
+      3.4065,
+      2.9376,
+      4.4425,
+      4.8902,
+      1.8617,
+      4.4494,
+      3.8386
+     ]
+    },
+    {
+     "entity": "Private Sector Banks",
+     "size": {
+      "display": "49,105",
+      "sort": 49105.0
+     },
+     "of_cut": {
+      "display": "36.0%",
+      "sort": 36.0174
+     },
+     "of_book": null,
+     "growth": {
+      "display": "3.4%",
+      "sort": 3.4203
+     },
+     "pace": {
+      "display": "+0.35 pp",
+      "sort": 0.3508
+     },
+     "new": {
+      "display": "31.8%",
+      "sort": 31.756
+     },
+     "run": [
+      0.9812,
+      0.7503,
+      0.9298,
+      1.3414,
+      1.762,
+      -0.6019,
+      3.0695,
+      3.4203
+     ]
+    },
+    {
+     "entity": "Small Finance Banks",
+     "size": {
+      "display": "3,345",
+      "sort": 3345.0
+     },
+     "of_cut": {
+      "display": "2.5%",
+      "sort": 2.4535
+     },
+     "of_book": null,
+     "growth": {
+      "display": "14.2%",
+      "sort": 14.1638
+     },
+     "pace": {
+      "display": "+9.89 pp",
+      "sort": 9.8884
+     },
+     "new": {
+      "display": "8.1%",
+      "sort": 8.115
+     },
+     "run": [
+      4.8247,
+      4.5281,
+      4.68,
+      4.3699,
+      4.3204,
+      4.1143,
+      4.2754,
+      14.1638
+     ]
+    },
+    {
+     "entity": "Foreign Banks",
+     "size": {
+      "display": "570",
+      "sort": 570.0
+     },
+     "of_cut": {
+      "display": "0.4%",
+      "sort": 0.4181
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-0.9%",
+      "sort": -0.8696
+     },
+     "pace": {
+      "display": "+1.03 pp",
+      "sort": 1.027
+     },
+     "new": {
+      "display": "-0.1%",
+      "sort": -0.0978
+     },
+     "run": [
+      -4.3118,
+      -4.4776,
+      -2.2071,
+      -1.8739,
+      -2.5773,
+      -3.0822,
+      -1.8966,
+      -0.8696
+     ]
+    },
+    {
+     "entity": "Payment Banks",
+     "size": {
+      "display": "0",
+      "sort": 0.0
+     },
+     "of_cut": {
+      "display": "0.0%",
+      "sort": 0.0
+     },
+     "of_book": null,
+     "growth": null,
+     "pace": null,
+     "new": {
+      "display": "0.0%",
+      "sort": 0.0
+     },
+     "run": [
+      -100.0,
+      -100.0
+     ]
+    }
+   ],
+   "total": {
+    "entity": null,
+    "size": {
+     "display": "1.36 lakh",
+     "sort": 136337.0
+    },
+    "of_cut": null,
+    "of_book": null,
+    "growth": null,
+    "pace": null,
+    "new": null,
+    "run": []
+   },
+   "source_signals": [
+    "atm-onsite-category-size-scan",
+    "atm-onsite-category-yoy-scan",
+    "atm-onsite-category-acceleration",
+    "atm-onsite-category-allocation",
+    "atm-onsite-category-share-of-credit-scan"
+   ]
+  },
+  "bharat-qr-category": {
+   "cut": "bharat-qr-category",
+   "flow_label": "Of fall",
+   "parts": [
+    {
+     "entity": "Private Sector Banks",
+     "size": {
+      "display": "31.90 lakh",
+      "sort": 3190053.0
+     },
+     "of_cut": {
+      "display": "60.5%",
+      "sort": 60.5387
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-20.3%",
+      "sort": -20.3282
+     },
+     "pace": {
+      "display": "+1.21 pp",
+      "sort": 1.2134
+     },
+     "new": {
+      "display": "59.3%",
+      "sort": 59.329
+     },
+     "run": [
+      -7.3271,
+      -6.1608,
+      -6.1447,
+      -11.9719,
+      -11.6422,
+      -11.9252,
+      -21.5416,
+      -20.3282
+     ]
+    },
+    {
+     "entity": "Public Sector Banks",
+     "size": {
+      "display": "20.79 lakh",
+      "sort": 2079389.0
+     },
+     "of_cut": {
+      "display": "39.5%",
+      "sort": 39.4613
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-19.3%",
+      "sort": -19.2996
+     },
+     "pace": {
+      "display": "+0.01 pp",
+      "sort": 0.0094
+     },
+     "new": {
+      "display": "36.2%",
+      "sort": 36.248
+     },
+     "run": [
+      -6.2269,
+      -12.413,
+      -14.0343,
+      -20.893,
+      -20.2381,
+      -19.443,
+      -19.309,
+      -19.2996
+     ]
+    },
+    {
+     "entity": "Foreign Banks",
+     "size": {
+      "display": "0",
+      "sort": 0.0
+     },
+     "of_cut": {
+      "display": "0.0%",
+      "sort": 0.0
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-100.0%",
+      "sort": -100.0
+     },
+     "pace": {
+      "display": "+0.00 pp",
+      "sort": 0.0
+     },
+     "new": {
+      "display": "0.0%",
+      "sort": 0.0001
+     },
+     "run": [
+      0.0,
+      0.0,
+      0.0,
+      -100.0,
+      -100.0,
+      -100.0,
+      -100.0,
+      -100.0
+     ]
+    },
+    {
+     "entity": "Payment Banks",
+     "size": {
+      "display": "0",
+      "sort": 0.0
+     },
+     "of_cut": {
+      "display": "0.0%",
+      "sort": 0.0
+     },
+     "of_book": null,
+     "growth": null,
+     "pace": null,
+     "new": {
+      "display": "0.0%",
+      "sort": 0.0
+     },
+     "run": []
+    },
+    {
+     "entity": "Small Finance Banks",
+     "size": {
+      "display": "0",
+      "sort": 0.0
+     },
+     "of_cut": {
+      "display": "0.0%",
+      "sort": 0.0
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-100.0%",
+      "sort": -100.0
+     },
+     "pace": {
+      "display": "+0.00 pp",
+      "sort": 0.0
+     },
+     "new": {
+      "display": "4.4%",
+      "sort": 4.423
+     },
+     "run": [
+      -100.0,
+      -100.0,
+      -100.0,
+      -100.0,
+      -100.0,
+      -100.0,
+      -100.0,
+      -100.0
+     ]
+    }
+   ],
+   "total": {
+    "entity": null,
+    "size": {
+     "display": "52.69 lakh",
+     "sort": 5269442.0
+    },
+    "of_cut": null,
+    "of_book": null,
+    "growth": null,
+    "pace": null,
+    "new": null,
+    "run": []
+   },
+   "source_signals": [
+    "bharat-qr-category-size-scan",
+    "bharat-qr-category-yoy-scan",
+    "bharat-qr-category-acceleration",
+    "bharat-qr-category-allocation",
+    "bharat-qr-category-share-of-credit-scan"
+   ]
+  },
+  "cc-atm-withdrawal-val-category": {
+   "cut": "cc-atm-withdrawal-val-category",
+   "flow_label": "New",
+   "parts": [
+    {
+     "entity": "Private Sector Banks",
+     "size": {
+      "display": "₹234 Cr",
+      "sort": 2340101.0484
+     },
+     "of_cut": {
+      "display": "62.9%",
+      "sort": 62.8756
+     },
+     "of_book": null,
+     "growth": {
+      "display": "0.2%",
+      "sort": 0.1839
+     },
+     "pace": {
+      "display": "-1.95 pp",
+      "sort": -1.9507
+     },
+     "new": {
+      "display": "4.1%",
+      "sort": 4.0662
+     },
+     "run": [
+      -7.4763,
+      -1.7648,
+      2.5083,
+      3.1853,
+      -0.7827,
+      -1.4931,
+      2.1346,
+      0.1839
+     ]
+    },
+    {
+     "entity": "Public Sector Banks",
+     "size": {
+      "display": "₹132 Cr",
+      "sort": 1315018.2643
+     },
+     "of_cut": {
+      "display": "35.3%",
+      "sort": 35.3329
+     },
+     "of_book": null,
+     "growth": {
+      "display": "7.1%",
+      "sort": 7.1108
+     },
+     "pace": {
+      "display": "+1.89 pp",
+      "sort": 1.8943
+     },
+     "new": {
+      "display": "82.7%",
+      "sort": 82.6529
+     },
+     "run": [
+      -7.6212,
+      -7.1424,
+      -6.7505,
+      -5.7762,
+      -4.3972,
+      -0.6054,
+      5.2165,
+      7.1108
+     ]
+    },
+    {
+     "entity": "Foreign Banks",
+     "size": {
+      "display": "₹3.65 Cr",
+      "sort": 36456.2036
+     },
+     "of_cut": {
+      "display": "1.0%",
+      "sort": 0.9795
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-8.0%",
+      "sort": -8.017
+     },
+     "pace": {
+      "display": "+9.47 pp",
+      "sort": 9.4743
+     },
+     "new": {
+      "display": "-3.0%",
+      "sort": -3.0083
+     },
+     "run": [
+      -50.7336,
+      -52.2696,
+      -51.6212,
+      -49.9667,
+      -24.2773,
+      -22.8642,
+      -17.4913,
+      -8.017
+     ]
+    },
+    {
+     "entity": "Small Finance Banks",
+     "size": {
+      "display": "₹3.02 Cr",
+      "sort": 30219.7
+     },
+     "of_cut": {
+      "display": "0.8%",
+      "sort": 0.812
+     },
+     "of_book": null,
+     "growth": {
+      "display": "132.2%",
+      "sort": 132.2002
+     },
+     "pace": {
+      "display": "+18.01 pp",
+      "sort": 18.0139
+     },
+     "new": {
+      "display": "16.3%",
+      "sort": 16.2892
+     },
+     "run": [
+      -11.1498,
+      16.7451,
+      49.0655,
+      71.5627,
+      86.3601,
+      123.8193,
+      114.1864,
+      132.2002
+     ]
+    },
+    {
+     "entity": "Payment Banks",
+     "size": {
+      "display": "₹0.00 Cr",
+      "sort": 0.0
+     },
+     "of_cut": {
+      "display": "0.0%",
+      "sort": 0.0
+     },
+     "of_book": null,
+     "growth": null,
+     "pace": null,
+     "new": {
+      "display": "0.0%",
+      "sort": 0.0
+     },
+     "run": []
+    }
+   ],
+   "total": {
+    "entity": null,
+    "size": {
+     "display": "₹372 Cr",
+     "sort": 3721795.2163
+    },
+    "of_cut": null,
+    "of_book": null,
+    "growth": null,
+    "pace": null,
+    "new": null,
+    "run": []
+   },
+   "source_signals": [
+    "cc-atm-withdrawal-val-category-size-scan",
+    "cc-atm-withdrawal-val-category-yoy-scan",
+    "cc-atm-withdrawal-val-category-acceleration",
+    "cc-atm-withdrawal-val-category-allocation",
+    "cc-atm-withdrawal-val-category-share-of-credit-scan"
+   ]
+  },
+  "cc-atm-withdrawal-vol-category": {
+   "cut": "cc-atm-withdrawal-vol-category",
+   "flow_label": "Of fall",
+   "parts": [
+    {
+     "entity": "Private Sector Banks",
+     "size": {
+      "display": "3.88 lakh",
+      "sort": 387812.0
+     },
+     "of_cut": {
+      "display": "59.4%",
+      "sort": 59.3915
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-4.1%",
+      "sort": -4.1043
+     },
+     "pace": {
+      "display": "-4.13 pp",
+      "sort": -4.1305
+     },
+     "new": null,
+     "run": [
+      -14.2425,
+      -8.4687,
+      -3.0034,
+      -0.6829,
+      -5.5178,
+      -4.4556,
+      0.0262,
+      -4.1043
+     ]
+    },
+    {
+     "entity": "Public Sector Banks",
+     "size": {
+      "display": "2.53 lakh",
+      "sort": 253352.0
+     },
+     "of_cut": {
+      "display": "38.8%",
+      "sort": 38.7996
+     },
+     "of_book": null,
+     "growth": {
+      "display": "2.0%",
+      "sort": 2.0166
+     },
+     "pace": {
+      "display": "+1.55 pp",
+      "sort": 1.551
+     },
+     "new": null,
+     "run": [
+      -12.1333,
+      -12.1606,
+      -12.1072,
+      -9.9407,
+      -8.4388,
+      -4.6186,
+      0.4655,
+      2.0166
+     ]
+    },
+    {
+     "entity": "Small Finance Banks",
+     "size": {
+      "display": "5,993",
+      "sort": 5993.0
+     },
+     "of_cut": {
+      "display": "0.9%",
+      "sort": 0.9178
+     },
+     "of_book": null,
+     "growth": {
+      "display": "112.4%",
+      "sort": 112.4424
+     },
+     "pace": {
+      "display": "+11.95 pp",
+      "sort": 11.9479
+     },
+     "new": null,
+     "run": [
+      -1.2444,
+      19.2591,
+      45.8763,
+      72.686,
+      72.0331,
+      105.5258,
+      100.4945,
+      112.4424
+     ]
+    },
+    {
+     "entity": "Foreign Banks",
+     "size": {
+      "display": "5,819",
+      "sort": 5819.0
+     },
+     "of_cut": {
+      "display": "0.9%",
+      "sort": 0.8912
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-21.3%",
+      "sort": -21.3436
+     },
+     "pace": {
+      "display": "+0.47 pp",
+      "sort": 0.4702
+     },
+     "new": null,
+     "run": [
+      -54.1957,
+      -54.2597,
+      -54.177,
+      -49.6302,
+      -28.0749,
+      -21.9057,
+      -21.8138,
+      -21.3436
+     ]
+    },
+    {
+     "entity": "Payment Banks",
+     "size": {
+      "display": "0",
+      "sort": 0.0
+     },
+     "of_cut": {
+      "display": "0.0%",
+      "sort": 0.0
+     },
+     "of_book": null,
+     "growth": null,
+     "pace": null,
+     "new": null,
+     "run": []
+    }
+   ],
+   "total": {
+    "entity": null,
+    "size": {
+     "display": "6.53 lakh",
+     "sort": 652976.0
+    },
+    "of_cut": null,
+    "of_book": null,
+    "growth": null,
+    "pace": null,
+    "new": null,
+    "run": []
+   },
+   "source_signals": [
+    "cc-atm-withdrawal-vol-category-size-scan",
+    "cc-atm-withdrawal-vol-category-yoy-scan",
+    "cc-atm-withdrawal-vol-category-acceleration",
+    "cc-atm-withdrawal-vol-category-allocation",
+    "cc-atm-withdrawal-vol-category-share-of-credit-scan"
+   ]
+  },
+  "cc-category": {
+   "cut": "cc-category",
+   "flow_label": "New",
+   "parts": [
+    {
+     "entity": "Private Sector Banks",
+     "size": {
+      "display": "8.69 crore",
+      "sort": 86914766.0
+     },
+     "of_cut": {
+      "display": "70.7%",
+      "sort": 70.7441
+     },
+     "of_book": null,
+     "growth": {
+      "display": "9.8%",
+      "sort": 9.8198
+     },
+     "pace": {
+      "display": "+0.09 pp",
+      "sort": 0.0927
+     },
+     "new": {
+      "display": "70.3%",
+      "sort": 70.3322
+     },
+     "run": [
+      7.4401,
+      7.5509,
+      8.1727,
+      8.3238,
+      8.4391,
+      8.5253,
+      9.7271,
+      9.8198
+     ]
+    },
+    {
+     "entity": "Public Sector Banks",
+     "size": {
+      "display": "2.94 crore",
+      "sort": 29359507.0
+     },
+     "of_cut": {
+      "display": "23.9%",
+      "sort": 23.8971
+     },
+     "of_book": null,
+     "growth": {
+      "display": "8.9%",
+      "sort": 8.8523
+     },
+     "pace": {
+      "display": "+0.57 pp",
+      "sort": 0.5656
+     },
+     "new": {
+      "display": "21.6%",
+      "sort": 21.6078
+     },
+     "run": [
+      7.2929,
+      7.0913,
+      7.1781,
+      7.211,
+      7.1434,
+      7.6585,
+      8.2867,
+      8.8523
+     ]
+    },
+    {
+     "entity": "Foreign Banks",
+     "size": {
+      "display": "42.42 lakh",
+      "sort": 4242414.0
+     },
+     "of_cut": {
+      "display": "3.5%",
+      "sort": 3.4531
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-6.5%",
+      "sort": -6.4525
+     },
+     "pace": {
+      "display": "-0.58 pp",
+      "sort": -0.5834
+     },
+     "new": {
+      "display": "-2.6%",
+      "sort": -2.6482
+     },
+     "run": [
+      -3.873,
+      -5.8538,
+      -5.8114,
+      -5.3539,
+      -5.5209,
+      -5.4229,
+      -5.8691,
+      -6.4525
+     ]
+    },
+    {
+     "entity": "Small Finance Banks",
+     "size": {
+      "display": "23.41 lakh",
+      "sort": 2341207.0
+     },
+     "of_cut": {
+      "display": "1.9%",
+      "sort": 1.9056
+     },
+     "of_book": null,
+     "growth": {
+      "display": "102.2%",
+      "sort": 102.1838
+     },
+     "pace": {
+      "display": "+11.27 pp",
+      "sort": 11.2676
+     },
+     "new": {
+      "display": "10.7%",
+      "sort": 10.7082
+     },
+     "run": [
+      30.5823,
+      34.0383,
+      40.2014,
+      55.4605,
+      67.5795,
+      80.0914,
+      90.9161,
+      102.1838
+     ]
+    },
+    {
+     "entity": "Payment Banks",
+     "size": {
+      "display": "0",
+      "sort": 0.0
+     },
+     "of_cut": {
+      "display": "0.0%",
+      "sort": 0.0
+     },
+     "of_book": null,
+     "growth": null,
+     "pace": null,
+     "new": {
+      "display": "0.0%",
+      "sort": 0.0
+     },
+     "run": []
+    }
+   ],
+   "total": {
+    "entity": null,
+    "size": {
+     "display": "12.29 crore",
+     "sort": 122857894.0
+    },
+    "of_cut": null,
+    "of_book": null,
+    "growth": {
+     "display": "9.9%",
+     "sort": 9.8829
+    },
+    "pace": null,
+    "new": null,
+    "run": []
+   },
+   "source_signals": [
+    "cc-category-size-scan",
+    "cc-category-yoy-scan",
+    "cc-category-acceleration",
+    "cc-category-allocation",
+    "cc-category-share-of-credit-scan",
+    "cc-outstanding-yoy"
+   ]
+  },
+  "cc-ecom-txn-val-category": {
+   "cut": "cc-ecom-txn-val-category",
+   "flow_label": "New",
+   "parts": [
+    {
+     "entity": "Private Sector Banks",
+     "size": {
+      "display": "₹94,447 Cr",
+      "sort": 944473557.0351
+     },
+     "of_cut": {
+      "display": "71.4%",
+      "sort": 71.3678
+     },
+     "of_book": null,
+     "growth": {
+      "display": "2.1%",
+      "sort": 2.0922
+     },
+     "pace": {
+      "display": "-0.12 pp",
+      "sort": -0.1199
+     },
+     "new": {
+      "display": "21.8%",
+      "sort": 21.7509
+     },
+     "run": [
+      2.3296,
+      2.7165,
+      -0.9307,
+      1.7181,
+      -0.6331,
+      1.3065,
+      2.2121,
+      2.0922
+     ]
+    },
+    {
+     "entity": "Public Sector Banks",
+     "size": {
+      "display": "₹29,763 Cr",
+      "sort": 297626493.8055
+     },
+     "of_cut": {
+      "display": "22.5%",
+      "sort": 22.4897
+     },
+     "of_book": null,
+     "growth": {
+      "display": "24.2%",
+      "sort": 24.2048
+     },
+     "pace": {
+      "display": "-16.59 pp",
+      "sort": -16.5907
+     },
+     "new": {
+      "display": "65.2%",
+      "sort": 65.1799
+     },
+     "run": [
+      50.5288,
+      31.5483,
+      30.1351,
+      39.135,
+      34.3298,
+      19.6071,
+      40.7955,
+      24.2048
+     ]
+    },
+    {
+     "entity": "Foreign Banks",
+     "size": {
+      "display": "₹7,021 Cr",
+      "sort": 70206324.3277
+     },
+     "of_cut": {
+      "display": "5.3%",
+      "sort": 5.305
+     },
+     "of_book": null,
+     "growth": {
+      "display": "9.9%",
+      "sort": 9.8619
+     },
+     "pace": {
+      "display": "+8.88 pp",
+      "sort": 8.8797
+     },
+     "new": {
+      "display": "7.1%",
+      "sort": 7.0822
+     },
+     "run": [
+      -8.8717,
+      -10.369,
+      -5.536,
+      -2.4237,
+      -0.2499,
+      -2.8543,
+      0.9822,
+      9.8619
+     ]
+    },
+    {
+     "entity": "Small Finance Banks",
+     "size": {
+      "display": "₹1,108 Cr",
+      "sort": 11083182.1572
+     },
+     "of_cut": {
+      "display": "0.8%",
+      "sort": 0.8375
+     },
+     "of_book": null,
+     "growth": {
+      "display": "92.6%",
+      "sort": 92.5606
+     },
+     "pace": {
+      "display": "+17.57 pp",
+      "sort": 17.5678
+     },
+     "new": {
+      "display": "6.0%",
+      "sort": 5.9869
+     },
+     "run": [
+      -9.1121,
+      48.3463,
+      60.2271,
+      64.7726,
+      116.9662,
+      80.2718,
+      74.9927,
+      92.5606
+     ]
+    },
+    {
+     "entity": "Payment Banks",
+     "size": {
+      "display": "₹0.00 Cr",
+      "sort": 0.0
+     },
+     "of_cut": {
+      "display": "0.0%",
+      "sort": 0.0
+     },
+     "of_book": null,
+     "growth": null,
+     "pace": null,
+     "new": {
+      "display": "0.0%",
+      "sort": 0.0
+     },
+     "run": []
+    }
+   ],
+   "total": {
+    "entity": null,
+    "size": {
+     "display": "₹1.32L Cr",
+     "sort": 1323389557.3255
+    },
+    "of_cut": null,
+    "of_book": null,
+    "growth": null,
+    "pace": null,
+    "new": null,
+    "run": []
+   },
+   "source_signals": [
+    "cc-ecom-txn-val-category-size-scan",
+    "cc-ecom-txn-val-category-yoy-scan",
+    "cc-ecom-txn-val-category-acceleration",
+    "cc-ecom-txn-val-category-allocation",
+    "cc-ecom-txn-val-category-share-of-credit-scan"
+   ]
+  },
+  "cc-ecom-txn-vol-category": {
+   "cut": "cc-ecom-txn-vol-category",
+   "flow_label": "New",
+   "parts": [
+    {
+     "entity": "Private Sector Banks",
+     "size": {
+      "display": "19.46 crore",
+      "sort": 194611191.0
+     },
+     "of_cut": {
+      "display": "63.2%",
+      "sort": 63.2475
+     },
+     "of_book": null,
+     "growth": {
+      "display": "18.7%",
+      "sort": 18.6908
+     },
+     "pace": {
+      "display": "-2.15 pp",
+      "sort": -2.1454
+     },
+     "new": {
+      "display": "46.2%",
+      "sort": 46.1711
+     },
+     "run": [
+      19.2071,
+      19.8099,
+      19.2882,
+      20.6423,
+      19.833,
+      21.5834,
+      20.8363,
+      18.6908
+     ]
+    },
+    {
+     "entity": "Public Sector Banks",
+     "size": {
+      "display": "9.74 crore",
+      "sort": 97355552.0
+     },
+     "of_cut": {
+      "display": "31.6%",
+      "sort": 31.64
+     },
+     "of_book": null,
+     "growth": {
+      "display": "45.7%",
+      "sort": 45.7248
+     },
+     "pace": {
+      "display": "-7.24 pp",
+      "sort": -7.2394
+     },
+     "new": {
+      "display": "46.0%",
+      "sort": 46.0224
+     },
+     "run": [
+      51.1557,
+      47.5725,
+      44.0243,
+      44.6139,
+      43.0442,
+      44.3881,
+      52.9642,
+      45.7248
+     ]
+    },
+    {
+     "entity": "Foreign Banks",
+     "size": {
+      "display": "1.01 crore",
+      "sort": 10073698.0
+     },
+     "of_cut": {
+      "display": "3.3%",
+      "sort": 3.2739
+     },
+     "of_book": null,
+     "growth": {
+      "display": "23.7%",
+      "sort": 23.6675
+     },
+     "pace": {
+      "display": "+0.77 pp",
+      "sort": 0.7654
+     },
+     "new": {
+      "display": "2.9%",
+      "sort": 2.9045
+     },
+     "run": [
+      9.1544,
+      10.579,
+      15.9623,
+      17.8197,
+      19.8103,
+      21.119,
+      22.9021,
+      23.6675
+     ]
+    },
+    {
+     "entity": "Small Finance Banks",
+     "size": {
+      "display": "56.58 lakh",
+      "sort": 5657632.0
+     },
+     "of_cut": {
+      "display": "1.8%",
+      "sort": 1.8387
+     },
+     "of_book": null,
+     "growth": {
+      "display": "135.3%",
+      "sort": 135.3484
+     },
+     "pace": {
+      "display": "+15.10 pp",
+      "sort": 15.0997
+     },
+     "new": {
+      "display": "4.9%",
+      "sort": 4.9019
+     },
+     "run": [
+      57.5194,
+      73.3197,
+      79.0392,
+      91.1129,
+      99.1879,
+      110.9581,
+      120.2487,
+      135.3484
+     ]
+    },
+    {
+     "entity": "Payment Banks",
+     "size": {
+      "display": "0",
+      "sort": 0.0
+     },
+     "of_cut": {
+      "display": "0.0%",
+      "sort": 0.0
+     },
+     "of_book": null,
+     "growth": null,
+     "pace": null,
+     "new": {
+      "display": "0.0%",
+      "sort": 0.0
+     },
+     "run": []
+    }
+   ],
+   "total": {
+    "entity": null,
+    "size": {
+     "display": "30.77 crore",
+     "sort": 307698073.0
+    },
+    "of_cut": null,
+    "of_book": null,
+    "growth": null,
+    "pace": null,
+    "new": null,
+    "run": []
+   },
+   "source_signals": [
+    "cc-ecom-txn-vol-category-size-scan",
+    "cc-ecom-txn-vol-category-yoy-scan",
+    "cc-ecom-txn-vol-category-acceleration",
+    "cc-ecom-txn-vol-category-allocation",
+    "cc-ecom-txn-vol-category-share-of-credit-scan"
+   ]
+  },
+  "cc-other-txn-val-category": {
+   "cut": "cc-other-txn-val-category",
+   "flow_label": "New",
+   "parts": [
+    {
+     "entity": "Small Finance Banks",
+     "size": {
+      "display": "₹102 Cr",
+      "sort": 1023400.7396
+     },
+     "of_cut": {
+      "display": "96.2%",
+      "sort": 96.2086
+     },
+     "of_book": null,
+     "growth": {
+      "display": "261.4%",
+      "sort": 261.4134
+     },
+     "pace": {
+      "display": "-72.92 pp",
+      "sort": -72.9226
+     },
+     "new": {
+      "display": "95.3%",
+      "sort": 95.3258
+     },
+     "run": [
+      792.6779,
+      561.6145,
+      528.1937,
+      497.7689,
+      487.2294,
+      428.1922,
+      334.336,
+      261.4134
+     ]
+    },
+    {
+     "entity": "Private Sector Banks",
+     "size": {
+      "display": "₹4.01 Cr",
+      "sort": 40124.6359
+     },
+     "of_cut": {
+      "display": "3.8%",
+      "sort": 3.7721
+     },
+     "of_book": null,
+     "growth": {
+      "display": "991.1%",
+      "sort": 991.0635
+     },
+     "pace": {
+      "display": "+157.66 pp",
+      "sort": 157.6612
+     },
+     "new": {
+      "display": "4.7%",
+      "sort": 4.6936
+     },
+     "run": [
+      264.4582,
+      218.1522,
+      202.1452,
+      445.5847,
+      939.5829,
+      120696.7307,
+      833.4023,
+      991.0635
+     ]
+    },
+    {
+     "entity": "Public Sector Banks",
+     "size": {
+      "display": "₹0.02 Cr",
+      "sort": 206.0
+     },
+     "of_cut": {
+      "display": "0.0%",
+      "sort": 0.0194
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-42.2%",
+      "sort": -42.2367
+     },
+     "pace": {
+      "display": "-215.13 pp",
+      "sort": -215.1314
+     },
+     "new": {
+      "display": "-0.0%",
+      "sort": -0.0194
+     },
+     "run": [
+      109.9985,
+      -71.4286,
+      111.7647,
+      24.1019,
+      43.1936,
+      -55.7283,
+      172.8946,
+      -42.2367
+     ]
+    },
+    {
+     "entity": "Foreign Banks",
+     "size": {
+      "display": "₹0.00 Cr",
+      "sort": 0.0
+     },
+     "of_cut": {
+      "display": "0.0%",
+      "sort": 0.0
+     },
+     "of_book": null,
+     "growth": null,
+     "pace": null,
+     "new": {
+      "display": "0.0%",
+      "sort": 0.0
+     },
+     "run": []
+    },
+    {
+     "entity": "Payment Banks",
+     "size": {
+      "display": "₹0.00 Cr",
+      "sort": 0.0
+     },
+     "of_cut": {
+      "display": "0.0%",
+      "sort": 0.0
+     },
+     "of_book": null,
+     "growth": null,
+     "pace": null,
+     "new": {
+      "display": "0.0%",
+      "sort": 0.0
+     },
+     "run": []
+    }
+   ],
+   "total": {
+    "entity": null,
+    "size": {
+     "display": "₹106 Cr",
+     "sort": 1063731.3755
+    },
+    "of_cut": null,
+    "of_book": null,
+    "growth": null,
+    "pace": null,
+    "new": null,
+    "run": []
+   },
+   "source_signals": [
+    "cc-other-txn-val-category-size-scan",
+    "cc-other-txn-val-category-yoy-scan",
+    "cc-other-txn-val-category-acceleration",
+    "cc-other-txn-val-category-allocation",
+    "cc-other-txn-val-category-share-of-credit-scan"
+   ]
+  },
+  "cc-other-txn-vol-category": {
+   "cut": "cc-other-txn-vol-category",
+   "flow_label": "New",
+   "parts": [
+    {
+     "entity": "Small Finance Banks",
+     "size": {
+      "display": "37.54 lakh",
+      "sort": 3754027.0
+     },
+     "of_cut": {
+      "display": "97.9%",
+      "sort": 97.8888
+     },
+     "of_book": null,
+     "growth": {
+      "display": "137.1%",
+      "sort": 137.0833
+     },
+     "pace": {
+      "display": "-51.58 pp",
+      "sort": -51.5762
+     },
+     "new": {
+      "display": "96.4%",
+      "sort": 96.4065
+     },
+     "run": [
+      485.6338,
+      350.0797,
+      316.4168,
+      306.64,
+      297.4073,
+      248.435,
+      188.6596,
+      137.0833
+     ]
+    },
+    {
+     "entity": "Private Sector Banks",
+     "size": {
+      "display": "80,961",
+      "sort": 80961.0
+     },
+     "of_cut": {
+      "display": "2.1%",
+      "sort": 2.1111
+     },
+     "of_book": null,
+     "growth": {
+      "display": "168568.8%",
+      "sort": 168568.75
+     },
+     "pace": {
+      "display": "+31836.25 pp",
+      "sort": 31836.25
+     },
+     "new": {
+      "display": "3.6%",
+      "sort": 3.5937
+     },
+     "run": [
+      11495.6522,
+      777.7778,
+      12218.6047,
+      25001.7241,
+      61091.1765,
+      11738180.4878,
+      136732.5,
+      168568.75
+     ]
+    },
+    {
+     "entity": "Public Sector Banks",
+     "size": {
+      "display": "2",
+      "sort": 2.0
+     },
+     "of_cut": {
+      "display": "0.0%",
+      "sort": 0.0001
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-66.7%",
+      "sort": -66.6667
+     },
+     "pace": {
+      "display": "-133.33 pp",
+      "sort": -133.3333
+     },
+     "new": {
+      "display": "-0.0%",
+      "sort": -0.0002
+     },
+     "run": [
+      100.0,
+      -50.0,
+      50.0,
+      33.3333,
+      100.0,
+      -50.0,
+      66.6667,
+      -66.6667
+     ]
+    },
+    {
+     "entity": "Foreign Banks",
+     "size": {
+      "display": "0",
+      "sort": 0.0
+     },
+     "of_cut": {
+      "display": "0.0%",
+      "sort": 0.0
+     },
+     "of_book": null,
+     "growth": null,
+     "pace": null,
+     "new": {
+      "display": "0.0%",
+      "sort": 0.0
+     },
+     "run": []
+    },
+    {
+     "entity": "Payment Banks",
+     "size": {
+      "display": "0",
+      "sort": 0.0
+     },
+     "of_cut": {
+      "display": "0.0%",
+      "sort": 0.0
+     },
+     "of_book": null,
+     "growth": null,
+     "pace": null,
+     "new": {
+      "display": "0.0%",
+      "sort": 0.0
+     },
+     "run": []
+    }
+   ],
+   "total": {
+    "entity": null,
+    "size": {
+     "display": "38.35 lakh",
+     "sort": 3834990.0
+    },
+    "of_cut": null,
+    "of_book": null,
+    "growth": null,
+    "pace": null,
+    "new": null,
+    "run": []
+   },
+   "source_signals": [
+    "cc-other-txn-vol-category-size-scan",
+    "cc-other-txn-vol-category-yoy-scan",
+    "cc-other-txn-vol-category-acceleration",
+    "cc-other-txn-vol-category-allocation",
+    "cc-other-txn-vol-category-share-of-credit-scan"
+   ]
+  },
+  "cc-pos-txn-val-category": {
+   "cut": "cc-pos-txn-val-category",
+   "flow_label": "New",
+   "parts": [
+    {
+     "entity": "Private Sector Banks",
+     "size": {
+      "display": "₹55,747 Cr",
+      "sort": 557472253.3708
+     },
+     "of_cut": {
+      "display": "73.6%",
+      "sort": 73.6031
+     },
+     "of_book": null,
+     "growth": {
+      "display": "4.1%",
+      "sort": 4.0623
+     },
+     "pace": {
+      "display": "-2.65 pp",
+      "sort": -2.649
+     },
+     "new": {
+      "display": "40.6%",
+      "sort": 40.6001
+     },
+     "run": [
+      5.4461,
+      5.6729,
+      4.7443,
+      9.3581,
+      6.3417,
+      6.6951,
+      6.7112,
+      4.0623
+     ]
+    },
+    {
+     "entity": "Public Sector Banks",
+     "size": {
+      "display": "₹16,396 Cr",
+      "sort": 163963110.7589
+     },
+     "of_cut": {
+      "display": "21.6%",
+      "sort": 21.648
+     },
+     "of_book": null,
+     "growth": {
+      "display": "18.1%",
+      "sort": 18.0835
+     },
+     "pace": {
+      "display": "-2.22 pp",
+      "sort": -2.22
+     },
+     "new": {
+      "display": "46.8%",
+      "sort": 46.8457
+     },
+     "run": [
+      16.5631,
+      23.7761,
+      21.9867,
+      11.096,
+      15.7982,
+      16.8234,
+      20.3035,
+      18.0835
+     ]
+    },
+    {
+     "entity": "Foreign Banks",
+     "size": {
+      "display": "₹2,825 Cr",
+      "sort": 28249583.2793
+     },
+     "of_cut": {
+      "display": "3.7%",
+      "sort": 3.7298
+     },
+     "of_book": null,
+     "growth": {
+      "display": "14.0%",
+      "sort": 13.9869
+     },
+     "pace": {
+      "display": "-0.39 pp",
+      "sort": -0.3855
+     },
+     "new": {
+      "display": "6.5%",
+      "sort": 6.4671
+     },
+     "run": [
+      5.9494,
+      10.9049,
+      10.0754,
+      8.5873,
+      13.1189,
+      14.0972,
+      14.3724,
+      13.9869
+     ]
+    },
+    {
+     "entity": "Small Finance Banks",
+     "size": {
+      "display": "₹772 Cr",
+      "sort": 7718751.1306
+     },
+     "of_cut": {
+      "display": "1.0%",
+      "sort": 1.0191
+     },
+     "of_book": null,
+     "growth": {
+      "display": "73.2%",
+      "sort": 73.2201
+     },
+     "pace": {
+      "display": "+5.52 pp",
+      "sort": 5.5165
+     },
+     "new": {
+      "display": "6.1%",
+      "sort": 6.0871
+     },
+     "run": [
+      -9.1437,
+      12.7473,
+      23.1371,
+      25.3173,
+      43.3165,
+      54.4495,
+      67.7036,
+      73.2201
+     ]
+    },
+    {
+     "entity": "Payment Banks",
+     "size": {
+      "display": "₹0.00 Cr",
+      "sort": 0.0
+     },
+     "of_cut": {
+      "display": "0.0%",
+      "sort": 0.0
+     },
+     "of_book": null,
+     "growth": null,
+     "pace": null,
+     "new": {
+      "display": "0.0%",
+      "sort": 0.0
+     },
+     "run": []
+    }
+   ],
+   "total": {
+    "entity": null,
+    "size": {
+     "display": "₹75,740 Cr",
+     "sort": 757403698.5396
+    },
+    "of_cut": null,
+    "of_book": null,
+    "growth": null,
+    "pace": null,
+    "new": null,
+    "run": []
+   },
+   "source_signals": [
+    "cc-pos-txn-val-category-size-scan",
+    "cc-pos-txn-val-category-yoy-scan",
+    "cc-pos-txn-val-category-acceleration",
+    "cc-pos-txn-val-category-allocation",
+    "cc-pos-txn-val-category-share-of-credit-scan"
+   ]
+  },
+  "cc-pos-txn-vol-category": {
+   "cut": "cc-pos-txn-vol-category",
+   "flow_label": "New",
+   "parts": [
+    {
+     "entity": "Private Sector Banks",
+     "size": {
+      "display": "24.30 crore",
+      "sort": 243024154.0
+     },
+     "of_cut": {
+      "display": "82.7%",
+      "sort": 82.7362
+     },
+     "of_book": null,
+     "growth": {
+      "display": "20.1%",
+      "sort": 20.051
+     },
+     "pace": {
+      "display": "-2.38 pp",
+      "sort": -2.3822
+     },
+     "new": {
+      "display": "80.4%",
+      "sort": 80.4428
+     },
+     "run": [
+      25.8921,
+      26.509,
+      24.9242,
+      25.8287,
+      22.7756,
+      24.0507,
+      22.4332,
+      20.051
+     ]
+    },
+    {
+     "entity": "Public Sector Banks",
+     "size": {
+      "display": "3.97 crore",
+      "sort": 39675082.0
+     },
+     "of_cut": {
+      "display": "13.5%",
+      "sort": 13.5072
+     },
+     "of_book": null,
+     "growth": {
+      "display": "11.3%",
+      "sort": 11.3021
+     },
+     "pace": {
+      "display": "+1.07 pp",
+      "sort": 1.0657
+     },
+     "new": {
+      "display": "8.0%",
+      "sort": 7.9844
+     },
+     "run": [
+      3.18,
+      5.3212,
+      4.4697,
+      8.1986,
+      5.1553,
+      10.0476,
+      10.2364,
+      11.3021
+     ]
+    },
+    {
+     "entity": "Small Finance Banks",
+     "size": {
+      "display": "67.96 lakh",
+      "sort": 6795686.0
+     },
+     "of_cut": {
+      "display": "2.3%",
+      "sort": 2.3136
+     },
+     "of_book": null,
+     "growth": {
+      "display": "677.9%",
+      "sort": 677.8882
+     },
+     "pace": {
+      "display": "+118.53 pp",
+      "sort": 118.5334
+     },
+     "new": {
+      "display": "11.7%",
+      "sort": 11.7366
+     },
+     "run": [
+      86.0925,
+      135.8846,
+      201.5063,
+      260.8557,
+      356.3352,
+      461.5983,
+      559.3548,
+      677.8882
+     ]
+    },
+    {
+     "entity": "Foreign Banks",
+     "size": {
+      "display": "42.39 lakh",
+      "sort": 4238695.0
+     },
+     "of_cut": {
+      "display": "1.4%",
+      "sort": 1.443
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-1.9%",
+      "sort": -1.9119
+     },
+     "pace": {
+      "display": "+3.26 pp",
+      "sort": 3.2645
+     },
+     "new": {
+      "display": "-0.2%",
+      "sort": -0.1637
+     },
+     "run": [
+      -7.1315,
+      -5.1768,
+      -7.0797,
+      -6.8379,
+      -6.6978,
+      -3.3284,
+      -5.1764,
+      -1.9119
+     ]
+    },
+    {
+     "entity": "Payment Banks",
+     "size": {
+      "display": "0",
+      "sort": 0.0
+     },
+     "of_cut": {
+      "display": "0.0%",
+      "sort": 0.0
+     },
+     "of_book": null,
+     "growth": null,
+     "pace": null,
+     "new": {
+      "display": "0.0%",
+      "sort": 0.0
+     },
+     "run": []
+    }
+   ],
+   "total": {
+    "entity": null,
+    "size": {
+     "display": "29.37 crore",
+     "sort": 293733617.0
+    },
+    "of_cut": null,
+    "of_book": null,
+    "growth": null,
+    "pace": null,
+    "new": null,
+    "run": []
+   },
+   "source_signals": [
+    "cc-pos-txn-vol-category-size-scan",
+    "cc-pos-txn-vol-category-yoy-scan",
+    "cc-pos-txn-vol-category-acceleration",
+    "cc-pos-txn-vol-category-allocation",
+    "cc-pos-txn-vol-category-share-of-credit-scan"
+   ]
+  },
+  "dc-atm-withdrawal-val-category": {
+   "cut": "dc-atm-withdrawal-val-category",
+   "flow_label": "Of fall",
+   "parts": [
+    {
+     "entity": "Public Sector Banks",
+     "size": {
+      "display": "₹1.51L Cr",
+      "sort": 1507406253.5744
+     },
+     "of_cut": {
+      "display": "68.7%",
+      "sort": 68.7346
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-4.0%",
+      "sort": -4.0052
+     },
+     "pace": {
+      "display": "+0.51 pp",
+      "sort": 0.5051
+     },
+     "new": {
+      "display": "50.7%",
+      "sort": 50.6626
+     },
+     "run": [
+      -3.4449,
+      -3.1233,
+      -0.2955,
+      -4.3611,
+      -4.2453,
+      -5.3492,
+      -4.5102,
+      -4.0052
+     ]
+    },
+    {
+     "entity": "Private Sector Banks",
+     "size": {
+      "display": "₹63,868 Cr",
+      "sort": 638682205.3108
+     },
+     "of_cut": {
+      "display": "29.1%",
+      "sort": 29.1226
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-8.2%",
+      "sort": -8.224
+     },
+     "pace": {
+      "display": "-0.84 pp",
+      "sort": -0.836
+     },
+     "new": {
+      "display": "46.1%",
+      "sort": 46.102
+     },
+     "run": [
+      -8.477,
+      -7.6605,
+      -4.9254,
+      -7.7691,
+      -6.8548,
+      -7.7278,
+      -7.3879,
+      -8.224
+     ]
+    },
+    {
+     "entity": "Small Finance Banks",
+     "size": {
+      "display": "₹2,989 Cr",
+      "sort": 29889303.2325
+     },
+     "of_cut": {
+      "display": "1.4%",
+      "sort": 1.3629
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-8.3%",
+      "sort": -8.2507
+     },
+     "pace": {
+      "display": "-2.22 pp",
+      "sort": -2.2228
+     },
+     "new": {
+      "display": "2.2%",
+      "sort": 2.1651
+     },
+     "run": [
+      3.1618,
+      -3.8122,
+      -4.7415,
+      -1.6346,
+      -6.6437,
+      -4.6137,
+      -6.0279,
+      -8.2507
+     ]
+    },
+    {
+     "entity": "Payment Banks",
+     "size": {
+      "display": "₹1,001 Cr",
+      "sort": 10012556.916
+     },
+     "of_cut": {
+      "display": "0.5%",
+      "sort": 0.4566
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-5.6%",
+      "sort": -5.5518
+     },
+     "pace": {
+      "display": "+0.29 pp",
+      "sort": 0.2854
+     },
+     "new": {
+      "display": "0.5%",
+      "sort": 0.4741
+     },
+     "run": [
+      12.0532,
+      -10.5668,
+      4.2845,
+      -0.4464,
+      1.9573,
+      -3.5328,
+      -5.8372,
+      -5.5518
+     ]
+    },
+    {
+     "entity": "Foreign Banks",
+     "size": {
+      "display": "₹709 Cr",
+      "sort": 7092602.668
+     },
+     "of_cut": {
+      "display": "0.3%",
+      "sort": 0.3234
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-9.4%",
+      "sort": -9.4491
+     },
+     "pace": {
+      "display": "-0.62 pp",
+      "sort": -0.6226
+     },
+     "new": {
+      "display": "0.6%",
+      "sort": 0.5962
+     },
+     "run": [
+      -12.4453,
+      -11.8125,
+      -8.8473,
+      -11.4525,
+      -8.803,
+      -9.0468,
+      -8.8266,
+      -9.4491
+     ]
+    }
+   ],
+   "total": {
+    "entity": null,
+    "size": {
+     "display": "₹2.19L Cr",
+     "sort": 2193082921.7017
+    },
+    "of_cut": null,
+    "of_book": null,
+    "growth": null,
+    "pace": null,
+    "new": null,
+    "run": []
+   },
+   "source_signals": [
+    "dc-atm-withdrawal-val-category-size-scan",
+    "dc-atm-withdrawal-val-category-yoy-scan",
+    "dc-atm-withdrawal-val-category-acceleration",
+    "dc-atm-withdrawal-val-category-allocation",
+    "dc-atm-withdrawal-val-category-share-of-credit-scan"
+   ]
+  },
+  "dc-atm-withdrawal-vol-category": {
+   "cut": "dc-atm-withdrawal-vol-category",
+   "flow_label": "Of fall",
+   "parts": [
+    {
+     "entity": "Public Sector Banks",
+     "size": {
+      "display": "29.75 crore",
+      "sort": 297462613.0
+     },
+     "of_cut": {
+      "display": "73.4%",
+      "sort": 73.4111
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-7.4%",
+      "sort": -7.4134
+     },
+     "pace": {
+      "display": "-0.38 pp",
+      "sort": -0.3789
+     },
+     "new": {
+      "display": "60.2%",
+      "sort": 60.1998
+     },
+     "run": [
+      -8.0435,
+      -7.9806,
+      -5.3206,
+      -8.6608,
+      -8.2317,
+      -8.1772,
+      -7.0345,
+      -7.4134
+     ]
+    },
+    {
+     "entity": "Private Sector Banks",
+     "size": {
+      "display": "9.74 crore",
+      "sort": 97361364.0
+     },
+     "of_cut": {
+      "display": "24.0%",
+      "sort": 24.0279
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-12.3%",
+      "sort": -12.2871
+     },
+     "pace": {
+      "display": "+0.03 pp",
+      "sort": 0.0254
+     },
+     "new": {
+      "display": "34.5%",
+      "sort": 34.4719
+     },
+     "run": [
+      -14.9062,
+      -14.1097,
+      -12.2134,
+      -15.1749,
+      -13.7865,
+      -12.278,
+      -12.3125,
+      -12.2871
+     ]
+    },
+    {
+     "entity": "Small Finance Banks",
+     "size": {
+      "display": "64.12 lakh",
+      "sort": 6411629.0
+     },
+     "of_cut": {
+      "display": "1.6%",
+      "sort": 1.5823
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-19.8%",
+      "sort": -19.7782
+     },
+     "pace": {
+      "display": "-1.84 pp",
+      "sort": -1.8378
+     },
+     "new": {
+      "display": "4.0%",
+      "sort": 3.9954
+     },
+     "run": [
+      -4.5614,
+      -9.2856,
+      -17.9436,
+      -13.4058,
+      -17.6862,
+      -14.3423,
+      -17.9405,
+      -19.7782
+     ]
+    },
+    {
+     "entity": "Payment Banks",
+     "size": {
+      "display": "28.45 lakh",
+      "sort": 2844711.0
+     },
+     "of_cut": {
+      "display": "0.7%",
+      "sort": 0.702
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-9.5%",
+      "sort": -9.5148
+     },
+     "pace": {
+      "display": "-1.87 pp",
+      "sort": -1.8714
+     },
+     "new": {
+      "display": "0.8%",
+      "sort": 0.7561
+     },
+     "run": [
+      3.0754,
+      -14.6168,
+      -1.5596,
+      -4.5222,
+      -1.5783,
+      -4.7088,
+      -7.6434,
+      -9.5148
+     ]
+    },
+    {
+     "entity": "Foreign Banks",
+     "size": {
+      "display": "11.21 lakh",
+      "sort": 1120689.0
+     },
+     "of_cut": {
+      "display": "0.3%",
+      "sort": 0.2766
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-16.9%",
+      "sort": -16.9203
+     },
+     "pace": {
+      "display": "+0.65 pp",
+      "sort": 0.6492
+     },
+     "new": {
+      "display": "0.6%",
+      "sort": 0.5769
+     },
+     "run": [
+      -22.3752,
+      -22.0105,
+      -19.833,
+      -21.6538,
+      -19.0253,
+      -17.5834,
+      -17.5695,
+      -16.9203
+     ]
+    }
+   ],
+   "total": {
+    "entity": null,
+    "size": {
+     "display": "40.52 crore",
+     "sort": 405201006.0
+    },
+    "of_cut": null,
+    "of_book": null,
+    "growth": null,
+    "pace": null,
+    "new": null,
+    "run": []
+   },
+   "source_signals": [
+    "dc-atm-withdrawal-vol-category-size-scan",
+    "dc-atm-withdrawal-vol-category-yoy-scan",
+    "dc-atm-withdrawal-vol-category-acceleration",
+    "dc-atm-withdrawal-vol-category-allocation",
+    "dc-atm-withdrawal-vol-category-share-of-credit-scan"
+   ]
+  },
+  "dc-category": {
+   "cut": "dc-category",
+   "flow_label": "New",
+   "parts": [
+    {
+     "entity": "Public Sector Banks",
+     "size": {
+      "display": "65.80 crore",
+      "sort": 657970979.0
+     },
+     "of_cut": {
+      "display": "63.7%",
+      "sort": 63.676
+     },
+     "of_book": null,
+     "growth": {
+      "display": "2.4%",
+      "sort": 2.3736
+     },
+     "pace": {
+      "display": "-0.79 pp",
+      "sort": -0.785
+     },
+     "new": null,
+     "run": [
+      2.0724,
+      3.8549,
+      4.0563,
+      3.8381,
+      3.3863,
+      3.1961,
+      3.1585,
+      2.3736
+     ]
+    },
+    {
+     "entity": "Private Sector Banks",
+     "size": {
+      "display": "26.80 crore",
+      "sort": 267980032.0
+     },
+     "of_cut": {
+      "display": "25.9%",
+      "sort": 25.9341
+     },
+     "of_book": null,
+     "growth": {
+      "display": "4.6%",
+      "sort": 4.5747
+     },
+     "pace": {
+      "display": "+0.03 pp",
+      "sort": 0.0272
+     },
+     "new": null,
+     "run": [
+      5.039,
+      5.5036,
+      5.2874,
+      4.9361,
+      4.9278,
+      4.9441,
+      4.5474,
+      4.5747
+     ]
+    },
+    {
+     "entity": "Payment Banks",
+     "size": {
+      "display": "6.50 crore",
+      "sort": 65012384.0
+     },
+     "of_cut": {
+      "display": "6.3%",
+      "sort": 6.2917
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-16.4%",
+      "sort": -16.4217
+     },
+     "pace": {
+      "display": "-0.60 pp",
+      "sort": -0.5999
+     },
+     "new": null,
+     "run": [
+      21.9729,
+      21.533,
+      20.0965,
+      19.3421,
+      -16.8426,
+      -15.2567,
+      -15.8217,
+      -16.4217
+     ]
+    },
+    {
+     "entity": "Small Finance Banks",
+     "size": {
+      "display": "3.80 crore",
+      "sort": 37951716.0
+     },
+     "of_cut": {
+      "display": "3.7%",
+      "sort": 3.6728
+     },
+     "of_book": null,
+     "growth": {
+      "display": "19.9%",
+      "sort": 19.8535
+     },
+     "pace": {
+      "display": "-2.22 pp",
+      "sort": -2.2205
+     },
+     "new": null,
+     "run": [
+      8.6913,
+      9.1546,
+      10.1624,
+      10.5387,
+      18.991,
+      19.0154,
+      22.074,
+      19.8535
+     ]
+    },
+    {
+     "entity": "Foreign Banks",
+     "size": {
+      "display": "43.96 lakh",
+      "sort": 4395753.0
+     },
+     "of_cut": {
+      "display": "0.4%",
+      "sort": 0.4254
+     },
+     "of_book": null,
+     "growth": {
+      "display": "2.2%",
+      "sort": 2.1507
+     },
+     "pace": {
+      "display": "+0.21 pp",
+      "sort": 0.2098
+     },
+     "new": null,
+     "run": [
+      -4.5464,
+      -3.6702,
+      -3.7247,
+      -0.0409,
+      0.6602,
+      1.6589,
+      1.9409,
+      2.1507
+     ]
+    }
+   ],
+   "total": {
+    "entity": null,
+    "size": {
+     "display": "103.33 crore",
+     "sort": 1033310864.0
+    },
+    "of_cut": null,
+    "of_book": null,
+    "growth": {
+     "display": "2.0%",
+     "sort": 2.0325
+    },
+    "pace": null,
+    "new": null,
+    "run": []
+   },
+   "source_signals": [
+    "dc-category-size-scan",
+    "dc-category-yoy-scan",
+    "dc-category-acceleration",
+    "dc-category-allocation",
+    "dc-category-share-of-credit-scan",
+    "dc-outstanding-yoy"
+   ]
+  },
+  "dc-ecom-txn-val-category": {
+   "cut": "dc-ecom-txn-val-category",
+   "flow_label": "New",
+   "parts": [
+    {
+     "entity": "Private Sector Banks",
+     "size": {
+      "display": "₹11,159 Cr",
+      "sort": 111587548.8707
+     },
+     "of_cut": {
+      "display": "71.9%",
+      "sort": 71.9185
+     },
+     "of_book": null,
+     "growth": {
+      "display": "16.2%",
+      "sort": 16.1571
+     },
+     "pace": {
+      "display": "+2.24 pp",
+      "sort": 2.2368
+     },
+     "new": null,
+     "run": [
+      0.3403,
+      -1.2094,
+      5.723,
+      6.3072,
+      10.7598,
+      13.1222,
+      13.9204,
+      16.1571
+     ]
+    },
+    {
+     "entity": "Public Sector Banks",
+     "size": {
+      "display": "₹4,103 Cr",
+      "sort": 41030544.8752
+     },
+     "of_cut": {
+      "display": "26.4%",
+      "sort": 26.4443
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-2.7%",
+      "sort": -2.6831
+     },
+     "pace": {
+      "display": "-1.29 pp",
+      "sort": -1.29
+     },
+     "new": null,
+     "run": [
+      -7.8348,
+      -10.1511,
+      -7.5068,
+      -5.7524,
+      -5.0623,
+      -4.0968,
+      -1.3931,
+      -2.6831
+     ]
+    },
+    {
+     "entity": "Small Finance Banks",
+     "size": {
+      "display": "₹150 Cr",
+      "sort": 1501818.604
+     },
+     "of_cut": {
+      "display": "1.0%",
+      "sort": 0.9679
+     },
+     "of_book": null,
+     "growth": {
+      "display": "26.3%",
+      "sort": 26.3165
+     },
+     "pace": {
+      "display": "+0.11 pp",
+      "sort": 0.1087
+     },
+     "new": null,
+     "run": [
+      -8.4085,
+      1.2252,
+      6.6887,
+      16.8197,
+      13.3325,
+      20.8323,
+      26.2078,
+      26.3165
+     ]
+    },
+    {
+     "entity": "Foreign Banks",
+     "size": {
+      "display": "₹83.75 Cr",
+      "sort": 837490.7893
+     },
+     "of_cut": {
+      "display": "0.5%",
+      "sort": 0.5398
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-6.6%",
+      "sort": -6.6289
+     },
+     "pace": {
+      "display": "-16.20 pp",
+      "sort": -16.1991
+     },
+     "new": null,
+     "run": [
+      -18.7381,
+      -16.314,
+      -23.2822,
+      -8.2265,
+      1.9755,
+      5.891,
+      9.5703,
+      -6.6289
+     ]
+    },
+    {
+     "entity": "Payment Banks",
+     "size": {
+      "display": "₹20.10 Cr",
+      "sort": 201027.4764
+     },
+     "of_cut": {
+      "display": "0.1%",
+      "sort": 0.1296
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-42.3%",
+      "sort": -42.3203
+     },
+     "pace": {
+      "display": "-8.87 pp",
+      "sort": -8.8725
+     },
+     "new": null,
+     "run": [
+      -4.5432,
+      -21.3067,
+      -16.1839,
+      -30.3475,
+      -16.819,
+      -26.9236,
+      -33.4479,
+      -42.3203
+     ]
+    }
+   ],
+   "total": {
+    "entity": null,
+    "size": {
+     "display": "₹15,516 Cr",
+     "sort": 155158430.6156
+    },
+    "of_cut": null,
+    "of_book": null,
+    "growth": null,
+    "pace": null,
+    "new": null,
+    "run": []
+   },
+   "source_signals": [
+    "dc-ecom-txn-val-category-size-scan",
+    "dc-ecom-txn-val-category-yoy-scan",
+    "dc-ecom-txn-val-category-acceleration",
+    "dc-ecom-txn-val-category-allocation",
+    "dc-ecom-txn-val-category-share-of-credit-scan"
+   ]
+  },
+  "dc-ecom-txn-vol-category": {
+   "cut": "dc-ecom-txn-vol-category",
+   "flow_label": "Of fall",
+   "parts": [
+    {
+     "entity": "Private Sector Banks",
+     "size": {
+      "display": "1.65 crore",
+      "sort": 16470886.0
+     },
+     "of_cut": {
+      "display": "60.2%",
+      "sort": 60.2176
+     },
+     "of_book": null,
+     "growth": {
+      "display": "0.5%",
+      "sort": 0.5179
+     },
+     "pace": {
+      "display": "+0.23 pp",
+      "sort": 0.2288
+     },
+     "new": null,
+     "run": [
+      -15.9656,
+      -16.1188,
+      -15.6526,
+      -9.8795,
+      -7.6072,
+      -4.4066,
+      0.2891,
+      0.5179
+     ]
+    },
+    {
+     "entity": "Public Sector Banks",
+     "size": {
+      "display": "1.03 crore",
+      "sort": 10257280.0
+     },
+     "of_cut": {
+      "display": "37.5%",
+      "sort": 37.5006
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-11.9%",
+      "sort": -11.8595
+     },
+     "pace": {
+      "display": "+0.90 pp",
+      "sort": 0.8973
+     },
+     "new": null,
+     "run": [
+      -22.5131,
+      -24.2965,
+      -21.7328,
+      -19.0342,
+      -19.4995,
+      -16.6424,
+      -12.7568,
+      -11.8595
+     ]
+    },
+    {
+     "entity": "Small Finance Banks",
+     "size": {
+      "display": "2.98 lakh",
+      "sort": 298084.0
+     },
+     "of_cut": {
+      "display": "1.1%",
+      "sort": 1.0898
+     },
+     "of_book": null,
+     "growth": {
+      "display": "14.7%",
+      "sort": 14.7095
+     },
+     "pace": {
+      "display": "-7.07 pp",
+      "sort": -7.0723
+     },
+     "new": null,
+     "run": [
+      -16.8689,
+      -10.2689,
+      -7.491,
+      12.0706,
+      2.8967,
+      11.9477,
+      21.7818,
+      14.7095
+     ]
+    },
+    {
+     "entity": "Foreign Banks",
+     "size": {
+      "display": "2.07 lakh",
+      "sort": 207405.0
+     },
+     "of_cut": {
+      "display": "0.8%",
+      "sort": 0.7583
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-5.9%",
+      "sort": -5.8897
+     },
+     "pace": {
+      "display": "-4.11 pp",
+      "sort": -4.1053
+     },
+     "new": null,
+     "run": [
+      -26.7299,
+      -24.9304,
+      -27.5525,
+      -23.3726,
+      -12.2417,
+      -5.7828,
+      -1.7844,
+      -5.8897
+     ]
+    },
+    {
+     "entity": "Payment Banks",
+     "size": {
+      "display": "1.19 lakh",
+      "sort": 118629.0
+     },
+     "of_cut": {
+      "display": "0.4%",
+      "sort": 0.4337
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-54.5%",
+      "sort": -54.4986
+     },
+     "pace": {
+      "display": "-4.30 pp",
+      "sort": -4.3028
+     },
+     "new": null,
+     "run": [
+      -61.0436,
+      -57.4408,
+      -56.5717,
+      -63.156,
+      -54.1326,
+      -52.3734,
+      -50.1958,
+      -54.4986
+     ]
+    }
+   ],
+   "total": {
+    "entity": null,
+    "size": {
+     "display": "2.74 crore",
+     "sort": 27352284.0
+    },
+    "of_cut": null,
+    "of_book": null,
+    "growth": null,
+    "pace": null,
+    "new": null,
+    "run": []
+   },
+   "source_signals": [
+    "dc-ecom-txn-vol-category-size-scan",
+    "dc-ecom-txn-vol-category-yoy-scan",
+    "dc-ecom-txn-vol-category-acceleration",
+    "dc-ecom-txn-vol-category-allocation",
+    "dc-ecom-txn-vol-category-share-of-credit-scan"
+   ]
+  },
+  "dc-other-txn-val-category": {
+   "cut": "dc-other-txn-val-category",
+   "flow_label": "New",
+   "parts": [
+    {
+     "entity": "Private Sector Banks",
+     "size": {
+      "display": "₹222 Cr",
+      "sort": 2220860.0026
+     },
+     "of_cut": {
+      "display": "92.2%",
+      "sort": 92.2257
+     },
+     "of_book": null,
+     "growth": {
+      "display": "69.1%",
+      "sort": 69.0591
+     },
+     "pace": {
+      "display": "-0.04 pp",
+      "sort": -0.0436
+     },
+     "new": {
+      "display": "100.0%",
+      "sort": 100.0085
+     },
+     "run": [
+      -9.4501,
+      -5.226,
+      12.8786,
+      5.3979,
+      21.9804,
+      27.8602,
+      69.1027,
+      69.0591
+     ]
+    },
+    {
+     "entity": "Public Sector Banks",
+     "size": {
+      "display": "₹18.45 Cr",
+      "sort": 184535.4754
+     },
+     "of_cut": {
+      "display": "7.7%",
+      "sort": 7.6632
+     },
+     "of_book": null,
+     "growth": {
+      "display": "0.5%",
+      "sort": 0.5166
+     },
+     "pace": {
+      "display": "-13.07 pp",
+      "sort": -13.0728
+     },
+     "new": {
+      "display": "0.1%",
+      "sort": 0.1045
+     },
+     "run": [
+      11.7895,
+      7.9045,
+      9.4093,
+      6.3746,
+      12.0554,
+      6.6114,
+      13.5894,
+      0.5166
+     ]
+    },
+    {
+     "entity": "Payment Banks",
+     "size": {
+      "display": "₹0.15 Cr",
+      "sort": 1503.2769
+     },
+     "of_cut": {
+      "display": "0.1%",
+      "sort": 0.0624
+     },
+     "of_book": null,
+     "growth": {
+      "display": "19.2%",
+      "sort": 19.1757
+     },
+     "pace": {
+      "display": "+8.02 pp",
+      "sort": 8.0159
+     },
+     "new": {
+      "display": "0.0%",
+      "sort": 0.0267
+     },
+     "run": [
+      178.9093,
+      173.9134,
+      151.0569,
+      95.0044,
+      60.5789,
+      50.4683,
+      11.1597,
+      19.1757
+     ]
+    },
+    {
+     "entity": "Small Finance Banks",
+     "size": {
+      "display": "₹0.08 Cr",
+      "sort": 827.743
+     },
+     "of_cut": {
+      "display": "0.0%",
+      "sort": 0.0344
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-60.0%",
+      "sort": -60.0145
+     },
+     "pace": {
+      "display": "-21.07 pp",
+      "sort": -21.0714
+     },
+     "new": {
+      "display": "-0.1%",
+      "sort": -0.137
+     },
+     "run": [
+      -19.5173,
+      -4.3191,
+      -45.24,
+      -48.6429,
+      7.4714,
+      -10.626,
+      -38.9431,
+      -60.0145
+     ]
+    },
+    {
+     "entity": "Foreign Banks",
+     "size": {
+      "display": "₹0.03 Cr",
+      "sort": 344.918
+     },
+     "of_cut": {
+      "display": "0.0%",
+      "sort": 0.0143
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-6.8%",
+      "sort": -6.7537
+     },
+     "pace": {
+      "display": "+45.27 pp",
+      "sort": 45.2718
+     },
+     "new": {
+      "display": "-0.0%",
+      "sort": -0.0028
+     },
+     "run": [
+      -22.2653,
+      -5.8306,
+      -50.0882,
+      -43.137,
+      -33.421,
+      -9.9831,
+      -52.0255,
+      -6.7537
+     ]
+    }
+   ],
+   "total": {
+    "entity": null,
+    "size": {
+     "display": "₹241 Cr",
+     "sort": 2408071.4159
+    },
+    "of_cut": null,
+    "of_book": null,
+    "growth": null,
+    "pace": null,
+    "new": null,
+    "run": []
+   },
+   "source_signals": [
+    "dc-other-txn-val-category-size-scan",
+    "dc-other-txn-val-category-yoy-scan",
+    "dc-other-txn-val-category-acceleration",
+    "dc-other-txn-val-category-allocation",
+    "dc-other-txn-val-category-share-of-credit-scan"
+   ]
+  },
+  "dc-other-txn-vol-category": {
+   "cut": "dc-other-txn-vol-category",
+   "flow_label": "New",
+   "parts": [
+    {
+     "entity": "Private Sector Banks",
+     "size": {
+      "display": "66,204",
+      "sort": 66204.0
+     },
+     "of_cut": {
+      "display": "80.4%",
+      "sort": 80.4052
+     },
+     "of_book": null,
+     "growth": {
+      "display": "9.9%",
+      "sort": 9.8986
+     },
+     "pace": {
+      "display": "+1.63 pp",
+      "sort": 1.6308
+     },
+     "new": null,
+     "run": [
+      -31.4217,
+      -30.8667,
+      -26.4271,
+      -24.6754,
+      -16.5358,
+      -14.2292,
+      8.2678,
+      9.8986
+     ]
+    },
+    {
+     "entity": "Public Sector Banks",
+     "size": {
+      "display": "13,663",
+      "sort": 13663.0
+     },
+     "of_cut": {
+      "display": "16.6%",
+      "sort": 16.5938
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-8.1%",
+      "sort": -8.117
+     },
+     "pace": {
+      "display": "-9.97 pp",
+      "sort": -9.9722
+     },
+     "new": null,
+     "run": [
+      0.2444,
+      -3.5859,
+      -1.5964,
+      -3.8879,
+      1.0647,
+      -0.1515,
+      1.8552,
+      -8.117
+     ]
+    },
+    {
+     "entity": "Payment Banks",
+     "size": {
+      "display": "2,406",
+      "sort": 2406.0
+     },
+     "of_cut": {
+      "display": "2.9%",
+      "sort": 2.9221
+     },
+     "of_book": null,
+     "growth": {
+      "display": "13.8%",
+      "sort": 13.8127
+     },
+     "pace": {
+      "display": "-10.18 pp",
+      "sort": -10.1773
+     },
+     "new": null,
+     "run": [
+      76.4781,
+      57.5221,
+      66.1224,
+      37.246,
+      20.8356,
+      25.641,
+      23.99,
+      13.8127
+     ]
+    },
+    {
+     "entity": "Small Finance Banks",
+     "size": {
+      "display": "52",
+      "sort": 52.0
+     },
+     "of_cut": {
+      "display": "0.1%",
+      "sort": 0.0632
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-62.6%",
+      "sort": -62.5899
+     },
+     "pace": {
+      "display": "-24.56 pp",
+      "sort": -24.5618
+     },
+     "new": null,
+     "run": [
+      -17.5879,
+      -15.3439,
+      -39.0728,
+      -35.6643,
+      -3.9474,
+      -30.0,
+      -38.0282,
+      -62.5899
+     ]
+    },
+    {
+     "entity": "Foreign Banks",
+     "size": {
+      "display": "13",
+      "sort": 13.0
+     },
+     "of_cut": {
+      "display": "0.0%",
+      "sort": 0.0158
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-50.0%",
+      "sort": -50.0
+     },
+     "pace": {
+      "display": "+10.87 pp",
+      "sort": 10.8696
+     },
+     "new": null,
+     "run": [
+      -35.1351,
+      -15.3846,
+      15.0,
+      -14.8148,
+      -7.6923,
+      -47.619,
+      -60.8696,
+      -50.0
+     ]
+    }
+   ],
+   "total": {
+    "entity": null,
+    "size": {
+     "display": "82,338",
+     "sort": 82338.0
+    },
+    "of_cut": null,
+    "of_book": null,
+    "growth": null,
+    "pace": null,
+    "new": null,
+    "run": []
+   },
+   "source_signals": [
+    "dc-other-txn-vol-category-size-scan",
+    "dc-other-txn-vol-category-yoy-scan",
+    "dc-other-txn-vol-category-acceleration",
+    "dc-other-txn-vol-category-allocation",
+    "dc-other-txn-vol-category-share-of-credit-scan"
+   ]
+  },
+  "dc-pos-txn-val-category": {
+   "cut": "dc-pos-txn-val-category",
+   "flow_label": "Of fall",
+   "parts": [
+    {
+     "entity": "Public Sector Banks",
+     "size": {
+      "display": "₹12,230 Cr",
+      "sort": 122303023.5933
+     },
+     "of_cut": {
+      "display": "55.2%",
+      "sort": 55.1515
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-8.2%",
+      "sort": -8.1955
+     },
+     "pace": {
+      "display": "-1.10 pp",
+      "sort": -1.0996
+     },
+     "new": {
+      "display": "62.6%",
+      "sort": 62.5546
+     },
+     "run": [
+      -12.2872,
+      -5.6642,
+      -7.9911,
+      -7.6715,
+      -9.3292,
+      -11.7808,
+      -7.0959,
+      -8.1955
+     ]
+    },
+    {
+     "entity": "Private Sector Banks",
+     "size": {
+      "display": "₹9,463 Cr",
+      "sort": 94628523.2837
+     },
+     "of_cut": {
+      "display": "42.7%",
+      "sort": 42.672
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-6.5%",
+      "sort": -6.5268
+     },
+     "pace": {
+      "display": "-1.39 pp",
+      "sort": -1.3857
+     },
+     "new": {
+      "display": "37.9%",
+      "sort": 37.8571
+     },
+     "run": [
+      -9.2609,
+      3.0995,
+      -3.3554,
+      -3.2447,
+      -4.3622,
+      -8.8933,
+      -5.1411,
+      -6.5268
+     ]
+    },
+    {
+     "entity": "Foreign Banks",
+     "size": {
+      "display": "₹287 Cr",
+      "sort": 2874500.1967
+     },
+     "of_cut": {
+      "display": "1.3%",
+      "sort": 1.2962
+     },
+     "of_book": null,
+     "growth": {
+      "display": "0.9%",
+      "sort": 0.9292
+     },
+     "pace": {
+      "display": "-6.68 pp",
+      "sort": -6.6814
+     },
+     "new": {
+      "display": "-0.2%",
+      "sort": -0.1516
+     },
+     "run": [
+      -6.0771,
+      6.2515,
+      7.6169,
+      0.9128,
+      7.6086,
+      6.7116,
+      7.6106,
+      0.9292
+     ]
+    },
+    {
+     "entity": "Small Finance Banks",
+     "size": {
+      "display": "₹154 Cr",
+      "sort": 1536596.211
+     },
+     "of_cut": {
+      "display": "0.7%",
+      "sort": 0.6929
+     },
+     "of_book": null,
+     "growth": {
+      "display": "1.0%",
+      "sort": 0.9978
+     },
+     "pace": {
+      "display": "-0.93 pp",
+      "sort": -0.928
+     },
+     "new": {
+      "display": "-0.1%",
+      "sort": -0.087
+     },
+     "run": [
+      -12.5336,
+      -6.2377,
+      -3.8288,
+      -7.5296,
+      -3.0704,
+      -1.8025,
+      1.9257,
+      0.9978
+     ]
+    },
+    {
+     "entity": "Payment Banks",
+     "size": {
+      "display": "₹41.55 Cr",
+      "sort": 415463.4086
+     },
+     "of_cut": {
+      "display": "0.2%",
+      "sort": 0.1873
+     },
+     "of_book": null,
+     "growth": {
+      "display": "7.8%",
+      "sort": 7.8397
+     },
+     "pace": {
+      "display": "-13.09 pp",
+      "sort": -13.0949
+     },
+     "new": {
+      "display": "-0.2%",
+      "sort": -0.173
+     },
+     "run": [
+      -10.4219,
+      -24.2856,
+      -4.5754,
+      5.0378,
+      5.4423,
+      -5.1882,
+      20.9346,
+      7.8397
+     ]
+    }
+   ],
+   "total": {
+    "entity": null,
+    "size": {
+     "display": "₹22,176 Cr",
+     "sort": 221758106.6933
+    },
+    "of_cut": null,
+    "of_book": null,
+    "growth": null,
+    "pace": null,
+    "new": null,
+    "run": []
+   },
+   "source_signals": [
+    "dc-pos-txn-val-category-size-scan",
+    "dc-pos-txn-val-category-yoy-scan",
+    "dc-pos-txn-val-category-acceleration",
+    "dc-pos-txn-val-category-allocation",
+    "dc-pos-txn-val-category-share-of-credit-scan"
+   ]
+  },
+  "dc-pos-txn-vol-category": {
+   "cut": "dc-pos-txn-vol-category",
+   "flow_label": "Of fall",
+   "parts": [
+    {
+     "entity": "Public Sector Banks",
+     "size": {
+      "display": "4.60 crore",
+      "sort": 46027181.0
+     },
+     "of_cut": {
+      "display": "62.1%",
+      "sort": 62.0971
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-13.5%",
+      "sort": -13.4634
+     },
+     "pace": {
+      "display": "+0.19 pp",
+      "sort": 0.1938
+     },
+     "new": null,
+     "run": [
+      -17.0942,
+      -15.5416,
+      -14.434,
+      -17.2267,
+      -18.5586,
+      -16.0271,
+      -13.6572,
+      -13.4634
+     ]
+    },
+    {
+     "entity": "Private Sector Banks",
+     "size": {
+      "display": "2.33 crore",
+      "sort": 23277339.0
+     },
+     "of_cut": {
+      "display": "31.4%",
+      "sort": 31.4044
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-17.5%",
+      "sort": -17.4657
+     },
+     "pace": {
+      "display": "+2.34 pp",
+      "sort": 2.3407
+     },
+     "new": null,
+     "run": [
+      -22.2663,
+      -19.8317,
+      -20.0287,
+      -21.8818,
+      -23.8043,
+      -19.9449,
+      -19.8063,
+      -17.4657
+     ]
+    },
+    {
+     "entity": "Payment Banks",
+     "size": {
+      "display": "36.60 lakh",
+      "sort": 3660024.0
+     },
+     "of_cut": {
+      "display": "4.9%",
+      "sort": 4.9379
+     },
+     "of_book": null,
+     "growth": {
+      "display": "619.1%",
+      "sort": 619.1436
+     },
+     "pace": {
+      "display": "-137.04 pp",
+      "sort": -137.0375
+     },
+     "new": null,
+     "run": [
+      613.1419,
+      828.744,
+      922.483,
+      997.8932,
+      1119.2827,
+      993.4882,
+      756.1812,
+      619.1436
+     ]
+    },
+    {
+     "entity": "Foreign Banks",
+     "size": {
+      "display": "5.84 lakh",
+      "sort": 584100.0
+     },
+     "of_cut": {
+      "display": "0.8%",
+      "sort": 0.788
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-15.8%",
+      "sort": -15.794
+     },
+     "pace": {
+      "display": "+0.90 pp",
+      "sort": 0.9039
+     },
+     "new": null,
+     "run": [
+      -22.1385,
+      -18.8081,
+      -17.0784,
+      -23.4986,
+      -19.748,
+      -16.5021,
+      -16.6979,
+      -15.794
+     ]
+    },
+    {
+     "entity": "Small Finance Banks",
+     "size": {
+      "display": "5.73 lakh",
+      "sort": 572665.0
+     },
+     "of_cut": {
+      "display": "0.8%",
+      "sort": 0.7726
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-8.4%",
+      "sort": -8.4135
+     },
+     "pace": {
+      "display": "+0.87 pp",
+      "sort": 0.8714
+     },
+     "new": null,
+     "run": [
+      -24.5685,
+      -22.6863,
+      -17.1602,
+      -19.4265,
+      -13.4922,
+      -11.3346,
+      -9.2848,
+      -8.4135
+     ]
+    }
+   ],
+   "total": {
+    "entity": null,
+    "size": {
+     "display": "7.41 crore",
+     "sort": 74121309.0
+    },
+    "of_cut": null,
+    "of_book": null,
+    "growth": null,
+    "pace": null,
+    "new": null,
+    "run": []
+   },
+   "source_signals": [
+    "dc-pos-txn-vol-category-size-scan",
+    "dc-pos-txn-vol-category-yoy-scan",
+    "dc-pos-txn-vol-category-acceleration",
+    "dc-pos-txn-vol-category-allocation",
+    "dc-pos-txn-vol-category-share-of-credit-scan"
+   ]
+  },
+  "dc-pos-withdrawal-val-category": {
+   "cut": "dc-pos-withdrawal-val-category",
+   "flow_label": "New",
+   "parts": [
+    {
+     "entity": "Small Finance Banks",
+     "size": {
+      "display": "₹0.85 Cr",
+      "sort": 8512.34
+     },
+     "of_cut": {
+      "display": "73.4%",
+      "sort": 73.4131
+     },
+     "of_book": null,
+     "growth": {
+      "display": "1046.0%",
+      "sort": 1045.9578
+     },
+     "pace": {
+      "display": "-516.36 pp",
+      "sort": -516.3625
+     },
+     "new": null,
+     "run": [
+      5970.0212,
+      7022.5564,
+      1999.0064,
+      1163.7729,
+      1954.0208,
+      3858.0102,
+      1562.3203,
+      1045.9578
+     ]
+    },
+    {
+     "entity": "Public Sector Banks",
+     "size": {
+      "display": "₹0.30 Cr",
+      "sort": 3007.0235
+     },
+     "of_cut": {
+      "display": "25.9%",
+      "sort": 25.9335
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-68.5%",
+      "sort": -68.5281
+     },
+     "pace": {
+      "display": "-5.39 pp",
+      "sort": -5.3917
+     },
+     "new": null,
+     "run": [
+      -67.6238,
+      -65.437,
+      -66.2206,
+      -68.3597,
+      -66.9011,
+      -66.037,
+      -63.1364,
+      -68.5281
+     ]
+    },
+    {
+     "entity": "Private Sector Banks",
+     "size": {
+      "display": "₹0.01 Cr",
+      "sort": 75.759
+     },
+     "of_cut": {
+      "display": "0.7%",
+      "sort": 0.6534
+     },
+     "of_book": null,
+     "growth": {
+      "display": "1.2%",
+      "sort": 1.2449
+     },
+     "pace": {
+      "display": "+35.17 pp",
+      "sort": 35.1717
+     },
+     "new": null,
+     "run": [
+      -97.3602,
+      -97.1143,
+      -91.7993,
+      -66.2125,
+      1.4962,
+      -40.379,
+      -33.9268,
+      1.2449
+     ]
+    },
+    {
+     "entity": "Foreign Banks",
+     "size": {
+      "display": "₹0.00 Cr",
+      "sort": 0.0
+     },
+     "of_cut": {
+      "display": "0.0%",
+      "sort": 0.0
+     },
+     "of_book": null,
+     "growth": null,
+     "pace": null,
+     "new": null,
+     "run": []
+    },
+    {
+     "entity": "Payment Banks",
+     "size": {
+      "display": "₹0.00 Cr",
+      "sort": 0.0
+     },
+     "of_cut": {
+      "display": "0.0%",
+      "sort": 0.0
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-100.0%",
+      "sort": -100.0
+     },
+     "pace": null,
+     "new": null,
+     "run": [
+      -100.0,
+      -100.0,
+      -100.0,
+      -100.0,
+      -100.0,
+      -100.0,
+      -100.0,
+      -100.0
+     ]
+    }
+   ],
+   "total": {
+    "entity": null,
+    "size": {
+     "display": "₹1.16 Cr",
+     "sort": 11595.1225
+    },
+    "of_cut": null,
+    "of_book": null,
+    "growth": null,
+    "pace": null,
+    "new": null,
+    "run": []
+   },
+   "source_signals": [
+    "dc-pos-withdrawal-val-category-size-scan",
+    "dc-pos-withdrawal-val-category-yoy-scan",
+    "dc-pos-withdrawal-val-category-acceleration",
+    "dc-pos-withdrawal-val-category-allocation",
+    "dc-pos-withdrawal-val-category-share-of-credit-scan"
+   ]
+  },
+  "dc-pos-withdrawal-vol-category": {
+   "cut": "dc-pos-withdrawal-vol-category",
+   "flow_label": "Of fall",
+   "parts": [
+    {
+     "entity": "Public Sector Banks",
+     "size": {
+      "display": "3,741",
+      "sort": 3741.0
+     },
+     "of_cut": {
+      "display": "61.5%",
+      "sort": 61.4689
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-63.4%",
+      "sort": -63.3881
+     },
+     "pace": {
+      "display": "-3.37 pp",
+      "sort": -3.365
+     },
+     "new": null,
+     "run": [
+      -61.8651,
+      -56.0096,
+      -54.4133,
+      -59.8057,
+      -60.5878,
+      -58.3652,
+      -60.0232,
+      -63.3881
+     ]
+    },
+    {
+     "entity": "Small Finance Banks",
+     "size": {
+      "display": "2,184",
+      "sort": 2184.0
+     },
+     "of_cut": {
+      "display": "35.9%",
+      "sort": 35.8856
+     },
+     "of_book": null,
+     "growth": {
+      "display": "940.0%",
+      "sort": 940.0
+     },
+     "pace": {
+      "display": "-936.99 pp",
+      "sort": -936.9912
+     },
+     "new": null,
+     "run": [
+      1427.5132,
+      1616.9935,
+      400.2053,
+      279.2285,
+      679.8077,
+      2235.7143,
+      1876.9912,
+      940.0
+     ]
+    },
+    {
+     "entity": "Private Sector Banks",
+     "size": {
+      "display": "161",
+      "sort": 161.0
+     },
+     "of_cut": {
+      "display": "2.6%",
+      "sort": 2.6454
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-2.4%",
+      "sort": -2.4242
+     },
+     "pace": {
+      "display": "+42.50 pp",
+      "sort": 42.5033
+     },
+     "new": null,
+     "run": [
+      -95.8987,
+      -92.1545,
+      -81.4664,
+      -47.6703,
+      -20.1613,
+      -23.5772,
+      -44.9275,
+      -2.4242
+     ]
+    },
+    {
+     "entity": "Foreign Banks",
+     "size": {
+      "display": "0",
+      "sort": 0.0
+     },
+     "of_cut": {
+      "display": "0.0%",
+      "sort": 0.0
+     },
+     "of_book": null,
+     "growth": null,
+     "pace": null,
+     "new": null,
+     "run": []
+    },
+    {
+     "entity": "Payment Banks",
+     "size": {
+      "display": "0",
+      "sort": 0.0
+     },
+     "of_cut": {
+      "display": "0.0%",
+      "sort": 0.0
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-100.0%",
+      "sort": -100.0
+     },
+     "pace": null,
+     "new": null,
+     "run": [
+      -100.0,
+      -100.0,
+      -100.0,
+      -100.0,
+      -100.0,
+      -100.0,
+      -100.0,
+      -100.0
+     ]
+    }
+   ],
+   "total": {
+    "entity": null,
+    "size": {
+     "display": "6,086",
+     "sort": 6086.0
+    },
+    "of_cut": null,
+    "of_book": null,
+    "growth": null,
+    "pace": null,
+    "new": null,
+    "run": []
+   },
+   "source_signals": [
+    "dc-pos-withdrawal-vol-category-size-scan",
+    "dc-pos-withdrawal-vol-category-yoy-scan",
+    "dc-pos-withdrawal-vol-category-acceleration",
+    "dc-pos-withdrawal-vol-category-allocation",
+    "dc-pos-withdrawal-vol-category-share-of-credit-scan"
+   ]
+  },
+  "micro-atms-category": {
+   "cut": "micro-atms-category",
+   "flow_label": "Of fall",
+   "parts": [
+    {
+     "entity": "Payment Banks",
+     "size": {
+      "display": "10.10 lakh",
+      "sort": 1010189.0
+     },
+     "of_cut": {
+      "display": "76.1%",
+      "sort": 76.0544
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-8.9%",
+      "sort": -8.9325
+     },
+     "pace": {
+      "display": "-1.60 pp",
+      "sort": -1.6013
+     },
+     "new": null,
+     "run": [
+      -0.3041,
+      -0.9869,
+      -1.9975,
+      -2.5132,
+      -4.6975,
+      -5.4296,
+      -7.3312,
+      -8.9325
+     ]
+    },
+    {
+     "entity": "Public Sector Banks",
+     "size": {
+      "display": "1.92 lakh",
+      "sort": 191818.0
+     },
+     "of_cut": {
+      "display": "14.4%",
+      "sort": 14.4415
+     },
+     "of_book": null,
+     "growth": {
+      "display": "7.9%",
+      "sort": 7.9461
+     },
+     "pace": {
+      "display": "-0.77 pp",
+      "sort": -0.7691
+     },
+     "new": null,
+     "run": [
+      8.0505,
+      8.6374,
+      13.2064,
+      11.0298,
+      8.9596,
+      8.0428,
+      8.7152,
+      7.9461
+     ]
+    },
+    {
+     "entity": "Private Sector Banks",
+     "size": {
+      "display": "1.21 lakh",
+      "sort": 121089.0
+     },
+     "of_cut": {
+      "display": "9.1%",
+      "sort": 9.1165
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-29.8%",
+      "sort": -29.7664
+     },
+     "pace": {
+      "display": "+1.60 pp",
+      "sort": 1.5959
+     },
+     "new": null,
+     "run": [
+      -34.4705,
+      -41.3561,
+      -37.6161,
+      -39.9911,
+      -35.2278,
+      -37.0221,
+      -31.3623,
+      -29.7664
+     ]
+    },
+    {
+     "entity": "Small Finance Banks",
+     "size": {
+      "display": "5,067",
+      "sort": 5067.0
+     },
+     "of_cut": {
+      "display": "0.4%",
+      "sort": 0.3815
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-29.6%",
+      "sort": -29.5859
+     },
+     "pace": {
+      "display": "+3.32 pp",
+      "sort": 3.3234
+     },
+     "new": null,
+     "run": [
+      -9.976,
+      -21.7822,
+      -23.0592,
+      -22.4583,
+      -23.4245,
+      -35.3521,
+      -32.9093,
+      -29.5859
+     ]
+    },
+    {
+     "entity": "Foreign Banks",
+     "size": {
+      "display": "83",
+      "sort": 83.0
+     },
+     "of_cut": {
+      "display": "0.0%",
+      "sort": 0.0062
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-7.8%",
+      "sort": -7.7778
+     },
+     "pace": {
+      "display": "-1.11 pp",
+      "sort": -1.1111
+     },
+     "new": null,
+     "run": [
+      -5.5556,
+      -6.6667,
+      -6.6667,
+      -6.6667,
+      -6.6667,
+      -6.6667,
+      -6.6667,
+      -7.7778
+     ]
+    }
+   ],
+   "total": {
+    "entity": null,
+    "size": {
+     "display": "13.28 lakh",
+     "sort": 1328246.0
+    },
+    "of_cut": null,
+    "of_book": null,
+    "growth": null,
+    "pace": null,
+    "new": null,
+    "run": []
+   },
+   "source_signals": [
+    "micro-atms-category-size-scan",
+    "micro-atms-category-yoy-scan",
+    "micro-atms-category-acceleration",
+    "micro-atms-category-allocation",
+    "micro-atms-category-share-of-credit-scan"
+   ]
+  },
+  "pos-category": {
+   "cut": "pos-category",
+   "flow_label": "Of fall",
+   "parts": [
+    {
+     "entity": "Private Sector Banks",
+     "size": {
+      "display": "79.46 lakh",
+      "sort": 7945682.0
+     },
+     "of_cut": {
+      "display": "79.2%",
+      "sort": 79.238
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-20.5%",
+      "sort": -20.5304
+     },
+     "pace": {
+      "display": "-0.22 pp",
+      "sort": -0.224
+     },
+     "new": null,
+     "run": [
+      14.7825,
+      10.9437,
+      8.1787,
+      5.1263,
+      -0.417,
+      -2.6564,
+      -20.3063,
+      -20.5304
+     ]
+    },
+    {
+     "entity": "Public Sector Banks",
+     "size": {
+      "display": "20.67 lakh",
+      "sort": 2067159.0
+     },
+     "of_cut": {
+      "display": "20.6%",
+      "sort": 20.6147
+     },
+     "of_book": null,
+     "growth": {
+      "display": "9.0%",
+      "sort": 8.9847
+     },
+     "pace": {
+      "display": "+1.27 pp",
+      "sort": 1.267
+     },
+     "new": null,
+     "run": [
+      16.3226,
+      15.4755,
+      12.7432,
+      10.8602,
+      11.0772,
+      10.8968,
+      7.7177,
+      8.9847
+     ]
+    },
+    {
+     "entity": "Foreign Banks",
+     "size": {
+      "display": "11,855",
+      "sort": 11855.0
+     },
+     "of_cut": {
+      "display": "0.1%",
+      "sort": 0.1182
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-22.9%",
+      "sort": -22.9144
+     },
+     "pace": {
+      "display": "-0.11 pp",
+      "sort": -0.1059
+     },
+     "new": null,
+     "run": [
+      -67.8251,
+      -59.6647,
+      -47.2895,
+      -24.342,
+      -24.361,
+      -22.4777,
+      -22.8085,
+      -22.9144
+     ]
+    },
+    {
+     "entity": "Small Finance Banks",
+     "size": {
+      "display": "2,918",
+      "sort": 2918.0
+     },
+     "of_cut": {
+      "display": "0.0%",
+      "sort": 0.0291
+     },
+     "of_book": null,
+     "growth": {
+      "display": "13.4%",
+      "sort": 13.4085
+     },
+     "pace": {
+      "display": "+2.84 pp",
+      "sort": 2.8416
+     },
+     "new": null,
+     "run": [
+      1.0025,
+      4.8091,
+      -3.2346,
+      -4.3945,
+      -9.2818,
+      10.7527,
+      10.5669,
+      13.4085
+     ]
+    },
+    {
+     "entity": "Payment Banks",
+     "size": {
+      "display": "0",
+      "sort": 0.0
+     },
+     "of_cut": {
+      "display": "0.0%",
+      "sort": 0.0
+     },
+     "of_book": null,
+     "growth": null,
+     "pace": null,
+     "new": null,
+     "run": [
+      -100.0,
+      -100.0,
+      -100.0
+     ]
+    }
+   ],
+   "total": {
+    "entity": null,
+    "size": {
+     "display": "1.00 crore",
+     "sort": 10027614.0
+    },
+    "of_cut": null,
+    "of_book": null,
+    "growth": {
+     "display": "-15.8%",
+     "sort": -15.8269
+    },
+    "pace": null,
+    "new": null,
+    "run": []
+   },
+   "source_signals": [
+    "pos-category-size-scan",
+    "pos-category-yoy-scan",
+    "pos-category-acceleration",
+    "pos-category-allocation",
+    "pos-category-share-of-credit-scan",
+    "pos-terminals-yoy"
+   ]
+  },
+  "upi-qr-category": {
+   "cut": "upi-qr-category",
+   "flow_label": "New",
+   "parts": [
+    {
+     "entity": "Private Sector Banks",
+     "size": {
+      "display": "77.19 crore",
+      "sort": 771924552.0
+     },
+     "of_cut": {
+      "display": "96.1%",
+      "sort": 96.1244
+     },
+     "of_book": null,
+     "growth": {
+      "display": "16.9%",
+      "sort": 16.9088
+     },
+     "pace": {
+      "display": "-0.18 pp",
+      "sort": -0.1798
+     },
+     "new": {
+      "display": "97.1%",
+      "sort": 97.069
+     },
+     "run": [
+      15.3988,
+      15.2924,
+      16.2776,
+      16.4639,
+      17.1499,
+      17.1498,
+      17.0887,
+      16.9088
+     ]
+    },
+    {
+     "entity": "Public Sector Banks",
+     "size": {
+      "display": "2.47 crore",
+      "sort": 24696768.0
+     },
+     "of_cut": {
+      "display": "3.1%",
+      "sort": 3.0754
+     },
+     "of_book": null,
+     "growth": {
+      "display": "11.0%",
+      "sort": 11.0149
+     },
+     "pace": {
+      "display": "+0.39 pp",
+      "sort": 0.3873
+     },
+     "new": {
+      "display": "2.1%",
+      "sort": 2.1305
+     },
+     "run": [
+      18.0832,
+      17.9855,
+      10.8657,
+      8.3322,
+      8.2277,
+      10.8474,
+      10.6275,
+      11.0149
+     ]
+    },
+    {
+     "entity": "Payment Banks",
+     "size": {
+      "display": "45.84 lakh",
+      "sort": 4584452.0
+     },
+     "of_cut": {
+      "display": "0.6%",
+      "sort": 0.5709
+     },
+     "of_book": null,
+     "growth": {
+      "display": "13.8%",
+      "sort": 13.7587
+     },
+     "pace": {
+      "display": "-0.30 pp",
+      "sort": -0.2975
+     },
+     "new": {
+      "display": "0.5%",
+      "sort": 0.4821
+     },
+     "run": [
+      12.3019,
+      7.9067,
+      10.6665,
+      -73.124,
+      -72.8639,
+      -72.9115,
+      14.0562,
+      13.7587
+     ]
+    },
+    {
+     "entity": "Small Finance Banks",
+     "size": {
+      "display": "18.26 lakh",
+      "sort": 1825654.0
+     },
+     "of_cut": {
+      "display": "0.2%",
+      "sort": 0.2273
+     },
+     "of_book": null,
+     "growth": {
+      "display": "24.5%",
+      "sort": 24.4833
+     },
+     "pace": {
+      "display": "+3.41 pp",
+      "sort": 3.4147
+     },
+     "new": {
+      "display": "0.3%",
+      "sort": 0.3122
+     },
+     "run": [
+      6.3648,
+      18.5581,
+      24.7283,
+      27.8914,
+      31.8744,
+      18.0714,
+      21.0686,
+      24.4833
+     ]
+    },
+    {
+     "entity": "Foreign Banks",
+     "size": {
+      "display": "16,164",
+      "sort": 16164.0
+     },
+     "of_cut": {
+      "display": "0.0%",
+      "sort": 0.002
+     },
+     "of_book": null,
+     "growth": {
+      "display": "80.1%",
+      "sort": 80.1203
+     },
+     "pace": {
+      "display": "-0.40 pp",
+      "sort": -0.4042
+     },
+     "new": {
+      "display": "0.0%",
+      "sort": 0.0063
+     },
+     "run": [
+      26.4619,
+      24.8422,
+      22.1584,
+      19.2998,
+      86.043,
+      82.5377,
+      80.5246,
+      80.1203
+     ]
+    }
+   ],
+   "total": {
+    "entity": null,
+    "size": {
+     "display": "80.30 crore",
+     "sort": 803047590.0
+    },
+    "of_cut": null,
+    "of_book": null,
+    "growth": null,
+    "pace": null,
+    "new": null,
+    "run": []
+   },
+   "source_signals": [
+    "upi-qr-category-size-scan",
+    "upi-qr-category-yoy-scan",
+    "upi-qr-category-acceleration",
+    "upi-qr-category-allocation",
+    "upi-qr-category-share-of-credit-scan"
+   ]
+  }
+ }
+}

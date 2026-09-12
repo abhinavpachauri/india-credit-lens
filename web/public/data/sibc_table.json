@@ -1,0 +1,3387 @@
+{
+ "_meta": {
+  "pipeline": "sibc",
+  "period": "2026-08-31",
+  "purpose": "One Layer 1 table per cut — every part of the cut with size, share, growth, pace, the run of readings, and its share of the new money. Numbers are rendered here and shipped as strings; `sort` orders and is never drawn. Regenerated every gate; freshness-guarded with --check.",
+  "spec": "analysis/DASHBOARD_SPEC.md §17"
+ },
+ "cuts": {
+  "sibc-basic-metal-sub": {
+   "cut": "sibc-basic-metal-sub",
+   "flow_label": "New",
+   "parts": [
+    {
+     "entity": "Iron and Steel",
+     "size": {
+      "display": "₹3.71L Cr",
+      "sort": 371483.6631
+     },
+     "of_cut": {
+      "display": "69.1%",
+      "sort": 69.0919
+     },
+     "of_book": null,
+     "growth": {
+      "display": "24.5%",
+      "sort": 24.4559
+     },
+     "pace": {
+      "display": "+2.22 pp",
+      "sort": 2.2169
+     },
+     "new": {
+      "display": "75.5%",
+      "sort": 75.5118
+     },
+     "run": [
+      9.4359,
+      8.1532,
+      11.0091,
+      18.826,
+      16.6538,
+      22.6105,
+      22.2389,
+      24.4559
+     ]
+    },
+    {
+     "entity": "Other Metal and Metal Product",
+     "size": {
+      "display": "₹1.66L Cr",
+      "sort": 166182.2157
+     },
+     "of_cut": {
+      "display": "30.9%",
+      "sort": 30.9081
+     },
+     "of_book": null,
+     "growth": {
+      "display": "16.6%",
+      "sort": 16.6114
+     },
+     "pace": {
+      "display": "-1.38 pp",
+      "sort": -1.3762
+     },
+     "new": {
+      "display": "24.5%",
+      "sort": 24.4882
+     },
+     "run": [
+      25.6878,
+      27.4474,
+      24.8166,
+      21.0385,
+      19.9115,
+      18.4341,
+      17.9877,
+      16.6114
+     ]
+    }
+   ],
+   "total": {
+    "entity": null,
+    "size": {
+     "display": "₹5.38L Cr",
+     "sort": 537665.8788
+    },
+    "of_cut": null,
+    "of_book": null,
+    "growth": null,
+    "pace": {
+     "display": "+1.03 pp",
+     "sort": 1.0327
+    },
+    "new": null,
+    "run": []
+   },
+   "source_signals": [
+    "sibc-basic-metal-sub-size-scan",
+    "sibc-basic-metal-sub-yoy-scan",
+    "sibc-basic-metal-sub-acceleration",
+    "sibc-basic-metal-sub-allocation",
+    "sibc-basic-metal-sub-share-of-credit-scan"
+   ]
+  },
+  "sibc-chemicals-sub": {
+   "cut": "sibc-chemicals-sub",
+   "flow_label": "New",
+   "parts": [
+    {
+     "entity": "Others",
+     "size": {
+      "display": "₹1.47L Cr",
+      "sort": 146918.8873
+     },
+     "of_cut": {
+      "display": "44.1%",
+      "sort": 44.054
+     },
+     "of_book": null,
+     "growth": {
+      "display": "22.2%",
+      "sort": 22.1873
+     },
+     "pace": {
+      "display": "+0.00 pp",
+      "sort": 0.0005
+     },
+     "new": {
+      "display": "41.4%",
+      "sort": 41.3575
+     },
+     "run": [
+      17.5975,
+      16.1258,
+      18.594,
+      14.8872,
+      16.4163,
+      21.8043,
+      22.4149,
+      22.1873
+     ]
+    },
+    {
+     "entity": "Drugs and Pharmaceuticals",
+     "size": {
+      "display": "₹1.08L Cr",
+      "sort": 107714.1839
+     },
+     "of_cut": {
+      "display": "32.3%",
+      "sort": 32.2983
+     },
+     "of_book": null,
+     "growth": {
+      "display": "24.4%",
+      "sort": 24.3797
+     },
+     "pace": {
+      "display": "+2.19 pp",
+      "sort": 2.1851
+     },
+     "new": {
+      "display": "32.7%",
+      "sort": 32.7302
+     },
+     "run": [
+      8.7987,
+      10.2131,
+      11.3003,
+      17.924,
+      20.6039,
+      22.6331,
+      22.1946,
+      24.3797
+     ]
+    },
+    {
+     "entity": "Petro Chemicals",
+     "size": {
+      "display": "₹40,229 Cr",
+      "sort": 40229.0836
+     },
+     "of_cut": {
+      "display": "12.1%",
+      "sort": 12.0628
+     },
+     "of_book": null,
+     "growth": {
+      "display": "24.0%",
+      "sort": 24.0425
+     },
+     "pace": {
+      "display": "+4.43 pp",
+      "sort": 4.4325
+     },
+     "new": {
+      "display": "12.1%",
+      "sort": 12.0878
+     },
+     "run": [
+      29.5421,
+      28.7137,
+      35.0738,
+      27.8166,
+      19.355,
+      14.2008,
+      19.61,
+      24.0425
+     ]
+    },
+    {
+     "entity": "Fertiliser",
+     "size": {
+      "display": "₹38,635 Cr",
+      "sort": 38635.4753
+     },
+     "of_cut": {
+      "display": "11.6%",
+      "sort": 11.5849
+     },
+     "of_book": null,
+     "growth": {
+      "display": "30.0%",
+      "sort": 30.0079
+     },
+     "pace": {
+      "display": "+13.84 pp",
+      "sort": 13.836
+     },
+     "new": {
+      "display": "13.8%",
+      "sort": 13.8245
+     },
+     "run": [
+      8.3085,
+      11.9453,
+      29.1636,
+      -4.4532,
+      -0.2775,
+      7.4292,
+      16.1719,
+      30.0079
+     ]
+    }
+   ],
+   "total": {
+    "entity": null,
+    "size": {
+     "display": "₹3.33L Cr",
+     "sort": 333497.6301
+    },
+    "of_cut": null,
+    "of_book": null,
+    "growth": null,
+    "pace": {
+     "display": "+2.72 pp",
+     "sort": 2.7231
+    },
+    "new": null,
+    "run": []
+   },
+   "source_signals": [
+    "sibc-chemicals-sub-size-scan",
+    "sibc-chemicals-sub-yoy-scan",
+    "sibc-chemicals-sub-acceleration",
+    "sibc-chemicals-sub-allocation",
+    "sibc-chemicals-sub-share-of-credit-scan"
+   ]
+  },
+  "sibc-engineering-sub": {
+   "cut": "sibc-engineering-sub",
+   "flow_label": "New",
+   "parts": [
+    {
+     "entity": "Others",
+     "size": {
+      "display": "₹2.73L Cr",
+      "sort": 272675.8768
+     },
+     "of_cut": {
+      "display": "79.4%",
+      "sort": 79.4451
+     },
+     "of_book": null,
+     "growth": {
+      "display": "40.1%",
+      "sort": 40.1321
+     },
+     "pace": {
+      "display": "+0.00 pp",
+      "sort": 0.0005
+     },
+     "new": {
+      "display": "85.6%",
+      "sort": 85.6326
+     },
+     "run": [
+      28.4569,
+      38.8334,
+      38.1434,
+      37.4831,
+      34.5095,
+      38.2691,
+      40.1316,
+      40.1321
+     ]
+    },
+    {
+     "entity": "Electronics",
+     "size": {
+      "display": "₹70,550 Cr",
+      "sort": 70549.6695
+     },
+     "of_cut": {
+      "display": "20.6%",
+      "sort": 20.5549
+     },
+     "of_book": null,
+     "growth": {
+      "display": "22.8%",
+      "sort": 22.8069
+     },
+     "pace": {
+      "display": "-5.93 pp",
+      "sort": -5.926
+     },
+     "new": {
+      "display": "14.4%",
+      "sort": 14.3674
+     },
+     "run": [
+      37.378,
+      25.6335,
+      28.1391,
+      13.3216,
+      17.8026,
+      23.8523,
+      28.7329,
+      22.8069
+     ]
+    }
+   ],
+   "total": {
+    "entity": null,
+    "size": {
+     "display": "₹3.43L Cr",
+     "sort": 343225.5463
+    },
+    "of_cut": null,
+    "of_book": null,
+    "growth": null,
+    "pace": {
+     "display": "-1.41 pp",
+     "sort": -1.4116
+    },
+    "new": null,
+    "run": []
+   },
+   "source_signals": [
+    "sibc-engineering-sub-size-scan",
+    "sibc-engineering-sub-yoy-scan",
+    "sibc-engineering-sub-acceleration",
+    "sibc-engineering-sub-allocation",
+    "sibc-engineering-sub-share-of-credit-scan"
+   ]
+  },
+  "sibc-food-processing-sub": {
+   "cut": "sibc-food-processing-sub",
+   "flow_label": "New",
+   "parts": [
+    {
+     "entity": "Others",
+     "size": {
+      "display": "₹2.07L Cr",
+      "sort": 207173.9385
+     },
+     "of_cut": {
+      "display": "78.3%",
+      "sort": 78.2939
+     },
+     "of_book": null,
+     "growth": {
+      "display": "21.7%",
+      "sort": 21.6842
+     },
+     "pace": {
+      "display": "+0.00 pp",
+      "sort": 0.0005
+     },
+     "new": {
+      "display": "76.6%",
+      "sort": 76.5567
+     },
+     "run": [
+      13.6892,
+      10.7311,
+      11.8218,
+      14.6068,
+      13.6007,
+      13.4412,
+      18.6572,
+      21.6842
+     ]
+    },
+    {
+     "entity": "Edible Oils and Vanaspati",
+     "size": {
+      "display": "₹32,328 Cr",
+      "sort": 32327.8964
+     },
+     "of_cut": {
+      "display": "12.2%",
+      "sort": 12.2172
+     },
+     "of_book": null,
+     "growth": {
+      "display": "53.6%",
+      "sort": 53.5883
+     },
+     "pace": {
+      "display": "+3.00 pp",
+      "sort": 2.9995
+     },
+     "new": {
+      "display": "23.4%",
+      "sort": 23.3899
+     },
+     "run": [
+      13.9993,
+      11.7234,
+      11.1087,
+      25.3181,
+      33.0033,
+      41.8149,
+      50.5889,
+      53.5883
+     ]
+    },
+    {
+     "entity": "Sugar",
+     "size": {
+      "display": "₹19,342 Cr",
+      "sort": 19341.6415
+     },
+     "of_cut": {
+      "display": "7.3%",
+      "sort": 7.3095
+     },
+     "of_book": null,
+     "growth": {
+      "display": "-4.1%",
+      "sort": -4.0512
+     },
+     "pace": {
+      "display": "-2.52 pp",
+      "sort": -2.5208
+     },
+     "new": {
+      "display": "-1.7%",
+      "sort": -1.6935
+     },
+     "run": [
+      2.414,
+      6.0821,
+      6.2791,
+      4.2799,
+      -0.4353,
+      -1.629,
+      -1.5305,
+      -4.0512
+     ]
+    },
+    {
+     "entity": "Tea",
+     "size": {
+      "display": "₹5,767 Cr",
+      "sort": 5767.1899
+     },
+     "of_cut": {
+      "display": "2.2%",
+      "sort": 2.1795
+     },
+     "of_book": null,
+     "growth": {
+      "display": "17.1%",
+      "sort": 17.1057
+     },
+     "pace": {
+      "display": "+3.12 pp",
+      "sort": 3.1166
+     },
+     "new": {
+      "display": "1.7%",
+      "sort": 1.7469
+     },
+     "run": [
+      -18.1414,
+      -16.9904,
+      -19.5961,
+      0.8459,
+      -3.0844,
+      1.4178,
+      13.9891,
+      17.1057
+     ]
+    }
+   ],
+   "total": {
+    "entity": null,
+    "size": {
+     "display": "₹2.65L Cr",
+     "sort": 264610.6663
+    },
+    "of_cut": null,
+    "of_book": null,
+    "growth": null,
+    "pace": {
+     "display": "+2.75 pp",
+     "sort": 2.7464
+    },
+    "new": null,
+    "run": []
+   },
+   "source_signals": [
+    "sibc-food-processing-sub-size-scan",
+    "sibc-food-processing-sub-yoy-scan",
+    "sibc-food-processing-sub-acceleration",
+    "sibc-food-processing-sub-allocation",
+    "sibc-food-processing-sub-share-of-credit-scan"
+   ]
+  },
+  "sibc-ind-size": {
+   "cut": "sibc-ind-size",
+   "flow_label": "New",
+   "parts": [
+    {
+     "entity": "Large",
+     "size": {
+      "display": "₹32.29L Cr",
+      "sort": 3228773.5076
+     },
+     "of_cut": {
+      "display": "67.3%",
+      "sort": 67.2552
+     },
+     "of_book": {
+      "display": "14.6%",
+      "sort": 14.6243
+     },
+     "growth": {
+      "display": "17.7%",
+      "sort": 17.6917
+     },
+     "pace": {
+      "display": "+1.10 pp",
+      "sort": 1.1012
+     },
+     "new": {
+      "display": "60.8%",
+      "sort": 60.7837
+     },
+     "run": [
+      7.473,
+      5.4509,
+      7.772,
+      9.1489,
+      10.0361,
+      14.3744,
+      16.5905,
+      17.6917
+     ]
+    },
+    {
+     "entity": "Micro and Small",
+     "size": {
+      "display": "₹10.92L Cr",
+      "sort": 1092367.5367
+     },
+     "of_cut": {
+      "display": "22.8%",
+      "sort": 22.754
+     },
+     "of_book": {
+      "display": "4.9%",
+      "sort": 4.9477
+     },
+     "growth": {
+      "display": "22.6%",
+      "sort": 22.5623
+     },
+     "pace": {
+      "display": "-0.48 pp",
+      "sort": -0.4846
+     },
+     "new": {
+      "display": "25.2%",
+      "sort": 25.1838
+     },
+     "run": [
+      31.0173,
+      31.1999,
+      30.3894,
+      32.6804,
+      30.0915,
+      26.1766,
+      23.0469,
+      22.5623
+     ]
+    },
+    {
+     "entity": "Medium",
+     "size": {
+      "display": "₹4.80L Cr",
+      "sort": 479635.6376
+     },
+     "of_cut": {
+      "display": "10.0%",
+      "sort": 9.9908
+     },
+     "of_book": {
+      "display": "2.2%",
+      "sort": 2.1725
+     },
+     "growth": {
+      "display": "30.5%",
+      "sort": 30.4826
+     },
+     "pace": {
+      "display": "+0.21 pp",
+      "sort": 0.2078
+     },
+     "new": {
+      "display": "14.0%",
+      "sort": 14.0325
+     },
+     "run": [
+      20.4431,
+      22.2584,
+      20.9951,
+      21.842,
+      19.8844,
+      21.1753,
+      30.2748,
+      30.4826
+     ]
+    }
+   ],
+   "total": {
+    "entity": null,
+    "size": {
+     "display": "₹48.01L Cr",
+     "sort": 4800776.6819
+    },
+    "of_cut": null,
+    "of_book": null,
+    "growth": {
+     "display": "20.0%",
+     "sort": 19.9511
+    },
+    "pace": {
+     "display": "+0.71 pp",
+     "sort": 0.7051
+    },
+    "new": null,
+    "run": []
+   },
+   "source_signals": [
+    "sibc-ind-size-size-scan",
+    "sibc-ind-size-yoy-scan",
+    "sibc-ind-size-acceleration",
+    "sibc-ind-size-allocation",
+    "sibc-ind-size-share-of-credit-scan",
+    "sibc-industry-yoy"
+   ]
+  },
+  "sibc-industry-type": {
+   "cut": "sibc-industry-type",
+   "flow_label": "New",
+   "parts": [
+    {
+     "entity": "Infrastructure",
+     "size": {
+      "display": "₹15.13L Cr",
+      "sort": 1512808.2869
+     },
+     "of_cut": {
+      "display": "31.5%",
+      "sort": 31.5117
+     },
+     "of_book": {
+      "display": "6.9%",
+      "sort": 6.8521
+     },
+     "growth": {
+      "display": "10.2%",
+      "sort": 10.2279
+     },
+     "pace": {
+      "display": "-0.66 pp",
+      "sort": -0.6573
+     },
+     "new": {
+      "display": "17.6%",
+      "sort": 17.5794
+     },
+     "run": [
+      7.1591,
+      6.4023,
+      7.9337,
+      9.2173,
+      10.1027,
+      11.6233,
+      10.8852,
+      10.2279
+     ]
+    },
+    {
+     "entity": "Basic Metal and Metal Product",
+     "size": {
+      "display": "₹5.38L Cr",
+      "sort": 537665.8788
+     },
+     "of_cut": {
+      "display": "11.2%",
+      "sort": 11.1996
+     },
+     "of_book": {
+      "display": "2.4%",
+      "sort": 2.4353
+     },
+     "growth": {
+      "display": "21.9%",
+      "sort": 21.9209
+     },
+     "pace": {
+      "display": "+1.03 pp",
+      "sort": 1.0327
+     },
+     "new": {
+      "display": "12.1%",
+      "sort": 12.1065
+     },
+     "run": [
+      14.1892,
+      13.7594,
+      15.1575,
+      19.5066,
+      17.6706,
+      21.2775,
+      20.8882,
+      21.9209
+     ]
+    },
+    {
+     "entity": "Other Industries",
+     "size": {
+      "display": "₹3.89L Cr",
+      "sort": 389497.043
+     },
+     "of_cut": {
+      "display": "8.1%",
+      "sort": 8.1132
+     },
+     "of_book": {
+      "display": "1.8%",
+      "sort": 1.7642
+     },
+     "growth": {
+      "display": "32.3%",
+      "sort": 32.3227
+     },
+     "pace": {
+      "display": "+3.09 pp",
+      "sort": 3.094
+     },
+     "new": {
+      "display": "11.9%",
+      "sort": 11.9152
+     },
+     "run": [
+      12.5501,
+      10.2436,
+      14.0059,
+      17.4438,
+      19.3943,
+      20.9103,
+      29.2288,
+      32.3227
+     ]
+    },
+    {
+     "entity": "All Engineering",
+     "size": {
+      "display": "₹3.43L Cr",
+      "sort": 343225.5462
+     },
+     "of_cut": {
+      "display": "7.1%",
+      "sort": 7.1494
+     },
+     "of_book": {
+      "display": "1.6%",
+      "sort": 1.5546
+     },
+     "growth": {
+      "display": "36.2%",
+      "sort": 36.183
+     },
+     "pace": {
+      "display": "-1.41 pp",
+      "sort": -1.4116
+     },
+     "new": {
+      "display": "11.4%",
+      "sort": 11.4205
+     },
+     "run": [
+      30.4255,
+      35.8814,
+      36.0067,
+      32.1642,
+      30.8215,
+      35.0975,
+      37.5946,
+      36.183
+     ]
+    },
+    {
+     "entity": "Chemicals and Chemical Products",
+     "size": {
+      "display": "₹3.33L Cr",
+      "sort": 333497.6302
+     },
+     "of_cut": {
+      "display": "6.9%",
+      "sort": 6.9467
+     },
+     "of_book": {
+      "display": "1.5%",
+      "sort": 1.5105
+     },
+     "growth": {
+      "display": "24.0%",
+      "sort": 23.9808
+     },
+     "pace": {
+      "display": "+2.72 pp",
+      "sort": 2.7231
+     },
+     "new": {
+      "display": "8.1%",
+      "sort": 8.0784
+     },
+     "run": [
+      14.8063,
+      15.0864,
+      19.0904,
+      14.9696,
+      16.1258,
+      19.365,
+      21.2578,
+      23.9808
+     ]
+    },
+    {
+     "entity": "Textiles",
+     "size": {
+      "display": "₹3.11L Cr",
+      "sort": 311348.9089
+     },
+     "of_cut": {
+      "display": "6.5%",
+      "sort": 6.4854
+     },
+     "of_book": {
+      "display": "1.4%",
+      "sort": 1.4102
+     },
+     "growth": {
+      "display": "15.1%",
+      "sort": 15.1162
+     },
+     "pace": {
+      "display": "+3.67 pp",
+      "sort": 3.6694
+     },
+     "new": {
+      "display": "5.1%",
+      "sort": 5.1201
+     },
+     "run": [
+      11.8291,
+      9.9704,
+      8.1724,
+      8.8728,
+      8.2958,
+      10.2641,
+      11.4468,
+      15.1162
+     ]
+    },
+    {
+     "entity": "Food Processing",
+     "size": {
+      "display": "₹2.65L Cr",
+      "sort": 264610.6663
+     },
+     "of_cut": {
+      "display": "5.5%",
+      "sort": 5.5118
+     },
+     "of_book": {
+      "display": "1.2%",
+      "sort": 1.1985
+     },
+     "growth": {
+      "display": "22.3%",
+      "sort": 22.2859
+     },
+     "pace": {
+      "display": "+2.75 pp",
+      "sort": 2.7464
+     },
+     "new": {
+      "display": "6.0%",
+      "sort": 6.0393
+     },
+     "run": [
+      11.6917,
+      9.5533,
+      10.203,
+      13.9675,
+      13.2916,
+      14.0538,
+      19.5394,
+      22.2859
+     ]
+    },
+    {
+     "entity": "Petroleum, Coal Products and Nuclear Fuels",
+     "size": {
+      "display": "₹2.12L Cr",
+      "sort": 212119.7143
+     },
+     "of_cut": {
+      "display": "4.4%",
+      "sort": 4.4184
+     },
+     "of_book": {
+      "display": "1.0%",
+      "sort": 0.9608
+     },
+     "growth": {
+      "display": "34.0%",
+      "sort": 34.0234
+     },
+     "pace": {
+      "display": "-14.52 pp",
+      "sort": -14.5231
+     },
+     "new": {
+      "display": "6.7%",
+      "sort": 6.7438
+     },
+     "run": [
+      38.9986,
+      14.4523,
+      20.0782,
+      32.431,
+      37.7706,
+      40.8732,
+      48.5465,
+      34.0234
+     ]
+    },
+    {
+     "entity": "Construction",
+     "size": {
+      "display": "₹1.94L Cr",
+      "sort": 194385.7279
+     },
+     "of_cut": {
+      "display": "4.0%",
+      "sort": 4.049
+     },
+     "of_book": {
+      "display": "0.9%",
+      "sort": 0.8804
+     },
+     "growth": {
+      "display": "24.4%",
+      "sort": 24.4175
+     },
+     "pace": {
+      "display": "+5.15 pp",
+      "sort": 5.1474
+     },
+     "new": {
+      "display": "4.8%",
+      "sort": 4.7776
+     },
+     "run": [
+      12.1767,
+      8.4478,
+      7.3234,
+      12.0511,
+      13.0075,
+      13.5172,
+      19.2701,
+      24.4175
+     ]
+    },
+    {
+     "entity": "Vehicles, Vehicle Parts and Transport Equipment",
+     "size": {
+      "display": "₹1.61L Cr",
+      "sort": 160649.4493
+     },
+     "of_cut": {
+      "display": "3.3%",
+      "sort": 3.3463
+     },
+     "of_book": {
+      "display": "0.7%",
+      "sort": 0.7276
+     },
+     "growth": {
+      "display": "32.2%",
+      "sort": 32.2214
+     },
+     "pace": {
+      "display": "+6.18 pp",
+      "sort": 6.1755
+     },
+     "new": {
+      "display": "4.9%",
+      "sort": 4.9028
+     },
+     "run": [
+      19.0407,
+      14.7736,
+      16.7305,
+      18.1041,
+      19.1472,
+      26.3797,
+      26.0459,
+      32.2214
+     ]
+    },
+    {
+     "entity": "Gems and Jewellery",
+     "size": {
+      "display": "₹1.24L Cr",
+      "sort": 124291.8345
+     },
+     "of_cut": {
+      "display": "2.6%",
+      "sort": 2.589
+     },
+     "of_book": {
+      "display": "0.6%",
+      "sort": 0.563
+     },
+     "growth": {
+      "display": "35.7%",
+      "sort": 35.7474
+     },
+     "pace": {
+      "display": "+3.04 pp",
+      "sort": 3.0404
+     },
+     "new": {
+      "display": "4.1%",
+      "sort": 4.099
+     },
+     "run": [
+      25.2524,
+      35.5978,
+      40.2119,
+      41.4172,
+      26.0235,
+      35.4687,
+      32.707,
+      35.7474
+     ]
+    },
+    {
+     "entity": "Rubber, Plastic and their Products",
+     "size": {
+      "display": "₹1.18L Cr",
+      "sort": 118487.4879
+     },
+     "of_cut": {
+      "display": "2.5%",
+      "sort": 2.4681
+     },
+     "of_book": {
+      "display": "0.5%",
+      "sort": 0.5367
+     },
+     "growth": {
+      "display": "15.6%",
+      "sort": 15.5824
+     },
+     "pace": {
+      "display": "+2.41 pp",
+      "sort": 2.4116
+     },
+     "new": {
+      "display": "2.0%",
+      "sort": 2.0005
+     },
+     "run": [
+      9.8473,
+      9.9624,
+      9.1161,
+      9.0021,
+      7.3132,
+      11.7054,
+      13.1707,
+      15.5824
+     ]
+    },
+    {
+     "entity": "Cement and Cement Products",
+     "size": {
+      "display": "₹69,420 Cr",
+      "sort": 69419.8507
+     },
+     "of_cut": {
+      "display": "1.4%",
+      "sort": 1.446
+     },
+     "of_book": {
+      "display": "0.3%",
+      "sort": 0.3144
+     },
+     "growth": {
+      "display": "16.3%",
+      "sort": 16.3435
+     },
+     "pace": {
+      "display": "-0.11 pp",
+      "sort": -0.1128
+     },
+     "new": {
+      "display": "1.2%",
+      "sort": 1.2213
+     },
+     "run": [
+      4.9023,
+      6.5574,
+      6.6375,
+      8.9704,
+      10.7551,
+      15.3757,
+      16.4563,
+      16.3435
+     ]
+    },
+    {
+     "entity": "Mining and Quarrying (incl. Coal)",
+     "size": {
+      "display": "₹63,876 Cr",
+      "sort": 63876.3141
+     },
+     "of_cut": {
+      "display": "1.3%",
+      "sort": 1.3305
+     },
+     "of_book": {
+      "display": "0.3%",
+      "sort": 0.2893
+     },
+     "growth": {
+      "display": "16.5%",
+      "sort": 16.5345
+     },
+     "pace": {
+      "display": "+3.81 pp",
+      "sort": 3.8127
+     },
+     "new": {
+      "display": "1.1%",
+      "sort": 1.135
+     },
+     "run": [
+      20.2825,
+      21.4626,
+      21.5251,
+      7.2394,
+      9.6681,
+      12.2836,
+      12.7218,
+      16.5345
+     ]
+    },
+    {
+     "entity": "Paper and Paper Products",
+     "size": {
+      "display": "₹62,081 Cr",
+      "sort": 62080.8656
+     },
+     "of_cut": {
+      "display": "1.3%",
+      "sort": 1.2931
+     },
+     "of_book": {
+      "display": "0.3%",
+      "sort": 0.2812
+     },
+     "growth": {
+      "display": "17.2%",
+      "sort": 17.2204
+     },
+     "pace": {
+      "display": "-0.50 pp",
+      "sort": -0.5035
+     },
+     "new": {
+      "display": "1.1%",
+      "sort": 1.1421
+     },
+     "run": [
+      11.8028,
+      11.9869,
+      11.6447,
+      11.5736,
+      13.3485,
+      15.4528,
+      17.7239,
+      17.2204
+     ]
+    },
+    {
+     "entity": "Beverage and Tobacco",
+     "size": {
+      "display": "₹38,377 Cr",
+      "sort": 38376.6159
+     },
+     "of_cut": {
+      "display": "0.8%",
+      "sort": 0.7994
+     },
+     "of_book": {
+      "display": "0.2%",
+      "sort": 0.1738
+     },
+     "growth": {
+      "display": "10.5%",
+      "sort": 10.4909
+     },
+     "pace": {
+      "display": "+1.70 pp",
+      "sort": 1.7042
+     },
+     "new": {
+      "display": "0.5%",
+      "sort": 0.4563
+     },
+     "run": [
+      22.1034,
+      24.334,
+      25.2218,
+      13.0726,
+      11.3723,
+      9.2641,
+      8.7867,
+      10.4909
+     ]
+    },
+    {
+     "entity": "Wood and Wood Products",
+     "size": {
+      "display": "₹33,331 Cr",
+      "sort": 33330.7488
+     },
+     "of_cut": {
+      "display": "0.7%",
+      "sort": 0.6943
+     },
+     "of_book": {
+      "display": "0.2%",
+      "sort": 0.151
+     },
+     "growth": {
+      "display": "18.8%",
+      "sort": 18.8117
+     },
+     "pace": {
+      "display": "+3.67 pp",
+      "sort": 3.6726
+     },
+     "new": {
+      "display": "0.7%",
+      "sort": 0.6609
+     },
+     "run": [
+      13.9515,
+      13.6704,
+      12.3932,
+      11.6046,
+      11.9934,
+      11.7595,
+      15.1391,
+      18.8117
+     ]
+    },
+    {
+     "entity": "Glass and Glassware",
+     "size": {
+      "display": "₹16,534 Cr",
+      "sort": 16533.7221
+     },
+     "of_cut": {
+      "display": "0.3%",
+      "sort": 0.3444
+     },
+     "of_book": {
+      "display": "0.1%",
+      "sort": 0.0749
+     },
+     "growth": {
+      "display": "28.0%",
+      "sort": 27.9722
+     },
+     "pace": {
+      "display": "+4.84 pp",
+      "sort": 4.8372
+     },
+     "new": {
+      "display": "0.5%",
+      "sort": 0.4526
+     },
+     "run": [
+      10.0107,
+      9.6434,
+      3.8127,
+      21.1566,
+      17.1547,
+      16.4082,
+      23.135,
+      27.9722
+     ]
+    },
+    {
+     "entity": "Leather and Leather Products",
+     "size": {
+      "display": "₹14,570 Cr",
+      "sort": 14570.3907
+     },
+     "of_cut": {
+      "display": "0.3%",
+      "sort": 0.3035
+     },
+     "of_book": {
+      "display": "0.1%",
+      "sort": 0.066
+     },
+     "growth": {
+      "display": "8.9%",
+      "sort": 8.8556
+     },
+     "pace": {
+      "display": "-1.41 pp",
+      "sort": -1.4058
+     },
+     "new": {
+      "display": "0.1%",
+      "sort": 0.1484
+     },
+     "run": [
+      7.133,
+      8.499,
+      6.5699,
+      8.9936,
+      6.4334,
+      8.847,
+      10.2615,
+      8.8556
+     ]
+    }
+   ],
+   "total": {
+    "entity": null,
+    "size": {
+     "display": "₹48.01L Cr",
+     "sort": 4800776.6821
+    },
+    "of_cut": null,
+    "of_book": null,
+    "growth": {
+     "display": "20.0%",
+     "sort": 19.9511
+    },
+    "pace": null,
+    "new": null,
+    "run": []
+   },
+   "source_signals": [
+    "sibc-industry-type-size-scan",
+    "sibc-industry-type-yoy-scan",
+    "sibc-industry-type-acceleration",
+    "sibc-industry-type-allocation",
+    "sibc-industry-type-share-of-credit-scan",
+    "sibc-industry-yoy"
+   ]
+  },
+  "sibc-infra-sub": {
+   "cut": "sibc-infra-sub",
+   "flow_label": "New",
+   "parts": [
+    {
+     "entity": "Power",
+     "size": {
+      "display": "₹8.69L Cr",
+      "sort": 869332.6095
+     },
+     "of_cut": {
+      "display": "57.5%",
+      "sort": 57.4648
+     },
+     "of_book": {
+      "display": "3.9%",
+      "sort": 3.9375
+     },
+     "growth": {
+      "display": "21.6%",
+      "sort": 21.6202
+     },
+     "pace": {
+      "display": "-1.62 pp",
+      "sort": -1.6167
+     },
+     "new": null,
+     "run": [
+      18.0297,
+      17.4938,
+      21.4397,
+      21.7428,
+      21.4686,
+      23.8268,
+      23.2369,
+      21.6202
+     ]
+    },
+    {
+     "entity": "Roads",
+     "size": {
+      "display": "₹3.42L Cr",
+      "sort": 341610.4922
+     },
+     "of_cut": {
+      "display": "22.6%",
+      "sort": 22.5812
+     },
+     "of_book": {
+      "display": "1.5%",
+      "sort": 1.5473
+     },
+     "growth": {
+      "display": "-0.8%",
+      "sort": -0.8369
+     },
+     "pace": {
+      "display": "+0.00 pp",
+      "sort": 0.0034
+     },
+     "new": null,
+     "run": [
+      0.5956,
+      0.1658,
+      -2.2987,
+      1.1936,
+      0.4494,
+      -0.7075,
+      -0.8403,
+      -0.8369
+     ]
+    },
+    {
+     "entity": "Other Infrastructure",
+     "size": {
+      "display": "₹1.80L Cr",
+      "sort": 180496.9569
+     },
+     "of_cut": {
+      "display": "11.9%",
+      "sort": 11.9313
+     },
+     "of_book": {
+      "display": "0.8%",
+      "sort": 0.8175
+     },
+     "growth": {
+      "display": "1.7%",
+      "sort": 1.7115
+     },
+     "pace": {
+      "display": "+0.74 pp",
+      "sort": 0.7417
+     },
+     "new": null,
+     "run": [
+      -2.2606,
+      -4.0428,
+      -4.9326,
+      -3.9302,
+      1.4052,
+      1.4559,
+      0.9698,
+      1.7115
+     ]
+    },
+    {
+     "entity": "Telecommunications",
+     "size": {
+      "display": "₹96,039 Cr",
+      "sort": 96039.4122
+     },
+     "of_cut": {
+      "display": "6.3%",
+      "sort": 6.3484
+     },
+     "of_book": {
+      "display": "0.4%",
+      "sort": 0.435
+     },
+     "growth": {
+      "display": "-13.2%",
+      "sort": -13.2105
+     },
+     "pace": {
+      "display": "-1.61 pp",
+      "sort": -1.6064
+     },
+     "new": null,
+     "run": [
+      -13.5453,
+      -17.2336,
+      -12.7679,
+      -12.2312,
+      -11.9122,
+      -6.9759,
+      -11.6041,
+      -13.2105
+     ]
+    },
+    {
+     "entity": "Airports",
+     "size": {
+      "display": "₹8,933 Cr",
+      "sort": 8932.62
+     },
+     "of_cut": {
+      "display": "0.6%",
+      "sort": 0.5905
+     },
+     "of_book": {
+      "display": "0.0%",
+      "sort": 0.0405
+     },
+     "growth": {
+      "display": "7.7%",
+      "sort": 7.6775
+     },
+     "pace": {
+      "display": "+21.92 pp",
+      "sort": 21.9218
+     },
+     "new": null,
+     "run": [
+      -26.4156,
+      -26.0618,
+      -25.2558,
+      -26.9951,
+      -26.033,
+      -14.4533,
+      -14.2444,
+      7.6775
+     ]
+    },
+    {
+     "entity": "Ports",
+     "size": {
+      "display": "₹8,719 Cr",
+      "sort": 8718.75
+     },
+     "of_cut": {
+      "display": "0.6%",
+      "sort": 0.5763
+     },
+     "of_book": {
+      "display": "0.0%",
+      "sort": 0.0395
+     },
+     "growth": {
+      "display": "58.4%",
+      "sort": 58.3785
+     },
+     "pace": {
+      "display": "-17.51 pp",
+      "sort": -17.5061
+     },
+     "new": null,
+     "run": [
+      30.2969,
+      49.2556,
+      55.209,
+      48.6551,
+      74.0215,
+      82.83,
+      75.8845,
+      58.3785
+     ]
+    },
+    {
+     "entity": "Railways (other than Indian Railways)",
+     "size": {
+      "display": "₹7,677 Cr",
+      "sort": 7677.4462
+     },
+     "of_cut": {
+      "display": "0.5%",
+      "sort": 0.5075
+     },
+     "of_book": {
+      "display": "0.0%",
+      "sort": 0.0348
+     },
+     "growth": {
+      "display": "-31.6%",
+      "sort": -31.6461
+     },
+     "pace": {
+      "display": "+6.49 pp",
+      "sort": 6.4909
+     },
+     "new": null,
+     "run": [
+      -23.2276,
+      -24.2205,
+      -45.8782,
+      -49.8298,
+      -44.0554,
+      -37.5951,
+      -38.1369,
+      -31.6461
+     ]
+    }
+   ],
+   "total": {
+    "entity": null,
+    "size": {
+     "display": "₹15.13L Cr",
+     "sort": 1512808.287
+    },
+    "of_cut": null,
+    "of_book": null,
+    "growth": {
+     "display": "10.2%",
+     "sort": 10.2279
+    },
+    "pace": {
+     "display": "-0.66 pp",
+     "sort": -0.6573
+    },
+    "new": null,
+    "run": []
+   },
+   "source_signals": [
+    "sibc-infra-sub-size-scan",
+    "sibc-infra-sub-yoy-scan",
+    "sibc-infra-sub-acceleration",
+    "sibc-infra-sub-allocation",
+    "sibc-infra-sub-share-of-credit-scan",
+    "sibc-infra-yoy"
+   ]
+  },
+  "sibc-main": {
+   "cut": "sibc-main",
+   "flow_label": "New",
+   "parts": [
+    {
+     "entity": "Personal Loans",
+     "size": {
+      "display": "₹71.83L Cr",
+      "sort": 7183335.4979
+     },
+     "of_cut": {
+      "display": "34.4%",
+      "sort": 34.3903
+     },
+     "of_book": {
+      "display": "32.5%",
+      "sort": 32.536
+     },
+     "growth": {
+      "display": "16.2%",
+      "sort": 16.2339
+     },
+     "pace": {
+      "display": "+0.48 pp",
+      "sort": 0.4759
+     },
+     "new": {
+      "display": "29.9%",
+      "sort": 29.9388
+     },
+     "run": [
+      14.3761,
+      14.9364,
+      15.2241,
+      16.2107,
+      16.0149,
+      15.3758,
+      15.758,
+      16.2339
+     ]
+    },
+    {
+     "entity": "Services",
+     "size": {
+      "display": "₹61.97L Cr",
+      "sort": 6196921.2975
+     },
+     "of_cut": {
+      "display": "29.7%",
+      "sort": 29.6678
+     },
+     "of_book": {
+      "display": "28.1%",
+      "sort": 28.0682
+     },
+     "growth": {
+      "display": "22.9%",
+      "sort": 22.9441
+     },
+     "pace": {
+      "display": "+1.52 pp",
+      "sort": 1.5168
+     },
+     "new": {
+      "display": "34.5%",
+      "sort": 34.511
+     },
+     "run": [
+      15.2576,
+      15.4658,
+      16.2571,
+      19.0011,
+      18.583,
+      20.4069,
+      21.4272,
+      22.9441
+     ]
+    },
+    {
+     "entity": "Industry (Micro and Small, Medium and Large)",
+     "size": {
+      "display": "₹48.01L Cr",
+      "sort": 4800776.6819
+     },
+     "of_cut": {
+      "display": "23.0%",
+      "sort": 22.9838
+     },
+     "of_book": {
+      "display": "21.7%",
+      "sort": 21.7445
+     },
+     "growth": {
+      "display": "20.0%",
+      "sort": 19.9511
+     },
+     "pace": {
+      "display": "+0.71 pp",
+      "sort": 0.7051
+     },
+     "new": {
+      "display": "23.8%",
+      "sort": 23.8283
+     },
+     "run": [
+      13.3492,
+      12.1191,
+      13.542,
+      15.02,
+      15.0562,
+      17.5485,
+      19.246,
+      19.9511
+     ]
+    },
+    {
+     "entity": "Agriculture and Allied Activities",
+     "size": {
+      "display": "₹27.07L Cr",
+      "sort": 2706651.9824
+     },
+     "of_cut": {
+      "display": "13.0%",
+      "sort": 12.9581
+     },
+     "of_book": {
+      "display": "12.3%",
+      "sort": 12.2594
+     },
+     "growth": {
+      "display": "17.0%",
+      "sort": 16.9763
+     },
+     "pace": {
+      "display": "+0.15 pp",
+      "sort": 0.1518
+     },
+     "new": {
+      "display": "11.7%",
+      "sort": 11.7218
+     },
+     "run": [
+      12.0676,
+      11.3724,
+      12.3292,
+      15.6179,
+      13.6996,
+      14.907,
+      16.8245,
+      16.9763
+     ]
+    }
+   ],
+   "total": {
+    "entity": null,
+    "size": {
+     "display": "₹208.88L Cr",
+     "sort": 20887685.4597
+    },
+    "of_cut": null,
+    "of_book": null,
+    "growth": {
+     "display": "19.1%",
+     "sort": 19.06
+    },
+    "pace": {
+     "display": "+0.74 pp",
+     "sort": 0.742
+    },
+    "new": null,
+    "run": []
+   },
+   "source_signals": [
+    "sibc-main-size-scan",
+    "sibc-main-yoy-scan",
+    "sibc-main-acceleration",
+    "sibc-main-allocation",
+    "sibc-main-share-of-credit-scan",
+    "sibc-nonfood-credit-yoy"
+   ]
+  },
+  "sibc-nbfc-sub": {
+   "cut": "sibc-nbfc-sub",
+   "flow_label": "New",
+   "parts": [
+    {
+     "entity": "Housing Finance Companies (HFCs)",
+     "size": {
+      "display": "₹3.82L Cr",
+      "sort": 382151.44
+     },
+     "of_cut": {
+      "display": "51.8%",
+      "sort": 51.7683
+     },
+     "of_book": null,
+     "growth": {
+      "display": "21.0%",
+      "sort": 21.013
+     },
+     "pace": {
+      "display": "+8.79 pp",
+      "sort": 8.7918
+     },
+     "new": {
+      "display": "29.6%",
+      "sort": 29.6246
+     },
+     "run": [
+      10.3207,
+      8.5128,
+      10.6635,
+      15.5198,
+      16.6791,
+      19.7148,
+      12.2211,
+      21.013
+     ]
+    },
+    {
+     "entity": "Public Financial Institutions (PFIs)",
+     "size": {
+      "display": "₹3.56L Cr",
+      "sort": 356043.8344
+     },
+     "of_cut": {
+      "display": "48.2%",
+      "sort": 48.2317
+     },
+     "of_book": null,
+     "growth": {
+      "display": "79.5%",
+      "sort": 79.4519
+     },
+     "pace": {
+      "display": "+10.17 pp",
+      "sort": 10.1749
+     },
+     "new": {
+      "display": "70.4%",
+      "sort": 70.3754
+     },
+     "run": [
+      33.3153,
+      39.0258,
+      45.2822,
+      52.5136,
+      57.0958,
+      71.7605,
+      69.277,
+      79.4519
+     ]
+    }
+   ],
+   "total": {
+    "entity": null,
+    "size": {
+     "display": "₹7.38L Cr",
+     "sort": 738195.2744
+    },
+    "of_cut": null,
+    "of_book": null,
+    "growth": null,
+    "pace": {
+     "display": "+3.42 pp",
+     "sort": 3.4181
+    },
+    "new": null,
+    "run": []
+   },
+   "source_signals": [
+    "sibc-nbfc-sub-size-scan",
+    "sibc-nbfc-sub-yoy-scan",
+    "sibc-nbfc-sub-acceleration",
+    "sibc-nbfc-sub-allocation",
+    "sibc-nbfc-sub-share-of-credit-scan"
+   ]
+  },
+  "sibc-pl": {
+   "cut": "sibc-pl",
+   "flow_label": "New",
+   "parts": [
+    {
+     "entity": "Housing (Including Priority Sector Housing)",
+     "size": {
+      "display": "₹34.28L Cr",
+      "sort": 3428452.5536
+     },
+     "of_cut": {
+      "display": "47.7%",
+      "sort": 47.7279
+     },
+     "of_book": {
+      "display": "15.5%",
+      "sort": 15.5288
+     },
+     "growth": {
+      "display": "11.3%",
+      "sort": 11.2718
+     },
+     "pace": {
+      "display": "+0.29 pp",
+      "sort": 0.2945
+     },
+     "new": {
+      "display": "34.6%",
+      "sort": 34.6171
+     },
+     "run": [
+      11.0723,
+      11.0962,
+      10.9755,
+      11.4761,
+      11.3931,
+      10.9195,
+      10.9773,
+      11.2718
+     ]
+    },
+    {
+     "entity": "Other Personal Loans",
+     "size": {
+      "display": "₹17.84L Cr",
+      "sort": 1784253.0954
+     },
+     "of_cut": {
+      "display": "24.8%",
+      "sort": 24.8388
+     },
+     "of_book": {
+      "display": "8.1%",
+      "sort": 8.0816
+     },
+     "growth": {
+      "display": "14.7%",
+      "sort": 14.7108
+     },
+     "pace": {
+      "display": "+0.49 pp",
+      "sort": 0.4897
+     },
+     "new": {
+      "display": "22.8%",
+      "sort": 22.8073
+     },
+     "run": [
+      10.1077,
+      11.5618,
+      12.0891,
+      12.8088,
+      12.6975,
+      12.4981,
+      14.2211,
+      14.7108
+     ]
+    },
+    {
+     "entity": "Vehicle Loans",
+     "size": {
+      "display": "₹7.65L Cr",
+      "sort": 764554.4702
+     },
+     "of_cut": {
+      "display": "10.6%",
+      "sort": 10.6434
+     },
+     "of_book": {
+      "display": "3.5%",
+      "sort": 3.463
+     },
+     "growth": {
+      "display": "18.8%",
+      "sort": 18.7835
+     },
+     "pace": {
+      "display": "+1.44 pp",
+      "sort": 1.4387
+     },
+     "new": {
+      "display": "12.1%",
+      "sort": 12.0507
+     },
+     "run": [
+      16.5231,
+      17.1207,
+      17.1412,
+      18.6072,
+      17.9737,
+      17.3332,
+      17.3448,
+      18.7835
+     ]
+    },
+    {
+     "entity": "Loans against gold jewellery",
+     "size": {
+      "display": "₹5.52L Cr",
+      "sort": 552261.1404
+     },
+     "of_cut": {
+      "display": "7.7%",
+      "sort": 7.6881
+     },
+     "of_book": {
+      "display": "2.5%",
+      "sort": 2.5014
+     },
+     "growth": {
+      "display": "88.1%",
+      "sort": 88.1201
+     },
+     "pace": {
+      "display": "-5.71 pp",
+      "sort": -5.7148
+     },
+     "new": {
+      "display": "25.8%",
+      "sort": 25.7851
+     },
+     "run": [
+      127.6277,
+      128.7542,
+      127.9048,
+      123.659,
+      121.2056,
+      105.4961,
+      93.8349,
+      88.1201
+     ]
+    },
+    {
+     "entity": "Credit Card Outstanding",
+     "size": {
+      "display": "₹2.98L Cr",
+      "sort": 297756.0797
+     },
+     "of_cut": {
+      "display": "4.1%",
+      "sort": 4.1451
+     },
+     "of_book": {
+      "display": "1.3%",
+      "sort": 1.3486
+     },
+     "growth": {
+      "display": "2.3%",
+      "sort": 2.2906
+     },
+     "pace": {
+      "display": "+0.35 pp",
+      "sort": 0.3499
+     },
+     "new": {
+      "display": "0.7%",
+      "sort": 0.6646
+     },
+     "run": [
+      1.0242,
+      1.4837,
+      1.7487,
+      3.5498,
+      3.776,
+      1.3268,
+      1.9408,
+      2.2906
+     ]
+    },
+    {
+     "entity": "Advances against Fixed Deposits (Including FCNR (B), NRNR Deposits etc.)",
+     "size": {
+      "display": "₹1.62L Cr",
+      "sort": 161519.4953
+     },
+     "of_cut": {
+      "display": "2.2%",
+      "sort": 2.2485
+     },
+     "of_book": {
+      "display": "0.7%",
+      "sort": 0.7316
+     },
+     "growth": {
+      "display": "14.6%",
+      "sort": 14.5778
+     },
+     "pace": {
+      "display": "+3.40 pp",
+      "sort": 3.4028
+     },
+     "new": {
+      "display": "2.0%",
+      "sort": 2.0483
+     },
+     "run": [
+      15.3055,
+      13.1163,
+      14.0666,
+      19.2222,
+      9.6139,
+      8.0567,
+      11.175,
+      14.5778
+     ]
+    },
+    {
+     "entity": "Education",
+     "size": {
+      "display": "₹1.61L Cr",
+      "sort": 160946.7871
+     },
+     "of_cut": {
+      "display": "2.2%",
+      "sort": 2.2406
+     },
+     "of_book": {
+      "display": "0.7%",
+      "sort": 0.729
+     },
+     "growth": {
+      "display": "13.7%",
+      "sort": 13.7137
+     },
+     "pace": {
+      "display": "+0.44 pp",
+      "sort": 0.4393
+     },
+     "new": {
+      "display": "1.9%",
+      "sort": 1.9347
+     },
+     "run": [
+      14.7591,
+      14.01,
+      13.7181,
+      13.3626,
+      13.2723,
+      14.0346,
+      13.2744,
+      13.7137
+     ]
+    },
+    {
+     "entity": "Consumer Durables",
+     "size": {
+      "display": "₹23,027 Cr",
+      "sort": 23026.5981
+     },
+     "of_cut": {
+      "display": "0.3%",
+      "sort": 0.3206
+     },
+     "of_book": {
+      "display": "0.1%",
+      "sort": 0.1043
+     },
+     "growth": {
+      "display": "0.4%",
+      "sort": 0.3878
+     },
+     "pace": {
+      "display": "+1.02 pp",
+      "sort": 1.0245
+     },
+     "new": {
+      "display": "0.0%",
+      "sort": 0.0089
+     },
+     "run": [
+      -5.1488,
+      -4.0354,
+      -9.7788,
+      -5.3392,
+      -3.3771,
+      -2.6357,
+      -0.6367,
+      0.3878
+     ]
+    },
+    {
+     "entity": "Advances to Individuals against share, bonds, etc.",
+     "size": {
+      "display": "₹10,565 Cr",
+      "sort": 10565.2782
+     },
+     "of_cut": {
+      "display": "0.1%",
+      "sort": 0.1471
+     },
+     "of_book": {
+      "display": "0.0%",
+      "sort": 0.0479
+     },
+     "growth": {
+      "display": "8.6%",
+      "sort": 8.5873
+     },
+     "pace": {
+      "display": "+4.00 pp",
+      "sort": 3.9972
+     },
+     "new": {
+      "display": "0.1%",
+      "sort": 0.0833
+     },
+     "run": [
+      4.1125,
+      5.0973,
+      2.8229,
+      4.6277,
+      -3.5927,
+      8.2901,
+      4.59,
+      8.5873
+     ]
+    }
+   ],
+   "total": {
+    "entity": null,
+    "size": {
+     "display": "₹71.83L Cr",
+     "sort": 7183335.498
+    },
+    "of_cut": null,
+    "of_book": null,
+    "growth": {
+     "display": "16.2%",
+     "sort": 16.2339
+    },
+    "pace": {
+     "display": "+0.48 pp",
+     "sort": 0.4759
+    },
+    "new": null,
+    "run": []
+   },
+   "source_signals": [
+    "sibc-pl-size-scan",
+    "sibc-pl-yoy-scan",
+    "sibc-pl-acceleration",
+    "sibc-pl-allocation",
+    "sibc-pl-share-of-credit-scan",
+    "sibc-personal-loans-yoy"
+   ]
+  },
+  "sibc-psl": {
+   "cut": "sibc-psl",
+   "flow_label": "New",
+   "parts": [
+    {
+     "entity": "Micro and Small Enterprises",
+     "size": {
+      "display": "₹30.88L Cr",
+      "sort": 3087892.47
+     },
+     "of_cut": {
+      "display": "31.2%",
+      "sort": 31.1699
+     },
+     "of_book": {
+      "display": "14.0%",
+      "sort": 13.9862
+     },
+     "growth": {
+      "display": "24.1%",
+      "sort": 24.0573
+     },
+     "pace": {
+      "display": "-0.48 pp",
+      "sort": -0.476
+     },
+     "new": {
+      "display": "37.2%",
+      "sort": 37.1835
+     },
+     "run": [
+      28.4557,
+      24.7996,
+      26.493,
+      29.3606,
+      28.5318,
+      23.6863,
+      24.5333,
+      24.0573
+     ]
+    },
+    {
+     "entity": "Agriculture and Allied Activities",
+     "size": {
+      "display": "₹27.32L Cr",
+      "sort": 2732430.5653
+     },
+     "of_cut": {
+      "display": "27.6%",
+      "sort": 27.5818
+     },
+     "of_book": {
+      "display": "12.4%",
+      "sort": 12.3762
+     },
+     "growth": {
+      "display": "19.4%",
+      "sort": 19.3957
+     },
+     "pace": {
+      "display": "+0.15 pp",
+      "sort": 0.1518
+     },
+     "new": {
+      "display": "27.6%",
+      "sort": 27.5632
+     },
+     "run": [
+      14.2325,
+      14.0705,
+      15.1981,
+      15.9522,
+      17.333,
+      13.8441,
+      19.9455,
+      19.3957
+     ]
+    },
+    {
+     "entity": "Weaker Sections including net PSLC- SF/MF",
+     "size": {
+      "display": "₹21.22L Cr",
+      "sort": 2122427.6508
+     },
+     "of_cut": {
+      "display": "21.4%",
+      "sort": 21.4243
+     },
+     "of_book": {
+      "display": "9.6%",
+      "sort": 9.6133
+     },
+     "growth": {
+      "display": "15.2%",
+      "sort": 15.1824
+     },
+     "pace": {
+      "display": "-0.11 pp",
+      "sort": -0.1148
+     },
+     "new": {
+      "display": "17.4%",
+      "sort": 17.372
+     },
+     "run": [
+      14.4786,
+      11.9187,
+      13.5459,
+      11.0735,
+      10.6684,
+      9.0581,
+      15.2972,
+      15.1824
+     ]
+    },
+    {
+     "entity": "Housing",
+     "size": {
+      "display": "₹10.40L Cr",
+      "sort": 1040210.6373
+     },
+     "of_cut": {
+      "display": "10.5%",
+      "sort": 10.5001
+     },
+     "of_book": {
+      "display": "4.7%",
+      "sort": 4.7115
+     },
+     "growth": {
+      "display": "10.6%",
+      "sort": 10.6104
+     },
+     "pace": {
+      "display": "-10.66 pp",
+      "sort": -10.6588
+     },
+     "new": {
+      "display": "6.2%",
+      "sort": 6.1961
+     },
+     "run": [
+      36.8643,
+      37.9444,
+      38.2491,
+      39.8023,
+      39.9351,
+      38.9761,
+      21.2692,
+      10.6104
+     ]
+    },
+    {
+     "entity": "Medium Enterprises",
+     "size": {
+      "display": "₹7.70L Cr",
+      "sort": 770456.3557
+     },
+     "of_cut": {
+      "display": "7.8%",
+      "sort": 7.7772
+     },
+     "of_book": {
+      "display": "3.5%",
+      "sort": 3.4897
+     },
+     "growth": {
+      "display": "29.2%",
+      "sort": 29.1969
+     },
+     "pace": {
+      "display": "+1.66 pp",
+      "sort": 1.6628
+     },
+     "new": {
+      "display": "10.8%",
+      "sort": 10.8117
+     },
+     "run": [
+      18.1097,
+      18.939,
+      18.3947,
+      17.9087,
+      17.2449,
+      17.839,
+      27.5341,
+      29.1969
+     ]
+    },
+    {
+     "entity": "Educational Loans",
+     "size": {
+      "display": "₹80,338 Cr",
+      "sort": 80338.0379
+     },
+     "of_cut": {
+      "display": "0.8%",
+      "sort": 0.811
+     },
+     "of_book": {
+      "display": "0.4%",
+      "sort": 0.3639
+     },
+     "growth": {
+      "display": "16.7%",
+      "sort": 16.7042
+     },
+     "pace": {
+      "display": "-5.58 pp",
+      "sort": -5.5814
+     },
+     "new": {
+      "display": "0.7%",
+      "sort": 0.714
+     },
+     "run": [
+      22.8512,
+      23.4677,
+      23.9551,
+      23.0219,
+      23.269,
+      22.5902,
+      22.2857,
+      16.7042
+     ]
+    },
+    {
+     "entity": "Others",
+     "size": {
+      "display": "₹43,836 Cr",
+      "sort": 43836.2555
+     },
+     "of_cut": {
+      "display": "0.4%",
+      "sort": 0.4425
+     },
+     "of_book": {
+      "display": "0.2%",
+      "sort": 0.1986
+     },
+     "growth": {
+      "display": "-1.1%",
+      "sort": -1.1172
+     },
+     "pace": {
+      "display": "+8.28 pp",
+      "sort": 8.2829
+     },
+     "new": {
+      "display": "-0.0%",
+      "sort": -0.0308
+     },
+     "run": [
+      -22.3365,
+      -23.9479,
+      -19.4141,
+      -9.5508,
+      -12.4547,
+      -11.2001,
+      -9.4,
+      -1.1172
+     ]
+    },
+    {
+     "entity": "Renewable Energy",
+     "size": {
+      "display": "₹16,014 Cr",
+      "sort": 16014.0
+     },
+     "of_cut": {
+      "display": "0.2%",
+      "sort": 0.1616
+     },
+     "of_book": {
+      "display": "0.1%",
+      "sort": 0.0725
+     },
+     "growth": {
+      "display": "31.7%",
+      "sort": 31.6971
+     },
+     "pace": {
+      "display": "+11.54 pp",
+      "sort": 11.5388
+     },
+     "new": {
+      "display": "0.2%",
+      "sort": 0.2393
+     },
+     "run": [
+      40.9243,
+      61.979,
+      64.3643,
+      26.0133,
+      15.638,
+      17.4591,
+      20.1583,
+      31.6971
+     ]
+    },
+    {
+     "entity": "Export Credit",
+     "size": {
+      "display": "₹11,738 Cr",
+      "sort": 11737.9072
+     },
+     "of_cut": {
+      "display": "0.1%",
+      "sort": 0.1185
+     },
+     "of_book": {
+      "display": "0.1%",
+      "sort": 0.0532
+     },
+     "growth": {
+      "display": "-8.8%",
+      "sort": -8.8351
+     },
+     "pace": {
+      "display": "+1.90 pp",
+      "sort": 1.9024
+     },
+     "new": {
+      "display": "-0.1%",
+      "sort": -0.0706
+     },
+     "run": [
+      -13.698,
+      -17.2245,
+      -14.0866,
+      -8.3602,
+      -12.0202,
+      -9.66,
+      -10.7375,
+      -8.8351
+     ]
+    },
+    {
+     "entity": "Social Infrastructure",
+     "size": {
+      "display": "₹1,289 Cr",
+      "sort": 1289.08
+     },
+     "of_cut": {
+      "display": "0.0%",
+      "sort": 0.013
+     },
+     "of_book": {
+      "display": "0.0%",
+      "sort": 0.0058
+     },
+     "growth": {
+      "display": "36.8%",
+      "sort": 36.755
+     },
+     "pace": {
+      "display": "-21.03 pp",
+      "sort": -21.0346
+     },
+     "new": {
+      "display": "0.0%",
+      "sort": 0.0215
+     },
+     "run": [
+      27.8673,
+      27.6768,
+      -1.0209,
+      12.8798,
+      35.2708,
+      70.7077,
+      57.7896,
+      36.755
+     ]
+    }
+   ],
+   "total": {
+    "entity": null,
+    "size": {
+     "display": "₹99.07L Cr",
+     "sort": 9906632.9597
+    },
+    "of_cut": null,
+    "of_book": null,
+    "growth": null,
+    "pace": null,
+    "new": null,
+    "run": []
+   },
+   "source_signals": [
+    "sibc-psl-size-scan",
+    "sibc-psl-yoy-scan",
+    "sibc-psl-acceleration",
+    "sibc-psl-allocation",
+    "sibc-psl-share-of-credit-scan"
+   ]
+  },
+  "sibc-services": {
+   "cut": "sibc-services",
+   "flow_label": "New",
+   "parts": [
+    {
+     "entity": "Non-Banking Financial Companies (NBFCs)",
+     "size": {
+      "display": "₹21.28L Cr",
+      "sort": 2127530.7008
+     },
+     "of_cut": {
+      "display": "34.3%",
+      "sort": 34.3321
+     },
+     "of_book": {
+      "display": "9.6%",
+      "sort": 9.6364
+     },
+     "growth": {
+      "display": "35.7%",
+      "sort": 35.6511
+     },
+     "pace": {
+      "display": "+3.42 pp",
+      "sort": 3.4181
+     },
+     "new": {
+      "display": "48.3%",
+      "sort": 48.349
+     },
+     "run": [
+      15.0641,
+      17.7582,
+      20.9121,
+      26.5812,
+      27.7297,
+      33.6929,
+      32.2331,
+      35.6511
+     ]
+    },
+    {
+     "entity": "Trade",
+     "size": {
+      "display": "₹14.09L Cr",
+      "sort": 1408848.1618
+     },
+     "of_cut": {
+      "display": "22.7%",
+      "sort": 22.7346
+     },
+     "of_book": {
+      "display": "6.4%",
+      "sort": 6.3812
+     },
+     "growth": {
+      "display": "19.8%",
+      "sort": 19.8361
+     },
+     "pace": {
+      "display": "+1.29 pp",
+      "sort": 1.2855
+     },
+     "new": {
+      "display": "20.2%",
+      "sort": 20.1648
+     },
+     "run": [
+      17.4686,
+      16.1432,
+      14.3765,
+      16.2071,
+      13.3872,
+      17.2738,
+      18.5505,
+      19.8361
+     ]
+    },
+    {
+     "entity": "Other Services",
+     "size": {
+      "display": "₹12.49L Cr",
+      "sort": 1248981.6348
+     },
+     "of_cut": {
+      "display": "20.2%",
+      "sort": 20.1549
+     },
+     "of_book": {
+      "display": "5.7%",
+      "sort": 5.6571
+     },
+     "growth": {
+      "display": "13.0%",
+      "sort": 12.9928
+     },
+     "pace": {
+      "display": "+0.70 pp",
+      "sort": 0.7005
+     },
+     "new": {
+      "display": "12.4%",
+      "sort": 12.4185
+     },
+     "run": [
+      16.9176,
+      14.2505,
+      13.3238,
+      13.179,
+      13.3595,
+      8.915,
+      12.2923,
+      12.9928
+     ]
+    },
+    {
+     "entity": "Commercial Real Estate",
+     "size": {
+      "display": "₹6.69L Cr",
+      "sort": 669259.5425
+     },
+     "of_cut": {
+      "display": "10.8%",
+      "sort": 10.7999
+     },
+     "of_book": {
+      "display": "3.0%",
+      "sort": 3.0313
+     },
+     "growth": {
+      "display": "21.5%",
+      "sort": 21.4943
+     },
+     "pace": {
+      "display": "-0.64 pp",
+      "sort": -0.6423
+     },
+     "new": {
+      "display": "10.2%",
+      "sort": 10.2382
+     },
+     "run": [
+      15.3747,
+      16.2046,
+      17.3671,
+      19.8471,
+      17.4987,
+      18.7396,
+      22.1365,
+      21.4943
+     ]
+    },
+    {
+     "entity": "Transport Operators",
+     "size": {
+      "display": "₹2.90L Cr",
+      "sort": 290423.8729
+     },
+     "of_cut": {
+      "display": "4.7%",
+      "sort": 4.6866
+     },
+     "of_book": {
+      "display": "1.3%",
+      "sort": 1.3154
+     },
+     "growth": {
+      "display": "8.0%",
+      "sort": 7.9725
+     },
+     "pace": {
+      "display": "+0.27 pp",
+      "sort": 0.2731
+     },
+     "new": {
+      "display": "1.9%",
+      "sort": 1.8543
+     },
+     "run": [
+      -0.9469,
+      4.2627,
+      7.5806,
+      9.6465,
+      8.6547,
+      7.6093,
+      7.6994,
+      7.9725
+     ]
+    },
+    {
+     "entity": "Professional Services",
+     "size": {
+      "display": "₹2.24L Cr",
+      "sort": 223520.4279
+     },
+     "of_cut": {
+      "display": "3.6%",
+      "sort": 3.607
+     },
+     "of_book": {
+      "display": "1.0%",
+      "sort": 1.0124
+     },
+     "growth": {
+      "display": "14.7%",
+      "sort": 14.6629
+     },
+     "pace": {
+      "display": "-0.07 pp",
+      "sort": -0.0704
+     },
+     "new": {
+      "display": "2.5%",
+      "sort": 2.4716
+     },
+     "run": [
+      10.9718,
+      9.5307,
+      9.2031,
+      11.4144,
+      12.8242,
+      11.986,
+      14.7334,
+      14.6629
+     ]
+    },
+    {
+     "entity": "Tourism, Hotels and Restaurants",
+     "size": {
+      "display": "₹1.09L Cr",
+      "sort": 108943.3685
+     },
+     "of_cut": {
+      "display": "1.8%",
+      "sort": 1.758
+     },
+     "of_book": {
+      "display": "0.5%",
+      "sort": 0.4934
+     },
+     "growth": {
+      "display": "27.1%",
+      "sort": 27.0963
+     },
+     "pace": {
+      "display": "+2.35 pp",
+      "sort": 2.3524
+     },
+     "new": {
+      "display": "2.0%",
+      "sort": 2.0083
+     },
+     "run": [
+      20.1627,
+      19.1606,
+      20.1667,
+      23.0223,
+      20.9528,
+      21.9667,
+      24.7439,
+      27.0963
+     ]
+    },
+    {
+     "entity": "Aviation",
+     "size": {
+      "display": "₹56,012 Cr",
+      "sort": 56012.31
+     },
+     "of_cut": {
+      "display": "0.9%",
+      "sort": 0.9039
+     },
+     "of_book": {
+      "display": "0.3%",
+      "sort": 0.2537
+     },
+     "growth": {
+      "display": "23.8%",
+      "sort": 23.7852
+     },
+     "pace": {
+      "display": "+11.20 pp",
+      "sort": 11.2044
+     },
+     "new": {
+      "display": "0.9%",
+      "sort": 0.9306
+     },
+     "run": [
+      10.8983,
+      10.686,
+      8.3667,
+      14.3597,
+      13.1682,
+      25.7892,
+      12.5808,
+      23.7852
+     ]
+    },
+    {
+     "entity": "Computer Software",
+     "size": {
+      "display": "₹52,415 Cr",
+      "sort": 52415.0593
+     },
+     "of_cut": {
+      "display": "0.8%",
+      "sort": 0.8458
+     },
+     "of_book": {
+      "display": "0.2%",
+      "sort": 0.2374
+     },
+     "growth": {
+      "display": "43.3%",
+      "sort": 43.2931
+     },
+     "pace": {
+      "display": "-5.36 pp",
+      "sort": -5.3589
+     },
+     "new": {
+      "display": "1.4%",
+      "sort": 1.3693
+     },
+     "run": [
+      33.86,
+      20.6541,
+      39.6846,
+      38.9566,
+      52.7481,
+      54.9477,
+      48.652,
+      43.2931
+     ]
+    },
+    {
+     "entity": "Shipping",
+     "size": {
+      "display": "₹10,986 Cr",
+      "sort": 10986.219
+     },
+     "of_cut": {
+      "display": "0.2%",
+      "sort": 0.1773
+     },
+     "of_book": {
+      "display": "0.0%",
+      "sort": 0.0498
+     },
+     "growth": {
+      "display": "25.9%",
+      "sort": 25.894
+     },
+     "pace": {
+      "display": "-3.03 pp",
+      "sort": -3.0331
+     },
+     "new": {
+      "display": "0.2%",
+      "sort": 0.1954
+     },
+     "run": [
+      47.2388,
+      44.4723,
+      41.6995,
+      42.156,
+      40.703,
+      40.974,
+      28.9272,
+      25.894
+     ]
+    }
+   ],
+   "total": {
+    "entity": null,
+    "size": {
+     "display": "₹61.97L Cr",
+     "sort": 6196921.2975
+    },
+    "of_cut": null,
+    "of_book": null,
+    "growth": {
+     "display": "22.9%",
+     "sort": 22.9441
+    },
+    "pace": {
+     "display": "+1.52 pp",
+     "sort": 1.5168
+    },
+    "new": null,
+    "run": []
+   },
+   "source_signals": [
+    "sibc-services-size-scan",
+    "sibc-services-yoy-scan",
+    "sibc-services-acceleration",
+    "sibc-services-allocation",
+    "sibc-services-share-of-credit-scan",
+    "sibc-services-yoy"
+   ]
+  },
+  "sibc-textiles-sub": {
+   "cut": "sibc-textiles-sub",
+   "flow_label": "New",
+   "parts": [
+    {
+     "entity": "Other Textiles",
+     "size": {
+      "display": "₹1.43L Cr",
+      "sort": 142656.0942
+     },
+     "of_cut": {
+      "display": "45.8%",
+      "sort": 45.8187
+     },
+     "of_book": null,
+     "growth": {
+      "display": "20.1%",
+      "sort": 20.1465
+     },
+     "pace": {
+      "display": "+0.58 pp",
+      "sort": 0.576
+     },
+     "new": {
+      "display": "58.5%",
+      "sort": 58.5093
+     },
+     "run": [
+      15.6797,
+      15.8375,
+      15.2155,
+      15.7147,
+      13.3278,
+      17.125,
+      19.5705,
+      20.1465
+     ]
+    },
+    {
+     "entity": "Cotton Textiles",
+     "size": {
+      "display": "₹1.09L Cr",
+      "sort": 108655.2138
+     },
+     "of_cut": {
+      "display": "34.9%",
+      "sort": 34.8982
+     },
+     "of_book": null,
+     "growth": {
+      "display": "10.3%",
+      "sort": 10.2805
+     },
+     "pace": {
+      "display": "+6.71 pp",
+      "sort": 6.705
+     },
+     "new": {
+      "display": "24.8%",
+      "sort": 24.775
+     },
+     "run": [
+      10.7245,
+      6.1546,
+      2.1683,
+      2.5805,
+      4.7945,
+      3.1757,
+      3.5755,
+      10.2805
+     ]
+    },
+    {
+     "entity": "Man-Made Textiles",
+     "size": {
+      "display": "₹54,664 Cr",
+      "sort": 54663.9411
+     },
+     "of_cut": {
+      "display": "17.6%",
+      "sort": 17.5571
+     },
+     "of_book": null,
+     "growth": {
+      "display": "11.8%",
+      "sort": 11.8451
+     },
+     "pace": {
+      "display": "+3.75 pp",
+      "sort": 3.7517
+     },
+     "new": {
+      "display": "14.2%",
+      "sort": 14.1601
+     },
+     "run": [
+      4.9175,
+      4.1847,
+      4.2482,
+      5.7856,
+      2.6933,
+      8.0769,
+      8.0934,
+      11.8451
+     ]
+    },
+    {
+     "entity": "Jute Textiles",
+     "size": {
+      "display": "₹5,374 Cr",
+      "sort": 5373.6597
+     },
+     "of_cut": {
+      "display": "1.7%",
+      "sort": 1.7259
+     },
+     "of_book": null,
+     "growth": {
+      "display": "24.1%",
+      "sort": 24.137
+     },
+     "pace": {
+      "display": "+2.77 pp",
+      "sort": 2.7656
+     },
+     "new": {
+      "display": "2.6%",
+      "sort": 2.5556
+     },
+     "run": [
+      14.4482,
+      13.2016,
+      15.0002,
+      16.4606,
+      19.9072,
+      20.1789,
+      21.3714,
+      24.137
+     ]
+    }
+   ],
+   "total": {
+    "entity": null,
+    "size": {
+     "display": "₹3.11L Cr",
+     "sort": 311348.9088
+    },
+    "of_cut": null,
+    "of_book": null,
+    "growth": null,
+    "pace": {
+     "display": "+3.67 pp",
+     "sort": 3.6694
+    },
+    "new": null,
+    "run": []
+   },
+   "source_signals": [
+    "sibc-textiles-sub-size-scan",
+    "sibc-textiles-sub-yoy-scan",
+    "sibc-textiles-sub-acceleration",
+    "sibc-textiles-sub-allocation",
+    "sibc-textiles-sub-share-of-credit-scan"
+   ]
+  },
+  "sibc-trade-sub": {
+   "cut": "sibc-trade-sub",
+   "flow_label": "New",
+   "parts": [
+    {
+     "entity": "Wholesale Trade",
+     "size": {
+      "display": "₹7.96L Cr",
+      "sort": 796239.0346
+     },
+     "of_cut": {
+      "display": "56.5%",
+      "sort": 56.517
+     },
+     "of_book": null,
+     "growth": {
+      "display": "25.7%",
+      "sort": 25.6859
+     },
+     "pace": {
+      "display": "+0.35 pp",
+      "sort": 0.3516
+     },
+     "new": {
+      "display": "69.8%",
+      "sort": 69.7781
+     },
+     "run": [
+      21.9061,
+      18.7995,
+      17.2547,
+      20.0758,
+      18.1208,
+      22.2995,
+      25.3343,
+      25.6859
+     ]
+    },
+    {
+     "entity": "Retail Trade",
+     "size": {
+      "display": "₹6.13L Cr",
+      "sort": 612609.1272
+     },
+     "of_cut": {
+      "display": "43.5%",
+      "sort": 43.483
+     },
+     "of_book": null,
+     "growth": {
+      "display": "13.0%",
+      "sort": 13.0002
+     },
+     "pace": {
+      "display": "+2.25 pp",
+      "sort": 2.2481
+     },
+     "new": {
+      "display": "30.2%",
+      "sort": 30.2219
+     },
+     "run": [
+      12.5727,
+      13.0247,
+      10.9321,
+      11.5649,
+      7.9761,
+      11.3496,
+      10.7521,
+      13.0002
+     ]
+    }
+   ],
+   "total": {
+    "entity": null,
+    "size": {
+     "display": "₹14.09L Cr",
+     "sort": 1408848.1618
+    },
+    "of_cut": null,
+    "of_book": null,
+    "growth": null,
+    "pace": {
+     "display": "+1.29 pp",
+     "sort": 1.2855
+    },
+    "new": null,
+    "run": []
+   },
+   "source_signals": [
+    "sibc-trade-sub-size-scan",
+    "sibc-trade-sub-yoy-scan",
+    "sibc-trade-sub-acceleration",
+    "sibc-trade-sub-allocation",
+    "sibc-trade-sub-share-of-credit-scan"
+   ]
+  }
+ }
+}

@@ -180,6 +180,19 @@
       "core": "state_band"
     },
     {
+      "id": "stamp_table",
+      "label": "5.9c Layer 1 cut tables (DASHBOARD_SPEC §17)",
+      "core": "stamp_table",
+      "derived": [
+        "web/public/data/atm_pos_table.json"
+      ]
+    },
+    {
+      "id": "cut_table",
+      "label": "5.9d cut table traceability",
+      "core": "cut_table"
+    },
+    {
       "id": "opportunities",
       "label": "5d. opportunities (live)",
       "core": "derive_opportunities",

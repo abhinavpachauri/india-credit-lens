@@ -213,8 +213,13 @@ def mix_line(conn, pipeline: str, period: str, alloc_sid: str, mom_sid: str,
         "AND entity_type='aggregate' AND entity_id='total'", (pipeline, period, mom_sid))), None)
     noun = "contraction" if (net is not None and net < 0) else "growth"
     verb = "Steered" if state == "steered" else "Drifting"
+    # "a year ago" is NOT decoration. `weight` is the share at the START of the window, and
+    # the §17 table beside this line shows the share TODAY (`weight_now`). Unqualified, the
+    # band said NBFCs hold 31.1% while the table under it said 34.3% — both true, and read
+    # together a contradiction. A number whose date is implicit is a number that will be
+    # read against the wrong one.
     line = (f"{verb} toward {_short(toward)} — it took {_pct(a)} of the {noun} "
-            f"while holding {_pct(w)} of the total.")
+            f"while holding {_pct(w)} of the total a year ago.")
     if away:
         line += f" Away from {_short(away)}."
     return line, [alloc_sid, mom_sid]

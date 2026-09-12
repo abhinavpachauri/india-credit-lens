@@ -1341,3 +1341,94 @@ Two things the measurement changed, both worth keeping:
 - **SIBC ships its raw CSV for the browser to parse** while payments ships a compact artifact.
   Untouched here (the band is a new sidecar, not a change to how the charts get their data),
   but it remains the one compute-once-ship-compact violation on the dashboard.
+
+
+---
+
+## 17. The Layer 1 table (v0.1 — approved 2026-09-12) ⭐
+
+> Written before the code. The surface that finally shows what Layer 1 measures.
+
+### 17.1 Why
+
+The dashboard rendered Layer 1 as **cards** — one signal, one card, 96 of them on credit. A reader
+asking "what is happening in industry" got the answer spread across nine cards in a rail, in
+generation order. Meanwhile the mix post that worked was a **table**: every part of one cut, side
+by side, with size, share, growth, pace and the run of readings on one line.
+
+The card is the right unit for *news*. The table is the right unit for *state*.
+
+### 17.2 The unit is a cut; the row is a part
+
+One table per cut. Columns are the six Layer 1 families (`signals/README.md`):
+
+| column | family | reads |
+|---|---|---|
+| Size | size | `{stem}-size-scan` |
+| of cut | allocation | `{stem}-allocation` / `weight_now` |
+| of book | share | `{stem}-share-of-credit-scan` (SIBC only — a payments cut's parent IS its root) |
+| Growth | growth | `{stem}-yoy-scan` |
+| Pace | pace | `{stem}-acceleration` |
+| Run | growth | the same signal's trailing series |
+| New ₹ | allocation | `{stem}-allocation` / `alloc` |
+
+**The table makes the pairing rule structural.** A share of new money cannot be rendered without
+that part's speed and acceleration, because they are cells in the same row. It stopped being a
+rule the builder has to remember.
+
+**"of cut" comes from `weight_now`, not the share scan.** The share scan divides by the parent's
+published row; `weight_now` divides by the sum of the parts — the same denominator as `weight`, so
+the Mix view's "then vs now" is like-for-like. Where they disagree (main sectors, 4.9%) the
+difference is stated as a footer, never hidden:
+
+    These four are 95.1% of non-food credit. RBI attributes the remaining
+    ₹10.72L crore to no sector.
+
+### 17.3 Numbers are rendered in Python and shipped as strings
+
+Same rule as the state band (§16.8), for the same reason: **a browser that formats numbers is a
+publishing surface no validator can see.**
+
+Each cell ships as `{display, sort}` — `display` is the authoritative rendered string and the only
+thing drawn; `sort` is the raw value, used for ordering and **never shown**. A column the data
+cannot fill ships `null` and renders as `—`, never 0 and never blank.
+
+### 17.4 Layout
+
+```
+ ▎🛎️ SERVICES                                 【Numbers】[ Chart ]       Jul 2026
+ ┌───────────────────────────────────────────────────────────────────────────────┐
+ │ THE STATE   speed  ...                          (§16, unchanged)              │
+ └───────────────────────────────────────────────────────────────────────────────┘
+                             Size   of cut  of book   Growth   Pace   Run     New ₹
+ ────────────────────────────────────────────────────────────────────────────────────
+ ▓ SERVICES                 ₹61.97L   100%    28.2%    22.9%  +1.52  ▃▄▅▆▇█      —
+ ────────────────────────────────────────────────────────────────────────────────────
+   NBFCs                    ₹21.28L  34.3%     9.6%    35.7%  +3.42  ▂▃▅▆▇█    48.3%
+   Trade                    ₹14.09L  22.7%     6.4%    19.8%  +1.29  ▃▄▅▆▇█    20.2%
+   ...                                             sort by 【size】 growth  new money
+ ────────────────────────────────────────────────────────────────────────────────────
+```
+
+- **Parent row** is pinned at the top, visually separated, and never sorts.
+- **Default sort is size** — the reader's mental model is "biggest first", and a growth-sorted
+  table leads with the smallest book on the page.
+- **Run** is a sparkline in the table; the actual readings appear when a row opens. Eight numbers
+  across ten rows is a spreadsheet; eight numbers in one opened row is the argument.
+- **Payments** reaches its tables through a measure strip (a group has many measures over the same
+  entities; a credit cut has one measure over a hierarchy). Same table either way.
+- `[Numbers] [Chart]` defaults to **Numbers**. The chart is NOT removed: §15's card-chart cut
+  contract is what makes the chart under a card answer that card's question, and deleting it from
+  read mode would discard that. The table leads; the chart is one click away.
+
+### 17.5 Gate
+
+A new stage validates every `display` string in the table against the row's declared
+`source_signals`, scoped to that cut at that period — the §15.2 scoping rule, never period-wide.
+The sidecar is freshness-guarded with `--check` like every other derived artifact.
+
+### 17.6 Not in this build
+
+No Layer 2 in the table — no forces, no gaps, no divergence flags. Layer 1 first, deliberately.
+Row expansion shows the readings and nothing else. §16's band above the table is the only L2 on
+the surface, and it was already there.

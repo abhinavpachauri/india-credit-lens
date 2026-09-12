@@ -18,7 +18,8 @@ import DeepReading from "./DeepReading";
 import SectionCard from "@/components/SectionCard";
 import AtmPosTrendChart from "@/components/AtmPosTrendChart";
 import AtmPosDistributionChart from "@/components/AtmPosDistributionChart";
-import ReadModeShell from "./ReadModeShell";
+import ReadModeShell, { type CutRef } from "./ReadModeShell";
+import type { CutTables } from "@/lib/table";
 import { EYEBROW, type RMModel, type RMCard, type RMDimension } from "./parts";
 import { FS } from "@/lib/tokens";
 
@@ -33,9 +34,26 @@ function defFor(ins: AtmPosInsight, group: string): SectionDef | undefined {
   return SECTION_DEFS.find((d) => d.id === ins.effect.focusCard) ?? SECTION_DEFS.find((d) => d.group === group);
 }
 
+/** A payments group owns one cut per MEASURE — a credit dimension is one measure over a
+ *  hierarchy, a payments group is many measures over the same bank categories. Derived from
+ *  SECTION_DEFS so a new section cannot be forgotten here, and filtered by what the sidecar
+ *  actually carries, so a measure with no cut simply does not appear.
+ */
+const atmCutsFor = (group: string): CutRef[] =>
+  SECTION_DEFS.filter((d) => d.group === group).flatMap((d) => {
+    const metrics = d.metric
+      ? (Array.isArray(d.metric) ? d.metric : [d.metric])
+      : [d.valMetric, d.volMetric].filter(Boolean) as string[];
+    return metrics.map((m) => ({
+      stem: `${m.replace(/_/g, "-")}-category`,
+      title: metrics.length > 1 ? `${d.title} — ${m.endsWith("_val") ? "value" : "volume"}` : d.title,
+    }));
+  });
+
 export default function AtmReadMode(
-  { series, insights, planes, state }:
-    { series: AtmPosSeries; insights: AtmPosInsight[]; planes: PlanesMap; state: StateMap },
+  { series, insights, planes, state, tables }:
+    { series: AtmPosSeries; insights: AtmPosInsight[]; planes: PlanesMap; state: StateMap;
+      tables: CutTables },
 ) {
   const { model, insById } = useMemo(() => {
     const plane = (id: string) => planes[id]?.plane ?? "subject";
@@ -174,6 +192,7 @@ export default function AtmReadMode(
 
   return (
     <ReadModeShell model={model} homeLabel="Payments dashboard" period={period} state={state}
+                   tables={tables} cutsFor={atmCutsFor}
                    renderChart={renderChart} hasDeep={hasDeep} renderDeep={renderDeep} />
   );
 }

@@ -7,11 +7,13 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { usePersistent } from "@/hooks/usePersistent";
 import {
+  chipStyle,
   STYLE, PANEL, EYEBROW, READS_COLOR, tint, vars, glyph, REASON,
-  ReadCard, DimensionCard, ChipStrip, DepthLadder, StateBand,
+  ReadCard, DimensionCard, ChipStrip, DepthLadder, CutTable, StateBand,
   type RMModel, type RMCard, type RMDimension, type Depth, type ChipItem,
 } from "./parts";
 import { FS, R } from "@/lib/tokens";
+import type { CutTables } from "@/lib/table";
 import type { StateMap } from "@/lib/state";
 
 const READS = "reads";
@@ -27,9 +29,22 @@ export interface ReadModeShellProps {
   renderDeep: (dimId: string, color: string) => React.ReactNode;
   /** dimension id → its standing state blocks (§16). Absent dimensions simply show none. */
   state?: StateMap;
+  /** §17 — the Layer 1 tables keyed by cut stem, and the cuts a dimension owns. A dimension
+   *  with no cut (Bank Credit) supplies none and keeps the chart. */
+  tables?: CutTables;
+  cutsFor?: (dimId: string) => CutRef[];
 }
 
-export default function ReadModeShell({ model, homeLabel, period, renderChart, hasDeep, renderDeep, state = {} }: ReadModeShellProps) {
+export interface CutRef {
+  stem: string;
+  title: string;
+  /** The denominator, NAMED — a share with an unnamed denominator is the §15 defect. */
+  bookLabel?: string;
+  footer?: string;
+}
+
+export default function ReadModeShell({ model, homeLabel, period, renderChart, hasDeep, renderDeep,
+                                       state = {}, tables, cutsFor }: ReadModeShellProps) {
   const cardById = useMemo(() => {
     const m = new Map<string, { card: RMCard; dim: RMDimension }>();
     for (const dim of model.dimensions)
@@ -45,6 +60,10 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
   const [activeList, setActiveList] = useState<string>(READS);
   const [depth, setDepth] = usePersistent<Depth>("icl-depth", "full");
   const [showAll, setShowAll] = useState(false);
+  // Numbers by default (§17.4): the table is the answer to "what is happening"; the chart
+  // is kept rather than removed, because §15's cut contract is what makes the chart under a
+  // card answer that card's question.
+  const [pane, setPane] = usePersistent<"numbers" | "chart">("icl-pane", "numbers");
 
   const detailRef = useRef<HTMLDivElement>(null);
   const stripRef = useRef<HTMLDivElement>(null);
@@ -209,7 +228,36 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
                 {selCard?.title ?? "Select a read"}
               </h3>
 
-              {selCard && selDim && renderChart(selCard, selDim)}
+              {/* §17 — Numbers or Chart. The dimension's tables come from the sidecar; a
+                  dimension with no cut (Bank Credit) has no table and falls back to the chart. */}
+              {(() => {
+                const cuts = (selDim && cutsFor?.(selDim.id)) || [];
+                const avail = cuts.filter((c: CutRef) => tables?.[c.stem]);
+                if (avail.length === 0) return selCard && selDim && renderChart(selCard, selDim);
+                return (
+                  <>
+                    <div className="flex gap-1 mb-3">
+                      {(["numbers", "chart"] as const).map((p) => (
+                        <button key={p} onClick={() => setPane(p)} className="rounded-full transition-colors"
+                                style={{ fontSize: FS.note, padding: "6px 12px", ...chipStyle(pane === p) }}>
+                          {p === "numbers" ? "Numbers" : "Chart"}
+                        </button>
+                      ))}
+                    </div>
+                    {pane === "chart"
+                      ? (selCard && selDim && renderChart(selCard, selDim))
+                      : avail.map((c: CutRef) => (
+                          <div key={c.stem} style={{ marginBottom: avail.length > 1 ? 22 : 0 }}>
+                            {avail.length > 1 && (
+                              <div style={{ ...EYEBROW, marginBottom: 6 }}>{c.title}</div>
+                            )}
+                            <CutTable table={tables![c.stem]} title={c.title} color={secColor}
+                                      bookLabel={c.bookLabel} footer={c.footer} />
+                          </div>
+                        ))}
+                  </>
+                );
+              })()}
 
               {selDim && selDim.compositionTitles.length > 0 && (
                 <p style={{ fontSize: FS.note, lineHeight: 1.55, color: "var(--font-muted)", marginTop: 12 }}>

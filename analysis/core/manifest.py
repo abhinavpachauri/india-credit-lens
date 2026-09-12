@@ -52,6 +52,8 @@ CORE_MAP = {
     "stamp_planes":             ("signals/stamp_planes.py", ["--pipeline", "$ID"], "ROOT"),
     "stamp_state":              ("signals/stamp_state.py", ["--pipeline", "$ID"], "ROOT"),
     "state_band":               ("guards/validate_state_band.py", ["--pipeline", "$ID"], "ROOT"),
+    "stamp_table":              ("signals/stamp_table.py", ["--pipeline", "$ID"], "ROOT"),
+    "cut_table":                ("guards/validate_cut_table.py", ["--pipeline", "$ID"], "ROOT"),
     "card_cuts":                ("guards/validate_card_cuts.py", ["--pipeline", "$ID", "--strict"], "ROOT"),
     "card_prose":               ("guards/validate_card_prose.py", ["--pipeline", "$ID", "--strict"], "ROOT"),
     "architecture_discover":    ("architecture/discover.py", ["--quiet"], "ROOT"),

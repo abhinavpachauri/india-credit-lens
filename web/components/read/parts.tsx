@@ -4,6 +4,8 @@
 // payments both render these; only the data model (below) + the chart/deep renderers differ per
 // pipeline. Colour = section/group (a card's colour is also its chart-line colour).
 
+import React from "react";
+import { sortParts as sortPartsMemo } from "@/lib/table";
 import { FS, R, GLYPH } from "@/lib/tokens";
 import { tileMix, type StateBlock } from "@/lib/state";
 
@@ -240,6 +242,144 @@ export function StateBand({ blocks, color }: { blocks: StateBlock[]; color: stri
             ) : null)}
         </div>
       ))}
+    </div>
+  );
+}
+
+// ── the Layer 1 cut table (DASHBOARD_SPEC §17) ─────────────────────────────────
+// One cut's parts, side by side. The table makes the pairing rule STRUCTURAL: a share of
+// new money cannot be drawn without that part's speed and acceleration, because they are
+// cells in the same row. Every number arrives rendered; this draws strings.
+
+/** A run of readings as a sparkline. Bars, not a line: eight monthly readings are eight
+ *  discrete observations, and a line implies we know what happened between them. */
+function Run({ values, color }: { values: number[]; color: string }) {
+  if (values.length < 2) return <span style={{ color: "var(--font-muted)" }}>—</span>;
+  const lo = Math.min(...values), hi = Math.max(...values), span = hi - lo || 1;
+  return (
+    <span className="inline-flex items-end gap-px" style={{ height: 16 }} aria-hidden>
+      {values.map((v, i) => (
+        <span key={i} style={{
+          width: 3, height: Math.max(2, ((v - lo) / span) * 14 + 2),
+          // Square, deliberately. The radius ladder starts at 4, which on a 3px bar is a
+          // circle; and adding a 1px rung for one sparkline would dilute a ladder that
+          // exists to stop exactly that. A 3px bar needs no corner.
+          background: color, opacity: 0.35 + 0.65 * (i / (values.length - 1)),
+        }} />
+      ))}
+    </span>
+  );
+}
+
+const NUM: React.CSSProperties = {
+  textAlign: "right", fontVariantNumeric: "tabular-nums", whiteSpace: "nowrap",
+  padding: "7px 10px", fontSize: FS.body, color: "var(--font)",
+};
+const HEAD: React.CSSProperties = {
+  ...NUM, fontSize: FS.meta, fontWeight: 600, color: "var(--font-muted)",
+  textTransform: "uppercase", letterSpacing: "0.05em", padding: "4px 10px 8px",
+};
+
+function cell(c: { display: string } | null) {
+  return c ? c.display : <span style={{ color: "var(--font-muted)" }}>—</span>;
+}
+
+export interface CutTableProps {
+  table: import("@/lib/table").CutTable;
+  title: string;               // the cut's own name, for the total row
+  color: string;
+  /** Named because a share is meaningless without it (§15). Omitted when the cut has none. */
+  bookLabel?: string;
+  footer?: string;             // e.g. the main-sectors residual
+  openLabel?: (entity: string) => string;
+}
+
+export function CutTable({ table, title, color, bookLabel, footer }: CutTableProps) {
+  const [sort, setSort] = React.useState<import("@/lib/table").SortKey>("size");
+  const [open, setOpen] = React.useState<string | null>(null);
+  const parts = sortPartsMemo(table.parts, sort);
+  const hasBook = table.parts.some((p) => p.of_book);
+
+  return (
+    <div style={{ overflowX: "auto" }}>
+      <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 560 }}>
+        <thead>
+          <tr>
+            <th style={{ ...HEAD, textAlign: "left" }}>Part</th>
+            <th style={HEAD}>Size</th>
+            <th style={HEAD}>of cut</th>
+            {hasBook && <th style={HEAD}>{bookLabel ?? "of book"}</th>}
+            <th style={HEAD}>Growth</th>
+            <th style={HEAD}>Pace</th>
+            <th style={HEAD}>Run</th>
+            <th style={HEAD}>{table.flow_label ?? "New"}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {/* the cut's own row — pinned, never sorted */}
+          <tr style={{ borderTop: `2px solid ${color}`, borderBottom: "1px solid var(--border-card)" }}>
+            <td style={{ ...NUM, textAlign: "left", fontWeight: 700 }}>{title}</td>
+            <td style={{ ...NUM, fontWeight: 700 }}>{cell(table.total.size)}</td>
+            <td style={NUM}>{cell(table.total.of_cut)}</td>
+            {hasBook && <td style={NUM}>{cell(table.total.of_book)}</td>}
+            <td style={NUM}>{cell(table.total.growth)}</td>
+            <td style={NUM}>{cell(table.total.pace)}</td>
+            <td style={NUM} /><td style={NUM} />
+          </tr>
+          {parts.map((p) => {
+            const isOpen = open === p.entity;
+            return (
+              <React.Fragment key={p.entity ?? "_"}>
+                <tr className="rm-row" onClick={() => setOpen(isOpen ? null : p.entity)}
+                    style={{ ...vars(color, tint(color, 0.07)), cursor: "pointer",
+                             background: isOpen ? tint(color, 0.07) : undefined }}>
+                  <td style={{ ...NUM, textAlign: "left" }}>{p.entity}</td>
+                  <td style={NUM}>{cell(p.size)}</td>
+                  <td style={NUM}>{cell(p.of_cut)}</td>
+                  {hasBook && <td style={NUM}>{cell(p.of_book)}</td>}
+                  <td style={NUM}>{cell(p.growth)}</td>
+                  <td style={NUM}>{cell(p.pace)}</td>
+                  <td style={{ ...NUM, textAlign: "center" }}><Run values={p.run} color={color} /></td>
+                  <td style={NUM}>{cell(p.new)}</td>
+                </tr>
+                {isOpen && p.run.length > 1 && (
+                  <tr>
+                    <td colSpan={hasBook ? 8 : 7}
+                        style={{ ...NUM, textAlign: "left", fontSize: FS.note,
+                                 color: "var(--font-muted)", paddingTop: 0, paddingBottom: 12 }}>
+                      {/* The readings themselves — the sparkline shows the shape, this shows
+                          the argument. Eight numbers per row would be a spreadsheet; eight
+                          numbers in the row you opened is the point. */}
+                      Growth, last {p.run.length} readings:{" "}
+                      <span style={{ color: "var(--font)" }}>
+                        {p.run.map((v) => `${v.toFixed(1)}%`).join("  →  ")}
+                      </span>
+                    </td>
+                  </tr>
+                )}
+              </React.Fragment>
+            );
+          })}
+        </tbody>
+      </table>
+
+      <div className="flex items-center justify-between flex-wrap gap-2" style={{ marginTop: 8 }}>
+        <span style={{ fontSize: FS.note, color: "var(--font-muted)" }}>
+          {table.parts.length} parts · sort by{" "}
+          {(["size", "growth", "new"] as const).map((k) => (
+            <button key={k} onClick={() => setSort(k)}
+                    style={{ fontWeight: sort === k ? 700 : 400,
+                             color: sort === k ? color : "var(--font-muted)", marginRight: 10 }}>
+              {k === "new" ? "new money" : k}
+            </button>
+          ))}
+        </span>
+      </div>
+      {footer && (
+        <p style={{ fontSize: FS.note, color: "var(--font-muted)", marginTop: 6, lineHeight: 1.5 }}>
+          {footer}
+        </p>
+      )}
     </div>
   );
 }

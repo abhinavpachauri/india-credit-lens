@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { loadReport }           from "@/lib/reports/rbi_sibc";
 import { loadPlanes, type PlanesMap } from "@/lib/planes";
 import { loadStateBands, type StateMap } from "@/lib/state";
+import { loadCutTables, type CutTables } from "@/lib/table";
 import { useAppShell }          from "@/components/AppShell";
 import SectionWithAnnotations   from "@/components/SectionWithAnnotations";
 import SibcReadMode             from "@/components/read/SibcReadMode";
@@ -16,6 +17,7 @@ export default function Dashboard() {
   const [report, setReport] = useState<Report | null>(null);
   const [planes, setPlanes] = useState<PlanesMap>({});
   const [state, setState]   = useState<StateMap>({});
+  const [tables, setTables] = useState<CutTables>({});
   const [mode, setMode] = usePersistent<"read" | "explore">("icl-mode", "read");
 
   useEffect(() => {
@@ -25,6 +27,7 @@ export default function Dashboard() {
     });
     loadPlanes("sibc").then(setPlanes);
     loadStateBands("sibc").then(setState);
+    loadCutTables("sibc").then(setTables);
   }, [setHeaderMetric]);
 
   if (!report) {
@@ -46,7 +49,7 @@ export default function Dashboard() {
       <ModeToggle mode={mode} setMode={setMode} />
 
       {mode === "read" ? (
-        <SibcReadMode report={report} planes={planes} state={state} />
+        <SibcReadMode report={report} planes={planes} state={state} tables={tables} />
       ) : (
         report.sections.map((section) => (
           <SectionWithAnnotations key={section.id} section={section} />

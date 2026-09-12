@@ -94,7 +94,7 @@ def test_steered_and_drifting_quote_the_two_stored_rows_not_the_tilt():
         line, sids = SL.mix_line(_alloc_db(14.03, 9.18, 798500.0), "t", "P", "a", "m",
                                  {"mix_state": state, "toward": "Medium", "away_from": "Large"})
         assert line == (f"{verb} toward Medium — it took 14.0% of the growth while "
-                        f"holding 9.2% of the total. Away from Large.")
+                        f"holding 9.2% of the total a year ago. Away from Large.")
         assert "4.85" not in line and "+4.9" not in line
         assert set(sids) == {"a", "m"}
 

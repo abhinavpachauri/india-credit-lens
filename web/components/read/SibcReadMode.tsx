@@ -13,11 +13,36 @@ import { SEC_COLORS } from "@/lib/theme";
 import SectionCard from "@/components/SectionCard";
 import TrendChart from "@/components/TrendChart";
 import DistributionChart from "@/components/DistributionChart";
-import ReadModeShell from "./ReadModeShell";
+import ReadModeShell, { type CutRef } from "./ReadModeShell";
+import type { CutTables } from "@/lib/table";
 import { EYEBROW, type RMModel, type RMCard, type RMDimension } from "./parts";
 import { FS } from "@/lib/tokens";
 
 /** The last non-null value of one series in a ChartPoint[]. */
+/** Which Layer 1 cut(s) each credit dimension owns (§17).
+ *
+ *  Industry by Type owns TWO — the type decomposition and infrastructure's sub-types — for
+ *  the same reason its mix state does: they hang off one node and are different mixes.
+ *  Bank Credit owns none: it IS the top level, so there is nothing to decompose here and
+ *  the chart stays. Declared, never inferred from a label.
+ */
+const SIBC_CUTS: Record<string, CutRef[]> = {
+  mainSectors: [{
+    stem: "sibc-main", title: "Main sectors", bookLabel: "of book",
+    // The four sectors do not add up to non-food credit, and RBI attributes the difference
+    // to nothing. Stated rather than hidden — the alternative is a column that silently
+    // fails to sum to 100.
+    footer: "These four are 95.1% of non-food credit — RBI attributes the remainder to no sector.",
+  }],
+  industryBySize:  [{ stem: "sibc-ind-size", title: "Industry", bookLabel: "of book" }],
+  industryByType:  [{ stem: "sibc-industry-type", title: "Industry", bookLabel: "of book" },
+                    { stem: "sibc-infra-sub", title: "Infrastructure", bookLabel: "of book" }],
+  services:        [{ stem: "sibc-services", title: "Services", bookLabel: "of book" }],
+  personalLoans:   [{ stem: "sibc-pl", title: "Personal loans", bookLabel: "of book" }],
+  prioritySector:  [{ stem: "sibc-psl", title: "Priority sector", bookLabel: "of book" }],
+};
+const sibcCutsFor = (dimId: string): CutRef[] => SIBC_CUTS[dimId] ?? [];
+
 function lastValue(points: { date: string; [k: string]: string | number | null }[], name: string): number | null {
   for (let i = points.length - 1; i >= 0; i--) {
     const v = points[i]?.[name];
@@ -57,7 +82,8 @@ const modeLabel = (pm?: string | null) =>
   pm === "share" ? "Share" : pm === "yoy" ? "YoY" : pm === "fy" ? "FY" : "Absolute";
 
 export default function SibcReadMode(
-  { report, planes, state }: { report: Report; planes: PlanesMap; state: StateMap },
+  { report, planes, state, tables }:
+    { report: Report; planes: PlanesMap; state: StateMap; tables: CutTables },
 ) {
   const { model, annById, sectionById } = useMemo(() => {
     const org = organizeReadMode(report, planes);
@@ -168,6 +194,7 @@ export default function SibcReadMode(
   const period = report.latestDate?.split(" ")[0] ?? "period";
   return (
     <ReadModeShell model={model} homeLabel="Credit dashboard" period={period} state={state}
+                   tables={tables} cutsFor={sibcCutsFor}
                    renderChart={renderChart} hasDeep={hasDeep} renderDeep={renderDeep} />
   );
 }
