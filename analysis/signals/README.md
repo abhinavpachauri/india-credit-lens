@@ -190,6 +190,36 @@ copy of that query and therefore **could not see the PSL memo block at all**, wh
 allocation could. Two descriptions of one concept is the drift the engineering principle forbids;
 a cut should be one declaration and every family should agree on what its parts are.
 
+### one cut, one stem — signal id naming
+
+**Every family of a cut shares one id stem**, so the six signals describing a cut can be found
+by name rather than by lookup table:
+
+    sibc-services-size-scan · -share-scan · -yoy-scan · -acceleration · -momentum · -allocation
+
+This was NOT true until 2026-09-12, and the reason is worth keeping. The scan families were named
+in the original spec (`sibc-services-yoy-scan`, `sibc-industry-type-share-scan`). Four months
+later the movement family arrived, needed a short label for its own `MOVEMENT_CUTS` table, and
+coined `svcs` and `ind-type` — so one cut had two names.
+
+**Nothing broke, and that is the interesting part.** `MovementCut` takes its speed signal as a
+DECLARED field, so the one place that had to bridge the two spellings simply wrote the other one
+down:
+
+    MovementCut("svcs", "services", "sibc-services-yoy-scan", ...)
+                  ^slug                ^ the other spelling, hand-carried
+
+Declaring rather than inferring is right in general, but here it absorbed the inconsistency
+instead of surfacing it. The mismatch only appeared when `test_l1_coverage` became the first code
+to build ids from a stem and expect all six families — and it reported a **false gap**, naming two
+fully-covered cuts as missing share and growth. A check that cannot tell a naming quirk from a
+real hole is a check people stop believing.
+
+**The rule, enforced in `tests/test_l1_coverage.py`:** a cut's stem is the one its families already
+use; a new family joins the existing stem rather than coining a shorter one. Prefer the stem that
+matches the dashboard's own section id (`services`, not `svcs`) — a reader debugging a column
+should not have to translate.
+
 ### Conventions
 - **Coverage is the contract, and it is tested.** `tests/test_l1_coverage.py` enumerates every cut
   from its own momentum signal and asserts each carries a size, a groundable share, and rows that

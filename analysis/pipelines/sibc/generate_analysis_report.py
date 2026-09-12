@@ -476,11 +476,11 @@ MOVEMENT_CUTS = [
     # the PSL memo lens has no total at all, so it declares none and publishes no speed line.
     MovementCut("main",      "mainSectors",    "sibc-main-yoy-scan",          "bank credit",
                 parent_yoy="sibc-nonfood-credit-yoy",   parent_label="Non-food credit"),
-    MovementCut("ind-type",  "industryByType", "sibc-industry-type-yoy-scan", "industry credit",
+    MovementCut("industry-type", "industryByType", "sibc-industry-type-yoy-scan", "industry credit",
                 parent_yoy="sibc-industry-yoy",         parent_label="Industry credit"),
     MovementCut("ind-size",  "industryBySize", "sibc-ind-size-yoy-scan",      "industry credit",
                 parent_yoy="sibc-industry-yoy",         parent_label="Industry credit"),
-    MovementCut("svcs",      "services",       "sibc-services-yoy-scan",      "services credit",
+    MovementCut("services",  "services",       "sibc-services-yoy-scan",      "services credit",
                 parent_yoy="sibc-services-yoy",         parent_label="Services credit"),
     MovementCut("pl",        "personalLoans",  "sibc-pl-yoy-scan",            "personal loans",
                 parent_yoy="sibc-personal-loans-yoy",   parent_label="Personal loans"),

@@ -165,7 +165,7 @@ def test_mix_states_are_keyed_by_cut_so_both_industry_decompositions_survive():
     from pathlib import Path
     root = Path(__file__).resolve().parents[1]
     ms = json.loads((root / "rbi_sibc" / "merged" / "system_state_2026-07-31.json").read_text())["mix_states"]
-    size, typ = ms["sibc-ind-size-momentum"], ms["sibc-ind-type-momentum"]
+    size, typ = ms["sibc-ind-size-momentum"], ms["sibc-industry-type-momentum"]
     assert size["entity_urn"] == typ["entity_urn"], "same node — that is the point"
     assert size["decomposition"] != typ["decomposition"]
 
@@ -202,7 +202,16 @@ def test_priority_sector_has_a_node_to_belong_to_and_therefore_a_mix_state():
     ms = json.loads((root / "rbi_sibc" / "merged" /
                      "system_state_2026-07-31.json").read_text())["mix_states"]
     assert ms["sibc-psl-momentum"]["entity_urn"].endswith("PSL")
-    assert len(ms) == 7, "every SIBC cut now carries a mix state"
+    # The PROPERTY, not the count. This read `len(ms) == 7` until 2026-09-12, when widening
+    # coverage to the seven sub-cuts made it 14 — a legitimate change that failed a test while
+    # nothing was broken. A characterisation test pins STRUCTURE; only a golden pins values.
+    import json as _json
+    registry = _json.loads((root.parent / "analysis/signals/registry.json").read_text())["signals"]
+    cuts = {sid for sid, sig in registry.items()
+            if sig.get("pipeline") == "sibc"
+            and sig.get("compute", {}).get("method") == "csv_sector_momentum"}
+    missing = cuts - set(ms)
+    assert not missing, f"SIBC cuts with no mix state: {sorted(missing)}"
 
 
 # ── payments movement: the regimes SIBC never renders ─────────────────────────

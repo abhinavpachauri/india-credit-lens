@@ -5,7 +5,7 @@
     "schema_version": "4.0",
     "spec_ref": "analysis/SYSTEM_MODEL_SPEC.md §16",
     "computed_from": "signals.db",
-    "signals_observed": 111
+    "signals_observed": 157
   },
   "entity_states": {
     "icl:sibc/Statement1/I": {
@@ -22,8 +22,8 @@
     },
     "icl:sibc/Statement1/III": {
       "direction": 1,
-      "signals": 11,
-      "observed": 11,
+      "signals": 14,
+      "observed": 14,
       "coherence": 1.0,
       "children": 4
     },
@@ -34,29 +34,29 @@
     },
     "icl:sibc/Statement1/2": {
       "direction": 1,
-      "signals": 11,
-      "observed": 11,
+      "signals": 14,
+      "observed": 14,
       "coherence": 1.0,
       "children": 3
     },
     "icl:sibc/Statement1/3": {
       "direction": 1,
-      "signals": 11,
-      "observed": 10,
+      "signals": 13,
+      "observed": 12,
       "coherence": 1.0,
       "children": 10
     },
     "icl:sibc/Statement1/4": {
       "direction": 1,
-      "signals": 19,
-      "observed": 18,
+      "signals": 21,
+      "observed": 20,
       "coherence": 1.0,
       "children": 9
     },
     "icl:sibc/Statement1/PSL": {
       "direction": 1,
-      "signals": 3,
-      "observed": 3,
+      "signals": 5,
+      "observed": 5,
       "coherence": 1.0,
       "children": 10
     },
@@ -107,8 +107,8 @@
     },
     "icl:sibc/Statement1/3.7": {
       "direction": 1,
-      "signals": 2,
-      "observed": 2
+      "signals": 6,
+      "observed": 6
     },
     "icl:sibc/Statement1/3.8": {
       "direction": 0,
@@ -117,8 +117,8 @@
     },
     "icl:sibc/Statement1/3.9": {
       "direction": 1,
-      "signals": 2,
-      "observed": 2
+      "signals": 6,
+      "observed": 6
     },
     "icl:sibc/Statement1/3.10": {
       "direction": 0,
@@ -217,8 +217,8 @@
     },
     "icl:sibc/Statement1/x": {
       "direction": 1,
-      "signals": 2,
-      "observed": 2
+      "signals": 3,
+      "observed": 3
     },
     "icl:sibc/Statement1/3.7.1": {
       "direction": 0,
@@ -247,8 +247,8 @@
     },
     "icl:sibc/Statement2/2.2": {
       "direction": 1,
-      "signals": 2,
-      "observed": 2
+      "signals": 6,
+      "observed": 6
     },
     "icl:sibc/Statement2/2.3": {
       "direction": 0,
@@ -257,8 +257,8 @@
     },
     "icl:sibc/Statement2/2.4": {
       "direction": 1,
-      "signals": 2,
-      "observed": 2
+      "signals": 6,
+      "observed": 6
     },
     "icl:sibc/Statement2/2.5": {
       "direction": 0,
@@ -282,8 +282,8 @@
     },
     "icl:sibc/Statement2/2.9": {
       "direction": 1,
-      "signals": 2,
-      "observed": 2
+      "signals": 6,
+      "observed": 6
     },
     "icl:sibc/Statement2/2.10": {
       "direction": 0,
@@ -302,13 +302,13 @@
     },
     "icl:sibc/Statement2/2.13": {
       "direction": 1,
-      "signals": 2,
-      "observed": 2
+      "signals": 6,
+      "observed": 6
     },
     "icl:sibc/Statement2/2.14": {
-      "direction": 0,
-      "signals": 2,
-      "observed": 2
+      "direction": 1,
+      "signals": 6,
+      "observed": 6
     },
     "icl:sibc/Statement2/2.15": {
       "direction": 0,
@@ -327,8 +327,8 @@
     },
     "icl:sibc/Statement2/2.18": {
       "direction": -1,
-      "signals": 5,
-      "observed": 5
+      "signals": 8,
+      "observed": 8
     },
     "icl:sibc/Statement2/2.19": {
       "direction": 0,
@@ -495,9 +495,9 @@
     "force_nbfc_regulatory_recovery": {
       "state": "active",
       "instance_of": "ch_wholesale_funding_intermediation",
-      "evidence_observed": 2,
-      "evidence_total": 2,
-      "authored_status": "watch",
+      "evidence_observed": 3,
+      "evidence_total": 3,
+      "authored_status": "active",
       "mismatch": false
     },
     "force_msp_procurement_growth": {
@@ -513,7 +513,7 @@
       "instance_of": "ch_project_lifecycle_origination",
       "evidence_observed": 1,
       "evidence_total": 1,
-      "authored_status": "active",
+      "authored_status": "watch",
       "mismatch": false
     },
     "force_eclgs5_guarantee_window": {
@@ -529,6 +529,30 @@
       "instance_of": "ch_kcc_psl_agri_limits",
       "evidence_observed": 2,
       "evidence_total": 2,
+      "authored_status": "active",
+      "mismatch": false
+    },
+    "force_vehicle_scrappage_replacement": {
+      "state": "active",
+      "instance_of": "ch_asset_retirement_replacement",
+      "evidence_observed": 1,
+      "evidence_total": 1,
+      "authored_status": "active",
+      "mismatch": false
+    },
+    "force_psl_education_limit": {
+      "state": "active",
+      "instance_of": "ch_psl_threshold_reclassification",
+      "evidence_observed": 1,
+      "evidence_total": 1,
+      "authored_status": "active",
+      "mismatch": false
+    },
+    "force_psl_renewable_limit": {
+      "state": "active",
+      "instance_of": "ch_psl_threshold_reclassification",
+      "evidence_observed": 1,
+      "evidence_total": 1,
       "authored_status": "active",
       "mismatch": false
     }
@@ -757,6 +781,27 @@
       "polarity": "+",
       "from": "force_kcc_collateral_limit",
       "to": "e_S1_1"
+    },
+    "force_vehicle_scrappage_replacement->e_S1_4_7": {
+      "state": "active",
+      "type": "drives",
+      "polarity": "+",
+      "from": "force_vehicle_scrappage_replacement",
+      "to": "e_S1_4_7"
+    },
+    "force_psl_education_limit->e_S1_v": {
+      "state": "active",
+      "type": "drives",
+      "polarity": "+",
+      "from": "force_psl_education_limit",
+      "to": "e_S1_v"
+    },
+    "force_psl_renewable_limit->e_S1_vi": {
+      "state": "active",
+      "type": "drives",
+      "polarity": "+",
+      "from": "force_psl_renewable_limit",
+      "to": "e_S1_vi"
     }
   },
   "loop_states": {
@@ -796,7 +841,10 @@
       "force_msp_procurement_growth",
       "force_infra_cycle_maturing",
       "force_eclgs5_guarantee_window",
-      "force_kcc_collateral_limit"
+      "force_kcc_collateral_limit",
+      "force_vehicle_scrappage_replacement",
+      "force_psl_education_limit",
+      "force_psl_renewable_limit"
     ],
     "binding_constraints": [
       "e_S2_2_18__creates_risk__risk_infrastructure_repayment"
@@ -819,7 +867,7 @@
       "toward_tilt_pp": 4.88,
       "children": 4
     },
-    "sibc-ind-type-momentum": {
+    "sibc-industry-type-momentum": {
       "entity_urn": "icl:sibc/Statement1/2",
       "decomposition": "Statement 2",
       "mix_state": "drifting",
@@ -839,7 +887,7 @@
       "toward_tilt_pp": 5.17,
       "children": 3
     },
-    "sibc-svcs-momentum": {
+    "sibc-services-momentum": {
       "entity_urn": "icl:sibc/Statement1/3",
       "decomposition": "Statement 1",
       "mix_state": "steered",
@@ -878,6 +926,76 @@
       "away_from": null,
       "toward_tilt_pp": null,
       "children": 0
+    },
+    "sibc-trade-sub-momentum": {
+      "entity_urn": "icl:sibc/Statement1/3.7",
+      "decomposition": "Statement 1",
+      "mix_state": "steered",
+      "coherence": 1.0,
+      "toward": "Wholesale Trade",
+      "away_from": "Retail Trade",
+      "toward_tilt_pp": 19.56,
+      "children": 2
+    },
+    "sibc-nbfc-sub-momentum": {
+      "entity_urn": "icl:sibc/Statement1/3.9",
+      "decomposition": "Statement 1",
+      "mix_state": "steered",
+      "coherence": 1.0,
+      "toward": "Public Financial Institutions (PFIs)",
+      "away_from": "Housing Finance Companies (HFCs)",
+      "toward_tilt_pp": 39.38,
+      "children": 2
+    },
+    "sibc-basic-metal-sub-momentum": {
+      "entity_urn": "icl:sibc/Statement2/2.13",
+      "decomposition": "Statement 2",
+      "mix_state": "drifting",
+      "coherence": 1.0,
+      "toward": "Iron and Steel",
+      "away_from": "Other Metal and Metal Product",
+      "toward_tilt_pp": 4.41,
+      "children": 2
+    },
+    "sibc-engineering-sub-momentum": {
+      "entity_urn": "icl:sibc/Statement2/2.14",
+      "decomposition": "Statement 2",
+      "mix_state": "drifting",
+      "coherence": 1.0,
+      "toward": "Others",
+      "away_from": "Electronics",
+      "toward_tilt_pp": 5.25,
+      "children": 2
+    },
+    "sibc-food-processing-sub-momentum": {
+      "entity_urn": "icl:sibc/Statement2/2.2",
+      "decomposition": "Statement 2",
+      "mix_state": "steered",
+      "coherence": 0.9842,
+      "toward": "Edible Oils and Vanaspati",
+      "away_from": "Sugar",
+      "toward_tilt_pp": 15.2,
+      "children": 4
+    },
+    "sibc-textiles-sub-momentum": {
+      "entity_urn": "icl:sibc/Statement2/2.4",
+      "decomposition": "Statement 2",
+      "mix_state": "steered",
+      "coherence": 1.0,
+      "toward": "Other Textiles",
+      "away_from": "Cotton Textiles",
+      "toward_tilt_pp": 30.1,
+      "children": 4
+    },
+    "sibc-chemicals-sub-momentum": {
+      "entity_urn": "icl:sibc/Statement2/2.9",
+      "decomposition": "Statement 2",
+      "mix_state": "drifting",
+      "coherence": 1.0,
+      "toward": "Others",
+      "away_from": "Fertiliser",
+      "toward_tilt_pp": 2.39,
+      "children": 4
     }
   },
   "narrative": null

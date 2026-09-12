@@ -31,7 +31,7 @@
   "industryByType": [
    {
     "dimension": "industryByType",
-    "cut": "ind-type",
+    "cut": "industry-type",
     "subject": "Industry credit",
     "speed": "Industry credit growing 20.0% YoY, accelerating.",
     "speed_short": "20.0% YoY · accelerating",
@@ -43,8 +43,8 @@
     "toward": "All Engineering",
     "toward_entity": "All Engineering",
     "source_signals": [
-     "sibc-ind-type-allocation",
-     "sibc-ind-type-momentum",
+     "sibc-industry-type-allocation",
+     "sibc-industry-type-momentum",
      "sibc-industry-yoy"
     ]
    },
@@ -90,7 +90,7 @@
   "services": [
    {
     "dimension": "services",
-    "cut": "svcs",
+    "cut": "services",
     "subject": "Services credit",
     "speed": "Services credit growing 22.9% YoY, accelerating.",
     "speed_short": "22.9% YoY · accelerating",
@@ -102,9 +102,9 @@
     "toward": "Non-Banking Financial Companies",
     "toward_entity": "Non-Banking Financial Companies (NBFCs)",
     "source_signals": [
-     "sibc-services-yoy",
-     "sibc-svcs-allocation",
-     "sibc-svcs-momentum"
+     "sibc-services-allocation",
+     "sibc-services-momentum",
+     "sibc-services-yoy"
     ]
    }
   ],

@@ -81,6 +81,37 @@ def test_every_declared_signal_actually_produced_rows(stem):
         con.close()
 
 
+def test_a_cut_has_exactly_one_id_stem():
+    """One cut, one stem — so its six families can be found by name, not by lookup table.
+
+    Until 2026-09-12 services was `sibc-svcs-*` for three families and `sibc-services-*` for the
+    other three, because the movement family arrived four months after the scans and coined a
+    shorter label for its own table. Nothing broke: `MovementCut` declares its speed signal, so
+    the one place that had to bridge the spellings hand-carried the other one. It surfaced only
+    when THIS file became the first code to build ids from a stem — and it reported a false gap,
+    naming two fully-covered cuts as missing share and growth.
+
+    A check that cannot tell a naming quirk from a real hole is one people stop believing, so the
+    convention is now asserted rather than assumed.
+    """
+    stems = sorted(_cuts())
+    for stem in stems:
+        # No other cut's stem may be a prefix of this one's, except the deliberate sub-cut
+        # pattern (`sibc-industry-type` vs `sibc-industry-type-sub`), which is a different cut.
+        shadowed = [o for o in stems
+                    if o != stem and stem.startswith(o + "-") is False and o.startswith(stem + "-")]
+        assert not shadowed or all("-sub" in o for o in shadowed), (
+            f"{stem} is shadowed by {shadowed} — two cuts cannot share a prefix ambiguously")
+
+    # The families of a cut must all exist under ITS stem, never a variant spelling.
+    import re
+    variants = {"sibc-svcs": "sibc-services", "sibc-ind-type": "sibc-industry-type"}
+    for old, new in variants.items():
+        stale = [k for k in REGISTRY if k.startswith(old + "-")]
+        assert not stale, (
+            f"'{old}-*' is a retired spelling of '{new}-*'; {stale} reintroduce it")
+
+
 def test_the_mix_comparison_uses_one_denominator():
     """`weight` (share of the cut a year ago) and `weight_now` (share today) must come from the
     same family, because the share SCAN divides by the parent's published row while these divide

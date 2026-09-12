@@ -1393,7 +1393,7 @@
           ]
         },
         {
-          "id": "sibc-svcs-allocation",
+          "id": "sibc-services-allocation",
           "layer": 1,
           "title": "Non-Banking Financial Companies took 48.3% of all new services credit in the past year",
           "body": "Of the services credit added over the past twelve months, Non-Banking Financial Companies took 48.3% — the largest share of the new money — growing 35.7% a year and accelerating (+3.42 pp). The rest went to Trade 20.2%; Other Services (not broken down) 12.4%; Commercial Real Estate 10.2%; Professional Services 2.5%; Tourism, Hotels and Restaurants 2.0%; Transport Operators 1.9%; Computer Software 1.4%; Aviation 0.9%; Shipping 0.2%. Computer Software took 1.4% while growing 43.3% a year and slowing (-5.36 pp) — a smaller slice of a faster-growing total, not a retreat.",
@@ -1414,9 +1414,9 @@
           "representation": "deterministic",
           "insight_kind": "movement_allocation",
           "sourceSignals": [
-            "sibc-svcs-allocation",
-            "sibc-svcs-momentum",
-            "sibc-svcs-acceleration",
+            "sibc-services-allocation",
+            "sibc-services-momentum",
+            "sibc-services-acceleration",
             "sibc-services-yoy-scan"
           ],
           "basis": {
@@ -3313,7 +3313,7 @@
           ]
         },
         {
-          "id": "sibc-ind-type-allocation",
+          "id": "sibc-industry-type-allocation",
           "layer": 1,
           "title": "Infrastructure took 17.6% of all new industry credit in the past year",
           "body": "Of the industry credit added over the past twelve months, Infrastructure took 17.6% — the largest share of the new money — growing 10.2% a year and slowing (-0.66 pp). The rest went to Basic Metal and Metal Product 12.1%; Other Industries (not broken down) 11.9%; All Engineering 11.4%; Chemicals and Chemical Products 8.1%; Petroleum, Coal Products and Nuclear Fuels 6.7%; Food Processing 6.0%; Textiles 5.1%; Vehicles, Vehicle Parts and Transport Equipment 4.9%; Construction 4.8%; Gems and Jewellery 4.1%; Rubber, Plastic and their Products 2.0%; Cement and Cement Products 1.2%; Paper and Paper Products 1.1%; Mining and Quarrying 1.1%; Wood and Wood Products 0.7%; Beverage and Tobacco 0.5%; Glass and Glassware 0.5%; Leather and Leather Products 0.1%. Petroleum, Coal Products and Nuclear Fuels took 6.7% while growing 34.0% a year and slowing (-14.52 pp) — a smaller slice of a faster-growing total, not a retreat.",
@@ -3334,9 +3334,9 @@
           "representation": "deterministic",
           "insight_kind": "movement_allocation",
           "sourceSignals": [
-            "sibc-ind-type-allocation",
-            "sibc-ind-type-momentum",
-            "sibc-ind-type-acceleration",
+            "sibc-industry-type-allocation",
+            "sibc-industry-type-momentum",
+            "sibc-industry-type-acceleration",
             "sibc-industry-type-yoy-scan"
           ],
           "basis": {
