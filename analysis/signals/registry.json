@@ -2,7 +2,7 @@
  "_meta": {
   "schema_version": "1.0",
   "description": "Signal registry — permanent catalog of every tracked signal across all ingestion pipelines. Signal IDs are immutable once created. Add new signals; never rename or delete. layer: 1 = per-chart data signal (algorithmically computed), 2 = cross-chart synthesis (authored per period from data), 3 = lending ecosystem expert model (generated ~6-monthly, strict claim validation).",
-  "last_updated": "2026-09-11"
+  "last_updated": "2026-09-12"
  },
  "pipelines": {
   "sibc": {
@@ -8030,6 +8030,619 @@
    "chart_series": [
     "Weaker Sections including net PSLC- SF/MF"
    ]
+  },
+  "sibc-main-size-scan": {
+   "id": "sibc-main-size-scan",
+   "title": "Size of each part of main sectors (Rs Cr)",
+   "pipeline": "sibc",
+   "layer": 1,
+   "sub_layer": "1c",
+   "domain": "sector_mix",
+   "type": "data",
+   "spec_version": "2.0",
+   "current_status": "active",
+   "first_seen": "2025-02-28",
+   "compute": {
+    "method": "csv_sector_scan_abs",
+    "parent_code": "III",
+    "statement": "Statement 1",
+    "child_level": 1,
+    "entity_type": "sector",
+    "unit": "rs_cr",
+    "status_rules": [
+     {
+      "if": "value > prev_value",
+      "then": "active"
+     },
+     {
+      "if": "true",
+      "then": "declining"
+     }
+    ]
+   }
+  },
+  "sibc-main-share-scan": {
+   "id": "sibc-main-share-scan",
+   "title": "Share of non-food credit for each part of main sectors (%)",
+   "pipeline": "sibc",
+   "layer": 1,
+   "sub_layer": "1c",
+   "domain": "sector_mix",
+   "type": "data",
+   "spec_version": "2.0",
+   "current_status": "weakening",
+   "first_seen": "2025-02-28",
+   "compute": {
+    "method": "csv_sector_scan_share",
+    "parent_code": "III",
+    "statement": "Statement 1",
+    "child_level": 1,
+    "entity_type": "sector",
+    "unit": "rs_cr",
+    "status_rules": [
+     {
+      "if": "value > prev_value",
+      "then": "strengthening"
+     },
+     {
+      "if": "value < prev_value",
+      "then": "weakening"
+     },
+     {
+      "if": "true",
+      "then": "stable"
+     }
+    ]
+   }
+  },
+  "sibc-main-share-of-credit-scan": {
+   "id": "sibc-main-share-of-credit-scan",
+   "title": "Share of ALL bank credit for each part of main sectors (%)",
+   "pipeline": "sibc",
+   "layer": 1,
+   "sub_layer": "1c",
+   "domain": "sector_mix",
+   "type": "data",
+   "spec_version": "2.0",
+   "current_status": "strengthening",
+   "first_seen": "2025-02-28",
+   "compute": {
+    "method": "csv_sector_scan_share",
+    "parent_code": "III",
+    "statement": "Statement 1",
+    "child_level": 1,
+    "entity_type": "sector",
+    "unit": "rs_cr",
+    "denominator_code": "I",
+    "denominator_statement": "Statement 1",
+    "status_rules": [
+     {
+      "if": "value > prev_value",
+      "then": "strengthening"
+     },
+     {
+      "if": "value < prev_value",
+      "then": "weakening"
+     },
+     {
+      "if": "true",
+      "then": "stable"
+     }
+    ]
+   }
+  },
+  "sibc-ind-size-size-scan": {
+   "id": "sibc-ind-size-size-scan",
+   "title": "Size of each part of industry by size (Rs Cr)",
+   "pipeline": "sibc",
+   "layer": 1,
+   "sub_layer": "1c",
+   "domain": "industry",
+   "type": "data",
+   "spec_version": "2.0",
+   "current_status": "active",
+   "first_seen": "2025-02-28",
+   "compute": {
+    "method": "csv_sector_scan_abs",
+    "parent_code": "2",
+    "statement": "Statement 1",
+    "child_level": 2,
+    "entity_type": "size_band",
+    "unit": "rs_cr",
+    "status_rules": [
+     {
+      "if": "value > prev_value",
+      "then": "active"
+     },
+     {
+      "if": "true",
+      "then": "declining"
+     }
+    ]
+   }
+  },
+  "sibc-ind-size-share-scan": {
+   "id": "sibc-ind-size-share-scan",
+   "title": "Share of industry credit for each part of industry by size (%)",
+   "pipeline": "sibc",
+   "layer": 1,
+   "sub_layer": "1c",
+   "domain": "industry",
+   "type": "data",
+   "spec_version": "2.0",
+   "current_status": "strengthening",
+   "first_seen": "2025-02-28",
+   "compute": {
+    "method": "csv_sector_scan_share",
+    "parent_code": "2",
+    "statement": "Statement 1",
+    "child_level": 2,
+    "entity_type": "size_band",
+    "unit": "rs_cr",
+    "status_rules": [
+     {
+      "if": "value > prev_value",
+      "then": "strengthening"
+     },
+     {
+      "if": "value < prev_value",
+      "then": "weakening"
+     },
+     {
+      "if": "true",
+      "then": "stable"
+     }
+    ]
+   }
+  },
+  "sibc-ind-size-share-of-credit-scan": {
+   "id": "sibc-ind-size-share-of-credit-scan",
+   "title": "Share of ALL bank credit for each part of industry by size (%)",
+   "pipeline": "sibc",
+   "layer": 1,
+   "sub_layer": "1c",
+   "domain": "industry",
+   "type": "data",
+   "spec_version": "2.0",
+   "current_status": "strengthening",
+   "first_seen": "2025-02-28",
+   "compute": {
+    "method": "csv_sector_scan_share",
+    "parent_code": "2",
+    "statement": "Statement 1",
+    "child_level": 2,
+    "entity_type": "size_band",
+    "unit": "rs_cr",
+    "denominator_code": "I",
+    "denominator_statement": "Statement 1",
+    "status_rules": [
+     {
+      "if": "value > prev_value",
+      "then": "strengthening"
+     },
+     {
+      "if": "value < prev_value",
+      "then": "weakening"
+     },
+     {
+      "if": "true",
+      "then": "stable"
+     }
+    ]
+   }
+  },
+  "sibc-ind-type-size-scan": {
+   "id": "sibc-ind-type-size-scan",
+   "title": "Size of each part of industry by type (Rs Cr)",
+   "pipeline": "sibc",
+   "layer": 1,
+   "sub_layer": "1c",
+   "domain": "industry",
+   "type": "data",
+   "spec_version": "2.0",
+   "current_status": "active",
+   "first_seen": "2025-02-28",
+   "compute": {
+    "method": "csv_sector_scan_abs",
+    "parent_code": "2",
+    "statement": "Statement 2",
+    "child_level": 2,
+    "entity_type": "industry_type",
+    "unit": "rs_cr",
+    "status_rules": [
+     {
+      "if": "value > prev_value",
+      "then": "active"
+     },
+     {
+      "if": "true",
+      "then": "declining"
+     }
+    ]
+   }
+  },
+  "sibc-ind-type-share-of-credit-scan": {
+   "id": "sibc-ind-type-share-of-credit-scan",
+   "title": "Share of ALL bank credit for each part of industry by type (%)",
+   "pipeline": "sibc",
+   "layer": 1,
+   "sub_layer": "1c",
+   "domain": "industry",
+   "type": "data",
+   "spec_version": "2.0",
+   "current_status": "strengthening",
+   "first_seen": "2025-02-28",
+   "compute": {
+    "method": "csv_sector_scan_share",
+    "parent_code": "2",
+    "statement": "Statement 2",
+    "child_level": 2,
+    "entity_type": "industry_type",
+    "unit": "rs_cr",
+    "denominator_code": "I",
+    "denominator_statement": "Statement 1",
+    "status_rules": [
+     {
+      "if": "value > prev_value",
+      "then": "strengthening"
+     },
+     {
+      "if": "value < prev_value",
+      "then": "weakening"
+     },
+     {
+      "if": "true",
+      "then": "stable"
+     }
+    ]
+   }
+  },
+  "sibc-svcs-size-scan": {
+   "id": "sibc-svcs-size-scan",
+   "title": "Size of each part of services (Rs Cr)",
+   "pipeline": "sibc",
+   "layer": 1,
+   "sub_layer": "1c",
+   "domain": "retail",
+   "type": "data",
+   "spec_version": "2.0",
+   "current_status": "active",
+   "first_seen": "2025-02-28",
+   "compute": {
+    "method": "csv_sector_scan_abs",
+    "parent_code": "3",
+    "statement": "Statement 1",
+    "child_level": 2,
+    "entity_type": "service_sector",
+    "unit": "rs_cr",
+    "status_rules": [
+     {
+      "if": "value > prev_value",
+      "then": "active"
+     },
+     {
+      "if": "true",
+      "then": "declining"
+     }
+    ]
+   }
+  },
+  "sibc-svcs-share-of-credit-scan": {
+   "id": "sibc-svcs-share-of-credit-scan",
+   "title": "Share of ALL bank credit for each part of services (%)",
+   "pipeline": "sibc",
+   "layer": 1,
+   "sub_layer": "1c",
+   "domain": "retail",
+   "type": "data",
+   "spec_version": "2.0",
+   "current_status": "weakening",
+   "first_seen": "2025-02-28",
+   "compute": {
+    "method": "csv_sector_scan_share",
+    "parent_code": "3",
+    "statement": "Statement 1",
+    "child_level": 2,
+    "entity_type": "service_sector",
+    "unit": "rs_cr",
+    "denominator_code": "I",
+    "denominator_statement": "Statement 1",
+    "status_rules": [
+     {
+      "if": "value > prev_value",
+      "then": "strengthening"
+     },
+     {
+      "if": "value < prev_value",
+      "then": "weakening"
+     },
+     {
+      "if": "true",
+      "then": "stable"
+     }
+    ]
+   }
+  },
+  "sibc-pl-size-scan": {
+   "id": "sibc-pl-size-scan",
+   "title": "Size of each part of personal loans (Rs Cr)",
+   "pipeline": "sibc",
+   "layer": 1,
+   "sub_layer": "1c",
+   "domain": "retail",
+   "type": "data",
+   "spec_version": "2.0",
+   "current_status": "active",
+   "first_seen": "2025-02-28",
+   "compute": {
+    "method": "csv_sector_scan_abs",
+    "parent_code": "4",
+    "statement": "Statement 1",
+    "child_level": 2,
+    "entity_type": "pl_category",
+    "unit": "rs_cr",
+    "status_rules": [
+     {
+      "if": "value > prev_value",
+      "then": "active"
+     },
+     {
+      "if": "true",
+      "then": "declining"
+     }
+    ]
+   }
+  },
+  "sibc-pl-share-of-credit-scan": {
+   "id": "sibc-pl-share-of-credit-scan",
+   "title": "Share of ALL bank credit for each part of personal loans (%)",
+   "pipeline": "sibc",
+   "layer": 1,
+   "sub_layer": "1c",
+   "domain": "retail",
+   "type": "data",
+   "spec_version": "2.0",
+   "current_status": "strengthening",
+   "first_seen": "2025-02-28",
+   "compute": {
+    "method": "csv_sector_scan_share",
+    "parent_code": "4",
+    "statement": "Statement 1",
+    "child_level": 2,
+    "entity_type": "pl_category",
+    "unit": "rs_cr",
+    "denominator_code": "I",
+    "denominator_statement": "Statement 1",
+    "status_rules": [
+     {
+      "if": "value > prev_value",
+      "then": "strengthening"
+     },
+     {
+      "if": "value < prev_value",
+      "then": "weakening"
+     },
+     {
+      "if": "true",
+      "then": "stable"
+     }
+    ]
+   }
+  },
+  "sibc-psl-size-scan": {
+   "id": "sibc-psl-size-scan",
+   "title": "Size of each part of priority sector (Rs Cr)",
+   "pipeline": "sibc",
+   "layer": 1,
+   "sub_layer": "1c",
+   "domain": "psl",
+   "type": "data",
+   "spec_version": "2.0",
+   "current_status": "active",
+   "first_seen": "2025-02-28",
+   "compute": {
+    "method": "csv_sector_scan_abs",
+    "psl_memo": true,
+    "statement": "Statement 1",
+    "child_level": 2,
+    "entity_type": "psl_category",
+    "unit": "rs_cr",
+    "parent_code": "PSL",
+    "status_rules": [
+     {
+      "if": "value > prev_value",
+      "then": "active"
+     },
+     {
+      "if": "true",
+      "then": "declining"
+     }
+    ]
+   }
+  },
+  "sibc-psl-share-of-credit-scan": {
+   "id": "sibc-psl-share-of-credit-scan",
+   "title": "Share of ALL bank credit for each part of priority sector (%)",
+   "pipeline": "sibc",
+   "layer": 1,
+   "sub_layer": "1c",
+   "domain": "psl",
+   "type": "data",
+   "spec_version": "2.0",
+   "current_status": "strengthening",
+   "first_seen": "2025-02-28",
+   "compute": {
+    "method": "csv_sector_scan_share",
+    "psl_memo": true,
+    "statement": "Statement 1",
+    "child_level": 2,
+    "entity_type": "psl_category",
+    "unit": "rs_cr",
+    "parent_code": "PSL",
+    "denominator_code": "I",
+    "denominator_statement": "Statement 1",
+    "status_rules": [
+     {
+      "if": "value > prev_value",
+      "then": "strengthening"
+     },
+     {
+      "if": "value < prev_value",
+      "then": "weakening"
+     },
+     {
+      "if": "true",
+      "then": "stable"
+     }
+    ]
+   }
+  },
+  "sibc-infra-sub-size-scan": {
+   "id": "sibc-infra-sub-size-scan",
+   "title": "Size of each part of infrastructure sub-types (Rs Cr)",
+   "pipeline": "sibc",
+   "layer": 1,
+   "sub_layer": "1c",
+   "domain": "industry",
+   "type": "data",
+   "spec_version": "2.0",
+   "current_status": "active",
+   "first_seen": "2025-02-28",
+   "compute": {
+    "method": "csv_sector_scan_abs",
+    "parent_code": "2.18",
+    "statement": "Statement 2",
+    "child_level": 3,
+    "entity_type": "infra_sub",
+    "unit": "rs_cr",
+    "status_rules": [
+     {
+      "if": "value > prev_value",
+      "then": "active"
+     },
+     {
+      "if": "true",
+      "then": "declining"
+     }
+    ]
+   }
+  },
+  "sibc-infra-sub-share-of-credit-scan": {
+   "id": "sibc-infra-sub-share-of-credit-scan",
+   "title": "Share of ALL bank credit for each part of infrastructure sub-types (%)",
+   "pipeline": "sibc",
+   "layer": 1,
+   "sub_layer": "1c",
+   "domain": "industry",
+   "type": "data",
+   "spec_version": "2.0",
+   "current_status": "weakening",
+   "first_seen": "2025-02-28",
+   "compute": {
+    "method": "csv_sector_scan_share",
+    "parent_code": "2.18",
+    "statement": "Statement 2",
+    "child_level": 3,
+    "entity_type": "infra_sub",
+    "unit": "rs_cr",
+    "denominator_code": "I",
+    "denominator_statement": "Statement 1",
+    "status_rules": [
+     {
+      "if": "value > prev_value",
+      "then": "strengthening"
+     },
+     {
+      "if": "value < prev_value",
+      "then": "weakening"
+     },
+     {
+      "if": "true",
+      "then": "stable"
+     }
+    ]
+   }
+  },
+  "cc-category-size-scan": {
+   "id": "cc-category-size-scan",
+   "title": "Size of each bank category — credit cards",
+   "pipeline": "atm_pos",
+   "layer": 1,
+   "sub_layer": "1c",
+   "domain": "cards_stock",
+   "type": "data",
+   "spec_version": "2.0",
+   "current_status": "active",
+   "first_seen": "2024-01-31",
+   "compute": {
+    "method": "csv_category_scan_abs",
+    "metric": "credit_cards",
+    "unit": "count",
+    "status_rules": [
+     {
+      "if": "value > prev_value",
+      "then": "active"
+     },
+     {
+      "if": "true",
+      "then": "declining"
+     }
+    ]
+   }
+  },
+  "dc-category-size-scan": {
+   "id": "dc-category-size-scan",
+   "title": "Size of each bank category — debit cards",
+   "pipeline": "atm_pos",
+   "layer": 1,
+   "sub_layer": "1c",
+   "domain": "cards_stock",
+   "type": "data",
+   "spec_version": "2.0",
+   "current_status": "active",
+   "first_seen": "2024-01-31",
+   "compute": {
+    "method": "csv_category_scan_abs",
+    "metric": "debit_cards",
+    "unit": "count",
+    "status_rules": [
+     {
+      "if": "value > prev_value",
+      "then": "active"
+     },
+     {
+      "if": "true",
+      "then": "declining"
+     }
+    ]
+   }
+  },
+  "pos-category-size-scan": {
+   "id": "pos-category-size-scan",
+   "title": "Size of each bank category — POS terminals",
+   "pipeline": "atm_pos",
+   "layer": 1,
+   "sub_layer": "1c",
+   "domain": "infrastructure",
+   "type": "data",
+   "spec_version": "2.0",
+   "current_status": "active",
+   "first_seen": "2024-01-31",
+   "compute": {
+    "method": "csv_category_scan_abs",
+    "metric": "pos_terminals",
+    "unit": "count",
+    "status_rules": [
+     {
+      "if": "value > prev_value",
+      "then": "active"
+     },
+     {
+      "if": "true",
+      "then": "declining"
+     }
+    ]
+   }
   }
  }
 }

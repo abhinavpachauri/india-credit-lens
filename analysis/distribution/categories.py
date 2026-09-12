@@ -64,9 +64,14 @@ METHOD_CATEGORY = {
     # C4 — distribution across an entity set: breadth, concentration, leaders/laggards
     "csv_sector_scan_yoy":           "C4",
     "csv_sector_scan_share":         "C4",
+    # A size scan is the spread of the cut by magnitude — the same question C4 asks of
+    # growth and share, asked of the level. Not C1: the headline is one number, this is
+    # the distribution behind it.
+    "csv_sector_scan_abs":           "C4",
     "csv_psl_scan_yoy":              "C4",
     "csv_bank_scan":                 "C4",
     "csv_category_scan_share":       "C4",
+    "csv_category_scan_abs":         "C4",
     "csv_category_scan_yoy":         "C4",
     "csv_sector_count_positive_yoy": "C4",
     "csv_sector_yoy_spread":         "C4",

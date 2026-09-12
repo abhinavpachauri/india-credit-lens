@@ -305,10 +305,8 @@ def csv_sector_scan_share(params: dict, period: str, df: pd.DataFrame) -> list[d
     # Denominator may differ from structural parent (e.g. Statement 2 types → Statement 1 total)
     denom_code       = str(params.get("denominator_code", parent_code))
     denom_stmt       = params.get("denominator_statement", stmt)
-    child_level      = params.get("child_level", 2)
     entity_type      = params.get("entity_type", "sector")
     avail            = set(df["date"].unique())
-    exclude          = {str(c) for c in params.get("exclude_codes", [])}
 
     parent_val = _val(df, period, denom_code, denom_stmt)
     if parent_val is None or parent_val == 0:
@@ -317,17 +315,9 @@ def csv_sector_scan_share(params: dict, period: str, df: pd.DataFrame) -> list[d
     prior       = _prior_period(period, avail)
     prior_denom = _val(df, prior, denom_code, denom_stmt) if prior else None
 
-    children = df[
-        (df["date"] == period) &
-        (df["statement"] == stmt) &
-        (df["parent_code"] == parent_code) &
-        (df["level"] == child_level)
-    ]
     out = []
-    for _, row in children.iterrows():
+    for _, row in _child_frame(params, period, df).iterrows():
         code = str(row["code"])
-        if code in exclude:
-            continue
         v = _val(df, period, code, stmt)
         if v is None:
             continue
@@ -342,6 +332,41 @@ def csv_sector_scan_share(params: dict, period: str, df: pd.DataFrame) -> list[d
                         "pct"))
     return sorted(out, key=lambda r: r["value"] if r["value"] is not None else -999,
                   reverse=True)
+
+
+def csv_sector_scan_abs(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
+    """The SIZE of every part of this cut — rupees outstanding, per child.
+
+    The registry held 229 computed signals and not one of them was the level of a sector.
+    Everything was a rate or a share, so the platform could say industry grew 20% and could
+    not say, from any stored value, that industry is Rs 48 lakh crore. A size published
+    beside a rate is what stops a 31.7% on a Rs 16,014 crore book reading like a 31.7% on a
+    Rs 32 lakh crore one — the pairing rule, at the level the reader actually starts from.
+
+    Status compares with the same month a year earlier rather than the prior period: a level
+    that is merely bigger than last month is not news in a series that grows every month.
+    """
+    stmt   = params.get("statement", "Statement 1")
+    etype  = params.get("entity_type", "sector")
+    rules  = params.get("status_rules", [])
+    avail  = set(df["date"].unique())
+    prior  = _month_back(period, int(params.get("window", 12)), avail)
+    out = []
+    for _, row in _child_frame(params, period, df).iterrows():
+        code = str(row["code"])
+        v = _val(df, period, code, stmt)
+        if v is None:
+            continue
+        pv = _val(df, prior, code, stmt) if prior else None
+        out.append(_row(etype, row["sector"], v, _eval_status(rules, v, pv if pv is not None else v), "rs_cr"))
+    if not out:
+        return []
+    out.sort(key=lambda r: r["value"], reverse=True)
+    # The cut's own total, from the children the cut actually has — the SAME denominator
+    # `weight` uses, so "this part is X of the cut" is answerable without reaching for a
+    # parent row that may not equal the sum of its parts (main sectors misses 4.9%).
+    out.append(_row("aggregate", "total", sum(r["value"] for r in out), "active", "rs_cr"))
+    return out
 
 
 def csv_psl_scan_yoy(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
@@ -606,12 +631,17 @@ ACCEL_DEFAULT_RULES = [
 COHERENCE_MIN = 0.90   # sentence-selector, never a publish gate — see README
 
 
-def _children_at(params: dict, period: str, df: pd.DataFrame) -> dict[str, float]:
-    """{sector name: value} for every child of parent_code at child_level on `period`.
+def _child_frame(params: dict, period: str, df: pd.DataFrame) -> pd.DataFrame:
+    """The rows that ARE the parts of this cut — the one selector every family shares.
 
     `psl_memo: true` selects the priority-sector memo block instead. PSL is not a child of any
     code — its rows carry an EMPTY parent_code and are flagged `is_priority_sector_memo` — so a
     parent_code selector cannot reach it, and PSL is a dimension the dashboard renders.
+
+    Extracted because the share scan used to carry its own copy of this query and therefore
+    could not see the PSL block at all, while momentum/allocation could. Two descriptions of
+    "the parts of this cut" is exactly the drift the engineering principle forbids: a cut
+    should be one declaration, and every family should agree on what its parts are.
     """
     stmt        = params.get("statement", "Statement 1")
     child_level = params.get("child_level", 2)
@@ -623,10 +653,14 @@ def _children_at(params: dict, period: str, df: pd.DataFrame) -> dict[str, float
         parent_code = str(params["parent_code"])
         rows = df[base & (df["parent_code"] == parent_code)
                   & (df["is_priority_sector_memo"] == False)]              # noqa: E712
+    return rows[~rows["code"].astype(str).isin(exclude)] if exclude else rows
+
+
+def _children_at(params: dict, period: str, df: pd.DataFrame) -> dict[str, float]:
+    """{sector name: value} for every part of this cut on `period`."""
+    stmt = params.get("statement", "Statement 1")
     out: dict[str, float] = {}
-    for _, r in rows.iterrows():
-        if str(r["code"]) in exclude:
-            continue
+    for _, r in _child_frame(params, period, df).iterrows():
         v = _val(df, period, str(r["code"]), stmt)
         if v is not None:
             out[r["sector"]] = float(v)
@@ -786,6 +820,17 @@ def csv_sector_allocation(params: dict, period: str, df: pd.DataFrame) -> list[d
         if tot:
             out.extend(_row("weight", name, 100.0 * v / tot, "active", "pct")
                        for name, v in base.items())
+    # `weight_now` — the SAME children over the SAME denominator at the END of the window.
+    # Stored rather than left to the share scan because the two use different denominators:
+    # a share scan divides by the parent's own published row, this divides by the sum of the
+    # parts. For main sectors those differ by 4.9% — the four sectors do not add up to
+    # non-food credit — so "share of the book then vs now" read off two families would be a
+    # comparison of two different questions, which is the defect §15 was written about.
+    now = _children_at(params, period, df)
+    tot_now = sum(now.values())
+    if tot_now:
+        out.extend(_row("weight_now", name, 100.0 * v / tot_now, "active", "pct")
+                   for name, v in now.items())
     if coherence >= cmin and net:
         alloc = [_row("alloc", name, 100.0 * val / net, "active", "pct")
                  for name, val in deltas.items()]
@@ -853,6 +898,7 @@ METHODS: dict = {
     "csv_sector_count_positive_yoy": csv_sector_count_positive_yoy,
     "csv_sector_scan_yoy":          csv_sector_scan_yoy,
     "csv_sector_scan_share":        csv_sector_scan_share,
+    "csv_sector_scan_abs":          csv_sector_scan_abs,
     "csv_psl_scan_yoy":             csv_psl_scan_yoy,
     # 1d — multi-period
     "csv_yoy_streak":               csv_yoy_streak,

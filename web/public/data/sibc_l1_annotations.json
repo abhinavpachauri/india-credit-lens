@@ -551,7 +551,7 @@
           "layer": 1,
           "title": "Services growing fastest at 22.9%; Personal Loans slowest at 16.2%",
           "body": "Services leads YoY growth at 22.9%, Industry at 20.0%; Personal Loans is slowest at 16.2%. 4 of 4 categories growing, spread 6.7 percentage points.",
-          "implication": "Services is the fastest at 22.9%; Personal Loans the slowest at 16.2%. Most of the category is growing.",
+          "implication": "Services is the fastest at 22.9% but holds 28.2% of the category; the largest block, Personal Loans at 32.7%, grew 16.2%. Growth rank and size rank are different questions. Most of the category is growing.",
           "preferredMode": "yoy",
           "effect": {
             "cut": {
@@ -573,7 +573,11 @@
               "Personal Loans is the weakest at 16.2% — a spread of 6.7 percentage points across 4 categories.",
               "4 of 4 categories are growing — broad-based momentum."
             ]
-          }
+          },
+          "sourceSignals": [
+            "sibc-main-yoy-scan",
+            "sibc-main-share-scan"
+          ]
         },
         {
           "id": "sibc-personal-loans-share",
@@ -801,7 +805,7 @@
           "layer": 1,
           "title": "Medium growing fastest at 30.5%; Large slowest at 17.7%",
           "body": "Medium leads YoY growth at 30.5%, Micro and Small at 22.6%; Large is slowest at 17.7%. 3 of 3 categories growing, spread 12.8 percentage points.",
-          "implication": "Medium is the fastest at 30.5%; Large the slowest at 17.7%. Most of the category is growing.",
+          "implication": "Medium is the fastest at 30.5% but holds 10.0% of the category; the largest block, Large at 67.3%, grew 17.7%. Growth rank and size rank are different questions. Most of the category is growing.",
           "preferredMode": "yoy",
           "effect": {
             "cut": {
@@ -823,7 +827,11 @@
               "Large is the weakest at 17.7% — a spread of 12.8 percentage points across 3 categories.",
               "3 of 3 categories are growing — broad-based momentum."
             ]
-          }
+          },
+          "sourceSignals": [
+            "sibc-ind-size-yoy-scan",
+            "sibc-ind-size-share-scan"
+          ]
         },
         {
           "id": "sibc-large-corporate-share",

@@ -53,7 +53,8 @@ class MovementCut:
 
 # The row types a movement signal writes ALONGSIDE its members. `aggregate` carries
 # total/gross_movement/coherence; allocation splits into alloc/contribution/weight.
-_NON_MEMBER = ("aggregate", "alloc", "contribution", "weight", "pair_side", "fy_yoy")
+_NON_MEMBER = ("aggregate", "alloc", "contribution", "weight", "weight_now",
+               "pair_side", "fy_yoy")
 
 # The compute methods this module OWNS. A signal computed by one of these is rendered as part of
 # the single movement card for its cut — never on its own — so the generic annotation path must

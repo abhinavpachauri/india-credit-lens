@@ -5,7 +5,7 @@
     "schema_version": "4.0",
     "spec_ref": "analysis/SYSTEM_MODEL_SPEC.md §16",
     "computed_from": "signals.db",
-    "signals_observed": 113
+    "signals_observed": 116
   },
   "entity_states": {
     "icl:atm_pos/cards/cards_in_force": {
@@ -17,13 +17,13 @@
     },
     "icl:atm_pos/cards/credit_cards": {
       "direction": 1,
-      "signals": 13,
-      "observed": 13
+      "signals": 14,
+      "observed": 14
     },
     "icl:atm_pos/cards/debit_cards": {
       "direction": 1,
-      "signals": 13,
-      "observed": 13
+      "signals": 14,
+      "observed": 14
     },
     "icl:atm_pos/infrastructure/acceptance_infrastructure": {
       "direction": 1,
@@ -51,8 +51,8 @@
     },
     "icl:atm_pos/infrastructure/pos_terminals": {
       "direction": 1,
-      "signals": 13,
-      "observed": 13
+      "signals": 14,
+      "observed": 14
     },
     "icl:atm_pos/infrastructure/upi_qr": {
       "direction": 1,

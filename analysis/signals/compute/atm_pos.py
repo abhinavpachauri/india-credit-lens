@@ -296,6 +296,31 @@ def csv_category_scan_share(params: dict, period: str, df: pd.DataFrame) -> list
     return sorted(out, key=lambda r: r["value"] if r["value"] is not None else -999, reverse=True)
 
 
+def csv_category_scan_abs(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
+    """The SIZE of every bank category on this metric — the payments twin of
+    `csv_sector_scan_abs`. See that docstring for why a level had to become a signal."""
+    metric = params["metric"]
+    rules  = params.get("status_rules", [])
+    avail  = set(df["report_date"].unique())
+    prior  = _month_back(period, int(params.get("window", 12)), avail)
+    cats = df[(df["report_date"] == period) &
+              (df["metric"] == metric) &
+              (df["record_type"] == "bank")]["bank_category"].unique()
+    out = []
+    for cat in cats:
+        v = _category_val(df, period, metric, cat)
+        if v is None:
+            continue
+        pv = _category_val(df, prior, metric, cat) if prior else None
+        out.append(_row("bank_category", cat, v,
+                        _eval_status(rules, v, pv if pv is not None else v), params.get("unit", "count")))
+    if not out:
+        return []
+    out.sort(key=lambda r: r["value"], reverse=True)
+    out.append(_row("aggregate", "total", sum(r["value"] for r in out), "active", params.get("unit", "count")))
+    return out
+
+
 def csv_bank_scan(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
     """
     Compute value or YoY for EVERY bank for a metric. One row per bank.
@@ -605,6 +630,17 @@ def csv_category_allocation(params: dict, period: str, df: pd.DataFrame) -> list
     if tot:
         out.extend(_row("weight", k, 100.0 * v / tot, "active", "pct")
                    for k, v in base.items())
+    # `weight_now` — the SAME children over the SAME denominator at the END of the window.
+    # Stored rather than left to the share scan because the two use different denominators:
+    # a share scan divides by the parent's own published row, this divides by the sum of the
+    # parts. For main sectors those differ by 4.9% — the four sectors do not add up to
+    # non-food credit — so "share of the book then vs now" read off two families would be a
+    # comparison of two different questions, which is the defect §15 was written about.
+    now = _cat_values(params, period, df)
+    tot_now = sum(now.values())
+    if tot_now:
+        out.extend(_row("weight_now", k, 100.0 * v / tot_now, "active", "pct")
+                   for k, v in now.items())
     # `alloc` — share of the NET — stays gated, and that is routing not suppression: when
     # members cancel, a share of a small net is unbounded and misleading. `contribution`
     # (share of gross) carries the quantitative work in those windows.
@@ -784,6 +820,7 @@ METHODS: dict = {
     "csv_category_share":      csv_category_share,
     "csv_category_yoy":        csv_category_yoy,
     "csv_category_scan_share": csv_category_scan_share,
+    "csv_category_scan_abs":        csv_category_scan_abs,
     "csv_bank_scan":           csv_bank_scan,
     "csv_mom_streak":         csv_mom_streak,
     # relational — cross-segment (spec: signals/README.md)

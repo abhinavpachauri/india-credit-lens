@@ -5,7 +5,7 @@
     "schema_version": "4.0",
     "spec_ref": "analysis/SYSTEM_MODEL_SPEC.md §16",
     "computed_from": "signals.db",
-    "signals_observed": 112
+    "signals_observed": 128
   },
   "entity_states": {
     "icl:sibc/Statement1/I": {
@@ -22,8 +22,8 @@
     },
     "icl:sibc/Statement1/III": {
       "direction": 1,
-      "signals": 11,
-      "observed": 11,
+      "signals": 14,
+      "observed": 14,
       "coherence": 1.0,
       "children": 4
     },
@@ -34,29 +34,29 @@
     },
     "icl:sibc/Statement1/2": {
       "direction": 1,
-      "signals": 11,
-      "observed": 11,
+      "signals": 14,
+      "observed": 14,
       "coherence": 1.0,
       "children": 3
     },
     "icl:sibc/Statement1/3": {
       "direction": 1,
-      "signals": 11,
-      "observed": 10,
+      "signals": 13,
+      "observed": 12,
       "coherence": 1.0,
       "children": 10
     },
     "icl:sibc/Statement1/4": {
       "direction": 1,
-      "signals": 19,
-      "observed": 18,
+      "signals": 21,
+      "observed": 20,
       "coherence": 1.0,
       "children": 9
     },
     "icl:sibc/Statement1/PSL": {
       "direction": 1,
-      "signals": 3,
-      "observed": 3,
+      "signals": 5,
+      "observed": 5,
       "coherence": 1.0,
       "children": 10
     },
@@ -326,9 +326,9 @@
       "observed": 0
     },
     "icl:sibc/Statement2/2.18": {
-      "direction": 0,
-      "signals": 6,
-      "observed": 6
+      "direction": -1,
+      "signals": 8,
+      "observed": 8
     },
     "icl:sibc/Statement2/2.19": {
       "direction": 0,
@@ -734,7 +734,7 @@
       "to": "opp_renewable_energy"
     },
     "e_S2_2_18__creates_risk__risk_infrastructure_repayment": {
-      "state": "dormant",
+      "state": "active",
       "type": "creates_risk",
       "polarity": "-",
       "from": "e_S2_2_18",
@@ -846,7 +846,9 @@
       "force_psl_education_limit",
       "force_psl_renewable_limit"
     ],
-    "binding_constraints": [],
+    "binding_constraints": [
+      "e_S2_2_18__creates_risk__risk_infrastructure_repayment"
+    ],
     "active_reinforcing_loops": [
       "pli_supply_chain_R",
       "msme_formalisation_R"
