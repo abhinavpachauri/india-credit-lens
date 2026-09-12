@@ -30,6 +30,7 @@ Usage:
     python3 analysis/architecture/reconcile.py --quiet
 """
 import argparse
+import importlib
 import json
 import re
 import sys
@@ -38,6 +39,7 @@ from pathlib import Path
 ANALYSIS = Path(__file__).resolve().parent.parent
 ROOT = ANALYSIS.parent
 GRAPH = ANALYSIS / "architecture" / "graph.json"
+sys.path.insert(0, str(ANALYSIS))   # compute modules, for the spec check
 
 # The LIVING docs (system-of-record prose). Handoffs/strategy are historical snapshots
 # and intentionally reference retired scripts, so they're excluded.
@@ -152,6 +154,42 @@ def _test_count() -> int:
     return total
 
 
+SIGNALS_SPEC = ROOT / "analysis" / "signals" / "README.md"
+
+
+def check_compute_methods_are_specced() -> list[str]:
+    """Check 5 — every compute method the engine will dispatch must appear in the L1 spec.
+
+    The rule in this project is spec first. It failed on 2026-09-12: two new compute methods
+    (`csv_sector_scan_abs`, `csv_category_scan_abs`) were written, registered, backfilled and
+    gated without `signals/README.md` — which documents every other L1 family in detail — ever
+    being opened. Nothing noticed. The distribution partition guard caught the new methods
+    within a minute because it enumerates METHODS; the spec had no such guard, so the one
+    artifact whose whole job is to say what the system measures was the one artifact allowed to
+    fall behind it.
+
+    Deliberately a NAME check, not a quality one. It cannot tell whether a section is any good
+    — only that a method cannot enter the engine unmentioned. That is the population the rule
+    was always about.
+    """
+    if not SIGNALS_SPEC.exists():
+        return [f"{SIGNALS_SPEC.relative_to(ROOT)}: missing — the Layer 1 spec"]
+    spec = SIGNALS_SPEC.read_text()
+    findings = []
+    for mod in ("sibc", "atm_pos"):
+        try:
+            engine = importlib.import_module(f"signals.compute.{mod}")
+        except Exception as e:                        # noqa: BLE001
+            findings.append(f"compute/{mod}.py could not be imported for the spec check: {e}")
+            continue
+        for method in sorted(getattr(engine, "METHODS", {})):
+            if method not in spec:
+                findings.append(
+                    f"compute method '{method}' ({mod}) is dispatchable but appears nowhere in "
+                    f"signals/README.md — spec it before it computes anything")
+    return findings
+
+
 COUNT_CHECKS = [
     ("registry signals", _registry_signal_count,
      [r"registry\.json \(\*\*(\d+) signals\*\*\)", r"Universal signal catalog — (\d+) signals"]),
@@ -229,6 +267,16 @@ def main():
         hard += len(evidence_findings)
     elif not args.quiet:
         print("✓ evidence pointers resolve")
+
+    # Check 5: a compute method must be specced before it can compute.
+    method_findings = check_compute_methods_are_specced()
+    if method_findings:
+        print("✗ compute methods missing from the Layer 1 spec")
+        for f in method_findings:
+            print(f"    {f}")
+        hard += len(method_findings)
+    elif not args.quiet:
+        print("✓ every compute method is specced")
 
     # Advisory: graph scripts whose basename appears in no living doc.
     if GRAPH.exists():

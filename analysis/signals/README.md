@@ -16,6 +16,78 @@ deterministic compute engine, and the LLM evaluation layer.
   consolidated CSV; hot filter columns are `category`-dtype for speed). Both cache the CSV
   per process via `_load_df()`.
 
+## The method catalogue — what Layer 1 measures
+
+> Added 2026-09-12, when a new reconcile check asked for the first time whether every
+> dispatchable compute method appears in this file. **Eighteen did not** — every one of them from
+> the original 1a–1d foundation. The spec had grown by documenting each new family in detail
+> while the methods the whole platform rests on were never written down at all. The check is a
+> name check and cannot judge a section's quality; it can only stop a method entering the engine
+> unmentioned, which is the population the spec-first rule was always about.
+
+Layer 1 asks five kinds of question. Every method below belongs to exactly one of them, and the
+sub-layer tag on a registry entry says which.
+
+### 1a — one number about a whole thing
+*How big is it, how fast is it moving?* One row, `aggregate`/`total`.
+
+| method | measures |
+|---|---|
+| `csv_total_abs` · `csv_sector_abs` | the level of one named thing |
+| `csv_total_yoy` · `csv_sector_yoy` · `csv_sum_yoy` | growth against the same month a year earlier (`csv_sum_yoy` over a bundle of metrics) |
+| `csv_total_ratio` · `csv_ratio_sum` | one metric over another, or over a bundle |
+| `csv_sector_count_positive_yoy` | how many named sectors are growing — a breadth reading |
+
+### 1b — one number about one named part
+*How fast is Agriculture? What share is Large?* Scalar, but scoped to a child rather than the whole.
+
+| method | measures |
+|---|---|
+| `csv_sector_share` · `csv_category_share` | a part's share of its parent |
+| `csv_category_yoy` | one bank category's growth on one metric |
+| `csv_sector_yoy_spread` | the gap in pp between two named parts — the entity axis of divergence |
+
+### 1c — the same number for EVERY part at once (a scan)
+*Rank all nineteen industry types.* One row per part; the rows **are** the distribution.
+
+| method | measures |
+|---|---|
+| `csv_sector_scan_abs` · `csv_category_scan_abs` | the **size** of every part (see the next section) |
+| `csv_sector_scan_share` · `csv_category_scan_share` | every part's **share**, of its parent or of a declared denominator |
+| `csv_sector_scan_yoy` · `csv_category_scan_yoy` | every part's **growth** |
+| `csv_psl_scan_yoy` | growth across the PSL memo block, which no `parent_code` can reach |
+| `csv_bank_scan` | the same, at individual-bank granularity — payments only; SIBC publishes no per-bank credit |
+
+### 1d — a number compared with its OWN past
+*How many readings in a row? How does this year compare with last?*
+
+| method | measures |
+|---|---|
+| `csv_yoy_streak` | consecutive periods a **YoY** condition has held (SIBC) |
+| `csv_mom_streak` | consecutive periods a **month-on-month** level move has held (payments) |
+| `csv_sector_fy_acceleration` | the change in growth between the two most recent 31-March readings |
+| `csv_sector_fy_delta` | the rupees added between those same two FY-ends |
+
+The two streak methods were once **one registry name meaning two things** — a YoY condition and a
+MoM level move, with different parameters, vocabulary and zero-handling. They are named for the
+comparison basis precisely so they cannot be confused again.
+
+### 1e — two things compared (the relational layer)
+*Is the mix shifting? Is a child out of step with its parent? Are two metrics diverging?* Specified
+in full in the two sections below: `csv_sector_rotation` · `csv_category_rotation` ·
+`csv_sector_divergence` · `csv_bank_divergence` · `csv_pair_divergence` · `csv_sector_momentum` ·
+`csv_category_momentum` · `csv_sector_acceleration` · `csv_category_acceleration` ·
+`csv_sector_allocation` · `csv_category_allocation`.
+
+### Rules that hold across all five
+- **A method is dispatched only from `METHODS`.** A registry entry naming a method that is not
+  there raises rather than silently producing zero rows — twelve payments signals were once
+  unwired that way and the freshness check stayed green.
+- **Status is evaluated by declared `status_rules`, never in the method body**, so what counts as
+  "strengthening" is a property of the signal rather than of the code.
+- **Every method reads the consolidated CSV and nothing else.** No method may read another
+  signal's stored rows; a value that depends on another signal belongs to the layer above.
+
 ## Cut coverage — size & share (the table families)
 
 > **Written 2026-09-12, AFTER the compute landed.** The rule in this project is spec first;
