@@ -16,6 +16,97 @@ deterministic compute engine, and the LLM evaluation layer.
   consolidated CSV; hot filter columns are `category`-dtype for speed). Both cache the CSV
   per process via `_load_df()`.
 
+## Cut coverage — size & share (the table families)
+
+> **Written 2026-09-12, AFTER the compute landed.** The rule in this project is spec first;
+> this section did not exist when `csv_sector_scan_abs` was built. It is therefore a record of
+> decisions already taken, not a design that disciplined them. Noted because a spec that quietly
+> back-fills its own code reads identically to one that led it, and the difference matters.
+
+A **cut** is a parent plus the parts it decomposes into — the unit the dashboard renders as a
+dimension, and the unit `MOVEMENT_CUTS` already declares. The question these families answer is
+not "is this signal correct" but **"is this cut completely described"**, which nothing had asked.
+It had not been asked for a reason worth recording: the registry held 229 computed signals and
+**not one of them was the size of a sector**. Every signal was a rate or a share, so the platform
+could say industry grew 20.0% and could not say, from any stored value, that industry is
+₹48 lakh crore — the number a reader starts from.
+
+### size — how big each part is
+`csv_sector_scan_abs` (SIBC) · `csv_category_scan_abs` (ATM/POS). METHOD_TYPE: `scan`.
+
+- **Rows:** one per part, value = the level in the source's own unit (`rs_cr` / `count`),
+  sorted descending. Plus one `aggregate`/`total` row.
+- **That total is summed from the parts, NOT read off the parent's published row**, and this is
+  the load-bearing choice: it is the same denominator `weight` uses, so "this part is X of the
+  cut" stays answerable when a parent does not equal the sum of its children. For SIBC main
+  sectors it does not — the four sectors total ₹208.9L Cr against non-food credit's ₹219.6L Cr,
+  a **4.9% residual** RBI attributes to no sector.
+- **Status compares with the same month a year earlier, not the prior period.** A level larger
+  than last month is not news in a series that grows every month.
+- **Why a size must be a signal rather than arithmetic in a browser:** a derived number is one no
+  gate can ground (the same rule that kept the tilt and the coherence figure out of published
+  prose). A size is also what stops a 31.7% on a ₹16,014 crore book reading like a 31.7% on a
+  ₹32 lakh crore one — the pairing rule, applied at the level the reader begins from.
+
+### share — of the parent, and of the whole book
+Both use `csv_sector_scan_share`; they differ only in the declared `denominator_code`.
+
+- **Share of parent** — denominator is the parent's own published row. Answers *"how much of
+  industry is this"*.
+- **Share of all bank credit** (`denominator_code: I`) — answers *"one rupee in every seven"*.
+  A genuinely different fact for any cut below the top, and hand-arithmetic until now.
+- **Both denominators are always NAMED in the rendering** (DASHBOARD_SPEC §15). Two share columns
+  side by side with unnamed denominators is the defect §15 was written about.
+- ATM/POS needs only one: a payments cut's parent **is** its root.
+
+### the PSL exception — named, never papered over
+`sibc-psl-share-scan` was declared, computed **zero rows**, and was **removed rather than given a
+denominator**. PSL is a memo lens: `gap_psl_totals_methodology` already records that its
+sub-category totals are non-additive, so there is no published total for its parts to be a share
+*of*. Summing them to manufacture one would have produced a plausible number with nothing behind
+it. PSL keeps `share-of-credit`, whose denominator is real. Check 2e caught the empty signal on
+the first run — an empty registry entry is the exact shape of a failure that looks like an absence.
+
+### `weight_now` — the mix comparison must use one denominator
+`csv_sector_allocation` / `csv_category_allocation` already stored `weight`, each part's share of
+the cut **at the start of the window**, so Layer 2 could read `tilt = alloc - weight`. They now
+also store **`weight_now`**, the same parts over the same denominator **today**.
+
+Not a convenience. The share scan divides by the parent's published row; `weight` divides by the
+sum of the parts. For main sectors those differ by 4.9%. Reading "share of the book a year ago"
+from the allocation family and "share today" from the share family would have compared **two
+different questions**, silently and plausibly, in adjacent columns.
+
+### one selector per cut
+`_child_frame(params, period, df)` is the single definition of *"the parts of this cut"*, shared
+by `_children_at`, the share scan and the size scan. The share scan previously carried its own
+copy of that query and therefore **could not see the PSL memo block at all**, while momentum and
+allocation could. Two descriptions of one concept is the drift the engineering principle forbids;
+a cut should be one declaration and every family should agree on what its parts are.
+
+### Conventions
+- **Coverage is the contract, and it is tested.** `tests/test_l1_coverage.py` enumerates every cut
+  from its own momentum signal and asserts each carries a size, a groundable share, and rows that
+  actually exist. Negative-tested by deleting a cut's size signal.
+- A new family for an existing cut **inherits that cut's declaration** (`parent_code`, `statement`,
+  `child_level`, `psl_memo`, `exclude_codes`) rather than restating it.
+- Backfill every period on introduction; Check 2f recomputes all and will fail on any drift.
+
+### Assessed and deliberately NOT added
+- **Rotation on the cuts that lack it.** Share-today and share-a-year-ago are both stored, so a
+  rendering shows **two operands instead of a subtraction no gate can ground** — the same call made
+  for the tilt in DASHBOARD_SPEC §16.3.
+- **Per-entity month-on-month.** Credit is a stock; the 12-calendar-month window is mandatory for
+  this family (see allocation above, where 5 of 20 monthly steps were arithmetically impossible).
+- **Per-entity streak counts.** The run of actual readings is strictly more informative than a
+  count of them, and it is already recoverable from the stored series.
+
+### Known, pre-existing, NOT fixed here
+`weight`/`weight_now` for the PSL cut divide by the sum of parts that
+`gap_psl_totals_methodology` declares non-additive. It predates this work, and changing it would
+rewrite PSL's Layer 2 mix state — a causal reading should not move as a side effect of a
+coverage pass. Flagged for a decision.
+
 ## Relational signal methods — rotation & divergence
 
 Cross-segment L1 methods. Same architectural status as `csv_yoy_streak`/`csv_mom_streak`/`csv_sector_scan_*`: registry
