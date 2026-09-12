@@ -260,32 +260,68 @@ def check_db(reg_signals: dict, known_pipelines: set[str]) -> sqlite3.Connection
             )
             status_mismatches += 1
 
-    # B6: no published `alloc` may exceed the whole it is a share of
+    # B6: no published `alloc` may exceed the bound coherence puts on it
     #
-    # `alloc` = 100 * delta_i / net answers "of the net new units, how many went
-    # here". When entities move against each other the net shrinks toward zero
-    # while the numerators do not, so one entity's share of the net can exceed
-    # 100% — "of every Rs 100 of new credit, telecoms took Rs 137" is
-    # arithmetically true and reads as impossible.
+    # `alloc` = 100 * delta_i / net answers "of the net new units, how many went here".
+    # When entities move against each other the net shrinks toward zero while the
+    # numerators do not, so one entity's share of the net LEGITIMATELY exceeds 100%:
+    # in May 2026 public banks added 204,595 POS terminals against a net of -55,885,
+    # which is -366% and perfectly true.
     #
-    # `coherence_min` is what stops that reaching a card, and it is measured:
-    # catch 100% (16/16 unsafe windows withheld), false rejection 7.6%, over all
-    # 134 momentum windows (analysis/measure_coherence_threshold.py). But the
-    # margin is thin — the highest coherence carrying an unsafe window is 0.864
-    # against a threshold of 0.90 — so a new cut could land in that gap. This
-    # asserts the OUTCOME the threshold exists to produce, instead of trusting
-    # the threshold to keep producing it.
-    impossible = conn.execute(
-        """SELECT pipeline, metric_id, period, entity_id, value
-           FROM signals
-           WHERE entity_type='alloc' AND ABS(value) > 100.0
-           ORDER BY ABS(value) DESC"""
-    ).fetchall()
-    for pl, mid, per, eid, val in impossible[:5]:
+    # THIS CHECK ASSERTED THE WRONG THING UNTIL 2026-09-12. It failed anything over
+    # 100% with the message "a share cannot exceed the whole" — false for a NET
+    # denominator, and already contradicted in two places the author had read:
+    # signals/README.md ("its only justification is the bound — no share beyond
+    # +/-111%") and the allocation docstring ("at coherence 0.12 a share can
+    # legitimately read 833%"). It stayed quiet only because none of the 134 windows
+    # that existed then landed between 100% and 111%. At 520 windows, 30 do — and it
+    # fired on 100.003%, where one category took all of the growth and two others
+    # shrank by a rounding whisker. No threshold fixes that: even coherence_min=1.00
+    # leaks 5 windows while withholding 62% of them.
+    #
+    # What IS provable, because |delta_i| <= gross for any single entity:
+    #
+    #       |share_i|  =  |delta_i| / |net|  <=  gross / |net|  =  1 / coherence
+    #
+    # So the bound is the property to assert, and it is the same property that
+    # justifies `coherence_min` existing at all (0.90 -> no share past 111%). It still
+    # catches what this check was built for: an invented 137% in a low-coherence
+    # window breaches its own bound and fails.
+    BOUND_TOLERANCE_PP = 0.5   # rounding room; stored values carry 4 decimals
+
+    coherence = {
+        (pl, per, mid[: -len("-momentum")]): val
+        for pl, per, mid, val in conn.execute(
+            """SELECT pipeline, period, metric_id, value FROM signals
+               WHERE entity_type='aggregate' AND entity_id='coherence'"""
+        )
+    }
+    breaches, unbounded = [], []
+    for pl, mid, per, eid, val in conn.execute(
+        """SELECT pipeline, metric_id, period, entity_id, value FROM signals
+           WHERE entity_type='alloc' ORDER BY ABS(value) DESC"""
+    ):
+        coh = coherence.get((pl, per, mid[: -len("-allocation")]))
+        if coh is None:
+            # An `alloc` row with no coherence row is not a pass — it is a share whose
+            # bound cannot be computed, which is the absence-shaped failure this
+            # codebase keeps paying for.
+            unbounded.append((pl, mid, per, eid, val))
+            continue
+        if coh > 0 and abs(val) > 100.0 / coh + BOUND_TOLERANCE_PP:
+            breaches.append((pl, mid, per, eid, val, coh))
+
+    for pl, mid, per, eid, val, coh in breaches[:5]:
         fail(
-            f"impossible allocation share — {mid} {per} ({pl}): "
-            f"'{eid}' at {val:.1f}% of net. A share cannot exceed the whole; "
-            f"coherence_min should have withheld this window."
+            f"allocation share beyond its bound — {mid} {per} ({pl}): "
+            f"'{eid}' at {val:.1f}% of net, but coherence {coh:.4f} bounds it at "
+            f"+/-{100.0 / coh:.1f}%. Either the momentum rows and the allocation rows "
+            f"disagree, or the share was computed against the wrong net."
+        )
+    for pl, mid, per, eid, val in unbounded[:5]:
+        fail(
+            f"allocation share with no coherence row — {mid} {per} ({pl}): "
+            f"'{eid}' at {val:.1f}%, and nothing to bound it against."
         )
 
     # Summary
@@ -302,11 +338,12 @@ def check_db(reg_signals: dict, known_pipelines: set[str]) -> sqlite3.Connection
         print(f"     B ✓ continuity: all {len(compute_signals)} L1 compute signals accounted for")
     if not status_mismatches:
         print(f"     B ✓ status sync: registry matches DB latest for all L1 signals")
-    if not impossible:
+    if not breaches and not unbounded:
         n_alloc = conn.execute(
             "SELECT COUNT(*) FROM signals WHERE entity_type='alloc'"
         ).fetchone()[0]
-        print(f"     B ✓ allocation sanity: all {n_alloc} alloc shares within 100% of net")
+        print(f"     B ✓ allocation sanity: all {n_alloc} alloc shares within the bound "
+              f"coherence puts on them (|share| <= 100/coherence)")
 
     return conn
 

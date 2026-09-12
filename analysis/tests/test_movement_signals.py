@@ -326,31 +326,45 @@ def test_the_movement_family_publishes_once_per_cut_and_not_as_scans():
 
 # ── the coherence threshold's outcome, not the threshold ──────────────────────
 
-def test_no_published_alloc_exceeds_the_whole_it_is_a_share_of():
-    """The live invariant `coherence_min` exists to produce.
+def test_no_published_alloc_exceeds_the_bound_coherence_puts_on_it():
+    """The live invariant — and note what it is NOT.
 
-    `alloc` = 100 * delta_i / net. When entities move against each other the net
-    shrinks toward zero while the numerators do not, so one entity's share of the
-    net can pass 100% — "of every Rs 100 of new credit, telecoms took Rs 137" is
-    arithmetically true and reads as impossible.
+    This test used to assert `|alloc| <= 100`, on the reasoning that a share cannot
+    exceed the whole. That is false when the denominator is the NET: if one part
+    shrinks, another can account for more than the whole net increase. In May 2026
+    public banks added 204,595 POS terminals against a net of -55,885 — a share of
+    -366%, and perfectly true.
 
-    Measured over all 134 momentum windows (measure_coherence_threshold.py): the
-    threshold catches 16 of 16 unsafe windows, at a 7.6% false-rejection cost. But
-    the highest coherence carrying an unsafe window is 0.864 against a threshold of
-    0.90, so a new cut could land in that 0.036 gap. This asserts the outcome
-    directly rather than trusting the threshold to keep producing it.
+    What IS provable, since a single entity's change cannot exceed the gross:
+
+        |share_i| = |delta_i| / |net| <= gross / |net| = 1 / coherence
+
+    That is also the only justification `coherence_min` has (0.90 -> no share past
+    111%, signals/README.md). The old form stayed green only because no window in
+    the store then landed between 100% and 111%; when the cut coverage widened it
+    failed on 100.003%, where one category took all the growth and two others shrank
+    by a rounding whisker.
     """
     import sqlite3
     from core.paths import ROOT
     con = sqlite3.connect(ROOT / "analysis/signals/signals.db")
     try:
-        bad = con.execute(
-            "SELECT metric_id, period, entity_id, value FROM signals "
-            "WHERE entity_type='alloc' AND ABS(value) > 100.0"
-        ).fetchall()
+        coh = {(pl, per, mid[: -len("-momentum")]): v for pl, per, mid, v in con.execute(
+            "SELECT pipeline, period, metric_id, value FROM signals "
+            "WHERE entity_type='aggregate' AND entity_id='coherence'")}
+        bad, unbounded = [], []
+        for pl, mid, per, eid, val in con.execute(
+                "SELECT pipeline, metric_id, period, entity_id, value FROM signals "
+                "WHERE entity_type='alloc'"):
+            c = coh.get((pl, per, mid[: -len("-allocation")]))
+            if c is None:
+                unbounded.append((mid, per, eid))
+            elif c > 0 and abs(val) > 100.0 / c + 0.5:
+                bad.append((mid, per, eid, round(val, 1), round(100.0 / c, 1)))
     finally:
         con.close()
-    assert not bad, f"impossible allocation shares published: {bad[:3]}"
+    assert not bad, f"allocation shares beyond their bound: {bad[:3]}"
+    assert not unbounded, f"allocation shares with no coherence to bound them: {unbounded[:3]}"
 
 
 def test_the_allocation_guard_rejects_an_impossible_share():
@@ -361,22 +375,35 @@ def test_the_allocation_guard_rejects_an_impossible_share():
     feed is asserted clean above, and the LOGIC is driven here against rows that will
     never exist in the database.
     """
-    def offending(rows):
-        return [r for r in rows if r["entity_type"] == "alloc" and abs(r["value"]) > 100.0]
+    def offending(rows, coherence):
+        """The rule under test: a share may exceed 100%, but never 100/coherence."""
+        return [r for r in rows
+                if r["entity_type"] == "alloc" and abs(r["value"]) > 100.0 / coherence + 0.5]
 
     aligned = [{"entity_type": "alloc", "entity_id": "Services", "value": 33.8},
                {"entity_type": "alloc", "entity_id": "Industry", "value": 66.2}]
-    assert offending(aligned) == []
+    assert offending(aligned, 1.0) == []
 
-    # A handover window: the net nearly cancels, so a share of it blows past 100.
+    # Mildly contested: one part took MORE than the whole net because another shrank.
+    # The old rule rejected this; it is ordinary, and at coherence 0.95 the bound is 105.3%.
+    over_a_hundred = [{"entity_type": "alloc", "entity_id": "Private", "value": 104.7}]
+    assert offending(over_a_hundred, 0.95) == [], "a share past 100% is legal inside its bound"
+
+    # The whisker case that exposed the old rule: one entity took all of the growth and
+    # two others shrank by a rounding amount.
+    assert offending([{"entity_type": "alloc", "entity_id": "SFB", "value": 100.003}], 1.0) == []
+
+    # The same 104.7% in a LOW-coherence window breaches its own bound (0.5 -> 200%? no:
+    # pick a coherence whose bound is tighter than the value).
+    assert len(offending(over_a_hundred, 0.99)) == 1, "a share past its own bound must be rejected"
+
+    # A handover window: -460% is true at coherence 0.12 (bound 833%), and NOT an error.
     handover = [{"entity_type": "alloc", "entity_id": "Private", "value": -460.4},
                 {"entity_type": "alloc", "entity_id": "Public", "value": 366.1}]
-    assert len(offending(handover)) == 2, "a share larger than the whole must be rejected"
-
-    # 100.0 exactly is the boundary and is legitimate — one entity took all the net.
-    boundary = [{"entity_type": "alloc", "entity_id": "Services", "value": 100.0}]
-    assert offending(boundary) == []
+    assert offending(handover, 0.12) == [], "the handover figures are real, not defects"
+    # ...but the same rows in a coherent window are impossible.
+    assert len(offending(handover, 1.0)) == 2
 
     # contribution rows are shares of GROSS, bounded by construction, never in scope
     contribution = [{"entity_type": "contribution", "entity_id": "Private", "value": 93.0}]
-    assert offending(contribution) == []
+    assert offending(contribution, 0.12) == []

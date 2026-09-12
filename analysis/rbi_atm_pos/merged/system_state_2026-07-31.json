@@ -5,7 +5,7 @@
     "schema_version": "4.0",
     "spec_ref": "analysis/SYSTEM_MODEL_SPEC.md §16",
     "computed_from": "signals.db",
-    "signals_observed": 116
+    "signals_observed": 254
   },
   "entity_states": {
     "icl:atm_pos/cards/cards_in_force": {
@@ -29,7 +29,7 @@
       "direction": 1,
       "signals": 0,
       "observed": 0,
-      "coherence": 0.9967,
+      "coherence": 0.9839,
       "children": 5
     },
     "icl:atm_pos/infrastructure/atms": {
@@ -40,14 +40,14 @@
       "children": 2
     },
     "icl:atm_pos/infrastructure/bharat_qr": {
-      "direction": 0,
-      "signals": 2,
-      "observed": 2
+      "direction": -1,
+      "signals": 8,
+      "observed": 8
     },
     "icl:atm_pos/infrastructure/micro_atms": {
       "direction": -1,
-      "signals": 2,
-      "observed": 2
+      "signals": 8,
+      "observed": 8
     },
     "icl:atm_pos/infrastructure/pos_terminals": {
       "direction": 1,
@@ -56,18 +56,18 @@
     },
     "icl:atm_pos/infrastructure/upi_qr": {
       "direction": 1,
-      "signals": 4,
-      "observed": 4
+      "signals": 10,
+      "observed": 10
     },
     "icl:atm_pos/infrastructure/atm_offsite": {
-      "direction": 0,
-      "signals": 2,
-      "observed": 2
+      "direction": 1,
+      "signals": 8,
+      "observed": 8
     },
     "icl:atm_pos/infrastructure/atm_onsite": {
       "direction": 1,
-      "signals": 2,
-      "observed": 2
+      "signals": 8,
+      "observed": 8
     },
     "icl:atm_pos/spend_value/card_spend_value": {
       "direction": 0,
@@ -87,59 +87,59 @@
       "direction": -1,
       "signals": 0,
       "observed": 0,
-      "coherence": 0.7051,
+      "coherence": 0.7069,
       "children": 5
     },
     "icl:atm_pos/spend_value/cc_atm_withdrawal_val": {
       "direction": 1,
-      "signals": 3,
-      "observed": 3
+      "signals": 9,
+      "observed": 9
     },
     "icl:atm_pos/spend_value/cc_ecom_txn_val": {
       "direction": 1,
-      "signals": 3,
-      "observed": 3
+      "signals": 9,
+      "observed": 9
     },
     "icl:atm_pos/spend_value/cc_other_txn_val": {
       "direction": 1,
-      "signals": 3,
-      "observed": 3
+      "signals": 9,
+      "observed": 9
     },
     "icl:atm_pos/spend_value/cc_pos_txn_val": {
       "direction": 1,
-      "signals": 3,
-      "observed": 3
+      "signals": 9,
+      "observed": 9
     },
     "icl:atm_pos/spend_value/dc_atm_withdrawal_val": {
       "direction": -1,
-      "signals": 3,
-      "observed": 3
+      "signals": 9,
+      "observed": 9
     },
     "icl:atm_pos/spend_value/dc_ecom_txn_val": {
       "direction": 1,
-      "signals": 3,
-      "observed": 3
+      "signals": 9,
+      "observed": 9
     },
     "icl:atm_pos/spend_value/dc_other_txn_val": {
-      "direction": 1,
-      "signals": 3,
-      "observed": 3
+      "direction": -1,
+      "signals": 9,
+      "observed": 9
     },
     "icl:atm_pos/spend_value/dc_pos_txn_val": {
       "direction": 1,
-      "signals": 3,
-      "observed": 3
+      "signals": 9,
+      "observed": 9
     },
     "icl:atm_pos/spend_value/dc_pos_withdrawal_val": {
       "direction": 1,
-      "signals": 3,
-      "observed": 3
+      "signals": 9,
+      "observed": 9
     },
     "icl:atm_pos/spend_volume/card_spend_volume": {
-      "direction": 1,
+      "direction": 0,
       "signals": 0,
       "observed": 0,
-      "coherence": 1.0,
+      "coherence": 0.0,
       "children": 2
     },
     "icl:atm_pos/spend_volume/cc_spend_volume": {
@@ -150,56 +150,56 @@
       "children": 4
     },
     "icl:atm_pos/spend_volume/dc_spend_volume": {
-      "direction": 1,
+      "direction": -1,
       "signals": 0,
       "observed": 0,
-      "coherence": 1.0,
+      "coherence": 0.892,
       "children": 5
     },
     "icl:atm_pos/spend_volume/cc_atm_withdrawal_vol": {
       "direction": 1,
-      "signals": 4,
-      "observed": 4
+      "signals": 10,
+      "observed": 10
     },
     "icl:atm_pos/spend_volume/cc_ecom_txn_vol": {
       "direction": 1,
-      "signals": 3,
-      "observed": 3
+      "signals": 9,
+      "observed": 9
     },
     "icl:atm_pos/spend_volume/cc_other_txn_vol": {
       "direction": 1,
-      "signals": 3,
-      "observed": 3
+      "signals": 9,
+      "observed": 9
     },
     "icl:atm_pos/spend_volume/cc_pos_txn_vol": {
       "direction": 1,
-      "signals": 3,
-      "observed": 3
+      "signals": 9,
+      "observed": 9
     },
     "icl:atm_pos/spend_volume/dc_atm_withdrawal_vol": {
-      "direction": 1,
-      "signals": 4,
-      "observed": 4
+      "direction": -1,
+      "signals": 10,
+      "observed": 10
     },
     "icl:atm_pos/spend_volume/dc_ecom_txn_vol": {
       "direction": 1,
-      "signals": 3,
-      "observed": 3
+      "signals": 9,
+      "observed": 9
     },
     "icl:atm_pos/spend_volume/dc_other_txn_vol": {
-      "direction": 1,
-      "signals": 3,
-      "observed": 3
+      "direction": -1,
+      "signals": 9,
+      "observed": 9
     },
     "icl:atm_pos/spend_volume/dc_pos_txn_vol": {
-      "direction": 1,
-      "signals": 3,
-      "observed": 3
+      "direction": -1,
+      "signals": 9,
+      "observed": 9
     },
     "icl:atm_pos/spend_volume/dc_pos_withdrawal_vol": {
-      "direction": -1,
-      "signals": 4,
-      "observed": 4
+      "direction": 1,
+      "signals": 10,
+      "observed": 10
     }
   },
   "force_states": {
@@ -503,6 +503,236 @@
       "away_from": null,
       "toward_tilt_pp": null,
       "children": 0
+    },
+    "atm-offsite-category-momentum": {
+      "entity_urn": "icl:atm_pos/infrastructure/atm_offsite",
+      "decomposition": null,
+      "mix_state": "contested",
+      "coherence": 0.7816,
+      "toward": null,
+      "away_from": null,
+      "toward_tilt_pp": null,
+      "children": 0
+    },
+    "atm-onsite-category-momentum": {
+      "entity_urn": "icl:atm_pos/infrastructure/atm_onsite",
+      "decomposition": null,
+      "mix_state": "drifting",
+      "coherence": 0.998,
+      "toward": "Small Finance Banks",
+      "away_from": "Private Sector Banks",
+      "toward_tilt_pp": 5.88,
+      "children": 5
+    },
+    "bharat-qr-category-momentum": {
+      "entity_urn": "icl:atm_pos/infrastructure/bharat_qr",
+      "decomposition": null,
+      "mix_state": "drifting",
+      "coherence": 1.0,
+      "toward": "Small Finance Banks",
+      "away_from": "Public Sector Banks",
+      "toward_tilt_pp": 3.51,
+      "children": 5
+    },
+    "cc-atm-withdrawal-val-category-momentum": {
+      "entity_urn": "icl:atm_pos/spend_value/cc_atm_withdrawal_val",
+      "decomposition": null,
+      "mix_state": "drifting",
+      "coherence": 0.9432,
+      "toward": "Public Sector Banks",
+      "away_from": "Private Sector Banks",
+      "toward_tilt_pp": 48.7,
+      "children": 5
+    },
+    "cc-atm-withdrawal-vol-category-momentum": {
+      "entity_urn": "icl:atm_pos/spend_volume/cc_atm_withdrawal_vol",
+      "decomposition": null,
+      "mix_state": "reallocating",
+      "coherence": 0.3793,
+      "toward": null,
+      "away_from": null,
+      "toward_tilt_pp": null,
+      "children": 0
+    },
+    "cc-ecom-txn-val-category-momentum": {
+      "entity_urn": "icl:atm_pos/spend_value/cc_ecom_txn_val",
+      "decomposition": null,
+      "mix_state": "steered",
+      "coherence": 1.0,
+      "toward": "Public Sector Banks",
+      "away_from": "Private Sector Banks",
+      "toward_tilt_pp": 45.77,
+      "children": 5
+    },
+    "cc-ecom-txn-vol-category-momentum": {
+      "entity_urn": "icl:atm_pos/spend_volume/cc_ecom_txn_vol",
+      "decomposition": null,
+      "mix_state": "drifting",
+      "coherence": 1.0,
+      "toward": "Public Sector Banks",
+      "away_from": "Private Sector Banks",
+      "toward_tilt_pp": 18.34,
+      "children": 5
+    },
+    "cc-other-txn-val-category-momentum": {
+      "entity_urn": "icl:atm_pos/spend_value/cc_other_txn_val",
+      "decomposition": null,
+      "mix_state": "drifting",
+      "coherence": 0.9996,
+      "toward": "Private Sector Banks",
+      "away_from": "Small Finance Banks",
+      "toward_tilt_pp": 3.41,
+      "children": 5
+    },
+    "cc-other-txn-vol-category-momentum": {
+      "entity_urn": "icl:atm_pos/spend_volume/cc_other_txn_vol",
+      "decomposition": null,
+      "mix_state": "steered",
+      "coherence": 1.0,
+      "toward": "Private Sector Banks",
+      "away_from": "Small Finance Banks",
+      "toward_tilt_pp": 3.59,
+      "children": 5
+    },
+    "cc-pos-txn-val-category-momentum": {
+      "entity_urn": "icl:atm_pos/spend_value/cc_pos_txn_val",
+      "decomposition": null,
+      "mix_state": "steered",
+      "coherence": 1.0,
+      "toward": "Public Sector Banks",
+      "away_from": "Private Sector Banks",
+      "toward_tilt_pp": 27.12,
+      "children": 5
+    },
+    "cc-pos-txn-vol-category-momentum": {
+      "entity_urn": "icl:atm_pos/spend_volume/cc_pos_txn_vol",
+      "decomposition": null,
+      "mix_state": "drifting",
+      "coherence": 0.9967,
+      "toward": "Small Finance Banks",
+      "away_from": "Public Sector Banks",
+      "toward_tilt_pp": 11.38,
+      "children": 5
+    },
+    "dc-atm-withdrawal-val-category-momentum": {
+      "entity_urn": "icl:atm_pos/spend_value/dc_atm_withdrawal_val",
+      "decomposition": null,
+      "mix_state": "steered",
+      "coherence": 1.0,
+      "toward": "Private Sector Banks",
+      "away_from": "Public Sector Banks",
+      "toward_tilt_pp": 16.07,
+      "children": 5
+    },
+    "dc-atm-withdrawal-vol-category-momentum": {
+      "entity_urn": "icl:atm_pos/spend_volume/dc_atm_withdrawal_vol",
+      "decomposition": null,
+      "mix_state": "drifting",
+      "coherence": 1.0,
+      "toward": "Private Sector Banks",
+      "away_from": "Public Sector Banks",
+      "toward_tilt_pp": 9.51,
+      "children": 5
+    },
+    "dc-ecom-txn-val-category-momentum": {
+      "entity_urn": "icl:atm_pos/spend_value/dc_ecom_txn_val",
+      "decomposition": null,
+      "mix_state": "contested",
+      "coherence": 0.8441,
+      "toward": null,
+      "away_from": null,
+      "toward_tilt_pp": null,
+      "children": 0
+    },
+    "dc-ecom-txn-vol-category-momentum": {
+      "entity_urn": "icl:atm_pos/spend_volume/dc_ecom_txn_vol",
+      "decomposition": null,
+      "mix_state": "contested",
+      "coherence": 0.8516,
+      "toward": null,
+      "away_from": null,
+      "toward_tilt_pp": null,
+      "children": 0
+    },
+    "dc-other-txn-val-category-momentum": {
+      "entity_urn": "icl:atm_pos/spend_value/dc_other_txn_val",
+      "decomposition": null,
+      "mix_state": "steered",
+      "coherence": 0.9972,
+      "toward": "Private Sector Banks",
+      "away_from": "Public Sector Banks",
+      "toward_tilt_pp": 12.49,
+      "children": 5
+    },
+    "dc-other-txn-vol-category-momentum": {
+      "entity_urn": "icl:atm_pos/spend_volume/dc_other_txn_vol",
+      "decomposition": null,
+      "mix_state": "contested",
+      "coherence": 0.6543,
+      "toward": null,
+      "away_from": null,
+      "toward_tilt_pp": null,
+      "children": 0
+    },
+    "dc-pos-txn-val-category-momentum": {
+      "entity_urn": "icl:atm_pos/spend_value/dc_pos_txn_val",
+      "decomposition": null,
+      "mix_state": "steered",
+      "coherence": 0.9918,
+      "toward": "Public Sector Banks",
+      "away_from": "Private Sector Banks",
+      "toward_tilt_pp": 6.86,
+      "children": 5
+    },
+    "dc-pos-txn-vol-category-momentum": {
+      "entity_urn": "icl:atm_pos/spend_volume/dc_pos_txn_vol",
+      "decomposition": null,
+      "mix_state": "contested",
+      "coherence": 0.5908,
+      "toward": null,
+      "away_from": null,
+      "toward_tilt_pp": null,
+      "children": 0
+    },
+    "dc-pos-withdrawal-val-category-momentum": {
+      "entity_urn": "icl:atm_pos/spend_value/dc_pos_withdrawal_val",
+      "decomposition": null,
+      "mix_state": "reallocating",
+      "coherence": 0.0853,
+      "toward": null,
+      "away_from": null,
+      "toward_tilt_pp": null,
+      "children": 0
+    },
+    "dc-pos-withdrawal-vol-category-momentum": {
+      "entity_urn": "icl:atm_pos/spend_volume/dc_pos_withdrawal_vol",
+      "decomposition": null,
+      "mix_state": "contested",
+      "coherence": 0.5332,
+      "toward": null,
+      "away_from": null,
+      "toward_tilt_pp": null,
+      "children": 0
+    },
+    "micro-atms-category-momentum": {
+      "entity_urn": "icl:atm_pos/infrastructure/micro_atms",
+      "decomposition": null,
+      "mix_state": "contested",
+      "coherence": 0.8306,
+      "toward": null,
+      "away_from": null,
+      "toward_tilt_pp": null,
+      "children": 0
+    },
+    "upi-qr-category-momentum": {
+      "entity_urn": "icl:atm_pos/infrastructure/upi_qr",
+      "decomposition": null,
+      "mix_state": "drifting",
+      "coherence": 1.0,
+      "toward": "Private Sector Banks",
+      "away_from": "Public Sector Banks",
+      "toward_tilt_pp": 1.1,
+      "children": 5
     }
   },
   "narrative": null

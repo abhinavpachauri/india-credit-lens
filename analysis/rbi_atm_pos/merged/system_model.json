@@ -222,6 +222,12 @@
       "data_series": null,
       "signal_ids": [
         "bharat-qr-abs",
+        "bharat-qr-category-acceleration",
+        "bharat-qr-category-allocation",
+        "bharat-qr-category-momentum",
+        "bharat-qr-category-share-scan",
+        "bharat-qr-category-size-scan",
+        "bharat-qr-category-yoy-scan",
         "bharat-qr-yoy"
       ],
       "annotation_ids": [],
@@ -257,7 +263,13 @@
       "data_series": null,
       "signal_ids": [
         "micro-atm-yoy",
-        "micro-atms-abs"
+        "micro-atms-abs",
+        "micro-atms-category-acceleration",
+        "micro-atms-category-allocation",
+        "micro-atms-category-momentum",
+        "micro-atms-category-share-scan",
+        "micro-atms-category-size-scan",
+        "micro-atms-category-yoy-scan"
       ],
       "annotation_ids": [],
       "description": "Micro ATMs — structural node (infrastructure micro_atms).",
@@ -340,6 +352,12 @@
       "signal_ids": [
         "upi-bharat-qr-ratio",
         "upi-qr-abs",
+        "upi-qr-category-acceleration",
+        "upi-qr-category-allocation",
+        "upi-qr-category-momentum",
+        "upi-qr-category-share-scan",
+        "upi-qr-category-size-scan",
+        "upi-qr-category-yoy-scan",
         "upi-qr-per-pos",
         "upi-qr-yoy"
       ],
@@ -376,6 +394,12 @@
       "data_series": null,
       "signal_ids": [
         "atm-offsite-abs",
+        "atm-offsite-category-acceleration",
+        "atm-offsite-category-allocation",
+        "atm-offsite-category-momentum",
+        "atm-offsite-category-share-scan",
+        "atm-offsite-category-size-scan",
+        "atm-offsite-category-yoy-scan",
         "atm-offsite-yoy"
       ],
       "annotation_ids": [],
@@ -411,6 +435,12 @@
       "data_series": null,
       "signal_ids": [
         "atm-onsite-abs",
+        "atm-onsite-category-acceleration",
+        "atm-onsite-category-allocation",
+        "atm-onsite-category-momentum",
+        "atm-onsite-category-share-scan",
+        "atm-onsite-category-size-scan",
+        "atm-onsite-category-yoy-scan",
         "atm-onsite-yoy"
       ],
       "annotation_ids": [],
@@ -543,7 +573,13 @@
       "signal_ids": [
         "cc-atm-val-abs",
         "cc-atm-val-share",
-        "cc-atm-val-yoy"
+        "cc-atm-val-yoy",
+        "cc-atm-withdrawal-val-category-acceleration",
+        "cc-atm-withdrawal-val-category-allocation",
+        "cc-atm-withdrawal-val-category-momentum",
+        "cc-atm-withdrawal-val-category-share-scan",
+        "cc-atm-withdrawal-val-category-size-scan",
+        "cc-atm-withdrawal-val-category-yoy-scan"
       ],
       "annotation_ids": [],
       "description": "CC ATM withdrawal value — structural node (spend_value cc_atm_withdrawal_val).",
@@ -577,6 +613,12 @@
       "data_section": null,
       "data_series": null,
       "signal_ids": [
+        "cc-ecom-txn-val-category-acceleration",
+        "cc-ecom-txn-val-category-allocation",
+        "cc-ecom-txn-val-category-momentum",
+        "cc-ecom-txn-val-category-share-scan",
+        "cc-ecom-txn-val-category-size-scan",
+        "cc-ecom-txn-val-category-yoy-scan",
         "cc-ecom-val-abs",
         "cc-ecom-val-share",
         "cc-ecom-val-yoy"
@@ -613,6 +655,12 @@
       "data_section": null,
       "data_series": null,
       "signal_ids": [
+        "cc-other-txn-val-category-acceleration",
+        "cc-other-txn-val-category-allocation",
+        "cc-other-txn-val-category-momentum",
+        "cc-other-txn-val-category-share-scan",
+        "cc-other-txn-val-category-size-scan",
+        "cc-other-txn-val-category-yoy-scan",
         "cc-other-val-abs",
         "cc-other-val-share",
         "cc-other-val-yoy"
@@ -649,6 +697,12 @@
       "data_section": null,
       "data_series": null,
       "signal_ids": [
+        "cc-pos-txn-val-category-acceleration",
+        "cc-pos-txn-val-category-allocation",
+        "cc-pos-txn-val-category-momentum",
+        "cc-pos-txn-val-category-share-scan",
+        "cc-pos-txn-val-category-size-scan",
+        "cc-pos-txn-val-category-yoy-scan",
         "cc-pos-val-abs",
         "cc-pos-val-share",
         "cc-pos-val-yoy"
@@ -687,7 +741,13 @@
       "signal_ids": [
         "dc-atm-val-abs",
         "dc-atm-val-share",
-        "dc-atm-val-yoy"
+        "dc-atm-val-yoy",
+        "dc-atm-withdrawal-val-category-acceleration",
+        "dc-atm-withdrawal-val-category-allocation",
+        "dc-atm-withdrawal-val-category-momentum",
+        "dc-atm-withdrawal-val-category-share-scan",
+        "dc-atm-withdrawal-val-category-size-scan",
+        "dc-atm-withdrawal-val-category-yoy-scan"
       ],
       "annotation_ids": [],
       "description": "DC ATM withdrawal value — structural node (spend_value dc_atm_withdrawal_val).",
@@ -721,6 +781,12 @@
       "data_section": null,
       "data_series": null,
       "signal_ids": [
+        "dc-ecom-txn-val-category-acceleration",
+        "dc-ecom-txn-val-category-allocation",
+        "dc-ecom-txn-val-category-momentum",
+        "dc-ecom-txn-val-category-share-scan",
+        "dc-ecom-txn-val-category-size-scan",
+        "dc-ecom-txn-val-category-yoy-scan",
         "dc-ecom-val-abs",
         "dc-ecom-val-share",
         "dc-ecom-val-yoy"
@@ -757,6 +823,12 @@
       "data_section": null,
       "data_series": null,
       "signal_ids": [
+        "dc-other-txn-val-category-acceleration",
+        "dc-other-txn-val-category-allocation",
+        "dc-other-txn-val-category-momentum",
+        "dc-other-txn-val-category-share-scan",
+        "dc-other-txn-val-category-size-scan",
+        "dc-other-txn-val-category-yoy-scan",
         "dc-other-val-abs",
         "dc-other-val-share",
         "dc-other-val-yoy"
@@ -793,6 +865,12 @@
       "data_section": null,
       "data_series": null,
       "signal_ids": [
+        "dc-pos-txn-val-category-acceleration",
+        "dc-pos-txn-val-category-allocation",
+        "dc-pos-txn-val-category-momentum",
+        "dc-pos-txn-val-category-share-scan",
+        "dc-pos-txn-val-category-size-scan",
+        "dc-pos-txn-val-category-yoy-scan",
         "dc-pos-val-abs",
         "dc-pos-val-share",
         "dc-pos-val-yoy"
@@ -830,6 +908,12 @@
       "data_series": null,
       "signal_ids": [
         "dc-pos-withdrawal-val-abs",
+        "dc-pos-withdrawal-val-category-acceleration",
+        "dc-pos-withdrawal-val-category-allocation",
+        "dc-pos-withdrawal-val-category-momentum",
+        "dc-pos-withdrawal-val-category-share-scan",
+        "dc-pos-withdrawal-val-category-size-scan",
+        "dc-pos-withdrawal-val-category-yoy-scan",
         "dc-pos-withdrawal-val-share",
         "dc-pos-withdrawal-val-yoy"
       ],
@@ -964,7 +1048,13 @@
         "cc-atm-vol-abs",
         "cc-atm-vol-share",
         "cc-atm-vol-streak",
-        "cc-atm-vol-yoy"
+        "cc-atm-vol-yoy",
+        "cc-atm-withdrawal-vol-category-acceleration",
+        "cc-atm-withdrawal-vol-category-allocation",
+        "cc-atm-withdrawal-vol-category-momentum",
+        "cc-atm-withdrawal-vol-category-share-scan",
+        "cc-atm-withdrawal-vol-category-size-scan",
+        "cc-atm-withdrawal-vol-category-yoy-scan"
       ],
       "annotation_ids": [],
       "description": "CC ATM withdrawal volume — structural node (spend_volume cc_atm_withdrawal_vol).",
@@ -998,6 +1088,12 @@
       "data_section": null,
       "data_series": null,
       "signal_ids": [
+        "cc-ecom-txn-vol-category-acceleration",
+        "cc-ecom-txn-vol-category-allocation",
+        "cc-ecom-txn-vol-category-momentum",
+        "cc-ecom-txn-vol-category-share-scan",
+        "cc-ecom-txn-vol-category-size-scan",
+        "cc-ecom-txn-vol-category-yoy-scan",
         "cc-ecom-vol-abs",
         "cc-ecom-vol-share",
         "cc-ecom-vol-yoy"
@@ -1034,6 +1130,12 @@
       "data_section": null,
       "data_series": null,
       "signal_ids": [
+        "cc-other-txn-vol-category-acceleration",
+        "cc-other-txn-vol-category-allocation",
+        "cc-other-txn-vol-category-momentum",
+        "cc-other-txn-vol-category-share-scan",
+        "cc-other-txn-vol-category-size-scan",
+        "cc-other-txn-vol-category-yoy-scan",
         "cc-other-vol-abs",
         "cc-other-vol-share",
         "cc-other-vol-yoy"
@@ -1070,6 +1172,12 @@
       "data_section": null,
       "data_series": null,
       "signal_ids": [
+        "cc-pos-txn-vol-category-acceleration",
+        "cc-pos-txn-vol-category-allocation",
+        "cc-pos-txn-vol-category-momentum",
+        "cc-pos-txn-vol-category-share-scan",
+        "cc-pos-txn-vol-category-size-scan",
+        "cc-pos-txn-vol-category-yoy-scan",
         "cc-pos-vol-abs",
         "cc-pos-vol-share",
         "cc-pos-vol-yoy"
@@ -1109,7 +1217,13 @@
         "dc-atm-vol-abs",
         "dc-atm-vol-share",
         "dc-atm-vol-streak",
-        "dc-atm-vol-yoy"
+        "dc-atm-vol-yoy",
+        "dc-atm-withdrawal-vol-category-acceleration",
+        "dc-atm-withdrawal-vol-category-allocation",
+        "dc-atm-withdrawal-vol-category-momentum",
+        "dc-atm-withdrawal-vol-category-share-scan",
+        "dc-atm-withdrawal-vol-category-size-scan",
+        "dc-atm-withdrawal-vol-category-yoy-scan"
       ],
       "annotation_ids": [],
       "description": "DC ATM withdrawal volume — structural node (spend_volume dc_atm_withdrawal_vol).",
@@ -1143,6 +1257,12 @@
       "data_section": null,
       "data_series": null,
       "signal_ids": [
+        "dc-ecom-txn-vol-category-acceleration",
+        "dc-ecom-txn-vol-category-allocation",
+        "dc-ecom-txn-vol-category-momentum",
+        "dc-ecom-txn-vol-category-share-scan",
+        "dc-ecom-txn-vol-category-size-scan",
+        "dc-ecom-txn-vol-category-yoy-scan",
         "dc-ecom-vol-abs",
         "dc-ecom-vol-share",
         "dc-ecom-vol-yoy"
@@ -1179,6 +1299,12 @@
       "data_section": null,
       "data_series": null,
       "signal_ids": [
+        "dc-other-txn-vol-category-acceleration",
+        "dc-other-txn-vol-category-allocation",
+        "dc-other-txn-vol-category-momentum",
+        "dc-other-txn-vol-category-share-scan",
+        "dc-other-txn-vol-category-size-scan",
+        "dc-other-txn-vol-category-yoy-scan",
         "dc-other-vol-abs",
         "dc-other-vol-share",
         "dc-other-vol-yoy"
@@ -1215,6 +1341,12 @@
       "data_section": null,
       "data_series": null,
       "signal_ids": [
+        "dc-pos-txn-vol-category-acceleration",
+        "dc-pos-txn-vol-category-allocation",
+        "dc-pos-txn-vol-category-momentum",
+        "dc-pos-txn-vol-category-share-scan",
+        "dc-pos-txn-vol-category-size-scan",
+        "dc-pos-txn-vol-category-yoy-scan",
         "dc-pos-vol-abs",
         "dc-pos-vol-share",
         "dc-pos-vol-yoy"
@@ -1252,6 +1384,12 @@
       "data_series": null,
       "signal_ids": [
         "dc-pos-withdrawal-vol-abs",
+        "dc-pos-withdrawal-vol-category-acceleration",
+        "dc-pos-withdrawal-vol-category-allocation",
+        "dc-pos-withdrawal-vol-category-momentum",
+        "dc-pos-withdrawal-vol-category-share-scan",
+        "dc-pos-withdrawal-vol-category-size-scan",
+        "dc-pos-withdrawal-vol-category-yoy-scan",
         "dc-pos-withdrawal-vol-share",
         "dc-pos-withdrawal-vol-streak",
         "dc-pos-withdrawal-vol-yoy"

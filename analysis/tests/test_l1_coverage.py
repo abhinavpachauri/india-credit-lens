@@ -57,7 +57,12 @@ def test_every_cut_can_state_a_share_of_something_published(stem):
     pipeline = REGISTRY[f"{stem}-momentum"]["pipeline"]
     if pipeline != "sibc":
         return          # a payments cut's parent IS its root — one share is the whole story
-    assert f"{stem}-share-of-credit-scan" in REGISTRY, f"{stem} cannot size itself against the book"
+    # EITHER denominator satisfies this — the assert used to demand share-of-root only,
+    # which contradicted this test's own docstring and failed the seven sub-cuts that
+    # carry a perfectly good share of their parent.
+    assert (f"{stem}-share-of-credit-scan" in REGISTRY
+            or f"{stem}-share-scan" in REGISTRY
+            or stem in NO_PARENT_TOTAL), f"{stem} cannot state a share of anything published"
 
 
 @pytest.mark.parametrize("stem", sorted(_cuts()))

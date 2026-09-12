@@ -5,7 +5,7 @@
     "schema_version": "4.0",
     "spec_ref": "analysis/SYSTEM_MODEL_SPEC.md §16",
     "computed_from": "signals.db",
-    "signals_observed": 128
+    "signals_observed": 156
   },
   "entity_states": {
     "icl:sibc/Statement1/I": {
@@ -107,8 +107,8 @@
     },
     "icl:sibc/Statement1/3.7": {
       "direction": 1,
-      "signals": 2,
-      "observed": 2
+      "signals": 6,
+      "observed": 6
     },
     "icl:sibc/Statement1/3.8": {
       "direction": 0,
@@ -117,8 +117,8 @@
     },
     "icl:sibc/Statement1/3.9": {
       "direction": 1,
-      "signals": 2,
-      "observed": 2
+      "signals": 6,
+      "observed": 6
     },
     "icl:sibc/Statement1/3.10": {
       "direction": 0,
@@ -247,8 +247,8 @@
     },
     "icl:sibc/Statement2/2.2": {
       "direction": 1,
-      "signals": 2,
-      "observed": 2
+      "signals": 6,
+      "observed": 6
     },
     "icl:sibc/Statement2/2.3": {
       "direction": 0,
@@ -257,8 +257,8 @@
     },
     "icl:sibc/Statement2/2.4": {
       "direction": 1,
-      "signals": 2,
-      "observed": 2
+      "signals": 6,
+      "observed": 6
     },
     "icl:sibc/Statement2/2.5": {
       "direction": 0,
@@ -282,8 +282,8 @@
     },
     "icl:sibc/Statement2/2.9": {
       "direction": 1,
-      "signals": 2,
-      "observed": 2
+      "signals": 6,
+      "observed": 6
     },
     "icl:sibc/Statement2/2.10": {
       "direction": 0,
@@ -302,13 +302,13 @@
     },
     "icl:sibc/Statement2/2.13": {
       "direction": 1,
-      "signals": 2,
-      "observed": 2
+      "signals": 6,
+      "observed": 6
     },
     "icl:sibc/Statement2/2.14": {
       "direction": 1,
-      "signals": 2,
-      "observed": 2
+      "signals": 6,
+      "observed": 6
     },
     "icl:sibc/Statement2/2.15": {
       "direction": 0,
@@ -926,6 +926,76 @@
       "away_from": null,
       "toward_tilt_pp": null,
       "children": 0
+    },
+    "sibc-trade-sub-momentum": {
+      "entity_urn": "icl:sibc/Statement1/3.7",
+      "decomposition": "Statement 1",
+      "mix_state": "steered",
+      "coherence": 1.0,
+      "toward": "Wholesale Trade",
+      "away_from": "Retail Trade",
+      "toward_tilt_pp": 15.89,
+      "children": 2
+    },
+    "sibc-nbfc-sub-momentum": {
+      "entity_urn": "icl:sibc/Statement1/3.9",
+      "decomposition": "Statement 1",
+      "mix_state": "steered",
+      "coherence": 1.0,
+      "toward": "Public Financial Institutions (PFIs)",
+      "away_from": "Housing Finance Companies (HFCs)",
+      "toward_tilt_pp": 31.79,
+      "children": 2
+    },
+    "sibc-basic-metal-sub-momentum": {
+      "entity_urn": "icl:sibc/Statement2/2.13",
+      "decomposition": "Statement 2",
+      "mix_state": "steered",
+      "coherence": 1.0,
+      "toward": "Iron and Steel",
+      "away_from": "Other Metal and Metal Product",
+      "toward_tilt_pp": 7.83,
+      "children": 2
+    },
+    "sibc-engineering-sub-momentum": {
+      "entity_urn": "icl:sibc/Statement2/2.14",
+      "decomposition": "Statement 2",
+      "mix_state": "steered",
+      "coherence": 1.0,
+      "toward": "Others",
+      "away_from": "Electronics",
+      "toward_tilt_pp": 8.43,
+      "children": 2
+    },
+    "sibc-food-processing-sub-momentum": {
+      "entity_urn": "icl:sibc/Statement2/2.2",
+      "decomposition": "Statement 2",
+      "mix_state": "steered",
+      "coherence": 0.9672,
+      "toward": "Edible Oils and Vanaspati",
+      "away_from": "Sugar",
+      "toward_tilt_pp": 13.66,
+      "children": 4
+    },
+    "sibc-textiles-sub-momentum": {
+      "entity_urn": "icl:sibc/Statement2/2.4",
+      "decomposition": "Statement 2",
+      "mix_state": "drifting",
+      "coherence": 1.0,
+      "toward": "Other Textiles",
+      "away_from": "Cotton Textiles",
+      "toward_tilt_pp": 14.61,
+      "children": 4
+    },
+    "sibc-chemicals-sub-momentum": {
+      "entity_urn": "icl:sibc/Statement2/2.9",
+      "decomposition": "Statement 2",
+      "mix_state": "drifting",
+      "coherence": 1.0,
+      "toward": "Fertiliser",
+      "away_from": "Others",
+      "toward_tilt_pp": 2.78,
+      "children": 4
     }
   },
   "narrative": null

@@ -103,6 +103,40 @@ It had not been asked for a reason worth recording: the registry held 229 comput
 could say industry grew 20.0% and could not say, from any stored value, that industry is
 ₹48 lakh crore — the number a reader starts from.
 
+### what counts as a cut — the coverage contract
+
+> Written **before** the entries this section requires (2026-09-12), which is the order the rule
+> asks for and the order the previous pass did not follow.
+
+A cut is **any parent whose parts the dashboard draws** — not only the seven credit dimensions and
+three payments groups that `MOVEMENT_CUTS` happens to name. That distinction was doing damage
+invisibly: `MOVEMENT_CUTS` is a table in the *card generator*, and coverage had been audited
+against it, so anything the dashboard rendered by another route was never checked at all.
+
+Audited 2026-09-12, two populations were half-covered:
+
+- **Seven SIBC sub-cuts** — trade, NBFC sub-types, basic metals, engineering, food processing,
+  textiles, chemicals. `buildSubCuts` draws every one (DASHBOARD_SPEC §15.6) and each carried
+  share and growth only: no size, no momentum, no pace, no allocation.
+- **Twenty-three payments metrics.** Only credit cards, debit cards and POS terminals had any
+  per-category signal, while the consolidated CSV carries per-bank rows for **all 26 metrics
+  across all 5 bank categories** — a registry gap, never a data gap.
+
+**The contract:** every cut carries all six families — size, share, growth, pace, momentum,
+allocation — so a table of its parts has no empty column for a reason nobody decided. Where a
+family is genuinely undefined for a cut, the reason is *declared and named* (PSL's share, see
+below), never left as an absence.
+
+**Registry coverage is not publication.** These families compute for every cut; which cuts earn a
+*card* is a separate, editorial decision that stays in each generator's `MOVEMENT_CUTS`. Widening
+compute must not widen the dashboard by side effect — the 2026-08-19 decision to watch the
+movement card rank before widening it still stands.
+
+**Layer 2 grows as a consequence, and that is expected.** `mix_states` selects on the momentum
+method, so a cut that gains momentum gains a mix state. That is the causal layer seeing more of
+the same system, not a new claim — but it is a downstream effect of an L1 change, so it is stated
+here rather than discovered later.
+
 ### size — how big each part is
 `csv_sector_scan_abs` (SIBC) · `csv_category_scan_abs` (ATM/POS). METHOD_TYPE: `scan`.
 
@@ -341,6 +375,23 @@ Emitted by `momentum`, consumed by `allocation`. Not its own registry signal.
 - **`coherence_min` default `0.90` is a SENTENCE-SELECTOR, not a publish switch.** Its only
   justification is the bound (no share beyond +/-111%). Per the standing AI PM rule it still ships
   with a measured catch / false-rejection rate — but nothing is silenced while that is pending.
+- **A share above 100% is ORDINARY, and the guard that said otherwise was wrong (2026-09-12).**
+  `alloc` divides by the NET, so when one part shrinks another can account for more than the whole
+  net increase. Check 2e B6 spent three days asserting "a share cannot exceed the whole" — false
+  for a net denominator, and contradicted by the two lines above it. It stayed quiet only because
+  none of the 134 windows then in the store landed between 100% and 111%; at 520 windows, 30 did,
+  and it fired on **100.003%**, where one category took all of the growth and two others shrank by
+  a rounding whisker. **No threshold repairs it** — measured over 648 windows, `coherence_min` at
+  1.00 still leaks 5 while withholding 62% of them. B6 now asserts the bound itself
+  (`|share| <= 100 / coherence`), which is the provable property AND the one that justifies the
+  threshold. Negative-tested three ways: an invented 137% at low coherence still fails; 105% where
+  the bound allows it now passes; an `alloc` row with no coherence row to bound it fails rather
+  than passing silently.
+- **"Reads as impossible" is a PROSE problem, not a storage one.** The real concern inside the old
+  B6 — that *"of every Rs 100, telecoms took Rs 137"* reads as a bug to a reader — is legitimate
+  and belongs in the card layer beside the pairing rule and the router table, where sentences are
+  decided. A guard over stored values is the wrong place to enforce it, and enforcing it there
+  suppressed true numbers.
 - **Report net and gross always; never "flag" their divergence.** A footnote that fires
   occasionally gets ignored; two totals side by side are self-explanatory.
 
