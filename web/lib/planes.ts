@@ -58,6 +58,23 @@ export interface ReadModeModel {
 
 const READ_FLOOR = 2.0;       // mirrors is_news.READ_FLOOR — a read must clear one strong factor
 
+/**
+ * Planes that no longer render in read mode (DASHBOARD_SPEC §18).
+ *
+ * Once §17's table exists, a SUBJECT card is a table cell written out as a sentence —
+ * "Large corporates at 67.3% — down 0.18pp" is a row, and a row reads better. Fifty of the
+ * ninety-six SIBC cards are that.
+ *
+ * READS are deliberately NOT here. "Fastest in 11 periods" is a judgement about the series,
+ * not a value at a period; the table structurally cannot say it. The card is the right unit
+ * for news, the table for state — hiding the reads would leave a dashboard that says what is
+ * true and never what is new.
+ *
+ * DISPLAY ONLY. Every card is still generated, gated and shipped; Explore still shows all of
+ * them, because Explore's purpose is the full inventory. Reversed by emptying this set.
+ */
+export const HIDDEN_PLANES: ReadonlySet<CardPlane["plane"]> = new Set(["subject"]);
+
 /** Every insight + gap on a section (opportunities are the Deep plane, joined separately). */
 function sectionCards(section: ReportSection): Annotation[] {
   return [
@@ -94,17 +111,21 @@ export function organizeReadMode(report: Report, planes: PlanesMap): ReadModeMod
       }
       if (p.plane === "composition") compositionCards.push(card);
 
-      // Every card is addressable in the accordion regardless of plane (nothing hidden).
+      // §18: the subject plane no longer renders here — the table says it better. Explore
+      // still carries every card, so nothing becomes unreachable.
+      if (HIDDEN_PLANES.has(p.plane)) continue;
       const subj = p.subject ?? card.effect?.highlight?.[0] ?? "";
       if (!bySubject.has(subj)) bySubject.set(subj, []);
       bySubject.get(subj)!.push(card);
     }
 
+    const shown = [...bySubject.values()].reduce((n, c) => n + c.length, 0);
     sections.push({
       section,
       subjects: [...bySubject.entries()].map(([name, cards]) => ({ name, cards })),
       compositionCards,
-      cardCount: cards.length,
+      // What is SHOWN, not what exists: a tile reading "27 insights" over a rail of nine lies.
+      cardCount: shown,
     });
   }
 

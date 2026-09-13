@@ -1432,3 +1432,44 @@ The sidecar is freshness-guarded with `--check` like every other derived artifac
 No Layer 2 in the table — no forces, no gaps, no divergence flags. Layer 1 first, deliberately.
 Row expansion shows the readings and nothing else. §16's band above the table is the only L2 on
 the surface, and it was already there.
+
+---
+
+## 18. Which cards still earn a place (2026-09-13)
+
+Once §17's table exists, most cards are a table row written out as a sentence. Measured over
+the 96 live SIBC cards, by whether the card's entity is a row in some table:
+
+| plane | cards | what it says | does the table say it? |
+|---|---|---|---|
+| **subject** | 50 | *"Large corporates at 67.3% — down 0.18pp"* | **Yes** — that is a cell |
+| **read** | 29 | *"Services at 22.94% YoY — fastest in 11 periods"* | **No** |
+| **composition** | 17 | 9 share rows · 8 FY step-ups | **Partly** |
+| **gap** | 6 | *"RBI does not break this down"* | **No** — not a number |
+
+### The decision: the SUBJECT plane stops rendering in read mode
+
+A sentence is a worse way to read a cell than a cell is. Fifty cards go; the rail drops from
+96 to 46.
+
+**The reads stay, and that is the load-bearing half of this decision.** *"Highest on record"*,
+*"fastest in 11 periods"*, *"first growth in 11 periods"* are judgements about the SERIES, not
+values at a period — `is_news`, which the table structurally cannot express. The card is the
+right unit for news; the table is the right unit for state. Dropping the reads would leave a
+dashboard that says what is true and never what is new.
+
+**Gaps and FY cards stay** for the same reason in a different form: a gap is not a number, and
+an FY step-up compares two years where the table's Run column compares months. Neither has a
+column to live in.
+
+### Rules
+
+- **Display only.** Every card is still generated, gated, traced and shipped. This hides them
+  from one surface; it deletes nothing and is reversed by a constant.
+- **Explore is untouched and keeps everything.** Explore's purpose IS the full inventory —
+  curating it would leave no surface where every card is reachable.
+- **The dimension badge counts what is SHOWN.** A tile reading "27 insights" over a rail of
+  nine is a tile that lies.
+- **Hidden is not gone.** The plane is a rendering decision; if a future reader needs the
+  subject prose, the constant is one line.
+

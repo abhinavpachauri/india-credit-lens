@@ -11,7 +11,7 @@ import {
   type AtmPosSeries, type FilterState, type SectionDef,
 } from "@/lib/atm_pos_data";
 import type { AtmPosInsight } from "@/lib/atm_pos_insights";
-import type { PlanesMap } from "@/lib/planes";
+import { HIDDEN_PLANES, type PlanesMap } from "@/lib/planes";
 import type { StateMap } from "@/lib/state";
 import { hasDeepReading } from "@/lib/opportunities";
 import DeepReading from "./DeepReading";
@@ -70,13 +70,18 @@ export default function AtmReadMode(
       const order: string[] = [];
       const bySubject = new Map<string, RMCard[]>();
       for (const i of gi) {
+        // §18 — the same curation the credit adapter applies, from the same constant rather
+        // than a second copy of the rule. Explore still lists every card.
+        if (HIDDEN_PLANES.has(plane(i.id) as "read" | "composition" | "subject")) continue;
         const name = SECTION_DEFS.find((d) => d.id === i.effect.focusCard)?.title ?? "";
         if (!bySubject.has(name)) { bySubject.set(name, []); order.push(name); }
         bySubject.get(name)!.push(toCard(i));
       }
+      const shown = [...bySubject.values()].reduce((n, c) => n + c.length, 0);
       return {
         id: g, title: GROUP_LABELS[g], icon: GROUP_ICONS[g], color: GROUP_ACCENT[g],
-        cardCount: gi.length, moved: gi.filter((i) => plane(i.id) === "read").length,
+        // What is SHOWN, not what exists (§18).
+        cardCount: shown, moved: gi.filter((i) => plane(i.id) === "read").length,
         subjects: order.map((name) => ({ name, cards: bySubject.get(name)! })),
         compositionTitles: gi.filter((i) => plane(i.id) === "composition").map((i) => i.title),
       };
