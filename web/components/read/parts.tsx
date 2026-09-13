@@ -74,6 +74,7 @@ export const STYLE = `
 .rm-strip::-webkit-scrollbar{display:none}
 .rm-link{transition:color .12s ease}
 .rm-link:hover{color:var(--font)}
+.rm-row:hover{background:var(--sel)}
 `;
 
 export const PANEL: React.CSSProperties = {
@@ -120,8 +121,8 @@ export function ReadCard({ read, selected, onClick }: { read: RMRead; selected: 
   );
 }
 
-export function DimensionCard({ dim, state = [], topRead, tables = 0, onClick }:
-  { dim: RMDimension; state?: StateBlock[]; topRead?: RMRead | null; tables?: number; onClick: () => void }) {
+export function DimensionCard({ dim, state = [], reads = [], tables = 0, onClick }:
+  { dim: RMDimension; state?: StateBlock[]; reads?: RMRead[]; tables?: number; onClick: () => void }) {
   const col = dim.color;
   return (
     <button onClick={onClick} className="rm-card rm-tile text-left rounded-xl h-full flex flex-col"
@@ -139,35 +140,76 @@ export function DimensionCard({ dim, state = [], topRead, tables = 0, onClick }:
                   <span style={{ color: col }}>{b.speed_dir === "down" ? "▼" : "▲"} </span>{b.speed_short}
                 </div>
               )}
+              {/* The mix, or the DECLARED reason there is none (§16): a tile that quietly
+                  drops the line makes a dimension with nothing to steer look like one that
+                  failed to load. */}
               {tileMix(b)
                 ? <div style={{ color: "var(--font-muted)" }}>⇢ {tileMix(b)}</div>
-                : !b.speed_short && <div style={{ color: "var(--font-muted)" }}>⇢ no mix at this level</div>}
+                : <div style={{ color: "var(--font-muted)", fontStyle: "italic" }}>
+                    — {b.no_mix_note ?? "no mix at this level"}
+                  </div>}
             </div>
           ))}
         </div>
       )}
-      {/* §20 — the ONE new thing, where it can be acted on. A pooled grid of five reads above
-          seven tiles was the same news twice, ranked by a score the reader cannot see; a tile
-          that carries its own says which dimension is worth opening this month. */}
-      {topRead && (
-        <div className="mt-2.5 flex items-baseline gap-1.5" style={{ fontSize: FS.note, lineHeight: 1.45 }}>
-          <span style={{ color: col }}>{glyph(topRead.direction)}</span>
-          <span style={{ color: "var(--font)" }}>{topRead.title}</span>
+      {/* §20 — this dimension's OWN news, up to three, where it can be acted on. A pooled
+          grid of five reads above seven tiles was the same news twice, ranked by a score the
+          reader cannot see. A dimension with one read shows one and says so: a padded tile and
+          a quiet month look identical otherwise, and Services being quiet IS the news when its
+          mix is the one being steered hardest. */}
+      {reads.length > 0 && (
+        <div className="mt-3 flex flex-col gap-1.5">
+          {reads.map((r) => (
+            <div key={r.id} className="flex items-baseline gap-1.5" style={{ fontSize: FS.note, lineHeight: 1.45 }}>
+              <span style={{ color: col }}>{glyph(r.direction)}</span>
+              <span style={{ color: "var(--font)" }}>{r.title}</span>
+            </div>
+          ))}
         </div>
       )}
       <div className="flex items-center gap-2 mt-auto pt-3">
         {tables > 0 && (
           <span style={{ fontSize: FS.note, color: "var(--font-muted)" }}>
-            {tables} table{tables > 1 ? "s" : ""}
+            {tables} table{tables > 1 ? "s" : ""} ·
           </span>
         )}
-        {dim.cardCount > 0 && (
-          <span style={{ fontSize: FS.note, fontWeight: dim.moved > 0 ? 600 : 400,
-                         color: dim.moved > 0 ? col : "var(--font-muted)" }}>
-            {dim.cardCount} notable
-          </span>
+        <span style={{ fontSize: FS.note, fontWeight: dim.moved > 0 ? 600 : 400,
+                       color: dim.moved > 0 ? col : "var(--font-muted)" }}>
+          {dim.cardCount} notable →
+        </span>
+      </div>
+    </button>
+  );
+}
+
+/** The same dimension, compressed (§20 state B). The tile's grid becomes a rail, so the rail
+ *  IS the dimension switcher and the chip strip is gone — two switchers for one nav was the
+ *  §14.8 mistake, re-made. */
+export function RailItem({ dim, state = [], selected, onClick }:
+  { dim: RMDimension; state?: StateBlock[]; selected: boolean; onClick: () => void }) {
+  const col = dim.color;
+  const b = state[0];
+  return (
+    <button onClick={onClick} className={`rm-flat w-full text-left rounded-lg${selected ? " sel" : ""}`}
+            style={{ ...vars(col, tint(col, 0.1)), padding: "10px 12px",
+                     borderLeft: `3px solid ${selected ? col : "transparent"}` }}>
+      <div className="flex items-baseline gap-2">
+        <span style={{ fontSize: FS.body }}>{dim.icon}</span>
+        <span style={{ fontSize: FS.body, fontWeight: selected ? 700 : 600, color: "var(--font)" }}>{dim.title}</span>
+        {dim.moved > 0 && (
+          <span className="ml-auto" style={{ fontSize: FS.meta, fontWeight: 600, color: col }}>▲ {dim.moved}</span>
         )}
       </div>
+      {b?.speed_short && (
+        <div style={{ fontSize: FS.meta, color: "var(--font-muted)", marginTop: 3 }}>
+          {b.speed_dir === "down" ? "▼" : "▲"} {b.speed_short}
+        </div>
+      )}
+      {!b?.speed_short && b?.no_speed_note && (
+        <div style={{ fontSize: FS.meta, color: "var(--font-muted)", marginTop: 3, fontStyle: "italic" }}>
+          — {b.no_speed_note}
+        </div>
+      )}
     </button>
   );
 }
@@ -292,64 +334,80 @@ const COL_LABEL: Record<ColKey, string> = {
   growth: "Growth", pace: "Pace", new: "New",
 };
 
+/** Which cell a chart is open on. The table no longer owns this: the chart is a COLUMN of
+ *  the page (§20 state C), not an overlay on the table, so the shell holds it and the table
+ *  is told what is lit. `stem` because a nested sub-cut is its own table. */
+export interface CellRef { stem: string; entity: string | null; col: ColKey }
+
 /**
  * The chart behind a cell (§20). Every cell is the latest reading of a stored series, so a
  * cell opens into its own history — which is why the sparkline column and the Numbers/Chart
  * toggle are both gone: one was this series printed as text, the other asked the reader to
  * leave the table to see it.
  *
+ * It takes the width the RAIL gave up when the reader opened a row, so nothing is hidden
+ * behind it. The columns are tabs inside it, which is what makes "click a row" and "click a
+ * number" the same gesture landing on different tabs.
+ *
  * `compare` overlays a sibling from the same cut and the same column — the one thing a table
  * genuinely cannot do, and the only overlay where the units and the depth match.
  */
-function CellPanel({ table, row, col, color, onClose }: {
+export function CellPanel({ table, cell, color, flowLabel, onPick, onClose }: {
   table: import("@/lib/table").CutTable;
-  row: import("@/lib/table").CutRow;
-  col: ColKey; color: string; onClose: () => void;
+  cell: CellRef; color: string; flowLabel?: string;
+  onPick: (col: ColKey) => void;
+  onClose: () => void;
 }) {
   const [compare, setCompare] = React.useState<string[]>([]);
-  const own = cellSeries(table, row, col);
-  const who = row.entity ?? "the cut";
-  const siblings = table.parts.filter((p) => p.entity && p.entity !== row.entity && p[col]?.series);
+  React.useEffect(() => setCompare([]), [cell.entity, cell.stem]);
 
-  // One row per period; one key per compared entity. Labels come from the sidecar, so the
-  // axis is a published string like everything else here.
+  const row = cell.entity === null ? table.total : table.parts.find((p) => p.entity === cell.entity);
+  const own = row ? cellSeries(table, row, cell.col) : [];
+  const who = cell.entity ?? table.cut;
+  const siblings = table.parts.filter((p) => p.entity && p.entity !== cell.entity && p[cell.col]?.series);
+  const cols = COLUMNS.filter((c) => row?.[c]?.series && (row[c]!.series as unknown[]).length > 1);
+
   const data = own.map((pt, i) => {
     const point: Record<string, string | number | null> = { label: pt.label, [who]: pt.value };
     for (const name of compare) {
-      const s = cellSeries(table, siblings.find((p) => p.entity === name)!, col);
-      point[name!] = s[i]?.label === pt.label ? s[i].value : null;
+      const sib = siblings.find((p) => p.entity === name);
+      const s = sib ? cellSeries(table, sib, cell.col) : [];
+      point[name] = s[i]?.label === pt.label ? s[i].value : null;
     }
     return point;
   });
   const lines = [who, ...compare];
 
-  React.useEffect(() => {
-    const esc = (e: KeyboardEvent) => e.key === "Escape" && onClose();
-    window.addEventListener("keydown", esc);
-    return () => window.removeEventListener("keydown", esc);
-  }, [onClose]);
+  // NB no Escape handler here. The SHELL owns the state stack (A/B/C) and pops exactly one
+  // level per press; a second listener in this panel meant one Esc popped two levels, which
+  // is what a reader experiences as the page jumping.
 
   return (
-    <div className="fixed z-40 inset-x-0 bottom-0 lg:top-[68px] lg:bottom-0 lg:inset-x-auto lg:right-0 lg:w-[440px]"
-         style={{ background: "var(--bg-card)", borderTop: "1px solid var(--border-card)",
-                  borderLeft: "1px solid var(--border-card)", boxShadow: "0 -6px 24px var(--shadow)",
-                  maxHeight: "82vh", overflowY: "auto", padding: 18 }}>
+    <div style={{ ...PANEL, padding: 16, position: "sticky", top: 12 }}>
       <div className="flex items-start justify-between gap-3">
-        <div>
-          <div style={{ ...EYEBROW, color }}>{COL_LABEL[col]}</div>
-          <div style={{ fontSize: FS.card, fontWeight: 700, color: "var(--font)", lineHeight: 1.25 }}>{who}</div>
-        </div>
-        <button onClick={onClose} className="rm-link" aria-label="close"
+        <div style={{ fontSize: FS.card, fontWeight: 700, color: "var(--font)", lineHeight: 1.25 }}>{who}</div>
+        <button onClick={onClose} className="rm-link shrink-0" aria-label="close chart"
                 style={{ fontSize: GLYPH.arrow, color: "var(--font-muted)", lineHeight: 1 }}>✕</button>
       </div>
 
-      <div style={{ height: 200, marginTop: 14 }}>
+      {/* The columns as tabs — so clicking a ROW and clicking a NUMBER are one gesture that
+          lands on different tabs. A column this row has no history for is simply not offered. */}
+      <div className="flex flex-wrap gap-1.5 mt-3">
+        {cols.map((c) => (
+          <button key={c} onClick={() => onPick(c)} className="rounded-full transition-colors"
+                  style={{ fontSize: FS.meta, padding: "4px 10px", ...chipStyle(c === cell.col) }}>
+            {c === "new" ? (flowLabel ?? "New") : COL_LABEL[c]}
+          </button>
+        ))}
+      </div>
+
+      <div style={{ height: 190, marginTop: 12 }}>
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={data} margin={{ top: 6, right: 8, left: -12, bottom: 0 }}>
+          <LineChart data={data} margin={{ top: 6, right: 8, left: -14, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="var(--border-card)" />
             <XAxis dataKey="label" tick={{ fontSize: FS.micro, fill: "var(--font-muted)" }}
                    interval="preserveStartEnd" />
-            <YAxis tick={{ fontSize: FS.micro, fill: "var(--font-muted)" }} width={52} />
+            <YAxis tick={{ fontSize: FS.micro, fill: "var(--font-muted)" }} width={50} />
             <Tooltip contentStyle={{ background: "var(--bg-card)", border: "1px solid var(--border-card)",
                                      borderRadius: R.sm, fontSize: FS.note }} />
             {lines.map((name, i) => (
@@ -406,38 +464,50 @@ export interface CutTableProps {
   color: string;
   /** Named because a share is meaningless without it (§15). Omitted when the cut has none. */
   bookLabel?: string;
-  footer?: string;             // e.g. the main-sectors residual
+  footer?: string;
+  /** The chart lives in the shell, so the table reports clicks and is told what is lit. */
+  active?: CellRef | null;
+  onPickCell?: (ref: CellRef) => void;
 }
 
-export function CutTable({ table, title, color, bookLabel, footer, all, depth = 0 }: CutTableProps) {
+/** What a row opens on when the reader clicks the ROW rather than one of its numbers.
+ *  Growth, because that is the question a reader is asking when they click a sector — the
+ *  size is already on the line in front of them. */
+const ROW_DEFAULT: ColKey[] = ["growth", "size", "of_cut", "new", "pace", "of_book"];
+
+export function CutTable({ table, title, color, bookLabel, footer, all, depth = 0,
+                          active, onPickCell }: CutTableProps) {
   // Default size, descending: the reader's model is "biggest first", and a growth-sorted
   // table opens with the smallest book on the page.
   const [sort, setSort] = React.useState<{ key: SortKey; dir: SortDir }>({ key: "size", dir: "desc" });
   const [open, setOpen] = React.useState<string | null>(null);
-  const [cell, setCell] = React.useState<{ entity: string | null; col: ColKey } | null>(null);
   const parts = sortPartsMemo(table.parts, sort.key, sort.dir);
   const cols = COLUMNS.filter((c) => c !== "of_book" || table.parts.some((p) => p.of_book));
   const label = (c: ColKey) => (c === "new" ? (table.flow_label ?? "New") : COL_LABEL[c]);
+  const lit = (row: import("@/lib/table").CutRow, c?: ColKey) =>
+    active?.stem === table.cut && active.entity === row.entity && (!c || active.col === c);
 
   function pickSort(key: SortKey) {
     setSort((s) => s.key === key ? { key, dir: s.dir === "desc" ? "asc" : "desc" } : { key, dir: "desc" });
   }
-  const openRow = cell && (cell.entity === null ? table.total
-                                                : table.parts.find((p) => p.entity === cell.entity));
+  function pickRow(row: import("@/lib/table").CutRow, col?: ColKey) {
+    const has = (c: ColKey) => (row[c]?.series?.length ?? 0) > 1;
+    const c = col && has(col) ? col : ROW_DEFAULT.find(has);
+    if (c && onPickCell) onPickCell({ stem: table.cut, entity: row.entity, col: c });
+  }
 
   function numeric(row: import("@/lib/table").CutRow, c: ColKey) {
     const v = row[c];
     if (!v) return <td key={c} style={NUM}>{DASH}</td>;
-    const live = v.series && v.series.length > 1;
-    const on = cell?.entity === row.entity && cell?.col === c;
+    const live = (v.series?.length ?? 0) > 1;
     return (
       <td key={c} style={{ ...NUM, cursor: live ? "pointer" : "default",
-                           background: on ? tint(color, 0.16) : undefined,
-                           borderRadius: on ? R.sm : undefined,
+                           background: lit(row, c) ? tint(color, 0.18) : undefined,
+                           borderRadius: lit(row, c) ? R.sm : undefined,
                            textDecoration: live ? "underline" : undefined,
                            textDecorationColor: live ? tint(color, 0.4) : undefined,
                            textUnderlineOffset: 3 }}
-          onClick={live ? (e) => { e.stopPropagation(); setCell(on ? null : { entity: row.entity, col: c }); } : undefined}>
+          onClick={live ? (e) => { e.stopPropagation(); pickRow(row, c); } : undefined}>
         {v.display}
       </td>
     );
@@ -446,7 +516,7 @@ export function CutTable({ table, title, color, bookLabel, footer, all, depth = 
   return (
     <div>
       <div style={{ overflowX: "auto" }}>
-      <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 560 }}>
+      <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 520 }}>
         <thead>
           <tr>
             <th style={{ ...HEAD, textAlign: "left" }}>Part</th>
@@ -464,7 +534,9 @@ export function CutTable({ table, title, color, bookLabel, footer, all, depth = 
         </thead>
         <tbody>
           {/* the cut's own row — pinned, never sorted: it is the denominator, not a competitor */}
-          <tr style={{ borderTop: `2px solid ${color}`, borderBottom: "1px solid var(--border-card)" }}>
+          <tr className="rm-row" onClick={() => pickRow(table.total)}
+              style={{ borderTop: `2px solid ${color}`, borderBottom: "1px solid var(--border-card)",
+                       cursor: "pointer", background: lit(table.total) ? tint(color, 0.07) : undefined }}>
             <td style={{ ...NUM, textAlign: "left", fontWeight: 700 }}>{title}</td>
             {cols.map((c) => numeric(table.total, c))}
           </tr>
@@ -473,12 +545,13 @@ export function CutTable({ table, title, color, bookLabel, footer, all, depth = 
             const isOpen = open === p.entity;
             return (
               <React.Fragment key={p.entity ?? "_"}>
-                <tr style={{ ...vars(color, tint(color, 0.07)),
-                             background: isOpen ? tint(color, 0.07) : undefined }}>
+                <tr className="rm-row" onClick={() => pickRow(p)}
+                    style={{ ...vars(color, tint(color, 0.07)), cursor: "pointer",
+                             background: lit(p) ? tint(color, 0.12) : isOpen ? tint(color, 0.07) : undefined }}>
                   <td style={{ ...NUM, textAlign: "left" }}>
                     {nested ? (
-                      <button onClick={() => setOpen(isOpen ? null : p.entity)} className="rm-link"
-                              style={{ font: "inherit", color: "inherit" }}>
+                      <button onClick={(e) => { e.stopPropagation(); setOpen(isOpen ? null : p.entity); }}
+                              className="rm-link" style={{ font: "inherit", color: "inherit" }}>
                         <span style={{ color, fontWeight: 700 }}>{isOpen ? "▾" : "▸"}</span> {p.entity}
                       </button>
                     ) : p.entity}
@@ -498,7 +571,7 @@ export function CutTable({ table, title, color, bookLabel, footer, all, depth = 
                           Inside {p.entity} · shares below are of {p.entity}
                         </div>
                         <CutTable table={nested} title={p.entity ?? ""} color={color}
-                                  all={all} depth={depth + 1} />
+                                  all={all} depth={depth + 1} active={active} onPickCell={onPickCell} />
                       </div>
                     </td>
                   </tr>
@@ -511,16 +584,12 @@ export function CutTable({ table, title, color, bookLabel, footer, all, depth = 
       </div>
 
       <p style={{ fontSize: FS.note, color: "var(--font-muted)", marginTop: 8 }}>
-        {table.parts.length} parts · every underlined number opens its own chart · sort by any column
+        {table.parts.length} parts · click any row to chart it · sort by any column
       </p>
       {footer && (
         <p style={{ fontSize: FS.note, color: "var(--font-muted)", marginTop: 6, lineHeight: 1.5 }}>
           {footer}
         </p>
-      )}
-      {cell && openRow && (
-        <CellPanel table={table} row={openRow} col={cell.col} color={color}
-                   onClose={() => setCell(null)} />
       )}
     </div>
   );

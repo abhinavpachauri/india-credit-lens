@@ -1598,6 +1598,40 @@ The state band stays pinned to the group's anchor cut while the filter moves. Th
 only because §16's sentences name their own subject — *"Credit cards in force growing 9.9%"*
 cannot be misread as describing the e-commerce table beneath it.
 
+### The three states (user, 2026-09-13) — the navigation this settles
+
+```
+   A  every dimension as a tile, each carrying up to three of its OWN reads
+   B  click a tile   — the tiles compress into a 300px rail, the dimension opens beside it
+   C  click a row    — the rail collapses to ☰ and the chart takes the width it gave up
+```
+
+**Each close pops exactly one level**: ✕ on the chart returns to B with the rail restored, ✕ on
+the dimension returns to A, and Esc does the same. ☰ slides the rail back over as an overlay so a
+reader can change dimension without giving up the chart they opened.
+
+**The chart is a COLUMN, not an overlay.** It occupies exactly the width the rail released, so
+nothing is hidden behind it and the table it was opened from stays readable. That is the one
+structural difference from the first cut of §20, where the panel slid over the table's right edge.
+
+**A row click and a number click are the same gesture**, landing on different tabs: the six columns
+are tabs inside the panel, and a row opens on `growth` — what a reader is asking when they click a
+sector, since the size is already on the line in front of them.
+
+**The rail is the dimension switcher, so the chip strip is deleted.** Two switchers for one nav was
+the §14.8 mistake, re-made.
+
+**The tile carries up to three reads and no more.** A dimension with one shows one and says so: a
+padded tile and a quiet month look identical otherwise, and Services being quiet IS the news in a
+month when its mix is the one being steered hardest.
+
+### A dimension with no table says why
+
+Bank Credit owns no cut — it IS the top level, and its only split is food vs non-food, an accounting
+line rather than a mix anyone steers. So its pane shows the state band, a declared `noTableNote`,
+and **the series itself**; the sectors are one level down in Main Sectors. The note is deliberately
+NOT a restatement of the band's own no-mix sentence directly above it.
+
 ### Decisions (user, 2026-09-13)
 
 1. **SIBC nests; payments filters.** A real inconsistency, accepted deliberately: one pipeline is

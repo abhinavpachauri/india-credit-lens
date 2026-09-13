@@ -30,6 +30,15 @@ import { FS } from "@/lib/tokens";
  *  chart stays. Declared, never inferred from a label.
  */
 const SIBC_CUTS: Record<string, CutRef[]> = {
+  // No table, and the reason is DECLARED — a pane that simply has none reads as broken, the
+  // same argument §16 makes for the state band's absent rows.
+  bankCredit: [{
+    stem: "sibc-bank-credit", title: "Bank credit",
+    // Deliberately does NOT restate the band's own no-mix sentence directly above it: two
+    // near-identical sentences stacked read as a stutter, not as emphasis.
+    noTableNote: "So there is nothing here to decompose — this dimension shows the series "
+      + "itself, and the sectors are one level down, in Main Sectors.",
+  }],
   mainSectors: [{
     stem: "sibc-main", title: "Main sectors", bookLabel: "of book",
     // The four sectors do not add up to non-food credit, and RBI attributes the difference
