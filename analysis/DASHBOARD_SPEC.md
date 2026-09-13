@@ -1516,26 +1516,25 @@ inside the other, with the relationship visible rather than implied.
 
 ---
 
-## 20. One table per dimension (v0.1 — DRAFT, NOT approved, 2026-09-13) ⛔
+## 20. One table per dimension (v1.0 — approved 2026-09-13, BUILT) ⭐
 
-> **Nothing here is built.** ASCII awaiting approval per the CLAUDE.md authoring rule. This is
-> the shape §17–§19 should be refactored into, raised by the user after seeing them live.
+> ASCII approved in session before any code, per the CLAUDE.md authoring rule.
 
 ### The problem with §17 as shipped
 
-**The table repeats.** Select any card in a dimension's rail and the detail pane redraws the same
-table with different prose beside it. The table is the constant and the cards are the variable,
-and the layout has that backwards. Payments is worse: a group is many measures over the same
+**The table repeated.** Select any card in a dimension's rail and the detail pane redrew the same
+table with different prose beside it. The table was the constant and the cards the variable, and
+the layout had that backwards. Payments was worse: a group is many measures over the same
 entities, so §17 stacked six to eleven tables in one pane.
 
-### What the data affords, and it decides the design
+### What the data affords, and it decided the design
 
-**Every cell is the latest reading of a stored series.** Verified: size, of-cut, of-book, growth,
-pace and new-money each carry 11 periods for every entity. The table is not a grid of numbers —
-it is the top of 6 x N series.
+**Every cell is the latest reading of a stored series.** Verified in the store, not assumed — and
+the verification changed the design: **a column's depth is its own.** Payments carries 31 readings
+of a level and 19 of its YoY, because a year-on-year rate cannot exist until a year has passed.
 
-So a cell can open its own chart, the `Run` column becomes redundant (it was one series' history
-printed as text), and the `[Numbers]/[Chart]` toggle is subsumed.
+So a cell opens its own chart, the `Run` column disappears (it was one series printed as text),
+and the `[Numbers]/[Chart]` toggle is subsumed.
 
 ### SIBC — one table, insights below, chart in a side panel
 
@@ -1545,10 +1544,9 @@ printed as text), and the `[Numbers]/[Chart]` toggle is subsumed.
  │ mix    Drifting toward Medium — took 14.0% of the growth while holding       │
  │        9.2% of the total a year ago. Away from Large.                        │
  └──────────────────────────────────────────────────────────────────────────────┘
-                                                       sort 【size】 growth  new
   PART                 SIZE   OF CUT  OF BOOK  GROWTH   PACE      NEW
  ───────────────────────────────────────────────────────────────────────
-  Industry          ₹48.01L     100%    21.9%   20.0%  +0.71        —
+  Industry          ₹48.01L     100%    21.7%   20.0%  +0.71        —
  ───────────────────────────────────────────────────────────────────────
   Large             ₹32.29L    67.3%    14.6%   17.7%  +1.10     60.8%
   Micro and Small   ₹10.92L    22.8%     4.9%   22.6%  −0.48     25.2%
@@ -1558,66 +1556,87 @@ printed as text), and the `[Numbers]/[Chart]` toggle is subsumed.
 
  ─ WHAT'S NOTABLE · 5 ──────────────────────────────────────────────────
   ▲ Large corporate credit at 17.7% YoY — highest on record
-  ▲ Medium enterprises at 30.5% YoY — highest on record
   ▲ Large took 60.8% of all new industry credit in the past year
   ○ Micro & Small grew 8.9% in FY25, 32.7% in FY26 — 23.8pp step-up
 ```
 
-Insight counts per dimension after §18: bankCredit 7 · mainSectors 12 · industryBySize 5 ·
-services 1 · personalLoans 14 · prioritySector 5 · industryByType 2.
+The worked example is the argument: the band says the mix drifts toward **Medium** while the row
+beneath shows **Large taking 60.8% of the new money against 67.3% of the book**. Both true, and a
+reader can now see why — in one grid, with no card explaining it.
+
+A nested dimension (Industry by Type) keeps §19's row expansion: `▸ Basic Metal 11.2% of industry`
+opens into `Iron and Steel 69.1% of basic metals`, with the nest footer naming the denominator. A
+dimension carrying two state cuts (industry-type + infra-sub) shows both bands and one table; the
+second cut is reached by expanding its row, where the parent's 31.5% stays on screen beside it.
 
 ### The side panel — click any number
 
-```
-  Large             ₹32.29L    67.3%    14.6% 【17.7%】 +1.10     60.8%
- ╔═ Large · Growth ════════════════════════════════════════ ✕ ═╗
- ║  25 ┤                              ╭──────●  17.7%          ║
- ║  15 ┤  ╮                      ╭────╯                        ║
- ║   5 ┤   ╰──────╮    ╭─────────╯                             ║
- ║     └────────────────────────────────────────────           ║
- ║  7.5 → 5.5 → 7.8 → 9.1 → 10.0 → 14.4 → 16.6 → 17.7          ║
- ║  compare:  ○ Micro and Small   ○ Medium   ○ Industry        ║
- ╚═════════════════════════════════════════════════════════════╝
-```
+Slides over the right third (a bottom sheet under `lg`); the table stays visible and the clicked
+cell stays lit. It draws the column's **whole stored history**, prints the readings as rendered in
+Python, says how many and from when, and offers `compare` over siblings **in the same cut and the
+same column** — the one overlay where units and depth match, and the one thing a table cannot do.
 
-Slides over the right third; the table stays visible. `compare` overlays a sibling — the one
-thing a table cannot do.
+The line is `linear` with a dot per reading, never a spline: SIBC's period set has a gap in it
+(eleven ingested periods, not eleven consecutive months), and a smoothed curve would draw a
+confident shape across months nobody measured.
 
 ### Payments — the measure is a FILTER, not another table
 
 ```
   measure  【Cards outstanding】 POS  eCommerce  ATM withdrawals  Other
-  showing  ● value  ○ volume                    ▸ break out by bank
-
+  showing  ● value  ○ volume
   PART                    SIZE   OF CUT  GROWTH   PACE     NEW
   Credit Cards        12.29 cr     100%    9.9%  +0.09       —
   Private Sector       8.69 cr    70.7%    9.8%  +0.09    70.3%
-  Public Sector        2.94 cr    23.9%    8.9%  +0.57    21.6%
-  Foreign              0.42 cr     3.5%   −6.5%  −0.58    −2.6%
-  Small Finance        0.23 cr     1.9%  102.2% +11.27    10.7%
-  Payment Banks              0     0.0%      —      —      0.0%
+  ...
 ```
 
-`break out by bank` swaps categories for the 63 banks — a different LEVEL of the same table
-rather than a drilldown, which also solves 21-banks-in-a-drawer.
+`of book` is **absent**, not dashed: a payments cut's parent IS its root, so the question has no
+answer rather than a missing one. Columns are declared per cut for that reason.
 
-### Open questions — settle before any code
+The state band stays pinned to the group's anchor cut while the filter moves. That is unambiguous
+only because §16's sentences name their own subject — *"Credit cards in force growing 9.9%"*
+cannot be misread as describing the e-commerce table beneath it.
 
-1. **Does SIBC get `break out by` too?** It would replace §19's row expansion. More consistent
-   with payments; but the expansion shows parent and child TOGETHER, which is what made the
-   Iron-and-Steel case land. Leaning: keep expansion for SIBC, filters for payments — the two
-   pipelines genuinely differ (one measure over a hierarchy vs many measures over one entity
-   set) — but that is a real inconsistency and needs a decision.
-2. **Insights below the table or beside it?** Below reads better on mobile and keeps the table
-   full width; beside puts both in view but competes with the side panel for the right third.
-3. **Does the side panel make Explore redundant?** A cell chart with sibling comparison is most
-   of what Explore does. Keep Explore initially and watch whether anyone reaches for it.
+### Decisions (user, 2026-09-13)
 
-### What must survive the refactor
+1. **SIBC nests; payments filters.** A real inconsistency, accepted deliberately: one pipeline is
+   one measure over a hierarchy, the other many measures over one entity set. The expansion shows
+   parent and child together, which is what made the Iron-and-Steel case land.
+2. **Insights below the table**, full width.
+3. **The side panel does NOT retire Explore. Explore never goes away** — it is the surface where
+   every card and every series stays reachable.
+4. **Sorting is click-the-header**, decided now rather than deferred: `sort` already existed on
+   every cell for exactly this. Default size descending; the parent row is pinned and never
+   sorts; `—` sinks in both directions, so a column the data cannot fill never leads the table.
+5. **`of book` on the parent row is COMPUTED**, not joined by eye — the share scan now stores the
+   cut's own share of the book, numerator = the parent's own published row.
 
-- Numbers rendered in Python, shipped as strings (§17.3) — the browser still formats nothing.
-- Gate 5.9c/5.9d unchanged: every drawn cell traces to its own cut at its own period.
+### What survived the refactor
+
+- Numbers rendered in Python, shipped as strings — including **every point of every chart**, since
+  the panel quotes its readings. A browser formatting those would be the second formatter this
+  project keeps paying for.
+- Gate 5.9c/5.9d, **tightened**: scope is now per COLUMN (the cut-wide pool let a growth cell trace
+  to a share), and the chart behind a cell is checked like the cell.
 - The pairing rule stays structural — a share of new money in the same row as its speed.
-- Bank rows (option B: 6 registry entries, ~34s freshness) are still unbuilt and fold into the
-  `break out by bank` filter rather than into a nested table.
 
+### The defect this build found: three payments ANCHOR tables reached no surface
+
+Widening the reachability test from SIBC to both pipelines found it immediately. Payments
+reconstructed each cut's stem from its metric's name (`credit_cards` → `credit-cards-category`),
+which is right for 23 of 26 cuts and wrong for `credit_cards`, `debit_cards` and `pos_terminals` —
+**every group's anchor**: the two card fleets and the POS fleet, computed, gated, shipped, rendered
+nowhere. The sidecar now DECLARES the metric each payments cut measures and the adapter matches on
+it; the test checks both pipelines.
+
+The test that exists to police hand-maintained lists had itself been scoped to one pipeline. Third
+instance of [[feedback_check_population]] in three days.
+
+### Still open
+
+- **Bank rows** (option B: 6 registry entries + one share method, ~34s) fold into a `break out by
+  bank` filter — unbuilt.
+- **SIBC history is 11 readings** where the consolidated CSV holds 24 dates: signals exist only for
+  ingested PERIODS. Deeper charts are a signals backfill, not a render change — a data job with its
+  own gate run, deliberately not folded into a UI refactor.

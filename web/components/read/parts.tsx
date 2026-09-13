@@ -5,7 +5,12 @@
 // pipeline. Colour = section/group (a card's colour is also its chart-line colour).
 
 import React from "react";
-import { sortParts as sortPartsMemo } from "@/lib/table";
+import {
+  sortParts as sortPartsMemo, cellSeries, COLUMNS,
+  type ColKey, type SortKey, type SortDir,
+} from "@/lib/table";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { pickColor } from "@/lib/theme";
 import { FS, R, GLYPH } from "@/lib/tokens";
 import { tileMix, type StateBlock } from "@/lib/state";
 
@@ -115,11 +120,11 @@ export function ReadCard({ read, selected, onClick }: { read: RMRead; selected: 
   );
 }
 
-export function DimensionCard({ dim, state = [], onClick }:
-  { dim: RMDimension; state?: StateBlock[]; onClick: () => void }) {
+export function DimensionCard({ dim, state = [], topRead, tables = 0, onClick }:
+  { dim: RMDimension; state?: StateBlock[]; topRead?: RMRead | null; tables?: number; onClick: () => void }) {
   const col = dim.color;
   return (
-    <button onClick={onClick} className="rm-card rm-tile text-left rounded-xl"
+    <button onClick={onClick} className="rm-card rm-tile text-left rounded-xl h-full flex flex-col"
             style={{ ...vars(col), padding: "16px 18px" }}>
       <div style={{ fontSize: GLYPH.dimension, lineHeight: 1 }}>{dim.icon}</div>
       <div style={{ fontSize: FS.card, fontWeight: 600, color: "var(--font)", marginTop: 10, lineHeight: 1.25 }}>{dim.title}</div>
@@ -141,9 +146,27 @@ export function DimensionCard({ dim, state = [], onClick }:
           ))}
         </div>
       )}
-      <div className="flex items-center gap-2 mt-2">
-        <span style={{ fontSize: FS.note, color: "var(--font-muted)" }}>{dim.cardCount} insights</span>
-        {dim.moved > 0 && <span style={{ fontSize: FS.note, fontWeight: 600, color: col }}>▲ {dim.moved} moved</span>}
+      {/* §20 — the ONE new thing, where it can be acted on. A pooled grid of five reads above
+          seven tiles was the same news twice, ranked by a score the reader cannot see; a tile
+          that carries its own says which dimension is worth opening this month. */}
+      {topRead && (
+        <div className="mt-2.5 flex items-baseline gap-1.5" style={{ fontSize: FS.note, lineHeight: 1.45 }}>
+          <span style={{ color: col }}>{glyph(topRead.direction)}</span>
+          <span style={{ color: "var(--font)" }}>{topRead.title}</span>
+        </div>
+      )}
+      <div className="flex items-center gap-2 mt-auto pt-3">
+        {tables > 0 && (
+          <span style={{ fontSize: FS.note, color: "var(--font-muted)" }}>
+            {tables} table{tables > 1 ? "s" : ""}
+          </span>
+        )}
+        {dim.cardCount > 0 && (
+          <span style={{ fontSize: FS.note, fontWeight: dim.moved > 0 ? 600 : 400,
+                         color: dim.moved > 0 ? col : "var(--font-muted)" }}>
+            {dim.cardCount} notable
+          </span>
+        )}
       </div>
     </button>
   );
@@ -251,26 +274,6 @@ export function StateBand({ blocks, color }: { blocks: StateBlock[]; color: stri
 // new money cannot be drawn without that part's speed and acceleration, because they are
 // cells in the same row. Every number arrives rendered; this draws strings.
 
-/** A run of readings as a sparkline. Bars, not a line: eight monthly readings are eight
- *  discrete observations, and a line implies we know what happened between them. */
-function Run({ values, color }: { values: number[]; color: string }) {
-  if (values.length < 2) return <span style={{ color: "var(--font-muted)" }}>—</span>;
-  const lo = Math.min(...values), hi = Math.max(...values), span = hi - lo || 1;
-  return (
-    <span className="inline-flex items-end gap-px" style={{ height: 16 }} aria-hidden>
-      {values.map((v, i) => (
-        <span key={i} style={{
-          width: 3, height: Math.max(2, ((v - lo) / span) * 14 + 2),
-          // Square, deliberately. The radius ladder starts at 4, which on a 3px bar is a
-          // circle; and adding a 1px rung for one sparkline would dilute a ladder that
-          // exists to stop exactly that. A 3px bar needs no corner.
-          background: color, opacity: 0.35 + 0.65 * (i / (values.length - 1)),
-        }} />
-      ))}
-    </span>
-  );
-}
-
 const NUM: React.CSSProperties = {
   textAlign: "right", fontVariantNumeric: "tabular-nums", whiteSpace: "nowrap",
   padding: "7px 10px", fontSize: FS.body, color: "var(--font)",
@@ -280,8 +283,118 @@ const HEAD: React.CSSProperties = {
   textTransform: "uppercase", letterSpacing: "0.05em", padding: "4px 10px 8px",
 };
 
-function cell(c: { display: string } | null) {
-  return c ? c.display : <span style={{ color: "var(--font-muted)" }}>—</span>;
+const DASH = <span style={{ color: "var(--font-muted)" }}>—</span>;
+
+/** What each column is called, and what a chart of it is called. `new` takes the cut's own
+ *  flow label, because a share of the net reads as "New" only while the net is positive. */
+const COL_LABEL: Record<ColKey, string> = {
+  size: "Size", of_cut: "of cut", of_book: "of book",
+  growth: "Growth", pace: "Pace", new: "New",
+};
+
+/**
+ * The chart behind a cell (§20). Every cell is the latest reading of a stored series, so a
+ * cell opens into its own history — which is why the sparkline column and the Numbers/Chart
+ * toggle are both gone: one was this series printed as text, the other asked the reader to
+ * leave the table to see it.
+ *
+ * `compare` overlays a sibling from the same cut and the same column — the one thing a table
+ * genuinely cannot do, and the only overlay where the units and the depth match.
+ */
+function CellPanel({ table, row, col, color, onClose }: {
+  table: import("@/lib/table").CutTable;
+  row: import("@/lib/table").CutRow;
+  col: ColKey; color: string; onClose: () => void;
+}) {
+  const [compare, setCompare] = React.useState<string[]>([]);
+  const own = cellSeries(table, row, col);
+  const who = row.entity ?? "the cut";
+  const siblings = table.parts.filter((p) => p.entity && p.entity !== row.entity && p[col]?.series);
+
+  // One row per period; one key per compared entity. Labels come from the sidecar, so the
+  // axis is a published string like everything else here.
+  const data = own.map((pt, i) => {
+    const point: Record<string, string | number | null> = { label: pt.label, [who]: pt.value };
+    for (const name of compare) {
+      const s = cellSeries(table, siblings.find((p) => p.entity === name)!, col);
+      point[name!] = s[i]?.label === pt.label ? s[i].value : null;
+    }
+    return point;
+  });
+  const lines = [who, ...compare];
+
+  React.useEffect(() => {
+    const esc = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    window.addEventListener("keydown", esc);
+    return () => window.removeEventListener("keydown", esc);
+  }, [onClose]);
+
+  return (
+    <div className="fixed z-40 inset-x-0 bottom-0 lg:top-[68px] lg:bottom-0 lg:inset-x-auto lg:right-0 lg:w-[440px]"
+         style={{ background: "var(--bg-card)", borderTop: "1px solid var(--border-card)",
+                  borderLeft: "1px solid var(--border-card)", boxShadow: "0 -6px 24px var(--shadow)",
+                  maxHeight: "82vh", overflowY: "auto", padding: 18 }}>
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <div style={{ ...EYEBROW, color }}>{COL_LABEL[col]}</div>
+          <div style={{ fontSize: FS.card, fontWeight: 700, color: "var(--font)", lineHeight: 1.25 }}>{who}</div>
+        </div>
+        <button onClick={onClose} className="rm-link" aria-label="close"
+                style={{ fontSize: GLYPH.arrow, color: "var(--font-muted)", lineHeight: 1 }}>✕</button>
+      </div>
+
+      <div style={{ height: 200, marginTop: 14 }}>
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={data} margin={{ top: 6, right: 8, left: -12, bottom: 0 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="var(--border-card)" />
+            <XAxis dataKey="label" tick={{ fontSize: FS.micro, fill: "var(--font-muted)" }}
+                   interval="preserveStartEnd" />
+            <YAxis tick={{ fontSize: FS.micro, fill: "var(--font-muted)" }} width={52} />
+            <Tooltip contentStyle={{ background: "var(--bg-card)", border: "1px solid var(--border-card)",
+                                     borderRadius: R.sm, fontSize: FS.note }} />
+            {lines.map((name, i) => (
+              // Linear with a dot per reading, not a smoothed curve: the readings are monthly
+              // observations and SIBC's own period set has a gap in it (eleven ingested
+              // periods, not eleven consecutive months). A spline through them would draw a
+              // confident shape across months nobody measured.
+              <Line key={name} type="linear" dataKey={name} stroke={i === 0 ? color : pickColor(name, i + 2)}
+                    strokeWidth={i === 0 ? 2.5 : 1.5} dot={{ r: 2 }} connectNulls={false}
+                    isAnimationActive={false} />
+            ))}
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+
+      {/* The readings themselves, as rendered in Python. The line shows the shape; these are
+          the argument, and they are the numbers the gate checked. */}
+      <p style={{ fontSize: FS.note, lineHeight: 1.7, color: "var(--font)", marginTop: 10 }}>
+        {own.filter((p) => p.display).map((p) => p.display).join("  →  ")}
+      </p>
+      <p style={{ fontSize: FS.meta, color: "var(--font-muted)", marginTop: 4 }}>
+        {own.filter((p) => p.value !== null).length} readings · {own[0]?.label} to {own[own.length - 1]?.label}
+      </p>
+
+      {siblings.length > 0 && (
+        <div style={{ marginTop: 14 }}>
+          <div style={{ ...EYEBROW, marginBottom: 6 }}>Compare</div>
+          <div className="flex flex-wrap gap-1.5">
+            {siblings.map((p) => {
+              const on = compare.includes(p.entity!);
+              return (
+                <button key={p.entity} onClick={() => setCompare(on
+                          ? compare.filter((x) => x !== p.entity)
+                          : [...compare, p.entity!])}
+                        className={`rm-chip rounded-full${on ? " on" : ""}`}
+                        style={{ ...vars(color, tint(color, 0.14)), fontSize: FS.meta, padding: "4px 10px" }}>
+                  {p.entity}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }
 
 export interface CutTableProps {
@@ -294,88 +407,99 @@ export interface CutTableProps {
   /** Named because a share is meaningless without it (§15). Omitted when the cut has none. */
   bookLabel?: string;
   footer?: string;             // e.g. the main-sectors residual
-  openLabel?: (entity: string) => string;
 }
 
 export function CutTable({ table, title, color, bookLabel, footer, all, depth = 0 }: CutTableProps) {
-  const [sort, setSort] = React.useState<import("@/lib/table").SortKey>("size");
+  // Default size, descending: the reader's model is "biggest first", and a growth-sorted
+  // table opens with the smallest book on the page.
+  const [sort, setSort] = React.useState<{ key: SortKey; dir: SortDir }>({ key: "size", dir: "desc" });
   const [open, setOpen] = React.useState<string | null>(null);
-  const parts = sortPartsMemo(table.parts, sort);
-  const hasBook = table.parts.some((p) => p.of_book);
+  const [cell, setCell] = React.useState<{ entity: string | null; col: ColKey } | null>(null);
+  const parts = sortPartsMemo(table.parts, sort.key, sort.dir);
+  const cols = COLUMNS.filter((c) => c !== "of_book" || table.parts.some((p) => p.of_book));
+  const label = (c: ColKey) => (c === "new" ? (table.flow_label ?? "New") : COL_LABEL[c]);
+
+  function pickSort(key: SortKey) {
+    setSort((s) => s.key === key ? { key, dir: s.dir === "desc" ? "asc" : "desc" } : { key, dir: "desc" });
+  }
+  const openRow = cell && (cell.entity === null ? table.total
+                                                : table.parts.find((p) => p.entity === cell.entity));
+
+  function numeric(row: import("@/lib/table").CutRow, c: ColKey) {
+    const v = row[c];
+    if (!v) return <td key={c} style={NUM}>{DASH}</td>;
+    const live = v.series && v.series.length > 1;
+    const on = cell?.entity === row.entity && cell?.col === c;
+    return (
+      <td key={c} style={{ ...NUM, cursor: live ? "pointer" : "default",
+                           background: on ? tint(color, 0.16) : undefined,
+                           borderRadius: on ? R.sm : undefined,
+                           textDecoration: live ? "underline" : undefined,
+                           textDecorationColor: live ? tint(color, 0.4) : undefined,
+                           textUnderlineOffset: 3 }}
+          onClick={live ? (e) => { e.stopPropagation(); setCell(on ? null : { entity: row.entity, col: c }); } : undefined}>
+        {v.display}
+      </td>
+    );
+  }
 
   return (
-    <div style={{ overflowX: "auto" }}>
+    <div>
+      <div style={{ overflowX: "auto" }}>
       <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 560 }}>
         <thead>
           <tr>
             <th style={{ ...HEAD, textAlign: "left" }}>Part</th>
-            <th style={HEAD}>Size</th>
-            <th style={HEAD}>of cut</th>
-            {hasBook && <th style={HEAD}>{bookLabel ?? "of book"}</th>}
-            <th style={HEAD}>Growth</th>
-            <th style={HEAD}>Pace</th>
-            <th style={HEAD}>Run</th>
-            <th style={HEAD}>{table.flow_label ?? "New"}</th>
+            {cols.map((c) => (
+              <th key={c} style={HEAD}>
+                <button onClick={() => pickSort(c)} className="rm-link"
+                        style={{ font: "inherit", letterSpacing: "inherit", textTransform: "inherit",
+                                 color: sort.key === c ? color : "inherit" }}>
+                  {c === "of_book" ? (bookLabel ?? label(c)) : label(c)}
+                  {sort.key === c ? (sort.dir === "desc" ? " ↓" : " ↑") : ""}
+                </button>
+              </th>
+            ))}
           </tr>
         </thead>
         <tbody>
-          {/* the cut's own row — pinned, never sorted */}
+          {/* the cut's own row — pinned, never sorted: it is the denominator, not a competitor */}
           <tr style={{ borderTop: `2px solid ${color}`, borderBottom: "1px solid var(--border-card)" }}>
             <td style={{ ...NUM, textAlign: "left", fontWeight: 700 }}>{title}</td>
-            <td style={{ ...NUM, fontWeight: 700 }}>{cell(table.total.size)}</td>
-            <td style={NUM}>{cell(table.total.of_cut)}</td>
-            {hasBook && <td style={NUM}>{cell(table.total.of_book)}</td>}
-            <td style={NUM}>{cell(table.total.growth)}</td>
-            <td style={NUM}>{cell(table.total.pace)}</td>
-            <td style={NUM} /><td style={NUM} />
+            {cols.map((c) => numeric(table.total, c))}
           </tr>
           {parts.map((p) => {
+            const nested = p.sub_cut && all?.[p.sub_cut] && depth === 0 ? all[p.sub_cut] : null;
             const isOpen = open === p.entity;
             return (
               <React.Fragment key={p.entity ?? "_"}>
-                <tr className="rm-row" onClick={() => setOpen(isOpen ? null : p.entity)}
-                    style={{ ...vars(color, tint(color, 0.07)), cursor: "pointer",
+                <tr style={{ ...vars(color, tint(color, 0.07)),
                              background: isOpen ? tint(color, 0.07) : undefined }}>
-                  <td style={{ ...NUM, textAlign: "left" }}>{p.entity}</td>
-                  <td style={NUM}>{cell(p.size)}</td>
-                  <td style={NUM}>{cell(p.of_cut)}</td>
-                  {hasBook && <td style={NUM}>{cell(p.of_book)}</td>}
-                  <td style={NUM}>{cell(p.growth)}</td>
-                  <td style={NUM}>{cell(p.pace)}</td>
-                  <td style={{ ...NUM, textAlign: "center" }}><Run values={p.run} color={color} /></td>
-                  <td style={NUM}>{cell(p.new)}</td>
+                  <td style={{ ...NUM, textAlign: "left" }}>
+                    {nested ? (
+                      <button onClick={() => setOpen(isOpen ? null : p.entity)} className="rm-link"
+                              style={{ font: "inherit", color: "inherit" }}>
+                        <span style={{ color, fontWeight: 700 }}>{isOpen ? "▾" : "▸"}</span> {p.entity}
+                      </button>
+                    ) : p.entity}
+                  </td>
+                  {cols.map((c) => numeric(p, c))}
                 </tr>
-                {isOpen && (p.run.length > 1 || (p.sub_cut && all?.[p.sub_cut])) && (
+                {/* §19 — the part decomposes further, so it opens into its own table. One level:
+                    RBI publishes no fourth. This is also the answer to §15's founding defect —
+                    the card said "Iron and Steel holds 69.0% of basic-metals credit" above a
+                    chart of "Basic Metal 11.2% of industry"; now both are on screen, nested,
+                    with the denominator stated rather than implied. */}
+                {isOpen && nested && (
                   <tr>
-                    <td colSpan={hasBook ? 8 : 7}
-                        style={{ ...NUM, textAlign: "left", fontSize: FS.note,
-                                 color: "var(--font-muted)", paddingTop: 0, paddingBottom: 12 }}>
-                      {/* The readings themselves — the sparkline shows the shape, this shows
-                          the argument. Eight numbers per row would be a spreadsheet; eight
-                          numbers in the row you opened is the point. */}
-                      {p.run.length > 1 && (
-                        <>
-                          Growth, last {p.run.length} readings:{" "}
-                          <span style={{ color: "var(--font)" }}>
-                            {p.run.map((v) => `${v.toFixed(1)}%`).join("  →  ")}
-                          </span>
-                        </>
-                      )}
-                      {/* §19 — the part decomposes further, so it opens into its own table.
-                          One level: RBI publishes no fourth, and buildSubCuts assumes the same.
-                          This is also the answer to §15's founding defect — the card said
-                          "Iron and Steel holds 69.0% of basic-metals credit" above a chart of
-                          "Basic Metal 11.2% of industry"; now both are on screen, nested. */}
-                      {p.sub_cut && all?.[p.sub_cut] && depth === 0 && (
-                        <div style={{ marginTop: p.run.length > 1 ? 14 : 0,
-                                      paddingLeft: 14, borderLeft: `2px solid ${tint(color, 0.4)}` }}>
-                          <div style={{ ...EYEBROW, marginBottom: 6 }}>
-                            Inside {p.entity}
-                          </div>
-                          <CutTable table={all[p.sub_cut]} title={p.entity ?? ""} color={color}
-                                    all={all} depth={depth + 1} />
+                    <td colSpan={cols.length + 1} style={{ padding: "0 10px 14px" }}>
+                      <div style={{ paddingLeft: 14, borderLeft: `2px solid ${tint(color, 0.4)}` }}>
+                        <div style={{ ...EYEBROW, margin: "8px 0 6px" }}>
+                          Inside {p.entity} · shares below are of {p.entity}
                         </div>
-                      )}
+                        <CutTable table={nested} title={p.entity ?? ""} color={color}
+                                  all={all} depth={depth + 1} />
+                      </div>
                     </td>
                   </tr>
                 )}
@@ -384,23 +508,19 @@ export function CutTable({ table, title, color, bookLabel, footer, all, depth = 
           })}
         </tbody>
       </table>
-
-      <div className="flex items-center justify-between flex-wrap gap-2" style={{ marginTop: 8 }}>
-        <span style={{ fontSize: FS.note, color: "var(--font-muted)" }}>
-          {table.parts.length} parts · sort by{" "}
-          {(["size", "growth", "new"] as const).map((k) => (
-            <button key={k} onClick={() => setSort(k)}
-                    style={{ fontWeight: sort === k ? 700 : 400,
-                             color: sort === k ? color : "var(--font-muted)", marginRight: 10 }}>
-              {k === "new" ? "new money" : k}
-            </button>
-          ))}
-        </span>
       </div>
+
+      <p style={{ fontSize: FS.note, color: "var(--font-muted)", marginTop: 8 }}>
+        {table.parts.length} parts · every underlined number opens its own chart · sort by any column
+      </p>
       {footer && (
         <p style={{ fontSize: FS.note, color: "var(--font-muted)", marginTop: 6, lineHeight: 1.5 }}>
           {footer}
         </p>
+      )}
+      {cell && openRow && (
+        <CellPanel table={table} row={openRow} col={cell.col} color={color}
+                   onClose={() => setCell(null)} />
       )}
     </div>
   );

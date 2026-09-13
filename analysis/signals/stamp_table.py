@@ -64,6 +64,32 @@ def cuts(pipeline: str) -> dict[str, str]:
     return out
 
 
+def measured_metric(pipeline: str) -> dict[str, str]:
+    """{stem: the CSV metric this cut measures} — payments only.
+
+    A payments cut's stem and the metric it measures are named independently: the credit-card
+    fleet is metric `credit_cards` and cut `cc-category`. The dashboard adapter had been
+    RECONSTRUCTING the stem from the metric name ("credit_cards" -> "credit-cards-category"),
+    which is right for twenty-three cuts and wrong for the three that matter most — the two
+    card fleets and the POS fleet, every group's anchor. All three were computed, gated,
+    shipped and reachable from nothing.
+
+    So the join is declared here, out of the registry that knows both names, and the browser
+    matches on the metric instead of guessing at a spelling.
+    """
+    if pipeline == "sibc":
+        return {}
+    reg = json.loads(REGISTRY.read_text())["signals"]
+    out = {}
+    for sid, sig in reg.items():
+        c = sig.get("compute", {})
+        if sig.get("pipeline") != pipeline or not sid.endswith("-size-scan"):
+            continue
+        if c.get("metric"):
+            out[sid[: -len("-size-scan")]] = c["metric"]
+    return out
+
+
 def sub_cut_map(pipeline: str) -> dict[str, str]:
     """{parent entity name: the cut it decomposes into} (§19).
 
@@ -98,9 +124,12 @@ def build(pipeline: str, period: str | None = None) -> dict:
     try:
         period = period or latest_period(conn, pipeline)
         tables, rates, subs = {}, parent_rates(pipeline), sub_cut_map(pipeline)
+        metrics = measured_metric(pipeline)
         for stem, unit in sorted(cuts(pipeline).items()):
             t = table_rows.build(conn, pipeline, period, stem, unit, rates.get(stem), subs)
             if t is not None:          # a cut without its 12-month window has no table yet
+                if stem in metrics:
+                    t["metric"] = metrics[stem]
                 tables[stem] = t
     finally:
         conn.close()

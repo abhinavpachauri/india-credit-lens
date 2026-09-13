@@ -39,14 +39,22 @@ class Cell:
 
     `series` is aligned to the column's own period list, with null where a part has no
     reading — an entity that arrived late must not silently slide its history a month left.
+    `series_display` is that same history rendered, because the panel a cell opens QUOTES its
+    readings — in a tooltip and in the run of numbers under the line. A browser formatting
+    those would be the second formatter this project keeps paying for; the strings compress
+    to almost nothing over the wire and cost nothing to be right.
     """
     display: str
     sort: float | None
     series: list[float | None] | None = None
+    series_display: list[str | None] | None = None
 
     @staticmethod
     def of(value: float | None, fmt, series: list[float | None] | None = None) -> "Cell | None":
-        return None if value is None else Cell(fmt(value), value, series)
+        if value is None:
+            return None
+        shown = None if series is None else [None if v is None else fmt(v) for v in series]
+        return Cell(fmt(value), value, series, shown)
 
 
 def _rs(v: float) -> str:

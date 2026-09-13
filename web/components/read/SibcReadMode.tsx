@@ -19,12 +19,15 @@ import { EYEBROW, type RMModel, type RMCard, type RMDimension } from "./parts";
 import { FS } from "@/lib/tokens";
 
 /** The last non-null value of one series in a ChartPoint[]. */
-/** Which Layer 1 cut(s) each credit dimension owns (§17).
+/** Which Layer 1 cut each credit dimension owns (§17, one table per dimension after §20).
  *
- *  Industry by Type owns TWO — the type decomposition and infrastructure's sub-types — for
- *  the same reason its mix state does: they hang off one node and are different mixes.
- *  Bank Credit owns none: it IS the top level, so there is nothing to decompose here and
- *  the chart stays. Declared, never inferred from a label.
+ *  ONE each. A credit dimension is one measure over a hierarchy, so its depth comes from a
+ *  row opening into its own cut (§19) — infrastructure's sub-types used to be listed here as
+ *  a second table and are now reached by expanding the Infrastructure row, which is where a
+ *  reader looks for them and where the parent's 31.5% stays on screen beside them.
+ *
+ *  Bank Credit owns none: it IS the top level, so there is nothing to decompose and the
+ *  chart stays. Declared, never inferred from a label.
  */
 const SIBC_CUTS: Record<string, CutRef[]> = {
   mainSectors: [{
@@ -35,8 +38,7 @@ const SIBC_CUTS: Record<string, CutRef[]> = {
     footer: "These four are 95.1% of non-food credit — RBI attributes the remainder to no sector.",
   }],
   industryBySize:  [{ stem: "sibc-ind-size", title: "Industry", bookLabel: "of book" }],
-  industryByType:  [{ stem: "sibc-industry-type", title: "Industry", bookLabel: "of book" },
-                    { stem: "sibc-infra-sub", title: "Infrastructure", bookLabel: "of book" }],
+  industryByType:  [{ stem: "sibc-industry-type", title: "Industry", bookLabel: "of book" }],
   services:        [{ stem: "sibc-services", title: "Services", bookLabel: "of book" }],
   personalLoans:   [{ stem: "sibc-pl", title: "Personal loans", bookLabel: "of book" }],
   prioritySector:  [{ stem: "sibc-psl", title: "Priority sector", bookLabel: "of book" }],

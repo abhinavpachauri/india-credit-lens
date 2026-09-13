@@ -110,13 +110,13 @@ def validate(pipeline: str) -> list[str]:
                             f"{stem} · {who} · {col}: drawn as '{cell['display']}' but "
                             f"{cell['sort']} renders as '{want}'")
                     findings += series_findings(conn, pipeline, stem, who, col, cell,
-                                                metric, periods.get(col), row)
+                                                metric, periods.get(col), row, unit)
     finally:
         conn.close()
     return findings
 
 
-def series_findings(conn, pipeline, stem, who, col, cell, metric, labels, row):
+def series_findings(conn, pipeline, stem, who, col, cell, metric, labels, row, unit):
     """The chart behind a cell is published too (§20), so it is checked like the cell.
 
     Three ways a history can lie without any single number being wrong: a value that was
@@ -136,6 +136,17 @@ def series_findings(conn, pipeline, stem, who, col, cell, metric, labels, row):
     if unknown:
         out.append(f"{stem} · {who} · {col}: {len(unknown)} reading(s) in the chart "
                    f"({unknown[:3]}) are not values {metric} ever stored for {eid}")
+    shown = cell.get("series_display")
+    if shown is None or len(shown) != len(series):
+        out.append(f"{stem} · {who} · {col}: the chart's readings are drawn with "
+                   f"{len(shown or [])} rendered strings for {len(series)} values")
+    else:
+        fmt = fmt_for(col, unit)
+        bad = [(v, d) for v, d in zip(series, shown)
+               if (v is None) != (d is None) or (v is not None and d != fmt(v))]
+        if bad:
+            out.append(f"{stem} · {who} · {col}: {len(bad)} reading(s) drawn as something "
+                       f"other than their value — e.g. {bad[0][1]} for {bad[0][0]}")
     last = next((v for v in reversed(series) if v is not None), None)
     if last is not None and cell["sort"] is not None and not matches(cell["sort"], [last], POLICY):
         out.append(f"{stem} · {who} · {col}: the chart ends at {last} but the cell reads "

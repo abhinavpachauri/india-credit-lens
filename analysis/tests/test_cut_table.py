@@ -191,27 +191,48 @@ def test_the_live_tables_are_traceable_on_both_pipelines():
 
 
 def test_every_computed_table_is_reachable_from_the_dashboard():
-    """No table may be computed, gated, shipped — and rendered nowhere.
+    """No table may be computed, gated, shipped — and rendered nowhere. BOTH pipelines.
 
-    This is the failure this whole session was about, and I committed a fresh instance of it an
-    hour after fixing the previous one: seven SIBC tables (trade, NBFC, basic metals,
-    engineering, food processing, textiles, chemicals) were stamped into the sidecar and had no
-    surface. The cause was a HAND-WRITTEN map in the credit adapter, next to a payments adapter
-    that DERIVES its list — one enumerates, the other declares from memory, and the declared one
-    omitted seven cuts added the same hour.
+    This is the failure this work was about, and it has now happened twice in two shapes. The
+    first: seven SIBC tables had no surface, because the credit adapter kept a HAND-WRITTEN map
+    beside a payments adapter that DERIVES its list. The second, found by widening this test to
+    the pipeline it was not watching: payments reconstructed each cut's stem from its metric's
+    name, which is right for 23 of 26 cuts and wrong for `credit_cards`, `debit_cards` and
+    `pos_terminals` — every group's ANCHOR table, the card fleets and the POS fleet.
 
-    A table is reachable two ways (§19): a dimension owns it, or a row in another table opens
-    into it. Anything else is computed for nobody.
+    So the test that exists to police hand-maintained lists was itself scoped to one pipeline.
+    A check's population is a design decision, and this is the third time that has cost us.
+
+    Reachable means (§19/§20): a dimension owns the cut, a row opens into it, or — on payments
+    — a measure filter resolves to it through the metric the sidecar declares.
     """
     import re
     web = ROOT / "web" / "components" / "read"
-    doc = json.loads((DATA / "sibc_table.json").read_text())
+
+    sibc = json.loads((DATA / "sibc_table.json").read_text())
     declared = set(re.findall(r'stem:\s*"([^"]+)"', (web / "SibcReadMode.tsx").read_text()))
-    via_row = {p["sub_cut"] for t in doc["cuts"].values() for p in t["parts"] if p.get("sub_cut")}
-    unreachable = set(doc["cuts"]) - declared - via_row
+    via_row = {p["sub_cut"] for t in sibc["cuts"].values() for p in t["parts"] if p.get("sub_cut")}
+    unreachable = set(sibc["cuts"]) - declared - via_row
     assert not unreachable, (
         f"computed and rendered nowhere: {sorted(unreachable)} — either a dimension must own "
         f"each, or a row must open into it")
+
+    # Payments resolves a cut by the METRIC it measures, so reachability is checked the same
+    # way the adapter resolves it: every metric named in SECTION_DEFS must find a cut, and
+    # every cut must be found by one.
+    pay = json.loads((DATA / "atm_pos_table.json").read_text())
+    defs = (ROOT / "web" / "lib" / "atm_pos_data.ts").read_text()
+    block = defs[defs.index("export const SECTION_DEFS"):defs.index("export const GROUP_LABELS")]
+    named = set(re.findall(r'(?:metric|valMetric|volMetric):\s*(?:\[([^\]]*)\]|"([^"]+)")', block))
+    metrics = {m.strip().strip('"') for pair in named for part in pair if part
+               for m in part.split(",") if m.strip()}
+    carried = {t["metric"] for t in pay["cuts"].values() if t.get("metric")}
+    assert not metrics - carried, f"a section names {sorted(metrics - carried)}, which no cut measures"
+    assert not carried - metrics, (
+        f"computed and rendered nowhere: {sorted(carried - metrics)} — no payments section "
+        f"measures it, so the measure filter can never reach it")
+    assert set(pay["cuts"]) == {s for s, t in pay["cuts"].items() if t.get("metric")}, \
+        "a payments cut ships without the metric it measures, so the adapter must guess its name"
 
 
 def test_a_sub_cut_is_joined_to_a_row_that_actually_exists():

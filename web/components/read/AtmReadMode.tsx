@@ -38,17 +38,36 @@ function defFor(ins: AtmPosInsight, group: string): SectionDef | undefined {
  *  hierarchy, a payments group is many measures over the same bank categories. Derived from
  *  SECTION_DEFS so a new section cannot be forgotten here, and filtered by what the sidecar
  *  actually carries, so a measure with no cut simply does not appear.
+ *
+ *  §20 — each becomes a FILTER on one table rather than a table of its own. Stacking six to
+ *  eleven tables in a pane was the worst case of the defect §20 exists to fix: the entity set
+ *  never changed, only the measure over it, so the reader was handed the same five bank
+ *  categories again and again and asked to find the difference.
  */
-const atmCutsFor = (group: string): CutRef[] =>
-  SECTION_DEFS.filter((d) => d.group === group).flatMap((d) => {
+const atmCutsFor = (tables: CutTables) => (group: string): CutRef[] => {
+  // metric -> stem, read off the sidecar. NOT reconstructed from the metric's own name: that
+  // spelling held for 23 of 26 cuts and missed `credit_cards`, `debit_cards` and
+  // `pos_terminals` — the two card fleets and the POS fleet, every group's anchor table,
+  // computed and gated and reachable from nothing.
+  const stemOf = new Map(Object.entries(tables)
+    .filter(([, t]) => t.metric)
+    .map(([stem, t]) => [t.metric as string, stem]));
+  return SECTION_DEFS.filter((d) => d.group === group).flatMap((d) => {
     const metrics = d.metric
       ? (Array.isArray(d.metric) ? d.metric : [d.metric])
       : [d.valMetric, d.volMetric].filter(Boolean) as string[];
     return metrics.map((m) => ({
-      stem: `${m.replace(/_/g, "-")}-category`,
-      title: metrics.length > 1 ? `${d.title} — ${m.endsWith("_val") ? "value" : "volume"}` : d.title,
+      stem: stemOf.get(m) ?? `${m.replace(/_/g, "-")}-category`,
+      title: d.title,
+      measure: d.title,
+      // Value and volume are the same measure asked two ways, so they are an axis on the
+      // filter and not two entries in it.
+      axis: metrics.length > 1
+        ? (m.endsWith("_val") ? "value" as const : "volume" as const)
+        : undefined,
     }));
   });
+};
 
 export default function AtmReadMode(
   { series, insights, planes, state, tables }:
@@ -197,7 +216,7 @@ export default function AtmReadMode(
 
   return (
     <ReadModeShell model={model} homeLabel="Payments dashboard" period={period} state={state}
-                   tables={tables} cutsFor={atmCutsFor}
+                   tables={tables} cutsFor={atmCutsFor(tables)}
                    renderChart={renderChart} hasDeep={hasDeep} renderDeep={renderDeep} />
   );
 }
