@@ -453,6 +453,34 @@
           "date": "2026-09-11",
           "how_measured": "Enumerated web/public/data/ against the mix_states blocks in system_state_{period}.json for both pipelines. The causal layer has been computed every ingestion and gate-validated since August 2026 and had never reached a reader; the only Layer 2 on screen was 4 cross-system items rendered inline as Deep.",
           "source": "web/public/data/sibc_state.json"
+        },
+        {
+          "metric": "Cut-table traceability — injection catch",
+          "value": "4 of 4 caught (invented value · a REAL value borrowed from another cut · true value drawn wrong · cell with no value behind it); 0 false rejections over 252 rows",
+          "date": "2026-09-13",
+          "how_measured": "Four fault shapes injected into web/public/data/sibc_table.json, gate re-run after each, sidecar restored md5-identical. The second is the one only SCOPE catches: a value that is genuinely stored, just by a different cut.",
+          "source": "analysis/guards/validate_cut_table.py"
+        },
+        {
+          "metric": "Layer 1 cut coverage",
+          "value": "10 of 40 cuts fully described -> 39 of 40; registry 267 -> 452 signals; the one exception (PSL share-of-parent) is a documented impossibility, not a gap",
+          "date": "2026-09-13",
+          "how_measured": "Enumerated every cut (any signal computed by a momentum method) against the six families a table needs. Found: the SIZE of a sector was not a stored signal anywhere — 229 signals, all rates and shares.",
+          "source": "analysis/tests/test_l1_coverage.py"
+        },
+        {
+          "metric": "Freshness guard — cost and blind spot",
+          "value": "2m47s -> 24.6s (6.8x, parallel by period, guarantee unchanged). Absent-period detection: MISSED -> CAUGHT (981 rows reported where it previously said 'fresh — 46,013 rows match')",
+          "date": "2026-09-13",
+          "how_measured": "Timed over 46,994 rows / 42 periods. Negative-tested by deleting one month and by hand-editing one value; DB restored md5-identical after each.",
+          "source": "analysis/guards/check_signal_freshness.py"
+        },
+        {
+          "metric": "Errors traceability structurally CANNOT catch",
+          "value": "1 found, 100x magnitude: rs_thousands->crore shipped as v/100 instead of v/1e4, drawing one month of debit-card ATM withdrawals as Rs 219 lakh crore — larger than the entire bank credit book",
+          "date": "2026-09-13",
+          "how_measured": "Passed every traceability gate because the STORED VALUE WAS CORRECT; the defect is in the transform between stored and drawn. Caught by reading the rendered number and asking whether it could be true. Now pinned by a magnitude band over every money cut.",
+          "source": "analysis/tests/test_cut_table.py"
         }
       ],
       "observations": [
@@ -603,6 +631,21 @@
         {
           "date": "2026-09-11",
           "observation": "The un-groundable number was the wrong thing to fight. The state band wanted to publish the mix tilt, which is alloc minus weight — a subtraction, so no gate can ground it, the same structural problem as coherence. The reflex was to store tilt as a new row. The better answer was to stop printing it: both operands ARE stored, so the sentence became 'it took 14.0% of the growth while holding 9.2% of the total', which traces completely AND explains what a tilt is instead of asking the reader to decode +4.9 pp. When a number cannot be grounded, check whether the sentence is better without it before adding a row to make it legal."
+        },
+        {
+          "observation": "A check's POPULATION was the defect in four separate guards this session, never its logic: coverage audited against MOVEMENT_CUTS (a table in the card generator) while seven rendered sub-cuts went unchecked; a hand-written SIBC_CUTS beside an adapter that derives its list, omitting seven tables added the same hour; coherence_min measured on 134 windows that happened to contain no counterexample; and check_signal_freshness reading its period set off the database it was checking, so a deleted month made the check smaller rather than failing it.",
+          "date": "2026-09-13",
+          "source": "analysis/guards/check_signal_freshness.py"
+        },
+        {
+          "observation": "A guard can encode a misconception and stay green until the data happens to test it. Check 2e B6 asserted 'a share cannot exceed the whole' — false for a NET denominator, and contradicted in two places in signals/README.md that the author had read. It passed for three days because none of the 134 windows then in the store landed between 100% and 111%. At 520 windows, 30 did. No threshold repairs it: at coherence_min 1.00 it still leaks 5 while withholding 62% of all windows.",
+          "date": "2026-09-13",
+          "source": "analysis/guards/validate_signal_history.py"
+        },
+        {
+          "observation": "Three defects in one build came from READING THE RENDERED OUTPUT, and none was catchable by a gate: a 100x unit conversion (stored value correct), a column header saying 'New' over 11 of 26 contracting cuts, and a band and a table quoting the same quantity at different dates ('holding 31.1%' vs 'of cut 34.3%' — weight vs weight_now) without either saying when.",
+          "date": "2026-09-13",
+          "source": "analysis/core/table_rows.py"
         }
       ],
       "open_questions": [
