@@ -286,6 +286,9 @@ function cell(c: { display: string } | null) {
 
 export interface CutTableProps {
   table: import("@/lib/table").CutTable;
+  /** All tables, so a row can open into the cut it decomposes into (§19). */
+  all?: import("@/lib/table").CutTables;
+  depth?: number;
   title: string;               // the cut's own name, for the total row
   color: string;
   /** Named because a share is meaningless without it (§15). Omitted when the cut has none. */
@@ -294,7 +297,7 @@ export interface CutTableProps {
   openLabel?: (entity: string) => string;
 }
 
-export function CutTable({ table, title, color, bookLabel, footer }: CutTableProps) {
+export function CutTable({ table, title, color, bookLabel, footer, all, depth = 0 }: CutTableProps) {
   const [sort, setSort] = React.useState<import("@/lib/table").SortKey>("size");
   const [open, setOpen] = React.useState<string | null>(null);
   const parts = sortPartsMemo(table.parts, sort);
@@ -342,7 +345,7 @@ export function CutTable({ table, title, color, bookLabel, footer }: CutTablePro
                   <td style={{ ...NUM, textAlign: "center" }}><Run values={p.run} color={color} /></td>
                   <td style={NUM}>{cell(p.new)}</td>
                 </tr>
-                {isOpen && p.run.length > 1 && (
+                {isOpen && (p.run.length > 1 || (p.sub_cut && all?.[p.sub_cut])) && (
                   <tr>
                     <td colSpan={hasBook ? 8 : 7}
                         style={{ ...NUM, textAlign: "left", fontSize: FS.note,
@@ -350,10 +353,29 @@ export function CutTable({ table, title, color, bookLabel, footer }: CutTablePro
                       {/* The readings themselves — the sparkline shows the shape, this shows
                           the argument. Eight numbers per row would be a spreadsheet; eight
                           numbers in the row you opened is the point. */}
-                      Growth, last {p.run.length} readings:{" "}
-                      <span style={{ color: "var(--font)" }}>
-                        {p.run.map((v) => `${v.toFixed(1)}%`).join("  →  ")}
-                      </span>
+                      {p.run.length > 1 && (
+                        <>
+                          Growth, last {p.run.length} readings:{" "}
+                          <span style={{ color: "var(--font)" }}>
+                            {p.run.map((v) => `${v.toFixed(1)}%`).join("  →  ")}
+                          </span>
+                        </>
+                      )}
+                      {/* §19 — the part decomposes further, so it opens into its own table.
+                          One level: RBI publishes no fourth, and buildSubCuts assumes the same.
+                          This is also the answer to §15's founding defect — the card said
+                          "Iron and Steel holds 69.0% of basic-metals credit" above a chart of
+                          "Basic Metal 11.2% of industry"; now both are on screen, nested. */}
+                      {p.sub_cut && all?.[p.sub_cut] && depth === 0 && (
+                        <div style={{ marginTop: p.run.length > 1 ? 14 : 0,
+                                      paddingLeft: 14, borderLeft: `2px solid ${tint(color, 0.4)}` }}>
+                          <div style={{ ...EYEBROW, marginBottom: 6 }}>
+                            Inside {p.entity}
+                          </div>
+                          <CutTable table={all[p.sub_cut]} title={p.entity ?? ""} color={color}
+                                    all={all} depth={depth + 1} />
+                        </div>
+                      )}
                     </td>
                   </tr>
                 )}

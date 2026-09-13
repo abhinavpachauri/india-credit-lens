@@ -149,3 +149,37 @@ def test_the_live_tables_are_traceable_on_both_pipelines():
     live feed is clean stops asserting anything the moment someone fixes the defect it found."""
     for pipeline in ("sibc", "atm_pos"):
         assert V.validate(pipeline) == []
+
+
+def test_every_computed_table_is_reachable_from_the_dashboard():
+    """No table may be computed, gated, shipped — and rendered nowhere.
+
+    This is the failure this whole session was about, and I committed a fresh instance of it an
+    hour after fixing the previous one: seven SIBC tables (trade, NBFC, basic metals,
+    engineering, food processing, textiles, chemicals) were stamped into the sidecar and had no
+    surface. The cause was a HAND-WRITTEN map in the credit adapter, next to a payments adapter
+    that DERIVES its list — one enumerates, the other declares from memory, and the declared one
+    omitted seven cuts added the same hour.
+
+    A table is reachable two ways (§19): a dimension owns it, or a row in another table opens
+    into it. Anything else is computed for nobody.
+    """
+    import re
+    web = ROOT / "web" / "components" / "read"
+    doc = json.loads((DATA / "sibc_table.json").read_text())
+    declared = set(re.findall(r'stem:\s*"([^"]+)"', (web / "SibcReadMode.tsx").read_text()))
+    via_row = {p["sub_cut"] for t in doc["cuts"].values() for p in t["parts"] if p.get("sub_cut")}
+    unreachable = set(doc["cuts"]) - declared - via_row
+    assert not unreachable, (
+        f"computed and rendered nowhere: {sorted(unreachable)} — either a dimension must own "
+        f"each, or a row must open into it")
+
+
+def test_a_sub_cut_is_joined_to_a_row_that_actually_exists():
+    """The join is code -> CSV name -> row entity, done in Python. If it silently missed, the
+    row would simply never offer to open — an absence, which is the shape that hides."""
+    doc = json.loads((DATA / "sibc_table.json").read_text())
+    named = {p["sub_cut"] for t in doc["cuts"].values() for p in t["parts"] if p.get("sub_cut")}
+    assert named, "no row offers a sub-cut — the join produced nothing"
+    for stem in named:
+        assert stem in doc["cuts"], f"a row opens into {stem}, which is not a table"

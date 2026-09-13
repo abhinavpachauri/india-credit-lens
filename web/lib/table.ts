@@ -15,6 +15,8 @@ export interface CutRow {
   pace:    Cell | null;
   new:     Cell | null;
   run:     number[];           // trailing growth readings, oldest first
+  /** The cut this part decomposes into, when it has one (§19) — resolved in Python. */
+  sub_cut?: string | null;
 }
 
 export interface CutTable {

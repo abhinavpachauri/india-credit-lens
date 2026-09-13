@@ -252,7 +252,7 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
                               <div style={{ ...EYEBROW, marginBottom: 6 }}>{c.title}</div>
                             )}
                             <CutTable table={tables![c.stem]} title={c.title} color={secColor}
-                                      bookLabel={c.bookLabel} footer={c.footer} />
+                                      bookLabel={c.bookLabel} footer={c.footer} all={tables} />
                           </div>
                         ))}
                   </>

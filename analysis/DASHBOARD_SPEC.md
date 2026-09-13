@@ -1473,3 +1473,44 @@ column to live in.
 - **Hidden is not gone.** The plane is a rendering decision; if a future reader needs the
   subject prose, the constant is one line.
 
+---
+
+## 19. A row opens into its own table (2026-09-13)
+
+### The defect this fixes, and how it was made
+
+Fourteen SIBC cut tables are computed, gated and shipped. **Seven rendered nowhere** — trade,
+NBFC sub-types, basic metals, engineering, food processing, textiles, chemicals.
+
+The cause is this session's own recurring failure, committed an hour after fixing the last
+instance of it: `SIBC_CUTS` in the credit adapter is a **hand-written map**, while the payments
+adapter **derives** its list from `SECTION_DEFS`. One pipeline enumerates, the other declares
+from memory — and the declared one silently omitted seven cuts added that same hour.
+
+### Where a sub-cut belongs
+
+Not as a dimension. Checked against the data: **every sub-cut's parent is already a row in a
+parent table.**
+
+    sibc-basic-metal-sub  -> code 2.13 -> "Basic Metal and Metal Product" -> a row in industry-by-type
+    sibc-nbfc-sub         -> code 3.9  -> "Non-Banking Financial Companies" -> a row in services
+
+So a row **opens into its own table**. That is the hierarchy the data already has, and it is
+how a reader drills in: *Basic Metal is 11.2% of industry — open it — Iron and Steel is 69% of
+basic metals.*
+
+**It also answers §15's founding defect.** The card that started that work said *"Iron and Steel
+holds 69.0% of basic-metals credit"* above a chart reading *"Basic Metal — 11.2% of industry"*:
+two correct artifacts answering different questions. The row expansion puts both on screen, one
+inside the other, with the relationship visible rather than implied.
+
+### Rules
+
+- **The join is computed in Python, never in the browser.** A row carries `sub_cut: "<stem>"`
+  when one exists; the browser looks it up. Resolving code -> CSV name -> row entity client-side
+  would be a second implementation of a mapping the compute layer already knows.
+- **One level.** RBI publishes no fourth, and `buildSubCuts` already makes the same assumption.
+- **Reachability is TESTED, not trusted.** Every computed table must be reachable — as a
+  dimension's cut or as a row's sub-cut. That test is the thing that would have caught the seven,
+  and hand-maintained lists are exactly what it exists to police.
+

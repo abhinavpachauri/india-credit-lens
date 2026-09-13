@@ -102,7 +102,7 @@ def _series(conn, pipeline, metric_id, entity_id, entity_type, n=8):
 
 
 def build(conn, pipeline: str, period: str, stem: str, unit: str = "rs_cr",
-          parent_yoy: str | None = None) -> dict | None:
+          parent_yoy: str | None = None, sub_cuts: dict[str, str] | None = None) -> dict | None:
     """One cut's table, or None when the cut has nothing to show this period.
 
     None is a real answer: a cut whose 12-month window is not yet available has no
@@ -140,6 +140,10 @@ def build(conn, pipeline: str, period: str, stem: str, unit: str = "rs_cr",
         share = val(alloc, name) if (gr is not None or not sz) else None
         parts.append({
             "entity":  name,
+            # The cut this part decomposes into, when it has one (§19). Resolved HERE — code to
+            # CSV name to row entity is a mapping the compute layer already holds, and doing it
+            # again in a browser would be a second implementation of it.
+            "sub_cut": (sub_cuts or {}).get(name),
             "size":    Cell.of(sz, fmt),
             "of_cut":  Cell.of(val(ofcut, name), _pct),
             "of_book": Cell.of(val(ofbook, name), _pct),

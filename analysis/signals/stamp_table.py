@@ -64,6 +64,31 @@ def cuts(pipeline: str) -> dict[str, str]:
     return out
 
 
+def sub_cut_map(pipeline: str) -> dict[str, str]:
+    """{parent entity name: the cut it decomposes into} (§19).
+
+    A sub-cut declares the CODE of its parent; a table row is keyed by the parent's NAME. The
+    consolidated CSV is the one place both are known, so the join happens here and the browser
+    is handed the answer.
+    """
+    if pipeline != "sibc":
+        return {}                    # payments has one level of bank categories, no sub-cuts
+    import pandas as pd
+    from core.manifest import consolidated_csv
+    reg = json.loads(REGISTRY.read_text())["signals"]
+    df = pd.read_csv(consolidated_csv(pipeline))
+    out = {}
+    for sid, sig in reg.items():
+        c = sig.get("compute", {})
+        if c.get("method") not in MOMENTUM or c.get("child_level") != 3:
+            continue
+        rows = df[(df["code"].astype(str) == str(c.get("parent_code")))
+                  & (df["statement"] == c.get("statement"))]["sector"]
+        if len(rows):
+            out[rows.iloc[0]] = sid[: -len("-momentum")]
+    return out
+
+
 def latest_period(conn, pipeline: str) -> str:
     return conn.execute("SELECT MAX(period) FROM signals WHERE pipeline=?", (pipeline,)).fetchone()[0]
 
@@ -72,9 +97,9 @@ def build(pipeline: str, period: str | None = None) -> dict:
     conn = sqlite3.connect(DB)
     try:
         period = period or latest_period(conn, pipeline)
-        tables, rates = {}, parent_rates(pipeline)
+        tables, rates, subs = {}, parent_rates(pipeline), sub_cut_map(pipeline)
         for stem, unit in sorted(cuts(pipeline).items()):
-            t = table_rows.build(conn, pipeline, period, stem, unit, rates.get(stem))
+            t = table_rows.build(conn, pipeline, period, stem, unit, rates.get(stem), subs)
             if t is not None:          # a cut without its 12-month window has no table yet
                 tables[stem] = t
     finally:
