@@ -33,6 +33,7 @@ import os
 import sqlite3
 import sys
 import tempfile
+from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
 # Bootstrap: <repo>/analysis on sys.path so `from core…` / `from signals…` resolve from
@@ -61,18 +62,21 @@ def _rows(conn, pipeline=None):
             for r in conn.execute(q, args).fetchall()}
 
 
-def _recompute(registry, periods_by_pipeline):
-    """Recompute the given (pipeline -> {periods}) set from current sources into a
-    throwaway DB; return the same {key: (value,status,unit)} mapping."""
+def _one(task):
+    """Recompute ONE (pipeline, period) into its own throwaway DB and return its rows.
+
+    A worker, deliberately: `run_append` writes only to the connection it is handed and caches
+    the source CSV per process, so periods are independent and the CSV is parsed once per
+    worker rather than once per period.
+    """
+    pipeline, period, registry = task
     tmp = tempfile.NamedTemporaryFile(suffix=".db", delete=False)
     tmp.close()
     path = Path(tmp.name)
     try:
         scratch = init_db(path)
         with contextlib.redirect_stdout(io.StringIO()):   # silence per-append summaries
-            for pipeline, periods in periods_by_pipeline.items():
-                for period in sorted(periods):
-                    run_append(pipeline, period, scratch, registry)
+            run_append(pipeline, period, scratch, registry)
         data = _rows(scratch)
         scratch.close()
         return data
@@ -81,6 +85,60 @@ def _recompute(registry, periods_by_pipeline):
             os.unlink(path)
         except OSError:
             pass
+
+
+def _recompute(registry, periods_by_pipeline, workers=None):
+    """Recompute the given (pipeline -> {periods}) set from current sources; return the same
+    {key: (value,status,unit)} mapping the committed DB is read into.
+
+    PARALLEL BY PERIOD, and the guarantee is unchanged by it: every period is still recomputed
+    from the CSV and compared row by row. Nothing is skipped, cached or trusted — the work is
+    simply spread over cores instead of done one period at a time.
+
+    This is deliberately NOT the other available speed-up. Fingerprinting the inputs and
+    skipping when they are unchanged would be far faster still, and it would stop catching a
+    hand-edited signals.db — a capability used four times in one day for negative tests, and the
+    thing that makes this check evidence rather than bookkeeping.
+
+    Falls back to serial on any pool failure: a guard that cannot run is worse than a slow one.
+    """
+    tasks = [(pl, per, registry)
+             for pl, periods in sorted(periods_by_pipeline.items())
+             for per in sorted(periods)]
+    out: dict = {}
+    if len(tasks) > 1:
+        try:
+            with ProcessPoolExecutor(max_workers=workers or min(os.cpu_count() or 1, 8)) as pool:
+                for part in pool.map(_one, tasks):
+                    out.update(part)
+            return out
+        except Exception as e:                            # noqa: BLE001
+            print(f"  · parallel recompute unavailable ({e}); falling back to serial",
+                  file=sys.stderr)
+            out = {}
+    for t in tasks:
+        out.update(_one(t))
+    return out
+
+
+def _declared_periods() -> dict[str, set]:
+    """{pipeline: periods the timeline says have been ingested}.
+
+    The timeline is each pipeline's own record of what it has taken in — the only statement of
+    what the signal store OUGHT to contain that does not come from the signal store itself.
+    """
+    out: dict[str, set] = {}
+    for pl, rel, key in (("sibc", "rbi_sibc/timeline.json", "dataDate"),
+                         ("atm_pos", "rbi_atm_pos/timeline.json", None)):
+        f = ROOT / "analysis" / rel
+        if not f.exists():
+            continue
+        doc = json.loads(f.read_text())
+        rows = doc["periods"] if isinstance(doc, dict) else doc
+        out[pl] = {(r[key] if key else (r.get("report_date") or r.get("dataDate")))
+                   for r in rows}
+        out[pl].discard(None)
+    return out
 
 
 def _fmt(triple) -> str:
@@ -104,10 +162,24 @@ def check(pipeline_filter=None, quiet=False) -> int:
         print(f"  ✗ no committed rows for pipeline filter {pipeline_filter!r}", file=sys.stderr)
         return 1
 
-    # Recompute exactly the (pipeline, period) set present in the committed DB.
+    # The population is the TIMELINE, not the database.
+    #
+    # This read the period set off the committed rows, which means a period with NO rows was
+    # never in the set, never recomputed and never compared. Deleting an entire month left the
+    # check reporting "fresh — 46,013 rows match (sibc:10p)". Stale VALUES were caught; an
+    # absent PERIOD was not — and an absent period is the June failure's own shape.
+    #
+    # timeline.json is the declared record of what has been ingested, so it is what the DB
+    # should be measured against. A period declared and not appended now surfaces as
+    # MISSING_IN_DB instead of silently shrinking the thing being checked.
     periods_by_pipeline: dict[str, set] = {}
     for (pl, per, *_rest) in committed:
         periods_by_pipeline.setdefault(pl, set()).add(per)
+    for pl, declared in _declared_periods().items():
+        if pipeline_filter and pl != pipeline_filter:
+            continue
+        if pl in periods_by_pipeline or not pipeline_filter:
+            periods_by_pipeline.setdefault(pl, set()).update(declared)
 
     expected = _recompute(registry, periods_by_pipeline)
 
