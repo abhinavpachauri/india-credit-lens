@@ -21,6 +21,7 @@ from pathlib import Path
 import sys
 sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
 from core.paths import ROOT as REPO
+from core import cadence
 ANAL  = REPO / "analysis"
 SIG   = ANAL / "signals"
 REG   = SIG / "registry.json"
@@ -120,6 +121,21 @@ def check_registry(reg: dict) -> set[str]:
             warn(f"registry.signals['{sig_id}'] missing 'layer' field (expected 1, 2, or 3)")
         elif layer not in VALID_LAYERS:
             fail(f"registry.signals['{sig_id}'].layer '{layer}' invalid — must be 1, 2, or 3")
+
+        # Cadence — how often the VALUE can change, not how often the source publishes.
+        # Required, because the alternative is what we had: every signal assumed monthly, the
+        # assumption written nowhere, and the first quarterly source inheriting it silently.
+        declared = sig.get("cadence")
+        if declared is None:
+            fail(f"registry.signals['{sig_id}'] declares no cadence — a signal that does not "
+                 f"say how often it can change is a signal every reader assumes is monthly")
+        elif not cadence.is_valid(declared):
+            fail(f"registry.signals['{sig_id}'].cadence '{declared}' invalid — one of {cadence.CADENCES}")
+        elif (declared == "annual") != bool((sig.get("compute") or {}).get("annual")):
+            # Two names for one fact, kept in step by a check rather than by memory: the FY
+            # signals have carried `compute.annual` since long before this field existed.
+            fail(f"registry.signals['{sig_id}']: cadence '{declared}' disagrees with "
+                 f"compute.annual={bool((sig.get('compute') or {}).get('annual'))}")
 
         # layer=1 data signals must have a compute spec
         if layer == 1 and sig.get("pipeline") == "sibc" and sig.get("type") == "data":

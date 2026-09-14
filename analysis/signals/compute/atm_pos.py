@@ -321,6 +321,21 @@ def csv_category_scan_abs(params: dict, period: str, df: pd.DataFrame) -> list[d
     return out
 
 
+def _bank_values(df: pd.DataFrame, period: str | None, metric: str) -> dict[str, float]:
+    """{bank: value} for one metric at one period — ONE pass over the frame.
+
+    Both bank methods used to look the prior year up per bank, which is a full-frame filter
+    inside a sixty-four-iteration loop, twenty-six metrics deep, thirty-one periods wide. The
+    values were right and the cost was paid again on every freshness recompute, which is the
+    check that runs on every commit.
+    """
+    if period is None:
+        return {}
+    rows = df[(df["report_date"] == period) & (df["metric"] == metric) &
+              (df["record_type"] == "bank")][["bank_name", "value"]].dropna()
+    return dict(zip(rows["bank_name"], rows["value"].astype(float)))
+
+
 def csv_bank_scan(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
     """
     Compute value or YoY for EVERY bank for a metric. One row per bank.
@@ -361,20 +376,12 @@ def csv_bank_scan(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
         return out
     else:
         # absolute value for each bank
-        total_v = _total_val(df, period, metric)
-        avail   = set(df["report_date"].unique())
-        prior   = _prior_year(period, avail)
+        avail = set(df["report_date"].unique())
+        prev  = _bank_values(df, _prior_year(period, avail), metric)
         out = []
         for _, row in bank_rows.iterrows():
-            v  = row["value"]
-            pv = v
-            if prior:
-                prow = df[(df["report_date"] == prior) &
-                          (df["metric"] == metric) &
-                          (df["bank_name"] == row["bank_name"]) &
-                          (df["record_type"] == "bank")]["value"]
-                if not prow.empty:
-                    pv = float(prow.iloc[0])
+            v  = float(row["value"])
+            pv = prev.get(row["bank_name"], v)
             status = _eval_status(rules, v, pv) if rules else "active"
             out.append(_row("bank", row["bank_name"], v, status, unit))
         return out
@@ -405,17 +412,14 @@ def csv_bank_scan_share(params: dict, period: str, df: pd.DataFrame) -> list[dic
     avail = set(df["report_date"].unique())
     prior = _prior_year(period, avail)
     prior_total = _total_val(df, prior, metric) if prior else None
+    prev = _bank_values(df, prior, metric) if prior_total else {}
 
     out = []
     for _, row in rows.iterrows():
         share = row["value"] / total * 100
         pshare = share
-        if prior and prior_total:
-            prow = df[(df["report_date"] == prior) & (df["metric"] == metric) &
-                      (df["bank_name"] == row["bank_name"]) &
-                      (df["record_type"] == "bank")]["value"]
-            if not prow.empty:
-                pshare = float(prow.iloc[0]) / prior_total * 100
+        if prior_total and row["bank_name"] in prev:
+            pshare = prev[row["bank_name"]] / prior_total * 100
         out.append(_row("bank", row["bank_name"], share,
                         _eval_status(rules, share, pshare) if rules else "active", "pct"))
     return sorted(out, key=lambda r: r["value"], reverse=True)

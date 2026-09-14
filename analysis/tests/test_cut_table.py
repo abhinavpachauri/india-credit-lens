@@ -252,6 +252,17 @@ def test_a_sub_cut_is_joined_to_a_row_that_actually_exists():
         assert stem in doc["cuts"], f"a row opens into {stem}, which is not a table"
 
 
+def _bank_tables(pipeline="atm_pos"):
+    """Every breakout, read the way the browser reads them: through the index."""
+    doc = json.loads((DATA / f"{pipeline}_table.json").read_text())
+    out = {}
+    for metric, entry in (doc.get("_banks") or {}).items():
+        f = DATA / entry["file"]
+        assert f.exists(), f"{metric} is indexed as a breakout but {entry['file']} is not there"
+        out[metric] = (entry, json.loads(f.read_text()))
+    return doc, out
+
+
 def test_a_bank_breakout_is_a_cut_like_any_other():
     """The 63 reporting banks were in the store from the first ingestion and no surface could
     show one of them beside its own growth: the bank scan fed concentration cards and nothing
@@ -261,27 +272,38 @@ def test_a_bank_breakout_is_a_cut_like_any_other():
     Discovery is by METHOD and METRIC, never by name: `cc-bank-scan` does not follow the stem
     convention and never will.
     """
-    doc = json.loads((DATA / "atm_pos_table.json").read_text())
-    banks = {s: t for s, t in doc["cuts"].items() if t.get("level") == "bank"}
-    assert len(banks) == 3, f"expected the three fleet metrics to break out by bank, got {sorted(banks)}"
-    for stem, t in banks.items():
-        assert t.get("metric"), f"{stem} does not say which metric it breaks out"
-        assert len(t["parts"]) > 20, f"{stem} has {len(t['parts'])} banks — that is a category table"
+    doc, banks = _bank_tables()
+    measured = {t["metric"] for t in doc["cuts"].values() if t.get("metric")}
+    assert set(banks) == measured, (
+        f"every measure should break out by bank; missing {sorted(measured - set(banks))}")
+    for metric, (entry, t) in banks.items():
+        assert t.get("level") == "bank" and t.get("metric") == metric
+        assert len(t["parts"]) == entry["parts"] > 20, \
+            f"{metric}: the index says {entry['parts']} banks, the file has {len(t['parts'])}"
         # A bank breakout has no 12-month allocation window and no acceleration, and six
         # columns of dashes would claim it does.
         assert set(t["columns"]) == {"size", "of_cut", "growth"}, \
-            f"{stem} declares {sorted(t['columns'])}"
+            f"{metric} declares {sorted(t['columns'])}"
+
+
+def test_a_breakout_ships_as_its_own_file():
+    """Twenty-six breakouts inline would be an eight-megabyte artifact every visitor downloads
+    to look at one. The main sidecar carries an INDEX; the files are fetched when opened."""
+    doc, banks = _bank_tables()
+    raw = (DATA / "atm_pos_table.json").read_text()
+    assert '"level": "bank"' not in raw, "a breakout is inline in the main sidecar"
+    assert len(banks) > 20, "the index is empty — the toggle would never appear"
+    for metric, (entry, _t) in banks.items():
+        assert entry["file"].startswith("atm_pos_banks/"), entry["file"]
 
 
 def test_the_breakouts_parent_row_is_the_same_total_the_category_table_shows():
     """One signal, two tables. The parent of the bank breakout is the metric's own published
     total — not the sum of the reporting banks, and not a second stored copy of it."""
-    doc = json.loads((DATA / "atm_pos_table.json").read_text())
-    for stem, t in doc["cuts"].items():
-        if t.get("level") != "bank":
+    doc, banks = _bank_tables()
+    for metric, (_entry, t) in banks.items():
+        sibling = next((c for c in doc["cuts"].values() if c.get("metric") == metric), None)
+        if not sibling or not sibling["total"].get("size") or not t["total"].get("size"):
             continue
-        sibling = next(c for c in doc["cuts"].values()
-                       if c.get("metric") == t["metric"] and c.get("level") != "bank")
         assert t["total"]["size"]["display"] == sibling["total"]["size"]["display"], \
-            f"{stem}: the fleet total differs between the bank and category views"
-
+            f"{metric}: the total differs between the bank and category views"

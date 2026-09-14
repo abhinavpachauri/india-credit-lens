@@ -26,7 +26,8 @@ import {
   type RMModel, type RMCard, type RMDimension, type RMRead, type CellRef,
 } from "./parts";
 import { FS, R, GLYPH } from "@/lib/tokens";
-import type { CutTables, ColKey } from "@/lib/table";
+import { loadBankTable, type CutTables, type CutTable as CutTableData,
+         type BankIndex, type ColKey } from "@/lib/table";
 import type { StateMap } from "@/lib/state";
 
 /** How many of a dimension's own reads its tile carries. Three, because the tile has to say
@@ -45,6 +46,8 @@ export interface ReadModeShellProps {
   state?: StateMap;
   /** §17 — the Layer 1 tables keyed by cut stem, and the cuts a dimension owns. */
   tables?: CutTables;
+  /** §20 — which measures have a bank breakout, and where to fetch it (metric → entry). */
+  bankIndex?: BankIndex;
   cutsFor?: (dimId: string) => CutRef[];
 }
 
@@ -56,8 +59,8 @@ export interface CutRef {
    *  measure over a hierarchy, and its depth comes from a row opening into its own cut. */
   measure?: string;
   axis?: "value" | "volume";
-  /** The same measure over the reporting banks (§20 `break out by bank`), when one exists. */
-  bankStem?: string;
+  /** The CSV metric this cut measures — how a bank breakout is found for it (§20). */
+  metricKey?: string;
   /** Named because a share is meaningless without it (§15). Omitted when the cut has none. */
   bookLabel?: string;
   footer?: string;
@@ -68,7 +71,7 @@ export interface CutRef {
 }
 
 export default function ReadModeShell({ model, homeLabel, period, renderChart, hasDeep, renderDeep,
-                                       state = {}, tables, cutsFor }: ReadModeShellProps) {
+                                       state = {}, tables, bankIndex = {}, cutsFor }: ReadModeShellProps) {
   const dimById = useMemo(() => new Map(model.dimensions.map((d) => [d.id, d])), [model]);
 
   const [openDim, setOpenDim] = useState<string | null>(null);       // null = state A
@@ -78,6 +81,9 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
   const [showIndex, setShowIndex] = useState(false);
   const [measure, setMeasure] = useState<string | null>(null);
   const [byBank, setByBank] = useState(false);
+  // The fetched breakout, if the reader has asked for one. Held here rather than in the table
+  // so that closing and reopening a measure does not re-fetch what is already in hand.
+  const [bankTable, setBankTable] = useState<CutTableData | null>(null);
   const [axis, setAxis] = usePersistent<"value" | "volume">("icl-axis", "value");
 
   const detailRef = useRef<HTMLDivElement>(null);
@@ -103,8 +109,17 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
   // A bank breakout is the same table at a different LEVEL, so it replaces the table rather
   // than nesting inside a row: the 63 banks are not children of the five categories on screen,
   // they are what those categories are made of.
-  const bankStem = cut?.bankStem && tables?.[cut.bankStem] ? cut.bankStem : null;
-  const table = cut && tables?.[(byBank && bankStem) ? bankStem : cut.stem];
+  const bankEntry = cut?.metricKey ? bankIndex[cut.metricKey] : undefined;
+  const table = byBank && bankTable ? bankTable : (cut && tables?.[cut.stem]);
+
+  // Fetch the breakout the first time it is asked for, and drop it when the reader moves to a
+  // measure that has a different one — a stale table under a new heading is the worst outcome.
+  useEffect(() => {
+    if (!byBank || !bankEntry) { setBankTable(null); return; }
+    let live = true;
+    loadBankTable(bankEntry).then((t) => { if (live) setBankTable(t); });
+    return () => { live = false; };
+  }, [byBank, bankEntry]);
 
   const deepAvailable = dim ? hasDeep(dim.id) : false;
 
@@ -246,14 +261,14 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
                       </button>
                     ))}
                   </div>
-                  {bankStem && (
+                  {bankEntry && (
                     <div className="flex flex-wrap items-center gap-1.5 mt-2">
                       <span style={{ ...EYEBROW, marginRight: 4 }}>Break out by</span>
                       {([false, true] as const).map((b) => (
                         <button key={String(b)} onClick={() => { setByBank(b); setCell(null); }}
                                 className="rounded-full transition-colors"
                                 style={{ fontSize: FS.note, padding: "5px 11px", ...chipStyle(b === byBank) }}>
-                          {b ? `bank (${tables?.[bankStem]?.parts.length ?? 0})` : "bank category"}
+                          {b ? `bank (${bankEntry.parts})` : "bank category"}
                         </button>
                       ))}
                     </div>

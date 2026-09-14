@@ -31,6 +31,14 @@ DB = ROOT / "analysis" / "signals" / "signals.db"
 CELLS = ("size", "of_cut", "of_book", "growth", "pace", "new")
 
 
+# One query per SIGNAL, not per cell. The bank breakouts took the cell count from ~350 to
+# ~5,000 and the row count in the store past 150,000; a query inside the cell loop turned a
+# two-second check into one that outlived a ten-minute timeout. The answers are identical —
+# a signal's rows at a period do not change while the check runs.
+_TRUTH: dict = {}
+_STORED: dict = {}
+
+
 def column_truth(conn, pipeline, period, metric_id):
     """Every value this ONE signal stores at this period — the candidate set for a cell.
 
@@ -38,9 +46,12 @@ def column_truth(conn, pipeline, period, metric_id):
     pace cell trace to a size: six families in one candidate set is six chances to collide,
     and a traceability gate is its scope.
     """
-    return [v for (v,) in conn.execute(
-        "SELECT value FROM signals WHERE pipeline=? AND period=? AND metric_id=? "
-        "AND value IS NOT NULL", (pipeline, period, metric_id))]
+    key = (pipeline, period, metric_id)
+    if key not in _TRUTH:
+        _TRUTH[key] = [v for (v,) in conn.execute(
+            "SELECT value FROM signals WHERE pipeline=? AND period=? AND metric_id=? "
+            "AND value IS NOT NULL", (pipeline, period, metric_id))]
+    return _TRUTH[key]
 
 
 def stored(conn, pipeline, metric_id, entity_id):
@@ -49,9 +60,15 @@ def stored(conn, pipeline, metric_id, entity_id):
     A cell's chart is history, so its scope is that entity's own history and nothing else.
     Widening it to the cut would let one part's past readings vouch for another's.
     """
-    return [v for (v,) in conn.execute(
-        "SELECT value FROM signals WHERE pipeline=? AND metric_id=? AND entity_id=? "
-        "AND value IS NOT NULL", (pipeline, metric_id, entity_id))]
+    key = (pipeline, metric_id)
+    if key not in _STORED:
+        by_entity: dict = {}
+        for eid, v in conn.execute(
+                "SELECT entity_id, value FROM signals WHERE pipeline=? AND metric_id=? "
+                "AND value IS NOT NULL", (pipeline, metric_id)):
+            by_entity.setdefault(eid, []).append(v)
+        _STORED[key] = by_entity
+    return _STORED[key].get(entity_id, [])
 
 
 def fmt_for(col: str, unit: str):
@@ -61,6 +78,25 @@ def fmt_for(col: str, unit: str):
     return table_rows._pp if col == "pace" else table_rows._pct
 
 
+def all_tables(pipeline: str) -> tuple[dict, str]:
+    """Every table this pipeline ships — the sidecar's own cuts AND each bank breakout, which
+    lives in its own file so a visitor downloads the one they opened rather than all 26.
+
+    A file the gate does not read is a file the gate does not check, and a breakout is 63 rows
+    of published numbers. Discovered from the index the sidecar itself declares, so a breakout
+    that stops being indexed stops being served and stops being checked together.
+    """
+    doc = json.loads((DATA / f"{pipeline}_table.json").read_text())
+    tables = dict(doc["cuts"])
+    for entry in (doc.get("_banks") or {}).values():
+        f = DATA / entry["file"]
+        if not f.exists():
+            tables[entry["cut"]] = None            # reported below as a missing breakout
+            continue
+        tables[entry["cut"]] = json.loads(f.read_text())
+    return tables, doc["_meta"]["period"]
+
+
 def validate(pipeline: str) -> list[str]:
     doc = json.loads((DATA / f"{pipeline}_table.json").read_text())
     period = doc["_meta"]["period"]
@@ -68,9 +104,20 @@ def validate(pipeline: str) -> list[str]:
     findings = []
     try:
         reg = json.loads((ROOT / "analysis/signals/registry.json").read_text())["signals"]
-        for stem, table in doc["cuts"].items():
-            unit = reg.get(f"{stem}-size-scan", {}).get("compute", {}).get(
-                "unit", "rs_cr" if pipeline == "sibc" else "count")
+        tables, _ = all_tables(pipeline)
+        for stem, table in tables.items():
+            if table is None:
+                findings.append(f"{stem}: indexed as a bank breakout but its file is missing — "
+                                f"the toggle would open nothing")
+                continue
+            size_id = (table.get("columns") or {}).get("size", f"{stem}-size-scan")
+            unit = reg.get(size_id, {}).get("compute", {}).get("unit")
+            if not unit:
+                # A bank scan takes its unit from the CSV rather than declaring one; read it
+                # back from the rows themselves rather than assuming a count.
+                row = conn.execute("SELECT unit FROM signals WHERE pipeline=? AND period=? AND "
+                                   "metric_id=? LIMIT 1", (pipeline, period, size_id)).fetchone()
+                unit = (row[0] if row and row[0] else ("rs_cr" if pipeline == "sibc" else "count"))
             cols, pcols = table["columns"], table.get("parent_columns", {})
             if not any(column_truth(conn, pipeline, period, m) for m in set(cols.values())):
                 findings.append(f"{stem}: declares {sorted(set(cols.values()))} and none of them "
@@ -164,7 +211,8 @@ def main():
         for x in f[:12]:
             print(f"      {x}")
         return 1
-    doc = json.loads((DATA / f"{args.pipeline}_table.json").read_text())
+    tables, _ = all_tables(args.pipeline)
+    doc = {"cuts": {k: v for k, v in tables.items() if v}}
     rows = sum(len(t["parts"]) + 1 for t in doc["cuts"].values())
     readings = sum(len(c["series"]) for t in doc["cuts"].values()
                    for r in [t["total"], *t["parts"]]

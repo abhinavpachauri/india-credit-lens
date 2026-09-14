@@ -227,6 +227,21 @@ def _unreachable_zero(row) -> bool:
             and abs(abs(row["value"]) - row["distance"]) < 1e-6)
 
 
+# One pass over 527 signals costs ~6 seconds, and the watchlist, the slate builder and a
+# dozen tests all ask for the same one inside a single process. The answer is a pure function
+# of the store, so it is cached against the store's own mtime and size: anything that writes a
+# row invalidates it, which is the only correctness condition this cache has.
+_RANKED: dict = {}
+
+
+def _store_stamp():
+    try:
+        st = DB.stat()
+        return (st.st_mtime_ns, st.st_size)
+    except OSError:
+        return None
+
+
 def ranked(pipeline=None, limit=None, kind="level"):
     """Measurable signals, nearest flip first.
 
@@ -234,6 +249,11 @@ def ranked(pipeline=None, limit=None, kind="level"):
     real distance still to travel. Pass kind=None for everything including the knife
     edges, which are a different (and much shorter) story.
     """
+    key = (pipeline, kind, _store_stamp())
+    if key in _RANKED:
+        cached = _RANKED[key]
+        return cached[:limit] if limit else list(cached)
+
     registry = load_registry()
     conn = _con()
     out = []
@@ -248,7 +268,8 @@ def ranked(pipeline=None, limit=None, kind="level"):
             out.append(row)
     conn.close()
     out.sort(key=lambda r: r["moves_away"])
-    return out[:limit] if limit else out
+    _RANKED[key] = out
+    return out[:limit] if limit else list(out)
 
 
 STATUS_WORD = {"strengthening": "accelerating", "active": "growing steadily",

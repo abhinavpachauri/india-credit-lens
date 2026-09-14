@@ -8,7 +8,7 @@
 > Authored rationale (layer model, design principles, guard purposes) lives in the
 > hand-written `ARCHITECTURE.md`. This file is the structural, drift-guarded half.
 
-_Derived from 76 scripts._
+_Derived from 77 scripts._
 
 ## 1. Data-flow
 
@@ -131,6 +131,7 @@ orchestrated, not import-coupled).
 - `guards/check_derived_fresh` → `core/manifest`
 - `guards/validate_card_prose` → `core/residuals`, `core/voice`
 - `guards/validate_cut_table` → `core/table_rows`
+- `guards/validate_signal_history` → `core/cadence`
 - `pipelines/atm_pos/compute_atm_pos_signals` → `core/manifest`
 - `pipelines/atm_pos/consolidate_atm_pos` → `core/manifest`
 - `pipelines/atm_pos/extract_atm_pos` → `pipelines/atm_pos/detect_atm_pos_format`
@@ -146,6 +147,7 @@ orchestrated, not import-coupled).
 - `signals/is_news` → `signals/proximity`
 - `signals/migrate_to_db` → `signals/db`
 - `signals/planes` → `signals/is_news`, `signals/proximity`
+- `signals/query` → `core/cadence`
 - `signals/stamp_planes` → `signals/planes`, `signals/proximity`
 - `signals/stamp_state` → `core/state_lines`
 - `signals/stamp_table` → `core/table_rows`

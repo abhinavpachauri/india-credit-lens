@@ -1,6 +1,14 @@
 {
   "root": "/Users/rishamjeetkaur/Downloads/abnvp/india-credit-lens",
   "scripts": {
+    "core/cadence": {
+      "doc_claims": [],
+      "imports": [],
+      "invokes": [],
+      "path": "analysis/core/cadence.py",
+      "reads": {},
+      "writes": {}
+    },
     "core/cuts": {
       "doc_claims": [],
       "imports": [],
@@ -433,7 +441,9 @@
     },
     "guards/validate_signal_history": {
       "doc_claims": [],
-      "imports": [],
+      "imports": [
+        "core/cadence"
+      ],
       "invokes": [],
       "path": "analysis/guards/validate_signal_history.py",
       "reads": {
@@ -911,7 +921,9 @@
     },
     "signals/query": {
       "doc_claims": [],
-      "imports": [],
+      "imports": [
+        "core/cadence"
+      ],
       "invokes": [],
       "path": "analysis/signals/query.py",
       "reads": {
@@ -955,6 +967,7 @@
       "invokes": [],
       "path": "analysis/signals/stamp_table.py",
       "reads": {
+        "*.json": "low",
         "analysis/signals/registry.json": "low",
         "analysis/signals/signals.db": "low"
       },

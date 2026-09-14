@@ -1678,8 +1678,14 @@ those categories are made of.
   allocation window and no acceleration, and six columns of dashes would claim otherwise.
 - Its parent row is the metric's own published total, from the SAME signal the category
   table's parent row reads.
-- Only the three fleet metrics carry one today, so the toggle appears on those measures and
-  nowhere else. An absent control is honest; a control that opens an empty table is not.
+- **All 26 measures carry one** (completed 2026-09-14): 69 registry entries over the 23
+  measures that had none, 151,448 payments rows in the store.
+- **A breakout ships as its own file** and is fetched when the reader opens it. Twenty-six of
+  them inline is an 8 MB artifact every visitor downloads to look at one; the sidecar carries
+  an INDEX (`_banks`: metric → cut, parts, file) so the toggle knows a breakout exists before
+  anything is fetched, and the page pulls only the one that was asked for. `stamp_table`
+  deletes a breakout file that stops being computed — a stale file would answer a fetch with
+  last month's table and nothing would say so.
 
 ### Decisions (user, 2026-09-13)
 

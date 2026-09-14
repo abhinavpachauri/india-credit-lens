@@ -481,6 +481,34 @@
           "date": "2026-09-13",
           "how_measured": "Passed every traceability gate because the STORED VALUE WAS CORRECT; the defect is in the transform between stored and drawn. Caught by reading the rendered number and asking whether it could be true. Now pinned by a magnitude band over every money cut.",
           "source": "analysis/tests/test_cut_table.py"
+        },
+        {
+          "metric": "Cut-table gate — injection catch, series and cells",
+          "value": "5/5 caught (fabricated reading inside a chart · series longer than its own axis · cell that is not the top of its series · a growth cell carrying an of_cut value · an invented parent share). 0 false rejections; sources restored md5-identical.",
+          "date": "2026-09-14",
+          "how_measured": "Each fault injected into web/public/data/sibc_table.json and the gate re-run; the artifact was rebuilt from source afterwards and compared by md5.",
+          "source": "analysis/guards/validate_cut_table.py"
+        },
+        {
+          "metric": "Traceability scope tightened from per-cut to per-column",
+          "value": "A cell's candidate set is now the ONE signal its column declares, not the union of the cut's six families. The cut-wide pool let a growth cell trace to a share and a pace cell to a size — six families in one candidate set is six chances to collide.",
+          "date": "2026-09-14",
+          "how_measured": "Negative test: a growth cell set to that row's of_cut value passed under the old scope and fails under the new one.",
+          "source": "analysis/guards/validate_cut_table.py"
+        },
+        {
+          "metric": "Published surface a gate could not see, found by widening a check's population",
+          "value": "3 payments ANCHOR tables (credit cards, debit cards, POS terminals) were computed, gated, shipped and reachable from nothing. Found on the first run after the reachability test was widened from SIBC to both pipelines.",
+          "date": "2026-09-14",
+          "how_measured": "The adapter reconstructed each cut's stem from its metric's NAME — right for 23 of 26 cuts, wrong for the three whose scan predates the convention. Test now asserts both directions: every metric a section names finds a cut, and every cut is found by one.",
+          "source": "analysis/tests/test_cut_table.py"
+        },
+        {
+          "metric": "Cadence field — negative tests",
+          "value": "3/3 caught (no cadence declared · a value outside the vocabulary · a cadence disagreeing with compute.annual). Registry restored byte-identical.",
+          "date": "2026-09-14",
+          "how_measured": "Each fault written into registry.json and Check 2e re-run; exit 1 with a finding naming the signal in all three.",
+          "source": "analysis/guards/validate_signal_history.py"
         }
       ],
       "observations": [
@@ -646,6 +674,21 @@
           "observation": "Three defects in one build came from READING THE RENDERED OUTPUT, and none was catchable by a gate: a 100x unit conversion (stored value correct), a column header saying 'New' over 11 of 26 contracting cuts, and a band and a table quoting the same quantity at different dates ('holding 31.1%' vs 'of cut 34.3%' — weight vs weight_now) without either saying when.",
           "date": "2026-09-13",
           "source": "analysis/core/table_rows.py"
+        },
+        {
+          "observation": "A number nobody can see is still published. A bank breakout ships as its own file and is fetched only when opened — so the gate had to be taught to read those files too, from the index the sidecar declares. A file the gate does not read is a file the gate does not check, and a breakout is 63 rows of published numbers.",
+          "date": "2026-09-14",
+          "source": "analysis/guards/validate_cut_table.py"
+        },
+        {
+          "observation": "A check that queries per CELL stops being runnable before it stops being correct. Adding the bank breakouts took the cell count from ~350 to ~5,000 over a 151k-row store, and the traceability gate outlived a ten-minute timeout; memoised per signal it runs in 4.5s with identical answers. A guard that times out is a guard that gets skipped.",
+          "date": "2026-09-14",
+          "source": "analysis/guards/validate_cut_table.py"
+        },
+        {
+          "observation": "An assumption that was never written down cannot be found when it stops holding. Every signal had assumed monthly since the first one; the field that says so (cadence) also had to say what it MEANS — how often the value can change, not how often the source publishes — because the FY signals arrive monthly and change once a year.",
+          "date": "2026-09-14",
+          "source": "analysis/core/cadence.py"
         }
       ],
       "open_questions": [

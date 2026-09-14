@@ -5,7 +5,7 @@
     "schema_version": "4.0",
     "spec_ref": "analysis/SYSTEM_MODEL_SPEC.md §16",
     "computed_from": "signals.db",
-    "signals_observed": 260
+    "signals_observed": 329
   },
   "entity_states": {
     "icl:atm_pos/cards/cards_in_force": {
@@ -41,13 +41,13 @@
     },
     "icl:atm_pos/infrastructure/bharat_qr": {
       "direction": -1,
-      "signals": 8,
-      "observed": 8
+      "signals": 11,
+      "observed": 11
     },
     "icl:atm_pos/infrastructure/micro_atms": {
       "direction": -1,
-      "signals": 8,
-      "observed": 8
+      "signals": 11,
+      "observed": 11
     },
     "icl:atm_pos/infrastructure/pos_terminals": {
       "direction": 1,
@@ -56,18 +56,18 @@
     },
     "icl:atm_pos/infrastructure/upi_qr": {
       "direction": 1,
-      "signals": 10,
-      "observed": 10
+      "signals": 13,
+      "observed": 13
     },
     "icl:atm_pos/infrastructure/atm_offsite": {
       "direction": 1,
-      "signals": 8,
-      "observed": 8
+      "signals": 11,
+      "observed": 11
     },
     "icl:atm_pos/infrastructure/atm_onsite": {
       "direction": 1,
-      "signals": 8,
-      "observed": 8
+      "signals": 11,
+      "observed": 11
     },
     "icl:atm_pos/spend_value/card_spend_value": {
       "direction": 0,
@@ -92,48 +92,48 @@
     },
     "icl:atm_pos/spend_value/cc_atm_withdrawal_val": {
       "direction": 1,
-      "signals": 9,
-      "observed": 9
+      "signals": 12,
+      "observed": 12
     },
     "icl:atm_pos/spend_value/cc_ecom_txn_val": {
       "direction": 1,
-      "signals": 9,
-      "observed": 9
+      "signals": 12,
+      "observed": 12
     },
     "icl:atm_pos/spend_value/cc_other_txn_val": {
       "direction": 1,
-      "signals": 9,
-      "observed": 9
+      "signals": 12,
+      "observed": 12
     },
     "icl:atm_pos/spend_value/cc_pos_txn_val": {
       "direction": 1,
-      "signals": 9,
-      "observed": 9
+      "signals": 12,
+      "observed": 12
     },
     "icl:atm_pos/spend_value/dc_atm_withdrawal_val": {
       "direction": -1,
-      "signals": 9,
-      "observed": 9
+      "signals": 12,
+      "observed": 12
     },
     "icl:atm_pos/spend_value/dc_ecom_txn_val": {
       "direction": 1,
-      "signals": 9,
-      "observed": 9
+      "signals": 12,
+      "observed": 12
     },
     "icl:atm_pos/spend_value/dc_other_txn_val": {
       "direction": -1,
-      "signals": 9,
-      "observed": 9
+      "signals": 12,
+      "observed": 12
     },
     "icl:atm_pos/spend_value/dc_pos_txn_val": {
       "direction": 1,
-      "signals": 9,
-      "observed": 9
+      "signals": 12,
+      "observed": 12
     },
     "icl:atm_pos/spend_value/dc_pos_withdrawal_val": {
       "direction": 1,
-      "signals": 9,
-      "observed": 9
+      "signals": 12,
+      "observed": 12
     },
     "icl:atm_pos/spend_volume/card_spend_volume": {
       "direction": 0,
@@ -158,48 +158,48 @@
     },
     "icl:atm_pos/spend_volume/cc_atm_withdrawal_vol": {
       "direction": 1,
-      "signals": 10,
-      "observed": 10
+      "signals": 13,
+      "observed": 13
     },
     "icl:atm_pos/spend_volume/cc_ecom_txn_vol": {
       "direction": 1,
-      "signals": 9,
-      "observed": 9
+      "signals": 12,
+      "observed": 12
     },
     "icl:atm_pos/spend_volume/cc_other_txn_vol": {
       "direction": 1,
-      "signals": 9,
-      "observed": 9
+      "signals": 12,
+      "observed": 12
     },
     "icl:atm_pos/spend_volume/cc_pos_txn_vol": {
       "direction": 1,
-      "signals": 9,
-      "observed": 9
+      "signals": 12,
+      "observed": 12
     },
     "icl:atm_pos/spend_volume/dc_atm_withdrawal_vol": {
       "direction": -1,
-      "signals": 10,
-      "observed": 10
+      "signals": 13,
+      "observed": 13
     },
     "icl:atm_pos/spend_volume/dc_ecom_txn_vol": {
       "direction": 1,
-      "signals": 9,
-      "observed": 9
+      "signals": 12,
+      "observed": 12
     },
     "icl:atm_pos/spend_volume/dc_other_txn_vol": {
       "direction": -1,
-      "signals": 9,
-      "observed": 9
+      "signals": 12,
+      "observed": 12
     },
     "icl:atm_pos/spend_volume/dc_pos_txn_vol": {
       "direction": -1,
-      "signals": 9,
-      "observed": 9
+      "signals": 12,
+      "observed": 12
     },
     "icl:atm_pos/spend_volume/dc_pos_withdrawal_vol": {
       "direction": 1,
-      "signals": 10,
-      "observed": 10
+      "signals": 13,
+      "observed": 13
     }
   },
   "force_states": {

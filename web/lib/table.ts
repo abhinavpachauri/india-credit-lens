@@ -58,6 +58,37 @@ export interface CutTable {
 
 export type CutTables = Record<string, CutTable>;
 
+/** The index of bank breakouts: which measure has one, how many banks, and the file to fetch.
+ *  A breakout ships as its own file — twenty-six of them inline is an eight-megabyte artifact
+ *  every visitor downloads to look at one, so the page fetches the one that was asked for. */
+export interface BankIndexEntry { cut: string; parts: number; file: string }
+export type BankIndex = Record<string, BankIndexEntry>;   // keyed by the CSV metric
+
+const bankCache = new Map<string, CutTable | null>();
+
+export async function loadBankIndex(pipeline: "sibc" | "atm_pos"): Promise<BankIndex> {
+  try {
+    const res = await fetch(`/data/${pipeline}_table.json`);
+    if (!res.ok) return {};
+    return ((await res.json()) as { _banks?: BankIndex })._banks ?? {};
+  } catch {
+    return {};
+  }
+}
+
+/** Fetch one breakout, once. A failed fetch caches null so a broken file cannot turn one
+ *  toggle into a fetch on every render. */
+export async function loadBankTable(entry: BankIndexEntry): Promise<CutTable | null> {
+  if (bankCache.has(entry.file)) return bankCache.get(entry.file)!;
+  let table: CutTable | null = null;
+  try {
+    const res = await fetch(`/data/${entry.file}`);
+    if (res.ok) table = (await res.json()) as CutTable;
+  } catch { /* left null — the toggle simply shows nothing rather than breaking the page */ }
+  bankCache.set(entry.file, table);
+  return table;
+}
+
 export async function loadCutTables(pipeline: "sibc" | "atm_pos"): Promise<CutTables> {
   try {
     const res = await fetch(`/data/${pipeline}_table.json`);

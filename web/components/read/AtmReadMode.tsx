@@ -19,7 +19,7 @@ import SectionCard from "@/components/SectionCard";
 import AtmPosTrendChart from "@/components/AtmPosTrendChart";
 import AtmPosDistributionChart from "@/components/AtmPosDistributionChart";
 import ReadModeShell, { type CutRef } from "./ReadModeShell";
-import type { CutTables } from "@/lib/table";
+import type { CutTables, BankIndex } from "@/lib/table";
 import { EYEBROW, type RMModel, type RMCard, type RMDimension } from "./parts";
 import { FS } from "@/lib/tokens";
 
@@ -52,19 +52,15 @@ const atmCutsFor = (tables: CutTables) => (group: string): CutRef[] => {
   const stemOf = new Map(Object.entries(tables)
     .filter(([, t]) => t.metric && t.level !== "bank")
     .map(([stem, t]) => [t.metric as string, stem]));
-  // The same measure at bank level, when it has been computed. Only the three fleet metrics
-  // carry one today, so the toggle appears on those measures and nowhere else — an absent
-  // control is honest; a control that opens an empty table is not.
-  const bankOf = new Map(Object.entries(tables)
-    .filter(([, t]) => t.metric && t.level === "bank")
-    .map(([stem, t]) => [t.metric as string, stem]));
+  // The bank breakout is NOT in this map: it ships as its own file and is fetched when the
+  // reader asks for it, so the cut carries the metric and the shell looks it up in the index.
   return SECTION_DEFS.filter((d) => d.group === group).flatMap((d) => {
     const metrics = d.metric
       ? (Array.isArray(d.metric) ? d.metric : [d.metric])
       : [d.valMetric, d.volMetric].filter(Boolean) as string[];
     return metrics.map((m) => ({
       stem: stemOf.get(m) ?? `${m.replace(/_/g, "-")}-category`,
-      bankStem: bankOf.get(m),
+      metricKey: m,
       title: d.title,
       measure: d.title,
       // Value and volume are the same measure asked two ways, so they are an axis on the
@@ -77,9 +73,9 @@ const atmCutsFor = (tables: CutTables) => (group: string): CutRef[] => {
 };
 
 export default function AtmReadMode(
-  { series, insights, planes, state, tables }:
+  { series, insights, planes, state, tables, bankIndex }:
     { series: AtmPosSeries; insights: AtmPosInsight[]; planes: PlanesMap; state: StateMap;
-      tables: CutTables },
+      tables: CutTables; bankIndex?: BankIndex },
 ) {
   const { model, insById } = useMemo(() => {
     const plane = (id: string) => planes[id]?.plane ?? "subject";
@@ -223,7 +219,7 @@ export default function AtmReadMode(
 
   return (
     <ReadModeShell model={model} homeLabel="Payments dashboard" period={period} state={state}
-                   tables={tables} cutsFor={atmCutsFor(tables)}
+                   tables={tables} bankIndex={bankIndex} cutsFor={atmCutsFor(tables)}
                    renderChart={renderChart} hasDeep={hasDeep} renderDeep={renderDeep} />
   );
 }

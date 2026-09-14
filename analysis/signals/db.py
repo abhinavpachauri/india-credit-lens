@@ -90,6 +90,10 @@ def init_db(path: Path = DB_PATH) -> sqlite3.Connection:
     """Create tables if not present. Returns open connection."""
     conn = get_conn(path)
     conn.executescript(_SCHEMA)
+    # WITHOUT statistics SQLite ignores the history index and falls back to scanning every
+    # row for the pipeline — measured at 18ms a query over 151,000 rows, which is how a
+    # five-second helper became a ten-minute one. ANALYZE is what makes the index chosen.
+    conn.execute("ANALYZE")
     conn.commit()
     return conn
 

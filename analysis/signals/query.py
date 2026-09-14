@@ -13,6 +13,7 @@ from functools import lru_cache
 from pathlib import Path
 
 sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
+from core import cadence
 from core.paths import ANALYSIS
 
 
@@ -253,7 +254,9 @@ def _scalar_payload(conn: sqlite3.Connection, sig_id: str, sig: dict,
     # per-period series, and a historical range are all meaningless and invite a
     # fabricated "jump" narrative. Surface the underlying component rates instead,
     # which make the value interpretable and traceable to its inputs.
-    is_annual = bool(sig.get("compute", {}).get("annual"))
+    # Cadence, not a local boolean: "this value is set once a year" is a property of the
+    # signal that several surfaces need, and it used to be spelled out here alone.
+    is_annual = cadence.of(sig) == "annual"
 
     if is_annual:
         comp = conn.execute(

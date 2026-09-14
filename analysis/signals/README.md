@@ -59,6 +59,32 @@ sub-layer tag on a registry entry says which.
 | `csv_bank_scan` | the same, at individual-bank granularity (`value_type: value|yoy`) — payments only; SIBC publishes no per-bank credit |
 | `csv_bank_scan_share` | each bank's **share of the metric's published total** — the denominator is the published total, never the sum of the banks that reported, because a bank that does not file is still part of the market |
 
+### The store's own shape (2026-09-14)
+
+`signals.db` carries an index on `(pipeline, metric_id, entity_type, entity_id, period)` and is
+`ANALYZE`d at init. The primary key leads with PERIOD, which is right for "what did this period
+hold" and wrong for the question every chart, series and traceability check actually asks: "what
+has this signal read over time". Without the index those scan the table — tolerable at 18,000
+rows, and at 169,000 it turned a five-second helper into one that outlived a ten-minute timeout.
+
+**The index alone was not enough**: SQLite kept choosing the primary key until statistics existed,
+so `ANALYZE` is part of the schema step, not an afterthought. Measured: 18ms → 0.02ms per history
+query, and the unit suite from beyond ten minutes back to **7.4 seconds**.
+
+### Cadence — how often a value can change
+
+Every signal declares `cadence`: `fortnightly` · `monthly` · `quarterly` · `half_yearly` ·
+`annual`. It is **how often the VALUE can change, not how often the source publishes** — the
+FY-acceleration signals arrive inside a monthly file and are set once a year at the March
+year-end, so a month-to-month move in one of them is noise being described as news.
+
+Until 2026-09-14 every signal assumed monthly and nothing said so, which is exactly the shape
+of assumption that survives a new source: the price-of-credit cluster is fortnightly and
+quarterly, BSR-1 is quarterly, STRBI is annual. `core/cadence.py` owns the vocabulary and the
+arithmetic (`window_months`, `describe`), Check 2e fails a signal that declares none or
+declares one that disagrees with `compute.annual`, and `query.py` reads it rather than keeping
+its own boolean.
+
 ### 1d — a number compared with its OWN past
 *How many readings in a row? How does this year compare with last?*
 

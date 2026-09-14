@@ -29,6 +29,11 @@ DATA = ROOT / "web" / "public" / "data"
 DB = ROOT / "analysis" / "signals" / "signals.db"
 REGISTRY = ROOT / "analysis" / "signals" / "registry.json"
 SIDECAR = {p: DATA / f"{p}_table.json" for p in ("sibc", "atm_pos")}
+# A bank breakout ships as its own file, fetched when the reader opens it. Twenty-six of them
+# inline would be an eight-megabyte artifact every visitor downloads to look at one: sixty-four
+# banks, three columns, thirty-one readings each. Compute once, ship compact, and ship only the
+# part that was asked for.
+BANK_DIR = {p: DATA / f"{p}_banks" for p in ("sibc", "atm_pos")}
 MOMENTUM = ("csv_sector_momentum", "csv_category_momentum")
 # A bank breakout's parent rate: the metric's own total YoY, which belongs to the level above
 # the banks exactly as a credit cut's parent rate belongs to the level above its parts.
@@ -177,6 +182,7 @@ def build(pipeline: str, period: str | None = None) -> dict:
         period = period or latest_period(conn, pipeline)
         tables, rates, subs = {}, parent_rates(pipeline), sub_cut_map(pipeline)
         metrics = measured_metric(pipeline)
+        banks = {}
         for stem, spec in sorted(bank_cuts(pipeline).items()):
             unit = json.loads(REGISTRY.read_text())["signals"].get(
                 spec["signals"]["size"], {}).get("compute", {}).get("unit")
@@ -186,7 +192,7 @@ def build(pipeline: str, period: str | None = None) -> dict:
             if t is not None:
                 t["metric"] = spec["metric"]
                 t["level"] = "bank"
-                tables[stem] = t
+                banks[stem] = t
         for stem, unit in sorted(cuts(pipeline).items()):
             t = table_rows.build(conn, pipeline, period, stem, unit, rates.get(stem), subs)
             if t is not None:          # a cut without its 12-month window has no table yet
@@ -196,6 +202,13 @@ def build(pipeline: str, period: str | None = None) -> dict:
     finally:
         conn.close()
     return {
+        # The index of bank breakouts: which measure has one, how many banks it holds, and the
+        # file to fetch. The browser needs to know a breakout EXISTS before the reader asks for
+        # it — an absent toggle is honest, a toggle that opens nothing is not.
+        "_banks": {t["metric"]: {"cut": stem, "parts": len(t["parts"]),
+                                 "file": f"{pipeline}_banks/{stem}.json"}
+                   for stem, t in banks.items()},
+        "_bank_tables": banks,           # written out separately, never into this file
         "_meta": {
             "pipeline": pipeline,
             "period": period,
@@ -209,20 +222,46 @@ def build(pipeline: str, period: str | None = None) -> dict:
     }
 
 
+def _split(payload: dict) -> tuple[dict, dict]:
+    """The main sidecar, and the bank tables that ship beside it one file each."""
+    banks = payload.pop("_bank_tables", {})
+    return payload, banks
+
+
 def write(pipeline: str) -> dict:
-    payload = build(pipeline)
+    payload, banks = _split(build(pipeline))
     SIDECAR[pipeline].write_text(json.dumps(payload, indent=1, ensure_ascii=False) + "\n")
+    d = BANK_DIR[pipeline]
+    d.mkdir(parents=True, exist_ok=True)
+    live = set()
+    for stem, table in banks.items():
+        (d / f"{stem}.json").write_text(json.dumps(table, indent=1, ensure_ascii=False) + "\n")
+        live.add(f"{stem}.json")
+    # A breakout that stops being computed must stop being SERVED: a stale file left behind
+    # would answer a fetch with last month's table and nothing would say so.
+    for old in d.glob("*.json"):
+        if old.name not in live:
+            old.unlink()
+    payload["_bank_tables"] = banks          # returned for the caller's counts, not written
     return payload
 
 
 def check(pipeline: str):
     if not SIDECAR[pipeline].exists():
         return False, "sidecar missing — run without --check"
+    fresh_all = build(pipeline)
+    fresh_banks = fresh_all.pop("_bank_tables", {})
     on_disk = json.loads(SIDECAR[pipeline].read_text()).get("cuts", {})
-    fresh = build(pipeline)["cuts"]
-    if on_disk == fresh:
+    drift = {k for k in set(on_disk) | set(fresh_all["cuts"])
+             if on_disk.get(k) != fresh_all["cuts"].get(k)}
+    for stem, table in fresh_banks.items():
+        f = BANK_DIR[pipeline] / f"{stem}.json"
+        if not f.exists() or json.loads(f.read_text()) != table:
+            drift.add(stem)
+    stale = {f.stem for f in BANK_DIR[pipeline].glob("*.json")} - set(fresh_banks)
+    drift |= stale
+    if not drift:
         return True, None
-    drift = {k for k in set(on_disk) | set(fresh) if on_disk.get(k) != fresh.get(k)}
     return False, f"{len(drift)} cut(s) drifted, e.g. {sorted(drift)[:4]}"
 
 
@@ -238,9 +277,13 @@ def main():
         return 0 if ok else 1
 
     p = write(args.pipeline)
+    banks = p.get("_bank_tables", {})
     rows = sum(len(t["parts"]) for t in p["cuts"].values())
+    brows = sum(len(t["parts"]) for t in banks.values())
     print(f"stamped {len(p['cuts'])} {args.pipeline} cut table(s), {rows} rows "
-          f"@ {p['_meta']['period']} → {SIDECAR[args.pipeline].name}")
+          f"@ {p['_meta']['period']} → {SIDECAR[args.pipeline].name}"
+          + (f"; {len(banks)} bank breakout(s), {brows} bank rows → {BANK_DIR[args.pipeline].name}/"
+             if banks else ""))
     return 0
 
 

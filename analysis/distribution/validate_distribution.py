@@ -132,6 +132,13 @@ def declared_ground_truth(declared_ids):
         for period in [p for p in (cur, prior_period(pl, cur)) if p]:
             raw += flat_numbers(signal_numbers(conn, sid, sig, pl, period))
         nums += raw + _as_rendered(raw, _units_of(conn, pl, sid))
+        # The WINDOW a signal declares is part of what the signal is, and a sentence that
+        # names it ("units added over 12 months") is quoting the spec, not asserting a
+        # measurement. It grounds to the declaration — which is the only reading under which
+        # a true sentence is not rejected, and it stays scoped to the signal that declares it.
+        window = (sig.get("compute") or {}).get("window")
+        if window is not None:
+            nums.append(float(window))
     conn.close()
     return nums
 
