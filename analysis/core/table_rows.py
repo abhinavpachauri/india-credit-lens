@@ -161,13 +161,21 @@ def _aligned(hist, entity_id, periods):
 
 
 def build(conn, pipeline: str, period: str, stem: str, unit: str = "rs_cr",
-          parent_yoy: str | None = None, sub_cuts: dict[str, str] | None = None) -> dict | None:
+          parent_yoy: str | None = None, sub_cuts: dict[str, str] | None = None,
+          signals: dict[str, str] | None = None) -> dict | None:
     """One cut's table, or None when the cut has nothing to show this period.
 
     None is a real answer: a cut whose 12-month window is not yet available has no
     allocation rows, and a table of blanks is worse than no table.
+
+    `signals` DECLARES which signal fills which column, for a cut whose ids do not follow the
+    stem convention — a bank breakout, whose scan has been called `{metric}-bank-scan` since
+    the first ingestion. Deriving an id from a stem is a spelling rule, and a spelling rule is
+    what hid three payments tables from the dashboard this week; a cut that can declare is
+    better than a cut that must be spelled correctly.
     """
-    size_id = f"{stem}-size-scan"
+    sid = lambda col, default: (signals or {}).get(col, default)
+    size_id = sid("size", f"{stem}-size-scan")
     etype = _member_type(conn, pipeline, period, size_id)
     if not etype:
         return None
@@ -175,10 +183,10 @@ def build(conn, pipeline: str, period: str, stem: str, unit: str = "rs_cr",
     if not size:
         return None
 
-    growth_id = f"{stem}-yoy-scan"
-    book_id   = f"{stem}-share-of-credit-scan"
-    accel_id  = f"{stem}-acceleration"
-    alloc_id  = f"{stem}-allocation"
+    growth_id = sid("growth",  f"{stem}-yoy-scan")
+    book_id   = sid("of_book", f"{stem}-share-of-credit-scan")
+    accel_id  = sid("pace",    f"{stem}-acceleration")
+    alloc_id  = sid("alloc",   f"{stem}-allocation")
     g_type = _member_type(conn, pipeline, period, growth_id) or etype
     a_type = _member_type(conn, pipeline, period, accel_id) or etype
     b_type = _member_type(conn, pipeline, period, book_id) or etype
@@ -189,19 +197,32 @@ def build(conn, pipeline: str, period: str, stem: str, unit: str = "rs_cr",
     # rest is what the cell opens into.
     COLS = {
         "size":    (size_id,  etype,        ("aggregate", "total")),
-        "of_cut":  (alloc_id, "weight_now", None),
+        # `of_cut` is normally the allocation's `weight_now` — the share over the SUM of the
+        # parts, which is what makes the Mix reading like-for-like. A cut that has no
+        # allocation (a bank breakout has no 12-month movement window) declares a share scan
+        # instead, whose denominator is the published total; the two answer the same question
+        # over different denominators, which is why the source is declared and not assumed.
+        "of_cut":  ((signals or {}).get("of_cut", alloc_id),
+                    "bank" if (signals or {}).get("of_cut") else "weight_now", None),
         "of_book": (book_id,  b_type,       ("aggregate", "total")),
         "growth":  (growth_id, g_type,      None),
         "pace":    (accel_id, a_type,       ("aggregate", "total")),
         "new":     (alloc_id, "alloc",      None),
     }
+    for c, (mid, et, agg) in list(COLS.items()):
+        if et == "bank":                     # a declared share scan carries the member type
+            COLS[c] = (mid, _member_type(conn, pipeline, period, mid) or et, agg)
     hist    = {c: _history(conn, pipeline, mid, et) for c, (mid, et, _) in COLS.items()}
     periods = {c: _periods_of(h) for c, h in hist.items()}
     # The parent's growth is NOT one of this cut's signals — it belongs to the level above,
     # which the cut declares (the same field the state band reads).
+    # The parent of a BANK breakout is the metric's own total, which no bank scan stores —
+    # sixty-four banks are the parts, and the whole is published separately. Declared, so the
+    # parent row reads the same total the category table's parent row reads.
+    agg_size_id = sid("total_size", size_id)
     par_hist = {
         "growth":  _history(conn, pipeline, parent_yoy, "aggregate") if parent_yoy else {},
-        "size":    _history(conn, pipeline, size_id,  "aggregate"),
+        "size":    _history(conn, pipeline, agg_size_id, "aggregate"),
         "pace":    _history(conn, pipeline, accel_id, "aggregate"),
         "of_book": _history(conn, pipeline, book_id,  "aggregate"),
     }
@@ -262,7 +283,8 @@ def build(conn, pipeline: str, period: str, stem: str, unit: str = "rs_cr",
         (pipeline, period, f"{stem}-momentum"))), None)
     flow_label = "Of fall" if (net is not None and net < 0) else "New"
 
-    declared = [size_id, growth_id, accel_id, alloc_id, book_id] + ([parent_yoy] if parent_yoy else [])
+    declared = sorted({size_id, growth_id, accel_id, alloc_id, book_id, COLS["of_cut"][0]}
+                      | ({parent_yoy} if parent_yoy else set()))
     cells = lambda r: {k: (asdict(v) if isinstance(v, Cell) else v) for k, v in r.items()}
     return {
         "cut": stem,
@@ -272,8 +294,12 @@ def build(conn, pipeline: str, period: str, stem: str, unit: str = "rs_cr",
         # WHICH SIGNAL EACH COLUMN IS, declared for the gate. Scoping a growth cell to the
         # union of the cut's signals would let a share pass as a rate; scoping it to the
         # growth signal is the check §17.5 was asking for and did not have.
-        "columns": {c: COLS[c][0] for c in COLS},
-        "parent_columns": {c: (parent_yoy if c == "growth" else COLS[c][0])
+        # Only the columns that actually carry a cell: a declared cut names the signals it
+        # has, and listing one it does not would be a mapping to nothing.
+        "columns": {c: COLS[c][0] for c in COLS
+                    if total.get(c) or any(p.get(c) for p in parts)},
+        "parent_columns": {c: (parent_yoy if c == "growth"
+                               else agg_size_id if c == "size" else COLS[c][0])
                            for c in ("size", "pace", "of_book", "growth") if total.get(c)},
         # The x-axis of every cell chart, rendered here like every other string. Per column,
         # because a column's depth is its own; `parent` where the parent row's history runs

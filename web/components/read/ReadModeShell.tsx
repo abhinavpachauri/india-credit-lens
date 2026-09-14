@@ -5,21 +5,24 @@
 // supplies its RMModel, its cuts, a chart renderer for dimensions that own no table, and its
 // deep reading.
 //
-// THREE STATES, AND EACH CLOSE POPS EXACTLY ONE LEVEL:
+// THREE PANES, NEVER MORE THAN TWO AT ONCE, AND EACH CLOSE POPS EXACTLY ONE LEVEL:
 //
-//   A  every dimension as a tile, each carrying its own news
-//   B  click a tile — the tiles compress into a rail, the dimension opens beside it
-//   C  click a row  — the rail collapses to ☰ and the chart takes the width it gave up
+//   A  dimensions            every dimension as a tile, each carrying its own news
+//   B  dimensions + table    the tiles compress into a rail; the table is the child
+//   C  table + chart         the table compresses into a row list; the chart is the child
 //
-// The chart is a COLUMN, not an overlay: it occupies exactly the space the rail released, so
-// nothing is hidden behind it and the table it was opened from stays readable.
+// THE CHILD ALWAYS TAKES THE LARGER SHARE, and the parent compresses into a list of its own
+// children — which is the one compression that loses nothing the reader was using, because
+// what a parent pane is FOR at that moment is changing their mind about which child they
+// wanted. Three panes at once was the version that had a hamburger; the hamburger existed
+// only to hide a pane that should not have been open.
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { usePersistent } from "@/hooks/usePersistent";
 import {
   chipStyle,
   STYLE, PANEL, EYEBROW, READS_COLOR, tint, glyph, REASON,
-  DimensionCard, RailItem, DepthLadder, CutTable, CellPanel, StateBand,
+  DimensionCard, RailItem, DepthLadder, CutTable, CutRowList, CellPanel, StateBand,
   type RMModel, type RMCard, type RMDimension, type RMRead, type Depth, type CellRef,
 } from "./parts";
 import { FS, R, GLYPH } from "@/lib/tokens";
@@ -53,6 +56,8 @@ export interface CutRef {
    *  measure over a hierarchy, and its depth comes from a row opening into its own cut. */
   measure?: string;
   axis?: "value" | "volume";
+  /** The same measure over the reporting banks (§20 `break out by bank`), when one exists. */
+  bankStem?: string;
   /** Named because a share is meaningless without it (§15). Omitted when the cut has none. */
   bookLabel?: string;
   footer?: string;
@@ -68,11 +73,11 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
 
   const [openDim, setOpenDim] = useState<string | null>(null);       // null = state A
   const [cell, setCell] = useState<CellRef | null>(null);            // non-null = state C
-  const [railOver, setRailOver] = useState(false);                   // ☰ in state C
   const [openCard, setOpenCard] = useState<string | null>(null);
   const [depth, setDepth] = usePersistent<Depth>("icl-depth", "full");
   const [showIndex, setShowIndex] = useState(false);
   const [measure, setMeasure] = useState<string | null>(null);
+  const [byBank, setByBank] = useState(false);
   const [axis, setAxis] = usePersistent<"value" | "volume">("icl-axis", "value");
 
   const detailRef = useRef<HTMLDivElement>(null);
@@ -95,7 +100,11 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
   const forMeasure = cuts.filter((c) => (c.measure ?? c.title) === activeMeasure);
   const axes = forMeasure.map((c) => c.axis).filter(Boolean) as ("value" | "volume")[];
   const cut = forMeasure.find((c) => !c.axis || c.axis === axis) ?? forMeasure[0];
-  const table = cut && tables?.[cut.stem];
+  // A bank breakout is the same table at a different LEVEL, so it replaces the table rather
+  // than nesting inside a row: the 63 banks are not children of the five categories on screen,
+  // they are what those categories are made of.
+  const bankStem = cut?.bankStem && tables?.[cut.bankStem] ? cut.bankStem : null;
+  const table = cut && tables?.[(byBank && bankStem) ? bankStem : cut.stem];
 
   const deepAvailable = dim ? hasDeep(dim.id) : false;
   const effDepth: Depth = depth === "deep" && !deepAvailable ? "full" : depth;
@@ -120,13 +129,12 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
   useEffect(() => {
     const esc = (e: KeyboardEvent) => {
       if (e.key !== "Escape") return;
-      if (railOver) setRailOver(false);
-      else if (cell) setCell(null);
+      if (cell) setCell(null);
       else if (openDim) setOpenDim(null);
     };
     window.addEventListener("keydown", esc);
     return () => window.removeEventListener("keydown", esc);
-  }, [cell, openDim, railOver]);
+  }, [cell, openDim]);
 
   function enter(dimId: string, cardId?: string) {
     setOpenDim(dimId);
@@ -136,7 +144,7 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
     if (typeof window !== "undefined") requestAnimationFrame(() => window.scrollTo({ top: 0 }));
   }
   function pickDim(dimId: string) {
-    setOpenDim(dimId); setMeasure(null); setCell(null); setOpenCard(null); setRailOver(false);
+    setOpenDim(dimId); setMeasure(null); setCell(null); setOpenCard(null); setByBank(false);
   }
 
   // ── STATE A · the landing grid ───────────────────────────────────────────
@@ -188,7 +196,7 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
         <RailItem key={d.id} dim={d} state={state[d.id]} selected={d.id === dim.id}
                   onClick={() => pickDim(d.id)} />
       ))}
-      <button onClick={() => { setOpenDim(null); setRailOver(false); }} className="rm-link text-left mt-1.5"
+      <button onClick={() => setOpenDim(null)} className="rm-link text-left mt-1.5"
               style={{ fontSize: FS.note, fontWeight: 600, color: READS_COLOR }}>
         ‹ all dimensions
       </button>
@@ -200,18 +208,12 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
       <style>{STYLE}</style>
       <div key="detail" style={{ animation: "rmfade 220ms ease" }}>
         <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-3">
-            {/* ☰ only exists in state C — in state B the rail is already there, and a control
-                that hides what is already visible is a control with nothing to do. */}
-            {cell && (
-              <button onClick={() => setRailOver(!railOver)} className="rm-link lg:block hidden"
-                      aria-label="dimensions" style={{ fontSize: GLYPH.arrow, color: "var(--font-muted)" }}>☰</button>
-            )}
-            <button onClick={() => (cell ? setCell(null) : setOpenDim(null))} className="rm-link"
-                    style={{ fontSize: FS.body, fontWeight: 600, color: "var(--font-muted)" }}>
-              ‹ {cell ? dim.title : homeLabel}
-            </button>
-          </div>
+          {/* One control to go up, because there is only ever one level above. The hamburger
+              is gone with the third pane it existed to hide. */}
+          <button onClick={() => (cell ? setCell(null) : setOpenDim(null))} className="rm-link"
+                  style={{ fontSize: FS.body, fontWeight: 600, color: "var(--font-muted)" }}>
+            ‹ {cell ? dim.title : homeLabel}
+          </button>
           <div className="flex flex-col items-end">
             <DepthLadder depth={effDepth} setDepth={setDepth} deepAvailable={deepAvailable} />
             <span style={{ fontSize: FS.meta, color: "var(--font-muted)", marginTop: 4 }}>Detail: {DEPTH_HINT[effDepth]}</span>
@@ -219,12 +221,21 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
         </div>
 
         <div className={`lg:grid lg:gap-6 lg:items-start ${
-          cell ? "lg:grid-cols-[minmax(0,1fr)_430px]" : "lg:grid-cols-[300px_minmax(0,1fr)]"}`}>
-          {/* LEFT · the rail, which state C hands to the chart */}
-          {!cell && <div className="hidden lg:block lg:col-start-1">{rail}</div>}
+          cell ? "lg:grid-cols-[260px_minmax(0,1fr)]" : "lg:grid-cols-[300px_minmax(0,1fr)]"}`}>
+          {/* LEFT · the PARENT, compressed. In B that is the dimensions; in C it is this
+              dimension's own rows. Never both — two panes, and the child gets the width. */}
+          <div className="hidden lg:block lg:col-start-1">
+            {cell && table
+              ? <div style={{ ...PANEL, padding: 14, position: "sticky", top: 12 }}>
+                  <CutRowList table={tables?.[cell.stem] ?? table} title={cut?.title ?? dim.title}
+                              cell={cell} color={secColor} onPick={setCell} />
+                </div>
+              : rail}
+          </div>
 
-          {/* CENTRE · the dimension */}
-          <div ref={detailRef} className={cell ? "lg:col-start-1" : "lg:col-start-2 mt-5 lg:mt-0"}>
+          {/* RIGHT · the CHILD — the table in B, the chart in C */}
+          {!cell && (
+          <div ref={detailRef} className="lg:col-start-2 mt-5 lg:mt-0">
             <div style={{ ...PANEL, padding: 20, borderTop: `3px solid ${secColor}` }}>
               <div className="flex items-start justify-between gap-3">
                 <div style={{ ...EYEBROW, color: secColor, letterSpacing: "0.05em", marginBottom: 12 }}>
@@ -246,13 +257,25 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
                   <div className="flex flex-wrap items-center gap-1.5">
                     <span style={{ ...EYEBROW, marginRight: 4 }}>Measure</span>
                     {measures.map((m) => (
-                      <button key={m} onClick={() => { setMeasure(m); setCell(null); }}
+                      <button key={m} onClick={() => { setMeasure(m); setCell(null); setByBank(false); }}
                               className="rounded-full transition-colors"
                               style={{ fontSize: FS.note, padding: "5px 11px", ...chipStyle(m === activeMeasure) }}>
                         {m}
                       </button>
                     ))}
                   </div>
+                  {bankStem && (
+                    <div className="flex flex-wrap items-center gap-1.5 mt-2">
+                      <span style={{ ...EYEBROW, marginRight: 4 }}>Break out by</span>
+                      {([false, true] as const).map((b) => (
+                        <button key={String(b)} onClick={() => { setByBank(b); setCell(null); }}
+                                className="rounded-full transition-colors"
+                                style={{ fontSize: FS.note, padding: "5px 11px", ...chipStyle(b === byBank) }}>
+                          {b ? `bank (${tables?.[bankStem]?.parts.length ?? 0})` : "bank category"}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                   {axes.length > 1 && (
                     <div className="flex flex-wrap items-center gap-1.5 mt-2">
                       <span style={{ ...EYEBROW, marginRight: 4 }}>Showing</span>
@@ -334,10 +357,11 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
               {effDepth === "deep" && <div ref={deepRef} style={{ borderRadius: R.md }}>{renderDeep(dim.id, secColor)}</div>}
             </div>
           </div>
+          )}
 
-          {/* RIGHT · STATE C — the chart, in the width the rail released */}
+          {/* STATE C · the chart is the child, so it takes the column the table was in */}
           {cell && table && (
-            <div ref={chartRef} className="mt-5 lg:mt-0 lg:col-start-2">
+            <div ref={chartRef} className="mt-5 lg:mt-0 lg:col-start-2 lg:row-start-1">
               <CellPanel table={tables?.[cell.stem] ?? table} cell={cell} color={secColor}
                          flowLabel={(tables?.[cell.stem] ?? table).flow_label}
                          onPick={(col: ColKey) => setCell({ ...cell, col })}
@@ -346,16 +370,6 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
           )}
         </div>
 
-        {/* ☰ — the rail slides back over, so a reader can change dimension without giving up
-            the chart they opened. */}
-        {railOver && (
-          <>
-            <div className="fixed inset-0 z-30" style={{ background: "var(--shadow)" }}
-                 onClick={() => setRailOver(false)} />
-            <div className="fixed z-40 top-0 bottom-0 left-0 w-[300px] overflow-y-auto"
-                 style={{ ...PANEL, borderRadius: 0, paddingTop: 20 }}>{rail}</div>
-          </>
-        )}
       </div>
     </>
   );

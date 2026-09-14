@@ -50,6 +50,9 @@ export interface CutTable {
    *  rather than reconstructing a stem from the metric name — a spelling that was right for
    *  23 cuts and wrong for the three group anchors, which reached no surface at all. */
   metric?: string;
+  /** "bank" = the same measure broken out over the 63 reporting banks rather than the five
+   *  bank categories. A different LEVEL of one table, not a drilldown into a row. */
+  level?: "bank";
   source_signals: string[];
 }
 

@@ -455,6 +455,56 @@ export function CellPanel({ table, cell, color, flowLabel, onPick, onClose }: {
   );
 }
 
+/**
+ * The table, COMPRESSED into a navigator (§20 state C). The parent pane never disappears and
+ * never stays full width: two panes at a time, and the child — the chart the reader just
+ * asked for — takes the larger share. What survives the compression is exactly what is needed
+ * to change the reader's mind about which row they wanted: the part's name and the number
+ * they clicked.
+ *
+ * The same shape the rail has in state B, one level down. A parent pane that shrinks into a
+ * list of its children is the one compression that loses nothing the reader was using.
+ */
+export function CutRowList({ table, title, cell, color, onPick }: {
+  table: import("@/lib/table").CutTable;
+  title: string; cell: CellRef; color: string;
+  onPick: (ref: CellRef) => void;
+}) {
+  const rows = [table.total, ...sortPartsMemo(table.parts, "size", "desc")];
+  const label = cell.col === "new" ? (table.flow_label ?? "New") : COL_LABEL[cell.col];
+  return (
+    <div>
+      <div style={{ ...EYEBROW, color, marginBottom: 2 }}>{title}</div>
+      <div style={{ ...EYEBROW, marginBottom: 8 }}>{label}</div>
+      <div className="flex flex-col gap-0.5">
+        {rows.map((r) => {
+          const v = r[cell.col];
+          const on = r.entity === cell.entity;
+          const live = (v?.series?.length ?? 0) > 1;
+          return (
+            <button key={r.entity ?? "_total"} disabled={!live}
+                    onClick={() => live && onPick({ stem: table.cut, entity: r.entity, col: cell.col })}
+                    className="rm-flat text-left rounded-md flex items-baseline gap-2"
+                    style={{ ...vars(color, tint(color, 0.12)), border: "none",
+                             background: on ? tint(color, 0.14) : "transparent",
+                             padding: "6px 8px", cursor: live ? "pointer" : "default",
+                             opacity: live ? 1 : 0.45 }}>
+              <span style={{ fontSize: FS.note, fontWeight: r.entity === null || on ? 700 : 400,
+                             color: "var(--font)", lineHeight: 1.35 }}>
+                {r.entity ?? title}
+              </span>
+              <span className="ml-auto" style={{ fontSize: FS.note, fontVariantNumeric: "tabular-nums",
+                                                 color: on ? color : "var(--font-muted)" }}>
+                {v?.display ?? "—"}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 export interface CutTableProps {
   table: import("@/lib/table").CutTable;
   /** All tables, so a row can open into the cut it decomposes into (§19). */
@@ -482,7 +532,12 @@ export function CutTable({ table, title, color, bookLabel, footer, all, depth = 
   const [sort, setSort] = React.useState<{ key: SortKey; dir: SortDir }>({ key: "size", dir: "desc" });
   const [open, setOpen] = React.useState<string | null>(null);
   const parts = sortPartsMemo(table.parts, sort.key, sort.dir);
-  const cols = COLUMNS.filter((c) => c !== "of_book" || table.parts.some((p) => p.of_book));
+  // The columns this cut ACTUALLY has, declared in Python. A bank breakout stores no pace and
+  // no share of the new money, and six columns of dashes would say it does — the same argument
+  // that keeps `of book` off the payments tables rather than dashing it.
+  const cols = COLUMNS.filter((c) => table.columns
+    ? c in table.columns
+    : c !== "of_book" || table.parts.some((p) => p.of_book));
   const label = (c: ColKey) => (c === "new" ? (table.flow_label ?? "New") : COL_LABEL[c]);
   const lit = (row: import("@/lib/table").CutRow, c?: ColKey) =>
     active?.stem === table.cut && active.entity === row.entity && (!c || active.col === c);

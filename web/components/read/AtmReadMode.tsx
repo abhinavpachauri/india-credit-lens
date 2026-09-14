@@ -50,7 +50,13 @@ const atmCutsFor = (tables: CutTables) => (group: string): CutRef[] => {
   // `pos_terminals` — the two card fleets and the POS fleet, every group's anchor table,
   // computed and gated and reachable from nothing.
   const stemOf = new Map(Object.entries(tables)
-    .filter(([, t]) => t.metric)
+    .filter(([, t]) => t.metric && t.level !== "bank")
+    .map(([stem, t]) => [t.metric as string, stem]));
+  // The same measure at bank level, when it has been computed. Only the three fleet metrics
+  // carry one today, so the toggle appears on those measures and nowhere else — an absent
+  // control is honest; a control that opens an empty table is not.
+  const bankOf = new Map(Object.entries(tables)
+    .filter(([, t]) => t.metric && t.level === "bank")
     .map(([stem, t]) => [t.metric as string, stem]));
   return SECTION_DEFS.filter((d) => d.group === group).flatMap((d) => {
     const metrics = d.metric
@@ -58,6 +64,7 @@ const atmCutsFor = (tables: CutTables) => (group: string): CutRef[] => {
       : [d.valMetric, d.volMetric].filter(Boolean) as string[];
     return metrics.map((m) => ({
       stem: stemOf.get(m) ?? `${m.replace(/_/g, "-")}-category`,
+      bankStem: bankOf.get(m),
       title: d.title,
       measure: d.title,
       // Value and volume are the same measure asked two ways, so they are an axis on the

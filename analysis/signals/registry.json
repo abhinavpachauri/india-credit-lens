@@ -2,7 +2,7 @@
   "_meta": {
     "schema_version": "1.0",
     "description": "Signal registry — permanent catalog of every tracked signal across all ingestion pipelines. Signal IDs are immutable once created. Add new signals; never rename or delete. layer: 1 = per-chart data signal (algorithmically computed), 2 = cross-chart synthesis (authored per period from data), 3 = lending ecosystem expert model (generated ~6-monthly, strict claim validation).",
-    "last_updated": "2026-09-13"
+    "last_updated": "2026-09-14"
   },
   "pipelines": {
     "sibc": {
@@ -13186,6 +13186,195 @@
         "metric": "upi_qr",
         "unit": "count"
       }
+    },
+    "cc-bank-yoy-scan": {
+      "title": "Credit cards — per-bank growth",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1c",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_bank_scan",
+        "metric": "credit_cards",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ],
+        "value_type": "yoy"
+      },
+      "id": "cc-bank-yoy-scan",
+      "current_status": "active",
+      "description": "Year-on-year growth of credit cards for every reporting bank. The bank scan stored levels from the first ingestion and never a rate, so a bank's size was answerable and its direction was not.",
+      "first_seen": "2024-01-31"
+    },
+    "cc-bank-share-scan": {
+      "title": "Credit cards — per-bank share",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1c",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_bank_scan_share",
+        "metric": "credit_cards",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      },
+      "id": "cc-bank-share-scan",
+      "current_status": "strengthening",
+      "description": "Each bank's share of all credit cards in force. Denominator is the published total, not the sum of the reporting banks.",
+      "first_seen": "2024-01-31"
+    },
+    "dc-bank-yoy-scan": {
+      "id": "dc-bank-yoy-scan",
+      "title": "Debit cards — per-bank growth",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1c",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_bank_scan",
+        "metric": "debit_cards",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ],
+        "value_type": "yoy"
+      },
+      "current_status": "active",
+      "description": "Year-on-year growth of debit cards for every reporting bank. The bank scan stored levels from the first ingestion and never a rate, so a bank's size was answerable and its direction was not.",
+      "first_seen": "2024-01-31"
+    },
+    "dc-bank-share-scan": {
+      "id": "dc-bank-share-scan",
+      "title": "Debit cards — per-bank share",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1c",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_bank_scan_share",
+        "metric": "debit_cards",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      },
+      "current_status": "strengthening",
+      "description": "Each bank's share of all debit cards in force. Denominator is the published total, not the sum of the reporting banks.",
+      "first_seen": "2024-01-31"
+    },
+    "pos-bank-yoy-scan": {
+      "title": "POS terminals — per-bank growth",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1c",
+      "domain": "infrastructure",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_bank_scan",
+        "metric": "pos_terminals",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ],
+        "value_type": "yoy"
+      },
+      "id": "pos-bank-yoy-scan",
+      "current_status": "active",
+      "description": "Year-on-year growth of pos terminals for every reporting bank. The bank scan stored levels from the first ingestion and never a rate, so a bank's size was answerable and its direction was not.",
+      "first_seen": "2024-01-31"
+    },
+    "pos-bank-share-scan": {
+      "title": "POS terminals — per-bank share",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "sub_layer": "1c",
+      "domain": "infrastructure",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_bank_scan_share",
+        "metric": "pos_terminals",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      },
+      "id": "pos-bank-share-scan",
+      "current_status": "active",
+      "description": "Each bank's share of all pos terminals in force. Denominator is the published total, not the sum of the reporting banks.",
+      "first_seen": "2024-01-31"
     }
   }
 }

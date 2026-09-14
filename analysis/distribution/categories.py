@@ -70,6 +70,7 @@ METHOD_CATEGORY = {
     "csv_sector_scan_abs":           "C4",
     "csv_psl_scan_yoy":              "C4",
     "csv_bank_scan":                 "C4",
+    "csv_bank_scan_share":           "C4",
     "csv_category_scan_share":       "C4",
     "csv_category_scan_abs":         "C4",
     "csv_category_scan_yoy":         "C4",

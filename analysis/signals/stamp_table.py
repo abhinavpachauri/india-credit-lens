@@ -30,6 +30,10 @@ DB = ROOT / "analysis" / "signals" / "signals.db"
 REGISTRY = ROOT / "analysis" / "signals" / "registry.json"
 SIDECAR = {p: DATA / f"{p}_table.json" for p in ("sibc", "atm_pos")}
 MOMENTUM = ("csv_sector_momentum", "csv_category_momentum")
+# A bank breakout's parent rate: the metric's own total YoY, which belongs to the level above
+# the banks exactly as a credit cut's parent rate belongs to the level above its parts.
+TOTAL_YOY = {"credit_cards": "cc-outstanding-yoy", "debit_cards": "dc-outstanding-yoy",
+             "pos_terminals": "pos-terminals-yoy"}
 
 
 def parent_rates(pipeline: str) -> dict[str, str]:
@@ -90,6 +94,46 @@ def measured_metric(pipeline: str) -> dict[str, str]:
     return out
 
 
+def bank_cuts(pipeline: str) -> dict[str, dict]:
+    """The per-bank breakout of a metric, as its own cut (§20 `break out by bank`).
+
+    Sixty-four banks have been in the store since the first ingestion and no surface could
+    show one of them beside its own growth: the bank scan was consumed only by concentration
+    cards. A breakout is not a drilldown into a category — it is the SAME table at a different
+    level, which is why it is a cut and not a nested row.
+
+    Discovered by METHOD and METRIC, never by name: `cc-bank-scan` does not follow the stem
+    convention and never will, and matching on a spelling is what hid three payments tables
+    from the dashboard this week.
+    """
+    if pipeline != "atm_pos":
+        return {}                    # SIBC is sector-level; RBI publishes no per-bank credit
+    reg = json.loads(REGISTRY.read_text())["signals"]
+    by_metric: dict[str, dict[str, str]] = {}
+    for sid, sig in reg.items():
+        c = sig.get("compute", {})
+        if sig.get("pipeline") != pipeline or not c.get("metric"):
+            continue
+        m = c["metric"]
+        if c.get("method") == "csv_bank_scan":
+            by_metric.setdefault(m, {})["growth" if c.get("value_type") == "yoy" else "size"] = sid
+        elif c.get("method") == "csv_bank_scan_share":
+            by_metric.setdefault(m, {})["of_cut"] = sid
+    out = {}
+    for metric, cols in by_metric.items():
+        if "size" not in cols:       # a rate with no level is not a table
+            continue
+        # The breakout's parent row is the metric's own total, which the CATEGORY cut of the
+        # same metric already stores. Same number in both tables, from one signal.
+        for stem2, sig2 in reg.items():
+            c2 = sig2.get("compute", {})
+            if c2.get("metric") == metric and c2.get("method") == "csv_category_scan_abs":
+                cols["total_size"] = stem2
+                break
+        out[f"{metric.replace('_', '-')}-banks"] = {"metric": metric, "signals": cols}
+    return out
+
+
 def sub_cut_map(pipeline: str) -> dict[str, str]:
     """{parent entity name: the cut it decomposes into} (§19).
 
@@ -115,6 +159,14 @@ def sub_cut_map(pipeline: str) -> dict[str, str]:
     return out
 
 
+def _metric_unit(conn, pipeline: str, period: str, size_id: str) -> str:
+    """The unit the size rows themselves carry — a bank scan takes its unit from the CSV
+    rather than declaring one, so read it back rather than assuming a count."""
+    row = conn.execute("SELECT unit FROM signals WHERE pipeline=? AND period=? AND metric_id=? "
+                       "LIMIT 1", (pipeline, period, size_id)).fetchone()
+    return row[0] if row and row[0] else "count"
+
+
 def latest_period(conn, pipeline: str) -> str:
     return conn.execute("SELECT MAX(period) FROM signals WHERE pipeline=?", (pipeline,)).fetchone()[0]
 
@@ -125,6 +177,16 @@ def build(pipeline: str, period: str | None = None) -> dict:
         period = period or latest_period(conn, pipeline)
         tables, rates, subs = {}, parent_rates(pipeline), sub_cut_map(pipeline)
         metrics = measured_metric(pipeline)
+        for stem, spec in sorted(bank_cuts(pipeline).items()):
+            unit = json.loads(REGISTRY.read_text())["signals"].get(
+                spec["signals"]["size"], {}).get("compute", {}).get("unit")
+            t = table_rows.build(conn, pipeline, period, stem,
+                                 unit or _metric_unit(conn, pipeline, period, spec["signals"]["size"]),
+                                 TOTAL_YOY.get(spec["metric"]), None, signals=spec["signals"])
+            if t is not None:
+                t["metric"] = spec["metric"]
+                t["level"] = "bank"
+                tables[stem] = t
         for stem, unit in sorted(cuts(pipeline).items()):
             t = table_rows.build(conn, pipeline, period, stem, unit, rates.get(stem), subs)
             if t is not None:          # a cut without its 12-month window has no table yet

@@ -1632,6 +1632,43 @@ line rather than a mix anyone steers. So its pane shows the state band, a declar
 and **the series itself**; the sectors are one level down in Main Sectors. The note is deliberately
 NOT a restatement of the band's own no-mix sentence directly above it.
 
+### The pane rule (user, 2026-09-14) — three panes, never more than two at once
+
+```
+   A  dimensions            every dimension as a tile, each carrying its own news
+   B  dimensions + table    the tiles compress into a rail; the TABLE is the child
+   C  table + chart         the table compresses into a row list; the CHART is the child
+```
+
+**The child always takes the larger share, and the parent compresses into a list of its own
+children.** That is the one compression that loses nothing the reader was using: what a parent
+pane is FOR at that moment is changing their mind about which child they wanted. In C the left
+pane is the table's rows with the value of the column being charted, so picking another row is
+one click and the chart follows.
+
+**There is no hamburger, because there is no third pane.** The first cut of §20 left the rail
+reachable in state C behind a ☰ that opened it over the page — a third pane wearing a menu. One
+control goes up, because there is only ever one level above.
+
+**Mobile is the same stack with one pane at a time**: A stacks the tiles, B is the table with a
+back link, C is the chart with a back link. The compressed parent list renders only at `lg`.
+
+### `break out by bank` (§20, built 2026-09-14)
+
+A payments measure with bank-level signals gains a **level** toggle: the same table over the 63
+reporting banks instead of the 5 bank categories. **A different LEVEL of one table, not a
+drilldown into a row** — the banks are not children of the categories on screen, they are what
+those categories are made of.
+
+- Discovered by METHOD and METRIC, never by name: `cc-bank-scan` does not follow the stem
+  convention and never will, and matching on a spelling is what hid three payments tables.
+- A bank breakout carries **Size · of cut · Growth and nothing else** — it has no 12-month
+  allocation window and no acceleration, and six columns of dashes would claim otherwise.
+- Its parent row is the metric's own published total, from the SAME signal the category
+  table's parent row reads.
+- Only the three fleet metrics carry one today, so the toggle appears on those measures and
+  nowhere else. An absent control is honest; a control that opens an empty table is not.
+
 ### Decisions (user, 2026-09-13)
 
 1. **SIBC nests; payments filters.** A real inconsistency, accepted deliberately: one pipeline is

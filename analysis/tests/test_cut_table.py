@@ -167,17 +167,24 @@ def test_the_pairing_rule_is_structural():
 
 def test_every_cut_with_a_table_covers_every_part_it_has():
     """A table that silently drops a part is worse than no table: the shares stop summing and
-    nothing says why."""
+    nothing says why.
+
+    The size signal is read from the table's own DECLARED columns, not rebuilt from the stem:
+    a bank breakout's scan has been called `cc-bank-scan` since the first ingestion, and a test
+    that reconstructs ids by convention fails on the one cut whose name does not follow it —
+    which is the same defect it is supposed to catch, wearing the other hat.
+    """
     for pipeline, period in (("sibc", "2026-08-31"), ("atm_pos", "2026-07-31")):
         doc = json.loads((DATA / f"{pipeline}_table.json").read_text())
         con = sqlite3.connect(DB)
         try:
             for stem, table in doc["cuts"].items():
-                etype = T._member_type(con, pipeline, doc["_meta"]["period"], f"{stem}-size-scan")
+                size_id = (table.get("columns") or {}).get("size", f"{stem}-size-scan")
+                etype = T._member_type(con, pipeline, doc["_meta"]["period"], size_id)
                 n = con.execute(
                     "SELECT COUNT(*) FROM signals WHERE pipeline=? AND period=? AND metric_id=? "
                     "AND entity_type=?", (pipeline, doc["_meta"]["period"],
-                                          f"{stem}-size-scan", etype)).fetchone()[0]
+                                          size_id, etype)).fetchone()[0]
                 assert len(table["parts"]) == n, f"{stem}: {len(table['parts'])} rows for {n} parts"
         finally:
             con.close()
@@ -243,3 +250,38 @@ def test_a_sub_cut_is_joined_to_a_row_that_actually_exists():
     assert named, "no row offers a sub-cut — the join produced nothing"
     for stem in named:
         assert stem in doc["cuts"], f"a row opens into {stem}, which is not a table"
+
+
+def test_a_bank_breakout_is_a_cut_like_any_other():
+    """The 63 reporting banks were in the store from the first ingestion and no surface could
+    show one of them beside its own growth: the bank scan fed concentration cards and nothing
+    else. A breakout is the SAME table at a different level, so it is a cut — not a nested row
+    under a bank category, which the banks are not children of.
+
+    Discovery is by METHOD and METRIC, never by name: `cc-bank-scan` does not follow the stem
+    convention and never will.
+    """
+    doc = json.loads((DATA / "atm_pos_table.json").read_text())
+    banks = {s: t for s, t in doc["cuts"].items() if t.get("level") == "bank"}
+    assert len(banks) == 3, f"expected the three fleet metrics to break out by bank, got {sorted(banks)}"
+    for stem, t in banks.items():
+        assert t.get("metric"), f"{stem} does not say which metric it breaks out"
+        assert len(t["parts"]) > 20, f"{stem} has {len(t['parts'])} banks — that is a category table"
+        # A bank breakout has no 12-month allocation window and no acceleration, and six
+        # columns of dashes would claim it does.
+        assert set(t["columns"]) == {"size", "of_cut", "growth"}, \
+            f"{stem} declares {sorted(t['columns'])}"
+
+
+def test_the_breakouts_parent_row_is_the_same_total_the_category_table_shows():
+    """One signal, two tables. The parent of the bank breakout is the metric's own published
+    total — not the sum of the reporting banks, and not a second stored copy of it."""
+    doc = json.loads((DATA / "atm_pos_table.json").read_text())
+    for stem, t in doc["cuts"].items():
+        if t.get("level") != "bank":
+            continue
+        sibling = next(c for c in doc["cuts"].values()
+                       if c.get("metric") == t["metric"] and c.get("level") != "bank")
+        assert t["total"]["size"]["display"] == sibling["total"]["size"]["display"], \
+            f"{stem}: the fleet total differs between the bank and category views"
+

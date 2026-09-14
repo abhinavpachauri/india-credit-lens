@@ -380,6 +380,47 @@ def csv_bank_scan(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
         return out
 
 
+def csv_bank_scan_share(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
+    """Each bank's share of the metric's total — the `of cut` column of a bank breakout.
+
+    The category scan answers "how much of the card fleet is private-sector banks"; this
+    answers "how much of it is HDFC". Same question, one level down, and it is the level the
+    reader asks about by name — sixty-four banks were in the store from the first ingestion
+    and no surface could show a single one of them beside its own growth.
+
+    Denominator is the metric's published total, not the sum of the bank rows: banks that do
+    not report are part of the market whether or not they are in the file, and dividing by the
+    reporters would quietly restate every share.
+    """
+    metric = params["metric"]
+    rules  = params.get("status_rules", [])
+    total  = _total_val(df, period, metric)
+    if not total:
+        return []
+    rows = df[(df["report_date"] == period) & (df["metric"] == metric) &
+              (df["record_type"] == "bank")][["bank_name", "value"]].dropna()
+    if rows.empty:
+        return []
+
+    avail = set(df["report_date"].unique())
+    prior = _prior_year(period, avail)
+    prior_total = _total_val(df, prior, metric) if prior else None
+
+    out = []
+    for _, row in rows.iterrows():
+        share = row["value"] / total * 100
+        pshare = share
+        if prior and prior_total:
+            prow = df[(df["report_date"] == prior) & (df["metric"] == metric) &
+                      (df["bank_name"] == row["bank_name"]) &
+                      (df["record_type"] == "bank")]["value"]
+            if not prow.empty:
+                pshare = float(prow.iloc[0]) / prior_total * 100
+        out.append(_row("bank", row["bank_name"], share,
+                        _eval_status(rules, share, pshare) if rules else "active", "pct"))
+    return sorted(out, key=lambda r: r["value"], reverse=True)
+
+
 # ── Layer 1d ──────────────────────────────────────────────────────────────────
 
 def csv_mom_streak(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
@@ -822,6 +863,7 @@ METHODS: dict = {
     "csv_category_scan_share": csv_category_scan_share,
     "csv_category_scan_abs":        csv_category_scan_abs,
     "csv_bank_scan":           csv_bank_scan,
+    "csv_bank_scan_share":     csv_bank_scan_share,
     "csv_mom_streak":         csv_mom_streak,
     # relational — cross-segment (spec: signals/README.md)
     "csv_category_rotation":   csv_category_rotation,
