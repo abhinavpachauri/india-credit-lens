@@ -1653,6 +1653,18 @@ control goes up, because there is only ever one level above.
 **Mobile is the same stack with one pane at a time**: A stacks the tiles, B is the table with a
 back link, C is the chart with a back link. The compressed parent list renders only at `lg`.
 
+### Chrome removed (user, 2026-09-14): the ✕ is the navigation
+
+The back links (`‹ Credit dashboard`, `‹ Industry by Size`, `‹ all dimensions`) are gone. Every
+pane already carries a **✕**, each close pops exactly one level, and two controls doing one job
+made the second one look like it did something else.
+
+**The Brief / Full / Deep ladder is gone too.** The notable list expands on click and the deeper
+reading has its own disclosure, so two of its three rungs controlled something a click already
+controlled — a three-way switch for one real choice spends the reader's attention explaining
+itself. The Deep rung survives as what it always was: **`▸ The deeper reading ⌁`** at the foot of
+the dimension pane, rendered only where one exists, which keeps the L1 → L2/L3 seam intact.
+
 ### `break out by bank` (§20, built 2026-09-14)
 
 A payments measure with bank-level signals gains a **level** toggle: the same table over the 63

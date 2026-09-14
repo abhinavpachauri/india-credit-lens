@@ -239,21 +239,10 @@ export function ChipStrip({ chips, active, stripRef, onPick }: {
   );
 }
 
-export type Depth = "brief" | "full" | "deep";
-
-export function DepthLadder({ depth, setDepth, deepAvailable }: { depth: Depth; setDepth: (d: Depth) => void; deepAvailable: boolean }) {
-  const levels: Depth[] = deepAvailable ? ["brief", "full", "deep"] : ["brief", "full"];
-  return (
-    <div className="flex gap-1">
-      {levels.map((d) => (
-        <button key={d} onClick={() => setDepth(d)} className="rounded-full transition-colors"
-                style={{ fontSize: FS.note, padding: "6px 12px", ...chipStyle(depth === d) }}>
-          {d === "brief" ? "Brief" : d === "full" ? "Full" : "Deep ⌁"}
-        </button>
-      ))}
-    </div>
-  );
-}
+// The Brief/Full/Deep ladder lived here. It is gone, not hidden: the notable list expands on
+// click and the deeper reading has its own disclosure, so two of the three rungs controlled
+// something a click already controlled — and a three-way switch for one real choice is a
+// control that spends the reader's attention explaining itself.
 
 /**
  * The standing state band (DASHBOARD_SPEC §16) — the tier above the reads.

@@ -1,7 +1,7 @@
 "use client";
 
 // The read-mode SHELL — pipeline-agnostic (DASHBOARD_SPEC.md §14, reshaped by §20). Owns the
-// three states, the rail, the depth ladder, and which cell has a chart open. A pipeline
+// three states, the rail, and which cell has a chart open. A pipeline
 // supplies its RMModel, its cuts, a chart renderer for dimensions that own no table, and its
 // deep reading.
 //
@@ -22,8 +22,8 @@ import { usePersistent } from "@/hooks/usePersistent";
 import {
   chipStyle,
   STYLE, PANEL, EYEBROW, READS_COLOR, tint, glyph, REASON,
-  DimensionCard, RailItem, DepthLadder, CutTable, CutRowList, CellPanel, StateBand,
-  type RMModel, type RMCard, type RMDimension, type RMRead, type Depth, type CellRef,
+  DimensionCard, RailItem, CutTable, CutRowList, CellPanel, StateBand,
+  type RMModel, type RMCard, type RMDimension, type RMRead, type CellRef,
 } from "./parts";
 import { FS, R, GLYPH } from "@/lib/tokens";
 import type { CutTables, ColKey } from "@/lib/table";
@@ -74,7 +74,7 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
   const [openDim, setOpenDim] = useState<string | null>(null);       // null = state A
   const [cell, setCell] = useState<CellRef | null>(null);            // non-null = state C
   const [openCard, setOpenCard] = useState<string | null>(null);
-  const [depth, setDepth] = usePersistent<Depth>("icl-depth", "full");
+  const [deepOpen, setDeepOpen] = useState(false);
   const [showIndex, setShowIndex] = useState(false);
   const [measure, setMeasure] = useState<string | null>(null);
   const [byBank, setByBank] = useState(false);
@@ -107,9 +107,6 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
   const table = cut && tables?.[(byBank && bankStem) ? bankStem : cut.stem];
 
   const deepAvailable = dim ? hasDeep(dim.id) : false;
-  const effDepth: Depth = depth === "deep" && !deepAvailable ? "full" : depth;
-  const DEPTH_HINT: Record<Depth, string> = {
-    brief: "the table only", full: "with the reasoning", deep: "the deeper reading" };
 
   const notable = (d: RMDimension) => d.subjects.flatMap((s) => s.cards);
   const readsOf = (dimId: string) => model.reads.filter((r) => r.dimId === dimId);
@@ -141,10 +138,12 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
     setMeasure(null);
     setCell(null);
     setOpenCard(cardId ?? null);
+    setDeepOpen(false);
     if (typeof window !== "undefined") requestAnimationFrame(() => window.scrollTo({ top: 0 }));
   }
   function pickDim(dimId: string) {
-    setOpenDim(dimId); setMeasure(null); setCell(null); setOpenCard(null); setByBank(false);
+    setOpenDim(dimId); setMeasure(null); setCell(null); setOpenCard(null);
+    setByBank(false); setDeepOpen(false);
   }
 
   // ── STATE A · the landing grid ───────────────────────────────────────────
@@ -196,10 +195,6 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
         <RailItem key={d.id} dim={d} state={state[d.id]} selected={d.id === dim.id}
                   onClick={() => pickDim(d.id)} />
       ))}
-      <button onClick={() => setOpenDim(null)} className="rm-link text-left mt-1.5"
-              style={{ fontSize: FS.note, fontWeight: 600, color: READS_COLOR }}>
-        ‹ all dimensions
-      </button>
     </div>
   );
 
@@ -207,19 +202,6 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
     <>
       <style>{STYLE}</style>
       <div key="detail" style={{ animation: "rmfade 220ms ease" }}>
-        <div className="flex items-center justify-between mb-3">
-          {/* One control to go up, because there is only ever one level above. The hamburger
-              is gone with the third pane it existed to hide. */}
-          <button onClick={() => (cell ? setCell(null) : setOpenDim(null))} className="rm-link"
-                  style={{ fontSize: FS.body, fontWeight: 600, color: "var(--font-muted)" }}>
-            ‹ {cell ? dim.title : homeLabel}
-          </button>
-          <div className="flex flex-col items-end">
-            <DepthLadder depth={effDepth} setDepth={setDepth} deepAvailable={deepAvailable} />
-            <span style={{ fontSize: FS.meta, color: "var(--font-muted)", marginTop: 4 }}>Detail: {DEPTH_HINT[effDepth]}</span>
-          </div>
-        </div>
-
         <div className={`lg:grid lg:gap-6 lg:items-start ${
           cell ? "lg:grid-cols-[260px_minmax(0,1fr)]" : "lg:grid-cols-[300px_minmax(0,1fr)]"}`}>
           {/* LEFT · the PARENT, compressed. In B that is the dimensions; in C it is this
@@ -332,7 +314,7 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
                             </span>
                             <span>{c.title}</span>
                           </button>
-                          {on && effDepth !== "brief" && (
+                          {on && (
                             <div style={{ padding: "4px 0 12px 22px" }}>
                               {c.body && <p style={{ fontSize: FS.body, lineHeight: 1.65, color: "var(--font)" }}>{c.body}</p>}
                               {c.implication && <p style={{ fontSize: FS.body, lineHeight: 1.6, color: "var(--font-muted)", marginTop: 8 }}>{c.implication}</p>}
@@ -354,7 +336,19 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
                 </div>
               )}
 
-              {effDepth === "deep" && <div ref={deepRef} style={{ borderRadius: R.md }}>{renderDeep(dim.id, secColor)}</div>}
+              {/* The deeper reading, where one exists. It used to be the third rung of a
+                  Brief/Full/Deep ladder — but the notable list expands on click, so two of
+                  those rungs controlled nothing a click did not already control, and a
+                  three-way switch for one real choice is a control explaining itself. */}
+              {deepAvailable && (
+                <div ref={deepRef} style={{ marginTop: 20, borderTop: "1px solid var(--border-card)", paddingTop: 14 }}>
+                  <button onClick={() => setDeepOpen(!deepOpen)} className="rm-link"
+                          style={{ ...EYEBROW, color: secColor }}>
+                    {deepOpen ? "▾" : "▸"} The deeper reading ⌁
+                  </button>
+                  {deepOpen && <div style={{ borderRadius: R.md, marginTop: 10 }}>{renderDeep(dim.id, secColor)}</div>}
+                </div>
+              )}
             </div>
           </div>
           )}
