@@ -11,6 +11,7 @@
    {
     "dimension": "cc",
     "cut": "category",
+    "stem": "cc-category",
     "subject": "Credit cards in force",
     "speed": "Credit cards in force growing 9.9% YoY, at a steady pace.",
     "speed_short": "9.9% YoY",
@@ -25,13 +26,190 @@
      "cc-category-allocation",
      "cc-category-momentum",
      "cc-outstanding-yoy"
-    ]
+    ],
+    "parent_entity": null,
+    "anchor": true
+   },
+   {
+    "dimension": "cc",
+    "cut": "atm-withdrawal-val-category",
+    "stem": "cc-atm-withdrawal-val-category",
+    "subject": "Credit card ATM withdrawal value",
+    "speed": "Credit card ATM withdrawal value growing 2.9% YoY, at a steady pace.",
+    "speed_short": "2.9% YoY",
+    "speed_dir": "up",
+    "mix": "Drifting toward Public Sector Banks — it took 82.7% of the growth while holding 34.0% of the total a year ago. Away from Private Sector Banks.",
+    "no_speed_note": null,
+    "no_mix_note": null,
+    "mix_state": "drifting",
+    "toward": "Public Sector Banks",
+    "toward_entity": "Public Sector Banks",
+    "source_signals": [
+     "cc-atm-val-yoy",
+     "cc-atm-withdrawal-val-category-allocation",
+     "cc-atm-withdrawal-val-category-momentum"
+    ],
+    "parent_entity": null,
+    "anchor": false
+   },
+   {
+    "dimension": "cc",
+    "cut": "atm-withdrawal-vol-category",
+    "stem": "cc-atm-withdrawal-vol-category",
+    "subject": "Credit card ATM withdrawals",
+    "speed": "Credit card ATM withdrawals at -1.5% YoY, contracting.",
+    "speed_short": "-1.5% YoY · contracting",
+    "speed_dir": "down",
+    "mix": "Reallocating — gains and losses very nearly cancel.",
+    "no_speed_note": null,
+    "no_mix_note": null,
+    "mix_state": "reallocating",
+    "toward": null,
+    "toward_entity": null,
+    "source_signals": [
+     "cc-atm-vol-yoy"
+    ],
+    "parent_entity": null,
+    "anchor": false
+   },
+   {
+    "dimension": "cc",
+    "cut": "ecom-txn-val-category",
+    "stem": "cc-ecom-txn-val-category",
+    "subject": "Credit card eCommerce spend value",
+    "speed": "Credit card eCommerce spend value growing 7.2% YoY, but slowing.",
+    "speed_short": "7.2% YoY · slowing",
+    "speed_dir": "up",
+    "mix": "Steered toward Public Sector Banks — it took 65.2% of the growth while holding 19.4% of the total a year ago. Away from Private Sector Banks.",
+    "no_speed_note": null,
+    "no_mix_note": null,
+    "mix_state": "steered",
+    "toward": "Public Sector Banks",
+    "toward_entity": "Public Sector Banks",
+    "source_signals": [
+     "cc-ecom-txn-val-category-allocation",
+     "cc-ecom-txn-val-category-momentum",
+     "cc-ecom-val-yoy"
+    ],
+    "parent_entity": null,
+    "anchor": false
+   },
+   {
+    "dimension": "cc",
+    "cut": "ecom-txn-vol-category",
+    "stem": "cc-ecom-txn-vol-category",
+    "subject": "Credit card eCommerce transactions",
+    "speed": "Credit card eCommerce transactions growing 27.5% YoY, but slowing.",
+    "speed_short": "27.5% YoY · slowing",
+    "speed_dir": "up",
+    "mix": "Drifting toward Public Sector Banks — it took 46.0% of the growth while holding 27.7% of the total a year ago. Away from Private Sector Banks.",
+    "no_speed_note": null,
+    "no_mix_note": null,
+    "mix_state": "drifting",
+    "toward": "Public Sector Banks",
+    "toward_entity": "Public Sector Banks",
+    "source_signals": [
+     "cc-ecom-txn-vol-category-allocation",
+     "cc-ecom-txn-vol-category-momentum",
+     "cc-ecom-vol-yoy"
+    ],
+    "parent_entity": null,
+    "anchor": false
+   },
+   {
+    "dimension": "cc",
+    "cut": "other-txn-val-category",
+    "stem": "cc-other-txn-val-category",
+    "subject": "Credit card other spend value",
+    "speed": "Credit card other spend value growing 270.4% YoY, but slowing.",
+    "speed_short": "270.4% YoY · slowing",
+    "speed_dir": "up",
+    "mix": "Drifting toward Private Sector Banks — it took 4.7% of the growth while holding 1.3% of the total a year ago. Away from Small Finance Banks.",
+    "no_speed_note": null,
+    "no_mix_note": null,
+    "mix_state": "drifting",
+    "toward": "Private Sector Banks",
+    "toward_entity": "Private Sector Banks",
+    "source_signals": [
+     "cc-other-txn-val-category-allocation",
+     "cc-other-txn-val-category-momentum",
+     "cc-other-val-yoy"
+    ],
+    "parent_entity": null,
+    "anchor": false
+   },
+   {
+    "dimension": "cc",
+    "cut": "other-txn-vol-category",
+    "stem": "cc-other-txn-vol-category",
+    "subject": "Credit card other transactions",
+    "speed": "Credit card other transactions growing 142.2% YoY, but slowing.",
+    "speed_short": "142.2% YoY · slowing",
+    "speed_dir": "up",
+    "mix": "Steered toward Private Sector Banks — it took 3.6% of the growth while holding 0.0% of the total a year ago. Away from Small Finance Banks.",
+    "no_speed_note": null,
+    "no_mix_note": null,
+    "mix_state": "steered",
+    "toward": "Private Sector Banks",
+    "toward_entity": "Private Sector Banks",
+    "source_signals": [
+     "cc-other-txn-vol-category-allocation",
+     "cc-other-txn-vol-category-momentum",
+     "cc-other-vol-yoy"
+    ],
+    "parent_entity": null,
+    "anchor": false
+   },
+   {
+    "dimension": "cc",
+    "cut": "pos-txn-val-category",
+    "stem": "cc-pos-txn-val-category",
+    "subject": "Credit card POS spend value",
+    "speed": "Credit card POS spend value growing 7.6% YoY, but slowing.",
+    "speed_short": "7.6% YoY · slowing",
+    "speed_dir": "up",
+    "mix": "Steered toward Public Sector Banks — it took 46.8% of the growth while holding 19.7% of the total a year ago. Away from Private Sector Banks.",
+    "no_speed_note": null,
+    "no_mix_note": null,
+    "mix_state": "steered",
+    "toward": "Public Sector Banks",
+    "toward_entity": "Public Sector Banks",
+    "source_signals": [
+     "cc-pos-txn-val-category-allocation",
+     "cc-pos-txn-val-category-momentum",
+     "cc-pos-val-yoy"
+    ],
+    "parent_entity": null,
+    "anchor": false
+   },
+   {
+    "dimension": "cc",
+    "cut": "pos-txn-vol-category",
+    "stem": "cc-pos-txn-vol-category",
+    "subject": "Credit card POS transactions",
+    "speed": "Credit card POS transactions growing 20.7% YoY, but slowing.",
+    "speed_short": "20.7% YoY · slowing",
+    "speed_dir": "up",
+    "mix": "Drifting toward Small Finance Banks — it took 11.7% of the growth while holding 0.4% of the total a year ago. Away from Public Sector Banks.",
+    "no_speed_note": null,
+    "no_mix_note": null,
+    "mix_state": "drifting",
+    "toward": "Small Finance Banks",
+    "toward_entity": "Small Finance Banks",
+    "source_signals": [
+     "cc-pos-txn-vol-category-allocation",
+     "cc-pos-txn-vol-category-momentum",
+     "cc-pos-vol-yoy"
+    ],
+    "parent_entity": null,
+    "anchor": false
    }
   ],
   "dc": [
    {
     "dimension": "dc",
     "cut": "category",
+    "stem": "dc-category",
     "subject": "Debit cards in force",
     "speed": "Debit cards in force growing 2.0% YoY, but slowing.",
     "speed_short": "2.0% YoY · slowing",
@@ -44,13 +222,224 @@
     "toward_entity": null,
     "source_signals": [
      "dc-outstanding-yoy"
-    ]
+    ],
+    "parent_entity": null,
+    "anchor": true
+   },
+   {
+    "dimension": "dc",
+    "cut": "atm-withdrawal-val-category",
+    "stem": "dc-atm-withdrawal-val-category",
+    "subject": "Debit card ATM withdrawal value",
+    "speed": "Debit card ATM withdrawal value at -5.4% YoY, contracting.",
+    "speed_short": "-5.4% YoY · contracting",
+    "speed_dir": "down",
+    "mix": "Steered toward Private Sector Banks — it took 46.1% of the contraction while holding 30.0% of the total a year ago. Away from Public Sector Banks.",
+    "no_speed_note": null,
+    "no_mix_note": null,
+    "mix_state": "steered",
+    "toward": "Private Sector Banks",
+    "toward_entity": "Private Sector Banks",
+    "source_signals": [
+     "dc-atm-val-yoy",
+     "dc-atm-withdrawal-val-category-allocation",
+     "dc-atm-withdrawal-val-category-momentum"
+    ],
+    "parent_entity": null,
+    "anchor": false
+   },
+   {
+    "dimension": "dc",
+    "cut": "atm-withdrawal-vol-category",
+    "stem": "dc-atm-withdrawal-vol-category",
+    "subject": "Debit card ATM withdrawals",
+    "speed": "Debit card ATM withdrawals at -8.9% YoY, contracting.",
+    "speed_short": "-8.9% YoY · contracting",
+    "speed_dir": "down",
+    "mix": "Drifting toward Private Sector Banks — it took 34.5% of the contraction while holding 25.0% of the total a year ago. Away from Public Sector Banks.",
+    "no_speed_note": null,
+    "no_mix_note": null,
+    "mix_state": "drifting",
+    "toward": "Private Sector Banks",
+    "toward_entity": "Private Sector Banks",
+    "source_signals": [
+     "dc-atm-vol-yoy",
+     "dc-atm-withdrawal-vol-category-allocation",
+     "dc-atm-withdrawal-vol-category-momentum"
+    ],
+    "parent_entity": null,
+    "anchor": false
+   },
+   {
+    "dimension": "dc",
+    "cut": "ecom-txn-val-category",
+    "stem": "dc-ecom-txn-val-category",
+    "subject": "Debit card eCommerce spend value",
+    "speed": "Debit card eCommerce spend value growing 10.3% YoY, accelerating.",
+    "speed_short": "10.3% YoY · accelerating",
+    "speed_dir": "up",
+    "mix": "Contested — parts are moving in opposite directions, with no single destination.",
+    "no_speed_note": null,
+    "no_mix_note": null,
+    "mix_state": "contested",
+    "toward": null,
+    "toward_entity": null,
+    "source_signals": [
+     "dc-ecom-val-yoy"
+    ],
+    "parent_entity": null,
+    "anchor": false
+   },
+   {
+    "dimension": "dc",
+    "cut": "ecom-txn-vol-category",
+    "stem": "dc-ecom-txn-vol-category",
+    "subject": "Debit card eCommerce transactions",
+    "speed": "Debit card eCommerce transactions at -4.9% YoY, contracting.",
+    "speed_short": "-4.9% YoY · contracting",
+    "speed_dir": "down",
+    "mix": "Contested — parts are moving in opposite directions, with no single destination.",
+    "no_speed_note": null,
+    "no_mix_note": null,
+    "mix_state": "contested",
+    "toward": null,
+    "toward_entity": null,
+    "source_signals": [
+     "dc-ecom-vol-yoy"
+    ],
+    "parent_entity": null,
+    "anchor": false
+   },
+   {
+    "dimension": "dc",
+    "cut": "other-txn-val-category",
+    "stem": "dc-other-txn-val-category",
+    "subject": "Debit card other spend value",
+    "speed": "Debit card other spend value growing 60.4% YoY, but slowing.",
+    "speed_short": "60.4% YoY · slowing",
+    "speed_dir": "up",
+    "mix": "Steered toward Private Sector Banks — it took 100.0% of the growth while holding 87.5% of the total a year ago. Away from Public Sector Banks.",
+    "no_speed_note": null,
+    "no_mix_note": null,
+    "mix_state": "steered",
+    "toward": "Private Sector Banks",
+    "toward_entity": "Private Sector Banks",
+    "source_signals": [
+     "dc-other-txn-val-category-allocation",
+     "dc-other-txn-val-category-momentum",
+     "dc-other-val-yoy"
+    ],
+    "parent_entity": null,
+    "anchor": false
+   },
+   {
+    "dimension": "dc",
+    "cut": "other-txn-vol-category",
+    "stem": "dc-other-txn-vol-category",
+    "subject": "Debit card other transactions",
+    "speed": "Debit card other transactions growing 6.4% YoY, but slowing.",
+    "speed_short": "6.4% YoY · slowing",
+    "speed_dir": "up",
+    "mix": "Contested — parts are moving in opposite directions, with no single destination.",
+    "no_speed_note": null,
+    "no_mix_note": null,
+    "mix_state": "contested",
+    "toward": null,
+    "toward_entity": null,
+    "source_signals": [
+     "dc-other-vol-yoy"
+    ],
+    "parent_entity": null,
+    "anchor": false
+   },
+   {
+    "dimension": "dc",
+    "cut": "pos-txn-val-category",
+    "stem": "dc-pos-txn-val-category",
+    "subject": "Debit card POS spend value",
+    "speed": "Debit card POS spend value at -7.3% YoY, contracting.",
+    "speed_short": "-7.3% YoY · contracting",
+    "speed_dir": "down",
+    "mix": "Steered toward Public Sector Banks — it took 62.6% of the contraction while holding 55.7% of the total a year ago. Away from Private Sector Banks.",
+    "no_speed_note": null,
+    "no_mix_note": null,
+    "mix_state": "steered",
+    "toward": "Public Sector Banks",
+    "toward_entity": "Public Sector Banks",
+    "source_signals": [
+     "dc-pos-txn-val-category-allocation",
+     "dc-pos-txn-val-category-momentum",
+     "dc-pos-val-yoy"
+    ],
+    "parent_entity": null,
+    "anchor": false
+   },
+   {
+    "dimension": "dc",
+    "cut": "pos-txn-vol-category",
+    "stem": "dc-pos-txn-vol-category",
+    "subject": "Debit card POS transactions",
+    "speed": "Debit card POS transactions at -10.9% YoY, contracting.",
+    "speed_short": "-10.9% YoY · contracting",
+    "speed_dir": "down",
+    "mix": "Contested — parts are moving in opposite directions, with no single destination.",
+    "no_speed_note": null,
+    "no_mix_note": null,
+    "mix_state": "contested",
+    "toward": null,
+    "toward_entity": null,
+    "source_signals": [
+     "dc-pos-vol-yoy"
+    ],
+    "parent_entity": null,
+    "anchor": false
+   },
+   {
+    "dimension": "dc",
+    "cut": "pos-withdrawal-val-category",
+    "stem": "dc-pos-withdrawal-val-category",
+    "subject": "Debit card POS withdrawal value",
+    "speed": "Debit card POS withdrawal value growing 11.8% YoY, but slowing.",
+    "speed_short": "11.8% YoY · slowing",
+    "speed_dir": "up",
+    "mix": "Reallocating — gains and losses very nearly cancel.",
+    "no_speed_note": null,
+    "no_mix_note": null,
+    "mix_state": "reallocating",
+    "toward": null,
+    "toward_entity": null,
+    "source_signals": [
+     "dc-pos-withdrawal-val-yoy"
+    ],
+    "parent_entity": null,
+    "anchor": false
+   },
+   {
+    "dimension": "dc",
+    "cut": "pos-withdrawal-vol-category",
+    "stem": "dc-pos-withdrawal-vol-category",
+    "subject": "Debit card POS withdrawals",
+    "speed": "Debit card POS withdrawals at -42.6% YoY, contracting.",
+    "speed_short": "-42.6% YoY · contracting",
+    "speed_dir": "down",
+    "mix": "Contested — parts are moving in opposite directions, with no single destination.",
+    "no_speed_note": null,
+    "no_mix_note": null,
+    "mix_state": "contested",
+    "toward": null,
+    "toward_entity": null,
+    "source_signals": [
+     "dc-pos-withdrawal-vol-yoy"
+    ],
+    "parent_entity": null,
+    "anchor": false
    }
   ],
   "infra": [
    {
     "dimension": "infra",
     "cut": "category",
+    "stem": "pos-category",
     "subject": "POS terminals",
     "speed": "POS terminals at -15.8% YoY — but it's ICICI Bank, not the market.",
     "speed_short": "-15.8% YoY · ICICI Bank, not the market",
@@ -63,7 +452,157 @@
     "toward_entity": null,
     "source_signals": [
      "pos-terminals-yoy"
-    ]
+    ],
+    "parent_entity": null,
+    "anchor": true
+   },
+   {
+    "dimension": "infra",
+    "cut": "cc-category",
+    "stem": "cc-category",
+    "subject": "Credit cards",
+    "speed": "Credit cards growing 9.9% YoY, at a steady pace.",
+    "speed_short": "9.9% YoY",
+    "speed_dir": "up",
+    "mix": "Steered toward Small Finance Banks — it took 10.7% of the growth while holding 1.0% of the total a year ago. Away from Foreign Banks.",
+    "no_speed_note": null,
+    "no_mix_note": null,
+    "mix_state": "steered",
+    "toward": "Small Finance Banks",
+    "toward_entity": "Small Finance Banks",
+    "source_signals": [
+     "cc-category-allocation",
+     "cc-category-momentum",
+     "cc-outstanding-yoy"
+    ],
+    "parent_entity": null,
+    "anchor": false
+   },
+   {
+    "dimension": "infra",
+    "cut": "dc-category",
+    "stem": "dc-category",
+    "subject": "Debit cards",
+    "speed": "Debit cards growing 2.0% YoY, but slowing.",
+    "speed_short": "2.0% YoY · slowing",
+    "speed_dir": "up",
+    "mix": "Reallocating — gains and losses very nearly cancel.",
+    "no_speed_note": null,
+    "no_mix_note": null,
+    "mix_state": "reallocating",
+    "toward": null,
+    "toward_entity": null,
+    "source_signals": [
+     "dc-outstanding-yoy"
+    ],
+    "parent_entity": null,
+    "anchor": false
+   },
+   {
+    "dimension": "infra",
+    "cut": "atm-offsite-category",
+    "stem": "atm-offsite-category",
+    "subject": "ATM offsite",
+    "speed": "ATM offsite at -4.4% YoY, contracting.",
+    "speed_short": "-4.4% YoY · contracting",
+    "speed_dir": "down",
+    "mix": "Contested — parts are moving in opposite directions, with no single destination.",
+    "no_speed_note": null,
+    "no_mix_note": null,
+    "mix_state": "contested",
+    "toward": null,
+    "toward_entity": null,
+    "source_signals": [
+     "atm-offsite-yoy"
+    ],
+    "parent_entity": null,
+    "anchor": false
+   },
+   {
+    "dimension": "infra",
+    "cut": "atm-onsite-category",
+    "stem": "atm-onsite-category",
+    "subject": "ATM onsite",
+    "speed": "ATM onsite growing 3.9% YoY, at a steady pace.",
+    "speed_short": "3.9% YoY",
+    "speed_dir": "up",
+    "mix": "Drifting toward Small Finance Banks — it took 8.1% of the growth while holding 2.2% of the total a year ago. Away from Private Sector Banks.",
+    "no_speed_note": null,
+    "no_mix_note": null,
+    "mix_state": "drifting",
+    "toward": "Small Finance Banks",
+    "toward_entity": "Small Finance Banks",
+    "source_signals": [
+     "atm-onsite-category-allocation",
+     "atm-onsite-category-momentum",
+     "atm-onsite-yoy"
+    ],
+    "parent_entity": null,
+    "anchor": false
+   },
+   {
+    "dimension": "infra",
+    "cut": "bharat-qr-category",
+    "stem": "bharat-qr-category",
+    "subject": "Bharat QR",
+    "speed": "Bharat QR at -20.7% YoY, contracting.",
+    "speed_short": "-20.7% YoY · contracting",
+    "speed_dir": "down",
+    "mix": "Drifting toward Small Finance Banks — it took 4.4% of the contraction while holding 0.9% of the total a year ago. Away from Public Sector Banks.",
+    "no_speed_note": null,
+    "no_mix_note": null,
+    "mix_state": "drifting",
+    "toward": "Small Finance Banks",
+    "toward_entity": "Small Finance Banks",
+    "source_signals": [
+     "bharat-qr-category-allocation",
+     "bharat-qr-category-momentum",
+     "bharat-qr-yoy"
+    ],
+    "parent_entity": null,
+    "anchor": false
+   },
+   {
+    "dimension": "infra",
+    "cut": "micro-atms-category",
+    "stem": "micro-atms-category",
+    "subject": "Micro ATMs",
+    "speed": "Micro ATMs at -9.4% YoY, contracting.",
+    "speed_short": "-9.4% YoY · contracting",
+    "speed_dir": "down",
+    "mix": "Contested — parts are moving in opposite directions, with no single destination.",
+    "no_speed_note": null,
+    "no_mix_note": null,
+    "mix_state": "contested",
+    "toward": null,
+    "toward_entity": null,
+    "source_signals": [
+     "micro-atm-yoy"
+    ],
+    "parent_entity": null,
+    "anchor": false
+   },
+   {
+    "dimension": "infra",
+    "cut": "upi-qr-category",
+    "stem": "upi-qr-category",
+    "subject": "UPI QR",
+    "speed": "UPI QR growing 16.7% YoY, at a steady pace.",
+    "speed_short": "16.7% YoY",
+    "speed_dir": "up",
+    "mix": "Drifting toward Private Sector Banks — it took 97.1% of the growth while holding 96.0% of the total a year ago. Away from Public Sector Banks.",
+    "no_speed_note": null,
+    "no_mix_note": null,
+    "mix_state": "drifting",
+    "toward": "Private Sector Banks",
+    "toward_entity": "Private Sector Banks",
+    "source_signals": [
+     "upi-qr-category-allocation",
+     "upi-qr-category-momentum",
+     "upi-qr-yoy"
+    ],
+    "parent_entity": null,
+    "anchor": false
    }
   ]
  }

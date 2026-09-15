@@ -50,6 +50,106 @@ def _cuts(pipeline):
     return MOVEMENT_CUTS, MOVEMENT_PREFIX, []
 
 
+REGISTRY = ROOT / "analysis" / "signals" / "registry.json"
+
+
+def _registry() -> dict:
+    return json.loads(REGISTRY.read_text())["signals"]
+
+
+def _label(metric: str) -> str:
+    """A payments metric, as a reader says it. Built from the metric's own parts rather than
+    a second lookup table: the parts are what the metric IS."""
+    t = metric.replace("cc_", "Credit card ").replace("dc_", "Debit card ")
+    t = (t.replace("_txn_val", " spend value").replace("_txn_vol", " transactions")
+          .replace("_withdrawal_val", " withdrawal value").replace("_withdrawal_vol", " withdrawals"))
+    t = (t.replace("_", " ").replace("pos", "POS").replace("atm", "ATM")
+          .replace("ecom", "eCommerce").replace("qr", "QR").replace("upi", "UPI"))
+    return t[0].upper() + t[1:]
+
+
+def derived_cuts(pipeline: str, declared, mix_states: dict):
+    """The cuts that have a state to show and no row in the generator's table.
+
+    THE BAND'S POPULATION IS NOW DERIVED. It was `MOVEMENT_CUTS` — a hand-written list of
+    seven SIBC cuts and three payments ones — sitting beside a table layer that discovers its
+    forty cuts from the registry. So Layer 2 computed forty mix states every ingestion and ten
+    reached a browser, which is the same defect this arc opened with, one level down: a check
+    or a surface whose population is a list is a surface that silently omits.
+
+    A cut qualifies by having a mix state. What it needs to SPEAK is a parent rate, and the
+    two pipelines hold that in different shapes — payments measures have their own total-YoY
+    aggregate, a SIBC sub-cut's parent is one ROW of its parent table's scan — so both are
+    resolved here from the registry rather than declared twice.
+    """
+    from core.movement_cards import MovementCut
+    reg = _registry()
+    known = {f"{c.slug}" for c in declared}
+    out = []
+
+    if pipeline == "atm_pos":
+        # metric -> its total-YoY signal, the rate that speaks for the whole measure.
+        yoy = {(s.get("compute") or {}).get("metric"): sid for sid, s in reg.items()
+               if s.get("pipeline") == "atm_pos"
+               and (s.get("compute") or {}).get("method") in ("csv_total_yoy", "csv_sum_yoy")}
+        for sid, sig in reg.items():
+            c = sig.get("compute") or {}
+            if c.get("method") != "csv_category_momentum" or f"{sid[:-len('-momentum')]}" == "":
+                continue
+            stem = sid[: -len("-momentum")]
+            metric = c.get("metric")
+            group = "cc" if metric.startswith("cc_") else "dc" if metric.startswith("dc_") else "infra"
+            slug = stem[len(MOVEMENT_PREFIX_FOR[group]):] if stem.startswith(MOVEMENT_PREFIX_FOR[group]) else stem
+            if slug in known or sid not in mix_states:
+                continue
+            out.append(MovementCut(slug=slug, section=group, speed=f"{stem}-yoy-scan",
+                                   subject=_label(metric), stem_full=stem,
+                                   parent_yoy=yoy.get(metric), parent_label=_label(metric),
+                                   no_mix_note="no mix computed for this measure"))
+        return out
+
+    # SIBC: a sub-cut hangs off a ROW of its parent cut's table (§19). Its dimension is the
+    # parent's dimension, and its parent rate is that row inside the parent's YoY scan.
+    parents = {(str((c.get("compute") or {}).get("parent_code")),
+                (c.get("compute") or {}).get("statement")): sid[: -len("-momentum")]
+               for sid, c in ((k, v) for k, v in reg.items())
+               if (c.get("compute") or {}).get("method") == "csv_sector_momentum"
+               for c in [c]}
+    section_of = {c.slug: c.section for c in declared}
+    import pandas as pd
+    from core.manifest import consolidated_csv
+    df = pd.read_csv(consolidated_csv("sibc"))
+    for sid, sig in reg.items():
+        c = sig.get("compute") or {}
+        if c.get("method") != "csv_sector_momentum" or c.get("child_level") != 3:
+            continue
+        stem = sid[: -len("-momentum")]
+        slug = stem[len("sibc-"):]
+        if slug in known or sid not in mix_states:
+            continue
+        code, stmt = str(c.get("parent_code")), c.get("statement")
+        grandparent = code.rsplit(".", 1)[0]
+        parent_stem = parents.get((grandparent, stmt))
+        rows = df[(df["code"].astype(str) == code) & (df["statement"] == stmt)]["sector"]
+        if parent_stem is None or not len(rows):
+            continue            # a sub-cut whose parent table we cannot name says nothing
+        entity = rows.iloc[0]
+        # RBI's parenthetical qualifiers are for a spreadsheet, not a sentence: the band
+        # already trims them on the mix line's destination, so the speed line's subject uses
+        # the same trim rather than a second idea of what a sector is called.
+        label = state_lines._short(entity)
+        out.append(MovementCut(
+            slug=slug, section=section_of.get(parent_stem[len("sibc-"):], ""),
+            speed=f"{stem}-yoy-scan", subject=label, stem_full=stem,
+            parent_yoy=f"{parent_stem}-yoy-scan", parent_label=f"{label} credit",
+            parent_entity=entity,
+            no_mix_note="no mix computed for this cut"))
+    return [c for c in out if c.section]
+
+
+MOVEMENT_PREFIX_FOR = {"cc": "cc-", "dc": "dc-", "infra": "pos-"}
+
+
 def latest_period(pipeline: str) -> str:
     """The newest period in signals.db — the period the dashboard is showing."""
     with sqlite3.connect(DB) as con:
@@ -75,9 +175,13 @@ def build(pipeline: str) -> dict:
     """The sidecar payload: dimension id → the ordered state blocks under it."""
     period = latest_period(pipeline)
     cuts, prefix, rate_only = _cuts(pipeline)
+    mix = _mix_states(pipeline, period)
+    extra = derived_cuts(pipeline, cuts, mix)
+    if isinstance(prefix, dict):
+        prefix = {**prefix}          # derived payments cuts share their group's prefix
     with sqlite3.connect(DB) as con:
-        blocks = state_lines.blocks(con, pipeline, period, cuts, prefix,
-                                    _mix_states(pipeline, period), rate_only)
+        blocks = state_lines.blocks(con, pipeline, period, [*cuts, *extra], prefix, mix,
+                                    rate_only, anchors=cuts)
     by_dim: dict[str, list[dict]] = {}
     for b in blocks:
         by_dim.setdefault(b.dimension, []).append(b.as_dict())

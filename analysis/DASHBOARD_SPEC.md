@@ -1316,6 +1316,52 @@ Two things the measurement changed, both worth keeping:
    Fourth instance in three days of a probe producing a false negative; the tell each time is
    a probe that returns the same answer regardless of input.
 
+### 16.12 The band follows the cut on screen (BUILT 2026-09-15) ⭐
+
+Arc 1 shipped the band at DIMENSION level: ten blocks over ten anchor cuts. Layer 2 computes a
+mix state for **forty** cuts, so thirty were computed every ingestion, gate-validated, and never
+reached a browser — the finding Arc 1 opened with, one level down.
+
+**The population is now DERIVED**, not listed. It was `MOVEMENT_CUTS`, a hand-written table in
+the card generator, sitting beside a table layer that discovers its forty cuts from the registry.
+A cut qualifies for a block by having a mix state; what it needs to SPEAK is a parent rate, and
+the two pipelines hold that differently — so both are resolved from the registry rather than
+declared twice:
+
+| | parent rate |
+|---|---|
+| payments measure | its own total-YoY aggregate (all 26 have one) |
+| SIBC sub-cut | one ROW of its parent table's YoY scan — RBI publishes no basic-metals total |
+
+That second case is why `speed_line` takes a `parent_entity` and why a block carries it: the gate
+scopes that number to the row the sentence names, so the pool stays in single digits.
+
+**A measure SWAPS the band; an expanded row STACKS a second block.** The rule is what the reader
+is looking at: a measure filter replaces the table, so it replaces the band; a row expansion
+leaves the parent table on screen, so the parent's state stays with it.
+
+    ┌─ Credit card eCommerce transactions ───────────────┐   measure = swap
+    │ speed  growing 27.5% YoY, but slowing.             │
+    │ mix    Drifting toward Public Sector Banks — took  │
+    │        46.0% of the growth, held 27.7% a year ago. │
+    └────────────────────────────────────────────────────┘
+
+    ┌─ Industry credit ──────────────────────────────────┐   row = stack
+    │ speed  growing 20.0% YoY, accelerating.            │
+    ├─ Basic Metal and Metal Product credit ─────────────┤
+    │ speed  growing 21.9% YoY, accelerating.            │
+    │ mix    Drifting toward Iron and Steel — took 75.5% │
+    │        of the growth, held 67.7% a year ago.       │
+    └────────────────────────────────────────────────────┘
+
+**A block declares whether it is the dimension's ANCHOR**, and the tile shows the anchor only: a
+payments group carries eleven measures, and a tile listing eleven has stopped being a summary.
+Declared by the generator's cut table, so widening the band cannot quietly rewrite the front door.
+
+Blocks: SIBC 8 → **15**, payments 3 → **28**. Injection: payments 3/3 caught including a 0.1
+near-miss; SIBC 2/3 — the survivor (19.8 → 19.9) sits inside the DISTRIBUTION policy's declared
+0.5% relative tolerance, which is a tolerance decision, not a scope hole.
+
 ### 16.9 Constraints carried in (non-negotiable)
 
 - The regime **word** only, never the coherence number.

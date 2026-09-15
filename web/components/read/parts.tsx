@@ -507,6 +507,9 @@ export interface CutTableProps {
   /** The chart lives in the shell, so the table reports clicks and is told what is lit. */
   active?: CellRef | null;
   onPickCell?: (ref: CellRef) => void;
+  /** Which sub-cut is open, reported upward: the state band stacks that cut's own reading
+   *  beside the parent's, and the band belongs to the shell. */
+  onExpand?: (subCut: string | null) => void;
 }
 
 /** What a row opens on when the reader clicks the ROW rather than one of its numbers.
@@ -515,7 +518,7 @@ export interface CutTableProps {
 const ROW_DEFAULT: ColKey[] = ["growth", "size", "of_cut", "new", "pace", "of_book"];
 
 export function CutTable({ table, title, color, bookLabel, footer, all, depth = 0,
-                          active, onPickCell }: CutTableProps) {
+                          active, onPickCell, onExpand }: CutTableProps) {
   // Default size, descending: the reader's model is "biggest first", and a growth-sorted
   // table opens with the smallest book on the page.
   const [sort, setSort] = React.useState<{ key: SortKey; dir: SortDir }>({ key: "size", dir: "desc" });
@@ -594,7 +597,11 @@ export function CutTable({ table, title, color, bookLabel, footer, all, depth = 
                              background: lit(p) ? tint(color, 0.12) : isOpen ? tint(color, 0.07) : undefined }}>
                   <td style={{ ...NUM, textAlign: "left" }}>
                     {nested ? (
-                      <button onClick={(e) => { e.stopPropagation(); setOpen(isOpen ? null : p.entity); }}
+                      <button onClick={(e) => {
+                                e.stopPropagation();
+                                setOpen(isOpen ? null : p.entity);
+                                onExpand?.(isOpen ? null : (p.sub_cut ?? null));
+                              }}
                               className="rm-link" style={{ font: "inherit", color: "inherit" }}>
                         <span style={{ color, fontWeight: 700 }}>{isOpen ? "▾" : "▸"}</span> {p.entity}
                       </button>

@@ -77,6 +77,10 @@ class StateBlock:
     cut has no such input — the band drops the line rather than inventing one."""
     dimension: str            # the dashboard section/group id this belongs to
     cut: str                  # the cut slug, so a dimension carrying two can tell them apart
+    # The cut's FULL signal stem ("cc-ecom-txn-val-category"). The browser matches the band to
+    # the table on screen with this rather than reassembling a prefix and a slug — a cut is
+    # identified by the name its signals carry, everywhere.
+    stem: str
     subject: str              # "Industry credit" — the block heading when a dimension has >1 cut
     speed: str | None
     # The tile form of the same reading: "20.0% YoY · accelerating". Rendered HERE and not
@@ -96,6 +100,13 @@ class StateBlock:
     # scope this block's ground truth to the one entity the sentence names.
     toward_entity: str | None
     source_signals: list[str] # what the gate scopes this block's numbers to
+    # Set when the parent RATE is one row of a scan rather than an aggregate (a sub-cut).
+    parent_entity: str | None = None
+    # Is this the dimension's headline cut? The tile shows the anchor and only the anchor: a
+    # payments group carries eleven measures, and a tile that lists all eleven has stopped
+    # being a summary. DECLARED by the generator's own cut table rather than inferred from a
+    # name, so widening the band cannot quietly rewrite the front door.
+    anchor: bool = False
 
     def as_dict(self) -> dict:
         return asdict(self)
@@ -103,10 +114,22 @@ class StateBlock:
 
 # ── speed · Layer 1 ───────────────────────────────────────────────────────────
 
-def _yoy_series(conn, pipeline: str, sid: str) -> list[tuple[str, float]]:
+def _yoy_series(conn, pipeline: str, sid: str,
+                entity: str | None = None) -> list[tuple[str, float]]:
     """The signal's own scalar series, oldest first. A YoY signal writes one
     aggregate/total row per period, which is the convention every roll-up in
-    this codebase keys on."""
+    this codebase keys on.
+
+    `entity` reads the parent out of a SCAN instead. A sub-cut's parent is a ROW, not a
+    total: basic metals grows 21.9% as one entity inside the industry-by-type scan, because
+    RBI publishes no separate basic-metals aggregate. Declared by the cut, never guessed —
+    the alternative is a band that goes silent on seven cuts for a reason no reader could
+    distinguish from breakage.
+    """
+    if entity:
+        return list(conn.execute(
+            "SELECT period, value FROM signals WHERE pipeline=? AND metric_id=? "
+            "AND entity_id=? AND value IS NOT NULL ORDER BY period", (pipeline, sid, entity)))
     return list(conn.execute(
         "SELECT period, value FROM signals WHERE pipeline=? AND metric_id=? "
         "AND entity_type='aggregate' AND entity_id='total' ORDER BY period",
@@ -130,7 +153,8 @@ def _pace(series: list[tuple[str, float]]) -> str | None:
 
 
 def speed_line(conn, pipeline: str, period: str, parent_yoy: str | None,
-               parent_label: str) -> tuple[str, str, str, list[str]] | None:
+               parent_label: str,
+               parent_entity: str | None = None) -> tuple[str, str, str, list[str]] | None:
     """`{Parent} growing 20.0% YoY, accelerating.`, its tile form, and the direction of the
     rate — or None when the cut has no parent-level signal to speak for it.
 
@@ -138,7 +162,8 @@ def speed_line(conn, pipeline: str, period: str, parent_yoy: str | None,
     a glyph, and a glyph inferred from a sentence is a glyph that says ▲ next to -15.8%."""
     if not parent_yoy:
         return None
-    series = [(p, v) for p, v in _yoy_series(conn, pipeline, parent_yoy) if p <= period]
+    series = [(p, v) for p, v in _yoy_series(conn, pipeline, parent_yoy, parent_entity)
+              if p <= period]
     if not series or series[-1][0] != period:
         return None
     value = series[-1][1]
@@ -146,7 +171,9 @@ def speed_line(conn, pipeline: str, period: str, parent_yoy: str | None,
     # A single entity's reporting change can own the whole aggregate move. Attribute it in
     # the sentence rather than suppressing the number — the figure is real, the market
     # reading is not. Same wording as the card-level guard, so the two cannot drift apart.
-    if parent_yoy in SCAN_FOR or parent_yoy in RATIO_DENOMINATOR:
+    # The dominance guard is an aggregate question — "is this whole market's move one
+    # entity's?" — and a parent read out of a scan IS one entity already.
+    if parent_entity is None and (parent_yoy in SCAN_FOR or parent_yoy in RATIO_DENOMINATOR):
         dom = move_dominance(pipeline, parent_yoy, period, conn=conn)
         if dom and dom.dominant:
             entity = short_entity(dom.top_entity) or "one issuer"
@@ -228,7 +255,7 @@ def mix_line(conn, pipeline: str, period: str, alloc_sid: str, mom_sid: str,
 # ── the band ──────────────────────────────────────────────────────────────────
 
 def blocks(conn, pipeline: str, period: str, cuts, prefix,
-           mix_states: dict, rate_only=()) -> list[StateBlock]:
+           mix_states: dict, rate_only=(), anchors=()) -> list[StateBlock]:
     """Every cut's state block for one pipeline, in the cut table's own order.
 
     `cuts` is the pipeline's `MOVEMENT_CUTS` — the same table that already decides
@@ -242,6 +269,7 @@ def blocks(conn, pipeline: str, period: str, cuts, prefix,
     pipeline has to keep a second copy of the same fact.
     """
     stem = (lambda c: prefix) if isinstance(prefix, str) else (lambda c: prefix[c.section])
+    anchor_slugs = {c.slug for c in (anchors or cuts)}
     out: list[StateBlock] = []
     for cut in [*cuts, *rate_only]:
         if isinstance(cut, RateOnlyCut):
@@ -249,14 +277,19 @@ def blocks(conn, pipeline: str, period: str, cuts, prefix,
             if sp is None:
                 continue
             out.append(StateBlock(
-                dimension=cut.section, cut=cut.section, subject=cut.parent_label,
+                dimension=cut.section, cut=cut.section, stem=cut.section,
+                subject=cut.parent_label,
                 speed=sp[0], speed_short=sp[1], speed_dir=sp[2],
                 mix=None, no_speed_note=None, no_mix_note=cut.no_mix_note,
-                mix_state=None, toward=None, toward_entity=None, source_signals=sp[3]))
+                mix_state=None, toward=None, toward_entity=None, source_signals=sp[3],
+                parent_entity=None, anchor=True))
             continue
-        mom_sid = f"{stem(cut)}{cut.slug}-momentum"
-        alloc_sid = f"{stem(cut)}{cut.slug}-allocation"
-        sp = speed_line(conn, pipeline, period, cut.parent_yoy, cut.parent_label or cut.subject)
+        cut_stem = getattr(cut, "stem_full", None) or f"{stem(cut)}{cut.slug}"
+        mom_sid = f"{cut_stem}-momentum"
+        alloc_sid = f"{cut_stem}-allocation"
+        sp = speed_line(conn, pipeline, period, cut.parent_yoy,
+                        cut.parent_label or cut.subject,
+                        getattr(cut, "parent_entity", None))
         mx = mix_line(conn, pipeline, period, alloc_sid, mom_sid, mix_states.get(mom_sid, {}))
         if sp is None and mx is None:
             continue
@@ -264,6 +297,7 @@ def blocks(conn, pipeline: str, period: str, cuts, prefix,
         out.append(StateBlock(
             dimension=cut.section,
             cut=cut.slug,
+            stem=cut_stem,
             subject=(cut.parent_label or cut.subject)[0].upper() + (cut.parent_label or cut.subject)[1:],
             speed=sp[0] if sp else None,
             speed_short=sp[1] if sp else None,
@@ -275,5 +309,9 @@ def blocks(conn, pipeline: str, period: str, cuts, prefix,
             toward=_short(mix["toward"]) if mix.get("toward") else None,
             toward_entity=mix.get("toward") if mx else None,
             source_signals=sorted({*(sp[3] if sp else []), *(mx[1] if mx else [])}),
+            # The entity a scan-read parent rate is keyed on, so the gate scopes that number
+            # to the row the sentence is about rather than to the whole scan.
+            parent_entity=getattr(cut, "parent_entity", None),
+            anchor=cut.slug in anchor_slugs,
         ))
     return out

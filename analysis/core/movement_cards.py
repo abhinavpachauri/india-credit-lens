@@ -49,6 +49,16 @@ class MovementCut:
     # "priority sector has no published total" is a fact about the data worth saying once a month.
     no_speed_note: str | None = None
     no_mix_note:   str | None = None
+    # When the parent's rate is one ROW of a scan rather than an aggregate. A sub-cut's parent
+    # is a row in the table above it — basic metals grows 21.9% as an entity inside the
+    # industry-by-type scan, because RBI publishes no basic-metals total — and without this the
+    # band goes silent on seven cuts for a reason no reader could tell from breakage.
+    parent_entity: str | None = None
+    # The cut's FULL signal stem, when it does not follow its section's prefix. Payments names
+    # its infrastructure cuts by product — pos-, atm-onsite-, upi-qr-, bharat-qr- — so "one
+    # prefix per dashboard group" is true of credit cards and false of infrastructure, and a
+    # cut that cannot spell its own stem is a cut that silently produces no rows.
+    stem_full: str | None = None
 
 
 # The row types a movement signal writes ALONGSIDE its members. `aggregate` carries

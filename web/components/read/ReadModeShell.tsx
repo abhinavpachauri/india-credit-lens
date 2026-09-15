@@ -78,6 +78,9 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
   const [cell, setCell] = useState<CellRef | null>(null);            // non-null = state C
   const [openCard, setOpenCard] = useState<string | null>(null);
   const [deepOpen, setDeepOpen] = useState(false);
+  // Which sub-cut a row has opened (SIBC §19). The band stacks that cut's own state under
+  // the parent's, because the parent table is still on screen above it.
+  const [subCut, setSubCut] = useState<string | null>(null);
   const [showIndex, setShowIndex] = useState(false);
   const [measure, setMeasure] = useState<string | null>(null);
   const [byBank, setByBank] = useState(false);
@@ -123,6 +126,15 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
 
   const deepAvailable = dim ? hasDeep(dim.id) : false;
 
+  /** The state blocks to show: the cut on screen, plus an expanded sub-cut's own. Falls back
+   *  to whatever the dimension declares, so a dimension whose cut has no state (or no table at
+   *  all, like Bank Credit) still renders its band rather than going quiet. */
+  const dimBlocks = (dim && state[dim.id]) || [];
+  const onScreen = dimBlocks.filter((b) => b.stem === (byBank && bankEntry ? bankEntry.cut : cut?.stem));
+  const stacked = subCut ? dimBlocks.filter((b) => b.stem === subCut) : [];
+  const bandBlocks = [...(onScreen.length ? onScreen : dimBlocks.filter((b) => b.anchor)),
+                      ...stacked];
+
   const notable = (d: RMDimension) => d.subjects.flatMap((s) => s.cards);
   const readsOf = (dimId: string) => model.reads.filter((r) => r.dimId === dimId);
   const tableCount = (dimId: string) =>
@@ -154,11 +166,12 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
     setCell(null);
     setOpenCard(cardId ?? null);
     setDeepOpen(false);
+    setSubCut(null);
     if (typeof window !== "undefined") requestAnimationFrame(() => window.scrollTo({ top: 0 }));
   }
   function pickDim(dimId: string) {
     setOpenDim(dimId); setMeasure(null); setCell(null); setOpenCard(null);
-    setByBank(false); setDeepOpen(false);
+    setByBank(false); setDeepOpen(false); setSubCut(null);
   }
 
   // ── STATE A · the landing grid ───────────────────────────────────────────
@@ -174,7 +187,7 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
           </h2>
           <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 items-stretch">
             {model.dimensions.map((d) => (
-              <DimensionCard key={d.id} dim={d} state={state[d.id]}
+              <DimensionCard key={d.id} dim={d} state={(state[d.id] ?? []).filter((b) => b.anchor)}
                              reads={readsOf(d.id).slice(0, TILE_READS)}
                              tables={tableCount(d.id)} onClick={() => enter(d.id)} />
             ))}
@@ -207,7 +220,8 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
     <div className="flex flex-col gap-1.5">
       <div style={{ ...EYEBROW, marginBottom: 4 }}>{homeLabel}</div>
       {model.dimensions.map((d) => (
-        <RailItem key={d.id} dim={d} state={state[d.id]} selected={d.id === dim.id}
+        <RailItem key={d.id} dim={d} state={(state[d.id] ?? []).filter((b) => b.anchor)}
+                  selected={d.id === dim.id}
                   onClick={() => pickDim(d.id)} />
       ))}
     </div>
@@ -245,7 +259,15 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
               {/* §16 — the dimension's standing state. It belongs to the dimension, not to any
                   card or measure, and every sentence names its own subject, so it cannot be
                   misread as describing whichever measure the filter is on. */}
-              <StateBand blocks={state[dim.id] ?? []} color={secColor} />
+              {/* §16 — the standing state OF THE CUT ON SCREEN. It was the dimension's anchor
+                  always, so switching to eCommerce Transactions left a band describing cards in
+                  force: not wrong, since every sentence names its own subject, but the right
+                  state existed and was withheld. Layer 2 computes 40 mix states and ten reached
+                  a browser.
+
+                  A measure SWAPS the band (the table is fully replaced); an expanded row STACKS
+                  a second block (the parent table is still above it). */}
+              <StateBand blocks={bandBlocks} color={secColor} />
 
               {/* §20 — the measure is a FILTER. A credit dimension has one measure and shows no
                   strip; a payments group has five to eleven and used to stack them as tables. */}
@@ -254,7 +276,7 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
                   <div className="flex flex-wrap items-center gap-1.5">
                     <span style={{ ...EYEBROW, marginRight: 4 }}>Measure</span>
                     {measures.map((m) => (
-                      <button key={m} onClick={() => { setMeasure(m); setCell(null); setByBank(false); }}
+                      <button key={m} onClick={() => { setMeasure(m); setCell(null); setByBank(false); setSubCut(null); }}
                               className="rounded-full transition-colors"
                               style={{ fontSize: FS.note, padding: "5px 11px", ...chipStyle(m === activeMeasure) }}>
                         {m}
@@ -291,7 +313,7 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
               {table ? (
                 <CutTable table={table} title={cut!.title} color={secColor}
                           bookLabel={cut!.bookLabel} footer={cut!.footer} all={tables}
-                          active={cell} onPickCell={setCell} />
+                          active={cell} onPickCell={setCell} onExpand={setSubCut} />
               ) : (
                 // A dimension that owns no cut says so, and shows the series itself. Bank
                 // Credit IS the top level: its only split is food vs non-food, an accounting

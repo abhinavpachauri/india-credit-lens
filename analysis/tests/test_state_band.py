@@ -249,3 +249,49 @@ def test_no_published_sentence_carries_a_coherence_figure():
                     assert "coherence" not in text, f"{pipeline}/{b['cut']}.{field}"
                 if b["mix_state"] in ("contested", "reallocating"):
                     assert not any(c.isdigit() for c in b["mix"])
+
+
+def test_the_bands_population_is_derived_not_listed():
+    """Layer 2 computes a mix state for every cut; the band used to ship the ten that a
+    hand-written table in the card generator happened to name. Thirty of forty never reached a
+    browser — the same defect this arc opened with, one level down.
+
+    Asserted as a PROPERTY: every cut with a mix state and a way to speak has a block.
+    """
+    import glob
+    for pipeline, data, merged in (("sibc", "sibc_state.json", "analysis/rbi_sibc/merged"),
+                                   ("atm_pos", "atm_pos_state.json", "analysis/rbi_atm_pos/merged")):
+        state = json.loads((DATA / data).read_text())
+        stems = {b["stem"] for bs in state["dimensions"].values() for b in bs}
+        latest = sorted(glob.glob(f"{ROOT}/{merged}/system_state_*.json"))[-1]
+        mix = json.loads(open(latest).read()).get("mix_states", {})
+        computed = {k[: -len("-momentum")] for k in mix}
+        missing = computed - stems
+        assert not missing, (
+            f"{pipeline}: {len(missing)} cut(s) have a computed mix state that reaches no "
+            f"band — {sorted(missing)[:5]}")
+
+
+def test_only_the_anchor_cut_reaches_the_tile():
+    """A payments group carries eleven measures. A tile that lists all eleven has stopped
+    being a summary, so the block DECLARES whether it is the dimension's headline cut."""
+    state = json.loads((DATA / "atm_pos_state.json").read_text())
+    for dim, blocks in state["dimensions"].items():
+        anchors = [b for b in blocks if b["anchor"]]
+        assert len(anchors) == 1, f"{dim} has {len(anchors)} anchor blocks, expected exactly 1"
+        assert len(blocks) > 1, f"{dim} has no derived measure blocks — the widening did nothing"
+
+
+def test_a_sub_cuts_parent_rate_is_a_row_not_an_aggregate():
+    """Basic metals grows 21.9% as one ENTITY inside the industry-by-type scan: RBI publishes
+    no basic-metals aggregate, so a band that only reads aggregates goes silent on seven cuts
+    for a reason no reader could tell from breakage."""
+    state = json.loads((DATA / "sibc_state.json").read_text())
+    subs = [b for bs in state["dimensions"].values() for b in bs if b["stem"].endswith("-sub")]
+    assert len(subs) >= 7, f"only {len(subs)} sub-cut blocks"
+    spoken = [b for b in subs if b["speed"]]
+    assert len(spoken) == len(subs), \
+        f"{len(subs) - len(spoken)} sub-cut(s) have no speed line: {[b['stem'] for b in subs if not b['speed']]}"
+    for b in spoken:
+        if b["stem"] != "sibc-infra-sub":          # infra has its own aggregate signal
+            assert b["parent_entity"], f"{b['stem']} reads a rate with no entity declared"

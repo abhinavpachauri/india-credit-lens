@@ -16,6 +16,10 @@ export type MixState = "steered" | "drifting" | "contested" | "reallocating";
 export interface StateBlock {
   dimension:      string;
   cut:            string;        // a dimension can carry two (industry by size AND by type)
+  /** The cut's FULL signal stem ("cc-ecom-txn-val-category"). The band is matched to the
+   *  table on screen with this, so a measure filter or an expanded row shows ITS state and
+   *  not the dimension anchor's. */
+  stem:           string;
   subject:        string;        // the block heading, shown only when a dimension has >1 cut
   speed:          string | null; // Layer 1 — how fast the parent is growing
   speed_short:    string | null; // the same reading, tile-sized — also rendered in Python
@@ -30,6 +34,11 @@ export interface StateBlock {
   toward:         string | null;
   toward_entity:  string | null;
   source_signals: string[];
+  /** Set when the parent RATE is one row of a scan rather than an aggregate (a sub-cut). */
+  parent_entity?: string | null;
+  /** The dimension's headline cut. The tile shows the anchor and only the anchor: a payments
+   *  group carries eleven measures, and a tile listing all eleven has stopped summarising. */
+  anchor?: boolean;
 }
 
 export type StateMap = Record<string, StateBlock[]>;

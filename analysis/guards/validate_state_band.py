@@ -50,7 +50,14 @@ def candidates(conn, registry, pipeline, period, block):
     Non-circular: the entity is read from the block as a LABEL and its numbers are fetched
     independently from signals.db. Nothing the renderer printed is taken on trust.
     """
-    wanted = {"total"} | ({block["toward_entity"]} if block.get("toward_entity") else set())
+    # The parent total, the destination the mix names, and — for a sub-cut — the ROW the
+    # parent rate is read from, since a sub-cut's parent has no aggregate of its own. Three
+    # named entities, still single digits of candidate values, and each one is a name the
+    # block DECLARED rather than a value it printed.
+    wanted = {"total"}
+    for key in ("toward_entity", "parent_entity"):
+        if block.get(key):
+            wanted.add(block[key])
     out: list[float] = []
     for sid in block["source_signals"]:
         if sid not in registry:

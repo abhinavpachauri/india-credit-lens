@@ -11,6 +11,7 @@
    {
     "dimension": "mainSectors",
     "cut": "main",
+    "stem": "sibc-main",
     "subject": "Non-food credit",
     "speed": "Non-food credit growing 19.1% YoY, accelerating.",
     "speed_short": "19.1% YoY · accelerating",
@@ -25,13 +26,16 @@
      "sibc-main-allocation",
      "sibc-main-momentum",
      "sibc-nonfood-credit-yoy"
-    ]
+    ],
+    "parent_entity": null,
+    "anchor": true
    }
   ],
   "industryByType": [
    {
     "dimension": "industryByType",
     "cut": "industry-type",
+    "stem": "sibc-industry-type",
     "subject": "Industry credit",
     "speed": "Industry credit growing 20.0% YoY, accelerating.",
     "speed_short": "20.0% YoY · accelerating",
@@ -46,11 +50,14 @@
      "sibc-industry-type-allocation",
      "sibc-industry-type-momentum",
      "sibc-industry-yoy"
-    ]
+    ],
+    "parent_entity": null,
+    "anchor": true
    },
    {
     "dimension": "industryByType",
     "cut": "infra-sub",
+    "stem": "sibc-infra-sub",
     "subject": "Infrastructure credit",
     "speed": "Infrastructure credit growing 10.2% YoY, but slowing.",
     "speed_short": "10.2% YoY · slowing",
@@ -63,13 +70,126 @@
     "toward_entity": null,
     "source_signals": [
      "sibc-infra-yoy"
-    ]
+    ],
+    "parent_entity": null,
+    "anchor": true
+   },
+   {
+    "dimension": "industryByType",
+    "cut": "basic-metal-sub",
+    "stem": "sibc-basic-metal-sub",
+    "subject": "Basic Metal and Metal Product credit",
+    "speed": "Basic Metal and Metal Product credit growing 21.9% YoY, accelerating.",
+    "speed_short": "21.9% YoY · accelerating",
+    "speed_dir": "up",
+    "mix": "Drifting toward Iron and Steel — it took 75.5% of the growth while holding 67.7% of the total a year ago. Away from Other Metal and Metal Product.",
+    "no_speed_note": null,
+    "no_mix_note": null,
+    "mix_state": "drifting",
+    "toward": "Iron and Steel",
+    "toward_entity": "Iron and Steel",
+    "source_signals": [
+     "sibc-basic-metal-sub-allocation",
+     "sibc-basic-metal-sub-momentum",
+     "sibc-industry-type-yoy-scan"
+    ],
+    "parent_entity": "Basic Metal and Metal Product",
+    "anchor": false
+   },
+   {
+    "dimension": "industryByType",
+    "cut": "engineering-sub",
+    "stem": "sibc-engineering-sub",
+    "subject": "All Engineering credit",
+    "speed": "All Engineering credit growing 36.2% YoY, but slowing.",
+    "speed_short": "36.2% YoY · slowing",
+    "speed_dir": "up",
+    "mix": "Steered toward Others — it took 85.6% of the growth while holding 77.2% of the total a year ago. Away from Electronics.",
+    "no_speed_note": null,
+    "no_mix_note": null,
+    "mix_state": "steered",
+    "toward": "Others",
+    "toward_entity": "Others",
+    "source_signals": [
+     "sibc-engineering-sub-allocation",
+     "sibc-engineering-sub-momentum",
+     "sibc-industry-type-yoy-scan"
+    ],
+    "parent_entity": "All Engineering",
+    "anchor": false
+   },
+   {
+    "dimension": "industryByType",
+    "cut": "food-processing-sub",
+    "stem": "sibc-food-processing-sub",
+    "subject": "Food Processing credit",
+    "speed": "Food Processing credit growing 22.3% YoY, accelerating.",
+    "speed_short": "22.3% YoY · accelerating",
+    "speed_dir": "up",
+    "mix": "Steered toward Edible Oils and Vanaspati — it took 23.4% of the growth while holding 9.7% of the total a year ago. Away from Sugar.",
+    "no_speed_note": null,
+    "no_mix_note": null,
+    "mix_state": "steered",
+    "toward": "Edible Oils and Vanaspati",
+    "toward_entity": "Edible Oils and Vanaspati",
+    "source_signals": [
+     "sibc-food-processing-sub-allocation",
+     "sibc-food-processing-sub-momentum",
+     "sibc-industry-type-yoy-scan"
+    ],
+    "parent_entity": "Food Processing",
+    "anchor": false
+   },
+   {
+    "dimension": "industryByType",
+    "cut": "textiles-sub",
+    "stem": "sibc-textiles-sub",
+    "subject": "Textiles credit",
+    "speed": "Textiles credit growing 15.1% YoY, accelerating.",
+    "speed_short": "15.1% YoY · accelerating",
+    "speed_dir": "up",
+    "mix": "Drifting toward Other Textiles — it took 58.5% of the growth while holding 43.9% of the total a year ago. Away from Cotton Textiles.",
+    "no_speed_note": null,
+    "no_mix_note": null,
+    "mix_state": "drifting",
+    "toward": "Other Textiles",
+    "toward_entity": "Other Textiles",
+    "source_signals": [
+     "sibc-industry-type-yoy-scan",
+     "sibc-textiles-sub-allocation",
+     "sibc-textiles-sub-momentum"
+    ],
+    "parent_entity": "Textiles",
+    "anchor": false
+   },
+   {
+    "dimension": "industryByType",
+    "cut": "chemicals-sub",
+    "stem": "sibc-chemicals-sub",
+    "subject": "Chemicals and Chemical Products credit",
+    "speed": "Chemicals and Chemical Products credit growing 24.0% YoY, accelerating.",
+    "speed_short": "24.0% YoY · accelerating",
+    "speed_dir": "up",
+    "mix": "Drifting toward Fertiliser — it took 13.8% of the growth while holding 11.0% of the total a year ago. Away from Others.",
+    "no_speed_note": null,
+    "no_mix_note": null,
+    "mix_state": "drifting",
+    "toward": "Fertiliser",
+    "toward_entity": "Fertiliser",
+    "source_signals": [
+     "sibc-chemicals-sub-allocation",
+     "sibc-chemicals-sub-momentum",
+     "sibc-industry-type-yoy-scan"
+    ],
+    "parent_entity": "Chemicals and Chemical Products",
+    "anchor": false
    }
   ],
   "industryBySize": [
    {
     "dimension": "industryBySize",
     "cut": "ind-size",
+    "stem": "sibc-ind-size",
     "subject": "Industry credit",
     "speed": "Industry credit growing 20.0% YoY, accelerating.",
     "speed_short": "20.0% YoY · accelerating",
@@ -84,13 +204,16 @@
      "sibc-ind-size-allocation",
      "sibc-ind-size-momentum",
      "sibc-industry-yoy"
-    ]
+    ],
+    "parent_entity": null,
+    "anchor": true
    }
   ],
   "services": [
    {
     "dimension": "services",
     "cut": "services",
+    "stem": "sibc-services",
     "subject": "Services credit",
     "speed": "Services credit growing 22.9% YoY, accelerating.",
     "speed_short": "22.9% YoY · accelerating",
@@ -105,13 +228,60 @@
      "sibc-services-allocation",
      "sibc-services-momentum",
      "sibc-services-yoy"
-    ]
+    ],
+    "parent_entity": null,
+    "anchor": true
+   },
+   {
+    "dimension": "services",
+    "cut": "trade-sub",
+    "stem": "sibc-trade-sub",
+    "subject": "Trade credit",
+    "speed": "Trade credit growing 19.8% YoY, accelerating.",
+    "speed_short": "19.8% YoY · accelerating",
+    "speed_dir": "up",
+    "mix": "Steered toward Wholesale Trade — it took 69.8% of the growth while holding 53.9% of the total a year ago. Away from Retail Trade.",
+    "no_speed_note": null,
+    "no_mix_note": null,
+    "mix_state": "steered",
+    "toward": "Wholesale Trade",
+    "toward_entity": "Wholesale Trade",
+    "source_signals": [
+     "sibc-services-yoy-scan",
+     "sibc-trade-sub-allocation",
+     "sibc-trade-sub-momentum"
+    ],
+    "parent_entity": "Trade",
+    "anchor": false
+   },
+   {
+    "dimension": "services",
+    "cut": "nbfc-sub",
+    "stem": "sibc-nbfc-sub",
+    "subject": "Non-Banking Financial Companies credit",
+    "speed": "Non-Banking Financial Companies credit growing 35.7% YoY, accelerating.",
+    "speed_short": "35.7% YoY · accelerating",
+    "speed_dir": "up",
+    "mix": "Drifting toward Public Financial Institutions — it took 70.4% of the growth while holding 38.6% of the total a year ago. Away from Housing Finance Companies.",
+    "no_speed_note": null,
+    "no_mix_note": null,
+    "mix_state": "drifting",
+    "toward": "Public Financial Institutions",
+    "toward_entity": "Public Financial Institutions (PFIs)",
+    "source_signals": [
+     "sibc-nbfc-sub-allocation",
+     "sibc-nbfc-sub-momentum",
+     "sibc-services-yoy-scan"
+    ],
+    "parent_entity": "Non-Banking Financial Companies (NBFCs)",
+    "anchor": false
    }
   ],
   "personalLoans": [
    {
     "dimension": "personalLoans",
     "cut": "pl",
+    "stem": "sibc-pl",
     "subject": "Personal loans",
     "speed": "Personal loans growing 16.2% YoY, at a steady pace.",
     "speed_short": "16.2% YoY",
@@ -126,13 +296,16 @@
      "sibc-personal-loans-yoy",
      "sibc-pl-allocation",
      "sibc-pl-momentum"
-    ]
+    ],
+    "parent_entity": null,
+    "anchor": true
    }
   ],
   "prioritySector": [
    {
     "dimension": "prioritySector",
     "cut": "psl",
+    "stem": "sibc-psl",
     "subject": "Priority sector credit",
     "speed": null,
     "speed_short": null,
@@ -146,13 +319,16 @@
     "source_signals": [
      "sibc-psl-allocation",
      "sibc-psl-momentum"
-    ]
+    ],
+    "parent_entity": null,
+    "anchor": true
    }
   ],
   "bankCredit": [
    {
     "dimension": "bankCredit",
     "cut": "bankCredit",
+    "stem": "bankCredit",
     "subject": "Bank credit",
     "speed": "Bank credit growing 19.3% YoY, accelerating.",
     "speed_short": "19.3% YoY · accelerating",
@@ -165,7 +341,9 @@
     "toward_entity": null,
     "source_signals": [
      "sibc-bank-credit-yoy"
-    ]
+    ],
+    "parent_entity": null,
+    "anchor": true
    }
   ]
  }
