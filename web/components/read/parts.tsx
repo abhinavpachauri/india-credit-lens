@@ -121,8 +121,9 @@ export function ReadCard({ read, selected, onClick }: { read: RMRead; selected: 
   );
 }
 
-export function DimensionCard({ dim, state = [], reads = [], tables = 0, onClick }:
-  { dim: RMDimension; state?: StateBlock[]; reads?: RMRead[]; tables?: number; onClick: () => void }) {
+export function DimensionCard({ dim, state = [], reads = [], tables = 0, period, onClick }:
+  { dim: RMDimension; state?: StateBlock[]; reads?: RMRead[]; tables?: number;
+    period?: string; onClick: () => void }) {
   const col = dim.color;
   return (
     <button onClick={onClick} className="rm-card rm-tile text-left rounded-xl h-full flex flex-col"
@@ -158,13 +159,18 @@ export function DimensionCard({ dim, state = [], reads = [], tables = 0, onClick
           a quiet month look identical otherwise, and Services being quiet IS the news when its
           mix is the one being steered hardest. */}
       {reads.length > 0 && (
-        <div className="mt-3 flex flex-col gap-1.5">
-          {reads.map((r) => (
-            <div key={r.id} className="flex items-baseline gap-1.5" style={{ fontSize: FS.note, lineHeight: 1.45 }}>
-              <span style={{ color: col }}>{glyph(r.direction)}</span>
-              <span style={{ color: "var(--font)" }}>{r.title}</span>
-            </div>
-          ))}
+        <div className="mt-3">
+          <div style={{ ...EYEBROW, marginBottom: 6 }}>
+            What&apos;s notable{period ? ` this ${period}` : ""} · {reads.length}
+          </div>
+          <div className="flex flex-col gap-1.5">
+            {reads.map((r) => (
+              <div key={r.id} className="flex items-baseline gap-1.5" style={{ fontSize: FS.note, lineHeight: 1.45 }}>
+                <span style={{ color: col }}>{glyph(r.direction)}</span>
+                <span style={{ color: "var(--font)" }}>{r.title}</span>
+              </div>
+            ))}
+          </div>
         </div>
       )}
       <div className="flex items-center gap-2 mt-auto pt-3">

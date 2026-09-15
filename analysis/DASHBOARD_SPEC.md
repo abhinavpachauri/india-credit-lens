@@ -1362,6 +1362,40 @@ Blocks: SIBC 8 → **15**, payments 3 → **28**. Injection: payments 3/3 caught
 near-miss; SIBC 2/3 — the survivor (19.8 → 19.9) sits inside the DISTRIBUTION policy's declared
 0.5% relative tolerance, which is a tolerance decision, not a scope hole.
 
+### 16.13 What the band and the cards may not both say (2026-09-15)
+
+Two tiers earn their keep when they say DIFFERENT things about one cut: the band names where
+the mix is tilting (*drifting toward Medium*), a card names the largest taker (*Large took
+60.8%*). Both true, neither implied by the other.
+
+They COMPETE when the card's entity and number are the band's own. Measured over the live
+feed: **5 of 56 shown cards**, e.g. *"Bank credit at 19.3% YoY — fastest growth in this window"*
+above a band reading *"Bank credit growing 19.3% YoY, accelerating"*, and a POS card that was the
+band's sentence almost verbatim. Those are now marked `superseded_by_band` in the planes sidecar
+and hidden from the notable list — **hidden, never deleted**: still generated, still gated, still
+in Explore.
+
+The rule requires the same NUMBER and the same thing measured (a shared signal, or the band's
+subject being the card's). Number alone would suppress a different sector growing at the same
+rate; a shared signal alone would suppress *Large took 60.8%*, which rests on the very allocation
+rows the mix line reads and says something the band does not.
+
+**This makes the planes stage depend on the band**, so it now runs after it (5.9 → 5.9a). A wrong
+order fails silently — the rule simply compares against last month's band — so a test asserts the
+order rather than trusting the manifest to stay in shape.
+
+### 16.14 Order and emphasis (user, 2026-09-15)
+
+- **What's notable sits ABOVE the table** in every dimension pane. The news is what a returning
+  reader came for; the state is what they read next.
+- **A dimension tile carries ALL of its notable items**, not three and a count. A count is not the
+  news, and a reader deciding which dimension to open needs the items. The grid drops from three
+  columns to two to give them the width. The tile's footer counts what is NOT on it (composition
+  and gaps), because two counts of the same word is a tile arguing with itself.
+- **The deeper reading (L2/L3) is off** while Layer 1 is being got right — `DEEP_ENABLED = false`
+  in the shell. Display only: the opportunities feed is still built, still gated, still reachable
+  at /opportunities.
+
 ### 16.9 Constraints carried in (non-negotiable)
 
 - The regime **word** only, never the coherence number.

@@ -7,12 +7,14 @@ the live signals.db so a schema drift shows up here rather than in a silent dash
 
 Run: python3 -m pytest analysis/tests/test_planes.py -q
 """
+import json
 import sqlite3
 import sys
 from pathlib import Path
 
 ROOT = next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir())
 sys.path.insert(0, str(ROOT / "analysis"))
+DATA = ROOT / "web" / "public" / "data"
 
 from signals import planes                                        # noqa: E402
 
@@ -152,3 +154,32 @@ def test_measure_catches_structure_and_rejects_movers():
     assert total > 0 and caught == total          # 100% catch
     assert movers > 0 and wrong == 0              # 0% false-reject
     assert m["partition"].get(planes.COMPOSITION, 0) > 0
+
+
+def test_a_card_the_band_already_publishes_is_hidden_not_deleted():
+    """Two tiers earn their keep when they say DIFFERENT things about the same cut: the band
+    names where the mix is tilting, the card names the largest taker. They compete when the
+    card's entity AND number are the band's own — "Bank credit at 19.3% YoY" above a band
+    reading "Bank credit growing 19.3% YoY", or a POS card that is the band's sentence verbatim.
+
+    Hidden from the notable list, never deleted: still generated, still gated, still in Explore.
+    """
+    for pipeline in ("sibc", "atm_pos"):
+        planes = json.loads((DATA / f"{pipeline}_planes.json").read_text())["planes"]
+        sup = {k for k, v in planes.items() if v.get("superseded_by_band")}
+        assert sup, f"{pipeline}: nothing superseded — the rule has stopped matching anything"
+        # It must stay a SMALL correction to the card layer, not a second curation of it.
+        shown = {k for k, v in planes.items() if v.get("plane") != "subject"}
+        assert len(sup) < len(shown) / 3, \
+            f"{pipeline}: {len(sup)} of {len(shown)} shown cards suppressed — too blunt to be a dedup"
+
+
+def test_planes_are_stamped_after_the_band_they_read():
+    """The supersede rule reads the shipped state sidecar, so the band must already be fresh
+    when planes are stamped. A stage order that is wrong here fails silently: the rule simply
+    compares against last month's band and suppresses the wrong cards."""
+    for pipeline in ("sibc", "atm_pos"):
+        gate = json.loads((ROOT / f"analysis/pipelines/{pipeline}/pipeline.json").read_text())["gate"]
+        ids = [s.get("id") for s in gate]
+        assert ids.index("stamp_state") < ids.index("stamp_planes"), \
+            f"{pipeline}: planes are stamped before the state band they compare against"

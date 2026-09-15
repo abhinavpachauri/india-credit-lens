@@ -30,9 +30,16 @@ import { loadBankTable, type CutTables, type CutTable as CutTableData,
          type BankIndex, type ColKey } from "@/lib/table";
 import type { StateMap } from "@/lib/state";
 
-/** How many of a dimension's own reads its tile carries. Three, because the tile has to say
- *  what happened without becoming the pooled read grid it replaced. */
-const TILE_READS = 3;
+/** Every read a dimension has, on its own tile. It was capped at three with the rest behind a
+ *  count — but a count is not the news, and a reader deciding which dimension to open needs the
+ *  items, not their number. The grid drops to two columns to give them the width; nine lines on
+ *  a wide tile reads, nine lines squeezed into a third of the screen does not. */
+const TILE_READS = Infinity;
+
+/** The deeper reading (Layer 2/3) is OFF while Layer 1 is being got right: the causal layer is
+ *  a different argument and it competes for the same attention. Display only — the opportunities
+ *  feed is still built, still gated, still on /opportunities. Reversed by flipping this. */
+const DEEP_ENABLED = false;
 
 export interface ReadModeShellProps {
   model: RMModel;
@@ -124,7 +131,7 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
     return () => { live = false; };
   }, [byBank, bankEntry]);
 
-  const deepAvailable = dim ? hasDeep(dim.id) : false;
+  const deepAvailable = DEEP_ENABLED && dim ? hasDeep(dim.id) : false;
 
   /** The state blocks to show: the cut on screen, plus an expanded sub-cut's own. Falls back
    *  to whatever the dimension declares, so a dimension whose cut has no state (or no table at
@@ -185,10 +192,11 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
             {model.dimensions.reduce((n, d) => n + tableCount(d.id), 0)} tables ·{" "}
             {model.reads.length} moved this {period}
           </h2>
-          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 items-stretch">
+          <div className="grid gap-4 grid-cols-1 lg:grid-cols-2 items-stretch">
             {model.dimensions.map((d) => (
               <DimensionCard key={d.id} dim={d} state={(state[d.id] ?? []).filter((b) => b.anchor)}
                              reads={readsOf(d.id).slice(0, TILE_READS)}
+                             period={period}
                              tables={tableCount(d.id)} onClick={() => enter(d.id)} />
             ))}
           </div>
@@ -269,6 +277,50 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
                   a second block (the parent table is still above it). */}
               <StateBand blocks={bandBlocks} color={secColor} />
 
+              {/* §18 — the cards that survive: judgements about a SERIES ("highest on record",
+                  "first growth in 11 periods"), gaps, and FY step-ups. None has a column to
+                  live in, which is exactly why they are still cards. */}
+              {notable(dim).length > 0 && (
+                <div style={{ marginBottom: 20, paddingBottom: 16,
+                              borderBottom: "1px solid var(--border-card)" }}>
+                  <div style={{ ...EYEBROW }}>What&apos;s notable · {notable(dim).length}</div>
+                  <div className="mt-3 flex flex-col gap-1">
+                    {notable(dim).map((c) => {
+                      const on = openCard === c.id;
+                      return (
+                        <div key={c.id}>
+                          <button onClick={() => setOpenCard(on ? null : c.id)}
+                                  className="rm-link text-left flex items-baseline gap-2 w-full py-1"
+                                  style={{ fontSize: FS.lead, lineHeight: 1.45,
+                                           fontWeight: c.isRead ? 600 : 400, color: "var(--font)" }}>
+                            <span style={{ color: c.isRead ? secColor : "var(--font-muted)" }}>
+                              {c.isRead ? "▲" : "○"}
+                            </span>
+                            <span>{c.title}</span>
+                          </button>
+                          {on && (
+                            <div style={{ padding: "4px 0 12px 22px" }}>
+                              {c.body && <p style={{ fontSize: FS.body, lineHeight: 1.65, color: "var(--font)" }}>{c.body}</p>}
+                              {c.implication && <p style={{ fontSize: FS.body, lineHeight: 1.6, color: "var(--font-muted)", marginTop: 8 }}>{c.implication}</p>}
+                              {c.chain?.length ? (
+                                <ol style={{ marginTop: 10 }}>
+                                  {c.chain.map((s, i) => (
+                                    <li key={i} className="flex gap-2.5" style={{ fontSize: FS.body, lineHeight: 1.55, color: "var(--font)", marginTop: 5 }}>
+                                      <span style={{ color: secColor, fontWeight: 700 }}>{i + 1}.</span><span>{s}</span>
+                                    </li>
+                                  ))}
+                                </ol>
+                              ) : null}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+
               {/* §20 — the measure is a FILTER. A credit dimension has one measure and shows no
                   strip; a payments group has five to eleven and used to stack them as tables. */}
               {measures.length > 1 && (
@@ -329,48 +381,6 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
                     return first ? renderChart(first, dim) : null;
                   })()}
                 </>
-              )}
-
-              {/* §18 — the cards that survive: judgements about a SERIES ("highest on record",
-                  "first growth in 11 periods"), gaps, and FY step-ups. None has a column to
-                  live in, which is exactly why they are still cards. */}
-              {notable(dim).length > 0 && (
-                <div style={{ marginTop: 22, borderTop: "1px solid var(--border-card)", paddingTop: 16 }}>
-                  <div style={{ ...EYEBROW }}>What&apos;s notable · {notable(dim).length}</div>
-                  <div className="mt-3 flex flex-col gap-1">
-                    {notable(dim).map((c) => {
-                      const on = openCard === c.id;
-                      return (
-                        <div key={c.id}>
-                          <button onClick={() => setOpenCard(on ? null : c.id)}
-                                  className="rm-link text-left flex items-baseline gap-2 w-full py-1"
-                                  style={{ fontSize: FS.lead, lineHeight: 1.45,
-                                           fontWeight: c.isRead ? 600 : 400, color: "var(--font)" }}>
-                            <span style={{ color: c.isRead ? secColor : "var(--font-muted)" }}>
-                              {c.isRead ? "▲" : "○"}
-                            </span>
-                            <span>{c.title}</span>
-                          </button>
-                          {on && (
-                            <div style={{ padding: "4px 0 12px 22px" }}>
-                              {c.body && <p style={{ fontSize: FS.body, lineHeight: 1.65, color: "var(--font)" }}>{c.body}</p>}
-                              {c.implication && <p style={{ fontSize: FS.body, lineHeight: 1.6, color: "var(--font-muted)", marginTop: 8 }}>{c.implication}</p>}
-                              {c.chain?.length ? (
-                                <ol style={{ marginTop: 10 }}>
-                                  {c.chain.map((s, i) => (
-                                    <li key={i} className="flex gap-2.5" style={{ fontSize: FS.body, lineHeight: 1.55, color: "var(--font)", marginTop: 5 }}>
-                                      <span style={{ color: secColor, fontWeight: 700 }}>{i + 1}.</span><span>{s}</span>
-                                    </li>
-                                  ))}
-                                </ol>
-                              ) : null}
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
               )}
 
               {/* The deeper reading, where one exists. It used to be the third rung of a

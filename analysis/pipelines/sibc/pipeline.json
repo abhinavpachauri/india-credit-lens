@@ -148,14 +148,6 @@
       ]
     },
     {
-      "id": "stamp_planes",
-      "label": "5.6 dashboard planes (read-mode)",
-      "core": "stamp_planes",
-      "derived": [
-        "web/public/data/sibc_planes.json"
-      ]
-    },
-    {
       "id": "card_cuts",
       "label": "5.7 card↔chart cut check (DASHBOARD_SPEC §15.7)",
       "core": "card_cuts"
@@ -213,6 +205,14 @@
       "core": "stamp_state",
       "derived": [
         "web/public/data/sibc_state.json"
+      ]
+    },
+    {
+      "id": "stamp_planes",
+      "label": "5.9a dashboard planes (read-mode)",
+      "core": "stamp_planes",
+      "derived": [
+        "web/public/data/sibc_planes.json"
       ]
     },
     {

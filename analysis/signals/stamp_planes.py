@@ -25,6 +25,7 @@ nor structural at the signal level.
 """
 import argparse
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -95,12 +96,84 @@ def _direction(conn, pipeline, sid):
     return "up" if latest > prev else "down" if latest < prev else "flat"
 
 
+def _band(pipeline) -> dict:
+    """The dimension's anchor state block, keyed by dimension — what the band already says.
+
+    Read from the shipped sidecar rather than recomputed: the band is the surface being
+    compared against, so comparing against a second rendering of it would compare two things
+    that could disagree.
+    """
+    f = DATA / f"{pipeline}_state.json"
+    if not f.exists():
+        return {}
+    out = {}
+    for dim, blocks in json.loads(f.read_text()).get("dimensions", {}).items():
+        for b in blocks:
+            if b.get("anchor"):
+                out.setdefault(dim, []).append(b)
+    return out
+
+
+_NUM = re.compile(r"-?\d+(?:\.\d+)?")
+
+
+def _superseded(card, dim, band, sids=()) -> bool:
+    """Does the state band already publish this card, entity and number?
+
+    The two tiers earn their keep when they say DIFFERENT things about the same cut: the band
+    names where the mix is tilting (drifting toward Medium), the card names the largest taker
+    (Large took 60.8%). Both true, neither implied by the other.
+
+    They compete when the card's SUBJECT and NUMBER are the band's own — "Bank credit at 19.3%
+    YoY" above a band reading "Bank credit growing 19.3% YoY, accelerating", or a POS card that
+    is word-for-word the band's sentence. There the band says it better, because it also says
+    what a year ago looked like, and the card is a second voice on one fact.
+
+    Requires BOTH: the same NUMBER, and the same thing being measured — either the band and
+    the card rest on a shared signal, or the band's subject is the card's. Number alone would
+    suppress a card about a different sector that happens to grow at the same rate; a shared
+    signal alone would suppress "Large took 60.8% of all new industry credit", which rests on
+    the same allocation rows the mix line does and says something the band does not.
+
+    Word matching alone was not enough on its own: the POS card is the band's sentence almost
+    verbatim and still missed, because the band's subject is "POS terminals" and the card's
+    title begins "POS terminal growth". Signals do not have plurals.
+    """
+    title = card.get("title") or ""
+    card_nums = set(_NUM.findall(title))
+    if not card_nums:
+        return False
+    highlight = (card.get("effect", {}).get("highlight") or [None])[0] or ""
+    for b in band.get(dim, []):
+        band_nums = set(_NUM.findall(f"{b.get('speed') or ''} {b.get('mix') or ''}"))
+        if not (card_nums & band_nums):
+            continue
+        toward = (b.get("toward_entity") or b.get("toward") or "").lower()
+        subject = (b.get("subject") or "").lower()
+        t = title.lower()
+        shared_signal = bool(set(sids) & set(b.get("source_signals") or []))
+        same_entity = (toward and (toward in t or (highlight and highlight.lower() in toward))) \
+            or (subject and t.startswith(subject.split(" (")[0]))
+        if shared_signal or same_entity:
+            return True
+    return False
+
+
 def build(pipeline, conn=None, registry=None):
     """The sidecar payload: per-card plane + news score + subject, keyed by card id."""
     close = conn is None
     conn = conn or proximity._con()
     registry = registry or proximity.load_registry()
     doc = json.loads(CARD_FILE[pipeline].read_text())
+    band = _band(pipeline)
+    dim_of = {}
+    if pipeline == "sibc":
+        for sec, blk in doc["sections"].items():
+            for kind in ("insights", "gaps", "opportunities"):
+                for c in blk.get(kind, []):
+                    dim_of[c.get("id")] = sec
+    else:
+        dim_of = {c.get("id"): c.get("group") for c in doc}
 
     out = {}
     for card, subject in _cards(pipeline, doc):
@@ -126,6 +199,11 @@ def build(pipeline, conn=None, registry=None):
         if card_plane == planes.READ and best_news:
             entry["reason"] = _reason(best_news)
             entry["direction"] = _direction(conn, pipeline, best_sid)
+        # The band publishes this same entity at this same number, and says more about it.
+        # Hidden from the notable list, never deleted: the card still exists, still validates,
+        # and still renders in Explore, which is the surface whose purpose is the inventory.
+        if _superseded(card, dim_of.get(cid), band, sids):
+            entry["superseded_by_band"] = True
         out[cid] = entry
     if close:
         conn.close()

@@ -79,11 +79,14 @@ export default function AtmReadMode(
 ) {
   const { model, insById } = useMemo(() => {
     const plane = (id: string) => planes[id]?.plane ?? "subject";
+    // The band already publishes this card's entity at its number (see lib/planes).
+    const superseded = (id: string) => planes[id]?.superseded_by_band === true;
     const insById = new Map(insights.map((i) => [i.id, i]));
 
     const toCard = (i: AtmPosInsight): RMCard => ({
       id: i.id, title: i.title, body: i.body, implication: i.implication,
-      chain: i.basis?.inferences ?? i.reasoning?.chain, dimId: i.group, isRead: plane(i.id) === "read",
+      chain: i.basis?.inferences ?? i.reasoning?.chain, dimId: i.group,
+      isRead: plane(i.id) === "read" && !superseded(i.id),
     });
 
     const dimensions: RMDimension[] = GROUPS.map((g) => {
@@ -94,6 +97,7 @@ export default function AtmReadMode(
       for (const i of gi) {
         // §18 — the same curation the credit adapter applies, from the same constant rather
         // than a second copy of the rule. Explore still lists every card.
+        if (superseded(i.id)) continue;
         if (HIDDEN_PLANES.has(plane(i.id) as "read" | "composition" | "subject")) continue;
         const name = SECTION_DEFS.find((d) => d.id === i.effect.focusCard)?.title ?? "";
         if (!bySubject.has(name)) { bySubject.set(name, []); order.push(name); }
@@ -103,14 +107,15 @@ export default function AtmReadMode(
       return {
         id: g, title: GROUP_LABELS[g], icon: GROUP_ICONS[g], color: GROUP_ACCENT[g],
         // What is SHOWN, not what exists (§18).
-        cardCount: shown, moved: gi.filter((i) => plane(i.id) === "read").length,
+        cardCount: shown,
+        moved: gi.filter((i) => plane(i.id) === "read" && !superseded(i.id)).length,
         subjects: order.map((name) => ({ name, cards: bySubject.get(name)! })),
         compositionTitles: gi.filter((i) => plane(i.id) === "composition").map((i) => i.title),
       };
     });
 
     const reads = insights
-      .filter((i) => plane(i.id) === "read")
+      .filter((i) => plane(i.id) === "read" && !superseded(i.id))
       .sort((a, b) => (planes[b.id]?.news_score ?? 0) - (planes[a.id]?.news_score ?? 0) || a.id.localeCompare(b.id))
       .map((i) => ({
         id: i.id, title: i.title, dimId: i.group, dimTitle: GROUP_LABELS[i.group],

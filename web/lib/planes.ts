@@ -14,6 +14,9 @@ export type Direction = "up" | "down" | "flat";
 
 export interface CardPlane {
   plane:      Plane;
+  /** The state band publishes this card's entity at this card's number, and says more about
+   *  it. Hidden from the notable list; still generated, still gated, still in Explore. */
+  superseded_by_band?: boolean;
   news_score: number | null;   // is_news score — orders the read tier
   subject:    string | null;   // chart series / focusCard — groups the accordion
   reason?:    ReadReason | null;   // why the read surfaced — the chip (reads only)
@@ -75,6 +78,14 @@ const READ_FLOOR = 2.0;       // mirrors is_news.READ_FLOOR — a read must clea
  */
 export const HIDDEN_PLANES: ReadonlySet<CardPlane["plane"]> = new Set(["subject"]);
 
+/** A card the band already publishes — same entity, same number — is a second voice on one
+ *  fact, and the band's version says what a year ago looked like too. Measured before it was
+ *  applied: 5 of 56 shown cards across both pipelines, and the ones KEPT are exactly those
+ *  naming a different entity than the band's (Large took 60.8% while the mix tilts to Medium). */
+export function supersededByBand(p: CardPlane): boolean {
+  return p.superseded_by_band === true;
+}
+
 /** Every insight + gap on a section (opportunities are the Deep plane, joined separately). */
 function sectionCards(section: ReportSection): Annotation[] {
   return [
@@ -103,6 +114,7 @@ export function organizeReadMode(report: Report, planes: PlanesMap): ReadModeMod
 
     for (const card of cards) {
       const p = planeOf(planes, card.id);
+      if (supersededByBand(p)) continue;
       if (p.plane === "read" && (p.news_score ?? 0) >= READ_FLOOR) {
         reads.push({
           card, section, newsScore: p.news_score ?? 0,
