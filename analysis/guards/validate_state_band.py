@@ -32,6 +32,7 @@ ROOT = next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()
 sys.path.insert(0, str(ROOT / "analysis"))
 
 from core.traceability import DISTRIBUTION as POLICY, extract_numbers, matches   # noqa: E402
+from core import manifest                          # noqa: E402
 
 DATA = ROOT / "web" / "public" / "data"
 DB = ROOT / "analysis" / "signals" / "signals.db"
@@ -96,7 +97,7 @@ def validate(pipeline: str) -> list[str]:
 
 def main():
     ap = argparse.ArgumentParser(description="State band number traceability (DASHBOARD_SPEC §16)")
-    ap.add_argument("--pipeline", choices=("sibc", "atm_pos"), required=True)
+    ap.add_argument("--pipeline", choices=manifest.PIPELINE_IDS, required=True)
     args = ap.parse_args()
 
     failures = validate(args.pipeline)

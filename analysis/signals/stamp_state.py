@@ -32,10 +32,11 @@ sys.path.insert(0, str(ROOT / "analysis"))
 
 from core import state_lines                                       # noqa: E402
 from core.manifest import path as manifest_path                    # noqa: E402
+from core import manifest                          # noqa: E402
 
 DATA = ROOT / "web" / "public" / "data"
 DB = ROOT / "analysis" / "signals" / "signals.db"
-SIDECAR = {p: DATA / f"{p}_state.json" for p in ("sibc", "atm_pos")}
+SIDECAR = {p: DATA / f"{p}_state.json" for p in manifest.PIPELINE_IDS}
 
 
 def _cuts(pipeline):

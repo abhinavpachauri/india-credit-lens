@@ -25,6 +25,7 @@ sys.path.insert(0, str(ROOT / "analysis"))
 
 from core.traceability import DISTRIBUTION as POLICY, matches                  # noqa: E402
 from core import table_rows                                                   # noqa: E402
+from core import manifest                          # noqa: E402
 
 DATA = ROOT / "web" / "public" / "data"
 DB = ROOT / "analysis" / "signals" / "signals.db"
@@ -203,7 +204,7 @@ def series_findings(conn, pipeline, stem, who, col, cell, metric, labels, row, u
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--pipeline", choices=("sibc", "atm_pos"), required=True)
+    ap.add_argument("--pipeline", choices=manifest.PIPELINE_IDS, required=True)
     args = ap.parse_args()
     f = validate(args.pipeline)
     if f:

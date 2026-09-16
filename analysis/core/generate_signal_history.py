@@ -46,11 +46,12 @@ from pathlib import Path
 import sys
 sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
 from core.paths import ROOT as REPO
+from core import manifest                          # noqa: E402
 ANAL   = REPO / "analysis"
 SIG    = ANAL / "signals"
 REG    = SIG / "registry.json"
 
-KNOWN_PIPELINES  = {"sibc", "atm_pos"}
+KNOWN_PIPELINES  = set(manifest.PIPELINE_IDS)
 PIPELINE_SOURCES = list(KNOWN_PIPELINES)
 
 VALID_STATUSES = {"new", "active", "strengthening", "weakening", "stable", "declining", "reversed", "absent", "unknown", "pending"}

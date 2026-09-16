@@ -35,6 +35,7 @@ ANALYSIS = next(p for p in Path(__file__).resolve().parents if (p / ".git").is_d
 REPO     = ANALYSIS.parent
 sys.path.insert(0, str(ANALYSIS))
 from core import residuals, voice   # noqa: E402
+from core import manifest                          # noqa: E402
 
 FIELDS = ("title", "body", "implication")
 
@@ -115,7 +116,7 @@ def run(pipeline: str, strict: bool) -> int:
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
-    ap.add_argument("--pipeline", choices=["sibc", "atm_pos"], default="sibc")
+    ap.add_argument("--pipeline", choices=manifest.PIPELINE_IDS, default="sibc")
     ap.add_argument("--all", action="store_true")
     ap.add_argument("--strict", action="store_true")
     a = ap.parse_args()

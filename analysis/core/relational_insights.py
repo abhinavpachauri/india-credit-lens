@@ -33,6 +33,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
 from core import residuals
+from core import manifest                          # noqa: E402
 from core.paths import ROOT as REPO  # noqa: E402
 
 SIG = REPO / "analysis" / "signals"
@@ -627,7 +628,7 @@ def _subject(sig: dict) -> str:
 
 def main() -> int:
     ap = argparse.ArgumentParser(description="Render rotation insights for review.")
-    ap.add_argument("--pipeline", choices=["sibc", "atm_pos"], required=True)
+    ap.add_argument("--pipeline", choices=manifest.PIPELINE_IDS, required=True)
     ap.add_argument("--period", required=True, help="signals.db period (YYYY-MM-DD)")
     args = ap.parse_args()
 

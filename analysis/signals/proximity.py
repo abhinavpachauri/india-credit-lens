@@ -38,6 +38,8 @@ from pathlib import Path
 ROOT = next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir())
 sys.path.insert(0, str(ROOT / "analysis"))
 
+from core import manifest                          # noqa: E402
+
 DB = ROOT / "analysis" / "signals" / "signals.db"
 REGISTRY = ROOT / "analysis" / "signals" / "registry.json"
 
@@ -315,7 +317,7 @@ def short_sentence(row):
 
 def main():
     ap = argparse.ArgumentParser(description="Rank signals by distance to their next status flip")
-    ap.add_argument("--pipeline", choices=["sibc", "atm_pos"])
+    ap.add_argument("--pipeline", choices=manifest.PIPELINE_IDS)
     ap.add_argument("--limit", type=int, default=15)
     ap.add_argument("--json", action="store_true")
     ap.add_argument("--all-kinds", action="store_true", help="include knife-edge (momentum) flips")

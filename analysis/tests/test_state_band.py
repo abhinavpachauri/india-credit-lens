@@ -19,6 +19,7 @@ from core import state_lines as SL                      # noqa: E402
 from core.movement_cards import MovementCut             # noqa: E402
 from core.state_lines import RateOnlyCut                # noqa: E402
 import validate_state_band as VSB                       # noqa: E402
+from core import manifest  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
 DATA = ROOT / "web" / "public" / "data"
@@ -232,7 +233,7 @@ def test_gate_scopes_to_the_named_entity_not_the_signals_history():
 def test_live_sidecars_are_clean_on_both_pipelines():
     """Separate from the logic tests above, deliberately: a check that only asserts the live
     feed is clean stops asserting anything the moment someone fixes the defect it found."""
-    for pipeline in ("sibc", "atm_pos"):
+    for pipeline in manifest.pipelines_with_stage("stamp_state"):
         assert VSB.validate(pipeline) == []
 
 
@@ -240,7 +241,7 @@ def test_no_published_sentence_carries_a_coherence_figure():
     """Decision #4, as a property over everything the band actually ships. Coherence lives in
     a state file rather than signals.db, so no gate can ground it — invented values have
     passed before. The regime WORD carries the meaning."""
-    for pipeline in ("sibc", "atm_pos"):
+    for pipeline in manifest.pipelines_with_stage("stamp_state"):
         doc = json.loads((DATA / f"{pipeline}_state.json").read_text())
         for blocks in doc["dimensions"].values():
             for b in blocks:

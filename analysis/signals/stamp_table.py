@@ -24,16 +24,17 @@ ROOT = next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()
 sys.path.insert(0, str(ROOT / "analysis"))
 
 from core import table_rows                                            # noqa: E402
+from core import manifest                          # noqa: E402
 
 DATA = ROOT / "web" / "public" / "data"
 DB = ROOT / "analysis" / "signals" / "signals.db"
 REGISTRY = ROOT / "analysis" / "signals" / "registry.json"
-SIDECAR = {p: DATA / f"{p}_table.json" for p in ("sibc", "atm_pos")}
+SIDECAR = {p: DATA / f"{p}_table.json" for p in manifest.PIPELINE_IDS}
 # A bank breakout ships as its own file, fetched when the reader opens it. Twenty-six of them
 # inline would be an eight-megabyte artifact every visitor downloads to look at one: sixty-four
 # banks, three columns, thirty-one readings each. Compute once, ship compact, and ship only the
 # part that was asked for.
-BANK_DIR = {p: DATA / f"{p}_banks" for p in ("sibc", "atm_pos")}
+BANK_DIR = {p: DATA / f"{p}_banks" for p in manifest.PIPELINE_IDS}
 MOMENTUM = ("csv_sector_momentum", "csv_category_momentum")
 # A bank breakout's parent rate: the metric's own total YoY, which belongs to the level above
 # the banks exactly as a credit cut's parent rate belongs to the level above its parts.

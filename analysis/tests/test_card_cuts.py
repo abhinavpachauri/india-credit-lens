@@ -16,6 +16,7 @@ ANALYSIS = next(p for p in Path(__file__).resolve().parents if (p / ".git").is_d
 sys.path.insert(0, str(ANALYSIS))
 from core import cuts as C                   # noqa: E402
 from guards import validate_card_cuts as vcc  # noqa: E402
+from core import manifest  # noqa: E402
 
 
 # ── C1/C3: the cut a signal was computed over ─────────────────────────────────
@@ -338,7 +339,7 @@ def test_no_card_tells_the_reader_what_to_do():
     UPI QR". Our own prose hard-fails; the eval's warns, because the fix there is the
     prompt, not a hand-edit of a validated artifact."""
     from guards import validate_card_prose as vcp
-    for pipeline in ("sibc", "atm_pos"):
+    for pipeline in manifest.pipelines_with_stage("card_cuts"):
         fails, _ = vcp.check(pipeline)
         assert fails == [], f"{pipeline}: {fails}"
 

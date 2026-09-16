@@ -40,6 +40,7 @@ from pathlib import Path
 # any cwd now that this guard lives under guards/. Move-safe via .git walk.
 sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
 from core.paths import ROOT                        # noqa: E402
+from core import manifest                          # noqa: E402
 ANALYSIS = ROOT / "analysis"
 REG = ANALYSIS / "signals" / "registry.json"
 
@@ -229,7 +230,7 @@ def check(pipeline_filter=None, quiet=False) -> int:
 
 def main() -> int:
     ap = argparse.ArgumentParser(description="Verify signals.db matches a fresh recompute from source CSVs.")
-    ap.add_argument("--pipeline", choices=["sibc", "atm_pos"], default=None,
+    ap.add_argument("--pipeline", choices=manifest.PIPELINE_IDS, default=None,
                     help="Limit the check to one pipeline (default: all present in DB).")
     ap.add_argument("--quiet", action="store_true")
     args = ap.parse_args()

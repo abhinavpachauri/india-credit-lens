@@ -135,3 +135,119 @@ def test_consolidated_csv_resolves_to_a_real_file(pipeline):
     csv = manifest.consolidated_csv(pipeline)
     assert csv.exists(), f"{pipeline} declares {csv}, which does not exist"
     assert csv.stat().st_size > 0
+
+
+# ── Pipeline discovery ────────────────────────────────────────────────────────
+# `PIPELINE_IDS` was a literal pair. The cost was never the tuple; it was that the same
+# pair is spelled out in argparse choices, dict comprehensions and guard loops elsewhere,
+# so a third source meant hunting for all of them. These pin the discovered contract.
+
+def test_every_manifest_directory_is_discovered():
+    """A pipeline declares itself by having a pipeline.json. Nothing else decides."""
+    on_disk = {d.name for d in (ANALYSIS / "pipelines").iterdir()
+               if (d / "pipeline.json").is_file()}
+    assert set(manifest.PIPELINE_IDS) == on_disk
+
+
+def test_discovery_order_is_declared_not_alphabetical():
+    """Order decides the sequence check_derived_fresh replays stages in, and both pipelines
+    write the shared opportunities_feed.json — so name-sorting would reorder who writes last.
+
+    Asserted as a property rather than by pinning today's pair: a third pipeline must not
+    make this test fail, only a pipeline that stops declaring its order."""
+    ids = manifest.PIPELINE_IDS
+    orders = [manifest.load(p).get("order") for p in ids]
+    declared = [o for o in orders if o is not None]
+    assert declared == sorted(declared), f"declared order not honoured: {list(zip(ids, orders))}"
+    # Undeclared ones sort last, never interleaved among the declared.
+    assert orders == sorted(orders, key=lambda o: (o is None, o or 0))
+
+
+def test_a_new_pipeline_directory_would_be_picked_up(tmp_path, monkeypatch):
+    """The point of discovery: adding a source must not require editing this module.
+
+    Driven synthetically — asserting against the live pair would only re-state what
+    test_every_manifest_directory_is_discovered already checks, and would pass for a
+    hardcoded list too.
+
+    The names deliberately CONTRADICT their declared order (`beta` is 1, `alpha` is 2), so
+    this also fails an implementation that sorts by name. The first version of this fixture
+    used alphabetical names and passed against a deliberately broken discovery — a test that
+    asserts nothing looks exactly like a test that passes."""
+    pipelines = tmp_path / "pipelines"
+    for name, order in (("alpha", 2), ("beta", 1), ("zeta", None)):
+        d = pipelines / name
+        d.mkdir(parents=True)
+        body = {"id": name} if order is None else {"id": name, "order": order}
+        (d / "pipeline.json").write_text(__import__("json").dumps(body))
+    (pipelines / "not_a_pipeline").mkdir()          # no manifest → not a pipeline
+    monkeypatch.setattr(manifest, "ANALYSIS", tmp_path)
+    assert manifest.discover_pipeline_ids() == ("beta", "alpha", "zeta")
+
+
+#: Modules allowed to name both pipelines literally, each for a stated reason. An exemption
+#: is a decision on the record, not a hole: anything not listed here must derive its
+#: population. Delete an entry when its reason stops holding.
+PAIR_EXEMPT = {
+    # Not "all pipelines" — the credit half and the payments half of the merged Substack
+    # issue. `data_vintage` is guarded by `len(out) == 2` and `vintage_sentence` reads both
+    # by name, so a third source must NOT silently join that sentence.
+    "distribution/distribution_sources.py",
+    # Iterates compute MODULES, not pipelines. Becomes manifest-driven when the compute path
+    # is schema-declared (ARCHITECTURE.md "Adding a pipeline", item 2).
+    "architecture/reconcile.py",
+}
+
+
+def _docstring_lines(src: str) -> set[int]:
+    """Line numbers occupied by docstrings, so prose is not read as code.
+
+    Written after the first version of the pair check flagged a docstring that QUOTES the
+    literal it exists to ban. A `startswith('\"\"\"')` test only sees the opening line of a
+    multi-line docstring — so the choice was to weaken the check or to teach it the
+    difference. Prose explaining a rule should never be able to violate it.
+    """
+    import ast
+    lines: set[int] = set()
+    try:
+        tree = ast.parse(src)
+    except SyntaxError:
+        return lines
+    for node in ast.walk(tree):
+        if not isinstance(node, (ast.Module, ast.ClassDef, ast.FunctionDef, ast.AsyncFunctionDef)):
+            continue
+        body = getattr(node, "body", None)
+        if body and isinstance(body[0], ast.Expr) and isinstance(body[0].value, ast.Constant) \
+                and isinstance(body[0].value.value, str):
+            d = body[0]
+            lines.update(range(d.lineno, (d.end_lineno or d.lineno) + 1))
+    return lines
+
+
+PAIR_LITERAL = re.compile(r'''["']sibc["']\s*,\s*["']atm_pos["']|["']atm_pos["']\s*,\s*["']sibc["']''')
+
+
+def test_no_live_module_hardcodes_the_pipeline_pair():
+    """Use manifest.PIPELINE_IDS, or manifest.pipelines_with_stage() for artifact populations.
+
+    The literal pair was never the expense; finding all of its spellings was. It sat in
+    argparse choices, sidecar dict comprehensions and guard loops — and in test loops, which
+    is worse, because a test whose population is a hardcoded pair stops covering the next
+    source without ever going red. That is how a reachability check scoped to SIBC let three
+    payments anchor tables ship to no surface at all.
+    """
+    offenders = []
+    for f in _live_modules():
+        rel = str(f.relative_to(ANALYSIS))
+        if rel in PAIR_EXEMPT:
+            continue
+        src = f.read_text()
+        prose = _docstring_lines(src)      # AST, not a startswith guess — see the helper
+        for n, line in enumerate(src.splitlines(), 1):
+            stripped = line.strip()
+            if n in prose or stripped.startswith("#") or "PAIR_EXEMPT" in line:
+                continue
+            if PAIR_LITERAL.search(line):
+                offenders.append(f"{rel}:{n}: {stripped[:70]}")
+    assert not offenders, (
+        "pipeline pair hardcoded — derive it instead:\n  " + "\n  ".join(offenders))

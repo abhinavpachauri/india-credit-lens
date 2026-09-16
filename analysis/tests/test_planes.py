@@ -17,6 +17,7 @@ sys.path.insert(0, str(ROOT / "analysis"))
 DATA = ROOT / "web" / "public" / "data"
 
 from signals import planes                                        # noqa: E402
+from core import manifest  # noqa: E402
 
 
 # ── a synthetic signals table, one signal's total-level history ───────────────
@@ -164,7 +165,7 @@ def test_a_card_the_band_already_publishes_is_hidden_not_deleted():
 
     Hidden from the notable list, never deleted: still generated, still gated, still in Explore.
     """
-    for pipeline in ("sibc", "atm_pos"):
+    for pipeline in manifest.pipelines_with_stage("stamp_planes"):
         planes = json.loads((DATA / f"{pipeline}_planes.json").read_text())["planes"]
         sup = {k for k, v in planes.items() if v.get("superseded_by_band")}
         assert sup, f"{pipeline}: nothing superseded — the rule has stopped matching anything"
@@ -178,7 +179,7 @@ def test_planes_are_stamped_after_the_band_they_read():
     """The supersede rule reads the shipped state sidecar, so the band must already be fresh
     when planes are stamped. A stage order that is wrong here fails silently: the rule simply
     compares against last month's band and suppresses the wrong cards."""
-    for pipeline in ("sibc", "atm_pos"):
+    for pipeline in manifest.pipelines_with_stage("stamp_planes"):
         gate = json.loads((ROOT / f"analysis/pipelines/{pipeline}/pipeline.json").read_text())["gate"]
         ids = [s.get("id") for s in gate]
         assert ids.index("stamp_state") < ids.index("stamp_planes"), \

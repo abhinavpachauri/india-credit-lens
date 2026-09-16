@@ -47,6 +47,7 @@ ROOT = next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()
 sys.path.insert(0, str(ROOT / "analysis"))
 
 from signals import proximity                                   # noqa: E402
+from core import manifest                          # noqa: E402
 from signals.dominance import move_dominance                     # noqa: E402
 
 # Weights. Records, regime flips and outsized moves are the strong signals of news, each
@@ -322,7 +323,7 @@ def measure():
 
 def main():
     ap = argparse.ArgumentParser(description="Score signals by whether their latest reading is news")
-    ap.add_argument("--pipeline", choices=["sibc", "atm_pos"])
+    ap.add_argument("--pipeline", choices=manifest.PIPELINE_IDS)
     ap.add_argument("--measure", action="store_true")
     ap.add_argument("--json", action="store_true")
     args = ap.parse_args()

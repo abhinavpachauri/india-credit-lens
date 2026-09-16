@@ -102,7 +102,7 @@ what a THIRD (NBFC sectoral deployment is next) would actually cost, counted rat
 
 | | cost |
 |---|---|
-| **the pipeline pair, hardcoded** | `PIPELINE_IDS = ("sibc", "atm_pos")` in `core/manifest.py` — and the same literal pair repeated in **15 modules** (argparse `choices`, sidecar dict comprehensions, guard loops) |
+| ~~the pipeline pair, hardcoded~~ | **CLOSED 2026-09-16.** `manifest.discover_pipeline_ids()` reads the directories that declare a `pipeline.json`, ordered by a declared `order` field (not alphabetically — both pipelines write the shared feed, so name-sorting would reorder who writes last). 21 literal sites removed; a test bans the literal, with two exemptions on the record. `manifest.pipelines_with_stage()` gives guards and tests the population they actually want — *every pipeline that produces this artifact* — so a source that legitimately makes no planes sidecar is not asked for one |
 | **compute module per pipeline** | `compute/sibc.py` + `compute/atm_pos.py`, dispatched by `if pipeline == …`. NBFC is SIBC-SHAPED, so it either copies `sibc.py` or `sibc.py` learns to read a manifest-declared CSV schema. **This is the decision that matters most** |
 | **card generator per pipeline** | 753 LOC (SIBC) and 2,123 LOC (payments) — a third pipeline has no generic path to cards, only two patterns to pick between |
 | **web adapter + page per pipeline** | `SibcReadMode` 211 LOC, `AtmReadMode` 230 LOC, plus a route; `"sibc" | "atm_pos"` is a TYPE UNION in 6 lib files, so a third id is a compile error in each |
@@ -116,7 +116,7 @@ compute module, a card generator, a web adapter and fifteen edits to hardcoded p
 gap between "the architecture scales" and "the plumbing scales", and it is worth closing in the
 order the third pipeline exposes it, not speculatively:
 
-1. **Pipeline ids from the manifest**, not a literal — one constant, fifteen call sites.
+1. ~~**Pipeline ids from the manifest**~~ — **done 2026-09-16.** Both gates ran end-to-end afterwards with **zero derived artifacts changed**, which is the no-op proof; freshness recomputed 17,809 SIBC and 151,448 payments rows identically.
 2. **A schema-declared CSV compute path**, so a SIBC-shaped source is a manifest entry rather than
    a copied module. NBFC is the case that tests it, because it is genuinely SIBC-shaped.
 3. **A generic card path**, or an explicit decision that cards stay per-pipeline and the TABLE is

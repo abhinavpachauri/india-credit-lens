@@ -17,6 +17,7 @@ sys.path.insert(0, str(ROOT / "analysis"))
 
 from core import table_rows as T                                       # noqa: E402
 from guards import validate_cut_table as V                             # noqa: E402
+from core import manifest  # noqa: E402
 
 DATA = ROOT / "web" / "public" / "data"
 DB = ROOT / "analysis" / "signals" / "signals.db"
@@ -193,7 +194,7 @@ def test_every_cut_with_a_table_covers_every_part_it_has():
 def test_the_live_tables_are_traceable_on_both_pipelines():
     """Separate from the synthetic tests above, deliberately: a check that only asserts the
     live feed is clean stops asserting anything the moment someone fixes the defect it found."""
-    for pipeline in ("sibc", "atm_pos"):
+    for pipeline in manifest.pipelines_with_stage("stamp_table"):
         assert V.validate(pipeline) == []
 
 

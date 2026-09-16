@@ -64,6 +64,7 @@ sys.path.insert(0, str(ANALYSIS))
 from core.cuts import (                                      # noqa: E402
     Cut, sibc_cut, atm_pos_cut, sibc_sections, section_cuts, chart_label, AGGREGATE,
 )
+from core import manifest                          # noqa: E402
 
 
 
@@ -218,7 +219,7 @@ def run(pipeline: str, strict: bool) -> int:
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
-    ap.add_argument("--pipeline", choices=["sibc", "atm_pos"])
+    ap.add_argument("--pipeline", choices=manifest.PIPELINE_IDS)
     ap.add_argument("--all", action="store_true")
     ap.add_argument("--strict", action="store_true")
     a = ap.parse_args()

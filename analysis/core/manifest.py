@@ -61,7 +61,55 @@ CORE_MAP = {
     "reconcile":                ("architecture/reconcile.py", ["--strict"], "ROOT"),
 }
 
-PIPELINE_IDS = ("sibc", "atm_pos")
+def discover_pipeline_ids() -> tuple[str, ...]:
+    """Every pipeline that declares a manifest, in declared order.
+
+    This was a literal — `("sibc", "atm_pos")` — sitting four lines under a docstring that
+    says nothing here inspects a pipeline id. It was also the smaller half of the problem:
+    the same pair is spelled out in argparse `choices`, sidecar dict comprehensions and
+    guard loops across the codebase, so adding a source meant finding all of them. A
+    pipeline already declares itself by having a `pipeline.json`; that is the fact, and this
+    reads it.
+
+    Order is DECLARED (`order` in the manifest), not alphabetical. It decides the sequence
+    `check_derived_fresh` replays stages in, and both pipelines write the shared
+    `opportunities_feed.json` — so sorting by name would quietly reorder who writes last.
+    A pipeline with no `order` sorts after the declared ones, by name.
+    """
+    ids = []
+    for d in (ANALYSIS / "pipelines").iterdir():
+        if (d / "pipeline.json").is_file():
+            try:
+                order = json.loads((d / "pipeline.json").read_text()).get("order")
+            except (json.JSONDecodeError, OSError):
+                order = None
+            ids.append((order if order is not None else float("inf"), d.name))
+    return tuple(name for _, name in sorted(ids))
+
+
+#: Computed at import, because callers use it as a parametrize argument and a loop bound.
+PIPELINE_IDS = discover_pipeline_ids()
+
+
+def pipelines_with_stage(stage_id: str) -> tuple[str, ...]:
+    """Every pipeline whose gate declares `stage_id`, in pipeline order.
+
+    The population a guard or a test should walk is usually not "all pipelines" — it is
+    "all pipelines that produce this artifact", and the manifest already says which those
+    are. Walking PIPELINE_IDS instead demands a sidecar from a source that legitimately
+    never makes one; hardcoding the pair silently stops covering the next source. Both are
+    the same defect, and it is the one this project keeps paying for: a check's population
+    is a design decision, and nothing measures it.
+    """
+    out = []
+    for pid in PIPELINE_IDS:
+        try:
+            gate = load(pid).get("gate", [])
+        except (json.JSONDecodeError, OSError):
+            continue
+        if any(s.get("id") == stage_id for s in gate):
+            out.append(pid)
+    return tuple(out)
 
 
 def load(pipeline: str) -> dict:

@@ -49,6 +49,7 @@ ROOT = next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()
 sys.path.insert(0, str(ROOT / "analysis"))
 
 from signals import is_news, proximity                          # noqa: E402
+from core import manifest                          # noqa: E402
 
 # How far back "the trailing year" reaches. Structure is a claim about the recent past, not
 # all history — a share that was volatile two years ago but has settled is structural now.
@@ -270,7 +271,7 @@ def measure():
 
 def main():
     ap = argparse.ArgumentParser(description="Sort signals into read / composition / subject planes")
-    ap.add_argument("--pipeline", choices=["sibc", "atm_pos"])
+    ap.add_argument("--pipeline", choices=manifest.PIPELINE_IDS)
     ap.add_argument("--measure", action="store_true")
     ap.add_argument("--json", action="store_true")
     args = ap.parse_args()
