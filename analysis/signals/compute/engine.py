@@ -3,11 +3,14 @@ Compute engine — dispatches to SIBC or ATM/POS methods, writes results to SQLi
 
 Entry point: run_append(pipeline, period, conn, registry)
 
-Both SIBC and ATM/POS read from their consolidated CSVs:
-  SIBC    → web/public/data/rbi_sibc_consolidated.csv
-  ATM/POS → web/public/data/atm_pos_consolidated.csv
+Every pipeline reads from its own consolidated CSV, declared in its manifest.
 
-period is always YYYY-MM-DD (the dataDate) for both pipelines.
+Which compute module serves a pipeline is DECLARED too (`compute_module`), not branched on
+the id. Two `if pipeline == "sibc"` ladders lived here, and they are the reason a third
+source looked like it needed a copied compute module: SIBC is not a pipeline-shaped module,
+it is a SHAPE — one measure over a code hierarchy — and any source of that shape can use it.
+
+period is always YYYY-MM-DD (the dataDate) for every pipeline.
 """
 
 from __future__ import annotations
@@ -17,9 +20,28 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-from . import sibc as _sibc
+from . import csv_sector as _csv_sector
 from . import atm_pos as _atm_pos
 from ..db import refresh_ranges
+
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from core import manifest                                          # noqa: E402
+
+#: Compute shape → the module implementing it. A manifest names the shape it is.
+MODULES = {"csv_sector": _csv_sector, "atm_pos": _atm_pos}
+
+
+def module_for(pipeline: str):
+    """The compute module a pipeline declares. An undeclared or unknown shape RAISES — a
+    pipeline that silently computes nothing is the failure this engine already refuses for
+    an unknown method name, and it looks exactly like a source with no signals yet."""
+    name = manifest.load(pipeline).get("compute_module")
+    if not name:
+        raise KeyError(f"{pipeline}: manifest declares no 'compute_module'")
+    if name not in MODULES:
+        raise KeyError(f"{pipeline}: compute_module '{name}' is not one of {sorted(MODULES)}")
+    return MODULES[name]
 
 
 def _upsert(conn: sqlite3.Connection, pipeline: str, period: str, rows: list[dict]) -> int:
@@ -55,16 +77,13 @@ def run_append(pipeline: str, period: str,
     if not signals:
         return {"metric_count": 0, "row_count": 0, "statuses": {}}
 
-    # Load DataFrames once per pipeline
-    df_sibc    = None
-    df_atm_pos = None
-    if pipeline == "sibc":
-        df_sibc = _sibc._load_df()
-    elif pipeline == "atm_pos":
-        df_atm_pos = _atm_pos._load_df()
+    engine = module_for(pipeline)
+    df = engine._load_df(pipeline)
 
-    # For SIBC: period (dataDate) → csv_date used for CSV lookup
-    csv_period = _sibc.resolve_csv_date(period) if pipeline == "sibc" else period
+    # dataDate → the date the CSV actually keys on, when the source needs the translation.
+    # A module that does not remap says so by not offering a resolver.
+    resolver = getattr(engine, "resolve_csv_date", None)
+    csv_period = resolver(pipeline, period) if resolver else period
 
     all_rows: list[dict] = []
     skipped = 0
@@ -75,12 +94,7 @@ def run_append(pipeline: str, period: str,
             skipped += 1
             continue
 
-        if pipeline == "sibc":
-            rows = _sibc.compute(sig_id, compute_spec, csv_period, df_sibc)
-        elif pipeline == "atm_pos":
-            rows = _atm_pos.compute(sig_id, compute_spec, period, df_atm_pos)
-        else:
-            rows = []
+        rows = engine.compute(sig_id, compute_spec, csv_period, df)
 
         spec_version = sig.get("spec_version", "1.0")
         for r in rows:

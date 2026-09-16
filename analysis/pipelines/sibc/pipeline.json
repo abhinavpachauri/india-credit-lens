@@ -2,6 +2,7 @@
   "id": "sibc",
   "name": "RBI SIBC — Bank Credit",
   "order": 1,
+  "compute_module": "csv_sector",
   "paths": {
     "data_dir": "analysis/rbi_sibc",
     "consolidated_csv": "web/public/data/rbi_sibc_consolidated.csv",
@@ -18,7 +19,10 @@
     "entity_columns": [
       "code",
       "parent_code"
-    ]
+    ],
+    "scope_column": "statement",
+    "default_scope": "Statement 1",
+    "memo_flag_column": "is_priority_sector_memo"
   },
   "modules": {
     "detect_format": "pipelines/sibc/detect_format.py",

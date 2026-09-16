@@ -251,3 +251,69 @@ def test_no_live_module_hardcodes_the_pipeline_pair():
                 offenders.append(f"{rel}:{n}: {stripped[:70]}")
     assert not offenders, (
         "pipeline pair hardcoded — derive it instead:\n  " + "\n  ".join(offenders))
+
+
+# ── The declared compute path ─────────────────────────────────────────────────
+# A pipeline declares the SHAPE of its source (`compute_module`) rather than the engine
+# branching on its id. `csv_sector` is "one measure over a code hierarchy" — not "SIBC" —
+# which is why a third source of that shape needs no copied module.
+
+@pytest.mark.parametrize("pipeline", manifest.PIPELINE_IDS)
+def test_every_pipeline_declares_a_resolvable_compute_module(pipeline):
+    from signals.compute import engine
+    assert engine.module_for(pipeline) is not None
+
+
+def test_an_undeclared_compute_module_raises_rather_than_computing_nothing(monkeypatch):
+    """Silence is the wrong answer to a shape the engine cannot resolve — it looks exactly
+    like a source that simply has no signals yet. The engine already refuses an unknown
+    METHOD name for this reason; an unknown module is the same failure one level up."""
+    from signals.compute import engine
+    monkeypatch.setattr(manifest, "load", lambda p: {"id": p})              # no compute_module
+    with pytest.raises(KeyError, match="compute_module"):
+        engine.module_for("whatever")
+    monkeypatch.setattr(manifest, "load", lambda p: {"compute_module": "not_a_shape"})
+    with pytest.raises(KeyError, match="not_a_shape"):
+        engine.module_for("whatever")
+
+
+def test_a_schema_declaration_the_csv_does_not_honour_raises(tmp_path, monkeypatch):
+    """The manifest's `schema` block must be load-bearing, not decoration.
+
+    `consolidated_csv` was declared by every manifest and read by almost nobody for months,
+    which is how the same path came to be hardcoded in nine modules. A declaration that
+    nothing verifies decays the same way, so loading the frame checks it."""
+    from signals.compute import csv_sector
+    csv = tmp_path / "x.csv"
+    csv.write_text("date,code,parent_code,level,sector,outstanding_cr\n"
+                   "2026-07-31,1,,1,Agriculture,100.0\n")
+    monkeypatch.setattr(manifest, "consolidated_csv", lambda p: csv)
+    monkeypatch.setattr(csv_sector.manifest, "consolidated_csv", lambda p: csv)
+
+    # Declares a scope column the file does not have.
+    monkeypatch.setattr(csv_sector.manifest, "load",
+                        lambda p: {"schema": {"scope_column": "statement"}})
+    csv_sector.invalidate_cache()
+    with pytest.raises(ValueError, match="scope_column"):
+        csv_sector._load_df("ghost")
+
+    # Declares nothing beyond the required columns → loads, with no scope and no memo lens.
+    monkeypatch.setattr(csv_sector.manifest, "load", lambda p: {"schema": {}})
+    csv_sector.invalidate_cache()
+    df = csv_sector._load_df("ghost")
+    assert csv_sector._val(df, "2026-07-31", "1") == 100.0, \
+        "a source with no scope column must still resolve a plain code"
+    assert csv_sector._scope({}, df) is None
+    csv_sector.invalidate_cache()
+
+
+def test_a_source_missing_a_required_column_raises(tmp_path, monkeypatch):
+    from signals.compute import csv_sector
+    csv = tmp_path / "y.csv"
+    csv.write_text("date,code,level,sector,outstanding_cr\n2026-07-31,1,1,Agriculture,100.0\n")
+    monkeypatch.setattr(csv_sector.manifest, "consolidated_csv", lambda p: csv)
+    monkeypatch.setattr(csv_sector.manifest, "load", lambda p: {"schema": {}})
+    csv_sector.invalidate_cache()
+    with pytest.raises(ValueError, match="parent_code"):
+        csv_sector._load_df("ghost")
+    csv_sector.invalidate_cache()

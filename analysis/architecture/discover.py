@@ -169,7 +169,7 @@ def parse_imports(tree, locals_by_stem):
                 root = node.module.split(".")[0]
                 if root in locals_by_stem:
                     deps.add(locals_by_stem[root])
-                # `from signals.query import ...` / `from compute.sibc import ...`
+                # `from signals.query import ...` / `from compute.csv_sector import ...`
                 for a in node.names:
                     if a.name in locals_by_stem:
                         deps.add(locals_by_stem[a.name])

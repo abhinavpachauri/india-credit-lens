@@ -157,6 +157,22 @@ def _test_count() -> int:
 SIGNALS_SPEC = ROOT / "analysis" / "signals" / "README.md"
 
 
+
+def _compute_modules() -> tuple[str, ...]:
+    """Every module in signals.compute that dispatches methods — discovered, not listed.
+
+    It was a literal pipeline pair, which was wrong twice over: the loop iterates compute
+    MODULES, and a module is a SHAPE, not a pipeline (`csv_sector` serves any source that is
+    one measure over a code hierarchy). Listing them meant a new shape could add methods the
+    spec check never looked at — and the whole point of this check is that a method cannot
+    enter the engine unspecced.
+    """
+    import pkgutil
+    import signals.compute as pkg
+    return tuple(sorted(m.name for m in pkgutil.iter_modules(pkg.__path__)
+                        if m.name not in ("engine", "common")))
+
+
 def check_compute_methods_are_specced() -> list[str]:
     """Check 5 — every compute method the engine will dispatch must appear in the L1 spec.
 
@@ -176,7 +192,7 @@ def check_compute_methods_are_specced() -> list[str]:
         return [f"{SIGNALS_SPEC.relative_to(ROOT)}: missing — the Layer 1 spec"]
     spec = SIGNALS_SPEC.read_text()
     findings = []
-    for mod in ("sibc", "atm_pos"):
+    for mod in _compute_modules():
         try:
             engine = importlib.import_module(f"signals.compute.{mod}")
         except Exception as e:                        # noqa: BLE001

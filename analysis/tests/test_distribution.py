@@ -71,7 +71,7 @@ RULES = [
 
 def test_eval_status_matches_the_compute_layer():
     """Proximity re-evaluates the same rules on hypothetical values — same answers."""
-    from signals.compute.sibc import _eval_status
+    from signals.compute.csv_sector import _eval_status
     for value, prev in ((5.0, 4.0), (3.0, 3.0), (-1.0, 2.0), (0.0, 0.0)):
         assert proximity.eval_status(RULES, value, prev) == _eval_status(RULES, value, prev)
 

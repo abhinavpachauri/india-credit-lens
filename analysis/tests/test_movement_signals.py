@@ -11,14 +11,14 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from core import relational_insights as RI          # noqa: E402
-from signals.compute import sibc                    # noqa: E402
+from signals.compute import csv_sector as sibc                    # noqa: E402
 
 MAIN = {"parent_code": "III", "statement": "Statement 1", "child_level": 1,
         "entity_type": "sector", "window": 12}
 
 
 def _rows(fn, period="2026-06-30"):
-    return fn(MAIN, period, sibc._load_df())
+    return fn(MAIN, period, sibc._load_df("sibc"))
 
 
 def _by(rows, entity_type):
@@ -60,7 +60,7 @@ def test_allocation_withholds_alloc_rows_below_the_coherence_threshold(monkeypat
     never suppressed (signals/README.md — coherence routes, it does not gate)."""
     monkeypatch.setattr(sibc, "_deltas",
                         lambda p, per, df: ({"A": 100.0, "B": -90.0}, 10.0, 190.0))
-    rows = sibc.csv_sector_allocation(MAIN, "2026-06-30", sibc._load_df())
+    rows = sibc.csv_sector_allocation(MAIN, "2026-06-30", sibc._load_df("sibc"))
     assert _by(rows, "alloc") == {}
     contrib = _by(rows, "contribution")
     assert set(contrib) == {"A", "B"}

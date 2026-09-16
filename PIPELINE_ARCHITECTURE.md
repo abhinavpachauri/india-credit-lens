@@ -771,7 +771,8 @@ analysis/
 │   ├── update_registry.py          ← One-time script: added sub_layer + compute specs to registry
 │   ├── compute/
 │   │   ├── engine.py               ← Dispatch: reads registry, calls sibc/atm_pos, writes DB
-│   │   ├── sibc.py                 ← SIBC compute methods (1a/1b/1c/1d) — reads consolidated CSV
+│   │   ├── csv_sector.py           ← sector-hierarchy compute methods (1a/1b/1c/1d) — any
+│   │   │                              source that is one measure over a code hierarchy
 │   │   └── atm_pos.py              ← ATM/POS compute methods (1a/1b/1c/1d) — reads CSV
 │   └── evaluations/
 │       ├── sibc/                   ← LLM evaluation JSONs per period (observation/direction/inference)

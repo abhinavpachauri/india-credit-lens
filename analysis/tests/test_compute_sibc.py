@@ -30,7 +30,7 @@ import pandas as pd
 import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from signals.compute import sibc  # noqa: E402
+from signals.compute import csv_sector as sibc  # noqa: E402
 
 P = "2026-03-31"
 

@@ -39,15 +39,16 @@ import sys
 sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
 from core.paths import ROOT as REPO
 from core import manifest
-CSV     = manifest.consolidated_csv("atm_pos")   # declared in pipelines/atm_pos/pipeline.json
 
-_df_cache: pd.DataFrame | None = None
+_df_cache: dict[str, pd.DataFrame] = {}
 
 
-def _load_df() -> pd.DataFrame:
-    global _df_cache
-    if _df_cache is None:
-        df = pd.read_csv(CSV, parse_dates=["report_date"])
+def _load_df(pipeline: str = "atm_pos") -> pd.DataFrame:
+    """Payments-shaped source (metric × bank × record_type), keyed by pipeline so the engine
+    can load every compute module the same way. Unlike `csv_sector`, this module is not a
+    family — one payments source is the only thing shaped like this so far."""
+    if pipeline not in _df_cache:
+        df = pd.read_csv(manifest.consolidated_csv(pipeline), parse_dates=["report_date"])
         df["report_date"] = df["report_date"].dt.strftime("%Y-%m-%d")
         # The hot path (_total_val/_category_val/scan/streak) filters by equality on these
         # string columns thousands of times over a 27k-row frame. As object dtype that runs
@@ -56,13 +57,12 @@ def _load_df() -> pd.DataFrame:
         for col in ("report_date", "metric", "record_type", "bank_category", "bank_name"):
             if col in df.columns:
                 df[col] = df[col].astype("category")
-        _df_cache = df
-    return _df_cache
+        _df_cache[pipeline] = df
+    return _df_cache[pipeline]
 
 
 def invalidate_cache() -> None:
-    global _df_cache
-    _df_cache = None
+    _df_cache.clear()
 
 
 def _prior_year(period: str, available: set[str]) -> str | None:

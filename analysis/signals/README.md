@@ -12,7 +12,7 @@ deterministic compute engine, and the LLM evaluation layer.
 
 ## Compute (`compute/`)
 - **`engine.py`** — `run_append(pipeline, period, db, registry)` dispatches each signal to its
-  method. **`sibc.py`** / **`atm_pos.py`** implement the 1a/1b/1c/1d methods (read the
+  method. **`csv_sector.py`** / **`atm_pos.py`** implement the 1a/1b/1c/1d methods (read the
   consolidated CSV; hot filter columns are `category`-dtype for speed). Both cache the CSV
   per process via `_load_df()`.
 

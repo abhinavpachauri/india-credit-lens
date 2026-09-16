@@ -68,7 +68,7 @@ def _con():
 def eval_status(rules, value, prev_value):
     """Re-implementation of the compute layer's rule evaluation, on hypothetical values.
 
-    Deliberately identical in behaviour to `compute.sibc._eval_status` — the same
+    Deliberately identical in behaviour to `compute.csv_sector._eval_status` — the same
     expressions, the same order, the same unknown fallback. It has to be a separate
     entry point because that one only ever sees values that actually happened, and the
     whole point here is to ask what would happen if the value were different.

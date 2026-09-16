@@ -45,15 +45,80 @@ from . import common
 
 import sys
 sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
-from core.paths import ROOT as REPO
 from core import manifest
-CSV      = manifest.consolidated_csv("sibc")   # declared in pipelines/sibc/pipeline.json
-TIMELINE = REPO / "analysis" / "rbi_sibc" / "timeline.json"
 
-_df_cache: pd.DataFrame | None = None
+#: Columns every sector-shaped source must carry. They are NOT parameterised, deliberately:
+#: they mean the same thing in every such source ("outstanding credit to this code, in
+#: rupees crore, on this date"), so giving them per-source spellings would invent a
+#: difference rather than describe one. The manifest declares them and `_load_df` VERIFIES
+#: the declaration against the file — a declaration nothing checks is decoration, which is
+#: how `consolidated_csv` came to be declared by every manifest and read by almost nobody.
+REQUIRED_COLUMNS = ("date", "code", "parent_code", "level", "sector", "outstanding_cr")
+
+#: One frame per pipeline. It was a single module-level `_df_cache`, which is what bound
+#: this module to SIBC more than anything else in it.
+_df_cache: dict[str, pd.DataFrame] = {}
 
 
-def resolve_csv_date(data_date: str) -> str | None:
+def schema(df: pd.DataFrame) -> dict:
+    """The declared shape of the source this frame came from.
+
+    Carried on the frame rather than threaded through seventeen method signatures: every
+    method already receives `df`, and the shape is a fact about the data, not about the
+    call. Read it only from the frame handed to a method — never from a filtered slice.
+    """
+    return df.attrs.get("schema", {})
+
+
+def _scope(params: dict, df: pd.DataFrame) -> str | None:
+    """The value of the column this source scopes codes by, or None when it has none.
+
+    SIBC publishes the same code in two statements — 2.3 is "Large" in Statement 1 and
+    "Beverage and Tobacco" in Statement 2 — so a code alone does not identify a row and
+    every compute spec says which statement it means. A source whose codes are already
+    unique declares no `scope_column` and its specs say nothing.
+
+    The PARAM KEY IS THE COLUMN NAME (`statement`), which is why 159 existing signals need
+    no edit, and why `denominator_statement` / `parent_statement` generalise for free as
+    `{role}_{scope_column}`.
+    """
+    col = schema(df).get("scope_column")
+    if not col:
+        return None
+    return params.get(col, schema(df).get("default_scope"))
+
+
+def _scope_param(df: pd.DataFrame, role: str, params: dict, fallback: str | None) -> str | None:
+    """A role-qualified scope override — `denominator_statement`, `parent_statement`."""
+    col = schema(df).get("scope_column")
+    if not col:
+        return None
+    return params.get(f"{role}_{col}", fallback)
+
+
+def _scoped(df: pd.DataFrame, scope: str | None):
+    """Mask restricting rows to `scope` — all-True when the source has no scope column."""
+    col = schema(df).get("scope_column")
+    if not col:
+        return pd.Series(True, index=df.index)
+    return df[col] == scope
+
+
+def _memo(df: pd.DataFrame, wanted: bool):
+    """Mask selecting (or excluding) the source's memo lens.
+
+    A memo lens is a second view over the same rupees — SIBC's priority-sector block, whose
+    rows carry an empty parent_code and overlap the main tree. `is_psl` / `psl_memo` keep
+    SIBC's spelling in the registry because that is what the source calls the lens; a source
+    that declares no `memo_flag_column` has none, and asking for one yields nothing.
+    """
+    col = schema(df).get("memo_flag_column")
+    if not col:
+        return pd.Series(bool(not wanted), index=df.index)
+    return df[col] == wanted
+
+
+def resolve_csv_date(pipeline: str, data_date: str) -> str | None:
     """
     Map a report dataDate (e.g. '2026-04-30') → csv_date ('2026-03-31').
     Returns the input unchanged if no matching entry found (allows direct
@@ -61,7 +126,7 @@ def resolve_csv_date(data_date: str) -> str | None:
     """
     import json as _json
     try:
-        tl = _json.loads(TIMELINE.read_text())
+        tl = _json.loads(manifest.path(pipeline, "timeline").read_text())
         for entry in tl.get("periods", []):
             if entry.get("dataDate") == data_date:
                 return entry.get("csv_date", data_date)
@@ -70,25 +135,36 @@ def resolve_csv_date(data_date: str) -> str | None:
     return data_date
 
 
-def _load_df() -> pd.DataFrame:
-    global _df_cache
-    if _df_cache is None:
-        df = pd.read_csv(CSV, dtype={"code": str, "parent_code": str})
+def _load_df(pipeline: str) -> pd.DataFrame:
+    if pipeline not in _df_cache:
+        sch = manifest.load(pipeline).get("schema", {})
+        df = pd.read_csv(manifest.consolidated_csv(pipeline),
+                         dtype={"code": str, "parent_code": str})
+        missing = [c for c in REQUIRED_COLUMNS if c not in df.columns]
+        if missing:
+            raise ValueError(f"{pipeline}: consolidated CSV is missing {missing} — a "
+                             f"sector-shaped source must carry {list(REQUIRED_COLUMNS)}")
+        for key in ("scope_column", "memo_flag_column"):
+            col = sch.get(key)
+            if col and col not in df.columns:
+                raise ValueError(f"{pipeline}: manifest declares {key}={col!r}, which the "
+                                 f"consolidated CSV does not have")
         df["date"] = pd.to_datetime(df["date"]).dt.strftime("%Y-%m-%d")
         df["code"]        = df["code"].fillna("").str.strip()
         df["parent_code"] = df["parent_code"].fillna("").str.strip()
         # Hot-path filter columns → category dtype (integer-code equality, identical results,
         # faster than object string comparison). Same optimization as atm_pos._load_df.
-        for col in ("date", "code", "statement", "parent_code"):
-            if col in df.columns:
+        for col in ("date", "code", sch.get("scope_column"), "parent_code"):
+            if col and col in df.columns:
                 df[col] = df[col].astype("category")
-        _df_cache = df
-    return _df_cache
+        df.attrs["schema"] = sch
+        df.attrs["pipeline"] = pipeline
+        _df_cache[pipeline] = df
+    return _df_cache[pipeline]
 
 
 def invalidate_cache() -> None:
-    global _df_cache
-    _df_cache = None
+    _df_cache.clear()
 
 
 # ── Date helpers ──────────────────────────────────────────────────────────────
@@ -111,12 +187,14 @@ def _prior_period(period: str, available: set[str]) -> str | None:
 # ── Value lookup ──────────────────────────────────────────────────────────────
 
 def _val(df: pd.DataFrame, date_str: str, code: str,
-         statement: str = "Statement 1", is_psl: bool = False) -> float | None:
+         scope: str | None = None, is_psl: bool = False) -> float | None:
     q = df[(df["date"] == date_str) & (df["code"] == str(code))]
     if is_psl:
-        q = q[q["is_priority_sector_memo"] == True]   # noqa: E712
+        q = q[_memo(q, True)]
     else:
-        q = q[q["statement"] == statement]
+        # Scope only — deliberately NOT also excluding memo rows. That is the behaviour this
+        # lookup has always had, and a refactor changes structure, not semantics.
+        q = q[_scoped(q, scope if scope is not None else schema(df).get("default_scope"))]
     rows = q["outstanding_cr"]
     return float(rows.iloc[0]) if not rows.empty else None
 
@@ -140,7 +218,7 @@ def _unknown() -> list[dict]:
 # ── YoY helper (current + prior-period YoY for momentum) ─────────────────────
 
 def _compute_yoy(df: pd.DataFrame, period: str, code: str,
-                 statement: str, avail: set[str],
+                 scope: str | None, avail: set[str],
                  is_psl: bool = False) -> tuple[float | None, float | None]:
     """
     Returns (yoy, prev_yoy) where prev_yoy is the prior period's YoY —
@@ -150,8 +228,8 @@ def _compute_yoy(df: pd.DataFrame, period: str, code: str,
     prior_yr = _prior_year(period, avail)
     if not prior_yr:
         return None, None
-    v  = _val(df, period,   code, statement, is_psl)
-    pv = _val(df, prior_yr, code, statement, is_psl)
+    v  = _val(df, period,   code, scope, is_psl)
+    pv = _val(df, prior_yr, code, scope, is_psl)
     if v is None or pv is None or pv == 0:
         return None, None
     yoy = (v - pv) / pv * 100
@@ -161,8 +239,8 @@ def _compute_yoy(df: pd.DataFrame, period: str, code: str,
     if prev_pd:
         prev_yr2 = _prior_year(prev_pd, avail)
         if prev_yr2:
-            v2  = _val(df, prev_pd,  code, statement, is_psl)
-            pv2 = _val(df, prev_yr2, code, statement, is_psl)
+            v2  = _val(df, prev_pd,  code, scope, is_psl)
+            pv2 = _val(df, prev_yr2, code, scope, is_psl)
             if v2 and pv2 and pv2 != 0:
                 prev_yoy = (v2 - pv2) / pv2 * 100
     return yoy, prev_yoy
@@ -173,7 +251,7 @@ def _compute_yoy(df: pd.DataFrame, period: str, code: str,
 def csv_sector_yoy(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
     """YoY% for a single sector code. Set is_psl=true in params for PSL memo items."""
     code   = str(params["code"])
-    stmt   = params.get("statement", "Statement 1")
+    stmt   = _scope(params, df)
     is_psl = bool(params.get("is_psl", False))
     avail  = set(df["date"].unique())
     yoy, prev_yoy = _compute_yoy(df, period, code, stmt, avail, is_psl=is_psl)
@@ -187,7 +265,7 @@ def csv_sector_yoy(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
 def csv_sector_abs(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
     """Absolute outstanding credit for a single sector code."""
     code   = str(params["code"])
-    stmt   = params.get("statement", "Statement 1")
+    stmt   = _scope(params, df)
     is_psl = bool(params.get("is_psl", False))
     avail  = set(df["date"].unique())
     v      = _val(df, period, code, stmt, is_psl=is_psl)
@@ -205,7 +283,7 @@ def csv_sector_share(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
     """Sector share of parent sector (%)."""
     code        = str(params["code"])
     parent_code = str(params["parent_code"])
-    stmt        = params.get("statement", "Statement 1")
+    stmt        = _scope(params, df)
     avail       = set(df["date"].unique())
     v   = _val(df, period, code,        stmt)
     den = _val(df, period, parent_code, stmt)
@@ -228,7 +306,7 @@ def csv_sector_yoy_spread(params: dict, period: str, df: pd.DataFrame) -> list[d
     """YoY spread: code_a growth minus code_b growth (pp)."""
     code_a = str(params["code_a"])
     code_b = str(params["code_b"])
-    stmt   = params.get("statement", "Statement 1")
+    stmt   = _scope(params, df)
     avail  = set(df["date"].unique())
     yoy_a, _ = _compute_yoy(df, period, code_a, stmt, avail)
     yoy_b, _ = _compute_yoy(df, period, code_b, stmt, avail)
@@ -251,7 +329,7 @@ def csv_sector_count_positive_yoy(params: dict, period: str,
                                    df: pd.DataFrame) -> list[dict]:
     """Count of named sector codes with positive YoY growth."""
     codes = [str(c) for c in params["child_codes"]]
-    stmt  = params.get("statement", "Statement 1")
+    stmt  = _scope(params, df)
     avail = set(df["date"].unique())
     prior = _prior_period(period, avail)
 
@@ -271,7 +349,7 @@ def csv_sector_count_positive_yoy(params: dict, period: str,
 def csv_sector_scan_yoy(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
     """YoY for every child of parent_code at child_level."""
     parent_code = str(params["parent_code"])
-    stmt        = params.get("statement", "Statement 1")
+    stmt        = _scope(params, df)
     child_level = params.get("child_level", 2)
     entity_type = params.get("entity_type", "sector")
     avail       = set(df["date"].unique())
@@ -279,7 +357,7 @@ def csv_sector_scan_yoy(params: dict, period: str, df: pd.DataFrame) -> list[dic
 
     children = df[
         (df["date"] == period) &
-        (df["statement"] == stmt) &
+        (_scoped(df, stmt)) &
         (df["parent_code"] == parent_code) &
         (df["level"] == child_level)
     ]
@@ -301,10 +379,10 @@ def csv_sector_scan_yoy(params: dict, period: str, df: pd.DataFrame) -> list[dic
 def csv_sector_scan_share(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
     """Share of parent for every child of parent_code at child_level."""
     parent_code      = str(params["parent_code"])
-    stmt             = params.get("statement", "Statement 1")
+    stmt             = _scope(params, df)
     # Denominator may differ from structural parent (e.g. Statement 2 types → Statement 1 total)
     denom_code       = str(params.get("denominator_code", parent_code))
-    denom_stmt       = params.get("denominator_statement", stmt)
+    denom_stmt       = _scope_param(df, "denominator", params, stmt)
     entity_type      = params.get("entity_type", "sector")
     avail            = set(df["date"].unique())
 
@@ -346,7 +424,7 @@ def csv_sector_scan_share(params: dict, period: str, df: pd.DataFrame) -> list[d
         # industry's parts are Statement 2 and industry's total is Statement 1, and Statement 2
         # carries no code "2" at all. Declared rather than guessed — a fallback that searched
         # the other statement would find "Beverage and Tobacco" the day a code collides.
-        own_stmt = params.get("parent_statement", stmt)
+        own_stmt = _scope_param(df, "parent", params, stmt)
         own = _val(df, period, parent_code, own_stmt)
         if own is not None:
             # Status "active", like the size scan's own total row and for the same reason:
@@ -371,7 +449,7 @@ def csv_sector_scan_abs(params: dict, period: str, df: pd.DataFrame) -> list[dic
     Status compares with the same month a year earlier rather than the prior period: a level
     that is merely bigger than last month is not news in a series that grows every month.
     """
-    stmt   = params.get("statement", "Statement 1")
+    stmt   = _scope(params, df)
     etype  = params.get("entity_type", "sector")
     rules  = params.get("status_rules", [])
     avail  = set(df["date"].unique())
@@ -402,14 +480,14 @@ def csv_psl_scan_yoy(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
 
     psl_rows = df[
         (df["date"] == period) &
-        (df["is_priority_sector_memo"] == True)   # noqa: E712
+        _memo(df, True)
     ]
     out = []
     for _, row in psl_rows.iterrows():
         code = str(row["code"])
         if code in exclude:
             continue
-        yoy, prev_yoy = _compute_yoy(df, period, code, "Statement 1", avail,
+        yoy, prev_yoy = _compute_yoy(df, period, code, _scope({}, df), avail,
                                       is_psl=True)
         if yoy is None:
             continue
@@ -437,13 +515,13 @@ def csv_yoy_streak(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
 
     params:
       code       — sector code
-      statement  — default "Statement 1"
+      statement  — the scope column, when the source has one
       is_psl     — default False
       condition  — "positive" | "negative" | "above:{n}" | "below:{n}"
                    e.g. "negative" → yoy < 0, "above:20" → yoy > 20
     """
     code      = str(params["code"])
-    stmt      = params.get("statement", "Statement 1")
+    stmt      = _scope(params, df)
     is_psl    = bool(params.get("is_psl", False))
     condition = params.get("condition", "positive")
     avail     = set(df["date"].unique())
@@ -500,11 +578,11 @@ def csv_sector_fy_acceleration(params: dict, period: str,
 
     params:
       code      — sector code
-      statement — default "Statement 1"
+      statement — the scope column, when the source has one
       is_psl    — default False
     """
     code   = str(params["code"])
-    stmt   = params.get("statement", "Statement 1")
+    stmt   = _scope(params, df)
     is_psl = bool(params.get("is_psl", False))
     avail  = set(df["date"].unique())
 
@@ -552,11 +630,11 @@ def csv_sector_fy_delta(params: dict, period: str,
 
     params:
       code      — sector code
-      statement — default "Statement 1"
+      statement — the scope column, when the source has one
       unit      — default "lcr_cr"
     """
     code  = str(params["code"])
-    stmt  = params.get("statement", "Statement 1")
+    stmt  = _scope(params, df)
     unit  = params.get("unit", "lcr_cr")
     avail = set(df["date"].unique())
 
@@ -668,22 +746,22 @@ def _child_frame(params: dict, period: str, df: pd.DataFrame) -> pd.DataFrame:
     "the parts of this cut" is exactly the drift the engineering principle forbids: a cut
     should be one declaration, and every family should agree on what its parts are.
     """
-    stmt        = params.get("statement", "Statement 1")
+    stmt        = _scope(params, df)
     child_level = params.get("child_level", 2)
     exclude     = {str(c) for c in params.get("exclude_codes", [])}
-    base = (df["date"] == period) & (df["statement"] == stmt) & (df["level"] == child_level)
+    base = (df["date"] == period) & (_scoped(df, stmt)) & (df["level"] == child_level)
     if params.get("psl_memo"):
-        rows = df[base & (df["is_priority_sector_memo"] == True)]          # noqa: E712
+        rows = df[base & _memo(df, True)]
     else:
         parent_code = str(params["parent_code"])
         rows = df[base & (df["parent_code"] == parent_code)
-                  & (df["is_priority_sector_memo"] == False)]              # noqa: E712
+                  & _memo(df, False)]
     return rows[~rows["code"].astype(str).isin(exclude)] if exclude else rows
 
 
 def _children_at(params: dict, period: str, df: pd.DataFrame) -> dict[str, float]:
     """{sector name: value} for every part of this cut on `period`."""
-    stmt = params.get("statement", "Statement 1")
+    stmt = _scope(params, df)
     out: dict[str, float] = {}
     for _, r in _child_frame(params, period, df).iterrows():
         v = _val(df, period, str(r["code"]), stmt)
@@ -760,7 +838,7 @@ def csv_sector_acceleration(params: dict, period: str, df: pd.DataFrame) -> list
     value = yoy(period) - yoy(prior period), unit pp. Emits per child + aggregate/total
     (the parent's own acceleration).
     """
-    stmt        = params.get("statement", "Statement 1")
+    stmt        = _scope(params, df)
     parent_code = str(params.get("parent_code", ""))
     parent_stmt = params.get("parent_statement", stmt)
     entity_type = params.get("entity_type", "sector")
@@ -777,7 +855,7 @@ def csv_sector_acceleration(params: dict, period: str, df: pd.DataFrame) -> list
 
     out = []
     for name, _v in _children_at(params, period, df).items():
-        code = df[(df["date"] == period) & (df["statement"] == stmt) &
+        code = df[(df["date"] == period) & (_scoped(df, stmt)) &
                   (df["sector"] == name)]["code"]
         if code.empty:
             continue
@@ -878,7 +956,7 @@ def csv_sector_divergence(params: dict, period: str, df: pd.DataFrame) -> list[d
     value = child_yoy − parent_yoy (pp, signed — sign carries direction).
     """
     parent_code = str(params["parent_code"])
-    stmt        = params.get("statement", "Statement 1")
+    stmt        = _scope(params, df)
     parent_stmt = params.get("parent_statement", stmt)
     child_level = params.get("child_level", 2)
     entity_type = params.get("entity_type", "sector")
@@ -893,7 +971,7 @@ def csv_sector_divergence(params: dict, period: str, df: pd.DataFrame) -> list[d
 
     children = df[
         (df["date"] == period) &
-        (df["statement"] == stmt) &
+        (_scoped(df, stmt)) &
         (df["parent_code"] == parent_code) &
         (df["level"] == child_level)
     ]

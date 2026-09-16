@@ -225,7 +225,7 @@ the default (COMPOSITION_SPEC §8.1).
 | `analysis/core/generate_signal_history.py` | Stage 4 (`append`) + Stage 5 (`evaluate`) + `status` + `seed` commands |
 | `analysis/signals/registry.json` | Universal signal catalog — 527 signals, layer 1/2/3 tagged; all Layer 1 signals have compute specs (SIBC + ATM/POS). Counts here are checked by `reconcile.py` |
 | `analysis/signals/signals.db` | **Primary signal store** — SQLite; (pipeline, period, metric_id, entity_type, entity_id) fact table + metric_ranges |
-| `analysis/signals/compute/` | Compute engine: engine.py dispatches; sibc.py + atm_pos.py implement all 1a/1b/1c/1d methods. Both read from consolidated CSVs. SIBC maps `dataDate → csv_date` via `timeline.json` before querying. |
+| `analysis/signals/compute/` | Compute engine: engine.py dispatches on the manifest's declared `compute_module`; `csv_sector.py` (any sector-hierarchy source — SIBC today) + `atm_pos.py` implement all 1a/1b/1c/1d methods. Both read their pipeline's consolidated CSV. A module offering `resolve_csv_date` maps `dataDate → csv_date` via `timeline.json` before querying. |
 | `analysis/signals/evaluate.py` | Stage 5 LLM evaluation engine — reads signals.db, builds domain payloads (full period series included), calls `claude -p` CLI, writes to evaluations/. prompt_version=1.4. Cache in llm_cache table. |
 | `analysis/signals/query.py` | Builds signal payloads for evaluate — scalar + scan + full chronological series per signal |
 | `analysis/signals/prompts/domain_eval_system.txt` | System prompt v1.4 — executive tone, trajectory style, no jargon |
