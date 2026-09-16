@@ -210,6 +210,105 @@ sum of the parts. For main sectors those differ by 4.9%. Reading "share of the b
 from the allocation family and "share today" from the share family would have compared **two
 different questions**, silently and plausibly, in adjacent columns.
 
+### the denominator rule — which total a share is a share OF
+
+> Specced **2026-09-16, before the compute** (`PLAN_2026-09-16_NBFC.md` §3.2). The rule
+> generalises the PSL exception above and supersedes the "sum of the parts" denominator that
+> `allocation` has always used.
+
+A share needs a denominator, and every family here has quietly assumed one: **the sum of the
+parts**. That is right exactly when the parts ARE the whole. RBI frequently publishes a parent
+and then only *some* of its children — an **"of which"** decomposition — and for those cuts the
+assumption inflates every share, silently and plausibly, with all the numbers still tracing to
+stored values. It is a §15-class defect: each artifact correct, the relationship between them not.
+
+**The rule: compute whether the parts sum to the parent. Do not declare it.** A hand-written
+`additive: true|false` field would be a second description of the data — the same shape as
+`MOVEMENT_CUTS`, which is how seven sub-cuts went unaudited for a month. The CSV already knows.
+
+```
+        Σ parts  ==  parent's published row  ?
+              │                        │
+             yes                       no ────────── is a parent row published?
+              │                                   │              │
+       BRANCH 1                                  yes             no
+    denominator = Σ parts                    BRANCH 2        BRANCH 3
+    (identical to the parent —          denominator =      no denominator
+     either works)                      the parent's       EXISTS → withhold,
+                                        published row      declare the reason
+```
+
+`EPS = 1e-4` relative. Not tuned — **measured, enumerated over all 12 SIBC cuts × all 24 dates**:
+additive cuts have a worst residual of **0.000000%**, and the smallest non-additive gap is
+**4.5%**. The threshold sits three orders of magnitude clear of both populations.
+
+**The branch is decided per cut per period, and a cut that CHANGES branch is a loud error** — an
+RBI restatement or a parsing bug, never a silent denominator flip.
+
+**What each branch does to each family:**
+
+| family | branch 1 | branch 2 ("of which") | branch 3 (no parent) |
+|---|---|---|---|
+| size, share-of-parent, growth, pace | unchanged | unchanged | unchanged |
+| `alloc` (share of net) | Σ parts net | **parent's published net** | **withheld** |
+| `weight`, `weight_now` | Σ parts | **parent's published row** | **withheld** |
+| `contribution` (share of gross) | Σ parts gross | **Σ parts gross — see below** | Σ parts gross |
+| `coverage` (new row) | not emitted | **Σ parts ÷ parent, stored** | not emitted |
+
+**`contribution` and `coherence` stay over the parts, and must therefore be relabelled on a
+branch-2 cut.** The unnamed remainder's *net* is knowable (parent net − Σ parts net); its *gross*
+is not, because RBI does not publish the parts that would reveal direction. So a branch-2 cut
+cannot state "of all the movement" — it states **"of the movement among the named parts"**, and
+`coherence` likewise describes the named parts' agreement, not the cut's. Emitting them unlabelled
+would be the same overstatement wearing a different coat.
+
+**`coverage` exists so the prose can say what is missing.** It is the one genuinely new row, and
+it is what lets a builder write "the three named parts are 51.7% of this cut" instead of implying
+the cut is fully decomposed.
+
+**Measured impact on the cuts that exist today** (2026-07-31, 12-month window):
+
+| cut | branch | parent net | Σ parts net | today's `alloc` |
+|---|---|---|---|---|
+| nine cuts incl. `sibc-ind-size`, `sibc-services`, `sibc-pl` | 1 | — | — | **unchanged** |
+| `sibc-industry-type` | 1 | — | — | **unchanged** (see the trap below) |
+| `sibc-main` | 2 | +3,515,561 | +3,351,049 | **×1.049 too high** |
+| `sibc-nbfc-sub` | 2 | +559,147 | +223,995 | **×2.49 too high** |
+| `sibc-psl` | 3 | *none published* | — | **withheld** |
+
+`sibc-main` is the most-read cut on the dashboard; the four sectors are 95.1% of non-food credit
+and RBI attributes ₹10.7 L Cr to no sector. `sibc-nbfc-sub` is the worst in the registry: HFCs and
+PFIs together are 34.7% of bank credit to NBFCs, so "HFCs took X% of new NBFC credit" overstates
+by a factor of two and a half.
+
+⚠️ **The trap — a parent you cannot FIND is not a parent that does not EXIST.**
+`sibc-industry-type` looks parentless: its parts are Statement 2, its total is Statement 1, and
+**Statement 2 carries no code "2" at all**. Its 19 parts sum to ₹4,800,777 — the published
+Industry total, exactly — so it is branch 1. An implementation that reads "lookup returned None"
+as branch 3 would withhold a correct allocation. **A declared parent code that is not found must
+RAISE**, never fall through to withholding. The share scan already solved this with
+`parent_statement`; momentum and allocation must declare it too.
+
+**PSL moves from a named exception to branch 3**, which is the point of generalising: it is not a
+special case, it is the third branch. RBI publishes no PSL total, and its ten lines are
+overlapping lenses over the main tree — PSL "Micro and Small Enterprises" (₹30.88 L Cr) spans
+industry *and* services and is not the Statement-1 ₹10.92 L Cr row, and a weaker-section loan to
+an MSE borrower is counted in both that line and "Weaker Sections" (₹21.22 L Cr). Their sum is not
+a book, so a share of it is not a share of anything. Today the dashboard says both things at once,
+in one block:
+
+```
+no_speed_note : "Priority sector is a memo lens over the main tree, not a slice of it,
+                 so RBI publishes no total for it to grow at."
+mix           : "Drifting toward Micro and Small Enterprises — it took 37.2% of the
+                 growth while holding 30.0% of the total a year ago."
+```
+
+The second sentence divides by the total the first says does not exist. Under branch 3 `alloc`,
+`weight` and `weight_now` go, the derived mix state goes with them, and the band's mix row carries
+its declared reason — the designed behaviour for a reading that cannot exist (DASHBOARD_SPEC §16).
+PSL keeps size, share-of-credit, growth and momentum, all of which have real denominators.
+
 ### one selector per cut
 `_child_frame(params, period, df)` is the single definition of *"the parts of this cut"*, shared
 by `_children_at`, the share scan and the size scan. The share scan previously carried its own
@@ -471,9 +570,12 @@ METHOD_TYPE: `acceleration`.
 - **Rows, two kinds, distinguished by `entity_type`:**
   - `contribution` — `100 * delta_i / gross`. **Always emitted, every regime.** Answers "of all
     the movement, how much was this one." Bounded by construction (cannot exceed 100%); valid in
-    growth, contraction and churn alike.
+    growth, contraction and churn alike. **On a branch-2 cut it answers "of the movement among the
+    NAMED parts"** and must be said that way — see *the denominator rule* above.
   - `alloc` — `100 * delta_i / net`. **Emitted when `coherence >= coherence_min`.** Answers "of
-    the net new units, how many went here." Sums to 100 across entities.
+    the net new units, how many went here." Sums to 100 across entities. **Which `net` is decided
+    by the denominator rule above**, not by this family: the sum of the parts only when the parts
+    are the whole.
 - **Below `coherence_min` there is no honest null and no silence** — `contribution` rows stand and
   the insight switches to the contested/handover sentence per the router table above.
 - **The 12-calendar-month window is mandatory, not a preference.** Month-on-month is not merely
@@ -503,7 +605,10 @@ METHOD_TYPE: `acceleration`.
 
 ### Conventions
 - Applicability: **momentum, acceleration and `contribution` are unconditional** — every cut, both
-  pipelines, any future source. Only the *`alloc` sentence* is coherence-routed.
+  pipelines, any future source. Only the *`alloc` sentence* is coherence-routed, and only the
+  *denominator* is branch-routed. Two independent decisions: coherence picks which sentence is
+  true, the denominator picks what the share is a share of. Neither suppresses a computed value
+  except branch 3, where the quantity does not exist to be computed.
 - Backfill: append every period on introduction (Check 2f recomputes all); the first `window`
   periods legitimately emit no momentum rows.
 - Traceability: rows land in `signals.db` → Check 2g / Stage 4c period-wide ground truth covers
@@ -517,6 +622,87 @@ METHOD_TYPE: `acceleration`.
 - **Coherence does not stop at Layer 1.** The same "do the parts agree?" question is unanswered in
   SYSTEM_MODEL_SPEC §16 Step 2 (mechanical propagation) and COMPOSITION_SPEC §14 (construct
   direction). Compute it once here; both consume it. See those sections.
+
+## NBFC sectoral deployment — the third source
+
+> Specced **2026-09-16, before the compute** (`PLAN_2026-09-16_NBFC.md`). RBI's *Sectoral
+> Deployment of Outstanding Credit by NBFCs (including HFCs)*, monthly, released ~M+2.
+
+The third source is **`csv_sector`-shaped**: one measure (outstanding credit, ₹ crore) over a code
+hierarchy. It needs no compute module — a manifest entry declares the shape (`compute_module`),
+and the two optional columns SIBC has (`statement`, the PSL memo flag) are simply absent.
+
+### what one release actually contains
+
+**Five dated columns, not one.** Each release carries `M-24`, the prior-prior FY end, `M-12`, the
+prior FY end, and `M` — so three release files hold **eleven distinct dates**, and seven of them
+compute a YoY from the first ingestion:
+
+```
+2024-05-31  2024-06-30  2024-07-31                      level only (no 2023 in any release)
+2025-03-31                                              level only (no 2024-03)
+2025-05-31  2025-06-30  2025-07-31   ← YoY vs 2024
+2026-03-31                           ← YoY vs 2025-03
+2026-05-31  2026-06-30  2026-07-31   ← YoY vs 2025
+```
+
+**All eleven are registered from day one**, the four level-only dates registered as such and
+saying so. SIBC ingested 11 of its 24 available dates and paid for the other 13 in a separate
+backfill session; there is no reason to repeat that.
+
+### the cuts, and which branch each is in
+
+| stem | parent | parts | branch |
+|---|---|---|---|
+| `nbfc-main` | NBFC Credit | Agriculture · Industry · Services · Retail · Other | **1** — sums to the total to the rupee at all 11 dates |
+| `nbfc-industry` | Industry | Infrastructure | **2** — 91% covered |
+| `nbfc-infra` | Infrastructure | Power | **2** — 71% covered |
+| `nbfc-services` | Services | Transport · Trade · Commercial Real Estate | **2** — 51.7% covered |
+| `nbfc-retail` | Retail Loans | Housing · Vehicle · Gold · Consumer Durables | **2** — 73% covered |
+
+Four of five cuts are **"of which"** decompositions, which is why the denominator rule above is a
+prerequisite and not a refinement. Worked example — NBFC Services, Jul 2025 → Jul 2026:
+
+```
+                       over Σ PARTS   over PARENT's net
+Transport Operators          33.8%           17.0%
+Trade                        29.0%           14.6%
+Commercial Real Estate       37.2%           18.6%
+unnamed remainder               —            49.8%
+```
+
+×1.99 across the board. Published over Σ parts, a card would read *"CRE took 37% of all new NBFC
+services credit"* when it took **18.6%** — half the new money went somewhere RBI does not break
+out. This is the first source where the defect is the common case rather than the exception.
+
+### the gap rule — a two-month step is not a one-month step
+
+Until releases accumulate, the store has holes: the prior period of `2025-05-31` is
+`2025-03-31`. Every rule that reads `prev_value` — status rules, acceleration — would compare
+across a two-month gap and report the result as an ordinary move.
+
+**A prior-period comparison computes only when the gap is one cadence step; otherwise the row is
+absent with a declared reason.** This is `feedback_failure_that_looks_like_absence` applied before
+the fact rather than after it: a silently-wrong comparison and a correct one are indistinguishable
+in the store. The 12-calendar-month window is unaffected — `_month_back` already resolves by
+calendar date, not by position, which is the same property that made SIBC's irregular CSV safe.
+
+Cadence is **monthly** (the value can change every month) even though only some months are
+published — `core/cadence.py` keys on how often the VALUE can change, not on the release schedule.
+
+### the free ground truth — RBI publishes its own YoY
+
+The release carries two computed YoY columns (`Jul 2025 / Jul 2024`, `Jul 2026 / Jul 2025`).
+**Our computed YoY is gated against RBI's own figure** — verified by hand on the total at
+14.94207% published vs 14.94207% computed. No other pipeline has an external check on its
+arithmetic, and it costs one comparison per row. Gate stage **1c**, hard fail beyond 1e-4.
+
+### the sample caveat — load-bearing, not a footnote
+
+The statement covers NBFCs in the Upper and Middle Layers plus HFCs — **~87% of NBFC credit**, per
+RTP 2024-25. So "NBFC credit is ₹59.9 L Cr" is false; that is 87% of it. This is a prose risk
+rather than a compute one, so it is carried by a `gap_` node in the system model and by gate 5.8,
+and it must appear wherever a cross-source ratio against bank credit is published.
 
 ## Evaluate + query
 - **`evaluate.py`** — Stage 5 LLM evaluation: builds domain payloads from `signals.db`, calls
