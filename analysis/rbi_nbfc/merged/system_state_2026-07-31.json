@@ -1,0 +1,136 @@
+{
+  "_meta": {
+    "pipeline": "nbfc",
+    "period": "2026-07-31",
+    "schema_version": "4.0",
+    "spec_ref": "analysis/SYSTEM_MODEL_SPEC.md §16",
+    "computed_from": "signals.db",
+    "signals_observed": 43
+  },
+  "entity_states": {
+    "icl:nbfc//T": {
+      "direction": 1,
+      "signals": 9,
+      "observed": 9,
+      "coherence": 1.0,
+      "children": 5
+    },
+    "icl:nbfc//1": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:nbfc//2": {
+      "direction": 1,
+      "signals": 8,
+      "observed": 8,
+      "coherence": 1.0,
+      "children": 1
+    },
+    "icl:nbfc//3": {
+      "direction": 1,
+      "signals": 8,
+      "observed": 8
+    },
+    "icl:nbfc//4": {
+      "direction": 1,
+      "signals": 8,
+      "observed": 8,
+      "coherence": 1.0,
+      "children": 4
+    },
+    "icl:nbfc//5": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:nbfc//2.1": {
+      "direction": 1,
+      "signals": 8,
+      "observed": 8
+    },
+    "icl:nbfc//3.1": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:nbfc//3.2": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:nbfc//3.3": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:nbfc//4.1": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:nbfc//4.2": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:nbfc//4.3": {
+      "direction": 1,
+      "signals": 1,
+      "observed": 1
+    },
+    "icl:nbfc//4.4": {
+      "direction": 1,
+      "signals": 1,
+      "observed": 1
+    },
+    "icl:nbfc//2.1.1": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    }
+  },
+  "force_states": {},
+  "edge_states": {},
+  "loop_states": {},
+  "system_observations": {
+    "dominant_forces": [],
+    "binding_constraints": [],
+    "active_reinforcing_loops": [],
+    "active_balancing_loops": [],
+    "authored_vs_observed_mismatches": []
+  },
+  "mix_states": {
+    "nbfc-main-momentum": {
+      "entity_urn": "icl:nbfc//T",
+      "decomposition": null,
+      "mix_state": "steered",
+      "coherence": 1.0,
+      "toward": "Retail Loans",
+      "away_from": "Industry",
+      "toward_tilt_pp": 17.89,
+      "children": 5
+    },
+    "nbfc-retail-momentum": {
+      "entity_urn": "icl:nbfc//4",
+      "decomposition": null,
+      "mix_state": "steered",
+      "coherence": 1.0,
+      "toward": "Loans against gold jewellery",
+      "away_from": "Housing Loans",
+      "toward_tilt_pp": 21.5,
+      "children": 4
+    },
+    "nbfc-services-momentum": {
+      "entity_urn": "icl:nbfc//3",
+      "decomposition": null,
+      "mix_state": "steered",
+      "coherence": 1.0,
+      "toward": "Commercial Real Estate",
+      "away_from": "Transport Operators",
+      "toward_tilt_pp": 5.96,
+      "children": 3
+    }
+  },
+  "narrative": null
+}

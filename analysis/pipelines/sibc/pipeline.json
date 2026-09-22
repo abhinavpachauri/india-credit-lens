@@ -3,6 +3,7 @@
   "name": "RBI SIBC — Bank Credit",
   "order": 1,
   "compute_module": "csv_sector",
+  "cuts_module": "pipelines.sibc.generate_analysis_report",
   "paths": {
     "data_dir": "analysis/rbi_sibc",
     "consolidated_csv": "web/public/data/rbi_sibc_consolidated.csv",

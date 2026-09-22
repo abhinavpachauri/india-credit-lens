@@ -41,14 +41,20 @@ SIDECAR = {p: DATA / f"{p}_state.json" for p in manifest.PIPELINE_IDS}
 
 def _cuts(pipeline):
     """The pipeline's movement cut table, signal-id stem, and its rate-only dimensions.
-    Imported from the generator that already owns them — a second table here is the drift this
-    project keeps paying for."""
-    if pipeline == "sibc":
-        from pipelines.sibc.generate_analysis_report import MOVEMENT_CUTS, STATE_RATE_ONLY
-        return MOVEMENT_CUTS, "sibc-", STATE_RATE_ONLY
-    from pipelines.atm_pos.generate_atm_pos_insights import MOVEMENT_CUTS, MOVEMENT_PREFIX
-    # Every payments dimension decomposes by bank category, so none is rate-only.
-    return MOVEMENT_CUTS, MOVEMENT_PREFIX, []
+
+    Imported from the module that already owns them — a second table here is the drift this
+    project keeps paying for — and WHICH module is declared (`cuts_module`) rather than
+    branched on the pipeline id. The first two pipelines keep their table inside their card
+    generator; NBFC has no card generator by design, so its table lives on its own. Both are
+    just "the module that owns this pipeline's dimensions".
+    """
+    import importlib
+    from core import manifest as _m
+    mod = importlib.import_module(_m.load(pipeline)["cuts_module"])
+    # A prefix is a string where a pipeline's ids share one stem and a section→stem map where
+    # they do not; defaulting to "{id}-" means only the exception has to say so.
+    prefix = getattr(mod, "MOVEMENT_PREFIX", f"{pipeline}-")
+    return mod.MOVEMENT_CUTS, prefix, getattr(mod, "STATE_RATE_ONLY", [])
 
 
 REGISTRY = ROOT / "analysis" / "signals" / "registry.json"
@@ -119,13 +125,22 @@ def derived_cuts(pipeline: str, declared, mix_states: dict):
     section_of = {c.slug: c.section for c in declared}
     import pandas as pd
     from core.manifest import consolidated_csv
-    df = pd.read_csv(consolidated_csv("sibc"))
+    # This branch serves every sector-hierarchy source, not SIBC alone: it read SIBC's CSV and
+    # sliced `len("sibc-")` off every stem regardless of pipeline, which on NBFC produced the
+    # slug "c-infra" and then looked for it in the wrong file. Harmless only because the
+    # lookup found nothing.
+    _, prefix, _ = _cuts(pipeline)
+    if not isinstance(prefix, str):
+        return []
+    df = pd.read_csv(consolidated_csv(pipeline))
+    if "statement" not in df.columns:
+        df["statement"] = ""
     for sid, sig in reg.items():
         c = sig.get("compute") or {}
         if c.get("method") != "csv_sector_momentum" or c.get("child_level") != 3:
             continue
         stem = sid[: -len("-momentum")]
-        slug = stem[len("sibc-"):]
+        slug = stem[len(prefix):]
         if slug in known or sid not in mix_states:
             continue
         code, stmt = str(c.get("parent_code")), c.get("statement")

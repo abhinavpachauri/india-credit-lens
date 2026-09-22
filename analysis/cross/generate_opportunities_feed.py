@@ -17,7 +17,8 @@ from pathlib import Path
 # Bootstrap: <repo>/analysis on sys.path so `from core import …` resolves from any cwd now
 # that this script lives under cross/. Move-safe via .git walk (see core/paths.py).
 sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
-from core import generate_skeleton as gs  # noqa: E402
+from core import generate_skeleton as gs
+from core import manifest  # noqa: E402
 
 ROOT = gs.ROOT
 OUT = ROOT / "web" / "public" / "data" / "opportunities_feed.json"
@@ -110,7 +111,7 @@ def chart_ref_for_entity(pipe, e, chart_series, with_caption=False):
 
 def build_pipeline_items(pipeline, channels, models, chart_series):
     period = latest_period(pipeline)
-    cfg = gs.PIPELINES[pipeline]
+    cfg = gs.pipeline_cfg(pipeline)
     model = models[pipeline]
     feed_path = cfg["model"].parent / f"opportunities_{period}.json"
     if not feed_path.exists():

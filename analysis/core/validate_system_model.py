@@ -35,7 +35,8 @@ from pathlib import Path
 # cwd now that this script lives under core/. Move-safe via .git walk (see core/paths.py).
 sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
 # reuse the deterministic profile/CSV plumbing from the emitter
-from core import generate_skeleton as gs  # noqa: E402
+from core import generate_skeleton as gs
+from core import manifest  # noqa: E402
 
 ROOT = gs.ROOT
 ADDITIVITY_TOL_PCT = 0.5
@@ -88,7 +89,7 @@ def load_csv_values(profile):
             code = r[cols["code"]].strip()
             if not code:
                 continue
-            key = (r[cols["partition"]], code)
+            key = (gs._partition(r, cols), code)
             present.add(key)
             try:
                 vals[key] = float(r[cols["value"]] or 0)
@@ -329,7 +330,16 @@ def check_behavioral(model, result):
     if tiers.get("entity", 0) < 1:
         result.error("count", "model must have ≥1 entity node")
     if len(instances) < 1:
-        result.error("count", "model must have ≥1 force_instance")
+        # A source can legitimately have no causal layer YET — a FOUNDATION pass wants a
+        # series long enough to argue over, and authoring forces against eleven dates would
+        # be inventing causality to satisfy a check. But "not yet" must be DECLARED, because
+        # a deferral and a forgotten layer look identical from here.
+        reason = meta.get("behavioral_deferred_reason")
+        if meta.get("behavioral_status") == "deferred" and reason:
+            result.note("count", f"no force_instances — behavioral layer deferred: {reason}")
+        else:
+            result.error("count", "model must have ≥1 force_instance, or declare "
+                                  "_meta.behavioral_status='deferred' with a reason")
 
     # edges
     n_behav = 0
@@ -429,10 +439,10 @@ def check_composition(model, profile, pipeline, result):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("model_path", nargs="?", default=None)
-    ap.add_argument("--pipeline", required=True, choices=list(gs.PIPELINES))
+    ap.add_argument("--pipeline", required=True, choices=manifest.PIPELINE_IDS)
     args = ap.parse_args()
 
-    cfg = gs.PIPELINES[args.pipeline]
+    cfg = gs.pipeline_cfg(args.pipeline)
     model_path = Path(args.model_path) if args.model_path else cfg["model"]
     if not model_path.exists():
         print(f"✗ model not found: {model_path}")

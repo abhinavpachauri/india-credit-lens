@@ -98,6 +98,28 @@
    },
    {
     "dimension": "industryByType",
+    "cut": "chemicals-sub",
+    "stem": "sibc-chemicals-sub",
+    "subject": "Chemicals and Chemical Products credit",
+    "speed": "Chemicals and Chemical Products credit growing 24.0% YoY, accelerating.",
+    "speed_short": "24.0% YoY · accelerating",
+    "speed_dir": "up",
+    "mix": "Drifting toward Fertiliser — it took 13.8% of the growth while holding 11.0% of the total a year ago. Away from Others.",
+    "no_speed_note": null,
+    "no_mix_note": null,
+    "mix_state": "drifting",
+    "toward": "Fertiliser",
+    "toward_entity": "Fertiliser",
+    "source_signals": [
+     "sibc-chemicals-sub-allocation",
+     "sibc-chemicals-sub-momentum",
+     "sibc-industry-type-yoy-scan"
+    ],
+    "parent_entity": "Chemicals and Chemical Products",
+    "anchor": false
+   },
+   {
+    "dimension": "industryByType",
     "cut": "engineering-sub",
     "stem": "sibc-engineering-sub",
     "subject": "All Engineering credit",
@@ -161,28 +183,6 @@
     ],
     "parent_entity": "Textiles",
     "anchor": false
-   },
-   {
-    "dimension": "industryByType",
-    "cut": "chemicals-sub",
-    "stem": "sibc-chemicals-sub",
-    "subject": "Chemicals and Chemical Products credit",
-    "speed": "Chemicals and Chemical Products credit growing 24.0% YoY, accelerating.",
-    "speed_short": "24.0% YoY · accelerating",
-    "speed_dir": "up",
-    "mix": "Drifting toward Fertiliser — it took 13.8% of the growth while holding 11.0% of the total a year ago. Away from Others.",
-    "no_speed_note": null,
-    "no_mix_note": null,
-    "mix_state": "drifting",
-    "toward": "Fertiliser",
-    "toward_entity": "Fertiliser",
-    "source_signals": [
-     "sibc-chemicals-sub-allocation",
-     "sibc-chemicals-sub-momentum",
-     "sibc-industry-type-yoy-scan"
-    ],
-    "parent_entity": "Chemicals and Chemical Products",
-    "anchor": false
    }
   ],
   "industryBySize": [
@@ -234,28 +234,6 @@
    },
    {
     "dimension": "services",
-    "cut": "trade-sub",
-    "stem": "sibc-trade-sub",
-    "subject": "Trade credit",
-    "speed": "Trade credit growing 19.8% YoY, accelerating.",
-    "speed_short": "19.8% YoY · accelerating",
-    "speed_dir": "up",
-    "mix": "Steered toward Wholesale Trade — it took 69.8% of the growth while holding 53.9% of the total a year ago. Away from Retail Trade.",
-    "no_speed_note": null,
-    "no_mix_note": null,
-    "mix_state": "steered",
-    "toward": "Wholesale Trade",
-    "toward_entity": "Wholesale Trade",
-    "source_signals": [
-     "sibc-services-yoy-scan",
-     "sibc-trade-sub-allocation",
-     "sibc-trade-sub-momentum"
-    ],
-    "parent_entity": "Trade",
-    "anchor": false
-   },
-   {
-    "dimension": "services",
     "cut": "nbfc-sub",
     "stem": "sibc-nbfc-sub",
     "subject": "Non-Banking Financial Companies credit",
@@ -274,6 +252,28 @@
      "sibc-services-yoy-scan"
     ],
     "parent_entity": "Non-Banking Financial Companies (NBFCs)",
+    "anchor": false
+   },
+   {
+    "dimension": "services",
+    "cut": "trade-sub",
+    "stem": "sibc-trade-sub",
+    "subject": "Trade credit",
+    "speed": "Trade credit growing 19.8% YoY, accelerating.",
+    "speed_short": "19.8% YoY · accelerating",
+    "speed_dir": "up",
+    "mix": "Steered toward Wholesale Trade — it took 69.8% of the growth while holding 53.9% of the total a year ago. Away from Retail Trade.",
+    "no_speed_note": null,
+    "no_mix_note": null,
+    "mix_state": "steered",
+    "toward": "Wholesale Trade",
+    "toward_entity": "Wholesale Trade",
+    "source_signals": [
+     "sibc-services-yoy-scan",
+     "sibc-trade-sub-allocation",
+     "sibc-trade-sub-momentum"
+    ],
+    "parent_entity": "Trade",
     "anchor": false
    }
   ],

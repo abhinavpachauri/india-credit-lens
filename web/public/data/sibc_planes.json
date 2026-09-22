@@ -95,8 +95,8 @@
    "direction": "up"
   },
   "sibc-main-yoy-scan": {
-   "plane": "subject",
-   "news_score": null,
+   "plane": "composition",
+   "news_score": 0.0,
    "subject": null
   },
   "sibc-personal-loans-share": {
@@ -137,8 +137,8 @@
    "superseded_by_band": true
   },
   "sibc-ind-size-yoy-scan": {
-   "plane": "subject",
-   "news_score": null,
+   "plane": "composition",
+   "news_score": 1.0,
    "subject": null
   },
   "sibc-large-corporate-share": {
@@ -215,8 +215,8 @@
    "subject": null
   },
   "sibc-services-yoy-scan": {
-   "plane": "subject",
-   "news_score": null,
+   "plane": "composition",
+   "news_score": 1.0,
    "subject": null
   },
   "sibc-trade-sub-share-scan": {
@@ -347,8 +347,8 @@
    "direction": "up"
   },
   "sibc-pl-yoy-scan": {
-   "plane": "subject",
-   "news_score": null,
+   "plane": "composition",
+   "news_score": 1.0,
    "subject": null
   },
   "sibc-pl-allocation": {
@@ -511,8 +511,8 @@
    "subject": null
   },
   "sibc-industry-type-yoy-scan": {
-   "plane": "subject",
-   "news_score": null,
+   "plane": "composition",
+   "news_score": 1.0,
    "subject": null
   },
   "sibc-infra-sub-share-scan": {
@@ -521,9 +521,11 @@
    "subject": "Infrastructure"
   },
   "sibc-infra-sub-yoy-scan": {
-   "plane": "subject",
-   "news_score": null,
-   "subject": "Infrastructure"
+   "plane": "read",
+   "news_score": 2.0,
+   "subject": "Infrastructure",
+   "reason": "record",
+   "direction": "down"
   },
   "sibc-textiles-sub-share-scan": {
    "plane": "subject",

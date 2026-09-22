@@ -44,27 +44,58 @@ from pathlib import Path
 import sys
 sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
 from core.paths import ROOT
+from collections.abc import Mapping
+from core import manifest
 ANALYSIS = ROOT / "analysis"
 
-PIPELINES = {
-    "sibc": {
-        "profile": ANALYSIS / "rbi_sibc" / "skeleton_profile.json",
-        "model": ANALYSIS / "rbi_sibc" / "merged" / "system_model.json",
-        "report_id": "rbi_sibc",
-        "report_name": "RBI Sector/Industry-wise Bank Credit — System Model",
-    },
-    "atm_pos": {
-        "profile": ANALYSIS / "rbi_atm_pos" / "skeleton_profile.json",
-        "model": ANALYSIS / "rbi_atm_pos" / "merged" / "system_model.json",
-        "report_id": "rbi_atm_pos",
-        "report_name": "RBI ATM/POS & Card Statistics — System Model",
-    },
-}
+class _PipelineConfigs(Mapping):
+    """`PIPELINES` — the same mapping interface, derived instead of listed.
+
+    Nine call sites iterate this (`for pipe, cfg in PIPELINES.items()`), so keeping the NAME
+    and the Mapping protocol is what lets the hardcoding go without rewriting them. The
+    entries are resolved lazily from each manifest, so a pipeline appears here the moment it
+    declares itself — which is the whole point of the manifest being the source of truth.
+    """
+
+    def __iter__(self):
+        return iter(manifest.PIPELINE_IDS)
+
+    def __len__(self):
+        return len(manifest.PIPELINE_IDS)
+
+    def __getitem__(self, pipeline):
+        if pipeline not in manifest.PIPELINE_IDS:
+            raise KeyError(pipeline)
+        return pipeline_cfg(pipeline)
+
+
+def pipeline_cfg(pipeline: str) -> dict:
+    """Where this pipeline's profile and model live — read from its manifest.
+
+    This was a hardcoded table of two, which made it the FIFTH thing a third pipeline had to
+    edit (ARCHITECTURE.md counted four). Everything in it was already declared elsewhere: the
+    manifest names the model path and the data dir, and the profile sits beside the data by
+    convention. So the table was a third description of facts that already had two.
+    """
+    from core import manifest as _m
+    man = _m.load(pipeline)
+    model = ROOT / man["paths"]["system_model"]
+    data_dir = ROOT / man["paths"]["data_dir"]
+    return {
+        "profile": data_dir / "skeleton_profile.json",
+        "model": model,
+        "report_id": data_dir.name,
+        "report_name": f"{man['name']} — System Model",
+    }
+
 
 STRUCTURAL_EDGE_TYPES = {"composes_into", "reclassifies"}
 
 
 # ───────────────────────── helpers ─────────────────────────
+
+PIPELINES = _PipelineConfigs()
+
 
 def load_json(path):
     with open(path) as f:
@@ -121,20 +152,30 @@ def derive_registry_domain(domains):
 
 def resolve_signal_keys(pipeline, compute):
     """Map a single signal's compute spec to a list of entity identity keys.
-    SIBC keys are (statement, code); ATM/POS keys are ('metric', metric)."""
+
+    Keyed on the SHAPE the pipeline declares, not on its id: a sector-hierarchy source keys
+    on (partition, code), a payments-shaped one on ('metric', metric). This was
+    `if pipeline == "atm_pos"`, which silently made every future source SIBC-shaped — right
+    for NBFC by luck, wrong for the next payments-like one.
+
+    The partition defaults to "" rather than None, matching `_partition`: a source that
+    publishes one statement has one partition, and the two halves must agree on how they
+    spell it or nothing attaches. NBFC attached 0 of 43 signals until they did.
+    """
     keys = []
-    if pipeline == "atm_pos":
+    from core import manifest as _m
+    if _m.load(pipeline).get("compute_module") == "atm_pos":
         m = compute.get("metric")
         if m:
             keys.append(("metric", m))
         return keys
 
-    # SIBC variants
-    stmt = compute.get("statement")
+    # sector-hierarchy variants
+    stmt = compute.get("statement") or ""
     if "code" in compute:                      # direct (yoy/share/abs/fy/streak)
         keys.append((stmt, compute["code"]))
     if "parent_code" in compute:               # scan -> attach to the family parent
-        keys.append((compute.get("statement"), compute["parent_code"]))
+        keys.append((stmt, compute["parent_code"]))
     for k in ("code_a", "code_b"):             # spread
         if k in compute:
             keys.append((stmt, compute[k]))
@@ -147,6 +188,29 @@ def resolve_signal_keys(pipeline, compute):
 
 
 # ──────────────────── skeleton emission: CSV hierarchy (SIBC) ────────────────────
+
+def _is_reclass(row: dict, cols: dict, vocab: set) -> bool:
+    """Whether this row belongs to a reclassification lens — False when the source has none.
+
+    SIBC's priority-sector block re-slices credit already counted in the primary tree. A
+    source that publishes no such lens declares no `reclass_flag`, and every row is simply
+    part of the one tree.
+    """
+    col = cols.get("reclass_flag")
+    return truthy(row[col], vocab) if col else False
+
+
+def _partition(row: dict, cols: dict) -> str:
+    """The partition a row lives in, or "" for a source that publishes only one statement.
+
+    SIBC needs this because the same code means different things in Statement 1 and 2 — 2.3
+    is "Large" in one and "Beverage and Tobacco" in the other. A source with a single
+    statement has no such ambiguity and declares no `partition` column; treating that as ""
+    keeps one key shape for both rather than branching on the pipeline.
+    """
+    col = cols.get("partition")
+    return row[col] if col else ""
+
 
 def latest_rows_csv(profile):
     cols = profile["columns"]
@@ -172,7 +236,7 @@ def emit_skeleton_csv(profile, signal_index, domain_index):
     # index raw rows by (partition, code)
     raw = {}
     for r in rows:
-        key = (r[cols["partition"]], r[cols["code"]])
+        key = (_partition(r, cols), r[cols["code"]])
         raw[key] = r
 
     # apply authored parent overrides (e.g. SIBC II,III -> I)
@@ -188,7 +252,8 @@ def emit_skeleton_csv(profile, signal_index, domain_index):
         pc = r.get(cols["parent_code"], "").strip()
         if not pc:
             return None, None
-        pp = r.get(cols["parent_partition"], "").strip() or r[cols["partition"]]
+        pp = (r.get(cols.get("parent_partition", ""), "") or "").strip() \
+            or _partition(r, cols)
         return (pp, pc), None
 
     reclass_map = profile.get("reclass_target_map", {}).get("entries", {})
@@ -199,7 +264,7 @@ def emit_skeleton_csv(profile, signal_index, domain_index):
     children = defaultdict(list)   # parent_key -> [child_key]
     reclass_keys = []
     for key, r in raw.items():
-        if truthy(r[cols["reclass_flag"]], vocab):
+        if _is_reclass(r, cols, vocab):
             reclass_keys.append(key)
             continue
         pkey, _ = parent_of(key)
@@ -215,7 +280,7 @@ def emit_skeleton_csv(profile, signal_index, domain_index):
     for key in sorted(raw, key=lambda k: (k[0], _level(raw[k], cols), _codesort(k[1]))):
         partition, code = key
         r = raw[key]
-        if truthy(r[cols["reclass_flag"]], vocab):
+        if _is_reclass(r, cols, vocab):
             continue  # reclass handled below
         pkey, ov_decomp = parent_of(key)
         kids = children.get(key, [])
@@ -275,7 +340,7 @@ def emit_skeleton_csv(profile, signal_index, domain_index):
     # its Agriculture is the same rupees as the main cut's Agriculture. Its own `psl_lens`
     # decomposition keeps it out of the primary roll-up, which never sums alternates anyway.
     if psl_lens_ids:
-        lens_partition = raw[reclass_keys[0]][cols["partition"]] if reclass_keys else "Statement 1"
+        lens_partition = _partition(raw[reclass_keys[0]], cols) if reclass_keys else "Statement 1"
         lens_id = entity_id(lens_partition, "PSL")
         nodes.append(_entity_node(
             eid=lens_id, label="Priority Sector Lending (memo)", code="PSL",
@@ -506,7 +571,10 @@ def merge_model(pipeline, cfg, profile, nodes, edges, new_entities):
     meta.update({
         "report_id": cfg["report_id"],
         "report_name": cfg["report_name"],
-        "schema_version": meta.get("schema_version", "3.0"),   # preserve 4.0 once migrated
+        # A model born today is born at the CURRENT schema. "3.0" was the default when 4.0
+        # was still being migrated to; leaving it meant every new pipeline arrived stale and
+        # failed its own validator on the first run.
+        "schema_version": meta.get("schema_version", "4.0"),
         "spec_ref": "analysis/SYSTEM_MODEL_SPEC.md",
         "skeleton_node_count": len(nodes),
         "skeleton_generated_by": "analysis/generate_skeleton.py",
@@ -524,7 +592,7 @@ def merge_model(pipeline, cfg, profile, nodes, edges, new_entities):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--pipeline", required=True, choices=list(PIPELINES))
+    ap.add_argument("--pipeline", required=True, choices=manifest.PIPELINE_IDS)
     ap.add_argument("--check", action="store_true",
                     help="Do not write; exit 1 if the on-disk skeleton differs from a fresh emit.")
     ap.add_argument("--skeleton-only", action="store_true",
@@ -532,7 +600,7 @@ def main():
     ap.add_argument("--out", default=None)
     args = ap.parse_args()
 
-    cfg = PIPELINES[args.pipeline]
+    cfg = pipeline_cfg(args.pipeline)
     profile = load_json(cfg["profile"])
     signal_index, domain_index = build_signal_index(
         args.pipeline, profile["signal_attach"]["registry"])

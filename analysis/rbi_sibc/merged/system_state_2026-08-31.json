@@ -857,86 +857,6 @@
     "authored_vs_observed_mismatches": []
   },
   "mix_states": {
-    "sibc-main-momentum": {
-      "entity_urn": "icl:sibc/Statement1/III",
-      "decomposition": "Statement 1",
-      "mix_state": "steered",
-      "coherence": 1.0,
-      "toward": "Services",
-      "away_from": "Personal Loans",
-      "toward_tilt_pp": 5.57,
-      "children": 4
-    },
-    "sibc-industry-type-momentum": {
-      "entity_urn": "icl:sibc/Statement1/2",
-      "decomposition": "Statement 2",
-      "mix_state": "drifting",
-      "coherence": 1.0,
-      "toward": "All Engineering",
-      "away_from": "Infrastructure",
-      "toward_tilt_pp": 5.12,
-      "children": 19
-    },
-    "sibc-ind-size-momentum": {
-      "entity_urn": "icl:sibc/Statement1/2",
-      "decomposition": "Statement 1",
-      "mix_state": "drifting",
-      "coherence": 1.0,
-      "toward": "Medium",
-      "away_from": "Large",
-      "toward_tilt_pp": 4.85,
-      "children": 3
-    },
-    "sibc-services-momentum": {
-      "entity_urn": "icl:sibc/Statement1/3",
-      "decomposition": "Statement 1",
-      "mix_state": "steered",
-      "coherence": 1.0,
-      "toward": "Non-Banking Financial Companies (NBFCs)",
-      "away_from": "Other Services",
-      "toward_tilt_pp": 17.23,
-      "children": 10
-    },
-    "sibc-pl-momentum": {
-      "entity_urn": "icl:sibc/Statement1/4",
-      "decomposition": "Statement 1",
-      "mix_state": "drifting",
-      "coherence": 1.0,
-      "toward": "Loans against gold jewellery",
-      "away_from": "Housing (Including Priority Sector Housing)",
-      "toward_tilt_pp": 21.03,
-      "children": 9
-    },
-    "sibc-infra-sub-momentum": {
-      "entity_urn": "icl:sibc/Statement2/2.18",
-      "decomposition": "Statement 2",
-      "mix_state": "contested",
-      "coherence": 0.7692,
-      "toward": null,
-      "away_from": null,
-      "toward_tilt_pp": null,
-      "children": 0
-    },
-    "sibc-trade-sub-momentum": {
-      "entity_urn": "icl:sibc/Statement1/3.7",
-      "decomposition": "Statement 1",
-      "mix_state": "steered",
-      "coherence": 1.0,
-      "toward": "Wholesale Trade",
-      "away_from": "Retail Trade",
-      "toward_tilt_pp": 15.89,
-      "children": 2
-    },
-    "sibc-nbfc-sub-momentum": {
-      "entity_urn": "icl:sibc/Statement1/3.9",
-      "decomposition": "Statement 1",
-      "mix_state": "steered",
-      "coherence": 1.0,
-      "toward": "Public Financial Institutions (PFIs)",
-      "away_from": "Housing Finance Companies (HFCs)",
-      "toward_tilt_pp": 15.54,
-      "children": 2
-    },
     "sibc-basic-metal-sub-momentum": {
       "entity_urn": "icl:sibc/Statement2/2.13",
       "decomposition": "Statement 2",
@@ -946,6 +866,16 @@
       "away_from": "Other Metal and Metal Product",
       "toward_tilt_pp": 7.83,
       "children": 2
+    },
+    "sibc-chemicals-sub-momentum": {
+      "entity_urn": "icl:sibc/Statement2/2.9",
+      "decomposition": "Statement 2",
+      "mix_state": "drifting",
+      "coherence": 1.0,
+      "toward": "Fertiliser",
+      "away_from": "Others",
+      "toward_tilt_pp": 2.78,
+      "children": 4
     },
     "sibc-engineering-sub-momentum": {
       "entity_urn": "icl:sibc/Statement2/2.14",
@@ -967,6 +897,76 @@
       "toward_tilt_pp": 13.66,
       "children": 4
     },
+    "sibc-ind-size-momentum": {
+      "entity_urn": "icl:sibc/Statement1/2",
+      "decomposition": "Statement 1",
+      "mix_state": "drifting",
+      "coherence": 1.0,
+      "toward": "Medium",
+      "away_from": "Large",
+      "toward_tilt_pp": 4.85,
+      "children": 3
+    },
+    "sibc-industry-type-momentum": {
+      "entity_urn": "icl:sibc/Statement1/2",
+      "decomposition": "Statement 2",
+      "mix_state": "drifting",
+      "coherence": 1.0,
+      "toward": "All Engineering",
+      "away_from": "Infrastructure",
+      "toward_tilt_pp": 5.12,
+      "children": 19
+    },
+    "sibc-infra-sub-momentum": {
+      "entity_urn": "icl:sibc/Statement2/2.18",
+      "decomposition": "Statement 2",
+      "mix_state": "contested",
+      "coherence": 0.7692,
+      "toward": null,
+      "away_from": null,
+      "toward_tilt_pp": null,
+      "children": 0
+    },
+    "sibc-main-momentum": {
+      "entity_urn": "icl:sibc/Statement1/III",
+      "decomposition": "Statement 1",
+      "mix_state": "steered",
+      "coherence": 1.0,
+      "toward": "Services",
+      "away_from": "Personal Loans",
+      "toward_tilt_pp": 5.57,
+      "children": 4
+    },
+    "sibc-nbfc-sub-momentum": {
+      "entity_urn": "icl:sibc/Statement1/3.9",
+      "decomposition": "Statement 1",
+      "mix_state": "steered",
+      "coherence": 1.0,
+      "toward": "Public Financial Institutions (PFIs)",
+      "away_from": "Housing Finance Companies (HFCs)",
+      "toward_tilt_pp": 15.54,
+      "children": 2
+    },
+    "sibc-pl-momentum": {
+      "entity_urn": "icl:sibc/Statement1/4",
+      "decomposition": "Statement 1",
+      "mix_state": "drifting",
+      "coherence": 1.0,
+      "toward": "Loans against gold jewellery",
+      "away_from": "Housing (Including Priority Sector Housing)",
+      "toward_tilt_pp": 21.03,
+      "children": 9
+    },
+    "sibc-services-momentum": {
+      "entity_urn": "icl:sibc/Statement1/3",
+      "decomposition": "Statement 1",
+      "mix_state": "steered",
+      "coherence": 1.0,
+      "toward": "Non-Banking Financial Companies (NBFCs)",
+      "away_from": "Other Services",
+      "toward_tilt_pp": 17.23,
+      "children": 10
+    },
     "sibc-textiles-sub-momentum": {
       "entity_urn": "icl:sibc/Statement2/2.4",
       "decomposition": "Statement 2",
@@ -977,15 +977,15 @@
       "toward_tilt_pp": 14.61,
       "children": 4
     },
-    "sibc-chemicals-sub-momentum": {
-      "entity_urn": "icl:sibc/Statement2/2.9",
-      "decomposition": "Statement 2",
-      "mix_state": "drifting",
+    "sibc-trade-sub-momentum": {
+      "entity_urn": "icl:sibc/Statement1/3.7",
+      "decomposition": "Statement 1",
+      "mix_state": "steered",
       "coherence": 1.0,
-      "toward": "Fertiliser",
-      "away_from": "Others",
-      "toward_tilt_pp": 2.78,
-      "children": 4
+      "toward": "Wholesale Trade",
+      "away_from": "Retail Trade",
+      "toward_tilt_pp": 15.89,
+      "children": 2
     }
   },
   "narrative": null

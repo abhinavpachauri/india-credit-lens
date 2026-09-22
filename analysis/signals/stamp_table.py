@@ -45,12 +45,14 @@ TOTAL_YOY = {"credit_cards": "cc-outstanding-yoy", "debit_cards": "dc-outstandin
 def parent_rates(pipeline: str) -> dict[str, str]:
     """{stem: the signal holding the PARENT's own growth} — read from the generator's own cut
     table, the single place that declares it (§16 uses the same field)."""
-    if pipeline == "sibc":
-        from pipelines.sibc.generate_analysis_report import MOVEMENT_CUTS
-        prefix = "sibc-"
-    else:
-        from pipelines.atm_pos.generate_atm_pos_insights import MOVEMENT_CUTS, MOVEMENT_PREFIX
-        prefix = None
+    import importlib
+    mod = importlib.import_module(manifest.load(pipeline)["cuts_module"])
+    MOVEMENT_CUTS = mod.MOVEMENT_CUTS
+    raw_prefix = getattr(mod, "MOVEMENT_PREFIX", f"{pipeline}-")
+    # A section→stem MAP means each cut spells its own stem from its section; a plain string
+    # means they all share one. Declared per pipeline, resolved here once.
+    prefix = None if isinstance(raw_prefix, dict) else raw_prefix
+    MOVEMENT_PREFIX = raw_prefix if isinstance(raw_prefix, dict) else {}
     out = {}
     for c in MOVEMENT_CUTS:
         stem = f"{prefix}{c.slug}" if prefix else f"{MOVEMENT_PREFIX[c.section]}{c.slug}"

@@ -1,0 +1,127 @@
+{
+ "_meta": {
+  "pipeline": "nbfc",
+  "period": "2026-07-31",
+  "purpose": "Standing state band per dashboard dimension — Layer-1 speed + Layer-2 mix state, rendered as sentences. Join on dimension id.",
+  "spec": "analysis/DASHBOARD_SPEC.md §16",
+  "renderer": "analysis/core/state_lines.py"
+ },
+ "dimensions": {
+  "mainSectors": [
+   {
+    "dimension": "mainSectors",
+    "cut": "main",
+    "stem": "nbfc-main",
+    "subject": "NBFC credit",
+    "speed": "NBFC credit growing 14.9% YoY, accelerating.",
+    "speed_short": "14.9% YoY · accelerating",
+    "speed_dir": "up",
+    "mix": "Steered toward Retail Loans — it took 59.1% of the growth while holding 41.2% of the total a year ago. Away from Industry.",
+    "no_speed_note": null,
+    "no_mix_note": null,
+    "mix_state": "steered",
+    "toward": "Retail Loans",
+    "toward_entity": "Retail Loans",
+    "source_signals": [
+     "nbfc-credit-yoy",
+     "nbfc-main-allocation",
+     "nbfc-main-momentum"
+    ],
+    "parent_entity": null,
+    "anchor": true
+   }
+  ],
+  "industry": [
+   {
+    "dimension": "industry",
+    "cut": "industry",
+    "stem": "nbfc-industry",
+    "subject": "Industry credit",
+    "speed": "Industry credit growing 7.4% YoY, accelerating.",
+    "speed_short": "7.4% YoY · accelerating",
+    "speed_dir": "up",
+    "mix": null,
+    "no_speed_note": null,
+    "no_mix_note": "RBI names only one part of this cut, so there is no mix between parts to state — only how that one part is moving.",
+    "mix_state": null,
+    "toward": null,
+    "toward_entity": null,
+    "source_signals": [
+     "nbfc-industry-yoy"
+    ],
+    "parent_entity": null,
+    "anchor": true
+   }
+  ],
+  "infrastructure": [
+   {
+    "dimension": "infrastructure",
+    "cut": "infra",
+    "stem": "nbfc-infra",
+    "subject": "Infrastructure credit",
+    "speed": "Infrastructure credit growing 6.2% YoY, accelerating.",
+    "speed_short": "6.2% YoY · accelerating",
+    "speed_dir": "up",
+    "mix": null,
+    "no_speed_note": null,
+    "no_mix_note": "RBI names only one part of this cut, so there is no mix between parts to state — only how that one part is moving.",
+    "mix_state": null,
+    "toward": null,
+    "toward_entity": null,
+    "source_signals": [
+     "nbfc-infra-yoy"
+    ],
+    "parent_entity": null,
+    "anchor": true
+   }
+  ],
+  "services": [
+   {
+    "dimension": "services",
+    "cut": "services",
+    "stem": "nbfc-services",
+    "subject": "Services credit",
+    "speed": "Services credit growing 15.2% YoY, but slowing.",
+    "speed_short": "15.2% YoY · slowing",
+    "speed_dir": "up",
+    "mix": "Steered toward Commercial Real Estate — it took 18.6% of the growth while holding 12.7% of the total a year ago. Away from Transport Operators.",
+    "no_speed_note": null,
+    "no_mix_note": null,
+    "mix_state": "steered",
+    "toward": "Commercial Real Estate",
+    "toward_entity": "Commercial Real Estate",
+    "source_signals": [
+     "nbfc-services-allocation",
+     "nbfc-services-momentum",
+     "nbfc-services-yoy"
+    ],
+    "parent_entity": null,
+    "anchor": true
+   }
+  ],
+  "retail": [
+   {
+    "dimension": "retail",
+    "cut": "retail",
+    "stem": "nbfc-retail",
+    "subject": "Retail credit",
+    "speed": "Retail credit growing 21.4% YoY, accelerating.",
+    "speed_short": "21.4% YoY · accelerating",
+    "speed_dir": "up",
+    "mix": "Steered toward Loans against gold jewellery — it took 31.3% of the growth while holding 9.8% of the total a year ago. Away from Housing Loans.",
+    "no_speed_note": null,
+    "no_mix_note": null,
+    "mix_state": "steered",
+    "toward": "Loans against gold jewellery",
+    "toward_entity": "Loans against gold jewellery",
+    "source_signals": [
+     "nbfc-retail-allocation",
+     "nbfc-retail-momentum",
+     "nbfc-retail-yoy"
+    ],
+    "parent_entity": null,
+    "anchor": true
+   }
+  ]
+ }
+}

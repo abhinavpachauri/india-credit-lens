@@ -27,7 +27,8 @@
         }
       ],
       "imports": [
-        "core/generate_skeleton"
+        "core/generate_skeleton",
+        "core/manifest"
       ],
       "invokes": [],
       "path": "analysis/core/derive_opportunities.py",
@@ -79,21 +80,17 @@
     },
     "core/generate_skeleton": {
       "doc_claims": [],
-      "imports": [],
+      "imports": [
+        "core/manifest"
+      ],
       "invokes": [],
       "path": "analysis/core/generate_skeleton.py",
       "reads": {
         "analysis/SYSTEM_MODEL_SPEC.md": "low",
-        "analysis/rbi_atm_pos/skeleton_profile.json": "low",
-        "analysis/rbi_sibc/skeleton_profile.json": "low",
         "skeleton_profile.json": "low",
         "tmp_skeleton.json": "low"
       },
-      "writes": {
-        "analysis/rbi_atm_pos/merged/system_model.json": "low",
-        "analysis/rbi_sibc/merged/system_model.json": "low",
-        "system_model.json": "low"
-      }
+      "writes": {}
     },
     "core/generate_system_state": {
       "doc_claims": [
@@ -103,7 +100,8 @@
         }
       ],
       "imports": [
-        "core/generate_skeleton"
+        "core/generate_skeleton",
+        "core/manifest"
       ],
       "invokes": [],
       "path": "analysis/core/generate_system_state.py",
@@ -184,7 +182,8 @@
     "core/run_inference": {
       "doc_claims": [],
       "imports": [
-        "core/generate_skeleton"
+        "core/generate_skeleton",
+        "core/manifest"
       ],
       "invokes": [],
       "path": "analysis/core/run_inference.py",
@@ -244,7 +243,8 @@
     "core/validate_system_model": {
       "doc_claims": [],
       "imports": [
-        "core/generate_skeleton"
+        "core/generate_skeleton",
+        "core/manifest"
       ],
       "invokes": [],
       "path": "analysis/core/validate_system_model.py",
@@ -281,7 +281,8 @@
         }
       ],
       "imports": [
-        "core/generate_skeleton"
+        "core/generate_skeleton",
+        "core/manifest"
       ],
       "invokes": [],
       "path": "analysis/cross/compose_ecosystem.py",
@@ -301,7 +302,8 @@
         }
       ],
       "imports": [
-        "core/generate_skeleton"
+        "core/generate_skeleton",
+        "core/manifest"
       ],
       "invokes": [],
       "path": "analysis/cross/derive_cross_links.py",
@@ -316,7 +318,8 @@
     "cross/generate_opportunities_feed": {
       "doc_claims": [],
       "imports": [
-        "core/generate_skeleton"
+        "core/generate_skeleton",
+        "core/manifest"
       ],
       "invokes": [],
       "path": "analysis/cross/generate_opportunities_feed.py",
@@ -335,6 +338,7 @@
       "doc_claims": [],
       "imports": [
         "core/generate_skeleton",
+        "core/manifest",
         "core/voice",
         "signals/evaluate"
       ],
@@ -351,7 +355,8 @@
     "cross/validate_composition": {
       "doc_claims": [],
       "imports": [
-        "core/generate_skeleton"
+        "core/generate_skeleton",
+        "core/manifest"
       ],
       "invokes": [],
       "path": "analysis/cross/validate_composition.py",

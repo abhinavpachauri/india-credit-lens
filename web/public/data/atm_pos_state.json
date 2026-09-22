@@ -458,48 +458,6 @@
    },
    {
     "dimension": "infra",
-    "cut": "cc-category",
-    "stem": "cc-category",
-    "subject": "Credit cards",
-    "speed": "Credit cards growing 9.9% YoY, at a steady pace.",
-    "speed_short": "9.9% YoY",
-    "speed_dir": "up",
-    "mix": "Steered toward Small Finance Banks — it took 10.7% of the growth while holding 1.0% of the total a year ago. Away from Foreign Banks.",
-    "no_speed_note": null,
-    "no_mix_note": null,
-    "mix_state": "steered",
-    "toward": "Small Finance Banks",
-    "toward_entity": "Small Finance Banks",
-    "source_signals": [
-     "cc-category-allocation",
-     "cc-category-momentum",
-     "cc-outstanding-yoy"
-    ],
-    "parent_entity": null,
-    "anchor": false
-   },
-   {
-    "dimension": "infra",
-    "cut": "dc-category",
-    "stem": "dc-category",
-    "subject": "Debit cards",
-    "speed": "Debit cards growing 2.0% YoY, but slowing.",
-    "speed_short": "2.0% YoY · slowing",
-    "speed_dir": "up",
-    "mix": "Reallocating — gains and losses very nearly cancel.",
-    "no_speed_note": null,
-    "no_mix_note": null,
-    "mix_state": "reallocating",
-    "toward": null,
-    "toward_entity": null,
-    "source_signals": [
-     "dc-outstanding-yoy"
-    ],
-    "parent_entity": null,
-    "anchor": false
-   },
-   {
-    "dimension": "infra",
     "cut": "atm-offsite-category",
     "stem": "atm-offsite-category",
     "subject": "ATM offsite",
@@ -558,6 +516,48 @@
      "bharat-qr-category-allocation",
      "bharat-qr-category-momentum",
      "bharat-qr-yoy"
+    ],
+    "parent_entity": null,
+    "anchor": false
+   },
+   {
+    "dimension": "infra",
+    "cut": "cc-category",
+    "stem": "cc-category",
+    "subject": "Credit cards",
+    "speed": "Credit cards growing 9.9% YoY, at a steady pace.",
+    "speed_short": "9.9% YoY",
+    "speed_dir": "up",
+    "mix": "Steered toward Small Finance Banks — it took 10.7% of the growth while holding 1.0% of the total a year ago. Away from Foreign Banks.",
+    "no_speed_note": null,
+    "no_mix_note": null,
+    "mix_state": "steered",
+    "toward": "Small Finance Banks",
+    "toward_entity": "Small Finance Banks",
+    "source_signals": [
+     "cc-category-allocation",
+     "cc-category-momentum",
+     "cc-outstanding-yoy"
+    ],
+    "parent_entity": null,
+    "anchor": false
+   },
+   {
+    "dimension": "infra",
+    "cut": "dc-category",
+    "stem": "dc-category",
+    "subject": "Debit cards",
+    "speed": "Debit cards growing 2.0% YoY, but slowing.",
+    "speed_short": "2.0% YoY · slowing",
+    "speed_dir": "up",
+    "mix": "Reallocating — gains and losses very nearly cancel.",
+    "no_speed_note": null,
+    "no_mix_note": null,
+    "mix_state": "reallocating",
+    "toward": null,
+    "toward_entity": null,
+    "source_signals": [
+     "dc-outstanding-yoy"
     ],
     "parent_entity": null,
     "anchor": false

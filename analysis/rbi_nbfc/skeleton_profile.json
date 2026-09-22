@@ -1,0 +1,144 @@
+{
+  "_meta": {
+    "pipeline": "nbfc",
+    "description": "Structural profile for RBI's Sectoral Deployment of Outstanding Credit by NBFCs (incl. HFCs), consumed by analysis/core/generate_skeleton.py. The simplest profile in the project: one statement, no reclassification lens, fifteen nodes, hierarchy entirely in the CSV's own parent_code column. The only authored input is the concept tag block.",
+    "spec_ref": "analysis/SYSTEM_MODEL_SPEC.md",
+    "expected_node_count": 15
+  },
+  "source_csv": "web/public/data/rbi_nbfc_consolidated.csv",
+  "hierarchy_source": "csv",
+  "columns": {
+    "code": "code",
+    "level": "level",
+    "parent_code": "parent_code",
+    "label": "sector",
+    "value": "outstanding_cr",
+    "note_why": "No `partition` and no `reclass_flag`. RBI publishes this as ONE statement, so a code alone identifies a row — unlike SIBC, where 2.3 is 'Large' in Statement 1 and 'Beverage and Tobacco' in Statement 2. And there is no memo lens re-slicing credit already counted, so every row belongs to the one tree."
+  },
+  "period_selection": {
+    "comment": "Structure is taken from the latest DATA date. `release_date` is provenance, not structure — a later release can carry an older date's values without changing the shape.",
+    "order_by": [
+      "date"
+    ]
+  },
+  "truthy": [
+    "True",
+    "true",
+    "1",
+    "yes"
+  ],
+  "exhaustive_decompositions": {
+    "comment": "The four 'of which' cuts, declared so the structural additivity check reports an EXPECTED residual instead of four permanent warnings — warnings nobody can act on are how a gate becomes noise. This is a second description of a fact the denominator rule measures every period, so it is GUARDED: test_nbfc_ingestion asserts the declaration matches what the compute finds.",
+    "non_exhaustive": [
+      {
+        "partition": "",
+        "code": "2",
+        "expected_residual_pct": 8.9
+      },
+      {
+        "partition": "",
+        "code": "2.1",
+        "expected_residual_pct": 28.8
+      },
+      {
+        "partition": "",
+        "code": "3",
+        "expected_residual_pct": 48.3
+      },
+      {
+        "partition": "",
+        "code": "4",
+        "expected_residual_pct": 26.6
+      }
+    ]
+  },
+  "signal_attach": {
+    "comment": "L1 signals carry compute.code as the entity identity key; this source has no partition to match on, so code alone resolves. Scan signals attach to the parent entity named by compute.parent_code.",
+    "registry": "analysis/signals/registry.json",
+    "match_on": {
+      "code": "compute.code"
+    }
+  },
+  "concept": {
+    "comment": "COMPOSITION_SPEC.md §4 concept_tags. Tags MIRROR SIBC's on every overlapping entity — gold_loan is gold_loan in both books — because that shared vocabulary is what lets derive_cross_links propose the bank-vs-NBFC pairs later without a bespoke mapping table. The one tag that must NOT match is `lender`: SIBC is 'all' (the banking system), this is 'nbfc'. Without that distinction a cross-link would read bank housing credit and NBFC housing credit as the same rupees.",
+    "defaults": {
+      "measure": "stock.balance",
+      "lender": "nbfc",
+      "geography": "national",
+      "segment": "mixed"
+    },
+    "inherit_from_ancestor": [
+      "product",
+      "segment",
+      "economic_role"
+    ],
+    "tags": {
+      "::T": {
+        "product": "nbfc_credit",
+        "segment": "mixed"
+      },
+      "::1": {
+        "product": "agriculture",
+        "segment": "agri",
+        "economic_role": "agri_inputs"
+      },
+      "::2": {
+        "product": "industry",
+        "segment": "corporate"
+      },
+      "::2.1": {
+        "product": "infrastructure_credit",
+        "segment": "corporate",
+        "economic_role": "energy_logistics_capex"
+      },
+      "::2.1.1": {
+        "product": "infrastructure_credit",
+        "segment": "corporate",
+        "economic_role": "energy_logistics_capex"
+      },
+      "::3": {
+        "product": "services",
+        "segment": "mixed"
+      },
+      "::3.1": {
+        "economic_role": "trade_channel"
+      },
+      "::3.2": {
+        "product": "trade_credit",
+        "segment": "corporate",
+        "economic_role": "trade_channel"
+      },
+      "::3.3": {
+        "economic_role": "construction_real_estate"
+      },
+      "::4": {
+        "product": "personal_loan",
+        "segment": "retail"
+      },
+      "::4.1": {
+        "product": "housing",
+        "segment": "retail",
+        "economic_role": "construction_real_estate"
+      },
+      "::4.2": {
+        "product": "vehicle_loan",
+        "segment": "retail",
+        "economic_role": "consumer_mobility"
+      },
+      "::4.3": {
+        "product": "gold_loan",
+        "segment": "retail",
+        "economic_role": "consumer_finance"
+      },
+      "::4.4": {
+        "product": "consumer_durable",
+        "segment": "retail",
+        "economic_role": "consumer_durables"
+      },
+      "::5": {
+        "product": "nbfc_credit",
+        "segment": "mixed"
+      }
+    }
+  }
+}

@@ -170,3 +170,53 @@ def test_the_published_yoy_check_actually_covers_the_store():
     out = buf.getvalue()
     n = int(out.split("all ")[1].split(" values")[0])
     assert n >= 80, f"only {n} YoY values checked against RBI's own figure"
+
+
+# ── the declared "of which" cuts must match what the arithmetic finds ─────────
+
+def test_the_profiles_non_exhaustive_declaration_matches_what_the_compute_measures():
+    """The skeleton profile DECLARES which cuts are 'of which' so the structural additivity
+    check reports an expected residual instead of four permanent warnings. That is a second
+    description of a fact the denominator rule measures every period — so it is guarded here
+    rather than left free to drift, which is the same 'declared == computed' shape the
+    card-cut contract uses."""
+    profile = json.loads((DATA / "skeleton_profile.json").read_text())
+    declared = {e["code"] for e in profile["exhaustive_decompositions"]["non_exhaustive"]}
+
+    df = csv_sector._load_df("nbfc")
+    period = max(df["date"].astype(str))
+    measured = set()
+    for parent, level in (("T", 1), ("2", 2), ("2.1", 3), ("3", 2), ("4", 2)):
+        c = {"parent_code": parent, "child_level": level, "entity_type": "sector", "window": 12}
+        rows = csv_sector.csv_sector_allocation(c, period, df)
+        if any(r["entity_type"] == "coverage" for r in rows):
+            measured.add(parent)
+    assert declared == measured, (
+        f"profile declares {sorted(declared)} non-exhaustive, the arithmetic finds "
+        f"{sorted(measured)} — the declaration has drifted from the data")
+
+
+def test_the_model_declares_why_it_has_no_behavioral_layer():
+    """A source can legitimately have no causal layer yet. But a deferral and a forgotten
+    layer look identical from the validator, so the reason is declared and the validator
+    accepts only a declared one."""
+    model = json.loads((DATA / "merged" / "system_model.json").read_text())
+    meta = model["_meta"]
+    assert not model.get("force_instances"), "if forces now exist, drop the deferral"
+    assert meta.get("behavioral_status") == "deferred"
+    assert len(meta.get("behavioral_deferred_reason", "")) > 60, "a reason, not a shrug"
+
+
+def test_every_nbfc_dimension_shows_a_band_and_the_one_part_cuts_say_why():
+    """Five dimensions, five blocks, every one speaking. The two cuts RBI gives a single
+    child cannot have a mix — a mix needs something to be a mix BETWEEN — and a row that
+    simply vanished would read as broken (DASHBOARD_SPEC §16)."""
+    band = json.loads((ROOT / "web/public/data/nbfc_state.json").read_text())["dimensions"]
+    assert set(band) == {"mainSectors", "industry", "infrastructure", "services", "retail"}
+    for dim, blocks in band.items():
+        for b in blocks:
+            assert b["speed"], f"{dim} has no speed line"
+            assert b["mix"] or b["no_mix_note"], f"{dim} is silent about its mix"
+    for dim in ("industry", "infrastructure"):
+        b = band[dim][0]
+        assert b["mix"] is None and "only one part" in b["no_mix_note"]

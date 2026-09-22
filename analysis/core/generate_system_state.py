@@ -30,7 +30,8 @@ from pathlib import Path
 # Bootstrap: put <repo>/analysis on sys.path so `from core import …` resolves from any
 # cwd now that this script lives under core/. Move-safe via .git walk (see core/paths.py).
 sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
-from core import generate_skeleton as gs  # noqa: E402
+from core import generate_skeleton as gs
+from core import manifest  # noqa: E402
 
 DB = gs.ANALYSIS / "signals" / "signals.db"
 # Direction map covering every status the L1 compute layer can emit: registry status_rules
@@ -73,7 +74,7 @@ def load_entity_weights(cfg):
             code = r[cols["code"]].strip()
             if code:
                 try:
-                    vals[(r[cols["partition"]], code)] = abs(float(r[cols["value"]] or 0))
+                    vals[(gs._partition(r, cols), code)] = abs(float(r[cols["value"]] or 0))
                 except ValueError:
                     pass
         for n in model["nodes"]:
@@ -153,6 +154,21 @@ def mix_states(pipeline: str, period: str, model: dict) -> dict:
             if coh is None or not weight:
                 continue
             tilt = {k: alloc[k] - weight[k] for k in alloc if k in weight}
+            # A MIX NEEDS SOMETHING TO BE A MIX BETWEEN. With one named part the tilt is
+            # trivially that part, and `toward` and `away_from` resolve to the SAME entity —
+            # "steered toward Infrastructure, away from Infrastructure". Neither pipeline had
+            # such a cut until NBFC, where RBI names exactly one child of Industry and one of
+            # Infrastructure, so the branch had never once rendered.
+            #
+            # Skipped rather than emitted-with-nulls: the state band reads the absence of a
+            # mix state and says why (DASHBOARD_SPEC §16), which is a truer sentence than any
+            # this could produce.
+            # EXACTLY one, not "fewer than two". An EMPTY tilt means `alloc` was withheld
+            # because the cut is contested or reallocating — which IS a mix state, and the
+            # most interesting one. Guarding on `< 2` dropped eleven live payments cuts on
+            # the first run; the counts caught it.
+            if len(tilt) == 1:
+                continue
 
             state, toward, toward_tilt, away = "drifting", None, None, None
             if coh < CONTESTED_MIN:
@@ -334,11 +350,11 @@ def compute(model, sig_dir, weights=None):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--pipeline", required=True, choices=list(gs.PIPELINES))
+    ap.add_argument("--pipeline", required=True, choices=manifest.PIPELINE_IDS)
     ap.add_argument("--period", required=True)
     args = ap.parse_args()
 
-    cfg = gs.PIPELINES[args.pipeline]
+    cfg = gs.pipeline_cfg(args.pipeline)
     model = gs.load_json(cfg["model"])
     sig_dir, sig_status = load_signal_dirs(args.pipeline, args.period)
     if not sig_dir:

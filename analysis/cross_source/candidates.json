@@ -153,6 +153,171 @@
       "type": "co_driven",
       "priority": 3,
       "group": "R2:ch_capital_weight_unsecured",
+      "from": "icl:atm_pos/cards/credit_cards",
+      "to": "icl:nbfc//4.4",
+      "shared": {
+        "channel": "ch_capital_weight_unsecured",
+        "product_a": "credit_card",
+        "product_b": "consumer_durable"
+      },
+      "rationale": "both products are targets of channel ch_capital_weight_unsecured",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_capital_weight_unsecured",
+      "from": "icl:atm_pos/spend_value/cc_atm_withdrawal_val",
+      "to": "icl:nbfc//4.4",
+      "shared": {
+        "channel": "ch_capital_weight_unsecured",
+        "product_a": "credit_card",
+        "product_b": "consumer_durable"
+      },
+      "rationale": "both products are targets of channel ch_capital_weight_unsecured",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_capital_weight_unsecured",
+      "from": "icl:atm_pos/spend_value/cc_ecom_txn_val",
+      "to": "icl:nbfc//4.4",
+      "shared": {
+        "channel": "ch_capital_weight_unsecured",
+        "product_a": "credit_card",
+        "product_b": "consumer_durable"
+      },
+      "rationale": "both products are targets of channel ch_capital_weight_unsecured",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_capital_weight_unsecured",
+      "from": "icl:atm_pos/spend_value/cc_other_txn_val",
+      "to": "icl:nbfc//4.4",
+      "shared": {
+        "channel": "ch_capital_weight_unsecured",
+        "product_a": "credit_card",
+        "product_b": "consumer_durable"
+      },
+      "rationale": "both products are targets of channel ch_capital_weight_unsecured",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_capital_weight_unsecured",
+      "from": "icl:atm_pos/spend_value/cc_pos_txn_val",
+      "to": "icl:nbfc//4.4",
+      "shared": {
+        "channel": "ch_capital_weight_unsecured",
+        "product_a": "credit_card",
+        "product_b": "consumer_durable"
+      },
+      "rationale": "both products are targets of channel ch_capital_weight_unsecured",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_capital_weight_unsecured",
+      "from": "icl:atm_pos/spend_value/cc_spend_value",
+      "to": "icl:nbfc//4.4",
+      "shared": {
+        "channel": "ch_capital_weight_unsecured",
+        "product_a": "credit_card",
+        "product_b": "consumer_durable"
+      },
+      "rationale": "both products are targets of channel ch_capital_weight_unsecured",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_capital_weight_unsecured",
+      "from": "icl:atm_pos/spend_volume/cc_atm_withdrawal_vol",
+      "to": "icl:nbfc//4.4",
+      "shared": {
+        "channel": "ch_capital_weight_unsecured",
+        "product_a": "credit_card",
+        "product_b": "consumer_durable"
+      },
+      "rationale": "both products are targets of channel ch_capital_weight_unsecured",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_capital_weight_unsecured",
+      "from": "icl:atm_pos/spend_volume/cc_ecom_txn_vol",
+      "to": "icl:nbfc//4.4",
+      "shared": {
+        "channel": "ch_capital_weight_unsecured",
+        "product_a": "credit_card",
+        "product_b": "consumer_durable"
+      },
+      "rationale": "both products are targets of channel ch_capital_weight_unsecured",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_capital_weight_unsecured",
+      "from": "icl:atm_pos/spend_volume/cc_other_txn_vol",
+      "to": "icl:nbfc//4.4",
+      "shared": {
+        "channel": "ch_capital_weight_unsecured",
+        "product_a": "credit_card",
+        "product_b": "consumer_durable"
+      },
+      "rationale": "both products are targets of channel ch_capital_weight_unsecured",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_capital_weight_unsecured",
+      "from": "icl:atm_pos/spend_volume/cc_pos_txn_vol",
+      "to": "icl:nbfc//4.4",
+      "shared": {
+        "channel": "ch_capital_weight_unsecured",
+        "product_a": "credit_card",
+        "product_b": "consumer_durable"
+      },
+      "rationale": "both products are targets of channel ch_capital_weight_unsecured",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_capital_weight_unsecured",
+      "from": "icl:atm_pos/spend_volume/cc_spend_volume",
+      "to": "icl:nbfc//4.4",
+      "shared": {
+        "channel": "ch_capital_weight_unsecured",
+        "product_a": "credit_card",
+        "product_b": "consumer_durable"
+      },
+      "rationale": "both products are targets of channel ch_capital_weight_unsecured",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_capital_weight_unsecured",
       "from": "icl:sibc/Statement1/4.1",
       "to": "icl:atm_pos/cards/credit_cards",
       "shared": {
@@ -311,6 +476,1056 @@
         "product_b": "credit_card"
       },
       "rationale": "both products are targets of channel ch_capital_weight_unsecured",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_capital_weight_unsecured",
+      "from": "icl:sibc/Statement1/4.1",
+      "to": "icl:nbfc//4.4",
+      "shared": {
+        "channel": "ch_capital_weight_unsecured",
+        "product_a": "consumer_durable",
+        "product_b": "consumer_durable"
+      },
+      "rationale": "both products are targets of channel ch_capital_weight_unsecured",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_capital_weight_unsecured",
+      "from": "icl:sibc/Statement1/4.5",
+      "to": "icl:nbfc//4.4",
+      "shared": {
+        "channel": "ch_capital_weight_unsecured",
+        "product_a": "credit_card",
+        "product_b": "consumer_durable"
+      },
+      "rationale": "both products are targets of channel ch_capital_weight_unsecured",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_collateral_price_secured",
+      "from": "icl:sibc/Statement1/4.8",
+      "to": "icl:nbfc//4.3",
+      "shared": {
+        "channel": "ch_collateral_price_secured",
+        "product_a": "gold_loan",
+        "product_b": "gold_loan"
+      },
+      "rationale": "both products are targets of channel ch_collateral_price_secured",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:sibc/Statement1/2",
+      "to": "icl:nbfc//2",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:sibc/Statement2/2.1",
+      "to": "icl:nbfc//2",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:sibc/Statement2/2.10",
+      "to": "icl:nbfc//2",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:sibc/Statement2/2.11",
+      "to": "icl:nbfc//2",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:sibc/Statement2/2.12",
+      "to": "icl:nbfc//2",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:sibc/Statement2/2.13",
+      "to": "icl:nbfc//2",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:sibc/Statement2/2.13.1",
+      "to": "icl:nbfc//2",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:sibc/Statement2/2.13.2",
+      "to": "icl:nbfc//2",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:sibc/Statement2/2.14",
+      "to": "icl:nbfc//2",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:sibc/Statement2/2.14.1",
+      "to": "icl:nbfc//2",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:sibc/Statement2/2.14.2",
+      "to": "icl:nbfc//2",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:sibc/Statement2/2.15",
+      "to": "icl:nbfc//2",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:sibc/Statement2/2.16",
+      "to": "icl:nbfc//2",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:sibc/Statement2/2.17",
+      "to": "icl:nbfc//2",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:sibc/Statement2/2.19",
+      "to": "icl:nbfc//2",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:sibc/Statement2/2.2",
+      "to": "icl:nbfc//2",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:sibc/Statement2/2.2.1",
+      "to": "icl:nbfc//2",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:sibc/Statement2/2.2.2",
+      "to": "icl:nbfc//2",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:sibc/Statement2/2.2.3",
+      "to": "icl:nbfc//2",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:sibc/Statement2/2.2.4",
+      "to": "icl:nbfc//2",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:sibc/Statement2/2.3",
+      "to": "icl:nbfc//2",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:sibc/Statement2/2.4",
+      "to": "icl:nbfc//2",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:sibc/Statement2/2.4.1",
+      "to": "icl:nbfc//2",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:sibc/Statement2/2.4.2",
+      "to": "icl:nbfc//2",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:sibc/Statement2/2.4.3",
+      "to": "icl:nbfc//2",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:sibc/Statement2/2.4.4",
+      "to": "icl:nbfc//2",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:sibc/Statement2/2.5",
+      "to": "icl:nbfc//2",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:sibc/Statement2/2.6",
+      "to": "icl:nbfc//2",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:sibc/Statement2/2.7",
+      "to": "icl:nbfc//2",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:sibc/Statement2/2.8",
+      "to": "icl:nbfc//2",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:sibc/Statement2/2.9",
+      "to": "icl:nbfc//2",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:sibc/Statement2/2.9.1",
+      "to": "icl:nbfc//2",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:sibc/Statement2/2.9.2",
+      "to": "icl:nbfc//2",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:sibc/Statement2/2.9.3",
+      "to": "icl:nbfc//2",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:sibc/Statement2/2.9.4",
+      "to": "icl:nbfc//2",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_kcc_psl_agri_limits",
+      "from": "icl:sibc/Statement1/1",
+      "to": "icl:nbfc//1",
+      "shared": {
+        "channel": "ch_kcc_psl_agri_limits",
+        "product_a": "agriculture",
+        "product_b": "agriculture"
+      },
+      "rationale": "both products are targets of channel ch_kcc_psl_agri_limits",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_kcc_psl_agri_limits",
+      "from": "icl:sibc/Statement1/i",
+      "to": "icl:nbfc//1",
+      "shared": {
+        "channel": "ch_kcc_psl_agri_limits",
+        "product_a": "agriculture",
+        "product_b": "agriculture"
+      },
+      "rationale": "both products are targets of channel ch_kcc_psl_agri_limits",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_policy_rate_retail_pricing",
+      "from": "icl:sibc/Statement1/4",
+      "to": "icl:nbfc//4",
+      "shared": {
+        "channel": "ch_policy_rate_retail_pricing",
+        "product_a": "personal_loan",
+        "product_b": "personal_loan"
+      },
+      "rationale": "both products are targets of channel ch_policy_rate_retail_pricing",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_policy_rate_retail_pricing",
+      "from": "icl:sibc/Statement1/4.3",
+      "to": "icl:nbfc//4",
+      "shared": {
+        "channel": "ch_policy_rate_retail_pricing",
+        "product_a": "personal_loan",
+        "product_b": "personal_loan"
+      },
+      "rationale": "both products are targets of channel ch_policy_rate_retail_pricing",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_policy_rate_retail_pricing",
+      "from": "icl:sibc/Statement1/4.4",
+      "to": "icl:nbfc//4",
+      "shared": {
+        "channel": "ch_policy_rate_retail_pricing",
+        "product_a": "personal_loan",
+        "product_b": "personal_loan"
+      },
+      "rationale": "both products are targets of channel ch_policy_rate_retail_pricing",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_policy_rate_retail_pricing",
+      "from": "icl:sibc/Statement1/4.9",
+      "to": "icl:nbfc//4",
+      "shared": {
+        "channel": "ch_policy_rate_retail_pricing",
+        "product_a": "personal_loan",
+        "product_b": "personal_loan"
+      },
+      "rationale": "both products are targets of channel ch_policy_rate_retail_pricing",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_project_lifecycle_origination",
+      "from": "icl:sibc/Statement2/2.18",
+      "to": "icl:nbfc//2.1",
+      "shared": {
+        "channel": "ch_project_lifecycle_origination",
+        "product_a": "infrastructure_credit",
+        "product_b": "infrastructure_credit"
+      },
+      "rationale": "both products are targets of channel ch_project_lifecycle_origination",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_project_lifecycle_origination",
+      "from": "icl:sibc/Statement2/2.18",
+      "to": "icl:nbfc//2.1.1",
+      "shared": {
+        "channel": "ch_project_lifecycle_origination",
+        "product_a": "infrastructure_credit",
+        "product_b": "infrastructure_credit"
+      },
+      "rationale": "both products are targets of channel ch_project_lifecycle_origination",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_project_lifecycle_origination",
+      "from": "icl:sibc/Statement2/2.18.1",
+      "to": "icl:nbfc//2.1",
+      "shared": {
+        "channel": "ch_project_lifecycle_origination",
+        "product_a": "infrastructure_credit",
+        "product_b": "infrastructure_credit"
+      },
+      "rationale": "both products are targets of channel ch_project_lifecycle_origination",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_project_lifecycle_origination",
+      "from": "icl:sibc/Statement2/2.18.1",
+      "to": "icl:nbfc//2.1.1",
+      "shared": {
+        "channel": "ch_project_lifecycle_origination",
+        "product_a": "infrastructure_credit",
+        "product_b": "infrastructure_credit"
+      },
+      "rationale": "both products are targets of channel ch_project_lifecycle_origination",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_project_lifecycle_origination",
+      "from": "icl:sibc/Statement2/2.18.2",
+      "to": "icl:nbfc//2.1",
+      "shared": {
+        "channel": "ch_project_lifecycle_origination",
+        "product_a": "infrastructure_credit",
+        "product_b": "infrastructure_credit"
+      },
+      "rationale": "both products are targets of channel ch_project_lifecycle_origination",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_project_lifecycle_origination",
+      "from": "icl:sibc/Statement2/2.18.2",
+      "to": "icl:nbfc//2.1.1",
+      "shared": {
+        "channel": "ch_project_lifecycle_origination",
+        "product_a": "infrastructure_credit",
+        "product_b": "infrastructure_credit"
+      },
+      "rationale": "both products are targets of channel ch_project_lifecycle_origination",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_project_lifecycle_origination",
+      "from": "icl:sibc/Statement2/2.18.3",
+      "to": "icl:nbfc//2.1",
+      "shared": {
+        "channel": "ch_project_lifecycle_origination",
+        "product_a": "infrastructure_credit",
+        "product_b": "infrastructure_credit"
+      },
+      "rationale": "both products are targets of channel ch_project_lifecycle_origination",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_project_lifecycle_origination",
+      "from": "icl:sibc/Statement2/2.18.3",
+      "to": "icl:nbfc//2.1.1",
+      "shared": {
+        "channel": "ch_project_lifecycle_origination",
+        "product_a": "infrastructure_credit",
+        "product_b": "infrastructure_credit"
+      },
+      "rationale": "both products are targets of channel ch_project_lifecycle_origination",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_project_lifecycle_origination",
+      "from": "icl:sibc/Statement2/2.18.4",
+      "to": "icl:nbfc//2.1",
+      "shared": {
+        "channel": "ch_project_lifecycle_origination",
+        "product_a": "infrastructure_credit",
+        "product_b": "infrastructure_credit"
+      },
+      "rationale": "both products are targets of channel ch_project_lifecycle_origination",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_project_lifecycle_origination",
+      "from": "icl:sibc/Statement2/2.18.4",
+      "to": "icl:nbfc//2.1.1",
+      "shared": {
+        "channel": "ch_project_lifecycle_origination",
+        "product_a": "infrastructure_credit",
+        "product_b": "infrastructure_credit"
+      },
+      "rationale": "both products are targets of channel ch_project_lifecycle_origination",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_project_lifecycle_origination",
+      "from": "icl:sibc/Statement2/2.18.5",
+      "to": "icl:nbfc//2.1",
+      "shared": {
+        "channel": "ch_project_lifecycle_origination",
+        "product_a": "infrastructure_credit",
+        "product_b": "infrastructure_credit"
+      },
+      "rationale": "both products are targets of channel ch_project_lifecycle_origination",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_project_lifecycle_origination",
+      "from": "icl:sibc/Statement2/2.18.5",
+      "to": "icl:nbfc//2.1.1",
+      "shared": {
+        "channel": "ch_project_lifecycle_origination",
+        "product_a": "infrastructure_credit",
+        "product_b": "infrastructure_credit"
+      },
+      "rationale": "both products are targets of channel ch_project_lifecycle_origination",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_project_lifecycle_origination",
+      "from": "icl:sibc/Statement2/2.18.6",
+      "to": "icl:nbfc//2.1",
+      "shared": {
+        "channel": "ch_project_lifecycle_origination",
+        "product_a": "infrastructure_credit",
+        "product_b": "infrastructure_credit"
+      },
+      "rationale": "both products are targets of channel ch_project_lifecycle_origination",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_project_lifecycle_origination",
+      "from": "icl:sibc/Statement2/2.18.6",
+      "to": "icl:nbfc//2.1.1",
+      "shared": {
+        "channel": "ch_project_lifecycle_origination",
+        "product_a": "infrastructure_credit",
+        "product_b": "infrastructure_credit"
+      },
+      "rationale": "both products are targets of channel ch_project_lifecycle_origination",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_project_lifecycle_origination",
+      "from": "icl:sibc/Statement2/2.18.7",
+      "to": "icl:nbfc//2.1",
+      "shared": {
+        "channel": "ch_project_lifecycle_origination",
+        "product_a": "infrastructure_credit",
+        "product_b": "infrastructure_credit"
+      },
+      "rationale": "both products are targets of channel ch_project_lifecycle_origination",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_project_lifecycle_origination",
+      "from": "icl:sibc/Statement2/2.18.7",
+      "to": "icl:nbfc//2.1.1",
+      "shared": {
+        "channel": "ch_project_lifecycle_origination",
+        "product_a": "infrastructure_credit",
+        "product_b": "infrastructure_credit"
+      },
+      "rationale": "both products are targets of channel ch_project_lifecycle_origination",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_psl_threshold_reclassification",
+      "from": "icl:sibc/Statement1/4.2",
+      "to": "icl:nbfc//4.1",
+      "shared": {
+        "channel": "ch_psl_threshold_reclassification",
+        "product_a": "housing",
+        "product_b": "housing"
+      },
+      "rationale": "both products are targets of channel ch_psl_threshold_reclassification",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_psl_threshold_reclassification",
+      "from": "icl:sibc/Statement1/iv",
+      "to": "icl:nbfc//4.1",
+      "shared": {
+        "channel": "ch_psl_threshold_reclassification",
+        "product_a": "housing",
+        "product_b": "housing"
+      },
+      "rationale": "both products are targets of channel ch_psl_threshold_reclassification",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_psl_threshold_reclassification",
+      "from": "icl:sibc/Statement1/viii",
+      "to": "icl:nbfc//4.1",
+      "shared": {
+        "channel": "ch_psl_threshold_reclassification",
+        "product_a": "export_credit",
+        "product_b": "housing"
+      },
+      "rationale": "both products are targets of channel ch_psl_threshold_reclassification",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_unsecured_to_secured_substitution",
+      "from": "icl:sibc/Statement1/4.8",
+      "to": "icl:nbfc//4.3",
+      "shared": {
+        "channel": "ch_unsecured_to_secured_substitution",
+        "product_a": "gold_loan",
+        "product_b": "gold_loan"
+      },
+      "rationale": "both products are targets of channel ch_unsecured_to_secured_substitution",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_wholesale_funding_intermediation",
+      "from": "icl:sibc/Statement1/3.9",
+      "to": "icl:nbfc//5",
+      "shared": {
+        "channel": "ch_wholesale_funding_intermediation",
+        "product_a": "nbfc_credit",
+        "product_b": "nbfc_credit"
+      },
+      "rationale": "both products are targets of channel ch_wholesale_funding_intermediation",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_wholesale_funding_intermediation",
+      "from": "icl:sibc/Statement1/3.9",
+      "to": "icl:nbfc//T",
+      "shared": {
+        "channel": "ch_wholesale_funding_intermediation",
+        "product_a": "nbfc_credit",
+        "product_b": "nbfc_credit"
+      },
+      "rationale": "both products are targets of channel ch_wholesale_funding_intermediation",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_wholesale_funding_intermediation",
+      "from": "icl:sibc/Statement1/3.9.1",
+      "to": "icl:nbfc//5",
+      "shared": {
+        "channel": "ch_wholesale_funding_intermediation",
+        "product_a": "nbfc_credit",
+        "product_b": "nbfc_credit"
+      },
+      "rationale": "both products are targets of channel ch_wholesale_funding_intermediation",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_wholesale_funding_intermediation",
+      "from": "icl:sibc/Statement1/3.9.1",
+      "to": "icl:nbfc//T",
+      "shared": {
+        "channel": "ch_wholesale_funding_intermediation",
+        "product_a": "nbfc_credit",
+        "product_b": "nbfc_credit"
+      },
+      "rationale": "both products are targets of channel ch_wholesale_funding_intermediation",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_wholesale_funding_intermediation",
+      "from": "icl:sibc/Statement1/3.9.2",
+      "to": "icl:nbfc//5",
+      "shared": {
+        "channel": "ch_wholesale_funding_intermediation",
+        "product_a": "nbfc_credit",
+        "product_b": "nbfc_credit"
+      },
+      "rationale": "both products are targets of channel ch_wholesale_funding_intermediation",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_wholesale_funding_intermediation",
+      "from": "icl:sibc/Statement1/3.9.2",
+      "to": "icl:nbfc//T",
+      "shared": {
+        "channel": "ch_wholesale_funding_intermediation",
+        "product_a": "nbfc_credit",
+        "product_b": "nbfc_credit"
+      },
+      "rationale": "both products are targets of channel ch_wholesale_funding_intermediation",
       "status": "candidate"
     }
   ]

@@ -474,36 +474,6 @@
     "authored_vs_observed_mismatches": []
   },
   "mix_states": {
-    "cc-category-momentum": {
-      "entity_urn": "icl:atm_pos/cards/credit_cards",
-      "decomposition": null,
-      "mix_state": "steered",
-      "coherence": 0.9497,
-      "toward": "Small Finance Banks",
-      "away_from": "Foreign Banks",
-      "toward_tilt_pp": 9.67,
-      "children": 5
-    },
-    "dc-category-momentum": {
-      "entity_urn": "icl:atm_pos/cards/debit_cards",
-      "decomposition": null,
-      "mix_state": "reallocating",
-      "coherence": 0.4462,
-      "toward": null,
-      "away_from": null,
-      "toward_tilt_pp": null,
-      "children": 0
-    },
-    "pos-category-momentum": {
-      "entity_urn": "icl:atm_pos/infrastructure/pos_terminals",
-      "decomposition": null,
-      "mix_state": "contested",
-      "coherence": 0.8466,
-      "toward": null,
-      "away_from": null,
-      "toward_tilt_pp": null,
-      "children": 0
-    },
     "atm-offsite-category-momentum": {
       "entity_urn": "icl:atm_pos/infrastructure/atm_offsite",
       "decomposition": null,
@@ -553,6 +523,16 @@
       "away_from": null,
       "toward_tilt_pp": null,
       "children": 0
+    },
+    "cc-category-momentum": {
+      "entity_urn": "icl:atm_pos/cards/credit_cards",
+      "decomposition": null,
+      "mix_state": "steered",
+      "coherence": 0.9497,
+      "toward": "Small Finance Banks",
+      "away_from": "Foreign Banks",
+      "toward_tilt_pp": 9.67,
+      "children": 5
     },
     "cc-ecom-txn-val-category-momentum": {
       "entity_urn": "icl:atm_pos/spend_value/cc_ecom_txn_val",
@@ -633,6 +613,16 @@
       "away_from": "Public Sector Banks",
       "toward_tilt_pp": 9.51,
       "children": 5
+    },
+    "dc-category-momentum": {
+      "entity_urn": "icl:atm_pos/cards/debit_cards",
+      "decomposition": null,
+      "mix_state": "reallocating",
+      "coherence": 0.4462,
+      "toward": null,
+      "away_from": null,
+      "toward_tilt_pp": null,
+      "children": 0
     },
     "dc-ecom-txn-val-category-momentum": {
       "entity_urn": "icl:atm_pos/spend_value/dc_ecom_txn_val",
@@ -719,6 +709,16 @@
       "decomposition": null,
       "mix_state": "contested",
       "coherence": 0.8306,
+      "toward": null,
+      "away_from": null,
+      "toward_tilt_pp": null,
+      "children": 0
+    },
+    "pos-category-momentum": {
+      "entity_urn": "icl:atm_pos/infrastructure/pos_terminals",
+      "decomposition": null,
+      "mix_state": "contested",
+      "coherence": 0.8466,
       "toward": null,
       "away_from": null,
       "toward_tilt_pp": null,

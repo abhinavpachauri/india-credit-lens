@@ -18,16 +18,11 @@ transforms one into the next. Derived from read/write analysis of the code.
 ```mermaid
 flowchart LR
   n_analysis_COMPOSITION_SPEC_md(["COMPOSITION_SPEC.md"])
-  n_analysis_SYSTEM_MODEL_SPEC_md(["SYSTEM_MODEL_SPEC.md"])
   n_analysis_cross_source_candidates_json["candidates.json"]
   n_analysis_cross_source_ecosystem_model_json(["ecosystem_model.json"])
   n_analysis_ontology_channels_json(["channels.json"])
   n_analysis_rbi_atm_pos_insights_json["insights.json"]
-  n_analysis_rbi_atm_pos_merged_system_model_json["system_model.json"]
   n_analysis_rbi_atm_pos_signals_json["signals.json"]
-  n_analysis_rbi_atm_pos_skeleton_profile_json(["skeleton_profile.json"])
-  n_analysis_rbi_sibc_merged_system_model_json["system_model.json"]
-  n_analysis_rbi_sibc_skeleton_profile_json(["skeleton_profile.json"])
   n_analysis_signals_narrative_cache_json["narrative_cache.json"]
   n_analysis_signals_registry_json["registry.json"]
   n_analysis_signals_signals_db["signals.db"]
@@ -36,16 +31,10 @@ flowchart LR
   n_web_public_data_opportunities_feed_json["opportunities_feed.json"]
   n_web_public_data_sibc_l1_annotations_json["sibc_l1_annotations.json"]
   n_analysis_COMPOSITION_SPEC_md -->|derive_cross_links| n_analysis_cross_source_candidates_json
-  n_analysis_SYSTEM_MODEL_SPEC_md -->|generate_skeleton| n_analysis_rbi_atm_pos_merged_system_model_json
-  n_analysis_SYSTEM_MODEL_SPEC_md -->|generate_skeleton| n_analysis_rbi_sibc_merged_system_model_json
   n_analysis_cross_source_ecosystem_model_json -->|generate_opportunities_feed| n_web_public_data_opportunities_feed_json
   n_analysis_ontology_channels_json -->|derive_cross_links| n_analysis_cross_source_candidates_json
   n_analysis_ontology_channels_json -->|generate_opportunities_feed| n_web_public_data_opportunities_feed_json
   n_analysis_rbi_atm_pos_signals_json -->|generate_atm_pos_insights| n_analysis_rbi_atm_pos_insights_json
-  n_analysis_rbi_atm_pos_skeleton_profile_json -->|generate_skeleton| n_analysis_rbi_atm_pos_merged_system_model_json
-  n_analysis_rbi_atm_pos_skeleton_profile_json -->|generate_skeleton| n_analysis_rbi_sibc_merged_system_model_json
-  n_analysis_rbi_sibc_skeleton_profile_json -->|generate_skeleton| n_analysis_rbi_atm_pos_merged_system_model_json
-  n_analysis_rbi_sibc_skeleton_profile_json -->|generate_skeleton| n_analysis_rbi_sibc_merged_system_model_json
   n_analysis_signals_registry_json -->|generate_atm_pos_insights| n_analysis_rbi_atm_pos_insights_json
   n_analysis_signals_registry_json -->|compute_atm_pos_signals| n_analysis_rbi_atm_pos_signals_json
   n_analysis_signals_registry_json -->|generate_opportunities_feed| n_web_public_data_opportunities_feed_json
@@ -90,15 +79,13 @@ Scripts each orchestrator launches as a subprocess, in execution order.
 | `analysis/ontology/concepts.json` | external/authored | — | `core/validate_system_model`, `cross/validate_composition` |
 | `analysis/ontology/domains.json` | external/authored | — | `cross/validate_composition` |
 | `analysis/rbi_atm_pos/insights.json` | derived | `pipelines/atm_pos/generate_atm_pos_insights` | `pipelines/atm_pos/validate_atm_pos_claims`, `pipelines/atm_pos/validate_atm_pos_insights` |
-| `analysis/rbi_atm_pos/merged/system_model.json` | derived | `core/generate_skeleton` | `core/relational_insights`, `guards/audit_force_sources` |
+| `analysis/rbi_atm_pos/merged/system_model.json` | external/authored | — | `core/relational_insights`, `guards/audit_force_sources` |
 | `analysis/rbi_atm_pos/signals.json` | derived | `pipelines/atm_pos/compute_atm_pos_signals` | `pipelines/atm_pos/generate_atm_pos_insights`, `pipelines/atm_pos/validate_atm_pos_claims`, `pipelines/atm_pos/validate_atm_pos_insights` |
-| `analysis/rbi_atm_pos/skeleton_profile.json` | external/authored | — | `core/generate_skeleton` |
 | `analysis/rbi_atm_pos/timeline.json` | external/authored | — | `guards/check_signal_freshness` |
 | `analysis/rbi_sibc/date_remap.json` | derived | `pipelines/sibc/update_web_data` | — |
 | `analysis/rbi_sibc/merged/annotations_merged.ts` | external/authored | — | `pipelines/sibc/validate_annotation_basis` |
 | `analysis/rbi_sibc/merged/sections_merged.json` | external/authored | — | `hook_validate`, `pipelines/sibc/detect_format`, `pipelines/sibc/generate_merge`, `pipelines/sibc/validate_content`, `pipelines/sibc/validate_web_series` |
-| `analysis/rbi_sibc/merged/system_model.json` | derived | `core/generate_skeleton` | `core/relational_insights`, `guards/audit_force_sources` |
-| `analysis/rbi_sibc/skeleton_profile.json` | external/authored | — | `core/generate_skeleton` |
+| `analysis/rbi_sibc/merged/system_model.json` | external/authored | — | `core/relational_insights`, `guards/audit_force_sources` |
 | `analysis/rbi_sibc/timeline.json` | external/authored | — | `core/validate_timeline`, `guards/check_signal_freshness`, `pipelines/sibc/generate_merge`, `signals/query` |
 | `analysis/signals/narrative_cache.json` | derived | `cross/generate_opportunity_narrative` | — |
 | `analysis/signals/registry.json` | derived | `signals/apply_status_rules`, `signals/update_registry` | `core/generate_signal_history`, `core/generate_system_state`, `core/relational_insights`, `core/validate_opportunity_traceability`, `cross/generate_opportunities_feed`, `cross/validate_composition`, `guards/check_signal_freshness`, `guards/validate_card_cuts`, `guards/validate_cut_table`, `guards/validate_signal_history`, `guards/validate_state_band`, `measure_coherence_threshold`, `pipelines/atm_pos/compute_atm_pos_signals`, `pipelines/atm_pos/generate_atm_pos_insights`, `pipelines/atm_pos/validate_atm_pos_insights`, `pipelines/sibc/generate_analysis_report`, `pipelines/sibc/validate_sibc_traceability`, `signals/proximity`, `signals/stamp_state`, `signals/stamp_table` |
@@ -116,19 +103,20 @@ Scripts each orchestrator launches as a subprocess, in execution order.
 Python import edges (sparse by design — the pipeline is subprocess-
 orchestrated, not import-coupled).
 
-- `core/derive_opportunities` → `core/generate_skeleton`
+- `core/derive_opportunities` → `core/generate_skeleton`, `core/manifest`
 - `core/gate` → `core/manifest`
 - `core/generate_chart_series` → `core/manifest`
 - `core/generate_signal_history` → `core/manifest`
-- `core/generate_system_state` → `core/generate_skeleton`
+- `core/generate_skeleton` → `core/manifest`
+- `core/generate_system_state` → `core/generate_skeleton`, `core/manifest`
 - `core/relational_insights` → `core/manifest`, `core/residuals`
-- `core/run_inference` → `core/generate_skeleton`
-- `core/validate_system_model` → `core/generate_skeleton`
-- `cross/compose_ecosystem` → `core/generate_skeleton`
-- `cross/derive_cross_links` → `core/generate_skeleton`
-- `cross/generate_opportunities_feed` → `core/generate_skeleton`
-- `cross/generate_opportunity_narrative` → `core/generate_skeleton`, `core/voice`, `signals/evaluate`
-- `cross/validate_composition` → `core/generate_skeleton`
+- `core/run_inference` → `core/generate_skeleton`, `core/manifest`
+- `core/validate_system_model` → `core/generate_skeleton`, `core/manifest`
+- `cross/compose_ecosystem` → `core/generate_skeleton`, `core/manifest`
+- `cross/derive_cross_links` → `core/generate_skeleton`, `core/manifest`
+- `cross/generate_opportunities_feed` → `core/generate_skeleton`, `core/manifest`
+- `cross/generate_opportunity_narrative` → `core/generate_skeleton`, `core/manifest`, `core/voice`, `signals/evaluate`
+- `cross/validate_composition` → `core/generate_skeleton`, `core/manifest`
 - `guards/check_derived_fresh` → `core/manifest`
 - `guards/check_signal_freshness` → `core/manifest`
 - `guards/validate_card_cuts` → `core/manifest`
