@@ -303,8 +303,29 @@ def check_db(reg_signals: dict, known_pipelines: set[str]) -> sqlite3.Connection
     # justifies `coherence_min` existing at all (0.90 -> no share past 111%). It still
     # catches what this check was built for: an invented 137% in a low-coherence
     # window breaches its own bound and fails.
+    # THE BOUND IS A PROPERTY OF THE SUM-OF-PARTS DENOMINATOR, AND SINCE 2026-09-22 NOT
+    # EVERY CUT USES ONE. The derivation above needs |delta_i| <= gross AND net == sum of the
+    # same deltas. On an "of which" cut the denominator is the PARENT's own published
+    # movement — an independent quantity — so the two are unrelated and no bound exists.
+    #
+    # Live case: bank credit to NBFCs GREW Rs 14,800 Cr over the year to May 2025 while both
+    # named sub-types SHRANK (HFCs -16,385, PFIs -6,632) — all the growth is in the NBFCs RBI
+    # does not name. HFCs read -110.7% of the parent's net, which is true: their book fell by
+    # more than the whole line grew. (Over the sum of the parts it read +71.2% — a POSITIVE
+    # share of a NEGATIVE net, which is the misleading version this rule removed.)
+    #
+    # So the bound is asserted where it is provable, and branch 2 gets the guard that is
+    # actually meaningful there: its shares must NOT sum to 100, because that is precisely
+    # what dividing by the parts again would produce. A `coverage` row marks branch 2.
     BOUND_TOLERANCE_PP = 0.5   # rounding room; stored values carry 4 decimals
 
+    of_which = {
+        (pl, per, mid[: -len("-allocation")])
+        for pl, per, mid in conn.execute(
+            """SELECT pipeline, period, metric_id FROM signals
+               WHERE entity_type='coverage'"""
+        )
+    }
     coherence = {
         (pl, per, mid[: -len("-momentum")]): val
         for pl, per, mid, val in conn.execute(
@@ -317,6 +338,8 @@ def check_db(reg_signals: dict, known_pipelines: set[str]) -> sqlite3.Connection
         """SELECT pipeline, metric_id, period, entity_id, value FROM signals
            WHERE entity_type='alloc' ORDER BY ABS(value) DESC"""
     ):
+        if (pl, per, mid[: -len("-allocation")]) in of_which:
+            continue                      # branch 2 — no bound exists; checked below instead
         coh = coherence.get((pl, per, mid[: -len("-allocation")]))
         if coh is None:
             # An `alloc` row with no coherence row is not a pass — it is a share whose
@@ -339,6 +362,25 @@ def check_db(reg_signals: dict, known_pipelines: set[str]) -> sqlite3.Connection
             f"allocation share with no coherence row — {mid} {per} ({pl}): "
             f"'{eid}' at {val:.1f}%, and nothing to bound it against."
         )
+
+    # B6b: an "of which" cut's shares must NOT account for all the new money. They are shares
+    # of the PARENT's movement while the parts are only a fraction of it, so a tidy 100 means
+    # the denominator silently reverted to the sum of the parts — the defect, not the fix.
+    sums: dict = {}
+    for pl, mid, per, val in conn.execute(
+        """SELECT pipeline, metric_id, period, value FROM signals
+           WHERE entity_type='alloc'"""
+    ):
+        key = (pl, per, mid[: -len("-allocation")])
+        if key in of_which:
+            sums[(pl, mid, per)] = sums.get((pl, mid, per), 0.0) + val
+    for (pl, mid, per), s in list(sums.items())[:5]:
+        if abs(s - 100.0) < 0.01:
+            fail(
+                f"'of which' allocation sums to 100 — {mid} {per} ({pl}): the parts are a "
+                f"SUBSET of this cut, so their shares of the new money cannot account for "
+                f"all of it. The denominator has reverted to the sum of the parts."
+            )
 
     # Summary
     total_rows   = conn.execute("SELECT COUNT(*) FROM signals").fetchone()[0]

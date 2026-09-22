@@ -790,6 +790,70 @@ def _deltas(params: dict, period: str, df: pd.DataFrame):
     return deltas, net, gross
 
 
+#: Relative tolerance for "the parts sum to the parent". NOT tuned — measured, enumerated over
+#: all 12 SIBC cuts x all 24 dates: the additive cuts differ by 0.000000% and the smallest
+#: non-additive gap is 4.5%, so this sits three orders of magnitude clear of both populations.
+ADDITIVE_EPS = 1e-4
+
+
+class ParentNotFound(LookupError):
+    """A cut declares a parent code the frame does not contain.
+
+    Raised — and re-raised by `compute` rather than swallowed into `_unknown()` — because a
+    parent you cannot FIND is not a parent that does not EXIST. `sibc-industry-type`'s parts
+    are Statement 2 while its total is Statement 1, and Statement 2 carries no code "2" at
+    all; its 19 parts nonetheless sum to the published Industry total exactly. An
+    implementation that read the failed lookup as "this cut has no parent" would silently
+    withhold a correct allocation, which is the absence-shaped failure this project keeps
+    paying for.
+    """
+
+
+def _parent_row(params: dict, period: str, df: pd.DataFrame) -> float | None:
+    """The parent's OWN published level on `period`, or None when the source publishes none.
+
+    None is reserved for the case where there is genuinely nothing to divide by: a memo lens
+    (`psl_memo`) is a view OVER the tree, not a slice of it, so RBI publishes no total for it.
+    A declared code that simply is not there raises instead.
+    """
+    if params.get("psl_memo"):
+        return None
+    code = params.get("parent_code")
+    if code is None:
+        return None
+    scope = _scope_param(df, "parent", params, _scope(params, df))
+    v = _val(df, period, str(code), scope)
+    if v is None:
+        raise ParentNotFound(
+            f"parent_code {code!r} (scope {scope!r}) has no row on {period}. Declare "
+            f"`parent_statement` if the parent lives in a different statement from its parts.")
+    return v
+
+
+def _denominators(params: dict, period: str, prior_date: str | None,
+                  df: pd.DataFrame, parts_now: float, parts_then: float):
+    """Which total this cut's shares are shares OF — MEASURED per cut per period.
+
+    The rule (signals/README.md, "the denominator rule"), in one line each:
+      additive  — the parts ARE the whole; sum-of-parts and the parent are the same number.
+      of_which  — the parts are a SUBSET; divide by the parent's own published row, and
+                  store `coverage` so prose can say what is missing.
+      no_parent — nothing is published to divide by; withhold rather than invent one.
+
+    Returns (branch, level_now, level_then, coverage_pct). `level_*` is None when the branch
+    cannot supply an honest denominator, and the caller withholds that family rather than
+    falling back to the sum of the parts — falling back is the silent wrong answer.
+    """
+    parent_now = _parent_row(params, period, df)
+    if parent_now is None:
+        return "no_parent", None, None, None
+    if abs(parts_now - parent_now) <= ADDITIVE_EPS * abs(parent_now):
+        return "additive", parts_now, parts_then, None
+    parent_then = _parent_row(params, prior_date, df) if prior_date else None
+    coverage = 100.0 * parts_now / parent_now if parent_now else None
+    return "of_which", parent_now, parent_then, coverage
+
+
 def csv_sector_momentum(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
     """
     How many units each child actually added or lost over the annual window — the
@@ -917,25 +981,36 @@ def csv_sector_allocation(params: dict, period: str, df: pd.DataFrame) -> list[d
     # to be derivable from rows a gate can check.
     window = int(params.get("window", 12))
     prior_date = _month_back(period, window, set(df["date"].unique()))
-    if prior_date:
-        base = _children_at(params, prior_date, df)
-        tot = sum(base.values())
-        if tot:
-            out.extend(_row("weight", name, 100.0 * v / tot, "active", "pct")
-                       for name, v in base.items())
-    # `weight_now` — the SAME children over the SAME denominator at the END of the window.
-    # Stored rather than left to the share scan because the two use different denominators:
-    # a share scan divides by the parent's own published row, this divides by the sum of the
-    # parts. For main sectors those differ by 4.9% — the four sectors do not add up to
-    # non-food credit — so "share of the book then vs now" read off two families would be a
-    # comparison of two different questions, which is the defect §15 was written about.
-    now = _children_at(params, period, df)
-    tot_now = sum(now.values())
-    if tot_now:
-        out.extend(_row("weight_now", name, 100.0 * v / tot_now, "active", "pct")
+    now   = _children_at(params, period, df)
+    base  = _children_at(params, prior_date, df) if prior_date else {}
+    branch, level_now, level_then, coverage = _denominators(
+        params, period, prior_date, df, sum(now.values()), sum(base.values()))
+
+    # `coverage` — the one row the rule adds. On an "of which" cut it is what lets prose say
+    # "the three named parts are 51.7% of this cut" instead of implying the cut is fully
+    # decomposed. Not emitted when the parts ARE the whole: 100.0 every month is noise.
+    if coverage is not None:
+        out.append(_row("coverage", "total", coverage, "active", "pct"))
+
+    # `weight` / `weight_now` — each part's share of the cut at the START and END of the
+    # window, so Layer 2 can read `tilt = alloc - weight` from stored rows rather than
+    # recomputing it in prose. WHICH total they divide by is the denominator rule's call, not
+    # this family's: the sum of the parts only when the parts are the whole.
+    if level_then:
+        out.extend(_row("weight", name, 100.0 * v / level_then, "active", "pct")
+                   for name, v in base.items())
+    if level_now:
+        out.extend(_row("weight_now", name, 100.0 * v / level_now, "active", "pct")
                    for name, v in now.items())
-    if coherence >= cmin and net:
-        alloc = [_row("alloc", name, 100.0 * val / net, "active", "pct")
+
+    # `alloc` — share of the NET new units. Two independent gates, deliberately separate:
+    # coherence decides whether the sentence "of the net new units" is true at all, and the
+    # denominator rule decides what that net IS. On an "of which" cut it is the parent's own
+    # published movement, because the named parts are not the whole of it.
+    net_denom = (level_now - level_then) if (level_now is not None
+                                             and level_then is not None) else None
+    if coherence >= cmin and net_denom:
+        alloc = [_row("alloc", name, 100.0 * val / net_denom, "active", "pct")
                  for name, val in deltas.items()]
         alloc.sort(key=lambda r: r["value"], reverse=True)
         out.extend(alloc)
@@ -1034,5 +1109,10 @@ def compute(metric_id: str, params: dict, period: str,
             f"the registry declares it but the engine cannot dispatch it.")
     try:
         return fn(params, period, df) or _unknown()
+    except ParentNotFound:
+        # Re-raised deliberately. Swallowing it into _unknown() would turn the loudest
+        # signal we have — "this cut declares a parent that is not there" — into an absence
+        # indistinguishable from a legitimate one, which is precisely what the rule forbids.
+        raise
     except Exception:
         return _unknown()

@@ -486,7 +486,13 @@ MOVEMENT_CUTS = [
                 parent_yoy="sibc-personal-loans-yoy",   parent_label="Personal loans"),
     MovementCut("psl",       "prioritySector", "sibc-psl-yoy-scan",           "priority sector credit",
                 no_speed_note="Priority sector is a memo lens over the main tree, not a slice of "
-                              "it, so RBI publishes no total for it to grow at."),
+                              "it, so RBI publishes no total for it to grow at.",
+                # Added 2026-09-22, when the denominator rule correctly took PSL's mix away.
+                # Same fact as the line above, stated for the other row: with no total, there
+                # is nothing for a share of the growth to be a share OF.
+                no_mix_note="Its ten lines are overlapping views of the same rupees — a "
+                            "weaker-section loan to a small enterprise sits in both — so "
+                            "there is no total for a share of the growth to measure against."),
     MovementCut("infra-sub", "industryByType", "sibc-infra-sub-yoy-scan",     "infrastructure credit",
                 parent_yoy="sibc-infra-yoy",            parent_label="Infrastructure credit"),
 ]

@@ -291,7 +291,12 @@ def blocks(conn, pipeline: str, period: str, cuts, prefix,
                         cut.parent_label or cut.subject,
                         getattr(cut, "parent_entity", None))
         mx = mix_line(conn, pipeline, period, alloc_sid, mom_sid, mix_states.get(mom_sid, {}))
-        if sp is None and mx is None:
+        # A block with neither reading AND nothing to say about why is genuinely empty — drop
+        # it. A block whose absences are DECLARED is not empty: it is the standing row §16
+        # exists for, because a dimension that silently vanishes reads as broken rather than
+        # as "this reading cannot exist here". Priority Sector reached exactly this state on
+        # 2026-09-22, when the denominator rule correctly took away its mix.
+        if sp is None and mx is None and not (cut.no_speed_note or cut.no_mix_note):
             continue
         mix = mix_states.get(mom_sid, {})
         out.append(StateBlock(

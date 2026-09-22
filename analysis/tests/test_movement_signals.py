@@ -16,6 +16,12 @@ from signals.compute import csv_sector as sibc                    # noqa: E402
 MAIN = {"parent_code": "III", "statement": "Statement 1", "child_level": 1,
         "entity_type": "sector", "window": 12}
 
+#: A BRANCH-1 cut — industry's three size bands sum to the published industry total exactly.
+#: MAIN is deliberately not that: the four main sectors are 95.1% of non-food credit and RBI
+#: attributes the remainder to no sector, which is why it exercises the "of which" branch.
+IND_SIZE = {"parent_code": "2", "statement": "Statement 1", "child_level": 2,
+            "entity_type": "sector", "window": 12}
+
 
 def _rows(fn, period="2026-06-30"):
     return fn(MAIN, period, sibc._load_df("sibc"))
@@ -44,13 +50,41 @@ def test_coherence_is_one_when_every_sector_moves_the_same_way():
     assert agg["coherence"] == 1.0
 
 
-def test_allocation_shares_sum_to_a_hundred_and_match_contribution_when_aligned():
-    rows = _rows(sibc.csv_sector_allocation)
+def test_allocation_shares_sum_to_a_hundred_on_an_ADDITIVE_cut():
+    """Branch 1: the parts ARE the whole, so the shares of the new money account for all of it.
+
+    This used to be asserted of MAIN, which was the defect rather than the property — the
+    four main sectors do not sum to non-food credit, so dividing by them inflated every share
+    by 1.049 and the sum came to a tidy, wrong 100."""
+    rows = sibc.csv_sector_allocation(IND_SIZE, "2026-06-30", sibc._load_df("sibc"))
     alloc, contrib = _by(rows, "alloc"), _by(rows, "contribution")
-    assert len(alloc) == 4 and len(contrib) == 4
+    assert len(alloc) == 3 and len(contrib) == 3
     assert abs(sum(alloc.values()) - 100.0) < 0.01
     for k in alloc:                       # at coherence 1.0 net == gross
         assert abs(alloc[k] - contrib[k]) < 1e-6
+    assert not _by(rows, "coverage"), "an additive cut states no coverage — 100.0 every month is noise"
+
+
+def test_allocation_on_an_OF_WHICH_cut_divides_by_the_parent_and_says_so():
+    """Branch 2: the named parts are a SUBSET, so their shares must NOT add to 100.
+
+    The shortfall is the point — it is the new money that went to parts RBI does not break
+    out, and `coverage` is what lets prose say so instead of implying a full decomposition."""
+    rows = sibc.csv_sector_allocation(MAIN, "2026-06-30", sibc._load_df("sibc"))
+    alloc, coverage = _by(rows, "alloc"), _by(rows, "coverage")
+    assert len(alloc) == 4
+    assert coverage, "an of-which cut must state what fraction of the cut its parts are"
+    assert 0 < coverage["total"] < 100
+
+    total = sum(alloc.values())
+    assert total < 100.0, "shares over a subset cannot account for all the new money"
+    # The shares are shares of the PARENT's movement, so what they miss is exactly the
+    # movement of the parts nobody publishes — not a rounding artefact.
+    assert 90.0 < total < 99.0
+
+    # And the defect this replaced: dividing by the sum of the parts would have inflated
+    # every share by the same factor, producing a plausible 100.
+    assert abs(sum(_by(rows, "contribution").values()) - 100.0) < 0.01
 
 
 def test_allocation_withholds_alloc_rows_below_the_coherence_threshold(monkeypatch):
@@ -361,10 +395,18 @@ def test_no_published_alloc_exceeds_the_bound_coherence_puts_on_it():
         coh = {(pl, per, mid[: -len("-momentum")]): v for pl, per, mid, v in con.execute(
             "SELECT pipeline, period, metric_id, value FROM signals "
             "WHERE entity_type='aggregate' AND entity_id='coherence'")}
+        # Branch 2 is EXCLUDED, and that is the finding rather than an exemption: the
+        # derivation needs net == the sum of the same deltas, and an "of which" cut divides
+        # by the parent's own published movement instead — an independent quantity, so no
+        # bound exists. A `coverage` row is what marks such a cut.
+        of_which = {(pl, per, mid[: -len("-allocation")]) for pl, per, mid in con.execute(
+            "SELECT pipeline, period, metric_id FROM signals WHERE entity_type='coverage'")}
         bad, unbounded = [], []
         for pl, mid, per, eid, val in con.execute(
                 "SELECT pipeline, metric_id, period, entity_id, value FROM signals "
                 "WHERE entity_type='alloc'"):
+            if (pl, per, mid[: -len("-allocation")]) in of_which:
+                continue
             c = coh.get((pl, per, mid[: -len("-allocation")]))
             if c is None:
                 unbounded.append((mid, per, eid))
@@ -416,3 +458,145 @@ def test_the_allocation_guard_rejects_an_impossible_share():
     # contribution rows are shares of GROSS, bounded by construction, never in scope
     contribution = [{"entity_type": "contribution", "entity_id": "Private", "value": 93.0}]
     assert offending(contribution, 0.12) == []
+
+
+# ── the denominator rule (signals/README.md) ──────────────────────────────────
+
+def test_a_memo_lens_withholds_the_shares_it_cannot_honestly_compute():
+    """Branch 3. PSL's ten lines are overlapping views over the main tree, not a partition —
+    PSL "Micro and Small Enterprises" spans industry AND services, and a weaker-section loan
+    to an MSE borrower is counted in both it and "Weaker Sections". Their sum is not a book,
+    so a share of it is not a share of anything. RBI publishes no PSL total to divide by.
+
+    Withheld, not invented: `share-of-parent` was already deleted for PSL on the same
+    reasoning, and this makes that a branch of one rule rather than a special case."""
+    psl = {"psl_memo": True, "statement": "Statement 1", "child_level": 2,
+           "entity_type": "psl_category", "window": 12, "parent_code": "PSL"}
+    rows = sibc.csv_sector_allocation(psl, "2026-06-30", sibc._load_df("sibc"))
+    assert not _by(rows, "alloc"),      "no published total ⇒ no share of the net"
+    assert not _by(rows, "weight"),     "no published total ⇒ no share of the cut"
+    assert not _by(rows, "weight_now")
+    assert not _by(rows, "coverage"),   "coverage needs a parent to be a fraction OF"
+    # Contribution survives: it divides by the parts' own gross movement, which is real.
+    assert _by(rows, "contribution"), "coherence routes and the rule redenominates — neither suppresses"
+
+
+def test_a_parent_that_cannot_be_found_RAISES_rather_than_withholding():
+    """The trap, pinned. `sibc-industry-type`'s parts are Statement 2 while its total is
+    Statement 1, and Statement 2 carries no code "2" at all — yet its 19 parts sum to the
+    published Industry total EXACTLY, so it is additive and its allocation is correct.
+
+    An implementation that read "lookup returned None" as "this cut has no parent" would
+    silently withhold that correct allocation. A parent you cannot FIND is not a parent that
+    does not EXIST, so the failure is loud and the message names the fix."""
+    import pytest
+    undeclared = {"parent_code": "2", "statement": "Statement 2", "child_level": 2,
+                  "entity_type": "industry_type", "window": 12}
+    with pytest.raises(sibc.ParentNotFound, match="parent_statement"):
+        sibc.csv_sector_allocation(undeclared, "2026-06-30", sibc._load_df("sibc"))
+
+    declared = {**undeclared, "parent_statement": "Statement 1"}
+    rows = sibc.csv_sector_allocation(declared, "2026-06-30", sibc._load_df("sibc"))
+    assert abs(sum(_by(rows, "alloc").values()) - 100.0) < 0.01
+    assert not _by(rows, "coverage"), "19 parts summing to the published total is branch 1"
+
+
+def test_the_dispatcher_does_not_swallow_a_missing_parent():
+    """`compute` turns any exception into `_unknown()` so a bad period cannot kill a run.
+    That is right for a data gap and WRONG here: it would turn the loudest signal we have
+    into an absence indistinguishable from a legitimate null."""
+    import pytest
+    undeclared = {"method": "csv_sector_allocation", "parent_code": "2",
+                  "statement": "Statement 2", "child_level": 2, "window": 12}
+    with pytest.raises(sibc.ParentNotFound):
+        sibc.compute("synthetic-allocation", undeclared, "2026-06-30", sibc._load_df("sibc"))
+
+
+def test_the_bound_does_not_apply_to_an_OF_WHICH_cut_and_the_data_proves_it():
+    """Why the exclusion above is a finding, not a loophole.
+
+    Live case: bank credit to NBFCs GREW Rs 14,800 Cr in the year to May 2025 while BOTH
+    named sub-types shrank (HFCs -16,385, PFIs -6,632) — every rupee of the growth went to
+    NBFCs RBI does not break out. HFCs read -110.7% of the parent's net: their book fell by
+    more than the whole line grew, which is true and is the story.
+
+    Over the sum of the parts the same month read +71.2% — a POSITIVE share of a NEGATIVE
+    net, which is the reading this rule removed."""
+    import sqlite3
+    from core.paths import ROOT
+    con = sqlite3.connect(ROOT / "analysis/signals/signals.db")
+    try:
+        rows = dict(con.execute(
+            "SELECT entity_id, value FROM signals WHERE metric_id='sibc-nbfc-sub-allocation' "
+            "AND period='2025-06-30' AND entity_type='alloc'"))
+        cov = con.execute(
+            "SELECT value FROM signals WHERE metric_id='sibc-nbfc-sub-allocation' "
+            "AND period='2025-06-30' AND entity_type='coverage'").fetchone()
+    finally:
+        con.close()
+    assert cov, "a coverage row is what marks this cut branch 2"
+    hfc = next(v for k, v in rows.items() if "Housing Finance" in k)
+    assert hfc < -100.0, "a part can fall by more than its parent grew; that is not a bug"
+
+
+def test_an_of_which_cut_never_sums_to_a_hundred_anywhere_in_the_store():
+    """B6b as a property over EVERY stored branch-2 window, not just this month's.
+
+    A tidy 100 would mean the denominator silently reverted to the sum of the parts, which
+    is the defect the rule exists to remove — and it would look entirely plausible."""
+    import sqlite3
+    from core.paths import ROOT
+    con = sqlite3.connect(ROOT / "analysis/signals/signals.db")
+    try:
+        of_which = {(pl, per, mid[: -len("-allocation")]) for pl, per, mid in con.execute(
+            "SELECT pipeline, period, metric_id FROM signals WHERE entity_type='coverage'")}
+        sums: dict = {}
+        for pl, mid, per, val in con.execute(
+                "SELECT pipeline, metric_id, period, value FROM signals "
+                "WHERE entity_type='alloc'"):
+            if (pl, per, mid[: -len("-allocation")]) in of_which:
+                sums[(mid, per)] = sums.get((mid, per), 0.0) + val
+    finally:
+        con.close()
+    assert sums, "no branch-2 allocation in the store — this test would assert nothing"
+    tidy = [(m, p, round(s, 3)) for (m, p), s in sums.items() if abs(s - 100.0) < 0.01]
+    assert not tidy, f"'of which' shares summing to 100: {tidy[:3]}"
+
+
+def test_payments_is_additive_everywhere_which_is_why_the_rule_is_a_no_op_there():
+    """"The same logic everywhere" — and the reason payments needed no code change.
+
+    The denominator rule lives in `csv_sector` only. `atm_pos` is a genuinely different
+    shape (metric x bank x record_type) and implementing the rule there too would be a
+    SECOND implementation of one rule — which this project has already paid for once, when
+    payments' copy of the allocation method gated on coherence while SIBC's routed on it,
+    and the two most interesting mixes produced no Layer 2 state for a month.
+
+    So the rule is stated once and payments is held to the CLAIM instead: its parts are
+    every reporting bank, so they always ARE the whole. Enumerated over every period x every
+    metric — not sampled — because an assumption nothing measures is how a check's
+    population silently stops being right."""
+    from signals.compute import atm_pos as ap
+    df = ap._load_df("atm_pos")
+    worst, where, checked, no_total = 0.0, None, 0, []
+    for per in sorted(df["report_date"].astype(str).unique()):
+        sub = df[df["report_date"] == per]
+        for m in sorted(sub["metric"].astype(str).unique()):
+            s = sub[sub["metric"] == m]
+            parts = s[s["record_type"] == "bank"]["value"].sum()
+            tot = s[s["record_type"] == "total"]["value"]
+            if tot.empty:
+                no_total.append((per, m))
+                continue
+            t = float(tot.iloc[0])
+            if not t:
+                continue
+            gap = abs(parts - t) / abs(t) * 100
+            checked += 1
+            if gap > worst:
+                worst, where = gap, (per, m)
+    assert checked > 500, "too few windows examined for this to mean anything"
+    assert not no_total, f"a payments metric with no published total to compare against: {no_total[:3]}"
+    assert worst < 100 * sibc.ADDITIVE_EPS, (
+        f"payments is no longer additive ({worst:.6f}% at {where}) — it now has an 'of which' "
+        f"cut, and csv_category_allocation must adopt the denominator rule")

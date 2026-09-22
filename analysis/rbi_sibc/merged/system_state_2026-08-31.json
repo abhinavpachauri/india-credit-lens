@@ -864,7 +864,7 @@
       "coherence": 1.0,
       "toward": "Services",
       "away_from": "Personal Loans",
-      "toward_tilt_pp": 5.77,
+      "toward_tilt_pp": 5.57,
       "children": 4
     },
     "sibc-industry-type-momentum": {
@@ -907,16 +907,6 @@
       "toward_tilt_pp": 21.03,
       "children": 9
     },
-    "sibc-psl-momentum": {
-      "entity_urn": "icl:sibc/Statement1/PSL",
-      "decomposition": "Statement 1",
-      "mix_state": "drifting",
-      "coherence": 0.998,
-      "toward": "Micro and Small Enterprises",
-      "away_from": "Housing",
-      "toward_tilt_pp": 7.18,
-      "children": 10
-    },
     "sibc-infra-sub-momentum": {
       "entity_urn": "icl:sibc/Statement2/2.18",
       "decomposition": "Statement 2",
@@ -940,11 +930,11 @@
     "sibc-nbfc-sub-momentum": {
       "entity_urn": "icl:sibc/Statement1/3.9",
       "decomposition": "Statement 1",
-      "mix_state": "drifting",
+      "mix_state": "steered",
       "coherence": 1.0,
       "toward": "Public Financial Institutions (PFIs)",
       "away_from": "Housing Finance Companies (HFCs)",
-      "toward_tilt_pp": 31.79,
+      "toward_tilt_pp": 15.54,
       "children": 2
     },
     "sibc-basic-metal-sub-momentum": {

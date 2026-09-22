@@ -102,6 +102,23 @@ def run_append(pipeline: str, period: str,
             r["spec_version"] = spec_version
         all_rows.extend(rows)
 
+    # A metric that recomputed owns its rows for this period OUTRIGHT — replace the set, do
+    # not merge into it. `_upsert` is INSERT OR REPLACE, which can add and update but never
+    # REMOVE, so a signal that stops emitting a row kind used to leave the old rows behind
+    # forever. That had never bitten because no signal had ever emitted fewer rows than
+    # before; the denominator rule is the first (priority sector legitimately stops emitting
+    # `alloc`/`weight`/`weight_now`), and 456 stale rows survived a full re-append.
+    #
+    # Scoped to metrics that actually produced rows, deliberately. A metric that produced
+    # NOTHING — a failed compute, a data gap — keeps its old rows rather than having them
+    # deleted by an error, and freshness reports them as orphans, which is loud. Silently
+    # emptying a signal because its compute raised is the worse failure.
+    recomputed = {r["metric_id"] for r in all_rows}
+    removed = 0
+    for metric_id in recomputed:
+        removed += conn.execute(
+            "DELETE FROM signals WHERE pipeline=? AND period=? AND metric_id=?",
+            (pipeline, period, metric_id)).rowcount
     row_count = _upsert(conn, pipeline, period, all_rows)
 
     # Refresh metric_ranges for every affected metric
@@ -127,6 +144,7 @@ def run_append(pipeline: str, period: str,
         status_counts[s] = status_counts.get(s, 0) + 1
 
     return {
+        "rows_replaced": removed,
         "metric_count": len(signals) - skipped,
         "skipped_no_compute": skipped,
         "row_count": row_count,

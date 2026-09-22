@@ -67,7 +67,9 @@
     },
     "core/generate_signal_history": {
       "doc_claims": [],
-      "imports": [],
+      "imports": [
+        "core/manifest"
+      ],
       "invokes": [],
       "path": "analysis/core/generate_signal_history.py",
       "reads": {
@@ -149,6 +151,7 @@
     "core/relational_insights": {
       "doc_claims": [],
       "imports": [
+        "core/manifest",
         "core/residuals"
       ],
       "invokes": [],
@@ -389,7 +392,9 @@
     },
     "guards/check_signal_freshness": {
       "doc_claims": [],
-      "imports": [],
+      "imports": [
+        "core/manifest"
+      ],
       "invokes": [],
       "path": "analysis/guards/check_signal_freshness.py",
       "reads": {
@@ -401,7 +406,9 @@
     },
     "guards/validate_card_cuts": {
       "doc_claims": [],
-      "imports": [],
+      "imports": [
+        "core/manifest"
+      ],
       "invokes": [],
       "path": "analysis/guards/validate_card_cuts.py",
       "reads": {
@@ -415,6 +422,7 @@
     "guards/validate_card_prose": {
       "doc_claims": [],
       "imports": [
+        "core/manifest",
         "core/residuals",
         "core/voice"
       ],
@@ -429,6 +437,7 @@
     "guards/validate_cut_table": {
       "doc_claims": [],
       "imports": [
+        "core/manifest",
         "core/table_rows"
       ],
       "invokes": [],
@@ -454,7 +463,9 @@
     },
     "guards/validate_state_band": {
       "doc_claims": [],
-      "imports": [],
+      "imports": [
+        "core/manifest"
+      ],
       "invokes": [],
       "path": "analysis/guards/validate_state_band.py",
       "reads": {
@@ -819,27 +830,25 @@
       "reads": {},
       "writes": {}
     },
-    "signals/compute/engine": {
-      "doc_claims": [],
-      "imports": [
-        "signals/db"
-      ],
-      "invokes": [],
-      "path": "analysis/signals/compute/engine.py",
-      "reads": {},
-      "writes": {}
-    },
-    "signals/compute/sibc": {
+    "signals/compute/csv_sector": {
       "doc_claims": [],
       "imports": [
         "core/manifest"
       ],
       "invokes": [],
-      "path": "analysis/signals/compute/sibc.py",
-      "reads": {
-        "analysis/rbi_sibc/timeline.json": "low",
-        "timeline.json": "low"
-      },
+      "path": "analysis/signals/compute/csv_sector.py",
+      "reads": {},
+      "writes": {}
+    },
+    "signals/compute/engine": {
+      "doc_claims": [],
+      "imports": [
+        "core/manifest",
+        "signals/db"
+      ],
+      "invokes": [],
+      "path": "analysis/signals/compute/engine.py",
+      "reads": {},
       "writes": {}
     },
     "signals/db": {
@@ -877,6 +886,7 @@
     "signals/is_news": {
       "doc_claims": [],
       "imports": [
+        "core/manifest",
         "signals/proximity"
       ],
       "invokes": [],
@@ -900,6 +910,7 @@
     "signals/planes": {
       "doc_claims": [],
       "imports": [
+        "core/manifest",
         "signals/is_news",
         "signals/proximity"
       ],
@@ -910,7 +921,9 @@
     },
     "signals/proximity": {
       "doc_claims": [],
-      "imports": [],
+      "imports": [
+        "core/manifest"
+      ],
       "invokes": [],
       "path": "analysis/signals/proximity.py",
       "reads": {
@@ -950,11 +963,13 @@
     "signals/stamp_state": {
       "doc_claims": [],
       "imports": [
+        "core/manifest",
         "core/state_lines"
       ],
       "invokes": [],
       "path": "analysis/signals/stamp_state.py",
       "reads": {
+        "analysis/signals/registry.json": "low",
         "analysis/signals/signals.db": "low"
       },
       "writes": {}
@@ -962,6 +977,7 @@
     "signals/stamp_table": {
       "doc_claims": [],
       "imports": [
+        "core/manifest",
         "core/table_rows"
       ],
       "invokes": [],

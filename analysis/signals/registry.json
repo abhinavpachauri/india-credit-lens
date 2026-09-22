@@ -2,7 +2,7 @@
   "_meta": {
     "schema_version": "1.0",
     "description": "Signal registry — permanent catalog of every tracked signal across all ingestion pipelines. Signal IDs are immutable once created. Add new signals; never rename or delete. layer: 1 = per-chart data signal (algorithmically computed), 2 = cross-chart synthesis (authored per period from data), 3 = lending ecosystem expert model (generated ~6-monthly, strict claim validation).",
-    "last_updated": "2026-09-14",
+    "last_updated": "2026-09-22",
     "cadence_vocabulary": [
       "fortnightly",
       "monthly",
@@ -4022,7 +4022,7 @@
       "domain": "industry",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "strengthening",
+      "current_status": "active",
       "first_seen": "2025-02-28",
       "compute": {
         "method": "csv_sector_scan_yoy",
@@ -7426,7 +7426,8 @@
         "entity_type": "industry_type",
         "method": "csv_sector_allocation",
         "window": 12,
-        "coherence_min": 0.9
+        "coherence_min": 0.9,
+        "parent_statement": "Statement 1"
       },
       "current_status": "active",
       "first_seen": "2025-02-28"
@@ -8225,7 +8226,7 @@
         ],
         "window": 12
       },
-      "current_status": "strengthening",
+      "current_status": "stable",
       "first_seen": "2024-01-31"
     },
     "pos-category-allocation": {
@@ -8275,7 +8276,7 @@
           }
         ]
       },
-      "current_status": "active",
+      "current_status": "declining",
       "first_seen": "2024-01-31"
     },
     "sibc-psl-weaker-yoy": {
@@ -9854,7 +9855,7 @@
       "domain": "infrastructure",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "active",
+      "current_status": "declining",
       "first_seen": "2024-01-31",
       "compute": {
         "method": "csv_category_scan_yoy",
@@ -10550,7 +10551,7 @@
       "domain": "credit_card_txn",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "active",
+      "current_status": "declining",
       "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_category_scan_yoy",
@@ -10866,7 +10867,7 @@
       "domain": "credit_card_txn",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "weakening",
+      "current_status": "strengthening",
       "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_category_scan_share",
@@ -11040,7 +11041,7 @@
       "domain": "credit_card_txn",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "weakening",
+      "current_status": "stable",
       "first_seen": "2024-01-31",
       "compute": {
         "method": "csv_category_scan_share",
@@ -11214,7 +11215,7 @@
       "domain": "credit_card_txn",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "weakening",
+      "current_status": "stable",
       "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_category_scan_share",
@@ -11388,7 +11389,7 @@
       "domain": "credit_card_txn",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "weakening",
+      "current_status": "strengthening",
       "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_category_scan_share",
@@ -11562,7 +11563,7 @@
       "domain": "credit_card_txn",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "weakening",
+      "current_status": "strengthening",
       "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_category_scan_share",
@@ -12003,7 +12004,7 @@
       "domain": "debit_card_txn",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "stable",
+      "current_status": "weakening",
       "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_category_acceleration",
@@ -13128,7 +13129,7 @@
       "domain": "debit_card_txn",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "strengthening",
+      "current_status": "stable",
       "first_seen": "2024-01-31",
       "compute": {
         "method": "csv_category_scan_share",
@@ -13160,7 +13161,7 @@
       "domain": "debit_card_txn",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "active",
+      "current_status": "declining",
       "first_seen": "2024-01-31",
       "compute": {
         "method": "csv_category_scan_yoy",
@@ -13302,7 +13303,7 @@
       "domain": "debit_card_txn",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "strengthening",
+      "current_status": "stable",
       "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_category_scan_share",
@@ -13846,7 +13847,7 @@
         ]
       },
       "id": "cc-bank-share-scan",
-      "current_status": "strengthening",
+      "current_status": "active",
       "description": "Each bank's share of all credit cards in force. Denominator is the published total, not the sum of the reporting banks.",
       "first_seen": "2024-01-31"
     },
@@ -14558,7 +14559,7 @@
         ]
       },
       "id": "cc-ecom-txn-val-bank-share-scan",
-      "current_status": "strengthening",
+      "current_status": "active",
       "description": "Each bank's share of all credit card eCommerce transactions value. Denominator is the published total, not the sum of the banks that reported.",
       "first_seen": "2024-01-31"
     },
