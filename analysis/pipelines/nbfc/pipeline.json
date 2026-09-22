@@ -1,0 +1,92 @@
+{
+  "id": "nbfc",
+  "name": "RBI NBFC — Sectoral Deployment (incl. HFCs)",
+  "order": 3,
+  "compute_module": "csv_sector",
+  "paths": {
+    "data_dir": "analysis/rbi_nbfc",
+    "consolidated_csv": "web/public/data/rbi_nbfc_consolidated.csv",
+    "timeline": "analysis/rbi_nbfc/timeline.json",
+    "system_model": "analysis/rbi_nbfc/merged/system_model.json"
+  },
+  "schema": {
+    "date_column": "date",
+    "value_column": "outstanding_cr",
+    "entity_columns": [
+      "code",
+      "parent_code"
+    ],
+    "note_why": "No scope_column and no memo_flag_column: this source publishes one statement and no memo lens, so a code alone identifies a row. `csv_sector` VERIFIES this block against the file on load — declaring a column the CSV lacks raises rather than being ignored."
+  },
+  "modules": {
+    "detect_format": "pipelines/nbfc/detect_format.py",
+    "extract": "pipelines/nbfc/extract_nbfc.py",
+    "consolidate": "pipelines/nbfc/consolidate_nbfc.py",
+    "published_yoy": "pipelines/nbfc/validate_published_yoy.py"
+  },
+  "gate": [
+    {
+      "id": "tests",
+      "label": "T.  unit tests (pytest)",
+      "builtin": "pytest"
+    },
+    {
+      "id": "format",
+      "label": "0.  format check",
+      "pipeline": "detect_format",
+      "args": ["--check"],
+      "skip_if": "revalidate"
+    },
+    {
+      "id": "extract",
+      "label": "0.6 extract → sections.json",
+      "pipeline": "extract",
+      "args": ["$XLSX"],
+      "skip_if": "ingest_only"
+    },
+    {
+      "id": "consolidate",
+      "label": "0.7 consolidate → CSV + timeline",
+      "pipeline": "consolidate",
+      "skip_if": "ingest_only",
+      "derived": [
+        "web/public/data/rbi_nbfc_consolidated.csv",
+        "analysis/rbi_nbfc/timeline.json"
+      ],
+      "note": "Wrote"
+    },
+    {
+      "id": "consolidate_check",
+      "label": "0.8 consolidated artifacts fresh",
+      "pipeline": "consolidate",
+      "args": ["--check"],
+      "note": "fresh"
+    },
+    {
+      "id": "timeline",
+      "label": "0.9 timeline.json",
+      "core": "validate_timeline"
+    },
+    {
+      "id": "csv_integrity",
+      "label": "1b. web CSV integrity",
+      "builtin": "csv_integrity"
+    },
+    {
+      "id": "published_yoy",
+      "label": "1c. computed YoY vs RBI's own printed column",
+      "pipeline": "published_yoy",
+      "note": "YoY"
+    },
+    {
+      "id": "reconcile",
+      "label": "5.  architecture reconcile",
+      "core": "reconcile",
+      "note": "drift"
+    }
+  ],
+  "period_resolver": {
+    "module": "extract",
+    "args": ["--print-period"]
+  }
+}
