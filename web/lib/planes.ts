@@ -6,6 +6,7 @@
 // them into the three tiers the read view renders.
 
 import type { Annotation, ReportSection, Report } from "@/lib/types";
+import type { Pipeline } from "@/lib/opportunities";
 
 export type Plane = "read" | "composition" | "subject";
 
@@ -25,7 +26,7 @@ export interface CardPlane {
 
 export type PlanesMap = Record<string, CardPlane>;
 
-export async function loadPlanes(pipeline: "sibc" | "atm_pos"): Promise<PlanesMap> {
+export async function loadPlanes(pipeline: Pipeline): Promise<PlanesMap> {
   const res = await fetch(`/data/${pipeline}_planes.json`);
   if (!res.ok) return {};
   const doc = await res.json();

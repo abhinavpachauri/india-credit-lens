@@ -179,9 +179,12 @@ export function DimensionCard({ dim, state = [], reads = [], tables = 0, period,
             {tables} table{tables > 1 ? "s" : ""} ·
           </span>
         )}
+        {/* A pipeline that generates no cards must not invite a click toward news that was
+            never written. "0 notable →" reads as a quiet month; an absent card LAYER is a
+            different thing, and the tile offers what it actually has. */}
         <span style={{ fontSize: FS.note, fontWeight: dim.moved > 0 ? 600 : 400,
                        color: dim.moved > 0 ? col : "var(--font-muted)" }}>
-          {dim.cardCount} notable →
+          {dim.cardCount > 0 ? `${dim.cardCount} notable →` : "open →"}
         </span>
       </div>
     </button>
@@ -643,6 +646,15 @@ export function CutTable({ table, title, color, bookLabel, footer, all, depth = 
       <p style={{ fontSize: FS.note, color: "var(--font-muted)", marginTop: 8 }}>
         {table.parts.length} parts · click any row to chart it · sort by any column
       </p>
+      {/* An "of which" cut must SAY so. Four rows under a heading imply a complete
+          decomposition; on this cut they are a subset, and the reader cannot tell from the
+          rows alone. The number is the stored coverage row, not a string in this file. */}
+      {table.coverage != null && (
+        <p style={{ fontSize: FS.note, color: "var(--font-muted)", marginTop: 6, lineHeight: 1.5 }}>
+          These {table.parts.length} are {table.coverage}% of {bookLabel ? `${title.toLowerCase()}` : title.toLowerCase()}
+          {" "}— RBI does not break out the rest.
+        </p>
+      )}
       {footer && (
         <p style={{ fontSize: FS.note, color: "var(--font-muted)", marginTop: 6, lineHeight: 1.5 }}>
           {footer}

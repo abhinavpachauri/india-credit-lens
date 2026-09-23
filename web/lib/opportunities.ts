@@ -14,7 +14,12 @@
 
 import feed from "../public/data/opportunities_feed.json";
 
-export type Pipeline = "sibc" | "atm_pos";
+/** Every pipeline the browser can be pointed at.
+ *
+ *  This union was spelled out in six lib files, so a third source was a compile error in each
+ *  — the web half of the same defect the manifest closed on the Python side. One name now,
+ *  imported rather than retyped. */
+export type Pipeline = "sibc" | "atm_pos" | "nbfc";
 export type OppStatus = "active" | "watch" | "closed" | "retired";
 
 /** The deterministic replay of a meta-model computation: member signals → directions → state.

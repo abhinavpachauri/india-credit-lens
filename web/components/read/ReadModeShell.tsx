@@ -100,6 +100,11 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
   const chartRef = useRef<HTMLDivElement>(null);
   const deepRef = useRef<HTMLDivElement>(null);
 
+  // Does this pipeline HAVE a news layer? NBFC generates no cards by design, so every
+  // card-shaped affordance — the moved count, the index of everything that moved — would be
+  // offering a reader something that was never written.
+  const hasCardLayer = model.dimensions.some((d) => d.cardCount > 0) || model.reads.length > 0;
+
   const dim = openDim ? dimById.get(openDim) ?? null : null;
   const secColor = dim?.color ?? READS_COLOR;
 
@@ -187,10 +192,13 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
       <>
         <style>{STYLE}</style>
         <div key="grid" style={{ animation: "rmfade 220ms ease" }}>
+          {/* "0 moved this Jul 2026" is what a QUIET month looks like. A pipeline with no card
+              layer at all has not had a quiet month — it has never been asked the question —
+              and the two must not render the same. Same rule as the tile footer. */}
           <h2 style={{ ...EYEBROW, marginBottom: 14 }}>
             {model.dimensions.length} dimensions ·{" "}
-            {model.dimensions.reduce((n, d) => n + tableCount(d.id), 0)} tables ·{" "}
-            {model.reads.length} moved this {period}
+            {model.dimensions.reduce((n, d) => n + tableCount(d.id), 0)} tables
+            {hasCardLayer && <> · {model.reads.length} moved this {period}</>}
           </h2>
           <div className="grid gap-4 grid-cols-1 lg:grid-cols-2 items-stretch">
             {model.dimensions.map((d) => (
@@ -201,10 +209,12 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
             ))}
           </div>
 
-          <button onClick={() => setShowIndex(!showIndex)} className="rm-link mt-6"
-                  style={{ fontSize: FS.body, fontWeight: 600, color: READS_COLOR }}>
-            {showIndex ? "▾" : "▸"} everything that moved this {period} · {model.reads.length}
-          </button>
+          {hasCardLayer && (
+            <button onClick={() => setShowIndex(!showIndex)} className="rm-link mt-6"
+                    style={{ fontSize: FS.body, fontWeight: 600, color: READS_COLOR }}>
+              {showIndex ? "▾" : "▸"} everything that moved this {period} · {model.reads.length}
+            </button>
+          )}
           {showIndex && (
             <div className="mt-3 flex flex-col gap-1.5">
               {model.reads.map((r) => (

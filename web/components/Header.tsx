@@ -8,6 +8,7 @@ import { formatCr } from "@/lib/data";
 const NAV_LINKS = [
   { label: "Credit",        href: "/",             icon: "📊" },
   { label: "Payments",      href: "/payments",      icon: "💳" },
+  { label: "NBFC",          href: "/nbfc",          icon: "🏦" },
 ];
 
 interface HeaderProps {

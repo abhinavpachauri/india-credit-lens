@@ -1,3 +1,4 @@
+import type { Pipeline } from "@/lib/opportunities";
 // The standing state band's data layer (DASHBOARD_SPEC.md §16).
 //
 // The read tier answers "what is news". This answers "what is happening", which is a
@@ -43,11 +44,27 @@ export interface StateBlock {
 
 export type StateMap = Record<string, StateBlock[]>;
 
-export async function loadStateBands(pipeline: "sibc" | "atm_pos"): Promise<StateMap> {
+export async function loadStateBands(pipeline: Pipeline): Promise<StateMap> {
   const res = await fetch(`/data/${pipeline}_state.json`);
   if (!res.ok) return {};
   const doc = await res.json();
   return (doc?.dimensions ?? {}) as StateMap;
+}
+
+/** The period the sidecars were stamped for, as the data itself declares it.
+ *
+ *  SIBC and payments read their period off their own series; a pipeline whose only artifacts
+ *  ARE the sidecars has to ask one of them. Explicit rather than taken from the last entry of
+ *  a column's axis array — the two cannot disagree, but inferring a period from an axis is
+ *  the kind of indirection that later reads as a bug. */
+export async function loadStatePeriod(pipeline: Pipeline): Promise<string> {
+  try {
+    const res = await fetch(`/data/${pipeline}_state.json`);
+    if (!res.ok) return "";
+    return String((await res.json())?._meta?.period ?? "");
+  } catch {
+    return "";
+  }
 }
 
 /** The tile form of the mix: two labels, no number — so this one is safe to compose here. */

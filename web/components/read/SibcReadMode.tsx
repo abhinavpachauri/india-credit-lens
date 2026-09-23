@@ -44,7 +44,9 @@ const SIBC_CUTS: Record<string, CutRef[]> = {
     // The four sectors do not add up to non-food credit, and RBI attributes the difference
     // to nothing. Stated rather than hidden — the alternative is a column that silently
     // fails to sum to 100.
-    footer: "These four are 95.1% of non-food credit — RBI attributes the remainder to no sector.",
+    // The COVERAGE number is derived and rendered by CutTable from the stored row; this is
+    // only the part no computation supplies — that RBI attributes the gap to nothing at all.
+    footer: "The remainder is credit RBI attributes to no sector.",
   }],
   industryBySize:  [{ stem: "sibc-ind-size", title: "Industry", bookLabel: "of book" }],
   industryByType:  [{ stem: "sibc-industry-type", title: "Industry", bookLabel: "of book" }],

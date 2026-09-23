@@ -1,3 +1,4 @@
+import type { Pipeline } from "@/lib/opportunities";
 // The Layer 1 cut table (DASHBOARD_SPEC §17, reshaped by §20) — loader + types.
 //
 // Every number arrives ALREADY RENDERED. `display` is drawn; `sort` orders and is never
@@ -38,6 +39,11 @@ export interface CutTable {
   cut: string;
   /** "New" or "Of fall" — a share of the NET, and the net can be negative. */
   flow_label: string;
+  /** What fraction of the cut the parts RBI actually NAMES add up to — the stored `coverage`
+   *  row. Null when they are the whole of it, which is the common case and needs no line.
+   *  Never typed into a component: this table's own footer used to carry a hand-written
+   *  "95.1%", a published number no gate could check. */
+  coverage?: number | null;
   parts: CutRow[];
   total: CutRow;
   /** Axis labels per column: a column's depth is its OWN (payments stores 31 readings of a
@@ -66,7 +72,7 @@ export type BankIndex = Record<string, BankIndexEntry>;   // keyed by the CSV me
 
 const bankCache = new Map<string, CutTable | null>();
 
-export async function loadBankIndex(pipeline: "sibc" | "atm_pos"): Promise<BankIndex> {
+export async function loadBankIndex(pipeline: Pipeline): Promise<BankIndex> {
   try {
     const res = await fetch(`/data/${pipeline}_table.json`);
     if (!res.ok) return {};
@@ -89,7 +95,7 @@ export async function loadBankTable(entry: BankIndexEntry): Promise<CutTable | n
   return table;
 }
 
-export async function loadCutTables(pipeline: "sibc" | "atm_pos"): Promise<CutTables> {
+export async function loadCutTables(pipeline: Pipeline): Promise<CutTables> {
   try {
     const res = await fetch(`/data/${pipeline}_table.json`);
     if (!res.ok) return {};

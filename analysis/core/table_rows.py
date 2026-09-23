@@ -283,12 +283,26 @@ def build(conn, pipeline: str, period: str, stem: str, unit: str = "rs_cr",
         (pipeline, period, f"{stem}-momentum"))), None)
     flow_label = "Of fall" if (net is not None and net < 0) else "New"
 
+    # COVERAGE — what fraction of this cut the parts RBI actually names add up to. Shipped so
+    # the table can SAY it: without the line, four rows under a heading imply a complete
+    # decomposition, and on an "of which" cut they are not one. The number is the stored
+    # `coverage` row (signals/README.md, the denominator rule), never recomputed here and
+    # never typed into a component — SIBC's main table carried a hand-written "95.1%" in the
+    # browser, which is a published number no gate could see.
+    coverage = next((v for (v,) in conn.execute(
+        "SELECT value FROM signals WHERE pipeline=? AND period=? AND metric_id=? "
+        "AND entity_type='coverage' AND entity_id='total'",
+        (pipeline, period, f"{stem}-allocation"))), None)
+
     declared = sorted({size_id, growth_id, accel_id, alloc_id, book_id, COLS["of_cut"][0]}
                       | ({parent_yoy} if parent_yoy else set()))
     cells = lambda r: {k: (asdict(v) if isinstance(v, Cell) else v) for k, v in r.items()}
     return {
         "cut": stem,
         "flow_label": flow_label,
+        # None when the parts ARE the whole — a line saying "these are 100.0% of the cut"
+        # every month is noise, and its absence is the honest signal that nothing is missing.
+        "coverage": None if coverage is None else round(coverage, 1),
         "parts": [cells(p) for p in parts],
         "total": cells(total),
         # WHICH SIGNAL EACH COLUMN IS, declared for the gate. Scoping a growth cell to the

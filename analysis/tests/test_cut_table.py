@@ -217,13 +217,26 @@ def test_every_computed_table_is_reachable_from_the_dashboard():
     import re
     web = ROOT / "web" / "components" / "read"
 
-    sibc = json.loads((DATA / "sibc_table.json").read_text())
-    declared = set(re.findall(r'stem:\s*"([^"]+)"', (web / "SibcReadMode.tsx").read_text()))
-    via_row = {p["sub_cut"] for t in sibc["cuts"].values() for p in t["parts"] if p.get("sub_cut")}
-    unreachable = set(sibc["cuts"]) - declared - via_row
-    assert not unreachable, (
-        f"computed and rendered nowhere: {sorted(unreachable)} — either a dimension must own "
-        f"each, or a row must open into it")
+    # Which adapter renders which pipeline. A MAP, and the assert below is what stops it
+    # becoming the fourth instance of this same defect: a pipeline that ships tables and has
+    # no entry here FAILS, rather than being quietly skipped the way NBFC would have been.
+    ADAPTER = {"sibc": "SibcReadMode.tsx", "atm_pos": "AtmReadMode.tsx", "nbfc": "NbfcReadMode.tsx"}
+    shipping = set(manifest.pipelines_with_stage("stamp_table"))
+    assert shipping <= set(ADAPTER), (
+        f"{sorted(shipping - set(ADAPTER))} ships cut tables and no adapter is named here, so "
+        f"this test would silently stop covering it — which is the defect it exists to catch")
+
+    # Every sector-hierarchy pipeline resolves a cut by its STEM, declared in the adapter.
+    for pipeline in sorted(shipping - {"atm_pos"}):
+        doc = json.loads((DATA / f"{pipeline}_table.json").read_text())
+        declared = set(re.findall(r'stem:\s*"([^"]+)"',
+                                  (web / ADAPTER[pipeline]).read_text()))
+        via_row = {p["sub_cut"] for t in doc["cuts"].values()
+                   for p in t["parts"] if p.get("sub_cut")}
+        unreachable = set(doc["cuts"]) - declared - via_row
+        assert not unreachable, (
+            f"{pipeline}: computed and rendered nowhere: {sorted(unreachable)} — either a "
+            f"dimension must own each, or a row must open into it")
 
     # Payments resolves a cut by the METRIC it measures, so reachability is checked the same
     # way the adapter resolves it: every metric named in SECTION_DEFS must find a cut, and
