@@ -1,6 +1,6 @@
 "use client";
 
-// The page-level Read ⇄ Explore switch (DASHBOARD_SPEC.md §11). Read is the curated three-tier
+// The page-level Read ⇄ Explore switch (archive/docs/DASHBOARD_SPEC_read_mode_2026-07.md §11). Read is the curated three-tier
 // view; Explore is the full dashboard, unchanged. A lens toggle, not a fork — both read the same
 // data. Sticky via the caller's usePersistent.
 

@@ -2,7 +2,7 @@
 """
 stamp_planes.py — ship each dashboard card's plane, precomputed.
 ----------------------------------------------------------------
-The dashboard read-mode (DASHBOARD_SPEC.md) files every card into a plane — read /
+The dashboard read-mode (archived design: archive/docs/DASHBOARD_SPEC_read_mode_2026-07.md §2–§3) files every card into a plane — read /
 composition / subject — decided by `planes.py` in the signal layer. The browser must never
 re-derive that (compute-once-ship-compact): it would need signals.db, the registry, and the
 whole classifier client-side. So this stamps the answer into a compact sidecar the web joins

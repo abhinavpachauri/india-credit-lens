@@ -2,7 +2,7 @@
 """
 planes.py — which of the three reader questions does this signal answer?
 ------------------------------------------------------------------------
-The dashboard read-mode (DASHBOARD_SPEC.md) sorts every signal into one of three planes,
+The dashboard read-mode (archived design: archive/docs/DASHBOARD_SPEC_read_mode_2026-07.md §2–§3) sorts every signal into one of three planes,
 each answering a different reader question:
 
   read         "what changed this month?"  — the signal MOVED enough to be news.

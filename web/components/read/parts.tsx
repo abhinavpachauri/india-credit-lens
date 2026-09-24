@@ -1,6 +1,6 @@
 "use client";
 
-// Shared read-mode primitives (DASHBOARD_SPEC.md §14). The design lives HERE, once — SIBC and
+// Shared read-mode primitives (archived read-mode spec §14: archive/docs/DASHBOARD_SPEC_read_mode_2026-07.md). The design lives HERE, once — SIBC and
 // payments both render these; only the data model (below) + the chart/deep renderers differ per
 // pipeline. Colour = section/group (a card's colour is also its chart-line colour).
 

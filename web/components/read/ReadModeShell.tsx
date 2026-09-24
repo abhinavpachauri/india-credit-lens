@@ -1,6 +1,6 @@
 "use client";
 
-// The read-mode SHELL — pipeline-agnostic (DASHBOARD_SPEC.md §14, reshaped by §20). Owns the
+// The read-mode SHELL — pipeline-agnostic (archived read-mode spec §14, reshaped by DASHBOARD_SPEC.md §20). Owns the
 // three states, the rail, and which cell has a chart open. A pipeline
 // supplies its RMModel, its cuts, a chart renderer for dimensions that own no table, and its
 // deep reading.

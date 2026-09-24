@@ -34,6 +34,29 @@ setHeaderMetric(null, "Mar 2026");
 
 ---
 
+## Read mode — the primary surface (all three dashboards)
+
+Spec: `analysis/DASHBOARD_SPEC.md` §15–§20. `/` (SIBC) and `/payments` open in **Read**, with a
+`ModeToggle` to **Explore** (the older per-section card list, below). `/nbfc` has no Explore
+mode, because it has no cards.
+
+| Piece | File | Role |
+|---|---|---|
+| Shell | `components/read/ReadModeShell.tsx` | pipeline-agnostic navigation: tiles → dimension → cell chart; each close pops **one** level; owns Esc |
+| Primitives | `components/read/parts.tsx` | `DimensionCard`, `RailItem`, `StateBand`, `CutTable`, `CutRowList`, `CellPanel`, `ReadCard` |
+| Adapters | `components/read/{Sibc,Atm,Nbfc}ReadMode.tsx` | one per pipeline: declare dimensions, map sidecars into the shell's model, render the chart |
+| Data | `lib/table.ts`, `lib/state.ts`, `lib/planes.ts` | typed readers for the sidecars `{pipeline}_table.json`, `_state.json`, `_planes.json` |
+| Deep view | `components/read/DeepReading.tsx` | **disabled** (`DEEP_ENABLED = false` in the shell) while Layer 1 is being got right |
+
+Rules:
+- **The browser never formats a number.** State-band sentences, table cells and cell readings
+  arrive as rendered strings from Python; a component only places them.
+- One `Pipeline` type (declared in `lib/opportunities.ts`), imported, never retyped as a union.
+- A new pipeline = a manifest + an adapter that declares its dimensions (NBFC's is ~70 lines).
+- Payments bank breakouts are fetched on open from `public/data/atm_pos_banks/*.json`.
+
+---
+
 ## Design Language System (DLS)
 
 Shared components live in `web/components/dls/`. Both the SIBC and Payments pages use
@@ -81,7 +104,7 @@ Entry / exit strip above a chart section.
 
 ---
 
-## SIBC page pattern (`SectionWithAnnotations.tsx`)
+## SIBC Explore mode (`SectionWithAnnotations.tsx`)
 
 Data source: `useSectionInsights(section)` hook — flattens insights / gaps / opportunities
 into a single navigable list. Exposes `ins.flat`, `ins.current`, `ins.enter`, `ins.exit`,
@@ -112,7 +135,7 @@ on the annotation. Check 2d (validate_annotation_basis.py) enforces this is non-
 
 ---
 
-## Payments page pattern (`AtmPosGroupSection.tsx`)
+## Payments Explore mode (`AtmPosGroupSection.tsx`)
 
 Data source: `atm_pos_insights.json` loaded via `loadAtmPosInsights()`, filtered by
 `filterInsights(allInsights, group, mode)`.
