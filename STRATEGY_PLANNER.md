@@ -133,7 +133,7 @@ Full execution rules are in `analysis/newsletter/CLAUDE.md`.
 
 Every report analysed in a single Claude pass produces four structured outputs: `annotations_merged.ts` (dashboard annotations), markdown docs (`insights.md` / `gaps.md` / `opportunities.md`), `system_model.json` (causal graph), and `subsystems.json` (subsystem map). `newsletter_config.json` is then authored from these outputs — it is not auto-generated. This single-pass discipline keeps analysis consistent and makes all content regeneration script-only — no Claude cost after the initial analysis pass.
 
-Full output schemas, file naming conventions, and validator commands are in `analysis/report_analysis_prompt.md` and `PIPELINE_ARCHITECTURE.md`.
+Stage detail is in `PIPELINE_ARCHITECTURE.md`.
 
 ---
 
@@ -203,7 +203,7 @@ India equivalent at 5–10x lower pricing: 50–200 institutional subscribers ×
 | **SIDBI MSME Pulse** | MSME access gaps, stress, underserved | Next (P2) | MSME |
 | **NABARD** | Agriculture, rural credit | Later | Housing, MSME |
 | **RBI FSR** | Financial stability, systemic risk | Later | Gold, NBFC risk |
-| **PLFS** | Labour force income — demand-side signal | Later | Personal, Housing |
+| **PLFS** | Labour force income — demand-side signal | Later — now via the MoSPI API (Tier 3) | Personal, Housing |
 
 ### Tier 2 — Macro and sentiment signals (evaluated April 2026, ingestion planned)
 
@@ -220,6 +220,51 @@ All 9 sources below passed the decision filter. Pipeline redesign required befor
 | `rbi_atm_pos` | Bank-wise ATM/POS/Card Statistics | Card infrastructure + credit/debit transaction volumes | Consumer Credit dashboard |
 | `rbi_ppi` | Entity-wise PPI Statistics | EMI card issuance + BNPL wallet proxy | Consumer Credit dashboard |
 | `rbi_treds` | Entity-wise TReDS Statistics | MSME invoice financing velocity | MSME Credit Monitor, Supply Chain Finance |
+
+### Tier 3 — The real economy behind the credit: MoSPI eSankhyiki (assessed 2026-09-24)
+
+**Why it matters.** Every source ingested so far measures CREDIT. None measures what the credit
+is financing, so the platform can say "industry credit +20%" and cannot say whether industry
+produced +4% or +20%. MoSPI's `esankhyiki.mospi.gov.in` is the official home of the other side
+of that ratio: output, prices, jobs and household balance sheets. It turns "credit moved" into
+**"credit moved relative to the economy it finances"**, which is a causal-layer question and
+exactly the differentiator.
+
+**Access (verified 2026-09-24).** It is a portal, not a source; the datasets behind it are the
+sources. A public REST API (`api.mospi.gov.in`, per-dataset OpenAPI specs, ~30 datasets) returns
+clean JSON: an IIP call returned index and growth by month and NIC sector. MoSPI also runs an
+official MCP server (`mcp.mospi.gov.in`, beta since Feb 2026). Two access facts:
+- The API server needs **legacy TLS renegotiation**, which OpenSSL 3 refuses by default (curl
+  fails outright). A client that opts in for that host only gets data.
+- In the API, **the IIP 2011-12-base series stops at March 2026**, which points to a base-year
+  revision. Confirm where the current base lives before building on IIP.
+
+| Dataset | Cadence | The lending question it answers | Pairs with |
+|---|---|---|---|
+| **IIP** (industrial production, NIC 2-digit + use-based) | monthly | Is credit to an industry running ahead of its output (working-capital build, leverage) or behind it? Consumer-durables output vs durables loans. | SIBC industry by type; SIBC consumer durables |
+| **ISP** (services production) | monthly | The same question for services. | SIBC services |
+| **NAS** (GDP/GVA by sector; household financial liabilities; capital formation) | quarterly / annual | Credit intensity: credit-to-GVA by sector over time. The household-debt ratio. | SIBC main sectors; NBFC |
+| **CPI / WPI** | monthly | Real credit growth: is 16% nominal growth 12% real or 5%? | every credit series |
+| **PLFS** (employment, wages; monthly urban) | monthly / quarterly | The retail borrower's income base behind personal-loan growth. | SIBC personal loans; payments |
+| **ASI / ASUSE** (factories; unincorporated enterprises) | annual | Formal vs informal enterprise finance. MSME credit gap sizing. Verify which loan indicators each exposes. | SIBC MSME cuts |
+| **NSS 77A AIDIS** (household debt & investment) | one-off survey (2019) | Institutional vs non-institutional household debt, as a structural baseline, not a feed. | Layer 2 gap nodes |
+| RBI (inside eSankhyiki) | — | **Skip** for anything ingested from RBI directly (one source of truth). | — |
+
+**Design rules for the build** (these are what make it scale, rather than a one-off):
+1. **A new ingestion TYPE: API pull**, the first non-XLSX source. The adapter snapshots the raw
+   JSON of each release into `{data_dir}/{period}/raw/`, and everything from consolidate onward is
+   the existing gate. Freshness recomputes from the committed snapshot, never from the live API
+   (the API revises: IIP quick estimates are final only after two months).
+2. The legacy-TLS opt-in lives in the one fetch path (`core/source_fetch.py`), scoped to that
+   host. It is never lowered globally.
+3. **The MCP server is for exploration in a session, never for compute.** An LLM never decides a
+   number (`DECISIONS.md`).
+4. **Base year is a series dimension.** No YoY or chaining across a base change.
+5. The NIC ↔ SIBC industry concordance is **authored once in the ontology** (`analysis/ontology/`)
+   as Layer 2b cross-links, not per card.
+6. These are denominators and context, not credit. The likely surface is a context column or
+   ratio on existing cut tables ("output growth" beside credit growth), not a fourth dashboard.
+   That needs an ASCII approval.
 
 ### Adding a new report — always ask first:
 1. Which product monitors does it feed?

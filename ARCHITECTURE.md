@@ -200,7 +200,6 @@ Live components only. Planned work lives in `PLAN.md`. Moved here from CLAUDE.md
 | `CLAUDE.md` | This file |
 | `STRATEGY_PLANNER.md` | Content ladder, revenue model, product roadmap |
 | `PIPELINE_ARCHITECTURE.md` | **Pipeline stages, system model cadence, adding-period checklist** |
-| `analysis/report_analysis_prompt.md` | Master prompt + analytical framework for all report analyses |
 | `analysis/core/gate.py` | Master eval gate — Stages 3 and 6 |
 | `analysis/core/validate_timeline.py` | Check 0: timeline.json schema + path existence |
 | `analysis/pipelines/sibc/validate_sections.py` | Check 1: sections.json data integrity |

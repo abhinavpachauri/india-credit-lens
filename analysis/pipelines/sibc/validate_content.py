@@ -2,12 +2,14 @@
 """
 validate_content.py — Content accuracy checker for Stage 2 outputs.
 
-Validates that numbers, dates, and growth rates cited in annotation bodies
-and markdown docs match the underlying sections.json data.
+Validates that numbers, dates, and growth rates cited in hand-written annotation
+bodies match the underlying sections.json data. (It also checked the insights /
+gaps / opportunities markdown docs of the retired Stage 2 authoring pass; those
+docs were deleted on 2026-09-24 and nothing generates them any more.)
 
 Three checks:
   A) Dates cited in annotation bodies/titles/implications must exist in the
-     corresponding section's absoluteData (or any section for markdown docs).
+     corresponding section's absoluteData.
   B) Growth rates cited as "X% FY" or "X% YoY" must match a value in
      growthData/fyData within GROWTH_TOLERANCE percentage points.
   C) Values cited as "₹X.XXL Cr" must match a value in absoluteData (in L Cr)
@@ -15,10 +17,10 @@ Three checks:
      VALUE_TOLERANCE percent.
 
 Usage:
-  # Per-period (checks annotations_draft.ts + insights.md + gaps.md + opportunities.md)
+  # Per-period (checks annotations_draft.ts)
   python3 validate_content.py --period 2026-03-30
 
-  # Merged (checks annotations_merged.ts + merged markdown docs)
+  # Merged (checks annotations_merged.ts)
   python3 validate_content.py --merged
 
 Exit codes:
@@ -197,16 +199,6 @@ def extract_annotation_texts(ts_path: Path) -> dict[str, list[str]]:
     return result
 
 
-def extract_markdown_texts(md_path: Path) -> list[str]:
-    """Return all non-header, non-bullet lines from a markdown file."""
-    lines = []
-    for line in md_path.read_text(encoding='utf-8').splitlines():
-        stripped = line.strip()
-        if stripped and not stripped.startswith('#') and not stripped.startswith('---'):
-            lines.append(stripped)
-    return lines
-
-
 # ── Validation logic ──────────────────────────────────────────────────────────
 
 class Result:
@@ -331,20 +323,6 @@ def validate_annotations(ts_path: Path, lookup: dict, all_v: set, all_g: set) ->
     return result
 
 
-def validate_markdown(md_path: Path, all_dates_: set, all_v: set, all_g: set) -> Result:
-    result = Result(md_path.name)
-    if not md_path.exists():
-        result.warn(f"Markdown file not found: {md_path.name} — skipping")
-        return result
-
-    texts = extract_markdown_texts(md_path)
-    validate_text_against_lookup(
-        texts, all_dates_, all_v, all_g, result,
-        context=md_path.name
-    )
-    return result
-
-
 # ── Main ──────────────────────────────────────────────────────────────────────
 
 def run(period_dir: Path, sections_path: Path) -> bool:
@@ -361,7 +339,6 @@ def run(period_dir: Path, sections_path: Path) -> bool:
     sections = data.get('sections', [])
 
     lookup    = build_section_lookup(sections)
-    all_d     = all_dates(lookup)
     all_v     = all_values(lookup)
     all_g     = all_growths(lookup)
 
@@ -372,10 +349,6 @@ def run(period_dir: Path, sections_path: Path) -> bool:
     if not ann_ts.exists():
         ann_ts = period_dir / "annotations_merged.ts"
     results.append(validate_annotations(ann_ts, lookup, all_v, all_g))
-
-    # Markdown docs
-    for doc in ('insights.md', 'gaps.md', 'opportunities.md'):
-        results.append(validate_markdown(period_dir / doc, all_d, all_v, all_g))
 
     # ── Print report ──────────────────────────────────────────────────────────
     all_errors   = [e for r in results for e in r.errors]

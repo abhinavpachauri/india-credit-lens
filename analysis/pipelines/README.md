@@ -25,4 +25,4 @@ consolidate_atm_pos · compute_atm_pos_signals (Stage 4a) · generate_atm_pos_in
 validate_atm_pos_insights (4c) · validate_atm_pos_claims (4d).
 
 Adding source #3 = a new `pipelines/{x}/pipeline.json` + a thin extractor module, reusing
-`core.*` stages — zero edits to `core/` or `gate.py`. See `core/MANIFEST_DESIGN.md`.
+`core.*` stages — zero edits to `core/` or `gate.py`. See `ARCHITECTURE.md` §"Adding a pipeline".

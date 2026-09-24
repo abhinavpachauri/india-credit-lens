@@ -16,7 +16,7 @@ Layout mirrors the original paths, so anything can be restored with a `git mv` b
 | `cytoscape`, `cytoscape-dagre`, `@types/cytoscape` | Dependencies of an unrouted feature | Removed from `web/package.json` |
 | `analysis/newsletter_v1/` | Retired 2026-07-04; no decision pending | Superseded by `analysis/distribution/` |
 | `analysis/rebuild_{sibc,atm_pos}_signals.py` | Superseded by `generate_signal_history append`; in neither the live set nor `legacy/` | — |
-| `docs/HANDOFF_*.md` × 4, `docs/FABLE_BRIEF_*.md` | Finished-work snapshots; their live content is already in CLAUDE.md and the specs | — |
+| `docs/FABLE_BRIEF_*.md` | Finished-work snapshot, still cited by `signals/README.md` | (the HANDOFF files were deleted 2026-09-24) |
 | `raw_inputs/*.xlsx` | Byte-identical duplicates of the copies already in their period directories | The period copies are the originals |
 | `trading_system.db` | Belongs to no pipeline in this project | — |
 
@@ -24,3 +24,15 @@ Layout mirrors the original paths, so anything can be restored with a `git mv` b
 not stray code — it was simply never routed. Archiving it is a statement that it is not in use,
 not that it was worthless: the v4.0 system model would now feed it far better data than existed
 when it was written. Restoring it is a `git mv` and a route.
+
+## 2026-09-24 — docs review
+
+**Deleted, not archived** (git history keeps them): the four `docs/HANDOFF_*.md` and
+`analysis/newsletter_v1/newsletter_delta_brief.md`. Nothing referenced them, and a document
+nobody opens is not a record anyone consults. Also deleted from the live tree: the retired
+generators' outputs (v1 newsletters, release reads, LinkedIn packages, their images), the
+May-era Stage 2 `insights/gaps/opportunities.md`, `report_analysis_prompt.md`,
+`core/MANIFEST_DESIGN.md`, `POST_SPEC_mix_movement.md` and `RESEARCH_BACKLOG.md`.
+
+**Moved here:** the dated plans (`docs/PLAN_2026-*.md`) and `docs/REVIEW_2026-08-11.md`. They are
+design records that the living `PLAN.md` still cites. The plan itself is `PLAN.md`.

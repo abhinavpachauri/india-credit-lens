@@ -75,7 +75,7 @@ repetition structurally hard.
 | C10 | **Method** | How this thing is built | AI PM register (§8) |
 
 **Standing post specs.** A post whose material comes from a build rather than a monthly cycle gets
-its own brief rather than a generator run: `POST_SPEC_mix_movement.md` (Post 1 = C2, Post 2 = C10).
+its own brief rather than a generator run (Post 1 = C2, Post 2 = C10). The brief was retired 2026-09-24 unapproved; the user now writes posts in their own voice.
 The brief carries the verified numbers, the arc, the traps, and an approved ASCII layout — and it
 inherits the §5.1 rule that the design session invents nothing and derives nothing.
 

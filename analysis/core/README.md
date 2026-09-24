@@ -3,7 +3,7 @@
 Pipeline-agnostic machinery. **Nothing here inspects a pipeline id** — every engine is
 parameterized by `--pipeline {id}` and reads the per-pipeline manifest
 (`pipelines/{id}/pipeline.json`). Adding a data source must not require editing this dir
-(the source-#3 litmus). Design rationale: `core/MANIFEST_DESIGN.md`.
+(the source-#3 litmus). What is and is not generic across pipelines: `ARCHITECTURE.md` §"Adding a pipeline".
 
 ## The gate
 - **`gate.py`** — the ONE manifest-driven gate runner (replaced `run_evals` /

@@ -8,7 +8,7 @@ Validates the annotations TypeScript file (e.g. web/lib/reports/rbi_sibc.ts)
 to ensure the analysis input is complete and correctly structured before it
 is used to generate the system model.
 
-If this passes → safe to run the report_analysis_prompt and generate system_model.json.
+If this passes → the annotations are structurally safe to promote.
 If this fails  → fix annotations first. The system model will inherit any errors here.
 
 Checks:
@@ -667,7 +667,7 @@ def print_report(result, ts_path, sections):
     print(f"\n{'═' * w}")
     if result.passed:
         print(f"  ✅  PASSED — annotations are ready for system model generation")
-        print(f"  →  Run report_analysis_prompt.md with Claude to generate system_model.json")
+        print(f"  →  Safe to promote (python3 analysis/pipelines/sibc/promote_annotations.py)")
     else:
         print(f"  ❌  FAILED — {len(result.errors)} error(s) must be resolved first")
     print(f"{'═' * w}\n")

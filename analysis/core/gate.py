@@ -6,7 +6,7 @@ Reads a per-pipeline manifest (pipelines/{id}/pipeline.json) and executes its de
 ordered stage list. Each stage targets a generic `core.*` engine, a per-pipeline
 `pipeline.*` module, or a `builtin` (pytest/web_build/csv_integrity). The manifest is the
 ONLY place the gate sequence is declared; this file holds no pipeline-specific logic and
-never inspects the pipeline id (see analysis/core/MANIFEST_DESIGN.md).
+never inspects the pipeline id (see ARCHITECTURE.md, "Adding a pipeline").
 
 This is the only gate. The legacy per-pipeline runners were retired in the §4 cutover
 (2026-06-25) and live in analysis/legacy/. Stage resolution — the logical-name → script map

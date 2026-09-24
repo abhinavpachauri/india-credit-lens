@@ -32,6 +32,11 @@ skills = procedure, subagents = independent review, hooks + `reconcile.py` = enf
    (accounts / limit / outstanding) where every layer assumes one, and an occupation taxonomy
    that overlaps SIBC sectors without matching them.
 5. **Lending & Deposit Rates** (monthly PDF; `pdftotext` works, so it is table extraction).
+6. **MoSPI eSankhyiki: the real economy behind the credit** (`STRATEGY_PLANNER.md` §9 Tier 3).
+   ⏸ **Position in this order is the user's call** (proposed 2026-09-24). Recommendation: first
+   a free half-day probe (confirm IIP's current base year, snapshot one release, map 5 NIC
+   sectors to SIBC codes), then **IIP + CPI** as the first API-pull pipeline. It is cheap (JSON,
+   no manual download) and it tests the one ingestion type the architecture has never met.
 
 ## Open decisions and known debts (not scheduled)
 
@@ -63,4 +68,6 @@ skills = procedure, subagents = independent review, hooks + `reconcile.py` = enf
 - **PDF extraction** as a general capability: 11 of 21 remaining RBI sources are PDF-only. Start
   it when a PDF source is next in line, not before.
 - **Future data bets**: longer history → forecasting; bank results → per-bank analytics.
+- **Research bets** (from the retired RESEARCH_BACKLOG): open-source a financial-analysis eval set
+  built from our deterministic ground truth; LLM reasoning over the causal graph, not only signals.
 - Strategy, revenue and the content ladder: `STRATEGY_PLANNER.md`.

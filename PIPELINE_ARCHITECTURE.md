@@ -808,7 +808,6 @@ analysis/
 ├── validate_signal_history.py      ← Check 2e
 ├── validate.py                     ← Checks 4, 5
 │
-├── report_analysis_prompt.md       ← Master prompt for all Claude analysis passes
 │
 └── newsletter/                     ← Exception — not yet standardised to this architecture
     ├── CLAUDE.md
