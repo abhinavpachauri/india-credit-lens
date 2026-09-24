@@ -768,7 +768,7 @@ Validators before content; compose behind validators; author last — every stag
    produce candidate construct members and cross-links with *zero edits* to Part II content —
    the M+N guarantee at N=3. If it doesn't, fix the derivation, never hand-patch.
 
-**Retail product tie-in (`STRATEGY_PLANNER.md` §17; artifact spec in `archive/docs/PLAN_2026-08-11.md`'s parked
+**Retail product tie-in (`STRATEGY_PLANNER.md` §13; artifact spec in `archive/docs/PLAN_2026-08-11.md`'s parked
 backlog, EN-1):** `ticker_map.json` targets may be
 **construct URNs as well as entity URNs** — a construct is often the correct transmission anchor
 (e.g. `icl:eco/unsecured_retail_appetite` → SBI Cards) and inherits its evidence set for the

@@ -32,7 +32,7 @@ skills = procedure, subagents = independent review, hooks + `reconcile.py` = enf
    (accounts / limit / outstanding) where every layer assumes one, and an occupation taxonomy
    that overlaps SIBC sectors without matching them.
 5. **Lending & Deposit Rates** (monthly PDF; `pdftotext` works, so it is table extraction).
-6. **MoSPI eSankhyiki: the real economy behind the credit** (`STRATEGY_PLANNER.md` §9 Tier 3).
+6. **MoSPI eSankhyiki: the real economy behind the credit** (`STRATEGY_PLANNER.md` §8.1).
    ⏸ **Position in this order is the user's call** (proposed 2026-09-24). Recommendation: first
    a free half-day probe (confirm IIP's current base year, snapshot one release, map 5 NIC
    sectors to SIBC codes), then **IIP + CPI** as the first API-pull pipeline. It is cheap (JSON,

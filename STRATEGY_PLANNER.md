@@ -1,573 +1,280 @@
-# India Credit Lens — Strategy Planner
-> Applying the BankRegData Model to the Indian Lending Intelligence Market
+# India Credit Lens — Strategy
 
-**Version:** 2.1 | **Updated:** May 2026 | **Author:** Abhinav
-**Status:** Foundation built → Content ladder live → Product monitors next
-
----
-
-## 1. The BankRegData Blueprint (What We're Adapting)
-
-BankRegData is a 16-year-old, 2–3 person US company that turned publicly available FFIEC/FDIC call report data into a subscription SaaS platform with 1,275+ clients and 10,800+ daily users. No funding raised. Private. Profitable.
-
-**Their formula:**
-```
-Public Regulatory Data  +  Pre-processed Metrics  +  Peer Benchmarking  +  Alerts
-  = Subscription Revenue from banking professionals
-```
-
-**Why it worked:**
-- Data is free and public — but useless without parsing
-- 525+ pre-calculated ratios saved analysts days of work
-- Automated threshold alerts created stickiness
-- Product-specific dashboards sold to relevant teams (not just "the whole bank")
-- Targeted a niche who had budget and pain
-
-**India Credit Lens adapts this as:**
-```
-RBI + CRIF + CIBIL + SIDBI + NABARD + PLFS + more
-  + Systems View  +  Signal vs Noise  +  Strategic Opportunities  +  Causal Model
-  = Intelligence Platform for Indian Lending Professionals
-```
-
-**The key evolution from BankRegData:** We add a causal layer (system_model.json) that connects data signals to macro drivers. BankRegData shows you what happened. India Credit Lens shows you what happened, why, and what to do about it.
+> **v3.0 · September 2026 · Author: Abhinav.** Strategy only: who we serve, what we sell, why it
+> is defensible, and in what order it gets monetised. **What is being built now is in `PLAN.md`;
+> standing rules are in `DECISIONS.md`; how the system works is in `ARCHITECTURE.md`.** This
+> document changes when the strategy changes, not when a feature ships. v2.1 (May 2026) described
+> a pipeline that has since been rebuilt; its execution sections were removed and are in git history.
 
 ---
 
-## 2. The Indian Market Context
+## 1. Positioning
 
-### Why India is a better opportunity than the US right now
+> **India Credit Lens** is the intelligence layer on top of India's public lending data —
+> turning fragmented regulatory releases into structured signals, a causal model that says
+> *why* credit moved, and numbers that trace to the source, for anyone building, running or
+> investing in Indian credit.
+
+**Decision filter** (every feature, source and piece of content):
+1. Does it build expert positioning in the Indian lending ecosystem?
+2. Does it attract CPOs, CROs, credit analysts or PE/VC at NBFCs, banks or fintechs?
+3. Does it move toward a monetisable asset (consulting, a CPO role, or a SaaS subscriber)?
+
+No to all three → deprioritise.
+
+---
+
+## 2. The model we are adapting: BankRegData
+
+A 16-year-old, 2–3 person, unfunded, profitable US company that turned public FFIEC/FDIC call
+reports into a subscription platform (1,275+ clients). Its formula:
+
+```
+Public regulatory data + pre-processed metrics + peer benchmarking + alerts
+  = subscription revenue from banking professionals
+```
+
+It worked because the data is free but useless unparsed, hundreds of precomputed ratios save
+analysts days, alerts create stickiness, and it sold to a niche with budget and pain.
+
+**Our adaptation adds one layer BankRegData does not have: the causal model.** BankRegData shows
+what happened. We show what happened, why, and what it connects to, with every number traceable.
+
+---
+
+## 3. The market
 
 | Factor | US (BankRegData) | India (Credit Lens) |
 |---|---|---|
-| Regulatory data | Highly structured, XBRL, API-ready | PDF-heavy, fragmented, harder to parse |
-| Competition | Established (S&P, Moody's, Bloomberg) | Near zero at this interpretation layer |
-| Market size | Mature credit market | Fastest growing credit market globally |
-| Digital penetration | High, saturated | Growing rapidly — fintech boom |
-| Report publishers | FFIEC, FDIC (2 sources) | RBI, CRIF, CIBIL, SIDBI, NABARD, PLFS, Sa-Dhan, MFI Network (8+ sources) |
-| Insight hunger | Moderate (data already structured) | High (data is raw PDFs, no synthesis) |
+| Regulatory data | Structured, XBRL, API-ready | Fragmented XLSX/PDF, manual downloads, revisions |
+| Competition at the interpretation layer | Established (S&P, Moody's, Bloomberg) | Near zero |
+| Credit market | Mature | Among the fastest-growing globally |
+| Publishers | 2 (FFIEC, FDIC) | RBI, MoSPI, NABARD, SIDBI, bureaus, SROs — 20+ releases |
 
-### The gap no one is filling
-- **DBIE** (RBI's own portal) = data warehouse, no interpretation
-- **Bloomberg/Refinitiv** = too expensive, not India lending-specific
-- **Consultancy reports** = expensive, infrequent, generic
-- **LinkedIn thought leaders** = opinions without data
-- **India Credit Lens** = structured, visual, strategic intelligence + causal model at low cost
+**The gap:** DBIE and eSankhyiki are data warehouses with no interpretation; Bloomberg/Refinitiv
+are expensive and not India-lending-specific; consultancy reports are infrequent and generic;
+LinkedIn commentary has opinions without data. Nobody sits between the raw release and the
+decision.
 
 ---
 
-## 3. The Content Ladder (How Readers Become Customers)
+## 4. What we sell: the three things an LLM cannot fake
 
-Every piece of content sits on a ladder. The goal is to pull readers up the ladder over time. Each rung has one CTA — to the rung directly above it. Never skip rungs.
+1. **Numbers that trace.** Every published number is checked against the computed signal store
+   before it ships. An LLM narrates; it never decides a number. This is the trust layer, and it is
+   what makes the rest sellable to a risk officer.
+2. **The causal layer.** A system model per source (entities, channels, sourced external forces)
+   re-evaluated against the data every release: which drivers are firing, which mixes are being
+   *steered* versus *drifting*, where new credit is going relative to where the book sits. Forces
+   enter only with a verified source.
+3. **Cross-source joins.** Bank credit to NBFCs *and* what NBFCs lend; card counts *and* card
+   balances; soon credit *and* the output it finances (MoSPI). No single release can say these.
+
+**The depth-of-job ladder is where the price is:**
+*describe the market* (commodity, marketing) → *benchmark a specific player* (mid-ticket, sticky)
+→ *inform a specific decision* (high-ticket, defensible). Most output today is "describe". The
+money is in moving the engine toward "decide".
+
+---
+
+## 5. Who we serve, and the distribution reality
+
+**Buyers:** credit, product and strategy teams at NBFCs, banks and fintechs; PE/VC in Indian
+lending; consultants.
+
+**The reachable network is not the buyer.** The warm graph is tech and fintech product people, not
+bank credit leadership. Aggregate bank-credit content posted to that graph under-performs because
+it is not that audience's world, not because the insight is weak. Two consequences:
+- **Payments is the bridge.** UPI QR vs POS, acquiring concentration and card-market structure are
+  fintech-builder content and match the warm network.
+- **Bank-leadership credit content needs a non-warm channel** (direct outreach, communities).
+
+**Channel state (Sep 2026):** the dashboard (`indiacreditlens.com`, three sources) is live. Substack
+is paused while the author reads a few cycles as a reader. LinkedIn posts are written by the author
+in their own voice from verified numbers the platform supplies. X needs its own design.
+
+**Open strategic fork:** (a) bend the content toward the reachable network (fintech and payments
+intelligence for builders), or (b) keep the bank-leadership thesis and build a cold channel. They
+lead to different products. Undecided.
+
+---
+
+## 6. The content ladder
 
 ```
-① Free Newsletter (Substack)
-   System narrative + 2 signals + 1 gap + 1 opportunity + what to watch
-   FREE | Email capture, engagement | Monthly
-
-        ↓  "explore all insights on the dashboard"
-
-② Dashboard (indiacreditlens.com)
-   All annotations, all charts, interactive System View tab
-   FREE | Depth, credibility, SEO | Always live
-
-        ↓  "get the full system model and lender strategy"
-
-③ Monthly Digest (Substack paid)
-   Full causal narrative + forward view + lender strategy + cross-report signals
-   PAID ₹999–1,999/month | First monetisation rung | Monthly PDF
-
-        ↓  "get product-specific intelligence for your segment"
-
-④ Product Intelligence Pages (SaaS)
-   Cross-report dashboards per credit product (Gold, MSME, Housing etc.)
-   PAID ₹25–75k/year per product | Institutional subscriptions | Always live
-
-        ↓  "let's apply this to your specific lending context"
-
-⑤ Consulting Mandates
-   Per-engagement strategic analysis for NBFCs, banks, fintechs, PE/VC
-   PAID ₹5–15L/engagement | High margin, low volume | Opportunistic
+① Free reads — LinkedIn posts, Substack (paused)        awareness, email capture
+② Dashboard — indiacreditlens.com                       depth, credibility, SEO     FREE, live
+③ Monthly Digest — the reasoning, not just conclusions  first monetisation rung     ₹999–1,999/mo
+④ Product intelligence — cross-source view per product  institutional               ₹25–75k/yr
+⑤ Consulting — the engine applied to one lender         high margin, low volume     ₹5–15L/mandate
 ```
 
----
-
-## 4. Distribution Strategy (LinkedIn → Substack Funnel)
-
-The content ladder only works if content reaches the right people. Distribution fills the top of the funnel — LinkedIn drives awareness, Substack captures emails. The website provides SEO discoverability and credibility but is not an active funnel step at this stage.
-
-### The funnel in practice
-
-LinkedIn short-form post → Substack free subscription → Substack paid digest → consulting enquiry
-
-All LinkedIn CTAs point to Substack. Never to the website.
-
-### One report = 8–10 posts, spread over 4–6 weeks
-
-Each SIBC release produces 6 subsystem themes and 8 cross-period insights — each is a standalone LinkedIn post. Short-form text posts drive awareness and funnel to the newsletter. No content drought, no new analysis needed between posts.
-
-### Insight-first framing (non-negotiable)
-
-Every post leads with the finding, never the source.
-
-- ❌ "Feb 2026 SIBC analysis is out"
-- ✅ "Gold loans tripled in 24 months while credit cards flatlined. Two products, one RBI decision."
-
-### Short-form format
-
-3–5 lines. One specific number. One implication for lenders. One Substack CTA. Text posts with precise data points deliver high engagement per unit of effort.
-
-### RBI event-reactive posts
-
-When RBI publishes a monetary policy decision, a new circular, or a relevant report, respond within 24 hours with a data point from the existing SIBC analysis. Reactive posts have the highest engagement — they meet the audience when attention is already high. Planned: `rbi_monitor.py` to automate daily RSS checks and alert when relevant releases land.
-
-### Data-backing contract
-
-Every claim in a distribution post must trace to a validated pipeline output — a specific insight from `insights.md`, a node stat from `system_model.json`, or a series value from `sections_merged.json`. Posts are not generated from memory or raw data. This is the same discipline as `validate_content.py` for annotations, applied to public distribution content.
-
-Full execution rules are in `analysis/newsletter/CLAUDE.md`.
+Each rung's call to action points to the rung directly above it. **The reasoning chain (fact →
+inference → hypothesis) is the proprietary asset:** the free dashboard gives conclusions; paid tiers
+give the reasoning.
 
 ---
 
-## 5. Four Outputs Per Report (Non-Negotiable Framework)
+## 7. Product intelligence (the SaaS layer)
 
-Every report analysed in a single Claude pass produces four structured outputs: `annotations_merged.ts` (dashboard annotations), markdown docs (`insights.md` / `gaps.md` / `opportunities.md`), `system_model.json` (causal graph), and `subsystems.json` (subsystem map). `newsletter_config.json` is then authored from these outputs — it is not auto-generated. This single-pass discipline keeps analysis consistent and makes all content regeneration script-only — no Claude cost after the initial analysis pass.
+Lenders think by product, not by report, so the paid layer is organised by credit product.
 
-Stage detail is in `PIPELINE_ARCHITECTURE.md`.
-
----
-
-## 6. The Generator Pipeline (Config-Driven, No Claude to Regenerate)
-
-Claude produces a JSON config once per report. All content outputs — newsletter markdown, monthly digest, mermaid diagrams — are regenerated by Python scripts reading that config. Editing the config and re-running the script is the full regeneration workflow. No Claude token cost after the initial analysis pass.
-
-Full script inventory, input/output paths, and current status are in `PIPELINE_ARCHITECTURE.md`.
-
----
-
-## 7. The System Model (The Causal Layer — Our Differentiator)
-
-Every report period produces a `system_model.json` — a structured causal graph connecting macro drivers to sector outcomes to opportunities, risks, and data gaps. Every node links to exact annotation IDs from the dashboard — no reinterpretation, pure structural indexing.
-
-Each driver, opportunity, pressure, and gap node carries a `claim_type` field — `data` (sourced directly from the report), `inference` (sourced externally via Stage 6b `source_claims.py`), or `hypothesis` (flagged but not blocked). This source verification layer — enforced by `validate_claims.py` as a pipeline gate — separates structured intelligence from opinion.
-
-This JSON powers three renderers: the newsletter generator, the mermaid diagram generator, and the planned System View dashboard tab. Full node/edge schema and annotation_id constraints are in `analysis/report_analysis_prompt.md`.
-
-**What makes this the paid layer:** BankRegData shows you metrics. The system model shows you why the metrics moved, what connects them, and what to watch for next — with verifiable sourcing on every claim. That causal intelligence is what the Monthly Digest sells.
-
----
-
-## 8. Product Intelligence — The SaaS Monetisation Layer
-
-The paid SaaS tier is **product-specific intelligence pages** — cross-report views organised by credit product. Lenders think by product, not by report source.
-
-### Five priority product monitors
-
-| Monitor | What it tracks | Report sources | Build priority |
+| Monitor | What it tracks | Sources | Unlocked by |
 |---|---|---|---|
-| **Gold Loan Monitor** | Market size, LTV risk, household stress, delinquency | RBI SIBC + CIBIL + RBI FSR + CRIF | **P1** — SIBC data live now |
-| **MSME Credit Monitor** | Size-wise growth, bureau gaps, formalisation signals | RBI SIBC + SIDBI Pulse + CRIF + CIBIL | **P1** — after SIDBI added |
-| **Housing Finance Monitor** | PSL housing, PMAY pipeline, Tier 3/4 distribution | RBI SIBC PSL + CIBIL + NABARD | P2 |
-| **Personal Credit Health** | Cards, consumer durables, fintech displacement | CIBIL + RBI SIBC | P2 |
-| **Supply Chain Finance** | Engineering, trade credit, TReDS flows | RBI SIBC + TReDS data | P3 |
+| **Gold Loan** | Size, pace, collateral cycle, NBFC vs bank share | SIBC + NBFC (+ CIBIL, FSR) | live data today; bureau adds risk |
+| **MSME Credit** | Size-wise growth, formalisation, access gaps | SIBC + NBFC + SIDBI + MoSPI (ASUSE) | SIDBI / MoSPI |
+| **Housing Finance** | PSL housing, bank vs HFC/NBFC, ticket bands | SIBC + NBFC + NABARD | NBFC live |
+| **Personal Credit Health** | Cards, consumer durables, the unsecured cycle | SIBC + payments + CIBIL | bureau |
+| **Supply Chain Finance** | Trade credit, TReDS flows | SIBC + TReDS | TReDS |
 
-### Free vs Paid line per monitor
-
-```
-FREE (SEO + discovery):
-  Current period only · Single-report signals · 3 key metrics · Public
-
-PAID ₹25–75k/year (institutional):
-  Cross-report aggregated view · Full historical data
-  Quarterly PDF briefing (generated from system_model.json)
-  Email alert when tracked signal crosses threshold
-  PSLC opportunity flags for PSL-eligible lenders
-```
-
-### Pricing rationale
-BankRegData: 1,275 clients, estimated $2–5M USD ARR with 2–3 people.
-India equivalent at 5–10x lower pricing: 50–200 institutional subscribers × ₹25–75k/year = **₹1.25–15Cr ARR at scale**.
+Free: current period, single-source signals, a few key metrics. Paid (₹25–75k/yr): the
+cross-source view, full history, a quarterly briefing, threshold alerts.
 
 ---
 
-## 9. Report Sources — Full Pipeline with Product Monitor Mapping
+## 8. Data sources
 
-### Tier 1 — Active pipeline (feeds product monitors)
+**Principle:** a new source earns its place by the *joins* it unlocks, not by its own content.
+Each is ingested through the same manifest-driven gate; a source that needs a new capability
+(a cadence, an API pull, a PDF table) pays for it once, for every later source of that kind.
 
-| Report | What it covers | Status | Feeds |
+| Status | Sources |
+|---|---|
+| **Live** | RBI SIBC (bank credit by sector) · RBI ATM/POS/card statistics (payments, 63 banks) · RBI NBFC sectoral deployment |
+| **Decided next, in order** | RBI regulatory watch (circulars attached to the model) → BSR-1 (credit by occupation, quarterly) → Lending & Deposit Rates (price of credit) |
+| **Candidate: MoSPI eSankhyiki** | The real economy behind the credit: IIP/ISP output, CPI/WPI prices, NAS GVA, PLFS jobs, ASI/ASUSE enterprises. Official REST API. Position in the order undecided (§8.1) |
+| **Candidate: RBI Tier 2** | Bank Lending Survey, consumer confidence, inflation expectations, PPI, TReDS |
+| **Commercial** | CIBIL, CRIF, Experian, MFIN. Rights differ from public data; needs a licence decision before ingestion |
+| **Rejected** | Bank results and presentations as a *source*: unstructured, and per-bank credit is annual only (STRBI). §11 holds the strategic question behind it |
+
+### 8.1 MoSPI eSankhyiki: why it matters
+
+Every live source measures credit. None measures what the credit finances, so the platform can
+say "industry credit +20%" and cannot say whether industry produced +4% or +20%. eSankhyiki is
+the official home of the other side of that ratio.
+
+| Dataset | Cadence | The lending question | Pairs with |
 |---|---|---|---|
-| **RBI SIBC** | Bank credit by sector/industry | **Live** | Gold, MSME, Housing, Personal, Supply Chain |
-| **CIBIL Quarterly** | Retail credit health, delinquency | Next (P1) | Gold, MSME, Housing, Personal |
-| **RBI BSR-1 Quarterly** | Bank-level credit — most granular | Next (P1) | All monitors |
-| **CRIF MSME Report** | Commercial credit, bureau penetration | Next (P2) | MSME, Supply Chain |
-| **SIDBI MSME Pulse** | MSME access gaps, stress, underserved | Next (P2) | MSME |
-| **NABARD** | Agriculture, rural credit | Later | Housing, MSME |
-| **RBI FSR** | Financial stability, systemic risk | Later | Gold, NBFC risk |
-| **PLFS** | Labour force income — demand-side signal | Later — now via the MoSPI API (Tier 3) | Personal, Housing |
+| IIP (NIC 2-digit, use-based) | monthly | Is credit to an industry running ahead of its output, or behind it? | SIBC industry by type; consumer durables |
+| ISP | monthly | The same for services | SIBC services |
+| NAS (GVA by sector; household liabilities) | quarterly / annual | Credit intensity by sector; household debt ratio | SIBC main sectors; NBFC |
+| CPI / WPI | monthly | Real credit growth | every credit series |
+| PLFS | monthly / quarterly | The income base behind personal-loan growth | personal loans; payments |
+| ASI / ASUSE | annual | Formal vs informal enterprise finance | MSME cuts |
+| AIDIS (NSS 77) | one-off (2019) | Institutional vs non-institutional household debt, as a baseline | Layer 2 gap nodes |
 
-### Tier 2 — Macro and sentiment signals (evaluated April 2026, ingestion planned)
+Access verified 2026-09-24: `api.mospi.gov.in` returns JSON (it needs legacy TLS renegotiation,
+opted into for that host only), and the IIP 2011-12-base series in the API stops at March 2026,
+so the current base must be confirmed first. Build rules are in `PLAN.md`; the first API-pull
+source is also the test of a new ingestion type.
 
-All 9 sources below passed the decision filter. Pipeline redesign required before ingestion begins. Draft ingestion plans to be documented in `DATA_SOURCES.md` (not yet created).
+---
 
-| Report ID | Report | What it adds | Product monitors it feeds |
+## 9. Revenue model
+
+| Tier | Product | Price | Customer |
 |---|---|---|---|
-| `rbi_walr` | Lending and Deposit Rates of SCBs | Credit pricing — WALR/EBLR by sector | All monitors (pricing layer) |
-| `rbi_bls` | Bank Lending Survey | Banker demand sentiment + terms tightening by sector | All monitors (forward view) |
-| `rbi_uccs` | Urban Consumer Confidence Survey | Urban household confidence, income, spending net responses | Personal Credit Health, MSME |
-| `rbi_iesh` | Inflation Expectations Survey of Households | Urban household inflation expectations (current, 3M, 1Y) | Personal Credit Health, Housing |
-| `rbi_rccs` | Rural Consumer Confidence Survey | Rural confidence — rural/urban divergence signal | Gold Loan, MSME, Housing |
-| `rbi_spf` | Survey of Professional Forecasters | Repo rate + CPI + credit growth professional consensus | All monitors — **web scrape pipeline** |
-| `rbi_atm_pos` | Bank-wise ATM/POS/Card Statistics | Card infrastructure + credit/debit transaction volumes | Consumer Credit dashboard |
-| `rbi_ppi` | Entity-wise PPI Statistics | EMI card issuance + BNPL wallet proxy | Consumer Credit dashboard |
-| `rbi_treds` | Entity-wise TReDS Statistics | MSME invoice financing velocity | MSME Credit Monitor, Supply Chain Finance |
+| Free | Dashboard + free posts | ₹0 | Analysts, students, discovery |
+| Digest | Monthly Digest (paid) | ₹999–1,999/mo | Senior analysts, consultants |
+| Product Monitor | Per-product intelligence | ₹25–75k/yr | NBFC/bank/fintech product and credit teams |
+| Team | Multi-product + data access | ₹1.5–3L/yr | Strategy teams, multi-product fintechs |
+| Enterprise | Full suite, custom, white-label | ₹5–15L/yr | Large banks, PE funds, consulting firms |
+| Consulting | Per engagement | ₹5–15L/mandate | NBFCs and fintechs needing custom intelligence |
 
-### Tier 3 — The real economy behind the credit: MoSPI eSankhyiki (assessed 2026-09-24)
-
-**Why it matters.** Every source ingested so far measures CREDIT. None measures what the credit
-is financing, so the platform can say "industry credit +20%" and cannot say whether industry
-produced +4% or +20%. MoSPI's `esankhyiki.mospi.gov.in` is the official home of the other side
-of that ratio: output, prices, jobs and household balance sheets. It turns "credit moved" into
-**"credit moved relative to the economy it finances"**, which is a causal-layer question and
-exactly the differentiator.
-
-**Access (verified 2026-09-24).** It is a portal, not a source; the datasets behind it are the
-sources. A public REST API (`api.mospi.gov.in`, per-dataset OpenAPI specs, ~30 datasets) returns
-clean JSON: an IIP call returned index and growth by month and NIC sector. MoSPI also runs an
-official MCP server (`mcp.mospi.gov.in`, beta since Feb 2026). Two access facts:
-- The API server needs **legacy TLS renegotiation**, which OpenSSL 3 refuses by default (curl
-  fails outright). A client that opts in for that host only gets data.
-- In the API, **the IIP 2011-12-base series stops at March 2026**, which points to a base-year
-  revision. Confirm where the current base lives before building on IIP.
-
-| Dataset | Cadence | The lending question it answers | Pairs with |
+| Scenario | Horizon | Assumptions | ARR |
 |---|---|---|---|
-| **IIP** (industrial production, NIC 2-digit + use-based) | monthly | Is credit to an industry running ahead of its output (working-capital build, leverage) or behind it? Consumer-durables output vs durables loans. | SIBC industry by type; SIBC consumer durables |
-| **ISP** (services production) | monthly | The same question for services. | SIBC services |
-| **NAS** (GDP/GVA by sector; household financial liabilities; capital formation) | quarterly / annual | Credit intensity: credit-to-GVA by sector over time. The household-debt ratio. | SIBC main sectors; NBFC |
-| **CPI / WPI** | monthly | Real credit growth: is 16% nominal growth 12% real or 5%? | every credit series |
-| **PLFS** (employment, wages; monthly urban) | monthly / quarterly | The retail borrower's income base behind personal-loan growth. | SIBC personal loans; payments |
-| **ASI / ASUSE** (factories; unincorporated enterprises) | annual | Formal vs informal enterprise finance. MSME credit gap sizing. Verify which loan indicators each exposes. | SIBC MSME cuts |
-| **NSS 77A AIDIS** (household debt & investment) | one-off survey (2019) | Institutional vs non-institutional household debt, as a structural baseline, not a feed. | Layer 2 gap nodes |
-| RBI (inside eSankhyiki) | — | **Skip** for anything ingested from RBI directly (one source of truth). | — |
+| Conservative | Year 1 | 50 paid digest + 1 consulting project | ₹8–12L |
+| Moderate | Year 2 | 200 paid digest + 5 product-monitor subscribers | ₹40–60L |
+| Target | Year 3 | 500 paid digest + 20 monitors + 1 enterprise | ₹1.5–2Cr |
+| Scale | Year 4–5 | 100+ institutional + data access + licensing | ₹4–5Cr |
 
-**Design rules for the build** (these are what make it scale, rather than a one-off):
-1. **A new ingestion TYPE: API pull**, the first non-XLSX source. The adapter snapshots the raw
-   JSON of each release into `{data_dir}/{period}/raw/`, and everything from consolidate onward is
-   the existing gate. Freshness recomputes from the committed snapshot, never from the live API
-   (the API revises: IIP quick estimates are final only after two months).
-2. The legacy-TLS opt-in lives in the one fetch path (`core/source_fetch.py`), scoped to that
-   host. It is never lowered globally.
-3. **The MCP server is for exploration in a session, never for compute.** An LLM never decides a
-   number (`DECISIONS.md`).
-4. **Base year is a series dimension.** No YoY or chaining across a base change.
-5. The NIC ↔ SIBC industry concordance is **authored once in the ontology** (`analysis/ontology/`)
-   as Layer 2b cross-links, not per card.
-6. These are denominators and context, not credit. The likely surface is a context column or
-   ratio on existing cut tables ("output growth" beside credit growth), not a fourth dashboard.
-   That needs an ASCII approval.
-
-### Adding a new report — always ask first:
-1. Which product monitors does it feed?
-2. Does it unlock cross-report signals that aren't possible without it?
-3. Build data pipeline → run analysis prompt → update product monitor pages
-
-### Future data bets (parked — strategic context, not yet scheduled)
-
-Two forward bets, both about **expanding the data to unlock a new capability tier**:
-
-1. **Longer historical range → ML forecasting.** Today's signal layer is descriptive/causal
-   (what moved and why). With a longer ingested history (more periods per signal), the next
-   phase can add **predictive models that forecast the next period's numbers** — moving from
-   "explains the past" to "projects the future." Gating factor = depth of clean history in
-   `signals.db`; the freshness + traceability guards already make that history trustworthy
-   enough to model on. This is a Phase 3/4 capability (product differentiation), not near-term.
-
-2. **Bank-level analytics from quarterly/annual results.** Ingest individual banks' quarterly
-   and annual filings (P&L + balance sheet) to power **per-bank** intelligence — the keystone
-   "per-bank granularity" lever. **Open question to validate first:** whether the P&L / balance
-   sheet actually breaks out *lending* detail at the granularity we need (sectoral exposure,
-   asset quality, segment growth) — bank disclosures may only give aggregate advances. Verify
-   disclosure granularity on 2–3 sample filings before committing pipeline work. Pairs naturally
-   with the ATM/POS per-bank data we already have. (See "per-bank granularity = keystone build"
-   in the strategic levers.)
-
----
-
-## 10. Revenue Model
-
-### Tier structure
-
-| Tier | Product | Price | Target customer |
-|---|---|---|---|
-| **Free** | Dashboard + free newsletter | ₹0 | Analysts, students, discovery |
-| **Digest** | Monthly Digest (Substack paid) | ₹999–1,999/month | Senior analysts, consultants, individual professionals |
-| **Product Monitor** | Per-product intelligence page | ₹25–75k/year | NBFC/bank/fintech product and credit teams |
-| **Team** | Multi-product + API access | ₹1.5–3L/year | Strategy teams, fintechs with multiple product lines |
-| **Enterprise** | Full suite + custom reports + white-label | ₹5–15L/year | Large banks, PE funds, consulting firms |
-| **Consulting** | Per-engagement | ₹5–15L/mandate | NBFCs, fintechs needing custom intelligence |
-
-### Revenue scenarios
-
-| Scenario | Timeline | Key assumptions | ARR |
-|---|---|---|---|
-| Conservative | Year 1 | 50 Substack paid + 1 consulting project | ₹8–12L |
-| Moderate | Year 2 | 200 Substack paid + 5 product monitor subscribers | ₹40–60L |
-| Target | Year 3 | 500 Substack paid + 20 product monitors + 1 enterprise | ₹1.5–2Cr |
-| Scale | Year 4–5 | 100+ institutional + API + data licensing | ₹4–5Cr |
-
----
-
-## 11. Phased Roadmap
-
-### Phase 0: Foundation ✅ COMPLETE
-- [x] Dashboard live on Vercel — RBI SIBC, 7 sections, 49 annotations (Jan 2024–Mar 2026 merged)
-- [x] SEO layer — metadata, OG image, sitemap, JSON-LD
-- [x] Analysis pipeline — report_analysis_prompt.md, four-output framework
-- [x] system_model.json schema — nodes, edges, annotation_ids, claim_type fields
-- [x] Stage 6b live — source_claims.py enriches nodes with external citations
-- [x] Check 2c live — validate_claims.py gates claim_type + source on all nodes
-- [x] Free newsletter generator — delta_v2 format, Substack HTML (Issue #3 published)
-- [x] LinkedIn post generator — 7-post package per cycle (1 anchor + 6 signal posts)
-- [x] Email / Substack CTA — SubstackCTA + EmailGate live on dashboard
-- [x] RBI SIBC pipeline — Jan 2024–Mar 2026 (7 periods) ingested, merged, and live
-- [x] New data source evaluation — 9 Tier 2 sources assessed, decision filter passed
-
----
-
-### Phase 1: Content Engine → Email List (Now — Month 6)
-**Goal: 500+ Substack subscribers, 2,000+ LinkedIn followers, first consulting enquiry**
-
-- [~] Publish newsletter + LinkedIn posts for every new RBI SIBC release (Issue #3 published — Apr 2026 next)
-- [x] Email / Substack CTA on dashboard
-- [x] Connect indiacreditlens.com domain on Vercel
-- [ ] Add BSR-1 Quarterly (next report — most granular bank-level data)
-- [ ] Add CIBIL Quarterly (unlocks Gold Loan Monitor MVP)
-- [ ] System View tab on dashboard (interactive causal diagram — SystemView.tsx built, not wired)
-
-**Investment:** Time only
-**Success metric:** 500 newsletter subscribers, 1 consulting enquiry
-
----
-
-### Phase 2: First Monetisation (Month 6–12)
-**Goal: ₹5–15L ARR, validate paid content model**
-
-- [ ] Launch Monthly Digest on Substack paid (₹999–1,999/month)
-  - generate_digest.py producing premium PDF from system_model.json
-  - Full system narrative + forward view + lender strategy section
-- [ ] Launch Gold Loan Monitor (first product intelligence page)
-  - Free: 3 metrics, current period, single report
-  - Paid: cross-report (SIBC + CIBIL), full history, quarterly PDF, alerts
-- [ ] Add SIDBI MSME Pulse — unlocks MSME Monitor MVP
-- [ ] First paid consulting project (close via LinkedIn + dashboard credibility)
-
-**Investment:** ₹10–30K (tooling, design)
-**Revenue target:** ₹8–15L ARR
-
----
-
-### Phase 3: Product Monitor Suite (Month 12–24)
-**Goal: ₹50L–1Cr ARR, systematic institutional sales**
-
-- [ ] MSME Credit Monitor live (cross-report: SIBC + SIDBI + CRIF + CIBIL)
-- [ ] Housing Finance Monitor live
-- [ ] Personal Credit Health Monitor live
-- [ ] Signal alert system — email when tracked metric crosses threshold
-- [ ] API access for Team tier
-- [ ] Approach 2–3 NBFCs / fintechs for enterprise pilot
-- [ ] Peer benchmarking feature (BankRegData's killer feature — compare lenders)
-- [ ] Quarterly "India Lending Intelligence" live event / webinar
-
-**Investment:** ₹50K–2L (possible part-time analyst hire)
-**Revenue target:** ₹50L–1Cr ARR
-
----
-
-### Phase 4: Platform Business (Year 3–5)
-**Goal: ₹3–5Cr ARR, defensible moat**
-
-- [ ] Full API marketplace — fintechs integrate India Credit Lens signals
-- [ ] AI-assisted report parsing (new reports auto-processed)
-- [ ] State/district-level credit intelligence layer
-- [ ] Supply Chain Finance Monitor (TReDS data integration)
-- [ ] Enterprise white-labelling for consulting firms
-- [ ] International expansion — SE Asia credit intelligence (same framework)
-
----
-
-## 12. The Moat (What Makes This Hard to Copy)
-
-| Moat Layer | Description | Strength today |
-|---|---|---|
-| **Data curation** | Manual + AI parsing of 8+ regulatory sources | Growing |
-| **Causal model layer** | system_model.json — not just metrics, but why | Unique |
-| **Framework consistency** | Same 4-output lens applied to all reports | Established |
-| **Author credibility** | Abhinav's lending domain expertise | Strong |
-| **Historical depth** | Year-over-year trend library that compounds | Building |
-| **Generator pipeline** | Config-driven content — scales without manual effort | Live |
-| **Network effects** | More subscribers → better peer benchmarks | Future |
-
----
-
-## 13. Monetisation Sequencing
-
-The reasoning chain — fact → inference → hypothesis — is the proprietary asset.
-The free dashboard gives conclusions. Paid tiers give the reasoning.
-See Section 10 for canonical tier pricing.
+**The highest-ticket dimensions** are data feed / API, white-label, peer benchmarking and investor
+intelligence; sector monitors sold as many small subscriptions carry a support drag.
 
 ### Launch triggers (in order)
 
-| Tier | Trigger before launching |
+| Tier | Trigger |
 |---|---|
-| **Consulting** | No build required — outreach after 2 newsletter issues published. First priority. |
-| **Monthly Digest (paid Substack)** | 50+ free newsletter subscribers |
-| **Product Monitor — Gold Loan** | CIBIL Quarterly added to pipeline |
-| **Product Monitor — MSME** | SIDBI MSME Pulse added to pipeline |
-| **API / Structured Data** | 3+ inbound requests for data access |
+| Consulting | No build required. First priority, via outreach |
+| Paid digest | An engaged free audience (≥50 subscribers or equivalent reach) |
+| Gold Loan monitor | Bureau data, or the SIBC + NBFC join presented as a product |
+| MSME monitor | SIDBI or MoSPI enterprise data ingested |
+| Data access / API | Three or more inbound requests |
 
-### Sequencing rule
-Consulting monetises first (no product build required). Substack paid is parallel.
-Product monitors unlock sequentially as new report sources are added.
-API is last — requires proven signal quality and inbound demand.
+Consulting monetises first; the digest runs in parallel; monitors unlock as their sources land;
+data access comes last, after proven signal quality and inbound demand.
 
 ---
 
-## 14. Key Risks & Mitigations
+## 10. The moat
+
+| Layer | What it is | Today |
+|---|---|---|
+| **Traceability** | Every published number checked against computed signals; paid model calls gated | Built |
+| **Causal model** | Per-source system model with sourced forces, re-evaluated each release | Built (3 sources) |
+| **Cross-source joins** | Relationships no single release can show | Early |
+| **Historical depth** | A signal history that compounds with every release | Building (24 SIBC readings) |
+| **Author credibility** | The author's lending domain expertise | Strong |
+| **Per-bank granularity** | India has no regulator-level per-bank credit disclosure; assembling it would not be copyable | Not started (§11) |
+| **Network effects** | More subscribers → better benchmarks | Future |
+
+---
+
+## 11. Phases (outcomes, not task lists)
+
+| Phase | Outcome | State |
+|---|---|---|
+| **0 · Foundation** | Three live sources, causal layer, traceability gates, public dashboard | ✅ Done (Sep 2026) |
+| **1 · Audience** | A reachable audience that returns: a channel that works for the chosen fork (§5), and a first consulting enquiry | **Now** |
+| **2 · First revenue** | Paid digest or first product monitor; first paid consulting project. ₹8–15L ARR | — |
+| **3 · Product suite** | Several product monitors, alerts, benchmarking, first enterprise pilot. ₹50L–1Cr ARR | — |
+| **4 · Platform** | Data access, white-label, state/district intelligence. ₹3–5Cr ARR | — |
+
+**Open strategic questions (decide, do not drift):**
+1. **The audience fork** (§5): fintech builders via payments, or bank leadership via a cold channel.
+2. **Per-bank granularity.** It is the keystone for benchmarking and investor intelligence, but bank
+   filings may not disclose lending detail at the granularity needed. Validate on 2–3 filings
+   before committing; building it would reshape the roadmap.
+3. **Which paid wedge to test first:** fintech go-to-market intelligence (faster, lower ticket,
+   warm network) or fintech-lending investor intelligence (slower, highest ticket).
+
+---
+
+## 12. Risks
 
 | Risk | Likelihood | Mitigation |
 |---|---|---|
-| RBI / regulators restrict data use | Low | All data is public; analysis and interpretation is original work |
-| Low initial paying subscribers | Medium | Consulting monetises first; Substack paid is parallel, not dependent |
-| Report publishing is slow/manual | Medium | Generator pipeline already reduces this — parsers next |
-| Competitor launches similar product | Medium | Causal model + personal brand + 2-year head start is the moat |
-| Platform costs spiral | Low | Vercel free tier handles early scale; infra cost <₹5K/mo until ₹1Cr ARR |
-| Token costs for analysis | Low | Config-driven pipeline means Claude runs once per report, not per output |
+| Distribution never reaches buyers | **High** | The audience fork (§5) is the first strategic decision, not a content problem |
+| Low paying subscribers | Medium | Consulting monetises first; the digest is parallel, not dependent |
+| Regulators restrict data use | Low | All data is public; the analysis is original work |
+| Source formats change or revise | Medium | Format detection, freshness recomputes, gated remaps |
+| A competitor copies the surface | Medium | Traceability + causal model + history + author credibility |
+| Model costs | Low | Computation is deterministic; paid calls are approved per run with a $5 ceiling |
+| Solo-operator bandwidth | Medium | Skills, gates and a single living plan keep sessions cheap to restart |
 
 ---
 
-## 15. Immediate Next Actions
+## 13. Parked: ICL-Retail (the retail-investor track)
 
-See `CLAUDE.md → Next Builds` for the current prioritised execution queue across both tracks (Track A: content & platform; Track B: multi-source pipeline). This document holds the strategic roadmap — CLAUDE.md holds the live task list.
+*Not active. Kept as a strategic option; revisit only after Phase 1 answers the audience fork.*
 
----
+**Thesis.** Government data → sector → listed-stock transmission intelligence for direct-equity
+retail investors: *"See what government data says about your stocks — before the market reads
+the PDF."* Same engine and repo; a different audience, packaging and price point.
 
-## 16. The Positioning Statement
+**The product is three things:** a transmission layer (release → specific listed names), a dated
+public call register that can be scored, and "your stocks × these signals" alerts.
 
-> **India Credit Lens** is the intelligence layer on top of India's public lending data —
-> turning fragmented regulatory reports into structured signals, causal models, and
-> actionable strategy for anyone building, running, or investing in Indian credit.
+**SEBI guardrail (non-negotiable).** Analytics and monitoring language only; no buy/sell/target
+language anywhere, free or paid. Enforced by the `SEBI_BANNED` lint in
+`distribution/slot_render.lint_compliance`. Revisit Research Analyst registration only if the
+product ever makes recommendations.
 
----
+**Pricing if launched:** ₹1,999 per half-year or ₹3,999/yr; the first 100 founding members at
+₹1,999/yr for life. Free tier: 3 tickers, current period, no alerts.
 
-## 17. ICL-Retail — the retail-investor track
+**Gates if launched (the kill-switch must not be softened):** DG1 ≥100 emails or ≥300 followers
+after 4 weekly notes (fail = packaging, not thesis) · DG2 ≥300 emails at ≥25% open (fail =
+distribution) · DG3 ≥20 paying (fewer than 5 on a 500+ list = wrong willingness to pay; stop).
 
-*Merged here 2026-08-11 from `ICL_RETAIL_90DAY_PLAN.md` (archived). That file mixed three
-concerns; each now lives with its own kind. **Strategy + product + pricing = this section.**
-Content mechanics → `analysis/distribution/DISTRIBUTION_SPEC.md` §15. Engineering artifacts
-(EN-1/EN-2/EN-4) → `archive/docs/PLAN_2026-08-11.md` parked backlog. **Status: not currently being executed** —
-the platform is in a refactor cycle; this is the strategic destination, not the live task list.*
-
-**Thesis.** Government data (RBI + the wider govt-data pool) → sector → listed-stock transmission
-intelligence for Indian retail investors. Working positioning line: *"See what government data says
-about your stocks — before the market reads the PDF."*
-
-**Why it is a different track, not a rename.** `indiacreditlens.com` is credit-scoped and sells to
-lenders (§8, §10). ICL-Retail is govt-data-scoped and sells to direct-equity retail investors. It
-reuses the same engine and the same repo; the audience, the packaging and the price point differ.
-
-**ICP.** Active Indian retail investor, direct-equity holder, already pays (or would) for
-screener.in / Trendlyne premium at ₹3–5k/yr, lives on X-fintwit, YouTube, r/IndianStockMarket.
-
-**The product is not "insights"** — anyone with an LLM can generate correlations. It is three things:
-1. **The transmission layer** — systematic mapping of govt-data releases → specific listed names.
-   Screener/Trendlyne do fundamentals, not data-flow.
-2. **A dated, public, scoreable call register** — the moat an LLM can't fake, compounding over time.
-3. **Monitoring** — "your stocks × these signals" alerts: a recurring relationship, not a one-off read.
-
-**SEBI guardrail (non-negotiable).** Analytics and monitoring language only. *"EPFO payroll growth
-turned negative for these 12 consumer names"* is fine; *"Buy Muthoot, target ₹2,400"* is Research
-Analyst territory. No buy/sell/target-price language anywhere, free or paid. Revisit RA registration
-only if the product ever moves to recommendations. Enforced deterministically by a forbidden-language
-lint before the first note ships — judgment stays human, the floor is mechanical. (The existing
-`SEBI_BANNED` list in `distribution/slot_render.lint_compliance` is the seed.)
-
-**Asset audit — ~70% of the hard engineering already exists.** The pivot is packaging and audience,
-not a rebuild:
-
-| Built asset | Reuse in the retail product |
-|---|---|
-| RBI SIBC pipeline | Bank credit by sector → banks, gold-loan NBFCs (Muthoot, Manappuram), MSME lenders, housing financiers |
-| RBI ATM/POS pipeline | Consumption/payments proxy → SBI Cards, banks' fee income, consumption names |
-| `signals.db` + compute engine + traceability gates | The alert engine and the "every number traces" trust layer — *directly* the paid product's backbone |
-| Causal system model (v4.0) | The transmission maps — anchored to tickers via a mapping artifact, never a model edit |
-| Distribution generators | Repoint at an investor audience |
-
-### 17.1 Pricing — single source for all copy
-
-Standard paid tier: **₹1,999 per half-year**, or **₹3,999/yr** (₹333/mo billed annually).
-Founding members: **the first 100 get the annual plan at ₹1,999/yr, locked for life** — a year at
-the half-year price. Anchored just under screener premium. All retail pricing copy anywhere derives
-from this paragraph. (Distinct from the lender-side pricing in §8/§10.)
-
-Paid tier includes: unlimited tickers, event-triggered alerts, full history, the monthly sector
-deep-dive, and register access. Free tier deliberately limited (3 tickers, current period only, no
-alerts) to create upgrade pressure.
-
-### 17.2 The 90-day shape and its decision gates
-
-Budget assumed ~30% time ≈ 12–14 hrs/week (≈6 build / 5 content / 2 ops). Starting audience: zero —
-the plan *manufactures* distribution rather than assuming it.
-
-| Stage | Weeks | Substance | Gate |
-|---|---|---|---|
-| Aim | 1–2 | ICP, release calendar, first 3 transmission maps, public call register live (empty is fine) | calendar built, maps chosen, accounts created |
-| Prove in public | 3–6 | 4 weekly Signal Notes (§15 of the distribution spec) | **DG1:** ≥100 Substack emails **or** ≥300 X followers **or** one note with clear organic spread |
-| Product v0 | 7–10 | Ticker→signal web view, weekly automated digest, +1 new data source | **DG2:** ≥300 emails, ≥25% open rate |
-| First revenue | 11–13 | Price test to the list only, founding-member framing | **DG3:** ≥20 paying subscribers |
-
-Gate failure semantics matter more than the numbers: **DG1 fail = the packaging is wrong, not the
-thesis** (test sharper formats for two weeks before touching product code). **DG2 fail = a
-distribution problem** (divert to content/collabs before building paid). **DG3 <5 on a 500+ engaged
-list = the willingness-to-pay hypothesis is wrong for this ICP — stop and reassess before building
-more.** That last one is the honest kill-switch and should not be quietly softened.
-
-First 3 transmission maps, all on already-built data: SIBC gold-loan credit → Muthoot/Manappuram/
-IIFL Fin · SIBC sectoral bank credit → specific PSU/private banks · ATM/POS card spend → SBI Cards
-and the consumption basket.
-
-### 17.3 Data-source expansion ladder (post-90-day, ranked by signal-per-effort)
-
-✅ RBI SIBC, ATM/POS (built) → VAHAN/FADA autos → GST collections → TRAI telecom subs → EPFO payroll
-→ POSOCO power demand → rail freight + ports cargo → DGCA aviation → trade (commerce ministry) →
-govt capex/tenders.
-
-Each new source = new sectors covered = new content surface = new subscriber pool.
-
-**Note the open conflict with the credit-side roadmap:** this ladder puts **VAHAN/FADA** as the next
-source (and the archived plan named it "source #3" deliberately, as the test of whether the generic
-gate absorbs a non-RBI source). The credit-side roadmap in `archive/docs/PLAN_2026-08-11.md` recommends **Cluster
-B, price of credit** instead. Both are defensible; they serve different audiences. **Unresolved —
-decide when source work actually starts, not before.**
-
-### 17.4 Operating model — division of labour
-
-| 👤 User only (never the model) | 🔧 Model |
-|---|---|
-| Create X/Substack accounts, post, reply, collab asks | Release-calendar draft, register page + validator |
-| Sign off calendar dates and date remaps | `ticker_map.json` + validator, derived stock↔signal artifact |
-| Pricing and launch decisions; SEBI final review of every note | Web app v0, digest automation, new pipelines, alert engine |
-| Source new data files (XLSX/CSV downloads) | Note drafts, charts, distribution packages via generators |
-
-### 17.5 Explicitly out of scope for the 90 days
-
-No mobile app · no portfolio import or broker integration · no Hindi · no YouTube until text formats
-prove out · no institutional SaaS (conflicts with the lender-side offer) · no buy/sell calls (SEBI) ·
-no rebrand debate before week 6.
-
-**And one rule that outlived its own document:** *"no new strategy documents — the next artifact is
-Signal Note #1."* Worth keeping. This section is a consolidation of an existing document, not a new one.
-
----
-
-*Next review: August 2026 | Track against Phase 1 milestones*
-*Model inspiration: BankRegData (US) — 1,275 clients, 2–3 people, 16 years, no funding*
+*Model inspiration: BankRegData (US) — 1,275 clients, 2–3 people, 16 years, no funding.*

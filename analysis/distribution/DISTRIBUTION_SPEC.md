@@ -1018,7 +1018,7 @@ states both months explicitly, and states the gap in months when there is one.
 ## 15. ICL-Retail content mechanics (merged 2026-08-11, NOT currently live)
 
 *Merged from the archived `ICL_RETAIL_90DAY_PLAN.md`, which mixed strategy, content and engineering.
-The strategy/product/pricing half now lives in `STRATEGY_PLANNER.md` §17; this section holds only
+The strategy/product/pricing half now lives in `STRATEGY_PLANNER.md` §13; this section holds only
 the **content and channel mechanics**, because that is what this spec governs.*
 
 **Status: specified, not built, not scheduled.** The platform is in a refactor cycle. Nothing in
@@ -1040,7 +1040,7 @@ Anatomy — designed to be produced in one sitting given the existing pipelines:
    41% YoY for a third month; the two listed pure-plays' combined AUM guidance implies X.
    Review: Sep SIBC release."* Note the shape: a number, a mechanism, and **a named future date on
    which the claim can be scored**.
-4. **Logged in the public call register** the moment it ships (see `STRATEGY_PLANNER.md` §17 and the
+4. **Logged in the public call register** the moment it ships (see `STRATEGY_PLANNER.md` §13 and the
    `call_register.json` artifact in `archive/docs/PLAN_2026-08-11.md`'s parked backlog).
 5. Closes with: follow + free Substack.
 
@@ -1070,7 +1070,7 @@ is the one with data in hand today; a decision to build it does not revive this 
 
 ### 15.4 The guardrail carries over unchanged
 
-The SEBI constraint in `STRATEGY_PLANNER.md` §17 is stricter for an investor audience than the
+The SEBI constraint in `STRATEGY_PLANNER.md` §13 is stricter for an investor audience than the
 existing `lint_compliance` list is for a lender audience: **no buy/sell/target-price/accumulate/
 book-profit vocabulary anywhere**, free or paid. If this track is ever built, that lint hardens
 *before* note #1 ships, not after — same precision-fix-first rule as §5.3.
