@@ -2,7 +2,7 @@
 NBFC dashboard cuts — the dimension table, and nothing else.
 
 The other two pipelines keep their cut table inside their CARD generator, because both have
-one. NBFC deliberately does not (PLAN_2026-09-16_NBFC.md D2: table + band for v1, cards
+one. NBFC deliberately does not (archive/docs/PLAN_2026-09-16_NBFC.md D2: table + band for v1, cards
 deferred until the series is long enough to support "fastest in N periods"). So the table
 lives on its own here, which is arguably where it always belonged: a cut declares a DIMENSION
 — what pane a reader finds it under — and that is a presentation decision, independent of

@@ -1,0 +1,41 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd \"$CLAUDE_PROJECT_DIR\" && python3 analysis/hook_validate.py"
+          }
+        ]
+      }
+    ]
+  },
+  "permissions": {
+    "allow": [
+      "Bash(python3 analysis/core/gate.py*)",
+      "Bash(python3 analysis/core/validate_timeline.py*)",
+      "Bash(python3 analysis/core/validate_system_model.py*)",
+      "Bash(python3 analysis/pipelines/sibc/validate_sections.py*)",
+      "Bash(python3 analysis/pipelines/sibc/validate_annotations.py*)",
+      "Bash(python3 analysis/pipelines/sibc/validate_content.py*)",
+      "Bash(python3 analysis/hook_validate.py*)",
+      "Bash(python3 analysis/pipelines/sibc/promote_annotations.py*)",
+      "Bash(python3 analysis/pipelines/sibc/generate_merge.py*)",
+      "Bash(python3 analysis/pipelines/sibc/extract_sibc.py*)",
+      "Bash(python3 analysis/pipelines/sibc/update_web_data.py*)",
+      "Bash(python3 analysis/architecture/reconcile.py*)",
+      "Bash(python3 analysis/guards/check_signal_freshness.py*)",
+      "Bash(python3 analysis/guards/check_derived_fresh.py*)",
+      "Bash(gh pr*)",
+      "Bash(gh run*)",
+      "Bash(gh issue*)",
+      "Bash(gh repo*)",
+      "Bash(vercel*)",
+      "Bash(git status)",
+      "Bash(git log*)",
+      "Bash(git diff*)"
+    ]
+  }
+}

@@ -271,7 +271,7 @@ Four distinct failures, previously merged into one informal "sourcing is hard":
   volume, and treat a future 403 as a site decision to respect, not a bug to route around.*
 - **R2 — No PDF text path, and this blocker is smaller than recorded.** `excerpt_on_page` needs
   text; RBI's authoritative material (Master Directions, FSR, bulletins, circulars) is PDF.
-  `PLAN_2026-08-11.md` records "no PDF extraction anywhere… its own project" — that **conflates two
+  `archive/docs/PLAN_2026-08-11.md` records "no PDF extraction anywhere… its own project" — that **conflates two
   problems**. Table extraction into an *ingestion pipeline* is a project. Extracting text to verify
   an excerpt is one command: demonstrated 2026-08-19 with `pdftotext -layout` on the RBI PSL Master
   Direction (RBI/FIDD/2024-25/128), which yielded the targets table verbatim. `pdftotext` and
@@ -768,7 +768,7 @@ Validators before content; compose behind validators; author last — every stag
    produce candidate construct members and cross-links with *zero edits* to Part II content —
    the M+N guarantee at N=3. If it doesn't, fix the derivation, never hand-patch.
 
-**Retail product tie-in (`STRATEGY_PLANNER.md` §17; artifact spec in `PLAN_2026-08-11.md`'s parked
+**Retail product tie-in (`STRATEGY_PLANNER.md` §17; artifact spec in `archive/docs/PLAN_2026-08-11.md`'s parked
 backlog, EN-1):** `ticker_map.json` targets may be
 **construct URNs as well as entity URNs** — a construct is often the correct transmission anchor
 (e.g. `icl:eco/unsecured_retail_appetite` → SBI Cards) and inherits its evidence set for the

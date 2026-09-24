@@ -1041,7 +1041,7 @@ Anatomy — designed to be produced in one sitting given the existing pipelines:
    Review: Sep SIBC release."* Note the shape: a number, a mechanism, and **a named future date on
    which the claim can be scored**.
 4. **Logged in the public call register** the moment it ships (see `STRATEGY_PLANNER.md` §17 and the
-   `call_register.json` artifact in `PLAN_2026-08-11.md`'s parked backlog).
+   `call_register.json` artifact in `archive/docs/PLAN_2026-08-11.md`'s parked backlog).
 5. Closes with: follow + free Substack.
 
 The register entry is not optional decoration — it is the moat. A note that is not logged has not

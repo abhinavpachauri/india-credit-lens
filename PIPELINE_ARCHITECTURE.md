@@ -147,7 +147,7 @@ Applies to every pipeline. Scripts differ; stage purpose and order do not.
                  with L2/L3 (from annotations_merged.ts) at makeSection() time
 
 [Stage 8]  S4 — inference loop                  (on-demand, MANUAL review — never auto-promoted)
-           python3 analysis/run_inference.py   (--no-llm = detection only)
+           python3 analysis/core/run_inference.py   (--no-llm = detection only)
            1. DETECT — for every L1 signal that moved this period, check whether a force/edge in the
               model explains it. Movements with no explanation → "unexplained" (review backlog).
               Also flags edge-direction mismatches + unconfirmed cross-links.

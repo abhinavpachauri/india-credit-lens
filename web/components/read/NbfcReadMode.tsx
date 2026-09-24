@@ -3,7 +3,7 @@
 // NBFC adapter — the thinnest one, because this pipeline has no cards.
 //
 // SIBC and payments build their RMModel from insight cards and rank them; NBFC deliberately
-// generates none (PLAN_2026-09-16_NBFC.md D2 — cards are the NEWS layer, and eleven dates is
+// generates none (archive/docs/PLAN_2026-09-16_NBFC.md D2 — cards are the NEWS layer, and eleven dates is
 // a thin basis for "fastest in N periods"). So the model here is a DECLARATION of five
 // dimensions with no subjects and no reads, and everything a reader sees comes from the two
 // derived sidecars: the standing state band (§16) and the Layer 1 cut tables (§17).

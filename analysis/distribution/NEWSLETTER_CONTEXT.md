@@ -86,7 +86,7 @@ tone needs fixing, fix the **eval prompt** upstream (next cycle), never the card
 
 ```
 □  Ingestion gate green for the release (this regenerates every input this layer reads)
-□  python3 analysis/distribution/issues/merged_issue.py [--pipeline atm_pos]
+□  python3 analysis/distribution/issues/monthly_issue.py [--pipeline atm_pos]
 □  Open output/release_read_*.html in a browser → select all → copy → paste into Substack
 □  Add charts manually in Substack (screenshot the dashboard section, or skip)
 □  Publish within 24h of the RBI release

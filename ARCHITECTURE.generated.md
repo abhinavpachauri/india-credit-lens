@@ -58,10 +58,11 @@ exact per-artifact producer/consumer._
 
 Scripts each orchestrator launches as a subprocess, in execution order.
 
-### `hook_validate` → 3 steps
+### `hook_validate` → 4 steps
 1. `pipelines/sibc/validate_annotations`
-2. `core/validate_timeline`
-3. `pipelines/sibc/validate_sections`
+2. `core/validate_system_model`
+3. `core/validate_timeline`
+4. `pipelines/sibc/validate_sections`
 
 ## 3. Artifact lineage
 
@@ -124,6 +125,7 @@ orchestrated, not import-coupled).
 - `guards/validate_cut_table` → `core/manifest`, `core/table_rows`
 - `guards/validate_signal_history` → `core/cadence`
 - `guards/validate_state_band` → `core/manifest`
+- `hook_validate` → `core/manifest`
 - `pipelines/atm_pos/compute_atm_pos_signals` → `core/manifest`
 - `pipelines/atm_pos/consolidate_atm_pos` → `core/manifest`
 - `pipelines/atm_pos/extract_atm_pos` → `pipelines/atm_pos/detect_atm_pos_format`

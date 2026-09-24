@@ -17,8 +17,12 @@ web/next-env.d.ts
 .DS_Store
 Thumbs.db
 
-# Claude internal
-.claude/
+# Claude — the agentic layer (skills, agents, shared settings) is versioned like code, so it
+# can be guarded by reconcile and reaches cloud sessions. Personal state stays local.
+.claude/*
+!.claude/skills/
+!.claude/agents/
+!.claude/settings.json
 
 # Vercel
 .vercel
@@ -39,3 +43,6 @@ trading_system.db
 # SQLite transient sidecars (signals.db itself IS tracked — these are not)
 *.db-shm
 *.db-wal
+
+# Private local archive (never committed; the repo is public)
+.local/

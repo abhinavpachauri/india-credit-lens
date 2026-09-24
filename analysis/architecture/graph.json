@@ -481,9 +481,12 @@
     },
     "hook_validate": {
       "doc_claims": [],
-      "imports": [],
+      "imports": [
+        "core/manifest"
+      ],
       "invokes": [
         "pipelines/sibc/validate_annotations",
+        "core/validate_system_model",
         "core/validate_timeline",
         "pipelines/sibc/validate_sections"
       ],

@@ -18,8 +18,15 @@ Three HARD checks (gate-able via --strict):
      expect. CLAUDE.md claimed 225 signals in one row and 90 in another while the registry held
      230, and still described the test suite as "9 tests" after it had grown past 300. A number
      in a living doc is a claim about the system, so it gets checked like a path.
+  4. EVIDENCE — file paths cited as a measurement's source in declared JSON must exist.
+  5. SPEC — every dispatchable compute method appears in signals/README.md.
+  6. EXACT PATHS — a full `analysis/…py` path must exist at THAT path (check 1 only matches the
+     basename, and every retired script still exists in legacy/). The agent layer — skills,
+     agents, settings.json hooks + allowlist, PLAN.md, DECISIONS.md — may not RUN a retired script.
+  7. CONTEXT BUDGET — CLAUDE.md imports @PLAN.md and @DECISIONS.md; those and CLAUDE.local.md
+     stay under their line caps.
 One ADVISORY signal (never fails):
-  4. Scripts in the graph never mentioned in any living doc (undocumented surface).
+  Scripts in the graph never mentioned in any living doc (undocumented surface).
 
 Templates ({period}/{pipeline}) and globs (*) are skipped — they can't be checked
 literally. Designed to be wired into run_evals / run_atm_pos_evals once stable.
@@ -232,6 +239,84 @@ def check_counts(docs_text: dict) -> list[str]:
     return findings
 
 
+# ── Check 6: the agent layer ────────────────────────────────────────────────
+# Skills, agents and the Claude Code settings are procedure: they tell a session which commands
+# to run. They lived in a gitignored .claude/ that nothing read, and by 2026-09-24 all three skills
+# ran scripts retired three months earlier, the edit hook validated v4 models with the v2 validator
+# (371 false errors on every edit), and 11 of 12 allowlisted scripts no longer existed.
+#
+# The doc check above is too weak for them: it matches a script by BASENAME anywhere in the repo,
+# and every retired script still exists in analysis/legacy/ — so `analysis/run_evals.py` passed.
+# A procedure names the exact file it will run, so here the exact path must exist, and it may not
+# point into legacy/.
+
+AGENT_LAYER_GLOBS = [".claude/skills/*/SKILL.md", ".claude/agents/*.md", "PLAN.md", "DECISIONS.md"]
+SETTINGS = ROOT / ".claude" / "settings.json"
+_FULL_PY = re.compile(r"(?<![\w/])((?:analysis|web)/[\w./-]+\.py)\b")
+_RETIRED_DIRS = ("analysis/legacy/", "archive/")
+
+
+def agent_layer_files() -> list[str]:
+    return sorted(str(p.relative_to(ROOT)) for g in AGENT_LAYER_GLOBS for p in ROOT.glob(g))
+
+
+def _exact_path_findings(where: str, text: str, may_cite_retired: bool = False) -> list[str]:
+    out = []
+    for tok in sorted(set(_FULL_PY.findall(text))):
+        if tok.startswith(_RETIRED_DIRS) and not may_cite_retired:
+            out.append(f"{where}: runs {tok}, which is retired")
+        elif not (ROOT / tok).exists():
+            out.append(f"{where}: names {tok}, which does not exist at that path")
+    return out
+
+
+def check_agent_layer() -> list[str]:
+    findings = []
+    for rel in agent_layer_files():
+        findings += _exact_path_findings(rel, (ROOT / rel).read_text(encoding="utf-8"))
+    # The living docs get the exact-path half too: CLAUDE.md's command table named nine scripts at
+    # paths they had moved from, all passing the basename check. A doc may still MENTION a retired
+    # script (it is documenting history); a procedure may not RUN one.
+    for rel in DOCS:
+        if (ROOT / rel).exists():
+            findings += _exact_path_findings(rel, (ROOT / rel).read_text(encoding="utf-8"),
+                                             may_cite_retired=True)
+    if SETTINGS.exists():
+        s = json.loads(SETTINGS.read_text())
+        commands = [h.get("command", "") for evs in s.get("hooks", {}).values()
+                    for ev in evs for h in ev.get("hooks", [])]
+        findings += _exact_path_findings(".claude/settings.json",
+                                         "\n".join(commands + s.get("permissions", {}).get("allow", [])))
+    return findings
+
+
+# ── Check 7: the always-loaded context stays small ───────────────────────────
+# CLAUDE.md imports the plan and the decisions with `@`, so their full text is in every session.
+# That is only affordable while they are short. CLAUDE.local.md grew to 247 KB (2,965 lines,
+# about 75k tokens with CLAUDE.md) by being appended to; a cap turns "keep it short" from a habit
+# into a failure. CLAUDE.local.md is gitignored, so its cap is checked only where it exists.
+
+IMPORTS = ("PLAN.md", "DECISIONS.md")
+LINE_CAPS = {"PLAN.md": 120, "DECISIONS.md": 150, "CLAUDE.local.md": 120}
+
+
+def check_context_budget() -> list[str]:
+    findings = []
+    claude_md = (ROOT / "CLAUDE.md").read_text(encoding="utf-8")
+    for target in IMPORTS:
+        if not re.search(rf"^@{re.escape(target)}\s*$", claude_md, re.M):
+            findings.append(f"CLAUDE.md does not import @{target}")
+        if not (ROOT / target).exists():
+            findings.append(f"{target}: imported by CLAUDE.md but missing")
+    for rel, cap in LINE_CAPS.items():
+        p = ROOT / rel
+        if p.exists():
+            n = len(p.read_text(encoding="utf-8").splitlines())
+            if n > cap:
+                findings.append(f"{rel}: {n} lines, cap is {cap} — rewrite it, do not append")
+    return findings
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--strict", action="store_true", help="exit 1 on any hard drift")
@@ -293,6 +378,21 @@ def main():
         hard += len(method_findings)
     elif not args.quiet:
         print("✓ every compute method is specced")
+
+    # Checks 6 + 7: the agent layer names real, live files; the always-loaded context stays small.
+    for label, ok, fn in (
+            ("scripts named at a path they do not live at (or retired, in a procedure)", "✓ every script path resolves exactly",
+             check_agent_layer),
+            ("always-loaded context is over budget", "✓ always-loaded context within budget",
+             check_context_budget)):
+        found = fn()
+        if found:
+            print(f"✗ {label}")
+            for f in found:
+                print(f"    {f}")
+            hard += len(found)
+        elif not args.quiet:
+            print(ok)
 
     # Advisory: graph scripts whose basename appears in no living doc.
     if GRAPH.exists():

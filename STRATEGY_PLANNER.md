@@ -419,7 +419,7 @@ See `CLAUDE.md → Next Builds` for the current prioritised execution queue acro
 *Merged here 2026-08-11 from `ICL_RETAIL_90DAY_PLAN.md` (archived). That file mixed three
 concerns; each now lives with its own kind. **Strategy + product + pricing = this section.**
 Content mechanics → `analysis/distribution/DISTRIBUTION_SPEC.md` §15. Engineering artifacts
-(EN-1/EN-2/EN-4) → `PLAN_2026-08-11.md` parked backlog. **Status: not currently being executed** —
+(EN-1/EN-2/EN-4) → `archive/docs/PLAN_2026-08-11.md` parked backlog. **Status: not currently being executed** —
 the platform is in a refactor cycle; this is the strategic destination, not the live task list.*
 
 **Thesis.** Government data (RBI + the wider govt-data pool) → sector → listed-stock transmission
@@ -500,7 +500,7 @@ Each new source = new sectors covered = new content surface = new subscriber poo
 
 **Note the open conflict with the credit-side roadmap:** this ladder puts **VAHAN/FADA** as the next
 source (and the archived plan named it "source #3" deliberately, as the test of whether the generic
-gate absorbs a non-RBI source). The credit-side roadmap in `PLAN_2026-08-11.md` recommends **Cluster
+gate absorbs a non-RBI source). The credit-side roadmap in `archive/docs/PLAN_2026-08-11.md` recommends **Cluster
 B, price of credit** instead. Both are defensible; they serve different audiences. **Unresolved —
 decide when source work actually starts, not before.**
 

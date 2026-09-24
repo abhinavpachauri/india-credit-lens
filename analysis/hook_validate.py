@@ -10,7 +10,7 @@ Called by Claude Code hooks. Receives tool data on stdin as JSON:
 
 Runs the appropriate validator based on file type:
   annotations_*.ts or rbi_sibc.ts  → validate_annotations.py
-  system_model.json                 → validate.py (structure only, no annotation cross-check)
+  system_model.json                 → core/validate_system_model.py --pipeline {owner}
   timeline.json                     → validate_timeline.py
   sections.json / sections_*.json   → validate_sections.py
 
@@ -34,6 +34,17 @@ def run(cmd, cwd=None):
         capture_output=True, text=True
     )
     return proc.returncode, proc.stdout + proc.stderr
+
+
+def pipeline_owning(p: Path) -> str | None:
+    """The pipeline whose declared data_dir contains this file — read off the manifests."""
+    from core import manifest
+    resolved = p.resolve()
+    for pid in manifest.discover_pipeline_ids():
+        data_dir = REPO_ROOT / manifest.load(pid)["paths"]["data_dir"]
+        if data_dir.resolve() in resolved.parents:
+            return pid
+    return None
 
 
 def one_liner(output: str) -> str:
@@ -73,9 +84,15 @@ def main():
             returncode = rc
 
     elif name == "system_model.json" and p.exists():
-        # Structure-only check (no annotation cross-check — annotations may not exist yet)
-        rc, out = run([sys.executable, str(ANALYSIS / "legacy" / "validate.py"), str(p)])
-        print(f"[hook:system_model] {one_liner(out)}")
+        # The v4 model validator, told which pipeline owns this model. This used to call the
+        # retired v2 validator (legacy/validate.py), which reported 371 errors against every
+        # valid v4 model — a hook that always fails teaches you to ignore it.
+        pipeline = pipeline_owning(p)
+        if pipeline is None:
+            sys.exit(0)   # a model outside every pipeline's data dir (e.g. a scratch copy)
+        rc, out = run([sys.executable, str(ANALYSIS / "core" / "validate_system_model.py"),
+                       "--pipeline", pipeline, str(p)])
+        print(f"[hook:system_model:{pipeline}] {one_liner(out)}")
         returncode = rc
 
     elif name == "timeline.json" and p.exists():

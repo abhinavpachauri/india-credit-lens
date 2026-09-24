@@ -212,7 +212,7 @@ different questions**, silently and plausibly, in adjacent columns.
 
 ### the denominator rule — which total a share is a share OF
 
-> Specced **2026-09-16, before the compute** (`PLAN_2026-09-16_NBFC.md` §3.2). The rule
+> Specced **2026-09-16, before the compute** (`archive/docs/PLAN_2026-09-16_NBFC.md` §3.2). The rule
 > generalises the PSL exception above and supersedes the "sum of the parts" denominator that
 > `allocation` has always used.
 
@@ -625,7 +625,7 @@ METHOD_TYPE: `acceleration`.
 
 ## NBFC sectoral deployment — the third source
 
-> Specced **2026-09-16, before the compute** (`PLAN_2026-09-16_NBFC.md`). RBI's *Sectoral
+> Specced **2026-09-16, before the compute** (`archive/docs/PLAN_2026-09-16_NBFC.md`). RBI's *Sectoral
 > Deployment of Outstanding Credit by NBFCs (including HFCs)*, monthly, released ~M+2.
 
 The third source is **`csv_sector`-shaped**: one measure (outstanding credit, ₹ crore) over a code

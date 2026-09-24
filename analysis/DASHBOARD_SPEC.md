@@ -868,7 +868,7 @@ At every step: both gates green, both pipelines, no per-section branches.
 
 ## 16. The standing state tier (v1.0 — BUILT 2026-09-11) ⭐
 
-> Arc 1 of `PLAN_2026-09-09.md`. **Rendering only.** Every number below is already computed,
+> Arc 1 of `archive/docs/PLAN_2026-09-09.md`. **Rendering only.** Every number below is already computed,
 > already gate-validated, and has never reached a browser.
 
 ### 16.1 The problem this answers
