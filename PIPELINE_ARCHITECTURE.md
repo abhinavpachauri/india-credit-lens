@@ -1,834 +1,159 @@
 # Pipeline Architecture — India Credit Lens
 
-> Single source of truth for the data ingestion, signal, and content generation pipeline.
-> Referenced by `CLAUDE.md`. Read this before adding any new report or period.
+> **What every pipeline does, stage by stage, and why the stages are in that order.** This is the
+> reference; it is not a runbook. To *run* an ingestion use the skills (`/ingest-period`,
+> `/model-pass`, `/s4-source`). What is generic across pipelines and what is not is in
+> `ARCHITECTURE.md`; the per-folder READMEs and `ARCHITECTURE.generated.md` map the code. Revised
+> 2026-09-24: the March–July material (per-period authoring, subsystems, mermaid, a hand-drawn
+> directory tree) was removed and is in git history.
 
 ---
 
-## Architectural Principles
+## 1. Principles
 
-**Separate gates per pipeline.** Each data source (SIBC, ATM/POS, future sources) has its own
-eval gate. Pipelines run independently — a new credit file does not block a payments file.
+- **One gate, many pipelines.** `analysis/core/gate.py --pipeline {id}` runs every pipeline.
+  A pipeline is a manifest (`analysis/pipelines/{id}/pipeline.json`) that declares its stages,
+  modules, paths, compute shape and the artifacts it rewrites. The gate never branches on the id.
+  Pipelines run independently: a new credit file does not block a payments file.
+- **Same stage purposes, different scripts.** Stage order is the contract; the manifest names
+  the script that fulfils each stage.
+- **Deterministic where mechanical, LLM where judgment.** Computation, status, selection, routing
+  and every published number are deterministic. The LLM only narrates, and every number it writes
+  is checked against the signal store. It never decides a number (`DECISIONS.md`).
+- **Evaluating the model ≠ changing the model.** Layer 2 is *evaluated* every period (S3,
+  deterministic). The model is *changed* only in an explicit, sourced authoring pass.
+- **Presentation is downstream.** Dashboards read sidecars stamped by the gate; nothing in the web
+  layer computes or formats a number that a validator cannot see.
+- **A committed artifact is stale until proven fresh.** Derived artifacts declare themselves in the
+  manifest (`derived`), and the pre-commit hook regenerates and compares them; `signals.db` is
+  recomputed from the CSVs and compared row by row.
 
-**Identical stage sequence.** Every pipeline follows the same stage numbering and purpose.
-Scripts differ per pipeline; stages do not.
+---
 
-**Every layer has two distinct concerns:**
+## 2. Layers
 
-| Layer | Model | Signal evaluation |
-|---|---|---|
-| 1 | `compute` specs in registry — written once per signal | Every ingestion — algorithmic from consolidated data |
-| 2a | `system_model.json` per source — FOUNDATION or UPDATE, rare | Every ingestion — rules from model + L1 outputs |
-| 2b | Cross-source model per tuple — after both L2a FOUNDATION | Every ingestion — after both constituent L2a evaluate |
-| 3  | `ecosystem_model.json` — authored once, updated ~6 monthly | Every ingestion — rules from model + L2b outputs |
-
-**v4.0 (June 2026) — the Layer 2/3 model is now built and operational.** See `analysis/COMPOSITION_SPEC.md`
-v1.0 (extends `SYSTEM_MODEL_SPEC.md` v3.0). It refines the above into **five strata**:
-
-| Stratum | What | Where | Cadence |
+| Layer | What | Where | Cadence |
 |---|---|---|---|
-| **S1** structural skeleton | entities + composes_into/reclassifies, URNs, concept_tags | `generate_skeleton.py` → `system_model.json` | deterministic, every ingestion |
-| **S2a** causal structure | data-less channels over concepts | **shared hub** `analysis/ontology/{concepts,channels}.json` | authored, rarely changes |
-| **S2b** force instances | dated, sourced activations of a channel | `force_instances[]` in `system_model.json` | authored |
-| **S3** dynamic state | forces/edges/loops fire from live signals; opportunity status | `generate_system_state.py`, `derive_opportunities.py`, `compose_ecosystem.py` | computed, every ingestion |
-| **S4** inference | detects unexplained L1 movements → LLM proposes candidate forces/channels/cross-edges (HYPOTHESES) → human sources + promotes into S2b | `run_inference.py` → `s4_proposals/{period}.json` | **live** — on-demand, manual review, never auto-promoted |
+| **L1** computed signals | rates, shares, sizes, movement, scans — from the consolidated CSV | `signals/registry.json` (spec) → `signals/signals.db` (values) | every ingestion |
+| **L2 · S1** structural skeleton | entities + composition edges, URNs, concept tags | `core/generate_skeleton.py` → `system_model.json` | deterministic, every ingestion |
+| **L2 · S2a** causal structure | channels over concepts | `analysis/ontology/{concepts,channels}.json` (shared hub) | authored, rarely |
+| **L2 · S2b** forces | dated, **sourced** activations of a channel | `force_instances[]` in `system_model.json` | authored (`/model-pass`) |
+| **L2 · S3** dynamic state | forces/edges/loops firing, mix states, opportunity status | `core/generate_system_state.py`, `core/derive_opportunities.py` | computed, every ingestion |
+| **L2 · S4** inference | unexplained movements → proposed forces (hypotheses) | `core/run_inference.py` → `s4_proposals/{period}.json` | on demand; human-sourced (`/s4-source`) |
+| **L2b / L3** cross-system | constructs, eco-edges, cross-pipeline loops, reconciliation constraints | `cross_source/{composition,ecosystem_model}.json` → `ecosystem_state_{period}.json` | projected every ingestion; authored rarely |
 
-Cross-system composition is **federated** (no monolith): each pipeline maps entities to the shared hub
-once; `derive_cross_links.py` derives cross-edges through shared concepts (stock↔flow + shared channel);
-`cross_source/composition.json` holds confirmed edges; the combined view is **projected**, never authored.
-Both gates (`core/gate.py`, `core/gate.py --pipeline atm_pos`) run skeleton-regen + `validate_system_model.py` + S3 +
-opportunities each ingestion. Legacy `validate.py` checks 4/5, `validate_claims.py`, the mermaid
-generator, `source_claims.py` are **retired** (detached from the gate).
-
-Model updates and signal evaluation are never conflated. A new period always runs signal
-evaluation for all layers where a model exists. Model updates are explicit, separate steps
-with their own cadence. If no model exists yet, evaluation is skipped silently and signals
-carry `pending` status.
-
-**Presentation is always downstream.** The web dashboard, insight pages, and opportunities
-are generated from the final signal layer outputs — not from any intermediate pipeline artifact.
-
-**Opportunities are ONE system (Layer 2 feed).** `opportunities_feed.json` (built by
-`generate_opportunities_feed.py`) is the single source for both the `/opportunities` page AND the
-per-section **opportunity teasers** on the SIBC and Payments dashboards. The shared
-`dls/OpportunityTeaser` (`pipeline`, `sectionId`) reads the feed via `web/lib/opportunities.ts`
-(`opportunitiesFor`) and deep-links to a specific opportunity card — `/opportunities#<opp.id>` —
-which carries a matching `id` anchor. Both pipelines' dashboards surface teasers identically;
-authored `rbi_sibc.ts` section opportunities are no longer the teaser source. Number traceability
-of opportunity copy is guarded by **Check 4f** (`validate_opportunity_traceability.py`) — **strict in
-both gates** (the L2 analog of Check 2g): every number in an opportunity body/chain/implication must
-trace to the driver's full declared evidence set (`evidence_all`).
-
-**Newsletter is an exception.** Newsletter generation is not yet standardised to this
-architecture. Do not modify newsletter scripts until the signal layer is complete across
-all pipelines.
+Specs: `analysis/signals/README.md` (L1), `analysis/SYSTEM_MODEL_SPEC.md` (L2),
+`analysis/COMPOSITION_SPEC.md` (cross-system), `analysis/DASHBOARD_SPEC.md` (what reaches a reader).
 
 ---
 
-## Standard Stage Sequence
+## 3. The stage sequence
 
-Applies to every pipeline. Scripts differ; stage purpose and order do not.
+The manifest is the source of truth for the exact list per pipeline; this is the shape every
+pipeline follows. Stage labels differ between pipelines; purposes do not.
 
-```
-[Stage 0]  Format detection
-           Compare incoming file structure against prior period
-           Gate: must be confirmed clean or changes reviewed before Stage 1
-
-[Stage 1]  Extraction
-           Raw file → per-period sections.json (schema-validated, typed)
-
-[Stage 2]  Per-period validation
-           Validate extracted data: schema, required series, value ranges, known banks/sectors
-
-[Stage 3]  Consolidation + Merge
-           All periods → rbi_sibc_consolidated.csv (long format — single source of truth for charts + signals)
-                      + sections_merged.json (time-series, analysis-ready — for Layer 2a model + annotations)
-           Both files are produced; the CSV is the canonical data source for signal compute.
-
-[Stage 4]  Layer 1 — signal compute            (every period, always)
-           Read compute specs from registry.json
-           Compute status + value algorithmically from consolidated data
-             SIBC:    reads rbi_sibc_consolidated.csv filtered by csv_date
-                      (dataDate → csv_date resolved via timeline.json csv_date field)
-             ATM/POS: reads atm_pos_consolidated.csv filtered by report_date
-           Write all entity-level rows to signals.db (INSERT OR REPLACE) with period=dataDate
-           Refresh metric_ranges in signals.db for all affected metrics
-           Update current_status + first_seen in registry.json
-           No Claude involvement. No exceptions.
-
-[Stage 5]  Signal evaluate — LLM interpretation of L1 signals   (every period)
-           NB: this is the LLM REPRESENTATION of Layer-1 signals (it produces the per-signal
-           narrative that becomes the L1 dashboard annotations via Stage 5.5 / ATM-POS 4b). It is
-           NOT the Layer-2 evaluation — that is Stage 5.7 (S3, model-based, deterministic). Both
-           pipelines: deterministic compute (Stage 4) → LLM narrates the scalar signals here,
-           every number traceable (Check 2g / ATM-POS 4c).
-           Load prior period evaluation JSON if it exists (auto-detected from signals.db)
-           Inject prior signal narratives into prompt for narrative diff
-           Call LLM (claude -p CLI); cache by payload hash + prompt_version
-           Write evaluations/{pipeline}/{period}.json
-           First period: no diff (no prior eval). Second period onward: diff is automatic.
-
-[Stage 5.5] Analysis report generation     (every period, after Stage 5)
-           SIBC:    python3 analysis/pipelines/sibc/generate_analysis_report.py
-                    Reads evaluations/sibc/{period}.json + registry.json
-                    Maps signals → UI sections via domain + signal-level routing
-                    Composes body (observation+direction), implication (inference)
-                    Derives title from eval `title` field (v1.5+) or observation
-                    Populates effect.highlight from registry.chart_series
-                    Writes web/public/data/sibc_l1_annotations.json
-           ATM/POS: dashboard insights are produced by Stage 4a→4b inside the gate
-                    (compute_atm_pos_signals.py → generate_atm_pos_insights.py), NOT here.
-                    (The old "Stage 5.5" generate_atm_pos_analysis_report.py was a no-op —
-                    4b is authoritative — and has been retired to analysis/legacy/; its gate
-                    stage is removed.) See the ATM/POS pipeline section's "Dashboard insight
-                    path" note. Writes atm_pos_insights.json.
-
-[Stage 5.7] Layer 2 — dynamic state + opportunities   (every period, inside the gate)
-           This is the L2 *ingestion* — deterministic, no LLM authoring:
-             a. generate_skeleton.py        — regenerate S1 structure from CSV (preserves S2 behavioral layer)
-             b. validate_system_model.py    — structural + D1/D2/D3 + force sourcing (Check 4/5 replacement)
-             c. generate_system_state.py    — S3: live L1 signal states map onto the model;
-                                              forces/edges/loops FIRE → system_state_{period}.json
-             d. derive_opportunities.py     — opportunity/risk STATUS (active|watch|closed) from driver firing
-             e. compose_ecosystem.py        — cross-system projection (L2b feed)
-             f. generate_opportunities_feed.py — build opportunities_feed.json (preserves prior LLM narrative)
-           Then (post-gate, LLM, free claude -p/API): generate_opportunity_narrative.py writes the grounded
-           plain-English copy. Check 4f (strict) gates every number. The LLM ONLY narrates what S3 computed;
-           it never invents causal structure (that is S4). Both gates run a–f each ingestion.
-
-[Stage 6]  Evals gate
-           Validates all artifacts produced by Stages 0–5.7:
-           data integrity, signal DB consistency, model structure, opportunity traceability (Check 4f strict)
-
-[Stage 7]  Presentation promote
-           Push validated insights to web (annotations, gaps, opportunities)
-           Explicit promotion step — never a direct write
-           SIBC: promote_annotations.py merges L1 (from sibc_l1_annotations.json)
-                 with L2/L3 (from annotations_merged.ts) at makeSection() time
-
-[Stage 8]  S4 — inference loop                  (on-demand, MANUAL review — never auto-promoted)
-           python3 analysis/core/run_inference.py   (--no-llm = detection only)
-           1. DETECT — for every L1 signal that moved this period, check whether a force/edge in the
-              model explains it. Movements with no explanation → "unexplained" (review backlog).
-              Also flags edge-direction mismatches + unconfirmed cross-links.
-           2. PROPOSE (LLM) — drafts a candidate force/channel/cross-edge for an unexplained movement.
-              Written to s4_proposals/{period}.json as HYPOTHESES with claim_type='hypothesis'.
-           3. SOURCE + PROMOTE (human) — a proposal becomes a model force ONLY after a real external
-              source (URL + date + excerpt) is attached, per SYSTEM_MODEL_SPEC §11. Promotion edits
-              S2b (force_instances in system_model.json); then re-run Stage 5.7 + gate.
-           Real-world nuance enters the model HERE (or in a FOUNDATION/UPDATE pass) — as sourced
-           forces — never by the narrative LLM at insight time.
-
-────────────────────── cross-pipeline boundary ──────────────────────────────────
-
-[Stage X]  Layer 2b — cross-source signal evaluate   (after BOTH pipelines complete Stages 0–7)
-           Read cross-source evaluate specs from catalog.json
-           Apply rules using L2a outputs from both constituent pipelines
-           NOT YET IMPLEMENTED — pending first cross-source model FOUNDATION pass
-
-[Stage Y]  Layer 3 — ecosystem signal evaluate        (after Stage X)
-           Apply rules from ecosystem_model.json using L2b outputs
-           NOT YET IMPLEMENTED — pending first ecosystem model authoring
-```
-
----
-
-## Model Update Cadence
-
-Model updates are named explicitly and run on their own schedule — they are not part of
-the per-period gate. When a model update runs, it must be followed by a full eval gate pass.
-
-### Layer 2a model — per-source system model
-
-**FOUNDATION** — full rebuild. Triggers:
-- First-ever period for a new source (always FOUNDATION)
-- FY-end period (March file, dataDate April–May) for SIBC
-- Equivalent annual anchor period for other sources
-- Structural event that changes multiple causal relationships simultaneously
-
-**UPDATE** — additive only. Triggers:
-- Any interim period where new nodes or signals emerge
-- Never restructure existing nodes/edges in UPDATE mode
-
-**Standard cadence (decided 2026-08-02): every current-period ingestion runs an L2a UPDATE pass**
-for each pipeline — it is not optional, and not "rare". The pass is:
-1. `run_inference.py --no-verify` → S4 hypotheses for the period's unexplained movements.
-2. Review the hypotheses against real, in-force drivers; **source the worthwhile ones via the
-   editor's logged-in Chrome** (Claude-in-Chrome `get_page_text`/`find`), because the automated
-   crawler is 403'd by PIB/NPCI/press. The excerpt anchor (`bank_sourcing.excerpt_on_page`) must
-   literally appear on a **whitelisted** page (`bank_sourcing.ALLOWLIST`, tiered official/report/press).
-3. Promote only source-verified forces into `force_instances[]` (each carries url + verbatim excerpt +
-   verified date, in force at the eval period). A period with nothing new that clears the bar is an
-   **honest null** — record it in `_meta.update_note`, never fabricate a force to fill the pass.
-4. Set `_meta.mode="update"` + `last_updated`, then re-run the gate (skeleton regen preserves the
-   behavioral layer) so the new force flows through S3 → opportunities → feed → distribution.
-
-Backdated/historical ingests remain **backfill-only** (skip the costly authoring) unless enough
-periods accumulate to batch — see the `feedback_backdated_period_authoring` rule.
-
-**Guard in `_meta`:**
-```json
-{
-  "_meta": {
-    "mode": "foundation | update",
-    "last_foundation_date": "YYYY-MM-DD",
-    "last_updated": "YYYY-MM-DD"
-  }
-}
-```
-
-After any Layer 2a model update:
-- Re-run Stage 5 (Layer 2a evaluate) for the current period
-- Re-run Stage 6 (evals gate)
-- Add `evaluate` specs to registry for any new Layer 2a signals
-
-### Layer 2b model — cross-source model
-
-- FOUNDATION after both constituent sources have completed a FOUNDATION pass
-- UPDATE when the cross-source interaction patterns shift materially
-- One model per declared tuple in `cross_source/catalog.json`
-- Tuple must be declared in catalog before model is authored
-
-### Layer 3 model — ecosystem expert model
-
-- Authored once; updated approximately every 6 months or on a major model release
-- Full rebuild each time — no UPDATE mode
-- Location: `analysis/ecosystem_model.json`
-- Requires strict claim validation before use in signal evaluation
-- NOT YET IMPLEMENTED
-
-### Mermaid generation — retired
-
-The 821-line legacy system-model/subsystem mermaid generator was **deleted on 2026-07-28**. Diagrams
-are no longer a separate on-demand stage: the only live consumer is the deep read, which draws its own
-loop/constraint diagrams inline via `analysis/distribution/mermaid.py` (§11.2). Nothing to run after a
-FOUNDATION or UPDATE pass.
-- Check node/edge count before and after UPDATE to decide
-
----
-
-## Signal Layer Architecture
-
-### Registry — universal signal catalog
-
-`analysis/signals/registry.json` is the single catalog for all signals across all pipelines.
-Signal IDs are immutable once created. Add signals; never rename or delete.
-
-Every signal carries:
-- `layer` — 1, 2, or 3
-- `sub_layer` — `"1a"` | `"1b"` | `"1c"` (Layer 1 only)
-- `pipeline` — which source owns this signal
-- `type` — `data` (observable) or `inference` (derived) or `insight` (narrative)
-- `compute` — required for all `layer: 1` signals; defines algorithmic derivation
-- `evaluate` — required for all `layer: 2` and `layer: 3` signals once model exists
-
-**Layer 1 sub-layers:**
-- `1a` — aggregate scalars from total rows (YoY, ratios, shares, spreads)
-- `1b` — composition scalars across natural data boundaries (sector share, category breakdown)
-- `1c` — full entity scans — one row per entity (all banks, all industry types, all categories)
-  Entity rows stored in DB with entity_type / entity_id. No filtering in compute layer —
-  analysis layer extracts top-N / directional / outlier observations via DB queries.
-
-**Layer 1 `compute` spec — SIBC** (reads `rbi_sibc_consolidated.csv`, period resolved via `csv_date`):
-```json
-"compute": {
-  "method": "csv_sector_yoy",
-  "code": "III",
-  "statement": "Statement 1",
-  "status_rules": [
-    { "if": "value > prev_value and value > 0", "then": "strengthening" },
-    { "if": "value > 0",                        "then": "active" },
-    { "if": "true",                             "then": "declining" }
-  ]
-}
-```
-
-Params: `code` = CSV sector code (e.g. "I", "III", "1", "2.1", "4.8", "i" for PSL).
-`statement` = "Statement 1" (main sectors, PSL) or "Statement 2" (industry by type).
-`parent_code` = required for `csv_sector_share` and scan methods.
-`is_psl: true` = filters `is_priority_sector_memo=True` rows.
-
-SIBC compute methods: `csv_sector_yoy` | `csv_sector_abs` | `csv_sector_share` |
-`csv_sector_yoy_spread` | `csv_sector_count_positive_yoy` |
-`csv_sector_scan_yoy` | `csv_sector_scan_share` | `csv_psl_scan_yoy`
-
-**Layer 1 `compute` spec — ATM/POS** (reads atm_pos_consolidated.csv):
-```json
-"compute": {
-  "method": "csv_bank_scan",
-  "metric": "debit_cards",
-  "value_type": "value"
-}
-```
-
-ATM/POS compute methods: `csv_total_yoy` | `csv_total_ratio` | `csv_ratio_sum` | `csv_sum_yoy` |
-`csv_category_share` | `csv_category_yoy` | `csv_category_scan_share` | `csv_bank_scan`
-
-**Layer 2a `evaluate` spec** — reads from Layer 1 DB outputs:
-```json
-"evaluate": {
-  "requires": ["psl-msme-structural-acceleration", "micro-small-growth-tripled"],
-  "rules": [
-    { "if": "psl-msme-structural-acceleration == 'strengthening' and micro-small-growth-tripled in ['active', 'strengthening']", "then": "active" },
-    { "if": "psl-msme-structural-acceleration == 'weakening'", "then": "weakening" },
-    { "if": "true", "then": "absent" }
-  ]
-}
-```
-
-### DB — primary signal store
-
-`analysis/signals/signals.db` — SQLite, single file for all pipelines.
-
-**`signals` table** — fact table, one row per (pipeline, period, metric_id, entity_type, entity_id):
-- `entity_type`: `aggregate` | `bank` | `bank_category` | `industry_type` | `section_series` | `loan_type` | `psl_category`
-- `entity_id`: `total` for aggregates; entity name for 1c scans
-- `value`: computed numeric value (NULL for signals without numeric output)
-- `status`: result of status_rules evaluation
-
-**`metric_ranges` table** — min/max/mean/p25/p75 per metric, refreshed after every append.
-Used by analysis layer to understand where the current value sits in historical context.
-
-**`ingestion_log` table** — one row per append run; tracks metric_count and row_count.
-
-Current state (June 2026):
-- SIBC: 28 compute signals × 3 periods = 254 rows
-- ATM/POS: 22 compute signals × 6 periods = 874 rows (includes full bank-level 1c scans)
-
-**Status values:** `new` | `active` | `strengthening` | `weakening` | `reversed` | `absent` | `unknown` | `pending`
-
-### Validator — Check 2e
-
-`validate_signal_history.py` enforces:
-- A: registry.json schema — required fields, valid statuses, known pipelines/domains
-- B: signals.db integrity — tables present, L1 metrics have rows (continuity), no orphaned metric_ids,
-     metric_ranges populated, registry current_status matches latest DB row per L1 signal
-
----
-
-## SIBC Pipeline
-
-**Gate:** `python3 analysis/core/gate.py --pipeline sibc`
-**Source:** RBI Sector/Industry-wise Bank Credit (monthly XLSX)
-**Cadence:** Monthly
-
-### Date normalization rules (update_web_data.py)
-
-RBI publishes Statement 1 (Bank Credit / Food Credit / Non-food Credit) as a fortnightly
-release. The publication date is always a Friday — which can fall in the first week of the
-**following** month. These must be remapped to the prior month-end. Two rules are baked into
-`_canonical_month_end`; specific dates are also captured in `{period}/date_overrides.json`.
-
-| Publication date | Maps to | Mechanism | Reason |
-|---|---|---|---|
-| Apr 1–7 | Mar 31 | normalization rule | Post-FY-end Bank Credit release |
-| May 1–7 | Apr 30 | normalization rule | Post-April Bank Credit release |
-| Mar 1–7 | Feb 28/29 | `date_overrides.json` in the Feb/Mar period dir | Early-March Bank Credit = Feb data |
-| All other dates | last day of same month | normalization fallback | Mid-month sector snapshots |
-
-**The remapping is enforced in code, not by habit (2026-08-11).** `update_web_data.py --check`
-recomputes the remapping and fails if it differs from the approved record in
-`analysis/rbi_sibc/date_remap.json` — whether a date moved, or a raw date appeared that nobody has
-classified. It runs as gate stage **1a**, and `--xlsx` ingestion stops at stage **0.7** before the
-CSV is written. To approve a new or changed remap: review the table it prints, then
-`python3 analysis/pipelines/sibc/update_web_data.py --approve` (it asks first).
-
-A remap decides which *month* a number belongs to. Get it wrong and the data is misdated rather
-than broken, so every downstream check still passes — which is why this one is enforced rather
-than remembered.
-
-### Scripts per stage
-
-| Stage | Script | Output |
+| # | Stage | What it guarantees |
 |---|---|---|
-| 0 | `detect_format.py` | `{period}/format_report.json` |
-| 1 | `extract_sibc.py` | `{period}/sections.json` |
-| 2 | `validate_sections.py` (Check 1) | — |
-| 3 | `generate_merge.py` + `update_web_data.py` | `merged/sections_merged.json` + `rbi_sibc_consolidated.csv` |
-| 4 | `generate_signal_history.py append --pipeline sibc` | `signals/signals.db` + registry update |
-| 5 | `generate_signal_history.py evaluate --pipeline sibc` | `signals/evaluations/sibc/{period}.json` |
-| 6 | `core/gate.py --period merged --merged` | — |
-| 7 | `promote_annotations.py` | `web/lib/reports/rbi_sibc.ts` |
+| T | unit tests | the deterministic core behaves |
+| 0 | **format detection** | the new file has the structure the extractor expects; drift stops here, loudly |
+| 0.6 | **extract** → `{period}/sections.json` | typed, schema-validated rows (the file is archived into `{period}/raw/`) |
+| 0.7 | **consolidate** → the pipeline's consolidated CSV (+ timeline for NBFC/ATM-POS) | one long-format CSV per pipeline: the single source for charts and signals. SIBC's **date remap** is gated here (see §5) |
+| 1 | data validation | sections, CSV integrity, pipeline-specific checks (e.g. NBFC 1c: computed YoY vs RBI's printed column) |
+| — | *L1 append* (`generate_signal_history.py append`) | signals computed into `signals.db`; run before the gate so the gate checks this period |
+| 2e / 2f | signal history + **freshness** | registry ↔ DB consistent; every stored row equals a fresh recompute from the CSV |
+| — | *L1 narration* (`evaluate`, **paid**, SIBC + ATM/POS) | per-signal narrative; approved per run, $5 ceiling |
+| 5.5 / 4b | **insight cards** (SIBC `generate_analysis_report`, ATM/POS `generate_atm_pos_insights`) | deterministic selection + routing; scalar prose from the eval, scan prose deterministic |
+| 2g / 4c | **card traceability** | every number in a card traces to its declared signals |
+| 5.7 / 5.8 | card ↔ chart cut, card prose voice | the chart answers the card's question; no advice, forecasts or banned register |
+| 4-pre / 4 | skeleton regen + model validation | structure regenerated from the CSV; forces sourced; behavioral layer preserved |
+| 4b | **S3 system state** | forces fire, mix states computed, from `signals.db` |
+| 5.9 | **state band, planes, cut tables** + their traceability | the dashboard sidecars, with every number scoped to its own signals |
+| 4c–4f | opportunities, composition, ecosystem projection, feed, **opportunity traceability** | cross-system state; every opportunity number traces to its evidence set |
+| 5 | architecture reconcile | docs, skills and settings name files that exist; context stays within budget |
+| 5b / 6 | web tests, `tsc` + `npm run build` | the site builds |
 
-### Layer 2a model — SIBC system model
-
-Location: `analysis/rbi_sibc/merged/system_model.json`
-Status: **Live** — updated to Mar 2026 (FOUNDATION pass complete)
-
-FOUNDATION trigger: March year-end file (`is_fy_end: true` in timeline.json)
-UPDATE trigger: Interim months where new signals emerge
-
-After any model update: run Stage 6 (`core/gate.py --period merged --merged`, which
-regenerates the skeleton and validates sourcing via `validate_system_model.py`) → run promote.
-(`source_claims.py` is RETIRED — sourcing is built into the v4.0 model gate.)
-
-### Per-period folder (minimal)
-
-```
-rbi_sibc/{YYYY-MM-DD}/
-    ├── sections.json        ← Stage 1 output
-    ├── format_report.json   ← Stage 0 output
-    └── delta_brief.md       ← Lightweight Claude delta (150–200 words)
-```
-
-`delta_brief.md` structure:
-```markdown
-## Period
-{month} {year} | dataDate: {YYYY-MM-DD} | vs prior: {prev_period}
-
-## What moved
-- 2–4 bullet observations on what changed vs prior period
-
-## Data quality flags
-- Any format anomalies, null series, reclassification effects
-
-## Signal watch
-- Which Layer 1 signals are showing movement worth watching
-```
-
-No system_model, subsystems, annotations_draft, or mermaid output in per-period folders.
-
-### timeline.json schema
-
-```json
-{
-  "report_id": "rbi_sibc",
-  "periods": [
-    {
-      "period":           "Mar 2026",
-      "dataDate":         "2026-04-30",
-      "is_fy_end":        true,
-      "total_credit_lcr": 213.6,
-      "yoy_growth_pct":   16.1,
-      "fy_growth_pct":    16.1,
-      "paths": {
-        "sections":      "rbi_sibc/2026-04-30/sections.json",
-        "format_report": "rbi_sibc/2026-04-30/format_report.json",
-        "delta_brief":   "rbi_sibc/2026-04-30/delta_brief.md"
-      }
-    }
-  ],
-  "merged": {
-    "sections":     "rbi_sibc/merged/sections_merged.json",
-    "system_model": "rbi_sibc/merged/system_model.json",
-    "subsystems":   "rbi_sibc/merged/subsystems.json",
-    "annotations":  "rbi_sibc/merged/annotations_merged.ts"
-  }
-}
-```
+NBFC has no card layer by design, so it skips 5.5–5.8 and the paid narration.
 
 ---
 
-## ATM/POS Pipeline
+## 4. Layer 2 model cadence
 
-**Gate:** `python3 analysis/core/gate.py --pipeline atm_pos`
-**Source:** RBI ATM/Acceptance Infrastructure and Card Statistics (monthly XLSX)
-**Cadence:** Monthly
+- **UPDATE** (every current-period ingestion, standing rule): S4 proposals → Chrome sourcing →
+  promote only verified forces; additive only; an honest null goes in `_meta.update_note`.
+- **FOUNDATION** (the March file, `is_fy_end: true`; the first period of a new source; a
+  structural event): a full review of the behavioral layer.
+- Backdated ingests are **backfill-only** unless the user asks otherwise.
+- `_meta` records `mode`, `last_foundation_date`, `last_updated`.
 
-### Current state
-
-| Stage | Script | Status |
-|---|---|---|
-| 0 | `detect_atm_pos_format.py` | ✓ Live |
-| 1 | `extract_atm_pos.py` | ✓ Live |
-| 2 | `validate_atm_pos.py` | ✓ Live |
-| 3 | `consolidate_atm_pos.py` → `atm_pos_consolidated.csv` | ✓ Live |
-| 4 | `generate_signal_history.py append --pipeline atm_pos` | ✓ Live — writes to signals.db + registry; **84 L1 signals, 16 periods** |
-| 5 | Layer 2a evaluate | ✓ Live — `evaluate` writes `evaluations/atm_pos/{period}.json` |
-| 6 | `core/gate.py --pipeline atm_pos` | ✓ Live |
-| 7 | Presentation promote | direct write (dashboard insights, see below) |
-
-**ATM/POS Layer 1 compute reads directly from `atm_pos_consolidated.csv`** — no
-sections_merged.json needed. All L1 signals have `compute` specs; full bank-level
-entity rows stored in signals.db (1c signals store all ~60 banks per period, not top-N).
-
-#### Dashboard insight path (the live one — read this before any payments UI work)
-
-The payments dashboard (`atm_pos_insights.json`) is **NOT** driven by signals.db / the
-evaluation. It comes from a separate deterministic path, run inside `core/gate.py --pipeline atm_pos`:
-
-```
-Stage 4a  compute_atm_pos_signals.py  → rbi_atm_pos/signals.json   (reads latest CSV; deterministic)
-Stage 4b  generate_atm_pos_insights.py → atm_pos_insights.json      (rule-based insights from signals.json)
-Stage 4c  validate_atm_pos_insights.py  (numbers vs signals.json — incl. prior-period ratios)
-Stage 4d  validate_atm_pos_claims.py    (declared signal keys exist)
-```
-
-**Stage 4a MUST precede 4b** — `signals.json` carries `meta.latest_month`; if 4a is skipped
-the dashboard silently serves the prior period (this happened — found frozen at Mar 2026
-while data was Apr; fixed 2026-06-13 by wiring 4a into the gate).
-
-**Dual-generator caveat — RESOLVED (2026-06-25):** the db/eval-driven "Stage 5.5"
-`generate_atm_pos_analysis_report.py` was a **no-op** (it only updated `layer==1` insights and 4b
-writes no `layer` field), so 4b was already authoritative for payments. In the §4 cutover it was
-retired to `analysis/legacy/` and its gate stage removed — 4b is now the single payments insight
-generator. SIBC keeps its one clean path (eval → `pipelines/sibc/generate_analysis_report.py` →
-`sibc_l1_annotations.json`, 84 L1 annotations).
-
-### Layer 2a model — ATM/POS system model
-
-Location: `analysis/rbi_atm_pos/merged/system_model.json`
-Status: **Pending** — first FOUNDATION pass required
-
-Directory `analysis/rbi_atm_pos/merged/` exists. Author system_model.json after at least
-one full fiscal year of ATM/POS data is available.
+How to run it: `/model-pass`. After any model change the full gate re-runs S3 onward.
 
 ---
 
-## Cross-Pipeline Stages
+## 5. Pipelines
 
-These run after both SIBC and ATM/POS have completed Stages 0–7 for the same period.
-They are not gated on each other — if only one pipeline has a new period, cross-pipeline
-stages still run using the latest available data from each source.
+### SIBC: RBI Sector/Industry-wise Bank Credit
+- Monthly XLSX, released on the last day of M+1; manual download. Data dir `analysis/rbi_sibc/`.
+- **Date normalisation** is a hard, gated rule (CLAUDE.md § SIBC date normalisation). The
+  approved record is `analysis/rbi_sibc/date_remap.json`; `update_web_data.py --check` runs as
+  stage 1a and `--xlsx` ingestion stops at 0.7 on an unclassified date. Approve with
+  `update_web_data.py --approve` only after the user classifies each date.
+- `timeline.json` entries are added **by hand** (`dataDate`, `csv_date`, `is_fy_end`), unlike the
+  other two pipelines, whose consolidate step registers the period.
+- Cards: 96 generated (`sibc_l1_annotations.json`) + 26 hand-written annotations in
+  `rbi_sibc.ts`, promoted from `merged/annotations_merged.ts` only by `promote_annotations.py`.
+- Compute shape: `csv_sector` (one measure over a code hierarchy, optional `statement` scope and
+  PSL memo lens declared in the manifest `schema`).
 
-### Layer 2b — cross-source signal evaluate
+### ATM/POS: RBI ATM, Acceptance Infrastructure and Card Statistics
+- Monthly XLSX, ~M+2, irregular; 63 banks (roster is time-aware: `rbi_atm_pos/canonical_banks.json`).
+- Compute shape: `atm_pos` (many measures over the same bank/category entities). 26 measures break
+  out by bank; each breakout ships as its own file, fetched when opened.
+- Cards: Stage 4a (`compute_atm_pos_signals.py` → `rbi_atm_pos/signals.json`) **must** precede 4b,
+  or the dashboard serves the prior month. 4b overrides anchored scalar prose with the eval
+  (`EVAL_ANCHOR`); the dominance guard attributes a move owned by one bank. Pipeline-specific
+  notes: `analysis/rbi_atm_pos/CLAUDE.md`.
 
-**Catalog:** `analysis/cross_source/catalog.json`
-**Status:** Not yet implemented — no cross-source model exists
-
-Declared tuples:
-
-| Tuple | Sources | Interaction |
-|---|---|---|
-| `sibc_x_atm_pos` | SIBC × ATM/POS | personalLoans ↔ credit_cards, debit_cards |
-
-To activate a tuple:
-1. Author `analysis/cross_source/{tuple_id}/system_model.json` (FOUNDATION pass)
-2. Add `evaluate` specs to all Layer 2b signals in registry
-3. Set `status: "active"` in catalog entry
-4. Wire `generate_signal_history.py evaluate --pipeline cross:{tuple_id}` into cross-pipeline gate
-
-### Layer 3 — ecosystem signal evaluate
-
-**Location:** `analysis/ecosystem_model.json` (does not yet exist)
-**Status:** Not yet implemented
-
-The ecosystem model is Claude's structured understanding of the Indian lending ecosystem —
-risk transmission, NBFC vs bank dynamics, policy effects on credit cycles, collections
-behaviour. It is not derived from any single ingested data source. It provides the
-"for lenders" interpretive layer that sits above all pipeline-specific signals.
-
-**Authoring cadence:** Once, then updated approximately every 6 months or on a major
-model release. Always a full rebuild — no UPDATE mode.
-
-**Claim validation:** Every claim in ecosystem_model.json must pass `validate_claims.py`
-before it is used in any signal evaluation or presentation output.
+### NBFC: RBI Sectoral Deployment of NBFC Credit
+- Monthly XLSX, ~M+2; manual download. The press release states headline numbers in text, which is
+  free ground truth for the extractor (stage 1c checks our YoY against RBI's printed column).
+- Covers ~87% of the NBFC sector: a page-level caveat, never a per-table footnote.
+- Compute shape: `csv_sector` (same as SIBC). **No card layer** (v1): the dashboard is the state
+  band + cut tables only. Revisit at ~12 releases.
 
 ---
 
-## Key Rules
+## 6. The signal store
 
-### Annotation IDs are permanent
-An `id` in `annotations_merged.ts`, once created, is never renamed or deleted.
-UPDATE mode may add new IDs. FOUNDATION mode may restructure — but before promoting,
-run `promote_annotations.py --dry-run` and explicitly account for every removed ID.
-`annotation_ids` in `system_model.json` must exactly match `id` fields in the annotations file.
-
-### Signal IDs are permanent
-A signal `id` in `registry.json`, once created, is never renamed or deleted.
-
-**The registry holds only Layer-1 *computed* signals as active.** Layer-2/3 findings are NOT registry
-signals — they live in `system_model.json` (force/risk/opportunity/gap nodes) and surface via S3 +
-`derive_opportunities`. The legacy SIBC `layer: 2` inference signals (hand-authored trackers) were
-reconciled into the model and marked `current_status: retired` (2026-06-20) with a `migrated_to` pointer;
-they stay in the registry for id-permanence but are inert. ATM/POS never had registry L2 signals. Net:
-both pipelines' registries are **L1-computed-only-active** — L2 is the model's job, identically for both.
-
-### Stage 3 self-validates
-`generate_merge.py` auto-runs `validate_sections.py --merged` after writing.
-If post-merge validation fails, the script exits 1 and Stage 4 must not run.
-
-### Layer 1 always runs — no exceptions
-If Stage 3 produces a valid `sections_merged.json`, Stage 4 always runs.
-Layer 1 signal evaluation is not optional, not skippable, not conditioned on model state.
-
-### Layer 2 evaluation ≠ Layer 2a model update
-The Layer-2 *evaluation* runs **every period** — Stage 5.7 (S3): live L1 signals fire onto the
-existing model (`generate_system_state` + `derive_opportunities`), deterministic. (Stage 5, the LLM
-signal interpretation, also runs every period but is L1 representation, not L2.) Updating
-`system_model.json` itself — adding/sourcing forces (FOUNDATION, UPDATE, or an S4 promotion) — is a
-separate, explicitly triggered authoring step. Never conflate evaluating the model with changing it.
-
-### Promotion is automated, never manual
-`promote_annotations.py` verifies annotation IDs match before and after write.
-Never copy `annotations_merged.ts` → `rbi_sibc.ts` manually.
-
-### Git / deployment
-- Work directly on `main` — solo project, no feature branches
-- Never auto-push to GitHub
-- Always run full evals (including build) before `git push`
-- Commit per-period outputs, merged outputs, and web/ separately
+- **Registry** (`signals/registry.json`): the catalog of Layer 1 **computed** signals only. IDs are
+  permanent. Every signal declares `layer`, `pipeline`, `compute` (method + params), `cadence`
+  (how often the value can change) and, where relevant, `window`. Methods are specified in
+  `signals/README.md`; `reconcile.py` Check 5 fails a method that is dispatchable but unspecced.
+- **`signals.db`** (SQLite, committed): `signals` fact table keyed (pipeline, period, metric_id,
+  entity_type, entity_id), plus `metric_ranges` and `ingestion_log`. It has a history index and
+  runs `ANALYZE` at init; without statistics SQLite ignores the index.
+- **Checks:** 2e (`guards/validate_signal_history.py`: schema, continuity, status sync, the
+  share-of-net bound, cadence) and 2f (`guards/check_signal_freshness.py`: recompute every period
+  listed in `timeline.json` and compare). A source revision means re-appending **every** period.
 
 ---
 
-## Adding a New Period
+## 7. Rules that hold across pipelines
 
-### SIBC — interim period (UPDATE mode)
+- **Annotation IDs are permanent.** FOUNDATION may restructure only after
+  `promote_annotations.py --dry-run` accounts for every removed ID.
+- **Signal IDs are permanent;** the registry holds Layer 1 computed signals only. Layer 2 lives on
+  the model and in S3, never as registry entries.
+- **Layer 1 always runs;** it is never conditioned on model state.
+- **A force needs a verified source** (URL + verbatim excerpt on the page + effective date in force
+  for the window). Nothing is auto-promoted.
+- **Paid model calls need approval in the current conversation** (`core/llm_budget`).
+- Git and deployment rules are in `CLAUDE.md`.
 
-```
-□  Place xlsx in analysis/rbi_sibc/{dataDate}/raw/
-□  python3 analysis/pipelines/sibc/detect_format.py {xlsx}
-   — review format_report.json; confirm before proceeding (interactive A/B)
-□  python3 analysis/core/gate.py --pipeline sibc --xlsx {xlsx} --skip-build
-   — resolves the period from the file, then runs format-check → extract → consolidate → validate.
-     Stops at 0.7 if the date remapping is unapproved; then `update_web_data.py --approve` and re-run.
-□  Update timeline.json — add period entry, is_fy_end: false
-□  Claude: delta_brief.md  (150–200 words; see structure above)
-□  python3 analysis/core/gate.py --pipeline sibc --period {dataDate} --skip-build
-   (Checks 0, 0.5, 1, 1b — data integrity only)
-□  python3 analysis/pipelines/sibc/generate_merge.py
-□  python3 analysis/core/generate_signal_history.py append --pipeline sibc --period {dataDate}
-   (Stage 4 — Layer 1 always runs here)
-□  python3 analysis/core/generate_signal_history.py evaluate --pipeline sibc --period {dataDate}
-   (Stage 5 — LLM signal evaluate; always runs every period)
-□  python3 analysis/pipelines/sibc/generate_analysis_report.py
-   (Stage 5.5 — generate sibc_l1_annotations.json for UI from eval output)
-□  READ rbi_sibc/merged/system_model.json — is a model UPDATE warranted?
-   If yes (new signals, material pattern shift): run Layer 2a model UPDATE pass
-   — edit behavioral layer in system_model.json (skeleton is regenerated by the gate)
-   — set _meta.mode = "update", bump _meta.last_updated
-   — (source_claims.py + the mermaid generator are RETIRED — sourcing is enforced by
-      validate_system_model.py inside the gate; do not run them)
-□  python3 analysis/core/gate.py --pipeline sibc --merged --skip-build
-□  python3 analysis/pipelines/sibc/promote_annotations.py --dry-run
-□  python3 analysis/pipelines/sibc/promote_annotations.py
-□  python3 analysis/core/gate.py --pipeline sibc --merged
-□  Commit per-period → merged → web/ separately
-□  git push
-```
+## 8. Adding things
 
-### SIBC — FY-end period (FOUNDATION mode)
-
-```
-□  All steps above through generate_merge.py + Stage 4 signal append
-□  Confirm: is_fy_end true? dataDate April–May? Full fiscal year visible?
-   If not certain, treat as UPDATE.
-□  Layer 2a model FOUNDATION pass:
-   — full rebuild of system_model.json from sections_merged.json
-   — set _meta.mode = "foundation", _meta.last_foundation_date = dataDate
-   — full rebuild of subsystems.json
-   — full rewrite of annotations_merged.ts (ID guard applies — see Key Rules)
-   — (source_claims.py RETIRED — sourcing enforced by validate_system_model.py in the gate)
-□  python3 analysis/core/generate_signal_history.py evaluate --pipeline sibc --period {dataDate}
-   (re-run Stage 5 after model rebuild)
-□  python3 analysis/core/gate.py --pipeline sibc --merged --skip-build
-   (regenerates the skeleton + S3 + opportunities; the mermaid generator is RETIRED)
-□  python3 analysis/pipelines/sibc/promote_annotations.py --dry-run  (REVIEW every removed ID)
-□  python3 analysis/pipelines/sibc/promote_annotations.py
-□  python3 analysis/core/gate.py --pipeline sibc --merged
-□  Commit per-period → merged → web/ separately
-□  git push
-```
-
-### ATM/POS — new period
-
-```
-□  Place xlsx in analysis/rbi_atm_pos/incoming/
-□  python3 analysis/core/gate.py --pipeline atm_pos --xlsx {file}
-   (Stages 0–3 extract/validate/consolidate, THEN Stage 4a refresh signals.json →
-    4b generate insights → 4c/4d validate → 5c skeleton+model → 5d S3+opportunities.
-    The dashboard insight refresh (4a→4b) lives INSIDE this gate — see the
-    "Dashboard insight path" note above. Do not hand-run generate_atm_pos_insights.py
-    without first running compute_atm_pos_signals.py, or you serve a stale period.)
-□  python3 analysis/core/generate_signal_history.py append --pipeline atm_pos --period {YYYY-MM-DD}
-   (Stage 4 — Layer 1: writes all signals to signals.db + updates registry)
-□  python3 analysis/core/generate_signal_history.py evaluate --pipeline atm_pos --period {YYYY-MM-DD}
-   (Stage 5 — LLM signal evaluate → evaluations/atm_pos/{period}.json)
-   NB: generate_atm_pos_analysis_report.py ("5.5") is currently a no-op — see caveat above.
-□  Commit per-period → web/ separately
-□  git push
-```
-
----
-
-## Annotation Migration Strategy
-
-Annotations in `annotations_merged.ts` were authored before the signal compute layer existed.
-Migration to computed output is layer-by-layer — the file is NOT retired until all three
-layers have compute coverage.
-
-### Principle
-Do not do a big-bang replacement. Each layer migrates independently when its compute is ready.
-The `layer` field on each annotation is the marker that controls which annotations are
-authored vs auto-computed.
-
-### Migration steps (in order)
-
-**Step 1 — Tag annotations (prerequisite for everything else)**
-Add `layer: 1 | 2 | 3` to every annotation object in `annotations_merged.ts`.
-Metadata-only — no content change. Run `promote_annotations.py` after.
-
-**Step 2 — Build `generate_analysis_report.py` formatter**
-Reads `evaluations/{pipeline}/{period}.json`, outputs annotation-shaped objects for
-`layer: 1` signals only. Does not touch layer 2/3 entries.
-
-**Step 3 — Wire layer 1 to computed output**
-Replace body/content of `layer: 1` annotations with formatter output each period.
-Layer 2/3 annotations remain authored and unchanged.
-
-**Step 4+ — Layer 2/3 compute (future)**
-When L2 compute is built → retire authored layer 2 annotations.
-When L3 compute is built → retire authored layer 3 annotations.
-When all layers computed → retire `annotations_merged.ts` entirely.
-
-### UPDATE pass scoping
-The Layer 2a model UPDATE pass continues each period, but its scope narrows as layers migrate:
-- Pre-Step 3: UPDATE pass authors all annotations
-- Post-Step 3: UPDATE pass only refreshes `layer: 2` annotations (layer 1 auto-computed)
-- Layer 3: unchanged each period (~6-monthly cadence regardless)
-
-### Known annotation reclassifications
-These annotations were initially classified as L1 but must remain L2 (authored):
-- `psl-housing-anomalous-surge` — the 39.8% YoY surge is a regulatory reclassification
-  artifact (RBI Oct 2024 PSL limit revision), not real demand. Computed signal inference
-  gets this wrong. Requires authored causal framing.
-
-### Known signal gaps (fix before replacing those annotations)
-- `computer-software-multi-year-surge` and `transport-operators-decelerating` both map to
-  `sibc-services-yoy-scan` which emits one merged narrative — transport doesn't appear.
-  Fix: scan signals need per-entity evaluation output before these can be replaced.
-
----
-
-## Directory Structure
-
-```
-analysis/
-├── rbi_sibc/
-│   ├── timeline.json               ← Registry of all ingested periods
-│   ├── merged/
-│   │   ├── sections_merged.json    ← Stage 3: combined time-series (source for L1 compute)
-│   │   ├── system_model.json       ← Layer 2a model (living doc — FOUNDATION or UPDATE)
-│   │   ├── subsystems.json         ← Subsystem map (append-only in UPDATE)
-│   │   ├── annotations_merged.ts   ← Draft annotations (→ web via promote_annotations.py)
-│   │   ├── insights.md
-│   │   ├── gaps.md
-│   │   └── opportunities.md
-│   └── {YYYY-MM-DD}/
-│       ├── sections.json
-│       ├── format_report.json
-│       └── delta_brief.md
-│
-├── rbi_atm_pos/
-│   ├── timeline.json
-│   ├── canonical_banks.json
-│   ├── merged/
-│   │   └── system_model.json       ← Layer 2a model (pending — first FOUNDATION pass needed)
-│   └── {YYYY-MM-DD}/
-│       ├── format_report.json
-│       └── sections.json
-│
-├── cross_source/
-│   ├── catalog.json                ← Tuple registry — all declared cross-source pairs
-│   └── {tuple_id}/
-│       └── system_model.json       ← Layer 2b model per tuple (pending)
-│
-├── signals/
-│   ├── registry.json               ← Universal signal catalog (90 signals, layer/compute/evaluate specs)
-│   ├── signals.db                  ← PRIMARY store — SQLite fact table (pipeline × period × metric × entity)
-│   ├── db.py                       ← DB init, schema, refresh_ranges()
-│   ├── migrate_to_db.py            ← One-time migration script (historical — no longer needed)
-│   ├── update_registry.py          ← One-time script: added sub_layer + compute specs to registry
-│   ├── compute/
-│   │   ├── engine.py               ← Dispatch: reads registry, calls sibc/atm_pos, writes DB
-│   │   ├── csv_sector.py           ← sector-hierarchy compute methods (1a/1b/1c/1d) — any
-│   │   │                              source that is one measure over a code hierarchy
-│   │   └── atm_pos.py              ← ATM/POS compute methods (1a/1b/1c/1d) — reads CSV
-│   └── evaluations/
-│       ├── sibc/                   ← LLM evaluation JSONs per period (observation/direction/inference)
-│       └── atm_pos/                ← LLM evaluation JSONs per period
-│
-├── output/
-│   └── mermaid/rbi_sibc/{YYYY-MM-DD}/   ← On-demand mermaid diagrams
-│
-├── core/gate.py                    ← SIBC gate (Stages 0–6)
-├── core/gate.py --pipeline atm_pos            ← ATM/POS gate (Stages 0–6)
-├── extract_sibc.py                 ← Stage 1 SIBC
-├── extract_atm_pos.py              ← Stage 1 ATM/POS
-├── detect_format.py                ← Stage 0 SIBC
-├── detect_atm_pos_format.py        ← Stage 0 ATM/POS
-├── update_web_data.py              ← Stage 3 SIBC (CSV consolidation)
-├── consolidate_atm_pos.py          ← Stage 3 ATM/POS (CSV consolidation)
-├── generate_merge.py               ← Stage 3 SIBC (sections_merged.json)
-├── generate_signal_history.py      ← Stage 4 + Stage 5: append | evaluate | status | seed
-├── source_claims.py                ← RETIRED (sourcing now in validate_system_model.py; on disk, detached)
-├── compute_atm_pos_signals.py      ← Stage 4a ATM/POS: rebuild signals.json from CSV (feeds 4b insights)
-├── generate_atm_pos_insights.py    ← Stage 4b ATM/POS: rule-based dashboard insights → atm_pos_insights.json
-├── check_derived_fresh.py          ← Drift guard: regenerate deterministic chain, fail on stale committed artifact
-├── promote_annotations.py          ← Stage 7 SIBC: verified copy to web
-│                                    (legacy mermaid generator DELETED 2026-07-28 →
-│                                     analysis/distribution/mermaid.py for deep-read diagrams)
-│
-├── validate_timeline.py            ← Check 0
-├── validate_sections.py            ← Check 1
-├── validate_annotations.py         ← Check 3
-├── validate_content.py             ← Check 2b
-├── validate_claims.py              ← Check 2c
-├── validate_annotation_basis.py    ← Check 2d
-├── validate_signal_history.py      ← Check 2e
-├── validate.py                     ← Checks 4, 5
-│
-│
-└── newsletter/                     ← Exception — not yet standardised to this architecture
-    ├── CLAUDE.md
-    └── ...
-
-web/
-└── lib/reports/
-    └── rbi_sibc.ts                 ← Live annotations (promoted from merged)
-
-web/public/data/
-    ├── rbi_sibc_consolidated.csv
-    ├── atm_pos_consolidated.csv
-    └── atm_pos_insights.json       ← Layer 2a output (will move to promotion step)
-```
-
----
-
-## Skills (load on demand)
-
-| Skill | When to invoke |
+| To add | Use |
 |---|---|
-| `/per-period-analysis` | Stage 2 delta_brief.md for a new period (~150 words) |
-| `/merged-analysis` | Layer 2a model UPDATE or FOUNDATION pass — check `is_fy_end` first |
-| `/add-new-report` | Full walkthrough: adding a new SIBC period end-to-end |
+| a period (any pipeline) | `/ingest-period` |
+| a model pass / sourced forces | `/model-pass`, `/s4-source` |
+| a new source (pipeline) | `ARCHITECTURE.md` §"Adding a pipeline"; `/onboard-source` is planned in `PLAN.md` |
+| a signal family | spec in `signals/README.md` first, then registry → compute → backfill every period → freshness |
