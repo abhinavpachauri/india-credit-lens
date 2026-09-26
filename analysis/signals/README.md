@@ -7,8 +7,8 @@ deterministic compute engine, and the LLM evaluation layer.
 - **`registry.json`** — universal signal catalog (L1/L2/L3 tagged; L1 signals carry compute
   specs). The single declaration of what each signal is.
 - **`signals.db`** — **primary store** (SQLite): `(pipeline, period, metric_id, entity_type,
-  entity_id)` fact table + `metric_ranges`. Binary — guarded by `guards/check_signal_freshness`.
-- **`db.py`** — schema init + `refresh_ranges()`.
+  entity_id)` fact table + `ingestion_log` + `llm_cache`. Binary — guarded by `guards/check_signal_freshness`.
+- **`db.py`** — schema init (and the history index's `ANALYZE`).
 
 ## Compute (`compute/`)
 - **`engine.py`** — `run_append(pipeline, period, db, registry)` dispatches each signal to its
@@ -710,7 +710,7 @@ and it must appear wherever a cross-source ratio against bank credit is publishe
   version.
 - **`query.py`** — builds signal payloads (scalar + scan + full chronological series) for
   evaluate and for traceability ground-truth (`signal_numbers` / `flat_numbers`).
-- **`apply_status_rules.py`**, **`update_registry.py`**, **`rebuild_*_signals.py`**,
-  **`migrate_to_db.py`** — maintenance/backfill helpers.
+- **`apply_status_rules.py`**, **`update_registry.py`** — maintenance/backfill helpers.
+  (The `rebuild_*_signals.py` scripts were archived on 2026-08-12, superseded by `append`.)
 
 Append/evaluate are driven via `core/generate_signal_history.py`, not these scripts directly.

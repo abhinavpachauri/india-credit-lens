@@ -5,7 +5,7 @@ Check 2e: Signal history integrity validation.
 Validates:
   A. registry.json schema — required fields, valid status values, known pipelines/domains
   B. signals.db integrity — tables present, layer-1 metrics have rows, no orphaned metric_ids,
-                            metric_ranges populated, registry current_status matches DB latest
+                            registry current_status matches DB latest
   C. Continuity — every L1 compute signal in registry has at least one DB row
 
 Exit 0 = all checks pass. Exit 1 = failures found.
@@ -152,7 +152,7 @@ def check_db(reg_signals: dict, known_pipelines: set[str]) -> sqlite3.Connection
     B1. DB file exists and has expected tables.
     B2. Every layer-1 compute signal has at least one row in signals table (continuity).
     B3. No orphaned metric_ids (present in DB but not registry).
-    B4. metric_ranges populated for metrics that have non-null values.
+    (B4, "metric_ranges populated", was removed with the table on 2026-09-26: nothing read it.)
     B5. registry current_status matches the latest DB row status per L1 signal.
 
     Returns the open connection for reuse, or None on failure.
@@ -171,7 +171,7 @@ def check_db(reg_signals: dict, known_pipelines: set[str]) -> sqlite3.Connection
     tables = {r[0] for r in conn.execute(
         "SELECT name FROM sqlite_master WHERE type='table'"
     ).fetchall()}
-    for expected in ("signals", "metric_ranges", "ingestion_log"):
+    for expected in ("signals", "ingestion_log"):
         if expected not in tables:
             fail(f"signals.db missing table '{expected}'")
     if "signals" not in tables:
@@ -238,18 +238,6 @@ def check_db(reg_signals: dict, known_pipelines: set[str]) -> sqlite3.Connection
     if orphaned:
         for sid in sorted(orphaned)[:5]:
             fail(f"signals.db has metric_id '{sid}' not found in registry.json")
-
-    # B4: metric_ranges populated for metrics with real values
-    metrics_with_values = {r[0] for r in conn.execute(
-        "SELECT DISTINCT metric_id FROM signals WHERE value IS NOT NULL"
-    ).fetchall()}
-    ranged_metrics = {r[0] for r in conn.execute(
-        "SELECT DISTINCT metric_id FROM metric_ranges"
-    ).fetchall()}
-    missing_ranges = metrics_with_values - ranged_metrics
-    if missing_ranges:
-        for mid in sorted(missing_ranges)[:5]:
-            fail(f"metric_ranges missing for '{mid}' which has values in signals table")
 
     # B5: registry current_status matches latest DB status per L1 signal
     db_latest_status: dict[str, str] = {}
@@ -384,12 +372,11 @@ def check_db(reg_signals: dict, known_pipelines: set[str]) -> sqlite3.Connection
 
     # Summary
     total_rows   = conn.execute("SELECT COUNT(*) FROM signals").fetchone()[0]
-    total_ranges = conn.execute("SELECT COUNT(*) FROM metric_ranges").fetchone()[0]
     pipeline_rows = conn.execute(
         "SELECT pipeline, COUNT(DISTINCT period), COUNT(*) FROM signals GROUP BY pipeline"
     ).fetchall()
 
-    print(f"     B ✓ {total_rows} signal rows, {total_ranges} ranges")
+    print(f"     B ✓ {total_rows} signal rows")
     for pl, n_periods, n_rows in pipeline_rows:
         print(f"       {pl}: {n_periods} period(s), {n_rows} rows")
     if not unexplained:

@@ -22,7 +22,6 @@ from typing import Any
 
 from . import csv_sector as _csv_sector
 from . import atm_pos as _atm_pos
-from ..db import refresh_ranges
 
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
@@ -120,14 +119,6 @@ def run_append(pipeline: str, period: str,
             "DELETE FROM signals WHERE pipeline=? AND period=? AND metric_id=?",
             (pipeline, period, metric_id)).rowcount
     row_count = _upsert(conn, pipeline, period, all_rows)
-
-    # Refresh metric_ranges for every affected metric
-    affected_metrics: set[tuple] = {
-        (r["metric_id"], r.get("entity_type", "aggregate"), r.get("entity_id", "total"))
-        for r in all_rows
-    }
-    for metric_id, entity_type, entity_id in affected_metrics:
-        refresh_ranges(conn, metric_id, pipeline, entity_type, entity_id)
 
     # Log
     conn.execute(

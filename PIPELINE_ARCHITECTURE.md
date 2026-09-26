@@ -129,7 +129,7 @@ How to run it: `/model-pass`. After any model change the full gate re-runs S3 on
   (how often the value can change) and, where relevant, `window`. Methods are specified in
   `signals/README.md`; `reconcile.py` Check 5 fails a method that is dispatchable but unspecced.
 - **`signals.db`** (SQLite, committed): `signals` fact table keyed (pipeline, period, metric_id,
-  entity_type, entity_id), plus `metric_ranges` and `ingestion_log`. It has a history index and
+  entity_type, entity_id), plus `ingestion_log` and `llm_cache`. It has a history index and
   runs `ANALYZE` at init; without statistics SQLite ignores the index.
 - **Checks:** 2e (`guards/validate_signal_history.py`: schema, continuity, status sync, the
   share-of-net bound, cadence) and 2f (`guards/check_signal_freshness.py`: recompute every period

@@ -12,7 +12,7 @@ return a short factual summary. You never write, edit, move or delete files; use
 
 | What | Where |
 |---|---|
-| Signal values | `analysis/signals/signals.db`, table `signals` keyed (pipeline, period, metric_id, entity_type, entity_id), plus `metric_ranges` |
+| Signal values | `analysis/signals/signals.db`, table `signals` keyed (pipeline, period, metric_id, entity_type, entity_id) |
 | Signal definitions | `analysis/signals/registry.json` (Layer 1 computed signals; `compute`, `cadence`, `window`) |
 | Source data | the consolidated CSV per pipeline (path in `analysis/pipelines/{id}/pipeline.json` → `paths.consolidated_csv`) |
 | Ingested periods | `analysis/rbi_{sibc,atm_pos,nbfc}/timeline.json` |

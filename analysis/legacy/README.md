@@ -13,5 +13,6 @@ in the current engines.
 | `build_behavioral_layer.py`, `migrate_forces_to_instances.py` | one-time v4.0 build helpers (done) |
 | `generate_atm_pos_analysis_report.py` | Stage 4b (`pipelines/atm_pos/generate_atm_pos_insights.py`) — the no-op "Stage 5.5" |
 | `generate_delta.py`, `backfill_sibc_basis.py` | one-off / orphan tools |
+| `migrate_to_db.py` | one-time June 2026 migration of the history JSON into signals.db (done); its `refresh_ranges` import no longer exists |
 
 Not scanned by the architecture discoverer; mentions of these names in docs resolve by basename.
