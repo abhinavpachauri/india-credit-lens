@@ -403,8 +403,6 @@
       "invokes": [],
       "path": "analysis/guards/check_signal_freshness.py",
       "reads": {
-        "analysis/rbi_atm_pos/timeline.json": "low",
-        "analysis/rbi_sibc/timeline.json": "low",
         "analysis/signals/registry.json": "low"
       },
       "writes": {}
@@ -767,9 +765,6 @@
         "analysis/rbi_sibc/merged/sections_merged.json": "low",
         "annotations_draft.ts": "low",
         "annotations_merged.ts": "low",
-        "gaps.md": "low",
-        "insights.md": "low",
-        "opportunities.md": "low",
         "sections.json": "low"
       },
       "writes": {}
@@ -851,8 +846,7 @@
     "signals/compute/engine": {
       "doc_claims": [],
       "imports": [
-        "core/manifest",
-        "signals/db"
+        "core/manifest"
       ],
       "invokes": [],
       "path": "analysis/signals/compute/engine.py",
@@ -900,19 +894,6 @@
       "invokes": [],
       "path": "analysis/signals/is_news.py",
       "reads": {},
-      "writes": {}
-    },
-    "signals/migrate_to_db": {
-      "doc_claims": [],
-      "imports": [
-        "signals/db"
-      ],
-      "invokes": [],
-      "path": "analysis/signals/migrate_to_db.py",
-      "reads": {
-        "atm_pos.json": "low",
-        "sibc.json": "low"
-      },
       "writes": {}
     },
     "signals/planes": {

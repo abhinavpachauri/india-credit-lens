@@ -258,6 +258,14 @@ def build(conn, pipeline: str, period: str, stem: str, unit: str = "rs_cr",
     # The cut's own row: its total summed from the parts (the denominator `of_cut` uses), the
     # parent's own growth, pace and — since this build — its share of the book. A cut whose
     # parent has no published rate loses those cells rather than borrowing a part's.
+    # The pinned row IS the parent, so its size is the parent's own published row wherever the
+    # scan stores one. The sum of the parts (`total`) is only the parent on a cut whose parts
+    # are the whole; on an "of which" cut it put ₹7.38L Cr beside a pinned "NBFCs" that the
+    # table one level up shows at ₹21.28L Cr, next to a share and a growth that were NBFCs'.
+    # Each pinned cell declares the row it came from, so the gate checks that row and no other.
+    own = "parent" if par_hist["size"].get("parent", {}).get(period) is not None else "total"
+    parent_entities = {c: "total" for c in COLS}
+    parent_entities["size"] = own
     total = {"entity": None}
     for col in COLS:
         agg = COLS[col][2]
@@ -266,9 +274,9 @@ def build(conn, pipeline: str, period: str, stem: str, unit: str = "rs_cr",
             # value, and a cell whose number traces to nothing is what every gate here stops.
             total[col] = None
             continue
-        h = par_hist[col]
-        total[col] = Cell.of(h.get(agg[1], {}).get(period), FMT[col],
-                             _aligned(h, agg[1], par_periods[col]))
+        h, eid = par_hist[col], parent_entities[col]
+        total[col] = Cell.of(h.get(eid, {}).get(period), FMT[col],
+                             _aligned(h, eid, par_periods[col]))
     total["growth"] = Cell.of(
         par_hist["growth"].get("total", {}).get(period), _pct,
         _aligned(par_hist["growth"], "total", par_periods["growth"])) if parent_yoy else None
@@ -315,6 +323,8 @@ def build(conn, pipeline: str, period: str, stem: str, unit: str = "rs_cr",
         "parent_columns": {c: (parent_yoy if c == "growth"
                                else agg_size_id if c == "size" else COLS[c][0])
                            for c in ("size", "pace", "of_book", "growth") if total.get(c)},
+        "parent_entities": {c: parent_entities[c] for c in ("size", "pace", "of_book", "growth")
+                            if total.get(c)},
         # The x-axis of every cell chart, rendered here like every other string. Per column,
         # because a column's depth is its own; `parent` where the parent row's history runs
         # over a different period set than the parts'.

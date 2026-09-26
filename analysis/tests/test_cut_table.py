@@ -321,3 +321,33 @@ def test_the_breakouts_parent_row_is_the_same_total_the_category_table_shows():
             continue
         assert t["total"]["size"]["display"] == sibling["total"]["size"]["display"], \
             f"{metric}: the total differs between the bank and category views"
+
+
+def test_the_pinned_row_is_the_parent_not_the_sum_of_what_is_named():
+    """On an "of which" cut the named parts are not the whole. The pinned "NBFCs" row showed
+    ₹7.38L Cr (its three named parts) beside NBFCs' own share and growth, while the services
+    table one level up showed NBFCs at ₹21.28L Cr. Same entity, two numbers."""
+    doc = json.loads((DATA / "sibc_table.json").read_text())
+    nbfc_here = doc["cuts"]["sibc-nbfc-sub"]["total"]["size"]
+    nbfc_above = next(p for p in doc["cuts"]["sibc-services"]["parts"]
+                      if p["entity"].startswith("Non-Banking Financial"))["size"]
+    assert nbfc_here["display"] == nbfc_above["display"]
+    main = doc["cuts"]["sibc-main"]
+    parts = sum(p["size"]["sort"] for p in main["parts"])
+    assert main["total"]["size"]["sort"] > parts, "the pinned row is Non-food credit, not the four"
+
+
+def test_a_pinned_size_that_is_the_sum_of_the_parts_is_caught(tmp_path, monkeypatch):
+    """The gate scoped a pinned cell to every value its column stored, so the parts' sum —
+    a stored value of the right signal, of the wrong row — passed. Drive the old shape back
+    through the gate and require it to fail."""
+    doc = json.loads((DATA / "sibc_table.json").read_text())
+    cut = doc["cuts"]["sibc-nbfc-sub"]
+    s = sum(p["size"]["sort"] for p in cut["parts"])
+    cut["total"]["size"] = {**cut["total"]["size"], "sort": s, "display": T._rs(s),
+                            "series": None}
+    cut["parent_entities"]["size"] = "total"
+    (tmp_path / "sibc_table.json").write_text(json.dumps(doc))
+    monkeypatch.setattr(V, "DATA", tmp_path)
+    findings = [f for f in V.validate("sibc") if f.startswith("sibc-nbfc-sub · (the cut itself) · size")]
+    assert findings, "a pinned row showing the sum of the named parts passed the gate"

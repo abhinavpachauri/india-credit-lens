@@ -1362,4 +1362,6 @@ annual NAS, any card or state-band sentence built from these columns. Layer 1 co
 
 The pinned row of `sibc-main` rendered **size = the four sectors' sum (₹208.88L Cr)** beside
 **of book 99.5% and growth, which belong to Non-food credit (₹219.60L Cr)**. A part cannot be
-99.5% of a book it is 94.6% of. It is fixed separately, independently of MoSPI.
+99.5% of a book it is 94.6% of. **Fixed 2026-09-26**, independently of MoSPI: the size scan stores
+the parent's own row (`aggregate`/`parent`), the pinned row reads it, and the gate checks each
+pinned cell against the row it declares. Six pinned rows were wrong, on SIBC and NBFC.

@@ -128,7 +128,10 @@ def test_the_shared_methods_compute_against_nbfc_with_no_nbfc_specific_code():
     size = csv_sector.csv_sector_scan_abs(main, "2026-07-31", df)
     parts = [r for r in size if r["entity_type"] == "sector"]
     agg = [r for r in size if r["entity_type"] == "aggregate"]
-    assert len(parts) == 5 and len(agg) == 1, "the size scan adds the cut's own total"
+    assert len(parts) == 5 and {r["entity_id"] for r in agg} == {"total", "parent"}, \
+        "the size scan adds the sum of the parts AND the parent's own published row"
+    by = {r["entity_id"]: r["value"] for r in agg}
+    assert abs(by["total"] - by["parent"]) < 1, "NBFC's main cut is additive: the two agree"
     # And on THIS cut that total is the published one, because the parts are the whole.
     assert abs(agg[0]["value"] - sum(r["value"] for r in parts)) < 0.01
 
@@ -220,3 +223,30 @@ def test_every_nbfc_dimension_shows_a_band_and_the_one_part_cuts_say_why():
     for dim in ("industry", "infrastructure"):
         b = band[dim][0]
         assert b["mix"] is None and "only one part" in b["no_mix_note"]
+
+
+def _published_yoy_with(tmp_path, monkeypatch, edit):
+    from pipelines.nbfc import validate_published_yoy as P
+    src = sorted(P.DATA_DIR.glob("*/sections.json"))[-1]
+    doc = json.loads(src.read_text())
+    edit(doc)
+    (tmp_path / src.parent.name).mkdir()
+    (tmp_path / src.parent.name / "sections.json").write_text(json.dumps(doc))
+    monkeypatch.setattr(P, "DATA_DIR", tmp_path)
+    return P.main()
+
+
+def test_the_published_yoy_check_fails_when_it_checked_nothing(tmp_path, monkeypatch):
+    """It printed ✓ over zero comparisons. An extractor that stops reading RBI's rate
+    columns must stop the gate, not pass it."""
+    def drop(doc):
+        for s in doc["sectors"]:
+            s["published_yoy"] = {}
+    assert _published_yoy_with(tmp_path, monkeypatch, drop) == 1
+
+
+def test_a_printed_rate_for_a_row_we_never_read_fails(tmp_path, monkeypatch):
+    def orphan(doc):
+        doc["sectors"][0]["published_yoy"]["2026-07-31"] = 1.0
+        doc["sectors"][0]["code"] = "ZZ"
+    assert _published_yoy_with(tmp_path, monkeypatch, orphan) == 1

@@ -52,6 +52,8 @@ skills = procedure, subagents = independent review, hooks + `reconcile.py` = enf
      COMPOSITION_SPEC §24; DASHBOARD_SPEC §21. Decided: output over a trailing year; Personal Loans
      get no Output (48% housing); Industry, Services and the total are declared approximations, with computed notes;
      a closed list of absence reasons in code; overdue fails. Layouts in §21 need a final look before code.
+   - **Found and fixed on the way (2026-09-26):** six pinned table rows showed the sum of the named
+     parts, not the parent (NBFCs ₹7.38L vs ₹21.28L Cr); NBFC stage 1c passed on zero checks.
    - **Next phases:** 1 reference-kind plumbing (six all-pipeline populations, `depends_on`,
      always-fetch mode) + MoSPI ingest (fetch contract, saved releases, consolidate, gate) → 2 concordance
      file + `validate_concordance` → 3 the two 1f methods + registry entries + SIBC `depends_on` →

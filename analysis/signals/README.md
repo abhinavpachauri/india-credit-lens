@@ -225,6 +225,14 @@ here rather than discovered later.
   cut" stays answerable when a parent does not equal the sum of its children. For SIBC main
   sectors it does not — the four sectors total ₹208.9L Cr against non-food credit's ₹219.6L Cr,
   a **4.9% residual** RBI attributes to no sector.
+- **Plus the parent's own published row, as `aggregate`/`parent`** (2026-09-26), wherever the
+  source publishes one (`parent_statement` where it sits in another statement). The table's
+  pinned row IS the parent, so it reads `parent`, and the gate checks it against that row alone.
+  Until then it showed the sum: on an "of which" cut, NBFCs read ₹7.38L Cr (its three named
+  parts) against ₹21.28L Cr one table up, and NBFC-infrastructure read ₹14.36L Cr against
+  ₹20.16L Cr, beside a share and a growth that were the parent's. Six pinned rows across two
+  pipelines were affected, and the gate passed all of them because it accepted any value the column
+  stored at that period.
 - **Status compares with the same month a year earlier, not the prior period.** A level larger
   than last month is not news in a series that grows every month.
 - **Why a size must be a signal rather than arithmetic in a browser:** a derived number is one no

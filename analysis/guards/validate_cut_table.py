@@ -38,6 +38,7 @@ CELLS = ("size", "of_cut", "of_book", "growth", "pace", "new")
 # a signal's rows at a period do not change while the check runs.
 _TRUTH: dict = {}
 _STORED: dict = {}
+_BY_ENTITY: dict = {}
 
 
 def column_truth(conn, pipeline, period, metric_id):
@@ -70,6 +71,24 @@ def stored(conn, pipeline, metric_id, entity_id):
             by_entity.setdefault(eid, []).append(v)
         _STORED[key] = by_entity
     return _STORED[key].get(entity_id, [])
+
+
+def entity_truth(conn, pipeline, period, metric_id, entity_id):
+    """The values this signal stores for THIS entity at this period.
+
+    A pinned row is the parent and a part row is that part. Checking a cell against every value
+    its column stores let the sum of an "of which" cut's named parts pass as the parent's size:
+    it was a stored value of the right signal, just of the wrong row.
+    """
+    key = (pipeline, period, metric_id)
+    if key not in _BY_ENTITY:
+        by: dict = {}
+        for eid, v in conn.execute(
+                "SELECT entity_id, value FROM signals WHERE pipeline=? AND period=? AND "
+                "metric_id=? AND value IS NOT NULL", (pipeline, period, metric_id)):
+            by.setdefault(eid, []).append(v)
+        _BY_ENTITY[key] = by
+    return _BY_ENTITY[key].get(entity_id, [])
 
 
 def fmt_for(col: str, unit: str):
@@ -124,9 +143,18 @@ def validate(pipeline: str) -> list[str]:
                 findings.append(f"{stem}: declares {sorted(set(cols.values()))} and none of them "
                                 f"has a row at {period} — nothing to check against")
                 continue
-            rows = [(table["total"], "(the cut itself)", pcols, table.get("parent_periods", {}))]
-            rows += [(p, p.get("entity"), cols, table.get("periods", {})) for p in table["parts"]]
-            for row, who, colmap, periods in rows:
+            pents = table.get("parent_entities", {})
+            size_metric = pcols.get("size")
+            if (size_metric and pents.get("size") != "parent"
+                    and entity_truth(conn, pipeline, period, size_metric, "parent")):
+                findings.append(f"{stem} · (the cut itself) · size: {size_metric} stores the "
+                                f"parent's own row at {period}, but the pinned row shows "
+                                f"'{pents.get('size', 'total')}' — the sum of the named parts")
+            rows = [(table["total"], "(the cut itself)", pcols, table.get("parent_periods", {}),
+                     lambda c: pents.get(c, "total"))]
+            rows += [(p, p.get("entity"), cols, table.get("periods", {}),
+                      lambda c, e=p.get("entity"): e) for p in table["parts"]]
+            for row, who, colmap, periods, eid_of in rows:
                 for col in CELLS:
                     cell = row.get(col)
                     if not cell:
@@ -136,7 +164,7 @@ def validate(pipeline: str) -> list[str]:
                         findings.append(f"{stem} · {who} · {col}: drawn as '{cell['display']}' "
                                         f"with no signal declared behind the column")
                         continue
-                    truth = column_truth(conn, pipeline, period, metric)
+                    truth = entity_truth(conn, pipeline, period, metric, eid_of(col))
                     # A CELL IS NOT PROSE. It carries exactly one number, so the check is
                     # stronger than number-extraction: the raw value must be one this column
                     # stores, AND the string drawn must be that value rendered. Extracting
@@ -150,7 +178,7 @@ def validate(pipeline: str) -> list[str]:
                     if not matches(cell["sort"], truth, POLICY):
                         findings.append(
                             f"{stem} · {who} · {col}: {cell['sort']} is not a value "
-                            f"{metric} stores at {period}")
+                            f"{metric} stores for {eid_of(col)} at {period}")
                         continue
                     want = fmt_for(col, unit)(cell["sort"])
                     if cell["display"] != want:
@@ -158,13 +186,13 @@ def validate(pipeline: str) -> list[str]:
                             f"{stem} · {who} · {col}: drawn as '{cell['display']}' but "
                             f"{cell['sort']} renders as '{want}'")
                     findings += series_findings(conn, pipeline, stem, who, col, cell,
-                                                metric, periods.get(col), row, unit)
+                                                metric, periods.get(col), eid_of(col), unit)
     finally:
         conn.close()
     return findings
 
 
-def series_findings(conn, pipeline, stem, who, col, cell, metric, labels, row, unit):
+def series_findings(conn, pipeline, stem, who, col, cell, metric, labels, eid, unit):
     """The chart behind a cell is published too (§20), so it is checked like the cell.
 
     Three ways a history can lie without any single number being wrong: a value that was
@@ -175,7 +203,6 @@ def series_findings(conn, pipeline, stem, who, col, cell, metric, labels, row, u
     if not series:
         return []
     out = []
-    eid = row.get("entity") or "total"
     if labels is None or len(labels) != len(series):
         out.append(f"{stem} · {who} · {col}: {len(series)} readings against "
                    f"{len(labels or [])} period labels — the axis and the line disagree")
@@ -219,7 +246,7 @@ def main():
                    for r in [t["total"], *t["parts"]]
                    for c in (r.get(k) for k in CELLS) if c and c.get("series"))
     print(f"  ✓ cut tables traceable — {len(doc['cuts'])} cut(s), {rows} row(s), "
-          f"{readings} charted reading(s), every cell scoped to its own column")
+          f"{readings} charted reading(s), every cell scoped to its own row and column")
     return 0
 
 

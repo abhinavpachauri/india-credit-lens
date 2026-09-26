@@ -96,7 +96,7 @@ def _status_series(conn, pipeline, sid, periods):
     held'. One query, filtered to the same total/aggregate row `series` reads its values from."""
     rows = conn.execute(
         "select period, status from signals where pipeline=? and metric_id=? "
-        "  and (entity_type in ('total','aggregate') or entity_id='total') "
+        "  and entity_id='total' "
         "  and status is not null order by period", (pipeline, sid)).fetchall()
     want = set(periods)
     return [st for p, st in rows if p in want]

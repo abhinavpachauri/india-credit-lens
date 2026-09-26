@@ -160,7 +160,7 @@ def move_dominance(pipeline: str, agg_metric: str, period: str, conn=None) -> Do
                 ex_top_yoy = 100 * (now / base - 1)
         agg_row = own.execute(
             "SELECT value FROM signals WHERE pipeline=? AND metric_id=? AND period=? "
-            "AND entity_type IN ('aggregate','total') LIMIT 1", (pipeline, agg_metric, period)).fetchone()
+            "AND entity_id='total'", (pipeline, agg_metric, period)).fetchone()
         agg_value = agg_row[0] if agg_row else None
         return Dominance(agg_metric, scan_metric, dominant, top if dominant else None,
                          round(top_share, 4) if dominant and top_share is not None else None,

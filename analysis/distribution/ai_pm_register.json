@@ -516,6 +516,20 @@
           "date": "2026-09-26",
           "how_measured": "Pre-fix and post-fix snapshots of 4 historical defects, reviewed via `claude -p` from a scratch folder with no project context (verified: 'NONE' loaded), model pinned to the session's. Scoring rule written before reading outputs.",
           "source": ".claude/skills/review-change/SKILL.md"
+        },
+        {
+          "metric": "scope tightness — cut-table gate, pinned row scoped to its declared entity (was: any value the column stores)",
+          "value": "6/6 real defects caught; 0 false rejections across 1,935 rows / 143,162 charted readings",
+          "date": "2026-09-26",
+          "how_measured": "Known-bad control: the pre-fix table sidecars (pinned size = sum of the named parts) validated against the recomputed store, which now carries each parent's own row. The gate flagged every old pinned row, including all 6 whose value was wrong (sibc-main, sibc-nbfc-sub, nbfc-industry/-infra/-retail/-services); under the old column-wide scope all 6 had passed. Known-good control: the rebuilt sidecars for sibc, nbfc and atm_pos, with part cells now also scoped to their own entity. A synthetic regression test drives the old shape back through the gate. Controls, not an enumerated injection sweep.",
+          "source": "analysis/guards/validate_cut_table.py (entity_truth, parent-size invariant) + analysis/tests/test_cut_table.py"
+        },
+        {
+          "metric": "vacuous-pass rate — NBFC published-YoY check (stage 1c)",
+          "value": "2/2 known-bad caught (was 0/2: printed ✓ on zero comparisons); 90/90 known-good values pass",
+          "date": "2026-09-26",
+          "how_measured": "Known-bad: the latest sections.json with every published_yoy emptied (checked = 0), and with a printed rate on a code we never read. Both returned exit 1 after the fix; before it, the first printed ✓ over 0 values. Known-good: the live store, all 90 comparable values within 1e-4 pp.",
+          "source": "analysis/pipelines/nbfc/validate_published_yoy.py + analysis/tests/test_nbfc_ingestion.py"
         }
       ],
       "observations": [

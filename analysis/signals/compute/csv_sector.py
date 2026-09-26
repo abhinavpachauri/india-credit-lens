@@ -469,6 +469,15 @@ def csv_sector_scan_abs(params: dict, period: str, df: pd.DataFrame) -> list[dic
     # `weight` uses, so "this part is X of the cut" is answerable without reaching for a
     # parent row that may not equal the sum of its parts (main sectors misses 4.9%).
     out.append(_row("aggregate", "total", sum(r["value"] for r in out), "active", "rs_cr"))
+    # The parent's OWN published row, beside the sum. On an "of which" cut they differ — NBFCs
+    # are ₹21.28L Cr, the three HFC/PFI parts RBI names are ₹7.38L Cr — and the table's pinned
+    # row is the parent, so it must carry the parent's size, not the sum of what happens to be
+    # named. The sum stays as `total`: it is the denominator `of cut` divides by.
+    if "parent_code" in params:
+        own = _val(df, period, str(params["parent_code"]),
+                   _scope_param(df, "parent", params, stmt))
+        if own is not None:
+            out.append(_row("aggregate", "parent", own, "active", "rs_cr"))
     return out
 
 

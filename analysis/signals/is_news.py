@@ -111,7 +111,7 @@ def _extreme(values):
 def _total_status(conn, pipeline, sid, period):
     row = conn.execute(
         "select status from signals where pipeline=? and metric_id=? and period=? "
-        "  and (entity_type in ('total','aggregate') or entity_id='total') "
+        "  and entity_id='total' "
         "order by status limit 1", (pipeline, sid, period)).fetchone()
     return row[0] if row else None
 

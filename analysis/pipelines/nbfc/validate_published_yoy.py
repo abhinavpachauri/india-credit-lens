@@ -54,17 +54,27 @@ def main() -> int:
     dates = {d for d, _ in levels}
 
     checked, failures, uncovered = 0, [], []
+    # Each way the check can pass without checking is its own count, and only one of them is
+    # legitimate. A stage that printed ✓ over zero comparisons read exactly like one that had
+    # compared ninety (absence review, 2026-09-26).
+    unread, unprinted, new_codes = [], [], []
     for sections in sorted(DATA_DIR.glob("*/sections.json")):
         doc = json.loads(sections.read_text())
         for s in doc["sectors"]:
-            for d, published in s.get("published_yoy", {}).items():
+            printed = s.get("published_yoy") or {}
+            if not printed:
+                unprinted.append((sections.parent.name, s["code"]))
+            for d, published in printed.items():
                 prior = _year_before(d, dates)
                 if prior is None:
-                    uncovered.append((d, s["code"]))
+                    uncovered.append((d, s["code"]))    # the oldest dates: no prior year exists
                     continue
                 now, then = levels.get((d, s["code"])), levels.get((prior, s["code"]))
-                if now is None or then is None or not then:
-                    uncovered.append((d, s["code"]))
+                if now is None:
+                    unread.append((d, s["code"]))       # RBI printed a rate for a row we lack
+                    continue
+                if then is None or not then:
+                    new_codes.append((d, s["code"]))    # the code is absent a year earlier
                     continue
                 computed = 100.0 * (now / then - 1.0)
                 checked += 1
@@ -79,12 +89,23 @@ def main() -> int:
               f"figure RBI printed. Our reading of the file is wrong — a shifted column, a "
               f"mis-parsed row, or a date matched to the wrong prior year.")
         return 1
+    if unread:
+        print(f"✗ {len(unread)} published YoY value(s) have no level of ours at that date "
+              f"(e.g. {unread[:3]}) — RBI printed a row we did not read")
+        return 1
+    if unprinted:
+        print(f"✗ {len(unprinted)} sector(s) carry no published YoY at all (e.g. {unprinted[:3]}) "
+              f"— the extractor stopped reading RBI's rate columns")
+        return 1
+    if checked == 0:
+        print("✗ no published YoY value could be compared — the check checked nothing")
+        return 1
 
     if uncovered:
-        # Not a failure: the earliest dates in the store legitimately have no prior year, so
-        # RBI's own YoY for them refers to a year we have never been given.
         print(f"  ({len(uncovered)} published YoY value(s) have no prior year in the store — "
               f"expected for the oldest dates)")
+    if new_codes:
+        print(f"  ({len(new_codes)} value(s) for a code absent a year earlier: {new_codes[:3]})")
     print(f"✓ computed YoY matches RBI's own published figure on all {checked} values "
           f"(tolerance {TOLERANCE_PP} pp) — an external check on our reading of the source")
     return 0

@@ -8,7 +8,7 @@
 > Authored rationale (layer model, design principles, guard purposes) lives in the
 > hand-written `ARCHITECTURE.md`. This file is the structural, drift-guarded half.
 
-_Derived from 77 scripts._
+_Derived from 76 scripts._
 
 ## 1. Data-flow
 
@@ -82,12 +82,11 @@ Scripts each orchestrator launches as a subprocess, in execution order.
 | `analysis/rbi_atm_pos/insights.json` | derived | `pipelines/atm_pos/generate_atm_pos_insights` | `pipelines/atm_pos/validate_atm_pos_claims`, `pipelines/atm_pos/validate_atm_pos_insights` |
 | `analysis/rbi_atm_pos/merged/system_model.json` | external/authored | — | `core/relational_insights`, `guards/audit_force_sources` |
 | `analysis/rbi_atm_pos/signals.json` | derived | `pipelines/atm_pos/compute_atm_pos_signals` | `pipelines/atm_pos/generate_atm_pos_insights`, `pipelines/atm_pos/validate_atm_pos_claims`, `pipelines/atm_pos/validate_atm_pos_insights` |
-| `analysis/rbi_atm_pos/timeline.json` | external/authored | — | `guards/check_signal_freshness` |
 | `analysis/rbi_sibc/date_remap.json` | derived | `pipelines/sibc/update_web_data` | — |
 | `analysis/rbi_sibc/merged/annotations_merged.ts` | external/authored | — | `pipelines/sibc/validate_annotation_basis` |
 | `analysis/rbi_sibc/merged/sections_merged.json` | external/authored | — | `hook_validate`, `pipelines/sibc/detect_format`, `pipelines/sibc/generate_merge`, `pipelines/sibc/validate_content`, `pipelines/sibc/validate_web_series` |
 | `analysis/rbi_sibc/merged/system_model.json` | external/authored | — | `core/relational_insights`, `guards/audit_force_sources` |
-| `analysis/rbi_sibc/timeline.json` | external/authored | — | `core/validate_timeline`, `guards/check_signal_freshness`, `pipelines/sibc/generate_merge`, `signals/query` |
+| `analysis/rbi_sibc/timeline.json` | external/authored | — | `core/validate_timeline`, `pipelines/sibc/generate_merge`, `signals/query` |
 | `analysis/signals/narrative_cache.json` | derived | `cross/generate_opportunity_narrative` | — |
 | `analysis/signals/registry.json` | derived | `signals/apply_status_rules`, `signals/update_registry` | `core/generate_signal_history`, `core/generate_system_state`, `core/relational_insights`, `core/validate_opportunity_traceability`, `cross/generate_opportunities_feed`, `cross/validate_composition`, `guards/check_signal_freshness`, `guards/validate_card_cuts`, `guards/validate_cut_table`, `guards/validate_signal_history`, `guards/validate_state_band`, `measure_coherence_threshold`, `pipelines/atm_pos/compute_atm_pos_signals`, `pipelines/atm_pos/generate_atm_pos_insights`, `pipelines/atm_pos/validate_atm_pos_insights`, `pipelines/sibc/generate_analysis_report`, `pipelines/sibc/validate_sibc_traceability`, `signals/proximity`, `signals/stamp_state`, `signals/stamp_table` |
 | `analysis/signals/signals.db` | derived | `signals/db` | `core/derive_opportunities`, `core/gate`, `core/generate_system_state`, `core/relational_insights`, `core/validate_opportunity_traceability`, `cross/compose_ecosystem`, `cross/generate_opportunities_feed`, `cross/generate_opportunity_narrative`, `guards/check_derived_fresh`, `guards/validate_cut_table`, `guards/validate_signal_history`, `guards/validate_state_band`, `measure_coherence_threshold`, `pipelines/atm_pos/compute_atm_pos_signals`, `pipelines/atm_pos/generate_atm_pos_insights`, `pipelines/atm_pos/validate_atm_pos_claims`, `pipelines/atm_pos/validate_atm_pos_insights`, `pipelines/sibc/generate_analysis_report`, `pipelines/sibc/validate_sibc_traceability`, `signals/dominance`, `signals/proximity`, `signals/stamp_state`, `signals/stamp_table` |
@@ -136,10 +135,9 @@ orchestrated, not import-coupled).
 - `pipelines/sibc/validate_web_series` → `core/manifest`
 - `signals/compute/atm_pos` → `core/manifest`
 - `signals/compute/csv_sector` → `core/manifest`
-- `signals/compute/engine` → `core/manifest`, `signals/db`
+- `signals/compute/engine` → `core/manifest`
 - `signals/evaluate` → `core/manifest`, `signals/db`, `signals/query`
 - `signals/is_news` → `core/manifest`, `signals/proximity`
-- `signals/migrate_to_db` → `signals/db`
 - `signals/planes` → `core/manifest`, `signals/is_news`, `signals/proximity`
 - `signals/proximity` → `core/manifest`
 - `signals/query` → `core/cadence`
