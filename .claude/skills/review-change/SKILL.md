@@ -56,10 +56,11 @@ action. Findings the user must decide go last, with the decision named.
 
 ## Known limits (measured 2026-09-26, see `PLAN.md` phase 3)
 
-- **Not fully cold.** Subagents load this project's `CLAUDE.md`, which imports `PLAN.md` and
-  `DECISIONS.md`. A reviewer therefore knows every lesson written there, which helps on real work
-  and invalidates it as a blind test: two of four acceptance catches were discounted for exactly
-  this reason. A truly cold review runs outside the repo (`claude -p` from a scratch directory).
+- **Accepted cold: 4/4 real past defects caught, 0/3 false re-flags on the fixed code.** Measured via
+  `claude -p` from a scratch folder with no project context (a first in-repo run was discarded).
+- **In-repo they are not cold.** Subagents load this project's `CLAUDE.md`, which imports `PLAN.md`
+  and `DECISIONS.md`, so a reviewer knows every lesson written there. That helps on real work and
+  invalidates it as a blind test. To re-measure them, run outside the repo.
 - They are one more pair of eyes, not a gate, and they miss things. Nothing here replaces a test
   that pins the fix.
 - Their first real outing found a live defect: the freshness check still hand-listed two of three

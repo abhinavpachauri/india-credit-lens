@@ -14,7 +14,7 @@ skills = procedure, subagents = independent review, hooks + `reconcile.py` = enf
 | 0 | edit hook runs the v4 validator; allowlist repointed; `.claude/` tracked in git; reconcile Checks 6 (agent layer names live files) + 7 (context budget) | ✅ 2026-09-24 |
 | 1 | knowledge split: `PLAN.md` + `DECISIONS.md` imported by CLAUDE.md; CLAUDE.local.md capped; dated plans archived | ✅ 2026-09-24 |
 | 2 | skills `ingest-period`, `model-pass`, `s4-source`, `session-close`; 3 stale March skills deleted | ✅ 2026-09-24. **Untested on real work**: the first August ingest is the test |
-| 3 | reviewer subagents `population-auditor`, `absence-auditor`, `plausibility-auditor` + `/review-change` + `data-inspector` refreshed | ✅ built 2026-09-26. **Acceptance provisional:** cold-credible catches = dashboard cut list (7 missing tables named exactly) + the ×100 unit bug; the freshness and cache-hit catches don't count (the answers are in `DECISIONS.md`, which subagents load). Controls re-flagged no fixed defect. **To finish:** re-run the 4 fixtures isolated via `claude -p` from outside the repo once the CLI login is renewed |
+| 3 | reviewer subagents `population-auditor`, `absence-auditor`, `plausibility-auditor` + `/review-change` + `data-inspector` refreshed | ✅ 2026-09-26. **Accepted cold:** 4/4 real past defects caught, 0/3 false re-flags (run via `claude -p` outside the repo, rule written first). First live catches fixed: freshness missing NBFC; evaluator losing signals |
 | 4 | `onboard-source`, `add-signal-family`, `measure-gate`, `dashboard-change` | ⬜ write each while doing its real task, not in the abstract |
 
 ## Next, in order
@@ -54,6 +54,9 @@ skills = procedure, subagents = independent review, hooks + `reconcile.py` = enf
   them. `/model-pass` decides at the March FOUNDATION whether to refresh or retire them.
 - **Prompt v1.13 fix list** (paid; bundle with the next evaluate run): 3 eval-authored 5.8 warnings
   (`through FY26`, `watch for`, `on track to`).
+- **Reviewer findings to verify against today's code** (from the cold controls): freshness passes a declared
+  period whose recompute yields zero rows, and never compares `metric_ranges`; `evaluate._load_prior_eval`
+  reports an unreadable prior file as "not found". Verify each; fix or record why not.
 - **S4 worklist 2026-08-31**: 20 proposals still need a browser (`run_inference.py --worklist`).
 - **signals.db → Git LFS at ~80 MB** (GitHub's hard limit is 100 MB per file).
 - **SIBC still ships its raw CSV** for client parsing; payments ships a compact precomputed

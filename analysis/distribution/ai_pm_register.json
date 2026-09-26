@@ -509,6 +509,13 @@
           "date": "2026-09-14",
           "how_measured": "Each fault written into registry.json and Check 2e re-run; exit 1 with a finding naming the signal in all three.",
           "source": "analysis/guards/validate_signal_history.py"
+        },
+        {
+          "metric": "Reviewer subagents — cold acceptance (catch + false re-flag)",
+          "value": "4/4 real past defects caught cold; 0/3 false re-flags on the post-fix controls. A first in-repo run was discarded: subagents load CLAUDE.md → DECISIONS.md, which stated two of the answers.",
+          "date": "2026-09-26",
+          "how_measured": "Pre-fix and post-fix snapshots of 4 historical defects, reviewed via `claude -p` from a scratch folder with no project context (verified: 'NONE' loaded), model pinned to the session's. Scoring rule written before reading outputs.",
+          "source": ".claude/skills/review-change/SKILL.md"
         }
       ],
       "observations": [
