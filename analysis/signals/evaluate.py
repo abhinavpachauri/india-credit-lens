@@ -328,6 +328,11 @@ def _load_prior_eval(pipeline: str, prior_period: str) -> dict:
     Load evaluations/{pipeline}/{prior_period}.json and return a flat dict of
     signal_id → {observation, direction, inference}.
     Returns empty dict if the file doesn't exist.
+
+    A file that EXISTS but cannot be read raises. It used to return {} as well, so the log said
+    "no evaluation file found — diff inactive" about a file that was there; the run then lost
+    its period-over-period comparison without anyone knowing, and cached its answers under a
+    key that said there was no prior context (found by the absence reviewer, 2026-09-26).
     """
     path = EVALS_DIR / pipeline / f"{prior_period}.json"
     if not path.exists():
@@ -344,8 +349,11 @@ def _load_prior_eval(pipeline: str, prior_period: str) -> dict:
                     if k in sig_eval
                 }
         return flat
-    except Exception:
-        return {}
+    except Exception as exc:
+        raise RuntimeError(
+            f"prior evaluation {path} exists but cannot be read ({_reason(exc)}) — fix or "
+            f"remove it; evaluating without it would silently drop the period-over-period diff"
+        ) from exc
 
 
 def _build_prior_eval_block(prior_period: str,

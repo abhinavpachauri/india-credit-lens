@@ -197,6 +197,19 @@ def check(pipeline_filter=None, quiet=False) -> int:
     expected = _recompute(registry, periods_by_pipeline)
 
     drift = []
+    # Both sides empty is not agreement. A period the timeline declares, which the store does not
+    # hold AND the CSV computes nothing for (its data never reached the consolidated file),
+    # produced no key on either side below, so nothing was compared and the check said fresh.
+    # Every period a pipeline declares must compute at least one row.
+    computed = {(pl, per) for (pl, per, *_r) in expected}
+    for pl, declared in _declared_periods().items():
+        if pipeline_filter and pl != pipeline_filter:
+            continue
+        for per in sorted(declared):
+            if (pl, per) not in computed:
+                drift.append(("DECLARED_BUT_EMPTY (timeline declares it; the CSV computes "
+                              "nothing for it)", (pl, per), None))
+
     for k in sorted(set(committed) | set(expected)):
         c, e = committed.get(k), expected.get(k)
         if c is None:
@@ -225,6 +238,8 @@ def check(pipeline_filter=None, quiet=False) -> int:
                 print(f"    {kind}  {ks}", file=sys.stderr)
                 print(f"        committed: {_fmt(c)}", file=sys.stderr)
                 print(f"        expected:  {_fmt(e)}", file=sys.stderr)
+            elif detail is None:
+                print(f"    {kind}  {ks}", file=sys.stderr)
             else:
                 print(f"    {kind}  {ks}  ({_fmt(detail)})", file=sys.stderr)
         if len(drift) > 25:

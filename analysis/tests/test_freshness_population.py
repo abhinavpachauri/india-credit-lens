@@ -79,3 +79,31 @@ def test_recompute_is_parallel_but_falls_back():
     src = inspect.getsource(F._recompute)
     assert "ProcessPoolExecutor" in src
     assert "falling back to serial" in src, "no fallback — a pool failure would take the guard out"
+
+
+def test_a_declared_period_the_csv_computes_nothing_for_fails(monkeypatch, tmp_path):
+    """Both sides empty is not agreement.
+
+    A period the timeline declares, with no rows in the store AND no rows from the recompute
+    (its data never reached the CSV), used to produce no key on either side — so nothing was
+    compared and the check said fresh. Found by the population reviewer's cold control run,
+    2026-09-26. Driven on a two-period store so it runs in a second, not the full recompute.
+    """
+    import shutil, sqlite3
+    db = tmp_path / "signals.db"
+    shutil.copy(ROOT / "analysis/signals/signals.db", db)
+    con = sqlite3.connect(db)
+    keep = con.execute("SELECT MAX(period) FROM signals WHERE pipeline='nbfc'").fetchone()[0]
+    con.execute("DELETE FROM signals WHERE NOT (pipeline='nbfc' AND period=?)", (keep,))
+    con.commit()
+    con.close()
+
+    ghost = "2031-01-31"                                   # declared; the CSV has nothing for it
+    monkeypatch.setattr(F, "DB_PATH", db)
+    monkeypatch.setattr(F, "_declared_periods", lambda: {"nbfc": {keep, ghost}})
+    real_one = F._one
+    monkeypatch.setattr(F, "_one", lambda task: {} if task[1] == ghost else real_one(task))
+    monkeypatch.setattr(F, "_recompute", lambda reg, pbp, workers=None:
+                        {k: v for pl, pers in pbp.items() for per in pers
+                         for k, v in F._one((pl, per, reg)).items()})
+    assert F.check("nbfc", quiet=True) == 1

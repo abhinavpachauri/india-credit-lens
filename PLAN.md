@@ -54,9 +54,10 @@ skills = procedure, subagents = independent review, hooks + `reconcile.py` = enf
   them. `/model-pass` decides at the March FOUNDATION whether to refresh or retire them.
 - **Prompt v1.13 fix list** (paid; bundle with the next evaluate run): 3 eval-authored 5.8 warnings
   (`through FY26`, `watch for`, `on track to`).
-- **Reviewer findings to verify against today's code** (from the cold controls): freshness passes a declared
-  period whose recompute yields zero rows, and never compares `metric_ranges`; `evaluate._load_prior_eval`
-  reports an unreadable prior file as "not found". Verify each; fix or record why not.
+- **`metric_ranges` has no reader** (verified 2026-09-26): the table is rewritten on every append but nothing
+  reads its values, and the freshness check never compares it. Harmless today, a trap for the first reader.
+  Decide: **delete it** (and Check 2e B4, which only asserts it is populated), or guard it by recomputing it
+  from the verified `signals` rows.
 - **S4 worklist 2026-08-31**: 20 proposals still need a browser (`run_inference.py --worklist`).
 - **signals.db → Git LFS at ~80 MB** (GitHub's hard limit is 100 MB per file).
 - **SIBC still ships its raw CSV** for client parsing; payments ships a compact precomputed

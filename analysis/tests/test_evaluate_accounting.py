@@ -191,3 +191,13 @@ def test_BD_the_file_records_failed_domains_and_unanswered_signals(monkeypatch, 
     assert summary["signals_missing"] == 1 and summary["errors"] == 1
     assert "sig-2" in written["domains"]["industry"]["missing_signals"]
     assert "retail upstream down" in written["failed_domains"]["retail"]
+
+
+def test_an_unreadable_prior_evaluation_is_not_reported_as_missing(monkeypatch, tmp_path):
+    """Missing and unreadable are different answers. Only the first may return {}."""
+    monkeypatch.setattr(E, "EVALS_DIR", tmp_path)
+    assert E._load_prior_eval("sibc", "2026-07-31") == {}, "a missing file is a legitimate {}"
+    (tmp_path / "sibc").mkdir()
+    (tmp_path / "sibc" / "2026-07-31.json").write_text('{"domains": {"industry": ')   # truncated
+    with pytest.raises(RuntimeError, match="cannot be read"):
+        E._load_prior_eval("sibc", "2026-07-31")
