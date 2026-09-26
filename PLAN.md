@@ -14,7 +14,7 @@ skills = procedure, subagents = independent review, hooks + `reconcile.py` = enf
 | 0 | edit hook runs the v4 validator; allowlist repointed; `.claude/` tracked in git; reconcile Checks 6 (agent layer names live files) + 7 (context budget) | ✅ 2026-09-24 |
 | 1 | knowledge split: `PLAN.md` + `DECISIONS.md` imported by CLAUDE.md; CLAUDE.local.md capped; dated plans archived | ✅ 2026-09-24 |
 | 2 | skills `ingest-period`, `model-pass`, `s4-source`, `session-close`; 3 stale March skills deleted | ✅ 2026-09-24. **Untested on real work**: the first August ingest is the test |
-| 3 | reviewer subagents `population-auditor`, `absence-auditor`, `plausibility-auditor` + a `review-change` skill | ⬜ accepted only if each finds a known past defect cold (e.g. `b906b1e` MOVEMENT_CUTS, the freshness-population fix) |
+| 3 | reviewer subagents `population-auditor`, `absence-auditor`, `plausibility-auditor` + `/review-change` + `data-inspector` refreshed | ✅ built 2026-09-26. **Acceptance provisional:** cold-credible catches = dashboard cut list (7 missing tables named exactly) + the ×100 unit bug; the freshness and cache-hit catches don't count (the answers are in `DECISIONS.md`, which subagents load). Controls re-flagged no fixed defect. **To finish:** re-run the 4 fixtures isolated via `claude -p` from outside the repo once the CLI login is renewed |
 | 4 | `onboard-source`, `add-signal-family`, `measure-gate`, `dashboard-change` | ⬜ write each while doing its real task, not in the abstract |
 
 ## Next, in order
@@ -54,6 +54,9 @@ skills = procedure, subagents = independent review, hooks + `reconcile.py` = enf
   them. `/model-pass` decides at the March FOUNDATION whether to refresh or retire them.
 - **Prompt v1.13 fix list** (paid; bundle with the next evaluate run): 3 eval-authored 5.8 warnings
   (`through FY26`, `watch for`, `on track to`).
+- **Live defect found by the absence reviewer**: `signals/evaluate.py:510` drops a failed sub-chunk when the other half
+  succeeds, so missing signals look like "nothing to say". Also reported, unverified: a partial model answer is cached,
+  and a failed domain is left out of the eval file with no marker. Fix with a mocked-LLM test (the path is paid).
 - **S4 worklist 2026-08-31**: 20 proposals still need a browser (`run_inference.py --worklist`).
 - **signals.db → Git LFS at ~80 MB** (GitHub's hard limit is 100 MB per file).
 - **SIBC still ships its raw CSV** for client parsing; payments ships a compact precomputed

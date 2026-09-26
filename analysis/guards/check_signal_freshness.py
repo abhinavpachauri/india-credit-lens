@@ -127,18 +127,30 @@ def _declared_periods() -> dict[str, set]:
 
     The timeline is each pipeline's own record of what it has taken in — the only statement of
     what the signal store OUGHT to contain that does not come from the signal store itself.
+
+    Both the pipelines and where each one keeps its timeline are read off the manifests. This was
+    a hand-written pair of (sibc, atm_pos) until 2026-09-26, so NBFC, added later, fell back to the
+    period set in the database: the exact circularity this function exists to remove, re-opened
+    by the next pipeline. A reviewer found it cold. A pipeline that declares a timeline which is
+    missing, or no `period_key`, now fails the check instead of silently dropping out of it.
     """
     out: dict[str, set] = {}
-    for pl, rel, key in (("sibc", "rbi_sibc/timeline.json", "dataDate"),
-                         ("atm_pos", "rbi_atm_pos/timeline.json", None)):
-        f = ROOT / "analysis" / rel
+    for pl in manifest.discover_pipeline_ids():
+        key = manifest.load(pl).get("period_key")
+        if not key:
+            raise SystemExit(f"✗ {pl}: manifest declares no period_key — freshness cannot tell "
+                             f"which periods its timeline says were ingested")
+        f = manifest.path(pl, "timeline")
         if not f.exists():
-            continue
+            raise SystemExit(f"✗ {pl}: declared timeline {f} is missing — "
+                             f"refusing to fall back to the database's own list of periods")
         doc = json.loads(f.read_text())
         rows = doc["periods"] if isinstance(doc, dict) else doc
-        out[pl] = {(r[key] if key else (r.get("report_date") or r.get("dataDate")))
-                   for r in rows}
-        out[pl].discard(None)
+        periods = {r.get(key) for r in rows}
+        periods.discard(None)
+        if not periods:
+            raise SystemExit(f"✗ {pl}: timeline has no '{key}' values — wrong period_key?")
+        out[pl] = periods
     return out
 
 

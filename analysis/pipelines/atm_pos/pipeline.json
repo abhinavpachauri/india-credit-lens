@@ -5,6 +5,7 @@
   "compute_module": "atm_pos",
   "cuts_module": "pipelines.atm_pos.generate_atm_pos_insights",
   "on_fail": "stop",
+  "period_key": "report_date",
   "period_resolver": {
     "module": "extract",
     "args": [
