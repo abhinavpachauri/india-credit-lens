@@ -59,7 +59,8 @@
 
 ## Sources and roadmap
 
-- **Order: NBFC → arc 3 regulatory watch → BSR-1 → Lending & Deposit Rates.** (user, 2026-09-16)
+- **Order: NBFC → MoSPI (IIP, WPI, NAS, CPI) → arc 3 regulatory watch → BSR-1 → Lending & Deposit Rates.** (user, 2026-09-16; MoSPI placed first 2026-09-26)
+- **MoSPI is pulled by hand until two clean cycles, then scheduled.** *Why:* no provisional/final flag and revisions overwrite silently, so revision behaviour must be seen before it is automated. *Revisit: after two clean cycles.* (user, 2026-09-26)
 - **Bank presentations/results rejected** as a source: unstructured, and per-bank credit is annual only (STRBI).
 - **A compute module is a shape, not a pipeline**, and a pipeline declares itself in its manifest. A new SIBC-shaped source is a manifest entry.
 

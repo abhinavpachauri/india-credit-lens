@@ -25,36 +25,49 @@ skills = procedure, subagents = independent review, hooks + `reconcile.py` = enf
 2. **NBFC post-ingest count** (NBFC plan §6 "after the ingest"): how many files did pipeline #3
    touch that were not its own? Record it in `ARCHITECTURE.md` §"Adding a pipeline", and let it
    decide the open fork on a generic card path.
-3. **Arc 3: RBI regulatory watch** (S4 pointed at RBI, push not pull). Admission rule: an item
+3. **MoSPI (IIP, WPI, NAS, CPI) as pipeline #4** (`STRATEGY_PLANNER.md` §8.1). Before arc 3, while SIBC Aug is pending (user, 2026-09-26).
+   **Shape (user, 2026-09-26):** its own manifest, gate, snapshots and L1 signals; **no page of
+   its own**. Its numbers reach the credit tables through one generic join driven by a concordance
+   in the ontology, so NBFC ↔ NAS later needs no new code. MoSPI only for v1 (Eight Core Industries
+   parked). Pull by hand until two clean cycles, then scheduled.
+   - **Probed 2026-09-26 (free), per dataset:**
+     - **IIP** 2022-23 base, Apr 2023 → Jul 2026, 2-digit NIC only. No provisional/final flag:
+       revisions overwrite silently, so every release is saved.
+     - **WPI** new base needs the UNDOCUMENTED `base_year=2022-23`; without it the API silently
+       serves the old 2011-12 series (ends Apr 2026). Jan → Aug 2026, 953 items, 3/4-digit
+       sub-groups (iron & steel, cement, glass, fertiliser, sugar, tea, jewellery).
+     - **NAS** quarterly GVA, 2022-23 base, → Q1 FY27, 8 sectors at current AND constant prices
+       (own deflator). Without `base_year` one response mixes both bases (153 new + 522 old rows).
+     - **CPI** the API holds only the 2012 base, ending Dec 2025; the new base is not loaded (no
+       endpoint, `base_year=2024` → no data). Take it from MoSPI's monthly release file until the
+       API catches up; use MoSPI's published inflation, never our own link across bases.
+     - **Guard for all four:** every row must carry the expected `base_year`, or the run fails.
+   - **Concordance:** SIBC industry types ↔ IIP/WPI groups, 12 of 19 = 45% of industry credit; +
+     Power ↔ Electricity → ~64%. 5 rows combine IIP groups by 2022-23 weights (PIB PRID 2267531,
+     Statement II-A, sum 76.062; rebuilds the published index within ~1 pt). Exact sub-row matches:
+     Power, Electronics (NIC 26), Pharma (NIC 21). No counterpart: construction (→ NAS), infra ex-power,
+     gems, other; cement/glass share an IIP group; textiles vs apparel undecided. NAS sectors ↔ SIBC
+     main sectors, services and Construction. CPI ↔ Personal Loans.
+   - **Phase 0 (spec) ✅ 2026-09-26, v0.2 after the three reviewers:** signals/README §1f + "MoSPI";
+     COMPOSITION_SPEC §24; DASHBOARD_SPEC §21. Decided: output over a trailing year; Personal Loans
+     get no Output (48% housing); Industry, Services and the total are declared approximations, with computed notes;
+     a closed list of absence reasons in code; overdue fails. Layouts in §21 need a final look before code.
+   - **Next phases:** 1 reference-kind plumbing (six all-pipeline populations, `depends_on`,
+     always-fetch mode) + MoSPI ingest (fetch contract, saved releases, consolidate, gate) → 2 concordance
+     file + `validate_concordance` → 3 the two 1f methods + registry entries + SIBC `depends_on` →
+     4 table columns (stamp_table + `CutTable`) → write `onboard-source` as we go.
+   - **Display:** see DASHBOARD_SPEC §21.
+   - **Decided in spec:** 1f signals live in the credit pipeline's registry; MoSPI has no signals
+     of its own in v1; match = exact or built from exact parts.
+   - **Open:** WPI weights (6 Real-credit cells absent until sourced); textiles vs apparel;
+     Petroleum deflated by WPI mineral oils (a judgment, flagged in §24.2).
+4. **Arc 3: RBI regulatory watch** (S4 pointed at RBI, push not pull). Admission rule: an item
    enters only if it attaches to a model entity, channel or cut. ⚠️ Re-run the allowlist census
    first; the 2026-08-19 one predates the probe-bug retraction. Design: `archive/docs/PLAN_2026-09-09.md` arc 3.
-4. **BSR-1 Table 1.4** (quarterly, credit by occupation). The real cost: three measures per entity
+5. **BSR-1 Table 1.4** (quarterly, credit by occupation). The real cost: three measures per entity
    (accounts / limit / outstanding) where every layer assumes one, and an occupation taxonomy
    that overlaps SIBC sectors without matching them.
-5. **Lending & Deposit Rates** (monthly PDF; `pdftotext` works, so it is table extraction).
-6. **MoSPI eSankhyiki: the real economy behind the credit** (`STRATEGY_PLANNER.md` §8.1).
-   ⏸ **Position in this order is the user's call.** Probe done 2026-09-26 (free):
-   - **Base:** IIP and WPI are on a 2022-23 base the spec omits; use it only (IIP Apr 2023 →, WPI →
-     Aug 2026). Never chain across bases; field names differ by base (`majorgroup` vs `major_group`).
-   - **Snapshot:** two fetches are identical in content and order; the natural key (year, month,
-     type, category, sub-category) is unique; values arrive as strings. **No provisional/final
-     flag**: revisions overwrite silently, so saving each release is mandatory, not optional.
-   - **Mapping** (SIBC's 19 industry types): 7 map 1:1 to an IIP group (mining, food, leather, wood,
-     paper, petroleum, rubber/plastics). 5 combine IIP groups by their **2022-23 weights**: beverage &
-     tobacco (NIC 11+12), chemicals + pharma (20+21), basic + fabricated metals (24+25), engineering
-     (26+27+28), vehicles (29+30). Weights: PIB PRID 2267531, Statement II-A (sum 76.062); fixed for
-     the base, so a one-time sourced table, not a monthly pull. Verified: they rebuild the published
-     manufacturing index within ~1 point and its YoY within ~0.2 pp (MoSPI aggregates from 455 item
-     groups, so exact is impossible). Glass + cement share one group; textiles is ambiguous over
-     apparel; construction, infrastructure, gems and "other" have no counterpart. **12 of 19 covered.**
-   - **Open decisions (user):** position in the source order; display (recommended: two columns on
-     the industry-by-type table, ASCII first); manual vs scheduled pull (recommended: manual until
-     two clean cycles). WPI group weights for deflating combined sectors: first new-series WPI
-     release (Office of the Economic Adviser), not yet checked.
-   - **The metric:** credit (nominal stock) vs IIP (real volume) needs WPI deflation first.
-   - **Recommended build:** IIP + WPI as one API-pull pipeline, the NIC ↔ SIBC concordance authored
-     once in the ontology, and "credit growth vs output growth, price-adjusted" as a column on the
-     industry-by-type table (ASCII approval first).
+6. **Lending & Deposit Rates** (monthly PDF; `pdftotext` works, so it is table extraction).
 
 ## Open decisions and known debts (not scheduled)
 

@@ -2,6 +2,7 @@
 > Version 1.1 | July 2026 | Extends `SYSTEM_MODEL_SPEC.md` v3.0
 > Part I (§1–§12, v1.0): federation, hub, cross-edges, projection — unchanged.
 > Part II (§13–§22, v1.1): the ecosystem meta-model — constructs, eco-edges, cross-pipeline loops, reconciliation constraints, domains, Layer 3 narrative.
+> Part III (§24, v1.2, 2026-09-26): reference joins — a credit part measured against the real economy (MoSPI).
 
 This document defines how **multiple pipeline system models compose** into one ecosystem view,
 and refines the v3.0 behavioral layer by splitting it into a **data-less causal structure** and a
@@ -864,4 +865,146 @@ preservation behavior).
 
 ---
 
-*Composition Specification v1.1 — extends System Model Specification v3.0 — India Credit Lens*
+# Part III — Reference joins (v1.2, specced 2026-09-26, not yet built)
+
+## 24. A credit part measured against the real economy
+
+Parts I–II join pipelines by **meaning** (concept tags → candidate causal edges, confirmed before
+use). This section joins them by **measurement**: a credit part and the real-economy series that
+measures the same activity, used to compute two numbers (signals/README §1f). These are different
+operations, and this one never licenses a causal claim. "Industry credit grew 20% while industry
+output grew 4%" is a description. "Credit is running ahead of output *because* …" still needs a
+sourced force (§2b).
+
+### 24.1 The concordance: one file per (credit pipeline, reference pipeline)
+
+`analysis/ontology/concordance/sibc__mospi.json` (planned; NBFC's would be `nbfc__mospi.json`).
+Adding a pipeline on either side is one file, never a code change (M+N, §6). Keyed by URN (§3):
+
+```
+concordance := {
+  credit_pipeline: "sibc", reference_pipeline: "mospi",
+  sources: { <id>: { citation, url, excerpt } },          # every weight cites one
+  cuts:    { <stem>: { parent: <urn>, cadence } },        # the cuts that carry 1f columns
+  parts: {
+    "icl:sibc/Statement2/2.13": {
+      output:   { series: [ {code: "nic:24", weight: <w>}, {code: "nic:25", weight: <w>} ],
+                  weight_source: <id> }
+              | { absent: <static reason> },
+      deflator: { series: [...] same shape, or implicit: {current: [...], constant: [...]} }
+              | { absent: <static reason> },
+      approximate: <note code>          # optional; see the match rule
+    }, ...
+  }
+}
+```
+
+**The match rule** (user, 2026-09-26): a counterpart must measure **exactly that part, or be built
+from exact parts**. A broader group shared by several parts is not a match, and the part carries
+`absent: shared_group`. A price deflator may be the part's own WPI sub-group, even where no output
+series exists: prices are published finer than output.
+
+**One declared exception: approximations on the main-sector aggregates.** Industry, Services and
+the Non-food total are compared with GVA/GDP aggregates that are RBI's own convention for this
+comparison but not exact. Each carries `approximate: <note code>`, and the note is rendered in
+Python **with its share computed from the credit CSV each period**, never typed:
+- Industry: infrastructure credit to telecom, roads, ports, airports and railways (9.6% of industry
+  credit, Jul 2026) funds activity NAS counts as services;
+- Services: lending to NBFCs (34.3% of services credit) is lent on, not spent on services output.
+
+An approximation is allowed on an aggregate only. **A leaf row never gets one.**
+
+**Absence reasons:** the closed list lives in code (`core/absence.py`, planned), and signals/README
+§1f describes it. The concordance may use only the *static* reasons; the per-period ones
+(`not_released`, `credit_history_gap`) are decided by compute.
+
+### 24.2 The SIBC ↔ MoSPI mapping (v1)
+
+**Main sectors (quarterly, NAS):**
+
+| code | part | output (real, trailing 4 quarters) | deflator (current ÷ constant) |
+|---|---|---|---|
+| III | Non-food credit (total row) | real GDP · *approximate* | GDP deflator |
+| 1 | Agriculture | GVA agriculture | same, implicit |
+| 2 | Industry | GVA mining + manufacturing + utilities + construction · *approximate* | same four, implicit |
+| 3 | Services | GVA trade/transport + financial/real estate + public admin & other · *approximate* | same three, implicit |
+| 4 | Personal Loans | `no_counterpart`: 47.7% of it is housing, which is household investment, not consumption | PFCE, implicit |
+
+Constant-price GVA is summed as published. **Verified**: on the 2022-23 base the 8 sectors sum to
+"Total Gross Value Added" to within ±2 crore in all 17 quarters, at both prices. Industry on the
+main table and on the industry-by-type table's total row are **the same entity, so the same
+number**. Likewise Personal Loans: the Personal Loans sub-table's total row shows the main table's
+quarterly PFCE-deflated value (labelled `·Q1`), not a CPI one.
+
+**Industry by type (monthly, IIP + WPI):**
+
+| code | part | output (IIP) | deflator (WPI) |
+|---|---|---|---|
+| 2.1 | Mining (incl. coal) | IIP mining | `weights_unsourced` (WPI minerals + coal + crude/gas) |
+| 2.2 | Food processing | nic:10 | nic:10 |
+| 2.3 | Beverage & tobacco | nic:11 + 12, IIP weights | `weights_unsourced` |
+| 2.4 | Textiles | `mapping_undecided` (apparel?) | `mapping_undecided` |
+| 2.5 · 2.6 · 2.7 | Leather · Wood · Paper | nic:15 · 16 · 17 | nic:15 · 16 · 17 |
+| 2.8 | Petroleum, coal products | nic:19 | WPI *Mineral oils* (fuel & power: WPI has no NIC-19 group). **A judgment, flagged** |
+| 2.9 | Chemicals (incl. pharma) | nic:20 + 21, IIP weights | `weights_unsourced` |
+| 2.10 | Rubber & plastics | nic:22 | nic:22 |
+| 2.11 · 2.12 | Glass · Cement | `shared_group` (both nic:23) | WPI sub-groups: glass · cement, lime & plaster |
+| 2.13 | Basic metal & metal product | nic:24 + 25, IIP weights | `weights_unsourced` |
+| 2.14 | All engineering | nic:26 + 27 + 28, IIP weights | `weights_unsourced` |
+| 2.15 | Vehicles & transport equipment | nic:29 + 30, IIP weights | `weights_unsourced` |
+| 2.16 | Gems & jewellery | `shared_group` (inside nic:32) | WPI sub-group: jewellery |
+| 2.17 | Construction | `cadence_mismatch` (quarterly GVA) | `cadence_mismatch` |
+| 2.18 | Infrastructure | `no_counterpart` | `no_counterpart` |
+| 2.19 | Other industries | `no_counterpart` (a remainder) | `no_counterpart` |
+
+**Sub-tables (monthly):** Power 2.18.1 ↔ IIP electricity / WPI electricity · Electronics 2.14.1 ↔
+nic:26 / nic:26 · Pharma 2.9.2 ↔ nic:21 / nic:21 · deflator only: Iron & steel 2.13.1, Fertiliser
+2.9.1, Sugar 2.2.1, Edible oils 2.2.2 (their WPI sub-groups). Tea 2.2.3 → `shared_group` (WPI
+pools coffee and tea). Every other sub-part is `no_counterpart`. **Personal-loan parts (4.x):**
+deflator = CPI all-India combined, monthly; output `no_counterpart`. Services parts (3.x):
+`shared_group` both, because quarterly NAS pools them.
+
+**Weights.** IIP: PIB PRID 2267531, Statement II-A (2022-23 base, sum 76.062). **Re-check the
+transcription before use.** IIP is a fixed-weight index, so true group weights rebuild the
+published manufacturing index almost exactly. A fit on the 40 probe months reproduces it to 0.03
+points, and our ~1 point miss points to an error in the transcribed table. The fitted weights
+(scaled to 76.062) are the cross-check: basic metals 9.06, fabricated metals 2.50, chemicals 7.94,
+pharma 5.58, motor vehicles 6.47, other transport 2.03, computer/electronic 2.01, electrical 3.22,
+machinery 5.06, beverages 1.14, tobacco 0.83. They are a check on the sourced table, never a
+substitute for it. **WPI weights are not yet sourced**, so six Real-credit cells start absent,
+saying why, rather than estimated.
+
+### 24.3 Validation (`validate_concordance`, planned)
+
+**Population, derived and not circular.** The cuts are declared once, in the concordance's
+`cuts`; the parts of each cut are the parent's children **in the credit CSV** (never
+`sibc_table.json`, which is built from the 1f output being checked). Structural, every gate:
+- every 1f registry entry names a concordance cut, and every concordance cut has both 1f entries;
+- every child of every declared cut appears in `parts`, and every key of `parts` is such a child,
+  so a part left out fails instead of vanishing;
+- every series code exists in the reference CSV;
+- every part of a cut matches at the cut's cadence, or is absent with `cadence_mismatch`;
+- only static reasons appear; `approximate` appears on aggregates only;
+- **every weight equals the sourced table's weight for its code**, and each combined part's code
+  set equals its declared NIC list, so moving nic:27 to Vehicles fails.
+
+Numeric (a guard, so it needs a measured catch rate and false-rejection rate before it gates):
+the sourced IIP weights rebuild the published manufacturing index within **~0.3 point / 0.1 pp
+YoY**. The known-good control is the fitted rebuild (0.03 point in-sample, 0.29 point out of
+sample, 0.065 pp YoY). The known-bad control is the transcription as it stands, if the re-check
+confirms the ~1 point miss.
+
+### 24.4 Order of the gates
+
+A 1f signal reads the reference CSV, so the credit pipeline's manifest declares
+`depends_on: ["mospi"]`. **Neither `depends_on` nor dependency ordering exists in `core/gate.py`
+yet.** Both are phase 1 work with their own tests. Once built:
+- the MoSPI gate ends by re-running Check 2f for every pipeline that depends on it, so a revised
+  IIP month shows up as SIBC drift the same day and SIBC is re-appended, every period;
+- the SIBC gate checks that MoSPI's data is current: a MoSPI period past its expected release date
+  and missing fails SIBC's gate as overdue (signals/README, the release calendar), so 1f never
+  computes against a stale CSV.
+
+---
+
+*Composition Specification v1.2 — extends System Model Specification v3.0 — India Credit Lens*

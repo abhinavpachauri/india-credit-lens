@@ -25,7 +25,7 @@ deterministic compute engine, and the LLM evaluation layer.
 > name check and cannot judge a section's quality; it can only stop a method entering the engine
 > unmentioned, which is the population the spec-first rule was always about.
 
-Layer 1 asks five kinds of question. Every method below belongs to exactly one of them, and the
+Layer 1 asks six kinds of question. Every method below belongs to exactly one of them, and the
 sub-layer tag on a registry entry says which.
 
 ### 1a — one number about a whole thing
@@ -106,14 +106,65 @@ in full in the two sections below: `csv_sector_rotation` · `csv_category_rotati
 `csv_category_momentum` · `csv_sector_acceleration` · `csv_category_acceleration` ·
 `csv_sector_allocation` · `csv_category_allocation`.
 
-### Rules that hold across all five
+### 1f — a credit number measured against the real economy
+*Is industry credit growing faster than industry's prices, and faster than its output?* One row
+per credit part, like a scan; the second input comes from a **reference pipeline** (MoSPI, below)
+through a declared concordance (COMPOSITION_SPEC §24). Specced 2026-09-26, revised the same day
+after the three reviewers; no compute exists yet.
+
+| method | measures |
+|---|---|
+| `csv_sector_real_growth` | credit YoY net of the part's own price change at the same period: `100 × ((1 + g/100) / (1 + π/100) − 1)`, where `g` is credit YoY % and `π` is the deflator's YoY % at that period (point-in-time, like the credit stock) |
+| `csv_sector_output_growth` | growth of the part's real-economy counterpart over **the trailing year**: IIP = the last 12 months' average index vs the 12 before; GVA / PFCE = the last 4 quarters' constant-price sum vs the 4 before |
+
+- **Pinned by a unit test:** Industry, Q1 FY27: g = 19.25, π = 3.85 → **14.83**. Written with
+  the percentages plugged in unconverted, the formula gives 3.2, which is inside the normal range and
+  invisible to any scale check (plausibility review, 2026-09-26).
+- **Why output is a trailing year.** Credit YoY is a 12-month change in a stock and moves 1–3 pp a
+  month. Single-month IIP YoY moves a median 4–7 pp month to month (up to 24 pp), so a gap
+  between the two columns would mostly be IIP noise. A trailing year also measures what a year's
+  lending financed. The cost is freshness, and it is accepted.
+- **Both live in the credit pipeline's registry**, keyed to the credit entity: computed,
+  deterministic Layer 1 numbers about a credit part, so "registry stays Layer-1-computed-only"
+  holds.
+- **The concordance, not the registry entry, says what each part is matched to.** Every 1f
+  registry entry names a concordance cut, and every concordance cut has both registry entries.
+  That is checked in both directions (COMPOSITION_SPEC §24.3).
+- **One column = one signal = one cadence.** A part matched only at another cadence is absent
+  (`cadence_mismatch`), never mixed in.
+- **A row for period P holds P's operands or a reason, never an earlier period's value.** Nothing
+  carries forward.
+- **A combined series needs every component for the period.** If one is missing it raises; the
+  weights are never renormalised over the components present.
+
+**Absence reasons: one closed list, defined once in code** (`core/absence.py`, planned; both specs
+cite it, and neither copies it). Cells carry the **code**; prose is rendered from the code.
+- *static*, declared in the concordance: `no_counterpart` · `shared_group` · `cadence_mismatch` ·
+  `weights_unsourced` · `mapping_undecided`;
+- *per period*, decided by compute: `not_released`, **only while the dataset's expected release
+  date for P is still in the future** (its declared lag, below); `credit_history_gap`, when the
+  credit store has no row for P (SIBC holds no Aug–Nov in any year, so the Jul–Sep quarter is
+  absent until that history is backfilled).
+
+**Anything else raises.** Examples: a reference value past its expected date and still missing
+("overdue"), a gap inside a series, a missing component. An outage must never read as a
+legitimate absence (absence review, 2026-09-26).
+
+**Stored and checked, like values.** `signals.db` gains `reason` and `operands` (JSON: the
+reference series codes, their values and periods, the weights, the credit YoY). Check 2f compares
+both, not just value/status/unit, and asserts **one row per concordance part per period**, so a part
+that emits nothing fails instead of agreeing with a recompute that also emits nothing.
+
+### Rules that hold across all six
 - **A method is dispatched only from `METHODS`.** A registry entry naming a method that is not
   there raises rather than silently producing zero rows — twelve payments signals were once
   unwired that way and the freshness check stayed green.
 - **Status is evaluated by declared `status_rules`, never in the method body**, so what counts as
   "strengthening" is a property of the signal rather than of the code.
-- **Every method reads the consolidated CSV and nothing else.** No method may read another
+- **Every method reads consolidated CSVs and nothing else.** No method may read another
   signal's stored rows; a value that depends on another signal belongs to the layer above.
+  A 1f method reads two: its own pipeline's, and the reference pipeline's that its concordance
+  names. That is the only exception, and the manifest declares it (`depends_on`).
 
 ## Cut coverage — size & share (the table families)
 
@@ -703,6 +754,144 @@ The statement covers NBFCs in the Upper and Middle Layers plus HFCs — **~87% o
 RTP 2024-25. So "NBFC credit is ₹59.9 L Cr" is false; that is 87% of it. This is a prose risk
 rather than a compute one, so it is carried by a `gap_` node in the system model and by gate 5.8,
 and it must appear wherever a cross-source ratio against bank credit is published.
+
+## MoSPI — the real economy behind the credit (pipeline #4)
+
+> Specced **2026-09-26, before any code**, from a free probe of `api.mospi.gov.in` that day, and
+> revised the same day after the population, absence and plausibility reviewers. Plan: `PLAN.md`
+> Next #3. A **reference pipeline**: it has a manifest, a gate and saved releases, but no page, no
+> cards and (in v1) no signals of its own. Its only consumer is 1f.
+
+### the four datasets, as the API actually serves them
+
+| dataset | endpoint | base | on the new base (2026-09-26) | cadence | what we read |
+|---|---|---|---|---|---|
+| IIP | `/api/iip/getIIPMonthly` | 2022-23 | Apr 2023 → Jul 2026 | monthly | index + MoSPI's growth rate, general / sectoral / 2-digit NIC |
+| WPI | `/api/wpi/getWpiRecords` | 2022-23 | Apr 2023 → Aug 2026 | monthly | index at major group, group (2-digit NIC) and sub-group (3/4-digit); **no printed rate** |
+| NAS | `/api/nas/getNASData` | 2022-23 | Q1 FY23 → Q1 FY27 | quarterly | GVA by 8 sectors (ind. 1), GDP (5), PFCE (10) at current AND constant prices; printed GVA / GDP growth (21, 22) |
+| CPI | *(release file, see below)* | 2024 | — | monthly | all-India combined index + MoSPI's inflation rate |
+
+**The trap all of them share: the base is a parameter, and getting it wrong is silent.**
+- WPI serves the new base only with `base_year=2022-23`, **which its own docs do not list**.
+  Omitted or misspelt, it returns the 2011-12 series (which ends Apr 2026) with status 200.
+- NAS with no `base_year` returns **both bases mixed in one response** (153 new + 522 old rows).
+- IIP field names differ by base (`majorgroup` vs `major_group`).
+- A filter sent in the wrong case (`Month_code`) is ignored, and the whole dataset comes back.
+- An empty result is also a 200: `{"data": [], "msg": "No Data Found", "statusCode": true}`, or
+  `totalRecords: 0` (WPI new base for 2022). An unknown path returns an HTML page with status 200.
+- **CPI's API holds only the 2012 base, ending Dec 2025**; the new base is not loaded (no
+  endpoint; `base_year=2024` returns "No Data Found"). Until it is, CPI comes from MoSPI's monthly
+  release file. That reader is the one non-API part, and it retires when the API catches up. It
+  never falls back to the API's 2012 series.
+
+**Never link two bases ourselves**: a YoY that straddles a rebase uses MoSPI's published rate, or
+is absent.
+
+### the fetch contract — what counts as a good response
+
+A fetch **fails** (and saves nothing) on any of:
+- a body that is not JSON, or `msg == "No Data Found"`, for a dataset declared as API-served;
+- zero rows;
+- fewer pages fetched than `totalPages`, or a row count different from `totalRecords`;
+- **any row whose value in a field the request filtered on differs from what was requested**, which
+  covers every filter sent and not just `base_year` (this catches both the ignored filter and the silent old base).
+
+### saving every release — mandatory
+
+IIP and quarterly NAS carry **no revision marker** (NAS's `revision` is null on every quarterly
+row), and a revision overwrites the old value in place. Two fetches a month apart can disagree
+about the same month and nothing says so. Therefore:
+1. each fetch saves the raw response first (`analysis/mospi/releases/{dataset}/{fetched}.json.gz`,
+   committed), before anything reads it;
+2. the consolidate step diffs it against the previous release, sorting every difference into one of three:
+   - **value changed**: a revision, which is news about the data. Reported as a warning.
+   - **key disappeared** (a `(code, period)` the previous release had): **fails**.
+   - **latest period moved backwards**: **fails**.
+3. WPI is saved at major group / group / sub-group level. Its 953 items are dropped at fetch,
+   because nothing reads them and they are ~85% of the volume. The drop is declared in the
+   manifest, so it is a decision, not an accident.
+
+CPI's `status: F|P` is kept in the CSV.
+
+### the release calendar — when missing means overdue
+
+Each dataset declares its **expected lag** in the manifest (MoSPI's calendar; the values are set
+in phase 1 from observed releases, roughly IIP ≈ M+28 days, WPI ≈ M+14, CPI ≈ M+12, NAS ≈ Q+60).
+It decides two things:
+- `not_released` (1f) holds only while `period + lag` is later than the run date;
+- after that date, a missing period **fails the gate as overdue**, whether the cause is the fetch,
+  the source or the mapping.
+
+### the consolidated CSV (the single source of truth)
+
+`analysis/mospi/mospi_consolidated.csv` (planned, not yet built): one row per `(dataset, base_year, period, code, measure)`.
+Not in `web/public/`, because the browser never reads it (compute once, ship compact).
+- `period` = month-end for monthly data, quarter-end for NAS (Q1 FY27 → 2026-06-30), which is
+  the same convention as SIBC, so the join is on the date.
+- `code` = a stable id we declare (`nic:24`, `nic:241`, `nas:construction`, `nas:pfce`,
+  `cpi:all`), mapped from MoSPI's **labels** by a lookup table in the pipeline directory. The
+  lookup is checked **in both directions**: an unknown label fails, and so does a mapped code with
+  no rows through its dataset's latest period (a series that ends or moves level is caught).
+- `measure` ∈ `index` · `growth_published` · `current_price` · `constant_price` · `inflation_published`.
+  Values arrive as strings and are parsed here, once.
+- **The population of every CSV check is the manifest's datasets × the lookup's codes**, never the
+  CSV's own keys. An empty or truncated release would otherwise agree with its own rebuild.
+
+### the free ground truth — MoSPI publishes its own growth rates
+
+Like NBFC's printed YoY (gate 1c): our YoY computed from the index is gated against MoSPI's own
+printed rate. **Its population is every series code the concordance references**, and each is
+either:
+- gated against MoSPI's own rate: IIP `growth_rate`, NAS indicators 21/22, CPI `inflation`.
+  Tolerance: the printed rounding (one decimal → 0.05 pp).
+- or declared `no_printed_rate`, with the count reported. This covers all of WPI, the NAS
+  implicit deflators, summed GVA and combined IIP.
+
+**The stage fails when it checked zero values**, when a current value is missing, or when
+printed rates are missing beyond a declared threshold. Its NBFC counterpart printed ✓ on zero
+checks, and it is fixed with the same rule.
+
+### the manifest (`pipelines/mospi/pipeline.json`, planned)
+
+A new ingestion type (API pull, not XLSX) on the same gate runner. `kind: "reference"`, and
+`datasets` declares each series (endpoint, `base_year`, natural key, value fields, filters, levels
+kept, expected lag), so a fifth MoSPI dataset is an entry, not code. No `compute_module`, no
+skeleton, no system model in v1.
+
+| stage | does | fails on |
+|---|---|---|
+| T | unit tests | — |
+| 0 fetch | pull each dataset, save the raw release. **Always runs** unless `--offline` | any breach of the fetch contract |
+| 0.5 format | map labels → codes | an unknown label; a mapped code with no rows |
+| 0.7 consolidate | releases → CSV + `timeline.json`; release diff | a key that disappeared; latest period moving backwards (a changed value only warns) |
+| 0.8 consolidated fresh | `--check` rebuild equals the committed CSV | any drift |
+| 1b CSV integrity | key unique; no gap inside a series; one base per series; every code current or not yet due | any; an overdue period |
+| 1c published growth | our YoY vs MoSPI's printed rate over every concordance series | a mismatch; zero checked; missing rates beyond threshold |
+| 2f dependents | re-run freshness for every pipeline whose manifest `depends_on` has `mospi` | drift in a dependent: re-append it |
+| 5 reconcile | docs agree with disk | drift |
+
+The summary line prints the date of the newest release, so a green run on old data says so.
+
+### what the reference kind changes in existing code
+
+Found by the population reviewer: these loop over **every** pipeline and would break or go quiet
+on one with no compute module, no system model and no signals. Each moves to a derived population
+(`manifest` `kind`, or `pipelines_with_stage`), in phase 1, before MoSPI's manifest lands:
+- `guards/check_signal_freshness.py` and `tests/test_freshness_population.py`: freshness runs over pipelines that store signals;
+- `tests/test_manifest.py`: the `module_for` test is limited to pipelines with a compute module, and `CSV_LITERAL` is built from every manifest's CSV path;
+- `guards/check_derived_fresh.py`: `FALLBACK_PERIOD` is hand-written for two pipelines; derive it or retire it;
+- `core/generate_skeleton.py` and the cross scripts (`validate_composition`, `compose_ecosystem`,
+  `derive_cross_links`, `run_inference`, `generate_opportunities_feed`,
+  `generate_opportunity_narrative`): the system-model pipelines only. `validate_composition`'s silent
+  `continue` on a missing model becomes an error;
+- `hook_validate.py`: reads `data_dir` for every pipeline;
+- `core/gate.py`: `depends_on`, and the always-fetch mode, are new features with their own tests.
+
+### what is NOT built in v1, and why
+- **MoSPI's own signals** (IIP YoY by group, etc.): nothing reads them. They would be derived data
+  no check reads, as `metric_ranges` was. Add each when a consumer exists.
+- **Annual NAS** (18 sub-industries): finer, but annual, so it cannot sit in a monthly table.
+- **Eight Core Industries** (steel / cement / fertiliser output): not MoSPI. Parked by the user.
 
 ## Evaluate + query
 - **`evaluate.py`** — Stage 5 LLM evaluation: builds domain payloads from `signals.db`, calls

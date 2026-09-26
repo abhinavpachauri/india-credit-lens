@@ -17,6 +17,7 @@
 | State band | two standing sentences per dimension: **speed** (L1) and **mix** (L2) | §16 |
 | Notable | cards that earned a place above the table | §18 |
 | The table | one Layer 1 table per dimension; each cell opens its own chart; rows open into their sub-cut | §17, §19, §20 |
+| vs the real economy | two columns (Real credit, Output) on the SIBC tables, from MoSPI — **specced, not built** | §21 |
 | The chart | always the cut the card or cell is about, drawn | §15 |
 
 ---
@@ -1245,3 +1246,120 @@ instance of [[feedback_check_population]] in three days.
 - **SIBC history is 11 readings** where the consolidated CSV holds 24 dates: signals exist only for
   ingested PERIODS. Deeper charts are a signals backfill, not a render change — a data job with its
   own gate run, deliberately not folded into a UI refactor.
+
+---
+
+## 21. The real economy beside the credit (v0.2, specced 2026-09-26, NOT BUILT)
+
+> Status: **specced, not built.** v0.1's layouts were shown and approved on 2026-09-26. v0.2
+> takes in the same day's reviews (population, absence, plausibility): output over a trailing
+> year, Personal Loans without an Output, notes on the approximate aggregates, and real gate work
+> in place of "no new stage". Both layouts need a final look before code. Data: signals/README §1f
+> + MoSPI; join: COMPOSITION_SPEC §24.
+
+### 21.1 What it answers
+
+"Industry credit grew 20%": fast compared with what? The table answers the credit half and is
+silent on the economy it finances. Two columns put the other half beside it:
+- **Real credit**: loans outstanding, year on year, net of that part's own prices. Nominal growth
+  partly measures inflation, and the inflation differs by sector.
+- **Output (12 mo)**: growth of the activity that credit finances, over the last year. It is a
+  trailing year and not a single month, because single-month output swings 4–7 pp from one month
+  to the next and would drown the comparison.
+
+No "gap" column: it would be a third derived number to ground, and the reader can already see it.
+
+### 21.2 Layout: industry by type (monthly)
+
+```
+ INDUSTRY BY TYPE · Jul 2026                                      ┌─ VS THE REAL ECONOMY ──┐
+ PART                         SIZE  OF CUT OF BOOK GROWTH   PACE   NEW │ REAL CREDIT OUTPUT 12M │
+ ─────────────────────────────────────────────────────────────────────┼────────────────────────┤
+ Industry ⓘ             ₹48.01L Cr      —  21.7%  20.0%      —     — │   x.x% ·Q1   x.x% ·Q1  │
+ ▸ Infrastructure       ₹15.13L Cr  31.5%   6.9%  10.2% -0.66pp 17.6% │     —          —       │
+ ▸ Basic Metal & Metal   ₹5.38L Cr  11.2%   2.4%  21.9% +1.03pp 12.1% │     —        x.x%      │
+   Other Industries      ₹3.89L Cr   8.1%   1.8%  32.3% +3.09pp 11.9% │     —          —       │
+ ▸ Food Processing       ₹2.65L Cr   5.5%   1.2%  22.3% +2.75pp  6.0% │   x.x%       x.x%      │
+   Petroleum, Coal …     ₹2.12L Cr   4.4%   1.0%  34.0% -14.5pp  6.7% │   x.x%       x.x%      │
+   Construction          ₹1.94L Cr   4.0%   0.9%  24.4% +5.15pp  4.8% │     —          —       │
+   Cement               ₹69,420 Cr   1.4%   0.3%  16.3% -0.11pp  1.2% │   x.x%         —       │
+   …
+ ─────────────────────────────────────────────────────────────────────┴────────────────────────
+ Real credit = loans outstanding, year on year, net of the industry's own wholesale prices (WPI);
+ the Industry row uses the national-accounts deflator. Output = IIP production over the last 12 months.
+ Output: 12 of 19 types · 45% of industry credit. Real credit: 9 of 19 · 19%. Hover a — for why.
+```
+
+### 21.3 Layout: main sectors (quarterly)
+
+```
+ MAIN SECTORS · Jul 2026                                          ┌─ VS THE REAL ECONOMY ──┐
+ PART                SIZE    OF CUT  OF BOOK  GROWTH    PACE   NEW │ REAL CREDIT OUTPUT 12M │
+ ─────────────────────────────────────────────────────────────────┼────────────────────────┤
+ Non-food credit ⓘ  ₹219.60L Cr   —    99.5%     …        —      — │   x.x% ·Q1   x.x% ·Q1  │
+ ▸ Personal Loans  ₹71.83L Cr    …      …        …        …      … │   x.x% ·Q1     —       │
+ ▸ Services ⓘ      ₹61.97L Cr    …      …        …        …      … │   x.x% ·Q1   x.x% ·Q1  │
+ ▸ Industry ⓘ      ₹48.01L Cr    …      …      20.0%      …      … │   x.x% ·Q1   x.x% ·Q1  │
+   Agriculture     ₹27.07L Cr    …      …        …        …      … │   x.x% ·Q1   x.x% ·Q1  │
+ ─────────────────────────────────────────────────────────────────┴────────────────────────
+ Real credit = loans outstanding, year on year, net of the sector's own prices (national-accounts
+ deflator). Output = real GVA over the last 4 quarters; for the total, real GDP. Personal loans have
+ no output measure: half is housing, which is investment, not consumption.
+ ·Q1 = Apr–Jun 2026; credit is read at Jun, the quarter's end. Jul–Sep has no cell until SIBC's
+ Aug–Nov history is backfilled. ⓘ = an approximate match; hover for what it includes.
+```
+
+The total row is keyed to one entity, **Non-food credit (III)**, for every cell. The live table
+mixed the four sectors' sum (size) with III's share and growth; that is fixed separately (§21.7).
+
+Sub-tables: Power, Electronics and Pharma rows get both cells. Iron & steel, Fertiliser, Sugar and
+Edible oils get Real credit only. The Personal Loans sub-table's rows get Real credit from CPI
+(monthly), and its total row repeats the main table's quarterly value (`·Q1`): same entity, same
+number. Every other sub-row shows two dashes, each with its reason.
+
+### 21.4 The rules the layout carries
+
+- **One column = one signal = one cadence.** Construction's output is quarterly, so it is a dash
+  on this monthly table and a value under Industry on the main one. A total row is a different
+  signal (the parent cut's), so it carries its own period label (`·Q1`).
+- **A cell never shows an older period than its row's.** No carry-forward. A cell whose data is not
+  yet due shows `—` with `not_released`; one that is overdue fails the gate before anything ships.
+- **An absent cell ships a reason code, and the sentence is rendered in Python from that code**:
+  `{display: "—", reason: "shared_group", note: "IIP pools cement with glass"}`. Shown on hover
+  or tap; never 0 and never blank (§17.3).
+- **ⓘ marks an approximate aggregate** (COMPOSITION_SPEC §24.1). Its note carries a share computed
+  that period ("9.6% of industry credit is infrastructure NAS counts as services").
+- **The coverage line counts cells that have a value this period**, rows AND credit, and says how
+  many are waiting on MoSPI ("2 awaiting the Aug IIP, due ~28 Sep"). It never counts what the
+  concordance maps.
+- **Same entity, same number**: Industry and Personal Loans are identical wherever they appear.
+- The group header renders only on a cut that declares 1f columns. Other tables are unchanged.
+- **A cell opens its own history**, like every column (§20).
+- Phone: the table keeps its sideways scroll (min-width 520 px); it is two columns wider.
+
+### 21.5 Gate: new work, not "no new stage"
+
+v0.1 claimed the §17.5 stage covers the new columns unchanged. The population review showed it
+cannot:
+- **the column list is typed in three places** (`core/table_rows.py`, `guards/validate_cut_table.py`,
+  `web/lib/table.ts`) with nothing keeping them in step. It becomes **one declaration** that the
+  builder, the gate and a generated TS constant all read. Otherwise the gate never reads a new
+  column;
+- **each cell is checked at its own declared period**, not the table's (`·Q1` cells), and never by
+  widening the scope for the whole table;
+- **absent cells**: the reason code must be in the closed list, and the cell may carry no value;
+- **the coverage line** is checked against the cells it counts;
+- **operands**: Check 2f recomputes each 1f row from the two CSVs, including its operands and
+  reason. A new check asserts that each row's series codes are the ones the concordance names for
+  that part. v0.1 cited Check 2g here, but 2g reads annotation prose, not table cells.
+
+### 21.6 Not in this build
+
+Credit intensity (credit ÷ annualised GVA), the services sub-rows (quarterly NAS pools them),
+annual NAS, any card or state-band sentence built from these columns. Layer 1 columns first.
+
+### 21.7 Found while speccing: the main table's pinned row
+
+The pinned row of `sibc-main` rendered **size = the four sectors' sum (₹208.88L Cr)** beside
+**of book 99.5% and growth, which belong to Non-food credit (₹219.60L Cr)**. A part cannot be
+99.5% of a book it is 94.6% of. It is fixed separately, independently of MoSPI.
