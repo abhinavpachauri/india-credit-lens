@@ -220,10 +220,16 @@ def cmd_evaluate(pipeline: str, period: str) -> int:
     print(f"Evaluating Layer 1 signals: {pipeline} / {period} ...")
     summary = run_evaluate(pipeline, period, conn, registry)
 
-    status = "✓" if summary['errors'] == 0 else f"⚠ {summary['errors']} domain(s) failed"
+    missing = summary.get('signals_missing', 0)
+    incomplete = summary['errors'] > 0 or missing > 0
+    status = "✓" if not incomplete else \
+        f"✗ INCOMPLETE — {summary['errors']} domain(s) failed, {missing} signal(s) unanswered"
     print(f"\n  {status}  {pipeline} / {period}")
     print(f"    Domains evaluated  : {summary['domains_evaluated']}")
-    print(f"    Signals interpreted: {summary['signals_interpreted']}")
+    print(f"    Signals interpreted: {summary['signals_interpreted']}"
+          + (f"  ({missing} unanswered — listed per domain in the output file)" if missing else ""))
+    for dom, why in summary.get('failed_domains', {}).items():
+        print(f"    Failed domain      : {dom} — {why}")
     print(f"    LLM calls          : {summary['api_calls']}  |  Cache hits: {summary['cache_hits']}")
     if summary.get('prior_period'):
         print(f"    Prior period used  : {summary['prior_period']} (narrative diff active)")
@@ -234,7 +240,9 @@ def cmd_evaluate(pipeline: str, period: str) -> int:
         print(f"    Tokens used        : {summary['total_tokens']:,}"
               + (f"  |  Cache read: {saved:,} (saved ~{saved//1000}k tokens)" if saved else ""))
     print(f"    Output             : {summary['output_path']}")
-    return 0
+    # Exit non-zero on an incomplete run. It used to return 0 whatever happened, so a caller —
+    # the ingest skill, a script, a gate — could not tell a partial evaluation from a full one.
+    return 1 if incomplete else 0
 
 
 # ─── status command ───────────────────────────────────────────────────────────

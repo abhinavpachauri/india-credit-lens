@@ -54,9 +54,6 @@ skills = procedure, subagents = independent review, hooks + `reconcile.py` = enf
   them. `/model-pass` decides at the March FOUNDATION whether to refresh or retire them.
 - **Prompt v1.13 fix list** (paid; bundle with the next evaluate run): 3 eval-authored 5.8 warnings
   (`through FY26`, `watch for`, `on track to`).
-- **Live defect found by the absence reviewer**: `signals/evaluate.py:510` drops a failed sub-chunk when the other half
-  succeeds, so missing signals look like "nothing to say". Also reported, unverified: a partial model answer is cached,
-  and a failed domain is left out of the eval file with no marker. Fix with a mocked-LLM test (the path is paid).
 - **S4 worklist 2026-08-31**: 20 proposals still need a browser (`run_inference.py --worklist`).
 - **signals.db → Git LFS at ~80 MB** (GitHub's hard limit is 100 MB per file).
 - **SIBC still ships its raw CSV** for client parsing; payments ships a compact precomputed

@@ -62,6 +62,10 @@ This refuses without approval and prints its estimate. ⏸ **Tell the user the e
 for a yes in THIS conversation**, then re-run with `ICL_LLM_OK=1` prefixed. The hard ceiling is
 $5 per run and is not overridable. Without an eval, Stage 5.5 warns "STALE NARRATIVE LAYER";
 that is acceptable for shipping, but say so.
+- **`✗ INCOMPLETE` (exit 1)** means a domain failed or signals went unanswered. Each gap is listed
+  with its reason in the output file (`failed_domains`, per-domain `missing_signals`). Re-running
+  re-asks only the unanswered chunks; answered ones replay from cache. Do not ship a period
+  whose evaluation is incomplete without telling the user which signals have no narrative.
 
 ## 4. The full gate
 

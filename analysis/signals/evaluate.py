@@ -387,6 +387,31 @@ def _build_prior_eval_block(prior_period: str,
 
 
 # ── Domain evaluation ─────────────────────────────────────────────────────────
+#
+# Every signal sent to the model must come back ACCOUNTED FOR: answered, or failed with a
+# reason. Four paths used to lose a signal while reporting success (found by the absence
+# reviewer, 2026-09-26): a failed half-chunk dropped when its sibling succeeded; a signal the
+# model left out skipped and still counted as interpreted; a partial answer cached and replayed
+# as a "cache hit"; a failed domain absent from the file with no marker. Downstream cannot tell
+# "the model said nothing" from "we never got an answer", so the difference is recorded here.
+
+class IncompleteAnswer(Exception):
+    """The model replied, but not for every signal it was asked about."""
+
+    def __init__(self, missing: list[str], partial: dict, tokens: int = 0):
+        self.missing, self.partial, self.tokens = list(missing), partial, tokens
+        shown = ", ".join(self.missing[:3]) + (" …" if len(self.missing) > 3 else "")
+        super().__init__(f"model did not answer {len(self.missing)} signal(s): {shown}")
+
+
+def _unanswered(result: dict, ids: list[str]) -> list[str]:
+    return [sid for sid in ids if sid not in result]
+
+
+def _reason(exc: BaseException) -> str:
+    text = str(exc).splitlines()[0][:200] if str(exc) else ""
+    return f"{type(exc).__name__}: {text}" if text else type(exc).__name__
+
 
 def _evaluate_chunk(pipeline: str, period: str, domain: str, chunk_idx: int,
                     chunk_payload: str, chunk_ids: list[str],
@@ -417,7 +442,11 @@ def _evaluate_chunk(pipeline: str, period: str, domain: str, chunk_idx: int,
 
     cached = _cache_get(conn, input_hash)
     if cached is not None:
-        return cached, True, 0, 0, 0
+        if not _unanswered(cached, chunk_ids):
+            return cached, True, 0, 0, 0
+        # An incomplete answer cached before this check existed. Replaying it is how a gap becomes
+        # permanent: every re-run reports "cache hit, 0 tokens" and the missing signals never
+        # return. Treat it as a miss (the call is still priced and approved like any other).
 
     system_prompt = _get_system_prompt()
     user_message  = _build_user_message(
@@ -425,6 +454,11 @@ def _evaluate_chunk(pipeline: str, period: str, domain: str, chunk_idx: int,
     )
     result, tokens, cache_read, cache_created = _call_llm(system_prompt, user_message)
 
+    # Only a complete answer is cached. A truncated or partial reply goes to the split-and-retry
+    # path instead — which is what that path was written for — carrying what did come back.
+    missing = _unanswered(result, chunk_ids)
+    if missing:
+        raise IncompleteAnswer(missing, result, tokens)
     _cache_set(conn, input_hash, pipeline, period, domain, result, MODEL, tokens)
     return result, False, tokens, cache_read, cache_created
 
@@ -440,7 +474,9 @@ def _evaluate_domain(pipeline: str, period: str, domain: str,
     Evaluate one domain, chunking into batches of chunk_size to avoid max_tokens
     truncation for large domains (industry=22, retail=23 signals).
     Prior eval narratives (signal-level) are forwarded to each chunk.
-    Returns (merged_result_dict, all_from_cache, total_tokens, total_cache_read, total_cache_created).
+    Returns (merged_result_dict, all_from_cache, total_tokens, total_cache_read,
+    total_cache_created, failed) — `failed` maps every signal that still has no answer after the
+    split-and-retry to the reason. Raises only when NO signal in the domain was answered.
     """
     from .query import build_chunk_payload
 
@@ -449,79 +485,65 @@ def _evaluate_domain(pipeline: str, period: str, domain: str,
 
     chunks = build_chunk_payload(signal_ids, signals_payload, chunk_size)
 
+    def attempt(key: int, payload: str, ids: list[str]):
+        """One chunk → (result, from_cache, tokens, cache_read, cache_created, failed{sid: why}).
+
+        A failed or incomplete chunk is split in half and each half retried — the truncation
+        guard — down to two signals. Whatever still has no answer is RECORDED with its reason.
+        A spend refusal is never split or recorded: splitting cannot fix "not authorised", so it
+        propagates and stops the run.
+        """
+        try:
+            r, fc, t, rd, cr = _evaluate_chunk(
+                pipeline, period, domain, key, payload, ids, domain_description, conn,
+                prior_period=prior_period, prior_signals=prior_signals)
+            return r, fc, t, rd, cr, {}
+        except LLMSpendNotApproved:
+            raise
+        except Exception as exc:
+            why = _reason(exc)
+            partial = exc.partial if isinstance(exc, IncompleteAnswer) else {}
+            spent = exc.tokens if isinstance(exc, IncompleteAnswer) else 0
+            if len(ids) <= 2:
+                return (dict(partial), False, spent, 0, 0,
+                        {sid: why for sid in _unanswered(partial, ids)})
+            half = max(2, len(ids) // 2)
+            result: dict = {}
+            failed: dict = {}
+            tokens, read, created = spent, 0, 0
+            for sub_idx, (sub_payload, sub_ids) in enumerate(
+                    build_chunk_payload(ids, payload, half)):
+                r, _, t, rd, cr, f = attempt(key * 100 + sub_idx, sub_payload, sub_ids)
+                result.update(r)
+                failed.update(f)
+                tokens, read, created = tokens + t, read + rd, created + cr
+            # A retried chunk is never reported as a cache hit, even if its halves were cached:
+            # it failed once, and "cache hit, 0 tokens" is the most reassuring line there is.
+            return result, False, tokens, read, created, failed
+
     merged:    dict = {}
+    failed:    dict = {}
     all_cache: bool = True
     tot_tok = tot_read = tot_created = 0
 
     for chunk_idx, (chunk_payload, chunk_ids) in enumerate(chunks):
-        try:
-            result, from_cache, tokens, cache_read, cache_created = _evaluate_chunk(
-                pipeline, period, domain, chunk_idx,
-                chunk_payload, chunk_ids,
-                domain_description, conn,
-                prior_period=prior_period,
-                prior_signals=prior_signals,
-            )
-        except LLMSpendNotApproved:
-            # Not a payload problem, so splitting it cannot help. Propagate untouched: an
-            # unapproved run must stop, loudly, rather than descend into the retry path below
-            # and come back out wearing a cache hit's clothes.
-            raise
-        except Exception as exc:
-            # Truncation guard: if a chunk fails, split it in half and retry each half
-            if len(chunk_ids) <= 2:
-                raise   # already minimal — propagate
-            from .query import build_chunk_payload as _bcp
-            half = max(2, len(chunk_ids) // 2)
-            sub_chunks = _bcp(chunk_ids, chunk_payload, half)
-            result = {}
-            tokens = cache_read = cache_created = 0
-            from_cache = True
-            sub_failed = False
-            sub_reason = "no reason recorded"
-            for sub_idx, (sub_payload, sub_ids) in enumerate(sub_chunks):
-                try:
-                    sub_result, sub_cache, sub_tok, sub_read, sub_created = _evaluate_chunk(
-                        pipeline, period, domain,
-                        chunk_idx * 100 + sub_idx,   # unique sub-chunk key
-                        sub_payload, sub_ids,
-                        domain_description, conn,
-                        prior_period=prior_period,
-                        prior_signals=prior_signals,
-                    )
-                except LLMSpendNotApproved:
-                    raise
-                except Exception as sub_exc:
-                    sub_reason = f"{type(sub_exc).__name__}: {str(sub_exc).splitlines()[0][:200]}"
-                    # Sub-chunk also failed. Skip it rather than killing the domain — but do NOT
-                    # call it a cache hit. `sub_cache = True` here meant every failure (an outage,
-                    # an exhausted balance, a refused spend) was reported as the cheapest, most
-                    # reassuring outcome there is: "cache hit, 0 tokens". A whole period once
-                    # evaluated to five empty domains and printed "✓ ... Cache hits: 5".
-                    sub_result, sub_cache = {}, False
-                    sub_failed = True
-                    sub_tok = sub_read = sub_created = 0
-                result.update(sub_result)
-                tokens      += sub_tok
-                cache_read  += sub_read
-                cache_created += sub_created
-                if not sub_cache:
-                    from_cache = False
-            if sub_failed and not result:
-                # Every sub-chunk failed: there is no narrative for this domain. Say so, and say
-                # WHY — a generic "it failed" sends the reader hunting for the real cause.
-                raise RuntimeError(
-                    f"{domain}: all sub-chunks failed after splitting — {sub_reason}")
-
+        result, from_cache, tokens, cache_read, cache_created, chunk_failed = attempt(
+            chunk_idx, chunk_payload, chunk_ids)
         # Accumulate signal entries; last chunk's _domain_narrative wins
         merged.update(result)
+        failed.update(chunk_failed)
         if not from_cache:
             all_cache = False
         tot_tok     += tokens
         tot_read    += cache_read
         tot_created += cache_created
 
-    return merged, all_cache, tot_tok, tot_read, tot_created
+    if signal_ids and all(sid in failed for sid in signal_ids):
+        # Nothing at all came back: the domain failed. Say so, and say WHY.
+        first = next(iter(failed.values()), "no reason recorded")
+        raise RuntimeError(f"{domain}: no signal was answered — {first}")
+
+    return merged, all_cache, tot_tok, tot_read, tot_created, failed
 
 
 # ── Source reference ─────────────────────────────────────────────────────────
@@ -652,6 +674,7 @@ def run_evaluate(pipeline: str, period: str,
 
     _FAILURES: dict[str, str] = {}
     total_signals  = 0
+    total_missing  = 0
     cache_hits     = 0
     api_calls      = 0
     total_tokens   = 0
@@ -659,25 +682,25 @@ def run_evaluate(pipeline: str, period: str,
     errors         = 0
 
     def _eval_one(domain: str, signals_payload: str,
-                  signal_ids: list[str]) -> tuple[str, dict | None, bool, int, int, int, float]:
+                  signal_ids: list[str]) -> tuple[str, dict | None, bool, int, int, int, float, dict]:
         """Evaluate one domain. Opens its own DB connection (thread-safe)."""
         thread_conn = init_db()
         desc = all_domains.get(domain, domain)
         t0   = time.monotonic()
         try:
-            result, from_cache, tokens, cache_read, _ = _evaluate_domain(
+            result, from_cache, tokens, cache_read, _, failed = _evaluate_domain(
                 pipeline, period, domain,
                 signals_payload, signal_ids, desc, thread_conn,
                 prior_period=prior_period if prior_signals else None,
                 prior_signals=prior_signals if prior_signals else None,
                 chunk_size=CHUNK_SIZE,
             )
-            return domain, result, from_cache, tokens, cache_read, 0, time.monotonic() - t0
+            return domain, result, from_cache, tokens, cache_read, 0, time.monotonic() - t0, failed
         except Exception as exc:
             # Carry the reason out. "ERROR" alone sends the reader hunting; the actual cause is
             # usually immediately actionable (spend not approved, no credit, bad JSON).
             _FAILURES[domain] = f"{type(exc).__name__}: {str(exc).splitlines()[0][:160]}"
-            return domain, None, False, 0, 0, 1, time.monotonic() - t0
+            return domain, None, False, 0, 0, 1, time.monotonic() - t0, {}
 
     # ── Parallel evaluation (API) or sequential (CLI) ─────────────────────────
     max_workers = 1 if USE_CLI else min(n_domains, 6)
@@ -690,20 +713,25 @@ def run_evaluate(pipeline: str, period: str,
 
         for future in as_completed(future_to_domain):
             domain, ids = future_to_domain[future]
-            domain_desc, result, from_cache, tokens, cache_read, err, elapsed = future.result()
+            (domain_desc, result, from_cache, tokens, cache_read, err, elapsed,
+             failed) = future.result()
 
             if err or result is None:
                 why = _FAILURES.get(domain, "")
                 print(f"  {domain:<22} ERROR ({elapsed:.1f}s)" + (f"  {why}" if why else ""))
                 errors += 1
+                # Recorded IN the file: a domain absent from it reads as "nothing to say".
+                output.setdefault("failed_domains", {})[domain] = why or "no reason recorded"
                 continue
 
             # Separate domain narrative from per-signal entries
             narrative  = result.pop("_domain_narrative", "")
 
             signals_out: dict = {}
+            missing: dict = {}
             for sid in ids:
                 if sid not in result:
+                    missing[sid] = failed.get(sid, "not returned by the model")
                     continue
                 sig_entry = dict(result[sid])
                 sig_def   = registry["signals"].get(sid, {})
@@ -714,8 +742,13 @@ def run_evaluate(pipeline: str, period: str,
                 "narrative": narrative,
                 "signals":   signals_out,
             }
+            if missing:
+                # Declared, per signal, with the reason: the insight stage must be able to tell
+                # "the model had nothing to say" from "we never got an answer".
+                output["domains"][domain]["missing_signals"] = missing
 
-            total_signals  += len(ids)
+            total_signals  += len(signals_out)
+            total_missing  += len(missing)
             total_tokens   += tokens
             total_cached_r += cache_read
 
@@ -731,7 +764,8 @@ def run_evaluate(pipeline: str, period: str,
                     if cache_read:
                         tag += f"  (cached {cache_read:,})"
 
-            print(f"  {domain:<22} {len(ids):>2} signals  {tag}  ({elapsed:.1f}s)")
+            gap = f"  ⚠ {len(missing)} unanswered" if missing else ""
+            print(f"  {domain:<22} {len(signals_out):>2}/{len(ids)} signals  {tag}  ({elapsed:.1f}s){gap}")
 
     # An evaluation with no content is not an evaluation. Refuse to WRITE one: Stage 5.5 and the
     # insight layer read this file and cannot tell "the model said nothing" from "nothing moved",
@@ -763,6 +797,8 @@ def run_evaluate(pipeline: str, period: str,
     return {
         "domains_evaluated":   len(output["domains"]),
         "signals_interpreted": total_signals,
+        "signals_missing":     total_missing,
+        "failed_domains":      output.get("failed_domains", {}),
         "api_calls":           api_calls,
         "cache_hits":          cache_hits,
         "errors":              errors,
