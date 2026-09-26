@@ -39,11 +39,18 @@ skills = procedure, subagents = independent review, hooks + `reconcile.py` = enf
    - **Snapshot:** two fetches are identical in content and order; the natural key (year, month,
      type, category, sub-category) is unique; values arrive as strings. **No provisional/final
      flag**: revisions overwrite silently, so saving each release is mandatory, not optional.
-   - **Mapping** (SIBC's 19 industry types): 7 map 1:1 to an IIP sub-sector (mining, food, leather,
-     wood, paper, petroleum, rubber/plastics); 5 need two or more IIP series (beverage & tobacco,
-     chemicals + pharma, basic + fabricated metals, vehicles, engineering), which cannot be combined
-     without IIP item weights (not in the API); glass and cement share one IIP series; textiles is
-     ambiguous over apparel; construction, infrastructure and "other" have no counterpart.
+   - **Mapping** (SIBC's 19 industry types): 7 map 1:1 to an IIP group (mining, food, leather, wood,
+     paper, petroleum, rubber/plastics). 5 combine IIP groups by their **2022-23 weights**: beverage &
+     tobacco (NIC 11+12), chemicals + pharma (20+21), basic + fabricated metals (24+25), engineering
+     (26+27+28), vehicles (29+30). Weights: PIB PRID 2267531, Statement II-A (sum 76.062); fixed for
+     the base, so a one-time sourced table, not a monthly pull. Verified: they rebuild the published
+     manufacturing index within ~1 point and its YoY within ~0.2 pp (MoSPI aggregates from 455 item
+     groups, so exact is impossible). Glass + cement share one group; textiles is ambiguous over
+     apparel; construction, infrastructure, gems and "other" have no counterpart. **12 of 19 covered.**
+   - **Open decisions (user):** position in the source order; display (recommended: two columns on
+     the industry-by-type table, ASCII first); manual vs scheduled pull (recommended: manual until
+     two clean cycles). WPI group weights for deflating combined sectors: first new-series WPI
+     release (Office of the Economic Adviser), not yet checked.
    - **The metric:** credit (nominal stock) vs IIP (real volume) needs WPI deflation first.
    - **Recommended build:** IIP + WPI as one API-pull pipeline, the NIC ↔ SIBC concordance authored
      once in the ontology, and "credit growth vs output growth, price-adjusted" as a column on the
