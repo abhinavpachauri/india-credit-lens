@@ -33,10 +33,21 @@ skills = procedure, subagents = independent review, hooks + `reconcile.py` = enf
    that overlaps SIBC sectors without matching them.
 5. **Lending & Deposit Rates** (monthly PDF; `pdftotext` works, so it is table extraction).
 6. **MoSPI eSankhyiki: the real economy behind the credit** (`STRATEGY_PLANNER.md` §8.1).
-   ⏸ **Position in this order is the user's call** (proposed 2026-09-24). Recommendation: first
-   a free half-day probe (confirm IIP's current base year, snapshot one release, map 5 NIC
-   sectors to SIBC codes), then **IIP + CPI** as the first API-pull pipeline. It is cheap (JSON,
-   no manual download) and it tests the one ingestion type the architecture has never met.
+   ⏸ **Position in this order is the user's call.** Probe done 2026-09-26 (free):
+   - **Base:** IIP and WPI are on a 2022-23 base the spec omits; use it only (IIP Apr 2023 →, WPI →
+     Aug 2026). Never chain across bases; field names differ by base (`majorgroup` vs `major_group`).
+   - **Snapshot:** two fetches are identical in content and order; the natural key (year, month,
+     type, category, sub-category) is unique; values arrive as strings. **No provisional/final
+     flag**: revisions overwrite silently, so saving each release is mandatory, not optional.
+   - **Mapping** (SIBC's 19 industry types): 7 map 1:1 to an IIP sub-sector (mining, food, leather,
+     wood, paper, petroleum, rubber/plastics); 5 need two or more IIP series (beverage & tobacco,
+     chemicals + pharma, basic + fabricated metals, vehicles, engineering), which cannot be combined
+     without IIP item weights (not in the API); glass and cement share one IIP series; textiles is
+     ambiguous over apparel; construction, infrastructure and "other" have no counterpart.
+   - **The metric:** credit (nominal stock) vs IIP (real volume) needs WPI deflation first.
+   - **Recommended build:** IIP + WPI as one API-pull pipeline, the NIC ↔ SIBC concordance authored
+     once in the ontology, and "credit growth vs output growth, price-adjusted" as a column on the
+     industry-by-type table (ASCII approval first).
 
 ## Open decisions and known debts (not scheduled)
 

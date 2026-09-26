@@ -163,10 +163,16 @@ the official home of the other side of that ratio.
 | ASI / ASUSE | annual | Formal vs informal enterprise finance | MSME cuts |
 | AIDIS (NSS 77) | one-off (2019) | Institutional vs non-institutional household debt, as a baseline | Layer 2 gap nodes |
 
-Access verified 2026-09-24: `api.mospi.gov.in` returns JSON (it needs legacy TLS renegotiation,
-opted into for that host only), and the IIP 2011-12-base series in the API stops at March 2026,
-so the current base must be confirmed first. Build rules are in `PLAN.md`; the first API-pull
-source is also the test of a new ingestion type.
+Access verified 2026-09-24/26: `api.mospi.gov.in` returns JSON (it needs legacy TLS
+renegotiation, opted into for that host only). **IIP and WPI were both rebased to 2022-23**, a
+base the published API spec does not list: IIP runs April 2023 → July 2026 on it (M+1, the same
+lag as SIBC), WPI to August 2026. Findings of the probe and the build rules are in `PLAN.md`.
+
+**The first reading, and why it is not publishable yet.** July 2026, credit YoY vs output YoY:
+chemicals +24.0% vs −2.7%, petroleum +34.0% vs +1.3%, food processing +22.3% vs +2.6%, vehicles
++32.2% vs +22.2%. The gap is large in most industries, but credit is in nominal rupees and IIP is a
+real volume index, so part of every gap is price. The publishable comparison needs the WPI for
+the same product group: that is what makes this three datasets (IIP + WPI + SIBC), not two.
 
 ---
 
