@@ -2,6 +2,7 @@
   "id": "sibc",
   "name": "RBI SIBC — Bank Credit",
   "order": 1,
+  "kind": "primary",
   "compute_module": "csv_sector",
   "cuts_module": "pipelines.sibc.generate_analysis_report",
   "paths": {

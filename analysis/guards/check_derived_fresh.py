@@ -44,7 +44,6 @@ from core import manifest as manifest_mod          # noqa: E402
 
 ANALYSIS = ROOT / "analysis"
 DB = ANALYSIS / "signals" / "signals.db"
-FALLBACK_PERIOD = {"sibc": "2026-05-29", "atm_pos": "2026-04-30"}  # if the DB is empty
 
 # Derived artifacts produced OUTSIDE any pipeline gate: the architecture graph and its
 # rendered doc describe the code itself, so they belong to no single pipeline. They are
@@ -59,12 +58,24 @@ CODE_DERIVED = [
 
 
 def latest_period(pipeline):
-    if not DB.exists():
-        return FALLBACK_PERIOD[pipeline]
-    con = sqlite3.connect(DB)
-    row = con.execute("select max(period) from signals where pipeline=?", (pipeline,)).fetchone()
-    con.close()
-    return (row and row[0]) or FALLBACK_PERIOD[pipeline]
+    """The newest stored period, which the analytical stages regenerate for ($LATEST).
+
+    A pipeline that stores no signals (a reference pipeline) has no such period and gets "";
+    none of its stages takes $LATEST. A signal pipeline with no rows used to fall back to a
+    hand-written date per pipeline, written for two of them, so a third raised a KeyError and an
+    empty store regenerated artifacts for a months-old period. An empty store is now an error.
+    """
+    if pipeline not in manifest_mod.signal_pipelines():
+        return ""
+    row = None
+    if DB.exists():
+        con = sqlite3.connect(DB)
+        row = con.execute("select max(period) from signals where pipeline=?", (pipeline,)).fetchone()
+        con.close()
+    if not (row and row[0]):
+        raise SystemExit(f"✗ {pipeline}: signals.db holds no rows, so there is no latest period "
+                         f"to regenerate for. Append the pipeline's periods first.")
+    return row[0]
 
 
 def run(label, cmd, cwd, quiet):

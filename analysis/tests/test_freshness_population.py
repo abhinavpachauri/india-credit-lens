@@ -27,7 +27,7 @@ def test_the_timeline_is_the_population():
     """Every period a pipeline says it ingested must be one the check will recompute."""
     declared = F._declared_periods()
     assert declared, "no timeline resolved — the check would fall back to the DB's own word"
-    for pipeline in manifest.discover_pipeline_ids():
+    for pipeline in manifest.signal_pipelines():
         key = manifest.load(pipeline)["period_key"]
         doc = json.loads(manifest.path(pipeline, "timeline").read_text())
         rows = doc["periods"] if isinstance(doc, dict) else doc
@@ -35,14 +35,15 @@ def test_the_timeline_is_the_population():
         assert declared.get(pipeline) == want, f"{pipeline}: declared set does not match its timeline"
 
 
-def test_every_pipeline_is_in_the_population():
-    """The population of pipelines is the manifests', not a list typed into the guard.
+def test_the_population_is_every_pipeline_that_stores_signals():
+    """Narrowing the population to signal pipelines must not become a way to drop one out.
 
-    It was the pair (sibc, atm_pos) until 2026-09-26, and NBFC — the third pipeline — fell back
-    to the database's own list of periods. This test used the same hand-written pair, so it
-    shared the blind spot it was meant to police.
+    The set is derived from `compute_module`, and every `primary` pipeline must declare one
+    (test_manifest). So the only pipelines outside it are ones that declare themselves
+    reference data, and a primary pipeline that lost its compute_module fails there, not here.
     """
-    assert set(F._declared_periods()) == set(manifest.discover_pipeline_ids())
+    primary = {p for p in manifest.PIPELINE_IDS if manifest.kind(p) == "primary"}
+    assert primary <= set(F._declared_periods()), "a primary pipeline dropped out of freshness"
 
 
 def test_a_missing_timeline_fails_rather_than_drops_out(monkeypatch, tmp_path):

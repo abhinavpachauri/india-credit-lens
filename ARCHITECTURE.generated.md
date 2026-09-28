@@ -8,7 +8,7 @@
 > Authored rationale (layer model, design principles, guard purposes) lives in the
 > hand-written `ARCHITECTURE.md`. This file is the structural, drift-guarded half.
 
-_Derived from 76 scripts._
+_Derived from 90 scripts._
 
 ## 1. Data-flow
 
@@ -129,9 +129,19 @@ orchestrated, not import-coupled).
 - `pipelines/atm_pos/consolidate_atm_pos` → `core/manifest`
 - `pipelines/atm_pos/extract_atm_pos` → `pipelines/atm_pos/detect_atm_pos_format`
 - `pipelines/atm_pos/generate_atm_pos_insights` → `core/manifest`
+- `pipelines/mospi/consolidate` → `core/manifest`, `pipelines/mospi/releases`
+- `pipelines/mospi/cpi_dashboard` → `pipelines/mospi/releases`
+- `pipelines/mospi/cpi_release` → `pipelines/mospi/releases`
+- `pipelines/mospi/detect_format` → `pipelines/mospi/consolidate`, `pipelines/mospi/releases`
+- `pipelines/mospi/fetch` → `pipelines/mospi/cpi_dashboard`, `pipelines/mospi/cpi_release`, `pipelines/mospi/mospi_api`, `pipelines/mospi/releases`
+- `pipelines/mospi/releases` → `core/manifest`
+- `pipelines/mospi/validate_csv` → `core/manifest`, `pipelines/mospi/consolidate`, `pipelines/mospi/releases`
+- `pipelines/mospi/validate_published_growth` → `core/manifest`, `pipelines/mospi/consolidate`, `pipelines/mospi/releases`, `pipelines/mospi/validate_csv`
+- `pipelines/nbfc/consolidate_nbfc` → `core/manifest`
+- `pipelines/nbfc/validate_published_yoy` → `core/manifest`
 - `pipelines/sibc/extract_sibc` → `pipelines/sibc/detect_format`
 - `pipelines/sibc/generate_analysis_report` → `core/residuals`
-- `pipelines/sibc/update_web_data` → `core/manifest`
+- `pipelines/sibc/update_web_data` → `core/manifest`, `pipelines/mospi/consolidate`
 - `pipelines/sibc/validate_web_series` → `core/manifest`
 - `signals/compute/atm_pos` → `core/manifest`
 - `signals/compute/csv_sector` → `core/manifest`
@@ -150,7 +160,8 @@ orchestrated, not import-coupled).
 ### Multiple writers (verify intentional vs. dual-path smell)
 - `analysis/signals/registry.json` ← `signals/apply_status_rules`, `signals/update_registry`
 - `format_report.json` ← `pipelines/atm_pos/detect_atm_pos_format`, `pipelines/sibc/detect_format`
-- `sections.json` ← `pipelines/atm_pos/extract_atm_pos`, `pipelines/sibc/extract_sibc`
+- `sections.json` ← `pipelines/atm_pos/extract_atm_pos`, `pipelines/nbfc/extract_nbfc`, `pipelines/sibc/extract_sibc`
+- `timeline.json` ← `pipelines/atm_pos/consolidate_atm_pos`, `pipelines/nbfc/consolidate_nbfc`
 - `web/public/data/opportunities_feed.json` ← `cross/generate_opportunities_feed`, `cross/generate_opportunity_narrative`
 
 ### Internal artifacts produced but never read (potential dead output)

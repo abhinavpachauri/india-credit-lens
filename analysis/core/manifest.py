@@ -59,6 +59,7 @@ CORE_MAP = {
     "architecture_discover":    ("architecture/discover.py", ["--quiet"], "ROOT"),
     "architecture_render":      ("architecture/render.py", [], "ROOT"),
     "reconcile":                ("architecture/reconcile.py", ["--strict"], "ROOT"),
+    "dependents_fresh":         ("guards/check_signal_freshness.py", ["--dependents-of", "$ID"], "ROOT"),
 }
 
 def discover_pipeline_ids() -> tuple[str, ...]:
@@ -115,6 +116,55 @@ def pipelines_with_stage(stage_id: str) -> tuple[str, ...]:
 def load(pipeline: str) -> dict:
     """The manifest for one pipeline."""
     return json.loads((ANALYSIS / "pipelines" / pipeline / "pipeline.json").read_text())
+
+
+# ── What a pipeline IS, and the populations that follow from it ────────────────
+# Until MoSPI every pipeline was the same kind of thing: a source that computes signals, has a
+# system model and ships a page. So "every pipeline" and "every pipeline that stores signals"
+# were the same set, and a dozen loops used the first to mean the second. A reference pipeline
+# (MoSPI: saved releases, a CSV and a gate, and nothing else) makes the two differ, and every
+# one of those loops would either break on it or silently check nothing for it.
+#
+# The fix is not an `if kind == "reference"` in each loop. A loop names the CAPABILITY it
+# needs, and the population is read off the manifests that declare that capability. `kind`
+# is the declaration of intent, and a test holds the declared kind and the declared
+# capabilities to each other, so neither can drift.
+
+#: Every manifest declares one. `primary`: computes signals, has a system model, ships a page.
+#: `reference`: data other pipelines measure against; no signals, model or page of its own.
+KINDS = ("primary", "reference")
+
+
+def kind(pipeline: str) -> str:
+    """The declared kind. Missing or unknown raises: a guess here picks a loop's population."""
+    k = load(pipeline).get("kind")
+    if k not in KINDS:
+        raise KeyError(f"{pipeline}: manifest declares kind={k!r}; expected one of {KINDS}")
+    return k
+
+
+def signal_pipelines() -> tuple[str, ...]:
+    """Pipelines that store signals: those declaring a `compute_module`, in pipeline order."""
+    return tuple(p for p in PIPELINE_IDS if load(p).get("compute_module"))
+
+
+def model_pipelines() -> tuple[str, ...]:
+    """Pipelines with a system model: those declaring `paths.system_model`, in pipeline order."""
+    return tuple(p for p in PIPELINE_IDS if "system_model" in load(p).get("paths", {}))
+
+
+def depends_on(pipeline: str) -> tuple[str, ...]:
+    """The reference pipelines whose CSV this pipeline's signals read (signals/README §1f)."""
+    return tuple(load(pipeline).get("depends_on", []))
+
+
+def dependents(reference: str) -> tuple[str, ...]:
+    """Every pipeline that declares `depends_on: [reference]`, in pipeline order.
+
+    Read off the dependents' manifests, never listed on the reference's: the edge is declared
+    once, by the pipeline that reads the data, so adding NBFC ↔ NAS touches NBFC's file only.
+    """
+    return tuple(p for p in PIPELINE_IDS if reference in depends_on(p))
 
 
 def subst(args, vars_):

@@ -997,8 +997,8 @@ confirms the ~1 point miss.
 ### 24.4 Order of the gates
 
 A 1f signal reads the reference CSV, so the credit pipeline's manifest declares
-`depends_on: ["mospi"]`. **Neither `depends_on` nor dependency ordering exists in `core/gate.py`
-yet.** Both are phase 1 work with their own tests. Once built:
+`depends_on: ["mospi"]`. Both `depends_on` and dependency ordering exist (phase 1, 2026-09-28,
+tested in `test_mospi.py` / `test_manifest.py`); SIBC declares the edge in phase 3. With it:
 - the MoSPI gate ends by re-running Check 2f for every pipeline that depends on it, so a revised
   IIP month shows up as SIBC drift the same day and SIBC is re-appended, every period;
 - the SIBC gate checks that MoSPI's data is current: a MoSPI period past its expected release date

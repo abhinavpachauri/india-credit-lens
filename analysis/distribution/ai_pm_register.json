@@ -530,6 +530,13 @@
           "date": "2026-09-26",
           "how_measured": "Known-bad: the latest sections.json with every published_yoy emptied (checked = 0), and with a printed rate on a code we never read. Both returned exit 1 after the fix; before it, the first printed ✓ over 0 values. Known-good: the live store, all 90 comparable values within 1e-4 pp.",
           "source": "analysis/pipelines/nbfc/validate_published_yoy.py + analysis/tests/test_nbfc_ingestion.py"
+        },
+        {
+          "metric": "catch rate + false-rejection rate — MoSPI stage 1c (our YoY from the level vs MoSPI's printed growth)",
+          "value": "catch 43/43 IIP (one-month shift) + 18/18 NAS (9 codes × {one-quarter shift, current/constant swap}) + CPI (index one month late); false rejections 0/1,472 compared values",
+          "date": "2026-09-28",
+          "how_measured": "By enumeration, not sampling. Known-good control: the committed 2026-09-28 releases (IIP 43 series, NAS 10), every value with a printed rate and a level a year back, tolerance derived per row from the printed decimals (not a constant). Known-bad control: for EACH IIP series in turn, its index shifted one month later (a wrong-period join), every other series untouched; the stage must fail for every one. Extended the same day after the population reviewer found the catch rate was IIP-only: every NAS code with a printed rate, its constant-price level one quarter late, and separately its current and constant prices swapped; the stage must fail for every one. Removal (not only shift) controls added after the absence reviewer: a missing level fails as no_level, never as a first-year absence.",
+          "source": "analysis/pipelines/mospi/validate_published_growth.py + analysis/tests/test_mospi.py (test_known_good_control_passes_every_value, test_known_bad_control_a_level_one_month_off_is_caught), test_known_bad_control_nas_is_caught_too, test_known_bad_control_cpi_is_caught"
         }
       ],
       "observations": [

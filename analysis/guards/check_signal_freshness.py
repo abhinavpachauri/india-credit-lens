@@ -133,9 +133,13 @@ def _declared_periods() -> dict[str, set]:
     period set in the database: the exact circularity this function exists to remove, re-opened
     by the next pipeline. A reviewer found it cold. A pipeline that declares a timeline which is
     missing, or no `period_key`, now fails the check instead of silently dropping out of it.
+
+    The pipelines are those that STORE signals (`manifest.signal_pipelines()`). A reference
+    pipeline keeps a timeline but has nothing in the store to hold against it; its data reaches
+    the store only through a dependent's signals, which this check covers as that dependent's.
     """
     out: dict[str, set] = {}
-    for pl in manifest.discover_pipeline_ids():
+    for pl in manifest.signal_pipelines():
         key = manifest.load(pl).get("period_key")
         if not key:
             raise SystemExit(f"✗ {pl}: manifest declares no period_key — freshness cannot tell "
@@ -257,11 +261,35 @@ def check(pipeline_filter=None, quiet=False) -> int:
 
 def main() -> int:
     ap = argparse.ArgumentParser(description="Verify signals.db matches a fresh recompute from source CSVs.")
-    ap.add_argument("--pipeline", choices=manifest.PIPELINE_IDS, default=None,
+    ap.add_argument("--pipeline", choices=manifest.signal_pipelines(), default=None,
                     help="Limit the check to one pipeline (default: all present in DB).")
+    ap.add_argument("--dependents-of", metavar="REFERENCE", choices=manifest.PIPELINE_IDS,
+                    help="Check every pipeline whose manifest declares depends_on: [REFERENCE].")
     ap.add_argument("--quiet", action="store_true")
     args = ap.parse_args()
+    if args.dependents_of:
+        return check_dependents(args.dependents_of, args.quiet)
     return check(args.pipeline, args.quiet)
+
+
+def check_dependents(reference: str, quiet: bool = False) -> int:
+    """Freshness of every pipeline that reads `reference`'s CSV (a reference gate's stage 2f).
+
+    A revised IIP month changes a SIBC 1f value without SIBC being re-ingested. Running this at the
+    end of the MoSPI gate makes that drift show up the same day, as SIBC's drift, with the fix the
+    check already prints (re-append every period). No dependents is a real state (before phase 3 no
+    pipeline declares one), and the line says so rather than printing a bare pass.
+    """
+    deps = manifest.dependents(reference)
+    if not deps:
+        print(f"  ✓ 0 dependent pipelines declare depends_on: [{reference}] — nothing reads its CSV yet")
+        return 0
+    worst = 0
+    for dep in deps:
+        worst = max(worst, check(dep, quiet))
+    if worst == 0:
+        print(f"  ✓ {len(deps)} dependent pipeline(s) fresh: {', '.join(deps)}")
+    return worst
 
 
 if __name__ == "__main__":

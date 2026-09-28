@@ -74,6 +74,7 @@ Use CLI tools for all external service interactions — they are the most contex
 |---|---|
 | `python3 analysis/core/gate.py --pipeline sibc` | SIBC gate — Stages 0–6 (data integrity + signal + model validation) |
 | `python3 analysis/core/gate.py --pipeline atm_pos --xlsx {file}` | ATM/POS gate — Stages 0–3 + L1 signal append + build |
+| `python3 analysis/core/gate.py --pipeline mospi [--offline]` | MoSPI gate (reference) — fetch + save releases, labels, consolidate, calendar, printed growth. CPI workbook fetched automatically; each month's press release first via `analysis/pipelines/mospi/fetch.py --cpi-pdf {file}` |
 | `python3 analysis/pipelines/sibc/promote_annotations.py` | Stage 7: verified copy annotations_merged.ts → rbi_sibc.ts — never `cp` or manual paste |
 | `python3 analysis/pipelines/sibc/detect_format.py` | Stage 0: flag format changes before extraction (SIBC) |
 | ~~`python3 analysis/legacy/source_claims.py`~~ | **Legacy** — v2 claim sourcing; superseded by `validate_system_model.py` (sourcing built in). Detached from gate. |

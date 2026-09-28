@@ -439,7 +439,7 @@ def check_composition(model, profile, pipeline, result):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("model_path", nargs="?", default=None)
-    ap.add_argument("--pipeline", required=True, choices=manifest.PIPELINE_IDS)
+    ap.add_argument("--pipeline", required=True, choices=manifest.model_pipelines())
     args = ap.parse_args()
 
     cfg = gs.pipeline_cfg(args.pipeline)

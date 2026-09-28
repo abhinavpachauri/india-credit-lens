@@ -55,16 +55,19 @@ class _PipelineConfigs(Mapping):
     and the Mapping protocol is what lets the hardcoding go without rewriting them. The
     entries are resolved lazily from each manifest, so a pipeline appears here the moment it
     declares itself — which is the whole point of the manifest being the source of truth.
+
+    Its population is the pipelines with a system model, not every pipeline: a reference
+    pipeline (MoSPI) has none, and every cross script walks this mapping to read models.
     """
 
     def __iter__(self):
-        return iter(manifest.PIPELINE_IDS)
+        return iter(manifest.model_pipelines())
 
     def __len__(self):
-        return len(manifest.PIPELINE_IDS)
+        return len(manifest.model_pipelines())
 
     def __getitem__(self, pipeline):
-        if pipeline not in manifest.PIPELINE_IDS:
+        if pipeline not in manifest.model_pipelines():
             raise KeyError(pipeline)
         return pipeline_cfg(pipeline)
 
@@ -592,7 +595,7 @@ def merge_model(pipeline, cfg, profile, nodes, edges, new_entities):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--pipeline", required=True, choices=manifest.PIPELINE_IDS)
+    ap.add_argument("--pipeline", required=True, choices=manifest.model_pipelines())
     ap.add_argument("--check", action="store_true",
                     help="Do not write; exit 1 if the on-disk skeleton differs from a fresh emit.")
     ap.add_argument("--skeleton-only", action="store_true",

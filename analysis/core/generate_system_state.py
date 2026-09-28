@@ -350,7 +350,7 @@ def compute(model, sig_dir, weights=None):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--pipeline", required=True, choices=manifest.PIPELINE_IDS)
+    ap.add_argument("--pipeline", required=True, choices=manifest.model_pipelines())
     ap.add_argument("--period", required=True)
     args = ap.parse_args()
 

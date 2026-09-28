@@ -639,6 +639,158 @@
       },
       "writes": {}
     },
+    "pipelines/mospi/consolidate": {
+      "doc_claims": [],
+      "imports": [
+        "core/manifest",
+        "pipelines/mospi/releases"
+      ],
+      "invokes": [],
+      "path": "analysis/pipelines/mospi/consolidate.py",
+      "reads": {},
+      "writes": {}
+    },
+    "pipelines/mospi/cpi_dashboard": {
+      "doc_claims": [],
+      "imports": [
+        "pipelines/mospi/releases"
+      ],
+      "invokes": [],
+      "path": "analysis/pipelines/mospi/cpi_dashboard.py",
+      "reads": {},
+      "writes": {}
+    },
+    "pipelines/mospi/cpi_release": {
+      "doc_claims": [],
+      "imports": [
+        "pipelines/mospi/releases"
+      ],
+      "invokes": [],
+      "path": "analysis/pipelines/mospi/cpi_release.py",
+      "reads": {},
+      "writes": {}
+    },
+    "pipelines/mospi/detect_format": {
+      "doc_claims": [],
+      "imports": [
+        "pipelines/mospi/consolidate",
+        "pipelines/mospi/releases"
+      ],
+      "invokes": [],
+      "path": "analysis/pipelines/mospi/detect_format.py",
+      "reads": {},
+      "writes": {}
+    },
+    "pipelines/mospi/fetch": {
+      "doc_claims": [],
+      "imports": [
+        "pipelines/mospi/cpi_dashboard",
+        "pipelines/mospi/cpi_release",
+        "pipelines/mospi/mospi_api",
+        "pipelines/mospi/releases"
+      ],
+      "invokes": [],
+      "path": "analysis/pipelines/mospi/fetch.py",
+      "reads": {},
+      "writes": {}
+    },
+    "pipelines/mospi/mospi_api": {
+      "doc_claims": [],
+      "imports": [],
+      "invokes": [],
+      "path": "analysis/pipelines/mospi/mospi_api.py",
+      "reads": {},
+      "writes": {}
+    },
+    "pipelines/mospi/releases": {
+      "doc_claims": [],
+      "imports": [
+        "core/manifest"
+      ],
+      "invokes": [],
+      "path": "analysis/pipelines/mospi/releases.py",
+      "reads": {},
+      "writes": {}
+    },
+    "pipelines/mospi/validate_csv": {
+      "doc_claims": [],
+      "imports": [
+        "core/manifest",
+        "pipelines/mospi/consolidate",
+        "pipelines/mospi/releases"
+      ],
+      "invokes": [],
+      "path": "analysis/pipelines/mospi/validate_csv.py",
+      "reads": {},
+      "writes": {}
+    },
+    "pipelines/mospi/validate_published_growth": {
+      "doc_claims": [],
+      "imports": [
+        "core/manifest",
+        "pipelines/mospi/consolidate",
+        "pipelines/mospi/releases",
+        "pipelines/mospi/validate_csv"
+      ],
+      "invokes": [],
+      "path": "analysis/pipelines/mospi/validate_published_growth.py",
+      "reads": {},
+      "writes": {}
+    },
+    "pipelines/nbfc/consolidate_nbfc": {
+      "doc_claims": [],
+      "imports": [
+        "core/manifest"
+      ],
+      "invokes": [],
+      "path": "analysis/pipelines/nbfc/consolidate_nbfc.py",
+      "reads": {
+        "*/sections.json": "low"
+      },
+      "writes": {
+        "timeline.json": "high"
+      }
+    },
+    "pipelines/nbfc/cuts": {
+      "doc_claims": [],
+      "imports": [],
+      "invokes": [],
+      "path": "analysis/pipelines/nbfc/cuts.py",
+      "reads": {},
+      "writes": {}
+    },
+    "pipelines/nbfc/detect_format": {
+      "doc_claims": [],
+      "imports": [],
+      "invokes": [],
+      "path": "analysis/pipelines/nbfc/detect_format.py",
+      "reads": {
+        "sections.json": "low"
+      },
+      "writes": {}
+    },
+    "pipelines/nbfc/extract_nbfc": {
+      "doc_claims": [],
+      "imports": [],
+      "invokes": [],
+      "path": "analysis/pipelines/nbfc/extract_nbfc.py",
+      "reads": {},
+      "writes": {
+        "sections.json": "high"
+      }
+    },
+    "pipelines/nbfc/validate_published_yoy": {
+      "doc_claims": [],
+      "imports": [
+        "core/manifest"
+      ],
+      "invokes": [],
+      "path": "analysis/pipelines/nbfc/validate_published_yoy.py",
+      "reads": {
+        "*/sections.json": "low"
+      },
+      "writes": {}
+    },
     "pipelines/sibc/detect_format": {
       "doc_claims": [],
       "imports": [],
@@ -722,7 +874,8 @@
     "pipelines/sibc/update_web_data": {
       "doc_claims": [],
       "imports": [
-        "core/manifest"
+        "core/manifest",
+        "pipelines/mospi/consolidate"
       ],
       "invokes": [],
       "path": "analysis/pipelines/sibc/update_web_data.py",

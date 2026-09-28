@@ -43,8 +43,8 @@ def load_entities():
     """All tagged entities across pipelines, keyed by urn."""
     ents = []
     for pipe, cfg in gs.PIPELINES.items():
-        if not cfg["model"].exists():
-            continue
+        if not cfg["model"].exists():   # declared and missing is broken, not exempt
+            raise SystemExit(f"✗ {pipe}: declares a system model at {cfg['model']}, which is missing")
         model = gs.load_json(cfg["model"])
         for n in model["nodes"]:
             if n.get("tier") == "entity" and (n.get("concept_tags") or {}).get("product"):

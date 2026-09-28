@@ -2,6 +2,7 @@
   "id": "atm_pos",
   "name": "RBI ATM/POS — Payments",
   "order": 2,
+  "kind": "primary",
   "compute_module": "atm_pos",
   "cuts_module": "pipelines.atm_pos.generate_atm_pos_insights",
   "on_fail": "stop",

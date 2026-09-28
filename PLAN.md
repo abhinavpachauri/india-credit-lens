@@ -54,8 +54,11 @@ skills = procedure, subagents = independent review, hooks + `reconcile.py` = enf
      a closed list of absence reasons in code; overdue fails. Layouts in §21 need a final look before code.
    - **Found and fixed on the way (2026-09-26):** six pinned table rows showed the sum of the named
      parts, not the parent (NBFCs ₹7.38L vs ₹21.28L Cr); NBFC stage 1c passed on zero checks.
-   - **Next phases:** 1 reference-kind plumbing (six all-pipeline populations, `depends_on`,
-     always-fetch mode) + MoSPI ingest (fetch contract, saved releases, consolidate, gate) → 2 concordance
+   - **Phase 1 ✅ 2026-09-28:** reference-kind plumbing (`kind`, `signal_pipelines`/`model_pipelines`,
+     `depends_on` + `currency_stage`, `--offline`) and the MoSPI ingest + gate; 11,632 rows, 1c 1,464
+     values within rounding; CPI from two publications (press-release PDFs by hand, the dashboard
+     workbook fetched automatically). Gate green, nothing overdue. As-built notes: signals/README "MoSPI".
+   - **Next phases:** 2 concordance
      file + `validate_concordance` → 3 the two 1f methods + registry entries + SIBC `depends_on` →
      4 table columns (stamp_table + `CutTable`) → write `onboard-source` as we go.
    - **Display:** see DASHBOARD_SPEC §21.

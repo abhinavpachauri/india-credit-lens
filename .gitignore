@@ -46,3 +46,7 @@ trading_system.db
 
 # Private local archive (never committed; the repo is public)
 .local/
+
+# MoSPI saved releases are the only record of what MoSPI published on a day (revisions overwrite
+# in place), so the raw workbook is committed like the PDFs and API responses beside it.
+!analysis/mospi/releases/**/*.xlsx

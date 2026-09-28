@@ -49,8 +49,11 @@ def load_indexes():
     urn_pipeline, edge_ids = {}, {}          # entity urn → pipeline; pipeline → {edge ids}
     models = {}
     for pipe, cfg in gs.PIPELINES.items():
+        # A pipeline that declares a model and has none is broken, not exempt. The `continue`
+        # this replaced dropped its URNs and edges from every cross-edge check below, so a
+        # deleted model read as a pipeline with nothing to validate.
         if not cfg["model"].exists():
-            continue
+            raise SystemExit(f"✗ {pipe}: declares a system model at {cfg['model']}, which is missing")
         m = gs.load_json(cfg["model"])
         models[pipe] = m
         for n in m["nodes"]:

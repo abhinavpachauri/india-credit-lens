@@ -232,7 +232,10 @@ def main():
     cross_edges = gs.load_json(comp_path).get("cross_edges", [])
     eco_path = CROSS / "ecosystem_model.json"
     eco = gs.load_json(eco_path) if eco_path.exists() else {}
-    models = {p: gs.load_json(cfg["model"]) for p, cfg in gs.PIPELINES.items() if cfg["model"].exists()}
+    missing = [p for p, cfg in gs.PIPELINES.items() if not cfg["model"].exists()]
+    if missing:                        # declared and missing is broken, not exempt
+        raise SystemExit(f"✗ declared system model missing for: {', '.join(missing)}")
+    models = {p: gs.load_json(cfg["model"]) for p, cfg in gs.PIPELINES.items()}
     sig_idx = entity_signal_index(models)
 
     # ── cross-edge states + cross-edge opportunities (v1.0, unchanged) ──────────

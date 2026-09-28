@@ -91,7 +91,7 @@ Measured 2026-09-16 against a third pipeline, then tested by building it (NBFC, 
 | | how it generalises |
 |---|---|
 | the gate | manifest-driven; a pipeline is a `pipeline.json`, not a script |
-| pipeline ids | `manifest.discover_pipeline_ids()`, ordered by a declared `order` (both pipelines write the shared feed, so order matters); a test bans the literal pair. `pipelines_with_stage()` gives checks the population they want |
+| pipeline ids | `manifest.discover_pipeline_ids()`, ordered by a declared `order` (both pipelines write the shared feed, so order matters; a pipeline comes after what it `depends_on`); a test bans the literal pair. `pipelines_with_stage()`, `signal_pipelines()` and `model_pipelines()` give checks the population they want |
 | compute | a module is a **shape**, not a pipeline. `csv_sector.py` = one measure over a code hierarchy (SIBC, NBFC); `atm_pos.py` = many measures over shared entities. Optional columns are declared in `schema` and verified on load |
 | L1 cut tables | discovered from the registry (40+ cuts, none listed) |
 | the state band | derived from the cuts that have a mix state |
@@ -107,7 +107,7 @@ Measured 2026-09-16 against a third pipeline, then tested by building it (NBFC, 
 | **card generator** | per pipeline: SIBC ~750 LOC, payments ~2,100. NBFC deliberately has none. **Open fork:** build a generic card path, or decide cards stay per-pipeline and the table + band is the generic L1 surface (which NBFC shows is viable). Decide from the post-NBFC count in `PLAN.md` |
 | **`MOVEMENT_CUTS`** | still a hand-written table per pipeline for movement *cards* (the band no longer reads it) |
 | **SIBC timeline registration** | by hand; the other two pipelines' consolidate step registers the period |
-| **a new ingestion type** | every source so far is a downloaded XLSX. An API pull (MoSPI) or a PDF table is the next capability to pay for once |
+| **a new ingestion type** | paid once for MoSPI (2026-09-28): an API pull under a declared fetch contract, saved releases, and a PDF reader for CPI. A reference pipeline (`kind: "reference"`) has a gate and a CSV but no signals, model or page; loops choose pipelines by capability (`signal_pipelines()`, `model_pipelines()`), and `depends_on` makes a dependent's gate check the reference is current (signals/README, "MoSPI") |
 
 ---
 

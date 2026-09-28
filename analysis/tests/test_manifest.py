@@ -106,7 +106,10 @@ def test_ingestion_stages_declare_nothing_derived():
 # six-file edit. This is the test that keeps it read.
 
 LIVE_DIRS = ("core", "signals", "pipelines", "cross", "guards", "distribution")
-CSV_LITERAL = re.compile(r"[\"'][^\"'\n]*(?:rbi_sibc|atm_pos)_consolidated\.csv[\"']")
+# Built from every manifest's declared CSV, not typed: it named two of them, so NBFC's
+# (`rbi_nbfc_consolidated.csv`) could be hardcoded anywhere without this test noticing.
+CSV_LITERAL = re.compile(r"[\"'][^\"'\n]*(?:%s)[\"']" % "|".join(
+    re.escape(manifest.consolidated_csv(p).name) for p in manifest.PIPELINE_IDS))
 
 
 def _live_modules():
@@ -258,10 +261,69 @@ def test_no_live_module_hardcodes_the_pipeline_pair():
 # branching on its id. `csv_sector` is "one measure over a code hierarchy" — not "SIBC" —
 # which is why a third source of that shape needs no copied module.
 
-@pytest.mark.parametrize("pipeline", manifest.PIPELINE_IDS)
+@pytest.mark.parametrize("pipeline", manifest.signal_pipelines())
 def test_every_pipeline_declares_a_resolvable_compute_module(pipeline):
     from signals.compute import engine
     assert engine.module_for(pipeline) is not None
+
+
+# ── Kinds: the declaration and the capabilities are held to each other ────────
+# Loops select pipelines by capability (`signal_pipelines`, `model_pipelines`), and `kind` is
+# the statement of intent. If they could disagree, a primary pipeline that lost its
+# compute_module would silently leave every signal check, which is the failure these exist for.
+
+@pytest.mark.parametrize("pipeline", manifest.PIPELINE_IDS)
+def test_every_pipeline_declares_a_known_kind(pipeline):
+    assert manifest.kind(pipeline) in manifest.KINDS
+
+
+@pytest.mark.parametrize("pipeline", manifest.PIPELINE_IDS)
+def test_kind_and_capabilities_agree(pipeline):
+    man = manifest.load(pipeline)
+    stores_signals = bool(man.get("compute_module"))
+    has_model = "system_model" in man["paths"]
+    if manifest.kind(pipeline) == "primary":
+        assert stores_signals and has_model, f"{pipeline}: primary, but no compute_module or model"
+        assert man.get("period_key"), f"{pipeline}: primary, but no period_key for freshness"
+    else:
+        assert not stores_signals and not has_model, (
+            f"{pipeline}: reference data declares signals or a model. It would join every "
+            f"signal/model check; make it primary, or drop the declaration.")
+        assert not man.get("depends_on"), f"{pipeline}: a reference pipeline depends on nothing"
+
+
+@pytest.mark.parametrize("pipeline", manifest.PIPELINE_IDS)
+def test_depends_on_names_existing_reference_pipelines(pipeline):
+    for ref in manifest.depends_on(pipeline):
+        assert ref in manifest.PIPELINE_IDS, f"{pipeline} depends on unknown pipeline {ref!r}"
+        assert manifest.kind(ref) == "reference", f"{pipeline} depends on {ref}, not reference data"
+
+
+def test_a_pipeline_comes_after_everything_it_depends_on():
+    """Discovery order is replay order (check_derived_fresh), so a reference's CSV must be rebuilt
+    before any dependent recomputes from it. Declared `order` must say so."""
+    ids = manifest.PIPELINE_IDS
+    for p in ids:
+        for ref in manifest.depends_on(p):
+            assert ids.index(ref) < ids.index(p), f"{p} is ordered before {ref}, which it reads"
+
+
+def test_an_undeclared_kind_raises(monkeypatch):
+    """A missing kind must not default to either answer: each default picks a population."""
+    monkeypatch.setattr(manifest, "load", lambda p: {"id": p})
+    with pytest.raises(KeyError, match="kind"):
+        manifest.kind("whatever")
+    monkeypatch.setattr(manifest, "load", lambda p: {"id": p, "kind": "credit"})
+    with pytest.raises(KeyError, match="credit"):
+        manifest.kind("whatever")
+
+
+def test_dependents_are_read_off_the_dependent_manifests(monkeypatch):
+    fake = {"a": {"depends_on": ["ref"]}, "b": {}, "ref": {}, "c": {"depends_on": ["ref"]}}
+    monkeypatch.setattr(manifest, "PIPELINE_IDS", ("a", "b", "ref", "c"))
+    monkeypatch.setattr(manifest, "load", lambda p: fake[p])
+    assert manifest.dependents("ref") == ("a", "c")
+    assert manifest.dependents("a") == ()
 
 
 def test_an_undeclared_compute_module_raises_rather_than_computing_nothing(monkeypatch):

@@ -769,6 +769,8 @@ and it must appear wherever a cross-source ratio against bank credit is publishe
 > revised the same day after the population, absence and plausibility reviewers. Plan: `PLAN.md`
 > Next #3. A **reference pipeline**: it has a manifest, a gate and saved releases, but no page, no
 > cards and (in v1) no signals of its own. Its only consumer is 1f.
+> **Phase 1 built 2026-09-28** (ingest + gate + reference-kind plumbing); what the build changed
+> from this spec is listed at the end of the section, under "as built".
 
 ### the four datasets, as the API actually serves them
 
@@ -832,7 +834,7 @@ It decides two things:
 
 ### the consolidated CSV (the single source of truth)
 
-`analysis/mospi/mospi_consolidated.csv` (planned, not yet built): one row per `(dataset, base_year, period, code, measure)`.
+`analysis/mospi/mospi_consolidated.csv`: one row per `(dataset, base_year, period, code, measure)`.
 Not in `web/public/`, because the browser never reads it (compute once, ship compact).
 - `period` = month-end for monthly data, quarter-end for NAS (Q1 FY27 → 2026-06-30), which is
   the same convention as SIBC, so the join is on the date.
@@ -859,7 +861,7 @@ either:
 printed rates are missing beyond a declared threshold. Its NBFC counterpart printed ✓ on zero
 checks, and it is fixed with the same rule.
 
-### the manifest (`pipelines/mospi/pipeline.json`, planned)
+### the manifest (`pipelines/mospi/pipeline.json`)
 
 A new ingestion type (API pull, not XLSX) on the same gate runner. `kind: "reference"`, and
 `datasets` declares each series (endpoint, `base_year`, natural key, value fields, filters, levels
@@ -880,11 +882,14 @@ skeleton, no system model in v1.
 
 The summary line prints the date of the newest release, so a green run on old data says so.
 
-### what the reference kind changes in existing code
+### what the reference kind changes in existing code (done, phase 1)
 
 Found by the population reviewer: these loop over **every** pipeline and would break or go quiet
-on one with no compute module, no system model and no signals. Each moves to a derived population
-(`manifest` `kind`, or `pipelines_with_stage`), in phase 1, before MoSPI's manifest lands:
+on one with no compute module, no system model and no signals. Each now names the capability it
+needs: `manifest.signal_pipelines()` (declares a `compute_module`) or `model_pipelines()` (declares
+`paths.system_model`). Every manifest declares `kind` (`primary` | `reference`), and a test holds
+kind and capabilities to each other, so a primary pipeline that lost its compute_module fails there
+instead of silently leaving every signal check. The list, as it was found:
 - `guards/check_signal_freshness.py` and `tests/test_freshness_population.py`: freshness runs over pipelines that store signals;
 - `tests/test_manifest.py`: the `module_for` test is limited to pipelines with a compute module, and `CSV_LITERAL` is built from every manifest's CSV path;
 - `guards/check_derived_fresh.py`: `FALLBACK_PERIOD` is hand-written for two pipelines; derive it or retire it;
@@ -894,6 +899,51 @@ on one with no compute module, no system model and no signals. Each moves to a d
   `continue` on a missing model becomes an error;
 - `hook_validate.py`: reads `data_dir` for every pipeline;
 - `core/gate.py`: `depends_on`, and the always-fetch mode, are new features with their own tests.
+
+### as built (phase 1, 2026-09-28): where the code departs from the text above
+
+- **No `timeline.json`.** Its validator is credit-shaped (`total_credit_lcr`), and what MoSPI needs
+  is a log of releases, not of credit periods: `analysis/mospi/release_log.json` (derived by
+  consolidate, so the pre-commit guard keeps it fresh).
+- **`order: 0`.** A pipeline must come after everything it depends on (test_manifest), and every
+  credit pipeline may depend on MoSPI; `check_derived_fresh` replays MoSPI's consolidate first.
+- **Page size 200** (300 → HTTP 400, all three endpoints). **TLS**: the server needs legacy
+  renegotiation, which OpenSSL 3 refuses; `mospi_api` enables it for this host only.
+- **Unchanged releases are not re-saved.** A release is what MoSPI said, not when we looked; an
+  unchanged fetch prints "unchanged since …" and writes nothing.
+- **CPI is one dataset fed by two MoSPI publications** (`sources`), both `increment`s:
+  - the **press release PDF**, read by hand (`fetch.py --cpi-pdf`): the newest month (P), the
+    previous (F) and MoSPI's printed inflation. Its layout changed three times in eight releases
+    (one line; numbers under the label; a wrapped label; month headers on two lines in reverse
+    column order), so the reader orders months by column and raises on anything else;
+  - the **"download data" workbook** on MoSPI's CPI page, fetched automatically every gate run
+    (the page's own list + download endpoints): the base-2024 index back to Jan 2025, which gives
+    CPI a year back, so 1c checks its printed inflation now rather than from Jan 2027. It lags the
+    press release and states no base and no P/F flag.
+  - Releases merge in **publication order** (each records `published`), never fetch order, so the
+    lagging workbook cannot put a provisional value back over a final one. A revision beyond
+    `max_revision_pct` (1%) fails, which is what holds the workbook's unstated base to account.
+  The API datasets are `snapshot`s.
+- **Release calendar grace: 5 days** past the declared lag (MoSPI moves releases off weekends).
+- **1c population** is every code in `labels.json`, not yet the concordance's (it does not exist
+  until phase 2): the stronger check meanwhile. Printed pairings are declared per dataset
+  (`printed_growth`); **NAS PFCE has no printed rate** (MoSPI prints quarterly growth only for GVA
+  and GDP, indicators 1–34 enumerated) and is declared `no_printed_rate_codes`. CPI is checked for every
+  month from Jan 2026, against the workbook's year-back index.
+- **NAS growth** is two measures, `growth_published_constant` and `growth_published_current`.
+- **Measured:** 1c catches a one-month shift on 43/43 IIP series, 18/18 NAS cases (a quarter
+  late, current/constant swapped) and the CPI index a month late, with 0/1,472 false rejections
+  (`ai_pm_register.json`, topic 1).
+- **After the three reviewers (same day):** a declared value field missing from a row fails
+  consolidate (a renamed field used to blank a whole measure); 1b holds every declared
+  (code, measure) series to the dataset's latest period; 1c fails a missing or late-starting level
+  (`no_level`) instead of filing it as a first-year absence, and judges each printed pairing on its
+  own; every row carries its own `base_year` (CPI's from the page its table is on), so 1b's base
+  check is no longer the manifest agreeing with itself; NAS rows verify `unit`; the CPI reader
+  checks index vs inflation by magnitude, not line order.
+- **`depends_on`** in `core/gate.py`: a dependent's gate first runs each reference's declared
+  `currency_stage` (MoSPI: 1b, the calendar). The MoSPI gate's 2f runs
+  `check_signal_freshness --dependents-of mospi` (zero dependents until phase 3, and it says so).
 
 ### what is NOT built in v1, and why
 - **MoSPI's own signals** (IIP YoY by group, etc.): nothing reads them. They would be derived data

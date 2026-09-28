@@ -1,0 +1,204 @@
+{
+  "id": "mospi",
+  "name": "MoSPI: IIP, WPI, NAS, CPI (reference)",
+  "order": 0,
+  "kind": "reference",
+  "note_why": "A reference pipeline (signals/README, MoSPI; COMPOSITION_SPEC §24): saved releases, a consolidated CSV and a gate, but no compute module, no skeleton, no system model and no signals of its own. Its only consumer is the 1f family on the credit pipelines that declare depends_on: [\"mospi\"]. order 0 because a pipeline's order must come after everything it depends on (test_manifest), and every credit pipeline may depend on this one.",
+  "paths": {
+    "data_dir": "analysis/mospi",
+    "consolidated_csv": "analysis/mospi/mospi_consolidated.csv",
+    "release_log": "analysis/mospi/release_log.json",
+    "releases": "analysis/mospi/releases",
+    "labels": "analysis/pipelines/mospi/labels.json"
+  },
+  "api": {
+    "base_url": "https://api.mospi.gov.in/api/",
+    "page_size": 200,
+    "workers": 6,
+    "note_why": "page_size: 200 is the largest the API accepts (300 → HTTP 400, probed 2026-09-28 on all three endpoints). The server needs TLS legacy renegotiation, which OpenSSL 3 refuses by default; mospi_api enables it for this host only."
+  },
+  "datasets": {
+    "iip": {
+      "source": "api",
+      "release_scope": "snapshot",
+      "endpoint": "iip/getIIPMonthly",
+      "cadence": "monthly",
+      "base_year": "2022-23",
+      "requests": [
+        {"filters": [{"param": "base_year", "value": "2022-23", "field": "base_year"}]}
+      ],
+      "period": {"year": "year", "month": "month"},
+      "label_fields": ["type", "category", "sub_category"],
+      "measures": {"index": "index", "growth_published": "growth_rate"},
+      "printed_growth": [
+        {"printed": "growth_published", "computed_from": "index", "lag_periods": 12, "printed_decimals": 1, "operand_decimals": 1}
+      ],
+      "expected_lag_days": 28,
+      "note_why": "Lag: July 2026 was released 28 Aug (MoSPI calendar: the 28th of M+1)."
+    },
+    "wpi": {
+      "source": "api",
+      "release_scope": "snapshot",
+      "endpoint": "wpi/getWpiRecords",
+      "cadence": "monthly",
+      "base_year": "2022-23",
+      "requests": [
+        {"filters": [{"param": "base_year", "value": "2022-23", "field": "base_year"}]}
+      ],
+      "period": {"year": "year", "month": "month"},
+      "label_fields": ["major_group", "group", "sub_group", "sub_sub_group"],
+      "drop_rows_where_set": ["item"],
+      "measures": {"index": "index_value"},
+      "printed_growth": [],
+      "note_printed_growth": "WPI prints no growth rate on the API: every WPI series is counted as no_printed_rate.",
+      "expected_lag_days": 14,
+      "note_why": "base_year=2022-23 is UNDOCUMENTED and load-bearing: without it the API serves the 2011-12 series with status 200. The 953 items (rows with `item` set, ~85% of the volume) are dropped at fetch because nothing reads them: a declared decision, not an accident. Lag: August 2026 was released 14 Sep."
+    },
+    "nas": {
+      "source": "api",
+      "release_scope": "snapshot",
+      "endpoint": "nas/getNASData",
+      "cadence": "quarterly",
+      "base_year": "2022-23",
+      "requests": [
+        {"filters": [{"param": "base_year", "value": "2022-23", "field": "base_year"},
+                     {"param": "indicator_code", "value": "1", "field": "indicator", "expect": "Gross Value Added"},
+                     {"param": "frequency_code", "value": "Quarterly", "field": "frequency"}],
+         "verify": [{"field": "unit", "expect": "₹ Crore"}]},
+        {"filters": [{"param": "base_year", "value": "2022-23", "field": "base_year"},
+                     {"param": "indicator_code", "value": "5", "field": "indicator", "expect": "Gross Domestic Product"},
+                     {"param": "frequency_code", "value": "Quarterly", "field": "frequency"}],
+         "verify": [{"field": "unit", "expect": "₹ Crore"}]},
+        {"filters": [{"param": "base_year", "value": "2022-23", "field": "base_year"},
+                     {"param": "indicator_code", "value": "10", "field": "indicator", "expect": "Private Final Consumption Expenditure"},
+                     {"param": "frequency_code", "value": "Quarterly", "field": "frequency"}],
+         "verify": [{"field": "unit", "expect": "₹ Crore"}]},
+        {"filters": [{"param": "base_year", "value": "2022-23", "field": "base_year"},
+                     {"param": "indicator_code", "value": "21", "field": "indicator", "expect": "GVA Growth Rate"},
+                     {"param": "frequency_code", "value": "Quarterly", "field": "frequency"}],
+         "verify": [{"field": "unit", "expect": "%"}]},
+        {"filters": [{"param": "base_year", "value": "2022-23", "field": "base_year"},
+                     {"param": "indicator_code", "value": "22", "field": "indicator", "expect": "GDP Growth Rate"},
+                     {"param": "frequency_code", "value": "Quarterly", "field": "frequency"}],
+         "verify": [{"field": "unit", "expect": "%"}]}
+      ],
+      "period": {"fiscal_year": "year", "quarter": "quarter"},
+      "label_fields": ["indicator", "industry"],
+      "measures_by_label": {
+        "GVA Growth Rate": {"growth_published_current": "current_price", "growth_published_constant": "constant_price"},
+        "GDP Growth Rate": {"growth_published_current": "current_price", "growth_published_constant": "constant_price"}
+      },
+      "measures": {"current_price": "current_price", "constant_price": "constant_price"},
+      "printed_growth": [
+        {"printed": "growth_published_constant", "computed_from": "constant_price", "lag_periods": 4, "printed_decimals": 1, "operand_decimals": 0},
+        {"printed": "growth_published_current", "computed_from": "current_price", "lag_periods": 4, "printed_decimals": 1, "operand_decimals": 0}
+      ],
+      "no_printed_rate_codes": ["nas:pfce"],
+      "note_no_printed_rate": "MoSPI prints quarterly growth only for GVA (indicator 21) and GDP (22); indicators 1-34 enumerated 2026-09-28. PFCE is counted as no_printed_rate.",
+      "expected_lag_days": 61,
+      "note_why": "frequency_code is honoured; `frequency` is silently ignored (282 rows, annual mixed in), which is why every filter is verified on the rows. Without base_year one response mixes both bases. The growth indicators (21, 22) carry the printed rate in the price columns. Lag: Q1 FY27 was released 29 Aug."
+    },
+    "cpi": {
+      "source": "release_files",
+      "release_scope": "increment",
+      "cadence": "monthly",
+      "base_year": "2024",
+      "label_fields": ["series"],
+      "measures": {"index": "index", "inflation_published": "inflation"},
+      "sources": {
+        "release_pdf": {
+          "measures": {"index": "index", "inflation_published": "inflation"},
+          "note_why": "The monthly press release, read by hand with `fetch.py --cpi-pdf`. The timely source: the newest month (P), the previous month (F), and MoSPI's printed inflation. Its URL is not predictable, so it is not fetched automatically."
+        },
+        "dashboard_xlsx": {
+          "measures": {"index": "index"},
+          "list_url": "https://www.mospi.gov.in/api/product/dashboard-export/exists/9",
+          "download_url": "https://www.mospi.gov.in/api/product/dashboard-export/download/{id}",
+          "note_why": "The 'download data' workbook on MoSPI's CPI page, fetched automatically. It holds the base-2024 index back to Jan 2025, which gives CPI a year back so 1c can check MoSPI's printed inflation against the index. It lags the press release (on 2026-09-28 it still ended in July, dated 12 Aug), states no P/F flag and no base."
+        }
+      },
+      "max_revision_pct": 1.0,
+      "note_max_revision": "A revision beyond 1% of the value fails. CPI revisions are ~0.01 index points (Jan 2026: 104.46 → 104.45); the workbook states no base, so a level jump between the two publications (a 2012-base series is ~200) must stop the run rather than warn.",
+      "status_field": "status",
+      "printed_growth": [
+        {"printed": "inflation_published", "computed_from": "index", "lag_periods": 12, "printed_decimals": 2, "operand_decimals": 2}
+      ],
+      "expected_lag_days": 12,
+      "note_why": "The API holds only the 2012 base, ending Dec 2025 (base_year=2024 → 'No Data Found', re-probed 2026-09-28); it is never used. CPI is one dataset fed by two MoSPI publications (`sources`). Their releases merge in PUBLICATION order (`published`), not fetch order, because the workbook lags: fetched after the August release, it would otherwise overwrite July's final value with the provisional one. Lag: July 2026 was released 12 Aug."
+    }
+  },
+  "currency_stage": "csv_integrity",
+  "note_currency_stage": "The stage a dependent's gate runs first (core/gate.py, depends_on): the release calendar, so no credit pipeline computes 1f against MoSPI data that is overdue.",
+  "grace_days": 5,
+  "note_grace": "Days past the declared lag before a missing period is overdue. MoSPI moves a release off a weekend (CPI for Aug 2026, nominally the 12th, came on the 15th), and releases land at 4 PM.",
+  "modules": {
+    "fetch": "pipelines/mospi/fetch.py",
+    "detect_format": "pipelines/mospi/detect_format.py",
+    "consolidate": "pipelines/mospi/consolidate.py",
+    "validate_csv": "pipelines/mospi/validate_csv.py",
+    "published_growth": "pipelines/mospi/validate_published_growth.py"
+  },
+  "gate": [
+    {
+      "id": "tests",
+      "label": "T.  unit tests (pytest)",
+      "builtin": "pytest"
+    },
+    {
+      "id": "fetch",
+      "label": "0.  fetch + save releases",
+      "pipeline": "fetch",
+      "skip_if": "offline",
+      "note": "releases"
+    },
+    {
+      "id": "format",
+      "label": "0.5 labels ↔ codes",
+      "pipeline": "detect_format",
+      "args": ["--check"],
+      "note": "labels"
+    },
+    {
+      "id": "consolidate",
+      "label": "0.7 consolidate → CSV + release log",
+      "pipeline": "consolidate",
+      "derived": [
+        "analysis/mospi/mospi_consolidated.csv",
+        "analysis/mospi/release_log.json"
+      ],
+      "note": "Wrote"
+    },
+    {
+      "id": "consolidate_check",
+      "label": "0.8 consolidated artifacts fresh",
+      "pipeline": "consolidate",
+      "args": ["--check"],
+      "note": "fresh"
+    },
+    {
+      "id": "csv_integrity",
+      "label": "1b. CSV integrity + release calendar",
+      "pipeline": "validate_csv",
+      "note": "series"
+    },
+    {
+      "id": "published_growth",
+      "label": "1c. growth vs MoSPI's printed rate",
+      "pipeline": "published_growth",
+      "note": "values checked"
+    },
+    {
+      "id": "dependents",
+      "label": "2f. freshness of every dependent pipeline",
+      "core": "dependents_fresh",
+      "note": "dependent"
+    },
+    {
+      "id": "reconcile",
+      "label": "5.  architecture reconcile",
+      "core": "reconcile",
+      "note": "drift"
+    }
+  ],
+  "printed_rate_missing_max": 0
+}

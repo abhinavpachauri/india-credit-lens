@@ -51,10 +51,12 @@ OUT = ANALYSIS / "architecture" / "graph.json"
 # Directories under analysis/ to scan for python sources. (`core`/`guards`/`cross`
 # are the §4 relocation targets — generic engines, freshness guards, cross-system pass.
 # `cross/` holds that pass's code; `cross_source/` holds the data it reads and writes.)
+# Pipeline directories are every one that declares a manifest, not a typed pair: the pair left
+# NBFC's and MoSPI's modules out of the graph without anything going red.
 SCAN_DIRS = [ANALYSIS, ANALYSIS / "signals", ANALYSIS / "cross_source",
              ANALYSIS / "newsletter", ANALYSIS / "signals" / "compute",
              ANALYSIS / "core", ANALYSIS / "guards", ANALYSIS / "cross",
-             ANALYSIS / "pipelines" / "sibc", ANALYSIS / "pipelines" / "atm_pos"]
+             *sorted(d for d in (ANALYSIS / "pipelines").iterdir() if (d / "pipeline.json").is_file())]
 
 # Tokens that mark a string literal as an artifact path worth tracking.
 PATH_TOKENS = ("web/public/data", "merged/", "rbi_sibc", "rbi_atm_pos",

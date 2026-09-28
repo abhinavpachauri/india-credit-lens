@@ -16,6 +16,14 @@ that "what the gate regenerates" is stated once.
 Usage:
     python3 analysis/core/gate.py --pipeline sibc --merged --skip-build
     python3 analysis/core/gate.py --pipeline atm_pos --period 2026-04-30
+    python3 analysis/core/gate.py --pipeline mospi --offline   # skip the network fetch
+
+Two features serve reference pipelines (MoSPI), and neither inspects a pipeline id:
+  * `skip_if: "offline"`: a reference pipeline's fetch runs on every gate run, because a release
+    not saved on the day is history lost. `--offline` is the one way to skip it, and says so.
+  * `depends_on`: a pipeline whose signals read another pipeline's CSV declares it. Its gate then
+    begins by running each reference's declared `currency_stage` (MoSPI: the release calendar),
+    so a dependent never computes against reference data that is overdue.
 """
 import argparse
 import json
@@ -109,6 +117,30 @@ BUILTINS = {"pytest": builtin_pytest, "web_build": builtin_web_build,
 
 # ── stage resolution + execution ────────────────────────────────────────────────
 
+def reference_currency(pipeline):
+    """[(label, cmd, cwd)] — each declared reference's currency stage, resolved in ITS manifest.
+
+    A reference declares which of its own stages says "my data is current" (`currency_stage`);
+    the dependent runs that stage as it stands, rather than restating the calendar here. A
+    reference that declares none, or names a stage it does not have, is a manifest error: a
+    dependency whose freshness nobody checks is exactly what `depends_on` exists to prevent.
+    """
+    out = []
+    for ref in manifest_mod.depends_on(pipeline):
+        ref_man = manifest_mod.load(ref)
+        sid = ref_man.get("currency_stage")
+        stage = next((s for s in ref_man["gate"] if s["id"] == sid), None)
+        if stage is None:
+            sys.exit(f"{pipeline} depends on {ref}, which declares no usable currency_stage "
+                     f"({sid!r})")
+        vars_ = {"$ID": ref, "$LATEST": "", "$PERIOD": "", "$XLSX": ""}
+        for key, rel in ref_man["paths"].items():
+            vars_["$" + key.upper()] = str(ROOT / rel)
+        cmd, cwd = resolve(stage, ref_man, vars_)
+        out.append((f"D.  {ref} data current (depends_on)", cmd, cwd))
+    return out
+
+
 def should_skip(stage, flags, vars_, failed, stop):
     if stop:                       # global on_fail:stop — an earlier stage failed
         return "skipped (upstream failure)"
@@ -136,6 +168,8 @@ def should_skip(stage, flags, vars_, failed, stop):
             path = subst([cond[len("missing_unless_merged:"):]], vars_)[0]
             if not (ROOT / path).exists():
                 return "skipped (file absent)"
+    if cond == "offline" and flags.get("offline"):
+        return "skipped (--offline)"
     for req in stage.get("requires", []):
         if req in failed:
             return f"skipped (requires {req})"
@@ -149,6 +183,8 @@ def main():
     ap.add_argument("--xlsx", help="Ingest a raw source file (runs the format/extract stages)")
     ap.add_argument("--merged", action="store_true")
     ap.add_argument("--skip-build", action="store_true")
+    ap.add_argument("--offline", action="store_true",
+                    help="skip stages marked skip_if: offline (a reference pipeline's fetch)")
     args = ap.parse_args()
 
     manifest = manifest_mod.load(args.pipeline)
@@ -170,7 +206,7 @@ def main():
         period, revalidate = args.period, bool(args.period)
 
     flags = {"merged": args.merged, "skip_build": args.skip_build, "revalidate": revalidate,
-             "ingesting": bool(args.xlsx)}
+             "ingesting": bool(args.xlsx), "offline": args.offline}
     # $LATEST = the most recent DB period — the live latest. The analytical layer (skeleton,
     #   system_state, opportunities, …) always runs for it, regardless of which period is being
     #   ingested/revalidated (a backfill of an OLDER period must not retarget S3 at itself).
@@ -189,6 +225,13 @@ def main():
 
     stop_on_fail = manifest.get("on_fail") == "stop"
     results, failed = [], set()
+    for label, cmd, cwd in reference_currency(args.pipeline):
+        passed, out, err = run_cmd(cmd, cwd)
+        if not passed:
+            failed.add("depends_on")
+            print(out)
+            print(err, file=sys.stderr)
+        results.append((label, passed, note_from(out, err, "")))
     for stage in manifest["gate"]:
         sid, label = stage["id"], stage["label"]
         skip = should_skip(stage, flags, vars_, failed, stop_on_fail and bool(failed))

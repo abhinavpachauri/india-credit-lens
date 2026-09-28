@@ -1,0 +1,202 @@
+{
+  "iip": {
+    "scope": "snapshot",
+    "base_year": "2022-23",
+    "releases": [
+      {
+        "release": "2026-09-28T024155Z.json.gz",
+        "rows": 1720,
+        "values": 3440,
+        "periods": [
+          "2023-04-30",
+          "2026-07-31"
+        ]
+      }
+    ]
+  },
+  "wpi": {
+    "scope": "snapshot",
+    "base_year": "2022-23",
+    "releases": [
+      {
+        "release": "2026-09-28T024225Z.json.gz",
+        "rows": 7544,
+        "values": 7544,
+        "periods": [
+          "2023-04-30",
+          "2026-08-31"
+        ]
+      }
+    ]
+  },
+  "nas": {
+    "scope": "snapshot",
+    "base_year": "2022-23",
+    "releases": [
+      {
+        "release": "2026-09-28T024227Z.json.gz",
+        "rows": 317,
+        "values": 634,
+        "periods": [
+          "2022-06-30",
+          "2026-06-30"
+        ]
+      }
+    ]
+  },
+  "cpi": {
+    "scope": "increment",
+    "base_year": "2024",
+    "releases": [
+      {
+        "release": "2026-09-28T035253Z.json.gz",
+        "rows": 1,
+        "values": 2,
+        "periods": [
+          "2026-01-31",
+          "2026-01-31"
+        ],
+        "source": "release_pdf",
+        "published": "2026-02-12",
+        "source_file": "cpi_jan26.pdf"
+      },
+      {
+        "release": "2026-09-28T035255Z.json.gz",
+        "rows": 2,
+        "values": 4,
+        "periods": [
+          "2026-01-31",
+          "2026-02-28"
+        ],
+        "source": "release_pdf",
+        "published": "2026-03-12",
+        "source_file": "cpi_feb26.pdf",
+        "revised": 2,
+        "revised_sample": [
+          [
+            "CPI (General) Combined",
+            "2026-01-31",
+            "index"
+          ],
+          [
+            "CPI (General) Combined",
+            "2026-01-31",
+            "inflation_published"
+          ]
+        ],
+        "new_keys": 2
+      },
+      {
+        "release": "2026-09-28T035256Z.json.gz",
+        "rows": 2,
+        "values": 4,
+        "periods": [
+          "2026-02-28",
+          "2026-03-31"
+        ],
+        "source": "release_pdf",
+        "published": "2026-04-13",
+        "source_file": "cpi_mar26.pdf",
+        "revised": 0,
+        "revised_sample": [],
+        "new_keys": 2
+      },
+      {
+        "release": "2026-09-28T035257Z.json.gz",
+        "rows": 2,
+        "values": 4,
+        "periods": [
+          "2026-03-31",
+          "2026-04-30"
+        ],
+        "source": "release_pdf",
+        "published": "2026-05-12",
+        "source_file": "cpi_apr26.pdf",
+        "revised": 0,
+        "revised_sample": [],
+        "new_keys": 2
+      },
+      {
+        "release": "2026-09-28T035258Z.json.gz",
+        "rows": 2,
+        "values": 4,
+        "periods": [
+          "2026-04-30",
+          "2026-05-31"
+        ],
+        "source": "release_pdf",
+        "published": "2026-06-12",
+        "source_file": "cpi_may26.pdf",
+        "revised": 0,
+        "revised_sample": [],
+        "new_keys": 2
+      },
+      {
+        "release": "2026-09-28T035259Z.json.gz",
+        "rows": 2,
+        "values": 4,
+        "periods": [
+          "2026-05-31",
+          "2026-06-30"
+        ],
+        "source": "release_pdf",
+        "published": "2026-07-13",
+        "source_file": "cpi_jun26.pdf",
+        "revised": 0,
+        "revised_sample": [],
+        "new_keys": 2
+      },
+      {
+        "release": "2026-09-28T035301Z.json.gz",
+        "rows": 2,
+        "values": 4,
+        "periods": [
+          "2026-06-30",
+          "2026-07-31"
+        ],
+        "source": "release_pdf",
+        "published": "2026-08-12",
+        "source_file": "cpi_jul26.pdf",
+        "revised": 0,
+        "revised_sample": [],
+        "new_keys": 2
+      },
+      {
+        "release": "2026-09-28T035304Z.json.gz",
+        "rows": 19,
+        "values": 19,
+        "periods": [
+          "2025-01-31",
+          "2026-07-31"
+        ],
+        "source": "dashboard_xlsx",
+        "published": "2026-08-12",
+        "source_file": "CPI updated_July_ 2026_Dashboard Data-12.08.2026.xlsx",
+        "revised": 0,
+        "revised_sample": [],
+        "new_keys": 12
+      },
+      {
+        "release": "2026-09-28T035302Z.json.gz",
+        "rows": 2,
+        "values": 4,
+        "periods": [
+          "2026-07-31",
+          "2026-08-31"
+        ],
+        "source": "release_pdf",
+        "published": "2026-09-14",
+        "source_file": "cpi_aug26.pdf",
+        "revised": 1,
+        "revised_sample": [
+          [
+            "CPI (General) Combined",
+            "2026-07-31",
+            "index"
+          ]
+        ],
+        "new_keys": 2
+      }
+    ]
+  }
+}

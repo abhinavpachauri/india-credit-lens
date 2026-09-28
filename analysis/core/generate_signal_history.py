@@ -51,7 +51,7 @@ ANAL   = REPO / "analysis"
 SIG    = ANAL / "signals"
 REG    = SIG / "registry.json"
 
-KNOWN_PIPELINES  = set(manifest.PIPELINE_IDS)
+KNOWN_PIPELINES  = set(manifest.signal_pipelines())
 PIPELINE_SOURCES = list(KNOWN_PIPELINES)
 
 VALID_STATUSES = {"new", "active", "strengthening", "weakening", "stable", "declining", "reversed", "absent", "unknown", "pending"}
