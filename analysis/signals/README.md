@@ -137,7 +137,7 @@ after the three reviewers; no compute exists yet.
 - **A combined series needs every component for the period.** If one is missing it raises; the
   weights are never renormalised over the components present.
 
-**Absence reasons: one closed list, defined once in code** (`core/absence.py`, planned; both specs
+**Absence reasons: one closed list, defined once in code** (`core/absence.py`, built in phase 2; both specs
 cite it, and neither copies it). Cells carry the **code**; prose is rendered from the code.
 - *static*, declared in the concordance: `no_counterpart` · `shared_group` · `cadence_mismatch` ·
   `weights_unsourced` · `mapping_undecided`;

@@ -878,7 +878,7 @@ sourced force (§2b).
 
 ### 24.1 The concordance: one file per (credit pipeline, reference pipeline)
 
-`analysis/ontology/concordance/sibc__mospi.json` (planned; NBFC's would be `nbfc__mospi.json`).
+`analysis/ontology/concordance/sibc__mospi.json` (built 2026-09-29, phase 2; NBFC's would be `nbfc__mospi.json`).
 Adding a pipeline on either side is one file, never a code change (M+N, §6). Keyed by URN (§3):
 
 ```
@@ -914,7 +914,7 @@ Python **with its share computed from the credit CSV each period**, never typed:
 
 An approximation is allowed on an aggregate only. **A leaf row never gets one.**
 
-**Absence reasons:** the closed list lives in code (`core/absence.py`, planned), and signals/README
+**Absence reasons:** the closed list lives in code (`core/absence.py`, built in phase 2), and signals/README
 §1f describes it. The concordance may use only the *static* reasons; the per-period ones
 (`not_released`, `credit_history_gap`) are decided by compute.
 
@@ -974,7 +974,32 @@ machinery 5.06, beverages 1.14, tobacco 0.83. They are a check on the sourced ta
 substitute for it. **WPI weights are not yet sourced**, so six Real-credit cells start absent,
 saying why, rather than estimated.
 
-### 24.3 Validation (`validate_concordance`, planned)
+### 24.3 Validation (`cross/validate_concordance.py`, built 2026-09-29; MoSPI gate stage 1d)
+
+**As built, phase 2:**
+- **Cuts:** 8, keyed by the registry's cut stems: `sibc-main` (quarterly) · `sibc-industry-type`
+  · the food, chemicals, basic-metal, engineering and infra sub-tables · `sibc-pl` (monthly).
+  A cut's parent row is a part too, and takes the cadence of the cut it is a child of
+  (Industry on the industry-by-type table is `icl:sibc/Statement1/2`, quarterly).
+- **Series** are `<dataset>/<code>` in the MoSPI CSV. Output reads IIP's index or NAS's constant
+  prices; a deflator reads a WPI/CPI index, or `implicit` (NAS current ÷ constant). Several series
+  need `combine`: `sum` (NAS only) or `weighted` with a cited table.
+- **The open decisions are absences, not guesses:** the five combined-IIP rows are
+  `weights_unsourced` until the IIP weights are re-checked, and Textiles is `mapping_undecided`
+  (PLAN). Output therefore covers 7 of 19 industry types (16% of industry credit), not 12; real
+  credit covers 9 of 19 (19%), as §21.2 predicted.
+- **The registry direction** is behind `requires_signals` (false until phase 3 adds the 1f
+  entries), shown in every run rather than passed on zero entries.
+- **Which cuts must be covered** is declared outside the file, by SIBC's manifest
+  (`reference_cuts.mospi`: 8 `include`d, 6 `exclude`d with a reason), and every cut the registry
+  scans must be one or the other. The check also runs in SIBC's own gate (1d), since a new or renamed
+  credit code breaks the join as surely as a MoSPI change.
+- **Weighted parts** take their code set from the source's `assign` table, and a weighted code serves
+  one part only, so moving nic:27 between parts fails even with the right weight.
+- **Measured:** every part and every cut dropped in turn (52/52, 8/8) plus one instance of each
+  other rule (17), all caught; the real file passes (`test_concordance.py`). The numeric weights
+  check below waits for sourced weights.
+
 
 **Population, derived and not circular.** The cuts are declared once, in the concordance's
 `cuts`; the parts of each cut are the parent's children **in the credit CSV** (never

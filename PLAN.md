@@ -58,14 +58,22 @@ skills = procedure, subagents = independent review, hooks + `reconcile.py` = enf
      `depends_on` + `currency_stage`, `--offline`) and the MoSPI ingest + gate; 11,632 rows, 1c 1,464
      values within rounding; CPI from two publications (press-release PDFs by hand, the dashboard
      workbook fetched automatically). Gate green, nothing overdue. As-built notes: signals/README "MoSPI".
-   - **Next phases:** 2 concordance
-     file + `validate_concordance` → 3 the two 1f methods + registry entries + SIBC `depends_on` →
+   - **Phase 2 ✅ 2026-09-29:** `ontology/concordance/sibc__mospi.json` (8 cuts, 52 parts),
+     `core/absence.py`, `cross/validate_concordance.py` as MoSPI stage 1d. Coverage today: output
+     7/19 industry types (16%), real credit 9/19 (19%); the open decisions below fill it in.
+   - **Next phases:** 3 the two 1f methods + registry entries + SIBC `depends_on` →
      4 table columns (stamp_table + `CutTable`) → write `onboard-source` as we go.
    - **Display:** see DASHBOARD_SPEC §21.
    - **Decided in spec:** 1f signals live in the credit pipeline's registry; MoSPI has no signals
      of its own in v1; match = exact or built from exact parts.
-   - **Open:** WPI weights (6 Real-credit cells absent until sourced); textiles vs apparel;
-     Petroleum deflated by WPI mineral oils (a judgment, flagged in §24.2).
+   - **Open, user deciding (2026-09-29; not blocking phase 2, whose cells stay absent with a
+     declared reason until each is settled):**
+     - **Textiles vs apparel:** SIBC 2.4 ↔ IIP/WPI nic:13 alone, or nic:13 + 14? (`mapping_undecided`)
+     - **WPI weights:** source an official MoSPI/PIB table for the 6 combined deflators
+       (`weights_unsourced` until then).
+     - **IIP weights re-check:** the PRID 2267531 transcription rebuilds the index within ~1 pt
+       vs 0.03 for the fitted weights (COMPOSITION_SPEC §24.2); verify before any combined-IIP cell computes.
+     - Petroleum deflated by WPI mineral oils (a judgment, flagged in §24.2).
 4. **Arc 3: RBI regulatory watch** (S4 pointed at RBI, push not pull). Admission rule: an item
    enters only if it attaches to a model entity, channel or cut. ⚠️ Re-run the allowlist census
    first; the 2026-08-19 one predates the probe-bug retraction. Design: `archive/docs/PLAN_2026-09-09.md` arc 3.

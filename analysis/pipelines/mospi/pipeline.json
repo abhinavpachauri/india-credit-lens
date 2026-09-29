@@ -188,6 +188,13 @@
       "note": "values checked"
     },
     {
+      "id": "concordance",
+      "label": "1d. concordance (credit ↔ MoSPI join)",
+      "core": "validate_concordance",
+      "args": ["--reference", "$ID"],
+      "note": "concordance"
+    },
+    {
       "id": "dependents",
       "label": "2f. freshness of every dependent pipeline",
       "core": "dependents_fresh",

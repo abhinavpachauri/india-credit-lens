@@ -537,6 +537,13 @@
           "date": "2026-09-28",
           "how_measured": "By enumeration, not sampling. Known-good control: the committed 2026-09-28 releases (IIP 43 series, NAS 10), every value with a printed rate and a level a year back, tolerance derived per row from the printed decimals (not a constant). Known-bad control: for EACH IIP series in turn, its index shifted one month later (a wrong-period join), every other series untouched; the stage must fail for every one. Extended the same day after the population reviewer found the catch rate was IIP-only: every NAS code with a printed rate, its constant-price level one quarter late, and separately its current and constant prices swapped; the stage must fail for every one. Removal (not only shift) controls added after the absence reviewer: a missing level fails as no_level, never as a first-year absence.",
           "source": "analysis/pipelines/mospi/validate_published_growth.py + analysis/tests/test_mospi.py (test_known_good_control_passes_every_value, test_known_bad_control_a_level_one_month_off_is_caught), test_known_bad_control_nas_is_caught_too, test_known_bad_control_cpi_is_caught"
+        },
+        {
+          "metric": "catch rate + false-rejection rate — validate_concordance (MoSPI stage 1d), the credit ↔ real-economy join",
+          "value": "catch 52/52 parts dropped + 8/8 cuts dropped (enumerated) + 17 single-instance rule faults; false rejections 0/1 (the committed file)",
+          "date": "2026-09-29",
+          "how_measured": "Enumerated where the population allows: every one of the 52 parts dropped in turn, and every one of the 8 cuts dropped with its parts. One instance per remaining rule (a sample, stated as such): part not in the credit CSV, cut parent missing, nonexistent code, IIP as a price, unknown dataset, monthly part on a quarterly series, per-period reason declared statically, approximation on a leaf, several series without combine, IIP summed, weight differing from its table, weighted code moved between parts, weighted code in two parts, registry cut unclassified, file name disagreeing, 1f entries with the flag off, phase-3 flag on. Rules added after the population and absence reviewers found a dropped cut, a weight moved between parts and a leaf rule blind to the statement all passing. Known-good: the committed sibc__mospi.json.",
+          "source": "analysis/cross/validate_concordance.py + analysis/tests/test_concordance.py"
         }
       ],
       "observations": [

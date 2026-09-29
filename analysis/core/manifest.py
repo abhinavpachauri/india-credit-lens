@@ -59,6 +59,7 @@ CORE_MAP = {
     "architecture_discover":    ("architecture/discover.py", ["--quiet"], "ROOT"),
     "architecture_render":      ("architecture/render.py", [], "ROOT"),
     "reconcile":                ("architecture/reconcile.py", ["--strict"], "ROOT"),
+    "validate_concordance":     ("cross/validate_concordance.py", [], "ROOT"),
     "dependents_fresh":         ("guards/check_signal_freshness.py", ["--dependents-of", "$ID"], "ROOT"),
 }
 

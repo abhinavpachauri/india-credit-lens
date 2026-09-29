@@ -3,6 +3,53 @@
   "name": "RBI SIBC — Bank Credit",
   "order": 1,
   "kind": "primary",
+  "reference_cuts": {
+    "mospi": {
+      "include": [
+        "sibc-main",
+        "sibc-industry-type",
+        "sibc-food-processing-sub",
+        "sibc-chemicals-sub",
+        "sibc-basic-metal-sub",
+        "sibc-engineering-sub",
+        "sibc-infra-sub",
+        "sibc-pl"
+      ],
+      "exclude": {
+        "sibc-ind-size": {
+          "statement": "Statement 1",
+          "parent_code": "2",
+          "why": "size classes (micro/small, medium, large) have no output or price counterpart"
+        },
+        "sibc-textiles-sub": {
+          "statement": "Statement 2",
+          "parent_code": "2.4",
+          "why": "no MoSPI series matches a textiles sub-row, and the parent's match is itself undecided"
+        },
+        "sibc-services": {
+          "statement": "Statement 1",
+          "parent_code": "3",
+          "why": "quarterly NAS pools the services sub-rows (DASHBOARD_SPEC §21.6); Services itself is covered on sibc-main"
+        },
+        "sibc-trade-sub": {
+          "statement": "Statement 1",
+          "parent_code": "3.7",
+          "why": "NAS pools trade with hotels, transport and communication"
+        },
+        "sibc-nbfc-sub": {
+          "statement": "Statement 1",
+          "parent_code": "3.9",
+          "why": "lending to lenders: it finances no output of its own"
+        },
+        "sibc-psl": {
+          "statement": "Statement 1",
+          "parent_code": "PSL",
+          "why": "priority-sector categories cut across sectors and are non-additive"
+        }
+      }
+    }
+  },
+  "note_reference_cuts": "Every cut the registry scans is classified for each reference pipeline: `include` (the tables carrying real-economy columns, DASHBOARD_SPEC §21) or `exclude` with a reason. Declared by the pipeline that owns the tables, so ontology/concordance/sibc__mospi.json is checked against something outside itself (stage 1d).",
   "compute_module": "csv_sector",
   "cuts_module": "pipelines.sibc.generate_analysis_report",
   "paths": {
@@ -101,6 +148,16 @@
       "id": "csv_integrity",
       "label": "1b. web CSV integrity",
       "builtin": "csv_integrity"
+    },
+    {
+      "id": "concordance",
+      "label": "1d. concordance (credit ↔ reference join)",
+      "core": "validate_concordance",
+      "args": [
+        "--credit",
+        "$ID"
+      ],
+      "note": "concordance"
     },
     {
       "id": "annotations_draft",
