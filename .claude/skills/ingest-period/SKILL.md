@@ -29,9 +29,12 @@ A red gate before ingesting means you cannot tell your breakage from the existin
 ## 1. Format + extract + consolidate, through the gate
 
 ```bash
-echo "y" | python3 analysis/pipelines/sibc/detect_format.py {xlsx}   # SIBC only: A/B confirm
+echo "A" | python3 analysis/pipelines/sibc/detect_format.py {xlsx}   # SIBC only: A = confirm, B = abort
 python3 analysis/core/gate.py --pipeline {p} --xlsx {xlsx} --skip-build
 ```
+- The prompt takes `A`/`B`, not `y`: a `y` records an ABORT (`confirmed=false`) and stage 0.5
+  then blocks. Read the report before confirming: dates NEW vs overlap, renamed series (a
+  wording change with the same code is normal; a code change is not), sample values.
 - ⏸ **SIBC date remap.** If the gate stops at stage 0.7 it names an unclassified raw date and
   writes NOTHING. Show the user the table (`update_web_data.py --check`), let them classify each
   date (CLAUDE.md § SIBC date normalisation), then `python3 analysis/pipelines/sibc/update_web_data.py --approve`
@@ -43,6 +46,12 @@ python3 analysis/core/gate.py --pipeline {p} --xlsx {xlsx} --skip-build
   press-release headline numbers (monthly NBFC press release) by eye before trusting the file.
 - ⚠ Check the bank count for ATM/POS (the roster is time-aware: closures and renames are in
   `canonical_banks.json`). A changed count is a finding, not noise.
+- **ATM/POS format detect prompts `[y/N]` when it has warnings**, and inside the gate that prompt
+  fails as `EOFError`. Run it by hand first (`echo n | python3 analysis/pipelines/atm_pos/detect_atm_pos_format.py {xlsx}`),
+  explain every warning, and only then re-run the gate. The expected bank count is read from the
+  roster since 2026-10-02 (it was a stale literal 64; the roster says 63 since Paytm's removal).
+- **ATM/POS stage 4a needs the period's signals in signals.db**: append (step 2) before the gate
+  can pass, then re-run the gate.
 
 ## 2. Layer 1: signals
 
@@ -58,8 +67,11 @@ re-append **every** period, never only the latest (`check_signal_freshness.py` n
 ```bash
 python3 analysis/core/generate_signal_history.py evaluate --pipeline {p} --period {period}
 ```
-This refuses without approval and prints its estimate. ⏸ **Tell the user the estimate and wait
-for a yes in THIS conversation**, then re-run with `ICL_LLM_OK=1` prefixed. The hard ceiling is
+This refuses without approval and prints its estimate (`Estimated cost: ~$…`), on both the API
+and the `claude -p` CLI path. Until 2026-10-02 the CLI path (no `ANTHROPIC_API_KEY`) skipped the
+guard and started evaluating; if a run here ever takes more than a few seconds without printing a
+refusal, stop it: it is calling the model. ⏸ **Tell the user the estimate and wait for a yes in
+THIS conversation**, then re-run with `ICL_LLM_OK=1` prefixed. The hard ceiling is
 $5 per run and is not overridable. Without an eval, Stage 5.5 warns "STALE NARRATIVE LAYER";
 that is acceptable for shipping, but say so.
 - **`✗ INCOMPLETE` (exit 1)** means a domain failed or signals went unanswered. Each gap is listed

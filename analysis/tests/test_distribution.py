@@ -166,7 +166,8 @@ def test_vintage_states_the_gap_when_the_pipelines_disagree():
     v = {"sibc": {"label": "June 2026"}, "atm_pos": {"label": "May 2026"}, "gap_months": 1}
     s = src.vintage_sentence(v)
     assert "June 2026 credit data" in s and "May 2026 payments data" in s
-    assert "1 month ahead" in s
+    assert "credit half is ahead" in s
+    assert not any(ch.isdigit() for ch in s.replace("2026", "")), "the gap is never a count"
 
 
 def test_vintage_says_so_when_they_agree():

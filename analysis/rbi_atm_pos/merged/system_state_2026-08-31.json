@@ -1,0 +1,739 @@
+{
+  "_meta": {
+    "pipeline": "atm_pos",
+    "period": "2026-08-31",
+    "schema_version": "4.0",
+    "spec_ref": "analysis/SYSTEM_MODEL_SPEC.md §16",
+    "computed_from": "signals.db",
+    "signals_observed": 329
+  },
+  "entity_states": {
+    "icl:atm_pos/cards/cards_in_force": {
+      "direction": 1,
+      "signals": 0,
+      "observed": 0,
+      "coherence": 1.0,
+      "children": 2
+    },
+    "icl:atm_pos/cards/credit_cards": {
+      "direction": 1,
+      "signals": 16,
+      "observed": 16
+    },
+    "icl:atm_pos/cards/debit_cards": {
+      "direction": 1,
+      "signals": 16,
+      "observed": 16
+    },
+    "icl:atm_pos/infrastructure/acceptance_infrastructure": {
+      "direction": 1,
+      "signals": 0,
+      "observed": 0,
+      "coherence": 0.984,
+      "children": 5
+    },
+    "icl:atm_pos/infrastructure/atms": {
+      "direction": 1,
+      "signals": 0,
+      "observed": 0,
+      "coherence": 1.0,
+      "children": 2
+    },
+    "icl:atm_pos/infrastructure/bharat_qr": {
+      "direction": -1,
+      "signals": 11,
+      "observed": 11
+    },
+    "icl:atm_pos/infrastructure/micro_atms": {
+      "direction": -1,
+      "signals": 11,
+      "observed": 11
+    },
+    "icl:atm_pos/infrastructure/pos_terminals": {
+      "direction": 1,
+      "signals": 16,
+      "observed": 16
+    },
+    "icl:atm_pos/infrastructure/upi_qr": {
+      "direction": 1,
+      "signals": 13,
+      "observed": 13
+    },
+    "icl:atm_pos/infrastructure/atm_offsite": {
+      "direction": 1,
+      "signals": 11,
+      "observed": 11
+    },
+    "icl:atm_pos/infrastructure/atm_onsite": {
+      "direction": 1,
+      "signals": 11,
+      "observed": 11
+    },
+    "icl:atm_pos/spend_value/card_spend_value": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0,
+      "coherence": 0.0,
+      "children": 2
+    },
+    "icl:atm_pos/spend_value/cc_spend_value": {
+      "direction": 1,
+      "signals": 0,
+      "observed": 0,
+      "coherence": 1.0,
+      "children": 4
+    },
+    "icl:atm_pos/spend_value/dc_spend_value": {
+      "direction": -1,
+      "signals": 0,
+      "observed": 0,
+      "coherence": 0.7184,
+      "children": 5
+    },
+    "icl:atm_pos/spend_value/cc_atm_withdrawal_val": {
+      "direction": 1,
+      "signals": 12,
+      "observed": 12
+    },
+    "icl:atm_pos/spend_value/cc_ecom_txn_val": {
+      "direction": 1,
+      "signals": 12,
+      "observed": 12
+    },
+    "icl:atm_pos/spend_value/cc_other_txn_val": {
+      "direction": 1,
+      "signals": 12,
+      "observed": 12
+    },
+    "icl:atm_pos/spend_value/cc_pos_txn_val": {
+      "direction": 1,
+      "signals": 12,
+      "observed": 12
+    },
+    "icl:atm_pos/spend_value/dc_atm_withdrawal_val": {
+      "direction": -1,
+      "signals": 12,
+      "observed": 12
+    },
+    "icl:atm_pos/spend_value/dc_ecom_txn_val": {
+      "direction": 1,
+      "signals": 12,
+      "observed": 12
+    },
+    "icl:atm_pos/spend_value/dc_other_txn_val": {
+      "direction": 1,
+      "signals": 12,
+      "observed": 12
+    },
+    "icl:atm_pos/spend_value/dc_pos_txn_val": {
+      "direction": 1,
+      "signals": 12,
+      "observed": 12
+    },
+    "icl:atm_pos/spend_value/dc_pos_withdrawal_val": {
+      "direction": 1,
+      "signals": 12,
+      "observed": 12
+    },
+    "icl:atm_pos/spend_volume/card_spend_volume": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0,
+      "coherence": 0.0,
+      "children": 2
+    },
+    "icl:atm_pos/spend_volume/cc_spend_volume": {
+      "direction": 1,
+      "signals": 0,
+      "observed": 0,
+      "coherence": 1.0,
+      "children": 4
+    },
+    "icl:atm_pos/spend_volume/dc_spend_volume": {
+      "direction": -1,
+      "signals": 0,
+      "observed": 0,
+      "coherence": 0.8925,
+      "children": 5
+    },
+    "icl:atm_pos/spend_volume/cc_atm_withdrawal_vol": {
+      "direction": 1,
+      "signals": 13,
+      "observed": 13
+    },
+    "icl:atm_pos/spend_volume/cc_ecom_txn_vol": {
+      "direction": 1,
+      "signals": 12,
+      "observed": 12
+    },
+    "icl:atm_pos/spend_volume/cc_other_txn_vol": {
+      "direction": 1,
+      "signals": 12,
+      "observed": 12
+    },
+    "icl:atm_pos/spend_volume/cc_pos_txn_vol": {
+      "direction": 1,
+      "signals": 12,
+      "observed": 12
+    },
+    "icl:atm_pos/spend_volume/dc_atm_withdrawal_vol": {
+      "direction": -1,
+      "signals": 13,
+      "observed": 13
+    },
+    "icl:atm_pos/spend_volume/dc_ecom_txn_vol": {
+      "direction": 1,
+      "signals": 12,
+      "observed": 12
+    },
+    "icl:atm_pos/spend_volume/dc_other_txn_vol": {
+      "direction": 1,
+      "signals": 12,
+      "observed": 12
+    },
+    "icl:atm_pos/spend_volume/dc_pos_txn_vol": {
+      "direction": -1,
+      "signals": 12,
+      "observed": 12
+    },
+    "icl:atm_pos/spend_volume/dc_pos_withdrawal_vol": {
+      "direction": 1,
+      "signals": 13,
+      "observed": 13
+    }
+  },
+  "force_states": {
+    "force_upi_zero_mdr": {
+      "state": "active",
+      "instance_of": "ch_zero_mdr_acceptance_mix",
+      "evidence_observed": 3,
+      "evidence_total": 3,
+      "authored_status": "active",
+      "mismatch": false
+    },
+    "force_rbi_paytm_action": {
+      "state": "active",
+      "instance_of": "ch_institutional_exit_card_stock",
+      "evidence_observed": 3,
+      "evidence_total": 3,
+      "authored_status": "retired",
+      "mismatch": false
+    },
+    "force_rbi_card_lifecycle_norms": {
+      "state": "active",
+      "instance_of": "ch_card_lifecycle_norms",
+      "evidence_observed": 1,
+      "evidence_total": 1,
+      "authored_status": "active",
+      "mismatch": false
+    },
+    "force_ncmc_transit_rollout": {
+      "state": "active",
+      "instance_of": "ch_embedded_payment_card_other",
+      "evidence_observed": 2,
+      "evidence_total": 2,
+      "authored_status": "active",
+      "mismatch": false
+    },
+    "fi_rupay_incentive_debit_ecom": {
+      "state": "active",
+      "instance_of": "ch_rupay_incentive_debit_ecom",
+      "evidence_observed": 1,
+      "evidence_total": 1,
+      "authored_status": "active",
+      "mismatch": false
+    },
+    "fi_cash_at_pos_clarity": {
+      "state": "active",
+      "instance_of": "ch_cash_at_pos_clarity",
+      "evidence_observed": 1,
+      "evidence_total": 1,
+      "authored_status": "active",
+      "mismatch": false
+    },
+    "fi_contactless_ceiling": {
+      "state": "active",
+      "instance_of": "ch_contactless_ceiling",
+      "evidence_observed": 2,
+      "evidence_total": 2,
+      "authored_status": "active",
+      "mismatch": false
+    }
+  },
+  "edge_states": {
+    "force_upi_zero_mdr__drives__e_infrastructure_upi_qr": {
+      "state": "active",
+      "type": "drives",
+      "polarity": "+",
+      "from": "force_upi_zero_mdr",
+      "to": "e_infrastructure_upi_qr"
+    },
+    "force_upi_zero_mdr__suppresses__e_infrastructure_pos_terminals": {
+      "state": "reversed",
+      "type": "suppresses",
+      "polarity": "-",
+      "from": "force_upi_zero_mdr",
+      "to": "e_infrastructure_pos_terminals"
+    },
+    "force_upi_zero_mdr__suppresses__e_spend_value_dc_atm_withdrawal_val": {
+      "state": "reversed",
+      "type": "suppresses",
+      "polarity": "-",
+      "from": "force_upi_zero_mdr",
+      "to": "e_spend_value_dc_atm_withdrawal_val"
+    },
+    "force_upi_zero_mdr__creates_risk__risk_infrastructure_bifurcation": {
+      "state": "reversed",
+      "type": "creates_risk",
+      "polarity": "-",
+      "from": "force_upi_zero_mdr",
+      "to": "risk_infrastructure_bifurcation"
+    },
+    "force_rbi_paytm_action__suppresses__e_cards_debit_cards": {
+      "state": "reversed",
+      "type": "suppresses",
+      "polarity": "-",
+      "from": "force_rbi_paytm_action",
+      "to": "e_cards_debit_cards"
+    },
+    "force_rbi_paytm_action__creates_risk__risk_debit_card_base_erosion": {
+      "state": "reversed",
+      "type": "creates_risk",
+      "polarity": "-",
+      "from": "force_rbi_paytm_action",
+      "to": "risk_debit_card_base_erosion"
+    },
+    "force_rbi_card_lifecycle_norms__suppresses__e_cards_credit_cards": {
+      "state": "reversed",
+      "type": "suppresses",
+      "polarity": "-",
+      "from": "force_rbi_card_lifecycle_norms",
+      "to": "e_cards_credit_cards"
+    },
+    "force_ncmc_transit_rollout__drives__e_spend_value_cc_other_txn_val": {
+      "state": "active",
+      "type": "drives",
+      "polarity": "+",
+      "from": "force_ncmc_transit_rollout",
+      "to": "e_spend_value_cc_other_txn_val"
+    },
+    "force_ncmc_transit_rollout__creates_opportunity__opp_transit_payment_products": {
+      "state": "active",
+      "type": "creates_opportunity",
+      "polarity": "+",
+      "from": "force_ncmc_transit_rollout",
+      "to": "opp_transit_payment_products"
+    },
+    "e_infrastructure_upi_qr__substitutes__e_infrastructure_pos_terminals": {
+      "state": "active",
+      "type": "substitutes",
+      "polarity": "~",
+      "from": "e_infrastructure_upi_qr",
+      "to": "e_infrastructure_pos_terminals"
+    },
+    "e_spend_value_cc_other_txn_val__substitutes__e_spend_value_cc_pos_txn_val": {
+      "state": "active",
+      "type": "substitutes",
+      "polarity": "~",
+      "from": "e_spend_value_cc_other_txn_val",
+      "to": "e_spend_value_cc_pos_txn_val"
+    },
+    "e_spend_value_dc_atm_withdrawal_val__reroutes_to__e_spend_value_dc_ecom_txn_val": {
+      "state": "active",
+      "type": "reroutes_to",
+      "polarity": "~",
+      "from": "e_spend_value_dc_atm_withdrawal_val",
+      "to": "e_spend_value_dc_ecom_txn_val"
+    },
+    "e_infrastructure_pos_terminals__leads__e_spend_value_cc_pos_txn_val": {
+      "state": "active",
+      "type": "leads",
+      "polarity": "+",
+      "from": "e_infrastructure_pos_terminals",
+      "to": "e_spend_value_cc_pos_txn_val"
+    },
+    "e_infrastructure_pos_terminals__leads__e_spend_value_dc_pos_txn_val": {
+      "state": "active",
+      "type": "leads",
+      "polarity": "+",
+      "from": "e_infrastructure_pos_terminals",
+      "to": "e_spend_value_dc_pos_txn_val"
+    },
+    "e_infrastructure_upi_qr__suppresses__e_spend_value_dc_atm_withdrawal_val": {
+      "state": "reversed",
+      "type": "suppresses",
+      "polarity": "-",
+      "from": "e_infrastructure_upi_qr",
+      "to": "e_spend_value_dc_atm_withdrawal_val"
+    },
+    "e_cards_credit_cards__leads__e_spend_value_cc_pos_txn_val": {
+      "state": "active",
+      "type": "leads",
+      "polarity": "+",
+      "from": "e_cards_credit_cards",
+      "to": "e_spend_value_cc_pos_txn_val"
+    },
+    "e_cards_credit_cards__leads__e_spend_value_cc_ecom_txn_val": {
+      "state": "active",
+      "type": "leads",
+      "polarity": "+",
+      "from": "e_cards_credit_cards",
+      "to": "e_spend_value_cc_ecom_txn_val"
+    },
+    "e_cards_debit_cards__leads__e_spend_value_dc_atm_withdrawal_val": {
+      "state": "active",
+      "type": "leads",
+      "polarity": "+",
+      "from": "e_cards_debit_cards",
+      "to": "e_spend_value_dc_atm_withdrawal_val"
+    },
+    "e_cards_debit_cards__leads__e_spend_value_dc_ecom_txn_val": {
+      "state": "active",
+      "type": "leads",
+      "polarity": "+",
+      "from": "e_cards_debit_cards",
+      "to": "e_spend_value_dc_ecom_txn_val"
+    },
+    "e_infrastructure_pos_terminals__creates_risk__risk_infrastructure_bifurcation": {
+      "state": "reversed",
+      "type": "creates_risk",
+      "polarity": "-",
+      "from": "e_infrastructure_pos_terminals",
+      "to": "risk_infrastructure_bifurcation"
+    },
+    "e_cards_credit_cards__creates_opportunity__opp_credit_card_deepening": {
+      "state": "active",
+      "type": "creates_opportunity",
+      "polarity": "+",
+      "from": "e_cards_credit_cards",
+      "to": "opp_credit_card_deepening"
+    },
+    "e_cards_debit_cards__creates_risk__risk_debit_card_base_erosion": {
+      "state": "reversed",
+      "type": "creates_risk",
+      "polarity": "-",
+      "from": "e_cards_debit_cards",
+      "to": "risk_debit_card_base_erosion"
+    },
+    "e_infrastructure_micro_atms__creates_opportunity__opp_rural_cash_distribution": {
+      "state": "reversed",
+      "type": "creates_opportunity",
+      "polarity": "+",
+      "from": "e_infrastructure_micro_atms",
+      "to": "opp_rural_cash_distribution"
+    },
+    "e_cards_credit_cards__creates_risk__risk_cc_market_concentration": {
+      "state": "reversed",
+      "type": "creates_risk",
+      "polarity": "-",
+      "from": "e_cards_credit_cards",
+      "to": "risk_cc_market_concentration"
+    }
+  },
+  "loop_states": {
+    "upi_network_effect_R": {
+      "state": "partial",
+      "type": "reinforcing",
+      "live_edges": 3,
+      "total_edges": 3
+    },
+    "cc_penetration_R": {
+      "state": "active_reinforcing",
+      "type": "reinforcing",
+      "live_edges": 2,
+      "total_edges": 2
+    },
+    "acceptance_bifurcation_B": {
+      "state": "partial",
+      "type": "balancing",
+      "live_edges": 3,
+      "total_edges": 3
+    },
+    "debit_base_erosion_B": {
+      "state": "partial",
+      "type": "balancing",
+      "live_edges": 2,
+      "total_edges": 2
+    }
+  },
+  "system_observations": {
+    "dominant_forces": [
+      "force_upi_zero_mdr",
+      "force_rbi_paytm_action",
+      "force_rbi_card_lifecycle_norms",
+      "force_ncmc_transit_rollout",
+      "fi_rupay_incentive_debit_ecom",
+      "fi_cash_at_pos_clarity",
+      "fi_contactless_ceiling"
+    ],
+    "binding_constraints": [],
+    "active_reinforcing_loops": [
+      "cc_penetration_R"
+    ],
+    "active_balancing_loops": [],
+    "authored_vs_observed_mismatches": []
+  },
+  "mix_states": {
+    "atm-offsite-category-momentum": {
+      "entity_urn": "icl:atm_pos/infrastructure/atm_offsite",
+      "decomposition": null,
+      "mix_state": "contested",
+      "coherence": 0.7527,
+      "toward": null,
+      "away_from": null,
+      "toward_tilt_pp": null,
+      "children": 0
+    },
+    "atm-onsite-category-momentum": {
+      "entity_urn": "icl:atm_pos/infrastructure/atm_onsite",
+      "decomposition": null,
+      "mix_state": "drifting",
+      "coherence": 0.9972,
+      "toward": "Private Sector Banks",
+      "away_from": "Public Sector Banks",
+      "toward_tilt_pp": 8.84,
+      "children": 5
+    },
+    "bharat-qr-category-momentum": {
+      "entity_urn": "icl:atm_pos/infrastructure/bharat_qr",
+      "decomposition": null,
+      "mix_state": "drifting",
+      "coherence": 1.0,
+      "toward": "Small Finance Banks",
+      "away_from": "Private Sector Banks",
+      "toward_tilt_pp": 3.98,
+      "children": 5
+    },
+    "cc-atm-withdrawal-val-category-momentum": {
+      "entity_urn": "icl:atm_pos/spend_value/cc_atm_withdrawal_val",
+      "decomposition": null,
+      "mix_state": "steered",
+      "coherence": 0.9841,
+      "toward": "Public Sector Banks",
+      "away_from": "Private Sector Banks",
+      "toward_tilt_pp": 41.09,
+      "children": 5
+    },
+    "cc-atm-withdrawal-vol-category-momentum": {
+      "entity_urn": "icl:atm_pos/spend_volume/cc_atm_withdrawal_vol",
+      "decomposition": null,
+      "mix_state": "reallocating",
+      "coherence": 0.4236,
+      "toward": null,
+      "away_from": null,
+      "toward_tilt_pp": null,
+      "children": 0
+    },
+    "cc-category-momentum": {
+      "entity_urn": "icl:atm_pos/cards/credit_cards",
+      "decomposition": null,
+      "mix_state": "steered",
+      "coherence": 0.9551,
+      "toward": "Small Finance Banks",
+      "away_from": "Foreign Banks",
+      "toward_tilt_pp": 10.44,
+      "children": 5
+    },
+    "cc-ecom-txn-val-category-momentum": {
+      "entity_urn": "icl:atm_pos/spend_value/cc_ecom_txn_val",
+      "decomposition": null,
+      "mix_state": "drifting",
+      "coherence": 1.0,
+      "toward": "Foreign Banks",
+      "away_from": "Public Sector Banks",
+      "toward_tilt_pp": 16.22,
+      "children": 5
+    },
+    "cc-ecom-txn-vol-category-momentum": {
+      "entity_urn": "icl:atm_pos/spend_volume/cc_ecom_txn_vol",
+      "decomposition": null,
+      "mix_state": "drifting",
+      "coherence": 1.0,
+      "toward": "Public Sector Banks",
+      "away_from": "Private Sector Banks",
+      "toward_tilt_pp": 15.31,
+      "children": 5
+    },
+    "cc-other-txn-val-category-momentum": {
+      "entity_urn": "icl:atm_pos/spend_value/cc_other_txn_val",
+      "decomposition": null,
+      "mix_state": "drifting",
+      "coherence": 0.9999,
+      "toward": "Private Sector Banks",
+      "away_from": "Small Finance Banks",
+      "toward_tilt_pp": 5.97,
+      "children": 5
+    },
+    "cc-other-txn-vol-category-momentum": {
+      "entity_urn": "icl:atm_pos/spend_volume/cc_other_txn_vol",
+      "decomposition": null,
+      "mix_state": "steered",
+      "coherence": 1.0,
+      "toward": "Private Sector Banks",
+      "away_from": "Small Finance Banks",
+      "toward_tilt_pp": 5.18,
+      "children": 5
+    },
+    "cc-pos-txn-val-category-momentum": {
+      "entity_urn": "icl:atm_pos/spend_value/cc_pos_txn_val",
+      "decomposition": null,
+      "mix_state": "steered",
+      "coherence": 1.0,
+      "toward": "Public Sector Banks",
+      "away_from": "Private Sector Banks",
+      "toward_tilt_pp": 31.64,
+      "children": 5
+    },
+    "cc-pos-txn-vol-category-momentum": {
+      "entity_urn": "icl:atm_pos/spend_volume/cc_pos_txn_vol",
+      "decomposition": null,
+      "mix_state": "drifting",
+      "coherence": 1.0,
+      "toward": "Small Finance Banks",
+      "away_from": "Public Sector Banks",
+      "toward_tilt_pp": 11.73,
+      "children": 5
+    },
+    "dc-atm-withdrawal-val-category-momentum": {
+      "entity_urn": "icl:atm_pos/spend_value/dc_atm_withdrawal_val",
+      "decomposition": null,
+      "mix_state": "drifting",
+      "coherence": 1.0,
+      "toward": "Private Sector Banks",
+      "away_from": "Public Sector Banks",
+      "toward_tilt_pp": 11.63,
+      "children": 5
+    },
+    "dc-atm-withdrawal-vol-category-momentum": {
+      "entity_urn": "icl:atm_pos/spend_volume/dc_atm_withdrawal_vol",
+      "decomposition": null,
+      "mix_state": "drifting",
+      "coherence": 1.0,
+      "toward": "Private Sector Banks",
+      "away_from": "Public Sector Banks",
+      "toward_tilt_pp": 3.99,
+      "children": 5
+    },
+    "dc-category-momentum": {
+      "entity_urn": "icl:atm_pos/cards/debit_cards",
+      "decomposition": null,
+      "mix_state": "reallocating",
+      "coherence": 0.4301,
+      "toward": null,
+      "away_from": null,
+      "toward_tilt_pp": null,
+      "children": 0
+    },
+    "dc-ecom-txn-val-category-momentum": {
+      "entity_urn": "icl:atm_pos/spend_value/dc_ecom_txn_val",
+      "decomposition": null,
+      "mix_state": "contested",
+      "coherence": 0.7926,
+      "toward": null,
+      "away_from": null,
+      "toward_tilt_pp": null,
+      "children": 0
+    },
+    "dc-ecom-txn-vol-category-momentum": {
+      "entity_urn": "icl:atm_pos/spend_volume/dc_ecom_txn_vol",
+      "decomposition": null,
+      "mix_state": "reallocating",
+      "coherence": 0.0093,
+      "toward": null,
+      "away_from": null,
+      "toward_tilt_pp": null,
+      "children": 0
+    },
+    "dc-other-txn-val-category-momentum": {
+      "entity_urn": "icl:atm_pos/spend_value/dc_other_txn_val",
+      "decomposition": null,
+      "mix_state": "steered",
+      "coherence": 0.9922,
+      "toward": "Private Sector Banks",
+      "away_from": "Public Sector Banks",
+      "toward_tilt_pp": 13.52,
+      "children": 5
+    },
+    "dc-other-txn-vol-category-momentum": {
+      "entity_urn": "icl:atm_pos/spend_volume/dc_other_txn_vol",
+      "decomposition": null,
+      "mix_state": "drifting",
+      "coherence": 0.9063,
+      "toward": "Public Sector Banks",
+      "away_from": "Payment Banks",
+      "toward_tilt_pp": 10.04,
+      "children": 5
+    },
+    "dc-pos-txn-val-category-momentum": {
+      "entity_urn": "icl:atm_pos/spend_value/dc_pos_txn_val",
+      "decomposition": null,
+      "mix_state": "steered",
+      "coherence": 0.9917,
+      "toward": "Public Sector Banks",
+      "away_from": "Private Sector Banks",
+      "toward_tilt_pp": 13.03,
+      "children": 5
+    },
+    "dc-pos-txn-vol-category-momentum": {
+      "entity_urn": "icl:atm_pos/spend_volume/dc_pos_txn_vol",
+      "decomposition": null,
+      "mix_state": "contested",
+      "coherence": 0.562,
+      "toward": null,
+      "away_from": null,
+      "toward_tilt_pp": null,
+      "children": 0
+    },
+    "dc-pos-withdrawal-val-category-momentum": {
+      "entity_urn": "icl:atm_pos/spend_value/dc_pos_withdrawal_val",
+      "decomposition": null,
+      "mix_state": "reallocating",
+      "coherence": 0.2357,
+      "toward": null,
+      "away_from": null,
+      "toward_tilt_pp": null,
+      "children": 0
+    },
+    "dc-pos-withdrawal-vol-category-momentum": {
+      "entity_urn": "icl:atm_pos/spend_volume/dc_pos_withdrawal_vol",
+      "decomposition": null,
+      "mix_state": "reallocating",
+      "coherence": 0.4494,
+      "toward": null,
+      "away_from": null,
+      "toward_tilt_pp": null,
+      "children": 0
+    },
+    "micro-atms-category-momentum": {
+      "entity_urn": "icl:atm_pos/infrastructure/micro_atms",
+      "decomposition": null,
+      "mix_state": "contested",
+      "coherence": 0.8327,
+      "toward": null,
+      "away_from": null,
+      "toward_tilt_pp": null,
+      "children": 0
+    },
+    "pos-category-momentum": {
+      "entity_urn": "icl:atm_pos/infrastructure/pos_terminals",
+      "decomposition": null,
+      "mix_state": "contested",
+      "coherence": 0.8224,
+      "toward": null,
+      "away_from": null,
+      "toward_tilt_pp": null,
+      "children": 0
+    },
+    "upi-qr-category-momentum": {
+      "entity_urn": "icl:atm_pos/infrastructure/upi_qr",
+      "decomposition": null,
+      "mix_state": "steered",
+      "coherence": 1.0,
+      "toward": "Private Sector Banks",
+      "away_from": "Public Sector Banks",
+      "toward_tilt_pp": 1.26,
+      "children": 5
+    }
+  },
+  "narrative": null
+}

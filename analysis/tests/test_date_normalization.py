@@ -4,7 +4,8 @@ Golden tests for the SIBC date-normalisation remap (update_web_data._canonical_m
 
 This is the most dangerous untested logic in the pipeline: RBI publishes the fortnightly
 Bank Credit figure on the first Friday *after* a month-end, which can land in the next
-month (Apr 4–5 = March data; May 2–3 = April data). A wrong remap silently shifts a whole
+month (Apr 4–5 = March data; May 2–3 = April data; Sep 5–6 = August data). Since 2026-10-02 one
+rule covers every month: days 1–7 → the previous month-end. A wrong remap silently shifts a whole
 period's numbers onto the wrong month-end, corrupting every downstream signal. It was
 human-gated only — these pin every documented rule + the off-by-one boundaries.
 
@@ -32,6 +33,12 @@ cme = uwd._canonical_month_end
     (date(2024, 5, 3), date(2024, 4, 30)),
     (date(2025, 5, 2), date(2025, 4, 30)),
     (date(2024, 5, 7), date(2024, 4, 30)),     # inclusive upper boundary
+    # any month's first week → previous month-end (the general rule, 2026-10-02)
+    (date(2024, 9, 6), date(2024, 8, 31)),     # the Aug 2026 file's two new raw dates
+    (date(2025, 9, 5), date(2025, 8, 31)),
+    (date(2025, 3, 7), date(2025, 2, 28)),     # was an override; the rule now agrees with it
+    (date(2025, 1, 3), date(2024, 12, 31)),    # January → December of the PREVIOUS year
+    (date(2024, 3, 1), date(2024, 2, 29)),     # into a leap February
     # generic intra-month snapshot → same month-end
     (date(2024, 3, 22), date(2024, 3, 31)),
     (date(2025, 3, 21), date(2025, 3, 31)),
@@ -62,3 +69,10 @@ def test_no_cross_year_leak():
     # The Apr/May rules only ever shift within the same calendar year.
     assert cme(date(2024, 4, 3)).year == 2024
     assert cme(date(2024, 5, 3)).year == 2024
+
+
+def test_the_first_week_rule_holds_for_every_month():
+    """Day 7 → previous month-end; day 8 → its own month-end, in all twelve months."""
+    for m in range(1, 13):
+        prev = cme(date(2025, m, 7))
+        assert prev < date(2025, m, 1) and cme(date(2025, m, 8)).month == m

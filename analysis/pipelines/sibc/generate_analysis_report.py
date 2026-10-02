@@ -84,6 +84,47 @@ SIGNAL_SECTION_OVERRIDE: dict[str, str] = {
     "sibc-food-processing-sub-share-scan": "industryByType",
 }
 
+def section_from_cut(cut, sections: dict) -> str | None:
+    """The one section whose chart draws what this signal measures, or None.
+
+    Derived from the cut, never listed: the hand-kept overrides below routed every signal they
+    did not name to its domain's default section, so `sibc-infra-yoy` (Statement 2, code 2.18)
+    landed on main sectors, whose chart cannot draw it (5.7, Aug 2026). A level on codes goes to
+    the section that draws those codes, or has them as a sub-cut; a cut over a parent goes to the
+    section that draws that parent's children, or has the parent as a sub-cut. Anything ambiguous
+    or unmatched returns None and falls back to the declared routing.
+    """
+    if cut is None:
+        return None
+    st = getattr(cut, "statement", None)
+    def matches(want):
+        return [k for k, sec in sections.items() if sec.get("statement") == st and want(sec)]
+    if getattr(cut, "parent_code", None):
+        p = cut.parent_code
+        hit = matches(lambda sec: sec.get("parent_code") == p) or \
+              matches(lambda sec: p in (sec.get("sub_cuts") or []))
+    elif getattr(cut, "codes", None):
+        cs = set(cut.codes)
+        hit = matches(lambda sec: cs <= set(sec.get("codes") or ())) or \
+              matches(lambda sec: cs <= set(sec.get("sub_cuts") or []))
+    else:
+        return None
+    return hit[0] if len(hit) == 1 else None
+
+
+def is_table_family(compute: dict) -> bool:
+    """A size scan, or a share scan whose denominator is not its own parent (share of the book)."""
+    method = compute.get("method", "")
+    if method == "csv_sector_scan_abs":
+        return True
+    if method == "csv_sector_scan_share":
+        own = (compute.get("parent_code"), compute.get("statement"))
+        den = (compute.get("denominator_code", compute.get("parent_code")),
+               compute.get("denominator_statement", compute.get("statement")))
+        return den != own
+    return False
+
+
 # ── Signal method → preferredMode ─────────────────────────────────────────────
 
 def preferred_mode(method: str) -> str:
@@ -618,7 +659,8 @@ def main(period: str | None = None) -> int:
 
 
         domain  = se["_domain"]
-        section = SIGNAL_SECTION_OVERRIDE.get(sid) or DOMAIN_SECTION.get(domain)
+        section = (section_from_cut(sibc_cut(reg_sig.get("compute", {})), sections)
+                   or SIGNAL_SECTION_OVERRIDE.get(sid) or DOMAIN_SECTION.get(domain))
         if not section or section not in sections_out:
             continue
 
@@ -632,6 +674,13 @@ def main(period: str | None = None) -> int:
         # prose. It never showed until Jul 2026 because these signals had never been through an
         # evaluation — the family was built after the last eval ran.
         if method in MOVEMENT_METHODS:
+            continue
+        # The table families (size; share of the WHOLE book) are the Layer 1 table's columns, not
+        # news. "Registry coverage is not publication" (signals/README, cut coverage): widening
+        # compute must not widen the dashboard by side effect. They had never been evaluated
+        # until Aug 2026, and then published 17 cards under the wrong sections, every one caught
+        # by the card↔chart check (5.7). A share of the PARENT stays a card, as it always was.
+        if is_table_family(reg_sig.get("compute", {})):
             continue
         cut          = sibc_cut(reg_sig.get("compute", {}))
         # DERIVED, never the registry's hand-typed `chart_series` (§15.4). Typing it

@@ -1,6 +1,14 @@
 {
   "root": "/Users/rishamjeetkaur/Downloads/abnvp/india-credit-lens",
   "scripts": {
+    "core/absence": {
+      "doc_claims": [],
+      "imports": [],
+      "invokes": [],
+      "path": "analysis/core/absence.py",
+      "reads": {},
+      "writes": {}
+    },
     "core/cadence": {
       "doc_claims": [],
       "imports": [],
@@ -369,6 +377,20 @@
       },
       "writes": {}
     },
+    "cross/validate_concordance": {
+      "doc_claims": [],
+      "imports": [
+        "core/absence",
+        "core/manifest"
+      ],
+      "invokes": [],
+      "path": "analysis/cross/validate_concordance.py",
+      "reads": {
+        "*__*.json": "low",
+        "analysis/signals/registry.json": "low"
+      },
+      "writes": {}
+    },
     "guards/audit_force_sources": {
       "doc_claims": [],
       "imports": [],
@@ -558,6 +580,7 @@
       "invokes": [],
       "path": "analysis/pipelines/atm_pos/detect_atm_pos_format.py",
       "reads": {
+        "analysis/rbi_atm_pos/canonical_banks.json": "low",
         "canonical_banks.json": "low"
       },
       "writes": {

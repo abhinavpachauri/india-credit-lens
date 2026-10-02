@@ -54,7 +54,11 @@ MONTHS = {
 }
 
 EXPECTED_COLS    = 29
-EXPECTED_BANKS   = 64
+# Read from the roster, never typed: a literal 64 here outlived the April 2026 roster change
+# (Paytm Payments Bank removed, 63 banks) and warned on every correct file until the Aug 2026
+# ingest asked why. The roster (canonical_banks.json) is the one place the count is decided.
+EXPECTED_BANKS   = json.loads((Path(__file__).resolve().parents[2] / "rbi_atm_pos" /
+                               "canonical_banks.json").read_text())["_meta"]["total"]
 SHEET_PREFIX     = "For Website "  # newer RBI format
 FORMAT_ID        = "atm_pos_monthly"
 

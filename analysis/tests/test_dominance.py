@@ -47,12 +47,22 @@ def test_is_news_keeps_raw_metric_but_zeroes_the_corrupted_ratio():
     try:
         raw = is_news.score(conn, "pos-terminals-yoy", reg["pos-terminals-yoy"])
         assert raw["factors"]["artifact"] is True          # flagged so the insight can attribute it
-        assert raw["score"] > 0                             # but still surfaces as an (explained) read
+        # ...and otherwise untouched: the guard never lowers a raw aggregate's score. Asserted
+        # against an unguarded run, not as "score > 0": whether the move is news THIS month is
+        # the data's call (it was in Jun 2026, not by Aug 2026), not the guard's.
+        import signals.is_news as _n
+        real = _n.move_dominance
+        _n.move_dominance = lambda *a, **k: None
+        try:
+            unguarded = is_news.score(conn, "pos-terminals-yoy", reg["pos-terminals-yoy"])
+        finally:
+            _n.move_dominance = real
+        assert raw["score"] == unguarded["score"]
 
         ratio = is_news.score(conn, "upi-qr-per-pos", reg["upi-qr-per-pos"])
         assert ratio["factors"]["artifact"] is True
-        assert ratio["factors"]["record"] is False and ratio["factors"]["magnitude"] is False
-        assert ratio["score"] == 0.0                        # its "record" is arithmetically spurious
+        assert not any(v for k, v in ratio["factors"].items() if k != "artifact"), ratio["factors"]
+        assert ratio["score"] == 0.0                        # every factor is arithmetically spurious
 
         # a genuine record is untouched by the guard
         assert is_news.score(conn, "cc-outstanding-yoy", reg["cc-outstanding-yoy"])["factors"]["record"] is True

@@ -1,0 +1,992 @@
+{
+  "_meta": {
+    "pipeline": "sibc",
+    "period": "2026-09-30",
+    "schema_version": "4.0",
+    "spec_ref": "analysis/SYSTEM_MODEL_SPEC.md §16",
+    "computed_from": "signals.db",
+    "signals_observed": 156
+  },
+  "entity_states": {
+    "icl:sibc/Statement1/I": {
+      "direction": 1,
+      "signals": 4,
+      "observed": 4,
+      "coherence": 1.0,
+      "children": 2
+    },
+    "icl:sibc/Statement1/II": {
+      "direction": 0,
+      "signals": 2,
+      "observed": 2
+    },
+    "icl:sibc/Statement1/III": {
+      "direction": 1,
+      "signals": 14,
+      "observed": 14,
+      "coherence": 1.0,
+      "children": 4
+    },
+    "icl:sibc/Statement1/1": {
+      "direction": 1,
+      "signals": 3,
+      "observed": 3
+    },
+    "icl:sibc/Statement1/2": {
+      "direction": 1,
+      "signals": 14,
+      "observed": 14,
+      "coherence": 1.0,
+      "children": 3
+    },
+    "icl:sibc/Statement1/3": {
+      "direction": 1,
+      "signals": 13,
+      "observed": 12,
+      "coherence": 1.0,
+      "children": 10
+    },
+    "icl:sibc/Statement1/4": {
+      "direction": 1,
+      "signals": 21,
+      "observed": 20,
+      "coherence": 1.0,
+      "children": 9
+    },
+    "icl:sibc/Statement1/PSL": {
+      "direction": 1,
+      "signals": 5,
+      "observed": 5,
+      "coherence": 1.0,
+      "children": 10
+    },
+    "icl:sibc/Statement1/2.1": {
+      "direction": 1,
+      "signals": 4,
+      "observed": 4
+    },
+    "icl:sibc/Statement1/2.2": {
+      "direction": 1,
+      "signals": 2,
+      "observed": 2
+    },
+    "icl:sibc/Statement1/2.3": {
+      "direction": 1,
+      "signals": 3,
+      "observed": 3
+    },
+    "icl:sibc/Statement1/3.1": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement1/3.2": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement1/3.3": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement1/3.4": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement1/3.5": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement1/3.6": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement1/3.7": {
+      "direction": 1,
+      "signals": 6,
+      "observed": 6
+    },
+    "icl:sibc/Statement1/3.8": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement1/3.9": {
+      "direction": 1,
+      "signals": 6,
+      "observed": 6
+    },
+    "icl:sibc/Statement1/3.10": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement1/4.1": {
+      "direction": 1,
+      "signals": 3,
+      "observed": 2
+    },
+    "icl:sibc/Statement1/4.2": {
+      "direction": 1,
+      "signals": 2,
+      "observed": 2
+    },
+    "icl:sibc/Statement1/4.3": {
+      "direction": 1,
+      "signals": 2,
+      "observed": 2
+    },
+    "icl:sibc/Statement1/4.4": {
+      "direction": 1,
+      "signals": 2,
+      "observed": 2
+    },
+    "icl:sibc/Statement1/4.5": {
+      "direction": 1,
+      "signals": 4,
+      "observed": 4
+    },
+    "icl:sibc/Statement1/4.6": {
+      "direction": 1,
+      "signals": 2,
+      "observed": 2
+    },
+    "icl:sibc/Statement1/4.7": {
+      "direction": 1,
+      "signals": 2,
+      "observed": 2
+    },
+    "icl:sibc/Statement1/4.8": {
+      "direction": 1,
+      "signals": 3,
+      "observed": 3
+    },
+    "icl:sibc/Statement1/4.9": {
+      "direction": 1,
+      "signals": 2,
+      "observed": 2
+    },
+    "icl:sibc/Statement1/i": {
+      "direction": 1,
+      "signals": 2,
+      "observed": 2
+    },
+    "icl:sibc/Statement1/ii": {
+      "direction": 1,
+      "signals": 3,
+      "observed": 3
+    },
+    "icl:sibc/Statement1/iii": {
+      "direction": 1,
+      "signals": 2,
+      "observed": 2
+    },
+    "icl:sibc/Statement1/iv": {
+      "direction": 1,
+      "signals": 2,
+      "observed": 2
+    },
+    "icl:sibc/Statement1/ix": {
+      "direction": 0,
+      "signals": 2,
+      "observed": 2
+    },
+    "icl:sibc/Statement1/v": {
+      "direction": 1,
+      "signals": 2,
+      "observed": 2
+    },
+    "icl:sibc/Statement1/vi": {
+      "direction": 1,
+      "signals": 3,
+      "observed": 3
+    },
+    "icl:sibc/Statement1/vii": {
+      "direction": 1,
+      "signals": 2,
+      "observed": 2
+    },
+    "icl:sibc/Statement1/viii": {
+      "direction": 0,
+      "signals": 2,
+      "observed": 2
+    },
+    "icl:sibc/Statement1/x": {
+      "direction": 1,
+      "signals": 3,
+      "observed": 3
+    },
+    "icl:sibc/Statement1/3.7.1": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement1/3.7.2": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement1/3.9.1": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement1/3.9.2": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.1": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.2": {
+      "direction": 1,
+      "signals": 6,
+      "observed": 6
+    },
+    "icl:sibc/Statement2/2.3": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.4": {
+      "direction": 1,
+      "signals": 6,
+      "observed": 6
+    },
+    "icl:sibc/Statement2/2.5": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.6": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.7": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.8": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.9": {
+      "direction": 1,
+      "signals": 6,
+      "observed": 6
+    },
+    "icl:sibc/Statement2/2.10": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.11": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.12": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.13": {
+      "direction": 1,
+      "signals": 6,
+      "observed": 6
+    },
+    "icl:sibc/Statement2/2.14": {
+      "direction": 1,
+      "signals": 6,
+      "observed": 6
+    },
+    "icl:sibc/Statement2/2.15": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.16": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.17": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.18": {
+      "direction": -1,
+      "signals": 8,
+      "observed": 8
+    },
+    "icl:sibc/Statement2/2.19": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.2.1": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.2.2": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.2.3": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.2.4": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.4.1": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.4.2": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.4.3": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.4.4": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.9.1": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.9.2": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.9.3": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.9.4": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.13.1": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.13.2": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.14.1": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.14.2": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.18.1": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.18.2": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.18.3": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.18.4": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.18.5": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.18.6": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.18.7": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    }
+  },
+  "force_states": {
+    "force_gold_price_surge": {
+      "state": "active",
+      "instance_of": "ch_collateral_price_secured",
+      "evidence_observed": 2,
+      "evidence_total": 2,
+      "authored_status": "active",
+      "mismatch": false
+    },
+    "force_rbi_unsecured_tightening": {
+      "state": "active",
+      "instance_of": "ch_capital_weight_unsecured",
+      "evidence_observed": 2,
+      "evidence_total": 3,
+      "authored_status": "active",
+      "mismatch": false
+    },
+    "force_psl_limit_revision": {
+      "state": "active",
+      "instance_of": "ch_psl_threshold_reclassification",
+      "evidence_observed": 1,
+      "evidence_total": 1,
+      "authored_status": "active",
+      "mismatch": false
+    },
+    "force_pli_manufacturing": {
+      "state": "active",
+      "instance_of": "ch_industrial_capex_supplychain",
+      "evidence_observed": 3,
+      "evidence_total": 3,
+      "authored_status": "active",
+      "mismatch": false
+    },
+    "force_msme_formalisation": {
+      "state": "active",
+      "instance_of": "ch_formalisation_underwritability",
+      "evidence_observed": 2,
+      "evidence_total": 2,
+      "authored_status": "active",
+      "mismatch": false
+    },
+    "force_nbfc_regulatory_recovery": {
+      "state": "active",
+      "instance_of": "ch_wholesale_funding_intermediation",
+      "evidence_observed": 3,
+      "evidence_total": 3,
+      "authored_status": "active",
+      "mismatch": false
+    },
+    "force_msp_procurement_growth": {
+      "state": "active",
+      "instance_of": "ch_procurement_policy_food",
+      "evidence_observed": 2,
+      "evidence_total": 2,
+      "authored_status": "active",
+      "mismatch": false
+    },
+    "force_infra_cycle_maturing": {
+      "state": "active",
+      "instance_of": "ch_project_lifecycle_origination",
+      "evidence_observed": 1,
+      "evidence_total": 1,
+      "authored_status": "watch",
+      "mismatch": false
+    },
+    "force_eclgs5_guarantee_window": {
+      "state": "active",
+      "instance_of": "ch_emergency_guarantee_msme",
+      "evidence_observed": 3,
+      "evidence_total": 3,
+      "authored_status": "active",
+      "mismatch": false
+    },
+    "force_kcc_collateral_limit": {
+      "state": "active",
+      "instance_of": "ch_kcc_psl_agri_limits",
+      "evidence_observed": 2,
+      "evidence_total": 2,
+      "authored_status": "active",
+      "mismatch": false
+    },
+    "force_vehicle_scrappage_replacement": {
+      "state": "active",
+      "instance_of": "ch_asset_retirement_replacement",
+      "evidence_observed": 1,
+      "evidence_total": 1,
+      "authored_status": "active",
+      "mismatch": false
+    },
+    "force_psl_education_limit": {
+      "state": "active",
+      "instance_of": "ch_psl_threshold_reclassification",
+      "evidence_observed": 1,
+      "evidence_total": 1,
+      "authored_status": "active",
+      "mismatch": false
+    },
+    "force_psl_renewable_limit": {
+      "state": "active",
+      "instance_of": "ch_psl_threshold_reclassification",
+      "evidence_observed": 1,
+      "evidence_total": 1,
+      "authored_status": "active",
+      "mismatch": false
+    }
+  },
+  "edge_states": {
+    "force_gold_price_surge__drives__e_S1_4_8": {
+      "state": "active",
+      "type": "drives",
+      "polarity": "+",
+      "from": "force_gold_price_surge",
+      "to": "e_S1_4_8"
+    },
+    "force_gold_price_surge__creates_opportunity__opp_gold_loan_entry": {
+      "state": "active",
+      "type": "creates_opportunity",
+      "polarity": "+",
+      "from": "force_gold_price_surge",
+      "to": "opp_gold_loan_entry"
+    },
+    "force_rbi_unsecured_tightening__suppresses__e_S1_4_5": {
+      "state": "reversed",
+      "type": "suppresses",
+      "polarity": "-",
+      "from": "force_rbi_unsecured_tightening",
+      "to": "e_S1_4_5"
+    },
+    "force_rbi_unsecured_tightening__suppresses__e_S1_4_1": {
+      "state": "reversed",
+      "type": "suppresses",
+      "polarity": "-",
+      "from": "force_rbi_unsecured_tightening",
+      "to": "e_S1_4_1"
+    },
+    "force_rbi_unsecured_tightening__creates_risk__risk_unsecured_migration": {
+      "state": "reversed",
+      "type": "creates_risk",
+      "polarity": "-",
+      "from": "force_rbi_unsecured_tightening",
+      "to": "risk_unsecured_migration"
+    },
+    "e_S1_4_5__reroutes_to__e_S1_4_8": {
+      "state": "active",
+      "type": "reroutes_to",
+      "polarity": "~",
+      "from": "e_S1_4_5",
+      "to": "e_S1_4_8"
+    },
+    "e_S1_4_1__creates_risk__risk_unsecured_migration": {
+      "state": "reversed",
+      "type": "creates_risk",
+      "polarity": "-",
+      "from": "e_S1_4_1",
+      "to": "risk_unsecured_migration"
+    },
+    "e_S1_4_5__creates_risk__risk_unsecured_migration": {
+      "state": "reversed",
+      "type": "creates_risk",
+      "polarity": "-",
+      "from": "e_S1_4_5",
+      "to": "risk_unsecured_migration"
+    },
+    "force_psl_limit_revision__drives__e_S1_iv": {
+      "state": "active",
+      "type": "drives",
+      "polarity": "+",
+      "from": "force_psl_limit_revision",
+      "to": "e_S1_iv"
+    },
+    "force_psl_limit_revision__drives__e_S1_viii": {
+      "state": "active",
+      "type": "drives",
+      "polarity": "+",
+      "from": "force_psl_limit_revision",
+      "to": "e_S1_viii"
+    },
+    "force_psl_limit_revision__creates_opportunity__opp_pslc_tooling": {
+      "state": "active",
+      "type": "creates_opportunity",
+      "polarity": "+",
+      "from": "force_psl_limit_revision",
+      "to": "opp_pslc_tooling"
+    },
+    "force_pli_manufacturing__drives__e_S2_2_14": {
+      "state": "active",
+      "type": "drives",
+      "polarity": "+",
+      "from": "force_pli_manufacturing",
+      "to": "e_S2_2_14"
+    },
+    "force_pli_manufacturing__drives__e_S2_2_9": {
+      "state": "active",
+      "type": "drives",
+      "polarity": "+",
+      "from": "force_pli_manufacturing",
+      "to": "e_S2_2_9"
+    },
+    "force_pli_manufacturing__drives__e_S2_2_13": {
+      "state": "active",
+      "type": "drives",
+      "polarity": "+",
+      "from": "force_pli_manufacturing",
+      "to": "e_S2_2_13"
+    },
+    "force_pli_manufacturing__creates_opportunity__opp_pli_supply_chain": {
+      "state": "active",
+      "type": "creates_opportunity",
+      "polarity": "+",
+      "from": "force_pli_manufacturing",
+      "to": "opp_pli_supply_chain"
+    },
+    "e_S2_2_9__amplifies__e_S2_2_14": {
+      "state": "active",
+      "type": "amplifies",
+      "polarity": "+",
+      "from": "e_S2_2_9",
+      "to": "e_S2_2_14"
+    },
+    "e_S2_2_13__amplifies__e_S2_2_14": {
+      "state": "active",
+      "type": "amplifies",
+      "polarity": "+",
+      "from": "e_S2_2_13",
+      "to": "e_S2_2_14"
+    },
+    "force_msme_formalisation__drives__e_S1_2_1": {
+      "state": "active",
+      "type": "drives",
+      "polarity": "+",
+      "from": "force_msme_formalisation",
+      "to": "e_S1_2_1"
+    },
+    "force_msme_formalisation__creates_opportunity__opp_msme_origination": {
+      "state": "active",
+      "type": "creates_opportunity",
+      "polarity": "+",
+      "from": "force_msme_formalisation",
+      "to": "opp_msme_origination"
+    },
+    "e_S1_2_1__creates_opportunity__opp_msme_origination": {
+      "state": "active",
+      "type": "creates_opportunity",
+      "polarity": "+",
+      "from": "e_S1_2_1",
+      "to": "opp_msme_origination"
+    },
+    "force_nbfc_regulatory_recovery__amplifies__e_S1_3": {
+      "state": "active",
+      "type": "amplifies",
+      "polarity": "+",
+      "from": "force_nbfc_regulatory_recovery",
+      "to": "e_S1_3"
+    },
+    "force_msp_procurement_growth__drives__e_S1_II": {
+      "state": "active",
+      "type": "drives",
+      "polarity": "+",
+      "from": "force_msp_procurement_growth",
+      "to": "e_S1_II"
+    },
+    "force_infra_cycle_maturing__suppresses__e_S2_2_18": {
+      "state": "reversed",
+      "type": "suppresses",
+      "polarity": "-",
+      "from": "force_infra_cycle_maturing",
+      "to": "e_S2_2_18"
+    },
+    "force_infra_cycle_maturing__creates_risk__risk_infrastructure_repayment": {
+      "state": "reversed",
+      "type": "creates_risk",
+      "polarity": "-",
+      "from": "force_infra_cycle_maturing",
+      "to": "risk_infrastructure_repayment"
+    },
+    "force_infra_cycle_maturing__creates_opportunity__opp_renewable_energy": {
+      "state": "active",
+      "type": "creates_opportunity",
+      "polarity": "+",
+      "from": "force_infra_cycle_maturing",
+      "to": "opp_renewable_energy"
+    },
+    "e_S2_2_18__creates_risk__risk_infrastructure_repayment": {
+      "state": "active",
+      "type": "creates_risk",
+      "polarity": "-",
+      "from": "e_S2_2_18",
+      "to": "risk_infrastructure_repayment"
+    },
+    "e_S1_4_7__creates_opportunity__opp_vehicle_ev": {
+      "state": "active",
+      "type": "creates_opportunity",
+      "polarity": "+",
+      "from": "e_S1_4_7",
+      "to": "opp_vehicle_ev"
+    },
+    "force_nbfc_regulatory_recovery__creates_opportunity__opp_services_entry": {
+      "state": "active",
+      "type": "creates_opportunity",
+      "polarity": "+",
+      "from": "force_nbfc_regulatory_recovery",
+      "to": "opp_services_entry"
+    },
+    "e_S1_3__creates_opportunity__opp_services_entry": {
+      "state": "active",
+      "type": "creates_opportunity",
+      "polarity": "+",
+      "from": "e_S1_3",
+      "to": "opp_services_entry"
+    },
+    "force_msme_formalisation__creates_opportunity__opp_colending_infra": {
+      "state": "active",
+      "type": "creates_opportunity",
+      "polarity": "+",
+      "from": "force_msme_formalisation",
+      "to": "opp_colending_infra"
+    },
+    "e_S1_2_1__creates_opportunity__opp_colending_infra": {
+      "state": "active",
+      "type": "creates_opportunity",
+      "polarity": "+",
+      "from": "e_S1_2_1",
+      "to": "opp_colending_infra"
+    },
+    "force_kcc_collateral_limit__drives__e_S1_1": {
+      "state": "active",
+      "type": "drives",
+      "polarity": "+",
+      "from": "force_kcc_collateral_limit",
+      "to": "e_S1_1"
+    },
+    "force_vehicle_scrappage_replacement->e_S1_4_7": {
+      "state": "active",
+      "type": "drives",
+      "polarity": "+",
+      "from": "force_vehicle_scrappage_replacement",
+      "to": "e_S1_4_7"
+    },
+    "force_psl_education_limit->e_S1_v": {
+      "state": "active",
+      "type": "drives",
+      "polarity": "+",
+      "from": "force_psl_education_limit",
+      "to": "e_S1_v"
+    },
+    "force_psl_renewable_limit->e_S1_vi": {
+      "state": "active",
+      "type": "drives",
+      "polarity": "+",
+      "from": "force_psl_renewable_limit",
+      "to": "e_S1_vi"
+    }
+  },
+  "loop_states": {
+    "pli_supply_chain_R": {
+      "state": "active_reinforcing",
+      "type": "reinforcing",
+      "live_edges": 4,
+      "total_edges": 4
+    },
+    "msme_formalisation_R": {
+      "state": "active_reinforcing",
+      "type": "reinforcing",
+      "live_edges": 3,
+      "total_edges": 3
+    },
+    "unsecured_rerouting_B": {
+      "state": "partial",
+      "type": "balancing",
+      "live_edges": 3,
+      "total_edges": 3
+    },
+    "infra_cycle_transition_B": {
+      "state": "partial",
+      "type": "balancing",
+      "live_edges": 3,
+      "total_edges": 3
+    }
+  },
+  "system_observations": {
+    "dominant_forces": [
+      "force_gold_price_surge",
+      "force_rbi_unsecured_tightening",
+      "force_psl_limit_revision",
+      "force_pli_manufacturing",
+      "force_msme_formalisation",
+      "force_nbfc_regulatory_recovery",
+      "force_msp_procurement_growth",
+      "force_infra_cycle_maturing",
+      "force_eclgs5_guarantee_window",
+      "force_kcc_collateral_limit",
+      "force_vehicle_scrappage_replacement",
+      "force_psl_education_limit",
+      "force_psl_renewable_limit"
+    ],
+    "binding_constraints": [
+      "e_S2_2_18__creates_risk__risk_infrastructure_repayment"
+    ],
+    "active_reinforcing_loops": [
+      "pli_supply_chain_R",
+      "msme_formalisation_R"
+    ],
+    "active_balancing_loops": [],
+    "authored_vs_observed_mismatches": []
+  },
+  "mix_states": {
+    "sibc-basic-metal-sub-momentum": {
+      "entity_urn": "icl:sibc/Statement2/2.13",
+      "decomposition": "Statement 2",
+      "mix_state": "steered",
+      "coherence": 1.0,
+      "toward": "Iron and Steel",
+      "away_from": "Other Metal and Metal Product",
+      "toward_tilt_pp": 9.57,
+      "children": 2
+    },
+    "sibc-chemicals-sub-momentum": {
+      "entity_urn": "icl:sibc/Statement2/2.9",
+      "decomposition": "Statement 2",
+      "mix_state": "drifting",
+      "coherence": 1.0,
+      "toward": "Fertiliser",
+      "away_from": "Others",
+      "toward_tilt_pp": 8.44,
+      "children": 4
+    },
+    "sibc-engineering-sub-momentum": {
+      "entity_urn": "icl:sibc/Statement2/2.14",
+      "decomposition": "Statement 2",
+      "mix_state": "steered",
+      "coherence": 1.0,
+      "toward": "Others",
+      "away_from": "Electronics",
+      "toward_tilt_pp": 8.43,
+      "children": 2
+    },
+    "sibc-food-processing-sub-momentum": {
+      "entity_urn": "icl:sibc/Statement2/2.2",
+      "decomposition": "Statement 2",
+      "mix_state": "drifting",
+      "coherence": 0.9482,
+      "toward": "Edible Oils and Vanaspati",
+      "away_from": "Sugar",
+      "toward_tilt_pp": 10.87,
+      "children": 4
+    },
+    "sibc-ind-size-momentum": {
+      "entity_urn": "icl:sibc/Statement1/2",
+      "decomposition": "Statement 1",
+      "mix_state": "drifting",
+      "coherence": 1.0,
+      "toward": "Medium",
+      "away_from": "Large",
+      "toward_tilt_pp": 6.8,
+      "children": 3
+    },
+    "sibc-industry-type-momentum": {
+      "entity_urn": "icl:sibc/Statement1/2",
+      "decomposition": "Statement 2",
+      "mix_state": "drifting",
+      "coherence": 1.0,
+      "toward": "All Engineering",
+      "away_from": "Infrastructure",
+      "toward_tilt_pp": 5.3,
+      "children": 19
+    },
+    "sibc-infra-sub-momentum": {
+      "entity_urn": "icl:sibc/Statement2/2.18",
+      "decomposition": "Statement 2",
+      "mix_state": "contested",
+      "coherence": 0.7717,
+      "toward": null,
+      "away_from": null,
+      "toward_tilt_pp": null,
+      "children": 0
+    },
+    "sibc-main-momentum": {
+      "entity_urn": "icl:sibc/Statement1/III",
+      "decomposition": "Statement 1",
+      "mix_state": "steered",
+      "coherence": 1.0,
+      "toward": "Services",
+      "away_from": "Personal Loans",
+      "toward_tilt_pp": 8.02,
+      "children": 4
+    },
+    "sibc-nbfc-sub-momentum": {
+      "entity_urn": "icl:sibc/Statement1/3.9",
+      "decomposition": "Statement 1",
+      "mix_state": "steered",
+      "coherence": 1.0,
+      "toward": "Public Financial Institutions (PFIs)",
+      "away_from": "Housing Finance Companies (HFCs)",
+      "toward_tilt_pp": 15.66,
+      "children": 2
+    },
+    "sibc-pl-momentum": {
+      "entity_urn": "icl:sibc/Statement1/4",
+      "decomposition": "Statement 1",
+      "mix_state": "drifting",
+      "coherence": 1.0,
+      "toward": "Loans against gold jewellery",
+      "away_from": "Housing (Including Priority Sector Housing)",
+      "toward_tilt_pp": 19.2,
+      "children": 9
+    },
+    "sibc-services-momentum": {
+      "entity_urn": "icl:sibc/Statement1/3",
+      "decomposition": "Statement 1",
+      "mix_state": "steered",
+      "coherence": 1.0,
+      "toward": "Non-Banking Financial Companies (NBFCs)",
+      "away_from": "Other Services",
+      "toward_tilt_pp": 16.75,
+      "children": 10
+    },
+    "sibc-textiles-sub-momentum": {
+      "entity_urn": "icl:sibc/Statement2/2.4",
+      "decomposition": "Statement 2",
+      "mix_state": "drifting",
+      "coherence": 1.0,
+      "toward": "Other Textiles",
+      "away_from": "Cotton Textiles",
+      "toward_tilt_pp": 10.19,
+      "children": 4
+    },
+    "sibc-trade-sub-momentum": {
+      "entity_urn": "icl:sibc/Statement1/3.7",
+      "decomposition": "Statement 1",
+      "mix_state": "steered",
+      "coherence": 1.0,
+      "toward": "Wholesale Trade",
+      "away_from": "Retail Trade",
+      "toward_tilt_pp": 16.3,
+      "children": 2
+    }
+  },
+  "narrative": null
+}

@@ -35,7 +35,11 @@ PRICING = {
     "claude-sonnet-4-5-20250929":    (3.00, 15.00),
     "claude-haiku-4-5-20251001":     (1.00,  5.00),
 }
-DEFAULT_MODEL = "claude-sonnet-4-5-20250929"
+# The ONE model id every paid path uses, on the API and on the `claude -p` CLI alike. The CLI
+# used to run without --model, so it took whatever the machine's CLI default was; on 2026-10-02
+# that default was a retired model and every Stage 5 call failed. Pinning it here keeps a run
+# from depending on how the editor's CLI happens to be configured.
+DEFAULT_MODEL = "claude-sonnet-5"
 
 # Hard ceiling for a single authorised run, set by the editor: "keep a limit of $5 as upper
 # limit, in any case don't go beyond that" (2026-09-05). It is deliberately NOT overridable by

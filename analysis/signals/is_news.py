@@ -165,7 +165,11 @@ def score(conn, sid, sig):
     if dom and dom.dominant:
         artifact = True
         if dom.via_denominator:
-            is_record, magnitude = False, False
+            # ALL factors, not only record and magnitude: a regime flip or a status crossing on a
+            # ratio whose denominator is one issuer's reclassification is the same arithmetic
+            # artefact. Only two were zeroed, and upi-qr-per-pos scored 3.0 on Aug 2026 data
+            # (flip + crossed) with every move owed to ICICI's POS count.
+            is_record = magnitude = flipped = crossed = False
 
     s = (W_RECORD * is_record + W_FLIP * flipped
          + W_MAGNITUDE * magnitude + W_CROSSED * crossed)

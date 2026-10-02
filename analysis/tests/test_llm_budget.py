@@ -136,3 +136,90 @@ def test_the_ceiling_cannot_be_lifted_by_an_environment_variable(monkeypatch):
         monkeypatch.setenv(var, "1000")
     with pytest.raises(LLMSpendNotApproved):
         require_approval("huge", 1, est_usd=MAX_RUN_USD + 1)
+
+
+# ── The CLI path (found live, Aug 2026 ingest, 2026-10-02) ────────────────────
+# `claude -p` bills the subscription, not the API, and the property test above only looked for
+# SDK calls, so evaluate's CLI path called the model with no approval while every test was green.
+# Two halves: an INVENTORY of every module that shells out to `claude -p` (so a new one fails
+# until it is driven below), and a BEHAVIOURAL check that each one refuses before any process
+# starts when the run is not approved.
+
+CLI_SITES = {"signals/evaluate.py", "core/run_inference.py", "cross/generate_opportunity_narrative.py"}
+
+
+def _invokes_claude_cli(src: str) -> bool:
+    tree = ast.parse(src)
+    for n in ast.walk(tree):
+        if isinstance(n, ast.List) and len(n.elts) >= 2 and all(isinstance(e, ast.Constant) for e in n.elts[:2]):
+            if [e.value for e in n.elts[:2]] == ["claude", "-p"]:
+                return True
+    return False
+
+
+def test_every_module_that_shells_out_to_claude_is_driven_below():
+    found = set()
+    for path in ROOT.rglob("*.py"):
+        if {"legacy", "tests", "archive"} & set(path.parts):
+            continue
+        if _invokes_claude_cli(path.read_text(errors="ignore")):
+            found.add(str(path.relative_to(ROOT)))
+    reachers = {"cross/generate_opportunity_narrative.py"}      # reuses evaluate._call_llm
+    assert found | reachers == CLI_SITES, (
+        f"`claude -p` call sites changed: {sorted(found)}. Add each to CLI_SITES and drive it below.")
+
+
+def _no_subprocess(monkeypatch, module):
+    calls = []
+    monkeypatch.setattr(module.subprocess, "run", lambda *a, **k: calls.append(a) or (_ for _ in ()).throw(
+        AssertionError(f"a process started before the guard: {a[0] if a else k}")))
+    return calls
+
+
+def test_evaluate_cli_path_refuses_before_calling_the_model(monkeypatch):
+    from signals import evaluate as ev
+    monkeypatch.delenv("ICL_LLM_OK", raising=False)
+    monkeypatch.setattr(ev, "USE_CLI", True)
+    monkeypatch.setitem(ev._EST, "usd", 0.10)
+    _no_subprocess(monkeypatch, ev)
+    with pytest.raises(LLMSpendNotApproved):
+        ev._call_llm("system", "user")
+
+
+def test_the_narrative_step_refuses_through_the_shared_path(monkeypatch):
+    from signals import evaluate as ev
+    from cross import generate_opportunity_narrative as gon
+    monkeypatch.delenv("ICL_LLM_OK", raising=False)
+    monkeypatch.setattr(ev, "USE_CLI", True)
+    _no_subprocess(monkeypatch, ev)
+    with pytest.raises(LLMSpendNotApproved):
+        gon.call_claude({"x": 1})
+
+
+def test_s4_generation_refuses_before_calling_the_model(monkeypatch):
+    from core import run_inference as ri
+    monkeypatch.delenv("ICL_LLM_OK", raising=False)
+    monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
+    _no_subprocess(monkeypatch, ri)
+    with pytest.raises(LLMSpendNotApproved):
+        ri.call_llm({"x": 1})
+
+
+def test_every_claude_cli_call_pins_the_model():
+    """Without --model the CLI uses the machine's default; on 2026-10-02 that was a retired model
+    and every Stage 5 call failed. Each `claude -p` call names its model."""
+    unpinned = []
+    for path in ROOT.rglob("*.py"):
+        if {"legacy", "tests", "archive"} & set(path.parts):
+            continue
+        for n in ast.walk(ast.parse(path.read_text(errors="ignore"))):
+            if isinstance(n, ast.List) and len(n.elts) >= 2 and all(isinstance(e, ast.Constant) for e in n.elts[:2]) \
+                    and [e.value for e in n.elts[:2]] == ["claude", "-p"]:
+                if not any(isinstance(e, ast.Constant) and e.value == "--model" for e in n.elts):
+                    unpinned.append(f"{path.relative_to(ROOT)}:{n.lineno}")
+    assert not unpinned, f"`claude -p` without --model: {unpinned}"
+
+
+def test_the_pinned_model_is_priced():
+    from core.llm_budget import DEFAULT_MODEL, PRICING
+    assert DEFAULT_MODEL in PRICING

@@ -279,11 +279,12 @@ def vintage_sentence(vintage):
     if gap == 0:
         return (f"Both halves are on the same data month: {sibc['label']} credit data and "
                 f"{atm['label']} payments data.")
-    months = "month" if abs(gap) == 1 else "months"
+    # The gap is stated by its operands, the two months, and never as a count: "1 month ahead" is
+    # a derived number no gate can ground, and the blurb gate failed on it the first month the
+    # releases fell out of step (Aug 2026 ingest, 2026-10-02). DECISIONS: quote the operands.
     ahead, behind = ("credit", "payments") if gap > 0 else ("payments", "credit")
     return (f"{sibc['label']} credit data, {atm['label']} payments data — the two RBI releases "
-            f"run on different clocks, so the {ahead} half is {abs(gap)} {months} ahead of the "
-            f"{behind} half.")
+            f"run on different clocks, so the {ahead} half is ahead of the {behind} half.")
 
 
 # ── Claims from validated feed cards ──────────────────────────────────────────

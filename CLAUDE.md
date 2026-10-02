@@ -106,15 +106,14 @@ Use CLI tools for all external service interactions — they are the most contex
 
 RBI publishes Statement 1 (Bank Credit / Food Credit / Non-food Credit) as a fortnightly
 release — always a Friday, which can fall in the first week of the **following** month.
-That publication date must be remapped to the **prior** month-end. Two rules are hard-coded
+That publication date must be remapped to the **prior** month-end. The rule is hard-coded
 in `update_web_data.py`; specific edge cases live in `{period}/date_overrides.json`.
 
 | Published on | Maps to | Why |
 |---|---|---|
-| Apr 1–7 | Mar 31 | Post-FY-end Bank Credit release — Apr 4–5 = March data |
-| May 1–7 | Apr 30 | Post-April Bank Credit release — May 2–3 = April data |
-| Mar 1–7 | Feb 28/29 | Early-March Bank Credit = February data — captured in `date_overrides.json` for the period |
+| Days 1–7 of any month | Last day of the previous month | A first-week Bank Credit release is the previous month's snapshot (Apr 4–5 = March, May 2–3 = April, Sep 5–6 = August). One rule since 2026-10-02 (user), replacing the Apr/May rules |
 | Any other date | Last day of same month | Mid-month sector snapshot → month-end |
+| Day-8+ exceptions | Per period | e.g. 2024-03-08 = February data — captured in `{period}/date_overrides.json` |
 
 **The remapping is gated in code, not by habit (2026-08-11).** It used to be a rule in this
 document with nothing enforcing it — `update_web_data.py` printed the table and wrote the CSV

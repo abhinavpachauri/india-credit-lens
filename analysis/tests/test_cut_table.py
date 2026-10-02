@@ -25,6 +25,16 @@ DB = ROOT / "analysis" / "signals" / "signals.db"
 
 # ── the properties, driven directly ───────────────────────────────────────────
 
+
+def latest(pipeline: str) -> str:
+    """The newest stored period, read, never typed. Dates pinned in these tests broke on the
+    next month's ingest with nothing actually wrong (Aug 2026 ingest, 2026-10-02)."""
+    con = sqlite3.connect(DB)
+    try:
+        return con.execute("SELECT MAX(period) FROM signals WHERE pipeline=?", (pipeline,)).fetchone()[0]
+    finally:
+        con.close()
+
 def test_a_whole_is_not_a_share_of_itself():
     """The total row's `of_cut` is None, not "100%".
 
@@ -33,7 +43,7 @@ def test_a_whole_is_not_a_share_of_itself():
     denominator, not a measurement of it."""
     con = sqlite3.connect(DB)
     try:
-        t = T.build(con, "sibc", "2026-08-31", "sibc-ind-size")
+        t = T.build(con, "sibc", latest("sibc"), "sibc-ind-size")
     finally:
         con.close()
     assert t["total"]["of_cut"] is None
@@ -95,7 +105,7 @@ def test_every_cell_carries_its_whole_stored_history():
     stories. Asserted over EVERY column, not the one that used to be the sparkline."""
     con = sqlite3.connect(DB)
     try:
-        t = T.build(con, "sibc", "2026-08-31", "sibc-ind-size",
+        t = T.build(con, "sibc", latest("sibc"), "sibc-ind-size",
                     parent_yoy="sibc-industry-yoy")
         large = next(p for p in t["parts"] if p["entity"] == "Large")
         for col, metric in t["columns"].items():
@@ -121,7 +131,7 @@ def test_a_columns_depth_is_its_own():
     the missing readings or discard the ones that exist."""
     con = sqlite3.connect(DB)
     try:
-        t = T.build(con, "atm_pos", "2026-07-31", "cc-category")
+        t = T.build(con, "atm_pos", latest("atm_pos"), "cc-category")
     finally:
         con.close()
     assert len(t["periods"]["size"]) > len(t["periods"]["growth"]), \
@@ -135,8 +145,8 @@ def test_the_parent_row_states_its_share_of_the_book():
     those differ by 4.9% because RBI attributes Rs 10.72L crore to no sector."""
     con = sqlite3.connect(DB)
     try:
-        t = T.build(con, "sibc", "2026-08-31", "sibc-ind-size", parent_yoy="sibc-industry-yoy")
-        main = T.build(con, "sibc", "2026-08-31", "sibc-main")
+        t = T.build(con, "sibc", latest("sibc"), "sibc-ind-size", parent_yoy="sibc-industry-yoy")
+        main = T.build(con, "sibc", latest("sibc"), "sibc-main")
     finally:
         con.close()
     assert t["total"]["of_book"], "the cut's own share of the book is missing"
@@ -153,7 +163,7 @@ def test_the_pairing_rule_is_structural():
     try:
         for stem in ("sibc-ind-size", "sibc-services", "cc-category"):
             pipeline = "sibc" if stem.startswith("sibc") else "atm_pos"
-            period = "2026-08-31" if pipeline == "sibc" else "2026-07-31"
+            period = latest(pipeline)
             t = T.build(con, pipeline, period, stem)
             if not t:
                 continue
@@ -175,7 +185,7 @@ def test_every_cut_with_a_table_covers_every_part_it_has():
     that reconstructs ids by convention fails on the one cut whose name does not follow it —
     which is the same defect it is supposed to catch, wearing the other hat.
     """
-    for pipeline, period in (("sibc", "2026-08-31"), ("atm_pos", "2026-07-31")):
+    for pipeline in ("sibc", "atm_pos"):
         doc = json.loads((DATA / f"{pipeline}_table.json").read_text())
         con = sqlite3.connect(DB)
         try:

@@ -57,7 +57,7 @@ SYSTEM = (
 )
 
 
-from core.llm_budget import require_approval, estimate_usd                 # noqa: E402
+from core.llm_budget import require_approval, estimate_usd, DEFAULT_MODEL  # noqa: E402
 from core.source_fetch import fetch_text                                   # noqa: E402
 from distribution.bank_sourcing import (                                  # noqa: E402
     MIN_EXCERPT_CHARS, excerpt_on_page, tier_of)
@@ -125,7 +125,7 @@ VERIFY_SYSTEM = (
 )
 
 
-MODEL = "claude-sonnet-4-5-20250929"
+MODEL = DEFAULT_MODEL       # one id for API and CLI (core/llm_budget.py)
 MAX_RUNGS = 3        # each rung is an LLM call with web search — bounded, not exhaustive
 # Observed size of one S4 call (generation, and a web-search rung). Used only to price the run
 # for approval — the guard needs an amount, and an amount needs a token count.
@@ -157,7 +157,7 @@ def _claude_json(system, payload, web=False, timeout=240, max_tokens=2000):
         text = "".join(getattr(b, "text", "") for b in resp.content if getattr(b, "type", None) == "text")
         return _parse_json(text)
     # CLI fallback (no web search available this way)
-    proc = subprocess.run(["claude", "-p", "--output-format", "text"],
+    proc = subprocess.run(["claude", "-p", "--model", MODEL, "--output-format", "text"],
                           input=f"{system}\n\n{'─'*50}\n\n{json.dumps(payload, ensure_ascii=False)}",
                           capture_output=True, text=True, timeout=timeout)
     if proc.returncode != 0:

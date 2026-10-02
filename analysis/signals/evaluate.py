@@ -31,11 +31,11 @@ import sys
 sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
 from core.paths import ROOT as REPO
 from core import manifest
-from core.llm_budget import require_approval, estimate_usd, LLMSpendNotApproved
+from core.llm_budget import require_approval, estimate_usd, LLMSpendNotApproved, DEFAULT_MODEL
 PROMPTS_DIR = Path(__file__).parent / "prompts"
 EVALS_DIR   = Path(__file__).parent / "evaluations"
 
-MODEL          = "claude-sonnet-4-5-20250929"
+MODEL          = DEFAULT_MODEL     # one id for API and CLI (core/llm_budget.py)
 
 # The run's cost estimate, filled in by `evaluate_period` before any billing call. Held at module
 # level because the estimate is a property of the RUN (domains × recorded tokens/domain), while
@@ -231,13 +231,21 @@ def _call_llm(system_prompt: str, user_content: str) -> tuple[dict, int, int, in
 
     Returns (result_dict, tokens, cache_read, cache_created).
     Token counts are 0 when using the CLI (not metered that way).
+
+    The guard comes FIRST, before either path. It used to sit only on the SDK path, so with no
+    API key set the CLI path called the model unapproved; the property test only looked for SDK
+    calls, so it stayed green. Found live on the Aug 2026 ingest (2026-10-02), when an "estimate
+    only" run started evaluating. A subscription call is still a model call the editor did not
+    approve, whichever path bills it.
     """
+    require_approval("Stage 5 signal evaluation", "1 per domain",
+                     est_usd=_EST.get("usd"), basis=_EST.get("basis", ""))
     if USE_CLI:
         # Combine system + user into one prompt passed via stdin
         # so we avoid shell-quoting issues with large payloads
         combined = f"{system_prompt}\n\n{'─'*60}\n\n{user_content}"
         proc = subprocess.run(
-            ["claude", "-p", "--output-format", "text"],
+            ["claude", "-p", "--model", MODEL, "--output-format", "text"],
             input=combined,
             capture_output=True,
             text=True,
@@ -264,8 +272,6 @@ def _call_llm(system_prompt: str, user_content: str) -> tuple[dict, int, int, in
         raise RuntimeError("pip install anthropic  (or install Claude Code)")
 
     client = anthropic.Anthropic(api_key=api_key)
-    require_approval("Stage 5 signal evaluation", "1 per domain",
-                     est_usd=_EST.get("usd"), basis=_EST.get("basis", ""))
     msg = client.messages.create(
         model=MODEL,
         max_tokens=8000,

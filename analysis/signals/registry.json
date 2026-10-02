@@ -2,7 +2,7 @@
   "_meta": {
     "schema_version": "1.0",
     "description": "Signal registry — permanent catalog of every tracked signal across all ingestion pipelines. Signal IDs are immutable once created. Add new signals; never rename or delete. layer: 1 = per-chart data signal (algorithmically computed), 2 = cross-chart synthesis (authored per period from data), 3 = lending ecosystem expert model (generated ~6-monthly, strict claim validation).",
-    "last_updated": "2026-09-26",
+    "last_updated": "2026-10-02",
     "cadence_vocabulary": [
       "fortnightly",
       "monthly",
@@ -132,7 +132,7 @@
         ]
       },
       "id": "atm-offsite-abs",
-      "current_status": "strengthening",
+      "current_status": "weakening",
       "first_seen": "2024-01-31"
     },
     "atm-offsite-bank-scan": {
@@ -195,7 +195,7 @@
         ]
       },
       "id": "atm-offsite-bank-share-scan",
-      "current_status": "weakening",
+      "current_status": "strengthening",
       "description": "Each bank's share of all ATM offsite. Denominator is the published total, not the sum of the banks that reported.",
       "first_seen": "2024-01-31"
     },
@@ -242,7 +242,7 @@
       "domain": "infrastructure",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "strengthening",
+      "current_status": "stable",
       "first_seen": "2024-01-31",
       "compute": {
         "method": "csv_category_acceleration",
@@ -575,7 +575,7 @@
       "domain": "infrastructure",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "strengthening",
+      "current_status": "weakening",
       "first_seen": "2024-01-31",
       "compute": {
         "method": "csv_category_acceleration",
@@ -656,7 +656,7 @@
       "domain": "infrastructure",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "strengthening",
+      "current_status": "weakening",
       "first_seen": "2024-01-31",
       "compute": {
         "method": "csv_category_scan_share",
@@ -1329,7 +1329,7 @@
       "sub_layer": "1a",
       "domain": "credit_card_txn",
       "spec_version": "1.0",
-      "current_status": "declining",
+      "current_status": "active",
       "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_total_yoy",
@@ -1538,7 +1538,7 @@
       "domain": "credit_card_txn",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "weakening",
+      "current_status": "strengthening",
       "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_category_scan_share",
@@ -1780,7 +1780,7 @@
       "domain": "credit_card_txn",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "declining",
+      "current_status": "active",
       "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_category_momentum",
@@ -2039,7 +2039,7 @@
         ],
         "window": 12
       },
-      "current_status": "strengthening",
+      "current_status": "stable",
       "first_seen": "2024-01-31"
     },
     "cc-category-allocation": {
@@ -2676,7 +2676,7 @@
       "domain": "credit_card_txn",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "strengthening",
+      "current_status": "weakening",
       "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_category_scan_share",
@@ -2769,7 +2769,7 @@
       "sub_layer": "1a",
       "domain": "credit_card_txn",
       "spec_version": "1.0",
-      "current_status": "strengthening",
+      "current_status": "weakening",
       "first_seen": "2024-01-31",
       "compute": {
         "method": "csv_total_abs",
@@ -2825,7 +2825,7 @@
         ]
       },
       "id": "cc-ecom-val-share",
-      "current_status": "active",
+      "current_status": "weakening",
       "first_seen": "2024-01-31"
     },
     "cc-ecom-val-yoy": {
@@ -2901,7 +2901,7 @@
       "sub_layer": "1a",
       "domain": "credit_card_txn",
       "spec_version": "1.0",
-      "current_status": "strengthening",
+      "current_status": "active",
       "first_seen": "2024-01-31",
       "compute": {
         "method": "csv_ratio_sum",
@@ -3048,7 +3048,7 @@
           }
         ]
       },
-      "current_status": "stable",
+      "current_status": "strengthening",
       "first_seen": "2024-01-31"
     },
     "cc-other-txn-val-bank-scan": {
@@ -3158,7 +3158,7 @@
       "domain": "credit_card_txn",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "weakening",
+      "current_status": "strengthening",
       "first_seen": "2024-01-31",
       "compute": {
         "method": "csv_category_acceleration",
@@ -3429,7 +3429,7 @@
       "domain": "credit_card_txn",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "weakening",
+      "current_status": "strengthening",
       "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_category_acceleration",
@@ -3995,7 +3995,7 @@
       "domain": "credit_card_txn",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "weakening",
+      "current_status": "strengthening",
       "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_category_acceleration",
@@ -4076,7 +4076,7 @@
       "domain": "credit_card_txn",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "strengthening",
+      "current_status": "weakening",
       "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_category_scan_share",
@@ -4347,7 +4347,7 @@
       "domain": "credit_card_txn",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "strengthening",
+      "current_status": "weakening",
       "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_category_scan_share",
@@ -4472,7 +4472,7 @@
       "sub_layer": "1a",
       "domain": "credit_card_txn",
       "spec_version": "1.0",
-      "current_status": "active",
+      "current_status": "strengthening",
       "first_seen": "2024-01-31",
       "compute": {
         "method": "csv_ratio_sum",
@@ -4572,7 +4572,7 @@
       "sub_layer": "1a",
       "domain": "credit_card_txn",
       "spec_version": "1.0",
-      "current_status": "weakening",
+      "current_status": "active",
       "first_seen": "2024-01-31",
       "compute": {
         "method": "csv_ratio_sum",
@@ -4856,7 +4856,7 @@
         ]
       },
       "id": "dc-atm-val-share",
-      "current_status": "weakening",
+      "current_status": "strengthening",
       "first_seen": "2024-01-31"
     },
     "dc-atm-val-yoy": {
@@ -5212,7 +5212,7 @@
       "domain": "debit_card_txn",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "weakening",
+      "current_status": "strengthening",
       "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_category_scan_share",
@@ -5402,7 +5402,7 @@
       "domain": "debit_card_txn",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "weakening",
+      "current_status": "stable",
       "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_category_acceleration",
@@ -5483,7 +5483,7 @@
       "domain": "debit_card_txn",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "weakening",
+      "current_status": "strengthening",
       "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_category_scan_share",
@@ -5713,7 +5713,7 @@
         ],
         "window": 12
       },
-      "current_status": "weakening",
+      "current_status": "stable",
       "first_seen": "2024-01-31"
     },
     "dc-category-allocation": {
@@ -6079,7 +6079,7 @@
       "domain": "debit_card_txn",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "weakening",
+      "current_status": "strengthening",
       "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_category_scan_share",
@@ -6269,7 +6269,7 @@
       "domain": "debit_card_txn",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "weakening",
+      "current_status": "strengthening",
       "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_category_acceleration",
@@ -6321,7 +6321,7 @@
       "domain": "debit_card_txn",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "declining",
+      "current_status": "active",
       "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_category_momentum",
@@ -6350,7 +6350,7 @@
       "domain": "debit_card_txn",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "weakening",
+      "current_status": "strengthening",
       "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_category_scan_share",
@@ -6443,7 +6443,7 @@
       "sub_layer": "1a",
       "domain": "debit_card_txn",
       "spec_version": "1.0",
-      "current_status": "strengthening",
+      "current_status": "weakening",
       "first_seen": "2024-01-31",
       "compute": {
         "method": "csv_total_abs",
@@ -6500,7 +6500,7 @@
         ]
       },
       "id": "dc-ecom-val-share",
-      "current_status": "strengthening",
+      "current_status": "weakening",
       "first_seen": "2024-01-31"
     },
     "dc-ecom-val-yoy": {
@@ -6614,7 +6614,7 @@
       "sub_layer": "1a",
       "domain": "debit_card_txn",
       "spec_version": "1.0",
-      "current_status": "declining",
+      "current_status": "active",
       "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_total_yoy",
@@ -6676,7 +6676,7 @@
           }
         ]
       },
-      "current_status": "stable",
+      "current_status": "strengthening",
       "first_seen": "2024-01-31"
     },
     "dc-other-txn-val-bank-scan": {
@@ -6786,7 +6786,7 @@
       "domain": "debit_card_txn",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "strengthening",
+      "current_status": "weakening",
       "first_seen": "2024-01-31",
       "compute": {
         "method": "csv_category_acceleration",
@@ -6867,7 +6867,7 @@
       "domain": "debit_card_txn",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "weakening",
+      "current_status": "strengthening",
       "first_seen": "2024-01-31",
       "compute": {
         "method": "csv_category_scan_share",
@@ -6928,7 +6928,7 @@
       "domain": "debit_card_txn",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "active",
+      "current_status": "declining",
       "first_seen": "2024-01-31",
       "compute": {
         "method": "csv_category_scan_yoy",
@@ -7057,7 +7057,7 @@
       "domain": "debit_card_txn",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "weakening",
+      "current_status": "strengthening",
       "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_category_acceleration",
@@ -7109,7 +7109,7 @@
       "domain": "debit_card_txn",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "active",
+      "current_status": "declining",
       "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_category_momentum",
@@ -7138,7 +7138,7 @@
       "domain": "debit_card_txn",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "weakening",
+      "current_status": "strengthening",
       "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_category_scan_share",
@@ -7231,7 +7231,7 @@
       "sub_layer": "1a",
       "domain": "debit_card_txn",
       "spec_version": "1.0",
-      "current_status": "strengthening",
+      "current_status": "weakening",
       "first_seen": "2024-01-31",
       "compute": {
         "method": "csv_total_abs",
@@ -7332,7 +7332,7 @@
       "sub_layer": "1a",
       "domain": "debit_card_txn",
       "spec_version": "1.0",
-      "current_status": "strengthening",
+      "current_status": "weakening",
       "first_seen": "2024-01-31",
       "compute": {
         "method": "csv_total_abs",
@@ -7402,7 +7402,7 @@
       "sub_layer": "1a",
       "domain": "debit_card_txn",
       "spec_version": "1.0",
-      "current_status": "active",
+      "current_status": "declining",
       "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_total_yoy",
@@ -7706,7 +7706,7 @@
       "domain": "debit_card_txn",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "strengthening",
+      "current_status": "weakening",
       "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_category_scan_share",
@@ -7767,7 +7767,7 @@
       "domain": "debit_card_txn",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "active",
+      "current_status": "declining",
       "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_category_scan_yoy",
@@ -7977,7 +7977,7 @@
       "domain": "debit_card_txn",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "weakening",
+      "current_status": "strengthening",
       "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_category_scan_share",
@@ -8272,7 +8272,7 @@
       "sub_layer": "1a",
       "domain": "debit_card_txn",
       "spec_version": "1.0",
-      "current_status": "weakening",
+      "current_status": "strengthening",
       "first_seen": "2024-01-31",
       "compute": {
         "method": "csv_total_abs",
@@ -8401,7 +8401,7 @@
       "domain": "debit_card_txn",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "weakening",
+      "current_status": "strengthening",
       "first_seen": "2024-01-31",
       "compute": {
         "method": "csv_category_acceleration",
@@ -8543,7 +8543,7 @@
       "domain": "debit_card_txn",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "declining",
+      "current_status": "active",
       "first_seen": "2024-01-31",
       "compute": {
         "method": "csv_category_scan_yoy",
@@ -8644,7 +8644,7 @@
       "sub_layer": "1a",
       "domain": "debit_card_txn",
       "spec_version": "1.0",
-      "current_status": "weakening",
+      "current_status": "strengthening",
       "first_seen": "2024-01-31",
       "compute": {
         "method": "csv_total_abs",
@@ -8773,7 +8773,7 @@
       "domain": "debit_card_txn",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "weakening",
+      "current_status": "strengthening",
       "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_category_acceleration",
@@ -8915,7 +8915,7 @@
       "domain": "debit_card_txn",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "declining",
+      "current_status": "active",
       "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_category_scan_yoy",
@@ -9005,7 +9005,7 @@
         ]
       },
       "id": "dc-pos-withdrawal-vol-streak",
-      "current_status": "weakening",
+      "current_status": "strengthening",
       "first_seen": "2024-02-29"
     },
     "dc-pos-withdrawal-vol-yoy": {
@@ -9426,7 +9426,7 @@
       "domain": "infrastructure",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "weakening",
+      "current_status": "strengthening",
       "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_category_acceleration",
@@ -11169,7 +11169,7 @@
         ],
         "window": 12
       },
-      "current_status": "stable",
+      "current_status": "strengthening",
       "first_seen": "2024-01-31"
     },
     "pos-category-allocation": {
@@ -11852,7 +11852,7 @@
         ]
       },
       "id": "sibc-bank-credit-yoy",
-      "current_status": "strengthening",
+      "current_status": "active",
       "first_seen": "2024-04-22",
       "type": "data",
       "chart_series": [
@@ -11869,7 +11869,7 @@
       "domain": "industry",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "strengthening",
+      "current_status": "weakening",
       "first_seen": "2025-02-28",
       "compute": {
         "method": "csv_sector_acceleration",
@@ -12027,7 +12027,7 @@
       "domain": "industry",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "strengthening",
+      "current_status": "active",
       "first_seen": "2025-02-28",
       "compute": {
         "method": "csv_sector_scan_yoy",
@@ -12064,7 +12064,7 @@
       "domain": "industry",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "strengthening",
+      "current_status": "stable",
       "first_seen": "2025-02-28",
       "compute": {
         "method": "csv_sector_acceleration",
@@ -12222,7 +12222,7 @@
       "domain": "industry",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "strengthening",
+      "current_status": "active",
       "first_seen": "2025-02-28",
       "compute": {
         "method": "csv_sector_scan_yoy",
@@ -12347,7 +12347,7 @@
       "domain": "industry",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "active",
+      "current_status": "strengthening",
       "first_seen": "2025-02-28",
       "compute": {
         "method": "csv_sector_scan_share",
@@ -12526,7 +12526,7 @@
       "domain": "industry",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "strengthening",
+      "current_status": "weakening",
       "first_seen": "2025-02-28",
       "compute": {
         "method": "csv_sector_acceleration",
@@ -12613,7 +12613,7 @@
       "domain": "industry",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "active",
+      "current_status": "weakening",
       "first_seen": "2025-02-28",
       "compute": {
         "method": "csv_sector_scan_share",
@@ -12743,7 +12743,7 @@
         ],
         "window": 12
       },
-      "current_status": "strengthening",
+      "current_status": "weakening",
       "first_seen": "2025-02-28"
     },
     "sibc-ind-size-allocation": {
@@ -13108,7 +13108,7 @@
         ],
         "window": 12
       },
-      "current_status": "strengthening",
+      "current_status": "weakening",
       "first_seen": "2025-02-28"
     },
     "sibc-industry-type-allocation": {
@@ -13309,7 +13309,7 @@
         ]
       },
       "id": "sibc-industry-type-yoy-scan",
-      "current_status": "strengthening",
+      "current_status": "active",
       "first_seen": "2024-04-22",
       "type": "data",
       "chart_series": []
@@ -13342,7 +13342,7 @@
         ]
       },
       "id": "sibc-industry-yoy",
-      "current_status": "strengthening",
+      "current_status": "active",
       "first_seen": "2024-04-22",
       "type": "data",
       "chart_series": [
@@ -13381,7 +13381,7 @@
         ],
         "window": 12
       },
-      "current_status": "weakening",
+      "current_status": "stable",
       "first_seen": "2025-02-28"
     },
     "sibc-infra-sub-allocation": {
@@ -13561,7 +13561,7 @@
       "domain": "industry",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "declining",
+      "current_status": "strengthening",
       "first_seen": "2025-02-28",
       "compute": {
         "method": "csv_sector_scan_yoy",
@@ -13652,7 +13652,7 @@
         ]
       },
       "id": "sibc-large-corporate-share",
-      "current_status": "active",
+      "current_status": "weakening",
       "first_seen": "2024-04-22",
       "type": "data",
       "chart_series": [
@@ -13687,7 +13687,7 @@
         ]
       },
       "id": "sibc-large-corporate-yoy",
-      "current_status": "strengthening",
+      "current_status": "active",
       "first_seen": "2024-04-22",
       "type": "data",
       "chart_series": [
@@ -13726,7 +13726,7 @@
           }
         ]
       },
-      "current_status": "strengthening",
+      "current_status": "stable",
       "first_seen": "2025-02-28"
     },
     "sibc-main-allocation": {
@@ -14061,7 +14061,7 @@
         ]
       },
       "id": "sibc-msme-micro-small-share",
-      "current_status": "active",
+      "current_status": "strengthening",
       "first_seen": "2024-04-22",
       "type": "data",
       "chart_series": [
@@ -14096,7 +14096,7 @@
         ]
       },
       "id": "sibc-msme-micro-small-yoy",
-      "current_status": "active",
+      "current_status": "strengthening",
       "first_seen": "2024-04-22",
       "type": "data",
       "chart_series": [
@@ -14132,7 +14132,7 @@
         ]
       },
       "id": "sibc-msme-size-yoy-spread",
-      "current_status": "weakening",
+      "current_status": "strengthening",
       "first_seen": "2024-04-22",
       "type": "data",
       "chart_series": [
@@ -14308,7 +14308,7 @@
       "domain": "sector_mix",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "strengthening",
+      "current_status": "active",
       "first_seen": "2025-02-28",
       "compute": {
         "method": "csv_sector_scan_yoy",
@@ -14435,7 +14435,7 @@
         ]
       },
       "id": "sibc-nonfood-credit-yoy",
-      "current_status": "strengthening",
+      "current_status": "active",
       "first_seen": "2024-04-22",
       "type": "data",
       "chart_series": [
@@ -14545,7 +14545,7 @@
         ],
         "window": 12
       },
-      "current_status": "stable",
+      "current_status": "strengthening",
       "first_seen": "2025-02-28"
     },
     "sibc-pl-allocation": {
@@ -14599,7 +14599,7 @@
         ]
       },
       "id": "sibc-pl-cc-abs",
-      "current_status": "weakening",
+      "current_status": "strengthening",
       "first_seen": "2025-02-28",
       "type": "data",
       "chart_series": [
@@ -14907,7 +14907,7 @@
         ]
       },
       "id": "sibc-pl-education-yoy",
-      "current_status": "strengthening",
+      "current_status": "active",
       "first_seen": "2024-04-22",
       "type": "data",
       "chart_series": [
@@ -14924,7 +14924,7 @@
       "domain": "retail",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "active",
+      "current_status": "strengthening",
       "first_seen": "2025-02-28",
       "compute": {
         "method": "csv_sector_share",
@@ -15156,7 +15156,7 @@
         ]
       },
       "id": "sibc-pl-housing-yoy",
-      "current_status": "strengthening",
+      "current_status": "active",
       "first_seen": "2024-04-22",
       "type": "data",
       "chart_series": [
@@ -15621,7 +15621,7 @@
         "parent_code": "PSL",
         "window": 12
       },
-      "current_status": "strengthening",
+      "current_status": "weakening",
       "first_seen": "2025-02-28"
     },
     "sibc-psl-agri-yoy": {
@@ -15653,7 +15653,7 @@
         ]
       },
       "id": "sibc-psl-agri-yoy",
-      "current_status": "active",
+      "current_status": "strengthening",
       "first_seen": "2024-04-22",
       "type": "data",
       "chart_series": [
@@ -15930,7 +15930,7 @@
         ]
       },
       "id": "sibc-psl-msme-yoy",
-      "current_status": "active",
+      "current_status": "strengthening",
       "first_seen": "2024-04-22",
       "type": "data",
       "chart_series": [
@@ -16039,7 +16039,7 @@
         ]
       },
       "id": "sibc-psl-renewable-yoy",
-      "current_status": "strengthening",
+      "current_status": "active",
       "first_seen": "2024-04-22",
       "type": "data",
       "chart_series": [
@@ -16056,7 +16056,7 @@
       "domain": "psl",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "strengthening",
+      "current_status": "weakening",
       "first_seen": "2025-02-28",
       "compute": {
         "method": "csv_sector_scan_share",
@@ -16127,7 +16127,7 @@
       "domain": "psl",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "active",
+      "current_status": "strengthening",
       "first_seen": "2025-02-28",
       "compute": {
         "method": "csv_sector_yoy",
@@ -16252,7 +16252,7 @@
         ]
       },
       "id": "sibc-psl-yoy-scan",
-      "current_status": "active",
+      "current_status": "strengthening",
       "first_seen": "2024-04-22",
       "type": "data",
       "chart_series": []
@@ -16908,7 +16908,7 @@
       "domain": "sector_mix",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "strengthening",
+      "current_status": "stable",
       "first_seen": "2025-02-28",
       "compute": {
         "method": "csv_sector_acceleration",
@@ -17401,7 +17401,7 @@
       "domain": "infrastructure",
       "type": "data",
       "spec_version": "2.0",
-      "current_status": "strengthening",
+      "current_status": "weakening",
       "first_seen": "2025-01-31",
       "compute": {
         "method": "csv_category_scan_share",
@@ -17514,7 +17514,7 @@
         ]
       },
       "id": "upi-qr-per-pos",
-      "current_status": "strengthening",
+      "current_status": "weakening",
       "first_seen": "2024-01-31"
     },
     "upi-qr-yoy": {

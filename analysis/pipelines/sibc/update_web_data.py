@@ -29,7 +29,7 @@ import json
 import shutil
 import sys
 from calendar import monthrange
-from datetime import date as date_type
+from datetime import timedelta, date as date_type
 from pathlib import Path
 
 import pandas as pd
@@ -53,25 +53,28 @@ def _canonical_month_end(d: date_type) -> date_type:
     Map a raw RBI publication date to the canonical last day of its reporting period.
 
     Rules:
-      - Apr 1–7  →  Mar 31 of the same year
-            RBI publishes the fortnightly Bank Credit figure (Statement 1:
-            Bank Credit, Food Credit, Non-food Credit) on the first Friday
-            after March year-end — typically Apr 4–5. That figure is the
-            March snapshot, not April's.
-      - May 1–7  →  Apr 30 of the same year
-            The equivalent fortnightly Bank Credit release after April month-end
-            lands on the first Friday of May (e.g. May 2–3). That figure is the
-            April snapshot, not May's.
+      - Days 1–7 of any month  →  the last day of the PREVIOUS month
+            RBI publishes the fortnightly Bank Credit figure (Statement 1: Bank Credit,
+            Food Credit, Non-food Credit) on a Friday, and when that Friday falls in a month's
+            first week the figure is the previous month's snapshot: Apr 4–5 is March's,
+            May 2–3 is April's, Sep 5–6 is August's. One rule for every month (user,
+            2026-10-02). It replaced two month-specific ones (Apr, May) after the Aug 2026
+            file brought 2024-09-06 and 2025-09-05, which they would have filed as September.
+            The approved record (date_remap.json, gate stage 1a) still fails any date that
+            moves, so widening the rule could not move one silently. Day-8 releases
+            (2024-03-08) stay per-period overrides.
       - All other dates  →  last calendar day of the same month
             Weekly sector snapshots land on Fridays within the month
             (e.g. Jan 24, Mar 22). Mapping them to month-end makes every
             period's data land on a single x-axis point in the dashboard.
 
     Examples:
-      2024-05-03  →  2024-04-30   (May fortnightly → Apr month-end)
+      2024-05-03  →  2024-04-30   (first-week release → previous month-end)
       2025-05-02  →  2025-04-30
-      2024-04-05  →  2024-03-31   (Apr fortnightly → Mar year-end)
+      2024-04-05  →  2024-03-31
       2025-04-04  →  2025-03-31
+      2024-09-06  →  2024-08-31
+      2025-09-05  →  2025-08-31
       2024-03-22  →  2024-03-31   (weekly sector snapshot)
       2025-03-21  →  2025-03-31
       2024-01-26  →  2024-01-31
@@ -79,10 +82,9 @@ def _canonical_month_end(d: date_type) -> date_type:
       2025-02-21  →  2025-02-28
       2026-03-31  →  2026-03-31   (already canonical)
     """
-    if d.month == 4 and d.day <= 7:
-        return date_type(d.year, 3, 31)
-    if d.month == 5 and d.day <= 7:
-        return date_type(d.year, 4, 30)
+    if d.day <= 7:
+        prev = d.replace(day=1) - timedelta(days=1)
+        return prev
     last_day = monthrange(d.year, d.month)[1]
     return date_type(d.year, d.month, last_day)
 
@@ -355,8 +357,8 @@ def main(dry_run: bool = False, check: bool = False, approve: bool = False):
     raw_dates = df[["date"]].copy()          # before any remapping, for the audit table
 
     # ── Step 2: Normalize to canonical period-end dates ───────────────────────
-    # Maps all weekly snapshot dates to the last day of their month, and maps
-    # early-April Bank Credit fortnightly dates (Apr 1–7) to March 31.
+    # Maps all weekly snapshot dates to the last day of their month, and maps a
+    # first-week Bank Credit release (days 1–7) to the previous month-end.
     # This ensures every reporting period lands on a single x-axis point in
     # the dashboard — no split between e.g. 2024-03-22 (sectors) and
     # 2024-04-05 (Bank Credit total) for the same March 2024 snapshot.
