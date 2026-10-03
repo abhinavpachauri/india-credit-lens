@@ -10,8 +10,8 @@
     "last_foundation_date": "2026-06-11",
     "behavioral_source_draft": "analysis/rbi_atm_pos/merged/system_model_draft.json",
     "composition_spec_ref": "analysis/COMPOSITION_SPEC.md",
-    "last_updated": "2026-06-30",
-    "update_note": "2026-08-02 UPDATE pass: S4 detection + review found June movements (UPI-QR record, e-commerce share, DC base decline) already explained by existing sourced forces (force_upi_zero_mdr, force_rbi_card_lifecycle_norms, fi_rupay_incentive_debit_ecom, retired force_rbi_paytm_action). No new force met the source-verification bar — honest null, not fabricated."
+    "last_updated": "2026-08-31",
+    "update_note": "2026-10-02 L2a UPDATE for report_date 2026-08-31 (August 2026 data; the July period had no pass recorded, so this covers both). S3: all 7 forces active, none mismatched; no edge changed state (11 reversed edges persist, e.g. POS terminals and debit cards growing against force_upi_zero_mdr / force_rbi_paytm_action suppression). Seven category mixes changed regime Jul→Aug: UPI QR drifting → steered (toward Private Sector Banks); CC ATM withdrawal value drifting → steered (toward Public Sector Banks); CC e-commerce value steered → drifting; DC ATM withdrawal value steered → drifting; DC other-txn volume contested → drifting; DC e-commerce volume and DC POS-withdrawal volume contested → reallocating. S4 (2026-10-03, analysis/s4_proposals/2026-09-30.json, 25 proposals): honest null, no force promoted, by editor decision. 7 triaged (5 not_a_force, 1 duplicate, 1 expired); 2 sourced to official pages but held unpromoted because each predates the window and fits only through a response lag (#12 ATM fees, RBI 1 May 2025; #8 TReDS, notification 7 Nov 2024); 1 searched, not found; 3 NBFC-raised deferred to the NBFC August pass; 12 not yet searched. Open design question: S4's temporal rule cannot see medium-term or lagged causes (PLAN)."
   },
   "nodes": [
     {

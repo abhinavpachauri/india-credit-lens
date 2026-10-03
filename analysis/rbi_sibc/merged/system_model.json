@@ -10,8 +10,8 @@
     "last_foundation_date": "2026-06-11",
     "behavioral_source_draft": "analysis/rbi_sibc/merged/system_model_v3_draft.json",
     "composition_spec_ref": "analysis/COMPOSITION_SPEC.md",
-    "last_updated": "2026-08-31",
-    "update_note": "2026-09-09 L2a UPDATE for dataDate 2026-08-31 (July 2026 data). S4 surfaced 29 unexplained movements / 34 proposals. One promotion: force_msp_procurement_growth moved hypothesis → inference, sourced to PIB PRID 2260618 (CCEA kharif MSP, 13 May 2026) — it had carried a 'NEEDS SOURCING' note since authoring because its only evidence was the SIBC series itself, i.e. the effect. No NEW force cleared the source bar this period; the rest of the worklist stays unresolved rather than fabricated."
+    "last_updated": "2026-09-30",
+    "update_note": "2026-10-02 L2a UPDATE for dataDate 2026-09-30 (August 2026 data). S3: all 13 forces active, none mismatched; no edge changed state (the 7 reversed edges persist from July: unsecured cards/durables growing against force_rbi_unsecured_tightening, infrastructure growing against force_infra_cycle_maturing). Two mix regimes changed: basic metal drifting → steered (toward Iron and Steel, +9.57pp tilt) and food processing steered → drifting. S4 (2026-10-03, analysis/s4_proposals/2026-09-30.json, 25 proposals): honest null, no force promoted, by editor decision. 7 triaged (5 not_a_force, 1 duplicate, 1 expired); 2 sourced to official pages but held unpromoted because each predates the window and fits only through a response lag (#12 ATM fees, RBI 1 May 2025; #8 TReDS, notification 7 Nov 2024); 1 searched, not found; 3 NBFC-raised deferred to the NBFC August pass; 12 not yet searched. Open design question: S4's temporal rule cannot see medium-term or lagged causes (PLAN)."
   },
   "nodes": [
     {

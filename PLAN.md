@@ -19,9 +19,9 @@ skills = procedure, subagents = independent review, hooks + `reconcile.py` = enf
 
 ## Next, in order
 
-1. **August 2026 ingest**, the first run through `/ingest-period`. SIBC releases ~30 Sep;
-   payments ~M+2; NBFC ~early Oct (July came 7 Sep). Then `/model-pass` + `/s4-source` (standing
-   rule). Fix every place the skill was wrong **in the skill**, in the same session.
+1. **NBFC August ingest** when RBI publishes (SIBC + payments Aug done 2026-10-03, with model
+   passes and S4). Then `/model-pass nbfc` + `/s4-source`, which also takes the 3 deferred
+   NBFC-raised proposals (#17-19 in `analysis/s4_proposals/2026-09-30.json`).
 2. **NBFC post-ingest count** (NBFC plan §6 "after the ingest"): how many files did pipeline #3
    touch that were not its own? Record it in `ARCHITECTURE.md` §"Adding a pipeline", and let it
    decide the open fork on a generic card path.
@@ -30,18 +30,8 @@ skills = procedure, subagents = independent review, hooks + `reconcile.py` = enf
    its own**. Its numbers reach the credit tables through one generic join driven by a concordance
    in the ontology, so NBFC ↔ NAS later needs no new code. MoSPI only for v1 (Eight Core Industries
    parked). Pull by hand until two clean cycles, then scheduled.
-   - **Probed 2026-09-26 (free), per dataset:**
-     - **IIP** 2022-23 base, Apr 2023 → Jul 2026, 2-digit NIC only. No provisional/final flag:
-       revisions overwrite silently, so every release is saved.
-     - **WPI** new base needs the UNDOCUMENTED `base_year=2022-23`; without it the API silently
-       serves the old 2011-12 series (ends Apr 2026). Jan → Aug 2026, 953 items, 3/4-digit
-       sub-groups (iron & steel, cement, glass, fertiliser, sugar, tea, jewellery).
-     - **NAS** quarterly GVA, 2022-23 base, → Q1 FY27, 8 sectors at current AND constant prices
-       (own deflator). Without `base_year` one response mixes both bases (153 new + 522 old rows).
-     - **CPI** the API holds only the 2012 base, ending Dec 2025; the new base is not loaded (no
-       endpoint, `base_year=2024` → no data). Take it from MoSPI's monthly release file until the
-       API catches up; use MoSPI's published inflation, never our own link across bases.
-     - **Guard for all four:** every row must carry the expected `base_year`, or the run fails.
+   - **Probe findings and the as-built contract** (bases, silent-200 traps, CPI from two
+     publications): signals/README "MoSPI".
    - **Concordance:** SIBC industry types ↔ IIP/WPI groups, 12 of 19 = 45% of industry credit; +
      Power ↔ Electricity → ~64%. 5 rows combine IIP groups by 2022-23 weights (PIB PRID 2267531,
      Statement II-A, sum 76.062; rebuilds the published index within ~1 pt). Exact sub-row matches:
@@ -83,6 +73,18 @@ skills = procedure, subagents = independent review, hooks + `reconcile.py` = enf
 6. **Lending & Deposit Rates** (monthly PDF; `pdftotext` works, so it is table extraction).
 
 ## Open decisions and known debts (not scheduled)
+
+- **S4 cannot explain medium-term moves (user, 2026-10-03). Design with MoSPI phase 3.** S4 asks
+  "which instrument took effect inside the window", so a lagged response or a slow-building
+  condition reads as `expired` or gets a decorative citation. Aug 2026 showed it: the two causes
+  that sourced cleanly (#12 ATM fees, RBI 1 May 2025; #8 TReDS, 7 Nov 2024) are real and fit the
+  movement only through a lag, and are held unpromoted. Directions, in payoff order:
+  (1) **decompose before attributing**: 1f real growth + output explain the price/activity share,
+  so S4 explains only the residual; (2) a **response lag** on forces, so the temporal check is
+  "effective date + declared lag overlaps the window", not "effective date inside it";
+  (3) sourced **standing conditions** as a class distinct from statistics; (4) record what stays
+  unexplained as such. Until then: source, do not promote; the Aug worklist keeps 12 proposals
+  unsearched (`analysis/s4_proposals/2026-09-30.json`).
 
 - **Card/band dedup, option B**: every card records entity/metric ids in the band's vocabulary,
   so arbitration is a set intersection. Do it when entity naming is touched anyway. Option A (a

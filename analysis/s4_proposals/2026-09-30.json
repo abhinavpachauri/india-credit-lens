@@ -1,0 +1,752 @@
+{
+  "_meta": {
+    "description": "S4 inference proposals — HYPOTHESES, sourcing-gated. NEVER auto-promoted; review + source + promote by hand.",
+    "spec_ref": "analysis/COMPOSITION_SPEC.md §8",
+    "period": "2026-09-30"
+  },
+  "gaps_detected": {
+    "unexplained": {
+      "sibc": [
+        {
+          "entity": "Large",
+          "urn": "icl:sibc/Statement1/2.3",
+          "product": "large_corporate",
+          "direction": "rising"
+        },
+        {
+          "entity": "Housing (Including Priority Sector Housing)",
+          "urn": "icl:sibc/Statement1/4.2",
+          "product": "housing",
+          "direction": "rising"
+        },
+        {
+          "entity": "Advances against Fixed Deposits (Including FCNR (B), NRNR Deposits etc.)",
+          "urn": "icl:sibc/Statement1/4.3",
+          "product": "personal_loan",
+          "direction": "rising"
+        },
+        {
+          "entity": "Advances to Individuals against share, bonds, etc.",
+          "urn": "icl:sibc/Statement1/4.4",
+          "product": "personal_loan",
+          "direction": "rising"
+        },
+        {
+          "entity": "Education",
+          "urn": "icl:sibc/Statement1/4.6",
+          "product": "education_loan",
+          "direction": "rising"
+        },
+        {
+          "entity": "Other Personal Loans",
+          "urn": "icl:sibc/Statement1/4.9",
+          "product": "personal_loan",
+          "direction": "rising"
+        },
+        {
+          "entity": "Agriculture and Allied Activities",
+          "urn": "icl:sibc/Statement1/i",
+          "product": "agriculture",
+          "direction": "rising"
+        },
+        {
+          "entity": "Micro and Small Enterprises",
+          "urn": "icl:sibc/Statement1/ii",
+          "product": "msme_credit",
+          "direction": "rising"
+        },
+        {
+          "entity": "Medium Enterprises",
+          "urn": "icl:sibc/Statement1/iii",
+          "product": "msme_credit",
+          "direction": "rising"
+        },
+        {
+          "entity": "Social Infrastructure",
+          "urn": "icl:sibc/Statement1/vii",
+          "product": "social_infrastructure",
+          "direction": "rising"
+        },
+        {
+          "entity": "Weaker Sections including net PSLC- SF/MF",
+          "urn": "icl:sibc/Statement1/x",
+          "product": "weaker_sections",
+          "direction": "rising"
+        }
+      ],
+      "atm_pos": [
+        {
+          "entity": "Bharat QR codes",
+          "urn": "icl:atm_pos/infrastructure/bharat_qr",
+          "product": "qr_acceptance",
+          "direction": "falling"
+        },
+        {
+          "entity": "Micro ATMs",
+          "urn": "icl:atm_pos/infrastructure/micro_atms",
+          "product": "micro_atm_cash",
+          "direction": "falling"
+        },
+        {
+          "entity": "Off-site ATMs",
+          "urn": "icl:atm_pos/infrastructure/atm_offsite",
+          "product": "atm_cash",
+          "direction": "rising"
+        },
+        {
+          "entity": "On-site ATMs",
+          "urn": "icl:atm_pos/infrastructure/atm_onsite",
+          "product": "atm_cash",
+          "direction": "rising"
+        },
+        {
+          "entity": "CC ATM withdrawal value",
+          "urn": "icl:atm_pos/spend_value/cc_atm_withdrawal_val",
+          "product": "credit_card",
+          "direction": "rising"
+        },
+        {
+          "entity": "CC e-commerce value",
+          "urn": "icl:atm_pos/spend_value/cc_ecom_txn_val",
+          "product": "credit_card",
+          "direction": "rising"
+        },
+        {
+          "entity": "DC other value",
+          "urn": "icl:atm_pos/spend_value/dc_other_txn_val",
+          "product": "debit_card",
+          "direction": "rising"
+        },
+        {
+          "entity": "DC POS value",
+          "urn": "icl:atm_pos/spend_value/dc_pos_txn_val",
+          "product": "debit_card",
+          "direction": "rising"
+        },
+        {
+          "entity": "CC ATM withdrawal volume",
+          "urn": "icl:atm_pos/spend_volume/cc_atm_withdrawal_vol",
+          "product": "credit_card",
+          "direction": "rising"
+        },
+        {
+          "entity": "CC e-commerce volume",
+          "urn": "icl:atm_pos/spend_volume/cc_ecom_txn_vol",
+          "product": "credit_card",
+          "direction": "rising"
+        },
+        {
+          "entity": "CC other volume",
+          "urn": "icl:atm_pos/spend_volume/cc_other_txn_vol",
+          "product": "credit_card",
+          "direction": "rising"
+        },
+        {
+          "entity": "CC POS volume",
+          "urn": "icl:atm_pos/spend_volume/cc_pos_txn_vol",
+          "product": "credit_card",
+          "direction": "rising"
+        },
+        {
+          "entity": "DC ATM withdrawal volume",
+          "urn": "icl:atm_pos/spend_volume/dc_atm_withdrawal_vol",
+          "product": "debit_card",
+          "direction": "falling"
+        },
+        {
+          "entity": "DC e-commerce volume",
+          "urn": "icl:atm_pos/spend_volume/dc_ecom_txn_vol",
+          "product": "debit_card",
+          "direction": "rising"
+        },
+        {
+          "entity": "DC other volume",
+          "urn": "icl:atm_pos/spend_volume/dc_other_txn_vol",
+          "product": "debit_card",
+          "direction": "rising"
+        }
+      ],
+      "nbfc": [
+        {
+          "entity": "Loans against gold jewellery",
+          "urn": "icl:nbfc//4.3",
+          "product": "gold_loan",
+          "direction": "rising"
+        },
+        {
+          "entity": "Consumer Durables",
+          "urn": "icl:nbfc//4.4",
+          "product": "consumer_durable",
+          "direction": "rising"
+        }
+      ]
+    },
+    "mismatches": {
+      "sibc": [],
+      "atm_pos": [],
+      "nbfc": []
+    },
+    "cross": [
+      {
+        "from": "icl:atm_pos/spend_value/cc_atm_withdrawal_val",
+        "to": "icl:sibc/Statement1/4.5",
+        "shared": {
+          "product": "credit_card"
+        },
+        "rule": "R1_stock_flow"
+      },
+      {
+        "from": "icl:atm_pos/spend_value/cc_ecom_txn_val",
+        "to": "icl:sibc/Statement1/4.5",
+        "shared": {
+          "product": "credit_card"
+        },
+        "rule": "R1_stock_flow"
+      },
+      {
+        "from": "icl:atm_pos/spend_value/cc_other_txn_val",
+        "to": "icl:sibc/Statement1/4.5",
+        "shared": {
+          "product": "credit_card"
+        },
+        "rule": "R1_stock_flow"
+      },
+      {
+        "from": "icl:atm_pos/spend_value/cc_pos_txn_val",
+        "to": "icl:sibc/Statement1/4.5",
+        "shared": {
+          "product": "credit_card"
+        },
+        "rule": "R1_stock_flow"
+      },
+      {
+        "from": "icl:atm_pos/spend_volume/cc_atm_withdrawal_vol",
+        "to": "icl:sibc/Statement1/4.5",
+        "shared": {
+          "product": "credit_card"
+        },
+        "rule": "R1_stock_flow"
+      },
+      {
+        "from": "icl:atm_pos/spend_volume/cc_ecom_txn_vol",
+        "to": "icl:sibc/Statement1/4.5",
+        "shared": {
+          "product": "credit_card"
+        },
+        "rule": "R1_stock_flow"
+      },
+      {
+        "from": "icl:atm_pos/spend_volume/cc_other_txn_vol",
+        "to": "icl:sibc/Statement1/4.5",
+        "shared": {
+          "product": "credit_card"
+        },
+        "rule": "R1_stock_flow"
+      },
+      {
+        "from": "icl:atm_pos/spend_volume/cc_pos_txn_vol",
+        "to": "icl:sibc/Statement1/4.5",
+        "shared": {
+          "product": "credit_card"
+        },
+        "rule": "R1_stock_flow"
+      },
+      {
+        "from": "icl:atm_pos/spend_volume/cc_spend_volume",
+        "to": "icl:sibc/Statement1/4.5",
+        "shared": {
+          "product": "credit_card"
+        },
+        "rule": "R1_stock_flow"
+      }
+    ]
+  },
+  "proposals": [
+    {
+      "kind": "channel",
+      "label": "Corporate bond-loan substitution",
+      "mechanism": "When corporate bond yields/spreads widen relative to bank MCLR, large corporates shift planned bond/CP issuance into bank term loans, raising large-corporate credit.",
+      "affects": "large_corporate",
+      "required_source": "RBI Financial Stability Report, corporate bond spread chapter",
+      "source_ladder": [
+        "RBI Financial Stability Report (corporate bond market chapter)",
+        "RBI Monthly Bulletin article on the corporate bond market / SEBI bond issuance data",
+        "CRISIL or ICRA report, or Business Standard/Mint coverage of bond-vs-bank-loan substitution"
+      ],
+      "claim_type": "hypothesis",
+      "from_pipeline": "sibc",
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "Housing loan risk-weight relaxation",
+      "mechanism": "Lower Basel risk weights for housing loans in given LTV/ticket-size slabs free bank capital, letting banks price and originate more housing loans in that slab.",
+      "affects": "housing",
+      "required_source": "RBI Master Direction on Capital Adequacy, housing loan risk-weight annex",
+      "source_ladder": [
+        "RBI Master Direction - Basel III Capital Regulations (risk-weight table for individual housing loans)",
+        "RBI circular specifically amending housing loan risk weights",
+        "Press report (Business Standard/Mint) on the risk-weight change and its expected credit impact"
+      ],
+      "claim_type": "hypothesis",
+      "from_pipeline": "sibc",
+      "status": "proposed",
+      "attempts": [
+        {
+          "rung": "chrome",
+          "target": "RBI Master Direction on Capital Adequacy, housing loan risk-weight annex",
+          "url": "",
+          "tier": null,
+          "verdict": "not_found",
+          "llm_verdict": null,
+          "date": "2026-10-03",
+          "retryable": true,
+          "note": "Searched 2026-10-03 ('RBI housing loan risk weight revised 2025 2026 circular'): no RELAXATION of housing risk weights found in the Sep 2025 - Aug 2026 window; RBI pages show a continuation of existing LTV-based weights. Open lead, opposite direction: an RBI Directions page updated 27 Apr 2026 sets risk weights on the third housing loan onward to individuals (a possible tightening). Not opened or verified."
+        }
+      ]
+    },
+    {
+      "kind": "channel",
+      "label": "Term-deposit rate level drives loan-against-deposit arbitrage",
+      "mechanism": "When term-deposit rates are high relative to the loan-against-FD spread banks charge, depositors prefer borrowing against the FD over premature withdrawal, raising this book.",
+      "affects": "personal_loan",
+      "required_source": "RBI DBIE term-deposit interest rate series for scheduled commercial banks",
+      "source_ladder": [
+        "RBI DBIE - deposit rates of scheduled commercial banks",
+        "RBI Monthly Bulletin table on deposit and lending rates",
+        "A major bank's published FD / loan-against-FD rate card for the period"
+      ],
+      "claim_type": "hypothesis",
+      "from_pipeline": "sibc",
+      "status": "proposed",
+      "triage": {
+        "verdict": "not_a_force",
+        "note": "A published rate series (DBIE term-deposit rates) is a candidate signal, not an external cause.",
+        "decided_on": "2026-10-03"
+      }
+    },
+    {
+      "kind": "channel",
+      "label": "Equity market level drives loan-against-shares demand",
+      "mechanism": "A rising benchmark equity index raises the market value of pledged shares, letting investors draw a larger loan against the same holding and pushing up outstanding advances against shares/bonds.",
+      "affects": "personal_loan",
+      "required_source": "NSE/BSE benchmark index (Nifty 50 / Sensex) closing levels for the period",
+      "source_ladder": [
+        "NSE/BSE official index closing data for the period",
+        "SEBI bulletin or circular on margin trading / loan-against-securities funding",
+        "Business press (Mint/Economic Times) report tying loan-against-shares growth to the market rally"
+      ],
+      "claim_type": "hypothesis",
+      "from_pipeline": "sibc",
+      "status": "proposed",
+      "triage": {
+        "verdict": "not_a_force",
+        "note": "Equity index levels are a market statistic, not an instrument with an effective date.",
+        "decided_on": "2026-10-03"
+      }
+    },
+    {
+      "kind": "channel",
+      "label": "Education loan interest-subsidy expansion",
+      "mechanism": "An expanded or newly eligible Central Sector Interest Subsidy Scheme lowers the effective borrower cost of an education loan, raising disbursal and outstanding balances.",
+      "affects": "education_loan",
+      "required_source": "Dept of Higher Education Central Sector Interest Subsidy Scheme (CSIS) circular or Budget notification",
+      "source_ladder": [
+        "Ministry of Education / Dept of Higher Education CSIS scheme circular",
+        "Union Budget document, education-loan subsidy allocation line",
+        "PIB press release announcing the scheme expansion"
+      ],
+      "claim_type": "hypothesis",
+      "from_pipeline": "sibc",
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "Rupee depreciation inflates overseas education loan ticket size",
+      "mechanism": "A weaker rupee raises the INR cost of a fixed foreign-currency tuition/living bill, inflating the sanctioned loan amount per overseas-study borrower even with no rise in the number of borrowers.",
+      "affects": "education_loan",
+      "required_source": "RBI reference rate (FBIL) USD/INR series for the period",
+      "source_ladder": [
+        "RBI/FBIL reference rate USD/INR series",
+        "RBI Monthly Bulletin exchange rate table",
+        "Press report on rupee depreciation raising study-abroad costs"
+      ],
+      "claim_type": "hypothesis",
+      "from_pipeline": "sibc",
+      "status": "proposed",
+      "triage": {
+        "verdict": "not_a_force",
+        "note": "The FBIL USD/INR reference rate is a statistic, not an external cause.",
+        "decided_on": "2026-10-03"
+      }
+    },
+    {
+      "kind": "channel",
+      "label": "Digital Lending Guarantee (DLG) co-lending growth",
+      "mechanism": "RBI's Default Loss Guarantee framework lets banks book more fintech-originated unsecured personal loans on their own balance sheet, raising the Other Personal Loans line.",
+      "affects": "personal_loan",
+      "required_source": "RBI circular on Default Loss Guarantee (DLG) in Digital Lending Arrangements",
+      "source_ladder": [
+        "RBI circular on DLG in digital lending",
+        "RBI Annual Report / Financial Stability Report chapter on digital lending growth",
+        "Fintech industry body (e.g. DLAI) or press report on bank-fintech co-lending volumes"
+      ],
+      "claim_type": "hypothesis",
+      "from_pipeline": "sibc",
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "MSP hike raises agricultural working-capital credit demand",
+      "mechanism": "A higher Minimum Support Price raises the cash outlay needed to carry the same physical quantity of crop, increasing crop and working-capital loan drawdown by farmers and traders.",
+      "affects": "agriculture",
+      "required_source": "Ministry of Agriculture & Farmers Welfare MSP notification for the season",
+      "source_ladder": [
+        "Ministry of Agriculture & Farmers Welfare MSP press release/notification",
+        "CACP Price Policy report for the crop season",
+        "PIB press release announcing the MSP hike"
+      ],
+      "claim_type": "hypothesis",
+      "from_pipeline": "sibc",
+      "status": "proposed",
+      "triage": {
+        "verdict": "duplicate",
+        "note": "Duplicates force_msp_procurement_growth (sourced: PIB PRID 2260618, CCEA kharif MSP, 13 May 2026).",
+        "decided_on": "2026-10-03"
+      }
+    },
+    {
+      "kind": "channel",
+      "label": "TReDS mandatory onboarding raises MSE receivables credit",
+      "mechanism": "Companies above the mandated turnover threshold must route MSE supplier payments through TReDS; banks book the discounted receivable as MSE credit, raising the MSE/Medium book independent of any guarantee scheme.",
+      "affects": "msme_credit",
+      "required_source": "RBI/Ministry of MSME circular mandating TReDS registration above the turnover threshold",
+      "source_ladder": [
+        "RBI or Ministry of MSME circular mandating TReDS onboarding by turnover threshold",
+        "TReDS platform operator (RXIL/M1xchange/Invoicemart) volume disclosure",
+        "Press report (Business Standard/Mint) on TReDS mandate compliance and its credit impact"
+      ],
+      "claim_type": "hypothesis",
+      "from_pipeline": "sibc",
+      "status": "proposed",
+      "attempts": [
+        {
+          "rung": "chrome",
+          "target": "RBI/Ministry of MSME circular mandating TReDS registration above the turnover threshold",
+          "url": "https://www.pib.gov.in/PressReleseDetailm.aspx?PRID=2196858&reg=3&lang=1",
+          "tier": "official",
+          "verdict": "excerpt_verified_temporal_unchecked",
+          "llm_verdict": null,
+          "date": "2026-10-03",
+          "retryable": false,
+          "note": "verified via editor browser (host refuses automated reads)",
+          "editor_note": "Not promoted by editor decision (2026-10-03). Sourced: PIB, Ministry of MSME, 1 Dec 2025, on Gazette S.O. 4845(E) of 7 Nov 2024 (onboarding deadline 31 Mar 2025, per secondary sources). Predates the Sep 2025 - Aug 2026 window; would explain MSE credit only through a ramp-up lag. Held until a lag rule exists."
+        }
+      ]
+    },
+    {
+      "kind": "channel",
+      "label": "Viability Gap Funding expansion lowers social-infrastructure bankability gap",
+      "mechanism": "A widened VGF scheme (more eligible project types or a higher funded share) narrows the equity/financing gap for social-infrastructure sponsors, improving bankability and raising loan sanctions.",
+      "affects": "social_infrastructure",
+      "required_source": "Dept of Economic Affairs (Ministry of Finance) VGF scheme guideline notification",
+      "source_ladder": [
+        "Dept of Economic Affairs VGF scheme guideline notification",
+        "PIB press release on the VGF scheme expansion",
+        "Press report (Mint/Economic Times) on social-infrastructure project financing under VGF"
+      ],
+      "claim_type": "hypothesis",
+      "from_pipeline": "sibc",
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "PSL weaker-section sub-target revision",
+      "mechanism": "RBI raising the binding PSL sub-target percentage for weaker sections compels banks to originate (not merely reclassify) more lending to this category to meet the higher target.",
+      "affects": "weaker_sections",
+      "required_source": "RBI Master Direction on Priority Sector Lending, weaker-sections sub-target clause",
+      "source_ladder": [
+        "RBI Master Direction - Priority Sector Lending (weaker-sections sub-target table)",
+        "RBI circular revising the PSL sub-target percentage",
+        "RBI press release / Annual Report note on PSL sub-target achievement"
+      ],
+      "claim_type": "hypothesis",
+      "from_pipeline": "sibc",
+      "status": "proposed",
+      "triage": {
+        "verdict": "expired",
+        "note": "The weaker-sections sub-target for domestic SCBs reached 12% of ANBC in 2023-24 (RBI Bulletin, 20 Sep 2024: 'increased from 10 per cent in 2020-21 to 11 per cent in 2021-22, 11.5 per cent in 2022-23 and 12 per cent'); the PSL Directions 2025 (rbi.org.in BS_ViewMasDirections id=12799) keep 12%. No change inside the Sep 2025 - Aug 2026 window. Not examined: the 2025 Directions' wider weaker-sections definition (e.g. PwD inclusion), a reclassification mechanism like force_psl_limit_revision, which would be a separate proposal.",
+        "decided_on": "2026-10-03"
+      }
+    },
+    {
+      "kind": "channel",
+      "label": "AePS biometric fraud-control tightening → Micro ATM deployment decline",
+      "mechanism": "NPCI and banks tightened Aadhaar-enabled biometric de-duplication and onboarding checks for Business Correspondent agents after a wave of AePS fraud cases, raising compliance cost and causing banks to shut down or not renew many Micro ATM touchpoints.",
+      "affects": "micro_atm_cash (Micro ATMs)",
+      "required_source": "NPCI circular mandating AePS risk-mitigation / biometric authentication measures for Business Correspondents",
+      "source_ladder": [
+        "NPCI circular to member banks on AePS risk-mitigation and biometric de-duplication measures",
+        "RBI Master Direction on Business Correspondents / KYC amendment addressing AePS fraud",
+        "Financial press coverage of the AePS fraud crackdown and resulting BC/Micro ATM shutdowns (e.g. Business Standard, Economic Times)"
+      ],
+      "claim_type": "hypothesis",
+      "from_pipeline": "atm_pos",
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "ATM interchange fee revision → ATM deployment economics",
+      "mechanism": "RBI's revision of the per-transaction ATM interchange fee paid to deploying banks/white-label ATM operators improved the unit economics of running ATMs, reversing the earlier slowdown in on-site and off-site ATM deployment.",
+      "affects": "atm_cash (On-site ATMs, Off-site ATMs)",
+      "required_source": "RBI circular rationalising/revising the ATM interchange fee structure (2025)",
+      "source_ladder": [
+        "RBI circular 'Rationalisation of ATM Interchange Fee Structure'",
+        "RBI press release announcing the revised ATM interchange fee",
+        "Financial press coverage of the ATM interchange fee hike (e.g. Mint, Business Standard)"
+      ],
+      "claim_type": "hypothesis",
+      "from_pipeline": "atm_pos",
+      "status": "proposed",
+      "attempts": [
+        {
+          "rung": "chrome",
+          "target": "RBI circular rationalising/revising the ATM interchange fee structure (2025)",
+          "url": "https://www.rbi.org.in/scripts/NotificationUser.aspx?Id=12111",
+          "tier": "official",
+          "verdict": "excerpt_verified_temporal_unchecked",
+          "llm_verdict": null,
+          "date": "2026-10-03",
+          "retryable": false,
+          "note": "verified via editor browser (host refuses automated reads)",
+          "editor_note": "Not promoted by editor decision (2026-10-03): S4's temporal rule asks for an effective date inside the window; this instrument (1 May 2025) predates it but fits the movement only through a response lag (off-site ATMs -14.6% → -3.7% YoY, Sep 2025 → Aug 2026). Held until a lag rule exists. The interchange amount itself (₹17 → ₹19) is NPCI's, not on this RBI page."
+        }
+      ]
+    },
+    {
+      "kind": "channel",
+      "label": "RuPay Credit Card on UPI → credit card transaction growth",
+      "mechanism": "NPCI's linkage of RuPay credit cards to UPI let credit cards settle small-ticket QR/UPI payments at millions of existing UPI merchant touchpoints, lifting recorded credit-card POS and e-commerce transaction counts and values beyond traditional card-swipe growth.",
+      "affects": "credit_card (CC POS, CC e-commerce, CC other)",
+      "required_source": "NPCI circular permitting 'Linking of RuPay Credit Card on UPI'",
+      "source_ladder": [
+        "NPCI circular on RuPay Credit Card linkage to UPI",
+        "RBI press release/circular approving credit lines on UPI",
+        "Financial press coverage of RuPay-credit-on-UPI merchant adoption"
+      ],
+      "claim_type": "hypothesis",
+      "from_pipeline": "atm_pos",
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "E-mandate recurring-transaction framework → recurring card-on-file growth",
+      "mechanism": "RBI's additional-factor-authentication framework for e-mandates standardised and expanded automated recurring charges (subscriptions, bill pay, EMIs) on both credit and debit cards, lifting the 'other' transaction buckets for each card type.",
+      "affects": "credit_card, debit_card (CC other, DC other)",
+      "required_source": "RBI circular 'Processing of e-mandate based recurring transactions'",
+      "source_ladder": [
+        "RBI circular on the e-mandate/recurring-transaction AFA framework",
+        "RBI FAQ or press release on e-mandate processing for cards",
+        "Financial press coverage of recurring-payment e-mandate adoption"
+      ],
+      "claim_type": "hypothesis",
+      "from_pipeline": "atm_pos",
+      "status": "proposed"
+    },
+    {
+      "kind": "instance",
+      "label": "Credit card cash-advance fee/limit revision → CC ATM withdrawal growth",
+      "mechanism": "A card network or major issuer revised cash-advance fee schedules and/or per-transaction cash withdrawal limits on credit cards, making ATM cash withdrawal on credit cards a more actively used feature.",
+      "affects": "credit_card (CC ATM withdrawal value, CC ATM withdrawal volume)",
+      "required_source": "Card network (Visa/Mastercard/RuPay) or major issuer notification revising credit card cash-advance fees or limits",
+      "source_ladder": [
+        "Issuer/network fee notification revising credit-card cash-advance terms",
+        "RBI Master Direction on Credit Card and Debit Card – Issuance and Conduct (fee disclosure provisions)",
+        "Financial press coverage of credit-card cash-advance fee or limit changes"
+      ],
+      "claim_type": "hypothesis",
+      "from_pipeline": "atm_pos",
+      "status": "proposed"
+    },
+    {
+      "kind": "instance",
+      "label": "RuPay debit card reward programme expansion → debit card POS spend growth",
+      "mechanism": "NPCI or issuing banks expanded cashback/reward programmes specifically for RuPay debit card point-of-sale spend (distinct from the existing e-commerce cashback scheme), lifting debit card POS transaction value.",
+      "affects": "debit_card (DC POS value)",
+      "required_source": "NPCI circular or issuing-bank notification on a RuPay debit card POS reward/cashback programme",
+      "source_ladder": [
+        "NPCI circular announcing a RuPay debit card POS rewards programme",
+        "Issuing bank's debit card reward programme circular/press release",
+        "Financial press coverage of RuPay debit card reward programme push"
+      ],
+      "claim_type": "hypothesis",
+      "from_pipeline": "atm_pos",
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "RBI gold-loan collateral norms → NBFC origination capacity",
+      "mechanism": "RBI's lending-against-gold directions set loan-to-value ceilings, valuation and tenor rules that NBFCs must follow, so a change in those norms mechanically moves how much NBFCs can originate per unit of gold collateral, independent of the gold price itself.",
+      "affects": "NBFC gold loan book (icl:nbfc//4.3)",
+      "required_source": "RBI Master Direction – Lending Against Gold and Silver Collateral (final circular)",
+      "source_ladder": [
+        "RBI Master Direction – Lending Against Gold and Silver Collateral, published on the RBI website under Notifications/Master Directions",
+        "RBI Statement on Developmental and Regulatory Policies accompanying the relevant Monetary Policy Statement, gold-loan section",
+        "Named financial press report (Business Standard or Mint) on RBI's gold-loan guideline impact on NBFCs"
+      ],
+      "claim_type": "hypothesis",
+      "from_pipeline": "nbfc",
+      "status": "proposed",
+      "attempts": [
+        {
+          "rung": "deferred",
+          "target": "RBI Master Direction – Lending Against Gold and Silver Collateral (final circular)",
+          "url": "",
+          "tier": null,
+          "verdict": "deferred",
+          "llm_verdict": null,
+          "date": "2026-10-03",
+          "retryable": true,
+          "note": "Deferred by the editor (2026-10-03) to the NBFC August pass: the cause is partly NBFC gold lending, and NBFC's August ingest will likely raise it from its own data. Sourced once there, one verified force attaches to both SIBC and NBFC. Not searched yet."
+        }
+      ]
+    },
+    {
+      "kind": "channel",
+      "label": "Unorganised gold-loan formalisation → NBFC gold loan volume",
+      "mechanism": "Tighter KYC/documentation enforcement on unlicensed pawnbrokers and local jewellers pushes gold-loan borrowers toward regulated NBFC channels, so NBFC book growth partly reflects a market-share shift from informal lenders rather than new credit demand.",
+      "affects": "NBFC gold loan book (icl:nbfc//4.3)",
+      "required_source": "RBI Financial Stability Report, household debt / gold-loan financialisation section",
+      "source_ladder": [
+        "RBI Financial Stability Report, household debt or gold-loan section",
+        "FIDC (Finance Industry Development Council) NBFC sector note on the gold loan market",
+        "CRISIL, ICRA or CareEdge sector report on the organised gold loan market's share of total gold lending"
+      ],
+      "claim_type": "hypothesis",
+      "from_pipeline": "nbfc",
+      "status": "proposed",
+      "attempts": [
+        {
+          "rung": "deferred",
+          "target": "RBI Financial Stability Report, household debt / gold-loan financialisation section",
+          "url": "",
+          "tier": null,
+          "verdict": "deferred",
+          "llm_verdict": null,
+          "date": "2026-10-03",
+          "retryable": true,
+          "note": "Deferred by the editor (2026-10-03) to the NBFC August pass: the cause is partly NBFC gold lending, and NBFC's August ingest will likely raise it from its own data. Sourced once there, one verified force attaches to both SIBC and NBFC. Not searched yet."
+        }
+      ]
+    },
+    {
+      "kind": "channel",
+      "label": "GST rate cut on consumer durables → financed-purchase volume",
+      "mechanism": "The GST Council's 2025 rate rationalisation lowered GST on air conditioners and large appliances, cutting retail prices and lifting unit sales, a share of which are financed through NBFC point-of-sale EMI schemes.",
+      "affects": "NBFC consumer durable loan book (icl:nbfc//4.4)",
+      "required_source": "CBIC notification implementing the GST Council's revised rates for consumer durables (GST 2.0, effective September 2025)",
+      "source_ladder": [
+        "CBIC GST rate notification for the relevant HSN codes (air conditioners, major appliances)",
+        "GST Council or Ministry of Finance press release announcing the rate change",
+        "Named financial press report (Economic Times or Mint) on consumer durable sales after the GST cut"
+      ],
+      "claim_type": "hypothesis",
+      "from_pipeline": "nbfc",
+      "status": "proposed",
+      "attempts": [
+        {
+          "rung": "deferred",
+          "target": "CBIC notification implementing the GST Council's revised rates for consumer durables (GST 2.0, effective September 2025)",
+          "url": "",
+          "tier": null,
+          "verdict": "deferred",
+          "llm_verdict": null,
+          "date": "2026-10-03",
+          "retryable": true,
+          "note": "Deferred by the editor (2026-10-03) to the NBFC August pass, with every NBFC-raised proposal (17, 18, 19): it was raised from NBFC's July data and is about NBFC's consumer-durable book, so NBFC's August ingest decides whether it still needs explaining. Not searched yet."
+        }
+      ]
+    },
+    {
+      "kind": "cross_edge",
+      "label": "IIP Consumer Durables production → consumer durable loan demand",
+      "mechanism": "MoSPI's IIP use-based 'Consumer Durables' index tracks output of the same goods (appliances, electronics, two-wheelers) that NBFC consumer-durable loans finance, so a rise in production/dispatch volume is a leading indicator of financed purchase volume.",
+      "affects": "NBFC consumer durable loan book (icl:nbfc//4.4)",
+      "required_source": "MoSPI IIP use-based classification, Consumer Durables index release",
+      "source_ladder": [
+        "MoSPI IIP press release, use-based classification table (Consumer Durables)",
+        "PIB press release accompanying the monthly IIP release",
+        "Named financial press report (Business Standard or Mint) on consumer durables output or dispatch trends"
+      ],
+      "claim_type": "hypothesis",
+      "from_pipeline": "nbfc",
+      "status": "proposed",
+      "triage": {
+        "verdict": "not_a_force",
+        "note": "IIP Consumer Durables is our own reference series (MoSPI pipeline, 1f): citing it would cite an effect series, not a cause.",
+        "decided_on": "2026-10-03"
+      }
+    },
+    {
+      "kind": "cross_edge",
+      "label": "EMI conversion of card spend decouples flow from stock",
+      "mechanism": "A material share of POS/e-com credit-card spend is converted to EMI (at point of sale or post-facto); EMI balances amortize over 3–24 months as a term-loan-like schedule, so a spend surge shows up immediately in ATM/POS value/volume but only shows up gradually, and at a different rate, in SIBC's credit-card outstanding (4.5) stock.",
+      "affects": "icl:sibc/Statement1/4.5 (credit card outstanding)",
+      "required_source": "RBI Master Direction – Credit Card and Debit Card – Issuance and Conduct Directions, 2022 (as amended), EMI/on-card-EMI provisions",
+      "source_ladder": [
+        "RBI Master Direction – Credit Card and Debit Card – Issuance and Conduct Directions, 2022 (as amended)",
+        "RBI Database on Indian Economy (DBIE) methodology/metadata notes for the credit-card receivables series under Statement 1",
+        "Financial press coverage of credit-card EMI conversion trends (e.g. Economic Times, Moneycontrol banking section)"
+      ],
+      "claim_type": "hypothesis",
+      "status": "proposed"
+    },
+    {
+      "kind": "cross_edge",
+      "label": "RuPay Credit Card on UPI shifts spend toward transactor behaviour",
+      "mechanism": "RuPay credit cards linked via UPI route small-ticket, high-frequency POS/e-com/other transactions that are typically repaid within the same billing cycle (transactor, not revolver, behaviour), so ATM/POS reported spend value/volume rises while SIBC's credit-card outstanding stock does not move proportionally.",
+      "affects": "icl:sibc/Statement1/4.5 (credit card outstanding)",
+      "required_source": "NPCI circular introducing RuPay Credit Card on UPI and its operating guidelines",
+      "source_ladder": [
+        "NPCI circular / operating guidelines — 'RuPay Credit Card on UPI' (credit line on UPI)",
+        "RBI press release / Monetary Policy Statement announcing credit line on UPI (2023)",
+        "Financial press coverage of RuPay-UPI credit card transaction volumes (e.g. Business Standard, Economic Times)"
+      ],
+      "claim_type": "hypothesis",
+      "status": "proposed"
+    },
+    {
+      "kind": "cross_edge",
+      "label": "Billing-cycle reporting lag between spend date and outstanding snapshot",
+      "mechanism": "ATM/POS spend is captured by transaction/settlement date within the calendar month, while SIBC Statement 1 credit-card outstanding is a fortnightly/month-end stock figure net of that cycle's repayments; a spend surge late in a month only affects the outstanding stock after the next due date passes without full repayment, producing a lag that reads as an unexplained gap between the two series.",
+      "affects": "icl:sibc/Statement1/4.5 (credit card outstanding)",
+      "required_source": "RBI DBIE metadata/methodology notes defining the reporting/reference date for the Statement 1 credit-card receivables series",
+      "source_ladder": [
+        "RBI Database on Indian Economy (DBIE) metadata notes for 'Sectoral Deployment of Bank Credit' (Statement 1), credit-card receivables definition",
+        "RBI Handbook of Statistics on the Indian Economy, notes on reporting periodicity for banking sector data",
+        "RBI Report on Trend and Progress of Banking in India, chapter on card payments"
+      ],
+      "claim_type": "hypothesis",
+      "status": "proposed",
+      "triage": {
+        "verdict": "not_a_force",
+        "note": "A reporting-date convention is a property of the data, not a cause of the movement.",
+        "decided_on": "2026-10-03"
+      }
+    },
+    {
+      "kind": "cross_edge",
+      "label": "Co-brand reward schemes incentivise full payment, suppressing stock growth relative to spend",
+      "mechanism": "Co-brand (airline/fuel/e-commerce) credit cards offer materially higher reward rates conditional on full statement repayment; this structurally pushes POS/e-com spend volume up (reward-chasing) while actively suppressing revolving outstanding on the same cards, decoupling ATM/POS spend growth from SIBC outstanding growth.",
+      "affects": "icl:sibc/Statement1/4.5 (credit card outstanding)",
+      "required_source": "the issuing bank's official co-brand credit card reward program terms & conditions document",
+      "source_ladder": [
+        "Issuing bank's co-brand card reward programme T&Cs (e.g. HDFC/SBI/ICICI/Axis co-brand card terms)",
+        "RBI circular on credit card reward-point/incentive-structure norms under the Issuance and Conduct Directions",
+        "Financial press analysis of co-brand card reward economics (e.g. LiveMint, Moneycontrol cards coverage)"
+      ],
+      "claim_type": "hypothesis",
+      "status": "proposed"
+    }
+  ]
+}
