@@ -55,6 +55,20 @@ python3 analysis/core/run_inference.py --resolve FILE --index N --url URL \
 (`bank_sourcing.excerpt_on_page`), from an allowlisted host. Then add the force to the model
 (`/model-pass`) and re-run `validate_system_model.py`.
 
+## Recording what is not a verdict (added 2026-10-03)
+
+- **Sourced but not promoted:** `--resolve` WITHOUT `--in-force` keeps the excerpt work as
+  `excerpt_verified_temporal_unchecked` (the CLI then prints "✗ not recorded": it means *not
+  promoted*). Use it for a real, official cause that predates the window (DECISIONS: held until the
+  lag rule). Add the reasoning as `editor_note` on that attempt.
+- **Deferred / searched-not-found:** there is no CLI for these; append an `attempts[]` entry with
+  `verdict: "deferred"` or `"not_found"`, `retryable: true` and a note saying why and what was
+  searched. Never a triage verdict: triage takes a proposal off the queue for good.
+- **Check `from_pipeline` first.** S4 proposes for every pipeline from its latest data, including
+  one whose current ingest is still pending (NBFC on 2026-10-03); those wait for that ingest.
+- **RBI pages are machine-readable; PIB release bodies load in a frame.** Fetch
+  `PressReleseDetailm.aspx?PRID=…` for the text; the main PIB page's text is the menu.
+
 ## Traps (each cost a day)
 
 - **Check the checker.** `core.source_fetch.fetch_text` returns a **tuple** `(text, verdict)`;

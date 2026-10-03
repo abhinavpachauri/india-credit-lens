@@ -40,6 +40,8 @@
 - **Chrome is the primary sourcing channel**; the API source hunt is opt-in. *Why:* many allowlisted hosts block crawlers. PIB and RBI are open; NPCI is genuinely blocked.
 - **A hypothesis with no source beats one with a decorative citation.** An excerpt that restates our own series is the effect, not a cause.
 - **Allowlist tiers:** nabard.org T1 (statutory); sidbi.in T2 (research, never a rung-1 official source).
+- **A cause that predates the window is sourced, not promoted** (user, 2026-10-03). S4's temporal rule cannot see a lagged or slow-building cause, so such a proposal gets its official excerpt recorded (`--resolve` without `--in-force`) and waits. *Why:* Aug 2026's two clean sources (ATM fees, TReDS) fit the movement only through a lag. *Revisit:* when the lag / decomposition design lands (PLAN, with MoSPI phase 3).
+- **A proposal raised by a pipeline whose ingest is pending waits for that ingest** (user, 2026-10-03), recorded as a `deferred` attempt, so one verified force can attach to every pipeline it explains.
 - **Triage never promotes.** A `duplicate` ruling must name the force it duplicates; ruled-out proposals are reported with counts, never silently dropped.
 
 ## Dashboard

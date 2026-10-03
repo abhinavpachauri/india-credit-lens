@@ -544,6 +544,13 @@
           "date": "2026-09-29",
           "how_measured": "Enumerated where the population allows: every one of the 52 parts dropped in turn, and every one of the 8 cuts dropped with its parts. One instance per remaining rule (a sample, stated as such): part not in the credit CSV, cut parent missing, nonexistent code, IIP as a price, unknown dataset, monthly part on a quarterly series, per-period reason declared statically, approximation on a leaf, several series without combine, IIP summed, weight differing from its table, weighted code moved between parts, weighted code in two parts, registry cut unclassified, file name disagreeing, 1f entries with the flag off, phase-3 flag on. Rules added after the population and absence reviewers found a dropped cut, a weight moved between parts and a leaf rule blind to the statement all passing. Known-good: the committed sibc__mospi.json.",
           "source": "analysis/cross/validate_concordance.py + analysis/tests/test_concordance.py"
+        },
+        {
+          "metric": "live catch — card↔chart cut check (SIBC stage 5.7) on the first evaluation of the table-family signals",
+          "value": "18/18 misrouted or table-only cards caught (17 table-family cards + sibc-infra-yoy), 0 false findings after the fix",
+          "date": "2026-10-03",
+          "how_measured": "Not injected: real defects from the Aug 2026 ingest. The table families (size, share of the whole book) were narrated for the first time and published under sections whose charts cannot draw them; 5.7 failed the gate on every one. After keeping table families out of cards and deriving sections from each signal's cut, 5.7 passed with 0 findings.",
+          "source": "analysis/guards/validate_card_cuts.py + analysis/pipelines/sibc/generate_analysis_report.py (is_table_family, section_from_cut) + analysis/tests/test_card_routing.py"
         }
       ],
       "observations": [
