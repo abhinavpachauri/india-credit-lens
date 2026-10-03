@@ -2,20 +2,15 @@
 
 > Rewritten in place, never appended. Finished items are **deleted** (git keeps them). Hard cap
 > 120 lines, enforced by `reconcile.py`. Standing rules live in `DECISIONS.md`; how to run a
-> workflow lives in its skill (`.claude/skills/`). Last rewritten 2026-09-24.
+> workflow lives in its skill (`.claude/skills/`). Last rewritten 2026-10-03 (pruned the same day).
 
 ## Now: the agentic layer (design: `archive/docs/PLAN_2026-09-24_AGENTIC_LAYER.md`)
 
 The engine (gate, compute, registry, traceability) stays deterministic code. On top of it:
 skills = procedure, subagents = independent review, hooks + `reconcile.py` = enforcement.
-
-| Phase | Work | State |
-|---|---|---|
-| 0 | edit hook runs the v4 validator; allowlist repointed; `.claude/` tracked in git; reconcile Checks 6 (agent layer names live files) + 7 (context budget) | ✅ 2026-09-24 |
-| 1 | knowledge split: `PLAN.md` + `DECISIONS.md` imported by CLAUDE.md; CLAUDE.local.md capped; dated plans archived | ✅ 2026-09-24 |
-| 2 | skills `ingest-period`, `model-pass`, `s4-source`, `session-close`; 3 stale March skills deleted | ✅ 2026-09-24. **Untested on real work**: the first August ingest is the test |
-| 3 | reviewer subagents `population-auditor`, `absence-auditor`, `plausibility-auditor` + `/review-change` + `data-inspector` refreshed | ✅ 2026-09-26. **Accepted cold:** 4/4 real past defects caught, 0/3 false re-flags (run via `claude -p` outside the repo, rule written first). First live catches fixed: freshness missing NBFC; evaluator losing signals |
-| 4 | `onboard-source`, `add-signal-family`, `measure-gate`, `dashboard-change` | ⬜ write each while doing its real task, not in the abstract |
+Phases 0–3 ✅ (2026-09-24/26: hooks, knowledge split, four skills tested on the Aug 2026 ingest,
+three reviewer subagents accepted cold at 4/4 caught, 0/3 false). **Phase 4 ⬜:** `onboard-source`,
+`add-signal-family`, `measure-gate`, `dashboard-change`, each written while doing its real task.
 
 ## Next, in order
 
@@ -25,45 +20,27 @@ skills = procedure, subagents = independent review, hooks + `reconcile.py` = enf
 2. **NBFC post-ingest count** (NBFC plan §6 "after the ingest"): how many files did pipeline #3
    touch that were not its own? Record it in `ARCHITECTURE.md` §"Adding a pipeline", and let it
    decide the open fork on a generic card path.
-3. **MoSPI (IIP, WPI, NAS, CPI) as pipeline #4** (`STRATEGY_PLANNER.md` §8.1). Before arc 3, while SIBC Aug is pending (user, 2026-09-26).
-   **Shape (user, 2026-09-26):** its own manifest, gate, snapshots and L1 signals; **no page of
-   its own**. Its numbers reach the credit tables through one generic join driven by a concordance
-   in the ontology, so NBFC ↔ NAS later needs no new code. MoSPI only for v1 (Eight Core Industries
-   parked). Pull by hand until two clean cycles, then scheduled.
-   - **Probe findings and the as-built contract** (bases, silent-200 traps, CPI from two
-     publications): signals/README "MoSPI".
-   - **Concordance:** SIBC industry types ↔ IIP/WPI groups, 12 of 19 = 45% of industry credit; +
-     Power ↔ Electricity → ~64%. 5 rows combine IIP groups by 2022-23 weights (PIB PRID 2267531,
-     Statement II-A, sum 76.062; rebuilds the published index within ~1 pt). Exact sub-row matches:
-     Power, Electronics (NIC 26), Pharma (NIC 21). No counterpart: construction (→ NAS), infra ex-power,
-     gems, other; cement/glass share an IIP group; textiles vs apparel undecided. NAS sectors ↔ SIBC
-     main sectors, services and Construction. CPI ↔ Personal Loans.
-   - **Phase 0 (spec) ✅ 2026-09-26, v0.2 after the three reviewers:** signals/README §1f + "MoSPI";
-     COMPOSITION_SPEC §24; DASHBOARD_SPEC §21. Decided: output over a trailing year; Personal Loans
-     get no Output (48% housing); Industry, Services and the total are declared approximations, with computed notes;
-     a closed list of absence reasons in code; overdue fails. Layouts in §21 need a final look before code.
-   - **Found and fixed on the way (2026-09-26):** six pinned table rows showed the sum of the named
-     parts, not the parent (NBFCs ₹7.38L vs ₹21.28L Cr); NBFC stage 1c passed on zero checks.
-   - **Phase 1 ✅ 2026-09-28:** reference-kind plumbing (`kind`, `signal_pipelines`/`model_pipelines`,
-     `depends_on` + `currency_stage`, `--offline`) and the MoSPI ingest + gate; 11,632 rows, 1c 1,464
-     values within rounding; CPI from two publications (press-release PDFs by hand, the dashboard
-     workbook fetched automatically). Gate green, nothing overdue. As-built notes: signals/README "MoSPI".
-   - **Phase 2 ✅ 2026-09-29:** `ontology/concordance/sibc__mospi.json` (8 cuts, 52 parts),
-     `core/absence.py`, `cross/validate_concordance.py` as MoSPI stage 1d. Coverage today: output
-     7/19 industry types (16%), real credit 9/19 (19%); the open decisions below fill it in.
-   - **Next phases:** 3 the two 1f methods + registry entries + SIBC `depends_on` →
-     4 table columns (stamp_table + `CutTable`) → write `onboard-source` as we go.
-   - **Display:** see DASHBOARD_SPEC §21.
-   - **Decided in spec:** 1f signals live in the credit pipeline's registry; MoSPI has no signals
-     of its own in v1; match = exact or built from exact parts.
-   - **Open, user deciding (2026-09-29; not blocking phase 2, whose cells stay absent with a
-     declared reason until each is settled):**
-     - **Textiles vs apparel:** SIBC 2.4 ↔ IIP/WPI nic:13 alone, or nic:13 + 14? (`mapping_undecided`)
-     - **WPI weights:** source an official MoSPI/PIB table for the 6 combined deflators
-       (`weights_unsourced` until then).
-     - **IIP weights re-check:** the PRID 2267531 transcription rebuilds the index within ~1 pt
-       vs 0.03 for the fitted weights (COMPOSITION_SPEC §24.2); verify before any combined-IIP cell computes.
-     - Petroleum deflated by WPI mineral oils (a judgment, flagged in §24.2).
+3. **MoSPI (IIP, WPI, NAS, CPI) as pipeline #4**: a reference pipeline with no page of its own;
+   its numbers reach the credit tables through one generic join driven by a concordance (user,
+   2026-09-26). Pulled by hand until two clean cycles. Spec: signals/README §1f + "MoSPI",
+   COMPOSITION_SPEC §24, DASHBOARD_SPEC §21 (layouts need a final look before code).
+   Phases 0–2 ✅ (2026-09-26/29): spec, ingest + gate, concordance + stage 1d. IIP weights sourced
+   from MoSPI's own table 2026-10-03: output covers 12/19 industry types (45% of industry credit).
+   - **Phase 3 (next):** the two 1f methods + registry entries + `reason`/`operands` in signals.db +
+     SIBC `depends_on`. Two questions put to the user 2026-10-03, unanswered: (a) periods before
+     the reference series exist (SIBC Dec 2023–24; CPI before Jan 2026): a new per-period reason
+     `reference_history_gap`, or no rows; (b) quarterly NAS rows stored at quarter-ends only.
+     Candidate: the IIP weights rebuild (0.046 pt measured by hand) as a standing 1d check.
+   - **Then:** 4 table columns (stamp_table + `CutTable`); write `onboard-source` as we go.
+   - **Replace the hand-read CPI PDFs** with the press-release annex in MoSPI's eSankhyiki
+     catalogue (Excel, base 2024, monthly from Feb 2026, e.g. `CPIMCY26004AUG`). Index:
+     `api.mospi.gov.in/api/esankhyiki/cms/golden-sheet/list?product=CPI`; files:
+     `…/api/esankhyiki/file/download{file_path}{file_name}`. Retires `cpi_release.py`, whose PDF
+     layout changed three times in eight releases. The catalogue (~4,800 tables) is the place to
+     look first for any MoSPI table, weights included.
+   - **Open, user deciding:** textiles vs apparel (SIBC 2.4 ↔ nic:13 or 13+14); WPI weights for the
+     6 combined deflators (WPI is DPIIT's, not in MoSPI's catalogue: eaindustry.nic.in); petroleum
+     deflated by WPI mineral oils (a judgment, §24.2).
 4. **Arc 3: RBI regulatory watch** (S4 pointed at RBI, push not pull). Admission rule: an item
    enters only if it attaches to a model entity, channel or cut. ⚠️ Re-run the allowlist census
    first; the 2026-08-19 one predates the probe-bug retraction. Design: `archive/docs/PLAN_2026-09-09.md` arc 3.
@@ -86,6 +63,9 @@ skills = procedure, subagents = independent review, hooks + `reconcile.py` = enf
   unexplained as such. Until then: source, do not promote; the Aug worklist keeps 12 proposals
   unsearched (`analysis/s4_proposals/2026-09-30.json`).
 
+- **Explore's Insights section (user, 2026-10-03, deferred):** legacy step-through UI, but Explore
+  is the only surface where every card is reachable (DASHBOARD_SPEC §18–19). Recommended: keep the
+  inventory as one shared plain list, drop `InsightCTAStrip` + insight mode. ASCII first.
 - **Card/band dedup, option B**: every card records entity/metric ids in the band's vocabulary,
   so arbitration is a set intersection. Do it when entity naming is touched anyway. Option A (a
   test pinning which cards are superseded) is the cheap stopgap.

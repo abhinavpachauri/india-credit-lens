@@ -964,15 +964,16 @@ pools coffee and tea). Every other sub-part is `no_counterpart`. **Personal-loan
 deflator = CPI all-India combined, monthly; output `no_counterpart`. Services parts (3.x):
 `shared_group` both, because quarterly NAS pools them.
 
-**Weights.** IIP: PIB PRID 2267531, Statement II-A (2022-23 base, sum 76.062). **Re-check the
-transcription before use.** IIP is a fixed-weight index, so true group weights rebuild the
-published manufacturing index almost exactly. A fit on the 40 probe months reproduces it to 0.03
-points, and our ~1 point miss points to an error in the transcribed table. The fitted weights
-(scaled to 76.062) are the cross-check: basic metals 9.06, fabricated metals 2.50, chemicals 7.94,
-pharma 5.58, motor vehicles 6.47, other transport 2.03, computer/electronic 2.01, electrical 3.22,
-machinery 5.06, beverages 1.14, tobacco 0.83. They are a check on the sourced table, never a
-substitute for it. **WPI weights are not yet sourced**, so six Real-credit cells start absent,
-saying why, rather than estimated.
+**Weights.** IIP: MoSPI's own table, sourced 2026-10-03 from the eSankhyiki data catalogue
+(IIP table `IIPMFY26018AUG`, "Monthly NIC-2 digit and sectoral indices…", column *Weights*, base
+2022-23, manufacturing 76.062; cited in the concordance's `sources.iip_2022_23`). IIP is a
+fixed-weight index, so true group weights rebuild the published manufacturing index almost
+exactly, and these do: **all 41 months (Apr 2023 – Aug 2026) within 0.046 points (mean 0.028),
+YoY within 0.077 pp**, which is index rounding. The PIB PRID 2267531 transcription used before
+missed by ~1 point and is retired. The weights a fit on the probe months produced (basic metals
+9.06 vs 9.198 official, pharma 5.58 vs 5.833, …) were a cross-check, never a substitute. **WPI
+weights are not yet sourced** (WPI is DPIIT's, not in MoSPI's catalogue), so six Real-credit
+cells start absent, saying why, rather than estimated.
 
 ### 24.3 Validation (`cross/validate_concordance.py`, built 2026-09-29; MoSPI gate stage 1d)
 
@@ -984,10 +985,10 @@ saying why, rather than estimated.
 - **Series** are `<dataset>/<code>` in the MoSPI CSV. Output reads IIP's index or NAS's constant
   prices; a deflator reads a WPI/CPI index, or `implicit` (NAS current ÷ constant). Several series
   need `combine`: `sum` (NAS only) or `weighted` with a cited table.
-- **The open decisions are absences, not guesses:** the five combined-IIP rows are
-  `weights_unsourced` until the IIP weights are re-checked, and Textiles is `mapping_undecided`
-  (PLAN). Output therefore covers 7 of 19 industry types (16% of industry credit), not 12; real
-  credit covers 9 of 19 (19%), as §21.2 predicted.
+- **The open decisions are absences, not guesses:** Textiles is `mapping_undecided` and the
+  six combined WPI deflators are `weights_unsourced` (PLAN). Output covers 12 of 19 industry types
+  (45% of industry credit) since the IIP weights were sourced (2026-10-03; 7 of 19, 16%, before);
+  real credit covers 9 of 19 (19%), as §21.2 predicted.
 - **The registry direction** is behind `requires_signals` (false until phase 3 adds the 1f
   entries), shown in every run rather than passed on zero entries.
 - **Which cuts must be covered** is declared outside the file, by SIBC's manifest
@@ -1013,11 +1014,11 @@ saying why, rather than estimated.
 - **every weight equals the sourced table's weight for its code**, and each combined part's code
   set equals its declared NIC list, so moving nic:27 to Vehicles fails.
 
-Numeric (a guard, so it needs a measured catch rate and false-rejection rate before it gates):
-the sourced IIP weights rebuild the published manufacturing index within **~0.3 point / 0.1 pp
-YoY**. The known-good control is the fitted rebuild (0.03 point in-sample, 0.29 point out of
-sample, 0.065 pp YoY). The known-bad control is the transcription as it stands, if the re-check
-confirms the ~1 point miss.
+Numeric (a guard, so it needs a measured catch rate and false-rejection rate before it gates;
+**not built yet**): the sourced IIP weights rebuild the published manufacturing index within
+**~0.1 point / 0.1 pp YoY**. Measured once by hand (2026-10-03): the official table gives 0.046
+point / 0.077 pp over 41 months, the known-good control. The known-bad control is the retired PIB
+transcription (~1 point).
 
 ### 24.4 Order of the gates
 

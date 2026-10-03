@@ -4,7 +4,63 @@
   "reference_pipeline": "mospi",
   "requires_signals": false,
   "note_requires_signals": "False until phase 3 adds the two 1f registry entries per cut. Then true, and the check that every cut has both entries (and every entry names a cut) is enforced. A flag, not a silent pass on zero entries.",
-  "sources": {},
+  "sources": {
+    "iip_2022_23": {
+      "citation": "MoSPI eSankhyiki data catalogue, IIP table IIPMFY26018AUG: 'Monthly NIC-2 digit and sectoral indices and growth rates of industrial production upto August 2026' (base 2022-23), column 'Weights'. Released 28 Sep 2026.",
+      "url": "https://esankhyiki.mospi.gov.in/catalogue-main/catalogue?product=IIP",
+      "file": "https://api.mospi.gov.in/api/esankhyiki/file/download/datacatalogue/IIP/IIP2026-27/IndicesIIP2011-12Monthly_annual_aug26_NIC 2d_sectoralmonthly.xlsx",
+      "excerpt": "NIC 2025 | Description | Weights … 24 | Manufacture of basic metals | 9.198 … Manufacturing | 76.062 … General | 100",
+      "verified": "2026-10-03: these weights rebuild MoSPI's published manufacturing index in all 41 months (Apr 2023 – Aug 2026) to within 0.046 points (mean 0.028) and its YoY to within 0.077 pp, i.e. index rounding; the PIB PRID 2267531 transcription missed by ~1 point and is retired.",
+      "weights": {
+        "iip/nic:10": 5.679,
+        "iip/nic:11": 1.113,
+        "iip/nic:12": 0.774,
+        "iip/nic:13": 3.275,
+        "iip/nic:14": 1.97,
+        "iip/nic:15": 0.607,
+        "iip/nic:16": 0.239,
+        "iip/nic:17": 1.375,
+        "iip/nic:18": 0.506,
+        "iip/nic:19": 7.721,
+        "iip/nic:20": 7.813,
+        "iip/nic:21": 5.833,
+        "iip/nic:22": 3.384,
+        "iip/nic:23": 3.519,
+        "iip/nic:24": 9.198,
+        "iip/nic:25": 2.481,
+        "iip/nic:26": 2.085,
+        "iip/nic:27": 3.175,
+        "iip/nic:28": 5.02,
+        "iip/nic:29": 6.417,
+        "iip/nic:30": 2.089,
+        "iip/nic:31": 0.283,
+        "iip/nic:32": 1.509
+      },
+      "assign": {
+        "icl:sibc/Statement2/2.3": [
+          "iip/nic:11",
+          "iip/nic:12"
+        ],
+        "icl:sibc/Statement2/2.9": [
+          "iip/nic:20",
+          "iip/nic:21"
+        ],
+        "icl:sibc/Statement2/2.13": [
+          "iip/nic:24",
+          "iip/nic:25"
+        ],
+        "icl:sibc/Statement2/2.14": [
+          "iip/nic:26",
+          "iip/nic:27",
+          "iip/nic:28"
+        ],
+        "icl:sibc/Statement2/2.15": [
+          "iip/nic:29",
+          "iip/nic:30"
+        ]
+      }
+    }
+  },
   "cuts": {
     "sibc-main": {
       "statement": "Statement 1",
@@ -155,12 +211,21 @@
     },
     "icl:sibc/Statement2/2.3": {
       "output": {
-        "absent": "weights_unsourced"
+        "series": [
+          "iip/nic:11",
+          "iip/nic:12"
+        ],
+        "combine": "weighted",
+        "weights": {
+          "iip/nic:11": 1.113,
+          "iip/nic:12": 0.774
+        },
+        "weight_source": "iip_2022_23"
       },
       "deflator": {
         "absent": "weights_unsourced"
       },
-      "note": "Output would be IIP nic:11 + nic:12 by IIP weights, pending the weights re-check (PLAN)."
+      "note": "Deflator would combine WPI groups by WPI weights, which are not yet sourced (PLAN)."
     },
     "icl:sibc/Statement2/2.4": {
       "output": {
@@ -222,12 +287,21 @@
     },
     "icl:sibc/Statement2/2.9": {
       "output": {
-        "absent": "weights_unsourced"
+        "series": [
+          "iip/nic:20",
+          "iip/nic:21"
+        ],
+        "combine": "weighted",
+        "weights": {
+          "iip/nic:20": 7.813,
+          "iip/nic:21": 5.833
+        },
+        "weight_source": "iip_2022_23"
       },
       "deflator": {
         "absent": "weights_unsourced"
       },
-      "note": "Output would be IIP nic:20 + nic:21 by IIP weights, pending the weights re-check (PLAN)."
+      "note": "Deflator would combine WPI groups by WPI weights, which are not yet sourced (PLAN)."
     },
     "icl:sibc/Statement2/2.9.1": {
       "output": {
@@ -303,12 +377,21 @@
     },
     "icl:sibc/Statement2/2.13": {
       "output": {
-        "absent": "weights_unsourced"
+        "series": [
+          "iip/nic:24",
+          "iip/nic:25"
+        ],
+        "combine": "weighted",
+        "weights": {
+          "iip/nic:24": 9.198,
+          "iip/nic:25": 2.481
+        },
+        "weight_source": "iip_2022_23"
       },
       "deflator": {
         "absent": "weights_unsourced"
       },
-      "note": "Output would be IIP nic:24 + nic:25 by IIP weights, pending the weights re-check (PLAN)."
+      "note": "Deflator would combine WPI groups by WPI weights, which are not yet sourced (PLAN)."
     },
     "icl:sibc/Statement2/2.13.1": {
       "output": {
@@ -330,12 +413,23 @@
     },
     "icl:sibc/Statement2/2.14": {
       "output": {
-        "absent": "weights_unsourced"
+        "series": [
+          "iip/nic:26",
+          "iip/nic:27",
+          "iip/nic:28"
+        ],
+        "combine": "weighted",
+        "weights": {
+          "iip/nic:26": 2.085,
+          "iip/nic:27": 3.175,
+          "iip/nic:28": 5.02
+        },
+        "weight_source": "iip_2022_23"
       },
       "deflator": {
         "absent": "weights_unsourced"
       },
-      "note": "Output would be IIP nic:26 + 27 + 28 by IIP weights, pending the weights re-check (PLAN)."
+      "note": "Deflator would combine WPI groups by WPI weights, which are not yet sourced (PLAN)."
     },
     "icl:sibc/Statement2/2.14.1": {
       "output": {
@@ -359,12 +453,21 @@
     },
     "icl:sibc/Statement2/2.15": {
       "output": {
-        "absent": "weights_unsourced"
+        "series": [
+          "iip/nic:29",
+          "iip/nic:30"
+        ],
+        "combine": "weighted",
+        "weights": {
+          "iip/nic:29": 6.417,
+          "iip/nic:30": 2.089
+        },
+        "weight_source": "iip_2022_23"
       },
       "deflator": {
         "absent": "weights_unsourced"
       },
-      "note": "Output would be IIP nic:29 + nic:30 by IIP weights, pending the weights re-check (PLAN)."
+      "note": "Deflator would combine WPI groups by WPI weights, which are not yet sourced (PLAN)."
     },
     "icl:sibc/Statement2/2.16": {
       "output": {

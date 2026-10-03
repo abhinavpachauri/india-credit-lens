@@ -201,7 +201,13 @@ def _csv_rows():
 
 def test_the_calendar_fails_a_missing_month_and_not_a_pending_one():
     man, lab = manifest.load("mospi"), C.labels()
-    rows = [r for r in _csv_rows() if r["dataset"] != "cpi"]
+    # Pinned to the July 2026 state (IIP to July, WPI to August) so the live CSV moving on
+    # cannot turn this into a test of nothing: it read "IIP Aug absent" off the file until
+    # MoSPI published it.
+    rows = [r for r in _csv_rows() if r["dataset"] != "cpi"
+            and not (r["dataset"] == "iip" and r["period"] > "2026-07-31")
+            and not (r["dataset"] == "wpi" and r["period"] > "2026-08-31")
+            and not (r["dataset"] == "nas" and r["period"] > "2026-06-30")]
     man = {**man, "datasets": {k: v for k, v in man["datasets"].items() if k != "cpi"}}
     errs, _ = V.check(rows, man, lab, date(2026, 9, 28))
     assert not errs, errs
@@ -541,3 +547,27 @@ def test_known_bad_control_cpi_is_caught():
     shifted = [r for r in shifted if not (r["dataset"] == "cpi" and r["period"] > latest)]
     assert G.check(shifted, man, lab)[0]
     assert G.check(_csv_rows(), man, lab)[1]["cpi:checked"] == 1
+
+
+# ── The CPI page's workbook listing (fetch.the_workbook) ─────────────────────
+# MoSPI's list endpoint stopped filling `file_type` in Oct 2026 with the same file listed. The
+# count must still hold: exactly one Excel file, or the fetch fails rather than picking one.
+
+import fetch as F                                       # noqa: E402
+
+_XLSX = {"id": 13, "file_name": "CPI updated_July_ 2026_Dashboard Data-12.08.2026.xlsx"}
+
+
+@pytest.mark.parametrize("file_type", ["xlsx", None])
+def test_one_workbook_is_found_with_or_without_file_type(file_type):
+    assert F.the_workbook({"exists": True, "data": [{**_XLSX, "file_type": file_type}]})["id"] == 13
+
+
+@pytest.mark.parametrize("data", [
+    [],                                                                        # none listed
+    [{**_XLSX, "file_type": None}, {**_XLSX, "id": 14, "file_type": None}],   # two workbooks
+    [{"id": 15, "file_name": "CPI_note.pdf", "file_type": None}],             # not a workbook
+])
+def test_anything_but_exactly_one_workbook_fails(data):
+    with pytest.raises(A.FetchError):
+        F.the_workbook({"exists": True, "data": data})

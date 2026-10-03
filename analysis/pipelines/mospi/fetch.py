@@ -85,6 +85,19 @@ def fetch_cpi_pdf(pdf: Path, ds: dict) -> str:
     return save_if_changed("cpi", doc, raw, "pdf")
 
 
+def the_workbook(listing: dict) -> dict:
+    """The one Excel file the CPI page lists, or FetchError.
+
+    `file_type` was "xlsx" until Oct 2026, then null with the same file listed; the name's
+    extension is the fallback, so a PDF or CSV listed beside it still fails the count.
+    """
+    files = [f for f in (listing.get("data") or [])
+             if (f.get("file_type") or Path(f.get("file_name") or "").suffix.lstrip(".")).lower() == "xlsx"]
+    if not listing.get("exists") or len(files) != 1:
+        raise mospi_api.FetchError(f"expected one CPI workbook, the page lists {listing.get('data')!r}")
+    return files[0]
+
+
 def fetch_cpi_workbook(ds: dict, local: Path | None = None) -> str:
     """The 'download data' workbook: fetched from MoSPI's CPI page, or read from a local copy.
 
@@ -96,12 +109,9 @@ def fetch_cpi_workbook(ds: dict, local: Path | None = None) -> str:
     if local is not None:
         name, raw = local.name, local.read_bytes()
     else:
-        listing = mospi_api.get_json(src["list_url"])
-        files = [f for f in (listing.get("data") or []) if f.get("file_type") == "xlsx"]
-        if not listing.get("exists") or len(files) != 1:
-            raise mospi_api.FetchError(f"expected one CPI workbook, the page lists {listing.get('data')!r}")
-        name = files[0]["file_name"]
-        raw = mospi_api.get_bytes(src["download_url"].format(id=files[0]["id"]))
+        listed = the_workbook(mospi_api.get_json(src["list_url"]))
+        name = listed["file_name"]
+        raw = mospi_api.get_bytes(src["download_url"].format(id=listed["id"]))
     doc = cpi_doc(ds, "dashboard_xlsx", name, raw, cpi_dashboard.published(name),
                   cpi_dashboard.parse(raw))
     return save_if_changed("cpi", doc, raw, "xlsx")

@@ -191,8 +191,11 @@ def test_a_registry_cut_nobody_classified_fails(tmp_path, monkeypatch):
 
 
 def _weighted(d, part, codes, assign):
-    table = {"iip/nic:26": 2.01, "iip/nic:27": 3.22, "iip/nic:28": 5.06, "iip/nic:29": 6.47, "iip/nic:30": 2.03}
-    d["sources"]["iip_2022_23"] = {"citation": "test", "weights": table, "assign": assign}
+    """Mutate the REAL cited source: only the named parts' assignment changes, so the other
+    weighted parts in the file stay valid and every error counted belongs to this mutation."""
+    src = d["sources"]["iip_2022_23"]
+    table = src["weights"]
+    src["assign"] = {**src["assign"], **assign}
     d["parts"][part]["output"] = {"series": codes, "combine": "weighted",
                                   "weights": {c: table[c] for c in codes}, "weight_source": "iip_2022_23"}
 
