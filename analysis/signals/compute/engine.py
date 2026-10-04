@@ -52,13 +52,13 @@ def _upsert(conn: sqlite3.Connection, pipeline: str, period: str, rows: list[dic
         conn.execute(
             """INSERT OR REPLACE INTO signals
                (pipeline, period, metric_id, entity_type, entity_id,
-                value, unit, status, spec_version, computed_at)
-               VALUES (?,?,?,?,?, ?,?,?,?,?)""",
+                value, unit, status, spec_version, reason, operands, computed_at)
+               VALUES (?,?,?,?,?, ?,?,?,?,?,?,?)""",
             (pipeline, period, r["metric_id"],
              r.get("entity_type", "aggregate"),
              r.get("entity_id",   "total"),
              r.get("value"), r.get("unit"), r.get("status"),
-             r.get("spec_version", "1.0"), ts)
+             r.get("spec_version", "1.0"), r.get("reason"), r.get("operands"), ts)
         )
         count += 1
     return count

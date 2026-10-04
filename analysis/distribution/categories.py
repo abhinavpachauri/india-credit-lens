@@ -76,6 +76,10 @@ METHOD_CATEGORY = {
     "csv_category_scan_yoy":         "C4",
     "csv_sector_count_positive_yoy": "C4",
     "csv_sector_yoy_spread":         "C4",
+    # 1f — one reading per part of a cut, like the YoY scan, measured against MoSPI. Not C7:
+    # that category is the cross-system artifacts (opportunities feed), not an L1 method.
+    "csv_sector_real_growth":        "C4",
+    "csv_sector_output_growth":      "C4",
     # C5 — direction changing: runs, and growth measured against its own past growth
     "csv_yoy_streak":                "C5",
     "csv_mom_streak":                "C5",

@@ -989,8 +989,8 @@ cells start absent, saying why, rather than estimated.
   six combined WPI deflators are `weights_unsourced` (PLAN). Output covers 12 of 19 industry types
   (45% of industry credit) since the IIP weights were sourced (2026-10-03; 7 of 19, 16%, before);
   real credit covers 9 of 19 (19%), as §21.2 predicted.
-- **The registry direction** is behind `requires_signals` (false until phase 3 adds the 1f
-  entries), shown in every run rather than passed on zero entries.
+- **The registry direction** is behind `requires_signals`, on since phase 3 (2026-10-03): every cut
+  has both 1f entries and every 1f entry names a cut.
 - **Which cuts must be covered** is declared outside the file, by SIBC's manifest
   (`reference_cuts.mospi`: 8 `include`d, 6 `exclude`d with a reason), and every cut the registry
   scans must be one or the other. The check also runs in SIBC's own gate (1d), since a new or renamed
@@ -1024,7 +1024,7 @@ transcription (~1 point).
 
 A 1f signal reads the reference CSV, so the credit pipeline's manifest declares
 `depends_on: ["mospi"]`. Both `depends_on` and dependency ordering exist (phase 1, 2026-09-28,
-tested in `test_mospi.py` / `test_manifest.py`); SIBC declares the edge in phase 3. With it:
+tested in `test_mospi.py` / `test_manifest.py`); SIBC declares the edge since phase 3 (2026-10-03). With it:
 - the MoSPI gate ends by re-running Check 2f for every pipeline that depends on it, so a revised
   IIP month shows up as SIBC drift the same day and SIBC is re-appended, every period;
 - the SIBC gate checks that MoSPI's data is current: a MoSPI period past its expected release date

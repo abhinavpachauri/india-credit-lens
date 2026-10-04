@@ -2,8 +2,8 @@
   "note_why": "Which MoSPI series measures each SIBC credit part (COMPOSITION_SPEC §24). One file per (credit, reference) pipeline pair, so NBFC ↔ MoSPI is another file, never code. Keyed by URN. Each part names its output series and its deflator, or a STATIC reason from core/absence.py. A series is '<dataset>/<code>' in the MoSPI CSV; output reads IIP's index or NAS's constant prices; a deflator reads a WPI/CPI index, or `implicit` = NAS current ÷ constant over the listed sectors. More than one series needs `combine`: 'sum' (NAS levels, additive as published) or 'weighted' with sourced weights. A cut's parent row inherits the cadence of the cut it is a child of (DASHBOARD_SPEC §21.4: a total row is a different signal). Checked by cross/validate_concordance.py.",
   "credit_pipeline": "sibc",
   "reference_pipeline": "mospi",
-  "requires_signals": false,
-  "note_requires_signals": "False until phase 3 adds the two 1f registry entries per cut. Then true, and the check that every cut has both entries (and every entry names a cut) is enforced. A flag, not a silent pass on zero entries.",
+  "requires_signals": true,
+  "note_requires_signals": "True since phase 3 (2026-10-03): every cut has both 1f registry entries and every 1f entry names a cut, checked both ways.",
   "sources": {
     "iip_2022_23": {
       "citation": "MoSPI eSankhyiki data catalogue, IIP table IIPMFY26018AUG: 'Monthly NIC-2 digit and sectoral indices and growth rates of industrial production upto August 2026' (base 2022-23), column 'Weights'. Released 28 Sep 2026.",

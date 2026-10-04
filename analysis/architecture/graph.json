@@ -420,7 +420,9 @@
     "guards/check_signal_freshness": {
       "doc_claims": [],
       "imports": [
-        "core/manifest"
+        "core/manifest",
+        "signals/compute/csv_sector",
+        "signals/compute/real_economy"
       ],
       "invokes": [],
       "path": "analysis/guards/check_signal_freshness.py",
@@ -1026,6 +1028,17 @@
       ],
       "invokes": [],
       "path": "analysis/signals/compute/engine.py",
+      "reads": {},
+      "writes": {}
+    },
+    "signals/compute/real_economy": {
+      "doc_claims": [],
+      "imports": [
+        "core/absence",
+        "core/manifest"
+      ],
+      "invokes": [],
+      "path": "analysis/signals/compute/real_economy.py",
       "reads": {},
       "writes": {}
     },

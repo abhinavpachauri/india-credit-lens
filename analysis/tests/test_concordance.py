@@ -35,7 +35,7 @@ def run(tmp_path, mutate=None, name="sibc__mospi.json"):
 def test_the_committed_concordance_is_valid():
     errs, notes = VC.check_file(REAL)
     assert not errs, errs
-    assert any("requires_signals: false" in n for n in notes), "the phase-3 flag must be visible"
+    assert not any("not enforced" in n for n in notes), "phase 3 is built: the registry check is on"
 
 
 def test_a_part_left_out_fails_instead_of_vanishing(tmp_path):
@@ -104,9 +104,17 @@ def test_a_file_name_that_disagrees_with_its_pipelines_fails(tmp_path):
     assert any("names sibc__mospi" in e for e in errs)
 
 
-def test_phase_3_flag_enforces_the_registry_both_ways(tmp_path):
-    errs, _ = run(tmp_path, lambda d: d.update({"requires_signals": True}))
-    assert sum("1f registry entries" in e for e in errs) == len(json.loads(REAL.read_text())["cuts"])
+def test_phase_3_flag_enforces_the_registry_both_ways(tmp_path, monkeypatch):
+    """A cut missing one of its two 1f entries fails, and so does an entry naming no cut."""
+    real = VC.registry_cuts
+    scanned, f1 = real("sibc")
+    assert set(f1) == set(json.loads(REAL.read_text())["cuts"])          # the live state: every cut
+    short = {**f1, "sibc-pl": ["csv_sector_real_growth"],              # one method dropped
+             "sibc-nowhere": list(VC.F1_METHODS)}                     # a cut nobody declared
+    monkeypatch.setattr(VC, "registry_cuts", lambda p: (scanned, short))
+    errs, _ = run(tmp_path)
+    assert any("sibc-pl" in e and "1f registry entries" in e for e in errs)
+    assert any("sibc-nowhere" in e and "does not declare" in e for e in errs)
 
 
 def test_every_static_reason_in_the_file_is_in_the_closed_list():
@@ -129,24 +137,23 @@ def test_a_cut_dropped_from_the_file_fails(tmp_path):
     assert any("sibc-infra-sub" in e and "requires it" in e for e in errs)
 
 
-def test_1f_entries_with_the_flag_still_off_fail(tmp_path, monkeypatch):
-    """The flag cannot outlive its reason: once 1f entries exist, leaving it false fails."""
-    real = VC.registry_cuts
-    monkeypatch.setattr(VC, "registry_cuts",
-                        lambda p: (real(p)[0], {"sibc-main": ["csv_sector_real_growth"]}))
-    errs, _ = run(tmp_path)
+def test_1f_entries_with_the_flag_still_off_fail(tmp_path):
+    """The flag cannot outlive its reason: with the real 1f entries, switching it off fails."""
+    errs, _ = run(tmp_path, lambda d: d.update({"requires_signals": False}))
     assert any("requires_signals is false" in e for e in errs)
 
 
-def test_the_verdict_line_says_when_the_registry_check_is_off(capsys):
-    assert VC.main.__code__                                        # the gate shows this one line
+def test_the_verdict_line_says_when_the_registry_check_is_off(capsys, tmp_path, monkeypatch):
+    """A concordance with the flag off (and so no 1f entries) says so in the one line the gate shows."""
+    doc = json.loads(REAL.read_text())
+    doc["requires_signals"] = False
+    (tmp_path / "sibc__mospi.json").write_text(json.dumps(doc))
+    real = VC.registry_cuts
+    monkeypatch.setattr(VC, "CONCORDANCE_DIR", tmp_path)
+    monkeypatch.setattr(VC, "registry_cuts", lambda p: (real(p)[0], {}))
     import sys as _s
-    argv = _s.argv
-    _s.argv = ["validate_concordance.py", "--reference", "mospi"]
-    try:
-        assert VC.main() == 0
-    finally:
-        _s.argv = argv
+    monkeypatch.setattr(_s, "argv", ["validate_concordance.py", "--reference", "mospi"])
+    assert VC.main() == 0
     last = [l for l in capsys.readouterr().out.splitlines() if "✓" in l][-1]
     assert "registry check OFF" in last and last.index("OFF") < 60, "must survive the gate's 60-char note"
 

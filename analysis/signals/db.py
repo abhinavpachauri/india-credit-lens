@@ -30,6 +30,8 @@ CREATE TABLE IF NOT EXISTS signals (
     unit          TEXT,
     status        TEXT,
     spec_version  TEXT    DEFAULT '1.0',
+    reason        TEXT,
+    operands      TEXT,
     data_status   TEXT    DEFAULT 'provisional',
     computed_at   TEXT    DEFAULT (datetime('now')),
     PRIMARY KEY (pipeline, period, metric_id, entity_type, entity_id)
@@ -75,6 +77,13 @@ def init_db(path: Path = DB_PATH) -> sqlite3.Connection:
     # read by nothing, and no guard compared it — derived data nobody checks is how silent
     # staleness starts. Removed 2026-09-26; this drops it from any copy of the DB that has it.
     conn.execute("DROP TABLE IF EXISTS metric_ranges")
+    # 1f rows (signals/README §1f) carry WHY a cell is empty and WHAT it was computed from:
+    # `reason` is a code from core/absence.py, `operands` the inputs as sorted JSON. Freshness
+    # compares both, so a revised IIP month or a reason that flips shows up as drift.
+    cols = {r[1] for r in conn.execute("PRAGMA table_info(signals)")}
+    for col in ("reason", "operands"):
+        if col not in cols:
+            conn.execute(f"ALTER TABLE signals ADD COLUMN {col} TEXT")
     # WITHOUT statistics SQLite ignores the history index and falls back to scanning every
     # row for the pipeline — measured at 18ms a query over 151,000 rows, which is how a
     # five-second helper became a ten-minute one. ANALYZE is what makes the index chosen.

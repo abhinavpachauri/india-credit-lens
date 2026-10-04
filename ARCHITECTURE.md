@@ -134,7 +134,7 @@ Status of what is live. History is in git; plans are in `PLAN.md`.
 | SIBC pipeline + dashboard `/` | `pipelines/sibc/`, `rbi_sibc/` | live: 24 periods; tables, band, 96 generated cards + 26 hand-written annotations |
 | Payments pipeline + `/payments` | `pipelines/atm_pos/`, `rbi_atm_pos/` | live: 31 periods, 63 banks, 26 measures with bank breakouts |
 | NBFC pipeline + `/nbfc` | `pipelines/nbfc/`, `rbi_nbfc/` | live: 11 dates; tables + band, no cards |
-| Signal store | `signals/registry.json` (Universal signal catalog — 570 signals), `signals/signals.db` | live; L1 computed only |
+| Signal store | `signals/registry.json` (Universal signal catalog — 586 signals), `signals/signals.db` | live; L1 computed only |
 | Movement + mix states | `csv_*_momentum/acceleration/allocation`; `generate_system_state.mix_states` | live on every cut; coherence routes the sentence, never gates |
 | Card narration | `signals/evaluate.py`, prompt `signals/prompts/domain_eval_system.txt` | live, paid, per-run approval |
 | System models + S3 | `rbi_*/merged/system_model.json`, `core/generate_system_state.py` | live for all three pipelines |

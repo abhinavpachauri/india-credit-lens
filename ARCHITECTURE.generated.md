@@ -8,7 +8,7 @@
 > Authored rationale (layer model, design principles, guard purposes) lives in the
 > hand-written `ARCHITECTURE.md`. This file is the structural, drift-guarded half.
 
-_Derived from 92 scripts._
+_Derived from 93 scripts._
 
 ## 1. Data-flow
 
@@ -120,7 +120,7 @@ orchestrated, not import-coupled).
 - `cross/validate_composition` → `core/generate_skeleton`, `core/manifest`
 - `cross/validate_concordance` → `core/absence`, `core/manifest`
 - `guards/check_derived_fresh` → `core/manifest`
-- `guards/check_signal_freshness` → `core/manifest`
+- `guards/check_signal_freshness` → `core/manifest`, `signals/compute/csv_sector`, `signals/compute/real_economy`
 - `guards/validate_card_cuts` → `core/manifest`
 - `guards/validate_card_prose` → `core/manifest`, `core/residuals`, `core/voice`
 - `guards/validate_cut_table` → `core/manifest`, `core/table_rows`
@@ -148,6 +148,7 @@ orchestrated, not import-coupled).
 - `signals/compute/atm_pos` → `core/manifest`
 - `signals/compute/csv_sector` → `core/manifest`
 - `signals/compute/engine` → `core/manifest`
+- `signals/compute/real_economy` → `core/absence`, `core/manifest`
 - `signals/evaluate` → `core/manifest`, `signals/db`, `signals/query`
 - `signals/is_news` → `core/manifest`, `signals/proximity`
 - `signals/planes` → `core/manifest`, `signals/is_news`, `signals/proximity`

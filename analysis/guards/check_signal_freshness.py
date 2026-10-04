@@ -14,7 +14,8 @@ check_derived_fresh.py guards the deterministic S1->S3 chain but EXCLUDES
 signals.db (it is binary; a raw git-diff churns on computed_at timestamps). This
 guard closes that gap at the VALUE level: it recomputes every (pipeline, period)
 present in the committed DB from current sources into a throwaway DB and fails on
-any drift in value / status / unit, or any missing / orphaned row.
+any drift in value / status / unit / reason / operands, or any missing / orphaned row. 1f signals
+(signals/README §1f) must also hold one row per concordance part per period.
 
 The LLM evaluation layer (evaluations/*.json) is non-deterministic and is NOT
 checked here — but it reads from this DB, so a fresh DB is the deterministic
@@ -52,14 +53,17 @@ VALUE_TOL = 1e-4
 
 
 def _rows(conn, pipeline=None):
-    """Return {(pipeline,period,metric_id,entity_type,entity_id): (value,status,unit)}."""
-    q = ("SELECT pipeline,period,metric_id,entity_type,entity_id,value,status,unit "
+    """Return {(pipeline,period,metric_id,entity_type,entity_id): (value,status,unit,reason,operands)}.
+
+    `reason` and `operands` are compared like values: a reason that flips (not_released → a value)
+    or a revised MoSPI input under an unchanged rounded value is drift, not agreement."""
+    q = ("SELECT pipeline,period,metric_id,entity_type,entity_id,value,status,unit,reason,operands "
          "FROM signals")
     args: tuple = ()
     if pipeline:
         q += " WHERE pipeline=?"
         args = (pipeline,)
-    return {(r[0], r[1], r[2], r[3], r[4]): (r[5], r[6], r[7])
+    return {(r[0], r[1], r[2], r[3], r[4]): (r[5], r[6], r[7], r[8], r[9])
             for r in conn.execute(q, args).fetchall()}
 
 
@@ -158,10 +162,73 @@ def _declared_periods() -> dict[str, set]:
     return out
 
 
-def _fmt(triple) -> str:
-    val, st, un = triple
+def _fmt(row) -> str:
+    val, st, un, reason, ops = row
     vs = "None" if val is None else f"{val:g}"
-    return f"value={vs} status={st} unit={un}"
+    extra = (f" reason={reason}" if reason else "") + (f" operands={ops[:80]}" if ops else "")
+    return f"value={vs} status={st} unit={un}{extra}"
+
+
+def _parts_per_period(registry: dict, pipeline: str, periods: set, expected: dict) -> list:
+    """1f: every (signal, period) holds exactly one row per concordance part.
+
+    Without this a part that emits nothing passes, because the recompute emits nothing too. The
+    population is the credit CSV's own children of the cut's parent at that period (plus the
+    parent, when no other declared cut has it as a child), read here directly rather than through
+    the compute module being checked."""
+    from signals.compute import csv_sector, real_economy
+    f1 = {sid: s for sid, s in registry["signals"].items()
+          if s.get("pipeline") == pipeline and (s.get("compute") or {}).get("method") in real_economy.METHODS}
+    if not f1:
+        return []
+    df = csv_sector._load_df(pipeline)
+    scope = (df.attrs.get("schema") or {}).get("scope_column")
+    got: dict = {}
+    for (pl, per, mid, *_r) in expected:
+        if pl == pipeline and mid in f1:
+            got[(per, mid)] = got.get((per, mid), 0) + 1
+    out = []
+    for sid, sig in sorted(f1.items()):
+        c = sig["compute"]
+        doc = real_economy.concordance(pipeline, c["reference"])
+        cut = doc["cuts"][c["cut"]]
+        for per in sorted(periods):
+            csv_date = csv_sector.resolve_csv_date(pipeline, per)
+            if cut["cadence"] == "quarterly" and int(csv_date[5:7]) not in real_economy.QUARTER_END_MONTHS:
+                continue
+            at = df[df["date"] == csv_date]
+            def children(cut_):
+                rows = at[(at[scope] == cut_["statement"]) & (at["parent_code"] == cut_["parent_code"])]
+                return {real_economy.urn(pipeline, st, code) for st, code in zip(rows[scope], rows["code"])}
+            parent = cut.get("parent_urn") or real_economy.urn(pipeline, cut["statement"], cut["parent_code"])
+            elsewhere = set().union(*(children(o) for s2, o in doc["cuts"].items() if s2 != c["cut"]))
+            want = len(children(cut)) + (0 if parent in elsewhere else 1)
+            n = got.get((per, sid), 0)
+            if n != want:
+                out.append((f"PART_COUNT ({n} rows, the cut has {want} parts)", (pipeline, per, sid), None))
+    return out
+
+
+def compare(committed: dict, expected: dict) -> list:
+    """Every row on either side, held to the other: missing, orphaned, or differing in value
+    (within VALUE_TOL), status, unit, reason or operands."""
+    drift = []
+    for k in sorted(set(committed) | set(expected)):
+        c, e = committed.get(k), expected.get(k)
+        if c is None:
+            drift.append(("MISSING_IN_DB (stale: not appended)", k, e))
+            continue
+        if e is None:
+            drift.append(("ORPHAN_IN_DB (stale: no longer computed)", k, c))
+            continue
+        cv, cs, cu, cr, co = c
+        ev, es, eu, er, eo = e
+        vbad = ((cv is None) != (ev is None)) or \
+               (cv is not None and ev is not None and abs(cv - ev) > VALUE_TOL)
+        if vbad or cs != es or cu != eu or cr != er or co != eo:
+            drift.append(("DRIFT", k, (c, e)))
+
+    return drift
 
 
 def check(pipeline_filter=None, quiet=False) -> int:
@@ -214,20 +281,10 @@ def check(pipeline_filter=None, quiet=False) -> int:
                 drift.append(("DECLARED_BUT_EMPTY (timeline declares it; the CSV computes "
                               "nothing for it)", (pl, per), None))
 
-    for k in sorted(set(committed) | set(expected)):
-        c, e = committed.get(k), expected.get(k)
-        if c is None:
-            drift.append(("MISSING_IN_DB (stale: not appended)", k, e))
-            continue
-        if e is None:
-            drift.append(("ORPHAN_IN_DB (stale: no longer computed)", k, c))
-            continue
-        cv, cs, cu = c
-        ev, es, eu = e
-        vbad = ((cv is None) != (ev is None)) or \
-               (cv is not None and ev is not None and abs(cv - ev) > VALUE_TOL)
-        if vbad or cs != es or cu != eu:
-            drift.append(("DRIFT", k, (c, e)))
+    drift.extend(compare(committed, expected))
+
+    for pl, periods in sorted(periods_by_pipeline.items()):
+        drift.extend(_parts_per_period(registry, pl, periods, expected))
 
     checked = len(set(committed) | set(expected))
     pls = ", ".join(f"{p}:{len(s)}p" for p, s in sorted(periods_by_pipeline.items()))

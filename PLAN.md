@@ -26,12 +26,13 @@ three reviewer subagents accepted cold at 4/4 caught, 0/3 false). **Phase 4 ⬜:
    COMPOSITION_SPEC §24, DASHBOARD_SPEC §21 (layouts need a final look before code).
    Phases 0–2 ✅ (2026-09-26/29): spec, ingest + gate, concordance + stage 1d. IIP weights sourced
    from MoSPI's own table 2026-10-03: output covers 12/19 industry types (45% of industry credit).
-   - **Phase 3 (next):** the two 1f methods + registry entries + `reason`/`operands` in signals.db +
-     SIBC `depends_on`. Two questions put to the user 2026-10-03, unanswered: (a) periods before
-     the reference series exist (SIBC Dec 2023–24; CPI before Jan 2026): a new per-period reason
-     `reference_history_gap`, or no rows; (b) quarterly NAS rows stored at quarter-ends only.
-     Candidate: the IIP weights rebuild (0.046 pt measured by hand) as a standing 1d check.
-   - **Then:** 4 table columns (stamp_table + `CutTable`); write `onboard-source` as we go.
+   - **Phase 3 ✅ 2026-10-03:** `signals/compute/real_economy.py` (real growth + trailing-year
+     output), 16 registry entries, `reason`/`operands` in signals.db, SIBC `depends_on: [mospi]`,
+     registry check on. User: early periods read `reference_history_gap`; quarterly rows at
+     quarter-ends only. Check 2f extended and measured (register). Industry Q1 FY27 real = 14.82.
+     Candidate: the IIP weights rebuild (0.046 pt by hand) as a standing 1d check.
+   - **Next: phase 4**, table columns (stamp_table + `CutTable`, DASHBOARD_SPEC §21: ASCII first);
+     write `onboard-source` as we go. Then the S4 decomposition (PLAN open decisions) can read 1f.
    - **Replace the hand-read CPI PDFs** with the press-release annex in MoSPI's eSankhyiki
      catalogue (Excel, base 2024, monthly from Feb 2026, e.g. `CPIMCY26004AUG`). Index:
      `api.mospi.gov.in/api/esankhyiki/cms/golden-sheet/list?product=CPI`; files:

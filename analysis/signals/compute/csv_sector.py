@@ -42,6 +42,7 @@ from pathlib import Path
 import pandas as pd
 
 from . import common
+from . import real_economy as _real_economy
 
 import sys
 sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
@@ -165,6 +166,7 @@ def _load_df(pipeline: str) -> pd.DataFrame:
 
 def invalidate_cache() -> None:
     _df_cache.clear()
+    _real_economy.invalidate_cache()      # its credit lookup is keyed to the frame just dropped
 
 
 # ── Date helpers ──────────────────────────────────────────────────────────────
@@ -1097,6 +1099,8 @@ METHODS: dict = {
     "csv_sector_acceleration":      csv_sector_acceleration,
     "csv_sector_allocation":        csv_sector_allocation,
     "csv_sector_divergence":        csv_sector_divergence,
+    # 1f — a credit part against the real economy, through a declared concordance
+    **_real_economy.METHODS,
 }
 
 
@@ -1118,7 +1122,7 @@ def compute(metric_id: str, params: dict, period: str,
             f"the registry declares it but the engine cannot dispatch it.")
     try:
         return fn(params, period, df) or _unknown()
-    except ParentNotFound:
+    except (ParentNotFound, _real_economy.ReferenceMissing):
         # Re-raised deliberately. Swallowing it into _unknown() would turn the loudest
         # signal we have — "this cut declares a parent that is not there" — into an absence
         # indistinguishable from a legitimate one, which is precisely what the rule forbids.

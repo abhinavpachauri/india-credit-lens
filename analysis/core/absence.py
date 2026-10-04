@@ -24,8 +24,12 @@ STATIC = {
 }
 
 PER_PERIOD = {
-    "not_released":       "MoSPI's figure for this period is not yet due",
-    "credit_history_gap": "the credit data has no reading for this period",
+    "not_released":          "MoSPI's figure for this period is not yet due",
+    "credit_history_gap":    "the credit data has no reading for this period or the year before it",
+    # user, 2026-10-03: SIBC's history starts Dec 2023, IIP/WPI on base 2022-23 in Apr 2023 and CPI
+    # on base 2024 in Jan 2025, so the early periods need a year-ago or trailing-year value that
+    # MoSPI never published on this base. A visible reason, not a missing row and not a failure.
+    "reference_history_gap": "MoSPI's series on this base does not reach back to this period",
 }
 
 #: An aggregate compared with a MoSPI aggregate that is RBI's convention but not exact

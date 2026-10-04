@@ -110,7 +110,7 @@ in full in the two sections below: `csv_sector_rotation` · `csv_category_rotati
 *Is industry credit growing faster than industry's prices, and faster than its output?* One row
 per credit part, like a scan; the second input comes from a **reference pipeline** (MoSPI, below)
 through a declared concordance (COMPOSITION_SPEC §24). Specced 2026-09-26, revised the same day
-after the three reviewers; no compute exists yet.
+after the three reviewers; built 2026-10-03 (`signals/compute/real_economy.py`, as built below).
 
 | method | measures |
 |---|---|
@@ -144,7 +144,10 @@ cite it, and neither copies it). Cells carry the **code**; prose is rendered fro
 - *per period*, decided by compute: `not_released`, **only while the dataset's expected release
   date for P is still in the future** (its declared lag, below); `credit_history_gap`, when the
   credit store has no row for P (SIBC holds no Aug–Nov in any year, so the Jul–Sep quarter is
-  absent until that history is backfilled).
+  absent until that history is backfilled); `reference_history_gap` (user, 2026-10-03), when
+  MoSPI's series on its current base starts after a period the computation needs (IIP/WPI from
+  Apr 2023, CPI from Jan 2025, against SIBC from Dec 2023). `credit_history_gap` also covers a
+  missing year-ago credit row.
 
 **Anything else raises.** Examples: a reference value past its expected date and still missing
 ("overdue"), a gap inside a series, a missing component. An outage must never read as a
@@ -154,6 +157,23 @@ legitimate absence (absence review, 2026-09-26).
 reference series codes, their values and periods, the weights, the credit YoY). Check 2f compares
 both, not just value/status/unit, and asserts **one row per concordance part per period**, so a part
 that emits nothing fails instead of agreeing with a recompute that also emits nothing.
+
+**As built (2026-10-03):**
+- 16 registry entries, `{cut}-real-growth` and `{cut}-output-growth` for each of the 8 concordance
+  cuts; `compute` names `cut` and `reference`, and entity type, domain and status rules are copied
+  from the cut's YoY scan. SIBC declares `depends_on: ["mospi"]`; the concordance's
+  `requires_signals` is on.
+- **Quarterly cuts store rows at quarter-end periods only** (user, 2026-10-03): between them the
+  method emits nothing, because its value cannot change there.
+- **The parent row** is emitted by the cut it is not a child of: Industry once, on the main table.
+- Absent rows: `value` null, `status: absent`, `reason` set. Present rows: `reason` null,
+  `operands` = sorted JSON of every input (credit pair and YoY, deflator kind/series/values, or the
+  trailing-year sums and window).
+- `ReferenceMissing` is re-raised by the engine (like `ParentNotFound`): overdue, a gap, a part the
+  concordance lacks, or a reference the manifest does not declare.
+- Freshness (Check 2f) compares `reason` and `operands` as well as value/status/unit, and holds
+  each (1f signal, period) to one row per part, counted from the credit CSV directly.
+- Pinned: Industry Q1 FY27 = 14.82 from the live CSVs (spec example 14.83 from rounded inputs).
 
 ### Rules that hold across all six
 - **A method is dispatched only from `METHODS`.** A registry entry naming a method that is not

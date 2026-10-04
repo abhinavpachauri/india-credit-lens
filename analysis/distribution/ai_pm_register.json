@@ -551,6 +551,13 @@
           "date": "2026-10-03",
           "how_measured": "Not injected: real defects from the Aug 2026 ingest. The table families (size, share of the whole book) were narrated for the first time and published under sections whose charts cannot draw them; 5.7 failed the gate on every one. After keeping table families out of cards and deriving sections from each signal's cut, 5.7 passed with 0 findings.",
           "source": "analysis/guards/validate_card_cuts.py + analysis/pipelines/sibc/generate_analysis_report.py (is_table_family, section_from_cut) + analysis/tests/test_card_routing.py"
+        },
+        {
+          "metric": "catch rate — Check 2f extended for 1f signals (reason, operands, one row per concordance part per period)",
+          "value": "reason flipped 2440/2440, operands changed 2440/2440, part dropped from both sides 368/368 (the row comparison alone: 0/368); 0 false findings on 21,083 known-good rows and 0/368 known-good groups",
+          "date": "2026-10-03",
+          "how_measured": "Enumerated, not sampled. One recompute of all 25 SIBC periods, then every 1f row in turn: its reason replaced, its operands JSON changed; each must give exactly one finding from check_signal_freshness.compare. For the part count, every (1f signal, period) group with one row removed from BOTH the committed and the recomputed side (a part that emits nothing anywhere): compare is silent by construction, _parts_per_period must flag it. The count's population is the credit CSV's children of the cut, read in the guard, not through real_economy.parts_of. Known-good: the committed signals.db after a full re-append.",
+          "source": "analysis/guards/check_signal_freshness.py (compare, _parts_per_period) + analysis/signals/compute/real_economy.py"
         }
       ],
       "observations": [

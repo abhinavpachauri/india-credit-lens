@@ -2,7 +2,7 @@
   "_meta": {
     "schema_version": "1.0",
     "description": "Signal registry — permanent catalog of every tracked signal across all ingestion pipelines. Signal IDs are immutable once created. Add new signals; never rename or delete. layer: 1 = per-chart data signal (algorithmically computed), 2 = cross-chart synthesis (authored per period from data), 3 = lending ecosystem expert model (generated ~6-monthly, strict claim validation).",
-    "last_updated": "2026-10-02",
+    "last_updated": "2026-10-03",
     "cadence_vocabulary": [
       "fortnightly",
       "monthly",
@@ -17575,6 +17575,534 @@
       "retire_period": "2026-04-30",
       "migrated_to": "opp_vehicle_ev",
       "retire_reason": "captured as Layer-2 system_model node"
+    },
+    "sibc-main-real-growth": {
+      "id": "sibc-main-real-growth",
+      "title": "Real credit growth (net of the part's own prices) — main sectors (YoY % per sector) (%)",
+      "pipeline": "sibc",
+      "layer": 1,
+      "cadence": "quarterly",
+      "sub_layer": "1f",
+      "domain": "sector_mix",
+      "type": "data",
+      "spec_version": "1.0",
+      "current_status": "strengthening",
+      "first_seen": "2024-01-31",
+      "compute": {
+        "method": "csv_sector_real_growth",
+        "cut": "sibc-main",
+        "reference": "mospi",
+        "entity_type": "sector",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      }
+    },
+    "sibc-main-output-growth": {
+      "id": "sibc-main-output-growth",
+      "title": "Output growth, trailing year (real economy) — main sectors (YoY % per sector) (%)",
+      "pipeline": "sibc",
+      "layer": 1,
+      "cadence": "quarterly",
+      "sub_layer": "1f",
+      "domain": "sector_mix",
+      "type": "data",
+      "spec_version": "1.0",
+      "current_status": "strengthening",
+      "first_seen": "2024-01-31",
+      "compute": {
+        "method": "csv_sector_output_growth",
+        "cut": "sibc-main",
+        "reference": "mospi",
+        "entity_type": "sector",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      }
+    },
+    "sibc-industry-type-real-growth": {
+      "id": "sibc-industry-type-real-growth",
+      "title": "Real credit growth (net of the part's own prices) — all industry types (%)",
+      "pipeline": "sibc",
+      "layer": 1,
+      "cadence": "monthly",
+      "sub_layer": "1f",
+      "domain": "industry",
+      "type": "data",
+      "spec_version": "1.0",
+      "current_status": "active",
+      "first_seen": "2024-01-31",
+      "compute": {
+        "method": "csv_sector_real_growth",
+        "cut": "sibc-industry-type",
+        "reference": "mospi",
+        "entity_type": "industry_type",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      }
+    },
+    "sibc-industry-type-output-growth": {
+      "id": "sibc-industry-type-output-growth",
+      "title": "Output growth, trailing year (real economy) — all industry types (%)",
+      "pipeline": "sibc",
+      "layer": 1,
+      "cadence": "monthly",
+      "sub_layer": "1f",
+      "domain": "industry",
+      "type": "data",
+      "spec_version": "1.0",
+      "current_status": "strengthening",
+      "first_seen": "2024-01-31",
+      "compute": {
+        "method": "csv_sector_output_growth",
+        "cut": "sibc-industry-type",
+        "reference": "mospi",
+        "entity_type": "industry_type",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      }
+    },
+    "sibc-food-processing-sub-real-growth": {
+      "id": "sibc-food-processing-sub-real-growth",
+      "title": "Real credit growth (net of the part's own prices) — Food Processing (Sugar/Oils/Tea etc.) (%)",
+      "pipeline": "sibc",
+      "layer": 1,
+      "cadence": "monthly",
+      "sub_layer": "1f",
+      "domain": "industry",
+      "type": "data",
+      "spec_version": "1.0",
+      "current_status": "active",
+      "first_seen": "2024-01-31",
+      "compute": {
+        "method": "csv_sector_real_growth",
+        "cut": "sibc-food-processing-sub",
+        "reference": "mospi",
+        "entity_type": "industry_type",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      }
+    },
+    "sibc-food-processing-sub-output-growth": {
+      "id": "sibc-food-processing-sub-output-growth",
+      "title": "Output growth, trailing year (real economy) — Food Processing (Sugar/Oils/Tea etc.) (%)",
+      "pipeline": "sibc",
+      "layer": 1,
+      "cadence": "monthly",
+      "sub_layer": "1f",
+      "domain": "industry",
+      "type": "data",
+      "spec_version": "1.0",
+      "current_status": "unknown",
+      "first_seen": "2024-01-31",
+      "compute": {
+        "method": "csv_sector_output_growth",
+        "cut": "sibc-food-processing-sub",
+        "reference": "mospi",
+        "entity_type": "industry_type",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      }
+    },
+    "sibc-chemicals-sub-real-growth": {
+      "id": "sibc-chemicals-sub-real-growth",
+      "title": "Real credit growth (net of the part's own prices) — Chemicals (Pharma/Fertiliser/Petro etc.) (%)",
+      "pipeline": "sibc",
+      "layer": 1,
+      "cadence": "monthly",
+      "sub_layer": "1f",
+      "domain": "industry",
+      "type": "data",
+      "spec_version": "1.0",
+      "current_status": "strengthening",
+      "first_seen": "2024-01-31",
+      "compute": {
+        "method": "csv_sector_real_growth",
+        "cut": "sibc-chemicals-sub",
+        "reference": "mospi",
+        "entity_type": "industry_type",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      }
+    },
+    "sibc-chemicals-sub-output-growth": {
+      "id": "sibc-chemicals-sub-output-growth",
+      "title": "Output growth, trailing year (real economy) — Chemicals (Pharma/Fertiliser/Petro etc.) (%)",
+      "pipeline": "sibc",
+      "layer": 1,
+      "cadence": "monthly",
+      "sub_layer": "1f",
+      "domain": "industry",
+      "type": "data",
+      "spec_version": "1.0",
+      "current_status": "declining",
+      "first_seen": "2024-01-31",
+      "compute": {
+        "method": "csv_sector_output_growth",
+        "cut": "sibc-chemicals-sub",
+        "reference": "mospi",
+        "entity_type": "industry_type",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      }
+    },
+    "sibc-basic-metal-sub-real-growth": {
+      "id": "sibc-basic-metal-sub-real-growth",
+      "title": "Real credit growth (net of the part's own prices) — Basic Metal (Iron & Steel / Other) (%)",
+      "pipeline": "sibc",
+      "layer": 1,
+      "cadence": "monthly",
+      "sub_layer": "1f",
+      "domain": "industry",
+      "type": "data",
+      "spec_version": "1.0",
+      "current_status": "strengthening",
+      "first_seen": "2024-01-31",
+      "compute": {
+        "method": "csv_sector_real_growth",
+        "cut": "sibc-basic-metal-sub",
+        "reference": "mospi",
+        "entity_type": "industry_type",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      }
+    },
+    "sibc-basic-metal-sub-output-growth": {
+      "id": "sibc-basic-metal-sub-output-growth",
+      "title": "Output growth, trailing year (real economy) — Basic Metal (Iron & Steel / Other) (%)",
+      "pipeline": "sibc",
+      "layer": 1,
+      "cadence": "monthly",
+      "sub_layer": "1f",
+      "domain": "industry",
+      "type": "data",
+      "spec_version": "1.0",
+      "current_status": "unknown",
+      "first_seen": "2024-01-31",
+      "compute": {
+        "method": "csv_sector_output_growth",
+        "cut": "sibc-basic-metal-sub",
+        "reference": "mospi",
+        "entity_type": "industry_type",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      }
+    },
+    "sibc-engineering-sub-real-growth": {
+      "id": "sibc-engineering-sub-real-growth",
+      "title": "Real credit growth (net of the part's own prices) — All Engineering (Electronics / Other) (%)",
+      "pipeline": "sibc",
+      "layer": 1,
+      "cadence": "monthly",
+      "sub_layer": "1f",
+      "domain": "industry",
+      "type": "data",
+      "spec_version": "1.0",
+      "current_status": "active",
+      "first_seen": "2024-01-31",
+      "compute": {
+        "method": "csv_sector_real_growth",
+        "cut": "sibc-engineering-sub",
+        "reference": "mospi",
+        "entity_type": "industry_type",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      }
+    },
+    "sibc-engineering-sub-output-growth": {
+      "id": "sibc-engineering-sub-output-growth",
+      "title": "Output growth, trailing year (real economy) — All Engineering (Electronics / Other) (%)",
+      "pipeline": "sibc",
+      "layer": 1,
+      "cadence": "monthly",
+      "sub_layer": "1f",
+      "domain": "industry",
+      "type": "data",
+      "spec_version": "1.0",
+      "current_status": "strengthening",
+      "first_seen": "2024-01-31",
+      "compute": {
+        "method": "csv_sector_output_growth",
+        "cut": "sibc-engineering-sub",
+        "reference": "mospi",
+        "entity_type": "industry_type",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      }
+    },
+    "sibc-infra-sub-real-growth": {
+      "id": "sibc-infra-sub-real-growth",
+      "title": "Real credit growth (net of the part's own prices) — Infrastructure (Power/Roads/Telecom etc.) (%)",
+      "pipeline": "sibc",
+      "layer": 1,
+      "cadence": "monthly",
+      "sub_layer": "1f",
+      "domain": "industry",
+      "type": "data",
+      "spec_version": "1.0",
+      "current_status": "strengthening",
+      "first_seen": "2024-01-31",
+      "compute": {
+        "method": "csv_sector_real_growth",
+        "cut": "sibc-infra-sub",
+        "reference": "mospi",
+        "entity_type": "industry_type",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      }
+    },
+    "sibc-infra-sub-output-growth": {
+      "id": "sibc-infra-sub-output-growth",
+      "title": "Output growth, trailing year (real economy) — Infrastructure (Power/Roads/Telecom etc.) (%)",
+      "pipeline": "sibc",
+      "layer": 1,
+      "cadence": "monthly",
+      "sub_layer": "1f",
+      "domain": "industry",
+      "type": "data",
+      "spec_version": "1.0",
+      "current_status": "strengthening",
+      "first_seen": "2024-01-31",
+      "compute": {
+        "method": "csv_sector_output_growth",
+        "cut": "sibc-infra-sub",
+        "reference": "mospi",
+        "entity_type": "industry_type",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      }
+    },
+    "sibc-pl-real-growth": {
+      "id": "sibc-pl-real-growth",
+      "title": "Real credit growth (net of the part's own prices) — all personal loan sub-categories (%)",
+      "pipeline": "sibc",
+      "layer": 1,
+      "cadence": "monthly",
+      "sub_layer": "1f",
+      "domain": "retail",
+      "type": "data",
+      "spec_version": "1.0",
+      "current_status": "active",
+      "first_seen": "2024-01-31",
+      "compute": {
+        "method": "csv_sector_real_growth",
+        "cut": "sibc-pl",
+        "reference": "mospi",
+        "entity_type": "pl_category",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      }
+    },
+    "sibc-pl-output-growth": {
+      "id": "sibc-pl-output-growth",
+      "title": "Output growth, trailing year (real economy) — all personal loan sub-categories (%)",
+      "pipeline": "sibc",
+      "layer": 1,
+      "cadence": "monthly",
+      "sub_layer": "1f",
+      "domain": "retail",
+      "type": "data",
+      "spec_version": "1.0",
+      "current_status": "unknown",
+      "first_seen": "2024-01-31",
+      "compute": {
+        "method": "csv_sector_output_growth",
+        "cut": "sibc-pl",
+        "reference": "mospi",
+        "entity_type": "pl_category",
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      }
     }
   }
 }
