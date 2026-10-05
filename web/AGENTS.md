@@ -112,6 +112,15 @@ Single shared card shell used by both SIBC and Payments.
 
 ---
 
+## Information hierarchy (`TEXT` in `lib/tokens.ts`, DASHBOARD_SPEC §22)
+
+Every Read surface uses five levels: `TEXT.title` (L1, one per screen) · `TEXT.section` (L2, with a
+grey subline) · `TEXT.item` (L3) · `TEXT.lead` / `TEXT.body` · `TEXT.meta`. Order inside a section
+is claim → evidence → reference; every chart uses the one frame (view label, `SectionCard`, legend
+chips); captions are triaged (caveat visible, definitions on hover, notes folded). A test fails a
+heading-sized `FS` step used directly in `components/read/`. Run the §22.6 checklist on any new
+surface.
+
 ## Type and radius scale (`lib/tokens.ts`)
 
 Sizes come from `FS` / `R` / `GLYPH`. Never write a raw number — `lib/tokens.test.ts` fails the

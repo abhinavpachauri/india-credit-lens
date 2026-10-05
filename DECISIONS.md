@@ -53,6 +53,7 @@
 - **Read is the authoritative surface for insights; Explore is charts only** (user, 2026-10-05). *Why:* every card Read hides is a cell of its table, so Explore's cards were repeats, and the 27 hand-written annotations were stale since June. *Revisit:* if a card type appears whose content has no cell or band line.
 - **NBFC v1 = table + band, no card generator.** *Revisit: ~12 releases* (D2). Cross-source UI waits until L1 is reviewed (D5).
 - **Type and radius scale live in `web/lib/tokens.ts`**, and a test fails any literal outside it. Colours stay CSS custom properties.
+- **One information hierarchy on every surface** (user, 2026-10-05): five `TEXT` levels, claim → evidence → reference, one chart frame, captions triaged (DASHBOARD_SPEC §22). *Why:* tiles, rail and row chart each picked their own and read as three products. *Revisit: never; extend §22 instead.*
 - **Explore mode stays per-pipeline.** *Revisit: when several more pipelines exist.*
 
 ## Distribution

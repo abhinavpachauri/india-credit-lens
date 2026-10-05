@@ -56,3 +56,25 @@ export const GLYPH = {
   /** The emoji standing in for a dimension on its tile. */
   dimension: 24,
 } as const;
+
+// ── The information hierarchy (DASHBOARD_SPEC §22) ──────────────────────────────
+// Five levels, the same on every surface: a reader learns them once and every screen reads the
+// same way. A component reaches for the LEVEL a piece of text plays, never a size and a weight
+// picked separately — that pairing, chosen by eye per component, is how the landing tiles, the
+// rail and the row chart each grew their own hierarchy.
+type TextRole = { fontSize: number; fontWeight?: number; lineHeight: number; color: string };
+
+export const TEXT = {
+  /** L1 — the page or open pane. One per screen. */
+  title:   { fontSize: FS.title,   fontWeight: 700, lineHeight: 1.2,  color: "var(--font)" },
+  /** L2 — a section inside the pane ("How it moved", "What's notable"); peers share it. */
+  section: { fontSize: FS.section, fontWeight: 700, lineHeight: 1.3,  color: "var(--font)" },
+  /** L3 — one item: a tile, a notable, a chart's own title. */
+  item:    { fontSize: FS.card,    fontWeight: 600, lineHeight: 1.35, color: "var(--font)" },
+  /** A section's lead paragraph — the one sentence block a reader should not skip. */
+  lead:    { fontSize: FS.card,                     lineHeight: 1.6,  color: "var(--font)" },
+  /** Sentences. */
+  body:    { fontSize: FS.body,                     lineHeight: 1.55, color: "var(--font)" },
+  /** Counts, view labels, footers, sublines — present but receding. */
+  meta:    { fontSize: FS.note,                     lineHeight: 1.45, color: "var(--font-muted)" },
+} as const satisfies Record<string, TextRole>;

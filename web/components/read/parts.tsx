@@ -11,8 +11,10 @@ import {
   type ColKey, type SortKey, type SortDir,
 } from "@/lib/table";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import ChartLegend from "@/components/ChartLegend";
+import SectionCard from "@/components/SectionCard";
 import { pickColor } from "@/lib/theme";
-import { FS, R, GLYPH } from "@/lib/tokens";
+import { FS, R, GLYPH, TEXT } from "@/lib/tokens";
 import { tileMix, type StateBlock } from "@/lib/state";
 
 export type ReadReason = "record" | "reversal" | "surge" | "shift";
@@ -126,71 +128,67 @@ export function ReadCard({ read, selected, onClick }: { read: RMRead; selected: 
   );
 }
 
-export function DimensionCard({ dim, state = [], reads = [], tables = 0, period, onClick }:
+export function DimensionCard({ dim, state = [], reads = [], tables = 0, period, newsLayer = true, onClick }:
   { dim: RMDimension; state?: StateBlock[]; reads?: RMRead[]; tables?: number;
-    period?: string; onClick: () => void }) {
+    period?: string; newsLayer?: boolean; onClick: () => void }) {
   const col = dim.color;
+  const more = Math.max(0, dim.cardCount - reads.length);
   return (
     <button onClick={onClick} className="rm-card rm-tile text-left rounded-xl h-full flex flex-col"
             style={{ ...vars(col), padding: "16px 18px" }}>
-      <div style={{ fontSize: GLYPH.dimension, lineHeight: 1 }}>{dim.icon}</div>
-      <div style={{ fontSize: FS.card, fontWeight: 600, color: "var(--font)", marginTop: 10, lineHeight: 1.25 }}>{dim.title}</div>
-      {/* The standing state (§16). A dimension with no movement cut shows NOTHING here —
-          an absence, not an empty row: Bank Credit is the top level and has no mix to state. */}
+      {/* L3 — the dimension. The icon sits beside the name, not on a line of its own. */}
+      <div className="flex items-baseline gap-2" style={TEXT.item}>
+        <span>{dim.icon}</span><span>{dim.title}</span>
+      </div>
+      {/* The standing state (§16), as body: speed in ink, mix receding beneath it. A dimension
+          with no movement cut shows NOTHING here — Bank Credit is the top level and has no mix. */}
       {state.length > 0 && (
-        <div className="mt-2.5 flex flex-col gap-1">
+        <div className="mt-2 flex flex-col gap-1">
           {state.map((b) => (
-            <div key={b.cut} style={{ fontSize: FS.note, lineHeight: 1.4 }}>
+            <div key={b.cut}>
               {b.speed_short && (
-                <div style={{ color: "var(--font)" }}>
+                <div style={TEXT.body}>
                   <span style={{ color: col }}>{b.speed_dir === "down" ? "▼" : "▲"} </span>{b.speed_short}
                 </div>
               )}
-              {/* The mix, or the DECLARED reason there is none (§16): a tile that quietly
-                  drops the line makes a dimension with nothing to steer look like one that
-                  failed to load. */}
+              {/* The mix, or the DECLARED reason there is none: a tile that quietly drops the
+                  line makes a dimension with nothing to steer look like one that failed to load. */}
               {tileMix(b)
-                ? <div style={{ color: "var(--font-muted)" }}>⇢ {tileMix(b)}</div>
-                : <div style={{ color: "var(--font-muted)", fontStyle: "italic" }}>
-                    — {b.no_mix_note ?? "no mix at this level"}
-                  </div>}
+                ? <div style={{ ...TEXT.body, color: "var(--font-muted)" }}>{tileMix(b)}</div>
+                : <div style={{ ...TEXT.meta, fontStyle: "italic" }}>— {b.no_mix_note ?? "no mix at this level"}</div>}
             </div>
           ))}
         </div>
       )}
-      {/* §20 — this dimension's OWN news, up to three, where it can be acted on. A pooled
-          grid of five reads above seven tiles was the same news twice, ranked by a score the
-          reader cannot see. A dimension with one read shows one and says so: a padded tile and
-          a quiet month look identical otherwise, and Services being quiet IS the news when its
-          mix is the one being steered hardest. */}
-      {reads.length > 0 && (
-        <div className="mt-3">
-          <div style={{ ...EYEBROW, marginBottom: 6 }}>
-            What&apos;s notable{period ? ` this ${period}` : ""} · {reads.length}
+      {/* §20 — this dimension's own news, capped at three with the rest counted (user,
+          2026-10-05: nine lines a tile flattened the grid). A pipeline with no card LAYER shows
+          no news block at all; a quiet month says so, because the two must not look alike. */}
+      {newsLayer && (
+        <div className="mt-3 pt-3" style={{ borderTop: "1px solid var(--border-card)" }}>
+          <div style={{ ...TEXT.meta, fontWeight: 600, marginBottom: 6 }}>
+            {dim.cardCount > 0
+              ? `${dim.cardCount} notable${period ? ` this ${period}` : ""}`
+              : `Nothing notable${period ? ` this ${period}` : ""}`}
           </div>
           <div className="flex flex-col gap-1.5">
             {reads.map((r) => (
-              <div key={r.id} className="flex items-baseline gap-1.5" style={{ fontSize: FS.note, lineHeight: 1.45 }}>
+              <div key={r.id} className="flex items-baseline gap-1.5" style={TEXT.body}>
                 <span style={{ color: col }}>{glyph(r.direction)}</span>
-                <span style={{ color: "var(--font)" }}>{r.title}</span>
+                <span>{r.title}</span>
               </div>
             ))}
           </div>
+          {/* "+1 more" under an empty list reads as a bug: name what the rest are instead. */}
+          {more > 0 && (
+            <div style={{ ...TEXT.meta, marginTop: reads.length ? 6 : 0 }}>
+              {reads.length ? `+${more} more` : `No headline moves; ${more === 1 ? "it is" : "they are"} inside.`}
+            </div>
+          )}
         </div>
       )}
-      <div className="flex items-center gap-2 mt-auto pt-3">
-        {tables > 0 && (
-          <span style={{ fontSize: FS.note, color: "var(--font-muted)" }}>
-            {tables} table{tables > 1 ? "s" : ""} ·
-          </span>
-        )}
-        {/* A pipeline that generates no cards must not invite a click toward news that was
-            never written. "0 notable →" reads as a quiet month; an absent card LAYER is a
-            different thing, and the tile offers what it actually has. */}
-        <span style={{ fontSize: FS.note, fontWeight: dim.moved > 0 ? 600 : 400,
-                       color: dim.moved > 0 ? col : "var(--font-muted)" }}>
-          {dim.cardCount > 0 ? `${dim.cardCount} notable →` : "open →"}
-        </span>
+      <div className="flex items-center gap-2 mt-auto pt-3" style={TEXT.meta}>
+        {tables > 0 && <span>{tables} table{tables > 1 ? "s" : ""} ·</span>}
+        <span style={{ color: col, fontWeight: 600 }}>Open →</span>
       </div>
     </button>
   );
@@ -198,30 +196,29 @@ export function DimensionCard({ dim, state = [], reads = [], tables = 0, period,
 
 /** The same dimension, compressed (§20 state B). The tile's grid becomes a rail, so the rail
  *  IS the dimension switcher and the chip strip is gone — two switchers for one nav was the
- *  §14.8 mistake, re-made. */
+ *  §14.8 mistake, re-made. Same levels as the tile, one step smaller because it is a list:
+ *  the name, then one meta line of speed → mix. */
 export function RailItem({ dim, state = [], selected, onClick }:
   { dim: RMDimension; state?: StateBlock[]; selected: boolean; onClick: () => void }) {
   const col = dim.color;
   const b = state[0];
+  const line = b?.speed_short
+    ? [b.speed_short, tileMix(b)].filter(Boolean).join(" · ")
+    : b?.no_speed_note ? `— ${b.no_speed_note}` : null;
   return (
     <button onClick={onClick} className={`rm-flat w-full text-left rounded-lg${selected ? " sel" : ""}`}
             style={{ ...vars(col, tint(col, 0.1)), padding: "10px 12px",
                      borderLeft: `3px solid ${selected ? col : "transparent"}` }}>
-      <div className="flex items-baseline gap-2">
-        <span style={{ fontSize: FS.body }}>{dim.icon}</span>
-        <span style={{ fontSize: FS.body, fontWeight: selected ? 700 : 600, color: "var(--font)" }}>{dim.title}</span>
-        {dim.moved > 0 && (
-          <span className="ml-auto" style={{ fontSize: FS.meta, fontWeight: 600, color: col }}>▲ {dim.moved}</span>
+      <div className="flex items-baseline gap-2" style={{ ...TEXT.body, fontWeight: selected ? 700 : 600 }}>
+        <span>{dim.icon}</span><span>{dim.title}</span>
+        {dim.cardCount > 0 && (
+          <span className="ml-auto" style={{ ...TEXT.meta, fontWeight: 600, color: col }}>{dim.cardCount}</span>
         )}
       </div>
-      {b?.speed_short && (
-        <div style={{ fontSize: FS.meta, color: "var(--font-muted)", marginTop: 3 }}>
-          {b.speed_dir === "down" ? "▼" : "▲"} {b.speed_short}
-        </div>
-      )}
-      {!b?.speed_short && b?.no_speed_note && (
-        <div style={{ fontSize: FS.meta, color: "var(--font-muted)", marginTop: 3, fontStyle: "italic" }}>
-          — {b.no_speed_note}
+      {line && (
+        <div style={{ ...TEXT.meta, marginTop: 2, fontStyle: b?.speed_short ? undefined : "italic",
+                      display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+          {line}
         </div>
       )}
     </button>
@@ -291,7 +288,7 @@ export function StateBand({ blocks, explainer }: {
           {/* The table's lead paragraph: speed (Layer 1) then mix (Layer 2), as one piece of
               prose. BOTH always: where a reading does not exist its declared reason stands in
               its place, because a paragraph that silently loses a sentence reads as broken. */}
-          <p style={{ fontSize: FS.card, lineHeight: 1.6, color: "var(--font)" }}>
+          <p style={TEXT.lead}>
             {([[b.speed, b.no_speed_note], [b.mix, b.no_mix_note]] as const).map(([text, note], k) =>
               text ? <span key={k}>{k > 0 ? " " : ""}{text}</span>
                 : note ? <span key={k} style={{ color: "var(--font-muted)", fontStyle: "italic" }}>
@@ -314,8 +311,8 @@ export function StateBand({ blocks, explainer }: {
 export function SectionHead({ title, sub }: { title: string; sub?: React.ReactNode }) {
   return (
     <div>
-      <h3 style={{ fontSize: FS.section, fontWeight: 700, color: "var(--font)", lineHeight: 1.3 }}>{title}</h3>
-      {sub && <div style={{ fontSize: FS.note, color: "var(--font-muted)", marginTop: 2 }}>{sub}</div>}
+      <h3 style={TEXT.section}>{title}</h3>
+      {sub && <div style={{ ...TEXT.meta, marginTop: 2 }}>{sub}</div>}
     </div>
   );
 }
@@ -378,9 +375,11 @@ export interface CellRef { stem: string; entity: string | null; col: ColKey }
  * `compare` overlays a sibling from the same cut and the same column — the one thing a table
  * genuinely cannot do, and the only overlay where the units and the depth match.
  */
-export function CellPanel({ table, cell, color, flowLabel, onPick, onClose }: {
+export function CellPanel({ table, cell, color, flowLabel, crumb, onPick, onClose }: {
   table: import("@/lib/table").CutTable;
   cell: CellRef; color: string; flowLabel?: string;
+  /** Where this chart sits: the dimension the reader opened it from. */
+  crumb?: string;
   onPick: (col: ColKey) => void;
   onClose: () => void;
 }) {
@@ -392,6 +391,7 @@ export function CellPanel({ table, cell, color, flowLabel, onPick, onClose }: {
   const who = cell.entity ?? table.cut;
   const siblings = table.parts.filter((p) => p.entity && p.entity !== cell.entity && p[cell.col]?.series);
   const cols = COLUMNS.filter((c) => row?.[c]?.series && (row[c]!.series as unknown[]).length > 1);
+  const colLabel = (c: ColKey) => (c === "new" ? (flowLabel ?? "New") : COL_LABEL[c]);
 
   const data = own.map((pt, i) => {
     const point: Record<string, string | number | null> = { label: pt.label, [who]: pt.value };
@@ -402,90 +402,100 @@ export function CellPanel({ table, cell, color, flowLabel, onPick, onClose }: {
     }
     return point;
   });
-  const lines = [who, ...compare];
+  // One colour per line, and the legend chip wears the same one — the notable charts' rule.
+  const lineColor = (name: string) => (name === who ? color : pickColor(name, siblings.findIndex((p) => p.entity === name) + 2));
+  const legend = [
+    { label: who, color: color, active: true },
+    ...siblings.map((p) => ({ label: p.entity!, color: lineColor(p.entity!), active: compare.includes(p.entity!) })),
+  ];
+  const toggle = (name: string) => {
+    if (name === who) return;   // the row the reader opened is the subject; it does not switch off
+    setCompare(compare.includes(name) ? compare.filter((x) => x !== name) : [...compare, name]);
+  };
+  const shown = own.filter((p) => p.value !== null);
+  const last = own.filter((p) => p.display).at(-1)?.display;
 
   // NB no Escape handler here. The SHELL owns the state stack (A/B/C) and pops exactly one
   // level per press; a second listener in this panel meant one Esc popped two levels, which
   // is what a reader experiences as the page jumping.
 
   return (
-    <div style={{ ...PANEL, padding: 16, position: "sticky", top: 12 }}>
+    <div style={{ ...PANEL, padding: 20, position: "sticky", top: 12 }}>
+      {/* Where am I (meta), then what am I looking at (L2) — the same order the pane uses. */}
       <div className="flex items-start justify-between gap-3">
-        <div style={{ fontSize: FS.card, fontWeight: 700, color: "var(--font)", lineHeight: 1.25 }}>{who}</div>
+        <div>
+          {crumb && <div style={{ ...TEXT.meta, marginBottom: 2 }}>{crumb} › {who}</div>}
+          <h3 style={TEXT.section}>{who} · {colLabel(cell.col)}</h3>
+        </div>
         <button onClick={onClose} className="rm-link shrink-0" aria-label="close chart"
                 style={{ fontSize: GLYPH.arrow, color: "var(--font-muted)", lineHeight: 1 }}>✕</button>
       </div>
 
       {/* The columns as tabs — so clicking a ROW and clicking a NUMBER are one gesture that
           lands on different tabs. A column this row has no history for is simply not offered. */}
-      <div className="flex flex-wrap gap-1.5 mt-3">
+      <div className="flex flex-wrap gap-1.5 mt-3 mb-4">
         {cols.map((c) => (
           <button key={c} onClick={() => onPick(c)} className="rounded-full transition-colors"
                   style={{ fontSize: FS.meta, padding: "4px 10px", ...chipStyle(c === cell.col) }}>
-            {c === "new" ? (flowLabel ?? "New") : COL_LABEL[c]}
+            {colLabel(c)}
           </button>
         ))}
       </div>
 
-      <div style={{ height: 190, marginTop: 12 }}>
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={data} margin={{ top: 6, right: 8, left: -14, bottom: 0 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="var(--border-card)" />
-            <XAxis dataKey="label" tick={{ fontSize: FS.micro, fill: "var(--font-muted)" }}
-                   interval="preserveStartEnd" />
-            <YAxis tick={{ fontSize: FS.micro, fill: "var(--font-muted)" }} width={50} />
-            <Tooltip contentStyle={{ background: "var(--bg-card)", border: "1px solid var(--border-card)",
-                                     borderRadius: R.sm, fontSize: FS.note }} />
-            {lines.map((name, i) => (
-              // Linear with a dot per reading, not a smoothed curve: the readings are monthly
-              // observations and SIBC's own period set has a gap in it (eleven ingested
-              // periods, not eleven consecutive months). A spline through them would draw a
-              // confident shape across months nobody measured.
-              <Line key={name} type="linear" dataKey={name} stroke={i === 0 ? color : pickColor(name, i + 2)}
-                    strokeWidth={i === 0 ? 2.5 : 1.5} dot={{ r: 2 }} connectNulls={false}
-                    isAnimationActive={false} />
-            ))}
-          </LineChart>
-        </ResponsiveContainer>
-      </div>
+      {/* The chart frame every chart on the read surface shares (§22): view label, then the
+          accent-bordered card with the legend as its first line. Comparing a sibling is a
+          legend chip, exactly as it is on the notable charts. */}
+      <div className="mb-3" style={{ ...TEXT.meta, fontWeight: 600 }}>📈 Trend · {colLabel(cell.col)}</div>
+      <SectionFrame color={color}>
+        <ChartLegend items={legend} onToggle={siblings.length ? toggle : undefined} />
+        <div style={{ height: 280 }}>
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={data} margin={{ top: 4, right: 16, left: 0, bottom: 4 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--grid)" />
+              <XAxis dataKey="label" tick={{ fontSize: FS.label, fill: "var(--font-muted)" }}
+                     tickLine={false} interval="preserveStartEnd" />
+              <YAxis tick={{ fontSize: FS.label, fill: "var(--font-muted)" }} tickLine={false}
+                     axisLine={false} width={56} />
+              <Tooltip contentStyle={{ background: "var(--bg-card)", border: "1px solid var(--border-card)",
+                                       borderRadius: R.sm, fontSize: FS.note }} />
+              {[who, ...compare].map((name) => (
+                // Linear with a dot per reading, not a smoothed curve: the readings are monthly
+                // observations and SIBC's own period set has a gap in it (eleven ingested
+                // periods, not eleven consecutive months). A spline through them would draw a
+                // confident shape across months nobody measured.
+                <Line key={name} type="linear" dataKey={name} stroke={lineColor(name)}
+                      strokeWidth={name === who ? 2.5 : 1.5} dot={{ r: 3 }} connectNulls={false}
+                      isAnimationActive={false} />
+              ))}
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      </SectionFrame>
 
-      {/* The readings themselves, as rendered in Python. The line shows the shape; these are
-          the argument, and they are the numbers the gate checked. */}
-      <p style={{ fontSize: FS.note, lineHeight: 1.7, color: "var(--font)", marginTop: 10 }}>
-        {own.filter((p) => p.display).map((p) => p.display).join("  →  ")}
+      {/* One meta line; the readings themselves — rendered in Python, the numbers the gate
+          checked — one click away rather than a line of arrows under every chart. */}
+      <p style={TEXT.meta}>
+        {shown.length} readings · {own[0]?.label} → {own[own.length - 1]?.label}{last ? ` · now ${last}` : ""}
       </p>
-      <p style={{ fontSize: FS.meta, color: "var(--font-muted)", marginTop: 4 }}>
-        {own.filter((p) => p.value !== null).length} readings · {own[0]?.label} to {own[own.length - 1]?.label}
-      </p>
+      <details style={{ marginTop: 4 }}>
+        <summary className="rm-link" style={{ ...TEXT.meta, cursor: "pointer" }}>Every reading</summary>
+        <p style={{ ...TEXT.meta, color: "var(--font)", marginTop: 4, lineHeight: 1.7 }}>
+          {own.filter((p) => p.display).map((p) => `${p.label} ${p.display}`).join(" · ")}
+        </p>
+      </details>
       {/* §21: what this reading is net of, or measured by — the sentence rendered in Python. A real-
           credit line that falls because prices rose must say so where the reader is looking. */}
       {row?.[cell.col]?.note && (
-        <p style={{ fontSize: FS.note, color: "var(--font)", marginTop: 6, lineHeight: 1.5 }}>
-          {row[cell.col]!.note}
-        </p>
-      )}
-
-      {siblings.length > 0 && (
-        <div style={{ marginTop: 14 }}>
-          <div style={{ ...EYEBROW, marginBottom: 6 }}>Compare</div>
-          <div className="flex flex-wrap gap-1.5">
-            {siblings.map((p) => {
-              const on = compare.includes(p.entity!);
-              return (
-                <button key={p.entity} onClick={() => setCompare(on
-                          ? compare.filter((x) => x !== p.entity)
-                          : [...compare, p.entity!])}
-                        className={`rm-chip rounded-full${on ? " on" : ""}`}
-                        style={{ ...vars(color, tint(color, 0.14)), fontSize: FS.meta, padding: "4px 10px" }}>
-                  {p.entity}
-                </button>
-              );
-            })}
-          </div>
-        </div>
+        <p style={{ ...TEXT.body, marginTop: 8 }}>{row[cell.col]!.note}</p>
       )}
     </div>
   );
+}
+
+/** The accent-bordered card a chart sits in — SectionCard's look, without its bottom margin,
+ *  so a chart reads the same whether it opened from a notable or from a table row. */
+function SectionFrame({ color, children }: { color: string; children: React.ReactNode }) {
+  return <div className="mb-3"><SectionCard accentColor={color} bare>{children}</SectionCard></div>;
 }
 
 /**
@@ -507,8 +517,8 @@ export function CutRowList({ table, title, cell, color, onPick }: {
   const label = cell.col === "new" ? (table.flow_label ?? "New") : COL_LABEL[cell.col];
   return (
     <div>
-      <div style={{ ...EYEBROW, color, marginBottom: 2 }}>{title}</div>
-      <div style={{ ...EYEBROW, marginBottom: 8 }}>{label}</div>
+      <div style={{ ...TEXT.body, fontWeight: 700 }}>{title}</div>
+      <div style={{ ...TEXT.meta, marginBottom: 8 }}>{label}</div>
       <div className="flex flex-col gap-0.5">
         {rows.map((r) => {
           const v = r[cell.col];

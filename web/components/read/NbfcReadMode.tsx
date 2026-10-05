@@ -63,6 +63,7 @@ export default function NbfcReadMode(
       cutsFor={(dimId) => CUTS[dimId] ?? []}
       // Every NBFC dimension owns a table, so the shell never needs the card-chart fallback.
       renderChart={() => null}
+      showTitle={false}
       hasDeep={() => false}
       renderDeep={() => null}
     />

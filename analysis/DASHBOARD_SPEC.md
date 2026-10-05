@@ -9,10 +9,19 @@
 > Authoring rule: ASCII layout → explicit approval → implement. Every section below is **built**
 > unless its own status line says otherwise.
 
-**What a reader sees, in order (as built, September 2026):**
+**What a reader sees, in order (as built, October 2026):**
 
 | Tier | What | Section |
 |---|---|---|
+| Front door | one tile per dimension: speed, mix, the top three notables and a count | §20, §22 |
+| How it moved | the state band as the table's lead paragraph: **speed** (L1) and **mix** (L2) | §16 |
+| The table | one Layer 1 table per dimension; each cell opens its own chart; rows open into their sub-cut | §17, §19, §20 |
+| vs the real economy | Real credit and Output columns on the SIBC tables, from MoSPI | §21 |
+| What's notable | below the table: movers (▲) charted, context (○) folded | §16, §18 |
+| The chart | always the cut the card or cell is about, drawn in one shared frame | §15, §22 |
+| The hierarchy | five text levels and one chart frame, the same on every surface | §22 |
+
+---|---|---|
 | Front door | one tile per dimension, carrying every read about it | §20 |
 | State band | two standing sentences per dimension: **speed** (L1) and **mix** (L2) | §16 |
 | Notable | cards that earned a place above the table | §18 |
@@ -1399,4 +1408,99 @@ pinned cell against the row it declares. Six pinned rows were wrong, on SIBC and
   stored rows and compared. Measured: 857/857 injections over 15 defect classes, 0 false on the
   shipped tables (ai_pm_register).
 - Coverage wording: "of this table's credit" (one phrasing for every cut), not "of industry credit".
+
+---
+
+## 22. Information hierarchy — the rules every surface follows (v1.0, 2026-10-05, BUILT) ⭐
+
+> Written after the user's review of 2026-10-05: the landing tiles, the rail and the chart that
+> opens from a table row each had their own hierarchy, picked by eye, so the dashboard read as
+> three products. The fix was one set of levels and one chart frame; this section is the rule
+> that keeps it that way. **Any new surface, pipeline or component follows it, and a change to it
+> is an ASCII-first design decision like any other.**
+
+### 22.1 The five levels
+
+Every piece of text plays one of these roles. Components take the level from `TEXT` in
+`web/lib/tokens.ts`, never a size and weight chosen separately.
+
+| Level | `TEXT.` | Size / weight | Used for | Rule |
+|---|---|---|---|---|
+| L1 | `title` | 24 / 700, ink | the page (landing) or the open pane | **one per screen** |
+| L2 | `section` | 18 / 700, ink | a section inside the pane: "How it moved", "What's notable", a chart opened from a row | peers share it; always followed by a grey subline that says what the section is |
+| L3 | `item` | 16 / 600, ink | one thing: a tile, a notable, a folded notable | the same size whether the item is open or folded |
+| lead | `lead` | 16 / 400, ink | a section's lead paragraph (the state band) | at most one per section |
+| body | `body` | 14 / 400, ink | sentences, list items, rail names | |
+| meta | `meta` | 13 / 400, grey | counts, view labels ("📈 Trend · YoY %"), breadcrumbs, footers, sublines | recedes; never carries the claim |
+
+A list that is a compressed copy of a larger surface (the rail is the tiles; the row list is the
+table) drops **one** level and keeps the same order: name, then one meta line. It never invents
+its own sizes.
+
+*Enforced:* `lib/tokens.test.ts` fails any `FS.title / FS.section / FS.card` used directly in
+`components/read/` (known-bad control: an injected `FS.section` fails it), and asserts the levels
+descend.
+
+### 22.2 The order inside a section
+
+**Claim → evidence → reference.** A sentence that says what happened comes first; the table or
+chart that shows it comes second; how to read it and its caveats come last.
+
+- **Evidence matches the claim's shape.** A comparison across parts at one moment is a table; a
+  claim about one series over time is a chart (§16 placement note).
+- **The standing state comes before the news.** "How it moved" (every month) sits above "What's
+  notable" (this month).
+
+### 22.3 One chart frame
+
+Every chart on the Read surface, whether it opened from a notable or a table row, uses the same frame:
+
+```
+L3 or L2 title — the claim, or "Row · Column"
+meta view label — "📈 Trend · YoY %" / "📊 Distribution · % share"
+┌ accent-bordered card (SectionCard) ─────────────┐
+│ legend chips — colour = line colour             │
+│ [ chart ]                                       │
+└─────────────────────────────────────────────────┘
+meta footer — readings / denominator, one line
+```
+
+- Comparing a sibling is a **legend chip**, never a separate control block.
+- A chart opened from inside a pane carries a meta **breadcrumb** ("Main Sectors › Services"), so
+  the reader knows where it came from without looking at the other pane.
+- The full run of readings is reference: one line of summary, the rest behind "Every reading".
+
+### 22.4 What stays visible, and what folds
+
+Text under a table or chart is triaged, not accumulated:
+
+| Kind | Default | Example |
+|---|---|---|
+| A correctness caveat (without it the reader draws a wrong conclusion) | **visible, one line** | "These 4 are 94.7% of main sectors…" |
+| How to use the surface | **one line**, above the thing it describes | "Hover a heading for its meaning; click a row for its history." |
+| What a column or term means | **on hover** at the heading (`hint` in `core/table_columns.py`) | "Pace: is growth speeding up or slowing down?" |
+| Coverage counts, method notes, keys | **folded** ("Notes on this table") | "Real credit: 4 of 4 parts…", "·Q1 = Apr–Jun 2026" |
+| Interaction feedback | where the reader just acted | the reason behind a clicked dash |
+
+Folding never deletes: every folded line is still rendered in Python and still gate-checked.
+
+### 22.5 Capped lists and empty states
+
+- A tile shows **three** notables, then "+N more" (user, 2026-10-05). The open pane shows all.
+- Within a section, the items that earn a chart (▲ movers) are shown open; the rest (○) sit in one
+  labelled group ("Also notable · N") at the **same item level**, folded.
+- **Quiet and absent never look alike.** A quiet month says "Nothing notable this Aug"; a
+  pipeline with no card layer (NBFC) shows no news block at all; a count with nothing listed names
+  what the rest are ("No headline moves; it is inside") rather than "+1 more" under an empty list.
+
+### 22.6 Checklist for a new surface or pipeline
+
+1. Which level is each piece of text? If one fits none, the design needs one, decided in
+   `tokens.ts` in the open, not a local size.
+2. Is there exactly one L1 on screen? (A page that draws its own title passes `showTitle={false}`.)
+3. Does each section read claim → evidence → reference?
+4. Does every chart use the frame in §22.3?
+5. Is every line under a table or chart triaged by §22.4?
+6. Do quiet, absent and empty each render differently (§22.5)?
+7. Checked at 1440px and 375px, light and dark, in all three dashboards.
 

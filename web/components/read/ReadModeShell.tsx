@@ -25,16 +25,15 @@ import {
   DimensionCard, RailItem, CutTable, CutRowList, CellPanel, StateBand,
   type RMModel, type RMCard, type RMDimension, type RMRead, type CellRef,
 } from "./parts";
-import { FS, R, GLYPH } from "@/lib/tokens";
+import { FS, R, GLYPH, TEXT } from "@/lib/tokens";
 import { loadBankTable, type CutTables, type CutTable as CutTableData,
          type BankIndex, type ColKey } from "@/lib/table";
 import type { StateMap } from "@/lib/state";
 
-/** Every read a dimension has, on its own tile. It was capped at three with the rest behind a
- *  count — but a count is not the news, and a reader deciding which dimension to open needs the
- *  items, not their number. The grid drops to two columns to give them the width; nine lines on
- *  a wide tile reads, nine lines squeezed into a third of the screen does not. */
-const TILE_READS = Infinity;
+/** The reads a tile shows before counting the rest. It was uncapped for a while so a reader could
+ *  see every item, but nine lines on every tile made the grid one flat wall of text; three plus
+ *  "+N more" lets the tiles be compared at a glance (user, 2026-10-05). The pane shows them all. */
+const TILE_READS = 3;
 
 /** The deeper reading (Layer 2/3) is OFF while Layer 1 is being got right: the causal layer is
  *  a different argument and it competes for the same attention. Display only — the opportunities
@@ -66,6 +65,9 @@ export interface ReadModeShellProps {
   /** §20 — which measures have a bank breakout, and where to fetch it (metric → entry). */
   bankIndex?: BankIndex;
   cutsFor?: (dimId: string) => CutRef[];
+  /** The landing's L1 title is `homeLabel`. A page that draws its own title (NBFC, which has a
+   *  sample caveat under it) turns this off so there are never two. */
+  showTitle?: boolean;
 }
 
 export interface CutRef {
@@ -88,7 +90,8 @@ export interface CutRef {
 }
 
 export default function ReadModeShell({ model, homeLabel, period, renderChart, hasDeep, renderDeep,
-                                       state = {}, tables, bankIndex = {}, cutsFor }: ReadModeShellProps) {
+                                       state = {}, tables, bankIndex = {}, cutsFor,
+                                       showTitle = true }: ReadModeShellProps) {
   const dimById = useMemo(() => new Map(model.dimensions.map((d) => [d.id, d])), [model]);
 
   const [openDim, setOpenDim] = useState<string | null>(null);       // null = state A
@@ -246,16 +249,17 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
           {/* "0 moved this Jul 2026" is what a QUIET month looks like. A pipeline with no card
               layer at all has not had a quiet month — it has never been asked the question —
               and the two must not render the same. Same rule as the tile footer. */}
-          <h2 style={{ ...EYEBROW, marginBottom: 14 }}>
+          {showTitle && <h1 style={TEXT.title}>{homeLabel}</h1>}
+          <div style={{ ...TEXT.meta, marginTop: showTitle ? 4 : 0, marginBottom: 16 }}>
             {model.dimensions.length} dimensions ·{" "}
             {model.dimensions.reduce((n, d) => n + tableCount(d.id), 0)} tables
-            {hasCardLayer && <> · {model.reads.length} moved this {period}</>}
-          </h2>
+            {hasCardLayer && <> · {model.dimensions.reduce((n, d) => n + d.cardCount, 0)} notable this {period}</>}
+          </div>
           <div className="grid gap-4 grid-cols-1 lg:grid-cols-2 items-stretch">
             {model.dimensions.map((d) => (
               <DimensionCard key={d.id} dim={d} state={(state[d.id] ?? []).filter((b) => b.anchor)}
                              reads={readsOf(d.id).slice(0, TILE_READS)}
-                             period={period}
+                             period={period} newsLayer={hasCardLayer}
                              tables={tableCount(d.id)} onClick={() => enter(d.id)} />
             ))}
           </div>
@@ -287,7 +291,7 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
   // ── STATES B and C ───────────────────────────────────────────────────────
   const rail = (
     <div className="flex flex-col gap-1.5">
-      <div style={{ ...EYEBROW, marginBottom: 4 }}>{homeLabel}</div>
+      <div style={{ ...TEXT.meta, fontWeight: 600, marginBottom: 4 }}>{homeLabel}</div>
       {model.dimensions.map((d) => (
         <RailItem key={d.id} dim={d} state={(state[d.id] ?? []).filter((b) => b.anchor)}
                   selected={d.id === dim.id}
@@ -318,8 +322,7 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
           <div ref={detailRef} className="lg:col-start-2 mt-5 lg:mt-0">
             <div style={{ ...PANEL, padding: 20, borderTop: `3px solid ${secColor}` }}>
               <div className="flex items-start justify-between gap-3">
-                <h2 style={{ fontSize: FS.title, fontWeight: 700, color: "var(--font)", lineHeight: 1.2,
-                             marginBottom: 18 }}>
+                <h2 style={{ ...TEXT.title, marginBottom: 18 }}>
                   <span style={{ fontSize: GLYPH.dimension }}>{dim.icon}</span> {dim.title}
                 </h2>
                 <button onClick={() => setOpenDim(null)} className="rm-link shrink-0" aria-label="close dimension"
@@ -408,7 +411,7 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
                     {movers.map((c) => (
                       <div key={c.id} style={NOTABLE_BOX}>
                         <div className="flex items-baseline gap-2 mb-3"
-                             style={{ fontSize: FS.card, lineHeight: 1.4, fontWeight: 600, color: "var(--font)" }}>
+                             style={TEXT.item}>
                           <span style={{ color: secColor }}>▲</span><span>{c.title}</span>
                         </div>
                         {renderChart(c, dim)}
@@ -421,7 +424,7 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
                   {context.length > 0 && (
                     <div style={{ marginTop: movers.length ? 20 : 16 }}>
                       {movers.length > 0 && (
-                        <div style={{ fontSize: FS.body, fontWeight: 700, color: "var(--font)", marginBottom: 8 }}>
+                        <div style={{ ...TEXT.body, fontWeight: 700, marginBottom: 8 }}>
                           Also notable · {context.length}
                         </div>
                       )}
@@ -432,8 +435,7 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
                             <div key={c.id} style={{ borderTop: i ? "1px solid var(--border-card)" : undefined }}>
                               <button onClick={() => setOpenCard(on ? null : c.id)}
                                       className="rm-row text-left flex items-baseline gap-2 w-full"
-                                      style={{ fontSize: FS.card, lineHeight: 1.4, fontWeight: 600,
-                                               color: "var(--font)", padding: "12px 14px" }}>
+                                      style={{ ...TEXT.item, padding: "12px 14px" }}>
                                 <span style={{ color: c.isRead ? secColor : "var(--font-muted)" }}>
                                   {c.isRead ? "▲" : "○"}
                                 </span>
@@ -481,6 +483,7 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
             <div ref={chartRef} className="mt-5 lg:mt-0 lg:col-start-2 lg:row-start-1">
               <CellPanel table={tables?.[cell.stem] ?? table} cell={cell} color={secColor}
                          flowLabel={(tables?.[cell.stem] ?? table).flow_label}
+                         crumb={dim.title}
                          onPick={(col: ColKey) => setCell({ ...cell, col })}
                          onClose={() => setCell(null)} />
             </div>
