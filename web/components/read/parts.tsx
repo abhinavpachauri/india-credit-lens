@@ -7,6 +7,7 @@
 import React from "react";
 import {
   sortParts as sortPartsMemo, cellSeries, COLUMNS, COL_LABEL, COL_GROUP, GROUP_LABEL,
+  COL_HINT, GROUP_HINT,
   type ColKey, type SortKey, type SortDir,
 } from "@/lib/table";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
@@ -75,6 +76,10 @@ export const STYLE = `
 .rm-link{transition:color .12s ease}
 .rm-link:hover{color:var(--font)}
 .rm-row:hover{background:var(--sel)}
+.rm-tip{position:relative;cursor:help;text-decoration:underline dotted;text-underline-offset:3px}
+.rm-tip-box{position:absolute;top:calc(100% + 6px);right:0;width:240px;z-index:20;opacity:0;pointer-events:none;transition:opacity .12s ease;background:var(--bg-card);border:1px solid var(--border-card);box-shadow:0 4px 14px var(--shadow);padding:8px 10px;color:var(--font);font-weight:400;text-transform:none;letter-spacing:normal;text-align:left;white-space:normal;line-height:1.45}
+.rm-tip.left .rm-tip-box{right:auto;left:0}
+.rm-tip:hover .rm-tip-box,button:focus-visible .rm-tip-box{opacity:1}
 `;
 
 export const PANEL: React.CSSProperties = {
@@ -257,7 +262,8 @@ export function ChipStrip({ chips, active, stripRef, onPick }: {
  * The standing state band (DASHBOARD_SPEC §16) — the tier above the reads.
  *
  * It belongs to the DIMENSION, not the selected card, so it does not change as the reader
- * clicks between the cards beneath it. Two labelled lines: `speed` is Layer 1 (how fast the
+ * clicks between the cards beneath it. It is the lead paragraph of the table under it (user,
+ * 2026-10-05: the table needed prose to say what it shows). Two sentences: `speed` is Layer 1 (how fast the
  * parent is growing) and `mix` is Layer 2 (whether anyone is steering the mix). Read together
  * they separate where the money went from whether that changed the shape of the book — the
  * distinction no single card can carry, and the reason this tier exists.
@@ -265,49 +271,74 @@ export function ChipStrip({ chips, active, stripRef, onPick }: {
  * Every sentence arrives pre-rendered from `analysis/core/state_lines.py` and gate-checked by
  * stage 5.9b. Nothing here formats a number; a missing line is simply absent.
  */
-export function StateBand({ blocks, color }: { blocks: StateBlock[]; color: string }) {
-  if (blocks.length === 0) return null;
+export function StateBand({ blocks, explainer }: {
+  blocks: StateBlock[];
+  /** One plain line on how to read the table beneath — static, so it carries no number. */
+  explainer?: string;
+}) {
+  if (blocks.length === 0 && !explainer) return null;
   const named = blocks.length > 1;   // two cuts on one dimension need telling apart
   return (
-    <div className="mb-4" style={{
-      background: tint(color, 0.06), border: `1px solid ${tint(color, 0.22)}`,
-      borderRadius: R.md, padding: "14px 16px",
-    }}>
-      <div style={{ ...EYEBROW, color, letterSpacing: "0.05em" }}>
-        The state · every month, news or not
-      </div>
+    <div className="mb-4">
+      <SectionHead title="How it moved" sub="every month, news or not" />
       {blocks.map((b, i) => (
-        <div key={b.cut} style={{ marginTop: i === 0 ? 10 : 12,
-                                  borderTop: i === 0 ? undefined : `1px solid ${tint(color, 0.22)}`,
-                                  paddingTop: i === 0 ? undefined : 12 }}>
+        <div key={b.cut} style={{ marginTop: i === 0 ? 8 : 12 }}>
           {named && (
-            <div style={{ fontSize: FS.label, fontWeight: 600, color: "var(--font)", marginBottom: 6 }}>
+            <div style={{ fontSize: FS.label, fontWeight: 600, color: "var(--font)", marginBottom: 4 }}>
               {b.subject}
             </div>
           )}
-          {/* BOTH rows, always. Where a reading does not exist the row carries the reason
-              instead of a number — a standing element that silently loses a line reads as
-              broken, and "priority sector has no published total" is worth saying. */}
-          {([["speed", b.speed, b.no_speed_note],
-             ["mix", b.mix, b.no_mix_note]] as const).map(([label, text, note]) =>
-            text || note ? (
-              <div key={label} className="flex flex-col sm:flex-row sm:gap-3" style={{ marginTop: 4 }}>
-                <span className="shrink-0" style={{
-                  fontSize: FS.meta, fontWeight: 600, color: "var(--font-muted)",
-                  textTransform: "uppercase", letterSpacing: "0.06em",
-                  width: 44, lineHeight: 1.9,
-                }}>{label}</span>
-                {text
-                  ? <span style={{ fontSize: FS.body, lineHeight: 1.55, color: "var(--font)" }}>{text}</span>
-                  : <span style={{ fontSize: FS.body, lineHeight: 1.55, color: "var(--font-muted)",
-                                   fontStyle: "italic" }}>— {note}</span>}
-              </div>
-            ) : null)}
+          {/* The table's lead paragraph: speed (Layer 1) then mix (Layer 2), as one piece of
+              prose. BOTH always: where a reading does not exist its declared reason stands in
+              its place, because a paragraph that silently loses a sentence reads as broken. */}
+          <p style={{ fontSize: FS.card, lineHeight: 1.6, color: "var(--font)" }}>
+            {([[b.speed, b.no_speed_note], [b.mix, b.no_mix_note]] as const).map(([text, note], k) =>
+              text ? <span key={k}>{k > 0 ? " " : ""}{text}</span>
+                : note ? <span key={k} style={{ color: "var(--font-muted)", fontStyle: "italic" }}>
+                           {k > 0 ? " " : ""}({note})</span>
+                : null)}
+          </p>
         </div>
       ))}
+      {explainer && (
+        <p style={{ fontSize: FS.note, lineHeight: 1.55, color: "var(--font-muted)", marginTop: 8 }}>
+          {explainer}
+        </p>
+      )}
     </div>
   );
 }
+
+/** A section of the open dimension: "How it moved", "What's notable". One level below the
+ *  pane's title, so both sections read as peers. */
+export function SectionHead({ title, sub }: { title: string; sub?: React.ReactNode }) {
+  return (
+    <div>
+      <h3 style={{ fontSize: FS.section, fontWeight: 700, color: "var(--font)", lineHeight: 1.3 }}>{title}</h3>
+      {sub && <div style={{ fontSize: FS.note, color: "var(--font-muted)", marginTop: 2 }}>{sub}</div>}
+    </div>
+  );
+}
+
+/** A heading that explains itself on hover. The words are declared beside the column in
+ *  analysis/core/table_columns.py, so a heading and its meaning cannot drift apart. */
+export function Hint({ text, align = "right", children }: {
+  text?: string; align?: "left" | "right"; children: React.ReactNode;
+}) {
+  if (!text) return <>{children}</>;
+  return (
+    <span className={`rm-tip${align === "left" ? " left" : ""}`}>
+      {children}
+      <span role="tooltip" className="rm-tip-box" style={{ fontSize: FS.note, borderRadius: R.sm }}>
+        {text}
+      </span>
+    </span>
+  );
+}
+
+/** The one heading that is not a column: what a row is. */
+const PART_HINT = "One row per part of this table. The first row is the table's own total; "
+  + "click any row or number to see its history.";
 
 // ── the Layer 1 cut table (DASHBOARD_SPEC §17) ─────────────────────────────────
 // One cut's parts, side by side. The table makes the pairing rule STRUCTURAL: a share of
@@ -611,18 +642,18 @@ export function CutTable({ table, title, color, bookLabel, footer, all, depth = 
               <th colSpan={groups.length}
                   style={{ ...HEAD, textAlign: "center", borderLeft: "1px solid var(--border-card)",
                            borderBottom: "1px solid var(--border-card)", padding: "4px 10px" }}>
-                {GROUP_LABEL[COL_GROUP[groups[0]]!]}
+                <Hint text={GROUP_HINT[COL_GROUP[groups[0]]!]}>{GROUP_LABEL[COL_GROUP[groups[0]]!]}</Hint>
               </th>
             </tr>
           )}
           <tr>
-            <th style={{ ...HEAD, textAlign: "left" }}>Part</th>
+            <th style={{ ...HEAD, textAlign: "left" }}><Hint text={PART_HINT} align="left">Part</Hint></th>
             {cols.map((c) => (
               <th key={c} style={{ ...HEAD, ...groupRule(c) }}>
                 <button onClick={() => pickSort(c)} className="rm-link"
                         style={{ font: "inherit", letterSpacing: "inherit", textTransform: "inherit",
                                  color: sort.key === c ? color : "inherit" }}>
-                  {c === "of_book" ? (bookLabel ?? label(c)) : label(c)}
+                  <Hint text={COL_HINT[c]}>{c === "of_book" ? (bookLabel ?? label(c)) : label(c)}</Hint>
                   {sort.key === c ? (sort.dir === "desc" ? " ↓" : " ↑") : ""}
                 </button>
               </th>
@@ -685,32 +716,32 @@ export function CutTable({ table, title, color, bookLabel, footer, all, depth = 
       </table>
       </div>
 
-      <p style={{ fontSize: FS.note, color: "var(--font-muted)", marginTop: 8 }}>
-        {table.parts.length} parts · click any row to chart it · sort by any column
-      </p>
-      {/* An "of which" cut must SAY so. Four rows under a heading imply a complete
-          decomposition; on this cut they are a subset, and the reader cannot tell from the
-          rows alone. The number is the stored coverage row, not a string in this file. */}
-      {table.coverage != null && (
-        <p style={{ fontSize: FS.note, color: "var(--font-muted)", marginTop: 6, lineHeight: 1.5 }}>
-          These {table.parts.length} are {table.coverage}% of {bookLabel ? `${title.toLowerCase()}` : title.toLowerCase()}
-          {" "}— RBI does not break out the rest.
-        </p>
-      )}
-      {footer && (
-        <p style={{ fontSize: FS.note, color: "var(--font-muted)", marginTop: 6, lineHeight: 1.5 }}>
+      {/* §21.4: why a cell is empty or what it is net of, after the reader asked for it. */}
+      {peek && <p style={{ fontSize: FS.note, color: "var(--font)", marginTop: 8, lineHeight: 1.5 }}>{peek}</p>}
+
+      {/* ONE caveat stays in view: an "of which" cut must SAY so. Four rows under a heading
+          imply a complete decomposition; here they are a subset, and the rows alone cannot tell
+          the reader. The number is the stored coverage row, not a string in this file. */}
+      {(table.coverage != null || footer) && (
+        <p style={{ fontSize: FS.note, color: "var(--font-muted)", marginTop: 8, lineHeight: 1.5 }}>
+          {table.coverage != null && <>These {table.parts.length} are {table.coverage}% of {title.toLowerCase()}. </>}
           {footer}
         </p>
       )}
-      {/* §21: what the real-economy columns cover and mean — every line rendered in Python,
-          the coverage counted from this period's cells by the builder and re-counted by the gate. */}
+      {/* Everything else about the table — what the real-economy columns cover, which price
+          index each uses, what ·Q1 means — is reference, not reading: one click away, every
+          line as Python rendered it and the gate re-counted it (§21). */}
       {table.real_economy && (
-        <div style={{ fontSize: FS.note, color: "var(--font-muted)", marginTop: 6, lineHeight: 1.5 }}>
-          {peek && <p style={{ color: "var(--font)", margin: "0 0 4px" }}>{peek}</p>}
-          {[...table.real_economy.coverage, ...table.real_economy.footnote].map((l) => (
-            <p key={l} style={{ margin: 0 }}>{l}</p>
-          ))}
-        </div>
+        <details style={{ marginTop: 6 }}>
+          <summary className="rm-link" style={{ fontSize: FS.note, color: "var(--font-muted)", cursor: "pointer" }}>
+            Notes on this table
+          </summary>
+          <div style={{ fontSize: FS.note, color: "var(--font-muted)", marginTop: 6, lineHeight: 1.5 }}>
+            {[...table.real_economy.coverage, ...table.real_economy.footnote].map((l) => (
+              <p key={l} style={{ margin: 0 }}>{l}</p>
+            ))}
+          </div>
+        </details>
       )}
     </div>
   );

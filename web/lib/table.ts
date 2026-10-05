@@ -28,8 +28,8 @@ export interface Cell {
 
 // The columns are declared ONCE, in analysis/core/table_columns.py, and generated into
 // table_columns.ts for the builder, the gate and this file to share (DASHBOARD_SPEC §21.5).
-import { COLUMNS, COL_LABEL, COL_GROUP, GROUP_LABEL, type ColKey } from "@/lib/table_columns";
-export { COLUMNS, COL_LABEL, COL_GROUP, GROUP_LABEL, type ColKey };
+import { COLUMNS, COL_LABEL, COL_GROUP, GROUP_LABEL, COL_HINT, GROUP_HINT, type ColKey } from "@/lib/table_columns";
+export { COLUMNS, COL_LABEL, COL_GROUP, GROUP_LABEL, COL_HINT, GROUP_HINT, type ColKey };
 
 export interface CutRow {
   entity:  string | null;      // null = the cut's own row

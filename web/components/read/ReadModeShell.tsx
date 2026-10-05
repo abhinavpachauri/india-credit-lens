@@ -20,7 +20,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { usePersistent } from "@/hooks/usePersistent";
 import {
-  chipStyle,
+  chipStyle, SectionHead,
   STYLE, PANEL, EYEBROW, READS_COLOR, tint, glyph, REASON,
   DimensionCard, RailItem, CutTable, CutRowList, CellPanel, StateBand,
   type RMModel, type RMCard, type RMDimension, type RMRead, type CellRef,
@@ -40,6 +40,16 @@ const TILE_READS = Infinity;
  *  a different argument and it competes for the same attention. Display only — the opportunities
  *  feed is still built, still gated, still on /opportunities. Reversed by flipping this. */
 const DEEP_ENABLED = false;
+
+/** How to read any Layer 1 table, in one line. Static and pipeline-neutral, so it carries no
+ *  number — the numbers are in the paragraph above it, rendered in Python. */
+/** One notable's frame — the same box whether its chart is open (▲) or folded (○). */
+const NOTABLE_BOX: React.CSSProperties = {
+  border: "1px solid var(--border-card)", borderRadius: R.md, padding: 14, minWidth: 0,
+};
+
+const TABLE_EXPLAINER = "Each row is one part: its size, its share, its growth, and its share of the "
+  + "year's change. Hover a heading for its meaning; click a row for its history.";
 
 export interface ReadModeShellProps {
   model: RMModel;
@@ -151,6 +161,47 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
   const readsOf = (dimId: string) => model.reads.filter((r) => r.dimId === dimId);
   const tableCount = (dimId: string) =>
     (cutsFor ? cutsFor(dimId).filter((c) => tables?.[c.stem]).length : 0);
+
+  // ── the notables of the open dimension, split by how they are shown ─────────
+  const cards = dim ? notable(dim) : [];
+  // A dimension with no table shows its first card's chart in the table's place, so that card
+  // is not charted a second time below.
+  const standIn = dim && !table ? cards[0] : undefined;
+  const movers = cards.filter((c) => c.isRead && c.id !== standIn?.id);
+  const context = cards.filter((c) => !movers.includes(c));
+
+  /** A card's own words — body, implication, chain — rendered as Python wrote them. */
+  function detail(c: RMCard) {
+    return (
+      <>
+        {c.body && <p style={{ fontSize: FS.body, lineHeight: 1.65, color: "var(--font)", marginTop: 10 }}>{c.body}</p>}
+        {c.implication && <p style={{ fontSize: FS.body, lineHeight: 1.6, color: "var(--font-muted)", marginTop: 8 }}>{c.implication}</p>}
+        {c.chain?.length ? (
+          <ol style={{ marginTop: 10 }}>
+            {c.chain.map((st, i) => (
+              <li key={i} className="flex gap-2.5" style={{ fontSize: FS.body, lineHeight: 1.55, color: "var(--font)", marginTop: 5 }}>
+                <span style={{ color: secColor, fontWeight: 700 }}>{i + 1}.</span><span>{st}</span>
+              </li>
+            ))}
+          </ol>
+        ) : null}
+      </>
+    );
+  }
+  /** A mover's words sit behind one disclosure: the title and the chart are the read. */
+  function why(c: RMCard) {
+    if (!c.body && !c.implication && !c.chain?.length) return null;
+    const on = openCard === c.id;
+    return (
+      <div className="mt-2">
+        <button onClick={() => setOpenCard(on ? null : c.id)} className="rm-link"
+                style={{ fontSize: FS.note, fontWeight: 600, color: "var(--font-muted)" }}>
+          {on ? "▾" : "▸"} why it matters
+        </button>
+        {on && detail(c)}
+      </div>
+    );
+  }
 
   // On a phone the chart cannot sit beside the table, so it stacks under it — and a chart
   // the reader has to go looking for is a chart that did not open. Desktop leaves the scroll
@@ -267,69 +318,13 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
           <div ref={detailRef} className="lg:col-start-2 mt-5 lg:mt-0">
             <div style={{ ...PANEL, padding: 20, borderTop: `3px solid ${secColor}` }}>
               <div className="flex items-start justify-between gap-3">
-                <div style={{ ...EYEBROW, color: secColor, letterSpacing: "0.05em", marginBottom: 12 }}>
-                  {dim.icon} {dim.title}
-                </div>
+                <h2 style={{ fontSize: FS.title, fontWeight: 700, color: "var(--font)", lineHeight: 1.2,
+                             marginBottom: 18 }}>
+                  <span style={{ fontSize: GLYPH.dimension }}>{dim.icon}</span> {dim.title}
+                </h2>
                 <button onClick={() => setOpenDim(null)} className="rm-link shrink-0" aria-label="close dimension"
                         style={{ fontSize: GLYPH.arrow, color: "var(--font-muted)", lineHeight: 1 }}>✕</button>
               </div>
-
-              {/* §16 — the dimension's standing state. It belongs to the dimension, not to any
-                  card or measure, and every sentence names its own subject, so it cannot be
-                  misread as describing whichever measure the filter is on. */}
-              {/* §16 — the standing state OF THE CUT ON SCREEN. It was the dimension's anchor
-                  always, so switching to eCommerce Transactions left a band describing cards in
-                  force: not wrong, since every sentence names its own subject, but the right
-                  state existed and was withheld. Layer 2 computes 40 mix states and ten reached
-                  a browser.
-
-                  A measure SWAPS the band (the table is fully replaced); an expanded row STACKS
-                  a second block (the parent table is still above it). */}
-              <StateBand blocks={bandBlocks} color={secColor} />
-
-              {/* §18 — the cards that survive: judgements about a SERIES ("highest on record",
-                  "first growth in 11 periods"), gaps, and FY step-ups. None has a column to
-                  live in, which is exactly why they are still cards. */}
-              {notable(dim).length > 0 && (
-                <div style={{ marginBottom: 20, paddingBottom: 16,
-                              borderBottom: "1px solid var(--border-card)" }}>
-                  <div style={{ ...EYEBROW }}>What&apos;s notable · {notable(dim).length}</div>
-                  <div className="mt-3 flex flex-col gap-1">
-                    {notable(dim).map((c) => {
-                      const on = openCard === c.id;
-                      return (
-                        <div key={c.id}>
-                          <button onClick={() => setOpenCard(on ? null : c.id)}
-                                  className="rm-link text-left flex items-baseline gap-2 w-full py-1"
-                                  style={{ fontSize: FS.lead, lineHeight: 1.45,
-                                           fontWeight: c.isRead ? 600 : 400, color: "var(--font)" }}>
-                            <span style={{ color: c.isRead ? secColor : "var(--font-muted)" }}>
-                              {c.isRead ? "▲" : "○"}
-                            </span>
-                            <span>{c.title}</span>
-                          </button>
-                          {on && (
-                            <div style={{ padding: "4px 0 12px 22px" }}>
-                              {c.body && <p style={{ fontSize: FS.body, lineHeight: 1.65, color: "var(--font)" }}>{c.body}</p>}
-                              {c.implication && <p style={{ fontSize: FS.body, lineHeight: 1.6, color: "var(--font-muted)", marginTop: 8 }}>{c.implication}</p>}
-                              {c.chain?.length ? (
-                                <ol style={{ marginTop: 10 }}>
-                                  {c.chain.map((s, i) => (
-                                    <li key={i} className="flex gap-2.5" style={{ fontSize: FS.body, lineHeight: 1.55, color: "var(--font)", marginTop: 5 }}>
-                                      <span style={{ color: secColor, fontWeight: 700 }}>{i + 1}.</span><span>{s}</span>
-                                    </li>
-                                  ))}
-                                </ol>
-                              ) : null}
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-
 
               {/* §20 — the measure is a FILTER. A credit dimension has one measure and shows no
                   strip; a payments group has five to eleven and used to stack them as tables. */}
@@ -372,6 +367,13 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
                 </div>
               )}
 
+              {/* §16 — the standing state OF THE CUT ON SCREEN, as the table's lead paragraph
+                  (user, 2026-10-05: a table with no heading did not say what it showed). A
+                  measure SWAPS it (the table is fully replaced); an expanded row STACKS a second
+                  block (the parent table is still above it). */}
+              <StateBand blocks={bandBlocks}
+                         explainer={table ? TABLE_EXPLAINER : undefined} />
+
               {table ? (
                 <CutTable table={table} title={cut!.title} color={secColor}
                           bookLabel={cut!.bookLabel} footer={cut!.footer} all={tables}
@@ -386,11 +388,75 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
                       {cut.noTableNote}
                     </p>
                   )}
-                  {(() => {
-                    const first = notable(dim)[0];
-                    return first ? renderChart(first, dim) : null;
-                  })()}
+                  {standIn && renderChart(standIn, dim)}
                 </>
+              )}
+
+              {/* §18 — the news, BELOW the standing state (DECISIONS: insights sit below the
+                  table). A notable is a claim about one series over time, so its evidence is a
+                  chart, where the table's is a comparison across parts at one moment. The
+                  movers (▲) show theirs; the context lines (○) open theirs on click, so a
+                  twelve-card dimension is not a wall of twelve charts. */}
+              {cards.length > 0 && (
+                <div style={{ marginTop: 32 }}>
+                  <SectionHead title={`What's notable this ${period}`}
+                               sub={`${cards.length} this month${movers.length && context.length
+                                 ? ` · ${movers.length} charted below, ${context.length} more after` : ""}`} />
+                  {/* ▲ movers: full width, one under another — a chart squeezed into half the
+                      pane loses the very shape the title claims. */}
+                  <div className="mt-4 flex flex-col gap-4">
+                    {movers.map((c) => (
+                      <div key={c.id} style={NOTABLE_BOX}>
+                        <div className="flex items-baseline gap-2 mb-3"
+                             style={{ fontSize: FS.card, lineHeight: 1.4, fontWeight: 600, color: "var(--font)" }}>
+                          <span style={{ color: secColor }}>▲</span><span>{c.title}</span>
+                        </div>
+                        {renderChart(c, dim)}
+                        {why(c)}
+                      </div>
+                    ))}
+                  </div>
+                  {/* ○ context: the same box at the same title size, collapsed — a labelled
+                      group, so they read as notables that are folded, not as a loose list. */}
+                  {context.length > 0 && (
+                    <div style={{ marginTop: movers.length ? 20 : 16 }}>
+                      {movers.length > 0 && (
+                        <div style={{ fontSize: FS.body, fontWeight: 700, color: "var(--font)", marginBottom: 8 }}>
+                          Also notable · {context.length}
+                        </div>
+                      )}
+                      <div style={{ ...NOTABLE_BOX, padding: 0, ["--sel" as string]: tint(secColor, 0.07) }}>
+                        {context.map((c, i) => {
+                          const on = openCard === c.id;
+                          return (
+                            <div key={c.id} style={{ borderTop: i ? "1px solid var(--border-card)" : undefined }}>
+                              <button onClick={() => setOpenCard(on ? null : c.id)}
+                                      className="rm-row text-left flex items-baseline gap-2 w-full"
+                                      style={{ fontSize: FS.card, lineHeight: 1.4, fontWeight: 600,
+                                               color: "var(--font)", padding: "12px 14px" }}>
+                                <span style={{ color: c.isRead ? secColor : "var(--font-muted)" }}>
+                                  {c.isRead ? "▲" : "○"}
+                                </span>
+                                <span className="flex-1">{c.title}</span>
+                                <span className="shrink-0" style={{ fontSize: FS.note, fontWeight: 600, color: "var(--font-muted)" }}>
+                                  {on ? "▾ hide" : "▸ chart"}
+                                </span>
+                              </button>
+                              {on && (
+                                <div style={{ padding: "0 14px 14px" }}>
+                                  {c.id === standIn?.id
+                                    ? <p style={{ fontSize: FS.note, color: "var(--font-muted)" }}>Charted above.</p>
+                                    : renderChart(c, dim)}
+                                  {detail(c)}
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+                </div>
               )}
 
               {/* The deeper reading, where one exists. It used to be the third rung of a

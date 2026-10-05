@@ -23,3 +23,9 @@ def test_no_component_retypes_the_column_list():
         src = f.read_text()
         assert '["size", "of_cut"' not in src, f"{f.name} types the column list again"
         assert "const COL_LABEL" not in src, f"{f.name} types the column labels again"
+
+
+def test_every_column_and_group_explains_itself():
+    # The headings are explained on hover; a column added without a hint would show a bare label.
+    assert all(c.hint.strip() for c in TC.COLUMNS), [c.key for c in TC.COLUMNS if not c.hint.strip()]
+    assert set(TC.GROUP_HINTS) == set(TC.GROUPS)

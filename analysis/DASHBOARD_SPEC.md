@@ -308,6 +308,14 @@ At every step: both gates green, both pipelines, no per-section branches.
 > Arc 1 of `archive/docs/PLAN_2026-09-09.md`. **Rendering only.** Every number below is already computed,
 > already gate-validated, and has never reached a browser.
 
+> **Placement, 2026-10-05 (user):** in the open dimension the band is the table's **lead
+> paragraph** ("How it moved"): speed + mix as one piece of prose, then one static line on how
+> to read the table; every column heading explains itself on hover (`hint` in
+> `core/table_columns.py`, generated into `lib/table_columns.ts`). The notables sit **below** the
+> table: the ▲ movers each show the card's chart (§15 cut) under the title; the ○ context lines
+> open their chart on click. A notable is a claim about one series over time, so its evidence is
+> a chart; the mix is a comparison across parts at one moment, so its evidence is the table.
+
 ### 16.1 The problem this answers
 
 The top tier of read mode is *what is news*. This period that is **29 of 96** SIBC cards

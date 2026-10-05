@@ -32,3 +32,19 @@ export const COL_GROUP: Record<ColKey, string | null> = {
 export const GROUP_LABEL: Record<string, string> = {
   real: "vs the real economy",
 };
+
+/** What each heading means, shown on hover. */
+export const COL_HINT: Record<ColKey, string> = {
+  size: "How big this part is today, in the table's own unit.",
+  of_cut: "Its share of this table: the parts added up.",
+  of_book: "Its share of the whole book, not just of this table.",
+  growth: "Year-on-year growth: now against the same month a year ago.",
+  pace: "Is growth speeding up or slowing down? The change in year-on-year growth since the previous reading, in percentage points.",
+  new: "Of the net change over the last 12 months, the part that came from here. Reads 'Of fall' when the total shrank; can pass 100% when parts move in opposite directions.",
+  real_credit: "Growth with price changes taken out, using the prices of what this part produces. Hover a cell for the price index used.",
+  output: "Growth in real output (GVA) over the last four quarters: the economy this credit funds.",
+};
+
+export const GROUP_HINT: Record<string, string> = {
+  real: "Credit set against prices and output, from MoSPI's national statistics.",
+};

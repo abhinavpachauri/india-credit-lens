@@ -7,7 +7,7 @@
 import { useMemo } from "react";
 import {
   buildSectionData, buildPairData, buildShareData, metricLabel,
-  SECTION_DEFS, GROUP_LABELS, GROUP_ICONS, GROUP_ACCENT,
+  SECTION_DEFS, GROUP_LABELS, GROUP_ICONS, GROUP_ACCENT, CATEGORY_SHORT_TO_FULL,
   type AtmPosSeries, type FilterState, type SectionDef,
 } from "@/lib/atm_pos_data";
 import type { AtmPosInsight } from "@/lib/atm_pos_insights";
@@ -188,10 +188,22 @@ export default function AtmReadMode(
     }
 
     const unit = def.unit ?? def.volUnit ?? "count";
-    const data = buildSectionData(series, metric, TOP_N);
-    const highlighted = new Set(ins.effect.highlight ?? []);
-    const hidden = new Set(data.seriesNames.filter((n) => highlighted.size > 0 && !highlighted.has(n)));
     const isDist = ins.effect.tab === "distribution";
+    // Draw the level the card is ABOUT. A card names bank categories ("SFB") or banks; drawn
+    // over the top five banks, a category card hid every series but Total and showed a single
+    // 100% bar — a chart of nothing the card says.
+    const highlighted = new Set(ins.effect.highlight ?? []);
+    const named = [...highlighted].filter((h) => h !== "Total");
+    const filter: FilterState =
+        named.some((h) => h in CATEGORY_SHORT_TO_FULL)
+          ? { ...TOP_N, mode: "by_type", selectedTypes: Object.keys(CATEGORY_SHORT_TO_FULL) }
+      : named.length > 0 ? { ...TOP_N, mode: "individual", selectedBanks: named }
+      : TOP_N;
+    const data = buildSectionData(series, metric, filter);
+    // A share chart measures against Total whether or not it is drawn, so Total's own 100% bar
+    // is hidden there; a trend keeps it when the card names it.
+    const hidden = new Set(data.seriesNames.filter((n) =>
+      (isDist && n === "Total") || (highlighted.size > 0 && !highlighted.has(n))));
     const label = isDist ? "📊 Distribution · % share"
       : `📈 Trend · ${chartMode === "yoy" ? "YoY %" : chartMode === "mom" ? "MoM %" : "Absolute"}`;
     return (
