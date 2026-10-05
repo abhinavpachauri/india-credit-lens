@@ -172,6 +172,7 @@ the default (COMPOSITION_SPEC §8.1).
 | `/ingest-period` | a new XLSX, any pipeline, through the gate to a verified dashboard | user |
 | `/model-pass` | the Layer 2a UPDATE (or March FOUNDATION) pass after a current-period ingest | user |
 | `/s4-source` | S4 proposals → triage → Chrome sourcing → promote only verified forces | user |
+| `/onboard-source` | a new source or pipeline: probe → manifest → fetch → gate → join → signals → dashboard | user |
 | `/session-close` | end of session: rewrite `CLAUDE.local.md` + `PLAN.md`, log measurements | user |
 
 A skill runs engine commands only and is finished only when its named gate passes. Skills are

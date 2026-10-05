@@ -9,8 +9,8 @@
 The engine (gate, compute, registry, traceability) stays deterministic code. On top of it:
 skills = procedure, subagents = independent review, hooks + `reconcile.py` = enforcement.
 Phases 0–3 ✅ (2026-09-24/26: hooks, knowledge split, four skills tested on the Aug 2026 ingest,
-three reviewer subagents accepted cold at 4/4 caught, 0/3 false). **Phase 4 ⬜:** `onboard-source`,
-`add-signal-family`, `measure-gate`, `dashboard-change`, each written while doing its real task.
+three reviewer subagents accepted cold at 4/4 caught, 0/3 false). **Phase 4:** `onboard-source` ✅ 2026-10-05 (from NBFC + MoSPI);
+`add-signal-family`, `measure-gate`, `dashboard-change` ⬜, each written while doing its real task.
 
 ## Next, in order
 
@@ -32,8 +32,8 @@ three reviewer subagents accepted cold at 4/4 caught, 0/3 false). **Phase 4 ⬜:
      quarter-ends only. Check 2f extended and measured (register). Industry Q1 FY27 real = 14.82.
      Candidate: the IIP weights rebuild (0.046 pt by hand) as a standing 1d check.
    - **Phase 4 ✅ 2026-10-04:** the two columns on 8 SIBC tables (DASHBOARD_SPEC §21.8); the
-     column list declared once; gate 5.9d extended and measured. Next: `onboard-source` (write it
-     from phases 1–4), then the S4 decomposition reading 1f (open decisions below).
+     column list declared once; gate 5.9d extended and measured. Next: the S4 decomposition reading 1f (open
+     decisions below).
    - **Replace the hand-read CPI PDFs** with the press-release annex in MoSPI's eSankhyiki
      catalogue (Excel, base 2024, monthly from Feb 2026, e.g. `CPIMCY26004AUG`). Index:
      `api.mospi.gov.in/api/esankhyiki/cms/golden-sheet/list?product=CPI`; files:
