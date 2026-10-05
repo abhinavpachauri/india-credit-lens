@@ -37,8 +37,8 @@ setHeaderMetric(null, "Mar 2026");
 ## Read mode — the primary surface (all three dashboards)
 
 Spec: `analysis/DASHBOARD_SPEC.md` §15–§20. `/` (SIBC) and `/payments` open in **Read**, with a
-`ModeToggle` to **Explore** (the older per-section card list, below). `/nbfc` has no Explore
-mode, because it has no cards.
+`ModeToggle` to **Explore** (charts with their controls, below). `/nbfc` has no Explore
+mode.
 
 | Piece | File | Role |
 |---|---|---|
@@ -57,107 +57,33 @@ Rules:
 
 ---
 
-## Design Language System (DLS)
+## Explore mode — charts only (since 2026-10-05)
 
-Shared components live in `web/components/dls/`. Both the SIBC and Payments pages use
-these — any change here affects both.
+**Read is the authoritative surface for insights.** Explore shows each section's chart with the
+controls Read lacks; it carries no insight cards (DASHBOARD_SPEC §18, DECISIONS). The step-through
+pieces it used (`InsightCTAStrip`, `InsightCard`, `useSectionInsights`, `useAnnotation`,
+`filterInsights`) were removed with it.
 
-### InsightCard (`dls/InsightCard.tsx`)
-Renders a single insight / gap / opportunity card.
+### SIBC (`SibcExploreSection.tsx`)
 
-```tsx
-<InsightCard
-  type="insight"          // "insight" | "gap" | "opportunity" — drives colour + badge
-  title="..."
-  body="..."
-  implication="..."       // optional — "For lenders" section
-  chain={["Step 1", ...]} // optional — inference expand toggle
-  activeIndex={0}
-  total={3}
-  onNext={...}
-  onPrev={...}
-/>
-```
-
-- `key={activeIndex}` on the **parent** resets internal `showChain` expand state on navigation
-- Touch swipe: left → next, right → prev
-- `TYPE_COLOR` export drives all type-specific colours across SIBC and Payments
-
-### InsightCTAStrip (`dls/InsightCTAStrip.tsx`)
-Entry / exit strip above a chart section.
-
-- Entry mode: count summary + animated headline ticker + "tap to explore →" CTA
-- Active mode: "← Exit insights · X of Y"
-- Ticker cycles internally — callers do not manage ticker state
-
-```tsx
-<InsightCTAStrip
-  items={flat.map(a => ({ type: a.type, title: a.title }))}
-  counts={{ insight: 3, gap: 1, opportunity: 0 }}
-  isActive={isActive}
-  activeIdx={activeIdx}
-  total={total}
-  onEnter={enter}
-  onExit={exit}
-/>
-```
-
----
-
-## SIBC Explore mode (`SectionWithAnnotations.tsx`)
-
-Data source: `useSectionInsights(section)` hook — flattens insights / gaps / opportunities
-into a single navigable list. Exposes `ins.flat`, `ins.current`, `ins.enter`, `ins.exit`,
-`ins.next`, `ins.prev`, `ins.highlightConfig`.
-
-Structural order (always) — mirrors payments exactly:
 1. Section heading (icon + `text-sm font-bold` title)
-2. `<InsightCTAStrip>` (if insights exist)
-3. `<InsightCard key={ins.activeIdx}>` (if active)
-4. Controls card (hidden in insights mode) — tab buttons + chart-mode radios + IndustryFilter
-5. `<SectionCard accentColor={...} bare>` wrapping chart only
+2. Controls card: 📈 Trend · 📊 Distribution, then radios that change with the tab
+   (Trend: Absolute · YoY % · FY Cumul.; Distribution: ₹ Crore · % Share), and `IndustryFilter`
+   for `section.filterable === true`
+3. `<SectionCard accentColor={...} bare>` wrapping the chart
 
-**No global TabBar.** Tab state (`trend` / `distribution`) and chart-mode state
-(`trendMode`: absolute/yoy/fy · `distMode`: absolute/pct) are local to each section.
-`TrendChart` and `DistributionChart` receive `mode` as a prop — they no longer own it.
+Tab state and chart mode are local to each section; `TrendChart` / `DistributionChart` take `mode`
+as a prop. Their `highlightConfig` / `preferredMode` props are used by Read's card charts.
 
-Controls card (same style as payments):
-- Tab buttons: 📈 Trend · 📊 Distribution
-- Radios (right of divider): change based on active tab
-  - Trend:        Absolute · YoY % · FY Cumul.
-  - Distribution: ₹ Crore  · % Share
-- IndustryFilter row: only for `section.filterable === true`
+### Payments (`AtmPosGroupSection.tsx`)
 
-`SectionCard bare` skips the internal title header — heading is rendered above the card.
+1. Group heading (icon + sentence-case title)
+2. Controls panel: By Type · Individual · Top N, Trend / Distribution, chart-mode radios, top-N
+   selector, series chips, bank search
+3. Card grid: `<AtmPosSectionCard>` per section, accent from `GROUP_ACCENT[group]` in
+   `atm_pos_data.ts` (cc `#4e8ef7`, dc `#2ca02c`, infra `#f0912a`)
 
-Inference chain: `chain={ins.current.basis?.inferences}` — sourced from `basis.inferences`
-on the annotation. Check 2d (validate_annotation_basis.py) enforces this is non-empty.
-
----
-
-## Payments Explore mode (`AtmPosGroupSection.tsx`)
-
-Data source: `atm_pos_insights.json` loaded via `loadAtmPosInsights()`, filtered by
-`filterInsights(allInsights, group, mode)`.
-
-Structural order (always):
-1. Group heading (icon + `text-sm font-bold` sentence-case title — unified with SIBC)
-2. `<InsightCTAStrip>` (if insights exist)
-3. `<InsightCard key={activeIdx}>` (if active)
-4. Controls panel (mode / tab / chart-mode / top-N / chips / bank selector)
-5. Card grid — `<AtmPosSectionCard>` per section
-
-Inference chain: `chain={activeInsight.reasoning?.chain}` — sourced from `reasoning.chain`
-on the insight object. Stage 4d enforces this has ≥ 2 steps.
-
-### AtmPosSectionCard (`AtmPosSectionCard.tsx`)
-Uses `SectionCard bare` + `accentColor` from `GROUP_ACCENT[group]` in `atm_pos_data.ts`:
-
-```
-cc    → #4e8ef7  (blue)
-dc    → #2ca02c  (green)
-infra → #f0912a  (orange)
-```
+`atm_pos_insights.json` (`loadAtmPosInsights`) is read by Read mode only.
 
 ---
 
@@ -181,7 +107,6 @@ Single shared card shell used by both SIBC and Payments.
 | Export | Used for |
 |---|---|
 | `pickColor(label, index)` | Chart series lines/bars — NAMED_COLORS first, D3_PALETTE fallback |
-| `TYPE_COLOR` (from InsightCard) | Insight type badge + card border + ticker text |
 | `SEC_COLORS[]` | SIBC section card left-border accents (index from `section.accentIndex`) |
 | `GROUP_ACCENT` (from atm_pos_data.ts) | Payments group card left-border accents |
 

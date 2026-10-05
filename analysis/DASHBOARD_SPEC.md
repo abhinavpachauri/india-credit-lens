@@ -984,7 +984,10 @@ column to live in.
 - **Display only.** Every card is still generated, gated, traced and shipped. This hides them
   from one surface; it deletes nothing and is reversed by a constant.
 - **Explore is untouched and keeps everything.** Explore's purpose IS the full inventory —
-  curating it would leave no surface where every card is reachable.
+  curating it would leave no surface where every card is reachable. *Superseded 2026-10-05
+  (user):* Explore shows charts only. Every hidden subject card's number is a cell of the §17
+  table, so Read is the authoritative surface for insights; the 27 hand-written L2/L3
+  annotations (unchanged since June 2026) stop rendering anywhere and stay in `rbi_sibc.ts`.
 - **The dimension badge counts what is SHOWN.** A tile reading "27 insights" over a rail of
   nine is a tile that lies.
 - **Hidden is not gone.** The plane is a rendering decision; if a future reader needs the
@@ -1211,7 +1214,8 @@ those categories are made of.
    parent and child together, which is what made the Iron-and-Steel case land.
 2. **Insights below the table**, full width.
 3. **The side panel does NOT retire Explore. Explore never goes away** — it is the surface where
-   every card and every series stays reachable.
+   every series stays reachable with the chart controls Read lacks (FY cumulative, % share,
+   filters, bank selection). Since 2026-10-05 it carries no insight cards (§18).
 4. **Sorting is click-the-header**, decided now rather than deferred: `sort` already existed on
    every cell for exactly this. Default size descending; the parent row is pinned and never
    sorts; `—` sinks in both directions, so a column the data cannot fill never leads the table.

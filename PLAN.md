@@ -56,9 +56,6 @@ three reviewer subagents accepted cold at 4/4 caught, 0/3 false). **Phase 4:** `
   unexplained as such. Until then: source, do not promote; the Aug worklist keeps 12 proposals
   unsearched (`analysis/s4_proposals/2026-09-30.json`).
 
-- **Explore's Insights section (user, 2026-10-03, deferred):** legacy step-through UI, but Explore
-  is the only surface where every card is reachable (DASHBOARD_SPEC §18–19). Recommended: keep the
-  inventory as one shared plain list, drop `InsightCTAStrip` + insight mode. ASCII first.
 - **Table-cell tolerance:** the six original columns are checked with the prose tolerance (±0.5%),
   which let 6/57 moved 1f cells pass before 1f went exact. Same fix for them, measured first.
 - **Card/band dedup, option B**: every card records entity/metric ids in the band's vocabulary,
@@ -71,8 +68,11 @@ three reviewer subagents accepted cold at 4/4 caught, 0/3 false). **Phase 4:** `
 - **Generic card path vs table-as-the-L1-surface** (ARCHITECTURE item 3): decide from the count in Next #2.
 - **NBFC phases 7–8** (cross-source concepts, links, construct, channel UI) are deferred by the
   user until L1 is reviewed (NBFC plan D5).
-- **26 hand-written SIBC annotations** in `rbi_sibc.ts` last changed 2026-06-12; nothing refreshes
-  them. `/model-pass` decides at the March FOUNDATION whether to refresh or retire them.
+- **27 hand-written SIBC annotations** in `rbi_sibc.ts` (unchanged since 2026-06-12) render nowhere
+  since Explore went charts-only (user, 2026-10-05); IDs stay. The March FOUNDATION decides:
+  rewrite them for Read, or leave them retired.
+- **Subject-plane cards** (50 SIBC, 26 payments) are still generated and narrated (paid) though no
+  surface shows them; their numbers are table cells. Whether to stop generating them is open.
 - **Prompt v1.13 fix list** (paid; bundle with the next evaluate run): 3 eval-authored 5.8 warnings
   (`through FY26`, `watch for`, `on track to`).
 - **S4 worklist 2026-08-31**: 20 proposals still need a browser (`run_inference.py --worklist`).

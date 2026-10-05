@@ -1,6 +1,9 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+// Explore mode, payments: a group's charts with the controls Read does not have (by type / bank /
+// top N, MoM). Charts only since 2026-10-05: the insight cards above them repeated Read, which is
+// the authoritative surface for insights (DASHBOARD_SPEC §18).
+import { useState, useMemo } from "react";
 import {
   SECTION_DEFS,
   GROUP_LABELS,
@@ -10,14 +13,7 @@ import {
   getTopNBanks,
 } from "@/lib/atm_pos_data";
 import type { AtmPosSeries, FilterState } from "@/lib/atm_pos_data";
-import {
-  loadAtmPosInsights,
-  filterInsights,
-} from "@/lib/atm_pos_insights";
-import type { AtmPosInsight } from "@/lib/atm_pos_insights";
 import { pickColor } from "@/lib/theme";
-import InsightCard   from "@/components/dls/InsightCard";
-import InsightCTAStrip from "@/components/dls/InsightCTAStrip";
 import AtmPosSectionCard from "@/components/AtmPosSectionCard";
 import { R } from "@/lib/tokens";
 
@@ -65,14 +61,6 @@ export default function AtmPosGroupSection({ group, series }: AtmPosGroupSection
   const [trendMode,     setTrendMode]     = useState<"absolute" | "mom" | "yoy">("absolute");
   const [distMode,      setDistMode]      = useState<"absolute" | "pct">("absolute");
   const [bankSearch,    setBankSearch]    = useState("");
-  const [activeInsight, setActiveInsight] = useState<AtmPosInsight | null>(null);
-  const [allInsights,   setAllInsights]   = useState<AtmPosInsight[]>([]);
-  const [insightsMode,  setInsightsMode]  = useState(false);
-
-  // Load insights once
-  useEffect(() => {
-    loadAtmPosInsights().then(setAllInsights).catch(() => setAllInsights([]));
-  }, []);
 
   // Pre-compute top N banks at group level for consistent chips across all cards
   const topNBanks = useMemo(() => {
@@ -98,26 +86,9 @@ export default function AtmPosGroupSection({ group, series }: AtmPosGroupSection
     return { mode: "individual", selectedTypes: [], selectedBanks: topNBanks, topN };
   }, [mode, selectedBanks, topNBanks, topN]);
 
-  // In insights mode, show only the card the active insight is about
-  const sectionsToShow = useMemo(() => {
-    if (!insightsMode || !activeInsight?.effect.focusCard) return sections;
-    const focused = sections.filter((s) => s.id === activeInsight.effect.focusCard);
-    return focused.length > 0 ? focused : sections;
-  }, [insightsMode, activeInsight, sections]);
-
-  // Insights visible for current group + mode
-  const visibleInsights = useMemo(
-    () => filterInsights(allInsights, group, mode),
-    [allInsights, group, mode],
-  );
-
-  const insightCount = visibleInsights.filter((i) => i.type === "insight").length;
-  const gapCount     = visibleInsights.filter((i) => i.type === "gap").length;
-
   const handleModeChange = (m: GroupMode) => {
     setMode(m);
     setHiddenSeries(m === "by_type" ? new Set() : new Set(["Total"]));
-    setActiveInsight(null);
   };
 
   const toggleSeries = (name: string) => {
@@ -134,57 +105,9 @@ export default function AtmPosGroupSection({ group, series }: AtmPosGroupSection
     );
   };
 
-  // Apply insight effect: dim all series except highlight, switch tab/mode
-  const applyInsight = (ins: AtmPosInsight) => {
-    if (activeInsight?.id === ins.id) {
-      setActiveInsight(null);
-      setHiddenSeries(new Set());
-      return;
-    }
-    setActiveInsight(ins);
-
-    const highlighted = new Set(ins.effect.highlight);
-    const toHide = new Set(seriesNames.filter((n) => !highlighted.has(n)));
-    setHiddenSeries(toHide);
-
-    setTab(ins.effect.tab);
-    if (ins.effect.trendMode) setTrendMode(ins.effect.trendMode);
-    if (ins.effect.distMode)  setDistMode(ins.effect.distMode);
-  };
-
-  // Enter insights mode — auto-activate first insight immediately
-  const enterInsightsMode = () => {
-    setInsightsMode(true);
-    if (visibleInsights.length > 0) applyInsight(visibleInsights[0]);
-  };
-
-  // Exit insights mode: reset chart state
-  const exitInsightsMode = () => {
-    setInsightsMode(false);
-    setActiveInsight(null);
-    setHiddenSeries(mode === "by_type" ? new Set() : new Set(["Total"]));
-    setTab("trend");
-    setTrendMode("absolute");
-    setDistMode("absolute");
-  };
-
   const filteredBanks = bankSearch
     ? allBanks.filter((b) => b.toLowerCase().includes(bankSearch.toLowerCase()))
     : allBanks;
-
-  // Active insight index (for nav)
-  const activeIdx = activeInsight
-    ? visibleInsights.findIndex((i) => i.id === activeInsight.id)
-    : -1;
-
-  const goNext = () => {
-    const next = visibleInsights[activeIdx + 1];
-    if (next) applyInsight(next);
-  };
-  const goPrev = () => {
-    const prev = visibleInsights[activeIdx - 1];
-    if (prev) applyInsight(prev);
-  };
 
   return (
     <div className="mb-12">
@@ -199,42 +122,8 @@ export default function AtmPosGroupSection({ group, series }: AtmPosGroupSection
         </h2>
       </div>
 
-      {/* ── Insights CTA / exit strip (DLS) ────────────────────────────────── */}
-      {visibleInsights.length > 0 && (
-        <InsightCTAStrip
-          items={visibleInsights.map((i) => ({ type: i.type, title: i.title }))}
-          counts={{
-            insight:     insightCount,
-            gap:         gapCount,
-            opportunity: 0,   // depth lives in read mode
-          }}
-          isActive={insightsMode}
-          activeIdx={activeIdx}
-          total={visibleInsights.length}
-          onEnter={enterInsightsMode}
-          onExit={exitInsightsMode}
-        />
-      )}
-
-
-      {/* ── Insight card (DLS) — key resets internal chain-expand on navigation */}
-      {insightsMode && activeInsight && (
-        <InsightCard
-          key={activeIdx}
-          type={activeInsight.type}
-          title={activeInsight.title}
-          body={activeInsight.body}
-          implication={activeInsight.implication}
-          chain={activeInsight.basis?.inferences ?? activeInsight.reasoning?.chain}
-          activeIndex={activeIdx}
-          total={visibleInsights.length}
-          onNext={goNext}
-          onPrev={goPrev}
-        />
-      )}
-
-      {/* ── Controls panel (hidden in insights mode) ────────────────────────── */}
-      {!insightsMode && <div
+      {/* ── Controls panel ─────────────────────────────────────────────────── */}
+      <div
         style={{
           background:   "var(--bg-card)",
           border:       "1px solid var(--border-card)",
@@ -400,11 +289,11 @@ export default function AtmPosGroupSection({ group, series }: AtmPosGroupSection
             </div>
           </div>
         )}
-      </div>}
+      </div>
 
       {/* Card grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {sectionsToShow.map((def) => (
+        {sections.map((def) => (
           <div key={def.id} data-card-id={def.id}>
             <AtmPosSectionCard
               def={def}

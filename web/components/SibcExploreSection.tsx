@@ -1,0 +1,175 @@
+"use client";
+
+// Explore mode, SIBC: one section's chart with the controls Read does not have (FY cumulative,
+// % share, the industry filter). Charts only since 2026-10-05: the insight cards that sat above
+// each chart repeated Read, which is the authoritative surface for insights (DASHBOARD_SPEC §18).
+import { useCallback, useState } from "react";
+import { SEC_COLORS }           from "@/lib/theme";
+import SectionCard              from "./SectionCard";
+import TrendChart               from "./TrendChart";
+import DistributionChart        from "./DistributionChart";
+import IndustryFilter           from "./IndustryFilter";
+import type { ReportSection }   from "@/lib/types";
+import { R } from "@/lib/tokens";
+
+type TabId      = "trend" | "distribution";
+type TrendMode  = "absolute" | "yoy" | "fy";
+type DistMode   = "absolute" | "pct";
+
+interface Props {
+  section: ReportSection;
+}
+
+// Matches the payments controls card style exactly
+const CONTROLS_CARD: React.CSSProperties = {
+  background:   "var(--bg-card)",
+  border:       "1px solid var(--border-card)",
+  borderRadius: R.md,
+  padding:      "12px 16px",
+  marginBottom: 16,
+};
+
+const DIVIDER: React.CSSProperties = {
+  width: 1, height: 20, background: "var(--border-card)", flexShrink: 0,
+};
+
+const BTN = (active: boolean): React.CSSProperties => ({
+  background: active ? "#4e8ef7" : "var(--bg-page)",
+  color:      active ? "#fff"    : "var(--font-muted)",
+  border:     `1px solid ${active ? "#4e8ef7" : "var(--border-card)"}`,
+});
+
+export default function SibcExploreSection({ section }: Props) {
+  // Per-section tab and chart-mode state — mirrors payments per-group controls
+  const [tab,       setTab]       = useState<TabId>("trend");
+  const [trendMode, setTrendMode] = useState<TrendMode>("absolute");
+  const [distMode,  setDistMode]  = useState<DistMode>("absolute");
+
+  // Series filter, for filterable sections
+  const [visibleSeries, setVisibleSeries] = useState<string[]>([]);
+  const onFilteredSeries = useCallback((names: string[]) => setVisibleSeries(names), []);
+
+  const accentColor = SEC_COLORS[section.accentIndex];
+
+  function renderChart(visible?: string[]) {
+    return tab === "distribution" ? (
+      <DistributionChart
+        absoluteData={section.absoluteData}
+        seriesNames={section.distributionSeriesNames ?? section.seriesNames}
+        pctLabel={section.pctLabel}
+        mode={distMode}
+        visibleSeries={visible}
+      />
+    ) : (
+      <TrendChart
+        absoluteData={section.absoluteData}
+        growthData={section.growthData}
+        fyData={section.fyData}
+        seriesNames={section.seriesNames}
+        pctLabel={section.pctLabel}
+        mode={trendMode}
+        visibleSeries={visible}
+        initialHidden={section.defaultHiddenSeries}
+      />
+    );
+  }
+
+  return (
+    <div className="mb-8">
+      {/* Section heading */}
+      <div className="flex items-center gap-2" style={{ marginTop: 32, marginBottom: 12 }}>
+        <span className="text-lg leading-none">{section.icon}</span>
+        <h2
+          className="text-sm font-bold leading-snug"
+          style={{ color: "var(--font)" }}
+        >
+          {section.title}
+        </h2>
+      </div>
+
+
+      {/* ── Controls card ─────────────────────────────────────────────────── */}
+      <div style={CONTROLS_CARD}>
+        {/* Tab + chart-mode row — tighter vertical gap when wrapped on mobile (matches payments) */}
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-2 sm:gap-3">
+          {/* Tab buttons */}
+          <div className="flex gap-1">
+            {([
+              ["trend",        "📈 Trend"],
+              ["distribution", "📊 Distribution"],
+            ] as const).map(([t, label]) => (
+              <button
+                key={t}
+                onClick={() => setTab(t)}
+                className="text-sm font-medium px-3 py-1.5 rounded-full transition-colors"
+                style={BTN(tab === t)}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+
+          <div className="hidden sm:block" style={DIVIDER} />
+
+          {/* Chart-mode radios — change with active tab */}
+          <div className="flex items-center gap-3 text-sm">
+            {tab === "trend"
+              ? (["absolute", "yoy", "fy"] as const).map((m) => (
+                  <label
+                    key={m}
+                    className="flex items-center gap-1.5 py-1.5 cursor-pointer"
+                    style={{ color: "var(--font)" }}
+                  >
+                    <input
+                      type="radio"
+                      name={`trend-${section.id}`}
+                      value={m}
+                      checked={trendMode === m}
+                      onChange={() => setTrendMode(m)}
+                      className="accent-blue-500 w-4 h-4"
+                    />
+                    {m === "absolute" ? "Absolute" : m === "yoy" ? "YoY %" : "FY Cumul."}
+                  </label>
+                ))
+              : (["absolute", "pct"] as const).map((m) => (
+                  <label
+                    key={m}
+                    className="flex items-center gap-1.5 py-1.5 cursor-pointer"
+                    style={{ color: "var(--font)" }}
+                  >
+                    <input
+                      type="radio"
+                      name={`dist-${section.id}`}
+                      value={m}
+                      checked={distMode === m}
+                      onChange={() => setDistMode(m)}
+                      className="accent-blue-500 w-4 h-4"
+                    />
+                    {m === "absolute" ? "₹ Crore" : "% Share"}
+                  </label>
+                ))}
+          </div>
+        </div>
+
+        {/* Industry filter — only for filterable sections */}
+        {section.filterable && (
+          <div className="mt-3">
+            <IndustryFilter
+              absoluteData={section.absoluteData}
+              seriesNames={section.seriesNames}
+              onFilteredSeries={onFilteredSeries}
+            />
+          </div>
+        )}
+      </div>
+
+      {/* Chart card */}
+      <SectionCard accentColor={accentColor} bare>
+        {section.filterable
+          ? (visibleSeries.length > 0 && renderChart(visibleSeries))
+          : renderChart()
+        }
+      </SectionCard>
+    </div>
+  );
+}

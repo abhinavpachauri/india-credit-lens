@@ -6,7 +6,7 @@ import { loadPlanes, type PlanesMap } from "@/lib/planes";
 import { loadStateBands, type StateMap } from "@/lib/state";
 import { loadCutTables, type CutTables } from "@/lib/table";
 import { useAppShell }          from "@/components/AppShell";
-import SectionWithAnnotations   from "@/components/SectionWithAnnotations";
+import SibcExploreSection       from "@/components/SibcExploreSection";
 import SibcReadMode             from "@/components/read/SibcReadMode";
 import ModeToggle               from "@/components/read/ModeToggle";
 import { usePersistent }        from "@/hooks/usePersistent";
@@ -52,7 +52,7 @@ export default function Dashboard() {
         <SibcReadMode report={report} planes={planes} state={state} tables={tables} />
       ) : (
         report.sections.map((section) => (
-          <SectionWithAnnotations key={section.id} section={section} />
+          <SibcExploreSection key={section.id} section={section} />
         ))
       )}
 

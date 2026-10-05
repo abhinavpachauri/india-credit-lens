@@ -65,21 +65,3 @@ export async function loadAtmPosInsights(): Promise<AtmPosInsight[]> {
   _cache = await res.json();
   return _cache!;
 }
-
-// ── Filter helpers ────────────────────────────────────────────────────────────
-
-/** Return the cuts relevant to a given group mode. */
-export function cutsForMode(mode: "by_type" | "individual" | "top_n"): InsightCut[] {
-  if (mode === "by_type")    return ["total", "by_type"];
-  if (mode === "top_n")      return ["total", "top_n", "by_bank"];
-  return ["total", "by_bank"];   // individual — total + single-bank stories (divergence)
-}
-
-export function filterInsights(
-  all:   AtmPosInsight[],
-  group: InsightGroup,
-  mode:  "by_type" | "individual" | "top_n",
-): AtmPosInsight[] {
-  const cuts = cutsForMode(mode);
-  return all.filter((i) => i.group === group && cuts.includes(i.cut));
-}
