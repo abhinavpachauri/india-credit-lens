@@ -20,6 +20,8 @@
 - **Cadence = how often the VALUE can change**, not how often the source publishes. Declared on every signal; Check 2e fails a missing one.
 - **Windows are declared per signal** (`window: 12`), never defaulted in code, so a title's "12 months" grounds.
 - **PSL has no share-of-parent**: its parts are non-additive, so no invented denominator. (The `weight`/`weight_now` question is open; see PLAN.)
+- **A real-economy (1f) cell holds its own period's reading or a reason** (user, 2026-10-03): a period before MoSPI's base reaches reads `reference_history_gap`; a quarterly value is stored at quarter-ends only and shown labelled (·Q1), never repeated into months. *Why:* nothing carries forward, and absences stay visible. *Revisit:* if MoSPI back-casts its current base.
+- **A real-credit number always names its deflator and that deflator's change** (user, 2026-10-04). *Why:* petroleum −17.1% real (Aug 2026) was a 38.5% fuel-price jump and reads as a collapse without it. *Revisit: never.*
 - **SIBC has no pair signals**: one measure (outstanding) per entity, so there is nothing to pair. *Revisit: a source with a second measure per entity.*
 
 ## Guards and storage

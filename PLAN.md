@@ -2,7 +2,7 @@
 
 > Rewritten in place, never appended. Finished items are **deleted** (git keeps them). Hard cap
 > 120 lines, enforced by `reconcile.py`. Standing rules live in `DECISIONS.md`; how to run a
-> workflow lives in its skill (`.claude/skills/`). Last rewritten 2026-10-03 (pruned the same day).
+> workflow lives in its skill (`.claude/skills/`). Last rewritten 2026-10-05.
 
 ## Now: the agentic layer (design: `archive/docs/PLAN_2026-09-24_AGENTIC_LAYER.md`)
 
@@ -20,29 +20,20 @@ three reviewer subagents accepted cold at 4/4 caught, 0/3 false). **Phase 4:** `
 2. **NBFC post-ingest count** (NBFC plan §6 "after the ingest"): how many files did pipeline #3
    touch that were not its own? Record it in `ARCHITECTURE.md` §"Adding a pipeline", and let it
    decide the open fork on a generic card path.
-3. **MoSPI (IIP, WPI, NAS, CPI) as pipeline #4**: a reference pipeline with no page of its own;
-   its numbers reach the credit tables through one generic join driven by a concordance (user,
-   2026-09-26). Pulled by hand until two clean cycles. Spec: signals/README §1f + "MoSPI",
-   COMPOSITION_SPEC §24, DASHBOARD_SPEC §21 (layouts need a final look before code).
-   Phases 0–2 ✅ (2026-09-26/29): spec, ingest + gate, concordance + stage 1d. IIP weights sourced
-   from MoSPI's own table 2026-10-03: output covers 12/19 industry types (45% of industry credit).
-   - **Phase 3 ✅ 2026-10-03:** `signals/compute/real_economy.py` (real growth + trailing-year
-     output), 16 registry entries, `reason`/`operands` in signals.db, SIBC `depends_on: [mospi]`,
-     registry check on. User: early periods read `reference_history_gap`; quarterly rows at
-     quarter-ends only. Check 2f extended and measured (register). Industry Q1 FY27 real = 14.82.
-     Candidate: the IIP weights rebuild (0.046 pt by hand) as a standing 1d check.
-   - **Phase 4 ✅ 2026-10-04:** the two columns on 8 SIBC tables (DASHBOARD_SPEC §21.8); the
-     column list declared once; gate 5.9d extended and measured. Next: the S4 decomposition reading 1f (open
-     decisions below).
+3. **MoSPI (IIP, WPI, NAS, CPI), pipeline #4: phases 0–4 ✅ (2026-09-26 → 10-04).** A reference
+   pipeline joined to SIBC by `ontology/concordance/sibc__mospi.json`; the 1f signals put Real
+   credit and Output 12m on 8 SIBC tables. Spec as built: signals/README §1f + "MoSPI",
+   COMPOSITION_SPEC §24, DASHBOARD_SPEC §21.8. Pulled by hand until two clean cycles. Next:
+   - **CPI each month** (Sep due ~12–14 Oct; MoSPI 1b fails overdue without it, and SIBC's gate with it).
    - **Replace the hand-read CPI PDFs** with the press-release annex in MoSPI's eSankhyiki
      catalogue (Excel, base 2024, monthly from Feb 2026, e.g. `CPIMCY26004AUG`). Index:
      `api.mospi.gov.in/api/esankhyiki/cms/golden-sheet/list?product=CPI`; files:
-     `…/api/esankhyiki/file/download{file_path}{file_name}`. Retires `cpi_release.py`, whose PDF
-     layout changed three times in eight releases. The catalogue (~4,800 tables) is the place to
-     look first for any MoSPI table, weights included.
+     `…/api/esankhyiki/file/download{file_path}{file_name}`. Retires `cpi_release.py`.
+   - **The S4 decomposition** reads 1f (open decisions below): design first, ASCII first.
+   - Candidate gate: the IIP weights rebuild (0.046 pt, measured by hand) as a standing 1d check.
    - **Open, user deciding:** textiles vs apparel (SIBC 2.4 ↔ nic:13 or 13+14); WPI weights for the
      6 combined deflators (WPI is DPIIT's, not in MoSPI's catalogue: eaindustry.nic.in); petroleum
-     deflated by WPI mineral oils (a judgment, §24.2).
+     deflated by WPI mineral oils (a judgment, §24.2; shown with its price note since 2026-10-04).
 4. **Arc 3: RBI regulatory watch** (S4 pointed at RBI, push not pull). Admission rule: an item
    enters only if it attaches to a model entity, channel or cut. ⚠️ Re-run the allowlist census
    first; the 2026-08-19 one predates the probe-bug retraction. Design: `archive/docs/PLAN_2026-09-09.md` arc 3.
@@ -53,7 +44,7 @@ three reviewer subagents accepted cold at 4/4 caught, 0/3 false). **Phase 4:** `
 
 ## Open decisions and known debts (not scheduled)
 
-- **S4 cannot explain medium-term moves (user, 2026-10-03). Design with MoSPI phase 3.** S4 asks
+- **S4 cannot explain medium-term moves (user, 2026-10-03). 1f is built; design this next.** S4 asks
   "which instrument took effect inside the window", so a lagged response or a slow-building
   condition reads as `expired` or gets a decorative citation. Aug 2026 showed it: the two causes
   that sourced cleanly (#12 ATM fees, RBI 1 May 2025; #8 TReDS, 7 Nov 2024) are real and fit the
@@ -68,6 +59,8 @@ three reviewer subagents accepted cold at 4/4 caught, 0/3 false). **Phase 4:** `
 - **Explore's Insights section (user, 2026-10-03, deferred):** legacy step-through UI, but Explore
   is the only surface where every card is reachable (DASHBOARD_SPEC §18–19). Recommended: keep the
   inventory as one shared plain list, drop `InsightCTAStrip` + insight mode. ASCII first.
+- **Table-cell tolerance:** the six original columns are checked with the prose tolerance (±0.5%),
+  which let 6/57 moved 1f cells pass before 1f went exact. Same fix for them, measured first.
 - **Card/band dedup, option B**: every card records entity/metric ids in the band's vocabulary,
   so arbitration is a set intersection. Do it when entity naming is touched anyway. Option A (a
   test pinning which cards are superseded) is the cheap stopgap.

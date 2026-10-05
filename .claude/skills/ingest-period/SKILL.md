@@ -26,6 +26,10 @@ python3 analysis/core/gate.py --pipeline {p} --skip-build   # green BEFORE touch
 ```
 A red gate before ingesting means you cannot tell your breakage from the existing one.
 
+**SIBC depends on MoSPI** (`depends_on`, since 2026-10-03): its gate's stage D fails when a MoSPI
+release is overdue. Bring MoSPI current first (`python3 analysis/core/gate.py --pipeline mospi`; the
+CPI press release is read by hand, `python3 analysis/pipelines/mospi/fetch.py --cpi-pdf {file}`).
+
 ## 1. Format + extract + consolidate, through the gate
 
 ```bash
@@ -101,6 +105,9 @@ new latest month in the band and tables, console clean, no horizontal scroll.
   golden deliberately (`analysis/tests/golden/refresh_atm_pos_cards.py`), after verifying every
   dropped card is an honest null.
 - **SIBC annual signals** (FY acceleration) only change at the March file.
+- **A MoSPI release changes SIBC rows already stored.** The 1f cells of past periods flip from
+  `not_released` to a value, so freshness reports SIBC drift after any MoSPI fetch. That is
+  correct: re-append every SIBC period, then restamp the tables (`python3 analysis/signals/stamp_table.py --pipeline sibc`).
 
 ## Record
 
