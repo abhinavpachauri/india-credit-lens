@@ -685,5 +685,28 @@
         ]
       }
     }
+  },
+  "approximations": {
+    "industry_includes_infra_services": {
+      "numerator": [
+        "icl:sibc/Statement2/2.18.2",
+        "icl:sibc/Statement2/2.18.3",
+        "icl:sibc/Statement2/2.18.4",
+        "icl:sibc/Statement2/2.18.5",
+        "icl:sibc/Statement2/2.18.6"
+      ],
+      "denominator": "icl:sibc/Statement1/2",
+      "why": "Telecom, roads, airports, ports and railways (2.18.2–2.18.6) are services in national accounts (COMPOSITION_SPEC §24.1)."
+    },
+    "services_includes_nbfc_onlending": {
+      "numerator": [
+        "icl:sibc/Statement1/3.9"
+      ],
+      "denominator": "icl:sibc/Statement1/3",
+      "why": "Lending to NBFCs is lent on, not spent on services output."
+    },
+    "nonfood_vs_gdp": {
+      "why": "The whole book against the whole economy: no part to measure, so no share."
+    }
   }
 }

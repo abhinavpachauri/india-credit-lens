@@ -6,7 +6,7 @@
 
 import React from "react";
 import {
-  sortParts as sortPartsMemo, cellSeries, COLUMNS,
+  sortParts as sortPartsMemo, cellSeries, COLUMNS, COL_LABEL, COL_GROUP, GROUP_LABEL,
   type ColKey, type SortKey, type SortDir,
 } from "@/lib/table";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
@@ -325,12 +325,9 @@ const HEAD: React.CSSProperties = {
 
 const DASH = <span style={{ color: "var(--font-muted)" }}>—</span>;
 
-/** What each column is called, and what a chart of it is called. `new` takes the cut's own
- *  flow label, because a share of the net reads as "New" only while the net is positive. */
-const COL_LABEL: Record<ColKey, string> = {
-  size: "Size", of_cut: "of cut", of_book: "of book",
-  growth: "Growth", pace: "Pace", new: "New",
-};
+// What each column is called comes from the one declaration (lib/table_columns.ts, generated
+// from analysis/core/table_columns.py). `new` takes the cut's own flow label, because a share of
+// the net reads as "New" only while the net is positive.
 
 /** Which cell a chart is open on. The table no longer owns this: the chart is a COLUMN of
  *  the page (§20 state C), not an overlay on the table, so the shell holds it and the table
@@ -429,6 +426,13 @@ export function CellPanel({ table, cell, color, flowLabel, onPick, onClose }: {
       <p style={{ fontSize: FS.meta, color: "var(--font-muted)", marginTop: 4 }}>
         {own.filter((p) => p.value !== null).length} readings · {own[0]?.label} to {own[own.length - 1]?.label}
       </p>
+      {/* §21: what this reading is net of, or measured by — the sentence rendered in Python. A real-
+          credit line that falls because prices rose must say so where the reader is looking. */}
+      {row?.[cell.col]?.note && (
+        <p style={{ fontSize: FS.note, color: "var(--font)", marginTop: 6, lineHeight: 1.5 }}>
+          {row[cell.col]!.note}
+        </p>
+      )}
 
       {siblings.length > 0 && (
         <div style={{ marginTop: 14 }}>
@@ -532,6 +536,9 @@ export function CutTable({ table, title, color, bookLabel, footer, all, depth = 
   // table opens with the smallest book on the page.
   const [sort, setSort] = React.useState<{ key: SortKey; dir: SortDir }>({ key: "size", dir: "desc" });
   const [open, setOpen] = React.useState<string | null>(null);
+  // §21.4: why a cell is empty, or what a value is net of — shown on hover, and on tap (phones
+  // have no hover), as one line under the table. The sentence arrives rendered from Python.
+  const [peek, setPeek] = React.useState<string | null>(null);
   const parts = sortPartsMemo(table.parts, sort.key, sort.dir);
   // The columns this cut ACTUALLY has, declared in Python. A bank breakout stores no pace and
   // no share of the new money, and six columns of dashes would say it does — the same argument
@@ -552,32 +559,66 @@ export function CutTable({ table, title, color, bookLabel, footer, all, depth = 
     if (c && onPickCell) onPickCell({ stem: table.cut, entity: row.entity, col: c });
   }
 
+  // The first column of a group opens with a rule, so "vs the real economy" reads as its own block.
+  const firstOfGroup = (c: ColKey) => COL_GROUP[c] !== null && cols[cols.indexOf(c) - 1] !== undefined
+    && COL_GROUP[cols[cols.indexOf(c) - 1]] !== COL_GROUP[c];
+  const groupRule = (c: ColKey) => (firstOfGroup(c) ? { borderLeft: "1px solid var(--border-card)" } : {});
+  const groups = cols.filter((c) => COL_GROUP[c] !== null);
+
   function numeric(row: import("@/lib/table").CutRow, c: ColKey) {
     const v = row[c];
-    if (!v) return <td key={c} style={NUM}>{DASH}</td>;
+    if (!v) return <td key={c} style={{ ...NUM, ...groupRule(c) }}>{DASH}</td>;
+    if (v.sort === null) {
+      // An empty §21 cell: a dash that says why, never 0 and never blank.
+      return (
+        <td key={c} title={v.note} style={{ ...NUM, ...groupRule(c), cursor: v.note ? "help" : "default" }}
+            onClick={v.note ? (e) => { e.stopPropagation(); setPeek(v.note!); } : undefined}>
+          {DASH}
+        </td>
+      );
+    }
     const live = (v.series?.length ?? 0) > 1;
+    const tag = v.period_label
+      ? <span style={{ fontSize: FS.micro, color: "var(--font-muted)", marginLeft: 3 }}>·{v.period_label}</span>
+      : null;
     return (
-      <td key={c} style={{ ...NUM, cursor: live ? "pointer" : "default",
+      <td key={c} title={v.note} style={{ ...NUM, ...groupRule(c), cursor: live ? "pointer" : "default",
                            background: lit(row, c) ? tint(color, 0.18) : undefined,
                            borderRadius: lit(row, c) ? R.sm : undefined,
                            textDecoration: live ? "underline" : undefined,
                            textDecorationColor: live ? tint(color, 0.4) : undefined,
                            textUnderlineOffset: 3 }}
-          onClick={live ? (e) => { e.stopPropagation(); pickRow(row, c); } : undefined}>
-        {v.display}
+          onClick={live ? (e) => { e.stopPropagation(); if (v.note) setPeek(v.note); pickRow(row, c); } : undefined}>
+        {v.display}{tag}
       </td>
     );
   }
+
+  const approxMark = (row: import("@/lib/table").CutRow) => row.approx ? (
+    <button className="rm-link" title={row.approx} aria-label={row.approx}
+            onClick={(e) => { e.stopPropagation(); setPeek(row.approx!); }}
+            style={{ font: "inherit", color: "var(--font-muted)", marginLeft: 4, cursor: "help" }}>ⓘ</button>
+  ) : null;
 
   return (
     <div>
       <div style={{ overflowX: "auto" }}>
       <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 520 }}>
         <thead>
+          {groups.length > 0 && (
+            <tr>
+              <th colSpan={1 + cols.length - groups.length} />
+              <th colSpan={groups.length}
+                  style={{ ...HEAD, textAlign: "center", borderLeft: "1px solid var(--border-card)",
+                           borderBottom: "1px solid var(--border-card)", padding: "4px 10px" }}>
+                {GROUP_LABEL[COL_GROUP[groups[0]]!]}
+              </th>
+            </tr>
+          )}
           <tr>
             <th style={{ ...HEAD, textAlign: "left" }}>Part</th>
             {cols.map((c) => (
-              <th key={c} style={HEAD}>
+              <th key={c} style={{ ...HEAD, ...groupRule(c) }}>
                 <button onClick={() => pickSort(c)} className="rm-link"
                         style={{ font: "inherit", letterSpacing: "inherit", textTransform: "inherit",
                                  color: sort.key === c ? color : "inherit" }}>
@@ -593,7 +634,7 @@ export function CutTable({ table, title, color, bookLabel, footer, all, depth = 
           <tr className="rm-row" onClick={() => pickRow(table.total)}
               style={{ borderTop: `2px solid ${color}`, borderBottom: "1px solid var(--border-card)",
                        cursor: "pointer", background: lit(table.total) ? tint(color, 0.07) : undefined }}>
-            <td style={{ ...NUM, textAlign: "left", fontWeight: 700 }}>{title}</td>
+            <td style={{ ...NUM, textAlign: "left", fontWeight: 700 }}>{title}{approxMark(table.total)}</td>
             {cols.map((c) => numeric(table.total, c))}
           </tr>
           {parts.map((p) => {
@@ -615,6 +656,7 @@ export function CutTable({ table, title, color, bookLabel, footer, all, depth = 
                         <span style={{ color, fontWeight: 700 }}>{isOpen ? "▾" : "▸"}</span> {p.entity}
                       </button>
                     ) : p.entity}
+                    {approxMark(p)}
                   </td>
                   {cols.map((c) => numeric(p, c))}
                 </tr>
@@ -659,6 +701,16 @@ export function CutTable({ table, title, color, bookLabel, footer, all, depth = 
         <p style={{ fontSize: FS.note, color: "var(--font-muted)", marginTop: 6, lineHeight: 1.5 }}>
           {footer}
         </p>
+      )}
+      {/* §21: what the real-economy columns cover and mean — every line rendered in Python,
+          the coverage counted from this period's cells by the builder and re-counted by the gate. */}
+      {table.real_economy && (
+        <div style={{ fontSize: FS.note, color: "var(--font-muted)", marginTop: 6, lineHeight: 1.5 }}>
+          {peek && <p style={{ color: "var(--font)", margin: "0 0 4px" }}>{peek}</p>}
+          {[...table.real_economy.coverage, ...table.real_economy.footnote].map((l) => (
+            <p key={l} style={{ margin: 0 }}>{l}</p>
+          ))}
+        </div>
       )}
     </div>
   );

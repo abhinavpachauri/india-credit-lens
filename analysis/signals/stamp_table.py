@@ -24,6 +24,7 @@ ROOT = next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()
 sys.path.insert(0, str(ROOT / "analysis"))
 
 from core import table_rows                                            # noqa: E402
+from core import real_cells                                            # noqa: E402
 from core import manifest                          # noqa: E402
 
 DATA = ROOT / "web" / "public" / "data"
@@ -201,6 +202,7 @@ def build(pipeline: str, period: str | None = None) -> dict:
             if t is not None:          # a cut without its 12-month window has no table yet
                 if stem in metrics:
                     t["metric"] = metrics[stem]
+                add_real_economy(conn, pipeline, period, stem, t)
                 tables[stem] = t
     finally:
         conn.close()
@@ -223,6 +225,25 @@ def build(pipeline: str, period: str | None = None) -> dict:
         },
         "cuts": tables,
     }
+
+
+def add_real_economy(conn, pipeline: str, period: str, stem: str, t: dict) -> None:
+    """The §21 columns, on a cut that declares 1f signals; every other table is untouched."""
+    sizes = {p["entity"]: (p.get("size") or {}).get("sort") for p in t["parts"]}
+    r = real_cells.for_cut(conn, pipeline, period, stem, sizes)
+    if not r or not r["columns"]:
+        return
+    for p in t["parts"]:
+        p.update(r["parts"][p["entity"]])
+        if p["entity"] in r["approx"]:
+            p["approx"] = r["approx"][p["entity"]]
+    t["total"].update(r["total"])
+    if None in r["approx"]:
+        t["total"]["approx"] = r["approx"][None]
+    for k in ("columns", "parent_columns", "parent_entities", "periods", "parent_periods"):
+        t.setdefault(k, {}).update(r[k])
+    t["real_economy"] = {"coverage": r["coverage"], "footnote": r["footnote"]}
+    t["source_signals"] = sorted(set(t["source_signals"]) | set(r["source_signals"]))
 
 
 def _split(payload: dict) -> tuple[dict, dict]:

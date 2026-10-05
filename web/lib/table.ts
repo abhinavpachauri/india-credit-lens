@@ -17,11 +17,19 @@ export interface Cell {
   series?: (number | null)[] | null;
   /** The same readings, rendered in Python — what the panel quotes. */
   series_display?: (string | null)[] | null;
+  /** §21 cells only. The reading's OWN period (a quarterly column on a monthly table) and its
+   *  label ("Q1"); `reason` (a code from core/absence.py) when the cell is empty, and the
+   *  sentence a hover shows — both rendered in Python. */
+  period?: string;
+  period_label?: string | null;
+  reason?: string;
+  note?: string;
 }
 
-/** The columns a row carries, in the order the table draws them. */
-export const COLUMNS = ["size", "of_cut", "of_book", "growth", "pace", "new"] as const;
-export type ColKey = typeof COLUMNS[number];
+// The columns are declared ONCE, in analysis/core/table_columns.py, and generated into
+// table_columns.ts for the builder, the gate and this file to share (DASHBOARD_SPEC §21.5).
+import { COLUMNS, COL_LABEL, COL_GROUP, GROUP_LABEL, type ColKey } from "@/lib/table_columns";
+export { COLUMNS, COL_LABEL, COL_GROUP, GROUP_LABEL, type ColKey };
 
 export interface CutRow {
   entity:  string | null;      // null = the cut's own row
@@ -31,6 +39,11 @@ export interface CutRow {
   growth:  Cell | null;
   pace:    Cell | null;
   new:     Cell | null;
+  /** §21: the real economy beside the credit, on a cut that declares it. */
+  real_credit?: Cell | null;
+  output?:      Cell | null;
+  /** §21.4: this row is an approximate match (ⓘ); the sentence, with its share, from Python. */
+  approx?: string;
   /** The cut this part decomposes into, when it has one (§19) — resolved in Python. */
   sub_cut?: string | null;
 }
@@ -59,6 +72,8 @@ export interface CutTable {
   /** "bank" = the same measure broken out over the 63 reporting banks rather than the five
    *  bank categories. A different LEVEL of one table, not a drilldown into a row. */
   level?: "bank";
+  /** §21: what the real-economy columns cover this period, and what they mean. */
+  real_economy?: { coverage: string[]; footnote: string[] };
   source_signals: string[];
 }
 

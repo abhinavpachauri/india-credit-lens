@@ -1249,13 +1249,11 @@ instance of [[feedback_check_population]] in three days.
 
 ---
 
-## 21. The real economy beside the credit (v0.2, specced 2026-09-26, NOT BUILT)
+## 21. The real economy beside the credit (v0.3, BUILT 2026-10-04)
 
-> Status: **specced, not built.** v0.1's layouts were shown and approved on 2026-09-26. v0.2
-> takes in the same day's reviews (population, absence, plausibility): output over a trailing
-> year, Personal Loans without an Output, notes on the approximate aggregates, and real gate work
-> in place of "no new stage". Both layouts need a final look before code. Data: signals/README §1f
-> + MoSPI; join: COMPOSITION_SPEC §24.
+> Status: **built.** v0.1's layouts were approved on 2026-09-26; v0.2 took in that day's reviews;
+> the final look (2026-10-04) approved both layouts with live numbers. Data: signals/README §1f +
+> MoSPI; join: COMPOSITION_SPEC §24. As built: §21.8.
 
 ### 21.1 What it answers
 
@@ -1365,3 +1363,28 @@ The pinned row of `sibc-main` rendered **size = the four sectors' sum (₹208.88
 99.5% of a book it is 94.6% of. **Fixed 2026-09-26**, independently of MoSPI: the size scan stores
 the parent's own row (`aggregate`/`parent`), the pinned row reads it, and the gate checks each
 pinned cell against the row it declares. Six pinned rows were wrong, on SIBC and NBFC.
+
+### 21.8 As built (2026-10-04)
+
+- **One column declaration:** `analysis/core/table_columns.py`. The builder and the gate import it;
+  `web/lib/table_columns.ts` is generated from it, and `test_table_columns.py` fails on drift or on a
+  component that types the list again.
+- **Cells:** `core/real_cells.py`, merged into a cut's table by `stamp_table.add_real_economy` only
+  on a cut that declares 1f signals. A 1f cell adds `period` (its own reading), `period_label`
+  ("Q1"), `reason` and `note`. Every real-credit value's note names its deflator and the
+  deflator's own change, so a fall caused by prices says so (petroleum, Aug 2026: −17.1% real,
+  "net of Mineral Oils prices (WPI), +38.5% over the year"; user, 2026-10-04). The chart panel
+  shows the note under the chart.
+- **A column a cut can never fill is not drawn** (every cell absent for a static reason), as Pace
+  is not drawn on a bank breakout: Personal Loans' sub-table has Real credit only. A column
+  waiting on MoSPI stays.
+- **ⓘ shares** are declared in the concordance (`approximations`: numerator and denominator URNs)
+  and computed each period from the stored size rows: infrastructure-as-services 9.8% of industry
+  credit, NBFC on-lending 34.4% of services (Aug 2026).
+- **Gate (5.9d):** each 1f cell at its own period, which must be the one the rule picks (no
+  carry-forward); the value exact to the stored row, not the prose tolerance; empty cells with a
+  closed-list reason the store also holds; notes, coverage lines and ⓘ shares re-rendered from
+  stored rows and compared. Measured: 857/857 injections over 15 defect classes, 0 false on the
+  shipped tables (ai_pm_register).
+- Coverage wording: "of this table's credit" (one phrasing for every cut), not "of industry credit".
+

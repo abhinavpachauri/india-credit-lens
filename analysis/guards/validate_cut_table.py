@@ -26,10 +26,14 @@ sys.path.insert(0, str(ROOT / "analysis"))
 from core.traceability import DISTRIBUTION as POLICY, matches                  # noqa: E402
 from core import table_rows                                                   # noqa: E402
 from core import manifest                          # noqa: E402
+from core import absence, real_cells, table_columns                           # noqa: E402
 
 DATA = ROOT / "web" / "public" / "data"
 DB = ROOT / "analysis" / "signals" / "signals.db"
-CELLS = ("size", "of_cut", "of_book", "growth", "pace", "new")
+# The columns, from the one declaration the builder and the browser also read (§21.5): a column
+# added there is a column this gate reads, with nothing to keep in step by hand.
+CELLS = table_columns.KEYS
+KIND = {c.key: c.kind for c in table_columns.COLUMNS}
 
 
 # One query per SIGNAL, not per cell. The bank breakouts took the cell count from ~350 to
@@ -93,9 +97,9 @@ def entity_truth(conn, pipeline, period, metric_id, entity_id):
 
 def fmt_for(col: str, unit: str):
     """The same formatter the builder used — imported, never re-implemented."""
-    if col == "size":
+    if KIND[col] == "level":
         return table_rows.UNIT_FMT.get(unit, table_rows._count)
-    return table_rows._pp if col == "pace" else table_rows._pct
+    return table_rows._pp if KIND[col] == "pp" else table_rows._pct
 
 
 def all_tables(pipeline: str) -> tuple[dict, str]:
@@ -117,14 +121,17 @@ def all_tables(pipeline: str) -> tuple[dict, str]:
     return tables, doc["_meta"]["period"]
 
 
-def validate(pipeline: str) -> list[str]:
+def validate(pipeline: str, tables: dict | None = None) -> list[str]:
+    """`tables` replaces the shipped files: the measurement harness injects defects into a copy
+    and runs THIS function on it, never a re-implementation of it."""
     doc = json.loads((DATA / f"{pipeline}_table.json").read_text())
     period = doc["_meta"]["period"]
     conn = sqlite3.connect(DB)
     findings = []
     try:
         reg = json.loads((ROOT / "analysis/signals/registry.json").read_text())["signals"]
-        tables, _ = all_tables(pipeline)
+        if tables is None:
+            tables, _ = all_tables(pipeline)
         for stem, table in tables.items():
             if table is None:
                 findings.append(f"{stem}: indexed as a bank breakout but its file is missing — "
@@ -164,7 +171,12 @@ def validate(pipeline: str) -> list[str]:
                         findings.append(f"{stem} · {who} · {col}: drawn as '{cell['display']}' "
                                         f"with no signal declared behind the column")
                         continue
-                    truth = entity_truth(conn, pipeline, period, metric, eid_of(col))
+                    if col in F1_COLS:
+                        findings += real_cell_findings(conn, pipeline, period, stem, who, col, cell,
+                                                       metric, eid_of(col), row.get("entity"), reg)
+                        if cell["sort"] is None:
+                            continue
+                    truth = entity_truth(conn, pipeline, cell.get("period", period), metric, eid_of(col))
                     # A CELL IS NOT PROSE. It carries exactly one number, so the check is
                     # stronger than number-extraction: the raw value must be one this column
                     # stores, AND the string drawn must be that value rendered. Extracting
@@ -178,7 +190,7 @@ def validate(pipeline: str) -> list[str]:
                     if not matches(cell["sort"], truth, POLICY):
                         findings.append(
                             f"{stem} · {who} · {col}: {cell['sort']} is not a value "
-                            f"{metric} stores for {eid_of(col)} at {period}")
+                            f"{metric} stores for {eid_of(col)} at {cell.get('period', period)}")
                         continue
                     want = fmt_for(col, unit)(cell["sort"])
                     if cell["display"] != want:
@@ -187,9 +199,90 @@ def validate(pipeline: str) -> list[str]:
                             f"{cell['sort']} renders as '{want}'")
                     findings += series_findings(conn, pipeline, stem, who, col, cell,
                                                 metric, periods.get(col), eid_of(col), unit)
+            if table.get("real_economy"):
+                findings += real_table_findings(conn, pipeline, period, stem, table)
     finally:
         conn.close()
     return findings
+
+
+F1_COLS = {c.key for c in table_columns.COLUMNS if c.group == "real"}
+
+
+def real_cell_findings(conn, pipeline, period, stem, who, col, cell, metric, eid, entity, reg):
+    """A 1f cell (§21.4): read at its own declared period, which must be the one the rule picks;
+    empty only with a closed-list reason the store also holds; its note the stored row rendered."""
+    out = []
+    sig = reg.get(metric)
+    if not sig:
+        return [f"{stem} · {who} · {col}: {metric} is not in the registry"]
+    want_p = real_cells.cell_period(conn, pipeline, sig, period)
+    if cell.get("period") != want_p:
+        out.append(f"{stem} · {who} · {col}: reads {cell.get('period')}, the column's reading for "
+                   f"{period} is {want_p} — a cell never shows an older period than its own")
+        return out
+    if cell.get("period_label") != real_cells.period_label(pipeline, sig, want_p):
+        out.append(f"{stem} · {who} · {col}: labelled {cell.get('period_label')!r} for {want_p}")
+    etype = conn.execute("SELECT entity_type FROM signals WHERE pipeline=? AND period=? AND metric_id=? "
+                         "AND entity_id=? LIMIT 1", (pipeline, want_p, metric, eid)).fetchone()
+    row = real_cells.stored(conn, pipeline, metric, want_p, etype[0], eid) if etype else None
+    if row is None:
+        return out + [f"{stem} · {who} · {col}: {metric} stores no row for {eid} at {want_p}"]
+    value, reason, ops = row
+    ref = sig["compute"]["reference"]
+    if cell["sort"] is None:
+        if cell.get("display") != "—":
+            out.append(f"{stem} · {who} · {col}: empty but drawn as {cell.get('display')!r}")
+        if cell.get("reason") not in absence.STATIC and cell.get("reason") not in absence.PER_PERIOD:
+            out.append(f"{stem} · {who} · {col}: reason {cell.get('reason')!r} is not in core/absence.py")
+        elif value is not None or cell.get("reason") != reason:
+            out.append(f"{stem} · {who} · {col}: shows {cell.get('reason')!r}, the store holds "
+                       f"value={value} reason={reason!r} at {want_p}")
+        else:
+            from signals.compute import real_economy
+            urn = real_cells.urn_for(pipeline, period, stem, entity)
+            part = real_economy.concordance(pipeline, ref)["parts"][urn]
+            from signals.compute import csv_sector
+            want = real_cells.reason_note(reason, csv_sector.resolve_csv_date(pipeline, want_p), part, col, ref)
+            if cell.get("note") != want:
+                out.append(f"{stem} · {who} · {col}: note {cell.get('note')!r} is not {want!r}")
+        return out
+    if cell.get("reason"):
+        out.append(f"{stem} · {who} · {col}: has a value and a reason {cell['reason']!r}")
+    # EXACT, not the prose tolerance: `sort` IS the stored value (4 dp), so ±0.5% would let a
+    # reading of 74.8 carry anything from 74.43 to 75.17 (measured: 6 of 57 moved cells passed).
+    if value is None or abs(cell["sort"] - value) > 1e-4:
+        out.append(f"{stem} · {who} · {col}: {cell['sort']} is not the stored {value} at {want_p}")
+    want = real_cells.value_note(col, json.loads(ops), ref) if ops else None
+    if cell.get("note") != want:
+        out.append(f"{stem} · {who} · {col}: note {cell.get('note')!r} is not the stored operands "
+                   f"rendered ({want!r})")
+    return out
+
+
+def real_table_findings(conn, pipeline, period, stem, table):
+    """The coverage lines count the cells actually shipped; every approximate row carries its ⓘ
+    note, with the share recomputed from stored sizes; no other row carries one."""
+    out = []
+    sizes = [(p, (p.get("size") or {}).get("sort")) for p in table["parts"]]
+    labels = {"real_credit": "Real credit", "output": "Output"}
+    want = [real_cells.coverage_line(c, labels[c], [(p.get(c), s) for p, s in sizes])
+            for c in ("real_credit", "output") if c in table.get("columns", {})]
+    if table["real_economy"].get("coverage") != want:
+        out.append(f"{stem}: coverage {table['real_economy'].get('coverage')} is not the cells "
+                   f"counted ({want})")
+    from signals.compute import real_economy
+    ref = next(iter(real_cells.f1_signals(pipeline, stem).values()))["compute"]["reference"]
+    doc = real_economy.concordance(pipeline, ref)
+    for row in [table["total"], *table["parts"]]:
+        part = doc["parts"][real_cells.urn_for(pipeline, period, stem, row.get("entity"))]
+        code = part.get("approximate")
+        want_note = (real_cells.approx_note(conn, pipeline, period, code,
+                                            doc.get("approximations", {}).get(code, {})) if code else None)
+        if row.get("approx") != want_note:
+            out.append(f"{stem} · {row.get('entity') or '(the cut itself)'}: ⓘ {row.get('approx')!r}, "
+                       f"want {want_note!r}")
+    return out
 
 
 def series_findings(conn, pipeline, stem, who, col, cell, metric, labels, eid, unit):

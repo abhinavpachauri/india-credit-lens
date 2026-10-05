@@ -558,6 +558,13 @@
           "date": "2026-10-03",
           "how_measured": "Enumerated, not sampled. One recompute of all 25 SIBC periods, then every 1f row in turn: its reason replaced, its operands JSON changed; each must give exactly one finding from check_signal_freshness.compare. For the part count, every (1f signal, period) group with one row removed from BOTH the committed and the recomputed side (a part that emits nothing anywhere): compare is silent by construction, _parts_per_period must flag it. The count's population is the credit CSV's children of the cut, read in the guard, not through real_economy.parts_of. Known-good: the committed signals.db after a full re-append.",
           "source": "analysis/guards/check_signal_freshness.py (compare, _parts_per_period) + analysis/signals/compute/real_economy.py"
+        },
+        {
+          "metric": "catch rate — cut-table gate (5.9d) extended for the §21 real-economy columns",
+          "value": "857/857 injections caught across 15 defect classes (value moved 0.01: 57/57; carried forward to an older period: 108/108; reason swapped / outside the closed list / absence filled: 51/51 each; notes, labels, coverage lines, approximation shares: all); 0 false findings on the 14 shipped SIBC tables",
+          "date": "2026-10-04",
+          "how_measured": "Enumerated over every 1f cell (57 values, 51 absences) and every coverage line and approximation note in the shipped sibc_table.json; each defect injected into a copy and run through validate_cut_table.validate (tables passed in memory, the same function the gate runs). First pass found the prose tolerance (rel 0.5%) let 6/57 cells moved by 0.1 pass; 1f cells now require the stored value exactly (1e-4). The six older columns still use the prose tolerance: not measured here, a separate change.",
+          "source": "analysis/guards/validate_cut_table.py (real_cell_findings, real_table_findings) + analysis/core/real_cells.py"
         }
       ],
       "observations": [

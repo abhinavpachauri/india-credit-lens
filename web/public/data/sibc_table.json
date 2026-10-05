@@ -239,6 +239,59 @@
        "75.5%",
        "77.3%"
       ]
+     },
+     "real_credit": {
+      "display": "16.3%",
+      "sort": 16.2673,
+      "series": [
+       20.2088,
+       21.6796,
+       15.9804,
+       12.4228,
+       13.5056,
+       13.1008,
+       15.1684,
+       11.0695,
+       13.1682,
+       7.3915,
+       8.218,
+       14.4447,
+       11.8303,
+       15.5853,
+       18.2334,
+       15.9013,
+       16.2673
+      ],
+      "series_display": [
+       "20.2%",
+       "21.7%",
+       "16.0%",
+       "12.4%",
+       "13.5%",
+       "13.1%",
+       "15.2%",
+       "11.1%",
+       "13.2%",
+       "7.4%",
+       "8.2%",
+       "14.4%",
+       "11.8%",
+       "15.6%",
+       "18.2%",
+       "15.9%",
+       "16.3%"
+      ],
+      "period": "2026-09-30",
+      "period_label": null,
+      "note": "Net of Manufacture Of Basic Iron And Steel prices (WPI), +4.5% over the year."
+     },
+     "output": {
+      "display": "—",
+      "sort": null,
+      "period": "2026-09-30",
+      "period_label": null,
+      "reason": "no_counterpart",
+      "note": "MoSPI publishes no series that measures this part."
      }
     },
     {
@@ -468,6 +521,22 @@
        "24.5%",
        "22.7%"
       ]
+     },
+     "real_credit": {
+      "display": "—",
+      "sort": null,
+      "period": "2026-09-30",
+      "period_label": null,
+      "reason": "no_counterpart",
+      "note": "MoSPI publishes no series that measures this part."
+     },
+     "output": {
+      "display": "—",
+      "sort": null,
+      "period": "2026-09-30",
+      "period_label": null,
+      "reason": "no_counterpart",
+      "note": "MoSPI publishes no series that measures this part."
      }
     }
    ],
@@ -574,22 +643,75 @@
       "-3.06 pp"
      ]
     },
-    "new": null
+    "new": null,
+    "real_credit": {
+     "display": "—",
+     "sort": null,
+     "period": "2026-09-30",
+     "period_label": null,
+     "reason": "weights_unsourced",
+     "note": "The part combines several MoSPI series, and their weights are not yet sourced."
+    },
+    "output": {
+     "display": "7.9%",
+     "sort": 7.9371,
+     "series": [
+      8.259,
+      8.4806,
+      8.3765,
+      8.3499,
+      8.5152,
+      9.5924,
+      9.9479,
+      10.1128,
+      9.7354,
+      9.4628,
+      9.3421,
+      8.9976,
+      8.3151,
+      7.9371
+     ],
+     "series_display": [
+      "8.3%",
+      "8.5%",
+      "8.4%",
+      "8.3%",
+      "8.5%",
+      "9.6%",
+      "9.9%",
+      "10.1%",
+      "9.7%",
+      "9.5%",
+      "9.3%",
+      "9.0%",
+      "8.3%",
+      "7.9%"
+     ],
+     "period": "2026-09-30",
+     "period_label": null,
+     "note": "IIP Manufacture of Basic Metals, Manufacture of Fabricated Metal Products, Except Machinery and Equipment: the last 12 months against the 12 before."
+    }
    },
    "columns": {
     "size": "sibc-basic-metal-sub-size-scan",
     "of_cut": "sibc-basic-metal-sub-allocation",
     "growth": "sibc-basic-metal-sub-yoy-scan",
     "pace": "sibc-basic-metal-sub-acceleration",
-    "new": "sibc-basic-metal-sub-allocation"
+    "new": "sibc-basic-metal-sub-allocation",
+    "real_credit": "sibc-basic-metal-sub-real-growth",
+    "output": "sibc-basic-metal-sub-output-growth"
    },
    "parent_columns": {
     "size": "sibc-basic-metal-sub-size-scan",
-    "pace": "sibc-basic-metal-sub-acceleration"
+    "pace": "sibc-basic-metal-sub-acceleration",
+    "real_credit": "sibc-industry-type-real-growth",
+    "output": "sibc-industry-type-output-growth"
    },
    "parent_entities": {
     "size": "parent",
-    "pace": "total"
+    "pace": "total",
+    "real_credit": "Basic Metal and Metal Product",
+    "output": "Basic Metal and Metal Product"
    },
    "periods": {
     "size": [
@@ -693,7 +815,27 @@
      "Jun 26",
      "Jul 26",
      "Aug 26"
-    ]
+    ],
+    "real_credit": [
+     "Dec 24",
+     "Jan 25",
+     "Feb 25",
+     "Mar 25",
+     "Apr 25",
+     "May 25",
+     "Jun 25",
+     "Jul 25",
+     "Dec 25",
+     "Jan 26",
+     "Feb 26",
+     "Mar 26",
+     "Apr 26",
+     "May 26",
+     "Jun 26",
+     "Jul 26",
+     "Aug 26"
+    ],
+    "output": []
    },
    "parent_periods": {
     "size": [
@@ -740,15 +882,65 @@
      "Jun 26",
      "Jul 26",
      "Aug 26"
+    ],
+    "real_credit": [
+     "Dec 24",
+     "Jan 25",
+     "Feb 25",
+     "Mar 25",
+     "Apr 25",
+     "May 25",
+     "Jun 25",
+     "Jul 25",
+     "Dec 25",
+     "Jan 26",
+     "Feb 26",
+     "Mar 26",
+     "Apr 26",
+     "May 26",
+     "Jun 26",
+     "Jul 26",
+     "Aug 26"
+    ],
+    "output": [
+     "Mar 25",
+     "Apr 25",
+     "May 25",
+     "Jun 25",
+     "Jul 25",
+     "Dec 25",
+     "Jan 26",
+     "Feb 26",
+     "Mar 26",
+     "Apr 26",
+     "May 26",
+     "Jun 26",
+     "Jul 26",
+     "Aug 26"
     ]
    },
    "source_signals": [
     "sibc-basic-metal-sub-acceleration",
     "sibc-basic-metal-sub-allocation",
+    "sibc-basic-metal-sub-output-growth",
+    "sibc-basic-metal-sub-real-growth",
     "sibc-basic-metal-sub-share-of-credit-scan",
     "sibc-basic-metal-sub-size-scan",
-    "sibc-basic-metal-sub-yoy-scan"
-   ]
+    "sibc-basic-metal-sub-yoy-scan",
+    "sibc-industry-type-output-growth",
+    "sibc-industry-type-real-growth"
+   ],
+   "real_economy": {
+    "coverage": [
+     "Real credit: 1 of 2 parts · 69.2% of this table's credit.",
+     "Output: 0 of 2 parts · 0.0% of this table's credit."
+    ],
+    "footnote": [
+     "Real credit = loans outstanding, year on year, net of each part's own prices: wholesale prices (WPI).",
+     "Output = IIP production over the last 12 months.",
+     "Hover a — for why it is empty."
+    ]
+   }
   },
   "sibc-chemicals-sub": {
    "cut": "sibc-chemicals-sub",
@@ -966,6 +1158,22 @@
        "41.4%",
        "36.7%"
       ]
+     },
+     "real_credit": {
+      "display": "—",
+      "sort": null,
+      "period": "2026-09-30",
+      "period_label": null,
+      "reason": "no_counterpart",
+      "note": "MoSPI publishes no series that measures this part."
+     },
+     "output": {
+      "display": "—",
+      "sort": null,
+      "period": "2026-09-30",
+      "period_label": null,
+      "reason": "no_counterpart",
+      "note": "MoSPI publishes no series that measures this part."
      }
     },
     {
@@ -1179,6 +1387,90 @@
        "32.7%",
        "31.5%"
       ]
+     },
+     "real_credit": {
+      "display": "18.8%",
+      "sort": 18.8064,
+      "series": [
+       10.4359,
+       11.9351,
+       12.4613,
+       11.713,
+       5.7115,
+       2.8755,
+       5.9699,
+       6.8888,
+       8.7987,
+       10.1025,
+       10.965,
+       16.6372,
+       17.5387,
+       17.9852,
+       18.1531,
+       18.737,
+       18.8064
+      ],
+      "series_display": [
+       "10.4%",
+       "11.9%",
+       "12.5%",
+       "11.7%",
+       "5.7%",
+       "2.9%",
+       "6.0%",
+       "6.9%",
+       "8.8%",
+       "10.1%",
+       "11.0%",
+       "16.6%",
+       "17.5%",
+       "18.0%",
+       "18.2%",
+       "18.7%",
+       "18.8%"
+      ],
+      "period": "2026-09-30",
+      "period_label": null,
+      "note": "Net of Manufacture Of Basic Pharmaceutical Products And Pharmaceutical Preparations prices (WPI), +3.4% over the year."
+     },
+     "output": {
+      "display": "-1.8%",
+      "sort": -1.7899,
+      "series": [
+       5.3027,
+       4.6241,
+       5.2513,
+       4.7128,
+       5.273,
+       1.7982,
+       0.7522,
+       1.1148,
+       0.4156,
+       -0.0207,
+       -1.0392,
+       -0.7914,
+       -2.0336,
+       -1.7899
+      ],
+      "series_display": [
+       "5.3%",
+       "4.6%",
+       "5.3%",
+       "4.7%",
+       "5.3%",
+       "1.8%",
+       "0.8%",
+       "1.1%",
+       "0.4%",
+       "-0.0%",
+       "-1.0%",
+       "-0.8%",
+       "-2.0%",
+       "-1.8%"
+      ],
+      "period": "2026-09-30",
+      "period_label": null,
+      "note": "IIP Manufacture of basic pharmaceutical products and pharmaceutical preparations: the last 12 months against the 12 before."
      }
     },
     {
@@ -1392,6 +1684,22 @@
        "12.1%",
        "12.8%"
       ]
+     },
+     "real_credit": {
+      "display": "—",
+      "sort": null,
+      "period": "2026-09-30",
+      "period_label": null,
+      "reason": "no_counterpart",
+      "note": "MoSPI publishes no series that measures this part."
+     },
+     "output": {
+      "display": "—",
+      "sort": null,
+      "period": "2026-09-30",
+      "period_label": null,
+      "reason": "no_counterpart",
+      "note": "MoSPI publishes no series that measures this part."
      }
     },
     {
@@ -1605,6 +1913,59 @@
        "13.8%",
        "19.0%"
       ]
+     },
+     "real_credit": {
+      "display": "27.5%",
+      "sort": 27.4784,
+      "series": [
+       -10.709,
+       -7.7503,
+       -16.1393,
+       -15.3331,
+       -14.0843,
+       -16.8586,
+       -14.1863,
+       -15.6405,
+       6.7174,
+       10.0757,
+       27.1475,
+       -6.5217,
+       -7.2164,
+       -1.9669,
+       4.6103,
+       16.7595,
+       27.4784
+      ],
+      "series_display": [
+       "-10.7%",
+       "-7.8%",
+       "-16.1%",
+       "-15.3%",
+       "-14.1%",
+       "-16.9%",
+       "-14.2%",
+       "-15.6%",
+       "6.7%",
+       "10.1%",
+       "27.1%",
+       "-6.5%",
+       "-7.2%",
+       "-2.0%",
+       "4.6%",
+       "16.8%",
+       "27.5%"
+      ],
+      "period": "2026-09-30",
+      "period_label": null,
+      "note": "Net of Manufacture Of Fertilizers And Nitrogen Compounds prices (WPI), +11.6% over the year."
+     },
+     "output": {
+      "display": "—",
+      "sort": null,
+      "period": "2026-09-30",
+      "period_label": null,
+      "reason": "no_counterpart",
+      "note": "MoSPI publishes no series that measures this part."
      }
     }
    ],
@@ -1711,22 +2072,75 @@
       "-0.49 pp"
      ]
     },
-    "new": null
+    "new": null,
+    "real_credit": {
+     "display": "—",
+     "sort": null,
+     "period": "2026-09-30",
+     "period_label": null,
+     "reason": "weights_unsourced",
+     "note": "The part combines several MoSPI series, and their weights are not yet sourced."
+    },
+    "output": {
+     "display": "-0.6%",
+     "sort": -0.5576,
+     "series": [
+      4.3729,
+      3.949,
+      4.0746,
+      3.3773,
+      2.9261,
+      0.8412,
+      0.1242,
+      0.6269,
+      0.2877,
+      0.0826,
+      -0.3703,
+      -0.2166,
+      -0.7273,
+      -0.5576
+     ],
+     "series_display": [
+      "4.4%",
+      "3.9%",
+      "4.1%",
+      "3.4%",
+      "2.9%",
+      "0.8%",
+      "0.1%",
+      "0.6%",
+      "0.3%",
+      "0.1%",
+      "-0.4%",
+      "-0.2%",
+      "-0.7%",
+      "-0.6%"
+     ],
+     "period": "2026-09-30",
+     "period_label": null,
+     "note": "IIP Manufacture of Chemicals and Chemical Products, Manufacture of basic pharmaceutical products and pharmaceutical preparations: the last 12 months against the 12 before."
+    }
    },
    "columns": {
     "size": "sibc-chemicals-sub-size-scan",
     "of_cut": "sibc-chemicals-sub-allocation",
     "growth": "sibc-chemicals-sub-yoy-scan",
     "pace": "sibc-chemicals-sub-acceleration",
-    "new": "sibc-chemicals-sub-allocation"
+    "new": "sibc-chemicals-sub-allocation",
+    "real_credit": "sibc-chemicals-sub-real-growth",
+    "output": "sibc-chemicals-sub-output-growth"
    },
    "parent_columns": {
     "size": "sibc-chemicals-sub-size-scan",
-    "pace": "sibc-chemicals-sub-acceleration"
+    "pace": "sibc-chemicals-sub-acceleration",
+    "real_credit": "sibc-industry-type-real-growth",
+    "output": "sibc-industry-type-output-growth"
    },
    "parent_entities": {
     "size": "parent",
-    "pace": "total"
+    "pace": "total",
+    "real_credit": "Chemicals and Chemical Products",
+    "output": "Chemicals and Chemical Products"
    },
    "periods": {
     "size": [
@@ -1822,6 +2236,41 @@
      "Jun 26",
      "Jul 26",
      "Aug 26"
+    ],
+    "real_credit": [
+     "Dec 24",
+     "Jan 25",
+     "Feb 25",
+     "Mar 25",
+     "Apr 25",
+     "May 25",
+     "Jun 25",
+     "Jul 25",
+     "Dec 25",
+     "Jan 26",
+     "Feb 26",
+     "Mar 26",
+     "Apr 26",
+     "May 26",
+     "Jun 26",
+     "Jul 26",
+     "Aug 26"
+    ],
+    "output": [
+     "Mar 25",
+     "Apr 25",
+     "May 25",
+     "Jun 25",
+     "Jul 25",
+     "Dec 25",
+     "Jan 26",
+     "Feb 26",
+     "Mar 26",
+     "Apr 26",
+     "May 26",
+     "Jun 26",
+     "Jul 26",
+     "Aug 26"
     ]
    },
    "parent_periods": {
@@ -1869,15 +2318,65 @@
      "Jun 26",
      "Jul 26",
      "Aug 26"
+    ],
+    "real_credit": [
+     "Dec 24",
+     "Jan 25",
+     "Feb 25",
+     "Mar 25",
+     "Apr 25",
+     "May 25",
+     "Jun 25",
+     "Jul 25",
+     "Dec 25",
+     "Jan 26",
+     "Feb 26",
+     "Mar 26",
+     "Apr 26",
+     "May 26",
+     "Jun 26",
+     "Jul 26",
+     "Aug 26"
+    ],
+    "output": [
+     "Mar 25",
+     "Apr 25",
+     "May 25",
+     "Jun 25",
+     "Jul 25",
+     "Dec 25",
+     "Jan 26",
+     "Feb 26",
+     "Mar 26",
+     "Apr 26",
+     "May 26",
+     "Jun 26",
+     "Jul 26",
+     "Aug 26"
     ]
    },
    "source_signals": [
     "sibc-chemicals-sub-acceleration",
     "sibc-chemicals-sub-allocation",
+    "sibc-chemicals-sub-output-growth",
+    "sibc-chemicals-sub-real-growth",
     "sibc-chemicals-sub-share-of-credit-scan",
     "sibc-chemicals-sub-size-scan",
-    "sibc-chemicals-sub-yoy-scan"
-   ]
+    "sibc-chemicals-sub-yoy-scan",
+    "sibc-industry-type-output-growth",
+    "sibc-industry-type-real-growth"
+   ],
+   "real_economy": {
+    "coverage": [
+     "Real credit: 2 of 4 parts · 44.4% of this table's credit.",
+     "Output: 1 of 4 parts · 32.2% of this table's credit."
+    ],
+    "footnote": [
+     "Real credit = loans outstanding, year on year, net of each part's own prices: wholesale prices (WPI).",
+     "Output = IIP production over the last 12 months.",
+     "Hover a — for why it is empty."
+    ]
+   }
   },
   "sibc-engineering-sub": {
    "cut": "sibc-engineering-sub",
@@ -2111,6 +2610,22 @@
        "85.6%",
        "84.9%"
       ]
+     },
+     "real_credit": {
+      "display": "—",
+      "sort": null,
+      "period": "2026-09-30",
+      "period_label": null,
+      "reason": "no_counterpart",
+      "note": "MoSPI publishes no series that measures this part."
+     },
+     "output": {
+      "display": "—",
+      "sort": null,
+      "period": "2026-09-30",
+      "period_label": null,
+      "reason": "no_counterpart",
+      "note": "MoSPI publishes no series that measures this part."
      }
     },
     {
@@ -2340,6 +2855,90 @@
        "14.4%",
        "15.1%"
       ]
+     },
+     "real_credit": {
+      "display": "22.0%",
+      "sort": 22.0119,
+      "series": [
+       18.1993,
+       10.9698,
+       7.542,
+       14.3359,
+       12.4851,
+       11.115,
+       11.9914,
+       18.4455,
+       31.8068,
+       24.0196,
+       27.0029,
+       13.9882,
+       19.1927,
+       24.9377,
+       29.8534,
+       23.9866,
+       22.0119
+      ],
+      "series_display": [
+       "18.2%",
+       "11.0%",
+       "7.5%",
+       "14.3%",
+       "12.5%",
+       "11.1%",
+       "12.0%",
+       "18.4%",
+       "31.8%",
+       "24.0%",
+       "27.0%",
+       "14.0%",
+       "19.2%",
+       "24.9%",
+       "29.9%",
+       "24.0%",
+       "22.0%"
+      ],
+      "period": "2026-09-30",
+      "period_label": null,
+      "note": "Net of Manufacture Of Computer, Electronic And Optical Products prices (WPI), -0.5% over the year."
+     },
+     "output": {
+      "display": "7.2%",
+      "sort": 7.1528,
+      "series": [
+       10.9922,
+       11.7855,
+       10.479,
+       9.3593,
+       9.2602,
+       6.4765,
+       5.7929,
+       5.6179,
+       4.9455,
+       4.1912,
+       5.4332,
+       5.9018,
+       6.0887,
+       7.1528
+      ],
+      "series_display": [
+       "11.0%",
+       "11.8%",
+       "10.5%",
+       "9.4%",
+       "9.3%",
+       "6.5%",
+       "5.8%",
+       "5.6%",
+       "4.9%",
+       "4.2%",
+       "5.4%",
+       "5.9%",
+       "6.1%",
+       "7.2%"
+      ],
+      "period": "2026-09-30",
+      "period_label": null,
+      "note": "IIP Manufacture of Computer, Electronic and Optical Products: the last 12 months against the 12 before."
      }
     }
    ],
@@ -2446,22 +3045,75 @@
       "-2.81 pp"
      ]
     },
-    "new": null
+    "new": null,
+    "real_credit": {
+     "display": "—",
+     "sort": null,
+     "period": "2026-09-30",
+     "period_label": null,
+     "reason": "weights_unsourced",
+     "note": "The part combines several MoSPI series, and their weights are not yet sourced."
+    },
+    "output": {
+     "display": "12.3%",
+     "sort": 12.3396,
+     "series": [
+      10.581,
+      11.3261,
+      10.6524,
+      9.5162,
+      8.6198,
+      8.6819,
+      8.6111,
+      8.9613,
+      8.1387,
+      7.8706,
+      8.5667,
+      10.012,
+      11.2162,
+      12.3396
+     ],
+     "series_display": [
+      "10.6%",
+      "11.3%",
+      "10.7%",
+      "9.5%",
+      "8.6%",
+      "8.7%",
+      "8.6%",
+      "9.0%",
+      "8.1%",
+      "7.9%",
+      "8.6%",
+      "10.0%",
+      "11.2%",
+      "12.3%"
+     ],
+     "period": "2026-09-30",
+     "period_label": null,
+     "note": "IIP Manufacture of Computer, Electronic and Optical Products, Manufacture of Electrical Equipment, Manufacture of Machinery and Equipment n.e.c.: the last 12 months against the 12 before."
+    }
    },
    "columns": {
     "size": "sibc-engineering-sub-size-scan",
     "of_cut": "sibc-engineering-sub-allocation",
     "growth": "sibc-engineering-sub-yoy-scan",
     "pace": "sibc-engineering-sub-acceleration",
-    "new": "sibc-engineering-sub-allocation"
+    "new": "sibc-engineering-sub-allocation",
+    "real_credit": "sibc-engineering-sub-real-growth",
+    "output": "sibc-engineering-sub-output-growth"
    },
    "parent_columns": {
     "size": "sibc-engineering-sub-size-scan",
-    "pace": "sibc-engineering-sub-acceleration"
+    "pace": "sibc-engineering-sub-acceleration",
+    "real_credit": "sibc-industry-type-real-growth",
+    "output": "sibc-industry-type-output-growth"
    },
    "parent_entities": {
     "size": "parent",
-    "pace": "total"
+    "pace": "total",
+    "real_credit": "All Engineering",
+    "output": "All Engineering"
    },
    "periods": {
     "size": [
@@ -2565,6 +3217,41 @@
      "Jun 26",
      "Jul 26",
      "Aug 26"
+    ],
+    "real_credit": [
+     "Dec 24",
+     "Jan 25",
+     "Feb 25",
+     "Mar 25",
+     "Apr 25",
+     "May 25",
+     "Jun 25",
+     "Jul 25",
+     "Dec 25",
+     "Jan 26",
+     "Feb 26",
+     "Mar 26",
+     "Apr 26",
+     "May 26",
+     "Jun 26",
+     "Jul 26",
+     "Aug 26"
+    ],
+    "output": [
+     "Mar 25",
+     "Apr 25",
+     "May 25",
+     "Jun 25",
+     "Jul 25",
+     "Dec 25",
+     "Jan 26",
+     "Feb 26",
+     "Mar 26",
+     "Apr 26",
+     "May 26",
+     "Jun 26",
+     "Jul 26",
+     "Aug 26"
     ]
    },
    "parent_periods": {
@@ -2612,15 +3299,65 @@
      "Jun 26",
      "Jul 26",
      "Aug 26"
+    ],
+    "real_credit": [
+     "Dec 24",
+     "Jan 25",
+     "Feb 25",
+     "Mar 25",
+     "Apr 25",
+     "May 25",
+     "Jun 25",
+     "Jul 25",
+     "Dec 25",
+     "Jan 26",
+     "Feb 26",
+     "Mar 26",
+     "Apr 26",
+     "May 26",
+     "Jun 26",
+     "Jul 26",
+     "Aug 26"
+    ],
+    "output": [
+     "Mar 25",
+     "Apr 25",
+     "May 25",
+     "Jun 25",
+     "Jul 25",
+     "Dec 25",
+     "Jan 26",
+     "Feb 26",
+     "Mar 26",
+     "Apr 26",
+     "May 26",
+     "Jun 26",
+     "Jul 26",
+     "Aug 26"
     ]
    },
    "source_signals": [
     "sibc-engineering-sub-acceleration",
     "sibc-engineering-sub-allocation",
+    "sibc-engineering-sub-output-growth",
+    "sibc-engineering-sub-real-growth",
     "sibc-engineering-sub-share-of-credit-scan",
     "sibc-engineering-sub-size-scan",
-    "sibc-engineering-sub-yoy-scan"
-   ]
+    "sibc-engineering-sub-yoy-scan",
+    "sibc-industry-type-output-growth",
+    "sibc-industry-type-real-growth"
+   ],
+   "real_economy": {
+    "coverage": [
+     "Real credit: 1 of 2 parts · 21.5% of this table's credit.",
+     "Output: 1 of 2 parts · 21.5% of this table's credit."
+    ],
+    "footnote": [
+     "Real credit = loans outstanding, year on year, net of each part's own prices: wholesale prices (WPI).",
+     "Output = IIP production over the last 12 months.",
+     "Hover a — for why it is empty."
+    ]
+   }
   },
   "sibc-food-processing-sub": {
    "cut": "sibc-food-processing-sub",
@@ -2846,6 +3583,22 @@
        "76.6%",
        "80.0%"
       ]
+     },
+     "real_credit": {
+      "display": "—",
+      "sort": null,
+      "period": "2026-09-30",
+      "period_label": null,
+      "reason": "no_counterpart",
+      "note": "MoSPI publishes no series that measures this part."
+     },
+     "output": {
+      "display": "—",
+      "sort": null,
+      "period": "2026-09-30",
+      "period_label": null,
+      "reason": "no_counterpart",
+      "note": "MoSPI publishes no series that measures this part."
      }
     },
     {
@@ -3067,6 +3820,59 @@
        "23.4%",
        "20.6%"
       ]
+     },
+     "real_credit": {
+      "display": "24.3%",
+      "sort": 24.31,
+      "series": [
+       -21.4272,
+       -18.7089,
+       -15.6281,
+       -18.1483,
+       -16.6183,
+       -13.6082,
+       -3.3272,
+       -6.1128,
+       11.3248,
+       7.6373,
+       4.8372,
+       17.3117,
+       18.5002,
+       21.4856,
+       25.7481,
+       28.9415,
+       24.31
+      ],
+      "series_display": [
+       "-21.4%",
+       "-18.7%",
+       "-15.6%",
+       "-18.1%",
+       "-16.6%",
+       "-13.6%",
+       "-3.3%",
+       "-6.1%",
+       "11.3%",
+       "7.6%",
+       "4.8%",
+       "17.3%",
+       "18.5%",
+       "21.5%",
+       "25.7%",
+       "28.9%",
+       "24.3%"
+      ],
+      "period": "2026-09-30",
+      "period_label": null,
+      "note": "Net of Manufacture Of Vegetable And Animal Oils And Fats prices (WPI), +17.5% over the year."
+     },
+     "output": {
+      "display": "—",
+      "sort": null,
+      "period": "2026-09-30",
+      "period_label": null,
+      "reason": "no_counterpart",
+      "note": "MoSPI publishes no series that measures this part."
      }
     },
     {
@@ -3288,6 +4094,59 @@
        "-1.7%",
        "-2.7%"
       ]
+     },
+     "real_credit": {
+      "display": "-18.8%",
+      "sort": -18.8478,
+      "series": [
+       23.4472,
+       16.5184,
+       6.4165,
+       -0.1295,
+       -4.7808,
+       -8.5702,
+       -11.5345,
+       -14.3914,
+       -4.3466,
+       2.4635,
+       5.8084,
+       5.3873,
+       0.1804,
+       -2.1459,
+       -3.8424,
+       -10.4478,
+       -18.8478
+      ],
+      "series_display": [
+       "23.4%",
+       "16.5%",
+       "6.4%",
+       "-0.1%",
+       "-4.8%",
+       "-8.6%",
+       "-11.5%",
+       "-14.4%",
+       "-4.3%",
+       "2.5%",
+       "5.8%",
+       "5.4%",
+       "0.2%",
+       "-2.1%",
+       "-3.8%",
+       "-10.4%",
+       "-18.8%"
+      ],
+      "period": "2026-09-30",
+      "period_label": null,
+      "note": "Net of Manufacture Of Sugar prices (WPI), +14.8% over the year."
+     },
+     "output": {
+      "display": "—",
+      "sort": null,
+      "period": "2026-09-30",
+      "period_label": null,
+      "reason": "no_counterpart",
+      "note": "MoSPI publishes no series that measures this part."
      }
     },
     {
@@ -3509,6 +4368,22 @@
        "1.7%",
        "2.2%"
       ]
+     },
+     "real_credit": {
+      "display": "—",
+      "sort": null,
+      "period": "2026-09-30",
+      "period_label": null,
+      "reason": "shared_group",
+      "note": "MoSPI's nearest series pools this part with others, so it is not a match."
+     },
+     "output": {
+      "display": "—",
+      "sort": null,
+      "period": "2026-09-30",
+      "period_label": null,
+      "reason": "no_counterpart",
+      "note": "MoSPI publishes no series that measures this part."
      }
     }
    ],
@@ -3615,22 +4490,112 @@
       "-0.56 pp"
      ]
     },
-    "new": null
+    "new": null,
+    "real_credit": {
+     "display": "11.0%",
+     "sort": 11.0142,
+     "series": [
+      4.0099,
+      3.336,
+      1.1392,
+      -2.4027,
+      0.2817,
+      2.1131,
+      3.4921,
+      0.7952,
+      10.4356,
+      7.8128,
+      7.9582,
+      11.1471,
+      8.1884,
+      7.3567,
+      11.1137,
+      12.299,
+      11.0142
+     ],
+     "series_display": [
+      "4.0%",
+      "3.3%",
+      "1.1%",
+      "-2.4%",
+      "0.3%",
+      "2.1%",
+      "3.5%",
+      "0.8%",
+      "10.4%",
+      "7.8%",
+      "8.0%",
+      "11.1%",
+      "8.2%",
+      "7.4%",
+      "11.1%",
+      "12.3%",
+      "11.0%"
+     ],
+     "period": "2026-09-30",
+     "period_label": null,
+     "note": "Net of Manufacture Of Food Products prices (WPI), +9.7% over the year."
+    },
+    "output": {
+     "display": "3.8%",
+     "sort": 3.7558,
+     "series": [
+      -0.9331,
+      -0.1387,
+      0.7784,
+      0.5234,
+      1.1787,
+      1.9482,
+      2.2311,
+      2.71,
+      3.1613,
+      3.3249,
+      3.2439,
+      4.1087,
+      3.6971,
+      3.7558
+     ],
+     "series_display": [
+      "-0.9%",
+      "-0.1%",
+      "0.8%",
+      "0.5%",
+      "1.2%",
+      "1.9%",
+      "2.2%",
+      "2.7%",
+      "3.2%",
+      "3.3%",
+      "3.2%",
+      "4.1%",
+      "3.7%",
+      "3.8%"
+     ],
+     "period": "2026-09-30",
+     "period_label": null,
+     "note": "IIP Manufacture of Food Products: the last 12 months against the 12 before."
+    }
    },
    "columns": {
     "size": "sibc-food-processing-sub-size-scan",
     "of_cut": "sibc-food-processing-sub-allocation",
     "growth": "sibc-food-processing-sub-yoy-scan",
     "pace": "sibc-food-processing-sub-acceleration",
-    "new": "sibc-food-processing-sub-allocation"
+    "new": "sibc-food-processing-sub-allocation",
+    "real_credit": "sibc-food-processing-sub-real-growth",
+    "output": "sibc-food-processing-sub-output-growth"
    },
    "parent_columns": {
     "size": "sibc-food-processing-sub-size-scan",
-    "pace": "sibc-food-processing-sub-acceleration"
+    "pace": "sibc-food-processing-sub-acceleration",
+    "real_credit": "sibc-industry-type-real-growth",
+    "output": "sibc-industry-type-output-growth"
    },
    "parent_entities": {
     "size": "parent",
-    "pace": "total"
+    "pace": "total",
+    "real_credit": "Food Processing",
+    "output": "Food Processing"
    },
    "periods": {
     "size": [
@@ -3730,7 +4695,27 @@
      "Jun 26",
      "Jul 26",
      "Aug 26"
-    ]
+    ],
+    "real_credit": [
+     "Dec 24",
+     "Jan 25",
+     "Feb 25",
+     "Mar 25",
+     "Apr 25",
+     "May 25",
+     "Jun 25",
+     "Jul 25",
+     "Dec 25",
+     "Jan 26",
+     "Feb 26",
+     "Mar 26",
+     "Apr 26",
+     "May 26",
+     "Jun 26",
+     "Jul 26",
+     "Aug 26"
+    ],
+    "output": []
    },
    "parent_periods": {
     "size": [
@@ -3777,15 +4762,65 @@
      "Jun 26",
      "Jul 26",
      "Aug 26"
+    ],
+    "real_credit": [
+     "Dec 24",
+     "Jan 25",
+     "Feb 25",
+     "Mar 25",
+     "Apr 25",
+     "May 25",
+     "Jun 25",
+     "Jul 25",
+     "Dec 25",
+     "Jan 26",
+     "Feb 26",
+     "Mar 26",
+     "Apr 26",
+     "May 26",
+     "Jun 26",
+     "Jul 26",
+     "Aug 26"
+    ],
+    "output": [
+     "Mar 25",
+     "Apr 25",
+     "May 25",
+     "Jun 25",
+     "Jul 25",
+     "Dec 25",
+     "Jan 26",
+     "Feb 26",
+     "Mar 26",
+     "Apr 26",
+     "May 26",
+     "Jun 26",
+     "Jul 26",
+     "Aug 26"
     ]
    },
    "source_signals": [
     "sibc-food-processing-sub-acceleration",
     "sibc-food-processing-sub-allocation",
+    "sibc-food-processing-sub-output-growth",
+    "sibc-food-processing-sub-real-growth",
     "sibc-food-processing-sub-share-of-credit-scan",
     "sibc-food-processing-sub-size-scan",
-    "sibc-food-processing-sub-yoy-scan"
-   ]
+    "sibc-food-processing-sub-yoy-scan",
+    "sibc-industry-type-output-growth",
+    "sibc-industry-type-real-growth"
+   ],
+   "real_economy": {
+    "coverage": [
+     "Real credit: 2 of 4 parts · 18.3% of this table's credit.",
+     "Output: 0 of 4 parts · 0.0% of this table's credit."
+    ],
+    "footnote": [
+     "Real credit = loans outstanding, year on year, net of each part's own prices: wholesale prices (WPI).",
+     "Output = IIP production over the last 12 months.",
+     "Hover a — for why it is empty."
+    ]
+   }
   },
   "sibc-ind-size": {
    "cut": "sibc-ind-size",
@@ -5394,6 +6429,22 @@
        "17.6%",
        "19.0%"
       ]
+     },
+     "real_credit": {
+      "display": "—",
+      "sort": null,
+      "period": "2026-09-30",
+      "period_label": null,
+      "reason": "no_counterpart",
+      "note": "MoSPI publishes no series that measures this part."
+     },
+     "output": {
+      "display": "—",
+      "sort": null,
+      "period": "2026-09-30",
+      "period_label": null,
+      "reason": "no_counterpart",
+      "note": "MoSPI publishes no series that measures this part."
      }
     },
     {
@@ -5678,6 +6729,53 @@
        "12.1%",
        "11.5%"
       ]
+     },
+     "real_credit": {
+      "display": "—",
+      "sort": null,
+      "period": "2026-09-30",
+      "period_label": null,
+      "reason": "weights_unsourced",
+      "note": "The part combines several MoSPI series, and their weights are not yet sourced."
+     },
+     "output": {
+      "display": "7.9%",
+      "sort": 7.9371,
+      "series": [
+       8.259,
+       8.4806,
+       8.3765,
+       8.3499,
+       8.5152,
+       9.5924,
+       9.9479,
+       10.1128,
+       9.7354,
+       9.4628,
+       9.3421,
+       8.9976,
+       8.3151,
+       7.9371
+      ],
+      "series_display": [
+       "8.3%",
+       "8.5%",
+       "8.4%",
+       "8.3%",
+       "8.5%",
+       "9.6%",
+       "9.9%",
+       "10.1%",
+       "9.7%",
+       "9.5%",
+       "9.3%",
+       "9.0%",
+       "8.3%",
+       "7.9%"
+      ],
+      "period": "2026-09-30",
+      "period_label": null,
+      "note": "IIP Manufacture of Basic Metals, Manufacture of Fabricated Metal Products, Except Machinery and Equipment: the last 12 months against the 12 before."
      }
     },
     {
@@ -5962,6 +7060,22 @@
        "11.9%",
        "9.6%"
       ]
+     },
+     "real_credit": {
+      "display": "—",
+      "sort": null,
+      "period": "2026-09-30",
+      "period_label": null,
+      "reason": "no_counterpart",
+      "note": "MoSPI publishes no series that measures this part."
+     },
+     "output": {
+      "display": "—",
+      "sort": null,
+      "period": "2026-09-30",
+      "period_label": null,
+      "reason": "no_counterpart",
+      "note": "MoSPI publishes no series that measures this part."
      }
     },
     {
@@ -6246,6 +7360,53 @@
        "11.4%",
        "11.7%"
       ]
+     },
+     "real_credit": {
+      "display": "—",
+      "sort": null,
+      "period": "2026-09-30",
+      "period_label": null,
+      "reason": "weights_unsourced",
+      "note": "The part combines several MoSPI series, and their weights are not yet sourced."
+     },
+     "output": {
+      "display": "12.3%",
+      "sort": 12.3396,
+      "series": [
+       10.581,
+       11.3261,
+       10.6524,
+       9.5162,
+       8.6198,
+       8.6819,
+       8.6111,
+       8.9613,
+       8.1387,
+       7.8706,
+       8.5667,
+       10.012,
+       11.2162,
+       12.3396
+      ],
+      "series_display": [
+       "10.6%",
+       "11.3%",
+       "10.7%",
+       "9.5%",
+       "8.6%",
+       "8.7%",
+       "8.6%",
+       "9.0%",
+       "8.1%",
+       "7.9%",
+       "8.6%",
+       "10.0%",
+       "11.2%",
+       "12.3%"
+      ],
+      "period": "2026-09-30",
+      "period_label": null,
+      "note": "IIP Manufacture of Computer, Electronic and Optical Products, Manufacture of Electrical Equipment, Manufacture of Machinery and Equipment n.e.c.: the last 12 months against the 12 before."
      }
     },
     {
@@ -6530,6 +7691,53 @@
        "8.1%",
        "8.7%"
       ]
+     },
+     "real_credit": {
+      "display": "—",
+      "sort": null,
+      "period": "2026-09-30",
+      "period_label": null,
+      "reason": "weights_unsourced",
+      "note": "The part combines several MoSPI series, and their weights are not yet sourced."
+     },
+     "output": {
+      "display": "-0.6%",
+      "sort": -0.5576,
+      "series": [
+       4.3729,
+       3.949,
+       4.0746,
+       3.3773,
+       2.9261,
+       0.8412,
+       0.1242,
+       0.6269,
+       0.2877,
+       0.0826,
+       -0.3703,
+       -0.2166,
+       -0.7273,
+       -0.5576
+      ],
+      "series_display": [
+       "4.4%",
+       "3.9%",
+       "4.1%",
+       "3.4%",
+       "2.9%",
+       "0.8%",
+       "0.1%",
+       "0.6%",
+       "0.3%",
+       "0.1%",
+       "-0.4%",
+       "-0.2%",
+       "-0.7%",
+       "-0.6%"
+      ],
+      "period": "2026-09-30",
+      "period_label": null,
+      "note": "IIP Manufacture of Chemicals and Chemical Products, Manufacture of basic pharmaceutical products and pharmaceutical preparations: the last 12 months against the 12 before."
      }
     },
     {
@@ -6814,6 +8022,22 @@
        "5.1%",
        "6.1%"
       ]
+     },
+     "real_credit": {
+      "display": "—",
+      "sort": null,
+      "period": "2026-09-30",
+      "period_label": null,
+      "reason": "mapping_undecided",
+      "note": "Which MoSPI series match this part is an open decision."
+     },
+     "output": {
+      "display": "—",
+      "sort": null,
+      "period": "2026-09-30",
+      "period_label": null,
+      "reason": "mapping_undecided",
+      "note": "Which MoSPI series match this part is an open decision."
      }
     },
     {
@@ -7098,6 +8322,90 @@
        "6.0%",
        "6.2%"
       ]
+     },
+     "real_credit": {
+      "display": "11.0%",
+      "sort": 11.0142,
+      "series": [
+       4.0099,
+       3.336,
+       1.1392,
+       -2.4027,
+       0.2817,
+       2.1131,
+       3.4921,
+       0.7952,
+       10.4356,
+       7.8128,
+       7.9582,
+       11.1471,
+       8.1884,
+       7.3567,
+       11.1137,
+       12.299,
+       11.0142
+      ],
+      "series_display": [
+       "4.0%",
+       "3.3%",
+       "1.1%",
+       "-2.4%",
+       "0.3%",
+       "2.1%",
+       "3.5%",
+       "0.8%",
+       "10.4%",
+       "7.8%",
+       "8.0%",
+       "11.1%",
+       "8.2%",
+       "7.4%",
+       "11.1%",
+       "12.3%",
+       "11.0%"
+      ],
+      "period": "2026-09-30",
+      "period_label": null,
+      "note": "Net of Manufacture Of Food Products prices (WPI), +9.7% over the year."
+     },
+     "output": {
+      "display": "3.8%",
+      "sort": 3.7558,
+      "series": [
+       -0.9331,
+       -0.1387,
+       0.7784,
+       0.5234,
+       1.1787,
+       1.9482,
+       2.2311,
+       2.71,
+       3.1613,
+       3.3249,
+       3.2439,
+       4.1087,
+       3.6971,
+       3.7558
+      ],
+      "series_display": [
+       "-0.9%",
+       "-0.1%",
+       "0.8%",
+       "0.5%",
+       "1.2%",
+       "1.9%",
+       "2.2%",
+       "2.7%",
+       "3.2%",
+       "3.3%",
+       "3.2%",
+       "4.1%",
+       "3.7%",
+       "3.8%"
+      ],
+      "period": "2026-09-30",
+      "period_label": null,
+      "note": "IIP Manufacture of Food Products: the last 12 months against the 12 before."
      }
     },
     {
@@ -7382,6 +8690,90 @@
        "6.7%",
        "3.5%"
       ]
+     },
+     "real_credit": {
+      "display": "-17.1%",
+      "sort": -17.0798,
+      "series": [
+       11.2237,
+       22.652,
+       15.7284,
+       19.4945,
+       6.2958,
+       6.5133,
+       8.6798,
+       20.8323,
+       41.7462,
+       19.4579,
+       25.5363,
+       27.0141,
+       -2.1103,
+       -5.9725,
+       1.408,
+       1.2279,
+       -17.0798
+      ],
+      "series_display": [
+       "11.2%",
+       "22.7%",
+       "15.7%",
+       "19.5%",
+       "6.3%",
+       "6.5%",
+       "8.7%",
+       "20.8%",
+       "41.7%",
+       "19.5%",
+       "25.5%",
+       "27.0%",
+       "-2.1%",
+       "-6.0%",
+       "1.4%",
+       "1.2%",
+       "-17.1%"
+      ],
+      "period": "2026-09-30",
+      "period_label": null,
+      "note": "Net of Mineral Oils prices (WPI), +38.5% over the year."
+     },
+     "output": {
+      "display": "0.0%",
+      "sort": 0.0153,
+      "series": [
+       4.1236,
+       3.5074,
+       3.2989,
+       3.7055,
+       3.1462,
+       2.1584,
+       1.4265,
+       1.3179,
+       1.1304,
+       1.2784,
+       0.7849,
+       0.391,
+       0.4598,
+       0.0153
+      ],
+      "series_display": [
+       "4.1%",
+       "3.5%",
+       "3.3%",
+       "3.7%",
+       "3.1%",
+       "2.2%",
+       "1.4%",
+       "1.3%",
+       "1.1%",
+       "1.3%",
+       "0.8%",
+       "0.4%",
+       "0.5%",
+       "0.0%"
+      ],
+      "period": "2026-09-30",
+      "period_label": null,
+      "note": "IIP Manufacture of Coke and Refined Petroleum Products: the last 12 months against the 12 before."
      }
     },
     {
@@ -7666,6 +9058,22 @@
        "4.8%",
        "5.3%"
       ]
+     },
+     "real_credit": {
+      "display": "—",
+      "sort": null,
+      "period": "2026-09-30",
+      "period_label": null,
+      "reason": "cadence_mismatch",
+      "note": "MoSPI measures this part only at another frequency than this table's."
+     },
+     "output": {
+      "display": "—",
+      "sort": null,
+      "period": "2026-09-30",
+      "period_label": null,
+      "reason": "cadence_mismatch",
+      "note": "MoSPI measures this part only at another frequency than this table's."
      }
     },
     {
@@ -7950,6 +9358,53 @@
        "4.9%",
        "5.8%"
       ]
+     },
+     "real_credit": {
+      "display": "—",
+      "sort": null,
+      "period": "2026-09-30",
+      "period_label": null,
+      "reason": "weights_unsourced",
+      "note": "The part combines several MoSPI series, and their weights are not yet sourced."
+     },
+     "output": {
+      "display": "15.9%",
+      "sort": 15.8629,
+      "series": [
+       5.7483,
+       5.806,
+       5.7669,
+       5.4838,
+       5.6508,
+       7.9827,
+       8.3845,
+       9.2364,
+       9.9626,
+       10.4434,
+       11.0659,
+       12.5397,
+       14.162,
+       15.8629
+      ],
+      "series_display": [
+       "5.7%",
+       "5.8%",
+       "5.8%",
+       "5.5%",
+       "5.7%",
+       "8.0%",
+       "8.4%",
+       "9.2%",
+       "10.0%",
+       "10.4%",
+       "11.1%",
+       "12.5%",
+       "14.2%",
+       "15.9%"
+      ],
+      "period": "2026-09-30",
+      "period_label": null,
+      "note": "IIP Manufacture of Motor Vehicles, Trailers and Semi-trailers, Manufacture of Other Transport Equipment: the last 12 months against the 12 before."
      }
     },
     {
@@ -8234,6 +9689,59 @@
        "4.1%",
        "5.0%"
       ]
+     },
+     "real_credit": {
+      "display": "12.6%",
+      "sort": 12.5985,
+      "series": [
+       -6.2834,
+       -2.6081,
+       -10.6676,
+       -9.6114,
+       -2.3561,
+       -11.4162,
+       -10.8128,
+       -8.067,
+       -10.7159,
+       -2.8479,
+       1.6161,
+       1.2362,
+       -4.1385,
+       8.2155,
+       6.8437,
+       7.6951,
+       12.5985
+      ],
+      "series_display": [
+       "-6.3%",
+       "-2.6%",
+       "-10.7%",
+       "-9.6%",
+       "-2.4%",
+       "-11.4%",
+       "-10.8%",
+       "-8.1%",
+       "-10.7%",
+       "-2.8%",
+       "1.6%",
+       "1.2%",
+       "-4.1%",
+       "8.2%",
+       "6.8%",
+       "7.7%",
+       "12.6%"
+      ],
+      "period": "2026-09-30",
+      "period_label": null,
+      "note": "Net of Manufacture Of Jewellery And Related Articles prices (WPI), +23.6% over the year."
+     },
+     "output": {
+      "display": "—",
+      "sort": null,
+      "period": "2026-09-30",
+      "period_label": null,
+      "reason": "shared_group",
+      "note": "MoSPI's nearest series pools this part with others, so it is not a match."
      }
     },
     {
@@ -8518,6 +10026,90 @@
        "2.0%",
        "2.4%"
       ]
+     },
+     "real_credit": {
+      "display": "5.1%",
+      "sort": 5.0755,
+      "series": [
+       9.4795,
+       8.1921,
+       9.5432,
+       11.5229,
+       14.7953,
+       14.2525,
+       14.8541,
+       15.4322,
+       11.3458,
+       11.3441,
+       9.9093,
+       3.4397,
+       -2.507,
+       0.7765,
+       2.4582,
+       4.7091,
+       5.0755
+      ],
+      "series_display": [
+       "9.5%",
+       "8.2%",
+       "9.5%",
+       "11.5%",
+       "14.8%",
+       "14.3%",
+       "14.9%",
+       "15.4%",
+       "11.3%",
+       "11.3%",
+       "9.9%",
+       "3.4%",
+       "-2.5%",
+       "0.8%",
+       "2.5%",
+       "4.7%",
+       "5.1%"
+      ],
+      "period": "2026-09-30",
+      "period_label": null,
+      "note": "Net of Manufacture Of Rubber And Plastics Products prices (WPI), +11.2% over the year."
+     },
+     "output": {
+      "display": "8.1%",
+      "sort": 8.1204,
+      "series": [
+       4.9721,
+       4.477,
+       4.6133,
+       4.1441,
+       4.1199,
+       2.8944,
+       2.3831,
+       2.2896,
+       1.748,
+       3.7857,
+       3.6802,
+       5.2202,
+       6.5576,
+       8.1204
+      ],
+      "series_display": [
+       "5.0%",
+       "4.5%",
+       "4.6%",
+       "4.1%",
+       "4.1%",
+       "2.9%",
+       "2.4%",
+       "2.3%",
+       "1.7%",
+       "3.8%",
+       "3.7%",
+       "5.2%",
+       "6.6%",
+       "8.1%"
+      ],
+      "period": "2026-09-30",
+      "period_label": null,
+      "note": "IIP Manufacture of Rubber and Plastics Products: the last 12 months against the 12 before."
      }
     },
     {
@@ -8802,6 +10394,59 @@
        "1.2%",
        "1.2%"
       ]
+     },
+     "real_credit": {
+      "display": "13.5%",
+      "sort": 13.4579,
+      "series": [
+       8.0171,
+       6.4747,
+       2.6577,
+       1.2652,
+       0.2034,
+       -2.4732,
+       -4.9355,
+       -5.6595,
+       5.9153,
+       7.2419,
+       7.5509,
+       9.0861,
+       10.6392,
+       16.3422,
+       16.9431,
+       16.3435,
+       13.4579
+      ],
+      "series_display": [
+       "8.0%",
+       "6.5%",
+       "2.7%",
+       "1.3%",
+       "0.2%",
+       "-2.5%",
+       "-4.9%",
+       "-5.7%",
+       "5.9%",
+       "7.2%",
+       "7.6%",
+       "9.1%",
+       "10.6%",
+       "16.3%",
+       "16.9%",
+       "16.3%",
+       "13.5%"
+      ],
+      "period": "2026-09-30",
+      "period_label": null,
+      "note": "Net of Manufacture Of Cement, Lime And Plaster prices (WPI), +0.5% over the year."
+     },
+     "output": {
+      "display": "—",
+      "sort": null,
+      "period": "2026-09-30",
+      "period_label": null,
+      "reason": "shared_group",
+      "note": "MoSPI's nearest series pools this part with others, so it is not a match."
      }
     },
     {
@@ -9086,6 +10731,53 @@
        "1.1%",
        "1.3%"
       ]
+     },
+     "real_credit": {
+      "display": "—",
+      "sort": null,
+      "period": "2026-09-30",
+      "period_label": null,
+      "reason": "weights_unsourced",
+      "note": "The part combines several MoSPI series, and their weights are not yet sourced."
+     },
+     "output": {
+      "display": "0.3%",
+      "sort": 0.2705,
+      "series": [
+       2.8543,
+       1.8976,
+       1.7735,
+       1.7349,
+       2.2008,
+       4.3175,
+       3.9481,
+       3.6773,
+       3.687,
+       3.2966,
+       2.6573,
+       2.444,
+       1.6384,
+       0.2705
+      ],
+      "series_display": [
+       "2.9%",
+       "1.9%",
+       "1.8%",
+       "1.7%",
+       "2.2%",
+       "4.3%",
+       "3.9%",
+       "3.7%",
+       "3.7%",
+       "3.3%",
+       "2.7%",
+       "2.4%",
+       "1.6%",
+       "0.3%"
+      ],
+      "period": "2026-09-30",
+      "period_label": null,
+      "note": "IIP Mining & Quarrying: the last 12 months against the 12 before."
      }
     },
     {
@@ -9370,6 +11062,90 @@
        "1.1%",
        "1.1%"
       ]
+     },
+     "real_credit": {
+      "display": "9.9%",
+      "sort": 9.9067,
+      "series": [
+       10.1867,
+       9.7402,
+       9.728,
+       10.2161,
+       9.804,
+       9.3894,
+       8.9875,
+       9.0391,
+       11.9271,
+       12.9812,
+       12.3841,
+       11.4516,
+       10.9291,
+       12.1401,
+       14.0842,
+       13.6117,
+       9.9067
+      ],
+      "series_display": [
+       "10.2%",
+       "9.7%",
+       "9.7%",
+       "10.2%",
+       "9.8%",
+       "9.4%",
+       "9.0%",
+       "9.0%",
+       "11.9%",
+       "13.0%",
+       "12.4%",
+       "11.5%",
+       "10.9%",
+       "12.1%",
+       "14.1%",
+       "13.6%",
+       "9.9%"
+      ],
+      "period": "2026-09-30",
+      "period_label": null,
+      "note": "Net of Manufacture Of Paper And Paper Products prices (WPI), +4.5% over the year."
+     },
+     "output": {
+      "display": "8.2%",
+      "sort": 8.2285,
+      "series": [
+       2.6616,
+       3.2549,
+       2.38,
+       2.3088,
+       2.2462,
+       3.0769,
+       3.3649,
+       4.6358,
+       5.7005,
+       6.425,
+       7.3347,
+       8.0106,
+       8.5477,
+       8.2285
+      ],
+      "series_display": [
+       "2.7%",
+       "3.3%",
+       "2.4%",
+       "2.3%",
+       "2.2%",
+       "3.1%",
+       "3.4%",
+       "4.6%",
+       "5.7%",
+       "6.4%",
+       "7.3%",
+       "8.0%",
+       "8.5%",
+       "8.2%"
+      ],
+      "period": "2026-09-30",
+      "period_label": null,
+      "note": "IIP Manufacture of Paper and Paper Products: the last 12 months against the 12 before."
      }
     },
     {
@@ -9654,6 +11430,53 @@
        "0.5%",
        "0.4%"
       ]
+     },
+     "real_credit": {
+      "display": "—",
+      "sort": null,
+      "period": "2026-09-30",
+      "period_label": null,
+      "reason": "weights_unsourced",
+      "note": "The part combines several MoSPI series, and their weights are not yet sourced."
+     },
+     "output": {
+      "display": "-0.5%",
+      "sort": -0.4574,
+      "series": [
+       10.0183,
+       8.7713,
+       5.8523,
+       4.2448,
+       3.0776,
+       0.8622,
+       0.7508,
+       -0.1462,
+       -2.7692,
+       -3.7522,
+       -3.0886,
+       -1.4729,
+       -0.6426,
+       -0.4574
+      ],
+      "series_display": [
+       "10.0%",
+       "8.8%",
+       "5.9%",
+       "4.2%",
+       "3.1%",
+       "0.9%",
+       "0.8%",
+       "-0.1%",
+       "-2.8%",
+       "-3.8%",
+       "-3.1%",
+       "-1.5%",
+       "-0.6%",
+       "-0.5%"
+      ],
+      "period": "2026-09-30",
+      "period_label": null,
+      "note": "IIP Manufacture of Beverages, Manufacture of Tobacco Products: the last 12 months against the 12 before."
      }
     },
     {
@@ -9938,6 +11761,90 @@
        "0.7%",
        "0.7%"
       ]
+     },
+     "real_credit": {
+      "display": "11.5%",
+      "sort": 11.5407,
+      "series": [
+       12.0325,
+       10.1688,
+       11.8592,
+       13.4436,
+       12.9535,
+       11.0424,
+       12.3783,
+       10.1279,
+       9.9897,
+       10.2572,
+       9.1236,
+       6.2285,
+       3.6328,
+       4.8596,
+       6.9576,
+       10.2303,
+       11.5407
+      ],
+      "series_display": [
+       "12.0%",
+       "10.2%",
+       "11.9%",
+       "13.4%",
+       "13.0%",
+       "11.0%",
+       "12.4%",
+       "10.1%",
+       "10.0%",
+       "10.3%",
+       "9.1%",
+       "6.2%",
+       "3.6%",
+       "4.9%",
+       "7.0%",
+       "10.2%",
+       "11.5%"
+      ],
+      "period": "2026-09-30",
+      "period_label": null,
+      "note": "Net of Manufacture Of Wood And Products Of Wood And Cork, Except Furniture; Manufacture Of Articles Of Straw And Plaiting Materials prices (WPI), +7.3% over the year."
+     },
+     "output": {
+      "display": "3.2%",
+      "sort": 3.1793,
+      "series": [
+       7.6312,
+       8.2058,
+       8.0965,
+       6.371,
+       4.2717,
+       6.3184,
+       4.3114,
+       5.0195,
+       3.6364,
+       2.1645,
+       2.0111,
+       1.6141,
+       2.816,
+       3.1793
+      ],
+      "series_display": [
+       "7.6%",
+       "8.2%",
+       "8.1%",
+       "6.4%",
+       "4.3%",
+       "6.3%",
+       "4.3%",
+       "5.0%",
+       "3.6%",
+       "2.2%",
+       "2.0%",
+       "1.6%",
+       "2.8%",
+       "3.2%"
+      ],
+      "period": "2026-09-30",
+      "period_label": null,
+      "note": "IIP Manufacture of Wood and Products of Wood and Cork, Except Furniture; Manufacture of Articles of Straw and Plaiting Materials: the last 12 months against the 12 before."
      }
     },
     {
@@ -10222,6 +12129,59 @@
        "0.5%",
        "0.5%"
       ]
+     },
+     "real_credit": {
+      "display": "19.3%",
+      "sort": 19.2668,
+      "series": [
+       12.5376,
+       9.1777,
+       13.8404,
+       11.6516,
+       11.808,
+       11.041,
+       5.9824,
+       5.6784,
+       10.4744,
+       8.7297,
+       4.6806,
+       21.1566,
+       12.1221,
+       10.2876,
+       16.4626,
+       20.1552,
+       19.2668
+      ],
+      "series_display": [
+       "12.5%",
+       "9.2%",
+       "13.8%",
+       "11.7%",
+       "11.8%",
+       "11.0%",
+       "6.0%",
+       "5.7%",
+       "10.5%",
+       "8.7%",
+       "4.7%",
+       "21.2%",
+       "12.1%",
+       "10.3%",
+       "16.5%",
+       "20.2%",
+       "19.3%"
+      ],
+      "period": "2026-09-30",
+      "period_label": null,
+      "note": "Net of Manufacture Of Glass And Glass Products prices (WPI), +6.4% over the year."
+     },
+     "output": {
+      "display": "—",
+      "sort": null,
+      "period": "2026-09-30",
+      "period_label": null,
+      "reason": "shared_group",
+      "note": "MoSPI's nearest series pools this part with others, so it is not a match."
      }
     },
     {
@@ -10506,6 +12466,90 @@
        "0.1%",
        "0.2%"
       ]
+     },
+     "real_credit": {
+      "display": "6.3%",
+      "sort": 6.3095,
+      "series": [
+       4.7197,
+       2.9105,
+       3.9696,
+       1.5001,
+       2.8005,
+       3.358,
+       1.2452,
+       4.3252,
+       4.6607,
+       6.3145,
+       3.8269,
+       5.5843,
+       2.4658,
+       4.4289,
+       6.1102,
+       4.0795,
+       6.3095
+      ],
+      "series_display": [
+       "4.7%",
+       "2.9%",
+       "4.0%",
+       "1.5%",
+       "2.8%",
+       "3.4%",
+       "1.2%",
+       "4.3%",
+       "4.7%",
+       "6.3%",
+       "3.8%",
+       "5.6%",
+       "2.5%",
+       "4.4%",
+       "6.1%",
+       "4.1%",
+       "6.3%"
+      ],
+      "period": "2026-09-30",
+      "period_label": null,
+      "note": "Net of Manufacture Of Leather And Related Products prices (WPI), +4.5% over the year."
+     },
+     "output": {
+      "display": "0.3%",
+      "sort": 0.3182,
+      "series": [
+       10.2,
+       10.4708,
+       11.0069,
+       9.4191,
+       7.9181,
+       2.7444,
+       1.1375,
+       0.9836,
+       -0.0246,
+       -0.5143,
+       -1.4548,
+       -0.3267,
+       -0.5375,
+       0.3182
+      ],
+      "series_display": [
+       "10.2%",
+       "10.5%",
+       "11.0%",
+       "9.4%",
+       "7.9%",
+       "2.7%",
+       "1.1%",
+       "1.0%",
+       "-0.0%",
+       "-0.5%",
+       "-1.5%",
+       "-0.3%",
+       "-0.5%",
+       "0.3%"
+      ],
+      "period": "2026-09-30",
+      "period_label": null,
+      "note": "IIP Manufacture of Leather and Related Products: the last 12 months against the 12 before."
      }
     }
    ],
@@ -10671,7 +12715,58 @@
      ]
     },
     "pace": null,
-    "new": null
+    "new": null,
+    "real_credit": {
+     "display": "14.8%",
+     "sort": 14.8218,
+     "series": [
+      8.5512,
+      8.0704,
+      6.6474,
+      11.7021,
+      12.7287,
+      14.8218
+     ],
+     "series_display": [
+      "8.6%",
+      "8.1%",
+      "6.6%",
+      "11.7%",
+      "12.7%",
+      "14.8%"
+     ],
+     "period": "2026-07-31",
+     "period_label": "Q1",
+     "note": "Net of the national-accounts deflator, +3.9% over the year."
+    },
+    "output": {
+     "display": "7.9%",
+     "sort": 7.8538,
+     "series": [
+      9.7229,
+      10.5154,
+      7.8816,
+      8.5105,
+      7.7888,
+      8.111,
+      7.6053,
+      7.8538
+     ],
+     "series_display": [
+      "9.7%",
+      "10.5%",
+      "7.9%",
+      "8.5%",
+      "7.8%",
+      "8.1%",
+      "7.6%",
+      "7.9%"
+     ],
+     "period": "2026-07-31",
+     "period_label": "Q1",
+     "note": "Real GVA (Mining and Quarrying, Manufacturing, Electricity, Gas, Water Supply & Other Utility Services, Construction): the last 4 quarters against the 4 before."
+    },
+    "approx": "Industry credit includes infrastructure that national accounts count as services: 9.8% of it this month."
    },
    "columns": {
     "size": "sibc-industry-type-size-scan",
@@ -10679,17 +12774,23 @@
     "of_book": "sibc-industry-type-share-of-credit-scan",
     "growth": "sibc-industry-type-yoy-scan",
     "pace": "sibc-industry-type-acceleration",
-    "new": "sibc-industry-type-allocation"
+    "new": "sibc-industry-type-allocation",
+    "real_credit": "sibc-industry-type-real-growth",
+    "output": "sibc-industry-type-output-growth"
    },
    "parent_columns": {
     "size": "sibc-industry-type-size-scan",
     "of_book": "sibc-industry-type-share-of-credit-scan",
-    "growth": "sibc-industry-yoy"
+    "growth": "sibc-industry-yoy",
+    "real_credit": "sibc-main-real-growth",
+    "output": "sibc-main-output-growth"
    },
    "parent_entities": {
     "size": "parent",
     "of_book": "total",
-    "growth": "total"
+    "growth": "total",
+    "real_credit": "Industry (Micro and Small, Medium and Large)",
+    "output": "Industry (Micro and Small, Medium and Large)"
    },
    "periods": {
     "size": [
@@ -10819,6 +12920,41 @@
      "Jun 26",
      "Jul 26",
      "Aug 26"
+    ],
+    "real_credit": [
+     "Dec 24",
+     "Jan 25",
+     "Feb 25",
+     "Mar 25",
+     "Apr 25",
+     "May 25",
+     "Jun 25",
+     "Jul 25",
+     "Dec 25",
+     "Jan 26",
+     "Feb 26",
+     "Mar 26",
+     "Apr 26",
+     "May 26",
+     "Jun 26",
+     "Jul 26",
+     "Aug 26"
+    ],
+    "output": [
+     "Mar 25",
+     "Apr 25",
+     "May 25",
+     "Jun 25",
+     "Jul 25",
+     "Dec 25",
+     "Jan 26",
+     "Feb 26",
+     "Mar 26",
+     "Apr 26",
+     "May 26",
+     "Jun 26",
+     "Jul 26",
+     "Aug 26"
     ]
    },
    "parent_periods": {
@@ -10894,16 +13030,50 @@
      "Jun 26",
      "Jul 26",
      "Aug 26"
+    ],
+    "real_credit": [
+     "Dec 24",
+     "Mar 25",
+     "Jun 25",
+     "Dec 25",
+     "Mar 26",
+     "Jun 26"
+    ],
+    "output": [
+     "Mar 24",
+     "Jun 24",
+     "Dec 24",
+     "Mar 25",
+     "Jun 25",
+     "Dec 25",
+     "Mar 26",
+     "Jun 26"
     ]
    },
    "source_signals": [
     "sibc-industry-type-acceleration",
     "sibc-industry-type-allocation",
+    "sibc-industry-type-output-growth",
+    "sibc-industry-type-real-growth",
     "sibc-industry-type-share-of-credit-scan",
     "sibc-industry-type-size-scan",
     "sibc-industry-type-yoy-scan",
-    "sibc-industry-yoy"
-   ]
+    "sibc-industry-yoy",
+    "sibc-main-output-growth",
+    "sibc-main-real-growth"
+   ],
+   "real_economy": {
+    "coverage": [
+     "Real credit: 9 of 19 parts · 18.9% of this table's credit.",
+     "Output: 12 of 19 parts · 45.4% of this table's credit."
+    ],
+    "footnote": [
+     "Real credit = loans outstanding, year on year, net of each part's own prices: the national-accounts deflator; wholesale prices (WPI).",
+     "Output = IIP production over the last 12 months; real GVA over the last 4 quarters.",
+     "·Q1 = Apr–Jun 2026; credit read at the quarter's end.",
+     "Hover a — for why it is empty."
+    ]
+   }
   },
   "sibc-infra-sub": {
    "cut": "sibc-infra-sub",
@@ -11153,7 +13323,91 @@
        "-0.62 pp"
       ]
      },
-     "new": null
+     "new": null,
+     "real_credit": {
+      "display": "23.1%",
+      "sort": 23.1344,
+      "series": [
+       0.1417,
+       6.9605,
+       4.2723,
+       9.8306,
+       6.0969,
+       4.6418,
+       5.4897,
+       12.83,
+       21.3632,
+       20.2291,
+       23.3633,
+       24.2791,
+       24.6792,
+       24.5034,
+       25.1287,
+       20.304,
+       23.1344
+      ],
+      "series_display": [
+       "0.1%",
+       "7.0%",
+       "4.3%",
+       "9.8%",
+       "6.1%",
+       "4.6%",
+       "5.5%",
+       "12.8%",
+       "21.4%",
+       "20.2%",
+       "23.4%",
+       "24.3%",
+       "24.7%",
+       "24.5%",
+       "25.1%",
+       "20.3%",
+       "23.1%"
+      ],
+      "period": "2026-09-30",
+      "period_label": null,
+      "note": "Net of Electricity prices (WPI), -1.7% over the year."
+     },
+     "output": {
+      "display": "5.2%",
+      "sort": 5.1641,
+      "series": [
+       5.2316,
+       4.5167,
+       2.8774,
+       2.0232,
+       1.6786,
+       1.4285,
+       1.6572,
+       1.5409,
+       0.9913,
+       1.3149,
+       2.7228,
+       3.8399,
+       4.353,
+       5.1641
+      ],
+      "series_display": [
+       "5.2%",
+       "4.5%",
+       "2.9%",
+       "2.0%",
+       "1.7%",
+       "1.4%",
+       "1.7%",
+       "1.5%",
+       "1.0%",
+       "1.3%",
+       "2.7%",
+       "3.8%",
+       "4.4%",
+       "5.2%"
+      ],
+      "period": "2026-09-30",
+      "period_label": null,
+      "note": "IIP Electricity: the last 12 months against the 12 before."
+     }
     },
     {
      "entity": "Roads",
@@ -11398,7 +13652,23 @@
        "+1.29 pp"
       ]
      },
-     "new": null
+     "new": null,
+     "real_credit": {
+      "display": "—",
+      "sort": null,
+      "period": "2026-09-30",
+      "period_label": null,
+      "reason": "no_counterpart",
+      "note": "MoSPI publishes no series that measures this part."
+     },
+     "output": {
+      "display": "—",
+      "sort": null,
+      "period": "2026-09-30",
+      "period_label": null,
+      "reason": "no_counterpart",
+      "note": "MoSPI publishes no series that measures this part."
+     }
     },
     {
      "entity": "Other Infrastructure",
@@ -11643,7 +13913,23 @@
        "+0.38 pp"
       ]
      },
-     "new": null
+     "new": null,
+     "real_credit": {
+      "display": "—",
+      "sort": null,
+      "period": "2026-09-30",
+      "period_label": null,
+      "reason": "no_counterpart",
+      "note": "MoSPI publishes no series that measures this part."
+     },
+     "output": {
+      "display": "—",
+      "sort": null,
+      "period": "2026-09-30",
+      "period_label": null,
+      "reason": "no_counterpart",
+      "note": "MoSPI publishes no series that measures this part."
+     }
     },
     {
      "entity": "Telecommunications",
@@ -11888,7 +14174,23 @@
        "-1.87 pp"
       ]
      },
-     "new": null
+     "new": null,
+     "real_credit": {
+      "display": "—",
+      "sort": null,
+      "period": "2026-09-30",
+      "period_label": null,
+      "reason": "no_counterpart",
+      "note": "MoSPI publishes no series that measures this part."
+     },
+     "output": {
+      "display": "—",
+      "sort": null,
+      "period": "2026-09-30",
+      "period_label": null,
+      "reason": "no_counterpart",
+      "note": "MoSPI publishes no series that measures this part."
+     }
     },
     {
      "entity": "Ports",
@@ -12133,7 +14435,23 @@
        "+16.93 pp"
       ]
      },
-     "new": null
+     "new": null,
+     "real_credit": {
+      "display": "—",
+      "sort": null,
+      "period": "2026-09-30",
+      "period_label": null,
+      "reason": "no_counterpart",
+      "note": "MoSPI publishes no series that measures this part."
+     },
+     "output": {
+      "display": "—",
+      "sort": null,
+      "period": "2026-09-30",
+      "period_label": null,
+      "reason": "no_counterpart",
+      "note": "MoSPI publishes no series that measures this part."
+     }
     },
     {
      "entity": "Airports",
@@ -12378,7 +14696,23 @@
        "+9.40 pp"
       ]
      },
-     "new": null
+     "new": null,
+     "real_credit": {
+      "display": "—",
+      "sort": null,
+      "period": "2026-09-30",
+      "period_label": null,
+      "reason": "no_counterpart",
+      "note": "MoSPI publishes no series that measures this part."
+     },
+     "output": {
+      "display": "—",
+      "sort": null,
+      "period": "2026-09-30",
+      "period_label": null,
+      "reason": "no_counterpart",
+      "note": "MoSPI publishes no series that measures this part."
+     }
     },
     {
      "entity": "Railways (other than Indian Railways)",
@@ -12623,7 +14957,23 @@
        "-0.32 pp"
       ]
      },
-     "new": null
+     "new": null,
+     "real_credit": {
+      "display": "—",
+      "sort": null,
+      "period": "2026-09-30",
+      "period_label": null,
+      "reason": "no_counterpart",
+      "note": "MoSPI publishes no series that measures this part."
+     },
+     "output": {
+      "display": "—",
+      "sort": null,
+      "period": "2026-09-30",
+      "period_label": null,
+      "reason": "no_counterpart",
+      "note": "MoSPI publishes no series that measures this part."
+     }
     }
    ],
    "total": {
@@ -12827,26 +15177,48 @@
       "-0.04 pp"
      ]
     },
-    "new": null
+    "new": null,
+    "real_credit": {
+     "display": "—",
+     "sort": null,
+     "period": "2026-09-30",
+     "period_label": null,
+     "reason": "no_counterpart",
+     "note": "MoSPI publishes no series that measures this part."
+    },
+    "output": {
+     "display": "—",
+     "sort": null,
+     "period": "2026-09-30",
+     "period_label": null,
+     "reason": "no_counterpart",
+     "note": "MoSPI publishes no series that measures this part."
+    }
    },
    "columns": {
     "size": "sibc-infra-sub-size-scan",
     "of_cut": "sibc-infra-sub-allocation",
     "of_book": "sibc-infra-sub-share-of-credit-scan",
     "growth": "sibc-infra-sub-yoy-scan",
-    "pace": "sibc-infra-sub-acceleration"
+    "pace": "sibc-infra-sub-acceleration",
+    "real_credit": "sibc-infra-sub-real-growth",
+    "output": "sibc-infra-sub-output-growth"
    },
    "parent_columns": {
     "size": "sibc-infra-sub-size-scan",
     "pace": "sibc-infra-sub-acceleration",
     "of_book": "sibc-infra-sub-share-of-credit-scan",
-    "growth": "sibc-infra-yoy"
+    "growth": "sibc-infra-yoy",
+    "real_credit": "sibc-industry-type-real-growth",
+    "output": "sibc-industry-type-output-growth"
    },
    "parent_entities": {
     "size": "parent",
     "pace": "total",
     "of_book": "total",
-    "growth": "total"
+    "growth": "total",
+    "real_credit": "Infrastructure",
+    "output": "Infrastructure"
    },
    "periods": {
     "size": [
@@ -12958,6 +15330,41 @@
      "Jun 26",
      "Jul 26",
      "Aug 26"
+    ],
+    "real_credit": [
+     "Dec 24",
+     "Jan 25",
+     "Feb 25",
+     "Mar 25",
+     "Apr 25",
+     "May 25",
+     "Jun 25",
+     "Jul 25",
+     "Dec 25",
+     "Jan 26",
+     "Feb 26",
+     "Mar 26",
+     "Apr 26",
+     "May 26",
+     "Jun 26",
+     "Jul 26",
+     "Aug 26"
+    ],
+    "output": [
+     "Mar 25",
+     "Apr 25",
+     "May 25",
+     "Jun 25",
+     "Jul 25",
+     "Dec 25",
+     "Jan 26",
+     "Feb 26",
+     "Mar 26",
+     "Apr 26",
+     "May 26",
+     "Jun 26",
+     "Jul 26",
+     "Aug 26"
     ]
    },
    "parent_periods": {
@@ -13051,16 +15458,66 @@
      "Jun 26",
      "Jul 26",
      "Aug 26"
+    ],
+    "real_credit": [
+     "Dec 24",
+     "Jan 25",
+     "Feb 25",
+     "Mar 25",
+     "Apr 25",
+     "May 25",
+     "Jun 25",
+     "Jul 25",
+     "Dec 25",
+     "Jan 26",
+     "Feb 26",
+     "Mar 26",
+     "Apr 26",
+     "May 26",
+     "Jun 26",
+     "Jul 26",
+     "Aug 26"
+    ],
+    "output": [
+     "Mar 25",
+     "Apr 25",
+     "May 25",
+     "Jun 25",
+     "Jul 25",
+     "Dec 25",
+     "Jan 26",
+     "Feb 26",
+     "Mar 26",
+     "Apr 26",
+     "May 26",
+     "Jun 26",
+     "Jul 26",
+     "Aug 26"
     ]
    },
    "source_signals": [
+    "sibc-industry-type-output-growth",
+    "sibc-industry-type-real-growth",
     "sibc-infra-sub-acceleration",
     "sibc-infra-sub-allocation",
+    "sibc-infra-sub-output-growth",
+    "sibc-infra-sub-real-growth",
     "sibc-infra-sub-share-of-credit-scan",
     "sibc-infra-sub-size-scan",
     "sibc-infra-sub-yoy-scan",
     "sibc-infra-yoy"
-   ]
+   ],
+   "real_economy": {
+    "coverage": [
+     "Real credit: 1 of 7 parts · 57.0% of this table's credit.",
+     "Output: 1 of 7 parts · 57.0% of this table's credit."
+    ],
+    "footnote": [
+     "Real credit = loans outstanding, year on year, net of each part's own prices: wholesale prices (WPI).",
+     "Output = IIP production over the last 12 months.",
+     "Hover a — for why it is empty."
+    ]
+   }
   },
   "sibc-main": {
    "cut": "sibc-main",
@@ -13351,6 +15808,37 @@
        "28.5%",
        "30.0%"
       ]
+     },
+     "real_credit": {
+      "display": "12.9%",
+      "sort": 12.8515,
+      "series": [
+       7.7219,
+       8.1827,
+       10.0756,
+       13.954,
+       14.319,
+       12.8515
+      ],
+      "series_display": [
+       "7.7%",
+       "8.2%",
+       "10.1%",
+       "14.0%",
+       "14.3%",
+       "12.9%"
+      ],
+      "period": "2026-07-31",
+      "period_label": "Q1",
+      "note": "Net of the national-accounts deflator, +2.6% over the year."
+     },
+     "output": {
+      "display": "—",
+      "sort": null,
+      "period": "2026-07-31",
+      "period_label": "Q1",
+      "reason": "no_counterpart",
+      "note": "MoSPI publishes no series that measures this part."
      }
     },
     {
@@ -13637,7 +16125,58 @@
        "32.9%",
        "35.0%"
       ]
-     }
+     },
+     "real_credit": {
+      "display": "18.6%",
+      "sort": 18.5988,
+      "series": [
+       8.7207,
+       9.9548,
+       6.6285,
+       14.2931,
+       17.368,
+       18.5988
+      ],
+      "series_display": [
+       "8.7%",
+       "10.0%",
+       "6.6%",
+       "14.3%",
+       "17.4%",
+       "18.6%"
+      ],
+      "period": "2026-07-31",
+      "period_label": "Q1",
+      "note": "Net of the national-accounts deflator, +2.4% over the year."
+     },
+     "output": {
+      "display": "10.2%",
+      "sort": 10.1831,
+      "series": [
+       8.0019,
+       7.9587,
+       8.4215,
+       7.492,
+       7.5001,
+       8.3722,
+       9.712,
+       10.1831
+      ],
+      "series_display": [
+       "8.0%",
+       "8.0%",
+       "8.4%",
+       "7.5%",
+       "7.5%",
+       "8.4%",
+       "9.7%",
+       "10.2%"
+      ],
+      "period": "2026-07-31",
+      "period_label": "Q1",
+      "note": "Real GVA (Trade, Hotels, Transport, Communication & Services Related to Broadcasting, Financial, Real Estate & Professional Services, Public Administration, Defence & Other Services): the last 4 quarters against the 4 before."
+     },
+     "approx": "Services credit includes lending to NBFCs, which is lent on rather than spent: 34.4% of it this month."
     },
     {
      "entity": "Industry (Micro and Small, Medium and Large)",
@@ -13923,7 +16462,58 @@
        "22.7%",
        "21.0%"
       ]
-     }
+     },
+     "real_credit": {
+      "display": "14.8%",
+      "sort": 14.8218,
+      "series": [
+       8.5512,
+       8.0704,
+       6.6474,
+       11.7021,
+       12.7287,
+       14.8218
+      ],
+      "series_display": [
+       "8.6%",
+       "8.1%",
+       "6.6%",
+       "11.7%",
+       "12.7%",
+       "14.8%"
+      ],
+      "period": "2026-07-31",
+      "period_label": "Q1",
+      "note": "Net of the national-accounts deflator, +3.9% over the year."
+     },
+     "output": {
+      "display": "7.9%",
+      "sort": 7.8538,
+      "series": [
+       9.7229,
+       10.5154,
+       7.8816,
+       8.5105,
+       7.7888,
+       8.111,
+       7.6053,
+       7.8538
+      ],
+      "series_display": [
+       "9.7%",
+       "10.5%",
+       "7.9%",
+       "8.5%",
+       "7.8%",
+       "8.1%",
+       "7.6%",
+       "7.9%"
+      ],
+      "period": "2026-07-31",
+      "period_label": "Q1",
+      "note": "Real GVA (Mining and Quarrying, Manufacturing, Electricity, Gas, Water Supply & Other Utility Services, Construction): the last 4 quarters against the 4 before."
+     },
+     "approx": "Industry credit includes infrastructure that national accounts count as services: 9.8% of it this month."
     },
     {
      "entity": "Agriculture and Allied Activities",
@@ -14209,6 +16799,56 @@
        "11.2%",
        "11.4%"
       ]
+     },
+     "real_credit": {
+      "display": "12.6%",
+      "sort": 12.5845,
+      "series": [
+       6.4412,
+       5.5146,
+       6.4818,
+       14.3687,
+       16.1108,
+       12.5845
+      ],
+      "series_display": [
+       "6.4%",
+       "5.5%",
+       "6.5%",
+       "14.4%",
+       "16.1%",
+       "12.6%"
+      ],
+      "period": "2026-07-31",
+      "period_label": "Q1",
+      "note": "Net of the national-accounts deflator, +3.8% over the year."
+     },
+     "output": {
+      "display": "3.1%",
+      "sort": 3.103,
+      "series": [
+       2.6912,
+       2.2613,
+       3.8806,
+       4.145,
+       4.5542,
+       3.2284,
+       3.272,
+       3.103
+      ],
+      "series_display": [
+       "2.7%",
+       "2.3%",
+       "3.9%",
+       "4.1%",
+       "4.6%",
+       "3.2%",
+       "3.3%",
+       "3.1%"
+      ],
+      "period": "2026-07-31",
+      "period_label": "Q1",
+      "note": "Real GVA (Agriculture, Livestock, Forestry and Fishing): the last 4 quarters against the 4 before."
      }
     }
    ],
@@ -14413,7 +17053,58 @@
       "-0.29 pp"
      ]
     },
-    "new": null
+    "new": null,
+    "real_credit": {
+     "display": "15.6%",
+     "sort": 15.6201,
+     "series": [
+      8.7662,
+      8.98,
+      8.0949,
+      13.278,
+      15.2505,
+      15.6201
+     ],
+     "series_display": [
+      "8.8%",
+      "9.0%",
+      "8.1%",
+      "13.3%",
+      "15.3%",
+      "15.6%"
+     ],
+     "period": "2026-07-31",
+     "period_label": "Q1",
+     "note": "Net of the national-accounts deflator, +2.3% over the year."
+    },
+    "output": {
+     "display": "8.0%",
+     "sort": 8.0399,
+     "series": [
+      7.3246,
+      7.5425,
+      7.4185,
+      7.1939,
+      7.0385,
+      7.3047,
+      7.8188,
+      8.0399
+     ],
+     "series_display": [
+      "7.3%",
+      "7.5%",
+      "7.4%",
+      "7.2%",
+      "7.0%",
+      "7.3%",
+      "7.8%",
+      "8.0%"
+     ],
+     "period": "2026-07-31",
+     "period_label": "Q1",
+     "note": "Real GVA (Gross Domestic Product): the last 4 quarters against the 4 before."
+    },
+    "approx": "Non-food credit is compared with the whole economy's output."
    },
    "columns": {
     "size": "sibc-main-size-scan",
@@ -14421,19 +17112,25 @@
     "of_book": "sibc-main-share-of-credit-scan",
     "growth": "sibc-main-yoy-scan",
     "pace": "sibc-main-acceleration",
-    "new": "sibc-main-allocation"
+    "new": "sibc-main-allocation",
+    "real_credit": "sibc-main-real-growth",
+    "output": "sibc-main-output-growth"
    },
    "parent_columns": {
     "size": "sibc-main-size-scan",
     "pace": "sibc-main-acceleration",
     "of_book": "sibc-main-share-of-credit-scan",
-    "growth": "sibc-nonfood-credit-yoy"
+    "growth": "sibc-nonfood-credit-yoy",
+    "real_credit": "sibc-main-real-growth",
+    "output": "sibc-main-output-growth"
    },
    "parent_entities": {
     "size": "parent",
     "pace": "total",
     "of_book": "total",
-    "growth": "total"
+    "growth": "total",
+    "real_credit": "total",
+    "output": "total"
    },
    "periods": {
     "size": [
@@ -14564,6 +17261,24 @@
      "Jun 26",
      "Jul 26",
      "Aug 26"
+    ],
+    "real_credit": [
+     "Dec 24",
+     "Mar 25",
+     "Jun 25",
+     "Dec 25",
+     "Mar 26",
+     "Jun 26"
+    ],
+    "output": [
+     "Mar 24",
+     "Jun 24",
+     "Dec 24",
+     "Mar 25",
+     "Jun 25",
+     "Dec 25",
+     "Mar 26",
+     "Jun 26"
     ]
    },
    "parent_periods": {
@@ -14657,16 +17372,48 @@
      "Jun 26",
      "Jul 26",
      "Aug 26"
+    ],
+    "real_credit": [
+     "Dec 24",
+     "Mar 25",
+     "Jun 25",
+     "Dec 25",
+     "Mar 26",
+     "Jun 26"
+    ],
+    "output": [
+     "Mar 24",
+     "Jun 24",
+     "Dec 24",
+     "Mar 25",
+     "Jun 25",
+     "Dec 25",
+     "Mar 26",
+     "Jun 26"
     ]
    },
    "source_signals": [
     "sibc-main-acceleration",
     "sibc-main-allocation",
+    "sibc-main-output-growth",
+    "sibc-main-real-growth",
     "sibc-main-share-of-credit-scan",
     "sibc-main-size-scan",
     "sibc-main-yoy-scan",
     "sibc-nonfood-credit-yoy"
-   ]
+   ],
+   "real_economy": {
+    "coverage": [
+     "Real credit: 4 of 4 parts · 100.0% of this table's credit.",
+     "Output: 3 of 4 parts · 65.5% of this table's credit."
+    ],
+    "footnote": [
+     "Real credit = loans outstanding, year on year, net of each part's own prices: the national-accounts deflator.",
+     "Output = real GVA over the last 4 quarters.",
+     "·Q1 = Apr–Jun 2026; credit read at the quarter's end.",
+     "Hover a — for why it is empty."
+    ]
+   }
   },
   "sibc-nbfc-sub": {
    "cut": "sibc-nbfc-sub",
@@ -15685,6 +18432,33 @@
        "34.6%",
        "32.8%"
       ]
+     },
+     "real_credit": {
+      "display": "6.0%",
+      "sort": 6.0208,
+      "series": [
+       8.1393,
+       7.5264,
+       7.8077,
+       7.6418,
+       6.7199,
+       6.3204,
+       6.5302,
+       6.0208
+      ],
+      "series_display": [
+       "8.1%",
+       "7.5%",
+       "7.8%",
+       "7.6%",
+       "6.7%",
+       "6.3%",
+       "6.5%",
+       "6.0%"
+      ],
+      "period": "2026-09-30",
+      "period_label": null,
+      "note": "Net of CPI (General) Combined prices (CPI), +4.8% over the year."
      }
     },
     {
@@ -15971,6 +18745,33 @@
        "22.8%",
        "22.2%"
       ]
+     },
+     "real_credit": {
+      "display": "9.7%",
+      "sort": 9.6755,
+      "series": [
+       8.5925,
+       8.6054,
+       9.0966,
+       8.9023,
+       8.2387,
+       9.4281,
+       9.8227,
+       9.6755
+      ],
+      "series_display": [
+       "8.6%",
+       "8.6%",
+       "9.1%",
+       "8.9%",
+       "8.2%",
+       "9.4%",
+       "9.8%",
+       "9.7%"
+      ],
+      "period": "2026-09-30",
+      "period_label": null,
+      "note": "Net of CPI (General) Combined prices (CPI), +4.8% over the year."
      }
     },
     {
@@ -16257,6 +19058,33 @@
        "12.1%",
        "12.1%"
       ]
+     },
+     "real_credit": {
+      "display": "14.2%",
+      "sort": 14.2335,
+      "series": [
+       14.0034,
+       13.5005,
+       14.7041,
+       14.0008,
+       12.8907,
+       12.4207,
+       13.7219,
+       14.2335
+      ],
+      "series_display": [
+       "14.0%",
+       "13.5%",
+       "14.7%",
+       "14.0%",
+       "12.9%",
+       "12.4%",
+       "13.7%",
+       "14.2%"
+      ],
+      "period": "2026-09-30",
+      "period_label": null,
+      "note": "Net of CPI (General) Combined prices (CPI), +4.8% over the year."
      }
     },
     {
@@ -16543,6 +19371,33 @@
        "25.8%",
        "24.1%"
       ]
+     },
+     "real_credit": {
+      "display": "74.8%",
+      "sort": 74.8016,
+      "series": [
+       122.6658,
+       120.8216,
+       116.299,
+       113.7563,
+       97.7155,
+       85.7011,
+       80.1038,
+       74.8016
+      ],
+      "series_display": [
+       "122.7%",
+       "120.8%",
+       "116.3%",
+       "113.8%",
+       "97.7%",
+       "85.7%",
+       "80.1%",
+       "74.8%"
+      ],
+      "period": "2026-09-30",
+      "period_label": null,
+      "note": "Net of CPI (General) Combined prices (CPI), +4.8% over the year."
      }
     },
     {
@@ -16829,6 +19684,33 @@
        "0.7%",
        "1.0%"
       ]
+     },
+     "real_credit": {
+      "display": "-1.1%",
+      "sort": -1.1249,
+      "series": [
+       -1.2173,
+       -1.4137,
+       0.1423,
+       0.2812,
+       -2.5096,
+       -2.3369,
+       -2.0682,
+       -1.1249
+      ],
+      "series_display": [
+       "-1.2%",
+       "-1.4%",
+       "0.1%",
+       "0.3%",
+       "-2.5%",
+       "-2.3%",
+       "-2.1%",
+       "-1.1%"
+      ],
+      "period": "2026-09-30",
+      "period_label": null,
+      "note": "Net of CPI (General) Combined prices (CPI), +4.8% over the year."
      }
     },
     {
@@ -17115,6 +19997,33 @@
        "2.0%",
        "5.8%"
       ]
+     },
+     "real_credit": {
+      "display": "36.6%",
+      "sort": 36.5773,
+      "series": [
+       10.1056,
+       10.5214,
+       15.2989,
+       5.9225,
+       3.9654,
+       6.5098,
+       9.6954,
+       36.5773
+      ],
+      "series_display": [
+       "10.1%",
+       "10.5%",
+       "15.3%",
+       "5.9%",
+       "4.0%",
+       "6.5%",
+       "9.7%",
+       "36.6%"
+      ],
+      "period": "2026-09-30",
+      "period_label": null,
+      "note": "Net of CPI (General) Combined prices (CPI), +4.8% over the year."
      }
     },
     {
@@ -17401,6 +20310,33 @@
        "1.9%",
        "1.8%"
       ]
+     },
+     "real_credit": {
+      "display": "8.0%",
+      "sort": 7.9532,
+      "series": [
+       10.9756,
+       10.1837,
+       9.6322,
+       9.4578,
+       9.717,
+       8.5211,
+       8.8681,
+       7.9532
+      ],
+      "series_display": [
+       "11.0%",
+       "10.2%",
+       "9.6%",
+       "9.5%",
+       "9.7%",
+       "8.5%",
+       "8.9%",
+       "8.0%"
+      ],
+      "period": "2026-09-30",
+      "period_label": null,
+      "note": "Net of CPI (General) Combined prices (CPI), +4.8% over the year."
      }
     },
     {
@@ -17687,6 +20623,33 @@
        "0.0%",
        "0.1%"
       ]
+     },
+     "real_credit": {
+      "display": "-2.3%",
+      "sort": -2.3032,
+      "series": [
+       -6.5896,
+       -12.5829,
+       -8.4542,
+       -6.631,
+       -6.3221,
+       -4.8062,
+       -3.89,
+       -2.3032
+      ],
+      "series_display": [
+       "-6.6%",
+       "-12.6%",
+       "-8.5%",
+       "-6.6%",
+       "-6.3%",
+       "-4.8%",
+       "-3.9%",
+       "-2.3%"
+      ],
+      "period": "2026-09-30",
+      "period_label": null,
+      "note": "Net of CPI (General) Combined prices (CPI), +4.8% over the year."
      }
     },
     {
@@ -17973,6 +20936,33 @@
        "0.1%",
        "0.1%"
       ]
+     },
+     "real_credit": {
+      "display": "7.5%",
+      "sort": 7.4888,
+      "series": [
+       2.3001,
+       -0.3728,
+       1.1847,
+       -6.8393,
+       4.19,
+       0.2012,
+       3.9601,
+       7.4888
+      ],
+      "series_display": [
+       "2.3%",
+       "-0.4%",
+       "1.2%",
+       "-6.8%",
+       "4.2%",
+       "0.2%",
+       "4.0%",
+       "7.5%"
+      ],
+      "period": "2026-09-30",
+      "period_label": null,
+      "note": "Net of CPI (General) Combined prices (CPI), +4.8% over the year."
      }
     }
    ],
@@ -18177,7 +21167,30 @@
       "+0.69 pp"
      ]
     },
-    "new": null
+    "new": null,
+    "real_credit": {
+     "display": "12.9%",
+     "sort": 12.8515,
+     "series": [
+      7.7219,
+      8.1827,
+      10.0756,
+      13.954,
+      14.319,
+      12.8515
+     ],
+     "series_display": [
+      "7.7%",
+      "8.2%",
+      "10.1%",
+      "14.0%",
+      "14.3%",
+      "12.9%"
+     ],
+     "period": "2026-07-31",
+     "period_label": "Q1",
+     "note": "Net of the national-accounts deflator, +2.6% over the year."
+    }
    },
    "columns": {
     "size": "sibc-pl-size-scan",
@@ -18185,19 +21198,22 @@
     "of_book": "sibc-pl-share-of-credit-scan",
     "growth": "sibc-pl-yoy-scan",
     "pace": "sibc-pl-acceleration",
-    "new": "sibc-pl-allocation"
+    "new": "sibc-pl-allocation",
+    "real_credit": "sibc-pl-real-growth"
    },
    "parent_columns": {
     "size": "sibc-pl-size-scan",
     "pace": "sibc-pl-acceleration",
     "of_book": "sibc-pl-share-of-credit-scan",
-    "growth": "sibc-personal-loans-yoy"
+    "growth": "sibc-personal-loans-yoy",
+    "real_credit": "sibc-main-real-growth"
    },
    "parent_entities": {
     "size": "parent",
     "pace": "total",
     "of_book": "total",
-    "growth": "total"
+    "growth": "total",
+    "real_credit": "Personal Loans"
    },
    "periods": {
     "size": [
@@ -18328,6 +21344,16 @@
      "Jun 26",
      "Jul 26",
      "Aug 26"
+    ],
+    "real_credit": [
+     "Jan 26",
+     "Feb 26",
+     "Mar 26",
+     "Apr 26",
+     "May 26",
+     "Jun 26",
+     "Jul 26",
+     "Aug 26"
     ]
    },
    "parent_periods": {
@@ -18421,16 +21447,36 @@
      "Jun 26",
      "Jul 26",
      "Aug 26"
+    ],
+    "real_credit": [
+     "Dec 24",
+     "Mar 25",
+     "Jun 25",
+     "Dec 25",
+     "Mar 26",
+     "Jun 26"
     ]
    },
    "source_signals": [
+    "sibc-main-real-growth",
     "sibc-personal-loans-yoy",
     "sibc-pl-acceleration",
     "sibc-pl-allocation",
+    "sibc-pl-real-growth",
     "sibc-pl-share-of-credit-scan",
     "sibc-pl-size-scan",
     "sibc-pl-yoy-scan"
-   ]
+   ],
+   "real_economy": {
+    "coverage": [
+     "Real credit: 9 of 9 parts · 100.0% of this table's credit."
+    ],
+    "footnote": [
+     "Real credit = loans outstanding, year on year, net of each part's own prices: consumer prices (CPI); the national-accounts deflator.",
+     "·Q1 = Apr–Jun 2026; credit read at the quarter's end.",
+     "Hover a — for why it is empty."
+    ]
+   }
   },
   "sibc-psl": {
    "cut": "sibc-psl",
