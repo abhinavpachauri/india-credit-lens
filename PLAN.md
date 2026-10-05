@@ -2,7 +2,7 @@
 
 > Rewritten in place, never appended. Finished items are **deleted** (git keeps them). Hard cap
 > 120 lines, enforced by `reconcile.py`. Standing rules live in `DECISIONS.md`; how to run a
-> workflow lives in its skill (`.claude/skills/`). Last rewritten 2026-10-05.
+> workflow lives in its skill (`.claude/skills/`). Last rewritten 2026-10-06.
 
 ## Now: the agentic layer (design: `archive/docs/PLAN_2026-09-24_AGENTIC_LAYER.md`)
 
@@ -10,7 +10,9 @@ The engine (gate, compute, registry, traceability) stays deterministic code. On 
 skills = procedure, subagents = independent review, hooks + `reconcile.py` = enforcement.
 Phases 0–3 ✅ (2026-09-24/26: hooks, knowledge split, four skills tested on the Aug 2026 ingest,
 three reviewer subagents accepted cold at 4/4 caught, 0/3 false). **Phase 4:** `onboard-source` ✅ 2026-10-05 (from NBFC + MoSPI);
-`add-signal-family`, `measure-gate`, `dashboard-change` ⬜, each written while doing its real task.
+`add-signal-family`, `measure-gate` ⬜, each written while doing its real task. `dashboard-change` ⬜:
+its real task happened 2026-10-05/06 (Read hierarchy, DASHBOARD_SPEC §22); write it from §22.6 + the
+ASCII → approve → build → verify at 1440/375, light/dark loop, before the next dashboard change.
 
 ## Next, in order
 
@@ -56,6 +58,16 @@ three reviewer subagents accepted cold at 4/4 caught, 0/3 false). **Phase 4:** `
   unexplained as such. Until then: source, do not promote; the Aug worklist keeps 12 proposals
   unsearched (`analysis/s4_proposals/2026-09-30.json`).
 
+- **Stage 5.7 checks the declared cut, not the drawn series** (found 2026-10-05). Payments cards
+  naming a bank category were drawn over the top-5 banks, so the chart showed only Total, and 5.7
+  was green. Fixed in the renderer (`AtmReadMode.tsx` picks by_type / individual from the highlight);
+  the gate still cannot see it. Bank-named cards draw `individual`, so a bank outside the top 5 is safe.
+  A guard needs a rendered-series check (measure first, per DECISIONS).
+- **Small-share claims on a 0–100% bar chart** (e.g. Small Finance Banks +0.97 pp at 2.0%) read as a
+  sliver; a line of the share itself would show the move. Presentation only; §22.3 frame.
+- **"Hover a — for why it is empty"** is written by `core/real_cells.footnote()`; now folded under
+  "Notes on this table", it is redundant. Remove at source with the next table rebuild.
+- **Heading hints don't work on touch** (hover/keyboard focus only); tapping a heading sorts.
 - **Table-cell tolerance:** the six original columns are checked with the prose tolerance (±0.5%),
   which let 6/57 moved 1f cells pass before 1f went exact. Same fix for them, measured first.
 - **Card/band dedup, option B**: every card records entity/metric ids in the band's vocabulary,
