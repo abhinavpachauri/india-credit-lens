@@ -134,5 +134,57 @@
     }
   },
   "force_check": {},
+  "explanation_coverage": {
+    "summary": {
+      "lines": 14,
+      "moves": 2,
+      "steady": 12,
+      "artifact": 0,
+      "prices_activity": 0,
+      "cause": 0,
+      "relationship": 0,
+      "unexplained": 2,
+      "no_reading": 0
+    },
+    "moves": [
+      {
+        "entity": "Vehicle Loans",
+        "urn": "icl:nbfc//4.2",
+        "product": "vehicle_loan",
+        "direction": "down",
+        "level": "leaf",
+        "gap_change_pp": -1.2,
+        "noise_pp": 0.35,
+        "threshold_pp": 1.05,
+        "baseline_kind": "parent",
+        "baseline_of": "Retail Loans",
+        "filed_under": "unexplained",
+        "also_holds": {},
+        "prices_activity": "not_decomposable",
+        "prices_detail": {
+          "reason": "no 1f match for this line"
+        }
+      },
+      {
+        "entity": "Power",
+        "urn": "icl:nbfc//2.1.1",
+        "product": "infrastructure_credit",
+        "direction": "up",
+        "level": "leaf",
+        "gap_change_pp": 0.86,
+        "noise_pp": 0.28,
+        "threshold_pp": 0.85,
+        "baseline_kind": "parent",
+        "baseline_of": "Infrastructure",
+        "filed_under": "unexplained",
+        "also_holds": {},
+        "prices_activity": "not_decomposable",
+        "prices_detail": {
+          "reason": "no 1f match for this line"
+        }
+      }
+    ],
+    "no_reading": []
+  },
   "narrative": null
 }

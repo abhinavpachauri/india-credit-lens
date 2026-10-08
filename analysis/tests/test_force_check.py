@@ -147,3 +147,8 @@ def test_roll_up():
     assert fc.roll_up(["faded", "faded"]) == "faded"
     assert fc.roll_up(["faded", "unassessable"]) == "unassessable"
     assert fc.roll_up([]) == "unassessable"
+
+
+def test_monthly_changes_skip_a_hole():
+    gaps = [("2025-01", 1.0), ("2025-02", 2.0), ("2025-06", 9.0), ("2025-07", 9.5)]
+    assert fc.monthly_changes(gaps, lambda p: p) == [("2025-02", 1.0), ("2025-07", 0.5)]

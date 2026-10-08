@@ -1028,7 +1028,7 @@
           "baseline_of": "Personal Loans",
           "baseline": 16.92,
           "gap_pp": 66.31,
-          "noise_pp": 6.63,
+          "noise_pp": 6.19,
           "verdict": "working"
         }
       }
@@ -1100,7 +1100,7 @@
           "baseline_of": "Industry (Micro and Small, Medium and Large)",
           "baseline": 18.23,
           "gap_pp": 15.14,
-          "noise_pp": 1.34,
+          "noise_pp": 1.38,
           "verdict": "working"
         },
         "force_pli_manufacturing__drives__e_S2_2_9": {
@@ -1111,7 +1111,7 @@
           "baseline_of": "Industry (Micro and Small, Medium and Large)",
           "baseline": 18.23,
           "gap_pp": 5.26,
-          "noise_pp": 1.18,
+          "noise_pp": 1.12,
           "verdict": "working"
         },
         "force_pli_manufacturing__drives__e_S2_2_13": {
@@ -1122,7 +1122,7 @@
           "baseline_of": "Industry (Micro and Small, Medium and Large)",
           "baseline": 18.23,
           "gap_pp": 0.63,
-          "noise_pp": 1.23,
+          "noise_pp": 1.13,
           "verdict": "unclear"
         }
       }
@@ -1140,7 +1140,7 @@
           "baseline_of": "Industry (Micro and Small, Medium and Large)",
           "baseline": 18.23,
           "gap_pp": 4.73,
-          "noise_pp": 1.83,
+          "noise_pp": 1.54,
           "verdict": "working"
         }
       }
@@ -1158,7 +1158,7 @@
           "baseline_of": "Non-food Credit",
           "baseline": 18.77,
           "gap_pp": 5.58,
-          "noise_pp": 0.56,
+          "noise_pp": 0.58,
           "verdict": "working"
         }
       }
@@ -1176,7 +1176,7 @@
           "baseline_of": "Bank Credit (II + III)",
           "baseline": 19.08,
           "gap_pp": 126.73,
-          "noise_pp": 12.71,
+          "noise_pp": 11.34,
           "verdict": "working"
         }
       }
@@ -1194,7 +1194,7 @@
           "baseline_of": "Industry (Micro and Small, Medium and Large)",
           "baseline": 18.23,
           "gap_pp": -8.05,
-          "noise_pp": 0.91,
+          "noise_pp": 0.85,
           "verdict": "working"
         }
       }
@@ -1219,7 +1219,7 @@
           "baseline_of": "Non-food Credit",
           "baseline": 18.77,
           "gap_pp": -1.55,
-          "noise_pp": 0.62,
+          "noise_pp": 0.65,
           "verdict": "contradicted"
         }
       }
@@ -1237,7 +1237,7 @@
           "baseline_of": "Personal Loans",
           "baseline": 16.92,
           "gap_pp": 2.82,
-          "noise_pp": 0.4,
+          "noise_pp": 0.37,
           "verdict": "working"
         }
       }
@@ -1276,6 +1276,133 @@
         }
       }
     }
+  },
+  "explanation_coverage": {
+    "summary": {
+      "lines": 84,
+      "moves": 6,
+      "steady": 78,
+      "artifact": 0,
+      "prices_activity": 0,
+      "cause": 0,
+      "relationship": 0,
+      "unexplained": 6,
+      "no_reading": 0
+    },
+    "moves": [
+      {
+        "entity": "Food Credit",
+        "urn": "icl:sibc/Statement1/II",
+        "product": "food_credit",
+        "direction": "up",
+        "level": "leaf",
+        "gap_change_pp": 38.16,
+        "noise_pp": 11.34,
+        "threshold_pp": 34.02,
+        "baseline_kind": "parent",
+        "baseline_of": "Bank Credit (II + III)",
+        "filed_under": "unexplained",
+        "also_holds": {},
+        "prices_activity": "not_decomposable",
+        "prices_detail": {
+          "reason": "no 1f match for this line"
+        }
+      },
+      {
+        "entity": "Housing (Including Priority Sector Housing)",
+        "urn": "icl:sibc/Statement1/4.2",
+        "product": "housing",
+        "direction": "down",
+        "level": "leaf",
+        "gap_change_pp": -0.83,
+        "noise_pp": 0.23,
+        "threshold_pp": 0.68,
+        "baseline_kind": "parent",
+        "baseline_of": "Personal Loans",
+        "filed_under": "unexplained",
+        "also_holds": {},
+        "prices_activity": "does_not_hold",
+        "prices_detail": {
+          "nominal_change_pp": -0.14,
+          "deflator_change_pp": 0.37
+        }
+      },
+      {
+        "entity": "Advances against Fixed Deposits (Including FCNR (B), NRNR Deposits etc.)",
+        "urn": "icl:sibc/Statement1/4.3",
+        "product": "personal_loan",
+        "direction": "up",
+        "level": "leaf",
+        "gap_change_pp": 27.89,
+        "noise_pp": 2.75,
+        "threshold_pp": 8.25,
+        "baseline_kind": "parent",
+        "baseline_of": "Personal Loans",
+        "filed_under": "unexplained",
+        "also_holds": {},
+        "prices_activity": "does_not_hold",
+        "prices_detail": {
+          "nominal_change_pp": 28.58,
+          "deflator_change_pp": 0.37
+        }
+      },
+      {
+        "entity": "Textiles",
+        "urn": "icl:sibc/Statement2/2.4",
+        "product": "industry",
+        "direction": "up",
+        "level": "aggregate",
+        "gap_change_pp": 3.24,
+        "noise_pp": 0.78,
+        "threshold_pp": 2.33,
+        "baseline_kind": "parent",
+        "baseline_of": "Industry (Micro and Small, Medium and Large)",
+        "filed_under": "unexplained",
+        "also_holds": {},
+        "prices_activity": "not_decomposable",
+        "prices_detail": {
+          "reason": "no 1f match for this line"
+        }
+      },
+      {
+        "entity": "Other Industries",
+        "urn": "icl:sibc/Statement2/2.19",
+        "product": "industry",
+        "direction": "down",
+        "level": "leaf",
+        "gap_change_pp": -6.62,
+        "noise_pp": 1.96,
+        "threshold_pp": 5.88,
+        "baseline_kind": "parent",
+        "baseline_of": "Industry (Micro and Small, Medium and Large)",
+        "filed_under": "unexplained",
+        "also_holds": {},
+        "prices_activity": "not_decomposable",
+        "prices_detail": {
+          "reason": "no 1f match for this line"
+        }
+      },
+      {
+        "entity": "Fertiliser",
+        "urn": "icl:sibc/Statement2/2.9.1",
+        "product": "industry",
+        "direction": "up",
+        "level": "leaf",
+        "gap_change_pp": 12.78,
+        "noise_pp": 3.36,
+        "threshold_pp": 10.07,
+        "baseline_kind": "parent",
+        "baseline_of": "Chemicals and Chemical Products",
+        "filed_under": "unexplained",
+        "also_holds": {},
+        "prices_activity": "does_not_hold",
+        "prices_detail": {
+          "nominal_change_pp": 12.29,
+          "deflator_change_pp": 0.28
+        }
+      }
+    ],
+    "no_reading": []
   },
   "narrative": null
 }

@@ -858,5 +858,101 @@
       "reason": "no drives/suppresses/amplifies edge: the model does not say which way it pushes"
     }
   },
+  "explanation_coverage": {
+    "summary": {
+      "lines": 31,
+      "moves": 3,
+      "steady": 23,
+      "artifact": 0,
+      "prices_activity": 0,
+      "cause": 0,
+      "relationship": 0,
+      "unexplained": 3,
+      "no_reading": 5
+    },
+    "moves": [
+      {
+        "entity": "DC other value",
+        "urn": "icl:atm_pos/spend_value/dc_other_txn_val",
+        "product": "debit_card",
+        "direction": "down",
+        "level": "leaf",
+        "gap_change_pp": -13.7,
+        "noise_pp": 4.56,
+        "threshold_pp": 13.68,
+        "baseline_kind": "none",
+        "baseline_of": null,
+        "filed_under": "unexplained",
+        "also_holds": {},
+        "prices_activity": "not_decomposable",
+        "prices_detail": {
+          "reason": "no 1f match for this line"
+        }
+      },
+      {
+        "entity": "DC POS cash withdrawal value",
+        "urn": "icl:atm_pos/spend_value/dc_pos_withdrawal_val",
+        "product": "debit_card",
+        "direction": "up",
+        "level": "leaf",
+        "gap_change_pp": 19.23,
+        "noise_pp": 4.01,
+        "threshold_pp": 12.02,
+        "baseline_kind": "none",
+        "baseline_of": null,
+        "filed_under": "unexplained",
+        "also_holds": {},
+        "prices_activity": "not_decomposable",
+        "prices_detail": {
+          "reason": "no 1f match for this line"
+        }
+      },
+      {
+        "entity": "DC other volume",
+        "urn": "icl:atm_pos/spend_volume/dc_other_txn_vol",
+        "product": "debit_card",
+        "direction": "down",
+        "level": "leaf",
+        "gap_change_pp": -10.46,
+        "noise_pp": 3.36,
+        "threshold_pp": 10.08,
+        "baseline_kind": "none",
+        "baseline_of": null,
+        "filed_under": "unexplained",
+        "also_holds": {},
+        "prices_activity": "not_decomposable",
+        "prices_detail": {
+          "reason": "no 1f match for this line"
+        }
+      }
+    ],
+    "no_reading": [
+      {
+        "entity": "ATMs (on-site + off-site)",
+        "urn": "icl:atm_pos/infrastructure/atms",
+        "reason": "no YoY signal for this line in signals.db"
+      },
+      {
+        "entity": "Credit card spend (value)",
+        "urn": "icl:atm_pos/spend_value/cc_spend_value",
+        "reason": "no YoY signal for this line in signals.db"
+      },
+      {
+        "entity": "Debit card spend (value)",
+        "urn": "icl:atm_pos/spend_value/dc_spend_value",
+        "reason": "no YoY signal for this line in signals.db"
+      },
+      {
+        "entity": "Credit card spend (volume)",
+        "urn": "icl:atm_pos/spend_volume/cc_spend_volume",
+        "reason": "no YoY signal for this line in signals.db"
+      },
+      {
+        "entity": "Debit card spend (volume)",
+        "urn": "icl:atm_pos/spend_volume/dc_spend_volume",
+        "reason": "no YoY signal for this line in signals.db"
+      }
+    ]
+  },
   "narrative": null
 }

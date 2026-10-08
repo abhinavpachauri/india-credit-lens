@@ -9,9 +9,10 @@ HYPOTHESES — written to analysis/s4_proposals/{period}.json with status 'propo
 NEVER auto-enter the model. A human (or a later session) sources + promotes them.
 
 Detection (deterministic):
-  1. Unexplained movement — an entity whose live signal is moving but which no force/channel
-     points at (no incoming drives/suppresses/amplifies edge and not in any force_instance scope).
-  2. Authored-vs-observed mismatch — a force authored 'active' that S3 computes as not firing.
+  1. Unexplained movement — read from S3: the moves SYSTEM_MODEL_SPEC §16 Step 6a could not
+     account for (a line moved against its group beyond its own bar, and no artifact,
+     price/activity change, working cause or relationship explains it).
+  2. Authored-vs-observed mismatch — read from S3: a force the data disputes (`in_doubt`).
   3. Unconfirmed cross-link — a derived stock↔flow candidate whose both sides are live but which
      is not yet in composition.json.
 
@@ -35,7 +36,6 @@ from core import manifest  # noqa: E402
 
 ROOT = gs.ROOT
 OUT_DIR = ROOT / "analysis" / "s4_proposals"
-DRIVER_EDGES = {"drives", "suppresses", "amplifies"}
 
 SYSTEM = (
     "You are a credit-systems analyst proposing NEW causal explanations for India Credit Lens. "
@@ -68,31 +68,40 @@ def latest_state(cfg):
     return gs.load_json(files[-1]) if files else None
 
 
+# How many unexplained moves one proposal call is shown. The list itself is never capped: a cut
+# here prints how many it left out, ranked so the largest moves (against their own bar) go first.
+PROMPT_MAX = 15
+
+
 def detect_unexplained(pipeline, cfg):
-    model = gs.load_json(cfg["model"])
+    """S4's two inputs, read from S3 rather than detected here (COMPOSITION_SPEC §8, v3.1).
+
+    unexplained: the moves SYSTEM_MODEL_SPEC §16 Step 6a could not account for — lines that
+    moved against their group by more than their own bar, after artifacts, prices/activity,
+    working causes and relationships were tried. The detection this replaced counted lines
+    that were merely growing, called any attached arrow an explanation, and stopped at 15.
+    mismatches: forces the data disputes (`in_doubt` under force_check v3.1).
+    """
     state = latest_state(cfg)
     if not state:
         return [], None
-    ent = {n.get("urn"): n for n in model["nodes"] if n.get("tier") == "entity"}
-    id2urn = {n["id"]: n.get("urn") for n in ent.values()}
-    # urns that already have a driver: behavioral-edge target or force_instance scope
-    driven = set()
-    for e in model["edges"]:
-        if e.get("type") in DRIVER_EDGES and e.get("to") in id2urn:
-            driven.add(id2urn[e["to"]])
-    for fi in model.get("force_instances", []):
-        driven.update(fi.get("scope_entities", []))
-    unexplained = []
-    for urn, st in state["entity_states"].items():
-        n = ent.get(urn)
-        tags = (n or {}).get("concept_tags") or {}
-        # only LEAF entities — aggregates move mechanically from their children, not from a force
-        if (st["direction"] != 0 and urn not in driven and st.get("observed", 0) > 0
-                and tags.get("product") and n and n.get("structural_role") == "leaf"):
-            unexplained.append({"entity": n["label"], "urn": urn, "product": tags["product"],
-                                "direction": "rising" if st["direction"] > 0 else "falling"})
+    cov = state.get("explanation_coverage")
+    if cov is None:
+        # Loud, not empty: a state written before Step 6a would read as "nothing unexplained".
+        raise RuntimeError(f"{pipeline}: {state['_meta']['period']} state has no explanation_coverage; "
+                           f"re-run generate_system_state for it")
+    moves = sorted((m for m in cov["moves"] if m["filed_under"] == "unexplained"),
+                   key=lambda m: -abs(m["gap_change_pp"]) / max(m["threshold_pp"], 1e-9))
+    unexplained = [{"entity": m["entity"], "urn": m["urn"], "product": m.get("product"),
+                    "direction": "rising" if m["direction"] == "up" else "falling",
+                    "against": m["baseline_of"] or "its own earlier growth",
+                    "gap_change_pp": m["gap_change_pp"], "prices": m["prices_activity"]}
+                   for m in moves]
+    if len(unexplained) > PROMPT_MAX:
+        print(f"  · {pipeline}: {len(unexplained)} unexplained moves; the proposal call sees the "
+              f"largest {PROMPT_MAX}, {len(unexplained) - PROMPT_MAX} left out", file=sys.stderr)
     mismatches = state["system_observations"].get("authored_vs_observed_mismatches", [])
-    return unexplained[:15], mismatches
+    return unexplained[:PROMPT_MAX], mismatches
 
 
 def detect_cross():

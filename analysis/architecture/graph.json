@@ -17,6 +17,20 @@
       "reads": {},
       "writes": {}
     },
+    "core/coverage": {
+      "doc_claims": [],
+      "imports": [
+        "core/force_check",
+        "core/generate_skeleton",
+        "signals/dominance"
+      ],
+      "invokes": [],
+      "path": "analysis/core/coverage.py",
+      "reads": {
+        "analysis/signals/registry.json": "low"
+      },
+      "writes": {}
+    },
     "core/cuts": {
       "doc_claims": [],
       "imports": [],
@@ -123,6 +137,7 @@
         }
       ],
       "imports": [
+        "core/coverage",
         "core/force_check",
         "core/generate_skeleton",
         "core/manifest"

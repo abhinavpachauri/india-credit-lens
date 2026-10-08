@@ -122,8 +122,20 @@ def growth_series(pipeline: str, model: dict, con=None) -> dict[str, dict[str, f
 # ── 2. Baseline: chosen by the entity's place in the skeleton ────────────────────────────
 
 def _months(d: str) -> int:
-    y, m, _ = (int(x) for x in d.split("-"))
+    y, m = (int(x) for x in d.split("-")[:2])
     return y * 12 + m - 1
+
+
+def monthly_changes(gaps: list[tuple[str, float]], data_month) -> list[tuple[str, float]]:
+    """(period, change) for each pair of readings ONE data month apart, and no others.
+
+    A line's wobble is its typical month-to-month change. SIBC's history has holes (Sep–Dec
+    2025 never published) and NBFC reads irregularly, so a change across a hole spans several
+    months and is not comparable: counted, it made Jan 2026 look like 32 SIBC lines moved at
+    once. Shared by force_check (Step 3) and coverage (Step 6a): one definition of "wobble".
+    """
+    return [(b[0], b[1] - a[1]) for a, b in zip(gaps, gaps[1:])
+            if _months(data_month(b[0])) - _months(data_month(a[0])) == 1]
 
 
 def window_of(force: dict) -> tuple[int, int] | None:
@@ -167,19 +179,19 @@ def edge_history(growth: dict[str, float], base: dict[str, float], periods: list
 
 
 def judge(gaps: list[tuple[str, float]], period: str, expected: int,
-          in_window: str) -> dict:
+          in_window: str, data_month=lambda p: p) -> dict:
     """One edge at one period. `gaps` is the edge's history up to and including `period`."""
     upto = [(p, g) for p, g in gaps if p <= period]
     if not upto or upto[-1][0] != period:
         return {"verdict": "unassessable", "reason": "no growth or baseline reading this period"}
-    deltas = [abs(b[1] - a[1]) for a, b in zip(upto, upto[1:])]
+    deltas = [abs(d) for _, d in monthly_changes(upto, data_month)]
     gap = upto[-1][1]
     out = {"gap_pp": round(gap, 2)}
     if in_window != "in_window":
         return {**out, "verdict": in_window}
     if len(deltas) < MIN_HISTORY:
         return {**out, "verdict": "unassessable",
-                "reason": f"{len(deltas)} reading-to-reading changes; the wobble needs {MIN_HISTORY}"}
+                "reason": f"{len(deltas)} month-to-month changes; the wobble needs {MIN_HISTORY}"}
     noise = median(deltas)
     out["noise_pp"] = round(noise, 2)
     if abs(gap) <= noise:
@@ -240,7 +252,7 @@ def check(pipeline: str, model: dict, period: str, series: dict[str, dict[str, f
                     continue
                 own_before = g[before[-1]]
             gaps = edge_history(g, series.get(base_id, {}), periods, own_before)
-            res = judge(gaps, p, DRIVER_SIGN[e["type"]], window_state(force, p))
+            res = judge(gaps, p, DRIVER_SIGN[e["type"]], window_state(force, p), data_month)
             out[e.get("id", f"{e['from']}->{e['to']}")] = {
                 "entity": node["label"], "type": e["type"],
                 "growth": None if g.get(p) is None else round(g[p], 2),

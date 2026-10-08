@@ -33,6 +33,7 @@ sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / 
 from core import generate_skeleton as gs
 from core import manifest  # noqa: E402
 from core import force_check  # noqa: E402
+from core import coverage  # noqa: E402
 
 DB = gs.ANALYSIS / "signals" / "signals.db"
 # Direction map covering every status the L1 compute layer can emit: registry status_rules
@@ -392,9 +393,8 @@ def main():
         return 1
 
     weights = load_entity_weights(cfg)
-    checked = force_check.check(
-        args.pipeline, model, args.period,
-        force_check.growth_series(args.pipeline, model), force_check.periods_of(args.pipeline))
+    series, periods = force_check.growth_series(args.pipeline, model), force_check.periods_of(args.pipeline)
+    checked = force_check.check(args.pipeline, model, args.period, series, periods)
     # §16 Step 3: the manifest says which rule judges this pipeline's forces. Under v3.1 the
     # force states, force edges, dominant forces and S4's mismatches all come from `checked`;
     # under v3.0 it is still emitted, beside the old states, for comparison.
@@ -402,6 +402,10 @@ def main():
     state = compute(model, sig_dir, weights, checked if rule == "v3.1" else None)
     state["mix_states"] = mix_states(args.pipeline, args.period, model)
     state["force_check"] = checked
+    # §16 Step 6a: how much of this period's movement the model accounts for. S4 reads its
+    # unexplained list from here (COMPOSITION_SPEC §8) and keeps no detection of its own.
+    state["explanation_coverage"] = coverage.for_period(args.pipeline, model, args.period,
+                                                        series, periods, checked)
     out = {
         "_meta": {
             "pipeline": args.pipeline, "period": args.period,
@@ -420,6 +424,10 @@ def main():
     print(f"  dominant forces ({len(o['dominant_forces'])}): {o['dominant_forces']}")
     print(f"  binding constraints (active '-' edges): {len(o['binding_constraints'])}")
     print(f"  active loops: reinforcing={o['active_reinforcing_loops']} balancing={o['active_balancing_loops']}")
+    c = state["explanation_coverage"]["summary"]
+    print(f"  coverage: {c['moves']} moves of {c['lines']} lines — artifact {c['artifact']}, "
+          f"prices/activity {c['prices_activity']}, cause {c['cause']}, relationship "
+          f"{c['relationship']}, unexplained {c['unexplained']} (no reading {c['no_reading']})")
     if rule == "v3.0":
         doubt = [k for k, v in state["force_check"].items() if v["in_doubt"]]
         if doubt:

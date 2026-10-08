@@ -560,16 +560,31 @@ no detection of its own. The other "coverage" numbers in the code (1f match shar
 parts-of-total on table rows, construct measurements observed) measure data, not explanation, and
 are untouched.
 
-*Population.* Every entity that is a leaf of its decomposition (primary leaves and lens members),
-derived from the skeleton, and has a growth reading from the Step 3 resolver. A leaf without a
-reading is listed as `no_reading` with its reason, never dropped. Aggregates are excluded: they
-move mechanically from their children (Step 2), which is composition, not explanation.
+*Population.* Every entity except a root (leaves, groups and lens members), derived from the
+skeleton. A line without a usable reading is listed in `no_reading` with its reason, never
+dropped. *Changed while building (2026-10-08):* the first draft counted leaves only, on the
+argument that aggregates move mechanically from their children. But moves are measured against
+the line's group, so a force acting on a group (Services, All Engineering) cancels out of every
+member's move and can only explain the **group** beating its own parent. Leaves-only made every
+force on a group uncountable; groups are counted for that reason.
 
-*What counts as a move.* A line **moved against its group** this period when its gap to its
-baseline (Step 3: same resolver, same baseline rule, same `noise_pp`) changed since the previous
-reading by more than `noise_pp`. Sign of the change = direction of the move. One computation
-shared with Step 3, never a second definition of "baseline" or "noise". A line growing steadily
-in step with its group is **not** a move and needs no explanation.
+*What counts as a move.* The line's gap to its baseline changed since **the month before** by
+more than `MOVE_FACTOR` (3) × its typical month-to-month change. Baseline: its parent when it is
+an additive child, else the root of its own tree, else (no reading for either, e.g. payments'
+group totals today) its own earlier growth, recorded as `baseline_kind: none`. The typical change
+is the median |month-to-month change| over the line's own history (the Step 3 wobble, from the
+same shared function, `force_check.monthly_changes`). A line growing steadily with its group is
+**not** a move and needs no explanation.
+
+- **Why 3×, not 1×** (measured 2026-10-08 over every reading): at 1× half of any line's
+  readings beat its own median by construction — 47% of SIBC line-readings, 43% of payments.
+  2× flags 20% / 18%; 3× flags 11% / 10%, so a move is roughly a one-in-ten event per line,
+  close to the usual ~2σ bar for "unusual". One named constant (`coverage.MOVE_FACTOR`).
+- **Only changes one data month apart count**, for the wobble and for the move. SIBC never
+  published Sep–Dec 2025 and NBFC reads irregularly; a change across a hole spans several months
+  and is not comparable to a monthly wobble. Counted, it made Jan 2026 show 32 SIBC moves and
+  NBFC Mar 2026 show 11. After a hole the line reads `no_reading: no reading for the month before`.
+  Step 3 uses the same rule for its wobble (one more contradicted SIBC reading as a result).
 
 *What counts as explained*, tried in this order; a move is filed under the **first** that holds,
 and every one that holds is listed:
@@ -611,6 +626,22 @@ per-period summary is shown. Controls: a line with an injected step change must 
 a line moving in step with its parent must not; a move with a matched working force must file
 under `cause`; the same move with the force's sign flipped must file under `unexplained`.
 Logged in `ai_pm_register.json`.
+
+*Built 2026-10-08* (`core/coverage.py`, tests `tests/test_coverage.py`; `--history` prints the
+summary for every reading). Emitted as `explanation_coverage` in every
+`system_state_{period}.json`; S4's `detect_unexplained` now reads it and raises on a state
+without it (a missing count must not read as "nothing unexplained"). The prompt still sees at
+most 15 moves, ranked by size against their own bar, and prints how many it left out.
+
+- **The starting point.** SIBC, every month from Apr 2025: 4–15 moves of 84 lines; prices and
+  activity explain 2 in total, working causes 5, relationships 1; the rest are unexplained.
+  Aug 2026: 6 moves (Food Credit, Housing slowing against personal loans, loans against
+  deposits, Textiles, Other Industries, Fertiliser), all unexplained. Payments: 1–7 moves a month,
+  all unexplained except two one-bank artifacts (Nov 2025, Jun 2026). NBFC: 2 a month, unexplained.
+- **Controls.** The four above are unit tests, plus standing force, unworking force, prices
+  too small or the wrong way, no 1f match, artifact filed first with others still listed,
+  relationship, group counted, hole. Mutations (factor 0, standing allowed, sign ignored) each
+  fail a test.
 
 **Output:** structured JSON with `entity_states` (incl. propagated aggregates), `force_states`, `edge_states`, `loop_states`, `system_observations`, and a `narrative: null` slot the LLM fills at Stage 5.X.
 
