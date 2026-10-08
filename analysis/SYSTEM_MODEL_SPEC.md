@@ -1,5 +1,6 @@
 # System Model Specification — India Credit Lens
-> Version 3.0 | June 2026 | Domain-agnostic
+> Version 3.1 | October 2026 | Domain-agnostic
+> v3.1 (2026-10-08): force state judged against a baseline, with timing fields (§10.1, §16 Step 3); explanation coverage computed in S3 and read by S4 (§16 Step 6a). Specced, not yet built.
 
 This document is the canonical definition for all system models in the India Credit Lens pipeline.
 Read it before any FOUNDATION or UPDATE pass on any pipeline's `system_model.json`.
@@ -249,8 +250,41 @@ Five tiers. `force`, `entity`, `risk`, `opportunity`, `gap`.
 Exogenous cause, not measurable in the CSV.
 `force_type`: `policy_action` | `macro_factor` | `structural_shift` | `institutional_behavior`.
 `domain` = `registry_domain` of the primary affected entity.
-`signal_evidence`: L1 signal IDs confirming the force operates.
-**Required:** `id, tier, label, description, claim_type, domain, force_type, non_observable_reason, signal_evidence, source, source_url, source_verified_date, source_excerpt, source_rationale, status`
+`signal_evidence`: L1 signal IDs a reader should look at for this force. Pointers for review and
+narration; since v3.1 they **do not decide** the force's state (§16 Step 3).
+**Timing (v3.1, 2026-10-08):** a force is either *dated* or *standing*, never neither.
+- Dated: `starts` (ISO date the instrument or event took effect: the effective date, not the
+  announcement), `delay_months` (how long before the effect can show in the data),
+  `fades_after_months` (how long after `starts + delay` the effect should stay visible; after it
+  the line has settled at a new normal and the force no longer explains a gap).
+- Standing: `standing: true` and no dates. For slow conditions with no single start
+  (formalisation, a price trend). Always in its window.
+
+The dates are the editor's, filled from the force's own source text at sourcing time, and live
+in fields because a date inside `label` ("eff. 1 Apr 2025") is readable by a person and by no check.
+
+**`timing_rule`** names how the force works, and the rule, not a per-force judgment, sets
+`delay_months` and `fades_after_months` (user, 2026-10-08):
+
+| `timing_rule` | delay | visible for | why |
+|---|---|---|---|
+| `relabelling` | 0 | 12 | a limit change moves loans already on the book into a category on day one; YoY carries the jump exactly 12 months, then the base absorbs it |
+| `capital_cost` | 3 | 24 | banks reprice and slow new lending over quarters |
+| `eligibility` | 3 | 24 | newly eligible borrowers build up gradually |
+| `guarantee_window` | 1 | scheme period + 12 | lending happens while it is open; YoY carries it a year more |
+| `exit` | 0 | 12 | a one-off step, then in the base |
+| `long_lag` | from the force's own text | 24 | approvals turn into drawdowns years later |
+| `standing_regime` | — | standing | a rule in force since before our data starts (2020–22 instruments) |
+| `trend` | — | standing | a slow condition with no single start |
+
+A force whose delay or window differs from its rule says why in `source_rationale`.
+**A standing force explains a steady gap, never a sudden move** (§16 Step 6a): "zero MDR since
+2020" cannot be the reason something changed in August 2026.
+
+Written 2026-10-08 for all 20 forces (13 SIBC, 7 payments). At SIBC 2026-09-30 (Aug 2026 data),
+4 dated forces had faded (the Nov 2023 unsecured risk weights and the three PSL 2025 ceilings),
+and every live payments force is standing, so payments has no dated cause in window.
+**Required:** `id, tier, label, description, claim_type, domain, force_type, non_observable_reason, signal_evidence, source, source_url, source_verified_date, source_excerpt, source_rationale, status`, and either `starts + delay_months + fades_after_months` or `standing: true`
 
 ### 10.2 `entity`
 A node in the source code hierarchy.
@@ -395,13 +429,181 @@ personal loans **drifting**; priority sector **drifting** toward Micro & Small E
 is in fact `steered`, and toward which child. It qualifies, it does not fire on its own —
 consistent with Step 2a, coherence never suppresses a direction.
 
-**Step 3 — Force states.** For each force, read `signal_evidence` → `active` | `latent`.
+**Step 3 — Force states: a check that can fail (v3.1, specced 2026-10-08, not yet built).**
 
-**Step 4 — Behavioral edge states.** For each behavioral edge (polarity `+`/`-`/`~`): `active` | `dominant` | `dormant` | `reversed` per from-node direction and polarity.
+*What it replaces, and why.* v3.0 read `signal_evidence` and called a force `active` if **any**
+evidence signal had a direction. About 80% of SIBC signal rows read up in a given month
+(Aug 2026: 864 of 1,064), so every force was active every month: 13/13 SIBC, 7/7 payments, every
+period. Step 4 then judged each force→entity edge against **zero**, so a force that "drives" a
+line passed whenever the line grew at all, and a force that "suppresses" one failed whenever it
+grew at all. Wrong in both directions. Aug 2026, v3.0 against the built v3.1 check:
+
+| force (polarity) | line | reading | v3.0 says | v3.1 says |
+|---|---|---|---|---|
+| RBI unsecured risk weights, Nov 2023 (−) | Credit card outstanding | +3.6% vs Personal Loans +16.9% | `reversed` | `faded` (read `working` at every assessable reading inside its window) |
+| KCC collateral-free limit, Jan 2025 (+) | Agriculture | +17.2% vs Non-food credit +18.8% | `active` | `contradicted`, **in doubt** |
+| PSL Directions 2025 (+) | Export credit | −9.7% | `active` | `faded` (window Apr 2025 – Mar 2026) |
+| Gold price surge (+) | Loans against gold | +83.2% vs Personal Loans +16.9% | `active` | `working` |
+
+*Correction, 2026-10-08:* an earlier draft of this table had NBFC risk weights → Services as
+contradicted, on "Services +4.0%". That 4.0 was `sibc-sectors-positive-yoy-count` (the number of
+growing sectors), read by a quick query that took the first signal on the node whose id contained
+"yoy". Services grew 24.4% against 18.8%, and the force reads `working`. The built check reads
+growth only through the declared resolver below, which is why that query was the wrong tool.
+
+*The rule.* A force is judged through its force→entity edges, and each edge asks one question:
+**did the line beat its baseline in the direction the force predicts?**
+
+1. **Growth reading.** The entity's YoY at the period, from `signals.db`, through **one resolver**
+   (`force_check.growth_series`) joined through the registry's own declarations: a
+   `csv_sector_yoy` / `csv_total_yoy` row for the node's code, else the node's row in its
+   parent's `*_scan_yoy`. The cut tables read the same stored rows. Never picked per force. No
+   reading → the edge is `unassessable` with its reason; it never silently drops (absences stay
+   visible).
+2. **Baseline**, chosen by the entity's place in the skeleton, never per force:
+
+   | entity's place | baseline | why |
+   |---|---|---|
+   | child in an additive decomposition | its parent's YoY, same period | "faster than its group" is what a force acting on one part predicts |
+   | member of a non-additive lens (`additive: false`, e.g. PSL), force dated | its own YoY at the last reading before `starts` | lens members overlap and sum to nothing; the only clean comparison is the line against itself |
+   | non-additive member with a standing force, or no parent at all | the pipeline root's YoY (SIBC: bank credit; payments: its total) | the widest group available |
+
+3. **Gap** = growth − baseline, in percentage points. Expected sign: `drives` and `amplifies` →
+   positive; `suppresses` → negative. `~` polarity has no expected sign and is `unassessable`.
+4. **Noise band**, from the line's own history, never a constant: the median absolute
+   reading-to-reading change of this same gap over the line's history (the self-calibrating
+   idiom of Step 2b and `proximity.typical_move`). Stored per edge as `noise_pp`. The exact
+   statistic is confirmed in the measurement below and the choice recorded.
+5. **Window.** Dated force: in window from `starts + delay_months` to that plus
+   `fades_after_months`. Before → `not_yet_due`; after → `faded`. Standing force: always in window.
+
+*Edge verdicts:* `working` (in window, gap the expected sign, |gap| > `noise_pp`) ·
+`contradicted` (in window, gap the opposite sign, |gap| > `noise_pp`) · `unclear` (|gap| ≤
+`noise_pp`) · `not_yet_due` · `faded` · `unassessable` (with reason).
+
+*Force verdict*, over its in-window, assessed edges: `working` if working edges outnumber
+contradicted ones; `contradicted` if the reverse; otherwise `unclear`. If no edge is in window, the
+window verdict carries through (`not_yet_due` / `faded`).
+
+*Persistence.* A force authored `active` whose verdict is `contradicted` for `MIX_PERSISTENCE`
+(2) consecutive readings becomes **`in_doubt`**. Same constant as Step 2b, imported, not
+copied. Readings, not months: SIBC history has gaps, and a gap does not count as agreement.
+`in_doubt` replaces v3.0's `mismatch` and is what S4 receives as "authored vs observed"
+(COMPOSITION_SPEC §8): S4 then works on forces the data disputes, not on lines that merely grow.
+
+*Output per force:* `verdict`, `in_doubt`, `window`, and per edge `growth`, `baseline`,
+`baseline_kind`, `gap_pp`, `noise_pp`, `verdict`. Every number here is a stored reading or a
+difference of two, so prose can quote the operands.
+
+*Scope.* Force→entity edges only. Entity→entity edges keep the Step 4 rule until the
+relationships inside a pipeline are redesigned (the next step of the same plan).
+Force nodes feed edges downstream (`creates_opportunity`, `creates_risk`) with direction +1 only
+when their verdict is `working`, so opportunities stop firing off a force the data does not support.
+
+*Measured before it is trusted* (DECISIONS: no gate change without catch and false-rejection rates):
+old vs new over **every period × every force**, both pipelines, shown side by side; known-good
+control = the Nov 2023 risk-weight force reads `working` on credit cards **in the periods inside
+its window** (Feb 2024 – Feb 2026) and `faded` after it; known-bad control = an
+injected force pointing at a falling line reads `contradicted`; the count of forces whose answer
+changes is reported, not sampled. Logged in `ai_pm_register.json`.
+
+*Built 2026-10-08* (`core/force_check.py`, tests `tests/test_force_check.py`). Emitted as
+`force_check` in each `system_state_{period}.json` **beside** the v3.0 `force_states`, read by
+nothing yet; the switch waits for the editor's review of
+`python3 analysis/core/force_check.py --pipeline {p} --history`. Measured over every reading:
+
+- **SIBC, 13 forces × 25 readings (325).** v3.0: 237 active, 88 latent. v3.1: 106 working,
+  20 contradicted, 11 unclear, 27 not yet due, 22 faded, 139 unassessable; 14 in doubt.
+  Unassessable is mostly honest: SIBC has YoY only from Jan 2025 data (2024 has no year-ago
+  figure) and the wobble needs 3 changes, so the check judges from about Apr 2025.
+- **Payments, 7 forces × 32 readings (224): all unassessable.** Two reasons, both real gaps:
+  the parent totals (cards in force, credit/debit card spend) carry **no YoY signal** in
+  `signals.db`, so no payments line has a group to be compared with; and 3 payments forces plus
+  SIBC's ECLGS 5.0 have **no driver edge**, so the model never said which way they push.
+- **Controls.** Known-good: the Nov 2023 risk weights read `working` at every assessable
+  reading in their window, `faded` after. Known-bad (unit test): a force driving a falling line
+  reads `contradicted` and `in_doubt`. Mutation check: forcing every verdict to `working` fails
+  2 tests; reverting to the zero baseline fails 4.
+- **What it found.** KCC → agriculture is contradicted at 12 of its 13 assessable readings
+  (agriculture grows slower than non-food credit) and in doubt now. Vehicle scrappage was
+  contradicted for its first 5 assessable readings, working since. PSL renewable was
+  contradicted twice inside its window.
+
+*Migration.* Done 2026-10-08: all 20 forces carry `timing_rule` and either dates or
+`standing: true` (§10.1). The validator check (§18) can now be switched on.
+
+**Step 4 — Behavioral edge states.** Force→entity edges: Step 3. Other behavioral edges (polarity
+`+`/`-`/`~`): `active` | `dominant` | `dormant` | `reversed` per from-node direction and polarity
+(v3.0 rule, zero baseline; known weak, redesign pending).
 
 **Step 5 — Loop states.** `active_reinforcing` | `active_balancing` | `partial` | `dormant` from participating edge states.
 
 **Step 6 — System observations.** `dominant_forces`, `binding_constraints` (active `-` edges), `active_reinforcing_loops`, `active_balancing_loops`.
+
+**Step 6a — Explanation coverage: how much of this period's movement the model accounts for
+(v3.1, specced 2026-10-08, not yet built).**
+
+*What it replaces.* The only existing measure of "unexplained" is S4's `detect_unexplained`
+(`run_inference.py`), and it answers the wrong question three ways: it counts a leaf that is
+**moving at all** (so Housing, growing at its usual pace, acceleration −0.14, is "unexplained");
+it counts a leaf as explained when **any** driver edge or force scope touches it, working or not;
+and it **stops at 15** and lives only inside an S4 run, so nothing can track it across periods.
+This step computes the count properly, once, in S3; S4 reads it (COMPOSITION_SPEC §8) and keeps
+no detection of its own. The other "coverage" numbers in the code (1f match share on tables,
+parts-of-total on table rows, construct measurements observed) measure data, not explanation, and
+are untouched.
+
+*Population.* Every entity that is a leaf of its decomposition (primary leaves and lens members),
+derived from the skeleton, and has a growth reading from the Step 3 resolver. A leaf without a
+reading is listed as `no_reading` with its reason, never dropped. Aggregates are excluded: they
+move mechanically from their children (Step 2), which is composition, not explanation.
+
+*What counts as a move.* A line **moved against its group** this period when its gap to its
+baseline (Step 3: same resolver, same baseline rule, same `noise_pp`) changed since the previous
+reading by more than `noise_pp`. Sign of the change = direction of the move. One computation
+shared with Step 3, never a second definition of "baseline" or "noise". A line growing steadily
+in step with its group is **not** a move and needs no explanation.
+
+*What counts as explained*, tried in this order; a move is filed under the **first** that holds,
+and every one that holds is listed:
+
+| order | kind | holds when | source |
+|---|---|---|---|
+| 1 | `artifact` | the move is dominated by one reporting entity, merger or reclassification | `signals/dominance.py` |
+| 2 | `prices_activity` | the line's 1f deflator YoY (or its output growth) changed in the same direction and covers at least half the change in its nominal YoY | 1f operands (`deflator_yoy`, `credit_yoy`) and `*-output-growth` |
+| 3 | `cause` | a **dated** force whose edge to this line is `working` (Step 3), in window, with expected sign matching the move. A standing force never files a move here: it explains a steady gap, not a change (§10.1) | Step 3 |
+| 4 | `relationship` | an entity→entity edge into this line whose state matches the move | Step 4 (zero until the in-pipeline relationships are built; honest, not hidden) |
+| — | `unexplained` | none of the above | → S4 |
+
+The "at least half" threshold for `prices_activity` is a starting value, confirmed in the
+measurement below and the choice recorded. A line with no 1f match cannot be tested for row 2
+and says so (`prices_activity: not_decomposable`), so "no price effect" and "price effect not
+measurable" never read the same.
+
+*Not an explanation:* the mix state (Step 2b). "Money was steered toward Services" restates the
+move; it does not explain it (DECISIONS: an excerpt that restates our own series is the effect,
+not a cause). It stays alongside each move as context.
+
+*Output.* `explanation_coverage` in each `system_state_{period}.json`: one record per move
+(`entity`, `direction`, `gap_change_pp`, `noise_pp`, `filed_under`, `also_holds`) plus a summary:
+
+```
+moves  N   artifact a   prices_activity b   cause c   relationship d   unexplained u   no_reading r
+```
+
+No cap anywhere. If S4's prompt must be shortened, the shortening happens in S4 and prints how
+many it left out.
+
+*Why it matters.* This is the number that says whether the model is getting tighter. Adding a
+force or a relationship is an improvement only if `unexplained` falls on the periods it claims to
+cover. Step 3 alone may **raise** `unexplained` (forces that read contradicted stop counting), and
+that is the honest starting point.
+
+*Measured before it is trusted:* computed over every period for both pipelines, and the
+per-period summary is shown. Controls: a line with an injected step change must count as a move;
+a line moving in step with its parent must not; a move with a matched working force must file
+under `cause`; the same move with the force's sign flipped must file under `unexplained`.
+Logged in `ai_pm_register.json`.
 
 **Output:** structured JSON with `entity_states` (incl. propagated aggregates), `force_states`, `edge_states`, `loop_states`, `system_observations`, and a `narrative: null` slot the LLM fills at Stage 5.X.
 
@@ -431,6 +633,10 @@ First-class objects in `loops[]`. Explicitly authored (loops may close through f
 | D1 | No behavioral edge duplicates a `composes_into` ancestor link |
 | D2 | No `leads` edge between entities in a part-whole chain |
 | D3 | Cross-decomposition behavioral edges carry `double_count_risk: true` + note |
+
+**Force timing (v3.1, enforced after the migration in §16 Step 3):** every force carries either
+`starts` + `delay_months` + `fades_after_months` or `standing: true`, never both, never neither;
+`starts` parses as an ISO date; `timing_rule` is one of the §10.1 values.
 
 **Behavioral layer (retained from v2.0):** valid tiers; valid edge types; polarity present; scope present; entity `signal_ids` present (may be empty array, key required); entity `claim_type: fact`; force `signal_evidence` + source fields; risk/opp `status`; gap `gap_type`; hypothesis `source_rationale`; disallowed tier combos; `leads`/`substitutes` scope; loop references valid; ≥1 force, ≥1 entity, ≥1 edge; `schema_version: "3.0"`.
 

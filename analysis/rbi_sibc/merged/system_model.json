@@ -4287,7 +4287,9 @@
         "icl:sibc/Statement1/4.8"
       ],
       "source_corroboration_url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx?prid=55327",
-      "source_corroboration_excerpt": "works out to ₹5,611/- (Rupees Five thousand six hundred eleven only) per gram of gold"
+      "source_corroboration_excerpt": "works out to ₹5,611/- (Rupees Five thousand six hundred eleven only) per gram of gold",
+      "timing_rule": "trend",
+      "standing": true
     },
     {
       "id": "force_rbi_unsecured_tightening",
@@ -4313,7 +4315,11 @@
       "scope_entities": [
         "icl:sibc/Statement1/4.1",
         "icl:sibc/Statement1/4.5"
-      ]
+      ],
+      "timing_rule": "capital_cost",
+      "starts": "2023-11-16",
+      "delay_months": 3,
+      "fades_after_months": 24
     },
     {
       "id": "force_psl_limit_revision",
@@ -4339,7 +4345,11 @@
         "icl:sibc/Statement1/viii"
       ],
       "source_verified": false,
-      "source_audit_note": "2026-09-09 audit: excerpt not on cited page. MORE THAN A CITATION PROBLEM: the excerpt claims PSL housing loan limits were revised to metro ₹45L / non-metro ₹35L, but the cited Master Direction states loans up to ₹35 lakh in metropolitan centres and ₹25 lakh in other centres, with ₹45 lakh and ₹30 lakh being the DWELLING-UNIT COST caps. The force appears to have read cost caps as loan limits. Needs re-sourcing against the current PSL Master Direction before the claim is relied on."
+      "source_audit_note": "2026-09-09 audit: excerpt not on cited page. MORE THAN A CITATION PROBLEM: the excerpt claims PSL housing loan limits were revised to metro ₹45L / non-metro ₹35L, but the cited Master Direction states loans up to ₹35 lakh in metropolitan centres and ₹25 lakh in other centres, with ₹45 lakh and ₹30 lakh being the DWELLING-UNIT COST caps. The force appears to have read cost caps as loan limits. Needs re-sourcing against the current PSL Master Direction before the claim is relied on.",
+      "timing_rule": "relabelling",
+      "starts": "2025-04-01",
+      "delay_months": 0,
+      "fades_after_months": 12
     },
     {
       "id": "force_pli_manufacturing",
@@ -4366,7 +4376,11 @@
         "icl:sibc/Statement2/2.13",
         "icl:sibc/Statement2/2.14",
         "icl:sibc/Statement2/2.9"
-      ]
+      ],
+      "timing_rule": "long_lag",
+      "starts": "2022-04-01",
+      "delay_months": 36,
+      "fades_after_months": 24
     },
     {
       "id": "force_msme_formalisation",
@@ -4390,7 +4404,9 @@
       "instance_of": "ch_formalisation_underwritability",
       "scope_entities": [
         "icl:sibc/Statement1/2.1"
-      ]
+      ],
+      "timing_rule": "trend",
+      "standing": true
     },
     {
       "id": "force_nbfc_regulatory_recovery",
@@ -4415,7 +4431,11 @@
       "instance_of": "ch_wholesale_funding_intermediation",
       "scope_entities": [
         "icl:sibc/Statement1/3"
-      ]
+      ],
+      "timing_rule": "capital_cost",
+      "starts": "2025-04-01",
+      "delay_months": 3,
+      "fades_after_months": 24
     },
     {
       "id": "force_msp_procurement_growth",
@@ -4440,7 +4460,9 @@
       "scope_entities": [
         "icl:sibc/Statement1/II"
       ],
-      "source_verification": "excerpt verified verbatim against the live PIB page (re-verified through the unattended fetch path 2026-09-09)"
+      "source_verification": "excerpt verified verbatim against the live PIB page (re-verified through the unattended fetch path 2026-09-09)",
+      "timing_rule": "trend",
+      "standing": true
     },
     {
       "id": "force_infra_cycle_maturing",
@@ -4463,7 +4485,9 @@
       "instance_of": "ch_project_lifecycle_origination",
       "scope_entities": [
         "icl:sibc/Statement2/2.18"
-      ]
+      ],
+      "timing_rule": "trend",
+      "standing": true
     },
     {
       "id": "force_eclgs5_guarantee_window",
@@ -4489,7 +4513,11 @@
       "scope_entities": [
         "icl:sibc/Statement1/2.1",
         "icl:sibc/Statement1/2.2"
-      ]
+      ],
+      "timing_rule": "guarantee_window",
+      "starts": "2026-05-05",
+      "delay_months": 1,
+      "fades_after_months": 22
     },
     {
       "id": "force_kcc_collateral_limit",
@@ -4513,7 +4541,11 @@
       "instance_of": "ch_kcc_psl_agri_limits",
       "scope_entities": [
         "icl:sibc/Statement1/1"
-      ]
+      ],
+      "timing_rule": "eligibility",
+      "starts": "2025-01-01",
+      "delay_months": 3,
+      "fades_after_months": 24
     },
     {
       "id": "force_vehicle_scrappage_replacement",
@@ -4536,7 +4568,9 @@
       "instance_of": "ch_asset_retirement_replacement",
       "scope_entities": [
         "icl:sibc/Statement1/4.7"
-      ]
+      ],
+      "timing_rule": "standing_regime",
+      "standing": true
     },
     {
       "id": "force_psl_education_limit",
@@ -4559,7 +4593,11 @@
       "instance_of": "ch_psl_threshold_reclassification",
       "scope_entities": [
         "icl:sibc/Statement1/v"
-      ]
+      ],
+      "timing_rule": "relabelling",
+      "starts": "2025-04-01",
+      "delay_months": 0,
+      "fades_after_months": 12
     },
     {
       "id": "force_psl_renewable_limit",
@@ -4582,7 +4620,11 @@
       "instance_of": "ch_psl_threshold_reclassification",
       "scope_entities": [
         "icl:sibc/Statement1/vi"
-      ]
+      ],
+      "timing_rule": "relabelling",
+      "starts": "2025-04-01",
+      "delay_months": 0,
+      "fades_after_months": 12
     }
   ],
   "loops": [

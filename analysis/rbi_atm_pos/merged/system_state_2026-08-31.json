@@ -735,5 +735,120 @@
       "children": 5
     }
   },
+  "force_check": {
+    "force_upi_zero_mdr": {
+      "verdict": "unassessable",
+      "window": "in_window",
+      "in_doubt": false,
+      "edges": {
+        "force_upi_zero_mdr__drives__e_infrastructure_upi_qr": {
+          "entity": "UPI QR codes",
+          "type": "drives",
+          "growth": 16.52,
+          "baseline_kind": "root",
+          "baseline_of": "Acceptance & cash infrastructure",
+          "baseline": null,
+          "verdict": "unassessable",
+          "reason": "no growth or baseline reading this period"
+        },
+        "force_upi_zero_mdr__suppresses__e_infrastructure_pos_terminals": {
+          "entity": "POS terminals",
+          "type": "suppresses",
+          "growth": -14.68,
+          "baseline_kind": "root",
+          "baseline_of": "Acceptance & cash infrastructure",
+          "baseline": null,
+          "verdict": "unassessable",
+          "reason": "no growth or baseline reading this period"
+        },
+        "force_upi_zero_mdr__suppresses__e_spend_value_dc_atm_withdrawal_val": {
+          "entity": "DC ATM withdrawal value",
+          "type": "suppresses",
+          "growth": -6.27,
+          "baseline_kind": "parent",
+          "baseline_of": "Debit card spend (value)",
+          "baseline": null,
+          "verdict": "unassessable",
+          "reason": "no growth or baseline reading this period"
+        }
+      },
+      "reason": "no growth or baseline reading this period"
+    },
+    "force_rbi_paytm_action": {
+      "verdict": "unassessable",
+      "window": "faded",
+      "in_doubt": false,
+      "edges": {
+        "force_rbi_paytm_action__suppresses__e_cards_debit_cards": {
+          "entity": "Debit cards outstanding",
+          "type": "suppresses",
+          "growth": 1.85,
+          "baseline_kind": "parent",
+          "baseline_of": "Cards in force",
+          "baseline": null,
+          "verdict": "unassessable",
+          "reason": "no growth or baseline reading this period"
+        }
+      },
+      "reason": "no growth or baseline reading this period"
+    },
+    "force_rbi_card_lifecycle_norms": {
+      "verdict": "unassessable",
+      "window": "in_window",
+      "in_doubt": false,
+      "edges": {
+        "force_rbi_card_lifecycle_norms__suppresses__e_cards_credit_cards": {
+          "entity": "Credit cards outstanding",
+          "type": "suppresses",
+          "growth": 10.27,
+          "baseline_kind": "parent",
+          "baseline_of": "Cards in force",
+          "baseline": null,
+          "verdict": "unassessable",
+          "reason": "no growth or baseline reading this period"
+        }
+      },
+      "reason": "no growth or baseline reading this period"
+    },
+    "force_ncmc_transit_rollout": {
+      "verdict": "unassessable",
+      "window": "in_window",
+      "in_doubt": false,
+      "edges": {
+        "force_ncmc_transit_rollout__drives__e_spend_value_cc_other_txn_val": {
+          "entity": "CC other value",
+          "type": "drives",
+          "growth": 220.86,
+          "baseline_kind": "parent",
+          "baseline_of": "Credit card spend (value)",
+          "baseline": null,
+          "verdict": "unassessable",
+          "reason": "no growth or baseline reading this period"
+        }
+      },
+      "reason": "no growth or baseline reading this period"
+    },
+    "fi_rupay_incentive_debit_ecom": {
+      "verdict": "unassessable",
+      "window": "in_window",
+      "in_doubt": false,
+      "edges": {},
+      "reason": "no drives/suppresses/amplifies edge: the model does not say which way it pushes"
+    },
+    "fi_cash_at_pos_clarity": {
+      "verdict": "unassessable",
+      "window": "in_window",
+      "in_doubt": false,
+      "edges": {},
+      "reason": "no drives/suppresses/amplifies edge: the model does not say which way it pushes"
+    },
+    "fi_contactless_ceiling": {
+      "verdict": "unassessable",
+      "window": "in_window",
+      "in_doubt": false,
+      "edges": {},
+      "reason": "no drives/suppresses/amplifies edge: the model does not say which way it pushes"
+    }
+  },
   "narrative": null
 }

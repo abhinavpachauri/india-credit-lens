@@ -2199,7 +2199,9 @@
         "icl:atm_pos/infrastructure/pos_terminals",
         "icl:atm_pos/infrastructure/upi_qr",
         "icl:atm_pos/spend_value/dc_atm_withdrawal_val"
-      ]
+      ],
+      "timing_rule": "standing_regime",
+      "standing": true
     },
     {
       "id": "force_rbi_paytm_action",
@@ -2225,7 +2227,11 @@
       "instance_of": "ch_institutional_exit_card_stock",
       "scope_entities": [
         "icl:atm_pos/cards/debit_cards"
-      ]
+      ],
+      "timing_rule": "exit",
+      "starts": "2024-03-15",
+      "delay_months": 0,
+      "fades_after_months": 12
     },
     {
       "id": "force_rbi_card_lifecycle_norms",
@@ -2248,7 +2254,9 @@
       "instance_of": "ch_card_lifecycle_norms",
       "scope_entities": [
         "icl:atm_pos/cards/credit_cards"
-      ]
+      ],
+      "timing_rule": "standing_regime",
+      "standing": true
     },
     {
       "id": "force_ncmc_transit_rollout",
@@ -2272,7 +2280,9 @@
       "instance_of": "ch_embedded_payment_card_other",
       "scope_entities": [
         "icl:atm_pos/spend_value/cc_other_txn_val"
-      ]
+      ],
+      "timing_rule": "trend",
+      "standing": true
     },
     {
       "id": "fi_rupay_incentive_debit_ecom",
@@ -2295,7 +2305,9 @@
       "source_excerpt": "acquiring banks will be provided financial incentive, for promoting Point-of-Sale (PoS) and e-commerce transactions using RuPay Debit Cards",
       "source_rationale": "Promoted from S4 after web source-verification.",
       "claim_type": "inference",
-      "status": "active"
+      "status": "active",
+      "timing_rule": "standing_regime",
+      "standing": true
     },
     {
       "id": "fi_cash_at_pos_clarity",
@@ -2318,7 +2330,9 @@
       "source_excerpt": "cardholders can withdraw cash using their debit cards and full KYC prepaid cards issued by banks",
       "source_rationale": "Promoted from S4 after web source-verification.",
       "claim_type": "inference",
-      "status": "active"
+      "status": "active",
+      "timing_rule": "standing_regime",
+      "standing": true
     },
     {
       "id": "fi_contactless_ceiling",
@@ -2342,7 +2356,9 @@
       "source_excerpt": "Additional Factor of Authentication (AFA) requirement was relaxed for values up to ₹ 2,000/- per transaction for card transactions in contactless mode at Points of Sale (PoS) terminals",
       "source_rationale": "Promoted from S4 after web source-verification.",
       "claim_type": "inference",
-      "status": "active"
+      "status": "active",
+      "timing_rule": "standing_regime",
+      "standing": true
     }
   ],
   "loops": [

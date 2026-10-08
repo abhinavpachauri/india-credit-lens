@@ -988,5 +988,268 @@
       "children": 2
     }
   },
+  "force_check": {
+    "force_gold_price_surge": {
+      "verdict": "working",
+      "window": "in_window",
+      "in_doubt": false,
+      "edges": {
+        "force_gold_price_surge__drives__e_S1_4_8": {
+          "entity": "Loans against gold jewellery",
+          "type": "drives",
+          "growth": 83.23,
+          "baseline_kind": "parent",
+          "baseline_of": "Personal Loans",
+          "baseline": 16.92,
+          "gap_pp": 66.31,
+          "noise_pp": 6.63,
+          "verdict": "working"
+        }
+      }
+    },
+    "force_rbi_unsecured_tightening": {
+      "verdict": "faded",
+      "window": "faded",
+      "in_doubt": false,
+      "edges": {
+        "force_rbi_unsecured_tightening__suppresses__e_S1_4_5": {
+          "entity": "Credit Card Outstanding",
+          "type": "suppresses",
+          "growth": 3.64,
+          "baseline_kind": "parent",
+          "baseline_of": "Personal Loans",
+          "baseline": 16.92,
+          "gap_pp": -13.28,
+          "verdict": "faded"
+        },
+        "force_rbi_unsecured_tightening__suppresses__e_S1_4_1": {
+          "entity": "Consumer Durables",
+          "type": "suppresses",
+          "growth": 2.41,
+          "baseline_kind": "parent",
+          "baseline_of": "Personal Loans",
+          "baseline": 16.92,
+          "gap_pp": -14.52,
+          "verdict": "faded"
+        }
+      }
+    },
+    "force_psl_limit_revision": {
+      "verdict": "faded",
+      "window": "faded",
+      "in_doubt": false,
+      "edges": {
+        "force_psl_limit_revision__drives__e_S1_iv": {
+          "entity": "Housing",
+          "type": "drives",
+          "growth": 9.55,
+          "baseline_kind": "own_before",
+          "baseline_of": "Housing",
+          "baseline": -1.13,
+          "gap_pp": 10.68,
+          "verdict": "faded"
+        },
+        "force_psl_limit_revision__drives__e_S1_viii": {
+          "entity": "Export Credit",
+          "type": "drives",
+          "growth": -9.73,
+          "baseline_kind": "own_before",
+          "baseline_of": "Export Credit",
+          "baseline": 5.32,
+          "gap_pp": -15.05,
+          "verdict": "faded"
+        }
+      }
+    },
+    "force_pli_manufacturing": {
+      "verdict": "working",
+      "window": "in_window",
+      "in_doubt": false,
+      "edges": {
+        "force_pli_manufacturing__drives__e_S2_2_14": {
+          "entity": "All Engineering",
+          "type": "drives",
+          "growth": 33.37,
+          "baseline_kind": "parent",
+          "baseline_of": "Industry (Micro and Small, Medium and Large)",
+          "baseline": 18.23,
+          "gap_pp": 15.14,
+          "noise_pp": 1.34,
+          "verdict": "working"
+        },
+        "force_pli_manufacturing__drives__e_S2_2_9": {
+          "entity": "Chemicals and Chemical Products",
+          "type": "drives",
+          "growth": 23.49,
+          "baseline_kind": "parent",
+          "baseline_of": "Industry (Micro and Small, Medium and Large)",
+          "baseline": 18.23,
+          "gap_pp": 5.26,
+          "noise_pp": 1.18,
+          "verdict": "working"
+        },
+        "force_pli_manufacturing__drives__e_S2_2_13": {
+          "entity": "Basic Metal and Metal Product",
+          "type": "drives",
+          "growth": 18.86,
+          "baseline_kind": "parent",
+          "baseline_of": "Industry (Micro and Small, Medium and Large)",
+          "baseline": 18.23,
+          "gap_pp": 0.63,
+          "noise_pp": 1.23,
+          "verdict": "unclear"
+        }
+      }
+    },
+    "force_msme_formalisation": {
+      "verdict": "working",
+      "window": "in_window",
+      "in_doubt": false,
+      "edges": {
+        "force_msme_formalisation__drives__e_S1_2_1": {
+          "entity": "Micro and Small",
+          "type": "drives",
+          "growth": 22.96,
+          "baseline_kind": "parent",
+          "baseline_of": "Industry (Micro and Small, Medium and Large)",
+          "baseline": 18.23,
+          "gap_pp": 4.73,
+          "noise_pp": 1.83,
+          "verdict": "working"
+        }
+      }
+    },
+    "force_nbfc_regulatory_recovery": {
+      "verdict": "working",
+      "window": "in_window",
+      "in_doubt": false,
+      "edges": {
+        "force_nbfc_regulatory_recovery__amplifies__e_S1_3": {
+          "entity": "Services",
+          "type": "amplifies",
+          "growth": 24.35,
+          "baseline_kind": "parent",
+          "baseline_of": "Non-food Credit",
+          "baseline": 18.77,
+          "gap_pp": 5.58,
+          "noise_pp": 0.56,
+          "verdict": "working"
+        }
+      }
+    },
+    "force_msp_procurement_growth": {
+      "verdict": "working",
+      "window": "in_window",
+      "in_doubt": false,
+      "edges": {
+        "force_msp_procurement_growth__drives__e_S1_II": {
+          "entity": "Food Credit",
+          "type": "drives",
+          "growth": 145.81,
+          "baseline_kind": "parent",
+          "baseline_of": "Bank Credit (II + III)",
+          "baseline": 19.08,
+          "gap_pp": 126.73,
+          "noise_pp": 12.71,
+          "verdict": "working"
+        }
+      }
+    },
+    "force_infra_cycle_maturing": {
+      "verdict": "working",
+      "window": "in_window",
+      "in_doubt": false,
+      "edges": {
+        "force_infra_cycle_maturing__suppresses__e_S2_2_18": {
+          "entity": "Infrastructure",
+          "type": "suppresses",
+          "growth": 10.18,
+          "baseline_kind": "parent",
+          "baseline_of": "Industry (Micro and Small, Medium and Large)",
+          "baseline": 18.23,
+          "gap_pp": -8.05,
+          "noise_pp": 0.91,
+          "verdict": "working"
+        }
+      }
+    },
+    "force_eclgs5_guarantee_window": {
+      "verdict": "unassessable",
+      "window": "in_window",
+      "in_doubt": false,
+      "edges": {},
+      "reason": "no drives/suppresses/amplifies edge: the model does not say which way it pushes"
+    },
+    "force_kcc_collateral_limit": {
+      "verdict": "contradicted",
+      "window": "in_window",
+      "in_doubt": true,
+      "edges": {
+        "force_kcc_collateral_limit__drives__e_S1_1": {
+          "entity": "Agriculture and Allied Activities",
+          "type": "drives",
+          "growth": 17.22,
+          "baseline_kind": "parent",
+          "baseline_of": "Non-food Credit",
+          "baseline": 18.77,
+          "gap_pp": -1.55,
+          "noise_pp": 0.62,
+          "verdict": "contradicted"
+        }
+      }
+    },
+    "force_vehicle_scrappage_replacement": {
+      "verdict": "working",
+      "window": "in_window",
+      "in_doubt": false,
+      "edges": {
+        "force_vehicle_scrappage_replacement->e_S1_4_7": {
+          "entity": "Vehicle Loans",
+          "type": "drives",
+          "growth": 19.74,
+          "baseline_kind": "parent",
+          "baseline_of": "Personal Loans",
+          "baseline": 16.92,
+          "gap_pp": 2.82,
+          "noise_pp": 0.4,
+          "verdict": "working"
+        }
+      }
+    },
+    "force_psl_education_limit": {
+      "verdict": "faded",
+      "window": "faded",
+      "in_doubt": false,
+      "edges": {
+        "force_psl_education_limit->e_S1_v": {
+          "entity": "Educational Loans",
+          "type": "drives",
+          "growth": 15.91,
+          "baseline_kind": "own_before",
+          "baseline_of": "Educational Loans",
+          "baseline": 0.95,
+          "gap_pp": 14.96,
+          "verdict": "faded"
+        }
+      }
+    },
+    "force_psl_renewable_limit": {
+      "verdict": "faded",
+      "window": "faded",
+      "in_doubt": false,
+      "edges": {
+        "force_psl_renewable_limit->e_S1_vi": {
+          "entity": "Renewable Energy",
+          "type": "drives",
+          "growth": 25.96,
+          "baseline_kind": "own_before",
+          "baseline_of": "Renewable Energy",
+          "baseline": 78.32,
+          "gap_pp": -52.36,
+          "verdict": "faded"
+        }
+      }
+    }
+  },
   "narrative": null
 }

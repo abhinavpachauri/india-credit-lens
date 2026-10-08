@@ -8,7 +8,7 @@
 > Authored rationale (layer model, design principles, guard purposes) lives in the
 > hand-written `ARCHITECTURE.md`. This file is the structural, drift-guarded half.
 
-_Derived from 93 scripts._
+_Derived from 97 scripts._
 
 ## 1. Data-flow
 
@@ -89,10 +89,11 @@ Scripts each orchestrator launches as a subprocess, in execution order.
 | `analysis/rbi_sibc/merged/system_model.json` | external/authored | — | `core/relational_insights`, `guards/audit_force_sources` |
 | `analysis/rbi_sibc/timeline.json` | external/authored | — | `core/validate_timeline`, `pipelines/sibc/generate_merge`, `signals/query` |
 | `analysis/signals/narrative_cache.json` | derived | `cross/generate_opportunity_narrative` | — |
-| `analysis/signals/registry.json` | derived | `signals/apply_status_rules`, `signals/update_registry` | `core/generate_signal_history`, `core/generate_system_state`, `core/relational_insights`, `core/validate_opportunity_traceability`, `cross/generate_opportunities_feed`, `cross/validate_composition`, `cross/validate_concordance`, `guards/check_signal_freshness`, `guards/validate_card_cuts`, `guards/validate_cut_table`, `guards/validate_signal_history`, `guards/validate_state_band`, `measure_coherence_threshold`, `pipelines/atm_pos/compute_atm_pos_signals`, `pipelines/atm_pos/generate_atm_pos_insights`, `pipelines/atm_pos/validate_atm_pos_insights`, `pipelines/sibc/generate_analysis_report`, `pipelines/sibc/validate_sibc_traceability`, `signals/proximity`, `signals/stamp_state`, `signals/stamp_table` |
-| `analysis/signals/signals.db` | derived | `signals/db` | `core/derive_opportunities`, `core/gate`, `core/generate_system_state`, `core/relational_insights`, `core/validate_opportunity_traceability`, `cross/compose_ecosystem`, `cross/generate_opportunities_feed`, `cross/generate_opportunity_narrative`, `guards/check_derived_fresh`, `guards/validate_cut_table`, `guards/validate_signal_history`, `guards/validate_state_band`, `measure_coherence_threshold`, `pipelines/atm_pos/compute_atm_pos_signals`, `pipelines/atm_pos/generate_atm_pos_insights`, `pipelines/atm_pos/validate_atm_pos_claims`, `pipelines/atm_pos/validate_atm_pos_insights`, `pipelines/sibc/generate_analysis_report`, `pipelines/sibc/validate_sibc_traceability`, `signals/dominance`, `signals/proximity`, `signals/stamp_state`, `signals/stamp_table` |
+| `analysis/signals/registry.json` | derived | `signals/apply_status_rules`, `signals/update_registry` | `core/force_check`, `core/generate_signal_history`, `core/generate_system_state`, `core/real_cells`, `core/relational_insights`, `core/validate_opportunity_traceability`, `cross/generate_opportunities_feed`, `cross/validate_composition`, `cross/validate_concordance`, `guards/check_signal_freshness`, `guards/validate_card_cuts`, `guards/validate_cut_table`, `guards/validate_signal_history`, `guards/validate_state_band`, `measure_coherence_threshold`, `pipelines/atm_pos/compute_atm_pos_signals`, `pipelines/atm_pos/generate_atm_pos_insights`, `pipelines/atm_pos/validate_atm_pos_insights`, `pipelines/sibc/generate_analysis_report`, `pipelines/sibc/validate_sibc_traceability`, `signals/proximity`, `signals/stamp_state`, `signals/stamp_table` |
+| `analysis/signals/signals.db` | derived | `signals/db` | `core/derive_opportunities`, `core/force_check`, `core/gate`, `core/generate_system_state`, `core/relational_insights`, `core/validate_opportunity_traceability`, `cross/compose_ecosystem`, `cross/generate_opportunities_feed`, `cross/generate_opportunity_narrative`, `guards/check_derived_fresh`, `guards/validate_cut_table`, `guards/validate_signal_history`, `guards/validate_state_band`, `measure_coherence_threshold`, `pipelines/atm_pos/compute_atm_pos_signals`, `pipelines/atm_pos/generate_atm_pos_insights`, `pipelines/atm_pos/validate_atm_pos_claims`, `pipelines/atm_pos/validate_atm_pos_insights`, `pipelines/sibc/generate_analysis_report`, `pipelines/sibc/validate_sibc_traceability`, `signals/dominance`, `signals/proximity`, `signals/stamp_state`, `signals/stamp_table` |
 | `web/lib/reports/rbi_sibc.ts` | derived | `pipelines/sibc/promote_annotations` | `hook_validate`, `pipelines/sibc/validate_annotation_basis`, `pipelines/sibc/validate_web_series` |
 | `web/lib/reports/rbi_sibc_label_overrides.json` | external/authored | — | `core/cuts`, `pipelines/sibc/validate_web_series` |
+| `web/lib/table_columns.ts` | derived | `core/table_columns` | — |
 | `web/public/data/atm_pos_chart_series.json` | derived | `core/generate_chart_series` | `guards/validate_card_cuts` |
 | `web/public/data/atm_pos_insights.json` | external/authored | — | `guards/validate_card_cuts`, `guards/validate_card_prose`, `pipelines/atm_pos/generate_atm_pos_insights`, `signals/stamp_planes` |
 | `web/public/data/atm_pos_signals.json` | external/authored | — | `pipelines/atm_pos/compute_atm_pos_signals` |
@@ -105,11 +106,13 @@ Python import edges (sparse by design — the pipeline is subprocess-
 orchestrated, not import-coupled).
 
 - `core/derive_opportunities` → `core/generate_skeleton`, `core/manifest`
+- `core/force_check` → `core/generate_skeleton`, `core/generate_system_state`
 - `core/gate` → `core/manifest`
 - `core/generate_chart_series` → `core/manifest`
 - `core/generate_signal_history` → `core/manifest`
 - `core/generate_skeleton` → `core/manifest`
-- `core/generate_system_state` → `core/generate_skeleton`, `core/manifest`
+- `core/generate_system_state` → `core/force_check`, `core/generate_skeleton`, `core/manifest`
+- `core/real_cells` → `core/absence`, `core/manifest`, `signals/compute/csv_sector`, `signals/compute/real_economy`
 - `core/relational_insights` → `core/manifest`, `core/residuals`
 - `core/run_inference` → `core/generate_skeleton`, `core/manifest`
 - `core/validate_system_model` → `core/generate_skeleton`, `core/manifest`
@@ -123,7 +126,7 @@ orchestrated, not import-coupled).
 - `guards/check_signal_freshness` → `core/manifest`, `signals/compute/csv_sector`, `signals/compute/real_economy`
 - `guards/validate_card_cuts` → `core/manifest`
 - `guards/validate_card_prose` → `core/manifest`, `core/residuals`, `core/voice`
-- `guards/validate_cut_table` → `core/manifest`, `core/table_rows`
+- `guards/validate_cut_table` → `core/absence`, `core/manifest`, `core/real_cells`, `core/table_columns`, `core/table_rows`, `signals/compute/csv_sector`, `signals/compute/real_economy`
 - `guards/validate_signal_history` → `core/cadence`
 - `guards/validate_state_band` → `core/manifest`
 - `hook_validate` → `core/manifest`
@@ -132,10 +135,11 @@ orchestrated, not import-coupled).
 - `pipelines/atm_pos/extract_atm_pos` → `pipelines/atm_pos/detect_atm_pos_format`
 - `pipelines/atm_pos/generate_atm_pos_insights` → `core/manifest`
 - `pipelines/mospi/consolidate` → `core/manifest`, `pipelines/mospi/releases`
+- `pipelines/mospi/cpi_annex` → `pipelines/mospi/releases`
 - `pipelines/mospi/cpi_dashboard` → `pipelines/mospi/releases`
 - `pipelines/mospi/cpi_release` → `pipelines/mospi/releases`
 - `pipelines/mospi/detect_format` → `pipelines/mospi/consolidate`, `pipelines/mospi/releases`
-- `pipelines/mospi/fetch` → `pipelines/mospi/cpi_dashboard`, `pipelines/mospi/cpi_release`, `pipelines/mospi/mospi_api`, `pipelines/mospi/releases`
+- `pipelines/mospi/fetch` → `pipelines/mospi/cpi_annex`, `pipelines/mospi/cpi_dashboard`, `pipelines/mospi/cpi_release`, `pipelines/mospi/mospi_api`, `pipelines/mospi/releases`
 - `pipelines/mospi/releases` → `core/manifest`
 - `pipelines/mospi/validate_csv` → `core/manifest`, `pipelines/mospi/consolidate`, `pipelines/mospi/releases`
 - `pipelines/mospi/validate_published_growth` → `core/manifest`, `pipelines/mospi/consolidate`, `pipelines/mospi/releases`, `pipelines/mospi/validate_csv`
@@ -156,7 +160,7 @@ orchestrated, not import-coupled).
 - `signals/query` → `core/cadence`
 - `signals/stamp_planes` → `signals/planes`, `signals/proximity`
 - `signals/stamp_state` → `core/manifest`, `core/state_lines`
-- `signals/stamp_table` → `core/manifest`, `core/table_rows`
+- `signals/stamp_table` → `core/manifest`, `core/real_cells`, `core/table_rows`
 
 ## 5. Findings (drift signals)
 

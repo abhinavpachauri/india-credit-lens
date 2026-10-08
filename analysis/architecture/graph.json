@@ -45,6 +45,20 @@
       },
       "writes": {}
     },
+    "core/force_check": {
+      "doc_claims": [],
+      "imports": [
+        "core/generate_skeleton",
+        "core/generate_system_state"
+      ],
+      "invokes": [],
+      "path": "analysis/core/force_check.py",
+      "reads": {
+        "analysis/signals/registry.json": "low",
+        "analysis/signals/signals.db": "low"
+      },
+      "writes": {}
+    },
     "core/gate": {
       "doc_claims": [],
       "imports": [
@@ -108,6 +122,7 @@
         }
       ],
       "imports": [
+        "core/force_check",
         "core/generate_skeleton",
         "core/manifest"
       ],
@@ -152,6 +167,21 @@
       "invokes": [],
       "path": "analysis/core/paths.py",
       "reads": {},
+      "writes": {}
+    },
+    "core/real_cells": {
+      "doc_claims": [],
+      "imports": [
+        "core/absence",
+        "core/manifest",
+        "signals/compute/csv_sector",
+        "signals/compute/real_economy"
+      ],
+      "invokes": [],
+      "path": "analysis/core/real_cells.py",
+      "reads": {
+        "analysis/signals/registry.json": "low"
+      },
       "writes": {}
     },
     "core/relational_insights": {
@@ -219,6 +249,18 @@
       "path": "analysis/core/state_lines.py",
       "reads": {},
       "writes": {}
+    },
+    "core/table_columns": {
+      "doc_claims": [],
+      "imports": [],
+      "invokes": [],
+      "path": "analysis/core/table_columns.py",
+      "reads": {
+        "table_columns.ts": "low"
+      },
+      "writes": {
+        "web/lib/table_columns.ts": "high"
+      }
     },
     "core/table_rows": {
       "doc_claims": [],
@@ -464,8 +506,13 @@
     "guards/validate_cut_table": {
       "doc_claims": [],
       "imports": [
+        "core/absence",
         "core/manifest",
-        "core/table_rows"
+        "core/real_cells",
+        "core/table_columns",
+        "core/table_rows",
+        "signals/compute/csv_sector",
+        "signals/compute/real_economy"
       ],
       "invokes": [],
       "path": "analysis/guards/validate_cut_table.py",
@@ -675,6 +722,16 @@
       "reads": {},
       "writes": {}
     },
+    "pipelines/mospi/cpi_annex": {
+      "doc_claims": [],
+      "imports": [
+        "pipelines/mospi/releases"
+      ],
+      "invokes": [],
+      "path": "analysis/pipelines/mospi/cpi_annex.py",
+      "reads": {},
+      "writes": {}
+    },
     "pipelines/mospi/cpi_dashboard": {
       "doc_claims": [],
       "imports": [
@@ -709,6 +766,7 @@
     "pipelines/mospi/fetch": {
       "doc_claims": [],
       "imports": [
+        "pipelines/mospi/cpi_annex",
         "pipelines/mospi/cpi_dashboard",
         "pipelines/mospi/cpi_release",
         "pipelines/mospi/mospi_api",
@@ -1156,6 +1214,7 @@
       "doc_claims": [],
       "imports": [
         "core/manifest",
+        "core/real_cells",
         "core/table_rows"
       ],
       "invokes": [],

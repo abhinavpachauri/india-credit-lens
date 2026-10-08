@@ -219,6 +219,15 @@ the v3.0 §13 Force Identification Protocol (external source + ≥1 L1 signal ch
 mechanism). **Unvalidated proposals never enter the source of truth.** This is the single, gated
 path by which non-deterministic inference improves the deterministic backbone.
 
+**What S4 works on (v3.1, specced 2026-10-08, not yet built).** S4 stops detecting for itself.
+Its "unexplained movement" input is the `unexplained` list of SYSTEM_MODEL_SPEC §16 Step 6a
+(lines that moved against their group, after artifacts, prices/activity, working causes and
+relationships are tried), and its "authored vs observed" input is the forces marked `in_doubt`
+by §16 Step 3. Unconfirmed cross-links (detection 3) are unchanged. The old detection counted
+lines that were merely growing, treated any attached arrow as an explanation, and capped at 15.
+How S4 then hypothesises and sources (evidence classes beyond official instruments, response
+lag) is a later design, after the model below it is tightened.
+
 ### 8.1 Retrieval and verification — the measured bottleneck (added 2026-08-19)
 
 > **CORRECTION, 2026-09-09 — an earlier note in this section claimed `pib.gov.in` had begun

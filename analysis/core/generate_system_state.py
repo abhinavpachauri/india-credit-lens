@@ -32,6 +32,7 @@ from pathlib import Path
 sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
 from core import generate_skeleton as gs
 from core import manifest  # noqa: E402
+from core import force_check  # noqa: E402
 
 DB = gs.ANALYSIS / "signals" / "signals.db"
 # Direction map covering every status the L1 compute layer can emit: registry status_rules
@@ -101,7 +102,9 @@ def load_entity_weights(cfg):
 
 
 ALIGNED_MIN, CONTESTED_MIN = 0.90, 0.50
-MIX_PERSISTENCE = 2       # same noise filter derive_opportunities uses before `active`
+# Same noise filter derive_opportunities uses before `active`, and the one force_check uses
+# before a contradicted force is `in_doubt` — one constant, so the two cannot drift.
+MIX_PERSISTENCE = force_check.PERSISTENCE
 
 
 # Momentum across every pipeline's own decomposition. Payments computed these from the
@@ -364,6 +367,12 @@ def main():
     weights = load_entity_weights(cfg)
     state = compute(model, sig_dir, weights)
     state["mix_states"] = mix_states(args.pipeline, args.period, model)
+    # §16 Step 3 v3.1: emitted BESIDE the v3.0 force_states, read by nothing yet. The switch
+    # (force_states, edge firing and S4's mismatches reading this) waits for the editor's
+    # review of `force_check.py --history`.
+    state["force_check"] = force_check.check(
+        args.pipeline, model, args.period,
+        force_check.growth_series(args.pipeline, model), force_check.periods_of(args.pipeline))
     out = {
         "_meta": {
             "pipeline": args.pipeline, "period": args.period,
@@ -381,6 +390,9 @@ def main():
     print(f"  dominant forces ({len(o['dominant_forces'])}): {o['dominant_forces']}")
     print(f"  binding constraints (active '-' edges): {len(o['binding_constraints'])}")
     print(f"  active loops: reinforcing={o['active_reinforcing_loops']} balancing={o['active_balancing_loops']}")
+    doubt = [k for k, v in state["force_check"].items() if v["in_doubt"]]
+    if doubt:
+        print(f"  ⚠ in doubt (v3.1 check, contradicted {force_check.PERSISTENCE} readings running): {doubt}")
     if o["authored_vs_observed_mismatches"]:
         print(f"  ⚠ S2b/S3 mismatches (authored active, not firing): {o['authored_vs_observed_mismatches']}")
     print(f"  → wrote {out_path.relative_to(gs.ROOT)}")
