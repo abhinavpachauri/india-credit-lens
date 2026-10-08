@@ -27,8 +27,9 @@ python3 analysis/core/gate.py --pipeline {p} --skip-build   # green BEFORE touch
 A red gate before ingesting means you cannot tell your breakage from the existing one.
 
 **SIBC depends on MoSPI** (`depends_on`, since 2026-10-03): its gate's stage D fails when a MoSPI
-release is overdue. Bring MoSPI current first (`python3 analysis/core/gate.py --pipeline mospi`; the
-CPI press release is read by hand, `python3 analysis/pipelines/mospi/fetch.py --cpi-pdf {file}`).
+release is overdue. Bring MoSPI current first (`python3 analysis/core/gate.py --pipeline mospi`; its
+fetch pulls CPI's press-release annex from the eSankhyiki catalogue. If the catalogue lags a release,
+read the PDF by hand: `python3 analysis/pipelines/mospi/fetch.py --cpi-pdf {file}`).
 
 ## 1. Format + extract + consolidate, through the gate
 

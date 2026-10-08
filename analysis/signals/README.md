@@ -931,11 +931,20 @@ instead of silently leaving every signal check. The list, as it was found:
   renegotiation, which OpenSSL 3 refuses; `mospi_api` enables it for this host only.
 - **Unchanged releases are not re-saved.** A release is what MoSPI said, not when we looked; an
   unchanged fetch prints "unchanged since …" and writes nothing.
-- **CPI is one dataset fed by two MoSPI publications** (`sources`), both `increment`s:
-  - the **press release PDF**, read by hand (`fetch.py --cpi-pdf`): the newest month (P), the
-    previous (F) and MoSPI's printed inflation. Its layout changed three times in eight releases
-    (one line; numbers under the label; a wrapped label; month headers on two lines in reverse
-    column order), so the reader orders months by column and raises on anything else;
+- **CPI is one dataset fed by three MoSPI publications** (`sources`), all `increment`s:
+  - the **press release's Excel annex** in the eSankhyiki catalogue, fetched automatically
+    (`cpi_annex`, since 2026-10-08): the table titled "All India Combined (General) level index and
+    inflation (Base Year : 2024=100)", holding the index from Jan 2025, printed inflation from Jan
+    2026 and the provisional mark. Chosen by that title, never by annex number ("Annex-IV" was a
+    base-2012 state table until Dec 2025). Seven releases varied in sheet name, title lines, a
+    numerals row, date-typed months and text numbers; the reader takes those and raises on
+    anything else, and the catalogue's `ref_period` must equal the sheet's provisional month.
+    Every listed release is saved, so a missed month is recovered on the next run;
+  - the **press release PDF**, read by hand (`fetch.py --cpi-pdf`), now the fallback for a month
+    the catalogue lags (its Feb–Aug 2026 entries were all created 2026-10-01; whether it updates on
+    release day is measured by September's). Its layout changed three times in eight releases, so
+    the reader orders months by column and raises on anything else. Retires with `cpi_release.py`
+    once the annex has been seen to land on release day;
   - the **"download data" workbook** on MoSPI's CPI page, fetched automatically every gate run
     (the page's own list + download endpoints): the base-2024 index back to Jan 2025, which gives
     CPI a year back, so 1c checks its printed inflation now rather than from Jan 2027. It lags the

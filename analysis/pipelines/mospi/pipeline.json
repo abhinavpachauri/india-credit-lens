@@ -106,9 +106,16 @@
       "label_fields": ["series"],
       "measures": {"index": "index", "inflation_published": "inflation"},
       "sources": {
+        "annex_xlsx": {
+          "measures": {"index": "index", "inflation_published": "inflation"},
+          "list_endpoint": "esankhyiki/cms/golden-sheet/list",
+          "list_filters": [{"param": "product", "value": "CPI", "field": "product"}],
+          "download_url": "https://api.mospi.gov.in/api/esankhyiki/file/download{file_path}{file_name}",
+          "note_why": "The press release's own Excel annex in MoSPI's eSankhyiki catalogue, fetched automatically (cpi_annex.py). One table holds the base-2024 Combined index from Jan 2025, MoSPI's printed inflation from Jan 2026, and the provisional mark. Selected by its title, which states the base, never by annex number: 'Annex-IV' was a base-2012 state table until Dec 2025. Every listed release is saved (sha256 dedupes), so a missed month is recovered on the next run. Catalogue entries for Feb–Aug 2026 were all created 2026-10-01: whether the catalogue updates on release day is unmeasured until September's release (due ~13 Oct)."
+        },
         "release_pdf": {
           "measures": {"index": "index", "inflation_published": "inflation"},
-          "note_why": "The monthly press release, read by hand with `fetch.py --cpi-pdf`. The timely source: the newest month (P), the previous month (F), and MoSPI's printed inflation. Its URL is not predictable, so it is not fetched automatically."
+          "note_why": "The monthly press release, read by hand with `fetch.py --cpi-pdf`. Kept as the fallback until the annex has been seen to land on release day; then retired with cpi_release.py. Releases Jan–Aug 2026 were saved from it."
         },
         "dashboard_xlsx": {
           "measures": {"index": "index"},

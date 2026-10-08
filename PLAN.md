@@ -27,10 +27,10 @@ ASCII → approve → build → verify at 1440/375, light/dark loop, before the 
    credit and Output 12m on 8 SIBC tables. Spec as built: signals/README §1f + "MoSPI",
    COMPOSITION_SPEC §24, DASHBOARD_SPEC §21.8. Pulled by hand until two clean cycles. Next:
    - **CPI each month** (Sep due ~12–14 Oct; MoSPI 1b fails overdue without it, and SIBC's gate with it).
-   - **Replace the hand-read CPI PDFs** with the press-release annex in MoSPI's eSankhyiki
-     catalogue (Excel, base 2024, monthly from Feb 2026, e.g. `CPIMCY26004AUG`). Index:
-     `api.mospi.gov.in/api/esankhyiki/cms/golden-sheet/list?product=CPI`; files:
-     `…/api/esankhyiki/file/download{file_path}{file_name}`. Retires `cpi_release.py`.
+     Fetched automatically since 2026-10-08 (`cpi_annex.py`, the eSankhyiki press-release annex).
+     **September decides the PDF path**: if the annex is listed within the 5-day grace, retire
+     `--cpi-pdf` + `cpi_release.py` (and ask whether the dashboard workbook, now redundant, goes too);
+     if not, the PDF stays as the release-day source. The catalogue's Feb–Aug entries were all created 10-01.
    - **The S4 decomposition** reads 1f (open decisions below): design first, ASCII first.
    - Candidate gate: the IIP weights rebuild (0.046 pt, measured by hand) as a standing 1d check.
    - **Open, user deciding:** textiles vs apparel (SIBC 2.4 ↔ nic:13 or 13+14); WPI weights for the

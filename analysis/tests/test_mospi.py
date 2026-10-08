@@ -571,3 +571,113 @@ def test_one_workbook_is_found_with_or_without_file_type(file_type):
 def test_anything_but_exactly_one_workbook_fails(data):
     with pytest.raises(A.FetchError):
         F.the_workbook({"exists": True, "data": data})
+
+
+# ── The press release's Excel annex (cpi_annex), from the eSankhyiki catalogue ──────────────
+# Built in the shapes seven real releases (Feb–Aug 2026) took: sheet name varies, the
+# "Annexure-IV" line comes and goes, a numerals row sometimes sits under the header, a month is
+# sometimes a date cell, and a number is sometimes text.
+
+import cpi_annex                                         # noqa: E402
+from datetime import datetime                            # noqa: E402
+
+_ANNEX_HEAD = [("All India Combined (General) level index and inflation",),
+               ("Month", "Index", None, None, "Inflation (%)"),
+               (None, "Rural", "Urban", "Combined", "Rural", "Urban", "Combined")]
+_ANNEX_BODY = [("Dec-25", 104.19, 103.98, 104.1, None, None, None),
+               ("Jan-26", 104.59, 104.28, 104.45, 2.73, 2.75, 2.74),
+               ("Feb-26", 104.74, 104.36, 104.57, 3.37, 3.02, 3.21),
+               (datetime(2026, 3, 1), 105.02, 104.62, 104.84, 3.63, 3.11, "3.40"),
+               ("Apr-26*", 105.28, 104.92, 105.12, 3.74, 3.16, 3.48)]
+_ANNEX_NOTE = [("*Index and Inflation for the month of April 2026 are provisional.",)]
+
+
+def annex(body=None, head=None, note=None, sheet="Sheet1", lead=(("Annexure-IV",),), numerals=False):
+    import openpyxl
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = sheet
+    for r in [*lead, *(head or _ANNEX_HEAD),
+              *([("(i)", "(ii)", "(iii)", "(iv)", "(v)", "(vi)", "(vii)")] if numerals else []),
+              *(_ANNEX_BODY if body is None else body), *(_ANNEX_NOTE if note is None else note)]:
+        ws.append(r)
+    buf = io.BytesIO()
+    wb.save(buf)
+    return buf.getvalue()
+
+
+@pytest.mark.parametrize("kw", [{}, {"lead": ()}, {"numerals": True}, {"sheet": "Annexure IV"}])
+def test_the_annex_reads_every_layout_mospi_has_used(kw):
+    rows = cpi_annex.parse(annex(**kw))
+    assert [(r["period"], r["index"], r["inflation"], r["status"]) for r in rows] == [
+        ("2025-12-31", "104.10", "", "F"), ("2026-01-31", "104.45", "2.74", "F"),
+        ("2026-02-28", "104.57", "3.21", "F"), ("2026-03-31", "104.84", "3.40", "F"),
+        ("2026-04-30", "105.12", "3.48", "P")]
+    assert {r["base_year"] for r in rows} == {"2024"}
+
+
+_B = _ANNEX_BODY
+@pytest.mark.parametrize("kw, match", [
+    ({"body": _B[:2] + _B[3:]}, "months missing or out of order"),                    # Feb gone
+    ({"body": [_B[1], _B[0]] + _B[2:]}, "out of order"),
+    ({"body": _B[:-1] + [("Apr-26", *_B[-1][1:])]}, "only the last month"),          # no star
+    ({"body": [(_B[0][0] + "*", *_B[0][1:])] + _B[1:]}, "only the last month"),       # two stars
+    ({"note": [("*Index and Inflation for the month of March 2026 are provisional.",)]}, "footnote"),
+    ({"note": []}, "footnote"),
+    ({"body": _B[:2] + [("Feb-26", 104.74, 104.36, 104.57, None, None, None)] + _B[3:]}, "stops before"),
+    ({"body": _B[:-1] + [("Apr-26*", 3.74, 3.16, 3.48, 105.28, 104.92, 105.12)]}, "not a base-2024"),
+    ({"body": _B[:-1] + [("Apr-26*", 105.28, 104.92, 105.12, 3.74, 3.16, 205.12)]}, "not a rate"),
+    ({"body": _B[:-1] + [("Apr-26*", 105.28, 104.92, "n.a.", 3.74, 3.16, 3.48)]}, "not a number"),
+    ({"body": _B[:-1] + [("April-26*", *_B[-1][1:])]}, "unexpected month"),
+    ({"head": _ANNEX_HEAD[:1] + [("Month", "Inflation (%)", None, None, "Index")] + _ANNEX_HEAD[2:]}, "header"),
+    ({"head": _ANNEX_HEAD[:2] + [(None, "Combined", "Rural", "Urban", "Rural", "Urban", "Combined")]}, "second line"),
+    ({"head": [("All India General division wise indices",)] + _ANNEX_HEAD[1:]}, "expected one sheet"),
+])
+def test_an_annex_it_does_not_recognise_raises(kw, match):
+    with pytest.raises(ValueError, match=match):
+        cpi_annex.parse(annex(**kw))
+
+
+@pytest.mark.parametrize("title, want", [
+    ("All India Combined (General) level index and inflation (Base Year : 2024=100)", True),
+    ("All India Combined (General) level index and inflation (Base Year : 2024= 100)", True),
+    # The same annex number has meant other tables: these must never be taken.
+    ("State wise CPI from January 2025 to December 2025 (Base Year : 2024= 100)", False),
+    ("Year-on-year inflation rates (%) of major@ States for Rural, Urban and Combined (Base Year : 2012=100)", False),
+    ("All India Combined (General) level index and inflation (Base Year : 2012=100)", False),
+])
+def test_the_annex_is_chosen_by_its_title_and_base(title, want):
+    assert cpi_annex.is_the_table(title) is want
+
+
+def test_an_annex_is_placed_by_its_release_date():
+    assert cpi_annex.published("14 Sep 2026") == "2026-09-14"
+    with pytest.raises(ValueError):
+        cpi_annex.published("2026-09-14")
+
+
+def test_a_catalogue_with_no_annex_fails_rather_than_saving_nothing():
+    with pytest.raises(A.FetchError, match="no catalogue entry"):
+        F.the_annexes([{"table_name": "State/UT wise general index", "release_date": "14 Sep 2026"}])
+
+
+def test_a_catalogue_entry_pointing_at_another_months_file_fails(monkeypatch):
+    entry = {"table_name": "All India Combined (General) level index and inflation (Base Year : 2024=100)",
+             "release_date": "12 Jun 2026", "ref_period": "May 2026",
+             "file_path": "/datacatalogue/CPI/2026/", "file_name": "x.xlsx"}
+    monkeypatch.setattr(A, "fetch_request", lambda *a, **k: [entry])
+    monkeypatch.setattr(A, "get_bytes", lambda url: annex())                   # an April sheet
+    monkeypatch.setattr(F, "save_if_changed", lambda *a, **k: pytest.fail("must not save"))
+    with pytest.raises(A.FetchError, match="provisional month is 2026-04-30"):
+        F.fetch_cpi_annexes(manifest.load("mospi")["datasets"]["cpi"], manifest.load("mospi")["api"])
+
+
+def test_every_saved_annex_still_parses_to_its_saved_rows():
+    """Known-good control over the committed raw files: the parser as it is today must read every
+    annex MoSPI has actually published to exactly what was saved from it."""
+    saved = [(p, R.read(p)) for p in R.saved("cpi")]
+    annexes = [(p, d) for p, d in saved if d.get("source") == "annex_xlsx"]
+    assert annexes, "no annex release saved yet"
+    for p, d in annexes:
+        raw = p.with_name(p.name.replace(".json.gz", ".xlsx")).read_bytes()
+        assert R.canonical_rows(cpi_annex.parse(raw)) == d["rows"], p.name

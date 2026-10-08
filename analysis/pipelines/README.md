@@ -20,7 +20,7 @@ hard-codes a pipeline — it reads `pipeline.json`.
 
 ## `mospi/` — MoSPI IIP, WPI, NAS, CPI (reference)
 API pull, not XLSX. `datasets` declares each series as data (endpoint, filters and the row field
-that verifies each, levels kept, printed-growth pairings, expected lag). fetch (+ `--cpi-pdf`) ·
+that verifies each, levels kept, printed-growth pairings, expected lag). fetch (CPI: eSankhyiki annex + workbook; `--cpi-pdf` fallback) ·
 detect_format · consolidate · validate_csv (1b, release calendar) · validate_published_growth (1c).
 Contract and rules: `analysis/signals/README.md`, "MoSPI".
 
