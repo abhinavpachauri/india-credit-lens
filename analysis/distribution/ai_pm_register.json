@@ -565,6 +565,13 @@
           "date": "2026-10-04",
           "how_measured": "Enumerated over every 1f cell (57 values, 51 absences) and every coverage line and approximation note in the shipped sibc_table.json; each defect injected into a copy and run through validate_cut_table.validate (tables passed in memory, the same function the gate runs). First pass found the prose tolerance (rel 0.5%) let 6/57 cells moved by 0.1 pass; 1f cells now require the stored value exactly (1e-4). The six older columns still use the prose tolerance: not measured here, a separate change.",
           "source": "analysis/guards/validate_cut_table.py (real_cell_findings, real_table_findings) + analysis/core/real_cells.py"
+        },
+        {
+          "metric": "catch rate — total row vs state band agreement (test_cut_table, new 2026-10-08)",
+          "value": "23/23 disagreements caught on the pre-fix payments sidecar (every payments table whose total growth was '—' under a band quoting it); 0 false findings over 45 shipped tables on 3 pipelines, with 7 SIBC sub-cut gaps held as an exact known set",
+          "date": "2026-10-08",
+          "how_measured": "Known-bad control: total_disagreements() run on the payments table sidecar saved before the fix (23 of 26 totals empty). Known-good: the same function on the restamped sibc/atm_pos/nbfc sidecars. Enumerated over every table that has a band line, not sampled. The defect was two resolvers for one fact (band from the registry, table from 3 hand-declared anchors); the fix is one resolver, core/cuts.py total_yoy_by_metric.",
+          "source": "analysis/tests/test_cut_table.py"
         }
       ],
       "observations": [

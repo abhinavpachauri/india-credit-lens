@@ -104,7 +104,7 @@ debt below). `add-signal-family`, `measure-gate` ⬜, each written while doing i
 
 - **Distribution**: LinkedIn carousels began with Aug 2026 (3 posts: headline stats, market-share
   mix, MoSPI real credit; `analysis/distribution/output/2026-10-08_linkedin_set*`). Flow: Claude
-  drafts text + source table + ASCII layout → user rewrites → approves → PDF. Tooling (uncommitted,
+  drafts text + source table + ASCII layout → user rewrites → approves → PDF. Tooling (committed,
   hand-tuned per set) in `analysis/distribution/carousel/`; make it one generic builder, and a
   `linkedin-carousel` skill, when the September posts repeat it. Substack paused; X per-bank feed idea stands.
 - **PDF extraction** as a general capability: 11 of 21 remaining RBI sources are PDF-only. Start
