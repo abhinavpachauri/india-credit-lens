@@ -1251,7 +1251,7 @@
         "pipeline": "sibc",
         "scope": "pipeline",
         "tier": "opportunity",
-        "status": "active",
+        "status": "closed",
         "authored_status": "active",
         "section": {
           "id": "prioritySector",
@@ -1259,18 +1259,15 @@
           "icon": "⭐"
         },
         "title": "PSLC market depth from PSL reclassification surplus",
-        "body": "In October 2024 the RBI raised the ceiling for housing loans that count toward Priority Sector Lending targets. Banks that already had many loans just below the old ceiling suddenly saw those loans reclassified as PSL-eligible, giving them a surplus. Banks with a surplus can sell PSL Certificates to banks that are short on their targets. Housing loan growth under PSL rules is running at 10.6% year-on-year, so the pool of tradable certificates has expanded.",
-        "implication": "A one-time reclassification has created a deeper secondary market for PSL Certificates, meaning banks with surplus PSL credit can monetise it by selling to banks that need to meet targets, and banks short on PSL now have more supply to buy from.",
+        "body": "Banks that received a large reclassification-driven PSL surplus from the Oct 2024 ceiling revision can sell PSL Certificates to banks that are under-achieving on PSL targets. This deepens the PSLC secondary market and creates a one-time monetisation event for well-positioned banks.",
+        "implication": "",
         "chain": [
-          "The RBI raised the housing loan ceiling for PSL eligibility in October 2024, so loans that were previously too large to count now qualify.",
-          "Banks holding many of these loans saw an instant reclassification surplus without making new loans.",
-          "Banks with surplus can sell PSL Certificates to banks falling short, expanding the secondary market and creating a monetisation opportunity."
+          "Revising a PSL eligibility ceiling reclassifies existing sub-threshold stock into the priority bucket, producing reported growth that is not new lending and distorting the flow read.",
+          "This is being driven by PSL housing loan ceilings raised (RBI PSL Directions 2025, eff. 1 Apr 2025)."
         ],
         "_driver": "PSL housing loan ceilings raised (RBI PSL Directions 2025, eff. 1 Apr 2025)",
         "_via": "PSL classification threshold → reported reclassification",
-        "evidence": [
-          "sibc-psl-housing-yoy"
-        ],
+        "evidence": [],
         "evidence_all": [
           "sibc-psl-housing-yoy"
         ],
@@ -1285,8 +1282,7 @@
               "Housing"
             ]
           }
-        ],
-        "narrative": true
+        ]
       },
       {
         "id": "opp_renewable_energy",

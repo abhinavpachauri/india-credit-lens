@@ -508,9 +508,16 @@ injected force pointing at a falling line reads `contradicted`; the count of for
 changes is reported, not sampled. Logged in `ai_pm_register.json`.
 
 *Built 2026-10-08* (`core/force_check.py`, tests `tests/test_force_check.py`). Emitted as
-`force_check` in each `system_state_{period}.json` **beside** the v3.0 `force_states`, read by
-nothing yet; the switch waits for the editor's review of
-`python3 analysis/core/force_check.py --pipeline {p} --history`. Measured over every reading:
+`force_check` in every `system_state_{period}.json`. **Which rule a pipeline's forces are judged
+by is declared in its manifest** (`"force_check": "v3.1"`, read by `manifest.force_check`;
+undeclared = `v3.0`). Under v3.1 the verdict drives `force_states` (`working` → `active`, every
+other verdict by name), the force's driver edges (`working` → active, `contradicted` →
+reversed, anything else → dormant), `dominant_forces`, `authored_vs_observed_mismatches`
+(= `in_doubt`, S4's input) and opportunity firing in `derive_opportunities` (a force driver fires
+only when `working`). **Switched on for SIBC 2026-10-08** (user, after reviewing `--history`):
+dominant forces 13 → 7, KCC in doubt, the PSLC-reclassification opportunity closed (its PSL
+ceilings have faded), and the PLI supply-chain loop no longer active (basic metals reads unclear).
+Payments stays v3.0 until its group totals carry a YoY signal. Measured over every reading:
 
 - **SIBC, 13 forces × 25 readings (325).** v3.0: 237 active, 88 latent. v3.1: 106 working,
   20 contradicted, 11 unclear, 27 not yet due, 22 faded, 139 unassessable; 14 in doubt.

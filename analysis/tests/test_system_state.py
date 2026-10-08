@@ -159,3 +159,62 @@ def test_loop_active_vs_partial():
 
 if __name__ == "__main__":
     sys.exit(pytest.main([__file__, "-q"]))
+
+
+# --------------------------------------------------------------------------- #
+# v3.1 switch (SYSTEM_MODEL_SPEC §16 Step 3): when the manifest declares it, the force
+# check's verdict replaces "any evidence signal moved". These are the cases where the two
+# rules disagree, which is the whole reason for the switch.
+# --------------------------------------------------------------------------- #
+def _checked(verdict, in_doubt=False):
+    return {"f_F": {"verdict": verdict, "window": "in_window", "in_doubt": in_doubt,
+                    "edges": {"ed_F_A": {"verdict": verdict}}}}
+
+
+def test_v31_contradicted_force_is_not_active_even_when_its_signal_moves():
+    model = make_model()
+    st = g3.compute(model, {"sig_A1": 1}, checked=_checked("contradicted", in_doubt=True))
+    f = st["force_states"]["f_F"]
+    assert f["state"] == "contradicted" and f["rule"] == "v3.1"
+    assert f["mismatch"] is True                                   # in_doubt -> S4's input
+    assert st["edge_states"]["ed_F_A"]["state"] == "reversed"
+    assert "f_F" not in st["system_observations"]["dominant_forces"]
+    assert st["loop_states"]["L"]["state"] != "active_reinforcing"
+
+
+def test_v31_working_force_is_active_even_when_v30_would_call_it_latent():
+    model = make_model()
+    st = g3.compute(model, {"sig_A1": 0}, checked=_checked("working"))
+    assert st["force_states"]["f_F"]["state"] == "active"
+    assert st["edge_states"]["ed_F_A"]["state"] == "active"
+    assert st["system_observations"]["dominant_forces"] == ["f_F"]
+
+
+def test_v31_window_and_unassessable_verdicts_make_the_edge_dormant():
+    model = make_model()
+    for v in ("faded", "not_yet_due", "unclear", "unassessable"):
+        st = g3.compute(model, {"sig_A1": 1}, checked=_checked(v))
+        assert st["edge_states"]["ed_F_A"]["state"] == "dormant", v
+        assert st["force_states"]["f_F"]["state"] == v
+
+
+def test_without_checked_the_v30_rule_is_unchanged():
+    st = g3.compute(make_model(), {"sig_A1": 1})
+    assert st["force_states"]["f_F"]["rule"] == "v3.0"
+    assert st["force_states"]["f_F"]["state"] == "active"
+
+
+def test_manifest_force_check_defaults_and_rejects_unknown(monkeypatch):
+    from core import manifest
+    monkeypatch.setattr(manifest, "load", lambda p: {})
+    assert manifest.force_check("x") == "v3.0"
+    monkeypatch.setattr(manifest, "load", lambda p: {"force_check": "v9"})
+    with pytest.raises(KeyError):
+        manifest.force_check("x")
+    assert manifest.force_check.__module__ == "core.manifest"
+
+
+def test_sibc_declares_v31_and_payments_does_not():
+    from core import manifest
+    assert manifest.force_check("sibc") == "v3.1"
+    assert manifest.force_check("atm_pos") == "v3.0"

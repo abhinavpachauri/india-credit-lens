@@ -154,6 +154,22 @@ def model_pipelines() -> tuple[str, ...]:
     return tuple(p for p in PIPELINE_IDS if "system_model" in load(p).get("paths", {}))
 
 
+#: Which rule judges this pipeline's forces (SYSTEM_MODEL_SPEC §16 Step 3). `v3.0`: a force is
+#: active when any evidence signal moves, its edges judged against zero. `v3.1`: judged against
+#: a baseline, with timing (core/force_check). Switched per pipeline because a pipeline whose
+#: lines have no baseline reading yet (payments: no YoY on its group totals) would turn every
+#: force dormant rather than judged.
+FORCE_CHECKS = ("v3.0", "v3.1")
+
+
+def force_check(pipeline: str) -> str:
+    """The declared force rule; `v3.0` when undeclared. An unknown value raises."""
+    v = load(pipeline).get("force_check", "v3.0")
+    if v not in FORCE_CHECKS:
+        raise KeyError(f"{pipeline}: manifest declares force_check={v!r}; expected one of {FORCE_CHECKS}")
+    return v
+
+
 def depends_on(pipeline: str) -> tuple[str, ...]:
     """The reference pipelines whose CSV this pipeline's signals read (signals/README §1f)."""
     return tuple(load(pipeline).get("depends_on", []))

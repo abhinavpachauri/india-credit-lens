@@ -8,7 +8,10 @@ S3 over the last 2 periods, with the signal evidence that decided it. Stamps the
 surface/scope/refs fields the UI consumes (§12.2).
 
 Status rule:
-    driver fires in a period  := any of its signal_evidence / signal_ids is non-flat (db status)
+    driver fires in a period  := an entity driver: any of its signal_ids is non-flat (db status);
+                                 a force driver: under force_check v3.1 (the pipeline's manifest),
+                                 its verdict is `working` (SYSTEM_MODEL_SPEC §16 Step 3); under
+                                 v3.0, any of its signal_evidence is non-flat
     active  — driver fires in the current AND prior period
     watch   — driver fires in exactly one of the two
     closed  — driver fires in neither
@@ -29,6 +32,7 @@ from pathlib import Path
 sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
 from core import generate_skeleton as gs
 from core import manifest  # noqa: E402
+from core import force_check  # noqa: E402
 
 DB = gs.ANALYSIS / "signals" / "signals.db"
 NONFLAT = {"strengthening", "weakening", "declining", "active"}
@@ -85,6 +89,25 @@ def main():
     fire = {p: firing_signals(args.pipeline, p) for p in periods}
     cur, prior = (periods + [None, None])[0], (periods + [None, None])[1]
 
+    # Under v3.1 a force fires when the data supports it, not when its signals merely move:
+    # the same verdict S3 uses, recomputed for both periods from the same series.
+    working = None
+    if manifest.force_check(args.pipeline) == "v3.1":
+        series, all_p = force_check.growth_series(args.pipeline, model), force_check.periods_of(args.pipeline)
+        working = {p: {fid for fid, x in force_check.check(args.pipeline, model, p, series, all_p).items()
+                       if x["verdict"] == "working"} for p in periods}
+
+    def fires(driver_id, p):
+        """Does this driver fire at period p, and on which of its signals?"""
+        sigs = driver_signals(driver_id)
+        if p is None:
+            return False, set()
+        if working is not None and driver_id in fi_by_id:
+            on = driver_id in working[p]
+            return on, (sigs & fire[p]) if on else set()
+        hit = sigs & fire.get(p, set())
+        return bool(hit), hit
+
     # driver → its evidence signal set
     def driver_signals(driver_id):
         if driver_id in fi_by_id:
@@ -104,8 +127,9 @@ def main():
     for tid, info in targets.items():
         n = info["node"]
         sigs = set().union(*[driver_signals(d) for d in info["drivers"]]) if info["drivers"] else set()
-        fires_now = bool(sigs & fire.get(cur, set())) if cur else False
-        fires_prior = bool(sigs & fire.get(prior, set())) if prior else False
+        now = [fires(d, cur) for d in info["drivers"]]
+        fires_now = any(on for on, _ in now)
+        fires_prior = any(fires(d, prior)[0] for d in info["drivers"])
         status = opportunity_status(fires_now, fires_prior, n.get("status"))
         # references for the UI (§12.2)
         entity_refs, instance_refs, channel_refs = [], [], []
@@ -125,7 +149,7 @@ def main():
             # evidence = the firing subset (drives STATUS); evidence_all = the driver's
             # full declared signal set (drives TRACEABILITY — a structural risk's numbers
             # trace to its signals even when the driver isn't currently firing).
-            "evidence": sorted(sigs & fire.get(cur, set())),
+            "evidence": sorted(set().union(set(), *[hit for _, hit in now])),
             "evidence_all": sorted(sigs),
             "refs": {
                 "entities": sorted(set(entity_refs)),
@@ -137,7 +161,8 @@ def main():
     out = {
         "_meta": {"pipeline": args.pipeline, "period": args.period,
                   "spec_ref": "analysis/COMPOSITION_SPEC.md §12",
-                  "periods_used": periods, "note": "status derived from S3 driver firing"},
+                  "periods_used": periods, "note": "status derived from S3 driver firing",
+                  "force_rule": manifest.force_check(args.pipeline)},
         "items": sorted(feed, key=lambda x: (x["tier"], x["id"])),
     }
     out_path = cfg["model"].parent / f"opportunities_{args.period}.json"

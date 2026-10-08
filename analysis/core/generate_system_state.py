@@ -219,7 +219,9 @@ def mix_states(pipeline: str, period: str, model: dict) -> dict:
     return out
 
 
-def compute(model, sig_dir, weights=None):
+def compute(model, sig_dir, weights=None, checked=None):
+    """`checked` is force_check.check()'s result when the pipeline declares force_check v3.1;
+    None keeps the v3.0 rule (any evidence signal moving = active, edges against zero)."""
     weights = weights or {}
     entities = [n for n in model["nodes"] if n.get("tier") == "entity"]
     by_id = {n["id"]: n for n in entities}
@@ -278,6 +280,19 @@ def compute(model, sig_dir, weights=None):
     # Step 3 — force-instance states
     force_states = {}
     for fi in model.get("force_instances", []):
+        if checked is not None:
+            # v3.1: the verdict IS the state. `active` survives as the word for `working` so
+            # loops, observations and the ecosystem projection keep their vocabulary.
+            c = checked[fi["id"]]
+            force_states[fi["id"]] = {
+                "state": "active" if c["verdict"] == "working" else c["verdict"],
+                "verdict": c["verdict"], "window": c["window"],
+                "instance_of": fi.get("instance_of"),
+                "authored_status": fi.get("status"),
+                "mismatch": c["in_doubt"],
+                "rule": "v3.1",
+            }
+            continue
         ev = fi.get("signal_evidence") or []
         observed = [sig_dir[s] for s in ev if s in sig_dir]
         firing = any(d != 0 for d in observed)
@@ -287,6 +302,7 @@ def compute(model, sig_dir, weights=None):
             "evidence_observed": len(observed), "evidence_total": len(ev),
             "authored_status": fi.get("status"),
             "mismatch": (fi.get("status") == "active" and not firing),
+            "rule": "v3.0",
         }
 
     # Step 4 — behavioral edge states
@@ -301,10 +317,21 @@ def compute(model, sig_dir, weights=None):
     # an edge fires in its expected direction ("active"), against it ("reversed"), or not at
     # all ("dormant"). The prior `"dominant" if abs(d) >= 1` branch was unreachable because
     # abs(d) is always 1 when d != 0.
+    # v3.1: a force's driver edges are judged by force_check against the line's baseline,
+    # not by sign against zero; map its verdict onto the edge vocabulary loops read.
+    judged = {eid: x for f in (checked or {}).values() for eid, x in f["edges"].items()}
+    EDGE_OF = {"working": "active", "contradicted": "reversed"}
     edge_states = {}
     for e in model["edges"]:
         pol = e.get("polarity")
         if pol not in ("+", "-", "~"):
+            continue
+        eid = e.get("id", f"{e['from']}->{e['to']}")
+        if eid in judged:
+            edge_states[eid] = {
+                "state": EDGE_OF.get(judged[eid]["verdict"], "dormant"),
+                "verdict": judged[eid]["verdict"], "type": e["type"], "polarity": pol,
+                "from": e["from"], "to": e["to"]}
             continue
         d = node_dir(e["from"])
         expected = 1 if pol == "+" else -1 if pol == "-" else 0
@@ -365,19 +392,22 @@ def main():
         return 1
 
     weights = load_entity_weights(cfg)
-    state = compute(model, sig_dir, weights)
-    state["mix_states"] = mix_states(args.pipeline, args.period, model)
-    # §16 Step 3 v3.1: emitted BESIDE the v3.0 force_states, read by nothing yet. The switch
-    # (force_states, edge firing and S4's mismatches reading this) waits for the editor's
-    # review of `force_check.py --history`.
-    state["force_check"] = force_check.check(
+    checked = force_check.check(
         args.pipeline, model, args.period,
         force_check.growth_series(args.pipeline, model), force_check.periods_of(args.pipeline))
+    # §16 Step 3: the manifest says which rule judges this pipeline's forces. Under v3.1 the
+    # force states, force edges, dominant forces and S4's mismatches all come from `checked`;
+    # under v3.0 it is still emitted, beside the old states, for comparison.
+    rule = manifest.force_check(args.pipeline)
+    state = compute(model, sig_dir, weights, checked if rule == "v3.1" else None)
+    state["mix_states"] = mix_states(args.pipeline, args.period, model)
+    state["force_check"] = checked
     out = {
         "_meta": {
             "pipeline": args.pipeline, "period": args.period,
             "schema_version": "4.0", "spec_ref": "analysis/SYSTEM_MODEL_SPEC.md §16",
             "computed_from": "signals.db", "signals_observed": len(sig_dir),
+            "force_rule": rule,
         },
         **state,
         "narrative": None,
@@ -390,11 +420,14 @@ def main():
     print(f"  dominant forces ({len(o['dominant_forces'])}): {o['dominant_forces']}")
     print(f"  binding constraints (active '-' edges): {len(o['binding_constraints'])}")
     print(f"  active loops: reinforcing={o['active_reinforcing_loops']} balancing={o['active_balancing_loops']}")
-    doubt = [k for k, v in state["force_check"].items() if v["in_doubt"]]
-    if doubt:
-        print(f"  ⚠ in doubt (v3.1 check, contradicted {force_check.PERSISTENCE} readings running): {doubt}")
+    if rule == "v3.0":
+        doubt = [k for k, v in state["force_check"].items() if v["in_doubt"]]
+        if doubt:
+            print(f"  · v3.1 check (not switched on) would mark in doubt: {doubt}")
     if o["authored_vs_observed_mismatches"]:
-        print(f"  ⚠ S2b/S3 mismatches (authored active, not firing): {o['authored_vs_observed_mismatches']}")
+        what = ("in doubt: contradicted by the data" if rule == "v3.1"
+                else "authored active, not firing")
+        print(f"  ⚠ S2b/S3 mismatches ({what}): {o['authored_vs_observed_mismatches']}")
     print(f"  → wrote {out_path.relative_to(gs.ROOT)}")
     return 0
 

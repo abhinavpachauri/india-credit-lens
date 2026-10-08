@@ -105,7 +105,7 @@ Scripts each orchestrator launches as a subprocess, in execution order.
 Python import edges (sparse by design — the pipeline is subprocess-
 orchestrated, not import-coupled).
 
-- `core/derive_opportunities` → `core/generate_skeleton`, `core/manifest`
+- `core/derive_opportunities` → `core/force_check`, `core/generate_skeleton`, `core/manifest`
 - `core/force_check` → `core/generate_skeleton`, `core/generate_system_state`
 - `core/gate` → `core/manifest`
 - `core/generate_chart_series` → `core/manifest`

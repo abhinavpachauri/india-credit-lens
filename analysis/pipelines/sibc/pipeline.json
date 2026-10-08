@@ -4,6 +4,8 @@
   "order": 1,
   "depends_on": ["mospi"],
   "kind": "primary",
+  "force_check": "v3.1",
+  "note_force_check": "Forces judged against a baseline with timing (SYSTEM_MODEL_SPEC §16 Step 3), switched on 2026-10-08 after the editor reviewed force_check.py --history. Payments stays v3.0 until its group totals carry a YoY signal.",
   "reference_cuts": {
     "mospi": {
       "include": [

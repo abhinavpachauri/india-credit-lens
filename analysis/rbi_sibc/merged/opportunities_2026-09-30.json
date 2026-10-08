@@ -7,7 +7,8 @@
       "2026-09-30",
       "2026-08-31"
     ],
-    "note": "status derived from S3 driver firing"
+    "note": "status derived from S3 driver firing",
+    "force_rule": "v3.1"
   },
   "items": [
     {
@@ -140,11 +141,9 @@
       "label": "PSLC market depth from PSL reclassification surplus",
       "surface": "opportunities",
       "scope": "pipeline",
-      "status": "active",
+      "status": "closed",
       "authored_status": "active",
-      "evidence": [
-        "sibc-psl-housing-yoy"
-      ],
+      "evidence": [],
       "evidence_all": [
         "sibc-psl-housing-yoy"
       ],

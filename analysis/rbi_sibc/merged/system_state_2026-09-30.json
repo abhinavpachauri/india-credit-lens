@@ -5,7 +5,8 @@
     "schema_version": "4.0",
     "spec_ref": "analysis/SYSTEM_MODEL_SPEC.md §16",
     "computed_from": "signals.db",
-    "signals_observed": 170
+    "signals_observed": 170,
+    "force_rule": "v3.1"
   },
   "entity_states": {
     "icl:sibc/Statement1/I": {
@@ -454,112 +455,126 @@
   "force_states": {
     "force_gold_price_surge": {
       "state": "active",
+      "verdict": "working",
+      "window": "in_window",
       "instance_of": "ch_collateral_price_secured",
-      "evidence_observed": 2,
-      "evidence_total": 2,
       "authored_status": "active",
-      "mismatch": false
+      "mismatch": false,
+      "rule": "v3.1"
     },
     "force_rbi_unsecured_tightening": {
-      "state": "active",
+      "state": "faded",
+      "verdict": "faded",
+      "window": "faded",
       "instance_of": "ch_capital_weight_unsecured",
-      "evidence_observed": 2,
-      "evidence_total": 3,
       "authored_status": "active",
-      "mismatch": false
+      "mismatch": false,
+      "rule": "v3.1"
     },
     "force_psl_limit_revision": {
-      "state": "active",
+      "state": "faded",
+      "verdict": "faded",
+      "window": "faded",
       "instance_of": "ch_psl_threshold_reclassification",
-      "evidence_observed": 1,
-      "evidence_total": 1,
       "authored_status": "active",
-      "mismatch": false
+      "mismatch": false,
+      "rule": "v3.1"
     },
     "force_pli_manufacturing": {
       "state": "active",
+      "verdict": "working",
+      "window": "in_window",
       "instance_of": "ch_industrial_capex_supplychain",
-      "evidence_observed": 3,
-      "evidence_total": 3,
       "authored_status": "active",
-      "mismatch": false
+      "mismatch": false,
+      "rule": "v3.1"
     },
     "force_msme_formalisation": {
       "state": "active",
+      "verdict": "working",
+      "window": "in_window",
       "instance_of": "ch_formalisation_underwritability",
-      "evidence_observed": 2,
-      "evidence_total": 2,
       "authored_status": "active",
-      "mismatch": false
+      "mismatch": false,
+      "rule": "v3.1"
     },
     "force_nbfc_regulatory_recovery": {
       "state": "active",
+      "verdict": "working",
+      "window": "in_window",
       "instance_of": "ch_wholesale_funding_intermediation",
-      "evidence_observed": 3,
-      "evidence_total": 3,
       "authored_status": "active",
-      "mismatch": false
+      "mismatch": false,
+      "rule": "v3.1"
     },
     "force_msp_procurement_growth": {
       "state": "active",
+      "verdict": "working",
+      "window": "in_window",
       "instance_of": "ch_procurement_policy_food",
-      "evidence_observed": 2,
-      "evidence_total": 2,
       "authored_status": "active",
-      "mismatch": false
+      "mismatch": false,
+      "rule": "v3.1"
     },
     "force_infra_cycle_maturing": {
       "state": "active",
+      "verdict": "working",
+      "window": "in_window",
       "instance_of": "ch_project_lifecycle_origination",
-      "evidence_observed": 1,
-      "evidence_total": 1,
       "authored_status": "watch",
-      "mismatch": false
+      "mismatch": false,
+      "rule": "v3.1"
     },
     "force_eclgs5_guarantee_window": {
-      "state": "active",
+      "state": "unassessable",
+      "verdict": "unassessable",
+      "window": "in_window",
       "instance_of": "ch_emergency_guarantee_msme",
-      "evidence_observed": 3,
-      "evidence_total": 3,
       "authored_status": "active",
-      "mismatch": false
+      "mismatch": false,
+      "rule": "v3.1"
     },
     "force_kcc_collateral_limit": {
-      "state": "active",
+      "state": "contradicted",
+      "verdict": "contradicted",
+      "window": "in_window",
       "instance_of": "ch_kcc_psl_agri_limits",
-      "evidence_observed": 2,
-      "evidence_total": 2,
       "authored_status": "active",
-      "mismatch": false
+      "mismatch": true,
+      "rule": "v3.1"
     },
     "force_vehicle_scrappage_replacement": {
       "state": "active",
+      "verdict": "working",
+      "window": "in_window",
       "instance_of": "ch_asset_retirement_replacement",
-      "evidence_observed": 1,
-      "evidence_total": 1,
       "authored_status": "active",
-      "mismatch": false
+      "mismatch": false,
+      "rule": "v3.1"
     },
     "force_psl_education_limit": {
-      "state": "active",
+      "state": "faded",
+      "verdict": "faded",
+      "window": "faded",
       "instance_of": "ch_psl_threshold_reclassification",
-      "evidence_observed": 1,
-      "evidence_total": 1,
       "authored_status": "active",
-      "mismatch": false
+      "mismatch": false,
+      "rule": "v3.1"
     },
     "force_psl_renewable_limit": {
-      "state": "active",
+      "state": "faded",
+      "verdict": "faded",
+      "window": "faded",
       "instance_of": "ch_psl_threshold_reclassification",
-      "evidence_observed": 1,
-      "evidence_total": 1,
       "authored_status": "active",
-      "mismatch": false
+      "mismatch": false,
+      "rule": "v3.1"
     }
   },
   "edge_states": {
     "force_gold_price_surge__drives__e_S1_4_8": {
       "state": "active",
+      "verdict": "working",
       "type": "drives",
       "polarity": "+",
       "from": "force_gold_price_surge",
@@ -573,21 +588,23 @@
       "to": "opp_gold_loan_entry"
     },
     "force_rbi_unsecured_tightening__suppresses__e_S1_4_5": {
-      "state": "reversed",
+      "state": "dormant",
+      "verdict": "faded",
       "type": "suppresses",
       "polarity": "-",
       "from": "force_rbi_unsecured_tightening",
       "to": "e_S1_4_5"
     },
     "force_rbi_unsecured_tightening__suppresses__e_S1_4_1": {
-      "state": "reversed",
+      "state": "dormant",
+      "verdict": "faded",
       "type": "suppresses",
       "polarity": "-",
       "from": "force_rbi_unsecured_tightening",
       "to": "e_S1_4_1"
     },
     "force_rbi_unsecured_tightening__creates_risk__risk_unsecured_migration": {
-      "state": "reversed",
+      "state": "dormant",
       "type": "creates_risk",
       "polarity": "-",
       "from": "force_rbi_unsecured_tightening",
@@ -615,21 +632,23 @@
       "to": "risk_unsecured_migration"
     },
     "force_psl_limit_revision__drives__e_S1_iv": {
-      "state": "active",
+      "state": "dormant",
+      "verdict": "faded",
       "type": "drives",
       "polarity": "+",
       "from": "force_psl_limit_revision",
       "to": "e_S1_iv"
     },
     "force_psl_limit_revision__drives__e_S1_viii": {
-      "state": "active",
+      "state": "dormant",
+      "verdict": "faded",
       "type": "drives",
       "polarity": "+",
       "from": "force_psl_limit_revision",
       "to": "e_S1_viii"
     },
     "force_psl_limit_revision__creates_opportunity__opp_pslc_tooling": {
-      "state": "active",
+      "state": "dormant",
       "type": "creates_opportunity",
       "polarity": "+",
       "from": "force_psl_limit_revision",
@@ -637,6 +656,7 @@
     },
     "force_pli_manufacturing__drives__e_S2_2_14": {
       "state": "active",
+      "verdict": "working",
       "type": "drives",
       "polarity": "+",
       "from": "force_pli_manufacturing",
@@ -644,13 +664,15 @@
     },
     "force_pli_manufacturing__drives__e_S2_2_9": {
       "state": "active",
+      "verdict": "working",
       "type": "drives",
       "polarity": "+",
       "from": "force_pli_manufacturing",
       "to": "e_S2_2_9"
     },
     "force_pli_manufacturing__drives__e_S2_2_13": {
-      "state": "active",
+      "state": "dormant",
+      "verdict": "unclear",
       "type": "drives",
       "polarity": "+",
       "from": "force_pli_manufacturing",
@@ -679,6 +701,7 @@
     },
     "force_msme_formalisation__drives__e_S1_2_1": {
       "state": "active",
+      "verdict": "working",
       "type": "drives",
       "polarity": "+",
       "from": "force_msme_formalisation",
@@ -700,6 +723,7 @@
     },
     "force_nbfc_regulatory_recovery__amplifies__e_S1_3": {
       "state": "active",
+      "verdict": "working",
       "type": "amplifies",
       "polarity": "+",
       "from": "force_nbfc_regulatory_recovery",
@@ -707,13 +731,15 @@
     },
     "force_msp_procurement_growth__drives__e_S1_II": {
       "state": "active",
+      "verdict": "working",
       "type": "drives",
       "polarity": "+",
       "from": "force_msp_procurement_growth",
       "to": "e_S1_II"
     },
     "force_infra_cycle_maturing__suppresses__e_S2_2_18": {
-      "state": "reversed",
+      "state": "active",
+      "verdict": "working",
       "type": "suppresses",
       "polarity": "-",
       "from": "force_infra_cycle_maturing",
@@ -776,7 +802,8 @@
       "to": "opp_colending_infra"
     },
     "force_kcc_collateral_limit__drives__e_S1_1": {
-      "state": "active",
+      "state": "reversed",
+      "verdict": "contradicted",
       "type": "drives",
       "polarity": "+",
       "from": "force_kcc_collateral_limit",
@@ -784,20 +811,23 @@
     },
     "force_vehicle_scrappage_replacement->e_S1_4_7": {
       "state": "active",
+      "verdict": "working",
       "type": "drives",
       "polarity": "+",
       "from": "force_vehicle_scrappage_replacement",
       "to": "e_S1_4_7"
     },
     "force_psl_education_limit->e_S1_v": {
-      "state": "active",
+      "state": "dormant",
+      "verdict": "faded",
       "type": "drives",
       "polarity": "+",
       "from": "force_psl_education_limit",
       "to": "e_S1_v"
     },
     "force_psl_renewable_limit->e_S1_vi": {
-      "state": "active",
+      "state": "dormant",
+      "verdict": "faded",
       "type": "drives",
       "polarity": "+",
       "from": "force_psl_renewable_limit",
@@ -806,9 +836,9 @@
   },
   "loop_states": {
     "pli_supply_chain_R": {
-      "state": "active_reinforcing",
+      "state": "partial",
       "type": "reinforcing",
-      "live_edges": 4,
+      "live_edges": 3,
       "total_edges": 4
     },
     "msme_formalisation_R": {
@@ -820,7 +850,7 @@
     "unsecured_rerouting_B": {
       "state": "partial",
       "type": "balancing",
-      "live_edges": 3,
+      "live_edges": 1,
       "total_edges": 3
     },
     "infra_cycle_transition_B": {
@@ -833,28 +863,24 @@
   "system_observations": {
     "dominant_forces": [
       "force_gold_price_surge",
-      "force_rbi_unsecured_tightening",
-      "force_psl_limit_revision",
       "force_pli_manufacturing",
       "force_msme_formalisation",
       "force_nbfc_regulatory_recovery",
       "force_msp_procurement_growth",
       "force_infra_cycle_maturing",
-      "force_eclgs5_guarantee_window",
-      "force_kcc_collateral_limit",
-      "force_vehicle_scrappage_replacement",
-      "force_psl_education_limit",
-      "force_psl_renewable_limit"
+      "force_vehicle_scrappage_replacement"
     ],
     "binding_constraints": [
+      "force_infra_cycle_maturing__suppresses__e_S2_2_18",
       "e_S2_2_18__creates_risk__risk_infrastructure_repayment"
     ],
     "active_reinforcing_loops": [
-      "pli_supply_chain_R",
       "msme_formalisation_R"
     ],
     "active_balancing_loops": [],
-    "authored_vs_observed_mismatches": []
+    "authored_vs_observed_mismatches": [
+      "force_kcc_collateral_limit"
+    ]
   },
   "mix_states": {
     "sibc-basic-metal-sub-momentum": {

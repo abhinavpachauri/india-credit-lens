@@ -5,7 +5,8 @@
     "schema_version": "4.0",
     "spec_ref": "analysis/SYSTEM_MODEL_SPEC.md §16",
     "computed_from": "signals.db",
-    "signals_observed": 329
+    "signals_observed": 329,
+    "force_rule": "v3.0"
   },
   "entity_states": {
     "icl:atm_pos/cards/cards_in_force": {
@@ -209,7 +210,8 @@
       "evidence_observed": 3,
       "evidence_total": 3,
       "authored_status": "active",
-      "mismatch": false
+      "mismatch": false,
+      "rule": "v3.0"
     },
     "force_rbi_paytm_action": {
       "state": "active",
@@ -217,7 +219,8 @@
       "evidence_observed": 3,
       "evidence_total": 3,
       "authored_status": "retired",
-      "mismatch": false
+      "mismatch": false,
+      "rule": "v3.0"
     },
     "force_rbi_card_lifecycle_norms": {
       "state": "active",
@@ -225,7 +228,8 @@
       "evidence_observed": 1,
       "evidence_total": 1,
       "authored_status": "active",
-      "mismatch": false
+      "mismatch": false,
+      "rule": "v3.0"
     },
     "force_ncmc_transit_rollout": {
       "state": "active",
@@ -233,7 +237,8 @@
       "evidence_observed": 2,
       "evidence_total": 2,
       "authored_status": "active",
-      "mismatch": false
+      "mismatch": false,
+      "rule": "v3.0"
     },
     "fi_rupay_incentive_debit_ecom": {
       "state": "active",
@@ -241,7 +246,8 @@
       "evidence_observed": 1,
       "evidence_total": 1,
       "authored_status": "active",
-      "mismatch": false
+      "mismatch": false,
+      "rule": "v3.0"
     },
     "fi_cash_at_pos_clarity": {
       "state": "active",
@@ -249,7 +255,8 @@
       "evidence_observed": 1,
       "evidence_total": 1,
       "authored_status": "active",
-      "mismatch": false
+      "mismatch": false,
+      "rule": "v3.0"
     },
     "fi_contactless_ceiling": {
       "state": "active",
@@ -257,7 +264,8 @@
       "evidence_observed": 2,
       "evidence_total": 2,
       "authored_status": "active",
-      "mismatch": false
+      "mismatch": false,
+      "rule": "v3.0"
     }
   },
   "edge_states": {
