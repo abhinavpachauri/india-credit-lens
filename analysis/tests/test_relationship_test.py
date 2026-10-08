@@ -51,3 +51,13 @@ def test_a_lagged_push_is_found_only_at_its_declared_lag():
 def test_too_few_months_says_so():
     short = {k: v for k, v in noise(7).items() if k < 6}
     assert rt.test(short, short, TIDE, sign=1, lag=0)["verdict"] == "too_few"
+
+
+def test_a_family_of_tests_raises_the_bar(monkeypatch):
+    """p = 0.03 passes alone and fails as one of four (bar 0.0125). The p-value is fixed so the
+    bar, not the luck of a synthetic series, is what is tested."""
+    monkeypatch.setattr(rt, "shuffle_p", lambda x, y, seed=rt.SEED: (0.5, 0.03))
+    a = {k: TIDE[k] + v for k, v in noise(8).items()}
+    one, four = rt.test(a, a, TIDE, sign=1, lag=0), rt.test(a, a, TIDE, sign=1, lag=0, family=4)
+    assert (one["alpha"], one["verdict"]) == (0.05, "supported")
+    assert (four["alpha"], four["verdict"]) == (0.0125, "not_supported")

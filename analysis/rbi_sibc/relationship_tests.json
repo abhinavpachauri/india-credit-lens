@@ -38,6 +38,154 @@
         }
       },
       "note": "Pre-registered as substitution (−); complement (+) was the alternative reading. Ad-hoc checks 2026-10-08: raw monthly new lending r=+0.46 p=0.03 (n=22) and YoY-change r=+0.52 p=0.04 (n=15), both explained by the shared bank-credit tide (housing vs total bank credit r=0.78); after removing it r=+0.17 p=0.43."
+    },
+    {
+      "source": "e_S2_2_17",
+      "source_label": "Construction",
+      "target": "e_S2_2_12",
+      "target_label": "Cement and Cement Products",
+      "predicted_sign": 1,
+      "reason": "When construction firms borrow more, their main input suppliers' working capital rises too, within the same month.",
+      "tested": "2026-10-08",
+      "through_period": "2026-09-30",
+      "protocol": "SYSTEM_MODEL_SPEC §16 Step 6b",
+      "verdict": "not_supported",
+      "at_lag": 0,
+      "family": 4,
+      "alpha": 0.0125,
+      "lags": {
+        "0": {
+          "n": 15,
+          "r": -0.18,
+          "p": 0.523
+        },
+        "1": {
+          "n": 13,
+          "r": 0.226,
+          "p": 0.454
+        },
+        "2": {
+          "n": 11,
+          "r": -0.091,
+          "p": 0.801
+        },
+        "3": {
+          "n": 9,
+          "verdict": "too_few"
+        }
+      },
+      "note": "Family of 4 declared together 2026-10-08 before any result: Construction→Cement (main), Construction→Iron and Steel, CRE→Cement, CRE→Iron and Steel; all +, lag 0. Construction and Cement are siblings under Industry, a slight mechanical pull toward a negative link (against the prediction)."
+    },
+    {
+      "source": "e_S2_2_17",
+      "source_label": "Construction",
+      "target": "e_S2_2_13_1",
+      "target_label": "Iron and Steel",
+      "predicted_sign": 1,
+      "reason": "When construction firms borrow more, their main input suppliers' working capital rises too, within the same month.",
+      "tested": "2026-10-08",
+      "through_period": "2026-09-30",
+      "protocol": "SYSTEM_MODEL_SPEC §16 Step 6b",
+      "verdict": "not_supported",
+      "at_lag": 0,
+      "family": 4,
+      "alpha": 0.0125,
+      "lags": {
+        "0": {
+          "n": 15,
+          "r": 0.159,
+          "p": 0.563
+        },
+        "1": {
+          "n": 13,
+          "r": -0.079,
+          "p": 0.789
+        },
+        "2": {
+          "n": 11,
+          "r": 0.22,
+          "p": 0.5
+        },
+        "3": {
+          "n": 9,
+          "verdict": "too_few"
+        }
+      },
+      "note": "Family of 4 declared together 2026-10-08 before any result: Construction→Cement (main), Construction→Iron and Steel, CRE→Cement, CRE→Iron and Steel; all +, lag 0. Construction and Cement are siblings under Industry, a slight mechanical pull toward a negative link (against the prediction)."
+    },
+    {
+      "source": "e_S1_3_8",
+      "source_label": "Commercial Real Estate",
+      "target": "e_S2_2_12",
+      "target_label": "Cement and Cement Products",
+      "predicted_sign": 1,
+      "reason": "When construction firms borrow more, their main input suppliers' working capital rises too, within the same month.",
+      "tested": "2026-10-08",
+      "through_period": "2026-09-30",
+      "protocol": "SYSTEM_MODEL_SPEC §16 Step 6b",
+      "verdict": "not_supported",
+      "at_lag": 0,
+      "family": 4,
+      "alpha": 0.0125,
+      "lags": {
+        "0": {
+          "n": 15,
+          "r": 0.208,
+          "p": 0.47
+        },
+        "1": {
+          "n": 13,
+          "r": 0.078,
+          "p": 0.803
+        },
+        "2": {
+          "n": 11,
+          "r": -0.495,
+          "p": 0.121
+        },
+        "3": {
+          "n": 9,
+          "verdict": "too_few"
+        }
+      },
+      "note": "Family of 4 declared together 2026-10-08 before any result: Construction→Cement (main), Construction→Iron and Steel, CRE→Cement, CRE→Iron and Steel; all +, lag 0. Construction and Cement are siblings under Industry, a slight mechanical pull toward a negative link (against the prediction)."
+    },
+    {
+      "source": "e_S1_3_8",
+      "source_label": "Commercial Real Estate",
+      "target": "e_S2_2_13_1",
+      "target_label": "Iron and Steel",
+      "predicted_sign": 1,
+      "reason": "When construction firms borrow more, their main input suppliers' working capital rises too, within the same month.",
+      "tested": "2026-10-08",
+      "through_period": "2026-09-30",
+      "protocol": "SYSTEM_MODEL_SPEC §16 Step 6b",
+      "verdict": "not_supported",
+      "at_lag": 0,
+      "family": 4,
+      "alpha": 0.0125,
+      "lags": {
+        "0": {
+          "n": 15,
+          "r": 0.179,
+          "p": 0.531
+        },
+        "1": {
+          "n": 13,
+          "r": 0.096,
+          "p": 0.754
+        },
+        "2": {
+          "n": 11,
+          "r": 0.279,
+          "p": 0.416
+        },
+        "3": {
+          "n": 9,
+          "verdict": "too_few"
+        }
+      },
+      "note": "Family of 4 declared together 2026-10-08 before any result: Construction→Cement (main), Construction→Iron and Steel, CRE→Cement, CRE→Iron and Steel; all +, lag 0. Construction and Cement are siblings under Industry, a slight mechanical pull toward a negative link (against the prediction)."
     }
   ]
 }

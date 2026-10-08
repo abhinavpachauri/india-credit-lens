@@ -674,6 +674,20 @@ lending r = +0.46, p = 0.03, but both follow total bank credit (housing r = 0.78
 the tide removed, r = +0.17, p = 0.43. That near-miss is why the tide step is in the protocol and
 why its unit test (two lines sharing only a tide must fail) exists.
 
+*Several declared together raise the bar* (`--family N`, Bonferroni, p < 0.05 / N): four tested
+at once would otherwise pass one by luck about one time in five.
+
+*Second test (2026-10-08), a family of four, all predicted +, lag 0, bar p < 0.0125:*
+Construction → Cement (main), Construction → Iron and Steel, Commercial Real Estate → Cement,
+Commercial Real Estate → Iron and Steel. **All `not_supported`**, none near (p 0.47–0.56; r
+between −0.18 and +0.21). No other lag came close either.
+
+*What a null means here: too weak to see, not absent.* The smallest |r| that can pass at p < 0.05
+with n monthly changes: n = 15 → 0.51 (0.63 as one of four); 22 → 0.42; 36 → 0.33; 60 → 0.25;
+120 → 0.18. SIBC has 15 usable monthly changes (YoY exists from Jan 2025 data, and Sep–Dec 2025
+is missing), so only very strong links are visible. **History length is the binding constraint
+on this layer:** a 5-year SIBC backfill (RBI publishes it) would bring the visible bar to ~0.25.
+
 **Output:** structured JSON with `entity_states` (incl. propagated aggregates), `force_states`, `edge_states`, `loop_states`, `system_observations`, and a `narrative: null` slot the LLM fills at Stage 5.X.
 
 ---

@@ -572,6 +572,34 @@
           "date": "2026-10-08",
           "how_measured": "Known-bad control: total_disagreements() run on the payments table sidecar saved before the fix (23 of 26 totals empty). Known-good: the same function on the restamped sibc/atm_pos/nbfc sidecars. Enumerated over every table that has a band line, not sampled. The defect was two resolvers for one fact (band from the registry, table from 3 hand-declared anchors); the fix is one resolver, core/cuts.py total_yoy_by_metric.",
           "source": "analysis/tests/test_cut_table.py"
+        },
+        {
+          "metric": "catch rate — force check v3.1 vs v3.0 (a check that could not fail)",
+          "value": "v3.0 marked 237 of 325 SIBC force-readings 'active' (every force, every month it could read); v3.1: 106 working, 21 contradicted, 15 in doubt. Known-good (Nov 2023 risk weights on cards) working at every assessable reading in its window; known-bad (injected force on a falling line) contradicted. Mutations: always-working fails 2 tests, zero baseline fails 4",
+          "date": "2026-10-08",
+          "how_measured": "force_check.py --history over every period x force; controls and mutations as unit tests",
+          "source": "analysis/core/force_check.py; analysis/tests/test_force_check.py; SYSTEM_MODEL_SPEC §16 Step 3"
+        },
+        {
+          "metric": "false-finding rate — explanation coverage threshold and history holes",
+          "value": "a 1x-median threshold flags 47% of SIBC line-readings as moves by construction (2x 20%, 3x 11%); counting changes across the Sep–Dec 2025 hole produced 32 false SIBC moves in one reading (NBFC 11). Fixed: 3x, one data month apart",
+          "date": "2026-10-08",
+          "how_measured": "coverage.py --history over every reading, all three pipelines; share flagged enumerated per threshold",
+          "source": "analysis/core/coverage.py; SYSTEM_MODEL_SPEC §16 Step 6a"
+        },
+        {
+          "metric": "false-discovery rate — relationships found by correlation alone",
+          "value": "86 cross-group SIBC pairs co-move at |r|>0.6; a shuffled control produces 48 (over half would be chance). First candidate (HFC vs direct housing) looked linked raw (r=+0.46, p=0.03) and vanished once the bank-credit tide was removed (r=+0.17, p=0.43). Unit test: two lines sharing only a tide must fail — it does, and fails to fail when tide removal is switched off",
+          "date": "2026-10-08",
+          "how_measured": "all 2,912 cross-group pairs, 10,000-shuffle permutation; relationship_test.py protocol",
+          "source": "analysis/core/relationship_test.py; analysis/rbi_sibc/relationship_tests.json; SYSTEM_MODEL_SPEC §16 Step 6b"
+        },
+        {
+          "metric": "detectable effect size vs history length (why nulls are 'too weak to see')",
+          "value": "smallest |r| that can pass at p<0.05: 15 monthly changes 0.51 (0.63 as one of four), 36 → 0.33, 60 → 0.25, 120 → 0.18. SIBC has 15; the four construction links tested all not_supported (p 0.47–0.56)",
+          "date": "2026-10-08",
+          "how_measured": "critical r from the t distribution, n-2 df, two-sided; Bonferroni for a family of 4",
+          "source": "SYSTEM_MODEL_SPEC §16 Step 6b"
         }
       ],
       "observations": [

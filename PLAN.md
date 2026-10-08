@@ -2,16 +2,25 @@
 
 > Rewritten in place, never appended. Finished items are **deleted** (git keeps them). Hard cap
 > 120 lines, enforced by `reconcile.py`. Standing rules live in `DECISIONS.md`; how to run a
-> workflow lives in its skill (`.claude/skills/`). Last rewritten 2026-10-08.
+> workflow lives in its skill (`.claude/skills/`). Last rewritten 2026-10-09.
 
-## Now: the agentic layer (design: `archive/docs/PLAN_2026-09-24_AGENTIC_LAYER.md`)
+## Now: tightening the model under S4 (user, 2026-10-08)
 
-The engine (gate, compute, registry, traceability) stays deterministic code. On top of it:
-skills = procedure, subagents = independent review, hooks + `reconcile.py` = enforcement.
-Phases 0–3 ✅ (2026-09-24/26: hooks, knowledge split, four skills tested on the Aug 2026 ingest,
-three reviewer subagents accepted cold at 4/4 caught, 0/3 false). **Phase 4:** `onboard-source` ✅ 2026-10-05 (from NBFC + MoSPI);
-`dashboard-change` ✅ 2026-10-08 (from the 10-05/06 Read hierarchy; first real use = the next presentation
-debt below). `add-signal-family`, `measure-gate` ⬜, each written while doing its real task.
+S4 was asked to explain growth, not change, and could only accept government instruments, because
+the layers under it were thin. Order agreed: fix the force check → count what the model explains
+→ relationships inside a pipeline → links between pipelines → master model → S4 redesign.
+Built 2026-10-08 (SYSTEM_MODEL_SPEC v3.1 §16):
+- **Force check** (Step 3, `core/force_check.py`): judged against the line's group, with timing;
+  live for SIBC (13 → 7 active; KCC in doubt). Payments waits: its group totals have no YoY signal.
+- **Coverage count** (Step 6a, `core/coverage.py`): moves vs explained, every state file; S4 reads
+  its list from it. SIBC Aug 2026: 6 moves, 2 structural, 4 unexplained (food credit, loans
+  against FDs, other industries, fertiliser). History: 102 unexplained → 86 after structural.
+- **Relationship test** (Step 6b, `core/relationship_test.py`): HFC vs housing and the four
+  construction links all `not_supported` (`analysis/rbi_sibc/relationship_tests.json`).
+  **History is the binding constraint:** 15 monthly changes see only |r| ≥ 0.51.
+
+Agentic layer: phases 0–4 as before (`dashboard-change`, `onboard-source` ✅); `add-signal-family`,
+`measure-gate` ⬜, each written while doing its real task.
 
 ## Next, in order
 
@@ -30,7 +39,7 @@ debt below). `add-signal-family`, `measure-gate` ⬜, each written while doing i
      **September decides the PDF path**: if the annex is listed within the 5-day grace, retire
      `--cpi-pdf` + `cpi_release.py` (and ask whether the dashboard workbook, now redundant, goes too);
      if not, the PDF stays as the release-day source. The catalogue's Feb–Aug entries were all created 10-01.
-   - **The S4 decomposition** reads 1f (open decisions below): design first, ASCII first.
+   - 1f now feeds the coverage count's prices/activity check (Step 6a); S4 redesign below.
    - Candidate gate: the IIP weights rebuild (0.046 pt, measured by hand) as a standing 1d check.
    - **Open, user deciding:** textiles vs apparel (SIBC 2.4 ↔ nic:13 or 13+14); WPI weights for the
      6 combined deflators (WPI is DPIIT's, not in MoSPI's catalogue: eaindustry.nic.in); petroleum
@@ -45,17 +54,13 @@ debt below). `add-signal-family`, `measure-gate` ⬜, each written while doing i
 
 ## Open decisions and known debts (not scheduled)
 
-- **S4 cannot explain medium-term moves (user, 2026-10-03). 1f is built; design this next.** S4 asks
-  "which instrument took effect inside the window", so a lagged response or a slow-building
-  condition reads as `expired` or gets a decorative citation. Aug 2026 showed it: the two causes
-  that sourced cleanly (#12 ATM fees, RBI 1 May 2025; #8 TReDS, 7 Nov 2024) are real and fit the
-  movement only through a lag, and are held unpromoted. Directions, in payoff order:
-  (1) **decompose before attributing**: 1f real growth + output explain the price/activity share,
-  so S4 explains only the residual; (2) a **response lag** on forces, so the temporal check is
-  "effective date + declared lag overlaps the window", not "effective date inside it";
-  (3) sourced **standing conditions** as a class distinct from statistics; (4) record what stays
-  unexplained as such. Until then: source, do not promote; the Aug worklist keeps 12 proposals
-  unsearched (`analysis/s4_proposals/2026-09-30.json`).
+- **Next for the model, user deciding (2026-10-09):** (a) **SIBC history backfill** (RBI publishes
+  years of it; data-only per DECISIONS): unlocks relationship tests (60 changes → |r| ≥ 0.25),
+  steadier wobble, more coverage readings; (b) **S4 redesign**: causes beyond instruments, as
+  series checked against data (rates, prices, subsidy timing), with lag; Aug's 4 open moves are
+  of that kind; (c) payments group-total YoY signals, then switch its force check on;
+  (d) model pass: arrows for ECLGS 5.0 and 3 payments forces (none say which way they push).
+  The Aug worklist still keeps 12 S4 proposals unsearched (`analysis/s4_proposals/2026-09-30.json`).
 
 - **Stage 5.7 checks the declared cut, not the drawn series** (found 2026-10-05). Payments cards
   naming a bank category were drawn over the top-5 banks, so the chart showed only Total, and 5.7

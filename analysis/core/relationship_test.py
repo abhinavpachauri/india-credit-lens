@@ -17,9 +17,11 @@ The protocol, fixed before any result is seen:
             the first candidate tested (HFC lending vs direct housing) showed r = +0.46,
             p = 0.03 raw, and r = +0.17, p = 0.43 once the tide was removed
   control   10,000 shuffles of one side; p = share with |r| at least the observed
-  verdict   `supported` when the predicted sign holds and p < ALPHA at the declared lag;
-            `opposite` when the sign is reversed at p < ALPHA; otherwise `not_supported`.
-            Other lags are reported, never used to rescue a verdict.
+  verdict   `supported` when the predicted sign holds and p < ALPHA / family at the declared
+            lag; `opposite` when the sign is reversed at that bar; otherwise `not_supported`.
+            Other lags are reported, never used to rescue a verdict. `family` is how many
+            relationships were declared together (Bonferroni): four tested at once each need
+            p < 0.0125, or one of them passes by luck one time in five.
 
 Results, nulls included, are recorded in analysis/{pipeline}/relationship_tests.json: a
 rejection is evidence about the world and is kept (the same rule as S4's attempts[]).
@@ -81,8 +83,10 @@ def shuffle_p(x: list[float], y: list[float], seed: int = SEED) -> tuple[float, 
     return r, hits / SHUFFLES
 
 
-def test(a: dict[int, float], b: dict[int, float], t: dict[int, float], sign: int, lag: int) -> dict:
+def test(a: dict[int, float], b: dict[int, float], t: dict[int, float], sign: int, lag: int,
+         family: int = 1) -> dict:
     """`a` pushes `b` with `sign` after `lag` months. Pure given its inputs."""
+    alpha = ALPHA / family
     rows = {}
     for L in sorted({0, 1, 2, 3, lag}):
         months = sorted(k for k in a if k + L in b and k + L in t and k in t)
@@ -96,23 +100,24 @@ def test(a: dict[int, float], b: dict[int, float], t: dict[int, float], sign: in
     main = rows[lag]
     if "r" not in main:
         verdict = "too_few"
-    elif main["p"] < ALPHA and (main["r"] > 0) == (sign > 0):
+    elif main["p"] < alpha and (main["r"] > 0) == (sign > 0):
         verdict = "supported"
-    elif main["p"] < ALPHA:
+    elif main["p"] < alpha:
         verdict = "opposite"
     else:
         verdict = "not_supported"
-    return {"verdict": verdict, "at_lag": lag, "lags": rows}
+    return {"verdict": verdict, "at_lag": lag, "family": family, "alpha": round(alpha, 4), "lags": rows}
 
 
-def run(pipeline: str, source: str, target: str, sign: int, lag: int, reason: str) -> dict:
+def run(pipeline: str, source: str, target: str, sign: int, lag: int, reason: str,
+        family: int = 1) -> dict:
     model = gs.load_json(gs.pipeline_cfg(pipeline)["model"])
     series, periods = fc.growth_series(pipeline, model), fc.periods_of(pipeline)
     dm = lambda p: fc.resolve_csv_date(pipeline, p)  # noqa: E731
     by_id = {n["id"]: n for n in model["nodes"]}
     res = test(gap_changes(source, model, series, periods, dm),
                gap_changes(target, model, series, periods, dm),
-               tide(model, series, dm), sign, lag)
+               tide(model, series, dm), sign, lag, family)
     return {"source": source, "source_label": by_id[source]["label"],
             "target": target, "target_label": by_id[target]["label"],
             "predicted_sign": sign, "reason": reason, "tested": date.today().isoformat(),
@@ -141,11 +146,14 @@ def main() -> int:
                     help="+1 complement (move together), -1 substitute (move apart)")
     ap.add_argument("--lag", type=int, default=0, help="months the push takes, declared up front")
     ap.add_argument("--reason", required=True, help="the real-world reason, one sentence")
+    ap.add_argument("--family", type=int, default=1,
+                    help="how many relationships were declared together (Bonferroni)")
     ap.add_argument("--note")
     ap.add_argument("--record", action="store_true", help="append the result to relationship_tests.json")
     a = ap.parse_args()
-    r = run(a.pipeline, a.source, a.target, a.sign, a.lag, a.reason)
-    print(f"{r['source_label']} → {r['target_label']} (predicted {'+' if a.sign > 0 else '−'}, lag {a.lag}m)")
+    r = run(a.pipeline, a.source, a.target, a.sign, a.lag, a.reason, a.family)
+    print(f"{r['source_label']} → {r['target_label']} (predicted {'+' if a.sign > 0 else '−'}, "
+          f"lag {a.lag}m, bar p < {r['alpha']:g})")
     for L, row in r["lags"].items():
         mark = " ← declared" if L == a.lag else ""
         print(f"  lag {L}m: " + (f"n={row['n']} r={row['r']:+.2f} p={row['p']:.3f}" if "r" in row
