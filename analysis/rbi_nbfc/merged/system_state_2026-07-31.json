@@ -140,10 +140,11 @@
       "moves": 2,
       "steady": 12,
       "artifact": 0,
+      "structural": 1,
       "prices_activity": 0,
       "cause": 0,
       "relationship": 0,
-      "unexplained": 2,
+      "unexplained": 1,
       "no_reading": 0
     },
     "moves": [
@@ -158,8 +159,12 @@
         "threshold_pp": 1.05,
         "baseline_kind": "parent",
         "baseline_of": "Retail Loans",
-        "filed_under": "unexplained",
-        "also_holds": {},
+        "filed_under": "structural",
+        "also_holds": {
+          "structural": [
+            "echo of Retail Loans"
+          ]
+        },
         "prices_activity": "not_decomposable",
         "prices_detail": {
           "reason": "no 1f match for this line"

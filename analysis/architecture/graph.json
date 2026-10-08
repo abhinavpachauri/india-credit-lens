@@ -217,6 +217,20 @@
       },
       "writes": {}
     },
+    "core/relationship_test": {
+      "doc_claims": [],
+      "imports": [
+        "core/coverage",
+        "core/force_check",
+        "core/generate_skeleton"
+      ],
+      "invokes": [],
+      "path": "analysis/core/relationship_test.py",
+      "reads": {},
+      "writes": {
+        "relationship_tests.json": "high"
+      }
+    },
     "core/render": {
       "doc_claims": [],
       "imports": [],

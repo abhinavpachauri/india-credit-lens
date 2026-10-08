@@ -8,7 +8,7 @@
 > Authored rationale (layer model, design principles, guard purposes) lives in the
 > hand-written `ARCHITECTURE.md`. This file is the structural, drift-guarded half.
 
-_Derived from 98 scripts._
+_Derived from 99 scripts._
 
 ## 1. Data-flow
 
@@ -115,6 +115,7 @@ orchestrated, not import-coupled).
 - `core/generate_system_state` → `core/coverage`, `core/force_check`, `core/generate_skeleton`, `core/manifest`
 - `core/real_cells` → `core/absence`, `core/manifest`, `signals/compute/csv_sector`, `signals/compute/real_economy`
 - `core/relational_insights` → `core/manifest`, `core/residuals`
+- `core/relationship_test` → `core/coverage`, `core/force_check`, `core/generate_skeleton`
 - `core/run_inference` → `core/generate_skeleton`, `core/manifest`
 - `core/validate_system_model` → `core/generate_skeleton`, `core/manifest`
 - `cross/compose_ecosystem` → `core/generate_skeleton`, `core/manifest`

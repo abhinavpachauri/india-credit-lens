@@ -1,0 +1,43 @@
+{
+  "_meta": {
+    "spec_ref": "analysis/SYSTEM_MODEL_SPEC.md §16 Step 6b",
+    "description": "Every relationship tested, nulls included. Only `supported` may become an entity→entity edge, and only with the editor's yes."
+  },
+  "tests": [
+    {
+      "source": "e_S1_3_9_1",
+      "source_label": "Housing Finance Companies (HFCs)",
+      "target": "e_S1_4_2",
+      "target_label": "Housing (Including Priority Sector Housing)",
+      "predicted_sign": -1,
+      "reason": "Banks fund home loans either directly or by lending to housing finance companies, so one channel substitutes for the other.",
+      "tested": "2026-10-08",
+      "through_period": "2026-09-30",
+      "protocol": "SYSTEM_MODEL_SPEC §16 Step 6b",
+      "verdict": "not_supported",
+      "at_lag": 0,
+      "lags": {
+        "0": {
+          "n": 15,
+          "r": 0.353,
+          "p": 0.199
+        },
+        "1": {
+          "n": 13,
+          "r": -0.258,
+          "p": 0.396
+        },
+        "2": {
+          "n": 11,
+          "r": 0.299,
+          "p": 0.375
+        },
+        "3": {
+          "n": 9,
+          "verdict": "too_few"
+        }
+      },
+      "note": "Pre-registered as substitution (−); complement (+) was the alternative reading. Ad-hoc checks 2026-10-08: raw monthly new lending r=+0.46 p=0.03 (n=22) and YoY-change r=+0.52 p=0.04 (n=15), both explained by the shared bank-credit tide (housing vs total bank credit r=0.78); after removing it r=+0.17 p=0.43."
+    }
+  ]
+}

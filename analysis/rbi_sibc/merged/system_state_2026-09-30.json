@@ -1283,10 +1283,11 @@
       "moves": 6,
       "steady": 78,
       "artifact": 0,
+      "structural": 2,
       "prices_activity": 0,
       "cause": 0,
       "relationship": 0,
-      "unexplained": 6,
+      "unexplained": 4,
       "no_reading": 0
     },
     "moves": [
@@ -1319,8 +1320,12 @@
         "threshold_pp": 0.68,
         "baseline_kind": "parent",
         "baseline_of": "Personal Loans",
-        "filed_under": "unexplained",
-        "also_holds": {},
+        "filed_under": "structural",
+        "also_holds": {
+          "structural": [
+            "echo of Personal Loans"
+          ]
+        },
         "prices_activity": "does_not_hold",
         "prices_detail": {
           "nominal_change_pp": -0.14,
@@ -1357,8 +1362,12 @@
         "threshold_pp": 2.33,
         "baseline_kind": "parent",
         "baseline_of": "Industry (Micro and Small, Medium and Large)",
-        "filed_under": "unexplained",
-        "also_holds": {},
+        "filed_under": "structural",
+        "also_holds": {
+          "structural": [
+            "echo of Industry (Micro and Small, Medium and Large)"
+          ]
+        },
         "prices_activity": "not_decomposable",
         "prices_detail": {
           "reason": "no 1f match for this line"

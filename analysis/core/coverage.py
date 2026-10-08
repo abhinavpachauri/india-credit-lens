@@ -11,6 +11,9 @@ in S3, and S4 reads the result.
                 previous reading by more than MOVE_FACTOR × its typical change
     EXPLAINED   the first of these that holds, in order:
                   artifact         one bank is most of the move (signals/dominance.py)
+                  structural       not a separate event: an ECHO (the group moved the other way),
+                                   a TWIN (the same borrowers moved in a linked table), or
+                                   CARRIED by one member (the group moved because it did)
                   prices_activity  the line's 1f price index or output moved the same way and
                                    covers at least half the change in its nominal growth
                   cause            a DATED force whose edge to the line is working, sign matching
@@ -46,7 +49,9 @@ PRICE_SHARE = 0.5
 # move roughly a one-in-ten event per line, close to the usual ~2σ bar for "unusual".
 MOVE_FACTOR = 3.0
 POLARITY = {"+": 1, "-": -1}
-ORDER = ("artifact", "prices_activity", "cause", "relationship")
+ORDER = ("artifact", "structural", "prices_activity", "cause", "relationship")
+# An echo / carried-by-member holds when the other line covers at least this share of the move.
+STRUCTURAL_SHARE = 0.5
 
 
 def sign(x: float) -> int:
@@ -161,13 +166,57 @@ def relationships(node_id: str, direction: int, moves: dict, model: dict) -> lis
     return out
 
 
+def structural(nid: str, m: dict, moves: dict, model: dict, by_id: dict, parent_of: dict,
+               series: dict, period: str, weights: dict) -> list[str]:
+    """Why this move is not a separate event, from the skeleton alone. SYSTEM_MODEL_SPEC §16
+    Step 6a. Each points at the line that holds the event, which keeps its own filing, so an
+    event is counted once:
+
+      echo     the line moved against its group because the GROUP moved the other way, by at
+               least half the line's change (non-food credit "falls" when food credit jumps)
+      twin     a lens member (PSL) whose linked main-table line moved the same way this month:
+               the same borrowers in a second table. The main-table line keeps the event
+      carried  a group whose move one member carries: that member moved the same way and its
+               weighted change is at least half the group's own change. The member keeps it
+    """
+    d, prev, out = m["direction"], m["previous"], []
+    node = by_id[nid]
+    base = m.get("base_change")
+    if base is not None and -d * base > 0 and abs(base) >= STRUCTURAL_SHARE * abs(m["gap_change_pp"]):
+        out.append(f"echo of {m['baseline_of']}")
+    if not node.get("additive", True):
+        for e in model["edges"]:
+            if e["type"] != "reclassifies" or nid not in (e["from"], e["to"]):
+                continue
+            other = e["to"] if e["from"] == nid else e["from"]
+            if other in by_id and by_id[other].get("additive", True) \
+                    and moves.get(other, {}).get("direction") == d:
+                out.append(f"twin of {by_id[other]['label']}")
+    own = series.get(nid, {})
+    if prev in own and period in own and weights.get(nid):
+        d_group = own[period] - own[prev]
+        for k, parent in parent_of.items():
+            km = moves.get(k, {})
+            if parent != nid or km.get("direction") != d or not weights.get(k):
+                continue
+            kser = series.get(k, {})
+            if prev not in kser or period not in kser:
+                continue
+            carried = weights[k] / weights[nid] * (kser[period] - kser[prev])
+            if sign(carried) == sign(d_group) != 0 and abs(carried) >= STRUCTURAL_SHARE * abs(d_group):
+                out.append(f"carried by {by_id[k]['label']}")
+    return out
+
+
 # ── 3. The count ─────────────────────────────────────────────────────────────────────────
 
 def compute(model: dict, period: str, series: dict, periods: list[str], checked: dict,
             real: dict | None = None, output: dict | None = None, artifact=None,
-            data_month=lambda p: p) -> dict:
+            data_month=lambda p: p, weights: dict | None = None) -> dict:
     """Pure given its inputs. `artifact(node) -> True | False | None` (None = not testable);
-    `data_month(period)` is the month a period key's data describes (SIBC keys run a month ahead)."""
+    `data_month(period)` is the month a period key's data describes (SIBC keys run a month ahead);
+    `weights` is entity_id -> size (latest CSV value), for `carried`."""
+    weights = weights or {}
     real, output = real or {}, output or {}
     artifact = artifact or (lambda node: None)
     by_id = {n["id"]: n for n in model["nodes"] if n.get("tier") == "entity"}
@@ -182,8 +231,10 @@ def compute(model: dict, period: str, series: dict, periods: list[str], checked:
             moves[nid] = {"status": "no_reading", "reason": "no YoY signal for this line in signals.db"}
             continue
         kind, of, base = baseline_for(nid, parent_of, by_id, series, period)
-        moves[nid] = {**move_of(series[nid], base, kind, periods, period, data_month),
-                      "baseline_kind": kind, "baseline_of": of}
+        mv = move_of(series[nid], base, kind, periods, period, data_month)
+        if mv.get("previous") in base and period in base:
+            mv["base_change"] = base[period] - base[mv["previous"]]
+        moves[nid] = {**mv, "baseline_kind": kind, "baseline_of": of}
 
     # Every line but a root. Moves are measured against the line's group, so a force acting on a
     # group (Services, All Engineering) cancels out of its members' moves and can only explain
@@ -202,6 +253,9 @@ def compute(model: dict, period: str, series: dict, periods: list[str], checked:
         held = {}
         if artifact(n):
             held["artifact"] = ["one bank is most of the move"]
+        st = structural(n["id"], m, moves, model, by_id, parent_of, series, period, weights)
+        if st:
+            held["structural"] = st
         pa, pa_detail = prices_activity(real.get(n["id"]), output.get(n["id"]), series[n["id"]],
                                         period, m["previous"], d)
         if pa == "holds":
@@ -301,10 +355,12 @@ def for_period(pipeline: str, model: dict, period: str, series=None, periods=Non
     series = series if series is not None else fc.growth_series(pipeline, model)
     periods = periods if periods is not None else fc.periods_of(pipeline)
     checked = checked if checked is not None else fc.check(pipeline, model, period, series, periods)
+    from core.generate_system_state import load_entity_weights
     real, output = reference_rows(pipeline, model)
     return compute(model, period, series, periods, checked, real, output,
                    artifact_test(pipeline, model, period),
-                   lambda p: fc.resolve_csv_date(pipeline, p))
+                   lambda p: fc.resolve_csv_date(pipeline, p),
+                   load_entity_weights(gs.pipeline_cfg(pipeline)))
 
 
 def main() -> int:

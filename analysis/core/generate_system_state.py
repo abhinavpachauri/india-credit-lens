@@ -425,7 +425,7 @@ def main():
     print(f"  binding constraints (active '-' edges): {len(o['binding_constraints'])}")
     print(f"  active loops: reinforcing={o['active_reinforcing_loops']} balancing={o['active_balancing_loops']}")
     c = state["explanation_coverage"]["summary"]
-    print(f"  coverage: {c['moves']} moves of {c['lines']} lines — artifact {c['artifact']}, "
+    print(f"  coverage: {c['moves']} moves of {c['lines']} lines — artifact {c['artifact']}, structural {c['structural']}, "
           f"prices/activity {c['prices_activity']}, cause {c['cause']}, relationship "
           f"{c['relationship']}, unexplained {c['unexplained']} (no reading {c['no_reading']})")
     if rule == "v3.0":

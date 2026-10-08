@@ -1,6 +1,6 @@
 # System Model Specification — India Credit Lens
 > Version 3.1 | October 2026 | Domain-agnostic
-> v3.1 (2026-10-08): force state judged against a baseline, with timing fields (§10.1, §16 Step 3); explanation coverage computed in S3 and read by S4 (§16 Step 6a). Specced, not yet built.
+> v3.1 (2026-10-08): force state judged against a baseline, with timing fields (§10.1, §16 Step 3); explanation coverage computed in S3 and read by S4, with structural explanations (§16 Step 6a); relationships admitted by a test (§16 Step 6b). Built.
 
 This document is the canonical definition for all system models in the India Credit Lens pipeline.
 Read it before any FOUNDATION or UPDATE pass on any pipeline's `system_model.json`.
@@ -592,6 +592,7 @@ and every one that holds is listed:
 | order | kind | holds when | source |
 |---|---|---|---|
 | 1 | `artifact` | the move is dominated by one reporting entity, merger or reclassification | `signals/dominance.py` |
+| 1a | `structural` | not a separate event (added 2026-10-08): an **echo** (the group moved the other way by at least half the line's change), a **twin** (a lens member whose `reclassifies` partner moved the same way; the main-table line keeps the event), or **carried** by a member (that member moved the same way and its weighted change is at least half the group's own; the member keeps the event) | the skeleton + latest CSV weights |
 | 2 | `prices_activity` | the line's 1f deflator YoY (or its output growth) changed in the same direction and covers at least half the change in its nominal YoY | 1f operands (`deflator_yoy`, `credit_yoy`) and `*-output-growth` |
 | 3 | `cause` | a **dated** force whose edge to this line is `working` (Step 3), in window, with expected sign matching the move. A standing force never files a move here: it explains a steady gap, not a change (§10.1) | Step 3 |
 | 4 | `relationship` | an entity→entity edge into this line whose state matches the move | Step 4 (zero until the in-pipeline relationships are built; honest, not hidden) |
@@ -638,10 +639,40 @@ most 15 moves, ranked by size against their own bar, and prints how many it left
   Aug 2026: 6 moves (Food Credit, Housing slowing against personal loans, loans against
   deposits, Textiles, Other Industries, Fertiliser), all unexplained. Payments: 1–7 moves a month,
   all unexplained except two one-bank artifacts (Nov 2025, Jun 2026). NBFC: 2 a month, unexplained.
+- **Structural (1a), added 2026-10-08.** SIBC history: 18 of 102 unexplained moves were not
+  separate events (13 echoes, 2 twins, 3 carried), so unexplained falls to 86. Aug 2026: Housing
+  "slowing" is an echo of Personal Loans speeding up (gold loans +83%), Textiles an echo of
+  Industry. Each points at the line that holds the event, which keeps its own filing, so an event
+  is never filed away entirely.
 - **Controls.** The four above are unit tests, plus standing force, unworking force, prices
   too small or the wrong way, no 1f match, artifact filed first with others still listed,
   relationship, group counted, hole. Mutations (factor 0, standing allowed, sign ignored) each
   fail a test.
+
+**Step 6b — Relationships between parts: proposed with a reason, admitted by a test
+(v3.1, 2026-10-08).** A relationship is an entity→entity driver edge (one line pushes another).
+It explains a move in Step 6a (row 4). It enters the model only after it is **proposed** with a
+real-world reason, a predicted sign (+ complement, − substitute) and a lag, and then **passes**
+`core/relationship_test.py`. Every result, nulls included, is kept in
+`analysis/{pipeline}/relationship_tests.json`; only `supported` may become an edge, and only with
+the editor's yes.
+
+*Why the data cannot find them.* Over ~15 monthly changes, coincidence looks like relationship:
+across all 2,912 cross-group SIBC pairs, 86 co-move at |r| > 0.6 and a shuffled control produces
+48. Discovery by correlation would admit mostly noise, so the reason comes first and the data can
+only refute.
+
+*The protocol, fixed before any result:* the measure is the monthly change in each line's gap to
+its own group (the quantity Step 6a uses); both are first regressed on the root's monthly growth
+change (**the tide**); 10,000 seeded shuffles give p; `supported` when the predicted sign holds
+at p < 0.05 at the declared lag, `opposite` when reversed, else `not_supported`. Other lags are
+reported, never used to rescue a verdict.
+
+*First test (2026-10-08): bank lending to HFCs → banks' own housing loans, predicted
+substitute: `not_supported`* (r = +0.35, p = 0.20). Raw, the two looked related, monthly new
+lending r = +0.46, p = 0.03, but both follow total bank credit (housing r = 0.78 with it); with
+the tide removed, r = +0.17, p = 0.43. That near-miss is why the tide step is in the protocol and
+why its unit test (two lines sharing only a tide must fail) exists.
 
 **Output:** structured JSON with `entity_states` (incl. propagated aggregates), `force_states`, `edge_states`, `loop_states`, `system_observations`, and a `narrative: null` slot the LLM fills at Stage 5.X.
 

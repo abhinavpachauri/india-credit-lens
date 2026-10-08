@@ -185,3 +185,70 @@ def test_a_change_across_a_hole_in_the_history_is_not_a_move():
     r = cv.compute(model(), PERIODS[-1], {"R": flat, "P": flat, "A": a, "B": line(0.0)}, holed, {})
     assert move(r) is None
     assert any(x["entity"] == "Line A" and "month before" in x["reason"] for x in r["no_reading"])
+
+
+# ── structural: not a separate event (Part A) ────────────────────────────────────────────
+
+def test_echo_when_the_group_moved_the_other_way():
+    """Non-food credit 'falls' against bank credit when food credit jumps: the group moved."""
+    flat = {p: 10.0 for p in PERIODS}
+    parent = {**flat, PERIODS[-1]: 13.0}                  # the group jumps +3
+    a = {p: 12.0 + w for p, w in zip(PERIODS, [0, .3, .1, .35, .05, .25, 0, 0])}
+    a[PERIODS[-1]] = a[PERIODS[-2]]                       # the line itself did not change
+    r = cv.compute(model(), PERIODS[-1], {"R": flat, "P": parent, "A": a, "B": line(0.0)},
+                   PERIODS, {})
+    m = move(r)
+    assert m["direction"] == "down" and m["filed_under"] == "structural"
+    assert m["also_holds"]["structural"] == ["echo of Parent"]
+
+
+def test_no_echo_when_the_line_itself_moved():
+    r = run(model(), line(+3.0))                           # the parent is flat
+    assert move(r)["filed_under"] == "unexplained"
+
+
+def lens_model():
+    m = model()
+    m["nodes"] += [{"id": "L", "tier": "entity", "label": "Lens", "structural_role": "root",
+                    "additive": False},
+                   {"id": "T", "tier": "entity", "label": "Lens twin", "structural_role": "leaf",
+                    "additive": False}]
+    m["edges"] += [{"type": "composes_into", "from": "T", "to": "L"},
+                   {"type": "reclassifies", "from": "T", "to": "A"}]
+    return m
+
+
+def test_twin_files_the_lens_side_and_the_main_line_keeps_the_event():
+    flat = {p: 10.0 for p in PERIODS}
+    series = {"R": flat, "P": flat, "A": line(+3.0), "B": line(0.0), "T": line(+3.0)}
+    r = cv.compute(lens_model(), PERIODS[-1], series, PERIODS, {})
+    assert move(r, "Lens twin")["also_holds"]["structural"] == ["twin of Line A"]
+    assert move(r, "Line A")["filed_under"] == "unexplained"
+
+
+def test_no_twin_when_the_main_line_moved_the_other_way():
+    flat = {p: 10.0 for p in PERIODS}
+    series = {"R": flat, "P": flat, "A": line(-3.0), "B": line(0.0), "T": line(+3.0)}
+    r = cv.compute(lens_model(), PERIODS[-1], series, PERIODS, {})
+    assert move(r, "Lens twin")["filed_under"] == "unexplained"
+
+
+def test_carried_by_a_member_that_is_most_of_the_group():
+    """The member leads (it beats its group too), and its weighted change is most of the
+    group's: the event is the member's, so the group is filed as carried by it."""
+    flat = {p: 10.0 for p in PERIODS}
+    series = {"R": flat, "P": line(+3.0), "A": line(+5.0), "B": line(0.0)}
+    r = cv.compute(model(), PERIODS[-1], series, PERIODS, {}, weights={"P": 100.0, "A": 60.0, "B": 40.0})
+    assert move(r, "Parent")["also_holds"]["structural"] == ["carried by Line A"]
+    assert move(r, "Line A")["filed_under"] == "unexplained"         # the event stays listed once
+    r = cv.compute(model(), PERIODS[-1], series, PERIODS, {}, weights={"P": 100.0, "A": 10.0, "B": 90.0})
+    assert move(r, "Parent")["filed_under"] == "unexplained"         # a sliver cannot carry it
+
+
+def test_not_carried_when_the_member_merely_moved_with_its_group():
+    """If the member has no move of its own, filing the group as carried would make the event
+    vanish from the list. The group keeps it."""
+    flat = {p: 10.0 for p in PERIODS}
+    series = {"R": flat, "P": line(+3.0), "A": line(+3.0), "B": line(0.0)}
+    r = cv.compute(model(), PERIODS[-1], series, PERIODS, {}, weights={"P": 100.0, "A": 90.0, "B": 10.0})
+    assert move(r, "Parent")["filed_under"] == "unexplained"
