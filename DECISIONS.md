@@ -58,7 +58,7 @@
 
 ## Distribution
 
-- **The user writes the words.** Claude supplies verified numbers, arc, traps and design briefs, never a finished LinkedIn post. Machine "so what" lines are observations, never advice or forecasts.
+- **The user writes the words.** Claude drafts when asked (post text + a source row per number + traps + ASCII layout); the user rewrites it and decides what is posted. Every number is a stored dashboard value, a real-credit number names its deflator, and causes we have not sourced are framed as questions. Machine "so what" lines are observations, never advice or forecasts. (user, 2026-10-08, Aug 2026 carousels) *Revisit:* if the user stops rewriting drafts.
 - **Substack is paused, not deleted**; the generators stay. *Revisit: after the user has read a few cycles.*
 - **Reads are ranked by the machine and picked by the editor.** The same pattern applies to deep-read spines.
 - **Reply desk retired.** X needs its own design.

@@ -2,7 +2,7 @@
 
 > Rewritten in place, never appended. Finished items are **deleted** (git keeps them). Hard cap
 > 120 lines, enforced by `reconcile.py`. Standing rules live in `DECISIONS.md`; how to run a
-> workflow lives in its skill (`.claude/skills/`). Last rewritten 2026-10-06.
+> workflow lives in its skill (`.claude/skills/`). Last rewritten 2026-10-08.
 
 ## Now: the agentic layer (design: `archive/docs/PLAN_2026-09-24_AGENTIC_LAYER.md`)
 
@@ -63,8 +63,12 @@ ASCII → approve → build → verify at 1440/375, light/dark loop, before the 
   was green. Fixed in the renderer (`AtmReadMode.tsx` picks by_type / individual from the highlight);
   the gate still cannot see it. Bank-named cards draw `individual`, so a bank outside the top 5 is safe.
   A guard needs a rendered-series check (measure first, per DECISIONS).
-- **Small-share claims on a 0–100% bar chart** (e.g. Small Finance Banks +0.97 pp at 2.0%) read as a
-  sliver; a line of the share itself would show the move. Presentation only; §22.3 frame.
+- **Share bar charts flatten real moves**: small shares (Small Finance Banks +0.97 pp at 2.0%) read
+  as a sliver, and a 0–80% axis makes Large 71 → 66.5 look flat; at 375px the bars are 2px because
+  the Y axis takes 96px of 255. A line of the share itself would show the move. Presentation; §22.3.
+- **Payments POS value table**: the total row shows "—" for growth though the band says 9.1% YoY.
+- **"lowest in N periods"** card titles count readings, not months: SIBC history has gaps
+  (Aug–Nov 2024 and 2025), so "25 periods" reads as two years when it means "since Dec 2023".
 - **"Hover a — for why it is empty"** is written by `core/real_cells.footnote()`; now folded under
   "Notes on this table", it is redundant. Remove at source with the next table rebuild.
 - **Heading hints don't work on touch** (hover/keyboard focus only); tapping a heading sorts.
@@ -96,8 +100,11 @@ ASCII → approve → build → verify at 1440/375, light/dark loop, before the 
 
 ## Parked (a trigger, not a date)
 
-- **Distribution**: Substack paused (generators kept); the user reads a few cycles first. Next
-  channel idea = an X per-bank blurb feed, which is payments-only because no per-bank credit exists monthly.
+- **Distribution**: LinkedIn carousels began with Aug 2026 (3 posts: headline stats, market-share
+  mix, MoSPI real credit; `analysis/distribution/output/2026-10-08_linkedin_set*`). Flow: Claude
+  drafts text + source table + ASCII layout → user rewrites → approves → PDF. Tooling (uncommitted,
+  hand-tuned per set) in `analysis/distribution/carousel/`; make it one generic builder, and a
+  `linkedin-carousel` skill, when the September posts repeat it. Substack paused; X per-bank feed idea stands.
 - **PDF extraction** as a general capability: 11 of 21 remaining RBI sources are PDF-only. Start
   it when a PDF source is next in line, not before.
 - **Future data bets**: longer history → forecasting; bank results → per-bank analytics.
