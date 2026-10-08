@@ -482,6 +482,7 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
           {cell && table && (
             <div ref={chartRef} className="mt-5 lg:mt-0 lg:col-start-2 lg:row-start-1">
               <CellPanel table={tables?.[cell.stem] ?? table} cell={cell} color={secColor}
+                         title={cut?.title ?? dim.title}
                          flowLabel={(tables?.[cell.stem] ?? table).flow_label}
                          crumb={dim.title}
                          onPick={(col: ColKey) => setCell({ ...cell, col })}

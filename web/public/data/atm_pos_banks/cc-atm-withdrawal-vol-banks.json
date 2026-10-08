@@ -11301,7 +11301,54 @@
   },
   "of_cut": null,
   "of_book": null,
-  "growth": null,
+  "growth": {
+   "display": "1.9%",
+   "sort": 1.873,
+   "series": [
+    -5.7139,
+    -13.4758,
+    -15.8762,
+    -24.2801,
+    -22.3671,
+    -24.2008,
+    -22.3314,
+    -20.6619,
+    -16.5818,
+    -14.4479,
+    -13.3012,
+    -14.2204,
+    -10.5758,
+    -7.1676,
+    -4.7731,
+    -6.5542,
+    -4.2656,
+    0.3718,
+    -1.5079,
+    1.873
+   ],
+   "series_display": [
+    "-5.7%",
+    "-13.5%",
+    "-15.9%",
+    "-24.3%",
+    "-22.4%",
+    "-24.2%",
+    "-22.3%",
+    "-20.7%",
+    "-16.6%",
+    "-14.4%",
+    "-13.3%",
+    "-14.2%",
+    "-10.6%",
+    "-7.2%",
+    "-4.8%",
+    "-6.6%",
+    "-4.3%",
+    "0.4%",
+    "-1.5%",
+    "1.9%"
+   ]
+  },
   "pace": null,
   "new": null
  },
@@ -11311,10 +11358,12 @@
   "growth": "cc-atm-withdrawal-vol-bank-yoy-scan"
  },
  "parent_columns": {
-  "size": "cc-atm-withdrawal-vol-category-size-scan"
+  "size": "cc-atm-withdrawal-vol-category-size-scan",
+  "growth": "cc-atm-vol-yoy"
  },
  "parent_entities": {
-  "size": "total"
+  "size": "total",
+  "growth": "total"
  },
  "periods": {
   "size": [
@@ -11409,6 +11458,28 @@
   ]
  },
  "parent_periods": {
+  "growth": [
+   "Jan 25",
+   "Feb 25",
+   "Mar 25",
+   "Apr 25",
+   "May 25",
+   "Jun 25",
+   "Jul 25",
+   "Aug 25",
+   "Sep 25",
+   "Oct 25",
+   "Nov 25",
+   "Dec 25",
+   "Jan 26",
+   "Feb 26",
+   "Mar 26",
+   "Apr 26",
+   "May 26",
+   "Jun 26",
+   "Jul 26",
+   "Aug 26"
+  ],
   "size": [
    "Jan 24",
    "Feb 24",
@@ -11445,6 +11516,7 @@
   ]
  },
  "source_signals": [
+  "cc-atm-vol-yoy",
   "cc-atm-withdrawal-vol-bank-scan",
   "cc-atm-withdrawal-vol-bank-share-scan",
   "cc-atm-withdrawal-vol-bank-yoy-scan",

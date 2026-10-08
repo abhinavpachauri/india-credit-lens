@@ -375,9 +375,12 @@ export interface CellRef { stem: string; entity: string | null; col: ColKey }
  * `compare` overlays a sibling from the same cut and the same column — the one thing a table
  * genuinely cannot do, and the only overlay where the units and the depth match.
  */
-export function CellPanel({ table, cell, color, flowLabel, crumb, onPick, onClose }: {
+export function CellPanel({ table, cell, color, title, flowLabel, crumb, onPick, onClose }: {
   table: import("@/lib/table").CutTable;
-  cell: CellRef; color: string; flowLabel?: string;
+  cell: CellRef; color: string;
+  /** What the total row is called: the same title the row list beside it shows. */
+  title?: string;
+  flowLabel?: string;
   /** Where this chart sits: the dimension the reader opened it from. */
   crumb?: string;
   onPick: (col: ColKey) => void;
@@ -388,17 +391,25 @@ export function CellPanel({ table, cell, color, flowLabel, crumb, onPick, onClos
 
   const row = cell.entity === null ? table.total : table.parts.find((p) => p.entity === cell.entity);
   const own = row ? cellSeries(table, row, cell.col) : [];
-  const who = cell.entity ?? table.cut;
+  // The total row has no entity. It is named as the row list names it, never by the cut's id
+  // ("cc-pos-txn-val-category · Growth" was the title, the breadcrumb and the legend chip).
+  const who = cell.entity ?? title ?? table.cut;
   const siblings = table.parts.filter((p) => p.entity && p.entity !== cell.entity && p[cell.col]?.series);
   const cols = COLUMNS.filter((c) => row?.[c]?.series && (row[c]!.series as unknown[]).length > 1);
   const colLabel = (c: ColKey) => (c === "new" ? (flowLabel ?? "New") : COL_LABEL[c]);
 
+  // Each line's readings as Python rendered them, so the tooltip places a string instead of
+  // formatting a float ("8.5481"): the browser never formats a number.
+  const shownAs: Record<string, Record<string, string | null>> = {
+    [who]: Object.fromEntries(own.map((pt) => [pt.label, pt.display])),
+  };
   const data = own.map((pt, i) => {
     const point: Record<string, string | number | null> = { label: pt.label, [who]: pt.value };
     for (const name of compare) {
       const sib = siblings.find((p) => p.entity === name);
       const s = sib ? cellSeries(table, sib, cell.col) : [];
       point[name] = s[i]?.label === pt.label ? s[i].value : null;
+      if (s[i]?.label === pt.label) (shownAs[name] ??= {})[pt.label] = s[i].display;
     }
     return point;
   });
@@ -457,7 +468,9 @@ export function CellPanel({ table, cell, color, flowLabel, crumb, onPick, onClos
               <YAxis tick={{ fontSize: FS.label, fill: "var(--font-muted)" }} tickLine={false}
                      axisLine={false} width={56} />
               <Tooltip contentStyle={{ background: "var(--bg-card)", border: "1px solid var(--border-card)",
-                                       borderRadius: R.sm, fontSize: FS.note }} />
+                                       borderRadius: R.sm, fontSize: FS.note }}
+                       formatter={(_v, name, item) =>
+                         shownAs[String(name)]?.[String(item?.payload?.label)] ?? "—"} />
               {[who, ...compare].map((name) => (
                 // Linear with a dot per reading, not a smoothed curve: the readings are monthly
                 // observations and SIBC's own period set has a gap in it (eleven ingested

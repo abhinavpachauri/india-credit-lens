@@ -12429,7 +12429,54 @@
   },
   "of_cut": null,
   "of_book": null,
-  "growth": null,
+  "growth": {
+   "display": "-6.3%",
+   "sort": -6.2693,
+   "series": [
+    -3.3472,
+    -8.366,
+    -5.1223,
+    -7.9269,
+    -5.3481,
+    -9.8916,
+    -6.9267,
+    -5.8416,
+    -5.828,
+    -11.8823,
+    -2.6681,
+    -4.8717,
+    -4.5778,
+    -1.7773,
+    -5.3785,
+    -5.0463,
+    -6.0652,
+    -5.4107,
+    -5.3573,
+    -6.2693
+   ],
+   "series_display": [
+    "-3.3%",
+    "-8.4%",
+    "-5.1%",
+    "-7.9%",
+    "-5.3%",
+    "-9.9%",
+    "-6.9%",
+    "-5.8%",
+    "-5.8%",
+    "-11.9%",
+    "-2.7%",
+    "-4.9%",
+    "-4.6%",
+    "-1.8%",
+    "-5.4%",
+    "-5.0%",
+    "-6.1%",
+    "-5.4%",
+    "-5.4%",
+    "-6.3%"
+   ]
+  },
   "pace": null,
   "new": null
  },
@@ -12439,10 +12486,12 @@
   "growth": "dc-atm-withdrawal-val-bank-yoy-scan"
  },
  "parent_columns": {
-  "size": "dc-atm-withdrawal-val-category-size-scan"
+  "size": "dc-atm-withdrawal-val-category-size-scan",
+  "growth": "dc-atm-val-yoy"
  },
  "parent_entities": {
-  "size": "total"
+  "size": "total",
+  "growth": "total"
  },
  "periods": {
   "size": [
@@ -12537,6 +12586,28 @@
   ]
  },
  "parent_periods": {
+  "growth": [
+   "Jan 25",
+   "Feb 25",
+   "Mar 25",
+   "Apr 25",
+   "May 25",
+   "Jun 25",
+   "Jul 25",
+   "Aug 25",
+   "Sep 25",
+   "Oct 25",
+   "Nov 25",
+   "Dec 25",
+   "Jan 26",
+   "Feb 26",
+   "Mar 26",
+   "Apr 26",
+   "May 26",
+   "Jun 26",
+   "Jul 26",
+   "Aug 26"
+  ],
   "size": [
    "Jan 24",
    "Feb 24",
@@ -12573,6 +12644,7 @@
   ]
  },
  "source_signals": [
+  "dc-atm-val-yoy",
   "dc-atm-withdrawal-val-bank-scan",
   "dc-atm-withdrawal-val-bank-share-scan",
   "dc-atm-withdrawal-val-bank-yoy-scan",

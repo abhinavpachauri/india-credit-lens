@@ -11066,7 +11066,54 @@
   },
   "of_cut": null,
   "of_book": null,
-  "growth": null,
+  "growth": {
+   "display": "-9.9%",
+   "sort": -9.8876,
+   "series": [
+    -16.2773,
+    -13.7042,
+    -15.5679,
+    -15.4781,
+    -5.8031,
+    -4.2921,
+    -0.7999,
+    1.5095,
+    0.4855,
+    0.9555,
+    -1.6938,
+    -4.1789,
+    -5.5888,
+    -5.344,
+    -6.2087,
+    -7.1712,
+    -8.1054,
+    -8.3939,
+    -9.4379,
+    -9.8876
+   ],
+   "series_display": [
+    "-16.3%",
+    "-13.7%",
+    "-15.6%",
+    "-15.5%",
+    "-5.8%",
+    "-4.3%",
+    "-0.8%",
+    "1.5%",
+    "0.5%",
+    "1.0%",
+    "-1.7%",
+    "-4.2%",
+    "-5.6%",
+    "-5.3%",
+    "-6.2%",
+    "-7.2%",
+    "-8.1%",
+    "-8.4%",
+    "-9.4%",
+    "-9.9%"
+   ]
+  },
   "pace": null,
   "new": null
  },
@@ -11076,10 +11123,12 @@
   "growth": "micro-atms-bank-yoy-scan"
  },
  "parent_columns": {
-  "size": "micro-atms-category-size-scan"
+  "size": "micro-atms-category-size-scan",
+  "growth": "micro-atm-yoy"
  },
  "parent_entities": {
-  "size": "total"
+  "size": "total",
+  "growth": "total"
  },
  "periods": {
   "size": [
@@ -11174,6 +11223,28 @@
   ]
  },
  "parent_periods": {
+  "growth": [
+   "Jan 25",
+   "Feb 25",
+   "Mar 25",
+   "Apr 25",
+   "May 25",
+   "Jun 25",
+   "Jul 25",
+   "Aug 25",
+   "Sep 25",
+   "Oct 25",
+   "Nov 25",
+   "Dec 25",
+   "Jan 26",
+   "Feb 26",
+   "Mar 26",
+   "Apr 26",
+   "May 26",
+   "Jun 26",
+   "Jul 26",
+   "Aug 26"
+  ],
   "size": [
    "Jan 24",
    "Feb 24",
@@ -11210,6 +11281,7 @@
   ]
  },
  "source_signals": [
+  "micro-atm-yoy",
   "micro-atms-bank-scan",
   "micro-atms-bank-share-scan",
   "micro-atms-bank-yoy-scan",

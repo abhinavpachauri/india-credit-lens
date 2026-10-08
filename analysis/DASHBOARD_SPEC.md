@@ -1469,6 +1469,10 @@ meta footer — readings / denominator, one line
 - A chart opened from inside a pane carries a meta **breadcrumb** ("Main Sectors › Services"), so
   the reader knows where it came from without looking at the other pane.
 - The full run of readings is reference: one line of summary, the rest behind "Every reading".
+- *As built 2026-10-08:* the total row is named as the row list names it (the cut's title, never
+  its id), and the tooltip places each reading's Python-rendered string, never a float.
+  The total's growth comes from one resolver shared with the state band (`core/cuts.py`
+  `total_yoy_by_metric`); `test_cut_table` asserts the two agree on every pipeline.
 
 ### 22.4 What stays visible, and what folds
 

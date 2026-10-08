@@ -361,3 +361,55 @@ def test_a_pinned_size_that_is_the_sum_of_the_parts_is_caught(tmp_path, monkeypa
     monkeypatch.setattr(V, "DATA", tmp_path)
     findings = [f for f in V.validate("sibc") if f.startswith("sibc-nbfc-sub · (the cut itself) · size")]
     assert findings, "a pinned row showing the sum of the named parts passed the gate"
+
+
+# ── the total row and the band quote one rate (one resolver, core.cuts) ───────
+
+import pytest                                                          # noqa: E402
+from core.cuts import total_yoy_by_metric                              # noqa: E402
+
+# SIBC sub-cuts whose band takes its rate from a ROW of the parent table's scan, which
+# table_rows cannot read yet (PLAN, "SIBC sub-cut totals"). Exact: the test fails if this set
+# grows, and fails when the fix lands until the entry is deleted.
+KNOWN_TOTAL_GAPS = {"sibc": {"sibc-basic-metal-sub", "sibc-chemicals-sub", "sibc-engineering-sub",
+                             "sibc-food-processing-sub", "sibc-nbfc-sub", "sibc-textiles-sub",
+                             "sibc-trade-sub"}}
+
+
+def band_speeds(pipeline: str) -> dict[str, str | None]:
+    """{stem: the band's YoY figure, or None where the band states a reason instead}."""
+    out = {}
+    def walk(x):
+        if isinstance(x, dict):
+            if "stem" in x and "speed_short" in x:
+                out[x["stem"]] = (x["speed_short"] or "").split(" YoY")[0] or None
+            for v in x.values():
+                walk(v)
+        elif isinstance(x, list):
+            for v in x:
+                walk(v)
+    walk(json.loads((DATA / f"{pipeline}_state.json").read_text()))
+    return out
+
+
+def total_disagreements(pipeline: str, table: dict) -> set[str]:
+    band = band_speeds(pipeline)
+    return {stem for stem, t in table["cuts"].items()
+            if stem in band and (t["total"].get("growth") or {}).get("display") != band[stem]}
+
+
+@pytest.mark.parametrize("pipeline", ["sibc", "atm_pos", "nbfc"])
+def test_the_total_row_and_the_band_quote_the_same_rate(pipeline):
+    """23 of 26 payments tables drew "—" for the total's growth under a band quoting it, because
+    the table read three hand-declared anchors and the band read the registry. Known-bad control:
+    the pre-fix payments sidecar fails here on exactly those 23."""
+    table = json.loads((DATA / f"{pipeline}_table.json").read_text())
+    assert total_disagreements(pipeline, table) == KNOWN_TOTAL_GAPS.get(pipeline, set())
+
+
+def test_a_measure_with_two_total_rates_is_ambiguous_not_picked():
+    reg = {"a": {"pipeline": "atm_pos", "compute": {"method": "csv_total_yoy", "metric": "m"}},
+           "b": {"pipeline": "atm_pos", "compute": {"method": "csv_sum_yoy", "metric": "m"}}}
+    with pytest.raises(ValueError, match="two total-YoY signals"):
+        total_yoy_by_metric("atm_pos", reg)
+    assert total_yoy_by_metric("atm_pos", {"a": reg["a"]}) == {"m": "a"}

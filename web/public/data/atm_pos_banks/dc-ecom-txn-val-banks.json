@@ -12335,7 +12335,54 @@
   },
   "of_cut": null,
   "of_book": null,
-  "growth": null,
+  "growth": {
+   "display": "8.4%",
+   "sort": 8.3934,
+   "series": [
+    -14.0375,
+    -17.7926,
+    -14.0428,
+    -13.8519,
+    -10.9759,
+    -8.8245,
+    -11.897,
+    -10.067,
+    -2.0638,
+    -11.4268,
+    -7.6305,
+    -2.3537,
+    -4.0209,
+    1.4334,
+    2.7268,
+    5.7595,
+    7.8808,
+    9.3308,
+    10.3057,
+    8.3934
+   ],
+   "series_display": [
+    "-14.0%",
+    "-17.8%",
+    "-14.0%",
+    "-13.9%",
+    "-11.0%",
+    "-8.8%",
+    "-11.9%",
+    "-10.1%",
+    "-2.1%",
+    "-11.4%",
+    "-7.6%",
+    "-2.4%",
+    "-4.0%",
+    "1.4%",
+    "2.7%",
+    "5.8%",
+    "7.9%",
+    "9.3%",
+    "10.3%",
+    "8.4%"
+   ]
+  },
   "pace": null,
   "new": null
  },
@@ -12345,10 +12392,12 @@
   "growth": "dc-ecom-txn-val-bank-yoy-scan"
  },
  "parent_columns": {
-  "size": "dc-ecom-txn-val-category-size-scan"
+  "size": "dc-ecom-txn-val-category-size-scan",
+  "growth": "dc-ecom-val-yoy"
  },
  "parent_entities": {
-  "size": "total"
+  "size": "total",
+  "growth": "total"
  },
  "periods": {
   "size": [
@@ -12443,6 +12492,28 @@
   ]
  },
  "parent_periods": {
+  "growth": [
+   "Jan 25",
+   "Feb 25",
+   "Mar 25",
+   "Apr 25",
+   "May 25",
+   "Jun 25",
+   "Jul 25",
+   "Aug 25",
+   "Sep 25",
+   "Oct 25",
+   "Nov 25",
+   "Dec 25",
+   "Jan 26",
+   "Feb 26",
+   "Mar 26",
+   "Apr 26",
+   "May 26",
+   "Jun 26",
+   "Jul 26",
+   "Aug 26"
+  ],
   "size": [
    "Jan 24",
    "Feb 24",
@@ -12484,7 +12555,8 @@
   "dc-ecom-txn-val-bank-yoy-scan",
   "dc-ecom-txn-val-banks-acceleration",
   "dc-ecom-txn-val-banks-allocation",
-  "dc-ecom-txn-val-banks-share-of-credit-scan"
+  "dc-ecom-txn-val-banks-share-of-credit-scan",
+  "dc-ecom-val-yoy"
  ],
  "metric": "dc_ecom_txn_val",
  "level": "bank"

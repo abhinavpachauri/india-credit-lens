@@ -10,9 +10,8 @@ The engine (gate, compute, registry, traceability) stays deterministic code. On 
 skills = procedure, subagents = independent review, hooks + `reconcile.py` = enforcement.
 Phases 0–3 ✅ (2026-09-24/26: hooks, knowledge split, four skills tested on the Aug 2026 ingest,
 three reviewer subagents accepted cold at 4/4 caught, 0/3 false). **Phase 4:** `onboard-source` ✅ 2026-10-05 (from NBFC + MoSPI);
-`add-signal-family`, `measure-gate` ⬜, each written while doing its real task. `dashboard-change` ⬜:
-its real task happened 2026-10-05/06 (Read hierarchy, DASHBOARD_SPEC §22); write it from §22.6 + the
-ASCII → approve → build → verify at 1440/375, light/dark loop, before the next dashboard change.
+`dashboard-change` ✅ 2026-10-08 (from the 10-05/06 Read hierarchy; first real use = the next presentation
+debt below). `add-signal-family`, `measure-gate` ⬜, each written while doing its real task.
 
 ## Next, in order
 
@@ -66,7 +65,10 @@ ASCII → approve → build → verify at 1440/375, light/dark loop, before the 
 - **Share bar charts flatten real moves**: small shares (Small Finance Banks +0.97 pp at 2.0%) read
   as a sliver, and a 0–80% axis makes Large 71 → 66.5 look flat; at 375px the bars are 2px because
   the Y axis takes 96px of 255. A line of the share itself would show the move. Presentation; §22.3.
-- **Payments POS value table**: the total row shows "—" for growth though the band says 9.1% YoY.
+- **SIBC sub-cut totals** (found 2026-10-08): 7 sub-industry tables (Basic Metal, Chemicals,
+  Engineering, Food Processing, NBFCs, Textiles, Trade) draw "—" for the total's growth while the
+  band quotes it from the parent table's ROW. `table_rows` reads a parent rate only as a whole-cut
+  aggregate; teach it a (signal, entity) parent, then delete `KNOWN_TOTAL_GAPS` in test_cut_table.
 - **"lowest in N periods"** card titles count readings, not months: SIBC history has gaps
   (Aug–Nov 2024 and 2025), so "25 periods" reads as two years when it means "since Dec 2023".
 - **"Hover a — for why it is empty"** is written by `core/real_cells.footnote()`; now folded under

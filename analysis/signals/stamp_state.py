@@ -96,9 +96,8 @@ def derived_cuts(pipeline: str, declared, mix_states: dict):
 
     if pipeline == "atm_pos":
         # metric -> its total-YoY signal, the rate that speaks for the whole measure.
-        yoy = {(s.get("compute") or {}).get("metric"): sid for sid, s in reg.items()
-               if s.get("pipeline") == "atm_pos"
-               and (s.get("compute") or {}).get("method") in ("csv_total_yoy", "csv_sum_yoy")}
+        from core.cuts import total_yoy_by_metric
+        yoy = total_yoy_by_metric("atm_pos", reg)
         for sid, sig in reg.items():
             c = sig.get("compute") or {}
             if c.get("method") != "csv_category_momentum" or f"{sid[:-len('-momentum')]}" == "":

@@ -11536,7 +11536,54 @@
   },
   "of_cut": null,
   "of_book": null,
-  "growth": null,
+  "growth": {
+   "display": "16.5%",
+   "sort": 16.5222,
+   "series": [
+    99.1929,
+    92.6837,
+    91.5411,
+    18.3421,
+    17.6855,
+    17.5291,
+    17.5893,
+    18.0037,
+    16.7847,
+    16.3057,
+    16.2924,
+    15.443,
+    15.3423,
+    16.0865,
+    15.6989,
+    16.3691,
+    16.4298,
+    16.8711,
+    16.7168,
+    16.5222
+   ],
+   "series_display": [
+    "99.2%",
+    "92.7%",
+    "91.5%",
+    "18.3%",
+    "17.7%",
+    "17.5%",
+    "17.6%",
+    "18.0%",
+    "16.8%",
+    "16.3%",
+    "16.3%",
+    "15.4%",
+    "15.3%",
+    "16.1%",
+    "15.7%",
+    "16.4%",
+    "16.4%",
+    "16.9%",
+    "16.7%",
+    "16.5%"
+   ]
+  },
   "pace": null,
   "new": null
  },
@@ -11546,10 +11593,12 @@
   "growth": "upi-qr-bank-yoy-scan"
  },
  "parent_columns": {
-  "size": "upi-qr-category-size-scan"
+  "size": "upi-qr-category-size-scan",
+  "growth": "upi-qr-yoy"
  },
  "parent_entities": {
-  "size": "total"
+  "size": "total",
+  "growth": "total"
  },
  "periods": {
   "size": [
@@ -11644,6 +11693,28 @@
   ]
  },
  "parent_periods": {
+  "growth": [
+   "Jan 25",
+   "Feb 25",
+   "Mar 25",
+   "Apr 25",
+   "May 25",
+   "Jun 25",
+   "Jul 25",
+   "Aug 25",
+   "Sep 25",
+   "Oct 25",
+   "Nov 25",
+   "Dec 25",
+   "Jan 26",
+   "Feb 26",
+   "Mar 26",
+   "Apr 26",
+   "May 26",
+   "Jun 26",
+   "Jul 26",
+   "Aug 26"
+  ],
   "size": [
    "Jan 24",
    "Feb 24",
@@ -11685,7 +11756,8 @@
   "upi-qr-bank-yoy-scan",
   "upi-qr-banks-acceleration",
   "upi-qr-banks-allocation",
-  "upi-qr-banks-share-of-credit-scan"
+  "upi-qr-banks-share-of-credit-scan",
+  "upi-qr-yoy"
  ],
  "metric": "upi_qr",
  "level": "bank"

@@ -26,6 +26,7 @@ sys.path.insert(0, str(ROOT / "analysis"))
 from core import table_rows                                            # noqa: E402
 from core import real_cells                                            # noqa: E402
 from core import manifest                          # noqa: E402
+from core.cuts import total_yoy_by_metric                              # noqa: E402
 
 DATA = ROOT / "web" / "public" / "data"
 DB = ROOT / "analysis" / "signals" / "signals.db"
@@ -37,15 +38,17 @@ SIDECAR = {p: DATA / f"{p}_table.json" for p in manifest.PIPELINE_IDS}
 # part that was asked for.
 BANK_DIR = {p: DATA / f"{p}_banks" for p in manifest.PIPELINE_IDS}
 MOMENTUM = ("csv_sector_momentum", "csv_category_momentum")
-# A bank breakout's parent rate: the metric's own total YoY, which belongs to the level above
-# the banks exactly as a credit cut's parent rate belongs to the level above its parts.
-TOTAL_YOY = {"credit_cards": "cc-outstanding-yoy", "debit_cards": "dc-outstanding-yoy",
-             "pos_terminals": "pos-terminals-yoy"}
 
 
 def parent_rates(pipeline: str) -> dict[str, str]:
-    """{stem: the signal holding the PARENT's own growth} — read from the generator's own cut
-    table, the single place that declares it (§16 uses the same field)."""
+    """{stem: the signal holding the PARENT's own growth}.
+
+    Two sources, which must agree: the generator's cut table declares it for the cuts it
+    narrates (§16 uses the same field), and a payments cut measures a metric whose own total
+    YoY is in the registry (`cuts.total_yoy_by_metric`, which the state band reads too). Only
+    the first was read, so 23 of 26 payments tables drew "—" for the total's growth while the
+    band above them quoted it. Where both name a signal and differ, that raises.
+    """
     import importlib
     mod = importlib.import_module(manifest.load(pipeline)["cuts_module"])
     MOVEMENT_CUTS = mod.MOVEMENT_CUTS
@@ -59,6 +62,13 @@ def parent_rates(pipeline: str) -> dict[str, str]:
         stem = f"{prefix}{c.slug}" if prefix else f"{MOVEMENT_PREFIX[c.section]}{c.slug}"
         if c.parent_yoy:
             out[stem] = c.parent_yoy
+    if pipeline == "atm_pos":
+        total = total_yoy_by_metric(pipeline, json.loads(REGISTRY.read_text())["signals"])
+        for stem, metric in measured_metric(pipeline).items():
+            sid = total.get(metric)
+            if sid and out.setdefault(stem, sid) != sid:
+                raise ValueError(f"{stem}: the cut table declares {out[stem]} as its parent "
+                                 f"rate, the registry says {sid}")
     return out
 
 
@@ -187,12 +197,13 @@ def build(pipeline: str, period: str | None = None) -> dict:
         tables, rates, subs = {}, parent_rates(pipeline), sub_cut_map(pipeline)
         metrics = measured_metric(pipeline)
         banks = {}
+        total_yoy = total_yoy_by_metric(pipeline, json.loads(REGISTRY.read_text())["signals"])
         for stem, spec in sorted(bank_cuts(pipeline).items()):
             unit = json.loads(REGISTRY.read_text())["signals"].get(
                 spec["signals"]["size"], {}).get("compute", {}).get("unit")
             t = table_rows.build(conn, pipeline, period, stem,
                                  unit or _metric_unit(conn, pipeline, period, spec["signals"]["size"]),
-                                 TOTAL_YOY.get(spec["metric"]), None, signals=spec["signals"])
+                                 total_yoy.get(spec["metric"]), None, signals=spec["signals"])
             if t is not None:
                 t["metric"] = spec["metric"]
                 t["level"] = "bank"

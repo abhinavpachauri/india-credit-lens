@@ -10596,7 +10596,54 @@
   },
   "of_cut": null,
   "of_book": null,
-  "growth": null,
+  "growth": {
+   "display": "-18.9%",
+   "sort": -18.9083,
+   "series": [
+    7.318,
+    6.4803,
+    7.4853,
+    9.7319,
+    8.5201,
+    8.6752,
+    7.3465,
+    2.7519,
+    -5.3863,
+    -5.9636,
+    -6.4018,
+    -7.7148,
+    -9.3022,
+    -9.9385,
+    -16.1507,
+    -15.7229,
+    -15.6157,
+    -21.3946,
+    -20.6571,
+    -18.9083
+   ],
+   "series_display": [
+    "7.3%",
+    "6.5%",
+    "7.5%",
+    "9.7%",
+    "8.5%",
+    "8.7%",
+    "7.3%",
+    "2.8%",
+    "-5.4%",
+    "-6.0%",
+    "-6.4%",
+    "-7.7%",
+    "-9.3%",
+    "-9.9%",
+    "-16.2%",
+    "-15.7%",
+    "-15.6%",
+    "-21.4%",
+    "-20.7%",
+    "-18.9%"
+   ]
+  },
   "pace": null,
   "new": null
  },
@@ -10606,10 +10653,12 @@
   "growth": "bharat-qr-bank-yoy-scan"
  },
  "parent_columns": {
-  "size": "bharat-qr-category-size-scan"
+  "size": "bharat-qr-category-size-scan",
+  "growth": "bharat-qr-yoy"
  },
  "parent_entities": {
-  "size": "total"
+  "size": "total",
+  "growth": "total"
  },
  "periods": {
   "size": [
@@ -10704,6 +10753,28 @@
   ]
  },
  "parent_periods": {
+  "growth": [
+   "Jan 25",
+   "Feb 25",
+   "Mar 25",
+   "Apr 25",
+   "May 25",
+   "Jun 25",
+   "Jul 25",
+   "Aug 25",
+   "Sep 25",
+   "Oct 25",
+   "Nov 25",
+   "Dec 25",
+   "Jan 26",
+   "Feb 26",
+   "Mar 26",
+   "Apr 26",
+   "May 26",
+   "Jun 26",
+   "Jul 26",
+   "Aug 26"
+  ],
   "size": [
    "Jan 24",
    "Feb 24",
@@ -10745,7 +10816,8 @@
   "bharat-qr-bank-yoy-scan",
   "bharat-qr-banks-acceleration",
   "bharat-qr-banks-allocation",
-  "bharat-qr-banks-share-of-credit-scan"
+  "bharat-qr-banks-share-of-credit-scan",
+  "bharat-qr-yoy"
  ],
  "metric": "bharat_qr",
  "level": "bank"

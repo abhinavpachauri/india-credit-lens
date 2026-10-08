@@ -12429,7 +12429,54 @@
   },
   "of_cut": null,
   "of_book": null,
-  "growth": null,
+  "growth": {
+   "display": "-9.8%",
+   "sort": -9.7507,
+   "series": [
+    -23.6563,
+    -27.5516,
+    -23.0249,
+    -22.286,
+    -22.6841,
+    -23.5695,
+    -22.1214,
+    -20.5205,
+    -21.8573,
+    -21.825,
+    -16.6908,
+    -17.6411,
+    -15.1187,
+    -14.1467,
+    -16.3529,
+    -17.5737,
+    -14.3666,
+    -12.3427,
+    -10.9324,
+    -9.7507
+   ],
+   "series_display": [
+    "-23.7%",
+    "-27.6%",
+    "-23.0%",
+    "-22.3%",
+    "-22.7%",
+    "-23.6%",
+    "-22.1%",
+    "-20.5%",
+    "-21.9%",
+    "-21.8%",
+    "-16.7%",
+    "-17.6%",
+    "-15.1%",
+    "-14.1%",
+    "-16.4%",
+    "-17.6%",
+    "-14.4%",
+    "-12.3%",
+    "-10.9%",
+    "-9.8%"
+   ]
+  },
   "pace": null,
   "new": null
  },
@@ -12439,10 +12486,12 @@
   "growth": "dc-pos-txn-vol-bank-yoy-scan"
  },
  "parent_columns": {
-  "size": "dc-pos-txn-vol-category-size-scan"
+  "size": "dc-pos-txn-vol-category-size-scan",
+  "growth": "dc-pos-vol-yoy"
  },
  "parent_entities": {
-  "size": "total"
+  "size": "total",
+  "growth": "total"
  },
  "periods": {
   "size": [
@@ -12537,6 +12586,28 @@
   ]
  },
  "parent_periods": {
+  "growth": [
+   "Jan 25",
+   "Feb 25",
+   "Mar 25",
+   "Apr 25",
+   "May 25",
+   "Jun 25",
+   "Jul 25",
+   "Aug 25",
+   "Sep 25",
+   "Oct 25",
+   "Nov 25",
+   "Dec 25",
+   "Jan 26",
+   "Feb 26",
+   "Mar 26",
+   "Apr 26",
+   "May 26",
+   "Jun 26",
+   "Jul 26",
+   "Aug 26"
+  ],
   "size": [
    "Jan 24",
    "Feb 24",
@@ -12578,7 +12649,8 @@
   "dc-pos-txn-vol-bank-yoy-scan",
   "dc-pos-txn-vol-banks-acceleration",
   "dc-pos-txn-vol-banks-allocation",
-  "dc-pos-txn-vol-banks-share-of-credit-scan"
+  "dc-pos-txn-vol-banks-share-of-credit-scan",
+  "dc-pos-vol-yoy"
  ],
  "metric": "dc_pos_txn_vol",
  "level": "bank"

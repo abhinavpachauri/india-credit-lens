@@ -11724,7 +11724,54 @@
   },
   "of_cut": null,
   "of_book": null,
-  "growth": null,
+  "growth": {
+   "display": "-3.7%",
+   "sort": -3.7098,
+   "series": [
+    -8.1141,
+    -8.8194,
+    -9.9041,
+    -10.1279,
+    -10.4083,
+    -12.5813,
+    -13.8845,
+    -13.5527,
+    -14.562,
+    -14.1992,
+    -13.782,
+    -14.1504,
+    -13.9551,
+    -12.9127,
+    -11.7639,
+    -10.5046,
+    -8.8687,
+    -6.821,
+    -4.3792,
+    -3.7098
+   ],
+   "series_display": [
+    "-8.1%",
+    "-8.8%",
+    "-9.9%",
+    "-10.1%",
+    "-10.4%",
+    "-12.6%",
+    "-13.9%",
+    "-13.6%",
+    "-14.6%",
+    "-14.2%",
+    "-13.8%",
+    "-14.2%",
+    "-14.0%",
+    "-12.9%",
+    "-11.8%",
+    "-10.5%",
+    "-8.9%",
+    "-6.8%",
+    "-4.4%",
+    "-3.7%"
+   ]
+  },
   "pace": null,
   "new": null
  },
@@ -11734,10 +11781,12 @@
   "growth": "atm-offsite-bank-yoy-scan"
  },
  "parent_columns": {
-  "size": "atm-offsite-category-size-scan"
+  "size": "atm-offsite-category-size-scan",
+  "growth": "atm-offsite-yoy"
  },
  "parent_entities": {
-  "size": "total"
+  "size": "total",
+  "growth": "total"
  },
  "periods": {
   "size": [
@@ -11832,6 +11881,28 @@
   ]
  },
  "parent_periods": {
+  "growth": [
+   "Jan 25",
+   "Feb 25",
+   "Mar 25",
+   "Apr 25",
+   "May 25",
+   "Jun 25",
+   "Jul 25",
+   "Aug 25",
+   "Sep 25",
+   "Oct 25",
+   "Nov 25",
+   "Dec 25",
+   "Jan 26",
+   "Feb 26",
+   "Mar 26",
+   "Apr 26",
+   "May 26",
+   "Jun 26",
+   "Jul 26",
+   "Aug 26"
+  ],
   "size": [
    "Jan 24",
    "Feb 24",
@@ -11873,7 +11944,8 @@
   "atm-offsite-bank-yoy-scan",
   "atm-offsite-banks-acceleration",
   "atm-offsite-banks-allocation",
-  "atm-offsite-banks-share-of-credit-scan"
+  "atm-offsite-banks-share-of-credit-scan",
+  "atm-offsite-yoy"
  ],
  "metric": "atm_offsite",
  "level": "bank"

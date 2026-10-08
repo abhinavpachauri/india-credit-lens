@@ -139,6 +139,30 @@ def cut_of(pipeline: str, compute: dict) -> Cut:
     return sibc_cut(compute) if pipeline == "sibc" else atm_pos_cut(compute)
 
 
+TOTAL_YOY_METHODS = ("csv_total_yoy", "csv_sum_yoy")
+
+
+def total_yoy_by_metric(pipeline: str, registry: dict) -> dict[str, str]:
+    """{metric: the signal holding that measure's own total YoY}, read from the registry.
+
+    The one answer to "how fast is the whole of this cut growing", for every surface that needs
+    it. The state band and the table each used to resolve it their own way (the band from the
+    registry, the table from three hand-declared anchors), so 23 of 26 payments tables drew "—"
+    in the total row beside a band quoting that very rate. A measure with two such signals is
+    ambiguous and raises rather than picking one.
+    """
+    out: dict[str, str] = {}
+    for sid, sig in registry.items():
+        c = sig.get("compute") or {}
+        if sig.get("pipeline") != pipeline or c.get("method") not in TOTAL_YOY_METHODS:
+            continue
+        if c.get("metric") in out:
+            raise ValueError(f"{pipeline}: metric {c['metric']!r} has two total-YoY signals: "
+                             f"{out[c['metric']]}, {sid}")
+        out[c["metric"]] = sid
+    return out
+
+
 # ── what each section's chart renders ─────────────────────────────────────────
 
 def section_cuts(pipeline: str) -> dict:
