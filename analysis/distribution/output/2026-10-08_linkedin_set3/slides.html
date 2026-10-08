@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Set 3 carousel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Dashboard light theme (web/lib/theme.ts) */
+  :root {
+    --page: #faf6ef; --card: #fffcf5; --border: #e4d9c8; --ink: #2c1e0f; --muted: #7a6a55;
+    --industry: #e05c5c; --services: #a87fdb; --cards: #4e8ef7;
+    --large: #2ca02c; --medium: #ff7f0e; --small: #1f77b4; --svc: #9467bd; --track: #ece2d3;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #d9d2c6; font-family: Geist, -apple-system, "Helvetica Neue", Arial, sans-serif; color: var(--ink); }
+  .slide {
+    width: 1080px; height: 1350px; background: var(--page); position: relative; overflow: hidden;
+    padding: 76px 80px 64px; display: flex; flex-direction: column; margin: 0 auto 40px;
+    border-top: 14px solid var(--accent, var(--ink));
+  }
+  .kicker { font-size: 32px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+  .kicker b { color: var(--accent, var(--ink)); }
+  h1 { font-size: 76px; line-height: 1.08; font-weight: 800; letter-spacing: -.02em; margin-top: 28px; }
+  h2 { font-size: 60px; line-height: 1.1; font-weight: 800; letter-spacing: -.015em; margin-top: 22px; }
+  .body { font-size: 40px; line-height: 1.3; color: var(--ink); }
+  .muted { color: var(--muted); }
+  .small { font-size: 32px; line-height: 1.3; color: var(--muted); }
+  .big { font-size: 150px; font-weight: 800; letter-spacing: -.035em; line-height: 1; }
+  .shot {
+    background: var(--card); border: 2px solid var(--border); border-radius: 28px; padding: 28px;
+    box-shadow: 0 10px 30px rgba(120,90,40,.10);
+  }
+  .shot img { display: block; width: 100%; height: auto; border-radius: 12px; }
+  .shot .cap { font-size: 30px; color: var(--muted); margin-top: 18px; line-height: 1.3; }
+  .shot .cap b { color: var(--ink); font-weight: 600; }
+  .callout {
+    font-size: 40px; font-weight: 700; padding: 22px 30px; border-radius: 20px;
+    background: color-mix(in srgb, var(--accent) 14%, var(--card)); border-left: 10px solid var(--accent);
+  }
+  .foot { margin-top: auto; display: flex; justify-content: space-between; align-items: baseline; font-size: 30px; color: var(--muted); padding-top: 18px; }
+  .foot b { color: var(--ink); font-weight: 700; }
+  .spacer { flex: 1; }
+
+  /* Slide 1 */
+  .points { margin-top: 70px; display: flex; flex-direction: column; gap: 44px; }
+  .point { display: flex; gap: 34px; align-items: flex-start; }
+  .num {
+    flex: none; width: 96px; height: 96px; border-radius: 50%; display: grid; place-items: center;
+    font-size: 50px; font-weight: 800; color: #fff; background: var(--c);
+  }
+  .point .t { font-size: 52px; font-weight: 700; line-height: 1.15; }
+  .point .t span { display: block; font-size: 38px; font-weight: 500; color: var(--muted); margin-top: 10px; }
+
+  /* Slide 2 */
+  .fromto { display: flex; align-items: flex-end; gap: 36px; margin-top: 44px; }
+  .fromto .arrow { font-size: 90px; color: var(--muted); padding-bottom: 22px; }
+  .fromto .lab { font-size: 32px; color: var(--muted); margin-top: 12px; font-weight: 500; }
+  .fromto .now { color: var(--industry); }
+
+  /* Bars (slide 3, 5) — direct-labelled, thin rounded data-ends */
+  .bars { display: flex; flex-direction: column; gap: 26px; margin-top: 46px; }
+  .bar { display: grid; grid-template-columns: 250px 1fr; align-items: center; gap: 24px; }
+  .bar .name { font-size: 40px; font-weight: 600; }
+  .bar .track { position: relative; height: 72px; display: flex; align-items: center; }
+  .bar .fill { height: 72px; border-radius: 0 10px 10px 0; background: var(--c); }
+  .bar .val { font-size: 46px; font-weight: 800; margin-left: 20px; white-space: nowrap; }
+
+  /* Slide 4: ₹100 bar */
+  .hundred { margin-top: 30px; }
+  .hundred .row { display: flex; height: 84px; gap: 4px; }
+  .hundred .seg { display: flex; align-items: center; padding: 0 26px; font-size: 40px; font-weight: 700; }
+  .hundred .svc { background: var(--svc); color: #fff; border-radius: 14px 0 0 14px; }
+  .hundred .rest { background: var(--track); color: var(--muted); border-radius: 0 14px 14px 0; font-weight: 500; font-size: 34px; }
+  .hundred .tick { position: relative; height: 50px; }
+  .hundred .tick div { position: absolute; top: 10px; font-size: 32px; color: var(--muted); white-space: nowrap; transform: translateX(-50%); }
+  .hundred .tick div::before { content: ""; position: absolute; left: 50%; top: -14px; height: 18px; border-left: 3px dashed var(--muted); }
+  .nbfc { display: flex; gap: 36px; align-items: center; margin-top: 18px; }
+  .nbfc .big { font-size: 96px; color: var(--svc); }
+
+  /* Slide 5: swipes vs value */
+  .pair { margin-top: 30px; }
+  .pair h3 { font-size: 34px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 700; margin-bottom: 16px; }
+  .pair .bar { grid-template-columns: 170px 1fr; gap: 20px; }
+  .pair .bar .track, .pair .bar .fill { height: 62px; }
+  .pair + .pair { margin-top: 34px; }
+  .legend-note { font-size: 30px; color: var(--muted); margin-top: 14px; }
+
+  /* Slide 6 */
+  .close h1 { font-size: 92px; margin-top: 70px; }
+  .close .body { font-size: 46px; margin-top: 40px; }
+  .next {
+    margin-top: 70px; padding: 40px 44px; border-radius: 28px; background: var(--card); border: 2px solid var(--border);
+  }
+  .next .k { font-size: 30px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--services); }
+  .next .t { font-size: 46px; font-weight: 700; margin-top: 14px; line-height: 1.2; }
+  .brand { font-size: 52px; font-weight: 800; letter-spacing: -.01em; }
+
+  /* Slide 3: tiles beside the chart */
+  .split { display: grid; grid-template-columns: 1fr 500px; gap: 36px; margin-top: 36px; align-items: start; }
+  .tiles { display: flex; flex-direction: column; gap: 24px; }
+  .tile { background: var(--card); border: 2px solid var(--border); border-left: 12px solid var(--c); border-radius: 22px; padding: 26px 28px; }
+  .tile .n { font-size: 36px; font-weight: 700; }
+  .tile .v { font-size: 92px; font-weight: 800; letter-spacing: -.03em; line-height: 1.05; margin-top: 6px; }
+  .tile .s { font-size: 32px; color: var(--muted); margin-top: 4px; }
+  h2 { font-size: 58px; }
+  .big { font-size: 118px; }
+
+  /* Set 2 */
+  .slide > * { flex-shrink: 0; }  /* overflow must show, never squash a block */
+  .groups { margin-top: 34px; display: flex; flex-direction: column; gap: 26px; }
+  .group .gl { font-size: 32px; font-weight: 700; color: var(--muted); letter-spacing: .04em; text-transform: uppercase; margin-bottom: 12px; }
+  .chips { display: flex; gap: 14px; }
+  .chip { flex: 1; background: var(--card); border: 2px solid var(--border); border-top: 10px solid var(--c); border-radius: 18px; padding: 10px 18px; }
+  .chip .n { font-size: 28px; font-weight: 600; color: var(--muted); white-space: nowrap; }
+  .chip .v { font-size: 56px; font-weight: 800; letter-spacing: -.02em; line-height: 1.05; }
+  .stack { display: flex; height: 92px; gap: 4px; margin-top: 30px; }
+  .stack div { display: flex; align-items: center; padding: 0 22px; font-size: 38px; font-weight: 700; color: #fff; white-space: nowrap; }
+  .stack .rest { background: var(--track); color: var(--muted); font-weight: 500; font-size: 30px; padding: 0 12px; }
+  .stack div:first-child { border-radius: 14px 0 0 14px; } .stack div:last-child { border-radius: 0 14px 14px 0; }
+  .grid2 { display: grid; grid-template-columns: 220px 1fr 1fr; margin-top: 34px; border: 2px solid var(--border); border-radius: 22px; background: var(--card); overflow: hidden; }
+  .grid2 > div { padding: 12px 24px; border-bottom: 2px solid var(--border); }
+  .grid2 > div:nth-last-child(-n+3) { border-bottom: 0; }
+  .grid2 .h { font-size: 28px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+  .grid2 .rl { font-size: 40px; font-weight: 700; display: flex; align-items: center; }
+  .grid2 .gv { font-size: 64px; font-weight: 800; letter-spacing: -.02em; }
+  .grid2 .gold { background: #fdecd9; }
+  #s3 .fromto .lab, #s6 .fromto .lab { white-space: nowrap; }
+  .summary { margin-top: 60px; display: grid; grid-template-columns: auto 1fr; column-gap: 44px; row-gap: 34px; align-items: baseline; }
+  .summary b { font-size: 44px; color: var(--muted); font-weight: 600; }
+  .summary span { font-size: 56px; font-weight: 800; letter-spacing: -.01em; }
+  .legend { display: flex; gap: 34px; margin-top: 18px; font-size: 34px; flex-wrap: wrap; }
+  .legend i { display: inline-block; width: 26px; height: 26px; border-radius: 6px; margin-right: 12px; vertical-align: -3px; }
+
+  /* Set 3 */
+  .duo { display: flex; flex-direction: column; gap: 22px; margin-top: 30px; }
+  .duo .item { background: var(--card); border: 2px solid var(--border); border-radius: 24px; padding: 22px 26px; }
+  .duo .top { display: flex; align-items: baseline; justify-content: space-between; gap: 20px; }
+  .duo .nm { font-size: 40px; font-weight: 700; }
+  .duo .ft { font-size: 64px; font-weight: 800; letter-spacing: -.02em; white-space: nowrap; }
+  .duo .ft span { color: var(--muted); font-weight: 500; margin: 0 10px; font-size: 48px; }
+  .duo .why { font-size: 32px; color: var(--muted); margin-top: 4px; }
+  .duo img { display: block; width: 100%; margin-top: 16px; border-radius: 10px; border: 2px solid var(--border); }
+  .pbars { margin-top: 20px; display: flex; flex-direction: column; gap: 16px; }
+  .pb { display: grid; grid-template-columns: 210px 1fr; gap: 20px; align-items: center; }
+  .pb .nm { font-size: 38px; font-weight: 700; }
+  .pb .rows { display: flex; flex-direction: column; gap: 6px; }
+  .pb .r { display: flex; align-items: center; height: 40px; }
+  .pb .f { height: 40px; border-radius: 0 8px 8px 0; background: var(--c); }
+  .pb .v { font-size: 36px; font-weight: 800; margin-left: 14px; white-space: nowrap; }
+  .lg { display: flex; gap: 34px; font-size: 32px; margin-top: 18px; color: var(--ink); }
+  .lg i { display: inline-block; width: 24px; height: 24px; border-radius: 6px; margin-right: 10px; vertical-align: -2px; }
+  .trio { display: flex; gap: 14px; margin-top: 30px; }
+  .trio > div { flex: 1; background: var(--card); border: 2px solid var(--border); border-radius: 18px; padding: 14px 18px; }
+  .trio .n { font-size: 30px; color: var(--muted); font-weight: 600; }
+  .trio .v { font-size: 58px; font-weight: 800; letter-spacing: -.02em; }
+  .line-chart { margin-top: 30px; background: var(--card); border: 2px solid var(--border); border-radius: 24px; padding: 24px 24px 12px; }
+  .line-chart text { font-family: Geist, sans-serif; }
+  .rr { margin-top: 54px; display: grid; grid-template-columns: 340px 1fr; column-gap: 36px; row-gap: 30px; align-items: baseline; }
+  .rr b { font-size: 40px; color: var(--muted); font-weight: 600; }
+  .rr span { font-size: 44px; font-weight: 800; line-height: 1.15; }
+</style>
+</head>
+<body>
+<!-- 1 · COVER -->
+<section class="slide" id="s1" style="--accent: var(--ink)">
+  <div class="kicker">India Credit Lens · <b>Aug 2026 · Part 3</b></div>
+  <h1>Take inflation out, and the story changes</h1>
+  <div class="points">
+    <div class="point" style="--c: var(--industry)"><div class="num">1</div>
+      <div class="t">Prices flatter some loan books<span>and hide others: petroleum, gems, power.</span></div></div>
+    <div class="point" style="--c: var(--large)"><div class="num">2</div>
+      <div class="t">Loans are growing about 2× the economy<span>Services, industry, agriculture.</span></div></div>
+    <div class="point" style="--c: var(--cards)"><div class="num">3</div>
+      <div class="t">We swipe more, but owe less<span>Card debt is shrinking after inflation.</span></div></div>
+  </div>
+  <div class="foot"><span>RBI credit × MoSPI prices and output · 7 slides</span><b>Swipe →</b></div>
+</section>
+
+<!-- 2 · PETROLEUM -->
+<section class="slide" id="s2" style="--accent: var(--industry)">
+  <div class="kicker"><b>1</b> · Petroleum, coal products</div>
+  <h2>More rupees, less real borrowing</h2>
+  <div class="fromto">
+    <div><div class="big">+14.8%</div><div class="lab">credit, in rupees</div></div>
+    <div class="arrow">→</div>
+    <div><div class="big now">−17.1%</div><div class="lab">after oil prices</div></div>
+  </div>
+  <p class="body" style="margin-top: 26px">Oil prices (WPI mineral oils) up <b>38.5%</b>. Production: <b>0.0%</b>.</p>
+  <div class="shot" style="margin-top: 30px">
+    <img src="shots/1_petroleum.png" alt="Petroleum row: growth 14.8%, real credit -17.1%, output 0.0%">
+    <div class="cap"><b>REAL CREDIT</b> = growth with prices taken out · <b>OUTPUT</b> = production, last 12 months</div>
+  </div>
+  <div class="spacer"></div>
+  <div class="callout">August alone: yearly growth fell from 34.0% to 14.8%</div>
+  <div class="foot"><span>indiacreditlens.com</span><span>RBI credit · MoSPI WPI, IIP</span></div>
+</section>
+
+<!-- 3 · GEMS vs POWER -->
+<section class="slide" id="s3" style="--accent: var(--industry)">
+  <div class="kicker"><b>1</b> · Gems and power</div>
+  <h2>Same lens, opposite stories</h2>
+  <div class="duo">
+    <div class="item">
+      <div class="top"><div class="nm">💍 Gems &amp; jewellery</div><div class="ft">39.1%<span>→</span>12.6%</div></div>
+      <div class="why">Take out jewellery prices (WPI, +23.6%) and growth shrinks a lot</div>
+      <img src="shots/2_gems.png" alt="Gems and jewellery: growth 39.1%, real credit 12.6%">
+    </div>
+    <div class="item">
+      <div class="top"><div class="nm">⚡ Power</div><div class="ft">21.0%<span>→</span>23.1%</div></div>
+      <div class="why">Electricity prices (WPI) fell 1.7%, so real growth is higher</div>
+      <img src="shots/3_power.png" alt="Power: growth 21.0%, real credit 23.1%, output 5.2%">
+    </div>
+  </div>
+  <div class="spacer"></div>
+  <div class="callout">Power output grew only 5.2%. Lending is running way ahead of generation.</div>
+  <div class="foot"><span>indiacreditlens.com</span><span>RBI credit · MoSPI WPI, IIP</span></div>
+</section>
+
+<!-- 4 · CREDIT vs OUTPUT -->
+<section class="slide" id="s4" style="--accent: var(--large)">
+  <div class="kicker"><b style="color: var(--large)">2</b> · Credit vs the economy</div>
+  <h2>Loans are growing about 2× as fast as output</h2>
+  <div class="lg" style="margin-top: 22px"><span class="muted">Apr–Jun 2026, after inflation:</span><span><i style="background: var(--small)"></i>Bank credit</span><span><i style="background: var(--medium)"></i>Real output</span></div>
+  <div class="pbars">
+    <div class="pb"><div class="nm">Services</div><div class="rows">
+      <div class="r" style="--c: var(--small)"><div class="f" style="width: 68.9%"></div><div class="v">18.6%</div></div>
+      <div class="r" style="--c: var(--medium)"><div class="f" style="width: 37.8%"></div><div class="v">10.2%</div></div></div></div>
+    <div class="pb"><div class="nm">Industry</div><div class="rows">
+      <div class="r" style="--c: var(--small)"><div class="f" style="width: 54.8%"></div><div class="v">14.8%</div></div>
+      <div class="r" style="--c: var(--medium)"><div class="f" style="width: 29.3%"></div><div class="v">7.9%</div></div></div></div>
+    <div class="pb"><div class="nm">Agriculture</div><div class="rows">
+      <div class="r" style="--c: var(--small)"><div class="f" style="width: 46.7%"></div><div class="v">12.6%</div></div>
+      <div class="r" style="--c: var(--medium)"><div class="f" style="width: 11.5%"></div><div class="v">3.1% · a 4× gap</div></div></div></div>
+  </div>
+  <div class="shot" style="margin-top: 22px; width: 540px; align-self: center; padding: 14px">
+    <img src="shots/4_main_real.png" alt="Main sectors: real credit and output, Q1">
+  </div>
+  <p class="small" style="margin-top: 14px">Prices removed with the national-accounts deflator: +2.4% services, +3.9% industry, +3.8% agriculture.</p>
+  <div class="spacer"></div>
+  <div class="callout" style="font-size: 36px">August: industry 20.0% → 18.2% · services 22.9% → 24.3%</div>
+  <div class="foot"><span>indiacreditlens.com</span><span>RBI credit · MoSPI national accounts</span></div>
+</section>
+
+<!-- 5 · CARDS -->
+<section class="slide" id="s5" style="--accent: var(--cards)">
+  <div class="kicker"><b>3</b> · Credit cards</div>
+  <h2>We swipe more, but owe less</h2>
+  <div class="trio">
+    <div><div class="n">Cards</div><div class="v">+10.3%</div></div>
+    <div><div class="n">Shop spending</div><div class="v">+9.1%</div></div>
+    <div><div class="n">Card debt</div><div class="v">+3.6%</div></div>
+  </div>
+  <div style="display: flex; align-items: baseline; gap: 26px; margin-top: 44px">
+    <div class="big" style="color: var(--cards)">−1.1%</div>
+    <div class="body">card debt after inflation<br><span class="muted">CPI +4.8%</span></div>
+  </div>
+  <div class="shot" style="margin-top: 34px">
+    <img src="shots/5_card_debt.png" alt="Credit card outstanding: growth 3.6%, real credit -1.1%">
+  </div>
+  <div class="spacer"></div>
+  <div class="callout">More people seem to be paying their bill in full. Good for card safety, not so good for bank profits.</div>
+  <div class="foot"><span>indiacreditlens.com</span><span>RBI credit + card statistics · MoSPI CPI</span></div>
+</section>
+
+<!-- 6 · AUGUST -->
+<section class="slide" id="s6" style="--accent: var(--cards)">
+  <div class="kicker"><b>New in August</b></div>
+  <h2>The smallest fall since May</h2>
+  <p class="body muted" style="margin-top: 12px">Card debt after inflation (CPI), growth vs a year ago, 2026</p>
+  <div class="line-chart"><svg viewBox="0 0 860 470" width="100%" role="img" aria-label="Real card debt growth, Jan to Aug 2026: below zero in 6 of 8 months; July −2.1%, August −1.1%"><line x1="90" x2="820" y1="40.0" y2="40.0" stroke="#e8ddd0" stroke-width="1.5" stroke-dasharray="6 6"/><text x="74" y="51.0" text-anchor="end" font-size="30" fill="#7a6a55">+1%</text><line x1="90" x2="820" y1="130.0" y2="130.0" stroke="#7a6a55" stroke-width="2"/><text x="74" y="141.0" text-anchor="end" font-size="30" fill="#7a6a55">0%</text><line x1="90" x2="820" y1="220.0" y2="220.0" stroke="#e8ddd0" stroke-width="1.5" stroke-dasharray="6 6"/><text x="74" y="231.0" text-anchor="end" font-size="30" fill="#7a6a55">−1%</text><line x1="90" x2="820" y1="310.0" y2="310.0" stroke="#e8ddd0" stroke-width="1.5" stroke-dasharray="6 6"/><text x="74" y="321.0" text-anchor="end" font-size="30" fill="#7a6a55">−2%</text><line x1="90" x2="820" y1="400.0" y2="400.0" stroke="#e8ddd0" stroke-width="1.5" stroke-dasharray="6 6"/><text x="74" y="411.0" text-anchor="end" font-size="30" fill="#7a6a55">−3%</text><polyline points="90.0,238.0 194.3,256.0 298.6,121.0 402.9,103.0 507.1,355.0 611.4,337.0 715.7,319.0 820.0,229.0" fill="none" stroke="#1f77b4" stroke-width="4" stroke-linejoin="round"/><circle cx="90.0" cy="238.0" r="8" fill="#1f77b4" stroke="#1f77b4" stroke-width="3"/><circle cx="194.3" cy="256.0" r="8" fill="#1f77b4" stroke="#1f77b4" stroke-width="3"/><circle cx="298.6" cy="121.0" r="8" fill="#fffcf5" stroke="#1f77b4" stroke-width="3"/><circle cx="402.9" cy="103.0" r="8" fill="#fffcf5" stroke="#1f77b4" stroke-width="3"/><circle cx="507.1" cy="355.0" r="8" fill="#1f77b4" stroke="#1f77b4" stroke-width="3"/><circle cx="611.4" cy="337.0" r="8" fill="#1f77b4" stroke="#1f77b4" stroke-width="3"/><circle cx="715.7" cy="319.0" r="8" fill="#1f77b4" stroke="#1f77b4" stroke-width="3"/><circle cx="820.0" cy="229.0" r="11" fill="#1f77b4" stroke="#1f77b4" stroke-width="3"/><text x="90.0" y="446" text-anchor="middle" font-size="30" fill="#7a6a55" font-weight="400">Jan</text><text x="194.3" y="446" text-anchor="middle" font-size="30" fill="#7a6a55" font-weight="400">Feb</text><text x="298.6" y="446" text-anchor="middle" font-size="30" fill="#7a6a55" font-weight="400">Mar</text><text x="402.9" y="446" text-anchor="middle" font-size="30" fill="#7a6a55" font-weight="400">Apr</text><text x="507.1" y="446" text-anchor="middle" font-size="30" fill="#7a6a55" font-weight="400">May</text><text x="611.4" y="446" text-anchor="middle" font-size="30" fill="#7a6a55" font-weight="400">Jun</text><text x="715.7" y="446" text-anchor="middle" font-size="30" fill="#2c1e0f" font-weight="700">Jul</text><text x="820.0" y="446" text-anchor="middle" font-size="30" fill="#2c1e0f" font-weight="700">Aug</text><text x="820.0" y="203.0" text-anchor="middle" font-size="34" font-weight="800" fill="#2c1e0f">−1.1%</text><text x="715.7" y="369.0" text-anchor="middle" font-size="30" font-weight="700" fill="#7a6a55">−2.1%</text></svg></div>
+  <p class="body" style="margin-top: 28px">Below zero in <b>6 of 8 months</b> this year.</p>
+  <div class="spacer"></div>
+  <div class="callout">July −2.1% → August −1.1%</div>
+  <div class="foot"><span>indiacreditlens.com</span><span>RBI credit · MoSPI CPI</span></div>
+</section>
+
+<!-- 7 · CLOSE -->
+<section class="slide close" id="s7" style="--accent: var(--ink)">
+  <div class="kicker">India Credit Lens · <b>Aug 2026 · Part 3</b></div>
+  <h1>Rupees vs reality</h1>
+  <div class="rr">
+    <b>Petroleum</b><span>grew in rupees, shrank in reality</span>
+    <b>Power</b><span>real growth is even higher</span>
+    <b>Loans vs output</b><span>about 2× as fast</span>
+    <b>Card debt</b><span>shrinking after inflation</span>
+  </div>
+  <div class="spacer"></div>
+  <div class="brand">indiacreditlens.com</div>
+  <p class="small" style="margin-top: 12px">Data: RBI sector-wise bank credit + ATM/POS card statistics; MoSPI WPI, CPI, IIP and national accounts · Aug 2026</p>
+</section>
+
+</body>
+</html>

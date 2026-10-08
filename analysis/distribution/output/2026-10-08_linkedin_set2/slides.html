@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Set 2 carousel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Dashboard light theme (web/lib/theme.ts) */
+  :root {
+    --page: #faf6ef; --card: #fffcf5; --border: #e4d9c8; --ink: #2c1e0f; --muted: #7a6a55;
+    --industry: #e05c5c; --services: #a87fdb; --cards: #4e8ef7;
+    --large: #2ca02c; --medium: #ff7f0e; --small: #1f77b4; --svc: #9467bd; --track: #ece2d3;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #d9d2c6; font-family: Geist, -apple-system, "Helvetica Neue", Arial, sans-serif; color: var(--ink); }
+  .slide {
+    width: 1080px; height: 1350px; background: var(--page); position: relative; overflow: hidden;
+    padding: 76px 80px 64px; display: flex; flex-direction: column; margin: 0 auto 40px;
+    border-top: 14px solid var(--accent, var(--ink));
+  }
+  .kicker { font-size: 32px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+  .kicker b { color: var(--accent, var(--ink)); }
+  h1 { font-size: 76px; line-height: 1.08; font-weight: 800; letter-spacing: -.02em; margin-top: 28px; }
+  h2 { font-size: 60px; line-height: 1.1; font-weight: 800; letter-spacing: -.015em; margin-top: 22px; }
+  .body { font-size: 40px; line-height: 1.3; color: var(--ink); }
+  .muted { color: var(--muted); }
+  .small { font-size: 32px; line-height: 1.3; color: var(--muted); }
+  .big { font-size: 150px; font-weight: 800; letter-spacing: -.035em; line-height: 1; }
+  .shot {
+    background: var(--card); border: 2px solid var(--border); border-radius: 28px; padding: 28px;
+    box-shadow: 0 10px 30px rgba(120,90,40,.10);
+  }
+  .shot img { display: block; width: 100%; height: auto; border-radius: 12px; }
+  .shot .cap { font-size: 30px; color: var(--muted); margin-top: 18px; line-height: 1.3; }
+  .shot .cap b { color: var(--ink); font-weight: 600; }
+  .callout {
+    font-size: 40px; font-weight: 700; padding: 22px 30px; border-radius: 20px;
+    background: color-mix(in srgb, var(--accent) 14%, var(--card)); border-left: 10px solid var(--accent);
+  }
+  .foot { margin-top: auto; display: flex; justify-content: space-between; align-items: baseline; font-size: 30px; color: var(--muted); padding-top: 18px; }
+  .foot b { color: var(--ink); font-weight: 700; }
+  .spacer { flex: 1; }
+
+  /* Slide 1 */
+  .points { margin-top: 70px; display: flex; flex-direction: column; gap: 44px; }
+  .point { display: flex; gap: 34px; align-items: flex-start; }
+  .num {
+    flex: none; width: 96px; height: 96px; border-radius: 50%; display: grid; place-items: center;
+    font-size: 50px; font-weight: 800; color: #fff; background: var(--c);
+  }
+  .point .t { font-size: 52px; font-weight: 700; line-height: 1.15; }
+  .point .t span { display: block; font-size: 38px; font-weight: 500; color: var(--muted); margin-top: 10px; }
+
+  /* Slide 2 */
+  .fromto { display: flex; align-items: flex-end; gap: 36px; margin-top: 44px; }
+  .fromto .arrow { font-size: 90px; color: var(--muted); padding-bottom: 22px; }
+  .fromto .lab { font-size: 32px; color: var(--muted); margin-top: 12px; font-weight: 500; }
+  .fromto .now { color: var(--industry); }
+
+  /* Bars (slide 3, 5) — direct-labelled, thin rounded data-ends */
+  .bars { display: flex; flex-direction: column; gap: 26px; margin-top: 46px; }
+  .bar { display: grid; grid-template-columns: 250px 1fr; align-items: center; gap: 24px; }
+  .bar .name { font-size: 40px; font-weight: 600; }
+  .bar .track { position: relative; height: 72px; display: flex; align-items: center; }
+  .bar .fill { height: 72px; border-radius: 0 10px 10px 0; background: var(--c); }
+  .bar .val { font-size: 46px; font-weight: 800; margin-left: 20px; white-space: nowrap; }
+
+  /* Slide 4: ₹100 bar */
+  .hundred { margin-top: 30px; }
+  .hundred .row { display: flex; height: 84px; gap: 4px; }
+  .hundred .seg { display: flex; align-items: center; padding: 0 26px; font-size: 40px; font-weight: 700; }
+  .hundred .svc { background: var(--svc); color: #fff; border-radius: 14px 0 0 14px; }
+  .hundred .rest { background: var(--track); color: var(--muted); border-radius: 0 14px 14px 0; font-weight: 500; font-size: 34px; }
+  .hundred .tick { position: relative; height: 50px; }
+  .hundred .tick div { position: absolute; top: 10px; font-size: 32px; color: var(--muted); white-space: nowrap; transform: translateX(-50%); }
+  .hundred .tick div::before { content: ""; position: absolute; left: 50%; top: -14px; height: 18px; border-left: 3px dashed var(--muted); }
+  .nbfc { display: flex; gap: 36px; align-items: center; margin-top: 18px; }
+  .nbfc .big { font-size: 96px; color: var(--svc); }
+
+  /* Slide 5: swipes vs value */
+  .pair { margin-top: 30px; }
+  .pair h3 { font-size: 34px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 700; margin-bottom: 16px; }
+  .pair .bar { grid-template-columns: 170px 1fr; gap: 20px; }
+  .pair .bar .track, .pair .bar .fill { height: 62px; }
+  .pair + .pair { margin-top: 34px; }
+  .legend-note { font-size: 30px; color: var(--muted); margin-top: 14px; }
+
+  /* Slide 6 */
+  .close h1 { font-size: 92px; margin-top: 70px; }
+  .close .body { font-size: 46px; margin-top: 40px; }
+  .next {
+    margin-top: 70px; padding: 40px 44px; border-radius: 28px; background: var(--card); border: 2px solid var(--border);
+  }
+  .next .k { font-size: 30px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--services); }
+  .next .t { font-size: 46px; font-weight: 700; margin-top: 14px; line-height: 1.2; }
+  .brand { font-size: 52px; font-weight: 800; letter-spacing: -.01em; }
+
+  /* Slide 3: tiles beside the chart */
+  .split { display: grid; grid-template-columns: 1fr 500px; gap: 36px; margin-top: 36px; align-items: start; }
+  .tiles { display: flex; flex-direction: column; gap: 24px; }
+  .tile { background: var(--card); border: 2px solid var(--border); border-left: 12px solid var(--c); border-radius: 22px; padding: 26px 28px; }
+  .tile .n { font-size: 36px; font-weight: 700; }
+  .tile .v { font-size: 92px; font-weight: 800; letter-spacing: -.03em; line-height: 1.05; margin-top: 6px; }
+  .tile .s { font-size: 32px; color: var(--muted); margin-top: 4px; }
+  h2 { font-size: 58px; }
+  .big { font-size: 118px; }
+
+  /* Set 2 */
+  .slide > * { flex-shrink: 0; }  /* overflow must show, never squash a block */
+  .groups { margin-top: 34px; display: flex; flex-direction: column; gap: 26px; }
+  .group .gl { font-size: 32px; font-weight: 700; color: var(--muted); letter-spacing: .04em; text-transform: uppercase; margin-bottom: 12px; }
+  .chips { display: flex; gap: 14px; }
+  .chip { flex: 1; background: var(--card); border: 2px solid var(--border); border-top: 10px solid var(--c); border-radius: 18px; padding: 10px 18px; }
+  .chip .n { font-size: 28px; font-weight: 600; color: var(--muted); white-space: nowrap; }
+  .chip .v { font-size: 56px; font-weight: 800; letter-spacing: -.02em; line-height: 1.05; }
+  .stack { display: flex; height: 92px; gap: 4px; margin-top: 30px; }
+  .stack div { display: flex; align-items: center; padding: 0 22px; font-size: 38px; font-weight: 700; color: #fff; white-space: nowrap; }
+  .stack .rest { background: var(--track); color: var(--muted); font-weight: 500; font-size: 30px; padding: 0 12px; }
+  .stack div:first-child { border-radius: 14px 0 0 14px; } .stack div:last-child { border-radius: 0 14px 14px 0; }
+  .grid2 { display: grid; grid-template-columns: 220px 1fr 1fr; margin-top: 34px; border: 2px solid var(--border); border-radius: 22px; background: var(--card); overflow: hidden; }
+  .grid2 > div { padding: 12px 24px; border-bottom: 2px solid var(--border); }
+  .grid2 > div:nth-last-child(-n+3) { border-bottom: 0; }
+  .grid2 .h { font-size: 28px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+  .grid2 .rl { font-size: 40px; font-weight: 700; display: flex; align-items: center; }
+  .grid2 .gv { font-size: 64px; font-weight: 800; letter-spacing: -.02em; }
+  .grid2 .gold { background: #fdecd9; }
+  #s3 .fromto .lab, #s6 .fromto .lab { white-space: nowrap; }
+  .summary { margin-top: 60px; display: grid; grid-template-columns: auto 1fr; column-gap: 44px; row-gap: 34px; align-items: baseline; }
+  .summary b { font-size: 44px; color: var(--muted); font-weight: 600; }
+  .summary span { font-size: 56px; font-weight: 800; letter-spacing: -.01em; }
+  .legend { display: flex; gap: 34px; margin-top: 18px; font-size: 34px; flex-wrap: wrap; }
+  .legend i { display: inline-block; width: 26px; height: 26px; border-radius: 6px; margin-right: 12px; vertical-align: -3px; }
+</style>
+</head>
+<body>
+<!-- 1 · COVER -->
+<section class="slide" id="s1" style="--accent: var(--ink)">
+  <div class="kicker">India Credit Lens · <b>Aug 2026 · Part 2</b></div>
+  <h1>Who's winning<br>market share?</h1>
+  <div class="points">
+    <div class="point" style="--c: var(--cards)"><div class="num">1</div>
+      <div class="t">Credit cards<span>The big banks are growing, just slower than the market.</span></div></div>
+    <div class="point" style="--c: #f0912a"><div class="num">2</div>
+      <div class="t">UPI QR codes<span>Two banks are behind almost every QR you scan.</span></div></div>
+    <div class="point" style="--c: var(--industry)"><div class="num">3</div>
+      <div class="t">Personal loans<span>From homes to gold.</span></div></div>
+  </div>
+  <div class="foot"><span>Card payments + bank credit, RBI · 7 slides</span><b>Swipe →</b></div>
+</section>
+
+<!-- 2 · CARDS BY BANK -->
+<section class="slide" id="s2" style="--accent: var(--cards)">
+  <div class="kicker"><b>1</b> · Credit cards in force</div>
+  <h2>Big banks: growing, but slower</h2>
+  <div class="groups">
+    <div class="group"><div class="gl">Market: +10.3% · the four biggest grew slower</div>
+      <div class="chips" style="--c: #c9b9a3">
+        <div class="chip"><div class="n">HDFC</div><div class="v">8.3%</div></div>
+        <div class="chip"><div class="n">SBI</div><div class="v">7.6%</div></div>
+        <div class="chip"><div class="n">ICICI</div><div class="v">9.1%</div></div>
+        <div class="chip"><div class="n">Axis</div><div class="v">6.4%</div></div>
+      </div></div>
+    <div class="group"><div class="gl">Taking share: grew faster</div>
+      <div class="chips" style="--c: var(--cards)">
+        <div class="chip"><div class="n">Federal</div><div class="v">81.8%</div></div>
+        <div class="chip"><div class="n">IDFC First</div><div class="v">25.2%</div></div>
+        <div class="chip"><div class="n">Small finance banks</div><div class="v">111%</div></div>
+      </div></div>
+  </div>
+  <div class="shot" style="margin-top: 20px; width: 640px; align-self: center; padding: 18px">
+    <img src="shots/1_cards_by_bank.png" alt="Cards outstanding by bank: share and growth">
+  </div>
+  <div class="foot"><span>indiacreditlens.com</span><span>RBI ATM/POS card statistics</span></div>
+</section>
+
+<!-- 3 · SPENDING -->
+<section class="slide" id="s3" style="--accent: var(--cards)">
+  <div class="kicker"><b>1</b> · Card spending at shops</div>
+  <h2>But on spending, government banks lead</h2>
+  <div class="fromto">
+    <div><div class="big">19.4%</div><div class="lab">share of card spend, a year ago</div></div>
+    <div class="arrow">→</div>
+    <div><div class="big" style="color: var(--cards)">51%</div><div class="lab">of this year's growth</div></div>
+  </div>
+  <div class="shot" style="margin-top: 24px">
+    <img src="shots/2_pos_value_by_category.png" alt="Card POS spend by bank category">
+    <div class="cap"><b>NEW</b> = share of this year's growth in card spend at shops</div>
+  </div>
+  <div class="spacer"></div>
+  <div class="callout" style="font-size: 38px">SBI: 16.2% → 22.3% in one month.<br>HDFC, the biggest: just +0.9%.</div>
+  <div class="foot"><span>indiacreditlens.com</span><span>RBI ATM/POS card statistics</span></div>
+</section>
+
+<!-- 4 · UPI QR -->
+<section class="slide" id="s4" style="--accent: #f0912a">
+  <div class="kicker"><b style="color: #f0912a">2</b> · UPI QR codes</div>
+  <h2>Two banks are behind almost every UPI QR</h2>
+  <div style="display: flex; align-items: baseline; gap: 24px; margin-top: 36px">
+    <div class="big" style="color: #c96f12">93</div>
+    <div class="body">of every <b>100</b> QR stickers<br><span class="muted">of 81.3 crore in India</span></div>
+  </div>
+  <div class="stack">
+    <div style="width: 77.4%; background: var(--small)"></div>
+    <div style="width: 16%; background: var(--medium)"></div>
+    <div class="rest" style="flex: 1"></div>
+  </div>
+  <div class="legend">
+    <span><i style="background: var(--small)"></i>Yes Bank <b>77.4%</b></span>
+    <span><i style="background: var(--medium)"></i>Axis <b>16.0%</b></span>
+    <span><i style="background: var(--track)"></i>all other banks</span>
+  </div>
+  <div class="shot" style="margin-top: 34px">
+    <img src="shots/3_upi_qr_by_bank.png" alt="UPI QR codes by bank">
+  </div>
+  <div class="foot"><span>indiacreditlens.com</span><span>RBI ATM/POS card statistics</span></div>
+</section>
+
+<!-- 5 · PERSONAL LOANS -->
+<section class="slide" id="s5" style="--accent: #f0912a">
+  <div class="kicker"><b style="color: #f0912a">3</b> · Personal loans</div>
+  <h2>From homes to gold</h2>
+  <div class="grid2">
+    <div></div><div class="h">Share of loans</div><div class="h">Share of this year's growth</div>
+    <div class="rl">Homes</div><div class="gv">47.4%</div><div class="gv">32.8%</div>
+    <div class="rl gold">Gold</div><div class="gv gold">7.7%</div><div class="gv gold" style="color: #c96f12">24.1%</div>
+  </div>
+  <p class="small" style="margin-top: 14px">Gold loans up 83.2% in a year. Part of that is gold itself getting pricier.</p>
+  <div class="shot" style="margin-top: 22px; width: 580px; align-self: center; padding: 18px">
+    <img src="shots/4_personal_loans.png" alt="Personal loans table: housing, gold, FD loans">
+  </div>
+  <div class="foot"><span>indiacreditlens.com</span><span>RBI sector-wise bank credit</span></div>
+</section>
+
+<!-- 6 · FD LOANS, AUGUST -->
+<section class="slide" id="s6" style="--accent: #f0912a">
+  <div class="kicker"><b style="color: #f0912a">New in August</b></div>
+  <h2>Loans against fixed deposits jumped</h2>
+  <div class="fromto">
+    <div><div class="big">14.6%</div><div class="lab">yearly growth, July</div></div>
+    <div class="arrow">→</div>
+    <div><div class="big" style="color: #c96f12">43.2%</div><div class="lab">August</div></div>
+  </div>
+  <div class="shot" style="margin-top: 40px">
+    <img src="shots/5_fd_loans.png" alt="Advances against fixed deposits, including FCNR (B): growth 43.2%, pace +28.58 pp">
+    <div class="cap">RBI's own label for this line includes <b>FCNR (B)</b> deposits</div>
+  </div>
+  <div class="spacer"></div>
+  <div class="callout" style="font-size: 48px">Could NRI deposits (FCNR) be behind this?</div>
+  <div class="foot"><span>indiacreditlens.com</span><span>RBI sector-wise bank credit</span></div>
+</section>
+
+<!-- 7 · CLOSE -->
+<section class="slide close" id="s7" style="--accent: var(--ink)">
+  <div class="kicker">India Credit Lens · <b>Aug 2026 · Part 2</b></div>
+  <h1>Who's winning?</h1>
+  <div class="summary">
+    <b>Cards</b><span>smaller banks</span>
+    <b>Card spending</b><span>government banks</span>
+    <b>UPI QR</b><span>two banks</span>
+    <b>Personal loans</b><span>gold</span>
+  </div>
+  <div class="spacer"></div>
+  <div class="brand">indiacreditlens.com</div>
+  <p class="small" style="margin-top: 12px">Data: RBI ATM/POS card statistics + sector-wise bank credit, Aug 2026</p>
+</section>
+
+</body>
+</html>

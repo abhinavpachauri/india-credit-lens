@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Set 1 carousel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Dashboard light theme (web/lib/theme.ts) */
+  :root {
+    --page: #faf6ef; --card: #fffcf5; --border: #e4d9c8; --ink: #2c1e0f; --muted: #7a6a55;
+    --industry: #e05c5c; --services: #a87fdb; --cards: #4e8ef7;
+    --large: #2ca02c; --medium: #ff7f0e; --small: #1f77b4; --svc: #9467bd; --track: #ece2d3;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #d9d2c6; font-family: Geist, -apple-system, "Helvetica Neue", Arial, sans-serif; color: var(--ink); }
+  .slide {
+    width: 1080px; height: 1350px; background: var(--page); position: relative; overflow: hidden;
+    padding: 76px 80px 64px; display: flex; flex-direction: column; margin: 0 auto 40px;
+    border-top: 14px solid var(--accent, var(--ink));
+  }
+  .kicker { font-size: 32px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+  .kicker b { color: var(--accent, var(--ink)); }
+  h1 { font-size: 76px; line-height: 1.08; font-weight: 800; letter-spacing: -.02em; margin-top: 28px; }
+  h2 { font-size: 60px; line-height: 1.1; font-weight: 800; letter-spacing: -.015em; margin-top: 22px; }
+  .body { font-size: 40px; line-height: 1.3; color: var(--ink); }
+  .muted { color: var(--muted); }
+  .small { font-size: 32px; line-height: 1.3; color: var(--muted); }
+  .big { font-size: 150px; font-weight: 800; letter-spacing: -.035em; line-height: 1; }
+  .shot {
+    background: var(--card); border: 2px solid var(--border); border-radius: 28px; padding: 28px;
+    box-shadow: 0 10px 30px rgba(120,90,40,.10);
+  }
+  .shot img { display: block; width: 100%; height: auto; border-radius: 12px; }
+  .shot .cap { font-size: 30px; color: var(--muted); margin-top: 18px; line-height: 1.3; }
+  .shot .cap b { color: var(--ink); font-weight: 600; }
+  .callout {
+    font-size: 40px; font-weight: 700; padding: 22px 30px; border-radius: 20px;
+    background: color-mix(in srgb, var(--accent) 14%, var(--card)); border-left: 10px solid var(--accent);
+  }
+  .foot { margin-top: auto; display: flex; justify-content: space-between; align-items: baseline; font-size: 30px; color: var(--muted); padding-top: 18px; }
+  .foot b { color: var(--ink); font-weight: 700; }
+  .spacer { flex: 1; }
+
+  /* Slide 1 */
+  .points { margin-top: 70px; display: flex; flex-direction: column; gap: 44px; }
+  .point { display: flex; gap: 34px; align-items: flex-start; }
+  .num {
+    flex: none; width: 96px; height: 96px; border-radius: 50%; display: grid; place-items: center;
+    font-size: 50px; font-weight: 800; color: #fff; background: var(--c);
+  }
+  .point .t { font-size: 52px; font-weight: 700; line-height: 1.15; }
+  .point .t span { display: block; font-size: 38px; font-weight: 500; color: var(--muted); margin-top: 10px; }
+
+  /* Slide 2 */
+  .fromto { display: flex; align-items: flex-end; gap: 36px; margin-top: 44px; }
+  .fromto .arrow { font-size: 90px; color: var(--muted); padding-bottom: 22px; }
+  .fromto .lab { font-size: 32px; color: var(--muted); margin-top: 12px; font-weight: 500; }
+  .fromto .now { color: var(--industry); }
+
+  /* Bars (slide 3, 5) — direct-labelled, thin rounded data-ends */
+  .bars { display: flex; flex-direction: column; gap: 26px; margin-top: 46px; }
+  .bar { display: grid; grid-template-columns: 250px 1fr; align-items: center; gap: 24px; }
+  .bar .name { font-size: 40px; font-weight: 600; }
+  .bar .track { position: relative; height: 72px; display: flex; align-items: center; }
+  .bar .fill { height: 72px; border-radius: 0 10px 10px 0; background: var(--c); }
+  .bar .val { font-size: 46px; font-weight: 800; margin-left: 20px; white-space: nowrap; }
+
+  /* Slide 4: ₹100 bar */
+  .hundred { margin-top: 30px; }
+  .hundred .row { display: flex; height: 84px; gap: 4px; }
+  .hundred .seg { display: flex; align-items: center; padding: 0 26px; font-size: 40px; font-weight: 700; }
+  .hundred .svc { background: var(--svc); color: #fff; border-radius: 14px 0 0 14px; }
+  .hundred .rest { background: var(--track); color: var(--muted); border-radius: 0 14px 14px 0; font-weight: 500; font-size: 34px; }
+  .hundred .tick { position: relative; height: 50px; }
+  .hundred .tick div { position: absolute; top: 10px; font-size: 32px; color: var(--muted); white-space: nowrap; transform: translateX(-50%); }
+  .hundred .tick div::before { content: ""; position: absolute; left: 50%; top: -14px; height: 18px; border-left: 3px dashed var(--muted); }
+  .nbfc { display: flex; gap: 36px; align-items: center; margin-top: 18px; }
+  .nbfc .big { font-size: 96px; color: var(--svc); }
+
+  /* Slide 5: swipes vs value */
+  .pair { margin-top: 30px; }
+  .pair h3 { font-size: 34px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 700; margin-bottom: 16px; }
+  .pair .bar { grid-template-columns: 170px 1fr; gap: 20px; }
+  .pair .bar .track, .pair .bar .fill { height: 62px; }
+  .pair + .pair { margin-top: 34px; }
+  .legend-note { font-size: 30px; color: var(--muted); margin-top: 14px; }
+
+  /* Slide 6 */
+  .close h1 { font-size: 92px; margin-top: 70px; }
+  .close .body { font-size: 46px; margin-top: 40px; }
+  .next {
+    margin-top: 70px; padding: 40px 44px; border-radius: 28px; background: var(--card); border: 2px solid var(--border);
+  }
+  .next .k { font-size: 30px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--services); }
+  .next .t { font-size: 46px; font-weight: 700; margin-top: 14px; line-height: 1.2; }
+  .brand { font-size: 52px; font-weight: 800; letter-spacing: -.01em; }
+
+  /* Slide 3: tiles beside the chart */
+  .split { display: grid; grid-template-columns: 1fr 500px; gap: 36px; margin-top: 36px; align-items: start; }
+  .tiles { display: flex; flex-direction: column; gap: 24px; }
+  .tile { background: var(--card); border: 2px solid var(--border); border-left: 12px solid var(--c); border-radius: 22px; padding: 26px 28px; }
+  .tile .n { font-size: 36px; font-weight: 700; }
+  .tile .v { font-size: 92px; font-weight: 800; letter-spacing: -.03em; line-height: 1.05; margin-top: 6px; }
+  .tile .s { font-size: 32px; color: var(--muted); margin-top: 4px; }
+  h2 { font-size: 58px; }
+  .big { font-size: 118px; }
+</style>
+</head>
+<body>
+
+<!-- 1 · COVER -->
+<section class="slide" id="s1" style="--accent: var(--ink)">
+  <div class="kicker">India Credit Lens · <b>Aug 2026</b></div>
+  <h1>August's RBI data is out.<br>Two things moved.</h1>
+  <div class="points">
+    <div class="point" style="--c: var(--industry)">
+      <div class="num">1</div>
+      <div class="t">Big companies are slowing down.<span>Smaller ones are not. And the new money is going to services and NBFCs.</span></div>
+    </div>
+    <div class="point" style="--c: var(--cards)">
+      <div class="num">2</div>
+      <div class="t">We're swiping more, but spending smaller.<span>Credit cards are becoming an everyday thing.</span></div>
+    </div>
+  </div>
+  <div class="foot"><span>Bank credit + card payments, RBI · 7 slides</span><b>Swipe →</b></div>
+</section>
+
+<!-- 2 · BIG COMPANIES' SHARE -->
+<section class="slide" id="s2" style="--accent: var(--industry)">
+  <div class="kicker"><b>1</b> · Bank credit to industry</div>
+  <h2>Big companies are slowing down</h2>
+  <div class="fromto">
+    <div><div class="big">71</div><div class="lab">Dec 2024</div></div>
+    <div class="arrow">→</div>
+    <div><div class="big now">66.5</div><div class="lab">Aug 2026</div></div>
+  </div>
+  <p class="body" style="margin-top: 24px">of every <b>₹100</b> lent to industry went to big companies</p>
+  <div class="shot" style="margin-top: 22px">
+    <img src="shots/1_size_table.png" alt="Industry by Size table: Large 66.5% share, 14.9% growth">
+    <div class="cap"><b>OF CUT</b> = share of industry loans · <b>GROWTH</b> = vs a year ago</div>
+  </div>
+  <div class="spacer"></div>
+  <div class="callout">August alone: 67.3 → 66.5 in one month</div>
+  <div class="foot"><span>indiacreditlens.com</span><span>RBI sector-wise bank credit</span></div>
+</section>
+
+<!-- 3 · SMALLER FIRMS' SPEED -->
+<section class="slide" id="s3" style="--accent: var(--industry)">
+  <div class="kicker"><b>1</b> · Bank credit to industry</div>
+  <h2>…smaller ones are not</h2>
+  <p class="body muted" style="margin-top: 16px">How fast bank loans grew in a year</p>
+  <div class="split">
+    <div class="tiles">
+      <div class="tile" style="--c: var(--medium)"><div class="n">Mid-sized</div><div class="v">31.8%</div><div class="s">2× the big guys</div></div>
+      <div class="tile" style="--c: var(--small)"><div class="n">Small</div><div class="v">23.0%</div><div class="s">still healthy</div></div>
+      <div class="tile" style="--c: var(--large)"><div class="n">Big</div><div class="v">14.9%</div><div class="s">the slowest</div></div>
+    </div>
+    <div class="shot" style="padding: 18px"><img src="shots/2_size_growth.png" alt="Dashboard chart: loan growth by company size, 2024 to 2026"></div>
+  </div>
+  <div class="foot"><span>indiacreditlens.com</span><span>Aug 2026 vs Aug 2025</span></div>
+</section>
+
+<!-- 4 · SERVICES + NBFCs -->
+<section class="slide" id="s4" style="--accent: var(--services)">
+  <div class="kicker"><b>1a</b> · Where the new money went</div>
+  <h2 style="font-size: 54px">The new money went to services, mostly NBFCs</h2>
+  <p class="body" style="margin-top: 16px">Of every <b>₹100</b> of new bank credit this year:</p>
+  <div class="hundred">
+    <div class="row">
+      <div class="seg svc" style="width: 35%">₹35</div>
+      <div class="seg rest" style="flex: 1">everything else ₹65</div>
+    </div>
+    <div class="tick"><div style="left: 27%">a year ago: ₹27</div></div>
+  </div>
+  <div class="nbfc">
+    <div class="big">+37.5%</div>
+    <div class="body"><b>bank loans to NBFCs</b><br><span class="muted">banks lending to lenders</span></div>
+  </div>
+  <div class="shot" style="margin-top: 14px; padding: 20px 24px">
+    <img src="shots/3_services_table.png" alt="Services table: NBFCs growing 37.5%">
+    <div class="cap"><b>NEW</b> = share of services' new lending this year</div>
+  </div>
+  <div class="foot"><span>indiacreditlens.com</span><span>RBI sector-wise bank credit</span></div>
+</section>
+
+<!-- 5 · SWIPES VS VALUE -->
+<section class="slide" id="s5" style="--accent: var(--cards)">
+  <div class="kicker"><b>2</b> · Credit card payments</div>
+  <h2>We're swiping more, but spending smaller</h2>
+  <div class="pair" style="margin-top: 56px">
+    <h3>🏪 At shops · growth in a year</h3>
+    <div class="bars" style="margin-top: 0; gap: 18px">
+      <div class="bar" style="--c: var(--small)"><div class="name">Swipes</div>
+        <div class="track"><div class="fill" style="width: 47%"></div><div class="val">+23.5%</div></div></div>
+      <div class="bar" style="--c: var(--medium)"><div class="name">Value</div>
+        <div class="track"><div class="fill" style="width: 18.2%"></div><div class="val">+9.1%</div></div></div>
+    </div>
+  </div>
+  <div class="pair" style="margin-top: 56px">
+    <h3>🛒 Online · growth in a year</h3>
+    <div class="bars" style="margin-top: 0; gap: 18px">
+      <div class="bar" style="--c: var(--small)"><div class="name">Swipes</div>
+        <div class="track"><div class="fill" style="width: 64.4%"></div><div class="val">+32.2%</div></div></div>
+      <div class="bar" style="--c: var(--medium)"><div class="name">Value</div>
+        <div class="track"><div class="fill" style="width: 7.8%"></div><div class="val">+3.9%</div></div></div>
+    </div>
+  </div>
+  <div class="spacer"></div>
+  <div class="callout">Swipes growing faster than rupees means each bill is getting smaller.</div>
+  <div class="foot"><span>indiacreditlens.com</span><span>RBI ATM/POS card statistics</span></div>
+</section>
+
+<!-- 6 · 12.4 CRORE CARDS -->
+<section class="slide" id="s6" style="--accent: var(--cards)">
+  <div class="kicker"><b>2</b> · Credit cards in India</div>
+  <div class="big" style="font-size: 112px; color: var(--cards); margin-top: 24px">12.4 crore</div>
+  <p class="body" style="margin-top: 18px">credit cards, growing <b>10.3%</b> a year: the fastest in our data</p>
+  <div class="shot" style="margin-top: 26px; padding: 20px; width: 780px; align-self: center">
+    <img src="shots/4_card_growth.png" alt="Dashboard chart: credit card growth hits 10.27%, a new high">
+    <div class="cap" style="padding: 0 8px"><b>Credit cards in force</b>, growth vs a year ago</div>
+  </div>
+  <div class="foot"><span>indiacreditlens.com</span><span>RBI ATM/POS card statistics</span></div>
+</section>
+
+<!-- 7 · CLOSE -->
+<section class="slide close" id="s7" style="--accent: var(--ink)">
+  <div class="kicker">India Credit Lens · <b>Aug 2026</b></div>
+  <h1>More swipes,<br>smaller bills.</h1>
+  <p class="body">The credit card looks less like a "big purchase" card now, and more like an everyday one: groceries, fuel, food orders.</p>
+  <div class="next">
+    <div class="k">Coming up</div>
+    <div class="t">The NBFC breakup. RBI has just started publishing it separately.</div>
+  </div>
+  <div class="spacer"></div>
+  <div class="brand">indiacreditlens.com</div>
+  <p class="small" style="margin-top: 12px">Data: RBI sector-wise bank credit + ATM/POS card statistics, Aug 2026</p>
+</section>
+
+</body>
+</html>
