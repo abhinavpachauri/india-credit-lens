@@ -6,6 +6,13 @@
   "classifier": "analysis/signals/planes.py"
  },
  "planes": {
+  "sibc-bank-credit-abs": {
+   "plane": "read",
+   "news_score": 2.0,
+   "subject": "Bank Credit",
+   "reason": "record",
+   "direction": "up"
+  },
   "sibc-bank-credit-fy-acceleration": {
    "plane": "composition",
    "news_score": 0.0,
@@ -19,7 +26,8 @@
   "sibc-bank-credit-yoy": {
    "plane": "subject",
    "news_score": 1.0,
-   "subject": "Bank Credit"
+   "subject": "Bank Credit",
+   "superseded_by_band": true
   },
   "sibc-food-credit-abs": {
    "plane": "subject",
@@ -50,19 +58,15 @@
    "news_score": 1.0,
    "subject": "Non-food Credit"
   },
-  "sibc-bank-credit-abs": {
-   "plane": "read",
-   "news_score": 2.0,
-   "subject": "Bank Credit",
-   "reason": "record",
-   "direction": "up"
+  "sibc-sectors-positive-yoy-count": {
+   "plane": "composition",
+   "news_score": 0.0,
+   "subject": "Agriculture"
   },
   "sibc-agriculture-share": {
-   "plane": "read",
-   "news_score": 2.0,
-   "subject": "Agriculture",
-   "reason": "record",
-   "direction": "down"
+   "plane": "composition",
+   "news_score": 0.0,
+   "subject": "Agriculture"
   },
   "sibc-agriculture-yoy": {
    "plane": "read",
@@ -84,9 +88,11 @@
    "direction": "down"
   },
   "sibc-industry-yoy": {
-   "plane": "subject",
-   "news_score": 1.0,
-   "subject": "Industry"
+   "plane": "read",
+   "news_score": 3.0,
+   "subject": "Industry",
+   "reason": "surge",
+   "direction": "down"
   },
   "sibc-main-share-scan": {
    "plane": "subject",
@@ -135,11 +141,6 @@
    "direction": "down",
    "superseded_by_band": true
   },
-  "sibc-sectors-positive-yoy-count": {
-   "plane": "composition",
-   "news_score": 0.0,
-   "subject": "Agriculture"
-  },
   "sibc-ind-size-share-scan": {
    "plane": "subject",
    "news_score": null,
@@ -160,13 +161,15 @@
    "direction": "down"
   },
   "sibc-large-corporate-yoy": {
-   "plane": "subject",
-   "news_score": 1.0,
-   "subject": "Large"
+   "plane": "read",
+   "news_score": 3.0,
+   "subject": "Large",
+   "reason": "surge",
+   "direction": "down"
   },
   "sibc-msme-medium-share": {
    "plane": "read",
-   "news_score": 2.0,
+   "news_score": 4.0,
    "subject": "Medium",
    "reason": "record",
    "direction": "up"
@@ -254,9 +257,9 @@
   },
   "sibc-pl-cc-abs": {
    "plane": "read",
-   "news_score": 5.0,
+   "news_score": 3.0,
    "subject": "Credit Card Outstanding",
-   "reason": "record",
+   "reason": "reversal",
    "direction": "up"
   },
   "sibc-pl-cc-below10-streak": {
@@ -298,13 +301,6 @@
    "reason": "record",
    "direction": "down"
   },
-  "sibc-pl-fd-advances-share": {
-   "plane": "read",
-   "news_score": 5.0,
-   "subject": "Advances vs Fixed Deposits",
-   "reason": "record",
-   "direction": "up"
-  },
   "sibc-pl-fd-advances-yoy": {
    "plane": "read",
    "news_score": 4.0,
@@ -318,16 +314,14 @@
    "subject": "Gold Loans"
   },
   "sibc-pl-gold-share": {
-   "plane": "subject",
+   "plane": "composition",
    "news_score": 0.0,
    "subject": "Gold Loans"
   },
   "sibc-pl-gold-yoy": {
-   "plane": "read",
-   "news_score": 2.0,
-   "subject": "Gold Loans",
-   "reason": "record",
-   "direction": "down"
+   "plane": "subject",
+   "news_score": 0.0,
+   "subject": "Gold Loans"
   },
   "sibc-pl-housing-share": {
    "plane": "read",
@@ -401,6 +395,13 @@
    "reason": "record",
    "direction": "down"
   },
+  "sibc-pl-fd-advances-share": {
+   "plane": "read",
+   "news_score": 5.0,
+   "subject": "Advances vs Fixed Deposits",
+   "reason": "record",
+   "direction": "up"
+  },
   "sibc-psl-agri-yoy": {
    "plane": "subject",
    "news_score": 1.0,
@@ -432,11 +433,6 @@
    "plane": "subject",
    "news_score": 1.0,
    "subject": "Micro and Small Enterprises"
-  },
-  "sibc-psl-renewable-pos-streak": {
-   "plane": "subject",
-   "news_score": 0.0,
-   "subject": "Renewable Energy"
   },
   "sibc-psl-renewable-yoy": {
    "plane": "subject",
@@ -477,6 +473,11 @@
    "plane": "subject",
    "news_score": 0.0,
    "subject": "Others"
+  },
+  "sibc-psl-renewable-pos-streak": {
+   "plane": "subject",
+   "news_score": 0.0,
+   "subject": "Renewable Energy"
   },
   "sibc-basic-metal-sub-share-scan": {
    "plane": "subject",

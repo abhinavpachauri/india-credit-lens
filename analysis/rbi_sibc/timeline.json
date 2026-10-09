@@ -3,6 +3,33 @@
   "report_name": "RBI Sector/Industry-wise Bank Credit",
   "periods": [
     {
+      "period": "Sep 2023",
+      "dataDate": "2023-10-31",
+      "csv_date": "2023-09-30",
+      "total_credit_lcr": 151.5,
+      "is_fy_end": false,
+      "paths": {},
+      "note": "Backfilled 2026-10-09 from the consolidated CSV — the data month arrived as history inside a later release file."
+    },
+    {
+      "period": "Oct 2023",
+      "dataDate": "2023-11-30",
+      "csv_date": "2023-10-31",
+      "total_credit_lcr": 155.8,
+      "is_fy_end": false,
+      "paths": {},
+      "note": "Backfilled 2026-10-09 from the consolidated CSV — the data month arrived as history inside a later release file."
+    },
+    {
+      "period": "Nov 2023",
+      "dataDate": "2023-12-31",
+      "csv_date": "2023-11-30",
+      "total_credit_lcr": 158.3,
+      "is_fy_end": false,
+      "paths": {},
+      "note": "Backfilled 2026-10-09 from the consolidated CSV — the data month arrived as history inside a later release file."
+    },
+    {
       "period": "Dec 2023",
       "dataDate": "2024-01-31",
       "csv_date": "2023-12-31",
@@ -83,6 +110,45 @@
       "note": "Backfilled 2026-09-14 from the consolidated CSV — level and share only: the CSV holds no 2023 months, so no year-on-year comparison exists for this period and every rate signal is legitimately absent."
     },
     {
+      "period": "Aug 2024",
+      "dataDate": "2024-09-30",
+      "csv_date": "2024-08-31",
+      "total_credit_lcr": 170.5,
+      "is_fy_end": false,
+      "paths": {},
+      "note": "Backfilled 2026-10-09 from the consolidated CSV — the data month arrived as history inside a later release file."
+    },
+    {
+      "period": "Sep 2024",
+      "dataDate": "2024-10-31",
+      "csv_date": "2024-09-30",
+      "total_credit_lcr": 171.3,
+      "yoy_growth_pct": 13.03,
+      "is_fy_end": false,
+      "paths": {},
+      "note": "Backfilled 2026-10-09 from the consolidated CSV — the data month arrived as history inside a later release file."
+    },
+    {
+      "period": "Oct 2024",
+      "dataDate": "2024-11-30",
+      "csv_date": "2024-10-31",
+      "total_credit_lcr": 174.2,
+      "yoy_growth_pct": 11.77,
+      "is_fy_end": false,
+      "paths": {},
+      "note": "Backfilled 2026-10-09 from the consolidated CSV — the data month arrived as history inside a later release file."
+    },
+    {
+      "period": "Nov 2024",
+      "dataDate": "2024-12-31",
+      "csv_date": "2024-11-30",
+      "total_credit_lcr": 175.1,
+      "yoy_growth_pct": 10.64,
+      "is_fy_end": false,
+      "paths": {},
+      "note": "Backfilled 2026-10-09 from the consolidated CSV — the data month arrived as history inside a later release file."
+    },
+    {
       "period": "Dec 2024",
       "dataDate": "2025-01-31",
       "csv_date": "2024-12-31",
@@ -161,6 +227,55 @@
       "paths": {},
       "is_fy_end": false,
       "note": "Backfilled 2026-09-14 from the consolidated CSV — the data month was already ingested as history inside a later report file, so the signals exist without a standalone release."
+    },
+    {
+      "period": "Aug 2025",
+      "dataDate": "2025-09-30",
+      "csv_date": "2025-08-31",
+      "total_credit_lcr": 188.0,
+      "yoy_growth_pct": 10.29,
+      "is_fy_end": false,
+      "paths": {},
+      "note": "Backfilled 2026-10-09 from the consolidated CSV — the data month arrived as history inside a later release file."
+    },
+    {
+      "period": "Sep 2025",
+      "dataDate": "2025-10-31",
+      "csv_date": "2025-09-30",
+      "total_credit_lcr": 189.0,
+      "yoy_growth_pct": 10.38,
+      "is_fy_end": false,
+      "paths": {
+        "sections": "rbi_sibc/2025-10-31/sections.json",
+        "format_report": "rbi_sibc/2025-10-31/format_report.json"
+      },
+      "note": "Backfill release ingested 2026-10-09 (Phase 1: closes the Sep–Nov holes)."
+    },
+    {
+      "period": "Oct 2025",
+      "dataDate": "2025-11-28",
+      "csv_date": "2025-10-31",
+      "total_credit_lcr": 193.9,
+      "yoy_growth_pct": 11.31,
+      "is_fy_end": false,
+      "paths": {
+        "sections": "rbi_sibc/2025-11-28/sections.json",
+        "format_report": "rbi_sibc/2025-11-28/format_report.json"
+      },
+      "note": "Backfill release ingested 2026-10-09 (Phase 1: closes the Sep–Nov holes)."
+    },
+    {
+      "period": "Nov 2025",
+      "dataDate": "2025-12-31",
+      "csv_date": "2025-11-30",
+      "total_credit_lcr": 195.3,
+      "yoy_growth_pct": 11.53,
+      "is_fy_end": false,
+      "paths": {
+        "sections": "rbi_sibc/2025-12-31/sections.json",
+        "format_report": "rbi_sibc/2025-12-31/format_report.json"
+      },
+      "note": "Backfill release ingested 2026-10-09 (Phase 1: closes the Sep–Nov holes)."
     },
     {
       "period": "Dec 2025",

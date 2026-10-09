@@ -886,7 +886,7 @@
     "sibc-basic-metal-sub-momentum": {
       "entity_urn": "icl:sibc/Statement2/2.13",
       "decomposition": "Statement 2",
-      "mix_state": "steered",
+      "mix_state": "drifting",
       "coherence": 1.0,
       "toward": "Iron and Steel",
       "away_from": "Other Metal and Metal Product",
@@ -916,7 +916,7 @@
     "sibc-food-processing-sub-momentum": {
       "entity_urn": "icl:sibc/Statement2/2.2",
       "decomposition": "Statement 2",
-      "mix_state": "drifting",
+      "mix_state": "steered",
       "coherence": 0.9482,
       "toward": "Edible Oils and Vanaspati",
       "away_from": "Sugar",
@@ -1028,7 +1028,7 @@
           "baseline_of": "Personal Loans",
           "baseline": 16.92,
           "gap_pp": 66.31,
-          "noise_pp": 6.19,
+          "noise_pp": 7.07,
           "verdict": "working"
         }
       }
@@ -1100,7 +1100,7 @@
           "baseline_of": "Industry (Micro and Small, Medium and Large)",
           "baseline": 18.23,
           "gap_pp": 15.14,
-          "noise_pp": 1.38,
+          "noise_pp": 1.78,
           "verdict": "working"
         },
         "force_pli_manufacturing__drives__e_S2_2_9": {
@@ -1111,7 +1111,7 @@
           "baseline_of": "Industry (Micro and Small, Medium and Large)",
           "baseline": 18.23,
           "gap_pp": 5.26,
-          "noise_pp": 1.12,
+          "noise_pp": 1.23,
           "verdict": "working"
         },
         "force_pli_manufacturing__drives__e_S2_2_13": {
@@ -1122,7 +1122,7 @@
           "baseline_of": "Industry (Micro and Small, Medium and Large)",
           "baseline": 18.23,
           "gap_pp": 0.63,
-          "noise_pp": 1.13,
+          "noise_pp": 1.11,
           "verdict": "unclear"
         }
       }
@@ -1140,7 +1140,7 @@
           "baseline_of": "Industry (Micro and Small, Medium and Large)",
           "baseline": 18.23,
           "gap_pp": 4.73,
-          "noise_pp": 1.54,
+          "noise_pp": 1.51,
           "verdict": "working"
         }
       }
@@ -1176,7 +1176,7 @@
           "baseline_of": "Bank Credit (II + III)",
           "baseline": 19.08,
           "gap_pp": 126.73,
-          "noise_pp": 11.34,
+          "noise_pp": 11.01,
           "verdict": "working"
         }
       }
@@ -1194,7 +1194,7 @@
           "baseline_of": "Industry (Micro and Small, Medium and Large)",
           "baseline": 18.23,
           "gap_pp": -8.05,
-          "noise_pp": 0.85,
+          "noise_pp": 0.47,
           "verdict": "working"
         }
       }
@@ -1237,7 +1237,7 @@
           "baseline_of": "Personal Loans",
           "baseline": 16.92,
           "gap_pp": 2.82,
-          "noise_pp": 0.37,
+          "noise_pp": 0.48,
           "verdict": "working"
         }
       }
@@ -1280,14 +1280,14 @@
   "explanation_coverage": {
     "summary": {
       "lines": 84,
-      "moves": 6,
-      "steady": 78,
+      "moves": 7,
+      "steady": 77,
       "artifact": 0,
-      "structural": 2,
+      "structural": 4,
       "prices_activity": 0,
       "cause": 0,
       "relationship": 0,
-      "unexplained": 4,
+      "unexplained": 3,
       "no_reading": 0
     },
     "moves": [
@@ -1298,12 +1298,34 @@
         "direction": "up",
         "level": "leaf",
         "gap_change_pp": 38.16,
-        "noise_pp": 11.34,
-        "threshold_pp": 34.02,
+        "noise_pp": 11.01,
+        "threshold_pp": 33.03,
         "baseline_kind": "parent",
         "baseline_of": "Bank Credit (II + III)",
         "filed_under": "unexplained",
         "also_holds": {},
+        "prices_activity": "not_decomposable",
+        "prices_detail": {
+          "reason": "no 1f match for this line"
+        }
+      },
+      {
+        "entity": "Medium",
+        "urn": "icl:sibc/Statement1/2.2",
+        "product": "msme_credit",
+        "direction": "up",
+        "level": "leaf",
+        "gap_change_pp": 3.02,
+        "noise_pp": 0.91,
+        "threshold_pp": 2.74,
+        "baseline_kind": "parent",
+        "baseline_of": "Industry (Micro and Small, Medium and Large)",
+        "filed_under": "structural",
+        "also_holds": {
+          "structural": [
+            "echo of Industry (Micro and Small, Medium and Large)"
+          ]
+        },
         "prices_activity": "not_decomposable",
         "prices_detail": {
           "reason": "no 1f match for this line"
@@ -1358,8 +1380,8 @@
         "direction": "up",
         "level": "aggregate",
         "gap_change_pp": 3.24,
-        "noise_pp": 0.78,
-        "threshold_pp": 2.33,
+        "noise_pp": 0.63,
+        "threshold_pp": 1.88,
         "baseline_kind": "parent",
         "baseline_of": "Industry (Micro and Small, Medium and Large)",
         "filed_under": "structural",
@@ -1374,18 +1396,22 @@
         }
       },
       {
-        "entity": "Other Industries",
-        "urn": "icl:sibc/Statement2/2.19",
-        "product": "industry",
-        "direction": "down",
-        "level": "leaf",
-        "gap_change_pp": -6.62,
-        "noise_pp": 1.96,
-        "threshold_pp": 5.88,
+        "entity": "Infrastructure",
+        "urn": "icl:sibc/Statement2/2.18",
+        "product": "infrastructure_credit",
+        "direction": "up",
+        "level": "aggregate",
+        "gap_change_pp": 1.68,
+        "noise_pp": 0.47,
+        "threshold_pp": 1.42,
         "baseline_kind": "parent",
         "baseline_of": "Industry (Micro and Small, Medium and Large)",
-        "filed_under": "unexplained",
-        "also_holds": {},
+        "filed_under": "structural",
+        "also_holds": {
+          "structural": [
+            "echo of Industry (Micro and Small, Medium and Large)"
+          ]
+        },
         "prices_activity": "not_decomposable",
         "prices_detail": {
           "reason": "no 1f match for this line"
@@ -1398,8 +1424,8 @@
         "direction": "up",
         "level": "leaf",
         "gap_change_pp": 12.78,
-        "noise_pp": 3.36,
-        "threshold_pp": 10.07,
+        "noise_pp": 3.11,
+        "threshold_pp": 9.32,
         "baseline_kind": "parent",
         "baseline_of": "Chemicals and Chemical Products",
         "filed_under": "unexplained",

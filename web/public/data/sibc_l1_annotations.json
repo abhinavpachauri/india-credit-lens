@@ -1,16 +1,51 @@
 {
   "pipeline": "sibc",
   "period": "2026-09-30",
-  "generated_at": "2026-10-02T12:26:44",
+  "generated_at": "2026-10-09T20:17:53",
   "sections": {
     "bankCredit": {
       "insights": [
         {
+          "id": "sibc-bank-credit-abs",
+          "layer": 1,
+          "title": "Bank credit hits ₹223.9L Cr — fresh record, up ₹3.1L Cr",
+          "body": "Total bank credit outstanding reached ₹223.9L Cr in August 2026, the highest level on record. Volume climbed ₹3.1L Cr period-on-period (₹220.8L Cr → ₹223.9L Cr), continuing the climb from ₹178.7L Cr in January 2025.",
+          "implication": "August's ₹3.1L Cr addition is larger than July's ₹1.5L Cr gain, keeping bank credit at a fresh all-time high of ₹223.9L Cr in this 36-period record.",
+          "preferredMode": "absolute",
+          "effect": {
+            "highlight": [
+              "Bank Credit"
+            ],
+            "cut": {
+              "shape": "level",
+              "statement": "Statement 1",
+              "codes": [
+                "I"
+              ]
+            }
+          },
+          "claim_type": "data",
+          "representation": "llm",
+          "basis": {
+            "facts": [
+              "Current: 22,387,567.0L Cr",
+              "Prior period: 22,078,094.6L Cr",
+              "Range: 15,151,314.2L Cr – 22,387,567.0L Cr over 36 periods",
+              "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_abs)"
+            ],
+            "inferences": [
+              "Bank credit outstanding hit ₹223.9L Cr in August 2026, up ₹3.1L Cr from July's ₹220.8L Cr.",
+              "The book has grown steadily since Sep 2023, when it stood at ₹151.5L Cr — an addition of roughly ₹72.4L Cr over this 36-period window.",
+              "The level sits at or near the maximum of this window, with no pause in the expansion."
+            ]
+          }
+        },
+        {
           "id": "sibc-bank-credit-fy-acceleration",
           "layer": 1,
-          "title": "FY26 bank credit growth hits 16.1%, up 5.1 points on FY25",
-          "body": "Bank credit grew 11.0% in the year ending March 2025 and 16.1% in the year ending March 2026, a 5.1 point acceleration. The full-year growth rate stepped up from 11.0% in FY25 to 16.1% in FY26, a 5.1 point increase.",
-          "implication": "The 5.1 point jump from FY25 to FY26 remains the largest full-year acceleration in this dataset, a reading unchanged since July's evaluation.",
+          "title": "Bank credit growth stepped up 5.1 points to 16.1% in FY26",
+          "body": "Bank credit grew 11.0% in the year ending March 2025 and 16.1% in the year ending March 2026. Full-year growth stepped up 11.0% → 16.1%, a 5.1 point acceleration.",
+          "implication": "The jump from 11.0% in FY25 to 16.1% in FY26 is a 5.1-point step-up between full years, marking a clear shift in the pace of annual bank credit growth.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -32,22 +67,22 @@
               "Prior period: 5.1pp",
               "FY YoY @ 2025-03-31: 11.0%",
               "FY YoY @ 2026-03-31: 16.1%",
-              "Range: 5.1pp – 5.1pp over 25 periods",
+              "Range: 5.1pp – 5.1pp over 36 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_fy_acceleration)"
             ],
             "inferences": [
-              "Bank credit grew 11.0% in FY25 and 16.1% in FY26.",
-              "That is a 5.1 point step-up in the full-year pace.",
-              "This is an annual metric set at the March year-end; it does not move month to month."
+              "Bank credit grew 11.0% in FY25 and 16.1% in FY26, a 5.1-point step-up.",
+              "This is an annual measure set only at the March year-end, not a month-to-month trend — it compares the full year ending March 2026 against the one ending March 2025.",
+              "The status reads strengthening, with FY26's full-year rate 5.1 points above FY25's."
             ]
           }
         },
         {
           "id": "sibc-bank-credit-fy-delta",
           "layer": 1,
-          "title": "FY26 net credit add holds at ₹29.6L Cr, highest on record",
-          "body": "Banks deployed ₹29.6L Cr of net new credit in FY26, the highest annual addition in this window. This figure has stayed flat at ₹29.6L Cr across all 25 periods shown, since it reflects the full-year tally locked at the March 2026 year-end.",
-          "implication": "The ₹29.6L Cr FY26 addition stays the largest annual deployment on record, with the book continuing to grow past year-end into August.",
+          "title": "Banks added ₹29.6L Cr net new credit in FY26",
+          "body": "Banks deployed ₹29.6L Cr of net new bank credit in the year ending March 2026. The figure is locked at ₹29.6L Cr across the window, reflecting the FY26 year-end tally fixed since March 2026.",
+          "implication": "₹29.6L Cr is the high point of annual credit additions in this 36-period record, underscoring the scale of FY26's full-year deployment.",
           "preferredMode": "absolute",
           "effect": {
             "highlight": [
@@ -67,22 +102,22 @@
             "facts": [
               "Current: 2,960,080.5L Cr",
               "Prior period: 2,960,080.5L Cr",
-              "Range: 2,960,080.5L Cr – 2,960,080.5L Cr over 25 periods",
+              "Range: 2,960,080.5L Cr – 2,960,080.5L Cr over 36 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_fy_delta)"
             ],
             "inferences": [
-              "FY26 net new credit stands at ₹29.6L Cr, unchanged across all 25 periods shown.",
-              "It is an annual figure fixed at the March 2026 year-end, so it does not move period to period.",
-              "It remains the largest annual addition in this dataset."
+              "Net new bank credit in FY26 totalled ₹29.6L Cr.",
+              "This value holds constant across all 36 periods in the series because it is set once, at the March year-end, and does not update month to month.",
+              "It sits at or near the maximum of this window, the largest annual addition in the dataset."
             ]
           }
         },
         {
           "id": "sibc-bank-credit-yoy",
           "layer": 1,
-          "title": "Bank credit growth eases to 19.08% YoY after four-month climb",
-          "body": "Bank credit grew 19.08% year-on-year in August 2026. Growth slipped 0.25 points from July's 19.33% to 19.08%, the first pause after four straight months of acceleration from April's 16.0%.",
-          "implication": "The 0.25 point dip is the first break in four months of acceleration, but at 19.08% growth is still well above the upper range of this window, so this reads as a pause rather than a reversal.",
+          "title": "Bank credit growth eases to 19.1% YoY from July's 19.3% peak",
+          "body": "Bank credit grew 19.1% year-on-year in August 2026, just below July's 19.3%. Growth eased 0.25 points (19.3% → 19.1%), pausing the run-up from 16.0% in April to 19.3% in July.",
+          "implication": "After rising from 16.0% in April to 19.3% in July, growth eased slightly to 19.1% in August — still the second-highest reading in this 24-period window, not a break in the broader climb.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -102,22 +137,22 @@
             "facts": [
               "Current: 19.1%",
               "Prior period: 19.3%",
-              "Range: 9.0% – 19.3% over 17 periods",
+              "Range: 9.0% – 19.3% over 24 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_yoy)"
             ],
             "inferences": [
-              "August's YoY growth is 19.08%, down from 19.33% in July.",
-              "That ends a four-month run of acceleration that took growth from 16.0% in April to 19.33% in July.",
-              "The reading still sits in the upper range of this 17-period window, above the 16.9% mark that otherwise bounds that range."
+              "Bank credit grew 19.1% YoY in August 2026, down from 19.3% in July.",
+              "The reading stays well above the p75 mark of 15.7% for this 24-period window, keeping growth in the upper band.",
+              "The slight pullback follows a run-up from 16.0% in April through 19.3% in July."
             ]
           }
         },
         {
           "id": "sibc-food-credit-abs",
           "layer": 1,
-          "title": "Food credit falls to ₹1.12L Cr, third straight monthly drop",
-          "body": "Food credit outstanding stood at ₹1.12L Cr in August 2026, down ₹0.06L Cr from July. Volume declined ₹0.06L Cr period-on-period (₹1.18L Cr → ₹1.12L Cr), the third consecutive monthly decline since the May 2026 all-time high of ₹1.37L Cr.",
-          "implication": "Three consecutive monthly declines from the May peak of ₹1.37L Cr mark the first sustained pullback in this series, even though the ₹1.12L Cr level is still in the upper range of this window.",
+          "title": "Food credit falls to ₹1.12L Cr — third straight monthly drop",
+          "body": "Food credit outstanding stood at ₹1.12L Cr in August 2026, down from ₹1.18L Cr in July. Volume fell ₹0.06L Cr period-on-period (₹1.18L Cr → ₹1.12L Cr), the third consecutive monthly decline since May's ₹1.37L Cr peak.",
+          "implication": "Food credit has declined for three straight months after peaking at ₹1.37L Cr in May, yet at ₹1.12L Cr it still sits in the upper range of this window — the pullback hasn't erased most of the earlier run-up.",
           "preferredMode": "absolute",
           "effect": {
             "highlight": [
@@ -137,22 +172,22 @@
             "facts": [
               "Current: 112,041.7L Cr",
               "Prior period: 117,830.4L Cr",
-              "Range: 21,208.2L Cr – 137,005.5L Cr over 25 periods",
+              "Range: 18,865.0L Cr – 137,005.5L Cr over 36 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_abs)"
             ],
             "inferences": [
-              "Food credit fell to ₹1.12L Cr in August, down from ₹1.18L Cr in July.",
-              "That is the third straight monthly drop since the ₹1.37L Cr peak in May 2026.",
-              "Despite the pullback, the level remains in the upper range of this 25-period window."
+              "Food credit outstanding fell to ₹1.12L Cr in August 2026, down ₹0.06L Cr from July's ₹1.18L Cr.",
+              "This is the third straight monthly fall since the ₹1.37L Cr peak in May 2026 (June ₹1.32L Cr, July ₹1.18L Cr, August ₹1.12L Cr).",
+              "Even after three months of decline, the level stays above the upper range (p75) of this 36-period window."
             ]
           }
         },
         {
           "id": "sibc-food-credit-yoy",
           "layer": 1,
-          "title": "Food credit YoY growth leaps to 145.8%, a new series high",
-          "body": "Food credit grew 145.81% year-on-year in August 2026, the highest rate in this 17-period window. Growth jumped 37.9 points (107.9% → 145.8%), surpassing the prior high of 139.4% set in March 2026.",
-          "implication": "The 37.9 point jump to 145.8% is the sharpest acceleration in this dataset, pushing food credit YoY growth to a new high above the prior 139.4% peak from March 2026.",
+          "title": "Food credit YoY growth jumps to 145.8% — highest in this window",
+          "body": "Food credit grew 145.8% year-on-year in August 2026, the highest rate in this 24-period window. Growth accelerated 37.9 points (107.9% → 145.8%), extending the run-up from 94.1% in May and 105.1% in June.",
+          "implication": "The 37.9-point jump to 145.8% is the sharpest single-period acceleration in this food-credit series, taking growth past every prior reading in this 24-period window.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -172,22 +207,22 @@
             "facts": [
               "Current: 145.8%",
               "Prior period: 107.9%",
-              "Range: 23.1% – 145.8% over 17 periods",
+              "Range: 5.6% – 145.8% over 24 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_yoy)"
             ],
             "inferences": [
-              "Food credit YoY growth hit 145.8% in August, up from 107.9% in July — a 37.9 point jump.",
-              "That is above the previous high of 139.4% recorded in March 2026, making this a fresh high for the series.",
-              "This is a YoY rate, so the jump reflects growth measured against August 2025's base, not a change within this period alone."
+              "Food credit grew 145.8% YoY in August 2026, up 37.9 points from July's 107.9%.",
+              "This extends a run-up from 94.1% in May and 105.1% in June to 107.9% in July — four straight months of acceleration.",
+              "At or near the maximum of this 24-period window, against a p75 of 107.2%, this is now the fastest reading in the series."
             ]
           }
         },
         {
           "id": "sibc-nonfood-credit-abs",
           "layer": 1,
-          "title": "Non-food credit hits ₹222.8L Cr, re-accelerating after July",
-          "body": "Non-food credit outstanding reached ₹222.8L Cr in August 2026, the highest level on record. Volume climbed ₹3.2L Cr period-on-period (₹219.6L Cr → ₹222.8L Cr), a bigger gain than July's ₹1.6L Cr addition, continuing the climb from ₹178.1L Cr in January 2025.",
-          "implication": "August's ₹3.2L Cr gain reverses July's slowdown in non-food credit, the same re-acceleration pattern seen in total bank credit this period.",
+          "title": "Non-food credit hits ₹222.8L Cr — new record, up ₹3.2L Cr",
+          "body": "Non-food credit outstanding reached ₹222.8L Cr in August 2026, the highest level on record. Volume climbed ₹3.2L Cr period-on-period (₹219.6L Cr → ₹222.8L Cr), continuing the climb from ₹178.1L Cr in January 2025.",
+          "implication": "August's ₹3.2L Cr gain built on an already record-high base, leaving non-food credit at its highest level in this 36-period window.",
           "preferredMode": "absolute",
           "effect": {
             "highlight": [
@@ -207,22 +242,22 @@
             "facts": [
               "Current: 22,275,525.3L Cr",
               "Prior period: 21,960,264.2L Cr",
-              "Range: 15,918,805.4L Cr – 22,275,525.3L Cr over 25 periods",
+              "Range: 15,132,449.1L Cr – 22,275,525.3L Cr over 36 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_abs)"
             ],
             "inferences": [
-              "Non-food credit outstanding hit ₹222.8L Cr in August, up from ₹219.6L Cr in July.",
-              "The ₹3.2L Cr add is roughly double July's ₹1.6L Cr gain, though still below June's record ₹4.2L Cr addition.",
-              "The series remains at or near its 25-period maximum, extending the climb from ₹178.1L Cr in January 2025."
+              "Non-food credit outstanding rose to ₹222.8L Cr in August 2026, up ₹3.2L Cr from July's ₹219.6L Cr.",
+              "The book has grown from ₹178.1L Cr in January 2025 to ₹222.8L Cr now — an addition of roughly ₹44.6L Cr.",
+              "At or near the maximum of this 36-period window, the expansion shows no sign of a pause."
             ]
           }
         },
         {
           "id": "sibc-nonfood-credit-fy-delta",
           "layer": 1,
-          "title": "Non-food FY26 net add holds at ₹29.2L Cr, record high",
-          "body": "Banks deployed ₹29.2L Cr of net new non-food credit in FY26, the highest annual addition in this window. This figure has remained flat at ₹29.2L Cr across all 25 periods shown, reflecting the full-year tally locked at the March 2026 year-end.",
-          "implication": "The ₹29.2L Cr FY26 addition stays the largest annual non-food deployment on record, with the book still expanding past year-end into August.",
+          "title": "Non-food credit added ₹29.2L Cr net new in FY26",
+          "body": "Banks deployed ₹29.2L Cr of net new non-food credit in the year ending March 2026. The figure is locked at ₹29.2L Cr across the window, reflecting the FY26 year-end tally fixed since March 2026.",
+          "implication": "₹29.2L Cr is the largest annual non-food credit addition in this 36-period record, the high-water mark of the window.",
           "preferredMode": "absolute",
           "effect": {
             "highlight": [
@@ -242,22 +277,22 @@
             "facts": [
               "Current: 2,919,165.8L Cr",
               "Prior period: 2,919,165.8L Cr",
-              "Range: 2,919,165.8L Cr – 2,919,165.8L Cr over 25 periods",
+              "Range: 2,919,165.8L Cr – 2,919,165.8L Cr over 36 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_fy_delta)"
             ],
             "inferences": [
-              "FY26 net new non-food credit stands at ₹29.2L Cr, unchanged across all 25 periods shown.",
-              "It is fixed at the March 2026 year-end and does not move period to period.",
-              "It remains the largest annual addition in this dataset."
+              "Net new non-food credit in FY26 totalled ₹29.2L Cr.",
+              "The figure holds constant across all 36 periods because it is set once, at the March year-end, not updated monthly.",
+              "It sits at or near the maximum of this window, the largest annual non-food credit addition in the dataset."
             ]
           }
         },
         {
           "id": "sibc-nonfood-credit-yoy",
           "layer": 1,
-          "title": "Non-food credit growth slips to 18.77% from 19.06%",
-          "body": "Non-food credit grew 18.77% year-on-year in August 2026, down from 19.06% the prior period. Growth eased 0.29 points (19.06% → 18.77%), the first pullback after rising for three straight months from April's 15.8% to July's 19.1%.",
-          "implication": "August's dip to 18.77% is the first deceleration since the climb began in April, but non-food credit is still growing faster than in most of the last 17 periods, above the 16.6% upper-range mark.",
+          "title": "Non-food credit growth eases to 18.8% YoY from 19.1%",
+          "body": "Non-food credit grew 18.77% year-on-year in August 2026. Growth slipped 0.29 points, from 19.06% to 18.77%.",
+          "implication": "This is the first pullback after a multi-month climb, but at 18.77% growth is still well above the 15.5% level that marks the top quarter of readings in this window.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -277,35 +312,44 @@
             "facts": [
               "Current: 18.8%",
               "Prior period: 19.1%",
-              "Range: 8.8% – 19.1% over 17 periods",
+              "Range: 8.8% – 19.1% over 24 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_yoy)"
             ],
             "inferences": [
-              "Non-food credit grew 18.77% year-on-year in August 2026, down from 19.06% the prior period — a pullback of 0.29 points.",
-              "That breaks a three-month climb: growth had risen from 15.8% in April 2026 to 19.1% in July 2026.",
-              "Even after easing, 18.77% stays above the 16.6% mark that defines the top of this 17-period window's typical range.",
-              "The first deceleration since April's trough shows the recent run-up has lost a little pace, while growth stays at an elevated level."
+              "Non-food credit grew 18.77% YoY in August 2026, down from 19.06% the prior period.",
+              "Even after this dip, 18.77% sits above the 15.5% upper bound of this signal's 24-period range.",
+              "The run-up that took growth from 9.3% in June 2025 to a peak near 19.1% has paused for the first time in this window."
             ]
           }
         }
       ],
-      "gaps": [
+      "gaps": [],
+      "opportunities": []
+    },
+    "mainSectors": {
+      "insights": [
         {
-          "id": "sibc-bank-credit-abs",
+          "id": "sibc-sectors-positive-yoy-count",
           "layer": 1,
-          "title": "Bank credit hits record ₹223.9L Cr, re-accelerating in August",
-          "body": "Total bank credit outstanding reached ₹223.9L Cr in August 2026, the highest level on record. Volume climbed ₹3.1L Cr period-on-period (₹220.8L Cr → ₹223.9L Cr), a bigger gain than July's ₹1.5L Cr addition, continuing the climb from ₹178.7L Cr in January 2025.",
-          "implication": "August's ₹3.1L Cr gain reverses July's slowdown, with the book still expanding without a single monthly contraction since January 2025.",
-          "preferredMode": "absolute",
+          "title": "All 4 main sectors stay positive YoY, 36 periods running",
+          "body": "All four main credit sectors posted positive year-on-year growth in August 2026. Breadth held at 4 of 4 sectors, unchanged from the prior period.",
+          "implication": "Breadth has sat at its ceiling for 36 straight periods with no sector falling away, a sharp contrast to the 0-of-4 reading that held through August 2024.",
+          "preferredMode": "yoy",
           "effect": {
             "highlight": [
-              "Bank Credit"
+              "Agriculture",
+              "Industry",
+              "Services",
+              "Personal Loans"
             ],
             "cut": {
               "shape": "level",
               "statement": "Statement 1",
               "codes": [
-                "I"
+                "1",
+                "2",
+                "3",
+                "4"
               ]
             }
           },
@@ -313,29 +357,24 @@
           "representation": "llm",
           "basis": {
             "facts": [
-              "Current: 22,387,567.0L Cr",
-              "Prior period: 22,078,094.6L Cr",
-              "Range: 15,961,944.0L Cr – 22,387,567.0L Cr over 25 periods",
-              "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_abs)"
+              "Current: 4.0",
+              "Prior period: 4.0",
+              "Range: 0.0 – 4.0 over 36 periods",
+              "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_count_positive_yoy)"
             ],
             "inferences": [
-              "Bank credit outstanding hit ₹223.9L Cr in August 2026, up from ₹220.8L Cr in July.",
-              "The ₹3.1L Cr add is more than double July's ₹1.5L Cr gain, though still below June's record ₹4.1L Cr addition.",
-              "The series remains at or near its 25-period maximum, with the book growing every month since January 2025's ₹178.7L Cr."
+              "4 of 4 main sectors showed positive YoY growth in August 2026, matching every period since September 2024.",
+              "That streak now runs 36 periods, the maximum reading in this window, after a stretch of 0 of 4 through August 2024.",
+              "No sector has dropped out of positive growth since the count first turned to 4 of 4."
             ]
           }
-        }
-      ],
-      "opportunities": []
-    },
-    "mainSectors": {
-      "insights": [
+        },
         {
           "id": "sibc-agriculture-share",
           "layer": 1,
-          "title": "Agriculture share falls to 12.23% — new low in range",
-          "body": "Agriculture's share of total bank credit stands at 12.23% in Aug 2026. Share declined 0.09pp from 12.33% to 12.23%, moving further below the 25th percentile of 12.4% to a new low in this 25-period window.",
-          "implication": "At 12.23%, agriculture's share of total credit is at or near the lowest point in this 25-period window, continuing a multi-year drift down from 12.8% readings in 2024.",
+          "title": "Agriculture's credit share slips to 12.23%, near its lowest",
+          "body": "Agriculture's share of total bank credit fell to 12.23% in Aug 2026, down from 12.33% the previous period. The share declined 0.09 points to 12.23%, in the bottom quarter of readings across this 36-period window.",
+          "implication": "Agriculture's share of the book has been easing since early 2026, now back at the 12.2% level last touched in Nov 2023 — a sustained drift to the low end of this window rather than a one-period move.",
           "preferredMode": "share",
           "effect": {
             "highlight": [
@@ -355,23 +394,22 @@
             "facts": [
               "Current: 12.2%",
               "Prior period: 12.3%",
-              "Range: 12.2% – 12.8% over 25 periods",
+              "Range: 12.2% – 12.8% over 36 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_share)"
             ],
             "inferences": [
-              "Agriculture's share fell to 12.23% in Aug 2026, down from 12.33% the prior period.",
-              "The reading sits at or near the minimum of its 25-period range, below the 25th percentile of 12.4% and well under the 75th percentile of 12.7%.",
-              "The series shows the share drifting down from readings as high as 12.8% in 2024 to 12.2-12.3% in recent months.",
-              "Agriculture's slice of the overall credit book keeps narrowing even as the sector itself keeps growing."
+              "Agriculture's share of total credit fell to 12.23% in Aug 2026, down 0.09 points from 12.33% in Jul 2026.",
+              "That reading sits in the bottom quarter of this 36-period window, matching the 12.2% level last seen in Nov 2023.",
+              "The share has stayed at or below 12.4% in every period since Jan 2026, after running near 12.7%-12.8% through most of 2024."
             ]
           }
         },
         {
           "id": "sibc-agriculture-yoy",
           "layer": 1,
-          "title": "Agriculture credit YoY hits 17.22% — fresh high in window",
-          "body": "Agriculture credit grew 17.22% YoY in Aug 2026. Growth accelerated 0.25pp from 16.98% to 17.22%, extending above the prior high and the 75th percentile of 15.3%.",
-          "implication": "Agriculture credit's 17.22% YoY rate is the highest point in this 17-period series, part of a climb from 6.8% in Jun 2025 that has kept setting new highs period after period.",
+          "title": "Agriculture credit growth climbs to 17.22% YoY, a new high",
+          "body": "Agriculture credit grew 17.22% year-on-year in Aug 2026, up from 16.98% the previous period. Growth accelerated 0.25 points from 16.98% to 17.22%, its highest reading in this 24-period window.",
+          "implication": "Agriculture lending is now growing faster than at any point in this 24-period window, having more than doubled its pace since the 6.8% low of Jun 2025, with the climb resuming for four straight periods after April's brief dip.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -391,23 +429,22 @@
             "facts": [
               "Current: 17.2%",
               "Prior period: 17.0%",
-              "Range: 6.8% – 17.2% over 17 periods",
+              "Range: 6.8% – 17.2% over 24 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_yoy)"
             ],
             "inferences": [
-              "Agriculture credit grew 17.22% YoY in Aug 2026, up from 16.98% the prior period.",
-              "This is at or near the maximum of its 17-period range, well above the 75th percentile of 15.3%.",
-              "The series shows growth climbing steadily from a trough of 6.8% in Jun 2025 to 17.2% now.",
-              "The sector's YoY pace keeps setting new highs in this window."
+              "Agriculture credit YoY growth rose to 17.22% in Aug 2026, up from 16.98% in Jul 2026 — a 0.25-point gain.",
+              "That is above the high end of this 24-period window's typical range, which topped out at 15.5%, making it the strongest reading shown.",
+              "Growth has risen from 6.8% in Jun 2025 to 17.22% now, climbing for four straight periods after dipping to 13.7% in Apr 2026."
             ]
           }
         },
         {
           "id": "sibc-industry-fy-acceleration",
           "layer": 1,
-          "title": "Industry FY growth jumps 8.2% to 15.0% — up 6.8 points",
-          "body": "Industry credit's full-year growth rose from 8.2% in FY25 to 15.0% in FY26. FY growth stepped up 8.2% → 15.0%, a 6.8-point acceleration recorded at the Mar 2026 year-end.",
-          "implication": "The 6.8-point jump from 8.2% to 15.0% between FY25 and FY26 nearly doubled industry credit's full-year growth rate at the Mar 2026 year-end.",
+          "title": "Industry credit: FY26 growth up 6.8 points over FY25",
+          "body": "Industry credit grew 8.2% in the year to Mar 2025 and 15.0% in the year to Mar 2026. Full-year growth stepped up 6.8 points between FY25 and FY26, set once at the Mar 2026 year-end rather than moving month to month.",
+          "implication": "Industry's full-year growth nearly doubled between FY25 and FY26 (8.2% to 15.0%), a 6.8-point step-up that stands as the reading recorded at the Mar 2026 close.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -429,22 +466,22 @@
               "Prior period: 6.8pp",
               "FY YoY @ 2025-03-31: 8.2%",
               "FY YoY @ 2026-03-31: 15.0%",
-              "Range: 6.8pp – 6.8pp over 25 periods",
+              "Range: 6.8pp – 6.8pp over 36 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_fy_acceleration)"
             ],
             "inferences": [
-              "Industry credit grew 8.2% in FY25 and 15.0% in FY26 — a 6.8-point step-up.",
-              "This is an annual metric set once at the March year-end, not a monthly reading.",
-              "The FY26 rate is nearly double the FY25 rate."
+              "Industry credit grew 8.2% in FY25 and 15.0% in FY26 — a 6.8-point step-up in full-year growth.",
+              "This is an annual reading fixed at the Mar 2026 year-end; it holds steady between fiscal year-ends rather than moving month to month.",
+              "Industry's full-year pace nearly doubled between the two fiscal years, from 8.2% to 15.0%."
             ]
           }
         },
         {
           "id": "sibc-industry-share",
           "layer": 1,
-          "title": "Industry share drops to 21.53%, now below its range floor",
-          "body": "Industry's share of total bank credit fell to 21.53% in Aug 2026. Share declined 0.33pp from 21.86% to 21.53%, moving from above the 75th percentile of 22.3% to below the 25th percentile of 21.6% in one period.",
-          "implication": "Industry's share swung from above the 75th percentile to below the 25th percentile in a single period, falling to 21.53% — close to the 21.5% low seen earlier in 2026.",
+          "title": "Industry's credit share falls to 21.53%, back near its low",
+          "body": "Industry's share of total bank credit fell to 21.53% in Aug 2026, down from 21.86% the previous period. The share dropped 0.33 points to 21.53%, slipping into the bottom quarter of readings across this 36-period window.",
+          "implication": "Industry's share has slipped back to the 21.5% level last seen from Jan through Apr 2026, giving up the brief run-up to 21.9% seen in Jun and Jul.",
           "preferredMode": "share",
           "effect": {
             "highlight": [
@@ -464,23 +501,22 @@
             "facts": [
               "Current: 21.5%",
               "Prior period: 21.9%",
-              "Range: 21.5% – 22.8% over 25 periods",
+              "Range: 21.5% – 23.1% over 36 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_share)"
             ],
             "inferences": [
-              "Industry's share fell to 21.53% in Aug 2026, down 0.33pp from 21.86% the prior period.",
-              "The reading moved from above the 75th percentile (22.3%) to below the 25th percentile (21.6%) in a single period.",
-              "The 25-period series shows a low of 21.5% (seen in Jan-Apr 2026) and a high of 22.8% (Dec 2023); the current reading sits near that low.",
-              "Industry's hold on a larger slice of the book, visible in recent months, pulled back to near the bottom of this range."
+              "Industry's share of total credit fell to 21.53% in Aug 2026, down 0.33 points from 21.86% in Jul 2026.",
+              "That puts it in the bottom quarter of this 36-period window, matching the 21.5% readings seen from Jan through Apr 2026.",
+              "The share had briefly run higher at 21.9% in Jun and Jul 2026 before this period's drop back to the 21.5% band."
             ]
           }
         },
         {
           "id": "sibc-industry-yoy",
           "layer": 1,
-          "title": "Industry credit YoY eases to 18.23% from 19.95%",
-          "body": "Industry credit grew 18.23% YoY in Aug 2026. Growth decelerated 1.72pp from 19.95% the prior period, though it stays above the 75th percentile of 16.3% in this 17-period window.",
-          "implication": "Industry credit growth eased to 18.23% from 19.95%, the first step back after a climb from 6.3% in Jun 2025 to 20.0% in Jul 2026 — it still sits above the 75th percentile of 16.3%.",
+          "title": "Industry credit growth eases to 18.23% YoY from its peak",
+          "body": "Industry credit grew 18.23% year-on-year in Aug 2026, down from 19.95% the previous period. Growth slowed 1.72 points from 19.95% to 18.23%, pulling back from Jul 2026's peak of 20.0% but still above the high end of this window's typical range, which topped out at 14.7%.",
+          "implication": "Industry credit growth pulled back from its window peak of 20.0% to 18.23% — the first easing after a run-up from 7.3% in Sep 2025 — but the reading still sits above the top of this window's typical range.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -500,14 +536,13 @@
             "facts": [
               "Current: 18.2%",
               "Prior period: 20.0%",
-              "Range: 5.3% – 20.0% over 17 periods",
+              "Range: 5.3% – 20.0% over 24 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_yoy)"
             ],
             "inferences": [
-              "Industry credit grew 18.23% YoY in Aug 2026, down 1.72pp from 19.95% the prior period.",
-              "The reading remains above the 75th percentile of 16.3%, so growth stays in the upper part of its range despite the pullback.",
-              "The series shows growth climbing from 6.3% in Jun 2025 to 20.0% in Jul 2026 before this step-down.",
-              "The multi-period climb in industry credit growth paused in Aug 2026."
+              "Industry credit YoY growth eased to 18.23% in Aug 2026, down 1.72 points from 19.95% in Jul 2026.",
+              "Jul 2026's 20.0% was the peak of this 24-period window; Aug 2026 is the first pullback from that peak.",
+              "Even after the pullback, 18.23% is still above the high end of this window's typical range, which topped out at 14.7%."
             ]
           }
         },
@@ -576,9 +611,9 @@
         {
           "id": "sibc-personal-loans-share",
           "layer": 1,
-          "title": "Personal loans hold steady at 32.71% of total credit",
-          "body": "Personal loans account for 32.71% of total bank credit in Aug 2026. Share was unchanged at 32.71% from the prior period, sitting near the median of its 32.6%–32.9% range over 25 periods.",
-          "implication": "Personal loans' share is steady at 32.71%, sitting near the middle of its 25-period range — the segment is neither gaining nor losing ground in the overall credit mix this period.",
+          "title": "Personal loans share steady at 32.71%, near its median",
+          "body": "Personal loans account for 32.71% of total bank credit in Aug 2026, unchanged from last period. Share held flat at 32.71%, remaining near the median of its 36-period range of 32.6% to 33.0%.",
+          "implication": "Personal loans' share is flat at 32.71% for a second straight period, sitting in the middle of its 32.6%–33.0% range rather than extending the prior period's move back toward the median.",
           "preferredMode": "share",
           "effect": {
             "highlight": [
@@ -598,22 +633,22 @@
             "facts": [
               "Current: 32.7%",
               "Prior period: 32.7%",
-              "Range: 32.3% – 33.5% over 25 periods",
+              "Range: 32.2% – 33.5% over 36 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_share)"
             ],
             "inferences": [
-              "Personal loans held 32.71% of total bank credit in Aug 2026, unchanged from the prior period's 32.71%.",
-              "That keeps the share within the 32.6%–32.9% range seen across the past 25 periods, near the median.",
-              "A flat reading like this, within half a point, counts as noise rather than a shift in the credit mix."
+              "Personal loans held 32.71% of total credit, unchanged from 32.71% last period.",
+              "The share sits near the median of its 36-period range (p25 32.6%, p75 33.0%).",
+              "With no movement this period, the segment is neither gaining nor losing ground in the mix."
             ]
           }
         },
         {
           "id": "sibc-personal-loans-yoy",
           "layer": 1,
-          "title": "Personal loans YoY growth climbs to 16.92%, a new high",
-          "body": "Personal loans credit grew 16.92% year-on-year in Aug 2026. Growth accelerated from 16.23% to 16.92%, and is now at or near the highest reading in this 17-period series (12.0% in Dec 2024 → 16.92% now).",
-          "implication": "Personal loans growth at 16.92% is at or near its highest level across this 17-period dataset, continuing an acceleration that started at 12.0% back in Dec 2024.",
+          "title": "Personal loans growth hits fresh high of 16.92% YoY",
+          "body": "Personal loans credit grew 16.92% year-on-year in Aug 2026, the highest reading in this 24-period series. Growth accelerated from 16.23% to 16.92%, a 0.69-point gain, extending a climb that ran from 11.7% in Sep 2025 to 14.0% in Oct 2025 and now 16.92%.",
+          "implication": "Personal loans growth has broken its own record again, climbing 0.69 points to 16.92% — the fastest pace in this dataset, still accelerating rather than leveling off after last period's high.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -633,22 +668,22 @@
             "facts": [
               "Current: 16.9%",
               "Prior period: 16.2%",
-              "Range: 11.1% – 16.9% over 17 periods",
+              "Range: 11.1% – 16.9% over 24 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_yoy)"
             ],
             "inferences": [
-              "Personal loans grew 16.92% YoY in Aug 2026, up from 16.23% the prior period.",
-              "The gain extends a climb that began at 12.0% in Dec 2024, placing growth at or near the top of this 17-period range.",
-              "Sustained acceleration across multiple periods points to broadening momentum in personal loans rather than a one-off reading."
+              "Personal loans grew 16.92% YoY, up 0.69 points from 16.23% last period.",
+              "This is the strongest reading in the 24-period series, above the prior range of 11.9% to 15.3%.",
+              "The run continues from 11.7% in Sep 2025 through 14.0% in Oct 2025 to 16.92% now."
             ]
           }
         },
         {
           "id": "sibc-services-fy-acceleration",
           "layer": 1,
-          "title": "Services credit grew 12% in FY25, 19% in FY26, a 7-point step-up",
-          "body": "Services credit grew 12.0% in the year ending Mar 2025 and 19.0% in the year ending Mar 2026. Full-year growth stepped up from 12.0% to 19.0%, a 7.0-point acceleration measured at the Mar 2026 year-end.",
-          "implication": "Services credit's full-year growth stepped up by 7.0 points between FY25 and FY26 (12.0% → 19.0%), a sizeable move for an annual metric that only changes once a year.",
+          "title": "Services credit stays at 7.0-point FY step-up: 12% to 19%",
+          "body": "Services credit grew 12.0% in FY25 and 19.0% in FY26, a 7.0-point acceleration. The full-year step-up, set at the Mar 2026 year-end, holds at 7.0pp, unchanged since last measured.",
+          "implication": "Services credit's move from 12.0% in FY25 to 19.0% in FY26 remains the sharpest full-year step-up in this dataset, a reading that stays fixed until the next March print.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -670,22 +705,22 @@
               "Prior period: 7.0pp",
               "FY YoY @ 2025-03-31: 12.0%",
               "FY YoY @ 2026-03-31: 19.0%",
-              "Range: 7.0pp – 7.0pp over 25 periods",
+              "Range: 7.0pp – 7.0pp over 36 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_fy_acceleration)"
             ],
             "inferences": [
-              "Services credit grew 12.0% in FY25 and 19.0% in FY26, a 7.0-point acceleration.",
-              "This is an annual figure set once at each March year-end, not a month-to-month reading.",
-              "A 7.0-point annual acceleration reflects a step-up in the sector's full-year growth trajectory from FY25 to FY26."
+              "Services credit grew 12.0% in FY25 and 19.0% in FY26.",
+              "That is a 7.0-point jump in the full-year growth rate between the two year-ends.",
+              "As an annual metric, this reading stays fixed until the next March year-end."
             ]
           }
         },
         {
           "id": "sibc-services-share",
           "layer": 1,
-          "title": "Services share ticks up to 28.27%, stays in upper range",
-          "body": "Services account for 28.27% of total bank credit in Aug 2026. Share edged up from 28.22% to 28.27%, staying above the upper end of its typical 27.5%–28.2% band seen across the past 25 periods.",
-          "implication": "Services' share at 28.27% stays in the upper part of its 25-period range, little changed from last period's 28.22% — the segment is holding its elevated position rather than extending or giving it back.",
+          "title": "Services share ticks up to 28.27%, above its typical range",
+          "body": "Services account for 28.27% of total bank credit in Aug 2026. Share rose 0.05pp from 28.22% to 28.27%, holding above the p75 mark of 27.9% in its 36-period range.",
+          "implication": "Services' share edged up to 28.27% after last period's flat reading, keeping the sector above the top quartile (27.9%) of its 36-period range rather than reverting toward the median.",
           "preferredMode": "share",
           "effect": {
             "highlight": [
@@ -705,22 +740,22 @@
             "facts": [
               "Current: 28.3%",
               "Prior period: 28.2%",
-              "Range: 27.3% – 28.5% over 25 periods",
+              "Range: 27.0% – 28.5% over 36 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_share)"
             ],
             "inferences": [
-              "Services held 28.27% of total credit in Aug 2026, up from 28.22% the prior period.",
-              "That keeps the share above the upper end of its 25-period range (27.5%–28.2%), where it has sat since peaking in Mar 2026 at 28.5%.",
-              "A move of this size is within the noise band for a share reading, not a structural shift."
+              "Services held 28.27% share of total credit, up 0.05pp from 28.22% last period.",
+              "This sits above the p75 level of 27.9% across the 36-period range (p25 27.5%).",
+              "After holding flat last period, the share has ticked higher again."
             ]
           }
         },
         {
           "id": "sibc-services-yoy",
           "layer": 1,
-          "title": "Services credit growth hits 24.35% — fastest in 17 periods",
-          "body": "Services credit grew 24.35% year-on-year in Aug 2026. Growth accelerated again, from 22.94% last period to 24.35% now — a 1.4-point gain. Over the past year it moved 12.0% (Mar 2025) → 19.0% (Mar 2026) → 22.9% (Jul 2026) → 24.3% (Aug 2026).",
-          "implication": "Services credit has broken its own record for a fourth straight period, reaching 24.35% — the strongest reading in this 17-period window. The 1.4-point acceleration from 22.94% confirms the trend is still strengthening, not plateauing, with growth now roughly double the 12.0% rate seen in Mar 2025.",
+          "title": "Services credit hits 24.35% YoY growth — highest in 24 periods",
+          "body": "Services credit grew 24.35% year-on-year in Aug 2026, the highest reading in this 24-period dataset. Growth accelerated from 22.94% to 24.35%, a 1.40-point gain, continuing a climb from 19.0% in Mar 2026 through 18.6%, 20.4%, 21.4%, 22.9%, to 24.3% now.",
+          "implication": "Services credit keeps re-accelerating rather than leveling off — at 24.35% it is the highest reading in the 24-period dataset, well above the typical 10.6%-to-18.0% range.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -740,13 +775,13 @@
             "facts": [
               "Current: 24.3%",
               "Prior period: 22.9%",
-              "Range: 8.4% – 24.3% over 17 periods",
+              "Range: 8.4% – 24.3% over 24 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_yoy)"
             ],
             "inferences": [
-              "Services credit grew 24.35% year-on-year in Aug 2026, up from 22.94% in Jul 2026 — a gain of 1.4 points.",
-              "This is the fourth consecutive period of acceleration, and the current 24.35% reading sits at or near the highest level seen in this 17-period window.",
-              "Growth has moved from 12.0% in Mar 2025 to 24.35% now, pointing to broad-based momentum in services credit rather than a short-lived spike."
+              "Services credit grew 24.35% YoY in Aug 2026, up from 22.94% the prior period — a 1.40-point gain.",
+              "That puts growth at the top of this 24-period window, whose typical range runs 10.6% to 18.0%.",
+              "The series shows growth climbing from a low of 8.4% in May 2025 to 24.35% now, roughly tripling over that stretch."
             ]
           }
         },
@@ -789,49 +824,7 @@
           }
         }
       ],
-      "gaps": [
-        {
-          "id": "sibc-sectors-positive-yoy-count",
-          "layer": 1,
-          "title": "Breadth holds at 4 of 4 sectors, matching 25-period max",
-          "body": "All four main sectors — agriculture, industry, services, retail — again posted positive year-on-year growth in August 2026, with breadth at 4. Breadth is unchanged at 4 of 4, the same reading it has held through most of this 25-period window, now at or near the top of that range.",
-          "implication": "With breadth steady at 4 of 4 for most of this 25-period window, the credit expansion stays broad-based across agriculture, industry, services and retail, with no sector lagging into contraction.",
-          "preferredMode": "yoy",
-          "effect": {
-            "highlight": [
-              "Agriculture",
-              "Industry",
-              "Services",
-              "Personal Loans"
-            ],
-            "cut": {
-              "shape": "level",
-              "statement": "Statement 1",
-              "codes": [
-                "1",
-                "2",
-                "3",
-                "4"
-              ]
-            }
-          },
-          "claim_type": "data",
-          "representation": "llm",
-          "basis": {
-            "facts": [
-              "Current: 4.0",
-              "Prior period: 4.0",
-              "Range: 0.0 – 4.0 over 25 periods",
-              "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_count_positive_yoy)"
-            ],
-            "inferences": [
-              "Breadth stayed at 4 of 4 main sectors with positive YoY growth in August 2026, unchanged from the prior period.",
-              "This matches the level breadth has held since all four sectors turned positive, now at or near the high point across this 25-period window.",
-              "No sector has slipped into contraction through this stretch, keeping the expansion spread across all four rather than concentrated in one or two."
-            ]
-          }
-        }
-      ],
+      "gaps": [],
       "opportunities": []
     },
     "industryBySize": {
@@ -901,9 +894,9 @@
         {
           "id": "sibc-large-corporate-share",
           "layer": 1,
-          "title": "Large corporate share falls to 66.55% — lowest in 25 periods",
-          "body": "Large corporates' share of industry credit fell to 66.55% in Aug 2026, down 0.71 points from 67.26% the prior period. Share dropped 67.26% → 66.55%, breaking the 67.2%-67.4% band held for five straight periods and landing at or near the bottom of this 25-period range, where the lower quartile sits at 67.3%.",
-          "implication": "The drop to 66.55% ends the five-period plateau between 67.2% and 67.4% and is the lowest large-corporate share reading in this 25-period window, which opened at 72.4% in Dec 2023.",
+          "title": "Large corporate share falls to 66.55% — new low in 36 periods",
+          "body": "Large corporates held 66.55% of industry credit in Aug 2026, down from 67.26% in the prior period. Share fell from 67.26% to 66.55%, breaking the plateau that had held it between 67.2% and 67.4% for several periods, and now sits at or near the lowest level in this 36-period window, below the 67.5% mark that most readings in this window sit above.",
+          "implication": "The 0.71-point drop to 66.55% ends the recent plateau between 67.2% and 67.4%, leaving large corporates at or near their lowest share of industry credit in this 36-period window.",
           "preferredMode": "share",
           "effect": {
             "highlight": [
@@ -923,22 +916,23 @@
             "facts": [
               "Current: 66.5%",
               "Prior period: 67.3%",
-              "Range: 66.5% – 72.4% over 25 periods",
+              "Range: 66.5% – 73.1% over 36 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_share)"
             ],
             "inferences": [
               "Large corporate share fell to 66.55% in Aug 2026, down 0.71 points from 67.26% the prior period.",
-              "That breaks the 67.2%-67.4% band the share had held for five straight periods, and sits below the 25-period range's lower quartile of 67.3%.",
-              "66.55% is at or near the minimum reading across this 25-period series, which started at 72.4% in Dec 2023."
+              "This breaks the plateau that had held the share between 67.2% and 67.4% for the preceding periods.",
+              "The reading sits at or near the minimum of this 36-period range, below the 67.5% level most readings in this window sit above.",
+              "Large corporates are losing share of industry credit at a pace the recent plateau had not shown."
             ]
           }
         },
         {
           "id": "sibc-large-corporate-yoy",
           "layer": 1,
-          "title": "Large corporate credit growth cools to 14.88%, down from 17.69% peak",
-          "body": "Large corporate credit grew 14.88% year-on-year in Aug 2026, down 2.81 points from 17.69% the prior period. Growth decelerated 17.69% → 14.88%, breaking the seven-period climb that had run from 5.5% in Jan 2026 to that 17.69% peak in Jul 2026.",
-          "implication": "Large corporate credit growth has pulled back 2.81 points from last period's 17.69% peak — the first deceleration after the seven-period climb from 5.5% in Jan 2026 — though at 14.88% it still sits above the top quartile (12.2%) of this 17-period window.",
+          "title": "Large corporate credit growth cools to 14.9% from 17.7% peak",
+          "body": "Large corporate credit grew 14.88% YoY in Aug 2026, down from 17.69% in the prior period. Growth decelerated from 17.69% to 14.88%, a 2.81-point slowdown that breaks the run-up from 5.5% in Jan 2026. The reading remains above the 8.8% mark, among the strongest readings in this 24-period window.",
+          "implication": "The 2.81-point deceleration to 14.88% is the first break in the run-up from 5.5% in Jan 2026 to 17.69% in Jul 2026, though growth remains well above the 8.8% level, among the strongest readings in this window.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -958,22 +952,23 @@
             "facts": [
               "Current: 14.9%",
               "Prior period: 17.7%",
-              "Range: 1.5% – 17.7% over 17 periods",
+              "Range: 1.5% – 17.7% over 24 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_yoy)"
             ],
             "inferences": [
-              "Large corporate credit grew 14.88% YoY in Aug 2026, down 2.81 points from a 17.69% peak the prior period.",
-              "That peak capped a seven-period climb from 5.5% in Jan 2026, so Aug 2026 is the first pullback after that run.",
-              "Even after the pullback, 14.88% sits above the top quartile of this 17-period range, where p75 is 12.2%."
+              "Large corporate credit grew 14.88% YoY in Aug 2026, down 2.81 points from 17.69% the prior period.",
+              "This breaks the seven-period run-up that had taken growth from 5.5% in Jan 2026 to 17.69% in Jul 2026.",
+              "Even after the slowdown, 14.88% stays above the 8.8% level, keeping it among the strongest readings in this 24-period window.",
+              "The acceleration that had been building since January has broken step for the first time in this series."
             ]
           }
         },
         {
           "id": "sibc-msme-medium-share",
           "layer": 1,
-          "title": "Medium enterprises share climbs to 10.2% — fresh high",
-          "body": "Medium enterprises accounted for 10.19% of industry credit in Aug 2026, up from 9.99% in Jul 2026. Share rose from 9.99% to 10.19%, a +0.20pp gain that extends the climb from 8.1% in Dec 2023 and holds the segment at or near the maximum of this 25-period window (p75 9.7%).",
-          "implication": "Medium enterprises have now held above 10% of industry credit for two straight periods, the highest share recorded in this window — a sustained structural gain rather than a single-period move.",
+          "title": "Medium enterprises share hits 10.19% — new high",
+          "body": "Medium enterprises held 10.19% of industry credit in Aug 2026, the highest share in this 36-period window. Share rose from 9.99% in Jul 2026 to 10.19% in Aug 2026, up 0.20pp, extending a run of new highs since 8.0% in Sep 2023.",
+          "implication": "Medium enterprises' share has climbed to 10.19%, clear of the historical p75 of 9.6% — the steadiest structural gain among the industry-size segments in this window.",
           "preferredMode": "share",
           "effect": {
             "highlight": [
@@ -993,22 +988,23 @@
             "facts": [
               "Current: 10.2%",
               "Prior period: 10.0%",
-              "Range: 8.1% – 10.2% over 25 periods",
+              "Range: 8.0% – 10.2% over 36 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_share)"
             ],
             "inferences": [
-              "Medium enterprises' share of industry credit rose to 10.19% in Aug 2026 from 9.99% in Jul 2026, a +0.20pp gain.",
-              "This sits above the historical p75 of 9.7%, continuing a climb that started at 8.1% in Dec 2023.",
-              "The segment is at or near the highest share recorded in this 25-period window."
+              "Medium enterprises reached 10.19% of industry credit in Aug 2026, up 0.20pp from 9.99% in Jul 2026.",
+              "This sits at or near the maximum of the 36-period window, whose typical range runs from 8.5% to 9.6% (p25-p75).",
+              "The share has risen from 8.0% in Sep 2023 to 10.19% now, with no period of reversal in between.",
+              "Medium continues to hold a larger slice of industry credit than at any other point in this series."
             ]
           }
         },
         {
           "id": "sibc-msme-medium-yoy",
           "layer": 1,
-          "title": "Medium enterprise credit growth jumps to 31.8% YoY",
-          "body": "Medium enterprise credit grew 31.78% YoY in Aug 2026, the strongest reading in this 17-period window. Growth accelerated from 30.48% in Jul 2026 to 31.78% in Aug 2026, up 1.30 points and well above the historical p75 of 22.1%.",
-          "implication": "Medium enterprise credit growth has extended its run to a third straight period of gains, reaching 31.78% — the fastest pace recorded in this 17-period series.",
+          "title": "Medium enterprise credit growth hits 31.78% YoY, a fresh high",
+          "body": "Medium enterprise credit grew 31.78% YoY in Aug 2026, the fastest pace in this 24-period window. Growth accelerated from 30.48% in Jul 2026 to 31.78% in Aug 2026, up 1.30pp, the third straight month above 30%.",
+          "implication": "Medium enterprises have posted three consecutive months above 30% YoY growth, each one higher than the last — a sustained climb to a new ceiling for the segment rather than a single-period spike.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -1028,22 +1024,23 @@
             "facts": [
               "Current: 31.8%",
               "Prior period: 30.5%",
-              "Range: 13.2% – 31.8% over 17 periods",
+              "Range: 13.2% – 31.8% over 24 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_yoy)"
             ],
             "inferences": [
-              "Medium enterprise credit grew 31.78% YoY in Aug 2026, up from 30.48% in Jul 2026, a +1.30pp gain.",
-              "This is above the historical p75 of 22.1% for this 17-period window and sits at or near its maximum.",
-              "Growth has now risen for a third straight period, from 30.3% in Jun 2026 to 30.5% in Jul 2026 to 31.78% in Aug 2026."
+              "Medium enterprise credit grew 31.78% YoY in Aug 2026, up 1.30pp from 30.48% in Jul 2026.",
+              "This is the third consecutive period above 30%, following 30.3% in Jun 2026 and 30.5% in Jul 2026.",
+              "The typical range over this 24-period window is 17.1% to 21.1% (p25-p75), well below the current reading.",
+              "Growth is still rising each period rather than levelling off at its new highs."
             ]
           }
         },
         {
           "id": "sibc-msme-micro-small-fy-acceleration",
           "layer": 1,
-          "title": "Micro & Small credit accelerated 23.8pp in FY26",
-          "body": "Micro & Small enterprise credit grew 8.9% in the year ending Mar 2025 and 32.7% in the year ending Mar 2026 — a 23.8 percentage point step-up. Full-year growth rose from 8.9% in FY25 to 32.7% in FY26, a 23.8-point acceleration; this annual metric is set only at each March year-end, so it does not move between periods.",
-          "implication": "The 23.8-point acceleration from FY25's 8.9% to FY26's 32.7% remains the defining full-year shift in Micro & Small credit; the figure stays fixed until the next March year-end close.",
+          "title": "Micro & Small credit: 8.9% to 32.7% — 23.8pp FY step-up",
+          "body": "Micro & Small enterprise credit grew 8.9% in the year ending Mar 2025 and 32.7% in the year ending Mar 2026, a 23.8 percentage point acceleration. Full-year growth moved from 8.9% in FY25 to 32.7% in FY26 — a 23.8-point step-up, the largest in this dataset.",
+          "implication": "An acceleration of this size — taking the FY25 pace of 8.9% to 32.7% in FY26 — is the largest full-year step-up recorded for this segment in this dataset.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -1065,22 +1062,22 @@
               "Prior period: 23.8pp",
               "FY YoY @ 2025-03-31: 8.9%",
               "FY YoY @ 2026-03-31: 32.7%",
-              "Range: 23.8pp – 23.8pp over 25 periods",
+              "Range: 23.8pp – 23.8pp over 36 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_fy_acceleration)"
             ],
             "inferences": [
-              "Micro & Small credit grew 8.9% in the year ending Mar 2025 and 32.7% in the year ending Mar 2026, a 23.8-point acceleration.",
-              "This figure is fixed at the March year-end close and does not change month to month.",
-              "FY26 stands as the sharpest full-year step-up recorded for this segment in the dataset."
+              "Micro & Small credit grew 8.9% in the year ending Mar 2025 and 32.7% in the year ending Mar 2026, an acceleration of 23.8pp.",
+              "This is an annual measure set only at the March year-end, reflecting a shift in the full-year growth rate rather than a single month's move.",
+              "FY26 marks a distinct, sustained step-up in the pace at which Micro & Small credit expanded across that full year."
             ]
           }
         },
         {
           "id": "sibc-msme-micro-small-share",
           "layer": 1,
-          "title": "Micro & Small share rebounds to 23.3%, regains ground",
-          "body": "Micro & Small enterprises accounted for 23.26% of industry credit in Aug 2026, up 0.51pp from 22.75% in Jul 2026. Share rose from 22.75% to 23.26%, moving back above the 23.1% level last held in Mar/Jun 2026, after dipping as low as 22.75% in Jul 2026.",
-          "implication": "Micro & Small's share had slipped to 22.75% by Jul 2026 after peaking at 23.5% in Jan 2026; the Aug 2026 reading of 23.26% is the first gain in several periods, back above the 23.1% upper-range mark.",
+          "title": "Micro & Small share rebounds to 23.26%, up 0.51pp",
+          "body": "Micro & Small enterprises held 23.26% of industry credit in Aug 2026, up 0.51pp from the prior period. Share rose from 22.75% in Jul 2026 to 23.26% in Aug 2026, reversing the near-flat readings of Jun 2026 (22.7%) and Jul 2026 (22.75%).",
+          "implication": "After two periods of near-flat share around 22.7-22.75%, Micro & Small's 0.51pp jump to 23.26% breaks that plateau, though the segment is still short of its Jan 2026 high of 23.5%.",
           "preferredMode": "share",
           "effect": {
             "highlight": [
@@ -1100,22 +1097,23 @@
             "facts": [
               "Current: 23.3%",
               "Prior period: 22.8%",
-              "Range: 19.6% – 23.5% over 25 periods",
+              "Range: 19.0% – 23.5% over 36 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_share)"
             ],
             "inferences": [
-              "Micro & Small share rose to 23.26% in Aug 2026 from 22.75% in Jul 2026, a +0.51pp gain.",
-              "This reverses a decline from the Jan 2026 peak of 23.5% and moves the reading back above the historical p75 of 23.1%.",
-              "The segment is back in the upper range of this 25-period window after several periods below it."
+              "Micro & Small share rose to 23.26% in Aug 2026, up 0.51pp from 22.75% in Jul 2026.",
+              "This is the largest single-period gain since the share flattened out across Jun 2026 (22.7%) and Jul 2026 (22.75%).",
+              "The reading now sits above the historical p75 of 22.7% for this 36-period window.",
+              "It remains below the Jan 2026 peak of 23.5%, the highest share recorded in this series."
             ]
           }
         },
         {
           "id": "sibc-msme-micro-small-yoy",
           "layer": 1,
-          "title": "Micro & Small credit growth ticks up to 23.0% YoY",
-          "body": "Micro & Small enterprise credit grew 22.96% YoY in Aug 2026, up from 22.56% in Jul 2026. Growth rose from 22.56% to 22.96%, breaking four straight periods of deceleration from the 32.7% peak in Mar 2026.",
-          "implication": "Micro & Small growth had decelerated for four straight periods to 22.56% in Jul 2026; the Aug 2026 uptick to 22.96% is the first gain in that run, though it remains well below the Mar 2026 peak of 32.7%.",
+          "title": "Micro & Small growth reaccelerates to 22.96%, ending 4-period slide",
+          "body": "Micro & Small enterprise credit grew 22.96% YoY in Aug 2026, up 0.40pp from the prior period. Growth had decelerated for four straight periods from a Mar 2026 peak of 32.7% down to 22.56% in Jul 2026; it has now turned up to 22.96% in Aug 2026.",
+          "implication": "After four consecutive months of slowing from the Mar 2026 peak of 32.7%, Micro & Small's uptick to 22.96% in Aug 2026 is the first reversal in that slide, even as the pace stays far off the peak.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -1135,22 +1133,23 @@
             "facts": [
               "Current: 23.0%",
               "Prior period: 22.6%",
-              "Range: 8.9% – 32.7% over 17 periods",
+              "Range: 8.9% – 32.7% over 24 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_yoy)"
             ],
             "inferences": [
-              "Micro & Small credit growth rose to 22.96% in Aug 2026 from 22.56% in Jul 2026, a +0.40pp gain.",
-              "This follows four consecutive declines from the Mar 2026 peak of 32.7%, and sits near the median of this 17-period window (p25 9.7%, p75 30.2%).",
-              "The slowdown that had run since Mar 2026 has paused for the first time in this stretch."
+              "Micro & Small credit grew 22.96% YoY in Aug 2026, up 0.40pp from 22.56% in Jul 2026.",
+              "This breaks a four-period deceleration that had taken growth from 32.7% in Mar 2026 down to 22.56% in Jul 2026.",
+              "The 22.96% reading sits near the median of this 24-period window (p25=10.1%, p75=26.1%).",
+              "The segment's growth rate has stopped falling, though it remains well below its Mar 2026 peak of 32.7%."
             ]
           }
         },
         {
           "id": "sibc-msme-size-yoy-spread",
           "layer": 1,
-          "title": "MSME vs large corporate growth spread widens to 8.1pp",
-          "body": "The YoY growth spread between MSME and large corporate credit widened to 8.1 percentage points in Aug 2026, up from 4.9 points in Jul 2026. The spread widened from 4.9pp to 8.1pp, a +3.2pp move that breaks three straight periods of narrowing (11.8pp in May 2026 to 6.5pp in Jun 2026 to 4.9pp in Jul 2026).",
-          "implication": "The spread had narrowed for three straight periods to a low of 4.9pp in Jul 2026, well down from the 25.7pp peak in Jan 2026. The Aug 2026 reading of 8.1pp is the first widening since Mar 2026, breaking that convergence.",
+          "title": "MSME-large corporate growth gap widens back to 8.1pp",
+          "body": "MSME credit grew 8.1 percentage points faster than large corporate credit in Aug 2026, up 3.2pp from the prior period. The spread had narrowed to 4.9pp in Jul 2026, its tightest level since 2.1pp in Mar 2025; it has now widened back out to 8.1pp in Aug 2026.",
+          "implication": "The spread's rebound to 8.1pp breaks a six-period narrowing run that had brought MSME and large-corporate growth to within 4.9pp of each other, the closest gap since Mar 2025's 2.1pp.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -1172,13 +1171,14 @@
             "facts": [
               "Current: 8.1pp",
               "Prior period: 4.9pp",
-              "Range: 2.1pp – 25.7pp over 17 periods",
+              "Range: 2.1pp – 25.7pp over 24 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_yoy_spread)"
             ],
             "inferences": [
-              "The MSME-to-large-corporate growth spread widened to 8.1pp in Aug 2026 from 4.9pp in Jul 2026, a +3.2pp move.",
-              "This reverses a narrowing trend that had brought the spread down from a 25.7pp peak in Jan 2026 to a low of 4.9pp in Jul 2026.",
-              "It is the first widening in the spread since Mar 2026, when it moved from 22.6pp to 23.5pp."
+              "The MSME-large corporate growth spread widened to 8.1pp in Aug 2026, up 3.2pp from 4.9pp in Jul 2026.",
+              "This reverses a narrowing run that had taken the spread from a Jan 2026 peak of 25.7pp down to 4.9pp by Jul 2026.",
+              "The 8.1pp reading sits near the median of this 24-period window.",
+              "MSME credit has pulled back ahead of large corporate credit after the gap had nearly closed."
             ]
           }
         },
@@ -1504,9 +1504,9 @@
         {
           "id": "sibc-pl-cc-abs",
           "layer": 1,
-          "title": "Credit card outstanding hits ₹2.99L Cr — a new high",
-          "body": "Credit card outstanding stood at ₹2.99L Cr in Aug 2026, up ₹1,445 crore from ₹2.98L Cr in Jul 2026. Outstanding rose from ₹2.98L Cr in Jul 2026 to ₹2.99L Cr in Aug 2026, at or near the highest level in this 25-period window.",
-          "implication": "At ₹2.99L Cr, credit card outstanding is at or near its highest level in this 25-period series, even though the book has moved in a narrow band since May 2026 rather than climbing steadily.",
+          "title": "Credit card outstanding climbs to ₹2.99L Cr, up ₹1,445 crore",
+          "body": "Credit card outstanding stood at ₹2.99L Cr in Aug 2026, up ₹1,445 crore from ₹2.98L Cr in Jul 2026. Outstanding rose from ₹2.98L Cr in Jul 2026 to ₹2.99L Cr in Aug 2026, reversing the prior period's decline, and now sits above the p75 level of its 36-period range.",
+          "implication": "At ₹2.99L Cr, outstanding is within ₹3,872 crore of the Oct 2025 peak of ₹3.03L Cr but still below it — the Aug gain follows the prior period's dip rather than extending a clean uptrend.",
           "preferredMode": "absolute",
           "effect": {
             "highlight": [
@@ -1526,22 +1526,22 @@
             "facts": [
               "Current: 299,200.7L Cr",
               "Prior period: 297,756.1L Cr",
-              "Range: 251,842.8L Cr – 299,200.7L Cr over 25 periods",
+              "Range: 230,259.4L Cr – 303,072.8L Cr over 36 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_abs)"
             ],
             "inferences": [
-              "Credit card outstanding reached ₹2.99L Cr in Aug 2026, up ₹1,445 crore from ₹2.98L Cr in Jul 2026.",
-              "The series is at or near its MAX across this 25-period window, surpassing the Apr 2026 level of ₹2.98L Cr and the Jan 2026 level of ₹2.96L Cr.",
-              "Outstanding has moved in a narrow ₹2.95L Cr–₹2.99L Cr band since May 2026, with Aug 2026 the highest point in that band."
+              "Credit card outstanding rose ₹1,445 crore to ₹2.99L Cr (299,201 crore) in Aug 2026.",
+              "This reverses a ₹524 crore dip the period before (298,280 crore in Jun 2026 to 297,756 crore in Jul 2026).",
+              "The level is close to the 36-period peak of ₹3.03L Cr (303,073 crore) set in Oct 2025, the highest point in this series."
             ]
           }
         },
         {
           "id": "sibc-pl-cc-below10-streak",
           "layer": 1,
-          "title": "Credit cards under 10% YoY for 13 straight periods",
-          "body": "Credit card growth has stayed below 10% YoY for 13 consecutive periods, the longest run in this dataset. The streak extended from 12 periods in Jul 2026 to 13 periods in Aug 2026, at or near a new high.",
-          "implication": "At 13 consecutive periods, the sub-10% streak is the longest in this dataset, confirming card growth has settled into a sustained slower pace rather than a brief dip.",
+          "title": "Credit card sub-10% YoY streak hits 16 periods, a new max",
+          "body": "Credit card outstanding growth has stayed below 10% YoY for 16 consecutive periods as of Aug 2026, extending the streak by one from 15. The streak extended from 15 periods in Jul 2026 to 16 in Aug 2026, at or near the maximum of its 16-period range.",
+          "implication": "Sixteen straight periods below 10% YoY is the longest run in this dataset, confirming credit card growth has settled into sub-double-digit territory rather than this being a brief dip.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -1559,24 +1559,24 @@
           "representation": "llm",
           "basis": {
             "facts": [
-              "Current: 13 periods",
-              "Prior period: 12 periods",
-              "Range: 1 periods – 13 periods over 12 periods",
+              "Current: 16 periods",
+              "Prior period: 15 periods",
+              "Range: 1 periods – 16 periods over 16 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_yoy_streak)"
             ],
             "inferences": [
-              "The sub-10% YoY streak reached 13 periods in Aug 2026, up from 12 in Jul 2026.",
-              "The streak has run continuously since May 2025, when it stood at 1 period, and is at or near its MAX across this window.",
-              "A streak this long means card growth has not touched double digits in over a year."
+              "The sub-10% YoY streak reached 16 consecutive periods in Aug 2026, up from 15 in Jul 2026.",
+              "The streak has run uninterrupted since it started at 1 period in May 2025, covering the full 16-period series without a reset.",
+              "At 16 periods, the streak is at or near the maximum of its own historical range — card growth has not cleared 10% YoY once across that span."
             ]
           }
         },
         {
           "id": "sibc-pl-cc-share",
           "layer": 1,
-          "title": "Credit card share of personal loans slips to 4.11%",
-          "body": "Credit cards now account for 4.11% of personal loans, down from 4.15% in the prior period. Share fell from 4.15% to 4.11%, a 0.04-point drop, and is at or near the lowest point in this 25-period window.",
-          "implication": "At 4.11%, the credit card share of personal loans is at or near its lowest point in this 25-period series, continuing a decline that started from 4.9% in Dec 2023.",
+          "title": "Credit card share of personal loans falls to 4.11%, a new low",
+          "body": "Credit cards accounted for 4.11% of personal loans in Aug 2026, down 0.04 points from 4.15% in Jul 2026. Share fell from 4.15% in Jul 2026 to 4.11% in Aug 2026, now at or near the minimum of its 36-period range (p25 4.4%, p75 4.9%).",
+          "implication": "At 4.11%, credit card share is now below the p25 level of its 36-period range, extending a decline from readings near 5.0% in 2024 — cards are a shrinking slice of the personal loan book even as other categories move.",
           "preferredMode": "share",
           "effect": {
             "highlight": [
@@ -1596,22 +1596,22 @@
             "facts": [
               "Current: 4.1%",
               "Prior period: 4.1%",
-              "Range: 4.1% – 5.0% over 25 periods",
+              "Range: 4.1% – 5.0% over 36 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_share)"
             ],
             "inferences": [
-              "Credit card share of personal loans fell to 4.11% in the latest period, down 0.04pp from 4.15%.",
-              "The reading is at or near the MIN of its historical range, below the p25 mark of 4.3% and well under the p75 mark of 4.9%.",
-              "Share has fallen from 4.9% in Dec 2023 to 4.11% now, a decline spread across the full 25-period series."
+              "Credit card share dropped to 4.11% in Aug 2026 from 4.15% the prior period, a 0.04-point decline.",
+              "That puts the share at or near the minimum of its 36-period range, below even the p25 level of 4.4%.",
+              "Share has fallen from readings near 5.0% seen repeatedly through 2024 (Jun, Oct, Nov, Dec 2024 and Jan 2025 all read 5.0% in the series)."
             ]
           }
         },
         {
           "id": "sibc-pl-cc-yoy",
           "layer": 1,
-          "title": "Credit card YoY growth jumps to 3.64%, up 1.35 points",
-          "body": "Credit card outstanding grew 3.64% YoY in Aug 2026, up from 2.29% in Jul 2026. Growth rose from 2.29% in Jul 2026 to 3.64% in Aug 2026, a 1.35-point increase.",
-          "implication": "The rise to 3.64% is the fastest pace recorded since early 2026 in this series, though it remains well under the double-digit growth seen through most of 2025.",
+          "title": "Credit card YoY growth ticks up to 3.64%, still under 10%",
+          "body": "Credit card outstanding grew 3.64% YoY in Aug 2026, up from 2.29% in Jul 2026. Growth rose from 2.29% in Jul 2026 to 3.64% in Aug 2026, a 1.35-point increase, sitting near the median of its 24-period range (p25 2.3%, p75 11.1%).",
+          "implication": "Growth has edged up for two straight periods (2.29% then 3.64%) but remains near the median of its own range and far below the 18.0% rate from Sep 2024, continuing a run below 10% YoY that has now lasted 16 periods.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -1631,22 +1631,22 @@
             "facts": [
               "Current: 3.6%",
               "Prior period: 2.3%",
-              "Range: 1.0% – 15.6% over 17 periods",
+              "Range: 1.0% – 18.1% over 24 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_yoy)"
             ],
             "inferences": [
-              "Credit card YoY growth rose to 3.64% in Aug 2026, up 1.35pp from 2.29% in Jul 2026.",
-              "The reading sits near the median of its historical range (p25=1.8%, p75=10.6%), well below the 3.8% reading in Apr 2026 and the 15.6% reading in Dec 2024.",
-              "This is the third straight period of acceleration, following May 2026 (1.3%), Jun 2026 (1.9%) and Jul 2026 (2.3%)."
+              "Credit card YoY growth rose to 3.64% in Aug 2026 from 2.29% in Jul 2026, a 1.35-point gain.",
+              "That keeps growth near the median of its 24-period range, still far below the 18.0% rate seen in Sep 2024.",
+              "Every reading since May 2025 (8.5%) has stayed below 10% — 16 straight periods — so even with Aug's gain the pace remains far under the levels seen through 2024."
             ]
           }
         },
         {
           "id": "sibc-pl-consumer-durables-share",
           "layer": 1,
-          "title": "Consumer Durables share holds near 0.32% of personal loans",
-          "body": "Consumer Durables account for 0.32% of personal loans, unchanged from the prior period. Share held flat at 0.32%, in the lower range of this 25-period window, below the p25 mark of 0.3%.",
-          "implication": "At 0.32%, in the lower range of this 25-period series, Consumer Durables remains a marginal slice of the personal loan book, continuing its decline from 0.5% in Dec 2023.",
+          "title": "Consumer Durables share of personal loans holds flat at 0.32%",
+          "body": "Consumer Durables accounted for 0.32% of personal loans in Aug 2026, unchanged from 0.32% in Jul 2026. Share stayed at 0.32% in Aug 2026, matching Jul 2026, and remains in the lower part of its 36-period range, below the p25 level of 0.3%.",
+          "implication": "Consumer Durables' share has stabilised at 0.32%, in the lower band of its historical range, after sliding from readings near 0.5% in late 2023 — the segment has stopped shrinking as a share of personal loans but has not regained ground.",
           "preferredMode": "share",
           "effect": {
             "highlight": [
@@ -1666,22 +1666,22 @@
             "facts": [
               "Current: 0.3%",
               "Prior period: 0.3%",
-              "Range: 0.3% – 0.5% over 25 periods",
+              "Range: 0.3% – 0.5% over 36 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_share)"
             ],
             "inferences": [
-              "Consumer Durables share of personal loans held at 0.32% in the latest period, unchanged from the prior period.",
-              "The reading sits below the p25 mark of 0.3% for this 25-period window, in the lower range of its history.",
-              "Share has fallen from 0.5% in Dec 2023 to 0.32% now, a decline spread across the full series."
+              "Consumer Durables' share held at 0.32% in Aug 2026, the same reading as Jul 2026.",
+              "That keeps the share in the lower part of its 36-period range, below the p25 mark of 0.3%, after sliding from readings near 0.4%-0.5% in late 2023.",
+              "The share has stayed close to 0.3% since Dec 2025, showing no further contraction but no recovery either."
             ]
           }
         },
         {
           "id": "sibc-pl-consumer-durables-yoy",
           "layer": 1,
-          "title": "Consumer Durables growth jumps to 2.41% YoY — second straight gain",
-          "body": "Consumer Durables outstanding grew 2.41% YoY in Aug 2026, up from 0.39% in Jul 2026. Growth rose from 0.39% in Jul 2026 to 2.41% in Aug 2026, a 2.02-point increase.",
-          "implication": "At 2.41%, Consumer Durables growth is now in the upper range of this 17-period series, building on the Jul 2026 turn to positive after a stretch that saw declines as steep as -9.8% in Feb 2026.",
+          "title": "Consumer Durables YoY growth jumps to 2.41%, second straight gain",
+          "body": "Consumer Durables outstanding grew 2.41% YoY in Aug 2026, up from 0.39% in Jul 2026. Growth accelerated from 0.39% in Jul 2026 to 2.41% in Aug 2026, a 2.02-point increase, extending the recovery that began after a low of -9.8% in Feb 2026.",
+          "implication": "Two consecutive positive readings — 0.39% then 2.41% — mark the clearest recovery in Consumer Durables growth since the series turned negative in Dec 2024, even though the rate remains far below the 8.6% high seen in Sep 2024.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -1701,22 +1701,22 @@
             "facts": [
               "Current: 2.4%",
               "Prior period: 0.4%",
-              "Range: -9.8% – 2.6% over 17 periods",
+              "Range: -9.8% – 8.6% over 24 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_yoy)"
             ],
             "inferences": [
-              "Consumer Durables YoY growth rose to 2.41% in Aug 2026, up 2.02pp from 0.39% in Jul 2026.",
-              "The reading is above the p75 mark of -0.8% for this 17-period window, in the upper range of its history.",
-              "This is the second straight positive reading, after growth turned positive at 0.39% in Jul 2026 following a stretch that included -9.8% in Feb 2026."
+              "Consumer Durables YoY growth rose to 2.41% in Aug 2026 from 0.39% in Jul 2026, a 2.02-point acceleration.",
+              "That is the second straight positive reading, following a stretch of declines that bottomed at -9.8% in Feb 2026.",
+              "At 2.41%, growth is above the p75 level of 0.8% in its 24-period range, though still well below the 8.6% reading seen in Sep 2024."
             ]
           }
         },
         {
           "id": "sibc-pl-education-share",
           "layer": 1,
-          "title": "Education loans' share holds flat at 2.24%, near median",
-          "body": "Education loans held 2.24% of personal loans in Aug 2026, unchanged from the prior period. Share stayed flat at 2.24%, with no change (+0.00pp) from Jul 2026.",
-          "implication": "Education's share has barely moved across this 25-period window, sitting in a tight 2.2%-2.3% band — a segment whose position in the personal loan mix is essentially static.",
+          "title": "Education loans' share holds flat at 2.24% of personal loans",
+          "body": "Education loans accounted for 2.24% of personal loans in Aug 2026. Share was unchanged at 2.24% versus 2.24% in Jul 2026, a flat reading.",
+          "implication": "Education's share has not moved while Advances against Fixed Deposits jumped from 2.25% to 2.80% in the same month — education remains the flattest segment in the mix.",
           "preferredMode": "share",
           "effect": {
             "highlight": [
@@ -1736,22 +1736,22 @@
             "facts": [
               "Current: 2.2%",
               "Prior period: 2.2%",
-              "Range: 2.2% – 2.3% over 25 periods",
+              "Range: 2.2% – 2.4% over 36 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_share)"
             ],
             "inferences": [
-              "Education's share of personal loans held at 2.24% in Aug 2026, flat versus 2.24% in Jul 2026.",
-              "That keeps it near the median of its 25-period range, which runs between 2.2% and 2.3%.",
-              "A flat share across periods means education is neither gaining nor losing ground in the personal loan mix."
+              "Education's share of personal loans was 2.24% in Aug 2026, identical to Jul 2026.",
+              "The share has sat inside a narrow 2.2%-2.3% band for 36 periods (p25=2.2%, p75=2.3%), and Aug 2026 is near that median.",
+              "Education's position in the personal loan mix is unchanged this period, even as its own growth rate (13.16% YoY) hit a new low for the window."
             ]
           }
         },
         {
           "id": "sibc-pl-education-yoy",
           "layer": 1,
-          "title": "Education loan growth slips to 13.16%, near a 17-period low",
-          "body": "Education loans grew 13.16% YoY in Aug 2026, down from 13.71% in Jul 2026. Growth slowed from 13.71% to 13.16%, a 0.56-point decline.",
-          "implication": "At 13.16%, education loan growth is at or near its lowest point in the 17-period window, down from 15.8% in Dec 2024 — a gradual, unbroken slowdown rather than a sudden drop.",
+          "title": "Education loan growth slows to 13.16%, a 24-period low",
+          "body": "Education loans grew 13.16% YoY in Aug 2026. Growth fell from 13.71% in Jul 2026 to 13.16% in Aug 2026, a 0.56-point drop.",
+          "implication": "At 13.16%, education loan growth has now dropped below this dataset's lower quartile for the first time in the window — the slowdown noted last period has deepened rather than held steady near 13%-14%.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -1771,57 +1771,22 @@
             "facts": [
               "Current: 13.2%",
               "Prior period: 13.7%",
-              "Range: 13.2% – 15.9% over 17 periods",
+              "Range: 13.2% – 17.6% over 24 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_yoy)"
             ],
             "inferences": [
-              "Education loan growth fell to 13.16% in Aug 2026 from 13.71% the prior period, a 0.56-point drop.",
-              "That puts it at or near the minimum of its 17-period range, where the middle band runs 13.5% to 15.2%.",
-              "A reading at the low end of this range means education lending momentum is at its weakest in this dataset."
-            ]
-          }
-        },
-        {
-          "id": "sibc-pl-fd-advances-share",
-          "layer": 1,
-          "title": "FD-backed advances share jumps to 2.80%, a 25-period high",
-          "body": "Advances against Fixed Deposits rose to 2.80% of personal loans in Aug 2026. Share jumped from 2.25% in Jul 2026 to 2.80% in Aug 2026, up 0.55 points.",
-          "implication": "At 2.80%, FD-backed advances' share has broken clear of the 2.3%-2.4% band that held for most of this 25-period window — the sharpest single-period reshuffling of personal loan composition in the data.",
-          "preferredMode": "share",
-          "effect": {
-            "highlight": [
-              "Advances vs Fixed Deposits"
-            ],
-            "cut": {
-              "shape": "level",
-              "statement": "Statement 1",
-              "codes": [
-                "4.3"
-              ]
-            }
-          },
-          "claim_type": "data",
-          "representation": "llm",
-          "basis": {
-            "facts": [
-              "Current: 2.8%",
-              "Prior period: 2.2%",
-              "Range: 2.2% – 2.8% over 25 periods",
-              "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_share)"
-            ],
-            "inferences": [
-              "FD-backed advances' share of personal loans rose to 2.80% in Aug 2026, up 0.55 points from 2.25% the prior period.",
-              "That is at or near the highest level in this 25-period window, well above the typical 2.3%-2.4% band.",
-              "A share breaking out of its usual range points to a structural shift rather than normal month-to-month noise."
+              "Education loan growth decelerated to 13.16% YoY in Aug 2026, down from 13.71% in Jul 2026.",
+              "That puts it at or near the minimum of this 24-period window, below the historical p25 of 13.7%.",
+              "Growth has fallen steadily from 17.6% in Sep 2024 to 13.16% in Aug 2026."
             ]
           }
         },
         {
           "id": "sibc-pl-fd-advances-yoy",
           "layer": 1,
-          "title": "FD-backed advances growth triples to 43.16% YoY",
-          "body": "Advances against Fixed Deposits grew 43.16% YoY in Aug 2026. Growth surged from 14.58% in Jul 2026 to 43.16% in Aug 2026, up 28.58 points.",
-          "implication": "The 28.58-point jump to 43.16% is the largest period-on-period move in this 17-period dataset, pushing FD-backed advances growth well outside its usual 13%-18% band.",
+          "title": "FD-backed loan growth triples to 43.16% YoY, a 24-period high",
+          "body": "Advances against Fixed Deposits grew 43.16% YoY in Aug 2026. Growth jumped from 14.58% in Jul 2026 to 43.16% in Aug 2026, a 28.58-point increase.",
+          "implication": "This is by far the largest single-period jump in FD-backed loan growth in the dataset — prior periods moved in a steady 12%-17% band, and Aug 2026 breaks that pattern alongside a share high in the same month.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -1841,22 +1806,22 @@
             "facts": [
               "Current: 43.2%",
               "Prior period: 14.6%",
-              "Range: 8.1% – 43.2% over 17 periods",
+              "Range: 8.1% – 43.2% over 24 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_yoy)"
             ],
             "inferences": [
-              "FD-backed advances grew 43.16% YoY in Aug 2026, up 28.58 points from 14.58% the prior period.",
-              "That is the highest reading in this 17-period window, far above the usual 13.0%-17.8% band.",
-              "A jump this far outside the normal range marks a sharp break from the segment's typical growth pace."
+              "FD-backed loan growth rose to 43.16% YoY in Aug 2026 from 14.58% in Jul 2026, a 28.58-point jump.",
+              "That is more than double this dataset's upper range (p75=17.0%) and the strongest reading in 24 periods.",
+              "The jump lines up with the segment's share of personal loans also hitting a 36-period high of 2.80% in the same month."
             ]
           }
         },
         {
           "id": "sibc-pl-gold-pos-streak",
           "layer": 1,
-          "title": "Gold loans extend positive growth streak to 18 periods",
-          "body": "Gold loans have posted positive YoY growth for 18 consecutive periods as of Aug 2026. The streak extended from 17 periods to 18 periods.",
-          "implication": "Eighteen straight periods of positive growth is the longest run in this dataset, making gold loans the most consistently expanding segment tracked here.",
+          "title": "Gold loans hit 24 straight periods of positive YoY growth",
+          "body": "Gold loans have posted positive YoY growth for 24 consecutive periods through Aug 2026. The streak extended from 23 periods in Jul 2026 to 24 periods in Aug 2026.",
+          "implication": "Twenty-four straight periods of positive YoY growth makes gold the most sustained performer among the five segments tracked, even as the pace of that growth keeps cooling (83.23% YoY, down from 88.12%).",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -1874,24 +1839,24 @@
           "representation": "llm",
           "basis": {
             "facts": [
-              "Current: 18 periods",
-              "Prior period: 17 periods",
-              "Range: 1 periods – 18 periods over 17 periods",
+              "Current: 24 periods",
+              "Prior period: 23 periods",
+              "Range: 1 periods – 24 periods over 24 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_yoy_streak)"
             ],
             "inferences": [
-              "Gold loans' positive-growth streak reached 18 periods in Aug 2026, up from 17 the prior period.",
-              "That is at or near the maximum of this dataset's range.",
-              "An unbroken streak this long means gold lending has not posted a single negative YoY reading across the tracked history."
+              "Gold loans have grown YoY every period since Sep 2024, now 24 periods running.",
+              "This is the longest streak recorded in this dataset, and it is still extending (23 → 24).",
+              "No other personal loan segment tracked here has matched this unbroken run."
             ]
           }
         },
         {
           "id": "sibc-pl-gold-share",
           "layer": 1,
-          "title": "Gold loans' share holds near 7.68%, still above its upper range",
-          "body": "Gold loans accounted for 7.68% of personal loans in Aug 2026. Share was essentially flat, easing from 7.69% to 7.68%.",
-          "implication": "Gold's 7.68% share, up from 1.8% in Dec 2023, has essentially plateaued at the top of its 25-period range above the 6.5% p75 mark — the first sign of the long climb flattening out.",
+          "title": "Gold loans' share steadies near 7.68%, still near 36-period highs",
+          "body": "Gold loans accounted for 7.68% of personal loans in Aug 2026. Share was nearly flat, 7.69% in Jul 2026 to 7.68% in Aug 2026, a 0.01-point dip.",
+          "implication": "After climbing without interruption from 2.0% to 7.69% over three years, gold's share paused in Aug 2026 — a flat reading rather than a reversal, but the first non-advancing month in this series.",
           "preferredMode": "share",
           "effect": {
             "highlight": [
@@ -1911,22 +1876,22 @@
             "facts": [
               "Current: 7.7%",
               "Prior period: 7.7%",
-              "Range: 1.7% – 7.7% over 25 periods",
+              "Range: 1.7% – 7.7% over 36 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_share)"
             ],
             "inferences": [
-              "Gold loans' share held at 7.68% in Aug 2026, barely changed from 7.69% the prior period.",
-              "That is still above the p75 mark of 6.5%, in the upper range of this 25-period window.",
-              "Holding above its upper range after rising from 1.8% in Dec 2023 means gold has settled at a structurally higher share rather than giving back ground."
+              "Gold's share of personal loans was 7.68% in Aug 2026, barely changed from 7.69% in Jul 2026.",
+              "That remains well above this window's upper quartile of 5.7% (p75), after climbing continuously from 2.0% in Sep 2023.",
+              "This is the first period in the recent run where the share did not advance, following steady monthly gains through Jul 2026."
             ]
           }
         },
         {
           "id": "sibc-pl-gold-yoy",
           "layer": 1,
-          "title": "Gold loan growth cools to 83.23%, near a 17-period low",
-          "body": "Gold loans grew 83.23% YoY in Aug 2026, down from 88.12% in Jul 2026. Growth decelerated from 88.12% to 83.23%, a 4.89-point drop.",
-          "implication": "At 83.23%, gold loan growth has dropped below its usual 92.6%-130.7% band for the first time in this 17-period window, down from a peak near 140.9% in Jun 2025 — still fast, but clearly past its steepest phase.",
+          "title": "Gold loan growth cools to 83.23% YoY, a 24-period low",
+          "body": "Gold loans grew 83.23% YoY in Aug 2026. Growth decelerated from 88.12% in Jul 2026 to 83.23% in Aug 2026, a 4.89-point drop.",
+          "implication": "Gold lending's growth has fallen below this dataset's lower quartile for the first time, extending a four-period deceleration from the 140.9% peak in Jun 2025 — the slowdown flagged last period continues even as the 24-period positive streak and the 7.68% share both hold.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -1946,22 +1911,22 @@
             "facts": [
               "Current: 83.2%",
               "Prior period: 88.1%",
-              "Range: 83.2% – 140.9% over 17 periods",
+              "Range: 51.0% – 140.9% over 24 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_yoy)"
             ],
             "inferences": [
-              "Gold loan growth fell to 83.23% in Aug 2026 from 88.12% the prior period, down 4.89 points.",
-              "That is at or near the minimum of this 17-period range, below the typical 92.6%-130.7% band.",
-              "Falling below the usual range after peaking near 140.9% in Jun 2025 shows the deceleration has moved outside gold's normal pace, not just a pause."
+              "Gold loan growth slowed to 83.23% YoY in Aug 2026 from 88.12% in Jul 2026, a 4.89-point deceleration.",
+              "This is below the historical p25 of 88.9% for the first time in this 24-period window, the weakest reading in the series.",
+              "Growth has now stepped down for four straight periods: 105.5% (May 2026) → 93.8% (Jun 2026) → 88.1% (Jul 2026) → 83.2% (Aug 2026)."
             ]
           }
         },
         {
           "id": "sibc-pl-housing-share",
           "layer": 1,
-          "title": "Housing's share slips to 47.41%, a fresh 25-period low",
-          "body": "Housing loans accounted for 47.41% of personal loans in Aug 2026. Share fell from 47.73% in Jul 2026 to 47.41% in Aug 2026, down 0.32 points.",
-          "implication": "Housing's 47.41% share is the lowest point in this 25-period series, continuing an unbroken slide from 50.8% in Dec 2023 — still by far the largest personal loan category, but steadily giving up ground.",
+          "title": "Housing share falls to 47.41% of personal loans, a new low",
+          "body": "Housing loans accounted for 47.41% of personal loans in Aug 2026. Share fell from 47.73% in Jul 2026 to 47.41% in Aug 2026, a 0.32-point drop.",
+          "implication": "Housing's share has set a fresh low again this period, continuing the year-long slide flagged previously — it remains the largest category in personal loans by a wide margin, but its share keeps eroding while gold's share holds near its highs.",
           "preferredMode": "share",
           "effect": {
             "highlight": [
@@ -1981,22 +1946,22 @@
             "facts": [
               "Current: 47.4%",
               "Prior period: 47.7%",
-              "Range: 47.4% – 51.1% over 25 periods",
+              "Range: 47.4% – 51.2% over 36 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_share)"
             ],
             "inferences": [
-              "Housing's share of personal loans fell to 47.41% in Aug 2026, down 0.32 points from 47.73% the prior period.",
-              "That is at or near the minimum of this 25-period range, below the typical 48.5%-50.8% band.",
-              "A new low after sliding from 50.8% in Dec 2023 shows the retreat is continuing, not stabilising."
+              "Housing's share of personal loans fell to 47.41% in Aug 2026 from 47.73% in Jul 2026.",
+              "That is the lowest level in this 36-period window, below the historical p25 of 49.1%.",
+              "The share has slid from 51.2% in Sep 2023 to 47.41% in Aug 2026."
             ]
           }
         },
         {
           "id": "sibc-pl-housing-yoy",
           "layer": 1,
-          "title": "Housing loan growth eases to 11.13% YoY, still near median",
-          "body": "Housing loans grew 11.13% YoY in Aug 2026. Growth ticked down 0.14 points from 11.27% in Jul 2026 to 11.13% in Aug 2026, sitting near the median of the last 17 periods (10.2% to 11.1%).",
-          "implication": "Housing credit growth is holding steady rather than accelerating — 11.13% sits almost exactly at the middle of its 17-period range, continuing the pattern of the last several readings rather than pushing to a new high.",
+          "title": "Housing loan growth eases to 11.13% from 11.27%",
+          "body": "Housing loans grew 11.13% YoY in Aug 2026, down from 11.27% in Jul 2026. Growth eased 0.14 points period-on-period (11.27% → 11.13%), reversing last period's pickup from 10.98% to 11.27%, and now sits near the median of the 9.9%-11.2% range seen over 24 periods.",
+          "implication": "Housing's growth gave back a small part of last period's pickup, settling back toward the middle of its 24-period range rather than extending the acceleration.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -2016,22 +1981,22 @@
             "facts": [
               "Current: 11.1%",
               "Prior period: 11.3%",
-              "Range: 9.0% – 11.5% over 17 periods",
+              "Range: 9.0% – 12.6% over 24 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_yoy)"
             ],
             "inferences": [
-              "Housing loan growth stood at 11.13% YoY in Aug 2026, down 0.14 points from 11.27% in Jul 2026.",
-              "The reading sits near the median of the last 17 periods, inside the 10.2% to 11.1% range that has held since Dec 2024.",
-              "Growth has moved in a narrow band for over a year without breaking out in either direction."
+              "Housing loans grew 11.13% YoY in Aug 2026, down 0.14 points from 11.27% in Jul 2026.",
+              "That reverses the acceleration seen into Jul 2026, when growth had risen from 10.98% to 11.27%.",
+              "At 11.13%, the reading sits near the median of the 9.9%-11.2% range recorded across 24 periods — neither a high nor a low."
             ]
           }
         },
         {
           "id": "sibc-pl-other-share",
           "layer": 1,
-          "title": "Other Personal Loans share slips to 24.64%, near 25-period low",
-          "body": "Other Personal Loans accounted for 24.64% of personal loans in Aug 2026. Share moved from 24.84% in Jul 2026 to 24.64% in Aug 2026 — a small move, but it keeps the reading at or near the lowest level in the last 25 periods, down from 26.6% in Dec 2023.",
-          "implication": "Other Personal Loans' 24.64% share is at or near its lowest point in 25 periods, continuing a multi-year slide from 26.6% in Dec 2023.",
+          "title": "Other Personal Loans share falls to 24.64%, lowest in 36 periods",
+          "body": "Other Personal Loans made up 24.64% of personal loans in Aug 2026, down from 24.84% in Jul 2026. Share fell 0.19 points (24.84% → 24.64%), now at or near the lowest level in the 36-period range of 25.0% to 26.3%.",
+          "implication": "This is the lowest share reading in the 36-period window, extending a slide that last period looked to have paused — Other Personal Loans keeps shrinking as a slice of the personal-loan book.",
           "preferredMode": "share",
           "effect": {
             "highlight": [
@@ -2051,22 +2016,22 @@
             "facts": [
               "Current: 24.6%",
               "Prior period: 24.8%",
-              "Range: 24.6% – 26.7% over 25 periods",
+              "Range: 24.6% – 26.7% over 36 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_share)"
             ],
             "inferences": [
-              "Other Personal Loans' share of personal loans was 24.64% in Aug 2026, down from 24.84% in Jul 2026.",
-              "This keeps the share at or near the minimum of the last 25 periods, a decline from 26.6% in Dec 2023.",
-              "The category keeps giving up relative weight within personal loans even as the single-period move is small."
+              "Other Personal Loans' share of personal loans fell to 24.64% in Aug 2026 from 24.84% in Jul 2026, a 0.19 point drop.",
+              "That puts the share at or near the minimum of the last 36 periods, where the middle range runs from 25.0% to 26.3%.",
+              "The share has moved below the 25.0% mark that framed most of this history."
             ]
           }
         },
         {
           "id": "sibc-pl-other-yoy",
           "layer": 1,
-          "title": "Other Personal Loans growth climbs to 14.96%, a fresh high",
-          "body": "Other Personal Loans grew 14.96% YoY in Aug 2026. Growth rose from 14.71% in Jul 2026 to 14.96% in Aug 2026, at or near the highest level in the last 17 periods, up sharply from the 7.5% low in Mar 2025.",
-          "implication": "Other Personal Loans' 14.96% YoY pace is the strongest reading in this 17-period series, extending the climb that began from 7.5% in Mar 2025.",
+          "title": "Other Personal Loans growth hits 14.96%, a 24-period high",
+          "body": "Other Personal Loans grew 14.96% YoY in Aug 2026, up from 14.71% in Jul 2026. Growth rose 0.25 points (14.71% → 14.96%), extending its climb to at or near the maximum of the 24-period window (range 7.7% to 12.4%).",
+          "implication": "Other Personal Loans has now strengthened for three straight periods and sits at the top of its 24-period range — a sustained climb, not a one-period blip.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -2086,13 +2051,13 @@
             "facts": [
               "Current: 15.0%",
               "Prior period: 14.7%",
-              "Range: 7.1% – 15.0% over 17 periods",
+              "Range: 7.1% – 15.0% over 24 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_yoy)"
             ],
             "inferences": [
-              "Other Personal Loans grew 14.96% YoY in Aug 2026, up from 14.71% in Jul 2026.",
-              "This sits at or near the top of the 17-period range (7.6% to 12.8% for the 25th/75th percentile bounds), extending the climb from a 7.5% low in Mar 2025.",
-              "The category has roughly doubled its growth rate since that Mar 2025 low."
+              "Other Personal Loans grew 14.96% YoY in Aug 2026, up 0.25 points from 14.71% in Jul 2026.",
+              "This is the third straight pickup: 14.2% in Jun 2026 → 14.71% in Jul 2026 → 14.96% in Aug 2026.",
+              "At 14.96%, growth is at or near the maximum of the 24-period window, well above the 7.7%-12.4% range that covers most of that history."
             ]
           }
         },
@@ -2130,9 +2095,9 @@
         {
           "id": "sibc-pl-share-advances-share",
           "layer": 1,
-          "title": "Shares/bonds advances hold flat at 0.15% of personal loans",
-          "body": "Advances against shares and bonds account for 0.15% of personal loans in Aug 2026. Share was unchanged at 0.15% from Jul 2026 to Aug 2026, within the narrow 0.1% to 0.2% range seen across the last 25 periods.",
-          "implication": "At 0.15% share, advances against shares and bonds remain a negligible, stable sliver of personal loans.",
+          "title": "Advances against shares/bonds holds at 0.15% — stays negligible",
+          "body": "Advances against shares and bonds account for 0.15% of personal loans in Aug 2026, unchanged from Jul 2026. Share held flat at 0.15%, staying below the p25 level of 0.2% that has framed most of the last 36 periods.",
+          "implication": "This category remains too small to matter for personal-loan composition — the share has barely moved across 36 periods and sits in the lower part of its already narrow range.",
           "preferredMode": "share",
           "effect": {
             "highlight": [
@@ -2152,22 +2117,22 @@
             "facts": [
               "Current: 0.2%",
               "Prior period: 0.1%",
-              "Range: 0.1% – 0.2% over 25 periods",
+              "Range: 0.1% – 0.2% over 36 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_share)"
             ],
             "inferences": [
-              "This category's share of personal loans held at 0.15% in Aug 2026, unchanged from Jul 2026.",
-              "The reading sits near the median of a tight 0.1% to 0.2% band that has held for 25 periods.",
-              "The category remains too small to move the composition of personal loans."
+              "Advances against shares and bonds held at 0.15% of personal loans in Aug 2026, flat from 0.15% in Jul 2026 — a +0.00pp change.",
+              "The reading sits below the p25 mark of 0.2%, in the lower part of its range across 36 periods.",
+              "At this scale, the category stays a rounding error within personal loans regardless of period-to-period moves."
             ]
           }
         },
         {
           "id": "sibc-pl-share-advances-yoy",
           "layer": 1,
-          "title": "Shares/bonds advances YoY growth jumps to 12.67%, near median",
-          "body": "Advances against shares and bonds grew 12.67% YoY in Aug 2026. Growth accelerated 4.08 points from 8.59% in Jul 2026 to 12.67% in Aug 2026, building on the move from 4.59% in Jun 2026, and now sits near the median of the 17-period range (3.7% to 17.7%).",
-          "implication": "This is the third straight period of acceleration — from 4.59% to 8.59% to 12.67% — placing growth back near the middle of its historically wide range after dipping to -3.6% in Apr 2026.",
+          "title": "Advances against shares/bonds growth jumps to 12.67%",
+          "body": "Advances against shares and bonds grew 12.67% YoY in Aug 2026, up from 8.59% in Jul 2026. Growth accelerated 4.08 points period-on-period (8.59% → 12.67%), the second straight sharp pickup after June's 4.6% to July's 8.6%, now near the median of the 3.5%-17.6% range over 24 periods.",
+          "implication": "This category is accelerating for a second straight period, but its own history (p25 3.5%, p75 17.6%) shows swings this size are typical — the current rate isn't an outlier for a category this volatile.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -2187,13 +2152,13 @@
             "facts": [
               "Current: 12.7%",
               "Prior period: 8.6%",
-              "Range: -3.6% – 33.0% over 17 periods",
+              "Range: -3.6% – 33.0% over 24 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_yoy)"
             ],
             "inferences": [
-              "Growth jumped to 12.67% YoY in Aug 2026, up 4.08 points from 8.59% in Jul 2026.",
-              "This is the third straight period of acceleration, building on the move from 4.59% in Jun 2026 to 8.59% in Jul 2026.",
-              "The pace has swung from -3.6% in Apr 2026 to double digits within a few months, landing near the middle of its 3.7% to 17.7% range."
+              "Advances against shares and bonds grew 12.67% YoY in Aug 2026, up 4.08 points from 8.59% in Jul 2026.",
+              "This is the second consecutive sharp pickup: 4.6% in Jun 2026 → 8.6% in Jul 2026 → 12.7% in Aug 2026.",
+              "Even at this faster pace, the reading sits near the median of the 24-period range (3.5% to 17.6%)."
             ]
           }
         },
@@ -2229,9 +2194,9 @@
         {
           "id": "sibc-pl-vehicle-share",
           "layer": 1,
-          "title": "Vehicle loan share holds flat at 10.64% of personal loans",
-          "body": "Vehicle loans held a 10.64% share of personal loans in Aug 2026, unchanged from 10.64% in Jul 2026. Share was flat at 10.64% for a second straight period, staying inside the 10.4%–10.7% range seen across all 25 periods.",
-          "implication": "Vehicle loans are keeping pace with the broader personal loan book rather than outpacing it — the 10.64% share hasn't moved for two periods running and remains inside the same 10.4%–10.7% band this series has held for 25 periods.",
+          "title": "Vehicle loans hold steady at 10.6% of personal loan book",
+          "body": "Vehicle loans account for 10.64% of personal loans in Aug 2026, unchanged from 10.64% in Jul 2026. Share held flat at 10.64%, staying within the 10.5%–10.7% range seen across the 36-period series.",
+          "implication": "Vehicle loans have held an almost constant 10.5%–10.7% share for three years, including the last two periods flat at 10.64% — growth here is tracking the overall personal loan pool, not outpacing it.",
           "preferredMode": "share",
           "effect": {
             "highlight": [
@@ -2251,22 +2216,22 @@
             "facts": [
               "Current: 10.6%",
               "Prior period: 10.6%",
-              "Range: 10.4% – 10.9% over 25 periods",
+              "Range: 10.3% – 10.9% over 36 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_share)"
             ],
             "inferences": [
-              "Vehicle loan share was 10.64% in Aug 2026, identical to Jul 2026's 10.64% — a change of 0.00 points.",
-              "That reading sits inside the 10.4%–10.7% band this series has held to for 25 periods.",
-              "A flat share despite ongoing loan growth means the category is moving in step with the rest of the personal loan pool, not pulling ahead of it."
+              "Vehicle loans' share was unchanged at 10.64% in Aug 2026, the same as Jul 2026.",
+              "The share has moved only narrowly between 10.5% (p25) and 10.7% (p75) across 36 periods, and the current reading sits near that median band.",
+              "Vehicle loans are growing in line with the overall personal loan pool rather than gaining or losing ground within it."
             ]
           }
         },
         {
           "id": "sibc-pl-vehicle-yoy",
           "layer": 1,
-          "title": "Vehicle loans accelerate to 19.74% YoY — fastest in 17 periods",
-          "body": "Vehicle loans grew 19.74% YoY in Aug 2026, up from 18.78% in Jul 2026. Growth accelerated from 18.78% in Jul 2026 to 19.74% in Aug 2026, the highest reading in this 17-period window.",
-          "implication": "Vehicle loan growth is at its highest point in this 17-period series, extending a run that has risen every period since Jun 2026's 17.3%, with no sign yet of the acceleration topping out.",
+          "title": "Vehicle loan growth climbs to 19.7% — a fresh high",
+          "body": "Vehicle loans grew 19.74% YoY in Aug 2026, up from 18.78% in Jul 2026. Growth accelerated from 18.78% to 19.74%, a fresh high in this 24-period window, extending the climb from 17.34% in Jun 2026.",
+          "implication": "Vehicle loan growth has accelerated for three consecutive months, each one a new high for the series, up from single digits as recently as Aug 2025 (8.7%).",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -2286,13 +2251,13 @@
             "facts": [
               "Current: 19.7%",
               "Prior period: 18.8%",
-              "Range: 8.6% – 19.7% over 17 periods",
+              "Range: 7.3% – 19.7% over 24 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_yoy)"
             ],
             "inferences": [
-              "Vehicle loan growth rose to 19.74% YoY in Aug 2026 from 18.78% in Jul 2026.",
-              "That is the strongest reading across the 17-period series, above the prior range of 8.9% to 17.7%.",
-              "The rate has now risen for three straight periods — 17.3% in Jun 2026, 18.78% in Jul 2026, 19.74% in Aug 2026."
+              "Vehicle loan growth hit 19.74% YoY in Aug 2026, up 0.96 points from 18.78% in Jul 2026.",
+              "This is at or near the maximum across the 24-period series, whose range runs from 8.9% (p25) to 17.3% (p75).",
+              "The rate has now risen for three straight months — 17.34% (Jun) → 18.78% (Jul) → 19.74% (Aug)."
             ]
           }
         },
@@ -2368,7 +2333,43 @@
           }
         }
       ],
-      "gaps": [],
+      "gaps": [
+        {
+          "id": "sibc-pl-fd-advances-share",
+          "layer": 1,
+          "title": "FD-backed loans share jumps to 2.80%, a 36-period high",
+          "body": "Advances against Fixed Deposits rose to 2.80% of personal loans in Aug 2026. Share jumped from 2.25% in Jul 2026 to 2.80% in Aug 2026, a 0.55-point increase.",
+          "implication": "FD-backed lending's share just broke out of a three-year-long flat 2.2%-2.4% band in a single period — the largest one-period share move recorded for this segment, a reversal from the declining-share pattern noted last period.",
+          "preferredMode": "share",
+          "effect": {
+            "highlight": [
+              "Advances vs Fixed Deposits"
+            ],
+            "cut": {
+              "shape": "level",
+              "statement": "Statement 1",
+              "codes": [
+                "4.3"
+              ]
+            }
+          },
+          "claim_type": "data",
+          "representation": "llm",
+          "basis": {
+            "facts": [
+              "Current: 2.8%",
+              "Prior period: 2.2%",
+              "Range: 2.2% – 2.8% over 36 periods",
+              "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_share)"
+            ],
+            "inferences": [
+              "FD-backed advances' share of personal loans rose to 2.80% in Aug 2026 from 2.25% in Jul 2026.",
+              "That is well above this window's typical 2.3% level (p25=2.3%, p75=2.3%) that held for most of the 36-period series, and the highest reading in it.",
+              "The share move comes in the same period FD-backed loan growth also jumped to its highest reading in 24 periods."
+            ]
+          }
+        }
+      ],
       "opportunities": []
     },
     "prioritySector": {
@@ -2376,9 +2377,9 @@
         {
           "id": "sibc-psl-agri-yoy",
           "layer": 1,
-          "title": "PSL Agriculture growth holds at 19.4%, near series highs",
-          "body": "PSL Agriculture credit grew 19.44% year-on-year in Aug 2026, up slightly from 19.40% in Jul 2026. Growth ticked up 0.04 points, from 19.40% → 19.44%, holding above the 16.6% p75 mark of the 17-period series.",
-          "implication": "Agriculture growth is holding steady at an elevated level rather than extending further — the 0.04-point move is essentially flat after the plateau that followed the Jun 2026 peak of 19.9%.",
+          "title": "PSL Agriculture holds near peak at 19.44% YoY growth",
+          "body": "PSL Agriculture credit grew 19.44% year-on-year in Aug 2026, barely changed from 19.40% in Jul 2026. Growth moved just 0.04 points, from 19.40% → 19.44%, holding above 15.2%, the high end of its 24-period range.",
+          "implication": "This is a third straight period above 19%, but the 0.04-point move confirms Agriculture is holding at this elevated growth level rather than climbing further — the same plateau flagged last period, still unbroken.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -2398,22 +2399,22 @@
             "facts": [
               "Current: 19.4%",
               "Prior period: 19.4%",
-              "Range: 6.1% – 19.9% over 17 periods",
+              "Range: 6.1% – 19.9% over 24 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_yoy)"
             ],
             "inferences": [
-              "PSL Agriculture grew 19.44% year-on-year in Aug 2026, a 0.04-point increase from 19.40% in Jul 2026.",
-              "The reading sits above the series' upper-range marker of 16.6%, in the top quarter of the last 17 periods.",
-              "Growth has now held in a narrow 19.4%–19.9% band for three straight periods (Jun 2026: 19.9%, Jul 2026: 19.4%, Aug 2026: 19.4%)."
+              "PSL Agriculture grew 19.44% year-on-year in Aug 2026, up only 0.04 points from 19.40% in Jul 2026.",
+              "That keeps the reading above 15.2%, the high end of the 24-period range, matching the level it held in Jun 2026 (19.9%).",
+              "Growth has now sat at 19.9% → 19.4% → 19.4% across Jun, Jul and Aug 2026 without extending higher."
             ]
           }
         },
         {
           "id": "sibc-psl-education-yoy",
           "layer": 1,
-          "title": "PSL Education loans decelerate to 15.9%, near series median",
-          "body": "PSL Educational Loans grew 15.91% year-on-year in Aug 2026, down from 16.70% in Jul 2026. Growth decelerated by 0.80 points, from 16.7% → 15.9%, continuing to ease after the 5.58-point drop from 22.3% in Jun 2026.",
-          "implication": "Education lending's deceleration has extended for a second period, now 15.91% versus the 22%-plus levels held through Jun 2026 — growth continues easing rather than stabilizing after the initial break.",
+          "title": "PSL Education loans cool further to 15.91% YoY, down 0.80 points",
+          "body": "PSL Educational Loans grew 15.91% year-on-year in Aug 2026, down from 16.70% in Jul 2026. Growth decelerated another 0.80 points, from 16.70% → 15.91%, continuing the pullback from 22.3% in Jun 2026.",
+          "implication": "Education lending has now decelerated for two consecutive periods — 22.3% → 16.7% → 15.9% — confirming the plateau break flagged last period rather than a one-off dip.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -2433,22 +2434,22 @@
             "facts": [
               "Current: 15.9%",
               "Prior period: 16.7%",
-              "Range: 0.9% – 24.0% over 17 periods",
+              "Range: 0.9% – 24.0% over 24 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_yoy)"
             ],
             "inferences": [
-              "PSL Educational Loans grew 15.91% in Aug 2026, down 0.80 points from 16.70% in Jul 2026.",
-              "This is the second straight deceleration following the Jun 2026 break from a seven-period run above 22%, which fell to 16.70% in Jul 2026.",
-              "The current reading sits near the series median, versus an upper-range marker of 22.9%."
+              "PSL Educational Loans grew 15.91% year-on-year in Aug 2026, down 0.80 points from 16.70% in Jul 2026.",
+              "This is a second straight deceleration after growth broke its run above 22% in Jul 2026, down from 22.3% in Jun 2026.",
+              "At 15.91%, growth now sits near the middle of its 24-period range, well below the 22.5% high end it held for several months through Jun 2026."
             ]
           }
         },
         {
           "id": "sibc-psl-housing-yoy",
           "layer": 1,
-          "title": "PSL Housing growth slows further to 9.55% YoY",
-          "body": "PSL Housing credit grew 9.55% year-on-year in Aug 2026, down from 10.61% in Jul 2026. Growth decelerated by 1.06 points, from 10.6% → 9.5%, a third straight period of decline after the 10.66-point drop in Jul 2026 and the 17.71-point drop in Jun 2026.",
-          "implication": "Housing's slowdown has extended to a third consecutive period, falling from a near-40% reading in May 2026 (39.0%) to 9.55% now — the structural slowdown flagged last period is continuing rather than stabilizing.",
+          "title": "PSL Housing Growth Cools to 9.6% YoY, Slide Eases",
+          "body": "PSL Housing credit grew 9.55% year-on-year in Aug 2026. Growth slowed by 1.06 points, from 10.6% → 9.6%, a far smaller drop than the 10.7-point slide from 21.3% to 10.6% in Jul 2026 or the 17.7-point fall from 39.0% to 21.3% in Jun 2026.",
+          "implication": "The sharp back-to-back decelerations that pulled Housing down from near 40% growth appear to be flattening out — the Aug 2026 slip of 1.06 points is a fraction of the prior two drops, even though growth is still falling.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -2468,22 +2469,22 @@
             "facts": [
               "Current: 9.5%",
               "Prior period: 10.6%",
-              "Range: -1.6% – 39.9% over 17 periods",
+              "Range: -1.6% – 39.9% over 24 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_yoy)"
             ],
             "inferences": [
-              "PSL Housing grew 9.55% year-on-year in Aug 2026, down 1.06 points from 10.61% in Jul 2026.",
-              "This follows two consecutive double-digit decelerations: -10.66 points in Jul 2026 and -17.71 points in Jun 2026, when growth fell from 39.0% to 10.61%.",
-              "The reading now sits near the series median, far below the upper-range marker of 38.1% that defined the segment's prior high-growth phase."
+              "Housing credit grew 9.55% YoY in Aug 2026, down from 10.61% in Jul 2026 — a 1.06-point slowdown.",
+              "That is much smaller than the preceding drops: 10.7 points in Jul 2026 (21.3% → 10.6%) and 17.7 points in Jun 2026 (39.0% → 21.3%).",
+              "The current reading sits near the middle of the 24-period range (p25=0.7%, p75=35.8%), after spending most of this run near its top."
             ]
           }
         },
         {
           "id": "sibc-psl-medium-yoy",
           "layer": 1,
-          "title": "PSL Medium Enterprises hit new high, 31.0% YoY",
-          "body": "PSL Medium Enterprises credit grew 31.01% year-on-year in Aug 2026, the highest reading in the series. Growth accelerated by 1.81 points, from 29.2% → 31.0%, extending back-to-back series highs after Jul 2026's 29.20%.",
-          "implication": "Medium Enterprises are extending a structural breakout, posting a third consecutive series high (27.5% → 29.2% → 31.0%) and pulling further away from the 22.6% level that bounded growth earlier in the dataset.",
+          "title": "PSL Medium Enterprises Hit 31.0% YoY — Third Straight Record",
+          "body": "PSL Medium Enterprises credit grew 31.01% year-on-year in Aug 2026. Growth accelerated by 1.81 points, from 29.2% → 31.0%, extending the run from 27.5% in Jun 2026.",
+          "implication": "Medium Enterprises have now posted three straight series-high readings (27.5% → 29.2% → 31.0%), the fastest growth in this dataset, with each period adding further acceleration rather than leveling off.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -2503,22 +2504,22 @@
             "facts": [
               "Current: 31.0%",
               "Prior period: 29.2%",
-              "Range: 15.7% – 31.0% over 17 periods",
+              "Range: 14.2% – 31.0% over 24 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_yoy)"
             ],
             "inferences": [
-              "PSL Medium Enterprises grew 31.01% in Aug 2026, up 1.81 points from 29.20% in Jul 2026, a new series high.",
-              "This is the third straight period of acceleration — from 27.5% in Jun 2026, to 29.2% in Jul 2026, to 31.0% now — and the current value sits at or near the series maximum against an upper-range marker of 22.6%.",
-              "The segment has broken clear of the 17.2%–22.6% range it held through most of the series."
+              "Medium Enterprises credit grew 31.01% YoY in Aug 2026, up from 29.20% in Jul 2026 — a 1.81-point acceleration.",
+              "This is the third consecutive series high, following 27.5% in Jun 2026 and 29.2% in Jul 2026.",
+              "The reading is at or near the maximum of the 24-period range, well above the historical p75 of 21.9%."
             ]
           }
         },
         {
           "id": "sibc-psl-msme-fy-acceleration",
           "layer": 1,
-          "title": "PSL MSME growth steps up to 29.4% in FY26, up 15.9 points",
-          "body": "PSL Micro & Small enterprises credit grew 13.4% in the year ending Mar 2025 and 29.4% in the year ending Mar 2026. Full-year growth moved 13.4% → 29.4% between FY25 and FY26, a 15.9-point step-up.",
-          "implication": "MSME is the PSL segment with the sharpest full-year acceleration on record, with growth more than doubling between FY25 and FY26.",
+          "title": "PSL MSME credit up 15.9 points FY25 to FY26",
+          "body": "PSL MSME credit grew 13.4% in the year ending Mar 2025 and 29.4% in the year ending Mar 2026, a 15.9-point acceleration. Full-year growth stepped up from 13.4% to 29.4% between FY25 and FY26.",
+          "implication": "This 15.9-point step-up is unchanged since the last evaluation — FY26's 29.4% full-year rate more than doubled FY25's 13.4%, the largest full-year acceleration in this dataset.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -2540,22 +2541,22 @@
               "Prior period: 15.9pp",
               "FY YoY @ 2025-03-31: 13.4%",
               "FY YoY @ 2026-03-31: 29.4%",
-              "Range: 15.9pp – 15.9pp over 25 periods",
+              "Range: 15.9pp – 15.9pp over 36 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_fy_acceleration)"
             ],
             "inferences": [
-              "PSL MSME credit grew 13.4% in the year to Mar 2025 and 29.4% in the year to Mar 2026, a 15.9-point acceleration.",
-              "This is an annual figure, fixed at each March year-end, so it reflects a full-year step-up rather than a monthly move.",
-              "It is the largest full-year acceleration recorded for this segment in the dataset."
+              "PSL MSME credit grew 13.4% in FY25 and 29.4% in FY26.",
+              "The 15.9-point gap between the two years is this signal's acceleration value.",
+              "A full-year step-up of this size shows bank deployment to Micro & Small enterprises moved to a materially higher growth rate across the year, not within it."
             ]
           }
         },
         {
           "id": "sibc-psl-msme-yoy",
           "layer": 1,
-          "title": "PSL Micro & Small credit growth rises to 25.95%, up 1.89 points",
-          "body": "PSL Micro & Small enterprises credit grew 25.95% year-on-year in Aug 2026. Growth rose 1.89 points, from 24.06% → 25.95%, after holding near 24% for three periods (May–Jul 2026: 23.7%, 24.5%, 24.1%).",
-          "implication": "After three periods near 24%, MSME credit growth picked up again in Aug 2026, though it has not returned to the 29.4% peak set in Mar 2026.",
+          "title": "PSL Micro & Small credit growth up to 25.95% YoY",
+          "body": "PSL Micro & Small enterprises credit grew 25.95% year-on-year in Aug 2026. Growth rose 1.89 points, from 24.06% in Jul 2026 to 25.95% in Aug 2026.",
+          "implication": "Growth had held near 24% for three periods (May to Jul 2026) after easing from March's 29.4% peak; the 1.89-point rise to 25.95% in Aug 2026 breaks that plateau and pushes the reading back above the p75 mark of 25.6%, the upper end of this signal's 24-period range.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -2575,57 +2576,22 @@
             "facts": [
               "Current: 25.9%",
               "Prior period: 24.1%",
-              "Range: 12.1% – 29.4% over 17 periods",
+              "Range: 11.7% – 29.4% over 24 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_yoy)"
             ],
             "inferences": [
-              "PSL Micro & Small credit grew 25.95% YoY in Aug 2026, up from 24.06% in Jul 2026, a 1.89-point rise.",
-              "This breaks the run of three periods holding near 24% between May and Jul 2026.",
-              "At 25.95%, growth is still below the Mar 2026 peak of 29.4% in this series."
-            ]
-          }
-        },
-        {
-          "id": "sibc-psl-renewable-pos-streak",
-          "layer": 1,
-          "title": "Renewable Energy PSL growth streak hits 18 periods, a record",
-          "body": "PSL Renewable Energy has posted positive year-on-year growth for 18 consecutive periods through Aug 2026. The streak extended from 17 periods in Jul 2026 to 18 now, unbroken since the series began in Dec 2024.",
-          "implication": "Renewable Energy is the only PSL segment in this dataset that has not recorded a single negative YoY period across its 18-period history.",
-          "preferredMode": "yoy",
-          "effect": {
-            "highlight": [
-              "Renewable Energy"
-            ],
-            "cut": {
-              "shape": "level",
-              "statement": "Statement 1",
-              "codes": [
-                "vi"
-              ]
-            }
-          },
-          "claim_type": "data",
-          "representation": "llm",
-          "basis": {
-            "facts": [
-              "Current: 18 periods",
-              "Prior period: 17 periods",
-              "Range: 1 periods – 18 periods over 17 periods",
-              "Source: web/public/data/rbi_sibc_consolidated.csv (csv_yoy_streak)"
-            ],
-            "inferences": [
-              "PSL Renewable Energy has grown YoY for 18 consecutive periods as of Aug 2026, up from 17 in Jul 2026.",
-              "This is the longest streak in this dataset, with no negative reading since the series started in Dec 2024.",
-              "The segment has sustained positive growth in every period tracked, even as the pace of that growth has swung widely."
+              "PSL Micro & Small enterprises YoY growth rose to 25.95% in Aug 2026, up from 24.06% the prior period.",
+              "At 25.95%, the reading sits above this series' p75 mark of 25.6%, the upper end of its range across 24 periods.",
+              "The move follows a run between May 2026 (23.7%) and Jul 2026 (24.1%) where growth had eased from the Mar 2026 peak of 29.4%."
             ]
           }
         },
         {
           "id": "sibc-psl-renewable-yoy",
           "layer": 1,
-          "title": "PSL Renewable Energy growth cools to 25.96%, down 5.74 points",
-          "body": "PSL Renewable Energy credit grew 25.96% year-on-year in Aug 2026. Growth eased 5.74 points, from 31.70% → 25.96%, ending the four-period run of acceleration that began at 15.6% in Apr 2026.",
-          "implication": "Renewable Energy's growth rate pulled back in Aug 2026 after four consecutive months of acceleration, landing near the bottom of its historical range even though the segment's YoY growth has stayed positive throughout this window.",
+          "title": "PSL Renewable Energy growth slows to 26% from 31.7%",
+          "body": "PSL Renewable Energy grew 25.96% year-on-year in Aug 2026, down from 31.70% in Jul 2026. Growth decelerated by 5.74 points, from 31.7% → 26.0%, after rising from 15.6% in Apr 2026 to 31.7% in Jul 2026.",
+          "implication": "The acceleration that lifted Renewable Energy from 15.6% in Apr 2026 to 31.7% in Jul 2026 has broken, and at 26.0% growth is back in the lower range of this 24-period series — close to the 15.6%-20.2% levels it ran at between Apr and Jun 2026.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -2645,22 +2611,22 @@
             "facts": [
               "Current: 26.0%",
               "Prior period: 31.7%",
-              "Range: 15.6% – 118.5% over 17 periods",
+              "Range: 15.6% – 281.3% over 24 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_yoy)"
             ],
             "inferences": [
-              "PSL Renewable Energy grew 25.96% YoY in Aug 2026, down from 31.70% in Jul 2026 — a 5.74-point drop.",
-              "This ends four straight periods of acceleration that had taken growth from 15.6% in Apr 2026 to 31.7% in Jul 2026.",
-              "At 25.96%, growth is only marginally above the floor of its 17-period range (26.0%) and well below the Mar 2025 peak of 78.3%."
+              "Renewable Energy YoY growth fell to 26.0% in Aug 2026 from 31.7% in Jul 2026, a drop of 5.74 points.",
+              "This breaks the run that had taken growth from 15.6% in Apr 2026 up to 31.7% in Jul 2026.",
+              "At 26.0%, growth is now in the lower range of this 24-period series, below the 33.5% level it has usually exceeded."
             ]
           }
         },
         {
           "id": "sibc-psl-social-infra-yoy",
           "layer": 1,
-          "title": "PSL Social Infrastructure growth rebounds to 41.49%, up 4.74 points",
-          "body": "PSL Social Infrastructure credit grew 41.49% year-on-year in Aug 2026. Growth rose 4.74 points, from 36.76% → 41.49%, after two straight periods of deceleration from the May 2026 peak of 70.7%.",
-          "implication": "Social Infrastructure's rebound to 41.49% shows the two-period slide from the May 2026 peak of 70.7% did not continue into Aug 2026, with growth settling well above the negative readings the segment posted in mid-2025.",
+          "title": "PSL Social Infrastructure rebounds to 41.5% YoY growth",
+          "body": "PSL Social Infrastructure grew 41.49% year-on-year in Aug 2026, up from 36.76% in Jul 2026. Growth turned back up by 4.74 points, from 36.8% → 41.5%, after two straight periods of slowing from the 70.7% peak in May 2026 (57.8% in Jun, 36.8% in Jul).",
+          "implication": "After slowing for two straight periods from the 70.7% peak in May 2026 down to 36.8% in Jul, Social Infrastructure growth has turned back up to 41.5% — back above the 40.3% mark and among the strongest readings in this 24-period series.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -2680,22 +2646,22 @@
             "facts": [
               "Current: 41.5%",
               "Prior period: 36.8%",
-              "Range: -26.8% – 70.7% over 17 periods",
+              "Range: -77.0% – 70.7% over 24 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_yoy)"
             ],
             "inferences": [
-              "PSL Social Infrastructure grew 41.49% YoY in Aug 2026, up from 36.76% in Jul 2026, a 4.74-point rise.",
-              "This breaks a two-period deceleration that had taken growth down from 70.7% in May 2026 to 36.8% in Jul 2026.",
-              "The series has swung from -26.8% in Jun 2025 to 70.7% in May 2026, underscoring how volatile this segment's readings are compared with the current 41.49%."
+              "Social Infrastructure growth rose to 41.5% in Aug 2026, up 4.74 points from 36.8% in Jul 2026.",
+              "This follows two consecutive periods of slowing from the 70.7% peak in May 2026, down to 57.8% in Jun and 36.8% in Jul.",
+              "At 41.5%, growth is back above the 40.3% level, placing it among the strongest readings in this 24-period series."
             ]
           }
         },
         {
           "id": "sibc-psl-weaker-sections-yoy",
           "layer": 1,
-          "title": "PSL Weaker Sections growth eases to 14.7%, still above p75",
-          "body": "PSL Weaker Sections (incl. PSLC SF/MF) grew 14.73% year-on-year, down from 15.18% in the prior period. Growth slipped 0.45 points, from 15.18% → 14.73%, the third straight easing from Jun 2026's 15.3%.",
-          "implication": "Weaker Sections growth has eased for three readings running, from 15.3% to 14.73%, but it is still just above the series' p75 mark of 14.6% — a gentle cooling rather than a trend break.",
+          "title": "PSL Weaker Sections growth cools to 14.7%, still above range",
+          "body": "PSL Weaker Sections (including PSLC SF/MF) grew 14.73% year-on-year in Aug 2026, down from 15.18% in Jul 2026. Growth eased 0.45 points, from 15.2% → 14.7%, the second straight monthly slip after peaking at 15.3% in Jun 2026 — but it still sits above the p75 level of 14.4%.",
+          "implication": "Weaker Sections growth has eased for two straight periods from the 15.3% high in Jun 2026 to 14.73% now, though it remains above the p75 threshold of 14.4% and well above the May 2026 trough of 9.1%.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -2715,13 +2681,13 @@
             "facts": [
               "Current: 14.7%",
               "Prior period: 15.2%",
-              "Range: 8.8% – 15.3% over 17 periods",
+              "Range: 8.8% – 17.2% over 24 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_yoy)"
             ],
             "inferences": [
-              "PSL Weaker Sections (incl. PSLC SF/MF) grew 14.73% YoY, down from 15.18% a period earlier and from 15.3% in Jun 2026.",
-              "Even after three straight periods of easing, 14.73% still sits above the p75 level of 14.6% across this 17-period window.",
-              "The reading remains far above May 2026's low of 9.1%, so the segment is cooling from a high base, not reversing."
+              "Weaker Sections (incl. PSLC SF/MF) grew 14.73% YoY in Aug 2026, down from 15.18% in Jul 2026 and 15.3% in Jun 2026.",
+              "At 14.7%, the reading still sits above the p75 level of 14.4% across 24 periods, keeping it in the upper range even after the slip.",
+              "This is the second consecutive monthly decline from the Jun 2026 high of 15.3%, pulling growth off its recent peak."
             ]
           }
         },
@@ -2729,8 +2695,8 @@
           "id": "sibc-psl-weaker-yoy",
           "layer": 1,
           "title": "PSL Weaker Sections YoY growth slips to 14.7% from 15.2%",
-          "body": "PSL Weaker Sections grew 14.73% year-on-year, against 15.18% in the prior period. Growth eased 0.45 points, from 15.18% → 14.73%, continuing a slide from Jun 2026's 15.3%.",
-          "implication": "Three straight periods of easing have brought Weaker Sections from 15.3% to 14.73%, yet it still clears the p75 threshold of 14.6% — a measured slowdown, not a reversal.",
+          "body": "PSL Weaker Sections grew 14.73% year-on-year in Aug 2026, down from 15.18% in Jul 2026. Growth fell 0.45 points, from 15.2% → 14.7%, the second straight period of cooling since the 15.3% reading in Jun 2026 — still above the p75 level of 14.4%.",
+          "implication": "Growth has slipped for two straight periods from 15.3% in Jun 2026 to 14.73% now, though it is still above the p75 of 14.4% and far above the May 2026 low of 9.1%.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -2750,13 +2716,13 @@
             "facts": [
               "Current: 14.7%",
               "Prior period: 15.2%",
-              "Range: 8.8% – 15.3% over 17 periods",
+              "Range: 8.8% – 17.2% over 24 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_yoy)"
             ],
             "inferences": [
-              "PSL Weaker Sections grew 14.73% YoY, down from 15.18% last period and 15.3% in Jun 2026.",
-              "Despite three consecutive declines, 14.73% is still above the p75 level of 14.6% over this 17-period window.",
-              "The level remains well clear of May 2026's trough of 9.1%, so growth is slowing, not breaking down."
+              "Weaker Sections YoY growth was 14.73% in Aug 2026, down from 15.18% in Jul 2026 and 15.3% in Jun 2026.",
+              "The 14.7% reading remains above the p75 level of 14.4% across 24 periods, keeping it in the upper range of this dataset.",
+              "Two consecutive monthly declines from the Jun 2026 peak of 15.3% mark a pullback from this series' recent high."
             ]
           }
         },
@@ -2830,9 +2796,9 @@
         {
           "id": "sibc-psl-export-yoy",
           "layer": 1,
-          "title": "PSL Export Credit contraction deepens to -9.73% YoY",
-          "body": "PSL Export Credit contracted 9.73% year-on-year in Aug 2026, deeper than the 8.84% contraction in Jul 2026. The contraction worsened by 0.90 points, from -8.8% → -9.7%, reversing the improvement seen in Jul 2026 from -10.74% in Jun 2026.",
-          "implication": "Export Credit's two-period improvement has reversed — after easing from -10.74% in Jun 2026 to -8.84% in Jul 2026, the contraction deepened again to -9.73% in Aug 2026.",
+          "title": "PSL Export Credit Falls to -9.7% YoY, Recovery Stalls",
+          "body": "PSL Export Credit contracted 9.73% year-on-year in Aug 2026. The contraction deepened by 0.90 points, from -8.8% → -9.7%, reversing the two-period improvement that had brought it in from -13.7% in Dec 2025 to -8.8% in Jul 2026.",
+          "implication": "Last period's moderation in Export Credit has not held — the contraction widened again instead of continuing to narrow, putting the segment back in a declining state after one period of relief.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -2852,22 +2818,22 @@
             "facts": [
               "Current: -9.7%",
               "Prior period: -8.8%",
-              "Range: -17.2% – 12.6% over 17 periods",
+              "Range: -17.2% – 63.9% over 24 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_yoy)"
             ],
             "inferences": [
-              "PSL Export Credit fell 9.73% year-on-year in Aug 2026, a 0.90-point deeper contraction than Jul 2026's -8.84%.",
-              "This breaks the two-period improving streak that had eased the contraction from -10.74% in Jun 2026 to -8.84% in Jul 2026.",
-              "The reading sits near the series median, between the lower-range marker of -11.4% and upper-range marker of 7.1%."
+              "Export credit fell 9.73% YoY in Aug 2026, worsening from -8.84% in Jul 2026 — a 0.90-point deepening.",
+              "This breaks the easing trend seen since Dec 2025 (-13.7%), when the contraction had been narrowing period over period toward -8.8% in Jul 2026.",
+              "The reading sits near the middle of the 24-period range (p25=-10.5%, p75=7.1%), so the segment remains in the weaker half of its history rather than at an extreme."
             ]
           }
         },
         {
           "id": "sibc-psl-others-yoy",
           "layer": 1,
-          "title": "PSL Others falls back to -3.35% YoY, snapping improvement run",
-          "body": "PSL Others contracted 3.35% year-on-year in Aug 2026. The contraction widened by 2.23 points, from -1.12% → -3.35%, after easing for four straight periods between Apr and Jul 2026.",
-          "implication": "After four straight periods of narrowing, PSL Others' contraction widened again in Aug 2026, though it remains well short of the deep contraction seen through 2025.",
+          "title": "PSL Others contraction widens again to -3.35% YoY",
+          "body": "PSL Others credit contracted 3.35% year-on-year in Aug 2026. The contraction widened by 2.23 points, from -1.12% in Jul 2026 to -3.35% in Aug 2026.",
+          "implication": "The four-period run of easing contraction, from -12.5% in Apr 2026 to -1.12% in Jul 2026, has broken: the gap widened back to -3.35% in Aug 2026, interrupting what had looked like a steady path out of contraction.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -2887,13 +2853,48 @@
             "facts": [
               "Current: -3.3%",
               "Prior period: -1.1%",
-              "Range: -35.2% – 3.5% over 17 periods",
+              "Range: -35.2% – 14.7% over 24 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_yoy)"
             ],
             "inferences": [
-              "PSL Others fell 3.35% YoY in Aug 2026, worse than the -1.12% recorded in Jul 2026 — a 2.23-point widening.",
-              "This breaks the improving run that had taken the contraction from -12.5% in Apr 2026 to -1.1% in Jul 2026.",
-              "Even so, -3.35% is far milder than the -17% to -35% readings that dominated the series through most of 2025, including -35.2% in Apr 2025."
+              "PSL Others YoY growth fell to -3.35% in Aug 2026 from -1.12% in Jul 2026, a 2.23-point widening of the contraction.",
+              "Jul 2026's -1.12% had been the mildest reading in this 24-period series; Aug 2026's -3.35% reverses the four-period improvement that ran from -12.5% in Apr 2026.",
+              "Even after widening, -3.35% stays above this series' p75 of -4.9%, so it remains in the milder half of the historical range despite the month-on-month move."
+            ]
+          }
+        },
+        {
+          "id": "sibc-psl-renewable-pos-streak",
+          "layer": 1,
+          "title": "PSL Renewable Energy streak extends to 24 periods",
+          "body": "PSL Renewable Energy credit has posted positive YoY growth for 24 consecutive periods as of Aug 2026. The streak extended from 23 periods in Jul 2026 to 24 in Aug 2026 — positive every period since the series began.",
+          "implication": "At 24 consecutive periods — the full length of the series — Renewable Energy is the only PSL segment evaluated here with no recorded month of YoY contraction.",
+          "preferredMode": "yoy",
+          "effect": {
+            "highlight": [
+              "Renewable Energy"
+            ],
+            "cut": {
+              "shape": "level",
+              "statement": "Statement 1",
+              "codes": [
+                "vi"
+              ]
+            }
+          },
+          "claim_type": "data",
+          "representation": "llm",
+          "basis": {
+            "facts": [
+              "Current: 24 periods",
+              "Prior period: 23 periods",
+              "Range: 1 periods – 24 periods over 24 periods",
+              "Source: web/public/data/rbi_sibc_consolidated.csv (csv_yoy_streak)"
+            ],
+            "inferences": [
+              "PSL Renewable Energy's positive YoY streak reached 24 periods in Aug 2026, up from 23 the prior period.",
+              "24 periods is the maximum value recorded in this series, meaning the streak has held without interruption since it started.",
+              "An unbroken run across the full 24-period series means no month in this dataset has recorded negative YoY growth for this segment."
             ]
           }
         }
@@ -3462,9 +3463,9 @@
         {
           "id": "sibc-infra-yoy",
           "layer": 1,
-          "title": "Infrastructure credit YoY holds near 10.18%, still elevated",
-          "body": "Infrastructure credit grew 10.18% YoY in Aug 2026. Growth was nearly flat, down 0.04pp from 10.23%, holding above the 75th percentile of 10.1% in this 17-period window.",
-          "implication": "Infrastructure credit growth has held in a tight band around 10% for four straight readings (10.1%, 11.6%, 10.9%, 10.2%, now 10.18%) after swinging up from a -1.3% contraction in May 2025.",
+          "title": "Infrastructure credit growth steady at 10.18% YoY, near its high",
+          "body": "Infrastructure credit grew 10.18% year-on-year in Aug 2026, almost unchanged from 10.23% the previous period. Growth was flat, down just 0.04 points from 10.23% to 10.18%, holding above the high end of this window's typical range, which topped out at 8.9%.",
+          "implication": "Infrastructure credit growth has held steady just above 10% for three straight periods after climbing out of a -1.3% contraction in May 2025 — the pace has leveled off rather than kept climbing, but stays well inside the high end of this window.",
           "preferredMode": "yoy",
           "effect": {
             "highlight": [
@@ -3484,14 +3485,13 @@
             "facts": [
               "Current: 10.2%",
               "Prior period: 10.2%",
-              "Range: -1.3% – 11.6% over 17 periods",
+              "Range: -1.3% – 11.6% over 24 periods",
               "Source: web/public/data/rbi_sibc_consolidated.csv (csv_sector_yoy)"
             ],
             "inferences": [
-              "Infrastructure credit grew 10.18% YoY in Aug 2026, almost unchanged from 10.23% the prior period.",
-              "The reading stays above the 75th percentile of 10.1%, in the upper part of its 17-period range.",
-              "Growth swung from -1.3% in May 2025 to double digits by Apr 2026 (10.1%), then 11.6% in May, 10.9% in Jun and 10.2% in Jul, before this reading.",
-              "The sharp recovery from contraction has settled into a narrow band near 10% for four straight periods."
+              "Infrastructure credit YoY growth was 10.18% in Aug 2026, barely changed from 10.23% in Jul 2026.",
+              "That keeps it above the high end of this 24-period window's typical range, which topped out at 8.9%.",
+              "The rate has held at or above 10% for three straight periods now (10.9% in Jun 2026, 10.2% in Jul 2026, 10.18% in Aug 2026), after climbing from -1.3% in May 2025."
             ]
           }
         }
