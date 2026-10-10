@@ -77,12 +77,17 @@ def test_a_reindented_row_stops_the_ingest(tmp_path):
 
 # ── the consolidated store ────────────────────────────────────────────────────
 
-def test_three_releases_become_eleven_dates():
+def test_the_releases_become_exactly_their_dates_with_every_sector_on_each():
+    """Was pinned to 3 releases / 11 dates, and failed the day a 4th release arrived (2026-10-10)
+    with nothing broken. The contract is the population, derived from the releases themselves:
+    the consolidated dates are exactly the union of the dates the releases name, and every one
+    carries all fifteen sectors."""
     docs = consolidate_nbfc.load_releases()
     rows, _ = consolidate_nbfc.consolidate(docs)
     dates = {r["date"] for r in rows}
-    assert len(docs) == 3 and len(dates) == 11
-    assert len(rows) == 15 * 11, "fifteen sectors on every date, or a sector went missing"
+    assert len(docs) >= 3
+    assert dates == set().union(*(d["dates"] for d in docs))
+    assert len(rows) == 15 * len(dates), "fifteen sectors on every date, or a sector went missing"
 
 
 def test_a_later_release_wins_and_the_disagreement_is_reported():
@@ -108,7 +113,7 @@ def test_the_csv_honours_the_shared_column_contract():
     df = csv_sector._load_df("nbfc")
     for col in csv_sector.REQUIRED_COLUMNS:
         assert col in df.columns, f"{col} missing — csv_sector would refuse to load this"
-    assert len(df) == 165
+    assert len(df) == 15 * df["date"].nunique(), "fifteen sectors on every date in the shipped CSV"
 
 
 def test_nbfc_declares_the_shared_compute_shape_and_no_optional_columns():
