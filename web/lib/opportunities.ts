@@ -20,7 +20,7 @@ import feed from "../public/data/opportunities_feed.json";
  *  — the web half of the same defect the manifest closed on the Python side. One name now,
  *  imported rather than retyped. */
 export type Pipeline = "sibc" | "atm_pos" | "nbfc";
-export type OppStatus = "active" | "watch" | "closed" | "retired";
+export type OppStatus = "active" | "watch" | "closed" | "retired" | "unassessable";
 
 /** The deterministic replay of a meta-model computation: member signals → directions → state.
  *  Never LLM-touched (COMPOSITION_SPEC §23.2), which is why it can be shown as "How we know". */
@@ -53,7 +53,8 @@ const PIPELINES = FEED.pipelines ?? {};
 const CROSS = FEED.cross_system ?? [];
 
 /** Retired is a lifecycle decision; closed means the driver stopped firing. Neither is a read. */
-const isLive = (o: OppFeedItem) => o.status !== "retired" && o.status !== "closed";
+// "unassessable" (a driver line with no group to compare with) is not live: we cannot tell.
+const isLive = (o: OppFeedItem) => o.status !== "retired" && o.status !== "closed" && o.status !== "unassessable";
 
 /** The pipeline's own findings for one dashboard dimension. */
 export function opportunitiesFor(pipeline: string, sectionId: string): OppFeedItem[] {

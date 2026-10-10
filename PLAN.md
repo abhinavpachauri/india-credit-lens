@@ -10,14 +10,16 @@ S4 was asked to explain growth, not change, and could only accept government ins
 the layers under it were thin. Order agreed: fix the force check → count what the model explains
 → relationships inside a pipeline → links between pipelines → master model → S4 redesign.
 Built 2026-10-08 (SYSTEM_MODEL_SPEC v3.1 §16):
-- **Force check** (Step 3, `core/force_check.py`): judged against the line's group, with timing;
-  live for SIBC (13 → 7 active; KCC in doubt) and payments (2026-10-10, after 8 group-total YoY signals; 7 → 1 active).
+- **Force check** (Step 3, `core/force_check.py`): against the line's group, with timing; live for
+  SIBC and payments (8 group-total YoY signals). Active: SIBC 8, payments 2; KCC in doubt.
 - **Coverage count** (Step 6a, `core/coverage.py`): moves vs explained, every state file; S4 reads
   its list from it. SIBC Aug 2026: 6 moves, 2 structural, 4 unexplained (food credit, loans
   against FDs, other industries, fertiliser). History: 102 unexplained → 86 after structural.
 - **Relationship test** (Step 6b, `core/relationship_test.py`): HFC vs housing and the four
   construction links all `not_supported` (`analysis/rbi_sibc/relationship_tests.json`).
   **History is the binding constraint:** 15 monthly changes see only |r| ≥ 0.51.
+- **12 model arrows tested** (10-10): none supported; states, loops, coverage, line-driven opportunities
+  follow tests. **Card spend → card outstanding (1-month lead) supported** (r=+0.54, borderline).
 
 Agentic layer: phases 0–4 as before (`dashboard-change`, `onboard-source` ✅); `add-signal-family`,
 `measure-gate` ⬜, each written while doing its real task.
@@ -74,8 +76,6 @@ Agentic layer: phases 0–4 as before (`dashboard-change`, `onboard-source` ✅)
   Engineering, Food Processing, NBFCs, Textiles, Trade) draw "—" for the total's growth while the
   band quotes it from the parent table's ROW. `table_rows` reads a parent rate only as a whole-cut
   aggregate; teach it a (signal, entity) parent, then delete `KNOWN_TOTAL_GAPS` in test_cut_table.
-- **"lowest in N periods"** card titles count readings, not months: SIBC history has gaps
-  (Aug–Nov 2024 and 2025), so "25 periods" reads as two years when it means "since Dec 2023".
 - **"Hover a — for why it is empty"** is written by `core/real_cells.footnote()`; now folded under
   "Notes on this table", it is redundant. Remove at source with the next table rebuild.
 - **Heading hints don't work on touch** (hover/keyboard focus only); tapping a heading sorts.

@@ -705,6 +705,36 @@ the longer history: 176 moves, 34 structural, 12 working causes, 2 prices/activi
 relationships, 128 unexplained. The 3× move threshold still flags 10% of readings (2× 20%,
 1× 49%), so it stands.
 
+*The model's own arrows, tested 2026-10-10* (user-approved A–D). The 12 entity→entity arrows
+already in the models (SIBC 3, payments 9; authored, never tested) were run as one family of 12
+(bar p < 0.0042), sign from the arrow type (leads / amplifies +; substitutes / reroutes_to /
+suppresses −), lag 1 month for `leads`, else 0: **all `not_supported`**. Closest: DC ATM
+withdrawals → DC e-commerce (predicted −) r = −0.51, p = 0.024, promising but short of the bar.
+Consequences, all under force_check v3.1:
+- **S3 edge states** for an arrow between two lines follow its latest test (supported → active,
+  opposite → reversed, else dormant, marked `untested` when never tested), never the source's sign
+  against zero (`relationship_test.latest_verdicts`, the one reader). Loops follow: payments
+  `cc_penetration_R` active → dormant, `upi_network_effect_R` and SIBC `unsecured_rerouting_B`
+  partial → dormant.
+- **Coverage** credits a relationship only when its test is `supported`, with the test's sign;
+  a delayed one reads its source's move `lag` months earlier.
+- **A line driving an opportunity or risk** fires only when it beats its group in the arrow's
+  direction (`force_check.line_verdict`, the Step 3 test applied to a line). A driver with no
+  group reading makes the item `unassessable`, never `closed`. Payments: Micro-ATM rural cash
+  → unassessable; card-concentration risk → closed. *Known ambiguity:* every risk arrow carries
+  − and every opportunity arrow + (the type's default, not a stated direction); read as
+  direction it fits most risks but not card concentration. Decide per arrow in the next pass.
+- **Cross-pipeline links (Layer 2b)** are tested the same way, paired by data month with each
+  side's own tide removed (`relationship_test.run_cross`, `analysis/cross_source/relationship_tests.json`).
+  **Credit-card spend (payments) leads credit-card outstanding (SIBC) by one month: `supported`**
+  (r = +0.54, p = 0.020 vs a family-of-2 bar of 0.025, n = 18; lag 0 r = −0.13, lag 2 −0.19),
+  the first relationship any test has admitted; borderline, re-test as history grows. Its state
+  is now `aligned` because of the test, not because both lines rose, and the cross-source
+  opportunity it powers fires only while it is supported. The count ↔ outstanding link is
+  definitional (`linked`); its co-movement test (not supported, r = +0.20) is information only.
+- *Not yet:* the ecosystem constructs, eco-edges and eco-loop (Layer 3) still read direction
+  only ("5/5 measurements observed"); out of this pass's scope.
+
 **Output:** structured JSON with `entity_states` (incl. propagated aggregates), `force_states`, `edge_states`, `loop_states`, `system_observations`, and a `narrative: null` slot the LLM fills at Stage 5.X.
 
 ---

@@ -305,6 +305,20 @@ def check(pipeline: str, model: dict, period: str, series: dict[str, dict[str, f
     return result
 
 
+def line_verdict(node_id: str, expected: int, model: dict, series: dict[str, dict[str, float]],
+                 periods: list[str], period: str, data_month=lambda p: p) -> dict:
+    """Is this LINE beating its group the way an arrow out of it assumes? Step 3's test, applied
+    to a line instead of a force: same baseline rule (as for a standing force: parent, else the
+    root of its tree), same wobble, same verdicts. Used for an opportunity or risk whose driver
+    is a line, which v3.0 fired whenever any of the line's signals moved."""
+    by_id = {n["id"]: n for n in model["nodes"] if n.get("tier") == "entity"}
+    parent_of = {e["from"]: e["to"] for e in model["edges"]
+                 if e["type"] == "composes_into" and e["from"] in by_id and e["to"] in by_id}
+    kind, base_id = baseline_of(by_id[node_id], {"standing": True}, parent_of, by_id)
+    gaps = edge_history(series.get(node_id, {}), series.get(base_id, {}), periods)
+    return {"baseline_kind": kind, **judge(gaps, period, expected, "in_window", data_month)}
+
+
 def periods_of(pipeline: str, con=None) -> list[str]:
     own = con is None
     con = con or sqlite3.connect(DB)

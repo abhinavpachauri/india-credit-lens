@@ -1,0 +1,388 @@
+{
+  "_meta": {
+    "spec_ref": "analysis/SYSTEM_MODEL_SPEC.md §16 Step 6b",
+    "description": "Every relationship tested, nulls included. Only `supported` may become an entity→entity edge, and only with the editor's yes."
+  },
+  "tests": [
+    {
+      "source": "e_infrastructure_upi_qr",
+      "source_label": "UPI QR codes",
+      "target": "e_infrastructure_pos_terminals",
+      "target_label": "POS terminals",
+      "predicted_sign": -1,
+      "reason": "[substitutes] UPI QR acceptance directly substitutes POS terminal need at merchant acceptance points — same merchant function, structurally different economics",
+      "tested": "2026-10-10",
+      "through_period": "2026-08-31",
+      "protocol": "SYSTEM_MODEL_SPEC §16 Step 6b",
+      "verdict": "not_supported",
+      "at_lag": 0,
+      "family": 12,
+      "alpha": 0.0042,
+      "lags": {
+        "0": {
+          "n": 19,
+          "r": -0.267,
+          "p": 0.213
+        },
+        "1": {
+          "n": 18,
+          "r": -0.252,
+          "p": 0.258
+        },
+        "2": {
+          "n": 17,
+          "r": 0.134,
+          "p": 0.538
+        },
+        "3": {
+          "n": 16,
+          "r": -0.289,
+          "p": 0.251
+        }
+      },
+      "note": "Existing authored edge, first tested 2026-10-10 (family of 12 declared together: 3 SIBC + 9 payments; sign from edge type — leads/amplifies +, substitutes/reroutes_to/suppresses −; lag: leads 1 month, others 0)."
+    },
+    {
+      "source": "e_spend_value_cc_other_txn_val",
+      "source_label": "CC other value",
+      "target": "e_spend_value_cc_pos_txn_val",
+      "target_label": "CC POS value",
+      "predicted_sign": -1,
+      "reason": "[substitutes] Tap-to-pay and transit flows in 'other' category are displacing traditional POS category classification as NFC tap replaces inserted/swiped card transactions at the same terminal",
+      "tested": "2026-10-10",
+      "through_period": "2026-08-31",
+      "protocol": "SYSTEM_MODEL_SPEC §16 Step 6b",
+      "verdict": "not_supported",
+      "at_lag": 0,
+      "family": 12,
+      "alpha": 0.0042,
+      "lags": {
+        "0": {
+          "n": 19,
+          "r": 0.159,
+          "p": 0.523
+        },
+        "1": {
+          "n": 18,
+          "r": 0.076,
+          "p": 0.771
+        },
+        "2": {
+          "n": 17,
+          "r": -0.169,
+          "p": 0.511
+        },
+        "3": {
+          "n": 16,
+          "r": 0.033,
+          "p": 0.905
+        }
+      },
+      "note": "Existing authored edge, first tested 2026-10-10 (family of 12 declared together: 3 SIBC + 9 payments; sign from edge type — leads/amplifies +, substitutes/reroutes_to/suppresses −; lag: leads 1 month, others 0)."
+    },
+    {
+      "source": "e_spend_value_dc_atm_withdrawal_val",
+      "source_label": "DC ATM withdrawal value",
+      "target": "e_spend_value_dc_ecom_txn_val",
+      "target_label": "DC e-commerce value",
+      "predicted_sign": -1,
+      "reason": "[reroutes_to] Cash demand formerly expressed through ATM withdrawals is rerouting to digital ecommerce purchases as consumers pay online directly",
+      "tested": "2026-10-10",
+      "through_period": "2026-08-31",
+      "protocol": "SYSTEM_MODEL_SPEC §16 Step 6b",
+      "verdict": "not_supported",
+      "at_lag": 0,
+      "family": 12,
+      "alpha": 0.0042,
+      "lags": {
+        "0": {
+          "n": 19,
+          "r": -0.508,
+          "p": 0.024
+        },
+        "1": {
+          "n": 18,
+          "r": 0.65,
+          "p": 0.003
+        },
+        "2": {
+          "n": 17,
+          "r": -0.288,
+          "p": 0.274
+        },
+        "3": {
+          "n": 16,
+          "r": -0.152,
+          "p": 0.574
+        }
+      },
+      "note": "Existing authored edge, first tested 2026-10-10 (family of 12 declared together: 3 SIBC + 9 payments; sign from edge type — leads/amplifies +, substitutes/reroutes_to/suppresses −; lag: leads 1 month, others 0)."
+    },
+    {
+      "source": "e_infrastructure_pos_terminals",
+      "source_label": "POS terminals",
+      "target": "e_spend_value_cc_pos_txn_val",
+      "target_label": "CC POS value",
+      "predicted_sign": 1,
+      "reason": "[leads] POS terminal network is the physical capacity constraint on credit card POS transactions — no terminal means no POS transaction at that merchant",
+      "tested": "2026-10-10",
+      "through_period": "2026-08-31",
+      "protocol": "SYSTEM_MODEL_SPEC §16 Step 6b",
+      "verdict": "not_supported",
+      "at_lag": 1,
+      "family": 12,
+      "alpha": 0.0042,
+      "lags": {
+        "0": {
+          "n": 19,
+          "r": 0.189,
+          "p": 0.432
+        },
+        "1": {
+          "n": 18,
+          "r": 0.221,
+          "p": 0.372
+        },
+        "2": {
+          "n": 17,
+          "r": -0.303,
+          "p": 0.234
+        },
+        "3": {
+          "n": 16,
+          "r": 0.242,
+          "p": 0.354
+        }
+      },
+      "note": "Existing authored edge, first tested 2026-10-10 (family of 12 declared together: 3 SIBC + 9 payments; sign from edge type — leads/amplifies +, substitutes/reroutes_to/suppresses −; lag: leads 1 month, others 0)."
+    },
+    {
+      "source": "e_infrastructure_pos_terminals",
+      "source_label": "POS terminals",
+      "target": "e_spend_value_dc_pos_txn_val",
+      "target_label": "DC POS value",
+      "predicted_sign": 1,
+      "reason": "[leads] POS terminal availability is the structural capacity constraint on debit card POS transaction opportunity",
+      "tested": "2026-10-10",
+      "through_period": "2026-08-31",
+      "protocol": "SYSTEM_MODEL_SPEC §16 Step 6b",
+      "verdict": "not_supported",
+      "at_lag": 1,
+      "family": 12,
+      "alpha": 0.0042,
+      "lags": {
+        "0": {
+          "n": 19,
+          "r": 0.252,
+          "p": 0.298
+        },
+        "1": {
+          "n": 18,
+          "r": -0.044,
+          "p": 0.866
+        },
+        "2": {
+          "n": 17,
+          "r": -0.382,
+          "p": 0.131
+        },
+        "3": {
+          "n": 16,
+          "r": 0.453,
+          "p": 0.085
+        }
+      },
+      "note": "Existing authored edge, first tested 2026-10-10 (family of 12 declared together: 3 SIBC + 9 payments; sign from edge type — leads/amplifies +, substitutes/reroutes_to/suppresses −; lag: leads 1 month, others 0)."
+    },
+    {
+      "source": "e_infrastructure_upi_qr",
+      "source_label": "UPI QR codes",
+      "target": "e_spend_value_dc_atm_withdrawal_val",
+      "target_label": "DC ATM withdrawal value",
+      "predicted_sign": -1,
+      "reason": "[suppresses] UPI QR acceptance availability reduces consumer need to pre-withdraw cash before purchases — QR merchant reach is correlated with ATM withdrawal decline",
+      "tested": "2026-10-10",
+      "through_period": "2026-08-31",
+      "protocol": "SYSTEM_MODEL_SPEC §16 Step 6b",
+      "verdict": "not_supported",
+      "at_lag": 0,
+      "family": 12,
+      "alpha": 0.0042,
+      "lags": {
+        "0": {
+          "n": 19,
+          "r": 0.17,
+          "p": 0.474
+        },
+        "1": {
+          "n": 18,
+          "r": -0.29,
+          "p": 0.228
+        },
+        "2": {
+          "n": 17,
+          "r": 0.198,
+          "p": 0.433
+        },
+        "3": {
+          "n": 16,
+          "r": -0.135,
+          "p": 0.622
+        }
+      },
+      "note": "Existing authored edge, first tested 2026-10-10 (family of 12 declared together: 3 SIBC + 9 payments; sign from edge type — leads/amplifies +, substitutes/reroutes_to/suppresses −; lag: leads 1 month, others 0)."
+    },
+    {
+      "source": "e_cards_credit_cards",
+      "source_label": "Credit cards outstanding",
+      "target": "e_spend_value_cc_pos_txn_val",
+      "target_label": "CC POS value",
+      "predicted_sign": 1,
+      "reason": "[leads] Credit card stock size determines the potential POS transaction base — more active cardholders create proportionally more POS transaction capacity",
+      "tested": "2026-10-10",
+      "through_period": "2026-08-31",
+      "protocol": "SYSTEM_MODEL_SPEC §16 Step 6b",
+      "verdict": "not_supported",
+      "at_lag": 1,
+      "family": 12,
+      "alpha": 0.0042,
+      "lags": {
+        "0": {
+          "n": 19,
+          "r": -0.014,
+          "p": 0.958
+        },
+        "1": {
+          "n": 18,
+          "r": 0.145,
+          "p": 0.57
+        },
+        "2": {
+          "n": 17,
+          "r": -0.056,
+          "p": 0.838
+        },
+        "3": {
+          "n": 16,
+          "r": 0.018,
+          "p": 0.945
+        }
+      },
+      "note": "Existing authored edge, first tested 2026-10-10 (family of 12 declared together: 3 SIBC + 9 payments; sign from edge type — leads/amplifies +, substitutes/reroutes_to/suppresses −; lag: leads 1 month, others 0)."
+    },
+    {
+      "source": "e_cards_credit_cards",
+      "source_label": "Credit cards outstanding",
+      "target": "e_spend_value_cc_ecom_txn_val",
+      "target_label": "CC e-commerce value",
+      "predicted_sign": 1,
+      "reason": "[leads] Credit card stock expansion drives ecommerce transaction capacity — more active cardholders transact more online",
+      "tested": "2026-10-10",
+      "through_period": "2026-08-31",
+      "protocol": "SYSTEM_MODEL_SPEC §16 Step 6b",
+      "verdict": "not_supported",
+      "at_lag": 1,
+      "family": 12,
+      "alpha": 0.0042,
+      "lags": {
+        "0": {
+          "n": 19,
+          "r": 0.048,
+          "p": 0.843
+        },
+        "1": {
+          "n": 18,
+          "r": -0.133,
+          "p": 0.603
+        },
+        "2": {
+          "n": 17,
+          "r": 0.05,
+          "p": 0.858
+        },
+        "3": {
+          "n": 16,
+          "r": 0.009,
+          "p": 0.971
+        }
+      },
+      "note": "Existing authored edge, first tested 2026-10-10 (family of 12 declared together: 3 SIBC + 9 payments; sign from edge type — leads/amplifies +, substitutes/reroutes_to/suppresses −; lag: leads 1 month, others 0)."
+    },
+    {
+      "source": "e_cards_debit_cards",
+      "source_label": "Debit cards outstanding",
+      "target": "e_spend_value_dc_atm_withdrawal_val",
+      "target_label": "DC ATM withdrawal value",
+      "predicted_sign": 1,
+      "reason": "[leads] Debit card stock contraction reduces the potential ATM cash-withdrawal base — fewer active debit cards means fewer ATM transactions",
+      "tested": "2026-10-10",
+      "through_period": "2026-08-31",
+      "protocol": "SYSTEM_MODEL_SPEC §16 Step 6b",
+      "verdict": "not_supported",
+      "at_lag": 1,
+      "family": 12,
+      "alpha": 0.0042,
+      "lags": {
+        "0": {
+          "n": 19,
+          "r": -0.274,
+          "p": 0.259
+        },
+        "1": {
+          "n": 18,
+          "r": 0.135,
+          "p": 0.598
+        },
+        "2": {
+          "n": 17,
+          "r": -0.056,
+          "p": 0.832
+        },
+        "3": {
+          "n": 16,
+          "r": -0.085,
+          "p": 0.758
+        }
+      },
+      "note": "Existing authored edge, first tested 2026-10-10 (family of 12 declared together: 3 SIBC + 9 payments; sign from edge type — leads/amplifies +, substitutes/reroutes_to/suppresses −; lag: leads 1 month, others 0)."
+    },
+    {
+      "source": "e_cards_debit_cards",
+      "source_label": "Debit cards outstanding",
+      "target": "e_spend_value_dc_ecom_txn_val",
+      "target_label": "DC e-commerce value",
+      "predicted_sign": 1,
+      "reason": "[leads] Debit card base contraction constrains potential ecommerce transaction capacity over time",
+      "tested": "2026-10-10",
+      "through_period": "2026-08-31",
+      "protocol": "SYSTEM_MODEL_SPEC §16 Step 6b",
+      "verdict": "not_supported",
+      "at_lag": 1,
+      "family": 12,
+      "alpha": 0.0042,
+      "lags": {
+        "0": {
+          "n": 19,
+          "r": 0.06,
+          "p": 0.806
+        },
+        "1": {
+          "n": 18,
+          "r": -0.041,
+          "p": 0.873
+        },
+        "2": {
+          "n": 17,
+          "r": 0.226,
+          "p": 0.381
+        },
+        "3": {
+          "n": 16,
+          "r": 0.165,
+          "p": 0.526
+        }
+      },
+      "note": "Existing authored edge, first tested 2026-10-10 (family of 12 declared together: 3 SIBC + 9 payments; sign from edge type — leads/amplifies +, substitutes/reroutes_to/suppresses −; lag: leads 1 month, others 0)."
+    }
+  ]
+}

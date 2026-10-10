@@ -339,70 +339,80 @@
       "to": "opp_transit_payment_products"
     },
     "e_infrastructure_upi_qr__substitutes__e_infrastructure_pos_terminals": {
-      "state": "active",
+      "state": "dormant",
+      "verdict": "not_supported",
       "type": "substitutes",
       "polarity": "~",
       "from": "e_infrastructure_upi_qr",
       "to": "e_infrastructure_pos_terminals"
     },
     "e_spend_value_cc_other_txn_val__substitutes__e_spend_value_cc_pos_txn_val": {
-      "state": "active",
+      "state": "dormant",
+      "verdict": "not_supported",
       "type": "substitutes",
       "polarity": "~",
       "from": "e_spend_value_cc_other_txn_val",
       "to": "e_spend_value_cc_pos_txn_val"
     },
     "e_spend_value_dc_atm_withdrawal_val__reroutes_to__e_spend_value_dc_ecom_txn_val": {
-      "state": "active",
+      "state": "dormant",
+      "verdict": "not_supported",
       "type": "reroutes_to",
       "polarity": "~",
       "from": "e_spend_value_dc_atm_withdrawal_val",
       "to": "e_spend_value_dc_ecom_txn_val"
     },
     "e_infrastructure_pos_terminals__leads__e_spend_value_cc_pos_txn_val": {
-      "state": "active",
+      "state": "dormant",
+      "verdict": "not_supported",
       "type": "leads",
       "polarity": "+",
       "from": "e_infrastructure_pos_terminals",
       "to": "e_spend_value_cc_pos_txn_val"
     },
     "e_infrastructure_pos_terminals__leads__e_spend_value_dc_pos_txn_val": {
-      "state": "active",
+      "state": "dormant",
+      "verdict": "not_supported",
       "type": "leads",
       "polarity": "+",
       "from": "e_infrastructure_pos_terminals",
       "to": "e_spend_value_dc_pos_txn_val"
     },
     "e_infrastructure_upi_qr__suppresses__e_spend_value_dc_atm_withdrawal_val": {
-      "state": "reversed",
+      "state": "dormant",
+      "verdict": "not_supported",
       "type": "suppresses",
       "polarity": "-",
       "from": "e_infrastructure_upi_qr",
       "to": "e_spend_value_dc_atm_withdrawal_val"
     },
     "e_cards_credit_cards__leads__e_spend_value_cc_pos_txn_val": {
-      "state": "active",
+      "state": "dormant",
+      "verdict": "not_supported",
       "type": "leads",
       "polarity": "+",
       "from": "e_cards_credit_cards",
       "to": "e_spend_value_cc_pos_txn_val"
     },
     "e_cards_credit_cards__leads__e_spend_value_cc_ecom_txn_val": {
-      "state": "active",
+      "state": "dormant",
+      "verdict": "not_supported",
       "type": "leads",
       "polarity": "+",
       "from": "e_cards_credit_cards",
       "to": "e_spend_value_cc_ecom_txn_val"
     },
     "e_cards_debit_cards__leads__e_spend_value_dc_atm_withdrawal_val": {
-      "state": "active",
+      "state": "dormant",
+      "verdict": "not_supported",
       "type": "leads",
       "polarity": "+",
       "from": "e_cards_debit_cards",
       "to": "e_spend_value_dc_atm_withdrawal_val"
     },
     "e_cards_debit_cards__leads__e_spend_value_dc_ecom_txn_val": {
-      "state": "active",
+      "state": "dormant",
+      "verdict": "not_supported",
       "type": "leads",
       "polarity": "+",
       "from": "e_cards_debit_cards",
@@ -470,27 +480,27 @@
   },
   "loop_states": {
     "upi_network_effect_R": {
-      "state": "partial",
+      "state": "dormant",
       "type": "reinforcing",
-      "live_edges": 1,
+      "live_edges": 0,
       "total_edges": 3
     },
     "cc_penetration_R": {
-      "state": "active_reinforcing",
+      "state": "dormant",
       "type": "reinforcing",
-      "live_edges": 2,
+      "live_edges": 0,
       "total_edges": 2
     },
     "acceptance_bifurcation_B": {
       "state": "partial",
       "type": "balancing",
-      "live_edges": 2,
+      "live_edges": 1,
       "total_edges": 3
     },
     "debit_base_erosion_B": {
       "state": "partial",
       "type": "balancing",
-      "live_edges": 2,
+      "live_edges": 1,
       "total_edges": 2
     }
   },
@@ -502,9 +512,7 @@
     "binding_constraints": [
       "force_upi_zero_mdr__suppresses__e_spend_value_dc_atm_withdrawal_val"
     ],
-    "active_reinforcing_loops": [
-      "cc_penetration_R"
-    ],
+    "active_reinforcing_loops": [],
     "active_balancing_loops": [],
     "authored_vs_observed_mismatches": []
   },

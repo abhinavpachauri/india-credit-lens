@@ -125,14 +125,32 @@ def test_artifact_is_filed_first_and_the_others_still_listed():
     assert m["filed_under"] == "artifact" and set(m["also_holds"]) == {"artifact", "cause"}
 
 
-def test_a_relationship_explains_when_its_source_moved_the_pushing_way():
-    rel = {"id": "rel", "type": "drives", "from": "B", "to": "A", "polarity": "+"}
+def test_a_relationship_explains_only_when_its_test_supports_it():
+    """An authored arrow is a hypothesis until the data admits it (Step 6b): untested or
+    unsupported, it explains nothing, however its source moved."""
+    rel = {"id": "rel", "type": "leads", "from": "B", "to": "A", "polarity": "+"}
     flat = {p: 10.0 for p in PERIODS}
     series = {"R": flat, "P": flat, "A": line(+3.0), "B": line(+3.0)}
-    r = cv.compute(model([rel]), PERIODS[-1], series, PERIODS, {})
-    assert move(r)["filed_under"] == "relationship"
-    series["B"] = line(-3.0)
+    ok = {("B", "A"): {"verdict": "supported", "sign": 1, "lag": 0}}
+    assert move(cv.compute(model([rel]), PERIODS[-1], series, PERIODS, {}, verdicts=ok))["filed_under"] == "relationship"
     assert move(cv.compute(model([rel]), PERIODS[-1], series, PERIODS, {}))["filed_under"] == "unexplained"
+    no = {("B", "A"): {"verdict": "not_supported", "sign": 1, "lag": 0}}
+    assert move(cv.compute(model([rel]), PERIODS[-1], series, PERIODS, {}, verdicts=no))["filed_under"] == "unexplained"
+    series["B"] = line(-3.0)                                # moved the wrong way
+    assert move(cv.compute(model([rel]), PERIODS[-1], series, PERIODS, {}, verdicts=ok))["filed_under"] == "unexplained"
+
+
+def test_a_delayed_relationship_reads_its_source_lag_months_earlier():
+    rel = {"id": "rel", "type": "leads", "from": "B", "to": "A", "polarity": "+"}
+    flat = {p: 10.0 for p in PERIODS}
+    b = {p: v for p, v in line(0.0).items()}
+    b[PERIODS[-2]] = b[PERIODS[-3]] + 3.0                  # B jumped the month before
+    b[PERIODS[-1]] = b[PERIODS[-2]]
+    series = {"R": flat, "P": flat, "A": line(+3.0), "B": b}
+    lag1 = {("B", "A"): {"verdict": "supported", "sign": 1, "lag": 1}}
+    lag0 = {("B", "A"): {"verdict": "supported", "sign": 1, "lag": 0}}
+    assert move(cv.compute(model([rel]), PERIODS[-1], series, PERIODS, {}, verdicts=lag1))["filed_under"] == "relationship"
+    assert move(cv.compute(model([rel]), PERIODS[-1], series, PERIODS, {}, verdicts=lag0))["filed_under"] == "unexplained"
 
 
 def test_a_group_is_counted_so_a_force_on_it_can_explain_its_move_against_its_parent():

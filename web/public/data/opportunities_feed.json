@@ -1616,7 +1616,7 @@
         "pipeline": "atm_pos",
         "scope": "pipeline",
         "tier": "opportunity",
-        "status": "active",
+        "status": "unassessable",
         "authored_status": "active",
         "section": {
           "id": "infra",
@@ -1624,28 +1624,12 @@
           "icon": "🏗️"
         },
         "title": "Rural cash distribution via Micro ATM / Business Correspondent networks",
-        "body": "India has 13.3 lakh micro ATMs, down -9.4% from last year. These are small cash-dispensing devices run by local agents in villages and small towns. Even as the overall ATM network shrinks, micro ATMs remain at over 13 lakh units because many rural areas still need cash but cannot support the cost of a full ATM or bank branch.",
-        "implication": "The 13.3 lakh micro ATM base, despite a -9.4% decline, shows that rural cash demand persists at a level where low-cost agent networks are more viable than building full infrastructure — notable for lenders who want rural reach without heavy branch investment.",
-        "chain": [
-          "Rural areas need cash access but full ATMs and branches cost too much to run there",
-          "Micro ATMs let local agents handle cash at much lower cost so over 13 lakh are still operating",
-          "Lenders can reach these customers by partnering with agent networks instead of building their own branches"
-        ],
+        "body": "Micro ATM growth counter-trending against overall ATM network contraction signals persistent rural and semi-urban cash demand at a scale below the economics of full ATM deployment. Banks and fintechs expanding Business Correspondent channels with micro ATM deployment can serve this demand at lower capex than branch or full ATM infrastructure.",
+        "implication": "",
+        "chain": [],
         "_driver": null,
         "_via": null,
-        "evidence": [
-          "micro-atm-yoy",
-          "micro-atms-abs",
-          "micro-atms-bank-scan",
-          "micro-atms-bank-share-scan",
-          "micro-atms-bank-yoy-scan",
-          "micro-atms-category-acceleration",
-          "micro-atms-category-allocation",
-          "micro-atms-category-momentum",
-          "micro-atms-category-share-scan",
-          "micro-atms-category-size-scan",
-          "micro-atms-category-yoy-scan"
-        ],
+        "evidence": [],
         "evidence_all": [
           "micro-atm-yoy",
           "micro-atms-abs",
@@ -1670,8 +1654,7 @@
               "Total"
             ]
           }
-        ],
-        "narrative": true
+        ]
       },
       {
         "id": "opp_transit_payment_products",
@@ -1717,7 +1700,7 @@
         "pipeline": "atm_pos",
         "scope": "pipeline",
         "tier": "risk",
-        "status": "active",
+        "status": "closed",
         "authored_status": "active",
         "section": {
           "id": "cc",
@@ -1730,24 +1713,7 @@
         "chain": [],
         "_driver": null,
         "_via": null,
-        "evidence": [
-          "cc-bank-divergence",
-          "cc-bank-scan",
-          "cc-bank-share-scan",
-          "cc-bank-yoy-scan",
-          "cc-category-acceleration",
-          "cc-category-allocation",
-          "cc-category-momentum",
-          "cc-category-rotation",
-          "cc-category-share-scan",
-          "cc-category-size-scan",
-          "cc-category-yoy-scan",
-          "cc-outstanding-abs",
-          "cc-outstanding-streak",
-          "cc-outstanding-yoy",
-          "cc-private-share",
-          "cc-psb-share"
-        ],
+        "evidence": [],
         "evidence_all": [
           "cc-bank-divergence",
           "cc-bank-scan",
@@ -1871,21 +1837,6 @@
         "_driver": "Zero MDR policy on UPI transactions (NPCI/GoI)",
         "_via": "Zero MDR → acceptance-infrastructure mix",
         "evidence": [
-          "pos-bank-divergence",
-          "pos-bank-scan",
-          "pos-bank-share-scan",
-          "pos-bank-yoy-scan",
-          "pos-category-acceleration",
-          "pos-category-allocation",
-          "pos-category-momentum",
-          "pos-category-rotation",
-          "pos-category-share-scan",
-          "pos-category-size-scan",
-          "pos-category-yoy-scan",
-          "pos-private-share",
-          "pos-psb-share",
-          "pos-terminals-abs",
-          "pos-terminals-pos-streak",
           "pos-terminals-yoy",
           "upi-qr-per-pos",
           "upi-qr-yoy"

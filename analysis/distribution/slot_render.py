@@ -186,12 +186,17 @@ def _numbers_block(claims):
 
 _NUM_TOKEN = re.compile(r"[₹]?-?\d[\d,]*\.?\d*\s?(?:%|pp|L Cr|Cr|lakh|crore|×)?")
 
+# A calendar date is presentation, not a figure. The ONE definition: validate_distribution reads
+# it from here. A day may lead ("15 Mar 2024") or follow ("March 15, 2024"); a quoted force label
+# carried "barred after 15 Mar 2024" and the 15 was read as a figure (2026-10-10).
+DATE = re.compile(r"\b(?:\d{1,2} )?(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*"
+                  r" (?:\d{1,2}, )?20\d\d\b")
+
 
 def _number_tokens(text):
     """Numeric tokens as the reader sees them — with unit attached, so the design
     session copies '₹2.95L Cr', never a bare 2.95 it might re-unit."""
-    text = re.sub(r"\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]* 20\d\d\b",
-                  " ", text)
+    text = DATE.sub(" ", text)
     out = []
     for m in _NUM_TOKEN.finditer(text):
         tok = m.group(0).strip()

@@ -189,3 +189,26 @@ def test_a_sum_signal_belongs_to_the_node_whose_leaves_it_adds(monkeypatch, tmp_
     reg = {"signals": {"grp-yoy": {"pipeline": "t", "compute": {"method": "csv_sum_yoy", "metrics": ["b", "a"]}}}}
     monkeypatch.setattr(fc.gs, "load_json", lambda p: reg)
     assert fc.growth_series("t", model, con) == {"G": {"2026-08-31": 4.2}}
+
+
+# ── a line as an opportunity driver (Step 6b-C, 2026-10-10) ──────────────────────────────
+
+def test_a_line_driver_fires_only_when_it_beats_its_group_the_arrows_way():
+    model = make_model(STANDING)
+    series = {"e_P": PARENT}
+    beating = {"2025-01": 11, "2025-02": 11.5, "2025-03": 11, "2025-04": 11.5, "2025-05": 15, "2025-06": 16}
+    series["e_A"] = beating
+    assert fc.line_verdict("e_A", 1, model, series, PERIODS, "2025-06")["verdict"] == "working"
+    assert fc.line_verdict("e_A", -1, model, series, PERIODS, "2025-06")["verdict"] == "contradicted"
+    series["e_A"] = {p: 10.0 + (0.3 if i % 2 else -0.3) for i, p in enumerate(PERIODS)}   # in step
+    assert fc.line_verdict("e_A", 1, model, series, PERIODS, "2025-06")["verdict"] == "unclear"
+
+
+def test_a_line_with_no_group_reading_is_unassessable_and_the_status_says_so():
+    from core.derive_opportunities import opportunity_status
+    model = make_model(STANDING)
+    series = {"e_M": {p: 12.0 for p in PERIODS}}             # lens member: its root has no reading
+    assert fc.line_verdict("e_M", 1, model, series, PERIODS, "2025-06")["verdict"] == "unassessable"
+    assert opportunity_status(False, False, unknown=True) == "unassessable"
+    assert opportunity_status(False, False) == "closed"
+    assert opportunity_status(True, False, unknown=True) == "watch"    # a firing driver still counts

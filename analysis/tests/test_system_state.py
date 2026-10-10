@@ -221,3 +221,19 @@ def test_the_force_rule_each_pipeline_declares():
     assert manifest.force_check("sibc") == "v3.1"
     assert manifest.force_check("atm_pos") == "v3.1"
     assert manifest.force_check("nbfc") == "v3.0"
+
+
+def test_v31_an_arrow_between_lines_follows_its_relationship_test():
+    """Step 6b: an authored arrow between two lines is judged by its test, never by the sign of
+    its source against zero. Untested reads dormant and says `untested`."""
+    model = make_model()
+    model["edges"].append({"id": "rel", "type": "leads", "from": "e_A1", "to": "e_B1", "polarity": "+"})
+    for verdict, state in (("supported", "active"), ("opposite", "reversed"),
+                           ("not_supported", "dormant")):
+        st = g3.compute(model, {"sig_A1": 1, "sig_B1": 1}, checked=_checked("working"),
+                        relationships={("e_A1", "e_B1"): {"verdict": verdict, "sign": 1, "lag": 1}})
+        assert st["edge_states"]["rel"]["state"] == state, verdict
+    st = g3.compute(model, {"sig_A1": 1, "sig_B1": 1}, checked=_checked("working"), relationships={})
+    assert st["edge_states"]["rel"] == {**st["edge_states"]["rel"], "state": "dormant", "verdict": "untested"}
+    st = g3.compute(model, {"sig_A1": 1, "sig_B1": 1})           # v3.0: the old sign rule stays
+    assert st["edge_states"]["rel"]["state"] == "active"

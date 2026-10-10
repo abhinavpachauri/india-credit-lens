@@ -611,7 +611,8 @@
       "to": "risk_unsecured_migration"
     },
     "e_S1_4_5__reroutes_to__e_S1_4_8": {
-      "state": "active",
+      "state": "dormant",
+      "verdict": "not_supported",
       "type": "reroutes_to",
       "polarity": "~",
       "from": "e_S1_4_5",
@@ -686,14 +687,16 @@
       "to": "opp_pli_supply_chain"
     },
     "e_S2_2_9__amplifies__e_S2_2_14": {
-      "state": "active",
+      "state": "dormant",
+      "verdict": "not_supported",
       "type": "amplifies",
       "polarity": "+",
       "from": "e_S2_2_9",
       "to": "e_S2_2_14"
     },
     "e_S2_2_13__amplifies__e_S2_2_14": {
-      "state": "active",
+      "state": "dormant",
+      "verdict": "not_supported",
       "type": "amplifies",
       "polarity": "+",
       "from": "e_S2_2_13",
@@ -854,7 +857,7 @@
     "pli_supply_chain_R": {
       "state": "partial",
       "type": "reinforcing",
-      "live_edges": 3,
+      "live_edges": 1,
       "total_edges": 4
     },
     "msme_formalisation_R": {
@@ -864,9 +867,9 @@
       "total_edges": 3
     },
     "unsecured_rerouting_B": {
-      "state": "partial",
+      "state": "dormant",
       "type": "balancing",
-      "live_edges": 1,
+      "live_edges": 0,
       "total_edges": 3
     },
     "infra_cycle_transition_B": {

@@ -8,7 +8,7 @@
 > Authored rationale (layer model, design principles, guard purposes) lives in the
 > hand-written `ARCHITECTURE.md`. This file is the structural, drift-guarded half.
 
-_Derived from 99 scripts._
+_Derived from 100 scripts._
 
 ## 1. Data-flow
 
@@ -76,6 +76,7 @@ Scripts each orchestrator launches as a subprocess, in execution order.
 | `analysis/cross_source/candidates.json` | derived | `cross/derive_cross_links` | `core/run_inference`, `guards/check_derived_fresh` |
 | `analysis/cross_source/composition.json` | external/authored | — | `core/run_inference`, `cross/compose_ecosystem`, `cross/validate_composition` |
 | `analysis/cross_source/ecosystem_model.json` | external/authored | — | `cross/compose_ecosystem`, `cross/generate_opportunities_feed`, `cross/validate_composition` |
+| `analysis/cross_source/relationship_tests.json` | derived | `core/relationship_test` | — |
 | `analysis/ontology/channels.json` | external/authored | — | `core/run_inference`, `core/validate_system_model`, `cross/derive_cross_links`, `cross/generate_opportunities_feed` |
 | `analysis/ontology/concepts.json` | external/authored | — | `core/validate_system_model`, `cross/validate_composition` |
 | `analysis/ontology/domains.json` | external/authored | — | `cross/validate_composition` |
@@ -116,7 +117,7 @@ orchestrated, not import-coupled).
 - `core/real_cells` → `core/absence`, `core/manifest`, `signals/compute/csv_sector`, `signals/compute/real_economy`
 - `core/relational_insights` → `core/manifest`, `core/residuals`
 - `core/relationship_test` → `core/coverage`, `core/force_check`, `core/generate_skeleton`
-- `core/run_inference` → `core/generate_skeleton`, `core/manifest`
+- `core/run_inference` → `core/generate_skeleton`, `core/keep_awake`, `core/manifest`
 - `core/validate_system_model` → `core/generate_skeleton`, `core/manifest`
 - `cross/compose_ecosystem` → `core/generate_skeleton`, `core/manifest`
 - `cross/derive_cross_links` → `core/generate_skeleton`, `core/manifest`
@@ -155,7 +156,7 @@ orchestrated, not import-coupled).
 - `signals/compute/csv_sector` → `core/manifest`
 - `signals/compute/engine` → `core/manifest`
 - `signals/compute/real_economy` → `core/absence`, `core/manifest`
-- `signals/evaluate` → `core/manifest`, `signals/db`, `signals/query`
+- `signals/evaluate` → `core/keep_awake`, `core/manifest`, `signals/db`, `signals/query`
 - `signals/is_news` → `core/manifest`, `signals/proximity`
 - `signals/planes` → `core/manifest`, `signals/is_news`, `signals/proximity`
 - `signals/proximity` → `core/manifest`
@@ -174,5 +175,6 @@ orchestrated, not import-coupled).
 - `web/public/data/opportunities_feed.json` ← `cross/generate_opportunities_feed`, `cross/generate_opportunity_narrative`
 
 ### Internal artifacts produced but never read (potential dead output)
+- `analysis/cross_source/relationship_tests.json` ← `core/relationship_test`
 - `analysis/rbi_sibc/date_remap.json` ← `pipelines/sibc/update_web_data`
 - `analysis/signals/narrative_cache.json` ← `cross/generate_opportunity_narrative`

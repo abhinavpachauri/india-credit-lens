@@ -7,6 +7,7 @@ latest system_state (S3) with the confirmed cross-edges (composition.json) and t
 authored meta-model (ecosystem_model.json), and projects:
 
   cross_edge_states           (v1.0 §7)   aligned | divergent | dormant | linked
+                                          (a 'leads' link: from its relationship test, v3.1)
   construct_states            (v1.1 §14)  sign-only direction + member basis
   eco_edge_states             (v1.1 §15)  active | reversed | dormant
   eco_loop_states             (v1.1 §16)  same firing rule as per-pipeline S3 loops
@@ -239,20 +240,27 @@ def main():
     sig_idx = entity_signal_index(models)
 
     # ── cross-edge states + cross-edge opportunities (v1.0, unchanged) ──────────
+    # A causal link's state follows its relationship test (SYSTEM_MODEL_SPEC §16 Step 6b,
+    # 2026-10-10), never "both ends point the same way": both credit-card lines rise every
+    # month, so that rule read "aligned" whatever the data said. Untested reads dormant.
+    from core.relationship_test import latest_cross_verdicts
+    xtests = latest_cross_verdicts()
     edge_states, premium = [], []
     for e in cross_edges:
         fd, td = urn_dir.get(e["from"], 0), urn_dir.get(e["to"], 0)
+        t = xtests.get(e["id"])
+        verdict = t["verdict"] if t else "untested"
         if e["type"] == "leads":
-            state = "dormant" if fd == 0 else ("aligned" if fd == td or td == 0 else "divergent")
-        else:  # corresponds_to / structural
+            state = {"supported": "aligned", "opposite": "divergent"}.get(verdict, "dormant")
+        else:  # corresponds_to / structural: a definition, so its test is information only
             state = "linked"
         item = {"id": e["id"], "type": e["type"], "from": e["from"], "to": e["to"],
-                "from_direction": fd, "to_direction": td, "state": state,
+                "from_direction": fd, "to_direction": td, "state": state, "verdict": verdict,
                 "shared": e.get("shared"), "derived_from": e.get("derived_from")}
         edge_states.append(item)
 
-        # premium cross_source opportunity: an active 'leads' cross-edge is an opening
-        if e["type"] == "leads" and fd != 0:
+        # premium cross_source opportunity: a SUPPORTED 'leads' cross-edge is an opening
+        if e["type"] == "leads" and state == "aligned":
             # Evidence = both endpoints' signals. The endpoints ARE the claim ("flow leads
             # stock"), so the full set is also the firing set — and it gives the narrative
             # step real numbers to reason over (Check 4f validates against evidence_all).

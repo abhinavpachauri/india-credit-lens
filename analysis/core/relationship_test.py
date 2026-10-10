@@ -84,17 +84,20 @@ def shuffle_p(x: list[float], y: list[float], seed: int = SEED) -> tuple[float, 
 
 
 def test(a: dict[int, float], b: dict[int, float], t: dict[int, float], sign: int, lag: int,
-         family: int = 1) -> dict:
-    """`a` pushes `b` with `sign` after `lag` months. Pure given its inputs."""
+         family: int = 1, t_b: dict[int, float] | None = None) -> dict:
+    """`a` pushes `b` with `sign` after `lag` months. Pure given its inputs. `t_b` is `b`'s own
+    tide when the two lines live in different pipelines (each side removes its own root's tide);
+    otherwise both share `t`."""
     alpha = ALPHA / family
+    t_b = t if t_b is None else t_b
     rows = {}
     for L in sorted({0, 1, 2, 3, lag}):
-        months = sorted(k for k in a if k + L in b and k + L in t and k in t)
+        months = sorted(k for k in a if k + L in b and k + L in t_b and k in t)
         if len(months) < MIN_PAIRS:
             rows[L] = {"n": len(months), "verdict": "too_few"}
             continue
         x = residual([a[k] for k in months], [t[k] for k in months])
-        y = residual([b[k + L] for k in months], [t[k + L] for k in months])
+        y = residual([b[k + L] for k in months], [t_b[k + L] for k in months])
         r, p = shuffle_p(x, y)
         rows[L] = {"n": len(months), "r": round(r, 3), "p": round(p, 3)}
     main = rows[lag]
@@ -124,8 +127,78 @@ def run(pipeline: str, source: str, target: str, sign: int, lag: int, reason: st
             "through_period": periods[-1], "protocol": "SYSTEM_MODEL_SPEC §16 Step 6b", **res}
 
 
+def _side(pipeline: str):
+    model = gs.load_json(gs.pipeline_cfg(pipeline)["model"])
+    series, periods = fc.growth_series(pipeline, model), fc.periods_of(pipeline)
+    dm = lambda p: fc.resolve_csv_date(pipeline, p)  # noqa: E731
+    return model, series, periods, dm
+
+
+def run_cross(source_pipeline: str, source: str, target_pipeline: str, target: str, sign: int,
+              lag: int, reason: str, family: int = 1) -> dict:
+    """A link BETWEEN pipelines (Layer 2b), the same protocol: each side's gap-to-group changes,
+    paired by data month (period keys differ: SIBC's run a month ahead of its data), each side's
+    own tide removed. The 2026-10-10 replacement for "aligned" = both lines rising."""
+    sm, ss, sp, sd = _side(source_pipeline)
+    tm, ts, tp, td = _side(target_pipeline)
+    res = test(gap_changes(source, sm, ss, sp, sd), gap_changes(target, tm, ts, tp, td),
+               tide(sm, ss, sd), sign, lag, family, t_b=tide(tm, ts, td))
+    lab = lambda m, i: next(n["label"] for n in m["nodes"] if n["id"] == i)  # noqa: E731
+    return {"source": f"{source_pipeline}:{source}", "source_label": lab(sm, source),
+            "target": f"{target_pipeline}:{target}", "target_label": lab(tm, target),
+            "predicted_sign": sign, "reason": reason, "tested": date.today().isoformat(),
+            "through_period": {source_pipeline: sp[-1], target_pipeline: tp[-1]},
+            "protocol": "SYSTEM_MODEL_SPEC §16 Step 6b (cross-pipeline)", **res}
+
+
+CROSS_TESTS = gs.ROOT / "analysis" / "cross_source" / "relationship_tests.json"
+
+
+def latest_cross_verdicts() -> dict[str, dict]:
+    """cross-edge id -> its latest test. Read by compose_ecosystem for cross-edge states."""
+    if not CROSS_TESTS.exists():
+        return {}
+    out = {}
+    for t in json.loads(CROSS_TESTS.read_text()).get("tests", []):
+        out[t["edge_id"]] = {"verdict": t["verdict"], "sign": t["predicted_sign"],
+                             "lag": t["at_lag"], "tested": t["tested"]}
+    return out
+
+
+def record_cross(edge_id: str, result: dict, note: str | None = None) -> Path:
+    doc = json.loads(CROSS_TESTS.read_text()) if CROSS_TESTS.exists() else {
+        "_meta": {"spec_ref": "analysis/SYSTEM_MODEL_SPEC.md §16 Step 6b",
+                  "description": "Tests of links between pipelines (composition.json cross_edges), "
+                                 "nulls included. A causal link's state follows its latest test."},
+        "tests": []}
+    doc["tests"].append({"edge_id": edge_id, **result, **({"note": note} if note else {})})
+    CROSS_TESTS.write_text(json.dumps(doc, indent=2, ensure_ascii=False))
+    return CROSS_TESTS
+
+
+def tests_path(pipeline: str) -> Path:
+    return gs.pipeline_cfg(pipeline)["model"].parent.parent / "relationship_tests.json"
+
+
+def latest_verdicts(pipeline: str) -> dict[tuple[str, str], dict]:
+    """(source, target) -> the most recent test of that relationship: its verdict, sign and lag.
+
+    The one place every consumer reads an arrow's standing from (S3 edge states, the coverage
+    count), so an arrow is never judged by two rules. A relationship never tested is absent,
+    and consumers say `untested`, not `not_supported`.
+    """
+    path = tests_path(pipeline)
+    if not path.exists():
+        return {}
+    out: dict[tuple[str, str], dict] = {}
+    for t in json.loads(path.read_text()).get("tests", []):   # appended in order: last wins
+        out[(t["source"], t["target"])] = {"verdict": t["verdict"], "sign": t["predicted_sign"],
+                                           "lag": t["at_lag"], "tested": t["tested"]}
+    return out
+
+
 def record(pipeline: str, result: dict, note: str | None = None) -> Path:
-    path = gs.pipeline_cfg(pipeline)["model"].parent.parent / "relationship_tests.json"
+    path = tests_path(pipeline)
     doc = json.loads(path.read_text()) if path.exists() else {
         "_meta": {"spec_ref": "analysis/SYSTEM_MODEL_SPEC.md §16 Step 6b",
                   "description": "Every relationship tested, nulls included. Only `supported` may "

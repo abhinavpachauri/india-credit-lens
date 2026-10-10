@@ -50,7 +50,7 @@ DB = ROOT / "analysis" / "signals" / "signals.db"
 
 
 # Presentation-only tokens that are not data claims.
-_DATE = re.compile(r"\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]* 20\d\d\b")
+_DATE = slot_render.DATE          # one definition of "a calendar date" (slot_render)
 _ISO = re.compile(r"\b20\d\d-\d\d-\d\d\b")
 # A financial-year / budget-year range ("2022-23", "FY22-24", "2022/23") reads as a date to a
 # person and as a stray "-23" to the extractor — the FY-range leak, seen before in Check 2g.

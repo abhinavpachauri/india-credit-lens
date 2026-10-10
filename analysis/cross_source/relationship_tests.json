@@ -1,0 +1,92 @@
+{
+  "_meta": {
+    "spec_ref": "analysis/SYSTEM_MODEL_SPEC.md §16 Step 6b",
+    "description": "Tests of links between pipelines (composition.json cross_edges), nulls included. A causal link's state follows its latest test."
+  },
+  "tests": [
+    {
+      "edge_id": "x_cc_spend_leads_cc_stock",
+      "source": "atm_pos:e_spend_value_cc_spend_value",
+      "source_label": "Credit card spend (value)",
+      "target": "sibc:e_S1_4_5",
+      "target_label": "Credit Card Outstanding",
+      "predicted_sign": 1,
+      "reason": "Credit-card spend flow leads credit-card outstanding stock: sustained spending growth precedes balance build-up.",
+      "tested": "2026-10-10",
+      "through_period": {
+        "atm_pos": "2026-08-31",
+        "sibc": "2026-09-30"
+      },
+      "protocol": "SYSTEM_MODEL_SPEC §16 Step 6b (cross-pipeline)",
+      "verdict": "supported",
+      "at_lag": 1,
+      "family": 2,
+      "alpha": 0.025,
+      "lags": {
+        "0": {
+          "n": 19,
+          "r": -0.126,
+          "p": 0.615
+        },
+        "1": {
+          "n": 18,
+          "r": 0.538,
+          "p": 0.02
+        },
+        "2": {
+          "n": 17,
+          "r": -0.188,
+          "p": 0.468
+        },
+        "3": {
+          "n": 16,
+          "r": -0.36,
+          "p": 0.175
+        }
+      },
+      "note": "Declared 2026-10-10 (user-approved D), family of 2: spend→stock leads (+, lag 1), count↔stock corresponds (+, lag 0). Replaces the 'aligned' = both rising state."
+    },
+    {
+      "edge_id": "x_cc_count_corresponds_cc_stock",
+      "source": "atm_pos:e_cards_credit_cards",
+      "source_label": "Credit cards outstanding",
+      "target": "sibc:e_S1_4_5",
+      "target_label": "Credit Card Outstanding",
+      "predicted_sign": 1,
+      "reason": "Card count and card outstanding are two measures of one product (definitional; the test is informational).",
+      "tested": "2026-10-10",
+      "through_period": {
+        "atm_pos": "2026-08-31",
+        "sibc": "2026-09-30"
+      },
+      "protocol": "SYSTEM_MODEL_SPEC §16 Step 6b (cross-pipeline)",
+      "verdict": "not_supported",
+      "at_lag": 0,
+      "family": 2,
+      "alpha": 0.025,
+      "lags": {
+        "0": {
+          "n": 19,
+          "r": 0.205,
+          "p": 0.4
+        },
+        "1": {
+          "n": 18,
+          "r": 0.39,
+          "p": 0.107
+        },
+        "2": {
+          "n": 17,
+          "r": 0.228,
+          "p": 0.379
+        },
+        "3": {
+          "n": 16,
+          "r": 0.313,
+          "p": 0.238
+        }
+      },
+      "note": "Declared 2026-10-10 (user-approved D), family of 2: spend→stock leads (+, lag 1), count↔stock corresponds (+, lag 0). Replaces the 'aligned' = both rising state."
+    }
+  ]
+}

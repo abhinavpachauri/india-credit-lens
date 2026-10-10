@@ -150,6 +150,14 @@
       },
       "writes": {}
     },
+    "core/keep_awake": {
+      "doc_claims": [],
+      "imports": [],
+      "invokes": [],
+      "path": "analysis/core/keep_awake.py",
+      "reads": {},
+      "writes": {}
+    },
     "core/llm_budget": {
       "doc_claims": [],
       "imports": [],
@@ -228,7 +236,7 @@
       "path": "analysis/core/relationship_test.py",
       "reads": {},
       "writes": {
-        "relationship_tests.json": "high"
+        "analysis/cross_source/relationship_tests.json": "high"
       }
     },
     "core/render": {
@@ -251,6 +259,7 @@
       "doc_claims": [],
       "imports": [
         "core/generate_skeleton",
+        "core/keep_awake",
         "core/manifest"
       ],
       "invokes": [],
@@ -1153,6 +1162,7 @@
     "signals/evaluate": {
       "doc_claims": [],
       "imports": [
+        "core/keep_awake",
         "core/manifest",
         "signals/db",
         "signals/query"

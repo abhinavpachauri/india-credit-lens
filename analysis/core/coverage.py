@@ -153,15 +153,22 @@ def causes(node_id: str, direction: int, checked: dict, model: dict) -> list[str
     return out
 
 
-def relationships(node_id: str, direction: int, moves: dict, model: dict) -> list[str]:
-    """Entity→entity driver edges into this line whose source moved the way that pushes it."""
+def relationships(node_id: str, direction: int, moves: dict, model: dict,
+                  verdicts: dict | None = None, lagged_move=None) -> list[str]:
+    """Entity→entity arrows into this line that explain its move: the arrow's relationship test
+    (Step 6b) is `supported`, and its source moved, `lag` months earlier, the way that pushes
+    this line in the direction it moved. An untested or unsupported arrow explains nothing:
+    an authored arrow is a hypothesis until the data admits it (all 12 tested 2026-10-10 were
+    not supported)."""
     out = []
     for e in model["edges"]:
-        if e["to"] != node_id or e["type"] not in fc.DRIVER_SIGN or e["from"] not in moves:
+        if e["to"] != node_id or e["from"] not in moves:
             continue
-        src = moves[e["from"]]
-        pol = POLARITY.get(e.get("polarity"), fc.DRIVER_SIGN[e["type"]])
-        if src.get("status") == "moved" and src["direction"] * pol == direction:
+        t = (verdicts or {}).get((e["from"], e["to"]))
+        if not t or t["verdict"] != "supported":
+            continue
+        src = moves[e["from"]] if not t["lag"] else (lagged_move(e["from"], t["lag"]) if lagged_move else {})
+        if src.get("status") == "moved" and src["direction"] * t["sign"] == direction:
             out.append(e["from"])
     return out
 
@@ -212,7 +219,8 @@ def structural(nid: str, m: dict, moves: dict, model: dict, by_id: dict, parent_
 
 def compute(model: dict, period: str, series: dict, periods: list[str], checked: dict,
             real: dict | None = None, output: dict | None = None, artifact=None,
-            data_month=lambda p: p, weights: dict | None = None) -> dict:
+            data_month=lambda p: p, weights: dict | None = None,
+            verdicts: dict | None = None) -> dict:
     """Pure given its inputs. `artifact(node) -> True | False | None` (None = not testable);
     `data_month(period)` is the month a period key's data describes (SIBC keys run a month ahead);
     `weights` is entity_id -> size (latest CSV value), for `carried`."""
@@ -235,6 +243,15 @@ def compute(model: dict, period: str, series: dict, periods: list[str], checked:
         if mv.get("previous") in base and period in base:
             mv["base_change"] = base[period] - base[mv["previous"]]
         moves[nid] = {**mv, "baseline_kind": kind, "baseline_of": of}
+
+    def lagged_move(nid: str, lag: int) -> dict:
+        """The source's move `lag` data months before this period (for a delayed arrow)."""
+        target = fc._months(data_month(period)) - lag
+        at = next((q for q in periods if fc._months(data_month(q)) == target), None)
+        if at is None or nid not in series:
+            return {}
+        kind, _, base = baseline_for(nid, parent_of, by_id, series, at)
+        return move_of(series[nid], base, kind, periods, at, data_month)
 
     # Every line but a root. Moves are measured against the line's group, so a force acting on a
     # group (Services, All Engineering) cancels out of its members' moves and can only explain
@@ -263,7 +280,7 @@ def compute(model: dict, period: str, series: dict, periods: list[str], checked:
         c = causes(n["id"], d, checked, model)
         if c:
             held["cause"] = c
-        r = relationships(n["id"], d, moves, model)
+        r = relationships(n["id"], d, moves, model, verdicts, lagged_move)
         if r:
             held["relationship"] = [by_id[x]["label"] for x in r]
         filed = next((k for k in ORDER if k in held), "unexplained")
@@ -356,11 +373,13 @@ def for_period(pipeline: str, model: dict, period: str, series=None, periods=Non
     periods = periods if periods is not None else fc.periods_of(pipeline)
     checked = checked if checked is not None else fc.check(pipeline, model, period, series, periods)
     from core.generate_system_state import load_entity_weights
+    from core.relationship_test import latest_verdicts
     real, output = reference_rows(pipeline, model)
     return compute(model, period, series, periods, checked, real, output,
                    artifact_test(pipeline, model, period),
                    lambda p: fc.resolve_csv_date(pipeline, p),
-                   load_entity_weights(gs.pipeline_cfg(pipeline)))
+                   load_entity_weights(gs.pipeline_cfg(pipeline)),
+                   latest_verdicts(pipeline))
 
 
 def main() -> int:

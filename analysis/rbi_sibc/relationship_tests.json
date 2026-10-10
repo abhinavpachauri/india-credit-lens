@@ -376,6 +376,120 @@
         }
       },
       "note": "Re-test 2026-10-10 after SIBC backfill phase 1 (15 → 23 monthly changes). Hypothesis, sign, lag and family unchanged from the first test. Family of 4."
+    },
+    {
+      "source": "e_S1_4_5",
+      "source_label": "Credit Card Outstanding",
+      "target": "e_S1_4_8",
+      "target_label": "Loans against gold jewellery",
+      "predicted_sign": -1,
+      "reason": "[reroutes_to] Households unable to access or expand unsecured revolving credit shift toward secured gold collateral borrowing for similar liquidity needs",
+      "tested": "2026-10-10",
+      "through_period": "2026-09-30",
+      "protocol": "SYSTEM_MODEL_SPEC §16 Step 6b",
+      "verdict": "not_supported",
+      "at_lag": 0,
+      "family": 12,
+      "alpha": 0.0042,
+      "lags": {
+        "0": {
+          "n": 23,
+          "r": -0.03,
+          "p": 0.888
+        },
+        "1": {
+          "n": 22,
+          "r": -0.323,
+          "p": 0.139
+        },
+        "2": {
+          "n": 21,
+          "r": -0.135,
+          "p": 0.566
+        },
+        "3": {
+          "n": 20,
+          "r": -0.074,
+          "p": 0.761
+        }
+      },
+      "note": "Existing authored edge, first tested 2026-10-10 (family of 12 declared together: 3 SIBC + 9 payments; sign from edge type — leads/amplifies +, substitutes/reroutes_to/suppresses −; lag: leads 1 month, others 0)."
+    },
+    {
+      "source": "e_S2_2_9",
+      "source_label": "Chemicals and Chemical Products",
+      "target": "e_S2_2_14",
+      "target_label": "All Engineering",
+      "predicted_sign": 1,
+      "reason": "[amplifies] Upstream specialty chemicals supply chain enables engineering manufacturing production capacity; chemicals credit growth predicts engineering credit expansion",
+      "tested": "2026-10-10",
+      "through_period": "2026-09-30",
+      "protocol": "SYSTEM_MODEL_SPEC §16 Step 6b",
+      "verdict": "not_supported",
+      "at_lag": 0,
+      "family": 12,
+      "alpha": 0.0042,
+      "lags": {
+        "0": {
+          "n": 23,
+          "r": 0.127,
+          "p": 0.569
+        },
+        "1": {
+          "n": 22,
+          "r": -0.071,
+          "p": 0.756
+        },
+        "2": {
+          "n": 21,
+          "r": -0.33,
+          "p": 0.142
+        },
+        "3": {
+          "n": 20,
+          "r": -0.001,
+          "p": 0.999
+        }
+      },
+      "note": "Existing authored edge, first tested 2026-10-10 (family of 12 declared together: 3 SIBC + 9 payments; sign from edge type — leads/amplifies +, substitutes/reroutes_to/suppresses −; lag: leads 1 month, others 0)."
+    },
+    {
+      "source": "e_S2_2_13",
+      "source_label": "Basic Metal and Metal Product",
+      "target": "e_S2_2_14",
+      "target_label": "All Engineering",
+      "predicted_sign": 1,
+      "reason": "[amplifies] Steel, aluminium, and metals supply chain feeds engineering and defence manufacturing — upstream metals credit is a leading input to downstream engineering capex",
+      "tested": "2026-10-10",
+      "through_period": "2026-09-30",
+      "protocol": "SYSTEM_MODEL_SPEC §16 Step 6b",
+      "verdict": "not_supported",
+      "at_lag": 0,
+      "family": 12,
+      "alpha": 0.0042,
+      "lags": {
+        "0": {
+          "n": 23,
+          "r": -0.129,
+          "p": 0.561
+        },
+        "1": {
+          "n": 22,
+          "r": -0.106,
+          "p": 0.642
+        },
+        "2": {
+          "n": 21,
+          "r": -0.048,
+          "p": 0.831
+        },
+        "3": {
+          "n": 20,
+          "r": 0.336,
+          "p": 0.142
+        }
+      },
+      "note": "Existing authored edge, first tested 2026-10-10 (family of 12 declared together: 3 SIBC + 9 payments; sign from edge type — leads/amplifies +, substitutes/reroutes_to/suppresses −; lag: leads 1 month, others 0)."
     }
   ]
 }

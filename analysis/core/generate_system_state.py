@@ -220,7 +220,7 @@ def mix_states(pipeline: str, period: str, model: dict) -> dict:
     return out
 
 
-def compute(model, sig_dir, weights=None, checked=None):
+def compute(model, sig_dir, weights=None, checked=None, relationships=None):
     """`checked` is force_check.check()'s result when the pipeline declares force_check v3.1;
     None keeps the v3.0 rule (any evidence signal moving = active, edges against zero)."""
     weights = weights or {}
@@ -328,6 +328,16 @@ def compute(model, sig_dir, weights=None, checked=None):
         if pol not in ("+", "-", "~"):
             continue
         eid = e.get("id", f"{e['from']}->{e['to']}")
+        if relationships is not None and e["from"] in by_id and e["to"] in by_id:
+            # v3.1: an arrow between two lines is judged by its relationship test (Step 6b),
+            # never by the sign of its source against zero. Untested reads dormant and says so.
+            t = relationships.get((e["from"], e["to"]))
+            v = t["verdict"] if t else "untested"
+            edge_states[eid] = {
+                "state": {"supported": "active", "opposite": "reversed"}.get(v, "dormant"),
+                "verdict": v, "type": e["type"], "polarity": pol,
+                "from": e["from"], "to": e["to"]}
+            continue
         if eid in judged:
             edge_states[eid] = {
                 "state": EDGE_OF.get(judged[eid]["verdict"], "dormant"),
@@ -399,7 +409,9 @@ def main():
     # force states, force edges, dominant forces and S4's mismatches all come from `checked`;
     # under v3.0 it is still emitted, beside the old states, for comparison.
     rule = manifest.force_check(args.pipeline)
-    state = compute(model, sig_dir, weights, checked if rule == "v3.1" else None)
+    from core.relationship_test import latest_verdicts
+    rels = latest_verdicts(args.pipeline) if rule == "v3.1" else None
+    state = compute(model, sig_dir, weights, checked if rule == "v3.1" else None, rels)
     state["mix_states"] = mix_states(args.pipeline, args.period, model)
     state["force_check"] = checked
     # §16 Step 6a: how much of this period's movement the model accounts for. S4 reads its

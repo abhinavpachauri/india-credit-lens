@@ -470,3 +470,23 @@ def test_no_correction_when_the_read_still_holds():
              "statuses": {sid: registry[sid]["current_status"]}}
     assert not any(c["id"] == sid and "we published" in c["body"]
                    for c in src.corrections([entry]))
+
+
+# ── a date is not a figure (2026-10-10) ──────────────────────────────────────────────────
+# A deep read quoted a force label, "…barred after 15 Mar 2024", and the gate rejected 15 as an
+# ungrounded number: only "Mar 2024" was recognised as a date. Known-good and known-bad
+# controls, per DECISIONS (no gate change without both).
+
+def test_a_day_month_year_date_is_not_read_as_a_number():
+    from distribution.validate_distribution import _strip_presentation
+    for text in ("deposits barred after 15 Mar 2024", "approved on 5 May 2026",
+                 "effective March 15, 2024", "since 1 January 2020"):
+        stripped = _strip_presentation(text, [])
+        assert not any(ch.isdigit() for ch in stripped), (text, stripped)
+
+
+def test_a_real_figure_beside_a_date_is_still_read():
+    from distribution.validate_distribution import _strip_presentation
+    for text, figure in (("grew 15% in Mar 2024", "15"), ("₹15 L Cr in Mar 2024", "15"),
+                         ("up 3.2 points by 15 Mar 2024", "3.2")):
+        assert figure in _strip_presentation(text, []), text

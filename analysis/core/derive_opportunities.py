@@ -8,10 +8,11 @@ S3 over the last 2 periods, with the signal evidence that decided it. Stamps the
 surface/scope/refs fields the UI consumes (§12.2).
 
 Status rule:
-    driver fires in a period  := an entity driver: any of its signal_ids is non-flat (db status);
-                                 a force driver: under force_check v3.1 (the pipeline's manifest),
-                                 its verdict is `working` (SYSTEM_MODEL_SPEC §16 Step 3); under
-                                 v3.0, any of its signal_evidence is non-flat
+    driver fires in a period  := under force_check v3.1 (the pipeline's manifest): a force driver
+                                 when its verdict is `working` (SYSTEM_MODEL_SPEC §16 Step 3); a
+                                 LINE driver when it beats its group in the arrow's direction
+                                 (force_check.line_verdict). Under v3.0: any of the driver's
+                                 signals is non-flat (db status)
     active  — driver fires in the current AND prior period
     watch   — driver fires in exactly one of the two
     closed  — driver fires in neither
@@ -55,7 +56,8 @@ def firing_signals(pipeline, period):
     return {m for m, s in rows if s in NONFLAT}
 
 
-def opportunity_status(fires_now: bool, fires_prior: bool, node_status: str | None = None) -> str:
+def opportunity_status(fires_now: bool, fires_prior: bool, node_status: str | None = None,
+                       unknown: bool = False) -> str:
     """The rule that decides whether an opportunity is live, and the only judgment this file makes.
 
     Two periods rather than one, deliberately: a single firing period is noise as often as it is
@@ -70,7 +72,9 @@ def opportunity_status(fires_now: bool, fires_prior: bool, node_status: str | No
         return "active"
     if fires_now or fires_prior:
         return "watch"
-    return "closed"
+    # Nothing fired, but a driver could not be judged at all (a line with no group to compare
+    # with): that is "we cannot tell", never "closed" (DECISIONS: absences stay visible).
+    return "unassessable" if unknown else "closed"
 
 
 def main():
@@ -96,8 +100,16 @@ def main():
         series, all_p = force_check.growth_series(args.pipeline, model), force_check.periods_of(args.pipeline)
         working = {p: {fid for fid, x in force_check.check(args.pipeline, model, p, series, all_p).items()
                        if x["verdict"] == "working"} for p in periods}
+        dm = lambda q: force_check.resolve_csv_date(args.pipeline, q)  # noqa: E731
 
-    def fires(driver_id, p):
+    # The arrow's polarity says which way the driver must move for the opportunity/risk to hold:
+    # a line beating its group creates an opportunity (+), a line falling behind creates a risk (−).
+    polarity = {(e["from"], e["to"]): (1 if e.get("polarity") == "+" else -1)
+                for e in model["edges"] if e["type"] in ("creates_opportunity", "creates_risk")}
+
+    unknown_drivers: dict[str, set] = {}
+
+    def fires(driver_id, p, target=None):
         """Does this driver fire at period p, and on which of its signals?"""
         sigs = driver_signals(driver_id)
         if p is None:
@@ -105,6 +117,15 @@ def main():
         if working is not None and driver_id in fi_by_id:
             on = driver_id in working[p]
             return on, (sigs & fire[p]) if on else set()
+        if working is not None and driver_id in urn_of:
+            # v3.1: a LINE fires when it beats its group in the arrow's direction, not whenever
+            # any of its signals moved (which, like the old force check, could not fail).
+            v = force_check.line_verdict(driver_id, polarity.get((driver_id, target), 1),
+                                         model, series, all_p, p, dm)
+            if v["verdict"] == "unassessable":
+                unknown_drivers.setdefault(target, set()).add(driver_id)
+            on = v["verdict"] == "working"
+            return on, (sigs & fire.get(p, set())) if on else set()
         hit = sigs & fire.get(p, set())
         return bool(hit), hit
 
@@ -127,10 +148,11 @@ def main():
     for tid, info in targets.items():
         n = info["node"]
         sigs = set().union(*[driver_signals(d) for d in info["drivers"]]) if info["drivers"] else set()
-        now = [fires(d, cur) for d in info["drivers"]]
+        now = [fires(d, cur, tid) for d in info["drivers"]]
         fires_now = any(on for on, _ in now)
-        fires_prior = any(fires(d, prior)[0] for d in info["drivers"])
-        status = opportunity_status(fires_now, fires_prior, n.get("status"))
+        fires_prior = any(fires(d, prior, tid)[0] for d in info["drivers"])
+        status = opportunity_status(fires_now, fires_prior, n.get("status"),
+                                    unknown=bool(unknown_drivers.get(tid)))
         # references for the UI (§12.2)
         entity_refs, instance_refs, channel_refs = [], [], []
         for d in info["drivers"]:
@@ -146,6 +168,8 @@ def main():
             "scope": "pipeline",
             "status": status,
             "authored_status": n.get("status"),
+            **({"unassessable_drivers": sorted(by_id[d]["label"] for d in unknown_drivers[tid])}
+               if status == "unassessable" else {}),
             # evidence = the firing subset (drives STATUS); evidence_all = the driver's
             # full declared signal set (drives TRACEABILITY — a structural risk's numbers
             # trace to its signals even when the driver isn't currently firing).
