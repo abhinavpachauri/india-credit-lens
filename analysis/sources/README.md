@@ -46,6 +46,52 @@ household income → retail credit); ASUSE quarterly (informal enterprises → M
 Professional Forecasters; NPAs and CRAR (annual); MSP and PDS procurement (annual); Industry-wise
 deployment from 2007 (Bulletin 16 / Handbook 169; a different bank set before 2019, so not SIBC history).
 
+## Lending & Deposit Rates: probed 2026-10-10 (onboarding paused)
+
+Four releases probed (`MLDRSCB{30062026,31072026E,31082026ENG,30092026ENG}.xlsx`, user download).
+Onboarding is paused until the user decides the kind (reference or primary with a page), the
+source order, and which tables to carry.
+
+- **Excel with 9 tables, and every file holds the full history:**
+
+  | Table | Contents | From |
+  |---|---|---|
+  | T1 | Lending rate (WALR) on outstanding loans, by bank group | Feb 2012 |
+  | T2 | WALR on new loans | Sep 2014 |
+  | T3 | Term deposit rate, outstanding deposits | Mar 2013 |
+  | T4 | Term deposit rate, new deposits | Mar 2020, then Jan 2021 on |
+  | T5 | One-year MCLR per bank (99 banks) | Apr 2016 |
+  | T6 | Group MCLR as min, max and median | Apr 2016 |
+  | T7 | Floating-rate loan shares by benchmark (base rate, MCLR, EBLR, others) | Sep 2019, quarterly |
+  | T8, T9 | **WALR by sector**, outstanding and new loans | Apr 2020 |
+
+- **Lag:** the release at the end of month M carries WALR and deposit rates for M−1, and MCLR for M.
+- **Revisions exist; snapshot saving is needed, latest release wins.**
+  - The latest month moves 0.01–0.04 pp in the next release.
+  - The Sep 2026 file revised five months of T4 public-sector-bank rates, by up to 0.06 pp.
+  - T7 "Others" re-rounds by ±0.01 so each row sums to 100.
+  - All four files say "Data are provisional".
+- **Precision varies across releases** (2 decimals in one, 15 in the next), so revision diffs
+  compare at 2 decimals. Across the four files there were 467 / 428 / 45 changed cells; 9 / 3 / 37
+  of them were real revisions.
+- **Dates are labels, not days.**
+  - Month-start until Dec 2020, month-end after, with stray days (28 Mar 2023; 2–9 in T2 in 2024).
+  - Some months are text: "July-2023" in T2 and T3, "Jan-2024" in T6.
+  - T5's column headers mix dates with "May-2016" and "Sept-2016".
+  - None of these are gaps.
+- **No printed growth to check against** (the values are levels). The internal checks available
+  are T7 rows summing to 100 and T6 min ≤ median ≤ max.
+- **Notes to carry forward:**
+  - "Data from July 2023 onwards include the impact of the merger of a non-bank with a bank"
+    (the HDFC merger), in T1 and T3.
+  - The SCB column is RBI's weighted aggregate. Its weights are not published, so the groups
+    cannot rebuild it.
+- **Join to SIBC sectors:**
+  - Exact name match: Agriculture, Industry (Large), Infrastructure, Trade, Professional Services,
+    Education, Vehicle, Housing, Other Personal Loans.
+  - Judgment calls: "MSMEs" may include services MSMEs, where SIBC's Micro and Small + Medium is
+    industry only; and "Rupee Export Credit" vs SIBC's Export Credit.
+
 ## Settled here, so not reopened
 
 - **DBIE is not a SIBC history source** (user, 2026-10-10). The New Format table (Jan 2019–Jun 2026)

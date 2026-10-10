@@ -1,0 +1,221 @@
+{
+  "batch": "2026-10-10",
+  "plan": "analysis/distribution/output/x/2026-10-11_to_11-04_plan.md",
+  "out_dir": "analysis/distribution/output/x/2026-10-10",
+  "posts": [
+    {
+      "date": "2026-10-10",
+      "slug": "services-fastest",
+      "text": "Bank credit to services grew 24.3% in Aug 2026, against 18.8% for all bank credit.\n\nServices is 28.3% of the book but took 35.0% of the new credit. Industry grew 18.2%, personal loans 16.9%.\n\n#BankCredit #IndianBanking #RBI\nindiacreditlens.com",
+      "image": {
+        "kicker": "Bank credit · Aug 2026",
+        "title": "Services: 24.3% growth, and 35.0% of the new bank credit",
+        "source": "Source: RBI, Sectoral Deployment of Bank Credit",
+        "tables": [
+          {
+            "path": "/",
+            "clicks": [
+              "Main Sectors"
+            ],
+            "cols": [
+              "PART",
+              "OF CUT",
+              "GROWTH",
+              "NEW"
+            ],
+            "rows": [
+              "Personal Loans",
+              "Services",
+              "Industry (Micro and Small, Medium and Large)",
+              "Agriculture and Allied Activities"
+            ],
+            "highlight": "Services",
+            "width": 400
+          }
+        ]
+      }
+    },
+    {
+      "date": "2026-10-11",
+      "slug": "consumer-durables-banks-vs-nbfcs",
+      "text": "Consumer durable loans, Aug 2026:\n\nBanks: ₹23,295 Cr, +2.4% over the year.\nNBFCs: ₹77,784 Cr, +56.4%.\n\nThe product has moved off bank books. Point-of-sale finance at work?\n\n(NBFCs: RBI's reporting sample.)\n#NBFC #ConsumerFinance #BankCredit\nindiacreditlens.com",
+      "image": {
+        "kicker": "Banks vs NBFCs · Aug 2026",
+        "title": "Consumer durable loans: banks +2.4%, NBFCs +56.4%",
+        "source": "Source: RBI, Sectoral Deployment of Bank Credit; RBI NBFC sectoral credit (reporting sample)",
+        "tables": [
+          {
+            "caption": "Banks",
+            "path": "/",
+            "clicks": [
+              "Personal Loans"
+            ],
+            "cols": [
+              "PART",
+              "SIZE",
+              "GROWTH"
+            ],
+            "rows": [
+              "Consumer Durables"
+            ],
+            "highlight": "Consumer Durables",
+            "width": 340
+          },
+          {
+            "caption": "NBFCs",
+            "path": "/nbfc",
+            "clicks": [
+              "Retail"
+            ],
+            "cols": [
+              "PART",
+              "SIZE",
+              "GROWTH"
+            ],
+            "rows": [
+              "Consumer Durables"
+            ],
+            "highlight": "Consumer Durables",
+            "width": 340
+          }
+        ]
+      }
+    },
+    {
+      "date": "2026-10-12",
+      "slug": "hdfc-card-spend-at-shops",
+      "text": "HDFC Bank's credit card spend at shops grew 0.9% in Aug 2026. The market grew 9.1%; SBI 22.3%, Axis 11.6%, ICICI −5.1%.\n\nA year ago HDFC was growing 28.3%. Base effect, or is the lead fading?\n\n#CreditCards #DigitalPayments #HDFCBank\nindiacreditlens.com",
+      "notes": [
+        {
+          "sidecar": "atm_pos_banks/cc-pos-txn-val-banks.json",
+          "entity": "HDFC BANK LTD",
+          "column": "growth",
+          "index": -13
+        }
+      ],
+      "image": {
+        "kicker": "Payments · Credit card spend at shops (POS) · Aug 2026",
+        "title": "HDFC Bank: 0.9% growth, against 9.1% for the market",
+        "source": "Source: RBI, bank-wise ATM, POS and card statistics · rupee value, year on year",
+        "tables": [
+          {
+            "path": "/payments",
+            "clicks": [
+              "Credit Card",
+              "POS Transactions",
+              "bank (63)"
+            ],
+            "cols": [
+              "PART",
+              "OF CUT",
+              "GROWTH"
+            ],
+            "rows": [
+              "HDFC BANK LTD",
+              "STATE BANK OF INDIA",
+              "AXIS BANK LTD",
+              "ICICI BANK LTD"
+            ],
+            "highlight": "HDFC BANK LTD",
+            "width": 380
+          }
+        ]
+      }
+    },
+    {
+      "date": "2026-10-13",
+      "slug": "petroleum-real-credit",
+      "text": "Bank credit to petroleum, coal and nuclear fuels grew 14.8% in Aug 2026. Net of fuel prices it fell 17.1%: wholesale mineral-oil prices rose 38.5% over the year.\n\nMore rupees, less fuel financed.\n\n#BankCredit #WPI #Inflation\nindiacreditlens.com",
+      "notes": [
+        {
+          "sidecar": "sibc_table.json",
+          "cut": "sibc-industry-type",
+          "entity": "Petroleum, Coal Products and Nuclear Fuels",
+          "column": "real_credit"
+        }
+      ],
+      "image": {
+        "kicker": "Bank credit vs prices · Aug 2026",
+        "title": "Petroleum credit: 14.8% in rupees, −17.1% net of fuel prices",
+        "source": "Source: RBI, Sectoral Deployment of Bank Credit; WPI Mineral Oils (+38.5% over the year)",
+        "tables": [
+          {
+            "path": "/",
+            "clicks": [
+              "Industry by Type"
+            ],
+            "cols": [
+              "PART",
+              "GROWTH",
+              "REAL CREDIT",
+              "OUTPUT 12M"
+            ],
+            "rows": [
+              "Petroleum, Coal Products and Nuclear Fuels"
+            ],
+            "highlight": "Petroleum, Coal Products and Nuclear Fuels",
+            "width": 400,
+            "name_width": 230
+          }
+        ]
+      }
+    },
+    {
+      "date": "2026-10-14",
+      "slug": "gold-loans-banks-and-nbfcs",
+      "text": "Gold loans, Aug 2026.\n\nBanks: ₹5.59L Cr, +83.2%. 24.1% of new personal loans, from 7.7% of the book.\nNBFCs: ₹3.65L Cr, +69.1%. 31.2% of new retail credit.\n\nRising gold prices, or rising demand?\n\n#GoldLoans #NBFC #BankCredit\nindiacreditlens.com",
+      "notes": [
+        {
+          "sidecar": "sibc_table.json",
+          "cut": "sibc-pl",
+          "entity": "Loans against gold jewellery",
+          "column": "of_cut",
+          "field": "display"
+        }
+      ],
+      "image": {
+        "kicker": "Banks and NBFCs · Aug 2026",
+        "title": "Gold loans: banks +83.2%, NBFCs +69.1%",
+        "source": "Source: RBI, Sectoral Deployment of Bank Credit; RBI NBFC sectoral credit (reporting sample)",
+        "tables": [
+          {
+            "caption": "Banks · personal loans",
+            "path": "/",
+            "clicks": [
+              "Personal Loans"
+            ],
+            "cols": [
+              "PART",
+              "SIZE",
+              "GROWTH",
+              "NEW"
+            ],
+            "rows": [
+              "Loans against gold jewellery"
+            ],
+            "highlight": "Loans against gold jewellery",
+            "width": 360
+          },
+          {
+            "caption": "NBFCs · retail loans",
+            "path": "/nbfc",
+            "clicks": [
+              "Retail"
+            ],
+            "cols": [
+              "PART",
+              "SIZE",
+              "GROWTH",
+              "NEW"
+            ],
+            "rows": [
+              "Loans against gold jewellery"
+            ],
+            "highlight": "Loans against gold jewellery",
+            "width": 360
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1074,3 +1074,69 @@ The SEBI constraint in `STRATEGY_PLANNER.md` §13 is stricter for an investor au
 existing `lint_compliance` list is for a lender audience: **no buy/sell/target-price/accumulate/
 book-profit vocabulary anywhere**, free or paid. If this track is ever built, that lint hardens
 *before* note #1 ships, not after — same precision-fix-first rule as §5.3.
+
+---
+
+## 16. X daily feed: one story, one image (v0.1 DRAFT, 2026-10-10, awaiting ASCII approval)
+
+> Supersedes §9 for this one proposition. It is the "per-bank blurb feed" of §15.3, now with the
+> image made by the machine too. Account: `@indiacreditlens`.
+> Why now (user, 2026-10-10): specific beats generic. A named bank, a named sector and a forward
+> lean are what get shared. Regular posting is the floor: LinkedIn 3 sets a month, X daily.
+
+### 16.1 What one story is
+
+**One row of one Layer-1 table, quoted verbatim, against its market.**
+- Source: the table sidecars (`web/public/data/*_table.json`, `atm_pos_banks/*.json`). Every cell
+  there is a rendered string that gate 5.9d already traces, so a story adds no number of its own.
+- Newsworthiness: the `is_news.py` factors (record, regime flip, magnitude) applied to the row's
+  own series (its `series` / `series_display`), plus one specific-only factor, **gap to market**:
+  the row's growth against the total row's growth. Floor as for reads (a strong factor is required).
+- Kinds, in priority order:
+  - a named bank against its market (payments, 26 per-bank cuts);
+  - a SIBC or NBFC sector against its parent, with real credit when 1f has it;
+  - a tested link (only `supported` relationship tests) or a sourced force.
+- No repeats: the same (entity, metric) waits 30 days in `distribution_ledger.json`.
+
+### 16.2 Text: Python template, no LLM
+
+- ≤ 280 characters. Every number is a cell's `display` string.
+- Shape: **claim** (entity + this reading vs market) → **context** (its own run, e.g. the peak) →
+  **one question or one tested link** → dashboard link.
+- A cause we have not tested or sourced is asked, never stated (DECISIONS: untested causes are
+  questions). `lint_compliance` (SEBI wording) runs on every post.
+- **Tags (user, 2026-10-10):** 3 hashtags on their own line before the link: topic, sector, one
+  discovery tag (e.g. `#GoldLoans #NBFC #BankCredit`). A bank may appear as a hashtag (`#HDFCBank`),
+  never as an @mention: tagging a company in a post about its lag reads as a call-out.
+
+### 16.3 Image: a story card, rendered by the site and captured
+
+- A new static route `/s/{story_id}` renders one story from a Python-built `x_stories.json` at
+  1200×675 (X's 16:9). Its chart is the row's own series beside the market's.
+- The same route is the post's link target and its Open Graph image, so the link preview matches
+  the attached image and every post leads to the dashboard.
+- Captured headless with the existing `carousel/cdp.mjs`.
+
+### 16.4 Pool and delivery
+
+- After each release's gate passes, build the month's pool (~30–60 stories) and capture every card
+  in one run. The pool is a file, ranked and mixed (payments ~4 days in 7, credit ~3).
+- **v1, queue:** `analysis/distribution/output/x/{date}/` holds `post.txt` and `card.png` for each
+  day. The user posts or schedules them natively in X (a month can be scheduled in one sitting).
+  No API keys and no daily job.
+- **v2, auto-post** after two clean weeks of v1: an X API call per day. Keys live in env/secrets,
+  never in the repo, and are set up by the user. Decided then, not now.
+- Failure is loud: a story that fails a gate is dropped with its reason, and a day whose pool is
+  empty says so. Nothing ever falls back to a generic line.
+
+### 16.5 Open (user)
+
+- Approve the ASCII mock below (CLAUDE.md: no code before approval).
+- **Two story-rule cautions, both from the first worked example** (HDFC credit card POS value,
+  Aug 2026):
+  - *Base effect.* 0.9% vs the market's 9.1% is a year on from HDFC's own surge (Aug 2025: 28.3%,
+    peak 36.1% in Sep 2025). The rule names the base when the base month was itself an outlier.
+  - *Break.* Share fell 30.8% → 26.6% in one month (Nov → Dec 2025). A one-month step that size
+    is checked against `signals/dominance.py` and the release notes before any story leans on it.
+    If unexplained, the post quotes only readings on one side of the break.
+  The Oct 2025 spike (₹27,199 Cr) is festive season and will swing Oct 2026's year-on-year.

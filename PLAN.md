@@ -20,10 +20,8 @@ Built 2026-10-08 (SYSTEM_MODEL_SPEC v3.1 §16):
   **History is the binding constraint:** 15 monthly changes see only |r| ≥ 0.51.
 - **12 model arrows tested** (10-10): none supported; states, loops, coverage, line-driven opportunities
   follow tests. **Card spend → card outstanding (1-month lead) supported** (r=+0.54, borderline).
-- **Structured context data feeds L2; S4 keeps the residual** (user, 10-10; DECISIONS). MoSPI WPI links
-  tested (fertiliser, gold): not supported. **DBIE, rbi.org.in and eSankhyiki explored once (10-10):
-  `analysis/sources/README.md`** (398 DBIE tables, ranked shortlist). DBIE is not SIBC history. Next:
-  the user picks tables → download → `/onboard-source` each as its own pipeline.
+- **Structured context data feeds L2; S4 keeps the residual** (user, 10-10). WPI links: not supported.
+  Sources explored once: `analysis/sources/README.md` (398 DBIE tables, shortlist). Order: Next #4–6.
 
 Agentic layer: phases 0–4 as before (`dashboard-change`, `onboard-source` ✅); `add-signal-family`,
 `measure-gate` ⬜, each written while doing its real task.
@@ -56,7 +54,9 @@ Agentic layer: phases 0–4 as before (`dashboard-change`, `onboard-source` ✅)
 5. **BSR-1 Table 1.4** (quarterly, credit by occupation). The real cost: three measures per entity
    (accounts / limit / outstanding) where every layer assumes one, and an occupation taxonomy
    that overlaps SIBC sectors without matching them.
-6. **Lending & Deposit Rates** (monthly PDF; `pdftotext` works, so it is table extraction).
+6. **Lending & Deposit Rates: probed 10-10, onboarding paused (user).** Excel, full history in each
+   file (Jun–Sep 2026 in repo root); findings in `analysis/sources/README.md`. **Open, user deciding
+   after stepping back:** reference vs primary-with-page; the source order (#4–6); which of the 9 tables.
 
 ## Open decisions and known debts (not scheduled)
 
@@ -107,11 +107,11 @@ Agentic layer: phases 0–4 as before (`dashboard-change`, `onboard-source` ✅)
 
 ## Parked (a trigger, not a date)
 
-- **Distribution**: LinkedIn carousels began with Aug 2026 (3 posts: headline stats, market-share
-  mix, MoSPI real credit; `analysis/distribution/output/2026-10-08_linkedin_set*`). Flow: Claude
-  drafts text + source table + ASCII layout → user rewrites → approves → PDF. Tooling (committed,
-  hand-tuned per set) in `analysis/distribution/carousel/`; make it one generic builder, and a
-  `linkedin-carousel` skill, when the September posts repeat it. Substack paused; X per-bank feed idea stands.
+- **Distribution**: **X daily from 2026-10-10** (DISTRIBUTION_SPEC §16): 25-day plan in
+  `output/x/2026-10-10_to_11-03_plan.md`; `x/build_posts.mjs {batch}` → post.txt + 16:9 card (phone
+  text ≥ 9px, every number traced); posts 1–5 built, next batch = plan #6–10. LinkedIn: 3 sets/month
+  (Aug done, `carousel/`); NBFC story first, then the `linkedin-carousel` skill (user: parked till then).
+  Open: @RBI source credit in X posts; auto-post via API after two clean weeks. Substack paused.
 - **PDF extraction** as a general capability: 11 of 21 remaining RBI sources are PDF-only. Start
   it when a PDF source is next in line, not before.
 - **Future data bets**: longer history → forecasting; bank results → per-bank analytics.
