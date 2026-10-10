@@ -735,6 +735,19 @@ Consequences, all under force_check v3.1:
 - *Not yet:* the ecosystem constructs, eco-edges and eco-loop (Layer 3) still read direction
   only ("5/5 measurements observed"); out of this pass's scope.
 
+*Reference series as L2 connections (2026-10-10).* Structured context data (`kind: reference`
+pipelines: MoSPI now; RBI rates, bond/CP flows, FCI, CGA next) explains credit at L2 through
+tested links, before S4 (DECISIONS: every source its own pipeline; only lending data gets a page).
+`relationship_test.run_reference` reads a series through `real_economy.reference` (the 1f
+reader), measures its monthly change in YoY with its own headline removed as the tide (WPI all
+for a WPI item), and tests it against a credit line's gap changes, the same protocol. First
+family of 2 (declared +, lag 0, bar 0.025): **WPI fertilisers → fertiliser credit not supported**
+(r = +0.21, p = 0.33; best other lag 1, r = +0.38, p = 0.08, which can only be re-declared and
+tested on months not yet seen); **WPI jewellery → gold loans not supported** (r = +0.18, p = 0.44).
+The gold levels co-trend, but the shape does not fit a price cause: gold-loan YoY went 51% → 138%
+(Sep 2024 → Apr 2025) while jewellery prices rose 8–12%, and slowed to 83% while prices were
+still +24%. A non-price driver, so an S4 question. Recorded in `analysis/cross_source/relationship_tests.json`.
+
 **Output:** structured JSON with `entity_states` (incl. propagated aggregates), `force_states`, `edge_states`, `loop_states`, `system_observations`, and a `narrative: null` slot the LLM fills at Stage 5.X.
 
 ---

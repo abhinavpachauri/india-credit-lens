@@ -74,6 +74,7 @@
 - **MoSPI is pulled by hand until two clean cycles, then scheduled.** *Why:* no provisional/final flag and revisions overwrite silently, so revision behaviour must be seen before it is automated. *Revisit: after two clean cycles.* (user, 2026-09-26)
 - **Bank presentations/results rejected** as a source: unstructured, and per-bank credit is annual only (STRBI).
 - **A compute module is a shape, not a pipeline**, and a pipeline declares itself in its manifest. A new SIBC-shaped source is a manifest entry.
+- **Every data source is its own pipeline in the engine; only lending data gets a dashboard page** (user, 2026-10-10). Context data (MoSPI prices/output, and next RBI rates, bond/CP flows, FCI, CGA) is `kind: reference`: own fetch, gate and cadence, no page, cards or paid narration; it reaches the reader inside credit tables and as tested L2 connections. The price of credit (RBI lending/deposit rates) is decided when onboarded. *Why:* isolated failures and one mechanism at N sources; a raw context page competes with DBIE/eSankhyiki, where they are the official source and our edge is explaining credit. Structured context data feeds L2; S4 keeps the residual, searched in official and market sources. *Revisit:* if a reference source's own story becomes the reader's question.
 
 ## Working model
 

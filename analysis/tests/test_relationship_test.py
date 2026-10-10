@@ -61,3 +61,19 @@ def test_a_family_of_tests_raises_the_bar(monkeypatch):
     one, four = rt.test(a, a, TIDE, sign=1, lag=0), rt.test(a, a, TIDE, sign=1, lag=0, family=4)
     assert (one["alpha"], one["verdict"]) == (0.05, "supported")
     assert (four["alpha"], four["verdict"]) == (0.0125, "not_supported")
+
+
+def test_a_reference_series_is_read_as_monthly_changes_in_its_yoy(monkeypatch):
+    """reference_changes reads through real_economy.reference (the 1f reader), takes YoY of the
+    index, and keeps only changes one data month apart."""
+    import types
+    vals = {}
+    for i, p in enumerate(["2024-01-31", "2024-02-29", "2024-03-31",
+                           "2025-01-31", "2025-02-28", "2025-03-31"]):
+        vals[("wpi", "x", "index", p)] = [100, 100, 100, 110, 121, 100][i]
+    fake = types.SimpleNamespace(values=vals)
+    monkeypatch.setattr("signals.compute.real_economy.reference", lambda pipeline: fake)
+    ch = rt.reference_changes("mospi", "wpi/x")
+    jan25 = 2025 * 12
+    assert set(ch) == {jan25 + 1, jan25 + 2}               # YoY 10 → 21 → 0
+    assert round(ch[jan25 + 1], 6) == 11.0 and round(ch[jan25 + 2], 6) == -21.0

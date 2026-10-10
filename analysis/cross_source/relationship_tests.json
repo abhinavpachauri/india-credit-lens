@@ -87,6 +87,90 @@
         }
       },
       "note": "Declared 2026-10-10 (user-approved D), family of 2: spend→stock leads (+, lag 1), count↔stock corresponds (+, lag 0). Replaces the 'aligned' = both rising state."
+    },
+    {
+      "edge_id": "ref:wpi_fertilizers->sibc:fertiliser",
+      "source": "mospi:wpi/nic:20/fertilizers_and_nitrogen_compounds",
+      "source_label": "wpi/nic:20/fertilizers_and_nitrogen_compounds",
+      "source_tide": "mospi:wpi/wpi:all",
+      "target": "sibc:e_S2_2_9_1",
+      "target_label": "Fertiliser",
+      "predicted_sign": 1,
+      "reason": "Fertiliser makers' working capital rises with the price of what they make and sell, within the month.",
+      "tested": "2026-10-10",
+      "through_period": {
+        "sibc": "2026-09-30"
+      },
+      "protocol": "SYSTEM_MODEL_SPEC §16 Step 6b (reference series)",
+      "verdict": "not_supported",
+      "at_lag": 0,
+      "family": 2,
+      "alpha": 0.025,
+      "lags": {
+        "0": {
+          "n": 23,
+          "r": 0.215,
+          "p": 0.325
+        },
+        "1": {
+          "n": 23,
+          "r": 0.378,
+          "p": 0.076
+        },
+        "2": {
+          "n": 23,
+          "r": 0.279,
+          "p": 0.199
+        },
+        "3": {
+          "n": 23,
+          "r": 0.23,
+          "p": 0.282
+        }
+      },
+      "note": "Declared 2026-10-10 before any result (user-approved #1): family of 2 reference links, both +, lag 0. Source tide = WPI all commodities; target tide = bank credit."
+    },
+    {
+      "edge_id": "ref:wpi_jewellery->sibc:gold_loans",
+      "source": "mospi:wpi/nic:32/jewellery_and_related_articles",
+      "source_label": "wpi/nic:32/jewellery_and_related_articles",
+      "source_tide": "mospi:wpi/wpi:all",
+      "target": "sibc:e_S1_4_8",
+      "target_label": "Loans against gold jewellery",
+      "predicted_sign": 1,
+      "reason": "Gold collateral is revalued daily, so the loan value of pledged jewellery follows the gold price; the jewellery index tracks gold, its main input.",
+      "tested": "2026-10-10",
+      "through_period": {
+        "sibc": "2026-09-30"
+      },
+      "protocol": "SYSTEM_MODEL_SPEC §16 Step 6b (reference series)",
+      "verdict": "not_supported",
+      "at_lag": 0,
+      "family": 2,
+      "alpha": 0.025,
+      "lags": {
+        "0": {
+          "n": 23,
+          "r": 0.185,
+          "p": 0.436
+        },
+        "1": {
+          "n": 23,
+          "r": 0.072,
+          "p": 0.774
+        },
+        "2": {
+          "n": 23,
+          "r": 0.025,
+          "p": 0.92
+        },
+        "3": {
+          "n": 23,
+          "r": -0.121,
+          "p": 0.605
+        }
+      },
+      "note": "Declared 2026-10-10 before any result (user-approved #1): family of 2 reference links, both +, lag 0. Source tide = WPI all commodities; target tide = bank credit."
     }
   ]
 }

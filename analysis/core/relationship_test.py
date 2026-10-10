@@ -151,6 +151,39 @@ def run_cross(source_pipeline: str, source: str, target_pipeline: str, target: s
             "protocol": "SYSTEM_MODEL_SPEC §16 Step 6b (cross-pipeline)", **res}
 
 
+def reference_changes(pipeline: str, series: str, measure: str = "index") -> dict[int, float]:
+    """month index -> monthly change in a reference series' YoY %, one data month apart.
+
+    Read through `real_economy.reference`, the same reader the 1f signals use, so a price or
+    output series has one definition. Reference periods ARE their data months (MoSPI)."""
+    from signals.compute.real_economy import reference
+    ref = reference(pipeline)
+    ds, code = series.split("/", 1)
+    vals = {fc._months(p): v for (d, c, m, p), v in ref.values.items()
+            if d == ds and c == code and m == measure}
+    yoy = {k: (v / vals[k - 12] - 1) * 100 for k, v in vals.items() if vals.get(k - 12)}
+    return {k: yoy[k] - yoy[k - 1] for k in sorted(yoy) if k - 1 in yoy}
+
+
+def run_reference(reference_pipeline: str, series: str, tide_series: str, target_pipeline: str,
+                  target: str, sign: int, lag: int, reason: str, family: int = 1) -> dict:
+    """A REFERENCE series (prices, output…) pushing a credit line: Layer 2 enriched by ingested
+    data, the same protocol. The source side's tide is its own headline (WPI all commodities for a
+    WPI item), so "prices rose in general" is not read as this price moving."""
+    tm, ts, tp, td = _side(target_pipeline)
+    res = test(reference_changes(reference_pipeline, series),
+               gap_changes(target, tm, ts, tp, td),
+               reference_changes(reference_pipeline, tide_series), sign, lag, family,
+               t_b=tide(tm, ts, td))
+    label = next(n["label"] for n in tm["nodes"] if n["id"] == target)
+    return {"source": f"{reference_pipeline}:{series}", "source_label": series,
+            "source_tide": f"{reference_pipeline}:{tide_series}",
+            "target": f"{target_pipeline}:{target}", "target_label": label,
+            "predicted_sign": sign, "reason": reason, "tested": date.today().isoformat(),
+            "through_period": {target_pipeline: tp[-1]},
+            "protocol": "SYSTEM_MODEL_SPEC §16 Step 6b (reference series)", **res}
+
+
 CROSS_TESTS = gs.ROOT / "analysis" / "cross_source" / "relationship_tests.json"
 
 

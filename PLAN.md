@@ -20,6 +20,9 @@ Built 2026-10-08 (SYSTEM_MODEL_SPEC v3.1 §16):
   **History is the binding constraint:** 15 monthly changes see only |r| ≥ 0.51.
 - **12 model arrows tested** (10-10): none supported; states, loops, coverage, line-driven opportunities
   follow tests. **Card spend → card outstanding (1-month lead) supported** (r=+0.54, borderline).
+- **Structured context data feeds L2; S4 keeps the residual** (user, 10-10; DECISIONS). MoSPI WPI links
+  tested (fertiliser, gold): not supported. **Next: probe RBI DBIE** (rates, repo, bond/CP flows); if
+  blocked, Chrome; else the user downloads, as for SIBC. Onboard via `/onboard-source`.
 
 Agentic layer: phases 0–4 as before (`dashboard-change`, `onboard-source` ✅); `add-signal-family`,
 `measure-gate` ⬜, each written while doing its real task.
@@ -56,12 +59,8 @@ Agentic layer: phases 0–4 as before (`dashboard-change`, `onboard-source` ✅)
 
 ## Open decisions and known debts (not scheduled)
 
-- **Next for the model, user deciding (2026-10-09):** (a) **SIBC history backfill** (RBI publishes
-  years of it; data-only per DECISIONS): unlocks relationship tests (60 changes → |r| ≥ 0.25),
-  steadier wobble, more coverage readings; (b) **S4 redesign**: causes beyond instruments, as
-  series checked against data (rates, prices, subsidy timing), with lag; Aug's 4 open moves are
-  of that kind; (c) payments group-total YoY signals, then switch its force check on;
-  (d) model pass: arrows for ECLGS 5.0 and 3 payments forces (none say which way they push).
+- **Open for the model:** SIBC backfill phase 2 (2024 releases; HDFC-merger year needs a rule);
+  S4 widened to market sources for the residual; model pass for risk-arrow signs and NBFC causes.
   The Aug worklist still keeps 12 S4 proposals unsearched (`analysis/s4_proposals/2026-09-30.json`).
 
 - **Stage 5.7 checks the declared cut, not the drawn series** (found 2026-10-05). Payments cards
