@@ -526,8 +526,8 @@
       "rule": "v3.1"
     },
     "force_eclgs5_guarantee_window": {
-      "state": "unassessable",
-      "verdict": "unassessable",
+      "state": "active",
+      "verdict": "working",
       "window": "in_window",
       "instance_of": "ch_emergency_guarantee_msme",
       "authored_status": "active",
@@ -832,6 +832,22 @@
       "polarity": "+",
       "from": "force_psl_renewable_limit",
       "to": "e_S1_vi"
+    },
+    "force_eclgs5_guarantee_window__drives__e_S1_2_1": {
+      "state": "active",
+      "verdict": "working",
+      "type": "drives",
+      "polarity": "+",
+      "from": "force_eclgs5_guarantee_window",
+      "to": "e_S1_2_1"
+    },
+    "force_eclgs5_guarantee_window__drives__e_S1_2_2": {
+      "state": "active",
+      "verdict": "working",
+      "type": "drives",
+      "polarity": "+",
+      "from": "force_eclgs5_guarantee_window",
+      "to": "e_S1_2_2"
     }
   },
   "loop_states": {
@@ -868,6 +884,7 @@
       "force_nbfc_regulatory_recovery",
       "force_msp_procurement_growth",
       "force_infra_cycle_maturing",
+      "force_eclgs5_guarantee_window",
       "force_vehicle_scrappage_replacement"
     ],
     "binding_constraints": [
@@ -1200,11 +1217,33 @@
       }
     },
     "force_eclgs5_guarantee_window": {
-      "verdict": "unassessable",
+      "verdict": "working",
       "window": "in_window",
       "in_doubt": false,
-      "edges": {},
-      "reason": "no drives/suppresses/amplifies edge: the model does not say which way it pushes"
+      "edges": {
+        "force_eclgs5_guarantee_window__drives__e_S1_2_1": {
+          "entity": "Micro and Small",
+          "type": "drives",
+          "growth": 22.96,
+          "baseline_kind": "parent",
+          "baseline_of": "Industry (Micro and Small, Medium and Large)",
+          "baseline": 18.23,
+          "gap_pp": 4.73,
+          "noise_pp": 1.51,
+          "verdict": "working"
+        },
+        "force_eclgs5_guarantee_window__drives__e_S1_2_2": {
+          "entity": "Medium",
+          "type": "drives",
+          "growth": 31.78,
+          "baseline_kind": "parent",
+          "baseline_of": "Industry (Micro and Small, Medium and Large)",
+          "baseline": 18.23,
+          "gap_pp": 13.55,
+          "noise_pp": 0.91,
+          "verdict": "working"
+        }
+      }
     },
     "force_kcc_collateral_limit": {
       "verdict": "contradicted",
@@ -1324,6 +1363,9 @@
         "also_holds": {
           "structural": [
             "echo of Industry (Micro and Small, Medium and Large)"
+          ],
+          "cause": [
+            "force_eclgs5_guarantee_window"
           ]
         },
         "prices_activity": "not_decomposable",

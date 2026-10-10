@@ -10,8 +10,8 @@
     "last_foundation_date": "2026-06-11",
     "behavioral_source_draft": "analysis/rbi_atm_pos/merged/system_model_draft.json",
     "composition_spec_ref": "analysis/COMPOSITION_SPEC.md",
-    "last_updated": "2026-08-31",
-    "update_note": "2026-10-02 L2a UPDATE for report_date 2026-08-31 (August 2026 data; the July period had no pass recorded, so this covers both). S3: all 7 forces active, none mismatched; no edge changed state (11 reversed edges persist, e.g. POS terminals and debit cards growing against force_upi_zero_mdr / force_rbi_paytm_action suppression). Seven category mixes changed regime Jul→Aug: UPI QR drifting → steered (toward Private Sector Banks); CC ATM withdrawal value drifting → steered (toward Public Sector Banks); CC e-commerce value steered → drifting; DC ATM withdrawal value steered → drifting; DC other-txn volume contested → drifting; DC e-commerce volume and DC POS-withdrawal volume contested → reallocating. S4 (2026-10-03, analysis/s4_proposals/2026-09-30.json, 25 proposals): honest null, no force promoted, by editor decision. 7 triaged (5 not_a_force, 1 duplicate, 1 expired); 2 sourced to official pages but held unpromoted because each predates the window and fits only through a response lag (#12 ATM fees, RBI 1 May 2025; #8 TReDS, notification 7 Nov 2024); 1 searched, not found; 3 NBFC-raised deferred to the NBFC August pass; 12 not yet searched. Open design question: S4's temporal rule cannot see medium-term or lagged causes (PLAN)."
+    "last_updated": "2026-10-10",
+    "update_note": "2026-10-10 (user-approved, no sourcing): driver edges for the RuPay incentive (→ DC e-commerce value) and the contactless ceiling (→ CC POS value and volume), read from each force's own description; cash-at-POS and card lifecycle norms moved to watch. | Earlier: 2026-10-02 L2a UPDATE for report_date 2026-08-31 (August 2026 data; the July period had no pass recorded, so this covers both). S3: all 7 forces active, none mismatched; no edge changed state (11 reversed edges persist, e.g. POS terminals and debit cards growing against force_upi_zero_mdr / force_rbi_paytm_action suppression). Seven category mixes changed regime Jul→Aug: UPI QR drifting → steered (toward Private Sector Banks); CC ATM withdrawal value drifting → steered (toward Public Sector Banks); CC e-commerce value steered → drifting; DC ATM withdrawal value steered → drifting; DC other-txn volume contested → drifting; DC e-commerce volume and DC POS-withdrawal volume contested → reallocating. S4 (2026-10-03, analysis/s4_proposals/2026-09-30.json, 25 proposals): honest null, no force promoted, by editor decision. 7 triaged (5 not_a_force, 1 duplicate, 1 expired); 2 sourced to official pages but held unpromoted because each predates the window and fits only through a response lag (#12 ATM fees, RBI 1 May 2025; #8 TReDS, notification 7 Nov 2024); 1 searched, not found; 3 NBFC-raised deferred to the NBFC August pass; 12 not yet searched. Open design question: S4's temporal rule cannot see medium-term or lagged causes (PLAN)."
   },
   "nodes": [
     {
@@ -2171,6 +2171,36 @@
       "scope": "inter_group",
       "mechanism": "High top-5 / single-issuer concentration in credit cards outstanding means a shock to one major issuer (issuance freeze, lifecycle purge) propagates market-wide, as the Paytm debit step-down demonstrated.",
       "id": "e_cards_credit_cards__creates_risk__risk_cc_market_concentration"
+    },
+    {
+      "from": "fi_rupay_incentive_debit_ecom",
+      "to": "e_spend_value_dc_ecom_txn_val",
+      "type": "drives",
+      "polarity": "+",
+      "scope": "inter_group",
+      "mechanism": "Acquirer incentives and zero MDR lower the cost of accepting RuPay debit online, channelling debit spend toward e-commerce",
+      "id": "fi_rupay_incentive_debit_ecom__drives__e_spend_value_dc_ecom_txn_val",
+      "channel": "ch_rupay_incentive_debit_ecom"
+    },
+    {
+      "from": "fi_contactless_ceiling",
+      "to": "e_spend_value_cc_pos_txn_val",
+      "type": "drives",
+      "polarity": "+",
+      "scope": "inter_group",
+      "mechanism": "A ₹5,000 tap-to-pay limit lets more card spend clear at POS without OTP friction, lifting credit card POS value",
+      "id": "fi_contactless_ceiling__drives__e_spend_value_cc_pos_txn_val",
+      "channel": "ch_contactless_ceiling"
+    },
+    {
+      "from": "fi_contactless_ceiling",
+      "to": "e_spend_volume_cc_pos_txn_vol",
+      "type": "drives",
+      "polarity": "+",
+      "scope": "inter_group",
+      "mechanism": "The same frictionless tap-to-pay limit raises the number of credit card POS transactions",
+      "id": "fi_contactless_ceiling__drives__e_spend_volume_cc_pos_txn_vol",
+      "channel": "ch_contactless_ceiling"
     }
   ],
   "force_instances": [
@@ -2250,13 +2280,14 @@
       "source_verified_date": "2026-09-10",
       "source_excerpt": "If a credit card has not been used for a period of more than one year, the process to close the card shall be initiated after intimating the cardholder.",
       "source_rationale": "Repointed 2026-09-10. The force cited id=12156, which serves a PPI Master Direction and contains no credit-card closure rule; the Directions are id=12300. The previous excerpt also carried a second clause — 'and shall not count such cards in their outstanding card base' — which appears NOWHERE in the Directions ('card base', 'outstanding card', 'number of cards' and 'shall not count' are all absent). That clause was invented and has been removed. The reporting effect (closed cards leaving the reported stock) is OUR inference from the closure rule, and is stated in the description rather than attributed to RBI.",
-      "status": "active",
+      "status": "watch",
       "instance_of": "ch_card_lifecycle_norms",
       "scope_entities": [
         "icl:atm_pos/cards/credit_cards"
       ],
       "timing_rule": "standing_regime",
-      "standing": true
+      "standing": true,
+      "status_note": "watch 2026-10-10 (user): the claim is episodic step-downs (purges of inactive cards), which the v3.1 steady-gap check cannot test; against 'cards in force' (~90% debit) it read contradicted at every reading. Held, with its source, until a step-change test exists."
     },
     {
       "id": "force_ncmc_transit_rollout",
@@ -2330,9 +2361,10 @@
       "source_excerpt": "cardholders can withdraw cash using their debit cards and full KYC prepaid cards issued by banks",
       "source_rationale": "Promoted from S4 after web source-verification.",
       "claim_type": "inference",
-      "status": "active",
+      "status": "watch",
       "timing_rule": "standing_regime",
-      "standing": true
+      "standing": true,
+      "status_note": "watch 2026-10-10 (user): the description explains how the cash-at-POS channel works (a facility with caps) but states no direction of push, so no driver edge is authored; kept as context, not counted as an active cause."
     },
     {
       "id": "fi_contactless_ceiling",
@@ -2341,7 +2373,8 @@
       "description": "RBI raised the contactless (no-Additional-Factor-of-Authentication) card per-transaction ceiling from Rs 2,000 to Rs 5,000 effective 1 January 2021 (RBI/2020-21/71). The higher tap-to-pay limit lets a larger share of card spend clear without OTP friction, supporting CC PoS transaction value and volume and shifting the ticket-size distribution upward.",
       "instance_of": "ch_contactless_ceiling",
       "scope_entities": [
-        "icl:atm_pos/spend_value/cc_pos_txn_val"
+        "icl:atm_pos/spend_value/cc_pos_txn_val",
+        "icl:atm_pos/spend_volume/cc_pos_txn_vol"
       ],
       "force_type": "policy_action",
       "non_observable_reason": "Regulatory/policy action; not a time-series column in the CSV.",

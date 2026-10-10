@@ -227,8 +227,8 @@
       "verdict": "contradicted",
       "window": "in_window",
       "instance_of": "ch_card_lifecycle_norms",
-      "authored_status": "active",
-      "mismatch": true,
+      "authored_status": "watch",
+      "mismatch": false,
       "rule": "v3.1"
     },
     "force_ncmc_transit_rollout": {
@@ -241,8 +241,8 @@
       "rule": "v3.1"
     },
     "fi_rupay_incentive_debit_ecom": {
-      "state": "unassessable",
-      "verdict": "unassessable",
+      "state": "active",
+      "verdict": "working",
       "window": "in_window",
       "instance_of": "ch_rupay_incentive_debit_ecom",
       "authored_status": "active",
@@ -254,13 +254,13 @@
       "verdict": "unassessable",
       "window": "in_window",
       "instance_of": "ch_cash_at_pos_clarity",
-      "authored_status": "active",
+      "authored_status": "watch",
       "mismatch": false,
       "rule": "v3.1"
     },
     "fi_contactless_ceiling": {
-      "state": "unassessable",
-      "verdict": "unassessable",
+      "state": "unclear",
+      "verdict": "unclear",
       "window": "in_window",
       "instance_of": "ch_contactless_ceiling",
       "authored_status": "active",
@@ -442,6 +442,30 @@
       "polarity": "-",
       "from": "e_cards_credit_cards",
       "to": "risk_cc_market_concentration"
+    },
+    "fi_rupay_incentive_debit_ecom__drives__e_spend_value_dc_ecom_txn_val": {
+      "state": "active",
+      "verdict": "working",
+      "type": "drives",
+      "polarity": "+",
+      "from": "fi_rupay_incentive_debit_ecom",
+      "to": "e_spend_value_dc_ecom_txn_val"
+    },
+    "fi_contactless_ceiling__drives__e_spend_value_cc_pos_txn_val": {
+      "state": "active",
+      "verdict": "working",
+      "type": "drives",
+      "polarity": "+",
+      "from": "fi_contactless_ceiling",
+      "to": "e_spend_value_cc_pos_txn_val"
+    },
+    "fi_contactless_ceiling__drives__e_spend_volume_cc_pos_txn_vol": {
+      "state": "reversed",
+      "verdict": "contradicted",
+      "type": "drives",
+      "polarity": "+",
+      "from": "fi_contactless_ceiling",
+      "to": "e_spend_volume_cc_pos_txn_vol"
     }
   },
   "loop_states": {
@@ -472,7 +496,8 @@
   },
   "system_observations": {
     "dominant_forces": [
-      "force_upi_zero_mdr"
+      "force_upi_zero_mdr",
+      "fi_rupay_incentive_debit_ecom"
     ],
     "binding_constraints": [
       "force_upi_zero_mdr__suppresses__e_spend_value_dc_atm_withdrawal_val"
@@ -481,9 +506,7 @@
       "cc_penetration_R"
     ],
     "active_balancing_loops": [],
-    "authored_vs_observed_mismatches": [
-      "force_rbi_card_lifecycle_norms"
-    ]
+    "authored_vs_observed_mismatches": []
   },
   "mix_states": {
     "atm-offsite-category-momentum": {
@@ -806,7 +829,7 @@
     "force_rbi_card_lifecycle_norms": {
       "verdict": "contradicted",
       "window": "in_window",
-      "in_doubt": true,
+      "in_doubt": false,
       "edges": {
         "force_rbi_card_lifecycle_norms__suppresses__e_cards_credit_cards": {
           "entity": "Credit cards outstanding",
@@ -840,11 +863,22 @@
       }
     },
     "fi_rupay_incentive_debit_ecom": {
-      "verdict": "unassessable",
+      "verdict": "working",
       "window": "in_window",
       "in_doubt": false,
-      "edges": {},
-      "reason": "no drives/suppresses/amplifies edge: the model does not say which way it pushes"
+      "edges": {
+        "fi_rupay_incentive_debit_ecom__drives__e_spend_value_dc_ecom_txn_val": {
+          "entity": "DC e-commerce value",
+          "type": "drives",
+          "growth": 8.39,
+          "baseline_kind": "parent",
+          "baseline_of": "Debit card spend (value)",
+          "baseline": -5.68,
+          "gap_pp": 14.07,
+          "noise_pp": 2.75,
+          "verdict": "working"
+        }
+      }
     },
     "fi_cash_at_pos_clarity": {
       "verdict": "unassessable",
@@ -854,11 +888,33 @@
       "reason": "no drives/suppresses/amplifies edge: the model does not say which way it pushes"
     },
     "fi_contactless_ceiling": {
-      "verdict": "unassessable",
+      "verdict": "unclear",
       "window": "in_window",
       "in_doubt": false,
-      "edges": {},
-      "reason": "no drives/suppresses/amplifies edge: the model does not say which way it pushes"
+      "edges": {
+        "fi_contactless_ceiling__drives__e_spend_value_cc_pos_txn_val": {
+          "entity": "CC POS value",
+          "type": "drives",
+          "growth": 9.07,
+          "baseline_kind": "parent",
+          "baseline_of": "Credit card spend (value)",
+          "baseline": 5.9,
+          "gap_pp": 3.17,
+          "noise_pp": 2.44,
+          "verdict": "working"
+        },
+        "fi_contactless_ceiling__drives__e_spend_volume_cc_pos_txn_vol": {
+          "entity": "CC POS volume",
+          "type": "drives",
+          "growth": 23.45,
+          "baseline_kind": "parent",
+          "baseline_of": "Credit card spend (volume)",
+          "baseline": 28.1,
+          "gap_pp": -4.65,
+          "noise_pp": 0.92,
+          "verdict": "contradicted"
+        }
+      }
     }
   },
   "explanation_coverage": {
