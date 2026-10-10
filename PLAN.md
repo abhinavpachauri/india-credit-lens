@@ -21,8 +21,9 @@ Built 2026-10-08 (SYSTEM_MODEL_SPEC v3.1 §16):
 - **12 model arrows tested** (10-10): none supported; states, loops, coverage, line-driven opportunities
   follow tests. **Card spend → card outstanding (1-month lead) supported** (r=+0.54, borderline).
 - **Structured context data feeds L2; S4 keeps the residual** (user, 10-10; DECISIONS). MoSPI WPI links
-  tested (fertiliser, gold): not supported. **Next: probe RBI DBIE** (rates, repo, bond/CP flows); if
-  blocked, Chrome; else the user downloads, as for SIBC. Onboard via `/onboard-source`.
+  tested (fertiliser, gold): not supported. **DBIE, rbi.org.in and eSankhyiki explored once (10-10):
+  `analysis/sources/README.md`** (398 DBIE tables, ranked shortlist). DBIE is not SIBC history. Next:
+  the user picks tables → download → `/onboard-source` each as its own pipeline.
 
 Agentic layer: phases 0–4 as before (`dashboard-change`, `onboard-source` ✅); `add-signal-family`,
 `measure-gate` ⬜, each written while doing its real task.
