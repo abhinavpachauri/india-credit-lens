@@ -1678,7 +1678,7 @@
         "pipeline": "atm_pos",
         "scope": "pipeline",
         "tier": "opportunity",
-        "status": "active",
+        "status": "closed",
         "authored_status": "emerging",
         "section": {
           "id": "cc",
@@ -1686,19 +1686,15 @@
           "icon": "💳"
         },
         "title": "Embedded transit and tap-to-pay payment products",
-        "body": "Credit card spending in the 'other' category jumped 270.4% by value and 142.2% by volume in the past year. This category includes transit tap-to-pay and embedded payment products that let people use cards in new everyday situations — buses, metros, and UPI-linked credit transactions. The value is growing much faster than the number of transactions, which means people are using these new payment methods for bigger purchases once they get comfortable with them.",
-        "implication": "A new everyday use case for credit cards is taking hold quickly, and the gap between value growth (270.4%) and volume growth (142.2%) shows that early adopters are increasing how much they spend through these channels, not just how often.",
+        "body": "The structural embedding of a new credit card use case (the 'other' category) signals a platform land-grab window for card issuers and acquirers who integrate with the winning infrastructure — whether transit NFC or UPI-linked credit. The opportunity is real regardless of which force hypothesis is confirmed; the appropriate platform strategy differs based on which force is validated.",
+        "implication": "",
         "chain": [
-          "New payment infrastructure (transit NFC, UPI-linked credit) makes it possible to use credit cards in places that previously only took cash or debit",
-          "People try the new method for small purchases first, then use it for larger amounts as they get comfortable",
-          "Value grows faster than volume because each user is spending more per transaction over time, signaling the behaviour is sticking"
+          "A new embedded payment use case (transit NFC tap-to-pay or RuPay-credit-on-UPI) creates a structurally growing card-spend channel in the unclassified 'other' category. Driver composition is unresolved (hypothesis).",
+          "This is being driven by Embedded card payment infrastructure rollout (transit NFC or RuPay-credit-on-UPI)."
         ],
         "_driver": "Embedded card payment infrastructure rollout (transit NFC or RuPay-credit-on-UPI)",
         "_via": "Embedded payment rails → new card-spend surface",
-        "evidence": [
-          "cc-other-val-yoy",
-          "cc-other-vol-yoy"
-        ],
+        "evidence": [],
         "evidence_all": [
           "cc-other-val-yoy",
           "cc-other-vol-yoy"
@@ -1714,8 +1710,7 @@
               "Total"
             ]
           }
-        ],
-        "narrative": true
+        ]
       },
       {
         "id": "risk_cc_market_concentration",

@@ -60,6 +60,8 @@ def growth_series(pipeline: str, model: dict, con=None) -> dict[str, dict[str, f
     The registry already says which YoY signal measures which code, in three shapes:
       csv_sector_yoy   one row per (statement, code)           -> that node
       csv_total_yoy    one row per metric (payments codes ARE the metric) -> that node
+      csv_sum_yoy      one row for a SUM of metrics -> the node whose leaf descendants are
+                       exactly those metrics (derived from the skeleton, never named by hand)
       *_scan_yoy       one row per member of a parent's cut, keyed by label -> that child
     A direct reading wins over a scan row for the same node; they are the same CSV numbers,
     and preferring one shape keeps the answer independent of registry order.
@@ -72,6 +74,14 @@ def growth_series(pipeline: str, model: dict, con=None) -> dict[str, dict[str, f
         by_code.setdefault((None, str(n.get("code"))), n)
     kids = _children(model)
     roots = {n.get("decomposition"): n for n in ents if n.get("structural_role") == "root"}
+
+    def leaves_under(nid: str) -> frozenset:
+        kid_list = kids.get(nid, [])
+        if not kid_list:
+            return frozenset({str(by_id_all[nid].get("code"))})
+        return frozenset().union(*(leaves_under(k["id"]) for k in kid_list))
+    by_id_all = {n["id"]: n for n in ents}
+    by_leaves = {leaves_under(n["id"]): n for n in ents if kids.get(n["id"])}
 
     own = con is None
     con = con or sqlite3.connect(DB)
@@ -94,6 +104,12 @@ def growth_series(pipeline: str, model: dict, con=None) -> dict[str, dict[str, f
             if method == "csv_sector_yoy" or method == "csv_total_yoy":
                 code = comp.get("code") if method == "csv_sector_yoy" else comp.get("metric")
                 node = by_code.get((comp.get("statement"), str(code))) or by_code.get((None, str(code)))
+                if node:
+                    for p, e, v in rows(sid):
+                        if e == "total":
+                            direct.setdefault(node["id"], {})[p] = v
+            elif method == "csv_sum_yoy":
+                node = by_leaves.get(frozenset(str(m) for m in comp.get("metrics", [])))
                 if node:
                     for p, e, v in rows(sid):
                         if e == "total":

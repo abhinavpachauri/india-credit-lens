@@ -44,6 +44,7 @@ METHOD_CATEGORY = {
     "csv_total_abs":                 "C1",
     "csv_sector_yoy":                "C1",
     "csv_total_yoy":                 "C1",
+    "csv_sum_yoy":                   "C1",   # a group total's growth (payments, 2026-10-10)
     "csv_sector_share":              "C1",
     "csv_category_share":            "C1",
     "csv_total_ratio":               "C1",

@@ -27,6 +27,7 @@ Relational methods (cross-segment — spec: signals/README.md):
 
 from __future__ import annotations
 import calendar
+import json
 from datetime import date
 from pathlib import Path
 from typing import Any
@@ -189,17 +190,41 @@ def csv_ratio_sum(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
 
 
 def csv_sum_yoy(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
-    """YoY% of (metric_1 + metric_2 + ...)."""
+    """YoY% of (metric_1 + metric_2 + ...): the growth of a group total RBI does not print
+    (all card spend, all cards in force). The group nodes of the payments model carry no
+    reading of their own, so without this nothing in them can be compared with its group.
+
+    A missing part makes the row unknown WITH a reason, never a smaller total: the earlier
+    `or 0` let one absent metric shrink the sum, and a partial total's growth reads as a
+    real one (DECISIONS: make the unknown case loud). Each row carries its parts.
+    """
     metrics = params["metrics"]
     avail   = set(df["report_date"].unique())
     prior   = _prior_year(period, avail)
-    v  = sum((_total_val(df, period, m) or 0) for m in metrics)
-    pv = sum((_total_val(df, prior,  m) or 0) for m in metrics) if prior else None
-    if not v:
-        return _unknown()
-    yoy = ((v - pv) / pv * 100) if pv else None
-    status = _eval_status(params.get("status_rules", []), yoy, None) if yoy is not None else "unknown"
-    return [_row("aggregate", "total", yoy, status, "pct")]
+    now     = {m: _total_val(df, period, m) for m in metrics}
+    before  = {m: _total_val(df, prior, m) for m in metrics} if prior else {}
+
+    def unknown(reason: str) -> list[dict]:
+        r = _row("aggregate", "total", None, "unknown", "")
+        r["reason"] = reason
+        return [r]
+
+    missing = sorted(m for m, v in now.items() if v is None)
+    if missing:
+        return unknown(f"part(s) missing this period: {', '.join(missing)}")
+    if not prior:
+        return unknown("no reading a year earlier")
+    missing = sorted(m for m, v in before.items() if v is None)
+    if missing:
+        return unknown(f"part(s) missing a year earlier: {', '.join(missing)}")
+    v, pv = sum(now.values()), sum(before.values())
+    if not pv:
+        return unknown("the year-earlier total is zero")
+    yoy = (v - pv) / pv * 100
+    row = _row("aggregate", "total", yoy, _eval_status(params.get("status_rules", []), yoy, None), "pct")
+    row["operands"] = json.dumps({"sum": round(v, 4), "year_ago_sum": round(pv, 4),
+                                  "year_ago": prior, "parts": sorted(metrics)}, sort_keys=True)
+    return [row]
 
 
 # ── Layer 1b ──────────────────────────────────────────────────────────────────

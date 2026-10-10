@@ -214,7 +214,10 @@ def test_manifest_force_check_defaults_and_rejects_unknown(monkeypatch):
     assert manifest.force_check.__module__ == "core.manifest"
 
 
-def test_sibc_declares_v31_and_payments_does_not():
+def test_the_force_rule_each_pipeline_declares():
+    """The user's decisions, pinned: SIBC on v3.1 (2026-10-08), payments on v3.1 once its group
+    totals carried a YoY signal (2026-10-10). NBFC has no forces yet, so it declares nothing."""
     from core import manifest
     assert manifest.force_check("sibc") == "v3.1"
-    assert manifest.force_check("atm_pos") == "v3.0"
+    assert manifest.force_check("atm_pos") == "v3.1"
+    assert manifest.force_check("nbfc") == "v3.0"

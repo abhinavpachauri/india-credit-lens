@@ -18103,6 +18103,302 @@
           }
         ]
       }
+    },
+    "cards-in-force-yoy": {
+      "title": "Cards in force (credit + debit) YoY growth (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "cadence": "monthly",
+      "sub_layer": "1a",
+      "domain": "cards_stock",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_sum_yoy",
+        "metrics": [
+          "credit_cards",
+          "debit_cards"
+        ],
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      },
+      "id": "cards-in-force-yoy",
+      "current_status": "active",
+      "first_seen": "2024-01-31"
+    },
+    "atms-yoy": {
+      "title": "ATMs (on-site + off-site) YoY growth (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "cadence": "monthly",
+      "sub_layer": "1a",
+      "domain": "infrastructure",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_sum_yoy",
+        "metrics": [
+          "atm_onsite",
+          "atm_offsite"
+        ],
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      },
+      "id": "atms-yoy",
+      "current_status": "active",
+      "first_seen": "2024-01-31"
+    },
+    "cc-spend-val-yoy": {
+      "title": "Credit card spend value (all channels) YoY growth (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "cadence": "monthly",
+      "sub_layer": "1a",
+      "domain": "credit_card_txn",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_sum_yoy",
+        "metrics": [
+          "cc_atm_withdrawal_val",
+          "cc_ecom_txn_val",
+          "cc_other_txn_val",
+          "cc_pos_txn_val"
+        ],
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      },
+      "id": "cc-spend-val-yoy",
+      "current_status": "active",
+      "first_seen": "2024-01-31"
+    },
+    "dc-spend-val-yoy": {
+      "title": "Debit card spend value (all channels) YoY growth (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "cadence": "monthly",
+      "sub_layer": "1a",
+      "domain": "debit_card_txn",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_sum_yoy",
+        "metrics": [
+          "dc_atm_withdrawal_val",
+          "dc_ecom_txn_val",
+          "dc_other_txn_val",
+          "dc_pos_txn_val",
+          "dc_pos_withdrawal_val"
+        ],
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      },
+      "id": "dc-spend-val-yoy",
+      "current_status": "declining",
+      "first_seen": "2024-01-31"
+    },
+    "card-spend-val-yoy": {
+      "title": "Total card spend value (credit + debit) YoY growth (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "cadence": "monthly",
+      "sub_layer": "1a",
+      "domain": "credit_card_txn",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_sum_yoy",
+        "metrics": [
+          "cc_atm_withdrawal_val",
+          "cc_ecom_txn_val",
+          "cc_other_txn_val",
+          "cc_pos_txn_val",
+          "dc_atm_withdrawal_val",
+          "dc_ecom_txn_val",
+          "dc_other_txn_val",
+          "dc_pos_txn_val",
+          "dc_pos_withdrawal_val"
+        ],
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      },
+      "id": "card-spend-val-yoy",
+      "current_status": "declining",
+      "first_seen": "2024-01-31"
+    },
+    "cc-spend-vol-yoy": {
+      "title": "Credit card spend volume (all channels) YoY growth (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "cadence": "monthly",
+      "sub_layer": "1a",
+      "domain": "credit_card_txn",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_sum_yoy",
+        "metrics": [
+          "cc_atm_withdrawal_vol",
+          "cc_ecom_txn_vol",
+          "cc_other_txn_vol",
+          "cc_pos_txn_vol"
+        ],
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      },
+      "id": "cc-spend-vol-yoy",
+      "current_status": "active",
+      "first_seen": "2024-01-31"
+    },
+    "dc-spend-vol-yoy": {
+      "title": "Debit card spend volume (all channels) YoY growth (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "cadence": "monthly",
+      "sub_layer": "1a",
+      "domain": "debit_card_txn",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_sum_yoy",
+        "metrics": [
+          "dc_atm_withdrawal_vol",
+          "dc_ecom_txn_vol",
+          "dc_other_txn_vol",
+          "dc_pos_txn_vol",
+          "dc_pos_withdrawal_vol"
+        ],
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      },
+      "id": "dc-spend-vol-yoy",
+      "current_status": "declining",
+      "first_seen": "2024-01-31"
+    },
+    "card-spend-vol-yoy": {
+      "title": "Total card spend volume (credit + debit) YoY growth (%)",
+      "type": "data",
+      "pipeline": "atm_pos",
+      "layer": 1,
+      "cadence": "monthly",
+      "sub_layer": "1a",
+      "domain": "credit_card_txn",
+      "spec_version": "1.0",
+      "compute": {
+        "method": "csv_sum_yoy",
+        "metrics": [
+          "cc_atm_withdrawal_vol",
+          "cc_ecom_txn_vol",
+          "cc_other_txn_vol",
+          "cc_pos_txn_vol",
+          "dc_atm_withdrawal_vol",
+          "dc_ecom_txn_vol",
+          "dc_other_txn_vol",
+          "dc_pos_txn_vol",
+          "dc_pos_withdrawal_vol"
+        ],
+        "status_rules": [
+          {
+            "if": "value > prev_value and value > 0",
+            "then": "strengthening"
+          },
+          {
+            "if": "value > 0",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      },
+      "id": "card-spend-vol-yoy",
+      "current_status": "active",
+      "first_seen": "2024-01-31"
     }
   }
 }

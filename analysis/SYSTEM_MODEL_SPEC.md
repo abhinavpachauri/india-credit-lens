@@ -517,7 +517,17 @@ reversed, anything else → dormant), `dominant_forces`, `authored_vs_observed_m
 only when `working`). **Switched on for SIBC 2026-10-08** (user, after reviewing `--history`):
 dominant forces 13 → 7, KCC in doubt, the PSLC-reclassification opportunity closed (its PSL
 ceilings have faded), and the PLI supply-chain loop no longer active (basic metals reads unclear).
-Payments stays v3.0 until its group totals carry a YoY signal. Measured over every reading:
+**Payments switched on 2026-10-10** (user, option A): dominant forces 7 → 1 (zero MDR), card
+lifecycle norms in doubt (the misfit below), the transit tap-to-pay opportunity closed (its force
+reads unclear). *Group totals added 2026-10-10:*
+8 `csv_sum_yoy` signals (cards in force, ATMs, credit / debit / all card spend by value and
+volume), read by `growth_series` from the node whose leaf set they add up; 34 of 35 payments
+lines now have a growth reading (acceptance infrastructure has none on purpose: QR codes, POS
+and ATMs do not add). A missing part makes a total unknown, never smaller. Payments verdicts
+over 32 readings: 13 working, 23 contradicted, 15 unclear, 18 faded (was 224/224 unassessable).
+*Known misfit before switching payments on:* card lifecycle norms read contradicted at every
+reading because "cards in force" is ~90% debit, so the test is credit vs debit cards; the force
+claims episodic purges (a step change), not a steady gap. Measured over every reading:
 
 - **SIBC, 13 forces × 25 readings (325).** v3.0: 237 active, 88 latent. v3.1: 106 working,
   20 contradicted, 11 unclear, 27 not yet due, 22 faded, 139 unassessable; 14 in doubt.
@@ -687,6 +697,13 @@ with n monthly changes: n = 15 → 0.51 (0.63 as one of four); 22 → 0.42; 36 �
 120 → 0.18. SIBC has 15 usable monthly changes (YoY exists from Jan 2025 data, and Sep–Dec 2025
 is missing), so only very strong links are visible. **History length is the binding constraint
 on this layer:** a 5-year SIBC backfill (RBI publishes it) would bring the visible bar to ~0.25.
+
+*Re-measured 2026-10-10 after backfill phase 1* (Sep–Nov releases; 36 continuous months, 23
+monthly changes per line): all five tests stay `not_supported` (HFC → housing r = +0.21,
+p = 0.35; the construction family |r| ≤ 0.31, p ≥ 0.16 against a bar of 0.0125). Coverage over
+the longer history: 176 moves, 34 structural, 12 working causes, 2 prices/activity, 0
+relationships, 128 unexplained. The 3× move threshold still flags 10% of readings (2× 20%,
+1× 49%), so it stands.
 
 **Output:** structured JSON with `entity_states` (incl. propagated aggregates), `force_states`, `edge_states`, `loop_states`, `system_observations`, and a `narrative: null` slot the LLM fills at Stage 5.X.
 

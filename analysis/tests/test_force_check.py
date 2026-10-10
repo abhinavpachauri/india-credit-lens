@@ -152,3 +152,40 @@ def test_roll_up():
 def test_monthly_changes_skip_a_hole():
     gaps = [("2025-01", 1.0), ("2025-02", 2.0), ("2025-06", 9.0), ("2025-07", 9.5)]
     assert fc.monthly_changes(gaps, lambda p: p) == [("2025-02", 1.0), ("2025-07", 0.5)]
+
+
+# ── group totals (csv_sum_yoy) — 2026-10-10 ──────────────────────────────────────────────
+
+def test_a_missing_part_makes_a_group_total_unknown_not_smaller():
+    """`or 0` once let one absent metric shrink the sum, and a partial total's growth reads as
+    real. A missing part now returns unknown with a reason."""
+    import pandas as pd
+    from signals.compute import atm_pos
+    rows = []
+    for d in ("2025-08-31", "2026-08-31"):
+        for m, v in (("a", 100.0), ("b", 50.0)):
+            rows.append({"report_date": d, "metric": m, "record_type": "total", "value": v * (1.1 if d[:4] == "2026" else 1)})
+    df = pd.DataFrame(rows)
+    ok = atm_pos.csv_sum_yoy({"metrics": ["a", "b"]}, "2026-08-31", df)[0]
+    assert round(ok["value"], 4) == 10.0 and '"year_ago_sum": 150.0' in ok["operands"]
+    holed = df[~((df["metric"] == "b") & (df["report_date"] == "2025-08-31"))]
+    bad = atm_pos.csv_sum_yoy({"metrics": ["a", "b"]}, "2026-08-31", holed)[0]
+    assert bad["value"] is None and bad["status"] == "unknown" and "b" in bad["reason"]
+
+
+def test_a_sum_signal_belongs_to_the_node_whose_leaves_it_adds(monkeypatch, tmp_path):
+    """No hand-written mapping: the node is derived from the skeleton by its leaf set."""
+    import sqlite3
+    db = tmp_path / "s.db"
+    con = sqlite3.connect(db)
+    con.execute("create table signals (pipeline, period, metric_id, entity_type, entity_id, value)")
+    con.execute("insert into signals values ('t','2026-08-31','grp-yoy','aggregate','total',4.2)")
+    con.commit()
+    model = {"nodes": [{"id": "G", "tier": "entity", "code": "grp", "label": "G"},
+                       {"id": "A", "tier": "entity", "code": "a", "label": "A"},
+                       {"id": "B", "tier": "entity", "code": "b", "label": "B"}],
+             "edges": [{"type": "composes_into", "from": "A", "to": "G"},
+                       {"type": "composes_into", "from": "B", "to": "G"}]}
+    reg = {"signals": {"grp-yoy": {"pipeline": "t", "compute": {"method": "csv_sum_yoy", "metrics": ["b", "a"]}}}}
+    monkeypatch.setattr(fc.gs, "load_json", lambda p: reg)
+    assert fc.growth_series("t", model, con) == {"G": {"2026-08-31": 4.2}}

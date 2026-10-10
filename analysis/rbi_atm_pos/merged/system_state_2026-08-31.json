@@ -5,8 +5,8 @@
     "schema_version": "4.0",
     "spec_ref": "analysis/SYSTEM_MODEL_SPEC.md §16",
     "computed_from": "signals.db",
-    "signals_observed": 329,
-    "force_rule": "v3.0"
+    "signals_observed": 337,
+    "force_rule": "v3.1"
   },
   "entity_states": {
     "icl:atm_pos/cards/cards_in_force": {
@@ -206,85 +206,88 @@
   "force_states": {
     "force_upi_zero_mdr": {
       "state": "active",
+      "verdict": "working",
+      "window": "in_window",
       "instance_of": "ch_zero_mdr_acceptance_mix",
-      "evidence_observed": 3,
-      "evidence_total": 3,
       "authored_status": "active",
       "mismatch": false,
-      "rule": "v3.0"
+      "rule": "v3.1"
     },
     "force_rbi_paytm_action": {
-      "state": "active",
+      "state": "faded",
+      "verdict": "faded",
+      "window": "faded",
       "instance_of": "ch_institutional_exit_card_stock",
-      "evidence_observed": 3,
-      "evidence_total": 3,
       "authored_status": "retired",
       "mismatch": false,
-      "rule": "v3.0"
+      "rule": "v3.1"
     },
     "force_rbi_card_lifecycle_norms": {
-      "state": "active",
+      "state": "contradicted",
+      "verdict": "contradicted",
+      "window": "in_window",
       "instance_of": "ch_card_lifecycle_norms",
-      "evidence_observed": 1,
-      "evidence_total": 1,
       "authored_status": "active",
-      "mismatch": false,
-      "rule": "v3.0"
+      "mismatch": true,
+      "rule": "v3.1"
     },
     "force_ncmc_transit_rollout": {
-      "state": "active",
+      "state": "unclear",
+      "verdict": "unclear",
+      "window": "in_window",
       "instance_of": "ch_embedded_payment_card_other",
-      "evidence_observed": 2,
-      "evidence_total": 2,
       "authored_status": "active",
       "mismatch": false,
-      "rule": "v3.0"
+      "rule": "v3.1"
     },
     "fi_rupay_incentive_debit_ecom": {
-      "state": "active",
+      "state": "unassessable",
+      "verdict": "unassessable",
+      "window": "in_window",
       "instance_of": "ch_rupay_incentive_debit_ecom",
-      "evidence_observed": 1,
-      "evidence_total": 1,
       "authored_status": "active",
       "mismatch": false,
-      "rule": "v3.0"
+      "rule": "v3.1"
     },
     "fi_cash_at_pos_clarity": {
-      "state": "active",
+      "state": "unassessable",
+      "verdict": "unassessable",
+      "window": "in_window",
       "instance_of": "ch_cash_at_pos_clarity",
-      "evidence_observed": 1,
-      "evidence_total": 1,
       "authored_status": "active",
       "mismatch": false,
-      "rule": "v3.0"
+      "rule": "v3.1"
     },
     "fi_contactless_ceiling": {
-      "state": "active",
+      "state": "unassessable",
+      "verdict": "unassessable",
+      "window": "in_window",
       "instance_of": "ch_contactless_ceiling",
-      "evidence_observed": 2,
-      "evidence_total": 2,
       "authored_status": "active",
       "mismatch": false,
-      "rule": "v3.0"
+      "rule": "v3.1"
     }
   },
   "edge_states": {
     "force_upi_zero_mdr__drives__e_infrastructure_upi_qr": {
-      "state": "active",
+      "state": "dormant",
+      "verdict": "unassessable",
       "type": "drives",
       "polarity": "+",
       "from": "force_upi_zero_mdr",
       "to": "e_infrastructure_upi_qr"
     },
     "force_upi_zero_mdr__suppresses__e_infrastructure_pos_terminals": {
-      "state": "reversed",
+      "state": "dormant",
+      "verdict": "unassessable",
       "type": "suppresses",
       "polarity": "-",
       "from": "force_upi_zero_mdr",
       "to": "e_infrastructure_pos_terminals"
     },
     "force_upi_zero_mdr__suppresses__e_spend_value_dc_atm_withdrawal_val": {
-      "state": "reversed",
+      "state": "active",
+      "verdict": "working",
       "type": "suppresses",
       "polarity": "-",
       "from": "force_upi_zero_mdr",
@@ -298,14 +301,15 @@
       "to": "risk_infrastructure_bifurcation"
     },
     "force_rbi_paytm_action__suppresses__e_cards_debit_cards": {
-      "state": "reversed",
+      "state": "dormant",
+      "verdict": "faded",
       "type": "suppresses",
       "polarity": "-",
       "from": "force_rbi_paytm_action",
       "to": "e_cards_debit_cards"
     },
     "force_rbi_paytm_action__creates_risk__risk_debit_card_base_erosion": {
-      "state": "reversed",
+      "state": "dormant",
       "type": "creates_risk",
       "polarity": "-",
       "from": "force_rbi_paytm_action",
@@ -313,20 +317,22 @@
     },
     "force_rbi_card_lifecycle_norms__suppresses__e_cards_credit_cards": {
       "state": "reversed",
+      "verdict": "contradicted",
       "type": "suppresses",
       "polarity": "-",
       "from": "force_rbi_card_lifecycle_norms",
       "to": "e_cards_credit_cards"
     },
     "force_ncmc_transit_rollout__drives__e_spend_value_cc_other_txn_val": {
-      "state": "active",
+      "state": "dormant",
+      "verdict": "unclear",
       "type": "drives",
       "polarity": "+",
       "from": "force_ncmc_transit_rollout",
       "to": "e_spend_value_cc_other_txn_val"
     },
     "force_ncmc_transit_rollout__creates_opportunity__opp_transit_payment_products": {
-      "state": "active",
+      "state": "dormant",
       "type": "creates_opportunity",
       "polarity": "+",
       "from": "force_ncmc_transit_rollout",
@@ -442,7 +448,7 @@
     "upi_network_effect_R": {
       "state": "partial",
       "type": "reinforcing",
-      "live_edges": 3,
+      "live_edges": 1,
       "total_edges": 3
     },
     "cc_penetration_R": {
@@ -454,7 +460,7 @@
     "acceptance_bifurcation_B": {
       "state": "partial",
       "type": "balancing",
-      "live_edges": 3,
+      "live_edges": 2,
       "total_edges": 3
     },
     "debit_base_erosion_B": {
@@ -466,20 +472,18 @@
   },
   "system_observations": {
     "dominant_forces": [
-      "force_upi_zero_mdr",
-      "force_rbi_paytm_action",
-      "force_rbi_card_lifecycle_norms",
-      "force_ncmc_transit_rollout",
-      "fi_rupay_incentive_debit_ecom",
-      "fi_cash_at_pos_clarity",
-      "fi_contactless_ceiling"
+      "force_upi_zero_mdr"
     ],
-    "binding_constraints": [],
+    "binding_constraints": [
+      "force_upi_zero_mdr__suppresses__e_spend_value_dc_atm_withdrawal_val"
+    ],
     "active_reinforcing_loops": [
       "cc_penetration_R"
     ],
     "active_balancing_loops": [],
-    "authored_vs_observed_mismatches": []
+    "authored_vs_observed_mismatches": [
+      "force_rbi_card_lifecycle_norms"
+    ]
   },
   "mix_states": {
     "atm-offsite-category-momentum": {
@@ -745,7 +749,7 @@
   },
   "force_check": {
     "force_upi_zero_mdr": {
-      "verdict": "unassessable",
+      "verdict": "working",
       "window": "in_window",
       "in_doubt": false,
       "edges": {
@@ -775,15 +779,15 @@
           "growth": -6.27,
           "baseline_kind": "parent",
           "baseline_of": "Debit card spend (value)",
-          "baseline": null,
-          "verdict": "unassessable",
-          "reason": "no growth or baseline reading this period"
+          "baseline": -5.68,
+          "gap_pp": -0.59,
+          "noise_pp": 0.48,
+          "verdict": "working"
         }
-      },
-      "reason": "no growth or baseline reading this period"
+      }
     },
     "force_rbi_paytm_action": {
-      "verdict": "unassessable",
+      "verdict": "faded",
       "window": "faded",
       "in_doubt": false,
       "edges": {
@@ -793,17 +797,16 @@
           "growth": 1.85,
           "baseline_kind": "parent",
           "baseline_of": "Cards in force",
-          "baseline": null,
-          "verdict": "unassessable",
-          "reason": "no growth or baseline reading this period"
+          "baseline": 2.68,
+          "gap_pp": -0.84,
+          "verdict": "faded"
         }
-      },
-      "reason": "no growth or baseline reading this period"
+      }
     },
     "force_rbi_card_lifecycle_norms": {
-      "verdict": "unassessable",
+      "verdict": "contradicted",
       "window": "in_window",
-      "in_doubt": false,
+      "in_doubt": true,
       "edges": {
         "force_rbi_card_lifecycle_norms__suppresses__e_cards_credit_cards": {
           "entity": "Credit cards outstanding",
@@ -811,15 +814,15 @@
           "growth": 10.27,
           "baseline_kind": "parent",
           "baseline_of": "Cards in force",
-          "baseline": null,
-          "verdict": "unassessable",
-          "reason": "no growth or baseline reading this period"
+          "baseline": 2.68,
+          "gap_pp": 7.59,
+          "noise_pp": 0.52,
+          "verdict": "contradicted"
         }
-      },
-      "reason": "no growth or baseline reading this period"
+      }
     },
     "force_ncmc_transit_rollout": {
-      "verdict": "unassessable",
+      "verdict": "unclear",
       "window": "in_window",
       "in_doubt": false,
       "edges": {
@@ -829,12 +832,12 @@
           "growth": 220.86,
           "baseline_kind": "parent",
           "baseline_of": "Credit card spend (value)",
-          "baseline": null,
-          "verdict": "unassessable",
-          "reason": "no growth or baseline reading this period"
+          "baseline": 5.9,
+          "gap_pp": 214.96,
+          "noise_pp": 340.83,
+          "verdict": "unclear"
         }
-      },
-      "reason": "no growth or baseline reading this period"
+      }
     },
     "fi_rupay_incentive_debit_ecom": {
       "verdict": "unassessable",
@@ -861,15 +864,15 @@
   "explanation_coverage": {
     "summary": {
       "lines": 31,
-      "moves": 3,
-      "steady": 23,
+      "moves": 4,
+      "steady": 27,
       "artifact": 0,
-      "structural": 0,
+      "structural": 1,
       "prices_activity": 0,
       "cause": 0,
       "relationship": 0,
       "unexplained": 3,
-      "no_reading": 5
+      "no_reading": 0
     },
     "moves": [
       {
@@ -878,11 +881,11 @@
         "product": "debit_card",
         "direction": "down",
         "level": "leaf",
-        "gap_change_pp": -13.7,
-        "noise_pp": 4.56,
-        "threshold_pp": 13.68,
-        "baseline_kind": "none",
-        "baseline_of": null,
+        "gap_change_pp": -12.7,
+        "noise_pp": 3.3,
+        "threshold_pp": 9.91,
+        "baseline_kind": "parent",
+        "baseline_of": "Debit card spend (value)",
         "filed_under": "unexplained",
         "also_holds": {},
         "prices_activity": "not_decomposable",
@@ -896,13 +899,35 @@
         "product": "debit_card",
         "direction": "up",
         "level": "leaf",
-        "gap_change_pp": 19.23,
-        "noise_pp": 4.01,
-        "threshold_pp": 12.02,
-        "baseline_kind": "none",
-        "baseline_of": null,
+        "gap_change_pp": 20.23,
+        "noise_pp": 5.08,
+        "threshold_pp": 15.25,
+        "baseline_kind": "parent",
+        "baseline_of": "Debit card spend (value)",
         "filed_under": "unexplained",
         "also_holds": {},
+        "prices_activity": "not_decomposable",
+        "prices_detail": {
+          "reason": "no 1f match for this line"
+        }
+      },
+      {
+        "entity": "Debit card spend (volume)",
+        "urn": "icl:atm_pos/spend_volume/dc_spend_volume",
+        "product": "debit_card",
+        "direction": "down",
+        "level": "aggregate",
+        "gap_change_pp": -1.98,
+        "noise_pp": 0.59,
+        "threshold_pp": 1.76,
+        "baseline_kind": "parent",
+        "baseline_of": "Total card spend (volume)",
+        "filed_under": "structural",
+        "also_holds": {
+          "structural": [
+            "echo of Total card spend (volume)"
+          ]
+        },
         "prices_activity": "not_decomposable",
         "prices_detail": {
           "reason": "no 1f match for this line"
@@ -914,11 +939,11 @@
         "product": "debit_card",
         "direction": "down",
         "level": "leaf",
-        "gap_change_pp": -10.46,
-        "noise_pp": 3.36,
-        "threshold_pp": 10.08,
-        "baseline_kind": "none",
-        "baseline_of": null,
+        "gap_change_pp": -9.62,
+        "noise_pp": 1.89,
+        "threshold_pp": 5.66,
+        "baseline_kind": "parent",
+        "baseline_of": "Debit card spend (volume)",
         "filed_under": "unexplained",
         "also_holds": {},
         "prices_activity": "not_decomposable",
@@ -927,33 +952,7 @@
         }
       }
     ],
-    "no_reading": [
-      {
-        "entity": "ATMs (on-site + off-site)",
-        "urn": "icl:atm_pos/infrastructure/atms",
-        "reason": "no YoY signal for this line in signals.db"
-      },
-      {
-        "entity": "Credit card spend (value)",
-        "urn": "icl:atm_pos/spend_value/cc_spend_value",
-        "reason": "no YoY signal for this line in signals.db"
-      },
-      {
-        "entity": "Debit card spend (value)",
-        "urn": "icl:atm_pos/spend_value/dc_spend_value",
-        "reason": "no YoY signal for this line in signals.db"
-      },
-      {
-        "entity": "Credit card spend (volume)",
-        "urn": "icl:atm_pos/spend_volume/cc_spend_volume",
-        "reason": "no YoY signal for this line in signals.db"
-      },
-      {
-        "entity": "Debit card spend (volume)",
-        "urn": "icl:atm_pos/spend_volume/dc_spend_volume",
-        "reason": "no YoY signal for this line in signals.db"
-      }
-    ]
+    "no_reading": []
   },
   "narrative": null
 }

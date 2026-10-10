@@ -3,6 +3,8 @@
   "name": "RBI ATM/POS — Payments",
   "order": 2,
   "kind": "primary",
+  "force_check": "v3.1",
+  "note_force_check": "Forces judged against a baseline with timing (SYSTEM_MODEL_SPEC §16 Step 3), switched on 2026-10-10 once the group totals carried a YoY signal (csv_sum_yoy). Known misfit, user-accepted: card lifecycle norms reads contradicted because cards in force is ~90% debit; the next model pass rewrites or retires that force.",
   "compute_module": "atm_pos",
   "cuts_module": "pipelines.atm_pos.generate_atm_pos_insights",
   "on_fail": "stop",

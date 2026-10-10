@@ -186,6 +186,196 @@
         }
       },
       "note": "Family of 4 declared together 2026-10-08 before any result: Construction→Cement (main), Construction→Iron and Steel, CRE→Cement, CRE→Iron and Steel; all +, lag 0. Construction and Cement are siblings under Industry, a slight mechanical pull toward a negative link (against the prediction)."
+    },
+    {
+      "source": "e_S1_3_9_1",
+      "source_label": "Housing Finance Companies (HFCs)",
+      "target": "e_S1_4_2",
+      "target_label": "Housing (Including Priority Sector Housing)",
+      "predicted_sign": -1,
+      "reason": "Banks fund home loans either directly or by lending to housing finance companies, so one channel substitutes for the other.",
+      "tested": "2026-10-10",
+      "through_period": "2026-09-30",
+      "protocol": "SYSTEM_MODEL_SPEC §16 Step 6b",
+      "verdict": "not_supported",
+      "at_lag": 0,
+      "family": 1,
+      "alpha": 0.05,
+      "lags": {
+        "0": {
+          "n": 23,
+          "r": 0.206,
+          "p": 0.35
+        },
+        "1": {
+          "n": 22,
+          "r": -0.27,
+          "p": 0.22
+        },
+        "2": {
+          "n": 21,
+          "r": -0.016,
+          "p": 0.944
+        },
+        "3": {
+          "n": 20,
+          "r": 0.282,
+          "p": 0.228
+        }
+      },
+      "note": "Re-test 2026-10-10 after SIBC backfill phase 1 (15 → 23 monthly changes). Hypothesis, sign, lag and family unchanged from the first test."
+    },
+    {
+      "source": "e_S2_2_17",
+      "source_label": "Construction",
+      "target": "e_S2_2_12",
+      "target_label": "Cement and Cement Products",
+      "predicted_sign": 1,
+      "reason": "When construction firms borrow more, their main input suppliers' working capital rises too, within the same month.",
+      "tested": "2026-10-10",
+      "through_period": "2026-09-30",
+      "protocol": "SYSTEM_MODEL_SPEC §16 Step 6b",
+      "verdict": "not_supported",
+      "at_lag": 0,
+      "family": 4,
+      "alpha": 0.0125,
+      "lags": {
+        "0": {
+          "n": 23,
+          "r": -0.306,
+          "p": 0.157
+        },
+        "1": {
+          "n": 22,
+          "r": 0.081,
+          "p": 0.718
+        },
+        "2": {
+          "n": 21,
+          "r": -0.279,
+          "p": 0.218
+        },
+        "3": {
+          "n": 20,
+          "r": 0.096,
+          "p": 0.685
+        }
+      },
+      "note": "Re-test 2026-10-10 after SIBC backfill phase 1 (15 → 23 monthly changes). Hypothesis, sign, lag and family unchanged from the first test. Family of 4."
+    },
+    {
+      "source": "e_S2_2_17",
+      "source_label": "Construction",
+      "target": "e_S2_2_13_1",
+      "target_label": "Iron and Steel",
+      "predicted_sign": 1,
+      "reason": "When construction firms borrow more, their main input suppliers' working capital rises too, within the same month.",
+      "tested": "2026-10-10",
+      "through_period": "2026-09-30",
+      "protocol": "SYSTEM_MODEL_SPEC §16 Step 6b",
+      "verdict": "not_supported",
+      "at_lag": 0,
+      "family": 4,
+      "alpha": 0.0125,
+      "lags": {
+        "0": {
+          "n": 23,
+          "r": 0.129,
+          "p": 0.56
+        },
+        "1": {
+          "n": 22,
+          "r": -0.148,
+          "p": 0.515
+        },
+        "2": {
+          "n": 21,
+          "r": 0.148,
+          "p": 0.526
+        },
+        "3": {
+          "n": 20,
+          "r": -0.221,
+          "p": 0.35
+        }
+      },
+      "note": "Re-test 2026-10-10 after SIBC backfill phase 1 (15 → 23 monthly changes). Hypothesis, sign, lag and family unchanged from the first test. Family of 4."
+    },
+    {
+      "source": "e_S1_3_8",
+      "source_label": "Commercial Real Estate",
+      "target": "e_S2_2_12",
+      "target_label": "Cement and Cement Products",
+      "predicted_sign": 1,
+      "reason": "When construction firms borrow more, their main input suppliers' working capital rises too, within the same month.",
+      "tested": "2026-10-10",
+      "through_period": "2026-09-30",
+      "protocol": "SYSTEM_MODEL_SPEC §16 Step 6b",
+      "verdict": "not_supported",
+      "at_lag": 0,
+      "family": 4,
+      "alpha": 0.0125,
+      "lags": {
+        "0": {
+          "n": 23,
+          "r": 0.284,
+          "p": 0.188
+        },
+        "1": {
+          "n": 22,
+          "r": -0.168,
+          "p": 0.464
+        },
+        "2": {
+          "n": 21,
+          "r": -0.052,
+          "p": 0.83
+        },
+        "3": {
+          "n": 20,
+          "r": -0.169,
+          "p": 0.492
+        }
+      },
+      "note": "Re-test 2026-10-10 after SIBC backfill phase 1 (15 → 23 monthly changes). Hypothesis, sign, lag and family unchanged from the first test. Family of 4."
+    },
+    {
+      "source": "e_S1_3_8",
+      "source_label": "Commercial Real Estate",
+      "target": "e_S2_2_13_1",
+      "target_label": "Iron and Steel",
+      "predicted_sign": 1,
+      "reason": "When construction firms borrow more, their main input suppliers' working capital rises too, within the same month.",
+      "tested": "2026-10-10",
+      "through_period": "2026-09-30",
+      "protocol": "SYSTEM_MODEL_SPEC §16 Step 6b",
+      "verdict": "not_supported",
+      "at_lag": 0,
+      "family": 4,
+      "alpha": 0.0125,
+      "lags": {
+        "0": {
+          "n": 23,
+          "r": 0.097,
+          "p": 0.651
+        },
+        "1": {
+          "n": 22,
+          "r": -0.019,
+          "p": 0.935
+        },
+        "2": {
+          "n": 21,
+          "r": 0.205,
+          "p": 0.376
+        },
+        "3": {
+          "n": 20,
+          "r": -0.076,
+          "p": 0.742
+        }
+      },
+      "note": "Re-test 2026-10-10 after SIBC backfill phase 1 (15 → 23 monthly changes). Hypothesis, sign, lag and family unchanged from the first test. Family of 4."
     }
   ]
 }

@@ -11,7 +11,7 @@ the layers under it were thin. Order agreed: fix the force check → count what 
 → relationships inside a pipeline → links between pipelines → master model → S4 redesign.
 Built 2026-10-08 (SYSTEM_MODEL_SPEC v3.1 §16):
 - **Force check** (Step 3, `core/force_check.py`): judged against the line's group, with timing;
-  live for SIBC (13 → 7 active; KCC in doubt). Payments waits: its group totals have no YoY signal.
+  live for SIBC (13 → 7 active; KCC in doubt) and payments (2026-10-10, after 8 group-total YoY signals; 7 → 1 active).
 - **Coverage count** (Step 6a, `core/coverage.py`): moves vs explained, every state file; S4 reads
   its list from it. SIBC Aug 2026: 6 moves, 2 structural, 4 unexplained (food credit, loans
   against FDs, other industries, fertiliser). History: 102 unexplained → 86 after structural.

@@ -156,6 +156,11 @@ def total_yoy_by_metric(pipeline: str, registry: dict) -> dict[str, str]:
         c = sig.get("compute") or {}
         if sig.get("pipeline") != pipeline or c.get("method") not in TOTAL_YOY_METHODS:
             continue
+        if "metric" not in c:
+            # A sum of several measures (csv_sum_yoy: all card spend, cards in force) is a
+            # GROUP's total, not any one measure's own; the system model reads it by its leaf
+            # set (force_check.growth_series). Keyed here it would have no measure to answer for.
+            continue
         if c.get("metric") in out:
             raise ValueError(f"{pipeline}: metric {c['metric']!r} has two total-YoY signals: "
                              f"{out[c['metric']]}, {sid}")
