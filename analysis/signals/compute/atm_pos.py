@@ -28,6 +28,7 @@ Relational methods (cross-segment — spec: signals/README.md):
 from __future__ import annotations
 import calendar
 import json
+import statistics
 from datetime import date
 from pathlib import Path
 from typing import Any
@@ -629,9 +630,15 @@ def csv_category_momentum(params: dict, period: str, df: pd.DataFrame) -> list[d
     if got is None:
         return []
     deltas, net, gross = got
+    return _momentum_rows("bank_category", deltas, net, gross, params)
+
+
+def _momentum_rows(entity_type: str, deltas: dict, net: float, gross: float,
+                   params: dict) -> list[dict]:
+    """Momentum rows for any member set — categories or banks. One copy of the math."""
     unit  = params.get("unit", "count")
     rules = params.get("status_rules") or MOMENTUM_DEFAULT_RULES
-    out = [_row("bank_category", k, v, _eval_status(rules, v, 0.0), unit)
+    out = [_row(entity_type, k, v, _eval_status(rules, v, 0.0), unit)
            for k, v in deltas.items()]
     out.sort(key=lambda r: r["value"], reverse=True)
     out.append(_row("aggregate", "total", net, _eval_status(rules, net, 0.0), unit))
@@ -673,51 +680,183 @@ def csv_category_allocation(params: dict, period: str, df: pd.DataFrame) -> list
 
     Below `coherence_min` this is not an honest null — the contribution rows stand and the
     insight switches to the contested/handover sentence. Nothing computed is suppressed.
+    Categories divide by the sum of the parts without the branch check (signals/README.md,
+    "Story readings › Known"): right today because the categories add up to the total.
     """
     got = _cat_deltas(params, period, df)
     if got is None:
         return []
     deltas, net, gross = got
+    window = int(params.get("window", 12))
+    prior_date = _month_back(period, window, set(df["report_date"].unique()))
+    base = _cat_values(params, prior_date, df) if prior_date else {}
+    now = _cat_values(params, period, df)
+    return _allocation_rows(deltas, net, gross, base, now,
+                            sum(base.values()), sum(now.values()), None, params)
+
+
+def _allocation_rows(deltas: dict, net_denom: float | None, gross: float,
+                     base: dict, now: dict, level_then: float | None, level_now: float | None,
+                     coverage: float | None, params: dict) -> list[dict]:
+    """Allocation rows for any member set. One copy of the math; the caller decides the
+    denominators (the denominator rule), this decides nothing but the arithmetic.
+
+    `weight` — each member's share at the START of the window — is emitted in EVERY regime. It
+    is direction-free and always computable, so withholding it when coherence is low is
+    coherence GATING rather than routing, which this project decided against: Layer 2 reads
+    `tilt = alloc - weight` and skips a cut with no weight rows, so payments' contested mixes
+    once produced no mix state at all. `weight_now` is the same members over the same
+    denominator TODAY, stored because the share scan divides by a different total.
+    `alloc` — share of the NET — is routed by coherence: when members cancel, a share of a
+    small net is unbounded and misleading, and `contribution` (share of gross) carries the work.
+    """
     if not gross:
         return []
-    coherence = abs(net) / gross
+    coherence = abs(sum(deltas.values())) / gross
     cmin = float(params.get("coherence_min", COHERENCE_MIN))
     out = [_row("contribution", k, 100.0 * v / gross, "active", "pct")
            for k, v in deltas.items()]
     out.sort(key=lambda r: r["value"], reverse=True)
     out.append(_row("aggregate", "total", max(abs(r["value"]) for r in out), "active", "pct"))
-    # `weight` — each category's share of the parent at the START of the window — is
-    # emitted in EVERY regime, like SIBC's. It is direction-free and always computable, so
-    # withholding it when coherence is low is coherence GATING rather than routing, which
-    # this project decided against. The consequence was silent: Layer 2 reads
-    # `tilt = alloc - weight` and skips a cut with no weight rows, so payments' contested
-    # mixes — debit cards at 0.525, POS at 0.864, the two most interesting on the platform —
-    # produced no mix state at all while SIBC's contested infra cut produced one.
-    window = int(params.get("window", 12))
-    prior_date = _month_back(period, window, set(df["report_date"].unique()))
-    base = _cat_values(params, prior_date, df) if prior_date else {}
-    tot = sum(base.values())
-    if tot:
-        out.extend(_row("weight", k, 100.0 * v / tot, "active", "pct")
+    if coverage is not None:
+        out.append(_row("coverage", "total", coverage, "active", "pct"))
+    if level_then:
+        out.extend(_row("weight", k, 100.0 * v / level_then, "active", "pct")
                    for k, v in base.items())
-    # `weight_now` — the SAME children over the SAME denominator at the END of the window.
-    # Stored rather than left to the share scan because the two use different denominators:
-    # a share scan divides by the parent's own published row, this divides by the sum of the
-    # parts. For main sectors those differ by 4.9% — the four sectors do not add up to
-    # non-food credit — so "share of the book then vs now" read off two families would be a
-    # comparison of two different questions, which is the defect §15 was written about.
-    now = _cat_values(params, period, df)
-    tot_now = sum(now.values())
-    if tot_now:
-        out.extend(_row("weight_now", k, 100.0 * v / tot_now, "active", "pct")
+    if level_now:
+        out.extend(_row("weight_now", k, 100.0 * v / level_now, "active", "pct")
                    for k, v in now.items())
-    # `alloc` — share of the NET — stays gated, and that is routing not suppression: when
-    # members cancel, a share of a small net is unbounded and misleading. `contribution`
-    # (share of gross) carries the quantitative work in those windows.
-    if coherence >= cmin and net:
-        alloc = [_row("alloc", k, 100.0 * v / net, "active", "pct") for k, v in deltas.items()]
+    if coherence >= cmin and net_denom:
+        alloc = [_row("alloc", k, 100.0 * v / net_denom, "active", "pct") for k, v in deltas.items()]
         alloc.sort(key=lambda r: r["value"], reverse=True)
         out.extend(alloc)
+    return out
+
+
+# ── movement one level down: banks (signals/README.md, "Story readings") ──────
+# The category family's operator over individual banks, so "how much of the market's move
+# was HDFC" has a stored row. Two differences, both because banks are not categories:
+# a bank present at only one end of the window counts with 0 at the other (a leaver's book is
+# part of the market's move), and the denominator is decided by the rule, not assumed.
+
+ADDITIVE_EPS = 1e-4     # same threshold as SIBC's denominator rule (csv_sector.ADDITIVE_EPS)
+
+
+def _bank_deltas(params: dict, period: str, df: pd.DataFrame):
+    """(deltas, now, then, prior_date) over the window, entries and exits included."""
+    window = int(params.get("window", 12))
+    prior_date = _month_back(period, window, set(df["report_date"].unique()))
+    if prior_date is None:
+        return None
+    now = _bank_values(df, period, params["metric"])
+    then = _bank_values(df, prior_date, params["metric"])
+    if not now:
+        return None
+    # A bank with nothing at either end is not in this market: a zero row says nothing, and
+    # 13,863 of them (one in three) were padding the store toward GitHub's file limit.
+    deltas = {b: now.get(b, 0.0) - then.get(b, 0.0) for b in set(now) | set(then)
+              if now.get(b) or then.get(b)}
+    return deltas, now, then, prior_date
+
+
+def _bank_denominators(metric: str, period: str, prior_date: str, df: pd.DataFrame,
+                       parts_now: float, parts_then: float):
+    """The denominator rule for banks, measured per metric per period.
+
+    (branch, level_now, level_then, coverage). The parent is the metric's published total;
+    a missing one raises (the dispatcher turns it into an `unknown` row — visible, never a
+    silent fall-back to the sum of the banks).
+    """
+    total_now, total_then = _total_val(df, period, metric), _total_val(df, prior_date, metric)
+    if total_now is None or total_then is None:
+        raise LookupError(f"{metric}: no published total at {period} or {prior_date}")
+    if abs(parts_now - total_now) <= ADDITIVE_EPS * abs(total_now):
+        return "additive", parts_now, parts_then, None
+    return "of_which", total_now, total_then, 100.0 * parts_now / total_now
+
+
+def csv_bank_momentum(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
+    """Units each bank added or lost over the annual window, + net / gross / coherence."""
+    got = _bank_deltas(params, period, df)
+    if got is None:
+        return []
+    deltas = got[0]
+    net, gross = sum(deltas.values()), sum(abs(v) for v in deltas.values())
+    return _momentum_rows("bank", deltas, net, gross, params)
+
+
+def csv_bank_allocation(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
+    """Where the market's new units went, bank by bank. `contribution` always, `weight` and
+    `weight_now` always, `alloc` when coherent — over the denominator the rule picks."""
+    got = _bank_deltas(params, period, df)
+    if got is None:
+        return []
+    deltas, now, then, prior_date = got
+    gross = sum(abs(v) for v in deltas.values())
+    branch, level_now, level_then, coverage = _bank_denominators(
+        params["metric"], period, prior_date, df, sum(now.values()), sum(then.values()))
+    # No `weight` / `weight_now` for banks: each is a bank's share of the published total at
+    # one end of the window, which `{metric}-bank-share-scan` already stores over the same
+    # denominator. Stored twice they were 66,506 rows; nothing in Layer 2 reads bank weights.
+    return _allocation_rows(deltas, level_now - level_then, gross, {}, {},
+                            None, None, coverage, params)
+
+
+# ── the break flag (1d) ────────────────────────────────────────────────────────
+
+STEP_FACTOR, STEP_FLOOR_PP, STEP_MIN_HISTORY = 3.0, 1.0, 6
+STEP_DEFAULT_RULES = [
+    {"if": "value > 0", "then": "strengthening"},
+    {"if": "true",      "then": "weakening"},
+]
+
+
+def _month_index(d: str) -> int:
+    y, m = int(d[:4]), int(d[5:7])
+    return y * 12 + m
+
+
+def csv_bank_step(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
+    """Banks whose share of the market jumped this month far beyond their own usual move.
+
+    A reclassification, merger or reporting change looks like this; ordinary business rarely
+    does. Flag: |Δshare| > factor × the median |Δshare| of the bank's EARLIER consecutive-month
+    changes, and |Δshare| ≥ floor pp. Read from earlier changes only, so a stored flag never
+    moves when later months arrive. Flagged banks only; no flag → no rows.
+    """
+    metric = params["metric"]
+    factor = float(params.get("factor", STEP_FACTOR))
+    floor  = float(params.get("floor_pp", STEP_FLOOR_PP))
+    min_h  = int(params.get("min_history", STEP_MIN_HISTORY))
+    rules  = params.get("status_rules") or STEP_DEFAULT_RULES
+    sub = df[df["metric"] == metric]
+    sub = sub[sub["report_date"].astype(str) <= period]    # dates are unordered categoricals
+    totals = sub[sub["record_type"] == "total"].groupby("report_date", observed=True)["value"].sum()
+    if period not in totals.index or not totals.get(period):
+        return []
+    banks = sub[sub["record_type"] == "bank"].pivot_table(
+        index="bank_name", columns="report_date", values="value", aggfunc="sum", observed=True)
+    dates = [d for d in sorted(banks.columns) if d in totals.index and totals[d]]
+    if len(dates) < 2 or dates[-1] != period:
+        return []
+    mi = [_month_index(d) for d in dates]
+    if mi[-1] - mi[-2] != 1:
+        return []                           # a gap in the file is not a one-month step
+    shares = banks[dates].div(totals[dates], axis=1) * 100.0
+    out = []
+    for bank, row in shares.iterrows():
+        s = row.tolist()
+        step = s[-1] - s[-2]
+        if pd.isna(step):
+            continue
+        earlier = [abs(s[i] - s[i - 1]) for i in range(1, len(s) - 1)
+                   if mi[i] - mi[i - 1] == 1 and not pd.isna(s[i]) and not pd.isna(s[i - 1])]
+        if len(earlier) < min_h:
+            continue
+        typical = statistics.median(earlier)
+        if abs(step) >= floor and abs(step) > factor * typical:
+            out.append(_row("bank", bank, step, _eval_status(rules, step, 0.0), "pp"))
+    out.sort(key=lambda r: abs(r["value"]), reverse=True)
     return out
 
 
@@ -903,6 +1042,10 @@ METHODS: dict = {
     "csv_category_acceleration": csv_category_acceleration,
     "csv_category_allocation": csv_category_allocation,
     "csv_bank_divergence":     csv_bank_divergence,
+    # story readings (signals/README.md): the movement family one level down, and the break flag
+    "csv_bank_momentum":       csv_bank_momentum,
+    "csv_bank_allocation":     csv_bank_allocation,
+    "csv_bank_step":           csv_bank_step,
     "csv_pair_divergence":     csv_pair_divergence,
 }
 

@@ -58,10 +58,14 @@ METHOD_CATEGORY = {
     "csv_sector_allocation":         "C2",
     "csv_category_momentum":         "C2",
     "csv_category_allocation":       "C2",
+    "csv_bank_momentum":             "C2",   # the same, one level down (signals/README.md, "Story readings")
+    "csv_bank_allocation":           "C2",
     # C3 — declared co-movement breaking (hierarchy axis and metric axis)
     "csv_sector_divergence":         "C3",
     "csv_bank_divergence":           "C3",
     "csv_pair_divergence":           "C3",
+    # a break in one bank's own series: a series contradicting its own past, flagged only
+    "csv_bank_step":                 "C3",
     # C4 — distribution across an entity set: breadth, concentration, leaders/laggards
     "csv_sector_scan_yoy":           "C4",
     "csv_sector_scan_share":         "C4",

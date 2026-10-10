@@ -103,6 +103,11 @@ METHOD_TYPE: dict[str, str] = {
     "csv_sector_divergence":   "divergence",
     "csv_bank_divergence":     "divergence",
     "csv_pair_divergence":     "pair",
+    # story readings (signals/README.md): bank movement is a row distribution like the
+    # sector family; the break flag is flagged-entities-only, the divergence shape
+    "csv_bank_momentum":       "scan",
+    "csv_bank_allocation":     "scan",
+    "csv_bank_step":           "divergence",
 }
 
 # Multi-entity signal types stored as one row per entity — payloads and

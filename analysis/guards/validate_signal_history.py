@@ -202,6 +202,7 @@ def check_db(reg_signals: dict, known_pipelines: set[str]) -> sqlite3.Connection
     ANOMALY_SURFACED = {
         "csv_sector_divergence",   # child contradicts parent — flagged rows only
         "csv_bank_divergence",     # bank contradicts its category
+        "csv_bank_step",           # a break in one bank's share (signals/README.md, "Story readings")
     }
 
     def method_of(sig_id: str) -> str:

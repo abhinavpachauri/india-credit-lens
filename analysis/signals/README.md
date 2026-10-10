@@ -702,6 +702,94 @@ METHOD_TYPE: `acceleration`.
   SYSTEM_MODEL_SPEC §16 Step 2 (mechanical propagation) and COMPOSITION_SPEC §14 (construct
   direction). Compute it once here; both consume it. See those sections.
 
+## Story readings — per-bank movement and the break flag (2026-10-10)
+
+> Specced **2026-10-10, before the compute**, from the first X plan (25 posts,
+> `analysis/distribution/output/x/2026-10-10_to_11-03_plan.md`). The drafts asked for six readings
+> nothing stored. Each was assessed against this spec before anything was built.
+
+**The six, and what this spec already says about each:**
+
+| reading the drafts wanted | ruling | why |
+|---|---|---|
+| gap to market ("0.9% vs 9.1%") | **not a signal** | Two stored operands beat a subtraction no gate grounds (*Assessed and NOT added*, above). The posts already quote both. Story *ranking* may compute it; nothing publishes it. |
+| remainder ("everyone else 6.6%") | **not a signal** | DECISIONS: a remainder is not a sector. |
+| minimum size before ranking | **not a signal** | A selection rule, owned by the distribution layer (DISTRIBUTION_SPEC §16). Open for the user (`min_base`, PLAN). |
+| run length ("3rd month below the market") | **not built: needs a user ruling** | Reverses *per-entity streak counts: assessed and NOT added*. If reversed: a 1d relative streak (entity YoY on one side of its parent's, consecutive months, a gap ends the run with a reason). |
+| contribution on bank tables ("HDFC is carrying card e-com") | **built below** | A coverage addition: bank tables carry size, share and growth but no movement, so "how much of the market's move was this bank" has no stored row. |
+| break flag (HDFC share −4.2 pp in one month) | **built below** | Nothing detects a step in one entity's own series. `dominance.py` asks a different question: how much of the *aggregate's* move one bank is. |
+
+### `csv_bank_momentum` · `csv_bank_allocation` — the movement family, one level down
+
+**One operator, both trees** (as divergence): the category methods' math, run over banks. Rows
+`entity_type = "bank"`; ids `{metric}-bank-momentum`, `{metric}-bank-allocation` (the bank stem,
+like `-bank-scan`); `sub_layer 1e`, monthly, `window: 12`, all 26 payments metrics.
+
+- **Entries and exits count.** A bank in the file at one end of the window and not the other is
+  counted with **0 at the missing end**, so the deltas add up to the published total's move. The
+  category code keeps only members present at both ends; for categories that loses nothing, for
+  banks it drops a leaver's whole book (1 of 64 banks left in the year to Aug 2026).
+- **The denominator rule applies, measured not assumed.** Σ banks vs the published total,
+  enumerated: **832 of 832** metric-months additive (worst residual 1.2e-15). So today it is
+  branch 1, but the branch is still decided per metric per period, and a non-additive month
+  takes branch 2 (alloc and weights over the published total, `coverage` row stored). Today's
+  category allocation divides by the parts without checking; it is right only because these
+  sums happen to match (recorded under *Known*, below).
+- **Same routing as the category family, fewer row kinds:** momentum = delta per bank + `total`
+  (net), `gross_movement`, `coherence`; allocation = `contribution` always, `alloc` only when
+  coherence ≥ `coherence_min`. Coherence routes, never gates. **No `weight` / `weight_now`:** for a
+  bank they are its share of the published total at each end of the window, which
+  `-bank-share-scan` already stores over the same denominator (one source of truth; 66,506 rows).
+- **A member is a bank with a value at either end.** A bank at zero at both ends is not in that
+  market; its zero rows were one in three momentum rows (13,863) and said nothing.
+- **Size, measured:** first build added 150,043 rows (+79%) and took `signals.db` from 67 MB to
+  121 MB, past GitHub's 100 MB file limit. The two rules above are what brought it back.
+- **Consumers:** the bank tables and story selection. **No cards**: "never pre-generate per-bank
+  cards" stands, so `movement_cards.py` does not read these methods.
+
+### `csv_bank_step` — a break in one bank's own series (1d)
+
+*Did this bank's share of the market jump in one month by far more than it ever moves?* A
+reclassification, a merger or a reporting change looks like this; ordinary business rarely does.
+
+- **Rule:** `Δs = share(t) − share(t−1)`, shares of the published total, **consecutive months only**
+  (a gap in the file is not a one-month step). Flag when `|Δs| > 3 × median|Δs|` over the bank's own
+  earlier changes **and** `|Δs| ≥ 1.0 pp`. The 3× is the coverage count's move rule (SYSTEM_MODEL_SPEC
+  §16 Step 6a), so one definition of "a move" serves both layers.
+- **No look-ahead:** the typical change is read from changes **before t**, so a stored flag never
+  changes as later months arrive. At least **6** earlier consecutive changes, else no flag.
+- **Rows: flagged banks only** (anomaly-surfaced, like divergence). `value = Δs` in pp, signed;
+  status `strengthening` / `weakening` by sign. No flag → no rows.
+- **Measured (all 26 metrics × 64 banks × 32 months, 51,451 readings), with the two known breaks
+  as controls** (HDFC credit-card POS value, Dec 2025, −4.2 pp; ICICI POS terminals, Jun 2026):
+
+  | factor | floor | flagged readings | series | known breaks caught |
+  |---|---|---|---|---|
+  | 3× | 0.5 pp | 505 (0.98%) | 175 | 2 / 2 |
+  | **3×** | **1.0 pp** | **307 (0.60%)** | **107** | **2 / 2** |
+  | 3× | 2.0 pp | 185 (0.36%) | 66 | 2 / 2 |
+  | 5× | 1.0 pp | 232 (0.45%) | 90 | 2 / 2 |
+
+  The largest flags are spikes that revert the next month in thin metrics (`cc_other_txn_*`:
+  Federal Bank 0 → 78.4% → 0). That is a reporting artefact, exactly what the flag is for.
+- **As built (3×, 1.0 pp, earlier changes only, ≥ 6 of them):** **180 flags in 77 series**, both
+  controls caught (HDFC −4.16 pp, ICICI −13.35 pp). Fewer than the table's 307 because the
+  measurement above read each bank's typical move from its whole series, later months included;
+  the method reads only what was known at t. Aug 2026 flags 5, among them credit-card e-commerce:
+  SBI −2.70 pp and HDFC +2.36 pp in one month, which is X plan post #16's story.
+- **Bank movement as built:** credit-card e-commerce, Aug 2026: the banks' net movement equals the
+  published total's move exactly (leavers counted); coherence 0.278, so `alloc` is withheld and
+  `contribution` carries it (HDFC 43.9% of all movement).
+- **What a consumer does with it:** a story never quotes a reading across a flagged month as a trend.
+  It quotes one side of the break, or names the break. (DISTRIBUTION_SPEC §16.5.)
+
+### Known, found here, NOT fixed here
+- `query.METHOD_TYPE` lacks `csv_category_momentum` / `_acceleration` / `_allocation` and
+  `csv_bank_scan_share`, so traceability types them `yoy` (one scalar) instead of `scan` (row sets).
+  The new methods are registered correctly; changing the old mapping alters existing gates'
+  ground truth, so it is a separate, measured change.
+- `csv_category_allocation` uses the parts as denominator without the branch check (see above).
+
 ## NBFC sectoral deployment — the third source
 
 > Specced **2026-09-16, before the compute** (`archive/docs/PLAN_2026-09-16_NBFC.md`). RBI's *Sectoral

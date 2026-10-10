@@ -20,7 +20,9 @@
       "status": "active",
       "authored_status": "active",
       "evidence": [
+        "cc-bank-allocation",
         "cc-bank-divergence",
+        "cc-bank-momentum",
         "cc-bank-scan",
         "cc-bank-share-scan",
         "cc-bank-yoy-scan",
@@ -38,9 +40,12 @@
         "cc-psb-share"
       ],
       "evidence_all": [
+        "cc-bank-allocation",
         "cc-bank-divergence",
+        "cc-bank-momentum",
         "cc-bank-scan",
         "cc-bank-share-scan",
+        "cc-bank-step",
         "cc-bank-yoy-scan",
         "cc-category-acceleration",
         "cc-category-allocation",
@@ -78,8 +83,11 @@
       "evidence_all": [
         "micro-atm-yoy",
         "micro-atms-abs",
+        "micro-atms-bank-allocation",
+        "micro-atms-bank-momentum",
         "micro-atms-bank-scan",
         "micro-atms-bank-share-scan",
+        "micro-atms-bank-step",
         "micro-atms-bank-yoy-scan",
         "micro-atms-category-acceleration",
         "micro-atms-category-allocation",
@@ -131,9 +139,12 @@
       "authored_status": "active",
       "evidence": [],
       "evidence_all": [
+        "cc-bank-allocation",
         "cc-bank-divergence",
+        "cc-bank-momentum",
         "cc-bank-scan",
         "cc-bank-share-scan",
+        "cc-bank-step",
         "cc-bank-yoy-scan",
         "cc-category-acceleration",
         "cc-category-allocation",
@@ -165,7 +176,9 @@
       "status": "active",
       "authored_status": "active",
       "evidence": [
+        "dc-bank-allocation",
         "dc-bank-divergence",
+        "dc-bank-momentum",
         "dc-bank-scan",
         "dc-bank-share-scan",
         "dc-bank-yoy-scan",
@@ -183,9 +196,12 @@
         "dc-psb-share"
       ],
       "evidence_all": [
+        "dc-bank-allocation",
         "dc-bank-divergence",
+        "dc-bank-momentum",
         "dc-bank-scan",
         "dc-bank-share-scan",
+        "dc-bank-step",
         "dc-bank-yoy-scan",
         "dc-category-acceleration",
         "dc-category-allocation",
@@ -226,9 +242,12 @@
         "upi-qr-yoy"
       ],
       "evidence_all": [
+        "pos-bank-allocation",
         "pos-bank-divergence",
+        "pos-bank-momentum",
         "pos-bank-scan",
         "pos-bank-share-scan",
+        "pos-bank-step",
         "pos-bank-yoy-scan",
         "pos-category-acceleration",
         "pos-category-allocation",
