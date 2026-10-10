@@ -201,3 +201,53 @@ def test_an_unreadable_prior_evaluation_is_not_reported_as_missing(monkeypatch, 
     (tmp_path / "sibc" / "2026-07-31.json").write_text('{"domains": {"industry": ')   # truncated
     with pytest.raises(RuntimeError, match="cannot be read"):
         E._load_prior_eval("sibc", "2026-07-31")
+
+
+# ── F. A re-run must not pay again for halves it already has (found 2026-10-09) ───────────
+#
+# The Aug 2026 SIBC re-narration: a chunk failed whole, was split, and its halves answered and
+# cached. The re-run asked for the WHOLE chunk again (its key was never cached, because it
+# failed), paid for a fresh call, and never looked at the cached halves. Industry re-called for
+# 188 s. The rule: a chunk whose split halves are in the cache is served from them, and only the
+# halves that are missing are asked.
+
+def test_F_a_rerun_reuses_cached_halves_instead_of_re_asking_the_whole_chunk(monkeypatch):
+    conn = cache_conn()
+    first = {"n": 0}
+
+    def behave(asked):
+        if len(asked) == 6 and first["n"] == 0:      # the whole chunk fails, once
+            first["n"] += 1
+            return RuntimeError("malformed JSON")
+        return answer(asked)
+
+    calls = fake_llm(monkeypatch, behave)
+    merged, *_, failed = run(conn)
+    assert failed == {} and all(sid in merged for sid in IDS)
+    paid_first = len(calls)                          # the failed whole + two halves
+    merged2, *_, failed2 = run(conn)
+    assert failed2 == {} and all(sid in merged2 for sid in IDS)
+    assert len(calls) == paid_first, "the re-run made a paid call for halves already cached"
+
+
+def test_F_only_the_missing_half_is_asked_on_a_rerun(monkeypatch):
+    conn = cache_conn()
+    state = {"run": 1}
+
+    def behave(asked):
+        if len(asked) == 6:
+            return RuntimeError("malformed JSON")    # the whole chunk always fails
+        if state["run"] == 1 and "sig-4" in asked:
+            return RuntimeError("timed out")         # the second half fails on the first run
+        return answer(asked)
+
+    calls = fake_llm(monkeypatch, behave)
+    _, *_, failed = run(conn)
+    assert set(failed) == {"sig-3", "sig-4"}
+    state["run"] = 2
+    before = len(calls)
+    merged, *_, failed2 = run(conn)
+    asked_again = calls[before:]
+    assert failed2 == {} and all(sid in merged for sid in IDS)
+    assert ["sig-0", "sig-1", "sig-2"] not in asked_again, "the answered half was re-asked"
+    assert all(len(a) < 6 for a in asked_again), "the whole chunk was re-asked although halves exist"

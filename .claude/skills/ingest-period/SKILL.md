@@ -95,6 +95,15 @@ new latest month in the band and tables, console clean, no horizontal scroll.
 
 ## Traps (each one happened)
 
+- **A slow paid call is not a hung call until the sleep log says so** (2026-10-09). The Aug SIBC
+  re-narration took two hours, and one call looked stuck for 18 minutes: the Mac had slept
+  (lid closed) for an hour of it, and Python's timeout clock stops while macOS sleeps. Stopping the
+  "hung" call left two signals unanswered and the re-run cost extra. Paid runs now hold the Mac
+  awake (`core/keep_awake.py`) and print a stamped line per call; still, before stopping one,
+  run `pmset -g log | grep -E "Entering Sleep|Wake from"`. Closing the lid on battery still sleeps.
+- **A re-run pays only for what is missing** (fixed 2026-10-10): a chunk whose split halves are
+  cached is served from them. Before the fix, a re-run re-asked the whole chunk.
+
 - **An ingest that ingests nothing must not look like success.** Confirm the new period is in
   `timeline.json` AND in signals.db (`generate_signal_history.py status`). Both pipelines once
   re-ingested the previous month and printed a green "registered".

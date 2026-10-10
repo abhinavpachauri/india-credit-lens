@@ -19,6 +19,7 @@ Usage:
 from __future__ import annotations
 
 import hashlib
+import time as _time
 import json
 import os
 import sqlite3
@@ -427,6 +428,27 @@ def _reason(exc: BaseException) -> str:
     return f"{type(exc).__name__}: {text}" if text else type(exc).__name__
 
 
+def _chunk_key(pipeline: str, period: str, domain: str, chunk_idx: int, chunk_payload: str,
+               chunk_ids: list[str], prior_period: str | None,
+               prior_signals: dict | None) -> tuple[str, str]:
+    """(cache key, prior-eval block) for one chunk. The ONE definition of a chunk's identity:
+    `_evaluate_chunk` keys its answer with it, and the re-run check reads the cache with it."""
+    prior_eval_block = ""
+    if prior_period and prior_signals:
+        prior_eval_block = _build_prior_eval_block(prior_period, chunk_ids, prior_signals, pipeline)
+    cache_key_obj = {
+        "pipeline":       pipeline,
+        "period":         period,
+        "domain":         domain,
+        "chunk":          chunk_idx,
+        "payload":        chunk_payload,
+        "version":        PROMPT_VERSION,
+        "prior_period":   prior_period or "",
+        "prior_eval":     prior_eval_block,   # content change → cache miss
+    }
+    return _payload_hash(cache_key_obj), prior_eval_block
+
+
 def _evaluate_chunk(pipeline: str, period: str, domain: str, chunk_idx: int,
                     chunk_payload: str, chunk_ids: list[str],
                     domain_description: str,
@@ -438,21 +460,8 @@ def _evaluate_chunk(pipeline: str, period: str, domain: str, chunk_idx: int,
     is cached independently. Prior eval narratives are injected into the prompt
     when available (signal-level, only for signals in this chunk).
     """
-    prior_eval_block = ""
-    if prior_period and prior_signals:
-        prior_eval_block = _build_prior_eval_block(prior_period, chunk_ids, prior_signals, pipeline)
-
-    cache_key_obj = {
-        "pipeline":       pipeline,
-        "period":         period,
-        "domain":         domain,
-        "chunk":          chunk_idx,
-        "payload":        chunk_payload,
-        "version":        PROMPT_VERSION,
-        "prior_period":   prior_period or "",
-        "prior_eval":     prior_eval_block,   # content change → cache miss
-    }
-    input_hash = _payload_hash(cache_key_obj)
+    input_hash, prior_eval_block = _chunk_key(pipeline, period, domain, chunk_idx, chunk_payload,
+                                              chunk_ids, prior_period, prior_signals)
 
     cached = _cache_get(conn, input_hash)
     if cached is not None:
@@ -466,7 +475,19 @@ def _evaluate_chunk(pipeline: str, period: str, domain: str, chunk_idx: int,
     user_message  = _build_user_message(
         pipeline, domain, domain_description, chunk_payload, prior_eval_block
     )
-    result, tokens, cache_read, cache_created = _call_llm(system_prompt, user_message)
+    # Progress per call, unbuffered and wall-clock stamped, so a slow call can be told from a
+    # sleeping machine (the 2026-10-09 "hang" was a closed lid; nothing printed until the end).
+    t0 = _time.time()
+    print(f"    {_time.strftime('%H:%M:%S')} → {domain} chunk {chunk_idx}: asking "
+          f"{len(chunk_ids)} signal(s)", flush=True)
+    try:
+        result, tokens, cache_read, cache_created = _call_llm(system_prompt, user_message)
+    except Exception as exc:
+        print(f"    {_time.strftime('%H:%M:%S')} ✗ {domain} chunk {chunk_idx}: "
+              f"{type(exc).__name__} after {_time.time() - t0:.0f}s", flush=True)
+        raise
+    print(f"    {_time.strftime('%H:%M:%S')} ← {domain} chunk {chunk_idx}: answered in "
+          f"{_time.time() - t0:.0f}s", flush=True)
 
     # Only a complete answer is cached. A truncated or partial reply goes to the split-and-retry
     # path instead — which is what that path was written for — carrying what did come back.
@@ -499,14 +520,39 @@ def _evaluate_domain(pipeline: str, period: str, domain: str,
 
     chunks = build_chunk_payload(signal_ids, signals_payload, chunk_size)
 
+    def answered_in_cache(key: int, payload: str, ids: list[str]) -> bool:
+        h, _ = _chunk_key(pipeline, period, domain, key, payload, ids, prior_period, prior_signals)
+        hit = _cache_get(conn, h)
+        return hit is not None and not _unanswered(hit, ids)
+
+    def halves(ids: list[str], payload: str):
+        return list(enumerate(build_chunk_payload(ids, payload, max(2, len(ids) // 2))))
+
+    def split_has_cache(key: int, payload: str, ids: list[str]) -> bool:
+        """Does any chunk in this chunk's split tree already hold a complete answer?
+
+        A chunk that failed whole was split, and its halves were answered and cached under their
+        own keys; the whole chunk's key never was. Without this check a re-run asked for the whole
+        chunk again — a fresh paid call — and never looked at the halves (Aug 2026 SIBC: industry
+        re-called for 188 s). Same split rule as the retry below, so the keys line up.
+        """
+        if len(ids) <= 2:
+            return False
+        return any(answered_in_cache(key * 100 + i, sp, si) or split_has_cache(key * 100 + i, sp, si)
+                   for i, (sp, si) in halves(ids, payload))
+
     def attempt(key: int, payload: str, ids: list[str]):
         """One chunk → (result, from_cache, tokens, cache_read, cache_created, failed{sid: why}).
 
         A failed or incomplete chunk is split in half and each half retried — the truncation
         guard — down to two signals. Whatever still has no answer is RECORDED with its reason.
         A spend refusal is never split or recorded: splitting cannot fix "not authorised", so it
-        propagates and stops the run.
+        propagates and stops the run. A chunk whose halves are already cached goes straight to
+        its halves, so a re-run pays only for what is missing.
         """
+        if (len(ids) > 2 and not answered_in_cache(key, payload, ids)
+                and split_has_cache(key, payload, ids)):
+            return from_halves(key, payload, ids, 0, {})
         try:
             r, fc, t, rd, cr = _evaluate_chunk(
                 pipeline, period, domain, key, payload, ids, domain_description, conn,
@@ -521,19 +567,20 @@ def _evaluate_domain(pipeline: str, period: str, domain: str,
             if len(ids) <= 2:
                 return (dict(partial), False, spent, 0, 0,
                         {sid: why for sid in _unanswered(partial, ids)})
-            half = max(2, len(ids) // 2)
-            result: dict = {}
-            failed: dict = {}
-            tokens, read, created = spent, 0, 0
-            for sub_idx, (sub_payload, sub_ids) in enumerate(
-                    build_chunk_payload(ids, payload, half)):
-                r, _, t, rd, cr, f = attempt(key * 100 + sub_idx, sub_payload, sub_ids)
-                result.update(r)
-                failed.update(f)
-                tokens, read, created = tokens + t, read + rd, created + cr
-            # A retried chunk is never reported as a cache hit, even if its halves were cached:
-            # it failed once, and "cache hit, 0 tokens" is the most reassuring line there is.
-            return result, False, tokens, read, created, failed
+            return from_halves(key, payload, ids, spent, partial)
+
+    def from_halves(key: int, payload: str, ids: list[str], spent: int, partial: dict):
+        result: dict = {}
+        failed: dict = {}
+        tokens, read, created = spent, 0, 0
+        for sub_idx, (sub_payload, sub_ids) in halves(ids, payload):
+            r, _, t, rd, cr, f = attempt(key * 100 + sub_idx, sub_payload, sub_ids)
+            result.update(r)
+            failed.update(f)
+            tokens, read, created = tokens + t, read + rd, created + cr
+        # A retried chunk is never reported as a cache hit, even if its halves were cached:
+        # it failed once, and "cache hit, 0 tokens" is the most reassuring line there is.
+        return result, False, tokens, read, created, failed
 
     merged:    dict = {}
     failed:    dict = {}
@@ -636,6 +683,9 @@ def run_evaluate(pipeline: str, period: str,
     from concurrent.futures import ThreadPoolExecutor, as_completed
 
     CHUNK_SIZE = CHUNK_SIZE_CLI if USE_CLI else CHUNK_SIZE_API
+
+    from core.keep_awake import keep_awake
+    keep_awake("Stage 5 evaluate")
 
     domains      = PIPELINE_DOMAINS.get(pipeline, [])
     all_domains  = registry.get("domains", {})

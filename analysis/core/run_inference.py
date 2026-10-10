@@ -497,6 +497,9 @@ def main():
     if args.file:
         return cmd_resolve(args)
 
+    if not args.no_llm:
+        from core.keep_awake import keep_awake
+        keep_awake("S4 proposal generation")
     gaps, proposals = {"unexplained": {}, "mismatches": {}, "cross": []}, []
     for pipe, cfg in gs.PIPELINES.items():
         unexplained, mismatches = detect_unexplained(pipe, cfg)
