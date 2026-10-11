@@ -70,9 +70,9 @@
 
 ## Sources and roadmap
 
-- **Order: NBFC → MoSPI (IIP, WPI, NAS, CPI) → arc 3 regulatory watch → BSR-1 → Lending & Deposit Rates.** (user, 2026-09-16; MoSPI placed first 2026-09-26)
+- **The next source is chosen by a buyer conversation, not by analytical completeness** (2026-10-11, strategy review; STRATEGY §5). The old order (NBFC → MoSPI → arc 3 → BSR-1 → Rates; user, 2026-09-16) is under review since 2026-10-10. *Revisit:* when a buyer conversation names a need.
 - **MoSPI is pulled by hand until two clean cycles, then scheduled.** *Why:* no provisional/final flag and revisions overwrite silently, so revision behaviour must be seen before it is automated. *Revisit: after two clean cycles.* (user, 2026-09-26)
-- **Bank presentations/results rejected** as a source: unstructured, and per-bank credit is annual only (STRBI).
+- **Bank presentations/results rejected** as a source: unstructured, layouts change. *Per-bank data is not annual-only*: RBI's bank-wise quarterly variables on DBIE (2002 →) carry every SCB's advances and NPAs by the four RBI sectors (found 2026-10-11, `analysis/sources/README.md`). *Revisit:* if a buyer needs depth below four sectors (then Pillar 3 first).
 - **A compute module is a shape, not a pipeline**, and a pipeline declares itself in its manifest. A new SIBC-shaped source is a manifest entry.
 - **Every data source is its own pipeline in the engine; only lending data gets a dashboard page** (user, 2026-10-10). Context data (MoSPI prices/output, and next RBI rates, bond/CP flows, FCI, CGA) is `kind: reference`: own fetch, gate and cadence, no page, cards or paid narration; it reaches the reader inside credit tables and as tested L2 connections. The price of credit (RBI lending/deposit rates) is decided when onboarded. *Why:* isolated failures and one mechanism at N sources; a raw context page competes with DBIE/eSankhyiki, where they are the official source and our edge is explaining credit. Structured context data feeds L2; S4 keeps the residual, searched in official and market sources. *Revisit:* if a reference source's own story becomes the reader's question.
 

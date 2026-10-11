@@ -20,8 +20,8 @@ Built 2026-10-08 (SYSTEM_MODEL_SPEC v3.1 §16):
   **History is the binding constraint:** 15 monthly changes see only |r| ≥ 0.51.
 - **12 model arrows tested** (10-10): none supported; states, loops, coverage, line-driven opportunities
   follow tests. **Card spend → card outstanding (1-month lead) supported** (r=+0.54, borderline).
-- **Structured context data feeds L2; S4 keeps the residual** (user, 10-10). WPI links: not supported.
-  Sources explored once: `analysis/sources/README.md` (398 DBIE tables, shortlist). Order: Next #4–6.
+- **Buyer first** (STRATEGY v3.1 §5, 10-11): log who engages with X/LinkedIn, ask the 3 questions; the
+  next source waits on it. Per-bank quarterly found on DBIE (`analysis/sources/README.md`), not ingested.
 
 Agentic layer: phases 0–4 as before (`dashboard-change`, `onboard-source` ✅); `add-signal-family`,
 `measure-gate` ⬜, each written while doing its real task.

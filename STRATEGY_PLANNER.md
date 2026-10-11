@@ -1,6 +1,6 @@
 # India Credit Lens — Strategy
 
-> **v3.0 · September 2026 · Author: Abhinav.** Strategy only: who we serve, what we sell, why it
+> **v3.1 · October 2026 · Author: Abhinav.** v3.1 (2026-10-11): US comparables' caveats, the buyer discipline (§5), per-bank source found (§2, §8), moat re-ranked (§10). Strategy only: who we serve, what we sell, why it
 > is defensible, and in what order it gets monetised. **What is being built now is in `PLAN.md`;
 > standing rules are in `DECISIONS.md`; how the system works is in `ARCHITECTURE.md`.** This
 > document changes when the strategy changes, not when a feature ships. v2.1 (May 2026) described
@@ -39,6 +39,20 @@ analysts days, alerts create stickiness, and it sold to a niche with budget and 
 
 **Our adaptation adds one layer BankRegData does not have: the causal model.** BankRegData shows
 what happened. We show what happened, why, and what it connects to, with every number traceable.
+
+**Two caveats (strategy review, 2026-10-11; third-party figures, verify before any funding use):**
+- **The model is proven as a small durable business, not a venture outcome.** BankRegData is
+  1–10 people and under $5M revenue (ZoomInfo); BankRegReports, a newer entrant, sells peer sets,
+  screeners, scorecards, an API and a free newsletter to bank executives, analysts, consultants,
+  examiners, investors and M&A advisors. That fits the north star (1–2 people, a few million USD).
+- **The US category rests on an input the regulator hands over:** every bank files a standardised
+  quarterly Call Report (FFIEC CDR, plus the UBPR peer view), so the gap those firms fill is
+  presentation, not data. **India has more of that input than assumed.** RBI publishes, on DBIE,
+  *bank-wise quarterly variables since 2002* for every scheduled commercial bank: balance sheet,
+  capital, asset quality, profitability, and gross advances and NPAs by RBI's four sectors, split
+  domestic / overseas (opened 2026-10-11; `analysis/sources/README.md`). What it lacks is depth
+  below the four sectors, and nobody presents it. So the per-bank layer is a **presentation and
+  reconciliation** job at the top level, and an assembly job only below it.
 
 ---
 
@@ -97,6 +111,16 @@ in their own voice from verified numbers the platform supplies. X needs its own 
 intelligence for builders), or (b) keep the bank-leadership thesis and build a cold channel. They
 lead to different products. Undecided.
 
+**The buyer is not yet identified, and that is the largest open risk** (2026-10-11). Candidate
+buyers share almost no roadmap: NBFC strategy heads want benchmarking and competitive position;
+investors want leading indicators and surprise-vs-consensus; bank strategy teams want time saved
+(a clean API, not insight); consultants and M&A advisors want peer sets and client-ready
+tearsheets (a large segment for the US comparables). **Discipline: the next dataset is chosen by a
+buyer conversation, not by analytical completeness.** Method: publish one sharp, specific finding
+(the daily X posts and monthly LinkedIn sets now do this), then talk to whoever engages. Do not
+ask "would you pay". Ask what they did the last time they needed that number, how long it took,
+and **who asked them for it**: the last answer locates the budget.
+
 ---
 
 ## 6. The content ladder
@@ -140,12 +164,22 @@ Each is ingested through the same manifest-driven gate; a source that needs a ne
 
 | Status | Sources |
 |---|---|
-| **Live** | RBI SIBC (bank credit by sector) · RBI ATM/POS/card statistics (payments, 63 banks) · RBI NBFC sectoral deployment |
-| **Decided next, in order** | RBI regulatory watch (circulars attached to the model) → BSR-1 (credit by occupation, quarterly) → Lending & Deposit Rates (price of credit) |
-| **Candidate: MoSPI eSankhyiki** | The real economy behind the credit: IIP/ISP output, CPI/WPI prices, NAS GVA, PLFS jobs, ASI/ASUSE enterprises. Official REST API. Position in the order undecided (§8.1) |
+| **Live** | RBI SIBC (bank credit by sector, Jan 2023 →) · RBI ATM/POS/card statistics (payments, 63 banks) · RBI NBFC sectoral deployment · MoSPI IIP/WPI/NAS/CPI (reference: no page, feeds real credit and L2 tests) |
+| **Order under review** (2026-10-11) | Was: RBI regulatory watch → BSR-1 → Lending & Deposit Rates. Now decided by buyer conversations (§5). Rates is probed and paused; the full source catalogue is in `analysis/sources/README.md` |
+| **Candidate, high: per-bank quarterly** | RBI bank-wise variables on DBIE (2002 →): every SCB, balance sheet, capital, asset quality, profitability, advances and NPAs by RBI's four sectors, domestic/overseas. The per-bank layer §10 calls the keystone |
+| **Candidate: MoSPI, more** | PLFS jobs and wages, ASUSE enterprises, ISP (§8.1) |
 | **Candidate: RBI Tier 2** | Bank Lending Survey, consumer confidence, inflation expectations, PPI, TReDS |
 | **Commercial** | CIBIL, CRIF, Experian, MFIN. Rights differ from public data; needs a licence decision before ingestion |
-| **Rejected** | Bank results and presentations as a *source*: unstructured, and per-bank credit is annual only (STRBI). §11 holds the strategic question behind it |
+| **Rejected** | Bank results and investor presentations as a *source* (unstructured; layouts change). Below RBI's four sectors, Basel III Pillar 3 disclosures are the semi-standard middle path, if ever needed |
+
+**Reconciliation traps, designed for up front** (any per-bank or bottom-up work):
+- **Domestic vs global.** RBI sectoral data is domestic operations; banks report global advances
+  (SBI, BoB, ICICI overseas books). The bank-wise table carries both, so reconcile on domestic.
+- **Gross bank credit vs net advances.** Provisions, IBPC and securitisation are treated differently.
+- **Coverage.** SIBC covers a *select* set of SCBs; a bottom-up sum will not equal its top line.
+  Decide once whether to reconcile *to* it or index *against* it. (Seen already: DBIE's old-format
+  sector table covered a different bank set.)
+- **Outstanding vs disbursement.** RBI and banks report stocks; bureaus report flows.
 
 ### 8.1 MoSPI eSankhyiki: why it matters
 
@@ -214,15 +248,19 @@ data access comes last, after proven signal quality and inbound demand.
 
 ## 10. The moat
 
-| Layer | What it is | Today |
-|---|---|---|
-| **Traceability** | Every published number checked against computed signals; paid model calls gated | Built |
-| **Causal model** | Per-source system model with sourced forces, re-evaluated each release | Built (3 sources) |
-| **Cross-source joins** | Relationships no single release can show | Early |
-| **Historical depth** | A signal history that compounds with every release | Building (24 SIBC readings) |
-| **Author credibility** | The author's lending domain expertise | Strong |
-| **Per-bank granularity** | India has no regulator-level per-bank credit disclosure; assembling it would not be copyable | Not started (§11) |
-| **Network effects** | More subscribers → better benchmarks | Future |
+Ranked by how hard it is to copy (strategy review, 2026-10-11). Statuses are honest, not aspirational.
+
+| Strength | Layer | What it is | Today |
+|---|---|---|---|
+| Weak | **The data corpus** | Public releases, ingested | Live. An LLM-equipped competitor rebuilds it in weeks |
+| Weak–medium | **History across RBI format changes and revisions** | Remaps, restatements, series breaks handled once | Building: SIBC 44 months (Jan 2023 →), the 2023 merger as a declared break. A ~6-month wall, not permanent |
+| Medium | **Traceability** | Every published number checked against computed signals; paid calls gated | Built |
+| Medium | **Causal model** | Per-source system model, forces and relationships admitted only by test | Built but mostly unproven: 12 of 12 authored arrows failed their tests; Aug 2026 has 3 of 5 moves unexplained. A moat only once it explains |
+| Medium, compounding | **Reconciliation and crosswalks** | Consistent judgement calls kept across quarters: bank ↔ RBI sectors below the four RBI publishes, system ↔ bottom-up, domestic ↔ global. A 2028 entrant cannot retrofit 2024–27 consistency | Mechanism exists (concordance files, e.g. SIBC ↔ MoSPI); per-bank not started |
+| Medium | **Per-bank granularity** | The benchmarking and investor keystone | **Source found** (2026-10-11): RBI bank-wise quarterly variables, 2002 →. Not ingested; buyer first (§5) |
+| Cheap, underrated | **The cited reference** | "Per India Credit Lens" in other people's work | Free distribution that converts to consulting. Daily X and monthly LinkedIn from 2026-10 |
+| Strong | **Author credibility** | The author's lending domain expertise | Strong |
+| High | **Contributed-data exchange** | Lenders share approval rates, pull-through, pricing, early delinquency in return for benchmarks: a bureau-style network effect | Future: needs credibility and 5–8 seed lenders; 12–18 months |
 
 ---
 
@@ -238,9 +276,12 @@ data access comes last, after proven signal quality and inbound demand.
 
 **Open strategic questions (decide, do not drift):**
 1. **The audience fork** (§5): fintech builders via payments, or bank leadership via a cold channel.
-2. **Per-bank granularity.** It is the keystone for benchmarking and investor intelligence, but bank
-   filings may not disclose lending detail at the granularity needed. Validate on 2–3 filings
-   before committing; building it would reshape the roadmap.
+2. **Per-bank granularity.** The keystone for benchmarking and investor intelligence. *Partly
+   answered 2026-10-11:* RBI's bank-wise quarterly variables give every SCB's advances and NPAs by
+   the four RBI sectors, domestic/overseas, since 2002, so the top level needs no PDF work. Still
+   open: whether a buyer wants it (§5), and whether depth below four sectors (housing, gold, NBFC
+   lending per bank) is worth Pillar 3 or presentation assembly. Validate the latter on 2–3 banks
+   only if a buyer asks for that depth.
 3. **Which paid wedge to test first:** fintech go-to-market intelligence (faster, lower ticket,
    warm network) or fintech-lending investor intelligence (slower, highest ticket).
 

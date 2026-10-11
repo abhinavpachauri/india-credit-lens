@@ -36,7 +36,7 @@ Tier 2 is net-new lending data: each would be a pipeline **with a page**.
 | # | Table | Where | Freq · from | Why it matters | Cost |
 |---|---|---|---|---|---|
 | 7 | **Quarterly BSR-1** (credit by occupation, bank group, population group, interest-rate band, state) | rbi.org.in, SectionID 354; annual district-level on DBIE (2010–2026) | quarterly | Who borrows at what rate, where. The deepest lending view RBI publishes | Three measures per entity (accounts, limit, outstanding); occupation taxonomy overlaps SIBC without matching |
-| 8 | Bank-wise variables (public access) | Statistics › Performance Indicators | quarterly · Mar 2002 | Per-bank analytics (STRATEGY future bet) | Wide, per bank |
+| 8 | **Bank-wise variables (public access)**, opened 2026-10-11, see below | Statistics › Performance Indicators | quarterly · Mar 2002 | **Per-bank, RBI-standardised:** the nearest thing India has to a US Call Report | Wide (8 tabs × every SCB × domestic/overseas/global) |
 | 9 | SCB select aggregates (deposits, credit, investments, CD ratio) | Statistics › Assets & Liabilities | fortnightly · 1997 | The funding side: deposit growth vs credit growth | Small |
 | 10 | Household financial assets and liabilities | Bulletin 52A, 52B | quarterly · Jun 2018 | Household borrowing from banks, NBFCs, HFCs together | Small |
 | 11 | Quarterly BSR-2 (deposits) | rbi.org.in, SectionID 382 | quarterly | Deposit mix by type and region | Medium |
@@ -45,6 +45,32 @@ Tier 3 is context, taken when a test needs it: PLFS monthly unemployment and wag
 household income → retail credit); ASUSE quarterly (informal enterprises → MSME); Survey of
 Professional Forecasters; NPAs and CRAR (annual); MSP and PDS procurement (annual); Industry-wise
 deployment from 2007 (Bulletin 16 / Handbook 169; a different bank set before 2019, so not SIBC history).
+
+## Per-bank quarterly variables: opened 2026-10-11
+
+*"Variables to be published Bank and Bank Group wise (For Public Access)"*, DBIE › Statistics ›
+Financial Sector › Banking – Performance Indicators. Quarterly, Mar 2002 – Jun 2026, read in Chrome
+(SAP BusinessObjects viewer; prompts: reporting periods, bank names, unit). It tests the strategy
+claim that India has no per-institution, standardised, quarterly filing: **for the core of a
+Call Report, it does.**
+
+- **Every scheduled commercial bank by name**: public, private (HDFC, ICICI, Axis, Kotak, Bandhan,
+  …), foreign, with bank-group totals. The scan read 73+ names before truncating.
+- **Every figure split into domestic / overseas / global operations.** That answers the
+  "RBI is domestic, banks report global" reconciliation trap at the source.
+- **Eight tabs:** Major Balance Sheet Items · Capital Adequacy · Asset Quality · Profitability ·
+  Performance Indicators · **Major Sectoral** · Priority / Non-priority Break-up · Infrastructure
+  Financing.
+- **Major Sectoral, per bank, domestic:** gross advances, gross NPAs and GNPA ratio for food
+  credit, non-food credit, **Agriculture, Industry, Services, Retail Loans**. These are RBI's own
+  four sectors, so per-bank lines need no bank-segment crosswalk at that depth.
+  Example, Bank of Baroda, Sep 2024: gross advances ₹9,38,883 Cr; agriculture ₹1,44,510 Cr (GNPA
+  5.30%), industry ₹2,20,809 Cr (1.61%), services ₹3,00,879 Cr (2.70%), retail ₹2,45,438 Cr.
+- **What it does not have:** anything below the four sectors (no housing, gold, NBFC lending
+  per bank). That depth still lives only in investor presentations and Pillar 3 disclosures.
+- **Not yet checked:** how it exports (Excel, as other DBIE reports do), whether later quarters
+  restate earlier ones, and whether Σ banks reconciles to SIBC's sector totals (SIBC covers
+  "select" banks; this covers all SCBs).
 
 ## Lending & Deposit Rates: probed 2026-10-10 (onboarding paused)
 
