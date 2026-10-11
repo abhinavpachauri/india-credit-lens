@@ -186,6 +186,40 @@ that emits nothing fails instead of agreeing with a recompute that also emits no
   A 1f method reads two: its own pipeline's, and the reference pipeline's that its concordance
   names. That is the only exception, and the manifest declares it (`depends_on`).
 
+### Series breaks — a comparison that spans a merger (2026-10-10)
+
+> Specced **2026-10-10, before the compute**, for the SIBC backfill to Jan 2023 (user: "absent with
+> a reason"). The rule is general; the HDFC merger is its first entry.
+
+On 1 July 2023 HDFC Ltd (a non-bank) merged into HDFC Bank, and its loans entered bank credit
+overnight. RBI's note, in every release whose comparisons span it: *"Data since July 28, 2023
+include the impact of the merger of a non-bank with a bank."* Year-on-year housing growth to Jan
+2024 reads **36.9%** as published and **16.6%** excluding the merger (RBI's own figure, Jan 2025
+release). A comparison that spans the merger measures the merger, not growth.
+
+- **Declared once, per pipeline:** `analysis/rbi_sibc/series_breaks.json`: each break's id, its
+  effective month (the first reading that includes it: **Jul 2023**), the reason code, RBI's note as
+  the source, and **the lines RBI marks** (the rows it prints merger-excluded figures for, the same
+  11 in all six releases Feb–Jul 2025: Statement 1 `I`, `III`, `2`, `3`, `3.8`, `3.10`, `4`, `4.2`,
+  `4.9`, PSL `iv`, `x`). Lines RBI does not mark are read as published: that is RBI's judgement,
+  not ours.
+- **The question is asked once:** `core/series_breaks.spans(pipeline, statement, code, a, b)`.
+  A comparison spans a break when one date is before the effective month and the other on or after it.
+- **What it does to each family:**
+
+  | family | on a marked line, window spanning the break |
+  |---|---|
+  | growth (YoY), and everything built on it: scans, acceleration, streaks, spreads, breadth, FY acceleration, divergence, real credit | the reading is **absent, reason `merger_break`** (a scan marks only the affected rows) |
+  | movement (momentum, allocation, rotation) over a cut whose parent or any part is marked | the whole cut's reading is absent: net, gross and every share include the jump |
+  | level, share of parent at one date | unchanged: a level is not a comparison |
+
+- **Loud, not silent.** Growth raises a typed `SeriesBreak`; the dispatcher stores an absent row with
+  the reason, never `unknown` and never no row. A prior period's growth that spans the break is not
+  used as the status comparison (status falls back as when no prior exists).
+- **The cost, stated:** total bank credit is marked, and every relationship test removes the
+  total's growth first, so tests see no reading from Jan–Jun 2024. The 2023 months lengthen the
+  charts; test power from them is two months (Jul–Aug 2024).
+
 ## Cut coverage — size & share (the table families)
 
 > **Written 2026-09-12, AFTER the compute landed.** The rule in this project is spec first;

@@ -42,6 +42,8 @@ from pathlib import Path
 import pandas as pd
 
 from . import common
+from core import series_breaks
+from core.series_breaks import SeriesBreak
 from . import real_economy as _real_economy
 
 import sys
@@ -217,6 +219,13 @@ def _unknown() -> list[dict]:
     return [_row("aggregate", "total", None, "unknown", "")]
 
 
+def _absent(entity_type: str, entity_id: str, reason: str) -> dict:
+    """A reading that cannot exist, with its reason (core/absence.py) — never a blank."""
+    r = _row(entity_type, entity_id, None, "absent", "")
+    r["reason"] = reason
+    return r
+
+
 # ── YoY helper (current + prior-period YoY for momentum) ─────────────────────
 
 def _compute_yoy(df: pd.DataFrame, period: str, code: str,
@@ -230,6 +239,9 @@ def _compute_yoy(df: pd.DataFrame, period: str, code: str,
     prior_yr = _prior_year(period, avail)
     if not prior_yr:
         return None, None
+    # A comparison across a declared break measures the break, not growth: raise, so the caller
+    # stores an absent row with its reason (signals/README.md, "Series breaks").
+    series_breaks.check(df.attrs.get("pipeline", ""), scope, code, prior_yr, period)
     v  = _val(df, period,   code, scope, is_psl)
     pv = _val(df, prior_yr, code, scope, is_psl)
     if v is None or pv is None or pv == 0:
@@ -240,7 +252,8 @@ def _compute_yoy(df: pd.DataFrame, period: str, code: str,
     prev_yoy = yoy
     if prev_pd:
         prev_yr2 = _prior_year(prev_pd, avail)
-        if prev_yr2:
+        if prev_yr2 and not series_breaks.spans(df.attrs.get("pipeline", ""), scope, code,
+                                                prev_yr2, prev_pd):
             v2  = _val(df, prev_pd,  code, scope, is_psl)
             pv2 = _val(df, prev_yr2, code, scope, is_psl)
             if v2 and pv2 and pv2 != 0:
@@ -318,8 +331,11 @@ def csv_sector_yoy_spread(params: dict, period: str, df: pd.DataFrame) -> list[d
     prior  = _prior_period(period, avail)
     pspread = spread
     if prior:
-        pa, _ = _compute_yoy(df, prior, code_a, stmt, avail)
-        pb, _ = _compute_yoy(df, prior, code_b, stmt, avail)
+        try:
+            pa, _ = _compute_yoy(df, prior, code_a, stmt, avail)
+            pb, _ = _compute_yoy(df, prior, code_b, stmt, avail)
+        except SeriesBreak:
+            pa = pb = None
         if pa is not None and pb is not None:
             pspread = pa - pb
     return [_row("aggregate", "total", spread,
@@ -339,8 +355,11 @@ def csv_sector_count_positive_yoy(params: dict, period: str,
                  if (_compute_yoy(df, period, c, stmt, avail)[0] or 0) > 0)
     pcount = count
     if prior:
-        pcount = sum(1 for c in codes
-                     if (_compute_yoy(df, prior, c, stmt, avail)[0] or 0) > 0)
+        try:
+            pcount = sum(1 for c in codes
+                         if (_compute_yoy(df, prior, c, stmt, avail)[0] or 0) > 0)
+        except SeriesBreak:
+            pcount = count
     return [_row("aggregate", "total", count,
                  _eval_status(params.get("status_rules", []), count, pcount),
                  "count")]
@@ -368,7 +387,11 @@ def csv_sector_scan_yoy(params: dict, period: str, df: pd.DataFrame) -> list[dic
         code = str(row["code"])
         if code in exclude:
             continue
-        yoy, prev_yoy = _compute_yoy(df, period, code, stmt, avail)
+        try:
+            yoy, prev_yoy = _compute_yoy(df, period, code, stmt, avail)
+        except SeriesBreak as b:
+            out.append(_absent(entity_type, row["sector"], b.reason))
+            continue
         if yoy is None:
             continue
         out.append(_row(entity_type, row["sector"], yoy,
@@ -498,8 +521,12 @@ def csv_psl_scan_yoy(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
         code = str(row["code"])
         if code in exclude:
             continue
-        yoy, prev_yoy = _compute_yoy(df, period, code, _scope({}, df), avail,
-                                      is_psl=True)
+        try:
+            yoy, prev_yoy = _compute_yoy(df, period, code, _scope({}, df), avail,
+                                          is_psl=True)
+        except SeriesBreak as b:
+            out.append(_absent(entity_type, row["sector"], b.reason))
+            continue
         if yoy is None:
             continue
         out.append(_row(entity_type, row["sector"], yoy,
@@ -556,9 +583,19 @@ def csv_yoy_streak(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
     except ValueError:
         return _unknown()
 
+    def _yoy_at(d: str, first: bool) -> float | None:
+        # The current period across a break raises (the streak is absent, with its reason);
+        # an earlier one ends the run, as a missing reading does.
+        try:
+            return _compute_yoy(df, d, code, stmt, avail, is_psl=is_psl)[0]
+        except SeriesBreak:
+            if first:
+                raise
+            return None
+
     streak = 0
     for d in reversed(sorted_dates[: idx + 1]):
-        yoy, _ = _compute_yoy(df, d, code, stmt, avail, is_psl=is_psl)
+        yoy = _yoy_at(d, d == period)
         if _meets(yoy):
             streak += 1
         else:
@@ -570,7 +607,7 @@ def csv_yoy_streak(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
     prev_streak = 0
     if idx > 0:
         for d in reversed(sorted_dates[: idx]):
-            yoy, _ = _compute_yoy(df, d, code, stmt, avail, is_psl=is_psl)
+            yoy = _yoy_at(d, False)
             if _meets(yoy):
                 prev_streak += 1
             else:
@@ -616,7 +653,10 @@ def csv_sector_fy_acceleration(params: dict, period: str,
     prev_accel = accel
     if len(fy_dates) >= 3:
         prior2_fy = fy_dates[-3]
-        yoy_prior2, _ = _compute_yoy(df, prior2_fy, code, stmt, avail, is_psl=is_psl)
+        try:
+            yoy_prior2, _ = _compute_yoy(df, prior2_fy, code, stmt, avail, is_psl=is_psl)
+        except SeriesBreak:
+            yoy_prior2 = None
         if yoy_prior2 is not None:
             prev_accel = yoy_prior - yoy_prior2
 
@@ -656,6 +696,7 @@ def csv_sector_fy_delta(params: dict, period: str,
     latest_fy = fy_dates[-1]
     prior_fy  = fy_dates[-2]
 
+    series_breaks.check(df.attrs.get("pipeline", ""), stmt, code, prior_fy, latest_fy)
     v_latest = _val(df, latest_fy, code, stmt)
     v_prior  = _val(df, prior_fy,  code, stmt)
 
@@ -668,7 +709,8 @@ def csv_sector_fy_delta(params: dict, period: str,
     if len(fy_dates) >= 3:
         prior2_fy = fy_dates[-3]
         v_prior2  = _val(df, prior2_fy, code, stmt)
-        if v_prior2 is not None:
+        if v_prior2 is not None and not series_breaks.spans(
+                df.attrs.get("pipeline", ""), stmt, code, prior2_fy, prior_fy):
             prev_delta = v_prior - v_prior2
 
     return [_row("aggregate", "total", delta,
@@ -719,6 +761,7 @@ def csv_sector_rotation(params: dict, period: str, df: pd.DataFrame) -> list[dic
     prior_date = _month_back(period, window, avail)
     if prior_date is None:
         return []
+    _check_cut_break(params, prior_date, period, df)
     cur   = csv_sector_scan_share(params, period, df)
     prior = csv_sector_scan_share(params, prior_date, df)
     return _rotation_rows(cur, prior,
@@ -781,6 +824,19 @@ def _children_at(params: dict, period: str, df: pd.DataFrame) -> dict[str, float
     return out
 
 
+def _check_cut_break(params: dict, a: str, b: str, df: pd.DataFrame) -> None:
+    """Raise SeriesBreak when a cut's movement window spans a break on its parent or any part.
+    Net, gross and every share of a cut include the jump, so the whole reading is the break."""
+    pipeline = df.attrs.get("pipeline", "")
+    stmt = _scope(params, df)
+    if not params.get("psl_memo"):
+        series_breaks.check(pipeline, params.get("parent_statement", stmt),
+                            str(params.get("parent_code", "")), a, b)
+    for d in (a, b):
+        for code in _child_frame(params, d, df)["code"].astype(str):
+            series_breaks.check(pipeline, stmt, code, a, b)
+
+
 def _deltas(params: dict, period: str, df: pd.DataFrame):
     """(deltas, net, gross) over the annual window, or None when the window is absent.
 
@@ -791,6 +847,7 @@ def _deltas(params: dict, period: str, df: pd.DataFrame):
     prior_date = _month_back(period, window, set(df["date"].unique()))
     if prior_date is None:
         return None
+    _check_cut_break(params, prior_date, period, df)
     cur, prior = _children_at(params, period, df), _children_at(params, prior_date, df)
     shared = [k for k in cur if k in prior]
     if not shared:
@@ -934,17 +991,25 @@ def csv_sector_acceleration(params: dict, period: str, df: pd.DataFrame) -> list
                   (df["sector"] == name)]["code"]
         if code.empty:
             continue
-        a = accel(str(code.iloc[0]), stmt)
+        try:
+            a = accel(str(code.iloc[0]), stmt)
+        except SeriesBreak as b:
+            out.append(_absent(entity_type, name, b.reason))
+            continue
         if a is not None:
             out.append(_row(entity_type, name, a, _eval_status(rules, a, 0.0), "pp"))
     if not out:
         return []
-    out.sort(key=lambda r: r["value"], reverse=True)
+    out.sort(key=lambda r: r["value"] if r["value"] is not None else float("-inf"), reverse=True)
     # The PSL memo block is not a child of any code, so it has no parent row to accelerate
     # against. Its status rolls up from the children instead (Counter path in
     # sync_current_status_from_db) rather than inventing a parent that does not exist.
     if not params.get("psl_memo"):
-        pa = accel(parent_code, parent_stmt)
+        try:
+            pa = accel(parent_code, parent_stmt)
+        except SeriesBreak as b:
+            out.append(_absent("aggregate", "total", b.reason))
+            return out
         if pa is not None:
             out.append(_row("aggregate", "total", pa, _eval_status(rules, pa, 0.0), "pp"))
     return out
@@ -1066,7 +1131,10 @@ def csv_sector_divergence(params: dict, period: str, df: pd.DataFrame) -> list[d
         code = str(row["code"])
         if code in exclude:
             continue
-        child_yoy, _ = _compute_yoy(df, period, code, stmt, avail)
+        try:
+            child_yoy, _ = _compute_yoy(df, period, code, stmt, avail)
+        except SeriesBreak:
+            continue
         if child_yoy is None:
             continue
         opposite = (child_yoy > 0 > parent_yoy) or (child_yoy < 0 < parent_yoy)
@@ -1122,6 +1190,9 @@ def compute(metric_id: str, params: dict, period: str,
             f"the registry declares it but the engine cannot dispatch it.")
     try:
         return fn(params, period, df) or _unknown()
+    except SeriesBreak as b:
+        # The whole reading spans a declared break: absent, with the break's reason.
+        return [_absent("aggregate", "total", b.reason)]
     except (ParentNotFound, _real_economy.ReferenceMissing):
         # Re-raised deliberately. Swallowing it into _unknown() would turn the loudest
         # signal we have — "this cut declares a parent that is not there" — into an absence

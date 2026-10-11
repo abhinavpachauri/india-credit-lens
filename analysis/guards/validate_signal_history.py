@@ -259,6 +259,11 @@ def check_db(reg_signals: dict, known_pipelines: set[str]) -> sqlite3.Connection
             continue
         reg_status = sig.get("current_status", "unknown")
         db_status  = db_latest_status.get(sig_id)
+        # `absent` is a reading that cannot exist (a reason, not a status), and the sync skips it
+        # exactly as it skips `unknown`: comparing it would fail every flag-only signal whose last
+        # rows are absences (the 2023 merger window, signals/README.md "Series breaks").
+        if db_status == "absent":
+            continue
         if db_status and db_status != reg_status:
             fail(
                 f"Status mismatch '{sig_id}' — registry='{reg_status}', DB latest='{db_status}'"

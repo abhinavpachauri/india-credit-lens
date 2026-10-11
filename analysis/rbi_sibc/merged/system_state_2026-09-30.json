@@ -1131,7 +1131,7 @@
           "baseline_of": "Industry (Micro and Small, Medium and Large)",
           "baseline": 18.23,
           "gap_pp": 5.26,
-          "noise_pp": 1.23,
+          "noise_pp": 1.12,
           "verdict": "working"
         },
         "force_pli_manufacturing__drives__e_S2_2_13": {
@@ -1142,7 +1142,7 @@
           "baseline_of": "Industry (Micro and Small, Medium and Large)",
           "baseline": 18.23,
           "gap_pp": 0.63,
-          "noise_pp": 1.11,
+          "noise_pp": 1.12,
           "verdict": "unclear"
         }
       }
@@ -1160,7 +1160,7 @@
           "baseline_of": "Industry (Micro and Small, Medium and Large)",
           "baseline": 18.23,
           "gap_pp": 4.73,
-          "noise_pp": 1.51,
+          "noise_pp": 1.41,
           "verdict": "working"
         }
       }
@@ -1178,7 +1178,7 @@
           "baseline_of": "Non-food Credit",
           "baseline": 18.77,
           "gap_pp": 5.58,
-          "noise_pp": 0.58,
+          "noise_pp": 0.72,
           "verdict": "working"
         }
       }
@@ -1232,7 +1232,7 @@
           "baseline_of": "Industry (Micro and Small, Medium and Large)",
           "baseline": 18.23,
           "gap_pp": 4.73,
-          "noise_pp": 1.51,
+          "noise_pp": 1.41,
           "verdict": "working"
         },
         "force_eclgs5_guarantee_window__drives__e_S1_2_2": {
@@ -1243,7 +1243,7 @@
           "baseline_of": "Industry (Micro and Small, Medium and Large)",
           "baseline": 18.23,
           "gap_pp": 13.55,
-          "noise_pp": 0.91,
+          "noise_pp": 1.2,
           "verdict": "working"
         }
       }
@@ -1279,7 +1279,7 @@
           "baseline_of": "Personal Loans",
           "baseline": 16.92,
           "gap_pp": 2.82,
-          "noise_pp": 0.48,
+          "noise_pp": 0.44,
           "verdict": "working"
         }
       }
@@ -1322,10 +1322,10 @@
   "explanation_coverage": {
     "summary": {
       "lines": 84,
-      "moves": 7,
-      "steady": 77,
+      "moves": 5,
+      "steady": 79,
       "artifact": 0,
-      "structural": 4,
+      "structural": 2,
       "prices_activity": 0,
       "cause": 0,
       "relationship": 0,
@@ -1352,62 +1352,14 @@
         }
       },
       {
-        "entity": "Medium",
-        "urn": "icl:sibc/Statement1/2.2",
-        "product": "msme_credit",
-        "direction": "up",
-        "level": "leaf",
-        "gap_change_pp": 3.02,
-        "noise_pp": 0.91,
-        "threshold_pp": 2.74,
-        "baseline_kind": "parent",
-        "baseline_of": "Industry (Micro and Small, Medium and Large)",
-        "filed_under": "structural",
-        "also_holds": {
-          "structural": [
-            "echo of Industry (Micro and Small, Medium and Large)"
-          ],
-          "cause": [
-            "force_eclgs5_guarantee_window"
-          ]
-        },
-        "prices_activity": "not_decomposable",
-        "prices_detail": {
-          "reason": "no 1f match for this line"
-        }
-      },
-      {
-        "entity": "Housing (Including Priority Sector Housing)",
-        "urn": "icl:sibc/Statement1/4.2",
-        "product": "housing",
-        "direction": "down",
-        "level": "leaf",
-        "gap_change_pp": -0.83,
-        "noise_pp": 0.23,
-        "threshold_pp": 0.68,
-        "baseline_kind": "parent",
-        "baseline_of": "Personal Loans",
-        "filed_under": "structural",
-        "also_holds": {
-          "structural": [
-            "echo of Personal Loans"
-          ]
-        },
-        "prices_activity": "does_not_hold",
-        "prices_detail": {
-          "nominal_change_pp": -0.14,
-          "deflator_change_pp": 0.37
-        }
-      },
-      {
         "entity": "Advances against Fixed Deposits (Including FCNR (B), NRNR Deposits etc.)",
         "urn": "icl:sibc/Statement1/4.3",
         "product": "personal_loan",
         "direction": "up",
         "level": "leaf",
         "gap_change_pp": 27.89,
-        "noise_pp": 2.75,
-        "threshold_pp": 8.25,
+        "noise_pp": 2.74,
+        "threshold_pp": 8.21,
         "baseline_kind": "parent",
         "baseline_of": "Personal Loans",
         "filed_under": "unexplained",
@@ -1426,7 +1378,7 @@
         "level": "aggregate",
         "gap_change_pp": 3.24,
         "noise_pp": 0.63,
-        "threshold_pp": 1.88,
+        "threshold_pp": 1.89,
         "baseline_kind": "parent",
         "baseline_of": "Industry (Micro and Small, Medium and Large)",
         "filed_under": "structural",
@@ -1469,8 +1421,8 @@
         "direction": "up",
         "level": "leaf",
         "gap_change_pp": 12.78,
-        "noise_pp": 3.11,
-        "threshold_pp": 9.32,
+        "noise_pp": 3.36,
+        "threshold_pp": 10.07,
         "baseline_kind": "parent",
         "baseline_of": "Chemicals and Chemical Products",
         "filed_under": "unexplained",

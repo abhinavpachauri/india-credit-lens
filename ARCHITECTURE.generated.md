@@ -8,7 +8,7 @@
 > Authored rationale (layer model, design principles, guard purposes) lives in the
 > hand-written `ARCHITECTURE.md`. This file is the structural, drift-guarded half.
 
-_Derived from 100 scripts._
+_Derived from 101 scripts._
 
 ## 1. Data-flow
 
@@ -118,6 +118,7 @@ orchestrated, not import-coupled).
 - `core/relational_insights` → `core/manifest`, `core/residuals`
 - `core/relationship_test` → `core/coverage`, `core/force_check`, `core/generate_skeleton`
 - `core/run_inference` → `core/generate_skeleton`, `core/keep_awake`, `core/manifest`
+- `core/series_breaks` → `core/absence`, `core/manifest`
 - `core/validate_system_model` → `core/generate_skeleton`, `core/manifest`
 - `cross/compose_ecosystem` → `core/generate_skeleton`, `core/manifest`
 - `cross/derive_cross_links` → `core/generate_skeleton`, `core/manifest`
@@ -153,9 +154,9 @@ orchestrated, not import-coupled).
 - `pipelines/sibc/update_web_data` → `core/manifest`, `pipelines/mospi/consolidate`
 - `pipelines/sibc/validate_web_series` → `core/manifest`
 - `signals/compute/atm_pos` → `core/manifest`
-- `signals/compute/csv_sector` → `core/manifest`
+- `signals/compute/csv_sector` → `core/manifest`, `core/series_breaks`
 - `signals/compute/engine` → `core/manifest`
-- `signals/compute/real_economy` → `core/absence`, `core/manifest`
+- `signals/compute/real_economy` → `core/absence`, `core/manifest`, `core/series_breaks`
 - `signals/evaluate` → `core/keep_awake`, `core/manifest`, `signals/db`, `signals/query`
 - `signals/is_news` → `core/manifest`, `signals/proximity`
 - `signals/planes` → `core/manifest`, `signals/is_news`, `signals/proximity`

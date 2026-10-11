@@ -273,6 +273,19 @@
       },
       "writes": {}
     },
+    "core/series_breaks": {
+      "doc_claims": [],
+      "imports": [
+        "core/absence",
+        "core/manifest"
+      ],
+      "invokes": [],
+      "path": "analysis/core/series_breaks.py",
+      "reads": {
+        "series_breaks.json": "low"
+      },
+      "writes": {}
+    },
     "core/source_fetch": {
       "doc_claims": [],
       "imports": [],
@@ -1111,7 +1124,8 @@
     "signals/compute/csv_sector": {
       "doc_claims": [],
       "imports": [
-        "core/manifest"
+        "core/manifest",
+        "core/series_breaks"
       ],
       "invokes": [],
       "path": "analysis/signals/compute/csv_sector.py",
@@ -1132,7 +1146,8 @@
       "doc_claims": [],
       "imports": [
         "core/absence",
-        "core/manifest"
+        "core/manifest",
+        "core/series_breaks"
       ],
       "invokes": [],
       "path": "analysis/signals/compute/real_economy.py",

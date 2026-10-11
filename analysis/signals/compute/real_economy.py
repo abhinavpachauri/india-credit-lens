@@ -34,7 +34,7 @@ import pandas as pd
 
 import sys
 sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
-from core import manifest, absence                                    # noqa: E402
+from core import manifest, absence, series_breaks                     # noqa: E402
 from core.paths import ANALYSIS                                       # noqa: E402
 
 from . import common
@@ -185,12 +185,14 @@ class Credit:
         self.value: dict[tuple, float] = {}
         self.name: dict[tuple, str] = {}
         self.children: dict[tuple, list[str]] = {}
+        self.line: dict[str, tuple[str, str]] = {}      # urn → (statement, code), for breaks
         for r in df[["date", "code", "parent_code", "sector", "outstanding_cr"] + ([scope] if scope else [])] \
                 .itertuples(index=False):
             st = getattr(r, scope) if scope else ""
             if not r.code:
                 continue
             u = urn(self.pipeline, str(st), str(r.code))
+            self.line[u] = (str(st), str(r.code))
             self.value[(u, str(r.date))] = float(r.outstanding_cr)
             self.name[(u, str(r.date))] = r.sector
             self.children.setdefault((str(st), str(r.parent_code), str(r.date)), []).append(u)
@@ -198,7 +200,11 @@ class Credit:
     def yoy(self, u: str, period: str) -> tuple[float, float, float]:
         cur, prior = self.value.get((u, period)), self.value.get((u, months_back(period, 12)))
         if cur is None or prior is None or prior == 0:
-            raise Absent("credit_history_gap")
+            raise Absent("credit_history_gap")      # no year-ago reading is the deeper absence
+        st, code = self.line.get(u, ("", ""))
+        reason = series_breaks.spans(self.pipeline, st, code, months_back(period, 12), period)
+        if reason:
+            raise Absent(reason)          # credit growth across a merger is not growth
         return (cur / prior - 1) * 100, cur, prior
 
 

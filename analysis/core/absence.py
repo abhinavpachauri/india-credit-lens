@@ -30,6 +30,9 @@ PER_PERIOD = {
     # on base 2024 in Jan 2025, so the early periods need a year-ago or trailing-year value that
     # MoSPI never published on this base. A visible reason, not a missing row and not a failure.
     "reference_history_gap": "MoSPI's series on this base does not reach back to this period",
+    # user, 2026-10-10: the HDFC merger (Jul 2023) moved a non-bank's loans into bank credit, so a
+    # comparison across it on a line RBI marks measures the merger, not growth (core/series_breaks).
+    "merger_break":          "a merger moved loans into bank credit inside this comparison's window, so the change is not growth",
 }
 
 #: An aggregate compared with a MoSPI aggregate that is RBI's convention but not exact

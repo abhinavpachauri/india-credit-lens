@@ -1,0 +1,29 @@
+{
+  "_meta": {
+    "spec": "analysis/signals/README.md, \"Series breaks\"",
+    "purpose": "Breaks in a published series that a comparison must not span. A reading whose window crosses a break on a marked line is absent with the break's reason. Read by core/series_breaks.py only.",
+    "decided": "user, 2026-10-10: absent with a reason"
+  },
+  "breaks": [
+    {
+      "id": "hdfc_merger_2023",
+      "effective": "2023-07-31",
+      "reason": "merger_break",
+      "source": "RBI SIBC releases Feb-Jul 2025, notes: \"Data since July 28, 2023 include the impact of the merger of a non-bank with a bank. Figures in parentheses exclude the impact of the merger.\"",
+      "lines_rule": "The rows RBI prints merger-excluded figures for, identical in all six releases whose comparisons span the merger (PR2276SIBC28022025 ... PR815SIBC31072025).",
+      "lines": [
+        {"statement": "Statement 1", "code": "I",    "name": "Bank Credit (II + III)"},
+        {"statement": "Statement 1", "code": "III",  "name": "Non-food Credit"},
+        {"statement": "Statement 1", "code": "2",    "name": "Industry (Micro and Small, Medium and Large)"},
+        {"statement": "Statement 1", "code": "3",    "name": "Services"},
+        {"statement": "Statement 1", "code": "3.8",  "name": "Commercial Real Estate"},
+        {"statement": "Statement 1", "code": "3.10", "name": "Other Services"},
+        {"statement": "Statement 1", "code": "4",    "name": "Personal Loans"},
+        {"statement": "Statement 1", "code": "4.2",  "name": "Housing (Including Priority Sector Housing)"},
+        {"statement": "Statement 1", "code": "4.9",  "name": "Other Personal Loans"},
+        {"statement": "Statement 1", "code": "iv",   "name": "Housing (priority sector)"},
+        {"statement": "Statement 1", "code": "x",    "name": "Weaker Sections including net PSLC- SF/MF"}
+      ]
+    }
+  ]
+}

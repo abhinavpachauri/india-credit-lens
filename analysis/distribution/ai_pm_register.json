@@ -600,6 +600,13 @@
           "date": "2026-10-08",
           "how_measured": "critical r from the t distribution, n-2 df, two-sided; Bonferroni for a family of 4",
           "source": "SYSTEM_MODEL_SPEC §16 Step 6b"
+        },
+        {
+          "metric": "Check 2e B5 (registry status vs latest DB status) skips `absent` rows",
+          "value": "catch 385/385 signals with a real latest status (every one corrupted in the registry -> 385 mismatches); false rejections 1 -> 0 (sibc-services-divergence, whose latest rows are merger_break absences)",
+          "date": "2026-10-10",
+          "how_measured": "enumerated over every L1 signal's latest aggregate row; known-good = live store, known-bad = every real status overwritten in a registry copy, then restored",
+          "source": "analysis/guards/validate_signal_history.py B5; signals/README.md \"Series breaks\""
         }
       ],
       "observations": [
