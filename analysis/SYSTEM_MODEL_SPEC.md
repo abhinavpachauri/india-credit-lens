@@ -1,5 +1,6 @@
 # System Model Specification — India Credit Lens
-> Version 3.1 | October 2026 | Domain-agnostic
+> Version 3.2 (draft) | October 2026 | Domain-agnostic
+> v3.2 (2026-10-11, specced, not built): the explainability loop (§16 Step 6c): driver register, data-request report, generic driver test, admission.
 > v3.1 (2026-10-08): force state judged against a baseline, with timing fields (§10.1, §16 Step 3); explanation coverage computed in S3 and read by S4, with structural explanations (§16 Step 6a); relationships admitted by a test (§16 Step 6b). Built.
 
 This document is the canonical definition for all system models in the India Credit Lens pipeline.
@@ -777,6 +778,144 @@ tested on months not yet seen); **WPI jewellery → gold loans not supported** (
 The gold levels co-trend, but the shape does not fit a price cause: gold-loan YoY went 51% → 138%
 (Sep 2024 → Apr 2025) while jewellery prices rose 8–12%, and slowed to 83% while prices were
 still +24%. A non-price driver, so an S4 question. Recorded in `analysis/cross_source/relationship_tests.json`.
+
+**Step 6c — The explainability loop: hypotheses, data, tests, admission (v3.2, specced
+2026-10-11, not yet built).** Steps 6a and 6b measure and test. Nothing yet decides *what to test
+next* or *which data to fetch*, so those choices were made by argument: on 2026-10-11 a hand-made
+driver tagging overstated "input prices" (31 moves) when 15 of them sat on lines whose price series
+was already attached and had not explained them. This step makes the choice a measured process.
+The aim it serves (user, 2026-10-11): explain the credit system well enough that what remains is
+honestly "not explained by the system's drivers" (sentiment, surprise, or data we lack), with
+enough sources to get there and no more. **The target is completeness, not a share (user,
+2026-10-11): every kind of reason tested for every line it applies to.** The explained share is
+the outcome, measured at every step, never a bar a source must clear.
+
+*The loop:*
+
+```
+1 MEASURE      Step 6a: every move, explained (how) or unexplained
+2 HYPOTHESISE  the driver register: candidate drivers per line, each declared before testing
+3 DATA         series in hand → 4 · missing → a data request, ranked by the moves it could cover
+4 TEST         one generic driver test (Step 6b protocol), declared sign and lag
+5 ADMIT        supported + editor's yes → an explanation in Step 6a; re-measure
+```
+
+*The taxonomy: the kinds of reason (closed).* When a line suddenly grows faster or slower than
+its group, there are only so many kinds of reason. Every hypothesis is filed under exactly one,
+so what has and has not been covered is visible.
+
+| kind (`class`) | in plain words | example | explanation in 6a | needs outside data |
+|---|---|---|---|---|
+| 1 `arithmetic` | nothing happened; the YoY calculation moved | aviation "slowed" Jun 2024 as a Jun 2023 jump left the comparison | `base_effect` (built) | no |
+| 2 `artefact` | a reporting or classification change, not lending | ICICI reclassifying POS terminals | `artifact` (built); a one-month step is recorded as a mechanism | no |
+| 3 `structural` | the same event seen twice in the tables | housing "slowing" as gold loans surge inside personal loans | `structural` (built) | no |
+| 4 `within_system` | one kind of lending replacing or feeding another | card spend leading card balances a month later | `relationship` (built, Step 6b) | no |
+| 5 `input_prices` | what borrowers buy or sell got dearer or cheaper | fertiliser prices and fertiliser credit | `driver` (new) | yes |
+| 6 `credit_price` | loans got cheaper or dearer | deposit rates and loans against FDs | `driver` (new) | yes |
+| 7 `demand` | borrowers' business or income grew or shrank | vehicle output and vehicle-maker credit | `driver` (new) | yes |
+| 8 `alternative_finance` | firms switch between banks and bonds, CP, foreign loans, NBFCs | large corporates and the bond market | `driver` (new) | yes |
+| 9 `regulation` | a rule, scheme or deadline | priority-sector targets at quarter-ends; risk weights | `cause` (built: dated forces, Step 3) | yes (sourced) |
+| 10 `funding` | lenders short of deposits or capital lend less overall | deposits, CD ratio, CRAR | `driver` (new) | yes; for totals and per-bank lines only, since a line measured against its group has the common tide removed |
+
+What remains after every class has been tried is the **residual**: reported as "not explained
+by the system's drivers", never as "sentiment" outright, because a missing driver and too short a
+history look the same (the detectability below is printed beside it).
+
+*The driver register* (single source of truth: `{data_dir}/driver_hypotheses.json`, one per
+pipeline). One entry per hypothesis:
+
+| field | meaning |
+|---|---|
+| `id` | permanent, never reused |
+| `line` | the target line's URN (must exist in the model) |
+| `class` | one taxonomy class |
+| `driver` | `{pipeline, series}` when the data exists; `{source, note}` (a catalogue entry, `analysis/sources/README.md`) when it does not |
+| `sign`, `lag` | declared before any test: `+1`/`-1`; months, 0–6 |
+| `reason` | the real-world mechanism, one sentence |
+| `proposed_by` | `claude` · `s4` · `user` |
+| `approved` | `{by, date}` or null. Only approved hypotheses are tested for admission; drafts may be tested to inform, never admitted |
+| `status` | derived, never typed: `draft` → `approved` → `data_missing` · `ready` → `supported` · `not_supported` · `opposite` · `too_short` → `admitted` · `retired` |
+| `tests` | ids of its results in `relationship_tests.json` |
+
+Rules: several hypotheses may target one line (they are tested together, below). A hypothesis
+belongs to one (line, class) cell of the completeness grid. A hypothesis
+whose line or series disappears is retired with the reason, never deleted. The draft tags of
+2026-10-11 (`explainability_baseline.json`) are imported as `draft` entries, and the existing
+price mappings in the MoSPI concordance as `input_prices` hypotheses already tested at lag 0.
+
+*Which kinds apply to which line* is part of the register: each line carries an `applies` list
+of classes (approved by the user like a hypothesis; Claude drafts it). A class a line does not
+need is marked not applicable, with a reason, so a gap and a "does not apply" never read the same.
+Classes 1–4 apply to every line and are computed from our own tables.
+
+*The completeness grid* (generated, `core/explainability.py report`): lines down, classes across,
+one cell per (line, class) that applies:
+
+```
+                 input   price of   demand   other     rules   funding
+                 prices  credit              finance
+Fertiliser        ✓✗      –          ·        –         ·       –
+Housing           –       ·          ·        ·         ✓       –
+...
+complete         8/14    0/10       5/22     0/11      3/9     0/2
+```
+
+A cell is **complete** when every approved hypothesis in it has been tested (any result,
+including `not_supported` and `too_short`); `·` is data missing, `–` not applicable. A column's
+completeness is complete cells over cells that apply. Beside each column: the sources that would
+fill its missing cells (from the hypotheses' `driver.source`), and the unexplained moves on those
+lines. The buyer conversation (STRATEGY §5) picks which column to complete next. The report also
+prints, per pipeline, the history length and the smallest |r| a test can detect at it, because a
+complete column on a short history can still be mostly `too_short`.
+
+*The generic driver test.* `relationship_test.run_reference` generalised to any declared driver:
+the target's monthly change in its gap to its group against the driver's monthly change (in YoY,
+or in level for rates and spreads), the driver's own headline removed as its tide, 10,000 seeded
+shuffles, a family per line (all hypotheses for one line tested in one run share the Bonferroni
+bar), at the **declared** lag only. Other lags are printed and can only be re-declared and tested
+on months not yet seen. A result with fewer changes than the effect size needs is `too_short`,
+not `not_supported`. Every result, nulls included, is kept.
+
+*Admission and the `driver` explanation.* An `approved` hypothesis that is `supported`, with the
+editor's yes, is `admitted`. It explains a move in Step 6a when, at that period, the driver's
+change at the declared lag times the test's slope covers at least half the move, in its direction
+(`STRUCTURAL_SHARE`). That is the same coverage rule `prices_activity` uses, with a fitted slope
+instead of an assumed one. **`prices_activity` stays until the generic path reproduces its
+explanations** (control below), then it becomes the `input_prices`/`demand` lag-0 case and the
+old path is removed, so no move is ever explained twice by two mechanisms.
+
+*The verdict on a source is the column it completes.* A source is onboarded to fill a column's
+missing cells; it is done when those cells are tested. Every onboarding ends by re-running the
+history baseline, and the change in explained share is **recorded** beside the source in the
+report and in `ai_pm_register.json`: a measurement of what the source taught us, never a bar it
+must clear (a well-tested column of nulls is a finding: that kind of reason does not drive these
+lines at this history length). **The target: every column complete for every pipeline with a
+model** (user, 2026-10-11). Then the residual, with its detectability, is the product's honest
+answer for the rest.
+
+*Who does what.* Claude drafts hypotheses and mappings, runs tests and the report (free, may start
+alone). The user approves hypotheses, admits supported ones, and picks sources. S4 adds hypotheses
+from its sourcing (`proposed_by: s4`), which enter as drafts like any other.
+
+*Guards (each measured by injection before it gates, per DECISIONS):* the register validates
+(URN exists; class in the taxonomy; sign and lag declared; a `ready` series exists in its
+pipeline's CSV; status derivable from tests; every line of the model has an `applies` list, so a
+line missing from the grid fails rather than reading as complete); an `admitted` hypothesis must have a `supported`
+test at its declared lag; coverage refuses a `driver` explanation from a non-admitted hypothesis.
+
+*Controls for the test and the admission:* an injected driver with a known slope and lag →
+`supported` and the move explained; the same series shuffled → `not_supported`; sign flipped →
+`opposite`; a short series → `too_short`; the generic path at lag 0 on the 1f deflators reproduces
+`prices_activity`'s explanations (2 on SIBC history, 1 latest) before the old path is retired.
+
+*Not in this step:* discovery by correlation (Step 6b: reasons come first); paid model calls (S4
+remains the paid path, approved per run); the dashboard's "why" for a line (a later
+`dashboard-change`, once admitted drivers exist).
+
+*Build order:* (1) register + validator + import of the drafts and concordance mappings; (2) the
+report; (3) the generic test with its controls; (4) the `driver` explanation in 6a and the
+`prices_activity` handover; (5) the first cycle on data in hand: lagged WPI on the 15 lines whose
+prices did not explain at lag 0, then the rates files. Re-measure after each.
 
 **Output:** structured JSON with `entity_states` (incl. propagated aggregates), `force_states`, `edge_states`, `loop_states`, `system_observations`, and a `narrative: null` slot the LLM fills at Stage 5.X.
 
