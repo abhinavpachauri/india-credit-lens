@@ -922,6 +922,14 @@ not_supported, unassessable → too_short), and a placeholder naming its source 
 applicable cell left empty. Validator measured by injection: 10 rules, 10 faults caught, 0 errors
 on the seeded register (`tests/test_explainability.py`). Not yet wired into a gate.
 
+*Built, step 2 (2026-10-11):* `explainability.py report` prints the column summary and writes
+`analysis/rbi_sibc/explainability_grid.md` (the grid by table group, the column summary with the
+sources that would fill each column and the unexplained moves on those lines, and the "does not
+apply" drafts grouped by reason, 11 decisions for 84 lines). First reading: 25 usable monthly
+changes, detectable |r| ≥ 0.40; complete cells: input prices 0/54, price of credit 0/83,
+demand 0/84, other finance 0/50, rules and dates 8/84 (Step 3's judged forces). A line's
+unexplained moves count in every column that applies to it, so the column figures overlap.
+
 *Build order:* (1) register + validator + import of the drafts and concordance mappings; (2) the
 report; (3) the generic test with its controls; (4) the `driver` explanation in 6a and the
 `prices_activity` handover; (5) the first cycle on data in hand: lagged WPI on the 15 lines whose

@@ -10,6 +10,7 @@ results, never typed. Claude drafts; the user approves; tests decide.
     python3 analysis/core/explainability.py seed --pipeline sibc      # draft register (refuses to overwrite)
     python3 analysis/core/explainability.py validate --pipeline sibc
     python3 analysis/core/explainability.py summary --pipeline sibc
+    python3 analysis/core/explainability.py report --pipeline sibc    # the completeness grid
 
 Step 1 of the build order (register, validator, seed). The completeness grid is step 2.
 """
@@ -341,10 +342,153 @@ def summary(pipeline: str) -> str:
     return "\n".join(out)
 
 
+# ── Step 2: the completeness grid (spec §16 Step 6c) ───────────────────────────────────────
+
+TESTED = ("supported", "not_supported", "opposite", "too_short", "admitted")
+SHORT = {"input_prices": "input prices", "credit_price": "price of credit", "demand": "demand",
+         "alternative_finance": "other finance", "regulation": "rules & dates", "funding": "lenders' capacity"}
+GROUPS = [("agri", "Agriculture"), ("industry_size", "Industry by size"), ("industry_type", "Industry by type"),
+          ("services", "Services"), ("personal", "Personal loans"), ("psl", "Priority sector (lens)"),
+          ("food", "Food credit"), ("nonfood", "Non-food credit")]
+
+
+def cell(hyps: list[dict], verdicts: dict, applies: dict) -> tuple[str, bool]:
+    """(symbol, complete) for one (line, kind). Complete = every hypothesis in it tested."""
+    if applies.get("status") != "applies":
+        return "–", True
+    st = [status(h, verdicts) for h in hyps]
+    done = bool(st) and all(s in TESTED for s in st)
+    if done:
+        sym = "✓" if any(s in ("supported", "admitted") for s in st) else \
+              "?" if all(s == "too_short" for s in st) else "✗"
+    elif any(s in TESTED for s in st):
+        sym = "✓…" if any(s in ("supported", "admitted") for s in st) else "✗…"
+    elif any(s == "ready" for s in st):
+        sym = "○"
+    else:
+        sym = "·"
+    return sym, done
+
+
+def unexplained_moves(pipeline: str) -> dict:
+    """urn -> number of unexplained moves over the whole history (Step 6a, live)."""
+    from core import coverage as C, force_check as fc
+    model = gs.load_json(gs.pipeline_cfg(pipeline)["model"])
+    series, periods = fc.growth_series(pipeline, model), fc.periods_of(pipeline)
+    out: dict[str, int] = {}
+    for p in periods:
+        for m in C.for_period(pipeline, model, p, series, periods)["moves"]:
+            if m["filed_under"] == "unexplained":
+                out[m["urn"]] = out.get(m["urn"], 0) + 1
+    return out
+
+
+def detectability(pipeline: str) -> tuple[int, float | None]:
+    """(usable monthly changes, smallest |r| detectable at p < 0.05) for the root's growth: the
+    series every test removes as the tide, so no test can use more changes than it has."""
+    from core import force_check as fc
+    from scipy.stats import t as tdist
+    model = gs.load_json(gs.pipeline_cfg(pipeline)["model"])
+    series = fc.growth_series(pipeline, model)
+    root = next(n["id"] for n in model["nodes"] if n.get("structural_role") == "root" and n["id"] in series)
+    months = sorted(fc._months(fc.resolve_csv_date(pipeline, p)) for p in series[root])
+    n = sum(1 for a, b in zip(months, months[1:]) if b - a == 1)
+    if n < 4:
+        return n, None
+    tc = tdist.ppf(0.975, n - 2)
+    return n, round(tc / (n - 2 + tc ** 2) ** 0.5, 2)
+
+
+def report(pipeline: str, with_moves: bool = True) -> tuple[str, str]:
+    """(terminal summary, markdown page) of the completeness grid."""
+    reg = json.loads(register_path(pipeline).read_text())
+    model = gs.load_json(gs.pipeline_cfg(pipeline)["model"])
+    v = _verdicts(pipeline)
+    by_cell: dict[tuple, list] = {}
+    for h in reg["hypotheses"]:
+        by_cell.setdefault((h["line"], h["class"]), []).append(h)
+    moves = unexplained_moves(pipeline) if with_moves else {}
+    n_changes, r_min = detectability(pipeline)
+    group_of = {n["urn"]: _sibc_group(n) for n in lines(model)}
+
+    col = {k: {"applies": 0, "complete": 0, "sources": {}} for k in OUTSIDE}
+    rows = {g: [] for g, _ in GROUPS}
+    for urn, line in reg["lines"].items():
+        cells = []
+        for k in OUTSIDE:
+            hs = by_cell.get((urn, k), [])
+            sym, done = cell(hs, v, line["applies"].get(k, {}))
+            cells.append(sym)
+            if line["applies"].get(k, {}).get("status") == "applies":
+                col[k]["applies"] += 1
+                col[k]["complete"] += done
+                for h in hs:
+                    if status(h, v) == "data_missing":
+                        s = col[k]["sources"].setdefault(h["driver"]["source"], {"lines": 0, "moves": 0})
+                        s["lines"] += 1
+                        s["moves"] += moves.get(urn, 0)
+        ws = [status(h, v) for h in by_cell.get((urn, "within_system"), [])]
+        rows.setdefault(group_of.get(urn, "other"), []).append(
+            (line["label"], moves.get(urn, 0), cells, f"{len(ws)} tested" if ws else ""))
+
+    md = [f"# Explainability grid — {pipeline}",
+          "",
+          f"> Generated by `python3 analysis/core/explainability.py report --pipeline {pipeline}` "
+          f"({date.today().isoformat()}). Spec: SYSTEM_MODEL_SPEC §16 Step 6c. **Every cell is a draft** "
+          f"until approved. The target: every column complete.",
+          "",
+          "`✓` tested, explains · `✗` tested, does not explain · `?` tested, history too short to tell · "
+          "`○` data in hand, not yet tested · `·` data missing · `–` does not apply · `…` partly tested",
+          "",
+          f"**History:** {n_changes} usable monthly changes; a test can detect a link of |r| ≥ {r_min} "
+          f"(p < 0.05). Weaker links read `?` or `✗` until the history grows.",
+          "",
+          "## Columns: how complete is each kind of reason",
+          "",
+          "| kind | complete | where the missing data would come from (lines · unexplained moves on them) |",
+          "|---|---|---|"]
+    term = [f"{pipeline}: completeness grid ({n_changes} monthly changes, detectable |r| ≥ {r_min})"]
+    for k in OUTSIDE:
+        c = col[k]
+        src = "; ".join(f"{s} ({d['lines']} · {d['moves']})" for s, d in
+                        sorted(c["sources"].items(), key=lambda x: -x[1]["moves"])) or "—"
+        md.append(f"| {SHORT[k]} | {c['complete']}/{c['applies']} | {src} |")
+        term.append(f"  {SHORT[k]:17} complete {c['complete']:2}/{c['applies']:2}"
+                    f"   missing-data lines {sum(d['lines'] for d in c['sources'].values()):2}, "
+                    f"unexplained moves on them {sum(d['moves'] for d in c['sources'].values())}")
+    md += ["", "## The grid", ""]
+    head = "| line | unexplained moves | " + " | ".join(SHORT[k] for k in OUTSIDE) + " | within system |"
+    for g, title in GROUPS:
+        if not rows.get(g):
+            continue
+        md += [f"### {title}", "", head, "|" + "---|" * (len(OUTSIDE) + 3)]
+        for label, mv, cells, ws in sorted(rows[g], key=lambda r: -r[1]):
+            md.append(f"| {label} | {mv or ''} | " + " | ".join(cells) + f" | {ws} |")
+        md.append("")
+    md += ["## Drafts to approve: where a kind of reason does not apply", "",
+           "Grouped by reason, so each row is one decision. Approve, or name the lines it should not cover.", "",
+           "| kind | reason | lines |", "|---|---|---|"]
+    na: dict[tuple, list] = {}
+    for urn, line in reg["lines"].items():
+        for k, c in line["applies"].items():
+            if c.get("status") == NO:
+                na.setdefault((k, c["reason"]), []).append(line["label"])
+    for (k, why), ls in sorted(na.items(), key=lambda x: (OUTSIDE.index(x[0][0]), -len(x[1]))):
+        shown = ", ".join(sorted(ls)) if len(ls) <= 12 else f"{len(ls)} lines (all of: " + \
+            ", ".join(sorted(set(_sibc_group_label(l, reg, model) for l in ls))) + ")"
+        md.append(f"| {SHORT[k]} | {why} | {shown} |")
+    return "\n".join(term), "\n".join(md) + "\n"
+
+
+def _sibc_group_label(label: str, reg: dict, model: dict) -> str:
+    n = next(n for n in lines(model) if n["label"] == label)
+    return dict(GROUPS).get(_sibc_group(n), "other")
+
+
 def main() -> int:
     import argparse
     ap = argparse.ArgumentParser(description="Driver register (SYSTEM_MODEL_SPEC §16 Step 6c)")
-    ap.add_argument("command", choices=("seed", "validate", "summary"))
+    ap.add_argument("command", choices=("seed", "validate", "summary", "report"))
     ap.add_argument("--pipeline", required=True)
     a = ap.parse_args()
     if a.command == "seed":
@@ -366,6 +510,13 @@ def main() -> int:
         for e in errs[:40]:
             print("   ·", e)
         return 1 if errs else 0
+    if a.command == "report":
+        term, md = report(a.pipeline)
+        out = register_path(a.pipeline).with_name("explainability_grid.md")
+        out.write_text(md)
+        print(term)
+        print(f"  → {out.relative_to(ROOT)}")
+        return 0
     print(summary(a.pipeline))
     return 0
 

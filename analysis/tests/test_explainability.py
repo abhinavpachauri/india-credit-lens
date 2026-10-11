@@ -88,3 +88,25 @@ def test_every_applicable_cell_has_at_least_one_hypothesis():
         for cls, cell in line["applies"].items():
             if cell["status"] == "applies":
                 assert (urn, cls) in filled, (line["label"], cls)
+
+
+# ── step 2: the completeness grid ─────────────────────────────────────────────────────────
+
+def test_a_cell_is_complete_only_when_every_hypothesis_in_it_is_tested():
+    yes = {"status": "applies"}
+    tested = {"driver": {"pipeline": "mospi", "series": ["a"]}, "tests": ["t"]}
+    untested = {"driver": {"source": "x"}, "tests": []}
+    assert X.cell([tested], {"t": "not_supported"}, yes) == ("✗", True)
+    assert X.cell([tested], {"t": "supported"}, yes) == ("✓", True)
+    assert X.cell([tested, untested], {"t": "supported"}, yes) == ("✓…", False)
+    assert X.cell([untested], {}, yes) == ("·", False)
+    assert X.cell([], {}, {"status": "not_applicable", "reason": "r"}) == ("–", True)
+
+
+def test_the_grid_counts_every_applicable_cell_once():
+    import json
+    term, md = X.report("sibc", with_moves=False)
+    reg = json.loads(X.register_path("sibc").read_text())
+    for k in X.OUTSIDE:
+        n = sum(1 for l in reg["lines"].values() if l["applies"][k]["status"] == "applies")
+        assert f"/{n:2}" in term or f"/{n}" in term, k
