@@ -1,0 +1,2268 @@
+{
+ "_meta": {
+  "date": "2026-10-11",
+  "pipeline": "sibc",
+  "history": "Jan 2023 - Aug 2026 (44 months)",
+  "how": "core/coverage.py over every period; a move = a change in the line's growth gap to its group > 3x its typical monthly change",
+  "totals": {
+   "moves": 218,
+   "structural": 35,
+   "cause": 14,
+   "prices_activity": 2,
+   "relationship": 0,
+   "artifact": 0,
+   "unexplained": 167,
+   "explained_share_pct": 23
+  },
+  "tags": "DRAFT by Claude, for the user to correct: the driver class most likely to explain each line's unexplained moves. A tag is a hypothesis; a move counts as explained only once a source is ingested and its link passes a test.",
+  "transient_rule": "a move followed within 2 months by an opposite move at least half its size (51 of 167)",
+  "after_base_effect": {
+   "date": "2026-10-11",
+   "unexplained": 129,
+   "explained_share_pct": 41,
+   "one_month_steps": 52
+  },
+  "draft_tags": {
+   "Price of credit (rates)": [
+    "Advances against Fixed Deposits (Including FCNR (B), NRNR Deposits etc.)",
+    "Housing",
+    "Housing (Including Priority Sector Housing)",
+    "Vehicle Loans",
+    "Consumer Durables",
+    "Commercial Real Estate",
+    "Educational Loans",
+    "Education",
+    "Other Personal Loans",
+    "Personal Loans"
+   ],
+   "Alternative finance (bonds, CP, ECB, NBFC lenders)": [
+    "Public Financial Institutions (PFIs)",
+    "Housing Finance Companies (HFCs)",
+    "Large",
+    "Infrastructure",
+    "Other Infrastructure",
+    "Renewable Energy",
+    "Airports",
+    "Ports",
+    "Railways (other than Indian Railways)",
+    "Social Infrastructure",
+    "Industry (Micro and Small, Medium and Large)"
+   ],
+   "Input prices (WPI detail, gold)": [
+    "Fertiliser",
+    "Edible Oils and Vanaspati",
+    "Tea",
+    "Petro Chemicals",
+    "Petroleum, Coal Products and Nuclear Fuels",
+    "Iron and Steel",
+    "Gems and Jewellery",
+    "Loans against gold jewellery",
+    "Other Metal and Metal Product",
+    "Drugs and Pharmaceuticals",
+    "Glass and Glassware",
+    "Cotton Textiles",
+    "Textiles",
+    "Beverage and Tobacco",
+    "Others",
+    "Food Processing"
+   ],
+   "Regulation and calendar (PSL, schemes)": [
+    "Agriculture and Allied Activities",
+    "Micro and Small",
+    "Micro and Small Enterprises",
+    "Medium",
+    "Medium Enterprises",
+    "Weaker Sections including net PSLC- SF/MF",
+    "Export Credit"
+   ],
+   "Sector demand (output, services, jobs)": [
+    "Aviation",
+    "Computer Software",
+    "Transport Operators",
+    "Tourism, Hotels and Restaurants",
+    "Trade",
+    "Professional Services",
+    "Shipping",
+    "Mining and Quarrying (incl. Coal)",
+    "Vehicles, Vehicle Parts and Transport Equipment",
+    "Electronics",
+    "Wood and Wood Products"
+   ],
+   "Food procurement": [
+    "Food Credit"
+   ],
+   "Totals echoing parts": [
+    "Non-food Credit"
+   ]
+  }
+ },
+ "unexplained_by_line": {
+  "Food Credit": [
+   [
+    "2024-04",
+    "up",
+    70.9,
+    "none",
+    ""
+   ],
+   [
+    "2025-04",
+    "up",
+    27.9,
+    "parent",
+    "Bank Credit (II + III)"
+   ],
+   [
+    "2025-11",
+    "down",
+    -78.7,
+    "parent",
+    "Bank Credit (II + III)"
+   ],
+   [
+    "2026-02",
+    "up",
+    35.4,
+    "parent",
+    "Bank Credit (II + III)"
+   ],
+   [
+    "2026-03",
+    "up",
+    43.6,
+    "parent",
+    "Bank Credit (II + III)"
+   ],
+   [
+    "2026-04",
+    "down",
+    -72.9,
+    "parent",
+    "Bank Credit (II + III)"
+   ],
+   [
+    "2026-08",
+    "up",
+    38.2,
+    "parent",
+    "Bank Credit (II + III)"
+   ]
+  ],
+  "Agriculture and Allied Activities": [
+   [
+    "2024-04",
+    "down",
+    -0.1,
+    "none",
+    ""
+   ],
+   [
+    "2024-05",
+    "up",
+    1.8,
+    "none",
+    ""
+   ],
+   [
+    "2024-06",
+    "down",
+    -4.2,
+    "none",
+    ""
+   ],
+   [
+    "2024-12",
+    "down",
+    -3.4,
+    "parent",
+    "Non-food Credit"
+   ],
+   [
+    "2025-06",
+    "down",
+    -5.1,
+    "none",
+    ""
+   ],
+   [
+    "2025-10",
+    "up",
+    3.2,
+    "none",
+    ""
+   ],
+   [
+    "2025-12",
+    "up",
+    4.1,
+    "none",
+    ""
+   ],
+   [
+    "2026-05",
+    "down",
+    -3.5,
+    "none",
+    ""
+   ],
+   [
+    "2026-06",
+    "up",
+    6.1,
+    "none",
+    ""
+   ]
+  ],
+  "Educational Loans": [
+   [
+    "2024-04",
+    "down",
+    -1.7,
+    "none",
+    ""
+   ],
+   [
+    "2026-07",
+    "down",
+    -5.6,
+    "none",
+    ""
+   ]
+  ],
+  "Export Credit": [
+   [
+    "2024-04",
+    "up",
+    9.4,
+    "none",
+    ""
+   ],
+   [
+    "2024-11",
+    "up",
+    61.2,
+    "none",
+    ""
+   ],
+   [
+    "2024-12",
+    "down",
+    -55.0,
+    "none",
+    ""
+   ]
+  ],
+  "Petro Chemicals": [
+   [
+    "2024-04",
+    "up",
+    8.2,
+    "parent",
+    "Chemicals and Chemical"
+   ],
+   [
+    "2024-11",
+    "up",
+    17.0,
+    "parent",
+    "Chemicals and Chemical"
+   ],
+   [
+    "2024-12",
+    "down",
+    -30.7,
+    "parent",
+    "Chemicals and Chemical"
+   ],
+   [
+    "2025-10",
+    "up",
+    19.3,
+    "parent",
+    "Chemicals and Chemical"
+   ],
+   [
+    "2025-11",
+    "down",
+    -18.3,
+    "parent",
+    "Chemicals and Chemical"
+   ]
+  ],
+  "Airports": [
+   [
+    "2024-04",
+    "up",
+    19.7,
+    "parent",
+    "Infrastructure"
+   ],
+   [
+    "2024-12",
+    "up",
+    16.9,
+    "parent",
+    "Infrastructure"
+   ],
+   [
+    "2025-07",
+    "down",
+    -19.1,
+    "parent",
+    "Infrastructure"
+   ],
+   [
+    "2025-10",
+    "down",
+    -19.6,
+    "parent",
+    "Infrastructure"
+   ],
+   [
+    "2026-07",
+    "up",
+    22.6,
+    "parent",
+    "Infrastructure"
+   ]
+  ],
+  "Loans against gold jewellery": [
+   [
+    "2024-05",
+    "up",
+    17.0,
+    "none",
+    ""
+   ]
+  ],
+  "Mining and Quarrying (incl. Coal)": [
+   [
+    "2024-05",
+    "up",
+    8.7,
+    "none",
+    ""
+   ],
+   [
+    "2026-03",
+    "down",
+    -15.8,
+    "parent",
+    "Industry (Micro and Sm"
+   ]
+  ],
+  "Micro and Small": [
+   [
+    "2024-06",
+    "down",
+    -4.6,
+    "none",
+    ""
+   ],
+   [
+    "2024-10",
+    "down",
+    -2.5,
+    "parent",
+    "Industry (Micro and Sm"
+   ],
+   [
+    "2025-05",
+    "up",
+    6.2,
+    "parent",
+    "Industry (Micro and Sm"
+   ],
+   [
+    "2025-06",
+    "up",
+    4.5,
+    "parent",
+    "Industry (Micro and Sm"
+   ],
+   [
+    "2026-05",
+    "down",
+    -6.4,
+    "parent",
+    "Industry (Micro and Sm"
+   ],
+   [
+    "2026-06",
+    "down",
+    -4.8,
+    "parent",
+    "Industry (Micro and Sm"
+   ]
+  ],
+  "Shipping": [
+   [
+    "2024-06",
+    "down",
+    -8.8,
+    "none",
+    ""
+   ]
+  ],
+  "Aviation": [
+   [
+    "2024-06",
+    "down",
+    -37.8,
+    "none",
+    ""
+   ],
+   [
+    "2024-12",
+    "down",
+    -11.8,
+    "parent",
+    "Services"
+   ],
+   [
+    "2025-06",
+    "up",
+    9.8,
+    "parent",
+    "Services"
+   ],
+   [
+    "2025-07",
+    "down",
+    -11.9,
+    "parent",
+    "Services"
+   ],
+   [
+    "2026-05",
+    "up",
+    10.8,
+    "parent",
+    "Services"
+   ],
+   [
+    "2026-06",
+    "down",
+    -14.2,
+    "parent",
+    "Services"
+   ],
+   [
+    "2026-07",
+    "up",
+    9.7,
+    "parent",
+    "Services"
+   ]
+  ],
+  "Professional Services": [
+   [
+    "2024-06",
+    "down",
+    -13.2,
+    "none",
+    ""
+   ],
+   [
+    "2024-10",
+    "up",
+    6.1,
+    "parent",
+    "Services"
+   ]
+  ],
+  "Consumer Durables": [
+   [
+    "2024-06",
+    "down",
+    -7.3,
+    "none",
+    ""
+   ],
+   [
+    "2025-02",
+    "up",
+    5.1,
+    "parent",
+    "Personal Loans"
+   ],
+   [
+    "2025-10",
+    "up",
+    5.0,
+    "parent",
+    "Personal Loans"
+   ],
+   [
+    "2026-02",
+    "down",
+    -6.0,
+    "parent",
+    "Personal Loans"
+   ]
+  ],
+  "Education": [
+   [
+    "2024-06",
+    "down",
+    -4.3,
+    "none",
+    ""
+   ],
+   [
+    "2026-01",
+    "down",
+    -1.3,
+    "parent",
+    "Personal Loans"
+   ]
+  ],
+  "Medium Enterprises": [
+   [
+    "2024-06",
+    "down",
+    -3.0,
+    "none",
+    ""
+   ]
+  ],
+  "Social Infrastructure": [
+   [
+    "2024-06",
+    "up",
+    10.5,
+    "none",
+    ""
+   ],
+   [
+    "2024-08",
+    "down",
+    -1.6,
+    "none",
+    ""
+   ],
+   [
+    "2024-10",
+    "up",
+    90.0,
+    "none",
+    ""
+   ],
+   [
+    "2024-11",
+    "down",
+    -110.5,
+    "none",
+    ""
+   ],
+   [
+    "2024-12",
+    "up",
+    96.0,
+    "none",
+    ""
+   ],
+   [
+    "2025-02",
+    "up",
+    32.5,
+    "none",
+    ""
+   ],
+   [
+    "2025-03",
+    "up",
+    10.9,
+    "none",
+    ""
+   ],
+   [
+    "2025-04",
+    "down",
+    -20.4,
+    "none",
+    ""
+   ],
+   [
+    "2025-05",
+    "down",
+    -42.3,
+    "none",
+    ""
+   ],
+   [
+    "2026-05",
+    "up",
+    35.4,
+    "none",
+    ""
+   ]
+  ],
+  "Public Financial Institutions (PFIs)": [
+   [
+    "2024-06",
+    "down",
+    -14.9,
+    "parent",
+    "Non-Banking Financial "
+   ],
+   [
+    "2025-06",
+    "up",
+    10.6,
+    "parent",
+    "Non-Banking Financial "
+   ],
+   [
+    "2025-07",
+    "down",
+    -11.9,
+    "parent",
+    "Non-Banking Financial "
+   ],
+   [
+    "2025-10",
+    "up",
+    16.7,
+    "parent",
+    "Non-Banking Financial "
+   ]
+  ],
+  "Others": [
+   [
+    "2024-07",
+    "up",
+    0.6,
+    "parent",
+    "Food Processing"
+   ],
+   [
+    "2024-08",
+    "down",
+    -1.7,
+    "parent",
+    "Food Processing"
+   ],
+   [
+    "2025-04",
+    "up",
+    1.8,
+    "parent",
+    "Food Processing"
+   ],
+   [
+    "2026-01",
+    "up",
+    4.9,
+    "parent",
+    "All Engineering"
+   ]
+  ],
+  "Housing Finance Companies (HFCs)": [
+   [
+    "2024-08",
+    "up",
+    5.2,
+    "parent",
+    "Non-Banking Financial "
+   ]
+  ],
+  "Electronics": [
+   [
+    "2024-08",
+    "up",
+    14.0,
+    "parent",
+    "All Engineering"
+   ],
+   [
+    "2025-12",
+    "up",
+    12.3,
+    "parent",
+    "All Engineering"
+   ],
+   [
+    "2026-01",
+    "down",
+    -17.2,
+    "parent",
+    "All Engineering"
+   ]
+  ],
+  "Vehicle Loans": [
+   [
+    "2024-10",
+    "down",
+    -1.4,
+    "parent",
+    "Personal Loans"
+   ],
+   [
+    "2025-09",
+    "down",
+    -1.4,
+    "parent",
+    "Personal Loans"
+   ],
+   [
+    "2025-10",
+    "up",
+    3.0,
+    "parent",
+    "Personal Loans"
+   ],
+   [
+    "2025-12",
+    "up",
+    2.5,
+    "parent",
+    "Personal Loans"
+   ]
+  ],
+  "Wood and Wood Products": [
+   [
+    "2024-10",
+    "up",
+    2.2,
+    "parent",
+    "Industry (Micro and Sm"
+   ]
+  ],
+  "Renewable Energy": [
+   [
+    "2024-11",
+    "up",
+    235.8,
+    "none",
+    ""
+   ],
+   [
+    "2024-12",
+    "down",
+    -228.1,
+    "none",
+    ""
+   ],
+   [
+    "2025-03",
+    "up",
+    28.7,
+    "none",
+    ""
+   ],
+   [
+    "2025-07",
+    "down",
+    -29.5,
+    "none",
+    ""
+   ],
+   [
+    "2026-03",
+    "down",
+    -38.4,
+    "none",
+    ""
+   ]
+  ],
+  "Other Personal Loans": [
+   [
+    "2024-12",
+    "down",
+    -1.1,
+    "parent",
+    "Personal Loans"
+   ],
+   [
+    "2026-06",
+    "up",
+    1.3,
+    "parent",
+    "Personal Loans"
+   ]
+  ],
+  "Iron and Steel": [
+   [
+    "2024-12",
+    "down",
+    -3.2,
+    "parent",
+    "Basic Metal and Metal "
+   ],
+   [
+    "2026-03",
+    "up",
+    3.5,
+    "parent",
+    "Basic Metal and Metal "
+   ]
+  ],
+  "Other Metal and Metal Product": [
+   [
+    "2024-12",
+    "up",
+    7.1,
+    "parent",
+    "Basic Metal and Metal "
+   ]
+  ],
+  "Railways (other than Indian Railways)": [
+   [
+    "2024-12",
+    "up",
+    23.2,
+    "parent",
+    "Infrastructure"
+   ],
+   [
+    "2025-10",
+    "down",
+    -20.7,
+    "parent",
+    "Infrastructure"
+   ],
+   [
+    "2026-02",
+    "down",
+    -23.2,
+    "parent",
+    "Infrastructure"
+   ]
+  ],
+  "Computer Software": [
+   [
+    "2025-01",
+    "up",
+    9.1,
+    "parent",
+    "Services"
+   ],
+   [
+    "2025-04",
+    "up",
+    9.9,
+    "parent",
+    "Services"
+   ],
+   [
+    "2026-01",
+    "down",
+    -13.4,
+    "parent",
+    "Services"
+   ],
+   [
+    "2026-02",
+    "up",
+    18.2,
+    "parent",
+    "Services"
+   ],
+   [
+    "2026-04",
+    "up",
+    14.2,
+    "parent",
+    "Services"
+   ]
+  ],
+  "Tea": [
+   [
+    "2025-01",
+    "down",
+    -6.5,
+    "parent",
+    "Food Processing"
+   ],
+   [
+    "2025-03",
+    "down",
+    -13.7,
+    "parent",
+    "Food Processing"
+   ],
+   [
+    "2026-03",
+    "up",
+    16.7,
+    "parent",
+    "Food Processing"
+   ]
+  ],
+  "Food Processing": [
+   [
+    "2025-03",
+    "down",
+    -5.0,
+    "parent",
+    "Industry (Micro and Sm"
+   ]
+  ],
+  "Beverage and Tobacco": [
+   [
+    "2025-03",
+    "up",
+    8.7,
+    "parent",
+    "Industry (Micro and Sm"
+   ],
+   [
+    "2025-10",
+    "down",
+    -9.6,
+    "parent",
+    "Industry (Micro and Sm"
+   ],
+   [
+    "2025-11",
+    "up",
+    9.9,
+    "parent",
+    "Industry (Micro and Sm"
+   ],
+   [
+    "2026-03",
+    "down",
+    -13.6,
+    "parent",
+    "Industry (Micro and Sm"
+   ]
+  ],
+  "Non-food Credit": [
+   [
+    "2025-04",
+    "down",
+    -0.1,
+    "parent",
+    "Bank Credit (II + III)"
+   ],
+   [
+    "2025-11",
+    "up",
+    0.1,
+    "parent",
+    "Bank Credit (II + III)"
+   ]
+  ],
+  "Commercial Real Estate": [
+   [
+    "2025-04",
+    "up",
+    5.5,
+    "parent",
+    "Services"
+   ],
+   [
+    "2025-08",
+    "down",
+    -2.5,
+    "parent",
+    "Services"
+   ],
+   [
+    "2025-09",
+    "up",
+    2.4,
+    "parent",
+    "Services"
+   ],
+   [
+    "2026-06",
+    "up",
+    2.4,
+    "parent",
+    "Services"
+   ]
+  ],
+  "Housing (Including Priority Sector Housing)": [
+   [
+    "2025-04",
+    "down",
+    -1.2,
+    "parent",
+    "Personal Loans"
+   ]
+  ],
+  "Micro and Small Enterprises": [
+   [
+    "2025-04",
+    "up",
+    4.3,
+    "none",
+    ""
+   ],
+   [
+    "2025-07",
+    "up",
+    2.8,
+    "none",
+    ""
+   ],
+   [
+    "2025-10",
+    "up",
+    3.4,
+    "none",
+    ""
+   ],
+   [
+    "2025-12",
+    "up",
+    4.7,
+    "none",
+    ""
+   ],
+   [
+    "2026-01",
+    "down",
+    -3.7,
+    "none",
+    ""
+   ]
+  ],
+  "Gems and Jewellery": [
+   [
+    "2025-04",
+    "up",
+    9.1,
+    "parent",
+    "Industry (Micro and Sm"
+   ],
+   [
+    "2025-11",
+    "up",
+    8.8,
+    "parent",
+    "Industry (Micro and Sm"
+   ],
+   [
+    "2026-01",
+    "up",
+    11.6,
+    "parent",
+    "Industry (Micro and Sm"
+   ]
+  ],
+  "Infrastructure": [
+   [
+    "2025-04",
+    "down",
+    -1.2,
+    "parent",
+    "Industry (Micro and Sm"
+   ],
+   [
+    "2025-06",
+    "up",
+    1.0,
+    "parent",
+    "Industry (Micro and Sm"
+   ],
+   [
+    "2025-07",
+    "up",
+    2.4,
+    "parent",
+    "Industry (Micro and Sm"
+   ]
+  ],
+  "Large": [
+   [
+    "2025-05",
+    "down",
+    -1.8,
+    "parent",
+    "Industry (Micro and Sm"
+   ],
+   [
+    "2026-05",
+    "up",
+    1.9,
+    "parent",
+    "Industry (Micro and Sm"
+   ]
+  ],
+  "Medium": [
+   [
+    "2025-06",
+    "down",
+    -4.8,
+    "parent",
+    "Industry (Micro and Sm"
+   ],
+   [
+    "2026-01",
+    "up",
+    3.0,
+    "parent",
+    "Industry (Micro and Sm"
+   ]
+  ],
+  "Edible Oils and Vanaspati": [
+   [
+    "2025-06",
+    "up",
+    8.7,
+    "parent",
+    "Food Processing"
+   ],
+   [
+    "2025-11",
+    "down",
+    -13.6,
+    "parent",
+    "Food Processing"
+   ],
+   [
+    "2026-03",
+    "up",
+    10.4,
+    "parent",
+    "Food Processing"
+   ]
+  ],
+  "Vehicles, Vehicle Parts and Transport Equipment": [
+   [
+    "2025-07",
+    "up",
+    3.7,
+    "parent",
+    "Industry (Micro and Sm"
+   ],
+   [
+    "2025-09",
+    "up",
+    4.6,
+    "parent",
+    "Industry (Micro and Sm"
+   ],
+   [
+    "2026-05",
+    "up",
+    4.7,
+    "parent",
+    "Industry (Micro and Sm"
+   ],
+   [
+    "2026-07",
+    "up",
+    5.5,
+    "parent",
+    "Industry (Micro and Sm"
+   ]
+  ],
+  "Cotton Textiles": [
+   [
+    "2025-07",
+    "down",
+    -3.5,
+    "parent",
+    "Textiles"
+   ]
+  ],
+  "Tourism, Hotels and Restaurants": [
+   [
+    "2025-09",
+    "up",
+    5.3,
+    "parent",
+    "Services"
+   ]
+  ],
+  "Fertiliser": [
+   [
+    "2025-09",
+    "up",
+    10.2,
+    "parent",
+    "Chemicals and Chemical"
+   ],
+   [
+    "2026-02",
+    "up",
+    13.2,
+    "parent",
+    "Chemicals and Chemical"
+   ],
+   [
+    "2026-03",
+    "down",
+    -29.5,
+    "parent",
+    "Chemicals and Chemical"
+   ],
+   [
+    "2026-07",
+    "up",
+    11.1,
+    "parent",
+    "Chemicals and Chemical"
+   ],
+   [
+    "2026-08",
+    "up",
+    12.8,
+    "parent",
+    "Chemicals and Chemical"
+   ]
+  ],
+  "Ports": [
+   [
+    "2025-09",
+    "up",
+    30.9,
+    "parent",
+    "Infrastructure"
+   ],
+   [
+    "2026-01",
+    "up",
+    19.7,
+    "parent",
+    "Infrastructure"
+   ],
+   [
+    "2026-04",
+    "up",
+    24.5,
+    "parent",
+    "Infrastructure"
+   ]
+  ],
+  "Industry (Micro and Small, Medium and Large)": [
+   [
+    "2025-10",
+    "up",
+    1.8,
+    "parent",
+    "Non-food Credit"
+   ]
+  ],
+  "Personal Loans": [
+   [
+    "2025-10",
+    "up",
+    1.4,
+    "parent",
+    "Non-food Credit"
+   ],
+   [
+    "2025-11",
+    "down",
+    -1.5,
+    "parent",
+    "Non-food Credit"
+   ]
+  ],
+  "Weaker Sections including net PSLC- SF/MF": [
+   [
+    "2025-11",
+    "up",
+    3.3,
+    "none",
+    ""
+   ],
+   [
+    "2026-06",
+    "up",
+    6.2,
+    "none",
+    ""
+   ]
+  ],
+  "Transport Operators": [
+   [
+    "2025-12",
+    "down",
+    -14.0,
+    "parent",
+    "Services"
+   ],
+   [
+    "2026-01",
+    "up",
+    5.0,
+    "parent",
+    "Services"
+   ]
+  ],
+  "Petroleum, Coal Products and Nuclear Fuels": [
+   [
+    "2026-01",
+    "down",
+    -23.3,
+    "parent",
+    "Industry (Micro and Sm"
+   ]
+  ],
+  "Trade": [
+   [
+    "2026-02",
+    "down",
+    -2.6,
+    "parent",
+    "Services"
+   ]
+  ],
+  "Textiles": [
+   [
+    "2026-02",
+    "down",
+    -3.2,
+    "parent",
+    "Industry (Micro and Sm"
+   ],
+   [
+    "2026-07",
+    "up",
+    3.0,
+    "parent",
+    "Industry (Micro and Sm"
+   ]
+  ],
+  "Glass and Glassware": [
+   [
+    "2026-03",
+    "up",
+    15.9,
+    "parent",
+    "Industry (Micro and Sm"
+   ]
+  ],
+  "Drugs and Pharmaceuticals": [
+   [
+    "2026-03",
+    "up",
+    10.7,
+    "parent",
+    "Chemicals and Chemical"
+   ]
+  ],
+  "Advances against Fixed Deposits (Including FCNR (B), NRNR Deposits etc.)": [
+   [
+    "2026-04",
+    "down",
+    -9.4,
+    "parent",
+    "Personal Loans"
+   ],
+   [
+    "2026-08",
+    "up",
+    27.9,
+    "parent",
+    "Personal Loans"
+   ]
+  ],
+  "Other Infrastructure": [
+   [
+    "2026-04",
+    "up",
+    4.5,
+    "parent",
+    "Infrastructure"
+   ]
+  ],
+  "Housing": [
+   [
+    "2026-06",
+    "down",
+    -17.7,
+    "none",
+    ""
+   ],
+   [
+    "2026-07",
+    "down",
+    -10.7,
+    "none",
+    ""
+   ]
+  ]
+ },
+ "unexplained_after_base_effect": {
+  "Food Credit": [
+   {
+    "month": "2024-04",
+    "direction": "up",
+    "gap_change_pp": 70.9,
+    "mechanism": null
+   },
+   {
+    "month": "2025-04",
+    "direction": "up",
+    "gap_change_pp": 27.9,
+    "mechanism": null
+   },
+   {
+    "month": "2025-11",
+    "direction": "down",
+    "gap_change_pp": -78.7,
+    "mechanism": null
+   },
+   {
+    "month": "2026-02",
+    "direction": "up",
+    "gap_change_pp": 35.4,
+    "mechanism": null
+   },
+   {
+    "month": "2026-03",
+    "direction": "up",
+    "gap_change_pp": 43.6,
+    "mechanism": null
+   },
+   {
+    "month": "2026-08",
+    "direction": "up",
+    "gap_change_pp": 38.2,
+    "mechanism": null
+   }
+  ],
+  "Agriculture and Allied Activities": [
+   {
+    "month": "2024-04",
+    "direction": "down",
+    "gap_change_pp": -0.1,
+    "mechanism": null
+   },
+   {
+    "month": "2024-05",
+    "direction": "up",
+    "gap_change_pp": 1.8,
+    "mechanism": null
+   },
+   {
+    "month": "2024-12",
+    "direction": "down",
+    "gap_change_pp": -3.4,
+    "mechanism": null
+   },
+   {
+    "month": "2025-10",
+    "direction": "up",
+    "gap_change_pp": 3.2,
+    "mechanism": "one_month_step"
+   },
+   {
+    "month": "2025-12",
+    "direction": "up",
+    "gap_change_pp": 4.1,
+    "mechanism": "one_month_step"
+   },
+   {
+    "month": "2026-05",
+    "direction": "down",
+    "gap_change_pp": -3.5,
+    "mechanism": null
+   },
+   {
+    "month": "2026-06",
+    "direction": "up",
+    "gap_change_pp": 6.1,
+    "mechanism": "one_month_step"
+   }
+  ],
+  "Educational Loans": [
+   {
+    "month": "2024-04",
+    "direction": "down",
+    "gap_change_pp": -1.7,
+    "mechanism": null
+   }
+  ],
+  "Export Credit": [
+   {
+    "month": "2024-04",
+    "direction": "up",
+    "gap_change_pp": 9.4,
+    "mechanism": null
+   }
+  ],
+  "Petro Chemicals": [
+   {
+    "month": "2024-04",
+    "direction": "up",
+    "gap_change_pp": 8.2,
+    "mechanism": "one_month_step"
+   },
+   {
+    "month": "2024-11",
+    "direction": "up",
+    "gap_change_pp": 17.0,
+    "mechanism": "one_month_step"
+   },
+   {
+    "month": "2024-12",
+    "direction": "down",
+    "gap_change_pp": -30.7,
+    "mechanism": null
+   }
+  ],
+  "Loans against gold jewellery": [
+   {
+    "month": "2024-05",
+    "direction": "up",
+    "gap_change_pp": 17.0,
+    "mechanism": "one_month_step"
+   }
+  ],
+  "Micro and Small": [
+   {
+    "month": "2024-06",
+    "direction": "down",
+    "gap_change_pp": -4.6,
+    "mechanism": null
+   },
+   {
+    "month": "2025-05",
+    "direction": "up",
+    "gap_change_pp": 6.2,
+    "mechanism": "one_month_step"
+   },
+   {
+    "month": "2025-06",
+    "direction": "up",
+    "gap_change_pp": 4.5,
+    "mechanism": "one_month_step"
+   }
+  ],
+  "Professional Services": [
+   {
+    "month": "2024-06",
+    "direction": "down",
+    "gap_change_pp": -13.2,
+    "mechanism": null
+   },
+   {
+    "month": "2024-10",
+    "direction": "up",
+    "gap_change_pp": 6.1,
+    "mechanism": null
+   }
+  ],
+  "Medium Enterprises": [
+   {
+    "month": "2024-06",
+    "direction": "down",
+    "gap_change_pp": -3.0,
+    "mechanism": null
+   }
+  ],
+  "Social Infrastructure": [
+   {
+    "month": "2024-06",
+    "direction": "up",
+    "gap_change_pp": 10.5,
+    "mechanism": "one_month_step"
+   },
+   {
+    "month": "2024-08",
+    "direction": "down",
+    "gap_change_pp": -1.6,
+    "mechanism": null
+   },
+   {
+    "month": "2025-02",
+    "direction": "up",
+    "gap_change_pp": 32.5,
+    "mechanism": "one_month_step"
+   },
+   {
+    "month": "2025-03",
+    "direction": "up",
+    "gap_change_pp": 10.9,
+    "mechanism": null
+   },
+   {
+    "month": "2025-04",
+    "direction": "down",
+    "gap_change_pp": -20.4,
+    "mechanism": "one_month_step"
+   },
+   {
+    "month": "2025-05",
+    "direction": "down",
+    "gap_change_pp": -42.3,
+    "mechanism": "one_month_step"
+   }
+  ],
+  "Housing Finance Companies (HFCs)": [
+   {
+    "month": "2024-08",
+    "direction": "up",
+    "gap_change_pp": 5.2,
+    "mechanism": null
+   }
+  ],
+  "Others": [
+   {
+    "month": "2024-08",
+    "direction": "down",
+    "gap_change_pp": -1.7,
+    "mechanism": null
+   },
+   {
+    "month": "2025-04",
+    "direction": "up",
+    "gap_change_pp": 1.8,
+    "mechanism": null
+   },
+   {
+    "month": "2026-01",
+    "direction": "up",
+    "gap_change_pp": 4.9,
+    "mechanism": "one_month_step"
+   }
+  ],
+  "Electronics": [
+   {
+    "month": "2024-08",
+    "direction": "up",
+    "gap_change_pp": 14.0,
+    "mechanism": "one_month_step"
+   },
+   {
+    "month": "2025-12",
+    "direction": "up",
+    "gap_change_pp": 12.3,
+    "mechanism": "one_month_step"
+   },
+   {
+    "month": "2026-01",
+    "direction": "down",
+    "gap_change_pp": -17.2,
+    "mechanism": null
+   }
+  ],
+  "Vehicle Loans": [
+   {
+    "month": "2024-10",
+    "direction": "down",
+    "gap_change_pp": -1.4,
+    "mechanism": null
+   },
+   {
+    "month": "2025-09",
+    "direction": "down",
+    "gap_change_pp": -1.4,
+    "mechanism": null
+   },
+   {
+    "month": "2025-10",
+    "direction": "up",
+    "gap_change_pp": 3.0,
+    "mechanism": "one_month_step"
+   },
+   {
+    "month": "2025-12",
+    "direction": "up",
+    "gap_change_pp": 2.5,
+    "mechanism": "one_month_step"
+   }
+  ],
+  "Wood and Wood Products": [
+   {
+    "month": "2024-10",
+    "direction": "up",
+    "gap_change_pp": 2.2,
+    "mechanism": null
+   }
+  ],
+  "Renewable Energy": [
+   {
+    "month": "2024-11",
+    "direction": "up",
+    "gap_change_pp": 235.8,
+    "mechanism": null
+   },
+   {
+    "month": "2024-12",
+    "direction": "down",
+    "gap_change_pp": -228.1,
+    "mechanism": null
+   },
+   {
+    "month": "2025-03",
+    "direction": "up",
+    "gap_change_pp": 28.7,
+    "mechanism": "one_month_step"
+   },
+   {
+    "month": "2025-07",
+    "direction": "down",
+    "gap_change_pp": -29.5,
+    "mechanism": null
+   }
+  ],
+  "Other Personal Loans": [
+   {
+    "month": "2024-12",
+    "direction": "down",
+    "gap_change_pp": -1.1,
+    "mechanism": null
+   },
+   {
+    "month": "2026-06",
+    "direction": "up",
+    "gap_change_pp": 1.3,
+    "mechanism": null
+   }
+  ],
+  "Other Metal and Metal Product": [
+   {
+    "month": "2024-12",
+    "direction": "up",
+    "gap_change_pp": 7.1,
+    "mechanism": null
+   }
+  ],
+  "Railways (other than Indian Railways)": [
+   {
+    "month": "2024-12",
+    "direction": "up",
+    "gap_change_pp": 23.2,
+    "mechanism": "one_month_step"
+   },
+   {
+    "month": "2025-10",
+    "direction": "down",
+    "gap_change_pp": -20.7,
+    "mechanism": "one_month_step"
+   },
+   {
+    "month": "2026-02",
+    "direction": "down",
+    "gap_change_pp": -23.2,
+    "mechanism": "one_month_step"
+   }
+  ],
+  "Computer Software": [
+   {
+    "month": "2025-01",
+    "direction": "up",
+    "gap_change_pp": 9.1,
+    "mechanism": null
+   },
+   {
+    "month": "2025-04",
+    "direction": "up",
+    "gap_change_pp": 9.9,
+    "mechanism": null
+   },
+   {
+    "month": "2026-01",
+    "direction": "down",
+    "gap_change_pp": -13.4,
+    "mechanism": null
+   },
+   {
+    "month": "2026-02",
+    "direction": "up",
+    "gap_change_pp": 18.2,
+    "mechanism": "one_month_step"
+   },
+   {
+    "month": "2026-04",
+    "direction": "up",
+    "gap_change_pp": 14.2,
+    "mechanism": "one_month_step"
+   }
+  ],
+  "Tea": [
+   {
+    "month": "2025-01",
+    "direction": "down",
+    "gap_change_pp": -6.5,
+    "mechanism": null
+   },
+   {
+    "month": "2025-03",
+    "direction": "down",
+    "gap_change_pp": -13.7,
+    "mechanism": "one_month_step"
+   }
+  ],
+  "Consumer Durables": [
+   {
+    "month": "2025-02",
+    "direction": "up",
+    "gap_change_pp": 5.1,
+    "mechanism": "one_month_step"
+   },
+   {
+    "month": "2025-10",
+    "direction": "up",
+    "gap_change_pp": 5.0,
+    "mechanism": "one_month_step"
+   },
+   {
+    "month": "2026-02",
+    "direction": "down",
+    "gap_change_pp": -6.0,
+    "mechanism": null
+   }
+  ],
+  "Food Processing": [
+   {
+    "month": "2025-03",
+    "direction": "down",
+    "gap_change_pp": -5.0,
+    "mechanism": null
+   }
+  ],
+  "Beverage and Tobacco": [
+   {
+    "month": "2025-03",
+    "direction": "up",
+    "gap_change_pp": 8.7,
+    "mechanism": "one_month_step"
+   },
+   {
+    "month": "2025-10",
+    "direction": "down",
+    "gap_change_pp": -9.6,
+    "mechanism": null
+   },
+   {
+    "month": "2025-11",
+    "direction": "up",
+    "gap_change_pp": 9.9,
+    "mechanism": null
+   }
+  ],
+  "Non-food Credit": [
+   {
+    "month": "2025-04",
+    "direction": "down",
+    "gap_change_pp": -0.1,
+    "mechanism": null
+   },
+   {
+    "month": "2025-11",
+    "direction": "up",
+    "gap_change_pp": 0.1,
+    "mechanism": null
+   }
+  ],
+  "Commercial Real Estate": [
+   {
+    "month": "2025-04",
+    "direction": "up",
+    "gap_change_pp": 5.5,
+    "mechanism": "one_month_step"
+   },
+   {
+    "month": "2025-08",
+    "direction": "down",
+    "gap_change_pp": -2.5,
+    "mechanism": null
+   },
+   {
+    "month": "2025-09",
+    "direction": "up",
+    "gap_change_pp": 2.4,
+    "mechanism": "one_month_step"
+   },
+   {
+    "month": "2026-06",
+    "direction": "up",
+    "gap_change_pp": 2.4,
+    "mechanism": "one_month_step"
+   }
+  ],
+  "Housing (Including Priority Sector Housing)": [
+   {
+    "month": "2025-04",
+    "direction": "down",
+    "gap_change_pp": -1.2,
+    "mechanism": null
+   }
+  ],
+  "Micro and Small Enterprises": [
+   {
+    "month": "2025-04",
+    "direction": "up",
+    "gap_change_pp": 4.3,
+    "mechanism": null
+   },
+   {
+    "month": "2025-07",
+    "direction": "up",
+    "gap_change_pp": 2.8,
+    "mechanism": null
+   },
+   {
+    "month": "2025-10",
+    "direction": "up",
+    "gap_change_pp": 3.4,
+    "mechanism": null
+   },
+   {
+    "month": "2025-12",
+    "direction": "up",
+    "gap_change_pp": 4.7,
+    "mechanism": "one_month_step"
+   },
+   {
+    "month": "2026-01",
+    "direction": "down",
+    "gap_change_pp": -3.7,
+    "mechanism": null
+   }
+  ],
+  "Gems and Jewellery": [
+   {
+    "month": "2025-04",
+    "direction": "up",
+    "gap_change_pp": 9.1,
+    "mechanism": null
+   },
+   {
+    "month": "2025-11",
+    "direction": "up",
+    "gap_change_pp": 8.8,
+    "mechanism": null
+   },
+   {
+    "month": "2026-01",
+    "direction": "up",
+    "gap_change_pp": 11.6,
+    "mechanism": null
+   }
+  ],
+  "Infrastructure": [
+   {
+    "month": "2025-04",
+    "direction": "down",
+    "gap_change_pp": -1.2,
+    "mechanism": null
+   },
+   {
+    "month": "2025-06",
+    "direction": "up",
+    "gap_change_pp": 1.0,
+    "mechanism": null
+   },
+   {
+    "month": "2025-07",
+    "direction": "up",
+    "gap_change_pp": 2.4,
+    "mechanism": null
+   }
+  ],
+  "Large": [
+   {
+    "month": "2025-05",
+    "direction": "down",
+    "gap_change_pp": -1.8,
+    "mechanism": null
+   },
+   {
+    "month": "2026-05",
+    "direction": "up",
+    "gap_change_pp": 1.9,
+    "mechanism": null
+   }
+  ],
+  "Medium": [
+   {
+    "month": "2025-06",
+    "direction": "down",
+    "gap_change_pp": -4.8,
+    "mechanism": null
+   },
+   {
+    "month": "2026-01",
+    "direction": "up",
+    "gap_change_pp": 3.0,
+    "mechanism": null
+   }
+  ],
+  "Aviation": [
+   {
+    "month": "2025-06",
+    "direction": "up",
+    "gap_change_pp": 9.8,
+    "mechanism": "one_month_step"
+   },
+   {
+    "month": "2025-07",
+    "direction": "down",
+    "gap_change_pp": -11.9,
+    "mechanism": "one_month_step"
+   },
+   {
+    "month": "2026-05",
+    "direction": "up",
+    "gap_change_pp": 10.8,
+    "mechanism": "one_month_step"
+   }
+  ],
+  "Edible Oils and Vanaspati": [
+   {
+    "month": "2025-06",
+    "direction": "up",
+    "gap_change_pp": 8.7,
+    "mechanism": null
+   },
+   {
+    "month": "2026-03",
+    "direction": "up",
+    "gap_change_pp": 10.4,
+    "mechanism": null
+   }
+  ],
+  "Public Financial Institutions (PFIs)": [
+   {
+    "month": "2025-07",
+    "direction": "down",
+    "gap_change_pp": -11.9,
+    "mechanism": null
+   },
+   {
+    "month": "2025-10",
+    "direction": "up",
+    "gap_change_pp": 16.7,
+    "mechanism": "one_month_step"
+   }
+  ],
+  "Vehicles, Vehicle Parts and Transport Equipment": [
+   {
+    "month": "2025-07",
+    "direction": "up",
+    "gap_change_pp": 3.7,
+    "mechanism": null
+   },
+   {
+    "month": "2025-09",
+    "direction": "up",
+    "gap_change_pp": 4.6,
+    "mechanism": "one_month_step"
+   },
+   {
+    "month": "2026-05",
+    "direction": "up",
+    "gap_change_pp": 4.7,
+    "mechanism": "one_month_step"
+   },
+   {
+    "month": "2026-07",
+    "direction": "up",
+    "gap_change_pp": 5.5,
+    "mechanism": "one_month_step"
+   }
+  ],
+  "Cotton Textiles": [
+   {
+    "month": "2025-07",
+    "direction": "down",
+    "gap_change_pp": -3.5,
+    "mechanism": "one_month_step"
+   }
+  ],
+  "Airports": [
+   {
+    "month": "2025-07",
+    "direction": "down",
+    "gap_change_pp": -19.1,
+    "mechanism": "one_month_step"
+   },
+   {
+    "month": "2025-10",
+    "direction": "down",
+    "gap_change_pp": -19.6,
+    "mechanism": "one_month_step"
+   }
+  ],
+  "Tourism, Hotels and Restaurants": [
+   {
+    "month": "2025-09",
+    "direction": "up",
+    "gap_change_pp": 5.3,
+    "mechanism": null
+   }
+  ],
+  "Fertiliser": [
+   {
+    "month": "2025-09",
+    "direction": "up",
+    "gap_change_pp": 10.2,
+    "mechanism": null
+   },
+   {
+    "month": "2026-02",
+    "direction": "up",
+    "gap_change_pp": 13.2,
+    "mechanism": "one_month_step"
+   },
+   {
+    "month": "2026-03",
+    "direction": "down",
+    "gap_change_pp": -29.5,
+    "mechanism": "one_month_step"
+   },
+   {
+    "month": "2026-07",
+    "direction": "up",
+    "gap_change_pp": 11.1,
+    "mechanism": null
+   },
+   {
+    "month": "2026-08",
+    "direction": "up",
+    "gap_change_pp": 12.8,
+    "mechanism": null
+   }
+  ],
+  "Ports": [
+   {
+    "month": "2025-09",
+    "direction": "up",
+    "gap_change_pp": 30.9,
+    "mechanism": "one_month_step"
+   },
+   {
+    "month": "2026-04",
+    "direction": "up",
+    "gap_change_pp": 24.5,
+    "mechanism": null
+   }
+  ],
+  "Industry (Micro and Small, Medium and Large)": [
+   {
+    "month": "2025-10",
+    "direction": "up",
+    "gap_change_pp": 1.8,
+    "mechanism": null
+   }
+  ],
+  "Personal Loans": [
+   {
+    "month": "2025-10",
+    "direction": "up",
+    "gap_change_pp": 1.4,
+    "mechanism": "one_month_step"
+   },
+   {
+    "month": "2025-11",
+    "direction": "down",
+    "gap_change_pp": -1.5,
+    "mechanism": null
+   }
+  ],
+  "Weaker Sections including net PSLC- SF/MF": [
+   {
+    "month": "2025-11",
+    "direction": "up",
+    "gap_change_pp": 3.3,
+    "mechanism": null
+   },
+   {
+    "month": "2026-06",
+    "direction": "up",
+    "gap_change_pp": 6.2,
+    "mechanism": "one_month_step"
+   }
+  ],
+  "Transport Operators": [
+   {
+    "month": "2025-12",
+    "direction": "down",
+    "gap_change_pp": -14.0,
+    "mechanism": "one_month_step"
+   },
+   {
+    "month": "2026-01",
+    "direction": "up",
+    "gap_change_pp": 5.0,
+    "mechanism": "one_month_step"
+   }
+  ],
+  "Education": [
+   {
+    "month": "2026-01",
+    "direction": "down",
+    "gap_change_pp": -1.3,
+    "mechanism": null
+   }
+  ],
+  "Petroleum, Coal Products and Nuclear Fuels": [
+   {
+    "month": "2026-01",
+    "direction": "down",
+    "gap_change_pp": -23.3,
+    "mechanism": null
+   }
+  ],
+  "Trade": [
+   {
+    "month": "2026-02",
+    "direction": "down",
+    "gap_change_pp": -2.6,
+    "mechanism": null
+   }
+  ],
+  "Textiles": [
+   {
+    "month": "2026-02",
+    "direction": "down",
+    "gap_change_pp": -3.2,
+    "mechanism": null
+   },
+   {
+    "month": "2026-07",
+    "direction": "up",
+    "gap_change_pp": 3.0,
+    "mechanism": null
+   }
+  ],
+  "Mining and Quarrying (incl. Coal)": [
+   {
+    "month": "2026-03",
+    "direction": "down",
+    "gap_change_pp": -15.8,
+    "mechanism": null
+   }
+  ],
+  "Glass and Glassware": [
+   {
+    "month": "2026-03",
+    "direction": "up",
+    "gap_change_pp": 15.9,
+    "mechanism": "one_month_step"
+   }
+  ],
+  "Drugs and Pharmaceuticals": [
+   {
+    "month": "2026-03",
+    "direction": "up",
+    "gap_change_pp": 10.7,
+    "mechanism": "one_month_step"
+   }
+  ],
+  "Iron and Steel": [
+   {
+    "month": "2026-03",
+    "direction": "up",
+    "gap_change_pp": 3.5,
+    "mechanism": "one_month_step"
+   }
+  ],
+  "Advances against Fixed Deposits (Including FCNR (B), NRNR Deposits etc.)": [
+   {
+    "month": "2026-04",
+    "direction": "down",
+    "gap_change_pp": -9.4,
+    "mechanism": null
+   },
+   {
+    "month": "2026-08",
+    "direction": "up",
+    "gap_change_pp": 27.9,
+    "mechanism": "one_month_step"
+   }
+  ]
+ }
+}

@@ -11,6 +11,9 @@ in S3, and S4 reads the result.
                 previous reading by more than MOVE_FACTOR × its typical change
     EXPLAINED   the first of these that holds, in order:
                   artifact         one bank is most of the move (signals/dominance.py)
+                  base_effect      arithmetic: the line's own level step a year ago is leaving the
+                                   comparison (a step NOW is recorded as the move's mechanism,
+                                   not an explanation)
                   structural       not a separate event: an ECHO (the group moved the other way),
                                    a TWIN (the same borrowers moved in a linked table), or
                                    CARRIED by one member (the group moved because it did)
@@ -49,7 +52,12 @@ PRICE_SHARE = 0.5
 # move roughly a one-in-ten event per line, close to the usual ~2σ bar for "unusual".
 MOVE_FACTOR = 3.0
 POLARITY = {"+": 1, "-": -1}
-ORDER = ("artifact", "structural", "prices_activity", "cause", "relationship")
+ORDER = ("artifact", "base_effect", "structural", "prices_activity", "cause", "relationship")
+# A line's own one-month level step is an outlier when it is more than MOVE_FACTOR x its typical
+# (median) monthly level change AND at least this large (log change, ~2%), with at least
+# STEP_MIN_HISTORY earlier changes to judge "typical" by (SYSTEM_MODEL_SPEC §16 Step 6a).
+STEP_FLOOR = 0.02
+STEP_MIN_HISTORY = 6
 # An echo / carried-by-member holds when the other line covers at least this share of the move.
 STRUCTURAL_SHARE = 0.5
 
@@ -220,11 +228,13 @@ def structural(nid: str, m: dict, moves: dict, model: dict, by_id: dict, parent_
 def compute(model: dict, period: str, series: dict, periods: list[str], checked: dict,
             real: dict | None = None, output: dict | None = None, artifact=None,
             data_month=lambda p: p, weights: dict | None = None,
-            verdicts: dict | None = None) -> dict:
+            verdicts: dict | None = None, levels: dict | None = None) -> dict:
     """Pure given its inputs. `artifact(node) -> True | False | None` (None = not testable);
     `data_month(period)` is the month a period key's data describes (SIBC keys run a month ahead);
-    `weights` is entity_id -> size (latest CSV value), for `carried`."""
+    `weights` is entity_id -> size (latest CSV value), for `carried`; `levels` is
+    entity_id -> {"YYYY-MM": level}, for the base effect and the one-month step."""
     weights = weights or {}
+    levels = levels or {}
     real, output = real or {}, output or {}
     artifact = artifact or (lambda node: None)
     by_id = {n["id"]: n for n in model["nodes"] if n.get("tier") == "entity"}
@@ -270,6 +280,20 @@ def compute(model: dict, period: str, series: dict, periods: list[str], checked:
         held = {}
         if artifact(n):
             held["artifact"] = ["one bank is most of the move"]
+        steps = step_reading(levels.get(n["id"]), data_month(period))
+        size = abs(m["gap_change_pp"])
+        base_eff = now_step = None
+        if steps:
+            now, base, typical = steps
+            def outlier(x):
+                return x is not None and abs(x) >= STEP_FLOOR and abs(x) > MOVE_FACTOR * typical
+            if outlier(base) and sign(-base) == d and 100 * abs(base) >= STRUCTURAL_SHARE * size:
+                base_eff = {"month": _ym(data_month(period), -12), "level_change_pct": round(100 * base, 2),
+                            "typical_pct": round(100 * typical, 2)}
+                held["base_effect"] = [f"last year's {100 * base:+.1f}% one-month step leaving the comparison"]
+            if outlier(now) and sign(now) == d and 100 * abs(now) >= STRUCTURAL_SHARE * size:
+                now_step = {"month": _ym(data_month(period), 0), "level_change_pct": round(100 * now, 2),
+                            "typical_pct": round(100 * typical, 2)}
         st = structural(n["id"], m, moves, model, by_id, parent_of, series, period, weights)
         if st:
             held["structural"] = st
@@ -294,15 +318,84 @@ def compute(model: dict, period: str, series: dict, periods: list[str], checked:
             "baseline_kind": m["baseline_kind"], "baseline_of": m["baseline_of"],
             "filed_under": filed, "also_holds": held,
             "prices_activity": pa, **({"prices_detail": pa_detail} if pa_detail else {}),
+            **({"base_effect": base_eff} if base_eff else {}),
+            **({"mechanism": "one_month_step", "step": now_step} if now_step else {}),
         })
 
     count = {k: sum(1 for r in records if r["filed_under"] == k) for k in (*ORDER, "unexplained")}
+    count["unexplained_one_month_step"] = sum(1 for r in records if r["filed_under"] == "unexplained"
+                                              and r.get("mechanism") == "one_month_step")
     return {
         "summary": {"lines": len(lines), "moves": len(records), "steady": steady, **count,
                     "no_reading": len(no_reading)},
         "moves": records,
         "no_reading": no_reading,
     }
+
+
+# ── The line's own level: base effect and one-month step ─────────────────────────────────
+
+def _from_months(k: int) -> str:
+    """Inverse of force_check._months (y * 12 + m - 1), as 'YYYY-MM'."""
+    y, m0 = divmod(k, 12)
+    return f"{y}-{m0 + 1:02d}"
+
+
+def _ym(date: str, offset: int) -> str:
+    """The 'YYYY-MM' that is `offset` months from `date`."""
+    return _from_months(fc._months(date) + offset)
+
+
+def step_reading(levels: dict | None, date: str):
+    """(now, base, typical): this month's and the year-ago month's log level change, and the
+    median |change| over months BEFORE this one (the year-ago step excluded, so an outlier does
+    not set its own bar). None when the line has no level series or too little history."""
+    import math
+    if not levels:
+        return None
+
+    def change(k):
+        a, b = levels.get(_from_months(k)), levels.get(_from_months(k - 1))
+        return math.log(a / b) if a and b and a > 0 and b > 0 else None
+    k = fc._months(date)
+    now, base = change(k), change(k - 12)
+    if now is None or base is None:
+        return None
+    first = min(fc._months(f"{m}-01") for m in levels)
+    earlier = [abs(c) for c in (change(j) for j in range(first + 1, k) if j != k - 12) if c is not None]
+    if len(earlier) < STEP_MIN_HISTORY:
+        return None
+    return now, base, median(earlier)
+
+
+def level_series(pipeline: str, model: dict) -> dict:
+    """entity_id -> {"YYYY-MM": level}, read from the pipeline's consolidated CSV. A sector-shaped
+    source keys a line by (statement, code); payments by its metric's published total. A node the
+    CSV does not carry (a group of several metrics) has no level series and is not tested."""
+    import csv
+    from core import manifest
+    path = manifest.consolidated_csv(pipeline)
+    rows = list(csv.DictReader(open(path)))
+    out: dict[str, dict] = {}
+    if rows and "outstanding_cr" in rows[0]:
+        by = {}
+        for r in rows:
+            if r.get("code"):
+                by.setdefault((r.get("statement", ""), r["code"]), {})[r["date"][:7]] = float(r["outstanding_cr"])
+        for n in model["nodes"]:
+            if n.get("tier") == "entity" and n.get("code") is not None:
+                lv = by.get((n.get("statement") or "", str(n["code"])))
+                if lv:
+                    out[n["id"]] = lv
+    elif rows and "metric" in rows[0]:
+        by = {}
+        for r in rows:
+            if r.get("record_type") == "total" and r.get("value"):
+                by.setdefault(r["metric"], {})[r["report_date"][:7]] = float(r["value"])
+        for n in model["nodes"]:
+            if n.get("tier") == "entity" and n.get("code") in by:
+                out[n["id"]] = by[n["code"]]
+    return out
 
 
 # ── Inputs from signals.db, all joined through the registry ──────────────────────────────
@@ -379,7 +472,7 @@ def for_period(pipeline: str, model: dict, period: str, series=None, periods=Non
                    artifact_test(pipeline, model, period),
                    lambda p: fc.resolve_csv_date(pipeline, p),
                    load_entity_weights(gs.pipeline_cfg(pipeline)),
-                   latest_verdicts(pipeline))
+                   latest_verdicts(pipeline), level_series(pipeline, model))
 
 
 def main() -> int:

@@ -1325,11 +1325,13 @@
       "moves": 5,
       "steady": 79,
       "artifact": 0,
+      "base_effect": 0,
       "structural": 2,
       "prices_activity": 0,
       "cause": 0,
       "relationship": 0,
       "unexplained": 3,
+      "unexplained_one_month_step": 1,
       "no_reading": 0
     },
     "moves": [
@@ -1368,6 +1370,12 @@
         "prices_detail": {
           "nominal_change_pp": 28.58,
           "deflator_change_pp": 0.37
+        },
+        "mechanism": "one_month_step",
+        "step": {
+          "month": "2026-08",
+          "level_change_pct": 23.48,
+          "typical_pct": 2.77
         }
       },
       {

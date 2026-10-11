@@ -602,6 +602,7 @@ and every one that holds is listed:
 | order | kind | holds when | source |
 |---|---|---|---|
 | 1 | `artifact` | the move is dominated by one reporting entity, merger or reclassification | `signals/dominance.py` |
+| 1′ | `base_effect` | arithmetic, not an event (added 2026-10-11): the line's own level changed a year ago at this month by more than `MOVE_FACTOR` × its typical monthly change (and ≥ 2%), and that step leaving the comparison covers at least half the line's change in YoY, in the move's direction. ΔYoY ≈ (this month's level change) − (the level change a year earlier), so the second term is last year's event, not this year's | the line's own level series, months up to this one only |
 | 1a | `structural` | not a separate event (added 2026-10-08): an **echo** (the group moved the other way by at least half the line's change), a **twin** (a lens member whose `reclassifies` partner moved the same way; the main-table line keeps the event), or **carried** by a member (that member moved the same way and its weighted change is at least half the group's own; the member keeps the event) | the skeleton + latest CSV weights |
 | 2 | `prices_activity` | the line's 1f deflator YoY (or its output growth) changed in the same direction and covers at least half the change in its nominal YoY | 1f operands (`deflator_yoy`, `credit_yoy`) and `*-output-growth` |
 | 3 | `cause` | a **dated** force whose edge to this line is `working` (Step 3), in window, with expected sign matching the move. A standing force never files a move here: it explains a steady gap, not a change (§10.1) | Step 3 |
@@ -613,6 +614,20 @@ measurement below and the choice recorded. A line with no 1f match cannot be tes
 and says so (`prices_activity: not_decomposable`), so "no price effect" and "price effect not
 measurable" never read the same.
 
+*Not an explanation, but a mechanism:* a **step now** (added 2026-10-11): the line's own level
+jumped this month by more than `MOVE_FACTOR` × its typical monthly change (≥ 2%) and that jump
+covers at least half the move, in its direction. It says *how* the move happened (in one month:
+a reclassification, a lumpy loan, or a real shock), not *why*, so the move stays `unexplained` and
+carries `mechanism: one_month_step` with the month, which turns S4's question from "why did this
+grow" into "what happened to this line in that month".
+
+*Why not "a spike that reverts".* A reversal can only be confirmed months later, so filing on it
+would refile past periods as data arrives. Base effect and step now are both decidable at the
+period itself; the typical change is read from changes before it. Measured 2026-10-11 on SIBC
+Jan 2023 – Aug 2026, 167 unexplained moves: base effect 38, step now 54, neither 75 (gradual
+moves, which need real drivers). 51 of the 167 were part of a two-month spike-and-revert, the
+pattern that prompted this.
+
 *Not an explanation:* the mix state (Step 2b). "Money was steered toward Services" restates the
 move; it does not explain it (DECISIONS: an excerpt that restates our own series is the effect,
 not a cause). It stays alongside each move as context.
@@ -621,7 +636,7 @@ not a cause). It stays alongside each move as context.
 (`entity`, `direction`, `gap_change_pp`, `noise_pp`, `filed_under`, `also_holds`) plus a summary:
 
 ```
-moves  N   artifact a   prices_activity b   cause c   relationship d   unexplained u   no_reading r
+moves  N   artifact a   base_effect e   structural s   prices_activity b   cause c   relationship d   unexplained u (of which one-month steps k)   no_reading r
 ```
 
 No cap anywhere. If S4's prompt must be shortened, the shortening happens in S4 and prints how
@@ -654,6 +669,21 @@ most 15 moves, ranked by size against their own bar, and prints how many it left
   "slowing" is an echo of Personal Loans speeding up (gold loans +83%), Textiles an echo of
   Industry. Each points at the line that holds the event, which keeps its own filing, so an event
   is never filed away entirely.
+- **Base effect and the one-month step (added 2026-10-11).** Every reading, rule off vs on:
+
+  | pipeline | moves | unexplained before | after | explained | of the rest, one-month steps |
+  |---|---|---|---|---|---|
+  | SIBC (Jan 2023 – Aug 2026) | 218 | 167 | 129 | 23% → 41% | 52 |
+  | Payments | 44 | 33 | 24 | 25% → 45% | 8 |
+  | NBFC | 9 | 7 | 7 | 22% → 22% | 1 |
+
+  SIBC's base effects cluster at Jun 2024, whose base month (Jun 2023, a quarter-end) carried
+  one-month steps in agriculture (+4.5%), NBFCs (+6.0%), aviation (+29.3%), small enterprises
+  (+4.4%). Levels come from the consolidated CSV (`coverage.level_series`); payments reads each
+  metric's published total, so its group nodes (sums of metrics) are not tested. Controls are unit
+  tests: a step a year ago the right way files `base_effect`; the wrong way, or under 2%, does not;
+  a step now is a mechanism, not an explanation; no level series means not tested; later months
+  cannot change a filing.
 - **Controls.** The four above are unit tests, plus standing force, unworking force, prices
   too small or the wrong way, no 1f match, artifact filed first with others still listed,
   relationship, group counted, hole. Mutations (factor 0, standing allowed, sign ignored) each

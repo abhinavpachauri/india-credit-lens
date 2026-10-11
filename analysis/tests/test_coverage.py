@@ -270,3 +270,58 @@ def test_not_carried_when_the_member_merely_moved_with_its_group():
     series = {"R": flat, "P": line(+3.0), "A": line(+3.0), "B": line(0.0)}
     r = cv.compute(model(), PERIODS[-1], series, PERIODS, {}, weights={"P": 100.0, "A": 90.0, "B": 10.0})
     assert move(r, "Parent")["filed_under"] == "unexplained"
+
+
+# ── base effect and the one-month step (Step 6a, 2026-10-11) ─────────────────────────────
+
+def levels(step_at=None, size=0.0):
+    """A level series growing 1% a month from Jan 2024 to Aug 2025, with one step."""
+    out, v = {}, 100.0
+    for k in range(20):
+        y, m = 2024 + k // 12, k % 12 + 1
+        key = f"{y}-{m:02d}"
+        v *= 1.01 * (1 + size if key == step_at else 1)
+        out[key] = v
+    return out
+
+
+def run_lv(lv, last_change=2.0):
+    flat = {p: 10.0 for p in PERIODS}
+    series = {"R": flat, "P": flat, "A": line(last_change), "B": line(0.0)}
+    return cv.compute(model(), PERIODS[-1], series, PERIODS, {}, levels={"A": lv})
+
+
+def test_last_years_step_leaving_the_comparison_is_a_base_effect():
+    """A −5% step in Aug 2024 lifts YoY in Aug 2025 when it drops out: arithmetic, not an event."""
+    m = move(run_lv(levels("2024-08", -0.05)))
+    assert m["filed_under"] == "base_effect" and m["base_effect"]["month"] == "2024-08"
+
+
+def test_a_step_this_month_is_a_mechanism_not_an_explanation():
+    m = move(run_lv(levels("2025-08", 0.05)))
+    assert m["filed_under"] == "unexplained" and m["mechanism"] == "one_month_step"
+    assert m["step"]["month"] == "2025-08"
+
+
+def test_a_year_ago_step_the_wrong_way_does_not_explain():
+    """+5% a year ago would push YoY DOWN as it leaves; the move is up, so it is no explanation."""
+    assert move(run_lv(levels("2024-08", 0.05)))["filed_under"] == "unexplained"
+
+
+def test_a_step_under_the_two_percent_floor_is_ordinary():
+    m = move(run_lv(levels("2024-08", -0.012)))
+    assert m["filed_under"] == "unexplained" and "base_effect" not in m
+
+
+def test_a_line_with_no_level_series_is_not_tested():
+    flat = {p: 10.0 for p in PERIODS}
+    res = cv.compute(model(), PERIODS[-1], {"R": flat, "P": flat, "A": line(2.0), "B": line(0.0)},
+                     PERIODS, {})
+    assert move(res)["filed_under"] == "unexplained" and "mechanism" not in move(res)
+
+
+def test_the_typical_change_is_read_from_months_before_the_move_only():
+    """Later months cannot change a filing: the step is judged against earlier changes."""
+    lv = levels("2024-08", -0.05)
+    later = {**lv, "2025-09": lv["2025-08"] * 1.3, "2025-10": lv["2025-08"] * 0.7}
+    assert cv.step_reading(lv, "2025-08") == cv.step_reading(later, "2025-08")

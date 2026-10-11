@@ -95,7 +95,10 @@ def detect_unexplained(pipeline, cfg):
     unexplained = [{"entity": m["entity"], "urn": m["urn"], "product": m.get("product"),
                     "direction": "rising" if m["direction"] == "up" else "falling",
                     "against": m["baseline_of"] or "its own earlier growth",
-                    "gap_change_pp": m["gap_change_pp"], "prices": m["prices_activity"]}
+                    "gap_change_pp": m["gap_change_pp"], "prices": m["prices_activity"],
+                    # A one-month level step (Step 6a) narrows the question to that month.
+                    **({"mechanism": f"one-month step: level {m['step']['level_change_pct']:+.1f}% "
+                                     f"in {m['step']['month']}"} if m.get("step") else {})}
                    for m in moves]
     if len(unexplained) > PROMPT_MAX:
         print(f"  · {pipeline}: {len(unexplained)} unexplained moves; the proposal call sees the "
