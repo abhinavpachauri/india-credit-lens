@@ -912,6 +912,16 @@ test at its declared lag; coverage refuses a `driver` explanation from a non-adm
 remains the paid path, approved per run); the dashboard's "why" for a line (a later
 `dashboard-change`, once admitted drivers exist).
 
+*Built, step 1 (2026-10-11):* `core/explainability.py` (`seed`, `validate`, `summary`);
+`analysis/rbi_sibc/driver_hypotheses.json`, 84 lines and 368 draft hypotheses, none approved.
+Seeded from the concordance (price and output series, imported as drivers only where the kind
+applies: a CPI deflator on personal loans shows real credit and is not a claim that prices drive
+them, 9 such dropped), the recorded reference and within-system tests, the 13 dated forces (Step
+3's edge verdict read as the test result: working → supported, contradicted → opposite, unclear →
+not_supported, unassessable → too_short), and a placeholder naming its source for every
+applicable cell left empty. Validator measured by injection: 10 rules, 10 faults caught, 0 errors
+on the seeded register (`tests/test_explainability.py`). Not yet wired into a gate.
+
 *Build order:* (1) register + validator + import of the drafts and concordance mappings; (2) the
 report; (3) the generic test with its controls; (4) the `driver` explanation in 6a and the
 `prices_activity` handover; (5) the first cycle on data in hand: lagged WPI on the 15 lines whose

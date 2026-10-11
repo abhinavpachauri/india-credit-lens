@@ -607,6 +607,13 @@
           "date": "2026-10-10",
           "how_measured": "enumerated over every L1 signal's latest aggregate row; known-good = live store, known-bad = every real status overwritten in a registry copy, then restored",
           "source": "analysis/guards/validate_signal_history.py B5; signals/README.md \"Series breaks\""
+        },
+        {
+          "metric": "driver register validator (Step 6c), 10 rules",
+          "value": "10/10 injected faults caught; 0 errors on the seeded SIBC register (84 lines, 368 hypotheses)",
+          "date": "2026-10-11",
+          "how_measured": "one injected fault per rule on a copy of the seeded register; known-good = the seed itself",
+          "source": "analysis/core/explainability.py; analysis/tests/test_explainability.py"
         }
       ],
       "observations": [
