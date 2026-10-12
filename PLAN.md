@@ -60,9 +60,9 @@ Agentic layer: phases 0–4 as before (`dashboard-change`, `onboard-source` ✅)
 
 ## Open decisions and known debts (not scheduled)
 
-- **Open for the model:** SIBC backfill phase 2 (2024 releases; HDFC-merger year needs a rule);
-  S4 widened to market sources for the residual; model pass for risk-arrow signs and NBFC causes.
-  The Aug worklist still keeps 12 S4 proposals unsearched (`analysis/s4_proposals/2026-09-30.json`).
+- **Open for the model:** explainability loop (SYSTEM_MODEL_SPEC §16 Step 6c), step 3 next; **review
+  later: vehicles and durables input prices** (`rbi_sibc/explainability_grid.md`). SIBC releases Sep–Dec
+  2024 still to add (user). 12 S4 proposals unsearched (`analysis/s4_proposals/2026-09-30.json`).
 
 - **Stage 5.7 checks the declared cut, not the drawn series** (found 2026-10-05). Payments cards
   naming a bank category were drawn over the top-5 banks, so the chart showed only Total, and 5.7

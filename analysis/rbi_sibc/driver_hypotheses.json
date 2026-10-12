@@ -15,7 +15,20 @@
    "alternative_finance": "firms switch between banks and bonds, CP, foreign loans, NBFCs",
    "regulation": "a rule, scheme or deadline",
    "funding": "lenders short of deposits or capital lend less overall"
-  }
+  },
+  "decisions": [
+   {
+    "date": "2026-10-12",
+    "by": "user",
+    "what": "Approved the 'does not apply' rows of the grid, narrowed three: commercial real estate and trade keep input prices; loans against shares keep input prices; aviation and shipping keep other finance. Vehicles and durables keep input prices, leaning slightly yes, to review later."
+   }
+  ],
+  "review_later": [
+   {
+    "cells": "Vehicle Loans, Consumer Durables · input prices",
+    "why": "user leaned slightly yes (2026-10-12): do product prices drive the loan size? review later"
+   }
+  ]
  },
  "lines": {
   "icl:sibc/Statement1/II": {
@@ -28,7 +41,10 @@
     "credit_price": {
      "status": "not_applicable",
      "reason": "food credit is lent to FCI on administered terms",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "demand": {
      "status": "applies",
@@ -37,7 +53,10 @@
     "alternative_finance": {
      "status": "not_applicable",
      "reason": "FCI's market borrowing is a fiscal decision, not a credit substitute",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "regulation": {
      "status": "applies",
@@ -46,7 +65,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -76,7 +98,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -98,7 +123,10 @@
     "alternative_finance": {
      "status": "not_applicable",
      "reason": "farm borrowers have no bond or commercial-paper market",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "regulation": {
      "status": "applies",
@@ -107,7 +135,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -137,7 +168,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -147,7 +181,10 @@
     "input_prices": {
      "status": "not_applicable",
      "reason": "no single priceable input drives this line's borrowing",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "credit_price": {
      "status": "applies",
@@ -168,7 +205,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -178,7 +218,10 @@
     "input_prices": {
      "status": "not_applicable",
      "reason": "no asset or input price drives this loan's size",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "credit_price": {
      "status": "applies",
@@ -191,7 +234,10 @@
     "alternative_finance": {
      "status": "not_applicable",
      "reason": "households do not borrow in markets; NBFC competition is a within-system or cross-pipeline link",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "regulation": {
      "status": "applies",
@@ -200,7 +246,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -222,7 +271,10 @@
     "alternative_finance": {
      "status": "not_applicable",
      "reason": "small and mid-sized firms rarely issue bonds or CP",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "regulation": {
      "status": "applies",
@@ -231,7 +283,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -253,7 +308,10 @@
     "alternative_finance": {
      "status": "not_applicable",
      "reason": "small and mid-sized firms rarely issue bonds or CP",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "regulation": {
      "status": "applies",
@@ -262,7 +320,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -292,7 +353,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -314,7 +378,10 @@
     "alternative_finance": {
      "status": "not_applicable",
      "reason": "these borrowers rarely use bond or CP markets",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "regulation": {
      "status": "applies",
@@ -323,7 +390,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -333,7 +403,10 @@
     "input_prices": {
      "status": "not_applicable",
      "reason": "no single priceable input drives this line's borrowing",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "credit_price": {
      "status": "applies",
@@ -346,7 +419,10 @@
     "alternative_finance": {
      "status": "not_applicable",
      "reason": "these borrowers rarely use bond or CP markets",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "regulation": {
      "status": "applies",
@@ -355,7 +431,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -365,7 +444,10 @@
     "input_prices": {
      "status": "not_applicable",
      "reason": "no single priceable input drives this line's borrowing",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "credit_price": {
      "status": "applies",
@@ -378,7 +460,10 @@
     "alternative_finance": {
      "status": "not_applicable",
      "reason": "these borrowers rarely use bond or CP markets",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "regulation": {
      "status": "applies",
@@ -387,7 +472,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -407,9 +495,11 @@
      "approved": null
     },
     "alternative_finance": {
-     "status": "not_applicable",
-     "reason": "these borrowers rarely use bond or CP markets",
-     "approved": null
+     "status": "applies",
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "regulation": {
      "status": "applies",
@@ -418,7 +508,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -438,9 +531,11 @@
      "approved": null
     },
     "alternative_finance": {
-     "status": "not_applicable",
-     "reason": "these borrowers rarely use bond or CP markets",
-     "approved": null
+     "status": "applies",
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "regulation": {
      "status": "applies",
@@ -449,7 +544,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -459,7 +557,10 @@
     "input_prices": {
      "status": "not_applicable",
      "reason": "no single priceable input drives this line's borrowing",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "credit_price": {
      "status": "applies",
@@ -472,7 +573,10 @@
     "alternative_finance": {
      "status": "not_applicable",
      "reason": "these borrowers rarely use bond or CP markets",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "regulation": {
      "status": "applies",
@@ -481,7 +585,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -489,9 +596,11 @@
    "label": "Trade",
    "applies": {
     "input_prices": {
-     "status": "not_applicable",
-     "reason": "no single priceable input drives this line's borrowing",
-     "approved": null
+     "status": "applies",
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "credit_price": {
      "status": "applies",
@@ -504,7 +613,10 @@
     "alternative_finance": {
      "status": "not_applicable",
      "reason": "these borrowers rarely use bond or CP markets",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "regulation": {
      "status": "applies",
@@ -513,7 +625,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -521,9 +636,11 @@
    "label": "Commercial Real Estate",
    "applies": {
     "input_prices": {
-     "status": "not_applicable",
-     "reason": "no single priceable input drives this line's borrowing",
-     "approved": null
+     "status": "applies",
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "credit_price": {
      "status": "applies",
@@ -544,7 +661,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -554,7 +674,10 @@
     "input_prices": {
      "status": "not_applicable",
      "reason": "no single priceable input drives this line's borrowing",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "credit_price": {
      "status": "applies",
@@ -575,7 +698,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -585,7 +711,10 @@
     "input_prices": {
      "status": "not_applicable",
      "reason": "no single priceable input drives this line's borrowing",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "credit_price": {
      "status": "applies",
@@ -598,7 +727,10 @@
     "alternative_finance": {
      "status": "not_applicable",
      "reason": "these borrowers rarely use bond or CP markets",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "regulation": {
      "status": "applies",
@@ -607,7 +739,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -615,9 +750,12 @@
    "label": "Consumer Durables",
    "applies": {
     "input_prices": {
-     "status": "not_applicable",
-     "reason": "no asset or input price drives this loan's size",
-     "approved": null
+     "status": "applies",
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     },
+     "review_later": "user leaned slightly yes (2026-10-12): do product prices drive the loan size? review later"
     },
     "credit_price": {
      "status": "applies",
@@ -630,7 +768,10 @@
     "alternative_finance": {
      "status": "not_applicable",
      "reason": "households do not borrow in markets; NBFC competition is a within-system or cross-pipeline link",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "regulation": {
      "status": "applies",
@@ -639,7 +780,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -661,7 +805,10 @@
     "alternative_finance": {
      "status": "not_applicable",
      "reason": "households do not borrow in markets; NBFC competition is a within-system or cross-pipeline link",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "regulation": {
      "status": "applies",
@@ -670,7 +817,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -680,7 +830,10 @@
     "input_prices": {
      "status": "not_applicable",
      "reason": "no asset or input price drives this loan's size",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "credit_price": {
      "status": "applies",
@@ -693,7 +846,10 @@
     "alternative_finance": {
      "status": "not_applicable",
      "reason": "households do not borrow in markets; NBFC competition is a within-system or cross-pipeline link",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "regulation": {
      "status": "applies",
@@ -702,7 +858,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -710,9 +869,11 @@
    "label": "Advances to Individuals against share, bonds, etc.",
    "applies": {
     "input_prices": {
-     "status": "not_applicable",
-     "reason": "no asset or input price drives this loan's size",
-     "approved": null
+     "status": "applies",
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "credit_price": {
      "status": "applies",
@@ -725,7 +886,10 @@
     "alternative_finance": {
      "status": "not_applicable",
      "reason": "households do not borrow in markets; NBFC competition is a within-system or cross-pipeline link",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "regulation": {
      "status": "applies",
@@ -734,7 +898,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -744,7 +911,10 @@
     "input_prices": {
      "status": "not_applicable",
      "reason": "no asset or input price drives this loan's size",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "credit_price": {
      "status": "applies",
@@ -757,7 +927,10 @@
     "alternative_finance": {
      "status": "not_applicable",
      "reason": "households do not borrow in markets; NBFC competition is a within-system or cross-pipeline link",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "regulation": {
      "status": "applies",
@@ -766,7 +939,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -776,7 +952,10 @@
     "input_prices": {
      "status": "not_applicable",
      "reason": "no asset or input price drives this loan's size",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "credit_price": {
      "status": "applies",
@@ -789,7 +968,10 @@
     "alternative_finance": {
      "status": "not_applicable",
      "reason": "households do not borrow in markets; NBFC competition is a within-system or cross-pipeline link",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "regulation": {
      "status": "applies",
@@ -798,7 +980,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -806,9 +991,12 @@
    "label": "Vehicle Loans",
    "applies": {
     "input_prices": {
-     "status": "not_applicable",
-     "reason": "no asset or input price drives this loan's size",
-     "approved": null
+     "status": "applies",
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     },
+     "review_later": "user leaned slightly yes (2026-10-12): do product prices drive the loan size? review later"
     },
     "credit_price": {
      "status": "applies",
@@ -821,7 +1009,10 @@
     "alternative_finance": {
      "status": "not_applicable",
      "reason": "households do not borrow in markets; NBFC competition is a within-system or cross-pipeline link",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "regulation": {
      "status": "applies",
@@ -830,7 +1021,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -852,7 +1046,10 @@
     "alternative_finance": {
      "status": "not_applicable",
      "reason": "households do not borrow in markets; NBFC competition is a within-system or cross-pipeline link",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "regulation": {
      "status": "applies",
@@ -861,7 +1058,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -871,7 +1071,10 @@
     "input_prices": {
      "status": "not_applicable",
      "reason": "no asset or input price drives this loan's size",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "credit_price": {
      "status": "applies",
@@ -884,7 +1087,10 @@
     "alternative_finance": {
      "status": "not_applicable",
      "reason": "households do not borrow in markets; NBFC competition is a within-system or cross-pipeline link",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "regulation": {
      "status": "applies",
@@ -893,7 +1099,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -903,7 +1112,10 @@
     "input_prices": {
      "status": "not_applicable",
      "reason": "a lens over the main tree; prices act on the underlying line",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "credit_price": {
      "status": "applies",
@@ -916,7 +1128,10 @@
     "alternative_finance": {
      "status": "not_applicable",
      "reason": "a lens over the main tree; markets act on the underlying line",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "regulation": {
      "status": "applies",
@@ -925,7 +1140,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -935,7 +1153,10 @@
     "input_prices": {
      "status": "not_applicable",
      "reason": "a lens over the main tree; prices act on the underlying line",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "credit_price": {
      "status": "applies",
@@ -948,7 +1169,10 @@
     "alternative_finance": {
      "status": "not_applicable",
      "reason": "a lens over the main tree; markets act on the underlying line",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "regulation": {
      "status": "applies",
@@ -957,7 +1181,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -967,7 +1194,10 @@
     "input_prices": {
      "status": "not_applicable",
      "reason": "a lens over the main tree; prices act on the underlying line",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "credit_price": {
      "status": "applies",
@@ -980,7 +1210,10 @@
     "alternative_finance": {
      "status": "not_applicable",
      "reason": "a lens over the main tree; markets act on the underlying line",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "regulation": {
      "status": "applies",
@@ -989,7 +1222,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -999,7 +1235,10 @@
     "input_prices": {
      "status": "not_applicable",
      "reason": "a lens over the main tree; prices act on the underlying line",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "credit_price": {
      "status": "applies",
@@ -1012,7 +1251,10 @@
     "alternative_finance": {
      "status": "not_applicable",
      "reason": "a lens over the main tree; markets act on the underlying line",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "regulation": {
      "status": "applies",
@@ -1021,7 +1263,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -1031,7 +1276,10 @@
     "input_prices": {
      "status": "not_applicable",
      "reason": "a lens over the main tree; prices act on the underlying line",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "credit_price": {
      "status": "applies",
@@ -1044,7 +1292,10 @@
     "alternative_finance": {
      "status": "not_applicable",
      "reason": "a lens over the main tree; markets act on the underlying line",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "regulation": {
      "status": "applies",
@@ -1053,7 +1304,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -1063,7 +1317,10 @@
     "input_prices": {
      "status": "not_applicable",
      "reason": "a lens over the main tree; prices act on the underlying line",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "credit_price": {
      "status": "applies",
@@ -1076,7 +1333,10 @@
     "alternative_finance": {
      "status": "not_applicable",
      "reason": "a lens over the main tree; markets act on the underlying line",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "regulation": {
      "status": "applies",
@@ -1085,7 +1345,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -1095,7 +1358,10 @@
     "input_prices": {
      "status": "not_applicable",
      "reason": "a lens over the main tree; prices act on the underlying line",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "credit_price": {
      "status": "applies",
@@ -1108,7 +1374,10 @@
     "alternative_finance": {
      "status": "not_applicable",
      "reason": "a lens over the main tree; markets act on the underlying line",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "regulation": {
      "status": "applies",
@@ -1117,7 +1386,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -1127,7 +1399,10 @@
     "input_prices": {
      "status": "not_applicable",
      "reason": "a lens over the main tree; prices act on the underlying line",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "credit_price": {
      "status": "applies",
@@ -1140,7 +1415,10 @@
     "alternative_finance": {
      "status": "not_applicable",
      "reason": "a lens over the main tree; markets act on the underlying line",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "regulation": {
      "status": "applies",
@@ -1149,7 +1427,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -1159,7 +1440,10 @@
     "input_prices": {
      "status": "not_applicable",
      "reason": "a lens over the main tree; prices act on the underlying line",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "credit_price": {
      "status": "applies",
@@ -1172,7 +1456,10 @@
     "alternative_finance": {
      "status": "not_applicable",
      "reason": "a lens over the main tree; markets act on the underlying line",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "regulation": {
      "status": "applies",
@@ -1181,7 +1468,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -1191,7 +1481,10 @@
     "input_prices": {
      "status": "not_applicable",
      "reason": "a lens over the main tree; prices act on the underlying line",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "credit_price": {
      "status": "applies",
@@ -1204,7 +1497,10 @@
     "alternative_finance": {
      "status": "not_applicable",
      "reason": "a lens over the main tree; markets act on the underlying line",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "regulation": {
      "status": "applies",
@@ -1213,7 +1509,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -1221,9 +1520,11 @@
    "label": "Wholesale Trade",
    "applies": {
     "input_prices": {
-     "status": "not_applicable",
-     "reason": "no single priceable input drives this line's borrowing",
-     "approved": null
+     "status": "applies",
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "credit_price": {
      "status": "applies",
@@ -1236,7 +1537,10 @@
     "alternative_finance": {
      "status": "not_applicable",
      "reason": "these borrowers rarely use bond or CP markets",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "regulation": {
      "status": "applies",
@@ -1245,7 +1549,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -1253,9 +1560,11 @@
    "label": "Retail Trade",
    "applies": {
     "input_prices": {
-     "status": "not_applicable",
-     "reason": "no single priceable input drives this line's borrowing",
-     "approved": null
+     "status": "applies",
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "credit_price": {
      "status": "applies",
@@ -1268,7 +1577,10 @@
     "alternative_finance": {
      "status": "not_applicable",
      "reason": "these borrowers rarely use bond or CP markets",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "regulation": {
      "status": "applies",
@@ -1277,7 +1589,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -1287,7 +1602,10 @@
     "input_prices": {
      "status": "not_applicable",
      "reason": "no single priceable input drives this line's borrowing",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "credit_price": {
      "status": "applies",
@@ -1308,7 +1626,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -1318,7 +1639,10 @@
     "input_prices": {
      "status": "not_applicable",
      "reason": "no single priceable input drives this line's borrowing",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     },
     "credit_price": {
      "status": "applies",
@@ -1339,7 +1663,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -1369,7 +1696,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -1399,7 +1729,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -1429,7 +1762,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -1459,7 +1795,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -1489,7 +1828,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -1519,7 +1861,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -1549,7 +1894,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -1579,7 +1927,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -1609,7 +1960,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -1639,7 +1993,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -1669,7 +2026,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -1699,7 +2059,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -1729,7 +2092,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -1759,7 +2125,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -1789,7 +2158,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -1819,7 +2191,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -1849,7 +2224,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -1879,7 +2257,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -1909,7 +2290,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -1939,7 +2323,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -1969,7 +2356,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -1999,7 +2389,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -2029,7 +2422,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -2059,7 +2455,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -2089,7 +2488,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -2119,7 +2521,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -2149,7 +2554,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -2179,7 +2587,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -2209,7 +2620,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -2239,7 +2653,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -2269,7 +2686,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -2299,7 +2719,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -2329,7 +2752,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -2359,7 +2785,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -2389,7 +2818,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -2419,7 +2851,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -2449,7 +2884,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -2479,7 +2917,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -2509,7 +2950,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -2539,7 +2983,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -2569,7 +3016,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   },
@@ -2599,7 +3049,10 @@
     "funding": {
      "status": "not_applicable",
      "reason": "measured against its group, so the common funding tide is removed; funding applies to totals and per-bank lines",
-     "approved": null
+     "approved": {
+      "by": "user",
+      "date": "2026-10-12"
+     }
     }
    }
   }
@@ -8780,6 +9233,166 @@
    "lag": null,
    "reason": "",
    "proposed_by": "claude",
+   "approved": null,
+   "admitted": null,
+   "tests": []
+  },
+  {
+   "id": "h0369",
+   "line": "icl:sibc/Statement1/3.8",
+   "line_label": "Commercial Real Estate",
+   "class": "input_prices",
+   "driver": {
+    "source": "RBI House Price Index (DBIE, quarterly)"
+   },
+   "sign": 1,
+   "lag": null,
+   "reason": "rising property prices raise developers' and buyers' borrowing",
+   "proposed_by": "user",
+   "approved": null,
+   "admitted": null,
+   "tests": []
+  },
+  {
+   "id": "h0370",
+   "line": "icl:sibc/Statement1/3.7",
+   "line_label": "Trade",
+   "class": "input_prices",
+   "driver": {
+    "pipeline": "mospi",
+    "series": [
+     "wpi/wpi:all"
+    ]
+   },
+   "sign": 1,
+   "lag": 0,
+   "reason": "dearer goods need more working capital to hold the same stock",
+   "proposed_by": "user",
+   "approved": null,
+   "admitted": null,
+   "tests": []
+  },
+  {
+   "id": "h0371",
+   "line": "icl:sibc/Statement1/3.7.1",
+   "line_label": "Wholesale Trade",
+   "class": "input_prices",
+   "driver": {
+    "pipeline": "mospi",
+    "series": [
+     "wpi/wpi:all"
+    ]
+   },
+   "sign": 1,
+   "lag": 0,
+   "reason": "dearer goods need more working capital to hold the same stock",
+   "proposed_by": "user",
+   "approved": null,
+   "admitted": null,
+   "tests": []
+  },
+  {
+   "id": "h0372",
+   "line": "icl:sibc/Statement1/3.7.2",
+   "line_label": "Retail Trade",
+   "class": "input_prices",
+   "driver": {
+    "pipeline": "mospi",
+    "series": [
+     "wpi/wpi:all"
+    ]
+   },
+   "sign": 1,
+   "lag": 0,
+   "reason": "dearer goods need more working capital to hold the same stock",
+   "proposed_by": "user",
+   "approved": null,
+   "admitted": null,
+   "tests": []
+  },
+  {
+   "id": "h0373",
+   "line": "icl:sibc/Statement1/4.4",
+   "line_label": "Advances to Individuals against share, bonds, etc.",
+   "class": "input_prices",
+   "driver": {
+    "source": "Share prices: Sensex / Nifty monthly (DBIE Handbook 182-183)"
+   },
+   "sign": 1,
+   "lag": null,
+   "reason": "a rising market lets the same pledged shares back a bigger loan",
+   "proposed_by": "user",
+   "approved": null,
+   "admitted": null,
+   "tests": []
+  },
+  {
+   "id": "h0374",
+   "line": "icl:sibc/Statement1/3.5",
+   "line_label": "Aviation",
+   "class": "alternative_finance",
+   "driver": {
+    "source": "External commercial borrowing, monthly (DBIE Bulletin Table 38); leasing"
+   },
+   "sign": -1,
+   "lag": null,
+   "reason": "airlines and shippers that borrow abroad or lease need less from banks",
+   "proposed_by": "user",
+   "approved": null,
+   "admitted": null,
+   "tests": []
+  },
+  {
+   "id": "h0375",
+   "line": "icl:sibc/Statement1/3.4",
+   "line_label": "Shipping",
+   "class": "alternative_finance",
+   "driver": {
+    "source": "External commercial borrowing, monthly (DBIE Bulletin Table 38); leasing"
+   },
+   "sign": -1,
+   "lag": null,
+   "reason": "airlines and shippers that borrow abroad or lease need less from banks",
+   "proposed_by": "user",
+   "approved": null,
+   "admitted": null,
+   "tests": []
+  },
+  {
+   "id": "h0376",
+   "line": "icl:sibc/Statement1/4.7",
+   "line_label": "Vehicle Loans",
+   "class": "input_prices",
+   "driver": {
+    "pipeline": "mospi",
+    "series": [
+     "wpi/nic:29/motor_vehicles",
+     "wpi/nic:30/motorcycles"
+    ]
+   },
+   "sign": 1,
+   "lag": 0,
+   "reason": "dearer vehicles mean bigger loans for the same purchase",
+   "proposed_by": "user",
+   "approved": null,
+   "admitted": null,
+   "tests": []
+  },
+  {
+   "id": "h0377",
+   "line": "icl:sibc/Statement1/4.1",
+   "line_label": "Consumer Durables",
+   "class": "input_prices",
+   "driver": {
+    "pipeline": "mospi",
+    "series": [
+     "wpi/nic:27/domestic_appliances"
+    ]
+   },
+   "sign": 1,
+   "lag": 0,
+   "reason": "dearer durables mean bigger loans for the same purchase",
+   "proposed_by": "user",
    "approved": null,
    "admitted": null,
    "tests": []

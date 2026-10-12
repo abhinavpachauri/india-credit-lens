@@ -465,18 +465,23 @@ def report(pipeline: str, with_moves: bool = True) -> tuple[str, str]:
         for label, mv, cells, ws in sorted(rows[g], key=lambda r: -r[1]):
             md.append(f"| {label} | {mv or ''} | " + " | ".join(cells) + f" | {ws} |")
         md.append("")
-    md += ["## Drafts to approve: where a kind of reason does not apply", "",
-           "Grouped by reason, so each row is one decision. Approve, or name the lines it should not cover.", "",
-           "| kind | reason | lines |", "|---|---|---|"]
+    review = reg["_meta"].get("review_later", [])
+    if review:
+        md += ["## To review later", "", "| cells | why |", "|---|---|"]
+        md += [f"| {x['cells']} | {x['why']} |" for x in review]
+        md.append("")
+    md += ["## Where a kind of reason does not apply", "",
+           "Grouped by reason, so each row is one decision. `approved` = the user agreed; `draft` = awaiting review.", "",
+           "| kind | reason | lines | state |", "|---|---|---|---|"]
     na: dict[tuple, list] = {}
     for urn, line in reg["lines"].items():
         for k, c in line["applies"].items():
             if c.get("status") == NO:
-                na.setdefault((k, c["reason"]), []).append(line["label"])
-    for (k, why), ls in sorted(na.items(), key=lambda x: (OUTSIDE.index(x[0][0]), -len(x[1]))):
+                na.setdefault((k, c["reason"], "approved" if c.get("approved") else "draft"), []).append(line["label"])
+    for (k, why, state), ls in sorted(na.items(), key=lambda x: (OUTSIDE.index(x[0][0]), -len(x[1]))):
         shown = ", ".join(sorted(ls)) if len(ls) <= 12 else f"{len(ls)} lines (all of: " + \
             ", ".join(sorted(set(_sibc_group_label(l, reg, model) for l in ls))) + ")"
-        md.append(f"| {SHORT[k]} | {why} | {shown} |")
+        md.append(f"| {SHORT[k]} | {why} | {shown} | {state} |")
     return "\n".join(term), "\n".join(md) + "\n"
 
 
