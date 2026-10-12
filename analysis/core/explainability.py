@@ -45,7 +45,7 @@ TAXONOMY = {
 COMPUTED = ("arithmetic", "artefact", "structural")
 # Kinds that need outside data: the columns of the completeness grid.
 OUTSIDE = ("input_prices", "credit_price", "demand", "alternative_finance", "regulation", "funding")
-MAX_LAG = 6
+MAX_LAG = 9                      # relationship_test.DISCOVERY_MAX_LAG
 
 # Where a missing cell's data would come from (analysis/sources/README.md). A default per kind;
 # a hypothesis may name a more precise source.
@@ -297,12 +297,21 @@ def validate(pipeline: str, reg: dict | None = None) -> list[str]:
             elif c["status"] == NO and not c.get("reason"):
                 errs.append(f"{n['label']}: kind {cls} not applicable without a reason")
     ref_series = _reference_series()
+    tp = ROOT / manifest.load(pipeline)["paths"]["data_dir"] / "relationship_tests.json"
+    ids = [r["test_id"] for r in _tests(tp) if r.get("test_id")]
+    dup_ids = {i for i in ids if ids.count(i) > 1}
+    known = set(ids)
     seen = set()
     for h in reg["hypotheses"]:
         where = f"{h.get('id')} ({h.get('line_label')}, {h.get('class')})"
         if h["id"] in seen:
             errs.append(f"{where}: duplicate id")
         seen.add(h["id"])
+        refs = [x[7:] for x in h.get("tests", []) if x.startswith("driver:")]
+        if any(x not in known for x in refs):
+            errs.append(f"{where}: references a driver result that is not recorded")
+        if len(refs) != len(set(refs)) or any(x in dup_ids for x in refs):
+            errs.append(f"{where}: a driver result id is not unique")
         if h["line"] not in urns:
             errs.append(f"{where}: line {h['line']} is not in the model")
         if h["class"] not in TAXONOMY or h["class"] in COMPUTED:
@@ -314,8 +323,8 @@ def validate(pipeline: str, reg: dict | None = None) -> list[str]:
         if h.get("approved"):
             if h.get("sign") not in (1, -1):
                 errs.append(f"{where}: approved without a declared sign")
-            if not isinstance(h.get("lag"), int) or not 0 <= h["lag"] <= MAX_LAG:
-                errs.append(f"{where}: approved without a declared lag 0-{MAX_LAG}")
+            if h.get("lag") is not None and (not isinstance(h["lag"], int) or not 0 <= h["lag"] <= MAX_LAG):
+                errs.append(f"{where}: a fixed lag must be 0-{MAX_LAG}")
         d = h["driver"]
         if d.get("pipeline") == "mospi":
             for s in d.get("series", []):
@@ -497,34 +506,43 @@ def _sibc_group_label(label: str, reg: dict, model: dict) -> str:
 # ── Step 3: run the generic driver test on every hypothesis with data in hand ─────────────
 
 def run_tests(pipeline: str, dry_run: bool = False) -> list[dict]:
-    """Every `ready` hypothesis with a series, a sign and a lag, tested once. All hypotheses for
-    one line in this run form its family (one Bonferroni bar). Results are appended, nulls
-    included, to the pipeline's relationship_tests.json and linked from the hypothesis."""
+    """Every hypothesis with a series and a sign: its delay found on earlier months and confirmed
+    on later ones (spec §16 Step 6c). The delay and cutoff are frozen at first discovery; later runs
+    re-confirm on every month after the cutoff. A run with nothing new since the last result for a
+    hypothesis records nothing for it. All hypotheses for one line form its family. Results,
+    nulls included, are appended to relationship_tests.json and linked from the hypothesis."""
     from core import relationship_test as rt
     reg_path = register_path(pipeline)
     reg = json.loads(reg_path.read_text())
     model = gs.load_json(gs.pipeline_cfg(pipeline)["model"])
     node_of = {n.get("urn"): n["id"] for n in model["nodes"] if n.get("tier") == "entity"}
-    v = _verdicts(pipeline)
-    todo = [h for h in reg["hypotheses"] if status(h, v) == "ready" and "series" in h["driver"]
-            and h.get("sign") in (1, -1) and isinstance(h.get("lag"), int)]
+    tp = ROOT / manifest.load(pipeline)["paths"]["data_dir"] / "relationship_tests.json"
+    doc = json.loads(tp.read_text()) if tp.exists() else {"tests": []}
+    last = {}
+    for r in doc["tests"]:
+        if r.get("hypothesis_id") and "discover" in r.get("protocol", ""):
+            last[r["hypothesis_id"]] = r
+    todo = [h for h in reg["hypotheses"] if "series" in h["driver"] and h.get("sign") in (1, -1)]
     family = {}
     for h in todo:
         family[h["line"]] = family.get(h["line"], 0) + 1
     results = []
     for h in todo:
-        r = rt.run_driver(h, pipeline, node_of[h["line"]], family[h["line"]])
+        r = rt.run_driver(h, pipeline, node_of[h["line"]], family[h["line"]], discover=True)
+        prev = last.get(h["id"])
+        if prev and prev.get("through_period") == r["through_period"]:
+            continue                                       # nothing new since its last result
         results.append(r)
         if not dry_run:
             h.setdefault("tests", []).append(f"driver:{r['test_id']}")
+            d = r.get("discovery") or {}
+            if d.get("lag") is not None and not h.get("discovery"):
+                h["discovery"] = {"cutoff": d["cutoff"], "lag": d["lag"], "found": r["tested"]}
     if not dry_run and results:
-        tp = ROOT / manifest.load(pipeline)["paths"]["data_dir"] / "relationship_tests.json"
-        doc = json.loads(tp.read_text()) if tp.exists() else {"tests": []}
         doc["tests"].extend(results)
         tp.write_text(json.dumps(doc, indent=1, ensure_ascii=False) + "\n")
         reg_path.write_text(json.dumps(reg, indent=1, ensure_ascii=False) + "\n")
     return results
-
 
 def main() -> int:
     import argparse
@@ -558,9 +576,12 @@ def main() -> int:
         print(f"  {a.pipeline}: {len(res)} hypotheses tested{' (dry run, nothing recorded)' if a.dry_run else ''}: "
               + ", ".join(f"{k} {n}" for k, n in Counter(r['verdict'] for r in res).most_common()))
         for r in sorted(res, key=lambda r: (r["verdict"] != "supported", r["target_label"])):
-            m = r["lags"][r["at_lag"]]
-            print(f"   {r['verdict']:13} {r['target_label'][:34]:34} ← {r['source'][:44]:44} "
-                  f"lag {r['at_lag']} n {m.get('n')} r {m.get('r', '—')} p {m.get('p', '—')} bar {r['alpha']}")
+            m = r.get("lags", {}).get(r.get("at_lag"), {}) if r.get("lags") else {}
+            d = r.get("discovery") or {}
+            peak = d.get("profile", {}).get(d.get("lag"), {}) if d.get("lag") is not None else {}
+            print(f"   {r['verdict']:13} {r['target_label'][:30]:30} ← {r['source'][:38]:38} "
+                  f"delay {d.get('lag', '—')} (found r {peak.get('r', '—')}) · confirmed on n {m.get('n', '—')} "
+                  f"r {m.get('r', '—')} p {m.get('p', '—')}")
         return 0
     if a.command == "report":
         term, md = report(a.pipeline)

@@ -225,6 +225,8 @@ def latest_verdicts(pipeline: str) -> dict[tuple[str, str], dict]:
         return {}
     out: dict[tuple[str, str], dict] = {}
     for t in json.loads(path.read_text()).get("tests", []):   # appended in order: last wins
+        if t.get("hypothesis_id"):
+            continue    # a driver test (Step 6c) is read through the driver register, not as an arrow
         out[(t["source"], t["target"])] = {"verdict": t["verdict"], "sign": t["predicted_sign"],
                                            "lag": t["at_lag"], "tested": t["tested"]}
     return out
@@ -312,6 +314,42 @@ def judge(a: dict[int, float], b: dict[int, float], t_a: dict[int, float], t_b: 
     return res
 
 
+DISCOVERY_MAX_LAG = 9
+
+
+def discover_confirm(a: dict[int, float], b: dict[int, float], t_a: dict[int, float],
+                     t_b: dict[int, float], sign: int, family: int = 1,
+                     cutoff: int | None = None, lag: int | None = None) -> dict:
+    """The line's own delay, found on months up to `cutoff`, confirmed on months after it
+    (spec §16 Step 6c). `cutoff` and `lag` are passed back in once frozen, so later runs only
+    re-confirm, on a confirmation set that grows with every new month."""
+    usable = sorted(k for k in b if k in t_b)
+    if cutoff is None:
+        if len(usable) < 2 * MIN_PAIRS:
+            return {"verdict": "too_short", "discovery": {"cutoff": None, "profile": {}, "lag": None,
+                    "why": f"{len(usable)} change months; discovery and confirmation need {MIN_PAIRS} each"}}
+        cutoff = usable[len(usable) // 2 - 1]
+    profile = {}
+    if lag is None:
+        for L in range(DISCOVERY_MAX_LAG + 1):
+            ks = sorted(k for k in a if k in t_a and k + L in b and k + L in t_b and k + L <= cutoff)
+            if len(ks) < MIN_PAIRS:
+                profile[L] = {"n": len(ks)}
+                continue
+            x = residual([a[k] for k in ks], [t_a[k] for k in ks])
+            y = residual([b[k + L] for k in ks], [t_b[k + L] for k in ks])
+            profile[L] = {"n": len(ks), "r": round(correlation(x, y), 3)}
+        scored = {L: sign * v["r"] for L, v in profile.items() if "r" in v}
+        if not scored:
+            return {"verdict": "too_short", "discovery": {"cutoff": cutoff, "profile": profile, "lag": None,
+                    "why": "no delay had enough pairs before the cutoff"}}
+        lag = max(scored, key=scored.get)
+    later_b = {k: v for k, v in b.items() if k > cutoff}
+    later_tb = {k: v for k, v in t_b.items() if k > cutoff}
+    res = judge(a, later_b, t_a, later_tb, sign, lag, family)
+    return {**res, "discovery": {"cutoff": cutoff, "profile": profile, "lag": lag}}
+
+
 def driver_changes(pipeline: str, series: list[str]) -> dict[int, float]:
     """month index -> monthly change in the driver's YoY: one series, or the equal-weighted mean of
     several over the months they share (weights are not invented; a bundle states that it is equal)."""
@@ -320,7 +358,8 @@ def driver_changes(pipeline: str, series: list[str]) -> dict[int, float]:
     return {k: sum(p[k] for p in parts) / len(parts) for k in sorted(common)}
 
 
-def run_driver(hyp: dict, target_pipeline: str, target_id: str, family: int) -> dict:
+def run_driver(hyp: dict, target_pipeline: str, target_id: str, family: int,
+               discover: bool = False) -> dict:
     """One register hypothesis, tested: the driver's change (its own headline removed as its tide;
     a headline driver uses the credit tide instead) against the target line's gap changes."""
     d = hyp["driver"]
@@ -331,12 +370,20 @@ def run_driver(hyp: dict, target_pipeline: str, target_id: str, family: int) -> 
     a = driver_changes(ref, series)
     credit_tide = tide(tm, ts, td)
     t_a = credit_tide if (head is None or head in series) else reference_changes(ref, head)
-    res = judge(a, gap_changes(target_id, tm, ts, tp, td), t_a, credit_tide,
-                hyp["sign"], hyp["lag"], family)
-    return {"test_id": f"{hyp['id']}@{date.today().isoformat()}", "hypothesis_id": hyp["id"],
+    b = gap_changes(target_id, tm, ts, tp, td)
+    if discover:
+        frozen = hyp.get("discovery") or {}
+        res = discover_confirm(a, b, t_a, credit_tide, hyp["sign"], family,
+                               cutoff=frozen.get("cutoff"), lag=frozen.get("lag"))
+    else:
+        res = judge(a, b, t_a, credit_tide, hyp["sign"], hyp["lag"], family)
+    # Unique per result: two runs on one day (a lag-0 test, then discovery) must not share an id.
+    run = len(hyp.get("tests", [])) + 1
+    return {"test_id": f"{hyp['id']}@{date.today().isoformat()}#{run}", "hypothesis_id": hyp["id"],
             "class": hyp["class"], "source": f"{ref}:{'+'.join(series)}",
             "source_tide": "credit tide" if t_a is credit_tide else head,
             "target": f"{target_pipeline}:{target_id}", "target_label": hyp["line_label"],
             "predicted_sign": hyp["sign"], "reason": hyp["reason"], "tested": date.today().isoformat(),
             "through_period": {target_pipeline: tp[-1]},
-            "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (generic driver test)", **res}
+            "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (" + ("discover/confirm" if discover else
+                                                              "generic driver test") + ")", **res}

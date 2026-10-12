@@ -38,45 +38,45 @@
 
 | line | unexplained moves | input prices | price of credit | demand | other finance | rules & dates | lenders' capacity | within system |
 |---|---|---|---|---|---|---|---|---|
-| Fertiliser | 5 | ✗ | · | · | · | · | – |  |
-| Vehicles, Vehicle Parts and Transport Equipment | 4 | · | · | ✗ | · | · | – |  |
-| Beverage and Tobacco | 3 | · | · | ✗ | · | · | – |  |
-| Gems and Jewellery | 3 | ✗ | · | · | · | · | – |  |
+| Fertiliser | 5 | ? | · | · | · | · | – |  |
+| Vehicles, Vehicle Parts and Transport Equipment | 4 | · | · | ? | · | · | – |  |
+| Beverage and Tobacco | 3 | · | · | ? | · | · | – |  |
+| Gems and Jewellery | 3 | ? | · | · | · | · | – |  |
 | Infrastructure | 3 | · | · | ✓… | · | · | – |  |
 | Petro Chemicals | 3 | · | · | · | · | · | – |  |
-| Electronics | 3 | ✗ | · | ✗ | · | · | – |  |
+| Electronics | 3 | ? | · | ? | · | · | – |  |
 | Railways (other than Indian Railways) | 3 | · | · | · | · | · | – |  |
 | Textiles | 2 | · | · | · | · | · | – |  |
-| Edible Oils and Vanaspati | 2 | ✗ | · | · | · | · | – |  |
+| Edible Oils and Vanaspati | 2 | ? | · | · | · | · | – |  |
 | Tea | 2 | · | · | · | · | · | – |  |
 | Others | 2 | · | · | · | · | · | – |  |
 | Airports | 2 | · | · | · | · | · | – |  |
 | Ports | 2 | · | · | · | · | · | – |  |
-| Mining and Quarrying (incl. Coal) | 1 | · | · | ✗ | · | · | – |  |
-| Food Processing | 1 | ✗ | · | ✗ | · | · | – |  |
-| Wood and Wood Products | 1 | ✗ | · | ✗ | · | · | – |  |
-| Petroleum, Coal Products and Nuclear Fuels | 1 | ✗ | · | ✗ | · | · | – |  |
-| Glass and Glassware | 1 | ✗ | · | · | · | · | – |  |
+| Mining and Quarrying (incl. Coal) | 1 | · | · | ? | · | · | – |  |
+| Food Processing | 1 | ? | · | ? | · | · | – |  |
+| Wood and Wood Products | 1 | ? | · | ? | · | · | – |  |
+| Petroleum, Coal Products and Nuclear Fuels | 1 | ✗ | · | ? | · | · | – |  |
+| Glass and Glassware | 1 | ? | · | · | · | · | – |  |
 | Cotton Textiles | 1 | · | · | · | · | · | – |  |
-| Drugs and Pharmaceuticals | 1 | ✗ | · | ✗ | · | · | – |  |
-| Iron and Steel | 1 | ✗ | · | · | · | · | – | 2 tested |
+| Drugs and Pharmaceuticals | 1 | ? | · | ? | · | · | – |  |
+| Iron and Steel | 1 | ? | · | · | · | · | – | 2 tested |
 | Other Metal and Metal Product | 1 | · | · | · | · | · | – |  |
 | Others | 1 | · | · | · | · | · | – |  |
-| Leather and Leather Products |  | ✗ | · | ✗ | · | · | – |  |
-| Paper and Paper Products |  | ✗ | · | ✗ | · | · | – |  |
-| Chemicals and Chemical Products |  | · | · | ✗ | · | ✓ | – |  |
-| Rubber, Plastic and their Products |  | ✗ | · | ✗ | · | · | – |  |
-| Cement and Cement Products |  | ✗ | · | · | · | · | – | 2 tested |
-| Basic Metal and Metal Product |  | · | · | ✗ | · | ✗ | – |  |
-| All Engineering |  | · | · | ✗ | · | ✓ | – | 2 tested |
+| Leather and Leather Products |  | ? | · | ? | · | · | – |  |
+| Paper and Paper Products |  | ? | · | ? | · | · | – |  |
+| Chemicals and Chemical Products |  | · | · | ? | · | ✓ | – |  |
+| Rubber, Plastic and their Products |  | ? | · | ? | · | · | – |  |
+| Cement and Cement Products |  | ? | · | · | · | · | – | 2 tested |
+| Basic Metal and Metal Product |  | · | · | ? | · | ✗ | – |  |
+| All Engineering |  | · | · | ? | · | ✓ | – | 2 tested |
 | Construction |  | · | · | · | · | · | – |  |
 | Other Industries |  | · | · | · | · | · | – |  |
-| Sugar |  | ✗ | · | · | · | · | – |  |
+| Sugar |  | ? | · | · | · | · | – |  |
 | Jute Textiles |  | · | · | · | · | · | – |  |
 | Man-Made Textiles |  | · | · | · | · | · | – |  |
 | Other Textiles |  | · | · | · | · | · | – |  |
 | Others |  | · | · | · | · | · | – |  |
-| Power |  | ✗ | · | ✗ | · | · | – |  |
+| Power |  | ? | · | ? | · | · | – |  |
 | Telecommunications |  | · | · | · | · | · | – |  |
 | Roads |  | · | · | · | · | · | – |  |
 | Other Infrastructure |  | · | · | · | · | · | – |  |
@@ -92,21 +92,21 @@
 | Professional Services | 2 | – | · | · | – | · | – |  |
 | Public Financial Institutions (PFIs) | 2 | – | · | · | · | · | – |  |
 | Tourism, Hotels and Restaurants | 1 | – | · | · | – | · | – |  |
-| Trade | 1 | ✗ | · | · | – | · | – |  |
+| Trade | 1 | ? | · | · | – | · | – |  |
 | Housing Finance Companies (HFCs) | 1 | – | · | · | · | · | – |  |
 | Services |  | – | · | ? | · | ✓ | – |  |
 | Shipping |  | · | · | · | · | · | – |  |
 | Non-Banking Financial Companies (NBFCs) |  | – | · | · | · | · | – |  |
 | Other Services |  | – | · | · | – | · | – |  |
-| Wholesale Trade |  | ✗ | · | · | – | · | – |  |
-| Retail Trade |  | ✗ | · | · | – | · | – |  |
+| Wholesale Trade |  | ? | · | · | – | · | – |  |
+| Retail Trade |  | ? | · | · | – | · | – |  |
 
 ### Personal loans
 
 | line | unexplained moves | input prices | price of credit | demand | other finance | rules & dates | lenders' capacity | within system |
 |---|---|---|---|---|---|---|---|---|
-| Vehicle Loans | 4 | ✗ | · | · | – | ○ | – |  |
-| Consumer Durables | 3 | ✗ | · | · | – | ○ | – |  |
+| Vehicle Loans | 4 | ? | · | · | – | ○ | – |  |
+| Consumer Durables | 3 | ? | · | · | – | ○ | – |  |
 | Personal Loans | 2 | – | · | · | – | · | – |  |
 | Advances against Fixed Deposits (Including FCNR (B), NRNR Deposits etc.) | 2 | – | · | · | – | · | – |  |
 | Other Personal Loans | 2 | – | · | · | – | · | – |  |

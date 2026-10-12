@@ -830,7 +830,8 @@ pipeline). One entry per hypothesis:
 | `line` | the target line's URN (must exist in the model) |
 | `class` | one taxonomy class |
 | `driver` | `{pipeline, series}` when the data exists; `{source, note}` (a catalogue entry, `analysis/sources/README.md`) when it does not |
-| `sign`, `lag` | declared before any test: `+1`/`-1`; months, 0–6 |
+| `sign` | declared before any test: `+1`/`-1` |
+| `lag` | not declared: **found** on earlier months and confirmed on later ones (below), stored in `discovery` once found; a lag fixed by hand is allowed only with a stated reason |
 | `reason` | the real-world mechanism, one sentence |
 | `proposed_by` | `claude` · `s4` · `user` |
 | `approved` | `{by, date}` or null. Only approved hypotheses are tested for admission; drafts may be tested to inform, never admitted |
@@ -872,9 +873,45 @@ complete column on a short history can still be mostly `too_short`.
 the target's monthly change in its gap to its group against the driver's monthly change (in YoY,
 or in level for rates and spreads), the driver's own headline removed as its tide, 10,000 seeded
 shuffles, a family per line (all hypotheses for one line tested in one run share the Bonferroni
-bar), at the **declared** lag only. Other lags are printed and can only be re-declared and tested
-on months not yet seen. A result with fewer changes than the effect size needs is `too_short`,
-not `not_supported`. Every result, nulls included, is kept.
+bar). A result with fewer changes than the effect size needs is `too_short`, not
+`not_supported`. Every result, nulls included, is kept.
+
+*Each line's own delay: found on earlier months, confirmed on later ones (user, 2026-10-12).*
+Credit catches up with its driver at a speed that is the line's own (construction is not consumer
+durables), so the delay is measured per hypothesis, not assumed. Trying every delay on all the
+data and keeping the best would find coincidences (45 hypotheses × 10 delays ≈ 450 tries, ~22 at
+5% by chance), so the search and the verdict use **different months**:
+
+1. **Discovery** — the target's change months up to a cutoff (the midpoint of its usable months at
+   first discovery). For each delay 0–`MAX_LAG` (9), the residual correlation; the **catch-up
+   delay** is the one with the strongest response in the predicted direction, with at least
+   `MIN_PAIRS` pairs. The whole profile (r by delay) is kept: it says how fast credit catches up
+   and how long the response lasts.
+2. **Confirmation** — the same test at that one delay, only on change months **after** the
+   cutoff. Its verdict is the hypothesis's verdict (`supported` · `not_supported` · `opposite` ·
+   `too_short`).
+3. **Persistence** — the delay and cutoff are frozen in the hypothesis (`discovery`) at first
+   discovery. Every later run re-confirms on all months after the cutoff, so the confirmation set
+   only grows with new data, and a link that stops holding drops back. A hypothesis is never
+   re-discovered unless the user resets it.
+
+With ~25 usable changes each half has ~12, enough to confirm only very strong links, so most
+results read `too_short` until the history grows (more months, the SIBC backfill, or a longer
+driver history). That is the honest state, and the grid shows it.
+
+*Built (2026-10-12):* `relationship_test.discover_confirm`; `explainability.py test` discovers
+each hypothesis's delay once (frozen with its cutoff in `discovery`) and re-confirms on later
+months each run; a run with nothing new records nothing. Controls (unit tests): planted delays of
+1 and 5 months found and confirmed on 60 months; a shuffled driver finds a "best" delay but does
+not confirm; confirmation is unchanged when the discovery months are scrambled; 15 months →
+too_short. First run, SIBC, 47 hypotheses: 46 too_short, 1 opposite. The trap it guards against
+showed at once: discovery found paper r = 0.81, wood 0.80, iron and steel 0.77, food processing
+0.66 on the earlier months, and none held on the later 13 (0.17, −0.11, 0.18, −0.23). The one
+result clearing its bar: **petroleum credit vs WPI mineral oils, delay 3, r = −0.72, p = 0.006,
+opposite to the hypothesis** (fuel prices up, petroleum credit falls against industry three months
+later): a lead on 13 months, not a finding. Driver results are skipped by `latest_verdicts` (they
+are read through the register, not as arrows); result ids are unique per run
+(`{hypothesis}@{date}#{n}`), and the validator fails a reference to a missing or repeated result.
 
 *Admission and the `driver` explanation.* An `approved` hypothesis that is `supported`, with the
 editor's yes, is `admitted`. It explains a move in Step 6a when, at that period, the driver's

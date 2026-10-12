@@ -45,8 +45,8 @@ def _first(reg, cls=None, has=None):
      lambda r: _first(r).update({"class": "arithmetic"}), "class must be one of"),
     ("approved without a sign",
      lambda r: _first(r, has="source").update({"approved": {"by": "user"}}), "without a declared sign"),
-    ("approved with a lag beyond 6",
-     lambda r: _first(r, has="series").update({"approved": {"by": "user"}, "lag": 9}), "declared lag"),
+    ("a fixed lag beyond the 0-9 window",
+     lambda r: _first(r, has="series").update({"approved": {"by": "user"}, "lag": 12}), "a fixed lag must be"),
     ("a series the reference CSV lacks",
      lambda r: _first(r, has="series").update({"driver": {"pipeline": "mospi", "series": ["wpi/nope"]}}),
      "not in the MoSPI CSV"),
@@ -56,6 +56,8 @@ def _first(reg, cls=None, has=None):
      lambda r: _first(r).update({"line": "icl:sibc/Statement1/zz"}), "not in the model"),
     ("a duplicate id",
      lambda r: r["hypotheses"][1].update({"id": r["hypotheses"][0]["id"]}), "duplicate id"),
+    ("a reference to a driver result that does not exist",
+     lambda r: _first(r).setdefault("tests", []).append("driver:h9999@2026-01-01#1"), "not recorded"),
     ("admitted without a supported test",
      lambda r: _first(r, has="source").update({"admitted": {"by": "user"}}), "admitted without a supported test"),
 ])
@@ -155,3 +157,34 @@ def test_the_wrong_lag_is_not_rescued_by_the_right_one():
 def test_a_short_history_is_too_short_not_a_null():
     a, b, t = _series(n=8)
     assert RT.judge(a, b, t, t, sign=1, lag=1)["verdict"] == "too_short"
+
+
+# ── each line's own delay: found on earlier months, confirmed on later ones ────────────────
+
+@pytest.mark.parametrize("lag", [1, 5])
+def test_a_planted_delay_is_found_and_confirmed(lag):
+    """Construction is not consumer durables: a 5-month catch-up is found as surely as a 1-month one."""
+    a, b, t = _series(n=60, lag=lag, seed=11)
+    r = RT.discover_confirm(a, b, t, t, sign=1)
+    assert r["discovery"]["lag"] == lag and r["verdict"] == "supported"
+
+
+def test_a_shuffled_driver_finds_a_best_delay_but_does_not_confirm():
+    a, b, t = _series(n=60, lag=3, seed=11)
+    vals = list(a.values()); _random.Random(5).shuffle(vals)
+    r = RT.discover_confirm(dict(zip(a, vals)), b, t, t, sign=1)
+    assert r["discovery"]["lag"] is not None and r["verdict"] != "supported"
+
+
+def test_confirmation_never_reads_the_discovery_months():
+    a, b, t = _series(n=60, lag=2, seed=11)
+    first = RT.discover_confirm(a, b, t, t, sign=1)
+    cut, lag = first["discovery"]["cutoff"], first["discovery"]["lag"]
+    scrambled = {k: (v * -3 if k <= cut else v) for k, v in b.items()}
+    again = RT.discover_confirm(a, scrambled, t, t, sign=1, cutoff=cut, lag=lag)
+    assert again["lags"][lag] == first["lags"][lag]
+
+
+def test_a_history_too_short_to_split_is_too_short():
+    a, b, t = _series(n=15, lag=1)
+    assert RT.discover_confirm(a, b, t, t, sign=1)["verdict"] == "too_short"

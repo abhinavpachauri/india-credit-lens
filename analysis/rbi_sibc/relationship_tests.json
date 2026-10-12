@@ -492,7 +492,7 @@
    "note": "Existing authored edge, first tested 2026-10-10 (family of 12 declared together: 3 SIBC + 9 payments; sign from edge type — leads/amplifies +, substitutes/reroutes_to/suppresses −; lag: leads 1 month, others 0)."
   },
   {
-   "test_id": "h0001@2026-10-12",
+   "test_id": "h0001@2026-10-12#1",
    "hypothesis_id": "h0001",
    "class": "input_prices",
    "source": "mospi:nas/nas:gdp",
@@ -531,7 +531,7 @@
    "critical_r": null
   },
   {
-   "test_id": "h0002@2026-10-12",
+   "test_id": "h0002@2026-10-12#1",
    "hypothesis_id": "h0002",
    "class": "demand",
    "source": "mospi:nas/nas:gdp",
@@ -570,7 +570,7 @@
    "critical_r": null
   },
   {
-   "test_id": "h0003@2026-10-12",
+   "test_id": "h0003@2026-10-12#1",
    "hypothesis_id": "h0003",
    "class": "input_prices",
    "source": "mospi:nas/nas:agriculture",
@@ -609,7 +609,7 @@
    "critical_r": null
   },
   {
-   "test_id": "h0004@2026-10-12",
+   "test_id": "h0004@2026-10-12#1",
    "hypothesis_id": "h0004",
    "class": "demand",
    "source": "mospi:nas/nas:agriculture",
@@ -648,7 +648,7 @@
    "critical_r": null
   },
   {
-   "test_id": "h0005@2026-10-12",
+   "test_id": "h0005@2026-10-12#1",
    "hypothesis_id": "h0005",
    "class": "input_prices",
    "source": "mospi:nas/nas:mining+nas/nas:manufacturing+nas/nas:utilities+nas/nas:construction",
@@ -687,7 +687,7 @@
    "critical_r": null
   },
   {
-   "test_id": "h0006@2026-10-12",
+   "test_id": "h0006@2026-10-12#1",
    "hypothesis_id": "h0006",
    "class": "demand",
    "source": "mospi:nas/nas:mining+nas/nas:manufacturing+nas/nas:utilities+nas/nas:construction",
@@ -726,7 +726,7 @@
    "critical_r": null
   },
   {
-   "test_id": "h0007@2026-10-12",
+   "test_id": "h0007@2026-10-12#1",
    "hypothesis_id": "h0007",
    "class": "demand",
    "source": "mospi:nas/nas:trade_transport+nas/nas:financial_real_estate+nas/nas:public_admin_other",
@@ -765,7 +765,7 @@
    "critical_r": null
   },
   {
-   "test_id": "h0010@2026-10-12",
+   "test_id": "h0010@2026-10-12#1",
    "hypothesis_id": "h0010",
    "class": "input_prices",
    "source": "mospi:cpi/cpi:all",
@@ -804,7 +804,7 @@
    "critical_r": 0.754
   },
   {
-   "test_id": "h0017@2026-10-12",
+   "test_id": "h0017@2026-10-12#1",
    "hypothesis_id": "h0017",
    "class": "input_prices",
    "source": "mospi:cpi/cpi:all",
@@ -843,7 +843,7 @@
    "critical_r": 0.754
   },
   {
-   "test_id": "h0021@2026-10-12",
+   "test_id": "h0021@2026-10-12#1",
    "hypothesis_id": "h0021",
    "class": "demand",
    "source": "mospi:iip/iip:mining",
@@ -887,7 +887,7 @@
    "slope": -0.271
   },
   {
-   "test_id": "h0022@2026-10-12",
+   "test_id": "h0022@2026-10-12#1",
    "hypothesis_id": "h0022",
    "class": "input_prices",
    "source": "mospi:wpi/nic:10",
@@ -931,7 +931,7 @@
    "slope": 0.0477
   },
   {
-   "test_id": "h0023@2026-10-12",
+   "test_id": "h0023@2026-10-12#1",
    "hypothesis_id": "h0023",
    "class": "demand",
    "source": "mospi:iip/nic:10",
@@ -975,7 +975,7 @@
    "slope": -0.0214
   },
   {
-   "test_id": "h0025@2026-10-12",
+   "test_id": "h0025@2026-10-12#1",
    "hypothesis_id": "h0025",
    "class": "demand",
    "source": "mospi:iip/nic:11+iip/nic:12",
@@ -1019,7 +1019,7 @@
    "slope": 0.032
   },
   {
-   "test_id": "h0028@2026-10-12",
+   "test_id": "h0028@2026-10-12#1",
    "hypothesis_id": "h0028",
    "class": "input_prices",
    "source": "mospi:wpi/nic:15",
@@ -1063,7 +1063,7 @@
    "slope": -0.2108
   },
   {
-   "test_id": "h0029@2026-10-12",
+   "test_id": "h0029@2026-10-12#1",
    "hypothesis_id": "h0029",
    "class": "demand",
    "source": "mospi:iip/nic:15",
@@ -1107,7 +1107,7 @@
    "slope": -0.05
   },
   {
-   "test_id": "h0030@2026-10-12",
+   "test_id": "h0030@2026-10-12#1",
    "hypothesis_id": "h0030",
    "class": "input_prices",
    "source": "mospi:wpi/nic:16",
@@ -1151,7 +1151,7 @@
    "slope": 0.1271
   },
   {
-   "test_id": "h0031@2026-10-12",
+   "test_id": "h0031@2026-10-12#1",
    "hypothesis_id": "h0031",
    "class": "demand",
    "source": "mospi:iip/nic:16",
@@ -1195,7 +1195,7 @@
    "slope": -0.0311
   },
   {
-   "test_id": "h0032@2026-10-12",
+   "test_id": "h0032@2026-10-12#1",
    "hypothesis_id": "h0032",
    "class": "input_prices",
    "source": "mospi:wpi/nic:17",
@@ -1239,7 +1239,7 @@
    "slope": 0.4948
   },
   {
-   "test_id": "h0033@2026-10-12",
+   "test_id": "h0033@2026-10-12#1",
    "hypothesis_id": "h0033",
    "class": "demand",
    "source": "mospi:iip/nic:17",
@@ -1283,7 +1283,7 @@
    "slope": -0.0134
   },
   {
-   "test_id": "h0034@2026-10-12",
+   "test_id": "h0034@2026-10-12#1",
    "hypothesis_id": "h0034",
    "class": "input_prices",
    "source": "mospi:wpi/wpi:fuel_power/mineral_oils",
@@ -1327,7 +1327,7 @@
    "slope": 0.4851
   },
   {
-   "test_id": "h0035@2026-10-12",
+   "test_id": "h0035@2026-10-12#1",
    "hypothesis_id": "h0035",
    "class": "demand",
    "source": "mospi:iip/nic:19",
@@ -1371,7 +1371,7 @@
    "slope": 0.1879
   },
   {
-   "test_id": "h0037@2026-10-12",
+   "test_id": "h0037@2026-10-12#1",
    "hypothesis_id": "h0037",
    "class": "demand",
    "source": "mospi:iip/nic:20+iip/nic:21",
@@ -1415,7 +1415,7 @@
    "slope": 0.1411
   },
   {
-   "test_id": "h0038@2026-10-12",
+   "test_id": "h0038@2026-10-12#1",
    "hypothesis_id": "h0038",
    "class": "input_prices",
    "source": "mospi:wpi/nic:22",
@@ -1459,7 +1459,7 @@
    "slope": -0.0424
   },
   {
-   "test_id": "h0039@2026-10-12",
+   "test_id": "h0039@2026-10-12#1",
    "hypothesis_id": "h0039",
    "class": "demand",
    "source": "mospi:iip/nic:22",
@@ -1503,7 +1503,7 @@
    "slope": -0.068
   },
   {
-   "test_id": "h0040@2026-10-12",
+   "test_id": "h0040@2026-10-12#1",
    "hypothesis_id": "h0040",
    "class": "input_prices",
    "source": "mospi:wpi/nic:23/glass_and_glass_products",
@@ -1547,7 +1547,7 @@
    "slope": 0.3096
   },
   {
-   "test_id": "h0042@2026-10-12",
+   "test_id": "h0042@2026-10-12#1",
    "hypothesis_id": "h0042",
    "class": "input_prices",
    "source": "mospi:wpi/nic:23/cement_lime_and_plaster",
@@ -1591,7 +1591,7 @@
    "slope": 0.0366
   },
   {
-   "test_id": "h0045@2026-10-12",
+   "test_id": "h0045@2026-10-12#1",
    "hypothesis_id": "h0045",
    "class": "demand",
    "source": "mospi:iip/nic:24+iip/nic:25",
@@ -1635,7 +1635,7 @@
    "slope": -0.0243
   },
   {
-   "test_id": "h0047@2026-10-12",
+   "test_id": "h0047@2026-10-12#1",
    "hypothesis_id": "h0047",
    "class": "demand",
    "source": "mospi:iip/nic:26+iip/nic:27+iip/nic:28",
@@ -1679,7 +1679,7 @@
    "slope": 0.0233
   },
   {
-   "test_id": "h0049@2026-10-12",
+   "test_id": "h0049@2026-10-12#1",
    "hypothesis_id": "h0049",
    "class": "demand",
    "source": "mospi:iip/nic:29+iip/nic:30",
@@ -1723,7 +1723,7 @@
    "slope": 0.1072
   },
   {
-   "test_id": "h0050@2026-10-12",
+   "test_id": "h0050@2026-10-12#1",
    "hypothesis_id": "h0050",
    "class": "input_prices",
    "source": "mospi:wpi/nic:32/jewellery_and_related_articles",
@@ -1767,7 +1767,7 @@
    "slope": 0.0781
   },
   {
-   "test_id": "h0058@2026-10-12",
+   "test_id": "h0058@2026-10-12#1",
    "hypothesis_id": "h0058",
    "class": "input_prices",
    "source": "mospi:wpi/nic:10/sugar",
@@ -1811,7 +1811,7 @@
    "slope": -0.162
   },
   {
-   "test_id": "h0060@2026-10-12",
+   "test_id": "h0060@2026-10-12#1",
    "hypothesis_id": "h0060",
    "class": "input_prices",
    "source": "mospi:wpi/nic:10/vegetable_and_animal_oils_and_fats",
@@ -1855,7 +1855,7 @@
    "slope": 0.0879
   },
   {
-   "test_id": "h0066@2026-10-12",
+   "test_id": "h0066@2026-10-12#1",
    "hypothesis_id": "h0066",
    "class": "input_prices",
    "source": "mospi:wpi/nic:20/fertilizers_and_nitrogen_compounds",
@@ -1899,7 +1899,7 @@
    "slope": 2.6587
   },
   {
-   "test_id": "h0068@2026-10-12",
+   "test_id": "h0068@2026-10-12#1",
    "hypothesis_id": "h0068",
    "class": "input_prices",
    "source": "mospi:wpi/nic:21",
@@ -1943,7 +1943,7 @@
    "slope": -0.0682
   },
   {
-   "test_id": "h0069@2026-10-12",
+   "test_id": "h0069@2026-10-12#1",
    "hypothesis_id": "h0069",
    "class": "demand",
    "source": "mospi:iip/nic:21",
@@ -1987,7 +1987,7 @@
    "slope": -0.1261
   },
   {
-   "test_id": "h0074@2026-10-12",
+   "test_id": "h0074@2026-10-12#1",
    "hypothesis_id": "h0074",
    "class": "input_prices",
    "source": "mospi:wpi/nic:24/basic_iron_and_steel",
@@ -2031,7 +2031,7 @@
    "slope": 0.0098
   },
   {
-   "test_id": "h0078@2026-10-12",
+   "test_id": "h0078@2026-10-12#1",
    "hypothesis_id": "h0078",
    "class": "input_prices",
    "source": "mospi:wpi/nic:26",
@@ -2075,7 +2075,7 @@
    "slope": 0.3478
   },
   {
-   "test_id": "h0079@2026-10-12",
+   "test_id": "h0079@2026-10-12#1",
    "hypothesis_id": "h0079",
    "class": "demand",
    "source": "mospi:iip/nic:26",
@@ -2119,7 +2119,7 @@
    "slope": 0.057
   },
   {
-   "test_id": "h0082@2026-10-12",
+   "test_id": "h0082@2026-10-12#1",
    "hypothesis_id": "h0082",
    "class": "input_prices",
    "source": "mospi:wpi/wpi:fuel_power/electricity",
@@ -2163,7 +2163,7 @@
    "slope": 0.0412
   },
   {
-   "test_id": "h0083@2026-10-12",
+   "test_id": "h0083@2026-10-12#1",
    "hypothesis_id": "h0083",
    "class": "demand",
    "source": "mospi:iip/iip:electricity",
@@ -2207,7 +2207,7 @@
    "slope": -0.0989
   },
   {
-   "test_id": "h0370@2026-10-12",
+   "test_id": "h0370@2026-10-12#1",
    "hypothesis_id": "h0370",
    "class": "input_prices",
    "source": "mospi:wpi/wpi:all",
@@ -2251,7 +2251,7 @@
    "slope": -0.4173
   },
   {
-   "test_id": "h0371@2026-10-12",
+   "test_id": "h0371@2026-10-12#1",
    "hypothesis_id": "h0371",
    "class": "input_prices",
    "source": "mospi:wpi/wpi:all",
@@ -2295,7 +2295,7 @@
    "slope": -0.046
   },
   {
-   "test_id": "h0372@2026-10-12",
+   "test_id": "h0372@2026-10-12#1",
    "hypothesis_id": "h0372",
    "class": "input_prices",
    "source": "mospi:wpi/wpi:all",
@@ -2339,7 +2339,7 @@
    "slope": 0.0571
   },
   {
-   "test_id": "h0376@2026-10-12",
+   "test_id": "h0376@2026-10-12#1",
    "hypothesis_id": "h0376",
    "class": "input_prices",
    "source": "mospi:wpi/nic:29/motor_vehicles+wpi/nic:30/motorcycles",
@@ -2383,7 +2383,7 @@
    "slope": -0.0603
   },
   {
-   "test_id": "h0377@2026-10-12",
+   "test_id": "h0377@2026-10-12#1",
    "hypothesis_id": "h0377",
    "class": "input_prices",
    "source": "mospi:wpi/nic:27/domestic_appliances",
@@ -2425,6 +2425,3791 @@
    },
    "critical_r": 0.396,
    "slope": -0.4861
+  },
+  {
+   "test_id": "h0001@2026-10-12#2",
+   "hypothesis_id": "h0001",
+   "class": "input_prices",
+   "source": "mospi:nas/nas:gdp",
+   "source_tide": "credit tide",
+   "target": "sibc:e_S1_III",
+   "target_label": "Non-food Credit",
+   "predicted_sign": 1,
+   "reason": "the price of what this line's borrowers sell or hold moves their borrowing",
+   "tested": "2026-10-12",
+   "through_period": {
+    "sibc": "2026-09-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "discovery": {
+    "cutoff": 24306,
+    "profile": {
+     "0": {
+      "n": 0
+     },
+     "1": {
+      "n": 0
+     },
+     "2": {
+      "n": 0
+     },
+     "3": {
+      "n": 0
+     },
+     "4": {
+      "n": 0
+     },
+     "5": {
+      "n": 0
+     },
+     "6": {
+      "n": 0
+     },
+     "7": {
+      "n": 0
+     },
+     "8": {
+      "n": 0
+     },
+     "9": {
+      "n": 0
+     }
+    },
+    "lag": null,
+    "why": "no delay had enough pairs before the cutoff"
+   }
+  },
+  {
+   "test_id": "h0002@2026-10-12#2",
+   "hypothesis_id": "h0002",
+   "class": "demand",
+   "source": "mospi:nas/nas:gdp",
+   "source_tide": "credit tide",
+   "target": "sibc:e_S1_III",
+   "target_label": "Non-food Credit",
+   "predicted_sign": 1,
+   "reason": "this line's borrowers' output moves their borrowing",
+   "tested": "2026-10-12",
+   "through_period": {
+    "sibc": "2026-09-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "discovery": {
+    "cutoff": 24306,
+    "profile": {
+     "0": {
+      "n": 0
+     },
+     "1": {
+      "n": 0
+     },
+     "2": {
+      "n": 0
+     },
+     "3": {
+      "n": 0
+     },
+     "4": {
+      "n": 0
+     },
+     "5": {
+      "n": 0
+     },
+     "6": {
+      "n": 0
+     },
+     "7": {
+      "n": 0
+     },
+     "8": {
+      "n": 0
+     },
+     "9": {
+      "n": 0
+     }
+    },
+    "lag": null,
+    "why": "no delay had enough pairs before the cutoff"
+   }
+  },
+  {
+   "test_id": "h0003@2026-10-12#2",
+   "hypothesis_id": "h0003",
+   "class": "input_prices",
+   "source": "mospi:nas/nas:agriculture",
+   "source_tide": "nas/nas:gdp",
+   "target": "sibc:e_S1_1",
+   "target_label": "Agriculture and Allied Activities",
+   "predicted_sign": 1,
+   "reason": "the price of what this line's borrowers sell or hold moves their borrowing",
+   "tested": "2026-10-12",
+   "through_period": {
+    "sibc": "2026-09-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "discovery": {
+    "cutoff": 24306,
+    "profile": {
+     "0": {
+      "n": 0
+     },
+     "1": {
+      "n": 0
+     },
+     "2": {
+      "n": 0
+     },
+     "3": {
+      "n": 0
+     },
+     "4": {
+      "n": 0
+     },
+     "5": {
+      "n": 0
+     },
+     "6": {
+      "n": 0
+     },
+     "7": {
+      "n": 0
+     },
+     "8": {
+      "n": 0
+     },
+     "9": {
+      "n": 0
+     }
+    },
+    "lag": null,
+    "why": "no delay had enough pairs before the cutoff"
+   }
+  },
+  {
+   "test_id": "h0004@2026-10-12#2",
+   "hypothesis_id": "h0004",
+   "class": "demand",
+   "source": "mospi:nas/nas:agriculture",
+   "source_tide": "nas/nas:gdp",
+   "target": "sibc:e_S1_1",
+   "target_label": "Agriculture and Allied Activities",
+   "predicted_sign": 1,
+   "reason": "this line's borrowers' output moves their borrowing",
+   "tested": "2026-10-12",
+   "through_period": {
+    "sibc": "2026-09-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "discovery": {
+    "cutoff": 24306,
+    "profile": {
+     "0": {
+      "n": 0
+     },
+     "1": {
+      "n": 0
+     },
+     "2": {
+      "n": 0
+     },
+     "3": {
+      "n": 0
+     },
+     "4": {
+      "n": 0
+     },
+     "5": {
+      "n": 0
+     },
+     "6": {
+      "n": 0
+     },
+     "7": {
+      "n": 0
+     },
+     "8": {
+      "n": 0
+     },
+     "9": {
+      "n": 0
+     }
+    },
+    "lag": null,
+    "why": "no delay had enough pairs before the cutoff"
+   }
+  },
+  {
+   "test_id": "h0005@2026-10-12#2",
+   "hypothesis_id": "h0005",
+   "class": "input_prices",
+   "source": "mospi:nas/nas:mining+nas/nas:manufacturing+nas/nas:utilities+nas/nas:construction",
+   "source_tide": "nas/nas:gdp",
+   "target": "sibc:e_S1_2",
+   "target_label": "Industry (Micro and Small, Medium and Large)",
+   "predicted_sign": 1,
+   "reason": "the price of what this line's borrowers sell or hold moves their borrowing",
+   "tested": "2026-10-12",
+   "through_period": {
+    "sibc": "2026-09-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "discovery": {
+    "cutoff": 24306,
+    "profile": {
+     "0": {
+      "n": 0
+     },
+     "1": {
+      "n": 0
+     },
+     "2": {
+      "n": 0
+     },
+     "3": {
+      "n": 0
+     },
+     "4": {
+      "n": 0
+     },
+     "5": {
+      "n": 0
+     },
+     "6": {
+      "n": 0
+     },
+     "7": {
+      "n": 0
+     },
+     "8": {
+      "n": 0
+     },
+     "9": {
+      "n": 0
+     }
+    },
+    "lag": null,
+    "why": "no delay had enough pairs before the cutoff"
+   }
+  },
+  {
+   "test_id": "h0006@2026-10-12#2",
+   "hypothesis_id": "h0006",
+   "class": "demand",
+   "source": "mospi:nas/nas:mining+nas/nas:manufacturing+nas/nas:utilities+nas/nas:construction",
+   "source_tide": "nas/nas:gdp",
+   "target": "sibc:e_S1_2",
+   "target_label": "Industry (Micro and Small, Medium and Large)",
+   "predicted_sign": 1,
+   "reason": "this line's borrowers' output moves their borrowing",
+   "tested": "2026-10-12",
+   "through_period": {
+    "sibc": "2026-09-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "discovery": {
+    "cutoff": 24306,
+    "profile": {
+     "0": {
+      "n": 0
+     },
+     "1": {
+      "n": 0
+     },
+     "2": {
+      "n": 0
+     },
+     "3": {
+      "n": 0
+     },
+     "4": {
+      "n": 0
+     },
+     "5": {
+      "n": 0
+     },
+     "6": {
+      "n": 0
+     },
+     "7": {
+      "n": 0
+     },
+     "8": {
+      "n": 0
+     },
+     "9": {
+      "n": 0
+     }
+    },
+    "lag": null,
+    "why": "no delay had enough pairs before the cutoff"
+   }
+  },
+  {
+   "test_id": "h0007@2026-10-12#2",
+   "hypothesis_id": "h0007",
+   "class": "demand",
+   "source": "mospi:nas/nas:trade_transport+nas/nas:financial_real_estate+nas/nas:public_admin_other",
+   "source_tide": "nas/nas:gdp",
+   "target": "sibc:e_S1_3",
+   "target_label": "Services",
+   "predicted_sign": 1,
+   "reason": "this line's borrowers' output moves their borrowing",
+   "tested": "2026-10-12",
+   "through_period": {
+    "sibc": "2026-09-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "discovery": {
+    "cutoff": 24306,
+    "profile": {
+     "0": {
+      "n": 0
+     },
+     "1": {
+      "n": 0
+     },
+     "2": {
+      "n": 0
+     },
+     "3": {
+      "n": 0
+     },
+     "4": {
+      "n": 0
+     },
+     "5": {
+      "n": 0
+     },
+     "6": {
+      "n": 0
+     },
+     "7": {
+      "n": 0
+     },
+     "8": {
+      "n": 0
+     },
+     "9": {
+      "n": 0
+     }
+    },
+    "lag": null,
+    "why": "no delay had enough pairs before the cutoff"
+   }
+  },
+  {
+   "test_id": "h0010@2026-10-12#2",
+   "hypothesis_id": "h0010",
+   "class": "input_prices",
+   "source": "mospi:cpi/cpi:all",
+   "source_tide": "credit tide",
+   "target": "sibc:e_S1_4_2",
+   "target_label": "Housing (Including Priority Sector Housing)",
+   "predicted_sign": 1,
+   "reason": "the price of what this line's borrowers sell or hold moves their borrowing",
+   "tested": "2026-10-12",
+   "through_period": {
+    "sibc": "2026-09-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "discovery": {
+    "cutoff": 24306,
+    "profile": {
+     "0": {
+      "n": 0
+     },
+     "1": {
+      "n": 0
+     },
+     "2": {
+      "n": 0
+     },
+     "3": {
+      "n": 0
+     },
+     "4": {
+      "n": 0
+     },
+     "5": {
+      "n": 0
+     },
+     "6": {
+      "n": 0
+     },
+     "7": {
+      "n": 0
+     },
+     "8": {
+      "n": 0
+     },
+     "9": {
+      "n": 0
+     }
+    },
+    "lag": null,
+    "why": "no delay had enough pairs before the cutoff"
+   }
+  },
+  {
+   "test_id": "h0017@2026-10-12#2",
+   "hypothesis_id": "h0017",
+   "class": "input_prices",
+   "source": "mospi:cpi/cpi:all",
+   "source_tide": "credit tide",
+   "target": "sibc:e_S1_4_8",
+   "target_label": "Loans against gold jewellery",
+   "predicted_sign": 1,
+   "reason": "the price of what this line's borrowers sell or hold moves their borrowing",
+   "tested": "2026-10-12",
+   "through_period": {
+    "sibc": "2026-09-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "discovery": {
+    "cutoff": 24306,
+    "profile": {
+     "0": {
+      "n": 0
+     },
+     "1": {
+      "n": 0
+     },
+     "2": {
+      "n": 0
+     },
+     "3": {
+      "n": 0
+     },
+     "4": {
+      "n": 0
+     },
+     "5": {
+      "n": 0
+     },
+     "6": {
+      "n": 0
+     },
+     "7": {
+      "n": 0
+     },
+     "8": {
+      "n": 0
+     },
+     "9": {
+      "n": 0
+     }
+    },
+    "lag": null,
+    "why": "no delay had enough pairs before the cutoff"
+   }
+  },
+  {
+   "test_id": "h0021@2026-10-12#2",
+   "hypothesis_id": "h0021",
+   "class": "demand",
+   "source": "mospi:iip/iip:mining",
+   "source_tide": "iip/iip:general",
+   "target": "sibc:e_S2_2_1",
+   "target_label": "Mining and Quarrying (incl. Coal)",
+   "predicted_sign": 1,
+   "reason": "this line's borrowers' output moves their borrowing",
+   "tested": "2026-10-12",
+   "through_period": {
+    "sibc": "2026-09-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 4,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 13,
+     "r": -0.046,
+     "p": 0.879
+    },
+    "1": {
+     "n": 13,
+     "r": 0.286,
+     "p": 0.342
+    },
+    "2": {
+     "n": 13,
+     "r": 0.177,
+     "p": 0.567
+    },
+    "3": {
+     "n": 13,
+     "r": 0.215,
+     "p": 0.49
+    },
+    "4": {
+     "n": 13,
+     "r": 0.468,
+     "p": 0.104
+    }
+   },
+   "critical_r": 0.553,
+   "slope": 0.6314,
+   "discovery": {
+    "cutoff": 24306,
+    "profile": {
+     "0": {
+      "n": 12,
+      "r": -0.278
+     },
+     "1": {
+      "n": 12,
+      "r": 0.369
+     },
+     "2": {
+      "n": 12,
+      "r": 0.188
+     },
+     "3": {
+      "n": 12,
+      "r": -0.301
+     },
+     "4": {
+      "n": 11,
+      "r": 0.468
+     },
+     "5": {
+      "n": 10,
+      "r": -0.222
+     },
+     "6": {
+      "n": 9
+     },
+     "7": {
+      "n": 8
+     },
+     "8": {
+      "n": 7
+     },
+     "9": {
+      "n": 6
+     }
+    },
+    "lag": 4
+   }
+  },
+  {
+   "test_id": "h0022@2026-10-12#2",
+   "hypothesis_id": "h0022",
+   "class": "input_prices",
+   "source": "mospi:wpi/nic:10",
+   "source_tide": "wpi/wpi:all",
+   "target": "sibc:e_S2_2_2",
+   "target_label": "Food Processing",
+   "predicted_sign": 1,
+   "reason": "the price of what this line's borrowers sell or hold moves their borrowing",
+   "tested": "2026-10-12",
+   "through_period": {
+    "sibc": "2026-09-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 3,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 13,
+     "r": 0.401,
+     "p": 0.177
+    },
+    "1": {
+     "n": 13,
+     "r": 0.735,
+     "p": 0.005
+    },
+    "2": {
+     "n": 13,
+     "r": 0.445,
+     "p": 0.131
+    },
+    "3": {
+     "n": 13,
+     "r": -0.23,
+     "p": 0.451
+    }
+   },
+   "critical_r": 0.616,
+   "slope": -0.774,
+   "discovery": {
+    "cutoff": 24306,
+    "profile": {
+     "0": {
+      "n": 12,
+      "r": -0.301
+     },
+     "1": {
+      "n": 12,
+      "r": -0.263
+     },
+     "2": {
+      "n": 12,
+      "r": -0.301
+     },
+     "3": {
+      "n": 12,
+      "r": 0.659
+     },
+     "4": {
+      "n": 11,
+      "r": 0.341
+     },
+     "5": {
+      "n": 10,
+      "r": -0.61
+     },
+     "6": {
+      "n": 9
+     },
+     "7": {
+      "n": 8
+     },
+     "8": {
+      "n": 7
+     },
+     "9": {
+      "n": 6
+     }
+    },
+    "lag": 3
+   }
+  },
+  {
+   "test_id": "h0023@2026-10-12#2",
+   "hypothesis_id": "h0023",
+   "class": "demand",
+   "source": "mospi:iip/nic:10",
+   "source_tide": "iip/iip:general",
+   "target": "sibc:e_S2_2_2",
+   "target_label": "Food Processing",
+   "predicted_sign": 1,
+   "reason": "this line's borrowers' output moves their borrowing",
+   "tested": "2026-10-12",
+   "through_period": {
+    "sibc": "2026-09-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 1,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 13,
+     "r": -0.385,
+     "p": 0.198
+    },
+    "1": {
+     "n": 13,
+     "r": -0.512,
+     "p": 0.074
+    },
+    "2": {
+     "n": 13,
+     "r": 0.188,
+     "p": 0.542
+    },
+    "3": {
+     "n": 13,
+     "r": 0.24,
+     "p": 0.422
+    }
+   },
+   "critical_r": 0.616,
+   "slope": -0.2918,
+   "discovery": {
+    "cutoff": 24306,
+    "profile": {
+     "0": {
+      "n": 12,
+      "r": 0.052
+     },
+     "1": {
+      "n": 12,
+      "r": 0.188
+     },
+     "2": {
+      "n": 12,
+      "r": -0.238
+     },
+     "3": {
+      "n": 12,
+      "r": 0.099
+     },
+     "4": {
+      "n": 11,
+      "r": 0.159
+     },
+     "5": {
+      "n": 10,
+      "r": -0.133
+     },
+     "6": {
+      "n": 9
+     },
+     "7": {
+      "n": 8
+     },
+     "8": {
+      "n": 7
+     },
+     "9": {
+      "n": 6
+     }
+    },
+    "lag": 1
+   }
+  },
+  {
+   "test_id": "h0025@2026-10-12#2",
+   "hypothesis_id": "h0025",
+   "class": "demand",
+   "source": "mospi:iip/nic:11+iip/nic:12",
+   "source_tide": "iip/iip:general",
+   "target": "sibc:e_S2_2_3",
+   "target_label": "Beverage and Tobacco",
+   "predicted_sign": 1,
+   "reason": "this line's borrowers' output moves their borrowing",
+   "tested": "2026-10-12",
+   "through_period": {
+    "sibc": "2026-09-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 2,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 13,
+     "r": 0.017,
+     "p": 0.953
+    },
+    "1": {
+     "n": 13,
+     "r": 0.841,
+     "p": 0.0
+    },
+    "2": {
+     "n": 13,
+     "r": -0.278,
+     "p": 0.36
+    },
+    "3": {
+     "n": 13,
+     "r": -0.12,
+     "p": 0.704
+    }
+   },
+   "critical_r": 0.553,
+   "slope": -0.1664,
+   "discovery": {
+    "cutoff": 24306,
+    "profile": {
+     "0": {
+      "n": 12,
+      "r": 0.228
+     },
+     "1": {
+      "n": 12,
+      "r": -0.197
+     },
+     "2": {
+      "n": 12,
+      "r": 0.498
+     },
+     "3": {
+      "n": 12,
+      "r": -0.245
+     },
+     "4": {
+      "n": 11,
+      "r": -0.311
+     },
+     "5": {
+      "n": 10,
+      "r": 0.407
+     },
+     "6": {
+      "n": 9
+     },
+     "7": {
+      "n": 8
+     },
+     "8": {
+      "n": 7
+     },
+     "9": {
+      "n": 6
+     }
+    },
+    "lag": 2
+   }
+  },
+  {
+   "test_id": "h0028@2026-10-12#2",
+   "hypothesis_id": "h0028",
+   "class": "input_prices",
+   "source": "mospi:wpi/nic:15",
+   "source_tide": "wpi/wpi:all",
+   "target": "sibc:e_S2_2_5",
+   "target_label": "Leather and Leather Products",
+   "predicted_sign": 1,
+   "reason": "the price of what this line's borrowers sell or hold moves their borrowing",
+   "tested": "2026-10-12",
+   "through_period": {
+    "sibc": "2026-09-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 3,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 13,
+     "r": -0.262,
+     "p": 0.387
+    },
+    "1": {
+     "n": 13,
+     "r": 0.577,
+     "p": 0.037
+    },
+    "2": {
+     "n": 13,
+     "r": -0.184,
+     "p": 0.556
+    },
+    "3": {
+     "n": 13,
+     "r": 0.131,
+     "p": 0.669
+    }
+   },
+   "critical_r": 0.616,
+   "slope": 0.5277,
+   "discovery": {
+    "cutoff": 24306,
+    "profile": {
+     "0": {
+      "n": 12,
+      "r": 0.014
+     },
+     "1": {
+      "n": 12,
+      "r": 0.043
+     },
+     "2": {
+      "n": 12,
+      "r": -0.447
+     },
+     "3": {
+      "n": 12,
+      "r": 0.394
+     },
+     "4": {
+      "n": 11,
+      "r": 0.086
+     },
+     "5": {
+      "n": 10,
+      "r": 0.115
+     },
+     "6": {
+      "n": 9
+     },
+     "7": {
+      "n": 8
+     },
+     "8": {
+      "n": 7
+     },
+     "9": {
+      "n": 6
+     }
+    },
+    "lag": 3
+   }
+  },
+  {
+   "test_id": "h0029@2026-10-12#2",
+   "hypothesis_id": "h0029",
+   "class": "demand",
+   "source": "mospi:iip/nic:15",
+   "source_tide": "iip/iip:general",
+   "target": "sibc:e_S2_2_5",
+   "target_label": "Leather and Leather Products",
+   "predicted_sign": 1,
+   "reason": "this line's borrowers' output moves their borrowing",
+   "tested": "2026-10-12",
+   "through_period": {
+    "sibc": "2026-09-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 1,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 13,
+     "r": -0.301,
+     "p": 0.303
+    },
+    "1": {
+     "n": 13,
+     "r": 0.205,
+     "p": 0.489
+    },
+    "2": {
+     "n": 13,
+     "r": -0.007,
+     "p": 0.982
+    },
+    "3": {
+     "n": 13,
+     "r": -0.023,
+     "p": 0.939
+    }
+   },
+   "critical_r": 0.616,
+   "slope": 0.0949,
+   "discovery": {
+    "cutoff": 24306,
+    "profile": {
+     "0": {
+      "n": 12,
+      "r": 0.111
+     },
+     "1": {
+      "n": 12,
+      "r": 0.164
+     },
+     "2": {
+      "n": 12,
+      "r": -0.138
+     },
+     "3": {
+      "n": 12,
+      "r": -0.118
+     },
+     "4": {
+      "n": 11,
+      "r": -0.271
+     },
+     "5": {
+      "n": 10,
+      "r": 0.071
+     },
+     "6": {
+      "n": 9
+     },
+     "7": {
+      "n": 8
+     },
+     "8": {
+      "n": 7
+     },
+     "9": {
+      "n": 6
+     }
+    },
+    "lag": 1
+   }
+  },
+  {
+   "test_id": "h0030@2026-10-12#2",
+   "hypothesis_id": "h0030",
+   "class": "input_prices",
+   "source": "mospi:wpi/nic:16",
+   "source_tide": "wpi/wpi:all",
+   "target": "sibc:e_S2_2_6",
+   "target_label": "Wood and Wood Products",
+   "predicted_sign": 1,
+   "reason": "the price of what this line's borrowers sell or hold moves their borrowing",
+   "tested": "2026-10-12",
+   "through_period": {
+    "sibc": "2026-09-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 1,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 13,
+     "r": 0.291,
+     "p": 0.333
+    },
+    "1": {
+     "n": 13,
+     "r": -0.108,
+     "p": 0.725
+    },
+    "2": {
+     "n": 13,
+     "r": 0.005,
+     "p": 0.988
+    },
+    "3": {
+     "n": 13,
+     "r": 0.194,
+     "p": 0.517
+    }
+   },
+   "critical_r": 0.616,
+   "slope": -0.1981,
+   "discovery": {
+    "cutoff": 24306,
+    "profile": {
+     "0": {
+      "n": 12,
+      "r": -0.326
+     },
+     "1": {
+      "n": 12,
+      "r": 0.795
+     },
+     "2": {
+      "n": 12,
+      "r": -0.483
+     },
+     "3": {
+      "n": 12,
+      "r": -0.058
+     },
+     "4": {
+      "n": 11,
+      "r": 0.011
+     },
+     "5": {
+      "n": 10,
+      "r": 0.057
+     },
+     "6": {
+      "n": 9
+     },
+     "7": {
+      "n": 8
+     },
+     "8": {
+      "n": 7
+     },
+     "9": {
+      "n": 6
+     }
+    },
+    "lag": 1
+   }
+  },
+  {
+   "test_id": "h0031@2026-10-12#2",
+   "hypothesis_id": "h0031",
+   "class": "demand",
+   "source": "mospi:iip/nic:16",
+   "source_tide": "iip/iip:general",
+   "target": "sibc:e_S2_2_6",
+   "target_label": "Wood and Wood Products",
+   "predicted_sign": 1,
+   "reason": "this line's borrowers' output moves their borrowing",
+   "tested": "2026-10-12",
+   "through_period": {
+    "sibc": "2026-09-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 2,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 13,
+     "r": -0.121,
+     "p": 0.687
+    },
+    "1": {
+     "n": 13,
+     "r": 0.247,
+     "p": 0.417
+    },
+    "2": {
+     "n": 13,
+     "r": 0.169,
+     "p": 0.58
+    },
+    "3": {
+     "n": 13,
+     "r": -0.328,
+     "p": 0.269
+    }
+   },
+   "critical_r": 0.616,
+   "slope": 0.0332,
+   "discovery": {
+    "cutoff": 24306,
+    "profile": {
+     "0": {
+      "n": 12,
+      "r": -0.252
+     },
+     "1": {
+      "n": 12,
+      "r": 0.099
+     },
+     "2": {
+      "n": 12,
+      "r": 0.237
+     },
+     "3": {
+      "n": 12,
+      "r": -0.238
+     },
+     "4": {
+      "n": 11,
+      "r": 0.184
+     },
+     "5": {
+      "n": 10,
+      "r": -0.273
+     },
+     "6": {
+      "n": 9
+     },
+     "7": {
+      "n": 8
+     },
+     "8": {
+      "n": 7
+     },
+     "9": {
+      "n": 6
+     }
+    },
+    "lag": 2
+   }
+  },
+  {
+   "test_id": "h0032@2026-10-12#2",
+   "hypothesis_id": "h0032",
+   "class": "input_prices",
+   "source": "mospi:wpi/nic:17",
+   "source_tide": "wpi/wpi:all",
+   "target": "sibc:e_S2_2_7",
+   "target_label": "Paper and Paper Products",
+   "predicted_sign": 1,
+   "reason": "the price of what this line's borrowers sell or hold moves their borrowing",
+   "tested": "2026-10-12",
+   "through_period": {
+    "sibc": "2026-09-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 1,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 13,
+     "r": 0.095,
+     "p": 0.764
+    },
+    "1": {
+     "n": 13,
+     "r": 0.167,
+     "p": 0.592
+    },
+    "2": {
+     "n": 13,
+     "r": 0.015,
+     "p": 0.961
+    },
+    "3": {
+     "n": 13,
+     "r": 0.13,
+     "p": 0.679
+    }
+   },
+   "critical_r": 0.616,
+   "slope": 0.3544,
+   "discovery": {
+    "cutoff": 24306,
+    "profile": {
+     "0": {
+      "n": 12,
+      "r": 0.337
+     },
+     "1": {
+      "n": 12,
+      "r": 0.807
+     },
+     "2": {
+      "n": 12,
+      "r": 0.275
+     },
+     "3": {
+      "n": 12,
+      "r": -0.095
+     },
+     "4": {
+      "n": 11,
+      "r": 0.372
+     },
+     "5": {
+      "n": 10,
+      "r": 0.59
+     },
+     "6": {
+      "n": 9
+     },
+     "7": {
+      "n": 8
+     },
+     "8": {
+      "n": 7
+     },
+     "9": {
+      "n": 6
+     }
+    },
+    "lag": 1
+   }
+  },
+  {
+   "test_id": "h0033@2026-10-12#2",
+   "hypothesis_id": "h0033",
+   "class": "demand",
+   "source": "mospi:iip/nic:17",
+   "source_tide": "iip/iip:general",
+   "target": "sibc:e_S2_2_7",
+   "target_label": "Paper and Paper Products",
+   "predicted_sign": 1,
+   "reason": "this line's borrowers' output moves their borrowing",
+   "tested": "2026-10-12",
+   "through_period": {
+    "sibc": "2026-09-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 3,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 13,
+     "r": -0.45,
+     "p": 0.118
+    },
+    "1": {
+     "n": 13,
+     "r": -0.045,
+     "p": 0.884
+    },
+    "2": {
+     "n": 13,
+     "r": 0.672,
+     "p": 0.015
+    },
+    "3": {
+     "n": 13,
+     "r": -0.051,
+     "p": 0.87
+    }
+   },
+   "critical_r": 0.616,
+   "slope": -0.0189,
+   "discovery": {
+    "cutoff": 24306,
+    "profile": {
+     "0": {
+      "n": 12,
+      "r": 0.217
+     },
+     "1": {
+      "n": 12,
+      "r": 0.055
+     },
+     "2": {
+      "n": 12,
+      "r": -0.576
+     },
+     "3": {
+      "n": 12,
+      "r": 0.435
+     },
+     "4": {
+      "n": 11,
+      "r": 0.272
+     },
+     "5": {
+      "n": 10,
+      "r": -0.412
+     },
+     "6": {
+      "n": 9
+     },
+     "7": {
+      "n": 8
+     },
+     "8": {
+      "n": 7
+     },
+     "9": {
+      "n": 6
+     }
+    },
+    "lag": 3
+   }
+  },
+  {
+   "test_id": "h0034@2026-10-12#2",
+   "hypothesis_id": "h0034",
+   "class": "input_prices",
+   "source": "mospi:wpi/wpi:fuel_power/mineral_oils",
+   "source_tide": "wpi/wpi:all",
+   "target": "sibc:e_S2_2_8",
+   "target_label": "Petroleum, Coal Products and Nuclear Fuels",
+   "predicted_sign": 1,
+   "reason": "the price of what this line's borrowers sell or hold moves their borrowing",
+   "tested": "2026-10-12",
+   "through_period": {
+    "sibc": "2026-09-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "opposite",
+   "at_lag": 3,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 13,
+     "r": 0.234,
+     "p": 0.442
+    },
+    "1": {
+     "n": 13,
+     "r": 0.175,
+     "p": 0.565
+    },
+    "2": {
+     "n": 13,
+     "r": 0.101,
+     "p": 0.733
+    },
+    "3": {
+     "n": 13,
+     "r": -0.721,
+     "p": 0.006
+    }
+   },
+   "critical_r": 0.616,
+   "slope": -1.3046,
+   "discovery": {
+    "cutoff": 24306,
+    "profile": {
+     "0": {
+      "n": 12,
+      "r": -0.389
+     },
+     "1": {
+      "n": 12,
+      "r": -0.151
+     },
+     "2": {
+      "n": 12,
+      "r": 0.166
+     },
+     "3": {
+      "n": 12,
+      "r": 0.343
+     },
+     "4": {
+      "n": 11,
+      "r": -0.243
+     },
+     "5": {
+      "n": 10,
+      "r": 0.074
+     },
+     "6": {
+      "n": 9
+     },
+     "7": {
+      "n": 8
+     },
+     "8": {
+      "n": 7
+     },
+     "9": {
+      "n": 6
+     }
+    },
+    "lag": 3
+   }
+  },
+  {
+   "test_id": "h0035@2026-10-12#2",
+   "hypothesis_id": "h0035",
+   "class": "demand",
+   "source": "mospi:iip/nic:19",
+   "source_tide": "iip/iip:general",
+   "target": "sibc:e_S2_2_8",
+   "target_label": "Petroleum, Coal Products and Nuclear Fuels",
+   "predicted_sign": 1,
+   "reason": "this line's borrowers' output moves their borrowing",
+   "tested": "2026-10-12",
+   "through_period": {
+    "sibc": "2026-09-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 0,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 13,
+     "r": 0.118,
+     "p": 0.702
+    },
+    "1": {
+     "n": 13,
+     "r": -0.212,
+     "p": 0.491
+    },
+    "2": {
+     "n": 13,
+     "r": -0.244,
+     "p": 0.422
+    },
+    "3": {
+     "n": 13,
+     "r": 0.236,
+     "p": 0.441
+    }
+   },
+   "critical_r": 0.616,
+   "slope": 0.3769,
+   "discovery": {
+    "cutoff": 24306,
+    "profile": {
+     "0": {
+      "n": 12,
+      "r": 0.332
+     },
+     "1": {
+      "n": 12,
+      "r": 0.159
+     },
+     "2": {
+      "n": 12,
+      "r": 0.19
+     },
+     "3": {
+      "n": 12,
+      "r": -0.008
+     },
+     "4": {
+      "n": 11,
+      "r": -0.494
+     },
+     "5": {
+      "n": 10,
+      "r": -0.055
+     },
+     "6": {
+      "n": 9
+     },
+     "7": {
+      "n": 8
+     },
+     "8": {
+      "n": 7
+     },
+     "9": {
+      "n": 6
+     }
+    },
+    "lag": 0
+   }
+  },
+  {
+   "test_id": "h0037@2026-10-12#2",
+   "hypothesis_id": "h0037",
+   "class": "demand",
+   "source": "mospi:iip/nic:20+iip/nic:21",
+   "source_tide": "iip/iip:general",
+   "target": "sibc:e_S2_2_9",
+   "target_label": "Chemicals and Chemical Products",
+   "predicted_sign": 1,
+   "reason": "this line's borrowers' output moves their borrowing",
+   "tested": "2026-10-12",
+   "through_period": {
+    "sibc": "2026-09-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 3,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 13,
+     "r": 0.355,
+     "p": 0.196
+    },
+    "1": {
+     "n": 13,
+     "r": -0.77,
+     "p": 0.026
+    },
+    "2": {
+     "n": 13,
+     "r": 0.011,
+     "p": 0.966
+    },
+    "3": {
+     "n": 13,
+     "r": 0.105,
+     "p": 0.703
+    }
+   },
+   "critical_r": 0.553,
+   "slope": 0.0561,
+   "discovery": {
+    "cutoff": 24306,
+    "profile": {
+     "0": {
+      "n": 12,
+      "r": 0.291
+     },
+     "1": {
+      "n": 12,
+      "r": 0.005
+     },
+     "2": {
+      "n": 12,
+      "r": -0.301
+     },
+     "3": {
+      "n": 12,
+      "r": 0.518
+     },
+     "4": {
+      "n": 11,
+      "r": -0.647
+     },
+     "5": {
+      "n": 10,
+      "r": 0.13
+     },
+     "6": {
+      "n": 9
+     },
+     "7": {
+      "n": 8
+     },
+     "8": {
+      "n": 7
+     },
+     "9": {
+      "n": 6
+     }
+    },
+    "lag": 3
+   }
+  },
+  {
+   "test_id": "h0038@2026-10-12#2",
+   "hypothesis_id": "h0038",
+   "class": "input_prices",
+   "source": "mospi:wpi/nic:22",
+   "source_tide": "wpi/wpi:all",
+   "target": "sibc:e_S2_2_10",
+   "target_label": "Rubber, Plastic and their Products",
+   "predicted_sign": 1,
+   "reason": "the price of what this line's borrowers sell or hold moves their borrowing",
+   "tested": "2026-10-12",
+   "through_period": {
+    "sibc": "2026-09-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 1,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 13,
+     "r": -0.012,
+     "p": 0.976
+    },
+    "1": {
+     "n": 13,
+     "r": -0.218,
+     "p": 0.547
+    },
+    "2": {
+     "n": 13,
+     "r": 0.347,
+     "p": 0.255
+    },
+    "3": {
+     "n": 13,
+     "r": 0.096,
+     "p": 0.808
+    }
+   },
+   "critical_r": 0.616,
+   "slope": -0.3145,
+   "discovery": {
+    "cutoff": 24306,
+    "profile": {
+     "0": {
+      "n": 12,
+      "r": -0.136
+     },
+     "1": {
+      "n": 12,
+      "r": 0.45
+     },
+     "2": {
+      "n": 12,
+      "r": 0.395
+     },
+     "3": {
+      "n": 12,
+      "r": 0.053
+     },
+     "4": {
+      "n": 11,
+      "r": -0.158
+     },
+     "5": {
+      "n": 10,
+      "r": 0.282
+     },
+     "6": {
+      "n": 9
+     },
+     "7": {
+      "n": 8
+     },
+     "8": {
+      "n": 7
+     },
+     "9": {
+      "n": 6
+     }
+    },
+    "lag": 1
+   }
+  },
+  {
+   "test_id": "h0039@2026-10-12#2",
+   "hypothesis_id": "h0039",
+   "class": "demand",
+   "source": "mospi:iip/nic:22",
+   "source_tide": "iip/iip:general",
+   "target": "sibc:e_S2_2_10",
+   "target_label": "Rubber, Plastic and their Products",
+   "predicted_sign": 1,
+   "reason": "this line's borrowers' output moves their borrowing",
+   "tested": "2026-10-12",
+   "through_period": {
+    "sibc": "2026-09-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 3,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 13,
+     "r": -0.31,
+     "p": 0.332
+    },
+    "1": {
+     "n": 13,
+     "r": 0.338,
+     "p": 0.292
+    },
+    "2": {
+     "n": 13,
+     "r": -0.005,
+     "p": 0.984
+    },
+    "3": {
+     "n": 13,
+     "r": -0.038,
+     "p": 0.886
+    }
+   },
+   "critical_r": 0.616,
+   "slope": -0.0077,
+   "discovery": {
+    "cutoff": 24306,
+    "profile": {
+     "0": {
+      "n": 12,
+      "r": -0.242
+     },
+     "1": {
+      "n": 12,
+      "r": 0.064
+     },
+     "2": {
+      "n": 12,
+      "r": -0.294
+     },
+     "3": {
+      "n": 12,
+      "r": 0.353
+     },
+     "4": {
+      "n": 11,
+      "r": 0.045
+     },
+     "5": {
+      "n": 10,
+      "r": -0.123
+     },
+     "6": {
+      "n": 9
+     },
+     "7": {
+      "n": 8
+     },
+     "8": {
+      "n": 7
+     },
+     "9": {
+      "n": 6
+     }
+    },
+    "lag": 3
+   }
+  },
+  {
+   "test_id": "h0040@2026-10-12#2",
+   "hypothesis_id": "h0040",
+   "class": "input_prices",
+   "source": "mospi:wpi/nic:23/glass_and_glass_products",
+   "source_tide": "wpi/wpi:all",
+   "target": "sibc:e_S2_2_11",
+   "target_label": "Glass and Glassware",
+   "predicted_sign": 1,
+   "reason": "the price of what this line's borrowers sell or hold moves their borrowing",
+   "tested": "2026-10-12",
+   "through_period": {
+    "sibc": "2026-09-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 0,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 13,
+     "r": 0.16,
+     "p": 0.601
+    },
+    "1": {
+     "n": 13,
+     "r": -0.551,
+     "p": 0.051
+    },
+    "2": {
+     "n": 13,
+     "r": 0.22,
+     "p": 0.476
+    },
+    "3": {
+     "n": 13,
+     "r": -0.073,
+     "p": 0.817
+    }
+   },
+   "critical_r": 0.553,
+   "slope": 0.8099,
+   "discovery": {
+    "cutoff": 24306,
+    "profile": {
+     "0": {
+      "n": 12,
+      "r": 0.003
+     },
+     "1": {
+      "n": 12,
+      "r": -0.469
+     },
+     "2": {
+      "n": 12,
+      "r": -0.559
+     },
+     "3": {
+      "n": 12,
+      "r": -0.49
+     },
+     "4": {
+      "n": 11,
+      "r": -0.512
+     },
+     "5": {
+      "n": 10,
+      "r": -0.131
+     },
+     "6": {
+      "n": 9
+     },
+     "7": {
+      "n": 8
+     },
+     "8": {
+      "n": 7
+     },
+     "9": {
+      "n": 6
+     }
+    },
+    "lag": 0
+   }
+  },
+  {
+   "test_id": "h0042@2026-10-12#2",
+   "hypothesis_id": "h0042",
+   "class": "input_prices",
+   "source": "mospi:wpi/nic:23/cement_lime_and_plaster",
+   "source_tide": "wpi/wpi:all",
+   "target": "sibc:e_S2_2_12",
+   "target_label": "Cement and Cement Products",
+   "predicted_sign": 1,
+   "reason": "the price of what this line's borrowers sell or hold moves their borrowing",
+   "tested": "2026-10-12",
+   "through_period": {
+    "sibc": "2026-09-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 1,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 13,
+     "r": -0.085,
+     "p": 0.79
+    },
+    "1": {
+     "n": 13,
+     "r": 0.242,
+     "p": 0.433
+    },
+    "2": {
+     "n": 13,
+     "r": 0.247,
+     "p": 0.423
+    },
+    "3": {
+     "n": 13,
+     "r": -0.079,
+     "p": 0.797
+    }
+   },
+   "critical_r": 0.553,
+   "slope": 0.308,
+   "discovery": {
+    "cutoff": 24306,
+    "profile": {
+     "0": {
+      "n": 12,
+      "r": 0.245
+     },
+     "1": {
+      "n": 12,
+      "r": 0.257
+     },
+     "2": {
+      "n": 12,
+      "r": -0.275
+     },
+     "3": {
+      "n": 12,
+      "r": 0.122
+     },
+     "4": {
+      "n": 11,
+      "r": 0.24
+     },
+     "5": {
+      "n": 10,
+      "r": -0.438
+     },
+     "6": {
+      "n": 9
+     },
+     "7": {
+      "n": 8
+     },
+     "8": {
+      "n": 7
+     },
+     "9": {
+      "n": 6
+     }
+    },
+    "lag": 1
+   }
+  },
+  {
+   "test_id": "h0045@2026-10-12#2",
+   "hypothesis_id": "h0045",
+   "class": "demand",
+   "source": "mospi:iip/nic:24+iip/nic:25",
+   "source_tide": "iip/iip:general",
+   "target": "sibc:e_S2_2_13",
+   "target_label": "Basic Metal and Metal Product",
+   "predicted_sign": 1,
+   "reason": "this line's borrowers' output moves their borrowing",
+   "tested": "2026-10-12",
+   "through_period": {
+    "sibc": "2026-09-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 5,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 13,
+     "r": -0.019,
+     "p": 0.95
+    },
+    "1": {
+     "n": 13,
+     "r": 0.043,
+     "p": 0.889
+    },
+    "2": {
+     "n": 13,
+     "r": 0.117,
+     "p": 0.708
+    },
+    "3": {
+     "n": 13,
+     "r": -0.057,
+     "p": 0.853
+    },
+    "5": {
+     "n": 13,
+     "r": -0.276,
+     "p": 0.356
+    }
+   },
+   "critical_r": 0.553,
+   "slope": -0.1459,
+   "discovery": {
+    "cutoff": 24306,
+    "profile": {
+     "0": {
+      "n": 12,
+      "r": -0.044
+     },
+     "1": {
+      "n": 12,
+      "r": -0.249
+     },
+     "2": {
+      "n": 12,
+      "r": 0.48
+     },
+     "3": {
+      "n": 12,
+      "r": 0.11
+     },
+     "4": {
+      "n": 11,
+      "r": -0.126
+     },
+     "5": {
+      "n": 10,
+      "r": 0.572
+     },
+     "6": {
+      "n": 9
+     },
+     "7": {
+      "n": 8
+     },
+     "8": {
+      "n": 7
+     },
+     "9": {
+      "n": 6
+     }
+    },
+    "lag": 5
+   }
+  },
+  {
+   "test_id": "h0047@2026-10-12#2",
+   "hypothesis_id": "h0047",
+   "class": "demand",
+   "source": "mospi:iip/nic:26+iip/nic:27+iip/nic:28",
+   "source_tide": "iip/iip:general",
+   "target": "sibc:e_S2_2_14",
+   "target_label": "All Engineering",
+   "predicted_sign": 1,
+   "reason": "this line's borrowers' output moves their borrowing",
+   "tested": "2026-10-12",
+   "through_period": {
+    "sibc": "2026-09-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 3,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 13,
+     "r": 0.129,
+     "p": 0.668
+    },
+    "1": {
+     "n": 13,
+     "r": 0.105,
+     "p": 0.729
+    },
+    "2": {
+     "n": 13,
+     "r": -0.085,
+     "p": 0.791
+    },
+    "3": {
+     "n": 13,
+     "r": 0.207,
+     "p": 0.501
+    }
+   },
+   "critical_r": 0.553,
+   "slope": 0.2024,
+   "discovery": {
+    "cutoff": 24306,
+    "profile": {
+     "0": {
+      "n": 12,
+      "r": 0.151
+     },
+     "1": {
+      "n": 12,
+      "r": -0.267
+     },
+     "2": {
+      "n": 12,
+      "r": 0.157
+     },
+     "3": {
+      "n": 12,
+      "r": 0.516
+     },
+     "4": {
+      "n": 11,
+      "r": -0.349
+     },
+     "5": {
+      "n": 10,
+      "r": -0.258
+     },
+     "6": {
+      "n": 9
+     },
+     "7": {
+      "n": 8
+     },
+     "8": {
+      "n": 7
+     },
+     "9": {
+      "n": 6
+     }
+    },
+    "lag": 3
+   }
+  },
+  {
+   "test_id": "h0049@2026-10-12#2",
+   "hypothesis_id": "h0049",
+   "class": "demand",
+   "source": "mospi:iip/nic:29+iip/nic:30",
+   "source_tide": "iip/iip:general",
+   "target": "sibc:e_S2_2_15",
+   "target_label": "Vehicles, Vehicle Parts and Transport Equipment",
+   "predicted_sign": 1,
+   "reason": "this line's borrowers' output moves their borrowing",
+   "tested": "2026-10-12",
+   "through_period": {
+    "sibc": "2026-09-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 0,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 13,
+     "r": -0.003,
+     "p": 0.993
+    },
+    "1": {
+     "n": 13,
+     "r": 0.252,
+     "p": 0.408
+    },
+    "2": {
+     "n": 13,
+     "r": 0.04,
+     "p": 0.9
+    },
+    "3": {
+     "n": 13,
+     "r": -0.369,
+     "p": 0.215
+    }
+   },
+   "critical_r": 0.553,
+   "slope": -0.0026,
+   "discovery": {
+    "cutoff": 24306,
+    "profile": {
+     "0": {
+      "n": 12,
+      "r": 0.574
+     },
+     "1": {
+      "n": 12,
+      "r": -0.413
+     },
+     "2": {
+      "n": 12,
+      "r": -0.082
+     },
+     "3": {
+      "n": 12,
+      "r": 0.203
+     },
+     "4": {
+      "n": 11,
+      "r": -0.325
+     },
+     "5": {
+      "n": 10,
+      "r": 0.175
+     },
+     "6": {
+      "n": 9
+     },
+     "7": {
+      "n": 8
+     },
+     "8": {
+      "n": 7
+     },
+     "9": {
+      "n": 6
+     }
+    },
+    "lag": 0
+   }
+  },
+  {
+   "test_id": "h0050@2026-10-12#2",
+   "hypothesis_id": "h0050",
+   "class": "input_prices",
+   "source": "mospi:wpi/nic:32/jewellery_and_related_articles",
+   "source_tide": "wpi/wpi:all",
+   "target": "sibc:e_S2_2_16",
+   "target_label": "Gems and Jewellery",
+   "predicted_sign": 1,
+   "reason": "the price of what this line's borrowers sell or hold moves their borrowing",
+   "tested": "2026-10-12",
+   "through_period": {
+    "sibc": "2026-09-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 3,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 13,
+     "r": -0.098,
+     "p": 0.696
+    },
+    "1": {
+     "n": 13,
+     "r": 0.321,
+     "p": 0.232
+    },
+    "2": {
+     "n": 13,
+     "r": 0.069,
+     "p": 0.781
+    },
+    "3": {
+     "n": 13,
+     "r": -0.176,
+     "p": 0.504
+    }
+   },
+   "critical_r": 0.553,
+   "slope": -0.2179,
+   "discovery": {
+    "cutoff": 24306,
+    "profile": {
+     "0": {
+      "n": 12,
+      "r": 0.102
+     },
+     "1": {
+      "n": 12,
+      "r": -0.352
+     },
+     "2": {
+      "n": 12,
+      "r": 0.141
+     },
+     "3": {
+      "n": 12,
+      "r": 0.485
+     },
+     "4": {
+      "n": 11,
+      "r": -0.446
+     },
+     "5": {
+      "n": 10,
+      "r": 0.002
+     },
+     "6": {
+      "n": 9
+     },
+     "7": {
+      "n": 8
+     },
+     "8": {
+      "n": 7
+     },
+     "9": {
+      "n": 6
+     }
+    },
+    "lag": 3
+   }
+  },
+  {
+   "test_id": "h0058@2026-10-12#2",
+   "hypothesis_id": "h0058",
+   "class": "input_prices",
+   "source": "mospi:wpi/nic:10/sugar",
+   "source_tide": "wpi/wpi:all",
+   "target": "sibc:e_S2_2_2_1",
+   "target_label": "Sugar",
+   "predicted_sign": 1,
+   "reason": "the price of what this line's borrowers sell or hold moves their borrowing",
+   "tested": "2026-10-12",
+   "through_period": {
+    "sibc": "2026-09-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 5,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 13,
+     "r": -0.232,
+     "p": 0.446
+    },
+    "1": {
+     "n": 13,
+     "r": -0.038,
+     "p": 0.903
+    },
+    "2": {
+     "n": 13,
+     "r": 0.304,
+     "p": 0.32
+    },
+    "3": {
+     "n": 13,
+     "r": 0.254,
+     "p": 0.407
+    },
+    "5": {
+     "n": 13,
+     "r": 0.421,
+     "p": 0.152
+    }
+   },
+   "critical_r": 0.553,
+   "slope": 1.0008,
+   "discovery": {
+    "cutoff": 24306,
+    "profile": {
+     "0": {
+      "n": 12,
+      "r": 0.053
+     },
+     "1": {
+      "n": 12,
+      "r": -0.076
+     },
+     "2": {
+      "n": 12,
+      "r": -0.439
+     },
+     "3": {
+      "n": 12,
+      "r": -0.41
+     },
+     "4": {
+      "n": 11,
+      "r": -0.375
+     },
+     "5": {
+      "n": 10,
+      "r": 0.413
+     },
+     "6": {
+      "n": 9
+     },
+     "7": {
+      "n": 8
+     },
+     "8": {
+      "n": 7
+     },
+     "9": {
+      "n": 6
+     }
+    },
+    "lag": 5
+   }
+  },
+  {
+   "test_id": "h0060@2026-10-12#2",
+   "hypothesis_id": "h0060",
+   "class": "input_prices",
+   "source": "mospi:wpi/nic:10/vegetable_and_animal_oils_and_fats",
+   "source_tide": "wpi/wpi:all",
+   "target": "sibc:e_S2_2_2_2",
+   "target_label": "Edible Oils and Vanaspati",
+   "predicted_sign": 1,
+   "reason": "the price of what this line's borrowers sell or hold moves their borrowing",
+   "tested": "2026-10-12",
+   "through_period": {
+    "sibc": "2026-09-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 1,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 13,
+     "r": -0.091,
+     "p": 0.777
+    },
+    "1": {
+     "n": 13,
+     "r": 0.243,
+     "p": 0.421
+    },
+    "2": {
+     "n": 13,
+     "r": 0.454,
+     "p": 0.121
+    },
+    "3": {
+     "n": 13,
+     "r": -0.115,
+     "p": 0.711
+    }
+   },
+   "critical_r": 0.553,
+   "slope": 0.382,
+   "discovery": {
+    "cutoff": 24306,
+    "profile": {
+     "0": {
+      "n": 12,
+      "r": -0.12
+     },
+     "1": {
+      "n": 12,
+      "r": 0.556
+     },
+     "2": {
+      "n": 12,
+      "r": -0.42
+     },
+     "3": {
+      "n": 12,
+      "r": -0.148
+     },
+     "4": {
+      "n": 11,
+      "r": 0.504
+     },
+     "5": {
+      "n": 10,
+      "r": 0.142
+     },
+     "6": {
+      "n": 9
+     },
+     "7": {
+      "n": 8
+     },
+     "8": {
+      "n": 7
+     },
+     "9": {
+      "n": 6
+     }
+    },
+    "lag": 1
+   }
+  },
+  {
+   "test_id": "h0066@2026-10-12#2",
+   "hypothesis_id": "h0066",
+   "class": "input_prices",
+   "source": "mospi:wpi/nic:20/fertilizers_and_nitrogen_compounds",
+   "source_tide": "wpi/wpi:all",
+   "target": "sibc:e_S2_2_9_1",
+   "target_label": "Fertiliser",
+   "predicted_sign": 1,
+   "reason": "the price of what this line's borrowers sell or hold moves their borrowing",
+   "tested": "2026-10-12",
+   "through_period": {
+    "sibc": "2026-09-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 2,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 13,
+     "r": 0.265,
+     "p": 0.428
+    },
+    "1": {
+     "n": 13,
+     "r": 0.469,
+     "p": 0.087
+    },
+    "2": {
+     "n": 13,
+     "r": 0.356,
+     "p": 0.249
+    },
+    "3": {
+     "n": 13,
+     "r": 0.267,
+     "p": 0.417
+    }
+   },
+   "critical_r": 0.616,
+   "slope": 3.7974,
+   "discovery": {
+    "cutoff": 24306,
+    "profile": {
+     "0": {
+      "n": 12,
+      "r": -0.546
+     },
+     "1": {
+      "n": 12,
+      "r": 0.358
+     },
+     "2": {
+      "n": 12,
+      "r": 0.469
+     },
+     "3": {
+      "n": 12,
+      "r": 0.398
+     },
+     "4": {
+      "n": 11,
+      "r": 0.068
+     },
+     "5": {
+      "n": 10,
+      "r": -0.326
+     },
+     "6": {
+      "n": 9
+     },
+     "7": {
+      "n": 8
+     },
+     "8": {
+      "n": 7
+     },
+     "9": {
+      "n": 6
+     }
+    },
+    "lag": 2
+   }
+  },
+  {
+   "test_id": "h0068@2026-10-12#2",
+   "hypothesis_id": "h0068",
+   "class": "input_prices",
+   "source": "mospi:wpi/nic:21",
+   "source_tide": "wpi/wpi:all",
+   "target": "sibc:e_S2_2_9_2",
+   "target_label": "Drugs and Pharmaceuticals",
+   "predicted_sign": 1,
+   "reason": "the price of what this line's borrowers sell or hold moves their borrowing",
+   "tested": "2026-10-12",
+   "through_period": {
+    "sibc": "2026-09-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 2,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 13,
+     "r": 0.023,
+     "p": 0.935
+    },
+    "1": {
+     "n": 13,
+     "r": -0.224,
+     "p": 0.449
+    },
+    "2": {
+     "n": 13,
+     "r": -0.175,
+     "p": 0.565
+    },
+    "3": {
+     "n": 13,
+     "r": 0.167,
+     "p": 0.579
+    }
+   },
+   "critical_r": 0.616,
+   "slope": -1.2688,
+   "discovery": {
+    "cutoff": 24306,
+    "profile": {
+     "0": {
+      "n": 12,
+      "r": -0.168
+     },
+     "1": {
+      "n": 12,
+      "r": -0.439
+     },
+     "2": {
+      "n": 12,
+      "r": 0.4
+     },
+     "3": {
+      "n": 12,
+      "r": 0.343
+     },
+     "4": {
+      "n": 11,
+      "r": 0.137
+     },
+     "5": {
+      "n": 10,
+      "r": -0.233
+     },
+     "6": {
+      "n": 9
+     },
+     "7": {
+      "n": 8
+     },
+     "8": {
+      "n": 7
+     },
+     "9": {
+      "n": 6
+     }
+    },
+    "lag": 2
+   }
+  },
+  {
+   "test_id": "h0069@2026-10-12#2",
+   "hypothesis_id": "h0069",
+   "class": "demand",
+   "source": "mospi:iip/nic:21",
+   "source_tide": "iip/iip:general",
+   "target": "sibc:e_S2_2_9_2",
+   "target_label": "Drugs and Pharmaceuticals",
+   "predicted_sign": 1,
+   "reason": "this line's borrowers' output moves their borrowing",
+   "tested": "2026-10-12",
+   "through_period": {
+    "sibc": "2026-09-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 4,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 13,
+     "r": -0.394,
+     "p": 0.187
+    },
+    "1": {
+     "n": 13,
+     "r": 0.772,
+     "p": 0.003
+    },
+    "2": {
+     "n": 13,
+     "r": 0.042,
+     "p": 0.883
+    },
+    "3": {
+     "n": 13,
+     "r": 0.026,
+     "p": 0.932
+    },
+    "4": {
+     "n": 13,
+     "r": -0.024,
+     "p": 0.935
+    }
+   },
+   "critical_r": 0.616,
+   "slope": -0.0152,
+   "discovery": {
+    "cutoff": 24306,
+    "profile": {
+     "0": {
+      "n": 12,
+      "r": -0.096
+     },
+     "1": {
+      "n": 12,
+      "r": -0.026
+     },
+     "2": {
+      "n": 12,
+      "r": 0.032
+     },
+     "3": {
+      "n": 12,
+      "r": -0.018
+     },
+     "4": {
+      "n": 11,
+      "r": 0.392
+     },
+     "5": {
+      "n": 10,
+      "r": -0.294
+     },
+     "6": {
+      "n": 9
+     },
+     "7": {
+      "n": 8
+     },
+     "8": {
+      "n": 7
+     },
+     "9": {
+      "n": 6
+     }
+    },
+    "lag": 4
+   }
+  },
+  {
+   "test_id": "h0074@2026-10-12#2",
+   "hypothesis_id": "h0074",
+   "class": "input_prices",
+   "source": "mospi:wpi/nic:24/basic_iron_and_steel",
+   "source_tide": "wpi/wpi:all",
+   "target": "sibc:e_S2_2_13_1",
+   "target_label": "Iron and Steel",
+   "predicted_sign": 1,
+   "reason": "the price of what this line's borrowers sell or hold moves their borrowing",
+   "tested": "2026-10-12",
+   "through_period": {
+    "sibc": "2026-09-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 3,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 13,
+     "r": 0.086,
+     "p": 0.782
+    },
+    "1": {
+     "n": 13,
+     "r": 0.042,
+     "p": 0.891
+    },
+    "2": {
+     "n": 13,
+     "r": 0.612,
+     "p": 0.025
+    },
+    "3": {
+     "n": 13,
+     "r": 0.178,
+     "p": 0.554
+    }
+   },
+   "critical_r": 0.553,
+   "slope": 0.1056,
+   "discovery": {
+    "cutoff": 24306,
+    "profile": {
+     "0": {
+      "n": 12,
+      "r": -0.025
+     },
+     "1": {
+      "n": 12,
+      "r": -0.179
+     },
+     "2": {
+      "n": 12,
+      "r": 0.042
+     },
+     "3": {
+      "n": 12,
+      "r": 0.774
+     },
+     "4": {
+      "n": 11,
+      "r": -0.261
+     },
+     "5": {
+      "n": 10,
+      "r": 0.31
+     },
+     "6": {
+      "n": 9
+     },
+     "7": {
+      "n": 8
+     },
+     "8": {
+      "n": 7
+     },
+     "9": {
+      "n": 6
+     }
+    },
+    "lag": 3
+   }
+  },
+  {
+   "test_id": "h0078@2026-10-12#2",
+   "hypothesis_id": "h0078",
+   "class": "input_prices",
+   "source": "mospi:wpi/nic:26",
+   "source_tide": "wpi/wpi:all",
+   "target": "sibc:e_S2_2_14_1",
+   "target_label": "Electronics",
+   "predicted_sign": 1,
+   "reason": "the price of what this line's borrowers sell or hold moves their borrowing",
+   "tested": "2026-10-12",
+   "through_period": {
+    "sibc": "2026-09-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 4,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 13,
+     "r": 0.004,
+     "p": 0.991
+    },
+    "1": {
+     "n": 13,
+     "r": 0.141,
+     "p": 0.652
+    },
+    "2": {
+     "n": 13,
+     "r": -0.077,
+     "p": 0.811
+    },
+    "3": {
+     "n": 13,
+     "r": -0.387,
+     "p": 0.199
+    },
+    "4": {
+     "n": 13,
+     "r": 0.54,
+     "p": 0.05
+    }
+   },
+   "critical_r": 0.616,
+   "slope": 1.9717,
+   "discovery": {
+    "cutoff": 24306,
+    "profile": {
+     "0": {
+      "n": 12,
+      "r": 0.123
+     },
+     "1": {
+      "n": 12,
+      "r": 0.039
+     },
+     "2": {
+      "n": 12,
+      "r": 0.429
+     },
+     "3": {
+      "n": 12,
+      "r": -0.876
+     },
+     "4": {
+      "n": 11,
+      "r": 0.628
+     },
+     "5": {
+      "n": 10,
+      "r": 0.048
+     },
+     "6": {
+      "n": 9
+     },
+     "7": {
+      "n": 8
+     },
+     "8": {
+      "n": 7
+     },
+     "9": {
+      "n": 6
+     }
+    },
+    "lag": 4
+   }
+  },
+  {
+   "test_id": "h0079@2026-10-12#2",
+   "hypothesis_id": "h0079",
+   "class": "demand",
+   "source": "mospi:iip/nic:26",
+   "source_tide": "iip/iip:general",
+   "target": "sibc:e_S2_2_14_1",
+   "target_label": "Electronics",
+   "predicted_sign": 1,
+   "reason": "this line's borrowers' output moves their borrowing",
+   "tested": "2026-10-12",
+   "through_period": {
+    "sibc": "2026-09-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 3,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 13,
+     "r": 0.152,
+     "p": 0.625
+    },
+    "1": {
+     "n": 13,
+     "r": 0.085,
+     "p": 0.783
+    },
+    "2": {
+     "n": 13,
+     "r": -0.274,
+     "p": 0.374
+    },
+    "3": {
+     "n": 13,
+     "r": 0.312,
+     "p": 0.317
+    }
+   },
+   "critical_r": 0.616,
+   "slope": 0.4575,
+   "discovery": {
+    "cutoff": 24306,
+    "profile": {
+     "0": {
+      "n": 12,
+      "r": -0.281
+     },
+     "1": {
+      "n": 12,
+      "r": -0.055
+     },
+     "2": {
+      "n": 12,
+      "r": 0.149
+     },
+     "3": {
+      "n": 12,
+      "r": 0.237
+     },
+     "4": {
+      "n": 11,
+      "r": -0.566
+     },
+     "5": {
+      "n": 10,
+      "r": 0.021
+     },
+     "6": {
+      "n": 9
+     },
+     "7": {
+      "n": 8
+     },
+     "8": {
+      "n": 7
+     },
+     "9": {
+      "n": 6
+     }
+    },
+    "lag": 3
+   }
+  },
+  {
+   "test_id": "h0082@2026-10-12#2",
+   "hypothesis_id": "h0082",
+   "class": "input_prices",
+   "source": "mospi:wpi/wpi:fuel_power/electricity",
+   "source_tide": "wpi/wpi:all",
+   "target": "sibc:e_S2_2_18_1",
+   "target_label": "Power",
+   "predicted_sign": 1,
+   "reason": "the price of what this line's borrowers sell or hold moves their borrowing",
+   "tested": "2026-10-12",
+   "through_period": {
+    "sibc": "2026-09-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 5,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 13,
+     "r": 0.133,
+     "p": 0.67
+    },
+    "1": {
+     "n": 13,
+     "r": -0.102,
+     "p": 0.741
+    },
+    "2": {
+     "n": 13,
+     "r": -0.193,
+     "p": 0.525
+    },
+    "3": {
+     "n": 13,
+     "r": 0.347,
+     "p": 0.244
+    },
+    "5": {
+     "n": 13,
+     "r": 0.194,
+     "p": 0.531
+    }
+   },
+   "critical_r": 0.616,
+   "slope": 0.0752,
+   "discovery": {
+    "cutoff": 24306,
+    "profile": {
+     "0": {
+      "n": 12,
+      "r": 0.071
+     },
+     "1": {
+      "n": 12,
+      "r": -0.07
+     },
+     "2": {
+      "n": 12,
+      "r": -0.136
+     },
+     "3": {
+      "n": 12,
+      "r": -0.447
+     },
+     "4": {
+      "n": 11,
+      "r": -0.058
+     },
+     "5": {
+      "n": 10,
+      "r": 0.211
+     },
+     "6": {
+      "n": 9
+     },
+     "7": {
+      "n": 8
+     },
+     "8": {
+      "n": 7
+     },
+     "9": {
+      "n": 6
+     }
+    },
+    "lag": 5
+   }
+  },
+  {
+   "test_id": "h0083@2026-10-12#2",
+   "hypothesis_id": "h0083",
+   "class": "demand",
+   "source": "mospi:iip/iip:electricity",
+   "source_tide": "iip/iip:general",
+   "target": "sibc:e_S2_2_18_1",
+   "target_label": "Power",
+   "predicted_sign": 1,
+   "reason": "this line's borrowers' output moves their borrowing",
+   "tested": "2026-10-12",
+   "through_period": {
+    "sibc": "2026-09-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 4,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 13,
+     "r": -0.281,
+     "p": 0.353
+    },
+    "1": {
+     "n": 13,
+     "r": 0.16,
+     "p": 0.606
+    },
+    "2": {
+     "n": 13,
+     "r": 0.291,
+     "p": 0.326
+    },
+    "3": {
+     "n": 13,
+     "r": -0.477,
+     "p": 0.099
+    },
+    "4": {
+     "n": 13,
+     "r": -0.209,
+     "p": 0.49
+    }
+   },
+   "critical_r": 0.616,
+   "slope": -0.0549,
+   "discovery": {
+    "cutoff": 24306,
+    "profile": {
+     "0": {
+      "n": 12,
+      "r": -0.442
+     },
+     "1": {
+      "n": 12,
+      "r": 0.308
+     },
+     "2": {
+      "n": 12,
+      "r": 0.001
+     },
+     "3": {
+      "n": 12,
+      "r": -0.361
+     },
+     "4": {
+      "n": 11,
+      "r": 0.564
+     },
+     "5": {
+      "n": 10,
+      "r": 0.084
+     },
+     "6": {
+      "n": 9
+     },
+     "7": {
+      "n": 8
+     },
+     "8": {
+      "n": 7
+     },
+     "9": {
+      "n": 6
+     }
+    },
+    "lag": 4
+   }
+  },
+  {
+   "test_id": "h0096@2026-10-12#1",
+   "hypothesis_id": "h0096",
+   "class": "input_prices",
+   "source": "mospi:wpi/nic:20/fertilizers_and_nitrogen_compounds",
+   "source_tide": "wpi/wpi:all",
+   "target": "sibc:e_S2_2_9_1",
+   "target_label": "Fertiliser",
+   "predicted_sign": 1,
+   "reason": "Fertiliser makers' working capital rises with the price of what they make and sell, within the month.",
+   "tested": "2026-10-12",
+   "through_period": {
+    "sibc": "2026-09-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 2,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 13,
+     "r": 0.265,
+     "p": 0.428
+    },
+    "1": {
+     "n": 13,
+     "r": 0.469,
+     "p": 0.087
+    },
+    "2": {
+     "n": 13,
+     "r": 0.356,
+     "p": 0.249
+    },
+    "3": {
+     "n": 13,
+     "r": 0.267,
+     "p": 0.417
+    }
+   },
+   "critical_r": 0.616,
+   "slope": 3.7974,
+   "discovery": {
+    "cutoff": 24306,
+    "profile": {
+     "0": {
+      "n": 12,
+      "r": -0.546
+     },
+     "1": {
+      "n": 12,
+      "r": 0.358
+     },
+     "2": {
+      "n": 12,
+      "r": 0.469
+     },
+     "3": {
+      "n": 12,
+      "r": 0.398
+     },
+     "4": {
+      "n": 11,
+      "r": 0.068
+     },
+     "5": {
+      "n": 10,
+      "r": -0.326
+     },
+     "6": {
+      "n": 9
+     },
+     "7": {
+      "n": 8
+     },
+     "8": {
+      "n": 7
+     },
+     "9": {
+      "n": 6
+     }
+    },
+    "lag": 2
+   }
+  },
+  {
+   "test_id": "h0097@2026-10-12#1",
+   "hypothesis_id": "h0097",
+   "class": "input_prices",
+   "source": "mospi:wpi/nic:32/jewellery_and_related_articles",
+   "source_tide": "wpi/wpi:all",
+   "target": "sibc:e_S1_4_8",
+   "target_label": "Loans against gold jewellery",
+   "predicted_sign": 1,
+   "reason": "Gold collateral is revalued daily, so the loan value of pledged jewellery follows the gold price; the jewellery index tracks gold, its main input.",
+   "tested": "2026-10-12",
+   "through_period": {
+    "sibc": "2026-09-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 1,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 13,
+     "r": 0.273,
+     "p": 0.328
+    },
+    "1": {
+     "n": 13,
+     "r": 0.251,
+     "p": 0.356
+    },
+    "2": {
+     "n": 13,
+     "r": 0.122,
+     "p": 0.636
+    },
+    "3": {
+     "n": 13,
+     "r": -0.083,
+     "p": 0.751
+    }
+   },
+   "critical_r": 0.616,
+   "slope": 0.3323,
+   "discovery": {
+    "cutoff": 24306,
+    "profile": {
+     "0": {
+      "n": 12,
+      "r": -0.36
+     },
+     "1": {
+      "n": 12,
+      "r": 0.208
+     },
+     "2": {
+      "n": 12,
+      "r": -0.199
+     },
+     "3": {
+      "n": 12,
+      "r": -0.23
+     },
+     "4": {
+      "n": 11,
+      "r": -0.238
+     },
+     "5": {
+      "n": 10,
+      "r": -0.108
+     },
+     "6": {
+      "n": 9
+     },
+     "7": {
+      "n": 8
+     },
+     "8": {
+      "n": 7
+     },
+     "9": {
+      "n": 6
+     }
+    },
+    "lag": 1
+   }
+  },
+  {
+   "test_id": "h0370@2026-10-12#2",
+   "hypothesis_id": "h0370",
+   "class": "input_prices",
+   "source": "mospi:wpi/wpi:all",
+   "source_tide": "credit tide",
+   "target": "sibc:e_S1_3_7",
+   "target_label": "Trade",
+   "predicted_sign": 1,
+   "reason": "dearer goods need more working capital to hold the same stock",
+   "tested": "2026-10-12",
+   "through_period": {
+    "sibc": "2026-09-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 1,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 13,
+     "r": -0.299,
+     "p": 0.322
+    },
+    "1": {
+     "n": 13,
+     "r": 0.089,
+     "p": 0.771
+    },
+    "2": {
+     "n": 13,
+     "r": 0.137,
+     "p": 0.651
+    },
+    "3": {
+     "n": 13,
+     "r": 0.221,
+     "p": 0.458
+    }
+   },
+   "critical_r": 0.553,
+   "slope": 0.0823,
+   "discovery": {
+    "cutoff": 24306,
+    "profile": {
+     "0": {
+      "n": 12,
+      "r": 0.061
+     },
+     "1": {
+      "n": 11,
+      "r": 0.518
+     },
+     "2": {
+      "n": 10,
+      "r": 0.46
+     },
+     "3": {
+      "n": 9
+     },
+     "4": {
+      "n": 8
+     },
+     "5": {
+      "n": 7
+     },
+     "6": {
+      "n": 6
+     },
+     "7": {
+      "n": 5
+     },
+     "8": {
+      "n": 4
+     },
+     "9": {
+      "n": 3
+     }
+    },
+    "lag": 1
+   }
+  },
+  {
+   "test_id": "h0371@2026-10-12#2",
+   "hypothesis_id": "h0371",
+   "class": "input_prices",
+   "source": "mospi:wpi/wpi:all",
+   "source_tide": "credit tide",
+   "target": "sibc:e_S1_3_7_1",
+   "target_label": "Wholesale Trade",
+   "predicted_sign": 1,
+   "reason": "dearer goods need more working capital to hold the same stock",
+   "tested": "2026-10-12",
+   "through_period": {
+    "sibc": "2026-09-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 1,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 13,
+     "r": 0.317,
+     "p": 0.316
+    },
+    "1": {
+     "n": 13,
+     "r": -0.014,
+     "p": 0.965
+    },
+    "2": {
+     "n": 13,
+     "r": 0.26,
+     "p": 0.413
+    },
+    "3": {
+     "n": 13,
+     "r": 0.161,
+     "p": 0.632
+    }
+   },
+   "critical_r": 0.553,
+   "slope": -0.0104,
+   "discovery": {
+    "cutoff": 24306,
+    "profile": {
+     "0": {
+      "n": 12,
+      "r": -0.161
+     },
+     "1": {
+      "n": 11,
+      "r": 0.138
+     },
+     "2": {
+      "n": 10,
+      "r": 0.03
+     },
+     "3": {
+      "n": 9
+     },
+     "4": {
+      "n": 8
+     },
+     "5": {
+      "n": 7
+     },
+     "6": {
+      "n": 6
+     },
+     "7": {
+      "n": 5
+     },
+     "8": {
+      "n": 4
+     },
+     "9": {
+      "n": 3
+     }
+    },
+    "lag": 1
+   }
+  },
+  {
+   "test_id": "h0372@2026-10-12#2",
+   "hypothesis_id": "h0372",
+   "class": "input_prices",
+   "source": "mospi:wpi/wpi:all",
+   "source_tide": "credit tide",
+   "target": "sibc:e_S1_3_7_2",
+   "target_label": "Retail Trade",
+   "predicted_sign": 1,
+   "reason": "dearer goods need more working capital to hold the same stock",
+   "tested": "2026-10-12",
+   "through_period": {
+    "sibc": "2026-09-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 0,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 13,
+     "r": -0.315,
+     "p": 0.321
+    },
+    "1": {
+     "n": 13,
+     "r": -0.008,
+     "p": 0.981
+    },
+    "2": {
+     "n": 13,
+     "r": -0.275,
+     "p": 0.383
+    },
+    "3": {
+     "n": 13,
+     "r": -0.156,
+     "p": 0.643
+    }
+   },
+   "critical_r": 0.553,
+   "slope": -0.2515,
+   "discovery": {
+    "cutoff": 24306,
+    "profile": {
+     "0": {
+      "n": 12,
+      "r": 0.157
+     },
+     "1": {
+      "n": 11,
+      "r": -0.149
+     },
+     "2": {
+      "n": 10,
+      "r": -0.035
+     },
+     "3": {
+      "n": 9
+     },
+     "4": {
+      "n": 8
+     },
+     "5": {
+      "n": 7
+     },
+     "6": {
+      "n": 6
+     },
+     "7": {
+      "n": 5
+     },
+     "8": {
+      "n": 4
+     },
+     "9": {
+      "n": 3
+     }
+    },
+    "lag": 0
+   }
+  },
+  {
+   "test_id": "h0376@2026-10-12#2",
+   "hypothesis_id": "h0376",
+   "class": "input_prices",
+   "source": "mospi:wpi/nic:29/motor_vehicles+wpi/nic:30/motorcycles",
+   "source_tide": "wpi/wpi:all",
+   "target": "sibc:e_S1_4_7",
+   "target_label": "Vehicle Loans",
+   "predicted_sign": 1,
+   "reason": "dearer vehicles mean bigger loans for the same purchase",
+   "tested": "2026-10-12",
+   "through_period": {
+    "sibc": "2026-09-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 4,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 13,
+     "r": -0.284,
+     "p": 0.35
+    },
+    "1": {
+     "n": 13,
+     "r": 0.115,
+     "p": 0.7
+    },
+    "2": {
+     "n": 13,
+     "r": 0.215,
+     "p": 0.449
+    },
+    "3": {
+     "n": 13,
+     "r": 0.292,
+     "p": 0.328
+    },
+    "4": {
+     "n": 13,
+     "r": -0.006,
+     "p": 0.983
+    }
+   },
+   "critical_r": 0.553,
+   "slope": -0.0103,
+   "discovery": {
+    "cutoff": 24306,
+    "profile": {
+     "0": {
+      "n": 12,
+      "r": 0.272
+     },
+     "1": {
+      "n": 12,
+      "r": 0.012
+     },
+     "2": {
+      "n": 12,
+      "r": -0.036
+     },
+     "3": {
+      "n": 12,
+      "r": 0.06
+     },
+     "4": {
+      "n": 11,
+      "r": 0.512
+     },
+     "5": {
+      "n": 10,
+      "r": 0.114
+     },
+     "6": {
+      "n": 9
+     },
+     "7": {
+      "n": 8
+     },
+     "8": {
+      "n": 7
+     },
+     "9": {
+      "n": 6
+     }
+    },
+    "lag": 4
+   }
+  },
+  {
+   "test_id": "h0377@2026-10-12#2",
+   "hypothesis_id": "h0377",
+   "class": "input_prices",
+   "source": "mospi:wpi/nic:27/domestic_appliances",
+   "source_tide": "wpi/wpi:all",
+   "target": "sibc:e_S1_4_1",
+   "target_label": "Consumer Durables",
+   "predicted_sign": 1,
+   "reason": "dearer durables mean bigger loans for the same purchase",
+   "tested": "2026-10-12",
+   "through_period": {
+    "sibc": "2026-09-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 2,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 13,
+     "r": -0.265,
+     "p": 0.382
+    },
+    "1": {
+     "n": 13,
+     "r": 0.144,
+     "p": 0.637
+    },
+    "2": {
+     "n": 13,
+     "r": 0.078,
+     "p": 0.79
+    },
+    "3": {
+     "n": 13,
+     "r": -0.163,
+     "p": 0.593
+    }
+   },
+   "critical_r": 0.553,
+   "slope": 0.1961,
+   "discovery": {
+    "cutoff": 24306,
+    "profile": {
+     "0": {
+      "n": 12,
+      "r": -0.093
+     },
+     "1": {
+      "n": 12,
+      "r": -0.091
+     },
+     "2": {
+      "n": 12,
+      "r": 0.478
+     },
+     "3": {
+      "n": 12,
+      "r": -0.501
+     },
+     "4": {
+      "n": 11,
+      "r": -0.081
+     },
+     "5": {
+      "n": 10,
+      "r": -0.38
+     },
+     "6": {
+      "n": 9
+     },
+     "7": {
+      "n": 8
+     },
+     "8": {
+      "n": 7
+     },
+     "9": {
+      "n": 6
+     }
+    },
+    "lag": 2
+   }
   }
  ]
 }
