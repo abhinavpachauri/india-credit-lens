@@ -110,3 +110,48 @@ def test_the_grid_counts_every_applicable_cell_once():
     for k in X.OUTSIDE:
         n = sum(1 for l in reg["lines"].values() if l["applies"][k]["status"] == "applies")
         assert f"/{n:2}" in term or f"/{n}" in term, k
+
+
+# ── step 3: the generic driver test's controls (spec §16 Step 6c) ──────────────────────────
+
+import random as _random                                          # noqa: E402
+from core import relationship_test as RT                           # noqa: E402
+
+
+def _series(n=30, lag=1, slope=0.8, noise=0.3, seed=7):
+    """A driver, a credit line that follows it `lag` months later with `slope`, and a tide."""
+    rnd = _random.Random(seed)
+    a = {k: rnd.gauss(0, 1) for k in range(n)}
+    t = {k: rnd.gauss(0, 1) for k in range(n + lag)}
+    b = {k + lag: slope * a[k] + 0.2 * t[k + lag] + rnd.gauss(0, noise) for k in range(n)}
+    return a, b, t
+
+
+def test_a_planted_driver_is_supported_with_its_slope():
+    a, b, t = _series()
+    r = RT.judge(a, b, t, t, sign=1, lag=1)
+    assert r["verdict"] == "supported" and 0.6 < r["slope"] < 1.0
+
+
+def test_the_same_driver_shuffled_is_not_supported():
+    a, b, t = _series()
+    vals = list(a.values()); _random.Random(3).shuffle(vals)
+    r = RT.judge(dict(zip(a, vals)), b, t, t, sign=1, lag=1)
+    assert r["verdict"] in ("not_supported", "too_short")
+
+
+def test_a_flipped_sign_reads_opposite():
+    a, b, t = _series()
+    assert RT.judge(a, b, t, t, sign=-1, lag=1)["verdict"] == "opposite"
+
+
+def test_the_wrong_lag_is_not_rescued_by_the_right_one():
+    """Other lags are reported, never used: declared at lag 0, the lag-1 link does not count."""
+    a, b, t = _series()
+    r = RT.judge(a, b, t, t, sign=1, lag=0)
+    assert r["verdict"] != "supported" and r["lags"][1]["p"] < 0.05
+
+
+def test_a_short_history_is_too_short_not_a_null():
+    a, b, t = _series(n=8)
+    assert RT.judge(a, b, t, t, sign=1, lag=1)["verdict"] == "too_short"

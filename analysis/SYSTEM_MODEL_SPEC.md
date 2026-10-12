@@ -930,6 +930,19 @@ changes, detectable |r| ≥ 0.40; complete cells: input prices 0/54, price of cr
 demand 0/84, other finance 0/50, rules and dates 8/84 (Step 3's judged forces). A line's
 unexplained moves count in every column that applies to it, so the column figures overlap.
 
+*Built, step 3 (2026-10-12):* `relationship_test.judge` / `run_driver` (the Step 6b `test` plus
+`too_short` when n < 10 or the bar exceeds |r| = 0.5 (`R_PRACTICAL`), and the fitted slope at the
+declared lag); a bundle of series is an equal-weighted mean, stated as such; a driver's tide is its
+dataset's headline (WPI all, IIP general, CPI all, NAS GDP), or the credit tide when the driver
+is the headline. `explainability.py test` runs every `ready` hypothesis once, a family per line,
+and appends the results to `relationship_tests.json`. Controls (unit tests): a planted lag-1 link
+→ supported with its slope; shuffled → not; sign flipped → opposite; declared lag 0 does not borrow
+the lag-1 result; 8 months → too_short. First run, SIBC, 45 hypotheses (all seeded at lag 0, all
+drafts, so none admissible): 36 not_supported, 9 too_short (CPI 7 changes, NAS quarterly), 0
+supported; nearly all |r| < 0.3 against a bar of 0.40–0.45. Grid: input prices 26/61, demand 19/84
+complete. Same-month prices and output do not move SIBC lines against their groups; lagged
+hypotheses (declared, approved) are step 5.
+
 *Build order:* (1) register + validator + import of the drafts and concordance mappings; (2) the
 report; (3) the generic test with its controls; (4) the `driver` explanation in 6a and the
 `prices_activity` handover; (5) the first cycle on data in hand: lagged WPI on the 15 lines whose

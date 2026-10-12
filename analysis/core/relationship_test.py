@@ -272,3 +272,71 @@ def main() -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
+
+
+# ── Step 6c: the generic driver test ────────────────────────────────────────────────────────
+# One reference series (or an equal-weighted bundle) pushing a credit line, declared in the driver
+# register. The same `test`, plus two things a driver needs: a verdict that says when the history
+# was too short to see a strong link, and the fitted slope that admission uses (spec §16 Step 6c).
+
+# A link this strong is what a test must be able to see before a null counts as evidence: with too
+# few changes, even |r| = 0.5 cannot clear the bar, and "not supported" would overstate the null.
+R_PRACTICAL = 0.5
+HEADLINE = {"wpi": "wpi/wpi:all", "iip": "iip/iip:general", "cpi": "cpi/cpi:all", "nas": "nas/nas:gdp"}
+
+
+def critical_r(n: int, alpha: float) -> float | None:
+    """The smallest |r| significant at `alpha` (two-sided) with n pairs."""
+    from scipy.stats import t as tdist
+    if n < 4:
+        return None
+    tc = tdist.ppf(1 - alpha / 2, n - 2)
+    return tc / (n - 2 + tc ** 2) ** 0.5
+
+
+def judge(a: dict[int, float], b: dict[int, float], t_a: dict[int, float], t_b: dict[int, float],
+          sign: int, lag: int, family: int = 1) -> dict:
+    """`test`, read for a driver: too few pairs, or a bar a strong link could not clear, is
+    `too_short`; the slope of the target's residual on the driver's at the declared lag is kept."""
+    res = test(a, b, t_a, sign, lag, family, t_b=t_b)
+    main = res["lags"][lag]
+    crit = critical_r(main["n"], res["alpha"])
+    res["critical_r"] = round(crit, 3) if crit else None
+    if res["verdict"] == "too_few" or (res["verdict"] == "not_supported" and (crit is None or crit > R_PRACTICAL)):
+        res["verdict"] = "too_short"
+    if "r" in main:
+        months = sorted(k for k in a if k + lag in b and k + lag in t_b and k in t_a)
+        x = residual([a[k] for k in months], [t_a[k] for k in months])
+        y = residual([b[k + lag] for k in months], [t_b[k + lag] for k in months])
+        res["slope"] = round(linear_regression(x, y)[0], 4)
+    return res
+
+
+def driver_changes(pipeline: str, series: list[str]) -> dict[int, float]:
+    """month index -> monthly change in the driver's YoY: one series, or the equal-weighted mean of
+    several over the months they share (weights are not invented; a bundle states that it is equal)."""
+    parts = [reference_changes(pipeline, s) for s in series]
+    common = set.intersection(*(set(p) for p in parts)) if parts else set()
+    return {k: sum(p[k] for p in parts) / len(parts) for k in sorted(common)}
+
+
+def run_driver(hyp: dict, target_pipeline: str, target_id: str, family: int) -> dict:
+    """One register hypothesis, tested: the driver's change (its own headline removed as its tide;
+    a headline driver uses the credit tide instead) against the target line's gap changes."""
+    d = hyp["driver"]
+    ref, series = d["pipeline"], d["series"]
+    dataset = series[0].split("/", 1)[0]
+    head = HEADLINE.get(dataset)
+    tm, ts, tp, td = _side(target_pipeline)
+    a = driver_changes(ref, series)
+    credit_tide = tide(tm, ts, td)
+    t_a = credit_tide if (head is None or head in series) else reference_changes(ref, head)
+    res = judge(a, gap_changes(target_id, tm, ts, tp, td), t_a, credit_tide,
+                hyp["sign"], hyp["lag"], family)
+    return {"test_id": f"{hyp['id']}@{date.today().isoformat()}", "hypothesis_id": hyp["id"],
+            "class": hyp["class"], "source": f"{ref}:{'+'.join(series)}",
+            "source_tide": "credit tide" if t_a is credit_tide else head,
+            "target": f"{target_pipeline}:{target_id}", "target_label": hyp["line_label"],
+            "predicted_sign": hyp["sign"], "reason": hyp["reason"], "tested": date.today().isoformat(),
+            "through_period": {target_pipeline: tp[-1]},
+            "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (generic driver test)", **res}

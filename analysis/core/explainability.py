@@ -11,6 +11,7 @@ results, never typed. Claude drafts; the user approves; tests decide.
     python3 analysis/core/explainability.py validate --pipeline sibc
     python3 analysis/core/explainability.py summary --pipeline sibc
     python3 analysis/core/explainability.py report --pipeline sibc    # the completeness grid
+    python3 analysis/core/explainability.py test --pipeline sibc [--dry-run]   # step 3: test what has data
 
 Step 1 of the build order (register, validator, seed). The completeness grid is step 2.
 """
@@ -252,7 +253,10 @@ def _verdicts(pipeline: str) -> dict:
     for t in _tests(ROOT / "analysis/cross_source/relationship_tests.json"):
         out[f"cross_source:{t.get('edge_id')}"] = t["verdict"]
     for t in _tests(ROOT / manifest.load(pipeline)["paths"]["data_dir"] / "relationship_tests.json"):
-        out[f"{pipeline}:{t.get('source')}->{t.get('target')}"] = t["verdict"]    # latest wins
+        if t.get("test_id"):                                   # a generic driver test (step 3)
+            out[f"driver:{t['test_id']}"] = t["verdict"]
+        else:
+            out[f"{pipeline}:{t.get('source')}->{t.get('target')}"] = t["verdict"]    # latest wins
     states = sorted((ROOT / manifest.load(pipeline)["paths"]["data_dir"] / "merged").glob("system_state_*.json"))
     if states:
         for fid, f in json.loads(states[-1].read_text()).get("force_check", {}).items():
@@ -490,10 +494,43 @@ def _sibc_group_label(label: str, reg: dict, model: dict) -> str:
     return dict(GROUPS).get(_sibc_group(n), "other")
 
 
+# ── Step 3: run the generic driver test on every hypothesis with data in hand ─────────────
+
+def run_tests(pipeline: str, dry_run: bool = False) -> list[dict]:
+    """Every `ready` hypothesis with a series, a sign and a lag, tested once. All hypotheses for
+    one line in this run form its family (one Bonferroni bar). Results are appended, nulls
+    included, to the pipeline's relationship_tests.json and linked from the hypothesis."""
+    from core import relationship_test as rt
+    reg_path = register_path(pipeline)
+    reg = json.loads(reg_path.read_text())
+    model = gs.load_json(gs.pipeline_cfg(pipeline)["model"])
+    node_of = {n.get("urn"): n["id"] for n in model["nodes"] if n.get("tier") == "entity"}
+    v = _verdicts(pipeline)
+    todo = [h for h in reg["hypotheses"] if status(h, v) == "ready" and "series" in h["driver"]
+            and h.get("sign") in (1, -1) and isinstance(h.get("lag"), int)]
+    family = {}
+    for h in todo:
+        family[h["line"]] = family.get(h["line"], 0) + 1
+    results = []
+    for h in todo:
+        r = rt.run_driver(h, pipeline, node_of[h["line"]], family[h["line"]])
+        results.append(r)
+        if not dry_run:
+            h.setdefault("tests", []).append(f"driver:{r['test_id']}")
+    if not dry_run and results:
+        tp = ROOT / manifest.load(pipeline)["paths"]["data_dir"] / "relationship_tests.json"
+        doc = json.loads(tp.read_text()) if tp.exists() else {"tests": []}
+        doc["tests"].extend(results)
+        tp.write_text(json.dumps(doc, indent=1, ensure_ascii=False) + "\n")
+        reg_path.write_text(json.dumps(reg, indent=1, ensure_ascii=False) + "\n")
+    return results
+
+
 def main() -> int:
     import argparse
     ap = argparse.ArgumentParser(description="Driver register (SYSTEM_MODEL_SPEC §16 Step 6c)")
-    ap.add_argument("command", choices=("seed", "validate", "summary", "report"))
+    ap.add_argument("command", choices=("seed", "validate", "summary", "report", "test"))
+    ap.add_argument("--dry-run", action="store_true", help="test: run and print, record nothing")
     ap.add_argument("--pipeline", required=True)
     a = ap.parse_args()
     if a.command == "seed":
@@ -515,6 +552,16 @@ def main() -> int:
         for e in errs[:40]:
             print("   ·", e)
         return 1 if errs else 0
+    if a.command == "test":
+        res = run_tests(a.pipeline, a.dry_run)
+        from collections import Counter
+        print(f"  {a.pipeline}: {len(res)} hypotheses tested{' (dry run, nothing recorded)' if a.dry_run else ''}: "
+              + ", ".join(f"{k} {n}" for k, n in Counter(r['verdict'] for r in res).most_common()))
+        for r in sorted(res, key=lambda r: (r["verdict"] != "supported", r["target_label"])):
+            m = r["lags"][r["at_lag"]]
+            print(f"   {r['verdict']:13} {r['target_label'][:34]:34} ← {r['source'][:44]:44} "
+                  f"lag {r['at_lag']} n {m.get('n')} r {m.get('r', '—')} p {m.get('p', '—')} bar {r['alpha']}")
+        return 0
     if a.command == "report":
         term, md = report(a.pipeline)
         out = register_path(a.pipeline).with_name("explainability_grid.md")

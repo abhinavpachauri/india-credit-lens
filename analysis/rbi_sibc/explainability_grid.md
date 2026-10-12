@@ -10,9 +10,9 @@
 
 | kind | complete | where the missing data would come from (lines · unexplained moves on them) |
 |---|---|---|
-| input prices | 0/61 | MoSPI WPI at item level (dropped at fetch today), or a commodity price (gold: DBIE Bulletin Table 21) (33 · 48); RBI House Price Index (DBIE, quarterly) (1 · 4); Share prices: Sensex / Nifty monthly (DBIE Handbook 182-183) (1 · 0) |
+| input prices | 26/61 | MoSPI WPI at item level (dropped at fetch today), or a commodity price (gold: DBIE Bulletin Table 21) (33 · 48); RBI House Price Index (DBIE, quarterly) (1 · 4); Share prices: Sensex / Nifty monthly (DBIE Handbook 182-183) (1 · 0) |
 | price of credit | 0/83 | RBI Lending and Deposit Rates of SCBs (sources shortlist #1; files in hand, onboarding paused) (83 · 123) |
-| demand | 0/84 | MoSPI output not matched at this line; services and households: ISP, PLFS (MoSPI) (65 · 108) |
+| demand | 19/84 | MoSPI output not matched at this line; services and households: ISP, PLFS (MoSPI) (65 · 108) |
 | other finance | 0/52 | DBIE flow of financial resources to the commercial sector, CP, ECB (shortlist #4-5) (50 · 61); External commercial borrowing, monthly (DBIE Bulletin Table 38); leasing (2 · 3) |
 | rules & dates | 8/84 | a dated force, sourced through S4 or the regulatory watch (arc 3) (69 · 102) |
 | lenders' capacity | 0/0 | — |
@@ -23,7 +23,7 @@
 
 | line | unexplained moves | input prices | price of credit | demand | other finance | rules & dates | lenders' capacity | within system |
 |---|---|---|---|---|---|---|---|---|
-| Agriculture and Allied Activities | 3 | ○ | · | ○ | – | ✗ | – |  |
+| Agriculture and Allied Activities | 3 | ? | · | ? | – | ✗ | – |  |
 
 ### Industry by size
 
@@ -32,51 +32,51 @@
 | Micro and Small | 3 | · | · | · | – | ✓ | – |  |
 | Medium | 2 | · | · | · | – | ✓ | – |  |
 | Large | 2 | · | · | · | · | · | – |  |
-| Industry (Micro and Small, Medium and Large) | 1 | ○ | · | ○ | · | · | – |  |
+| Industry (Micro and Small, Medium and Large) | 1 | ? | · | ? | · | · | – |  |
 
 ### Industry by type
 
 | line | unexplained moves | input prices | price of credit | demand | other finance | rules & dates | lenders' capacity | within system |
 |---|---|---|---|---|---|---|---|---|
-| Fertiliser | 5 | ✗… | · | · | · | · | – |  |
-| Vehicles, Vehicle Parts and Transport Equipment | 4 | · | · | ○ | · | · | – |  |
-| Beverage and Tobacco | 3 | · | · | ○ | · | · | – |  |
-| Gems and Jewellery | 3 | ○ | · | · | · | · | – |  |
+| Fertiliser | 5 | ✗ | · | · | · | · | – |  |
+| Vehicles, Vehicle Parts and Transport Equipment | 4 | · | · | ✗ | · | · | – |  |
+| Beverage and Tobacco | 3 | · | · | ✗ | · | · | – |  |
+| Gems and Jewellery | 3 | ✗ | · | · | · | · | – |  |
 | Infrastructure | 3 | · | · | ✓… | · | · | – |  |
 | Petro Chemicals | 3 | · | · | · | · | · | – |  |
-| Electronics | 3 | ○ | · | ○ | · | · | – |  |
+| Electronics | 3 | ✗ | · | ✗ | · | · | – |  |
 | Railways (other than Indian Railways) | 3 | · | · | · | · | · | – |  |
 | Textiles | 2 | · | · | · | · | · | – |  |
-| Edible Oils and Vanaspati | 2 | ○ | · | · | · | · | – |  |
+| Edible Oils and Vanaspati | 2 | ✗ | · | · | · | · | – |  |
 | Tea | 2 | · | · | · | · | · | – |  |
 | Others | 2 | · | · | · | · | · | – |  |
 | Airports | 2 | · | · | · | · | · | – |  |
 | Ports | 2 | · | · | · | · | · | – |  |
-| Mining and Quarrying (incl. Coal) | 1 | · | · | ○ | · | · | – |  |
-| Food Processing | 1 | ○ | · | ○ | · | · | – |  |
-| Wood and Wood Products | 1 | ○ | · | ○ | · | · | – |  |
-| Petroleum, Coal Products and Nuclear Fuels | 1 | ○ | · | ○ | · | · | – |  |
-| Glass and Glassware | 1 | ○ | · | · | · | · | – |  |
+| Mining and Quarrying (incl. Coal) | 1 | · | · | ✗ | · | · | – |  |
+| Food Processing | 1 | ✗ | · | ✗ | · | · | – |  |
+| Wood and Wood Products | 1 | ✗ | · | ✗ | · | · | – |  |
+| Petroleum, Coal Products and Nuclear Fuels | 1 | ✗ | · | ✗ | · | · | – |  |
+| Glass and Glassware | 1 | ✗ | · | · | · | · | – |  |
 | Cotton Textiles | 1 | · | · | · | · | · | – |  |
-| Drugs and Pharmaceuticals | 1 | ○ | · | ○ | · | · | – |  |
-| Iron and Steel | 1 | ○ | · | · | · | · | – | 2 tested |
+| Drugs and Pharmaceuticals | 1 | ✗ | · | ✗ | · | · | – |  |
+| Iron and Steel | 1 | ✗ | · | · | · | · | – | 2 tested |
 | Other Metal and Metal Product | 1 | · | · | · | · | · | – |  |
 | Others | 1 | · | · | · | · | · | – |  |
-| Leather and Leather Products |  | ○ | · | ○ | · | · | – |  |
-| Paper and Paper Products |  | ○ | · | ○ | · | · | – |  |
-| Chemicals and Chemical Products |  | · | · | ○ | · | ✓ | – |  |
-| Rubber, Plastic and their Products |  | ○ | · | ○ | · | · | – |  |
-| Cement and Cement Products |  | ○ | · | · | · | · | – | 2 tested |
-| Basic Metal and Metal Product |  | · | · | ○ | · | ✗ | – |  |
-| All Engineering |  | · | · | ○ | · | ✓ | – | 2 tested |
+| Leather and Leather Products |  | ✗ | · | ✗ | · | · | – |  |
+| Paper and Paper Products |  | ✗ | · | ✗ | · | · | – |  |
+| Chemicals and Chemical Products |  | · | · | ✗ | · | ✓ | – |  |
+| Rubber, Plastic and their Products |  | ✗ | · | ✗ | · | · | – |  |
+| Cement and Cement Products |  | ✗ | · | · | · | · | – | 2 tested |
+| Basic Metal and Metal Product |  | · | · | ✗ | · | ✗ | – |  |
+| All Engineering |  | · | · | ✗ | · | ✓ | – | 2 tested |
 | Construction |  | · | · | · | · | · | – |  |
 | Other Industries |  | · | · | · | · | · | – |  |
-| Sugar |  | ○ | · | · | · | · | – |  |
+| Sugar |  | ✗ | · | · | · | · | – |  |
 | Jute Textiles |  | · | · | · | · | · | – |  |
 | Man-Made Textiles |  | · | · | · | · | · | – |  |
 | Other Textiles |  | · | · | · | · | · | – |  |
 | Others |  | · | · | · | · | · | – |  |
-| Power |  | ○ | · | ○ | · | · | – |  |
+| Power |  | ✗ | · | ✗ | · | · | – |  |
 | Telecommunications |  | · | · | · | · | · | – |  |
 | Roads |  | · | · | · | · | · | – |  |
 | Other Infrastructure |  | · | · | · | · | · | – |  |
@@ -92,27 +92,27 @@
 | Professional Services | 2 | – | · | · | – | · | – |  |
 | Public Financial Institutions (PFIs) | 2 | – | · | · | · | · | – |  |
 | Tourism, Hotels and Restaurants | 1 | – | · | · | – | · | – |  |
-| Trade | 1 | ○ | · | · | – | · | – |  |
+| Trade | 1 | ✗ | · | · | – | · | – |  |
 | Housing Finance Companies (HFCs) | 1 | – | · | · | · | · | – |  |
-| Services |  | – | · | ○ | · | ✓ | – |  |
+| Services |  | – | · | ? | · | ✓ | – |  |
 | Shipping |  | · | · | · | · | · | – |  |
 | Non-Banking Financial Companies (NBFCs) |  | – | · | · | · | · | – |  |
 | Other Services |  | – | · | · | – | · | – |  |
-| Wholesale Trade |  | ○ | · | · | – | · | – |  |
-| Retail Trade |  | ○ | · | · | – | · | – |  |
+| Wholesale Trade |  | ✗ | · | · | – | · | – |  |
+| Retail Trade |  | ✗ | · | · | – | · | – |  |
 
 ### Personal loans
 
 | line | unexplained moves | input prices | price of credit | demand | other finance | rules & dates | lenders' capacity | within system |
 |---|---|---|---|---|---|---|---|---|
-| Vehicle Loans | 4 | ○ | · | · | – | ○ | – |  |
-| Consumer Durables | 3 | ○ | · | · | – | ○ | – |  |
+| Vehicle Loans | 4 | ✗ | · | · | – | ○ | – |  |
+| Consumer Durables | 3 | ✗ | · | · | – | ○ | – |  |
 | Personal Loans | 2 | – | · | · | – | · | – |  |
 | Advances against Fixed Deposits (Including FCNR (B), NRNR Deposits etc.) | 2 | – | · | · | – | · | – |  |
 | Other Personal Loans | 2 | – | · | · | – | · | – |  |
-| Housing (Including Priority Sector Housing) | 1 | ○ | · | · | – | · | – | 1 tested |
+| Housing (Including Priority Sector Housing) | 1 | ? | · | · | – | · | – | 1 tested |
 | Education | 1 | – | · | · | – | · | – |  |
-| Loans against gold jewellery | 1 | ✓… | · | · | – | · | – | 1 tested |
+| Loans against gold jewellery | 1 | ✓ | · | · | – | · | – | 1 tested |
 | Advances to Individuals against share, bonds, etc. |  | · | · | · | – | · | – |  |
 | Credit Card Outstanding |  | – | · | · | – | ○ | – |  |
 
@@ -141,7 +141,7 @@
 
 | line | unexplained moves | input prices | price of credit | demand | other finance | rules & dates | lenders' capacity | within system |
 |---|---|---|---|---|---|---|---|---|
-| Non-food Credit | 2 | ○ | · | ○ | · | · | – |  |
+| Non-food Credit | 2 | ? | · | ? | · | · | – |  |
 
 ## To review later
 

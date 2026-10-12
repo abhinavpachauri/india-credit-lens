@@ -614,6 +614,13 @@
           "date": "2026-10-11",
           "how_measured": "one injected fault per rule on a copy of the seeded register; known-good = the seed itself",
           "source": "analysis/core/explainability.py; analysis/tests/test_explainability.py"
+        },
+        {
+          "metric": "generic driver test (Step 6c step 3): controls and first run",
+          "value": "controls 5/5 (planted link supported with slope 0.6-1.0; shuffled not; flipped opposite; wrong declared lag not rescued; 8 months too_short). SIBC first run: 45 lag-0 draft hypotheses, 36 not_supported, 9 too_short, 0 supported",
+          "date": "2026-10-12",
+          "how_measured": "synthetic series for the controls; the live register for the run",
+          "source": "analysis/core/relationship_test.py judge/run_driver; analysis/tests/test_explainability.py"
         }
       ],
       "observations": [
