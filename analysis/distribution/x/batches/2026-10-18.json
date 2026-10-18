@@ -1,0 +1,192 @@
+{
+  "batch": "2026-10-18",
+  "plan": "analysis/distribution/output/x/2026-10-10_to_11-03_plan.md",
+  "note": "Plan posts #6-10, moved to 18-22 Oct (posting resumed 18 Oct). Data month Aug 2026.",
+  "out_dir": "analysis/distribution/output/x/2026-10-18",
+  "posts": [
+    {
+      "date": "2026-10-18",
+      "slug": "upi-qr-yes-bank",
+      "text": "77.4% of the UPI QR codes reported by banks sit with one bank: Yes Bank, 62.93 crore codes, in Aug 2026. Axis holds 16.0%.\n\nQR codes grew 16.5% over the year.\n\n#UPI #DigitalPayments #YesBank\nindiacreditlens.com",
+      "image": {
+        "kicker": "Payments · UPI QR codes · Aug 2026",
+        "title": "Yes Bank holds 77.4% of UPI QR codes",
+        "source": "Source: RBI, bank-wise ATM, POS and card statistics",
+        "tables": [
+          {
+            "path": "/payments",
+            "clicks": [
+              "Digital Infrastructure",
+              "UPI QR Codes",
+              "bank (63)"
+            ],
+            "cols": [
+              "PART",
+              "SIZE",
+              "OF CUT",
+              "GROWTH"
+            ],
+            "rows": [
+              "YES BANK LTD",
+              "AXIS BANK LTD",
+              "INDUSIND BANK LTD",
+              "STATE BANK OF INDIA"
+            ],
+            "highlight": "YES BANK LTD"
+          }
+        ]
+      }
+    },
+    {
+      "date": "2026-10-19",
+      "slug": "bank-credit-to-nbfcs",
+      "text": "Bank credit to NBFCs grew 37.5% in Aug 2026, to ₹21.64L Cr.\n\nNBFCs are 34.4% of bank credit to services, but took 47.8% of the new services credit.\n\n#NBFC #BankCredit #IndianBanking\nindiacreditlens.com",
+      "image": {
+        "kicker": "Bank credit · Services · Aug 2026",
+        "title": "NBFCs: 34.4% of services credit, 47.8% of the new",
+        "source": "Source: RBI, Sectoral Deployment of Bank Credit",
+        "tables": [
+          {
+            "path": "/",
+            "clicks": [
+              "Services"
+            ],
+            "cols": [
+              "PART",
+              "OF CUT",
+              "GROWTH",
+              "NEW"
+            ],
+            "rows": [
+              "Non-Banking Financial Companies (NBFCs)",
+              "Trade",
+              "Commercial Real Estate"
+            ],
+            "highlight": "Non-Banking Financial Companies (NBFCs)",
+            "name_width": 260
+          }
+        ]
+      },
+      "notes": [
+        {
+          "sidecar": "sibc_table.json",
+          "cut": "sibc-services",
+          "entity": "Non-Banking Financial Companies (NBFCs)",
+          "column": "size",
+          "field": "display"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-20",
+      "slug": "card-spend-leads-balances",
+      "text": "Credit card balances at banks grew 3.6% in Aug 2026. Card spend at shops grew 9.1%.\n\nOur test finds that a change in card spend shows up in balances a month later: one of the few links in our model that has passed a test.\n\n#CreditCards #DigitalPayments\nindiacreditlens.com",
+      "image": {
+        "kicker": "Bank credit and payments · Aug 2026",
+        "title": "Card balances +3.6%, card spend at shops +9.1%",
+        "source": "Source: RBI, Sectoral Deployment of Bank Credit; RBI, ATM, POS and card statistics",
+        "tables": [
+          {
+            "caption": "Banks · personal loans",
+            "path": "/",
+            "clicks": [
+              "Personal Loans"
+            ],
+            "cols": [
+              "PART",
+              "GROWTH"
+            ],
+            "rows": [
+              "Credit Card Outstanding"
+            ],
+            "highlight": "Credit Card Outstanding"
+          },
+          {
+            "caption": "Payments · credit card spend at shops",
+            "path": "/payments",
+            "clicks": [
+              "Credit Card",
+              "POS Transactions"
+            ],
+            "cols": [
+              "PART",
+              "GROWTH"
+            ],
+            "rows": [],
+            "highlight": ""
+          }
+        ]
+      }
+    },
+    {
+      "date": "2026-10-21",
+      "slug": "public-banks-card-spend",
+      "text": "Public sector banks hold 22.0% of credit card spend at shops, but took 51.0% of its growth: +23.9% in Aug 2026 against the market's 9.1%. SBI alone grew 22.3%.\n\n#CreditCards #PublicSectorBanks #DigitalPayments\nindiacreditlens.com",
+      "notes": [
+        {
+          "sidecar": "atm_pos_banks/cc-pos-txn-val-banks.json",
+          "entity": "STATE BANK OF INDIA",
+          "column": "growth",
+          "field": "display"
+        }
+      ],
+      "image": {
+        "kicker": "Payments · Credit card spend at shops (POS) · Aug 2026",
+        "title": "Public banks: 22.0% of card spend, 51.0% of its growth",
+        "source": "Source: RBI, ATM, POS and card statistics · rupee value, year on year",
+        "tables": [
+          {
+            "path": "/payments",
+            "clicks": [
+              "Credit Card",
+              "POS Transactions"
+            ],
+            "cols": [
+              "PART",
+              "OF CUT",
+              "GROWTH",
+              "NEW"
+            ],
+            "rows": [
+              "Private Sector Banks",
+              "Public Sector Banks",
+              "Foreign Banks",
+              "Small Finance Banks"
+            ],
+            "highlight": "Public Sector Banks"
+          }
+        ]
+      }
+    },
+    {
+      "date": "2026-10-22",
+      "slug": "loans-against-fixed-deposits",
+      "text": "Loans against fixed deposits grew 43.2% in Aug 2026, to ₹2.04L Cr: growth up 28.58 pp on the month.\n\nOur model has no explanation for it yet. Deposit rates? Liquidity needs? Tell us.\n\n#BankCredit #FixedDeposits\nindiacreditlens.com",
+      "image": {
+        "kicker": "Bank credit · Personal loans · Aug 2026",
+        "title": "Loans against fixed deposits: +43.2%, up 28.58 pp in a month",
+        "source": "Source: RBI, Sectoral Deployment of Bank Credit",
+        "tables": [
+          {
+            "path": "/",
+            "clicks": [
+              "Personal Loans"
+            ],
+            "cols": [
+              "PART",
+              "SIZE",
+              "GROWTH",
+              "PACE"
+            ],
+            "rows": [
+              "Advances against Fixed Deposits (Including FCNR (B), NRNR Deposits etc.)",
+              "Loans against gold jewellery"
+            ],
+            "highlight": "Advances against Fixed Deposits (Including FCNR (B), NRNR Deposits etc.)",
+            "name_width": 300
+          }
+        ]
+      }
+    }
+  ]
+}
