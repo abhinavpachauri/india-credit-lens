@@ -621,6 +621,20 @@
           "date": "2026-10-12",
           "how_measured": "synthetic series for the controls; the live register for the run",
           "source": "analysis/core/relationship_test.py judge/run_driver; analysis/tests/test_explainability.py"
+        },
+        {
+          "metric": "explanation coverage with the base effect (Step 6a)",
+          "value": "explained share over every reading, rule off -> on: SIBC 23% -> 41% (218 moves, unexplained 167 -> 129, 52 of them one-month steps), payments 25% -> 45%, NBFC 22% -> 22%",
+          "date": "2026-10-11",
+          "how_measured": "core/coverage.py over every period with coverage.level_series switched off vs on",
+          "source": "analysis/core/coverage.py; analysis/rbi_sibc/explainability_baseline.json"
+        },
+        {
+          "metric": "discover-on-earlier, confirm-on-later delays (Step 6c)",
+          "value": "controls 5/5 (1- and 5-month delays found and confirmed on 60 months; shuffled finds a delay but does not confirm; confirmation blind to discovery months; 15 months too_short). SIBC run: 47 hypotheses, 46 too_short, 1 opposite; discovery-only links (paper 0.81, wood 0.80, steel 0.77) all failed on later months",
+          "date": "2026-10-12",
+          "how_measured": "synthetic series for the controls; the live register for the run",
+          "source": "analysis/core/relationship_test.py discover_confirm; analysis/tests/test_explainability.py"
         }
       ],
       "observations": [

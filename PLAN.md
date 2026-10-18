@@ -2,66 +2,56 @@
 
 > Rewritten in place, never appended. Finished items are **deleted** (git keeps them). Hard cap
 > 120 lines, enforced by `reconcile.py`. Standing rules live in `DECISIONS.md`; how to run a
-> workflow lives in its skill (`.claude/skills/`). Last rewritten 2026-10-09.
+> workflow lives in its skill (`.claude/skills/`). Last rewritten 2026-10-18.
 
-## Now: tightening the model under S4 (user, 2026-10-08)
+## Now: make the credit system explainable (user, 2026-10-11)
 
-S4 was asked to explain growth, not change, and could only accept government instruments, because
-the layers under it were thin. Order agreed: fix the force check → count what the model explains
-→ relationships inside a pipeline → links between pipelines → master model → S4 redesign.
-Built 2026-10-08 (SYSTEM_MODEL_SPEC v3.1 §16):
-- **Force check** (Step 3, `core/force_check.py`): against the line's group, with timing; live for
-  SIBC and payments (8 group-total YoY signals). Active: SIBC 8, payments 2; KCC in doubt.
-- **Coverage count** (Step 6a, `core/coverage.py`): moves vs explained, every state file; S4 reads
-  its list from it. SIBC Aug 2026: 6 moves, 2 structural, 4 unexplained (food credit, loans
-  against FDs, other industries, fertiliser). History: 102 unexplained → 86 after structural.
-- **Relationship test** (Step 6b, `core/relationship_test.py`): HFC vs housing and the four
-  construction links all `not_supported` (`analysis/rbi_sibc/relationship_tests.json`).
-  **History is the binding constraint:** 15 monthly changes see only |r| ≥ 0.51.
-- **12 model arrows tested** (10-10): none supported; states, loops, coverage, line-driven opportunities
-  follow tests. **Card spend → card outstanding (1-month lead) supported** (r=+0.54, borderline).
-- **Buyer first** (STRATEGY v3.1 §5, 10-11): log who engages with X/LinkedIn, ask the 3 questions; the
-  next source waits on it. Per-bank quarterly found on DBIE (`analysis/sources/README.md`), not ingested.
-
-Agentic layer: phases 0–4 as before (`dashboard-change`, `onboard-source` ✅); `add-signal-family`,
-`measure-gate` ⬜, each written while doing its real task.
+The aim: explain why each line moves through the system's own drivers, so what remains is honestly
+"not explained by them". Method: the explainability loop (SYSTEM_MODEL_SPEC v3.2 §16 Step 6c, built
+2026-10-11/12): coverage count (6a, incl. base effect) → driver register (`rbi_sibc/driver_hypotheses.json`)
+→ completeness grid (`rbi_sibc/explainability_grid.md`, `core/explainability.py report`) → generic
+driver test, each line's delay found on earlier months and confirmed on later ones (`... test`).
+**Target: every column of the grid complete** (user). Explained share is the outcome: SIBC 23% → 41%
+of 218 moves after the base effect.
+- **History is the binding constraint:** 25 usable monthly changes; the first driver run read 46 of 47
+  `too_short` (one lead: petroleum credit vs fuel prices, delay 3, opposite sign, 13 months).
+- Steps 4 (admission: a `driver` explanation in 6a, `prices_activity` handed over) and 5 (cycles on
+  new data) wait until something is supported. **Review later (user): vehicles and durables input prices.**
+- **Buyer first** (STRATEGY v3.1 §5): log who engages with X/LinkedIn, ask the 3 questions; a source is
+  chosen by a buyer conversation and by the grid column it completes.
 
 ## Next, in order
 
-1. **NBFC August ingest** when RBI publishes (SIBC + payments Aug done 2026-10-03, with model
-   passes and S4). Then `/model-pass nbfc` + `/s4-source`, which also takes the 3 deferred
-   NBFC-raised proposals (#17-19 in `analysis/s4_proposals/2026-09-30.json`).
-2. **NBFC post-ingest count** (NBFC plan §6 "after the ingest"): how many files did pipeline #3
-   touch that were not its own? Record it in `ARCHITECTURE.md` §"Adding a pipeline", and let it
-   decide the open fork on a generic card path.
-3. **MoSPI (IIP, WPI, NAS, CPI), pipeline #4: phases 0–4 ✅ (2026-09-26 → 10-04).** A reference
-   pipeline joined to SIBC by `ontology/concordance/sibc__mospi.json`; the 1f signals put Real
-   credit and Output 12m on 8 SIBC tables. Spec as built: signals/README §1f + "MoSPI",
-   COMPOSITION_SPEC §24, DASHBOARD_SPEC §21.8. Pulled by hand until two clean cycles. Next:
-   - **CPI each month (settled 10-18):** release-day source is the press-release PDF (`fetch.py --cpi-pdf`);
-     the eSankhyiki annex arrives later (Sep not listed by 10-18) and confirms. Dashboard workbook retired
-     (user): redundant, and its name stopped dating its contents. Next: fetch the PDF automatically from
-     MoSPI's product feed (`api/product/get-product-data`, product 9 lists every release PDF).
-   - 1f now feeds the coverage count's prices/activity check (Step 6a); S4 redesign below.
-   - Candidate gate: the IIP weights rebuild (0.046 pt, measured by hand) as a standing 1d check.
-   - **Open, user deciding:** textiles vs apparel (SIBC 2.4 ↔ nic:13 or 13+14); WPI weights for the
-     6 combined deflators (WPI is DPIIT's, not in MoSPI's catalogue: eaindustry.nic.in); petroleum
-     deflated by WPI mineral oils (a judgment, §24.2; shown with its price note since 2026-10-04).
-4. **Arc 3: RBI regulatory watch** (S4 pointed at RBI, push not pull). Admission rule: an item
-   enters only if it attaches to a model entity, channel or cut. ⚠️ Re-run the allowlist census
-   first; the 2026-08-19 one predates the probe-bug retraction. Design: `archive/docs/PLAN_2026-09-09.md` arc 3.
-5. **BSR-1 Table 1.4** (quarterly, credit by occupation). The real cost: three measures per entity
-   (accounts / limit / outstanding) where every layer assumes one, and an occupation taxonomy
-   that overlaps SIBC sectors without matching them.
-6. **Lending & Deposit Rates: probed 10-10, onboarding paused (user).** Excel, full history in each
-   file (Jun–Sep 2026 in repo root); findings in `analysis/sources/README.md`. **Open, user deciding
-   after stepping back:** reference vs primary-with-page; the source order (#4–6); which of the 9 tables.
+1. **Extend history, both sides** (proposed 10-12, user to decide in the strategy session):
+   DBIE "Deployment of Bank Credit by Major Sectors" + industry-wise, monthly from Jan 2019 (system-level,
+   SIBC-shaped). SIBC releases stay primary; DBIE fills before Jan 2023 only after every 2023–26 overlap
+   month matches (a ~1% September gap seen 10-10 must be explained first). Plus MoSPI's older-base
+   (2011-12) WPI/IIP joined to the current base: without it older credit cannot be tested against prices
+   and output. Together ~25 → ~80 changes (detectable |r| 0.40 → ~0.22). **Git LFS for signals.db
+   first** (82 MB; GitHub warns at 50, refuses at 100).
+2. **Releases due:** SIBC Sep ~30 Oct, payments Sep ~3–5 Nov, NBFC Sep ~6 Nov (`/ingest-period`, then
+   `/model-pass` + `/s4-source`; NBFC also takes deferred proposals #17-19 in `s4_proposals/2026-09-30.json`).
+   CPI Oct ~12 Nov: PDF from MoSPI's product feed (`api/product/get-product-data`, product 9 lists every
+   release PDF), read with `fetch.py --cpi-pdf`; automating that fetch is a small next step.
+3. **X:** posts built to 3 Nov (`output/x/2026-10-18/`, `2026-10-23/`); next batch from 4 Nov, release
+   stories once SIBC/payments September land. Card e-commerce held: HDFC/SBI share break in Aug.
+4. **NBFC post-ingest count** (NBFC plan §6): how many files did pipeline #3 touch that were not its
+   own? Record it in `ARCHITECTURE.md` §"Adding a pipeline"; it decides the generic card path fork.
+5. **MoSPI open decisions (user):** textiles vs apparel (SIBC 2.4 ↔ nic:13 or 13+14); WPI weights for the
+   6 combined deflators (eaindustry.nic.in); petroleum deflated by WPI mineral oils (§24.2). Candidate
+   gate: the IIP weights rebuild (0.046 pt) as a standing 1d check.
+6. **Sources, order by buyer and grid** (catalogue: `analysis/sources/README.md`): Lending & Deposit Rates
+   (probed 10-10, paused; fills "price of credit", 83 lines), DBIE flow of resources/CP/ECB ("other
+   finance", 52), per-bank quarterly (buyer-led), arc 3 regulatory watch (`archive/docs/PLAN_2026-09-09.md`;
+   re-run the allowlist census first), BSR-1 (three measures per entity; occupation ≠ SIBC sectors).
 
 ## Open decisions and known debts (not scheduled)
 
-- **Open for the model:** explainability loop (SYSTEM_MODEL_SPEC §16 Step 6c), step 3 next; **review
-  later: vehicles and durables input prices** (`rbi_sibc/explainability_grid.md`). SIBC releases Sep–Dec
-  2024 still to add (user). 12 S4 proposals unsearched (`analysis/s4_proposals/2026-09-30.json`).
+- **Agentic layer:** `add-signal-family` and `measure-gate` skills ⬜, each written while doing its real task
+  (the story-readings and driver-test builds of 10-10/12 were candidates; not yet written).
+- **The merger gap is unexplained on screen** (10-10): growth cells absent for `merger_break` (Jan–Jun 2024)
+  draw blank with no reason; "Every reading" skips them. A `/dashboard-change`.
+- **12 S4 proposals unsearched** (`analysis/s4_proposals/2026-09-30.json`); 20 more from 2026-08-31.
 
 - **Stage 5.7 checks the declared cut, not the drawn series** (found 2026-10-05). Payments cards
   naming a bank category were drawn over the top-5 banks, so the chart showed only Total, and 5.7
@@ -97,8 +87,6 @@ Agentic layer: phases 0–4 as before (`dashboard-change`, `onboard-source` ✅)
   surface shows them; their numbers are table cells. Whether to stop generating them is open.
 - **Prompt v1.13 fix list** (paid; bundle with the next evaluate run): 3 eval-authored 5.8 warnings
   (`through FY26`, `watch for`, `on track to`).
-- **S4 worklist 2026-08-31**: 20 proposals still need a browser (`run_inference.py --worklist`).
-- **signals.db → Git LFS at ~80 MB** (GitHub's hard limit is 100 MB per file).
 - **SIBC still ships its raw CSV** for client parsing; payments ships a compact precomputed
   series. Move SIBC to the same mechanism before relocating either CSV out of `web/public/`.
 - **ai_pm_register** has not been updated for arcs 1–2 or NBFC; the injection numbers in those
@@ -106,11 +94,9 @@ Agentic layer: phases 0–4 as before (`dashboard-change`, `onboard-source` ✅)
 
 ## Parked (a trigger, not a date)
 
-- **Distribution**: **X daily from 2026-10-10** (DISTRIBUTION_SPEC §16): 25-day plan in
-  `output/x/2026-10-10_to_11-03_plan.md`; `x/build_posts.mjs {batch}` → post.txt + 16:9 card (phone
-  text ≥ 9px, every number traced); posts 1–5 built, next batch = plan #6–10. LinkedIn: 3 sets/month
-  (Aug done, `carousel/`); NBFC story first, then the `linkedin-carousel` skill (user: parked till then).
-  Open: @RBI source credit in X posts; auto-post via API after two clean weeks. Substack paused.
+- **Distribution**: X daily since 10-10 (DISTRIBUTION_SPEC §16; `x/build_posts.mjs {batch} --base URL`;
+  @RBI credit and API auto-post open). LinkedIn 3 sets/month; the NBFC story first, then the
+  `linkedin-carousel` skill (user: parked till then). Substack paused.
 - **PDF extraction** as a general capability: 11 of 21 remaining RBI sources are PDF-only. Start
   it when a PDF source is next in line, not before.
 - **Future data bets**: longer history → forecasting; bank results → per-bank analytics.

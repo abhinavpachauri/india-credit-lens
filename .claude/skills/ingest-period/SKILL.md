@@ -27,9 +27,11 @@ python3 analysis/core/gate.py --pipeline {p} --skip-build   # green BEFORE touch
 A red gate before ingesting means you cannot tell your breakage from the existing one.
 
 **SIBC depends on MoSPI** (`depends_on`, since 2026-10-03): its gate's stage D fails when a MoSPI
-release is overdue. Bring MoSPI current first (`python3 analysis/core/gate.py --pipeline mospi`; its
-fetch pulls CPI's press-release annex from the eSankhyiki catalogue. If the catalogue lags a release,
-read the PDF by hand: `python3 analysis/pipelines/mospi/fetch.py --cpi-pdf {file}`).
+release is overdue. Bring MoSPI current first (`python3 analysis/core/gate.py --pipeline mospi`). CPI's
+release-day source is the press-release PDF (the eSankhyiki annex lags by weeks, 2026-10-18): find it in
+MoSPI's product feed (`POST www.mospi.gov.in/api/product/get-product-data` with `{"product_id": 9}` lists
+every release PDF under `uploads/latestreleasesfiles/`), ask before downloading, then
+`python3 analysis/pipelines/mospi/fetch.py --cpi-pdf {file}`. The dashboard workbook is retired.
 
 ## 1. Format + extract + consolidate, through the gate
 
@@ -45,7 +47,11 @@ python3 analysis/core/gate.py --pipeline {p} --xlsx {xlsx} --skip-build
   date (CLAUDE.md § SIBC date normalisation), then `python3 analysis/pipelines/sibc/update_web_data.py --approve`
   and re-run. Never approve on their behalf: a wrong remap misdates data and nothing downstream notices.
 - **SIBC only:** add the period to `analysis/rbi_sibc/timeline.json` by hand (`dataDate`,
-  `csv_date` = month-end the data belongs to, `is_fy_end` = true only for the March file). NBFC and
+  `csv_date` = month-end the data belongs to, `is_fy_end` = true only for the March file).
+  **`dataDate` must equal the release's folder name** (`rbi_sibc/{date}/`): `generate_merge.py` finds a
+  release's sections through it, and a month-end guess silently drops the release from the merge
+  (3 of 8 back-releases, 2026-10-10). Moving a `dataDate` moves its signals' period key: delete the
+  old key's rows and re-append. NBFC and
   ATM/POS consolidate registers the timeline itself.
 - **NBFC:** stage 1c checks our computed YoY against RBI's own printed column. Also compare the
   press-release headline numbers (monthly NBFC press release) by eye before trusting the file.
