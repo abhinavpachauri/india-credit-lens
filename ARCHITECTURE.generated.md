@@ -8,7 +8,7 @@
 > Authored rationale (layer model, design principles, guard purposes) lives in the
 > hand-written `ARCHITECTURE.md`. This file is the structural, drift-guarded half.
 
-_Derived from 101 scripts._
+_Derived from 102 scripts._
 
 ## 1. Data-flow
 
@@ -76,7 +76,7 @@ Scripts each orchestrator launches as a subprocess, in execution order.
 | `analysis/cross_source/candidates.json` | derived | `cross/derive_cross_links` | `core/run_inference`, `guards/check_derived_fresh` |
 | `analysis/cross_source/composition.json` | external/authored | — | `core/run_inference`, `cross/compose_ecosystem`, `cross/validate_composition` |
 | `analysis/cross_source/ecosystem_model.json` | external/authored | — | `cross/compose_ecosystem`, `cross/generate_opportunities_feed`, `cross/validate_composition` |
-| `analysis/cross_source/relationship_tests.json` | derived | `core/relationship_test` | — |
+| `analysis/cross_source/relationship_tests.json` | derived | `core/explainability`, `core/relationship_test` | — |
 | `analysis/ontology/channels.json` | external/authored | — | `core/run_inference`, `core/validate_system_model`, `cross/derive_cross_links`, `cross/generate_opportunities_feed` |
 | `analysis/ontology/concepts.json` | external/authored | — | `core/validate_system_model`, `cross/validate_composition` |
 | `analysis/ontology/domains.json` | external/authored | — | `cross/validate_composition` |
@@ -108,6 +108,7 @@ orchestrated, not import-coupled).
 
 - `core/coverage` → `core/force_check`, `core/generate_skeleton`, `core/manifest`, `signals/dominance`
 - `core/derive_opportunities` → `core/force_check`, `core/generate_skeleton`, `core/manifest`
+- `core/explainability` → `core/coverage`, `core/force_check`, `core/generate_skeleton`, `core/manifest`, `core/relationship_test`
 - `core/force_check` → `core/generate_skeleton`, `core/generate_system_state`
 - `core/gate` → `core/manifest`
 - `core/generate_chart_series` → `core/manifest`
@@ -169,6 +170,7 @@ orchestrated, not import-coupled).
 ## 5. Findings (drift signals)
 
 ### Multiple writers (verify intentional vs. dual-path smell)
+- `analysis/cross_source/relationship_tests.json` ← `core/explainability`, `core/relationship_test`
 - `analysis/signals/registry.json` ← `signals/apply_status_rules`, `signals/update_registry`
 - `format_report.json` ← `pipelines/atm_pos/detect_atm_pos_format`, `pipelines/sibc/detect_format`
 - `sections.json` ← `pipelines/atm_pos/extract_atm_pos`, `pipelines/nbfc/extract_nbfc`, `pipelines/sibc/extract_sibc`
@@ -176,6 +178,6 @@ orchestrated, not import-coupled).
 - `web/public/data/opportunities_feed.json` ← `cross/generate_opportunities_feed`, `cross/generate_opportunity_narrative`
 
 ### Internal artifacts produced but never read (potential dead output)
-- `analysis/cross_source/relationship_tests.json` ← `core/relationship_test`
+- `analysis/cross_source/relationship_tests.json` ← `core/explainability`, `core/relationship_test`
 - `analysis/rbi_sibc/date_remap.json` ← `pipelines/sibc/update_web_data`
 - `analysis/signals/narrative_cache.json` ← `cross/generate_opportunity_narrative`

@@ -573,6 +573,20 @@ def test_anything_but_exactly_one_workbook_fails(data):
         F.the_workbook({"exists": True, "data": data})
 
 
+def test_last_months_workbook_still_listed_is_passed_over_for_the_newest():
+    """The listing as MoSPI served it on 18 Oct 2026: the old file stays beside the new one."""
+    listing = {"exists": True, "data": [
+        {"id": 16, "file_name": "CPI updated_Sep_ 2026_Dashboard Data-12.09.2026.xlsx", "file_type": "xlsx"},
+        {"id": 13, "file_name": "CPI updated_July_ 2026_Dashboard Data-12.08.2026.xlsx", "file_type": None}]}
+    assert F.the_workbook(listing)["id"] == 16
+
+
+def test_several_workbooks_with_an_undated_name_fail():
+    with pytest.raises(A.FetchError):
+        F.the_workbook({"exists": True, "data": [{**_XLSX, "file_type": None},
+                                                  {"id": 17, "file_name": "CPI data.xlsx", "file_type": "xlsx"}]})
+
+
 # ── The press release's Excel annex (cpi_annex), from the eSankhyiki catalogue ──────────────
 # Built in the shapes seven real releases (Feb–Aug 2026) took: sheet name varies, the
 # "Annexure-IV" line comes and goes, a numerals row sometimes sits under the header, a month is

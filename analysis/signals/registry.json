@@ -2,7 +2,7 @@
   "_meta": {
     "schema_version": "1.0",
     "description": "Signal registry — permanent catalog of every tracked signal across all ingestion pipelines. Signal IDs are immutable once created. Add new signals; never rename or delete. layer: 1 = per-chart data signal (algorithmically computed), 2 = cross-chart synthesis (authored per period from data), 3 = lending ecosystem expert model (generated ~6-monthly, strict claim validation).",
-    "last_updated": "2026-10-10",
+    "last_updated": "2026-10-18",
     "cadence_vocabulary": [
       "fortnightly",
       "monthly",
@@ -17784,7 +17784,7 @@
       "domain": "industry",
       "type": "data",
       "spec_version": "1.0",
-      "current_status": "strengthening",
+      "current_status": "active",
       "first_seen": "2024-01-31",
       "compute": {
         "method": "csv_sector_real_growth",
@@ -17850,7 +17850,7 @@
       "domain": "industry",
       "type": "data",
       "spec_version": "1.0",
-      "current_status": "strengthening",
+      "current_status": "active",
       "first_seen": "2024-01-31",
       "compute": {
         "method": "csv_sector_real_growth",

@@ -101,9 +101,22 @@ def the_workbook(listing: dict) -> dict:
     """
     files = [f for f in (listing.get("data") or [])
              if (f.get("file_type") or Path(f.get("file_name") or "").suffix.lstrip(".")).lower() == "xlsx"]
-    if not listing.get("exists") or len(files) != 1:
+    if not listing.get("exists") or not files:
         raise mospi_api.FetchError(f"expected one CPI workbook, the page lists {listing.get('data')!r}")
-    return files[0]
+    if len(files) == 1:
+        return files[0]
+    # Since Oct 2026 the page keeps last month's workbook listed beside the new one (18 Oct: the
+    # 12.08 and 12.09 files). Several are read by the publication date in their names; the latest
+    # is the current file. Two on one date, or a name with no date, still raises: that is a
+    # change in how MoSPI publishes, not a stale entry.
+    import cpi_dashboard
+    try:
+        dated = sorted(((cpi_dashboard.published(f["file_name"]), f) for f in files), key=lambda x: x[0])
+    except ValueError as e:
+        raise mospi_api.FetchError(f"several CPI workbooks listed and one has no date: {e}") from e
+    if len(dated) > 1 and dated[-1][0] == dated[-2][0]:
+        raise mospi_api.FetchError(f"two CPI workbooks share the latest date: {listing.get('data')!r}")
+    return dated[-1][1]
 
 
 def fetch_cpi_workbook(ds: dict, local: Path | None = None) -> str:
@@ -186,8 +199,10 @@ def main() -> int:
     for name in names:
         ds = man["datasets"][name]
         if ds["source"] == "release_files":
-            for label, pull in (("annex", lambda: fetch_cpi_annexes(ds, man["api"])),
-                                ("workbook", lambda: [fetch_cpi_workbook(ds)])):
+            pulls = [("annex", lambda: fetch_cpi_annexes(ds, man["api"]))]
+            if not ds["sources"].get("dashboard_xlsx", {}).get("retired"):
+                pulls.append(("workbook", lambda: [fetch_cpi_workbook(ds)]))
+            for label, pull in pulls:
                 try:
                     for msg in pull():
                         print(f"  ✓ {name} {label}: {msg}")

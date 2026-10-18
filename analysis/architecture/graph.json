@@ -61,6 +61,26 @@
       },
       "writes": {}
     },
+    "core/explainability": {
+      "doc_claims": [],
+      "imports": [
+        "core/coverage",
+        "core/force_check",
+        "core/generate_skeleton",
+        "core/manifest",
+        "core/relationship_test"
+      ],
+      "invokes": [],
+      "path": "analysis/core/explainability.py",
+      "reads": {
+        "driver_hypotheses.json": "low",
+        "explainability_grid.md": "low",
+        "system_state_*.json": "low"
+      },
+      "writes": {
+        "analysis/cross_source/relationship_tests.json": "high"
+      }
+    },
     "core/force_check": {
       "doc_claims": [],
       "imports": [

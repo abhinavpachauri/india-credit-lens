@@ -38,11 +38,10 @@ Agentic layer: phases 0–4 as before (`dashboard-change`, `onboard-source` ✅)
    pipeline joined to SIBC by `ontology/concordance/sibc__mospi.json`; the 1f signals put Real
    credit and Output 12m on 8 SIBC tables. Spec as built: signals/README §1f + "MoSPI",
    COMPOSITION_SPEC §24, DASHBOARD_SPEC §21.8. Pulled by hand until two clean cycles. Next:
-   - **CPI each month** (Sep due ~12–14 Oct; MoSPI 1b fails overdue without it, and SIBC's gate with it).
-     Fetched automatically since 2026-10-08 (`cpi_annex.py`, the eSankhyiki press-release annex).
-     **September decides the PDF path**: if the annex is listed within the 5-day grace, retire
-     `--cpi-pdf` + `cpi_release.py` (and ask whether the dashboard workbook, now redundant, goes too);
-     if not, the PDF stays as the release-day source. The catalogue's Feb–Aug entries were all created 10-01.
+   - **CPI each month (settled 10-18):** release-day source is the press-release PDF (`fetch.py --cpi-pdf`);
+     the eSankhyiki annex arrives later (Sep not listed by 10-18) and confirms. Dashboard workbook retired
+     (user): redundant, and its name stopped dating its contents. Next: fetch the PDF automatically from
+     MoSPI's product feed (`api/product/get-product-data`, product 9 lists every release PDF).
    - 1f now feeds the coverage count's prices/activity check (Step 6a); S4 redesign below.
    - Candidate gate: the IIP weights rebuild (0.046 pt, measured by hand) as a standing 1d check.
    - **Open, user deciding:** textiles vs apparel (SIBC 2.4 ↔ nic:13 or 13+14); WPI weights for the
