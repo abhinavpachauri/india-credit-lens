@@ -1,0 +1,456 @@
+{
+  "batch": "2026-10-23",
+  "plan": "analysis/distribution/output/x/2026-10-10_to_11-03_plan.md",
+  "note": "23 Oct - 3 Nov. Plan #11-15, #17-19, #22, #23 (moved to 28 Oct), #25; #16 (card e-commerce) dropped: HDFC and SBI carry a one-month share break in Aug (bank step flag). Release-day slots filled with ready stories: swap in a release post when SIBC (~30 Oct) or payments (~3-5 Nov) September lands. Data month Aug 2026.",
+  "out_dir": "analysis/distribution/output/x/2026-10-23",
+  "posts": [
+    {
+      "date": "2026-10-23",
+      "slug": "nbfc-retail-share",
+      "text": "Retail is 43.7% of NBFC loans, but took 57.8% of new NBFC credit in Aug 2026. Retail grew 22.0% against 15.8% for all NBFC lending. Inside retail: gold loans +69.1%, consumer durables +56.4%.\n\n(NBFCs: RBI's reporting sample.)\n#NBFC #RetailCredit\nindiacreditlens.com",
+      "image": {
+        "kicker": "NBFC credit · Aug 2026",
+        "title": "NBFC retail: 43.7% of the book, 57.8% of the new",
+        "source": "Source: RBI, NBFC sectoral credit (reporting sample)",
+        "tables": [
+          {
+            "path": "/nbfc",
+            "clicks": [
+              "Main sectors"
+            ],
+            "cols": [
+              "PART",
+              "OF CUT",
+              "GROWTH",
+              "NEW"
+            ],
+            "rows": [
+              "Retail Loans",
+              "Industry",
+              "Services"
+            ],
+            "highlight": "Retail Loans"
+          }
+        ]
+      },
+      "notes": [
+        {
+          "sidecar": "nbfc_table.json",
+          "cut": "nbfc-retail",
+          "entity": "Loans against gold jewellery",
+          "column": "growth",
+          "field": "display"
+        },
+        {
+          "sidecar": "nbfc_table.json",
+          "cut": "nbfc-retail",
+          "entity": "Consumer Durables",
+          "column": "growth",
+          "field": "display"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-24",
+      "slug": "industry-credit-vs-output",
+      "text": "Bank credit to industry grew 18.2% in Aug 2026.\n\nIn the Apr–Jun quarter, net of prices (national-accounts deflator, +3.9%), industry credit grew 14.8%, while industry's real output grew 7.9% over the four quarters to Q1.\n\n#BankCredit #Manufacturing\nindiacreditlens.com",
+      "image": {
+        "kicker": "Bank credit vs the real economy · Aug 2026",
+        "title": "Industry credit 18.2%; in Q1, real 14.8% vs output 7.9%",
+        "source": "Source: RBI, Sectoral Deployment of Bank Credit; MoSPI national accounts",
+        "tables": [
+          {
+            "path": "/",
+            "clicks": [
+              "Main Sectors"
+            ],
+            "cols": [
+              "PART",
+              "GROWTH",
+              "REAL CREDIT",
+              "OUTPUT 12M"
+            ],
+            "rows": [
+              "Industry (Micro and Small, Medium and Large)",
+              "Services"
+            ],
+            "highlight": "Industry (Micro and Small, Medium and Large)",
+            "name_width": 190
+          }
+        ]
+      },
+      "notes": [
+        {
+          "sidecar": "sibc_table.json",
+          "cut": "sibc-main",
+          "entity": "Industry (Micro and Small, Medium and Large)",
+          "column": "real_credit"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-25",
+      "slug": "debit-cards-at-shops",
+      "text": "Debit card spend at shops fell 7.4% over the year to Aug 2026: SBI −9.3%, HDFC −6.1%, ICICI −7.3%.\n\nUPI QR codes grew 16.5% over the same year. Is UPI taking the debit card's place at the counter?\n\n#DebitCards #UPI #DigitalPayments\nindiacreditlens.com",
+      "image": {
+        "kicker": "Payments · Debit card spend at shops (POS) · Aug 2026",
+        "title": "Debit card spend at shops: −7.4% over the year",
+        "source": "Source: RBI, bank-wise ATM, POS and card statistics · rupee value, year on year",
+        "tables": [
+          {
+            "path": "/payments",
+            "clicks": [
+              "Debit Card",
+              "POS Transactions",
+              "bank (63)"
+            ],
+            "cols": [
+              "PART",
+              "OF CUT",
+              "GROWTH"
+            ],
+            "rows": [
+              "STATE BANK OF INDIA",
+              "HDFC BANK LTD",
+              "ICICI BANK LTD"
+            ],
+            "highlight": ""
+          }
+        ]
+      },
+      "notes": [
+        {
+          "sidecar": "atm_pos_banks/upi-qr-banks.json",
+          "entity": null,
+          "column": "growth",
+          "field": "display"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-26",
+      "slug": "housing-share-of-new",
+      "text": "Housing is 47.4% of bank personal loans but took 32.8% of the new ones in Aug 2026. It grew 11.1%; net of consumer prices (CPI, +4.8% over the year), 6.0%.\n\nNBFC housing loans grew 12.1%.\n\n#HousingFinance #BankCredit #NBFC\nindiacreditlens.com",
+      "image": {
+        "kicker": "Bank credit · Personal loans · Aug 2026",
+        "title": "Housing: 47.4% of personal loans, 32.8% of the new",
+        "source": "Source: RBI, Sectoral Deployment of Bank Credit; RBI NBFC sectoral credit",
+        "tables": [
+          {
+            "path": "/",
+            "clicks": [
+              "Personal Loans"
+            ],
+            "cols": [
+              "PART",
+              "OF CUT",
+              "GROWTH",
+              "NEW"
+            ],
+            "rows": [
+              "Housing (Including Priority Sector Housing)",
+              "Other Personal Loans",
+              "Loans against gold jewellery"
+            ],
+            "highlight": "Housing (Including Priority Sector Housing)",
+            "name_width": 280
+          }
+        ]
+      },
+      "notes": [
+        {
+          "sidecar": "sibc_table.json",
+          "cut": "sibc-pl",
+          "entity": "Housing (Including Priority Sector Housing)",
+          "column": "real_credit"
+        },
+        {
+          "sidecar": "sibc_table.json",
+          "cut": "sibc-pl",
+          "entity": "Housing (Including Priority Sector Housing)",
+          "column": "real_credit",
+          "field": "display"
+        },
+        {
+          "sidecar": "nbfc_table.json",
+          "cut": "nbfc-retail",
+          "entity": "Housing Loans",
+          "column": "growth",
+          "field": "display"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-27",
+      "slug": "software-and-aviation",
+      "text": "Bank credit to computer software grew 41.8% in Aug 2026, and to aviation 32.1%, against 24.3% for all services.\n\nAviation's growth picked up 8.28 pp on the month.\n\n#BankCredit #Aviation #IT\nindiacreditlens.com",
+      "image": {
+        "kicker": "Bank credit · Services · Aug 2026",
+        "title": "Software +41.8%, aviation +32.1%, services +24.3%",
+        "source": "Source: RBI, Sectoral Deployment of Bank Credit",
+        "tables": [
+          {
+            "path": "/",
+            "clicks": [
+              "Services"
+            ],
+            "cols": [
+              "PART",
+              "GROWTH",
+              "PACE"
+            ],
+            "rows": [
+              "Computer Software",
+              "Aviation",
+              "Trade"
+            ],
+            "highlight": "Computer Software"
+          }
+        ]
+      }
+    },
+    {
+      "date": "2026-10-28",
+      "slug": "bharat-qr-fading",
+      "text": "Bharat QR codes fell 18.9% over the year to Aug 2026. HDFC holds 43.3% of them and grew 3.4%; Axis fell 36.7%.\n\nUPI QR codes grew 16.5% over the same year.\n\n#BharatQR #UPI #DigitalPayments\nindiacreditlens.com",
+      "image": {
+        "kicker": "Payments · Bharat QR codes · Aug 2026",
+        "title": "Bharat QR codes: −18.9% over the year",
+        "source": "Source: RBI, bank-wise ATM, POS and card statistics",
+        "tables": [
+          {
+            "path": "/payments",
+            "clicks": [
+              "Digital Infrastructure",
+              "Bharat QR Codes",
+              "bank (63)"
+            ],
+            "cols": [
+              "PART",
+              "SIZE",
+              "OF CUT",
+              "GROWTH"
+            ],
+            "rows": [
+              "HDFC BANK LTD",
+              "STATE BANK OF INDIA",
+              "AXIS BANK LTD"
+            ],
+            "highlight": "HDFC BANK LTD"
+          }
+        ]
+      },
+      "notes": [
+        {
+          "sidecar": "atm_pos_banks/upi-qr-banks.json",
+          "entity": null,
+          "column": "growth",
+          "field": "display"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-29",
+      "slug": "farm-credit-vs-output",
+      "text": "Bank credit to agriculture grew 17.2% in Aug 2026.\n\nIn the Apr–Jun quarter, net of prices (national-accounts deflator, +3.8%), farm credit grew 12.6%, while real farm output grew 3.1% over the four quarters to Q1.\n\n#Agriculture #BankCredit #RealEconomy\nindiacreditlens.com",
+      "image": {
+        "kicker": "Bank credit vs the real economy · Aug 2026",
+        "title": "Farm credit 17.2%; in Q1, real 12.6% vs output 3.1%",
+        "source": "Source: RBI, Sectoral Deployment of Bank Credit; MoSPI national accounts",
+        "tables": [
+          {
+            "path": "/",
+            "clicks": [
+              "Main Sectors"
+            ],
+            "cols": [
+              "PART",
+              "GROWTH",
+              "REAL CREDIT",
+              "OUTPUT 12M"
+            ],
+            "rows": [
+              "Agriculture and Allied Activities",
+              "Industry (Micro and Small, Medium and Large)"
+            ],
+            "highlight": "Agriculture and Allied Activities",
+            "name_width": 190
+          }
+        ]
+      },
+      "notes": [
+        {
+          "sidecar": "sibc_table.json",
+          "cut": "sibc-main",
+          "entity": "Agriculture and Allied Activities",
+          "column": "real_credit"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-30",
+      "slug": "vehicle-makers-credit-vs-output",
+      "text": "Bank credit to vehicle makers grew 34.8% in Aug 2026. Their output (IIP, the last 12 months against the 12 before) grew 15.9%.\n\n#Automobiles #BankCredit #Manufacturing\nindiacreditlens.com",
+      "image": {
+        "kicker": "Bank credit vs the real economy · Aug 2026",
+        "title": "Vehicle makers: credit +34.8%, output +15.9%",
+        "source": "Source: RBI, Sectoral Deployment of Bank Credit; MoSPI IIP",
+        "tables": [
+          {
+            "path": "/",
+            "clicks": [
+              "Industry by Type"
+            ],
+            "cols": [
+              "PART",
+              "GROWTH",
+              "OUTPUT 12M"
+            ],
+            "rows": [
+              "Vehicles, Vehicle Parts and Transport Equipment",
+              "All Engineering",
+              "Basic Metal and Metal Product"
+            ],
+            "highlight": "Vehicles, Vehicle Parts and Transport Equipment",
+            "name_width": 300
+          }
+        ]
+      }
+    },
+    {
+      "date": "2026-10-31",
+      "slug": "small-finance-bank-cards",
+      "text": "Small finance banks had 25.26 lakh credit cards in force in Aug 2026, up 111.2% over the year. Still only 2.0% of all cards, but 11.5% of the cards added.\n\n#CreditCards #SmallFinanceBanks\nindiacreditlens.com",
+      "image": {
+        "kicker": "Payments · Credit cards in force · Aug 2026",
+        "title": "Small finance banks' credit cards: +111.2%",
+        "source": "Source: RBI, bank-wise ATM, POS and card statistics",
+        "tables": [
+          {
+            "path": "/payments",
+            "clicks": [
+              "Credit Card"
+            ],
+            "cols": [
+              "PART",
+              "SIZE",
+              "OF CUT",
+              "GROWTH",
+              "NEW"
+            ],
+            "rows": [
+              "Private Sector Banks",
+              "Public Sector Banks",
+              "Small Finance Banks"
+            ],
+            "highlight": "Small Finance Banks"
+          }
+        ]
+      }
+    },
+    {
+      "date": "2026-11-01",
+      "slug": "nbfc-power-book",
+      "text": "91.0% of NBFC lending to industry is infrastructure, and 71.4% of that is power. Power took 81.3% of new NBFC infrastructure credit in Aug 2026 and grew 8.3%.\n\n(NBFCs: RBI's reporting sample.)\n#NBFC #Power #Infrastructure\nindiacreditlens.com",
+      "image": {
+        "kicker": "NBFC credit · Infrastructure · Aug 2026",
+        "title": "Power: 71.4% of NBFC infrastructure credit, 81.3% of the new",
+        "source": "Source: RBI, NBFC sectoral credit (reporting sample)",
+        "tables": [
+          {
+            "path": "/nbfc",
+            "clicks": [
+              "Infrastructure"
+            ],
+            "cols": [
+              "PART",
+              "OF CUT",
+              "GROWTH",
+              "NEW"
+            ],
+            "rows": [
+              "Power"
+            ],
+            "highlight": "Power"
+          }
+        ]
+      },
+      "notes": [
+        {
+          "sidecar": "nbfc_table.json",
+          "cut": "nbfc-industry",
+          "entity": "Infrastructure",
+          "column": "of_cut",
+          "field": "display"
+        }
+      ]
+    },
+    {
+      "date": "2026-11-02",
+      "slug": "gems-jewellery-real-credit",
+      "text": "Bank credit to gems and jewellery makers grew 39.1% in Aug 2026. Net of jewellery prices (WPI, +23.6% over the year), it grew 12.6%.\n\nMost of the rupee growth is the price of gold.\n\n#GemsAndJewellery #Gold #BankCredit\nindiacreditlens.com",
+      "image": {
+        "kicker": "Bank credit vs prices · Aug 2026",
+        "title": "Gems & jewellery credit: 39.1% in rupees, 12.6% net of prices",
+        "source": "Source: RBI, Sectoral Deployment of Bank Credit; WPI jewellery",
+        "tables": [
+          {
+            "path": "/",
+            "clicks": [
+              "Industry by Type"
+            ],
+            "cols": [
+              "PART",
+              "GROWTH",
+              "REAL CREDIT"
+            ],
+            "rows": [
+              "Gems and Jewellery"
+            ],
+            "highlight": "Gems and Jewellery"
+          }
+        ]
+      },
+      "notes": [
+        {
+          "sidecar": "sibc_table.json",
+          "cut": "sibc-industry-type",
+          "entity": "Gems and Jewellery",
+          "column": "real_credit"
+        }
+      ]
+    },
+    {
+      "date": "2026-11-03",
+      "slug": "pos-terminals-one-bank",
+      "text": "POS terminals fell 14.7% over the year to Aug 2026. Most of that is one bank: ICICI Bank −91.9%.\n\nElsewhere the network grew: HDFC +17.0%, SBI +8.6%, Axis +6.3%.\n\n#POS #DigitalPayments #ICICIBank\nindiacreditlens.com",
+      "image": {
+        "kicker": "Payments · POS terminals · Aug 2026",
+        "title": "POS terminals −14.7%: mostly one bank",
+        "source": "Source: RBI, bank-wise ATM, POS and card statistics",
+        "tables": [
+          {
+            "path": "/payments",
+            "clicks": [
+              "Digital Infrastructure",
+              "POS Terminals",
+              "bank (63)"
+            ],
+            "cols": [
+              "PART",
+              "OF CUT",
+              "GROWTH"
+            ],
+            "rows": [
+              "HDFC BANK LTD",
+              "STATE BANK OF INDIA",
+              "AXIS BANK LTD",
+              "ICICI BANK LTD"
+            ],
+            "highlight": "ICICI BANK LTD"
+          }
+        ]
+      }
+    }
+  ]
+}
