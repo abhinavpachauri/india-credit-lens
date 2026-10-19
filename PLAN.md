@@ -27,8 +27,8 @@ of 218 moves after the base effect.
    SIBC-shaped). SIBC releases stay primary; DBIE fills before Jan 2023 only after every 2023–26 overlap
    month matches (a ~1% September gap seen 10-10 must be explained first). Plus MoSPI's older-base
    (2011-12) WPI/IIP joined to the current base: without it older credit cannot be tested against prices
-   and output. Together ~25 → ~80 changes (detectable |r| 0.40 → ~0.22). **Git LFS for signals.db
-   first** (82 MB; GitHub warns at 50, refuses at 100).
+   and output. Together ~25 → ~80 changes (detectable |r| 0.40 → ~0.22). The store is now committed
+   compressed (`signals.db.gz`, 10.9 MB, 10-19), so the backfill no longer hits GitHub's file limit.
 2. **Releases due:** SIBC Sep ~30 Oct, payments Sep ~3–5 Nov, NBFC Sep ~6 Nov (`/ingest-period`, then
    `/model-pass` + `/s4-source`; NBFC also takes deferred proposals #17-19 in `s4_proposals/2026-09-30.json`).
    CPI Oct ~12 Nov: PDF from MoSPI's product feed (`api/product/get-product-data`, product 9 lists every

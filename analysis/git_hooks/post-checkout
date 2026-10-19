@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# India Credit Lens post-checkout hook: restore the local signal store from the committed pack when it is safe
+# (signals/README.md, "How the store is committed"). Never overwrites local changes; a conflict is
+# reported, not resolved.
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+python3 "$REPO_ROOT/analysis/signals/db_pack.py" unpack || true

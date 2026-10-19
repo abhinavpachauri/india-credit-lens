@@ -40,7 +40,13 @@ DOMAIN_BRAND_RESEARCH.md
 rbi-analytics/
 trading_system.db
 
-# SQLite transient sidecars (signals.db itself IS tracked — these are not)
+# The signal store is committed compressed (signals.db.gz + .sha256); the working copy and its
+# sync marker are local (signals/README.md, "How the store is committed").
+analysis/signals/signals.db
+analysis/signals/.signals.db.synced
+analysis/signals/signals.db.gz.tmp
+analysis/signals/signals.db.tmp
+# SQLite transient sidecars
 *.db-shm
 *.db-wal
 

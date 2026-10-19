@@ -11,7 +11,7 @@
 #      corrected but not every period is re-appended. (2026-06 FY-acceleration
 #      phantom jump.)
 #
-# Install: ln -sf ../../analysis/git_hooks/pre-commit .git/hooks/pre-commit
+# Install: for h in pre-commit post-merge post-checkout; do ln -sf ../../analysis/git_hooks/$h .git/hooks/$h; done
 set -uo pipefail
 REPO_ROOT="$(git rev-parse --show-toplevel)"
 STAGED="$(git diff --cached --name-only)"
@@ -20,9 +20,16 @@ STAGED="$(git diff --cached --name-only)"
 DERIVED_RE='(system_model\.json|ontology/(channels|concepts)\.json|signals/registry\.json|skeleton_profile\.(json|md)|cross_source/composition\.json|system_state_.*\.json|opportunities_.*\.json|candidates\.json|opportunities_feed\.json)'
 
 # Sources that can stale signals.db (the computed signal fact table).
-SIGNAL_RE='(rbi_sibc_consolidated\.csv|atm_pos_consolidated\.csv|signals/registry\.json|signals/compute/.*\.py|signals\.db)'
+SIGNAL_RE='(rbi_sibc_consolidated\.csv|atm_pos_consolidated\.csv|signals/registry\.json|signals/compute/.*\.py|signals\.db\.(gz|sha256))'
 
 rc=0
+# The store is committed compressed (signals/README.md, "How the store is committed"): a changed
+# working copy is packed here, and the commit fails until the new pack is staged.
+if python3 "$REPO_ROOT/analysis/signals/db_pack.py" pack | grep -q "packed"; then
+  echo "[pre-commit] signals.db changed — packed signals.db.gz; stage it and re-commit:"
+  echo "  git add analysis/signals/signals.db.gz analysis/signals/signals.db.sha256"
+  rc=1
+fi
 if echo "$STAGED" | grep -Eq "$DERIVED_RE"; then
   echo "[pre-commit] source/derived files staged — checking derived-artifact freshness…"
   python3 "$REPO_ROOT/analysis/guards/check_derived_fresh.py" --quiet || rc=$?

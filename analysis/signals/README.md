@@ -9,6 +9,25 @@ deterministic compute engine, and the LLM evaluation layer.
 - **`signals.db`** — **primary store** (SQLite): `(pipeline, period, metric_id, entity_type,
   entity_id)` fact table + `ingestion_log` + `llm_cache`. Binary — guarded by `guards/check_signal_freshness`.
 - **`db.py`** — schema init (and the history index's `ANALYZE`).
+- **How the store is committed (user, 2026-10-19).** `signals.db` passed 80 MB and was committed
+  ~13 times a month, so Git LFS would have stored ~1 GB a month. Instead the repo commits
+  **`signals.db.gz`** (deterministic gzip, ~11 MB: the same store always gives the same bytes) and
+  **`signals.db.sha256`** (the fingerprint of the store inside it). `signals.db` is the local working
+  copy and is not committed; `.signals.db.synced` (not committed) records the fingerprint it was last
+  packed or unpacked at. `signals/db_pack.py` decides, from the three fingerprints:
+
+  | working copy vs committed | working copy vs last sync | state | action |
+  |---|---|---|---|
+  | equal | — | `in_sync` | none |
+  | absent | — | `missing` | unpack |
+  | different | equal | `pull_not_unpacked` | unpack (the committed store is newer) |
+  | different | different, committed = last sync | `not_packed` | pack (local changes) |
+  | different | different, committed ≠ last sync | `conflict` | **stop**: both changed; never overwrite either |
+
+  The pre-commit hook packs a changed working copy and fails until the new `.gz` and `.sha256` are
+  staged (the same pattern as the derived-artifact check). Post-merge and post-checkout hooks
+  unpack. The freshness check (2f) refuses to run unless the state is `in_sync`, so "the committed
+  store is what freshness verifies" still holds: at every commit the packed store is the checked one.
 
 ## Compute (`compute/`)
 - **`engine.py`** — `run_append(pipeline, period, db, registry)` dispatches each signal to its

@@ -26,7 +26,7 @@
 
 ## Guards and storage
 
-- **signals.db stays committed until ~80 MB, then Git LFS.** The committed DB is what freshness verifies; never untrack it and rebuild from CSV. (2026-09-14)
+- **The signal store is committed compressed** (user, 2026-10-19; signals/README "How the store is committed"): `signals.db.gz` (deterministic, ~11 MB) + `signals.db.sha256`; `signals.db` is the local working copy, packed by the pre-commit hook and unpacked by post-merge/checkout. The committed store is still what freshness verifies (2f refuses unless in sync); never rebuild it from CSV (it also caches paid narration). *Why:* past 80 MB at ~13 commits a month, Git LFS would store ~1 GB a month. *Revisit:* if the .gz passes ~50 MB.
 - **Freshness is NOT input-fingerprinted.** Skipping on unchanged inputs would stop catching a hand-edited DB. Its population is `timeline.json`, never the DB it checks.
 - **A check's population is a design decision.** Every new guard states what set it iterates and where that set comes from; a derived set beats a hand-written list.
 - **Make the unknown case loud.** A failure must never return the same value as a legitimate null (outage vs "found nothing", refusal vs cache hit, empty ingest vs success).

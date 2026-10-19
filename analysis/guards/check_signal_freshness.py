@@ -324,6 +324,10 @@ def main() -> int:
                     help="Check every pipeline whose manifest declares depends_on: [REFERENCE].")
     ap.add_argument("--quiet", action="store_true")
     args = ap.parse_args()
+    # The working copy must be the committed store (or local work about to be packed), never an
+    # un-unpacked older copy or a conflict: freshness verifies what is committed.
+    from signals import db_pack
+    db_pack.require_in_sync()
     if args.dependents_of:
         return check_dependents(args.dependents_of, args.quiet)
     return check(args.pipeline, args.quiet)

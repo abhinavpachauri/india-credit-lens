@@ -88,6 +88,7 @@ Use CLI tools for all external service interactions — they are the most contex
 | `python3 analysis/core/generate_signal_history.py evaluate --pipeline {name} --period {date}` | Stage 5: LLM signal evaluate → evaluations JSON; auto-loads prior period for narrative diff |
 | `python3 analysis/core/generate_signal_history.py status` | Print current signal states across all pipelines |
 | `python3 analysis/guards/validate_signal_history.py` | Check 2e: signal history integrity — DB rows, registry schema, status sync vs DB |
+| `python3 analysis/signals/db_pack.py status\|unpack\|pack` | The signal store is committed as `signals.db.gz`: after a clone or pull run `unpack` (hooks do it once installed: `for h in pre-commit post-merge post-checkout; do ln -sf ../../analysis/git_hooks/$h .git/hooks/$h; done`); the pre-commit hook packs. Never edit the `.gz` by hand |
 | `python3 analysis/guards/check_signal_freshness.py [--pipeline {name}]` | Check 2f/5b2: signals.db freshness — recompute every period from the CSV and fail on any drift (value/status/missing/orphan). Deterministic guard; runs in both gates + pre-commit. Fix = re-append **every** period, not just the latest. |
 | `python3 analysis/distribution/issues/monthly_issue.py [--shortlist]` | Long-form Post 1 (merged monthly issue, both pipelines) — self-gating; run after the ingestion gate is green |
 | `python3 analysis/distribution/issues/deep_read.py` | Long-form Post 2 (L2/L3 deep read) — self-gating; publish mid-cycle |
