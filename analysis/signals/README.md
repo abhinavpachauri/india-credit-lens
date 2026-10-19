@@ -843,6 +843,40 @@ reclassification, a merger or a reporting change looks like this; ordinary busin
   ground truth, so it is a separate, measured change.
 - `csv_category_allocation` uses the parts as denominator without the branch check (see above).
 
+## Longer history: older SIBC releases, then MoSPI's older base (user, 2026-10-19)
+
+> Why: every Layer-2 test is limited by history (SYSTEM_MODEL_SPEC §16 Step 6c). With history from
+> Jan 2023 a test saw only |r| ≥ 0.40 and the first driver run read 46 of 47 `too_short`.
+
+**Source: SIBC's own releases, ingested back one month at a time** (user). Each release carries its
+month, the year before and two years before, so a release published in month *m* adds the data month
+two years back. Same layout, codes, date rule and gate as the current ingest; no second source to
+reconcile. DBIE's "Deployment of Bank Credit" was measured first and rejected for it: over 42 shared
+months it differs from the releases where it takes one mid-month date for every row (food credit up
+to 52%, Sep 2024 / Sep 2025 / Dec 2025 sectors ~5%) and where it keeps a first publication (vehicle
+loans Jan–Sep 2023, ~3%).
+
+**Coverage is constant:** every release from Feb 2024 carries the same note: bank, food and non-food
+credit from the Section-42 return (all SCBs); sector rows from the SIBC return (select banks, ~95% of
+non-food credit). A release whose note differs is a series break, declared before ingest.
+
+**Done:** phase 3 (2026-10-19): the 12 releases Feb 2024 – Jan 2025 → Jan–Dec 2022; history Jan 2022 –
+Aug 2026 (56 months); 15 new raw dates approved (date_remap 71); 4 periods moved from a month-end guess
+to their release date (Feb, May, Jul, Oct 2024). Moves 218 → 279, explained 41% → 43%.
+
+**Next, by the same route:** releases from Jan 2024 back (each adds a 2021 month), until a release's
+layout or coverage note differs (`detect_format.py` flags layout; the note is read by hand).
+
+**Prices and output (MoSPI).** The API serves the 2011-12 base when `base_year` is omitted (found
+2026-09-28: that was the silent-wrong-answer trap). Before Apr 2023 credit has no price or output
+partner, so link WPI and IIP 2011-12 (and CPI 2012) onto the current base with **MoSPI's published
+linking factor where it exists**, else the overlap ratio over the months both bases cover: measure
+both before choosing. Quarterly NAS on 2011-12 likewise.
+
+**Open (user):** the 2020–21 COVID months, once history reaches them: kept in the data and on the
+dashboard, excluded from the relationship and driver tests (year-on-year readings through Mar 2022
+inherit the 2020 base), with one cross-check run that includes them.
+
 ## NBFC sectoral deployment — the third source
 
 > Specced **2026-09-16, before the compute** (`archive/docs/PLAN_2026-09-16_NBFC.md`). RBI's *Sectoral

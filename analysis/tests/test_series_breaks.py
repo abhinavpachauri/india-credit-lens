@@ -72,10 +72,22 @@ def test_movement_over_a_cut_with_a_marked_part_is_absent_as_a_whole():
 
 
 def test_no_year_ago_reading_is_the_deeper_absence_than_the_merger():
-    """Jul 2023 has no Jul 2022 to compare with: that is a history gap, not the merger."""
+    """With history starting Jan 2023, Jul 2023 has no Jul 2022: a history gap, not the merger.
+
+    The live CSV reaches back to 2022 since 2026-10-19, so the history is cut to 2023 here to keep
+    the precedence itself under test; the next test pins what the live data now reads."""
     from signals.compute import real_economy as R
-    cred = R.credit(S._load_df("sibc"))
+    df = S._load_df("sibc")
+    cred = R.credit(df[df["date"].astype(str) >= "2023-01-01"])
     u = R.urn("sibc", ST, "4.2")
     with pytest.raises(R.Absent) as e:
         cred.yoy(u, "2023-07-31")
     assert e.value.reason == "credit_history_gap"
+
+
+def test_with_2022_held_a_comparison_across_the_merger_reads_merger_break():
+    from signals.compute import real_economy as R
+    cred = R.credit(S._load_df("sibc"))
+    with pytest.raises(R.Absent) as e:
+        cred.yoy(R.urn("sibc", ST, "4.2"), "2023-07-31")
+    assert e.value.reason == "merger_break"

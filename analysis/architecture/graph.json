@@ -537,7 +537,8 @@
       "imports": [
         "core/manifest",
         "signals/compute/csv_sector",
-        "signals/compute/real_economy"
+        "signals/compute/real_economy",
+        "signals/db_pack"
       ],
       "invokes": [],
       "path": "analysis/guards/check_signal_freshness.py",
@@ -1184,6 +1185,16 @@
       "writes": {
         "analysis/signals/signals.db": "high"
       }
+    },
+    "signals/db_pack": {
+      "doc_claims": [],
+      "imports": [],
+      "invokes": [],
+      "path": "analysis/signals/db_pack.py",
+      "reads": {
+        "analysis/signals/signals.db": "low"
+      },
+      "writes": {}
     },
     "signals/dominance": {
       "doc_claims": [],

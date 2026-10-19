@@ -996,7 +996,7 @@
     "sibc-pl-momentum": {
       "entity_urn": "icl:sibc/Statement1/4",
       "decomposition": "Statement 1",
-      "mix_state": "drifting",
+      "mix_state": "steered",
       "coherence": 1.0,
       "toward": "Loans against gold jewellery",
       "away_from": "Housing (Including Priority Sector Housing)",
@@ -1048,7 +1048,7 @@
           "baseline_of": "Personal Loans",
           "baseline": 16.92,
           "gap_pp": 66.31,
-          "noise_pp": 7.07,
+          "noise_pp": 6.2,
           "verdict": "working"
         }
       }
@@ -1120,7 +1120,7 @@
           "baseline_of": "Industry (Micro and Small, Medium and Large)",
           "baseline": 18.23,
           "gap_pp": 15.14,
-          "noise_pp": 1.78,
+          "noise_pp": 1.84,
           "verdict": "working"
         },
         "force_pli_manufacturing__drives__e_S2_2_9": {
@@ -1131,7 +1131,7 @@
           "baseline_of": "Industry (Micro and Small, Medium and Large)",
           "baseline": 18.23,
           "gap_pp": 5.26,
-          "noise_pp": 1.12,
+          "noise_pp": 1.04,
           "verdict": "working"
         },
         "force_pli_manufacturing__drives__e_S2_2_13": {
@@ -1142,7 +1142,7 @@
           "baseline_of": "Industry (Micro and Small, Medium and Large)",
           "baseline": 18.23,
           "gap_pp": 0.63,
-          "noise_pp": 1.12,
+          "noise_pp": 1.13,
           "verdict": "unclear"
         }
       }
@@ -1160,7 +1160,7 @@
           "baseline_of": "Industry (Micro and Small, Medium and Large)",
           "baseline": 18.23,
           "gap_pp": 4.73,
-          "noise_pp": 1.41,
+          "noise_pp": 1.52,
           "verdict": "working"
         }
       }
@@ -1178,7 +1178,7 @@
           "baseline_of": "Non-food Credit",
           "baseline": 18.77,
           "gap_pp": 5.58,
-          "noise_pp": 0.72,
+          "noise_pp": 0.75,
           "verdict": "working"
         }
       }
@@ -1196,7 +1196,7 @@
           "baseline_of": "Bank Credit (II + III)",
           "baseline": 19.08,
           "gap_pp": 126.73,
-          "noise_pp": 11.01,
+          "noise_pp": 11.18,
           "verdict": "working"
         }
       }
@@ -1214,7 +1214,7 @@
           "baseline_of": "Industry (Micro and Small, Medium and Large)",
           "baseline": 18.23,
           "gap_pp": -8.05,
-          "noise_pp": 0.47,
+          "noise_pp": 0.43,
           "verdict": "working"
         }
       }
@@ -1232,7 +1232,7 @@
           "baseline_of": "Industry (Micro and Small, Medium and Large)",
           "baseline": 18.23,
           "gap_pp": 4.73,
-          "noise_pp": 1.41,
+          "noise_pp": 1.52,
           "verdict": "working"
         },
         "force_eclgs5_guarantee_window__drives__e_S1_2_2": {
@@ -1243,7 +1243,7 @@
           "baseline_of": "Industry (Micro and Small, Medium and Large)",
           "baseline": 18.23,
           "gap_pp": 13.55,
-          "noise_pp": 1.2,
+          "noise_pp": 1.53,
           "verdict": "working"
         }
       }
@@ -1261,7 +1261,7 @@
           "baseline_of": "Non-food Credit",
           "baseline": 18.77,
           "gap_pp": -1.55,
-          "noise_pp": 0.65,
+          "noise_pp": 0.7,
           "verdict": "contradicted"
         }
       }
@@ -1279,7 +1279,7 @@
           "baseline_of": "Personal Loans",
           "baseline": 16.92,
           "gap_pp": 2.82,
-          "noise_pp": 0.44,
+          "noise_pp": 0.53,
           "verdict": "working"
         }
       }
@@ -1322,15 +1322,15 @@
   "explanation_coverage": {
     "summary": {
       "lines": 84,
-      "moves": 5,
-      "steady": 79,
+      "moves": 4,
+      "steady": 80,
       "artifact": 0,
       "base_effect": 0,
       "structural": 2,
       "prices_activity": 0,
       "cause": 0,
       "relationship": 0,
-      "unexplained": 3,
+      "unexplained": 2,
       "unexplained_one_month_step": 1,
       "no_reading": 0
     },
@@ -1342,8 +1342,8 @@
         "direction": "up",
         "level": "leaf",
         "gap_change_pp": 38.16,
-        "noise_pp": 11.01,
-        "threshold_pp": 33.03,
+        "noise_pp": 11.18,
+        "threshold_pp": 33.53,
         "baseline_kind": "parent",
         "baseline_of": "Bank Credit (II + III)",
         "filed_under": "unexplained",
@@ -1360,8 +1360,8 @@
         "direction": "up",
         "level": "leaf",
         "gap_change_pp": 27.89,
-        "noise_pp": 2.74,
-        "threshold_pp": 8.21,
+        "noise_pp": 2.79,
+        "threshold_pp": 8.36,
         "baseline_kind": "parent",
         "baseline_of": "Personal Loans",
         "filed_under": "unexplained",
@@ -1385,8 +1385,8 @@
         "direction": "up",
         "level": "aggregate",
         "gap_change_pp": 3.24,
-        "noise_pp": 0.63,
-        "threshold_pp": 1.89,
+        "noise_pp": 0.78,
+        "threshold_pp": 2.33,
         "baseline_kind": "parent",
         "baseline_of": "Industry (Micro and Small, Medium and Large)",
         "filed_under": "structural",
@@ -1407,8 +1407,8 @@
         "direction": "up",
         "level": "aggregate",
         "gap_change_pp": 1.68,
-        "noise_pp": 0.47,
-        "threshold_pp": 1.42,
+        "noise_pp": 0.43,
+        "threshold_pp": 1.3,
         "baseline_kind": "parent",
         "baseline_of": "Industry (Micro and Small, Medium and Large)",
         "filed_under": "structural",
@@ -1420,25 +1420,6 @@
         "prices_activity": "not_decomposable",
         "prices_detail": {
           "reason": "no 1f match for this line"
-        }
-      },
-      {
-        "entity": "Fertiliser",
-        "urn": "icl:sibc/Statement2/2.9.1",
-        "product": "industry",
-        "direction": "up",
-        "level": "leaf",
-        "gap_change_pp": 12.78,
-        "noise_pp": 3.36,
-        "threshold_pp": 10.07,
-        "baseline_kind": "parent",
-        "baseline_of": "Chemicals and Chemical Products",
-        "filed_under": "unexplained",
-        "also_holds": {},
-        "prices_activity": "does_not_hold",
-        "prices_detail": {
-          "nominal_change_pp": 12.29,
-          "deflator_change_pp": -0.57
         }
       }
     ],

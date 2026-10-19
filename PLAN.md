@@ -22,13 +22,11 @@ of 218 moves after the base effect.
 
 ## Next, in order
 
-1. **Extend history, both sides** (proposed 10-12, user to decide in the strategy session):
-   DBIE "Deployment of Bank Credit by Major Sectors" + industry-wise, monthly from Jan 2019 (system-level,
-   SIBC-shaped). SIBC releases stay primary; DBIE fills before Jan 2023 only after every 2023–26 overlap
-   month matches (a ~1% September gap seen 10-10 must be explained first). Plus MoSPI's older-base
-   (2011-12) WPI/IIP joined to the current base: without it older credit cannot be tested against prices
-   and output. Together ~25 → ~80 changes (detectable |r| 0.40 → ~0.22). The store is now committed
-   compressed (`signals.db.gz`, 10.9 MB, 10-19), so the backfill no longer hits GitHub's file limit.
+1. **Extend history, both sides** (`analysis/signals/README.md` §"Longer history"): older SIBC
+   releases, not DBIE (user, 10-19). Phase 3 done 10-19: Jan–Dec 2022 in, history Jan 2022 → (56 months).
+   Next: the user sends releases from Jan 2024 back (each adds a 2021 month; flag layout/coverage
+   changes); then MoSPI's 2011-12 base linked on, so pre-2023 credit has price/output partners; then
+   rerun the driver and arrow tests. COVID months in tests: user to confirm (exclude + one cross-check).
 2. **Releases due:** SIBC Sep ~30 Oct, payments Sep ~3–5 Nov, NBFC Sep ~6 Nov (`/ingest-period`, then
    `/model-pass` + `/s4-source`; NBFC also takes deferred proposals #17-19 in `s4_proposals/2026-09-30.json`).
    CPI Oct ~12 Nov: PDF from MoSPI's product feed (`api/product/get-product-data`, product 9 lists every
