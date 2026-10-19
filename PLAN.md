@@ -35,12 +35,15 @@ of 218 moves after the base effect.
    release PDF), read with `fetch.py --cpi-pdf`; automating that fetch is a small next step.
 3. **X:** posts built to 3 Nov (`output/x/2026-10-18/`, `2026-10-23/`); next batch from 4 Nov, release
    stories once SIBC/payments September land. Card e-commerce held: HDFC/SBI share break in Aug.
-4. **NBFC post-ingest count** (NBFC plan §6): how many files did pipeline #3 touch that were not its
+4. **Model pass, owed:** risk-arrow signs (arrows that do not say which way they push) and NBFC causes
+   (no `/model-pass nbfc` or `/s4-source` since its Aug ingest; deferred proposals #17-19 wait for it).
+   Then S4 widened to market sources for the residual. NBFC force check stays off (9 moves of history).
+5. **NBFC post-ingest count** (NBFC plan §6): how many files did pipeline #3 touch that were not its
    own? Record it in `ARCHITECTURE.md` §"Adding a pipeline"; it decides the generic card path fork.
-5. **MoSPI open decisions (user):** textiles vs apparel (SIBC 2.4 ↔ nic:13 or 13+14); WPI weights for the
+6. **MoSPI open decisions (user):** textiles vs apparel (SIBC 2.4 ↔ nic:13 or 13+14); WPI weights for the
    6 combined deflators (eaindustry.nic.in); petroleum deflated by WPI mineral oils (§24.2). Candidate
    gate: the IIP weights rebuild (0.046 pt) as a standing 1d check.
-6. **Sources, order by buyer and grid** (catalogue: `analysis/sources/README.md`): Lending & Deposit Rates
+7. **Sources, order by buyer and grid** (catalogue: `analysis/sources/README.md`): Lending & Deposit Rates
    (probed 10-10, paused; fills "price of credit", 83 lines), DBIE flow of resources/CP/ECB ("other
    finance", 52), per-bank quarterly (buyer-led), arc 3 regulatory watch (`archive/docs/PLAN_2026-09-09.md`;
    re-run the allowlist census first), BSR-1 (three measures per entity; occupation ≠ SIBC sectors).
