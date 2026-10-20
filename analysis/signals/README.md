@@ -856,16 +856,34 @@ months it differs from the releases where it takes one mid-month date for every 
 to 52%, Sep 2024 / Sep 2025 / Dec 2025 sectors ~5%) and where it keeps a first publication (vehicle
 loans Jan–Sep 2023, ~3%).
 
-**Coverage is constant:** every release from Feb 2024 carries the same note: bank, food and non-food
-credit from the Section-42 return (all SCBs); sector rows from the SIBC return (select banks, ~95% of
-non-food credit). A release whose note differs is a series break, declared before ingest.
+**Coverage changed once, in the Nov 2023 release** (measured 2026-10-20 over every pair of
+consecutive releases, Feb 2023 → Sep 2026). Normally consecutive releases agree on 54–55 of 55 sector
+lines for the months they share (year-end revisions: median ≤ 0.2%). Between the Oct 31 and Nov 30,
+2023 releases only 1 of 55 agrees: every sector line is restated **up by a median 2.7%** (Agriculture
++2.4, Industry +2.5, Services +2.6, Personal loans +2.0–2.3), as RBI's note moves from select banks
+with "about 93 per cent" of non-food credit to "about 95 per cent". Headline rows (bank, food,
+non-food credit: the Section-42 return, all SCBs) are identical on both sides. Releases before
+Nov 2023 were never restated, so **sector history on the current group starts at Oct 2021**, the
+oldest month the Nov 2023 – Jan 2024 releases carry. The 9 releases Feb–Oct 2023 (Jan–Sep 2021, ~93%
+group) are not ingested: they would add 2.5–2.7 points of false growth to every sector for Jan–Sep 2022.
 
-**Done:** phase 3 (2026-10-19): the 12 releases Feb 2024 – Jan 2025 → Jan–Dec 2022; history Jan 2022 –
-Aug 2026 (56 months); 15 new raw dates approved (date_remap 71); 4 periods moved from a month-end guess
-to their release date (Feb, May, Jul, Oct 2024). Moves 218 → 279, explained 41% → 43%.
+**DBIE checked for the months before (2026-10-20): not usable as it stands.** It matches our current
+group from Oct 2021 (sector median −0.02%; exact from mid-2022) and runs continuous Sep → Oct 2021, so
+RBI restated most of its 2021; it sits 1–3% above the ~93% releases for Jan–Feb and Apr–Sep 2021. But
+**its Mar 2021 equals the ~93% release exactly**: Industry −1.2% and Services −1.9% month on month
+where every other March jumps +2.5–5.5%, and April fails to dip. A series with one month on the old
+group cannot be spliced as published, 2019–2020 has no release on the current group to check it
+against, and the headline rows keep their single mid-month date. What it could add (Apr–Sep 2021,
+then COVID-era months the tests would exclude) is small; **not pursued** unless a need names it.
 
-**Next, by the same route:** releases from Jan 2024 back (each adds a 2021 month), until a release's
-layout or coverage note differs (`detect_format.py` flags layout; the note is read by hand).
+**Done:** phase 3 (2026-10-19): the 12 releases Feb 2024 – Jan 2025 → Jan–Dec 2022 (15 raw dates
+approved; Feb, May, Jul, Oct 2024 moved from a month-end guess to their release date). Phase 4
+(2026-10-20): the 3 releases Nov 2023 – Jan 2024 → Oct–Dec 2021 (3 raw dates approved, date_remap 74;
+Nov 2023 moved to its release date 2023-12-29). History Oct 2021 – Aug 2026, 59 months. Moves 218 →
+286, explained 41% → 43%.
+
+**Credit history is now as long as it gets on one basis.** Lengthening it further needs RBI to
+publish a restated series, or a decision to declare a coverage break at Oct 2021.
 
 **Prices and output (MoSPI).** The API serves the 2011-12 base when `base_year` is omitted (found
 2026-09-28: that was the silent-wrong-answer trap). Before Apr 2023 credit has no price or output

@@ -3,6 +3,36 @@
   "report_name": "RBI Sector/Industry-wise Bank Credit",
   "periods": [
     {
+      "period": "Oct 2021",
+      "dataDate": "2021-11-30",
+      "csv_date": "2021-10-31",
+      "total_credit_lcr": 110.4,
+      "yoy_growth_pct": null,
+      "is_fy_end": false,
+      "paths": {},
+      "note": "Backfilled 2026-10-20 from the consolidated CSV: the data month arrived as history inside a release of Nov 2023 - Jan 2024. Sector history on the current reporting group (~95% of non-food credit) starts here: releases before Nov 2023 use the earlier ~93% group, restated by ~2.7% (signals/README \"Longer history\"). No 2020 month is held, so no year-on-year reading exists."
+    },
+    {
+      "period": "Nov 2021",
+      "dataDate": "2021-12-31",
+      "csv_date": "2021-11-30",
+      "total_credit_lcr": 111.6,
+      "yoy_growth_pct": null,
+      "is_fy_end": false,
+      "paths": {},
+      "note": "Backfilled 2026-10-20 from the consolidated CSV: the data month arrived as history inside a release of Nov 2023 - Jan 2024. Sector history on the current reporting group (~95% of non-food credit) starts here: releases before Nov 2023 use the earlier ~93% group, restated by ~2.7% (signals/README \"Longer history\"). No 2020 month is held, so no year-on-year reading exists."
+    },
+    {
+      "period": "Dec 2021",
+      "dataDate": "2022-01-31",
+      "csv_date": "2021-12-31",
+      "total_credit_lcr": 115.8,
+      "yoy_growth_pct": null,
+      "is_fy_end": false,
+      "paths": {},
+      "note": "Backfilled 2026-10-20 from the consolidated CSV: the data month arrived as history inside a release of Nov 2023 - Jan 2024. Sector history on the current reporting group (~95% of non-food credit) starts here: releases before Nov 2023 use the earlier ~93% group, restated by ~2.7% (signals/README \"Longer history\"). No 2020 month is held, so no year-on-year reading exists."
+    },
+    {
       "period": "Jan 2022",
       "dataDate": "2022-02-28",
       "csv_date": "2022-01-31",
@@ -97,30 +127,30 @@
       "dataDate": "2022-11-30",
       "csv_date": "2022-10-31",
       "total_credit_lcr": 128.8,
-      "yoy_growth_pct": null,
+      "yoy_growth_pct": 16.6,
       "is_fy_end": false,
       "paths": {},
-      "note": "Backfilled 2026-10-19 from the consolidated CSV: the data month arrived as history inside a 2024 release. No 2021 month is held, so no year-on-year reading exists."
+      "note": "Backfilled 2026-10-19 from the consolidated CSV: the data month arrived as history inside a 2024 release. Year-on-year from the 2021 months ingested 2026-10-20."
     },
     {
       "period": "Nov 2022",
       "dataDate": "2022-12-31",
       "csv_date": "2022-11-30",
       "total_credit_lcr": 131.1,
-      "yoy_growth_pct": null,
+      "yoy_growth_pct": 17.4,
       "is_fy_end": false,
       "paths": {},
-      "note": "Backfilled 2026-10-19 from the consolidated CSV: the data month arrived as history inside a 2024 release. No 2021 month is held, so no year-on-year reading exists."
+      "note": "Backfilled 2026-10-19 from the consolidated CSV: the data month arrived as history inside a 2024 release. Year-on-year from the 2021 months ingested 2026-10-20."
     },
     {
       "period": "Dec 2022",
       "dataDate": "2023-01-31",
       "csv_date": "2022-12-31",
       "total_credit_lcr": 133.1,
-      "yoy_growth_pct": null,
+      "yoy_growth_pct": 14.9,
       "is_fy_end": false,
       "paths": {},
-      "note": "Backfilled 2026-10-19 from the consolidated CSV: the data month arrived as history inside a 2024 release. No 2021 month is held, so no year-on-year reading exists."
+      "note": "Backfilled 2026-10-19 from the consolidated CSV: the data month arrived as history inside a 2024 release. Year-on-year from the 2021 months ingested 2026-10-20."
     },
     {
       "period": "Jan 2023",
@@ -218,18 +248,24 @@
       "csv_date": "2023-10-31",
       "total_credit_lcr": 155.8,
       "is_fy_end": false,
-      "paths": {},
-      "note": "Backfilled 2026-10-09 from the consolidated CSV — the data month arrived as history inside a later release file.",
+      "paths": {
+        "sections": "rbi_sibc/2023-11-30/sections.json",
+        "format_report": "rbi_sibc/2023-11-30/format_report.json"
+      },
+      "note": "Backfilled 2026-10-09 from the consolidated CSV — the data month arrived as history inside a later release file. Release ingested 2026-10-20 (backfill phase 4); registered under its release date.",
       "yoy_growth_pct": 21.0
     },
     {
       "period": "Nov 2023",
-      "dataDate": "2023-12-31",
+      "dataDate": "2023-12-29",
       "csv_date": "2023-11-30",
       "total_credit_lcr": 158.3,
       "is_fy_end": false,
-      "paths": {},
-      "note": "Backfilled 2026-10-09 from the consolidated CSV — the data month arrived as history inside a later release file.",
+      "paths": {
+        "sections": "rbi_sibc/2023-12-29/sections.json",
+        "format_report": "rbi_sibc/2023-12-29/format_report.json"
+      },
+      "note": "Backfilled 2026-10-09 from the consolidated CSV — the data month arrived as history inside a later release file. Release ingested 2026-10-20 (backfill phase 4); registered under its release date.",
       "yoy_growth_pct": 20.7
     },
     {
@@ -238,9 +274,12 @@
       "csv_date": "2023-12-31",
       "total_credit_lcr": 159.6,
       "yoy_growth_pct": 20.0,
-      "paths": {},
+      "paths": {
+        "sections": "rbi_sibc/2024-01-31/sections.json",
+        "format_report": "rbi_sibc/2024-01-31/format_report.json"
+      },
       "is_fy_end": false,
-      "note": "Backfilled 2026-09-14 from the consolidated CSV — level and share only: the CSV holds no 2023 months, so no year-on-year comparison exists for this period and every rate signal is legitimately absent."
+      "note": "Backfilled 2026-09-14 from the consolidated CSV — level and share only: the CSV holds no 2023 months, so no year-on-year comparison exists for this period and every rate signal is legitimately absent. Release ingested 2026-10-20 (backfill phase 4); registered under its release date."
     },
     {
       "period": "Jan 2024",

@@ -2,9 +2,12 @@
   "_meta": {
     "what": "Raw RBI publication date \u2192 the month-end it is counted as.",
     "why": "A remap decides which month a number belongs to. Approved by a human; update_web_data.py --check fails if the computed remapping ever differs.",
-    "approved_dates": 71
+    "approved_dates": 74
   },
   "remap": {
+    "2021-10-22": "2021-10-31",
+    "2021-11-19": "2021-11-30",
+    "2021-12-31": "2021-12-31",
     "2022-01-28": "2022-01-31",
     "2022-02-25": "2022-02-28",
     "2022-03-25": "2022-03-31",

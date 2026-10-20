@@ -22,11 +22,11 @@ of 218 moves after the base effect.
 
 ## Next, in order
 
-1. **Extend history, both sides** (`analysis/signals/README.md` §"Longer history"): older SIBC
-   releases, not DBIE (user, 10-19). Phase 3 done 10-19: Jan–Dec 2022 in, history Jan 2022 → (56 months).
-   Next: the user sends releases from Jan 2024 back (each adds a 2021 month; flag layout/coverage
-   changes); then MoSPI's 2011-12 base linked on, so pre-2023 credit has price/output partners; then
-   rerun the driver and arrow tests. COVID months in tests: user to confirm (exclude + one cross-check).
+1. **Extend history, both sides** (`analysis/signals/README.md` §"Longer history"). Credit: done to
+   its limit 10-20: Oct 2021 → Aug 2026 (59 months) from older SIBC releases. Earlier releases use a
+   smaller reporting group (restated +2.7% in Nov 2023), and DBIE carries one month on the old group
+   (Mar 2021), so neither is spliced. Next: MoSPI's 2011-12 base linked on, so credit before Apr 2023
+   has price/output partners; then rerun the driver and arrow tests.
 2. **Releases due:** SIBC Sep ~30 Oct, payments Sep ~3–5 Nov, NBFC Sep ~6 Nov (`/ingest-period`, then
    `/model-pass` + `/s4-source`; NBFC also takes deferred proposals #17-19 in `s4_proposals/2026-09-30.json`).
    CPI Oct ~12 Nov: PDF from MoSPI's product feed (`api/product/get-product-data`, product 9 lists every
