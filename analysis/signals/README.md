@@ -885,15 +885,34 @@ Nov 2023 moved to its release date 2023-12-29). History Oct 2021 – Aug 2026, 5
 **Credit history is now as long as it gets on one basis.** Lengthening it further needs RBI to
 publish a restated series, or a decision to declare a coverage break at Oct 2021.
 
-**Prices and output (MoSPI).** The API serves the 2011-12 base when `base_year` is omitted (found
-2026-09-28: that was the silent-wrong-answer trap). Before Apr 2023 credit has no price or output
-partner, so link WPI and IIP 2011-12 (and CPI 2012) onto the current base with **MoSPI's published
-linking factor where it exists**, else the overlap ratio over the months both bases cover: measure
-both before choosing. Quarterly NAS on 2011-12 likewise.
+**Prices and output for the tests: MoSPI's retired bases, one series each (built 2026-10-25).**
+The current bases start Apr 2023 (CPI Jan 2025), after the credit history. Linking two bases is ruled
+out (MoSPI section), and switching bases mid-series puts a step in every growth series: on the months
+both cover, IIP trailing-year output differs by a median 1.8 points between 2011-12 and 2022-23
+(general: 4.1% vs 5.7% to Mar 2025). So the **tests read the retired base throughout**, and the
+dashboard keeps the current base (user, 2026-10-21):
+- `iip_2011` (to Mar 2026), `wpi_2011` (to Apr 2026), `cpi_2012` (to Dec 2025): their own datasets in the
+  MoSPI manifest, with `final_period` (fetched once, never overdue) and `from_period` Nov 2019 (the
+  earliest month a test from Oct 2021 can read). Labels map to the current codes where the wording is the
+  same; five re-worded labels with the same industry code by hand; the rest keep their own prefix.
+- Verified: **3,690 values match MoSPI's printed growth within rounding**, the retired bases included.
+  MoSPI's own lockdown blanks are declared (`published_blanks`): no IIP growth for Apr 2021, no CPI
+  inflation for Apr–May 2020.
+- The current dataset names the base its tests read (`tests_read`), and **stand-ins where the retired
+  base lacks a code** (`tests_approximate`, named in every result): sugar ← sugar, molasses & honey
+  (monthly change r 0.91); basic iron & steel ← basic metals (r 0.96 same base, 0.83 across). User,
+  2026-10-25.
+- **NAS is not on a retired base:** its 2011-12 printed growth disagrees with its own levels on 168
+  quarters (a median 0.07 points, mostly ours higher: an older vintage of the year-ago quarter), and NAS
+  is quarterly, which the monthly test cannot read. Its 7 driver hypotheses are untestable until a
+  quarterly test exists. Their 14 earlier `too_short` results were a broken read (an `index` NAS does
+  not have, n = 0 at every delay) and are withdrawn; an empty read now raises.
+- The tests reach back to Feb 2022 at most: credit's first year-on-year is Oct 2022, and a delay is at
+  most 9 months.
 
-**Open (user):** the 2020–21 COVID months, once history reaches them: kept in the data and on the
-dashboard, excluded from the relationship and driver tests (year-on-year readings through Mar 2022
-inherit the 2020 base), with one cross-check run that includes them.
+**COVID (user, 2026-10-21):** a change whose four compared months touch Mar–Dec 2020 is left out of
+every test (`relationship_test.outside_covid`), and `test --include-covid` runs the cross-check. At
+today's history the rule never binds (the cross-check is identical); it will once history reaches 2021.
 
 ## NBFC sectoral deployment — the third source
 
@@ -1009,6 +1028,8 @@ and it must appear wherever a cross-source ratio against bank credit is publishe
 
 **Never link two bases ourselves**: a YoY that straddles a rebase uses MoSPI's published rate, or
 is absent.
+A retired base is read as its own dataset, never spliced: the tests read IIP/WPI 2011-12 and CPI 2012
+end to end (`tests_read`; "Longer history").
 
 ### the fetch contract — what counts as a good response
 

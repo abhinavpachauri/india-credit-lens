@@ -87,12 +87,15 @@ def keyed(name: str, ds: dict, doc: dict) -> dict:
     for row in doc["rows"]:
         # The row's OWN base, never the declaration: 1b checks the CSV's base column, and a column
         # stamped from the manifest would only ever agree with the manifest.
-        if "base_year" not in row:
-            raise ConsolidateError(f"{name}: a row carries no base_year of its own")
-        if str(row["base_year"]) != ds["base_year"]:
-            raise ConsolidateError(f"{name}: a row on base {row['base_year']!r}, "
+        bf = ds.get("base_field", "base_year")              # CPI 2012 rows say `baseyear`
+        if bf not in row:
+            raise ConsolidateError(f"{name}: a row carries no {bf} of its own")
+        if str(row[bf]) != ds["base_year"]:
+            raise ConsolidateError(f"{name}: a row on base {row[bf]!r}, "
                                    f"declared {ds['base_year']!r}")
         period = row["period"] if "period" in row else R.period_of(row, ds["period"])
+        if ds.get("from_period") and period < ds["from_period"]:
+            continue                                         # declared: nothing reads earlier months
         lk = R.label_key(row, fields)
         for measure, field in measures_for(ds, row, fields, doc.get("source")).items():
             if field not in row:
@@ -107,7 +110,7 @@ def keyed(name: str, ds: dict, doc: dict) -> dict:
             if key in out:
                 raise ConsolidateError(f"{name}: {key} appears twice in one release")
             out[key] = (str(v).strip(), row.get(ds.get("status_field", ""), "") or "",
-                        str(row["base_year"]))
+                        str(row[bf]))
     return out
 
 

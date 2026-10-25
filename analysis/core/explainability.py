@@ -253,6 +253,8 @@ def _verdicts(pipeline: str) -> dict:
     for t in _tests(ROOT / "analysis/cross_source/relationship_tests.json"):
         out[f"cross_source:{t.get('edge_id')}"] = t["verdict"]
     for t in _tests(ROOT / manifest.load(pipeline)["paths"]["data_dir"] / "relationship_tests.json"):
+        if t.get("withdrawn"):                                 # kept as history, never a verdict
+            continue
         if t.get("test_id"):                                   # a generic driver test (step 3)
             out[f"driver:{t['test_id']}"] = t["verdict"]
         else:
@@ -507,9 +509,9 @@ def _sibc_group_label(label: str, reg: dict, model: dict) -> str:
 
 def run_tests(pipeline: str, dry_run: bool = False) -> list[dict]:
     """Every hypothesis with a series and a sign: its delay found on earlier months and confirmed
-    on later ones (spec §16 Step 6c). The delay and cutoff are frozen at first discovery; later runs
-    re-confirm on every month after the cutoff. A run with nothing new since the last result for a
-    hypothesis records nothing for it. All hypotheses for one line form its family. Results,
+    on every month outside the search window (spec §16 Step 6c). The window and delay are frozen at
+    first discovery; later runs re-confirm on every month outside it, earlier or later. A run with nothing new since the last result for a
+    hypothesis records nothing for it (the same answer, not merely the same latest month). All hypotheses for one line form its family. Results,
     nulls included, are appended to relationship_tests.json and linked from the hypothesis."""
     from core import relationship_test as rt
     reg_path = register_path(pipeline)
@@ -526,18 +528,28 @@ def run_tests(pipeline: str, dry_run: bool = False) -> list[dict]:
     family = {}
     for h in todo:
         family[h["line"]] = family.get(h["line"], 0) + 1
-    results = []
+    from signals.compute.real_economy import ReferenceMissing
+    results, untestable = [], []
     for h in todo:
-        r = rt.run_driver(h, pipeline, node_of[h["line"]], family[h["line"]], discover=True)
+        try:
+            r = rt.run_driver(h, pipeline, node_of[h["line"]], family[h["line"]], discover=True)
+        except ReferenceMissing as e:
+            untestable.append((h["id"], h["line_label"], str(e)))      # stays untested, visibly
+            continue
         prev = last.get(h["id"])
-        if prev and prev.get("through_period") == r["through_period"]:
-            continue                                       # nothing new since its last result
+        same = ("verdict", "lags", "discovery", "source", "through_period", "covid")
+        if prev and all(prev.get(k) == r.get(k) for k in same):
+            continue                                       # the same answer as its last result
+        # Not "the same latest month": a longer history or another base changes the answer while
+        # the latest month stays put (2026-10-25: the backfill and the 2011-12 base re-ran nothing).
         results.append(r)
         if not dry_run:
             h.setdefault("tests", []).append(f"driver:{r['test_id']}")
             d = r.get("discovery") or {}
             if d.get("lag") is not None and not h.get("discovery"):
-                h["discovery"] = {"cutoff": d["cutoff"], "lag": d["lag"], "found": r["tested"]}
+                h["discovery"] = {"from": d["from"], "cutoff": d["cutoff"], "lag": d["lag"], "found": r["tested"]}
+    for hid, label, why in untestable:
+        print(f"   ✗ not testable  {hid} {label[:30]:30} {why}")
     if not dry_run and results:
         doc["tests"].extend(results)
         tp.write_text(json.dumps(doc, indent=1, ensure_ascii=False) + "\n")
@@ -549,6 +561,8 @@ def main() -> int:
     ap = argparse.ArgumentParser(description="Driver register (SYSTEM_MODEL_SPEC §16 Step 6c)")
     ap.add_argument("command", choices=("seed", "validate", "summary", "report", "test"))
     ap.add_argument("--dry-run", action="store_true", help="test: run and print, record nothing")
+    ap.add_argument("--include-covid", action="store_true",
+                    help="test: the COVID cross-check (always a dry run: printed, never recorded)")
     ap.add_argument("--pipeline", required=True)
     a = ap.parse_args()
     if a.command == "seed":
@@ -571,6 +585,9 @@ def main() -> int:
             print("   ·", e)
         return 1 if errs else 0
     if a.command == "test":
+        if a.include_covid:
+            from core import relationship_test as rt
+            rt.INCLUDE_COVID, a.dry_run = True, True
         res = run_tests(a.pipeline, a.dry_run)
         from collections import Counter
         print(f"  {a.pipeline}: {len(res)} hypotheses tested{' (dry run, nothing recorded)' if a.dry_run else ''}: "

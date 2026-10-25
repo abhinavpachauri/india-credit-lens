@@ -22,11 +22,11 @@ of 218 moves after the base effect.
 
 ## Next, in order
 
-1. **Extend history, both sides** (`analysis/signals/README.md` §"Longer history"). Credit: done to
-   its limit 10-20: Oct 2021 → Aug 2026 (59 months) from older SIBC releases. Earlier releases use a
-   smaller reporting group (restated +2.7% in Nov 2023), and DBIE carries one month on the old group
-   (Mar 2021), so neither is spliced. Next: MoSPI's 2011-12 base linked on, so credit before Apr 2023
-   has price/output partners; then rerun the driver and arrow tests.
+1. **Extend history: done 10-25** (`analysis/signals/README.md` §"Longer history"). Credit Oct 2021 →
+   (59 months, its one-basis limit); MoSPI's retired bases (IIP/WPI 2011-12, CPI 2012) read by the tests,
+   one base per series; delays confirmed on every month their search never saw. 40 driver tests: 1
+   supported (edible oils ← their prices, p 0.049), 23 tested-no-link, 16 too short. Next on this arc:
+   **a quarterly test for NAS** (7 hypotheses untestable), then explainability steps 4–5.
 2. **Releases due:** SIBC Sep ~30 Oct, payments Sep ~3–5 Nov, NBFC Sep ~6 Nov (`/ingest-period`, then
    `/model-pass` + `/s4-source`; NBFC also takes deferred proposals #17-19 in `s4_proposals/2026-09-30.json`).
    CPI Oct ~12 Nov: PDF from MoSPI's product feed (`api/product/get-product-data`, product 9 lists every
@@ -50,6 +50,9 @@ of 218 moves after the base effect.
 
 - **Agentic layer:** `add-signal-family` and `measure-gate` skills ⬜, each written while doing its real task
   (the story-readings and driver-test builds of 10-10/12 were candidates; not yet written).
+- **The git hooks run whichever `python3` is first on PATH** (found 10-25): the system 3.9 (numpy 2.0) recomputes
+  18 signal rows differently from Anaconda 3.12 (numpy 1.26) in the 4th decimal, so freshness fails on an
+  unchanged store. Pin the interpreter in `analysis/git_hooks/*` (one variable), not a tolerance.
 - **The merger gap is unexplained on screen** (10-10): growth cells absent for `merger_break` (Jan–Jun 2024)
   draw blank with no reason; "Every reading" skips them. A `/dashboard-change`.
 - **12 S4 proposals unsearched** (`analysis/s4_proposals/2026-09-30.json`); 20 more from 2026-08-31.

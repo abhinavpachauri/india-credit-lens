@@ -58,7 +58,9 @@
         }
       ],
       "expected_lag_days": 28,
-      "note_why": "Lag: July 2026 was released 28 Aug (MoSPI calendar: the 28th of M+1)."
+      "note_why": "Lag: July 2026 was released 28 Aug (MoSPI calendar: the 28th of M+1).",
+      "tests_read": "iip_2011",
+      "note_tests_read": "The driver and arrow tests read iip_2011: this base starts after the credit history (Oct 2021), and switching bases mid-series puts a step in every growth series (IIP trailing-year output: median gap 1.8 points, measured 2026-10-21). Revisit when this base holds the test window on its own (~2028)."
     },
     "wpi": {
       "source": "api",
@@ -96,7 +98,20 @@
       "printed_growth": [],
       "note_printed_growth": "WPI prints no growth rate on the API: every WPI series is counted as no_printed_rate.",
       "expected_lag_days": 14,
-      "note_why": "base_year=2022-23 is UNDOCUMENTED and load-bearing: without it the API serves the 2011-12 series with status 200. The 953 items (rows with `item` set, ~85% of the volume) are dropped at fetch because nothing reads them: a declared decision, not an accident. Lag: August 2026 was released 14 Sep."
+      "note_why": "base_year=2022-23 is UNDOCUMENTED and load-bearing: without it the API serves the 2011-12 series with status 200. The 953 items (rows with `item` set, ~85% of the volume) are dropped at fetch because nothing reads them: a declared decision, not an accident. Lag: August 2026 was released 14 Sep.",
+      "tests_read": "wpi_2011",
+      "note_tests_read": "The driver and arrow tests read wpi_2011: this base starts after the credit history (Oct 2021), and switching bases mid-series puts a step in every growth series (IIP trailing-year output: median gap 1.8 points, measured 2026-10-21). Revisit when this base holds the test window on its own (~2028).",
+      "tests_approximate": {
+        "nic:10/sugar": {
+          "code": "wpi_2011:manufactured_products/manufacture_of_food_products/manufacture_of_sugar_molasses_honey",
+          "why": "The 2011-12 base has no sugar index, only sugar, molasses & honey: its monthly change tracks current-base sugar at r 0.91 (Apr 2024 - Apr 2026, measured 2026-10-25). User-approved 2026-10-25."
+        },
+        "nic:24/basic_iron_and_steel": {
+          "code": "nic:24",
+          "why": "The 2011-12 base splits steel into seven sub-groups and prints no iron & steel total; adding them needs weights we do not invent. Basic metals (steel plus non-ferrous) stands in: its monthly change tracks iron & steel at r 0.96 on the current base and 0.83 across bases (measured 2026-10-25)."
+        }
+      },
+      "note_tests_approximate": "A code the test base lacks is read from a declared stand-in on that base; every result that uses one names it (`approximated`)."
     },
     "nas": {
       "source": "api",
@@ -340,7 +355,269 @@
         }
       ],
       "expected_lag_days": 12,
-      "note_why": "The API holds only the 2012 base, ending Dec 2025 (base_year=2024 → 'No Data Found', re-probed 2026-09-28); it is never used. CPI is one dataset fed by two MoSPI publications (`sources`). Their releases merge in PUBLICATION order (`published`), not fetch order, because the workbook lags: fetched after the August release, it would otherwise overwrite July's final value with the provisional one. Lag: July 2026 was released 12 Aug."
+      "note_why": "The API holds only the 2012 base, ending Dec 2025 (base_year=2024 → 'No Data Found', re-probed 2026-09-28); it is never used. CPI is one dataset fed by two MoSPI publications (`sources`). Their releases merge in PUBLICATION order (`published`), not fetch order, because the workbook lags: fetched after the August release, it would otherwise overwrite July's final value with the provisional one. Lag: July 2026 was released 12 Aug.",
+      "tests_read": "cpi_2012",
+      "note_tests_read": "The driver and arrow tests read cpi_2012: this base starts after the credit history (Oct 2021), and switching bases mid-series puts a step in every growth series (IIP trailing-year output: median gap 1.8 points, measured 2026-10-21). Revisit when this base holds the test window on its own (~2028)."
+    },
+    "iip_2011": {
+      "source": "api",
+      "release_scope": "snapshot",
+      "endpoint": "iip/getIIPMonthly",
+      "cadence": "monthly",
+      "base_year": "2011-12",
+      "requests": [
+        {
+          "filters": [
+            {
+              "param": "base_year",
+              "value": "2011-12",
+              "field": "base_year"
+            }
+          ]
+        }
+      ],
+      "period": {
+        "year": "year",
+        "month": "month"
+      },
+      "label_fields": [
+        "type",
+        "category",
+        "sub_category"
+      ],
+      "measures": {
+        "index": "index",
+        "growth_published": "growth_rate"
+      },
+      "printed_growth": [
+        {
+          "printed": "growth_published",
+          "computed_from": "index",
+          "lag_periods": 12,
+          "printed_decimals": 1,
+          "operand_decimals": 1
+        }
+      ],
+      "note_why": "A retired base, read only by the driver and arrow tests (`tests_read` on the current dataset; signals/README \"Longer history\", user 2026-10-21): one series on one base from Oct 2021, never linked to the current base. Fetched once: a release is saved only while none reaching `final_period` exists. Rows before `from_period` are not consolidated: Nov 2019 is the earliest month a test from Oct 2021 can read (a change one month apart of a YoY, at a delay of up to 9 months). Old-base growth is printed (growth_rate), so 1c checks it.",
+      "final_period": "2026-03-31",
+      "from_period": "2019-11-30",
+      "published_blanks": {
+        "growth_published": {
+          "2021-04-30": "MoSPI printed no growth for Apr 2021, on any of its 33 groups, against the lockdown month Apr 2020: its blank, not a hole in our data."
+        }
+      }
+    },
+    "wpi_2011": {
+      "source": "api",
+      "release_scope": "snapshot",
+      "endpoint": "wpi/getWpiRecords",
+      "cadence": "monthly",
+      "base_year": "2011-12",
+      "requests": [
+        {
+          "filters": [
+            {
+              "param": "base_year",
+              "value": "2011-12",
+              "field": "base_year"
+            },
+            {
+              "param": "year",
+              "value": "2019",
+              "field": "year"
+            }
+          ]
+        },
+        {
+          "filters": [
+            {
+              "param": "base_year",
+              "value": "2011-12",
+              "field": "base_year"
+            },
+            {
+              "param": "year",
+              "value": "2020",
+              "field": "year"
+            }
+          ]
+        },
+        {
+          "filters": [
+            {
+              "param": "base_year",
+              "value": "2011-12",
+              "field": "base_year"
+            },
+            {
+              "param": "year",
+              "value": "2021",
+              "field": "year"
+            }
+          ]
+        },
+        {
+          "filters": [
+            {
+              "param": "base_year",
+              "value": "2011-12",
+              "field": "base_year"
+            },
+            {
+              "param": "year",
+              "value": "2022",
+              "field": "year"
+            }
+          ]
+        },
+        {
+          "filters": [
+            {
+              "param": "base_year",
+              "value": "2011-12",
+              "field": "base_year"
+            },
+            {
+              "param": "year",
+              "value": "2023",
+              "field": "year"
+            }
+          ]
+        },
+        {
+          "filters": [
+            {
+              "param": "base_year",
+              "value": "2011-12",
+              "field": "base_year"
+            },
+            {
+              "param": "year",
+              "value": "2024",
+              "field": "year"
+            }
+          ]
+        },
+        {
+          "filters": [
+            {
+              "param": "base_year",
+              "value": "2011-12",
+              "field": "base_year"
+            },
+            {
+              "param": "year",
+              "value": "2025",
+              "field": "year"
+            }
+          ]
+        },
+        {
+          "filters": [
+            {
+              "param": "base_year",
+              "value": "2011-12",
+              "field": "base_year"
+            },
+            {
+              "param": "year",
+              "value": "2026",
+              "field": "year"
+            }
+          ]
+        }
+      ],
+      "period": {
+        "year": "year",
+        "month": "month"
+      },
+      "label_fields": [
+        "majorgroup",
+        "group",
+        "subgroup",
+        "sub_subgroup"
+      ],
+      "drop_rows_where_set": [
+        "item"
+      ],
+      "measures": {
+        "index": "index_value"
+      },
+      "printed_growth": [],
+      "note_why": "A retired base, read only by the driver and arrow tests (`tests_read` on the current dataset; signals/README \"Longer history\", user 2026-10-21): one series on one base from Oct 2021, never linked to the current base. Fetched once: a release is saved only while none reaching `final_period` exists. Rows before `from_period` are not consolidated: Nov 2019 is the earliest month a test from Oct 2021 can read (a change one month apart of a YoY, at a delay of up to 9 months). Requested a year at a time from 2019: the base holds 146,861 rows from 2012, ~85% items (dropped, as on the current base).",
+      "final_period": "2026-04-30",
+      "from_period": "2019-11-30",
+      "workers": 2,
+      "note_workers": "MoSPI answered HTTP 429 at 6 parallel requests over ~400 pages (2026-10-25)."
+    },
+    "cpi_2012": {
+      "source": "api",
+      "release_scope": "snapshot",
+      "endpoint": "cpi/getCPIIndex",
+      "cadence": "monthly",
+      "base_year": "2012",
+      "base_field": "baseyear",
+      "requests": [
+        {
+          "filters": [
+            {
+              "param": "base_year",
+              "value": "2012",
+              "field": "baseyear"
+            },
+            {
+              "param": "state_code",
+              "value": "99",
+              "field": "state",
+              "expect": "All India"
+            },
+            {
+              "param": "sector_code",
+              "value": "3",
+              "field": "sector",
+              "expect": "Combined"
+            },
+            {
+              "param": "group_code",
+              "value": "0",
+              "field": "group",
+              "expect": "General"
+            }
+          ]
+        }
+      ],
+      "period": {
+        "year": "year",
+        "month": "month"
+      },
+      "label_fields": [
+        "sector",
+        "group",
+        "subgroup"
+      ],
+      "measures": {
+        "index": "index",
+        "inflation_published": "inflation"
+      },
+      "printed_growth": [
+        {
+          "printed": "inflation_published",
+          "computed_from": "index",
+          "lag_periods": 12,
+          "printed_decimals": 2,
+          "operand_decimals": 1
+        }
+      ],
+      "status_field": "status",
+      "final_period": "2025-12-31",
+      "from_period": "2019-11-30",
+      "note_why": "A retired base, read only by the driver and arrow tests (`tests_read` on the current dataset; signals/README \"Longer history\", user 2026-10-21): one series on one base from Oct 2021, never linked to the current base. Fetched once: a release is saved only while none reaching `final_period` exists. Rows before `from_period` are not consolidated: Nov 2019 is the earliest month a test from Oct 2021 can read (a change one month apart of a YoY, at a delay of up to 9 months). The API's only CPI base; rows carry `baseyear`, not `base_year` (base_field). One row a month: all-India, combined, general index.",
+      "published_blanks": {
+        "inflation_published": {
+          "2020-04-30": "No inflation was printed for Apr-May 2020: price collection was suspended in the lockdown.",
+          "2020-05-31": "As Apr 2020."
+        }
+      }
     }
   },
   "currency_stage": "csv_integrity",

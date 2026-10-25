@@ -71,7 +71,7 @@ def test_a_reference_series_is_read_as_monthly_changes_in_its_yoy(monkeypatch):
     for i, p in enumerate(["2024-01-31", "2024-02-29", "2024-03-31",
                            "2025-01-31", "2025-02-28", "2025-03-31"]):
         vals[("wpi", "x", "index", p)] = [100, 100, 100, 110, 121, 100][i]
-    fake = types.SimpleNamespace(values=vals)
+    fake = types.SimpleNamespace(values=vals, datasets={"wpi": {}})     # no tests_read: its own base
     monkeypatch.setattr("signals.compute.real_economy.reference", lambda pipeline: fake)
     ch = rt.reference_changes("mospi", "wpi/x")
     jan25 = 2025 * 12

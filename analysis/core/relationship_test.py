@@ -46,6 +46,24 @@ SHUFFLES = 10_000
 SEED = 20261008
 MIN_PAIRS = 10
 
+# COVID (user, 2026-10-21; signals/README "Longer history"): a monthly change of a YoY compares
+# four months (k, k-1, k-12, k-13). If any of them falls in Mar-Dec 2020, the lockdown collapse
+# and its base effect dominate any link, so the change is left out of every test. `--include-covid`
+# runs the cross-check with them in; a link that appears only then is a COVID story, not credit.
+COVID = (2020 * 12 + 2, 2020 * 12 + 11)              # fc._months of Mar 2020 .. Dec 2020
+INCLUDE_COVID = False
+
+
+def outside_covid(changes: dict[int, float]) -> dict[int, float]:
+    if INCLUDE_COVID:
+        return changes
+    lo, hi = COVID
+    return {k: v for k, v in changes.items() if not any(lo <= m <= hi for m in (k, k - 1, k - 12, k - 13))}
+
+
+def covid_note() -> str:
+    return "included (cross-check)" if INCLUDE_COVID else "changes comparing any month of Mar-Dec 2020 left out"
+
 
 def gap_changes(nid: str, model: dict, series: dict, periods: list[str], data_month) -> dict[int, float]:
     """month index -> change in the line's gap to its own group, one data month apart."""
@@ -90,6 +108,7 @@ def test(a: dict[int, float], b: dict[int, float], t: dict[int, float], sign: in
     otherwise both share `t`."""
     alpha = ALPHA / family
     t_b = t if t_b is None else t_b
+    a, b, t, t_b = (outside_covid(x) for x in (a, b, t, t_b))
     rows = {}
     for L in sorted({0, 1, 2, 3, lag}):
         months = sorted(k for k in a if k + L in b and k + L in t_b and k in t)
@@ -109,7 +128,8 @@ def test(a: dict[int, float], b: dict[int, float], t: dict[int, float], sign: in
         verdict = "opposite"
     else:
         verdict = "not_supported"
-    return {"verdict": verdict, "at_lag": lag, "family": family, "alpha": round(alpha, 4), "lags": rows}
+    return {"verdict": verdict, "at_lag": lag, "family": family, "alpha": round(alpha, 4), "lags": rows,
+            "covid": covid_note()}
 
 
 def run(pipeline: str, source: str, target: str, sign: int, lag: int, reason: str,
@@ -151,16 +171,34 @@ def run_cross(source_pipeline: str, source: str, target_pipeline: str, target: s
             "protocol": "SYSTEM_MODEL_SPEC §16 Step 6b (cross-pipeline)", **res}
 
 
+def test_series(ref, series: str) -> tuple[str, str, str | None]:
+    """(dataset, code, stand-in note) a test reads for `series`: the manifest's `tests_read` base, and a
+    declared stand-in (`tests_approximate`) where that base lacks the code."""
+    ds, code = series.split("/", 1)
+    spec = ref.datasets.get(ds, {})
+    test_ds = spec.get("tests_read", ds)
+    approx = spec.get("tests_approximate", {}).get(code) if test_ds != ds else None
+    if approx and not any(d == test_ds and c == code for (d, c, _m, _p) in ref.values):
+        return test_ds, approx["code"], f"{series} read as {test_ds}/{approx['code']}: {approx['why']}"
+    return test_ds, code, None
+
+
 def reference_changes(pipeline: str, series: str, measure: str = "index") -> dict[int, float]:
     """month index -> monthly change in a reference series' YoY %, one data month apart.
 
     Read through `real_economy.reference`, the same reader the 1f signals use, so a price or
     output series has one definition. Reference periods ARE their data months (MoSPI)."""
-    from signals.compute.real_economy import reference
+    from signals.compute.real_economy import ReferenceMissing, reference
     ref = reference(pipeline)
     ds, code = series.split("/", 1)
+    # Tests read the base the manifest names (`tests_read`): one base across the whole test window,
+    # never a switch mid-series (signals/README "Longer history").
+    test_ds, test_code, _ = test_series(ref, series)
     vals = {fc._months(p): v for (d, c, m, p), v in ref.values.items()
-            if d == ds and c == code and m == measure}
+            if d == test_ds and c == test_code and m == measure}
+    if not vals:
+        # Loud: an empty read once recorded 14 NAS tests as `too_short` (n = 0 at every delay).
+        raise ReferenceMissing(f"{series}: no {measure!r} on the test base {test_ds}")
     yoy = {k: (v / vals[k - 12] - 1) * 100 for k, v in vals.items() if vals.get(k - 12)}
     return {k: yoy[k] - yoy[k - 1] for k in sorted(yoy) if k - 1 in yoy}
 
@@ -300,6 +338,7 @@ def judge(a: dict[int, float], b: dict[int, float], t_a: dict[int, float], t_b: 
           sign: int, lag: int, family: int = 1) -> dict:
     """`test`, read for a driver: too few pairs, or a bar a strong link could not clear, is
     `too_short`; the slope of the target's residual on the driver's at the declared lag is kept."""
+    a, b, t_a, t_b = (outside_covid(x) for x in (a, b, t_a, t_b))      # the slope reads what `test` read
     res = test(a, b, t_a, sign, lag, family, t_b=t_b)
     main = res["lags"][lag]
     crit = critical_r(main["n"], res["alpha"])
@@ -319,12 +358,16 @@ DISCOVERY_MAX_LAG = 9
 
 def discover_confirm(a: dict[int, float], b: dict[int, float], t_a: dict[int, float],
                      t_b: dict[int, float], sign: int, family: int = 1,
-                     cutoff: int | None = None, lag: int | None = None) -> dict:
-    """The line's own delay, found on months up to `cutoff`, confirmed on months after it
-    (spec §16 Step 6c). `cutoff` and `lag` are passed back in once frozen, so later runs only
-    re-confirm, on a confirmation set that grows with every new month."""
+                     cutoff: int | None = None, lag: int | None = None, start: int | None = None) -> dict:
+    """The line's own delay, found on months `start`..`cutoff`, confirmed on every month OUTSIDE that
+    window (spec §16 Step 6c; user 2026-10-25). `start`, `cutoff` and `lag` are passed back in once
+    frozen, so later runs only re-confirm, on a set that grows with every new month: later ones as
+    they arrive, earlier ones as history is backfilled. The delay is never chosen and confirmed on
+    the same months, which is what the split protects."""
+    a, b, t_a, t_b = (outside_covid(x) for x in (a, b, t_a, t_b))
     usable = sorted(k for k in b if k in t_b)
-    if cutoff is None:
+    if start is None:
+        start = usable[0] if usable else None              # the window opens at the first usable month
         if len(usable) < 2 * MIN_PAIRS:
             return {"verdict": "too_short", "discovery": {"cutoff": None, "profile": {}, "lag": None,
                     "why": f"{len(usable)} change months; discovery and confirmation need {MIN_PAIRS} each"}}
@@ -332,7 +375,7 @@ def discover_confirm(a: dict[int, float], b: dict[int, float], t_a: dict[int, fl
     profile = {}
     if lag is None:
         for L in range(DISCOVERY_MAX_LAG + 1):
-            ks = sorted(k for k in a if k in t_a and k + L in b and k + L in t_b and k + L <= cutoff)
+            ks = sorted(k for k in a if k in t_a and k + L in b and k + L in t_b and start <= k + L <= cutoff)
             if len(ks) < MIN_PAIRS:
                 profile[L] = {"n": len(ks)}
                 continue
@@ -344,10 +387,9 @@ def discover_confirm(a: dict[int, float], b: dict[int, float], t_a: dict[int, fl
             return {"verdict": "too_short", "discovery": {"cutoff": cutoff, "profile": profile, "lag": None,
                     "why": "no delay had enough pairs before the cutoff"}}
         lag = max(scored, key=scored.get)
-    later_b = {k: v for k, v in b.items() if k > cutoff}
-    later_tb = {k: v for k, v in t_b.items() if k > cutoff}
-    res = judge(a, later_b, t_a, later_tb, sign, lag, family)
-    return {**res, "discovery": {"cutoff": cutoff, "profile": profile, "lag": lag}}
+    unseen = lambda s: {k: v for k, v in s.items() if k < start or k > cutoff}  # noqa: E731
+    res = judge(a, unseen(b), t_a, unseen(t_b), sign, lag, family)
+    return {**res, "discovery": {"from": start, "cutoff": cutoff, "profile": profile, "lag": lag}}
 
 
 def driver_changes(pipeline: str, series: list[str]) -> dict[int, float]:
@@ -368,13 +410,15 @@ def run_driver(hyp: dict, target_pipeline: str, target_id: str, family: int,
     head = HEADLINE.get(dataset)
     tm, ts, tp, td = _side(target_pipeline)
     a = driver_changes(ref, series)
+    from signals.compute.real_economy import reference as _ref
+    approximated = [n for s in series if (n := test_series(_ref(ref), s)[2])]
     credit_tide = tide(tm, ts, td)
     t_a = credit_tide if (head is None or head in series) else reference_changes(ref, head)
     b = gap_changes(target_id, tm, ts, tp, td)
     if discover:
         frozen = hyp.get("discovery") or {}
         res = discover_confirm(a, b, t_a, credit_tide, hyp["sign"], family,
-                               cutoff=frozen.get("cutoff"), lag=frozen.get("lag"))
+                               cutoff=frozen.get("cutoff"), lag=frozen.get("lag"), start=frozen.get("from"))
     else:
         res = judge(a, b, t_a, credit_tide, hyp["sign"], hyp["lag"], family)
     # Unique per result: two runs on one day (a lag-0 test, then discovery) must not share an id.
@@ -386,4 +430,5 @@ def run_driver(hyp: dict, target_pipeline: str, target_id: str, family: int,
             "predicted_sign": hyp["sign"], "reason": hyp["reason"], "tested": date.today().isoformat(),
             "through_period": {target_pipeline: tp[-1]},
             "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (" + ("discover/confirm" if discover else
-                                                              "generic driver test") + ")", **res}
+                                                              "generic driver test") + ")",
+            **({"approximated": approximated} if approximated else {}), **res}

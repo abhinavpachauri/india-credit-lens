@@ -84,10 +84,14 @@ def check(rows: list[dict], man: dict, lab: dict, today: date) -> tuple[list[str
         series = {}
         for r in mine:
             series.setdefault((r["code"], r["measure"]), set()).add(r["period"])
+        blanks = ds.get("published_blanks", {})           # months MoSPI itself left blank, declared
         for (code, measure), periods in sorted(series.items()):
             ps = sorted(periods)
             for a, b in zip(ps, ps[1:]):
-                if next_period(a, step) != b:
+                p, missing = a, []
+                while (p := next_period(p, step)) < b:
+                    missing.append(p)
+                if any(q not in blanks.get(measure, {}) for q in missing):
                     errs.append(f"{name}: {code}/{measure} has a gap between {a} and {b}")
                     break
         latest = max(r["period"] for r in mine)
@@ -99,6 +103,13 @@ def check(rows: list[dict], man: dict, lab: dict, today: date) -> tuple[list[str
                 errs.append(f"{name}: {code}/{measure} is declared but has no rows")
             elif max(ps) != latest:
                 errs.append(f"{name}: {code}/{measure} ends {max(ps)}, the dataset's latest is {latest}")
+        if ds.get("final_period"):
+            # A retired base has no calendar: its last month is fixed, and must be exactly what we hold.
+            if latest != ds["final_period"]:
+                errs.append(f"{name}: retired base ends {ds['final_period']}, the CSV holds to {latest}")
+            else:
+                notes.append(f"{name}: retired base, {min(r['period'] for r in mine)} → {latest}")
+            continue
         want = expected_latest(latest, ds["cadence"], ds["expected_lag_days"], grace, today)
         if want > latest:
             errs.append(f"{name}: OVERDUE: {want} was due by "

@@ -188,3 +188,44 @@ def test_confirmation_never_reads_the_discovery_months():
 def test_a_history_too_short_to_split_is_too_short():
     a, b, t = _series(n=15, lag=1)
     assert RT.discover_confirm(a, b, t, t, sign=1)["verdict"] == "too_short"
+
+
+# ── the test base, stand-ins, COVID and the unseen-months confirmation (2026-10-25) ─────────
+
+def test_covid_months_leave_any_change_that_compares_them():
+    k = lambda y, m: y * 12 + m - 1                                        # noqa: E731 (fc._months)
+    s = {k(2021, m): 1.0 for m in range(1, 13)} | {k(2022, 2): 1.0}
+    kept = RT.outside_covid(s)
+    assert k(2021, 1) not in kept and k(2021, 12) not in kept           # k-12 / k-13 in 2020
+    assert k(2022, 2) in kept                                           # compares Jan-Feb 2021 / 2022
+    RT.INCLUDE_COVID = True
+    try:
+        assert RT.outside_covid(s) == s                                  # the cross-check keeps them
+    finally:
+        RT.INCLUDE_COVID = False
+
+
+def test_confirmation_uses_months_before_the_search_window_too():
+    """Months backfilled before the window were never seen by the delay search: they confirm."""
+    a, b, t = _series(n=60, lag=2, seed=11)
+    first = RT.discover_confirm(a, b, t, t, sign=1)
+    d = first["discovery"]
+    start, cut = 20, d["cutoff"]                                     # pretend history began at 20
+    again = RT.discover_confirm(a, b, t, t, sign=1, cutoff=cut, lag=d["lag"], start=start)
+    later = RT.discover_confirm(a, b, t, t, sign=1, cutoff=cut, lag=d["lag"], start=min(b))
+    assert again["lags"][d["lag"]]["n"] > later["lags"][d["lag"]]["n"]
+
+
+def test_the_test_reads_the_declared_base_and_names_a_stand_in():
+    from signals.compute.real_economy import reference
+    ref = reference("mospi")
+    assert RT.test_series(ref, "iip/nic:10")[:2] == ("iip_2011", "nic:10")
+    ds, code, note = RT.test_series(ref, "wpi/nic:24/basic_iron_and_steel")
+    assert (ds, code) == ("wpi_2011", "nic:24") and "stands in" in note
+    assert RT.test_series(ref, "wpi/nic:10")[2] is None                  # no stand-in where none is needed
+
+
+def test_a_series_the_test_base_cannot_read_fails_loudly_not_as_too_short():
+    from signals.compute.real_economy import ReferenceMissing
+    with pytest.raises(ReferenceMissing, match="no 'index'"):
+        RT.reference_changes("mospi", "nas/nas:gdp")                   # NAS has levels, not an index

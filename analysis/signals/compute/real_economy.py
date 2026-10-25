@@ -101,6 +101,9 @@ class Reference:
             raise ReferenceMissing(f"{series} {measure}: not in the reference CSV at all")
         if period < self.first[k]:
             return "reference_history_gap"
+        if self.datasets[ds].get("final_period"):
+            raise ReferenceMissing(f"{series} {measure} {period}: past the retired base's final month "
+                                   f"{self.datasets[ds]['final_period']}")
         due = date.fromisoformat(period) + timedelta(days=self.datasets[ds]["expected_lag_days"] + self.grace)
         if due > today():
             return "not_released"

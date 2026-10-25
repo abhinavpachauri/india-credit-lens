@@ -695,3 +695,37 @@ def test_every_saved_annex_still_parses_to_its_saved_rows():
     for p, d in annexes:
         raw = p.with_name(p.name.replace(".json.gz", ".xlsx")).read_bytes()
         assert R.canonical_rows(cpi_annex.parse(raw)) == d["rows"], p.name
+
+
+# ── retired bases (signals/README "Longer history", 2026-10-25) ────────────────────────────
+
+def test_a_retired_base_must_end_exactly_at_its_final_month_and_is_never_overdue():
+    man, lab = manifest.load("mospi"), C.labels()
+    rows = [r for r in _csv_rows() if r["dataset"] == "iip_2011"]
+    man = {**man, "datasets": {"iip_2011": man["datasets"]["iip_2011"]}}
+    errs, notes = V.check(rows, man, lab, date(2030, 1, 1))          # years later: still not overdue
+    assert not errs and any("retired base" in n for n in notes), errs
+    cut = [r for r in rows if r["period"] < "2026-03-31"]
+    errs, _ = V.check(cut, man, lab, date(2030, 1, 1))
+    assert any("retired base ends 2026-03-31" in e for e in errs)
+
+
+def test_only_a_declared_mospi_blank_is_allowed_as_a_gap():
+    man, lab = manifest.load("mospi"), C.labels()
+    ds = man["datasets"]["cpi_2012"]
+    rows = [r for r in _csv_rows() if r["dataset"] == "cpi_2012"]
+    one = {**man, "datasets": {"cpi_2012": ds}}
+    assert not V.check(rows, one, lab, date(2030, 1, 1))[0]          # Apr-May 2020: declared
+    undeclared = {**one, "datasets": {"cpi_2012": {**ds, "published_blanks": {}}}}
+    assert any("gap between 2020-03-31 and 2020-06-30" in e for e in V.check(rows, undeclared, lab, date(2030, 1, 1))[0])
+
+
+def test_a_row_is_checked_against_its_own_base_field_and_early_months_are_not_consolidated():
+    ds = {**manifest.load("mospi")["datasets"]["cpi_2012"]}
+    row = {"baseyear": "2012", "year": 2019, "month": "October", "sector": "Combined", "group": "General",
+           "subgroup": "General-Overall", "index": "150.0", "inflation": "4.6", "status": "F"}
+    assert C.keyed("cpi_2012", ds, {"rows": [row]}) == {}                   # Oct 2019 < from_period
+    later = {**row, "year": 2020, "month": "January"}
+    assert len(C.keyed("cpi_2012", ds, {"rows": [later]})) == 2
+    with pytest.raises(C.ConsolidateError, match="a row on base"):
+        C.keyed("cpi_2012", ds, {"rows": [{**later, "baseyear": "2024"}]})

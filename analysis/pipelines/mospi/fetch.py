@@ -44,7 +44,7 @@ def fetch_api(name: str, ds: dict, api: dict) -> list[dict]:
     rows = []
     for req in ds["requests"]:
         rows += mospi_api.fetch_request(api["base_url"], ds["endpoint"], req["filters"],
-                                        api["page_size"], api.get("workers", 1),
+                                        api["page_size"], ds.get("workers", api.get("workers", 1)),
                                         verify=req.get("verify", []))
     drop = ds.get("drop_rows_where_set", [])
     kept = [r for r in rows if not any(r.get(f) not in (None, "") for f in drop)]
@@ -212,6 +212,11 @@ def main() -> int:
                     failed = True
             print(f"  · if the catalogue lags a {name} press release, read the PDF by hand "
                   f"(fetch.py --cpi-pdf <file>); the calendar check (1b) says if one is overdue.")
+            continue
+        if ds.get("final_period") and R.saved(name):
+            # A retired base does not change: fetched once, then 1b checks the saved release reaches
+            # final_period. Re-fetching it every run would cost hundreds of requests for nothing.
+            print(f"  · {name}: retired base (final {ds['final_period']}), saved release kept")
             continue
         try:
             rows = fetch_api(name, ds, man["api"])

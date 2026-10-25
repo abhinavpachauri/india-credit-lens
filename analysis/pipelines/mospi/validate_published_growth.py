@@ -94,7 +94,8 @@ def check(rows: list[dict], man: dict, lab: dict) -> tuple[list[str], Counter, i
                     if prev is None:
                         continue
                     if p not in printed:
-                        missing += 1
+                        if p not in ds.get("published_blanks", {}).get(pg["printed"], {}):
+                            missing += 1                  # a declared MoSPI blank is not missing
                         continue
                     ours = 100 * (cur / prev - 1)
                     tol = tolerance(cur, prev, pg["printed_decimals"], pg["operand_decimals"])
