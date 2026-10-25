@@ -72,7 +72,7 @@
 
 ## Sources and roadmap
 
-- **The next source is chosen by a buyer conversation, not by analytical completeness** (2026-10-11, strategy review; STRATEGY §5). The old order (NBFC → MoSPI → arc 3 → BSR-1 → Rates; user, 2026-09-16) is under review since 2026-10-10. *Revisit:* when a buyer conversation names a need.
+- **Two purposes, two orders** (user, 2026-10-25): the platform is also the user's own way to understand the credit system, so sources that complete the model (the explainability grid's columns: price of credit, other finance, input prices) are pursued now, deterministic data first. Buyer conversations continue alongside and decide what is packaged and sold, not what is learned. *Why:* the 11 Oct rule (buyer first) left the model with empty columns the user needs to read the system. *Revisit:* when a buyer conversation names a need the grid order does not cover.
 - **MoSPI is pulled by hand until two clean cycles, then scheduled.** *Why:* no provisional/final flag and revisions overwrite silently, so revision behaviour must be seen before it is automated. *Revisit: after two clean cycles.* (user, 2026-09-26)
 - **Bank presentations/results rejected** as a source: unstructured, layouts change. *Per-bank data is not annual-only*: RBI's bank-wise quarterly variables on DBIE (2002 →) carry every SCB's advances and NPAs by the four RBI sectors (found 2026-10-11, `analysis/sources/README.md`). *Revisit:* if a buyer needs depth below four sectors (then Pillar 3 first).
 - **A compute module is a shape, not a pipeline**, and a pipeline declares itself in its manifest. A new SIBC-shaped source is a manifest entry.

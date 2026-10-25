@@ -537,8 +537,9 @@ def run_tests(pipeline: str, dry_run: bool = False) -> list[dict]:
             untestable.append((h["id"], h["line_label"], str(e)))      # stays untested, visibly
             continue
         prev = last.get(h["id"])
-        same = ("verdict", "lags", "discovery", "source", "through_period", "covid")
-        if prev and all(prev.get(k) == r.get(k) for k in same):
+        # The delay and its window are frozen, so the search profile (kept on the first result only) is
+        # not part of the answer; the verdict, the confirmation and the inputs are.
+        if prev and rt.same_answer(prev, r, ("verdict", "lags", "source", "through_period")):
             continue                                       # the same answer as its last result
         # Not "the same latest month": a longer history or another base changes the answer while
         # the latest month stays put (2026-10-25: the backfill and the 2011-12 base re-ran nothing).

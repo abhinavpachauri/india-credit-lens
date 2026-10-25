@@ -77,3 +77,14 @@ def test_a_reference_series_is_read_as_monthly_changes_in_its_yoy(monkeypatch):
     jan25 = 2025 * 12
     assert set(ch) == {jan25 + 1, jan25 + 2}               # YoY 10 → 21 → 0
     assert round(ch[jan25 + 1], 6) == 11.0 and round(ch[jan25 + 2], 6) == -21.0
+
+
+def test_a_rerun_with_the_same_answer_is_not_a_change():
+    """JSON stores lag keys as strings; a fresh result has ints. Read naively, every re-run of every
+    relationship 'changed' and would be re-recorded (found 2026-10-25: 22 of 22)."""
+    import json
+    fresh = {"verdict": "not_supported", "lags": {0: {"n": 19, "r": 0.1, "p": 0.5}},
+             "through_period": "2026-09-30", "covid": "x"}
+    stored = json.loads(json.dumps({k: v for k, v in fresh.items() if k != "covid"}))   # predates covid
+    assert rt.same_answer(stored, fresh)
+    assert not rt.same_answer(stored, {**fresh, "lags": {0: {"n": 20, "r": 0.1, "p": 0.5}}})

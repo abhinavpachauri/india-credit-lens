@@ -282,21 +282,90 @@ def record(pipeline: str, result: dict, note: str | None = None) -> Path:
     return path
 
 
+SAME = ("verdict", "lags", "through_period")
+
+
+def same_answer(prev: dict, new: dict, keys=SAME) -> bool:
+    """Compared as stored: JSON turns lag keys into strings, so a fresh result is round-tripped first.
+    A field the old record predates (`covid`) is not a change."""
+    fresh = json.loads(json.dumps(new))
+    return all(prev.get(k) == fresh.get(k) for k in keys) and \
+        ("covid" not in prev or prev["covid"] == fresh.get("covid"))
+
+
+def retest(pipelines: list[str], dry_run: bool = False) -> list[tuple[str, dict, dict | None]]:
+    """Every recorded relationship (Step 6b: inside a pipeline, across pipelines, a reference series)
+    re-run with its recorded reason, sign, delay and family. A result is recorded only when the
+    answer changed, so the file grows with evidence, not with runs. Driver tests (Step 6c) re-run
+    through `explainability.py test`, not here. Returns (where, new result, last result)."""
+    out = []
+    jobs = []
+    for pl in pipelines:
+        path = tests_path(pl)
+        if not path.exists():
+            continue
+        latest = {}
+        for t in json.loads(path.read_text()).get("tests", []):
+            if not t.get("hypothesis_id"):
+                latest[(t["source"], t["target"])] = t
+        for t in latest.values():
+            jobs.append((pl, None, t))
+    if CROSS_TESTS.exists():
+        latest = {}
+        for t in json.loads(CROSS_TESTS.read_text()).get("tests", []):
+            latest[t["edge_id"]] = t
+        jobs += [(None, eid, t) for eid, t in latest.items()]
+    for pl, eid, t in jobs:
+        sign, lag, fam, why = t["predicted_sign"], t["at_lag"], t.get("family", 1), t.get("reason", "")
+        proto = t.get("protocol", "")
+        if eid is None:
+            r = run(pl, t["source"], t["target"], sign, lag, why, fam)
+        elif "reference series" in proto:
+            ref, series = t["source"].split(":", 1)
+            tp, target = t["target"].split(":", 1)
+            r = run_reference(ref, series, t["source_tide"].split(":", 1)[1], tp, target, sign, lag, why, fam)
+        else:
+            sp, source = t["source"].split(":", 1)
+            tp, target = t["target"].split(":", 1)
+            r = run_cross(sp, source, tp, target, sign, lag, why, fam)
+        changed = not same_answer(t, r)
+        out.append((pl or f"cross:{eid}", r, t if changed else None))
+        if changed and not dry_run:
+            note = f"Re-test {date.today().isoformat()}: the same reason, sign, delay and family on the current history."
+            record(pl, r, note) if eid is None else record_cross(eid, r, note)
+    return out
+
+
 def main() -> int:
     import argparse
     ap = argparse.ArgumentParser(description="Test a proposed relationship (SYSTEM_MODEL_SPEC §16 Step 6b)")
-    ap.add_argument("--pipeline", required=True)
-    ap.add_argument("--source", required=True, help="entity id that pushes")
-    ap.add_argument("--target", required=True, help="entity id that is pushed")
-    ap.add_argument("--sign", type=int, choices=(1, -1), required=True,
+    ap.add_argument("--retest", nargs="+", metavar="PIPELINE",
+                    help="re-run every recorded relationship of these pipelines (and every cross link)")
+    ap.add_argument("--dry-run", action="store_true", help="--retest: print, record nothing")
+    ap.add_argument("--pipeline")
+    ap.add_argument("--source", help="entity id that pushes")
+    ap.add_argument("--target", help="entity id that is pushed")
+    ap.add_argument("--sign", type=int, choices=(1, -1),
                     help="+1 complement (move together), -1 substitute (move apart)")
     ap.add_argument("--lag", type=int, default=0, help="months the push takes, declared up front")
-    ap.add_argument("--reason", required=True, help="the real-world reason, one sentence")
+    ap.add_argument("--reason", help="the real-world reason, one sentence")
     ap.add_argument("--family", type=int, default=1,
                     help="how many relationships were declared together (Bonferroni)")
     ap.add_argument("--note")
     ap.add_argument("--record", action="store_true", help="append the result to relationship_tests.json")
     a = ap.parse_args()
+    if a.retest:
+        res = retest(a.retest, a.dry_run)
+        for where, r, prev in res:
+            m = r["lags"][r["at_lag"]]
+            was = f" (was {prev['verdict']}, n {prev['lags'][str(prev['at_lag'])]['n']})" if prev else " (unchanged)"
+            print(f"  {r['verdict']:13} {where[:22]:22} {r.get('source_label', r['source'])[:34]:34} → "
+                  f"{r['target_label'][:28]:28} n {m['n']} r {m.get('r', '—')} p {m.get('p', '—')}{was}")
+        print(f"  {len(res)} relationships re-run; {sum(1 for x in res if x[2])} changed"
+              f"{' (dry run, nothing recorded)' if a.dry_run else ' and recorded'}")
+        return 0
+    if not (a.pipeline and a.source and a.target and a.sign and a.reason):
+        ap.error("--pipeline, --source, --target, --sign and --reason are required without --retest")
     r = run(a.pipeline, a.source, a.target, a.sign, a.lag, a.reason, a.family)
     print(f"{r['source_label']} → {r['target_label']} (predicted {'+' if a.sign > 0 else '−'}, "
           f"lag {a.lag}m, bar p < {r['alpha']:g})")

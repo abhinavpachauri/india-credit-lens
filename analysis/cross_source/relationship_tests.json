@@ -171,6 +171,92 @@
         }
       },
       "note": "Declared 2026-10-10 before any result (user-approved #1): family of 2 reference links, both +, lag 0. Source tide = WPI all commodities; target tide = bank credit."
+    },
+    {
+      "edge_id": "ref:wpi_fertilizers->sibc:fertiliser",
+      "source": "mospi:wpi/nic:20/fertilizers_and_nitrogen_compounds",
+      "source_label": "wpi/nic:20/fertilizers_and_nitrogen_compounds",
+      "source_tide": "mospi:wpi/wpi:all",
+      "target": "sibc:e_S2_2_9_1",
+      "target_label": "Fertiliser",
+      "predicted_sign": 1,
+      "reason": "Fertiliser makers' working capital rises with the price of what they make and sell, within the month.",
+      "tested": "2026-10-25",
+      "through_period": {
+        "sibc": "2026-09-30"
+      },
+      "protocol": "SYSTEM_MODEL_SPEC §16 Step 6b (reference series)",
+      "verdict": "not_supported",
+      "at_lag": 0,
+      "family": 2,
+      "alpha": 0.025,
+      "lags": {
+        "0": {
+          "n": 29,
+          "r": -0.196,
+          "p": 0.3
+        },
+        "1": {
+          "n": 30,
+          "r": -0.167,
+          "p": 0.384
+        },
+        "2": {
+          "n": 31,
+          "r": -0.016,
+          "p": 0.933
+        },
+        "3": {
+          "n": 32,
+          "r": 0.098,
+          "p": 0.598
+        }
+      },
+      "covid": "changes comparing any month of Mar-Dec 2020 left out",
+      "note": "Re-test 2026-10-25: the same reason, sign, delay and family on the current history."
+    },
+    {
+      "edge_id": "ref:wpi_jewellery->sibc:gold_loans",
+      "source": "mospi:wpi/nic:32/jewellery_and_related_articles",
+      "source_label": "wpi/nic:32/jewellery_and_related_articles",
+      "source_tide": "mospi:wpi/wpi:all",
+      "target": "sibc:e_S1_4_8",
+      "target_label": "Loans against gold jewellery",
+      "predicted_sign": 1,
+      "reason": "Gold collateral is revalued daily, so the loan value of pledged jewellery follows the gold price; the jewellery index tracks gold, its main input.",
+      "tested": "2026-10-25",
+      "through_period": {
+        "sibc": "2026-09-30"
+      },
+      "protocol": "SYSTEM_MODEL_SPEC §16 Step 6b (reference series)",
+      "verdict": "not_supported",
+      "at_lag": 0,
+      "family": 2,
+      "alpha": 0.025,
+      "lags": {
+        "0": {
+          "n": 29,
+          "r": -0.034,
+          "p": 0.868
+        },
+        "1": {
+          "n": 30,
+          "r": 0.066,
+          "p": 0.727
+        },
+        "2": {
+          "n": 31,
+          "r": 0.154,
+          "p": 0.412
+        },
+        "3": {
+          "n": 32,
+          "r": -0.051,
+          "p": 0.783
+        }
+      },
+      "covid": "changes comparing any month of Mar-Dec 2020 left out",
+      "note": "Re-test 2026-10-25: the same reason, sign, delay and family on the current history."
     }
   ]
 }
