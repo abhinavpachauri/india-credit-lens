@@ -1321,8 +1321,16 @@ checks every reference pipeline's CSV.
   the same lines against wrong sectors' rates are supported 5 of 134 times (4%), against 13% for the
   own rate, so the rate is a real driver but 2–3 of the 9 are likely luck. With two drivers per line
   the family bar halves (α 0.025): edible oils ← its prices (p 0.049) no longer clears it.
-- The explained share of moves is unchanged (43%): a supported driver explains a move only once
-  admitted (Step 6c step 4, the user's approval), which is next.
+- **Admission (step 4), user 2026-10-26:** 7 admitted (Chemicals: Others, All Engineering, Other
+  Textiles, Basic Metals, Textiles, Medium and Medium Enterprises, the same firms twice); loans against
+  FDs rejected (priced off the borrower's own deposit rate; a 9-month delay read as chance); Engineering:
+  Others held (its parent follows the same rate in the same month). The coverage count gained a
+  `driver` explanation (`coverage.driver_explains`): the admitted slope × the driver's change net of
+  its tide, `lag` months earlier, pushes the line the way it moved and covers half the move.
+- **Result:** the drivers hold on 7 of the 32 moves on admitted lines, but 6 were already filed under
+  an earlier explanation (mostly structural), so the explained share moves by one move (43%). Price
+  pushes are small (typically 1–3 pp of gap change); the unexplained moves on these lines are often
+  ±20–45 pp. Price of credit explains steady pressure, not shocks.
 
 **Build order.** (1) manifest, reader, label and note tables, saved releases for the four files;
 (2) the gate (integrity both ways, order, calendar, notes, plausibility measured by injection);

@@ -279,6 +279,10 @@ def _verdicts(pipeline: str) -> dict:
 
 
 def status(h: dict, verdicts: dict) -> str:
+    if h.get("rejected"):
+        return "rejected"                                  # supported, but the user read it as chance
+    if h.get("held"):
+        return "held"                                      # supported, decision waiting on history
     if h.get("admitted"):
         return "admitted"
     results = [verdicts[t] for t in h.get("tests", []) if t in verdicts]
@@ -432,7 +436,7 @@ def summary(pipeline: str) -> str:
 
 # ── Step 2: the completeness grid (spec §16 Step 6c) ───────────────────────────────────────
 
-TESTED = ("supported", "not_supported", "opposite", "too_short", "admitted")
+TESTED = ("supported", "not_supported", "opposite", "too_short", "admitted", "rejected", "held")
 SHORT = {"input_prices": "input prices", "credit_price": "price of credit", "demand": "demand",
          "alternative_finance": "other finance", "regulation": "rules & dates", "funding": "lenders' capacity"}
 GROUPS = [("agri", "Agriculture"), ("industry_size", "Industry by size"), ("industry_type", "Industry by type"),
@@ -448,7 +452,7 @@ def cell(hyps: list[dict], verdicts: dict, applies: dict) -> tuple[str, bool]:
     done = bool(st) and all(s in TESTED for s in st)
     if done:
         sym = "✓" if any(s in ("supported", "admitted") for s in st) else \
-              "?" if all(s == "too_short" for s in st) else "✗"
+              "?" if all(s in ("too_short", "held") for s in st) else "✗"
     elif any(s in TESTED for s in st):
         sym = "✓…" if any(s in ("supported", "admitted") for s in st) else "✗…"
     elif any(s == "ready" for s in st):

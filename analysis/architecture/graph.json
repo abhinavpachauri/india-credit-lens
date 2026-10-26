@@ -20,9 +20,11 @@
     "core/coverage": {
       "doc_claims": [],
       "imports": [
+        "core/explainability",
         "core/force_check",
         "core/generate_skeleton",
         "core/manifest",
+        "core/relationship_test",
         "signals/dominance"
       ],
       "invokes": [],
@@ -73,6 +75,7 @@
       "invokes": [],
       "path": "analysis/core/explainability.py",
       "reads": {
+        "*.json": "low",
         "driver_hypotheses.json": "low",
         "explainability_grid.md": "low",
         "system_state_*.json": "low"
@@ -251,7 +254,8 @@
       "imports": [
         "core/coverage",
         "core/force_check",
-        "core/generate_skeleton"
+        "core/generate_skeleton",
+        "core/manifest"
       ],
       "invokes": [],
       "path": "analysis/core/relationship_test.py",
@@ -946,6 +950,38 @@
       "reads": {
         "*/sections.json": "low"
       },
+      "writes": {}
+    },
+    "pipelines/rbi_rates/fetch": {
+      "doc_claims": [],
+      "imports": [
+        "pipelines/mospi/releases",
+        "pipelines/rbi_rates/reader"
+      ],
+      "invokes": [],
+      "path": "analysis/pipelines/rbi_rates/fetch.py",
+      "reads": {
+        "analysis/pipelines/rbi_rates/labels.json": "low"
+      },
+      "writes": {}
+    },
+    "pipelines/rbi_rates/reader": {
+      "doc_claims": [],
+      "imports": [],
+      "invokes": [],
+      "path": "analysis/pipelines/rbi_rates/reader.py",
+      "reads": {},
+      "writes": {}
+    },
+    "pipelines/rbi_rates/validate_rates": {
+      "doc_claims": [],
+      "imports": [
+        "core/manifest",
+        "pipelines/mospi/releases"
+      ],
+      "invokes": [],
+      "path": "analysis/pipelines/rbi_rates/validate_rates.py",
+      "reads": {},
       "writes": {}
     },
     "pipelines/sibc/detect_format": {

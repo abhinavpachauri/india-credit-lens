@@ -21,6 +21,11 @@
     "date": "2026-10-12",
     "by": "user",
     "what": "Approved the 'does not apply' rows of the grid, narrowed three: commercial real estate and trade keep input prices; loans against shares keep input prices; aviation and shipping keep other finance. Vehicles and durables keep input prices, leaning slightly yes, to review later."
+   },
+   {
+    "date": "2026-10-26",
+    "by": "user",
+    "what": "Admitted 7 price-of-credit drivers (Chemicals: Others, All Engineering, Other Textiles, Basic Metals, Medium (by size), Textiles, Medium Enterprises (PSL; the same firms as Medium)); rejected loans against FDs; held Engineering: Others."
    }
   ],
   "review_later": [
@@ -6044,8 +6049,17 @@
    "lag": null,
    "reason": "dearer new credit slows borrowing in that sector",
    "proposed_by": "claude",
-   "approved": null,
-   "admitted": null,
+   "approved": {
+    "by": "user",
+    "date": "2026-10-26"
+   },
+   "admitted": {
+    "by": "user",
+    "date": "2026-10-26",
+    "test": "h0141@2026-10-26#1",
+    "lag": 7,
+    "slope": -9.4162
+   },
    "tests": [
     "driver:h0141@2026-10-26#1"
    ],
@@ -6864,6 +6878,11 @@
     "cutoff": 24302,
     "lag": 9,
     "found": "2026-10-26"
+   },
+   "rejected": {
+    "by": "user",
+    "date": "2026-10-26",
+    "why": "Loans against fixed deposits are priced off the borrower's own deposit rate, not the personal-loan rate, and a 9-month delay is implausible: a supported test read as chance."
    }
   },
   {
@@ -7261,8 +7280,17 @@
    "lag": null,
    "reason": "dearer new credit slows borrowing in that sector",
    "proposed_by": "claude",
-   "approved": null,
-   "admitted": null,
+   "approved": {
+    "by": "user",
+    "date": "2026-10-26"
+   },
+   "admitted": {
+    "by": "user",
+    "date": "2026-10-26",
+    "test": "h0204@2026-10-26#1",
+    "lag": 7,
+    "slope": -9.7928
+   },
    "tests": [
     "driver:h0204@2026-10-26#1"
    ],
@@ -8114,8 +8142,17 @@
    "lag": null,
    "reason": "dearer new credit slows borrowing in that sector",
    "proposed_by": "claude",
-   "approved": null,
-   "admitted": null,
+   "approved": {
+    "by": "user",
+    "date": "2026-10-26"
+   },
+   "admitted": {
+    "by": "user",
+    "date": "2026-10-26",
+    "test": "h0247@2026-10-26#1",
+    "lag": 6,
+    "slope": -10.3869
+   },
    "tests": [
     "driver:h0247@2026-10-26#1"
    ],
@@ -8665,8 +8702,17 @@
    "lag": null,
    "reason": "dearer new credit slows borrowing in that sector",
    "proposed_by": "claude",
-   "approved": null,
-   "admitted": null,
+   "approved": {
+    "by": "user",
+    "date": "2026-10-26"
+   },
+   "admitted": {
+    "by": "user",
+    "date": "2026-10-26",
+    "test": "h0273@2026-10-26#1",
+    "lag": 8,
+    "slope": -5.0067
+   },
    "tests": [
     "driver:h0273@2026-10-26#1"
    ],
@@ -8712,8 +8758,17 @@
    "lag": null,
    "reason": "dearer new credit slows borrowing in that sector",
    "proposed_by": "claude",
-   "approved": null,
-   "admitted": null,
+   "approved": {
+    "by": "user",
+    "date": "2026-10-26"
+   },
+   "admitted": {
+    "by": "user",
+    "date": "2026-10-26",
+    "test": "h0275@2026-10-26#1",
+    "lag": 0,
+    "slope": -16.7845
+   },
    "tests": [
     "driver:h0275@2026-10-26#1"
    ],
@@ -9623,8 +9678,17 @@
    "lag": null,
    "reason": "dearer new credit slows borrowing in that sector",
    "proposed_by": "claude",
-   "approved": null,
-   "admitted": null,
+   "approved": {
+    "by": "user",
+    "date": "2026-10-26"
+   },
+   "admitted": {
+    "by": "user",
+    "date": "2026-10-26",
+    "test": "h0320@2026-10-26#1",
+    "lag": 4,
+    "slope": -10.0029
+   },
    "tests": [
     "driver:h0320@2026-10-26#1"
    ],
@@ -9891,8 +9955,17 @@
    "lag": null,
    "reason": "dearer new credit slows borrowing in that sector",
    "proposed_by": "claude",
-   "approved": null,
-   "admitted": null,
+   "approved": {
+    "by": "user",
+    "date": "2026-10-26"
+   },
+   "admitted": {
+    "by": "user",
+    "date": "2026-10-26",
+    "test": "h0333@2026-10-26#1",
+    "lag": 4,
+    "slope": -13.1609
+   },
    "tests": [
     "driver:h0333@2026-10-26#1"
    ],
@@ -10153,6 +10226,11 @@
     "cutoff": 24302,
     "lag": 6,
     "found": "2026-10-26"
+   },
+   "held": {
+    "by": "user",
+    "date": "2026-10-26",
+    "why": "Its parent, All Engineering, follows the same rate in the same month; a 6-month delay here does not fit with that. Re-read when the history grows."
    }
   },
   {

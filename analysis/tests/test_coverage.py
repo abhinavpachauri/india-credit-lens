@@ -325,3 +325,15 @@ def test_the_typical_change_is_read_from_months_before_the_move_only():
     lv = levels("2024-08", -0.05)
     later = {**lv, "2025-09": lv["2025-08"] * 1.3, "2025-10": lv["2025-08"] * 0.7}
     assert cv.step_reading(lv, "2025-08") == cv.step_reading(later, "2025-08")
+
+
+def test_an_admitted_driver_explains_a_move_only_with_the_right_sign_size_and_delay():
+    """Step 6c step 4: slope × the driver's change `lag` months earlier must push the line the way
+    it moved and cover at least half the move."""
+    from core import coverage as C
+    a = [{"label": "sector:industry_large", "lag": 4, "slope": -10.0, "push": {96: -0.3, 97: 0.05}}]
+    assert C.driver_explains(a, 100, +1, 4.0)           # -10 × -0.3 = +3.0 ≥ half of 4.0, upward
+    assert not C.driver_explains(a, 100, -1, 4.0)       # the wrong direction
+    assert not C.driver_explains(a, 100, +1, 8.0)       # covers less than half
+    assert C.driver_explains(a, 101, -1, 0.4)           # -10 × 0.05 = -0.5, downward, ≥ half of 0.4
+    assert not C.driver_explains(a, 99, +1, 1.0)        # no driver reading at that delay

@@ -439,7 +439,7 @@ def main():
     c = state["explanation_coverage"]["summary"]
     print(f"  coverage: {c['moves']} moves of {c['lines']} lines — artifact {c['artifact']}, "
           f"base effect {c['base_effect']}, structural {c['structural']}, "
-          f"prices/activity {c['prices_activity']}, cause {c['cause']}, relationship "
+          f"prices/activity {c['prices_activity']}, driver {c['driver']}, cause {c['cause']}, relationship "
           f"{c['relationship']}, unexplained {c['unexplained']} "
           f"(one-month steps {c['unexplained_one_month_step']}; no reading {c['no_reading']})")
     if rule == "v3.0":

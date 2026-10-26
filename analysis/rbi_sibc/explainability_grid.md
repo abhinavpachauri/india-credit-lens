@@ -10,11 +10,11 @@
 
 | kind | complete | of which too short to tell | of which through a stand-in | where the missing data would come from (lines · unexplained moves on them) |
 |---|---|---|---|---|
-| input prices | 23/61 | 18 | 0 | MoSPI WPI at item level (dropped at fetch today), or a commodity price (gold: DBIE Bulletin Table 21) (33 · 57); Share prices: Sensex / Nifty monthly (DBIE Handbook 182-183) (1 · 5); RBI House Price Index (DBIE, quarterly) (1 · 4) |
-| price of credit | 68/83 | 29 | 55 | rbi_rates: no published rate for this line (15 · 35) |
-| demand | 15/84 | 13 | 0 | MoSPI output not matched at this line; services and households: ISP, PLFS (MoSPI) (65 · 144) |
-| other finance | 0/52 | 0 | 0 | DBIE flow of financial resources to the commercial sector, CP, ECB (shortlist #4-5) (50 · 82); External commercial borrowing, monthly (DBIE Bulletin Table 38); leasing (2 · 1) |
-| rules & dates | 8/84 | 0 | 0 | a dated force, sourced through S4 or the regulatory watch (arc 3) (69 · 145) |
+| input prices | 23/61 | 18 | 0 | MoSPI WPI at item level (dropped at fetch today), or a commodity price (gold: DBIE Bulletin Table 21) (33 · 56); Share prices: Sensex / Nifty monthly (DBIE Handbook 182-183) (1 · 5); RBI House Price Index (DBIE, quarterly) (1 · 4) |
+| price of credit | 68/83 | 30 | 55 | rbi_rates: no published rate for this line (15 · 35) |
+| demand | 15/84 | 13 | 0 | MoSPI output not matched at this line; services and households: ISP, PLFS (MoSPI) (65 · 143) |
+| other finance | 0/52 | 0 | 0 | DBIE flow of financial resources to the commercial sector, CP, ECB (shortlist #4-5) (50 · 81); External commercial borrowing, monthly (DBIE Bulletin Table 38); leasing (2 · 1) |
+| rules & dates | 8/84 | 0 | 0 | a dated force, sourced through S4 or the regulatory watch (arc 3) (69 · 144) |
 | lenders' capacity | 0/0 | 0 | 0 | — |
 
 ## The grid
@@ -46,17 +46,17 @@
 | Airports | 3 | · | ✗ˢ | · | · | · | – |  |
 | Railways (other than Indian Railways) | 3 | · | ✗ˢ | · | · | · | – |  |
 | Beverage and Tobacco | 2 | · | ?ˢ | ? | · | · | – |  |
-| Textiles | 2 | · | ✓ˢ | · | · | · | – |  |
 | Glass and Glassware | 2 | ? | ?ˢ | · | · | · | – |  |
 | Gems and Jewellery | 2 | ✗ | ?ˢ | · | · | · | – |  |
 | Edible Oils and Vanaspati | 2 | ? | ?ˢ | · | · | · | – |  |
 | Others | 2 | · | ✗ˢ | · | · | · | – |  |
 | Cotton Textiles | 2 | · | ✗ˢ | · | · | · | – |  |
 | Jute Textiles | 2 | · | ✗ˢ | · | · | · | – |  |
-| Others | 2 | · | ✓ˢ | · | · | · | – |  |
+| Others | 2 | · | ?ˢ | · | · | · | – |  |
 | Roads | 2 | · | ✗ˢ | · | · | · | – |  |
 | Mining and Quarrying (incl. Coal) | 1 | · | ?ˢ | ✗ | · | · | – |  |
 | Food Processing | 1 | ? | ?ˢ | ? | · | · | – |  |
+| Textiles | 1 | · | ✓ˢ | · | · | · | – |  |
 | Leather and Leather Products | 1 | ? | ?ˢ | ? | · | · | – |  |
 | Petroleum, Coal Products and Nuclear Fuels | 1 | ? | ?ˢ | ? | · | · | – |  |
 | Construction | 1 | · | ✗ˢ | · | · | · | – |  |
@@ -106,7 +106,7 @@
 | line | unexplained moves | input prices | price of credit | demand | other finance | rules & dates | lenders' capacity | within system |
 |---|---|---|---|---|---|---|---|---|
 | Advances to Individuals against share, bonds, etc. | 5 | · | ✗ˢ | · | – | · | – |  |
-| Advances against Fixed Deposits (Including FCNR (B), NRNR Deposits etc.) | 4 | – | ✓ˢ | · | – | · | – |  |
+| Advances against Fixed Deposits (Including FCNR (B), NRNR Deposits etc.) | 4 | – | ✗ˢ | · | – | · | – |  |
 | Loans against gold jewellery | 2 | ✓ | ?ˢ | · | – | · | – | 1 tested |
 | Housing (Including Priority Sector Housing) | 1 | ? | ? | · | – | · | – | 1 tested |
 | Credit Card Outstanding | 1 | – | ✗ˢ | · | – | ○ | – |  |

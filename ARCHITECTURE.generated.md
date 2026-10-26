@@ -8,7 +8,7 @@
 > Authored rationale (layer model, design principles, guard purposes) lives in the
 > hand-written `ARCHITECTURE.md`. This file is the structural, drift-guarded half.
 
-_Derived from 103 scripts._
+_Derived from 106 scripts._
 
 ## 1. Data-flow
 
@@ -80,6 +80,7 @@ Scripts each orchestrator launches as a subprocess, in execution order.
 | `analysis/ontology/channels.json` | external/authored | — | `core/run_inference`, `core/validate_system_model`, `cross/derive_cross_links`, `cross/generate_opportunities_feed` |
 | `analysis/ontology/concepts.json` | external/authored | — | `core/validate_system_model`, `cross/validate_composition` |
 | `analysis/ontology/domains.json` | external/authored | — | `cross/validate_composition` |
+| `analysis/pipelines/rbi_rates/labels.json` | external/authored | — | `pipelines/rbi_rates/fetch` |
 | `analysis/rbi_atm_pos/canonical_banks.json` | external/authored | — | `pipelines/atm_pos/detect_atm_pos_format` |
 | `analysis/rbi_atm_pos/insights.json` | derived | `pipelines/atm_pos/generate_atm_pos_insights` | `pipelines/atm_pos/validate_atm_pos_claims`, `pipelines/atm_pos/validate_atm_pos_insights` |
 | `analysis/rbi_atm_pos/merged/system_model.json` | external/authored | — | `core/relational_insights`, `guards/audit_force_sources` |
@@ -106,7 +107,7 @@ Scripts each orchestrator launches as a subprocess, in execution order.
 Python import edges (sparse by design — the pipeline is subprocess-
 orchestrated, not import-coupled).
 
-- `core/coverage` → `core/force_check`, `core/generate_skeleton`, `core/manifest`, `signals/dominance`
+- `core/coverage` → `core/explainability`, `core/force_check`, `core/generate_skeleton`, `core/manifest`, `core/relationship_test`, `signals/dominance`
 - `core/derive_opportunities` → `core/force_check`, `core/generate_skeleton`, `core/manifest`
 - `core/explainability` → `core/coverage`, `core/force_check`, `core/generate_skeleton`, `core/manifest`, `core/relationship_test`
 - `core/force_check` → `core/generate_skeleton`, `core/generate_system_state`
@@ -117,7 +118,7 @@ orchestrated, not import-coupled).
 - `core/generate_system_state` → `core/coverage`, `core/force_check`, `core/generate_skeleton`, `core/manifest`
 - `core/real_cells` → `core/absence`, `core/manifest`, `signals/compute/csv_sector`, `signals/compute/real_economy`
 - `core/relational_insights` → `core/manifest`, `core/residuals`
-- `core/relationship_test` → `core/coverage`, `core/force_check`, `core/generate_skeleton`
+- `core/relationship_test` → `core/coverage`, `core/force_check`, `core/generate_skeleton`, `core/manifest`
 - `core/run_inference` → `core/generate_skeleton`, `core/keep_awake`, `core/manifest`
 - `core/series_breaks` → `core/absence`, `core/manifest`
 - `core/validate_system_model` → `core/generate_skeleton`, `core/manifest`
@@ -150,6 +151,8 @@ orchestrated, not import-coupled).
 - `pipelines/mospi/validate_published_growth` → `core/manifest`, `pipelines/mospi/consolidate`, `pipelines/mospi/releases`, `pipelines/mospi/validate_csv`
 - `pipelines/nbfc/consolidate_nbfc` → `core/manifest`
 - `pipelines/nbfc/validate_published_yoy` → `core/manifest`
+- `pipelines/rbi_rates/fetch` → `pipelines/mospi/releases`, `pipelines/rbi_rates/reader`
+- `pipelines/rbi_rates/validate_rates` → `core/manifest`, `pipelines/mospi/releases`
 - `pipelines/sibc/extract_sibc` → `pipelines/sibc/detect_format`
 - `pipelines/sibc/generate_analysis_report` → `core/residuals`
 - `pipelines/sibc/update_web_data` → `core/manifest`, `pipelines/mospi/consolidate`

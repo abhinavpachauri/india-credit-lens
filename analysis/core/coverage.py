@@ -19,6 +19,10 @@ in S3, and S4 reads the result.
                                    CARRIED by one member (the group moved because it did)
                   prices_activity  the line's 1f price index or output moved the same way and
                                    covers at least half the change in its nominal growth
+                  driver           an ADMITTED driver (Step 6c step 4, the user's approval of a
+                                   supported test): its change `lag` months earlier, net of its
+                                   tide, times the fitted slope, pushes the line the way it moved
+                                   and covers at least half the move
                   cause            a DATED force whose edge to the line is working, sign matching
                   relationship     an entity→entity driver edge whose source moved the way
                                    that pushes this line in the direction it moved
@@ -52,7 +56,7 @@ PRICE_SHARE = 0.5
 # move roughly a one-in-ten event per line, close to the usual ~2σ bar for "unusual".
 MOVE_FACTOR = 3.0
 POLARITY = {"+": 1, "-": -1}
-ORDER = ("artifact", "base_effect", "structural", "prices_activity", "cause", "relationship")
+ORDER = ("artifact", "base_effect", "structural", "prices_activity", "driver", "cause", "relationship")
 # A line's own one-month level step is an outlier when it is more than MOVE_FACTOR x its typical
 # (median) monthly level change AND at least this large (log change, ~2%), with at least
 # STEP_MIN_HISTORY earlier changes to judge "typical" by (SYSTEM_MODEL_SPEC §16 Step 6a).
@@ -181,6 +185,54 @@ def relationships(node_id: str, direction: int, moves: dict, model: dict,
     return out
 
 
+def driver_explains(admitted: list[dict], month: int, direction: int, size: float) -> list[str]:
+    """Admitted drivers whose fitted push explains this move: slope × the driver's change
+    (net of its tide) `lag` months before, in the direction the line moved, at least
+    PRICE_SHARE of the move's size. The slope is the admitted test's own (the change in the
+    line's gap per point of the driver's change); a month with no driver reading explains nothing."""
+    out = []
+    for a in admitted:
+        x = a["push"].get(month - a["lag"])
+        if x is None:
+            continue
+        push = a["slope"] * x
+        if sign(push) == direction and abs(push) >= PRICE_SHARE * size:
+            out.append(f"{a['label']} ({a['lag']} months earlier, push {push:+.2f} pp)")
+    return out
+
+
+def admitted_drivers(pipeline: str, model: dict) -> dict:
+    """entity_id -> its admitted drivers, read from the driver register (Step 6c step 4). The
+    driver's change is net of its tide, the same residual the test fitted its slope on."""
+    from core import explainability as X
+    from core import relationship_test as rt
+    path = X.register_path(pipeline)
+    if not path.exists():
+        return {}
+    reg = json.loads(path.read_text())
+    node_of = {n.get("urn"): n["id"] for n in model["nodes"] if n.get("tier") == "entity"}
+    tm, ts, tp, td = rt._side(pipeline)
+    credit_tide = rt.tide(tm, ts, td)
+    out: dict[str, list] = {}
+    for h in reg["hypotheses"]:
+        adm = h.get("admitted")
+        if not adm or h.get("rejected") or "series" not in h["driver"]:
+            continue
+        ref, series = h["driver"]["pipeline"], h["driver"]["series"]
+        a = rt.outside_covid(rt.driver_changes(ref, series))
+        from signals.compute.real_economy import reference
+        head = rt.driver_spec(reference(ref), series[0].split("/", 1)[0])["tide"]
+        t = rt.outside_covid(credit_tide if head in series else rt.reference_changes(ref, head))
+        ks = sorted(k for k in a if k in t)
+        if len(ks) < rt.MIN_PAIRS:
+            continue
+        res = rt.residual([a[k] for k in ks], [t[k] for k in ks])
+        out.setdefault(node_of[h["line"]], []).append(
+            {"label": series[0].split("/", 1)[1], "lag": adm["lag"], "slope": adm["slope"],
+             "push": dict(zip(ks, res))})
+    return out
+
+
 def structural(nid: str, m: dict, moves: dict, model: dict, by_id: dict, parent_of: dict,
                series: dict, period: str, weights: dict) -> list[str]:
     """Why this move is not a separate event, from the skeleton alone. SYSTEM_MODEL_SPEC §16
@@ -228,11 +280,14 @@ def structural(nid: str, m: dict, moves: dict, model: dict, by_id: dict, parent_
 def compute(model: dict, period: str, series: dict, periods: list[str], checked: dict,
             real: dict | None = None, output: dict | None = None, artifact=None,
             data_month=lambda p: p, weights: dict | None = None,
-            verdicts: dict | None = None, levels: dict | None = None) -> dict:
+            verdicts: dict | None = None, levels: dict | None = None,
+            drivers: dict | None = None) -> dict:
     """Pure given its inputs. `artifact(node) -> True | False | None` (None = not testable);
     `data_month(period)` is the month a period key's data describes (SIBC keys run a month ahead);
     `weights` is entity_id -> size (latest CSV value), for `carried`; `levels` is
-    entity_id -> {"YYYY-MM": level}, for the base effect and the one-month step."""
+    entity_id -> {"YYYY-MM": level}, for the base effect and the one-month step; `drivers` is
+    entity_id -> [admitted driver: label, lag, slope, push {month index: driver change net of tide}]."""
+    drivers = drivers or {}
     weights = weights or {}
     levels = levels or {}
     real, output = real or {}, output or {}
@@ -301,6 +356,9 @@ def compute(model: dict, period: str, series: dict, periods: list[str], checked:
                                         period, m["previous"], d)
         if pa == "holds":
             held["prices_activity"] = [pa_detail["by"]]
+        dv = driver_explains(drivers.get(n["id"], []), fc._months(data_month(period)), d, size)
+        if dv:
+            held["driver"] = dv
         c = causes(n["id"], d, checked, model)
         if c:
             held["cause"] = c
@@ -472,7 +530,8 @@ def for_period(pipeline: str, model: dict, period: str, series=None, periods=Non
                    artifact_test(pipeline, model, period),
                    lambda p: fc.resolve_csv_date(pipeline, p),
                    load_entity_weights(gs.pipeline_cfg(pipeline)),
-                   latest_verdicts(pipeline), level_series(pipeline, model))
+                   latest_verdicts(pipeline), level_series(pipeline, model),
+                   admitted_drivers(pipeline, model))
 
 
 def main() -> int:
