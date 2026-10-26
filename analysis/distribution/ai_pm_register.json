@@ -649,6 +649,13 @@
           "date": "2026-10-25",
           "how_measured": "population, absence and plausibility reviewer agents on signals/README \"RBI lending and deposit rates\"",
           "source": "analysis/signals/README.md (findings marked ⓡ)"
+        },
+        {
+          "metric": "price-of-credit driver tests vs a wrong-sector placebo",
+          "value": "own sector's new-loan rate supported on 9/67 lines (13%), all with the predicted sign; the same lines against two wrong sectors' rates 5/134 (4%, about the nominal false-positive rate). Own rate ~3x the placebo: a real but partly lucky result (expect 2-3 of the 9 by chance; many share the Large-industry stand-in, so they are not independent).",
+          "date": "2026-10-26",
+          "how_measured": "run_driver with discovery on every rate hypothesis, then each with two other sectors' series (deterministic choice), same family and protocol",
+          "source": "analysis/core/relationship_test.py run_driver; analysis/rbi_sibc/relationship_tests.json"
         }
       ],
       "observations": [

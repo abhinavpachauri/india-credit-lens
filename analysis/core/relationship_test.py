@@ -183,14 +183,42 @@ def test_series(ref, series: str) -> tuple[str, str, str | None]:
     return test_ds, code, None
 
 
-def reference_changes(pipeline: str, series: str, measure: str = "index") -> dict[int, float]:
-    """month index -> monthly change in a reference series' YoY %, one data month apart.
+def driver_spec(ref, dataset: str) -> dict:
+    """How the driver test reads a reference dataset: `growth` (ratio | difference),
+    `driver_measure` and `tide`, declared in its manifest. Missing raises, never defaults: the old
+    hand-written HEADLINE table knew only MoSPI, and any other dataset fell back to the credit tide
+    without a sound (spec review, 2026-10-25)."""
+    spec = ref.datasets.get(dataset)
+    if spec is None:
+        raise KeyError(f"{dataset}: not a dataset of this reference pipeline")
+    missing = [k for k in ("growth", "driver_measure", "tide") if k not in spec]
+    if missing:
+        raise KeyError(f"{dataset}: the manifest declares no {', '.join(missing)} for the driver test")
+    if spec["growth"] not in ("ratio", "difference"):
+        raise KeyError(f"{dataset}: growth {spec['growth']!r} is neither ratio nor difference")
+    return spec
 
-    Read through `real_economy.reference`, the same reader the 1f signals use, so a price or
-    output series has one definition. Reference periods ARE their data months (MoSPI)."""
+
+def declared_breaks(pipeline: str, dataset: str) -> list[int]:
+    """Month indices where a reference dataset's coverage changes, from its classified footnotes
+    (`paths.notes`, kind series_break). None declared → []."""
+    from core import manifest
+    paths = manifest.load(pipeline)["paths"]
+    if "notes" not in paths:
+        return []
+    notes = json.loads((gs.ROOT / paths["notes"]).read_text())["notes"].get(dataset, {})
+    return sorted(fc._months(v["effective"]) for v in notes.values() if v["kind"] == "series_break")
+
+
+def reference_yoy(pipeline: str, series: str) -> tuple[dict[int, float], int]:
+    """(month index -> 12-month change, number of months left out across a declared break)."""
     from signals.compute.real_economy import ReferenceMissing, reference
     ref = reference(pipeline)
     ds, code = series.split("/", 1)
+    spec = driver_spec(ref, ds)
+    if spec.get("cadence") != "monthly":
+        raise ReferenceMissing(f"{series}: {spec.get('cadence')} data; the driver test reads monthly changes")
+    measure = spec["driver_measure"]
     # Tests read the base the manifest names (`tests_read`): one base across the whole test window,
     # never a switch mid-series (signals/README "Longer history").
     test_ds, test_code, _ = test_series(ref, series)
@@ -199,7 +227,26 @@ def reference_changes(pipeline: str, series: str, measure: str = "index") -> dic
     if not vals:
         # Loud: an empty read once recorded 14 NAS tests as `too_short` (n = 0 at every delay).
         raise ReferenceMissing(f"{series}: no {measure!r} on the test base {test_ds}")
-    yoy = {k: (v / vals[k - 12] - 1) * 100 for k, v in vals.items() if vals.get(k - 12)}
+    # A rate changes by points (9.5% → 8.9% is −0.6, never −6.3%); an index by ratio.
+    change = (lambda a, b: a - b) if spec["growth"] == "difference" else (lambda a, b: (a / b - 1) * 100)
+    breaks = declared_breaks(pipeline, test_ds)
+    yoy, cut = {}, 0
+    for k, v in vals.items():
+        if vals.get(k - 12) is None:
+            continue
+        if any(k - 12 < e <= k for e in breaks):
+            cut += 1                                  # spans a coverage change: out, and counted
+            continue
+        yoy[k] = change(v, vals[k - 12])
+    return yoy, cut
+
+
+def reference_changes(pipeline: str, series: str) -> dict[int, float]:
+    """month index -> monthly change in a reference series' 12-month change, one data month apart.
+
+    Read through `real_economy.reference`, the same reader the 1f signals use, so a price or
+    output series has one definition. Reference periods ARE their data months."""
+    yoy, _ = reference_yoy(pipeline, series)
     return {k: yoy[k] - yoy[k - 1] for k in sorted(yoy) if k - 1 in yoy}
 
 
@@ -391,7 +438,6 @@ if __name__ == "__main__":
 # A link this strong is what a test must be able to see before a null counts as evidence: with too
 # few changes, even |r| = 0.5 cannot clear the bar, and "not supported" would overstate the null.
 R_PRACTICAL = 0.5
-HEADLINE = {"wpi": "wpi/wpi:all", "iip": "iip/iip:general", "cpi": "cpi/cpi:all", "nas": "nas/nas:gdp"}
 
 
 def critical_r(n: int, alpha: float) -> float | None:
@@ -476,13 +522,15 @@ def run_driver(hyp: dict, target_pipeline: str, target_id: str, family: int,
     d = hyp["driver"]
     ref, series = d["pipeline"], d["series"]
     dataset = series[0].split("/", 1)[0]
-    head = HEADLINE.get(dataset)
+    from signals.compute.real_economy import reference as _reference
+    head = driver_spec(_reference(ref), dataset)["tide"]                # declared, never defaulted
+    excluded = sum(reference_yoy(ref, s)[1] for s in series)
     tm, ts, tp, td = _side(target_pipeline)
     a = driver_changes(ref, series)
     from signals.compute.real_economy import reference as _ref
     approximated = [n for s in series if (n := test_series(_ref(ref), s)[2])]
     credit_tide = tide(tm, ts, td)
-    t_a = credit_tide if (head is None or head in series) else reference_changes(ref, head)
+    t_a = credit_tide if head in series else reference_changes(ref, head)
     b = gap_changes(target_id, tm, ts, tp, td)
     if discover:
         frozen = hyp.get("discovery") or {}
@@ -500,4 +548,6 @@ def run_driver(hyp: dict, target_pipeline: str, target_id: str, family: int,
             "through_period": {target_pipeline: tp[-1]},
             "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (" + ("discover/confirm" if discover else
                                                               "generic driver test") + ")",
-            **({"approximated": approximated} if approximated else {}), **res}
+            **({"approximated": approximated} if approximated else {}),
+            **({"excluded": {"series_break": excluded}} if excluded else {}),
+            **({"stand_in": d["stand_in"]} if d.get("stand_in") else {}), **res}

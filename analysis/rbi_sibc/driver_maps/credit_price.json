@@ -1,0 +1,483 @@
+{
+ "_meta": {
+  "class": "credit_price",
+  "reference_pipeline": "rbi_rates",
+  "spec": "signals/README \"RBI lending and deposit rates\" (the join)",
+  "rule": "Keys equal the register's credit_price: applies lines, each exactly once (explainability.validate). `how`: exact | system | approximation | stand_in (each named in every result) | absent: no_counterpart (untested, data missing, never complete).",
+  "reason": "dearer new credit slows borrowing in that sector",
+  "sign": -1
+ },
+ "lines": {
+  "icl:sibc/Statement1/1": {
+   "label": "Agriculture and Allied Activities",
+   "series": "walr_sector_fresh/sector:agriculture",
+   "how": "exact"
+  },
+  "icl:sibc/Statement1/2": {
+   "label": "Industry (Micro and Small, Medium and Large)",
+   "absent": "no_counterpart",
+   "why": "RBI prints no lending rate for this line, and a mix of sector rates would misstate it (no published weights)."
+  },
+  "icl:sibc/Statement1/2.1": {
+   "label": "Micro and Small",
+   "series": "walr_sector_fresh/sector:msme",
+   "how": "approximation",
+   "why": "RBI's MSME rate may include services MSMEs; these lines are industry only (user, 2026-10-25)."
+  },
+  "icl:sibc/Statement1/2.2": {
+   "label": "Medium",
+   "series": "walr_sector_fresh/sector:msme",
+   "how": "approximation",
+   "why": "RBI's MSME rate may include services MSMEs; these lines are industry only (user, 2026-10-25)."
+  },
+  "icl:sibc/Statement1/2.3": {
+   "label": "Large",
+   "series": "walr_sector_fresh/sector:industry_large",
+   "how": "exact"
+  },
+  "icl:sibc/Statement1/3": {
+   "label": "Services",
+   "absent": "no_counterpart",
+   "why": "RBI prints no lending rate for this line, and a mix of sector rates would misstate it (no published weights)."
+  },
+  "icl:sibc/Statement1/3.1": {
+   "label": "Transport Operators",
+   "absent": "no_counterpart",
+   "why": "RBI prints no lending rate for this line, and a mix of sector rates would misstate it (no published weights)."
+  },
+  "icl:sibc/Statement1/3.10": {
+   "label": "Other Services",
+   "absent": "no_counterpart",
+   "why": "RBI prints no lending rate for this line, and a mix of sector rates would misstate it (no published weights)."
+  },
+  "icl:sibc/Statement1/3.2": {
+   "label": "Computer Software",
+   "absent": "no_counterpart",
+   "why": "RBI prints no lending rate for this line, and a mix of sector rates would misstate it (no published weights)."
+  },
+  "icl:sibc/Statement1/3.3": {
+   "label": "Tourism, Hotels and Restaurants",
+   "absent": "no_counterpart",
+   "why": "RBI prints no lending rate for this line, and a mix of sector rates would misstate it (no published weights)."
+  },
+  "icl:sibc/Statement1/3.4": {
+   "label": "Shipping",
+   "absent": "no_counterpart",
+   "why": "RBI prints no lending rate for this line, and a mix of sector rates would misstate it (no published weights)."
+  },
+  "icl:sibc/Statement1/3.5": {
+   "label": "Aviation",
+   "absent": "no_counterpart",
+   "why": "RBI prints no lending rate for this line, and a mix of sector rates would misstate it (no published weights)."
+  },
+  "icl:sibc/Statement1/3.6": {
+   "label": "Professional Services",
+   "series": "walr_sector_fresh/sector:professional_services",
+   "how": "exact"
+  },
+  "icl:sibc/Statement1/3.7": {
+   "label": "Trade",
+   "series": "walr_sector_fresh/sector:trade",
+   "how": "exact"
+  },
+  "icl:sibc/Statement1/3.7.1": {
+   "label": "Wholesale Trade",
+   "series": "walr_sector_fresh/sector:trade",
+   "how": "stand_in",
+   "why": "No wholesale or retail rate; their parent Trade's (user, 2026-10-25)."
+  },
+  "icl:sibc/Statement1/3.7.2": {
+   "label": "Retail Trade",
+   "series": "walr_sector_fresh/sector:trade",
+   "how": "stand_in",
+   "why": "No wholesale or retail rate; their parent Trade's (user, 2026-10-25)."
+  },
+  "icl:sibc/Statement1/3.8": {
+   "label": "Commercial Real Estate",
+   "absent": "no_counterpart",
+   "why": "RBI prints no lending rate for this line, and a mix of sector rates would misstate it (no published weights)."
+  },
+  "icl:sibc/Statement1/3.9": {
+   "label": "Non-Banking Financial Companies (NBFCs)",
+   "absent": "no_counterpart",
+   "why": "RBI prints no lending rate for this line, and a mix of sector rates would misstate it (no published weights)."
+  },
+  "icl:sibc/Statement1/3.9.1": {
+   "label": "Housing Finance Companies (HFCs)",
+   "absent": "no_counterpart",
+   "why": "RBI prints no lending rate for this line, and a mix of sector rates would misstate it (no published weights)."
+  },
+  "icl:sibc/Statement1/3.9.2": {
+   "label": "Public Financial Institutions (PFIs)",
+   "absent": "no_counterpart",
+   "why": "RBI prints no lending rate for this line, and a mix of sector rates would misstate it (no published weights)."
+  },
+  "icl:sibc/Statement1/4": {
+   "label": "Personal Loans",
+   "absent": "no_counterpart",
+   "why": "RBI prints no lending rate for this line, and a mix of sector rates would misstate it (no published weights)."
+  },
+  "icl:sibc/Statement1/4.1": {
+   "label": "Consumer Durables",
+   "series": "walr_sector_fresh/sector:other_personal",
+   "how": "stand_in",
+   "why": "RBI's Other Personal Loans is personal lending other than housing, vehicle and education, so it covers these (user, 2026-10-25)."
+  },
+  "icl:sibc/Statement1/4.2": {
+   "label": "Housing (Including Priority Sector Housing)",
+   "series": "walr_sector_fresh/sector:housing",
+   "how": "exact"
+  },
+  "icl:sibc/Statement1/4.3": {
+   "label": "Advances against Fixed Deposits (Including FCNR (B), NRNR Deposits etc.)",
+   "series": "walr_sector_fresh/sector:other_personal",
+   "how": "stand_in",
+   "why": "RBI's Other Personal Loans is personal lending other than housing, vehicle and education, so it covers these (user, 2026-10-25)."
+  },
+  "icl:sibc/Statement1/4.4": {
+   "label": "Advances to Individuals against share, bonds, etc.",
+   "series": "walr_sector_fresh/sector:other_personal",
+   "how": "stand_in",
+   "why": "RBI's Other Personal Loans is personal lending other than housing, vehicle and education, so it covers these (user, 2026-10-25)."
+  },
+  "icl:sibc/Statement1/4.5": {
+   "label": "Credit Card Outstanding",
+   "series": "walr_sector_fresh/sector:other_personal",
+   "how": "stand_in",
+   "why": "RBI's Other Personal Loans is personal lending other than housing, vehicle and education, so it covers these (user, 2026-10-25)."
+  },
+  "icl:sibc/Statement1/4.6": {
+   "label": "Education",
+   "series": "walr_sector_fresh/sector:education",
+   "how": "exact"
+  },
+  "icl:sibc/Statement1/4.7": {
+   "label": "Vehicle Loans",
+   "series": "walr_sector_fresh/sector:vehicle",
+   "how": "exact"
+  },
+  "icl:sibc/Statement1/4.8": {
+   "label": "Loans against gold jewellery",
+   "series": "walr_sector_fresh/sector:other_personal",
+   "how": "stand_in",
+   "why": "RBI's Other Personal Loans is personal lending other than housing, vehicle and education, so it covers these (user, 2026-10-25)."
+  },
+  "icl:sibc/Statement1/4.9": {
+   "label": "Other Personal Loans",
+   "series": "walr_sector_fresh/sector:other_personal",
+   "how": "exact"
+  },
+  "icl:sibc/Statement1/III": {
+   "label": "Non-food Credit",
+   "series": "walr_fresh/group:scb",
+   "how": "system",
+   "why": "All banks' new-loan rate for non-food credit as a whole; tested against the credit tide, as a headline driver."
+  },
+  "icl:sibc/Statement1/i": {
+   "label": "Agriculture and Allied Activities",
+   "series": "walr_sector_fresh/sector:agriculture",
+   "how": "exact"
+  },
+  "icl:sibc/Statement1/ii": {
+   "label": "Micro and Small Enterprises",
+   "series": "walr_sector_fresh/sector:msme",
+   "how": "approximation",
+   "why": "RBI's MSME rate may include services MSMEs; these lines are industry only (user, 2026-10-25)."
+  },
+  "icl:sibc/Statement1/iii": {
+   "label": "Medium Enterprises",
+   "series": "walr_sector_fresh/sector:msme",
+   "how": "approximation",
+   "why": "RBI's MSME rate may include services MSMEs; these lines are industry only (user, 2026-10-25)."
+  },
+  "icl:sibc/Statement1/iv": {
+   "label": "Housing",
+   "series": "walr_sector_fresh/sector:housing",
+   "how": "exact"
+  },
+  "icl:sibc/Statement1/ix": {
+   "label": "Others",
+   "absent": "no_counterpart",
+   "why": "RBI prints no lending rate for this line, and a mix of sector rates would misstate it (no published weights)."
+  },
+  "icl:sibc/Statement1/v": {
+   "label": "Educational Loans",
+   "series": "walr_sector_fresh/sector:education",
+   "how": "exact"
+  },
+  "icl:sibc/Statement1/vi": {
+   "label": "Renewable Energy",
+   "series": "walr_sector_fresh/sector:infrastructure",
+   "how": "stand_in",
+   "why": "Renewable energy and social infrastructure are infrastructure lending (user, 2026-10-25)."
+  },
+  "icl:sibc/Statement1/vii": {
+   "label": "Social Infrastructure",
+   "series": "walr_sector_fresh/sector:infrastructure",
+   "how": "stand_in",
+   "why": "Renewable energy and social infrastructure are infrastructure lending (user, 2026-10-25)."
+  },
+  "icl:sibc/Statement1/viii": {
+   "label": "Export Credit",
+   "series": "walr_sector_fresh/sector:export_credit_rupee",
+   "how": "approximation",
+   "why": "RBI's rupee export credit vs the PSL export credit line (user, 2026-10-25)."
+  },
+  "icl:sibc/Statement1/x": {
+   "label": "Weaker Sections including net PSLC- SF/MF",
+   "absent": "no_counterpart",
+   "why": "RBI prints no lending rate for this line, and a mix of sector rates would misstate it (no published weights)."
+  },
+  "icl:sibc/Statement2/2.1": {
+   "label": "Mining and Quarrying (incl. Coal)",
+   "series": "walr_sector_fresh/sector:industry_large",
+   "how": "stand_in",
+   "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+  },
+  "icl:sibc/Statement2/2.10": {
+   "label": "Rubber, Plastic and their Products",
+   "series": "walr_sector_fresh/sector:industry_large",
+   "how": "stand_in",
+   "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+  },
+  "icl:sibc/Statement2/2.11": {
+   "label": "Glass and Glassware",
+   "series": "walr_sector_fresh/sector:industry_large",
+   "how": "stand_in",
+   "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+  },
+  "icl:sibc/Statement2/2.12": {
+   "label": "Cement and Cement Products",
+   "series": "walr_sector_fresh/sector:industry_large",
+   "how": "stand_in",
+   "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+  },
+  "icl:sibc/Statement2/2.13": {
+   "label": "Basic Metal and Metal Product",
+   "series": "walr_sector_fresh/sector:industry_large",
+   "how": "stand_in",
+   "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+  },
+  "icl:sibc/Statement2/2.13.1": {
+   "label": "Iron and Steel",
+   "series": "walr_sector_fresh/sector:industry_large",
+   "how": "stand_in",
+   "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+  },
+  "icl:sibc/Statement2/2.13.2": {
+   "label": "Other Metal and Metal Product",
+   "series": "walr_sector_fresh/sector:industry_large",
+   "how": "stand_in",
+   "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+  },
+  "icl:sibc/Statement2/2.14": {
+   "label": "All Engineering",
+   "series": "walr_sector_fresh/sector:industry_large",
+   "how": "stand_in",
+   "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+  },
+  "icl:sibc/Statement2/2.14.1": {
+   "label": "Electronics",
+   "series": "walr_sector_fresh/sector:industry_large",
+   "how": "stand_in",
+   "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+  },
+  "icl:sibc/Statement2/2.14.2": {
+   "label": "Others",
+   "series": "walr_sector_fresh/sector:industry_large",
+   "how": "stand_in",
+   "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+  },
+  "icl:sibc/Statement2/2.15": {
+   "label": "Vehicles, Vehicle Parts and Transport Equipment",
+   "series": "walr_sector_fresh/sector:industry_large",
+   "how": "stand_in",
+   "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+  },
+  "icl:sibc/Statement2/2.16": {
+   "label": "Gems and Jewellery",
+   "series": "walr_sector_fresh/sector:industry_large",
+   "how": "stand_in",
+   "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+  },
+  "icl:sibc/Statement2/2.17": {
+   "label": "Construction",
+   "series": "walr_sector_fresh/sector:industry_large",
+   "how": "stand_in",
+   "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+  },
+  "icl:sibc/Statement2/2.18": {
+   "label": "Infrastructure",
+   "series": "walr_sector_fresh/sector:infrastructure",
+   "how": "exact"
+  },
+  "icl:sibc/Statement2/2.18.1": {
+   "label": "Power",
+   "series": "walr_sector_fresh/sector:infrastructure",
+   "how": "stand_in",
+   "why": "No rate per infrastructure kind; Infrastructure's (user, 2026-10-25)."
+  },
+  "icl:sibc/Statement2/2.18.2": {
+   "label": "Telecommunications",
+   "series": "walr_sector_fresh/sector:infrastructure",
+   "how": "stand_in",
+   "why": "No rate per infrastructure kind; Infrastructure's (user, 2026-10-25)."
+  },
+  "icl:sibc/Statement2/2.18.3": {
+   "label": "Roads",
+   "series": "walr_sector_fresh/sector:infrastructure",
+   "how": "stand_in",
+   "why": "No rate per infrastructure kind; Infrastructure's (user, 2026-10-25)."
+  },
+  "icl:sibc/Statement2/2.18.4": {
+   "label": "Airports",
+   "series": "walr_sector_fresh/sector:infrastructure",
+   "how": "stand_in",
+   "why": "No rate per infrastructure kind; Infrastructure's (user, 2026-10-25)."
+  },
+  "icl:sibc/Statement2/2.18.5": {
+   "label": "Ports",
+   "series": "walr_sector_fresh/sector:infrastructure",
+   "how": "stand_in",
+   "why": "No rate per infrastructure kind; Infrastructure's (user, 2026-10-25)."
+  },
+  "icl:sibc/Statement2/2.18.6": {
+   "label": "Railways (other than Indian Railways)",
+   "series": "walr_sector_fresh/sector:infrastructure",
+   "how": "stand_in",
+   "why": "No rate per infrastructure kind; Infrastructure's (user, 2026-10-25)."
+  },
+  "icl:sibc/Statement2/2.18.7": {
+   "label": "Other Infrastructure",
+   "series": "walr_sector_fresh/sector:infrastructure",
+   "how": "stand_in",
+   "why": "No rate per infrastructure kind; Infrastructure's (user, 2026-10-25)."
+  },
+  "icl:sibc/Statement2/2.19": {
+   "label": "Other Industries",
+   "series": "walr_sector_fresh/sector:industry_large",
+   "how": "stand_in",
+   "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+  },
+  "icl:sibc/Statement2/2.2": {
+   "label": "Food Processing",
+   "series": "walr_sector_fresh/sector:industry_large",
+   "how": "stand_in",
+   "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+  },
+  "icl:sibc/Statement2/2.2.1": {
+   "label": "Sugar",
+   "series": "walr_sector_fresh/sector:industry_large",
+   "how": "stand_in",
+   "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+  },
+  "icl:sibc/Statement2/2.2.2": {
+   "label": "Edible Oils and Vanaspati",
+   "series": "walr_sector_fresh/sector:industry_large",
+   "how": "stand_in",
+   "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+  },
+  "icl:sibc/Statement2/2.2.3": {
+   "label": "Tea",
+   "series": "walr_sector_fresh/sector:industry_large",
+   "how": "stand_in",
+   "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+  },
+  "icl:sibc/Statement2/2.2.4": {
+   "label": "Others",
+   "series": "walr_sector_fresh/sector:industry_large",
+   "how": "stand_in",
+   "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+  },
+  "icl:sibc/Statement2/2.3": {
+   "label": "Beverage and Tobacco",
+   "series": "walr_sector_fresh/sector:industry_large",
+   "how": "stand_in",
+   "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+  },
+  "icl:sibc/Statement2/2.4": {
+   "label": "Textiles",
+   "series": "walr_sector_fresh/sector:industry_large",
+   "how": "stand_in",
+   "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+  },
+  "icl:sibc/Statement2/2.4.1": {
+   "label": "Cotton Textiles",
+   "series": "walr_sector_fresh/sector:industry_large",
+   "how": "stand_in",
+   "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+  },
+  "icl:sibc/Statement2/2.4.2": {
+   "label": "Jute Textiles",
+   "series": "walr_sector_fresh/sector:industry_large",
+   "how": "stand_in",
+   "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+  },
+  "icl:sibc/Statement2/2.4.3": {
+   "label": "Man-Made Textiles",
+   "series": "walr_sector_fresh/sector:industry_large",
+   "how": "stand_in",
+   "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+  },
+  "icl:sibc/Statement2/2.4.4": {
+   "label": "Other Textiles",
+   "series": "walr_sector_fresh/sector:industry_large",
+   "how": "stand_in",
+   "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+  },
+  "icl:sibc/Statement2/2.5": {
+   "label": "Leather and Leather Products",
+   "series": "walr_sector_fresh/sector:industry_large",
+   "how": "stand_in",
+   "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+  },
+  "icl:sibc/Statement2/2.6": {
+   "label": "Wood and Wood Products",
+   "series": "walr_sector_fresh/sector:industry_large",
+   "how": "stand_in",
+   "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+  },
+  "icl:sibc/Statement2/2.7": {
+   "label": "Paper and Paper Products",
+   "series": "walr_sector_fresh/sector:industry_large",
+   "how": "stand_in",
+   "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+  },
+  "icl:sibc/Statement2/2.8": {
+   "label": "Petroleum, Coal Products and Nuclear Fuels",
+   "series": "walr_sector_fresh/sector:industry_large",
+   "how": "stand_in",
+   "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+  },
+  "icl:sibc/Statement2/2.9": {
+   "label": "Chemicals and Chemical Products",
+   "series": "walr_sector_fresh/sector:industry_large",
+   "how": "stand_in",
+   "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+  },
+  "icl:sibc/Statement2/2.9.1": {
+   "label": "Fertiliser",
+   "series": "walr_sector_fresh/sector:industry_large",
+   "how": "stand_in",
+   "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+  },
+  "icl:sibc/Statement2/2.9.2": {
+   "label": "Drugs and Pharmaceuticals",
+   "series": "walr_sector_fresh/sector:industry_large",
+   "how": "stand_in",
+   "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+  },
+  "icl:sibc/Statement2/2.9.3": {
+   "label": "Petro Chemicals",
+   "series": "walr_sector_fresh/sector:industry_large",
+   "how": "stand_in",
+   "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+  },
+  "icl:sibc/Statement2/2.9.4": {
+   "label": "Others",
+   "series": "walr_sector_fresh/sector:industry_large",
+   "how": "stand_in",
+   "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+  }
+ }
+}

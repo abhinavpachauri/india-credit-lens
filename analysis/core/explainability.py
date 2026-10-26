@@ -140,13 +140,17 @@ def _sibc_applies(n: dict) -> dict:
 
 
 def _concordance_parts(pipeline: str) -> dict:
-    """urn -> concordance part, over every concordance this pipeline is the credit side of."""
-    out = {}
+    """urn -> [(reference, part)], over every concordance this pipeline is the credit side of.
+
+    A list per line, one entry per reference source: keyed by line alone, a second concordance
+    (RBI rates beside MoSPI) silently replaced the first's deflator and output parts (spec review,
+    2026-10-25)."""
+    out: dict[str, list] = {}
     for f in sorted((ROOT / "analysis/ontology/concordance").glob(f"{pipeline}__*.json")):
         doc = json.loads(f.read_text())
         ref = doc.get("reference_pipeline")
         for urn, part in doc.get("parts", {}).items():
-            out[urn] = (ref, part)
+            out.setdefault(urn, []).append((ref, part))
     return out
 
 
@@ -177,10 +181,7 @@ def seed(pipeline: str) -> dict:
 
     # 1. The concordance: each matched price and output series is a hypothesis at lag 0.
     parts = _concordance_parts(pipeline)
-    for n in ls:
-        ref, part = parts.get(n.get("urn"), (None, None))
-        if not part:
-            continue
+    for n, (ref, part) in ((n, rp) for n in ls for rp in parts.get(n.get("urn"), [])):
         for role, cls, why in (("deflator", "input_prices", "the price of what this line's borrowers "
                                                              "sell or hold moves their borrowing"),
                                ("output", "demand", "this line's borrowers' output moves their borrowing")):
@@ -232,12 +233,20 @@ def seed(pipeline: str) -> dict:
             t.get("predicted_sign"), t.get("lag", t.get("at_lag", 0)), t.get("reason", ""),
             tests=[f"{pipeline}:{t.get('source')}->{t.get('target')}"])
 
-    # 5. Every applicable cell still empty gets a placeholder naming where its data would come from.
+    # 5. Every applicable cell still empty takes its declared driver map, or a placeholder naming
+    #    where its data would come from.
     filled = {(h["line"], h["class"]) for h in hyps}
+    maps = driver_maps(pipeline)
     for n in ls:
         for cls, cell in applies[n["urn"]]["applies"].items():
             if cell["status"] == "applies" and (n["urn"], cls) not in filled:
-                add(n, cls, {"source": CLASS_SOURCE[cls]}, None, None, "")
+                doc = maps.get(cls)
+                e = doc["lines"].get(n["urn"]) if doc else None
+                if e:
+                    add(n, cls, mapped_driver(doc, e), None if "absent" in e else doc["_meta"]["sign"],
+                        None, doc["_meta"]["reason"])
+                else:
+                    add(n, cls, {"source": CLASS_SOURCE[cls]}, None, None, "")
     return {"_meta": {"spec": "SYSTEM_MODEL_SPEC §16 Step 6c", "pipeline": pipeline,
                       "seeded": date.today().isoformat(),
                       "status": "DRAFT: every applies-cell and hypothesis awaits the user's approval",
@@ -299,6 +308,7 @@ def validate(pipeline: str, reg: dict | None = None) -> list[str]:
             elif c["status"] == NO and not c.get("reason"):
                 errs.append(f"{n['label']}: kind {cls} not applicable without a reason")
     ref_series = _reference_series()
+    errs += _map_errors(pipeline, reg)
     tp = ROOT / manifest.load(pipeline)["paths"]["data_dir"] / "relationship_tests.json"
     ids = [r["test_id"] for r in _tests(tp) if r.get("test_id")]
     dup_ids = {i for i in ids if ids.count(i) > 1}
@@ -328,18 +338,81 @@ def validate(pipeline: str, reg: dict | None = None) -> list[str]:
             if h.get("lag") is not None and (not isinstance(h["lag"], int) or not 0 <= h["lag"] <= MAX_LAG):
                 errs.append(f"{where}: a fixed lag must be 0-{MAX_LAG}")
         d = h["driver"]
-        if d.get("pipeline") == "mospi":
+        if d.get("pipeline"):
+            if d["pipeline"] not in ref_series:
+                errs.append(f"{where}: driver pipeline {d['pipeline']} is not a reference pipeline")
             for s in d.get("series", []):
-                if tuple(s.split("/", 1)) not in ref_series:
-                    errs.append(f"{where}: series {s} is not in the MoSPI CSV")
+                if tuple(s.split("/", 1)) not in ref_series.get(d["pipeline"], set()):
+                    errs.append(f"{where}: series {s} is not in the {d['pipeline']} CSV")
         if h.get("admitted") and status({**h, "admitted": None}, _verdicts(pipeline)) != "supported":
             errs.append(f"{where}: admitted without a supported test")
     return errs
 
 
-def _reference_series() -> set:
-    path = manifest.consolidated_csv("mospi")
-    return {(r["dataset"], r["code"]) for r in csv.DictReader(open(path))}
+def driver_maps(pipeline: str) -> dict[str, dict]:
+    """class -> its declared driver map (`{data_dir}/driver_maps/{class}.json`): which reference
+    series each applicable line is tested against, or why it has none (RBI rates, 2026-10-26)."""
+    d = ROOT / manifest.load(pipeline)["paths"]["data_dir"] / "driver_maps"
+    return {f.stem: json.loads(f.read_text()) for f in sorted(d.glob("*.json"))} if d.exists() else {}
+
+
+def mapped_driver(doc: dict, entry: dict) -> dict:
+    """The register's `driver` for one map entry: a series (with its stand-in note) or an absence."""
+    ref = doc["_meta"]["reference_pipeline"]
+    if "absent" in entry:
+        return {"source": f"{ref}: no published rate for this line", "absent": entry["absent"],
+                "why": entry["why"]}
+    d = {"pipeline": ref, "series": [entry["series"]]}
+    if entry["how"] in ("approximation", "stand_in"):
+        d["stand_in"] = {"how": entry["how"], "why": entry["why"]}
+    return d
+
+
+def apply_maps(pipeline: str) -> int:
+    """Write each map's drivers, sign and reason into the register's hypotheses of that class.
+    Approvals and recorded tests are kept; a hypothesis whose driver changes loses nothing else."""
+    path = register_path(pipeline)
+    reg = json.loads(path.read_text())
+    n = 0
+    for cls, doc in driver_maps(pipeline).items():
+        meta = doc["_meta"]
+        for h in reg["hypotheses"]:
+            if h["class"] != cls or h["line"] not in doc["lines"]:
+                continue
+            e = doc["lines"][h["line"]]
+            h["driver"] = mapped_driver(doc, e)
+            h["sign"] = None if "absent" in e else meta["sign"]
+            h["reason"] = meta["reason"]
+            n += 1
+    path.write_text(json.dumps(reg, indent=1, ensure_ascii=False) + "\n")
+    return n
+
+
+def _map_errors(pipeline: str, reg: dict) -> list[str]:
+    """Each map covers its class's applicable lines exactly once, and the register says what it says."""
+    errs = []
+    for cls, doc in driver_maps(pipeline).items():
+        applies = {u for u, l in reg["lines"].items() if l["applies"].get(cls, {}).get("status") == "applies"}
+        keys = set(doc["lines"])
+        for u in sorted(applies - keys):
+            errs.append(f"driver map {cls}: {u} applies but is not in the map")
+        for u in sorted(keys - applies):
+            errs.append(f"driver map {cls}: {u} is in the map but the cell does not apply")
+        for h in reg["hypotheses"]:
+            if h["class"] == cls and h["line"] in doc["lines"]:
+                if h["driver"] != mapped_driver(doc, doc["lines"][h["line"]]):
+                    errs.append(f"{h['id']} ({h['line_label']}, {cls}): driver differs from the map; run `map`")
+    return errs
+
+
+def _reference_series() -> dict[str, set]:
+    """reference pipeline -> {(dataset, code)} in its CSV, for every reference pipeline the
+    manifests declare (was MoSPI only, so a typo in any other source passed validation)."""
+    out = {}
+    for p in manifest.reference_pipelines():
+        with manifest.consolidated_csv(p).open() as f:
+            out[p] = {(r["dataset"], r["code"]) for r in csv.DictReader(f)}
+    return out
 
 
 def summary(pipeline: str) -> str:
@@ -426,17 +499,20 @@ def report(pipeline: str, with_moves: bool = True) -> tuple[str, str]:
     n_changes, r_min = detectability(pipeline)
     group_of = {n["urn"]: _sibc_group(n) for n in lines(model)}
 
-    col = {k: {"applies": 0, "complete": 0, "sources": {}} for k in OUTSIDE}
+    col = {k: {"applies": 0, "complete": 0, "short": 0, "stand_in": 0, "sources": {}} for k in OUTSIDE}
     rows = {g: [] for g, _ in GROUPS}
     for urn, line in reg["lines"].items():
         cells = []
         for k in OUTSIDE:
             hs = by_cell.get((urn, k), [])
             sym, done = cell(hs, v, line["applies"].get(k, {}))
-            cells.append(sym)
+            proxy = any(h["driver"].get("stand_in") for h in hs)
+            cells.append(sym + ("ˢ" if proxy and sym not in ("–", "·") else ""))
             if line["applies"].get(k, {}).get("status") == "applies":
                 col[k]["applies"] += 1
                 col[k]["complete"] += done
+                col[k]["short"] += sym == "?"            # complete by the target's rule, but no answer
+                col[k]["stand_in"] += proxy and done
                 for h in hs:
                     if status(h, v) == "data_missing":
                         s = col[k]["sources"].setdefault(h["driver"]["source"], {"lines": 0, "moves": 0})
@@ -453,22 +529,23 @@ def report(pipeline: str, with_moves: bool = True) -> tuple[str, str]:
           f"until approved. The target: every column complete.",
           "",
           "`✓` tested, explains · `✗` tested, does not explain · `?` tested, history too short to tell · "
-          "`○` data in hand, not yet tested · `·` data missing · `–` does not apply · `…` partly tested",
+          "`○` data in hand, not yet tested · `·` data missing · `–` does not apply · `…` partly tested · "
+          "`ˢ` tested through a declared stand-in or approximation (another line's series)",
           "",
           f"**History:** {n_changes} usable monthly changes; a test can detect a link of |r| ≥ {r_min} "
           f"(p < 0.05). Weaker links read `?` or `✗` until the history grows.",
           "",
           "## Columns: how complete is each kind of reason",
           "",
-          "| kind | complete | where the missing data would come from (lines · unexplained moves on them) |",
-          "|---|---|---|"]
+          "| kind | complete | of which too short to tell | of which through a stand-in | where the missing data would come from (lines · unexplained moves on them) |",
+          "|---|---|---|---|---|"]
     term = [f"{pipeline}: completeness grid ({n_changes} monthly changes, detectable |r| ≥ {r_min})"]
     for k in OUTSIDE:
         c = col[k]
         src = "; ".join(f"{s} ({d['lines']} · {d['moves']})" for s, d in
                         sorted(c["sources"].items(), key=lambda x: -x[1]["moves"])) or "—"
-        md.append(f"| {SHORT[k]} | {c['complete']}/{c['applies']} | {src} |")
-        term.append(f"  {SHORT[k]:17} complete {c['complete']:2}/{c['applies']:2}"
+        md.append(f"| {SHORT[k]} | {c['complete']}/{c['applies']} | {c['short']} | {c['stand_in']} | {src} |")
+        term.append(f"  {SHORT[k]:17} complete {c['complete']:2}/{c['applies']:2} (too short {c['short']:2}, stand-in {c['stand_in']:2})"
                     f"   missing-data lines {sum(d['lines'] for d in c['sources'].values()):2}, "
                     f"unexplained moves on them {sum(d['moves'] for d in c['sources'].values())}")
     md += ["", "## The grid", ""]
@@ -525,6 +602,10 @@ def run_tests(pipeline: str, dry_run: bool = False) -> list[dict]:
         if r.get("hypothesis_id") and "discover" in r.get("protocol", ""):
             last[r["hypothesis_id"]] = r
     todo = [h for h in reg["hypotheses"] if "series" in h["driver"] and h.get("sign") in (1, -1)]
+    from collections import Counter
+    idle = Counter(h["class"] for h in reg["hypotheses"] if "series" not in h["driver"])
+    print("   · no series to test (data missing, shown `·`): "
+          + ", ".join(f"{k} {n}" for k, n in sorted(idle.items())))
     family = {}
     for h in todo:
         family[h["line"]] = family.get(h["line"], 0) + 1
@@ -560,7 +641,7 @@ def run_tests(pipeline: str, dry_run: bool = False) -> list[dict]:
 def main() -> int:
     import argparse
     ap = argparse.ArgumentParser(description="Driver register (SYSTEM_MODEL_SPEC §16 Step 6c)")
-    ap.add_argument("command", choices=("seed", "validate", "summary", "report", "test"))
+    ap.add_argument("command", choices=("seed", "validate", "summary", "report", "test", "map"))
     ap.add_argument("--dry-run", action="store_true", help="test: run and print, record nothing")
     ap.add_argument("--include-covid", action="store_true",
                     help="test: the COVID cross-check (always a dry run: printed, never recorded)")
@@ -579,6 +660,13 @@ def main() -> int:
         for e in errs[:20]:
             print("   ·", e)
         return 0
+    if a.command == "map":
+        n = apply_maps(a.pipeline)
+        errs = validate(a.pipeline)
+        print(f"  ✓ {n} hypotheses take their driver from the driver maps; {len(errs)} validation error(s)")
+        for e in errs[:20]:
+            print("   ·", e)
+        return 1 if errs else 0
     if a.command == "validate":
         errs = validate(a.pipeline)
         print(f"  {'✓' if not errs else '✗'} {a.pipeline} register: {len(errs)} error(s)")

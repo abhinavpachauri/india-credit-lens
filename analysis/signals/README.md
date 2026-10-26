@@ -1305,6 +1305,25 @@ part per line, so a second SIBC concordance would silently replace MoSPI's defla
 it keys by (line, reference). (b) The register validator checked driver series only for `mospi`; it
 checks every reference pipeline's CSV.
 
+**As built (2026-10-26).**
+- Phase 1: four releases saved (Jun–Sep 2026), 3,890 values, 38 series; the gate measured by
+  injection, 100% caught, 0 false on the real files. Consolidate and the CSV check are the shared
+  reference-pipeline stages (`--pipeline`); a rate's `base_year` is null.
+- Phase 2: the join lives in the credit pipeline as a declared **driver map**
+  (`analysis/rbi_sibc/driver_maps/credit_price.json`; `explainability.py map` writes it into the register,
+  `validate` holds the two together both ways). The formal concordance (1f schema) follows with the
+  dashboard rate column. `growth`, `driver_measure` and `tide` are declared on every reference dataset;
+  the MoSPI results were identical after the switch (0 changed).
+- Result: price of credit **0 → 68 of 83 complete** (29 too short to tell; 55 through a stand-in or
+  approximation; 15 lines have no published rate). **9 lines supported**, every one with the predicted
+  sign (dearer new credit, slower borrowing), delays 0–9 months: engineering, basic metals, textiles,
+  other textiles, two "others", medium enterprises (twice), loans against fixed deposits. **Placebo:**
+  the same lines against wrong sectors' rates are supported 5 of 134 times (4%), against 13% for the
+  own rate, so the rate is a real driver but 2–3 of the 9 are likely luck. With two drivers per line
+  the family bar halves (α 0.025): edible oils ← its prices (p 0.049) no longer clears it.
+- The explained share of moves is unchanged (43%): a supported driver explains a move only once
+  admitted (Step 6c step 4, the user's approval), which is next.
+
 **Build order.** (1) manifest, reader, label and note tables, saved releases for the four files;
 (2) the gate (integrity both ways, order, calendar, notes, plausibility measured by injection);
 (3) `growth`/`driver_measure`/`tide` declared on every reference dataset and read by the driver

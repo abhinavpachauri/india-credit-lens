@@ -60,7 +60,11 @@
       "expected_lag_days": 28,
       "note_why": "Lag: July 2026 was released 28 Aug (MoSPI calendar: the 28th of M+1).",
       "tests_read": "iip_2011",
-      "note_tests_read": "The driver and arrow tests read iip_2011: this base starts after the credit history (Oct 2021), and switching bases mid-series puts a step in every growth series (IIP trailing-year output: median gap 1.8 points, measured 2026-10-21). Revisit when this base holds the test window on its own (~2028)."
+      "note_tests_read": "The driver and arrow tests read iip_2011: this base starts after the credit history (Oct 2021), and switching bases mid-series puts a step in every growth series (IIP trailing-year output: median gap 1.8 points, measured 2026-10-21). Revisit when this base holds the test window on its own (~2028).",
+      "growth": "ratio",
+      "driver_measure": "index",
+      "tide": "iip/iip:general",
+      "note_driver": "growth/driver_measure/tide: how the driver test reads this dataset (signals/README \"RBI lending and deposit rates\": declared per dataset, never defaulted). An index changes by ratio; its tide is its own headline, so 'prices rose in general' is not read as this series moving."
     },
     "wpi": {
       "source": "api",
@@ -111,7 +115,10 @@
           "why": "The 2011-12 base splits steel into seven sub-groups and prints no iron & steel total; adding them needs weights we do not invent. Basic metals (steel plus non-ferrous) stands in: its monthly change tracks iron & steel at r 0.96 on the current base and 0.83 across bases (measured 2026-10-25)."
         }
       },
-      "note_tests_approximate": "A code the test base lacks is read from a declared stand-in on that base; every result that uses one names it (`approximated`)."
+      "note_tests_approximate": "A code the test base lacks is read from a declared stand-in on that base; every result that uses one names it (`approximated`).",
+      "growth": "ratio",
+      "driver_measure": "index",
+      "tide": "wpi/wpi:all"
     },
     "nas": {
       "source": "api",
@@ -294,7 +301,10 @@
       ],
       "note_no_printed_rate": "MoSPI prints quarterly growth only for GVA (indicator 21) and GDP (22); indicators 1-34 enumerated 2026-09-28. PFCE is counted as no_printed_rate.",
       "expected_lag_days": 61,
-      "note_why": "frequency_code is honoured; `frequency` is silently ignored (282 rows, annual mixed in), which is why every filter is verified on the rows. Without base_year one response mixes both bases. The growth indicators (21, 22) carry the printed rate in the price columns. Lag: Q1 FY27 was released 29 Aug."
+      "note_why": "frequency_code is honoured; `frequency` is silently ignored (282 rows, annual mixed in), which is why every filter is verified on the rows. Without base_year one response mixes both bases. The growth indicators (21, 22) carry the printed rate in the price columns. Lag: Q1 FY27 was released 29 Aug.",
+      "growth": "ratio",
+      "driver_measure": "constant_price",
+      "tide": "nas/nas:gdp"
     },
     "cpi": {
       "source": "release_files",
@@ -357,7 +367,10 @@
       "expected_lag_days": 12,
       "note_why": "The API holds only the 2012 base, ending Dec 2025 (base_year=2024 → 'No Data Found', re-probed 2026-09-28); it is never used. CPI is one dataset fed by two MoSPI publications (`sources`). Their releases merge in PUBLICATION order (`published`), not fetch order, because the workbook lags: fetched after the August release, it would otherwise overwrite July's final value with the provisional one. Lag: July 2026 was released 12 Aug.",
       "tests_read": "cpi_2012",
-      "note_tests_read": "The driver and arrow tests read cpi_2012: this base starts after the credit history (Oct 2021), and switching bases mid-series puts a step in every growth series (IIP trailing-year output: median gap 1.8 points, measured 2026-10-21). Revisit when this base holds the test window on its own (~2028)."
+      "note_tests_read": "The driver and arrow tests read cpi_2012: this base starts after the credit history (Oct 2021), and switching bases mid-series puts a step in every growth series (IIP trailing-year output: median gap 1.8 points, measured 2026-10-21). Revisit when this base holds the test window on its own (~2028).",
+      "growth": "ratio",
+      "driver_measure": "index",
+      "tide": "cpi/cpi:all"
     },
     "iip_2011": {
       "source": "api",

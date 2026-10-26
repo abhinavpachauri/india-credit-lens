@@ -22,11 +22,11 @@ of 218 moves after the base effect.
 
 ## Next, in order
 
-1. **Extend history: done 10-25** (`analysis/signals/README.md` §"Longer history"). Credit Oct 2021 →
-   (59 months, its one-basis limit); MoSPI's retired bases (IIP/WPI 2011-12, CPI 2012) read by the tests,
-   one base per series; delays confirmed on every month their search never saw. 40 driver tests: 1
-   supported (edible oils ← their prices, p 0.049), 23 tested-no-link, 16 too short. Next on this arc:
-   **a quarterly test for NAS** (7 hypotheses untestable), then explainability steps 4–5.
+1. **Price of credit: built 10-26** (`analysis/signals/README.md` §"RBI lending and deposit rates"; pipeline
+   `rbi_rates`, reference). Grid column 0 → 68/83; 9 lines supported (placebo 4% vs 13% own rate). **Next:
+   step 4, admission** (the user approves supported drivers, and the coverage count credits them, so the
+   explained share moves); RBI's Sep file due ~31 Oct (`rbi_rates/fetch.py --xlsx`, then its gate). Then other
+   finance (DBIE flows, CP, ECB: probe), the rest of input prices, and a quarterly test for NAS (7 lines).
 2. **Releases due:** SIBC Sep ~30 Oct, payments Sep ~3–5 Nov, NBFC Sep ~6 Nov (`/ingest-period`, then
    `/model-pass` + `/s4-source`; NBFC also takes deferred proposals #17-19 in `s4_proposals/2026-09-30.json`).
    CPI Oct ~12 Nov: PDF from MoSPI's product feed (`api/product/get-product-data`, product 9 lists every

@@ -149,6 +149,12 @@ def signal_pipelines() -> tuple[str, ...]:
     return tuple(p for p in PIPELINE_IDS if load(p).get("compute_module"))
 
 
+def reference_pipelines() -> tuple[str, ...]:
+    """Pipelines other pipelines measure against: kind `reference`, read through their
+    consolidated CSV (MoSPI, RBI rates), in pipeline order."""
+    return tuple(p for p in PIPELINE_IDS if kind(p) == "reference")
+
+
 def model_pipelines() -> tuple[str, ...]:
     """Pipelines with a system model: those declaring `paths.system_model`, in pipeline order."""
     return tuple(p for p in PIPELINE_IDS if "system_model" in load(p).get("paths", {}))

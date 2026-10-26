@@ -49,7 +49,7 @@ def _first(reg, cls=None, has=None):
      lambda r: _first(r, has="series").update({"approved": {"by": "user"}, "lag": 12}), "a fixed lag must be"),
     ("a series the reference CSV lacks",
      lambda r: _first(r, has="series").update({"driver": {"pipeline": "mospi", "series": ["wpi/nope"]}}),
-     "not in the MoSPI CSV"),
+     "not in the mospi CSV"),
     ("a hypothesis in a not-applicable cell",
      lambda r: _first(r, cls="credit_price").update({"line": "icl:sibc/Statement1/II"}), "marked not applicable"),
     ("a line outside the model",
@@ -227,5 +227,5 @@ def test_the_test_reads_the_declared_base_and_names_a_stand_in():
 
 def test_a_series_the_test_base_cannot_read_fails_loudly_not_as_too_short():
     from signals.compute.real_economy import ReferenceMissing
-    with pytest.raises(ReferenceMissing, match="no 'index'"):
-        RT.reference_changes("mospi", "nas/nas:gdp")                   # NAS has levels, not an index
+    with pytest.raises(ReferenceMissing, match="quarterly data"):
+        RT.reference_changes("mospi", "nas/nas:gdp")                   # NAS is quarterly
