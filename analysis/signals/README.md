@@ -1194,6 +1194,123 @@ instead of silently leaving every signal check. The list, as it was found:
 - **Annual NAS** (18 sub-industries): finer, but annual, so it cannot sit in a monthly table.
 - **Eight Core Industries** (steel / cement / fertiliser output): not MoSPI. Parked by the user.
 
+## RBI lending and deposit rates: the price of credit (pipeline #5, specced 2026-10-25)
+
+> Why: the explainability grid's largest empty column is **price of credit** (0 of 83 lines). Kind
+> **reference** (user, 2026-10-25), like MoSPI: own manifest, saved releases and gate; no page, no
+> cards, no paid narration. v1 consumer: the driver tests (SYSTEM_MODEL_SPEC §16 Step 6c). A rate
+> column in the credit tables is a later `/dashboard-change`. Probe notes: `analysis/sources/README.md`.
+> Reviewed before code by the population, absence and plausibility reviewers (2026-10-25); their
+> findings are folded in below and marked ⓡ.
+
+**The release.** RBI's monthly "Lending and Deposit Rates of Scheduled Commercial Banks", an Excel
+file (`MLDRSCB{ddmmyyyy}*.xlsx`) with nine tables, **every file carrying the full history**. It comes
+out at the end of month M with lending and deposit rates for M−1 (the 30 Sep 2026 file ends Aug 2026).
+All values are levels in per cent (2.64–13.10 over the whole history ⓡ); RBI prints no growth rate.
+
+| dataset | table | what | codes | from |
+|---|---|---|---|---|
+| `walr_outstanding` | T1 | lending rate on outstanding rupee loans | `group:psb` `group:pvt` `group:foreign` `group:scb` | Feb 2012 |
+| `walr_fresh` | T2 | lending rate on new loans sanctioned that month | the same | Sep 2014 |
+| `tdr_outstanding` | T3 | term deposit rate, outstanding deposits | the same | Mar 2013 |
+| `tdr_fresh` | T4 | term deposit rate, new deposits | the same | Jan 2021 (`from_period`: one Mar 2020 point precedes a 10-month gap) |
+| `walr_sector_outstanding` | T8 | lending rate by sector, outstanding | the 11 sector codes | Apr 2020 |
+| `walr_sector_fresh` | T9 | lending rate by sector, new loans | the same | Apr 2020 |
+
+The 11 sector codes (T8/T9 headers, mapped by a label table that fails on an unknown header):
+`sector:agriculture` `sector:industry_large` `sector:msme` `sector:infrastructure` `sector:trade`
+`sector:professional_services` `sector:education` `sector:vehicle` `sector:housing`
+`sector:other_personal` `sector:export_credit_rupee`. Not taken: T5–T7 (MCLR, benchmark shares).
+
+**What it does not measure.** No rate for Services as a whole, most service sub-sectors, industry
+sub-groups, cards or gold loans separately; no NBFC lending rates. The SCB column is RBI's weighted
+aggregate (it lies inside the three groups' range in every month of T1–T4 ⓡ); its weights are unpublished.
+
+**Cadence and calendar.** Every value can change monthly. Expected lag 31 days after the data month
+ends, plus grace; past that a missing month fails as overdue (MoSPI's `expected_latest`, reused).
+Pulled by hand (`fetch.py --xlsx {file}`) until two clean cycles.
+
+**Saving, ordering, revisions** ⓡ. Each file is saved as published (raw xlsx beside its parsed rows).
+Releases are ordered by the **publication date in the file name**, never by when they were saved. A
+file whose data ends no later than the last saved release's and whose rows equal it is recorded as a
+`duplicate`, not a release; an older file than the latest saved raises. Each dataset is a snapshot
+(latest wins). The diff runs over the **union** of the two releases' keys: a value changed beyond
+0.25 pp fails (a different series; the largest real revision is 0.06 pp ⓡ), smaller changes are
+reported as revisions, and **a key the older release had and the newer lacks fails** (a truncated
+file). Each series must start at its declared `from` month (a file missing its early years fails).
+Precision varies by release (2 to 15 decimals); values compare at 2 decimals.
+
+**Dates are labels** ⓡ. A row label is a date (first of the month until Dec 2020, month end after,
+stray days) or a month written as text (`July-2023` in T2 and T3, carrying real values): both map
+to their month's end. A label that parses as neither raises.
+
+**Footnotes are classified, not ignored** ⓡ. Every note the file prints (per table) is listed in a
+declared `notes.json` with its handling: `series_break` (T8: domestic banks only to Feb 2021; T9: to
+Apr 2021), `carried` (the HDFC merger note on T1/T3: a rate is a price, not a stock, so it does not
+break the series), `provisional`, `definition`. A note not in the file fails the gate, as an
+unclassified raw date does for SIBC.
+
+**Series breaks in the driver read** ⓡ. A 12-month change whose two months fall either side of a
+declared break is excluded **and counted**: the result records `excluded: {series_break: n}`, so a
+shortened history is visible, never a silent `too_short`.
+
+**Checks (the gate).** Integrity in both directions (every declared code has rows through the latest
+month; a row whose code is not declared fails); one release order; the calendar; the footnotes; and
+**plausibility per table**, measured on the full history ⓡ: a level outside 0–25%; a month-on-month
+move above **1.5 pp on T1–T4 and T8** (largest real move 0.98 pp) or **2.5 pp on T9** (fresh sector
+rates are noisy: 18 moves above 1 pp, the largest −1.98 pp, Professional Services Dec 2020). Months
+across a declared break or a `from_period` gap are not compared. Measured by injection with a
+separate known-bad control (a value with its decimal shifted, 9.44 → 94.4; a month dropped).
+
+**Driver arithmetic: declared per dataset, never defaulted** ⓡ. Every reference dataset the driver
+test reads declares `growth: ratio` (an index: every MoSPI dataset, added explicitly) or `growth:
+difference` (a rate: these six), its `driver_measure` (`index` / `rate`), and its **`tide`** series; a
+dataset missing any of the three raises. This replaces the hand-written `HEADLINE` table in
+`relationship_test`, which knew only MoSPI's datasets and would have fallen back to the credit tide
+without a sound. (On these rates the ratio and the difference move together, monthly changes r
+0.99 ⓡ, so verdicts would barely differ; the rule matters because a stored "rate grew 7%" would be
+false: −0.74 pp, not −7.2%.)
+
+**The driver (v1).** The **fresh-loan rate** (T9; T2's SCB rate for non-food credit), the price of
+credit taken now; the outstanding rate is stored for the table later. Declared reason and sign:
+*dearer new credit slows borrowing in that sector*, sign −1; delay found and confirmed as every
+driver (§16 Step 6c). Tide: `walr_fresh/group:scb`, so a sector rate moving with the whole rate
+cycle is not read as that sector's own price. Deposit rates are stored for a later spread hypothesis.
+
+**The join: the register's 83 lines, each exactly once** ⓡ (concordance `sibc__rbi_rates.json`; its
+keys must equal the register's `credit_price: applies` set, checked in both directions, so a line
+cannot be dropped or doubled):
+
+| how | n | lines | rate |
+|---|---|---|---|
+| exact | 12 | Agriculture (1, PSL i), Large industry (2.3), Professional Services (3.6), Trade (3.7), Housing (4.2, PSL iv), Education (4.6, PSL v), Vehicle Loans (4.7), Other Personal Loans (4.9), Infrastructure (S2 2.18) | the sector's own |
+| exact, system | 1 | Non-food credit (III) | `walr_fresh/group:scb`, tested against the credit tide (a headline driver) |
+| approximation (user) | 5 | Micro & Small, Medium (2.1, 2.2, PSL ii, iii) ← MSMEs; Export Credit (PSL viii) ← Rupee Export Credit | declared |
+| parent stand-in (user) | 16 | Wholesale, Retail (3.7.1–2) ← Trade; infrastructure sub-lines (2.18.1–7) ← Infrastructure; 4.1, 4.3–4.5, 4.8 ← Other Personal Loans; Renewable Energy, Social Infrastructure (PSL vi, vii) ← Infrastructure | declared |
+| parent stand-in (user, 2026-10-26) | 34 | industry by type (S2 2.1–2.17, 2.19 and children) ← Large industry, the only industry-level rate RBI prints | declared |
+| no published rate | 15 | Industry, Services and Personal loans totals (2, 3, 4); service lines 3.1–3.5, 3.8, 3.9, 3.9.1–2, 3.10; PSL Others, Weaker Sections (ix, x) | `absent: no_counterpart`, with the reason |
+
+A **stand-in or approximation is written into the hypothesis itself** (`driver.stand_in`: what it
+stands for and why) and copied into every result, and the grid marks it ⓡ. Each stand-in line is
+still tested against **its own** credit changes (seven infrastructure sub-lines are seven tests).
+
+**The grid, read honestly** ⓡ. "No published rate" is not "does not apply": the cell stays
+`applies`, its hypothesis has no series, and it reads `·` (data missing), never complete. The run
+lists every hypothesis it could not test. The column summary reports `too_short` cells separately
+from tested-with-an-answer (`?` is complete by the target's rule, but a reader must see how much of
+"complete" is "could not tell").
+
+**Fixes this source needs in existing code** ⓡ: (a) `explainability._concordance_parts` keyed one
+part per line, so a second SIBC concordance would silently replace MoSPI's deflator/output parts;
+it keys by (line, reference). (b) The register validator checked driver series only for `mospi`; it
+checks every reference pipeline's CSV.
+
+**Build order.** (1) manifest, reader, label and note tables, saved releases for the four files;
+(2) the gate (integrity both ways, order, calendar, notes, plausibility measured by injection);
+(3) `growth`/`driver_measure`/`tide` declared on every reference dataset and read by the driver
+test; the two fixes above; (4) the concordance and the price-of-credit hypotheses (signs and
+stand-ins for approval); (5) driver tests, grid, explained share recorded.
+
 ## Evaluate + query
 - **`evaluate.py`** — Stage 5 LLM evaluation: builds domain payloads from `signals.db`, calls
   the model, writes `evaluations/{pipeline}/{period}.json`. Caches by payload hash + prompt

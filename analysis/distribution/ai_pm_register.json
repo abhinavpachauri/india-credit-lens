@@ -635,6 +635,20 @@
           "date": "2026-10-12",
           "how_measured": "synthetic series for the controls; the live register for the run",
           "source": "analysis/core/relationship_test.py discover_confirm; analysis/tests/test_explainability.py"
+        },
+        {
+          "metric": "RBI rates gate (pipeline #5): integrity, footnotes, unit, plausibility",
+          "value": "catch 100% on every injected fault, enumerated: decimal shift 3890/3890, interior month dropped 3814/3814, truncated history 38/38, series missing 38/38, unclassified footnote 6/6, declared-not-printed footnote 6/6; known-good control (4 real releases) 0 false rejections. Plausibility bounds measured on the full history first (T1-T4, T8 max move 0.98 pp, bound 1.5; T9 max 1.98, bound 2.5).",
+          "date": "2026-10-26",
+          "how_measured": "in-memory injection over the whole consolidated CSV (3,890 values, 38 series) and the latest release's footnotes",
+          "source": "analysis/pipelines/rbi_rates/validate_rates.py; analysis/pipelines/mospi/validate_csv.py --pipeline rbi_rates"
+        },
+        {
+          "metric": "spec review before code (rates pipeline)",
+          "value": "3 reviewers, 17 findings before a line was written; 2 were silent faults in existing code this source would have triggered (a second concordance overwriting MoSPI's parts; the driver tide falling back to the credit tide for any non-MoSPI dataset), 1 a gate that would have rejected 3 real RBI prints (a 1.5 pp bound on T9), 1 a miscount (39 vs 34 lines)",
+          "date": "2026-10-25",
+          "how_measured": "population, absence and plausibility reviewer agents on signals/README \"RBI lending and deposit rates\"",
+          "source": "analysis/signals/README.md (findings marked ⓡ)"
         }
       ],
       "observations": [

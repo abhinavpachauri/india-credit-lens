@@ -56,3 +56,5 @@ analysis/signals/signals.db.tmp
 # MoSPI saved releases are the only record of what MoSPI published on a day (revisions overwrite
 # in place), so the raw workbook is committed like the PDFs and API responses beside it.
 !analysis/mospi/releases/**/*.xlsx
+# RBI rates: the workbook is the release as published (signals/README "RBI lending and deposit rates").
+!analysis/rbi_rates/releases/**/*.xlsx

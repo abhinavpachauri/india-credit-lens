@@ -64,7 +64,7 @@ def check(rows: list[dict], man: dict, lab: dict, today: date) -> tuple[list[str
     for name, ds in man["datasets"].items():
         mine = [r for r in rows if r["dataset"] == name]
         bases = {r["base_year"] for r in mine}
-        if bases != {ds["base_year"]}:
+        if bases != {ds["base_year"] or ""}:
             errs.append(f"{name}: base years {sorted(bases)}, declared {ds['base_year']!r}")
         if not mine:
             errs.append(f"{name}: no rows")
@@ -87,6 +87,9 @@ def check(rows: list[dict], man: dict, lab: dict, today: date) -> tuple[list[str
         blanks = ds.get("published_blanks", {})           # months MoSPI itself left blank, declared
         for (code, measure), periods in sorted(series.items()):
             ps = sorted(periods)
+            if ds.get("first_period") and ps[0] != ds["first_period"]:
+                # The latest release replaces history: a file missing its early years must not pass.
+                errs.append(f"{name}: {code}/{measure} starts {ps[0]}, declared {ds['first_period']}")
             for a, b in zip(ps, ps[1:]):
                 p, missing = a, []
                 while (p := next_period(p, step)) < b:
@@ -124,7 +127,9 @@ def check(rows: list[dict], man: dict, lab: dict, today: date) -> tuple[list[str
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[1])
     ap.add_argument("--today", type=date.fromisoformat, default=date.today())
+    ap.add_argument("--pipeline", default="mospi", help="the reference pipeline (default mospi)")
     args = ap.parse_args()
+    R.use(args.pipeline)
     path = manifest.path(R.PIPELINE, "consolidated_csv")
     if not path.exists():
         print(f"  ✗ {path} is missing; run consolidate.py", file=sys.stderr)

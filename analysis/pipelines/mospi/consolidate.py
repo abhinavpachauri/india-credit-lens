@@ -72,7 +72,7 @@ def ordered(name: str, ds: dict) -> list[tuple]:
     publications on one day) fall back to fetch order.
     """
     docs = [(f, R.read(f)) for f in R.saved(name)]
-    if ds["release_scope"] == "snapshot":
+    if ds["release_scope"] == "snapshot" and not ds.get("order_by_published"):
         return docs
     for f, d in docs:
         if not d.get("published"):
@@ -88,9 +88,11 @@ def keyed(name: str, ds: dict, doc: dict) -> dict:
         # The row's OWN base, never the declaration: 1b checks the CSV's base column, and a column
         # stamped from the manifest would only ever agree with the manifest.
         bf = ds.get("base_field", "base_year")              # CPI 2012 rows say `baseyear`
-        if bf not in row:
+        if ds["base_year"] is None:
+            pass                                             # a rate has no base (declared null)
+        elif bf not in row:
             raise ConsolidateError(f"{name}: a row carries no {bf} of its own")
-        if str(row[bf]) != ds["base_year"]:
+        elif str(row[bf]) != ds["base_year"]:
             raise ConsolidateError(f"{name}: a row on base {row[bf]!r}, "
                                    f"declared {ds['base_year']!r}")
         period = row["period"] if "period" in row else R.period_of(row, ds["period"])
@@ -110,13 +112,20 @@ def keyed(name: str, ds: dict, doc: dict) -> dict:
             if key in out:
                 raise ConsolidateError(f"{name}: {key} appears twice in one release")
             out[key] = (str(v).strip(), row.get(ds.get("status_field", ""), "") or "",
-                        str(row[bf]))
+                        "" if ds["base_year"] is None else str(row[bf]))
     return out
 
 
-def diff(name: str, scope: str, prev: dict, new: dict, max_revision_pct: float | None = None) -> dict:
+def diff(name: str, scope: str, prev: dict, new: dict, max_revision_pct: float | None = None,
+         max_revision_abs: float | None = None) -> dict:
     """What changed between two consecutive releases. Raises on the failing kinds."""
     revised = sorted(k for k in new.keys() & prev.keys() if new[k][0] != prev[k][0])
+    if max_revision_abs is not None:
+        for k in revised:
+            a, b = float(prev[k][0]), float(new[k][0])
+            if abs(b - a) > max_revision_abs:
+                raise ConsolidateError(f"{name}: {k} moved {a} → {b}, beyond the declared "
+                                       f"{max_revision_abs} revision: a different series?")
     if max_revision_pct is not None:
         for k in revised:
             a, b = float(prev[k][0]), float(new[k][0])
@@ -155,7 +164,7 @@ def build() -> tuple[str, str, list[str]]:
                     entry[field] = doc[field]
             if prev is not None:
                 d = diff(name, scope, prev if scope == "snapshot" else current, k,
-                         ds.get("max_revision_pct"))
+                         ds.get("max_revision_pct"), ds.get("max_revision_abs"))
                 entry.update(d)
                 if d["revised"]:
                     warnings.append(f"{name}: {d['revised']} value(s) revised in {f.name}, "
@@ -182,7 +191,9 @@ def build() -> tuple[str, str, list[str]]:
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[1])
     ap.add_argument("--check", action="store_true", help="fail if the committed files are stale")
+    ap.add_argument("--pipeline", default="mospi", help="the reference pipeline (default mospi)")
     args = ap.parse_args()
+    R.use(args.pipeline)
     try:
         csv_text, log_text, warnings = build()
     except (ConsolidateError, ValueError, KeyError) as e:

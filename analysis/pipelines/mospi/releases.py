@@ -27,7 +27,14 @@ from pathlib import Path
 sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
 from core import manifest  # noqa: E402
 
-PIPELINE = "mospi"
+PIPELINE = "mospi"      # the reference pipeline these stages serve; `use()` switches it (--pipeline)
+
+
+def use(pipeline: str) -> None:
+    """Point every stage at another reference pipeline (RBI rates, 2026-10-26): the release format,
+    the consolidated CSV and its checks are one mechanism for every reference source."""
+    global PIPELINE
+    PIPELINE = pipeline
 MONTHS = {m: i for i, m in enumerate(calendar.month_name) if m}
 QUARTER_END = {"Q1": (0, 6), "Q2": (0, 9), "Q3": (0, 12), "Q4": (1, 3)}   # (year offset, month)
 

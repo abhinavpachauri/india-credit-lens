@@ -1,0 +1,71 @@
+{
+  "note_why": "Every footnote RBI prints, per table, with its handling (signals/README \"RBI lending and deposit rates\": footnotes are classified, not ignored). A note the file prints that is not listed here fails stage 1c, as an unclassified raw date does for SIBC.",
+  "kinds": {
+    "provisional": "RBI marks every value provisional; revisions are tracked by the release diff.",
+    "definition": "How RBI computes the rate; no effect on reading it.",
+    "carried": "Kept as context; does not break the series (a rate is a price, not a stock).",
+    "series_break": "Coverage changes at `effective`: a 12-month change spanning it is excluded from the driver read and counted."
+  },
+  "notes": {
+    "walr_outstanding": {
+      "Notes: (i) WALRs have been computed based on data submitted by banks.": {
+        "kind": "definition"
+      },
+      "(ii) Data from July 2023 onwards include the impact of the merger of a non-bank with a bank.": {
+        "kind": "carried",
+        "why": "The HDFC merger changes who is in the average, not what a rate measures; unlike a credit stock the level does not jump with the merger."
+      },
+      "Data are provisional.": {
+        "kind": "provisional"
+      }
+    },
+    "walr_fresh": {
+      "Note: WALRs have been computed based on data submitted by banks.": {
+        "kind": "definition"
+      },
+      "Data are provisional.": {
+        "kind": "provisional"
+      }
+    },
+    "tdr_outstanding": {
+      "Notes: (i) WADTDRs have been computed based on data submitted by banks.": {
+        "kind": "definition"
+      },
+      "(ii) Data from July 2023 onwards include the impact of the merger of a non-bank with a bank.": {
+        "kind": "carried",
+        "why": "As T1."
+      },
+      "Data are provisional.": {
+        "kind": "provisional"
+      }
+    },
+    "tdr_fresh": {
+      "Note: WADTDRs have been computed based on data submitted by banks.": {
+        "kind": "definition"
+      },
+      "Data are provisional.": {
+        "kind": "provisional"
+      }
+    },
+    "walr_sector_outstanding": {
+      "Note: Data pertains to Domestic Banks for the period April 2020 to February 2021.": {
+        "kind": "series_break",
+        "effective": "2021-03-31",
+        "why": "Foreign banks enter the sector averages from Mar 2021."
+      },
+      "Data are provisional.": {
+        "kind": "provisional"
+      }
+    },
+    "walr_sector_fresh": {
+      "Note: Data pertains to Domestic Banks for the period April 2020 to April 2021.": {
+        "kind": "series_break",
+        "effective": "2021-05-31",
+        "why": "Foreign banks enter the sector averages from May 2021."
+      },
+      "Data are provisional.": {
+        "kind": "provisional"
+      }
+    }
+  }
+}

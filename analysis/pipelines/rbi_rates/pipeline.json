@@ -1,0 +1,258 @@
+{
+  "id": "rbi_rates",
+  "name": "RBI: lending and deposit rates of SCBs (reference)",
+  "order": 0,
+  "kind": "reference",
+  "note_why": "A reference pipeline (signals/README \"RBI lending and deposit rates\"): saved releases, a consolidated CSV and a gate, no signals or page of its own. Its v1 consumer is the driver test (price of credit). Consolidate and the CSV check are the shared reference-pipeline stages (pipelines/mospi/consolidate.py and validate_csv.py, --pipeline rbi_rates).",
+  "paths": {
+    "data_dir": "analysis/rbi_rates",
+    "consolidated_csv": "analysis/rbi_rates/rbi_rates_consolidated.csv",
+    "release_log": "analysis/rbi_rates/release_log.json",
+    "releases": "analysis/rbi_rates/releases",
+    "labels": "analysis/pipelines/rbi_rates/labels.json",
+    "notes": "analysis/pipelines/rbi_rates/notes.json"
+  },
+  "grace_days": 5,
+  "note_grace": "RBI releases at month end; a weekend or holiday moves it a day or two.",
+  "currency_stage": "csv_integrity",
+  "datasets": {
+    "walr_outstanding": {
+      "source": "release_files",
+      "release_scope": "snapshot",
+      "order_by_published": true,
+      "cadence": "monthly",
+      "base_year": null,
+      "sheet": "Monthly Outstanding Loans WALR",
+      "table": "Table 1",
+      "title": "Bank Group-wise Weighted Average Lending Rates (WALR)",
+      "unit": "(Per cent)",
+      "label_fields": [
+        "column"
+      ],
+      "measures": {
+        "rate": "value"
+      },
+      "printed_growth": [],
+      "expected_lag_days": 31,
+      "first_period": "2012-02-29",
+      "max_revision_abs": 0.25,
+      "plausible": {
+        "min": 0,
+        "max": 25,
+        "max_monthly_move_pp": 1.5
+      },
+      "growth": "difference",
+      "driver_measure": "rate",
+      "tide": "walr_fresh/group:scb"
+    },
+    "walr_fresh": {
+      "source": "release_files",
+      "release_scope": "snapshot",
+      "order_by_published": true,
+      "cadence": "monthly",
+      "base_year": null,
+      "sheet": "Monthly Fresh Rupee Loans WALR",
+      "table": "Table 2",
+      "title": "Bank Group wise Weighted Average Lending Rates (WALR)",
+      "unit": "(Per cent)",
+      "label_fields": [
+        "column"
+      ],
+      "measures": {
+        "rate": "value"
+      },
+      "printed_growth": [],
+      "expected_lag_days": 31,
+      "first_period": "2014-09-30",
+      "max_revision_abs": 0.25,
+      "plausible": {
+        "min": 0,
+        "max": 25,
+        "max_monthly_move_pp": 1.5
+      },
+      "growth": "difference",
+      "driver_measure": "rate",
+      "tide": "walr_fresh/group:scb"
+    },
+    "tdr_outstanding": {
+      "source": "release_files",
+      "release_scope": "snapshot",
+      "order_by_published": true,
+      "cadence": "monthly",
+      "base_year": null,
+      "sheet": "Outstanding Rupee Term Deposits",
+      "table": "Table 3",
+      "title": "Bank Group wise Weighted Average Domestic Term Deposit Rates (WADTDR)",
+      "unit": "(Per cent)",
+      "label_fields": [
+        "column"
+      ],
+      "measures": {
+        "rate": "value"
+      },
+      "printed_growth": [],
+      "expected_lag_days": 31,
+      "first_period": "2013-03-31",
+      "max_revision_abs": 0.25,
+      "plausible": {
+        "min": 0,
+        "max": 25,
+        "max_monthly_move_pp": 1.5
+      },
+      "growth": "difference",
+      "driver_measure": "rate",
+      "tide": "walr_fresh/group:scb"
+    },
+    "tdr_fresh": {
+      "source": "release_files",
+      "release_scope": "snapshot",
+      "order_by_published": true,
+      "cadence": "monthly",
+      "base_year": null,
+      "sheet": "Fresh Rupee Term Deposits",
+      "table": "Table 4",
+      "title": "Bank Group wise Weighted Average Domestic Term Deposit Rates (WADTDR)",
+      "unit": "(Per cent)",
+      "label_fields": [
+        "column"
+      ],
+      "measures": {
+        "rate": "value"
+      },
+      "printed_growth": [],
+      "expected_lag_days": 31,
+      "first_period": "2021-01-31",
+      "max_revision_abs": 0.25,
+      "plausible": {
+        "min": 0,
+        "max": 25,
+        "max_monthly_move_pp": 1.5
+      },
+      "growth": "difference",
+      "driver_measure": "rate",
+      "tide": "walr_fresh/group:scb",
+      "from_period": "2021-01-31",
+      "note_from": "One Mar 2020 point precedes a 10-month gap; the series runs monthly from Jan 2021."
+    },
+    "walr_sector_outstanding": {
+      "source": "release_files",
+      "release_scope": "snapshot",
+      "order_by_published": true,
+      "cadence": "monthly",
+      "base_year": null,
+      "sheet": "Sector-wise Outstanding WALR",
+      "table": "Table 8",
+      "title": "Sector-wise Weighted Average Lending Rates (WALRs)",
+      "unit": "(Per cent)",
+      "label_fields": [
+        "column"
+      ],
+      "measures": {
+        "rate": "value"
+      },
+      "printed_growth": [],
+      "expected_lag_days": 31,
+      "first_period": "2020-04-30",
+      "max_revision_abs": 0.25,
+      "plausible": {
+        "min": 0,
+        "max": 25,
+        "max_monthly_move_pp": 1.5
+      },
+      "growth": "difference",
+      "driver_measure": "rate",
+      "tide": "walr_fresh/group:scb"
+    },
+    "walr_sector_fresh": {
+      "source": "release_files",
+      "release_scope": "snapshot",
+      "order_by_published": true,
+      "cadence": "monthly",
+      "base_year": null,
+      "sheet": "Sector-wise Fresh WALR",
+      "table": "Table 9",
+      "title": "Sector-wise Weighted Average Lending Rates (WALRs)",
+      "unit": "(Per cent)",
+      "label_fields": [
+        "column"
+      ],
+      "measures": {
+        "rate": "value"
+      },
+      "printed_growth": [],
+      "expected_lag_days": 31,
+      "first_period": "2020-04-30",
+      "max_revision_abs": 0.25,
+      "plausible": {
+        "min": 0,
+        "max": 25,
+        "max_monthly_move_pp": 2.5
+      },
+      "growth": "difference",
+      "driver_measure": "rate",
+      "tide": "walr_fresh/group:scb",
+      "note_plausible": "Fresh sector rates are noisy: 18 month-on-month moves above 1 pp, the largest -1.98 pp (Professional Services, Dec 2020), measured 2026-10-25."
+    }
+  },
+  "note_bounds": "max_monthly_move_pp measured on the full history 2026-10-25: T1-T4 and T8 never move more than 0.98 pp in a month; T9 up to 1.98 pp. Levels run 2.64-13.10%.",
+  "modules": {
+    "fetch": "pipelines/rbi_rates/fetch.py",
+    "consolidate": "pipelines/mospi/consolidate.py",
+    "validate_csv": "pipelines/mospi/validate_csv.py",
+    "validate_rates": "pipelines/rbi_rates/validate_rates.py"
+  },
+  "gate": [
+    {
+      "id": "tests",
+      "label": "T.  unit tests (pytest)",
+      "builtin": "pytest"
+    },
+    {
+      "id": "consolidate",
+      "label": "0.7 consolidate → CSV + release log",
+      "pipeline": "consolidate",
+      "args": [
+        "--pipeline",
+        "$ID"
+      ],
+      "derived": [
+        "analysis/rbi_rates/rbi_rates_consolidated.csv",
+        "analysis/rbi_rates/release_log.json"
+      ],
+      "note": "Wrote"
+    },
+    {
+      "id": "consolidate_check",
+      "label": "0.8 consolidated artifacts fresh",
+      "pipeline": "consolidate",
+      "args": [
+        "--pipeline",
+        "$ID",
+        "--check"
+      ],
+      "note": "fresh"
+    },
+    {
+      "id": "csv_integrity",
+      "label": "1b. CSV integrity + release calendar",
+      "pipeline": "validate_csv",
+      "args": [
+        "--pipeline",
+        "$ID"
+      ],
+      "note": "series"
+    },
+    {
+      "id": "rates",
+      "label": "1c. footnotes, unit, plausibility",
+      "pipeline": "validate_rates",
+      "note": "checked"
+    },
+    {
+      "id": "reconcile",
+      "label": "5.  architecture reconcile",
+      "core": "reconcile",
+      "note": "drift"
+    }
+  ]
+}
