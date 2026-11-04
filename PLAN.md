@@ -25,8 +25,11 @@ of 218 moves after the base effect.
 1. **Price of credit: built 10-26** (`analysis/signals/README.md` §"RBI lending and deposit rates"; pipeline
    `rbi_rates`, reference). Grid column 0 → 68/83; 9 supported (placebo 4% vs 13%); 7 admitted 10-26 and credited by
    the coverage count (`driver`): 43% explained, unchanged (price explains small pushes, not the big moves).
-   RBI's Sep file due ~31 Oct (`rbi_rates/fetch.py --xlsx`, then its gate). Then other
-   finance (DBIE flows, CP, ECB: probe), the rest of input prices, and a quarterly test for NAS (7 lines).
+   RBI's Sep file due ~31 Oct (`rbi_rates/fetch.py --xlsx`, then its gate). Other finance probed 10-26
+   (`analysis/sources/README.md`): only ECB registrations (Bulletin 38) are by sector, monthly from 2019 in two
+   overlapping formats. **Next: the user exports ECB (+ CP) from DBIE, then spec, reviewers, build; then a
+   pause: a plain-language write-up of what the model says about the credit system (user, 10-26).** After that
+   the rest of input prices and a quarterly test for NAS (7 lines).
 2. **Releases due:** SIBC Sep ~30 Oct, payments Sep ~3–5 Nov, NBFC Sep ~6 Nov (`/ingest-period`, then
    `/model-pass` + `/s4-source`; NBFC also takes deferred proposals #17-19 in `s4_proposals/2026-09-30.json`).
    CPI Oct ~12 Nov: PDF from MoSPI's product feed (`api/product/get-product-data`, product 9 lists every

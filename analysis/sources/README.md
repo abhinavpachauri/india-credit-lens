@@ -72,7 +72,22 @@ Call Report, it does.**
   restate earlier ones, and whether Σ banks reconciles to SIBC's sector totals (SIBC covers
   "select" banks; this covers all SCBs).
 
-## Lending & Deposit Rates: probed 2026-10-10 (onboarding paused)
+## Other finance: probed 2026-10-26 (four tables, read in the browser pane)
+
+The grid's "other finance" kind applies on 52 SIBC lines (industry, infrastructure, NBFCs/HFCs/PFIs,
+CRE, shipping, aviation). What each candidate actually holds:
+
+| Table | Holds | By sector? | Range | Verdict |
+|---|---|---|---|---|
+| **ECB registrations** (Bulletin 38) | number and amount (US$ mn), maturity, margin; monthly | **Yes**: agriculture, manufacturing, infrastructure (transport, energy, water, communication, social & commercial, mining & refinery, other), construction, services, financial (banks, **NBFCs** by type, FIs, MFIs), others | "Monthly (New Format)" 2019-20 → 2025-26; "Monthly (Revised Format)" Apr 2024 → Aug 2026 (adds agriculture and construction); an older format before | **Use.** The only line-level other-finance series: covers the credit history from Oct 2021 once the two formats are joined on their overlap (2024-25 onwards). Registrations are intentions, lumpy by deal: needs a trailing sum |
+| **Commercial paper** (Bulletin 29) | outstanding, issued in the fortnight, min/max rate; fortnightly | **No**, totals only | Jun 2011 → Oct 2026 | System level only (large industry, NBFCs as a whole) |
+| **Flow of resources to the commercial sector** (Bulletin 18(a)) | non-food bank credit beside equity, bonds, REITs/InvITs, CP, HFC and NBFC credit (net of bank borrowing), AIFIs, ECB, ADR/GDR, short-term foreign credit, FDI | **No**, by instrument | 2023-24 → Mar 2026; **financial-year-to-date cumulative**, rows Oct–Mar only, some components quarterly (repeated three months) | **Context, not a test series**: the best picture of where firms raise money, too patchy for monthly tests |
+| **New capital issues** (Bulletin 31) | equity (public, rights) and **public** bond issues; number and amount | **No** | 1990 → Aug 2026 | Skip: private placements, the bulk of corporate bonds, are not in it |
+
+Access: DBIE cannot be scripted; each table opens in the SAP BusinessObjects viewer, which exports
+to Excel (the user downloads, as for SIBC). Corporate bond issuance by sector is not on DBIE (SEBI).
+
+ (onboarding paused)
 
 Four releases probed (`MLDRSCB{30062026,31072026E,31082026ENG,30092026ENG}.xlsx`, user download).
 Onboarding is paused until the user decides the kind (reference or primary with a page), the
