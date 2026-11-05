@@ -250,7 +250,7 @@ def _compute_yoy(df: pd.DataFrame, period: str, code: str,
 
     prev_pd = _prior_period(period, avail)
     prev_yoy = yoy
-    if prev_pd:
+    if prev_pd and not series_breaks.spans(df.attrs.get("pipeline", ""), scope, code, prev_pd, period):
         prev_yr2 = _prior_year(prev_pd, avail)
         if prev_yr2 and not series_breaks.spans(df.attrs.get("pipeline", ""), scope, code,
                                                 prev_yr2, prev_pd):
@@ -981,6 +981,8 @@ def csv_sector_acceleration(params: dict, period: str, df: pd.DataFrame) -> list
         return []
 
     def accel(code: str, statement: str):
+        # Each YoY can hold on its own basis while their difference is the relabelling.
+        series_breaks.check(df.attrs.get("pipeline", ""), statement, code, prior, period)
         now, _  = _compute_yoy(df, period, code, statement, avail)
         was, _  = _compute_yoy(df, prior, code, statement, avail)
         return None if now is None or was is None else now - was

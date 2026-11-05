@@ -36,6 +36,7 @@ SCAN_FOR = {
     "pos-terminals-yoy":  "pos-bank-scan",
     "cc-outstanding-yoy": "cc-bank-scan",
     "dc-outstanding-yoy": "dc-bank-scan",
+    "upi-qr-yoy":         "upi-qr-bank-scan",
 }
 
 # A ratio inherits its denominator's artifact: if POS terminals lurch at one issuer, UPI-QR-per-POS

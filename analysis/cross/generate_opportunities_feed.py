@@ -216,7 +216,7 @@ def _db_latest_values(periods):
                 "select metric_id, value, unit, status from signals "
                 "where pipeline=? and period=? and (entity_type='total' or entity_id='total')",
                 (pipe, period)):
-            out[(pipe, m)] = {"value": round(v, 2) if isinstance(v, float) else v, "unit": u, "status": s}
+            out[(pipe, m)] = {"value": v, "unit": u, "status": s}
     con.close()
     return out
 

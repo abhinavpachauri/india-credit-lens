@@ -142,16 +142,19 @@ def _months(d: str) -> int:
     return y * 12 + m - 1
 
 
-def monthly_changes(gaps: list[tuple[str, float]], data_month) -> list[tuple[str, float]]:
+def monthly_changes(gaps: list[tuple[str, float]], data_month,
+                    restated: frozenset = frozenset()) -> list[tuple[str, float]]:
     """(period, change) for each pair of readings ONE data month apart, and no others.
 
     A line's wobble is its typical month-to-month change. SIBC's history has holes (Sep–Dec
     2025 never published) and NBFC reads irregularly, so a change across a hole spans several
     months and is not comparable: counted, it made Jan 2026 look like 32 SIBC lines moved at
     once. Shared by force_check (Step 3) and coverage (Step 6a): one definition of "wobble".
+    `restated` is the line's months on a restated basis: a change between bases is the relabelling.
     """
     return [(b[0], b[1] - a[1]) for a, b in zip(gaps, gaps[1:])
-            if _months(data_month(b[0])) - _months(data_month(a[0])) == 1]
+            if _months(data_month(b[0])) - _months(data_month(a[0])) == 1
+            and (data_month(a[0]) in restated) == (data_month(b[0]) in restated)]
 
 
 def window_of(force: dict) -> tuple[int, int] | None:

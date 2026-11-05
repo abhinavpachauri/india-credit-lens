@@ -95,7 +95,9 @@ def _dominance_caveat(ins: dict, dom) -> None:
     not the market — so we do not let the LLM narrate a 'collapse'."""
     entity = short_entity(dom.top_entity) or "one issuer"
     rose = dom.ex_top_yoy_pct is not None and dom.ex_top_yoy_pct > 0.5
-    rest = ("edged up over the year" if rose else
+    grew = dom.ex_top_yoy_pct is not None and dom.ex_top_yoy_pct > 5
+    rest = ("kept growing over the year" if grew else
+            "edged up over the year" if rose else
             "was essentially flat over the year" if dom.ex_top_yoy_pct is not None and abs(dom.ex_top_yoy_pct) <= 0.5
             else "barely moved over the year")
     # Strip only a TRAILING rate — "POS terminal growth -15.8% YoY" → "POS terminal growth" —
@@ -110,10 +112,9 @@ def _dominance_caveat(ins: dict, dom) -> None:
         # numerator outpacing the market — the "record" is arithmetically spurious.
         ins["title"] = f"{base} — the jump is {entity}'s count, not a real shift"
         ins["body"] = (
-            f"This ratio looks like it hit a record, but the move is almost entirely its denominator: "
-            f"{entity}'s reported count fell sharply in a single month while the numerator barely "
-            f"changed. Across every other bank the denominator held steady, so the ratio's jump is a "
-            f"reporting artifact, not the market pulling apart.")
+            f"This ratio is inflated by its denominator: {entity}'s reported count fell sharply in a "
+            f"single month. Across every other bank the denominator held steady, so that part of the "
+            f"ratio's rise is a reporting artifact, not the market pulling apart.")
         ins["implication"] = (f"Discount the record — the ratio moved because {entity}'s reported count "
                               f"changed, not because the two sides really diverged.")
     else:
@@ -121,15 +122,16 @@ def _dominance_caveat(ins: dict, dom) -> None:
         # the market-level reading is what the rest of the banks did. We name the driver (a fact from
         # the bank scan); we hedge the cause, which we have not sourced.
         pct = f"{dom.agg_value:+.1f}%" if dom.agg_value is not None else "sharply"
-        ins["title"] = f"{base} {pct} YoY — but it's {entity}, not the market"
+        jumped = ((dom.mom_pct if dom.window == "mom" else dom.agg_value) or 0) > 0
+        ins["title"] = f"{re.sub(r' (?:up|down)$', '', base)} {pct} YoY — but it's {entity}, not the market"
         ins["body"] = (
-            f"The headline {pct} year-on-year move is almost entirely {entity}: its reported count fell "
-            f"sharply in a single month and accounts for nearly all of the change, while across every "
-            f"other bank the fleet {rest}. This looks like a base or reporting change at {entity} — most "
-            f"likely a reclassification of how terminals are counted — not a market-wide shift. (The "
-            f"specific reason is not yet sourced; the concentration is straight from the bank-level data.)")
-        ins["implication"] = (f"Read the market signal off the other banks — flat-to-steady — not the "
-                              f"headline, which is {entity}'s reporting change.")
+            f"The headline {pct} year-on-year move is largely {entity}: its reported count "
+            f"{'jumped' if jumped else 'fell sharply'} in a single month and accounts for most of the "
+            f"change, while across every other bank the total {rest}. This looks like a base or "
+            f"reporting change at {entity}, not a market-wide shift. (The specific reason is not yet "
+            f"sourced; the concentration is straight from the bank-level data.)")
+        ins["implication"] = (f"Read the market signal off the other banks, whose total {rest}, not the "
+                              f"headline, which includes {entity}'s reporting change.")
     ins.setdefault("basis", {}).setdefault("facts", [])
     ins["basis"]["facts"] = [f for f in ins["basis"].get("facts", [])] + [dom.as_facts()]
     ins.setdefault("reasoning", {"signals": []})["chain"] = [ins["body"], ins["implication"]]

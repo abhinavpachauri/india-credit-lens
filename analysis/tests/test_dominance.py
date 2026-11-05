@@ -36,7 +36,7 @@ def test_ratio_inherits_its_denominator_artifact():
 
 
 def test_unmapped_metric_returns_none():
-    assert move_dominance("atm_pos", "upi-qr-yoy", PERIOD) is None      # no per-entity count to decompose
+    assert move_dominance("atm_pos", "bharat-qr-yoy", PERIOD) is None    # not mapped to a bank scan
 
 
 def test_is_news_keeps_raw_metric_but_zeroes_the_corrupted_ratio():

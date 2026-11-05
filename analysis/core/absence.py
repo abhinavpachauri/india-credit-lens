@@ -33,6 +33,9 @@ PER_PERIOD = {
     # user, 2026-10-10: the HDFC merger (Jul 2023) moved a non-bank's loans into bank credit, so a
     # comparison across it on a line RBI marks measures the merger, not growth (core/series_breaks).
     "merger_break":          "a merger moved loans into bank credit inside this comparison's window, so the change is not growth",
+    # user, 2026-11-04: RBI reprinted a line on a new classification for some months only, so a
+    # comparison between a reprinted month and one still on the old basis measures the relabelling.
+    "restated_basis":        "RBI has reclassified this line and reprinted only some months, so this comparison mixes two classifications",
 }
 
 #: An aggregate compared with a MoSPI aggregate that is RBI's convention but not exact

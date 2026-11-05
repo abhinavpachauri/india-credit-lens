@@ -254,7 +254,8 @@ def _call_llm(system_prompt: str, user_content: str) -> tuple[dict, int, int, in
         )
         if proc.returncode != 0:
             raise RuntimeError(
-                f"claude CLI exited {proc.returncode}: {proc.stderr[:300]}"
+                # A login failure prints to stdout, so stderr alone reads as an empty error.
+                f"claude CLI exited {proc.returncode}: {(proc.stderr or proc.stdout)[:300]}"
             )
         text = proc.stdout.strip()
         result = _extract_json(text)

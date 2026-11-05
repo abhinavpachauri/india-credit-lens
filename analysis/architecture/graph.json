@@ -25,6 +25,7 @@
         "core/generate_skeleton",
         "core/manifest",
         "core/relationship_test",
+        "core/series_breaks",
         "signals/dominance"
       ],
       "invokes": [],
@@ -255,7 +256,8 @@
         "core/coverage",
         "core/force_check",
         "core/generate_skeleton",
-        "core/manifest"
+        "core/manifest",
+        "core/series_breaks"
       ],
       "invokes": [],
       "path": "analysis/core/relationship_test.py",
@@ -982,6 +984,22 @@
       "invokes": [],
       "path": "analysis/pipelines/rbi_rates/validate_rates.py",
       "reads": {},
+      "writes": {}
+    },
+    "pipelines/sibc/check_restatements": {
+      "doc_claims": [],
+      "imports": [
+        "core/manifest",
+        "core/series_breaks",
+        "pipelines/mospi/consolidate",
+        "pipelines/sibc/update_web_data"
+      ],
+      "invokes": [],
+      "path": "analysis/pipelines/sibc/check_restatements.py",
+      "reads": {
+        "analysis/rbi_sibc/series_breaks.json": "low",
+        "series_breaks.json": "low"
+      },
       "writes": {}
     },
     "pipelines/sibc/detect_format": {

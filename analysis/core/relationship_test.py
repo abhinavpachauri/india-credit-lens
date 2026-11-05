@@ -40,6 +40,7 @@ sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / 
 from core import coverage as cv  # noqa: E402
 from core import force_check as fc  # noqa: E402
 from core import generate_skeleton as gs  # noqa: E402
+from core import series_breaks as sb  # noqa: E402
 
 ALPHA = 0.05
 SHUFFLES = 10_000
@@ -73,7 +74,8 @@ def gap_changes(nid: str, model: dict, series: dict, periods: list[str], data_mo
     kind, _, base = cv.baseline_for(nid, parent_of, by_id, series, periods[-1])
     gaps = [(p, series[nid][p] - (0.0 if kind == "none" else base[p]))
             for p in periods if p in series.get(nid, {}) and (kind == "none" or p in base)]
-    return {fc._months(data_month(p)): d for p, d in fc.monthly_changes(gaps, data_month)}
+    restated = sb.restated_months_of_node(model, by_id[nid]) if nid in by_id else frozenset()
+    return {fc._months(data_month(p)): d for p, d in fc.monthly_changes(gaps, data_month, restated)}
 
 
 def tide(model: dict, series: dict, data_month) -> dict[int, float]:

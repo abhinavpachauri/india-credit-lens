@@ -3,8 +3,8 @@
     "spec_ref": "analysis/COMPOSITION_SPEC.md §12",
     "generated_by": "analysis/cross/generate_opportunities_feed.py",
     "periods": {
-      "sibc": "2026-09-30",
-      "atm_pos": "2026-08-31",
+      "sibc": "2026-10-30",
+      "atm_pos": "2026-09-30",
       "nbfc": "2026-08-31"
     }
   },
@@ -179,7 +179,7 @@
       ],
       "basis": {
         "headline": "Credit card spend (value) (Payments) → Credit Card Outstanding (Credit): moving together",
-        "coverage": "Credit @ 2026-09-30 · Payments @ 2026-08-31 · nbfc @ 2026-08-31",
+        "coverage": "Credit @ 2026-10-30 · Payments @ 2026-09-30 · nbfc @ 2026-08-31",
         "members": [
           {
             "role": "leads",
@@ -191,7 +191,7 @@
               "cc-other-val-yoy",
               "cc-pos-val-yoy"
             ],
-            "value": "atm +6.0% · ecom +3.9% · other +220.9% · pos +9.1% YoY"
+            "value": "atm +3.8% · ecom -12.5% · other +147.3% · pos +7.2% YoY"
           },
           {
             "role": "follows",
@@ -200,42 +200,42 @@
             "signals": [
               "sibc-pl-cc-yoy"
             ],
-            "value": "+3.6% YoY"
+            "value": "+7.2% YoY"
           }
         ],
         "chain": [
-          "Leading side: Credit card spend (value) (Payments) atm +6.0% · ecom +3.9% · other +220.9% · pos +9.1% YoY.",
-          "Lagging side: Credit Card Outstanding (Credit) +3.6% YoY.",
+          "Leading side: Credit card spend (value) (Payments) atm +3.8% · ecom -12.5% · other +147.3% · pos +7.2% YoY.",
+          "Lagging side: Credit Card Outstanding (Credit) +7.2% YoY.",
           "The two sides are moving together → this reads as origination headroom."
         ],
         "facts": [
           {
             "id": "cc-atm-val-yoy",
-            "value": 5.98,
+            "value": 3.7766,
             "unit": "pct",
             "status": "active"
           },
           {
             "id": "cc-ecom-val-yoy",
-            "value": 3.88,
+            "value": -12.52,
             "unit": "pct",
-            "status": "active"
+            "status": "declining"
           },
           {
             "id": "cc-other-val-yoy",
-            "value": 220.86,
+            "value": 147.3081,
             "unit": "pct",
             "status": "active"
           },
           {
             "id": "cc-pos-val-yoy",
-            "value": 9.07,
+            "value": 7.1785,
             "unit": "pct",
             "status": "active"
           },
           {
             "id": "sibc-pl-cc-yoy",
-            "value": 3.64,
+            "value": 7.2167,
             "unit": "pct",
             "status": "strengthening"
           }
@@ -251,7 +251,7 @@
       "body": "Unsecured retail credit appetite is expanding. It is not one series — it is credit and payments data read together. Right now its measurements are moving the same way. The computed basis below shows exactly which inputs drive the read.",
       "implication": "Treat this as the combined read across credit and payments — check the basis to see which side is doing the work before acting on it.",
       "chain": [
-        "Measured inputs: Credit Card Outstanding +3.6% YoY, Other Personal Loans +15.0% YoY, Consumer Durables +2.4% YoY, Credit card spend rising, Credit cards outstanding +10.3% YoY.",
+        "Measured inputs: Credit Card Outstanding +7.2% YoY, Other Personal Loans +15.6% YoY, Consumer Durables +4.6% YoY, Credit card spend rising, Credit cards outstanding +10.4% YoY.",
         "Member directions combine — measures and proxies count as-is, contra-indicators flipped — giving an expanding read on 5 of 5 measurements.",
         "The willingness of households to carry — and lenders to extend — unsecured retail credit. No pipeline measures it directly: SIBC measures the unsecured stock (credit-card outstanding, other personal loans, consumer durables), payments measures the flow (credit-card spend) and reach (cards in force). Together they bound the construct: when stock, flow and reach move together the appetite read is unambiguous; when they diverge, the divergence itself is the signal."
       ],
@@ -468,7 +468,7 @@
       ],
       "basis": {
         "headline": "Unsecured retail credit appetite → expanding",
-        "coverage": "5/5 measurements observed · all pulling the same way · Payments @ 2026-08-31 · Credit @ 2026-09-30",
+        "coverage": "5/5 measurements observed · all pulling the same way · Payments @ 2026-09-30 · Credit @ 2026-10-30",
         "members": [
           {
             "role": "measures",
@@ -477,7 +477,7 @@
             "signals": [
               "sibc-pl-cc-yoy"
             ],
-            "value": "+3.6% YoY"
+            "value": "+7.2% YoY"
           },
           {
             "role": "measures",
@@ -486,7 +486,7 @@
             "signals": [
               "sibc-pl-other-yoy"
             ],
-            "value": "+15.0% YoY"
+            "value": "+15.6% YoY"
           },
           {
             "role": "measures",
@@ -495,7 +495,7 @@
             "signals": [
               "sibc-pl-consumer-durables-yoy"
             ],
-            "value": "+2.4% YoY"
+            "value": "+4.6% YoY"
           },
           {
             "role": "measures",
@@ -511,11 +511,11 @@
             "signals": [
               "cc-outstanding-yoy"
             ],
-            "value": "+10.3% YoY"
+            "value": "+10.4% YoY"
           }
         ],
         "chain": [
-          "Measured inputs: Credit Card Outstanding +3.6% YoY, Other Personal Loans +15.0% YoY, Consumer Durables +2.4% YoY, Credit card spend rising, Credit cards outstanding +10.3% YoY.",
+          "Measured inputs: Credit Card Outstanding +7.2% YoY, Other Personal Loans +15.6% YoY, Consumer Durables +4.6% YoY, Credit card spend rising, Credit cards outstanding +10.4% YoY.",
           "Member directions combine — measures and proxies count as-is, contra-indicators flipped — giving an expanding read on 5 of 5 measurements.",
           "Those members are pulling the same way.",
           "The willingness of households to carry — and lenders to extend — unsecured retail credit. No pipeline measures it directly: SIBC measures the unsecured stock (credit-card outstanding, other personal loans, consumer durables), payments measures the flow (credit-card spend) and reach (cards in force). Together they bound the construct: when stock, flow and reach move together the appetite read is unambiguous; when they diverge, the divergence itself is the signal.",
@@ -524,25 +524,25 @@
         "facts": [
           {
             "id": "sibc-pl-cc-yoy",
-            "value": 3.64,
+            "value": 7.2167,
             "unit": "pct",
             "status": "strengthening"
           },
           {
             "id": "sibc-pl-other-yoy",
-            "value": 14.96,
+            "value": 15.5867,
             "unit": "pct",
             "status": "strengthening"
           },
           {
             "id": "sibc-pl-consumer-durables-yoy",
-            "value": 2.41,
+            "value": 4.5545,
             "unit": "pct",
             "status": "strengthening"
           },
           {
             "id": "cc-outstanding-yoy",
-            "value": 10.27,
+            "value": 10.403,
             "unit": "pct",
             "status": "active"
           }
@@ -558,7 +558,7 @@
       "body": "Card-based consumption activity is expanding. It is not one series — it is credit and payments data read together. Right now its measurements do NOT all move the same way — the direction is a majority read, not a consensus, so check which inputs dissent before leaning on it. The computed basis below shows exactly which inputs drive the read.",
       "implication": "Treat this as the combined read across credit and payments — check the basis to see which side is doing the work before acting on it.",
       "chain": [
-        "Measured inputs: Credit card spend rising, Debit card spend falling, POS terminals -14.7% YoY, Consumer Durables +2.4% YoY, Vehicle Loans +19.7% YoY.",
+        "Measured inputs: Credit card spend rising, Debit card spend falling, POS terminals -14.0% YoY, Consumer Durables +4.6% YoY, Vehicle Loans +15.5% YoY.",
         "Member directions combine — measures and proxies count as-is, contra-indicators flipped — giving an expanding read on 5 of 5 measurements.",
         "Household consumption as expressed through card rails. Payments measures the transaction flows (credit + debit card spend) directly; acceptance infrastructure (POS terminals) proxies the merchant side of the same activity; SIBC's consumer-durable and vehicle loan stocks proxy the credit-financed share of it."
       ],
@@ -917,7 +917,7 @@
       ],
       "basis": {
         "headline": "Card-based consumption activity → expanding",
-        "coverage": "5/5 measurements observed · but some members move against it · Payments @ 2026-08-31 · Credit @ 2026-09-30",
+        "coverage": "5/5 measurements observed · but some members move against it · Payments @ 2026-09-30 · Credit @ 2026-10-30",
         "members": [
           {
             "role": "measures",
@@ -940,7 +940,7 @@
             "signals": [
               "pos-terminals-yoy"
             ],
-            "value": "-14.7% YoY"
+            "value": "-14.0% YoY"
           },
           {
             "role": "proxies",
@@ -949,7 +949,7 @@
             "signals": [
               "sibc-pl-consumer-durables-yoy"
             ],
-            "value": "+2.4% YoY"
+            "value": "+4.6% YoY"
           },
           {
             "role": "proxies",
@@ -958,11 +958,11 @@
             "signals": [
               "sibc-pl-vehicle-yoy"
             ],
-            "value": "+19.7% YoY"
+            "value": "+15.5% YoY"
           }
         ],
         "chain": [
-          "Measured inputs: Credit card spend rising, Debit card spend falling, POS terminals -14.7% YoY, Consumer Durables +2.4% YoY, Vehicle Loans +19.7% YoY.",
+          "Measured inputs: Credit card spend rising, Debit card spend falling, POS terminals -14.0% YoY, Consumer Durables +4.6% YoY, Vehicle Loans +15.5% YoY.",
           "Member directions combine — measures and proxies count as-is, contra-indicators flipped — giving an expanding read on 5 of 5 measurements.",
           "Those members are NOT all pulling the same way — some move against the direction, so part of the movement cancels and the read rests on a majority rather than a consensus.",
           "Household consumption as expressed through card rails. Payments measures the transaction flows (credit + debit card spend) directly; acceptance infrastructure (POS terminals) proxies the merchant side of the same activity; SIBC's consumer-durable and vehicle loan stocks proxy the credit-financed share of it.",
@@ -971,21 +971,21 @@
         "facts": [
           {
             "id": "pos-terminals-yoy",
-            "value": -14.68,
+            "value": -14.0053,
             "unit": "pct",
             "status": "declining"
           },
           {
             "id": "sibc-pl-consumer-durables-yoy",
-            "value": 2.41,
+            "value": 4.5545,
             "unit": "pct",
             "status": "strengthening"
           },
           {
             "id": "sibc-pl-vehicle-yoy",
-            "value": 19.74,
+            "value": 15.4988,
             "unit": "pct",
-            "status": "strengthening"
+            "status": "active"
           }
         ]
       }
@@ -1160,7 +1160,7 @@
       ],
       "basis": {
         "headline": "Unsecured spend–stock cycle → active reinforcing",
-        "coverage": "3/3 segments live · Credit @ 2026-09-30 · Payments @ 2026-08-31 · nbfc @ 2026-08-31",
+        "coverage": "3/3 segments live · Credit @ 2026-10-30 · Payments @ 2026-09-30 · nbfc @ 2026-08-31",
         "members": [
           {
             "role": "segment",
@@ -1549,10 +1549,7 @@
         "chain": [],
         "_driver": null,
         "_via": null,
-        "evidence": [
-          "sibc-pl-vehicle-share",
-          "sibc-pl-vehicle-yoy"
-        ],
+        "evidence": [],
         "evidence_all": [
           "sibc-pl-vehicle-share",
           "sibc-pl-vehicle-yoy"
@@ -1974,7 +1971,7 @@
         "pipeline": "atm_pos",
         "scope": "pipeline",
         "tier": "risk",
-        "status": "active",
+        "status": "watch",
         "authored_status": "active",
         "section": {
           "id": "infra",
@@ -1990,11 +1987,7 @@
         ],
         "_driver": "Zero MDR policy on UPI transactions (NPCI/GoI)",
         "_via": "Zero MDR → acceptance-infrastructure mix",
-        "evidence": [
-          "pos-terminals-yoy",
-          "upi-qr-per-pos",
-          "upi-qr-yoy"
-        ],
+        "evidence": [],
         "evidence_all": [
           "pos-bank-allocation",
           "pos-bank-divergence",

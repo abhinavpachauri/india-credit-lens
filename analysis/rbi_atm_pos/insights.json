@@ -3,48 +3,48 @@
     "id": "cc-ecom-vs-pos-share",
     "group": "cc",
     "cut": "total",
-    "period": "Aug 2026",
+    "period": "Sep 2026",
     "type": "insight",
-    "title": "CC ecommerce volume share holds above 50% for third straight month",
-    "body": "Ecommerce accounted for 50.47% of total credit card transaction volume in Aug 2026. Share eased 50.78% \u2192 50.47%, a 0.31pp dip that stays above the 32-period p75 of 49.8%, in the upper range.",
-    "implication": "The 0.31pp dip falls inside the noise band for this signal, so the more significant read is that ecommerce has now held more than half of CC transaction volume for three consecutive months.",
+    "title": "Ecommerce volume share dips slightly to 50.4%, stays high",
+    "body": "Ecommerce transactions were 50.41% of total credit card transaction volume in Sep 2026. Share eased from 50.47% to 50.41%, a dip of 0.06 points, while staying above the 50.0% level that marks the top quartile of the past 33 months.",
+    "implication": "Ecommerce has now held above 50% of total card transaction volume for four straight months running (Jun 2026 onward), even though the share eased marginally to 50.41% this period.",
     "reasoning": {
       "signals": [
         {
           "key": "groups.cc.total.cross.cc_ecom_txn_vol.share_pct",
-          "value": 50.47
+          "value": 50.41
         },
         {
           "key": "groups.cc.total.cross.cc_pos_txn_vol.share_pct",
-          "value": 48.78
+          "value": 48.82
         },
         {
           "key": "groups.cc.total.cross.cc_ecom_txn_vol.prior_share_pct",
-          "value": 50.78
+          "value": 50.47
         },
         {
           "key": "groups.cc.total.cross.cc_ecom_txn_vol.share_delta_pp",
-          "value": -0.31
+          "value": -0.06
         }
       ],
       "chain": [
-        "Ecommerce's share of CC transaction volume was 50.47% in Aug 2026, down 0.31pp from 50.78% in Jul 2026.",
-        "A move of 0.31pp is within the \u00b10.5pp band treated as noise for a share signal, so the level is effectively unchanged from Jul.",
-        "At 50.47%, the share stays above the 32-period p75 of 49.8%, the third straight month above 50%, following 50.2% in Jun 2026 and 50.8% in Jul 2026."
+        "Ecommerce's share of total card volume was 50.41% in Sep 2026, down slightly from 50.47% in Aug 2026.",
+        "That keeps the reading above the 50.0% level marking the top quartile of the 33-month series \u2014 the fourth straight month above 50%, following 50.2% in Jun 2026, 50.8% in Jul, and 50.5% in Aug.",
+        "Four consecutive months above the 50% mark show ecommerce holding a majority share of total card volume even as the reading eases slightly this period."
       ]
     },
     "basis": {
       "facts": [
-        "cc_ecom_txn_vol.share_pct: 50.47",
-        "cc_pos_txn_vol.share_pct: 48.78",
-        "cc_ecom_txn_vol.prior_share_pct: 50.78",
-        "cc_ecom_txn_vol.share_delta_pp: -0.31",
+        "cc_ecom_txn_vol.share_pct: 50.41",
+        "cc_pos_txn_vol.share_pct: 48.82",
+        "cc_ecom_txn_vol.prior_share_pct: 50.47",
+        "cc_ecom_txn_vol.share_delta_pp: -0.06",
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
-        "Ecommerce's share of CC transaction volume was 50.47% in Aug 2026, down 0.31pp from 50.78% in Jul 2026.",
-        "A move of 0.31pp is within the \u00b10.5pp band treated as noise for a share signal, so the level is effectively unchanged from Jul.",
-        "At 50.47%, the share stays above the 32-period p75 of 49.8%, the third straight month above 50%, following 50.2% in Jun 2026 and 50.8% in Jul 2026."
+        "Ecommerce's share of total card volume was 50.41% in Sep 2026, down slightly from 50.47% in Aug 2026.",
+        "That keeps the reading above the 50.0% level marking the top quartile of the 33-month series \u2014 the fourth straight month above 50%, following 50.2% in Jun 2026, 50.8% in Jul, and 50.5% in Aug.",
+        "Four consecutive months above the 50% mark show ecommerce holding a majority share of total card volume even as the reading eases slightly this period."
       ]
     },
     "sourceSignals": [
@@ -81,43 +81,43 @@
     "id": "cc-cards-streak",
     "group": "cc",
     "cut": "total",
-    "period": "Aug 2026",
+    "period": "Sep 2026",
     "type": "insight",
-    "title": "Credit cards outstanding grow for a 14th straight month",
-    "body": "Credit cards outstanding have now grown for 14 consecutive months, up from 13 the prior period. The streak extended from 13 to 14 months, continuing the run that began in Jul 2025 after the previous streak reset to zero in Jun 2025.",
-    "implication": "The current 14-month growth streak is long but still short of the 16-month run that ended in May 2025, so this is sustained expansion, not yet a new record.",
+    "title": "Credit cards outstanding streak hits 15 months, one short of record 16",
+    "body": "Credit cards outstanding have now grown for 15 consecutive periods, up from 14 the prior period. The streak extended from 14 to 15 months, continuing the run that began after the streak reset to zero in Jun 2025.",
+    "implication": "At 15 consecutive months, the current streak is one month short of the 16-month record set in May 2025 \u2014 sustained expansion, not yet a new high.",
     "reasoning": {
       "signals": [
         {
           "key": "groups.cc.total.metrics.credit_cards.latest",
-          "value": 124053544.0
+          "value": 125315381.0
         },
         {
           "key": "groups.cc.total.metrics.credit_cards.streak_months",
-          "value": 14.0
+          "value": 15.0
         },
         {
           "key": "groups.cc.total.metrics.credit_cards.qoq_pct",
-          "value": 2.03
+          "value": 3.06
         }
       ],
       "chain": [
-        "The credit card growth streak reached 14 consecutive months in Aug 2026, up from 13 in Jul 2026.",
-        "This run began in Jul 2025, right after the prior streak reset to 0 in Jun 2025 following a 16-period run that ended in May 2025.",
-        "At 14 periods, the current streak is now in the upper range of the 31-period historical distribution, though it has not yet matched the earlier 16-period run."
+        "The current growth streak reached 15 consecutive periods in Sep 2026, up from 14 in Aug 2026.",
+        "This run began after the streak reset to 0 periods in Jun 2025 and has climbed every month since.",
+        "The series' longest run on record is 16 periods, reached in May 2025 before the Jun 2025 reset."
       ]
     },
     "basis": {
       "facts": [
-        "credit_cards.latest: 124053544.0",
-        "credit_cards.streak_months: 14.0",
-        "credit_cards.qoq_pct: 2.03",
+        "credit_cards.latest: 125315381.0",
+        "credit_cards.streak_months: 15.0",
+        "credit_cards.qoq_pct: 3.06",
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
-        "The credit card growth streak reached 14 consecutive months in Aug 2026, up from 13 in Jul 2026.",
-        "This run began in Jul 2025, right after the prior streak reset to 0 in Jun 2025 following a 16-period run that ended in May 2025.",
-        "At 14 periods, the current streak is now in the upper range of the 31-period historical distribution, though it has not yet matched the earlier 16-period run."
+        "The current growth streak reached 15 consecutive periods in Sep 2026, up from 14 in Aug 2026.",
+        "This run began after the streak reset to 0 periods in Jun 2025 and has climbed every month since.",
+        "The series' longest run on record is 16 periods, reached in May 2025 before the Jun 2025 reset."
       ]
     },
     "sourceSignals": [
@@ -150,48 +150,48 @@
     "id": "cc-cards-yoy",
     "group": "cc",
     "cut": "total",
-    "period": "Aug 2026",
+    "period": "Sep 2026",
     "type": "insight",
-    "title": "Credit card YoY growth hits 10.27%, a new high",
-    "body": "Credit cards outstanding grew 10.27% year-on-year in Aug 2026, up 0.39 points from 9.88% prior period. YoY growth rose from 9.6% in Jun 2026 to 9.9% in Jul 2026 to 10.3% in Aug 2026, now above the 7.0%-8.6% range that bounded most of the past 20 periods.",
-    "implication": "At 10.27%, year-on-year growth in credit cards outstanding is at or near the highest point in this 20-period window, well above the 7.0%-8.6% range that held for most of the period.",
+    "title": "Credit cards outstanding YoY growth hits 10.40%, near series high",
+    "body": "Credit cards outstanding grew 10.40% year-on-year in Sep 2026, up from 10.27% prior period. YoY growth rose from 9.9% in Jul 2026 to 10.3% in Aug 2026 to 10.40% in Sep 2026, now above the 7.1%-9.0% range that bounded most of the past 21 periods.",
+    "implication": "Year-on-year growth in credit cards outstanding has pushed to 10.40%, at or near the highest point in this 21-period window, extending the climb seen through Jul and Aug 2026 rather than leveling off.",
     "reasoning": {
       "signals": [
         {
           "key": "groups.cc.total.metrics.credit_cards.yoy_pct",
-          "value": 10.27
+          "value": 10.4
         },
         {
           "key": "groups.cc.total.metrics.credit_cards.yoy_prior_pct",
-          "value": 9.88
+          "value": 10.27
         },
         {
           "key": "groups.cc.total.metrics.credit_cards.yoy_accel_pp",
-          "value": 0.39
+          "value": 0.13
         },
         {
           "key": "groups.cc.total.metrics.credit_cards.latest",
-          "value": 124053544.0
+          "value": 125315381.0
         }
       ],
       "chain": [
-        "Credit cards outstanding grew 10.27% year-on-year in Aug 2026, up 0.39 points from 9.88% in Jul 2026.",
-        "The rate has risen in each of the last three periods shown: 9.6% in Jun 2026, 9.9% in Jul 2026, and 10.3% in Aug 2026.",
-        "This puts growth at or near the maximum of the 20-period range, whose middle band sat between 7.0% and 8.6%."
+        "Credit cards outstanding grew 10.40% year-on-year in Sep 2026, up 0.13 points from 10.27% in Aug 2026.",
+        "This continues a climb from 9.9% in Jul 2026 and 10.3% in Aug 2026.",
+        "The 10.40% reading is at or near the maximum of this 21-period window, whose typical range was 7.1% to 9.0%."
       ]
     },
     "basis": {
       "facts": [
-        "credit_cards.yoy_pct: 10.27",
-        "credit_cards.yoy_prior_pct: 9.88",
-        "credit_cards.yoy_accel_pp: 0.39",
-        "credit_cards.latest: 124053544.0",
+        "credit_cards.yoy_pct: 10.4",
+        "credit_cards.yoy_prior_pct: 10.27",
+        "credit_cards.yoy_accel_pp: 0.13",
+        "credit_cards.latest: 125315381.0",
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
-        "Credit cards outstanding grew 10.27% year-on-year in Aug 2026, up 0.39 points from 9.88% in Jul 2026.",
-        "The rate has risen in each of the last three periods shown: 9.6% in Jun 2026, 9.9% in Jul 2026, and 10.3% in Aug 2026.",
-        "This puts growth at or near the maximum of the 20-period range, whose middle band sat between 7.0% and 8.6%."
+        "Credit cards outstanding grew 10.40% year-on-year in Sep 2026, up 0.13 points from 10.27% in Aug 2026.",
+        "This continues a climb from 9.9% in Jul 2026 and 10.3% in Aug 2026.",
+        "The 10.40% reading is at or near the maximum of this 21-period window, whose typical range was 7.1% to 9.0%."
       ]
     },
     "sourceSignals": [
@@ -225,37 +225,37 @@
     "id": "cc-spend-yoy",
     "group": "cc",
     "cut": "total",
-    "period": "Aug 2026",
+    "period": "Sep 2026",
     "type": "insight",
-    "title": "CC spend YoY \u2014 ecommerce 32.2% vs in-store POS 23.4%",
-    "body": "On a year-on-year basis, credit card ecommerce transaction volume grew 32.2% and in-store POS volume grew 23.4% as of Aug 2026. Year-on-year removes the heavy seasonality in the monthly numbers \u2014 online is outpacing in-store on a clean comparison.",
-    "implication": "Credit card spend is growing across both channels year-on-year (ecom faster). A spend mix tilting online is a mix of more card-not-present volume, where fraud and dispute rates run higher \u2014 so the channel mix carries risk information the headline spend growth does not.",
+    "title": "CC spend YoY \u2014 ecommerce 22.3% vs in-store POS 23.4%",
+    "body": "On a year-on-year basis, credit card ecommerce transaction volume grew 22.3% and in-store POS volume grew 23.4% as of Sep 2026. Year-on-year removes the heavy seasonality in the monthly numbers \u2014 in-store is outpacing online on a clean comparison.",
+    "implication": "Credit card spend is growing across both channels year-on-year (POS faster). A spend mix tilting online is a mix of more card-not-present volume, where fraud and dispute rates run higher \u2014 so the channel mix carries risk information the headline spend growth does not.",
     "reasoning": {
       "signals": [
         {
           "key": "groups.cc.total.metrics.cc_ecom_txn_vol.yoy_pct",
-          "value": 32.25
+          "value": 22.31
         },
         {
           "key": "groups.cc.total.metrics.cc_pos_txn_vol.yoy_pct",
-          "value": 23.45
+          "value": 23.4
         }
       ],
       "chain": [
-        "CC ecommerce volume up 32.2% YoY vs POS up 23.4% YoY \u2014 both growing, seasonally clean",
-        "Online (CNP) is the faster-growing channel on a year-on-year basis",
+        "CC ecommerce volume up 22.3% YoY vs POS up 23.4% YoY \u2014 both growing, seasonally clean",
+        "In-store POS is the faster-growing channel on a year-on-year basis",
         "Channel mix shift changes the fraud and dispute profile \u2014 risk models must track mix, not just total spend"
       ]
     },
     "basis": {
       "facts": [
-        "cc_ecom_txn_vol.yoy_pct: 32.25",
-        "cc_pos_txn_vol.yoy_pct: 23.45",
+        "cc_ecom_txn_vol.yoy_pct: 22.31",
+        "cc_pos_txn_vol.yoy_pct: 23.4",
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
-        "CC ecommerce volume up 32.2% YoY vs POS up 23.4% YoY \u2014 both growing, seasonally clean",
-        "Online (CNP) is the faster-growing channel on a year-on-year basis",
+        "CC ecommerce volume up 22.3% YoY vs POS up 23.4% YoY \u2014 both growing, seasonally clean",
+        "In-store POS is the faster-growing channel on a year-on-year basis",
         "Channel mix shift changes the fraud and dispute profile \u2014 risk models must track mix, not just total spend"
       ]
     },
@@ -287,59 +287,59 @@
     "id": "cc-category-share-shift",
     "group": "cc",
     "cut": "by_type",
-    "period": "Aug 2026",
+    "period": "Sep 2026",
     "type": "insight",
-    "title": "PSB banks gained CC card share in Aug 2026 (+0.1pp)",
-    "body": "PSB banks hold 24.0% of total credit cards outstanding in Aug 2026 (+0.1pp vs prior month). Private banks lost the most share at -0.2pp, now at 70.5%. ",
-    "implication": "PSB banks picking up credit card share \u2014 even by 0.1pp \u2014 signals a change in who's acquiring customers.  Which bank type is gaining share is itself a portfolio-quality signal \u2014 customer profiles and risk behaviour differ sharply between them.",
+    "title": "SFB banks gained CC card share in Sep 2026 (+0.1pp)",
+    "body": "SFB banks hold 2.1% of total credit cards outstanding in Sep 2026 (+0.1pp vs prior month). Foreign banks lost the most share at -0.1pp, now at 3.3%. SFB growth in credit cards reflects increased fintech partnerships.",
+    "implication": "SFB banks picking up credit card share \u2014 even by 0.1pp \u2014 signals a change in who's acquiring customers. SFBs (Small Finance Banks \u2014 banks that focus on underserved segments like AU or Equitas) growing in credit cards usually means fintech partnerships or co-branded products are kicking in. Which bank type is gaining share is itself a portfolio-quality signal \u2014 customer profiles and risk behaviour differ sharply between them.",
     "reasoning": {
       "signals": [
         {
-          "key": "groups.cc.by_type.categories.PSB.share_pct",
-          "value": 24.04
+          "key": "groups.cc.by_type.categories.SFB.share_pct",
+          "value": 2.15
         },
         {
-          "key": "groups.cc.by_type.categories.PSB.share_delta_pp",
-          "value": 0.14
+          "key": "groups.cc.by_type.categories.SFB.share_delta_pp",
+          "value": 0.11
         },
         {
-          "key": "groups.cc.by_type.categories.Private.share_pct",
-          "value": 70.5
+          "key": "groups.cc.by_type.categories.Foreign.share_pct",
+          "value": 3.32
         },
         {
-          "key": "groups.cc.by_type.categories.Private.share_delta_pp",
-          "value": -0.24
+          "key": "groups.cc.by_type.categories.Foreign.share_delta_pp",
+          "value": -0.1
         }
       ],
       "chain": [
-        "PSB banks gained 0.1pp CC share \u2014 Private banks lost 0.2pp",
-        "Private bank lead compounding as premium card market consolidates further",
+        "SFB banks gained 0.1pp CC share \u2014 Foreign banks lost 0.1pp",
+        "SFB growth signals fintech partnerships or co-branded card activity in underserved segments",
         "Customer risk profiles differ significantly across bank types \u2014 portfolio benchmarking must account for this mix shift"
       ]
     },
     "basis": {
       "facts": [
-        "PSB.share_pct: 24.04",
-        "PSB.share_delta_pp: 0.14",
-        "Private.share_pct: 70.5",
-        "Private.share_delta_pp: -0.24",
+        "SFB.share_pct: 2.15",
+        "SFB.share_delta_pp: 0.11",
+        "Foreign.share_pct: 3.32",
+        "Foreign.share_delta_pp: -0.1",
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
-        "PSB banks gained 0.1pp CC share \u2014 Private banks lost 0.2pp",
-        "Private bank lead compounding as premium card market consolidates further",
+        "SFB banks gained 0.1pp CC share \u2014 Foreign banks lost 0.1pp",
+        "SFB growth signals fintech partnerships or co-branded card activity in underserved segments",
         "Customer risk profiles differ significantly across bank types \u2014 portfolio benchmarking must account for this mix shift"
       ]
     },
     "sourceSignals": [
-      "groups.cc.by_type.categories.PSB.share_pct",
-      "groups.cc.by_type.categories.PSB.share_delta_pp",
-      "groups.cc.by_type.categories.Private.share_pct",
-      "groups.cc.by_type.categories.Private.share_delta_pp"
+      "groups.cc.by_type.categories.SFB.share_pct",
+      "groups.cc.by_type.categories.SFB.share_delta_pp",
+      "groups.cc.by_type.categories.Foreign.share_pct",
+      "groups.cc.by_type.categories.Foreign.share_delta_pp"
     ],
     "effect": {
       "highlight": [
-        "PSB",
+        "SFB",
         "Total"
       ],
       "tab": "distribution",
@@ -359,20 +359,20 @@
     "id": "cc-top5-concentration",
     "group": "cc",
     "cut": "top_n",
-    "period": "Aug 2026",
+    "period": "Sep 2026",
     "type": "insight",
-    "title": "Top 5 banks hold 73.5% of CC cards \u2014 HDFC BANK LTD leads at 21.9%",
-    "body": "In Aug 2026, the top 5 banks account for 73.5% of total credit cards outstanding (-0.3pp vs prior month). HDFC BANK LTD leads with 21.9% share (+0.5% MoM).",
-    "implication": "73.5% of all credit cards in India are with just 5 banks. In practice, this means the national credit card data from RBI tells you largely what HDFC, SBI, ICICI, Axis, and Kotak are doing \u2014 not the market as a whole. If your strategy relies on industry-level CC data, keep this concentration in mind.",
+    "title": "Top 5 banks hold 73.4% of CC cards \u2014 HDFC BANK LTD leads at 21.9%",
+    "body": "In Sep 2026, the top 5 banks account for 73.4% of total credit cards outstanding (-0.1pp vs prior month). HDFC BANK LTD leads with 21.9% share (+1.0% MoM).",
+    "implication": "73.4% of all credit cards in India are with just 5 banks. In practice, this means the national credit card data from RBI tells you largely what HDFC, SBI, ICICI, Axis, and Kotak are doing \u2014 not the market as a whole. If your strategy relies on industry-level CC data, keep this concentration in mind.",
     "reasoning": {
       "signals": [
         {
           "key": "groups.cc.top_n.top5_share_pct",
-          "value": 73.47
+          "value": 73.39
         },
         {
           "key": "groups.cc.top_n.top5_share_delta_pp",
-          "value": -0.26
+          "value": -0.08
         },
         {
           "key": "groups.cc.top_n.banks.0.share_pct",
@@ -380,25 +380,25 @@
         },
         {
           "key": "groups.cc.top_n.banks.0.mom_pct",
-          "value": 0.45
+          "value": 1.03
         }
       ],
       "chain": [
-        "Top 5 banks hold 73.5% of all CC cards \u2014 HDFC BANK LTD alone accounts for 21.9%",
+        "Top 5 banks hold 73.4% of all CC cards \u2014 HDFC BANK LTD alone accounts for 21.9%",
         "RBI aggregate CC data is effectively proxied by these 5 institutions \u2014 smaller banks are statistically marginal",
         "Industry-level CC strategy analysis must account for this concentration \u2014 it reflects large-bank dynamics, not the full market"
       ]
     },
     "basis": {
       "facts": [
-        "top_n.top5_share_pct: 73.47",
-        "top_n.top5_share_delta_pp: -0.26",
+        "top_n.top5_share_pct: 73.39",
+        "top_n.top5_share_delta_pp: -0.08",
         "0.share_pct: 21.85",
-        "0.mom_pct: 0.45",
+        "0.mom_pct: 1.03",
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
-        "Top 5 banks hold 73.5% of all CC cards \u2014 HDFC BANK LTD alone accounts for 21.9%",
+        "Top 5 banks hold 73.4% of all CC cards \u2014 HDFC BANK LTD alone accounts for 21.9%",
         "RBI aggregate CC data is effectively proxied by these 5 institutions \u2014 smaller banks are statistically marginal",
         "Industry-level CC strategy analysis must account for this concentration \u2014 it reflects large-bank dynamics, not the full market"
       ]
@@ -431,36 +431,36 @@
     "id": "gap-foreign-cc-decline",
     "group": "cc",
     "cut": "by_type",
-    "period": "Aug 2026",
+    "period": "Sep 2026",
     "type": "gap",
-    "title": "Gap: Foreign bank CC share at 3.4% (-0.0pp MoM) \u2014 premium segment shrinking",
-    "body": "Foreign banks hold only 3.4% of total credit cards outstanding in Aug 2026, down 0.03pp vs prior month. Foreign banks traditionally serve the high-income, high-spend segment \u2014 their declining share signals continued loss of the premium CC market to private Indian banks.",
-    "implication": "Foreign banks (Amex, Standard Chartered, etc.) traditionally served high-income customers \u2014 high credit limits, frequent international travel, premium cards. With their share at just 3.4% and still falling, those customers are now largely being served by Indian private banks instead. For anyone analysing RBI's credit card data, this means the premium borrower segment is now in the domestic bank numbers \u2014 not in a separate foreign bank bucket.",
+    "title": "Gap: Foreign bank CC share at 3.3% (-0.1pp MoM) \u2014 premium segment shrinking",
+    "body": "Foreign banks hold only 3.3% of total credit cards outstanding in Sep 2026, down 0.10pp vs prior month. Foreign banks traditionally serve the high-income, high-spend segment \u2014 their declining share signals continued loss of the premium CC market to private Indian banks.",
+    "implication": "Foreign banks (Amex, Standard Chartered, etc.) traditionally served high-income customers \u2014 high credit limits, frequent international travel, premium cards. With their share at just 3.3% and still falling, those customers are now largely being served by Indian private banks instead. For anyone analysing RBI's credit card data, this means the premium borrower segment is now in the domestic bank numbers \u2014 not in a separate foreign bank bucket.",
     "reasoning": {
       "signals": [
         {
           "key": "groups.cc.by_type.categories.Foreign.share_pct",
-          "value": 3.42
+          "value": 3.32
         },
         {
           "key": "groups.cc.by_type.categories.Foreign.share_delta_pp",
-          "value": -0.03
+          "value": -0.1
         }
       ],
       "chain": [
-        "Foreign banks hold only 3.4% of CC cards and declining \u2014 premium card segment exiting to Indian private banks",
+        "Foreign banks hold only 3.3% of CC cards and declining \u2014 premium card segment exiting to Indian private banks",
         "Foreign banks (Amex, Standard Chartered) traditionally served high-income, high-limit, internationally-active customers",
         "Premium cardholder behaviour is under-represented in RBI aggregate CC data \u2014 now consolidated into private bank numbers"
       ]
     },
     "basis": {
       "facts": [
-        "Foreign.share_pct: 3.42",
-        "Foreign.share_delta_pp: -0.03",
+        "Foreign.share_pct: 3.32",
+        "Foreign.share_delta_pp: -0.1",
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
-        "Foreign banks hold only 3.4% of CC cards and declining \u2014 premium card segment exiting to Indian private banks",
+        "Foreign banks hold only 3.3% of CC cards and declining \u2014 premium card segment exiting to Indian private banks",
         "Foreign banks (Amex, Standard Chartered) traditionally served high-income, high-limit, internationally-active customers",
         "Premium cardholder behaviour is under-represented in RBI aggregate CC data \u2014 now consolidated into private bank numbers"
       ]
@@ -488,123 +488,46 @@
     "representation": "deterministic"
   },
   {
-    "id": "dc-atm-share-structural",
-    "group": "dc",
-    "cut": "total",
-    "period": "Aug 2026",
-    "type": "insight",
-    "title": "ATM withdrawals' volume share dips slightly to 79.87%",
-    "body": "ATM withdrawals made up 79.87% of total debit card transaction volume in Aug 2026. Share slipped 79.96% \u2192 79.87%, down 0.09 points, staying near the middle of the 78.3%\u201380.7% range seen over the past 32 months.",
-    "implication": "This month's 0.09-point dip in ATM's volume share is minor, keeping the reading near the middle of the 78.3%\u201380.7% range this series has shown over the past 32 months \u2014 well short of Feb 2026's 81.9% high.",
-    "reasoning": {
-      "signals": [
-        {
-          "key": "groups.dc.total.cross.dc_atm_withdrawal_vol.share_pct",
-          "value": 79.87
-        },
-        {
-          "key": "groups.dc.total.cross.dc_atm_withdrawal_vol.share_delta_pp",
-          "value": -0.09
-        },
-        {
-          "key": "groups.dc.total.cross.dc_ecom_txn_vol.share_pct",
-          "value": 5.36
-        },
-        {
-          "key": "groups.dc.total.cross.dc_ecom_txn_vol.share_delta_pp",
-          "value": -0.04
-        }
-      ],
-      "chain": [
-        "ATM's share of debit card transaction volume eased to 79.87% in Aug 2026 from 79.96% in Jul 2026 \u2014 a 0.09-point dip.",
-        "That keeps the share inside the 78.3%\u201380.7% band this series has held for 32 months, near the middle of that range.",
-        "The move is small next to Feb 2026's standout high of 81.9%, the peak of this series."
-      ]
-    },
-    "basis": {
-      "facts": [
-        "dc_atm_withdrawal_vol.share_pct: 79.87",
-        "dc_atm_withdrawal_vol.share_delta_pp: -0.09",
-        "dc_ecom_txn_vol.share_pct: 5.36",
-        "dc_ecom_txn_vol.share_delta_pp: -0.04",
-        "Source: web/public/data/atm_pos_consolidated.csv"
-      ],
-      "inferences": [
-        "ATM's share of debit card transaction volume eased to 79.87% in Aug 2026 from 79.96% in Jul 2026 \u2014 a 0.09-point dip.",
-        "That keeps the share inside the 78.3%\u201380.7% band this series has held for 32 months, near the middle of that range.",
-        "The move is small next to Feb 2026's standout high of 81.9%, the peak of this series."
-      ]
-    },
-    "sourceSignals": [
-      "groups.dc.total.cross.dc_atm_withdrawal_vol.share_pct",
-      "groups.dc.total.cross.dc_atm_withdrawal_vol.share_delta_pp",
-      "groups.dc.total.cross.dc_ecom_txn_vol.share_pct",
-      "groups.dc.total.cross.dc_ecom_txn_vol.share_delta_pp"
-    ],
-    "effect": {
-      "highlight": [
-        "Total"
-      ],
-      "tab": "trend",
-      "trendMode": "absolute",
-      "focusCard": "dc_atm",
-      "cut": {
-        "shape": "share_of",
-        "metrics": [
-          "dc_atm_withdrawal_vol",
-          "dc_ecom_txn_vol",
-          "dc_other_txn_vol",
-          "dc_pos_txn_vol",
-          "dc_pos_withdrawal_vol"
-        ]
-      }
-    },
-    "exploreAction": null,
-    "representation": "llm",
-    "eval_signal": "dc-atm-vol-share",
-    "prompt_version": "1.12"
-  },
-  {
     "id": "dc-ecom-share",
     "group": "dc",
     "cut": "total",
-    "period": "Aug 2026",
+    "period": "Sep 2026",
     "type": "insight",
-    "title": "DC ecommerce volume share steady at 5.36% of total",
-    "body": "Ecommerce transactions held 5.36% of total debit card transaction volume in Aug 2026. Share was flat at 5.40% \u2192 5.36%, a move of just 0.04 points, within the range it has held in recent months.",
-    "implication": "Ecommerce's volume share is essentially unchanged at 5.36%, sitting near the median of its historical range rather than breaking out the way its value share has.",
+    "title": "DC ecommerce volume share holds near median at 5.26%",
+    "body": "Ecommerce transactions held 5.26% of total debit card transaction volume in Sep 2026. Share eased slightly from 5.36% in Aug 2026 to 5.26%, a 0.10 point move, staying near the median of this 33-month series.",
+    "implication": "Volume share's 5.26% reading stays near the middle of its historical range, in contrast to the value share which has held above its upper quartile \u2014 ecommerce is pulling bigger average tickets, not more transactions.",
     "reasoning": {
       "signals": [
         {
           "key": "groups.dc.total.cross.dc_ecom_txn_vol.share_pct",
-          "value": 5.36
+          "value": 5.26
         },
         {
           "key": "groups.dc.total.cross.dc_ecom_txn_vol.share_delta_pp",
-          "value": -0.04
+          "value": -0.1
         },
         {
           "key": "groups.dc.total.cross.dc_atm_withdrawal_vol.share_pct",
-          "value": 79.87
+          "value": 80.44
         }
       ],
       "chain": [
-        "Ecommerce's share of debit card transaction volume was 5.36% in Aug 2026, barely changed from 5.40% in Jul 2026.",
-        "The 0.04-point move stays within the 5.0%-to-5.5% band marked by the 25th and 75th percentiles of this series.",
-        "Volume share is not showing a clear structural shift in either direction this month."
+        "DC ecommerce volume share is 5.26% in Sep 2026, down 0.10 points from 5.36% in Aug 2026.",
+        "That keeps it near the median of this 33-month series, between the 25th percentile of 5.0% and the 75th percentile of 5.5%.",
+        "Unlike the value share, which has traded above the upper quartile, volume share has stayed within its middle range."
       ]
     },
     "basis": {
       "facts": [
-        "dc_ecom_txn_vol.share_pct: 5.36",
-        "dc_ecom_txn_vol.share_delta_pp: -0.04",
-        "dc_atm_withdrawal_vol.share_pct: 79.87",
+        "dc_ecom_txn_vol.share_pct: 5.26",
+        "dc_ecom_txn_vol.share_delta_pp: -0.1",
+        "dc_atm_withdrawal_vol.share_pct: 80.44",
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
-        "Ecommerce's share of debit card transaction volume was 5.36% in Aug 2026, barely changed from 5.40% in Jul 2026.",
-        "The 0.04-point move stays within the 5.0%-to-5.5% band marked by the 25th and 75th percentiles of this series.",
-        "Volume share is not showing a clear structural shift in either direction this month."
+        "DC ecommerce volume share is 5.26% in Sep 2026, down 0.10 points from 5.36% in Aug 2026.",
+        "That keeps it near the median of this 33-month series, between the 25th percentile of 5.0% and the 75th percentile of 5.5%.",
+        "Unlike the value share, which has traded above the upper quartile, volume share has stayed within its middle range."
       ]
     },
     "sourceSignals": [
@@ -641,43 +564,43 @@
     "id": "dc-cards-streak",
     "group": "dc",
     "cut": "total",
-    "period": "Aug 2026",
+    "period": "Sep 2026",
     "type": "insight",
-    "title": "Debit cards grow for 4th straight month since April's reset",
-    "body": "Debit cards outstanding have grown for 4 consecutive months, up from 3 periods in the prior reading. The growth streak extended from 3 to 4 periods, rebuilding after the Apr 2026 reset to 0 periods that had ended a 14-period run recorded in Mar 2026.",
-    "implication": "Four straight months of growth since the April reset shows the card base has stabilised, though at a streak length that is only near the historical median rather than an exceptional run.",
+    "title": "Debit cards outstanding grow for a 5th straight month",
+    "body": "Debit cards outstanding have grown for 5 consecutive months, up from 4 in the prior reading. The growth streak extended from 4 to 5 periods, continuing the rebuild since the Apr 2026 reset to 0 that ended a 14-period run recorded in Mar 2026.",
+    "implication": "Five straight months of growth since the April reset keeps building, but at a streak length still only near the historical median rather than approaching the 14-period run it followed.",
     "reasoning": {
       "signals": [
         {
           "key": "groups.dc.total.metrics.debit_cards.latest",
-          "value": 1036828562.91
+          "value": 1039700822.0
         },
         {
           "key": "groups.dc.total.metrics.debit_cards.streak_months",
-          "value": 4.0
+          "value": 5.0
         },
         {
           "key": "groups.dc.total.metrics.debit_cards.qoq_pct",
-          "value": 0.48
+          "value": 0.76
         }
       ],
       "chain": [
-        "The streak of consecutive growth months rose to 4 in Aug 2026, up from 3 in Jul 2026.",
-        "That rebuild follows the Apr 2026 reset to 0 periods, which snapped the 14-period streak on record as of Mar 2026.",
-        "At 4 periods, the current streak sits near the median of the 31-period historical range."
+        "The current growth streak stands at 5 consecutive periods, up from 4 last period.",
+        "This rebuild follows the Apr 2026 reset to 0, which ended a 14-period streak recorded in Mar 2026.",
+        "At 5 periods, the streak sits near the median of its 32-period historical range."
       ]
     },
     "basis": {
       "facts": [
-        "debit_cards.latest: 1036828562.91",
-        "debit_cards.streak_months: 4.0",
-        "debit_cards.qoq_pct: 0.48",
+        "debit_cards.latest: 1039700822.0",
+        "debit_cards.streak_months: 5.0",
+        "debit_cards.qoq_pct: 0.76",
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
-        "The streak of consecutive growth months rose to 4 in Aug 2026, up from 3 in Jul 2026.",
-        "That rebuild follows the Apr 2026 reset to 0 periods, which snapped the 14-period streak on record as of Mar 2026.",
-        "At 4 periods, the current streak sits near the median of the 31-period historical range."
+        "The current growth streak stands at 5 consecutive periods, up from 4 last period.",
+        "This rebuild follows the Apr 2026 reset to 0, which ended a 14-period streak recorded in Mar 2026.",
+        "At 5 periods, the streak sits near the median of its 32-period historical range."
       ]
     },
     "sourceSignals": [
@@ -710,46 +633,46 @@
     "id": "dc-psb-dominance",
     "group": "dc",
     "cut": "by_type",
-    "period": "Aug 2026",
+    "period": "Sep 2026",
     "type": "insight",
-    "title": "PSB banks hold 63.6% of debit cards \u2014 Payments gaining share in Aug 2026",
-    "body": "Public sector banks account for 63.6% of total debit cards outstanding in Aug 2026 (-0.1pp vs prior month). Private banks hold 25.9%. Payments banks are the fastest-growing category (+0.1pp share gain).",
-    "implication": "PSBs (government-owned banks like SBI, PNB, Bank of Baroda) hold 63.6% of debit cards, largely because of Jan Dhan \u2014 the government scheme that opened basic bank accounts for millions of low-income households. Many of these accounts have little activity. If you're using debit transaction data for credit assessment, PSB debit data needs to be treated very differently from, say, HDFC or Kotak debit customers.",
+    "title": "PSB banks hold 63.5% of debit cards \u2014 Payments gaining share in Sep 2026",
+    "body": "Public sector banks account for 63.5% of total debit cards outstanding in Sep 2026 (-0.1pp vs prior month). Private banks hold 25.8%. Payments banks are the fastest-growing category (+0.1pp share gain).",
+    "implication": "PSBs (government-owned banks like SBI, PNB, Bank of Baroda) hold 63.5% of debit cards, largely because of Jan Dhan \u2014 the government scheme that opened basic bank accounts for millions of low-income households. Many of these accounts have little activity. If you're using debit transaction data for credit assessment, PSB debit data needs to be treated very differently from, say, HDFC or Kotak debit customers.",
     "reasoning": {
       "signals": [
         {
           "key": "groups.dc.by_type.categories.PSB.share_pct",
-          "value": 63.56
+          "value": 63.46
         },
         {
           "key": "groups.dc.by_type.categories.PSB.share_delta_pp",
-          "value": -0.12
+          "value": -0.1
         },
         {
           "key": "groups.dc.by_type.categories.Private.share_pct",
-          "value": 25.86
+          "value": 25.83
         },
         {
           "key": "groups.dc.by_type.categories.Payments.share_delta_pp",
-          "value": 0.15
+          "value": 0.12
         }
       ],
       "chain": [
-        "PSBs hold 63.6% of debit cards \u2014 primarily through Jan Dhan scheme linkage, not active acquisition",
+        "PSBs hold 63.5% of debit cards \u2014 primarily through Jan Dhan scheme linkage, not active acquisition",
         "Jan Dhan portfolios skew toward low-income, low-activity accounts with thin or no transaction histories",
         "PSB and private bank debit data require separate calibration for transaction-based credit underwriting"
       ]
     },
     "basis": {
       "facts": [
-        "PSB.share_pct: 63.56",
-        "PSB.share_delta_pp: -0.12",
-        "Private.share_pct: 25.86",
-        "Payments.share_delta_pp: 0.15",
+        "PSB.share_pct: 63.46",
+        "PSB.share_delta_pp: -0.1",
+        "Private.share_pct: 25.83",
+        "Payments.share_delta_pp: 0.12",
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
-        "PSBs hold 63.6% of debit cards \u2014 primarily through Jan Dhan scheme linkage, not active acquisition",
+        "PSBs hold 63.5% of debit cards \u2014 primarily through Jan Dhan scheme linkage, not active acquisition",
         "Jan Dhan portfolios skew toward low-income, low-activity accounts with thin or no transaction histories",
         "PSB and private bank debit data require separate calibration for transaction-based credit underwriting"
       ]
@@ -783,46 +706,46 @@
     "id": "dc-top-bank-leader",
     "group": "dc",
     "cut": "top_n",
-    "period": "Aug 2026",
+    "period": "Sep 2026",
     "type": "insight",
-    "title": "STATE BANK OF INDIA leads DC cards at 25.0%",
-    "body": "STATE BANK OF INDIA holds 25.0% of total debit cards in Aug 2026 (+0.8% MoM). Top 5 banks account for 50.5% (-0.0pp vs prior month).",
-    "implication": "Top 5 banks hold 50.5% of debit cards. If you're using debit transaction data for credit underwriting (assessing someone's spending behaviour before giving them a loan), the quality of that data depends heavily on whether these top banks are sharing data with you. Without coverage from at least 2-3 of them, you're missing nearly half the market.",
+    "title": "STATE BANK OF INDIA leads DC cards at 24.9%",
+    "body": "STATE BANK OF INDIA holds 24.9% of total debit cards in Sep 2026 (-0.2% MoM). Top 5 banks account for 50.2% (-0.2pp vs prior month).",
+    "implication": "Top 5 banks hold 50.2% of debit cards. If you're using debit transaction data for credit underwriting (assessing someone's spending behaviour before giving them a loan), the quality of that data depends heavily on whether these top banks are sharing data with you. Without coverage from at least 2-3 of them, you're missing nearly half the market.",
     "reasoning": {
       "signals": [
         {
           "key": "groups.dc.top_n.top5_share_pct",
-          "value": 50.45
+          "value": 50.2
         },
         {
           "key": "groups.dc.top_n.top5_share_delta_pp",
-          "value": -0.03
+          "value": -0.25
         },
         {
           "key": "groups.dc.top_n.banks.0.share_pct",
-          "value": 24.99
+          "value": 24.86
         },
         {
           "key": "groups.dc.top_n.banks.0.mom_pct",
-          "value": 0.85
+          "value": -0.23
         }
       ],
       "chain": [
-        "Top 5 banks hold 50.5% of debit cards \u2014 STATE BANK OF INDIA alone accounts for 25.0%",
+        "Top 5 banks hold 50.2% of debit cards \u2014 STATE BANK OF INDIA alone accounts for 24.9%",
         "Debit transaction data coverage for underwriting depends on data-sharing with these top institutions",
         "Without data from 2-3 of these banks, nearly half the debit market is invisible for credit decisions"
       ]
     },
     "basis": {
       "facts": [
-        "top_n.top5_share_pct: 50.45",
-        "top_n.top5_share_delta_pp: -0.03",
-        "0.share_pct: 24.99",
-        "0.mom_pct: 0.85",
+        "top_n.top5_share_pct: 50.2",
+        "top_n.top5_share_delta_pp: -0.25",
+        "0.share_pct: 24.86",
+        "0.mom_pct: -0.23",
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
-        "Top 5 banks hold 50.5% of debit cards \u2014 STATE BANK OF INDIA alone accounts for 25.0%",
+        "Top 5 banks hold 50.2% of debit cards \u2014 STATE BANK OF INDIA alone accounts for 24.9%",
         "Debit transaction data coverage for underwriting depends on data-sharing with these top institutions",
         "Without data from 2-3 of these banks, nearly half the debit market is invisible for credit decisions"
       ]
@@ -855,41 +778,41 @@
     "id": "gap-dc-cash-dominance",
     "group": "dc",
     "cut": "total",
-    "period": "Aug 2026",
+    "period": "Sep 2026",
     "type": "gap",
-    "title": "Gap: DC ATM cash at 79.9% of DC volume \u2014 digital transition is incomplete",
-    "body": "Despite growth in digital payments, ATM cash withdrawals still account for 79.9% of total debit card transaction volume in Aug 2026 (-0.1pp vs prior month). DC ecommerce is only 5.4% of DC volume. India's debit card base remains overwhelmingly cash-dependent.",
-    "implication": "79.9% of debit card spending is ATM cash. Cash leaves no digital record \u2014 you can't tell where it was spent or on what. For lenders trying to assess a debit card holder's financial behaviour, the transaction history is mostly blank. Bureau scores (CIBIL, Experian) remain the primary tool for this segment \u2014 debit transaction data alone isn't enough yet.",
+    "title": "Gap: DC ATM cash at 80.4% of DC volume \u2014 digital transition is incomplete",
+    "body": "Despite growth in digital payments, ATM cash withdrawals still account for 80.4% of total debit card transaction volume in Sep 2026 (+0.6pp vs prior month). DC ecommerce is only 5.3% of DC volume. India's debit card base remains overwhelmingly cash-dependent.",
+    "implication": "80.4% of debit card spending is ATM cash. Cash leaves no digital record \u2014 you can't tell where it was spent or on what. For lenders trying to assess a debit card holder's financial behaviour, the transaction history is mostly blank. Bureau scores (CIBIL, Experian) remain the primary tool for this segment \u2014 debit transaction data alone isn't enough yet.",
     "reasoning": {
       "signals": [
         {
           "key": "groups.dc.total.cross.dc_atm_withdrawal_vol.share_pct",
-          "value": 79.87
+          "value": 80.44
         },
         {
           "key": "groups.dc.total.cross.dc_atm_withdrawal_vol.share_delta_pp",
-          "value": -0.09
+          "value": 0.57
         },
         {
           "key": "groups.dc.total.cross.dc_ecom_txn_vol.share_pct",
-          "value": 5.36
+          "value": 5.26
         }
       ],
       "chain": [
-        "79.9% of DC volume is ATM cash \u2014 transactions that leave no digital record",
+        "80.4% of DC volume is ATM cash \u2014 transactions that leave no digital record",
         "Cash-dominant customers' financial behaviour is opaque \u2014 spending categories, frequency, merchants all unknown",
         "Bureau scores (CIBIL, Experian) remain essential for this segment; debit transaction data alone is insufficient"
       ]
     },
     "basis": {
       "facts": [
-        "dc_atm_withdrawal_vol.share_pct: 79.87",
-        "dc_atm_withdrawal_vol.share_delta_pp: -0.09",
-        "dc_ecom_txn_vol.share_pct: 5.36",
+        "dc_atm_withdrawal_vol.share_pct: 80.44",
+        "dc_atm_withdrawal_vol.share_delta_pp: 0.57",
+        "dc_ecom_txn_vol.share_pct: 5.26",
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
-        "79.9% of DC volume is ATM cash \u2014 transactions that leave no digital record",
+        "80.4% of DC volume is ATM cash \u2014 transactions that leave no digital record",
         "Cash-dominant customers' financial behaviour is opaque \u2014 spending categories, frequency, merchants all unknown",
         "Bureau scores (CIBIL, Experian) remain essential for this segment; debit transaction data alone is insufficient"
       ]
@@ -921,36 +844,36 @@
     "id": "gap-dc-ecom-low",
     "group": "dc",
     "cut": "total",
-    "period": "Aug 2026",
+    "period": "Sep 2026",
     "type": "gap",
-    "title": "Gap: DC ecommerce at 5.4% of DC volume \u2014 debit cards leave thin digital footprints",
-    "body": "Debit card ecommerce transactions account for only 5.4% of total DC transaction volume in Aug 2026. ATM cash dominates at 79.9%. The vast majority of debit card holders transact primarily via ATM cash withdrawal, with minimal digital payment activity.",
-    "implication": "Only 5.4% of debit card volume is online spending \u2014 the rest is mostly ATM cash. For the typical debit card holder, their transaction history is largely cash withdrawals, which tells you very little about their financial behaviour. To lend to this segment, bureau scores (CIBIL, Experian) and income proxies (salary credits, GST filings) will be far more reliable than transaction data models.",
+    "title": "Gap: DC ecommerce at 5.3% of DC volume \u2014 debit cards leave thin digital footprints",
+    "body": "Debit card ecommerce transactions account for only 5.3% of total DC transaction volume in Sep 2026. ATM cash dominates at 80.4%. The vast majority of debit card holders transact primarily via ATM cash withdrawal, with minimal digital payment activity.",
+    "implication": "Only 5.3% of debit card volume is online spending \u2014 the rest is mostly ATM cash. For the typical debit card holder, their transaction history is largely cash withdrawals, which tells you very little about their financial behaviour. To lend to this segment, bureau scores (CIBIL, Experian) and income proxies (salary credits, GST filings) will be far more reliable than transaction data models.",
     "reasoning": {
       "signals": [
         {
           "key": "groups.dc.total.cross.dc_ecom_txn_vol.share_pct",
-          "value": 5.36
+          "value": 5.26
         },
         {
           "key": "groups.dc.total.cross.dc_atm_withdrawal_vol.share_pct",
-          "value": 79.87
+          "value": 80.44
         }
       ],
       "chain": [
-        "DC ecommerce at only 5.4% of DC volume \u2014 debit history is predominantly ATM cash withdrawals",
+        "DC ecommerce at only 5.3% of DC volume \u2014 debit history is predominantly ATM cash withdrawals",
         "Cash withdrawal records reveal nothing about spending behaviour \u2014 categories, merchants, frequency unknown",
         "Income proxies (salary credits, GST filings) and bureau scores are more reliable than transaction models for this segment"
       ]
     },
     "basis": {
       "facts": [
-        "dc_ecom_txn_vol.share_pct: 5.36",
-        "dc_atm_withdrawal_vol.share_pct: 79.87",
+        "dc_ecom_txn_vol.share_pct: 5.26",
+        "dc_atm_withdrawal_vol.share_pct: 80.44",
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
-        "DC ecommerce at only 5.4% of DC volume \u2014 debit history is predominantly ATM cash withdrawals",
+        "DC ecommerce at only 5.3% of DC volume \u2014 debit history is predominantly ATM cash withdrawals",
         "Cash withdrawal records reveal nothing about spending behaviour \u2014 categories, merchants, frequency unknown",
         "Income proxies (salary credits, GST filings) and bureau scores are more reliable than transaction models for this segment"
       ]
@@ -981,68 +904,68 @@
     "id": "infra-qr-per-pos",
     "group": "infra",
     "cut": "total",
-    "period": "Aug 2026",
+    "period": "Sep 2026",
     "type": "insight",
-    "title": "India now has 80 UPI QR codes per POS terminal \u2014 the jump is ICICI Bank's count, not a real shift",
-    "body": "This ratio looks like it hit a record, but the move is almost entirely its denominator: ICICI Bank's reported count fell sharply in a single month while the numerator barely changed. Across every other bank the denominator held steady, so the ratio's jump is a reporting artifact, not the market pulling apart.",
+    "title": "India now has 85 UPI QR codes per POS terminal \u2014 the jump is ICICI Bank's count, not a real shift",
+    "body": "This ratio is inflated by its denominator: ICICI Bank's reported count fell sharply in a single month. Across every other bank the denominator held steady, so that part of the ratio's rise is a reporting artifact, not the market pulling apart.",
     "implication": "Discount the record \u2014 the ratio moved because ICICI Bank's reported count changed, not because the two sides really diverged.",
     "reasoning": {
       "signals": [
         {
           "key": "groups.infra.total.metrics.upi_qr.latest",
-          "value": 813030623.0
+          "value": 885504973.0
         },
         {
           "key": "groups.infra.total.metrics.pos_terminals.latest",
-          "value": 10207640.0
+          "value": 10419206.0
         },
         {
           "key": "groups.infra.total.metrics.upi_qr.prior",
-          "value": 803047590.0
+          "value": 813030623.0
         },
         {
           "key": "groups.infra.total.metrics.pos_terminals.prior",
-          "value": 10027614.0
+          "value": 10207640.0
         },
         {
           "key": "groups.infra.total.metrics.upi_qr.mom_pct",
-          "value": 1.24
+          "value": 8.91
         },
         {
           "key": "groups.infra.total.metrics.pos_terminals.mom_pct",
-          "value": 1.8
+          "value": 2.07
         }
       ],
       "chain": [
-        "This ratio looks like it hit a record, but the move is almost entirely its denominator: ICICI Bank's reported count fell sharply in a single month while the numerator barely changed. Across every other bank the denominator held steady, so the ratio's jump is a reporting artifact, not the market pulling apart.",
+        "This ratio is inflated by its denominator: ICICI Bank's reported count fell sharply in a single month. Across every other bank the denominator held steady, so that part of the ratio's rise is a reporting artifact, not the market pulling apart.",
         "Discount the record \u2014 the ratio moved because ICICI Bank's reported count changed, not because the two sides really diverged."
       ]
     },
     "basis": {
       "facts": [
-        "upi_qr.latest: 813030623.0",
-        "pos_terminals.latest: 10207640.0",
-        "upi_qr.prior: 803047590.0",
-        "pos_terminals.prior: 10027614.0",
-        "upi_qr.mom_pct: 1.24",
-        "pos_terminals.mom_pct: 1.8",
+        "upi_qr.latest: 885504973.0",
+        "pos_terminals.latest: 10419206.0",
+        "upi_qr.prior: 813030623.0",
+        "pos_terminals.prior: 10207640.0",
+        "upi_qr.mom_pct: 8.91",
+        "pos_terminals.mom_pct: 2.07",
         "Source: web/public/data/atm_pos_consolidated.csv",
         {
           "metric": "upi-qr-per-pos",
           "scan_metric": "pos-bank-scan",
           "dominant": true,
           "top_entity": "ICICI BANK LTD",
-          "top_move_share": 1.1572,
-          "mom_pct": 1.8,
-          "ex_top_yoy_pct": 2.83,
-          "agg_value": 79.65,
-          "period": "2026-08-31",
+          "top_move_share": 1.2095,
+          "mom_pct": 2.07,
+          "ex_top_yoy_pct": 3.6,
+          "agg_value": 84.99,
+          "period": "2026-09-30",
           "via_denominator": true,
           "window": "yoy"
         }
       ],
       "inferences": [
-        "This ratio looks like it hit a record, but the move is almost entirely its denominator: ICICI Bank's reported count fell sharply in a single month while the numerator barely changed. Across every other bank the denominator held steady, so the ratio's jump is a reporting artifact, not the market pulling apart.",
+        "This ratio is inflated by its denominator: ICICI Bank's reported count fell sharply in a single month. Across every other bank the denominator held steady, so that part of the ratio's rise is a reporting artifact, not the market pulling apart.",
         "Discount the record \u2014 the ratio moved because ICICI Bank's reported count changed, not because the two sides really diverged."
       ]
     },
@@ -1091,62 +1014,131 @@
     "eval_signal": "upi-qr-per-pos"
   },
   {
-    "id": "infra-pos-yoy",
+    "id": "infra-pos-streak",
     "group": "infra",
     "cut": "total",
-    "period": "Aug 2026",
+    "period": "Sep 2026",
     "type": "insight",
-    "title": "POS terminal growth -14.7% YoY \u2014 but it's ICICI Bank, not the market",
-    "body": "The headline -14.7% year-on-year move is almost entirely ICICI Bank: its reported count fell sharply in a single month and accounts for nearly all of the change, while across every other bank the fleet edged up over the year. This looks like a base or reporting change at ICICI Bank \u2014 most likely a reclassification of how terminals are counted \u2014 not a market-wide shift. (The specific reason is not yet sourced; the concentration is straight from the bank-level data.)",
-    "implication": "Read the market signal off the other banks \u2014 flat-to-steady \u2014 not the headline, which is ICICI Bank's reporting change.",
+    "title": "POS terminals extend growth streak to 3 straight months",
+    "body": "POS terminal numbers have now risen for 3 consecutive months as of Sep 2026, up from a 2-month streak in Aug. Streak extended 2 \u2192 3 periods of monthly growth.",
+    "implication": "At 3 consecutive months, the current run is extending for a second straight period, but it remains well short of the 17-period streak that peaked in Oct 2025 and even short of this year's 4-period run in Mar 2026 \u2014 growth has reset to 0 twice since then rather than building a sustained run.",
     "reasoning": {
       "signals": [
         {
-          "key": "groups.infra.total.metrics.pos_terminals.yoy_pct",
-          "value": -14.68
-        },
-        {
-          "key": "groups.infra.total.metrics.pos_terminals.yoy_prior_pct",
-          "value": -15.83
-        },
-        {
-          "key": "groups.infra.total.metrics.pos_terminals.yoy_accel_pp",
-          "value": 1.15
-        },
-        {
           "key": "groups.infra.total.metrics.pos_terminals.latest",
-          "value": 10207640.0
+          "value": 10419206.0
+        },
+        {
+          "key": "groups.infra.total.metrics.pos_terminals.streak_months",
+          "value": 3.0
+        },
+        {
+          "key": "groups.infra.total.metrics.pos_terminals.qoq_pct",
+          "value": 5.01
         }
       ],
       "chain": [
-        "The headline -14.7% year-on-year move is almost entirely ICICI Bank: its reported count fell sharply in a single month and accounts for nearly all of the change, while across every other bank the fleet edged up over the year. This looks like a base or reporting change at ICICI Bank \u2014 most likely a reclassification of how terminals are counted \u2014 not a market-wide shift. (The specific reason is not yet sourced; the concentration is straight from the bank-level data.)",
-        "Read the market signal off the other banks \u2014 flat-to-steady \u2014 not the headline, which is ICICI Bank's reporting change."
+        "POS terminals have grown for 3 straight months now, up from a streak of 2 last period.",
+        "That's still far below the 17-period streak that peaked in Oct 2025, which itself followed a reset to 0 in Nov 2025.",
+        "Since then, streaks have repeatedly reset to 0 (Apr 2026, Jun 2026) before climbing again, reaching 4 periods in Mar 2026 and now 3 in Sep 2026."
       ]
     },
     "basis": {
       "facts": [
-        "pos_terminals.yoy_pct: -14.68",
-        "pos_terminals.yoy_prior_pct: -15.83",
-        "pos_terminals.yoy_accel_pp: 1.15",
-        "pos_terminals.latest: 10207640.0",
+        "pos_terminals.latest: 10419206.0",
+        "pos_terminals.streak_months: 3.0",
+        "pos_terminals.qoq_pct: 5.01",
+        "Source: web/public/data/atm_pos_consolidated.csv"
+      ],
+      "inferences": [
+        "POS terminals have grown for 3 straight months now, up from a streak of 2 last period.",
+        "That's still far below the 17-period streak that peaked in Oct 2025, which itself followed a reset to 0 in Nov 2025.",
+        "Since then, streaks have repeatedly reset to 0 (Apr 2026, Jun 2026) before climbing again, reaching 4 periods in Mar 2026 and now 3 in Sep 2026."
+      ]
+    },
+    "sourceSignals": [
+      "groups.infra.total.metrics.pos_terminals.latest",
+      "groups.infra.total.metrics.pos_terminals.streak_months",
+      "groups.infra.total.metrics.pos_terminals.qoq_pct"
+    ],
+    "effect": {
+      "highlight": [
+        "Total"
+      ],
+      "tab": "trend",
+      "trendMode": "absolute",
+      "focusCard": "pos_terminals",
+      "cut": {
+        "shape": "level",
+        "metrics": [
+          "pos_terminals"
+        ]
+      }
+    },
+    "exploreAction": {
+      "mode": "by_type"
+    },
+    "representation": "llm",
+    "eval_signal": "pos-terminals-pos-streak",
+    "prompt_version": "1.12"
+  },
+  {
+    "id": "infra-pos-yoy",
+    "group": "infra",
+    "cut": "total",
+    "period": "Sep 2026",
+    "type": "insight",
+    "title": "POS terminal growth -14.0% YoY \u2014 but it's ICICI Bank, not the market",
+    "body": "The headline -14.0% year-on-year move is largely ICICI Bank: its reported count fell sharply in a single month and accounts for most of the change, while across every other bank the total edged up over the year. This looks like a base or reporting change at ICICI Bank, not a market-wide shift. (The specific reason is not yet sourced; the concentration is straight from the bank-level data.)",
+    "implication": "Read the market signal off the other banks, whose total edged up over the year, not the headline, which includes ICICI Bank's reporting change.",
+    "reasoning": {
+      "signals": [
+        {
+          "key": "groups.infra.total.metrics.pos_terminals.yoy_pct",
+          "value": -14.01
+        },
+        {
+          "key": "groups.infra.total.metrics.pos_terminals.yoy_prior_pct",
+          "value": -14.68
+        },
+        {
+          "key": "groups.infra.total.metrics.pos_terminals.yoy_accel_pp",
+          "value": 0.67
+        },
+        {
+          "key": "groups.infra.total.metrics.pos_terminals.latest",
+          "value": 10419206.0
+        }
+      ],
+      "chain": [
+        "The headline -14.0% year-on-year move is largely ICICI Bank: its reported count fell sharply in a single month and accounts for most of the change, while across every other bank the total edged up over the year. This looks like a base or reporting change at ICICI Bank, not a market-wide shift. (The specific reason is not yet sourced; the concentration is straight from the bank-level data.)",
+        "Read the market signal off the other banks, whose total edged up over the year, not the headline, which includes ICICI Bank's reporting change."
+      ]
+    },
+    "basis": {
+      "facts": [
+        "pos_terminals.yoy_pct: -14.01",
+        "pos_terminals.yoy_prior_pct: -14.68",
+        "pos_terminals.yoy_accel_pp: 0.67",
+        "pos_terminals.latest: 10419206.0",
         "Source: web/public/data/atm_pos_consolidated.csv",
         {
           "metric": "pos-terminals-yoy",
           "scan_metric": "pos-bank-scan",
           "dominant": true,
           "top_entity": "ICICI BANK LTD",
-          "top_move_share": 1.1572,
-          "mom_pct": 1.8,
-          "ex_top_yoy_pct": 2.83,
-          "agg_value": -14.68,
-          "period": "2026-08-31",
+          "top_move_share": 1.2095,
+          "mom_pct": 2.07,
+          "ex_top_yoy_pct": 3.6,
+          "agg_value": -14.01,
+          "period": "2026-09-30",
           "via_denominator": false,
           "window": "yoy"
         }
       ],
       "inferences": [
-        "The headline -14.7% year-on-year move is almost entirely ICICI Bank: its reported count fell sharply in a single month and accounts for nearly all of the change, while across every other bank the fleet edged up over the year. This looks like a base or reporting change at ICICI Bank \u2014 most likely a reclassification of how terminals are counted \u2014 not a market-wide shift. (The specific reason is not yet sourced; the concentration is straight from the bank-level data.)",
-        "Read the market signal off the other banks \u2014 flat-to-steady \u2014 not the headline, which is ICICI Bank's reporting change."
+        "The headline -14.0% year-on-year move is largely ICICI Bank: its reported count fell sharply in a single month and accounts for most of the change, while across every other bank the total edged up over the year. This looks like a base or reporting change at ICICI Bank, not a market-wide shift. (The specific reason is not yet sourced; the concentration is straight from the bank-level data.)",
+        "Read the market signal off the other banks, whose total edged up over the year, not the headline, which includes ICICI Bank's reporting change."
       ]
     },
     "sourceSignals": [
@@ -1180,48 +1172,59 @@
     "id": "infra-upi-yoy",
     "group": "infra",
     "cut": "total",
-    "period": "Aug 2026",
+    "period": "Sep 2026",
     "type": "insight",
-    "title": "UPI QR growth eases to 16.5% YoY, still in stable band",
-    "body": "UPI QR codes grew 16.52% year-on-year in Aug 2026, down 0.19 points from 16.72% in Jul 2026. YoY growth eased slightly, 16.72% \u2192 16.52%, holding near the middle of the 16.3%\u201317.9% range seen across the past 20 periods.",
-    "implication": "UPI QR growth has eased for three straight months to 16.52%, but it remains near the middle of a stable 16.3%\u201317.9% band that has held for over a year \u2014 a gradual easing within an otherwise steady growth rate, not a trend break.",
+    "title": "UPI QR acceptance +24.9% YoY \u2014 but it's Axis Bank, not the market",
+    "body": "The headline +24.9% year-on-year move is largely Axis Bank: its reported count jumped in a single month and accounts for most of the change, while across every other bank the total kept growing over the year. This looks like a base or reporting change at Axis Bank, not a market-wide shift. (The specific reason is not yet sourced; the concentration is straight from the bank-level data.)",
+    "implication": "Read the market signal off the other banks, whose total kept growing over the year, not the headline, which includes Axis Bank's reporting change.",
     "reasoning": {
       "signals": [
         {
           "key": "groups.infra.total.metrics.upi_qr.yoy_pct",
-          "value": 16.52
+          "value": 24.9
         },
         {
           "key": "groups.infra.total.metrics.upi_qr.yoy_prior_pct",
-          "value": 16.72
+          "value": 16.52
         },
         {
           "key": "groups.infra.total.metrics.upi_qr.yoy_accel_pp",
-          "value": -0.2
+          "value": 8.38
         },
         {
           "key": "groups.infra.total.metrics.upi_qr.latest",
-          "value": 813030623.0
+          "value": 885504973.0
         }
       ],
       "chain": [
-        "UPI QR codes grew 16.52% year-on-year in Aug 2026, down 0.19 points from 16.72% in Jul 2026.",
-        "This is the third straight monthly easing from Jun's 16.87%, but the rate has stayed inside the 16.3%\u201317.9% band that has held for the past 20 periods.",
-        "The reading sits near the middle of that range, in line with the steady double-digit pace seen since Apr 2025's 18.3%."
+        "The headline +24.9% year-on-year move is largely Axis Bank: its reported count jumped in a single month and accounts for most of the change, while across every other bank the total kept growing over the year. This looks like a base or reporting change at Axis Bank, not a market-wide shift. (The specific reason is not yet sourced; the concentration is straight from the bank-level data.)",
+        "Read the market signal off the other banks, whose total kept growing over the year, not the headline, which includes Axis Bank's reporting change."
       ]
     },
     "basis": {
       "facts": [
-        "upi_qr.yoy_pct: 16.52",
-        "upi_qr.yoy_prior_pct: 16.72",
-        "upi_qr.yoy_accel_pp: -0.2",
-        "upi_qr.latest: 813030623.0",
-        "Source: web/public/data/atm_pos_consolidated.csv"
+        "upi_qr.yoy_pct: 24.9",
+        "upi_qr.yoy_prior_pct: 16.52",
+        "upi_qr.yoy_accel_pp: 8.38",
+        "upi_qr.latest: 885504973.0",
+        "Source: web/public/data/atm_pos_consolidated.csv",
+        {
+          "metric": "upi-qr-yoy",
+          "scan_metric": "upi-qr-bank-scan",
+          "dominant": true,
+          "top_entity": "AXIS BANK LTD",
+          "top_move_share": 0.8724,
+          "mom_pct": 8.91,
+          "ex_top_yoy_pct": 16.01,
+          "agg_value": 24.9,
+          "period": "2026-09-30",
+          "via_denominator": false,
+          "window": "mom"
+        }
       ],
       "inferences": [
-        "UPI QR codes grew 16.52% year-on-year in Aug 2026, down 0.19 points from 16.72% in Jul 2026.",
-        "This is the third straight monthly easing from Jun's 16.87%, but the rate has stayed inside the 16.3%\u201317.9% band that has held for the past 20 periods.",
-        "The reading sits near the middle of that range, in line with the steady double-digit pace seen since Apr 2025's 18.3%."
+        "The headline +24.9% year-on-year move is largely Axis Bank: its reported count jumped in a single month and accounts for most of the change, while across every other bank the total kept growing over the year. This looks like a base or reporting change at Axis Bank, not a market-wide shift. (The specific reason is not yet sourced; the concentration is straight from the bank-level data.)",
+        "Read the market signal off the other banks, whose total kept growing over the year, not the headline, which includes Axis Bank's reporting change."
       ]
     },
     "sourceSignals": [
@@ -1247,56 +1250,56 @@
     "exploreAction": {
       "mode": "by_type"
     },
-    "representation": "llm",
-    "eval_signal": "upi-qr-yoy",
-    "prompt_version": "1.12"
+    "representation": "deterministic-dominance",
+    "single_entity_artifact": true,
+    "eval_signal": "upi-qr-yoy"
   },
   {
     "id": "infra-upi-vs-bharat-qr",
     "group": "infra",
     "cut": "total",
-    "period": "Aug 2026",
+    "period": "Sep 2026",
     "type": "insight",
-    "title": "UPI QR ratio hits new high of 152.5x, pace slows sharply",
-    "body": "There were 152.5 UPI QR codes for every Bharat QR code in Aug 2026, up 0.14 from Jul's 152.4x. Ratio rose 152.4x \u2192 152.5x, a 0.14 increase \u2014 the highest level on record, but far slower than Jul's 1.9-point jump from Jun's 150.5x.",
-    "implication": "The UPI-to-Bharat ratio touched a fresh high of 152.5x, but this month's 0.14 gain is a fraction of Jul's 1.9-point rise and far smaller than moves like the 10.6-point jump seen between Aug and Sep 2025 \u2014 the gap is at its widest on record, even as the rate of widening has flattened.",
+    "title": "UPI-to-Bharat QR ratio surges to a record 165.8x in Sep",
+    "body": "There were 165.8 UPI QR codes for every Bharat QR code in Sep 2026. Ratio rose 152.5x \u2192 165.8x, a 13.28-point jump to a fresh high.",
+    "implication": "The 13.28-point jump is the sharpest widening in this ratio's 33-period history, breaking the much slower pace of gain (just 0.14 points in Aug) seen through most of 2026 \u2014 UPI QR acceptance is pulling further ahead of Bharat QR.",
     "reasoning": {
       "signals": [
         {
           "key": "groups.infra.total.metrics.upi_qr.latest",
-          "value": 813030623.0
+          "value": 885504973.0
         },
         {
           "key": "groups.infra.total.metrics.bharat_qr.latest",
-          "value": 5330222.0
+          "value": 5340323.0
         },
         {
           "key": "groups.infra.total.metrics.upi_qr.mom_pct",
-          "value": 1.24
+          "value": 8.91
         },
         {
           "key": "groups.infra.total.metrics.bharat_qr.mom_pct",
-          "value": 1.15
+          "value": 0.19
         }
       ],
       "chain": [
-        "The UPI-to-Bharat QR ratio reached 152.5x in Aug 2026, up just 0.14 from Jul's 152.4x.",
-        "That is a fraction of Jul's 1.9-point rise (from Jun's 150.5x) and far smaller than moves such as the 10.6-point jump between Aug and Sep 2025 (106.2x \u2192 116.8x).",
-        "The ratio is still at or near the maximum of its 32-period range, confirming UPI QR's continued lead over Bharat QR even as the pace of divergence flattens."
+        "The UPI-to-Bharat QR ratio reached 165.8x in Sep 2026, up 13.28 points from 152.5x in Aug.",
+        "That's a far bigger jump than Aug's 0.14-point rise from Jul's 152.4x.",
+        "This is the highest reading across the 33-period series, widening a gap that was already at its widest on record."
       ]
     },
     "basis": {
       "facts": [
-        "upi_qr.latest: 813030623.0",
-        "bharat_qr.latest: 5330222.0",
-        "upi_qr.mom_pct: 1.24",
-        "bharat_qr.mom_pct: 1.15",
+        "upi_qr.latest: 885504973.0",
+        "bharat_qr.latest: 5340323.0",
+        "upi_qr.mom_pct: 8.91",
+        "bharat_qr.mom_pct: 0.19",
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
-        "The UPI-to-Bharat QR ratio reached 152.5x in Aug 2026, up just 0.14 from Jul's 152.4x.",
-        "That is a fraction of Jul's 1.9-point rise (from Jun's 150.5x) and far smaller than moves such as the 10.6-point jump between Aug and Sep 2025 (106.2x \u2192 116.8x).",
-        "The ratio is still at or near the maximum of its 32-period range, confirming UPI QR's continued lead over Bharat QR even as the pace of divergence flattens."
+        "The UPI-to-Bharat QR ratio reached 165.8x in Sep 2026, up 13.28 points from 152.5x in Aug.",
+        "That's a far bigger jump than Aug's 0.14-point rise from Jul's 152.4x.",
+        "This is the highest reading across the 33-period series, widening a gap that was already at its widest on record."
       ]
     },
     "sourceSignals": [
@@ -1340,73 +1343,13 @@
     "prompt_version": "1.12"
   },
   {
-    "id": "infra-category-pos-share",
-    "group": "infra",
-    "cut": "by_type",
-    "period": "Aug 2026",
-    "type": "insight",
-    "title": "Private banks fastest-growing in POS terminal deployment in Aug 2026 (+0.4pp share)",
-    "body": "Private banks hold 79.6% of total POS terminals in Aug 2026, gaining +0.4pp vs prior month. PSB banks lost the most share.",
-    "implication": "Private banks gaining POS share means they're building more merchant relationships in that segment. Banks that own the POS network also own the merchant's transaction data \u2014 daily sales, busy periods, average ticket size. That data is the foundation for merchant lending (small business loans based on sales history). Watch which bank type is expanding POS \u2014 they're positioning for merchant credit.",
-    "reasoning": {
-      "signals": [
-        {
-          "key": "groups.infra.by_type.categories.Private.share_pct",
-          "value": 79.63
-        },
-        {
-          "key": "groups.infra.by_type.categories.Private.share_delta_pp",
-          "value": 0.39
-        }
-      ],
-      "chain": [
-        "Private banks gained 0.4pp POS share \u2014 building more merchant acquiring relationships",
-        "Banks owning the POS network own the merchant's transaction data (daily sales, ticket size, frequency)",
-        "POS share expansion is a leading indicator of positioning for merchant credit (working capital, cash advances)"
-      ]
-    },
-    "basis": {
-      "facts": [
-        "Private.share_pct: 79.63",
-        "Private.share_delta_pp: 0.39",
-        "Source: web/public/data/atm_pos_consolidated.csv"
-      ],
-      "inferences": [
-        "Private banks gained 0.4pp POS share \u2014 building more merchant acquiring relationships",
-        "Banks owning the POS network own the merchant's transaction data (daily sales, ticket size, frequency)",
-        "POS share expansion is a leading indicator of positioning for merchant credit (working capital, cash advances)"
-      ]
-    },
-    "sourceSignals": [
-      "groups.infra.by_type.categories.Private.share_pct",
-      "groups.infra.by_type.categories.Private.share_delta_pp"
-    ],
-    "effect": {
-      "highlight": [
-        "Private",
-        "Total"
-      ],
-      "tab": "distribution",
-      "distMode": "pct",
-      "focusCard": "pos_terminals",
-      "cut": {
-        "shape": "level",
-        "metrics": []
-      }
-    },
-    "exploreAction": {
-      "mode": "by_type"
-    },
-    "representation": "deterministic"
-  },
-  {
     "id": "infra-top-bank-pos",
     "group": "infra",
     "cut": "top_n",
-    "period": "Aug 2026",
+    "period": "Sep 2026",
     "type": "insight",
-    "title": "RBL BANK LTD leads POS terminal deployment at 27.1% market share",
-    "body": "RBL BANK LTD has deployed 27.6 lakh POS terminals in Aug 2026, accounting for 27.1% of total (+1.6% MoM). Top 5 banks hold 91.4% of all POS terminals (-0.1pp vs prior month).",
+    "title": "RBL BANK LTD leads POS terminal deployment at 26.8% market share",
+    "body": "RBL BANK LTD has deployed 27.9 lakh POS terminals in Sep 2026, accounting for 26.8% of total (+1.1% MoM). Top 5 banks hold 91.4% of all POS terminals.",
     "implication": "5 banks own 91.4% of all POS machines in India. That also means merchant transaction data \u2014 what each shop turns over, how often \u2014 sits largely with those same 5 banks. Merchant credit underwritten on sales history therefore rests on a data relationship with one of them, or on an alternate source such as GST returns or UPI transaction feeds.",
     "reasoning": {
       "signals": [
@@ -1416,11 +1359,11 @@
         },
         {
           "key": "groups.infra.top_n.banks.0.share_pct",
-          "value": 27.07
+          "value": 26.81
         },
         {
           "key": "groups.infra.top_n.banks.0.mom_pct",
-          "value": 1.59
+          "value": 1.13
         }
       ],
       "chain": [
@@ -1432,8 +1375,8 @@
     "basis": {
       "facts": [
         "top_n.top5_share_pct: 91.41",
-        "0.share_pct: 27.07",
-        "0.mom_pct: 1.59",
+        "0.share_pct: 26.81",
+        "0.mom_pct: 1.13",
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
@@ -1469,41 +1412,41 @@
     "id": "gap-atm-offsite-decline",
     "group": "infra",
     "cut": "total",
-    "period": "Aug 2026",
+    "period": "Sep 2026",
     "type": "gap",
-    "title": "Gap: Offsite ATMs declining -0.2% MoM \u2014 rural cash access contracting",
-    "body": "Offsite ATMs fell 0.2% MoM in Aug 2026 (now 73,298), while onsite ATMs grew +0.3% MoM. Offsite ATMs serve rural and semi-urban populations where branch presence is limited \u2014 their decline reduces physical cash access for underserved geographies.",
+    "title": "Gap: Offsite ATMs declining -0.3% MoM \u2014 rural cash access contracting",
+    "body": "Offsite ATMs fell 0.3% MoM in Sep 2026 (now 73,092). Offsite ATMs serve rural and semi-urban populations where branch presence is limited \u2014 their decline reduces physical cash access for underserved geographies.",
     "implication": "Offsite ATMs are standalone machines in villages, petrol pumps, small towns \u2014 placed away from bank branches specifically to serve rural areas. When these decline and digital payments haven't reached those areas yet, rural borrowers lose their easiest way to access cash for repayment. If you have loans in rural geographies, check whether ATM coverage in those areas is shrinking \u2014 it can make EMI collection harder.",
     "reasoning": {
       "signals": [
         {
           "key": "groups.infra.total.metrics.atm_offsite.mom_pct",
-          "value": -0.24
+          "value": -0.28
         },
         {
           "key": "groups.infra.total.metrics.atm_offsite.latest",
-          "value": 73298.0
+          "value": 73092.0
         },
         {
           "key": "groups.infra.total.metrics.atm_onsite.mom_pct",
-          "value": 0.26
+          "value": -0.02
         }
       ],
       "chain": [
-        "Offsite ATMs (standalone machines in rural/semi-urban areas away from branches) fell 0.2% MoM",
+        "Offsite ATMs (standalone machines in rural/semi-urban areas away from branches) fell 0.3% MoM",
         "Rural borrowers without digital payment access rely on offsite ATMs as primary cash access point for loan repayment",
         "Declining offsite ATM coverage can impair EMI collection in areas where digital payment penetration is still low"
       ]
     },
     "basis": {
       "facts": [
-        "atm_offsite.mom_pct: -0.24",
-        "atm_offsite.latest: 73298.0",
-        "atm_onsite.mom_pct: 0.26",
+        "atm_offsite.mom_pct: -0.28",
+        "atm_offsite.latest: 73092.0",
+        "atm_onsite.mom_pct: -0.02",
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
-        "Offsite ATMs (standalone machines in rural/semi-urban areas away from branches) fell 0.2% MoM",
+        "Offsite ATMs (standalone machines in rural/semi-urban areas away from branches) fell 0.3% MoM",
         "Rural borrowers without digital payment access rely on offsite ATMs as primary cash access point for loan repayment",
         "Declining offsite ATM coverage can impair EMI collection in areas where digital payment penetration is still low"
       ]
@@ -1535,10 +1478,10 @@
     "id": "gap-pos-concentration",
     "group": "infra",
     "cut": "top_n",
-    "period": "Aug 2026",
+    "period": "Sep 2026",
     "type": "gap",
     "title": "Gap: Top 5 banks hold 91.4% of POS terminals \u2014 acquiring market is highly concentrated",
-    "body": "In Aug 2026, the top 5 banks account for 91.4% of all deployed POS terminals in India. RBL BANK LTD leads at 27.1% market share. All remaining banks combined share less than 8.6% of merchant acquiring infrastructure.",
+    "body": "In Sep 2026, the top 5 banks account for 91.4% of all deployed POS terminals in India. RBL BANK LTD leads at 26.8% market share. All remaining banks combined share less than 8.6% of merchant acquiring infrastructure.",
     "implication": "91.4% of all POS machines in India are owned by just 5 banks \u2014 and so is most of the merchant transaction data that comes with them. If you're building merchant credit products (loans to shopkeepers or small businesses) and don't have data partnerships with these top banks, you're working with an incomplete picture. Alternate sources \u2014 GST filings, UPI transaction data \u2014 can partially fill this gap.",
     "reasoning": {
       "signals": [
@@ -1548,7 +1491,7 @@
         },
         {
           "key": "groups.infra.top_n.banks.0.share_pct",
-          "value": 27.07
+          "value": 26.81
         }
       ],
       "chain": [
@@ -1560,7 +1503,7 @@
     "basis": {
       "facts": [
         "top_n.top5_share_pct: 91.41",
-        "0.share_pct: 27.07",
+        "0.share_pct: 26.81",
         "Source: web/public/data/atm_pos_consolidated.csv"
       ],
       "inferences": [
@@ -1595,54 +1538,54 @@
     "id": "cc-category-rotation",
     "group": "cc",
     "cut": "by_type",
-    "period": "Aug 2026",
+    "period": "Sep 2026",
     "type": "insight",
-    "title": "Credit cards mix rotating toward Small Finance Banks (+0.97 pp share in a year)",
-    "body": "Compared with the same month a year ago, the biggest share gains in credit cards came from Small Finance Banks +0.97 pp. The ground came from Foreign Banks -0.59 pp; Private Sector Banks -0.36 pp; Public Sector Banks -0.02 pp. In all, 0.97 pp of the mix changed hands.",
+    "title": "Credit cards mix rotating toward Small Finance Banks (+1.06 pp share in a year)",
+    "body": "Compared with the same month a year ago, the biggest share gains in credit cards came from Small Finance Banks +1.06 pp; Public Sector Banks +0.12 pp. The ground came from Foreign Banks -0.66 pp; Private Sector Banks -0.52 pp. In all, 1.18 pp of the mix changed hands.",
     "implication": "This is a composition read: it says where the mix is shifting, not why and not what happens next. Watch whether Small Finance Banks holds its gains next month before reading the shift as a trend.",
     "reasoning": {
       "signals": [
         {
           "key": "cc-category-rotation:Small Finance Banks",
-          "value": 0.973
+          "value": 1.0578
+        },
+        {
+          "key": "cc-category-rotation:Public Sector Banks",
+          "value": 0.122
         },
         {
           "key": "cc-category-rotation:Payment Banks",
           "value": 0.0
         },
         {
-          "key": "cc-category-rotation:Public Sector Banks",
-          "value": -0.017
-        },
-        {
           "key": "cc-category-rotation:Private Sector Banks",
-          "value": -0.3631
+          "value": -0.5243
         },
         {
           "key": "cc-category-rotation:Foreign Banks",
-          "value": -0.593
+          "value": -0.6555
         }
       ],
       "chain": [
         "Each segment's share of credit cards is compared with the same month a year earlier \u2014 the change is in percentage points of the mix.",
-        "Top gainer: Small Finance Banks at +0.97 pp. Biggest cession: Foreign Banks at -0.59 pp.",
-        "Rotation mass \u2014 the share that changed hands \u2014 is 0.97 pp."
+        "Top gainer: Small Finance Banks at +1.06 pp. Biggest cession: Foreign Banks at -0.66 pp.",
+        "Rotation mass \u2014 the share that changed hands \u2014 is 1.18 pp."
       ]
     },
     "basis": {
       "facts": [
-        "Small Finance Banks: +0.97 pp share vs a year ago",
+        "Small Finance Banks: +1.06 pp share vs a year ago",
+        "Public Sector Banks: +0.12 pp share vs a year ago",
         "Payment Banks: +0.00 pp share vs a year ago",
-        "Public Sector Banks: -0.02 pp share vs a year ago",
-        "Private Sector Banks: -0.36 pp share vs a year ago",
-        "Foreign Banks: -0.59 pp share vs a year ago",
-        "Rotation mass: 0.97 pp",
+        "Private Sector Banks: -0.52 pp share vs a year ago",
+        "Foreign Banks: -0.66 pp share vs a year ago",
+        "Rotation mass: 1.18 pp",
         "Source: signals.db (cc-category-rotation)"
       ],
       "inferences": [
         "Each segment's share of credit cards is compared with the same month a year earlier \u2014 the change is in percentage points of the mix.",
-        "Top gainer: Small Finance Banks at +0.97 pp. Biggest cession: Foreign Banks at -0.59 pp.",
-        "Rotation mass \u2014 the share that changed hands \u2014 is 0.97 pp."
+        "Top gainer: Small Finance Banks at +1.06 pp. Biggest cession: Foreign Banks at -0.66 pp.",
+        "Rotation mass \u2014 the share that changed hands \u2014 is 1.18 pp."
       ]
     },
     "sourceSignals": [
@@ -1671,54 +1614,54 @@
     "id": "dc-category-rotation",
     "group": "dc",
     "cut": "by_type",
-    "period": "Aug 2026",
+    "period": "Sep 2026",
     "type": "insight",
-    "title": "Debit cards mix rotating toward Small Finance Banks (+0.62 pp share in a year)",
-    "body": "Compared with the same month a year ago, the biggest share gains in debit cards came from Small Finance Banks +0.62 pp; Private Sector Banks +0.55 pp; Public Sector Banks +0.17 pp. The ground came from Payment Banks -1.34 pp. In all, 1.34 pp of the mix changed hands.",
+    "title": "Debit cards mix rotating toward Small Finance Banks (+0.65 pp share in a year)",
+    "body": "Compared with the same month a year ago, the biggest share gains in debit cards came from Small Finance Banks +0.65 pp; Private Sector Banks +0.61 pp; Public Sector Banks +0.17 pp. The ground came from Payment Banks -1.44 pp. In all, 1.44 pp of the mix changed hands.",
     "implication": "This is a composition read: it says where the mix is shifting, not why and not what happens next. Watch whether Small Finance Banks holds its gains next month before reading the shift as a trend.",
     "reasoning": {
       "signals": [
         {
           "key": "dc-category-rotation:Small Finance Banks",
-          "value": 0.6194
+          "value": 0.6535
         },
         {
           "key": "dc-category-rotation:Private Sector Banks",
-          "value": 0.5463
+          "value": 0.6132
         },
         {
           "key": "dc-category-rotation:Public Sector Banks",
-          "value": 0.174
+          "value": 0.1727
         },
         {
           "key": "dc-category-rotation:Foreign Banks",
-          "value": 0.002
+          "value": -0.0029
         },
         {
           "key": "dc-category-rotation:Payment Banks",
-          "value": -1.3416
+          "value": -1.4364
         }
       ],
       "chain": [
         "Each segment's share of debit cards is compared with the same month a year earlier \u2014 the change is in percentage points of the mix.",
-        "Top gainer: Small Finance Banks at +0.62 pp. Biggest cession: Payment Banks at -1.34 pp.",
-        "Rotation mass \u2014 the share that changed hands \u2014 is 1.34 pp."
+        "Top gainer: Small Finance Banks at +0.65 pp. Biggest cession: Payment Banks at -1.44 pp.",
+        "Rotation mass \u2014 the share that changed hands \u2014 is 1.44 pp."
       ]
     },
     "basis": {
       "facts": [
-        "Small Finance Banks: +0.62 pp share vs a year ago",
-        "Private Sector Banks: +0.55 pp share vs a year ago",
+        "Small Finance Banks: +0.65 pp share vs a year ago",
+        "Private Sector Banks: +0.61 pp share vs a year ago",
         "Public Sector Banks: +0.17 pp share vs a year ago",
-        "Foreign Banks: +0.00 pp share vs a year ago",
-        "Payment Banks: -1.34 pp share vs a year ago",
-        "Rotation mass: 1.34 pp",
+        "Foreign Banks: -0.00 pp share vs a year ago",
+        "Payment Banks: -1.44 pp share vs a year ago",
+        "Rotation mass: 1.44 pp",
         "Source: signals.db (dc-category-rotation)"
       ],
       "inferences": [
         "Each segment's share of debit cards is compared with the same month a year earlier \u2014 the change is in percentage points of the mix.",
-        "Top gainer: Small Finance Banks at +0.62 pp. Biggest cession: Payment Banks at -1.34 pp.",
-        "Rotation mass \u2014 the share that changed hands \u2014 is 1.34 pp."
+        "Top gainer: Small Finance Banks at +0.65 pp. Biggest cession: Payment Banks at -1.44 pp.",
+        "Rotation mass \u2014 the share that changed hands \u2014 is 1.44 pp."
       ]
     },
     "sourceSignals": [
@@ -1747,20 +1690,20 @@
     "id": "pos-category-rotation",
     "group": "infra",
     "cut": "by_type",
-    "period": "Aug 2026",
+    "period": "Sep 2026",
     "type": "insight",
-    "title": "POS terminals mix rotating toward Public Sector Banks (+4.55 pp share in a year)",
-    "body": "Compared with the same month a year ago, the biggest share gains in POS terminals came from Public Sector Banks +4.55 pp. The ground came from Private Sector Banks -4.55 pp; Foreign Banks -0.01 pp. In all, 4.56 pp of the mix changed hands.",
+    "title": "POS terminals mix rotating toward Public Sector Banks (+4.42 pp share in a year)",
+    "body": "Compared with the same month a year ago, the biggest share gains in POS terminals came from Public Sector Banks +4.42 pp. The ground came from Private Sector Banks -4.41 pp; Foreign Banks -0.01 pp. In all, 4.43 pp of the mix changed hands.",
     "implication": "This is a composition read: it says where the mix is shifting, not why and not what happens next. Watch whether Public Sector Banks holds its gains next month before reading the shift as a trend.",
     "reasoning": {
       "signals": [
         {
           "key": "pos-category-rotation:Public Sector Banks",
-          "value": 4.5522
+          "value": 4.4215
         },
         {
           "key": "pos-category-rotation:Small Finance Banks",
-          "value": 0.0071
+          "value": 0.0064
         },
         {
           "key": "pos-category-rotation:Payment Banks",
@@ -1768,33 +1711,33 @@
         },
         {
           "key": "pos-category-rotation:Foreign Banks",
-          "value": -0.0129
+          "value": -0.0145
         },
         {
           "key": "pos-category-rotation:Private Sector Banks",
-          "value": -4.5464
+          "value": -4.4134
         }
       ],
       "chain": [
         "Each segment's share of POS terminals is compared with the same month a year earlier \u2014 the change is in percentage points of the mix.",
-        "Top gainer: Public Sector Banks at +4.55 pp. Biggest cession: Private Sector Banks at -4.55 pp.",
-        "Rotation mass \u2014 the share that changed hands \u2014 is 4.56 pp."
+        "Top gainer: Public Sector Banks at +4.42 pp. Biggest cession: Private Sector Banks at -4.41 pp.",
+        "Rotation mass \u2014 the share that changed hands \u2014 is 4.43 pp."
       ]
     },
     "basis": {
       "facts": [
-        "Public Sector Banks: +4.55 pp share vs a year ago",
+        "Public Sector Banks: +4.42 pp share vs a year ago",
         "Small Finance Banks: +0.01 pp share vs a year ago",
         "Payment Banks: +0.00 pp share vs a year ago",
         "Foreign Banks: -0.01 pp share vs a year ago",
-        "Private Sector Banks: -4.55 pp share vs a year ago",
-        "Rotation mass: 4.56 pp",
+        "Private Sector Banks: -4.41 pp share vs a year ago",
+        "Rotation mass: 4.43 pp",
         "Source: signals.db (pos-category-rotation)"
       ],
       "inferences": [
         "Each segment's share of POS terminals is compared with the same month a year earlier \u2014 the change is in percentage points of the mix.",
-        "Top gainer: Public Sector Banks at +4.55 pp. Biggest cession: Private Sector Banks at -4.55 pp.",
-        "Rotation mass \u2014 the share that changed hands \u2014 is 4.56 pp."
+        "Top gainer: Public Sector Banks at +4.42 pp. Biggest cession: Private Sector Banks at -4.41 pp.",
+        "Rotation mass \u2014 the share that changed hands \u2014 is 4.43 pp."
       ]
     },
     "sourceSignals": [
@@ -1823,63 +1766,58 @@
     "id": "cc-bank-divergence",
     "group": "cc",
     "cut": "by_bank",
-    "period": "Aug 2026",
+    "period": "Sep 2026",
     "type": "insight",
-    "title": "Banks moving against the pack on credit cards \u2014 widest gap TAMILNAD MERCANTILE BANK LTD at -40.81 pp",
-    "body": "While credit cards overall moves one way, these banks are moving the other. Growing against a declining trend: CITI BANK +18.90 pp; SBM BANK INDIA LTD +10.80 pp; HSBC LTD +10.50 pp versus its category's pace. Declining against a growing trend: TAMILNAD MERCANTILE BANK LTD -40.81 pp; SOUTH INDIAN BANK -19.65 pp; DHANALAXMI BANK LTD -18.97 pp. 7 banks are flagged in all.",
+    "title": "Banks moving against the pack on credit cards \u2014 widest gap TAMILNAD MERCANTILE BANK LTD at -26.52 pp",
+    "body": "While credit cards overall moves one way, these banks are moving the other. Growing against a declining trend: CITI BANK +20.16 pp; HSBC LTD +13.04 pp versus its category's pace. Declining against a growing trend: TAMILNAD MERCANTILE BANK LTD -26.52 pp; SOUTH INDIAN BANK -19.53 pp; DHANALAXMI BANK LTD -17.65 pp. 6 banks are flagged in all.",
     "implication": "A bank moving against its family is an early divergence read, not a verdict: check whether it is a base effect, a reclassification, or a genuine shift before acting on it. The gap closing or widening next month is the signal to watch.",
     "reasoning": {
       "signals": [
         {
           "key": "cc-bank-divergence:CITI BANK",
-          "value": 18.8992
-        },
-        {
-          "key": "cc-bank-divergence:SBM BANK INDIA LTD",
-          "value": 10.7956
+          "value": 20.1593
         },
         {
           "key": "cc-bank-divergence:HSBC LTD",
-          "value": 10.4967
+          "value": 13.0376
         },
         {
           "key": "cc-bank-divergence:INDUSIND BANK LTD",
-          "value": -16.3566
+          "value": -16.0612
         },
         {
           "key": "cc-bank-divergence:DHANALAXMI BANK LTD",
-          "value": -18.9736
+          "value": -17.6505
         },
         {
           "key": "cc-bank-divergence:SOUTH INDIAN BANK",
-          "value": -19.6529
+          "value": -19.5295
         },
         {
           "key": "cc-bank-divergence:TAMILNAD MERCANTILE BANK LTD",
-          "value": -40.8136
+          "value": -26.5243
         }
       ],
       "chain": [
         "Each bank's year-on-year growth is compared with its category's; a flag needs opposite directions and a material gap.",
-        "Widest gap: TAMILNAD MERCANTILE BANK LTD at -40.81 pp versus its category.",
-        "7 banks currently contradict their trend (3 above, 4 below)."
+        "Widest gap: TAMILNAD MERCANTILE BANK LTD at -26.52 pp versus its category.",
+        "6 banks currently contradict their trend (2 above, 4 below)."
       ]
     },
     "basis": {
       "facts": [
-        "CITI BANK: +18.90 pp vs its category's YoY pace",
-        "SBM BANK INDIA LTD: +10.80 pp vs its category's YoY pace",
-        "HSBC LTD: +10.50 pp vs its category's YoY pace",
-        "INDUSIND BANK LTD: -16.36 pp vs its category's YoY pace",
-        "DHANALAXMI BANK LTD: -18.97 pp vs its category's YoY pace",
-        "SOUTH INDIAN BANK: -19.65 pp vs its category's YoY pace",
-        "TAMILNAD MERCANTILE BANK LTD: -40.81 pp vs its category's YoY pace",
+        "CITI BANK: +20.16 pp vs its category's YoY pace",
+        "HSBC LTD: +13.04 pp vs its category's YoY pace",
+        "INDUSIND BANK LTD: -16.06 pp vs its category's YoY pace",
+        "DHANALAXMI BANK LTD: -17.65 pp vs its category's YoY pace",
+        "SOUTH INDIAN BANK: -19.53 pp vs its category's YoY pace",
+        "TAMILNAD MERCANTILE BANK LTD: -26.52 pp vs its category's YoY pace",
         "Source: signals.db (cc-bank-divergence)"
       ],
       "inferences": [
         "Each bank's year-on-year growth is compared with its category's; a flag needs opposite directions and a material gap.",
-        "Widest gap: TAMILNAD MERCANTILE BANK LTD at -40.81 pp versus its category.",
-        "7 banks currently contradict their trend (3 above, 4 below)."
+        "Widest gap: TAMILNAD MERCANTILE BANK LTD at -26.52 pp versus its category.",
+        "6 banks currently contradict their trend (2 above, 4 below)."
       ]
     },
     "sourceSignals": [
@@ -1908,123 +1846,118 @@
     "id": "dc-bank-divergence",
     "group": "dc",
     "cut": "by_bank",
-    "period": "Aug 2026",
+    "period": "Sep 2026",
     "type": "insight",
-    "title": "Banks moving against the pack on debit cards \u2014 widest gap NSDL PAYMENTS BANK at +338.41 pp",
-    "body": "While debit cards overall moves one way, these banks are moving the other. Growing against a declining trend: NSDL PAYMENTS BANK +338.41 pp; AIRTEL PAYMENTS BANK +85.33 pp; INDIA POST PAYMENTS BANK +45.61 pp versus its category's pace. Declining against a growing trend: UTKARSH SMALL FINANCE BANK LTD -51.90 pp; NAINITAL BANK LTD -50.92 pp; EQUITAS SMALL FINANCE BANK LTD -40.85 pp. 19 banks are flagged in all.",
+    "title": "Banks moving against the pack on debit cards \u2014 widest gap NSDL PAYMENTS BANK at +107.54 pp",
+    "body": "While debit cards overall moves one way, these banks are moving the other. Growing against a declining trend: NSDL PAYMENTS BANK +107.54 pp; AIRTEL PAYMENTS BANK +83.44 pp; INDIA POST PAYMENTS BANK +43.65 pp versus its category's pace. Declining against a growing trend: NAINITAL BANK LTD -50.65 pp; UTKARSH SMALL FINANCE BANK LTD -48.04 pp; EQUITAS SMALL FINANCE BANK LTD -40.45 pp. 18 banks are flagged in all.",
     "implication": "A bank moving against its family is an early divergence read, not a verdict: check whether it is a base effect, a reclassification, or a genuine shift before acting on it. The gap closing or widening next month is the signal to watch.",
     "reasoning": {
       "signals": [
         {
           "key": "dc-bank-divergence:NSDL PAYMENTS BANK",
-          "value": 338.413
+          "value": 107.5424
         },
         {
           "key": "dc-bank-divergence:AIRTEL PAYMENTS BANK",
-          "value": 85.3259
+          "value": 83.4365
         },
         {
           "key": "dc-bank-divergence:INDIA POST PAYMENTS BANK",
-          "value": 45.6148
+          "value": 43.6458
         },
         {
           "key": "dc-bank-divergence:JIO PAYMENTS BANK",
-          "value": 32.88
+          "value": 43.3123
         },
         {
           "key": "dc-bank-divergence:FINO PAYMENTS BANK",
-          "value": 25.677
-        },
-        {
-          "key": "dc-bank-divergence:DBS INDIA BANK LTD",
-          "value": -5.4133
+          "value": 28.8923
         },
         {
           "key": "dc-bank-divergence:KARNATAKA BANK LTD",
-          "value": -6.0959
+          "value": -6.2865
         },
         {
           "key": "dc-bank-divergence:RBL BANK LTD",
-          "value": -6.852
+          "value": -6.3161
         },
         {
           "key": "dc-bank-divergence:CSB BANK LTD.",
-          "value": -7.8396
+          "value": -8.2572
         },
         {
           "key": "dc-bank-divergence:IDBI BANK LTD",
-          "value": -9.8405
-        },
-        {
-          "key": "dc-bank-divergence:STANDARD CHARTERED BANK LTD",
-          "value": -10.7248
+          "value": -8.3756
         },
         {
           "key": "dc-bank-divergence:FEDERAL BANK LTD",
-          "value": -10.758
+          "value": -11.4404
         },
         {
           "key": "dc-bank-divergence:BANK OF BARODA",
-          "value": -11.7328
+          "value": -12.5688
         },
         {
           "key": "dc-bank-divergence:KARUR VYSYA BANK LTD",
-          "value": -12.3711
+          "value": -13.1337
+        },
+        {
+          "key": "dc-bank-divergence:STANDARD CHARTERED BANK LTD",
+          "value": -14.248
         },
         {
           "key": "dc-bank-divergence:ESAF SMALL FINANCE BANK LTD",
-          "value": -27.3369
+          "value": -27.3305
         },
         {
           "key": "dc-bank-divergence:BANK OF MAHARASHTRA",
-          "value": -28.7811
+          "value": -28.0372
         },
         {
           "key": "dc-bank-divergence:EQUITAS SMALL FINANCE BANK LTD",
-          "value": -40.8542
-        },
-        {
-          "key": "dc-bank-divergence:NAINITAL BANK LTD",
-          "value": -50.9199
+          "value": -40.4454
         },
         {
           "key": "dc-bank-divergence:UTKARSH SMALL FINANCE BANK LTD",
-          "value": -51.9028
+          "value": -48.0423
+        },
+        {
+          "key": "dc-bank-divergence:NAINITAL BANK LTD",
+          "value": -50.6519
         }
       ],
       "chain": [
         "Each bank's year-on-year growth is compared with its category's; a flag needs opposite directions and a material gap.",
-        "Widest gap: NSDL PAYMENTS BANK at +338.41 pp versus its category.",
-        "19 banks currently contradict their trend (5 above, 14 below)."
+        "Widest gap: NSDL PAYMENTS BANK at +107.54 pp versus its category.",
+        "18 banks currently contradict their trend (5 above, 13 below)."
       ]
     },
     "basis": {
       "facts": [
-        "NSDL PAYMENTS BANK: +338.41 pp vs its category's YoY pace",
-        "AIRTEL PAYMENTS BANK: +85.33 pp vs its category's YoY pace",
-        "INDIA POST PAYMENTS BANK: +45.61 pp vs its category's YoY pace",
-        "JIO PAYMENTS BANK: +32.88 pp vs its category's YoY pace",
-        "FINO PAYMENTS BANK: +25.68 pp vs its category's YoY pace",
-        "DBS INDIA BANK LTD: -5.41 pp vs its category's YoY pace",
-        "KARNATAKA BANK LTD: -6.10 pp vs its category's YoY pace",
-        "RBL BANK LTD: -6.85 pp vs its category's YoY pace",
-        "CSB BANK LTD.: -7.84 pp vs its category's YoY pace",
-        "IDBI BANK LTD: -9.84 pp vs its category's YoY pace",
-        "STANDARD CHARTERED BANK LTD: -10.72 pp vs its category's YoY pace",
-        "FEDERAL BANK LTD: -10.76 pp vs its category's YoY pace",
-        "BANK OF BARODA: -11.73 pp vs its category's YoY pace",
-        "KARUR VYSYA BANK LTD: -12.37 pp vs its category's YoY pace",
-        "ESAF SMALL FINANCE BANK LTD: -27.34 pp vs its category's YoY pace",
-        "BANK OF MAHARASHTRA: -28.78 pp vs its category's YoY pace",
-        "EQUITAS SMALL FINANCE BANK LTD: -40.85 pp vs its category's YoY pace",
-        "NAINITAL BANK LTD: -50.92 pp vs its category's YoY pace",
-        "UTKARSH SMALL FINANCE BANK LTD: -51.90 pp vs its category's YoY pace",
+        "NSDL PAYMENTS BANK: +107.54 pp vs its category's YoY pace",
+        "AIRTEL PAYMENTS BANK: +83.44 pp vs its category's YoY pace",
+        "INDIA POST PAYMENTS BANK: +43.65 pp vs its category's YoY pace",
+        "JIO PAYMENTS BANK: +43.31 pp vs its category's YoY pace",
+        "FINO PAYMENTS BANK: +28.89 pp vs its category's YoY pace",
+        "KARNATAKA BANK LTD: -6.29 pp vs its category's YoY pace",
+        "RBL BANK LTD: -6.32 pp vs its category's YoY pace",
+        "CSB BANK LTD.: -8.26 pp vs its category's YoY pace",
+        "IDBI BANK LTD: -8.38 pp vs its category's YoY pace",
+        "FEDERAL BANK LTD: -11.44 pp vs its category's YoY pace",
+        "BANK OF BARODA: -12.57 pp vs its category's YoY pace",
+        "KARUR VYSYA BANK LTD: -13.13 pp vs its category's YoY pace",
+        "STANDARD CHARTERED BANK LTD: -14.25 pp vs its category's YoY pace",
+        "ESAF SMALL FINANCE BANK LTD: -27.33 pp vs its category's YoY pace",
+        "BANK OF MAHARASHTRA: -28.04 pp vs its category's YoY pace",
+        "EQUITAS SMALL FINANCE BANK LTD: -40.45 pp vs its category's YoY pace",
+        "UTKARSH SMALL FINANCE BANK LTD: -48.04 pp vs its category's YoY pace",
+        "NAINITAL BANK LTD: -50.65 pp vs its category's YoY pace",
         "Source: signals.db (dc-bank-divergence)"
       ],
       "inferences": [
         "Each bank's year-on-year growth is compared with its category's; a flag needs opposite directions and a material gap.",
-        "Widest gap: NSDL PAYMENTS BANK at +338.41 pp versus its category.",
-        "19 banks currently contradict their trend (5 above, 14 below)."
+        "Widest gap: NSDL PAYMENTS BANK at +107.54 pp versus its category.",
+        "18 banks currently contradict their trend (5 above, 13 below)."
       ]
     },
     "sourceSignals": [
@@ -2053,73 +1986,78 @@
     "id": "pos-bank-divergence",
     "group": "infra",
     "cut": "by_bank",
-    "period": "Aug 2026",
+    "period": "Sep 2026",
     "type": "insight",
-    "title": "Banks moving against the pack on POS terminals \u2014 widest gap YES BANK LTD at +143.74 pp",
-    "body": "While POS terminals overall moves one way, these banks are moving the other. Growing against a declining trend: YES BANK LTD +143.74 pp; FEDERAL BANK LTD +44.49 pp; HDFC BANK LTD +36.28 pp versus its category's pace. Declining against a growing trend: UCO BANK -74.56 pp; UNION BANK OF INDIA -33.55 pp. 9 banks are flagged in all.",
+    "title": "Banks moving against the pack on POS terminals \u2014 widest gap YES BANK LTD at +134.51 pp",
+    "body": "While POS terminals overall moves one way, these banks are moving the other. Growing against a declining trend: YES BANK LTD +134.51 pp; FEDERAL BANK LTD +41.07 pp; HDFC BANK LTD +34.80 pp versus its category's pace. Declining against a growing trend: UCO BANK -69.01 pp; UNION BANK OF INDIA -34.04 pp; CENTRAL BANK OF INDIA -18.25 pp. 10 banks are flagged in all.",
     "implication": "A bank moving against its family is an early divergence read, not a verdict: check whether it is a base effect, a reclassification, or a genuine shift before acting on it. The gap closing or widening next month is the signal to watch.",
     "reasoning": {
       "signals": [
         {
           "key": "pos-bank-divergence:YES BANK LTD",
-          "value": 143.7424
+          "value": 134.507
         },
         {
           "key": "pos-bank-divergence:FEDERAL BANK LTD",
-          "value": 44.4908
+          "value": 41.073
         },
         {
           "key": "pos-bank-divergence:HDFC BANK LTD",
-          "value": 36.282
-        },
-        {
-          "key": "pos-bank-divergence:DHANALAXMI BANK LTD",
-          "value": 28.7398
-        },
-        {
-          "key": "pos-bank-divergence:BANDHAN BANK LTD",
-          "value": 26.3778
-        },
-        {
-          "key": "pos-bank-divergence:SOUTH INDIAN BANK",
-          "value": 25.7489
+          "value": 34.8008
         },
         {
           "key": "pos-bank-divergence:AXIS BANK LTD",
-          "value": 25.5963
+          "value": 32.2848
+        },
+        {
+          "key": "pos-bank-divergence:BANDHAN BANK LTD",
+          "value": 25.678
+        },
+        {
+          "key": "pos-bank-divergence:SOUTH INDIAN BANK",
+          "value": 25.4457
+        },
+        {
+          "key": "pos-bank-divergence:KARNATAKA BANK LTD",
+          "value": 25.1397
+        },
+        {
+          "key": "pos-bank-divergence:CENTRAL BANK OF INDIA",
+          "value": -18.2496
         },
         {
           "key": "pos-bank-divergence:UNION BANK OF INDIA",
-          "value": -33.5504
+          "value": -34.0383
         },
         {
           "key": "pos-bank-divergence:UCO BANK",
-          "value": -74.5599
+          "value": -69.0068
         }
       ],
       "chain": [
         "Each bank's year-on-year growth is compared with its category's; a flag needs opposite directions and a material gap.",
-        "Widest gap: YES BANK LTD at +143.74 pp versus its category.",
-        "9 banks currently contradict their trend (7 above, 2 below)."
+        "Widest gap: YES BANK LTD at +134.51 pp versus its category.",
+        "10 banks currently contradict their trend (7 above, 3 below)."
       ]
     },
     "basis": {
       "facts": [
-        "YES BANK LTD: +143.74 pp vs its category's YoY pace",
-        "FEDERAL BANK LTD: +44.49 pp vs its category's YoY pace",
-        "HDFC BANK LTD: +36.28 pp vs its category's YoY pace",
-        "DHANALAXMI BANK LTD: +28.74 pp vs its category's YoY pace",
-        "BANDHAN BANK LTD: +26.38 pp vs its category's YoY pace",
-        "SOUTH INDIAN BANK: +25.75 pp vs its category's YoY pace",
-        "AXIS BANK LTD: +25.60 pp vs its category's YoY pace",
-        "UNION BANK OF INDIA: -33.55 pp vs its category's YoY pace",
-        "UCO BANK: -74.56 pp vs its category's YoY pace",
+        "YES BANK LTD: +134.51 pp vs its category's YoY pace",
+        "FEDERAL BANK LTD: +41.07 pp vs its category's YoY pace",
+        "HDFC BANK LTD: +34.80 pp vs its category's YoY pace",
+        "AXIS BANK LTD: +32.28 pp vs its category's YoY pace",
+        "BANDHAN BANK LTD: +25.68 pp vs its category's YoY pace",
+        "SOUTH INDIAN BANK: +25.45 pp vs its category's YoY pace",
+        "KARNATAKA BANK LTD: +25.14 pp vs its category's YoY pace",
+        "CENTRAL BANK OF INDIA: -18.25 pp vs its category's YoY pace",
+        "UNION BANK OF INDIA: -34.04 pp vs its category's YoY pace",
+        "UCO BANK: -69.01 pp vs its category's YoY pace",
         "Source: signals.db (pos-bank-divergence)"
       ],
       "inferences": [
         "Each bank's year-on-year growth is compared with its category's; a flag needs opposite directions and a material gap.",
-        "Widest gap: YES BANK LTD at +143.74 pp versus its category.",
-        "9 banks currently contradict their trend (7 above, 2 below)."
+        "Widest gap: YES BANK LTD at +134.51 pp versus its category.",
+        "10 banks currently contradict their trend (7 above, 3 below)."
       ]
     },
     "sourceSignals": [
@@ -2148,24 +2086,24 @@
     "id": "cc-category-allocation",
     "group": "cc",
     "cut": "by_type",
-    "period": "Aug 2026",
+    "period": "Sep 2026",
     "type": "insight",
-    "title": "Private Sector Banks took 67.0% of all new credit cards in the past year",
-    "body": "Of the credit cards added over the past twelve months, Private Sector Banks took 67.0% \u2014 the largest share of the new money \u2014 growing 9.7% a year and slowing (-0.11 pp). The rest went to Public Sector Banks 23.9%; Small Finance Banks 11.5%; Foreign Banks -2.3%.",
+    "title": "Private Sector Banks took 65.4% of all new credit cards in the past year",
+    "body": "Of the credit cards added over the past twelve months, Private Sector Banks took 65.4% \u2014 the largest share of the new money \u2014 growing 9.6% a year and slowing (-0.12 pp). The rest went to Public Sector Banks 25.3%; Small Finance Banks 12.3%; Foreign Banks -3.0%. Foreign Banks took -3.0% while growing -7.8% a year and slowing (-1.81 pp) \u2014 a smaller slice of a faster-growing total, not a retreat.",
     "implication": "Shares of new lending move far faster than shares of the book, so this is the earlier read of the two. It says where the money went, not why \u2014 and a falling share alongside rising growth means the others grew faster, not that this one shrank.",
     "reasoning": {
       "signals": [
         {
           "key": "cc-category-momentum:Private Sector Banks",
-          "value": 7740425.0
+          "value": 7720744.0
         },
         {
           "key": "cc-category-momentum:Public Sector Banks",
-          "value": 2759126.0
+          "value": 2985247.0
         },
         {
           "key": "cc-category-momentum:Small Finance Banks",
-          "value": 1329937.0
+          "value": 1454520.0
         },
         {
           "key": "cc-category-momentum:Payment Banks",
@@ -2173,27 +2111,27 @@
         },
         {
           "key": "cc-category-momentum:Foreign Banks",
-          "value": -271536.0
+          "value": -352370.0
         }
       ],
       "chain": [
         "Every sector's credit cards is compared with the same month a year earlier, and each one's share of the total increase is taken.",
-        "Private Sector Banks accounts for 67.0% of the increase.",
+        "Private Sector Banks accounts for 65.4% of the increase.",
         "All sectors moved the same way this window, so the shares of the net increase are bounded and sum to a hundred."
       ]
     },
     "basis": {
       "facts": [
-        "Private: +7,740,425 added, +64.0% of the total movement",
-        "PSB: +2,759,126 added, +22.8% of the total movement",
-        "SFB: +1,329,937 added, +11.0% of the total movement",
+        "Private: +7,720,744 added, +61.7% of the total movement",
+        "PSB: +2,985,247 added, +23.9% of the total movement",
+        "SFB: +1,454,520 added, +11.6% of the total movement",
         "Payments: +0 added, +0.0% of the total movement",
-        "Foreign: -271,536 added, -2.2% of the total movement",
+        "Foreign: -352,370 added, -2.8% of the total movement",
         "Source: signals.db (cc-category-allocation, cc-category-momentum, cc-category-acceleration, cc-category-yoy-scan)"
       ],
       "inferences": [
         "Every sector's credit cards is compared with the same month a year earlier, and each one's share of the total increase is taken.",
-        "Private Sector Banks accounts for 67.0% of the increase.",
+        "Private Sector Banks accounts for 65.4% of the increase.",
         "All sectors moved the same way this window, so the shares of the net increase are bounded and sum to a hundred."
       ]
     },
@@ -2226,32 +2164,32 @@
     "id": "dc-category-allocation",
     "group": "dc",
     "cut": "by_type",
-    "period": "Aug 2026",
+    "period": "Sep 2026",
     "type": "insight",
     "title": "Payment Banks shed ground to Public Sector Banks \u2014 the net barely moved",
-    "body": "Debit cards shows almost no net change over the year, but a great deal happened underneath it: Public Sector Banks expanded while Payment Banks contracted by a similar amount. Public Sector Banks accounts for 31.4% of the total movement and Payment Banks for -28.5%. Almost none of that movement survives into the net figure \u2014 this period is a transfer between members, not a change in size.",
+    "body": "Debit cards shows almost no net change over the year, but a great deal happened underneath it: Public Sector Banks expanded while Payment Banks contracted by a similar amount. Public Sector Banks accounts for 26.5% of the total movement and Payment Banks for -32.4%. Almost none of that movement survives into the net figure \u2014 this period is a transfer between members, not a change in size.",
     "implication": "The headline number is the least informative part of this period. The reallocation between members is the finding.",
     "reasoning": {
       "signals": [
         {
           "key": "dc-category-momentum:Public Sector Banks",
-          "value": 13710354.0
+          "value": 11220171.0
         },
         {
           "key": "dc-category-momentum:Private Sector Banks",
-          "value": 10419924.912
+          "value": 10130557.0
         },
         {
           "key": "dc-category-momentum:Small Finance Banks",
-          "value": 7003717.0
+          "value": 7253454.0
         },
         {
           "key": "dc-category-momentum:Foreign Banks",
-          "value": 99794.0
+          "value": 32259.0
         },
         {
           "key": "dc-category-momentum:Payment Banks",
-          "value": -12447677.0
+          "value": -13744409.0
         }
       ],
       "chain": [
@@ -2262,11 +2200,11 @@
     },
     "basis": {
       "facts": [
-        "PSB: +13,710,354 added, +31.4% of the total movement",
-        "Private: +10,419,925 added, +23.9% of the total movement",
-        "SFB: +7,003,717 added, +16.0% of the total movement",
-        "Foreign: +99,794 added, +0.2% of the total movement",
-        "Payments: -12,447,677 added, -28.5% of the total movement",
+        "PSB: +11,220,171 added, +26.5% of the total movement",
+        "Private: +10,130,557 added, +23.9% of the total movement",
+        "SFB: +7,253,454 added, +17.1% of the total movement",
+        "Foreign: +32,259 added, +0.1% of the total movement",
+        "Payments: -13,744,409 added, -32.4% of the total movement",
         "Source: signals.db (dc-category-allocation, dc-category-momentum, dc-category-acceleration, dc-category-yoy-scan)"
       ],
       "inferences": [
@@ -2304,20 +2242,20 @@
     "id": "pos-category-allocation",
     "group": "infra",
     "cut": "by_type",
-    "period": "Aug 2026",
+    "period": "Sep 2026",
     "type": "insight",
     "title": "POS terminals shrank, but Public Sector Banks and Small Finance Banks moved against it",
-    "body": "POS terminals fell over the past year, but not everywhere: Public Sector Banks and Small Finance Banks expanded while the rest contracted. Private Sector Banks accounts for 91.0% of all the movement in the period. Because parts moved in opposite directions, much of the movement cancels out and the net figure understates how much actually shifted.",
+    "body": "POS terminals fell over the past year, but not everywhere: Public Sector Banks and Small Finance Banks expanded while the rest contracted. Private Sector Banks accounts for 90.6% of all the movement in the period. Because parts moved in opposite directions, much of the movement cancels out and the net figure understates how much actually shifted.",
     "implication": "A shrinking total with members moving the other way is a different claim from broad decline. Read the members, not the headline.",
     "reasoning": {
       "signals": [
         {
           "key": "pos-category-momentum:Public Sector Banks",
-          "value": 189327.0
+          "value": 191912.0
         },
         {
           "key": "pos-category-momentum:Small Finance Banks",
-          "value": 354.0
+          "value": 307.0
         },
         {
           "key": "pos-category-momentum:Payment Banks",
@@ -2325,11 +2263,11 @@
         },
         {
           "key": "pos-category-momentum:Foreign Banks",
-          "value": -3580.0
+          "value": -3661.0
         },
         {
           "key": "pos-category-momentum:Private Sector Banks",
-          "value": -1943074.0
+          "value": -1885454.0
         }
       ],
       "chain": [
@@ -2340,11 +2278,11 @@
     },
     "basis": {
       "facts": [
-        "PSB: +189,327 added, +8.9% of the total movement",
-        "SFB: +354 added, +0.0% of the total movement",
+        "PSB: +191,912 added, +9.2% of the total movement",
+        "SFB: +307 added, +0.0% of the total movement",
         "Payments: +0 added, +0.0% of the total movement",
-        "Foreign: -3,580 added, -0.2% of the total movement",
-        "Private: -1,943,074 added, -91.0% of the total movement",
+        "Foreign: -3,661 added, -0.2% of the total movement",
+        "Private: -1,885,454 added, -90.6% of the total movement",
         "Source: signals.db (pos-category-allocation, pos-category-momentum, pos-category-acceleration, pos-category-yoy-scan)"
       ],
       "inferences": [
@@ -2382,55 +2320,65 @@
     "id": "cc-issuance-vs-spend-gap",
     "group": "cc",
     "cut": "total",
-    "period": "Aug 2026",
+    "period": "Sep 2026",
     "type": "insight",
-    "title": "Credit cards in force grew faster than credit card spend (+4.41 pp apart over a year)",
-    "body": "Credit cards in force and credit card spend normally move together \u2014 they are two readings of the same activity. Over the past year they have come apart. Both grew over the year, credit cards in force the faster of the two. Measured as credit cards in force minus credit card spend, the two year-on-year rates are +4.41 pp apart. At the bank level the gap is concentrated, not general: 2 banks are flagged \u2014 CSB BANK LTD. +17.98 pp; ICICI BANK LTD +15.36 pp.",
+    "title": "Credit cards in force grew while credit card spend fell (+16.33 pp apart over a year)",
+    "body": "Credit cards in force and credit card spend normally move together \u2014 they are two readings of the same activity. Over the past year they have come apart. Credit cards in force grew over the year; credit card spend fell. Measured as credit cards in force minus credit card spend, the two year-on-year rates are +16.33 pp apart. At the bank level the gap is concentrated, not general: 4 banks are flagged \u2014 ICICI BANK LTD +34.38 pp; STATE BANK OF INDIA +21.84 pp; AXIS BANK LTD +18.43 pp.",
     "implication": "A gap between credit cards in force and credit card spend is a question, not a conclusion: the two sides can part company because behaviour changed, because one side has a base effect, or because reporting shifted. Watch whether the gap closes next month \u2014 a pair that stays apart for several months is telling you the relationship itself has changed.",
     "reasoning": {
       "signals": [
         {
           "key": "cc-issuance-vs-spend-gap:total",
-          "value": 4.4142
+          "value": 16.3274
         },
         {
           "key": "cc-issuance-vs-spend-gap:a",
-          "value": 10.2741
+          "value": 10.403
         },
         {
           "key": "cc-issuance-vs-spend-gap:b",
-          "value": 5.86
-        },
-        {
-          "key": "cc-issuance-vs-spend-bank-gap:CSB BANK LTD.",
-          "value": 17.9808
+          "value": -5.9244
         },
         {
           "key": "cc-issuance-vs-spend-bank-gap:ICICI BANK LTD",
-          "value": 15.3553
+          "value": 34.3765
+        },
+        {
+          "key": "cc-issuance-vs-spend-bank-gap:STATE BANK OF INDIA",
+          "value": 21.8355
+        },
+        {
+          "key": "cc-issuance-vs-spend-bank-gap:AXIS BANK LTD",
+          "value": 18.4348
+        },
+        {
+          "key": "cc-issuance-vs-spend-bank-gap:CSB BANK LTD.",
+          "value": 15.2331
         }
       ],
       "chain": [
         "Credit cards in force and credit card spend are a declared pair: each side's growth is measured against the same month a year earlier.",
-        "Both grew over the year, credit cards in force the faster of the two.",
-        "The gap between the two rates \u2014 credit cards in force minus credit card spend \u2014 is +4.41 pp, wide enough to count as a divergence rather than ordinary drift.",
-        "2 banks show the same split on their own books, the widest at +17.98 pp."
+        "Credit cards in force grew over the year; credit card spend fell.",
+        "The gap between the two rates \u2014 credit cards in force minus credit card spend \u2014 is +16.33 pp, wide enough to count as a divergence rather than ordinary drift.",
+        "4 banks show the same split on their own books, the widest at +34.38 pp."
       ]
     },
     "basis": {
       "facts": [
-        "credit cards in force vs credit card spend: +4.41 pp apart year on year",
-        "credit cards in force: +10.27% YoY",
-        "credit card spend: +5.86% YoY",
-        "CSB BANK LTD.: +17.98 pp \u2014 issuance ahead of spend on its own book",
-        "ICICI BANK LTD: +15.36 pp \u2014 issuance ahead of spend on its own book",
+        "credit cards in force vs credit card spend: +16.33 pp apart year on year",
+        "credit cards in force: +10.40% YoY",
+        "credit card spend: -5.92% YoY",
+        "ICICI BANK LTD: +34.38 pp \u2014 issuance ahead of spend on its own book",
+        "STATE BANK OF INDIA: +21.84 pp \u2014 issuance ahead of spend on its own book",
+        "AXIS BANK LTD: +18.43 pp \u2014 issuance ahead of spend on its own book",
+        "CSB BANK LTD.: +15.23 pp \u2014 issuance ahead of spend on its own book",
         "Source: signals.db (cc-issuance-vs-spend-gap, cc-issuance-vs-spend-bank-gap)"
       ],
       "inferences": [
         "Credit cards in force and credit card spend are a declared pair: each side's growth is measured against the same month a year earlier.",
-        "Both grew over the year, credit cards in force the faster of the two.",
-        "The gap between the two rates \u2014 credit cards in force minus credit card spend \u2014 is +4.41 pp, wide enough to count as a divergence rather than ordinary drift.",
-        "2 banks show the same split on their own books, the widest at +17.98 pp."
+        "Credit cards in force grew over the year; credit card spend fell.",
+        "The gap between the two rates \u2014 credit cards in force minus credit card spend \u2014 is +16.33 pp, wide enough to count as a divergence rather than ordinary drift.",
+        "4 banks show the same split on their own books, the widest at +34.38 pp."
       ]
     },
     "sourceSignals": [
@@ -2476,43 +2424,43 @@
     "id": "dc-issuance-vs-spend-gap",
     "group": "dc",
     "cut": "total",
-    "period": "Aug 2026",
+    "period": "Sep 2026",
     "type": "insight",
-    "title": "Debit cards in force grew while debit card spend fell (+3.93 pp apart over a year)",
-    "body": "Debit cards in force and debit card spend normally move together \u2014 they are two readings of the same activity. Over the past year they have come apart. Debit cards in force grew over the year; debit card spend fell. Measured as debit cards in force minus debit card spend, the two year-on-year rates are +3.93 pp apart.",
+    "title": "Debit cards in force grew while debit card spend fell (+9.09 pp apart over a year)",
+    "body": "Debit cards in force and debit card spend normally move together \u2014 they are two readings of the same activity. Over the past year they have come apart. Debit cards in force grew over the year; debit card spend fell. Measured as debit cards in force minus debit card spend, the two year-on-year rates are +9.09 pp apart.",
     "implication": "A gap between debit cards in force and debit card spend is a question, not a conclusion: the two sides can part company because behaviour changed, because one side has a base effect, or because reporting shifted. Watch whether the gap closes next month \u2014 a pair that stays apart for several months is telling you the relationship itself has changed.",
     "reasoning": {
       "signals": [
         {
           "key": "dc-issuance-vs-spend-gap:total",
-          "value": 3.9291
+          "value": 9.0905
         },
         {
           "key": "dc-issuance-vs-spend-gap:a",
-          "value": 1.8453
+          "value": 1.4532
         },
         {
           "key": "dc-issuance-vs-spend-gap:b",
-          "value": -2.0837
+          "value": -7.6373
         }
       ],
       "chain": [
         "Debit cards in force and debit card spend are a declared pair: each side's growth is measured against the same month a year earlier.",
         "Debit cards in force grew over the year; debit card spend fell.",
-        "The gap between the two rates \u2014 debit cards in force minus debit card spend \u2014 is +3.93 pp, wide enough to count as a divergence rather than ordinary drift."
+        "The gap between the two rates \u2014 debit cards in force minus debit card spend \u2014 is +9.09 pp, wide enough to count as a divergence rather than ordinary drift."
       ]
     },
     "basis": {
       "facts": [
-        "debit cards in force vs debit card spend: +3.93 pp apart year on year",
-        "debit cards in force: +1.85% YoY",
-        "debit card spend: -2.08% YoY",
+        "debit cards in force vs debit card spend: +9.09 pp apart year on year",
+        "debit cards in force: +1.45% YoY",
+        "debit card spend: -7.64% YoY",
         "Source: signals.db (dc-issuance-vs-spend-gap)"
       ],
       "inferences": [
         "Debit cards in force and debit card spend are a declared pair: each side's growth is measured against the same month a year earlier.",
         "Debit cards in force grew over the year; debit card spend fell.",
-        "The gap between the two rates \u2014 debit cards in force minus debit card spend \u2014 is +3.93 pp, wide enough to count as a divergence rather than ordinary drift."
+        "The gap between the two rates \u2014 debit cards in force minus debit card spend \u2014 is +9.09 pp, wide enough to count as a divergence rather than ordinary drift."
       ]
     },
     "sourceSignals": [
@@ -2557,43 +2505,43 @@
     "id": "pos-fleet-vs-spend-gap",
     "group": "infra",
     "cut": "total",
-    "period": "Aug 2026",
+    "period": "Sep 2026",
     "type": "insight",
-    "title": "Value transacted at POS grew while POS terminals deployed fell (-19.58 pp apart over a year)",
-    "body": "POS terminals deployed and value transacted at POS normally move together \u2014 they are two readings of the same activity. Over the past year they have come apart. Value transacted at POS grew over the year; POS terminals deployed fell. Measured as POS terminals deployed minus value transacted at POS, the two year-on-year rates are -19.58 pp apart.",
+    "title": "Value transacted at POS grew while POS terminals deployed fell (-17.30 pp apart over a year)",
+    "body": "POS terminals deployed and value transacted at POS normally move together \u2014 they are two readings of the same activity. Over the past year they have come apart. Value transacted at POS grew over the year; POS terminals deployed fell. Measured as POS terminals deployed minus value transacted at POS, the two year-on-year rates are -17.30 pp apart.",
     "implication": "A gap between POS terminals deployed and value transacted at POS is a question, not a conclusion: the two sides can part company because behaviour changed, because one side has a base effect, or because reporting shifted. Watch whether the gap closes next month \u2014 a pair that stays apart for several months is telling you the relationship itself has changed.",
     "reasoning": {
       "signals": [
         {
           "key": "pos-fleet-vs-spend-gap:total",
-          "value": -19.579
+          "value": -17.2983
         },
         {
           "key": "pos-fleet-vs-spend-gap:a",
-          "value": -14.6847
+          "value": -14.0053
         },
         {
           "key": "pos-fleet-vs-spend-gap:b",
-          "value": 4.8943
+          "value": 3.293
         }
       ],
       "chain": [
         "POS terminals deployed and value transacted at POS are a declared pair: each side's growth is measured against the same month a year earlier.",
         "Value transacted at POS grew over the year; POS terminals deployed fell.",
-        "The gap between the two rates \u2014 POS terminals deployed minus value transacted at POS \u2014 is -19.58 pp, wide enough to count as a divergence rather than ordinary drift."
+        "The gap between the two rates \u2014 POS terminals deployed minus value transacted at POS \u2014 is -17.30 pp, wide enough to count as a divergence rather than ordinary drift."
       ]
     },
     "basis": {
       "facts": [
-        "POS terminals deployed vs value transacted at POS: -19.58 pp apart year on year",
-        "POS terminals deployed: -14.68% YoY",
-        "value transacted at POS: +4.89% YoY",
+        "POS terminals deployed vs value transacted at POS: -17.30 pp apart year on year",
+        "POS terminals deployed: -14.01% YoY",
+        "value transacted at POS: +3.29% YoY",
         "Source: signals.db (pos-fleet-vs-spend-gap)"
       ],
       "inferences": [
         "POS terminals deployed and value transacted at POS are a declared pair: each side's growth is measured against the same month a year earlier.",
         "Value transacted at POS grew over the year; POS terminals deployed fell.",
-        "The gap between the two rates \u2014 POS terminals deployed minus value transacted at POS \u2014 is -19.58 pp, wide enough to count as a divergence rather than ordinary drift."
+        "The gap between the two rates \u2014 POS terminals deployed minus value transacted at POS \u2014 is -17.30 pp, wide enough to count as a divergence rather than ordinary drift."
       ]
     },
     "sourceSignals": [
@@ -2638,43 +2586,43 @@
     "id": "atm-fleet-vs-withdrawal-gap",
     "group": "infra",
     "cut": "total",
-    "period": "Aug 2026",
+    "period": "Sep 2026",
     "type": "insight",
-    "title": "ATMs deployed grew while cash withdrawn at ATMs fell (+7.69 pp apart over a year)",
-    "body": "ATMs deployed and cash withdrawn at ATMs normally move together \u2014 they are two readings of the same activity. Over the past year they have come apart. ATMs deployed grew over the year; cash withdrawn at ATMs fell. Measured as ATMs deployed minus cash withdrawn at ATMs, the two year-on-year rates are +7.69 pp apart.",
+    "title": "ATMs deployed grew while cash withdrawn at ATMs fell (+6.07 pp apart over a year)",
+    "body": "ATMs deployed and cash withdrawn at ATMs normally move together \u2014 they are two readings of the same activity. Over the past year they have come apart. ATMs deployed grew over the year; cash withdrawn at ATMs fell. Measured as ATMs deployed minus cash withdrawn at ATMs, the two year-on-year rates are +6.07 pp apart.",
     "implication": "A gap between ATMs deployed and cash withdrawn at ATMs is a question, not a conclusion: the two sides can part company because behaviour changed, because one side has a base effect, or because reporting shifted. Watch whether the gap closes next month \u2014 a pair that stays apart for several months is telling you the relationship itself has changed.",
     "reasoning": {
       "signals": [
         {
           "key": "atm-fleet-vs-withdrawal-gap:total",
-          "value": 7.6866
+          "value": 6.0687
         },
         {
           "key": "atm-fleet-vs-withdrawal-gap:a",
-          "value": 1.4361
+          "value": 1.4755
         },
         {
           "key": "atm-fleet-vs-withdrawal-gap:b",
-          "value": -6.2505
+          "value": -4.5932
         }
       ],
       "chain": [
         "ATMs deployed and cash withdrawn at ATMs are a declared pair: each side's growth is measured against the same month a year earlier.",
         "ATMs deployed grew over the year; cash withdrawn at ATMs fell.",
-        "The gap between the two rates \u2014 ATMs deployed minus cash withdrawn at ATMs \u2014 is +7.69 pp, wide enough to count as a divergence rather than ordinary drift."
+        "The gap between the two rates \u2014 ATMs deployed minus cash withdrawn at ATMs \u2014 is +6.07 pp, wide enough to count as a divergence rather than ordinary drift."
       ]
     },
     "basis": {
       "facts": [
-        "ATMs deployed vs cash withdrawn at ATMs: +7.69 pp apart year on year",
-        "ATMs deployed: +1.44% YoY",
-        "cash withdrawn at ATMs: -6.25% YoY",
+        "ATMs deployed vs cash withdrawn at ATMs: +6.07 pp apart year on year",
+        "ATMs deployed: +1.48% YoY",
+        "cash withdrawn at ATMs: -4.59% YoY",
         "Source: signals.db (atm-fleet-vs-withdrawal-gap)"
       ],
       "inferences": [
         "ATMs deployed and cash withdrawn at ATMs are a declared pair: each side's growth is measured against the same month a year earlier.",
         "ATMs deployed grew over the year; cash withdrawn at ATMs fell.",
-        "The gap between the two rates \u2014 ATMs deployed minus cash withdrawn at ATMs \u2014 is +7.69 pp, wide enough to count as a divergence rather than ordinary drift."
+        "The gap between the two rates \u2014 ATMs deployed minus cash withdrawn at ATMs \u2014 is +6.07 pp, wide enough to count as a divergence rather than ordinary drift."
       ]
     },
     "sourceSignals": [

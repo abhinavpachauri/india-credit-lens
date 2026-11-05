@@ -8,7 +8,7 @@
  "planes": {
   "cc-ecom-vs-pos-share": {
    "plane": "composition",
-   "news_score": 1.0,
+   "news_score": 0.0,
    "subject": "cc_ecom"
   },
   "cc-cards-streak": {
@@ -42,11 +42,6 @@
    "plane": "subject",
    "news_score": null,
    "subject": "credit_cards"
-  },
-  "dc-atm-share-structural": {
-   "plane": "composition",
-   "news_score": 0.0,
-   "subject": "dc_atm"
   },
   "dc-ecom-share": {
    "plane": "subject",
@@ -83,6 +78,11 @@
    "news_score": 0.0,
    "subject": "upi_qr"
   },
+  "infra-pos-streak": {
+   "plane": "subject",
+   "news_score": 1.0,
+   "subject": "pos_terminals"
+  },
   "infra-pos-yoy": {
    "plane": "subject",
    "news_score": 0.0,
@@ -90,21 +90,18 @@
    "superseded_by_band": true
   },
   "infra-upi-yoy": {
-   "plane": "subject",
-   "news_score": 0.0,
-   "subject": "upi_qr"
+   "plane": "read",
+   "news_score": 3.0,
+   "subject": "upi_qr",
+   "reason": "surge",
+   "direction": "up"
   },
   "infra-upi-vs-bharat-qr": {
    "plane": "read",
-   "news_score": 2.0,
+   "news_score": 4.0,
    "subject": "upi_qr",
    "reason": "record",
    "direction": "up"
-  },
-  "infra-category-pos-share": {
-   "plane": "subject",
-   "news_score": null,
-   "subject": "pos_terminals"
   },
   "infra-top-bank-pos": {
    "plane": "subject",
@@ -123,7 +120,7 @@
   },
   "cc-category-rotation": {
    "plane": "read",
-   "news_score": 2.0,
+   "news_score": 4.0,
    "subject": "credit_cards",
    "reason": "record",
    "direction": "up"
@@ -155,7 +152,7 @@
   },
   "cc-category-allocation": {
    "plane": "read",
-   "news_score": 4.0,
+   "news_score": 2.0,
    "subject": "credit_cards",
    "reason": "record",
    "direction": "down"
@@ -174,16 +171,16 @@
   },
   "cc-issuance-vs-spend-gap": {
    "plane": "read",
-   "news_score": 5.0,
+   "news_score": 4.0,
    "subject": "credit_cards",
    "reason": "record",
    "direction": "up"
   },
   "dc-issuance-vs-spend-gap": {
    "plane": "read",
-   "news_score": 3.0,
+   "news_score": 2.0,
    "subject": "debit_cards",
-   "reason": "reversal",
+   "reason": "surge",
    "direction": "up"
   },
   "pos-fleet-vs-spend-gap": {

@@ -8,7 +8,7 @@
 > Authored rationale (layer model, design principles, guard purposes) lives in the
 > hand-written `ARCHITECTURE.md`. This file is the structural, drift-guarded half.
 
-_Derived from 106 scripts._
+_Derived from 107 scripts._
 
 ## 1. Data-flow
 
@@ -89,6 +89,7 @@ Scripts each orchestrator launches as a subprocess, in execution order.
 | `analysis/rbi_sibc/merged/annotations_merged.ts` | external/authored | — | `pipelines/sibc/validate_annotation_basis` |
 | `analysis/rbi_sibc/merged/sections_merged.json` | external/authored | — | `hook_validate`, `pipelines/sibc/detect_format`, `pipelines/sibc/generate_merge`, `pipelines/sibc/validate_content`, `pipelines/sibc/validate_web_series` |
 | `analysis/rbi_sibc/merged/system_model.json` | external/authored | — | `core/relational_insights`, `guards/audit_force_sources` |
+| `analysis/rbi_sibc/series_breaks.json` | external/authored | — | `pipelines/sibc/check_restatements` |
 | `analysis/rbi_sibc/timeline.json` | external/authored | — | `core/validate_timeline`, `pipelines/sibc/generate_merge`, `signals/query` |
 | `analysis/signals/narrative_cache.json` | derived | `cross/generate_opportunity_narrative` | — |
 | `analysis/signals/registry.json` | derived | `signals/apply_status_rules`, `signals/update_registry` | `core/coverage`, `core/force_check`, `core/generate_signal_history`, `core/generate_system_state`, `core/real_cells`, `core/relational_insights`, `core/validate_opportunity_traceability`, `cross/generate_opportunities_feed`, `cross/validate_composition`, `cross/validate_concordance`, `guards/check_signal_freshness`, `guards/validate_card_cuts`, `guards/validate_cut_table`, `guards/validate_signal_history`, `guards/validate_state_band`, `measure_coherence_threshold`, `pipelines/atm_pos/compute_atm_pos_signals`, `pipelines/atm_pos/generate_atm_pos_insights`, `pipelines/atm_pos/validate_atm_pos_insights`, `pipelines/sibc/generate_analysis_report`, `pipelines/sibc/validate_sibc_traceability`, `signals/proximity`, `signals/stamp_state`, `signals/stamp_table` |
@@ -107,7 +108,7 @@ Scripts each orchestrator launches as a subprocess, in execution order.
 Python import edges (sparse by design — the pipeline is subprocess-
 orchestrated, not import-coupled).
 
-- `core/coverage` → `core/explainability`, `core/force_check`, `core/generate_skeleton`, `core/manifest`, `core/relationship_test`, `signals/dominance`
+- `core/coverage` → `core/explainability`, `core/force_check`, `core/generate_skeleton`, `core/manifest`, `core/relationship_test`, `core/series_breaks`, `signals/dominance`
 - `core/derive_opportunities` → `core/force_check`, `core/generate_skeleton`, `core/manifest`
 - `core/explainability` → `core/coverage`, `core/force_check`, `core/generate_skeleton`, `core/manifest`, `core/relationship_test`
 - `core/force_check` → `core/generate_skeleton`, `core/generate_system_state`
@@ -118,7 +119,7 @@ orchestrated, not import-coupled).
 - `core/generate_system_state` → `core/coverage`, `core/force_check`, `core/generate_skeleton`, `core/manifest`
 - `core/real_cells` → `core/absence`, `core/manifest`, `signals/compute/csv_sector`, `signals/compute/real_economy`
 - `core/relational_insights` → `core/manifest`, `core/residuals`
-- `core/relationship_test` → `core/coverage`, `core/force_check`, `core/generate_skeleton`, `core/manifest`
+- `core/relationship_test` → `core/coverage`, `core/force_check`, `core/generate_skeleton`, `core/manifest`, `core/series_breaks`
 - `core/run_inference` → `core/generate_skeleton`, `core/keep_awake`, `core/manifest`
 - `core/series_breaks` → `core/absence`, `core/manifest`
 - `core/validate_system_model` → `core/generate_skeleton`, `core/manifest`
@@ -153,6 +154,7 @@ orchestrated, not import-coupled).
 - `pipelines/nbfc/validate_published_yoy` → `core/manifest`
 - `pipelines/rbi_rates/fetch` → `pipelines/mospi/releases`, `pipelines/rbi_rates/reader`
 - `pipelines/rbi_rates/validate_rates` → `core/manifest`, `pipelines/mospi/releases`
+- `pipelines/sibc/check_restatements` → `core/manifest`, `core/series_breaks`, `pipelines/mospi/consolidate`, `pipelines/sibc/update_web_data`
 - `pipelines/sibc/extract_sibc` → `pipelines/sibc/detect_format`
 - `pipelines/sibc/generate_analysis_report` → `core/residuals`
 - `pipelines/sibc/update_web_data` → `core/manifest`, `pipelines/mospi/consolidate`

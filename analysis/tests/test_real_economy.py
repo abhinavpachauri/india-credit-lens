@@ -46,14 +46,14 @@ def _ref(monkeypatch, run_date):
 
 
 def test_a_missing_reference_value_is_not_released_while_due_date_is_ahead(monkeypatch):
-    ref = _ref(monkeypatch, date(2026, 9, 1))          # IIP Sep 2026 due 28 Oct + grace
-    assert ref.value("iip/nic:10", "index", "2026-09-30") == "not_released"
+    ref = _ref(monkeypatch, date(2040, 1, 1))          # a far-off month, so no release ever overtakes it
+    assert ref.value("iip/nic:10", "index", "2040-01-31") == "not_released"
 
 
 def test_a_missing_reference_value_past_its_due_date_raises(monkeypatch):
-    ref = _ref(monkeypatch, date(2027, 1, 1))
+    ref = _ref(monkeypatch, date(2041, 1, 1))
     with pytest.raises(R.ReferenceMissing):
-        ref.value("iip/nic:10", "index", "2026-09-30")
+        ref.value("iip/nic:10", "index", "2040-01-31")
 
 
 def test_a_period_before_the_series_starts_is_a_history_gap(monkeypatch):

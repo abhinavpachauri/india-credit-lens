@@ -86,6 +86,7 @@
     "insights": "pipelines/sibc/generate_analysis_report.py",
     "insights_validate": "pipelines/sibc/validate_sibc_traceability.py",
     "consolidate": "pipelines/sibc/update_web_data.py",
+    "restatements": "pipelines/sibc/check_restatements.py",
     "extract": "pipelines/sibc/extract_sibc.py"
   },
   "gate": [
@@ -146,6 +147,11 @@
         "--check"
       ],
       "note": "remapping"
+    },
+    {
+      "id": "restatements",
+      "label": "1a2. restated lines declared",
+      "pipeline": "restatements"
     },
     {
       "id": "csv_integrity",

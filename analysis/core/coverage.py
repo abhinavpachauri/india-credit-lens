@@ -44,6 +44,7 @@ from statistics import median
 
 sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
 from core import force_check as fc  # noqa: E402
+from core import series_breaks as sb  # noqa: E402
 from core import generate_skeleton as gs  # noqa: E402
 
 DB = fc.DB
@@ -91,13 +92,16 @@ def baseline_for(node_id: str, parent_of: dict, by_id: dict, series: dict, perio
 
 
 def move_of(growth: dict, base: dict, kind: str, periods: list[str], period: str,
-            data_month=lambda p: p) -> dict:
+            data_month=lambda p: p, restated: frozenset = frozenset()) -> dict:
     """The line's change against its baseline at `period`, judged against its own wobble."""
     gaps = [(p, growth[p] - (0.0 if kind == "none" else base[p]))
             for p in periods if p <= period and p in growth and (kind == "none" or p in base)]
     if not gaps or gaps[-1][0] != period:
         return {"status": "no_reading", "reason": "no reading this period"}
-    changes = fc.monthly_changes(gaps, data_month)
+    changes = fc.monthly_changes(gaps, data_month, restated)
+    if (len(gaps) > 1 and fc._months(data_month(gaps[-1][0])) - fc._months(data_month(gaps[-2][0])) == 1
+            and (data_month(gaps[-1][0]) in restated) != (data_month(gaps[-2][0]) in restated)):
+        return {"status": "no_reading", "reason": "restated_basis: the month before is on a different classification"}
     if not changes or changes[-1][0] != period:
         # The previous reading is not last month (a hole in the history): a change across it
         # spans several months and cannot be judged against a month-to-month wobble.
@@ -304,7 +308,8 @@ def compute(model: dict, period: str, series: dict, periods: list[str], checked:
             moves[nid] = {"status": "no_reading", "reason": "no YoY signal for this line in signals.db"}
             continue
         kind, of, base = baseline_for(nid, parent_of, by_id, series, period)
-        mv = move_of(series[nid], base, kind, periods, period, data_month)
+        mv = move_of(series[nid], base, kind, periods, period, data_month,
+                     sb.restated_months_of_node(model, by_id[nid]))
         if mv.get("previous") in base and period in base:
             mv["base_change"] = base[period] - base[mv["previous"]]
         moves[nid] = {**mv, "baseline_kind": kind, "baseline_of": of}
@@ -316,7 +321,8 @@ def compute(model: dict, period: str, series: dict, periods: list[str], checked:
         if at is None or nid not in series:
             return {}
         kind, _, base = baseline_for(nid, parent_of, by_id, series, at)
-        return move_of(series[nid], base, kind, periods, at, data_month)
+        return move_of(series[nid], base, kind, periods, at, data_month,
+                       sb.restated_months_of_node(model, by_id[nid]))
 
     # Every line but a root. Moves are measured against the line's group, so a force acting on a
     # group (Services, All Engineering) cancels out of its members' moves and can only explain
@@ -335,7 +341,8 @@ def compute(model: dict, period: str, series: dict, periods: list[str], checked:
         held = {}
         if artifact(n):
             held["artifact"] = ["one bank is most of the move"]
-        steps = step_reading(levels.get(n["id"]), data_month(period))
+        steps = step_reading(levels.get(n["id"]), data_month(period),
+                             sb.restated_months_of_node(model, n))
         size = abs(m["gap_change_pp"])
         base_eff = now_step = None
         if steps:
@@ -404,7 +411,7 @@ def _ym(date: str, offset: int) -> str:
     return _from_months(fc._months(date) + offset)
 
 
-def step_reading(levels: dict | None, date: str):
+def step_reading(levels: dict | None, date: str, restated: frozenset = frozenset()):
     """(now, base, typical): this month's and the year-ago month's log level change, and the
     median |change| over months BEFORE this one (the year-ago step excluded, so an outlier does
     not set its own bar). None when the line has no level series or too little history."""
@@ -412,7 +419,11 @@ def step_reading(levels: dict | None, date: str):
     if not levels:
         return None
 
+    restated_ym = {d[:7] for d in restated}
+
     def change(k):
+        if (_from_months(k) in restated_ym) != (_from_months(k - 1) in restated_ym):
+            return None
         a, b = levels.get(_from_months(k)), levels.get(_from_months(k - 1))
         return math.log(a / b) if a and b and a > 0 and b > 0 else None
     k = fc._months(date)

@@ -239,6 +239,47 @@ release). A comparison that spans the merger measures the merger, not growth.
   total's growth first, so tests see no reading from Jan–Jun 2024. The 2023 months lengthen the
   charts; test power from them is two months (Jul–Aug 2024).
 
+### Restated basis: a reprint that relabels some months (2026-11-04)
+
+> Specced **2026-11-04, before the signals were appended**, for the 30 Oct 2026 SIBC release (user:
+> "fix it first"). Same question as a merger, a different shape: the new basis is a set of months,
+> not a date.
+
+RBI's release of 30 Oct 2026 reprints Sep 2024, Mar 2025, Sep 2025 and Mar 2026 with Transport
+Operators 19–26% lower and Vehicle Loans 5–10% higher; every other month keeps the old print.
+RBI's notes give no reason. Transport reads ₹2.93 lakh crore (Aug 2026, old) then ₹2.50 (Sep 2026,
+new): −14.6% in a month whose typical move is 1.5%. That fall is the relabelling.
+
+- **Which lines (measured):** `core/series_breaks.is_restatement`: a release reprints the line at
+  least twice, every reprint moves the same way, and each is more than 3× the line's typical monthly
+  change (the bar for a move in DECISIONS). One month moving is a revision; revisions go both ways.
+- **Which months (derived):** a month is on the new basis when the CSV's figure for it comes from
+  the declaring release or a later one. Nobody lists them, so each later release that reprints a month
+  moves it across on its own, and the comparisons come back.
+- **Declared once:** `analysis/rbi_sibc/series_breaks.json`, key `restatements`.
+- **The question is still asked once:** `spans()`: exactly one of the two dates on the new basis.
+
+  | reading | Sep 2026 on a declared line |
+  |---|---|
+  | YoY (Sep vs Sep), FY variation (Sep vs Mar) | **kept**: both ends on one basis, and it equals RBI's printed rate |
+  | acceleration (this month's YoY − last month's) | **absent, reason `restated_basis`**: each YoY holds on its own basis, their difference is the relabelling |
+  | a YoY's status comparison with last month | falls back, as when no prior exists |
+  | coverage's move (6a), its base effect and one-month step; relationship and driver tests | the change across bases is left out; a move says `restated_basis` |
+  | level, share at one date | unchanged |
+
+- **Guard:** gate stage 1a2 (`pipelines/sibc/check_restatements.py`) fails when the latest release
+  flags a line nobody declared. Only the latest is judged, because "typical" moves with history.
+  Measured by injection on 85 lines of the 30 Oct release: 85/85 flagged at 3.1× typical, 0/85 at 2.9×,
+  and on the unmodified file no undeclared line. The one line not eligible has no code.
+- **What the rule does not cover, stated:**
+  - The other 7 flags in earlier releases are not declared: Export Credit (Dec 2023), Micro and Small
+    (Mar and Apr 2024), Roads, Other Infrastructure and Other Industries (May 2024), Construction
+    (Nov 2025). Declaring one changes published readings, so that is a separate decision.
+  - Parents read as published: Services carries part of the relabelling but moved under the bar.
+  - `force_check.judge` keeps the change in its wobble: the median barely moves and its gap reading
+    holds on one basis.
+  - Explore's level charts still draw the zigzag: a `/dashboard-change`, approved separately.
+
 ## Cut coverage — size & share (the table families)
 
 > **Written 2026-09-12, AFTER the compute landed.** The rule in this project is spec first;

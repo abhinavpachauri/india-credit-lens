@@ -296,9 +296,11 @@ def sentence(row):
     """Plain-English watchlist line. Deterministic prose — this is the published text."""
     unit = row["unit"]
     move = "rise" if row["direction"] > 0 else "fall"
+    # A sign-change threshold is zero to within float noise; "0.0" has no unit and fails the voice lint.
+    threshold = "zero" if abs(row["threshold_value"]) < 1e-6 else _fmt(row["threshold_value"], unit)
     return (f"{row['title']} is {_fmt(row['value'], unit)} and reads "
             f"{STATUS_WORD.get(row['current_status'], row['current_status'])}. "
-            f"A {move} to {_fmt(row['threshold_value'], unit)} would change that reading to "
+            f"A {move} to {threshold} would change that reading to "
             f"{STATUS_WORD.get(row['target_status'], row['target_status'])} — "
             f"a move of {_fmt(row['distance'], unit)}, against a typical monthly move of "
             f"{_fmt(row['typical_move'], unit)}.")

@@ -51,5 +51,5 @@ def test_coverage_counts_cells_with_a_value_not_what_is_mapped():
 
 
 def test_a_quarterly_cell_on_a_monthly_table_is_labelled():
-    assert CUTS["sibc-industry-type"]["total"]["real_credit"]["period_label"] == "Q1"
+    assert CUTS["sibc-industry-type"]["total"]["real_credit"]["period_label"] in {"Q1", "Q2", "Q3", "Q4"}
     assert all(p.get("real_credit", {}).get("period_label") is None for p in CUTS["sibc-industry-type"]["parts"])

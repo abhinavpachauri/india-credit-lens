@@ -1,0 +1,1565 @@
+{
+  "_meta": {
+    "pipeline": "sibc",
+    "period": "2026-10-30",
+    "schema_version": "4.0",
+    "spec_ref": "analysis/SYSTEM_MODEL_SPEC.md §16",
+    "computed_from": "signals.db",
+    "signals_observed": 172,
+    "force_rule": "v3.1"
+  },
+  "entity_states": {
+    "icl:sibc/Statement1/I": {
+      "direction": 1,
+      "signals": 4,
+      "observed": 4,
+      "coherence": 1.0,
+      "children": 2
+    },
+    "icl:sibc/Statement1/II": {
+      "direction": 0,
+      "signals": 2,
+      "observed": 2
+    },
+    "icl:sibc/Statement1/III": {
+      "direction": 1,
+      "signals": 14,
+      "observed": 14,
+      "coherence": 1.0,
+      "children": 4
+    },
+    "icl:sibc/Statement1/1": {
+      "direction": 1,
+      "signals": 3,
+      "observed": 3
+    },
+    "icl:sibc/Statement1/2": {
+      "direction": 1,
+      "signals": 14,
+      "observed": 14,
+      "coherence": 1.0,
+      "children": 3
+    },
+    "icl:sibc/Statement1/3": {
+      "direction": 1,
+      "signals": 13,
+      "observed": 12,
+      "coherence": 1.0,
+      "children": 10
+    },
+    "icl:sibc/Statement1/4": {
+      "direction": 1,
+      "signals": 21,
+      "observed": 20,
+      "coherence": 1.0,
+      "children": 9
+    },
+    "icl:sibc/Statement1/PSL": {
+      "direction": 1,
+      "signals": 5,
+      "observed": 5,
+      "coherence": 1.0,
+      "children": 10
+    },
+    "icl:sibc/Statement1/2.1": {
+      "direction": 1,
+      "signals": 4,
+      "observed": 4
+    },
+    "icl:sibc/Statement1/2.2": {
+      "direction": 1,
+      "signals": 2,
+      "observed": 2
+    },
+    "icl:sibc/Statement1/2.3": {
+      "direction": 1,
+      "signals": 3,
+      "observed": 3
+    },
+    "icl:sibc/Statement1/3.1": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement1/3.2": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement1/3.3": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement1/3.4": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement1/3.5": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement1/3.6": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement1/3.7": {
+      "direction": 1,
+      "signals": 6,
+      "observed": 6
+    },
+    "icl:sibc/Statement1/3.8": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement1/3.9": {
+      "direction": 1,
+      "signals": 6,
+      "observed": 6
+    },
+    "icl:sibc/Statement1/3.10": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement1/4.1": {
+      "direction": 1,
+      "signals": 3,
+      "observed": 2
+    },
+    "icl:sibc/Statement1/4.2": {
+      "direction": 1,
+      "signals": 2,
+      "observed": 2
+    },
+    "icl:sibc/Statement1/4.3": {
+      "direction": 1,
+      "signals": 2,
+      "observed": 2
+    },
+    "icl:sibc/Statement1/4.4": {
+      "direction": 1,
+      "signals": 2,
+      "observed": 2
+    },
+    "icl:sibc/Statement1/4.5": {
+      "direction": 1,
+      "signals": 4,
+      "observed": 4
+    },
+    "icl:sibc/Statement1/4.6": {
+      "direction": 1,
+      "signals": 2,
+      "observed": 2
+    },
+    "icl:sibc/Statement1/4.7": {
+      "direction": 1,
+      "signals": 2,
+      "observed": 2
+    },
+    "icl:sibc/Statement1/4.8": {
+      "direction": 1,
+      "signals": 3,
+      "observed": 3
+    },
+    "icl:sibc/Statement1/4.9": {
+      "direction": 1,
+      "signals": 2,
+      "observed": 2
+    },
+    "icl:sibc/Statement1/i": {
+      "direction": 1,
+      "signals": 2,
+      "observed": 2
+    },
+    "icl:sibc/Statement1/ii": {
+      "direction": 1,
+      "signals": 3,
+      "observed": 3
+    },
+    "icl:sibc/Statement1/iii": {
+      "direction": 1,
+      "signals": 2,
+      "observed": 2
+    },
+    "icl:sibc/Statement1/iv": {
+      "direction": 1,
+      "signals": 2,
+      "observed": 2
+    },
+    "icl:sibc/Statement1/ix": {
+      "direction": 1,
+      "signals": 2,
+      "observed": 2
+    },
+    "icl:sibc/Statement1/v": {
+      "direction": 1,
+      "signals": 2,
+      "observed": 2
+    },
+    "icl:sibc/Statement1/vi": {
+      "direction": 1,
+      "signals": 3,
+      "observed": 3
+    },
+    "icl:sibc/Statement1/vii": {
+      "direction": 1,
+      "signals": 2,
+      "observed": 2
+    },
+    "icl:sibc/Statement1/viii": {
+      "direction": 0,
+      "signals": 2,
+      "observed": 2
+    },
+    "icl:sibc/Statement1/x": {
+      "direction": 1,
+      "signals": 3,
+      "observed": 3
+    },
+    "icl:sibc/Statement1/3.7.1": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement1/3.7.2": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement1/3.9.1": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement1/3.9.2": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.1": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.2": {
+      "direction": 1,
+      "signals": 6,
+      "observed": 6
+    },
+    "icl:sibc/Statement2/2.3": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.4": {
+      "direction": 1,
+      "signals": 6,
+      "observed": 6
+    },
+    "icl:sibc/Statement2/2.5": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.6": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.7": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.8": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.9": {
+      "direction": 1,
+      "signals": 6,
+      "observed": 6
+    },
+    "icl:sibc/Statement2/2.10": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.11": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.12": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.13": {
+      "direction": 1,
+      "signals": 6,
+      "observed": 6
+    },
+    "icl:sibc/Statement2/2.14": {
+      "direction": 1,
+      "signals": 6,
+      "observed": 6
+    },
+    "icl:sibc/Statement2/2.15": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.16": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.17": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.18": {
+      "direction": 0,
+      "signals": 8,
+      "observed": 8
+    },
+    "icl:sibc/Statement2/2.19": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.2.1": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.2.2": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.2.3": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.2.4": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.4.1": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.4.2": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.4.3": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.4.4": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.9.1": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.9.2": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.9.3": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.9.4": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.13.1": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.13.2": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.14.1": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.14.2": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.18.1": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.18.2": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.18.3": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.18.4": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.18.5": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.18.6": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    },
+    "icl:sibc/Statement2/2.18.7": {
+      "direction": 0,
+      "signals": 0,
+      "observed": 0
+    }
+  },
+  "force_states": {
+    "force_gold_price_surge": {
+      "state": "active",
+      "verdict": "working",
+      "window": "in_window",
+      "instance_of": "ch_collateral_price_secured",
+      "authored_status": "active",
+      "mismatch": false,
+      "rule": "v3.1"
+    },
+    "force_rbi_unsecured_tightening": {
+      "state": "faded",
+      "verdict": "faded",
+      "window": "faded",
+      "instance_of": "ch_capital_weight_unsecured",
+      "authored_status": "active",
+      "mismatch": false,
+      "rule": "v3.1"
+    },
+    "force_psl_limit_revision": {
+      "state": "faded",
+      "verdict": "faded",
+      "window": "faded",
+      "instance_of": "ch_psl_threshold_reclassification",
+      "authored_status": "active",
+      "mismatch": false,
+      "rule": "v3.1"
+    },
+    "force_pli_manufacturing": {
+      "state": "active",
+      "verdict": "working",
+      "window": "in_window",
+      "instance_of": "ch_industrial_capex_supplychain",
+      "authored_status": "active",
+      "mismatch": false,
+      "rule": "v3.1"
+    },
+    "force_msme_formalisation": {
+      "state": "active",
+      "verdict": "working",
+      "window": "in_window",
+      "instance_of": "ch_formalisation_underwritability",
+      "authored_status": "active",
+      "mismatch": false,
+      "rule": "v3.1"
+    },
+    "force_nbfc_regulatory_recovery": {
+      "state": "active",
+      "verdict": "working",
+      "window": "in_window",
+      "instance_of": "ch_wholesale_funding_intermediation",
+      "authored_status": "active",
+      "mismatch": false,
+      "rule": "v3.1"
+    },
+    "force_msp_procurement_growth": {
+      "state": "active",
+      "verdict": "working",
+      "window": "in_window",
+      "instance_of": "ch_procurement_policy_food",
+      "authored_status": "active",
+      "mismatch": false,
+      "rule": "v3.1"
+    },
+    "force_infra_cycle_maturing": {
+      "state": "active",
+      "verdict": "working",
+      "window": "in_window",
+      "instance_of": "ch_project_lifecycle_origination",
+      "authored_status": "watch",
+      "mismatch": false,
+      "rule": "v3.1"
+    },
+    "force_eclgs5_guarantee_window": {
+      "state": "active",
+      "verdict": "working",
+      "window": "in_window",
+      "instance_of": "ch_emergency_guarantee_msme",
+      "authored_status": "active",
+      "mismatch": false,
+      "rule": "v3.1"
+    },
+    "force_kcc_collateral_limit": {
+      "state": "unclear",
+      "verdict": "unclear",
+      "window": "in_window",
+      "instance_of": "ch_kcc_psl_agri_limits",
+      "authored_status": "active",
+      "mismatch": false,
+      "rule": "v3.1"
+    },
+    "force_vehicle_scrappage_replacement": {
+      "state": "contradicted",
+      "verdict": "contradicted",
+      "window": "in_window",
+      "instance_of": "ch_asset_retirement_replacement",
+      "authored_status": "active",
+      "mismatch": false,
+      "rule": "v3.1"
+    },
+    "force_psl_education_limit": {
+      "state": "faded",
+      "verdict": "faded",
+      "window": "faded",
+      "instance_of": "ch_psl_threshold_reclassification",
+      "authored_status": "active",
+      "mismatch": false,
+      "rule": "v3.1"
+    },
+    "force_psl_renewable_limit": {
+      "state": "faded",
+      "verdict": "faded",
+      "window": "faded",
+      "instance_of": "ch_psl_threshold_reclassification",
+      "authored_status": "active",
+      "mismatch": false,
+      "rule": "v3.1"
+    }
+  },
+  "edge_states": {
+    "force_gold_price_surge__drives__e_S1_4_8": {
+      "state": "active",
+      "verdict": "working",
+      "type": "drives",
+      "polarity": "+",
+      "from": "force_gold_price_surge",
+      "to": "e_S1_4_8"
+    },
+    "force_gold_price_surge__creates_opportunity__opp_gold_loan_entry": {
+      "state": "active",
+      "type": "creates_opportunity",
+      "polarity": "+",
+      "from": "force_gold_price_surge",
+      "to": "opp_gold_loan_entry"
+    },
+    "force_rbi_unsecured_tightening__suppresses__e_S1_4_5": {
+      "state": "dormant",
+      "verdict": "faded",
+      "type": "suppresses",
+      "polarity": "-",
+      "from": "force_rbi_unsecured_tightening",
+      "to": "e_S1_4_5"
+    },
+    "force_rbi_unsecured_tightening__suppresses__e_S1_4_1": {
+      "state": "dormant",
+      "verdict": "faded",
+      "type": "suppresses",
+      "polarity": "-",
+      "from": "force_rbi_unsecured_tightening",
+      "to": "e_S1_4_1"
+    },
+    "force_rbi_unsecured_tightening__creates_risk__risk_unsecured_migration": {
+      "state": "dormant",
+      "type": "creates_risk",
+      "polarity": "-",
+      "from": "force_rbi_unsecured_tightening",
+      "to": "risk_unsecured_migration"
+    },
+    "e_S1_4_5__reroutes_to__e_S1_4_8": {
+      "state": "dormant",
+      "verdict": "not_supported",
+      "type": "reroutes_to",
+      "polarity": "~",
+      "from": "e_S1_4_5",
+      "to": "e_S1_4_8"
+    },
+    "e_S1_4_1__creates_risk__risk_unsecured_migration": {
+      "state": "reversed",
+      "type": "creates_risk",
+      "polarity": "-",
+      "from": "e_S1_4_1",
+      "to": "risk_unsecured_migration"
+    },
+    "e_S1_4_5__creates_risk__risk_unsecured_migration": {
+      "state": "reversed",
+      "type": "creates_risk",
+      "polarity": "-",
+      "from": "e_S1_4_5",
+      "to": "risk_unsecured_migration"
+    },
+    "force_psl_limit_revision__drives__e_S1_iv": {
+      "state": "dormant",
+      "verdict": "faded",
+      "type": "drives",
+      "polarity": "+",
+      "from": "force_psl_limit_revision",
+      "to": "e_S1_iv"
+    },
+    "force_psl_limit_revision__drives__e_S1_viii": {
+      "state": "dormant",
+      "verdict": "faded",
+      "type": "drives",
+      "polarity": "+",
+      "from": "force_psl_limit_revision",
+      "to": "e_S1_viii"
+    },
+    "force_psl_limit_revision__creates_opportunity__opp_pslc_tooling": {
+      "state": "dormant",
+      "type": "creates_opportunity",
+      "polarity": "+",
+      "from": "force_psl_limit_revision",
+      "to": "opp_pslc_tooling"
+    },
+    "force_pli_manufacturing__drives__e_S2_2_14": {
+      "state": "active",
+      "verdict": "working",
+      "type": "drives",
+      "polarity": "+",
+      "from": "force_pli_manufacturing",
+      "to": "e_S2_2_14"
+    },
+    "force_pli_manufacturing__drives__e_S2_2_9": {
+      "state": "active",
+      "verdict": "working",
+      "type": "drives",
+      "polarity": "+",
+      "from": "force_pli_manufacturing",
+      "to": "e_S2_2_9"
+    },
+    "force_pli_manufacturing__drives__e_S2_2_13": {
+      "state": "dormant",
+      "verdict": "unclear",
+      "type": "drives",
+      "polarity": "+",
+      "from": "force_pli_manufacturing",
+      "to": "e_S2_2_13"
+    },
+    "force_pli_manufacturing__creates_opportunity__opp_pli_supply_chain": {
+      "state": "active",
+      "type": "creates_opportunity",
+      "polarity": "+",
+      "from": "force_pli_manufacturing",
+      "to": "opp_pli_supply_chain"
+    },
+    "e_S2_2_9__amplifies__e_S2_2_14": {
+      "state": "dormant",
+      "verdict": "not_supported",
+      "type": "amplifies",
+      "polarity": "+",
+      "from": "e_S2_2_9",
+      "to": "e_S2_2_14"
+    },
+    "e_S2_2_13__amplifies__e_S2_2_14": {
+      "state": "dormant",
+      "verdict": "not_supported",
+      "type": "amplifies",
+      "polarity": "+",
+      "from": "e_S2_2_13",
+      "to": "e_S2_2_14"
+    },
+    "force_msme_formalisation__drives__e_S1_2_1": {
+      "state": "active",
+      "verdict": "working",
+      "type": "drives",
+      "polarity": "+",
+      "from": "force_msme_formalisation",
+      "to": "e_S1_2_1"
+    },
+    "force_msme_formalisation__creates_opportunity__opp_msme_origination": {
+      "state": "active",
+      "type": "creates_opportunity",
+      "polarity": "+",
+      "from": "force_msme_formalisation",
+      "to": "opp_msme_origination"
+    },
+    "e_S1_2_1__creates_opportunity__opp_msme_origination": {
+      "state": "active",
+      "type": "creates_opportunity",
+      "polarity": "+",
+      "from": "e_S1_2_1",
+      "to": "opp_msme_origination"
+    },
+    "force_nbfc_regulatory_recovery__amplifies__e_S1_3": {
+      "state": "active",
+      "verdict": "working",
+      "type": "amplifies",
+      "polarity": "+",
+      "from": "force_nbfc_regulatory_recovery",
+      "to": "e_S1_3"
+    },
+    "force_msp_procurement_growth__drives__e_S1_II": {
+      "state": "active",
+      "verdict": "working",
+      "type": "drives",
+      "polarity": "+",
+      "from": "force_msp_procurement_growth",
+      "to": "e_S1_II"
+    },
+    "force_infra_cycle_maturing__suppresses__e_S2_2_18": {
+      "state": "active",
+      "verdict": "working",
+      "type": "suppresses",
+      "polarity": "-",
+      "from": "force_infra_cycle_maturing",
+      "to": "e_S2_2_18"
+    },
+    "force_infra_cycle_maturing__creates_risk__risk_infrastructure_repayment": {
+      "state": "reversed",
+      "type": "creates_risk",
+      "polarity": "-",
+      "from": "force_infra_cycle_maturing",
+      "to": "risk_infrastructure_repayment"
+    },
+    "force_infra_cycle_maturing__creates_opportunity__opp_renewable_energy": {
+      "state": "active",
+      "type": "creates_opportunity",
+      "polarity": "+",
+      "from": "force_infra_cycle_maturing",
+      "to": "opp_renewable_energy"
+    },
+    "e_S2_2_18__creates_risk__risk_infrastructure_repayment": {
+      "state": "dormant",
+      "type": "creates_risk",
+      "polarity": "-",
+      "from": "e_S2_2_18",
+      "to": "risk_infrastructure_repayment"
+    },
+    "e_S1_4_7__creates_opportunity__opp_vehicle_ev": {
+      "state": "active",
+      "type": "creates_opportunity",
+      "polarity": "+",
+      "from": "e_S1_4_7",
+      "to": "opp_vehicle_ev"
+    },
+    "force_nbfc_regulatory_recovery__creates_opportunity__opp_services_entry": {
+      "state": "active",
+      "type": "creates_opportunity",
+      "polarity": "+",
+      "from": "force_nbfc_regulatory_recovery",
+      "to": "opp_services_entry"
+    },
+    "e_S1_3__creates_opportunity__opp_services_entry": {
+      "state": "active",
+      "type": "creates_opportunity",
+      "polarity": "+",
+      "from": "e_S1_3",
+      "to": "opp_services_entry"
+    },
+    "force_msme_formalisation__creates_opportunity__opp_colending_infra": {
+      "state": "active",
+      "type": "creates_opportunity",
+      "polarity": "+",
+      "from": "force_msme_formalisation",
+      "to": "opp_colending_infra"
+    },
+    "e_S1_2_1__creates_opportunity__opp_colending_infra": {
+      "state": "active",
+      "type": "creates_opportunity",
+      "polarity": "+",
+      "from": "e_S1_2_1",
+      "to": "opp_colending_infra"
+    },
+    "force_kcc_collateral_limit__drives__e_S1_1": {
+      "state": "dormant",
+      "verdict": "unclear",
+      "type": "drives",
+      "polarity": "+",
+      "from": "force_kcc_collateral_limit",
+      "to": "e_S1_1"
+    },
+    "force_vehicle_scrappage_replacement->e_S1_4_7": {
+      "state": "reversed",
+      "verdict": "contradicted",
+      "type": "drives",
+      "polarity": "+",
+      "from": "force_vehicle_scrappage_replacement",
+      "to": "e_S1_4_7"
+    },
+    "force_psl_education_limit->e_S1_v": {
+      "state": "dormant",
+      "verdict": "faded",
+      "type": "drives",
+      "polarity": "+",
+      "from": "force_psl_education_limit",
+      "to": "e_S1_v"
+    },
+    "force_psl_renewable_limit->e_S1_vi": {
+      "state": "dormant",
+      "verdict": "faded",
+      "type": "drives",
+      "polarity": "+",
+      "from": "force_psl_renewable_limit",
+      "to": "e_S1_vi"
+    },
+    "force_eclgs5_guarantee_window__drives__e_S1_2_1": {
+      "state": "active",
+      "verdict": "working",
+      "type": "drives",
+      "polarity": "+",
+      "from": "force_eclgs5_guarantee_window",
+      "to": "e_S1_2_1"
+    },
+    "force_eclgs5_guarantee_window__drives__e_S1_2_2": {
+      "state": "active",
+      "verdict": "working",
+      "type": "drives",
+      "polarity": "+",
+      "from": "force_eclgs5_guarantee_window",
+      "to": "e_S1_2_2"
+    }
+  },
+  "loop_states": {
+    "pli_supply_chain_R": {
+      "state": "partial",
+      "type": "reinforcing",
+      "live_edges": 1,
+      "total_edges": 4
+    },
+    "msme_formalisation_R": {
+      "state": "active_reinforcing",
+      "type": "reinforcing",
+      "live_edges": 3,
+      "total_edges": 3
+    },
+    "unsecured_rerouting_B": {
+      "state": "dormant",
+      "type": "balancing",
+      "live_edges": 0,
+      "total_edges": 3
+    },
+    "infra_cycle_transition_B": {
+      "state": "partial",
+      "type": "balancing",
+      "live_edges": 3,
+      "total_edges": 3
+    }
+  },
+  "system_observations": {
+    "dominant_forces": [
+      "force_gold_price_surge",
+      "force_pli_manufacturing",
+      "force_msme_formalisation",
+      "force_nbfc_regulatory_recovery",
+      "force_msp_procurement_growth",
+      "force_infra_cycle_maturing",
+      "force_eclgs5_guarantee_window"
+    ],
+    "binding_constraints": [
+      "force_infra_cycle_maturing__suppresses__e_S2_2_18"
+    ],
+    "active_reinforcing_loops": [
+      "msme_formalisation_R"
+    ],
+    "active_balancing_loops": [],
+    "authored_vs_observed_mismatches": []
+  },
+  "mix_states": {
+    "sibc-basic-metal-sub-momentum": {
+      "entity_urn": "icl:sibc/Statement2/2.13",
+      "decomposition": "Statement 2",
+      "mix_state": "drifting",
+      "coherence": 1.0,
+      "toward": "Iron and Steel",
+      "away_from": "Other Metal and Metal Product",
+      "toward_tilt_pp": 12.11,
+      "children": 2
+    },
+    "sibc-chemicals-sub-momentum": {
+      "entity_urn": "icl:sibc/Statement2/2.9",
+      "decomposition": "Statement 2",
+      "mix_state": "drifting",
+      "coherence": 1.0,
+      "toward": "Fertiliser",
+      "away_from": "Others",
+      "toward_tilt_pp": 11.84,
+      "children": 4
+    },
+    "sibc-engineering-sub-momentum": {
+      "entity_urn": "icl:sibc/Statement2/2.14",
+      "decomposition": "Statement 2",
+      "mix_state": "drifting",
+      "coherence": 1.0,
+      "toward": "Others",
+      "away_from": "Electronics",
+      "toward_tilt_pp": 3.54,
+      "children": 2
+    },
+    "sibc-food-processing-sub-momentum": {
+      "entity_urn": "icl:sibc/Statement2/2.2",
+      "decomposition": "Statement 2",
+      "mix_state": "drifting",
+      "coherence": 0.9573,
+      "toward": "Edible Oils and Vanaspati",
+      "away_from": "Sugar",
+      "toward_tilt_pp": 7.64,
+      "children": 4
+    },
+    "sibc-ind-size-momentum": {
+      "entity_urn": "icl:sibc/Statement1/2",
+      "decomposition": "Statement 1",
+      "mix_state": "drifting",
+      "coherence": 1.0,
+      "toward": "Medium",
+      "away_from": "Large",
+      "toward_tilt_pp": 6.56,
+      "children": 3
+    },
+    "sibc-industry-type-momentum": {
+      "entity_urn": "icl:sibc/Statement1/2",
+      "decomposition": "Statement 2",
+      "mix_state": "drifting",
+      "coherence": 1.0,
+      "toward": "All Engineering",
+      "away_from": "Infrastructure",
+      "toward_tilt_pp": 5.48,
+      "children": 19
+    },
+    "sibc-infra-sub-momentum": {
+      "entity_urn": "icl:sibc/Statement2/2.18",
+      "decomposition": "Statement 2",
+      "mix_state": "contested",
+      "coherence": 0.8252,
+      "toward": null,
+      "away_from": null,
+      "toward_tilt_pp": null,
+      "children": 0
+    },
+    "sibc-main-momentum": {
+      "entity_urn": "icl:sibc/Statement1/III",
+      "decomposition": "Statement 1",
+      "mix_state": "steered",
+      "coherence": 1.0,
+      "toward": "Services",
+      "away_from": "Personal Loans",
+      "toward_tilt_pp": 12.6,
+      "children": 4
+    },
+    "sibc-nbfc-sub-momentum": {
+      "entity_urn": "icl:sibc/Statement1/3.9",
+      "decomposition": "Statement 1",
+      "mix_state": "steered",
+      "coherence": 1.0,
+      "toward": "Public Financial Institutions (PFIs)",
+      "away_from": "Housing Finance Companies (HFCs)",
+      "toward_tilt_pp": 11.73,
+      "children": 2
+    },
+    "sibc-pl-momentum": {
+      "entity_urn": "icl:sibc/Statement1/4",
+      "decomposition": "Statement 1",
+      "mix_state": "steered",
+      "coherence": 1.0,
+      "toward": "Loans against gold jewellery",
+      "away_from": "Housing (Including Priority Sector Housing)",
+      "toward_tilt_pp": 18.9,
+      "children": 9
+    },
+    "sibc-services-momentum": {
+      "entity_urn": "icl:sibc/Statement1/3",
+      "decomposition": "Statement 1",
+      "mix_state": "steered",
+      "coherence": 1.0,
+      "toward": "Non-Banking Financial Companies (NBFCs)",
+      "away_from": "Other Services",
+      "toward_tilt_pp": 14.94,
+      "children": 10
+    },
+    "sibc-textiles-sub-momentum": {
+      "entity_urn": "icl:sibc/Statement2/2.4",
+      "decomposition": "Statement 2",
+      "mix_state": "drifting",
+      "coherence": 1.0,
+      "toward": "Other Textiles",
+      "away_from": "Cotton Textiles",
+      "toward_tilt_pp": 10.32,
+      "children": 4
+    },
+    "sibc-trade-sub-momentum": {
+      "entity_urn": "icl:sibc/Statement1/3.7",
+      "decomposition": "Statement 1",
+      "mix_state": "steered",
+      "coherence": 1.0,
+      "toward": "Wholesale Trade",
+      "away_from": "Retail Trade",
+      "toward_tilt_pp": 11.47,
+      "children": 2
+    }
+  },
+  "force_check": {
+    "force_gold_price_surge": {
+      "verdict": "working",
+      "window": "in_window",
+      "in_doubt": false,
+      "edges": {
+        "force_gold_price_surge__drives__e_S1_4_8": {
+          "entity": "Loans against gold jewellery",
+          "type": "drives",
+          "growth": 82.57,
+          "baseline_kind": "parent",
+          "baseline_of": "Personal Loans",
+          "baseline": 17.25,
+          "gap_pp": 65.31,
+          "noise_pp": 5.33,
+          "verdict": "working"
+        }
+      }
+    },
+    "force_rbi_unsecured_tightening": {
+      "verdict": "faded",
+      "window": "faded",
+      "in_doubt": false,
+      "edges": {
+        "force_rbi_unsecured_tightening__suppresses__e_S1_4_5": {
+          "entity": "Credit Card Outstanding",
+          "type": "suppresses",
+          "growth": 7.22,
+          "baseline_kind": "parent",
+          "baseline_of": "Personal Loans",
+          "baseline": 17.25,
+          "gap_pp": -10.04,
+          "verdict": "faded"
+        },
+        "force_rbi_unsecured_tightening__suppresses__e_S1_4_1": {
+          "entity": "Consumer Durables",
+          "type": "suppresses",
+          "growth": 4.55,
+          "baseline_kind": "parent",
+          "baseline_of": "Personal Loans",
+          "baseline": 17.25,
+          "gap_pp": -12.7,
+          "verdict": "faded"
+        }
+      }
+    },
+    "force_psl_limit_revision": {
+      "verdict": "faded",
+      "window": "faded",
+      "in_doubt": false,
+      "edges": {
+        "force_psl_limit_revision__drives__e_S1_iv": {
+          "entity": "Housing",
+          "type": "drives",
+          "growth": 6.72,
+          "baseline_kind": "own_before",
+          "baseline_of": "Housing",
+          "baseline": -1.18,
+          "gap_pp": 7.9,
+          "verdict": "faded"
+        },
+        "force_psl_limit_revision__drives__e_S1_viii": {
+          "entity": "Export Credit",
+          "type": "drives",
+          "growth": -1.71,
+          "baseline_kind": "own_before",
+          "baseline_of": "Export Credit",
+          "baseline": 5.46,
+          "gap_pp": -7.17,
+          "verdict": "faded"
+        }
+      }
+    },
+    "force_pli_manufacturing": {
+      "verdict": "working",
+      "window": "in_window",
+      "in_doubt": false,
+      "edges": {
+        "force_pli_manufacturing__drives__e_S2_2_14": {
+          "entity": "All Engineering",
+          "type": "drives",
+          "growth": 36.02,
+          "baseline_kind": "parent",
+          "baseline_of": "Industry (Micro and Small, Medium and Large)",
+          "baseline": 19.46,
+          "gap_pp": 16.56,
+          "noise_pp": 1.81,
+          "verdict": "working"
+        },
+        "force_pli_manufacturing__drives__e_S2_2_9": {
+          "entity": "Chemicals and Chemical Products",
+          "type": "drives",
+          "growth": 25.54,
+          "baseline_kind": "parent",
+          "baseline_of": "Industry (Micro and Small, Medium and Large)",
+          "baseline": 19.46,
+          "gap_pp": 6.08,
+          "noise_pp": 1.04,
+          "verdict": "working"
+        },
+        "force_pli_manufacturing__drives__e_S2_2_13": {
+          "entity": "Basic Metal and Metal Product",
+          "type": "drives",
+          "growth": 19.22,
+          "baseline_kind": "parent",
+          "baseline_of": "Industry (Micro and Small, Medium and Large)",
+          "baseline": 19.46,
+          "gap_pp": -0.24,
+          "noise_pp": 1.38,
+          "verdict": "unclear"
+        }
+      }
+    },
+    "force_msme_formalisation": {
+      "verdict": "working",
+      "window": "in_window",
+      "in_doubt": false,
+      "edges": {
+        "force_msme_formalisation__drives__e_S1_2_1": {
+          "entity": "Micro and Small",
+          "type": "drives",
+          "growth": 24.42,
+          "baseline_kind": "parent",
+          "baseline_of": "Industry (Micro and Small, Medium and Large)",
+          "baseline": 19.46,
+          "gap_pp": 4.96,
+          "noise_pp": 1.52,
+          "verdict": "working"
+        }
+      }
+    },
+    "force_nbfc_regulatory_recovery": {
+      "verdict": "working",
+      "window": "in_window",
+      "in_doubt": false,
+      "edges": {
+        "force_nbfc_regulatory_recovery__amplifies__e_S1_3": {
+          "entity": "Services",
+          "type": "amplifies",
+          "growth": 28.32,
+          "baseline_kind": "parent",
+          "baseline_of": "Non-food Credit",
+          "baseline": 19.15,
+          "gap_pp": 9.17,
+          "noise_pp": 1.29,
+          "verdict": "working"
+        }
+      }
+    },
+    "force_msp_procurement_growth": {
+      "verdict": "working",
+      "window": "in_window",
+      "in_doubt": false,
+      "edges": {
+        "force_msp_procurement_growth__drives__e_S1_II": {
+          "entity": "Food Credit",
+          "type": "drives",
+          "growth": 125.71,
+          "baseline_kind": "parent",
+          "baseline_of": "Bank Credit (II + III)",
+          "baseline": 19.38,
+          "gap_pp": 106.33,
+          "noise_pp": 12.14,
+          "verdict": "working"
+        }
+      }
+    },
+    "force_infra_cycle_maturing": {
+      "verdict": "working",
+      "window": "in_window",
+      "in_doubt": false,
+      "edges": {
+        "force_infra_cycle_maturing__suppresses__e_S2_2_18": {
+          "entity": "Infrastructure",
+          "type": "suppresses",
+          "growth": 11.79,
+          "baseline_kind": "parent",
+          "baseline_of": "Industry (Micro and Small, Medium and Large)",
+          "baseline": 19.46,
+          "gap_pp": -7.67,
+          "noise_pp": 0.49,
+          "verdict": "working"
+        }
+      }
+    },
+    "force_eclgs5_guarantee_window": {
+      "verdict": "working",
+      "window": "in_window",
+      "in_doubt": false,
+      "edges": {
+        "force_eclgs5_guarantee_window__drives__e_S1_2_1": {
+          "entity": "Micro and Small",
+          "type": "drives",
+          "growth": 24.42,
+          "baseline_kind": "parent",
+          "baseline_of": "Industry (Micro and Small, Medium and Large)",
+          "baseline": 19.46,
+          "gap_pp": 4.96,
+          "noise_pp": 1.52,
+          "verdict": "working"
+        },
+        "force_eclgs5_guarantee_window__drives__e_S1_2_2": {
+          "entity": "Medium",
+          "type": "drives",
+          "growth": 33.24,
+          "baseline_kind": "parent",
+          "baseline_of": "Industry (Micro and Small, Medium and Large)",
+          "baseline": 19.46,
+          "gap_pp": 13.78,
+          "noise_pp": 1.52,
+          "verdict": "working"
+        }
+      }
+    },
+    "force_kcc_collateral_limit": {
+      "verdict": "unclear",
+      "window": "in_window",
+      "in_doubt": false,
+      "edges": {
+        "force_kcc_collateral_limit__drives__e_S1_1": {
+          "entity": "Agriculture and Allied Activities",
+          "type": "drives",
+          "growth": 19.52,
+          "baseline_kind": "parent",
+          "baseline_of": "Non-food Credit",
+          "baseline": 19.15,
+          "gap_pp": 0.37,
+          "noise_pp": 0.7,
+          "verdict": "unclear"
+        }
+      }
+    },
+    "force_vehicle_scrappage_replacement": {
+      "verdict": "contradicted",
+      "window": "in_window",
+      "in_doubt": false,
+      "edges": {
+        "force_vehicle_scrappage_replacement->e_S1_4_7": {
+          "entity": "Vehicle Loans",
+          "type": "drives",
+          "growth": 15.5,
+          "baseline_kind": "parent",
+          "baseline_of": "Personal Loans",
+          "baseline": 17.25,
+          "gap_pp": -1.75,
+          "noise_pp": 0.78,
+          "verdict": "contradicted"
+        }
+      }
+    },
+    "force_psl_education_limit": {
+      "verdict": "faded",
+      "window": "faded",
+      "in_doubt": false,
+      "edges": {
+        "force_psl_education_limit->e_S1_v": {
+          "entity": "Educational Loans",
+          "type": "drives",
+          "growth": 15.91,
+          "baseline_kind": "own_before",
+          "baseline_of": "Educational Loans",
+          "baseline": 0.95,
+          "gap_pp": 14.96,
+          "verdict": "faded"
+        }
+      }
+    },
+    "force_psl_renewable_limit": {
+      "verdict": "faded",
+      "window": "faded",
+      "in_doubt": false,
+      "edges": {
+        "force_psl_renewable_limit->e_S1_vi": {
+          "entity": "Renewable Energy",
+          "type": "drives",
+          "growth": 4.5,
+          "baseline_kind": "own_before",
+          "baseline_of": "Renewable Energy",
+          "baseline": 78.3,
+          "gap_pp": -73.8,
+          "verdict": "faded"
+        }
+      }
+    }
+  },
+  "explanation_coverage": {
+    "summary": {
+      "lines": 84,
+      "moves": 10,
+      "steady": 72,
+      "artifact": 0,
+      "base_effect": 2,
+      "structural": 2,
+      "prices_activity": 0,
+      "driver": 0,
+      "cause": 0,
+      "relationship": 0,
+      "unexplained": 6,
+      "unexplained_one_month_step": 1,
+      "no_reading": 2
+    },
+    "moves": [
+      {
+        "entity": "Non-food Credit",
+        "urn": "icl:sibc/Statement1/III",
+        "product": "bank_credit",
+        "direction": "up",
+        "level": "aggregate",
+        "gap_change_pp": 0.07,
+        "noise_pp": 0.02,
+        "threshold_pp": 0.07,
+        "baseline_kind": "parent",
+        "baseline_of": "Bank Credit (II + III)",
+        "filed_under": "unexplained",
+        "also_holds": {},
+        "prices_activity": "not_decomposable",
+        "prices_detail": {
+          "reason": "no 1f match for this line"
+        }
+      },
+      {
+        "entity": "Tourism, Hotels and Restaurants",
+        "urn": "icl:sibc/Statement1/3.3",
+        "product": "services",
+        "direction": "down",
+        "level": "leaf",
+        "gap_change_pp": -4.38,
+        "noise_pp": 1.09,
+        "threshold_pp": 3.26,
+        "baseline_kind": "parent",
+        "baseline_of": "Services",
+        "filed_under": "structural",
+        "also_holds": {
+          "structural": [
+            "echo of Services"
+          ]
+        },
+        "prices_activity": "not_decomposable",
+        "prices_detail": {
+          "reason": "no 1f match for this line"
+        }
+      },
+      {
+        "entity": "Shipping",
+        "urn": "icl:sibc/Statement1/3.4",
+        "product": "services",
+        "direction": "down",
+        "level": "leaf",
+        "gap_change_pp": -20.15,
+        "noise_pp": 4.42,
+        "threshold_pp": 13.25,
+        "baseline_kind": "parent",
+        "baseline_of": "Services",
+        "filed_under": "unexplained",
+        "also_holds": {},
+        "prices_activity": "not_decomposable",
+        "prices_detail": {
+          "reason": "no 1f match for this line"
+        }
+      },
+      {
+        "entity": "Commercial Real Estate",
+        "urn": "icl:sibc/Statement1/3.8",
+        "product": "services",
+        "direction": "down",
+        "level": "leaf",
+        "gap_change_pp": -3.13,
+        "noise_pp": 0.99,
+        "threshold_pp": 2.98,
+        "baseline_kind": "parent",
+        "baseline_of": "Services",
+        "filed_under": "structural",
+        "also_holds": {
+          "structural": [
+            "echo of Services"
+          ]
+        },
+        "prices_activity": "not_decomposable",
+        "prices_detail": {
+          "reason": "no 1f match for this line"
+        }
+      },
+      {
+        "entity": "Advances against Fixed Deposits (Including FCNR (B), NRNR Deposits etc.)",
+        "urn": "icl:sibc/Statement1/4.3",
+        "product": "personal_loan",
+        "direction": "up",
+        "level": "leaf",
+        "gap_change_pp": 9.78,
+        "noise_pp": 2.87,
+        "threshold_pp": 8.62,
+        "baseline_kind": "parent",
+        "baseline_of": "Personal Loans",
+        "filed_under": "unexplained",
+        "also_holds": {},
+        "prices_activity": "does_not_hold",
+        "prices_detail": {
+          "nominal_change_pp": 10.11,
+          "deflator_change_pp": 0.72
+        }
+      },
+      {
+        "entity": "Agriculture and Allied Activities",
+        "urn": "icl:sibc/Statement1/i",
+        "product": "agriculture",
+        "direction": "up",
+        "level": "leaf",
+        "gap_change_pp": 4.05,
+        "noise_pp": 1.04,
+        "threshold_pp": 3.12,
+        "baseline_kind": "none",
+        "baseline_of": null,
+        "filed_under": "unexplained",
+        "also_holds": {},
+        "prices_activity": "not_decomposable",
+        "prices_detail": {
+          "reason": "no 1f match for this line"
+        },
+        "mechanism": "one_month_step",
+        "step": {
+          "month": "2026-09",
+          "level_change_pct": 4.28,
+          "typical_pct": 1.18
+        }
+      },
+      {
+        "entity": "Social Infrastructure",
+        "urn": "icl:sibc/Statement1/vii",
+        "product": "social_infrastructure",
+        "direction": "up",
+        "level": "leaf",
+        "gap_change_pp": 186.41,
+        "noise_pp": 6.4,
+        "threshold_pp": 19.2,
+        "baseline_kind": "none",
+        "baseline_of": null,
+        "filed_under": "unexplained",
+        "also_holds": {},
+        "prices_activity": "not_decomposable",
+        "prices_detail": {
+          "reason": "no 1f match for this line"
+        }
+      },
+      {
+        "entity": "Glass and Glassware",
+        "urn": "icl:sibc/Statement2/2.11",
+        "product": "industry",
+        "direction": "down",
+        "level": "leaf",
+        "gap_change_pp": -15.67,
+        "noise_pp": 3.39,
+        "threshold_pp": 10.18,
+        "baseline_kind": "parent",
+        "baseline_of": "Industry (Micro and Small, Medium and Large)",
+        "filed_under": "unexplained",
+        "also_holds": {},
+        "prices_activity": "does_not_hold",
+        "prices_detail": {
+          "nominal_change_pp": -14.44,
+          "deflator_change_pp": 0.87
+        }
+      },
+      {
+        "entity": "Vehicles, Vehicle Parts and Transport Equipment",
+        "urn": "icl:sibc/Statement2/2.15",
+        "product": "industry",
+        "direction": "down",
+        "level": "leaf",
+        "gap_change_pp": -9.07,
+        "noise_pp": 2.03,
+        "threshold_pp": 6.1,
+        "baseline_kind": "parent",
+        "baseline_of": "Industry (Micro and Small, Medium and Large)",
+        "filed_under": "base_effect",
+        "also_holds": {
+          "base_effect": [
+            "last year's +6.6% one-month step leaving the comparison"
+          ]
+        },
+        "prices_activity": "does_not_hold",
+        "prices_detail": {
+          "nominal_change_pp": -7.85,
+          "output_change_pp": 0.78
+        },
+        "base_effect": {
+          "month": "2025-09",
+          "level_change_pct": 6.64,
+          "typical_pct": 1.51
+        }
+      },
+      {
+        "entity": "Ports",
+        "urn": "icl:sibc/Statement2/2.18.5",
+        "product": "infrastructure_credit",
+        "direction": "down",
+        "level": "leaf",
+        "gap_change_pp": -55.02,
+        "noise_pp": 5.77,
+        "threshold_pp": 17.31,
+        "baseline_kind": "parent",
+        "baseline_of": "Infrastructure",
+        "filed_under": "base_effect",
+        "also_holds": {
+          "base_effect": [
+            "last year's +36.4% one-month step leaving the comparison"
+          ]
+        },
+        "prices_activity": "not_decomposable",
+        "prices_detail": {
+          "reason": "no 1f match for this line"
+        },
+        "base_effect": {
+          "month": "2025-09",
+          "level_change_pct": 36.45,
+          "typical_pct": 3.26
+        }
+      }
+    ],
+    "no_reading": [
+      {
+        "entity": "Transport Operators",
+        "urn": "icl:sibc/Statement1/3.1",
+        "reason": "restated_basis: the month before is on a different classification"
+      },
+      {
+        "entity": "Vehicle Loans",
+        "urn": "icl:sibc/Statement1/4.7",
+        "reason": "restated_basis: the month before is on a different classification"
+      }
+    ]
+  },
+  "narrative": null
+}
