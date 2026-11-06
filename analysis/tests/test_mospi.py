@@ -89,6 +89,72 @@ def test_fetch_request_reads_every_page():
     assert [r["i"] for r in rows] == [1, 2, 3]
 
 
+class _Clock:
+    """A clock that only moves when something sleeps, so a test waits for nothing."""
+
+    def __init__(self):
+        self.t, self.slept = 0.0, []
+
+    def now(self):
+        return self.t
+
+    def sleep(self, seconds):
+        self.slept.append(seconds)
+        self.t += seconds
+
+
+def _answers(*outcomes):
+    """A `once` that plays its outcomes in order: an exception is raised, anything else returned."""
+    queue = list(outcomes)
+
+    def once():
+        outcome = queue.pop(0)
+        if isinstance(outcome, Exception):
+            raise outcome
+        return outcome
+    return once
+
+
+def test_a_rate_limit_is_waited_out():
+    clock = _Clock()
+    gate = A.Gate(clock.now, clock.sleep)
+    once = _answers(A.RateLimited("429"), A.RateLimited("429"), "ok")
+    assert A.patiently(once, gate, waits=(5, 15)) == "ok"
+    assert clock.slept == [5, 15]
+
+
+def test_the_server_wait_wins_when_it_is_longer():
+    clock = _Clock()
+    gate = A.Gate(clock.now, clock.sleep)
+    assert A.patiently(_answers(A.RateLimited("429", retry_after=90), "ok"), gate, waits=(5,)) == "ok"
+    assert clock.slept == [90]
+
+
+def test_a_rate_limit_that_never_lifts_still_fails():
+    """Waiting must not turn an outage into a short fetch: out of waits, the fetch fails."""
+    clock = _Clock()
+    once = _answers(A.RateLimited("429"), A.RateLimited("429"))
+    with pytest.raises(A.RateLimited):
+        A.patiently(once, A.Gate(clock.now, clock.sleep), waits=(5,))
+
+
+def test_only_a_rate_limit_is_retried():
+    """Any other failure is a broken contract, not a "not yet"."""
+    clock = _Clock()
+    with pytest.raises(A.FetchError, match="HTTP 500"):
+        A.patiently(_answers(A.FetchError("HTTP 500"), "ok"), A.Gate(clock.now, clock.sleep))
+    assert clock.slept == []
+
+
+def test_a_pause_holds_every_worker():
+    """One worker's 429 stops the others asking, which is what lets the limit lift."""
+    clock = _Clock()
+    gate = A.Gate(clock.now, clock.sleep)
+    gate.pause(30)
+    assert A.patiently(_answers("ok"), gate) == "ok"
+    assert clock.slept == [30]
+
+
 def test_every_declared_filter_names_the_row_field_that_verifies_it():
     """A filter with nothing to verify it on is a filter that can be ignored unnoticed."""
     for name, ds in manifest.load("mospi")["datasets"].items():

@@ -15,12 +15,14 @@ The last clause is the one that catches both the ignored filter and the silent o
 why each filter in the manifest names the row field it is verified on.
 
 The contract is pure (dicts in, `FetchError` out) so every clause is unit-tested without a network.
-`get_json` is the only function that touches the wire.
+`_get_once` is the only function that touches the wire.
 """
 from __future__ import annotations
 
 import json
 import ssl
+import threading
+import time
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -47,16 +49,78 @@ def request_url(base_url: str, endpoint: str, filters: list[dict], page: int, li
     return base_url + endpoint + "?" + urllib.parse.urlencode(params)
 
 
-def get_json(url: str, timeout: int = 120) -> dict:
-    """One GET. A non-JSON body (the API's HTML page for an unknown path) is a FetchError."""
+class RateLimited(FetchError):
+    """HTTP 429. The only failure worth waiting out: the answer is "not yet", not "wrong"."""
+
+    def __init__(self, message: str, retry_after: float | None = None):
+        super().__init__(message)
+        self.retry_after = retry_after
+
+
+RETRY_WAITS = (5, 15, 30, 60, 120, 240)     # seconds; about 8 minutes, then the fetch fails loudly
+
+
+class Gate:
+    """One pause shared by every worker: while one waits out a 429, the others must not keep asking."""
+
+    def __init__(self, now=time.monotonic, sleep=time.sleep):
+        self.now, self.sleep = now, sleep
+        self._lock = threading.Lock()
+        self._resume_at = 0.0
+
+    def hold(self) -> None:
+        while True:
+            with self._lock:
+                left = self._resume_at - self.now()
+            if left <= 0:
+                return
+            self.sleep(left)
+
+    def pause(self, seconds: float) -> None:
+        with self._lock:
+            self._resume_at = max(self._resume_at, self.now() + seconds)
+
+
+_GATE = Gate()
+
+
+def patiently(once, gate: Gate = _GATE, waits: tuple = RETRY_WAITS):
+    """`once()`, waiting out 429s. Out of waits, the last RateLimited stands, and nothing is saved."""
+    for wait in (*waits, None):
+        gate.hold()
+        try:
+            return once()
+        except RateLimited as e:
+            if wait is None:
+                raise
+            pause = max(wait, e.retry_after or 0)
+            print(f"  … rate limited, all workers wait {pause:.0f}s", flush=True)
+            gate.pause(pause)
+
+
+def _retry_after(e: urllib.error.HTTPError) -> float | None:
+    """The server's own wait, when it gives one in seconds (the header may also be a date)."""
+    value = e.headers.get("Retry-After") if e.headers else None
+    return float(value) if value and value.isdigit() else None
+
+
+def _get_once(url: str, timeout: int) -> bytes:
+    """One GET: the only function that touches the wire."""
     req = urllib.request.Request(url, headers={"User-Agent": "india-credit-lens/mospi-fetch"})
     try:
         with urllib.request.urlopen(req, context=_context(), timeout=timeout) as r:
-            body = r.read()
+            return r.read()
     except urllib.error.HTTPError as e:
+        if e.code == 429:
+            raise RateLimited(f"HTTP 429 for {url}", _retry_after(e)) from e
         raise FetchError(f"HTTP {e.code} for {url}") from e
     except urllib.error.URLError as e:
         raise FetchError(f"unreachable: {e.reason} ({url})") from e
+
+
+def get_json(url: str, timeout: int = 120) -> dict:
+    """One answer. A non-JSON body (the API's HTML page for an unknown path) is a FetchError."""
+    body = patiently(lambda: _get_once(url, timeout))
     try:
         return json.loads(body)
     except json.JSONDecodeError as e:
@@ -64,15 +128,8 @@ def get_json(url: str, timeout: int = 120) -> dict:
 
 
 def get_bytes(url: str, timeout: int = 120) -> bytes:
-    """One GET of a file (the CPI workbook). Same TLS and error handling as `get_json`."""
-    req = urllib.request.Request(url, headers={"User-Agent": "india-credit-lens/mospi-fetch"})
-    try:
-        with urllib.request.urlopen(req, context=_context(), timeout=timeout) as r:
-            return r.read()
-    except urllib.error.HTTPError as e:
-        raise FetchError(f"HTTP {e.code} for {url}") from e
-    except urllib.error.URLError as e:
-        raise FetchError(f"unreachable: {e.reason} ({url})") from e
+    """One file (the CPI workbook). Same TLS, waiting and error handling as `get_json`."""
+    return patiently(lambda: _get_once(url, timeout))
 
 
 def check_page(doc: dict, filters: list[dict], url: str, verify: list[dict] = ()) -> list[dict]:

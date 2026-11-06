@@ -1,0 +1,964 @@
+{
+  "batch": "2026-11-07",
+  "plan": "analysis/distribution/output/2026-11-07_to_12-06_plan.md",
+  "note": "7 Nov - 6 Dec. Data month Sep 2026. Held for the NBFC ingest (user, 2026-11-06): #12 bank credit to NBFCs, #16 NBFC retail. Release days #24, #28 wait on RBI. #27 off-site ATMs held: the dashboard ATM table is titled On-site + Off-site but shows on-site only. #9 keeps shops only: online value carries a share step and a large base. UPI QR market growth (+24.9%) is not quoted: most of the month's addition is Axis's one-month step.",
+  "out_dir": "analysis/distribution/output/x/2026-11-07",
+  "posts": [
+    {
+      "date": "2026-11-07",
+      "slug": "non-food-credit-new-high",
+      "text": "Non-food bank credit reached ₹228.98L Cr in Sep 2026, up 19.1% over the year.\n\nServices grew fastest at 28.3%. Industry and farm credit: 19.5% each. Personal loans: 17.3%.\n\n#BankCredit #RBI\nindiacreditlens.com",
+      "image": {
+        "kicker": "Bank credit · Sep 2026",
+        "title": "Non-food bank credit: ₹228.98L Cr, +19.1%",
+        "source": "Source: RBI, Sectoral Deployment of Bank Credit",
+        "tables": [
+          {
+            "path": "/",
+            "clicks": [
+              "Main Sectors"
+            ],
+            "cols": [
+              "PART",
+              "SIZE",
+              "GROWTH"
+            ],
+            "rows": [
+              "Personal Loans",
+              "Services",
+              "Industry (Micro and Small, Medium and Large)",
+              "Agriculture and Allied Activities"
+            ],
+            "highlight": "",
+            "width": 400
+          }
+        ]
+      }
+    },
+    {
+      "date": "2026-11-08",
+      "slug": "medium-firms-fastest",
+      "text": "Bank credit to medium-sized firms grew 33.2% in Sep 2026, its fastest in our data. Large firms: 16.0%.\n\nMedium firms hold 10.3% of industry credit and took 15.8% of the new.\n\n#MSME #BankCredit\nindiacreditlens.com",
+      "image": {
+        "kicker": "Bank credit · Industry by size · Sep 2026",
+        "title": "Medium firms: 10.3% of the book, 15.8% of the new",
+        "source": "Source: RBI, Sectoral Deployment of Bank Credit",
+        "tables": [
+          {
+            "path": "/",
+            "clicks": [
+              "Industry by Size"
+            ],
+            "cols": [
+              "PART",
+              "OF CUT",
+              "GROWTH",
+              "NEW"
+            ],
+            "rows": [
+              "Large",
+              "Micro and Small",
+              "Medium"
+            ],
+            "highlight": "Medium"
+          }
+        ]
+      }
+    },
+    {
+      "date": "2026-11-09",
+      "slug": "services-share-of-new",
+      "text": "Services is 28.3% of bank credit but took 38.9% of the new credit in Sep 2026.\n\nIt grew 28.3%, its fastest in our data, against 19.1% for non-food credit overall.\n\n#BankCredit #Services\nindiacreditlens.com",
+      "image": {
+        "kicker": "Bank credit · Sep 2026",
+        "title": "Services: 28.3% of the book, 38.9% of the new",
+        "source": "Source: RBI, Sectoral Deployment of Bank Credit",
+        "tables": [
+          {
+            "path": "/",
+            "clicks": [
+              "Main Sectors"
+            ],
+            "cols": [
+              "PART",
+              "OF CUT",
+              "GROWTH",
+              "NEW"
+            ],
+            "rows": [
+              "Personal Loans",
+              "Services",
+              "Industry (Micro and Small, Medium and Large)",
+              "Agriculture and Allied Activities"
+            ],
+            "highlight": "Services",
+            "width": 400
+          }
+        ]
+      }
+    },
+    {
+      "date": "2026-11-10",
+      "slug": "construction-credit-peak",
+      "text": "Bank credit to construction grew 30.0% in Sep 2026, its fastest in our data, and sped up 5.31 points in a month.\n\nAll industry credit: 19.5%. Order books, or stretched working capital?\n\n#Construction #BankCredit\nindiacreditlens.com",
+      "image": {
+        "kicker": "Bank credit · Industry by type · Sep 2026",
+        "title": "Construction credit: +30.0%",
+        "source": "Source: RBI, Sectoral Deployment of Bank Credit",
+        "tables": [
+          {
+            "path": "/",
+            "clicks": [
+              "Industry by Type"
+            ],
+            "cols": [
+              "PART",
+              "SIZE",
+              "GROWTH",
+              "PACE"
+            ],
+            "rows": [
+              "Construction",
+              "Infrastructure"
+            ],
+            "highlight": "Construction"
+          }
+        ]
+      }
+    },
+    {
+      "date": "2026-11-11",
+      "slug": "hdfc-sbi-card-value-at-shops",
+      "text": "Credit card value at shops, Sep 2026. Market +7.2%. SBI +25.2%. HDFC Bank −6.7%, from +36.1% a year ago, its peak.\n\nHDFC still leads with 26.5%. SBI has 18.3%. Base effect, or a real change?\n\n#CreditCards #HDFCBank #SBI\nindiacreditlens.com",
+      "image": {
+        "kicker": "Payments · Credit card value at shops (POS) · Sep 2026",
+        "title": "HDFC Bank −6.7%, SBI +25.2%, market +7.2%",
+        "source": "Source: RBI, bank-wise ATM, POS and card statistics · rupee value, year on year",
+        "tables": [
+          {
+            "path": "/payments",
+            "clicks": [
+              "Credit Card",
+              "POS Transactions",
+              "bank (63)"
+            ],
+            "cols": [
+              "PART",
+              "OF CUT",
+              "GROWTH"
+            ],
+            "rows": [
+              "HDFC BANK LTD",
+              "STATE BANK OF INDIA",
+              "AXIS BANK LTD",
+              "ICICI BANK LTD"
+            ],
+            "highlight": "HDFC BANK LTD"
+          }
+        ]
+      },
+      "notes": [
+        {
+          "sidecar": "atm_pos_banks/cc-pos-txn-val-banks.json",
+          "entity": "HDFC BANK LTD",
+          "column": "growth",
+          "index": -13
+        }
+      ]
+    },
+    {
+      "date": "2026-11-12",
+      "slug": "card-balances-net-of-cpi",
+      "text": "Credit card balances at banks grew 7.2% in Sep 2026. Net of consumer prices (CPI, +5.5% over the year), 1.6%.\n\nCards are 4.1% of personal loans and took 1.9% of the new.\n\n#CreditCards #CPI #BankCredit\nindiacreditlens.com",
+      "image": {
+        "kicker": "Bank credit vs prices · Sep 2026",
+        "title": "Card balances: 7.2% in rupees, 1.6% net of prices",
+        "source": "Source: RBI, Sectoral Deployment of Bank Credit; MoSPI CPI",
+        "tables": [
+          {
+            "path": "/",
+            "clicks": [
+              "Personal Loans"
+            ],
+            "cols": [
+              "PART",
+              "OF CUT",
+              "GROWTH",
+              "NEW"
+            ],
+            "rows": [
+              "Credit Card Outstanding",
+              "Other Personal Loans"
+            ],
+            "highlight": "Credit Card Outstanding"
+          }
+        ]
+      },
+      "notes": [
+        {
+          "sidecar": "sibc_table.json",
+          "cut": "sibc-pl",
+          "entity": "Credit Card Outstanding",
+          "column": "real_credit",
+          "field": "note"
+        },
+        {
+          "sidecar": "sibc_table.json",
+          "cut": "sibc-pl",
+          "entity": "Credit Card Outstanding",
+          "column": "real_credit",
+          "field": "display"
+        }
+      ]
+    },
+    {
+      "date": "2026-11-13",
+      "slug": "gold-loans-net-of-cpi",
+      "text": "Gold loans grew 82.6% in Sep 2026; net of consumer prices (CPI, +5.5%), 73.0%.\n\nThey are 7.8% of bank personal loans and took 23.9% of the new. Collateral price, or demand?\n\n#GoldLoans #BankCredit\nindiacreditlens.com",
+      "image": {
+        "kicker": "Bank credit · Personal loans · Sep 2026",
+        "title": "Gold loans: 7.8% of the book, 23.9% of the new",
+        "source": "Source: RBI, Sectoral Deployment of Bank Credit; MoSPI CPI",
+        "tables": [
+          {
+            "path": "/",
+            "clicks": [
+              "Personal Loans"
+            ],
+            "cols": [
+              "PART",
+              "OF CUT",
+              "GROWTH",
+              "NEW"
+            ],
+            "rows": [
+              "Loans against gold jewellery",
+              "Housing (Including Priority Sector Housing)"
+            ],
+            "highlight": "Loans against gold jewellery",
+            "name_width": 280
+          }
+        ]
+      },
+      "notes": [
+        {
+          "sidecar": "sibc_table.json",
+          "cut": "sibc-pl",
+          "entity": "Loans against gold jewellery",
+          "column": "real_credit",
+          "field": "note"
+        },
+        {
+          "sidecar": "sibc_table.json",
+          "cut": "sibc-pl",
+          "entity": "Loans against gold jewellery",
+          "column": "real_credit",
+          "field": "display"
+        }
+      ]
+    },
+    {
+      "date": "2026-11-14",
+      "slug": "fertiliser-credit-peak",
+      "text": "Bank credit to fertiliser makers grew 53.1% in Sep 2026, its fastest in our data. Net of fertiliser prices (WPI, +11.6% over the year), 37.2%.\n\nWorking capital, or new capacity?\n\n#Fertiliser #BankCredit\nindiacreditlens.com",
+      "image": {
+        "kicker": "Bank credit vs prices · Sep 2026",
+        "title": "Fertiliser credit: 53.1% in rupees, 37.2% net of prices",
+        "source": "Source: RBI, Sectoral Deployment of Bank Credit; WPI fertilisers",
+        "tables": [
+          {
+            "path": "/",
+            "clicks": [
+              "Industry by Type",
+              "▸ Chemicals and Chemical Products"
+            ],
+            "cols": [
+              "PART",
+              "SIZE",
+              "GROWTH",
+              "REAL CREDIT"
+            ],
+            "rows": [
+              "Fertiliser",
+              "Drugs and Pharmaceuticals",
+              "Petro Chemicals"
+            ],
+            "highlight": "Fertiliser",
+            "table_index": 1
+          }
+        ]
+      },
+      "notes": [
+        {
+          "sidecar": "sibc_table.json",
+          "cut": "sibc-chemicals-sub",
+          "entity": "Fertiliser",
+          "column": "real_credit",
+          "field": "note"
+        }
+      ]
+    },
+    {
+      "date": "2026-11-15",
+      "slug": "card-swipes-vs-value-at-shops",
+      "text": "Credit cards at shops, Sep 2026: swipes +23.4% over the year, rupee value +7.2%.\n\nMore swipes, smaller bills. Public sector banks hold 22.6% of the value and took 71.0% of its growth.\n\n#CreditCards #DigitalPayments\nindiacreditlens.com",
+      "image": {
+        "kicker": "Payments · Credit card value at shops (POS) · Sep 2026",
+        "title": "Card swipes +23.4%, value +7.2%",
+        "source": "Source: RBI, bank-wise ATM, POS and card statistics",
+        "tables": [
+          {
+            "path": "/payments",
+            "clicks": [
+              "Credit Card",
+              "POS Transactions"
+            ],
+            "cols": [
+              "PART",
+              "OF CUT",
+              "GROWTH",
+              "NEW"
+            ],
+            "rows": [
+              "Private Sector Banks",
+              "Public Sector Banks",
+              "Foreign Banks",
+              "Small Finance Banks"
+            ],
+            "highlight": "Public Sector Banks"
+          }
+        ]
+      },
+      "notes": [
+        {
+          "sidecar": "atm_pos_table.json",
+          "cut": "cc-pos-txn-vol-category",
+          "entity": null,
+          "column": "growth",
+          "field": "display"
+        }
+      ]
+    },
+    {
+      "date": "2026-11-16",
+      "slug": "petroleum-net-of-fuel-prices",
+      "text": "Bank credit to petroleum, coal and nuclear fuels grew 9.3% in Sep 2026. Net of fuel prices it fell 21.9%: wholesale mineral-oil prices rose 40.0% over the year.\n\nMore rupees, less fuel financed.\n\n#BankCredit #WPI #Inflation\nindiacreditlens.com",
+      "image": {
+        "kicker": "Bank credit vs prices · Sep 2026",
+        "title": "Petroleum credit: 9.3% in rupees, −21.9% net of fuel prices",
+        "source": "Source: RBI, Sectoral Deployment of Bank Credit; WPI Mineral Oils",
+        "tables": [
+          {
+            "path": "/",
+            "clicks": [
+              "Industry by Type"
+            ],
+            "cols": [
+              "PART",
+              "GROWTH",
+              "REAL CREDIT",
+              "OUTPUT 12M"
+            ],
+            "rows": [
+              "Petroleum, Coal Products and Nuclear Fuels"
+            ],
+            "highlight": "Petroleum, Coal Products and Nuclear Fuels",
+            "width": 400,
+            "name_width": 230
+          }
+        ]
+      },
+      "notes": [
+        {
+          "sidecar": "sibc_table.json",
+          "cut": "sibc-industry-type",
+          "entity": "Petroleum, Coal Products and Nuclear Fuels",
+          "column": "real_credit",
+          "field": "note"
+        }
+      ]
+    },
+    {
+      "date": "2026-11-17",
+      "slug": "axis-upi-qr-one-month-jump",
+      "text": "Axis Bank's UPI QR codes went from 13.05 crore to 19.37 crore in one month, Sep 2026. Its share: 16.0% to 21.9%.\n\nYes Bank still holds 72.1%. A merchant migration, or a change in what is reported?\n\n#UPI #AxisBank #DigitalPayments\nindiacreditlens.com",
+      "image": {
+        "kicker": "Payments · UPI QR codes · Sep 2026",
+        "title": "Axis Bank: 19.37 crore UPI QR codes, 21.9% share",
+        "source": "Source: RBI, bank-wise ATM, POS and card statistics",
+        "tables": [
+          {
+            "path": "/payments",
+            "clicks": [
+              "Digital Infrastructure",
+              "UPI QR Codes",
+              "bank (63)"
+            ],
+            "cols": [
+              "PART",
+              "SIZE",
+              "OF CUT"
+            ],
+            "rows": [
+              "YES BANK LTD",
+              "AXIS BANK LTD",
+              "INDUSIND BANK LTD"
+            ],
+            "highlight": "AXIS BANK LTD"
+          }
+        ]
+      },
+      "notes": [
+        {
+          "sidecar": "atm_pos_banks/upi-qr-banks.json",
+          "entity": "AXIS BANK LTD",
+          "column": "size",
+          "index": -2
+        },
+        {
+          "sidecar": "atm_pos_banks/upi-qr-banks.json",
+          "entity": "AXIS BANK LTD",
+          "column": "of_cut",
+          "index": -2
+        }
+      ]
+    },
+    {
+      "date": "2026-11-19",
+      "slug": "infrastructure-is-power",
+      "text": "Infrastructure credit grew 11.8% in Sep 2026, and power carries it: +22.9% on 57.3% of the book.\n\nRoads +0.7%. Telecom −13.4%.\n\n#Infrastructure #Power #BankCredit\nindiacreditlens.com",
+      "image": {
+        "kicker": "Bank credit · Infrastructure · Sep 2026",
+        "title": "Infrastructure +11.8%: power +22.9%, roads +0.7%",
+        "source": "Source: RBI, Sectoral Deployment of Bank Credit",
+        "tables": [
+          {
+            "path": "/",
+            "clicks": [
+              "Industry by Type",
+              "▸ Infrastructure"
+            ],
+            "cols": [
+              "PART",
+              "SIZE",
+              "OF CUT",
+              "GROWTH"
+            ],
+            "rows": [
+              "Power",
+              "Roads",
+              "Telecommunications"
+            ],
+            "highlight": "Power",
+            "table_index": 1
+          }
+        ]
+      }
+    },
+    {
+      "date": "2026-11-20",
+      "slug": "card-spend-leads-balances",
+      "text": "Credit card balances at banks grew 7.2% in Sep 2026. Card value at shops grew 7.2% too.\n\nOur test finds that a change in card spend shows up in balances a month later: one of the few links in our model that has passed a test.\n\n#CreditCards #DigitalPayments\nindiacreditlens.com",
+      "image": {
+        "kicker": "Bank credit and payments · Sep 2026",
+        "title": "Card balances +7.2%, card value at shops +7.2%",
+        "source": "Source: RBI, Sectoral Deployment of Bank Credit; RBI, ATM, POS and card statistics",
+        "tables": [
+          {
+            "path": "/",
+            "clicks": [
+              "Personal Loans"
+            ],
+            "cols": [
+              "PART",
+              "GROWTH"
+            ],
+            "rows": [
+              "Credit Card Outstanding"
+            ],
+            "highlight": "Credit Card Outstanding",
+            "caption": "Banks · personal loans"
+          },
+          {
+            "path": "/payments",
+            "clicks": [
+              "Credit Card",
+              "POS Transactions"
+            ],
+            "cols": [
+              "PART",
+              "GROWTH"
+            ],
+            "rows": [],
+            "highlight": "",
+            "caption": "Payments · credit card value at shops"
+          }
+        ]
+      }
+    },
+    {
+      "date": "2026-11-21",
+      "slug": "loans-against-fixed-deposits",
+      "text": "Loans against fixed deposits grew 53.3% in Sep 2026, their fastest in our data; net of consumer prices (CPI, +5.5%), 45.2%.\n\n2.9% of personal loans, 6.9% of the new. Why borrow against a deposit?\n\n#BankCredit #FixedDeposits\nindiacreditlens.com",
+      "image": {
+        "kicker": "Bank credit · Personal loans · Sep 2026",
+        "title": "Loans against fixed deposits: +53.3%",
+        "source": "Source: RBI, Sectoral Deployment of Bank Credit; MoSPI CPI",
+        "tables": [
+          {
+            "path": "/",
+            "clicks": [
+              "Personal Loans"
+            ],
+            "cols": [
+              "PART",
+              "OF CUT",
+              "GROWTH",
+              "NEW"
+            ],
+            "rows": [
+              "Advances against Fixed Deposits (Including FCNR (B), NRNR Deposits etc.)",
+              "Loans against gold jewellery"
+            ],
+            "highlight": "Advances against Fixed Deposits (Including FCNR (B), NRNR Deposits etc.)",
+            "name_width": 300
+          }
+        ]
+      },
+      "notes": [
+        {
+          "sidecar": "sibc_table.json",
+          "cut": "sibc-pl",
+          "entity": "Advances against Fixed Deposits (Including FCNR (B), NRNR Deposits etc.)",
+          "column": "real_credit",
+          "field": "note"
+        },
+        {
+          "sidecar": "sibc_table.json",
+          "cut": "sibc-pl",
+          "entity": "Advances against Fixed Deposits (Including FCNR (B), NRNR Deposits etc.)",
+          "column": "real_credit",
+          "field": "display"
+        }
+      ]
+    },
+    {
+      "date": "2026-11-23",
+      "slug": "chemicals-credit-vs-output",
+      "text": "Bank credit to chemicals grew 25.5% in Sep 2026, its fastest in our data. Chemical output fell 1.4% (IIP, the last 12 months against the 12 before).\n\nWhat is the credit financing?\n\n#Chemicals #BankCredit #Manufacturing\nindiacreditlens.com",
+      "image": {
+        "kicker": "Bank credit vs the real economy · Sep 2026",
+        "title": "Chemicals: credit +25.5%, output −1.4%",
+        "source": "Source: RBI, Sectoral Deployment of Bank Credit; MoSPI IIP",
+        "tables": [
+          {
+            "path": "/",
+            "clicks": [
+              "Industry by Type"
+            ],
+            "cols": [
+              "PART",
+              "GROWTH",
+              "OUTPUT 12M"
+            ],
+            "rows": [
+              "Chemicals and Chemical Products",
+              "All Engineering",
+              "Basic Metal and Metal Product"
+            ],
+            "highlight": "Chemicals and Chemical Products",
+            "name_width": 300
+          }
+        ]
+      }
+    },
+    {
+      "date": "2026-11-24",
+      "slug": "debit-cards-at-shops-and-atms",
+      "text": "Debit cards, Sep 2026: value at shops −9.1% over the year, ATM withdrawals −4.6% by value.\n\n103.97 crore cards are in force, up 1.5%. Still issued, less used.\n\n#DebitCards #DigitalPayments\nindiacreditlens.com",
+      "image": {
+        "kicker": "Payments · Debit card value at shops (POS) · Sep 2026",
+        "title": "Debit card value at shops: −9.1%",
+        "source": "Source: RBI, bank-wise ATM, POS and card statistics",
+        "tables": [
+          {
+            "path": "/payments",
+            "clicks": [
+              "Debit Card",
+              "POS Transactions",
+              "bank (63)"
+            ],
+            "cols": [
+              "PART",
+              "OF CUT",
+              "GROWTH"
+            ],
+            "rows": [
+              "STATE BANK OF INDIA",
+              "HDFC BANK LTD",
+              "ICICI BANK LTD"
+            ],
+            "highlight": ""
+          }
+        ]
+      },
+      "notes": [
+        {
+          "sidecar": "atm_pos_table.json",
+          "cut": "dc-atm-withdrawal-val-category",
+          "entity": null,
+          "column": "growth",
+          "field": "display"
+        },
+        {
+          "sidecar": "atm_pos_table.json",
+          "cut": "dc-category",
+          "entity": null,
+          "column": "growth",
+          "field": "display"
+        },
+        {
+          "sidecar": "atm_pos_table.json",
+          "cut": "dc-category",
+          "entity": null,
+          "column": "size",
+          "field": "display"
+        }
+      ]
+    },
+    {
+      "date": "2026-11-25",
+      "slug": "housing-share-of-new",
+      "text": "Housing is 47.0% of bank personal loans but took 32.8% of the new ones in Sep 2026.\n\nIt grew 11.5%; net of consumer prices (CPI, +5.5% over the year), 5.6%. All personal loans: 17.3%.\n\n#HousingFinance #BankCredit\nindiacreditlens.com",
+      "image": {
+        "kicker": "Bank credit · Personal loans · Sep 2026",
+        "title": "Housing: 47.0% of personal loans, 32.8% of the new",
+        "source": "Source: RBI, Sectoral Deployment of Bank Credit; MoSPI CPI",
+        "tables": [
+          {
+            "path": "/",
+            "clicks": [
+              "Personal Loans"
+            ],
+            "cols": [
+              "PART",
+              "OF CUT",
+              "GROWTH",
+              "NEW"
+            ],
+            "rows": [
+              "Housing (Including Priority Sector Housing)",
+              "Other Personal Loans",
+              "Loans against gold jewellery"
+            ],
+            "highlight": "Housing (Including Priority Sector Housing)",
+            "name_width": 280
+          }
+        ]
+      },
+      "notes": [
+        {
+          "sidecar": "sibc_table.json",
+          "cut": "sibc-pl",
+          "entity": "Housing (Including Priority Sector Housing)",
+          "column": "real_credit",
+          "field": "note"
+        },
+        {
+          "sidecar": "sibc_table.json",
+          "cut": "sibc-pl",
+          "entity": "Housing (Including Priority Sector Housing)",
+          "column": "real_credit",
+          "field": "display"
+        }
+      ]
+    },
+    {
+      "date": "2026-11-26",
+      "slug": "wholesale-vs-retail-trade",
+      "text": "Trade credit, Sep 2026. Wholesale +29.1%, its fastest in our data. Retail +18.1%.\n\nWholesale is 55.3% of the book and took 64.6% of the new.\n\n#Trade #BankCredit\nindiacreditlens.com",
+      "image": {
+        "kicker": "Bank credit · Trade · Sep 2026",
+        "title": "Wholesale trade: 55.3% of the book, 64.6% of the new",
+        "source": "Source: RBI, Sectoral Deployment of Bank Credit",
+        "tables": [
+          {
+            "path": "/",
+            "clicks": [
+              "Services",
+              "▸ Trade"
+            ],
+            "cols": [
+              "PART",
+              "SIZE",
+              "OF CUT",
+              "GROWTH",
+              "NEW"
+            ],
+            "rows": [
+              "Wholesale Trade",
+              "Retail Trade"
+            ],
+            "highlight": "Wholesale Trade",
+            "table_index": 1
+          }
+        ]
+      }
+    },
+    {
+      "date": "2026-11-27",
+      "slug": "bharat-qr-shrinks",
+      "text": "Bharat QR codes fell 12.0% over the year to Sep 2026, to 53.40 lakh. HDFC Bank holds 42.8% and grew 1.6%.\n\nUnion Bank is the exception among the larger issuers: +33.7%. Axis fell 24.9%.\n\n#BharatQR #DigitalPayments\nindiacreditlens.com",
+      "image": {
+        "kicker": "Payments · Bharat QR codes · Sep 2026",
+        "title": "Bharat QR codes: −12.0% over the year",
+        "source": "Source: RBI, bank-wise ATM, POS and card statistics",
+        "tables": [
+          {
+            "path": "/payments",
+            "clicks": [
+              "Digital Infrastructure",
+              "Bharat QR Codes",
+              "bank (63)"
+            ],
+            "cols": [
+              "PART",
+              "SIZE",
+              "OF CUT",
+              "GROWTH"
+            ],
+            "rows": [
+              "HDFC BANK LTD",
+              "STATE BANK OF INDIA",
+              "UNION BANK OF INDIA",
+              "AXIS BANK LTD"
+            ],
+            "highlight": "UNION BANK OF INDIA"
+          }
+        ]
+      }
+    },
+    {
+      "date": "2026-11-28",
+      "slug": "idfc-first-cards",
+      "text": "Credit cards in force grew 10.4% in Sep 2026. IDFC First Bank grew 23.7%, to 50.10 lakh.\n\nThe four largest issuers each grew between 7.3% and 8.3%, below the market.\n\n#CreditCards #IDFCFirstBank\nindiacreditlens.com",
+      "image": {
+        "kicker": "Payments · Credit cards in force · Sep 2026",
+        "title": "IDFC First: cards +23.7%, market +10.4%",
+        "source": "Source: RBI, bank-wise ATM, POS and card statistics",
+        "tables": [
+          {
+            "path": "/payments",
+            "clicks": [
+              "Credit Card",
+              "bank (63)"
+            ],
+            "cols": [
+              "PART",
+              "SIZE",
+              "GROWTH"
+            ],
+            "rows": [
+              "HDFC BANK LTD",
+              "STATE BANK OF INDIA",
+              "ICICI BANK LTD",
+              "AXIS BANK LTD",
+              "IDFC FIRST BANK LTD"
+            ],
+            "highlight": "IDFC FIRST BANK LTD"
+          }
+        ]
+      }
+    },
+    {
+      "date": "2026-11-29",
+      "slug": "sugar-credit-shrinks",
+      "text": "Food processing credit grew 25.3% in Sep 2026, its fastest in our data.\n\nSugar went the other way: −7.0%, or −16.9% net of sugar prices (WPI, +11.9% over the year).\n\n#Sugar #BankCredit\nindiacreditlens.com",
+      "image": {
+        "kicker": "Bank credit vs prices · Sep 2026",
+        "title": "Sugar credit: −7.0% in rupees, −16.9% net of prices",
+        "source": "Source: RBI, Sectoral Deployment of Bank Credit; WPI sugar",
+        "tables": [
+          {
+            "path": "/",
+            "clicks": [
+              "Industry by Type",
+              "▸ Food Processing"
+            ],
+            "cols": [
+              "PART",
+              "SIZE",
+              "GROWTH",
+              "REAL CREDIT"
+            ],
+            "rows": [
+              "Sugar",
+              "Edible Oils and Vanaspati"
+            ],
+            "highlight": "Sugar",
+            "table_index": 1
+          }
+        ]
+      },
+      "notes": [
+        {
+          "sidecar": "sibc_table.json",
+          "cut": "sibc-food-processing-sub",
+          "entity": "Sugar",
+          "column": "real_credit",
+          "field": "note"
+        },
+        {
+          "sidecar": "sibc_table.json",
+          "cut": "sibc-industry-type",
+          "entity": "Food Processing",
+          "column": "growth",
+          "field": "display"
+        }
+      ]
+    },
+    {
+      "date": "2026-12-01",
+      "slug": "small-finance-bank-cards",
+      "text": "Small finance banks had 26.94 lakh credit cards in force in Sep 2026, up 117.4% over the year.\n\nStill only 2.1% of all cards, but 12.3% of the cards added.\n\n#CreditCards #SmallFinanceBanks\nindiacreditlens.com",
+      "image": {
+        "kicker": "Payments · Credit cards in force · Sep 2026",
+        "title": "Small finance banks' credit cards: +117.4%",
+        "source": "Source: RBI, bank-wise ATM, POS and card statistics",
+        "tables": [
+          {
+            "path": "/payments",
+            "clicks": [
+              "Credit Card"
+            ],
+            "cols": [
+              "PART",
+              "SIZE",
+              "OF CUT",
+              "GROWTH",
+              "NEW"
+            ],
+            "rows": [
+              "Private Sector Banks",
+              "Public Sector Banks",
+              "Small Finance Banks"
+            ],
+            "highlight": "Small Finance Banks"
+          }
+        ]
+      }
+    },
+    {
+      "date": "2026-12-02",
+      "slug": "electronics-credit-vs-output",
+      "text": "Bank credit to electronics makers grew 30.6% in Sep 2026; net of electronics prices (WPI, +4.0%), 25.6%.\n\nOutput grew 7.2% (IIP, the last 12 months against the 12 before). Capacity ahead of output?\n\n#Electronics #BankCredit #Manufacturing\nindiacreditlens.com",
+      "image": {
+        "kicker": "Bank credit vs the real economy · Sep 2026",
+        "title": "Electronics: credit +30.6%, output +7.2%",
+        "source": "Source: RBI, Sectoral Deployment of Bank Credit; WPI; MoSPI IIP",
+        "tables": [
+          {
+            "path": "/",
+            "clicks": [
+              "Industry by Type",
+              "▸ All Engineering"
+            ],
+            "cols": [
+              "PART",
+              "GROWTH",
+              "REAL CREDIT",
+              "OUTPUT 12M"
+            ],
+            "rows": [
+              "Electronics"
+            ],
+            "highlight": "Electronics",
+            "table_index": 1
+          }
+        ]
+      },
+      "notes": [
+        {
+          "sidecar": "sibc_table.json",
+          "cut": "sibc-engineering-sub",
+          "entity": "Electronics",
+          "column": "real_credit",
+          "field": "note"
+        }
+      ]
+    },
+    {
+      "date": "2026-12-05",
+      "slug": "education-loans-slowest",
+      "text": "Education loans grew 12.8% in Sep 2026, their slowest in our data; net of consumer prices (CPI, +5.5%), 6.9%.\n\nAll personal loans: 17.3%.\n\n#EducationLoans #BankCredit\nindiacreditlens.com",
+      "image": {
+        "kicker": "Bank credit · Personal loans · Sep 2026",
+        "title": "Education loans: +12.8%, the slowest in our data",
+        "source": "Source: RBI, Sectoral Deployment of Bank Credit; MoSPI CPI",
+        "tables": [
+          {
+            "path": "/",
+            "clicks": [
+              "Personal Loans"
+            ],
+            "cols": [
+              "PART",
+              "SIZE",
+              "GROWTH"
+            ],
+            "rows": [
+              "Education",
+              "Consumer Durables"
+            ],
+            "highlight": "Education"
+          }
+        ]
+      },
+      "notes": [
+        {
+          "sidecar": "sibc_table.json",
+          "cut": "sibc-pl",
+          "entity": "Education",
+          "column": "real_credit",
+          "field": "note"
+        },
+        {
+          "sidecar": "sibc_table.json",
+          "cut": "sibc-pl",
+          "entity": "Education",
+          "column": "real_credit",
+          "field": "display"
+        }
+      ]
+    },
+    {
+      "date": "2026-12-06",
+      "slug": "commercial-real-estate-peak",
+      "text": "Bank credit to commercial real estate grew 23.3% in Sep 2026, its fastest in our data, to ₹6.99L Cr.\n\nIt took 9.2% of new services credit.\n\n#CommercialRealEstate #BankCredit\nindiacreditlens.com",
+      "image": {
+        "kicker": "Bank credit · Services · Sep 2026",
+        "title": "Commercial real estate credit: +23.3%",
+        "source": "Source: RBI, Sectoral Deployment of Bank Credit",
+        "tables": [
+          {
+            "path": "/",
+            "clicks": [
+              "Services"
+            ],
+            "cols": [
+              "PART",
+              "SIZE",
+              "GROWTH",
+              "NEW"
+            ],
+            "rows": [
+              "Commercial Real Estate",
+              "Trade"
+            ],
+            "highlight": "Commercial Real Estate"
+          }
+        ]
+      }
+    }
+  ]
+}

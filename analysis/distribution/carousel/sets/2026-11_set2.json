@@ -1,0 +1,277 @@
+{
+  "file": "set2",
+  "title": "Cards carousel",
+  "out_dir": "analysis/distribution/output/2026-11-06_linkedin_set2",
+  "sources": "RBI ATM, POS and card statistics",
+  "post": "September's RBI card data: the government banks are taking the rupees.\n\n1. We keep swiping. The rupees are not keeping up.\n\nCredit card swipes at shops are up 23.4% in a year. The rupee value is up only 7.2%. In September alone, value growth slowed from 9.1% to 7.2%, while swipes barely moved (23.5% to 23.4%).\n\n2. Public sector banks took most of the growth.\n\nThey have 22.6% of card value at shops, but took 71.0% of its growth. A month ago that was 51.0%. Private banks hold 72.7% and grew just 1.4%.\n\n3. SBI up, HDFC down.\n\nSBI grew 25.2%. HDFC Bank, still the biggest at 26.5%, fell 6.7%, after growing 0.9% in August. Part of that is a high base: HDFC was growing 36.1% a year ago.\n\n4. Small finance banks are adding cards fast.\n\nOnly 2.1% of all cards, but 12.3% of the new ones, up 117.4% to 26.94 lakh.\n\nAnd the question I can't answer yet: private bank swipes are up 21.6% with value up 1.4%. Public bank swipes are up 13.6% with value up 26.6%. Why are the two moving so differently?\n\nData: RBI ATM, POS and card statistics, Sep 2026 · indiacreditlens.com",
+  "slides": [
+    {
+      "kind": "cover",
+      "kicker": "India Credit Lens · <b>Sep 2026 · Cards</b>",
+      "title": "Government banks are taking the card rupees",
+      "points": [
+        {
+          "colour": "blue",
+          "head": "More swipes, slower rupees",
+          "sub": "Volume and value have split."
+        },
+        {
+          "colour": "green",
+          "head": "Public banks take the growth",
+          "sub": "From a much smaller share."
+        },
+        {
+          "colour": "orange",
+          "head": "SBI up, HDFC down",
+          "sub": "With a high base to name."
+        }
+      ]
+    },
+    {
+      "accent": "blue",
+      "kicker": "<b>1</b> · Credit cards at shops",
+      "title": "We keep swiping. The rupees aren't keeping up",
+      "from": [
+        "+23.4%",
+        "swipes"
+      ],
+      "to": [
+        "+7.2%",
+        "rupee value"
+      ],
+      "table": {
+        "path": "/payments",
+        "clicks": [
+          "Credit Card",
+          "POS Transactions"
+        ],
+        "cols": [
+          "PART",
+          "OF CUT",
+          "GROWTH",
+          "NEW"
+        ],
+        "rows": [
+          "Private Sector Banks",
+          "Public Sector Banks"
+        ]
+      },
+      "cap": "<b>OF CUT</b> = share of card value · <b>NEW</b> = share of the year's growth",
+      "change": "September alone: value growth 9.1% to 7.2%. Swipes 23.5% to 23.4%.",
+      "notes": [
+        {
+          "sidecar": "atm_pos_table.json",
+          "cut": "cc-pos-txn-vol-category",
+          "entity": null,
+          "column": "growth",
+          "field": "display"
+        },
+        {
+          "sidecar": "atm_pos_table.json",
+          "cut": "cc-pos-txn-vol-category",
+          "entity": null,
+          "column": "growth",
+          "index": -2
+        },
+        {
+          "sidecar": "atm_pos_table.json",
+          "cut": "cc-pos-txn-val-category",
+          "entity": null,
+          "column": "growth",
+          "index": -2
+        }
+      ]
+    },
+    {
+      "accent": "green",
+      "kicker": "<b>2</b> · Public sector banks",
+      "title": "A small share, most of the growth",
+      "from": [
+        "22.6%",
+        "of card value"
+      ],
+      "to": [
+        "71.0%",
+        "of its growth"
+      ],
+      "table": {
+        "path": "/payments",
+        "clicks": [
+          "Credit Card",
+          "POS Transactions"
+        ],
+        "cols": [
+          "PART",
+          "OF CUT",
+          "GROWTH",
+          "NEW"
+        ],
+        "rows": [
+          "Private Sector Banks",
+          "Public Sector Banks"
+        ],
+        "highlight": "Public Sector Banks"
+      },
+      "body": "They grew 26.6%. Private banks, with 72.7% of the value, grew 1.4%.",
+      "change": "September alone: their share of the growth went from 51.0% to 71.0%.",
+      "notes": [
+        {
+          "sidecar": "atm_pos_table.json",
+          "cut": "cc-pos-txn-val-category",
+          "entity": "Public Sector Banks",
+          "column": "new",
+          "index": -2
+        }
+      ]
+    },
+    {
+      "accent": "orange",
+      "kicker": "<b>3</b> · By bank",
+      "title": "SBI up, HDFC Bank down",
+      "from": [
+        "+25.2%",
+        "SBI"
+      ],
+      "to": [
+        "−6.7%",
+        "HDFC Bank"
+      ],
+      "to_alert": true,
+      "table": {
+        "path": "/payments",
+        "clicks": [
+          "Credit Card",
+          "POS Transactions",
+          "bank (63)"
+        ],
+        "cols": [
+          "PART",
+          "OF CUT",
+          "GROWTH"
+        ],
+        "rows": [
+          "HDFC BANK LTD",
+          "STATE BANK OF INDIA"
+        ],
+        "highlight": "HDFC BANK LTD"
+      },
+      "body": "A year ago HDFC Bank was growing 36.1%, so part of this is a high base.",
+      "change": "September alone: HDFC Bank 0.9% to −6.7%. SBI 22.3% to 25.2%.",
+      "notes": [
+        {
+          "sidecar": "atm_pos_banks/cc-pos-txn-val-banks.json",
+          "entity": "HDFC BANK LTD",
+          "column": "growth",
+          "index": -13
+        },
+        {
+          "sidecar": "atm_pos_banks/cc-pos-txn-val-banks.json",
+          "entity": "HDFC BANK LTD",
+          "column": "growth",
+          "index": -2
+        },
+        {
+          "sidecar": "atm_pos_banks/cc-pos-txn-val-banks.json",
+          "entity": "STATE BANK OF INDIA",
+          "column": "growth",
+          "index": -2
+        }
+      ]
+    },
+    {
+      "accent": "purple",
+      "kicker": "<b>4</b> · Small finance banks",
+      "title": "Few cards, a big slice of the new ones",
+      "from": [
+        "2.1%",
+        "of all cards"
+      ],
+      "to": [
+        "12.3%",
+        "of new cards"
+      ],
+      "table": {
+        "path": "/payments",
+        "clicks": [
+          "Credit Card"
+        ],
+        "cols": [
+          "PART",
+          "OF CUT",
+          "GROWTH",
+          "NEW"
+        ],
+        "rows": [
+          "Private Sector Banks",
+          "Public Sector Banks",
+          "Small Finance Banks"
+        ],
+        "highlight": "Small Finance Banks"
+      },
+      "body": "26.94 lakh cards, up 117.4% in a year.",
+      "change": "September alone: share of new cards 11.5% to 12.3%.",
+      "notes": [
+        {
+          "sidecar": "atm_pos_table.json",
+          "cut": "cc-category",
+          "entity": "Small Finance Banks",
+          "column": "new",
+          "index": -2
+        },
+        {
+          "sidecar": "atm_pos_table.json",
+          "cut": "cc-category",
+          "entity": "Small Finance Banks",
+          "column": "size",
+          "field": "display"
+        }
+      ]
+    },
+    {
+      "accent": "ink",
+      "kicker": "India Credit Lens · <b>Sep 2026 · Cards</b>",
+      "title": "Why are the two moving so differently?",
+      "rows": [
+        [
+          "Private banks",
+          "swipes +21.6%, value +1.4%"
+        ],
+        [
+          "Public banks",
+          "swipes +13.6%, value +26.6%"
+        ]
+      ],
+      "ask": "Corporate cards? Bigger tickets at public banks? Small spends moving elsewhere? We haven't tested a cause yet. What are you seeing?",
+      "notes": [
+        {
+          "sidecar": "atm_pos_table.json",
+          "cut": "cc-pos-txn-vol-category",
+          "entity": "Private Sector Banks",
+          "column": "growth",
+          "field": "display"
+        },
+        {
+          "sidecar": "atm_pos_table.json",
+          "cut": "cc-pos-txn-vol-category",
+          "entity": "Public Sector Banks",
+          "column": "growth",
+          "field": "display"
+        },
+        {
+          "sidecar": "atm_pos_table.json",
+          "cut": "cc-pos-txn-val-category",
+          "entity": "Private Sector Banks",
+          "column": "growth",
+          "field": "display"
+        },
+        {
+          "sidecar": "atm_pos_table.json",
+          "cut": "cc-pos-txn-val-category",
+          "entity": "Public Sector Banks",
+          "column": "growth",
+          "field": "display"
+        }
+      ]
+    }
+  ]
+}

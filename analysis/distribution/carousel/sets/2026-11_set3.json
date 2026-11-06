@@ -1,0 +1,295 @@
+{
+  "file": "set3",
+  "title": "Credit vs output carousel",
+  "out_dir": "analysis/distribution/output/2026-11-06_linkedin_set3",
+  "sources": "RBI credit · MoSPI WPI, CPI, IIP",
+  "post": "September's RBI credit data against MoSPI's output and prices: credit is running ahead.\n\n1. Chemicals: credit up 25.5%, output down 1.4%. Credit growth rose from 23.5% in August, and output slipped further from −0.9%.\n\n2. All engineering: credit up 36.0%, output up 12.5%. Credit growth rose from 33.4% in a month.\n\n3. Power: credit up 22.9%, output up 6.0%. Electricity prices (WPI) fell 0.4%, so real growth is higher still at 23.4%.\n\n4. Petroleum goes the other way. Credit is up 9.3% in rupees, down from 14.8% in August. Oil prices (WPI mineral oils) are up 40.0%, so in real terms credit fell 21.9%.\n\n5. Gold loans are up 82.6%, or 73.0% after consumer prices (CPI, +5.5%). In a month it barely moved, from 83.2%.\n\nIs this capacity being built ahead of output, or more debt per rupee of output? Both can be true, and we haven't tested which.\n\nOutput here is IIP: the last 12 months against the 12 before.\n\nData: RBI sector-wise bank credit; MoSPI WPI, CPI and IIP · Sep 2026 · indiacreditlens.com",
+  "slides": [
+    {
+      "kind": "cover",
+      "kicker": "India Credit Lens · <b>Sep 2026 · Credit vs output</b>",
+      "title": "Credit is running ahead of output",
+      "points": [
+        {
+          "colour": "red",
+          "head": "Chemicals, engineering, power",
+          "sub": "Credit well ahead of production."
+        },
+        {
+          "colour": "orange",
+          "head": "Petroleum goes the other way",
+          "sub": "More rupees, less real credit."
+        },
+        {
+          "colour": "purple",
+          "head": "Gold stays hot",
+          "sub": "Even after prices."
+        }
+      ]
+    },
+    {
+      "accent": "red",
+      "kicker": "<b>1</b> · Chemicals",
+      "title": "Credit up, output down",
+      "from": [
+        "+25.5%",
+        "credit"
+      ],
+      "to": [
+        "−1.4%",
+        "output"
+      ],
+      "to_alert": true,
+      "table": {
+        "path": "/",
+        "clicks": [
+          "Industry by Type"
+        ],
+        "cols": [
+          "PART",
+          "GROWTH",
+          "OUTPUT 12M"
+        ],
+        "rows": [
+          "Chemicals and Chemical Products"
+        ],
+        "highlight": "Chemicals and Chemical Products",
+        "total": false,
+        "name_width": 240
+      },
+      "cap": "<b>OUTPUT 12M</b> = production (IIP), the last 12 months against the 12 before",
+      "body": "Credit to chemical makers is at its fastest in our data.",
+      "change": "September alone: credit 23.5% to 25.5%. Output −0.9% to −1.4%.",
+      "notes": [
+        {
+          "sidecar": "sibc_table.json",
+          "cut": "sibc-industry-type",
+          "entity": "Chemicals and Chemical Products",
+          "column": "growth",
+          "index": -2
+        },
+        {
+          "sidecar": "sibc_table.json",
+          "cut": "sibc-industry-type",
+          "entity": "Chemicals and Chemical Products",
+          "column": "output",
+          "index": -2
+        }
+      ]
+    },
+    {
+      "accent": "blue",
+      "kicker": "<b>2</b> · All engineering",
+      "title": "The fastest line in industry credit",
+      "from": [
+        "+36.0%",
+        "credit"
+      ],
+      "to": [
+        "+12.5%",
+        "output"
+      ],
+      "table": {
+        "path": "/",
+        "clicks": [
+          "Industry by Type"
+        ],
+        "cols": [
+          "PART",
+          "GROWTH",
+          "OUTPUT 12M"
+        ],
+        "rows": [
+          "All Engineering"
+        ],
+        "highlight": "All Engineering",
+        "total": false,
+        "name_width": 240
+      },
+      "cap": "<b>OUTPUT 12M</b> = production (IIP), the last 12 months against the 12 before",
+      "change": "September alone: credit 33.4% to 36.0%. Output 12.3% to 12.5%.",
+      "notes": [
+        {
+          "sidecar": "sibc_table.json",
+          "cut": "sibc-industry-type",
+          "entity": "All Engineering",
+          "column": "growth",
+          "index": -2
+        },
+        {
+          "sidecar": "sibc_table.json",
+          "cut": "sibc-industry-type",
+          "entity": "All Engineering",
+          "column": "output",
+          "index": -2
+        }
+      ]
+    },
+    {
+      "accent": "green",
+      "kicker": "<b>3</b> · Power",
+      "title": "Lending far ahead of generation",
+      "from": [
+        "+22.9%",
+        "credit"
+      ],
+      "to": [
+        "+6.0%",
+        "output"
+      ],
+      "table": {
+        "path": "/",
+        "clicks": [
+          "Industry by Type",
+          "▸ Infrastructure"
+        ],
+        "table_index": 1,
+        "cols": [
+          "PART",
+          "GROWTH",
+          "REAL CREDIT",
+          "OUTPUT 12M"
+        ],
+        "rows": [
+          "Power"
+        ],
+        "highlight": "Power",
+        "total": false
+      },
+      "cap": "<b>REAL CREDIT</b> = growth with prices taken out · <b>OUTPUT 12M</b> = production (IIP), the last 12 months against the 12 before",
+      "body": "Electricity prices (WPI) fell 0.4%, so real growth is higher still: 23.4%.",
+      "change": "September alone: credit 21.0% to 22.9%. Output 5.2% to 6.0%.",
+      "notes": [
+        {
+          "sidecar": "sibc_table.json",
+          "cut": "sibc-infra-sub",
+          "entity": "Power",
+          "column": "real_credit"
+        },
+        {
+          "sidecar": "sibc_table.json",
+          "cut": "sibc-infra-sub",
+          "entity": "Power",
+          "column": "growth",
+          "index": -2
+        },
+        {
+          "sidecar": "sibc_table.json",
+          "cut": "sibc-infra-sub",
+          "entity": "Power",
+          "column": "output",
+          "index": -2
+        }
+      ]
+    },
+    {
+      "accent": "orange",
+      "kicker": "<b>4</b> · Petroleum, coal products",
+      "title": "More rupees, less real credit",
+      "from": [
+        "+9.3%",
+        "credit, in rupees"
+      ],
+      "to": [
+        "−21.9%",
+        "after oil prices"
+      ],
+      "to_alert": true,
+      "arrow": true,
+      "table": {
+        "path": "/",
+        "clicks": [
+          "Industry by Type"
+        ],
+        "cols": [
+          "PART",
+          "GROWTH",
+          "REAL CREDIT"
+        ],
+        "rows": [
+          "Petroleum, Coal Products and Nuclear Fuels"
+        ],
+        "highlight": "Petroleum, Coal Products and Nuclear Fuels",
+        "total": false,
+        "name_width": 240
+      },
+      "cap": "<b>REAL CREDIT</b> = growth with prices taken out",
+      "body": "Oil prices (WPI mineral oils) up 40.0%. Production up 0.6%.",
+      "change": "September alone: credit 14.8% to 9.3%. Real −17.1% to −21.9%.",
+      "notes": [
+        {
+          "sidecar": "sibc_table.json",
+          "cut": "sibc-industry-type",
+          "entity": "Petroleum, Coal Products and Nuclear Fuels",
+          "column": "real_credit"
+        },
+        {
+          "sidecar": "sibc_table.json",
+          "cut": "sibc-industry-type",
+          "entity": "Petroleum, Coal Products and Nuclear Fuels",
+          "column": "output",
+          "field": "display"
+        },
+        {
+          "sidecar": "sibc_table.json",
+          "cut": "sibc-industry-type",
+          "entity": "Petroleum, Coal Products and Nuclear Fuels",
+          "column": "growth",
+          "index": -2
+        },
+        {
+          "sidecar": "sibc_table.json",
+          "cut": "sibc-industry-type",
+          "entity": "Petroleum, Coal Products and Nuclear Fuels",
+          "column": "real_credit",
+          "index": -2
+        }
+      ]
+    },
+    {
+      "accent": "purple",
+      "kicker": "<b>5</b> · Gold loans",
+      "title": "Hot even after prices",
+      "from": [
+        "+82.6%",
+        "in rupees"
+      ],
+      "to": [
+        "+73.0%",
+        "after CPI (+5.5%)"
+      ],
+      "arrow": true,
+      "ask": "Capacity being built ahead of output, or more debt per rupee of output? Both can be true, and we haven't tested which.",
+      "change": "September alone: barely moved, 83.2% to 82.6%.",
+      "notes": [
+        {
+          "sidecar": "sibc_table.json",
+          "cut": "sibc-pl",
+          "entity": "Loans against gold jewellery",
+          "column": "growth",
+          "field": "display"
+        },
+        {
+          "sidecar": "sibc_table.json",
+          "cut": "sibc-pl",
+          "entity": "Loans against gold jewellery",
+          "column": "real_credit"
+        },
+        {
+          "sidecar": "sibc_table.json",
+          "cut": "sibc-pl",
+          "entity": "Loans against gold jewellery",
+          "column": "real_credit",
+          "field": "display"
+        },
+        {
+          "sidecar": "sibc_table.json",
+          "cut": "sibc-pl",
+          "entity": "Loans against gold jewellery",
+          "column": "growth",
+          "index": -2
+        }
+      ]
+    }
+  ]
+}

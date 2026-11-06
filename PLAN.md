@@ -51,6 +51,9 @@ of 218 moves after the base effect.
 
 ## Open decisions and known debts (not scheduled)
 
+- **Spend per card and average ticket, by bank (user, 11-06):** add both as stored signals (card value ÷ cards in force; value ÷
+  swipes), computed in the engine for every period and bank, so the private bank scorecard (DISTRIBUTION_SPEC §17) and others can
+  quote them. Until then they stay out: a derived number no gate grounds. Needs a spec, a measured gate, a re-append of every period.
 - **Agentic layer:** `add-signal-family` and `measure-gate` skills ⬜, each written while doing its real task
   (the story-readings and driver-test builds of 10-10/12 were candidates; not yet written).
 - **The git hooks run whichever `python3` is first on PATH** (found 10-25): the system 3.9 (numpy 2.0) recomputes
