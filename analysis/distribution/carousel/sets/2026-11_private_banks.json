@@ -1,6 +1,6 @@
 {
   "file": "private_banks",
-  "title": "Private bank card scorecard",
+  "title": "Private banks' card story",
   "out_dir": "analysis/distribution/output/2026-11-06_linkedin_private_banks",
   "sources": "RBI ATM, POS and card statistics",
   "category": "Private Sector Banks",
@@ -9,98 +9,108 @@
     "credit-cards": "cc-category",
     "cc-pos-txn-val": "cc-pos-txn-val-category",
     "cc-pos-txn-vol": "cc-pos-txn-vol-category",
-    "cc-ecom-txn-val": "cc-ecom-txn-val-category",
-    "pos-terminals": "pos-category",
     "upi-qr": "upi-qr-category"
   },
   "banks": [
     {
       "entity": "HDFC BANK LTD",
-      "name": "HDFC Bank"
-    },
-    {
-      "entity": "AXIS BANK LTD",
-      "name": "Axis Bank"
+      "name": "HDFC Bank",
+      "group": "Giant"
     },
     {
       "entity": "ICICI BANK LTD",
-      "name": "ICICI Bank"
+      "name": "ICICI Bank",
+      "group": "Giant"
     },
     {
-      "entity": "KOTAK MAHINDRA BANK LTD",
-      "name": "Kotak"
-    },
-    {
-      "entity": "IDFC FIRST BANK LTD",
-      "name": "IDFC First"
+      "entity": "AXIS BANK LTD",
+      "name": "Axis Bank",
+      "group": "Still moving"
     },
     {
       "entity": "YES BANK LTD",
-      "name": "Yes Bank"
-    },
-    {
-      "entity": "RBL BANK LTD",
-      "name": "RBL Bank"
-    },
-    {
-      "entity": "INDUSIND BANK LTD",
-      "name": "IndusInd"
+      "name": "Yes Bank",
+      "group": "Challenger"
     },
     {
       "entity": "FEDERAL BANK LTD",
-      "name": "Federal Bank"
-    }
-  ],
-  "post": "September's card scorecard for India's 9 biggest private banks.\n\nWho's adding cards? Federal Bank, up 75.0% in a year, and IDFC First, up 23.7%. HDFC Bank, the biggest, is at 8.3%.\n\nWho's getting the spending at shops? HDFC still leads with 26.5% of the market, but its value fell 6.7% (it grew 0.9% in August). A year ago it was growing 36.1%, so the base is high. Kotak, Yes Bank and Federal Bank all grew over 35%.\n\nMore swipes, fewer rupees at HDFC: swipes up 17.7%, value down 6.7%. What's going on there?\n\nOnline is messier. Private banks' online value fell 10.4%, from +3.4% in August. ICICI fell 31.4% and Axis 29.0%, against big numbers last year. HDFC went the other way at +15.7%, and its share has jumped two months running.\n\nIndusInd is down on every measure here.\n\nCredit cards only, from RBI's monthly data. No loans or NPAs in this file, and I'm not saying why any of it happened. If you work on cards at one of these banks, what am I missing?\n\n@HDFC Bank @Axis Bank @ICICI Bank @Kotak Mahindra Bank @IDFC FIRST Bank @Yes Bank @RBL Bank @IndusInd Bank @Federal Bank\n\n#CreditCards #PrivateBanks #DigitalPayments\n\nData: RBI ATM, POS and card statistics, Sep 2026 · indiacreditlens.com",
-  "slides": [
-    {
-      "kind": "cover",
-      "kicker": "India Credit Lens · <b>Sep 2026 · Private banks</b>",
-      "title": "Private bank cards: who's winning?",
-      "points": [
-        {
-          "colour": "green",
-          "head": "Federal and IDFC First add cards fastest",
-          "sub": "HDFC, the biggest, is well behind them."
-        },
-        {
-          "colour": "red",
-          "head": "HDFC and ICICI shrink at shops",
-          "sub": "Kotak, Yes and Federal grow fast from small shares."
-        },
-        {
-          "colour": "orange",
-          "head": "IndusInd is down everywhere",
-          "sub": "On every measure in this set."
-        }
-      ]
+      "name": "Federal Bank",
+      "group": "Challenger"
     },
     {
-      "kind": "scorecard",
-      "accent": "green",
-      "kicker": "<b>1</b> · Credit cards in force",
-      "title": "Federal and IDFC First add cards fastest",
-      "columns": [
+      "entity": "KOTAK MAHINDRA BANK LTD",
+      "name": "Kotak",
+      "group": "Challenger"
+    },
+    {
+      "entity": "IDFC FIRST BANK LTD",
+      "name": "IDFC First",
+      "group": "Challenger"
+    },
+    {
+      "entity": "INDUSIND BANK LTD",
+      "name": "IndusInd",
+      "group": "Falling behind"
+    },
+    {
+      "entity": "RBL BANK LTD",
+      "name": "RBL Bank",
+      "group": "Falling behind"
+    }
+  ],
+  "post": "Private banks run most of India's credit card spending at shops. And in September, that spending almost stopped growing.\n\nThey hold 72.7% of the value. Their growth fell from 4.2% in August to just 1.4%. The market grew 7.2%.\n\nBut that 1.4% hides four very different stories.\n\n1. The two giants are shrinking.\n\nHDFC Bank fell 6.7%, after growing 0.9% in August. ICICI fell 9.2%. HDFC has a real excuse: it was growing 36.1% a year ago. And its swipes are still up 17.7%, so people are using the cards, just for less money.\n\nICICI has less of an excuse. It grew 8.8% a year ago, and its swipes are down too. Since Jan 2024, its share of swipes has gone from 11.2% to 5.2%.\n\n2. Axis is the one big bank still moving.\n\nValue up 15.7%, faster than August's 11.6%, and that's on top of 46.5% growth last year. Swipes up 29.0%.\n\n3. The challengers are growing fast, each in its own way.\n\nYes Bank +41.6%, and it was already growing 42.0% a year ago. Federal Bank +40.7%, with cards in force up 75.0%. IDFC First +26.8%. Kotak +35.8% with cards up only 7.3%, though Kotak's number comes off a weak year (−1.3%).\n\n4. Two banks are falling behind.\n\nIndusInd is down 42.8%, after falling 23.0% a year ago. Its share has gone from 3.6% to 2.2% since Jan 2024. RBL's value is up just 3.9%, with swipes down 8.4%.\n\nAdd it up, and the falls at HDFC, ICICI and IndusInd cancelled most of what the growers added.\n\nNow the twist: even so, this wasn't where the growth went. Public sector banks took 71.0% of the market's growth, up from 51.0% in August. Private banks took 14.7%. SBI alone grew 25.2%, with swipes flat (−0.3%).\n\nSo who's actually winning cards in India? If you work on cards at one of these banks, what am I missing?\n\n@HDFC Bank @ICICI Bank @Axis Bank @Yes Bank @Federal Bank @IDFC FIRST Bank @Kotak Mahindra Bank @IndusInd Bank @RBL Bank\n\n#CreditCards #PrivateBanks #DigitalPayments\n\nData: RBI ATM, POS and card statistics, Sep 2026 · indiacreditlens.com",
+  "slides": [
+    {
+      "accent": "ink",
+      "kicker": "India Credit Lens · <b>Sep 2026 · Private banks</b>",
+      "title": "Private banks' card spending almost stopped growing",
+      "from": [
+        "72.7%",
+        "of card value at shops"
+      ],
+      "to": [
+        "+1.4%",
+        "growth in a year"
+      ],
+      "joiner": "but",
+      "body": "The market grew 7.2%. Inside that 1.4% are four very different stories.",
+      "change": "In a month, their yearly growth went from 4.2% to 1.4%.",
+      "notes": [
         {
-          "head": "Share",
-          "metric": "credit-cards",
-          "field": "of_cut"
+          "sidecar": "atm_pos_table.json",
+          "cut": "cc-pos-txn-val-category",
+          "entity": "Private Sector Banks",
+          "column": "of_cut",
+          "index": -1
         },
         {
-          "head": "Aug → Sep growth",
-          "metric": "credit-cards",
-          "field": "change"
+          "sidecar": "atm_pos_table.json",
+          "cut": "cc-pos-txn-val-category",
+          "entity": "Private Sector Banks",
+          "column": "growth",
+          "index": -1
+        },
+        {
+          "sidecar": "atm_pos_table.json",
+          "cut": "cc-pos-txn-val-category",
+          "entity": "Private Sector Banks",
+          "column": "growth",
+          "index": -2
+        },
+        {
+          "sidecar": "atm_pos_table.json",
+          "cut": "cc-pos-txn-val-category",
+          "entity": null,
+          "column": "growth",
+          "index": -1
         }
-      ],
-      "trend": "credit-cards",
-      "highlight": "Federal Bank",
-      "change": "September alone: Federal Bank 81.8% to 75.0%, still the fastest. ICICI 9.1% to 8.1%."
+      ]
     },
     {
       "kind": "scorecard",
       "accent": "blue",
-      "kicker": "<b>2</b> · Credit card value at shops",
-      "title": "HDFC still leads, and it's shrinking",
+      "kicker": "<b>The puzzle</b> · Card value at shops",
+      "title": "So how are some of them growing 40%?",
       "columns": [
         {
           "head": "Share",
@@ -108,31 +118,26 @@
           "field": "of_cut"
         },
         {
-          "head": "Aug → Sep growth",
+          "head": "YoY",
           "metric": "cc-pos-txn-val",
-          "field": "change"
+          "field": "growth"
         }
       ],
-      "trend": "cc-pos-txn-val",
-      "highlight": "HDFC Bank",
-      "change": "September alone: HDFC 0.9% to −6.7%, on a high base: it grew 36.1% a year ago.",
-      "notes": [
-        {
-          "sidecar": "atm_pos_banks/cc-pos-txn-val-banks.json",
-          "entity": "HDFC BANK LTD",
-          "column": "growth",
-          "index": -13
-        }
-      ]
+      "show_group": true,
+      "change": "YoY = against the same month last year. Share = of all banks."
     },
     {
       "kind": "trend",
-      "accent": "purple",
-      "kicker": "<b>3</b> · Share of card value at shops",
-      "title": "Since Jan 2024: ICICI and IndusInd slip, Yes Bank climbs",
+      "accent": "red",
+      "kicker": "<b>1</b> · The giants",
+      "title": "HDFC and ICICI go backwards",
       "metric": "cc-pos-txn-val",
       "axis_max": 40,
-      "alt": "Share of credit card value at shops since January 2024 for five banks",
+      "height": 350,
+      "circle": [
+        "HDFC Bank"
+      ],
+      "alt": "Share of credit card value at shops since January 2024: HDFC, ICICI, Axis",
       "lines": [
         {
           "name": "HDFC Bank",
@@ -145,69 +150,65 @@
         {
           "name": "ICICI Bank",
           "colour": "#d1490c"
-        },
-        {
-          "name": "Yes Bank",
-          "colour": "#1f77b4"
-        },
-        {
-          "name": "IndusInd",
-          "colour": "#c0392b"
         }
       ],
-      "change": "HDFC's big step was one month: 30.8% to 26.6% in Dec 2025 (circled). September alone: 27.4% to 26.5%.",
+      "from": [
+        "−6.7%",
+        "HDFC Bank"
+      ],
+      "to": [
+        "−9.2%",
+        "ICICI Bank"
+      ],
+      "joiner": "and",
+      "body": "HDFC has a high base (+36.1% a year ago) and its swipes are up 17.7%. ICICI's base is lower (+8.8%), and its swipes are down 6.2%.",
+      "change": "In a month, yearly growth: HDFC 0.9% to −6.7%, ICICI −5.1% to −9.2%.",
       "notes": [
         {
           "sidecar": "atm_pos_banks/cc-pos-txn-val-banks.json",
           "entity": "HDFC BANK LTD",
-          "column": "of_cut",
-          "index": -11
+          "column": "growth",
+          "index": -1
+        },
+        {
+          "sidecar": "atm_pos_banks/cc-pos-txn-val-banks.json",
+          "entity": "ICICI BANK LTD",
+          "column": "growth",
+          "index": -1
         },
         {
           "sidecar": "atm_pos_banks/cc-pos-txn-val-banks.json",
           "entity": "HDFC BANK LTD",
-          "column": "of_cut",
-          "index": -10
+          "column": "growth",
+          "index": -13
         },
         {
           "sidecar": "atm_pos_banks/cc-pos-txn-val-banks.json",
-          "entity": "HDFC BANK LTD",
-          "column": "of_cut",
-          "index": -2
-        }
-      ]
-    },
-    {
-      "kind": "scorecard",
-      "accent": "orange",
-      "kicker": "<b>4</b> · Swipes vs value at shops",
-      "title": "HDFC: swipes up, rupees down",
-      "columns": [
-        {
-          "head": "Swipes",
-          "metric": "cc-pos-txn-vol",
-          "field": "growth"
+          "entity": "ICICI BANK LTD",
+          "column": "growth",
+          "index": -13
         },
-        {
-          "head": "Value",
-          "metric": "cc-pos-txn-val",
-          "field": "growth"
-        }
-      ],
-      "trend": "cc-pos-txn-vol",
-      "trend_head": "Swipe share",
-      "highlight": "HDFC Bank",
-      "change": "September alone: HDFC's swipes 19.2% to 17.7%, value 0.9% to −6.7%.",
-      "notes": [
         {
           "sidecar": "atm_pos_banks/cc-pos-txn-vol-banks.json",
           "entity": "HDFC BANK LTD",
           "column": "growth",
-          "index": -2
+          "index": -1
+        },
+        {
+          "sidecar": "atm_pos_banks/cc-pos-txn-vol-banks.json",
+          "entity": "ICICI BANK LTD",
+          "column": "growth",
+          "index": -1
         },
         {
           "sidecar": "atm_pos_banks/cc-pos-txn-val-banks.json",
           "entity": "HDFC BANK LTD",
+          "column": "growth",
+          "index": -2
+        },
+        {
+          "sidecar": "atm_pos_banks/cc-pos-txn-val-banks.json",
+          "entity": "ICICI BANK LTD",
           "column": "growth",
           "index": -2
         }
@@ -215,28 +216,182 @@
     },
     {
       "kind": "scorecard",
-      "accent": "red",
-      "kicker": "<b>5</b> · Credit card value online",
-      "title": "Online value fell. HDFC's didn't",
+      "accent": "purple",
+      "kicker": "<b>2</b> · Axis Bank",
+      "title": "The one big bank still moving",
+      "from": [
+        "+15.7%",
+        "value at shops"
+      ],
+      "to": [
+        "+29.0%",
+        "swipes"
+      ],
+      "joiner": "and",
+      "banks": [
+        "Axis Bank",
+        "HDFC Bank",
+        "ICICI Bank"
+      ],
       "columns": [
         {
-          "head": "Share",
-          "metric": "cc-ecom-txn-val",
-          "field": "of_cut"
+          "head": "Value",
+          "metric": "cc-pos-txn-val",
+          "field": "growth"
         },
         {
-          "head": "Aug → Sep growth",
-          "metric": "cc-ecom-txn-val",
-          "field": "change"
+          "head": "A year ago",
+          "metric": "cc-pos-txn-val",
+          "field": "year_ago"
+        },
+        {
+          "head": "Swipes",
+          "metric": "cc-pos-txn-vol",
+          "field": "growth"
         }
       ],
-      "trend": "cc-ecom-txn-val",
-      "highlight": "HDFC Bank",
-      "change": "September alone: private banks 3.4% to −10.4%. A high base: ICICI grew 43.0% a year ago.",
+      "body": "That's on top of +46.5% a year ago. Its UPI QR codes also went from 13.05 to 19.37 crore in one month: a real push, or a reporting change?",
+      "change": "In a month, yearly value growth went from 11.6% to 15.7%.",
       "notes": [
         {
-          "sidecar": "atm_pos_banks/cc-ecom-txn-val-banks.json",
+          "sidecar": "atm_pos_banks/cc-pos-txn-val-banks.json",
+          "entity": "AXIS BANK LTD",
+          "column": "growth",
+          "index": -1
+        },
+        {
+          "sidecar": "atm_pos_banks/cc-pos-txn-vol-banks.json",
+          "entity": "AXIS BANK LTD",
+          "column": "growth",
+          "index": -1
+        },
+        {
+          "sidecar": "atm_pos_banks/cc-pos-txn-val-banks.json",
+          "entity": "AXIS BANK LTD",
+          "column": "growth",
+          "index": -13
+        },
+        {
+          "sidecar": "atm_pos_banks/upi-qr-banks.json",
+          "entity": "AXIS BANK LTD",
+          "column": "size",
+          "index": -2
+        },
+        {
+          "sidecar": "atm_pos_banks/upi-qr-banks.json",
+          "entity": "AXIS BANK LTD",
+          "column": "size",
+          "index": -1
+        },
+        {
+          "sidecar": "atm_pos_banks/cc-pos-txn-val-banks.json",
+          "entity": "AXIS BANK LTD",
+          "column": "growth",
+          "index": -2
+        }
+      ]
+    },
+    {
+      "kind": "scorecard",
+      "accent": "green",
+      "kicker": "<b>3</b> · The challengers",
+      "title": "Small banks, fast growth, four different ways",
+      "banks": [
+        "Yes Bank",
+        "Federal Bank",
+        "Kotak",
+        "IDFC First"
+      ],
+      "columns": [
+        {
+          "head": "Value",
+          "metric": "cc-pos-txn-val",
+          "field": "growth"
+        },
+        {
+          "head": "A year ago",
+          "metric": "cc-pos-txn-val",
+          "field": "year_ago"
+        },
+        {
+          "head": "Cards",
+          "metric": "credit-cards",
+          "field": "growth"
+        }
+      ],
+      "body": "Yes Bank kept its pace. Federal Bank is adding cards fastest. Kotak's jump comes off a weak year.",
+      "change": "In a month, all four eased a little: Yes 42.3% to 41.6%, Federal 44.4% to 40.7%, Kotak 39.4% to 35.8%, IDFC First 30.2% to 26.8%.",
+      "notes": [
+        {
+          "sidecar": "atm_pos_banks/cc-pos-txn-val-banks.json",
+          "entity": "YES BANK LTD",
+          "column": "growth",
+          "index": -2
+        },
+        {
+          "sidecar": "atm_pos_banks/cc-pos-txn-val-banks.json",
+          "entity": "FEDERAL BANK LTD",
+          "column": "growth",
+          "index": -2
+        },
+        {
+          "sidecar": "atm_pos_banks/cc-pos-txn-val-banks.json",
+          "entity": "KOTAK MAHINDRA BANK LTD",
+          "column": "growth",
+          "index": -2
+        },
+        {
+          "sidecar": "atm_pos_banks/cc-pos-txn-val-banks.json",
+          "entity": "IDFC FIRST BANK LTD",
+          "column": "growth",
+          "index": -2
+        },
+        {
+          "sidecar": "atm_pos_banks/cc-pos-txn-vol-banks.json",
           "entity": "ICICI BANK LTD",
+          "column": "of_cut",
+          "index": 0
+        },
+        {
+          "sidecar": "atm_pos_banks/cc-pos-txn-vol-banks.json",
+          "entity": "ICICI BANK LTD",
+          "column": "of_cut",
+          "index": -1
+        },
+        {
+          "sidecar": "atm_pos_banks/credit-cards-banks.json",
+          "entity": "FEDERAL BANK LTD",
+          "column": "growth",
+          "index": -1
+        },
+        {
+          "sidecar": "atm_pos_banks/cc-pos-txn-val-banks.json",
+          "entity": "KOTAK MAHINDRA BANK LTD",
+          "column": "growth",
+          "index": -13
+        },
+        {
+          "sidecar": "atm_pos_banks/credit-cards-banks.json",
+          "entity": "KOTAK MAHINDRA BANK LTD",
+          "column": "growth",
+          "index": -1
+        },
+        {
+          "sidecar": "atm_pos_table.json",
+          "cut": "cc-pos-txn-val-category",
+          "entity": "Private Sector Banks",
+          "column": "new",
+          "index": -2
+        },
+        {
+          "sidecar": "atm_pos_banks/cc-pos-txn-val-banks.json",
+          "entity": "INDUSIND BANK LTD",
+          "column": "growth",
+          "index": -13
+        },
+        {
+          "sidecar": "atm_pos_banks/cc-pos-txn-val-banks.json",
+          "entity": "YES BANK LTD",
           "column": "growth",
           "index": -13
         }
@@ -244,52 +399,149 @@
     },
     {
       "kind": "scorecard",
-      "accent": "ink",
-      "kicker": "<b>6</b> · Payment infrastructure",
-      "title": "Terminals and QR codes: read with care",
+      "accent": "orange",
+      "kicker": "<b>4</b> · Falling behind",
+      "title": "Two banks going the other way",
+      "from": [
+        "−42.8%",
+        "IndusInd"
+      ],
+      "to": [
+        "+3.9%",
+        "RBL Bank"
+      ],
       "banks": [
-        "HDFC Bank",
-        "Axis Bank",
-        "ICICI Bank",
-        "RBL Bank",
-        "Yes Bank"
+        "IndusInd",
+        "RBL Bank"
       ],
       "columns": [
         {
-          "head": "POS share",
-          "metric": "pos-terminals",
+          "head": "Share",
+          "metric": "cc-pos-txn-val",
           "field": "of_cut"
         },
         {
-          "head": "POS growth",
-          "metric": "pos-terminals",
+          "head": "Value",
+          "metric": "cc-pos-txn-val",
           "field": "growth"
         },
         {
-          "head": "QR share",
-          "metric": "upi-qr",
-          "field": "of_cut"
+          "head": "Swipes",
+          "metric": "cc-pos-txn-vol",
+          "field": "growth"
         },
         {
-          "head": "QR growth",
-          "metric": "upi-qr",
+          "head": "Cards",
+          "metric": "credit-cards",
           "field": "growth"
         }
       ],
-      "note": "One-month jumps: POS terminals, June 2026 (ICICI, Axis, RBL, HDFC). UPI QR, Sep 2026 (Axis, Yes).",
-      "ask": "Real shift or a change in reporting? If you work on cards at one of these banks, what am I missing?",
-      "change": "September alone: Axis's QR growth 18.1% to 71.9%. Its POS growth 6.3% to 13.8%.",
+      "body": "Since Jan 2024, IndusInd's share went from 3.6% to 2.2%, RBL's from 5.8% to 3.2%. RBL's swipes are down 8.4%.",
+      "change": "In a month, yearly growth: IndusInd −47.7% to −42.8%, RBL 3.7% to 3.9%.",
       "notes": [
         {
-          "sidecar": "atm_pos_banks/upi-qr-banks.json",
-          "entity": "AXIS BANK LTD",
+          "sidecar": "atm_pos_banks/cc-pos-txn-val-banks.json",
+          "entity": "INDUSIND BANK LTD",
+          "column": "growth",
+          "index": -1
+        },
+        {
+          "sidecar": "atm_pos_banks/cc-pos-txn-val-banks.json",
+          "entity": "RBL BANK LTD",
+          "column": "growth",
+          "index": -1
+        },
+        {
+          "sidecar": "atm_pos_banks/cc-pos-txn-val-banks.json",
+          "entity": "INDUSIND BANK LTD",
+          "column": "of_cut",
+          "index": 0
+        },
+        {
+          "sidecar": "atm_pos_banks/cc-pos-txn-val-banks.json",
+          "entity": "INDUSIND BANK LTD",
+          "column": "of_cut",
+          "index": -1
+        },
+        {
+          "sidecar": "atm_pos_banks/cc-pos-txn-val-banks.json",
+          "entity": "RBL BANK LTD",
+          "column": "of_cut",
+          "index": 0
+        },
+        {
+          "sidecar": "atm_pos_banks/cc-pos-txn-val-banks.json",
+          "entity": "RBL BANK LTD",
+          "column": "of_cut",
+          "index": -1
+        },
+        {
+          "sidecar": "atm_pos_banks/cc-pos-txn-vol-banks.json",
+          "entity": "RBL BANK LTD",
+          "column": "growth",
+          "index": -1
+        },
+        {
+          "sidecar": "atm_pos_banks/cc-pos-txn-val-banks.json",
+          "entity": "INDUSIND BANK LTD",
           "column": "growth",
           "index": -2
         },
         {
-          "sidecar": "atm_pos_banks/pos-terminals-banks.json",
-          "entity": "AXIS BANK LTD",
+          "sidecar": "atm_pos_banks/cc-pos-txn-val-banks.json",
+          "entity": "RBL BANK LTD",
           "column": "growth",
+          "index": -2
+        }
+      ]
+    },
+    {
+      "accent": "ink",
+      "kicker": "<b>The twist</b> · Share of the year's growth",
+      "title": "But the growth didn't go to private banks anyway",
+      "from": [
+        "71.0%",
+        "public banks"
+      ],
+      "to": [
+        "14.7%",
+        "private banks"
+      ],
+      "body": "SBI alone grew 25.2%, with swipes flat at −0.3%.",
+      "ask": "So who's actually winning cards in India? If you work on cards at one of these banks, what am I missing?",
+      "change": "In a month, public banks' share of the growth went from 51.0% to 71.0%.",
+      "notes": [
+        {
+          "sidecar": "atm_pos_table.json",
+          "cut": "cc-pos-txn-val-category",
+          "entity": "Public Sector Banks",
+          "column": "new",
+          "index": -1
+        },
+        {
+          "sidecar": "atm_pos_table.json",
+          "cut": "cc-pos-txn-val-category",
+          "entity": "Private Sector Banks",
+          "column": "new",
+          "index": -1
+        },
+        {
+          "sidecar": "atm_pos_banks/cc-pos-txn-val-banks.json",
+          "entity": "STATE BANK OF INDIA",
+          "column": "growth",
+          "index": -1
+        },
+        {
+          "sidecar": "atm_pos_banks/cc-pos-txn-vol-banks.json",
+          "entity": "STATE BANK OF INDIA",
+          "column": "growth",
+          "index": -1
+        },
+        {
+          "sidecar": "atm_pos_table.json",
+          "cut": "cc-pos-txn-val-category",
+          "entity": "Public Sector Banks",
+          "column": "new",
           "index": -2
         }
       ]

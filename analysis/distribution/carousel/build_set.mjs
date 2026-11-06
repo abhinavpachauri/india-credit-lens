@@ -77,7 +77,7 @@ function slideHtml(s, i, shots) {
       <div class="spacer"></div><div class="foot">${foot}</div></section>`;
   const rows = s.rows ? `<div class="rr">${s.rows.map(([a, b]) => `<b>${a}</b><span>${b}</span>`).join("")}</div>` : "";
   return `<section class="slide" id="s${i + 1}" style="--accent:var(--${s.accent})">${kicker}<h2>${s.title}</h2>
-    ${s.from ? `<div class="fromto"><div><div class="big">${s.from[0]}</div><div class="lab">${s.from[1]}</div></div><div class="arrow${s.arrow ? "" : " vs"}">${s.arrow ? "→" : "vs"}</div><div><div class="big${s.to_alert ? " alert" : ""}">${s.to[0]}</div><div class="lab">${s.to[1]}</div></div></div>` : ""}
+    ${s.from ? `<div class="fromto"><div><div class="big">${s.from[0]}</div><div class="lab">${s.from[1]}</div></div><div class="arrow${s.arrow ? "" : " vs"}">${s.arrow ? "→" : (s.joiner ?? "vs")}</div><div><div class="big${s.to_alert ? " alert" : ""}">${s.to[0]}</div><div class="lab">${s.to[1]}</div></div></div>` : ""}
     ${rows}
     ${s.body ? `<p class="body">${s.body}</p>` : ""}
     ${shot ? `<div class="shot"><img src="shots/${shot}">${s.cap ? `<div class="cap">${s.cap}</div>` : ""}</div>` : ""}

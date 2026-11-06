@@ -1141,54 +1141,47 @@ book-profit vocabulary anywhere**, free or paid. If this track is ever built, th
     If unexplained, the post quotes only readings on one side of the break.
   The Oct 2025 spike (₹27,199 Cr) is festive season and will swing Oct 2026's year-on-year.
 
-## 17. Private bank card scorecard: a monthly LinkedIn set (v0.1, approved 2026-11-06; first set Sep 2026)
+## 17. Private bank cards: a monthly LinkedIn story (v0.2, 2026-11-06; first set Sep 2026)
 
-> User, 2026-11-06: readers care about cards, so credit cards lead, payment infrastructure is a light
-> addition, debit cards stay out. The post tags the banks. Trendlines on the charts.
+> User, 2026-11-06: readers care about cards, so credit cards lead, payment infrastructure is one line, debit cards
+> stay out. It must read as a story, not data population. The post tags the banks. One trend chart, not a line per bank.
 
 ### 17.1 What it is
 
-**One table of named banks per credit card measure, each row with its trend, every month.** It is a payments
-scorecard, not a view of the bank: RBI's monthly file has no per-bank loans, NPAs or deposits, and the title
-says "cards" so no reader expects them.
+**A monthly story about named banks' credit cards:** a hook, a puzzle, the banks grouped by what is happening to
+them, and a twist. It is about cards, not the bank: RBI's monthly file has no per-bank loans, NPAs or deposits.
 
 ### 17.2 Which banks
 
-- **Rule:** private sector banks (`canonical_banks.json`) with at least 1% of credit card value at shops. Sep 2026
-  gives **9**: HDFC, Axis, ICICI, Kotak, IDFC First, Yes, RBL, IndusInd, Federal. The tenth (J&K Bank) has 0.2%, and
-  its growth off that base would rank first.
-- **Reset each financial year**, not monthly, so the rows stay comparable.
-- **Generic:** category and threshold are set in the set's spec, so public banks can follow without new code.
+- **Rule:** private sector banks (`canonical_banks.json`) with at least 1% of credit card value at shops. Sep 2026 gives
+  **9**: HDFC, ICICI, Axis, Yes, Federal, Kotak, IDFC First, IndusInd, RBL. The tenth (J&K Bank) has 0.2%.
+- **Reset each financial year**, not monthly. Category and threshold sit in the set's spec, so public banks can follow.
 
-### 17.3 Measures
+### 17.3 Story, rewritten each month
 
-Credit cards in force · card value at shops · swipes at shops · online value · light: POS terminals and UPI QR.
-Each row: market share, growth, last month's growth, trend. Each table's total row is the private bank total.
+Sep 2026: hook (private total) → puzzle (all nine, one table) → the giants → the one still moving → the challengers →
+falling behind → twist (where the growth did go) and a question. **The groups are editorial** and are redrawn monthly
+from what the data shows; they are never stored or computed. Value at shops is the lead measure; swipes and cards
+in force explain it. Online value appears only when it is free of a share break.
 
-### 17.4 Trendlines
+### 17.4 Trend
 
-A sparkline per row, on every table, plus one full chart slide.
-- **What the line draws:** market share (`of_cut`, 33 months), not growth (21 months). Growth carries base effects,
-  and a share line shows a slow change that a bar flattens (PLAN, "Share bar charts flatten real moves").
-- **Scale:** each row its own, with its first and last value printed, so a small bank's move is visible and no
-  one reads the slopes as comparable.
-- **Rendered from stored series** in the sidecars, as SVG; numbers are the stored display strings.
+**One chart in the set**, on the beat it serves: market share (`of_cut`, 33 months), axis from zero, end values labelled.
+Tables have no trend column (user: a line per bank was overdoing it).
 
 ### 17.5 Guards
 
-- **A one-month share step of 2 points or more is marked** on the line and named on the slide, with no cause stated
-  unless sourced. Known: HDFC (online value Sep 2026; value at shops Nov → Dec 2025), Axis, IndusInd, UPI QR (Axis
-  Sep 2026), POS terminals (ICICI). This is the one new check; measure it per DECISIONS before it gates anything.
-- **The monthly change is required** (`build_set.mjs`), and every number is traced.
+- **A one-month share step of 2 points or more** is circled on the chart where the story relies on it, with no cause
+  stated unless sourced. Flag only; measure it per DECISIONS before it gates anything.
+- **Every point carries its monthly change**, in words that say what moved: "in a month, yearly growth went from x to y".
+  Growth is always year on year and labelled. `build_set.mjs` fails a slide with no band, and every number is traced.
+- **Bases are named** when they change the reading (HDFC's high one, Kotak's weak one).
 - **Causes are questions.** Observations only; no advice on a named bank (SEBI lint).
-- **Numbers no gate grounds stay out:** spend per card and average ticket are derived. Store them as signals first.
+- **Numbers no gate grounds stay out:** spend per card and average ticket wait until stored (PLAN). A sum across banks
+  is said in words, without a figure.
 
 ### 17.6 Tags
 
-Every issue tags **all the banks in the table, equally**, on a line at the end of the post, never only the ones that
-moved. §16.2 forbids @mentions on X because a tag on a post about one bank's lag reads as a call-out; a neutral table
-of all of them does not. Hashtags as well as tags. The user places the tags on LinkedIn when posting.
-
-### 17.7 Decisions
-
-Decided 2026-11-06: 9 banks, every bank tagged. Open: whether the share-step mark becomes a measured gate.
+Every issue tags **all the banks in the set, equally**, on a line at the end of the post, never only the ones that moved.
+§16.2 forbids @mentions on X because a tag on a post about one bank's lag reads as a call-out; a story covering all
+of them does not. Hashtags as well. The user places the tags on LinkedIn when posting.
