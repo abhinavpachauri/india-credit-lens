@@ -1,7 +1,7 @@
 {
   "batch": "2026-11-07",
   "plan": "analysis/distribution/output/2026-11-07_to_12-06_plan.md",
-  "note": "7 Nov - 6 Dec. Data month Sep 2026. Held for the NBFC ingest (user, 2026-11-06): #12 bank credit to NBFCs, #16 NBFC retail. Release days #24, #28 wait on RBI. #27 off-site ATMs held: the dashboard ATM table is titled On-site + Off-site but shows on-site only. #9 keeps shops only: online value carries a share step and a large base. UPI QR market growth (+24.9%) is not quoted: most of the month's addition is Axis's one-month step.",
+  "note": "7 Nov - 6 Dec. Data month Sep 2026. #12 and #16 built 2026-11-10 after the NBFC September ingest. Release days #24, #28 wait on RBI. #27 off-site ATMs held: the dashboard ATM table is titled On-site + Off-site but shows on-site only. #9 keeps shops only: online value carries a share step and a large base. UPI QR market growth (+24.9%) is not quoted: most of the month's addition is Axis's one-month step.",
   "out_dir": "analysis/distribution/output/x/2026-11-07",
   "posts": [
     {
@@ -424,6 +424,46 @@
       ]
     },
     {
+      "date": "2026-11-18",
+      "slug": "bank-credit-to-nbfcs",
+      "text": "Bank credit to NBFCs grew 41.8% in Sep 2026, the fastest in our data, up from 37.5% in August. It reached ₹22.53L Cr.\n\nNBFCs are 34.7% of bank credit to services, and took 46.4% of its growth.\n\n#NBFC #BankCredit\nindiacreditlens.com",
+      "image": {
+        "kicker": "Bank credit · Services · Sep 2026",
+        "title": "Bank credit to NBFCs: +41.8%, 46.4% of services' growth",
+        "source": "Source: RBI, Sectoral Deployment of Bank Credit",
+        "tables": [
+          {
+            "path": "/",
+            "clicks": [
+              "Services"
+            ],
+            "cols": [
+              "PART",
+              "SIZE",
+              "OF CUT",
+              "GROWTH",
+              "NEW"
+            ],
+            "rows": [
+              "Non-Banking Financial Companies (NBFCs)",
+              "Trade"
+            ],
+            "highlight": "Non-Banking Financial Companies (NBFCs)",
+            "name_width": 240
+          }
+        ]
+      },
+      "notes": [
+        {
+          "sidecar": "sibc_table.json",
+          "cut": "sibc-services",
+          "entity": "Non-Banking Financial Companies (NBFCs)",
+          "column": "growth",
+          "index": -2
+        }
+      ]
+    },
+    {
       "date": "2026-11-19",
       "slug": "infrastructure-is-power",
       "text": "Infrastructure credit grew 11.8% in Sep 2026, and power carries it: +22.9% on 57.3% of the book.\n\nRoads +0.7%. Telecom −13.4%.\n\n#Infrastructure #Power #BankCredit\nindiacreditlens.com",
@@ -539,6 +579,53 @@
           "entity": "Advances against Fixed Deposits (Including FCNR (B), NRNR Deposits etc.)",
           "column": "real_credit",
           "field": "display"
+        }
+      ]
+    },
+    {
+      "date": "2026-11-22",
+      "slug": "nbfc-retail-gold-loans",
+      "text": "NBFC retail loans grew 21.9% in Sep 2026 (22.0% in August). Retail is 43.5% of NBFC credit and took 58.6% of its growth.\n\nInside retail, gold loans grew 66.1% and took 30.9% of the growth, more than housing (20.1%), a far bigger book.\n\n#NBFC #GoldLoans\nindiacreditlens.com",
+      "image": {
+        "kicker": "NBFC credit · Retail · Sep 2026",
+        "title": "NBFC retail +21.9%: gold loans +66.1%",
+        "source": "Source: RBI, Sectoral Deployment of NBFC Credit (Upper and Middle Layer NBFCs and HFCs)",
+        "tables": [
+          {
+            "path": "/nbfc",
+            "clicks": [
+              "Retail"
+            ],
+            "cols": [
+              "PART",
+              "OF NBFC CREDIT",
+              "GROWTH",
+              "NEW"
+            ],
+            "rows": [
+              "Retail",
+              "Housing Loans",
+              "Loans against gold jewellery"
+            ],
+            "highlight": "Loans against gold jewellery",
+            "name_width": 240
+          }
+        ]
+      },
+      "notes": [
+        {
+          "sidecar": "nbfc_table.json",
+          "cut": "nbfc-main",
+          "entity": "Retail Loans",
+          "column": "new",
+          "field": "display"
+        },
+        {
+          "sidecar": "nbfc_table.json",
+          "cut": "nbfc-main",
+          "entity": "Retail Loans",
+          "column": "growth",
+          "index": -2
         }
       ]
     },

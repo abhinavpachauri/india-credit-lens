@@ -1,0 +1,280 @@
+{
+  "file": "set1",
+  "title": "Lenders carousel",
+  "out_dir": "analysis/distribution/output/2026-11-10_linkedin_set1",
+  "sources": "RBI, sectoral bank and NBFC credit",
+  "post": "September's RBI data: the new money goes to lenders.\n\n1. Services took most of the growth.\n\nServices is 28.3% of bank credit but took 38.9% of its growth over the year. Its yearly growth rose from 24.3% in August to 28.3%. Non-food credit grew 19.1%.\n\n2. Inside services: NBFCs.\n\nBank credit to NBFCs grew 41.8%, the fastest in our data (37.5% in August), to ₹22.53L Cr. NBFCs are 34.7% of bank credit to services and took 46.4% of its growth.\n\n3. Not all of it is the NBFCs you'd think of.\n\nPublic financial institutions grew 79.7% and took 24.7% of the growth in bank credit to NBFCs. Housing finance companies grew 19.7%.\n\n4. What NBFCs lend: retail.\n\nNBFC credit grew 15.4% (15.8% in August). Retail is 43.5% of it and took 58.6% of the growth, up from 57.8%.\n\n5. Inside retail: gold.\n\nNBFC gold loans grew 66.1% and took 30.9% of retail's growth, more than housing (20.1%).\n\nThe question I can't answer yet: is bank money now funding NBFC retail, and gold? RBI's NBFC data covers the larger NBFCs and HFCs, and bank credit to NBFCs includes the PFIs, so the two don't line up one to one. If you work at an NBFC, what am I missing?\n\n#NBFC #BankCredit #GoldLoans\n\nData: RBI, Sectoral Deployment of Bank Credit and of NBFC Credit, Sep 2026 · indiacreditlens.com",
+  "slides": [
+    {
+      "kind": "cover",
+      "kicker": "India Credit Lens · <b>Sep 2026 · Lenders</b>",
+      "title": "The new money goes to lenders",
+      "points": [
+        {
+          "colour": "blue",
+          "head": "Services take the growth",
+          "sub": "Far more than their share of the book."
+        },
+        {
+          "colour": "green",
+          "head": "Inside services, NBFCs",
+          "sub": "Bank credit to them is growing fastest in our data."
+        },
+        {
+          "colour": "orange",
+          "head": "NBFCs lend it to retail, and gold",
+          "sub": "Gold loans lead NBFC retail growth."
+        }
+      ]
+    },
+    {
+      "accent": "blue",
+      "kicker": "<b>1</b> · Bank credit",
+      "title": "Services: most of the growth",
+      "from": [
+        "28.3%",
+        "of bank credit"
+      ],
+      "to": [
+        "38.9%",
+        "of its growth"
+      ],
+      "table": {
+        "path": "/",
+        "clicks": [
+          "Main Sectors"
+        ],
+        "cols": [
+          "PART",
+          "OF CUT",
+          "NEW"
+        ],
+        "rows": [
+          "Services",
+          "Personal Loans"
+        ],
+        "highlight": "Services"
+      },
+      "cap": "<b>NEW</b> = share of the year's growth",
+      "body": "Services grew 28.3%. Non-food credit grew 19.1%.",
+      "change": "In a month, services' yearly growth went from 24.3% to 28.3%.",
+      "notes": [
+        {
+          "sidecar": "sibc_table.json",
+          "cut": "sibc-main",
+          "entity": null,
+          "column": "growth",
+          "field": "display"
+        },
+        {
+          "sidecar": "sibc_table.json",
+          "cut": "sibc-main",
+          "entity": "Services",
+          "column": "growth",
+          "index": -2
+        },
+        {
+          "sidecar": "sibc_table.json",
+          "cut": "sibc-main",
+          "entity": "Services",
+          "column": "growth",
+          "field": "display"
+        }
+      ]
+    },
+    {
+      "accent": "green",
+      "kicker": "<b>2</b> · Bank credit to services",
+      "title": "Inside services: NBFCs",
+      "from": [
+        "34.7%",
+        "of services credit"
+      ],
+      "to": [
+        "46.4%",
+        "of its growth"
+      ],
+      "table": {
+        "path": "/",
+        "clicks": [
+          "Services"
+        ],
+        "cols": [
+          "PART",
+          "OF CUT",
+          "NEW"
+        ],
+        "rows": [
+          "Non-Banking Financial Companies (NBFCs)"
+        ],
+        "highlight": "Non-Banking Financial Companies (NBFCs)"
+      },
+      "body": "₹22.53L Cr, growing 41.8%: the fastest in our data.",
+      "change": "In a month, yearly growth went from 37.5% to 41.8%.",
+      "notes": [
+        {
+          "sidecar": "sibc_table.json",
+          "cut": "sibc-services",
+          "entity": "Non-Banking Financial Companies (NBFCs)",
+          "column": "growth",
+          "index": -2
+        },
+        {
+          "sidecar": "sibc_table.json",
+          "cut": "sibc-services",
+          "entity": "Non-Banking Financial Companies (NBFCs)",
+          "column": "size",
+          "field": "display"
+        },
+        {
+          "sidecar": "sibc_table.json",
+          "cut": "sibc-services",
+          "entity": "Non-Banking Financial Companies (NBFCs)",
+          "column": "growth",
+          "field": "display"
+        }
+      ]
+    },
+    {
+      "accent": "orange",
+      "kicker": "<b>3</b> · Bank credit to NBFCs",
+      "title": "Not all of it is the NBFCs you'd think of",
+      "from": [
+        "+79.7%",
+        "public financial institutions"
+      ],
+      "to": [
+        "24.7%",
+        "of the growth"
+      ],
+      "table": {
+        "path": "/",
+        "clicks": [
+          "Services",
+          "▸ Non-Banking Financial Companies (NBFCs)"
+        ],
+        "table_index": 1,
+        "cols": [
+          "PART",
+          "GROWTH",
+          "NEW"
+        ],
+        "rows": [
+          "Housing Finance Companies (HFCs)",
+          "Public Financial Institutions (PFIs)"
+        ],
+        "highlight": "Public Financial Institutions (PFIs)"
+      },
+      "body": "Housing finance companies grew 19.7%.",
+      "change": "In a month, PFIs' yearly growth went from 83.7% to 79.7%.",
+      "notes": [
+        {
+          "sidecar": "sibc_table.json",
+          "cut": "sibc-nbfc-sub",
+          "entity": "Public Financial Institutions (PFIs)",
+          "column": "growth",
+          "index": -2
+        }
+      ],
+      "joiner": "and"
+    },
+    {
+      "accent": "purple",
+      "kicker": "<b>4</b> · NBFC credit",
+      "title": "What NBFCs lend: retail",
+      "from": [
+        "43.5%",
+        "of NBFC credit"
+      ],
+      "to": [
+        "58.6%",
+        "of its growth"
+      ],
+      "table": {
+        "path": "/nbfc",
+        "clicks": [
+          "Main sectors"
+        ],
+        "cols": [
+          "PART",
+          "OF CUT",
+          "GROWTH",
+          "NEW"
+        ],
+        "rows": [
+          "Retail Loans",
+          "Industry",
+          "Services"
+        ],
+        "highlight": "Retail Loans"
+      },
+      "body": "NBFC credit grew 15.4%. Retail grew 21.9%.",
+      "change": "In a month, NBFC credit growth went from 15.8% to 15.4%. Retail's share of the growth: 57.8% to 58.6%.",
+      "notes": [
+        {
+          "sidecar": "nbfc_table.json",
+          "cut": "nbfc-main",
+          "entity": null,
+          "column": "growth",
+          "field": "display"
+        },
+        {
+          "sidecar": "nbfc_table.json",
+          "cut": "nbfc-main",
+          "entity": null,
+          "column": "growth",
+          "index": -2
+        },
+        {
+          "sidecar": "nbfc_table.json",
+          "cut": "nbfc-main",
+          "entity": "Retail Loans",
+          "column": "new",
+          "index": -2
+        }
+      ]
+    },
+    {
+      "accent": "red",
+      "kicker": "<b>5</b> · NBFC retail",
+      "title": "Gold leads NBFC retail",
+      "from": [
+        "+66.1%",
+        "gold loans"
+      ],
+      "to": [
+        "30.9%",
+        "of retail's growth"
+      ],
+      "table": {
+        "path": "/nbfc",
+        "clicks": [
+          "Retail"
+        ],
+        "cols": [
+          "PART",
+          "GROWTH",
+          "NEW"
+        ],
+        "rows": [
+          "Housing Loans",
+          "Loans against gold jewellery"
+        ],
+        "highlight": "Loans against gold jewellery"
+      },
+      "body": "Housing, the biggest retail book, took 20.1%.",
+      "ask": "Is bank money now funding NBFC retail, and gold? If you work at an NBFC, what am I missing?",
+      "change": "In a month, gold's yearly growth went from 69.1% to 66.1%.",
+      "notes": [
+        {
+          "sidecar": "nbfc_table.json",
+          "cut": "nbfc-retail",
+          "entity": "Loans against gold jewellery",
+          "column": "growth",
+          "index": -2
+        }
+      ],
+      "joiner": "and"
+    }
+  ]
+}
