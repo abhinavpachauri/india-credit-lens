@@ -16514,6 +16514,6194 @@
     "profile": {},
     "lag": 2
    }
+  },
+  {
+   "test_id": "h0010@2026-11-10#4",
+   "hypothesis_id": "h0010",
+   "class": "input_prices",
+   "source": "mospi:cpi/cpi:all",
+   "source_tide": "credit tide",
+   "target": "sibc:e_S1_4_2",
+   "target_label": "Housing (Including Priority Sector Housing)",
+   "predicted_sign": 1,
+   "reason": "the price of what this line's borrowers sell or hold moves their borrowing",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 3,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 9,
+     "verdict": "too_few"
+    },
+    "1": {
+     "n": 10,
+     "r": 0.275,
+     "p": 0.47
+    },
+    "2": {
+     "n": 11,
+     "r": -0.541,
+     "p": 0.079
+    },
+    "3": {
+     "n": 12,
+     "r": 0.126,
+     "p": 0.718
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.64,
+   "slope": 0.1237,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 3
+   }
+  },
+  {
+   "test_id": "h0017@2026-11-10#4",
+   "hypothesis_id": "h0017",
+   "class": "input_prices",
+   "source": "mospi:cpi/cpi:all",
+   "source_tide": "credit tide",
+   "target": "sibc:e_S1_4_8",
+   "target_label": "Loans against gold jewellery",
+   "predicted_sign": 1,
+   "reason": "the price of what this line's borrowers sell or hold moves their borrowing",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 1,
+   "family": 3,
+   "alpha": 0.0167,
+   "lags": {
+    "0": {
+     "n": 9,
+     "verdict": "too_few"
+    },
+    "1": {
+     "n": 10,
+     "r": 0.188,
+     "p": 0.598
+    },
+    "2": {
+     "n": 11,
+     "r": -0.04,
+     "p": 0.909
+    },
+    "3": {
+     "n": 12,
+     "r": -0.406,
+     "p": 0.19
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.729,
+   "slope": 2.3729,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 1
+   }
+  },
+  {
+   "test_id": "h0021@2026-11-10#4",
+   "hypothesis_id": "h0021",
+   "class": "demand",
+   "source": "mospi:iip/iip:mining",
+   "source_tide": "iip/iip:general",
+   "target": "sibc:e_S2_2_1",
+   "target_label": "Mining and Quarrying (incl. Coal)",
+   "predicted_sign": 1,
+   "reason": "this line's borrowers' output moves their borrowing",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "not_supported",
+   "at_lag": 4,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 16,
+     "r": -0.105,
+     "p": 0.697
+    },
+    "1": {
+     "n": 17,
+     "r": 0.198,
+     "p": 0.443
+    },
+    "2": {
+     "n": 18,
+     "r": 0.105,
+     "p": 0.676
+    },
+    "3": {
+     "n": 19,
+     "r": -0.139,
+     "p": 0.575
+    },
+    "4": {
+     "n": 20,
+     "r": 0.126,
+     "p": 0.594
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.499,
+   "slope": 0.1976,
+   "discovery": {
+    "from": 24288,
+    "cutoff": 24306,
+    "profile": {},
+    "lag": 4
+   }
+  },
+  {
+   "test_id": "h0022@2026-11-10#5",
+   "hypothesis_id": "h0022",
+   "class": "input_prices",
+   "source": "mospi:wpi/nic:10",
+   "source_tide": "wpi/wpi:all",
+   "target": "sibc:e_S2_2_2",
+   "target_label": "Food Processing",
+   "predicted_sign": 1,
+   "reason": "the price of what this line's borrowers sell or hold moves their borrowing",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 3,
+   "family": 3,
+   "alpha": 0.0167,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": 0.14,
+     "p": 0.599
+    },
+    "1": {
+     "n": 18,
+     "r": 0.454,
+     "p": 0.06
+    },
+    "2": {
+     "n": 19,
+     "r": 0.222,
+     "p": 0.363
+    },
+    "3": {
+     "n": 20,
+     "r": 0.08,
+     "p": 0.74
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.528,
+   "slope": 0.1501,
+   "discovery": {
+    "from": 24288,
+    "cutoff": 24306,
+    "profile": {},
+    "lag": 3
+   }
+  },
+  {
+   "test_id": "h0023@2026-11-10#4",
+   "hypothesis_id": "h0023",
+   "class": "demand",
+   "source": "mospi:iip/nic:10",
+   "source_tide": "iip/iip:general",
+   "target": "sibc:e_S2_2_2",
+   "target_label": "Food Processing",
+   "predicted_sign": 1,
+   "reason": "this line's borrowers' output moves their borrowing",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 1,
+   "family": 3,
+   "alpha": 0.0167,
+   "lags": {
+    "0": {
+     "n": 16,
+     "r": -0.504,
+     "p": 0.048
+    },
+    "1": {
+     "n": 17,
+     "r": 0.415,
+     "p": 0.091
+    },
+    "2": {
+     "n": 18,
+     "r": -0.495,
+     "p": 0.036
+    },
+    "3": {
+     "n": 19,
+     "r": 0.065,
+     "p": 0.795
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.571,
+   "slope": 0.2898,
+   "discovery": {
+    "from": 24288,
+    "cutoff": 24306,
+    "profile": {},
+    "lag": 1
+   }
+  },
+  {
+   "test_id": "h0025@2026-11-10#5",
+   "hypothesis_id": "h0025",
+   "class": "demand",
+   "source": "mospi:iip/nic:11+iip/nic:12",
+   "source_tide": "iip/iip:general",
+   "target": "sibc:e_S2_2_3",
+   "target_label": "Beverage and Tobacco",
+   "predicted_sign": 1,
+   "reason": "this line's borrowers' output moves their borrowing",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 2,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 16,
+     "r": 0.098,
+     "p": 0.722
+    },
+    "1": {
+     "n": 17,
+     "r": 0.057,
+     "p": 0.825
+    },
+    "2": {
+     "n": 18,
+     "r": 0.132,
+     "p": 0.595
+    },
+    "3": {
+     "n": 19,
+     "r": 0.102,
+     "p": 0.679
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.526,
+   "slope": 0.1024,
+   "discovery": {
+    "from": 24288,
+    "cutoff": 24306,
+    "profile": {},
+    "lag": 2
+   }
+  },
+  {
+   "test_id": "h0028@2026-11-10#5",
+   "hypothesis_id": "h0028",
+   "class": "input_prices",
+   "source": "mospi:wpi/nic:15",
+   "source_tide": "wpi/wpi:all",
+   "target": "sibc:e_S2_2_5",
+   "target_label": "Leather and Leather Products",
+   "predicted_sign": 1,
+   "reason": "the price of what this line's borrowers sell or hold moves their borrowing",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 3,
+   "family": 3,
+   "alpha": 0.0167,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": 0.199,
+     "p": 0.442
+    },
+    "1": {
+     "n": 18,
+     "r": -0.263,
+     "p": 0.293
+    },
+    "2": {
+     "n": 19,
+     "r": -0.052,
+     "p": 0.831
+    },
+    "3": {
+     "n": 20,
+     "r": -0.047,
+     "p": 0.844
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.528,
+   "slope": -0.0939,
+   "discovery": {
+    "from": 24288,
+    "cutoff": 24306,
+    "profile": {},
+    "lag": 3
+   }
+  },
+  {
+   "test_id": "h0029@2026-11-10#4",
+   "hypothesis_id": "h0029",
+   "class": "demand",
+   "source": "mospi:iip/nic:15",
+   "source_tide": "iip/iip:general",
+   "target": "sibc:e_S2_2_5",
+   "target_label": "Leather and Leather Products",
+   "predicted_sign": 1,
+   "reason": "this line's borrowers' output moves their borrowing",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 1,
+   "family": 3,
+   "alpha": 0.0167,
+   "lags": {
+    "0": {
+     "n": 16,
+     "r": 0.072,
+     "p": 0.783
+    },
+    "1": {
+     "n": 17,
+     "r": 0.046,
+     "p": 0.866
+    },
+    "2": {
+     "n": 18,
+     "r": 0.152,
+     "p": 0.536
+    },
+    "3": {
+     "n": 19,
+     "r": -0.21,
+     "p": 0.384
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.571,
+   "slope": 0.0119,
+   "discovery": {
+    "from": 24288,
+    "cutoff": 24306,
+    "profile": {},
+    "lag": 1
+   }
+  },
+  {
+   "test_id": "h0030@2026-11-10#4",
+   "hypothesis_id": "h0030",
+   "class": "input_prices",
+   "source": "mospi:wpi/nic:16",
+   "source_tide": "wpi/wpi:all",
+   "target": "sibc:e_S2_2_6",
+   "target_label": "Wood and Wood Products",
+   "predicted_sign": 1,
+   "reason": "the price of what this line's borrowers sell or hold moves their borrowing",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 1,
+   "family": 3,
+   "alpha": 0.0167,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": -0.236,
+     "p": 0.377
+    },
+    "1": {
+     "n": 18,
+     "r": 0.209,
+     "p": 0.417
+    },
+    "2": {
+     "n": 19,
+     "r": -0.029,
+     "p": 0.91
+    },
+    "3": {
+     "n": 20,
+     "r": -0.058,
+     "p": 0.811
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.555,
+   "slope": 0.3701,
+   "discovery": {
+    "from": 24288,
+    "cutoff": 24306,
+    "profile": {},
+    "lag": 1
+   }
+  },
+  {
+   "test_id": "h0031@2026-11-10#4",
+   "hypothesis_id": "h0031",
+   "class": "demand",
+   "source": "mospi:iip/nic:16",
+   "source_tide": "iip/iip:general",
+   "target": "sibc:e_S2_2_6",
+   "target_label": "Wood and Wood Products",
+   "predicted_sign": 1,
+   "reason": "this line's borrowers' output moves their borrowing",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 2,
+   "family": 3,
+   "alpha": 0.0167,
+   "lags": {
+    "0": {
+     "n": 16,
+     "r": 0.183,
+     "p": 0.495
+    },
+    "1": {
+     "n": 17,
+     "r": -0.177,
+     "p": 0.49
+    },
+    "2": {
+     "n": 18,
+     "r": -0.157,
+     "p": 0.536
+    },
+    "3": {
+     "n": 19,
+     "r": 0.336,
+     "p": 0.157
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.555,
+   "slope": -0.0375,
+   "discovery": {
+    "from": 24288,
+    "cutoff": 24306,
+    "profile": {},
+    "lag": 2
+   }
+  },
+  {
+   "test_id": "h0032@2026-11-10#4",
+   "hypothesis_id": "h0032",
+   "class": "input_prices",
+   "source": "mospi:wpi/nic:17",
+   "source_tide": "wpi/wpi:all",
+   "target": "sibc:e_S2_2_7",
+   "target_label": "Paper and Paper Products",
+   "predicted_sign": 1,
+   "reason": "the price of what this line's borrowers sell or hold moves their borrowing",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 1,
+   "family": 3,
+   "alpha": 0.0167,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": -0.252,
+     "p": 0.319
+    },
+    "1": {
+     "n": 18,
+     "r": 0.047,
+     "p": 0.844
+    },
+    "2": {
+     "n": 19,
+     "r": -0.271,
+     "p": 0.256
+    },
+    "3": {
+     "n": 20,
+     "r": -0.183,
+     "p": 0.433
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.555,
+   "slope": 0.0705,
+   "discovery": {
+    "from": 24288,
+    "cutoff": 24306,
+    "profile": {},
+    "lag": 1
+   }
+  },
+  {
+   "test_id": "h0033@2026-11-10#4",
+   "hypothesis_id": "h0033",
+   "class": "demand",
+   "source": "mospi:iip/nic:17",
+   "source_tide": "iip/iip:general",
+   "target": "sibc:e_S2_2_7",
+   "target_label": "Paper and Paper Products",
+   "predicted_sign": 1,
+   "reason": "this line's borrowers' output moves their borrowing",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 3,
+   "family": 3,
+   "alpha": 0.0167,
+   "lags": {
+    "0": {
+     "n": 16,
+     "r": 0.121,
+     "p": 0.655
+    },
+    "1": {
+     "n": 17,
+     "r": -0.151,
+     "p": 0.563
+    },
+    "2": {
+     "n": 18,
+     "r": 0.086,
+     "p": 0.736
+    },
+    "3": {
+     "n": 19,
+     "r": -0.022,
+     "p": 0.93
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.541,
+   "slope": -0.0086,
+   "discovery": {
+    "from": 24288,
+    "cutoff": 24306,
+    "profile": {},
+    "lag": 3
+   }
+  },
+  {
+   "test_id": "h0034@2026-11-10#5",
+   "hypothesis_id": "h0034",
+   "class": "input_prices",
+   "source": "mospi:wpi/wpi:fuel_power/mineral_oils",
+   "source_tide": "wpi/wpi:all",
+   "target": "sibc:e_S2_2_8",
+   "target_label": "Petroleum, Coal Products and Nuclear Fuels",
+   "predicted_sign": 1,
+   "reason": "the price of what this line's borrowers sell or hold moves their borrowing",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 3,
+   "family": 3,
+   "alpha": 0.0167,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": 0.084,
+     "p": 0.749
+    },
+    "1": {
+     "n": 18,
+     "r": 0.325,
+     "p": 0.193
+    },
+    "2": {
+     "n": 19,
+     "r": -0.117,
+     "p": 0.64
+    },
+    "3": {
+     "n": 20,
+     "r": -0.484,
+     "p": 0.03
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.528,
+   "slope": -0.7334,
+   "discovery": {
+    "from": 24288,
+    "cutoff": 24306,
+    "profile": {},
+    "lag": 3
+   }
+  },
+  {
+   "test_id": "h0035@2026-11-10#4",
+   "hypothesis_id": "h0035",
+   "class": "demand",
+   "source": "mospi:iip/nic:19",
+   "source_tide": "iip/iip:general",
+   "target": "sibc:e_S2_2_8",
+   "target_label": "Petroleum, Coal Products and Nuclear Fuels",
+   "predicted_sign": 1,
+   "reason": "this line's borrowers' output moves their borrowing",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 0,
+   "family": 3,
+   "alpha": 0.0167,
+   "lags": {
+    "0": {
+     "n": 16,
+     "r": 0.324,
+     "p": 0.223
+    },
+    "1": {
+     "n": 17,
+     "r": 0.317,
+     "p": 0.218
+    },
+    "2": {
+     "n": 18,
+     "r": -0.295,
+     "p": 0.237
+    },
+    "3": {
+     "n": 19,
+     "r": -0.193,
+     "p": 0.431
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.588,
+   "slope": 0.7482,
+   "discovery": {
+    "from": 24288,
+    "cutoff": 24306,
+    "profile": {},
+    "lag": 0
+   }
+  },
+  {
+   "test_id": "h0037@2026-11-10#5",
+   "hypothesis_id": "h0037",
+   "class": "demand",
+   "source": "mospi:iip/nic:20+iip/nic:21",
+   "source_tide": "iip/iip:general",
+   "target": "sibc:e_S2_2_9",
+   "target_label": "Chemicals and Chemical Products",
+   "predicted_sign": 1,
+   "reason": "this line's borrowers' output moves their borrowing",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 3,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 16,
+     "r": -0.175,
+     "p": 0.514
+    },
+    "1": {
+     "n": 17,
+     "r": -0.131,
+     "p": 0.611
+    },
+    "2": {
+     "n": 18,
+     "r": -0.04,
+     "p": 0.875
+    },
+    "3": {
+     "n": 19,
+     "r": 0.293,
+     "p": 0.219
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.512,
+   "slope": 0.185,
+   "discovery": {
+    "from": 24288,
+    "cutoff": 24306,
+    "profile": {},
+    "lag": 3
+   }
+  },
+  {
+   "test_id": "h0038@2026-11-10#4",
+   "hypothesis_id": "h0038",
+   "class": "input_prices",
+   "source": "mospi:wpi/nic:22",
+   "source_tide": "wpi/wpi:all",
+   "target": "sibc:e_S2_2_10",
+   "target_label": "Rubber, Plastic and their Products",
+   "predicted_sign": 1,
+   "reason": "the price of what this line's borrowers sell or hold moves their borrowing",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 1,
+   "family": 3,
+   "alpha": 0.0167,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": -0.041,
+     "p": 0.875
+    },
+    "1": {
+     "n": 18,
+     "r": -0.415,
+     "p": 0.083
+    },
+    "2": {
+     "n": 19,
+     "r": -0.005,
+     "p": 0.984
+    },
+    "3": {
+     "n": 20,
+     "r": -0.027,
+     "p": 0.913
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.555,
+   "slope": -0.7829,
+   "discovery": {
+    "from": 24288,
+    "cutoff": 24306,
+    "profile": {},
+    "lag": 1
+   }
+  },
+  {
+   "test_id": "h0039@2026-11-10#4",
+   "hypothesis_id": "h0039",
+   "class": "demand",
+   "source": "mospi:iip/nic:22",
+   "source_tide": "iip/iip:general",
+   "target": "sibc:e_S2_2_10",
+   "target_label": "Rubber, Plastic and their Products",
+   "predicted_sign": 1,
+   "reason": "this line's borrowers' output moves their borrowing",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 3,
+   "family": 3,
+   "alpha": 0.0167,
+   "lags": {
+    "0": {
+     "n": 16,
+     "r": 0.305,
+     "p": 0.253
+    },
+    "1": {
+     "n": 17,
+     "r": 0.258,
+     "p": 0.313
+    },
+    "2": {
+     "n": 18,
+     "r": 0.411,
+     "p": 0.096
+    },
+    "3": {
+     "n": 19,
+     "r": 0.057,
+     "p": 0.816
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.541,
+   "slope": 0.0214,
+   "discovery": {
+    "from": 24288,
+    "cutoff": 24306,
+    "profile": {},
+    "lag": 3
+   }
+  },
+  {
+   "test_id": "h0040@2026-11-10#5",
+   "hypothesis_id": "h0040",
+   "class": "input_prices",
+   "source": "mospi:wpi/nic:23/glass_and_glass_products",
+   "source_tide": "wpi/wpi:all",
+   "target": "sibc:e_S2_2_11",
+   "target_label": "Glass and Glassware",
+   "predicted_sign": 1,
+   "reason": "the price of what this line's borrowers sell or hold moves their borrowing",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 0,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": -0.025,
+     "p": 0.922
+    },
+    "1": {
+     "n": 18,
+     "r": -0.033,
+     "p": 0.898
+    },
+    "2": {
+     "n": 19,
+     "r": 0.314,
+     "p": 0.197
+    },
+    "3": {
+     "n": 20,
+     "r": -0.035,
+     "p": 0.882
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.541,
+   "slope": -0.1109,
+   "discovery": {
+    "from": 24288,
+    "cutoff": 24306,
+    "profile": {},
+    "lag": 0
+   }
+  },
+  {
+   "test_id": "h0042@2026-11-10#5",
+   "hypothesis_id": "h0042",
+   "class": "input_prices",
+   "source": "mospi:wpi/nic:23/cement_lime_and_plaster",
+   "source_tide": "wpi/wpi:all",
+   "target": "sibc:e_S2_2_12",
+   "target_label": "Cement and Cement Products",
+   "predicted_sign": 1,
+   "reason": "the price of what this line's borrowers sell or hold moves their borrowing",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 1,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": 0.22,
+     "p": 0.392
+    },
+    "1": {
+     "n": 18,
+     "r": 0.311,
+     "p": 0.212
+    },
+    "2": {
+     "n": 19,
+     "r": 0.086,
+     "p": 0.749
+    },
+    "3": {
+     "n": 20,
+     "r": 0.239,
+     "p": 0.329
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.526,
+   "slope": 0.775,
+   "discovery": {
+    "from": 24288,
+    "cutoff": 24306,
+    "profile": {},
+    "lag": 1
+   }
+  },
+  {
+   "test_id": "h0045@2026-11-10#4",
+   "hypothesis_id": "h0045",
+   "class": "demand",
+   "source": "mospi:iip/nic:24+iip/nic:25",
+   "source_tide": "iip/iip:general",
+   "target": "sibc:e_S2_2_13",
+   "target_label": "Basic Metal and Metal Product",
+   "predicted_sign": 1,
+   "reason": "this line's borrowers' output moves their borrowing",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "not_supported",
+   "at_lag": 5,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 16,
+     "r": -0.18,
+     "p": 0.515
+    },
+    "1": {
+     "n": 17,
+     "r": -0.025,
+     "p": 0.917
+    },
+    "2": {
+     "n": 18,
+     "r": 0.141,
+     "p": 0.582
+    },
+    "3": {
+     "n": 19,
+     "r": 0.05,
+     "p": 0.839
+    },
+    "5": {
+     "n": 21,
+     "r": -0.297,
+     "p": 0.189
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.487,
+   "slope": -0.1793,
+   "discovery": {
+    "from": 24288,
+    "cutoff": 24306,
+    "profile": {},
+    "lag": 5
+   }
+  },
+  {
+   "test_id": "h0047@2026-11-10#5",
+   "hypothesis_id": "h0047",
+   "class": "demand",
+   "source": "mospi:iip/nic:26+iip/nic:27+iip/nic:28",
+   "source_tide": "iip/iip:general",
+   "target": "sibc:e_S2_2_14",
+   "target_label": "All Engineering",
+   "predicted_sign": 1,
+   "reason": "this line's borrowers' output moves their borrowing",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 3,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 16,
+     "r": 0.149,
+     "p": 0.587
+    },
+    "1": {
+     "n": 17,
+     "r": -0.065,
+     "p": 0.803
+    },
+    "2": {
+     "n": 18,
+     "r": -0.246,
+     "p": 0.338
+    },
+    "3": {
+     "n": 19,
+     "r": 0.292,
+     "p": 0.231
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.512,
+   "slope": 0.159,
+   "discovery": {
+    "from": 24288,
+    "cutoff": 24306,
+    "profile": {},
+    "lag": 3
+   }
+  },
+  {
+   "test_id": "h0049@2026-11-10#5",
+   "hypothesis_id": "h0049",
+   "class": "demand",
+   "source": "mospi:iip/nic:29+iip/nic:30",
+   "source_tide": "iip/iip:general",
+   "target": "sibc:e_S2_2_15",
+   "target_label": "Vehicles, Vehicle Parts and Transport Equipment",
+   "predicted_sign": 1,
+   "reason": "this line's borrowers' output moves their borrowing",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 0,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 16,
+     "r": -0.118,
+     "p": 0.658
+    },
+    "1": {
+     "n": 17,
+     "r": -0.092,
+     "p": 0.725
+    },
+    "2": {
+     "n": 18,
+     "r": 0.021,
+     "p": 0.931
+    },
+    "3": {
+     "n": 19,
+     "r": -0.061,
+     "p": 0.799
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.557,
+   "slope": -0.0468,
+   "discovery": {
+    "from": 24288,
+    "cutoff": 24306,
+    "profile": {},
+    "lag": 0
+   }
+  },
+  {
+   "test_id": "h0050@2026-11-10#4",
+   "hypothesis_id": "h0050",
+   "class": "input_prices",
+   "source": "mospi:wpi/nic:32/jewellery_and_related_articles",
+   "source_tide": "wpi/wpi:all",
+   "target": "sibc:e_S2_2_16",
+   "target_label": "Gems and Jewellery",
+   "predicted_sign": 1,
+   "reason": "the price of what this line's borrowers sell or hold moves their borrowing",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "not_supported",
+   "at_lag": 3,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": 0.582,
+     "p": 0.021
+    },
+    "1": {
+     "n": 18,
+     "r": 0.237,
+     "p": 0.331
+    },
+    "2": {
+     "n": 19,
+     "r": -0.054,
+     "p": 0.821
+    },
+    "3": {
+     "n": 20,
+     "r": -0.045,
+     "p": 0.854
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.499,
+   "slope": -0.0581,
+   "discovery": {
+    "from": 24288,
+    "cutoff": 24306,
+    "profile": {},
+    "lag": 3
+   }
+  },
+  {
+   "test_id": "h0058@2026-11-10#4",
+   "hypothesis_id": "h0058",
+   "class": "input_prices",
+   "source": "mospi:wpi/nic:10/sugar",
+   "source_tide": "wpi/wpi:all",
+   "target": "sibc:e_S2_2_2_1",
+   "target_label": "Sugar",
+   "predicted_sign": 1,
+   "reason": "the price of what this line's borrowers sell or hold moves their borrowing",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "approximated": [
+    "wpi/nic:10/sugar read as wpi_2011/wpi_2011:manufactured_products/manufacture_of_food_products/manufacture_of_sugar_molasses_honey: The 2011-12 base has no sugar index, only sugar, molasses & honey: its monthly change tracks current-base sugar at r 0.91 (Apr 2024 - Apr 2026, measured 2026-10-25). User-approved 2026-10-25."
+   ],
+   "verdict": "not_supported",
+   "at_lag": 5,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": -0.079,
+     "p": 0.76
+    },
+    "1": {
+     "n": 18,
+     "r": 0.031,
+     "p": 0.903
+    },
+    "2": {
+     "n": 19,
+     "r": 0.412,
+     "p": 0.075
+    },
+    "3": {
+     "n": 20,
+     "r": 0.347,
+     "p": 0.138
+    },
+    "5": {
+     "n": 22,
+     "r": 0.137,
+     "p": 0.546
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.476,
+   "slope": 0.3782,
+   "discovery": {
+    "from": 24288,
+    "cutoff": 24306,
+    "profile": {},
+    "lag": 5
+   }
+  },
+  {
+   "test_id": "h0060@2026-11-10#5",
+   "hypothesis_id": "h0060",
+   "class": "input_prices",
+   "source": "mospi:wpi/nic:10/vegetable_and_animal_oils_and_fats",
+   "source_tide": "wpi/wpi:all",
+   "target": "sibc:e_S2_2_2_2",
+   "target_label": "Edible Oils and Vanaspati",
+   "predicted_sign": 1,
+   "reason": "the price of what this line's borrowers sell or hold moves their borrowing",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 1,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": 0.196,
+     "p": 0.452
+    },
+    "1": {
+     "n": 18,
+     "r": 0.36,
+     "p": 0.134
+    },
+    "2": {
+     "n": 19,
+     "r": 0.447,
+     "p": 0.058
+    },
+    "3": {
+     "n": 20,
+     "r": 0.013,
+     "p": 0.957
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.526,
+   "slope": 0.6472,
+   "discovery": {
+    "from": 24288,
+    "cutoff": 24306,
+    "profile": {},
+    "lag": 1
+   }
+  },
+  {
+   "test_id": "h0066@2026-11-10#4",
+   "hypothesis_id": "h0066",
+   "class": "input_prices",
+   "source": "mospi:wpi/nic:20/fertilizers_and_nitrogen_compounds",
+   "source_tide": "wpi/wpi:all",
+   "target": "sibc:e_S2_2_9_1",
+   "target_label": "Fertiliser",
+   "predicted_sign": 1,
+   "reason": "the price of what this line's borrowers sell or hold moves their borrowing",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 2,
+   "family": 3,
+   "alpha": 0.0167,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": -0.373,
+     "p": 0.143
+    },
+    "1": {
+     "n": 18,
+     "r": -0.211,
+     "p": 0.398
+    },
+    "2": {
+     "n": 19,
+     "r": -0.006,
+     "p": 0.98
+    },
+    "3": {
+     "n": 20,
+     "r": 0.146,
+     "p": 0.542
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.541,
+   "slope": -0.0612,
+   "discovery": {
+    "from": 24288,
+    "cutoff": 24306,
+    "profile": {},
+    "lag": 2
+   }
+  },
+  {
+   "test_id": "h0068@2026-11-10#4",
+   "hypothesis_id": "h0068",
+   "class": "input_prices",
+   "source": "mospi:wpi/nic:21",
+   "source_tide": "wpi/wpi:all",
+   "target": "sibc:e_S2_2_9_2",
+   "target_label": "Drugs and Pharmaceuticals",
+   "predicted_sign": 1,
+   "reason": "the price of what this line's borrowers sell or hold moves their borrowing",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 2,
+   "family": 3,
+   "alpha": 0.0167,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": -0.042,
+     "p": 0.876
+    },
+    "1": {
+     "n": 18,
+     "r": 0.184,
+     "p": 0.472
+    },
+    "2": {
+     "n": 19,
+     "r": -0.48,
+     "p": 0.042
+    },
+    "3": {
+     "n": 20,
+     "r": -0.07,
+     "p": 0.766
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.541,
+   "slope": -3.298,
+   "discovery": {
+    "from": 24288,
+    "cutoff": 24306,
+    "profile": {},
+    "lag": 2
+   }
+  },
+  {
+   "test_id": "h0069@2026-11-10#5",
+   "hypothesis_id": "h0069",
+   "class": "demand",
+   "source": "mospi:iip/nic:21",
+   "source_tide": "iip/iip:general",
+   "target": "sibc:e_S2_2_9_2",
+   "target_label": "Drugs and Pharmaceuticals",
+   "predicted_sign": 1,
+   "reason": "this line's borrowers' output moves their borrowing",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 4,
+   "family": 3,
+   "alpha": 0.0167,
+   "lags": {
+    "0": {
+     "n": 16,
+     "r": -0.03,
+     "p": 0.914
+    },
+    "1": {
+     "n": 17,
+     "r": 0.234,
+     "p": 0.377
+    },
+    "2": {
+     "n": 18,
+     "r": -0.109,
+     "p": 0.67
+    },
+    "3": {
+     "n": 19,
+     "r": -0.203,
+     "p": 0.422
+    },
+    "4": {
+     "n": 20,
+     "r": 0.21,
+     "p": 0.384
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.528,
+   "slope": 0.0797,
+   "discovery": {
+    "from": 24288,
+    "cutoff": 24306,
+    "profile": {},
+    "lag": 4
+   }
+  },
+  {
+   "test_id": "h0074@2026-11-10#4",
+   "hypothesis_id": "h0074",
+   "class": "input_prices",
+   "source": "mospi:wpi/nic:24/basic_iron_and_steel",
+   "source_tide": "wpi/wpi:all",
+   "target": "sibc:e_S2_2_13_1",
+   "target_label": "Iron and Steel",
+   "predicted_sign": 1,
+   "reason": "the price of what this line's borrowers sell or hold moves their borrowing",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "approximated": [
+    "wpi/nic:24/basic_iron_and_steel read as wpi_2011/nic:24: The 2011-12 base splits steel into seven sub-groups and prints no iron & steel total; adding them needs weights we do not invent. Basic metals (steel plus non-ferrous) stands in: its monthly change tracks iron & steel at r 0.96 on the current base and 0.83 across bases (measured 2026-10-25)."
+   ],
+   "verdict": "not_supported",
+   "at_lag": 3,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": 0.192,
+     "p": 0.455
+    },
+    "1": {
+     "n": 18,
+     "r": 0.162,
+     "p": 0.512
+    },
+    "2": {
+     "n": 19,
+     "r": -0.35,
+     "p": 0.142
+    },
+    "3": {
+     "n": 20,
+     "r": -0.328,
+     "p": 0.158
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.499,
+   "slope": -0.281,
+   "discovery": {
+    "from": 24288,
+    "cutoff": 24306,
+    "profile": {},
+    "lag": 3
+   }
+  },
+  {
+   "test_id": "h0078@2026-11-10#5",
+   "hypothesis_id": "h0078",
+   "class": "input_prices",
+   "source": "mospi:wpi/nic:26",
+   "source_tide": "wpi/wpi:all",
+   "target": "sibc:e_S2_2_14_1",
+   "target_label": "Electronics",
+   "predicted_sign": 1,
+   "reason": "the price of what this line's borrowers sell or hold moves their borrowing",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 4,
+   "family": 3,
+   "alpha": 0.0167,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": 0.016,
+     "p": 0.952
+    },
+    "1": {
+     "n": 18,
+     "r": -0.375,
+     "p": 0.132
+    },
+    "2": {
+     "n": 19,
+     "r": 0.034,
+     "p": 0.888
+    },
+    "3": {
+     "n": 20,
+     "r": -0.391,
+     "p": 0.089
+    },
+    "4": {
+     "n": 21,
+     "r": 0.184,
+     "p": 0.418
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.516,
+   "slope": 1.7203,
+   "discovery": {
+    "from": 24288,
+    "cutoff": 24306,
+    "profile": {},
+    "lag": 4
+   }
+  },
+  {
+   "test_id": "h0079@2026-11-10#4",
+   "hypothesis_id": "h0079",
+   "class": "demand",
+   "source": "mospi:iip/nic:26",
+   "source_tide": "iip/iip:general",
+   "target": "sibc:e_S2_2_14_1",
+   "target_label": "Electronics",
+   "predicted_sign": 1,
+   "reason": "this line's borrowers' output moves their borrowing",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 3,
+   "family": 3,
+   "alpha": 0.0167,
+   "lags": {
+    "0": {
+     "n": 16,
+     "r": 0.369,
+     "p": 0.16
+    },
+    "1": {
+     "n": 17,
+     "r": -0.345,
+     "p": 0.173
+    },
+    "2": {
+     "n": 18,
+     "r": 0.097,
+     "p": 0.702
+    },
+    "3": {
+     "n": 19,
+     "r": -0.243,
+     "p": 0.318
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.541,
+   "slope": -0.1278,
+   "discovery": {
+    "from": 24288,
+    "cutoff": 24306,
+    "profile": {},
+    "lag": 3
+   }
+  },
+  {
+   "test_id": "h0082@2026-11-10#5",
+   "hypothesis_id": "h0082",
+   "class": "input_prices",
+   "source": "mospi:wpi/wpi:fuel_power/electricity",
+   "source_tide": "wpi/wpi:all",
+   "target": "sibc:e_S2_2_18_1",
+   "target_label": "Power",
+   "predicted_sign": 1,
+   "reason": "the price of what this line's borrowers sell or hold moves their borrowing",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 5,
+   "family": 3,
+   "alpha": 0.0167,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": 0.068,
+     "p": 0.79
+    },
+    "1": {
+     "n": 18,
+     "r": -0.21,
+     "p": 0.393
+    },
+    "2": {
+     "n": 19,
+     "r": -0.321,
+     "p": 0.177
+    },
+    "3": {
+     "n": 20,
+     "r": 0.49,
+     "p": 0.031
+    },
+    "5": {
+     "n": 22,
+     "r": -0.039,
+     "p": 0.864
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.504,
+   "slope": -0.0073,
+   "discovery": {
+    "from": 24288,
+    "cutoff": 24306,
+    "profile": {},
+    "lag": 5
+   }
+  },
+  {
+   "test_id": "h0083@2026-11-10#5",
+   "hypothesis_id": "h0083",
+   "class": "demand",
+   "source": "mospi:iip/iip:electricity",
+   "source_tide": "iip/iip:general",
+   "target": "sibc:e_S2_2_18_1",
+   "target_label": "Power",
+   "predicted_sign": 1,
+   "reason": "this line's borrowers' output moves their borrowing",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 4,
+   "family": 3,
+   "alpha": 0.0167,
+   "lags": {
+    "0": {
+     "n": 16,
+     "r": 0.009,
+     "p": 0.972
+    },
+    "1": {
+     "n": 17,
+     "r": 0.219,
+     "p": 0.394
+    },
+    "2": {
+     "n": 18,
+     "r": 0.127,
+     "p": 0.614
+    },
+    "3": {
+     "n": 19,
+     "r": -0.189,
+     "p": 0.429
+    },
+    "4": {
+     "n": 20,
+     "r": 0.148,
+     "p": 0.533
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.528,
+   "slope": 0.0487,
+   "discovery": {
+    "from": 24288,
+    "cutoff": 24306,
+    "profile": {},
+    "lag": 4
+   }
+  },
+  {
+   "test_id": "h0096@2026-11-10#4",
+   "hypothesis_id": "h0096",
+   "class": "input_prices",
+   "source": "mospi:wpi/nic:20/fertilizers_and_nitrogen_compounds",
+   "source_tide": "wpi/wpi:all",
+   "target": "sibc:e_S2_2_9_1",
+   "target_label": "Fertiliser",
+   "predicted_sign": 1,
+   "reason": "Fertiliser makers' working capital rises with the price of what they make and sell, within the month.",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 2,
+   "family": 3,
+   "alpha": 0.0167,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": -0.373,
+     "p": 0.143
+    },
+    "1": {
+     "n": 18,
+     "r": -0.211,
+     "p": 0.398
+    },
+    "2": {
+     "n": 19,
+     "r": -0.006,
+     "p": 0.98
+    },
+    "3": {
+     "n": 20,
+     "r": 0.146,
+     "p": 0.542
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.541,
+   "slope": -0.0612,
+   "discovery": {
+    "from": 24288,
+    "cutoff": 24306,
+    "profile": {},
+    "lag": 2
+   }
+  },
+  {
+   "test_id": "h0097@2026-11-10#4",
+   "hypothesis_id": "h0097",
+   "class": "input_prices",
+   "source": "mospi:wpi/nic:32/jewellery_and_related_articles",
+   "source_tide": "wpi/wpi:all",
+   "target": "sibc:e_S1_4_8",
+   "target_label": "Loans against gold jewellery",
+   "predicted_sign": 1,
+   "reason": "Gold collateral is revalued daily, so the loan value of pledged jewellery follows the gold price; the jewellery index tracks gold, its main input.",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 1,
+   "family": 3,
+   "alpha": 0.0167,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": -0.086,
+     "p": 0.736
+    },
+    "1": {
+     "n": 18,
+     "r": 0.118,
+     "p": 0.614
+    },
+    "2": {
+     "n": 19,
+     "r": 0.391,
+     "p": 0.105
+    },
+    "3": {
+     "n": 20,
+     "r": -0.048,
+     "p": 0.843
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.555,
+   "slope": 0.1142,
+   "discovery": {
+    "from": 24288,
+    "cutoff": 24306,
+    "profile": {},
+    "lag": 1
+   }
+  },
+  {
+   "test_id": "h0126@2026-11-10#2",
+   "hypothesis_id": "h0126",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_fresh/group:scb",
+   "source_tide": "credit tide",
+   "target": "sibc:e_S1_III",
+   "target_label": "Non-food Credit",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 2,
+   "family": 3,
+   "alpha": 0.0167,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": 0.105,
+     "p": 0.691
+    },
+    "1": {
+     "n": 18,
+     "r": 0.221,
+     "p": 0.379
+    },
+    "2": {
+     "n": 18,
+     "r": -0.324,
+     "p": 0.189
+    },
+    "3": {
+     "n": 18,
+     "r": 0.21,
+     "p": 0.41
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.555,
+   "slope": -0.065,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 2
+   }
+  },
+  {
+   "test_id": "h0129@2026-11-10#2",
+   "hypothesis_id": "h0129",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:agriculture",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S1_1",
+   "target_label": "Agriculture and Allied Activities",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "verdict": "too_short",
+   "at_lag": 8,
+   "family": 3,
+   "alpha": 0.0167,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": 0.037,
+     "p": 0.885
+    },
+    "1": {
+     "n": 18,
+     "r": -0.201,
+     "p": 0.426
+    },
+    "2": {
+     "n": 18,
+     "r": 0.066,
+     "p": 0.802
+    },
+    "3": {
+     "n": 18,
+     "r": 0.097,
+     "p": 0.701
+    },
+    "8": {
+     "n": 18,
+     "r": -0.316,
+     "p": 0.203
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.555,
+   "slope": -1.763,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 8
+   }
+  },
+  {
+   "test_id": "h0138@2026-11-10#2",
+   "hypothesis_id": "h0138",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:msme",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S1_2_1",
+   "target_label": "Micro and Small",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "approximation",
+    "why": "RBI's MSME rate may include services MSMEs; these lines are industry only (user, 2026-10-25)."
+   },
+   "verdict": "not_supported",
+   "at_lag": 4,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": -0.034,
+     "p": 0.896
+    },
+    "1": {
+     "n": 18,
+     "r": -0.14,
+     "p": 0.585
+    },
+    "2": {
+     "n": 18,
+     "r": -0.14,
+     "p": 0.579
+    },
+    "3": {
+     "n": 18,
+     "r": -0.178,
+     "p": 0.479
+    },
+    "4": {
+     "n": 18,
+     "r": -0.465,
+     "p": 0.053
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.468,
+   "slope": -10.1581,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 4
+   }
+  },
+  {
+   "test_id": "h0141@2026-11-10#2",
+   "hypothesis_id": "h0141",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:msme",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S1_2_2",
+   "target_label": "Medium",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "approximation",
+    "why": "RBI's MSME rate may include services MSMEs; these lines are industry only (user, 2026-10-25)."
+   },
+   "verdict": "supported",
+   "at_lag": 7,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": 0.17,
+     "p": 0.518
+    },
+    "1": {
+     "n": 18,
+     "r": -0.235,
+     "p": 0.353
+    },
+    "2": {
+     "n": 18,
+     "r": -0.063,
+     "p": 0.804
+    },
+    "3": {
+     "n": 18,
+     "r": 0.365,
+     "p": 0.138
+    },
+    "7": {
+     "n": 18,
+     "r": -0.49,
+     "p": 0.036
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.468,
+   "slope": -8.173,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 7
+   }
+  },
+  {
+   "test_id": "h0144@2026-11-10#2",
+   "hypothesis_id": "h0144",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:industry_large",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S1_2_3",
+   "target_label": "Large",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "verdict": "not_supported",
+   "at_lag": 9,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": 0.291,
+     "p": 0.261
+    },
+    "1": {
+     "n": 18,
+     "r": 0.225,
+     "p": 0.369
+    },
+    "2": {
+     "n": 18,
+     "r": 0.341,
+     "p": 0.164
+    },
+    "3": {
+     "n": 18,
+     "r": 0.046,
+     "p": 0.859
+    },
+    "9": {
+     "n": 18,
+     "r": 0.233,
+     "p": 0.356
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.468,
+   "slope": 1.0554,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 9
+   }
+  },
+  {
+   "test_id": "h0166@2026-11-10#2",
+   "hypothesis_id": "h0166",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:professional_services",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S1_3_6",
+   "target_label": "Professional Services",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "verdict": "not_supported",
+   "at_lag": 8,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": -0.407,
+     "p": 0.107
+    },
+    "1": {
+     "n": 18,
+     "r": 0.343,
+     "p": 0.164
+    },
+    "2": {
+     "n": 18,
+     "r": -0.004,
+     "p": 0.99
+    },
+    "3": {
+     "n": 18,
+     "r": -0.539,
+     "p": 0.023
+    },
+    "8": {
+     "n": 18,
+     "r": -0.374,
+     "p": 0.128
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.468,
+   "slope": -2.2334,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 8
+   }
+  },
+  {
+   "test_id": "h0169@2026-11-10#2",
+   "hypothesis_id": "h0169",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:trade",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S1_3_7",
+   "target_label": "Trade",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "verdict": "too_short",
+   "at_lag": 6,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": 0.485,
+     "p": 0.046
+    },
+    "1": {
+     "n": 18,
+     "r": -0.46,
+     "p": 0.053
+    },
+    "2": {
+     "n": 18,
+     "r": 0.041,
+     "p": 0.868
+    },
+    "3": {
+     "n": 18,
+     "r": -0.01,
+     "p": 0.969
+    },
+    "6": {
+     "n": 18,
+     "r": 0.02,
+     "p": 0.936
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.526,
+   "slope": 0.0527,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 6
+   }
+  },
+  {
+   "test_id": "h0183@2026-11-10#2",
+   "hypothesis_id": "h0183",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:other_personal",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S1_4_1",
+   "target_label": "Consumer Durables",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "stand_in",
+    "why": "RBI's Other Personal Loans is personal lending other than housing, vehicle and education, so it covers these (user, 2026-10-25)."
+   },
+   "verdict": "too_short",
+   "at_lag": 4,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": 0.377,
+     "p": 0.134
+    },
+    "1": {
+     "n": 18,
+     "r": -0.013,
+     "p": 0.96
+    },
+    "2": {
+     "n": 18,
+     "r": 0.011,
+     "p": 0.964
+    },
+    "3": {
+     "n": 18,
+     "r": 0.477,
+     "p": 0.05
+    },
+    "4": {
+     "n": 18,
+     "r": -0.236,
+     "p": 0.333
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.526,
+   "slope": -3.7446,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 4
+   }
+  },
+  {
+   "test_id": "h0184@2026-11-10#2",
+   "hypothesis_id": "h0184",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:housing",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S1_4_2",
+   "target_label": "Housing (Including Priority Sector Housing)",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "verdict": "too_short",
+   "at_lag": 8,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": 0.437,
+     "p": 0.08
+    },
+    "1": {
+     "n": 18,
+     "r": -0.442,
+     "p": 0.068
+    },
+    "2": {
+     "n": 18,
+     "r": 0.279,
+     "p": 0.257
+    },
+    "3": {
+     "n": 18,
+     "r": -0.476,
+     "p": 0.046
+    },
+    "8": {
+     "n": 18,
+     "r": 0.464,
+     "p": 0.05
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.526,
+   "slope": 0.678,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 8
+   }
+  },
+  {
+   "test_id": "h0186@2026-11-10#2",
+   "hypothesis_id": "h0186",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:other_personal",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S1_4_3",
+   "target_label": "Advances against Fixed Deposits (Including FCNR (B), NRNR Deposits etc.)",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "stand_in",
+    "why": "RBI's Other Personal Loans is personal lending other than housing, vehicle and education, so it covers these (user, 2026-10-25)."
+   },
+   "verdict": "supported",
+   "at_lag": 9,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": 0.112,
+     "p": 0.634
+    },
+    "1": {
+     "n": 18,
+     "r": -0.232,
+     "p": 0.32
+    },
+    "2": {
+     "n": 18,
+     "r": 0.12,
+     "p": 0.61
+    },
+    "3": {
+     "n": 18,
+     "r": 0.14,
+     "p": 0.541
+    },
+    "9": {
+     "n": 18,
+     "r": -0.546,
+     "p": 0.026
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.468,
+   "slope": -20.5728,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 9
+   }
+  },
+  {
+   "test_id": "h0188@2026-11-10#2",
+   "hypothesis_id": "h0188",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:other_personal",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S1_4_4",
+   "target_label": "Advances to Individuals against share, bonds, etc.",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "stand_in",
+    "why": "RBI's Other Personal Loans is personal lending other than housing, vehicle and education, so it covers these (user, 2026-10-25)."
+   },
+   "verdict": "not_supported",
+   "at_lag": 2,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": -0.348,
+     "p": 0.176
+    },
+    "1": {
+     "n": 18,
+     "r": 0.35,
+     "p": 0.156
+    },
+    "2": {
+     "n": 18,
+     "r": 0.054,
+     "p": 0.819
+    },
+    "3": {
+     "n": 18,
+     "r": -0.041,
+     "p": 0.87
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.468,
+   "slope": 2.6038,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 2
+   }
+  },
+  {
+   "test_id": "h0190@2026-11-10#2",
+   "hypothesis_id": "h0190",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:other_personal",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S1_4_5",
+   "target_label": "Credit Card Outstanding",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "stand_in",
+    "why": "RBI's Other Personal Loans is personal lending other than housing, vehicle and education, so it covers these (user, 2026-10-25)."
+   },
+   "verdict": "not_supported",
+   "at_lag": 1,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": 0.33,
+     "p": 0.194
+    },
+    "1": {
+     "n": 18,
+     "r": 0.076,
+     "p": 0.758
+    },
+    "2": {
+     "n": 18,
+     "r": 0.191,
+     "p": 0.436
+    },
+    "3": {
+     "n": 18,
+     "r": -0.06,
+     "p": 0.808
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.468,
+   "slope": 0.7362,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 1
+   }
+  },
+  {
+   "test_id": "h0191@2026-11-10#2",
+   "hypothesis_id": "h0191",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:education",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S1_4_6",
+   "target_label": "Education",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "verdict": "not_supported",
+   "at_lag": 1,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": 0.336,
+     "p": 0.197
+    },
+    "1": {
+     "n": 18,
+     "r": -0.166,
+     "p": 0.51
+    },
+    "2": {
+     "n": 18,
+     "r": -0.35,
+     "p": 0.159
+    },
+    "3": {
+     "n": 18,
+     "r": 0.252,
+     "p": 0.316
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.468,
+   "slope": -0.6566,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 1
+   }
+  },
+  {
+   "test_id": "h0193@2026-11-10#2",
+   "hypothesis_id": "h0193",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:vehicle",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S1_4_7",
+   "target_label": "Vehicle Loans",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "verdict": "too_short",
+   "at_lag": 0,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 12,
+     "r": -0.131,
+     "p": 0.691
+    },
+    "1": {
+     "n": 12,
+     "r": -0.008,
+     "p": 0.981
+    },
+    "2": {
+     "n": 12,
+     "r": 0.228,
+     "p": 0.473
+    },
+    "3": {
+     "n": 12,
+     "r": -0.063,
+     "p": 0.846
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.64,
+   "slope": -0.191,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 0
+   }
+  },
+  {
+   "test_id": "h0194@2026-11-10#2",
+   "hypothesis_id": "h0194",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:other_personal",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S1_4_8",
+   "target_label": "Loans against gold jewellery",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "stand_in",
+    "why": "RBI's Other Personal Loans is personal lending other than housing, vehicle and education, so it covers these (user, 2026-10-25)."
+   },
+   "verdict": "too_short",
+   "at_lag": 5,
+   "family": 3,
+   "alpha": 0.0167,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": -0.272,
+     "p": 0.284
+    },
+    "1": {
+     "n": 18,
+     "r": -0.244,
+     "p": 0.314
+    },
+    "2": {
+     "n": 18,
+     "r": 0.037,
+     "p": 0.879
+    },
+    "3": {
+     "n": 18,
+     "r": -0.272,
+     "p": 0.272
+    },
+    "5": {
+     "n": 18,
+     "r": 0.219,
+     "p": 0.382
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.555,
+   "slope": 7.1725,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 5
+   }
+  },
+  {
+   "test_id": "h0196@2026-11-10#2",
+   "hypothesis_id": "h0196",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:other_personal",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S1_4_9",
+   "target_label": "Other Personal Loans",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "verdict": "not_supported",
+   "at_lag": 1,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": -0.089,
+     "p": 0.727
+    },
+    "1": {
+     "n": 18,
+     "r": 0.193,
+     "p": 0.438
+    },
+    "2": {
+     "n": 18,
+     "r": 0.046,
+     "p": 0.856
+    },
+    "3": {
+     "n": 18,
+     "r": -0.067,
+     "p": 0.796
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.468,
+   "slope": 0.6702,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 1
+   }
+  },
+  {
+   "test_id": "h0198@2026-11-10#2",
+   "hypothesis_id": "h0198",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:agriculture",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S1_i",
+   "target_label": "Agriculture and Allied Activities",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "verdict": "not_supported",
+   "at_lag": 0,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": 0.336,
+     "p": 0.185
+    },
+    "1": {
+     "n": 18,
+     "r": -0.525,
+     "p": 0.021
+    },
+    "2": {
+     "n": 18,
+     "r": 0.27,
+     "p": 0.274
+    },
+    "3": {
+     "n": 18,
+     "r": -0.159,
+     "p": 0.533
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.482,
+   "slope": 5.2321,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 0
+   }
+  },
+  {
+   "test_id": "h0201@2026-11-10#2",
+   "hypothesis_id": "h0201",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:msme",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S1_ii",
+   "target_label": "Micro and Small Enterprises",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "approximation",
+    "why": "RBI's MSME rate may include services MSMEs; these lines are industry only (user, 2026-10-25)."
+   },
+   "verdict": "not_supported",
+   "at_lag": 7,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": 0.397,
+     "p": 0.114
+    },
+    "1": {
+     "n": 18,
+     "r": -0.408,
+     "p": 0.093
+    },
+    "2": {
+     "n": 18,
+     "r": 0.231,
+     "p": 0.352
+    },
+    "3": {
+     "n": 18,
+     "r": -0.254,
+     "p": 0.307
+    },
+    "7": {
+     "n": 18,
+     "r": 0.173,
+     "p": 0.488
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.468,
+   "slope": 2.942,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 7
+   }
+  },
+  {
+   "test_id": "h0204@2026-11-10#2",
+   "hypothesis_id": "h0204",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:msme",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S1_iii",
+   "target_label": "Medium Enterprises",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "approximation",
+    "why": "RBI's MSME rate may include services MSMEs; these lines are industry only (user, 2026-10-25)."
+   },
+   "verdict": "not_supported",
+   "at_lag": 7,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": 0.268,
+     "p": 0.302
+    },
+    "1": {
+     "n": 18,
+     "r": -0.175,
+     "p": 0.503
+    },
+    "2": {
+     "n": 18,
+     "r": 0.157,
+     "p": 0.542
+    },
+    "3": {
+     "n": 18,
+     "r": 0.195,
+     "p": 0.444
+    },
+    "7": {
+     "n": 18,
+     "r": -0.437,
+     "p": 0.069
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.468,
+   "slope": -7.8136,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 7
+   }
+  },
+  {
+   "test_id": "h0207@2026-11-10#2",
+   "hypothesis_id": "h0207",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:housing",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S1_iv",
+   "target_label": "Housing",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "verdict": "supported",
+   "at_lag": 7,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": 0.054,
+     "p": 0.839
+    },
+    "1": {
+     "n": 18,
+     "r": -0.316,
+     "p": 0.197
+    },
+    "2": {
+     "n": 18,
+     "r": -0.121,
+     "p": 0.635
+    },
+    "3": {
+     "n": 18,
+     "r": 0.035,
+     "p": 0.888
+    },
+    "7": {
+     "n": 18,
+     "r": -0.462,
+     "p": 0.047
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.468,
+   "slope": -10.7357,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 7
+   }
+  },
+  {
+   "test_id": "h0212@2026-11-10#2",
+   "hypothesis_id": "h0212",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:education",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S1_v",
+   "target_label": "Educational Loans",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "verdict": "not_supported",
+   "at_lag": 9,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": -0.327,
+     "p": 0.207
+    },
+    "1": {
+     "n": 18,
+     "r": -0.309,
+     "p": 0.223
+    },
+    "2": {
+     "n": 18,
+     "r": -0.288,
+     "p": 0.254
+    },
+    "3": {
+     "n": 18,
+     "r": -0.242,
+     "p": 0.343
+    },
+    "9": {
+     "n": 18,
+     "r": -0.177,
+     "p": 0.485
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.468,
+   "slope": -2.2125,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 9
+   }
+  },
+  {
+   "test_id": "h0214@2026-11-10#2",
+   "hypothesis_id": "h0214",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:infrastructure",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S1_vi",
+   "target_label": "Renewable Energy",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "stand_in",
+    "why": "Renewable energy and social infrastructure are infrastructure lending (user, 2026-10-25)."
+   },
+   "verdict": "not_supported",
+   "at_lag": 6,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": 0.194,
+     "p": 0.426
+    },
+    "1": {
+     "n": 18,
+     "r": -0.047,
+     "p": 0.843
+    },
+    "2": {
+     "n": 18,
+     "r": -0.324,
+     "p": 0.174
+    },
+    "3": {
+     "n": 18,
+     "r": 0.705,
+     "p": 0.005
+    },
+    "6": {
+     "n": 18,
+     "r": -0.06,
+     "p": 0.796
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.468,
+   "slope": -5.068,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 6
+   }
+  },
+  {
+   "test_id": "h0216@2026-11-10#2",
+   "hypothesis_id": "h0216",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:infrastructure",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S1_vii",
+   "target_label": "Social Infrastructure",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "stand_in",
+    "why": "Renewable energy and social infrastructure are infrastructure lending (user, 2026-10-25)."
+   },
+   "verdict": "not_supported",
+   "at_lag": 5,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": -0.305,
+     "p": 0.237
+    },
+    "1": {
+     "n": 18,
+     "r": -0.102,
+     "p": 0.541
+    },
+    "2": {
+     "n": 18,
+     "r": 0.738,
+     "p": 0.006
+    },
+    "3": {
+     "n": 18,
+     "r": -0.044,
+     "p": 0.792
+    },
+    "5": {
+     "n": 18,
+     "r": 0.13,
+     "p": 0.478
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.468,
+   "slope": 21.5043,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 5
+   }
+  },
+  {
+   "test_id": "h0219@2026-11-10#2",
+   "hypothesis_id": "h0219",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:export_credit_rupee",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S1_viii",
+   "target_label": "Export Credit",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "approximation",
+    "why": "RBI's rupee export credit vs the PSL export credit line (user, 2026-10-25)."
+   },
+   "verdict": "not_supported",
+   "at_lag": 5,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": 0.032,
+     "p": 0.905
+    },
+    "1": {
+     "n": 18,
+     "r": -0.015,
+     "p": 0.95
+    },
+    "2": {
+     "n": 18,
+     "r": -0.044,
+     "p": 0.867
+    },
+    "3": {
+     "n": 18,
+     "r": -0.36,
+     "p": 0.14
+    },
+    "5": {
+     "n": 18,
+     "r": -0.017,
+     "p": 0.943
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.468,
+   "slope": -0.1431,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 5
+   }
+  },
+  {
+   "test_id": "h0224@2026-11-10#2",
+   "hypothesis_id": "h0224",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:trade",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S1_3_7_1",
+   "target_label": "Wholesale Trade",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "stand_in",
+    "why": "No wholesale or retail rate; their parent Trade's (user, 2026-10-25)."
+   },
+   "verdict": "too_short",
+   "at_lag": 8,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": -0.428,
+     "p": 0.084
+    },
+    "1": {
+     "n": 18,
+     "r": 0.196,
+     "p": 0.437
+    },
+    "2": {
+     "n": 18,
+     "r": -0.43,
+     "p": 0.075
+    },
+    "3": {
+     "n": 18,
+     "r": 0.641,
+     "p": 0.004
+    },
+    "8": {
+     "n": 18,
+     "r": -0.433,
+     "p": 0.076
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.526,
+   "slope": -1.2304,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 8
+   }
+  },
+  {
+   "test_id": "h0227@2026-11-10#2",
+   "hypothesis_id": "h0227",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:trade",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S1_3_7_2",
+   "target_label": "Retail Trade",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "stand_in",
+    "why": "No wholesale or retail rate; their parent Trade's (user, 2026-10-25)."
+   },
+   "verdict": "too_short",
+   "at_lag": 9,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": 0.422,
+     "p": 0.088
+    },
+    "1": {
+     "n": 18,
+     "r": -0.198,
+     "p": 0.438
+    },
+    "2": {
+     "n": 18,
+     "r": 0.412,
+     "p": 0.09
+    },
+    "3": {
+     "n": 18,
+     "r": -0.626,
+     "p": 0.005
+    },
+    "9": {
+     "n": 18,
+     "r": -0.338,
+     "p": 0.179
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.526,
+   "slope": -1.0451,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 9
+   }
+  },
+  {
+   "test_id": "h0238@2026-11-10#2",
+   "hypothesis_id": "h0238",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:industry_large",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S2_2_1",
+   "target_label": "Mining and Quarrying (incl. Coal)",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "stand_in",
+    "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+   },
+   "verdict": "too_short",
+   "at_lag": 3,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": -0.055,
+     "p": 0.828
+    },
+    "1": {
+     "n": 18,
+     "r": 0.059,
+     "p": 0.819
+    },
+    "2": {
+     "n": 18,
+     "r": 0.333,
+     "p": 0.171
+    },
+    "3": {
+     "n": 18,
+     "r": -0.187,
+     "p": 0.443
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.526,
+   "slope": -9.9913,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 3
+   }
+  },
+  {
+   "test_id": "h0241@2026-11-10#2",
+   "hypothesis_id": "h0241",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:industry_large",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S2_2_2",
+   "target_label": "Food Processing",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "stand_in",
+    "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+   },
+   "verdict": "too_short",
+   "at_lag": 1,
+   "family": 3,
+   "alpha": 0.0167,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": 0.209,
+     "p": 0.428
+    },
+    "1": {
+     "n": 18,
+     "r": -0.031,
+     "p": 0.9
+    },
+    "2": {
+     "n": 18,
+     "r": 0.078,
+     "p": 0.773
+    },
+    "3": {
+     "n": 18,
+     "r": 0.371,
+     "p": 0.135
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.555,
+   "slope": -0.5578,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 1
+   }
+  },
+  {
+   "test_id": "h0244@2026-11-10#2",
+   "hypothesis_id": "h0244",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:industry_large",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S2_2_3",
+   "target_label": "Beverage and Tobacco",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "stand_in",
+    "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+   },
+   "verdict": "too_short",
+   "at_lag": 2,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": -0.305,
+     "p": 0.236
+    },
+    "1": {
+     "n": 18,
+     "r": -0.341,
+     "p": 0.171
+    },
+    "2": {
+     "n": 18,
+     "r": -0.157,
+     "p": 0.535
+    },
+    "3": {
+     "n": 18,
+     "r": 0.393,
+     "p": 0.106
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.526,
+   "slope": -6.2534,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 2
+   }
+  },
+  {
+   "test_id": "h0247@2026-11-10#2",
+   "hypothesis_id": "h0247",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:industry_large",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S2_2_4",
+   "target_label": "Textiles",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "stand_in",
+    "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+   },
+   "verdict": "not_supported",
+   "at_lag": 6,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": 0.208,
+     "p": 0.425
+    },
+    "1": {
+     "n": 18,
+     "r": 0.235,
+     "p": 0.351
+    },
+    "2": {
+     "n": 18,
+     "r": 0.14,
+     "p": 0.58
+    },
+    "3": {
+     "n": 18,
+     "r": 0.366,
+     "p": 0.135
+    },
+    "6": {
+     "n": 18,
+     "r": -0.367,
+     "p": 0.127
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.468,
+   "slope": -5.7,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 6
+   }
+  },
+  {
+   "test_id": "h0250@2026-11-10#2",
+   "hypothesis_id": "h0250",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:industry_large",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S2_2_5",
+   "target_label": "Leather and Leather Products",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "stand_in",
+    "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+   },
+   "verdict": "too_short",
+   "at_lag": 8,
+   "family": 3,
+   "alpha": 0.0167,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": -0.24,
+     "p": 0.357
+    },
+    "1": {
+     "n": 18,
+     "r": 0.164,
+     "p": 0.522
+    },
+    "2": {
+     "n": 18,
+     "r": -0.112,
+     "p": 0.655
+    },
+    "3": {
+     "n": 18,
+     "r": 0.431,
+     "p": 0.07
+    },
+    "8": {
+     "n": 18,
+     "r": -0.132,
+     "p": 0.614
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.555,
+   "slope": -1.568,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 8
+   }
+  },
+  {
+   "test_id": "h0253@2026-11-10#2",
+   "hypothesis_id": "h0253",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:industry_large",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S2_2_6",
+   "target_label": "Wood and Wood Products",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "stand_in",
+    "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+   },
+   "verdict": "too_short",
+   "at_lag": 8,
+   "family": 3,
+   "alpha": 0.0167,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": 0.128,
+     "p": 0.628
+    },
+    "1": {
+     "n": 18,
+     "r": 0.32,
+     "p": 0.195
+    },
+    "2": {
+     "n": 18,
+     "r": 0.188,
+     "p": 0.457
+    },
+    "3": {
+     "n": 18,
+     "r": 0.482,
+     "p": 0.045
+    },
+    "8": {
+     "n": 18,
+     "r": -0.067,
+     "p": 0.787
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.555,
+   "slope": -0.6073,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 8
+   }
+  },
+  {
+   "test_id": "h0256@2026-11-10#2",
+   "hypothesis_id": "h0256",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:industry_large",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S2_2_7",
+   "target_label": "Paper and Paper Products",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "stand_in",
+    "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+   },
+   "verdict": "too_short",
+   "at_lag": 8,
+   "family": 3,
+   "alpha": 0.0167,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": -0.117,
+     "p": 0.647
+    },
+    "1": {
+     "n": 18,
+     "r": 0.344,
+     "p": 0.162
+    },
+    "2": {
+     "n": 18,
+     "r": 0.348,
+     "p": 0.152
+    },
+    "3": {
+     "n": 18,
+     "r": -0.214,
+     "p": 0.399
+    },
+    "8": {
+     "n": 18,
+     "r": 0.189,
+     "p": 0.469
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.555,
+   "slope": 1.3288,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 8
+   }
+  },
+  {
+   "test_id": "h0259@2026-11-10#2",
+   "hypothesis_id": "h0259",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:industry_large",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S2_2_8",
+   "target_label": "Petroleum, Coal Products and Nuclear Fuels",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "stand_in",
+    "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+   },
+   "verdict": "too_short",
+   "at_lag": 2,
+   "family": 3,
+   "alpha": 0.0167,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": 0.013,
+     "p": 0.961
+    },
+    "1": {
+     "n": 18,
+     "r": -0.103,
+     "p": 0.687
+    },
+    "2": {
+     "n": 18,
+     "r": -0.292,
+     "p": 0.233
+    },
+    "3": {
+     "n": 18,
+     "r": -0.393,
+     "p": 0.104
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.555,
+   "slope": -24.7502,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 2
+   }
+  },
+  {
+   "test_id": "h0262@2026-11-10#2",
+   "hypothesis_id": "h0262",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:industry_large",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S2_2_9",
+   "target_label": "Chemicals and Chemical Products",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "stand_in",
+    "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+   },
+   "verdict": "too_short",
+   "at_lag": 3,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": -0.253,
+     "p": 0.329
+    },
+    "1": {
+     "n": 18,
+     "r": 0.054,
+     "p": 0.827
+    },
+    "2": {
+     "n": 18,
+     "r": 0.495,
+     "p": 0.038
+    },
+    "3": {
+     "n": 18,
+     "r": -0.05,
+     "p": 0.837
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.526,
+   "slope": -0.794,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 3
+   }
+  },
+  {
+   "test_id": "h0264@2026-11-10#2",
+   "hypothesis_id": "h0264",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:industry_large",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S2_2_10",
+   "target_label": "Rubber, Plastic and their Products",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "stand_in",
+    "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+   },
+   "verdict": "too_short",
+   "at_lag": 4,
+   "family": 3,
+   "alpha": 0.0167,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": 0.054,
+     "p": 0.836
+    },
+    "1": {
+     "n": 18,
+     "r": 0.129,
+     "p": 0.607
+    },
+    "2": {
+     "n": 18,
+     "r": 0.514,
+     "p": 0.028
+    },
+    "3": {
+     "n": 18,
+     "r": 0.352,
+     "p": 0.15
+    },
+    "4": {
+     "n": 18,
+     "r": 0.114,
+     "p": 0.651
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.555,
+   "slope": 2.3212,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 4
+   }
+  },
+  {
+   "test_id": "h0267@2026-11-10#2",
+   "hypothesis_id": "h0267",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:industry_large",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S2_2_11",
+   "target_label": "Glass and Glassware",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "stand_in",
+    "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+   },
+   "verdict": "supported",
+   "at_lag": 6,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": 0.294,
+     "p": 0.254
+    },
+    "1": {
+     "n": 18,
+     "r": 0.088,
+     "p": 0.726
+    },
+    "2": {
+     "n": 18,
+     "r": -0.545,
+     "p": 0.025
+    },
+    "3": {
+     "n": 18,
+     "r": 0.476,
+     "p": 0.048
+    },
+    "6": {
+     "n": 18,
+     "r": -0.604,
+     "p": 0.01
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.526,
+   "slope": -36.0891,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 6
+   }
+  },
+  {
+   "test_id": "h0270@2026-11-10#2",
+   "hypothesis_id": "h0270",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:industry_large",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S2_2_12",
+   "target_label": "Cement and Cement Products",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "stand_in",
+    "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+   },
+   "verdict": "too_short",
+   "at_lag": 2,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": -0.071,
+     "p": 0.782
+    },
+    "1": {
+     "n": 18,
+     "r": 0.343,
+     "p": 0.164
+    },
+    "2": {
+     "n": 18,
+     "r": 0.277,
+     "p": 0.265
+    },
+    "3": {
+     "n": 18,
+     "r": -0.102,
+     "p": 0.684
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.526,
+   "slope": 4.8247,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 2
+   }
+  },
+  {
+   "test_id": "h0273@2026-11-10#2",
+   "hypothesis_id": "h0273",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:industry_large",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S2_2_13",
+   "target_label": "Basic Metal and Metal Product",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "stand_in",
+    "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+   },
+   "verdict": "supported",
+   "at_lag": 8,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": 0.21,
+     "p": 0.416
+    },
+    "1": {
+     "n": 18,
+     "r": -0.351,
+     "p": 0.153
+    },
+    "2": {
+     "n": 18,
+     "r": 0.006,
+     "p": 0.981
+    },
+    "3": {
+     "n": 18,
+     "r": -0.034,
+     "p": 0.896
+    },
+    "8": {
+     "n": 18,
+     "r": -0.588,
+     "p": 0.007
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.526,
+   "slope": -5.4127,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 8
+   }
+  },
+  {
+   "test_id": "h0275@2026-11-10#2",
+   "hypothesis_id": "h0275",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:industry_large",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S2_2_14",
+   "target_label": "All Engineering",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "stand_in",
+    "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+   },
+   "verdict": "supported",
+   "at_lag": 0,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": -0.675,
+     "p": 0.002
+    },
+    "1": {
+     "n": 18,
+     "r": 0.019,
+     "p": 0.935
+    },
+    "2": {
+     "n": 18,
+     "r": 0.218,
+     "p": 0.384
+    },
+    "3": {
+     "n": 18,
+     "r": -0.06,
+     "p": 0.81
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.541,
+   "slope": -16.6063,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 0
+   }
+  },
+  {
+   "test_id": "h0277@2026-11-10#2",
+   "hypothesis_id": "h0277",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:industry_large",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S2_2_15",
+   "target_label": "Vehicles, Vehicle Parts and Transport Equipment",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "stand_in",
+    "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+   },
+   "verdict": "too_short",
+   "at_lag": 0,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": -0.091,
+     "p": 0.727
+    },
+    "1": {
+     "n": 18,
+     "r": 0.271,
+     "p": 0.276
+    },
+    "2": {
+     "n": 18,
+     "r": -0.165,
+     "p": 0.502
+    },
+    "3": {
+     "n": 18,
+     "r": -0.016,
+     "p": 0.948
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.541,
+   "slope": -2.3001,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 0
+   }
+  },
+  {
+   "test_id": "h0280@2026-11-10#2",
+   "hypothesis_id": "h0280",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:industry_large",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S2_2_16",
+   "target_label": "Gems and Jewellery",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "stand_in",
+    "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+   },
+   "verdict": "too_short",
+   "at_lag": 5,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": -0.389,
+     "p": 0.121
+    },
+    "1": {
+     "n": 18,
+     "r": -0.205,
+     "p": 0.419
+    },
+    "2": {
+     "n": 18,
+     "r": -0.015,
+     "p": 0.951
+    },
+    "3": {
+     "n": 18,
+     "r": 0.276,
+     "p": 0.26
+    },
+    "5": {
+     "n": 18,
+     "r": 0.38,
+     "p": 0.122
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.526,
+   "slope": 24.4496,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 5
+   }
+  },
+  {
+   "test_id": "h0283@2026-11-10#2",
+   "hypothesis_id": "h0283",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:industry_large",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S2_2_17",
+   "target_label": "Construction",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "stand_in",
+    "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+   },
+   "verdict": "not_supported",
+   "at_lag": 3,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": 0.513,
+     "p": 0.036
+    },
+    "1": {
+     "n": 18,
+     "r": 0.097,
+     "p": 0.705
+    },
+    "2": {
+     "n": 18,
+     "r": 0.209,
+     "p": 0.41
+    },
+    "3": {
+     "n": 18,
+     "r": 0.406,
+     "p": 0.093
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.468,
+   "slope": 11.8632,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 3
+   }
+  },
+  {
+   "test_id": "h0286@2026-11-10#2",
+   "hypothesis_id": "h0286",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:infrastructure",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S2_2_18",
+   "target_label": "Infrastructure",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "verdict": "not_supported",
+   "at_lag": 5,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": -0.425,
+     "p": 0.083
+    },
+    "1": {
+     "n": 18,
+     "r": 0.381,
+     "p": 0.114
+    },
+    "2": {
+     "n": 18,
+     "r": -0.061,
+     "p": 0.806
+    },
+    "3": {
+     "n": 18,
+     "r": 0.231,
+     "p": 0.348
+    },
+    "5": {
+     "n": 18,
+     "r": 0.128,
+     "p": 0.603
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.468,
+   "slope": 0.5791,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 5
+   }
+  },
+  {
+   "test_id": "h0289@2026-11-10#2",
+   "hypothesis_id": "h0289",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:industry_large",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S2_2_19",
+   "target_label": "Other Industries",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "stand_in",
+    "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+   },
+   "verdict": "not_supported",
+   "at_lag": 6,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": 0.519,
+     "p": 0.03
+    },
+    "1": {
+     "n": 18,
+     "r": -0.263,
+     "p": 0.289
+    },
+    "2": {
+     "n": 18,
+     "r": 0.301,
+     "p": 0.223
+    },
+    "3": {
+     "n": 18,
+     "r": 0.165,
+     "p": 0.51
+    },
+    "6": {
+     "n": 18,
+     "r": 0.005,
+     "p": 0.984
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.468,
+   "slope": 0.245,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 6
+   }
+  },
+  {
+   "test_id": "h0292@2026-11-10#2",
+   "hypothesis_id": "h0292",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:industry_large",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S2_2_2_1",
+   "target_label": "Sugar",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "stand_in",
+    "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+   },
+   "verdict": "too_short",
+   "at_lag": 3,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": -0.543,
+     "p": 0.021
+    },
+    "1": {
+     "n": 18,
+     "r": -0.035,
+     "p": 0.895
+    },
+    "2": {
+     "n": 18,
+     "r": -0.155,
+     "p": 0.541
+    },
+    "3": {
+     "n": 18,
+     "r": 0.037,
+     "p": 0.883
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.526,
+   "slope": 1.473,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 3
+   }
+  },
+  {
+   "test_id": "h0295@2026-11-10#2",
+   "hypothesis_id": "h0295",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:industry_large",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S2_2_2_2",
+   "target_label": "Edible Oils and Vanaspati",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "stand_in",
+    "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+   },
+   "verdict": "too_short",
+   "at_lag": 6,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": 0.324,
+     "p": 0.203
+    },
+    "1": {
+     "n": 18,
+     "r": -0.058,
+     "p": 0.822
+    },
+    "2": {
+     "n": 18,
+     "r": -0.086,
+     "p": 0.738
+    },
+    "3": {
+     "n": 18,
+     "r": -0.415,
+     "p": 0.091
+    },
+    "6": {
+     "n": 18,
+     "r": -0.248,
+     "p": 0.323
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.526,
+   "slope": -13.6574,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 6
+   }
+  },
+  {
+   "test_id": "h0298@2026-11-10#2",
+   "hypothesis_id": "h0298",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:industry_large",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S2_2_2_3",
+   "target_label": "Tea",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "stand_in",
+    "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+   },
+   "verdict": "not_supported",
+   "at_lag": 6,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": 0.31,
+     "p": 0.224
+    },
+    "1": {
+     "n": 18,
+     "r": 0.094,
+     "p": 0.709
+    },
+    "2": {
+     "n": 18,
+     "r": -0.299,
+     "p": 0.234
+    },
+    "3": {
+     "n": 18,
+     "r": 0.554,
+     "p": 0.019
+    },
+    "6": {
+     "n": 18,
+     "r": -0.244,
+     "p": 0.312
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.468,
+   "slope": -11.03,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 6
+   }
+  },
+  {
+   "test_id": "h0301@2026-11-10#2",
+   "hypothesis_id": "h0301",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:industry_large",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S2_2_2_4",
+   "target_label": "Others",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "stand_in",
+    "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+   },
+   "verdict": "not_supported",
+   "at_lag": 7,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": -0.031,
+     "p": 0.903
+    },
+    "1": {
+     "n": 18,
+     "r": -0.01,
+     "p": 0.968
+    },
+    "2": {
+     "n": 18,
+     "r": 0.216,
+     "p": 0.396
+    },
+    "3": {
+     "n": 18,
+     "r": 0.234,
+     "p": 0.358
+    },
+    "7": {
+     "n": 18,
+     "r": -0.101,
+     "p": 0.703
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.468,
+   "slope": -0.3294,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 7
+   }
+  },
+  {
+   "test_id": "h0305@2026-11-10#2",
+   "hypothesis_id": "h0305",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:industry_large",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S2_2_4_1",
+   "target_label": "Cotton Textiles",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "stand_in",
+    "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+   },
+   "verdict": "not_supported",
+   "at_lag": 8,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": 0.445,
+     "p": 0.071
+    },
+    "1": {
+     "n": 18,
+     "r": 0.197,
+     "p": 0.437
+    },
+    "2": {
+     "n": 18,
+     "r": -0.111,
+     "p": 0.671
+    },
+    "3": {
+     "n": 18,
+     "r": -0.127,
+     "p": 0.613
+    },
+    "8": {
+     "n": 18,
+     "r": 0.121,
+     "p": 0.645
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.468,
+   "slope": 1.3719,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 8
+   }
+  },
+  {
+   "test_id": "h0310@2026-11-10#2",
+   "hypothesis_id": "h0310",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:industry_large",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S2_2_4_2",
+   "target_label": "Jute Textiles",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "stand_in",
+    "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+   },
+   "verdict": "not_supported",
+   "at_lag": 3,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": -0.163,
+     "p": 0.536
+    },
+    "1": {
+     "n": 18,
+     "r": 0.018,
+     "p": 0.946
+    },
+    "2": {
+     "n": 18,
+     "r": -0.435,
+     "p": 0.072
+    },
+    "3": {
+     "n": 18,
+     "r": -0.27,
+     "p": 0.276
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.468,
+   "slope": -5.7419,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 3
+   }
+  },
+  {
+   "test_id": "h0315@2026-11-10#2",
+   "hypothesis_id": "h0315",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:industry_large",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S2_2_4_3",
+   "target_label": "Man-Made Textiles",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "stand_in",
+    "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+   },
+   "verdict": "not_supported",
+   "at_lag": 0,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": -0.103,
+     "p": 0.696
+    },
+    "1": {
+     "n": 18,
+     "r": -0.036,
+     "p": 0.887
+    },
+    "2": {
+     "n": 18,
+     "r": 0.114,
+     "p": 0.651
+    },
+    "3": {
+     "n": 18,
+     "r": 0.221,
+     "p": 0.381
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.482,
+   "slope": -1.7691,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 0
+   }
+  },
+  {
+   "test_id": "h0320@2026-11-10#2",
+   "hypothesis_id": "h0320",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:industry_large",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S2_2_4_4",
+   "target_label": "Other Textiles",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "stand_in",
+    "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+   },
+   "verdict": "supported",
+   "at_lag": 4,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": -0.542,
+     "p": 0.024
+    },
+    "1": {
+     "n": 18,
+     "r": -0.255,
+     "p": 0.309
+    },
+    "2": {
+     "n": 18,
+     "r": 0.095,
+     "p": 0.711
+    },
+    "3": {
+     "n": 18,
+     "r": 0.062,
+     "p": 0.806
+    },
+    "4": {
+     "n": 18,
+     "r": -0.583,
+     "p": 0.011
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.468,
+   "slope": -8.6739,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 4
+   }
+  },
+  {
+   "test_id": "h0324@2026-11-10#2",
+   "hypothesis_id": "h0324",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:industry_large",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S2_2_9_1",
+   "target_label": "Fertiliser",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "stand_in",
+    "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+   },
+   "verdict": "too_short",
+   "at_lag": 0,
+   "family": 3,
+   "alpha": 0.0167,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": -0.393,
+     "p": 0.125
+    },
+    "1": {
+     "n": 18,
+     "r": 0.266,
+     "p": 0.272
+    },
+    "2": {
+     "n": 18,
+     "r": 0.441,
+     "p": 0.074
+    },
+    "3": {
+     "n": 18,
+     "r": 0.238,
+     "p": 0.32
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.571,
+   "slope": -30.5868,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 0
+   }
+  },
+  {
+   "test_id": "h0327@2026-11-10#2",
+   "hypothesis_id": "h0327",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:industry_large",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S2_2_9_2",
+   "target_label": "Drugs and Pharmaceuticals",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "stand_in",
+    "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+   },
+   "verdict": "too_short",
+   "at_lag": 4,
+   "family": 3,
+   "alpha": 0.0167,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": 0.417,
+     "p": 0.099
+    },
+    "1": {
+     "n": 18,
+     "r": 0.022,
+     "p": 0.934
+    },
+    "2": {
+     "n": 18,
+     "r": -0.556,
+     "p": 0.021
+    },
+    "3": {
+     "n": 18,
+     "r": 0.002,
+     "p": 0.993
+    },
+    "4": {
+     "n": 18,
+     "r": -0.304,
+     "p": 0.216
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.555,
+   "slope": -9.8076,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 4
+   }
+  },
+  {
+   "test_id": "h0330@2026-11-10#2",
+   "hypothesis_id": "h0330",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:industry_large",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S2_2_9_3",
+   "target_label": "Petro Chemicals",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "stand_in",
+    "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+   },
+   "verdict": "not_supported",
+   "at_lag": 3,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": 0.035,
+     "p": 0.893
+    },
+    "1": {
+     "n": 18,
+     "r": -0.326,
+     "p": 0.185
+    },
+    "2": {
+     "n": 18,
+     "r": 0.199,
+     "p": 0.432
+    },
+    "3": {
+     "n": 18,
+     "r": -0.096,
+     "p": 0.703
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.468,
+   "slope": -8.8235,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 3
+   }
+  },
+  {
+   "test_id": "h0333@2026-11-10#2",
+   "hypothesis_id": "h0333",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:industry_large",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S2_2_9_4",
+   "target_label": "Others",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "stand_in",
+    "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+   },
+   "verdict": "supported",
+   "at_lag": 4,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": -0.012,
+     "p": 0.961
+    },
+    "1": {
+     "n": 18,
+     "r": 0.027,
+     "p": 0.914
+    },
+    "2": {
+     "n": 18,
+     "r": 0.022,
+     "p": 0.933
+    },
+    "3": {
+     "n": 18,
+     "r": -0.229,
+     "p": 0.361
+    },
+    "4": {
+     "n": 18,
+     "r": -0.68,
+     "p": 0.001
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.468,
+   "slope": -12.0693,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 4
+   }
+  },
+  {
+   "test_id": "h0336@2026-11-10#2",
+   "hypothesis_id": "h0336",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:industry_large",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S2_2_13_1",
+   "target_label": "Iron and Steel",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "stand_in",
+    "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+   },
+   "verdict": "too_short",
+   "at_lag": 8,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": 0.506,
+     "p": 0.041
+    },
+    "1": {
+     "n": 18,
+     "r": -0.046,
+     "p": 0.86
+    },
+    "2": {
+     "n": 18,
+     "r": 0.025,
+     "p": 0.921
+    },
+    "3": {
+     "n": 18,
+     "r": 0.091,
+     "p": 0.714
+    },
+    "8": {
+     "n": 18,
+     "r": -0.186,
+     "p": 0.457
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.526,
+   "slope": -1.0174,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 8
+   }
+  },
+  {
+   "test_id": "h0339@2026-11-10#2",
+   "hypothesis_id": "h0339",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:industry_large",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S2_2_13_2",
+   "target_label": "Other Metal and Metal Product",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "stand_in",
+    "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+   },
+   "verdict": "not_supported",
+   "at_lag": 4,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": -0.458,
+     "p": 0.065
+    },
+    "1": {
+     "n": 18,
+     "r": 0.052,
+     "p": 0.843
+    },
+    "2": {
+     "n": 18,
+     "r": 0.008,
+     "p": 0.977
+    },
+    "3": {
+     "n": 18,
+     "r": -0.07,
+     "p": 0.778
+    },
+    "4": {
+     "n": 18,
+     "r": -0.079,
+     "p": 0.747
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.468,
+   "slope": -1.9167,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 4
+   }
+  },
+  {
+   "test_id": "h0342@2026-11-10#2",
+   "hypothesis_id": "h0342",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:industry_large",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S2_2_14_1",
+   "target_label": "Electronics",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "stand_in",
+    "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+   },
+   "verdict": "too_short",
+   "at_lag": 3,
+   "family": 3,
+   "alpha": 0.0167,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": -0.277,
+     "p": 0.273
+    },
+    "1": {
+     "n": 18,
+     "r": 0.22,
+     "p": 0.381
+    },
+    "2": {
+     "n": 18,
+     "r": 0.188,
+     "p": 0.46
+    },
+    "3": {
+     "n": 18,
+     "r": -0.266,
+     "p": 0.283
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.555,
+   "slope": -18.153,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 3
+   }
+  },
+  {
+   "test_id": "h0345@2026-11-10#2",
+   "hypothesis_id": "h0345",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:industry_large",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S2_2_14_2",
+   "target_label": "Others",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "stand_in",
+    "why": "RBI prints no rate for industry sub-groups or industry as a whole; Large industry is the only industry-level rate (user, 2026-10-26)."
+   },
+   "verdict": "supported",
+   "at_lag": 6,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": 0.293,
+     "p": 0.246
+    },
+    "1": {
+     "n": 18,
+     "r": -0.204,
+     "p": 0.415
+    },
+    "2": {
+     "n": 18,
+     "r": -0.183,
+     "p": 0.469
+    },
+    "3": {
+     "n": 18,
+     "r": 0.273,
+     "p": 0.27
+    },
+    "6": {
+     "n": 18,
+     "r": -0.59,
+     "p": 0.009
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.468,
+   "slope": -11.0919,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 6
+   }
+  },
+  {
+   "test_id": "h0348@2026-11-10#2",
+   "hypothesis_id": "h0348",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:infrastructure",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S2_2_18_1",
+   "target_label": "Power",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "stand_in",
+    "why": "No rate per infrastructure kind; Infrastructure's (user, 2026-10-25)."
+   },
+   "verdict": "too_short",
+   "at_lag": 4,
+   "family": 3,
+   "alpha": 0.0167,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": -0.413,
+     "p": 0.097
+    },
+    "1": {
+     "n": 18,
+     "r": -0.118,
+     "p": 0.648
+    },
+    "2": {
+     "n": 18,
+     "r": -0.036,
+     "p": 0.897
+    },
+    "3": {
+     "n": 18,
+     "r": -0.184,
+     "p": 0.491
+    },
+    "4": {
+     "n": 18,
+     "r": -0.209,
+     "p": 0.419
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.555,
+   "slope": -0.835,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 4
+   }
+  },
+  {
+   "test_id": "h0351@2026-11-10#2",
+   "hypothesis_id": "h0351",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:infrastructure",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S2_2_18_2",
+   "target_label": "Telecommunications",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "stand_in",
+    "why": "No rate per infrastructure kind; Infrastructure's (user, 2026-10-25)."
+   },
+   "verdict": "not_supported",
+   "at_lag": 0,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": -0.004,
+     "p": 0.988
+    },
+    "1": {
+     "n": 18,
+     "r": -0.022,
+     "p": 0.927
+    },
+    "2": {
+     "n": 18,
+     "r": 0.069,
+     "p": 0.774
+    },
+    "3": {
+     "n": 18,
+     "r": -0.304,
+     "p": 0.19
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.482,
+   "slope": -0.0345,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 0
+   }
+  },
+  {
+   "test_id": "h0354@2026-11-10#2",
+   "hypothesis_id": "h0354",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:infrastructure",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S2_2_18_3",
+   "target_label": "Roads",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "stand_in",
+    "why": "No rate per infrastructure kind; Infrastructure's (user, 2026-10-25)."
+   },
+   "verdict": "not_supported",
+   "at_lag": 9,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": 0.184,
+     "p": 0.49
+    },
+    "1": {
+     "n": 18,
+     "r": 0.057,
+     "p": 0.826
+    },
+    "2": {
+     "n": 18,
+     "r": -0.083,
+     "p": 0.757
+    },
+    "3": {
+     "n": 18,
+     "r": 0.284,
+     "p": 0.272
+    },
+    "9": {
+     "n": 18,
+     "r": 0.21,
+     "p": 0.405
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.468,
+   "slope": 1.372,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 9
+   }
+  },
+  {
+   "test_id": "h0357@2026-11-10#2",
+   "hypothesis_id": "h0357",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:infrastructure",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S2_2_18_4",
+   "target_label": "Airports",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "stand_in",
+    "why": "No rate per infrastructure kind; Infrastructure's (user, 2026-10-25)."
+   },
+   "verdict": "not_supported",
+   "at_lag": 8,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": 0.637,
+     "p": 0.011
+    },
+    "1": {
+     "n": 18,
+     "r": 0.396,
+     "p": 0.103
+    },
+    "2": {
+     "n": 18,
+     "r": -0.111,
+     "p": 0.632
+    },
+    "3": {
+     "n": 18,
+     "r": 0.494,
+     "p": 0.059
+    },
+    "8": {
+     "n": 18,
+     "r": 0.219,
+     "p": 0.342
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.468,
+   "slope": 7.6349,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 8
+   }
+  },
+  {
+   "test_id": "h0360@2026-11-10#2",
+   "hypothesis_id": "h0360",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:infrastructure",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S2_2_18_5",
+   "target_label": "Ports",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "stand_in",
+    "why": "No rate per infrastructure kind; Infrastructure's (user, 2026-10-25)."
+   },
+   "verdict": "not_supported",
+   "at_lag": 8,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": -0.359,
+     "p": 0.157
+    },
+    "1": {
+     "n": 18,
+     "r": 0.333,
+     "p": 0.165
+    },
+    "2": {
+     "n": 18,
+     "r": -0.639,
+     "p": 0.014
+    },
+    "3": {
+     "n": 18,
+     "r": -0.095,
+     "p": 0.661
+    },
+    "8": {
+     "n": 18,
+     "r": 0.135,
+     "p": 0.534
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.468,
+   "slope": 9.3781,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 8
+   }
+  },
+  {
+   "test_id": "h0363@2026-11-10#2",
+   "hypothesis_id": "h0363",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:infrastructure",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S2_2_18_6",
+   "target_label": "Railways (other than Indian Railways)",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "stand_in",
+    "why": "No rate per infrastructure kind; Infrastructure's (user, 2026-10-25)."
+   },
+   "verdict": "not_supported",
+   "at_lag": 1,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": 0.235,
+     "p": 0.367
+    },
+    "1": {
+     "n": 18,
+     "r": 0.009,
+     "p": 0.973
+    },
+    "2": {
+     "n": 18,
+     "r": 0.368,
+     "p": 0.136
+    },
+    "3": {
+     "n": 18,
+     "r": 0.239,
+     "p": 0.339
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.468,
+   "slope": 0.2085,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 1
+   }
+  },
+  {
+   "test_id": "h0366@2026-11-10#2",
+   "hypothesis_id": "h0366",
+   "class": "credit_price",
+   "source": "rbi_rates:walr_sector_fresh/sector:infrastructure",
+   "source_tide": "walr_fresh/group:scb",
+   "target": "sibc:e_S2_2_18_7",
+   "target_label": "Other Infrastructure",
+   "predicted_sign": -1,
+   "reason": "dearer new credit slows borrowing in that sector",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "excluded": {
+    "series_break": 12
+   },
+   "stand_in": {
+    "how": "stand_in",
+    "why": "No rate per infrastructure kind; Infrastructure's (user, 2026-10-25)."
+   },
+   "verdict": "not_supported",
+   "at_lag": 3,
+   "family": 1,
+   "alpha": 0.05,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": 0.403,
+     "p": 0.1
+    },
+    "1": {
+     "n": 18,
+     "r": -0.015,
+     "p": 0.955
+    },
+    "2": {
+     "n": 18,
+     "r": 0.188,
+     "p": 0.461
+    },
+    "3": {
+     "n": 18,
+     "r": 0.216,
+     "p": 0.394
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.468,
+   "slope": 1.3116,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24302,
+    "profile": {},
+    "lag": 3
+   }
+  },
+  {
+   "test_id": "h0370@2026-11-10#5",
+   "hypothesis_id": "h0370",
+   "class": "input_prices",
+   "source": "mospi:wpi/wpi:all",
+   "source_tide": "credit tide",
+   "target": "sibc:e_S1_3_7",
+   "target_label": "Trade",
+   "predicted_sign": 1,
+   "reason": "dearer goods need more working capital to hold the same stock",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 1,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": -0.265,
+     "p": 0.3
+    },
+    "1": {
+     "n": 17,
+     "r": 0.285,
+     "p": 0.259
+    },
+    "2": {
+     "n": 17,
+     "r": 0.116,
+     "p": 0.653
+    },
+    "3": {
+     "n": 17,
+     "r": 0.355,
+     "p": 0.163
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.541,
+   "slope": 0.3273,
+   "discovery": {
+    "from": 24288,
+    "cutoff": 24306,
+    "profile": {},
+    "lag": 1
+   }
+  },
+  {
+   "test_id": "h0371@2026-11-10#5",
+   "hypothesis_id": "h0371",
+   "class": "input_prices",
+   "source": "mospi:wpi/wpi:all",
+   "source_tide": "credit tide",
+   "target": "sibc:e_S1_3_7_1",
+   "target_label": "Wholesale Trade",
+   "predicted_sign": 1,
+   "reason": "dearer goods need more working capital to hold the same stock",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 1,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": 0.31,
+     "p": 0.226
+    },
+    "1": {
+     "n": 17,
+     "r": 0.017,
+     "p": 0.95
+    },
+    "2": {
+     "n": 17,
+     "r": 0.305,
+     "p": 0.239
+    },
+    "3": {
+     "n": 17,
+     "r": 0.214,
+     "p": 0.434
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.541,
+   "slope": 0.0118,
+   "discovery": {
+    "from": 24288,
+    "cutoff": 24306,
+    "profile": {},
+    "lag": 1
+   }
+  },
+  {
+   "test_id": "h0372@2026-11-10#5",
+   "hypothesis_id": "h0372",
+   "class": "input_prices",
+   "source": "mospi:wpi/wpi:all",
+   "source_tide": "credit tide",
+   "target": "sibc:e_S1_3_7_2",
+   "target_label": "Retail Trade",
+   "predicted_sign": 1,
+   "reason": "dearer goods need more working capital to hold the same stock",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 0,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": -0.314,
+     "p": 0.216
+    },
+    "1": {
+     "n": 17,
+     "r": -0.067,
+     "p": 0.801
+    },
+    "2": {
+     "n": 17,
+     "r": -0.317,
+     "p": 0.22
+    },
+    "3": {
+     "n": 17,
+     "r": -0.237,
+     "p": 0.385
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.541,
+   "slope": -0.2536,
+   "discovery": {
+    "from": 24288,
+    "cutoff": 24306,
+    "profile": {},
+    "lag": 0
+   }
+  },
+  {
+   "test_id": "h0376@2026-11-10#4",
+   "hypothesis_id": "h0376",
+   "class": "input_prices",
+   "source": "mospi:wpi/nic:29/motor_vehicles+wpi/nic:30/motorcycles",
+   "source_tide": "wpi/wpi:all",
+   "target": "sibc:e_S1_4_7",
+   "target_label": "Vehicle Loans",
+   "predicted_sign": 1,
+   "reason": "dearer vehicles mean bigger loans for the same purchase",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 4,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 13,
+     "r": 0.275,
+     "p": 0.367
+    },
+    "1": {
+     "n": 14,
+     "r": -0.025,
+     "p": 0.928
+    },
+    "2": {
+     "n": 15,
+     "r": -0.461,
+     "p": 0.082
+    },
+    "3": {
+     "n": 16,
+     "r": 0.343,
+     "p": 0.194
+    },
+    "4": {
+     "n": 17,
+     "r": -0.001,
+     "p": 0.995
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.541,
+   "slope": -0.003,
+   "discovery": {
+    "from": 24288,
+    "cutoff": 24306,
+    "profile": {},
+    "lag": 4
+   }
+  },
+  {
+   "test_id": "h0377@2026-11-10#5",
+   "hypothesis_id": "h0377",
+   "class": "input_prices",
+   "source": "mospi:wpi/nic:27/domestic_appliances",
+   "source_tide": "wpi/wpi:all",
+   "target": "sibc:e_S1_4_1",
+   "target_label": "Consumer Durables",
+   "predicted_sign": 1,
+   "reason": "dearer durables mean bigger loans for the same purchase",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6c (discover/confirm)",
+   "verdict": "too_short",
+   "at_lag": 2,
+   "family": 2,
+   "alpha": 0.025,
+   "lags": {
+    "0": {
+     "n": 17,
+     "r": 0.41,
+     "p": 0.104
+    },
+    "1": {
+     "n": 18,
+     "r": 0.253,
+     "p": 0.312
+    },
+    "2": {
+     "n": 19,
+     "r": -0.107,
+     "p": 0.656
+    },
+    "3": {
+     "n": 20,
+     "r": 0.257,
+     "p": 0.276
+    }
+   },
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "critical_r": 0.512,
+   "slope": -0.6406,
+   "discovery": {
+    "from": 24288,
+    "cutoff": 24306,
+    "profile": {},
+    "lag": 2
+   }
   }
  ]
 }
