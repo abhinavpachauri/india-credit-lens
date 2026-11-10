@@ -1,0 +1,1000 @@
+{
+ "_meta": {
+  "spec_ref": "analysis/SYSTEM_MODEL_SPEC.md §16 Step 6d",
+  "description": "One driver tested across every line that names it, nulls included. Admits nothing: a line is admitted only by its own test and the editor's yes."
+ },
+ "tests": [
+  {
+   "test_id": "pool:mospi:wpi/wpi:all@2026-11-10#1",
+   "pool": "mospi:wpi/wpi:all",
+   "form": "separation",
+   "classes": [
+    "input_prices"
+   ],
+   "source_tide": "credit tide",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6d (pooled)",
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "family": 6,
+   "alpha": 0.0083,
+   "lines_n": 3,
+   "months_per_line": 15,
+   "limit": "a response shared equally by every part of a group cancels in the gaps to that group; the group's own line carries it (Step 6c), so this test cannot see it",
+   "verdict": "too_short",
+   "statistic": 0.0036,
+   "null_mean": 0.0714,
+   "bar": 0.2829,
+   "p": 0.9564,
+   "effect": {
+    "value": 0.0,
+    "range": [
+     0.0,
+     0.528
+    ],
+    "unit": "rms excess r over the shuffled mean",
+    "practical": 0.15
+   },
+   "months_needed": null,
+   "lines": [
+    {
+     "line": "e_S1_3_7",
+     "n": 15,
+     "r": 0.094,
+     "share": 0.821,
+     "label": "Trade",
+     "group": "e_S1_3"
+    },
+    {
+     "line": "e_S1_3_7_1",
+     "n": 15,
+     "r": -0.03,
+     "share": 0.085,
+     "label": "Wholesale Trade",
+     "group": "e_S1_3_7"
+    },
+    {
+     "line": "e_S1_3_7_2",
+     "n": 15,
+     "r": 0.032,
+     "share": 0.094,
+     "label": "Retail Trade",
+     "group": "e_S1_3_7"
+    }
+   ],
+   "at_lag": 3,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24303,
+    "lag": 3,
+    "profile": {
+     "0": {
+      "lines": 3,
+      "statistic": 0.035
+     },
+     "1": {
+      "lines": 3,
+      "statistic": 0.0549
+     },
+     "2": {
+      "lines": 3,
+      "statistic": 0.0661
+     },
+     "3": {
+      "lines": 3,
+      "statistic": 0.3343
+     },
+     "4": {
+      "lines": 0
+     },
+     "5": {
+      "lines": 0
+     },
+     "6": {
+      "lines": 0
+     },
+     "7": {
+      "lines": 0
+     },
+     "8": {
+      "lines": 0
+     },
+     "9": {
+      "lines": 0
+     }
+    }
+   }
+  },
+  {
+   "test_id": "pool:rbi_rates:walr_sector_fresh/sector:industry_large@2026-11-10#1",
+   "pool": "rbi_rates:walr_sector_fresh/sector:industry_large",
+   "form": "separation",
+   "classes": [
+    "credit_price"
+   ],
+   "source_tide": "walr_fresh/group:scb",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6d (pooled)",
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "family": 6,
+   "alpha": 0.0083,
+   "lines_n": 35,
+   "months_per_line": 16,
+   "limit": "a response shared equally by every part of a group cancels in the gaps to that group; the group's own line carries it (Step 6c), so this test cannot see it",
+   "verdict": "too_short",
+   "statistic": 0.107,
+   "null_mean": 0.0665,
+   "bar": 0.1394,
+   "p": 0.0647,
+   "effect": {
+    "value": 0.201,
+    "range": [
+     0.0,
+     0.414
+    ],
+    "unit": "rms excess r over the shuffled mean",
+    "practical": 0.15
+   },
+   "months_needed": 13,
+   "lines": [
+    {
+     "line": "e_S1_2_3",
+     "n": 16,
+     "r": 0.202,
+     "share": 0.011,
+     "label": "Large",
+     "group": "e_S1_2"
+    },
+    {
+     "line": "e_S2_2_1",
+     "n": 16,
+     "r": -0.058,
+     "share": 0.001,
+     "label": "Mining and Quarrying (incl. Coal)",
+     "group": "e_S1_2"
+    },
+    {
+     "line": "e_S2_2_10",
+     "n": 16,
+     "r": 0.109,
+     "share": 0.003,
+     "label": "Rubber, Plastic and their Products",
+     "group": "e_S1_2"
+    },
+    {
+     "line": "e_S2_2_11",
+     "n": 16,
+     "r": 0.256,
+     "share": 0.018,
+     "label": "Glass and Glassware",
+     "group": "e_S1_2"
+    },
+    {
+     "line": "e_S2_2_12",
+     "n": 16,
+     "r": -0.197,
+     "share": 0.01,
+     "label": "Cement and Cement Products",
+     "group": "e_S1_2"
+    },
+    {
+     "line": "e_S2_2_13",
+     "n": 16,
+     "r": 0.446,
+     "share": 0.053,
+     "label": "Basic Metal and Metal Product",
+     "group": "e_S1_2"
+    },
+    {
+     "line": "e_S2_2_13_1",
+     "n": 16,
+     "r": 0.523,
+     "share": 0.073,
+     "label": "Iron and Steel",
+     "group": "e_S2_2_13"
+    },
+    {
+     "line": "e_S2_2_13_2",
+     "n": 16,
+     "r": -0.482,
+     "share": 0.062,
+     "label": "Other Metal and Metal Product",
+     "group": "e_S2_2_13"
+    },
+    {
+     "line": "e_S2_2_14",
+     "n": 16,
+     "r": -0.639,
+     "share": 0.109,
+     "label": "All Engineering",
+     "group": "e_S1_2"
+    },
+    {
+     "line": "e_S2_2_14_1",
+     "n": 16,
+     "r": -0.249,
+     "share": 0.017,
+     "label": "Electronics",
+     "group": "e_S2_2_14"
+    },
+    {
+     "line": "e_S2_2_14_2",
+     "n": 16,
+     "r": 0.26,
+     "share": 0.018,
+     "label": "Others",
+     "group": "e_S2_2_14"
+    },
+    {
+     "line": "e_S2_2_15",
+     "n": 16,
+     "r": 0.054,
+     "share": 0.001,
+     "label": "Vehicles, Vehicle Parts and Transport Equipment",
+     "group": "e_S1_2"
+    },
+    {
+     "line": "e_S2_2_16",
+     "n": 16,
+     "r": -0.327,
+     "share": 0.029,
+     "label": "Gems and Jewellery",
+     "group": "e_S1_2"
+    },
+    {
+     "line": "e_S2_2_17",
+     "n": 16,
+     "r": 0.494,
+     "share": 0.065,
+     "label": "Construction",
+     "group": "e_S1_2"
+    },
+    {
+     "line": "e_S2_2_19",
+     "n": 16,
+     "r": 0.39,
+     "share": 0.041,
+     "label": "Other Industries",
+     "group": "e_S1_2"
+    },
+    {
+     "line": "e_S2_2_2",
+     "n": 16,
+     "r": 0.229,
+     "share": 0.014,
+     "label": "Food Processing",
+     "group": "e_S1_2"
+    },
+    {
+     "line": "e_S2_2_2_1",
+     "n": 16,
+     "r": -0.579,
+     "share": 0.089,
+     "label": "Sugar",
+     "group": "e_S2_2_2"
+    },
+    {
+     "line": "e_S2_2_2_2",
+     "n": 16,
+     "r": 0.375,
+     "share": 0.038,
+     "label": "Edible Oils and Vanaspati",
+     "group": "e_S2_2_2"
+    },
+    {
+     "line": "e_S2_2_2_3",
+     "n": 16,
+     "r": 0.17,
+     "share": 0.008,
+     "label": "Tea",
+     "group": "e_S2_2_2"
+    },
+    {
+     "line": "e_S2_2_2_4",
+     "n": 16,
+     "r": 0.042,
+     "share": 0.0,
+     "label": "Others",
+     "group": "e_S2_2_2"
+    },
+    {
+     "line": "e_S2_2_3",
+     "n": 16,
+     "r": -0.2,
+     "share": 0.011,
+     "label": "Beverage and Tobacco",
+     "group": "e_S1_2"
+    },
+    {
+     "line": "e_S2_2_4",
+     "n": 16,
+     "r": 0.344,
+     "share": 0.032,
+     "label": "Textiles",
+     "group": "e_S1_2"
+    },
+    {
+     "line": "e_S2_2_4_1",
+     "n": 16,
+     "r": 0.474,
+     "share": 0.06,
+     "label": "Cotton Textiles",
+     "group": "e_S2_2_4"
+    },
+    {
+     "line": "e_S2_2_4_2",
+     "n": 16,
+     "r": -0.118,
+     "share": 0.004,
+     "label": "Jute Textiles",
+     "group": "e_S2_2_4"
+    },
+    {
+     "line": "e_S2_2_4_3",
+     "n": 16,
+     "r": -0.009,
+     "share": 0.0,
+     "label": "Man-Made Textiles",
+     "group": "e_S2_2_4"
+    },
+    {
+     "line": "e_S2_2_4_4",
+     "n": 16,
+     "r": -0.615,
+     "share": 0.101,
+     "label": "Other Textiles",
+     "group": "e_S2_2_4"
+    },
+    {
+     "line": "e_S2_2_5",
+     "n": 16,
+     "r": -0.3,
+     "share": 0.024,
+     "label": "Leather and Leather Products",
+     "group": "e_S1_2"
+    },
+    {
+     "line": "e_S2_2_6",
+     "n": 16,
+     "r": 0.109,
+     "share": 0.003,
+     "label": "Wood and Wood Products",
+     "group": "e_S1_2"
+    },
+    {
+     "line": "e_S2_2_7",
+     "n": 16,
+     "r": -0.245,
+     "share": 0.016,
+     "label": "Paper and Paper Products",
+     "group": "e_S1_2"
+    },
+    {
+     "line": "e_S2_2_8",
+     "n": 16,
+     "r": -0.048,
+     "share": 0.001,
+     "label": "Petroleum, Coal Products and Nuclear Fuels",
+     "group": "e_S1_2"
+    },
+    {
+     "line": "e_S2_2_9",
+     "n": 16,
+     "r": -0.206,
+     "share": 0.011,
+     "label": "Chemicals and Chemical Products",
+     "group": "e_S1_2"
+    },
+    {
+     "line": "e_S2_2_9_1",
+     "n": 16,
+     "r": -0.386,
+     "share": 0.04,
+     "label": "Fertiliser",
+     "group": "e_S2_2_9"
+    },
+    {
+     "line": "e_S2_2_9_2",
+     "n": 16,
+     "r": 0.373,
+     "share": 0.037,
+     "label": "Drugs and Pharmaceuticals",
+     "group": "e_S2_2_9"
+    },
+    {
+     "line": "e_S2_2_9_3",
+     "n": 16,
+     "r": 0.079,
+     "share": 0.002,
+     "label": "Petro Chemicals",
+     "group": "e_S2_2_9"
+    },
+    {
+     "line": "e_S2_2_9_4",
+     "n": 16,
+     "r": -0.053,
+     "share": 0.001,
+     "label": "Others",
+     "group": "e_S2_2_9"
+    }
+   ],
+   "at_lag": 0,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24303,
+    "lag": 0,
+    "profile": {
+     "0": {
+      "lines": 35,
+      "statistic": 0.1086
+     },
+     "1": {
+      "lines": 35,
+      "statistic": 0.064
+     },
+     "2": {
+      "lines": 35,
+      "statistic": 0.0577
+     },
+     "3": {
+      "lines": 35,
+      "statistic": 0.0883
+     },
+     "4": {
+      "lines": 35,
+      "statistic": 0.107
+     },
+     "5": {
+      "lines": 35,
+      "statistic": 0.0587
+     },
+     "6": {
+      "lines": 35,
+      "statistic": 0.0839
+     },
+     "7": {
+      "lines": 35,
+      "statistic": 0.0944
+     },
+     "8": {
+      "lines": 35,
+      "statistic": 0.0905
+     },
+     "9": {
+      "lines": 35,
+      "statistic": 0.0774
+     }
+    }
+   }
+  },
+  {
+   "test_id": "pool:rbi_rates:walr_sector_fresh/sector:infrastructure@2026-11-10#1",
+   "pool": "rbi_rates:walr_sector_fresh/sector:infrastructure",
+   "form": "separation",
+   "classes": [
+    "credit_price"
+   ],
+   "source_tide": "walr_fresh/group:scb",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6d (pooled)",
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "family": 6,
+   "alpha": 0.0083,
+   "lines_n": 10,
+   "months_per_line": 17,
+   "limit": "a response shared equally by every part of a group cancels in the gaps to that group; the group's own line carries it (Step 6c), so this test cannot see it",
+   "verdict": "too_short",
+   "statistic": 0.0703,
+   "null_mean": 0.0627,
+   "bar": 0.1673,
+   "p": 0.3425,
+   "effect": {
+    "value": 0.087,
+    "range": [
+     0.0,
+     0.345
+    ],
+    "unit": "rms excess r over the shuffled mean",
+    "practical": 0.15
+   },
+   "months_needed": 217,
+   "lines": [
+    {
+     "line": "e_S1_vi",
+     "n": 17,
+     "r": -0.219,
+     "share": 0.068,
+     "label": "Renewable Energy",
+     "group": "e_S1_PSL"
+    },
+    {
+     "line": "e_S1_vii",
+     "n": 17,
+     "r": 0.287,
+     "share": 0.117,
+     "label": "Social Infrastructure",
+     "group": "e_S1_PSL"
+    },
+    {
+     "line": "e_S2_2_18",
+     "n": 17,
+     "r": -0.03,
+     "share": 0.001,
+     "label": "Infrastructure",
+     "group": "e_S1_2"
+    },
+    {
+     "line": "e_S2_2_18_1",
+     "n": 17,
+     "r": 0.231,
+     "share": 0.076,
+     "label": "Power",
+     "group": "e_S2_2_18"
+    },
+    {
+     "line": "e_S2_2_18_2",
+     "n": 17,
+     "r": 0.446,
+     "share": 0.283,
+     "label": "Telecommunications",
+     "group": "e_S2_2_18"
+    },
+    {
+     "line": "e_S2_2_18_3",
+     "n": 17,
+     "r": -0.353,
+     "share": 0.177,
+     "label": "Roads",
+     "group": "e_S2_2_18"
+    },
+    {
+     "line": "e_S2_2_18_4",
+     "n": 17,
+     "r": -0.03,
+     "share": 0.001,
+     "label": "Airports",
+     "group": "e_S2_2_18"
+    },
+    {
+     "line": "e_S2_2_18_5",
+     "n": 17,
+     "r": -0.413,
+     "share": 0.243,
+     "label": "Ports",
+     "group": "e_S2_2_18"
+    },
+    {
+     "line": "e_S2_2_18_6",
+     "n": 17,
+     "r": 0.153,
+     "share": 0.033,
+     "label": "Railways (other than Indian Railways)",
+     "group": "e_S2_2_18"
+    },
+    {
+     "line": "e_S2_2_18_7",
+     "n": 17,
+     "r": -0.009,
+     "share": 0.0,
+     "label": "Other Infrastructure",
+     "group": "e_S2_2_18"
+    }
+   ],
+   "at_lag": 6,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24303,
+    "lag": 6,
+    "profile": {
+     "0": {
+      "lines": 10,
+      "statistic": 0.0812
+     },
+     "1": {
+      "lines": 10,
+      "statistic": 0.0731
+     },
+     "2": {
+      "lines": 10,
+      "statistic": 0.0648
+     },
+     "3": {
+      "lines": 10,
+      "statistic": 0.0728
+     },
+     "4": {
+      "lines": 10,
+      "statistic": 0.0576
+     },
+     "5": {
+      "lines": 10,
+      "statistic": 0.0334
+     },
+     "6": {
+      "lines": 10,
+      "statistic": 0.1092
+     },
+     "7": {
+      "lines": 10,
+      "statistic": 0.0592
+     },
+     "8": {
+      "lines": 10,
+      "statistic": 0.0668
+     },
+     "9": {
+      "lines": 10,
+      "statistic": 0.0781
+     }
+    }
+   }
+  },
+  {
+   "test_id": "pool:rbi_rates:walr_sector_fresh/sector:msme@2026-11-10#1",
+   "pool": "rbi_rates:walr_sector_fresh/sector:msme",
+   "form": "separation",
+   "classes": [
+    "credit_price"
+   ],
+   "source_tide": "walr_fresh/group:scb",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6d (pooled)",
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "family": 6,
+   "alpha": 0.0083,
+   "lines_n": 4,
+   "months_per_line": 17,
+   "limit": "a response shared equally by every part of a group cancels in the gaps to that group; the group's own line carries it (Step 6c), so this test cannot see it",
+   "verdict": "too_short",
+   "statistic": 0.1299,
+   "null_mean": 0.0621,
+   "bar": 0.2307,
+   "p": 0.0994,
+   "effect": {
+    "value": 0.26,
+    "range": [
+     0.0,
+     0.524
+    ],
+    "unit": "rms excess r over the shuffled mean",
+    "practical": 0.15
+   },
+   "months_needed": 26,
+   "lines": [
+    {
+     "line": "e_S1_2_1",
+     "n": 17,
+     "r": -0.129,
+     "share": 0.032,
+     "label": "Micro and Small",
+     "group": "e_S1_2"
+    },
+    {
+     "line": "e_S1_2_2",
+     "n": 17,
+     "r": -0.563,
+     "share": 0.611,
+     "label": "Medium",
+     "group": "e_S1_2"
+    },
+    {
+     "line": "e_S1_ii",
+     "n": 17,
+     "r": 0.044,
+     "share": 0.004,
+     "label": "Micro and Small Enterprises",
+     "group": "e_S1_PSL"
+    },
+    {
+     "line": "e_S1_iii",
+     "n": 17,
+     "r": -0.428,
+     "share": 0.353,
+     "label": "Medium Enterprises",
+     "group": "e_S1_PSL"
+    }
+   ],
+   "at_lag": 7,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24303,
+    "lag": 7,
+    "profile": {
+     "0": {
+      "lines": 4,
+      "statistic": 0.0671
+     },
+     "1": {
+      "lines": 4,
+      "statistic": 0.0455
+     },
+     "2": {
+      "lines": 4,
+      "statistic": 0.0557
+     },
+     "3": {
+      "lines": 4,
+      "statistic": 0.1143
+     },
+     "4": {
+      "lines": 4,
+      "statistic": 0.0597
+     },
+     "5": {
+      "lines": 4,
+      "statistic": 0.0356
+     },
+     "6": {
+      "lines": 4,
+      "statistic": 0.0193
+     },
+     "7": {
+      "lines": 4,
+      "statistic": 0.1987
+     },
+     "8": {
+      "lines": 4,
+      "statistic": 0.0818
+     },
+     "9": {
+      "lines": 4,
+      "statistic": 0.0683
+     }
+    }
+   }
+  },
+  {
+   "test_id": "pool:rbi_rates:walr_sector_fresh/sector:other_personal@2026-11-10#1",
+   "pool": "rbi_rates:walr_sector_fresh/sector:other_personal",
+   "form": "separation",
+   "classes": [
+    "credit_price"
+   ],
+   "source_tide": "walr_fresh/group:scb",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6d (pooled)",
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "family": 6,
+   "alpha": 0.0083,
+   "lines_n": 6,
+   "months_per_line": 17,
+   "limit": "a response shared equally by every part of a group cancels in the gaps to that group; the group's own line carries it (Step 6c), so this test cannot see it",
+   "verdict": "too_short",
+   "statistic": 0.0596,
+   "null_mean": 0.0628,
+   "bar": 0.1724,
+   "p": 0.4705,
+   "effect": {
+    "value": 0.0,
+    "range": [
+     0.0,
+     0.384
+    ],
+    "unit": "rms excess r over the shuffled mean",
+    "practical": 0.15
+   },
+   "months_needed": null,
+   "lines": [
+    {
+     "line": "e_S1_4_1",
+     "n": 17,
+     "r": 0.038,
+     "share": 0.004,
+     "label": "Consumer Durables",
+     "group": "e_S1_4"
+    },
+    {
+     "line": "e_S1_4_3",
+     "n": 17,
+     "r": -0.18,
+     "share": 0.09,
+     "label": "Advances against Fixed Deposits (Including FCNR (B), NRNR Deposits etc.)",
+     "group": "e_S1_4"
+    },
+    {
+     "line": "e_S1_4_4",
+     "n": 17,
+     "r": 0.371,
+     "share": 0.384,
+     "label": "Advances to Individuals against share, bonds, etc.",
+     "group": "e_S1_4"
+    },
+    {
+     "line": "e_S1_4_5",
+     "n": 17,
+     "r": 0.094,
+     "share": 0.025,
+     "label": "Credit Card Outstanding",
+     "group": "e_S1_4"
+    },
+    {
+     "line": "e_S1_4_8",
+     "n": 17,
+     "r": -0.106,
+     "share": 0.031,
+     "label": "Loans against gold jewellery",
+     "group": "e_S1_4"
+    },
+    {
+     "line": "e_S1_4_9",
+     "n": 17,
+     "r": 0.408,
+     "share": 0.465,
+     "label": "Other Personal Loans",
+     "group": "e_S1_4"
+    }
+   ],
+   "at_lag": 1,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24303,
+    "lag": 1,
+    "profile": {
+     "0": {
+      "lines": 6,
+      "statistic": 0.0409
+     },
+     "1": {
+      "lines": 6,
+      "statistic": 0.1998
+     },
+     "2": {
+      "lines": 6,
+      "statistic": 0.0404
+     },
+     "3": {
+      "lines": 6,
+      "statistic": 0.0633
+     },
+     "4": {
+      "lines": 6,
+      "statistic": 0.0546
+     },
+     "5": {
+      "lines": 6,
+      "statistic": 0.0413
+     },
+     "6": {
+      "lines": 6,
+      "statistic": 0.0184
+     },
+     "7": {
+      "lines": 6,
+      "statistic": 0.0247
+     },
+     "8": {
+      "lines": 6,
+      "statistic": 0.0485
+     },
+     "9": {
+      "lines": 6,
+      "statistic": 0.0642
+     }
+    }
+   }
+  },
+  {
+   "test_id": "pool:rbi_rates:walr_sector_fresh/sector:trade@2026-11-10#1",
+   "pool": "rbi_rates:walr_sector_fresh/sector:trade",
+   "form": "separation",
+   "classes": [
+    "credit_price"
+   ],
+   "source_tide": "walr_fresh/group:scb",
+   "tested": "2026-11-10",
+   "through_period": {
+    "sibc": "2026-10-30"
+   },
+   "protocol": "SYSTEM_MODEL_SPEC §16 Step 6d (pooled)",
+   "covid": "changes comparing any month of Mar-Dec 2020 left out",
+   "family": 6,
+   "alpha": 0.0083,
+   "lines_n": 3,
+   "months_per_line": 17,
+   "limit": "a response shared equally by every part of a group cancels in the gaps to that group; the group's own line carries it (Step 6c), so this test cannot see it",
+   "verdict": "too_short",
+   "statistic": 0.1793,
+   "null_mean": 0.0632,
+   "bar": 0.2755,
+   "p": 0.0528,
+   "effect": {
+    "value": 0.341,
+    "range": [
+     0.0,
+     0.588
+    ],
+    "unit": "rms excess r over the shuffled mean",
+    "practical": 0.15
+   },
+   "months_needed": 15,
+   "lines": [
+    {
+     "line": "e_S1_3_7",
+     "n": 17,
+     "r": 0.079,
+     "share": 0.011,
+     "label": "Trade",
+     "group": "e_S1_3"
+    },
+    {
+     "line": "e_S1_3_7_1",
+     "n": 17,
+     "r": -0.522,
+     "share": 0.506,
+     "label": "Wholesale Trade",
+     "group": "e_S1_3_7"
+    },
+    {
+     "line": "e_S1_3_7_2",
+     "n": 17,
+     "r": 0.51,
+     "share": 0.483,
+     "label": "Retail Trade",
+     "group": "e_S1_3_7"
+    }
+   ],
+   "at_lag": 6,
+   "discovery": {
+    "from": 24274,
+    "cutoff": 24303,
+    "lag": 6,
+    "profile": {
+     "0": {
+      "lines": 3,
+      "statistic": 0.0911
+     },
+     "1": {
+      "lines": 3,
+      "statistic": 0.0365
+     },
+     "2": {
+      "lines": 3,
+      "statistic": 0.059
+     },
+     "3": {
+      "lines": 3,
+      "statistic": 0.0099
+     },
+     "4": {
+      "lines": 3,
+      "statistic": 0.0178
+     },
+     "5": {
+      "lines": 3,
+      "statistic": 0.1028
+     },
+     "6": {
+      "lines": 3,
+      "statistic": 0.1499
+     },
+     "7": {
+      "lines": 3,
+      "statistic": 0.0286
+     },
+     "8": {
+      "lines": 3,
+      "statistic": 0.144
+     },
+     "9": {
+      "lines": 3,
+      "statistic": 0.1389
+     }
+    }
+   }
+  }
+ ]
+}

@@ -1,5 +1,6 @@
 # System Model Specification — India Credit Lens
 > Version 3.2 (draft) | October 2026 | Domain-agnostic
+> v3.3 (2026-11-10, built): the pooled driver test (§16 Step 6d): one driver tested across many lines at once, with a size, a range and the months still needed.
 > v3.2 (2026-10-11, specced, not built): the explainability loop (§16 Step 6c): driver register, data-request report, generic driver test, admission.
 > v3.1 (2026-10-08): force state judged against a baseline, with timing fields (§10.1, §16 Step 3); explanation coverage computed in S3 and read by S4, with structural explanations (§16 Step 6a); relationships admitted by a test (§16 Step 6b). Built.
 
@@ -984,6 +985,113 @@ hypotheses (declared, approved) are step 5.
 report; (3) the generic test with its controls; (4) the `driver` explanation in 6a and the
 `prices_activity` handover; (5) the first cycle on data in hand: lagged WPI on the 15 lines whose
 prices did not explain at lag 0, then the rates files. Re-measure after each.
+
+**Step 6d — The pooled driver test: one driver, many lines (v3.3, specced and built
+2026-11-10; user approved the approach, r = 0.15 and the separation form).** Step 6c tests each hypothesis on one line's ~17–33 monthly
+changes, where only |r| ≳ 0.34–0.5 can pass, so a real but modest link reads `too_short` or flips
+month to month (Medium Enterprises and Textiles, admitted 10-26, withdrawn 11-10). Many hypotheses
+share one driver (35 SIBC lines name the large-industry fresh lending rate). Testing that driver
+once across all of them adds power from data already held, and its range says whether more
+history would settle the question.
+
+*What a pooled test can and cannot see (found while specifying).* Every line is measured as its
+gap to its own group, and the share-weighted gaps of a group's parts sum to about zero (less the
+residual "Others"). So "a dearer loan slows **every** part of Industry" is invisible in the gaps
+by construction: if all parts slow equally, no gap moves. That claim belongs to the group's own
+line (Industry against bank credit), which Step 6c already tests. What the parts can show is
+**that the driver separates them**: some parts slow more than their group and others less. Two
+consequences:
+- *The register's uniform signs cannot all be right.* All 68 signed `credit_price` hypotheses
+  say −1 against the group. Each can be true alone (that part is more rate-sensitive than its
+  siblings), but not every part of a group at once. A sign on a part is a claim about relative
+  sensitivity and needs a reason that says why this part differs (tenor, collateral, borrower
+  size), not the generic "dearer credit slows borrowing".
+- *So the pooled test has two forms:*
+
+| form | asks | statistic at delay L | sign needed |
+|---|---|---|---|
+| **separation** (default) | does the driver separate these lines more than chance? | mean over lines of r_i² | no |
+| **direction** | do the lines with a declared sign move that way? | mean over lines of s_i · r_i | yes, per line, with a differential reason; refused when every line of one sibling set carries the same sign |
+
+r_i is the Step 6b residual correlation for line i (driver's change against the line's gap
+change, each with its own tide removed), so each line enters exactly as it does today.
+
+*The family.* One driver series (or declared bundle) × every line whose hypothesis names it,
+grouped by sibling set so the cancellation above is visible in the output. One delay for the
+family, found and confirmed by the Step 6c split: discovery months pick the delay with the
+strongest pooled statistic; the verdict reads only months outside that window; delay and window
+are frozen at first discovery.
+
+*Months are not independent across lines.* The parts of a group move together in a month for
+reasons we have not removed, so 25 lines × 17 months is not 425 observations. Both the p-value and
+the range treat **the month as the unit**: the null shuffles the driver's months once and applies
+that same shuffle to every line (10,000 seeded); the range resamples months, all lines together
+(block bootstrap, 2,000 draws; repeated months inflate r², so the separation range subtracts the
+null mean measured under the same resamples). A shared monthly shock unrelated to the driver therefore cannot
+pass (control 4).
+
+*The output: a size, a range, and the months needed.*
+
+| verdict | when | reads in the grid as |
+|---|---|---|
+| `linked` | statistic beats the shuffle bar (Bonferroni over the families run together) | the driver separates these lines; per-line tests say which way each goes |
+| `no_meaningful_link` | range's upper bound below the practical size `R_POOL_PRACTICAL` | tested, too small to matter: more months will not change it |
+| `too_short` | neither | with `months_needed`: the months at which the current estimate would clear the bar (scaling the shuffle bar by 1/√n), stated as an estimate |
+
+Also kept: the pooled slope (credit-gap change per unit of driver change), each line's r_i and
+its share of the statistic, and a leave-one-line-out result. **A family that passes only because
+of one line is attributed to that line**, not reported as a group finding (DECISIONS: attribute,
+don't suppress).
+
+*What it changes, and what it does not.* A pooled result is a separate record
+(`pool:{driver}@{date}#n` in its own file, `{data_dir}/pooled_tests.json`, so no arrow reader sees it) and the grid shows it per column and
+group. It **admits nothing**: a line is still admitted only by its own supported test and the
+editor's yes. A `linked` family marks its lines' per-line results as worth following; a
+`no_meaningful_link` family turns its lines' `too_short` cells into complete nulls for that driver
+(a tested column, Step 6c). No gate changes until the controls are measured.
+
+*Controls (before any result is read; per DECISIONS by enumeration, logged in `ai_pm_register`)*,
+on synthetic data the length of SIBC's real history and on the real lines with a planted driver:
+1. a planted differential link (half the lines +, half −, delay 4) → `linked`, delay 4 found and
+   confirmed;
+2. a planted link on one line only → the family is attributed to that line, not called a group
+   link;
+3. the driver shuffled → `linked` in about 5% of 1,000 runs, no more (the false-rejection rate);
+4. lines sharing a common monthly shock and no driver → not `linked` at more than the nominal
+   rate (the month-as-unit control);
+5. a uniform response across a sibling set → cancels, reported as invisible in the gaps (the limit
+   stays documented, never silently "no link");
+6. a short history → `too_short` with a `months_needed` that a longer synthetic run confirms
+   within ±25%;
+7. direction form refused when every line of a sibling set has the same sign.
+
+*Decided (user, 2026-11-10):* `R_POOL_PRACTICAL` = 0.15 (a driver accounting for about 2% of a
+line's month-to-month gap movement); the 68 uniform `credit_price` signs are tested in the
+separation form until a line has a differential reason.
+
+*Build order:* (1) the pooled statistic, shuffle and bootstrap as pure functions beside
+`judge`/`discover_confirm` in `core/relationship_test.py`, with controls 1–7 as unit tests;
+(2) `explainability.py pool --pipeline {p} [--dry-run]`, families read from the register (no
+hand-written list); (3) the grid and report show the pooled verdict per column and group;
+(4) first run on SIBC: the large-industry fresh lending rate (35 lines), then the other shared
+drivers. Free throughout; generic across pipelines with a register.
+
+*Built (2026-11-10):* `core/pooled_test.py` (pure: `prepare`, `evaluate`, `pooled`,
+`check_direction`), `relationship_test.driver_side` (one reader of a driver for both tests; the
+per-line run re-ran with no change), `explainability.py pool --pipeline {p} [--form direction]
+[--dry-run]`. Controls 1-7 plus two range controls in `tests/test_pooled_test.py`. Measured
+(`ai_pm_register`): false rejection 5.1% on 3,000 null worlds; with a shared monthly shock 5.3%
+(19% if each line is shuffled alone); catch rate at SIBC length (17 months, 20 lines) 44% / 88% /
+99% for r ≈ 0.13 / 0.22 / 0.31, where one line alone needs r ≈ 0.48.
+
+*First run, SIBC (2026-11-10), 6 families, bar p < 0.0083:* all `too_short`. The large-industry
+fresh lending rate across 35 lines: effect r 0.20, range [0, 0.41], p 0.065, about 13 more months
+to settle at this size. Inside sibling sets the lines split both ways (Other Textiles −0.62,
+Cotton Textiles +0.47), as the gap measure implies. Trade (3 lines) r 0.34, ~15 months; MSME
+(4) 0.26, ~26; infrastructure (10) 0.09, ~217 (in practice: will not settle at this size);
+other personal (6) and WPI all (3) show no separation (0.0), range up to 0.38 and 0.53, so not yet
+`no_meaningful_link`. Direction form: all 6 refused (uniform signs). The grid (build step 3) does
+not yet show pooled verdicts.
 
 **Output:** structured JSON with `entity_states` (incl. propagated aggregates), `force_states`, `edge_states`, `loop_states`, `system_observations`, and a `narrative: null` slot the LLM fills at Stage 5.X.
 

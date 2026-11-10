@@ -656,6 +656,13 @@
           "date": "2026-10-26",
           "how_measured": "run_driver with discovery on every rate hypothesis, then each with two other sectors' series (deterministic choice), same family and protocol",
           "source": "analysis/core/relationship_test.py run_driver; analysis/rbi_sibc/relationship_tests.json"
+        },
+        {
+          "metric": "pooled driver test (Step 6d): false-rejection rate, shared-shock control, catch rate",
+          "value": "false rejection 5.1% on 3,000 null worlds (6.3% on the first 1,000; nominal 5%). Lines sharing a monthly shock: 5.3% with the month as the unit vs 19% if each line is shuffled on its own (300 worlds). Catch rate at SIBC length (17 confirmation months, 20 lines): planted r≈0.13 caught 44%, r≈0.22 88%, r≈0.31 99%; a single line needs r≈0.48. Range control: uncorrected bootstrap sat above zero beside p=0.065 on SIBC; corrected, it holds zero in ≥85% of null worlds.",
+          "date": "2026-11-10",
+          "how_measured": "synthetic worlds (analysis/tests/test_pooled_test.py world()), 400 shuffles per run, enumeration not sampling of seeds; naive comparison shuffles each line independently",
+          "source": "analysis/core/pooled_test.py; analysis/tests/test_pooled_test.py"
         }
       ],
       "observations": [

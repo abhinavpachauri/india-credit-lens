@@ -517,22 +517,31 @@ def driver_changes(pipeline: str, series: list[str]) -> dict[int, float]:
     return {k: sum(p[k] for p in parts) / len(parts) for k in sorted(common)}
 
 
+def driver_side(driver: dict, credit_tide: dict[int, float]) -> dict:
+    """A declared driver as the tests read it: its monthly change, and its own headline as its tide
+    (a headline driver uses the credit tide instead). Shared by the per-line test (Step 6c) and the
+    pooled test (Step 6d), so a driver is never read two ways."""
+    ref, series = driver["pipeline"], driver["series"]
+    dataset = series[0].split("/", 1)[0]
+    from signals.compute.real_economy import reference as _reference
+    head = driver_spec(_reference(ref), dataset)["tide"]                # declared, never defaulted
+    excluded = sum(reference_yoy(ref, s)[1] for s in series)
+    approximated = [n for s in series if (n := test_series(_reference(ref), s)[2])]
+    t_a = credit_tide if head in series else reference_changes(ref, head)
+    return {"a": driver_changes(ref, series), "t_a": t_a, "source": f"{ref}:{'+'.join(series)}",
+            "source_tide": "credit tide" if t_a is credit_tide else head,
+            "approximated": approximated, "excluded": excluded}
+
+
 def run_driver(hyp: dict, target_pipeline: str, target_id: str, family: int,
                discover: bool = False) -> dict:
     """One register hypothesis, tested: the driver's change (its own headline removed as its tide;
     a headline driver uses the credit tide instead) against the target line's gap changes."""
     d = hyp["driver"]
-    ref, series = d["pipeline"], d["series"]
-    dataset = series[0].split("/", 1)[0]
-    from signals.compute.real_economy import reference as _reference
-    head = driver_spec(_reference(ref), dataset)["tide"]                # declared, never defaulted
-    excluded = sum(reference_yoy(ref, s)[1] for s in series)
     tm, ts, tp, td = _side(target_pipeline)
-    a = driver_changes(ref, series)
-    from signals.compute.real_economy import reference as _ref
-    approximated = [n for s in series if (n := test_series(_ref(ref), s)[2])]
     credit_tide = tide(tm, ts, td)
-    t_a = credit_tide if head in series else reference_changes(ref, head)
+    side = driver_side(d, credit_tide)
+    a, t_a, approximated, excluded = side["a"], side["t_a"], side["approximated"], side["excluded"]
     b = gap_changes(target_id, tm, ts, tp, td)
     if discover:
         frozen = hyp.get("discovery") or {}
@@ -543,8 +552,8 @@ def run_driver(hyp: dict, target_pipeline: str, target_id: str, family: int,
     # Unique per result: two runs on one day (a lag-0 test, then discovery) must not share an id.
     run = len(hyp.get("tests", [])) + 1
     return {"test_id": f"{hyp['id']}@{date.today().isoformat()}#{run}", "hypothesis_id": hyp["id"],
-            "class": hyp["class"], "source": f"{ref}:{'+'.join(series)}",
-            "source_tide": "credit tide" if t_a is credit_tide else head,
+            "class": hyp["class"], "source": side["source"],
+            "source_tide": side["source_tide"],
             "target": f"{target_pipeline}:{target_id}", "target_label": hyp["line_label"],
             "predicted_sign": hyp["sign"], "reason": hyp["reason"], "tested": date.today().isoformat(),
             "through_period": {target_pipeline: tp[-1]},

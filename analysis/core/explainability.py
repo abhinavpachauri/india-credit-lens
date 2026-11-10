@@ -642,10 +642,93 @@ def run_tests(pipeline: str, dry_run: bool = False) -> list[dict]:
         reg_path.write_text(json.dumps(reg, indent=1, ensure_ascii=False) + "\n")
     return results
 
+def pools_path(pipeline: str) -> Path:
+    return ROOT / manifest.load(pipeline)["paths"]["data_dir"] / "pooled_tests.json"
+
+
+def run_pools(pipeline: str, form: str = "separation", dry_run: bool = False) -> list[dict]:
+    """Every driver named by at least `MIN_LINES` lines, tested once across them (spec §16 Step 6d).
+    Families come from the register, never a hand-written list. All families run together share one
+    Bonferroni bar. The delay and its window are frozen by a family's first result; later runs
+    re-confirm on every month outside it. A result whose answer is unchanged is not recorded again.
+    Pooled results live in their own file: they admit nothing and are not arrows."""
+    from core import pooled_test as pt
+    from core import relationship_test as rt
+    reg = json.loads(register_path(pipeline).read_text())
+    model, series, periods, dm = rt._side(pipeline)
+    node_of = {n.get("urn"): n["id"] for n in model["nodes"] if n.get("tier") == "entity"}
+    parent_of = {e["from"]: e["to"] for e in model["edges"] if e["type"] == "composes_into"}
+    families: dict[str, dict] = {}
+    for h in reg["hypotheses"]:
+        d = h.get("driver") or {}
+        if "series" not in d or h["line"] not in node_of:
+            continue
+        key = f"{d['pipeline']}:{'+'.join(d['series'])}"
+        f = families.setdefault(key, {"driver": d, "lines": {}, "labels": {}, "classes": set()})
+        f["lines"].setdefault(node_of[h["line"]], h.get("sign"))
+        f["labels"][node_of[h["line"]]] = h["line_label"]
+        f["classes"].add(h["class"])
+    families = {k: f for k, f in families.items() if len(f["lines"]) >= pt.MIN_LINES}
+    path = pools_path(pipeline)
+    doc = json.loads(path.read_text()) if path.exists() else {
+        "_meta": {"spec_ref": "analysis/SYSTEM_MODEL_SPEC.md §16 Step 6d",
+                  "description": "One driver tested across every line that names it, nulls included. "
+                                 "Admits nothing: a line is admitted only by its own test and the editor's yes."},
+        "tests": []}
+    first, last = {}, {}
+    for r in doc["tests"]:
+        k = (r["pool"], r["form"])
+        first.setdefault(k, r)
+        last[k] = r
+    credit_tide = rt.outside_covid(rt.tide(model, series, dm))
+    from signals.compute.real_economy import ReferenceMissing
+    results = []
+    for key, f in sorted(families.items()):
+        try:
+            side = rt.driver_side(f["driver"], credit_tide)
+        except ReferenceMissing as e:
+            print(f"   ✗ not testable  {key}: {e}")
+            continue
+        lines = {nid: rt.outside_covid(rt.gap_changes(nid, model, series, periods, dm)) for nid in f["lines"]}
+        signs = None
+        if form == "direction":
+            signs = {n: s for n, s in f["lines"].items() if s in (1, -1)}
+            lines = {n: b for n, b in lines.items() if n in signs}
+        frozen = (first.get((key, form)) or {}).get("discovery")
+        try:
+            res = pt.pooled(rt.outside_covid(side["a"]), rt.outside_covid(side["t_a"]), lines, credit_tide,
+                            signs=signs, groups={n: parent_of.get(n, "root") for n in lines},
+                            family=len(families), frozen=frozen)
+        except pt.Refused as e:
+            res = {"verdict": "refused", "why": str(e)}
+        for ln in res.get("lines", []):
+            ln["label"] = f["labels"].get(ln["line"], ln["line"])
+            ln["group"] = parent_of.get(ln["line"], "root")
+        prev = last.get((key, form))
+        n = sum(1 for r in doc["tests"] if r["pool"] == key) + 1
+        rec = {"test_id": f"pool:{key}@{date.today().isoformat()}#{n}", "pool": key, "form": form,
+               "classes": sorted(f["classes"]), "source_tide": side["source_tide"],
+               "tested": date.today().isoformat(), "through_period": {pipeline: periods[-1]},
+               "protocol": "SYSTEM_MODEL_SPEC §16 Step 6d (pooled)", "covid": rt.covid_note(),
+               **({"approximated": side["approximated"]} if side["approximated"] else {}), **res}
+        if frozen:
+            rec["discovery"] = {**frozen, "profile": {}}
+        if prev and all(prev.get(k) == json.loads(json.dumps(rec)).get(k)
+                        for k in ("verdict", "statistic", "p", "through_period")):
+            continue
+        results.append(rec)
+    if not dry_run and results:
+        doc["tests"].extend(results)
+        path.write_text(json.dumps(doc, indent=1, ensure_ascii=False) + "\n")
+    return results
+
+
 def main() -> int:
     import argparse
     ap = argparse.ArgumentParser(description="Driver register (SYSTEM_MODEL_SPEC §16 Step 6c)")
-    ap.add_argument("command", choices=("seed", "validate", "summary", "report", "test", "map"))
+    ap.add_argument("command", choices=("seed", "validate", "summary", "report", "test", "map", "pool"))
+    ap.add_argument("--form", choices=("separation", "direction"), default="separation",
+                    help="pool: separation (no sign needed, default) or direction (differential signs only)")
     ap.add_argument("--dry-run", action="store_true", help="test: run and print, record nothing")
     ap.add_argument("--include-covid", action="store_true",
                     help="test: the COVID cross-check (always a dry run: printed, never recorded)")
@@ -692,6 +775,19 @@ def main() -> int:
             print(f"   {r['verdict']:13} {r['target_label'][:30]:30} ← {r['source'][:38]:38} "
                   f"delay {d.get('lag', '—')} (found r {peak.get('r', '—')}) · confirmed on n {m.get('n', '—')} "
                   f"r {m.get('r', '—')} p {m.get('p', '—')}")
+        return 0
+    if a.command == "pool":
+        res = run_pools(a.pipeline, a.form, a.dry_run)
+        print(f"  {a.pipeline}: {len(res)} pooled famil{'y' if len(res) == 1 else 'ies'} ({a.form})"
+              f"{' (dry run, nothing recorded)' if a.dry_run else ''}")
+        for r in res:
+            e = r.get("effect") or {}
+            rng = e.get("range") or ["—", "—"]
+            print(f"   {r['verdict']:18} {r['pool'][:52]:52} lines {r.get('lines_n', '—'):>3} "
+                  f"months/line {r.get('months_per_line', '—'):>3} delay {(r.get('discovery') or {}).get('lag', '—')} "
+                  f"effect {e.get('value', '—')} [{rng[0]}, {rng[1]}] p {r.get('p', '—')}"
+                  + (f" · needs ~{r['months_needed']} more months" if r.get("months_needed") else "")
+                  + (f" · {r['why']}" if r.get("why") else ""))
         return 0
     if a.command == "report":
         term, md = report(a.pipeline)

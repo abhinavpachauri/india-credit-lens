@@ -17,6 +17,10 @@ of 218 moves after the base effect.
   `too_short` (one lead: petroleum credit vs fuel prices, delay 3, opposite sign, 13 months).
 - Steps 4 (admission: a `driver` explanation in 6a, `prices_activity` handed over) and 5 (cycles on
   new data) wait until something is supported. **Review later (user): vehicles and durables input prices.**
+- **Pooled driver test: built 11-10** (SYSTEM_MODEL_SPEC §16 Step 6d; `explainability.py pool`):
+  6 SIBC families, all too_short; large-industry rate across 35 lines r 0.20, ~13 more months.
+  Next: show pooled verdicts in the grid (step 3); differential signs per line for the direction form.
+  11-10 test run withdrew Medium Enterprises and Textiles; Glass and Housing supported, not admitted.
 - **Buyer first** (STRATEGY v3.1 §5): log who engages with X/LinkedIn, ask the 3 questions; a source is
   chosen by a buyer conversation and by the grid column it completes.
 
