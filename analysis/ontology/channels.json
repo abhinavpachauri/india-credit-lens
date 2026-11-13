@@ -365,6 +365,22 @@
       "polarity": "+",
       "lifecycle": "permanent",
       "promoted_from": "S4 inference (source-verified)"
+    },
+    {
+      "id": "ch_offshore_refinancing",
+      "label": "Offshore borrowing (ECB) → domestic bank loans repaid",
+      "driver_type": "structural_shift",
+      "source_concept": "structural:offshore_refinancing",
+      "target_concepts": [
+        {
+          "product": "services"
+        }
+      ],
+      "mechanism": "A borrower that raises an external commercial borrowing to refinance its rupee loans repays domestic bank credit: the line's outstanding falls with no change in its activity, and a loan taken from an Indian bank's overseas branch leaves the domestic books SIBC reports.",
+      "polarity": "-",
+      "lifecycle": "conditional",
+      "distortion": false,
+      "note": "Targets only products with an instance (Shipping, 2026-11-13); add a product when a force instance needs it, since every target pairs with every other in the cross-source candidates (R2)."
     }
   ]
 }

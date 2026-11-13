@@ -45,6 +45,23 @@ For each surviving proposal, state these before searching:
    2025) settled three forces that were each named something else.
 5. ⏸ **The user decides.** Present the verbatim excerpt, URL, effective date and what it attaches to.
 
+## 3b. Evidence from RBI's ECB borrower lists (free; added 2026-11-13)
+
+A firm that borrows abroad instead of from its bank shows up as a fall in its SIBC line. RBI lists
+every ECB registration each month, by borrower, NIC sector and purpose. Not a driver (no better
+than chance as a timing series, `analysis/sources/README.md` "ECB borrower lists"), but a deal that
+**refinances rupee loans** in a falling line's sector is an official, verbatim candidate cause.
+
+```bash
+python3 analysis/core/ecb_evidence.py discover            # months RBI lists vs saved; prints what to download
+# ⏸ download the listed XLSX in the editor's Chrome (rbidocs drops scripts; ask first), then:
+python3 analysis/core/ecb_evidence.py save --xlsx ~/Downloads/ECB*.XLSX
+python3 analysis/core/ecb_evidence.py evidence --pipeline sibc --period {period}
+```
+A row worth using becomes a proposal (`proposed_by: ecb_evidence`) and is recorded like any other
+(step 4), with the XLSX URL and the sheet's text as `--page-file`. A new sector label stops `save`:
+add an alias in `analysis/sources/ecb/nic2008_divisions.json` after checking it. ⏸ The user decides.
+
 ## 4. Record: the same gate whichever way the text was obtained
 
 ```bash

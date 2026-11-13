@@ -1,0 +1,561 @@
+{
+  "_meta": {
+    "description": "S4 inference proposals — HYPOTHESES, sourcing-gated. NEVER auto-promoted; review + source + promote by hand.",
+    "spec_ref": "analysis/COMPOSITION_SPEC.md §8",
+    "period": "2026-10-30"
+  },
+  "gaps_detected": {
+    "unexplained": {
+      "sibc": [
+        {
+          "entity": "Social Infrastructure",
+          "urn": "icl:sibc/Statement1/vii",
+          "product": "social_infrastructure",
+          "direction": "rising",
+          "against": "its own earlier growth",
+          "gap_change_pp": 186.41,
+          "prices": "not_decomposable"
+        },
+        {
+          "entity": "Glass and Glassware",
+          "urn": "icl:sibc/Statement2/2.11",
+          "product": "industry",
+          "direction": "falling",
+          "against": "Industry (Micro and Small, Medium and Large)",
+          "gap_change_pp": -15.67,
+          "prices": "does_not_hold"
+        },
+        {
+          "entity": "Shipping",
+          "urn": "icl:sibc/Statement1/3.4",
+          "product": "services",
+          "direction": "falling",
+          "against": "Services",
+          "gap_change_pp": -20.15,
+          "prices": "not_decomposable"
+        },
+        {
+          "entity": "Agriculture and Allied Activities",
+          "urn": "icl:sibc/Statement1/i",
+          "product": "agriculture",
+          "direction": "rising",
+          "against": "its own earlier growth",
+          "gap_change_pp": 4.05,
+          "prices": "not_decomposable",
+          "mechanism": "one-month step: level +4.3% in 2026-09"
+        },
+        {
+          "entity": "Advances against Fixed Deposits (Including FCNR (B), NRNR Deposits etc.)",
+          "urn": "icl:sibc/Statement1/4.3",
+          "product": "personal_loan",
+          "direction": "rising",
+          "against": "Personal Loans",
+          "gap_change_pp": 9.78,
+          "prices": "does_not_hold"
+        },
+        {
+          "entity": "Non-food Credit",
+          "urn": "icl:sibc/Statement1/III",
+          "product": "bank_credit",
+          "direction": "rising",
+          "against": "Bank Credit (II + III)",
+          "gap_change_pp": 0.07,
+          "prices": "not_decomposable"
+        }
+      ],
+      "atm_pos": [
+        {
+          "entity": "DC POS cash withdrawal value",
+          "urn": "icl:atm_pos/spend_value/dc_pos_withdrawal_val",
+          "product": "debit_card",
+          "direction": "falling",
+          "against": "Debit card spend (value)",
+          "gap_change_pp": -33.57,
+          "prices": "not_decomposable"
+        },
+        {
+          "entity": "DC e-commerce value",
+          "urn": "icl:atm_pos/spend_value/dc_ecom_txn_val",
+          "product": "debit_card",
+          "direction": "falling",
+          "against": "Debit card spend (value)",
+          "gap_change_pp": -14.34,
+          "prices": "not_decomposable"
+        },
+        {
+          "entity": "CC e-commerce volume",
+          "urn": "icl:atm_pos/spend_volume/cc_ecom_txn_vol",
+          "product": "credit_card",
+          "direction": "falling",
+          "against": "Credit card spend (volume)",
+          "gap_change_pp": -5.0,
+          "prices": "not_decomposable"
+        },
+        {
+          "entity": "DC other value",
+          "urn": "icl:atm_pos/spend_value/dc_other_txn_val",
+          "product": "debit_card",
+          "direction": "rising",
+          "against": "Debit card spend (value)",
+          "gap_change_pp": 14.43,
+          "prices": "not_decomposable"
+        },
+        {
+          "entity": "Debit card spend (volume)",
+          "urn": "icl:atm_pos/spend_volume/dc_spend_volume",
+          "product": "debit_card",
+          "direction": "rising",
+          "against": "Total card spend (volume)",
+          "gap_change_pp": 2.4,
+          "prices": "not_decomposable"
+        },
+        {
+          "entity": "Credit card spend (value)",
+          "urn": "icl:atm_pos/spend_value/cc_spend_value",
+          "product": "credit_card",
+          "direction": "falling",
+          "against": "Total card spend (value)",
+          "gap_change_pp": -7.33,
+          "prices": "not_decomposable"
+        }
+      ],
+      "nbfc": []
+    },
+    "mismatches": {
+      "sibc": [],
+      "atm_pos": [],
+      "nbfc": []
+    },
+    "cross": [
+      {
+        "from": "icl:atm_pos/spend_value/cc_atm_withdrawal_val",
+        "to": "icl:sibc/Statement1/4.5",
+        "shared": {
+          "product": "credit_card"
+        },
+        "rule": "R1_stock_flow"
+      },
+      {
+        "from": "icl:atm_pos/spend_value/cc_ecom_txn_val",
+        "to": "icl:sibc/Statement1/4.5",
+        "shared": {
+          "product": "credit_card"
+        },
+        "rule": "R1_stock_flow"
+      },
+      {
+        "from": "icl:atm_pos/spend_value/cc_other_txn_val",
+        "to": "icl:sibc/Statement1/4.5",
+        "shared": {
+          "product": "credit_card"
+        },
+        "rule": "R1_stock_flow"
+      },
+      {
+        "from": "icl:atm_pos/spend_value/cc_pos_txn_val",
+        "to": "icl:sibc/Statement1/4.5",
+        "shared": {
+          "product": "credit_card"
+        },
+        "rule": "R1_stock_flow"
+      },
+      {
+        "from": "icl:atm_pos/spend_volume/cc_atm_withdrawal_vol",
+        "to": "icl:sibc/Statement1/4.5",
+        "shared": {
+          "product": "credit_card"
+        },
+        "rule": "R1_stock_flow"
+      },
+      {
+        "from": "icl:atm_pos/spend_volume/cc_ecom_txn_vol",
+        "to": "icl:sibc/Statement1/4.5",
+        "shared": {
+          "product": "credit_card"
+        },
+        "rule": "R1_stock_flow"
+      },
+      {
+        "from": "icl:atm_pos/spend_volume/cc_other_txn_vol",
+        "to": "icl:sibc/Statement1/4.5",
+        "shared": {
+          "product": "credit_card"
+        },
+        "rule": "R1_stock_flow"
+      },
+      {
+        "from": "icl:atm_pos/spend_volume/cc_pos_txn_vol",
+        "to": "icl:sibc/Statement1/4.5",
+        "shared": {
+          "product": "credit_card"
+        },
+        "rule": "R1_stock_flow"
+      },
+      {
+        "from": "icl:atm_pos/spend_volume/cc_spend_volume",
+        "to": "icl:sibc/Statement1/4.5",
+        "shared": {
+          "product": "credit_card"
+        },
+        "rule": "R1_stock_flow"
+      }
+    ]
+  },
+  "proposals": [
+    {
+      "kind": "channel",
+      "label": "Rural water/sanitation scheme capex drives social-infrastructure contractor credit",
+      "mechanism": "A step-up in central-scheme fund release for drinking water and sanitation works increases working-capital and project credit draw by social-infrastructure contractors and implementing agencies.",
+      "affects": "social_infrastructure",
+      "required_source": "Jal Jeevan Mission (ejalshakti.gov.in) fund-release and utilisation dashboard for the quarter in question",
+      "source_ladder": [
+        "Jal Jeevan Mission / Swachh Bharat Mission dashboard: fund-release and utilisation report for the period",
+        "PIB press release, Ministry of Jal Shakti, on fund releases to states for the period",
+        "Union Budget / Department of Drinking Water & Sanitation demand-for-grants document showing the allocation and release schedule"
+      ],
+      "claim_type": "hypothesis",
+      "from_pipeline": "sibc",
+      "status": "proposed",
+      "attempts": [
+        {
+          "rung": "chrome",
+          "target": "Jal Jeevan Mission (ejalshakti.gov.in) fund-release and utilisation dashboard for the quarter in question",
+          "url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2295509&reg=3&lang=1",
+          "tier": "official",
+          "verdict": "excerpt_verified_temporal_unchecked",
+          "llm_verdict": null,
+          "date": "2026-11-13",
+          "retryable": false,
+          "note": "verified via editor browser (host refuses automated reads)",
+          "editor_note": "Not promoted by editor decision (2026-11-13). Official and verified, but it does not fit the September move: most of the release (₹5,289 cr) reimburses states for work already paid from their own funds, which would let contractors repay credit rather than draw it; JJM 2.0 was approved on 10 Mar 2026, too early for a one-month jump; Social Infrastructure is a small line where one loan can move +186 pp."
+        }
+      ]
+    },
+    {
+      "kind": "instance",
+      "label": "BIS Quality Control Order forces compliance-driven output cut at glass units",
+      "mechanism": "A BIS Quality Control Order mandating certification for glass and glassware products forces non-compliant (mostly SME) units to halt or cut production, reducing their short-term credit draw relative to the broader industry cut.",
+      "affects": "industry",
+      "required_source": "BIS Quality Control Order gazette notification for glass/glassware products",
+      "source_ladder": [
+        "Bureau of Indian Standards (BIS) Quality Control Order gazette notification for glass/glassware, with its compliance deadline",
+        "DPIIT press release or circular implementing/extending the QCO",
+        "Trade press (Glass Global, FICCI glass-industry note, or Business Standard) on unit closures/output cuts tied to the QCO deadline"
+      ],
+      "claim_type": "hypothesis",
+      "from_pipeline": "sibc",
+      "status": "proposed",
+      "attempts": [
+        {
+          "rung": "chrome",
+          "target": "BIS Quality Control Order for glass/glassware with a compliance date in the window",
+          "url": "",
+          "tier": null,
+          "verdict": "not_found",
+          "llm_verdict": null,
+          "date": "2026-11-13",
+          "retryable": true,
+          "note": "Searched 2026-11-13 ('BIS Quality Control Order glass glassware 2026'; BIS 'Upcoming QCOs notified and due for implementation'): no glass or glassware QCO in force around Sep 2026. The only glass item is Glass Screen Protector (IS 19348:2025), enforcement 1 Apr 2027; the Laboratory Glassware QCO dates from 2023."
+        }
+      ]
+    },
+    {
+      "kind": "instance",
+      "label": "Red Sea route disruption cuts Indian shipping line credit draw",
+      "mechanism": "Red Sea/Suez route diversion and the resulting freight-rate volatility reduce cargo volumes and revenue for Indian shipping lines, cutting their working-capital and vessel-financing credit draw.",
+      "affects": "services",
+      "required_source": "Ministry of Ports, Shipping & Waterways / DG Shipping press release on route disruption impact, or Baltic Exchange freight index for the period",
+      "source_ladder": [
+        "Ministry of Ports, Shipping & Waterways (DG Shipping) press release or circular addressing Red Sea route disruption impact on Indian shipping",
+        "Baltic Exchange Baltic Dry Index / Baltic Dirty Tanker Index data for the period",
+        "Financial/trade press (Lloyd's List, Mint, Business Standard) report on Indian shipping line freight revenue and borrowing for the period"
+      ],
+      "claim_type": "hypothesis",
+      "from_pipeline": "sibc",
+      "status": "proposed",
+      "attempts": [
+        {
+          "rung": "chrome",
+          "target": "Ministry of Ports, Shipping & Waterways / DG Shipping release on Red Sea disruption affecting Indian shipping",
+          "url": "",
+          "tier": null,
+          "verdict": "not_found",
+          "llm_verdict": null,
+          "date": "2026-11-13",
+          "retryable": true,
+          "note": "Searched 2026-11-13 ('Indian shipping companies September 2026 freight Red Sea DG Shipping'): only DGS maritime security advisories for seafarers (Orders/Circulars 41, 42 of 2026), not credit-relevant. Press (unverified) reports MSC and Maersk resuming selected Red Sea services in late Aug/early Sep 2026, the opposite direction. Shipping has few borrowers; one large repayment may explain -20 pp."
+        }
+      ]
+    },
+    {
+      "kind": "channel",
+      "label": "Interest-subvention season pulls forward crop-loan disbursal",
+      "mechanism": "A revised or expanded Modified Interest Subvention Scheme rate/coverage for the Kharif season lowers effective crop-loan borrowing cost, pulling disbursal forward into September.",
+      "affects": "agriculture",
+      "required_source": "RBI/NABARD circular on the Interest Subvention Scheme for Short Term Crop Loans for the current season",
+      "source_ladder": [
+        "RBI Master Direction / circular on the Interest Subvention Scheme (ISS/MISS) for the current crop season",
+        "NABARD circular to banks on MISS claim and disbursement guidelines for the season",
+        "Ministry of Agriculture & Farmers Welfare press release (PIB) on Kharif crop-loan targets and subvention coverage"
+      ],
+      "claim_type": "hypothesis",
+      "from_pipeline": "sibc",
+      "status": "proposed",
+      "attempts": [
+        {
+          "rung": "chrome",
+          "target": "RBI/NABARD circular on the Interest Subvention Scheme for the 2026 kharif season",
+          "url": "",
+          "tier": null,
+          "verdict": "not_found",
+          "llm_verdict": null,
+          "date": "2026-11-13",
+          "retryable": true,
+          "note": "Searched 2026-11-13 ('Modified Interest Subvention Scheme 2026-27 short term crop loans RBI circular'): the latest RBI MISS circular is 13 Jan 2026 (for 2025-26, continued without changes); no 2026-27 change found. The new KCC Directions (RBI, 19 Jun 2026) apply from 1 Jan 2027, after the window. An unchanged scheme cannot explain a sudden move."
+        }
+      ]
+    },
+    {
+      "kind": "instance",
+      "label": "Festive-season bank campaigns push loans against fixed deposits",
+      "mechanism": "Banks' festive-season promotional campaigns (preferential rates, instant digital sanction) on overdrafts/loans against fixed deposits pull borrowers from unsecured personal loans toward FD-backed credit.",
+      "affects": "personal_loan",
+      "required_source": "Bank press release on a festive-season loan-against-FD or instant digital OD-against-deposit offer",
+      "source_ladder": [
+        "Individual bank (SBI/HDFC/ICICI) press release announcing a festive-season loan/OD-against-FD offer or digital instant-sanction launch",
+        "RBI Statement on Developmental and Regulatory Policies referencing digital lending or deposit-backed credit facilities",
+        "Financial press (Economic Times, Mint) coverage of bank festive-season loan campaigns for the period"
+      ],
+      "claim_type": "hypothesis",
+      "from_pipeline": "sibc",
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "Food-procurement credit timing shifts the non-food/total mix",
+      "mechanism": "A timing shift in FCI/state-agency foodgrain procurement cash-credit drawdown changes the food-credit component's weight inside total bank credit, nudging the non-food share even with no change in underlying non-food lending.",
+      "affects": "bank_credit",
+      "required_source": "FCI procurement progress report / RBI food-credit line for the period",
+      "source_ladder": [
+        "Food Corporation of India procurement progress report for the marketing season",
+        "RBI Weekly Statistical Supplement, food credit line, for the period",
+        "PIB press release on foodgrain procurement (Kharif/Rabi marketing season) progress"
+      ],
+      "claim_type": "hypothesis",
+      "from_pipeline": "sibc",
+      "status": "proposed",
+      "triage": {
+        "verdict": "not_a_force",
+        "note": "food credit is our own series: a change in the food/non-food mix is composition, not an external cause; the Non-food move is +0.07 pp against a tiny usual change",
+        "decided_on": "2026-11-13"
+      }
+    },
+    {
+      "kind": "cross_edge",
+      "label": "AePS/micro-ATM cash-out growth → debit-card POS cash withdrawal substitution",
+      "mechanism": "Aadhaar-enabled micro-ATM and bank-mitra cash-out points let customers pull cash without swiping a debit card at a merchant terminal, diverting spend away from DC POS cash withdrawal.",
+      "affects": "debit_card / icl:atm_pos/spend_value/dc_pos_withdrawal_val",
+      "required_source": "NPCI AePS monthly transaction statistics",
+      "source_ladder": [
+        "NPCI AePS product statistics page (npci.org.in/statistics)",
+        "RBI Payment System Indicators / Annual Report chapter on AEPS and Business Correspondent network",
+        "Named financial press report (e.g. BusinessLine, Economic Times) on AePS/micro-ATM cash-out growth"
+      ],
+      "claim_type": "hypothesis",
+      "from_pipeline": "atm_pos",
+      "status": "proposed"
+    },
+    {
+      "kind": "instance",
+      "label": "Card-on-file tokenisation mandate → card e-commerce decline",
+      "mechanism": "RBI's CoF tokenisation requirement forced merchants to delete stored card numbers, adding checkout friction that pushed card-based online spend toward UPI/wallets.",
+      "affects": "debit_card and credit_card e-commerce value/volume",
+      "required_source": "RBI circular on Card-on-File Tokenisation (CoFT)",
+      "source_ladder": [
+        "RBI master direction/FAQ: 'Tokenisation – Card Transactions: Permitting Card-on-File Tokenisation (CoFT) Services'",
+        "RBI Payment and Settlement Systems annual report commentary on tokenisation's transition impact",
+        "Named financial press report on tokenisation's effect on card e-commerce volumes"
+      ],
+      "claim_type": "hypothesis",
+      "from_pipeline": "atm_pos",
+      "status": "proposed",
+      "triage": {
+        "verdict": "expired",
+        "note": "card-on-file tokenisation took effect 1 Oct 2022 (RBI CoFT deadline); four years before the Sep 2026 window, too old to explain a sudden move",
+        "decided_on": "2026-11-13"
+      }
+    },
+    {
+      "kind": "instance",
+      "label": "Merchant category code reclassification → debit 'other' spend inflation",
+      "mechanism": "A card-network or RBI reclassification of merchant category codes moved transactions previously booked under POS or e-commerce into the residual 'other' bucket, inflating it without a real behaviour shift.",
+      "affects": "debit_card / icl:atm_pos/spend_value/dc_other_txn_val",
+      "required_source": "RBI/NPCI payment system statistics definitions note or card-network MCC bulletin",
+      "source_ladder": [
+        "RBI Payment System Indicators methodology/definitions note",
+        "NPCI or card network (Visa/Mastercard/RuPay) MCC classification circular",
+        "Named financial press report on card transaction reclassification"
+      ],
+      "claim_type": "hypothesis",
+      "from_pipeline": "atm_pos",
+      "status": "proposed"
+    },
+    {
+      "kind": "instance",
+      "label": "RuPay/Jan Dhan debit card issuance drive → debit card spend volume growth",
+      "mechanism": "Continued PSU-bank issuance of RuPay debit cards under Jan Dhan accounts adds a high-frequency, low-ticket transaction base that grows debit card spend volume faster than value.",
+      "affects": "debit_card / icl:atm_pos/spend_volume/dc_spend_volume",
+      "required_source": "PMJDY progress report / RuPay debit card issuance data",
+      "source_ladder": [
+        "PMJDY official progress dashboard (pmjdy.gov.in)",
+        "RBI/NPCI RuPay card issuance and usage statistics",
+        "Named financial press report on Jan Dhan debit card issuance drive"
+      ],
+      "claim_type": "hypothesis",
+      "from_pipeline": "atm_pos",
+      "status": "proposed"
+    },
+    {
+      "kind": "instance",
+      "label": "Issuer-specific RBI supervisory restriction on new credit card onboarding → credit card spend value decline",
+      "mechanism": "An RBI supervisory order barring a major issuer from onboarding new credit card customers removes new-card spend growth from the base, pulling down aggregate credit card spend value.",
+      "affects": "credit_card / icl:atm_pos/spend_value/cc_spend_value",
+      "required_source": "RBI press release naming the restricted issuer and the onboarding ban",
+      "source_ladder": [
+        "RBI press release/circular on the specific issuer restriction",
+        "RBI Annual Report / Trend and Progress of Banking in India chapter on supervisory actions",
+        "Named financial press report on the restriction's business impact"
+      ],
+      "claim_type": "hypothesis",
+      "from_pipeline": "atm_pos",
+      "status": "proposed"
+    },
+    {
+      "kind": "instance",
+      "label": "Co-branded credit card programme discontinuation → credit card e-commerce volume decline",
+      "mechanism": "Discontinuation or downgrade of a high-volume co-branded e-commerce credit card partnership removes a large recurring slice of online transaction volume.",
+      "affects": "credit_card / icl:atm_pos/spend_volume/cc_ecom_txn_vol",
+      "required_source": "Issuer or partner press release/investor disclosure announcing the co-brand programme's discontinuation",
+      "source_ladder": [
+        "Issuer/partner press release or investor disclosure on the co-brand card discontinuation",
+        "RBI Payment System Indicators showing the volume step-down coincident with the announced date",
+        "Named financial press report on the partnership's end"
+      ],
+      "claim_type": "hypothesis",
+      "from_pipeline": "atm_pos",
+      "status": "proposed"
+    },
+    {
+      "kind": "cross_edge",
+      "label": "EMI conversion of card purchases moves balances off revolving card stock",
+      "mechanism": "Issuers let a cardholder convert a large purchase into a fixed-tenure EMI at or soon after the point of sale; once converted, that amount is carried as a personal/consumer loan, not revolving card debt, so the spend counted in ATM/POS value/volume never shows up in SIBC's credit-card outstanding line.",
+      "affects": "icl:sibc/Statement1/4.5 vs icl:atm_pos spend_value (credit_card, all channels)",
+      "required_source": "RBI Master Direction – Credit Card and Debit Card – Issuance and Conduct Directions, 2022 (EMI-conversion disclosure clause)",
+      "source_ladder": [
+        "RBI Master Direction – Credit Card and Debit Card – Issuance and Conduct Directions, 2022, EMI-conversion clause",
+        "RBI Monthly Bulletin / DBIE 'Loans and Advances' table, if it breaks out EMI-converted card balances separately",
+        "Card issuer investor presentation or annual report (e.g. SBI Cards, HDFC Bank) disclosing % of card spend converted to EMI"
+      ],
+      "claim_type": "hypothesis",
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "Co-branded card partnership launch/exit shifts e-com/POS spend mix without moving outstanding",
+      "mechanism": "A major bank-merchant co-branded card (e.g. an e-commerce or airline tie-up) being launched or discontinued concentrates spend growth among cardholders who typically pay in full, so e-com/POS credit-card spend value jumps or drops sharply while the revolving outstanding stock barely moves.",
+      "affects": "icl:atm_pos/spend_value/cc_ecom_txn_val, cc_pos_txn_val vs icl:sibc/Statement1/4.5",
+      "required_source": "Issuing bank's press release or stock-exchange disclosure announcing the co-branded card launch or termination",
+      "source_ladder": [
+        "Bank's official press release / exchange filing announcing the co-brand launch or termination",
+        "RBI Monthly Bulletin 'Developments in Banking' section, if it names the partnership",
+        "Business press report (Economic Times, Mint, Business Standard) quoting the partnership's card issuance or spend numbers"
+      ],
+      "claim_type": "hypothesis",
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "RBI's penal-charge cap reduces the cost of revolving, slowing outstanding growth independent of spend",
+      "mechanism": "RBI's rule barring penal charges disguised as interest and capping punitive charges on loan accounts (including credit cards) lowers the cost of carrying a balance, which can slow the growth rate of card outstanding even as transaction spend keeps rising.",
+      "affects": "icl:sibc/Statement1/4.5 growth rate vs icl:atm_pos/spend_value (credit_card) growth rate",
+      "required_source": "RBI circular 'Fair Lending Practices – Penal Charges in Loan Accounts'",
+      "source_ladder": [
+        "RBI circular 'Fair Lending Practices – Penal Charges in Loan Accounts' (2023/2024)",
+        "RBI Master Direction on credit card interest rates/charges, if it cross-references the same clause",
+        "Card issuer's revised Most Important Terms and Conditions (MITC) document reflecting the lower penal charge"
+      ],
+      "claim_type": "hypothesis",
+      "status": "proposed",
+      "triage": {
+        "verdict": "expired",
+        "note": "RBI penal-charges circular (Aug 2023) applied from 1 Jan 2024 (existing loans by Apr 2024); a standing rule for over two years cannot explain a change in the 2026 window",
+        "decided_on": "2026-11-13"
+      }
+    },
+    {
+      "kind": "channel",
+      "label": "Non-bank BNPL apps divert e-commerce spend away from bank credit cards",
+      "mechanism": "Growth of non-bank Buy-Now-Pay-Later checkout options (not booked in SIBC's bank credit-card outstanding) pulls a share of e-commerce transaction value away from bank-issued credit cards, so recorded credit-card e-com spend growth undershoots what the outstanding-stock trend alone would predict.",
+      "affects": "icl:atm_pos/spend_value/cc_ecom_txn_val vs icl:sibc/Statement1/4.5",
+      "required_source": "RBI 'Report on Trend and Progress of Banking in India', digital lending/BNPL chapter",
+      "source_ladder": [
+        "RBI 'Report on Trend and Progress of Banking in India' (digital lending/BNPL section, relevant year)",
+        "RBI Working Group / Guidelines on Digital Lending report",
+        "Industry market-sizing report (e.g. Redseer, BCG, RBI-cited third party) on India BNPL transaction value"
+      ],
+      "claim_type": "hypothesis",
+      "status": "proposed"
+    },
+    {
+      "kind": "channel",
+      "label": "Card-on-file tokenisation mandate disrupted e-commerce credit-card transaction volume independent of outstanding",
+      "mechanism": "RBI's mandate removing stored card-on-file data from merchants and replacing it with tokens caused a transition-period drop (then recovery) in saved-card checkout convenience, moving e-commerce credit-card transaction volume/value for reasons unrelated to any change in revolving outstanding.",
+      "affects": "icl:atm_pos/spend_volume/cc_ecom_txn_vol, spend_value/cc_ecom_txn_val vs icl:sibc/Statement1/4.5",
+      "required_source": "RBI circular on Card-on-File Tokenisation (CoFT) and its implementation deadline extensions",
+      "source_ladder": [
+        "RBI circular mandating Card-on-File Tokenisation and subsequent deadline-extension circulars",
+        "RBI press release / FAQ on CoFT implementation",
+        "Payments-industry press report (e.g. on NPCI/Visa/Mastercard token adoption rates) on the transition's effect on e-com checkout volumes"
+      ],
+      "claim_type": "hypothesis",
+      "status": "proposed",
+      "triage": {
+        "verdict": "expired",
+        "note": "same instrument as #7 (CoFT, in force from 1 Oct 2022): outside the window for a stock-flow link judged in 2026",
+        "decided_on": "2026-11-13"
+      }
+    },
+    {
+      "kind": "instance",
+      "label": "The Shipping Corporation of India refinanced rupee loans with a US$100.4 mn ECB (Sep 2026)",
+      "mechanism": "SCI registered a 5-year ECB of US$100.4 mn to refinance rupee loans, from a resident financial institution's branch outside India: debt moves off domestic bank books, so SIBC's Shipping line falls with no change in shipping activity.",
+      "affects": "services",
+      "target_entity": "icl:sibc/Statement1/3.4",
+      "required_source": "RBI, Data on ECB/FCCB for the month of September 2026 (borrower list)",
+      "source_ladder": [
+        "RBI ECB borrower list, September 2026 (XLSX/PDF on rbidocs, listed on www.rbi.org.in/Scripts/ECBView.aspx)"
+      ],
+      "claim_type": "inference",
+      "from_pipeline": "sibc",
+      "proposed_by": "ecb_evidence",
+      "status": "proposed",
+      "attempts": [
+        {
+          "rung": "chrome",
+          "target": "RBI, Data on ECB/FCCB for the month of September 2026 (borrower list)",
+          "url": "https://rbidocs.rbi.org.in/rdocs/ECB/DOCs/ECBD121120266095309A34A84F9CBC6180CD6F9F6432.XLSX",
+          "tier": "official",
+          "verdict": "excerpt_verified",
+          "llm_verdict": null,
+          "date": "2026-11-13",
+          "retryable": false,
+          "note": "verified via editor browser (host refuses automated reads)"
+        }
+      ],
+      "promotable": true,
+      "source_url": "https://rbidocs.rbi.org.in/rdocs/ECB/DOCs/ECBD121120266095309A34A84F9CBC6180CD6F9F6432.XLSX",
+      "source_excerpt": "The Shipping Corporation of India Limited | Water transport",
+      "source_verified_date": "2026-11-13"
+    }
+  ]
+}

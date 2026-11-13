@@ -569,6 +569,15 @@
       "authored_status": "active",
       "mismatch": false,
       "rule": "v3.1"
+    },
+    "force_sci_ecb_refinancing_2026_09": {
+      "state": "active",
+      "verdict": "working",
+      "window": "in_window",
+      "instance_of": "ch_offshore_refinancing",
+      "authored_status": "active",
+      "mismatch": false,
+      "rule": "v3.1"
     }
   },
   "edge_states": {
@@ -851,6 +860,14 @@
       "polarity": "+",
       "from": "force_eclgs5_guarantee_window",
       "to": "e_S1_2_2"
+    },
+    "force_sci_ecb_refinancing_2026_09__suppresses__e_S1_3_4": {
+      "state": "active",
+      "verdict": "working",
+      "type": "suppresses",
+      "polarity": "-",
+      "from": "force_sci_ecb_refinancing_2026_09",
+      "to": "e_S1_3_4"
     }
   },
   "loop_states": {
@@ -887,10 +904,12 @@
       "force_nbfc_regulatory_recovery",
       "force_msp_procurement_growth",
       "force_infra_cycle_maturing",
-      "force_eclgs5_guarantee_window"
+      "force_eclgs5_guarantee_window",
+      "force_sci_ecb_refinancing_2026_09"
     ],
     "binding_constraints": [
-      "force_infra_cycle_maturing__suppresses__e_S2_2_18"
+      "force_infra_cycle_maturing__suppresses__e_S2_2_18",
+      "force_sci_ecb_refinancing_2026_09__suppresses__e_S1_3_4"
     ],
     "active_reinforcing_loops": [
       "msme_formalisation_R"
@@ -1313,6 +1332,24 @@
           "verdict": "faded"
         }
       }
+    },
+    "force_sci_ecb_refinancing_2026_09": {
+      "verdict": "working",
+      "window": "in_window",
+      "in_doubt": false,
+      "edges": {
+        "force_sci_ecb_refinancing_2026_09__suppresses__e_S1_3_4": {
+          "entity": "Shipping",
+          "type": "suppresses",
+          "growth": 9.37,
+          "baseline_kind": "parent",
+          "baseline_of": "Services",
+          "baseline": 28.32,
+          "gap_pp": -18.94,
+          "noise_pp": 4.42,
+          "verdict": "working"
+        }
+      }
     }
   },
   "explanation_coverage": {
@@ -1325,9 +1362,9 @@
       "structural": 2,
       "prices_activity": 0,
       "driver": 0,
-      "cause": 0,
+      "cause": 1,
       "relationship": 0,
-      "unexplained": 6,
+      "unexplained": 5,
       "unexplained_one_month_step": 1,
       "no_reading": 2
     },
@@ -1383,8 +1420,12 @@
         "threshold_pp": 13.25,
         "baseline_kind": "parent",
         "baseline_of": "Services",
-        "filed_under": "unexplained",
-        "also_holds": {},
+        "filed_under": "cause",
+        "also_holds": {
+          "cause": [
+            "force_sci_ecb_refinancing_2026_09"
+          ]
+        },
         "prices_activity": "not_decomposable",
         "prices_detail": {
           "reason": "no 1f match for this line"

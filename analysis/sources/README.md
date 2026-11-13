@@ -87,6 +87,45 @@ CRE, shipping, aviation). What each candidate actually holds:
 Access: DBIE cannot be scripted; each table opens in the SAP BusinessObjects viewer, which exports
 to Excel (the user downloads, as for SIBC). Corporate bond issuance by sector is not on DBIE (SEBI).
 
+### ECB borrower lists: probed 2026-11-13 (go/no-go before building)
+
+**The better ECB source is not DBIE but RBI's monthly borrower list**
+(`www.rbi.org.in/Scripts/ECBView.aspx`, one XLSX + PDF per month, 2017 → Sep 2026 plus archives,
+~25-28 KB each). Every row is one registration: borrower, **economic sector in NIC wording**, amount
+(US$), **purpose** (working capital, on-lending, refinancing of rupee loans…), maturity, lender
+category. Layout is stable over Oct 2025 – Sep 2026 (sheet `ECB-FCCB`, a title row naming the month,
+sections "General Permission"/"Automatic route" and "Approval"); sector labels vary in punctuation
+(83 raw labels), so a reader needs a label map that fails loud on a new one.
+
+*Access:* the listing page answers a script; the file host (`rbidocs`) drops scripted connections
+(curl exit 56, urllib `RemoteDisconnected`). Not worked around (source_fetch: never present as a
+browser). The editor's Chrome downloads them; 12 files took one batch.
+
+*What the 12 months hold:* 1,585 registrations, **US$ 61.9 bn** (US$ 2.2 bn Oct 2025 → 7-8 bn a month
+Jul–Sep 2026). Financial services US$ 25.9 bn (42%: NBFCs and PFIs, e.g. Muthoot US$ 600 mn, REC, HUDCO),
+power US$ 9.3 bn, refining 2.9, air transport 2.8. **Refinancing of rupee loans** (the direct
+bank-to-ECB substitution) is US$ 5.4 bn in 56 deals, mostly financial services (2.8) and power (1.4).
+
+*The check (rule declared before matching):* last year's 58 unexplained SIBC moves, 37 on lines where
+firms can borrow abroad (hand map SIBC line → NIC sectors, PFIs by borrower name; probe only). A
+falling move "matches" when that sector's ECB in the move month or the one before is ≥ 3× its
+monthly median and ≥ 25% of the ₹ shift the move implies (gap change × the line a year earlier; ₹88
+per US$ assumed). Rises are not tested (substitution predicts falls).
+- **3 of 16 falling moves match (19%); the same rule on every other month matches 25%.** As a
+  monthly timing driver, ECB is **not better than chance** on this year.
+- One match carries the mechanism itself: **Shipping −20.2 pts (Sep 2026) beside The Shipping
+  Corporation of India, US$ 100.4 mn, "Refinancing of Rupee Loans"** (₹884 cr against ~₹1,929 cr
+  implied). Shipping Jun 2026 (Avana Logistek US$ 80 mn) and Computer Software Jan 2026 (Microsoft
+  India US$ 727 mn, working capital) match on timing only.
+
+*Verdict (user, 2026-11-13: "use as evidence"; built the same day as `core/ecb_evidence.py`, sector
+map `ontology/evidence/sibc__rbi_ecb.json`, saved months `sources/ecb/raw/`, step 3b of the
+`s4-source` skill):* **do not build ECB as a driver series now.** Use the borrower
+list as **evidence for a sourced cause**: when a line has a large unexplained fall, a refinancing
+deal in its sector that month is an official, verbatim row (`rbi.org.in`), the S4 kind of source.
+Revisit as a driver with more history (the files go back to 2017). Commercial paper stays context.
+Probe scripts and the 12 files are scratch, not committed.
+
  (onboarding paused)
 
 Four releases probed (`MLDRSCB{30062026,31072026E,31082026ENG,30092026ENG}.xlsx`, user download).

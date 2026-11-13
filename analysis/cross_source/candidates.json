@@ -1082,6 +1082,411 @@
       "rule": "R2_shared_channel",
       "type": "co_driven",
       "priority": 3,
+      "group": "R2:ch_offshore_refinancing",
+      "from": "icl:sibc/Statement1/3",
+      "to": "icl:nbfc//3",
+      "shared": {
+        "channel": "ch_offshore_refinancing",
+        "product_a": "services",
+        "product_b": "services"
+      },
+      "rationale": "both products are targets of channel ch_offshore_refinancing",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_offshore_refinancing",
+      "from": "icl:sibc/Statement1/3",
+      "to": "icl:nbfc//3.1",
+      "shared": {
+        "channel": "ch_offshore_refinancing",
+        "product_a": "services",
+        "product_b": "services"
+      },
+      "rationale": "both products are targets of channel ch_offshore_refinancing",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_offshore_refinancing",
+      "from": "icl:sibc/Statement1/3",
+      "to": "icl:nbfc//3.3",
+      "shared": {
+        "channel": "ch_offshore_refinancing",
+        "product_a": "services",
+        "product_b": "services"
+      },
+      "rationale": "both products are targets of channel ch_offshore_refinancing",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_offshore_refinancing",
+      "from": "icl:sibc/Statement1/3.1",
+      "to": "icl:nbfc//3",
+      "shared": {
+        "channel": "ch_offshore_refinancing",
+        "product_a": "services",
+        "product_b": "services"
+      },
+      "rationale": "both products are targets of channel ch_offshore_refinancing",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_offshore_refinancing",
+      "from": "icl:sibc/Statement1/3.1",
+      "to": "icl:nbfc//3.1",
+      "shared": {
+        "channel": "ch_offshore_refinancing",
+        "product_a": "services",
+        "product_b": "services"
+      },
+      "rationale": "both products are targets of channel ch_offshore_refinancing",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_offshore_refinancing",
+      "from": "icl:sibc/Statement1/3.1",
+      "to": "icl:nbfc//3.3",
+      "shared": {
+        "channel": "ch_offshore_refinancing",
+        "product_a": "services",
+        "product_b": "services"
+      },
+      "rationale": "both products are targets of channel ch_offshore_refinancing",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_offshore_refinancing",
+      "from": "icl:sibc/Statement1/3.10",
+      "to": "icl:nbfc//3",
+      "shared": {
+        "channel": "ch_offshore_refinancing",
+        "product_a": "services",
+        "product_b": "services"
+      },
+      "rationale": "both products are targets of channel ch_offshore_refinancing",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_offshore_refinancing",
+      "from": "icl:sibc/Statement1/3.10",
+      "to": "icl:nbfc//3.1",
+      "shared": {
+        "channel": "ch_offshore_refinancing",
+        "product_a": "services",
+        "product_b": "services"
+      },
+      "rationale": "both products are targets of channel ch_offshore_refinancing",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_offshore_refinancing",
+      "from": "icl:sibc/Statement1/3.10",
+      "to": "icl:nbfc//3.3",
+      "shared": {
+        "channel": "ch_offshore_refinancing",
+        "product_a": "services",
+        "product_b": "services"
+      },
+      "rationale": "both products are targets of channel ch_offshore_refinancing",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_offshore_refinancing",
+      "from": "icl:sibc/Statement1/3.2",
+      "to": "icl:nbfc//3",
+      "shared": {
+        "channel": "ch_offshore_refinancing",
+        "product_a": "services",
+        "product_b": "services"
+      },
+      "rationale": "both products are targets of channel ch_offshore_refinancing",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_offshore_refinancing",
+      "from": "icl:sibc/Statement1/3.2",
+      "to": "icl:nbfc//3.1",
+      "shared": {
+        "channel": "ch_offshore_refinancing",
+        "product_a": "services",
+        "product_b": "services"
+      },
+      "rationale": "both products are targets of channel ch_offshore_refinancing",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_offshore_refinancing",
+      "from": "icl:sibc/Statement1/3.2",
+      "to": "icl:nbfc//3.3",
+      "shared": {
+        "channel": "ch_offshore_refinancing",
+        "product_a": "services",
+        "product_b": "services"
+      },
+      "rationale": "both products are targets of channel ch_offshore_refinancing",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_offshore_refinancing",
+      "from": "icl:sibc/Statement1/3.3",
+      "to": "icl:nbfc//3",
+      "shared": {
+        "channel": "ch_offshore_refinancing",
+        "product_a": "services",
+        "product_b": "services"
+      },
+      "rationale": "both products are targets of channel ch_offshore_refinancing",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_offshore_refinancing",
+      "from": "icl:sibc/Statement1/3.3",
+      "to": "icl:nbfc//3.1",
+      "shared": {
+        "channel": "ch_offshore_refinancing",
+        "product_a": "services",
+        "product_b": "services"
+      },
+      "rationale": "both products are targets of channel ch_offshore_refinancing",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_offshore_refinancing",
+      "from": "icl:sibc/Statement1/3.3",
+      "to": "icl:nbfc//3.3",
+      "shared": {
+        "channel": "ch_offshore_refinancing",
+        "product_a": "services",
+        "product_b": "services"
+      },
+      "rationale": "both products are targets of channel ch_offshore_refinancing",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_offshore_refinancing",
+      "from": "icl:sibc/Statement1/3.4",
+      "to": "icl:nbfc//3",
+      "shared": {
+        "channel": "ch_offshore_refinancing",
+        "product_a": "services",
+        "product_b": "services"
+      },
+      "rationale": "both products are targets of channel ch_offshore_refinancing",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_offshore_refinancing",
+      "from": "icl:sibc/Statement1/3.4",
+      "to": "icl:nbfc//3.1",
+      "shared": {
+        "channel": "ch_offshore_refinancing",
+        "product_a": "services",
+        "product_b": "services"
+      },
+      "rationale": "both products are targets of channel ch_offshore_refinancing",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_offshore_refinancing",
+      "from": "icl:sibc/Statement1/3.4",
+      "to": "icl:nbfc//3.3",
+      "shared": {
+        "channel": "ch_offshore_refinancing",
+        "product_a": "services",
+        "product_b": "services"
+      },
+      "rationale": "both products are targets of channel ch_offshore_refinancing",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_offshore_refinancing",
+      "from": "icl:sibc/Statement1/3.5",
+      "to": "icl:nbfc//3",
+      "shared": {
+        "channel": "ch_offshore_refinancing",
+        "product_a": "services",
+        "product_b": "services"
+      },
+      "rationale": "both products are targets of channel ch_offshore_refinancing",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_offshore_refinancing",
+      "from": "icl:sibc/Statement1/3.5",
+      "to": "icl:nbfc//3.1",
+      "shared": {
+        "channel": "ch_offshore_refinancing",
+        "product_a": "services",
+        "product_b": "services"
+      },
+      "rationale": "both products are targets of channel ch_offshore_refinancing",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_offshore_refinancing",
+      "from": "icl:sibc/Statement1/3.5",
+      "to": "icl:nbfc//3.3",
+      "shared": {
+        "channel": "ch_offshore_refinancing",
+        "product_a": "services",
+        "product_b": "services"
+      },
+      "rationale": "both products are targets of channel ch_offshore_refinancing",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_offshore_refinancing",
+      "from": "icl:sibc/Statement1/3.6",
+      "to": "icl:nbfc//3",
+      "shared": {
+        "channel": "ch_offshore_refinancing",
+        "product_a": "services",
+        "product_b": "services"
+      },
+      "rationale": "both products are targets of channel ch_offshore_refinancing",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_offshore_refinancing",
+      "from": "icl:sibc/Statement1/3.6",
+      "to": "icl:nbfc//3.1",
+      "shared": {
+        "channel": "ch_offshore_refinancing",
+        "product_a": "services",
+        "product_b": "services"
+      },
+      "rationale": "both products are targets of channel ch_offshore_refinancing",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_offshore_refinancing",
+      "from": "icl:sibc/Statement1/3.6",
+      "to": "icl:nbfc//3.3",
+      "shared": {
+        "channel": "ch_offshore_refinancing",
+        "product_a": "services",
+        "product_b": "services"
+      },
+      "rationale": "both products are targets of channel ch_offshore_refinancing",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_offshore_refinancing",
+      "from": "icl:sibc/Statement1/3.8",
+      "to": "icl:nbfc//3",
+      "shared": {
+        "channel": "ch_offshore_refinancing",
+        "product_a": "services",
+        "product_b": "services"
+      },
+      "rationale": "both products are targets of channel ch_offshore_refinancing",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_offshore_refinancing",
+      "from": "icl:sibc/Statement1/3.8",
+      "to": "icl:nbfc//3.1",
+      "shared": {
+        "channel": "ch_offshore_refinancing",
+        "product_a": "services",
+        "product_b": "services"
+      },
+      "rationale": "both products are targets of channel ch_offshore_refinancing",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_offshore_refinancing",
+      "from": "icl:sibc/Statement1/3.8",
+      "to": "icl:nbfc//3.3",
+      "shared": {
+        "channel": "ch_offshore_refinancing",
+        "product_a": "services",
+        "product_b": "services"
+      },
+      "rationale": "both products are targets of channel ch_offshore_refinancing",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
       "group": "R2:ch_policy_rate_retail_pricing",
       "from": "icl:sibc/Statement1/4",
       "to": "icl:nbfc//4",

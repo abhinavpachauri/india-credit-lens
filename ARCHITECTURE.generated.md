@@ -8,7 +8,7 @@
 > Authored rationale (layer model, design principles, guard purposes) lives in the
 > hand-written `ARCHITECTURE.md`. This file is the structural, drift-guarded half.
 
-_Derived from 107 scripts._
+_Derived from 109 scripts._
 
 ## 1. Data-flow
 
@@ -110,7 +110,8 @@ orchestrated, not import-coupled).
 
 - `core/coverage` → `core/explainability`, `core/force_check`, `core/generate_skeleton`, `core/manifest`, `core/relationship_test`, `core/series_breaks`, `signals/dominance`
 - `core/derive_opportunities` → `core/force_check`, `core/generate_skeleton`, `core/manifest`
-- `core/explainability` → `core/coverage`, `core/force_check`, `core/generate_skeleton`, `core/manifest`, `core/relationship_test`
+- `core/ecb_evidence` → `core/coverage`, `core/force_check`, `core/generate_skeleton`
+- `core/explainability` → `core/coverage`, `core/force_check`, `core/generate_skeleton`, `core/manifest`, `core/pooled_test`, `core/relationship_test`
 - `core/force_check` → `core/generate_skeleton`, `core/generate_system_state`
 - `core/gate` → `core/manifest`
 - `core/generate_chart_series` → `core/manifest`

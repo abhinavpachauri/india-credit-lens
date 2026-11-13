@@ -10,8 +10,8 @@
     "last_foundation_date": "2026-06-11",
     "behavioral_source_draft": "analysis/rbi_sibc/merged/system_model_v3_draft.json",
     "composition_spec_ref": "analysis/COMPOSITION_SPEC.md",
-    "last_updated": "2026-10-10",
-    "update_note": "2026-10-10 (user-approved, no sourcing): added ECLGS 5.0 → Micro & Small and → Medium driver edges, read from the force's own description, so the v3.1 check can judge it. | Earlier: 2026-10-02 L2a UPDATE for dataDate 2026-09-30 (August 2026 data). S3: all 13 forces active, none mismatched; no edge changed state (the 7 reversed edges persist from July: unsecured cards/durables growing against force_rbi_unsecured_tightening, infrastructure growing against force_infra_cycle_maturing). Two mix regimes changed: basic metal drifting → steered (toward Iron and Steel, +9.57pp tilt) and food processing steered → drifting. S4 (2026-10-03, analysis/s4_proposals/2026-09-30.json, 25 proposals): honest null, no force promoted, by editor decision. 7 triaged (5 not_a_force, 1 duplicate, 1 expired); 2 sourced to official pages but held unpromoted because each predates the window and fits only through a response lag (#12 ATM fees, RBI 1 May 2025; #8 TReDS, notification 7 Nov 2024); 1 searched, not found; 3 NBFC-raised deferred to the NBFC August pass; 12 not yet searched. Open design question: S4's temporal rule cannot see medium-term or lagged causes (PLAN)."
+    "last_updated": "2026-11-13",
+    "update_note": "2026-11-13 L2a UPDATE for dataDate 2026-10-30 (September 2026 data). S3: 7 forces working, 4 faded, kcc_collateral_limit contradicted → unclear, vehicle_scrappage_replacement working → contradicted (Vehicle Loans 15.5% vs Personal Loans 17.25%, gap −1.75 pp > noise 0.78; Personal Loans is lifted by gold loans, so read with care); edges 19 active, 14 dormant, 4 reversed (infrastructure repayment risk active → dormant). Mix: engineering and food processing steered → drifting. Coverage: 10 moves, 2 base effect, 2 structural, 6 unexplained (Social Infrastructure, Shipping, Glass, Advances against FDs, Agriculture, Non-food). S4 (analysis/s4_proposals/2026-10-30.json, 17 proposals, paid run approved): one force promoted by the editor (2026-11-13): force_sci_ecb_refinancing_2026_09 (Shipping −20.2 pp, SCI refinanced rupee loans with a US$100.4 mn ECB; RBI ECB borrower list, found by core/ecb_evidence.py). 4 triaged (3 expired, 1 not_a_force); Social Infrastructure sourced to PIB 6 Aug 2026 (JJM 2.0 releases) and held unpromoted: mostly reimbursement for past work, does not fit the move; Glass, Agriculture and Shipping searched, not found; 9 payments and cross-pipeline proposals not yet searched. | Earlier: 2026-10-10 (user-approved, no sourcing): added ECLGS 5.0 → Micro & Small and → Medium driver edges, read from the force's own description, so the v3.1 check can judge it. | Earlier: 2026-10-02 L2a UPDATE for dataDate 2026-09-30 (August 2026 data). S3: all 13 forces active, none mismatched; no edge changed state (the 7 reversed edges persist from July: unsecured cards/durables growing against force_rbi_unsecured_tightening, infrastructure growing against force_infra_cycle_maturing). Two mix regimes changed: basic metal drifting → steered (toward Iron and Steel, +9.57pp tilt) and food processing steered → drifting. S4 (2026-10-03, analysis/s4_proposals/2026-09-30.json, 25 proposals): honest null, no force promoted, by editor decision. 7 triaged (5 not_a_force, 1 duplicate, 1 expired); 2 sourced to official pages but held unpromoted because each predates the window and fits only through a response lag (#12 ATM fees, RBI 1 May 2025; #8 TReDS, notification 7 Nov 2024); 1 searched, not found; 3 NBFC-raised deferred to the NBFC August pass; 12 not yet searched. Open design question: S4's temporal rule cannot see medium-term or lagged causes (PLAN)."
   },
   "nodes": [
     {
@@ -4280,6 +4280,16 @@
       "mechanism": "The same 100% guarantee covers medium enterprises (MSMEs), lifting additional working-capital credit to medium firms",
       "id": "force_eclgs5_guarantee_window__drives__e_S1_2_2",
       "channel": "ch_emergency_guarantee_msme"
+    },
+    {
+      "from": "force_sci_ecb_refinancing_2026_09",
+      "to": "e_S1_3_4",
+      "type": "suppresses",
+      "polarity": "-",
+      "scope": "inter_group",
+      "mechanism": "Rupee loans refinanced offshore are repaid to domestic banks, so Shipping's outstanding falls against Services in the month",
+      "id": "force_sci_ecb_refinancing_2026_09__suppresses__e_S1_3_4",
+      "channel": "ch_offshore_refinancing"
     }
   ],
   "force_instances": [
@@ -4645,6 +4655,34 @@
       "starts": "2025-04-01",
       "delay_months": 0,
       "fades_after_months": 12
+    },
+    {
+      "id": "force_sci_ecb_refinancing_2026_09",
+      "tier": "force_instance",
+      "force_type": "structural_shift",
+      "label": "Shipping Corporation of India refinances rupee loans with a US$100.4 mn ECB (Sep 2026)",
+      "description": "RBI's ECB borrower list for September 2026 records The Shipping Corporation of India Limited (economic sector: water transport) registering a US$100.4 mn, 5-year ECB for 'Refinancing of Rupee Loans', from a resident financial institution's branch outside India. Debt that sat on domestic bank books moves to an overseas lender (likely an Indian bank's overseas branch), so SIBC's Shipping line falls in the month with no change in shipping activity. A one-month step: the YoY gap stays lower for a year and leaves through the base effect. Found by core/ecb_evidence.py; promoted by the editor 2026-11-13.",
+      "non_observable_reason": "A single borrower's refinancing; SIBC reports only the sector total",
+      "claim_type": "inference",
+      "domain": "credit_growth",
+      "signal_evidence": [
+        "sibc-services-yoy-scan",
+        "sibc-services-allocation"
+      ],
+      "source": "Data on ECB/FCCB for the Month of September 2026 — Reserve Bank of India",
+      "source_url": "https://rbidocs.rbi.org.in/rdocs/ECB/DOCs/ECBD121120266095309A34A84F9CBC6180CD6F9F6432.XLSX",
+      "source_verified_date": "2026-11-13",
+      "source_excerpt": "The Shipping Corporation of India Limited | Water transport",
+      "source_rationale": "RBI's own borrower list (row 81, General Permission): purpose 'Refinancing of Rupee Loans', US$100,447,157, 5 years, lender 'Resident Financial Institution's Branch Outside India'. Excerpt verified against the workbook's text via the editor's browser download (rbidocs refuses scripted reads); S4 proposal analysis/s4_proposals/2026-10-30.json #17.",
+      "status": "active",
+      "instance_of": "ch_offshore_refinancing",
+      "scope_entities": [
+        "icl:sibc/Statement1/3.4"
+      ],
+      "timing_rule": "relabelling",
+      "starts": "2026-09-01",
+      "delay_months": 0,
+      "fades_after_months": 1
     }
   ],
   "loops": [

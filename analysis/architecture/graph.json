@@ -64,6 +64,22 @@
       },
       "writes": {}
     },
+    "core/ecb_evidence": {
+      "doc_claims": [],
+      "imports": [
+        "core/coverage",
+        "core/force_check",
+        "core/generate_skeleton"
+      ],
+      "invokes": [],
+      "path": "analysis/core/ecb_evidence.py",
+      "reads": {
+        "nic2008_divisions.json": "low"
+      },
+      "writes": {
+        "index.json": "high"
+      }
+    },
     "core/explainability": {
       "doc_claims": [],
       "imports": [
@@ -71,6 +87,7 @@
         "core/force_check",
         "core/generate_skeleton",
         "core/manifest",
+        "core/pooled_test",
         "core/relationship_test"
       ],
       "invokes": [],
@@ -79,6 +96,7 @@
         "*.json": "low",
         "driver_hypotheses.json": "low",
         "explainability_grid.md": "low",
+        "pooled_tests.json": "low",
         "system_state_*.json": "low"
       },
       "writes": {
@@ -215,6 +233,14 @@
       "imports": [],
       "invokes": [],
       "path": "analysis/core/paths.py",
+      "reads": {},
+      "writes": {}
+    },
+    "core/pooled_test": {
+      "doc_claims": [],
+      "imports": [],
+      "invokes": [],
+      "path": "analysis/core/pooled_test.py",
       "reads": {},
       "writes": {}
     },
