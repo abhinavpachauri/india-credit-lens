@@ -11,8 +11,8 @@ The aim: explain why each line moves through the system's own drivers, so what r
 2026-10-11/12): coverage count (6a, incl. base effect) → driver register (`rbi_sibc/driver_hypotheses.json`)
 → completeness grid (`rbi_sibc/explainability_grid.md`, `core/explainability.py report`) → generic
 driver test, each line's delay found on earlier months and confirmed on later ones (`... test`).
-**Target: every column of the grid complete** (user). Explained share is the outcome: SIBC 23% → 41%
-of 218 moves after the base effect.
+**Target: every column of the grid complete** (user). Two shares, both printed by `coverage.py --history`
+(11-12): SIBC **accounted for 43.1%** of 299 moves (arithmetic included), **explained by causes 24.8%** of 226.
 - **History is the binding constraint:** 25 usable monthly changes; the first driver run read 46 of 47
   `too_short` (one lead: petroleum credit vs fuel prices, delay 3, opposite sign, 13 months).
 - Steps 4 (admission: a `driver` explanation in 6a, `prices_activity` handed over) and 5 (cycles on
@@ -28,7 +28,7 @@ of 218 moves after the base effect.
 
 1. **Price of credit: built 10-26** (`analysis/signals/README.md` §"RBI lending and deposit rates"; pipeline
    `rbi_rates`, reference). Grid column 0 → 68/83; 9 supported (placebo 4% vs 13%); 7 admitted 10-26 and credited by
-   the coverage count (`driver`): 43% explained, unchanged (price explains small pushes, not the big moves).
+   the coverage count (`driver`): shares unchanged (price explains small pushes, not the big moves).
    RBI's Sep file due ~31 Oct (`rbi_rates/fetch.py --xlsx`, then its gate). Other finance probed 10-26
    (`analysis/sources/README.md`): only ECB registrations (Bulletin 38) are by sector, monthly from 2019 in two
    overlapping formats. **Next: the user exports ECB (+ CP) from DBIE, then spec, reviewers, build; then a

@@ -545,6 +545,25 @@ def for_period(pipeline: str, model: dict, period: str, series=None, periods=Non
                    admitted_drivers(pipeline, model))
 
 
+def shares(t: dict) -> list[str]:
+    """The two explained shares, each named for what it counts (2026-11-12). Quoting one number
+    for both read as 43% in one place and 25% in another, from the same counts.
+
+      accounted for       every move except the unexplained, arithmetic included: how much of
+                          the movement the model can say something true about
+      explained by causes the moves filed under a real-world reason (not arithmetic), over the
+                          moves that are not arithmetic: how far the system's drivers reach"""
+    m, b, u = t["moves"], t["base_effect"], t["unexplained"]
+    causes = sum(t[k] for k in ORDER if k != "base_effect")
+    out = []
+    if m:
+        out.append(f"accounted for:       {m - u}/{m} = {100 * (m - u) / m:.1f}% of moves (arithmetic {b} included)")
+    if m - b:
+        out.append(f"explained by causes: {causes}/{m - b} = {100 * causes / (m - b):.1f}% of the moves "
+                   f"that are not arithmetic")
+    return out
+
+
 def main() -> int:
     import argparse
     ap = argparse.ArgumentParser(description="Explanation coverage (SYSTEM_MODEL_SPEC §16 Step 6a)")
@@ -559,9 +578,15 @@ def main() -> int:
         print(f"{args.pipeline}: explanation coverage over every reading "
               f"(a move = a change > {MOVE_FACTOR:g}× the line's typical change)")
         print("  " + "period".ljust(12) + "".join(c[:12].rjust(13) for c in cols))
+        total = dict.fromkeys(cols, 0)
         for p in periods:
             s = for_period(args.pipeline, model, p, series, periods)["summary"]
             print("  " + p.ljust(12) + "".join(str(s[c]).rjust(13) for c in cols))
+            for c in cols:
+                total[c] += s[c]
+        print("  " + "all".ljust(12) + "".join(str(total[c]).rjust(13) for c in cols))
+        for line in shares(total):
+            print("  " + line)
         return 0
     p = args.period or periods[-1]
     r = for_period(args.pipeline, model, p, series, periods)
