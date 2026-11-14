@@ -670,6 +670,13 @@
           "date": "2026-11-14",
           "how_measured": "mutate one cell/bank/sheet at a time in memory over every saved bank-quarter, run the real check_quarter/scale, restore; enumeration, no sampling",
           "source": "analysis/pipelines/rbi_bankwise/validate_bankwise.py; analysis/tests/test_rbi_bankwise.py"
+        },
+        {
+          "metric": "rbi_bankwise: flag isolated RBI inconsistencies, fail column-wide patterns (11 quarters)",
+          "value": "Real data: 150 isolated inconsistencies, max 2 banks per (quarter, check, column); 0 column-wide. Threshold 10 banks. Injection: single-cell disagreement flagged 6,336/6,336, gate failures 0; column-wide swap of adjacent columns across every row fails the gate 2,055/2,293 (89.6%); the 238 missed are columns in no identity or ratio, caught only by the declared-header check at read time.",
+          "date": "2026-11-14",
+          "how_measured": "in-memory mutation of every bank (one random amount column per sheet) and every adjacent column pair (all rows) per quarter, through classify()",
+          "source": "analysis/pipelines/rbi_bankwise/validate_bankwise.py; analysis/rbi_bankwise/inconsistencies.json"
         }
       ],
       "observations": [

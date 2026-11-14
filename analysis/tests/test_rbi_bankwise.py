@@ -271,17 +271,55 @@ def _unexcepted(p, q, st):
     return [x for k, fl in vb.check_quarter(q, st).items() for x in fl if not vb.excepted(k, p, x)]
 
 
-def test_the_saved_quarters_pass_every_check(probe):
+PROBE = ("2024-09-30", "2025-06-30", "2026-06-30")     # pinned: clean in every check (2026-11-14)
+
+
+def test_the_probe_quarters_pass_every_check_with_nothing_flagged(probe):
     st, Q = probe
-    assert Q, "no saved quarters"
-    for p, q in Q.items():
-        assert _unexcepted(p, q, st) == [], p
-    assert vb.scale(Q, st) == []
+    for p in PROBE:
+        assert _unexcepted(p, Q[p], st) == [], p
+    assert vb.scale({p: Q[p] for p in PROBE}, st) == []
+
+
+def test_the_gate_passes_on_every_saved_quarter(probe):
+    st, Q = probe
+    ok, _, _ = vb.run(Q, st)
+    assert ok
+
+
+def test_a_column_wide_error_fails_the_gate(probe):
+    """A reading error maps a column the same way for every bank: swap two columns for every row."""
+    st, Q = probe
+    p, sid = PROBE[-1], "major_sectoral"
+    c1, c2 = "industry_gross_advances@dom", "services_gross_advances@dom"
+    rows = list(Q[p]["banks"].values()) + list(Q[p]["groups"].values())
+    for e in rows:
+        d = e["sheets"][sid]; d[c1], d[c2] = d[c2], d[c1]
+    try:
+        patterns, _, _, _ = vb.classify({p: Q[p]}, st)
+        assert patterns
+    finally:
+        for e in rows:
+            d = e["sheets"][sid]; d[c1], d[c2] = d[c2], d[c1]
+
+
+def test_one_bank_disagreeing_is_flagged_not_failed(probe):
+    st, Q = probe
+    p = PROBE[-1]
+    cols = Q[p]["banks"]["bank-of-baroda"]["sheets"]["major_sectoral"]
+    old = cols["industry_gross_advances@dom"]
+    cols["industry_gross_advances@dom"] = old + 100
+    try:
+        patterns, flags, _, _ = vb.classify({p: Q[p]}, st)
+        assert not patterns
+        assert any(f["entity"] in ("bank-of-baroda", "group:psb") for f in flags)
+    finally:
+        cols["industry_gross_advances@dom"] = old
 
 
 def test_a_shifted_bank_cell_breaks_its_group_sum(probe):
     st, Q = probe
-    p = sorted(Q)[-1]
+    p = PROBE[-1]
     cols = Q[p]["banks"]["bank-of-baroda"]["sheets"]["major_sectoral"]
     old = cols["industry_gross_advances@dom"]
     cols["industry_gross_advances@dom"] = old + 100

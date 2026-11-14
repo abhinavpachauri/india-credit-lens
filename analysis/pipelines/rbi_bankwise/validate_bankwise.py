@@ -82,6 +82,25 @@ EXCEPTIONS = [
 ]
 
 
+# Where RBI's own figures disagree in one bank or group, the cell is flagged and recorded, not
+# failed (user, 2026-11-14): over 11 quarters at most 2 banks broke a check in any one column of a
+# quarter. A reading error maps a column the same way for every bank, so it breaks a column across
+# most of the ~90 banks; that pattern fails. The line sits at 5× the observed maximum.
+COLUMN_WIDE_BANKS = 10
+FLAGS = "inconsistencies.json"
+
+
+def where(check: str, line: str) -> tuple[str, str]:
+    """(entity, column key) of a failure line, as check_quarter writes it."""
+    t = line.split(" ")
+    ent = t[0].rstrip(":")
+    if check == "5.5":
+        return ent, "sheets"
+    if check == "5.3":
+        return ent, " ".join(t[1:]).split(":")[0]
+    return ent, f"{t[1]} {t[2].rstrip(':')}"
+
+
 def excepted(check: str, quarter: str, line: str) -> bool:
     parts = line.split(" ", 2)
     return any(c == check and q in ("*", quarter) and parts[0] == e and parts[2].startswith(col)
@@ -227,14 +246,16 @@ def check_quarter(q: dict, st: dict, B: dict = BOUNDS) -> dict[str, list[str]]:
     v = lambda e, s, c: (e["sheets"].get(s) or {}).get(c)  # noqa: E731
     # 5.1 sums
     for gid, g in groups.items():
-        members = [banks[b] for b in g["members"]] if g["members"] else (
-            [groups[x] for x in SCB_MEMBERS if x in groups] if gid == "group:scb" else None)
-        if members is None:
+        if not g["members"] and gid != "group:scb":
             f["5.1"].append(f"{gid}: closes no block and is not a declared total")
             continue
         if gid == "group:scb" and [x for x in SCB_MEMBERS if x not in groups]:
             f["5.1"].append(f"group:scb: member group(s) {[x for x in SCB_MEMBERS if x not in groups]} absent")
         for sid, s in st.items():
+            if sid not in g["sheets"]:
+                continue
+            members = ([groups[x] for x in SCB_MEMBERS if x in groups] if gid == "group:scb"
+                       else [banks[b] for b in g.get("members_by_sheet", {}).get(sid, g["members"])])
             for c in s["amounts"]:
                 gv = v(g, sid, c)
                 parts = [v(m, sid, c) for m in members]
@@ -346,30 +367,44 @@ def load_quarters() -> dict[str, dict]:
     return out
 
 
-def run(quarters: dict, st: dict) -> tuple[bool, list[str]]:
-    lines, ok = [], True
-    counts = {k: 0 for k in ("5.1", "5.2", "5.3", "5.4", "5.5")}
-    fails = {k: [] for k in counts}
-    named = {k: 0 for k in counts}
+def classify(quarters: dict, st: dict) -> tuple[list[dict], list[dict], dict, dict]:
+    """(patterns, flags, named, populations). A pattern is a (quarter, check, column) failing for
+    COLUMN_WIDE_BANKS or more banks; everything else unexcepted is a flag on one bank or group."""
+    rows, named = [], {k: 0 for k in ("5.1", "5.2", "5.3", "5.4", "5.5")}
     for p, q in sorted(quarters.items()):
         for k, fl in check_quarter(q, st).items():
             for x in fl:
                 if excepted(k, p, x):
                     named[k] += 1
-                else:
-                    fails[k].append(f"{p} {x}")
-    n_groups = sum(len(q["groups"]) for q in quarters.values())
+                    continue
+                ent, col = where(k, x)
+                rows.append({"quarter": p, "check": k, "entity": ent, "column": col, "detail": x})
+    banks_by = {}
+    for r in rows:
+        if not r["entity"].startswith("group:"):
+            banks_by.setdefault((r["quarter"], r["check"], r["column"]), set()).add(r["entity"])
+    wide = {key for key, b in banks_by.items() if len(b) >= COLUMN_WIDE_BANKS}
+    patterns = [r for r in rows if (r["quarter"], r["check"], r["column"]) in wide]
+    flags = [r for r in rows if (r["quarter"], r["check"], r["column"]) not in wide]
     n_ent = sum(len(q["banks"]) + len(q["groups"]) for q in quarters.values())
-    pops = {"5.1": f"{n_groups} group rows × {sum(len(s['amounts']) for s in st.values())} amount columns",
+    pops = {"5.1": f"{sum(len(q['groups']) for q in quarters.values())} group rows × {sum(len(s['amounts']) for s in st.values())} amount columns",
             "5.2": f"{n_ent} rows × {sum(len(s['formulas']) for s in st.values())} printed ratios",
-            "5.3": f"{n_ent} rows × amount measures printed three ways",
+            "5.3": f"{n_ent} rows × credit measures printed three ways",
             "5.4": f"{n_ent} rows × {sum(len(s['identities']) for s in st.values())} identities",
             "5.5": f"{sum(len(q['banks']) for q in quarters.values())} bank-quarters × {len(st)} sheets"}
-    for k in counts:
-        ok &= not fails[k]
-        lines.append(f"{'✓' if not fails[k] else '✗'} {k} {pops[k]}: {len(fails[k])} failure(s)"
+    return patterns, flags, named, pops
+
+
+def run(quarters: dict, st: dict) -> tuple[bool, list[str], list[dict]]:
+    patterns, flags, named, pops = classify(quarters, st)
+    lines, ok = [], not patterns
+    for k in pops:
+        pk = [r for r in patterns if r["check"] == k]
+        fk = [r for r in flags if r["check"] == k]
+        lines.append(f"{'✓' if not pk else '✗'} {k} {pops[k]}: {len(pk)} column-wide failure(s), "
+                     f"{len(fk)} flagged in {len({(r['quarter'], r['entity']) for r in fk})} bank/group-quarter(s)"
                      + (f", {named[k]} named exception(s)" if named[k] else "")
-                     + "".join(f"\n      {x}" for x in fails[k][:6]))
+                     + "".join(f"\n      {r['detail']}" for r in pk[:6]))
     zeros = {p: not_reported(q) for p, q in quarters.items()}
     lines.append("· 5.6 not_reported (credit sheets all zero, a book elsewhere): " +
                  ("; ".join(f"{p}: {', '.join(z)}" for p, z in sorted(zeros.items()) if z) or "none"))
@@ -377,7 +412,19 @@ def run(quarters: dict, st: dict) -> tuple[bool, list[str]]:
     ok &= not sc
     lines.append(f"{'✓' if not sc else '✗'} 5.7 scale, {len(quarters)} quarters: {len(sc)} failure(s)"
                  + "".join(f"\n      {x}" for x in sc[:6]))
-    return ok, lines
+    return ok, lines, flags
+
+
+def write_flags(flags: list[dict]) -> Path:
+    """The record of where RBI's own figures disagree, one row per failure, for signals to honour."""
+    out = manifest.path(PIPELINE, "data_dir") / FLAGS
+    doc = {"_meta": {"what": "cells where RBI's own bank-wise figures fail a check in one bank or group "
+                             "(BANKWISE_SPEC §5); a signal never publishes a flagged cell as if it held",
+                     "rule": f"isolated = fewer than {COLUMN_WIDE_BANKS} banks failing the same column in a quarter",
+                     "count": len(flags)},
+           "flags": sorted(flags, key=lambda r: (r["quarter"], r["check"], r["entity"], r["column"]))}
+    out.write_text(json.dumps(doc, indent=1, ensure_ascii=False) + "\n")
+    return out
 
 
 def measure(quarters: dict, st: dict) -> None:
@@ -415,6 +462,7 @@ def measure(quarters: dict, st: dict) -> None:
 def main() -> int:
     ap = argparse.ArgumentParser(description="bank-wise checks against RBI's own totals")
     ap.add_argument("--measure", action="store_true")
+    ap.add_argument("--write-flags", action="store_true", help="write the flagged cells for signals to honour")
     a = ap.parse_args()
     declared = json.loads(manifest.path(PIPELINE, "sheets").read_text())
     st = structure(declared)
@@ -425,9 +473,11 @@ def main() -> int:
     if a.measure:
         measure(quarters, st)
         return 0
-    ok, lines = run(quarters, st)
+    ok, lines, flags = run(quarters, st)
     for line in lines:
         print("  " + line)
+    if a.write_flags:
+        print(f"  → {write_flags(flags).relative_to(manifest.path(PIPELINE, 'data_dir').parents[1])}: {len(flags)} flag(s)")
     return 0 if ok else 1
 
 

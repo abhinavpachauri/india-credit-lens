@@ -55,9 +55,15 @@
     },
     {
       "id": "rbi_totals",
-      "label": "1c. sums, ratios, parts vs RBI's own totals",
+      "label": "1c. vs RBI's totals: column-wide fails, isolated flagged",
       "pipeline": "validate",
-      "note": "5.1"
+      "note": "5.1",
+      "args": [
+        "--write-flags"
+      ],
+      "derived": [
+        "analysis/rbi_bankwise/inconsistencies.json"
+      ]
     },
     {
       "id": "reconcile",

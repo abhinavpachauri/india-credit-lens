@@ -1,6 +1,6 @@
 # Bank-wise credit pipeline (`rbi_bankwise`): specification
 
-> v0.2, 2026-11-14. Status: **phases 1–2 built** (roster, reader, saved quarters, local table, checks against RBI's totals). Onboarded through the `onboard-source` skill.
+> v0.2, 2026-11-14. Status: **phases 1–2 built; phase 3 (backfill) under way**, 11 of 97 quarters saved. Onboarded through the `onboard-source` skill.
 > v0.2 folds in the three reviewers (population, absence, plausibility; 21 findings, all verified;
 > table at the end). Probe: `analysis/sources/README.md` §"Per-bank quarterly variables" (opened
 > 2026-10-11, probed 2026-11-14).
@@ -291,3 +291,23 @@ provision coverage). The first run found a bug in the check itself ("ratio" matc
 "Generation" and "Operational") and it is pinned by a test. Not covered: a swapped quarter label
 (caught only by a later re-export's revision diff); a partial bank selection whose group rows DBIE
 recomputes.
+
+**Phase 3, batch 1 (2026-11-14): Dec 2023 → Mar 2026.** One Chrome export (8 new quarters + Sep 2024
+re-read, unchanged); 11 of 97 quarters saved. Roster: AB Bank and Sonali Bank under their pre-2024
+names (dated aliases, to Mar 2024), Credit Suisse AG (last seen Mar 2024, not linked to UBS), Fincare
+SFB (already in payments). `reader.py --unknown` lists every unknown name in an export at once.
+- **Membership is per sheet**: NatWest Markets is on six sheets but not Capital Adequacy or
+  Profitability in Mar 2024. Groups now record `members_by_sheet`; sums use each sheet's own block;
+  §5.5 still names the absent bank. The probe quarters were re-saved in this format.
+- **RBI's own figures disagree in isolated places (user decision: flag, don't fail).** Across
+  354,249 cells, 150 failures, at most 2 banks in any column of a quarter (the Jun 2024 foreign group
+  total exceeds its listed banks in 88 columns, cash funds by ₹391 Cr, likely a bank's book not
+  printed after Credit Suisse leaves; NOI ≠ [5 − 6] also at Indian Overseas and Capital SFB). The
+  gate now fails a check only when 10 or more banks break the same column in a quarter (5× the
+  observed maximum: a reading error maps a column the same way for every bank); everything else is
+  written to `analysis/rbi_bankwise/inconsistencies.json` (150 flags), which signals must honour.
+  Shape, unit, headers and the scale guard still fail outright.
+- **Measured** (11 quarters): control 0 column-wide failures; a single-cell disagreement is flagged
+  6,336/6,336 and fails the gate 0 times; a column-wide swap fails the gate 2,055/2,293 (89.6%). The
+  238 not caught by content sit in no sum or ratio (provisions, staff expenses, write-offs, sibling
+  infrastructure lines); the exact-header check at read time is what catches those.

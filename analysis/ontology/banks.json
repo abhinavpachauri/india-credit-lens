@@ -16,6 +16,10 @@
      "names": [
       {
        "name": "AB BANK PLC"
+      },
+      {
+       "name": "AB BANK LIMITED",
+       "to": "2024-03-31"
       }
      ]
     },
@@ -469,6 +473,23 @@
    }
   },
   {
+   "id": "credit-suisse-ag",
+   "name": "Credit Suisse Ag",
+   "sources": {
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "CREDIT SUISSE AG"
+      }
+     ]
+    },
+    "atm_pos": {
+     "not_in_source": "not in RBI's ATM/POS/card statistics roster (rbi_atm_pos/canonical_banks.json, 2026-11-14)"
+    }
+   },
+   "note": "Last in DBIE's bank-wise table in Mar 2024; not linked to UBS AG until an RBI record does."
+  },
+  {
    "id": "csb-bank",
    "name": "Csb Bank Limited",
    "sources": {
@@ -692,7 +713,11 @@
      ]
     },
     "rbi_bankwise": {
-     "not_in_source": "not in the DBIE bank-wise exports saved so far (Sep 2024, Jun 2025, Jun 2026); re-check when the backfill reaches earlier quarters"
+     "names": [
+      {
+       "name": "FINCARE SMALL FINANCE BANK LIMITED"
+      }
+     ]
     }
    }
   },
@@ -1496,6 +1521,10 @@
      "names": [
       {
        "name": "SONALI BANK PLC"
+      },
+      {
+       "name": "SONALI BANK",
+       "to": "2024-03-31"
       }
      ]
     },

@@ -153,12 +153,14 @@ def read(path: Path, declared: dict | None = None, resolver: Resolver | None = N
                 if gid is None:
                     raise ExportShapeError(f"{ws.title} {period}: bold row {nm!r} is not a declared group "
                                            f"(add it to sheets.json 'groups' after checking it)")
-                g = q["groups"].setdefault(gid, {"members": [], "sheets": {}})
+                g = q["groups"].setdefault(gid, {"members": [], "members_by_sheet": {}, "sheets": {}})
                 g["sheets"][sid] = vals
                 if not prev_group:
-                    if g["members"] and set(g["members"]) != set(block):
-                        raise ExportShapeError(f"{ws.title} {period}: {gid} closes a different bank set than on another sheet")
-                    g["members"] = list(block)
+                    # Membership is per sheet: a bank can be on every sheet but one (a foreign bank
+                    # missing from Capital Adequacy, Mar 2024). The presence check (§5.5) names it;
+                    # the sums (§5.1) use each sheet's own block.
+                    g["members_by_sheet"][sid] = list(block)
+                    g["members"] = sorted(set(g["members"]) | set(block))
                 block, prev_group = [], True
                 continue
             bid = resolver(nm, period)
@@ -178,11 +180,46 @@ def read(path: Path, declared: dict | None = None, resolver: Resolver | None = N
     return {"quarters": quarters, "names": names}
 
 
+def unknown_names(path: Path, declared: dict | None = None, resolver: Resolver | None = None) -> dict[str, list[str]]:
+    """Every non-group name in an export that the roster does not resolve, with its quarters, so a
+    backfill batch is reviewed once rather than one refusal at a time. Reads nothing else."""
+    import openpyxl
+    from core.banks import UnknownBank
+    declared = declared or json.loads(DECLARED.read_text())
+    resolver = resolver or Resolver(SOURCE)
+    out: dict[str, set] = {}
+    for ws in openpyxl.load_workbook(path).worksheets:
+        first, pc, nc, _, _ = _header(ws)
+        period = None
+        for r in ws.iter_rows(min_row=first + 1):
+            pv, nm = r[pc].value, r[nc].value
+            if isinstance(pv, datetime.datetime):
+                period = pv.date().isoformat()
+            if not isinstance(nm, str) or not nm.strip() or nm.strip().startswith("Source"):
+                continue
+            if r[nc].font.bold:
+                if norm(nm).lower() not in declared["groups"]:
+                    out.setdefault(f"[group] {norm(nm)}", set()).add(period)
+                continue
+            try:
+                resolver(nm, period)
+            except UnknownBank:
+                out.setdefault(norm(nm), set()).add(period)
+    return {k: sorted(v) for k, v in sorted(out.items())}
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[1])
     ap.add_argument("--xlsx", type=Path, required=True)
     ap.add_argument("--declare", action="store_true", help="write sheets.json from this export (keeps 'groups')")
+    ap.add_argument("--unknown", action="store_true", help="list names the roster does not resolve, with quarters")
     a = ap.parse_args()
+    if a.unknown:
+        un = unknown_names(a.xlsx)
+        print(f"  {len(un)} unknown name(s)")
+        for n, qs in un.items():
+            print(f"   {n:60} {qs[0]} … {qs[-1]} ({len(qs)})")
+        return 1 if un else 0
     if a.declare:
         doc = declare(a.xlsx)
         if DECLARED.exists():

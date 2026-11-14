@@ -1,0 +1,1059 @@
+{
+ "_meta": {
+  "what": "cells where RBI's own bank-wise figures fail a check in one bank or group (BANKWISE_SPEC §5); a signal never publishes a flagged cell as if it held",
+  "rule": "isolated = fewer than 10 banks failing the same column in a quarter",
+  "count": 150
+ },
+ "flags": [
+  {
+   "quarter": "2023-12-31",
+   "check": "5.2",
+   "entity": "citibank-n-a",
+   "column": "major_sectoral other_retail_loans_gnpa_ratio@dom",
+   "detail": "citibank-n-a major_sectoral other_retail_loans_gnpa_ratio@dom: null with denominator 6.7938, numerator 3.0271"
+  },
+  {
+   "quarter": "2023-12-31",
+   "check": "5.2",
+   "entity": "sonali-bank-plc",
+   "column": "major_sectoral other_retail_loans_gnpa_ratio@dom",
+   "detail": "sonali-bank-plc major_sectoral other_retail_loans_gnpa_ratio@dom: null with denominator 30.4873, numerator 4.229"
+  },
+  {
+   "quarter": "2023-12-31",
+   "check": "5.4",
+   "entity": "capital-small-finance-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "capital-small-finance-bank profitability 7_net_operating_income_april_to_date_5_6@dom: 115.3324 vs parts 114.9921"
+  },
+  {
+   "quarter": "2023-12-31",
+   "check": "5.4",
+   "entity": "capital-small-finance-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "capital-small-finance-bank profitability 7_net_operating_income_april_to_date_5_6@glb: 115.3324 vs parts 114.9921"
+  },
+  {
+   "quarter": "2023-12-31",
+   "check": "5.4",
+   "entity": "group:foreign",
+   "column": "capital_adequacy total_rwas_standalone_a_b_c@dom",
+   "detail": "group:foreign capital_adequacy total_rwas_standalone_a_b_c@dom: 1345478.74008368 vs parts 1345332.5261"
+  },
+  {
+   "quarter": "2023-12-31",
+   "check": "5.4",
+   "entity": "group:foreign",
+   "column": "capital_adequacy total_rwas_standalone_a_b_c@glb",
+   "detail": "group:foreign capital_adequacy total_rwas_standalone_a_b_c@glb: 1345478.74008368 vs parts 1345332.5261"
+  },
+  {
+   "quarter": "2023-12-31",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "group:psb profitability 7_net_operating_income_april_to_date_5_6@dom: 167426.2639 vs parts 167390.9075"
+  },
+  {
+   "quarter": "2023-12-31",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "group:psb profitability 7_net_operating_income_april_to_date_5_6@glb: 186016.8035 vs parts 185981.4471"
+  },
+  {
+   "quarter": "2023-12-31",
+   "check": "5.4",
+   "entity": "group:scb",
+   "column": "capital_adequacy total_rwas_standalone_a_b_c@dom",
+   "detail": "group:scb capital_adequacy total_rwas_standalone_a_b_c@dom: 15697881.8796754 vs parts 15697735.6657"
+  },
+  {
+   "quarter": "2023-12-31",
+   "check": "5.4",
+   "entity": "group:scb",
+   "column": "capital_adequacy total_rwas_standalone_a_b_c@glb",
+   "detail": "group:scb capital_adequacy total_rwas_standalone_a_b_c@glb: 15697881.8796754 vs parts 15697735.6657"
+  },
+  {
+   "quarter": "2023-12-31",
+   "check": "5.4",
+   "entity": "group:sfb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "group:sfb profitability 7_net_operating_income_april_to_date_5_6@dom: 7904.3294 vs parts 7903.9891"
+  },
+  {
+   "quarter": "2023-12-31",
+   "check": "5.4",
+   "entity": "group:sfb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "group:sfb profitability 7_net_operating_income_april_to_date_5_6@glb: 7904.3294 vs parts 7903.9891"
+  },
+  {
+   "quarter": "2023-12-31",
+   "check": "5.4",
+   "entity": "indian-overseas-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "indian-overseas-bank profitability 7_net_operating_income_april_to_date_5_6@dom: 4581.1427 vs parts 4545.7863"
+  },
+  {
+   "quarter": "2023-12-31",
+   "check": "5.4",
+   "entity": "indian-overseas-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "indian-overseas-bank profitability 7_net_operating_income_april_to_date_5_6@glb: 4801.288 vs parts 4765.9316"
+  },
+  {
+   "quarter": "2023-12-31",
+   "check": "5.4",
+   "entity": "nonghyup-bank",
+   "column": "capital_adequacy total_rwas_standalone_a_b_c@dom",
+   "detail": "nonghyup-bank capital_adequacy total_rwas_standalone_a_b_c@dom: 146.214 vs parts 0.0000"
+  },
+  {
+   "quarter": "2023-12-31",
+   "check": "5.4",
+   "entity": "nonghyup-bank",
+   "column": "capital_adequacy total_rwas_standalone_a_b_c@glb",
+   "detail": "nonghyup-bank capital_adequacy total_rwas_standalone_a_b_c@glb: 146.214 vs parts 0.0000"
+  },
+  {
+   "quarter": "2024-03-31",
+   "check": "5.2",
+   "entity": "north-east-small-finance-bank",
+   "column": "asset_quality 16_net_npas_to_net_advances@dom",
+   "detail": "north-east-small-finance-bank asset_quality 16_net_npas_to_net_advances@dom: printed 8.357056 vs 8.286159"
+  },
+  {
+   "quarter": "2024-03-31",
+   "check": "5.2",
+   "entity": "north-east-small-finance-bank",
+   "column": "asset_quality 16_net_npas_to_net_advances@glb",
+   "detail": "north-east-small-finance-bank asset_quality 16_net_npas_to_net_advances@glb: printed 8.357056 vs 8.286159"
+  },
+  {
+   "quarter": "2024-03-31",
+   "check": "5.2",
+   "entity": "north-east-small-finance-bank",
+   "column": "asset_quality 18_restructured_std_adv_to_gross_advances@glb",
+   "detail": "north-east-small-finance-bank asset_quality 18_restructured_std_adv_to_gross_advances@glb: printed 3.651559 vs 3.690789"
+  },
+  {
+   "quarter": "2024-03-31",
+   "check": "5.2",
+   "entity": "sonali-bank-plc",
+   "column": "major_sectoral other_retail_loans_gnpa_ratio@dom",
+   "detail": "sonali-bank-plc major_sectoral other_retail_loans_gnpa_ratio@dom: null with denominator 17.4969, numerator 4.4977"
+  },
+  {
+   "quarter": "2024-03-31",
+   "check": "5.3",
+   "entity": "group:scb",
+   "column": "asset_quality 17. Restructured Standard Advances",
+   "detail": "group:scb asset_quality 17. Restructured Standard Advances: 143823.54747308 + 501.4749 vs 144325.34977308"
+  },
+  {
+   "quarter": "2024-03-31",
+   "check": "5.3",
+   "entity": "group:scb",
+   "column": "asset_quality b. Doubtful advances",
+   "detail": "group:scb asset_quality b. Doubtful advances: 237169.165973218 + 5543.7663 vs 242713.063473218"
+  },
+  {
+   "quarter": "2024-03-31",
+   "check": "5.3",
+   "entity": "group:sfb",
+   "column": "asset_quality 17. Restructured Standard Advances",
+   "detail": "group:sfb asset_quality 17. Restructured Standard Advances: 742.4613 + 0 vs 742.7887"
+  },
+  {
+   "quarter": "2024-03-31",
+   "check": "5.3",
+   "entity": "group:sfb",
+   "column": "asset_quality b. Doubtful advances",
+   "detail": "group:sfb asset_quality b. Doubtful advances: 1514.2582 + 0 vs 1514.3894"
+  },
+  {
+   "quarter": "2024-03-31",
+   "check": "5.3",
+   "entity": "north-east-small-finance-bank",
+   "column": "asset_quality 17. Restructured Standard Advances",
+   "detail": "north-east-small-finance-bank asset_quality 17. Restructured Standard Advances: 30.475 + 0 vs 30.8024"
+  },
+  {
+   "quarter": "2024-03-31",
+   "check": "5.3",
+   "entity": "north-east-small-finance-bank",
+   "column": "asset_quality b. Doubtful advances",
+   "detail": "north-east-small-finance-bank asset_quality b. Doubtful advances: 12.8328 + 0 vs 12.964"
+  },
+  {
+   "quarter": "2024-03-31",
+   "check": "5.4",
+   "entity": "capital-small-finance-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "capital-small-finance-bank profitability 7_net_operating_income_april_to_date_5_6@dom: 154.7762 vs parts 154.0395"
+  },
+  {
+   "quarter": "2024-03-31",
+   "check": "5.4",
+   "entity": "capital-small-finance-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "capital-small-finance-bank profitability 7_net_operating_income_april_to_date_5_6@glb: 154.7762 vs parts 154.0395"
+  },
+  {
+   "quarter": "2024-03-31",
+   "check": "5.4",
+   "entity": "dcb-bank",
+   "column": "major_sectoral gross_advances@dom",
+   "detail": "dcb-bank major_sectoral gross_advances@dom: 41846.61 vs parts 41849.9600"
+  },
+  {
+   "quarter": "2024-03-31",
+   "check": "5.4",
+   "entity": "dcb-bank",
+   "column": "priority_non_priority_break_up gross_advances@dom",
+   "detail": "dcb-bank priority_non_priority_break_up gross_advances@dom: 41846.61 vs parts 41849.9600"
+  },
+  {
+   "quarter": "2024-03-31",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "group:psb profitability 7_net_operating_income_april_to_date_5_6@dom: 234962.9539 vs parts 234213.0362"
+  },
+  {
+   "quarter": "2024-03-31",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "group:psb profitability 7_net_operating_income_april_to_date_5_6@glb: 258935.124 vs parts 258185.2063"
+  },
+  {
+   "quarter": "2024-03-31",
+   "check": "5.4",
+   "entity": "group:sfb",
+   "column": "asset_quality 19_stressed_advances_gnpas_reststdadv@dom",
+   "detail": "group:sfb asset_quality 19_stressed_advances_gnpas_reststdadv@dom: 6332.2708 vs parts 6331.9434"
+  },
+  {
+   "quarter": "2024-03-31",
+   "check": "5.4",
+   "entity": "group:sfb",
+   "column": "asset_quality 8_gross_npas_npas_at_the_end_of_the_period_a_b_c@glb",
+   "detail": "group:sfb asset_quality 8_gross_npas_npas_at_the_end_of_the_period_a_b_c@glb: 5589.4821 vs parts 5589.6133"
+  },
+  {
+   "quarter": "2024-03-31",
+   "check": "5.4",
+   "entity": "group:sfb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "group:sfb profitability 7_net_operating_income_april_to_date_5_6@dom: 10778.6465 vs parts 10777.9098"
+  },
+  {
+   "quarter": "2024-03-31",
+   "check": "5.4",
+   "entity": "group:sfb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "group:sfb profitability 7_net_operating_income_april_to_date_5_6@glb: 10778.6465 vs parts 10777.9098"
+  },
+  {
+   "quarter": "2024-03-31",
+   "check": "5.4",
+   "entity": "indian-overseas-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "indian-overseas-bank profitability 7_net_operating_income_april_to_date_5_6@dom: 6469.6868 vs parts 5719.7691"
+  },
+  {
+   "quarter": "2024-03-31",
+   "check": "5.4",
+   "entity": "indian-overseas-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "indian-overseas-bank profitability 7_net_operating_income_april_to_date_5_6@glb: 6761.5598 vs parts 6011.6421"
+  },
+  {
+   "quarter": "2024-03-31",
+   "check": "5.4",
+   "entity": "north-east-small-finance-bank",
+   "column": "asset_quality 19_stressed_advances_gnpas_reststdadv@dom",
+   "detail": "north-east-small-finance-bank asset_quality 19_stressed_advances_gnpas_reststdadv@dom: 129.1359 vs parts 128.8085"
+  },
+  {
+   "quarter": "2024-03-31",
+   "check": "5.4",
+   "entity": "north-east-small-finance-bank",
+   "column": "asset_quality 8_gross_npas_npas_at_the_end_of_the_period_a_b_c@glb",
+   "detail": "north-east-small-finance-bank asset_quality 8_gross_npas_npas_at_the_end_of_the_period_a_b_c@glb: 98.3335 vs parts 98.4647"
+  },
+  {
+   "quarter": "2024-03-31",
+   "check": "5.4",
+   "entity": "unity-small-finance-bank",
+   "column": "major_sectoral gross_advances@dom",
+   "detail": "unity-small-finance-bank major_sectoral gross_advances@dom: 8270.6822 vs parts 8270.5717"
+  },
+  {
+   "quarter": "2024-03-31",
+   "check": "5.4",
+   "entity": "unity-small-finance-bank",
+   "column": "priority_non_priority_break_up gross_advances@dom",
+   "detail": "unity-small-finance-bank priority_non_priority_break_up gross_advances@dom: 8270.6822 vs parts 8270.5717"
+  },
+  {
+   "quarter": "2024-03-31",
+   "check": "5.5",
+   "entity": "natwest-markets-plc",
+   "column": "sheets",
+   "detail": "natwest-markets-plc: absent from ['capital_adequacy', 'profitability']"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:foreign",
+   "column": "infrastructure_financing_items 2_1_3_private_sector",
+   "detail": "group:foreign infrastructure_financing_items 2_1_3_private_sector: printed 26961.793513668 vs banks 26968.7935"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:foreign",
+   "column": "infrastructure_financing_items 2_1_electricity_generation",
+   "detail": "group:foreign infrastructure_financing_items 2_1_electricity_generation: printed 26961.793513668 vs banks 26968.7935"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:foreign",
+   "column": "infrastructure_financing_items 2_energy",
+   "detail": "group:foreign infrastructure_financing_items 2_energy: printed 32177.522313668 vs banks 32184.5223"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:foreign",
+   "column": "infrastructure_financing_items total",
+   "detail": "group:foreign infrastructure_financing_items total: printed 52127.331534489 vs banks 52134.3315"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "asset_quality 14_net_advances@dom",
+   "detail": "group:scb asset_quality 14_net_advances@dom: printed 16218046.0471067 vs banks 16221032.3122"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "asset_quality 14_net_advances@glb",
+   "detail": "group:scb asset_quality 14_net_advances@glb: printed 17388348.7104067 vs banks 17391334.9755"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "asset_quality 1_gross_advances@dom",
+   "detail": "group:scb asset_quality 1_gross_advances@dom: printed 16570256.077991 vs banks 16573242.3431"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "asset_quality 1_gross_advances@glb",
+   "detail": "group:scb asset_quality 1_gross_advances@glb: printed 17758875.359591 vs banks 17761861.6247"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "capital_adequacy a_total_rwas_credit_risk_standalone@dom",
+   "detail": "group:scb capital_adequacy a_total_rwas_credit_risk_standalone@dom: printed 14118657.3979297 vs banks 14119445.9070"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "capital_adequacy a_total_rwas_credit_risk_standalone@glb",
+   "detail": "group:scb capital_adequacy a_total_rwas_credit_risk_standalone@glb: printed 14118657.3979297 vs banks 14119445.9070"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "capital_adequacy b_total_rwas_market_risk_standalone@dom",
+   "detail": "group:scb capital_adequacy b_total_rwas_market_risk_standalone@dom: printed 619483.55933715 vs banks 621114.9218"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "capital_adequacy b_total_rwas_market_risk_standalone@glb",
+   "detail": "group:scb capital_adequacy b_total_rwas_market_risk_standalone@glb: printed 619483.55933715 vs banks 621114.9218"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "capital_adequacy c_total_rwas_operational_risk_standalone@dom",
+   "detail": "group:scb capital_adequacy c_total_rwas_operational_risk_standalone@dom: printed 1756037.91296416 vs banks 1757421.7461"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "capital_adequacy c_total_rwas_operational_risk_standalone@glb",
+   "detail": "group:scb capital_adequacy c_total_rwas_operational_risk_standalone@glb: printed 1756037.91296416 vs banks 1757421.7461"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "capital_adequacy common_equity_tier_i_capital_standalone@dom",
+   "detail": "group:scb capital_adequacy common_equity_tier_i_capital_standalone@dom: printed 2320749.10956352 vs banks 2325718.5747"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "capital_adequacy common_equity_tier_i_capital_standalone@glb",
+   "detail": "group:scb capital_adequacy common_equity_tier_i_capital_standalone@glb: printed 2320749.10956352 vs banks 2325718.5747"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "capital_adequacy tier_i_capital_standalone@dom",
+   "detail": "group:scb capital_adequacy tier_i_capital_standalone@dom: printed 2449502.62593381 vs banks 2454472.0910"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "capital_adequacy tier_i_capital_standalone@glb",
+   "detail": "group:scb capital_adequacy tier_i_capital_standalone@glb: printed 2449502.62593381 vs banks 2454472.0910"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "capital_adequacy tier_ii_capital_standalone@dom",
+   "detail": "group:scb capital_adequacy tier_ii_capital_standalone@dom: printed 318272.134275837 vs banks 318356.6179"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "capital_adequacy tier_ii_capital_standalone@glb",
+   "detail": "group:scb capital_adequacy tier_ii_capital_standalone@glb: printed 318272.134275837 vs banks 318356.6179"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "capital_adequacy total_capital_standalone@dom",
+   "detail": "group:scb capital_adequacy total_capital_standalone@dom: printed 2767774.76020965 vs banks 2772828.7089"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "capital_adequacy total_capital_standalone@glb",
+   "detail": "group:scb capital_adequacy total_capital_standalone@glb: printed 2767774.76020965 vs banks 2772828.7089"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "capital_adequacy total_rwas_standalone_a_b_c@dom",
+   "detail": "group:scb capital_adequacy total_rwas_standalone_a_b_c@dom: printed 16494178.870231 vs banks 16497982.5750"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "capital_adequacy total_rwas_standalone_a_b_c@glb",
+   "detail": "group:scb capital_adequacy total_rwas_standalone_a_b_c@glb: printed 16494178.870231 vs banks 16497982.5750"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "major_balance_sheet_items a_customer_deposits_i_ii_iii_iv_v@dom",
+   "detail": "group:scb major_balance_sheet_items a_customer_deposits_i_ii_iii_iv_v@dom: printed 20816135.2613695 vs banks 20818181.7448"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "major_balance_sheet_items a_customer_deposits_i_ii_iii_iv_v@glb",
+   "detail": "group:scb major_balance_sheet_items a_customer_deposits_i_ii_iii_iv_v@glb: printed 21273176.0590695 vs banks 21275222.5425"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "major_balance_sheet_items cash_funds@dom",
+   "detail": "group:scb major_balance_sheet_items cash_funds@dom: printed 1147219.52903893 vs banks 1147611.1179"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "major_balance_sheet_items cash_funds@glb",
+   "detail": "group:scb major_balance_sheet_items cash_funds@glb: printed 1160077.09453893 vs banks 1160468.6834"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "major_balance_sheet_items due_from_banks_fis_ccps@dom",
+   "detail": "group:scb major_balance_sheet_items due_from_banks_fis_ccps@dom: printed 443279.083709044 vs banks 443920.5481"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "major_balance_sheet_items due_from_banks_fis_ccps@glb",
+   "detail": "group:scb major_balance_sheet_items due_from_banks_fis_ccps@glb: printed 727575.450309044 vs banks 728216.9147"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "major_balance_sheet_items fixed_assets_net@dom",
+   "detail": "group:scb major_balance_sheet_items fixed_assets_net@dom: printed 178061.777932196 vs banks 178062.1405"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "major_balance_sheet_items fixed_assets_net@glb",
+   "detail": "group:scb major_balance_sheet_items fixed_assets_net@glb: printed 181291.880432196 vs banks 181292.2430"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "major_balance_sheet_items i_current_deposits@dom",
+   "detail": "group:scb major_balance_sheet_items i_current_deposits@dom: printed 1780173.49940894 vs banks 1780249.4285"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "major_balance_sheet_items i_current_deposits@glb",
+   "detail": "group:scb major_balance_sheet_items i_current_deposits@glb: printed 1849996.79860893 vs banks 1850072.7277"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "major_balance_sheet_items iii_time_deposits@dom",
+   "detail": "group:scb major_balance_sheet_items iii_time_deposits@dom: printed 11329937.7712636 vs banks 11331877.6187"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "major_balance_sheet_items iii_time_deposits@glb",
+   "detail": "group:scb major_balance_sheet_items iii_time_deposits@glb: printed 11610395.1366636 vs banks 11612334.9841"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "major_balance_sheet_items iv_nri_deposits@dom",
+   "detail": "group:scb major_balance_sheet_items iv_nri_deposits@dom: printed 1338726.14384409 vs banks 1338753.0526"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "major_balance_sheet_items iv_nri_deposits@glb",
+   "detail": "group:scb major_balance_sheet_items iv_nri_deposits@glb: printed 1428593.00394409 vs banks 1428619.9127"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "major_balance_sheet_items net_loans_and_advances@dom",
+   "detail": "group:scb major_balance_sheet_items net_loans_and_advances@dom: printed 16218046.0471067 vs banks 16221032.3122"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "major_balance_sheet_items net_loans_and_advances@glb",
+   "detail": "group:scb major_balance_sheet_items net_loans_and_advances@glb: printed 17388348.7104067 vs banks 17391334.9755"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "major_balance_sheet_items non_slr_investments@dom",
+   "detail": "group:scb major_balance_sheet_items non_slr_investments@dom: printed 1173081.54733126 vs banks 1173128.2430"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "major_balance_sheet_items non_slr_investments@glb",
+   "detail": "group:scb major_balance_sheet_items non_slr_investments@glb: printed 1291838.16973126 vs banks 1291884.8654"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "major_balance_sheet_items other_assets@dom",
+   "detail": "group:scb major_balance_sheet_items other_assets@dom: printed 1785486.19758715 vs banks 1785952.7356"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "major_balance_sheet_items other_assets@glb",
+   "detail": "group:scb major_balance_sheet_items other_assets@glb: printed 1737861.14948715 vs banks 1738327.6875"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "major_balance_sheet_items other_liabilities@dom",
+   "detail": "group:scb major_balance_sheet_items other_liabilities@dom: printed 1164252.80404102 vs banks 1164304.8285"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "major_balance_sheet_items other_liabilities@glb",
+   "detail": "group:scb major_balance_sheet_items other_liabilities@glb: printed 1423804.70474102 vs banks 1423856.7292"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "major_balance_sheet_items paid_up_share_capital@dom",
+   "detail": "group:scb major_balance_sheet_items paid_up_share_capital@dom: printed 226023.361453292 vs banks 229248.3615"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "major_balance_sheet_items paid_up_share_capital@glb",
+   "detail": "group:scb major_balance_sheet_items paid_up_share_capital@glb: printed 229483.942753292 vs banks 232708.9428"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "major_balance_sheet_items reserves_surplus@dom",
+   "detail": "group:scb major_balance_sheet_items reserves_surplus@dom: printed 2470971.43668949 vs banks 2473000.2440"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "major_balance_sheet_items reserves_surplus@glb",
+   "detail": "group:scb major_balance_sheet_items reserves_surplus@glb: printed 2504092.02748949 vs banks 2506120.8348"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "major_balance_sheet_items slr_approved_securities@dom",
+   "detail": "group:scb major_balance_sheet_items slr_approved_securities@dom: printed 6008691.3480318 vs banks 6011510.7485"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "major_balance_sheet_items slr_approved_securities@glb",
+   "detail": "group:scb major_balance_sheet_items slr_approved_securities@glb: printed 6016947.9132318 vs banks 6019767.3137"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "major_balance_sheet_items total_assets@dom",
+   "detail": "group:scb major_balance_sheet_items total_assets@dom: printed 26953865.5307371 vs banks 26961217.8459"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "major_balance_sheet_items total_assets@glb",
+   "detail": "group:scb major_balance_sheet_items total_assets@glb: printed 28503940.3681371 vs banks 28511292.6833"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "major_balance_sheet_items total_capital_liabilities@dom",
+   "detail": "group:scb major_balance_sheet_items total_capital_liabilities@dom: printed 26953865.5307371 vs banks 26961217.8459"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "major_balance_sheet_items total_capital_liabilities@glb",
+   "detail": "group:scb major_balance_sheet_items total_capital_liabilities@glb: printed 28503940.3681371 vs banks 28511292.6833"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "major_balance_sheet_items total_deposits_a_b@dom",
+   "detail": "group:scb major_balance_sheet_items total_deposits_a_b@dom: printed 21086254.0869266 vs banks 21088300.5703"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "major_balance_sheet_items total_deposits_a_b@glb",
+   "detail": "group:scb major_balance_sheet_items total_deposits_a_b@glb: printed 21893827.2236266 vs banks 21895873.7070"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "major_sectoral gross_advances@dom",
+   "detail": "group:scb major_sectoral gross_advances@dom: printed 16570256.077991 vs banks 16573242.3431"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "major_sectoral industry_gross_advances@dom",
+   "detail": "group:scb major_sectoral industry_gross_advances@dom: printed 3824566.3881822 vs banks 3824573.3882"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "major_sectoral non_food_credit_gross_advances@dom",
+   "detail": "group:scb major_sectoral non_food_credit_gross_advances@dom: printed 16520817.7271663 vs banks 16523803.9923"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "major_sectoral services_gross_advances@dom",
+   "detail": "group:scb major_sectoral services_gross_advances@dom: printed 4797226.50574707 vs banks 4800205.7708"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "priority_non_priority_break_up gross_advances@dom",
+   "detail": "group:scb priority_non_priority_break_up gross_advances@dom: printed 16570256.077991 vs banks 16573242.3431"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "priority_non_priority_break_up other_than_priority_gross_advances@dom",
+   "detail": "group:scb priority_non_priority_break_up other_than_priority_gross_advances@dom: printed 10800135.7539042 vs banks 10803095.0190"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "priority_non_priority_break_up priority_mse_gross_advances@dom",
+   "detail": "group:scb priority_non_priority_break_up priority_mse_gross_advances@dom: printed 2187974.48155241 vs banks 2188001.4816"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "priority_non_priority_break_up priority_sector_gross_advances@dom",
+   "detail": "group:scb priority_non_priority_break_up priority_sector_gross_advances@dom: printed 5770120.3242869 vs banks 5770147.3243"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "profitability 10_earning_before_provisions_amp_taxes_ebpt_april_to_date_7_8_9@dom",
+   "detail": "group:scb profitability 10_earning_before_provisions_amp_taxes_ebpt_april_to_date_7_8_9@dom: printed 155750.414318475 vs banks 155779.8369"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "profitability 10_earning_before_provisions_amp_taxes_ebpt_april_to_date_7_8_9@glb",
+   "detail": "group:scb profitability 10_earning_before_provisions_amp_taxes_ebpt_april_to_date_7_8_9@glb: printed 162618.55417483 vs banks 162647.9768"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "profitability 11_risk_provisions_total_april_to_date@dom",
+   "detail": "group:scb profitability 11_risk_provisions_total_april_to_date@dom: printed 14780.399078303 vs banks 14777.7690"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "profitability 11_risk_provisions_total_april_to_date@glb",
+   "detail": "group:scb profitability 11_risk_provisions_total_april_to_date@glb: printed 14082.900578303 vs banks 14080.2705"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "profitability 16_net_profit_loss_pat_april_to_date_14_15@dom",
+   "detail": "group:scb profitability 16_net_profit_loss_pat_april_to_date_14_15@dom: printed 90079.584661334 vs banks 90099.8127"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "profitability 16_net_profit_loss_pat_april_to_date_14_15@glb",
+   "detail": "group:scb profitability 16_net_profit_loss_pat_april_to_date_14_15@glb: printed 96981.822842134 vs banks 97002.0508"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "profitability 1_total_interest_income_net_of_interest_tax_april_to_date@dom",
+   "detail": "group:scb profitability 1_total_interest_income_net_of_interest_tax_april_to_date@dom: printed 524272.641852206 vs banks 524311.5470"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "profitability 1_total_interest_income_net_of_interest_tax_april_to_date@glb",
+   "detail": "group:scb profitability 1_total_interest_income_net_of_interest_tax_april_to_date@glb: printed 547783.311927761 vs banks 547822.2170"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "profitability 2_interest_expense_april_to_date@dom",
+   "detail": "group:scb profitability 2_interest_expense_april_to_date@dom: printed 304417.971828979 vs banks 304425.2687"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "profitability 2_interest_expense_april_to_date@glb",
+   "detail": "group:scb profitability 2_interest_expense_april_to_date@glb: printed 321379.647228979 vs banks 321386.9441"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "profitability 3_net_interest_income_nii_april_to_date_1_2@dom",
+   "detail": "group:scb profitability 3_net_interest_income_nii_april_to_date_1_2@dom: printed 219854.670023227 vs banks 219886.2782"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "profitability 3_net_interest_income_nii_april_to_date_1_2@glb",
+   "detail": "group:scb profitability 3_net_interest_income_nii_april_to_date_1_2@glb: printed 226403.664698782 vs banks 226435.2729"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "profitability 4_other_operating_income_ooi_april_to_date@dom",
+   "detail": "group:scb profitability 4_other_operating_income_ooi_april_to_date@dom: printed 79731.131567115 vs banks 79734.8069"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "profitability 4_other_operating_income_ooi_april_to_date@glb",
+   "detail": "group:scb profitability 4_other_operating_income_ooi_april_to_date@glb: printed 81201.087947915 vs banks 81204.7632"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "profitability 5_total_operating_income_april_to_date_3_4@dom",
+   "detail": "group:scb profitability 5_total_operating_income_april_to_date_3_4@dom: printed 299585.801590342 vs banks 299621.0851"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "profitability 5_total_operating_income_april_to_date_3_4@glb",
+   "detail": "group:scb profitability 5_total_operating_income_april_to_date_3_4@glb: printed 307604.752646697 vs banks 307640.0361"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "profitability 6_operating_expense_oe_april_to_date@dom",
+   "detail": "group:scb profitability 6_operating_expense_oe_april_to_date@dom: printed 144546.239757876 vs banks 144552.1007"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "profitability 6_operating_expense_oe_april_to_date@glb",
+   "detail": "group:scb profitability 6_operating_expense_oe_april_to_date@glb: printed 145736.415457876 vs banks 145742.2764"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "group:scb profitability 7_net_operating_income_april_to_date_5_6@dom: printed 155714.944332466 vs banks 155744.3669"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "group:scb profitability 7_net_operating_income_april_to_date_5_6@glb: printed 162556.635188821 vs banks 162586.0578"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "profitability of_which_staff_expenses_april_to_date@dom",
+   "detail": "group:scb profitability of_which_staff_expenses_april_to_date@dom: printed 70726.636636812 vs banks 70730.3646"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "profitability of_which_staff_expenses_april_to_date@glb",
+   "detail": "group:scb profitability of_which_staff_expenses_april_to_date@glb: printed 71223.628936812 vs banks 71227.3569"
+  },
+  {
+   "quarter": "2024-06-30",
+   "check": "5.2",
+   "entity": "sonali-bank-plc",
+   "column": "major_sectoral other_retail_loans_gnpa_ratio@dom",
+   "detail": "sonali-bank-plc major_sectoral other_retail_loans_gnpa_ratio@dom: null with denominator 12.7005, numerator 4.4977"
+  },
+  {
+   "quarter": "2024-12-31",
+   "check": "5.2",
+   "entity": "sonali-bank-plc",
+   "column": "major_sectoral other_retail_loans_gnpa_ratio@dom",
+   "detail": "sonali-bank-plc major_sectoral other_retail_loans_gnpa_ratio@dom: null with denominator 10.2581, numerator 4.229"
+  },
+  {
+   "quarter": "2024-12-31",
+   "check": "5.4",
+   "entity": "ab-bank-plc",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "ab-bank-plc profitability 7_net_operating_income_april_to_date_5_6@dom: 24.89 vs parts 39.1200"
+  },
+  {
+   "quarter": "2024-12-31",
+   "check": "5.4",
+   "entity": "ab-bank-plc",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "ab-bank-plc profitability 7_net_operating_income_april_to_date_5_6@glb: 24.89 vs parts 39.1200"
+  },
+  {
+   "quarter": "2024-12-31",
+   "check": "5.4",
+   "entity": "capital-small-finance-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "capital-small-finance-bank profitability 7_net_operating_income_april_to_date_5_6@dom: 138.5552 vs parts 138.4509"
+  },
+  {
+   "quarter": "2024-12-31",
+   "check": "5.4",
+   "entity": "capital-small-finance-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "capital-small-finance-bank profitability 7_net_operating_income_april_to_date_5_6@glb: 138.5552 vs parts 138.4509"
+  },
+  {
+   "quarter": "2024-12-31",
+   "check": "5.4",
+   "entity": "group:foreign",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "group:foreign profitability 7_net_operating_income_april_to_date_5_6@dom: 37318.389157219 vs parts 37332.6192"
+  },
+  {
+   "quarter": "2024-12-31",
+   "check": "5.4",
+   "entity": "group:foreign",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "group:foreign profitability 7_net_operating_income_april_to_date_5_6@glb: 37318.389157219 vs parts 37332.6192"
+  },
+  {
+   "quarter": "2024-12-31",
+   "check": "5.4",
+   "entity": "group:sfb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "group:sfb profitability 7_net_operating_income_april_to_date_5_6@dom: 8735.2683 vs parts 8735.1640"
+  },
+  {
+   "quarter": "2024-12-31",
+   "check": "5.4",
+   "entity": "group:sfb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "group:sfb profitability 7_net_operating_income_april_to_date_5_6@glb: 8735.2683 vs parts 8735.1640"
+  },
+  {
+   "quarter": "2025-03-31",
+   "check": "5.2",
+   "entity": "sonali-bank-plc",
+   "column": "major_sectoral other_retail_loans_gnpa_ratio@dom",
+   "detail": "sonali-bank-plc major_sectoral other_retail_loans_gnpa_ratio@dom: null with denominator 10.5395, numerator 5.6337"
+  },
+  {
+   "quarter": "2025-09-30",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "group:psb profitability 7_net_operating_income_april_to_date_5_6@dom: 147456.2043 vs parts 147450.9413"
+  },
+  {
+   "quarter": "2025-09-30",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "group:psb profitability 7_net_operating_income_april_to_date_5_6@glb: 158994.6583 vs parts 158989.3953"
+  },
+  {
+   "quarter": "2025-09-30",
+   "check": "5.4",
+   "entity": "indian-overseas-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "indian-overseas-bank profitability 7_net_operating_income_april_to_date_5_6@dom: 4636.207 vs parts 4630.9440"
+  },
+  {
+   "quarter": "2025-09-30",
+   "check": "5.4",
+   "entity": "indian-overseas-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "indian-overseas-bank profitability 7_net_operating_income_april_to_date_5_6@glb: 4757.0585 vs parts 4751.7955"
+  },
+  {
+   "quarter": "2025-12-31",
+   "check": "5.4",
+   "entity": "group:foreign",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "group:foreign profitability 7_net_operating_income_april_to_date_5_6@dom: 44342.312939742 vs parts 44399.9923"
+  },
+  {
+   "quarter": "2025-12-31",
+   "check": "5.4",
+   "entity": "group:foreign",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "group:foreign profitability 7_net_operating_income_april_to_date_5_6@glb: 44342.312939742 vs parts 44399.9923"
+  },
+  {
+   "quarter": "2025-12-31",
+   "check": "5.4",
+   "entity": "sberbank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "sberbank profitability 7_net_operating_income_april_to_date_5_6@dom: 535.4642 vs parts 593.1436"
+  },
+  {
+   "quarter": "2025-12-31",
+   "check": "5.4",
+   "entity": "sberbank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "sberbank profitability 7_net_operating_income_april_to_date_5_6@glb: 535.4642 vs parts 593.1436"
+  }
+ ]
+}
