@@ -363,7 +363,20 @@
       ],
       "claim_type": "hypothesis",
       "from_pipeline": "atm_pos",
-      "status": "proposed"
+      "status": "proposed",
+      "attempts": [
+        {
+          "rung": "data",
+          "target": "NPCI AePS statistics",
+          "url": "",
+          "tier": null,
+          "verdict": "not_found",
+          "llm_verdict": null,
+          "date": "2026-11-13",
+          "retryable": false,
+          "note": "Bank attribution from web/public/data/atm_pos_consolidated.csv (change in YoY growth Aug→Sep 2026, by bank, in pp of the total): DC POS cash withdrawal value fell 32.9 pp, of which Slice Small Finance Bank -38.7 (SBI +9.2). Slice ramped up in Sep–Oct 2025 (₹1,587 → 3,829 → 11,263 lakh), so this is one bank's base, not AePS substitution across the system. Not searched."
+        }
+      ]
     },
     {
       "kind": "instance",
@@ -398,7 +411,20 @@
       ],
       "claim_type": "hypothesis",
       "from_pipeline": "atm_pos",
-      "status": "proposed"
+      "status": "proposed",
+      "attempts": [
+        {
+          "rung": "data",
+          "target": "RBI/NPCI or card-network MCC classification note",
+          "url": "",
+          "tier": null,
+          "verdict": "not_found",
+          "llm_verdict": null,
+          "date": "2026-11-13",
+          "retryable": true,
+          "note": "Bank attribution from web/public/data/atm_pos_consolidated.csv (change in YoY growth Aug→Sep 2026, by bank, in pp of the total): DC other value +15.1 pp, of which HDFC Bank +15.6 (HDFC's own series swung -12% then +14% in Aug–Sep 2026). Consistent with an issuer-level reclassification at HDFC, which no public circular would show; a one-bank artefact for the dominance rule, not a system force."
+        }
+      ]
     },
     {
       "kind": "instance",
@@ -413,7 +439,12 @@
       ],
       "claim_type": "hypothesis",
       "from_pipeline": "atm_pos",
-      "status": "proposed"
+      "status": "proposed",
+      "triage": {
+        "verdict": "expired",
+        "note": "PMJDY RuPay issuance has run since 2014: a standing programme cannot explain a one-month move; the move (+2.4 pp gap) is small and spread across banks (SBI -0.7, Indian Bank -0.3 of the YoY change)",
+        "decided_on": "2026-11-13"
+      }
     },
     {
       "kind": "instance",
@@ -428,7 +459,20 @@
       ],
       "claim_type": "hypothesis",
       "from_pipeline": "atm_pos",
-      "status": "proposed"
+      "status": "proposed",
+      "attempts": [
+        {
+          "rung": "data",
+          "target": "RBI press release naming a restricted card issuer",
+          "url": "",
+          "tier": null,
+          "verdict": "not_found",
+          "llm_verdict": null,
+          "date": "2026-11-13",
+          "retryable": false,
+          "note": "Bank attribution from web/public/data/atm_pos_consolidated.csv (change in YoY growth Aug→Sep 2026, by bank, in pp of the total): credit card spend value fell 11.8 pp YoY, spread across issuers (ICICI -4.0, SBI -3.8, Axis -2.0): no single issuer, so not an onboarding ban. Last year's base: card spend rose 13.4% in Sep 2025 (Aug→Sep) against +0.7% this year, the late-Sep 2025 festive and GST-rate-cut window."
+        }
+      ]
     },
     {
       "kind": "instance",
@@ -443,7 +487,20 @@
       ],
       "claim_type": "hypothesis",
       "from_pipeline": "atm_pos",
-      "status": "proposed"
+      "status": "proposed",
+      "attempts": [
+        {
+          "rung": "data",
+          "target": "Issuer/partner release on a co-brand card discontinuation",
+          "url": "",
+          "tier": null,
+          "verdict": "not_found",
+          "llm_verdict": null,
+          "date": "2026-11-13",
+          "retryable": false,
+          "note": "Bank attribution from web/public/data/atm_pos_consolidated.csv (change in YoY growth Aug→Sep 2026, by bank, in pp of the total): credit card e-commerce volume fell 9.9 pp YoY, spread across issuers (ICICI -2.7, Axis -2.5, SBI -2.0): not one partnership. Last year's base: e-commerce festive sales in late Sep 2025."
+        }
+      ]
     },
     {
       "kind": "cross_edge",
@@ -457,7 +514,12 @@
         "Card issuer investor presentation or annual report (e.g. SBI Cards, HDFC Bank) disclosing % of card spend converted to EMI"
       ],
       "claim_type": "hypothesis",
-      "status": "proposed"
+      "status": "proposed",
+      "triage": {
+        "verdict": "expired",
+        "note": "EMI conversion is a standing card feature (Credit Card Directions 2022); it explains a steady gap between card spend and SIBC card outstanding, not a change in the window",
+        "decided_on": "2026-11-13"
+      }
     },
     {
       "kind": "channel",
@@ -471,7 +533,20 @@
         "Business press report (Economic Times, Mint, Business Standard) quoting the partnership's card issuance or spend numbers"
       ],
       "claim_type": "hypothesis",
-      "status": "proposed"
+      "status": "proposed",
+      "attempts": [
+        {
+          "rung": "data",
+          "target": "Bank release on a co-branded card launch or exit",
+          "url": "",
+          "tier": null,
+          "verdict": "not_found",
+          "llm_verdict": null,
+          "date": "2026-11-13",
+          "retryable": true,
+          "note": "Bank attribution from web/public/data/atm_pos_consolidated.csv (change in YoY growth Aug→Sep 2026, by bank, in pp of the total): no single-issuer step in card e-commerce or POS value in Sep 2026 (the largest issuer contributions are 2–4 pp each); no named partnership to search."
+        }
+      ]
     },
     {
       "kind": "channel",
@@ -504,7 +579,12 @@
         "Industry market-sizing report (e.g. Redseer, BCG, RBI-cited third party) on India BNPL transaction value"
       ],
       "claim_type": "hypothesis",
-      "status": "proposed"
+      "status": "proposed",
+      "triage": {
+        "verdict": "expired",
+        "note": "RBI's 2022 digital lending rules (and the Jun 2022 bar on loading PPIs from credit lines) reshaped non-bank BNPL four years before the window; a standing feature explains a steady gap, not a 2026 change",
+        "decided_on": "2026-11-13"
+      }
     },
     {
       "kind": "channel",
