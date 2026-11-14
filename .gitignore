@@ -58,3 +58,6 @@ analysis/signals/signals.db.tmp
 !analysis/mospi/releases/**/*.xlsx
 # RBI rates: the workbook is the release as published (signals/README "RBI lending and deposit rates").
 !analysis/rbi_rates/releases/**/*.xlsx
+
+# rbi_bankwise: the long table is rebuilt from the committed quarters (~140 MB for 2002 → 2026).
+analysis/rbi_bankwise/rbi_bankwise_consolidated.csv

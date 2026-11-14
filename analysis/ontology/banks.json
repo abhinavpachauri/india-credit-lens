@@ -1,0 +1,1816 @@
+{
+ "_meta": {
+  "description": "One identity per bank across every source (analysis/BANKWISE_SPEC.md §6; core/banks.py). For each registered source a bank lists the names that source prints (optionally dated with from/to for renames) or not_in_source with a reason. Names compare ignoring case, spacing and punctuation. No group field: a bank's group is the block RBI printed it in.",
+  "sources": [
+   "rbi_bankwise",
+   "atm_pos"
+  ],
+  "built": "2026-11-14 from the DBIE probe export and rbi_atm_pos/canonical_banks.json; 6 pairs matched by hand (Dhanlaxmi, J&K, Bank of America, Citibank, Deutsche, HSBC)"
+ },
+ "banks": [
+  {
+   "id": "ab-bank-plc",
+   "name": "Ab Bank Plc",
+   "sources": {
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "AB BANK PLC"
+      }
+     ]
+    },
+    "atm_pos": {
+     "not_in_source": "not in RBI's ATM/POS/card statistics roster (rbi_atm_pos/canonical_banks.json, 2026-11-14)"
+    }
+   }
+  },
+  {
+   "id": "airtel-payments-bank",
+   "name": "Airtel Payments Bank",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "AIRTEL PAYMENTS BANK"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "not_in_source": "a payments bank: DBIE's bank-wise table does not list payments banks"
+    }
+   }
+  },
+  {
+   "id": "american-express-banking-corp",
+   "name": "American Express Banking Corp.",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "AMERICAN EXPRESS BANKING CORPORATION"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "AMERICAN EXPRESS BANKING CORP."
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "au-small-finance-bank",
+   "name": "Au Small Finance Bank Limited",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "AU SMALL FINANCE BANK LTD"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "AU SMALL FINANCE BANK LIMITED"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "australia-and-new-zealand-banking-group",
+   "name": "Australia And New Zealand Banking Group Limited",
+   "sources": {
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "AUSTRALIA AND NEW ZEALAND BANKING GROUP LIMITED"
+      }
+     ]
+    },
+    "atm_pos": {
+     "not_in_source": "not in RBI's ATM/POS/card statistics roster (rbi_atm_pos/canonical_banks.json, 2026-11-14)"
+    }
+   }
+  },
+  {
+   "id": "axis-bank",
+   "name": "Axis Bank Limited",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "AXIS BANK LTD"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "AXIS BANK LIMITED"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "bandhan-bank",
+   "name": "Bandhan Bank Limited",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "BANDHAN BANK LTD"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "BANDHAN BANK LIMITED"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "bank-of-america-national-association",
+   "name": "Bank Of America , National Association",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "BANK OF AMERICA"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "BANK OF AMERICA , NATIONAL ASSOCIATION"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "bank-of-bahrain-kuwait-b-s-c",
+   "name": "Bank Of Bahrain & Kuwait B.S.C.",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "BANK OF BAHRAIN & KUWAIT B.S.C."
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "BANK OF BAHRAIN & KUWAIT B.S.C."
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "bank-of-baroda",
+   "name": "Bank Of Baroda",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "BANK OF BARODA"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "BANK OF BARODA"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "bank-of-ceylon",
+   "name": "Bank Of Ceylon",
+   "sources": {
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "BANK OF CEYLON"
+      }
+     ]
+    },
+    "atm_pos": {
+     "not_in_source": "not in RBI's ATM/POS/card statistics roster (rbi_atm_pos/canonical_banks.json, 2026-11-14)"
+    }
+   }
+  },
+  {
+   "id": "bank-of-china",
+   "name": "Bank Of China Limited",
+   "sources": {
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "BANK OF CHINA LIMITED"
+      }
+     ]
+    },
+    "atm_pos": {
+     "not_in_source": "not in RBI's ATM/POS/card statistics roster (rbi_atm_pos/canonical_banks.json, 2026-11-14)"
+    }
+   }
+  },
+  {
+   "id": "bank-of-india",
+   "name": "Bank Of India",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "BANK OF INDIA"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "BANK OF INDIA"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "bank-of-maharashtra",
+   "name": "Bank Of Maharashtra",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "BANK OF MAHARASHTRA"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "BANK OF MAHARASHTRA"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "bank-of-nova-scotia",
+   "name": "Bank Of Nova Scotia",
+   "sources": {
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "BANK OF NOVA SCOTIA"
+      }
+     ]
+    },
+    "atm_pos": {
+     "not_in_source": "not in RBI's ATM/POS/card statistics roster (rbi_atm_pos/canonical_banks.json, 2026-11-14)"
+    }
+   }
+  },
+  {
+   "id": "barclays-bank-plc",
+   "name": "Barclays Bank Plc",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "BARCLAYS BANK PLC"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "BARCLAYS BANK PLC"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "bnp-paribas",
+   "name": "Bnp Paribas",
+   "sources": {
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "BNP PARIBAS"
+      }
+     ]
+    },
+    "atm_pos": {
+     "not_in_source": "not in RBI's ATM/POS/card statistics roster (rbi_atm_pos/canonical_banks.json, 2026-11-14)"
+    }
+   }
+  },
+  {
+   "id": "canara-bank",
+   "name": "Canara Bank",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "CANARA BANK"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "CANARA BANK"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "capital-small-finance-bank",
+   "name": "Capital Small Finance Bank Limited",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "CAPITAL SMALL FINANCE BANK LTD"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "CAPITAL SMALL FINANCE BANK LIMITED"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "central-bank-of-india",
+   "name": "Central Bank Of India",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "CENTRAL BANK OF INDIA"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "CENTRAL BANK OF INDIA"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "citibank-n-a",
+   "name": "Citibank N.A",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "CITI BANK"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "CITIBANK N.A"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "city-union-bank",
+   "name": "City Union Bank Limited",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "CITY UNION BANK LTD."
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "CITY UNION BANK LIMITED"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "coastal-local-area-bank",
+   "name": "Coastal  Local  Area  Bank  Ltd.",
+   "sources": {
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "COASTAL  LOCAL  AREA  BANK  LTD."
+      }
+     ]
+    },
+    "atm_pos": {
+     "not_in_source": "not in RBI's ATM/POS/card statistics roster (rbi_atm_pos/canonical_banks.json, 2026-11-14)"
+    }
+   }
+  },
+  {
+   "id": "cooperatieve-rabobank-u-a",
+   "name": "Cooperatieve Rabobank U.A.",
+   "sources": {
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "COOPERATIEVE RABOBANK U.A."
+      }
+     ]
+    },
+    "atm_pos": {
+     "not_in_source": "not in RBI's ATM/POS/card statistics roster (rbi_atm_pos/canonical_banks.json, 2026-11-14)"
+    }
+   }
+  },
+  {
+   "id": "credit-agricole-corporate-and-investment-bank",
+   "name": "Credit Agricole Corporate And Investment Bank",
+   "sources": {
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "CREDIT AGRICOLE CORPORATE AND INVESTMENT BANK"
+      }
+     ]
+    },
+    "atm_pos": {
+     "not_in_source": "not in RBI's ATM/POS/card statistics roster (rbi_atm_pos/canonical_banks.json, 2026-11-14)"
+    }
+   }
+  },
+  {
+   "id": "csb-bank",
+   "name": "Csb Bank Limited",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "CSB BANK LTD."
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "CSB BANK LIMITED"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "ctbc-bank-co",
+   "name": "Ctbc Bank Co., Ltd.",
+   "sources": {
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "CTBC BANK CO., LTD."
+      }
+     ]
+    },
+    "atm_pos": {
+     "not_in_source": "not in RBI's ATM/POS/card statistics roster (rbi_atm_pos/canonical_banks.json, 2026-11-14)"
+    }
+   }
+  },
+  {
+   "id": "dbs-bank-india",
+   "name": "Dbs Bank India Limited",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "DBS INDIA BANK LTD"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "DBS BANK INDIA LIMITED"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "dcb-bank",
+   "name": "Dcb Bank Limited",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "DCB BANK LTD"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "DCB BANK LIMITED"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "deutsche-bank-ag",
+   "name": "Deutsche Bank Ag",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "DEUTSCHE BANK LTD"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "DEUTSCHE BANK AG"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "dhanlaxmi-bank",
+   "name": "Dhanlaxmi Bank Limited",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "DHANALAXMI BANK LTD"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "DHANLAXMI BANK LIMITED"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "doha-bank-q-p-s-c",
+   "name": "Doha Bank Q.P.S.C.",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "DOHA BANK Q.P.S.C."
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "DOHA BANK Q.P.S.C."
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "emirates-nbd-bank-p-j-s-c",
+   "name": "Emirates Nbd Bank (P.J.S.C.)",
+   "sources": {
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "EMIRATES NBD BANK (P.J.S.C.)"
+      }
+     ]
+    },
+    "atm_pos": {
+     "not_in_source": "not in RBI's ATM/POS/card statistics roster (rbi_atm_pos/canonical_banks.json, 2026-11-14)"
+    }
+   }
+  },
+  {
+   "id": "equitas-small-finance-bank",
+   "name": "Equitas Small Finance Bank Limited",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "EQUITAS SMALL FINANCE BANK LTD"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "EQUITAS SMALL FINANCE BANK LIMITED"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "esaf-small-finance-bank",
+   "name": "Esaf Small Finance Bank Limited",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "ESAF SMALL FINANCE BANK LTD"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "ESAF SMALL FINANCE BANK LIMITED"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "federal-bank",
+   "name": "Federal Bank Ltd",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "FEDERAL BANK LTD"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "FEDERAL BANK LTD"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "fincare-small-finance-bank",
+   "name": "Fincare Small Finance Bank Ltd",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "FINCARE SMALL FINANCE BANK LTD"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "not_in_source": "not in the DBIE bank-wise exports saved so far (Sep 2024, Jun 2025, Jun 2026); re-check when the backfill reaches earlier quarters"
+    }
+   }
+  },
+  {
+   "id": "fino-payments-bank",
+   "name": "Fino Payments Bank",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "FINO PAYMENTS BANK"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "not_in_source": "a payments bank: DBIE's bank-wise table does not list payments banks"
+    }
+   }
+  },
+  {
+   "id": "first-abu-dhabi-bank-pjsc",
+   "name": "First Abu Dhabi Bank Pjsc",
+   "sources": {
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "FIRST ABU DHABI BANK PJSC"
+      }
+     ]
+    },
+    "atm_pos": {
+     "not_in_source": "not in RBI's ATM/POS/card statistics roster (rbi_atm_pos/canonical_banks.json, 2026-11-14)"
+    }
+   }
+  },
+  {
+   "id": "firstrand-bank",
+   "name": "Firstrand Bank Ltd",
+   "sources": {
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "FIRSTRAND BANK LTD"
+      }
+     ]
+    },
+    "atm_pos": {
+     "not_in_source": "not in RBI's ATM/POS/card statistics roster (rbi_atm_pos/canonical_banks.json, 2026-11-14)"
+    }
+   }
+  },
+  {
+   "id": "hdfc-bank",
+   "name": "Hdfc Bank Ltd.",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "HDFC BANK LTD"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "HDFC BANK LTD."
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "icici-bank",
+   "name": "Icici Bank Limited",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "ICICI BANK LTD"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "ICICI BANK LIMITED"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "idbi-bank",
+   "name": "Idbi Bank Limited",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "IDBI BANK LTD"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "IDBI BANK LIMITED"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "idfc-first-bank",
+   "name": "Idfc First Bank Limited",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "IDFC FIRST BANK LTD"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "IDFC FIRST BANK LIMITED"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "india-post-payments-bank",
+   "name": "India Post Payments Bank",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "INDIA POST PAYMENTS BANK"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "not_in_source": "a payments bank: DBIE's bank-wise table does not list payments banks"
+    }
+   }
+  },
+  {
+   "id": "indian-bank",
+   "name": "Indian Bank",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "INDIAN BANK"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "INDIAN BANK"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "indian-overseas-bank",
+   "name": "Indian Overseas Bank",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "INDIAN OVERSEAS BANK"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "INDIAN OVERSEAS BANK"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "indusind-bank",
+   "name": "Indusind Bank Ltd",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "INDUSIND BANK LTD"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "INDUSIND BANK LTD"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "industrial-and-commercial-bank-of-china",
+   "name": "Industrial And Commercial Bank Of China",
+   "sources": {
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "INDUSTRIAL AND COMMERCIAL BANK OF CHINA"
+      }
+     ]
+    },
+    "atm_pos": {
+     "not_in_source": "not in RBI's ATM/POS/card statistics roster (rbi_atm_pos/canonical_banks.json, 2026-11-14)"
+    }
+   }
+  },
+  {
+   "id": "industrial-bank-of-korea",
+   "name": "Industrial Bank Of Korea",
+   "sources": {
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "INDUSTRIAL BANK OF KOREA"
+      }
+     ]
+    },
+    "atm_pos": {
+     "not_in_source": "not in RBI's ATM/POS/card statistics roster (rbi_atm_pos/canonical_banks.json, 2026-11-14)"
+    }
+   }
+  },
+  {
+   "id": "jammu-kashmir-bank",
+   "name": "Jammu & Kashmir Bank Ltd",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "JAMMU AND KASHMIR BANK LTD"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "JAMMU & KASHMIR BANK LTD"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "jana-small-finance-bank",
+   "name": "Jana Small Finance Bank Limited",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "JANA SMALL FINANCE BANK LTD"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "JANA SMALL FINANCE BANK LIMITED"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "jio-payments-bank",
+   "name": "Jio Payments Bank",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "JIO PAYMENTS BANK"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "not_in_source": "a payments bank: DBIE's bank-wise table does not list payments banks"
+    }
+   }
+  },
+  {
+   "id": "jpmorgan-chase-bank-national-association",
+   "name": "Jpmorgan Chase Bank National Association",
+   "sources": {
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "JPMORGAN CHASE BANK NATIONAL ASSOCIATION"
+      }
+     ]
+    },
+    "atm_pos": {
+     "not_in_source": "not in RBI's ATM/POS/card statistics roster (rbi_atm_pos/canonical_banks.json, 2026-11-14)"
+    }
+   }
+  },
+  {
+   "id": "jsc-vtb-bank",
+   "name": "Jsc Vtb Bank",
+   "sources": {
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "JSC VTB BANK"
+      }
+     ]
+    },
+    "atm_pos": {
+     "not_in_source": "not in RBI's ATM/POS/card statistics roster (rbi_atm_pos/canonical_banks.json, 2026-11-14)"
+    }
+   }
+  },
+  {
+   "id": "karnataka-bank",
+   "name": "Karnataka Bank Ltd",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "KARNATAKA BANK LTD"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "KARNATAKA BANK LTD"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "karur-vysya-bank",
+   "name": "Karur Vysya Bank Ltd",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "KARUR VYSYA BANK LTD"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "KARUR VYSYA BANK LTD"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "keb-hana-bank",
+   "name": "Keb Hana Bank",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "KEB HANA BANK"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "KEB HANA BANK"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "kookmin-bank",
+   "name": "Kookmin Bank",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "KOOKMIN BANK"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "KOOKMIN BANK"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "kotak-mahindra-bank",
+   "name": "Kotak Mahindra Bank Ltd.",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "KOTAK MAHINDRA BANK LTD"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "KOTAK MAHINDRA BANK LTD."
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "krishna-bhima-samruddhi-lab",
+   "name": "Krishna  Bhima  Samruddhi   Lab Ltd.",
+   "sources": {
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "KRISHNA  BHIMA  SAMRUDDHI   LAB LTD."
+      },
+      {
+       "name": "KRISHNA BHIMA SAMRUDDHI LAB LTD."
+      }
+     ]
+    },
+    "atm_pos": {
+     "not_in_source": "not in RBI's ATM/POS/card statistics roster (rbi_atm_pos/canonical_banks.json, 2026-11-14)"
+    }
+   }
+  },
+  {
+   "id": "mashreq-bank-psc",
+   "name": "Mashreq Bank Psc",
+   "sources": {
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "MASHREQ BANK PSC"
+      }
+     ]
+    },
+    "atm_pos": {
+     "not_in_source": "not in RBI's ATM/POS/card statistics roster (rbi_atm_pos/canonical_banks.json, 2026-11-14)"
+    }
+   }
+  },
+  {
+   "id": "mizuho-bank",
+   "name": "Mizuho Bank Ltd",
+   "sources": {
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "MIZUHO BANK LTD"
+      }
+     ]
+    },
+    "atm_pos": {
+     "not_in_source": "not in RBI's ATM/POS/card statistics roster (rbi_atm_pos/canonical_banks.json, 2026-11-14)"
+    }
+   }
+  },
+  {
+   "id": "mufg-bank",
+   "name": "Mufg Bank, Ltd.",
+   "sources": {
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "MUFG BANK, LTD."
+      }
+     ]
+    },
+    "atm_pos": {
+     "not_in_source": "not in RBI's ATM/POS/card statistics roster (rbi_atm_pos/canonical_banks.json, 2026-11-14)"
+    }
+   }
+  },
+  {
+   "id": "nainital-bank",
+   "name": "Nainital Bank Ltd",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "NAINITAL BANK LTD"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "NAINITAL BANK LTD"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "natwest-markets-plc",
+   "name": "Natwest Markets Plc",
+   "sources": {
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "NATWEST MARKETS PLC"
+      }
+     ]
+    },
+    "atm_pos": {
+     "not_in_source": "not in RBI's ATM/POS/card statistics roster (rbi_atm_pos/canonical_banks.json, 2026-11-14)"
+    }
+   }
+  },
+  {
+   "id": "nonghyup-bank",
+   "name": "Nonghyup Bank",
+   "sources": {
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "NONGHYUP BANK"
+      }
+     ]
+    },
+    "atm_pos": {
+     "not_in_source": "not in RBI's ATM/POS/card statistics roster (rbi_atm_pos/canonical_banks.json, 2026-11-14)"
+    }
+   }
+  },
+  {
+   "id": "north-east-small-finance-bank",
+   "name": "North East Small Finance Bank Limited",
+   "sources": {
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "NORTH EAST SMALL FINANCE BANK LIMITED"
+      }
+     ]
+    },
+    "atm_pos": {
+     "not_in_source": "not in RBI's ATM/POS/card statistics roster (rbi_atm_pos/canonical_banks.json, 2026-11-14)"
+    }
+   },
+   "note": "Possibly the same licence as slice Small Finance Bank (renamed after slice's merger); kept separate until verified from an RBI record."
+  },
+  {
+   "id": "nsdl-payments-bank",
+   "name": "Nsdl Payments Bank",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "NSDL PAYMENTS BANK"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "not_in_source": "a payments bank: DBIE's bank-wise table does not list payments banks"
+    }
+   }
+  },
+  {
+   "id": "paytm-payments-bank",
+   "name": "Paytm Payments Bank",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "PAYTM PAYMENTS BANK"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "not_in_source": "a payments bank: DBIE's bank-wise table does not list payments banks"
+    }
+   }
+  },
+  {
+   "id": "pt-bank-maybank-indonesia-tbk",
+   "name": "Pt Bank Maybank Indonesia Tbk",
+   "sources": {
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "PT BANK MAYBANK INDONESIA TBK"
+      }
+     ]
+    },
+    "atm_pos": {
+     "not_in_source": "not in RBI's ATM/POS/card statistics roster (rbi_atm_pos/canonical_banks.json, 2026-11-14)"
+    }
+   }
+  },
+  {
+   "id": "punjab-and-sind-bank",
+   "name": "Punjab And Sind Bank",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "PUNJAB AND SIND BANK"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "PUNJAB AND SIND BANK"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "punjab-national-bank",
+   "name": "Punjab National Bank",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "PUNJAB NATIONAL BANK"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "PUNJAB NATIONAL BANK"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "qatar-national-bank-q-p-s-c",
+   "name": "Qatar National Bank (Q.P.S.C)",
+   "sources": {
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "QATAR NATIONAL BANK (Q.P.S.C)"
+      }
+     ]
+    },
+    "atm_pos": {
+     "not_in_source": "not in RBI's ATM/POS/card statistics roster (rbi_atm_pos/canonical_banks.json, 2026-11-14)"
+    }
+   }
+  },
+  {
+   "id": "rbl-bank",
+   "name": "Rbl Bank Ltd",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "RBL BANK LTD"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "RBL BANK LTD"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "sberbank",
+   "name": "Sberbank",
+   "sources": {
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "SBERBANK"
+      }
+     ]
+    },
+    "atm_pos": {
+     "not_in_source": "not in RBI's ATM/POS/card statistics roster (rbi_atm_pos/canonical_banks.json, 2026-11-14)"
+    }
+   }
+  },
+  {
+   "id": "sbm-bank-india",
+   "name": "Sbm Bank (India) Limited",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "SBM BANK INDIA LTD"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "SBM BANK (INDIA) LIMITED"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "shinhan-bank",
+   "name": "Shinhan Bank",
+   "sources": {
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "SHINHAN BANK"
+      }
+     ]
+    },
+    "atm_pos": {
+     "not_in_source": "not in RBI's ATM/POS/card statistics roster (rbi_atm_pos/canonical_banks.json, 2026-11-14)"
+    }
+   }
+  },
+  {
+   "id": "shivalik-small-finance-bank",
+   "name": "Shivalik Small Finance Bank Limited",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "SHIVALIK SMALL FINANCE BANK LTD"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "SHIVALIK SMALL FINANCE BANK LIMITED"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "slice-small-finance-bank",
+   "name": "Slice Small Finance Bank Limited",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "SLICE SMALL FINANCE BANK LTD"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "SLICE SMALL FINANCE BANK LIMITED"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "societe-generale",
+   "name": "Societe Generale",
+   "sources": {
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "SOCIETE GENERALE"
+      }
+     ]
+    },
+    "atm_pos": {
+     "not_in_source": "not in RBI's ATM/POS/card statistics roster (rbi_atm_pos/canonical_banks.json, 2026-11-14)"
+    }
+   }
+  },
+  {
+   "id": "sonali-bank-plc",
+   "name": "Sonali Bank Plc",
+   "sources": {
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "SONALI BANK PLC"
+      }
+     ]
+    },
+    "atm_pos": {
+     "not_in_source": "not in RBI's ATM/POS/card statistics roster (rbi_atm_pos/canonical_banks.json, 2026-11-14)"
+    }
+   }
+  },
+  {
+   "id": "south-indian-bank",
+   "name": "South Indian Bank Ltd",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "SOUTH INDIAN BANK"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "SOUTH INDIAN BANK LTD"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "standard-chartered-bank",
+   "name": "Standard Chartered Bank",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "STANDARD CHARTERED BANK LTD"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "STANDARD CHARTERED BANK"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "state-bank-of-india",
+   "name": "State Bank Of India",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "STATE BANK OF INDIA"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "STATE BANK OF INDIA"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "sumitomo-mitsui-banking-corporation",
+   "name": "Sumitomo Mitsui Banking Corporation",
+   "sources": {
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "SUMITOMO MITSUI BANKING CORPORATION"
+      }
+     ]
+    },
+    "atm_pos": {
+     "not_in_source": "not in RBI's ATM/POS/card statistics roster (rbi_atm_pos/canonical_banks.json, 2026-11-14)"
+    }
+   }
+  },
+  {
+   "id": "suryoday-small-finance-bank",
+   "name": "Suryoday Small Finance Bank Limited",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "SURYODAY SMALL FINANCE BANK LTD"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "SURYODAY SMALL FINANCE BANK LIMITED"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "tamilnad-mercantile-bank",
+   "name": "Tamilnad Mercantile Bank Ltd",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "TAMILNAD MERCANTILE BANK LTD"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "TAMILNAD MERCANTILE BANK LTD"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "the-hongkong-and-shanghai-banking-corporation",
+   "name": "The Hongkong And Shanghai Banking Corporation Limited",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "HSBC LTD"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "THE HONGKONG AND SHANGHAI BANKING CORPORATION LIMITED"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "ubs-ag",
+   "name": "Ubs Ag",
+   "sources": {
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "UBS AG"
+      }
+     ]
+    },
+    "atm_pos": {
+     "not_in_source": "not in RBI's ATM/POS/card statistics roster (rbi_atm_pos/canonical_banks.json, 2026-11-14)"
+    }
+   }
+  },
+  {
+   "id": "uco-bank",
+   "name": "Uco Bank",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "UCO BANK"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "UCO BANK"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "ujjivan-small-finance-bank",
+   "name": "Ujjivan Small Finance Bank Limited",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "UJJIVAN SMALL FINANCE BANK LTD"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "UJJIVAN SMALL FINANCE BANK LIMITED"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "union-bank-of-india",
+   "name": "Union Bank Of India",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "UNION BANK OF INDIA"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "UNION BANK OF INDIA"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "united-overseas-bank",
+   "name": "United Overseas Bank Ltd",
+   "sources": {
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "UNITED OVERSEAS BANK LTD"
+      }
+     ]
+    },
+    "atm_pos": {
+     "not_in_source": "not in RBI's ATM/POS/card statistics roster (rbi_atm_pos/canonical_banks.json, 2026-11-14)"
+    }
+   }
+  },
+  {
+   "id": "unity-small-finance-bank",
+   "name": "Unity Small Finance Bank Limited",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "UNITY SMALL FINANCE BANK LTD"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "UNITY SMALL FINANCE BANK LIMITED"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "utkarsh-small-finance-bank",
+   "name": "Utkarsh Small Finance Bank Limited",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "UTKARSH SMALL FINANCE BANK LTD"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "UTKARSH SMALL FINANCE BANK LIMITED"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "woori-bank",
+   "name": "Woori Bank",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "WOORI BANK"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "WOORI BANK"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "yes-bank",
+   "name": "Yes Bank Ltd.",
+   "sources": {
+    "atm_pos": {
+     "names": [
+      {
+       "name": "YES BANK LTD"
+      }
+     ]
+    },
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "YES BANK LTD."
+      }
+     ]
+    }
+   }
+  }
+ ]
+}

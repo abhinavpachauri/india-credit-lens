@@ -1,6 +1,6 @@
 # Bank-wise credit pipeline (`rbi_bankwise`): specification
 
-> v0.2, 2026-11-14. Status: **specified, not built**. Onboarded through the `onboard-source` skill.
+> v0.2, 2026-11-14. Status: **phase 1 built** (roster, reader, saved quarters, local table, gate). Onboarded through the `onboard-source` skill.
 > v0.2 folds in the three reviewers (population, absence, plausibility; 21 findings, all verified;
 > table at the end). Probe: `analysis/sources/README.md` §"Per-bank quarterly variables" (opened
 > 2026-10-11, probed 2026-11-14).
@@ -220,4 +220,49 @@ Nothing dropped as not reproducible; nothing by design.
 
 ## As built
 
-(empty until phase 1)
+**Phase 1a (2026-11-14): roster, reader, saved releases.**
+- `analysis/ontology/banks.json` + `core/banks.py`: 98 banks, two sources (`rbi_bankwise`,
+  `atm_pos`); 58 in both (6 paired by hand: Dhanlaxmi, J&K, Bank of America, Citibank, Deutsche,
+  HSBC). Every bank answers for every source with names or `not_in_source` (6 payments banks: not
+  in DBIE's table; 34 DBIE-only banks, mostly foreign and the 2 Local Area Banks: not in the card
+  statistics). Names compare ignoring case, spacing and punctuation; dated aliases supported.
+  North East SFB and slice SFB are kept separate until an RBI record links them. Payments does not
+  read through it yet (its own commit, §9.4).
+- `pipelines/rbi_bankwise/reader.py` + `sheets.json`: the declared shape (8 sheets, 339 columns in
+  order, 7 group spellings) is written once from the probe (`--declare`) and every export is
+  compared with it. Groups by layout (bold; ANZ "…BANKING GROUP LIMITED" is not bold). The probe
+  reads as 89/90/90 banks with groups PSB 12, private 21, foreign 43–44, SFB 11, LAB 2, All SCBs
+  (no members). 10,045 sectoral cells identical to an independent parse of the same file.
+- `pipelines/rbi_bankwise/fetch.py`: one release per quarter, `analysis/rbi_bankwise/releases/
+  {quarter}/{saved}.json.gz` (≈ 145 KB each; ≈ 10 MB for 2002 → 2026). NEW / UNCHANGED / REVISED,
+  with the three refusals of §4. Loads its own `reader` by file (rbi_rates also has `reader` and
+  `fetch`; a bare import took the wrong one in the full test run).
+- `tests/test_rbi_bankwise.py`: 18 controls (mislabelled column, missing/extra sheet, lakhs, an
+  undeclared bold row, a bank named like a group, an unknown bank, banks after the last group, an
+  empty merged header, roster completeness, dated aliases, new/unchanged/stale, revision refused
+  then accepted keeping the old, a removed bank, a new quarter without the re-read, a backfill).
+
+**Found while building:**
+- **RBI leaves some merged headers empty over columns with data**: Asset Quality's last three
+  columns (after "21. Loans sold to ARCs") and Major Sectoral's last column hold numbers in Jun 2025
+  only (e.g. Bank of Baroda ₹7,91,974 Cr in the sectoral one). Declared as `unlabelled_{n}`, kept,
+  never published until identified. Forward-filling headers had named them after their neighbour.
+- **The Infrastructure sheet prints no unit line** and spells All SCBs "Scheduled Commercial
+  Banks", in title case ("Bank Of Baroda"). Declared; the unit is asserted on the other seven sheets.
+- **A primary pipeline must have signals and a model** (`test_kind_and_capabilities_agree`). Until
+  phase 4 this is honestly reference data.
+
+**Phase 1b (2026-11-14): manifest, local table, gate.** User decision: commit the saved quarters
+(the record, ~10 MB for the full history); rebuild the long table locally from them.
+- `pipelines/rbi_bankwise/pipeline.json`: `kind: reference` until phase 4 (a primary pipeline must
+  already store signals and have a model). Gate: consolidate → table equals a rebuild → tests →
+  calendar (the currency stage) → reconcile.
+- `consolidate.py`: releases → `analysis/rbi_bankwise/rbi_bankwise_consolidated.csv`, git-ignored,
+  reference schema (dataset = sheet, code = bank or group, measure = column, status = bank/group);
+  86,880 values for the 3 probe quarters. An empty store refuses rather than writing an empty table.
+- `validate_calendar.py`: current when the newest saved quarter is at or past the latest quarter
+  due under the 165-day ceiling; the declared history from Mar 2002 is counted and every missing
+  quarter named (now 2 of 97 due; `history_required` turns the gap into a failure at phase 3).
+- `core/explainability.py`: the register check now reads only the reference pipelines its
+  hypotheses name, instead of every reference CSV (it would have read this table on every run).
+- Not committed: the raw Excel exports (the saved quarters carry every cell, unlabelled ones too).

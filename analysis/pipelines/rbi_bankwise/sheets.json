@@ -1,0 +1,1416 @@
+{
+ "_meta": {
+  "from": "probe_2026-11-14.xlsx",
+  "declared": "2026-11-14",
+  "rule": "the reader refuses any export whose sheets or headers differ from these, in order"
+ },
+ "groups": {
+  "public sector banks": "group:psb",
+  "private sector banks": "group:pvt",
+  "foreign bank group": "group:foreign",
+  "small finance bank group-scheduled": "group:sfb",
+  "local area bank group": "group:lab",
+  "all scheduled commercial banks": "group:scb",
+  "scheduled commercial banks": "group:scb"
+ },
+ "sheets": {
+  "Major Balance Sheet Items": {
+   "id": "major_balance_sheet_items",
+   "columns": [
+    [
+     "Cash Funds",
+     "Domestic Operation"
+    ],
+    [
+     "Cash Funds",
+     "Overseas Operation"
+    ],
+    [
+     "Cash Funds",
+     "Global Operation"
+    ],
+    [
+     "Due from Banks/FIs/CCPs",
+     "Domestic Operation"
+    ],
+    [
+     "Due from Banks/FIs/CCPs",
+     "Overseas Operation"
+    ],
+    [
+     "Due from Banks/FIs/CCPs",
+     "Global Operation"
+    ],
+    [
+     "SLR/Approved Securities",
+     "Domestic Operation"
+    ],
+    [
+     "SLR/Approved Securities",
+     "Overseas Operation"
+    ],
+    [
+     "SLR/Approved Securities",
+     "Global Operation"
+    ],
+    [
+     "Non-SLR Investments",
+     "Domestic Operation"
+    ],
+    [
+     "Non-SLR Investments",
+     "Overseas Operation"
+    ],
+    [
+     "Non-SLR Investments",
+     "Global Operation"
+    ],
+    [
+     "Net Loans and Advances",
+     "Domestic Operation"
+    ],
+    [
+     "Net Loans and Advances",
+     "Overseas Operation"
+    ],
+    [
+     "Net Loans and Advances",
+     "Global Operation"
+    ],
+    [
+     "Fixed Assets (net)",
+     "Domestic Operation"
+    ],
+    [
+     "Fixed Assets (net)",
+     "Overseas Operation"
+    ],
+    [
+     "Fixed Assets (net)",
+     "Global Operation"
+    ],
+    [
+     "Other Assets",
+     "Domestic Operation"
+    ],
+    [
+     "Other Assets",
+     "Overseas Operation"
+    ],
+    [
+     "Other Assets",
+     "Global Operation"
+    ],
+    [
+     "Total Assets",
+     "Domestic Operation"
+    ],
+    [
+     "Total Assets",
+     "Overseas Operation"
+    ],
+    [
+     "Total Assets",
+     "Global Operation"
+    ],
+    [
+     "Paid-up Share Capital",
+     "Domestic Operation"
+    ],
+    [
+     "Paid-up Share Capital",
+     "Overseas Operation"
+    ],
+    [
+     "Paid-up Share Capital",
+     "Global Operation"
+    ],
+    [
+     "Reserves & Surplus",
+     "Domestic Operation"
+    ],
+    [
+     "Reserves & Surplus",
+     "Overseas Operation"
+    ],
+    [
+     "Reserves & Surplus",
+     "Global Operation"
+    ],
+    [
+     "Total Deposits (a+b)",
+     "Domestic Operation"
+    ],
+    [
+     "Total Deposits (a+b)",
+     "Overseas Operation"
+    ],
+    [
+     "Total Deposits (a+b)",
+     "Global Operation"
+    ],
+    [
+     "a. Customer Deposits (i+ii+iii+iv+v)",
+     "Domestic Operation"
+    ],
+    [
+     "a. Customer Deposits (i+ii+iii+iv+v)",
+     "Overseas Operation"
+    ],
+    [
+     "a. Customer Deposits (i+ii+iii+iv+v)",
+     "Global Operation"
+    ],
+    [
+     "i. Current Deposits",
+     "Domestic Operation"
+    ],
+    [
+     "i. Current Deposits",
+     "Overseas Operation"
+    ],
+    [
+     "i. Current Deposits",
+     "Global Operation"
+    ],
+    [
+     "ii. Savings Deposits",
+     "Domestic Operation"
+    ],
+    [
+     "ii. Savings Deposits",
+     "Overseas Operation"
+    ],
+    [
+     "ii. Savings Deposits",
+     "Global Operation"
+    ],
+    [
+     "iii. Time Deposits",
+     "Domestic Operation"
+    ],
+    [
+     "iii. Time Deposits",
+     "Overseas Operation"
+    ],
+    [
+     "iii. Time Deposits",
+     "Global Operation"
+    ],
+    [
+     "iV. NRI Deposits",
+     "Domestic Operation"
+    ],
+    [
+     "iV. NRI Deposits",
+     "Overseas Operation"
+    ],
+    [
+     "iV. NRI Deposits",
+     "Global Operation"
+    ],
+    [
+     "V. Certificates of Deposits",
+     "Domestic Operation"
+    ],
+    [
+     "V. Certificates of Deposits",
+     "Overseas Operation"
+    ],
+    [
+     "V. Certificates of Deposits",
+     "Global Operation"
+    ],
+    [
+     "b. Deposits of Banks (i+ii)",
+     "Domestic Operation"
+    ],
+    [
+     "b. Deposits of Banks (i+ii)",
+     "Overseas Operation"
+    ],
+    [
+     "b. Deposits of Banks (i+ii)",
+     "Global Operation"
+    ],
+    [
+     "i. Banks in India",
+     "Domestic Operation"
+    ],
+    [
+     "i. Banks in India",
+     "Overseas Operation"
+    ],
+    [
+     "i. Banks in India",
+     "Global Operation"
+    ],
+    [
+     "ii. Overseas Banks",
+     "Domestic Operation"
+    ],
+    [
+     "ii. Overseas Banks",
+     "Overseas Operation"
+    ],
+    [
+     "ii. Overseas Banks",
+     "Global Operation"
+    ],
+    [
+     "Total Borrowings",
+     "Domestic Operation"
+    ],
+    [
+     "Total Borrowings",
+     "Overseas Operation"
+    ],
+    [
+     "Total Borrowings",
+     "Global Operation"
+    ],
+    [
+     "Other liabilities",
+     "Domestic Operation"
+    ],
+    [
+     "Other liabilities",
+     "Overseas Operation"
+    ],
+    [
+     "Other liabilities",
+     "Global Operation"
+    ],
+    [
+     "Total Capital & Liabilities",
+     "Domestic Operation"
+    ],
+    [
+     "Total Capital & Liabilities",
+     "Overseas Operation"
+    ],
+    [
+     "Total Capital & Liabilities",
+     "Global Operation"
+    ]
+   ]
+  },
+  "Capital Adequacy": {
+   "id": "capital_adequacy",
+   "columns": [
+    [
+     "Tier I Capital-Standalone",
+     "Domestic Operation"
+    ],
+    [
+     "Tier I Capital-Standalone",
+     "Global Operation"
+    ],
+    [
+     "Common Equity Tier I Capital -Standalone",
+     "Domestic Operation"
+    ],
+    [
+     "Common Equity Tier I Capital -Standalone",
+     "Global Operation"
+    ],
+    [
+     "Tier II Capital-Standalone",
+     "Domestic Operation"
+    ],
+    [
+     "Tier II Capital-Standalone",
+     "Global Operation"
+    ],
+    [
+     "Total Capital-Standalone",
+     "Domestic Operation"
+    ],
+    [
+     "Total Capital-Standalone",
+     "Global Operation"
+    ],
+    [
+     "Total RWAs-Standalone (a+b+c)",
+     "Domestic Operation"
+    ],
+    [
+     "Total RWAs-Standalone (a+b+c)",
+     "Global Operation"
+    ],
+    [
+     "a. Total RWAs (Credit Risk)-Standalone",
+     "Domestic Operation"
+    ],
+    [
+     "a. Total RWAs (Credit Risk)-Standalone",
+     "Global Operation"
+    ],
+    [
+     "b. Total RWAs (Market Risk)-Standalone",
+     "Domestic Operation"
+    ],
+    [
+     "b. Total RWAs (Market Risk)-Standalone",
+     "Global Operation"
+    ],
+    [
+     "c. Total RWAs (Operational Risk)-Standalone",
+     "Domestic Operation"
+    ],
+    [
+     "c. Total RWAs (Operational Risk)-Standalone",
+     "Global Operation"
+    ],
+    [
+     "Capital Ratio (CRAR)-Standalone",
+     "Domestic Operation"
+    ],
+    [
+     "Capital Ratio (CRAR)-Standalone",
+     "Global Operation"
+    ],
+    [
+     "Tier I Capital Ratio-Standalone",
+     "Domestic Operation"
+    ],
+    [
+     "Tier I Capital Ratio-Standalone",
+     "Global Operation"
+    ],
+    [
+     "CET I Capital Ratio-Standalone",
+     "Domestic Operation"
+    ],
+    [
+     "CET I Capital Ratio-Standalone",
+     "Global Operation"
+    ],
+    [
+     "Tier 2 Capital Ratio-Standalone",
+     "Domestic Operation"
+    ],
+    [
+     "Tier 2 Capital Ratio-Standalone",
+     "Global Operation"
+    ]
+   ]
+  },
+  "Asset Quality": {
+   "id": "asset_quality",
+   "columns": [
+    [
+     "1. Gross Advances",
+     "Domestic Operation"
+    ],
+    [
+     "1. Gross Advances",
+     "Overseas Operation"
+    ],
+    [
+     "1. Gross Advances",
+     "Global Operation"
+    ],
+    [
+     "8. Gross NPAs NPAs at the end of the Period (a+b+c)",
+     "Domestic Operation"
+    ],
+    [
+     "8. Gross NPAs NPAs at the end of the Period (a+b+c)",
+     "Overseas Operation"
+    ],
+    [
+     "8. Gross NPAs NPAs at the end of the Period (a+b+c)",
+     "Global Operation"
+    ],
+    [
+     "a. Sub-standard advances",
+     "Domestic Operation"
+    ],
+    [
+     "a. Sub-standard advances",
+     "Overseas Operation"
+    ],
+    [
+     "a. Sub-standard advances",
+     "Global Operation"
+    ],
+    [
+     "b. Doubtful advances",
+     "Domestic Operation"
+    ],
+    [
+     "b. Doubtful advances",
+     "Overseas Operation"
+    ],
+    [
+     "b. Doubtful advances",
+     "Global Operation"
+    ],
+    [
+     "c. Loss advances",
+     "Domestic Operation"
+    ],
+    [
+     "c. Loss advances",
+     "Overseas Operation"
+    ],
+    [
+     "c. Loss advances",
+     "Global Operation"
+    ],
+    [
+     "9. Gross NPAs to Gross Advances (%)",
+     "Domestic Operation"
+    ],
+    [
+     "9. Gross NPAs to Gross Advances (%)",
+     "Overseas Operation"
+    ],
+    [
+     "9. Gross NPAs to Gross Advances (%)",
+     "Global Operation"
+    ],
+    [
+     "12. Provisions for NPAs at end of the FY",
+     "Domestic Operation"
+    ],
+    [
+     "12. Provisions for NPAs at end of the FY",
+     "Overseas Operation"
+    ],
+    [
+     "12. Provisions for NPAs at end of the FY",
+     "Global Operation"
+    ],
+    [
+     "13. Provision Coverage Ratio (Write-Off Adj) (%)",
+     "Domestic Operation"
+    ],
+    [
+     "13. Provision Coverage Ratio (Write-Off Adj) (%)",
+     "Overseas Operation"
+    ],
+    [
+     "13. Provision Coverage Ratio (Write-Off Adj) (%)",
+     "Global Operation"
+    ],
+    [
+     "14. Net Advances",
+     "Domestic Operation"
+    ],
+    [
+     "14. Net Advances",
+     "Overseas Operation"
+    ],
+    [
+     "14. Net Advances",
+     "Global Operation"
+    ],
+    [
+     "15. Net NPAs",
+     "Domestic Operation"
+    ],
+    [
+     "15. Net NPAs",
+     "Overseas Operation"
+    ],
+    [
+     "15. Net NPAs",
+     "Global Operation"
+    ],
+    [
+     "16. Net NPAs to Net Advances (%)",
+     "Domestic Operation"
+    ],
+    [
+     "16. Net NPAs to Net Advances (%)",
+     "Overseas Operation"
+    ],
+    [
+     "16. Net NPAs to Net Advances (%)",
+     "Global Operation"
+    ],
+    [
+     "17. Restructured Standard Advances",
+     "Domestic Operation"
+    ],
+    [
+     "17. Restructured Standard Advances",
+     "Overseas Operation"
+    ],
+    [
+     "17. Restructured Standard Advances",
+     "Global Operation"
+    ],
+    [
+     "18. Restructured Std Adv to Gross Advances (%)",
+     "Domestic Operation"
+    ],
+    [
+     "18. Restructured Std Adv to Gross Advances (%)",
+     "Overseas Operation"
+    ],
+    [
+     "18. Restructured Std Adv to Gross Advances (%)",
+     "Global Operation"
+    ],
+    [
+     "19. Stressed Advances (GNPAs+RestStdAdv)",
+     "Domestic Operation"
+    ],
+    [
+     "19. Stressed Advances (GNPAs+RestStdAdv)",
+     "Overseas Operation"
+    ],
+    [
+     "19. Stressed Advances (GNPAs+RestStdAdv)",
+     "Global Operation"
+    ],
+    [
+     "20. Stressed Advances (GNPAs+RestStdAdv) to Gross Advances (%)",
+     "Domestic Operation"
+    ],
+    [
+     "20. Stressed Advances (GNPAs+RestStdAdv) to Gross Advances (%)",
+     "Overseas Operation"
+    ],
+    [
+     "20. Stressed Advances (GNPAs+RestStdAdv) to Gross Advances (%)",
+     "Global Operation"
+    ],
+    [
+     "21. Loans sold to ARCs (April to date)",
+     "Domestic Operation"
+    ],
+    [
+     "21. Loans sold to ARCs (April to date)",
+     "Overseas Operation"
+    ],
+    [
+     "21. Loans sold to ARCs (April to date)",
+     "Global Operation"
+    ],
+    [
+     "",
+     "Domestic Operation"
+    ],
+    [
+     "",
+     "Overseas Operation"
+    ],
+    [
+     "",
+     "Global Operation"
+    ]
+   ]
+  },
+  "Profitability": {
+   "id": "profitability",
+   "columns": [
+    [
+     "1. Total Interest Income (Net of Interest Tax) (April to Date)",
+     "Domestic Operation"
+    ],
+    [
+     "1. Total Interest Income (Net of Interest Tax) (April to Date)",
+     "Overseas Operation"
+    ],
+    [
+     "1. Total Interest Income (Net of Interest Tax) (April to Date)",
+     "Global Operation"
+    ],
+    [
+     "2. Interest Expense (April to Date)",
+     "Domestic Operation"
+    ],
+    [
+     "2. Interest Expense (April to Date)",
+     "Overseas Operation"
+    ],
+    [
+     "2. Interest Expense (April to Date)",
+     "Global Operation"
+    ],
+    [
+     "3. Net Interest Income (NII) (April to Date) [1 - 2]",
+     "Domestic Operation"
+    ],
+    [
+     "3. Net Interest Income (NII) (April to Date) [1 - 2]",
+     "Overseas Operation"
+    ],
+    [
+     "3. Net Interest Income (NII) (April to Date) [1 - 2]",
+     "Global Operation"
+    ],
+    [
+     "4. Other Operating Income (OOI) (April to Date)",
+     "Domestic Operation"
+    ],
+    [
+     "4. Other Operating Income (OOI) (April to Date)",
+     "Overseas Operation"
+    ],
+    [
+     "4. Other Operating Income (OOI) (April to Date)",
+     "Global Operation"
+    ],
+    [
+     "5. Total Operating Income (April to Date) [3 + 4]",
+     "Domestic Operation"
+    ],
+    [
+     "5. Total Operating Income (April to Date) [3 + 4]",
+     "Overseas Operation"
+    ],
+    [
+     "5. Total Operating Income (April to Date) [3 + 4]",
+     "Global Operation"
+    ],
+    [
+     "6. Operating Expense (OE) (April to Date)",
+     "Domestic Operation"
+    ],
+    [
+     "6. Operating Expense (OE) (April to Date)",
+     "Overseas Operation"
+    ],
+    [
+     "6. Operating Expense (OE) (April to Date)",
+     "Global Operation"
+    ],
+    [
+     "Of Which: Staff Expenses (April to Date)",
+     "Domestic Operation"
+    ],
+    [
+     "Of Which: Staff Expenses (April to Date)",
+     "Overseas Operation"
+    ],
+    [
+     "Of Which: Staff Expenses (April to Date)",
+     "Global Operation"
+    ],
+    [
+     "7. Net Operating Income (April to Date) [5 - 6]",
+     "Domestic Operation"
+    ],
+    [
+     "7. Net Operating Income (April to Date) [5 - 6]",
+     "Overseas Operation"
+    ],
+    [
+     "7. Net Operating Income (April to Date) [5 - 6]",
+     "Global Operation"
+    ],
+    [
+     "8. Capital Gains/(Losses) (April to Date)",
+     "Domestic Operation"
+    ],
+    [
+     "8. Capital Gains/(Losses) (April to Date)",
+     "Overseas Operation"
+    ],
+    [
+     "8. Capital Gains/(Losses) (April to Date)",
+     "Global Operation"
+    ],
+    [
+     "9. Other Non-operating Income/ (expenses) (April to Date)",
+     "Domestic Operation"
+    ],
+    [
+     "9. Other Non-operating Income/ (expenses) (April to Date)",
+     "Overseas Operation"
+    ],
+    [
+     "9. Other Non-operating Income/ (expenses) (April to Date)",
+     "Global Operation"
+    ],
+    [
+     "10. Earning Before Provisions &amp; Taxes (EBPT) (April to Date) [7 + 8 +9]",
+     "Domestic Operation"
+    ],
+    [
+     "10. Earning Before Provisions &amp; Taxes (EBPT) (April to Date) [7 + 8 +9]",
+     "Overseas Operation"
+    ],
+    [
+     "10. Earning Before Provisions &amp; Taxes (EBPT) (April to Date) [7 + 8 +9]",
+     "Global Operation"
+    ],
+    [
+     "11. Risk Provisions - Total (April to Date)",
+     "Domestic Operation"
+    ],
+    [
+     "11. Risk Provisions - Total (April to Date)",
+     "Overseas Operation"
+    ],
+    [
+     "11. Risk Provisions - Total (April to Date)",
+     "Global Operation"
+    ],
+    [
+     "12. Write Offs - Total (April to Date)",
+     "Domestic Operation"
+    ],
+    [
+     "12. Write Offs - Total (April to Date)",
+     "Overseas Operation"
+    ],
+    [
+     "12. Write Offs - Total (April to Date)",
+     "Global Operation"
+    ],
+    [
+     "16. Net Profit/Loss (PAT) (April to Date) [14 - 15]",
+     "Domestic Operation"
+    ],
+    [
+     "16. Net Profit/Loss (PAT) (April to Date) [14 - 15]",
+     "Overseas Operation"
+    ],
+    [
+     "16. Net Profit/Loss (PAT) (April to Date) [14 - 15]",
+     "Global Operation"
+    ]
+   ]
+  },
+  "Performance Indicators": {
+   "id": "performance_indicators",
+   "columns": [
+    [
+     "Cost of Funds (annualized)",
+     "Domestic Operation"
+    ],
+    [
+     "Cost of Funds (annualized)",
+     "Overseas Operation"
+    ],
+    [
+     "Cost of Funds (annualized)",
+     "Global Operation"
+    ],
+    [
+     "Yield on Funds (annualized)",
+     "Domestic Operation"
+    ],
+    [
+     "Yield on Funds (annualized)",
+     "Overseas Operation"
+    ],
+    [
+     "Yield on Funds (annualized)",
+     "Global Operation"
+    ],
+    [
+     "Efficiency (Cost Income) Ratio",
+     "Domestic Operation"
+    ],
+    [
+     "Efficiency (Cost Income) Ratio",
+     "Overseas Operation"
+    ],
+    [
+     "Efficiency (Cost Income) Ratio",
+     "Global Operation"
+    ],
+    [
+     "Overhead Efficiency Ratio",
+     "Domestic Operation"
+    ],
+    [
+     "Overhead Efficiency Ratio",
+     "Overseas Operation"
+    ],
+    [
+     "Overhead Efficiency Ratio",
+     "Global Operation"
+    ],
+    [
+     "Profit Margin",
+     "Domestic Operation"
+    ],
+    [
+     "Profit Margin",
+     "Overseas Operation"
+    ],
+    [
+     "Profit Margin",
+     "Global Operation"
+    ],
+    [
+     "Net Interest Margin (NIM) (annualized)",
+     "Domestic Operation"
+    ],
+    [
+     "Net Interest Margin (NIM) (annualized)",
+     "Overseas Operation"
+    ],
+    [
+     "Net Interest Margin (NIM) (annualized)",
+     "Global Operation"
+    ],
+    [
+     "Return on Equity (annualized)",
+     "Domestic Operation"
+    ],
+    [
+     "Return on Equity (annualized)",
+     "Overseas Operation"
+    ],
+    [
+     "Return on Equity (annualized)",
+     "Global Operation"
+    ],
+    [
+     "Return on Total Assets (annualized)",
+     "Domestic Operation"
+    ],
+    [
+     "Return on Total Assets (annualized)",
+     "Overseas Operation"
+    ],
+    [
+     "Return on Total Assets (annualized)",
+     "Global Operation"
+    ],
+    [
+     "Operating Profit to Total Working Funds (annualized)",
+     "Domestic Operation"
+    ],
+    [
+     "Operating Profit to Total Working Funds (annualized)",
+     "Overseas Operation"
+    ],
+    [
+     "Operating Profit to Total Working Funds (annualized)",
+     "Global Operation"
+    ],
+    [
+     "Interest Income to Total Income",
+     "Domestic Operation"
+    ],
+    [
+     "Interest Income to Total Income",
+     "Overseas Operation"
+    ],
+    [
+     "Interest Income to Total Income",
+     "Global Operation"
+    ],
+    [
+     "Non-Interest Income to Total Income",
+     "Domestic Operation"
+    ],
+    [
+     "Non-Interest Income to Total Income",
+     "Overseas Operation"
+    ],
+    [
+     "Non-Interest Income to Total Income",
+     "Global Operation"
+    ],
+    [
+     "Staff Expenses to Total Income",
+     "Domestic Operation"
+    ],
+    [
+     "Staff Expenses to Total Income",
+     "Overseas Operation"
+    ],
+    [
+     "Staff Expenses to Total Income",
+     "Global Operation"
+    ]
+   ]
+  },
+  "Major Sectoral": {
+   "id": "major_sectoral",
+   "columns": [
+    [
+     "Gross Advances",
+     "Domestic Operation"
+    ],
+    [
+     "Gross NPAs",
+     "Domestic Operation"
+    ],
+    [
+     "Gross NPAs to Gross Advances (%)",
+     "Domestic Operation"
+    ],
+    [
+     "Food Credit - Gross Advances",
+     "Domestic Operation"
+    ],
+    [
+     "Food Credit - GNPAs",
+     "Domestic Operation"
+    ],
+    [
+     "Food Credit - GNPA Ratio",
+     "Domestic Operation"
+    ],
+    [
+     "Non-Food Credit - Gross Advances",
+     "Domestic Operation"
+    ],
+    [
+     "Non-Food Credit - GNPAs",
+     "Domestic Operation"
+    ],
+    [
+     "Non-Food Credit - GNPA Ratio",
+     "Domestic Operation"
+    ],
+    [
+     "Agriculture and Allied Activities - Gross Advances",
+     "Domestic Operation"
+    ],
+    [
+     "Agriculture and Allied Activities - Gross NPAs",
+     "Domestic Operation"
+    ],
+    [
+     "Agriculture and Allied Activities - GNPA Ratio",
+     "Domestic Operation"
+    ],
+    [
+     "Industry - Gross Advances",
+     "Domestic Operation"
+    ],
+    [
+     "Industry - Gross NPAs",
+     "Domestic Operation"
+    ],
+    [
+     "Industry - GNPA Ratio",
+     "Domestic Operation"
+    ],
+    [
+     "Services - Gross Advances",
+     "Domestic Operation"
+    ],
+    [
+     "Services - Gross NPAs",
+     "Domestic Operation"
+    ],
+    [
+     "Services - GNPA Ratio",
+     "Domestic Operation"
+    ],
+    [
+     "Retail Loans - Gross Advances",
+     "Domestic Operation"
+    ],
+    [
+     "Retail Loans - Gross NPAs",
+     "Domestic Operation"
+    ],
+    [
+     "Retail Loans - GNPA Ratio",
+     "Domestic Operation"
+    ],
+    [
+     "Other Non-food Credit - Gross Advances",
+     "Domestic Operation"
+    ],
+    [
+     "Other Non-food Credit - GNPAs",
+     "Domestic Operation"
+    ],
+    [
+     "Other Non-food Credit - GNPA Ratio",
+     "Domestic Operation"
+    ],
+    [
+     "Retail Loans - Housing Loans - Gross Advances",
+     "Domestic Operation"
+    ],
+    [
+     "Retail Loans - Housing Loans - GNPAs",
+     "Domestic Operation"
+    ],
+    [
+     "Retail Loans - Housing Loans - GNPA Ratio",
+     "Domestic Operation"
+    ],
+    [
+     "Retail Loans - Vehicle/Auto Loans - Gross Advances",
+     "Domestic Operation"
+    ],
+    [
+     "Retail Loans - Vehicle/Auto Loans - GNPAs",
+     "Domestic Operation"
+    ],
+    [
+     "Retail Loans - Vehicle/Auto Loans - GNPA Ratio",
+     "Domestic Operation"
+    ],
+    [
+     "Retail Loans - Credit Card Receivables - Gross Advances",
+     "Domestic Operation"
+    ],
+    [
+     "Retail Loans - Credit Card Receivables - GNPAs",
+     "Domestic Operation"
+    ],
+    [
+     "Retail Loans - Credit Card Receivables - GNPA Ratio",
+     "Domestic Operation"
+    ],
+    [
+     "Retail Loans - Education - Gross Advances",
+     "Domestic Operation"
+    ],
+    [
+     "Retail Loans - Education - GNPAs",
+     "Domestic Operation"
+    ],
+    [
+     "Retail Loans - Education - GNPA Ratio",
+     "Domestic Operation"
+    ],
+    [
+     "Other Retail Loans - Gross Advances",
+     "Domestic Operation"
+    ],
+    [
+     "Other Retail Loans - GNPAs",
+     "Domestic Operation"
+    ],
+    [
+     "Other Retail Loans - GNPA Ratio",
+     "Domestic Operation"
+    ],
+    [
+     "",
+     "Domestic Operation"
+    ]
+   ]
+  },
+  "Priority-Non_Priority Break-up": {
+   "id": "priority_non_priority_break_up",
+   "columns": [
+    [
+     "Gross Advances",
+     "Domestic Operation"
+    ],
+    [
+     "Gross NPAs",
+     "Domestic Operation"
+    ],
+    [
+     "Gross NPAs to Gross Advances (%)",
+     "Domestic Operation"
+    ],
+    [
+     "Priority Sector - Gross Advances",
+     "Domestic Operation"
+    ],
+    [
+     "Priority Sector - Gross NPAs",
+     "Domestic Operation"
+    ],
+    [
+     "Priority Sector - GNPA Ratio",
+     "Domestic Operation"
+    ],
+    [
+     "Other than Priority - Gross Advances",
+     "Domestic Operation"
+    ],
+    [
+     "Other than Priority - GNPAs",
+     "Domestic Operation"
+    ],
+    [
+     "Other than Priority - GNPA Ratio",
+     "Domestic Operation"
+    ],
+    [
+     "Priority - Agriculture and Allied Activities - Gross Advances",
+     "Domestic Operation"
+    ],
+    [
+     "Priority - Agriculture and Allied Activities - GNPAs",
+     "Domestic Operation"
+    ],
+    [
+     "Priority - Agriculture and Allied Activities - GNPA Ratio",
+     "Domestic Operation"
+    ],
+    [
+     "Priority - MSE - Gross Advances",
+     "Domestic Operation"
+    ],
+    [
+     "Priority - MSE - GNPAs",
+     "Domestic Operation"
+    ],
+    [
+     "Priority - MSE - GNPA Ratio",
+     "Domestic Operation"
+    ],
+    [
+     "Other Priority Sector - Gross Advances",
+     "Domestic Operation"
+    ],
+    [
+     "Other Priority Sector - GNPAs",
+     "Domestic Operation"
+    ],
+    [
+     "Other Priority Sector - GNPA Ratio",
+     "Domestic Operation"
+    ]
+   ]
+  },
+  "Infrastructure Financing Items": {
+   "id": "infrastructure_financing_items",
+   "columns": [
+    [
+     "Total",
+     ""
+    ],
+    [
+     "1. Transport and adjoining Infrastructure",
+     ""
+    ],
+    [
+     "1.1 Roads and Bridges",
+     ""
+    ],
+    [
+     "1.1.1 Highways",
+     ""
+    ],
+    [
+     "1.1.2 Other Roads",
+     ""
+    ],
+    [
+     "1.2 Ports",
+     ""
+    ],
+    [
+     "1.3 Shipyards",
+     ""
+    ],
+    [
+     "1.4 Inland Waterways",
+     ""
+    ],
+    [
+     "1.5 Airport",
+     ""
+    ],
+    [
+     "1.6 Railway track including electrical & signalling system, tunnels, viaducts, bridges",
+     ""
+    ],
+    [
+     "1.7 Railway rolling stock along with workshop and associated maintenance facilities",
+     ""
+    ],
+    [
+     "1.8 Railway terminal infrastructure including stations and adjoining commercial infrastructure",
+     ""
+    ],
+    [
+     "1.9 Urban Public Transport (except rolling stock in case of urban road transport)",
+     ""
+    ],
+    [
+     "1.10 Logistics Infrastructure",
+     ""
+    ],
+    [
+     "1.11 Bulk Material Transportation Pipelines",
+     ""
+    ],
+    [
+     "2. Energy",
+     ""
+    ],
+    [
+     "2.1 Electricity Generation",
+     ""
+    ],
+    [
+     "2.1.1 Central Govt PSUs",
+     ""
+    ],
+    [
+     "2.1.2 State Govt PSUs (incl. SEBs)",
+     ""
+    ],
+    [
+     "2.1.3 Private Sector",
+     ""
+    ],
+    [
+     "2.2 Electricity Transmission",
+     ""
+    ],
+    [
+     "2.2.1 Central Govt PSUs",
+     ""
+    ],
+    [
+     "2.2.2 State Govt PSUs (incl. SEBs)",
+     ""
+    ],
+    [
+     "2.2.3 Private Sector",
+     ""
+    ],
+    [
+     "2.3 Electricity Distribution",
+     ""
+    ],
+    [
+     "2.3.1 Central Govt PSUs",
+     ""
+    ],
+    [
+     "2.3.2 State Govt PSUs (incl. SEBs)",
+     ""
+    ],
+    [
+     "2.3.3 Private Sector",
+     ""
+    ],
+    [
+     "2.4 Oil/Gas/Liquefied Natural Gas (LNG) storage facility",
+     ""
+    ],
+    [
+     "3. Water and Sanitation",
+     ""
+    ],
+    [
+     "3.1 Solid Waste Management",
+     ""
+    ],
+    [
+     "3.2 Water supply pipelines",
+     ""
+    ],
+    [
+     "3.3 Water treatment plants",
+     ""
+    ],
+    [
+     "3.4 Sewage collection, treatment and disposal system",
+     ""
+    ],
+    [
+     "3.5 Irrigation (dams, channels, embankments etc)",
+     ""
+    ],
+    [
+     "3.6 Storm Water Drainage System",
+     ""
+    ],
+    [
+     "3.7 Slurry Pipelines",
+     ""
+    ],
+    [
+     "4. Communication",
+     ""
+    ],
+    [
+     "4.1 Telecommunication (Fixed network)",
+     ""
+    ],
+    [
+     "4.2 Telecommunication towers",
+     ""
+    ],
+    [
+     "4.3 Telecommunication and Telecom Services",
+     ""
+    ],
+    [
+     "5. Social and Commercial Infrastructure",
+     ""
+    ],
+    [
+     "5.1 Education Institutions (capital stock)",
+     ""
+    ],
+    [
+     "5.2 Sports Infrastructure",
+     ""
+    ],
+    [
+     "5.3 Hospitals (capital stock)",
+     ""
+    ],
+    [
+     "5.4 Tourism Infrastructure",
+     ""
+    ],
+    [
+     "5.4.1 Three-star or higher category classified hotels located outside cities with population of more than 1 million",
+     ""
+    ],
+    [
+     "5.4.2 Ropeways and cable cars",
+     ""
+    ],
+    [
+     "5.4.3 Others",
+     ""
+    ],
+    [
+     "5.5 Common infrastructure for Industrial Parks and other parks with industrialn activity such as food parks, textile parks, Special Economic Zones, tourism facilities and agriculture markets",
+     ""
+    ],
+    [
+     "5.6 Fertilizer (Capital investment)",
+     ""
+    ],
+    [
+     "5.7 Post harvest storage infrastructure for agriculture and horticultural produce including cold storage",
+     ""
+    ],
+    [
+     "5.8 Terminal markets",
+     ""
+    ],
+    [
+     "5.9 Soil-testing laboratories",
+     ""
+    ],
+    [
+     "5.10 Cold Chain",
+     ""
+    ],
+    [
+     "5.11 Affordable Housing",
+     ""
+    ],
+    [
+     "5.12 Affordable Rental Housing Complex",
+     ""
+    ],
+    [
+     "5.13 Exhibition-cum-Convention Centre",
+     ""
+    ],
+    [
+     "6. Others, if any, please specify",
+     ""
+    ]
+   ],
+   "unit": "not_printed",
+   "note_unit": "The sheet prints no unit line; the export's Unit prompt (crores) is asserted on the other seven sheets. Values match crores in scale (Bank of Baroda total ₹1,13,864 Cr, Jun 2026)."
+  }
+ }
+}

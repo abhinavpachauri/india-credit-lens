@@ -311,7 +311,7 @@ def validate(pipeline: str, reg: dict | None = None) -> list[str]:
                 errs.append(f"{n['label']}: kind {cls} is neither applies nor not_applicable")
             elif c["status"] == NO and not c.get("reason"):
                 errs.append(f"{n['label']}: kind {cls} not applicable without a reason")
-    ref_series = _reference_series()
+    ref_series = _reference_series({(h.get("driver") or {}).get("pipeline") for h in reg["hypotheses"]} - {None})
     errs += _map_errors(pipeline, reg)
     tp = ROOT / manifest.load(pipeline)["paths"]["data_dir"] / "relationship_tests.json"
     ids = [r["test_id"] for r in _tests(tp) if r.get("test_id")]
@@ -409,11 +409,16 @@ def _map_errors(pipeline: str, reg: dict) -> list[str]:
     return errs
 
 
-def _reference_series() -> dict[str, set]:
+def _reference_series(named: set | None = None) -> dict[str, set]:
     """reference pipeline -> {(dataset, code)} in its CSV, for every reference pipeline the
-    manifests declare (was MoSPI only, so a typo in any other source passed validation)."""
+    manifests declare (was MoSPI only, so a typo in any other source passed validation) that the
+    register names. Reading every reference read the bank-wise table too (~2.8 million rows for
+    the full history) though no driver names it; a pipeline the register names but the manifests
+    do not declare still fails, in _map_errors."""
     out = {}
     for p in manifest.reference_pipelines():
+        if named is not None and p not in named:
+            continue
         with manifest.consolidated_csv(p).open() as f:
             out[p] = {(r["dataset"], r["code"]) for r in csv.DictReader(f)}
     return out

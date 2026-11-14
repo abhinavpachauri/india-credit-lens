@@ -1,0 +1,60 @@
+{
+  "id": "rbi_bankwise",
+  "name": "RBI: bank-wise quarterly variables of SCBs (DBIE)",
+  "order": 0,
+  "kind": "reference",
+  "note_why": "Each bank's credit from official RBI records (user, 2026-11-14; analysis/BANKWISE_SPEC.md). Declared reference until phase 4: a primary pipeline must already store signals and have a model (test_manifest), and this one has neither yet. It becomes primary, surfaced inside the SIBC page, when its signals exist.",
+  "paths": {
+    "data_dir": "analysis/rbi_bankwise",
+    "releases": "analysis/rbi_bankwise/releases",
+    "consolidated_csv": "analysis/rbi_bankwise/rbi_bankwise_consolidated.csv",
+    "sheets": "analysis/pipelines/rbi_bankwise/sheets.json",
+    "roster": "analysis/ontology/banks.json"
+  },
+  "note_consolidated_csv": "Local only (git-ignored): ~2.8 million values for 2002 → 2026 are too many to commit, so the committed record is the saved quarters and this table is rebuilt from them by the first gate stage (user, 2026-11-14).",
+  "calendar": {
+    "first_quarter": "2002-03-31",
+    "lag_ceiling_days": 165,
+    "history_required": false,
+    "note": "Jun 2026 was on DBIE by 14 Nov 2026 (137 days); 165 days until two clean cycles are measured. history_required turns true when the backfill (phase 3) is done."
+  },
+  "currency_stage": "calendar",
+  "modules": {
+    "fetch": "pipelines/rbi_bankwise/fetch.py",
+    "reader": "pipelines/rbi_bankwise/reader.py",
+    "consolidate": "pipelines/rbi_bankwise/consolidate.py",
+    "calendar": "pipelines/rbi_bankwise/validate_calendar.py"
+  },
+  "gate": [
+    {
+      "id": "consolidate",
+      "label": "0.7 saved quarters → local table",
+      "pipeline": "consolidate",
+      "note": "Wrote"
+    },
+    {
+      "id": "consolidate_check",
+      "label": "0.8 local table equals a rebuild",
+      "pipeline": "consolidate",
+      "args": ["--check"],
+      "note": "fresh"
+    },
+    {
+      "id": "tests",
+      "label": "T.  unit tests (pytest)",
+      "builtin": "pytest"
+    },
+    {
+      "id": "calendar",
+      "label": "1b. newest quarter due + history count",
+      "pipeline": "calendar",
+      "note": "current"
+    },
+    {
+      "id": "reconcile",
+      "label": "5.  architecture reconcile",
+      "core": "reconcile",
+      "note": "drift"
+    }
+  ]
+}
