@@ -2,9 +2,870 @@
  "_meta": {
   "what": "cells where RBI's own bank-wise figures fail a check in one bank or group (BANKWISE_SPEC §5); a signal never publishes a flagged cell as if it held",
   "rule": "isolated = fewer than 10 banks failing the same column in a quarter",
-  "count": 2021
+  "count": 2144
  },
  "flags": [
+  {
+   "quarter": "2015-03-31",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "member group(s)",
+   "detail": "group:scb: member group(s) ['group:sfb'] absent"
+  },
+  {
+   "quarter": "2015-03-31",
+   "check": "5.4",
+   "entity": "allahabad-bank",
+   "column": "major_sectoral gross_advances@dom",
+   "detail": "allahabad-bank major_sectoral gross_advances@dom: 145076.5735 vs parts 145185.1235"
+  },
+  {
+   "quarter": "2015-03-31",
+   "check": "5.4",
+   "entity": "allahabad-bank",
+   "column": "priority_non_priority_break_up gross_advances@dom",
+   "detail": "allahabad-bank priority_non_priority_break_up gross_advances@dom: 145076.5735 vs parts 145185.1235"
+  },
+  {
+   "quarter": "2015-03-31",
+   "check": "5.4",
+   "entity": "bank-of-india",
+   "column": "major_sectoral gross_npas@dom",
+   "detail": "bank-of-india major_sectoral gross_npas@dom: 20244.96 vs parts 70954.0206"
+  },
+  {
+   "quarter": "2015-03-31",
+   "check": "5.4",
+   "entity": "bank-of-india",
+   "column": "priority_non_priority_break_up gross_advances@dom",
+   "detail": "bank-of-india priority_non_priority_break_up gross_advances@dom: 289515.12 vs parts 297910.4600"
+  },
+  {
+   "quarter": "2015-03-31",
+   "check": "5.4",
+   "entity": "bank-of-india",
+   "column": "priority_non_priority_break_up gross_npas@dom",
+   "detail": "bank-of-india priority_non_priority_break_up gross_npas@dom: 20244.96 vs parts 15968.7010"
+  },
+  {
+   "quarter": "2015-03-31",
+   "check": "5.4",
+   "entity": "city-union-bank",
+   "column": "major_sectoral gross_advances@dom",
+   "detail": "city-union-bank major_sectoral gross_advances@dom: 18088.5442 vs parts 17129.3236"
+  },
+  {
+   "quarter": "2015-03-31",
+   "check": "5.4",
+   "entity": "firstrand-bank",
+   "column": "major_sectoral gross_advances@dom",
+   "detail": "firstrand-bank major_sectoral gross_advances@dom: 283.0293 vs parts 282.2873"
+  },
+  {
+   "quarter": "2015-03-31",
+   "check": "5.4",
+   "entity": "group:foreign",
+   "column": "major_sectoral gross_advances@dom",
+   "detail": "group:foreign major_sectoral gross_advances@dom: 336638.0047 vs parts 336637.2628"
+  },
+  {
+   "quarter": "2015-03-31",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "major_sectoral gross_advances@dom",
+   "detail": "group:psb major_sectoral gross_advances@dom: 4917119.113 vs parts 4893709.5011"
+  },
+  {
+   "quarter": "2015-03-31",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "major_sectoral gross_npas@dom",
+   "detail": "group:psb major_sectoral gross_npas@dom: 267065.0315 vs parts 317669.1899"
+  },
+  {
+   "quarter": "2015-03-31",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "priority_non_priority_break_up gross_advances@dom",
+   "detail": "group:psb priority_non_priority_break_up gross_advances@dom: 4917119.113 vs parts 4845268.6680"
+  },
+  {
+   "quarter": "2015-03-31",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "priority_non_priority_break_up gross_npas@dom",
+   "detail": "group:psb priority_non_priority_break_up gross_npas@dom: 267065.0315 vs parts 262744.6929"
+  },
+  {
+   "quarter": "2015-03-31",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "group:psb profitability 7_net_operating_income_april_to_date_5_6@dom: 127461.0131 vs parts 127764.6822"
+  },
+  {
+   "quarter": "2015-03-31",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "group:psb profitability 7_net_operating_income_april_to_date_5_6@glb: 139202.0397 vs parts 139505.7088"
+  },
+  {
+   "quarter": "2015-03-31",
+   "check": "5.4",
+   "entity": "group:pvt",
+   "column": "major_sectoral gross_advances@dom",
+   "detail": "group:pvt major_sectoral gross_advances@dom: 1437338.1799 vs parts 1434366.8747"
+  },
+  {
+   "quarter": "2015-03-31",
+   "check": "5.4",
+   "entity": "group:pvt",
+   "column": "major_sectoral gross_npas@dom",
+   "detail": "group:pvt major_sectoral gross_npas@dom: 31576.0262 vs parts 31488.2230"
+  },
+  {
+   "quarter": "2015-03-31",
+   "check": "5.4",
+   "entity": "group:scb",
+   "column": "major_sectoral gross_advances@dom",
+   "detail": "group:scb major_sectoral gross_advances@dom: 6691095.2976 vs parts 6664713.6386"
+  },
+  {
+   "quarter": "2015-03-31",
+   "check": "5.4",
+   "entity": "group:scb",
+   "column": "major_sectoral gross_npas@dom",
+   "detail": "group:scb major_sectoral gross_npas@dom: 309398.8598 vs parts 359915.2150"
+  },
+  {
+   "quarter": "2015-03-31",
+   "check": "5.4",
+   "entity": "group:scb",
+   "column": "priority_non_priority_break_up gross_advances@dom",
+   "detail": "group:scb priority_non_priority_break_up gross_advances@dom: 6691095.2976 vs parts 6619244.8526"
+  },
+  {
+   "quarter": "2015-03-31",
+   "check": "5.4",
+   "entity": "group:scb",
+   "column": "priority_non_priority_break_up gross_npas@dom",
+   "detail": "group:scb priority_non_priority_break_up gross_npas@dom: 309398.8598 vs parts 305078.5212"
+  },
+  {
+   "quarter": "2015-03-31",
+   "check": "5.4",
+   "entity": "indian-bank",
+   "column": "major_sectoral gross_advances@dom",
+   "detail": "indian-bank major_sectoral gross_advances@dom: 122907.296 vs parts 99809.1291"
+  },
+  {
+   "quarter": "2015-03-31",
+   "check": "5.4",
+   "entity": "indian-bank",
+   "column": "priority_non_priority_break_up gross_advances@dom",
+   "detail": "indian-bank priority_non_priority_break_up gross_advances@dom: 122907.296 vs parts 104335.1060"
+  },
+  {
+   "quarter": "2015-03-31",
+   "check": "5.4",
+   "entity": "indian-bank",
+   "column": "priority_non_priority_break_up gross_npas@dom",
+   "detail": "indian-bank priority_non_priority_break_up gross_npas@dom: 5366.3876 vs parts 5353.0480"
+  },
+  {
+   "quarter": "2015-03-31",
+   "check": "5.4",
+   "entity": "indian-overseas-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "indian-overseas-bank profitability 7_net_operating_income_april_to_date_5_6@dom: 2874.9418 vs parts 3128.4263"
+  },
+  {
+   "quarter": "2015-03-31",
+   "check": "5.4",
+   "entity": "indian-overseas-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "indian-overseas-bank profitability 7_net_operating_income_april_to_date_5_6@glb: 3321.1936 vs parts 3574.6781"
+  },
+  {
+   "quarter": "2015-03-31",
+   "check": "5.4",
+   "entity": "ing-vysya-bank",
+   "column": "major_sectoral gross_advances@dom",
+   "detail": "ing-vysya-bank major_sectoral gross_advances@dom: 40718.5051 vs parts 40548.5535"
+  },
+  {
+   "quarter": "2015-03-31",
+   "check": "5.4",
+   "entity": "ing-vysya-bank",
+   "column": "major_sectoral gross_npas@dom",
+   "detail": "ing-vysya-bank major_sectoral gross_npas@dom: 745.2361 vs parts 661.8845"
+  },
+  {
+   "quarter": "2015-03-31",
+   "check": "5.4",
+   "entity": "lakshmi-vilas-bank",
+   "column": "major_sectoral gross_advances@dom",
+   "detail": "lakshmi-vilas-bank major_sectoral gross_advances@dom: 16512.8446 vs parts 14868.1575"
+  },
+  {
+   "quarter": "2015-03-31",
+   "check": "5.4",
+   "entity": "lakshmi-vilas-bank",
+   "column": "major_sectoral gross_npas@dom",
+   "detail": "lakshmi-vilas-bank major_sectoral gross_npas@dom: 454.6194 vs parts 450.2657"
+  },
+  {
+   "quarter": "2015-03-31",
+   "check": "5.4",
+   "entity": "state-bank-of-india",
+   "column": "priority_non_priority_break_up gross_advances@dom",
+   "detail": "state-bank-of-india priority_non_priority_break_up gross_advances@dom: 1100891.77 vs parts 1039109.6200"
+  },
+  {
+   "quarter": "2015-03-31",
+   "check": "5.4",
+   "entity": "state-bank-of-india",
+   "column": "priority_non_priority_break_up gross_npas@dom",
+   "detail": "state-bank-of-india priority_non_priority_break_up gross_npas@dom: 54106.69 vs parts 54075.9500"
+  },
+  {
+   "quarter": "2015-03-31",
+   "check": "5.4",
+   "entity": "vijaya-bank",
+   "column": "major_sectoral gross_advances@dom",
+   "detail": "vijaya-bank major_sectoral gross_advances@dom: 87691.5364 vs parts 87271.5364"
+  },
+  {
+   "quarter": "2015-03-31",
+   "check": "5.4",
+   "entity": "vijaya-bank",
+   "column": "major_sectoral gross_npas@dom",
+   "detail": "vijaya-bank major_sectoral gross_npas@dom: 2443.2137 vs parts 2338.3115"
+  },
+  {
+   "quarter": "2015-03-31",
+   "check": "5.4",
+   "entity": "yes-bank",
+   "column": "major_sectoral gross_advances@dom",
+   "detail": "yes-bank major_sectoral gross_advances@dom: 75775.4924 vs parts 75578.0466"
+  },
+  {
+   "quarter": "2015-03-31",
+   "check": "5.4",
+   "entity": "yes-bank",
+   "column": "major_sectoral gross_npas@dom",
+   "detail": "yes-bank major_sectoral gross_npas@dom: 313.4008 vs parts 313.3029"
+  },
+  {
+   "quarter": "2015-03-31",
+   "check": "5.5",
+   "entity": "capital-local-area-bank",
+   "column": "sheets",
+   "detail": "capital-local-area-bank: absent from ['major_balance_sheet_items', 'asset_quality', 'profitability', 'performance_indicators', 'major_sectoral', 'priority_non_priority_break_up']"
+  },
+  {
+   "quarter": "2015-03-31",
+   "check": "5.5",
+   "entity": "coastal-local-area-bank",
+   "column": "sheets",
+   "detail": "coastal-local-area-bank: absent from ['major_balance_sheet_items', 'asset_quality', 'profitability', 'performance_indicators', 'major_sectoral', 'priority_non_priority_break_up']"
+  },
+  {
+   "quarter": "2015-03-31",
+   "check": "5.5",
+   "entity": "krishna-bhima-samruddhi-lab",
+   "column": "sheets",
+   "detail": "krishna-bhima-samruddhi-lab: absent from ['major_balance_sheet_items', 'asset_quality', 'profitability', 'performance_indicators', 'major_sectoral', 'priority_non_priority_break_up']"
+  },
+  {
+   "quarter": "2015-03-31",
+   "check": "5.5",
+   "entity": "subhadra-local-area-bank",
+   "column": "sheets",
+   "detail": "subhadra-local-area-bank: absent from ['major_balance_sheet_items', 'asset_quality', 'profitability', 'performance_indicators', 'major_sectoral', 'priority_non_priority_break_up']"
+  },
+  {
+   "quarter": "2015-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "member group(s)",
+   "detail": "group:scb: member group(s) ['group:sfb'] absent"
+  },
+  {
+   "quarter": "2015-06-30",
+   "check": "5.3",
+   "entity": "allahabad-bank",
+   "column": "asset_quality 1. Gross Advances",
+   "detail": "allahabad-bank asset_quality 1. Gross Advances: 143152.6371 + 7984.8665 vs 154905.2506"
+  },
+  {
+   "quarter": "2015-06-30",
+   "check": "5.3",
+   "entity": "allahabad-bank",
+   "column": "asset_quality 14. Net Advances",
+   "detail": "allahabad-bank asset_quality 14. Net Advances: 139797.5625 + 7881.3506 vs 147634.2306"
+  },
+  {
+   "quarter": "2015-06-30",
+   "check": "5.3",
+   "entity": "group:psb",
+   "column": "asset_quality 1. Gross Advances",
+   "detail": "group:psb asset_quality 1. Gross Advances: 4788574.3442 + 710047.7112 vs 5502389.8026"
+  },
+  {
+   "quarter": "2015-06-30",
+   "check": "5.3",
+   "entity": "group:psb",
+   "column": "asset_quality 14. Net Advances",
+   "detail": "group:psb asset_quality 14. Net Advances: 4647144.6663 + 702120.954 vs 5349220.938"
+  },
+  {
+   "quarter": "2015-06-30",
+   "check": "5.3",
+   "entity": "group:scb",
+   "column": "asset_quality 1. Gross Advances",
+   "detail": "group:scb asset_quality 1. Gross Advances: 6604345.7979 + 885776.709 vs 7493890.2642"
+  },
+  {
+   "quarter": "2015-06-30",
+   "check": "5.3",
+   "entity": "group:scb",
+   "column": "asset_quality 14. Net Advances",
+   "detail": "group:scb asset_quality 14. Net Advances: 6430792.3008 + 876652.6454 vs 7307400.2739"
+  },
+  {
+   "quarter": "2015-06-30",
+   "check": "5.4",
+   "entity": "allahabad-bank",
+   "column": "major_sectoral gross_advances@dom",
+   "detail": "allahabad-bank major_sectoral gross_advances@dom: 143152.6371 vs parts 146605.3218"
+  },
+  {
+   "quarter": "2015-06-30",
+   "check": "5.4",
+   "entity": "allahabad-bank",
+   "column": "major_sectoral gross_npas@dom",
+   "detail": "allahabad-bank major_sectoral gross_npas@dom: 8377.3874 vs parts 8062.3251"
+  },
+  {
+   "quarter": "2015-06-30",
+   "check": "5.4",
+   "entity": "allahabad-bank",
+   "column": "priority_non_priority_break_up gross_advances@dom",
+   "detail": "allahabad-bank priority_non_priority_break_up gross_advances@dom: 143152.6371 vs parts 146920.3841"
+  },
+  {
+   "quarter": "2015-06-30",
+   "check": "5.4",
+   "entity": "bank-of-india",
+   "column": "major_sectoral gross_advances@dom",
+   "detail": "bank-of-india major_sectoral gross_advances@dom: 280986.59 vs parts 385659.7600"
+  },
+  {
+   "quarter": "2015-06-30",
+   "check": "5.4",
+   "entity": "bank-of-india",
+   "column": "major_sectoral gross_npas@dom",
+   "detail": "bank-of-india major_sectoral gross_npas@dom: 24401.63 vs parts 23984.4600"
+  },
+  {
+   "quarter": "2015-06-30",
+   "check": "5.4",
+   "entity": "bank-of-india",
+   "column": "priority_non_priority_break_up gross_advances@dom",
+   "detail": "bank-of-india priority_non_priority_break_up gross_advances@dom: 280986.59 vs parts 373106.6800"
+  },
+  {
+   "quarter": "2015-06-30",
+   "check": "5.4",
+   "entity": "bank-of-india",
+   "column": "priority_non_priority_break_up gross_npas@dom",
+   "detail": "bank-of-india priority_non_priority_break_up gross_npas@dom: 24401.63 vs parts 8154.0400"
+  },
+  {
+   "quarter": "2015-06-30",
+   "check": "5.4",
+   "entity": "barclays-bank-plc",
+   "column": "major_sectoral gross_advances@dom",
+   "detail": "barclays-bank-plc major_sectoral gross_advances@dom: 13793.4285 vs parts 12734.0809"
+  },
+  {
+   "quarter": "2015-06-30",
+   "check": "5.4",
+   "entity": "barclays-bank-plc",
+   "column": "major_sectoral gross_npas@dom",
+   "detail": "barclays-bank-plc major_sectoral gross_npas@dom: 306.4616 vs parts 246.9917"
+  },
+  {
+   "quarter": "2015-06-30",
+   "check": "5.4",
+   "entity": "firstrand-bank",
+   "column": "major_sectoral gross_advances@dom",
+   "detail": "firstrand-bank major_sectoral gross_advances@dom: 312.2743 vs parts 311.2751"
+  },
+  {
+   "quarter": "2015-06-30",
+   "check": "5.4",
+   "entity": "firstrand-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "firstrand-bank profitability 7_net_operating_income_april_to_date_5_6@dom: -12.2349 vs parts -10.8175"
+  },
+  {
+   "quarter": "2015-06-30",
+   "check": "5.4",
+   "entity": "firstrand-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "firstrand-bank profitability 7_net_operating_income_april_to_date_5_6@glb: -12.2349 vs parts -10.8175"
+  },
+  {
+   "quarter": "2015-06-30",
+   "check": "5.4",
+   "entity": "group:foreign",
+   "column": "major_sectoral gross_advances@dom",
+   "detail": "group:foreign major_sectoral gross_advances@dom: 348124.3428 vs parts 347063.9959"
+  },
+  {
+   "quarter": "2015-06-30",
+   "check": "5.4",
+   "entity": "group:foreign",
+   "column": "major_sectoral gross_npas@dom",
+   "detail": "group:foreign major_sectoral gross_npas@dom: 11165.8169 vs parts 11106.3470"
+  },
+  {
+   "quarter": "2015-06-30",
+   "check": "5.4",
+   "entity": "group:foreign",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "group:foreign profitability 7_net_operating_income_april_to_date_5_6@dom: 5916.9985 vs parts 5918.4159"
+  },
+  {
+   "quarter": "2015-06-30",
+   "check": "5.4",
+   "entity": "group:foreign",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "group:foreign profitability 7_net_operating_income_april_to_date_5_6@glb: 5916.9977 vs parts 5918.4151"
+  },
+  {
+   "quarter": "2015-06-30",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "major_sectoral gross_advances@dom",
+   "detail": "group:psb major_sectoral gross_advances@dom: 4788574.3442 vs parts 4896700.1988"
+  },
+  {
+   "quarter": "2015-06-30",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "major_sectoral gross_npas@dom",
+   "detail": "group:psb major_sectoral gross_npas@dom: 284255.9755 vs parts 283471.7984"
+  },
+  {
+   "quarter": "2015-06-30",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "priority_non_priority_break_up gross_advances@dom",
+   "detail": "group:psb priority_non_priority_break_up gross_advances@dom: 4788574.3442 vs parts 4834149.1911"
+  },
+  {
+   "quarter": "2015-06-30",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "priority_non_priority_break_up gross_npas@dom",
+   "detail": "group:psb priority_non_priority_break_up gross_npas@dom: 284255.9755 vs parts 267967.6855"
+  },
+  {
+   "quarter": "2015-06-30",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "group:psb profitability 7_net_operating_income_april_to_date_5_6@dom: 31116.482 vs parts 31116.0562"
+  },
+  {
+   "quarter": "2015-06-30",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "group:psb profitability 7_net_operating_income_april_to_date_5_6@glb: 33726.1585 vs parts 33725.7327"
+  },
+  {
+   "quarter": "2015-06-30",
+   "check": "5.4",
+   "entity": "group:pvt",
+   "column": "major_sectoral gross_advances@dom",
+   "detail": "group:pvt major_sectoral gross_advances@dom: 1467647.1109 vs parts 1443877.3627"
+  },
+  {
+   "quarter": "2015-06-30",
+   "check": "5.4",
+   "entity": "group:pvt",
+   "column": "major_sectoral gross_npas@dom",
+   "detail": "group:pvt major_sectoral gross_npas@dom: 33244.0746 vs parts 32633.4589"
+  },
+  {
+   "quarter": "2015-06-30",
+   "check": "5.4",
+   "entity": "group:pvt",
+   "column": "priority_non_priority_break_up gross_advances@dom",
+   "detail": "group:pvt priority_non_priority_break_up gross_advances@dom: 1467647.1109 vs parts 1466989.8803"
+  },
+  {
+   "quarter": "2015-06-30",
+   "check": "5.4",
+   "entity": "group:scb",
+   "column": "major_sectoral gross_advances@dom",
+   "detail": "group:scb major_sectoral gross_advances@dom: 6604345.7979 vs parts 6687641.5574"
+  },
+  {
+   "quarter": "2015-06-30",
+   "check": "5.4",
+   "entity": "group:scb",
+   "column": "major_sectoral gross_npas@dom",
+   "detail": "group:scb major_sectoral gross_npas@dom: 328665.867 vs parts 327211.6043"
+  },
+  {
+   "quarter": "2015-06-30",
+   "check": "5.4",
+   "entity": "group:scb",
+   "column": "priority_non_priority_break_up gross_advances@dom",
+   "detail": "group:scb priority_non_priority_break_up gross_advances@dom: 6604345.7979 vs parts 6649263.4191"
+  },
+  {
+   "quarter": "2015-06-30",
+   "check": "5.4",
+   "entity": "group:scb",
+   "column": "priority_non_priority_break_up gross_npas@dom",
+   "detail": "group:scb priority_non_priority_break_up gross_npas@dom: 328665.867 vs parts 312377.5770"
+  },
+  {
+   "quarter": "2015-06-30",
+   "check": "5.4",
+   "entity": "indian-overseas-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "indian-overseas-bank profitability 7_net_operating_income_april_to_date_5_6@dom: 459.4045 vs parts 460.9405"
+  },
+  {
+   "quarter": "2015-06-30",
+   "check": "5.4",
+   "entity": "indian-overseas-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "indian-overseas-bank profitability 7_net_operating_income_april_to_date_5_6@glb: 555.7493 vs parts 557.2853"
+  },
+  {
+   "quarter": "2015-06-30",
+   "check": "5.4",
+   "entity": "kotak-mahindra-bank",
+   "column": "major_sectoral gross_advances@dom",
+   "detail": "kotak-mahindra-bank major_sectoral gross_advances@dom: 104998.0165 vs parts 84109.0441"
+  },
+  {
+   "quarter": "2015-06-30",
+   "check": "5.4",
+   "entity": "kotak-mahindra-bank",
+   "column": "major_sectoral gross_npas@dom",
+   "detail": "kotak-mahindra-bank major_sectoral gross_npas@dom: 2421.7697 vs parts 1827.6745"
+  },
+  {
+   "quarter": "2015-06-30",
+   "check": "5.4",
+   "entity": "kotak-mahindra-bank",
+   "column": "priority_non_priority_break_up gross_advances@dom",
+   "detail": "kotak-mahindra-bank priority_non_priority_break_up gross_advances@dom: 104998.0165 vs parts 104340.7859"
+  },
+  {
+   "quarter": "2015-06-30",
+   "check": "5.4",
+   "entity": "lakshmi-vilas-bank",
+   "column": "major_sectoral gross_advances@dom",
+   "detail": "lakshmi-vilas-bank major_sectoral gross_advances@dom: 16562.8669 vs parts 14582.0504"
+  },
+  {
+   "quarter": "2015-06-30",
+   "check": "5.4",
+   "entity": "lakshmi-vilas-bank",
+   "column": "major_sectoral gross_npas@dom",
+   "detail": "lakshmi-vilas-bank major_sectoral gross_npas@dom: 451.1223 vs parts 444.4671"
+  },
+  {
+   "quarter": "2015-06-30",
+   "check": "5.4",
+   "entity": "rbl-bank",
+   "column": "major_sectoral gross_advances@dom",
+   "detail": "rbl-bank major_sectoral gross_advances@dom: 15953.5043 vs parts 15053.5450"
+  },
+  {
+   "quarter": "2015-06-30",
+   "check": "5.4",
+   "entity": "rbl-bank",
+   "column": "major_sectoral gross_npas@dom",
+   "detail": "rbl-bank major_sectoral gross_npas@dom: 118.9563 vs parts 109.0910"
+  },
+  {
+   "quarter": "2015-06-30",
+   "check": "5.4",
+   "entity": "state-bank-of-india",
+   "column": "priority_non_priority_break_up gross_advances@dom",
+   "detail": "state-bank-of-india priority_non_priority_break_up gross_advances@dom: 1062784.92 vs parts 1012471.9300"
+  },
+  {
+   "quarter": "2015-06-30",
+   "check": "5.4",
+   "entity": "state-bank-of-india",
+   "column": "priority_non_priority_break_up gross_npas@dom",
+   "detail": "state-bank-of-india priority_non_priority_break_up gross_npas@dom: 53788.28 vs parts 53747.5800"
+  },
+  {
+   "quarter": "2015-06-30",
+   "check": "5.4",
+   "entity": "vijaya-bank",
+   "column": "major_sectoral gross_npas@dom",
+   "detail": "vijaya-bank major_sectoral gross_npas@dom: 2870.7128 vs parts 2818.7680"
+  },
+  {
+   "quarter": "2015-06-30",
+   "check": "5.5",
+   "entity": "capital-local-area-bank",
+   "column": "sheets",
+   "detail": "capital-local-area-bank: absent from ['major_balance_sheet_items', 'asset_quality', 'profitability', 'performance_indicators', 'major_sectoral', 'priority_non_priority_break_up']"
+  },
+  {
+   "quarter": "2015-06-30",
+   "check": "5.5",
+   "entity": "coastal-local-area-bank",
+   "column": "sheets",
+   "detail": "coastal-local-area-bank: absent from ['major_balance_sheet_items', 'asset_quality', 'profitability', 'performance_indicators', 'major_sectoral', 'priority_non_priority_break_up']"
+  },
+  {
+   "quarter": "2015-06-30",
+   "check": "5.5",
+   "entity": "krishna-bhima-samruddhi-lab",
+   "column": "sheets",
+   "detail": "krishna-bhima-samruddhi-lab: absent from ['major_balance_sheet_items', 'asset_quality', 'profitability', 'performance_indicators', 'major_sectoral', 'priority_non_priority_break_up']"
+  },
+  {
+   "quarter": "2015-06-30",
+   "check": "5.5",
+   "entity": "subhadra-local-area-bank",
+   "column": "sheets",
+   "detail": "subhadra-local-area-bank: absent from ['major_balance_sheet_items', 'asset_quality', 'profitability', 'performance_indicators', 'major_sectoral', 'priority_non_priority_break_up']"
+  },
+  {
+   "quarter": "2015-09-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "member group(s)",
+   "detail": "group:scb: member group(s) ['group:sfb'] absent"
+  },
+  {
+   "quarter": "2015-09-30",
+   "check": "5.4",
+   "entity": "bank-of-india",
+   "column": "major_sectoral gross_advances@dom",
+   "detail": "bank-of-india major_sectoral gross_advances@dom: 278556.9568 vs parts 363437.8119"
+  },
+  {
+   "quarter": "2015-09-30",
+   "check": "5.4",
+   "entity": "bank-of-india",
+   "column": "priority_non_priority_break_up gross_advances@dom",
+   "detail": "bank-of-india priority_non_priority_break_up gross_advances@dom: 278556.9568 vs parts 343974.1193"
+  },
+  {
+   "quarter": "2015-09-30",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "major_sectoral gross_advances@dom",
+   "detail": "group:psb major_sectoral gross_advances@dom: 4837032.1616 vs parts 4892703.7806"
+  },
+  {
+   "quarter": "2015-09-30",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "priority_non_priority_break_up gross_advances@dom",
+   "detail": "group:psb priority_non_priority_break_up gross_advances@dom: 4837032.1616 vs parts 4812450.2632"
+  },
+  {
+   "quarter": "2015-09-30",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "priority_non_priority_break_up gross_npas@dom",
+   "detail": "group:psb priority_non_priority_break_up gross_npas@dom: 299687.7578 vs parts 299618.1975"
+  },
+  {
+   "quarter": "2015-09-30",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "group:psb profitability 7_net_operating_income_april_to_date_5_6@dom: 62426.6726 vs parts 62410.0729"
+  },
+  {
+   "quarter": "2015-09-30",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "group:psb profitability 7_net_operating_income_april_to_date_5_6@glb: 68154.4971 vs parts 68137.8974"
+  },
+  {
+   "quarter": "2015-09-30",
+   "check": "5.4",
+   "entity": "group:pvt",
+   "column": "major_sectoral gross_advances@dom",
+   "detail": "group:pvt major_sectoral gross_advances@dom: 1439471.203 vs parts 1436118.4825"
+  },
+  {
+   "quarter": "2015-09-30",
+   "check": "5.4",
+   "entity": "group:pvt",
+   "column": "priority_non_priority_break_up gross_advances@dom",
+   "detail": "group:pvt priority_non_priority_break_up gross_advances@dom: 1439471.203 vs parts 1437794.2620"
+  },
+  {
+   "quarter": "2015-09-30",
+   "check": "5.4",
+   "entity": "group:scb",
+   "column": "major_sectoral gross_advances@dom",
+   "detail": "group:scb major_sectoral gross_advances@dom: 6631162.4567 vs parts 6683481.3548"
+  },
+  {
+   "quarter": "2015-09-30",
+   "check": "5.4",
+   "entity": "group:scb",
+   "column": "priority_non_priority_break_up gross_advances@dom",
+   "detail": "group:scb priority_non_priority_break_up gross_advances@dom: 6631162.4567 vs parts 6604903.6169"
+  },
+  {
+   "quarter": "2015-09-30",
+   "check": "5.4",
+   "entity": "group:scb",
+   "column": "priority_non_priority_break_up gross_npas@dom",
+   "detail": "group:scb priority_non_priority_break_up gross_npas@dom: 343454.311 vs parts 343384.7507"
+  },
+  {
+   "quarter": "2015-09-30",
+   "check": "5.4",
+   "entity": "idbi-bank",
+   "column": "priority_non_priority_break_up gross_advances@dom",
+   "detail": "idbi-bank priority_non_priority_break_up gross_advances@dom: 189565.3693 vs parts 177624.3484"
+  },
+  {
+   "quarter": "2015-09-30",
+   "check": "5.4",
+   "entity": "idbi-bank",
+   "column": "priority_non_priority_break_up gross_npas@dom",
+   "detail": "idbi-bank priority_non_priority_break_up gross_npas@dom: 14557.6378 vs parts 14520.7575"
+  },
+  {
+   "quarter": "2015-09-30",
+   "check": "5.4",
+   "entity": "indian-overseas-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "indian-overseas-bank profitability 7_net_operating_income_april_to_date_5_6@dom: 1356.963 vs parts 1358.4990"
+  },
+  {
+   "quarter": "2015-09-30",
+   "check": "5.4",
+   "entity": "indian-overseas-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "indian-overseas-bank profitability 7_net_operating_income_april_to_date_5_6@glb: 1545.5931 vs parts 1547.1291"
+  },
+  {
+   "quarter": "2015-09-30",
+   "check": "5.4",
+   "entity": "karur-vysya-bank",
+   "column": "major_sectoral gross_advances@dom",
+   "detail": "karur-vysya-bank major_sectoral gross_advances@dom: 37518.5303 vs parts 34165.8105"
+  },
+  {
+   "quarter": "2015-09-30",
+   "check": "5.4",
+   "entity": "lakshmi-vilas-bank",
+   "column": "priority_non_priority_break_up gross_advances@dom",
+   "detail": "lakshmi-vilas-bank priority_non_priority_break_up gross_advances@dom: 17573.7976 vs parts 17438.2379"
+  },
+  {
+   "quarter": "2015-09-30",
+   "check": "5.4",
+   "entity": "oriental-bank-of-commerce",
+   "column": "priority_non_priority_break_up gross_advances@dom",
+   "detail": "oriental-bank-of-commerce priority_non_priority_break_up gross_advances@dom: 150081.8 vs parts 136523.4300"
+  },
+  {
+   "quarter": "2015-09-30",
+   "check": "5.4",
+   "entity": "south-indian-bank",
+   "column": "priority_non_priority_break_up gross_advances@dom",
+   "detail": "south-indian-bank priority_non_priority_break_up gross_advances@dom: 39913.9233 vs parts 38372.5427"
+  },
+  {
+   "quarter": "2015-09-30",
+   "check": "5.4",
+   "entity": "state-bank-of-india",
+   "column": "priority_non_priority_break_up gross_advances@dom",
+   "detail": "state-bank-of-india priority_non_priority_break_up gross_advances@dom: 1104884.25 vs parts 1045476.4200"
+  },
+  {
+   "quarter": "2015-09-30",
+   "check": "5.4",
+   "entity": "state-bank-of-india",
+   "column": "priority_non_priority_break_up gross_npas@dom",
+   "detail": "state-bank-of-india priority_non_priority_break_up gross_npas@dom: 54185.41 vs parts 54152.7400"
+  },
+  {
+   "quarter": "2015-09-30",
+   "check": "5.4",
+   "entity": "united-bank-of-india",
+   "column": "priority_non_priority_break_up gross_advances@dom",
+   "detail": "united-bank-of-india priority_non_priority_break_up gross_advances@dom: 68680.93 vs parts 63589.0900"
+  },
+  {
+   "quarter": "2015-09-30",
+   "check": "5.4",
+   "entity": "vijaya-bank",
+   "column": "major_sectoral gross_advances@dom",
+   "detail": "vijaya-bank major_sectoral gross_advances@dom: 87103.7934 vs parts 57894.5574"
+  },
+  {
+   "quarter": "2015-09-30",
+   "check": "5.5",
+   "entity": "bandhan-bank",
+   "column": "sheets",
+   "detail": "bandhan-bank: absent from ['major_balance_sheet_items', 'capital_adequacy', 'asset_quality', 'profitability', 'performance_indicators', 'major_sectoral', 'priority_non_priority_break_up']"
+  },
+  {
+   "quarter": "2015-09-30",
+   "check": "5.5",
+   "entity": "capital-local-area-bank",
+   "column": "sheets",
+   "detail": "capital-local-area-bank: absent from ['major_balance_sheet_items', 'asset_quality', 'profitability', 'performance_indicators', 'major_sectoral', 'priority_non_priority_break_up']"
+  },
+  {
+   "quarter": "2015-09-30",
+   "check": "5.5",
+   "entity": "coastal-local-area-bank",
+   "column": "sheets",
+   "detail": "coastal-local-area-bank: absent from ['major_balance_sheet_items', 'asset_quality', 'profitability', 'performance_indicators', 'major_sectoral', 'priority_non_priority_break_up']"
+  },
+  {
+   "quarter": "2015-09-30",
+   "check": "5.5",
+   "entity": "keb-hana-bank",
+   "column": "sheets",
+   "detail": "keb-hana-bank: absent from ['major_balance_sheet_items', 'capital_adequacy', 'asset_quality', 'profitability', 'performance_indicators', 'major_sectoral', 'priority_non_priority_break_up']"
+  },
+  {
+   "quarter": "2015-09-30",
+   "check": "5.5",
+   "entity": "krishna-bhima-samruddhi-lab",
+   "column": "sheets",
+   "detail": "krishna-bhima-samruddhi-lab: absent from ['major_balance_sheet_items', 'asset_quality', 'profitability', 'performance_indicators', 'major_sectoral', 'priority_non_priority_break_up']"
+  },
+  {
+   "quarter": "2015-09-30",
+   "check": "5.5",
+   "entity": "subhadra-local-area-bank",
+   "column": "sheets",
+   "detail": "subhadra-local-area-bank: absent from ['major_balance_sheet_items', 'asset_quality', 'profitability', 'performance_indicators', 'major_sectoral', 'priority_non_priority_break_up']"
+  },
   {
    "quarter": "2015-12-31",
    "check": "5.1",

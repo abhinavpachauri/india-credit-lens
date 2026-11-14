@@ -1,6 +1,6 @@
 # Bank-wise credit pipeline (`rbi_bankwise`): specification
 
-> v0.2, 2026-11-14. Status: **phases 1–2 built; phase 3 (backfill) under way**, 43 of 97 quarters saved (Dec 2015 →). Onboarded through the `onboard-source` skill.
+> v0.2, 2026-11-14. Status: **phases 1–3 built**; **backfill complete**: all 46 quarters from Mar 2015 saved. Onboarded through the `onboard-source` skill.
 > v0.2 folds in the three reviewers (population, absence, plausibility; 21 findings, all verified;
 > table at the end). Probe: `analysis/sources/README.md` §"Per-bank quarterly variables" (opened
 > 2026-10-11, probed 2026-11-14).
@@ -182,8 +182,8 @@ SIBC page and a joined bank page need **one identity**.
 ## 9. Decisions (user, 2026-11-14: "use your proposals")
 
 1. **All eight sheets** in phase 1: the whole record, read once.
-2. **History from Mar 2002**, the full record; the group set before 2016 differs and §5.1 reads it
-   from the layout.
+2. **History from Mar 2015** (user, 2026-11-15; was Mar 2002 on 11-14): the SIBC history we hold does
+   not reach further, and before Mar 2015 RBI's sector columns hold different content (below).
 3. **Primary, surfaced inside the SIBC page**, no page of its own for now.
 4. **One shared bank roster**; payments' roster moves onto it (a change to a live pipeline, in its
    own commit with the payments gate green).
@@ -365,3 +365,13 @@ Local Area Bank (to Mar 2016; kept apart from Capital SFB until an RBI record li
 membership rule follows IDBI in the public-sector total back to Dec 2015, and finds ESAF SFB printed
 among scheduled SFBs but counted in the non-scheduled total (Mar–Jun 2017). Gate: 0 column-wide
 failures; 2,021 flags.
+
+**Phase 3, batch 6 and the end of the backfill (2026-11-15): Mar 2015 → Sep 2015.** The export also
+returned Dec 2013 – Dec 2014, where Major Sectoral breaks column-wide: agriculture, industry and food
+are blank and the "non-food" and "services" cells hold small, different figures (SBI Dec 2014: non-food
+₹19,978 Cr, services ₹4,683 Cr, gross ₹10,40,810 Cr), and Priority / Non-priority does not add for most
+banks. **User decision: history from Mar 2015** (SIBC history does not reach further either). Those
+five quarters were not committed and were removed; the declared start is now Mar 2015, `fetch.py`
+skips (and reports) any quarter before it, and the history check is required: all 46 quarters
+Mar 2015 → Jun 2026 saved. Roster: HSBC Bank Oman and ING Vysya (both to Mar 2015). Gate: 0 column-wide
+failures; 2,144 isolated inconsistencies flagged; 1,243,828 values in the local table.

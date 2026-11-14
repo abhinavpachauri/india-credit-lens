@@ -109,9 +109,17 @@ def diff(old: dict, new: dict) -> list[str]:
     return out
 
 
+def history_start() -> str:
+    """The declared first quarter (manifest `calendar.first_quarter`)."""
+    from core import manifest
+    return manifest.load("rbi_bankwise")["calendar"]["first_quarter"]
+
+
 def save(paths: list[Path], no_new_expected: bool = False, accept: set[str] = frozenset(),
-         dry_run: bool = False, root: Path = RELEASES, today: str | None = None) -> list[str]:
+         dry_run: bool = False, root: Path = RELEASES, today: str | None = None,
+         start: str | None = None) -> list[str]:
     today = today or datetime.date.today().isoformat()
+    start = start or history_start()
     have = saved_quarters(root)
     report, writes, revised = [], [], []
     seen: dict[str, dict] = {}
@@ -119,6 +127,9 @@ def save(paths: list[Path], no_new_expected: bool = False, accept: set[str] = fr
         got = reader.read(p)
         sha = hashlib.sha256(p.read_bytes()).hexdigest()
         for quarter, q in got["quarters"].items():
+            if quarter < start:
+                report.append(f"SKIPPED    {quarter}: before the declared history start {start}")
+                continue
             body = content(q, got["names"])
             if quarter in seen and seen[quarter] != body:
                 raise SaveRefused(f"✗ {quarter} differs between two of the files given; export once and retry")

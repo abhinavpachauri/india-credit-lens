@@ -213,42 +213,49 @@ def saving(tmp_path, monkeypatch, resolver):
 
 def test_new_then_unchanged_then_stale(tmp_path, saving):
     x = export(tmp_path / "x.xlsx", quarters=("2026-03-31", "2026-06-30"))
-    assert sum("NEW" in line for line in fetch.save([x], root=saving, today="2026-11-14")) == 2
+    assert sum("NEW" in line for line in fetch.save([x], root=saving, today="2026-11-14", start="2000-01-01")) == 2
     with pytest.raises(fetch.SaveRefused, match="no quarter in this export is new"):
-        fetch.save([x], root=saving, today="2026-11-15")
-    out = fetch.save([x], no_new_expected=True, root=saving, today="2026-11-15")
+        fetch.save([x], root=saving, today="2026-11-15", start="2000-01-01")
+    out = fetch.save([x], no_new_expected=True, root=saving, today="2026-11-15", start="2000-01-01")
     assert "2 saved quarter(s) re-read, 0 changed" in out[-1]
 
 
 def test_a_revision_is_refused_listed_then_accepted_keeping_the_old(tmp_path, saving):
-    fetch.save([export(tmp_path / "a.xlsx")], root=saving, today="2026-11-14")
+    fetch.save([export(tmp_path / "a.xlsx")], root=saving, today="2026-11-14", start="2000-01-01")
     b = export(tmp_path / "b.xlsx", scale=1.01)
     with pytest.raises(fetch.SaveRefused, match="was revised"):
-        fetch.save([b], no_new_expected=True, root=saving, today="2026-11-15")
-    fetch.save([b], no_new_expected=True, accept={"2026-06-30"}, root=saving, today="2026-11-15")
+        fetch.save([b], no_new_expected=True, root=saving, today="2026-11-15", start="2000-01-01")
+    fetch.save([b], no_new_expected=True, accept={"2026-06-30"}, root=saving, today="2026-11-15", start="2000-01-01")
     assert len(list((saving / "2026-06-30").glob("*.json.gz"))) == 2
 
 
 def test_a_removed_bank_is_a_revision(tmp_path, saving):
-    fetch.save([export(tmp_path / "a.xlsx")], root=saving, today="2026-11-14")
+    fetch.save([export(tmp_path / "a.xlsx")], root=saving, today="2026-11-14", start="2000-01-01")
     rows = [("ALPHA BANK LTD.", False, 100.0), ("Public Sector Banks", True, 100.0),
             ("GAMMA  BANK", False, 10.0), ("Private Sector Banks", True, 10.0), ("All Scheduled Commercial Banks", True, 110.0)]
     with pytest.raises(fetch.SaveRefused, match="removed bank beta"):
-        fetch.save([export(tmp_path / "b.xlsx", rows=rows)], no_new_expected=True, root=saving, today="2026-11-15")
+        fetch.save([export(tmp_path / "b.xlsx", rows=rows)], no_new_expected=True, root=saving, today="2026-11-15", start="2000-01-01")
 
 
 def test_a_new_quarter_must_re_read_the_saved_ones(tmp_path, saving):
-    fetch.save([export(tmp_path / "a.xlsx", quarters=("2026-03-31",))], root=saving, today="2026-11-14")
+    fetch.save([export(tmp_path / "a.xlsx", quarters=("2026-03-31",))], root=saving, today="2026-11-14", start="2000-01-01")
     with pytest.raises(fetch.SaveRefused, match="does not re-read"):
-        fetch.save([export(tmp_path / "b.xlsx", quarters=("2026-06-30",))], root=saving, today="2026-11-15")
-    out = fetch.save([export(tmp_path / "c.xlsx", quarters=("2026-03-31", "2026-06-30"))], root=saving, today="2026-11-15")
+        fetch.save([export(tmp_path / "b.xlsx", quarters=("2026-06-30",))], root=saving, today="2026-11-15", start="2000-01-01")
+    out = fetch.save([export(tmp_path / "c.xlsx", quarters=("2026-03-31", "2026-06-30"))], root=saving, today="2026-11-15", start="2000-01-01")
     assert any("NEW        2026-06-30" in line for line in out)
 
 
 def test_a_backfill_of_older_quarters_saves(tmp_path, saving):
-    fetch.save([export(tmp_path / "a.xlsx", quarters=("2026-06-30",))], root=saving, today="2026-11-14")
-    out = fetch.save([export(tmp_path / "b.xlsx", quarters=("2002-03-31",))], root=saving, today="2026-11-15")
-    assert any("NEW        2002-03-31" in line for line in out)
+    fetch.save([export(tmp_path / "a.xlsx", quarters=("2026-06-30",))], root=saving, today="2026-11-14", start="2015-03-31")
+    out = fetch.save([export(tmp_path / "b.xlsx", quarters=("2015-03-31",))], root=saving, today="2026-11-15", start="2015-03-31")
+    assert any("NEW        2015-03-31" in line for line in out)
+
+
+def test_a_quarter_before_the_history_start_is_skipped_not_saved(tmp_path, saving):
+    out = fetch.save([export(tmp_path / "a.xlsx", quarters=("2014-12-31", "2015-03-31"))], root=saving,
+                     today="2026-11-15", start="2015-03-31")
+    assert any("SKIPPED    2014-12-31" in line for line in out)
+    assert not (saving / "2014-12-31").exists() and (saving / "2015-03-31").exists()
 
 
 def test_the_live_roster_validates():

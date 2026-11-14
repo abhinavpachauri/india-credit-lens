@@ -13,10 +13,10 @@
   },
   "note_consolidated_csv": "Local only (git-ignored): ~2.8 million values for 2002 → 2026 are too many to commit, so the committed record is the saved quarters and this table is rebuilt from them by the first gate stage (user, 2026-11-14).",
   "calendar": {
-    "first_quarter": "2002-03-31",
+    "first_quarter": "2015-03-31",
     "lag_ceiling_days": 165,
-    "history_required": false,
-    "note": "Jun 2026 was on DBIE by 14 Nov 2026 (137 days); 165 days until two clean cycles are measured. history_required turns true when the backfill (phase 3) is done."
+    "history_required": true,
+    "note": "History from Mar 2015 (user, 2026-11-15: the SIBC history we hold does not reach further, and before Mar 2015 RBI's sector columns hold different content). Jun 2026 was on DBIE by 14 Nov 2026 (137 days); the 165-day ceiling stands until two clean cycles are measured."
   },
   "currency_stage": "calendar",
   "modules": {

@@ -926,6 +926,23 @@
    }
   },
   {
+   "id": "hsbc-bank-oman-s-a-o-g",
+   "name": "Hsbc Bank Oman S.A.O.G.",
+   "sources": {
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "HSBC BANK OMAN S.A.O.G."
+      }
+     ]
+    },
+    "atm_pos": {
+     "not_in_source": "not in RBI's ATM/POS/card statistics roster (rbi_atm_pos/canonical_banks.json, 2026-11-14)"
+    }
+   },
+   "note": "Last in DBIE's bank-wise table in Mar 2015."
+  },
+  {
    "id": "icici-bank",
    "name": "Icici Bank Limited",
    "sources": {
@@ -1096,6 +1113,23 @@
      "not_in_source": "not in RBI's ATM/POS/card statistics roster (rbi_atm_pos/canonical_banks.json, 2026-11-14)"
     }
    }
+  },
+  {
+   "id": "ing-vysya-bank",
+   "name": "Ing Vysya Bank Ltd",
+   "sources": {
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "ING VYSYA BANK LTD"
+      }
+     ]
+    },
+    "atm_pos": {
+     "not_in_source": "not in RBI's ATM/POS/card statistics roster (rbi_atm_pos/canonical_banks.json, 2026-11-14)"
+    }
+   },
+   "note": "Last in DBIE's bank-wise table in Mar 2015 (merged into Kotak Mahindra Bank, April 2015). Not linked to a successor; merger adjustment is a signals decision."
   },
   {
    "id": "jammu-kashmir-bank",
