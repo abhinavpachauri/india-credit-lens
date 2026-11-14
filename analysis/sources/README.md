@@ -66,11 +66,36 @@ Call Report, it does.**
   four sectors, so per-bank lines need no bank-segment crosswalk at that depth.
   Example, Bank of Baroda, Sep 2024: gross advances ₹9,38,883 Cr; agriculture ₹1,44,510 Cr (GNPA
   5.30%), industry ₹2,20,809 Cr (1.61%), services ₹3,00,879 Cr (2.70%), retail ₹2,45,438 Cr.
-- **What it does not have:** anything below the four sectors (no housing, gold, NBFC lending
-  per bank). That depth still lives only in investor presentations and Pillar 3 disclosures.
-- **Not yet checked:** how it exports (Excel, as other DBIE reports do), whether later quarters
-  restate earlier ones, and whether Σ banks reconciles to SIBC's sector totals (SIBC covers
-  "select" banks; this covers all SCBs).
+- **Below the four sectors (corrected 2026-11-14):** the Major Sectoral tab also breaks retail
+  loans into **housing, vehicle/auto, credit card receivables, education and other retail**, each
+  with gross advances, GNPAs and GNPA ratio, per bank, quarterly. The Infrastructure Financing tab
+  splits infrastructure per bank into ~60 lines (roads, ports, airports, railways, power generation /
+  transmission / distribution by owner, telecom, water, social and commercial). Still not per bank:
+  gold loans, NBFC lending, industry below the total (investor presentations and Pillar 3 only).
+
+### Probe, 2026-11-14 (one export through the editor's Chrome)
+
+- **Export works:** prompts (reporting periods, bank, unit) → Run → Export → Excel, "All reports"
+  gives one workbook, eight sheets (631 KB for 3 quarters). Each sheet: a title row, two header
+  rows, then period (first row of each block) | bank | values; six group rows (Public Sector
+  Banks, Private Sector Banks, Foreign Bank Group, Small Finance Bank Group-scheduled, Local Area
+  Bank Group, All Scheduled Commercial Banks) each close their block and must be told apart. All
+  SCBs = Public + Private + Foreign + Small Finance; the Local Area Bank group sits outside it. 89
+  banks in Jun 2026, 90 in Sep 2024 and Jun 2025 (corrected from "92" by the spec review,
+  `BANKWISE_SPEC.md`). Source line: "Offsite returns (OSMOS),
+  Department of Banking Supervision"; overseas/global not available on the sectoral tab.
+- **No restatement seen:** Bank of Baroda, Sep 2024, read 2026-10-11 and again 2026-11-14:
+  identical in all five fields (₹9,38,883 / 1,44,510 / 2,20,809 / 3,00,879 / 2,45,438 Cr). One
+  bank, one quarter: a check, not proof.
+- **Reconciles with SIBC within a few per cent** (all SCBs vs SIBC's select banks, Jun 2026,
+  DBIE/SIBC): agriculture 1.024, industry 0.999, services 1.034, personal loans 1.003, credit card
+  1.017, education 1.006, vehicle 0.970, non-food 0.972; **housing 0.920** (definitions differ:
+  SIBC's line includes priority-sector housing) and food credit 1.10. Growth differs more than
+  levels: industry YoY 15.9% vs 19.2%, services 18.2% vs 21.4% (bank coverage and quarter-end vs
+  fortnight dates), so a per-bank share is DBIE's own, never mixed with SIBC growth.
+- **What it shows, Jun 2026, share of each bank's domestic gross advances:** SBI 41.7% retail,
+  0.0% cards (cards sit in SBI Card, an NBFC); HDFC 31.7% services, 3.8% cards; Axis 46.1% retail;
+  Canara 22.9% agriculture; PNB 38.6% services. The bank-by-sector map is real and quarterly.
 
 ## Other finance: probed 2026-10-26 (four tables, read in the browser pane)
 

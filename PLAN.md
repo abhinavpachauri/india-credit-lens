@@ -17,10 +17,10 @@ driver test, each line's delay found on earlier months and confirmed on later on
   `too_short` (one lead: petroleum credit vs fuel prices, delay 3, opposite sign, 13 months).
 - Steps 4 (admission: a `driver` explanation in 6a, `prices_activity` handed over) and 5 (cycles on
   new data) wait until something is supported. **Review later (user): vehicles and durables input prices.**
-- **Pooled driver test: built 11-10** (SYSTEM_MODEL_SPEC §16 Step 6d; `explainability.py pool`):
-  6 SIBC families, all too_short; large-industry rate across 35 lines r 0.20, ~13 more months.
-  Next: show pooled verdicts in the grid (step 3); differential signs per line for the direction form.
-  11-10 test run withdrew Medium Enterprises and Textiles; Glass and Housing supported, not admitted.
+- **Pooled driver test: built 11-10** (SYSTEM_MODEL_SPEC §16 Step 6d): all 6 SIBC families too_short
+  (large-industry rate, 35 lines, r 0.20, ~13 more months). Next: pooled verdicts in the grid.
+- **Each bank's credit (user, 11-14): `rbi_bankwise`**, spec v0.2 reviewed and decided (`analysis/BANKWISE_SPEC.md`).
+  Next: phase 1 (manifest, shared bank roster, reader, saved releases), then gate, backfill to 2002 via Chrome.
 - **Buyer first** (STRATEGY v3.1 §5): log who engages with X/LinkedIn, ask the 3 questions; a source is
   chosen by a buyer conversation and by the grid column it completes.
 
