@@ -1,6 +1,6 @@
 # Bank-wise credit pipeline (`rbi_bankwise`): specification
 
-> v0.2, 2026-11-14. Status: **phases 1–2 built; phase 3 (backfill) under way**, 35 of 97 quarters saved (Dec 2017 →). Onboarded through the `onboard-source` skill.
+> v0.2, 2026-11-14. Status: **phases 1–2 built; phase 3 (backfill) under way**, 43 of 97 quarters saved (Dec 2015 →). Onboarded through the `onboard-source` skill.
 > v0.2 folds in the three reviewers (population, absence, plausibility; 21 findings, all verified;
 > table at the end). Probe: `analysis/sources/README.md` §"Per-bank quarterly variables" (opened
 > 2026-10-11, probed 2026-11-14).
@@ -357,3 +357,11 @@ Australia Bank (to Jun 2019); "IDFC BANK LIMITED" is IDFC First Bank's name to D
   single bank explains (Small Finance Banks 2017–19, Local Area Banks Sep 2019) stay flagged.
 - Gate: 0 column-wide failures; 1,697 isolated inconsistencies flagged (of which 1,195 are those
   unexplained group gaps).
+
+**Phase 3, batch 5 (2026-11-14): Dec 2015 → Sep 2017.** 8 new quarters (re-reads unchanged); 43 of 97
+saved; 96–101 banks. No new layout or column. Roster: the five SBI associates and Bharatiya Mahila
+Bank (to Mar 2017), Commonwealth Bank of Australia (to Jun 2017), KBC Bank (to Mar 2016), Capital
+Local Area Bank (to Mar 2016; kept apart from Capital SFB until an RBI record links them). The
+membership rule follows IDBI in the public-sector total back to Dec 2015, and finds ESAF SFB printed
+among scheduled SFBs but counted in the non-scheduled total (Mar–Jun 2017). Gate: 0 column-wide
+failures; 2,021 flags.

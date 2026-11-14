@@ -360,6 +360,23 @@
    }
   },
   {
+   "id": "bharatiya-mahila-bank",
+   "name": "Bharatiya Mahila Bank Ltd.",
+   "sources": {
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "BHARATIYA MAHILA BANK LTD."
+      }
+     ]
+    },
+    "atm_pos": {
+     "not_in_source": "not in RBI's ATM/POS/card statistics roster (rbi_atm_pos/canonical_banks.json, 2026-11-14)"
+    }
+   },
+   "note": "Last in DBIE's bank-wise table in Mar 2017 (merged into State Bank of India, April 2017). Not linked to a successor; merger adjustment is a signals decision."
+  },
+  {
    "id": "bnp-paribas",
    "name": "Bnp Paribas",
    "sources": {
@@ -394,6 +411,23 @@
      ]
     }
    }
+  },
+  {
+   "id": "capital-local-area-bank",
+   "name": "Capital Local Area Bank Ltd.",
+   "sources": {
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "CAPITAL LOCAL AREA BANK LTD."
+      }
+     ]
+    },
+    "atm_pos": {
+     "not_in_source": "not in RBI's ATM/POS/card statistics roster (rbi_atm_pos/canonical_banks.json, 2026-11-14)"
+    }
+   },
+   "note": "Last in DBIE's bank-wise table in Mar 2016; possibly the licence that became Capital Small Finance Bank, kept separate until an RBI record links them."
   },
   {
    "id": "capital-small-finance-bank",
@@ -490,6 +524,23 @@
      "not_in_source": "not in RBI's ATM/POS/card statistics roster (rbi_atm_pos/canonical_banks.json, 2026-11-14)"
     }
    }
+  },
+  {
+   "id": "commonwealth-bank-of-australia",
+   "name": "Commonwealth Bank Of Australia",
+   "sources": {
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "COMMONWEALTH BANK OF AUSTRALIA"
+      }
+     ]
+    },
+    "atm_pos": {
+     "not_in_source": "not in RBI's ATM/POS/card statistics roster (rbi_atm_pos/canonical_banks.json, 2026-11-14)"
+    }
+   },
+   "note": "Last in DBIE's bank-wise table in Jun 2017."
   },
   {
    "id": "cooperatieve-rabobank-u-a",
@@ -1175,6 +1226,23 @@
    }
   },
   {
+   "id": "kbc-bank-nv",
+   "name": "Kbc Bank Nv",
+   "sources": {
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "KBC BANK NV"
+      }
+     ]
+    },
+    "atm_pos": {
+     "not_in_source": "not in RBI's ATM/POS/card statistics roster (rbi_atm_pos/canonical_banks.json, 2026-11-14)"
+    }
+   },
+   "note": "Last in DBIE's bank-wise table in Mar 2016."
+  },
+  {
    "id": "keb-hana-bank",
    "name": "Keb Hana Bank",
    "sources": {
@@ -1731,6 +1799,40 @@
    }
   },
   {
+   "id": "state-bank-of-bikaner-and-jaipur",
+   "name": "State Bank Of Bikaner And Jaipur",
+   "sources": {
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "STATE BANK OF BIKANER AND JAIPUR"
+      }
+     ]
+    },
+    "atm_pos": {
+     "not_in_source": "not in RBI's ATM/POS/card statistics roster (rbi_atm_pos/canonical_banks.json, 2026-11-14)"
+    }
+   },
+   "note": "Last in DBIE's bank-wise table in Mar 2017 (merged into State Bank of India, April 2017). Not linked to a successor; merger adjustment is a signals decision."
+  },
+  {
+   "id": "state-bank-of-hyderabad",
+   "name": "State Bank Of Hyderabad",
+   "sources": {
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "STATE BANK OF HYDERABAD"
+      }
+     ]
+    },
+    "atm_pos": {
+     "not_in_source": "not in RBI's ATM/POS/card statistics roster (rbi_atm_pos/canonical_banks.json, 2026-11-14)"
+    }
+   },
+   "note": "Last in DBIE's bank-wise table in Mar 2017 (merged into State Bank of India, April 2017). Not linked to a successor; merger adjustment is a signals decision."
+  },
+  {
    "id": "state-bank-of-india",
    "name": "State Bank Of India",
    "sources": {
@@ -1749,6 +1851,57 @@
      ]
     }
    }
+  },
+  {
+   "id": "state-bank-of-mysore",
+   "name": "State Bank Of Mysore",
+   "sources": {
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "STATE BANK OF MYSORE"
+      }
+     ]
+    },
+    "atm_pos": {
+     "not_in_source": "not in RBI's ATM/POS/card statistics roster (rbi_atm_pos/canonical_banks.json, 2026-11-14)"
+    }
+   },
+   "note": "Last in DBIE's bank-wise table in Mar 2017 (merged into State Bank of India, April 2017). Not linked to a successor; merger adjustment is a signals decision."
+  },
+  {
+   "id": "state-bank-of-patiala",
+   "name": "State Bank Of Patiala",
+   "sources": {
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "STATE BANK OF PATIALA"
+      }
+     ]
+    },
+    "atm_pos": {
+     "not_in_source": "not in RBI's ATM/POS/card statistics roster (rbi_atm_pos/canonical_banks.json, 2026-11-14)"
+    }
+   },
+   "note": "Last in DBIE's bank-wise table in Mar 2017 (merged into State Bank of India, April 2017). Not linked to a successor; merger adjustment is a signals decision."
+  },
+  {
+   "id": "state-bank-of-travancore",
+   "name": "State Bank Of Travancore",
+   "sources": {
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "STATE BANK OF TRAVANCORE"
+      }
+     ]
+    },
+    "atm_pos": {
+     "not_in_source": "not in RBI's ATM/POS/card statistics roster (rbi_atm_pos/canonical_banks.json, 2026-11-14)"
+    }
+   },
+   "note": "Last in DBIE's bank-wise table in Mar 2017 (merged into State Bank of India, April 2017). Not linked to a successor; merger adjustment is a signals decision."
   },
   {
    "id": "subhadra-local-area-bank",

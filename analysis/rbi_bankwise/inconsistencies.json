@@ -2,9 +2,2277 @@
  "_meta": {
   "what": "cells where RBI's own bank-wise figures fail a check in one bank or group (BANKWISE_SPEC §5); a signal never publishes a flagged cell as if it held",
   "rule": "isolated = fewer than 10 banks failing the same column in a quarter",
-  "count": 1697
+  "count": 2021
  },
  "flags": [
+  {
+   "quarter": "2015-12-31",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "member group(s)",
+   "detail": "group:scb: member group(s) ['group:sfb'] absent"
+  },
+  {
+   "quarter": "2015-12-31",
+   "check": "5.3",
+   "entity": "allahabad-bank",
+   "column": "asset_quality 1. Gross Advances",
+   "detail": "allahabad-bank asset_quality 1. Gross Advances: 149652.5439 + 9421.5657 vs 159250.0708"
+  },
+  {
+   "quarter": "2015-12-31",
+   "check": "5.3",
+   "entity": "group:psb",
+   "column": "asset_quality 1. Gross Advances",
+   "detail": "group:psb asset_quality 1. Gross Advances: 4952613.981 + 738332.6326 vs 5691122.5746"
+  },
+  {
+   "quarter": "2015-12-31",
+   "check": "5.3",
+   "entity": "group:pvt",
+   "column": "asset_quality 12. Provisions for NPAs at end of the FY",
+   "detail": "group:pvt asset_quality 12. Provisions for NPAs at end of the FY: 23206.0618 + 1994.4354 vs 25159.7562"
+  },
+  {
+   "quarter": "2015-12-31",
+   "check": "5.3",
+   "entity": "group:scb",
+   "column": "asset_quality 1. Gross Advances",
+   "detail": "group:scb asset_quality 1. Gross Advances: 6987362.3684 + 922037.3876 vs 7909575.7103"
+  },
+  {
+   "quarter": "2015-12-31",
+   "check": "5.3",
+   "entity": "group:scb",
+   "column": "asset_quality 12. Provisions for NPAs at end of the FY",
+   "detail": "group:scb asset_quality 12. Provisions for NPAs at end of the FY: 180986.5898 + 12542.1011 vs 193487.9499"
+  },
+  {
+   "quarter": "2015-12-31",
+   "check": "5.3",
+   "entity": "south-indian-bank",
+   "column": "asset_quality 12. Provisions for NPAs at end of the FY",
+   "detail": "south-indian-bank asset_quality 12. Provisions for NPAs at end of the FY: 432.7704 + 0 vs 392.0294"
+  },
+  {
+   "quarter": "2015-12-31",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "group:psb profitability 7_net_operating_income_april_to_date_5_6@dom: 91377.3851 vs parts 91518.0782"
+  },
+  {
+   "quarter": "2015-12-31",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "group:psb profitability 7_net_operating_income_april_to_date_5_6@glb: 100081.6855 vs parts 100222.3786"
+  },
+  {
+   "quarter": "2015-12-31",
+   "check": "5.4",
+   "entity": "indian-overseas-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "indian-overseas-bank profitability 7_net_operating_income_april_to_date_5_6@dom: 1933.9365 vs parts 1935.4725"
+  },
+  {
+   "quarter": "2015-12-31",
+   "check": "5.4",
+   "entity": "indian-overseas-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "indian-overseas-bank profitability 7_net_operating_income_april_to_date_5_6@glb: 2170.1317 vs parts 2171.6677"
+  },
+  {
+   "quarter": "2015-12-31",
+   "check": "5.5",
+   "entity": "bandhan-bank",
+   "column": "sheets",
+   "detail": "bandhan-bank: absent from ['major_balance_sheet_items', 'capital_adequacy', 'asset_quality', 'profitability', 'performance_indicators', 'major_sectoral', 'priority_non_priority_break_up']"
+  },
+  {
+   "quarter": "2015-12-31",
+   "check": "5.5",
+   "entity": "capital-local-area-bank",
+   "column": "sheets",
+   "detail": "capital-local-area-bank: absent from ['major_balance_sheet_items', 'asset_quality', 'profitability', 'performance_indicators', 'major_sectoral', 'priority_non_priority_break_up']"
+  },
+  {
+   "quarter": "2015-12-31",
+   "check": "5.5",
+   "entity": "coastal-local-area-bank",
+   "column": "sheets",
+   "detail": "coastal-local-area-bank: absent from ['major_balance_sheet_items', 'asset_quality', 'profitability', 'performance_indicators', 'major_sectoral', 'priority_non_priority_break_up']"
+  },
+  {
+   "quarter": "2015-12-31",
+   "check": "5.5",
+   "entity": "keb-hana-bank",
+   "column": "sheets",
+   "detail": "keb-hana-bank: absent from ['major_balance_sheet_items', 'capital_adequacy', 'asset_quality', 'profitability', 'performance_indicators', 'major_sectoral', 'priority_non_priority_break_up']"
+  },
+  {
+   "quarter": "2015-12-31",
+   "check": "5.5",
+   "entity": "krishna-bhima-samruddhi-lab",
+   "column": "sheets",
+   "detail": "krishna-bhima-samruddhi-lab: absent from ['major_balance_sheet_items', 'asset_quality', 'profitability', 'performance_indicators', 'major_sectoral', 'priority_non_priority_break_up']"
+  },
+  {
+   "quarter": "2015-12-31",
+   "check": "5.5",
+   "entity": "subhadra-local-area-bank",
+   "column": "sheets",
+   "detail": "subhadra-local-area-bank: absent from ['major_balance_sheet_items', 'asset_quality', 'profitability', 'performance_indicators', 'major_sectoral', 'priority_non_priority_break_up']"
+  },
+  {
+   "quarter": "2016-03-31",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "member group(s)",
+   "detail": "group:scb: member group(s) ['group:sfb'] absent"
+  },
+  {
+   "quarter": "2016-03-31",
+   "check": "5.4",
+   "entity": "bank-of-baroda",
+   "column": "priority_non_priority_break_up gross_advances@dom",
+   "detail": "bank-of-baroda priority_non_priority_break_up gross_advances@dom: 280915.4663 vs parts 258156.4927"
+  },
+  {
+   "quarter": "2016-03-31",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "priority_non_priority_break_up gross_advances@dom",
+   "detail": "group:psb priority_non_priority_break_up gross_advances@dom: 5104914.9288 vs parts 5082155.9552"
+  },
+  {
+   "quarter": "2016-03-31",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "group:psb profitability 7_net_operating_income_april_to_date_5_6@dom: 124741.971 vs parts 124846.4186"
+  },
+  {
+   "quarter": "2016-03-31",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "group:psb profitability 7_net_operating_income_april_to_date_5_6@glb: 137082.9745 vs parts 137187.4221"
+  },
+  {
+   "quarter": "2016-03-31",
+   "check": "5.4",
+   "entity": "group:scb",
+   "column": "priority_non_priority_break_up gross_advances@dom",
+   "detail": "group:scb priority_non_priority_break_up gross_advances@dom: 7273202.4487 vs parts 7250443.4756"
+  },
+  {
+   "quarter": "2016-03-31",
+   "check": "5.4",
+   "entity": "indian-overseas-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "indian-overseas-bank profitability 7_net_operating_income_april_to_date_5_6@dom: 2570.8095 vs parts 2572.3455"
+  },
+  {
+   "quarter": "2016-03-31",
+   "check": "5.4",
+   "entity": "indian-overseas-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "indian-overseas-bank profitability 7_net_operating_income_april_to_date_5_6@glb: 2884.2085 vs parts 2885.7445"
+  },
+  {
+   "quarter": "2016-03-31",
+   "check": "5.5",
+   "entity": "capital-local-area-bank",
+   "column": "sheets",
+   "detail": "capital-local-area-bank: absent from ['asset_quality', 'profitability', 'performance_indicators', 'major_sectoral', 'priority_non_priority_break_up']"
+  },
+  {
+   "quarter": "2016-06-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "member group(s)",
+   "detail": "group:scb: member group(s) ['group:sfb'] absent"
+  },
+  {
+   "quarter": "2016-06-30",
+   "check": "5.4",
+   "entity": "firstrand-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "firstrand-bank profitability 7_net_operating_income_april_to_date_5_6@dom: -9.3804 vs parts -9.3142"
+  },
+  {
+   "quarter": "2016-06-30",
+   "check": "5.4",
+   "entity": "firstrand-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "firstrand-bank profitability 7_net_operating_income_april_to_date_5_6@glb: -9.3804 vs parts -9.3142"
+  },
+  {
+   "quarter": "2016-06-30",
+   "check": "5.4",
+   "entity": "group:foreign",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "group:foreign profitability 7_net_operating_income_april_to_date_5_6@dom: 5948.9652 vs parts 5949.0314"
+  },
+  {
+   "quarter": "2016-06-30",
+   "check": "5.4",
+   "entity": "group:foreign",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "group:foreign profitability 7_net_operating_income_april_to_date_5_6@glb: 5948.9652 vs parts 5949.0314"
+  },
+  {
+   "quarter": "2016-06-30",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "group:psb profitability 7_net_operating_income_april_to_date_5_6@dom: 33485.2659 vs parts 33505.0102"
+  },
+  {
+   "quarter": "2016-06-30",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "group:psb profitability 7_net_operating_income_april_to_date_5_6@glb: 35796.1096 vs parts 35815.8539"
+  },
+  {
+   "quarter": "2016-06-30",
+   "check": "5.4",
+   "entity": "indian-overseas-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "indian-overseas-bank profitability 7_net_operating_income_april_to_date_5_6@dom: 619.448 vs parts 635.3664"
+  },
+  {
+   "quarter": "2016-06-30",
+   "check": "5.4",
+   "entity": "indian-overseas-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "indian-overseas-bank profitability 7_net_operating_income_april_to_date_5_6@glb: 690.3736 vs parts 706.2920"
+  },
+  {
+   "quarter": "2016-06-30",
+   "check": "5.5",
+   "entity": "capital-small-finance-bank",
+   "column": "sheets",
+   "detail": "capital-small-finance-bank: absent from ['major_balance_sheet_items', 'capital_adequacy', 'asset_quality', 'profitability', 'performance_indicators', 'major_sectoral', 'priority_non_priority_break_up']"
+  },
+  {
+   "quarter": "2016-09-30",
+   "check": "5.1",
+   "entity": "group:scb",
+   "column": "member group(s)",
+   "detail": "group:scb: member group(s) ['group:sfb'] absent"
+  },
+  {
+   "quarter": "2016-09-30",
+   "check": "5.4",
+   "entity": "deutsche-bank-ag",
+   "column": "major_sectoral gross_advances@dom",
+   "detail": "deutsche-bank-ag major_sectoral gross_advances@dom: 40983.7941 vs parts 0.0000"
+  },
+  {
+   "quarter": "2016-09-30",
+   "check": "5.4",
+   "entity": "deutsche-bank-ag",
+   "column": "priority_non_priority_break_up gross_advances@dom",
+   "detail": "deutsche-bank-ag priority_non_priority_break_up gross_advances@dom: 40983.7941 vs parts 183.4652"
+  },
+  {
+   "quarter": "2016-09-30",
+   "check": "5.4",
+   "entity": "group:foreign",
+   "column": "major_sectoral gross_advances@dom",
+   "detail": "group:foreign major_sectoral gross_advances@dom: 371662.2692 vs parts 330678.4750"
+  },
+  {
+   "quarter": "2016-09-30",
+   "check": "5.4",
+   "entity": "group:foreign",
+   "column": "priority_non_priority_break_up gross_advances@dom",
+   "detail": "group:foreign priority_non_priority_break_up gross_advances@dom: 371662.2692 vs parts 330861.9402"
+  },
+  {
+   "quarter": "2016-09-30",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "group:psb profitability 7_net_operating_income_april_to_date_5_6@dom: 65477.0681 vs parts 65498.0985"
+  },
+  {
+   "quarter": "2016-09-30",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "group:psb profitability 7_net_operating_income_april_to_date_5_6@glb: 70045.0194 vs parts 70066.0498"
+  },
+  {
+   "quarter": "2016-09-30",
+   "check": "5.4",
+   "entity": "group:scb",
+   "column": "major_sectoral gross_advances@dom",
+   "detail": "group:scb major_sectoral gross_advances@dom: 7270276.1348 vs parts 7229292.3405"
+  },
+  {
+   "quarter": "2016-09-30",
+   "check": "5.4",
+   "entity": "group:scb",
+   "column": "priority_non_priority_break_up gross_advances@dom",
+   "detail": "group:scb priority_non_priority_break_up gross_advances@dom: 7270276.1348 vs parts 7229475.8057"
+  },
+  {
+   "quarter": "2016-09-30",
+   "check": "5.4",
+   "entity": "indian-overseas-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "indian-overseas-bank profitability 7_net_operating_income_april_to_date_5_6@dom: 1613.3916 vs parts 1629.3102"
+  },
+  {
+   "quarter": "2016-09-30",
+   "check": "5.4",
+   "entity": "indian-overseas-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "indian-overseas-bank profitability 7_net_operating_income_april_to_date_5_6@glb: 1753.9832 vs parts 1769.9018"
+  },
+  {
+   "quarter": "2016-09-30",
+   "check": "5.5",
+   "entity": "capital-small-finance-bank",
+   "column": "sheets",
+   "detail": "capital-small-finance-bank: absent from ['major_balance_sheet_items', 'capital_adequacy', 'asset_quality', 'profitability', 'performance_indicators', 'major_sectoral', 'priority_non_priority_break_up']"
+  },
+  {
+   "quarter": "2016-09-30",
+   "check": "5.5",
+   "entity": "equitas-small-finance-bank",
+   "column": "sheets",
+   "detail": "equitas-small-finance-bank: absent from ['major_balance_sheet_items', 'capital_adequacy', 'asset_quality', 'profitability', 'performance_indicators', 'major_sectoral', 'priority_non_priority_break_up']"
+  },
+  {
+   "quarter": "2016-12-31",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "group:psb profitability 7_net_operating_income_april_to_date_5_6@dom: 105243.1908 vs parts 105644.2798"
+  },
+  {
+   "quarter": "2016-12-31",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "group:psb profitability 7_net_operating_income_april_to_date_5_6@glb: 113399.1968 vs parts 113800.2858"
+  },
+  {
+   "quarter": "2016-12-31",
+   "check": "5.4",
+   "entity": "indian-overseas-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "indian-overseas-bank profitability 7_net_operating_income_april_to_date_5_6@dom: 2438.7655 vs parts 2454.6841"
+  },
+  {
+   "quarter": "2016-12-31",
+   "check": "5.4",
+   "entity": "indian-overseas-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "indian-overseas-bank profitability 7_net_operating_income_april_to_date_5_6@glb: 2608.3838 vs parts 2624.3024"
+  },
+  {
+   "quarter": "2017-03-31",
+   "check": "5.4",
+   "entity": "firstrand-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "firstrand-bank profitability 7_net_operating_income_april_to_date_5_6@dom: -22.621 vs parts -22.5171"
+  },
+  {
+   "quarter": "2017-03-31",
+   "check": "5.4",
+   "entity": "firstrand-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "firstrand-bank profitability 7_net_operating_income_april_to_date_5_6@glb: -22.621 vs parts -22.5171"
+  },
+  {
+   "quarter": "2017-03-31",
+   "check": "5.4",
+   "entity": "group:foreign",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "group:foreign profitability 7_net_operating_income_april_to_date_5_6@dom: 26463.6075 vs parts 26463.7114"
+  },
+  {
+   "quarter": "2017-03-31",
+   "check": "5.4",
+   "entity": "group:foreign",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "group:foreign profitability 7_net_operating_income_april_to_date_5_6@glb: 26463.6075 vs parts 26463.7114"
+  },
+  {
+   "quarter": "2017-03-31",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "group:psb profitability 7_net_operating_income_april_to_date_5_6@dom: 149320.856 vs parts 149377.0103"
+  },
+  {
+   "quarter": "2017-03-31",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "group:psb profitability 7_net_operating_income_april_to_date_5_6@glb: 158948.1571 vs parts 159004.5837"
+  },
+  {
+   "quarter": "2017-03-31",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@ovs",
+   "detail": "group:psb profitability 7_net_operating_income_april_to_date_5_6@ovs: 9627.3039 vs parts 9627.5762"
+  },
+  {
+   "quarter": "2017-03-31",
+   "check": "5.4",
+   "entity": "group:sfb_ns",
+   "column": "major_sectoral gross_advances@dom",
+   "detail": "group:sfb_ns major_sectoral gross_advances@dom: 9786.1241 vs parts 3910.4766"
+  },
+  {
+   "quarter": "2017-03-31",
+   "check": "5.4",
+   "entity": "group:sfb_ns",
+   "column": "major_sectoral gross_npas@dom",
+   "detail": "group:sfb_ns major_sectoral gross_npas@dom: 75.4987 vs parts 59.0991"
+  },
+  {
+   "quarter": "2017-03-31",
+   "check": "5.4",
+   "entity": "group:sfb_ns",
+   "column": "priority_non_priority_break_up gross_advances@dom",
+   "detail": "group:sfb_ns priority_non_priority_break_up gross_advances@dom: 9786.1241 vs parts 3910.4766"
+  },
+  {
+   "quarter": "2017-03-31",
+   "check": "5.4",
+   "entity": "group:sfb_ns",
+   "column": "priority_non_priority_break_up gross_npas@dom",
+   "detail": "group:sfb_ns priority_non_priority_break_up gross_npas@dom: 75.4987 vs parts 59.0991"
+  },
+  {
+   "quarter": "2017-03-31",
+   "check": "5.4",
+   "entity": "indian-overseas-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "indian-overseas-bank profitability 7_net_operating_income_april_to_date_5_6@dom: 3369.4585 vs parts 3385.3771"
+  },
+  {
+   "quarter": "2017-03-31",
+   "check": "5.4",
+   "entity": "indian-overseas-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "indian-overseas-bank profitability 7_net_operating_income_april_to_date_5_6@glb: 3648.9659 vs parts 3665.1568"
+  },
+  {
+   "quarter": "2017-03-31",
+   "check": "5.4",
+   "entity": "indian-overseas-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@ovs",
+   "detail": "indian-overseas-bank profitability 7_net_operating_income_april_to_date_5_6@ovs: 279.5074 vs parts 279.7797"
+  },
+  {
+   "quarter": "2017-03-31",
+   "check": "5.5",
+   "entity": "esaf-small-finance-bank",
+   "column": "sheets",
+   "detail": "esaf-small-finance-bank: absent from ['capital_adequacy']"
+  },
+  {
+   "quarter": "2017-03-31",
+   "check": "5.5",
+   "entity": "suryoday-small-finance-bank",
+   "column": "sheets",
+   "detail": "suryoday-small-finance-bank: absent from ['capital_adequacy', 'profitability']"
+  },
+  {
+   "quarter": "2017-03-31",
+   "check": "5.5",
+   "entity": "ujjivan-small-finance-bank",
+   "column": "sheets",
+   "detail": "ujjivan-small-finance-bank: absent from ['capital_adequacy', 'infrastructure_financing_items']"
+  },
+  {
+   "quarter": "2017-03-31",
+   "check": "5.5",
+   "entity": "utkarsh-small-finance-bank",
+   "column": "sheets",
+   "detail": "utkarsh-small-finance-bank: absent from ['capital_adequacy']"
+  },
+  {
+   "quarter": "2017-06-30",
+   "check": "5.4",
+   "entity": "firstrand-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "firstrand-bank profitability 7_net_operating_income_april_to_date_5_6@dom: -2.0439 vs parts -1.6550"
+  },
+  {
+   "quarter": "2017-06-30",
+   "check": "5.4",
+   "entity": "firstrand-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "firstrand-bank profitability 7_net_operating_income_april_to_date_5_6@glb: -2.0439 vs parts -1.6550"
+  },
+  {
+   "quarter": "2017-06-30",
+   "check": "5.4",
+   "entity": "group:foreign",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "group:foreign profitability 7_net_operating_income_april_to_date_5_6@dom: 6345.4798 vs parts 6345.8687"
+  },
+  {
+   "quarter": "2017-06-30",
+   "check": "5.4",
+   "entity": "group:foreign",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "group:foreign profitability 7_net_operating_income_april_to_date_5_6@glb: 6345.4798 vs parts 6345.8687"
+  },
+  {
+   "quarter": "2017-06-30",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "group:psb profitability 7_net_operating_income_april_to_date_5_6@dom: 34028.5149 vs parts 34248.5768"
+  },
+  {
+   "quarter": "2017-06-30",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "group:psb profitability 7_net_operating_income_april_to_date_5_6@glb: 36298.9247 vs parts 36519.1755"
+  },
+  {
+   "quarter": "2017-06-30",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@ovs",
+   "detail": "group:psb profitability 7_net_operating_income_april_to_date_5_6@ovs: 2270.6951 vs parts 2270.5996"
+  },
+  {
+   "quarter": "2017-06-30",
+   "check": "5.4",
+   "entity": "group:sfb_ns",
+   "column": "major_sectoral gross_advances@dom",
+   "detail": "group:sfb_ns major_sectoral gross_advances@dom: 18049.6415 vs parts 11930.6960"
+  },
+  {
+   "quarter": "2017-06-30",
+   "check": "5.4",
+   "entity": "group:sfb_ns",
+   "column": "major_sectoral gross_npas@dom",
+   "detail": "group:sfb_ns major_sectoral gross_npas@dom: 1007.43 vs parts 630.6718"
+  },
+  {
+   "quarter": "2017-06-30",
+   "check": "5.4",
+   "entity": "group:sfb_ns",
+   "column": "priority_non_priority_break_up gross_advances@dom",
+   "detail": "group:sfb_ns priority_non_priority_break_up gross_advances@dom: 18049.6415 vs parts 11930.6960"
+  },
+  {
+   "quarter": "2017-06-30",
+   "check": "5.4",
+   "entity": "group:sfb_ns",
+   "column": "priority_non_priority_break_up gross_npas@dom",
+   "detail": "group:sfb_ns priority_non_priority_break_up gross_npas@dom: 1007.43 vs parts 630.6718"
+  },
+  {
+   "quarter": "2017-06-30",
+   "check": "5.4",
+   "entity": "indian-overseas-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "indian-overseas-bank profitability 7_net_operating_income_april_to_date_5_6@dom: 676.7905 vs parts 863.1070"
+  },
+  {
+   "quarter": "2017-06-30",
+   "check": "5.4",
+   "entity": "indian-overseas-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "indian-overseas-bank profitability 7_net_operating_income_april_to_date_5_6@glb: 776.5387 vs parts 962.9019"
+  },
+  {
+   "quarter": "2017-06-30",
+   "check": "5.5",
+   "entity": "au-small-finance-bank",
+   "column": "sheets",
+   "detail": "au-small-finance-bank: absent from ['capital_adequacy']"
+  },
+  {
+   "quarter": "2017-06-30",
+   "check": "5.5",
+   "entity": "esaf-small-finance-bank",
+   "column": "sheets",
+   "detail": "esaf-small-finance-bank: absent from ['capital_adequacy']"
+  },
+  {
+   "quarter": "2017-06-30",
+   "check": "5.5",
+   "entity": "suryoday-small-finance-bank",
+   "column": "sheets",
+   "detail": "suryoday-small-finance-bank: absent from ['capital_adequacy', 'profitability']"
+  },
+  {
+   "quarter": "2017-06-30",
+   "check": "5.5",
+   "entity": "ujjivan-small-finance-bank",
+   "column": "sheets",
+   "detail": "ujjivan-small-finance-bank: absent from ['capital_adequacy', 'infrastructure_financing_items']"
+  },
+  {
+   "quarter": "2017-06-30",
+   "check": "5.5",
+   "entity": "utkarsh-small-finance-bank",
+   "column": "sheets",
+   "detail": "utkarsh-small-finance-bank: absent from ['capital_adequacy']"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "asset_quality 12_provisions_for_npas_at_end_of_the_fy@dom",
+   "detail": "group:sfb asset_quality 12_provisions_for_npas_at_end_of_the_fy@dom: printed 439.0225 vs banks 487.5636"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "asset_quality 12_provisions_for_npas_at_end_of_the_fy@glb",
+   "detail": "group:sfb asset_quality 12_provisions_for_npas_at_end_of_the_fy@glb: printed 439.0225 vs banks 487.5636"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "asset_quality 14_net_advances@dom",
+   "detail": "group:sfb asset_quality 14_net_advances@dom: printed 15191.9096 vs banks 18747.5748"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "asset_quality 14_net_advances@glb",
+   "detail": "group:sfb asset_quality 14_net_advances@glb: printed 15191.9096 vs banks 18747.5748"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "asset_quality 15_net_npas@dom",
+   "detail": "group:sfb asset_quality 15_net_npas@dom: printed 366.1331 vs banks 529.9963"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "asset_quality 15_net_npas@glb",
+   "detail": "group:sfb asset_quality 15_net_npas@glb: printed 366.1331 vs banks 529.9963"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "asset_quality 19_stressed_advances_gnpas_reststdadv@dom",
+   "detail": "group:sfb asset_quality 19_stressed_advances_gnpas_reststdadv@dom: printed 805.1556 vs banks 1017.5599"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "asset_quality 19_stressed_advances_gnpas_reststdadv@glb",
+   "detail": "group:sfb asset_quality 19_stressed_advances_gnpas_reststdadv@glb: printed 805.1556 vs banks 1017.5599"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "asset_quality 1_gross_advances@dom",
+   "detail": "group:sfb asset_quality 1_gross_advances@dom: printed 15633.032 vs banks 19237.2383"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "asset_quality 1_gross_advances@glb",
+   "detail": "group:sfb asset_quality 1_gross_advances@glb: printed 15633.032 vs banks 19237.2383"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "asset_quality 8_gross_npas_npas_at_the_end_of_the_period_a_b_c@dom",
+   "detail": "group:sfb asset_quality 8_gross_npas_npas_at_the_end_of_the_period_a_b_c@dom: printed 805.1556 vs banks 1017.5599"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "asset_quality 8_gross_npas_npas_at_the_end_of_the_period_a_b_c@glb",
+   "detail": "group:sfb asset_quality 8_gross_npas_npas_at_the_end_of_the_period_a_b_c@glb: printed 805.1556 vs banks 1017.5599"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "asset_quality a_sub_standard_advances@dom",
+   "detail": "group:sfb asset_quality a_sub_standard_advances@dom: printed 530.956 vs banks 731.4594"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "asset_quality a_sub_standard_advances@glb",
+   "detail": "group:sfb asset_quality a_sub_standard_advances@glb: printed 530.956 vs banks 731.4594"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "asset_quality b_doubtful_advances@dom",
+   "detail": "group:sfb asset_quality b_doubtful_advances@dom: printed 129.7985 vs banks 141.6994"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "asset_quality b_doubtful_advances@glb",
+   "detail": "group:sfb asset_quality b_doubtful_advances@glb: printed 129.7985 vs banks 141.6994"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_balance_sheet_items a_customer_deposits_i_ii_iii_iv_v@dom",
+   "detail": "group:sfb major_balance_sheet_items a_customer_deposits_i_ii_iii_iv_v@dom: printed 6048.4811 vs banks 7181.6272"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_balance_sheet_items a_customer_deposits_i_ii_iii_iv_v@glb",
+   "detail": "group:sfb major_balance_sheet_items a_customer_deposits_i_ii_iii_iv_v@glb: printed 6048.4811 vs banks 7181.6272"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_balance_sheet_items b_deposits_of_banks_i_ii@dom",
+   "detail": "group:sfb major_balance_sheet_items b_deposits_of_banks_i_ii@dom: printed 2157.0035 vs banks 2367.8071"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_balance_sheet_items b_deposits_of_banks_i_ii@glb",
+   "detail": "group:sfb major_balance_sheet_items b_deposits_of_banks_i_ii@glb: printed 2157.0035 vs banks 2367.8071"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_balance_sheet_items cash_funds@dom",
+   "detail": "group:sfb major_balance_sheet_items cash_funds@dom: printed 680.2789 vs banks 993.2938"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_balance_sheet_items cash_funds@glb",
+   "detail": "group:sfb major_balance_sheet_items cash_funds@glb: printed 680.2789 vs banks 993.2938"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_balance_sheet_items due_from_banks_fis_ccps@dom",
+   "detail": "group:sfb major_balance_sheet_items due_from_banks_fis_ccps@dom: printed 934.0435 vs banks 1216.3939"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_balance_sheet_items due_from_banks_fis_ccps@glb",
+   "detail": "group:sfb major_balance_sheet_items due_from_banks_fis_ccps@glb: printed 934.0435 vs banks 1216.3939"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_balance_sheet_items fixed_assets_net@dom",
+   "detail": "group:sfb major_balance_sheet_items fixed_assets_net@dom: printed 472.1308 vs banks 527.5992"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_balance_sheet_items fixed_assets_net@glb",
+   "detail": "group:sfb major_balance_sheet_items fixed_assets_net@glb: printed 472.1308 vs banks 527.5992"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_balance_sheet_items i_banks_in_india@dom",
+   "detail": "group:sfb major_balance_sheet_items i_banks_in_india@dom: printed 2157.0035 vs banks 2367.8071"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_balance_sheet_items i_banks_in_india@glb",
+   "detail": "group:sfb major_balance_sheet_items i_banks_in_india@glb: printed 2157.0035 vs banks 2367.8071"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_balance_sheet_items i_current_deposits@dom",
+   "detail": "group:sfb major_balance_sheet_items i_current_deposits@dom: printed 332.4832 vs banks 346.1399"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_balance_sheet_items i_current_deposits@glb",
+   "detail": "group:sfb major_balance_sheet_items i_current_deposits@glb: printed 332.4832 vs banks 346.1399"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_balance_sheet_items ii_savings_deposits@dom",
+   "detail": "group:sfb major_balance_sheet_items ii_savings_deposits@dom: printed 1527.3236 vs banks 1651.3044"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_balance_sheet_items ii_savings_deposits@glb",
+   "detail": "group:sfb major_balance_sheet_items ii_savings_deposits@glb: printed 1527.3236 vs banks 1651.3044"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_balance_sheet_items iii_time_deposits@dom",
+   "detail": "group:sfb major_balance_sheet_items iii_time_deposits@dom: printed 2369.6998 vs banks 3365.2084"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_balance_sheet_items iii_time_deposits@glb",
+   "detail": "group:sfb major_balance_sheet_items iii_time_deposits@glb: printed 2369.6998 vs banks 3365.2084"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_balance_sheet_items net_loans_and_advances@dom",
+   "detail": "group:sfb major_balance_sheet_items net_loans_and_advances@dom: printed 15191.9096 vs banks 18747.5748"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_balance_sheet_items net_loans_and_advances@glb",
+   "detail": "group:sfb major_balance_sheet_items net_loans_and_advances@glb: printed 15191.9096 vs banks 18747.5748"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_balance_sheet_items non_slr_investments@dom",
+   "detail": "group:sfb major_balance_sheet_items non_slr_investments@dom: printed 439.0424 vs banks 466.0424"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_balance_sheet_items non_slr_investments@glb",
+   "detail": "group:sfb major_balance_sheet_items non_slr_investments@glb: printed 439.0424 vs banks 466.0424"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_balance_sheet_items other_assets@dom",
+   "detail": "group:sfb major_balance_sheet_items other_assets@dom: printed 742.3643 vs banks 932.1635"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_balance_sheet_items other_assets@glb",
+   "detail": "group:sfb major_balance_sheet_items other_assets@glb: printed 742.3643 vs banks 932.1635"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_balance_sheet_items other_liabilities@dom",
+   "detail": "group:sfb major_balance_sheet_items other_liabilities@dom: printed 759.4488 vs banks 1008.0949"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_balance_sheet_items other_liabilities@glb",
+   "detail": "group:sfb major_balance_sheet_items other_liabilities@glb: printed 759.4488 vs banks 1008.0949"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_balance_sheet_items paid_up_share_capital@dom",
+   "detail": "group:sfb major_balance_sheet_items paid_up_share_capital@dom: printed 2538.6979 vs banks 2877.7201"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_balance_sheet_items paid_up_share_capital@glb",
+   "detail": "group:sfb major_balance_sheet_items paid_up_share_capital@glb: printed 2538.6979 vs banks 2877.7201"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_balance_sheet_items reserves_surplus@dom",
+   "detail": "group:sfb major_balance_sheet_items reserves_surplus@dom: printed 1781.4583 vs banks 2055.2659"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_balance_sheet_items reserves_surplus@glb",
+   "detail": "group:sfb major_balance_sheet_items reserves_surplus@glb: printed 1781.4583 vs banks 2055.2659"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_balance_sheet_items slr_approved_securities@dom",
+   "detail": "group:sfb major_balance_sheet_items slr_approved_securities@dom: printed 4351.4056 vs banks 5374.5352"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_balance_sheet_items slr_approved_securities@glb",
+   "detail": "group:sfb major_balance_sheet_items slr_approved_securities@glb: printed 4351.4056 vs banks 5374.5352"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_balance_sheet_items total_assets@dom",
+   "detail": "group:sfb major_balance_sheet_items total_assets@dom: printed 22811.1751 vs banks 28257.6028"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_balance_sheet_items total_assets@glb",
+   "detail": "group:sfb major_balance_sheet_items total_assets@glb: printed 22811.1751 vs banks 28257.6028"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_balance_sheet_items total_borrowings@dom",
+   "detail": "group:sfb major_balance_sheet_items total_borrowings@dom: printed 9526.0855 vs banks 12767.0876"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_balance_sheet_items total_borrowings@glb",
+   "detail": "group:sfb major_balance_sheet_items total_borrowings@glb: printed 9526.0855 vs banks 12767.0876"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_balance_sheet_items total_capital_liabilities@dom",
+   "detail": "group:sfb major_balance_sheet_items total_capital_liabilities@dom: printed 22811.1751 vs banks 28257.6028"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_balance_sheet_items total_capital_liabilities@glb",
+   "detail": "group:sfb major_balance_sheet_items total_capital_liabilities@glb: printed 22811.1751 vs banks 28257.6028"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_balance_sheet_items total_deposits_a_b@dom",
+   "detail": "group:sfb major_balance_sheet_items total_deposits_a_b@dom: printed 8205.4846 vs banks 9549.4343"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_balance_sheet_items total_deposits_a_b@glb",
+   "detail": "group:sfb major_balance_sheet_items total_deposits_a_b@glb: printed 8205.4846 vs banks 9549.4343"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_sectoral agriculture_and_allied_activities_gross_advances@dom",
+   "detail": "group:sfb major_sectoral agriculture_and_allied_activities_gross_advances@dom: printed 1456.1855 vs banks 2453.0301"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_sectoral gross_advances@dom",
+   "detail": "group:sfb major_sectoral gross_advances@dom: printed 15633.032 vs banks 19237.2383"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_sectoral gross_npas@dom",
+   "detail": "group:sfb major_sectoral gross_npas@dom: printed 805.1556 vs banks 1017.5599"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_sectoral industry_gross_advances@dom",
+   "detail": "group:sfb major_sectoral industry_gross_advances@dom: printed 188.607 vs banks 224.8554"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_sectoral non_food_credit_gnpas@dom",
+   "detail": "group:sfb major_sectoral non_food_credit_gnpas@dom: printed 805.1556 vs banks 1017.5599"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_sectoral non_food_credit_gross_advances@dom",
+   "detail": "group:sfb major_sectoral non_food_credit_gross_advances@dom: printed 15633.032 vs banks 19237.2383"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_sectoral other_non_food_credit_gnpas@dom",
+   "detail": "group:sfb major_sectoral other_non_food_credit_gnpas@dom: printed 13.7458 vs banks 205.8176"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_sectoral other_non_food_credit_gross_advances@dom",
+   "detail": "group:sfb major_sectoral other_non_food_credit_gross_advances@dom: printed 238.807 vs banks 1134.0853"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_sectoral other_retail_loans_gnpas@dom",
+   "detail": "group:sfb major_sectoral other_retail_loans_gnpas@dom: printed 252.3733 vs banks 272.7058"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_sectoral other_retail_loans_gross_advances@dom",
+   "detail": "group:sfb major_sectoral other_retail_loans_gross_advances@dom: printed 3745.8881 vs banks 5110.2028"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_sectoral retail_loans_education_gross_advances@dom",
+   "detail": "group:sfb major_sectoral retail_loans_education_gross_advances@dom: printed 415.0117 vs banks 433.1170"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_sectoral retail_loans_gross_advances@dom",
+   "detail": "group:sfb major_sectoral retail_loans_gross_advances@dom: printed 5520.9943 vs banks 6910.4816"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_sectoral retail_loans_gross_npas@dom",
+   "detail": "group:sfb major_sectoral retail_loans_gross_npas@dom: printed 345.3908 vs banks 365.7233"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_sectoral retail_loans_housing_loans_gross_advances@dom",
+   "detail": "group:sfb major_sectoral retail_loans_housing_loans_gross_advances@dom: printed 1287.4257 vs banks 1294.4930"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "major_sectoral services_gross_advances@dom",
+   "detail": "group:sfb major_sectoral services_gross_advances@dom: printed 8228.4382 vs banks 8514.7859"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "priority_non_priority_break_up gross_advances@dom",
+   "detail": "group:sfb priority_non_priority_break_up gross_advances@dom: printed 15633.032 vs banks 19237.2383"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "priority_non_priority_break_up gross_npas@dom",
+   "detail": "group:sfb priority_non_priority_break_up gross_npas@dom: printed 805.1556 vs banks 1017.5599"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "priority_non_priority_break_up other_priority_sector_gnpas@dom",
+   "detail": "group:sfb priority_non_priority_break_up other_priority_sector_gnpas@dom: printed 3.3758 vs banks 19.7548"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "priority_non_priority_break_up other_priority_sector_gross_advances@dom",
+   "detail": "group:sfb priority_non_priority_break_up other_priority_sector_gross_advances@dom: printed 644.5761 vs banks 1944.3478"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "priority_non_priority_break_up other_than_priority_gnpas@dom",
+   "detail": "group:sfb priority_non_priority_break_up other_than_priority_gnpas@dom: printed 369.9013 vs banks 565.9266"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "priority_non_priority_break_up other_than_priority_gross_advances@dom",
+   "detail": "group:sfb priority_non_priority_break_up other_than_priority_gross_advances@dom: printed 5439.1116 vs banks 6424.1055"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "priority_non_priority_break_up priority_agriculture_and_allied_activities_gross_advances@dom",
+   "detail": "group:sfb priority_non_priority_break_up priority_agriculture_and_allied_activities_gross_advances@dom: printed 1234.6504 vs banks 2231.4950"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "priority_non_priority_break_up priority_mse_gross_advances@dom",
+   "detail": "group:sfb priority_non_priority_break_up priority_mse_gross_advances@dom: printed 8314.6939 vs banks 8637.2900"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "priority_non_priority_break_up priority_sector_gross_advances@dom",
+   "detail": "group:sfb priority_non_priority_break_up priority_sector_gross_advances@dom: printed 10193.9204 vs banks 12813.1328"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "priority_non_priority_break_up priority_sector_gross_npas@dom",
+   "detail": "group:sfb priority_non_priority_break_up priority_sector_gross_npas@dom: printed 435.2543 vs banks 451.6333"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "profitability 10_earning_before_provisions_amp_taxes_ebpt_april_to_date_7_8_9@dom",
+   "detail": "group:sfb profitability 10_earning_before_provisions_amp_taxes_ebpt_april_to_date_7_8_9@dom: printed 258.7877 vs banks 274.1627"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "profitability 10_earning_before_provisions_amp_taxes_ebpt_april_to_date_7_8_9@glb",
+   "detail": "group:sfb profitability 10_earning_before_provisions_amp_taxes_ebpt_april_to_date_7_8_9@glb: printed 258.7877 vs banks 274.1627"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "profitability 11_risk_provisions_total_april_to_date@dom",
+   "detail": "group:sfb profitability 11_risk_provisions_total_april_to_date@dom: printed 233.8609 vs banks 280.7509"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "profitability 11_risk_provisions_total_april_to_date@glb",
+   "detail": "group:sfb profitability 11_risk_provisions_total_april_to_date@glb: printed 233.8609 vs banks 280.7509"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "profitability 12_write_offs_total_april_to_date@dom",
+   "detail": "group:sfb profitability 12_write_offs_total_april_to_date@dom: printed 98.1747 vs banks 186.3913"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "profitability 12_write_offs_total_april_to_date@glb",
+   "detail": "group:sfb profitability 12_write_offs_total_april_to_date@glb: printed 98.1747 vs banks 186.3913"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "profitability 14_profit_loss_before_tax_pbt_april_to_date_10_11_12_13@dom",
+   "detail": "group:sfb profitability 14_profit_loss_before_tax_pbt_april_to_date_10_11_12_13@dom: printed -74.2071 vs banks -193.9387"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "profitability 14_profit_loss_before_tax_pbt_april_to_date_10_11_12_13@glb",
+   "detail": "group:sfb profitability 14_profit_loss_before_tax_pbt_april_to_date_10_11_12_13@glb: printed -74.2071 vs banks -193.9387"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "profitability 15_provision_for_income_taxes_april_to_date@dom",
+   "detail": "group:sfb profitability 15_provision_for_income_taxes_april_to_date@dom: printed -24.987 vs banks -16.7106"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "profitability 15_provision_for_income_taxes_april_to_date@glb",
+   "detail": "group:sfb profitability 15_provision_for_income_taxes_april_to_date@glb: printed -24.987 vs banks -16.7106"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "profitability 16_net_profit_loss_pat_april_to_date_14_15@dom",
+   "detail": "group:sfb profitability 16_net_profit_loss_pat_april_to_date_14_15@dom: printed -49.2201 vs banks -177.2281"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "profitability 16_net_profit_loss_pat_april_to_date_14_15@glb",
+   "detail": "group:sfb profitability 16_net_profit_loss_pat_april_to_date_14_15@glb: printed -49.2201 vs banks -177.2281"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "profitability 1_total_interest_income_net_of_interest_tax_april_to_date@dom",
+   "detail": "group:sfb profitability 1_total_interest_income_net_of_interest_tax_april_to_date@dom: printed 1658.5679 vs banks 2003.7076"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "profitability 1_total_interest_income_net_of_interest_tax_april_to_date@glb",
+   "detail": "group:sfb profitability 1_total_interest_income_net_of_interest_tax_april_to_date@glb: printed 1658.5679 vs banks 2003.7076"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "profitability 2_interest_expense_april_to_date@dom",
+   "detail": "group:sfb profitability 2_interest_expense_april_to_date@dom: printed 775.5382 vs banks 962.3173"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "profitability 2_interest_expense_april_to_date@glb",
+   "detail": "group:sfb profitability 2_interest_expense_april_to_date@glb: printed 775.5382 vs banks 962.3173"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "profitability 3_net_interest_income_nii_april_to_date_1_2@dom",
+   "detail": "group:sfb profitability 3_net_interest_income_nii_april_to_date_1_2@dom: printed 883.0297 vs banks 1041.3903"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "profitability 3_net_interest_income_nii_april_to_date_1_2@glb",
+   "detail": "group:sfb profitability 3_net_interest_income_nii_april_to_date_1_2@glb: printed 883.0297 vs banks 1041.3903"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "profitability 4_other_operating_income_ooi_april_to_date@dom",
+   "detail": "group:sfb profitability 4_other_operating_income_ooi_april_to_date@dom: printed 223.8492 vs banks 287.0302"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "profitability 4_other_operating_income_ooi_april_to_date@glb",
+   "detail": "group:sfb profitability 4_other_operating_income_ooi_april_to_date@glb: printed 223.8492 vs banks 287.0302"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "profitability 5_total_operating_income_april_to_date_3_4@dom",
+   "detail": "group:sfb profitability 5_total_operating_income_april_to_date_3_4@dom: printed 1106.8789 vs banks 1328.4205"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "profitability 5_total_operating_income_april_to_date_3_4@glb",
+   "detail": "group:sfb profitability 5_total_operating_income_april_to_date_3_4@glb: printed 1106.8789 vs banks 1328.4205"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "profitability 6_operating_expense_oe_april_to_date@dom",
+   "detail": "group:sfb profitability 6_operating_expense_oe_april_to_date@dom: printed 851.0619 vs banks 1057.2285"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "profitability 6_operating_expense_oe_april_to_date@glb",
+   "detail": "group:sfb profitability 6_operating_expense_oe_april_to_date@glb: printed 851.0619 vs banks 1057.2285"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "group:sfb profitability 7_net_operating_income_april_to_date_5_6@dom: printed 255.817 vs banks 271.1920"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "group:sfb profitability 7_net_operating_income_april_to_date_5_6@glb: printed 255.817 vs banks 271.1920"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "profitability of_which_staff_expenses_april_to_date@dom",
+   "detail": "group:sfb profitability of_which_staff_expenses_april_to_date@dom: printed 499.5387 vs banks 566.3923"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "profitability of_which_staff_expenses_april_to_date@glb",
+   "detail": "group:sfb profitability of_which_staff_expenses_april_to_date@glb: printed 499.5387 vs banks 566.3923"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "asset_quality 12_provisions_for_npas_at_end_of_the_fy@dom",
+   "detail": "group:sfb_ns asset_quality 12_provisions_for_npas_at_end_of_the_fy@dom: printed 184.7159 vs banks 136.1748"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "asset_quality 12_provisions_for_npas_at_end_of_the_fy@glb",
+   "detail": "group:sfb_ns asset_quality 12_provisions_for_npas_at_end_of_the_fy@glb: printed 184.7159 vs banks 136.1748"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "asset_quality 14_net_advances@dom",
+   "detail": "group:sfb_ns asset_quality 14_net_advances@dom: printed 14197.7746 vs banks 10642.1094"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "asset_quality 14_net_advances@glb",
+   "detail": "group:sfb_ns asset_quality 14_net_advances@glb: printed 14197.7746 vs banks 10642.1094"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "asset_quality 15_net_npas@dom",
+   "detail": "group:sfb_ns asset_quality 15_net_npas@dom: printed 538.7582 vs banks 374.8950"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "asset_quality 15_net_npas@glb",
+   "detail": "group:sfb_ns asset_quality 15_net_npas@glb: printed 538.7582 vs banks 374.8950"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "asset_quality 19_stressed_advances_gnpas_reststdadv@dom",
+   "detail": "group:sfb_ns asset_quality 19_stressed_advances_gnpas_reststdadv@dom: printed 674.4511 vs banks 462.0468"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "asset_quality 19_stressed_advances_gnpas_reststdadv@glb",
+   "detail": "group:sfb_ns asset_quality 19_stressed_advances_gnpas_reststdadv@glb: printed 674.4511 vs banks 462.0468"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "asset_quality 1_gross_advances@dom",
+   "detail": "group:sfb_ns asset_quality 1_gross_advances@dom: printed 14333.4675 vs banks 10729.2612"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "asset_quality 1_gross_advances@glb",
+   "detail": "group:sfb_ns asset_quality 1_gross_advances@glb: printed 14333.4675 vs banks 10729.2612"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "asset_quality 8_gross_npas_npas_at_the_end_of_the_period_a_b_c@dom",
+   "detail": "group:sfb_ns asset_quality 8_gross_npas_npas_at_the_end_of_the_period_a_b_c@dom: printed 674.4511 vs banks 462.0468"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "asset_quality 8_gross_npas_npas_at_the_end_of_the_period_a_b_c@glb",
+   "detail": "group:sfb_ns asset_quality 8_gross_npas_npas_at_the_end_of_the_period_a_b_c@glb: printed 674.4511 vs banks 462.0468"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "asset_quality a_sub_standard_advances@dom",
+   "detail": "group:sfb_ns asset_quality a_sub_standard_advances@dom: printed 628.0225 vs banks 427.5191"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "asset_quality a_sub_standard_advances@glb",
+   "detail": "group:sfb_ns asset_quality a_sub_standard_advances@glb: printed 628.0225 vs banks 427.5191"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "asset_quality b_doubtful_advances@dom",
+   "detail": "group:sfb_ns asset_quality b_doubtful_advances@dom: printed 40.2983 vs banks 28.3974"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "asset_quality b_doubtful_advances@glb",
+   "detail": "group:sfb_ns asset_quality b_doubtful_advances@glb: printed 40.2983 vs banks 28.3974"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_balance_sheet_items a_customer_deposits_i_ii_iii_iv_v@dom",
+   "detail": "group:sfb_ns major_balance_sheet_items a_customer_deposits_i_ii_iii_iv_v@dom: printed 2673.5881 vs banks 1540.4420"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_balance_sheet_items a_customer_deposits_i_ii_iii_iv_v@glb",
+   "detail": "group:sfb_ns major_balance_sheet_items a_customer_deposits_i_ii_iii_iv_v@glb: printed 2673.5881 vs banks 1540.4420"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_balance_sheet_items b_deposits_of_banks_i_ii@dom",
+   "detail": "group:sfb_ns major_balance_sheet_items b_deposits_of_banks_i_ii@dom: printed 1217.2237 vs banks 1006.4201"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_balance_sheet_items b_deposits_of_banks_i_ii@glb",
+   "detail": "group:sfb_ns major_balance_sheet_items b_deposits_of_banks_i_ii@glb: printed 1217.2237 vs banks 1006.4201"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_balance_sheet_items cash_funds@dom",
+   "detail": "group:sfb_ns major_balance_sheet_items cash_funds@dom: printed 677.4197 vs banks 364.4048"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_balance_sheet_items cash_funds@glb",
+   "detail": "group:sfb_ns major_balance_sheet_items cash_funds@glb: printed 677.4197 vs banks 364.4048"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_balance_sheet_items due_from_banks_fis_ccps@dom",
+   "detail": "group:sfb_ns major_balance_sheet_items due_from_banks_fis_ccps@dom: printed 1476.4339 vs banks 1194.0835"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_balance_sheet_items due_from_banks_fis_ccps@glb",
+   "detail": "group:sfb_ns major_balance_sheet_items due_from_banks_fis_ccps@glb: printed 1476.4339 vs banks 1194.0835"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_balance_sheet_items fixed_assets_net@dom",
+   "detail": "group:sfb_ns major_balance_sheet_items fixed_assets_net@dom: printed 498.7879 vs banks 443.3195"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_balance_sheet_items fixed_assets_net@glb",
+   "detail": "group:sfb_ns major_balance_sheet_items fixed_assets_net@glb: printed 498.7879 vs banks 443.3195"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_balance_sheet_items i_banks_in_india@dom",
+   "detail": "group:sfb_ns major_balance_sheet_items i_banks_in_india@dom: printed 1217.2237 vs banks 1006.4201"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_balance_sheet_items i_banks_in_india@glb",
+   "detail": "group:sfb_ns major_balance_sheet_items i_banks_in_india@glb: printed 1217.2237 vs banks 1006.4201"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_balance_sheet_items i_current_deposits@dom",
+   "detail": "group:sfb_ns major_balance_sheet_items i_current_deposits@dom: printed 151.1579 vs banks 137.5012"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_balance_sheet_items i_current_deposits@glb",
+   "detail": "group:sfb_ns major_balance_sheet_items i_current_deposits@glb: printed 151.1579 vs banks 137.5012"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_balance_sheet_items ii_savings_deposits@dom",
+   "detail": "group:sfb_ns major_balance_sheet_items ii_savings_deposits@dom: printed 630.5092 vs banks 506.5284"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_balance_sheet_items ii_savings_deposits@glb",
+   "detail": "group:sfb_ns major_balance_sheet_items ii_savings_deposits@glb: printed 630.5092 vs banks 506.5284"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_balance_sheet_items iii_time_deposits@dom",
+   "detail": "group:sfb_ns major_balance_sheet_items iii_time_deposits@dom: printed 1875.1726 vs banks 879.6640"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_balance_sheet_items iii_time_deposits@glb",
+   "detail": "group:sfb_ns major_balance_sheet_items iii_time_deposits@glb: printed 1875.1726 vs banks 879.6640"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_balance_sheet_items net_loans_and_advances@dom",
+   "detail": "group:sfb_ns major_balance_sheet_items net_loans_and_advances@dom: printed 14197.7746 vs banks 10642.1094"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_balance_sheet_items net_loans_and_advances@glb",
+   "detail": "group:sfb_ns major_balance_sheet_items net_loans_and_advances@glb: printed 14197.7746 vs banks 10642.1094"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_balance_sheet_items non_slr_investments@dom",
+   "detail": "group:sfb_ns major_balance_sheet_items non_slr_investments@dom: printed 256.2531 vs banks 229.2531"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_balance_sheet_items non_slr_investments@glb",
+   "detail": "group:sfb_ns major_balance_sheet_items non_slr_investments@glb: printed 256.2531 vs banks 229.2531"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_balance_sheet_items other_assets@dom",
+   "detail": "group:sfb_ns major_balance_sheet_items other_assets@dom: printed 540.7007 vs banks 350.9015"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_balance_sheet_items other_assets@glb",
+   "detail": "group:sfb_ns major_balance_sheet_items other_assets@glb: printed 540.7007 vs banks 350.9015"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_balance_sheet_items other_liabilities@dom",
+   "detail": "group:sfb_ns major_balance_sheet_items other_liabilities@dom: printed 1201.0103 vs banks 952.3642"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_balance_sheet_items other_liabilities@glb",
+   "detail": "group:sfb_ns major_balance_sheet_items other_liabilities@glb: printed 1201.0103 vs banks 952.3642"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_balance_sheet_items paid_up_share_capital@dom",
+   "detail": "group:sfb_ns major_balance_sheet_items paid_up_share_capital@dom: printed 1043.3231 vs banks 704.3009"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_balance_sheet_items paid_up_share_capital@glb",
+   "detail": "group:sfb_ns major_balance_sheet_items paid_up_share_capital@glb: printed 1043.3231 vs banks 704.3009"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_balance_sheet_items reserves_surplus@dom",
+   "detail": "group:sfb_ns major_balance_sheet_items reserves_surplus@dom: printed 2069.3087 vs banks 1795.5011"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_balance_sheet_items reserves_surplus@glb",
+   "detail": "group:sfb_ns major_balance_sheet_items reserves_surplus@glb: printed 2069.3087 vs banks 1795.5011"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_balance_sheet_items slr_approved_securities@dom",
+   "detail": "group:sfb_ns major_balance_sheet_items slr_approved_securities@dom: printed 3227.8656 vs banks 2204.7360"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_balance_sheet_items slr_approved_securities@glb",
+   "detail": "group:sfb_ns major_balance_sheet_items slr_approved_securities@glb: printed 3227.8656 vs banks 2204.7360"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_balance_sheet_items total_assets@dom",
+   "detail": "group:sfb_ns major_balance_sheet_items total_assets@dom: printed 20875.2355 vs banks 15428.8078"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_balance_sheet_items total_assets@glb",
+   "detail": "group:sfb_ns major_balance_sheet_items total_assets@glb: printed 20875.2355 vs banks 15428.8078"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_balance_sheet_items total_borrowings@dom",
+   "detail": "group:sfb_ns major_balance_sheet_items total_borrowings@dom: printed 12670.7816 vs banks 9429.7795"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_balance_sheet_items total_borrowings@glb",
+   "detail": "group:sfb_ns major_balance_sheet_items total_borrowings@glb: printed 12670.7816 vs banks 9429.7795"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_balance_sheet_items total_capital_liabilities@dom",
+   "detail": "group:sfb_ns major_balance_sheet_items total_capital_liabilities@dom: printed 20875.2355 vs banks 15428.8078"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_balance_sheet_items total_capital_liabilities@glb",
+   "detail": "group:sfb_ns major_balance_sheet_items total_capital_liabilities@glb: printed 20875.2355 vs banks 15428.8078"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_balance_sheet_items total_deposits_a_b@dom",
+   "detail": "group:sfb_ns major_balance_sheet_items total_deposits_a_b@dom: printed 3890.8118 vs banks 2546.8621"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_balance_sheet_items total_deposits_a_b@glb",
+   "detail": "group:sfb_ns major_balance_sheet_items total_deposits_a_b@glb: printed 3890.8118 vs banks 2546.8621"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_sectoral agriculture_and_allied_activities_gross_advances@dom",
+   "detail": "group:sfb_ns major_sectoral agriculture_and_allied_activities_gross_advances@dom: printed 3048.2718 vs banks 2051.4272"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_sectoral gross_advances@dom",
+   "detail": "group:sfb_ns major_sectoral gross_advances@dom: printed 14333.4675 vs banks 10729.2612"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_sectoral gross_npas@dom",
+   "detail": "group:sfb_ns major_sectoral gross_npas@dom: printed 674.4511 vs banks 462.0468"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_sectoral industry_gross_advances@dom",
+   "detail": "group:sfb_ns major_sectoral industry_gross_advances@dom: printed 431.4802 vs banks 395.2318"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_sectoral non_food_credit_gnpas@dom",
+   "detail": "group:sfb_ns major_sectoral non_food_credit_gnpas@dom: printed 674.4511 vs banks 462.0468"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_sectoral non_food_credit_gross_advances@dom",
+   "detail": "group:sfb_ns major_sectoral non_food_credit_gross_advances@dom: printed 14333.4675 vs banks 10729.2612"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_sectoral other_non_food_credit_gnpas@dom",
+   "detail": "group:sfb_ns major_sectoral other_non_food_credit_gnpas@dom: printed 194.0995 vs banks 2.0277"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_sectoral other_non_food_credit_gross_advances@dom",
+   "detail": "group:sfb_ns major_sectoral other_non_food_credit_gross_advances@dom: printed 1108.3401 vs banks 213.0618"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_sectoral other_retail_loans_gnpas@dom",
+   "detail": "group:sfb_ns major_sectoral other_retail_loans_gnpas@dom: printed 65.2726 vs banks 44.9401"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_sectoral other_retail_loans_gross_advances@dom",
+   "detail": "group:sfb_ns major_sectoral other_retail_loans_gross_advances@dom: printed 1444.9344 vs banks 80.6197"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_sectoral retail_loans_education_gross_advances@dom",
+   "detail": "group:sfb_ns major_sectoral retail_loans_education_gross_advances@dom: printed 18.1053 vs banks 0.0000"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_sectoral retail_loans_gross_advances@dom",
+   "detail": "group:sfb_ns major_sectoral retail_loans_gross_advances@dom: printed 3933.025 vs banks 2543.5377"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_sectoral retail_loans_gross_npas@dom",
+   "detail": "group:sfb_ns major_sectoral retail_loans_gross_npas@dom: printed 163.9104 vs banks 143.5779"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_sectoral retail_loans_housing_loans_gross_advances@dom",
+   "detail": "group:sfb_ns major_sectoral retail_loans_housing_loans_gross_advances@dom: printed 13.878 vs banks 6.8107"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "major_sectoral services_gross_advances@dom",
+   "detail": "group:sfb_ns major_sectoral services_gross_advances@dom: printed 5812.3504 vs banks 5526.0027"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "priority_non_priority_break_up gross_advances@dom",
+   "detail": "group:sfb_ns priority_non_priority_break_up gross_advances@dom: printed 14333.4675 vs banks 10729.2612"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "priority_non_priority_break_up gross_npas@dom",
+   "detail": "group:sfb_ns priority_non_priority_break_up gross_npas@dom: printed 674.4511 vs banks 462.0468"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "priority_non_priority_break_up other_priority_sector_gnpas@dom",
+   "detail": "group:sfb_ns priority_non_priority_break_up other_priority_sector_gnpas@dom: printed 159.158 vs banks 142.7790"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "priority_non_priority_break_up other_priority_sector_gross_advances@dom",
+   "detail": "group:sfb_ns priority_non_priority_break_up other_priority_sector_gross_advances@dom: printed 3447.2751 vs banks 2147.5034"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "priority_non_priority_break_up other_than_priority_gnpas@dom",
+   "detail": "group:sfb_ns priority_non_priority_break_up other_than_priority_gnpas@dom: printed 219.8481 vs banks 23.8228"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "priority_non_priority_break_up other_than_priority_gross_advances@dom",
+   "detail": "group:sfb_ns priority_non_priority_break_up other_than_priority_gross_advances@dom: printed 3732.2948 vs banks 2747.3009"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "priority_non_priority_break_up priority_agriculture_and_allied_activities_gross_advances@dom",
+   "detail": "group:sfb_ns priority_non_priority_break_up priority_agriculture_and_allied_activities_gross_advances@dom: printed 3048.2718 vs banks 2051.4272"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "priority_non_priority_break_up priority_mse_gross_advances@dom",
+   "detail": "group:sfb_ns priority_non_priority_break_up priority_mse_gross_advances@dom: printed 4105.6258 vs banks 3783.0297"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "priority_non_priority_break_up priority_sector_gross_advances@dom",
+   "detail": "group:sfb_ns priority_non_priority_break_up priority_sector_gross_advances@dom: printed 10601.1727 vs banks 7981.9603"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "priority_non_priority_break_up priority_sector_gross_npas@dom",
+   "detail": "group:sfb_ns priority_non_priority_break_up priority_sector_gross_npas@dom: printed 454.603 vs banks 438.2240"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "profitability 10_earning_before_provisions_amp_taxes_ebpt_april_to_date_7_8_9@dom",
+   "detail": "group:sfb_ns profitability 10_earning_before_provisions_amp_taxes_ebpt_april_to_date_7_8_9@dom: printed 304.9414 vs banks 289.5664"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "profitability 10_earning_before_provisions_amp_taxes_ebpt_april_to_date_7_8_9@glb",
+   "detail": "group:sfb_ns profitability 10_earning_before_provisions_amp_taxes_ebpt_april_to_date_7_8_9@glb: printed 304.9414 vs banks 289.5664"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "profitability 11_risk_provisions_total_april_to_date@dom",
+   "detail": "group:sfb_ns profitability 11_risk_provisions_total_april_to_date@dom: printed 156.7445 vs banks 109.8545"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "profitability 11_risk_provisions_total_april_to_date@glb",
+   "detail": "group:sfb_ns profitability 11_risk_provisions_total_april_to_date@glb: printed 156.7445 vs banks 109.8545"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "profitability 12_write_offs_total_april_to_date@dom",
+   "detail": "group:sfb_ns profitability 12_write_offs_total_april_to_date@dom: printed 99.226 vs banks 11.0094"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "profitability 12_write_offs_total_april_to_date@glb",
+   "detail": "group:sfb_ns profitability 12_write_offs_total_april_to_date@glb: printed 99.226 vs banks 11.0094"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "profitability 14_profit_loss_before_tax_pbt_april_to_date_10_11_12_13@dom",
+   "detail": "group:sfb_ns profitability 14_profit_loss_before_tax_pbt_april_to_date_10_11_12_13@dom: printed 48.9709 vs banks 168.7025"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "profitability 14_profit_loss_before_tax_pbt_april_to_date_10_11_12_13@glb",
+   "detail": "group:sfb_ns profitability 14_profit_loss_before_tax_pbt_april_to_date_10_11_12_13@glb: printed 48.9709 vs banks 168.7025"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "profitability 15_provision_for_income_taxes_april_to_date@dom",
+   "detail": "group:sfb_ns profitability 15_provision_for_income_taxes_april_to_date@dom: printed 84.6723 vs banks 76.3959"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "profitability 15_provision_for_income_taxes_april_to_date@glb",
+   "detail": "group:sfb_ns profitability 15_provision_for_income_taxes_april_to_date@glb: printed 84.6723 vs banks 76.3959"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "profitability 16_net_profit_loss_pat_april_to_date_14_15@dom",
+   "detail": "group:sfb_ns profitability 16_net_profit_loss_pat_april_to_date_14_15@dom: printed -35.7014 vs banks 92.3066"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "profitability 16_net_profit_loss_pat_april_to_date_14_15@glb",
+   "detail": "group:sfb_ns profitability 16_net_profit_loss_pat_april_to_date_14_15@glb: printed -35.7014 vs banks 92.3066"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "profitability 1_total_interest_income_net_of_interest_tax_april_to_date@dom",
+   "detail": "group:sfb_ns profitability 1_total_interest_income_net_of_interest_tax_april_to_date@dom: printed 1336.4064 vs banks 991.2667"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "profitability 1_total_interest_income_net_of_interest_tax_april_to_date@glb",
+   "detail": "group:sfb_ns profitability 1_total_interest_income_net_of_interest_tax_april_to_date@glb: printed 1336.4064 vs banks 991.2667"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "profitability 2_interest_expense_april_to_date@dom",
+   "detail": "group:sfb_ns profitability 2_interest_expense_april_to_date@dom: printed 667.6352 vs banks 480.8561"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "profitability 2_interest_expense_april_to_date@glb",
+   "detail": "group:sfb_ns profitability 2_interest_expense_april_to_date@glb: printed 667.6352 vs banks 480.8561"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "profitability 3_net_interest_income_nii_april_to_date_1_2@dom",
+   "detail": "group:sfb_ns profitability 3_net_interest_income_nii_april_to_date_1_2@dom: printed 668.7712 vs banks 510.4106"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "profitability 3_net_interest_income_nii_april_to_date_1_2@glb",
+   "detail": "group:sfb_ns profitability 3_net_interest_income_nii_april_to_date_1_2@glb: printed 668.7712 vs banks 510.4106"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "profitability 4_other_operating_income_ooi_april_to_date@dom",
+   "detail": "group:sfb_ns profitability 4_other_operating_income_ooi_april_to_date@dom: printed 216.741 vs banks 153.5600"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "profitability 4_other_operating_income_ooi_april_to_date@glb",
+   "detail": "group:sfb_ns profitability 4_other_operating_income_ooi_april_to_date@glb: printed 216.741 vs banks 153.5600"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "profitability 5_total_operating_income_april_to_date_3_4@dom",
+   "detail": "group:sfb_ns profitability 5_total_operating_income_april_to_date_3_4@dom: printed 885.5122 vs banks 663.9706"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "profitability 5_total_operating_income_april_to_date_3_4@glb",
+   "detail": "group:sfb_ns profitability 5_total_operating_income_april_to_date_3_4@glb: printed 885.5122 vs banks 663.9706"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "profitability 6_operating_expense_oe_april_to_date@dom",
+   "detail": "group:sfb_ns profitability 6_operating_expense_oe_april_to_date@dom: printed 604.8962 vs banks 398.7296"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "profitability 6_operating_expense_oe_april_to_date@glb",
+   "detail": "group:sfb_ns profitability 6_operating_expense_oe_april_to_date@glb: printed 604.8962 vs banks 398.7296"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "group:sfb_ns profitability 7_net_operating_income_april_to_date_5_6@dom: printed 280.616 vs banks 265.2410"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "group:sfb_ns profitability 7_net_operating_income_april_to_date_5_6@glb: printed 280.616 vs banks 265.2410"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "profitability of_which_staff_expenses_april_to_date@dom",
+   "detail": "group:sfb_ns profitability of_which_staff_expenses_april_to_date@dom: printed 297.2131 vs banks 230.3595"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.1",
+   "entity": "group:sfb_ns",
+   "column": "profitability of_which_staff_expenses_april_to_date@glb",
+   "detail": "group:sfb_ns profitability of_which_staff_expenses_april_to_date@glb: printed 297.2131 vs banks 230.3595"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.4",
+   "entity": "firstrand-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "firstrand-bank profitability 7_net_operating_income_april_to_date_5_6@dom: 7.3864 vs parts 7.4608"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.4",
+   "entity": "firstrand-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "firstrand-bank profitability 7_net_operating_income_april_to_date_5_6@glb: 7.3864 vs parts 7.4608"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.4",
+   "entity": "group:foreign",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "group:foreign profitability 7_net_operating_income_april_to_date_5_6@dom: 12620.5086 vs parts 12620.5830"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.4",
+   "entity": "group:foreign",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "group:foreign profitability 7_net_operating_income_april_to_date_5_6@glb: 12620.5086 vs parts 12620.5830"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.4",
+   "entity": "group:lab",
+   "column": "major_sectoral gross_advances@dom",
+   "detail": "group:lab major_sectoral gross_advances@dom: 489.6183 vs parts 155.9956"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.4",
+   "entity": "group:lab",
+   "column": "priority_non_priority_break_up gross_advances@dom",
+   "detail": "group:lab priority_non_priority_break_up gross_advances@dom: 489.6183 vs parts 155.9956"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "group:psb profitability 7_net_operating_income_april_to_date_5_6@dom: 80536.3365 vs parts 80693.2633"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "group:psb profitability 7_net_operating_income_april_to_date_5_6@glb: 85053.194 vs parts 85210.3803"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@ovs",
+   "detail": "group:psb profitability 7_net_operating_income_april_to_date_5_6@ovs: 4516.8574 vs parts 4517.1169"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.4",
+   "entity": "indian-overseas-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "indian-overseas-bank profitability 7_net_operating_income_april_to_date_5_6@dom: 1653.0904 vs parts 1839.4069"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.4",
+   "entity": "indian-overseas-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "indian-overseas-bank profitability 7_net_operating_income_april_to_date_5_6@glb: 1814.6509 vs parts 2000.6236"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.4",
+   "entity": "indian-overseas-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@ovs",
+   "detail": "indian-overseas-bank profitability 7_net_operating_income_april_to_date_5_6@ovs: 161.5604 vs parts 161.2166"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.5",
+   "entity": "au-small-finance-bank",
+   "column": "sheets",
+   "detail": "au-small-finance-bank: absent from ['capital_adequacy']"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.5",
+   "entity": "coastal-local-area-bank",
+   "column": "sheets",
+   "detail": "coastal-local-area-bank: absent from ['infrastructure_financing_items']"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.5",
+   "entity": "esaf-small-finance-bank",
+   "column": "sheets",
+   "detail": "esaf-small-finance-bank: absent from ['capital_adequacy']"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.5",
+   "entity": "fincare-small-finance-bank",
+   "column": "sheets",
+   "detail": "fincare-small-finance-bank: absent from ['capital_adequacy']"
+  },
+  {
+   "quarter": "2017-09-30",
+   "check": "5.5",
+   "entity": "utkarsh-small-finance-bank",
+   "column": "sheets",
+   "detail": "utkarsh-small-finance-bank: absent from ['capital_adequacy']"
+  },
   {
    "quarter": "2017-12-31",
    "check": "5.1",
