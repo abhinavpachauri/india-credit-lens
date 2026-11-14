@@ -79,6 +79,11 @@ EXCEPTIONS = [
     # half the domestic figure (1.0662 vs 0.5331 Cr), carried into the group totals.
     ("5.2", "2024-09-30", "sonali-bank-plc", "other_retail_loans_gnpa_ratio"),
     *[("5.3", "2024-09-30", e, "21. Loans sold to ARCs") for e in ("karur-vysya-bank", "group:pvt", "group:scb")],
+    # Mar 2023: for 13 banks RBI's printed Non-Food Credit sits just below the sum of its sectors
+    # (Citibank 50,173 vs 50,208 Cr) while gross = food + sectors holds; RBI's non-food aggregate
+    # for that quarter, not a reading error. Non-food is taken as printed for Mar 2023.
+    *[("5.4", "2023-03-31", "*", c) for c in ("gross_advances@dom", "gross_npas@dom",
+                                              "non_food_credit_gross_advances@dom", "non_food_credit_gnpas@dom")],
 ]
 
 
@@ -103,7 +108,7 @@ def where(check: str, line: str) -> tuple[str, str]:
 
 def excepted(check: str, quarter: str, line: str) -> bool:
     parts = line.split(" ", 2)
-    return any(c == check and q in ("*", quarter) and parts[0] == e and parts[2].startswith(col)
+    return any(c == check and q in ("*", quarter) and e in ("*", parts[0]) and parts[2].startswith(col)
                for c, q, e, col in EXCEPTIONS)
 
 
@@ -124,17 +129,23 @@ def structure(declared: dict) -> dict:
     """For each sheet: amount and ratio column ids, ratio formulas, and identities
     [(total_id, [(sign, part_id)…])], all derived from the declared labels."""
     out = {}
-    for title, spec in declared["sheets"].items():
-        sid = spec["id"]
-        cols = [(m, o) for m, o in spec["columns"]]
+
+    def build(sid, title, cols):
         by_label: dict[str, dict[str, str]] = {}
         for n, (m, o) in enumerate(cols):
             cid = (slug(m) if m else f"unlabelled_{n}") + (f"@{OPS[o]}" if o else "")
             by_label.setdefault(m, {})[OPS.get(o, "")] = cid
         amounts = [c for m, d in by_label.items() if m and not is_ratio(sid, m) for c in d.values()]
         ratios = [c for m, d in by_label.items() if m and is_ratio(sid, m) for c in d.values()]
-        out[sid] = {"title": title, "labels": by_label, "amounts": amounts, "ratios": ratios,
-                    "formulas": [], "identities": []}
+        return {"title": title, "labels": by_label, "amounts": amounts, "ratios": ratios,
+                "formulas": [], "identities": []}
+
+    for title, spec in declared["sheets"].items():
+        sid = spec["id"]
+        lays = spec.get("layouts") or {"current": {"columns": spec["columns"]}}
+        by = {lid: build(sid, title, [(m, o) for m, o in lay["columns"]]) for lid, lay in lays.items()}
+        out[sid] = by["current"]
+        out[sid]["by_layout"] = by
     S = out
 
     def col(sid, label, op):
@@ -221,27 +232,67 @@ def structure(declared: dict) -> dict:
     identity(pf, L["7"], [(1, L["5"]), (-1, L["6"])])
     identity(pf, L["10"], [(1, L["7"]), (1, L["8"]), (1, L["9"])])
 
-    inf = "infrastructure_financing_items"
-    labels = list(S[inf]["labels"])
-    num = {lab: lab.split(" ", 1)[0].rstrip(".") for lab in labels if re.match(r"^\d+(\.\d+)*\.? ", lab)}
-    tops = [lab for lab, n in num.items() if "." not in n]
-    identity(inf, "Total", [(1, t) for t in tops])
-    for lab, n in num.items():
-        kids = [k for k, m in num.items() if m.startswith(n + ".") and m.count(".") == n.count(".") + 1]
-        if kids:
-            identity(inf, lab, [(1, k) for k in kids])
+    # The infrastructure tree, for every layout, from RBI's own numbering: "1.1.1 Highways" (2022 →)
+    # and "R.a.1 Roads and Bridges" (to Mar 2022). A code with no dot is a top line; a "Total" column,
+    # where printed, is the sum of the top lines; each code is the sum of its next-level codes.
+    code_re = re.compile(r"^([A-Z0-9]+(?:\.[a-z0-9]+)*)\.?\s")
+    for lay in S["infrastructure_financing_items"]["by_layout"].values():
+        num = {lab: m.group(1) for lab in lay["labels"] if (m := code_re.match(lab))}
+        tops = [lab for lab, n in num.items() if "." not in n]
+        if "Total" in lay["labels"]:
+            lay["identities"].append((lay["labels"]["Total"][""], [(1, lay["labels"][t][""]) for t in tops]))
+        for lab, n in num.items():
+            kids = [k for k, m in num.items() if m.startswith(n + ".") and m.count(".") == n.count(".") + 1]
+            if kids:
+                lay["identities"].append((lay["labels"][lab][""], [(1, lay["labels"][k][""]) for k in kids]))
     return out
 
 
 # ── the checks ────────────────────────────────────────────────────────────────
 
+def printed_tol(v: float, floor: float) -> float:
+    """Half a unit in the last printed decimal: RBI printed ratios to 2 decimals in older quarters
+    (CRAR 19.98 for 19.98167, 2021-23) and to 6 later; "exact to the printed decimals" (§5.2)."""
+    t = repr(float(v))
+    dp = len(t.split(".")[1]) if "." in t and "e" not in t else 6
+    return max(floor, 0.5 * 10 ** -min(dp, 6) + 1e-9)
+
+
 def close(a: float, b: float, abs_tol: float, rel_tol: float = 0.0) -> bool:
     return abs(a - b) <= max(abs_tol, rel_tol * max(abs(a), abs(b)))
 
 
-def check_quarter(q: dict, st: dict, B: dict = BOUNDS) -> dict[str, list[str]]:
+def old_return(st: dict) -> dict:
+    """Major Sectoral up to Mar 2022 (the return before the Jun 2022 change that also re-listed
+    infrastructure): gross advances = food + the five sectors, and the printed "Non-Food Credit"
+    is a narrower aggregate apart from them (SBI Dec 2021: gross 22,64,217 = food 26,871 + sectors
+    22,37,346; non-food printed 18,28,400). Measured 2026-11-14 on Dec 2021 and Mar 2022."""
+    s = dict(st["major_sectoral"])
+    L = s["labels"]
+    def c(lab): return L[lab][OPS["Domestic Operation"]]
+    ids = []
+    for gross, food, parts in (
+            ("Gross Advances", "Food Credit - Gross Advances",
+             [f"{p} - Gross Advances" for p in ("Agriculture and Allied Activities", "Industry", "Services", "Retail Loans", "Other Non-food Credit")]),
+            ("Gross NPAs", "Food Credit - GNPAs",
+             ["Agriculture and Allied Activities - Gross NPAs", "Industry - Gross NPAs", "Services - Gross NPAs",
+              "Retail Loans - Gross NPAs", "Other Non-food Credit - GNPAs"])):
+        ids.append((c(gross), [(1, c(food))] + [(1, c(x)) for x in parts]))
+    keep = [i for i in s["identities"] if i[0] not in {c("Gross Advances"), c("Gross NPAs"),
+                                                        c("Non-Food Credit - Gross Advances"), c("Non-Food Credit - GNPAs")}]
+    s["identities"] = ids + keep
+    return {**st, "major_sectoral": s}
+
+
+OLD_RETURN_TO = "2022-03-31"
+
+
+def check_quarter(q: dict, st: dict, B: dict = BOUNDS, period: str | None = None) -> dict[str, list[str]]:
     """{check: [failures]} for one saved quarter (its `banks` and `groups`)."""
     f = {k: [] for k in ("5.1", "5.2", "5.3", "5.4", "5.5")}
+    st = {sid: s.get("by_layout", {}).get(q.get("layouts", {}).get(sid, "current"), s) for sid, s in st.items()}
+    if period and period <= OLD_RETURN_TO and "major_sectoral" in st:
+        st = old_return(st)
     banks, groups = q["banks"], q["groups"]
     v = lambda e, s, c: (e["sheets"].get(s) or {}).get(c)  # noqa: E731
     # 5.1 sums
@@ -279,7 +330,7 @@ def check_quarter(q: dict, st: dict, B: dict = BOUNDS) -> dict[str, list[str]]:
                 if rv is None:
                     if nv != 0:                  # RBI prints a 0% ratio as blank (GNPAs 0)
                         f["5.2"].append(f"{name} {sid} {r}: null with denominator {dv}, numerator {nv}")
-                elif not close(rv, 100 * nv / dv, B["ratio_abs"]):
+                elif not close(rv, 100 * nv / dv, printed_tol(rv, B["ratio_abs"])):
                     f["5.2"].append(f"{name} {sid} {r}: printed {rv} vs {100 * nv / dv:.6f}")
             # 5.3 global
             for lab, d in s["labels"].items():
@@ -291,8 +342,8 @@ def check_quarter(q: dict, st: dict, B: dict = BOUNDS) -> dict[str, list[str]]:
             for tot, parts in s["identities"]:
                 tv = v(e, sid, tot)
                 pv = [(sg, v(e, sid, p), p) for sg, p in parts]
-                if tv is None and all(x is None for _, x, _ in pv):
-                    continue
+                if all(x is None for _, x, _ in pv):
+                    continue                     # parts not printed (SFB RWA components, 2021-23)
                 got = sum(sg * (x or 0.0) for sg, x, _ in pv)
                 if tv is None and close(got, 0.0, B["part_abs"]):
                     continue
@@ -372,7 +423,7 @@ def classify(quarters: dict, st: dict) -> tuple[list[dict], list[dict], dict, di
     COLUMN_WIDE_BANKS or more banks; everything else unexcepted is a flag on one bank or group."""
     rows, named = [], {k: 0 for k in ("5.1", "5.2", "5.3", "5.4", "5.5")}
     for p, q in sorted(quarters.items()):
-        for k, fl in check_quarter(q, st).items():
+        for k, fl in check_quarter(q, st, period=p).items():
             for x in fl:
                 if excepted(k, p, x):
                     named[k] += 1

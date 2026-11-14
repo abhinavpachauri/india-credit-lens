@@ -50,7 +50,8 @@ def slug(text: str) -> str:
 
 
 def _header(ws) -> tuple[int, int, int, list[tuple[str, str]], str]:
-    """(header row, period column, name column, [(measure, operation)], unit text)."""
+    """(header row, period column, name column, [(measure, operation)], unit text) of the FIRST
+    header; later headers in the same sheet are read by `columns_at` (a layout change mid-sheet)."""
     rows = [[c.value for c in r] for r in ws.iter_rows(min_row=1, max_row=12)]
     hr = next((i for i, r in enumerate(rows) if "Period" in [norm(v) for v in r] and "Banks" in [norm(v) for v in r]), None)
     if hr is None:
@@ -59,25 +60,81 @@ def _header(ws) -> tuple[int, int, int, list[tuple[str, str]], str]:
     pc, nc = row.index("Period"), row.index("Banks")
     unit = " ".join(norm(v) for r in rows[:hr] for v in r if v and ("Crore" in str(v) or "Lakh" in str(v)
                                                                        or "Million" in str(v) or "Amount" in str(v)))
+    return hr + 1, pc, nc, columns_at(ws, hr + 1, nc), unit
+
+
+def columns_at(ws, at: int, nc: int) -> list[tuple[str, str]]:
+    """[(measure, operation)] of the header row `at` (1-based). A measure heads exactly the columns
+    its merged cell spans: never forward-filled, because RBI's export has merged header cells left
+    EMPTY over columns that hold numbers (Asset Quality AZ:BB and Major Sectoral AQ, Jun 2025 only;
+    found 2026-11-14). Forward-filling named them after the measure to their left."""
+    row = [norm(c.value) for c in ws[at]]
     after = row[nc + 1:]
     if any(v in OPERATIONS for v in after):
-        # A measure heads exactly the columns its merged cell spans: never forward-filled, because
-        # RBI's export has merged header cells left EMPTY over columns that hold numbers (Asset
-        # Quality AZ:BB and Major Sectoral AQ, Jun 2025 only; found 2026-11-14). Forward-filling
-        # named them after the measure to their left.
-        mr = hr                                      # 1-based row of the measures (the row above)
+        mr = at - 1
         span = {}
         for rg in ws.merged_cells.ranges:
             if rg.min_row <= mr <= rg.max_row:
                 for c in range(rg.min_col, rg.max_col + 1):
                     span[c] = norm(ws.cell(rg.min_row, rg.min_col).value)
-        cols = []
-        for j, op in enumerate(after, start=nc + 1):
-            if op:
-                cols.append((span.get(j + 1, norm(rows[hr - 1][j])), op))
-    else:
-        cols = [(v, "") for v in after if v]
-    return hr + 1, pc, nc, cols, unit
+        above = [norm(c.value) for c in ws[mr]]
+        return [(span.get(j + 1, above[j] if j < len(above) else ""), op)
+                for j, op in enumerate(after, start=nc + 1) if op]
+    return [(v, "") for v in after if v]
+
+
+def layouts_of(spec: dict) -> dict[str, list[tuple[str, str]]]:
+    """A sheet's declared layouts: id → ordered columns. RBI changes a classification now and then
+    (Infrastructure, Mar → Jun 2022) and one export then prints both, each under its own header."""
+    if "layouts" in spec:
+        return {k: [tuple(c) for c in v["columns"]] for k, v in spec["layouts"].items()}
+    return {"current": [tuple(c) for c in spec["columns"]]}
+
+
+def _fits(cols: list[tuple[str, str]], want: list[tuple[str, str]], blank_ok: set) -> list[tuple[str, str]] | None:
+    """The declared columns `cols` stands for, if `cols` is an ORDERED SUBSET of `want`: DBIE prints
+    only the measures that hold data in the quarters selected (Profitability: 42 columns for
+    2024-26, 51 for 2021-23; found 2026-11-14), so an export may skip declared columns but never
+    reorder or rename one. A label in `blank_ok` may print blank (DBIE prints '22. Loss or gain on
+    loan sales' only for some selections)."""
+    out, j = [], 0
+    for g in cols:
+        while j < len(want) and not (g == want[j] or (g == ("", want[j][1]) and want[j][0] in blank_ok)):
+            j += 1
+        if j == len(want):
+            return None
+        out.append(want[j])
+        j += 1
+    return out
+
+
+def match_layout(title: str, cols: list[tuple[str, str]], spec: dict) -> tuple[str, list[tuple[str, str]]]:
+    """(layout id, the DECLARED columns the printed header stands for). Ids always come from the
+    declaration, so one column has one id whatever an export prints."""
+    lays = layouts_of(spec)
+    for lid, want in lays.items():
+        blank = set((spec.get("layouts", {}).get(lid) or {}).get("blank_ok_labels", []))
+        got = _fits(cols, want, blank)
+        if got is not None:
+            return lid, got
+    want = lays.get("current") or next(iter(lays.values()))
+    unknown = [c for c in cols if c not in want and c[0]]
+    raise ExportShapeError(f"{title}: header is not an ordered subset of any declared layout ({list(lays)}); "
+                           f"{len(unknown)} column(s) not in '{next(iter(lays))}', first {unknown[:2]} "
+                           f"(new measures? merge them with --declare-merge after checking the export)")
+
+
+def merge_columns(want: list[tuple[str, str]], got: list[tuple[str, str]]) -> list[tuple[str, str]]:
+    """Both are ordered subsets of RBI's full list: interleave them, keeping each one's order."""
+    out, i = [], 0
+    for g in got:
+        if g in want[i:]:
+            k = want.index(g, i)
+            out += want[i:k + 1]
+            i = k + 1
+        elif g not in out and g not in want:
+            out.append(g)
+    return out + want[i:]
 
 
 def column_ids(cols: list[tuple[str, str]]) -> list[str]:
@@ -119,11 +176,7 @@ def read(path: Path, declared: dict | None = None, resolver: Resolver | None = N
     for ws in wb.worksheets:
         spec = declared["sheets"][ws.title]
         first, pc, nc, cols, unit = _header(ws)
-        want_cols = [tuple(c) for c in spec["columns"]]
-        if cols != want_cols:
-            diff = next(((i, a, b) for i, (a, b) in enumerate(zip(cols, want_cols)) if a != b), (min(len(cols), len(want_cols)), None, None))
-            raise ExportShapeError(f"{ws.title}: header differs from the declared list at column {diff[0]}: "
-                                   f"got {diff[1]}, declared {diff[2]} ({len(cols)} vs {len(want_cols)} columns)")
+        layout, cols = match_layout(ws.title, cols, spec)
         # The Unit prompt applies to the whole export; a sheet that prints no unit (Infrastructure)
         # is covered by the sheets that do, and is declared as printing none.
         if spec.get("unit", "crores") == "crores" and "crore" not in unit.lower():
@@ -135,6 +188,12 @@ def read(path: Path, declared: dict | None = None, resolver: Resolver | None = N
         period, block, prev_group = None, [], False
         for r in ws.iter_rows(min_row=first + 1):
             pv, nm = r[pc].value, r[nc].value
+            if norm(nm) == "Banks":                      # a second header: the layout changes here
+                if block:
+                    raise ExportShapeError(f"{ws.title}: banks before a header row without a closing group")
+                layout, cols = match_layout(ws.title, columns_at(ws, r[nc].row, nc), spec)
+                ids, period = column_ids(cols), None
+                continue
             if isinstance(pv, datetime.datetime):
                 period = pv.date().isoformat()
             if not isinstance(nm, str) or not nm.strip():
@@ -147,7 +206,9 @@ def read(path: Path, declared: dict | None = None, resolver: Resolver | None = N
             for i, v in vals.items():
                 if v is not None and not isinstance(v, (int, float)):
                     raise ExportShapeError(f"{ws.title} {period} {nm!r} {i}: non-numeric cell {v!r}")
-            q = quarters.setdefault(period, {"banks": {}, "groups": {}})
+            q = quarters.setdefault(period, {"banks": {}, "groups": {}, "layouts": {}})
+            if q["layouts"].setdefault(sid, layout) != layout:
+                raise ExportShapeError(f"{ws.title} {period}: printed under two layouts")
             if r[nc].font.bold:
                 gid = declared["groups"].get(norm(nm).lower())
                 if gid is None:
@@ -195,7 +256,7 @@ def unknown_names(path: Path, declared: dict | None = None, resolver: Resolver |
             pv, nm = r[pc].value, r[nc].value
             if isinstance(pv, datetime.datetime):
                 period = pv.date().isoformat()
-            if not isinstance(nm, str) or not nm.strip() or nm.strip().startswith("Source"):
+            if not isinstance(nm, str) or not nm.strip() or nm.strip().startswith("Source") or norm(nm) == "Banks":
                 continue
             if r[nc].font.bold:
                 if norm(nm).lower() not in declared["groups"]:
@@ -213,7 +274,31 @@ def main() -> int:
     ap.add_argument("--xlsx", type=Path, required=True)
     ap.add_argument("--declare", action="store_true", help="write sheets.json from this export (keeps 'groups')")
     ap.add_argument("--unknown", action="store_true", help="list names the roster does not resolve, with quarters")
+    ap.add_argument("--declare-merge", action="store_true",
+                    help="merge columns this export shows that the declaration lacks, at their printed position")
     a = ap.parse_args()
+    if a.declare_merge:
+        import openpyxl
+        doc = json.loads(DECLARED.read_text())
+        for ws in openpyxl.load_workbook(a.xlsx).worksheets:
+            spec = doc["sheets"][ws.title]
+            first, _, nc, _, _ = _header(ws)
+            heads = [first] + [r[nc].row for r in ws.iter_rows(min_row=first + 1) if norm(r[nc].value) == "Banks"]
+            for h in heads:
+                cols = columns_at(ws, h, nc)
+                lays = spec.get("layouts") or {"current": {"columns": spec["columns"]}}
+                lid = max(lays, key=lambda k: len(set(map(tuple, lays[k]["columns"])) & set(cols)))
+                before = [tuple(c) for c in lays[lid]["columns"]]
+                after = merge_columns(before, [c for c in cols if c[0]])
+                if after != before:
+                    print(f"  {ws.title} [{lid}]: +{len(after) - len(before)} column(s): "
+                          f"{[c for c in after if c not in before][:4]}")
+                    lays[lid]["columns"] = [list(c) for c in after]
+                    if "layouts" not in spec:
+                        spec.pop("columns", None)
+                        spec["layouts"] = lays
+        DECLARED.write_text(json.dumps(doc, indent=1, ensure_ascii=False) + "\n")
+        return 0
     if a.unknown:
         un = unknown_names(a.xlsx)
         print(f"  {len(un)} unknown name(s)")

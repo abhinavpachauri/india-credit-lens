@@ -2,7 +2,8 @@
  "_meta": {
   "from": "probe_2026-11-14.xlsx",
   "declared": "2026-11-14",
-  "rule": "the reader refuses any export whose sheets or headers differ from these, in order"
+  "rule": "the reader refuses any export whose sheets or headers differ from these, in order",
+  "layouts_rule": "A sheet may declare several layouts; each header row in an export must equal one of them exactly, and each quarter records the layout it was printed under."
  },
  "groups": {
   "public sector banks": "group:psb",
@@ -11,7 +12,8 @@
   "small finance bank group-scheduled": "group:sfb",
   "local area bank group": "group:lab",
   "all scheduled commercial banks": "group:scb",
-  "scheduled commercial banks": "group:scb"
+  "scheduled commercial banks": "group:scb",
+  "small finance bank group-non-scheduled": "group:sfb_ns"
  },
  "sheets": {
   "Major Balance Sheet Items": {
@@ -398,385 +400,433 @@
   },
   "Asset Quality": {
    "id": "asset_quality",
-   "columns": [
-    [
-     "1. Gross Advances",
-     "Domestic Operation"
-    ],
-    [
-     "1. Gross Advances",
-     "Overseas Operation"
-    ],
-    [
-     "1. Gross Advances",
-     "Global Operation"
-    ],
-    [
-     "8. Gross NPAs NPAs at the end of the Period (a+b+c)",
-     "Domestic Operation"
-    ],
-    [
-     "8. Gross NPAs NPAs at the end of the Period (a+b+c)",
-     "Overseas Operation"
-    ],
-    [
-     "8. Gross NPAs NPAs at the end of the Period (a+b+c)",
-     "Global Operation"
-    ],
-    [
-     "a. Sub-standard advances",
-     "Domestic Operation"
-    ],
-    [
-     "a. Sub-standard advances",
-     "Overseas Operation"
-    ],
-    [
-     "a. Sub-standard advances",
-     "Global Operation"
-    ],
-    [
-     "b. Doubtful advances",
-     "Domestic Operation"
-    ],
-    [
-     "b. Doubtful advances",
-     "Overseas Operation"
-    ],
-    [
-     "b. Doubtful advances",
-     "Global Operation"
-    ],
-    [
-     "c. Loss advances",
-     "Domestic Operation"
-    ],
-    [
-     "c. Loss advances",
-     "Overseas Operation"
-    ],
-    [
-     "c. Loss advances",
-     "Global Operation"
-    ],
-    [
-     "9. Gross NPAs to Gross Advances (%)",
-     "Domestic Operation"
-    ],
-    [
-     "9. Gross NPAs to Gross Advances (%)",
-     "Overseas Operation"
-    ],
-    [
-     "9. Gross NPAs to Gross Advances (%)",
-     "Global Operation"
-    ],
-    [
-     "12. Provisions for NPAs at end of the FY",
-     "Domestic Operation"
-    ],
-    [
-     "12. Provisions for NPAs at end of the FY",
-     "Overseas Operation"
-    ],
-    [
-     "12. Provisions for NPAs at end of the FY",
-     "Global Operation"
-    ],
-    [
-     "13. Provision Coverage Ratio (Write-Off Adj) (%)",
-     "Domestic Operation"
-    ],
-    [
-     "13. Provision Coverage Ratio (Write-Off Adj) (%)",
-     "Overseas Operation"
-    ],
-    [
-     "13. Provision Coverage Ratio (Write-Off Adj) (%)",
-     "Global Operation"
-    ],
-    [
-     "14. Net Advances",
-     "Domestic Operation"
-    ],
-    [
-     "14. Net Advances",
-     "Overseas Operation"
-    ],
-    [
-     "14. Net Advances",
-     "Global Operation"
-    ],
-    [
-     "15. Net NPAs",
-     "Domestic Operation"
-    ],
-    [
-     "15. Net NPAs",
-     "Overseas Operation"
-    ],
-    [
-     "15. Net NPAs",
-     "Global Operation"
-    ],
-    [
-     "16. Net NPAs to Net Advances (%)",
-     "Domestic Operation"
-    ],
-    [
-     "16. Net NPAs to Net Advances (%)",
-     "Overseas Operation"
-    ],
-    [
-     "16. Net NPAs to Net Advances (%)",
-     "Global Operation"
-    ],
-    [
-     "17. Restructured Standard Advances",
-     "Domestic Operation"
-    ],
-    [
-     "17. Restructured Standard Advances",
-     "Overseas Operation"
-    ],
-    [
-     "17. Restructured Standard Advances",
-     "Global Operation"
-    ],
-    [
-     "18. Restructured Std Adv to Gross Advances (%)",
-     "Domestic Operation"
-    ],
-    [
-     "18. Restructured Std Adv to Gross Advances (%)",
-     "Overseas Operation"
-    ],
-    [
-     "18. Restructured Std Adv to Gross Advances (%)",
-     "Global Operation"
-    ],
-    [
-     "19. Stressed Advances (GNPAs+RestStdAdv)",
-     "Domestic Operation"
-    ],
-    [
-     "19. Stressed Advances (GNPAs+RestStdAdv)",
-     "Overseas Operation"
-    ],
-    [
-     "19. Stressed Advances (GNPAs+RestStdAdv)",
-     "Global Operation"
-    ],
-    [
-     "20. Stressed Advances (GNPAs+RestStdAdv) to Gross Advances (%)",
-     "Domestic Operation"
-    ],
-    [
-     "20. Stressed Advances (GNPAs+RestStdAdv) to Gross Advances (%)",
-     "Overseas Operation"
-    ],
-    [
-     "20. Stressed Advances (GNPAs+RestStdAdv) to Gross Advances (%)",
-     "Global Operation"
-    ],
-    [
-     "21. Loans sold to ARCs (April to date)",
-     "Domestic Operation"
-    ],
-    [
-     "21. Loans sold to ARCs (April to date)",
-     "Overseas Operation"
-    ],
-    [
-     "21. Loans sold to ARCs (April to date)",
-     "Global Operation"
-    ],
-    [
-     "",
-     "Domestic Operation"
-    ],
-    [
-     "",
-     "Overseas Operation"
-    ],
-    [
-     "",
-     "Global Operation"
-    ]
-   ]
+   "layouts": {
+    "current": {
+     "columns": [
+      [
+       "1. Gross Advances",
+       "Domestic Operation"
+      ],
+      [
+       "1. Gross Advances",
+       "Overseas Operation"
+      ],
+      [
+       "1. Gross Advances",
+       "Global Operation"
+      ],
+      [
+       "8. Gross NPAs NPAs at the end of the Period (a+b+c)",
+       "Domestic Operation"
+      ],
+      [
+       "8. Gross NPAs NPAs at the end of the Period (a+b+c)",
+       "Overseas Operation"
+      ],
+      [
+       "8. Gross NPAs NPAs at the end of the Period (a+b+c)",
+       "Global Operation"
+      ],
+      [
+       "a. Sub-standard advances",
+       "Domestic Operation"
+      ],
+      [
+       "a. Sub-standard advances",
+       "Overseas Operation"
+      ],
+      [
+       "a. Sub-standard advances",
+       "Global Operation"
+      ],
+      [
+       "b. Doubtful advances",
+       "Domestic Operation"
+      ],
+      [
+       "b. Doubtful advances",
+       "Overseas Operation"
+      ],
+      [
+       "b. Doubtful advances",
+       "Global Operation"
+      ],
+      [
+       "c. Loss advances",
+       "Domestic Operation"
+      ],
+      [
+       "c. Loss advances",
+       "Overseas Operation"
+      ],
+      [
+       "c. Loss advances",
+       "Global Operation"
+      ],
+      [
+       "9. Gross NPAs to Gross Advances (%)",
+       "Domestic Operation"
+      ],
+      [
+       "9. Gross NPAs to Gross Advances (%)",
+       "Overseas Operation"
+      ],
+      [
+       "9. Gross NPAs to Gross Advances (%)",
+       "Global Operation"
+      ],
+      [
+       "12. Provisions for NPAs at end of the FY",
+       "Domestic Operation"
+      ],
+      [
+       "12. Provisions for NPAs at end of the FY",
+       "Overseas Operation"
+      ],
+      [
+       "12. Provisions for NPAs at end of the FY",
+       "Global Operation"
+      ],
+      [
+       "13. Provision Coverage Ratio (Write-Off Adj) (%)",
+       "Domestic Operation"
+      ],
+      [
+       "13. Provision Coverage Ratio (Write-Off Adj) (%)",
+       "Overseas Operation"
+      ],
+      [
+       "13. Provision Coverage Ratio (Write-Off Adj) (%)",
+       "Global Operation"
+      ],
+      [
+       "14. Net Advances",
+       "Domestic Operation"
+      ],
+      [
+       "14. Net Advances",
+       "Overseas Operation"
+      ],
+      [
+       "14. Net Advances",
+       "Global Operation"
+      ],
+      [
+       "15. Net NPAs",
+       "Domestic Operation"
+      ],
+      [
+       "15. Net NPAs",
+       "Overseas Operation"
+      ],
+      [
+       "15. Net NPAs",
+       "Global Operation"
+      ],
+      [
+       "16. Net NPAs to Net Advances (%)",
+       "Domestic Operation"
+      ],
+      [
+       "16. Net NPAs to Net Advances (%)",
+       "Overseas Operation"
+      ],
+      [
+       "16. Net NPAs to Net Advances (%)",
+       "Global Operation"
+      ],
+      [
+       "17. Restructured Standard Advances",
+       "Domestic Operation"
+      ],
+      [
+       "17. Restructured Standard Advances",
+       "Overseas Operation"
+      ],
+      [
+       "17. Restructured Standard Advances",
+       "Global Operation"
+      ],
+      [
+       "18. Restructured Std Adv to Gross Advances (%)",
+       "Domestic Operation"
+      ],
+      [
+       "18. Restructured Std Adv to Gross Advances (%)",
+       "Overseas Operation"
+      ],
+      [
+       "18. Restructured Std Adv to Gross Advances (%)",
+       "Global Operation"
+      ],
+      [
+       "19. Stressed Advances (GNPAs+RestStdAdv)",
+       "Domestic Operation"
+      ],
+      [
+       "19. Stressed Advances (GNPAs+RestStdAdv)",
+       "Overseas Operation"
+      ],
+      [
+       "19. Stressed Advances (GNPAs+RestStdAdv)",
+       "Global Operation"
+      ],
+      [
+       "20. Stressed Advances (GNPAs+RestStdAdv) to Gross Advances (%)",
+       "Domestic Operation"
+      ],
+      [
+       "20. Stressed Advances (GNPAs+RestStdAdv) to Gross Advances (%)",
+       "Overseas Operation"
+      ],
+      [
+       "20. Stressed Advances (GNPAs+RestStdAdv) to Gross Advances (%)",
+       "Global Operation"
+      ],
+      [
+       "21. Loans sold to ARCs (April to date)",
+       "Domestic Operation"
+      ],
+      [
+       "21. Loans sold to ARCs (April to date)",
+       "Overseas Operation"
+      ],
+      [
+       "21. Loans sold to ARCs (April to date)",
+       "Global Operation"
+      ],
+      [
+       "22. Loss or gain on loan sales (April to date)",
+       "Domestic Operation"
+      ],
+      [
+       "22. Loss or gain on loan sales (April to date)",
+       "Overseas Operation"
+      ],
+      [
+       "22. Loss or gain on loan sales (April to date)",
+       "Global Operation"
+      ]
+     ],
+     "note": "Columns 48-50 are printed with the label '22. Loss or gain on loan sales (April to date)' in some exports (batch 2, 2021-23 quarters) and with a blank merged header in others (probe, batch 1); ids come from this declaration either way.",
+     "blank_ok_labels": [
+      "22. Loss or gain on loan sales (April to date)"
+     ]
+    }
+   }
   },
   "Profitability": {
    "id": "profitability",
-   "columns": [
-    [
-     "1. Total Interest Income (Net of Interest Tax) (April to Date)",
-     "Domestic Operation"
-    ],
-    [
-     "1. Total Interest Income (Net of Interest Tax) (April to Date)",
-     "Overseas Operation"
-    ],
-    [
-     "1. Total Interest Income (Net of Interest Tax) (April to Date)",
-     "Global Operation"
-    ],
-    [
-     "2. Interest Expense (April to Date)",
-     "Domestic Operation"
-    ],
-    [
-     "2. Interest Expense (April to Date)",
-     "Overseas Operation"
-    ],
-    [
-     "2. Interest Expense (April to Date)",
-     "Global Operation"
-    ],
-    [
-     "3. Net Interest Income (NII) (April to Date) [1 - 2]",
-     "Domestic Operation"
-    ],
-    [
-     "3. Net Interest Income (NII) (April to Date) [1 - 2]",
-     "Overseas Operation"
-    ],
-    [
-     "3. Net Interest Income (NII) (April to Date) [1 - 2]",
-     "Global Operation"
-    ],
-    [
-     "4. Other Operating Income (OOI) (April to Date)",
-     "Domestic Operation"
-    ],
-    [
-     "4. Other Operating Income (OOI) (April to Date)",
-     "Overseas Operation"
-    ],
-    [
-     "4. Other Operating Income (OOI) (April to Date)",
-     "Global Operation"
-    ],
-    [
-     "5. Total Operating Income (April to Date) [3 + 4]",
-     "Domestic Operation"
-    ],
-    [
-     "5. Total Operating Income (April to Date) [3 + 4]",
-     "Overseas Operation"
-    ],
-    [
-     "5. Total Operating Income (April to Date) [3 + 4]",
-     "Global Operation"
-    ],
-    [
-     "6. Operating Expense (OE) (April to Date)",
-     "Domestic Operation"
-    ],
-    [
-     "6. Operating Expense (OE) (April to Date)",
-     "Overseas Operation"
-    ],
-    [
-     "6. Operating Expense (OE) (April to Date)",
-     "Global Operation"
-    ],
-    [
-     "Of Which: Staff Expenses (April to Date)",
-     "Domestic Operation"
-    ],
-    [
-     "Of Which: Staff Expenses (April to Date)",
-     "Overseas Operation"
-    ],
-    [
-     "Of Which: Staff Expenses (April to Date)",
-     "Global Operation"
-    ],
-    [
-     "7. Net Operating Income (April to Date) [5 - 6]",
-     "Domestic Operation"
-    ],
-    [
-     "7. Net Operating Income (April to Date) [5 - 6]",
-     "Overseas Operation"
-    ],
-    [
-     "7. Net Operating Income (April to Date) [5 - 6]",
-     "Global Operation"
-    ],
-    [
-     "8. Capital Gains/(Losses) (April to Date)",
-     "Domestic Operation"
-    ],
-    [
-     "8. Capital Gains/(Losses) (April to Date)",
-     "Overseas Operation"
-    ],
-    [
-     "8. Capital Gains/(Losses) (April to Date)",
-     "Global Operation"
-    ],
-    [
-     "9. Other Non-operating Income/ (expenses) (April to Date)",
-     "Domestic Operation"
-    ],
-    [
-     "9. Other Non-operating Income/ (expenses) (April to Date)",
-     "Overseas Operation"
-    ],
-    [
-     "9. Other Non-operating Income/ (expenses) (April to Date)",
-     "Global Operation"
-    ],
-    [
-     "10. Earning Before Provisions &amp; Taxes (EBPT) (April to Date) [7 + 8 +9]",
-     "Domestic Operation"
-    ],
-    [
-     "10. Earning Before Provisions &amp; Taxes (EBPT) (April to Date) [7 + 8 +9]",
-     "Overseas Operation"
-    ],
-    [
-     "10. Earning Before Provisions &amp; Taxes (EBPT) (April to Date) [7 + 8 +9]",
-     "Global Operation"
-    ],
-    [
-     "11. Risk Provisions - Total (April to Date)",
-     "Domestic Operation"
-    ],
-    [
-     "11. Risk Provisions - Total (April to Date)",
-     "Overseas Operation"
-    ],
-    [
-     "11. Risk Provisions - Total (April to Date)",
-     "Global Operation"
-    ],
-    [
-     "12. Write Offs - Total (April to Date)",
-     "Domestic Operation"
-    ],
-    [
-     "12. Write Offs - Total (April to Date)",
-     "Overseas Operation"
-    ],
-    [
-     "12. Write Offs - Total (April to Date)",
-     "Global Operation"
-    ],
-    [
-     "16. Net Profit/Loss (PAT) (April to Date) [14 - 15]",
-     "Domestic Operation"
-    ],
-    [
-     "16. Net Profit/Loss (PAT) (April to Date) [14 - 15]",
-     "Overseas Operation"
-    ],
-    [
-     "16. Net Profit/Loss (PAT) (April to Date) [14 - 15]",
-     "Global Operation"
-    ]
-   ]
+   "layouts": {
+    "current": {
+     "columns": [
+      [
+       "1. Total Interest Income (Net of Interest Tax) (April to Date)",
+       "Domestic Operation"
+      ],
+      [
+       "1. Total Interest Income (Net of Interest Tax) (April to Date)",
+       "Overseas Operation"
+      ],
+      [
+       "1. Total Interest Income (Net of Interest Tax) (April to Date)",
+       "Global Operation"
+      ],
+      [
+       "2. Interest Expense (April to Date)",
+       "Domestic Operation"
+      ],
+      [
+       "2. Interest Expense (April to Date)",
+       "Overseas Operation"
+      ],
+      [
+       "2. Interest Expense (April to Date)",
+       "Global Operation"
+      ],
+      [
+       "3. Net Interest Income (NII) (April to Date) [1 - 2]",
+       "Domestic Operation"
+      ],
+      [
+       "3. Net Interest Income (NII) (April to Date) [1 - 2]",
+       "Overseas Operation"
+      ],
+      [
+       "3. Net Interest Income (NII) (April to Date) [1 - 2]",
+       "Global Operation"
+      ],
+      [
+       "4. Other Operating Income (OOI) (April to Date)",
+       "Domestic Operation"
+      ],
+      [
+       "4. Other Operating Income (OOI) (April to Date)",
+       "Overseas Operation"
+      ],
+      [
+       "4. Other Operating Income (OOI) (April to Date)",
+       "Global Operation"
+      ],
+      [
+       "5. Total Operating Income (April to Date) [3 + 4]",
+       "Domestic Operation"
+      ],
+      [
+       "5. Total Operating Income (April to Date) [3 + 4]",
+       "Overseas Operation"
+      ],
+      [
+       "5. Total Operating Income (April to Date) [3 + 4]",
+       "Global Operation"
+      ],
+      [
+       "6. Operating Expense (OE) (April to Date)",
+       "Domestic Operation"
+      ],
+      [
+       "6. Operating Expense (OE) (April to Date)",
+       "Overseas Operation"
+      ],
+      [
+       "6. Operating Expense (OE) (April to Date)",
+       "Global Operation"
+      ],
+      [
+       "Of Which: Staff Expenses (April to Date)",
+       "Domestic Operation"
+      ],
+      [
+       "Of Which: Staff Expenses (April to Date)",
+       "Overseas Operation"
+      ],
+      [
+       "Of Which: Staff Expenses (April to Date)",
+       "Global Operation"
+      ],
+      [
+       "7. Net Operating Income (April to Date) [5 - 6]",
+       "Domestic Operation"
+      ],
+      [
+       "7. Net Operating Income (April to Date) [5 - 6]",
+       "Overseas Operation"
+      ],
+      [
+       "7. Net Operating Income (April to Date) [5 - 6]",
+       "Global Operation"
+      ],
+      [
+       "8. Capital Gains/(Losses) (April to Date)",
+       "Domestic Operation"
+      ],
+      [
+       "8. Capital Gains/(Losses) (April to Date)",
+       "Overseas Operation"
+      ],
+      [
+       "8. Capital Gains/(Losses) (April to Date)",
+       "Global Operation"
+      ],
+      [
+       "9. Other Non-operating Income/ (expenses) (April to Date)",
+       "Domestic Operation"
+      ],
+      [
+       "9. Other Non-operating Income/ (expenses) (April to Date)",
+       "Overseas Operation"
+      ],
+      [
+       "9. Other Non-operating Income/ (expenses) (April to Date)",
+       "Global Operation"
+      ],
+      [
+       "10. Earning Before Provisions &amp; Taxes (EBPT) (April to Date) [7 + 8 +9]",
+       "Domestic Operation"
+      ],
+      [
+       "10. Earning Before Provisions &amp; Taxes (EBPT) (April to Date) [7 + 8 +9]",
+       "Overseas Operation"
+      ],
+      [
+       "10. Earning Before Provisions &amp; Taxes (EBPT) (April to Date) [7 + 8 +9]",
+       "Global Operation"
+      ],
+      [
+       "11. Risk Provisions - Total (April to Date)",
+       "Domestic Operation"
+      ],
+      [
+       "11. Risk Provisions - Total (April to Date)",
+       "Overseas Operation"
+      ],
+      [
+       "11. Risk Provisions - Total (April to Date)",
+       "Global Operation"
+      ],
+      [
+       "12. Write Offs - Total (April to Date)",
+       "Domestic Operation"
+      ],
+      [
+       "12. Write Offs - Total (April to Date)",
+       "Overseas Operation"
+      ],
+      [
+       "12. Write Offs - Total (April to Date)",
+       "Global Operation"
+      ],
+      [
+       "13. Provisions For Liabilities (April to Date)",
+       "Domestic Operation"
+      ],
+      [
+       "13. Provisions For Liabilities (April to Date)",
+       "Overseas Operation"
+      ],
+      [
+       "13. Provisions For Liabilities (April to Date)",
+       "Global Operation"
+      ],
+      [
+       "14. Profit/Loss Before Tax (PBT) (April to Date) (10 - 11 - 12 - 13]",
+       "Domestic Operation"
+      ],
+      [
+       "14. Profit/Loss Before Tax (PBT) (April to Date) (10 - 11 - 12 - 13]",
+       "Overseas Operation"
+      ],
+      [
+       "14. Profit/Loss Before Tax (PBT) (April to Date) (10 - 11 - 12 - 13]",
+       "Global Operation"
+      ],
+      [
+       "15. Provision For Income Taxes (April to Date)",
+       "Domestic Operation"
+      ],
+      [
+       "15. Provision For Income Taxes (April to Date)",
+       "Overseas Operation"
+      ],
+      [
+       "15. Provision For Income Taxes (April to Date)",
+       "Global Operation"
+      ],
+      [
+       "16. Net Profit/Loss (PAT) (April to Date) [14 - 15]",
+       "Domestic Operation"
+      ],
+      [
+       "16. Net Profit/Loss (PAT) (April to Date) [14 - 15]",
+       "Overseas Operation"
+      ],
+      [
+       "16. Net Profit/Loss (PAT) (April to Date) [14 - 15]",
+       "Global Operation"
+      ]
+     ]
+    }
+   }
   },
   "Performance Indicators": {
    "id": "performance_indicators",
@@ -1171,246 +1221,466 @@
   },
   "Infrastructure Financing Items": {
    "id": "infrastructure_financing_items",
-   "columns": [
-    [
-     "Total",
-     ""
-    ],
-    [
-     "1. Transport and adjoining Infrastructure",
-     ""
-    ],
-    [
-     "1.1 Roads and Bridges",
-     ""
-    ],
-    [
-     "1.1.1 Highways",
-     ""
-    ],
-    [
-     "1.1.2 Other Roads",
-     ""
-    ],
-    [
-     "1.2 Ports",
-     ""
-    ],
-    [
-     "1.3 Shipyards",
-     ""
-    ],
-    [
-     "1.4 Inland Waterways",
-     ""
-    ],
-    [
-     "1.5 Airport",
-     ""
-    ],
-    [
-     "1.6 Railway track including electrical & signalling system, tunnels, viaducts, bridges",
-     ""
-    ],
-    [
-     "1.7 Railway rolling stock along with workshop and associated maintenance facilities",
-     ""
-    ],
-    [
-     "1.8 Railway terminal infrastructure including stations and adjoining commercial infrastructure",
-     ""
-    ],
-    [
-     "1.9 Urban Public Transport (except rolling stock in case of urban road transport)",
-     ""
-    ],
-    [
-     "1.10 Logistics Infrastructure",
-     ""
-    ],
-    [
-     "1.11 Bulk Material Transportation Pipelines",
-     ""
-    ],
-    [
-     "2. Energy",
-     ""
-    ],
-    [
-     "2.1 Electricity Generation",
-     ""
-    ],
-    [
-     "2.1.1 Central Govt PSUs",
-     ""
-    ],
-    [
-     "2.1.2 State Govt PSUs (incl. SEBs)",
-     ""
-    ],
-    [
-     "2.1.3 Private Sector",
-     ""
-    ],
-    [
-     "2.2 Electricity Transmission",
-     ""
-    ],
-    [
-     "2.2.1 Central Govt PSUs",
-     ""
-    ],
-    [
-     "2.2.2 State Govt PSUs (incl. SEBs)",
-     ""
-    ],
-    [
-     "2.2.3 Private Sector",
-     ""
-    ],
-    [
-     "2.3 Electricity Distribution",
-     ""
-    ],
-    [
-     "2.3.1 Central Govt PSUs",
-     ""
-    ],
-    [
-     "2.3.2 State Govt PSUs (incl. SEBs)",
-     ""
-    ],
-    [
-     "2.3.3 Private Sector",
-     ""
-    ],
-    [
-     "2.4 Oil/Gas/Liquefied Natural Gas (LNG) storage facility",
-     ""
-    ],
-    [
-     "3. Water and Sanitation",
-     ""
-    ],
-    [
-     "3.1 Solid Waste Management",
-     ""
-    ],
-    [
-     "3.2 Water supply pipelines",
-     ""
-    ],
-    [
-     "3.3 Water treatment plants",
-     ""
-    ],
-    [
-     "3.4 Sewage collection, treatment and disposal system",
-     ""
-    ],
-    [
-     "3.5 Irrigation (dams, channels, embankments etc)",
-     ""
-    ],
-    [
-     "3.6 Storm Water Drainage System",
-     ""
-    ],
-    [
-     "3.7 Slurry Pipelines",
-     ""
-    ],
-    [
-     "4. Communication",
-     ""
-    ],
-    [
-     "4.1 Telecommunication (Fixed network)",
-     ""
-    ],
-    [
-     "4.2 Telecommunication towers",
-     ""
-    ],
-    [
-     "4.3 Telecommunication and Telecom Services",
-     ""
-    ],
-    [
-     "5. Social and Commercial Infrastructure",
-     ""
-    ],
-    [
-     "5.1 Education Institutions (capital stock)",
-     ""
-    ],
-    [
-     "5.2 Sports Infrastructure",
-     ""
-    ],
-    [
-     "5.3 Hospitals (capital stock)",
-     ""
-    ],
-    [
-     "5.4 Tourism Infrastructure",
-     ""
-    ],
-    [
-     "5.4.1 Three-star or higher category classified hotels located outside cities with population of more than 1 million",
-     ""
-    ],
-    [
-     "5.4.2 Ropeways and cable cars",
-     ""
-    ],
-    [
-     "5.4.3 Others",
-     ""
-    ],
-    [
-     "5.5 Common infrastructure for Industrial Parks and other parks with industrialn activity such as food parks, textile parks, Special Economic Zones, tourism facilities and agriculture markets",
-     ""
-    ],
-    [
-     "5.6 Fertilizer (Capital investment)",
-     ""
-    ],
-    [
-     "5.7 Post harvest storage infrastructure for agriculture and horticultural produce including cold storage",
-     ""
-    ],
-    [
-     "5.8 Terminal markets",
-     ""
-    ],
-    [
-     "5.9 Soil-testing laboratories",
-     ""
-    ],
-    [
-     "5.10 Cold Chain",
-     ""
-    ],
-    [
-     "5.11 Affordable Housing",
-     ""
-    ],
-    [
-     "5.12 Affordable Rental Housing Complex",
-     ""
-    ],
-    [
-     "5.13 Exhibition-cum-Convention Centre",
-     ""
-    ],
-    [
-     "6. Others, if any, please specify",
-     ""
-    ]
-   ],
    "unit": "not_printed",
-   "note_unit": "The sheet prints no unit line; the export's Unit prompt (crores) is asserted on the other seven sheets. Values match crores in scale (Bank of Baroda total ₹1,13,864 Cr, Jun 2026)."
+   "note_unit": "The sheet prints no unit line; the export's Unit prompt (crores) is asserted on the other seven sheets. Values match crores in scale (Bank of Baroda total ₹1,13,864 Cr, Jun 2026).",
+   "layouts": {
+    "current": {
+     "columns": [
+      [
+       "Total",
+       ""
+      ],
+      [
+       "1. Transport and adjoining Infrastructure",
+       ""
+      ],
+      [
+       "1.1 Roads and Bridges",
+       ""
+      ],
+      [
+       "1.1.1 Highways",
+       ""
+      ],
+      [
+       "1.1.2 Other Roads",
+       ""
+      ],
+      [
+       "1.2 Ports",
+       ""
+      ],
+      [
+       "1.3 Shipyards",
+       ""
+      ],
+      [
+       "1.4 Inland Waterways",
+       ""
+      ],
+      [
+       "1.5 Airport",
+       ""
+      ],
+      [
+       "1.6 Railway track including electrical & signalling system, tunnels, viaducts, bridges",
+       ""
+      ],
+      [
+       "1.7 Railway rolling stock along with workshop and associated maintenance facilities",
+       ""
+      ],
+      [
+       "1.8 Railway terminal infrastructure including stations and adjoining commercial infrastructure",
+       ""
+      ],
+      [
+       "1.9 Urban Public Transport (except rolling stock in case of urban road transport)",
+       ""
+      ],
+      [
+       "1.10 Logistics Infrastructure",
+       ""
+      ],
+      [
+       "1.11 Bulk Material Transportation Pipelines",
+       ""
+      ],
+      [
+       "2. Energy",
+       ""
+      ],
+      [
+       "2.1 Electricity Generation",
+       ""
+      ],
+      [
+       "2.1.1 Central Govt PSUs",
+       ""
+      ],
+      [
+       "2.1.2 State Govt PSUs (incl. SEBs)",
+       ""
+      ],
+      [
+       "2.1.3 Private Sector",
+       ""
+      ],
+      [
+       "2.2 Electricity Transmission",
+       ""
+      ],
+      [
+       "2.2.1 Central Govt PSUs",
+       ""
+      ],
+      [
+       "2.2.2 State Govt PSUs (incl. SEBs)",
+       ""
+      ],
+      [
+       "2.2.3 Private Sector",
+       ""
+      ],
+      [
+       "2.3 Electricity Distribution",
+       ""
+      ],
+      [
+       "2.3.1 Central Govt PSUs",
+       ""
+      ],
+      [
+       "2.3.2 State Govt PSUs (incl. SEBs)",
+       ""
+      ],
+      [
+       "2.3.3 Private Sector",
+       ""
+      ],
+      [
+       "2.4 Oil/Gas/Liquefied Natural Gas (LNG) storage facility",
+       ""
+      ],
+      [
+       "3. Water and Sanitation",
+       ""
+      ],
+      [
+       "3.1 Solid Waste Management",
+       ""
+      ],
+      [
+       "3.2 Water supply pipelines",
+       ""
+      ],
+      [
+       "3.3 Water treatment plants",
+       ""
+      ],
+      [
+       "3.4 Sewage collection, treatment and disposal system",
+       ""
+      ],
+      [
+       "3.5 Irrigation (dams, channels, embankments etc)",
+       ""
+      ],
+      [
+       "3.6 Storm Water Drainage System",
+       ""
+      ],
+      [
+       "3.7 Slurry Pipelines",
+       ""
+      ],
+      [
+       "4. Communication",
+       ""
+      ],
+      [
+       "4.1 Telecommunication (Fixed network)",
+       ""
+      ],
+      [
+       "4.2 Telecommunication towers",
+       ""
+      ],
+      [
+       "4.3 Telecommunication and Telecom Services",
+       ""
+      ],
+      [
+       "5. Social and Commercial Infrastructure",
+       ""
+      ],
+      [
+       "5.1 Education Institutions (capital stock)",
+       ""
+      ],
+      [
+       "5.2 Sports Infrastructure",
+       ""
+      ],
+      [
+       "5.3 Hospitals (capital stock)",
+       ""
+      ],
+      [
+       "5.4 Tourism Infrastructure",
+       ""
+      ],
+      [
+       "5.4.1 Three-star or higher category classified hotels located outside cities with population of more than 1 million",
+       ""
+      ],
+      [
+       "5.4.2 Ropeways and cable cars",
+       ""
+      ],
+      [
+       "5.4.3 Others",
+       ""
+      ],
+      [
+       "5.5 Common infrastructure for Industrial Parks and other parks with industrialn activity such as food parks, textile parks, Special Economic Zones, tourism facilities and agriculture markets",
+       ""
+      ],
+      [
+       "5.6 Fertilizer (Capital investment)",
+       ""
+      ],
+      [
+       "5.7 Post harvest storage infrastructure for agriculture and horticultural produce including cold storage",
+       ""
+      ],
+      [
+       "5.8 Terminal markets",
+       ""
+      ],
+      [
+       "5.9 Soil-testing laboratories",
+       ""
+      ],
+      [
+       "5.10 Cold Chain",
+       ""
+      ],
+      [
+       "5.11 Affordable Housing",
+       ""
+      ],
+      [
+       "5.12 Affordable Rental Housing Complex",
+       ""
+      ],
+      [
+       "5.13 Exhibition-cum-Convention Centre",
+       ""
+      ],
+      [
+       "6. Others, if any, please specify",
+       ""
+      ]
+     ],
+     "from": "2022-06-30",
+     "note": "Infrastructure lending list as revised in 2022 (numbered 1. … 6.)."
+    },
+    "r_2021": {
+     "columns": [
+      [
+       "R. Infrastructure",
+       ""
+      ],
+      [
+       "R.a Transport (a.1 to a.8)",
+       ""
+      ],
+      [
+       "R.a.1 Roads and Bridges",
+       ""
+      ],
+      [
+       "R.a.2 Ports",
+       ""
+      ],
+      [
+       "R.a.3 Inland Waterways",
+       ""
+      ],
+      [
+       "R.a.4 Airport",
+       ""
+      ],
+      [
+       "R.a.5 Railway Track, tunnels, viaducts, bridges",
+       ""
+      ],
+      [
+       "R.a.6 Urban Public Transport (except rolling stock in case of urban road transport)",
+       ""
+      ],
+      [
+       "R.a.7 Shipyards",
+       ""
+      ],
+      [
+       "R.a.8 Logistics Infrastructure",
+       ""
+      ],
+      [
+       "R.b. Energy (b.1 to b.6)",
+       ""
+      ],
+      [
+       "R.b.1 Electricity Generation",
+       ""
+      ],
+      [
+       "R.b.1.1 Central Govt PSUs",
+       ""
+      ],
+      [
+       "R.b.1.2 State Govt PSUs (incl. SEBs)",
+       ""
+      ],
+      [
+       "R.b.1.3 Private Sector",
+       ""
+      ],
+      [
+       "R.b.2 Electricity Transmission",
+       ""
+      ],
+      [
+       "R.b.2.1 Central Govt PSUs",
+       ""
+      ],
+      [
+       "R.b.2.2 State Govt PSUs (incl. SEBs)",
+       ""
+      ],
+      [
+       "R.b.2.3 Private Sector",
+       ""
+      ],
+      [
+       "R.b.3 Electricity Distribution",
+       ""
+      ],
+      [
+       "R.b.3.1 Central Govt PSUs",
+       ""
+      ],
+      [
+       "R.b.3.2 State Govt PSUs (incl. SEBs)",
+       ""
+      ],
+      [
+       "R.b.3.3 Private Sector",
+       ""
+      ],
+      [
+       "R.b.4 Oil Pipelines",
+       ""
+      ],
+      [
+       "R.b.5 Oil/Gas/Liquefied Natural Gas (LNG) storage facility",
+       ""
+      ],
+      [
+       "R.b.6 Gas Pipelines",
+       ""
+      ],
+      [
+       "R.c. Water and Sanitation (c.1 to c.7)",
+       ""
+      ],
+      [
+       "R.c.1 Solid Waste Management",
+       ""
+      ],
+      [
+       "R.c.2 Water supply pipelines",
+       ""
+      ],
+      [
+       "R.c.3 Water treatment plants",
+       ""
+      ],
+      [
+       "R.c.4 Sewage collection, treatment and disposal system",
+       ""
+      ],
+      [
+       "R.c.5 Irrigation (dams, channels, embankments etc)",
+       ""
+      ],
+      [
+       "R.c.6 Storm Water Drainage System",
+       ""
+      ],
+      [
+       "R.c.7 Slurry Pipelines",
+       ""
+      ],
+      [
+       "R.d. Communication (d.1 to d.3)",
+       ""
+      ],
+      [
+       "R.d.1 Telecommunication (Fixed network)",
+       ""
+      ],
+      [
+       "R.d.2 Telecommunication towers",
+       ""
+      ],
+      [
+       "R.d.3 Telecommunication and Telecom Services",
+       ""
+      ],
+      [
+       "R.e. Social and Commercial Infrastructure (e.1 to e.12)",
+       ""
+      ],
+      [
+       "R.e.1 Education Institutions (capital stock)",
+       ""
+      ],
+      [
+       "R.e.2 Hospitals (capital stock)",
+       ""
+      ],
+      [
+       "R.e.3 Tourism - Three-star or higher category classified hotels located outside cities with population of more than 1 million",
+       ""
+      ],
+      [
+       "R.e.4 Common infrastructure for industrial parks, SEZ, tourism facilities and agriculture markets",
+       ""
+      ],
+      [
+       "R.e.5 Fertilizer (Capital investment)",
+       ""
+      ],
+      [
+       "R.e.6 Post harvest storage infrastructure for agriculture and horticultural produce including cold storage",
+       ""
+      ],
+      [
+       "R.e.7 Terminal markets",
+       ""
+      ],
+      [
+       "R.e.8 Soil-testing laboratories",
+       ""
+      ],
+      [
+       "R.e.9 Cold Chain",
+       ""
+      ],
+      [
+       "R.e.10 Sports Infrastructure",
+       ""
+      ],
+      [
+       "R.e.11 Tourism - Ropeways and Cable Cars",
+       ""
+      ],
+      [
+       "R.e.12 Affordable Housing",
+       ""
+      ],
+      [
+       "R.f. Others, if any, please specify",
+       ""
+      ]
+     ],
+     "to": "2022-03-31",
+     "note": "The earlier list (R. Infrastructure, R.a … R.f), printed for Dec 2021 and Mar 2022 in the batch-2 export, under its own header row."
+    }
+   }
   }
  }
 }

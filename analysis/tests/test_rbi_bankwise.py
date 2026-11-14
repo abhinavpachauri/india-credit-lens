@@ -108,8 +108,30 @@ def test_a_good_export_reads_banks_groups_and_membership(tmp_path, resolver):
 
 
 def test_a_mislabelled_column_raises(tmp_path, resolver):
-    with pytest.raises(reader.ExportShapeError, match="header differs"):
+    with pytest.raises(reader.ExportShapeError, match="not an ordered subset"):
         read(export(tmp_path / "x.xlsx", measures=["Gross NPAs", "Gross Advances"]), resolver)
+
+
+def test_an_export_may_skip_declared_columns_but_not_add_one(tmp_path, resolver):
+    """DBIE prints only measures with data in the selected quarters (Profitability 42 vs 51)."""
+    got = read(export(tmp_path / "a.xlsx", measures=["Gross NPAs"]), resolver)
+    cols = got["quarters"]["2026-06-30"]["banks"]["alpha"]["sheets"]["asset_quality"]
+    assert set(cols) == {"gross_npas@dom", "gross_npas@ovs", "gross_npas@glb"}
+    with pytest.raises(reader.ExportShapeError, match="not an ordered subset"):
+        read(export(tmp_path / "b.xlsx", measures=["Gross Advances", "Gross NPAs", "Net NPAs"]), resolver)
+
+
+def test_a_second_layout_is_matched_and_recorded(tmp_path, resolver):
+    declared = {**DECLARED, "sheets": {"Asset Quality": {"id": "asset_quality", "layouts": {
+        "current": {"columns": DECLARED["sheets"]["Asset Quality"]["columns"]},
+        "old": {"columns": [[m, o] for m in ["Old A", "Old B"] for o in ("Domestic Operation", "Overseas Operation", "Global Operation")]}}}}}
+    got = read(export(tmp_path / "x.xlsx", measures=["Old A", "Old B"]), resolver, declared)
+    assert got["quarters"]["2026-06-30"]["layouts"]["asset_quality"] == "old"
+
+
+def test_merge_keeps_both_orders():
+    a, b = [("1", ""), ("2", ""), ("5", "")], [("2", ""), ("3", ""), ("4", ""), ("5", "")]
+    assert reader.merge_columns(a, b) == [("1", ""), ("2", ""), ("3", ""), ("4", ""), ("5", "")]
 
 
 def test_a_missing_or_extra_sheet_raises(tmp_path, resolver):
@@ -155,7 +177,7 @@ def test_banks_after_the_last_group_row_raise(tmp_path, resolver):
 
 
 def test_an_empty_merged_header_is_unlabelled_not_borrowed(tmp_path, resolver):
-    """RBI leaves some merged headers empty over columns with data (Asset Quality, Jun 2025)."""
+    """RBI leaves some merged headers empty over columns with data (Major Sectoral, Jun 2025)."""
     declared = {**DECLARED, "sheets": {"Asset Quality": {"id": "asset_quality", "columns": [
         [m, o] for m in ["Gross Advances", ""] for o in ("Domestic Operation", "Overseas Operation", "Global Operation")]}}}
     got = read(export(tmp_path / "x.xlsx", measures=["Gross Advances", ""]), resolver, declared)
@@ -274,10 +296,13 @@ def _unexcepted(p, q, st):
 PROBE = ("2024-09-30", "2025-06-30", "2026-06-30")     # pinned: clean in every check (2026-11-14)
 
 
-def test_the_probe_quarters_pass_every_check_with_nothing_flagged(probe):
+def test_the_probe_quarters_have_no_column_wide_failure(probe):
+    """Was 'nothing flagged' until the loan-sales columns were labelled (2026-11-14): RBI's foreign
+    group total for them does not match its banks, an isolated inconsistency, now flagged."""
     st, Q = probe
-    for p in PROBE:
-        assert _unexcepted(p, Q[p], st) == [], p
+    patterns, flags, _, _ = vb.classify({p: Q[p] for p in PROBE}, st)
+    assert patterns == []
+    assert all("loss_or_gain_on_loan_sales" in f["column"] for f in flags), [f["column"] for f in flags][:5]
     assert vb.scale({p: Q[p] for p in PROBE}, st) == []
 
 

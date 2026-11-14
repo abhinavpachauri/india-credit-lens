@@ -1,6 +1,6 @@
 # Bank-wise credit pipeline (`rbi_bankwise`): specification
 
-> v0.2, 2026-11-14. Status: **phases 1–2 built; phase 3 (backfill) under way**, 11 of 97 quarters saved. Onboarded through the `onboard-source` skill.
+> v0.2, 2026-11-14. Status: **phases 1–2 built; phase 3 (backfill) under way**, 19 of 97 quarters saved (Dec 2021 →). Onboarded through the `onboard-source` skill.
 > v0.2 folds in the three reviewers (population, absence, plausibility; 21 findings, all verified;
 > table at the end). Probe: `analysis/sources/README.md` §"Per-bank quarterly variables" (opened
 > 2026-10-11, probed 2026-11-14).
@@ -311,3 +311,29 @@ SFB (already in payments). `reader.py --unknown` lists every unknown name in an 
   6,336/6,336 and fails the gate 0 times; a column-wide swap fails the gate 2,055/2,293 (89.6%). The
   238 not caught by content sit in no sum or ratio (provisions, staff expenses, write-offs, sibling
   infrastructure lines); the exact-header check at read time is what catches those.
+
+**Phase 3, batch 2 (2026-11-14): Dec 2021 → Sep 2023.** 8 new quarters (Jun and Sep 2024 re-read,
+unchanged); 19 of 97 saved. Roster: HSBC's older spelling (dated), Abu Dhabi Commercial Bank, Krung
+Thai Bank, RBS N.V. (not linked to NatWest Markets). What the older quarters taught the reader and
+the checks, each found in the data and now encoded:
+- **DBIE prints only the measures with data in the selected quarters.** Profitability had 42
+  columns for 2024-26 and 51 for 2021-23 (13. Provisions for liabilities, 14. PBT, 15. Tax). An
+  export's header must now be an ORDERED SUBSET of the declared layout (labels exact, order kept);
+  a column the declaration lacks stops the read until `reader.py --declare-merge` inserts it at its
+  printed position. Ids always come from the declaration.
+- **A label can print blank in one export and in full in another**: Asset Quality's last three
+  columns are "22. Loss or gain on loan sales (April to date)" (blank in the probe, labelled in batch
+  2); declared with that label and `blank_ok_labels`. Their sums now run, and RBI's foreign-group
+  total for them does not match its banks (flagged). Major Sectoral's blank column is still unknown.
+- **The return changed in Jun 2022.** Infrastructure was re-listed (52 "R." lines to Mar 2022, 59
+  numbered lines from Jun 2022): one sheet can now carry several declared layouts, each quarter
+  records its layout, and the checks build one structure per layout (the tree read from RBI's codes
+  in both schemes). On Major Sectoral, up to Mar 2022 gross advances = food + the five sectors and
+  the printed "Non-Food Credit" is a narrower aggregate apart from them (SBI Dec 2021: 22,64,217 =
+  26,871 + 22,37,346; non-food printed 18,28,400); encoded as the old-return identities.
+- A non-scheduled Small Finance Bank group (Unity SFB, Dec 2021 – Mar 2022) is declared.
+- Ratios are checked to the decimals RBI prints (2 in older quarters: CRAR 19.98 for 19.98167);
+  an identity whose parts are not printed is skipped (SFB RWA components); Mar 2023's non-food total
+  sits slightly below its sectors for 13 banks (Citibank 50,173 vs 50,208 Cr) — a quarter-level named
+  exception, non-food taken as printed.
+- Gate on 19 quarters: 0 column-wide failures; 453 isolated inconsistencies flagged.

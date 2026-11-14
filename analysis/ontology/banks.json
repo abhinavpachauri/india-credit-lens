@@ -29,6 +29,23 @@
    }
   },
   {
+   "id": "abu-dhabi-commercial-bank-pjsc",
+   "name": "Abu Dhabi Commercial Bank Pjsc",
+   "sources": {
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "ABU DHABI COMMERCIAL BANK PJSC"
+      }
+     ]
+    },
+    "atm_pos": {
+     "not_in_source": "not in RBI's ATM/POS/card statistics roster (rbi_atm_pos/canonical_banks.json, 2026-11-14)"
+    }
+   },
+   "note": "Last in DBIE's bank-wise table in Dec 2021."
+  },
+  {
    "id": "airtel-payments-bank",
    "name": "Airtel Payments Bank",
    "sources": {
@@ -1165,6 +1182,23 @@
    }
   },
   {
+   "id": "krung-thai-bank-public-company",
+   "name": "Krung Thai Bank Public Company Limited",
+   "sources": {
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "KRUNG THAI BANK PUBLIC COMPANY LIMITED"
+      }
+     ]
+    },
+    "atm_pos": {
+     "not_in_source": "not in RBI's ATM/POS/card statistics roster (rbi_atm_pos/canonical_banks.json, 2026-11-14)"
+    }
+   },
+   "note": "Last in DBIE's bank-wise table in Mar 2022."
+  },
+  {
    "id": "mashreq-bank-psc",
    "name": "Mashreq Bank Psc",
    "sources": {
@@ -1664,10 +1698,31 @@
      "names": [
       {
        "name": "THE HONGKONG AND SHANGHAI BANKING CORPORATION LIMITED"
+      },
+      {
+       "name": "HONGKONG AND SHANGHAI BANKING CORPN.LTD.",
+       "to": "2022-12-31"
       }
      ]
     }
    }
+  },
+  {
+   "id": "the-royal-bank-of-scotland-n-v",
+   "name": "The Royal Bank Of Scotland N.V.",
+   "sources": {
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "THE ROYAL BANK OF SCOTLAND N.V."
+      }
+     ]
+    },
+    "atm_pos": {
+     "not_in_source": "not in RBI's ATM/POS/card statistics roster (rbi_atm_pos/canonical_banks.json, 2026-11-14)"
+    }
+   },
+   "note": "Last in DBIE's bank-wise table in Jun 2022; not linked to NatWest Markets PLC until an RBI record does."
   },
   {
    "id": "ubs-ag",

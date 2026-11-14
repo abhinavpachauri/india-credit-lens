@@ -677,6 +677,13 @@
           "date": "2026-11-14",
           "how_measured": "in-memory mutation of every bank (one random amount column per sheet) and every adjacent column pair (all rows) per quarter, through classify()",
           "source": "analysis/pipelines/rbi_bankwise/validate_bankwise.py; analysis/rbi_bankwise/inconsistencies.json"
+        },
+        {
+          "metric": "rbi_bankwise checks after batch 2 (19 quarters, two returns, ordered-subset headers)",
+          "value": "Control: 0 column-wide, 453 flags. Single-cell disagreement newly flagged 10,902/10,906 (4 not, not investigated), gate failures 0. Column-wide adjacent swap fails the gate 3,508/3,984 (88.1%); the rest are columns in no identity or ratio, caught only by the header check.",
+          "date": "2026-11-14",
+          "how_measured": "same harness as 2026-11-14 (inject_bw2), all 19 saved quarters",
+          "source": "analysis/pipelines/rbi_bankwise/validate_bankwise.py"
         }
       ],
       "observations": [
