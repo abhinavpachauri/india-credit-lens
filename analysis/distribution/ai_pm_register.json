@@ -663,6 +663,13 @@
           "date": "2026-11-10",
           "how_measured": "synthetic worlds (analysis/tests/test_pooled_test.py world()), 400 shuffles per run, enumeration not sampling of seeds; naive comparison shuffles each line independently",
           "source": "analysis/core/pooled_test.py; analysis/tests/test_pooled_test.py"
+        },
+        {
+          "metric": "rbi_bankwise checks vs RBI's own totals (BANKWISE_SPEC §5), injection over the whole population",
+          "value": "Known-good control: 0 failures on 3 probe quarters (52 named exceptions, each reasoned: HDFC/ICICI/IDBI/Yes NOI ≠ RBI's own [5-6] in every quarter; one blank ratio; one halved ARC figure). Caught: +1% shift of every bank amount cell 34,987/34,987; adjacent-column swap 40,543/40,543; dropped bank with a book 269/269; nulled printed ratio 6,048/6,048; bank absent from one sheet 2,113/2,113; unit ×100 3/3; ratio +0.01pp 7,680/7,680 where RBI's ratio has a formula in the export (7,522 RBI-computed ratios, performance indicators and PCR, are not checkable). The first injection run found a bug in the check: 'ratio' matched inside 'Generation' and 'Operational', dropping two amount columns from every sum.",
+          "date": "2026-11-14",
+          "how_measured": "mutate one cell/bank/sheet at a time in memory over every saved bank-quarter, run the real check_quarter/scale, restore; enumeration, no sampling",
+          "source": "analysis/pipelines/rbi_bankwise/validate_bankwise.py; analysis/tests/test_rbi_bankwise.py"
         }
       ],
       "observations": [

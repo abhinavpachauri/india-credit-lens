@@ -23,7 +23,8 @@
     "fetch": "pipelines/rbi_bankwise/fetch.py",
     "reader": "pipelines/rbi_bankwise/reader.py",
     "consolidate": "pipelines/rbi_bankwise/consolidate.py",
-    "calendar": "pipelines/rbi_bankwise/validate_calendar.py"
+    "calendar": "pipelines/rbi_bankwise/validate_calendar.py",
+    "validate": "pipelines/rbi_bankwise/validate_bankwise.py"
   },
   "gate": [
     {
@@ -36,7 +37,9 @@
       "id": "consolidate_check",
       "label": "0.8 local table equals a rebuild",
       "pipeline": "consolidate",
-      "args": ["--check"],
+      "args": [
+        "--check"
+      ],
       "note": "fresh"
     },
     {
@@ -49,6 +52,12 @@
       "label": "1b. newest quarter due + history count",
       "pipeline": "calendar",
       "note": "current"
+    },
+    {
+      "id": "rbi_totals",
+      "label": "1c. sums, ratios, parts vs RBI's own totals",
+      "pipeline": "validate",
+      "note": "5.1"
     },
     {
       "id": "reconcile",

@@ -1,6 +1,6 @@
 # Bank-wise credit pipeline (`rbi_bankwise`): specification
 
-> v0.2, 2026-11-14. Status: **phase 1 built** (roster, reader, saved quarters, local table, gate). Onboarded through the `onboard-source` skill.
+> v0.2, 2026-11-14. Status: **phases 1–2 built** (roster, reader, saved quarters, local table, checks against RBI's totals). Onboarded through the `onboard-source` skill.
 > v0.2 folds in the three reviewers (population, absence, plausibility; 21 findings, all verified;
 > table at the end). Probe: `analysis/sources/README.md` §"Per-bank quarterly variables" (opened
 > 2026-10-11, probed 2026-11-14).
@@ -266,3 +266,28 @@ Nothing dropped as not reproducible; nothing by design.
 - `core/explainability.py`: the register check now reads only the reference pipelines its
   hypotheses name, instead of every reference CSV (it would have read this table on every run).
 - Not committed: the raw Excel exports (the saved quarters carry every cell, unlabelled ones too).
+
+**Phase 2 (2026-11-14): checks against RBI's own totals** (`validate_bankwise.py`, gate stage 1c).
+Population per check printed every run (3 quarters: 18 group rows × 257 amount columns; 287 rows ×
+39 printed ratios × 61 identities; 269 bank-quarters × 8 sheets). Structure read from RBI's labels;
+bounds measured once (max observed gaps: sums 8e-8 Cr, ratios 5e-7 pp; bounds 0.05 Cr / 0.001 pp).
+**What the data taught the checks** (each measured, reasoned, never a looser bound):
+- RBI prints a blank where every part is zero (a group row, a total) and a blank ratio where GNPAs
+  are 0; both are allowed only in exactly that case.
+- Domestic + overseas = global holds for **credit only** (Asset Quality): balance-sheet and profit
+  items eliminate inter-office balances in the global figure.
+- Parts ≥ 0 on the credit sheets only: reserves go negative with accumulated losses.
+- **Small Finance and Local Area Banks never appear on the Capital Adequacy sheet.**
+- 52 named exceptions: RBI's printed Net Operating Income is not its own "[5 − 6]" for HDFC, ICICI,
+  IDBI and Yes Bank in every quarter (up to 12.5%); one blank ratio (Sonali, Sep 2024); global loans
+  sold to ARCs printed as half the domestic figure (Karur Vysya, Sep 2024). Anything else fails.
+- 5.6 found no all-zero credit rows with a book elsewhere in these quarters (the FirstRand/VTB/
+  NatWest rows are zero on every sheet).
+**Measured** (`ai_pm_register`): control 0 failures; caught 100% of +1% shifts (34,987 cells), adjacent
+column swaps (40,543), dropped banks with a book (269), nulled ratios (6,048), a bank missing from one
+sheet (2,113), lakhs (3/3), +0.01 pp on every ratio RBI's export carries a formula for (7,680).
+Not checkable: 7,522 ratios RBI computes from data outside the export (performance indicators,
+provision coverage). The first run found a bug in the check itself ("ratio" matched inside
+"Generation" and "Operational") and it is pinned by a test. Not covered: a swapped quarter label
+(caught only by a later re-export's revision diff); a partial bank selection whose group rows DBIE
+recomputes.

@@ -253,3 +253,63 @@ def test_overdue_fails():
 def test_a_history_gap_fails_once_required():
     ok, _ = calendar_check.check({"2026-06-30"}, "2026-03-31", 165, required=True, today=TODAY)
     assert not ok
+
+
+# ── checks against RBI's own totals (§5), on the committed probe quarters ─────
+
+vb = _own("rbi_bankwise_validate", ANALYSIS / "pipelines/rbi_bankwise/validate_bankwise.py")
+
+
+@pytest.fixture(scope="module")
+def probe():
+    import json as _json
+    st = vb.structure(_json.loads((ANALYSIS / "pipelines/rbi_bankwise/sheets.json").read_text()))
+    return st, vb.load_quarters()
+
+
+def _unexcepted(p, q, st):
+    return [x for k, fl in vb.check_quarter(q, st).items() for x in fl if not vb.excepted(k, p, x)]
+
+
+def test_the_saved_quarters_pass_every_check(probe):
+    st, Q = probe
+    assert Q, "no saved quarters"
+    for p, q in Q.items():
+        assert _unexcepted(p, q, st) == [], p
+    assert vb.scale(Q, st) == []
+
+
+def test_a_shifted_bank_cell_breaks_its_group_sum(probe):
+    st, Q = probe
+    p = sorted(Q)[-1]
+    cols = Q[p]["banks"]["bank-of-baroda"]["sheets"]["major_sectoral"]
+    old = cols["industry_gross_advances@dom"]
+    cols["industry_gross_advances@dom"] = old + 100
+    try:
+        assert any("group:psb" in x and "industry_gross_advances" in x for x in _unexcepted(p, Q[p], st))
+    finally:
+        cols["industry_gross_advances@dom"] = old
+
+
+def test_ratio_means_the_word_not_the_letters(probe):
+    st, _ = probe
+    assert "2_1_electricity_generation" in st["infrastructure_financing_items"]["amounts"]
+    assert "c_total_rwas_operational_risk_standalone@glb" in st["capital_adequacy"]["amounts"]
+    assert "capital_ratio_crar_standalone@glb" in st["capital_adequacy"]["ratios"]
+
+
+def test_named_exceptions_cover_only_what_they_name(probe):
+    st, Q = probe
+    p = sorted(Q)[-1]
+    assert vb.excepted("5.4", p, "hdfc-bank profitability 7_net_operating_income_april_to_date_5_6@dom: x")
+    assert not vb.excepted("5.4", p, "axis-bank profitability 7_net_operating_income_april_to_date_5_6@dom: x")
+    assert not vb.excepted("5.4", p, "hdfc-bank profitability 3_net_interest_income_nii_april_to_date_1_2@dom: x")
+
+
+def test_lakhs_trips_the_scale_guard(probe):
+    import copy
+    st, Q = probe
+    p = sorted(Q)[-1]
+    q = copy.deepcopy(Q[p])
+    q["groups"]["group:scb"]["sheets"]["major_sectoral"]["gross_advances@dom"] *= 100
+    assert vb.scale({**Q, p: q}, st)
