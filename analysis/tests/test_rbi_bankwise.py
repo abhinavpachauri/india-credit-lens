@@ -376,3 +376,24 @@ def test_lakhs_trips_the_scale_guard(probe):
     q = copy.deepcopy(Q[p])
     q["groups"]["group:scb"]["sheets"]["major_sectoral"]["gross_advances@dom"] *= 100
     assert vb.scale({**Q, p: q}, st)
+
+
+def test_a_group_total_counting_a_bank_printed_elsewhere_is_recognised(probe):
+    """IDBI Bank was in RBI's public-sector total but printed among private banks (Dec 2017 – Dec
+    2018). Simulate it: drop Bank of Baroda from the printed PSB block; the total still counts it."""
+    import copy
+    st, Q = probe
+    q = copy.deepcopy(Q[PROBE[-1]])
+    sid = "major_sectoral"
+    q["groups"]["group:psb"]["members_by_sheet"][sid].remove("bank-of-baroda")
+    assert ("group:psb", sid, "bank-of-baroda", 1) in vb.membership_moves(q, st)
+    assert not [x for x in vb.check_quarter(q, st)["5.1"] if "group:psb major_sectoral" in x]
+
+
+def test_a_gap_no_single_bank_explains_stays_flagged(probe):
+    import copy
+    st, Q = probe
+    q = copy.deepcopy(Q[PROBE[-1]])
+    q["groups"]["group:psb"]["sheets"]["major_sectoral"]["industry_gross_advances@dom"] += 12345.6
+    assert not [m for m in vb.membership_moves(q, st) if m[0] == "group:psb" and m[1] == "major_sectoral"]
+    assert [x for x in vb.check_quarter(q, st)["5.1"] if "group:psb major_sectoral industry_gross_advances" in x]

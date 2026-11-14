@@ -1,6 +1,6 @@
 # Bank-wise credit pipeline (`rbi_bankwise`): specification
 
-> v0.2, 2026-11-14. Status: **phases 1–2 built; phase 3 (backfill) under way**, 27 of 97 quarters saved (Dec 2019 →). Onboarded through the `onboard-source` skill.
+> v0.2, 2026-11-14. Status: **phases 1–2 built; phase 3 (backfill) under way**, 35 of 97 quarters saved (Dec 2017 →). Onboarded through the `onboard-source` skill.
 > v0.2 folds in the three reviewers (population, absence, plausibility; 21 findings, all verified;
 > table at the end). Probe: `analysis/sources/README.md` §"Per-bank quarterly variables" (opened
 > 2026-10-11, probed 2026-11-14).
@@ -344,3 +344,16 @@ six banks amalgamated in April 2020 (Allahabad, Andhra, Corporation, OBC, Syndic
 last in the table Mar 2020), Lakshmi Vilas (to Mar 2021), Westpac (to Jun 2020), Subhadra Local
 Area Bank (Mar–Sep 2020), each its own bank, not linked to a successor (merger adjustment is a
 signals decision). Gate: 0 column-wide failures; 544 isolated inconsistencies flagged.
+
+**Phase 3, batch 4 (2026-11-14): Dec 2017 → Sep 2019.** 8 new quarters (re-reads unchanged); 35 of 97
+saved; 97–100 banks. No new layout or column. Roster: Dena and Vijaya (to Mar 2019), National
+Australia Bank (to Jun 2019); "IDFC BANK LIMITED" is IDFC First Bank's name to Dec 2018 (dated alias).
+- **RBI's group totals do not always count the banks printed in their block.** Dec 2017 – Dec 2018:
+  the public-sector total includes IDBI Bank, which is printed among private banks (the private
+  total leaves it out); IDBI was recategorised as private in Jan 2019. The gate now finds such a
+  case itself: when ONE bank's figures equal a group's gap on every amount column of a sheet (at
+  least 3), the sum is checked with RBI's own count and the move is reported, not flagged. It also
+  found the foreign total leaving out Société Générale (Sep 2023) and UBS AG (Jun 2024). Gaps no
+  single bank explains (Small Finance Banks 2017–19, Local Area Banks Sep 2019) stay flagged.
+- Gate: 0 column-wide failures; 1,697 isolated inconsistencies flagged (of which 1,195 are those
+  unexplained group gaps).

@@ -287,6 +287,37 @@ def old_return(st: dict) -> dict:
 OLD_RETURN_TO = "2022-03-31"
 
 
+def membership_moves(q: dict, st: dict, B: dict = BOUNDS) -> list[tuple[str, str, str, int]]:
+    """(group, sheet, bank, ±1) where RBI's group total counts a bank printed in another block (+1)
+    or leaves out one printed in its own (−1), found when that ONE bank's figures equal the group's
+    gap on every amount column of the sheet. IDBI Bank: in the public-sector total but printed
+    among private banks, Dec 2017 – Dec 2018 (it was recategorised as private in Jan 2019)."""
+    out = []
+    for gid, g in q["groups"].items():
+        if not g["members"]:
+            continue
+        for sid, s in st.items():
+            gs = g["sheets"].get(sid) or {}
+            mem = g.get("members_by_sheet", {}).get(sid, g["members"])
+            gaps = {}
+            for c in s["amounts"]:
+                if gs.get(c) is None:
+                    continue
+                tot = sum(((q["banks"][b]["sheets"].get(sid) or {}).get(c) or 0.0) for b in mem)
+                if not close(gs[c], tot, B["sum_abs"], B["sum_rel"]):
+                    gaps[c] = gs[c] - tot
+            if len(gaps) < 3:
+                continue
+            for b, e in q["banks"].items():
+                v = e["sheets"].get(sid) or {}
+                for sign in (1, -1):
+                    if (sign == 1) == (b in mem):
+                        continue
+                    if all(abs(gap - sign * (v.get(c) or 0.0)) <= max(0.5, 1e-6 * abs(gap)) for c, gap in gaps.items()):
+                        out.append((gid, sid, b, sign))
+    return out
+
+
 def check_quarter(q: dict, st: dict, B: dict = BOUNDS, period: str | None = None) -> dict[str, list[str]]:
     """{check: [failures]} for one saved quarter (its `banks` and `groups`)."""
     f = {k: [] for k in ("5.1", "5.2", "5.3", "5.4", "5.5")}
@@ -294,6 +325,7 @@ def check_quarter(q: dict, st: dict, B: dict = BOUNDS, period: str | None = None
     if period and period <= OLD_RETURN_TO and "major_sectoral" in st:
         st = old_return(st)
     banks, groups = q["banks"], q["groups"]
+    moves = {(gid, sid): (b, sg) for gid, sid, b, sg in membership_moves(q, st, B)}
     v = lambda e, s, c: (e["sheets"].get(s) or {}).get(c)  # noqa: E731
     # 5.1 sums
     for gid, g in groups.items():
@@ -305,8 +337,12 @@ def check_quarter(q: dict, st: dict, B: dict = BOUNDS, period: str | None = None
         for sid, s in st.items():
             if sid not in g["sheets"]:
                 continue
+            ids = list(g.get("members_by_sheet", {}).get(sid, g["members"]))
+            if (gid, sid) in moves:                      # RBI's own count of the group (see membership_moves)
+                b, sg = moves[(gid, sid)]
+                ids = ids + [b] if sg == 1 else [x for x in ids if x != b]
             members = ([groups[x] for x in SCB_MEMBERS if x in groups] if gid == "group:scb"
-                       else [banks[b] for b in g.get("members_by_sheet", {}).get(sid, g["members"])])
+                       else [banks[b] for b in ids])
             for c in s["amounts"]:
                 gv = v(g, sid, c)
                 parts = [v(m, sid, c) for m in members]
@@ -456,6 +492,11 @@ def run(quarters: dict, st: dict) -> tuple[bool, list[str], list[dict]]:
                      f"{len(fk)} flagged in {len({(r['quarter'], r['entity']) for r in fk})} bank/group-quarter(s)"
                      + (f", {named[k]} named exception(s)" if named[k] else "")
                      + "".join(f"\n      {r['detail']}" for r in pk[:6]))
+    mv = {p: sorted({(g, b, sg) for g, _, b, sg in membership_moves(q, st)}) for p, q in quarters.items()}
+    mv = {p: m for p, m in mv.items() if m}
+    lines.append("· 5.1 RBI's group totals counting a bank printed elsewhere: " + (
+        "; ".join(f"{p}: " + ", ".join(f"{g} {'+' if sg > 0 else '−'}{b}" for g, b, sg in m) for p, m in sorted(mv.items()))
+        or "none"))
     zeros = {p: not_reported(q) for p, q in quarters.items()}
     lines.append("· 5.6 not_reported (credit sheets all zero, a book elsewhere): " +
                  ("; ".join(f"{p}: {', '.join(z)}" for p, z in sorted(zeros.items()) if z) or "none"))

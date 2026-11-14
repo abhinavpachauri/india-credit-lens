@@ -634,6 +634,23 @@
    }
   },
   {
+   "id": "dena-bank",
+   "name": "Dena Bank",
+   "sources": {
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "DENA BANK"
+      }
+     ]
+    },
+    "atm_pos": {
+     "not_in_source": "not in RBI's ATM/POS/card statistics roster (rbi_atm_pos/canonical_banks.json, 2026-11-14)"
+    }
+   },
+   "note": "Last in DBIE's bank-wise table in Mar 2019 (amalgamated into Bank of Baroda, April 2019). Not linked to a successor; merger adjustment is a signals decision."
+  },
+  {
    "id": "deutsche-bank-ag",
    "name": "Deutsche Bank Ag",
    "sources": {
@@ -912,6 +929,10 @@
      "names": [
       {
        "name": "IDFC FIRST BANK LIMITED"
+      },
+      {
+       "name": "IDFC BANK LIMITED",
+       "to": "2018-12-31"
       }
      ]
     }
@@ -1333,6 +1354,23 @@
      ]
     }
    }
+  },
+  {
+   "id": "national-australia-bank",
+   "name": "National Australia Bank",
+   "sources": {
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "NATIONAL AUSTRALIA BANK"
+      }
+     ]
+    },
+    "atm_pos": {
+     "not_in_source": "not in RBI's ATM/POS/card statistics roster (rbi_atm_pos/canonical_banks.json, 2026-11-14)"
+    }
+   },
+   "note": "Last in DBIE's bank-wise table in Jun 2019. Not linked to a successor; merger adjustment is a signals decision."
   },
   {
    "id": "natwest-markets-plc",
@@ -1991,6 +2029,23 @@
      ]
     }
    }
+  },
+  {
+   "id": "vijaya-bank",
+   "name": "Vijaya Bank",
+   "sources": {
+    "rbi_bankwise": {
+     "names": [
+      {
+       "name": "VIJAYA BANK"
+      }
+     ]
+    },
+    "atm_pos": {
+     "not_in_source": "not in RBI's ATM/POS/card statistics roster (rbi_atm_pos/canonical_banks.json, 2026-11-14)"
+    }
+   },
+   "note": "Last in DBIE's bank-wise table in Mar 2019 (amalgamated into Bank of Baroda, April 2019). Not linked to a successor; merger adjustment is a signals decision."
   },
   {
    "id": "westpac-banking-corporation",
