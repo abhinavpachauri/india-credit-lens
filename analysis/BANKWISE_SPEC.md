@@ -1,6 +1,6 @@
 # Bank-wise credit pipeline (`rbi_bankwise`): specification
 
-> v0.2, 2026-11-14. Status: **phases 1–2 built; phase 3 (backfill) under way**, 19 of 97 quarters saved (Dec 2021 →). Onboarded through the `onboard-source` skill.
+> v0.2, 2026-11-14. Status: **phases 1–2 built; phase 3 (backfill) under way**, 27 of 97 quarters saved (Dec 2019 →). Onboarded through the `onboard-source` skill.
 > v0.2 folds in the three reviewers (population, absence, plausibility; 21 findings, all verified;
 > table at the end). Probe: `analysis/sources/README.md` §"Per-bank quarterly variables" (opened
 > 2026-10-11, probed 2026-11-14).
@@ -337,3 +337,10 @@ the checks, each found in the data and now encoded:
   sits slightly below its sectors for 13 banks (Citibank 50,173 vs 50,208 Cr) — a quarter-level named
   exception, non-food taken as printed.
 - Gate on 19 quarters: 0 column-wide failures; 453 isolated inconsistencies flagged.
+
+**Phase 3, batch 3 (2026-11-14): Dec 2019 → Sep 2021.** 8 new quarters (Jun and Sep 2024 re-read,
+unchanged); 27 of 97 saved; 98–99 banks in Dec 2019 – Mar 2020. No new layout or column. Roster: the
+six banks amalgamated in April 2020 (Allahabad, Andhra, Corporation, OBC, Syndicate, United Bank;
+last in the table Mar 2020), Lakshmi Vilas (to Mar 2021), Westpac (to Jun 2020), Subhadra Local
+Area Bank (Mar–Sep 2020), each its own bank, not linked to a successor (merger adjustment is a
+signals decision). Gate: 0 column-wide failures; 544 isolated inconsistencies flagged.

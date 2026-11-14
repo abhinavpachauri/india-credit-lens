@@ -2,9 +2,646 @@
  "_meta": {
   "what": "cells where RBI's own bank-wise figures fail a check in one bank or group (BANKWISE_SPEC §5); a signal never publishes a flagged cell as if it held",
   "rule": "isolated = fewer than 10 banks failing the same column in a quarter",
-  "count": 453
+  "count": 544
  },
  "flags": [
+  {
+   "quarter": "2019-12-31",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "group:psb profitability 7_net_operating_income_april_to_date_5_6@dom: 126675.5585 vs parts 126796.3170"
+  },
+  {
+   "quarter": "2019-12-31",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "group:psb profitability 7_net_operating_income_april_to_date_5_6@glb: 134015.4785 vs parts 134136.2370"
+  },
+  {
+   "quarter": "2019-12-31",
+   "check": "5.4",
+   "entity": "indian-overseas-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "indian-overseas-bank profitability 7_net_operating_income_april_to_date_5_6@dom: 2127.8407 vs parts 2248.5992"
+  },
+  {
+   "quarter": "2019-12-31",
+   "check": "5.4",
+   "entity": "indian-overseas-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "indian-overseas-bank profitability 7_net_operating_income_april_to_date_5_6@glb: 2329.3324 vs parts 2450.0909"
+  },
+  {
+   "quarter": "2020-03-31",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "group:psb profitability 7_net_operating_income_april_to_date_5_6@dom: 165139.2079 vs parts 165259.9664"
+  },
+  {
+   "quarter": "2020-03-31",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "group:psb profitability 7_net_operating_income_april_to_date_5_6@glb: 174606.1162 vs parts 174726.8747"
+  },
+  {
+   "quarter": "2020-03-31",
+   "check": "5.4",
+   "entity": "indian-overseas-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "indian-overseas-bank profitability 7_net_operating_income_april_to_date_5_6@dom: 3254.8962 vs parts 3375.6547"
+  },
+  {
+   "quarter": "2020-03-31",
+   "check": "5.4",
+   "entity": "indian-overseas-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "indian-overseas-bank profitability 7_net_operating_income_april_to_date_5_6@glb: 3528.0486 vs parts 3648.8071"
+  },
+  {
+   "quarter": "2020-03-31",
+   "check": "5.5",
+   "entity": "subhadra-local-area-bank",
+   "column": "sheets",
+   "detail": "subhadra-local-area-bank: absent from ['major_balance_sheet_items', 'asset_quality', 'profitability', 'performance_indicators', 'major_sectoral', 'priority_non_priority_break_up']"
+  },
+  {
+   "quarter": "2020-06-30",
+   "check": "5.4",
+   "entity": "firstrand-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "firstrand-bank profitability 7_net_operating_income_april_to_date_5_6@dom: 12.504 vs parts 11.8993"
+  },
+  {
+   "quarter": "2020-06-30",
+   "check": "5.4",
+   "entity": "firstrand-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "firstrand-bank profitability 7_net_operating_income_april_to_date_5_6@glb: 12.504 vs parts 11.8993"
+  },
+  {
+   "quarter": "2020-06-30",
+   "check": "5.4",
+   "entity": "group:foreign",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "group:foreign profitability 7_net_operating_income_april_to_date_5_6@dom: 9464.1023 vs parts 9463.4976"
+  },
+  {
+   "quarter": "2020-06-30",
+   "check": "5.4",
+   "entity": "group:foreign",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "group:foreign profitability 7_net_operating_income_april_to_date_5_6@glb: 9464.1023 vs parts 9463.4976"
+  },
+  {
+   "quarter": "2020-06-30",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "group:psb profitability 7_net_operating_income_april_to_date_5_6@dom: 44001.0179 vs parts 44001.1569"
+  },
+  {
+   "quarter": "2020-06-30",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "group:psb profitability 7_net_operating_income_april_to_date_5_6@glb: 46251.0392 vs parts 46251.1782"
+  },
+  {
+   "quarter": "2020-06-30",
+   "check": "5.4",
+   "entity": "indian-overseas-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "indian-overseas-bank profitability 7_net_operating_income_april_to_date_5_6@dom: 1029.6231 vs parts 1029.7621"
+  },
+  {
+   "quarter": "2020-06-30",
+   "check": "5.4",
+   "entity": "indian-overseas-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "indian-overseas-bank profitability 7_net_operating_income_april_to_date_5_6@glb: 1094.0363 vs parts 1094.1753"
+  },
+  {
+   "quarter": "2020-09-30",
+   "check": "5.4",
+   "entity": "firstrand-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "firstrand-bank profitability 7_net_operating_income_april_to_date_5_6@dom: 20.0635 vs parts 19.4559"
+  },
+  {
+   "quarter": "2020-09-30",
+   "check": "5.4",
+   "entity": "firstrand-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "firstrand-bank profitability 7_net_operating_income_april_to_date_5_6@glb: 20.0635 vs parts 19.4559"
+  },
+  {
+   "quarter": "2020-09-30",
+   "check": "5.4",
+   "entity": "group:foreign",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "group:foreign profitability 7_net_operating_income_april_to_date_5_6@dom: 20190.1867 vs parts 20189.5791"
+  },
+  {
+   "quarter": "2020-09-30",
+   "check": "5.4",
+   "entity": "group:foreign",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "group:foreign profitability 7_net_operating_income_april_to_date_5_6@glb: 20190.1867 vs parts 20189.5791"
+  },
+  {
+   "quarter": "2020-09-30",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "group:psb profitability 7_net_operating_income_april_to_date_5_6@dom: 90015.9849 vs parts 90016.1239"
+  },
+  {
+   "quarter": "2020-09-30",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "group:psb profitability 7_net_operating_income_april_to_date_5_6@glb: 94480.0528 vs parts 94480.1918"
+  },
+  {
+   "quarter": "2020-09-30",
+   "check": "5.4",
+   "entity": "indian-overseas-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "indian-overseas-bank profitability 7_net_operating_income_april_to_date_5_6@dom: 2311.5523 vs parts 2311.6913"
+  },
+  {
+   "quarter": "2020-09-30",
+   "check": "5.4",
+   "entity": "indian-overseas-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "indian-overseas-bank profitability 7_net_operating_income_april_to_date_5_6@glb: 2439.9986 vs parts 2440.1376"
+  },
+  {
+   "quarter": "2020-09-30",
+   "check": "5.5",
+   "entity": "subhadra-local-area-bank",
+   "column": "sheets",
+   "detail": "subhadra-local-area-bank: absent from ['major_balance_sheet_items', 'asset_quality', 'profitability', 'performance_indicators', 'major_sectoral', 'priority_non_priority_break_up']"
+  },
+  {
+   "quarter": "2020-12-31",
+   "check": "5.1",
+   "entity": "group:lab",
+   "column": "capital_adequacy tier_i_capital_standalone@dom",
+   "detail": "group:lab capital_adequacy tier_i_capital_standalone@dom: printed 289.055 vs banks 144.5275"
+  },
+  {
+   "quarter": "2020-12-31",
+   "check": "5.1",
+   "entity": "group:lab",
+   "column": "capital_adequacy tier_i_capital_standalone@glb",
+   "detail": "group:lab capital_adequacy tier_i_capital_standalone@glb: printed 289.055 vs banks 144.5275"
+  },
+  {
+   "quarter": "2020-12-31",
+   "check": "5.1",
+   "entity": "group:lab",
+   "column": "capital_adequacy tier_ii_capital_standalone@dom",
+   "detail": "group:lab capital_adequacy tier_ii_capital_standalone@dom: printed 9.2092 vs banks 4.6046"
+  },
+  {
+   "quarter": "2020-12-31",
+   "check": "5.1",
+   "entity": "group:lab",
+   "column": "capital_adequacy tier_ii_capital_standalone@glb",
+   "detail": "group:lab capital_adequacy tier_ii_capital_standalone@glb: printed 9.2092 vs banks 4.6046"
+  },
+  {
+   "quarter": "2020-12-31",
+   "check": "5.1",
+   "entity": "group:lab",
+   "column": "capital_adequacy total_capital_standalone@dom",
+   "detail": "group:lab capital_adequacy total_capital_standalone@dom: printed 298.2642 vs banks 149.1321"
+  },
+  {
+   "quarter": "2020-12-31",
+   "check": "5.1",
+   "entity": "group:lab",
+   "column": "capital_adequacy total_capital_standalone@glb",
+   "detail": "group:lab capital_adequacy total_capital_standalone@glb: printed 298.2642 vs banks 149.1321"
+  },
+  {
+   "quarter": "2020-12-31",
+   "check": "5.1",
+   "entity": "group:lab",
+   "column": "capital_adequacy total_rwas_standalone_a_b_c@dom",
+   "detail": "group:lab capital_adequacy total_rwas_standalone_a_b_c@dom: printed 1438.2178 vs banks 719.1089"
+  },
+  {
+   "quarter": "2020-12-31",
+   "check": "5.1",
+   "entity": "group:lab",
+   "column": "capital_adequacy total_rwas_standalone_a_b_c@glb",
+   "detail": "group:lab capital_adequacy total_rwas_standalone_a_b_c@glb: printed 1438.2178 vs banks 719.1089"
+  },
+  {
+   "quarter": "2020-12-31",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "capital_adequacy tier_i_capital_standalone@dom",
+   "detail": "group:sfb capital_adequacy tier_i_capital_standalone@dom: printed 29177.3014 vs banks 14588.6507"
+  },
+  {
+   "quarter": "2020-12-31",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "capital_adequacy tier_i_capital_standalone@glb",
+   "detail": "group:sfb capital_adequacy tier_i_capital_standalone@glb: printed 29177.3014 vs banks 14588.6507"
+  },
+  {
+   "quarter": "2020-12-31",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "capital_adequacy tier_ii_capital_standalone@dom",
+   "detail": "group:sfb capital_adequacy tier_ii_capital_standalone@dom: printed 3822.3354 vs banks 1911.1677"
+  },
+  {
+   "quarter": "2020-12-31",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "capital_adequacy tier_ii_capital_standalone@glb",
+   "detail": "group:sfb capital_adequacy tier_ii_capital_standalone@glb: printed 3822.3354 vs banks 1911.1677"
+  },
+  {
+   "quarter": "2020-12-31",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "capital_adequacy total_capital_standalone@dom",
+   "detail": "group:sfb capital_adequacy total_capital_standalone@dom: printed 32999.6368 vs banks 16499.8184"
+  },
+  {
+   "quarter": "2020-12-31",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "capital_adequacy total_capital_standalone@glb",
+   "detail": "group:sfb capital_adequacy total_capital_standalone@glb: printed 32999.6368 vs banks 16499.8184"
+  },
+  {
+   "quarter": "2020-12-31",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "capital_adequacy total_rwas_standalone_a_b_c@dom",
+   "detail": "group:sfb capital_adequacy total_rwas_standalone_a_b_c@dom: printed 168321.498 vs banks 84160.7490"
+  },
+  {
+   "quarter": "2020-12-31",
+   "check": "5.1",
+   "entity": "group:sfb",
+   "column": "capital_adequacy total_rwas_standalone_a_b_c@glb",
+   "detail": "group:sfb capital_adequacy total_rwas_standalone_a_b_c@glb: printed 168321.498 vs banks 84160.7490"
+  },
+  {
+   "quarter": "2020-12-31",
+   "check": "5.2",
+   "entity": "group:scb",
+   "column": "capital_adequacy cet_i_capital_ratio_standalone@dom",
+   "detail": "group:scb capital_adequacy cet_i_capital_ratio_standalone@dom: printed 12.65324 vs 12.457347"
+  },
+  {
+   "quarter": "2020-12-31",
+   "check": "5.2",
+   "entity": "group:scb",
+   "column": "capital_adequacy cet_i_capital_ratio_standalone@glb",
+   "detail": "group:scb capital_adequacy cet_i_capital_ratio_standalone@glb: printed 12.65324 vs 12.457347"
+  },
+  {
+   "quarter": "2020-12-31",
+   "check": "5.4",
+   "entity": "firstrand-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "firstrand-bank profitability 7_net_operating_income_april_to_date_5_6@dom: 29.5582 vs parts 28.9740"
+  },
+  {
+   "quarter": "2020-12-31",
+   "check": "5.4",
+   "entity": "firstrand-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "firstrand-bank profitability 7_net_operating_income_april_to_date_5_6@glb: 29.5582 vs parts 28.9740"
+  },
+  {
+   "quarter": "2020-12-31",
+   "check": "5.4",
+   "entity": "group:foreign",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "group:foreign profitability 7_net_operating_income_april_to_date_5_6@dom: 26633.4657 vs parts 26632.8815"
+  },
+  {
+   "quarter": "2020-12-31",
+   "check": "5.4",
+   "entity": "group:foreign",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "group:foreign profitability 7_net_operating_income_april_to_date_5_6@glb: 26633.4657 vs parts 26632.8815"
+  },
+  {
+   "quarter": "2020-12-31",
+   "check": "5.4",
+   "entity": "group:scb",
+   "column": "capital_adequacy total_rwas_standalone_a_b_c@dom",
+   "detail": "group:scb capital_adequacy total_rwas_standalone_a_b_c@dom: 10872338.43 vs parts 10704016.9323"
+  },
+  {
+   "quarter": "2020-12-31",
+   "check": "5.4",
+   "entity": "group:scb",
+   "column": "capital_adequacy total_rwas_standalone_a_b_c@glb",
+   "detail": "group:scb capital_adequacy total_rwas_standalone_a_b_c@glb: 10872338.43 vs parts 10704016.9323"
+  },
+  {
+   "quarter": "2020-12-31",
+   "check": "5.4",
+   "entity": "group:sfb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "group:sfb profitability 7_net_operating_income_april_to_date_5_6@dom: 4701.9753 vs parts 4702.1817"
+  },
+  {
+   "quarter": "2020-12-31",
+   "check": "5.4",
+   "entity": "group:sfb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "group:sfb profitability 7_net_operating_income_april_to_date_5_6@glb: 4701.9753 vs parts 4702.1817"
+  },
+  {
+   "quarter": "2020-12-31",
+   "check": "5.4",
+   "entity": "indian-overseas-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "indian-overseas-bank profitability 7_net_operating_income_april_to_date_5_6@dom: 3986.0268 vs parts 3986.1658"
+  },
+  {
+   "quarter": "2020-12-31",
+   "check": "5.4",
+   "entity": "indian-overseas-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "indian-overseas-bank profitability 7_net_operating_income_april_to_date_5_6@glb: 4170.8455 vs parts 4170.9845"
+  },
+  {
+   "quarter": "2020-12-31",
+   "check": "5.4",
+   "entity": "ujjivan-small-finance-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "ujjivan-small-finance-bank profitability 7_net_operating_income_april_to_date_5_6@dom: 651.3398 vs parts 651.5462"
+  },
+  {
+   "quarter": "2020-12-31",
+   "check": "5.4",
+   "entity": "ujjivan-small-finance-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "ujjivan-small-finance-bank profitability 7_net_operating_income_april_to_date_5_6@glb: 651.3398 vs parts 651.5462"
+  },
+  {
+   "quarter": "2021-03-31",
+   "check": "5.2",
+   "entity": "group:scb",
+   "column": "capital_adequacy cet_i_capital_ratio_standalone@dom",
+   "detail": "group:scb capital_adequacy cet_i_capital_ratio_standalone@dom: printed 13.20665 vs 13.100397"
+  },
+  {
+   "quarter": "2021-03-31",
+   "check": "5.2",
+   "entity": "group:scb",
+   "column": "capital_adequacy cet_i_capital_ratio_standalone@glb",
+   "detail": "group:scb capital_adequacy cet_i_capital_ratio_standalone@glb: printed 13.20665 vs 13.100397"
+  },
+  {
+   "quarter": "2021-03-31",
+   "check": "5.4",
+   "entity": "group:scb",
+   "column": "capital_adequacy total_rwas_standalone_a_b_c@dom",
+   "detail": "group:scb capital_adequacy total_rwas_standalone_a_b_c@dom: 10986632.0123 vs parts 10898240.6647"
+  },
+  {
+   "quarter": "2021-03-31",
+   "check": "5.4",
+   "entity": "group:scb",
+   "column": "capital_adequacy total_rwas_standalone_a_b_c@glb",
+   "detail": "group:scb capital_adequacy total_rwas_standalone_a_b_c@glb: 10986632.0123 vs parts 10898240.6647"
+  },
+  {
+   "quarter": "2021-03-31",
+   "check": "5.4",
+   "entity": "indian-overseas-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "indian-overseas-bank profitability 7_net_operating_income_april_to_date_5_6@dom: 5623.5879 vs parts 5623.7269"
+  },
+  {
+   "quarter": "2021-03-31",
+   "check": "5.4",
+   "entity": "indian-overseas-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "indian-overseas-bank profitability 7_net_operating_income_april_to_date_5_6@glb: 5894.3129 vs parts 5894.4519"
+  },
+  {
+   "quarter": "2021-03-31",
+   "check": "5.5",
+   "entity": "sbm-bank-india",
+   "column": "sheets",
+   "detail": "sbm-bank-india: absent from ['infrastructure_financing_items']"
+  },
+  {
+   "quarter": "2021-06-30",
+   "check": "5.2",
+   "entity": "group:scb",
+   "column": "capital_adequacy cet_i_capital_ratio_standalone@dom",
+   "detail": "group:scb capital_adequacy cet_i_capital_ratio_standalone@dom: printed 13.325832 vs 13.221522"
+  },
+  {
+   "quarter": "2021-06-30",
+   "check": "5.2",
+   "entity": "group:scb",
+   "column": "capital_adequacy cet_i_capital_ratio_standalone@glb",
+   "detail": "group:scb capital_adequacy cet_i_capital_ratio_standalone@glb: printed 13.325832 vs 13.221522"
+  },
+  {
+   "quarter": "2021-06-30",
+   "check": "5.3",
+   "entity": "axis-bank",
+   "column": "asset_quality 1. Gross Advances",
+   "detail": "axis-bank asset_quality 1. Gross Advances: 586094.1 + 53250.85 vs 630645.37"
+  },
+  {
+   "quarter": "2021-06-30",
+   "check": "5.3",
+   "entity": "axis-bank",
+   "column": "asset_quality 14. Net Advances",
+   "detail": "axis-bank asset_quality 14. Net Advances: 571849.77 + 51723.5 vs 614873.69"
+  },
+  {
+   "quarter": "2021-06-30",
+   "check": "5.3",
+   "entity": "group:pvt",
+   "column": "asset_quality 1. Gross Advances",
+   "detail": "group:pvt asset_quality 1. Gross Advances: 3906050.9434 + 166870.4169 vs 4064221.7802"
+  },
+  {
+   "quarter": "2021-06-30",
+   "check": "5.3",
+   "entity": "group:pvt",
+   "column": "asset_quality 14. Net Advances",
+   "detail": "group:pvt asset_quality 14. Net Advances: 3769889.5656 + 155414.111 vs 3916604.0975"
+  },
+  {
+   "quarter": "2021-06-30",
+   "check": "5.3",
+   "entity": "group:scb",
+   "column": "asset_quality 1. Gross Advances",
+   "detail": "group:scb asset_quality 1. Gross Advances: 10560337.7555 + 783032.0149 vs 11334670.1903"
+  },
+  {
+   "quarter": "2021-06-30",
+   "check": "5.3",
+   "entity": "group:scb",
+   "column": "asset_quality 14. Net Advances",
+   "detail": "group:scb asset_quality 14. Net Advances: 10021044.4208 + 742271.6464 vs 10754616.4882"
+  },
+  {
+   "quarter": "2021-06-30",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "group:psb profitability 7_net_operating_income_april_to_date_5_6@dom: 51047.121 vs parts 51238.6437"
+  },
+  {
+   "quarter": "2021-06-30",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "group:psb profitability 7_net_operating_income_april_to_date_5_6@glb: 53299.3982 vs parts 53490.9209"
+  },
+  {
+   "quarter": "2021-06-30",
+   "check": "5.4",
+   "entity": "group:scb",
+   "column": "capital_adequacy total_rwas_standalone_a_b_c@dom",
+   "detail": "group:scb capital_adequacy total_rwas_standalone_a_b_c@dom: 11042278.7405 vs parts 10955843.4524"
+  },
+  {
+   "quarter": "2021-06-30",
+   "check": "5.4",
+   "entity": "group:scb",
+   "column": "capital_adequacy total_rwas_standalone_a_b_c@glb",
+   "detail": "group:scb capital_adequacy total_rwas_standalone_a_b_c@glb: 11042278.7405 vs parts 10955843.4524"
+  },
+  {
+   "quarter": "2021-06-30",
+   "check": "5.4",
+   "entity": "indian-overseas-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "indian-overseas-bank profitability 7_net_operating_income_april_to_date_5_6@dom: 1138.4025 vs parts 1329.9252"
+  },
+  {
+   "quarter": "2021-06-30",
+   "check": "5.4",
+   "entity": "indian-overseas-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "indian-overseas-bank profitability 7_net_operating_income_april_to_date_5_6@glb: 1201.7236 vs parts 1393.2463"
+  },
+  {
+   "quarter": "2021-09-30",
+   "check": "5.2",
+   "entity": "group:scb",
+   "column": "capital_adequacy cet_i_capital_ratio_standalone@dom",
+   "detail": "group:scb capital_adequacy cet_i_capital_ratio_standalone@dom: printed 13.430624 vs 13.316815"
+  },
+  {
+   "quarter": "2021-09-30",
+   "check": "5.2",
+   "entity": "group:scb",
+   "column": "capital_adequacy cet_i_capital_ratio_standalone@glb",
+   "detail": "group:scb capital_adequacy cet_i_capital_ratio_standalone@glb: printed 13.430624 vs 13.316815"
+  },
+  {
+   "quarter": "2021-09-30",
+   "check": "5.3",
+   "entity": "axis-bank",
+   "column": "asset_quality 1. Gross Advances",
+   "detail": "axis-bank asset_quality 1. Gross Advances: 588841.14 + 53571.47 vs 636319.82"
+  },
+  {
+   "quarter": "2021-09-30",
+   "check": "5.3",
+   "entity": "axis-bank",
+   "column": "asset_quality 14. Net Advances",
+   "detail": "axis-bank asset_quality 14. Net Advances: 575740.36 + 52071.74 vs 621719.31"
+  },
+  {
+   "quarter": "2021-09-30",
+   "check": "5.3",
+   "entity": "group:pvt",
+   "column": "asset_quality 1. Gross Advances",
+   "detail": "group:pvt asset_quality 1. Gross Advances: 4047613.1216 + 169386.6805 vs 4210907.0122"
+  },
+  {
+   "quarter": "2021-09-30",
+   "check": "5.3",
+   "entity": "group:pvt",
+   "column": "asset_quality 14. Net Advances",
+   "detail": "group:pvt asset_quality 14. Net Advances: 3911805.6155 + 158386.0329 vs 4064098.8593"
+  },
+  {
+   "quarter": "2021-09-30",
+   "check": "5.3",
+   "entity": "group:scb",
+   "column": "asset_quality 1. Gross Advances",
+   "detail": "group:scb asset_quality 1. Gross Advances: 10751055.3314 + 797425.3694 vs 11542387.9109"
+  },
+  {
+   "quarter": "2021-09-30",
+   "check": "5.3",
+   "entity": "group:scb",
+   "column": "asset_quality 14. Net Advances",
+   "detail": "group:scb asset_quality 14. Net Advances: 10230689.8336 + 757068.7242 vs 10981665.7687"
+  },
+  {
+   "quarter": "2021-09-30",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "group:psb profitability 7_net_operating_income_april_to_date_5_6@dom: 91918.0156 vs parts 92109.5383"
+  },
+  {
+   "quarter": "2021-09-30",
+   "check": "5.4",
+   "entity": "group:psb",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "group:psb profitability 7_net_operating_income_april_to_date_5_6@glb: 96432.9786 vs parts 96624.5013"
+  },
+  {
+   "quarter": "2021-09-30",
+   "check": "5.4",
+   "entity": "group:scb",
+   "column": "capital_adequacy total_rwas_standalone_a_b_c@dom",
+   "detail": "group:scb capital_adequacy total_rwas_standalone_a_b_c@dom: 11167918.9332 vs parts 11073284.0861"
+  },
+  {
+   "quarter": "2021-09-30",
+   "check": "5.4",
+   "entity": "group:scb",
+   "column": "capital_adequacy total_rwas_standalone_a_b_c@glb",
+   "detail": "group:scb capital_adequacy total_rwas_standalone_a_b_c@glb: 11167918.9332 vs parts 11073284.0861"
+  },
+  {
+   "quarter": "2021-09-30",
+   "check": "5.4",
+   "entity": "indian-overseas-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@dom",
+   "detail": "indian-overseas-bank profitability 7_net_operating_income_april_to_date_5_6@dom: 2489.8629 vs parts 2681.3856"
+  },
+  {
+   "quarter": "2021-09-30",
+   "check": "5.4",
+   "entity": "indian-overseas-bank",
+   "column": "profitability 7_net_operating_income_april_to_date_5_6@glb",
+   "detail": "indian-overseas-bank profitability 7_net_operating_income_april_to_date_5_6@glb: 2620.4925 vs parts 2812.0152"
+  },
   {
    "quarter": "2021-12-31",
    "check": "5.2",
