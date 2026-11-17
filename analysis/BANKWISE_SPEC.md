@@ -179,6 +179,48 @@ SIBC page and a joined bank page need **one identity**.
   payments** (PLAN's open Bandhan +416,450% debt) before any growth ranking ships.
 - **A zero denominator is an absence with a reason** (`no_book`, `not_reported`), never a vanished row.
 
+## 8a. Phase 4 design: signals and model (user approved the layout and "primary with a model", 2026-11-17)
+
+**Shape.** The local table is rewritten in the payments shape (`report_date, bank_name, bank_category,
+record_type, metric, value, unit`) so the payments compute module (`signals/compute/atm_pos.py`,
+already keyed by pipeline) serves both: one generic per-bank mechanism, not a second one.
+`bank_name` is the roster id, `bank_category` the group RBI printed the bank under that quarter,
+`record_type` is `bank` or `total` (the All SCBs row; the Local Area Bank group sits outside it).
+Group values are sums of their banks, as in payments; RBI's own group rows stay in the releases and
+are what the §5 checks compare against. `metric` = `{sheet}.{column}`, only for declared metrics.
+
+**Declared metrics** (`pipelines/rbi_bankwise/signals.json`, the one list the registry is built
+from): Major Sectoral gross advances; food; non-food; agriculture; industry; services; retail;
+housing; vehicle; credit cards; education; other retail; and the gross NPA ratio. Infrastructure
+lines and the other sheets follow once the view needs them.
+
+**Signals per metric** (existing methods unless marked): each bank's size (`csv_bank_scan`), its share
+of all banks (`csv_bank_scan_share`), its growth a year (`csv_bank_scan` yoy), its share of the
+year's new money (`csv_bank_allocation`, a 12-month window = four quarters), the total's growth
+(`csv_total_yoy`), and the group scans (size, share, growth). **New:** a sector's share of the bank's
+own book (`csv_bank_ratio_scan`: metric ÷ the bank's gross advances, per bank).
+
+**Merger breaks.** Declared once in `rbi_bankwise/series_breaks.json` (the shared series-break
+mechanism, `core/series_breaks`; statement `bank`, code = bank id, group label or `total`): SBI and its associates (Apr 2017), Bank of Baroda with Dena and Vijaya (Apr 2019),
+the April 2020 amalgamations (PNB, Canara, Union, Indian Bank), Kotak with ING Vysya (Apr 2015),
+IDFC First (Dec 2018), DBS with Lakshmi Vilas (Nov 2020), HDFC Bank with HDFC Ltd (Jul 2023). Growth
+and new-money share for the absorbing bank across a break are absent with reason `merger_break`;
+size and shares stay. The bank-scan methods take the breaks as a parameter, so payments can use
+the same mechanism later.
+
+**Flags.** Cells in `inconsistencies.json` are honoured where cells are rendered (the table stamp,
+phase 5): shown "—" with the reason, never as if they held.
+
+**Model.** Primary, with a system model whose skeleton comes from an authored profile, like
+payments: entities are the credit measures (gross advances → food / non-food → the four sectors and
+other non-food → the five retail parts); banks and bank groups are a lens, not nodes, and the
+per-bank signals attach to their measure's entity. The behavioural layer (sourced forces: the
+mergers above, IDBI's recategorisation, recapitalisation) comes with the first FOUNDATION model pass
+after the view ships.
+
+**Timeline.** `analysis/rbi_bankwise/timeline.json` lists the saved quarters (written by
+consolidate from the releases); it is the freshness check's population.
+
 ## 9. Decisions (user, 2026-11-14: "use your proposals")
 
 1. **All eight sheets** in phase 1: the whole record, read once.
@@ -375,3 +417,28 @@ five quarters were not committed and were removed; the declared start is now Mar
 skips (and reports) any quarter before it, and the history check is required: all 46 quarters
 Mar 2015 → Jun 2026 saved. Roster: HSBC Bank Oman and ING Vysya (both to Mar 2015). Gate: 0 column-wide
 failures; 2,144 isolated inconsistencies flagged; 1,243,828 values in the local table.
+
+**Phase 4 (2026-11-17): signals and model.** Built as §8a, with these as-built facts:
+- The local table is in the payments shape and the manifest is `primary` with `compute_module:
+  atm_pos`; 130 registry entries come from `pipelines/rbi_bankwise/build_registry.py`, which reads
+  the 13 measures from the skeleton profile (10 signals each, 9 for gross, plus the gross NPA ratio;
+  each allocation has its momentum companion, whose coherence bounds the shares).
+  Gate stage 4-reg fails if the registry and the profile disagree.
+- Appended for all 46 quarters (239,732 rows, all matching a recompute). Spot check: HDFC Bank 15.4% a year to Jun 2026
+  = 30.11 / 26.09 lakh crore; all banks 17.0% (SIBC bank credit ~19% in the same months).
+- Breaks are honoured in the payments module for every bank, group and total method (payments
+  freshness unchanged: 216,164 rows). Seven mergers in `series_breaks.json`, each checked in the data
+  by the absorbing bank's jump. Two also break the group and the all-banks total (IDFC–Capital First,
+  Dec 2018; HDFC Ltd, Jul 2023), so all-banks growth is absent for the four quarters after each.
+  **Open (user):** Capital First added about 0.3% to all banks' credit, so blanking a year of
+  all-banks growth for it may cost more than it protects.
+- The skeleton profile declares what is NOT a line (`outside_model`, a pattern and a reason each):
+  NPA columns, the priority and infrastructure cuts, and the bank-measure sheets. `generate_skeleton`
+  and `validate_system_model` both read it, so an undeclared new column still fails completeness.
+- The behavioural layer is declared deferred (`_meta.behavioral_status`) until the FOUNDATION pass.
+- The coverage count reads "no reading" on all 12 lines: it is monthly by construction (a move is
+  one data month apart). **Open:** whether quarterly lines get a quarter-step move rule.
+- RBI's All-banks row differs from its banks' sum by 0–1.6% (continuous, from flagged cells), so
+  shares divide by the published total. The "of which never sums to 100" test now judges only
+  windows where the two denominators differ by ≥1 pt: all 84 SIBC and 44 NBFC windows, 5 of 102 bank-wise.
+- The pace column is not stored per bank (payments stores none either).

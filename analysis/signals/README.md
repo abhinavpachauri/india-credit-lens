@@ -75,8 +75,9 @@ sub-layer tag on a registry entry says which.
 | `csv_sector_scan_share` · `csv_category_scan_share` | every part's **share**, of its parent or of a declared denominator |
 | `csv_sector_scan_yoy` · `csv_category_scan_yoy` | every part's **growth** |
 | `csv_psl_scan_yoy` | growth across the PSL memo block, which no `parent_code` can reach |
-| `csv_bank_scan` | the same, at individual-bank granularity (`value_type: value|yoy`) — payments only; SIBC publishes no per-bank credit |
+| `csv_bank_scan` | the same, at individual-bank granularity (`value_type: value|yoy`) — payments and bank-wise credit (`rbi_bankwise`); SIBC publishes no per-bank credit. Growth across a declared merger (`series_breaks.json`, statement `bank`) is absent with `merger_break` |
 | `csv_bank_scan_share` | each bank's **share of the metric's published total** — the denominator is the published total, never the sum of the banks that reported, because a bank that does not file is still part of the market |
+| `csv_bank_ratio_scan` | one metric over another **for the same bank** (`denominator_metric`): a line's share of each bank's own book (bank-wise, 2026-11-17). A bank whose denominator is zero is absent with `no_book`; a bank without the metric has no row; plus the ratio of the two published totals |
 
 ### The store's own shape (2026-09-14)
 

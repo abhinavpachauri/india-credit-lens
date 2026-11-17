@@ -36,6 +36,7 @@ Exit codes:
 
 import argparse
 import csv
+import re
 import json
 import sys
 from collections import defaultdict
@@ -421,6 +422,16 @@ def _codesort(code):
 
 # ──────────────────── skeleton emission: profile hierarchy (ATM/POS) ────────────────────
 
+def outside_model(profile, metric: str) -> bool:
+    """True when the profile DECLARES this CSV metric outside the model's structure.
+
+    A source can carry measures that are not lines of the system (a bank's NPAs, capital,
+    profit), stored as signals but never nodes. They are declared in the profile with a reason
+    (`outside_model: [{"pattern": regex, "reason": ...}]`), never skipped silently, so a new
+    column that matches no pattern still shows as a new entity and fails completeness."""
+    return any(re.fullmatch(r["pattern"], metric) for r in profile.get("outside_model", []))
+
+
 def emit_skeleton_profile(profile, signal_index, domain_index):
     cols = profile["columns"]
     # CSV totals -> metric availability (for leaf verification + new-metric diff)
@@ -433,7 +444,7 @@ def emit_skeleton_profile(profile, signal_index, domain_index):
     for col in order:
         mx = max(r[col] for r in rows)
         rows = [r for r in rows if r[col] == mx]
-    csv_metrics = {r[cols["metric"]] for r in rows}
+    csv_metrics = {r[cols["metric"]] for r in rows if not outside_model(profile, r[cols["metric"]])}
 
     decl = profile["nodes"]
     decl_by_code = {n["code"]: n for n in decl}

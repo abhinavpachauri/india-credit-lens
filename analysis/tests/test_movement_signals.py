@@ -543,13 +543,22 @@ def test_an_of_which_cut_never_sums_to_a_hundred_anywhere_in_the_store():
     """B6b as a property over EVERY stored branch-2 window, not just this month's.
 
     A tidy 100 would mean the denominator silently reverted to the sum of the parts, which
-    is the defect the rule exists to remove — and it would look entirely plausible."""
+    is the defect the rule exists to remove — and it would look entirely plausible.
+
+    A tidy 100 can only be told from the honest sum where the two denominators differ
+    measurably: where the parts are within a hair of the published total, the honest shares
+    also sum to ~100. Bank-wise (2026-11-17) has such windows: RBI's All-banks row differs from
+    its banks' sum by 0–1.6%, continuously, from cells the gate flags (agri, Jun 2026: banks are
+    100.013% of the total and their shares sum to 100.003). SIBC's smallest gap is 4.5%, so the
+    window below keeps every SIBC case and drops only cases the test could never judge."""
+    DISTINGUISHABLE_PP = 1.0
     import sqlite3
     from core.paths import ROOT
     con = sqlite3.connect(ROOT / "analysis/signals/signals.db")
     try:
-        of_which = {(pl, per, mid[: -len("-allocation")]) for pl, per, mid in con.execute(
-            "SELECT pipeline, period, metric_id FROM signals WHERE entity_type='coverage'")}
+        of_which = {(pl, per, mid[: -len("-allocation")]) for pl, per, mid, cov in con.execute(
+            "SELECT pipeline, period, metric_id, value FROM signals WHERE entity_type='coverage'")
+            if abs(cov - 100.0) >= DISTINGUISHABLE_PP}
         sums: dict = {}
         for pl, mid, per, val in con.execute(
                 "SELECT pipeline, metric_id, period, value FROM signals "

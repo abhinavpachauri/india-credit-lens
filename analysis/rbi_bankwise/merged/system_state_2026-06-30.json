@@ -1,0 +1,177 @@
+{
+  "_meta": {
+    "pipeline": "rbi_bankwise",
+    "period": "2026-06-30",
+    "schema_version": "4.0",
+    "spec_ref": "analysis/SYSTEM_MODEL_SPEC.md §16",
+    "computed_from": "signals.db",
+    "signals_observed": 130,
+    "force_rule": "v3.0"
+  },
+  "entity_states": {
+    "icl:rbi_bankwise/credit/gross": {
+      "direction": 1,
+      "signals": 9,
+      "observed": 9,
+      "coherence": 1.0,
+      "children": 2
+    },
+    "icl:rbi_bankwise/credit/food": {
+      "direction": 1,
+      "signals": 10,
+      "observed": 10
+    },
+    "icl:rbi_bankwise/credit/non_food": {
+      "direction": 1,
+      "signals": 10,
+      "observed": 10,
+      "coherence": 1.0,
+      "children": 5
+    },
+    "icl:rbi_bankwise/credit/agri": {
+      "direction": 1,
+      "signals": 10,
+      "observed": 10
+    },
+    "icl:rbi_bankwise/credit/industry": {
+      "direction": 1,
+      "signals": 10,
+      "observed": 10
+    },
+    "icl:rbi_bankwise/credit/other_non_food": {
+      "direction": 1,
+      "signals": 10,
+      "observed": 10
+    },
+    "icl:rbi_bankwise/credit/retail": {
+      "direction": 1,
+      "signals": 10,
+      "observed": 10,
+      "coherence": 1.0,
+      "children": 5
+    },
+    "icl:rbi_bankwise/credit/services": {
+      "direction": 1,
+      "signals": 10,
+      "observed": 10
+    },
+    "icl:rbi_bankwise/credit/cards": {
+      "direction": 1,
+      "signals": 10,
+      "observed": 10
+    },
+    "icl:rbi_bankwise/credit/education": {
+      "direction": 1,
+      "signals": 10,
+      "observed": 10
+    },
+    "icl:rbi_bankwise/credit/housing": {
+      "direction": 1,
+      "signals": 10,
+      "observed": 10
+    },
+    "icl:rbi_bankwise/credit/other_retail": {
+      "direction": 1,
+      "signals": 10,
+      "observed": 10
+    },
+    "icl:rbi_bankwise/credit/vehicle": {
+      "direction": 1,
+      "signals": 10,
+      "observed": 10
+    }
+  },
+  "force_states": {},
+  "edge_states": {},
+  "loop_states": {},
+  "system_observations": {
+    "dominant_forces": [],
+    "binding_constraints": [],
+    "active_reinforcing_loops": [],
+    "active_balancing_loops": [],
+    "authored_vs_observed_mismatches": []
+  },
+  "mix_states": {},
+  "force_check": {},
+  "explanation_coverage": {
+    "summary": {
+      "lines": 12,
+      "moves": 0,
+      "steady": 0,
+      "artifact": 0,
+      "base_effect": 0,
+      "structural": 0,
+      "prices_activity": 0,
+      "driver": 0,
+      "cause": 0,
+      "relationship": 0,
+      "unexplained": 0,
+      "unexplained_one_month_step": 0,
+      "no_reading": 12
+    },
+    "moves": [],
+    "no_reading": [
+      {
+        "entity": "Food credit",
+        "urn": "icl:rbi_bankwise/credit/food",
+        "reason": "no YoY signal for this line in signals.db"
+      },
+      {
+        "entity": "Non-food credit",
+        "urn": "icl:rbi_bankwise/credit/non_food",
+        "reason": "no YoY signal for this line in signals.db"
+      },
+      {
+        "entity": "Agriculture and allied activities",
+        "urn": "icl:rbi_bankwise/credit/agri",
+        "reason": "no YoY signal for this line in signals.db"
+      },
+      {
+        "entity": "Industry",
+        "urn": "icl:rbi_bankwise/credit/industry",
+        "reason": "no YoY signal for this line in signals.db"
+      },
+      {
+        "entity": "Other non-food credit",
+        "urn": "icl:rbi_bankwise/credit/other_non_food",
+        "reason": "no YoY signal for this line in signals.db"
+      },
+      {
+        "entity": "Retail loans",
+        "urn": "icl:rbi_bankwise/credit/retail",
+        "reason": "no YoY signal for this line in signals.db"
+      },
+      {
+        "entity": "Services",
+        "urn": "icl:rbi_bankwise/credit/services",
+        "reason": "no YoY signal for this line in signals.db"
+      },
+      {
+        "entity": "Credit card receivables",
+        "urn": "icl:rbi_bankwise/credit/cards",
+        "reason": "no YoY signal for this line in signals.db"
+      },
+      {
+        "entity": "Education loans",
+        "urn": "icl:rbi_bankwise/credit/education",
+        "reason": "no YoY signal for this line in signals.db"
+      },
+      {
+        "entity": "Housing loans",
+        "urn": "icl:rbi_bankwise/credit/housing",
+        "reason": "no YoY signal for this line in signals.db"
+      },
+      {
+        "entity": "Other retail loans",
+        "urn": "icl:rbi_bankwise/credit/other_retail",
+        "reason": "no YoY signal for this line in signals.db"
+      },
+      {
+        "entity": "Vehicle / auto loans",
+        "urn": "icl:rbi_bankwise/credit/vehicle",
+        "reason": "no YoY signal for this line in signals.db"
+      }
+    ]
+  },
+  "narrative": null
+}

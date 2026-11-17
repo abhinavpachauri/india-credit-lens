@@ -3,6 +3,7 @@
     "description": "Computed cross-system ecosystem projection (S3 composed). Never hand-edited.",
     "spec_ref": "analysis/COMPOSITION_SPEC.md §7 + §21",
     "pipeline_periods": {
+      "rbi_bankwise": "2026-06-30",
       "sibc": "2026-10-30",
       "atm_pos": "2026-09-30",
       "nbfc": "2026-09-30"
@@ -158,6 +159,7 @@
       "live_edges": 3,
       "total_edges": 3,
       "input_periods": {
+        "rbi_bankwise": "2026-06-30",
         "sibc": "2026-10-30",
         "atm_pos": "2026-09-30",
         "nbfc": "2026-09-30"

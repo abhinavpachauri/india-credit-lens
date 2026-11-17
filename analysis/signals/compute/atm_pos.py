@@ -41,6 +41,7 @@ import sys
 sys.path.insert(0, str(next(p for p in Path(__file__).resolve().parents if (p / ".git").is_dir()) / "analysis"))
 from core.paths import ROOT as REPO
 from core import manifest
+from core import series_breaks
 
 _df_cache: dict[str, pd.DataFrame] = {}
 
@@ -59,8 +60,25 @@ def _load_df(pipeline: str = "atm_pos") -> pd.DataFrame:
         for col in ("report_date", "metric", "record_type", "bank_category", "bank_name"):
             if col in df.columns:
                 df[col] = df[col].astype("category")
+        df.attrs["pipeline"] = pipeline          # series breaks are declared per pipeline
         _df_cache[pipeline] = df
     return _df_cache[pipeline]
+
+
+def _spans(df: pd.DataFrame, code, a: str | None, b: str | None) -> str | None:
+    """The reason a comparison of this bank, group or 'total' between a and b crosses a declared
+    break (core/series_breaks, statement 'bank'), or None. Payments declares none; the bank-wise
+    pipeline declares its mergers (rbi_bankwise/series_breaks.json)."""
+    if a is None or b is None:
+        return None
+    return series_breaks.spans(df.attrs.get("pipeline", ""), "bank", str(code), a, b)
+
+
+def _absent(entity_type: str, entity_id: str, reason: str) -> dict:
+    """A reading that cannot exist, with its reason (core/absence.py) — never a blank."""
+    r = _row(entity_type, entity_id, None, "unknown", "pct")
+    r["reason"] = reason
+    return r
 
 
 def invalidate_cache() -> None:
@@ -146,6 +164,9 @@ def csv_total_yoy(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
     pv      = _total_val(df, prior,  metric) if prior else None
     if v is None:
         return _unknown()
+    why = _spans(df, "total", prior, period)
+    if why:
+        return [_absent("aggregate", "total", why)]
     yoy = ((v - pv) / pv * 100) if pv else None
     status = _eval_status(params.get("status_rules", []), yoy,
                           None) if yoy is not None else "unknown"
@@ -288,9 +309,13 @@ def csv_category_scan_yoy(params: dict, period: str, df: pd.DataFrame) -> list[d
         pv = _category_val(df, prior,  metric, cat)
         if v is None or not pv:
             continue
+        why = _spans(df, cat, prior, period)
+        if why:
+            out.append(_absent("bank_category", cat, why))
+            continue
         yoy = (v - pv) / pv * 100
         out.append(_row("bank_category", cat, yoy, _eval_status(rules, yoy, None), "pct"))
-    return sorted(out, key=lambda r: r["value"], reverse=True)
+    return sorted(out, key=lambda r: (r["value"] is not None, r["value"] or 0), reverse=True)
 
 
 def csv_category_scan_share(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
@@ -396,6 +421,10 @@ def csv_bank_scan(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
         merged["yoy"] = (merged["value_cur"] - merged["value_prev"]) / merged["value_prev"] * 100
         out = []
         for _, row in merged.iterrows():
+            why = _spans(df, row["bank_name"], prior, period)
+            if why:
+                out.append(_absent("bank", row["bank_name"], why))
+                continue
             v = row["yoy"]
             out.append(_row("bank", row["bank_name"], v,
                             _eval_status(rules, v, v) if rules else "active", "pct"))
@@ -449,6 +478,30 @@ def csv_bank_scan_share(params: dict, period: str, df: pd.DataFrame) -> list[dic
         out.append(_row("bank", row["bank_name"], share,
                         _eval_status(rules, share, pshare) if rules else "active", "pct"))
     return sorted(out, key=lambda r: r["value"], reverse=True)
+
+
+def csv_bank_ratio_scan(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
+    """Each bank's `metric` as a share of its OWN `denominator_metric`: a sector's share of the
+    bank's book (BANKWISE_SPEC §8a). The share-scan answers "how much of all housing is SBI's";
+    this answers "how much of SBI is housing". A bank whose denominator is zero is absent with
+    `no_book`; a bank that printed no numerator is not a row (RBI left the cell empty). The total
+    row is the same ratio over the published totals."""
+    num = _bank_values(df, period, params["metric"])
+    den = _bank_values(df, period, params["denominator_metric"])
+    if not den:
+        return []
+    out = []
+    for b, d in den.items():
+        if b not in num:
+            continue
+        if not d:
+            out.append(_absent("bank", b, "no_book"))
+            continue
+        out.append(_row("bank", b, 100.0 * num[b] / d, "active", "pct"))
+    tn, td = _total_val(df, period, params["metric"]), _total_val(df, period, params["denominator_metric"])
+    if tn is not None and td:
+        out.append(_row("aggregate", "total", 100.0 * tn / td, "active", "pct"))
+    return out
 
 
 # ── Layer 1d ──────────────────────────────────────────────────────────────────
@@ -775,11 +828,27 @@ def _bank_denominators(metric: str, period: str, prior_date: str, df: pd.DataFra
     return "of_which", total_now, total_then, 100.0 * parts_now / total_now
 
 
+def _break_rows(rows: list[dict], df: pd.DataFrame, a: str, b: str) -> list[dict]:
+    """Across a declared break, a bank's move is the merger, not lending: the whole reading is
+    absent when the total itself spans one (a non-bank merged in), else each spanning bank's
+    rows are. Payments declares no breaks, so its rows pass unchanged."""
+    why = _spans(df, "total", a, b)
+    if why:
+        return [_absent("aggregate", "total", why)]
+    out = []
+    for r in rows:
+        w = _spans(df, r["entity_id"], a, b) if r["entity_type"] not in ("aggregate", "coverage") else None
+        out.append(_absent(r["entity_type"], r["entity_id"], w) if w else r)
+    return out
+
+
 def csv_bank_momentum(params: dict, period: str, df: pd.DataFrame) -> list[dict]:
     """Units each bank added or lost over the annual window, + net / gross / coherence."""
     got = _bank_deltas(params, period, df)
     if got is None:
         return []
+    if _spans(df, "total", got[3], period):
+        return [_absent("aggregate", "total", _spans(df, "total", got[3], period))]
     deltas = got[0]
     net, gross = sum(deltas.values()), sum(abs(v) for v in deltas.values())
     return _momentum_rows("bank", deltas, net, gross, params)
@@ -798,8 +867,8 @@ def csv_bank_allocation(params: dict, period: str, df: pd.DataFrame) -> list[dic
     # No `weight` / `weight_now` for banks: each is a bank's share of the published total at
     # one end of the window, which `{metric}-bank-share-scan` already stores over the same
     # denominator. Stored twice they were 66,506 rows; nothing in Layer 2 reads bank weights.
-    return _allocation_rows(deltas, level_now - level_then, gross, {}, {},
-                            None, None, coverage, params)
+    return _break_rows(_allocation_rows(deltas, level_now - level_then, gross, {}, {},
+                                        None, None, coverage, params), df, prior_date, period)
 
 
 # ── the break flag (1d) ────────────────────────────────────────────────────────
@@ -1021,6 +1090,7 @@ def csv_pair_divergence(params: dict, period: str, df: pd.DataFrame) -> list[dic
 # ── dispatch ──────────────────────────────────────────────────────────────────
 
 METHODS: dict = {
+    "csv_bank_ratio_scan": csv_bank_ratio_scan,
     "csv_total_abs":           csv_total_abs,
     "csv_total_yoy":           csv_total_yoy,
     "csv_total_ratio":         csv_total_ratio,

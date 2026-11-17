@@ -2,14 +2,17 @@
   "id": "rbi_bankwise",
   "name": "RBI: bank-wise quarterly variables of SCBs (DBIE)",
   "order": 0,
-  "kind": "reference",
-  "note_why": "Each bank's credit from official RBI records (user, 2026-11-14; analysis/BANKWISE_SPEC.md). Declared reference until phase 4: a primary pipeline must already store signals and have a model (test_manifest), and this one has neither yet. It becomes primary, surfaced inside the SIBC page, when its signals exist.",
+  "kind": "primary",
+  "note_why": "Each bank's credit from official RBI records (user, 2026-11-14; analysis/BANKWISE_SPEC.md). Primary since 2026-11-17 (phase 4, user: 'primary, with a model'): its per-bank signals are computed by the payments compute module (one per-bank mechanism, §8a) and its model's skeleton comes from an authored profile; surfaced inside the SIBC page.",
   "paths": {
     "data_dir": "analysis/rbi_bankwise",
     "releases": "analysis/rbi_bankwise/releases",
     "consolidated_csv": "analysis/rbi_bankwise/rbi_bankwise_consolidated.csv",
     "sheets": "analysis/pipelines/rbi_bankwise/sheets.json",
-    "roster": "analysis/ontology/banks.json"
+    "roster": "analysis/ontology/banks.json",
+    "timeline": "analysis/rbi_bankwise/timeline.json",
+    "skeleton_profile": "analysis/rbi_bankwise/skeleton_profile.json",
+    "system_model": "analysis/rbi_bankwise/merged/system_model.json"
   },
   "note_consolidated_csv": "Local only (git-ignored): ~2.8 million values for 2002 → 2026 are too many to commit, so the committed record is the saved quarters and this table is rebuilt from them by the first gate stage (user, 2026-11-14).",
   "calendar": {
@@ -24,14 +27,18 @@
     "reader": "pipelines/rbi_bankwise/reader.py",
     "consolidate": "pipelines/rbi_bankwise/consolidate.py",
     "calendar": "pipelines/rbi_bankwise/validate_calendar.py",
-    "validate": "pipelines/rbi_bankwise/validate_bankwise.py"
+    "validate": "pipelines/rbi_bankwise/validate_bankwise.py",
+    "registry": "pipelines/rbi_bankwise/build_registry.py"
   },
   "gate": [
     {
       "id": "consolidate",
       "label": "0.7 saved quarters → local table",
       "pipeline": "consolidate",
-      "note": "Wrote"
+      "note": "Wrote",
+      "derived": [
+        "analysis/rbi_bankwise/timeline.json"
+      ]
     },
     {
       "id": "consolidate_check",
@@ -66,10 +73,67 @@
       ]
     },
     {
+      "id": "registry",
+      "label": "4-reg. registry entries match the declared measures",
+      "pipeline": "registry",
+      "args": [
+        "--check"
+      ],
+      "note": "match"
+    },
+    {
+      "id": "signal_history",
+      "label": "4a. signal history integrity",
+      "core": "validate_signal_history"
+    },
+    {
+      "id": "freshness",
+      "label": "4b. signal freshness (DB)",
+      "core": "check_signal_freshness",
+      "note": "signals.db"
+    },
+    {
+      "id": "skeleton",
+      "label": "4c-pre. skeleton regen",
+      "core": "skeleton",
+      "derived": [
+        "analysis/rbi_bankwise/merged/system_model.json"
+      ]
+    },
+    {
+      "id": "system_model",
+      "label": "4c. system_model.json",
+      "core": "validate_system_model",
+      "requires": [
+        "skeleton"
+      ]
+    },
+    {
+      "id": "system_state",
+      "label": "4d. system_state (S3)",
+      "core": "system_state",
+      "requires": [
+        "system_model"
+      ],
+      "derived": [
+        "analysis/rbi_bankwise/merged/system_state_*.json"
+      ]
+    },
+    {
       "id": "reconcile",
       "label": "5.  architecture reconcile",
       "core": "reconcile",
       "note": "drift"
     }
-  ]
+  ],
+  "compute_module": "atm_pos",
+  "period_key": "report_date",
+  "schema": {
+    "date_column": "report_date",
+    "value_column": "value",
+    "entity_columns": [
+      "bank_name",
+      "bank_category"
+    ]
+  }
 }

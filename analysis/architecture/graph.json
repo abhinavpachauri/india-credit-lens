@@ -9,6 +9,16 @@
       "reads": {},
       "writes": {}
     },
+    "core/banks": {
+      "doc_claims": [],
+      "imports": [],
+      "invokes": [],
+      "path": "analysis/core/banks.py",
+      "reads": {
+        "analysis/ontology/banks.json": "low"
+      },
+      "writes": {}
+    },
     "core/cadence": {
       "doc_claims": [],
       "imports": [],
@@ -861,8 +871,8 @@
     "pipelines/mospi/detect_format": {
       "doc_claims": [],
       "imports": [
-        "pipelines/mospi/consolidate",
-        "pipelines/mospi/releases"
+        "pipelines/mospi/releases",
+        "pipelines/rbi_bankwise/consolidate"
       ],
       "invokes": [],
       "path": "analysis/pipelines/mospi/detect_format.py",
@@ -905,8 +915,8 @@
       "doc_claims": [],
       "imports": [
         "core/manifest",
-        "pipelines/mospi/consolidate",
-        "pipelines/mospi/releases"
+        "pipelines/mospi/releases",
+        "pipelines/rbi_bankwise/consolidate"
       ],
       "invokes": [],
       "path": "analysis/pipelines/mospi/validate_csv.py",
@@ -917,9 +927,9 @@
       "doc_claims": [],
       "imports": [
         "core/manifest",
-        "pipelines/mospi/consolidate",
         "pipelines/mospi/releases",
-        "pipelines/mospi/validate_csv"
+        "pipelines/mospi/validate_csv",
+        "pipelines/rbi_bankwise/consolidate"
       ],
       "invokes": [],
       "path": "analysis/pipelines/mospi/validate_published_growth.py",
@@ -980,6 +990,74 @@
       },
       "writes": {}
     },
+    "pipelines/rbi_bankwise/build_registry": {
+      "doc_claims": [],
+      "imports": [],
+      "invokes": [],
+      "path": "analysis/pipelines/rbi_bankwise/build_registry.py",
+      "reads": {
+        "analysis/rbi_bankwise/skeleton_profile.json": "low"
+      },
+      "writes": {
+        "analysis/signals/registry.json": "high"
+      }
+    },
+    "pipelines/rbi_bankwise/consolidate": {
+      "doc_claims": [],
+      "imports": [
+        "core/manifest"
+      ],
+      "invokes": [
+        "pipelines/rbi_rates/fetch"
+      ],
+      "path": "analysis/pipelines/rbi_bankwise/consolidate.py",
+      "reads": {},
+      "writes": {}
+    },
+    "pipelines/rbi_bankwise/fetch": {
+      "doc_claims": [],
+      "imports": [
+        "core/manifest"
+      ],
+      "invokes": [
+        "pipelines/rbi_rates/reader"
+      ],
+      "path": "analysis/pipelines/rbi_bankwise/fetch.py",
+      "reads": {},
+      "writes": {}
+    },
+    "pipelines/rbi_bankwise/reader": {
+      "doc_claims": [],
+      "imports": [],
+      "invokes": [],
+      "path": "analysis/pipelines/rbi_bankwise/reader.py",
+      "reads": {},
+      "writes": {
+        "analysis/pipelines/rbi_bankwise/sheets.json": "high"
+      }
+    },
+    "pipelines/rbi_bankwise/validate_bankwise": {
+      "doc_claims": [],
+      "imports": [
+        "core/manifest"
+      ],
+      "invokes": [],
+      "path": "analysis/pipelines/rbi_bankwise/validate_bankwise.py",
+      "reads": {
+        "inconsistencies.json": "low"
+      },
+      "writes": {}
+    },
+    "pipelines/rbi_bankwise/validate_calendar": {
+      "doc_claims": [],
+      "imports": [
+        "core/manifest"
+      ],
+      "invokes": [],
+      "path": "analysis/pipelines/rbi_bankwise/validate_calendar.py",
+      "reads": {},
+      "writes": {}
+    },
     "pipelines/rbi_rates/fetch": {
       "doc_claims": [],
       "imports": [
@@ -1017,7 +1095,7 @@
       "imports": [
         "core/manifest",
         "core/series_breaks",
-        "pipelines/mospi/consolidate",
+        "pipelines/rbi_bankwise/consolidate",
         "pipelines/sibc/update_web_data"
       ],
       "invokes": [],
@@ -1112,7 +1190,7 @@
       "doc_claims": [],
       "imports": [
         "core/manifest",
-        "pipelines/mospi/consolidate"
+        "pipelines/rbi_bankwise/consolidate"
       ],
       "invokes": [],
       "path": "analysis/pipelines/sibc/update_web_data.py",
@@ -1208,7 +1286,8 @@
     "signals/compute/atm_pos": {
       "doc_claims": [],
       "imports": [
-        "core/manifest"
+        "core/manifest",
+        "core/series_breaks"
       ],
       "invokes": [],
       "path": "analysis/signals/compute/atm_pos.py",

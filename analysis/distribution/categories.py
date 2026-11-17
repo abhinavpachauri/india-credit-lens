@@ -49,6 +49,7 @@ METHOD_CATEGORY = {
     "csv_category_share":            "C1",
     "csv_total_ratio":               "C1",
     "csv_ratio_sum":                 "C1",
+    "csv_bank_ratio_scan":           "C1",   # a line's share of each bank's own book (rbi_bankwise, 2026-11-17)
     # C2 — share of the mix moving between entities
     "csv_sector_rotation":           "C2",
     "csv_category_rotation":         "C2",

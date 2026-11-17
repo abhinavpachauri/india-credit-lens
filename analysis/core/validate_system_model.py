@@ -107,6 +107,8 @@ def load_csv_values(profile):
             rows = [r for r in rows if r[col] == mx]
         vals, present = {}, set()
         for r in rows:
+            if gs.outside_model(profile, r[cols["metric"]]):
+                continue
             key = ("metric", r[cols["metric"]])
             present.add(key)
             try:

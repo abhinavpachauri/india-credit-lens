@@ -5,9 +5,12 @@ consolidate.py — saved quarters → one long table, rebuilt locally (BANKWISE_
 The record is the saved quarters (`releases/{quarter}/{saved}.json.gz`, committed, ~145 KB each).
 The long table is ~2.8 million values for 2002 → 2026 (~140 MB), too big to commit, so it is a
 local file rebuilt from the releases (user, 2026-11-14), git-ignored, like `signals.db` beside its
-committed `.gz`. Rows follow the reference-pipeline schema (dataset, base_year, period, code,
-measure, value, status): dataset = sheet, code = bank or group id, measure = column id,
-status = "bank" or "group". A cell RBI left empty is not a row; the release keeps it as null.
+committed `.gz`. Rows follow the PAYMENTS shape (BANKWISE_SPEC §8a), so one per-bank compute module
+serves both pipelines: report_date, bank_name (roster id), bank_category (the group RBI printed the
+bank under that quarter), record_type (`bank`, or `total` for RBI's All SCBs row), metric
+(`{sheet}.{column}`), value, unit, data_status. Group values are sums of their banks, as in
+payments. A cell RBI left empty is not a row; the release keeps it as null. It also writes
+`timeline.json`, the list of saved quarters that the freshness check iterates.
 
     python3 analysis/pipelines/rbi_bankwise/consolidate.py            # write
     python3 analysis/pipelines/rbi_bankwise/consolidate.py --check    # the file equals a rebuild
@@ -18,6 +21,7 @@ import argparse
 import csv
 import hashlib
 import io
+import json
 import sys
 from pathlib import Path
 
@@ -26,7 +30,16 @@ sys.path.insert(0, str(next(p for p in HERE.parents if (p / ".git").is_dir()) / 
 from core import manifest  # noqa: E402
 
 PIPELINE = "rbi_bankwise"
-FIELDS = ("dataset", "base_year", "period", "code", "measure", "value", "status")
+FIELDS = ("report_date", "bank_name", "bank_category", "record_type", "metric", "value", "unit", "data_status")
+GROUP_LABEL = {"group:psb": "Public Sector Banks", "group:pvt": "Private Sector Banks",
+               "group:foreign": "Foreign Banks", "group:sfb": "Small Finance Banks",
+               "group:sfb_ns": "Small Finance Banks (non-scheduled)", "group:lab": "Local Area Banks"}
+
+
+def _unit(measure: str) -> str:
+    import re
+    return "pct" if ("%" in measure or re.search(r"\bratio\b|annualized|annualised", measure, re.I)
+                     or measure.startswith(("yield", "cost_of", "return_on"))) else "crore"
 
 
 def _fetch():
@@ -47,13 +60,29 @@ def rows() -> list[tuple]:
         raise SystemExit("✗ no saved quarters: nothing to consolidate (an empty table is not a result)")
     for quarter, path in sorted(quarters.items()):
         doc = fetch.load(path)
-        for kind, ents in (("bank", doc["banks"]), ("group", doc["groups"])):
-            for code, e in sorted(ents.items()):
-                for sheet, cols in sorted(e["sheets"].items()):
-                    for measure, v in sorted(cols.items()):
-                        if v is not None:
-                            out.append((sheet, "", quarter, code, measure, repr(float(v)), kind))
+        for code, e in sorted(doc["banks"].items()):
+            cat = GROUP_LABEL.get(e.get("group"), e.get("group") or "")
+            for sheet, cols in sorted(e["sheets"].items()):
+                for measure, v in sorted(cols.items()):
+                    if v is not None:
+                        out.append((quarter, code, cat, "bank", f"{sheet}.{measure}", repr(float(v)),
+                                    _unit(measure), "final"))
+        scb = doc["groups"].get("group:scb", {})
+        for sheet, cols in sorted(scb.get("sheets", {}).items()):
+            for measure, v in sorted(cols.items()):
+                if v is not None:
+                    out.append((quarter, "All Scheduled Commercial Banks", "", "total", f"{sheet}.{measure}",
+                                repr(float(v)), _unit(measure), "final"))
     return out
+
+
+def timeline(rs: list[tuple]) -> dict:
+    import calendar
+    qs = sorted({r[0] for r in rs})
+    banks = {q: len({r[1] for r in rs if r[0] == q and r[3] == "bank"}) for q in qs}
+    return {"report_id": "rbi_bankwise", "report_name": "RBI bank-wise quarterly variables of SCBs (DBIE)",
+            "periods": [{"period": f"{calendar.month_name[int(q[5:7])]} {q[:4]}", "report_date": q,
+                         "data_status": "final", "bank_count": banks[q]} for q in qs]}
 
 
 def render(rs: list[tuple]) -> bytes:
@@ -71,8 +100,13 @@ def main() -> int:
     target = manifest.consolidated_csv(PIPELINE)
     rs = rows()
     body = render(rs)
-    quarters = len({r[2] for r in rs})
+    quarters = len({r[0] for r in rs})
+    tl = json.dumps(timeline(rs), indent=1) + "\n"
+    tl_path = manifest.path(PIPELINE, "timeline")
     if a.check:
+        if not tl_path.exists() or tl_path.read_text() != tl:
+            print(f"  ✗ {tl_path.name} stale or missing; run consolidate")
+            return 1
         if not target.exists():
             print(f"  ✗ {target.name} missing; run consolidate")
             return 1
@@ -81,6 +115,7 @@ def main() -> int:
         return 0 if same else 1
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_bytes(body)
+    tl_path.write_text(tl)
     print(f"  Wrote {target.relative_to(target.parents[2])}: {len(rs):,} values, {quarters} quarters "
           f"(local, rebuilt from the committed releases)")
     return 0

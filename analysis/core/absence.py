@@ -36,6 +36,9 @@ PER_PERIOD = {
     # user, 2026-11-04: RBI reprinted a line on a new classification for some months only, so a
     # comparison between a reprinted month and one still on the old basis measures the relabelling.
     "restated_basis":        "RBI has reclassified this line and reprinted only some months, so this comparison mixes two classifications",
+    # user, 2026-11-14 (BANKWISE_SPEC phase 4 rules): a bank with no book in the denominator has no
+    # share of it, and a row that vanishes reads as broken.
+    "no_book":               "this bank reports no lending in the denominator this quarter, so it has no share of it",
 }
 
 #: An aggregate compared with a MoSPI aggregate that is RBI's convention but not exact

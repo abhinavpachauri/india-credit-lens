@@ -9,6 +9,136 @@
       "rule": "R1_stock_flow",
       "type": "leads",
       "priority": 1,
+      "group": "R1:credit_card:atm_pos->rbi_bankwise",
+      "from": "icl:atm_pos/spend_value/cc_atm_withdrawal_val",
+      "to": "icl:rbi_bankwise/credit/cards",
+      "shared": {
+        "product": "credit_card"
+      },
+      "rationale": "flow.value flow leads stock.balance for product credit_card",
+      "status": "candidate"
+    },
+    {
+      "rule": "R1_stock_flow",
+      "type": "leads",
+      "priority": 1,
+      "group": "R1:credit_card:atm_pos->rbi_bankwise",
+      "from": "icl:atm_pos/spend_value/cc_ecom_txn_val",
+      "to": "icl:rbi_bankwise/credit/cards",
+      "shared": {
+        "product": "credit_card"
+      },
+      "rationale": "flow.value flow leads stock.balance for product credit_card",
+      "status": "candidate"
+    },
+    {
+      "rule": "R1_stock_flow",
+      "type": "leads",
+      "priority": 1,
+      "group": "R1:credit_card:atm_pos->rbi_bankwise",
+      "from": "icl:atm_pos/spend_value/cc_other_txn_val",
+      "to": "icl:rbi_bankwise/credit/cards",
+      "shared": {
+        "product": "credit_card"
+      },
+      "rationale": "flow.value flow leads stock.balance for product credit_card",
+      "status": "candidate"
+    },
+    {
+      "rule": "R1_stock_flow",
+      "type": "leads",
+      "priority": 1,
+      "group": "R1:credit_card:atm_pos->rbi_bankwise",
+      "from": "icl:atm_pos/spend_value/cc_pos_txn_val",
+      "to": "icl:rbi_bankwise/credit/cards",
+      "shared": {
+        "product": "credit_card"
+      },
+      "rationale": "flow.value flow leads stock.balance for product credit_card",
+      "status": "candidate"
+    },
+    {
+      "rule": "R1_stock_flow",
+      "type": "leads",
+      "priority": 1,
+      "group": "R1:credit_card:atm_pos->rbi_bankwise",
+      "from": "icl:atm_pos/spend_value/cc_spend_value",
+      "to": "icl:rbi_bankwise/credit/cards",
+      "shared": {
+        "product": "credit_card"
+      },
+      "rationale": "flow.value flow leads stock.balance for product credit_card",
+      "status": "candidate"
+    },
+    {
+      "rule": "R1_stock_flow",
+      "type": "leads",
+      "priority": 1,
+      "group": "R1:credit_card:atm_pos->rbi_bankwise",
+      "from": "icl:atm_pos/spend_volume/cc_atm_withdrawal_vol",
+      "to": "icl:rbi_bankwise/credit/cards",
+      "shared": {
+        "product": "credit_card"
+      },
+      "rationale": "flow.volume flow leads stock.balance for product credit_card",
+      "status": "candidate"
+    },
+    {
+      "rule": "R1_stock_flow",
+      "type": "leads",
+      "priority": 1,
+      "group": "R1:credit_card:atm_pos->rbi_bankwise",
+      "from": "icl:atm_pos/spend_volume/cc_ecom_txn_vol",
+      "to": "icl:rbi_bankwise/credit/cards",
+      "shared": {
+        "product": "credit_card"
+      },
+      "rationale": "flow.volume flow leads stock.balance for product credit_card",
+      "status": "candidate"
+    },
+    {
+      "rule": "R1_stock_flow",
+      "type": "leads",
+      "priority": 1,
+      "group": "R1:credit_card:atm_pos->rbi_bankwise",
+      "from": "icl:atm_pos/spend_volume/cc_other_txn_vol",
+      "to": "icl:rbi_bankwise/credit/cards",
+      "shared": {
+        "product": "credit_card"
+      },
+      "rationale": "flow.volume flow leads stock.balance for product credit_card",
+      "status": "candidate"
+    },
+    {
+      "rule": "R1_stock_flow",
+      "type": "leads",
+      "priority": 1,
+      "group": "R1:credit_card:atm_pos->rbi_bankwise",
+      "from": "icl:atm_pos/spend_volume/cc_pos_txn_vol",
+      "to": "icl:rbi_bankwise/credit/cards",
+      "shared": {
+        "product": "credit_card"
+      },
+      "rationale": "flow.volume flow leads stock.balance for product credit_card",
+      "status": "candidate"
+    },
+    {
+      "rule": "R1_stock_flow",
+      "type": "leads",
+      "priority": 1,
+      "group": "R1:credit_card:atm_pos->rbi_bankwise",
+      "from": "icl:atm_pos/spend_volume/cc_spend_volume",
+      "to": "icl:rbi_bankwise/credit/cards",
+      "shared": {
+        "product": "credit_card"
+      },
+      "rationale": "flow.volume flow leads stock.balance for product credit_card",
+      "status": "candidate"
+    },
+    {
+      "rule": "R1_stock_flow",
+      "type": "leads",
+      "priority": 1,
       "group": "R1:credit_card:atm_pos->sibc",
       "from": "icl:atm_pos/spend_value/cc_atm_withdrawal_val",
       "to": "icl:sibc/Statement1/4.5",
@@ -133,6 +263,19 @@
         "product": "credit_card"
       },
       "rationale": "flow.volume flow leads stock.balance for product credit_card",
+      "status": "candidate"
+    },
+    {
+      "rule": "R3_corresponds",
+      "type": "corresponds_to",
+      "priority": 2,
+      "group": "R3:credit_card",
+      "from": "icl:rbi_bankwise/credit/cards",
+      "to": "icl:atm_pos/cards/credit_cards",
+      "shared": {
+        "product": "credit_card"
+      },
+      "rationale": "same product credit_card, stock.balance ↔ count.value",
       "status": "candidate"
     },
     {
@@ -309,6 +452,51 @@
         "channel": "ch_capital_weight_unsecured",
         "product_a": "credit_card",
         "product_b": "consumer_durable"
+      },
+      "rationale": "both products are targets of channel ch_capital_weight_unsecured",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_capital_weight_unsecured",
+      "from": "icl:rbi_bankwise/credit/cards",
+      "to": "icl:nbfc//4.4",
+      "shared": {
+        "channel": "ch_capital_weight_unsecured",
+        "product_a": "credit_card",
+        "product_b": "consumer_durable"
+      },
+      "rationale": "both products are targets of channel ch_capital_weight_unsecured",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_capital_weight_unsecured",
+      "from": "icl:rbi_bankwise/credit/cards",
+      "to": "icl:sibc/Statement1/4.1",
+      "shared": {
+        "channel": "ch_capital_weight_unsecured",
+        "product_a": "credit_card",
+        "product_b": "consumer_durable"
+      },
+      "rationale": "both products are targets of channel ch_capital_weight_unsecured",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_capital_weight_unsecured",
+      "from": "icl:rbi_bankwise/credit/cards",
+      "to": "icl:sibc/Statement1/4.5",
+      "shared": {
+        "channel": "ch_capital_weight_unsecured",
+        "product_a": "credit_card",
+        "product_b": "credit_card"
       },
       "rationale": "both products are targets of channel ch_capital_weight_unsecured",
       "status": "candidate"
@@ -512,6 +700,21 @@
       "rule": "R2_shared_channel",
       "type": "co_driven",
       "priority": 3,
+      "group": "R2:ch_card_lifecycle_norms",
+      "from": "icl:rbi_bankwise/credit/cards",
+      "to": "icl:sibc/Statement1/4.5",
+      "shared": {
+        "channel": "ch_card_lifecycle_norms",
+        "product_a": "credit_card",
+        "product_b": "credit_card"
+      },
+      "rationale": "both products are targets of channel ch_card_lifecycle_norms",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
       "group": "R2:ch_collateral_price_secured",
       "from": "icl:sibc/Statement1/4.8",
       "to": "icl:nbfc//4.3",
@@ -521,6 +724,561 @@
         "product_b": "gold_loan"
       },
       "rationale": "both products are targets of channel ch_collateral_price_secured",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_contactless_ceiling",
+      "from": "icl:rbi_bankwise/credit/cards",
+      "to": "icl:sibc/Statement1/4.5",
+      "shared": {
+        "channel": "ch_contactless_ceiling",
+        "product_a": "credit_card",
+        "product_b": "credit_card"
+      },
+      "rationale": "both products are targets of channel ch_contactless_ceiling",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:rbi_bankwise/credit/industry",
+      "to": "icl:nbfc//2",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:rbi_bankwise/credit/industry",
+      "to": "icl:sibc/Statement1/2",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:rbi_bankwise/credit/industry",
+      "to": "icl:sibc/Statement2/2.1",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:rbi_bankwise/credit/industry",
+      "to": "icl:sibc/Statement2/2.10",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:rbi_bankwise/credit/industry",
+      "to": "icl:sibc/Statement2/2.11",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:rbi_bankwise/credit/industry",
+      "to": "icl:sibc/Statement2/2.12",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:rbi_bankwise/credit/industry",
+      "to": "icl:sibc/Statement2/2.13",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:rbi_bankwise/credit/industry",
+      "to": "icl:sibc/Statement2/2.13.1",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:rbi_bankwise/credit/industry",
+      "to": "icl:sibc/Statement2/2.13.2",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:rbi_bankwise/credit/industry",
+      "to": "icl:sibc/Statement2/2.14",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:rbi_bankwise/credit/industry",
+      "to": "icl:sibc/Statement2/2.14.1",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:rbi_bankwise/credit/industry",
+      "to": "icl:sibc/Statement2/2.14.2",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:rbi_bankwise/credit/industry",
+      "to": "icl:sibc/Statement2/2.15",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:rbi_bankwise/credit/industry",
+      "to": "icl:sibc/Statement2/2.16",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:rbi_bankwise/credit/industry",
+      "to": "icl:sibc/Statement2/2.17",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:rbi_bankwise/credit/industry",
+      "to": "icl:sibc/Statement2/2.19",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:rbi_bankwise/credit/industry",
+      "to": "icl:sibc/Statement2/2.2",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:rbi_bankwise/credit/industry",
+      "to": "icl:sibc/Statement2/2.2.1",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:rbi_bankwise/credit/industry",
+      "to": "icl:sibc/Statement2/2.2.2",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:rbi_bankwise/credit/industry",
+      "to": "icl:sibc/Statement2/2.2.3",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:rbi_bankwise/credit/industry",
+      "to": "icl:sibc/Statement2/2.2.4",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:rbi_bankwise/credit/industry",
+      "to": "icl:sibc/Statement2/2.3",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:rbi_bankwise/credit/industry",
+      "to": "icl:sibc/Statement2/2.4",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:rbi_bankwise/credit/industry",
+      "to": "icl:sibc/Statement2/2.4.1",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:rbi_bankwise/credit/industry",
+      "to": "icl:sibc/Statement2/2.4.2",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:rbi_bankwise/credit/industry",
+      "to": "icl:sibc/Statement2/2.4.3",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:rbi_bankwise/credit/industry",
+      "to": "icl:sibc/Statement2/2.4.4",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:rbi_bankwise/credit/industry",
+      "to": "icl:sibc/Statement2/2.5",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:rbi_bankwise/credit/industry",
+      "to": "icl:sibc/Statement2/2.6",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:rbi_bankwise/credit/industry",
+      "to": "icl:sibc/Statement2/2.7",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:rbi_bankwise/credit/industry",
+      "to": "icl:sibc/Statement2/2.8",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:rbi_bankwise/credit/industry",
+      "to": "icl:sibc/Statement2/2.9",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:rbi_bankwise/credit/industry",
+      "to": "icl:sibc/Statement2/2.9.1",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:rbi_bankwise/credit/industry",
+      "to": "icl:sibc/Statement2/2.9.2",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:rbi_bankwise/credit/industry",
+      "to": "icl:sibc/Statement2/2.9.3",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_industrial_capex_supplychain",
+      "from": "icl:rbi_bankwise/credit/industry",
+      "to": "icl:sibc/Statement2/2.9.4",
+      "shared": {
+        "channel": "ch_industrial_capex_supplychain",
+        "product_a": "industry",
+        "product_b": "industry"
+      },
+      "rationale": "both products are targets of channel ch_industrial_capex_supplychain",
       "status": "candidate"
     },
     {
@@ -1053,6 +1811,51 @@
       "type": "co_driven",
       "priority": 3,
       "group": "R2:ch_kcc_psl_agri_limits",
+      "from": "icl:rbi_bankwise/credit/agri",
+      "to": "icl:nbfc//1",
+      "shared": {
+        "channel": "ch_kcc_psl_agri_limits",
+        "product_a": "agriculture",
+        "product_b": "agriculture"
+      },
+      "rationale": "both products are targets of channel ch_kcc_psl_agri_limits",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_kcc_psl_agri_limits",
+      "from": "icl:rbi_bankwise/credit/agri",
+      "to": "icl:sibc/Statement1/1",
+      "shared": {
+        "channel": "ch_kcc_psl_agri_limits",
+        "product_a": "agriculture",
+        "product_b": "agriculture"
+      },
+      "rationale": "both products are targets of channel ch_kcc_psl_agri_limits",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_kcc_psl_agri_limits",
+      "from": "icl:rbi_bankwise/credit/agri",
+      "to": "icl:sibc/Statement1/i",
+      "shared": {
+        "channel": "ch_kcc_psl_agri_limits",
+        "product_a": "agriculture",
+        "product_b": "agriculture"
+      },
+      "rationale": "both products are targets of channel ch_kcc_psl_agri_limits",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_kcc_psl_agri_limits",
       "from": "icl:sibc/Statement1/1",
       "to": "icl:nbfc//1",
       "shared": {
@@ -1083,6 +1886,186 @@
       "type": "co_driven",
       "priority": 3,
       "group": "R2:ch_offshore_refinancing",
+      "from": "icl:rbi_bankwise/credit/services",
+      "to": "icl:nbfc//3",
+      "shared": {
+        "channel": "ch_offshore_refinancing",
+        "product_a": "services",
+        "product_b": "services"
+      },
+      "rationale": "both products are targets of channel ch_offshore_refinancing",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_offshore_refinancing",
+      "from": "icl:rbi_bankwise/credit/services",
+      "to": "icl:nbfc//3.1",
+      "shared": {
+        "channel": "ch_offshore_refinancing",
+        "product_a": "services",
+        "product_b": "services"
+      },
+      "rationale": "both products are targets of channel ch_offshore_refinancing",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_offshore_refinancing",
+      "from": "icl:rbi_bankwise/credit/services",
+      "to": "icl:nbfc//3.3",
+      "shared": {
+        "channel": "ch_offshore_refinancing",
+        "product_a": "services",
+        "product_b": "services"
+      },
+      "rationale": "both products are targets of channel ch_offshore_refinancing",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_offshore_refinancing",
+      "from": "icl:rbi_bankwise/credit/services",
+      "to": "icl:sibc/Statement1/3",
+      "shared": {
+        "channel": "ch_offshore_refinancing",
+        "product_a": "services",
+        "product_b": "services"
+      },
+      "rationale": "both products are targets of channel ch_offshore_refinancing",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_offshore_refinancing",
+      "from": "icl:rbi_bankwise/credit/services",
+      "to": "icl:sibc/Statement1/3.1",
+      "shared": {
+        "channel": "ch_offshore_refinancing",
+        "product_a": "services",
+        "product_b": "services"
+      },
+      "rationale": "both products are targets of channel ch_offshore_refinancing",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_offshore_refinancing",
+      "from": "icl:rbi_bankwise/credit/services",
+      "to": "icl:sibc/Statement1/3.10",
+      "shared": {
+        "channel": "ch_offshore_refinancing",
+        "product_a": "services",
+        "product_b": "services"
+      },
+      "rationale": "both products are targets of channel ch_offshore_refinancing",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_offshore_refinancing",
+      "from": "icl:rbi_bankwise/credit/services",
+      "to": "icl:sibc/Statement1/3.2",
+      "shared": {
+        "channel": "ch_offshore_refinancing",
+        "product_a": "services",
+        "product_b": "services"
+      },
+      "rationale": "both products are targets of channel ch_offshore_refinancing",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_offshore_refinancing",
+      "from": "icl:rbi_bankwise/credit/services",
+      "to": "icl:sibc/Statement1/3.3",
+      "shared": {
+        "channel": "ch_offshore_refinancing",
+        "product_a": "services",
+        "product_b": "services"
+      },
+      "rationale": "both products are targets of channel ch_offshore_refinancing",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_offshore_refinancing",
+      "from": "icl:rbi_bankwise/credit/services",
+      "to": "icl:sibc/Statement1/3.4",
+      "shared": {
+        "channel": "ch_offshore_refinancing",
+        "product_a": "services",
+        "product_b": "services"
+      },
+      "rationale": "both products are targets of channel ch_offshore_refinancing",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_offshore_refinancing",
+      "from": "icl:rbi_bankwise/credit/services",
+      "to": "icl:sibc/Statement1/3.5",
+      "shared": {
+        "channel": "ch_offshore_refinancing",
+        "product_a": "services",
+        "product_b": "services"
+      },
+      "rationale": "both products are targets of channel ch_offshore_refinancing",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_offshore_refinancing",
+      "from": "icl:rbi_bankwise/credit/services",
+      "to": "icl:sibc/Statement1/3.6",
+      "shared": {
+        "channel": "ch_offshore_refinancing",
+        "product_a": "services",
+        "product_b": "services"
+      },
+      "rationale": "both products are targets of channel ch_offshore_refinancing",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_offshore_refinancing",
+      "from": "icl:rbi_bankwise/credit/services",
+      "to": "icl:sibc/Statement1/3.8",
+      "shared": {
+        "channel": "ch_offshore_refinancing",
+        "product_a": "services",
+        "product_b": "services"
+      },
+      "rationale": "both products are targets of channel ch_offshore_refinancing",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_offshore_refinancing",
       "from": "icl:sibc/Statement1/3",
       "to": "icl:nbfc//3",
       "shared": {
@@ -1481,6 +2464,156 @@
         "product_b": "services"
       },
       "rationale": "both products are targets of channel ch_offshore_refinancing",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_policy_rate_retail_pricing",
+      "from": "icl:rbi_bankwise/credit/other_retail",
+      "to": "icl:nbfc//4",
+      "shared": {
+        "channel": "ch_policy_rate_retail_pricing",
+        "product_a": "personal_loan",
+        "product_b": "personal_loan"
+      },
+      "rationale": "both products are targets of channel ch_policy_rate_retail_pricing",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_policy_rate_retail_pricing",
+      "from": "icl:rbi_bankwise/credit/other_retail",
+      "to": "icl:sibc/Statement1/4",
+      "shared": {
+        "channel": "ch_policy_rate_retail_pricing",
+        "product_a": "personal_loan",
+        "product_b": "personal_loan"
+      },
+      "rationale": "both products are targets of channel ch_policy_rate_retail_pricing",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_policy_rate_retail_pricing",
+      "from": "icl:rbi_bankwise/credit/other_retail",
+      "to": "icl:sibc/Statement1/4.3",
+      "shared": {
+        "channel": "ch_policy_rate_retail_pricing",
+        "product_a": "personal_loan",
+        "product_b": "personal_loan"
+      },
+      "rationale": "both products are targets of channel ch_policy_rate_retail_pricing",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_policy_rate_retail_pricing",
+      "from": "icl:rbi_bankwise/credit/other_retail",
+      "to": "icl:sibc/Statement1/4.4",
+      "shared": {
+        "channel": "ch_policy_rate_retail_pricing",
+        "product_a": "personal_loan",
+        "product_b": "personal_loan"
+      },
+      "rationale": "both products are targets of channel ch_policy_rate_retail_pricing",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_policy_rate_retail_pricing",
+      "from": "icl:rbi_bankwise/credit/other_retail",
+      "to": "icl:sibc/Statement1/4.9",
+      "shared": {
+        "channel": "ch_policy_rate_retail_pricing",
+        "product_a": "personal_loan",
+        "product_b": "personal_loan"
+      },
+      "rationale": "both products are targets of channel ch_policy_rate_retail_pricing",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_policy_rate_retail_pricing",
+      "from": "icl:rbi_bankwise/credit/retail",
+      "to": "icl:nbfc//4",
+      "shared": {
+        "channel": "ch_policy_rate_retail_pricing",
+        "product_a": "personal_loan",
+        "product_b": "personal_loan"
+      },
+      "rationale": "both products are targets of channel ch_policy_rate_retail_pricing",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_policy_rate_retail_pricing",
+      "from": "icl:rbi_bankwise/credit/retail",
+      "to": "icl:sibc/Statement1/4",
+      "shared": {
+        "channel": "ch_policy_rate_retail_pricing",
+        "product_a": "personal_loan",
+        "product_b": "personal_loan"
+      },
+      "rationale": "both products are targets of channel ch_policy_rate_retail_pricing",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_policy_rate_retail_pricing",
+      "from": "icl:rbi_bankwise/credit/retail",
+      "to": "icl:sibc/Statement1/4.3",
+      "shared": {
+        "channel": "ch_policy_rate_retail_pricing",
+        "product_a": "personal_loan",
+        "product_b": "personal_loan"
+      },
+      "rationale": "both products are targets of channel ch_policy_rate_retail_pricing",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_policy_rate_retail_pricing",
+      "from": "icl:rbi_bankwise/credit/retail",
+      "to": "icl:sibc/Statement1/4.4",
+      "shared": {
+        "channel": "ch_policy_rate_retail_pricing",
+        "product_a": "personal_loan",
+        "product_b": "personal_loan"
+      },
+      "rationale": "both products are targets of channel ch_policy_rate_retail_pricing",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_policy_rate_retail_pricing",
+      "from": "icl:rbi_bankwise/credit/retail",
+      "to": "icl:sibc/Statement1/4.9",
+      "shared": {
+        "channel": "ch_policy_rate_retail_pricing",
+        "product_a": "personal_loan",
+        "product_b": "personal_loan"
+      },
+      "rationale": "both products are targets of channel ch_policy_rate_retail_pricing",
       "status": "candidate"
     },
     {
@@ -1547,6 +2680,21 @@
       "rule": "R2_shared_channel",
       "type": "co_driven",
       "priority": 3,
+      "group": "R2:ch_procurement_policy_food",
+      "from": "icl:rbi_bankwise/credit/food",
+      "to": "icl:sibc/Statement1/II",
+      "shared": {
+        "channel": "ch_procurement_policy_food",
+        "product_a": "food_credit",
+        "product_b": "food_credit"
+      },
+      "rationale": "both products are targets of channel ch_procurement_policy_food",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
       "group": "R2:ch_project_lifecycle_origination",
       "from": "icl:sibc/Statement2/2.18",
       "to": "icl:nbfc//2.1",
@@ -1781,6 +2929,66 @@
         "product_b": "infrastructure_credit"
       },
       "rationale": "both products are targets of channel ch_project_lifecycle_origination",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_psl_threshold_reclassification",
+      "from": "icl:rbi_bankwise/credit/housing",
+      "to": "icl:nbfc//4.1",
+      "shared": {
+        "channel": "ch_psl_threshold_reclassification",
+        "product_a": "housing",
+        "product_b": "housing"
+      },
+      "rationale": "both products are targets of channel ch_psl_threshold_reclassification",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_psl_threshold_reclassification",
+      "from": "icl:rbi_bankwise/credit/housing",
+      "to": "icl:sibc/Statement1/4.2",
+      "shared": {
+        "channel": "ch_psl_threshold_reclassification",
+        "product_a": "housing",
+        "product_b": "housing"
+      },
+      "rationale": "both products are targets of channel ch_psl_threshold_reclassification",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_psl_threshold_reclassification",
+      "from": "icl:rbi_bankwise/credit/housing",
+      "to": "icl:sibc/Statement1/iv",
+      "shared": {
+        "channel": "ch_psl_threshold_reclassification",
+        "product_a": "housing",
+        "product_b": "housing"
+      },
+      "rationale": "both products are targets of channel ch_psl_threshold_reclassification",
+      "status": "candidate"
+    },
+    {
+      "rule": "R2_shared_channel",
+      "type": "co_driven",
+      "priority": 3,
+      "group": "R2:ch_psl_threshold_reclassification",
+      "from": "icl:rbi_bankwise/credit/housing",
+      "to": "icl:sibc/Statement1/viii",
+      "shared": {
+        "channel": "ch_psl_threshold_reclassification",
+        "product_a": "housing",
+        "product_b": "export_credit"
+      },
+      "rationale": "both products are targets of channel ch_psl_threshold_reclassification",
       "status": "candidate"
     },
     {

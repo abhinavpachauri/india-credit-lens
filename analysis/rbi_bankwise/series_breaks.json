@@ -1,0 +1,184 @@
+{
+ "_meta": {
+  "what": "Bank mergers inside the bank-wise history: a growth or new-money comparison across one, on a listed line, is absent with reason merger_break (core/series_breaks; BANKWISE_SPEC §8a).",
+  "lines_rule": "statement 'bank' and code = the roster bank id, the bank group label, or 'total'. A merger between two banks lists both (the absorbed bank's exit and the absorbing bank's jump are the same event); a non-bank merged into a bank also lists its group and the total, because the system grows by it."
+ },
+ "breaks": [
+  {
+   "id": "kotak_ing_vysya_2015",
+   "effective": "2015-04-01",
+   "reason": "merger_break",
+   "lines": [
+    {
+     "statement": "bank",
+     "code": "kotak-mahindra-bank"
+    },
+    {
+     "statement": "bank",
+     "code": "ing-vysya-bank"
+    }
+   ],
+   "source": "ING Vysya last printed Mar 2015; Kotak +₹0.38L Cr in Jun 2015 against ING Vysya's ₹0.41L. verified in the saved quarters (2026-11-17): the absorbing bank's domestic gross advances jump by about the absorbed banks' last book"
+  },
+  {
+   "id": "sbi_associates_2017",
+   "effective": "2017-04-01",
+   "reason": "merger_break",
+   "lines": [
+    {
+     "statement": "bank",
+     "code": "state-bank-of-india"
+    },
+    {
+     "statement": "bank",
+     "code": "state-bank-of-bikaner-and-jaipur"
+    },
+    {
+     "statement": "bank",
+     "code": "state-bank-of-hyderabad"
+    },
+    {
+     "statement": "bank",
+     "code": "state-bank-of-mysore"
+    },
+    {
+     "statement": "bank",
+     "code": "state-bank-of-patiala"
+    },
+    {
+     "statement": "bank",
+     "code": "state-bank-of-travancore"
+    },
+    {
+     "statement": "bank",
+     "code": "bharatiya-mahila-bank"
+    }
+   ],
+   "source": "Associates and Bharatiya Mahila Bank last printed Mar 2017; SBI +₹2.67L Cr in Jun 2017 against their ₹3.25L. verified in the saved quarters (2026-11-17): the absorbing bank's domestic gross advances jump by about the absorbed banks' last book"
+  },
+  {
+   "id": "idfc_capital_first_2018",
+   "effective": "2018-12-01",
+   "reason": "merger_break",
+   "lines": [
+    {
+     "statement": "bank",
+     "code": "idfc-first-bank"
+    },
+    {
+     "statement": "bank",
+     "code": "Private Sector Banks"
+    },
+    {
+     "statement": "bank",
+     "code": "total"
+    }
+   ],
+   "source": "A non-bank (Capital First) merged into IDFC Bank: +₹0.30L Cr in Dec 2018 with no bank leaving the table, so the private group and the total move too."
+  },
+  {
+   "id": "bob_dena_vijaya_2019",
+   "effective": "2019-04-01",
+   "reason": "merger_break",
+   "lines": [
+    {
+     "statement": "bank",
+     "code": "bank-of-baroda"
+    },
+    {
+     "statement": "bank",
+     "code": "dena-bank"
+    },
+    {
+     "statement": "bank",
+     "code": "vijaya-bank"
+    }
+   ],
+   "source": "Dena and Vijaya last printed Mar 2019; Bank of Baroda +₹1.75L Cr in Jun 2019 against their ₹1.96L. verified in the saved quarters (2026-11-17): the absorbing bank's domestic gross advances jump by about the absorbed banks' last book"
+  },
+  {
+   "id": "psb_amalgamations_2020",
+   "effective": "2020-04-01",
+   "reason": "merger_break",
+   "lines": [
+    {
+     "statement": "bank",
+     "code": "punjab-national-bank"
+    },
+    {
+     "statement": "bank",
+     "code": "oriental-bank-of-commerce"
+    },
+    {
+     "statement": "bank",
+     "code": "united-bank-of-india"
+    },
+    {
+     "statement": "bank",
+     "code": "canara-bank"
+    },
+    {
+     "statement": "bank",
+     "code": "syndicate-bank"
+    },
+    {
+     "statement": "bank",
+     "code": "union-bank-of-india"
+    },
+    {
+     "statement": "bank",
+     "code": "andhra-bank"
+    },
+    {
+     "statement": "bank",
+     "code": "corporation-bank"
+    },
+    {
+     "statement": "bank",
+     "code": "indian-bank"
+    },
+    {
+     "statement": "bank",
+     "code": "allahabad-bank"
+    }
+   ],
+   "source": "Six banks last printed Mar 2020; PNB +2.06 (2.46), Canara +1.88 (1.92), Union +3.03 (3.19), Indian Bank +1.60 (1.63) ₹L Cr in Jun 2020. verified in the saved quarters (2026-11-17): the absorbing bank's domestic gross advances jump by about the absorbed banks' last book"
+  },
+  {
+   "id": "dbs_lakshmi_vilas_2021",
+   "effective": "2021-04-01",
+   "reason": "merger_break",
+   "lines": [
+    {
+     "statement": "bank",
+     "code": "dbs-bank-india"
+    },
+    {
+     "statement": "bank",
+     "code": "lakshmi-vilas-bank"
+    }
+   ],
+   "source": "The table prints Lakshmi Vilas to Mar 2021 and DBS Bank India +₹0.19L Cr in Jun 2021 against its ₹0.15L, so the break sits where the table shows it. verified in the saved quarters (2026-11-17): the absorbing bank's domestic gross advances jump by about the absorbed banks' last book"
+  },
+  {
+   "id": "hdfc_ltd_2023",
+   "effective": "2023-07-01",
+   "reason": "merger_break",
+   "lines": [
+    {
+     "statement": "bank",
+     "code": "hdfc-bank"
+    },
+    {
+     "statement": "bank",
+     "code": "Private Sector Banks"
+    },
+    {
+     "statement": "bank",
+     "code": "total"
+    }
+   ],
+   "source": "A non-bank (HDFC Ltd) merged into HDFC Bank: +₹7.27L Cr in Sep 2023 with no bank leaving the table, so the private group and the total move too (SIBC's hdfc_merger_2023)."
+  }
+ ]
+}

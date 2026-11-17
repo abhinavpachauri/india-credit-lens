@@ -1,0 +1,271 @@
+{
+  "_meta": {
+    "pipeline": "rbi_bankwise",
+    "description": "Bank-wise structural profile (BANKWISE_SPEC §8a), consumed by core/generate_skeleton.py like payments': the local table is per-bank long format with no parent column, so the credit hierarchy is AUTHORED here (hierarchy_source=profile). Entities are the credit measures of RBI's Major Sectoral sheet (domestic gross advances), read at the All SCBs total; banks and bank groups are a lens, not nodes, and the per-bank signals attach to their measure's entity. Up to Mar 2022 non-food was a narrower aggregate (validate_bankwise.old_return); the skeleton reads the latest quarter.",
+    "spec_ref": "analysis/SYSTEM_MODEL_SPEC.md",
+    "expected_node_count": 13
+  },
+  "source_csv": "analysis/rbi_bankwise/rbi_bankwise_consolidated.csv",
+  "hierarchy_source": "profile",
+  "columns": {
+    "metric": "metric",
+    "value": "value",
+    "unit": "unit",
+    "category": "bank_category",
+    "record_type": "record_type"
+  },
+  "csv_filter": {
+    "record_type": "total"
+  },
+  "outside_model": [
+    {
+      "pattern": "major_sectoral\\..*(gnpa|gross_npas|_npas).*",
+      "reason": "Gross NPAs and NPA ratios by line: a stress reading ON each credit line, not a line of credit. Stored as per-bank signals (bw-gnpa-ratio-bank-scan), not nodes."
+    },
+    {
+      "pattern": "(priority_non_priority_break_up|infrastructure_financing_items)\\..*",
+      "reason": "A second cut of the same credit (priority/non-priority; infrastructure sub-lines). Not in the v1 skeleton, which follows Major Sectoral; a FOUNDATION pass decides whether they become a second partition."
+    },
+    {
+      "pattern": "(asset_quality|capital_adequacy|profitability|performance_indicators|major_balance_sheet_items)\\..*",
+      "reason": "Measures of each bank (asset quality, capital, profit, balance sheet), not lines of the credit system. They describe lenders, which are a lens here, not nodes."
+    }
+  ],
+  "period_selection": {
+    "order_by": [
+      "report_date"
+    ]
+  },
+  "lens": {
+    "bank_category": {
+      "field": "bank_category",
+      "values": [
+        "Public Sector Banks",
+        "Private Sector Banks",
+        "Foreign Banks",
+        "Small Finance Banks",
+        "Local Area Banks"
+      ],
+      "additive": true,
+      "emit_nodes": false,
+      "comment": "Bank groups as printed by RBI each quarter; banks and groups attach as per-bank and per-group signals on each measure."
+    }
+  },
+  "signal_attach": {
+    "registry": "analysis/signals/registry.json",
+    "match_on": {
+      "metric": "compute.metric"
+    },
+    "comment": "signal_ids on a measure = every rbi_bankwise registry signal whose compute.metric is that measure."
+  },
+  "concept": {
+    "comment": "Tags copied from SIBC's matching lines so cross-source composition compares like with like.",
+    "defaults": {
+      "lender": "all",
+      "geography": "national",
+      "segment": "mixed"
+    },
+    "defaults_by_partition": {
+      "credit": {
+        "measure": "stock.balance"
+      }
+    },
+    "inherit_from_ancestor": [
+      "product",
+      "segment",
+      "economic_role"
+    ],
+    "tags": {
+      "credit::gross": {
+        "product": "bank_credit"
+      },
+      "credit::food": {
+        "product": "food_credit",
+        "segment": "government"
+      },
+      "credit::non_food": {
+        "product": "bank_credit"
+      },
+      "credit::agri": {
+        "product": "agriculture",
+        "segment": "agri",
+        "economic_role": "agri_inputs"
+      },
+      "credit::industry": {
+        "product": "industry",
+        "segment": "corporate"
+      },
+      "credit::services": {
+        "product": "services"
+      },
+      "credit::retail": {
+        "product": "personal_loan",
+        "segment": "retail"
+      },
+      "credit::other_non_food": {
+        "product": "bank_credit"
+      },
+      "credit::housing": {
+        "product": "housing",
+        "segment": "retail",
+        "economic_role": "construction_real_estate"
+      },
+      "credit::vehicle": {
+        "product": "vehicle_loan",
+        "segment": "retail",
+        "economic_role": "consumer_mobility"
+      },
+      "credit::cards": {
+        "product": "credit_card",
+        "segment": "retail",
+        "economic_role": "consumer_finance"
+      },
+      "credit::education": {
+        "product": "education_loan",
+        "segment": "retail"
+      },
+      "credit::other_retail": {
+        "product": "personal_loan",
+        "segment": "mixed",
+        "economic_role": "consumer_finance"
+      }
+    }
+  },
+  "aggregation_modes": {
+    "sum": "children are disjoint and sum to the parent value (additivity validated, tolerance-checked)",
+    "grouping": "parent is a category container over heterogeneous instruments that are NOT summable",
+    "leaf": "terminal metric node, value read from the CSV total"
+  },
+  "nodes": [
+    {
+      "partition": "credit",
+      "code": "gross",
+      "label": "Gross advances (all banks)",
+      "level": 0,
+      "parent_code": null,
+      "metric": "major_sectoral.gross_advances@dom",
+      "unit": "crore",
+      "aggregation": "sum"
+    },
+    {
+      "partition": "credit",
+      "code": "food",
+      "label": "Food credit",
+      "level": 1,
+      "parent_code": "gross",
+      "metric": "major_sectoral.food_credit_gross_advances@dom",
+      "unit": "crore",
+      "aggregation": "leaf"
+    },
+    {
+      "partition": "credit",
+      "code": "non_food",
+      "label": "Non-food credit",
+      "level": 1,
+      "parent_code": "gross",
+      "metric": "major_sectoral.non_food_credit_gross_advances@dom",
+      "unit": "crore",
+      "aggregation": "sum"
+    },
+    {
+      "partition": "credit",
+      "code": "agri",
+      "label": "Agriculture and allied activities",
+      "level": 2,
+      "parent_code": "non_food",
+      "metric": "major_sectoral.agriculture_and_allied_activities_gross_advances@dom",
+      "unit": "crore",
+      "aggregation": "leaf"
+    },
+    {
+      "partition": "credit",
+      "code": "industry",
+      "label": "Industry",
+      "level": 2,
+      "parent_code": "non_food",
+      "metric": "major_sectoral.industry_gross_advances@dom",
+      "unit": "crore",
+      "aggregation": "leaf"
+    },
+    {
+      "partition": "credit",
+      "code": "services",
+      "label": "Services",
+      "level": 2,
+      "parent_code": "non_food",
+      "metric": "major_sectoral.services_gross_advances@dom",
+      "unit": "crore",
+      "aggregation": "leaf"
+    },
+    {
+      "partition": "credit",
+      "code": "retail",
+      "label": "Retail loans",
+      "level": 2,
+      "parent_code": "non_food",
+      "metric": "major_sectoral.retail_loans_gross_advances@dom",
+      "unit": "crore",
+      "aggregation": "sum"
+    },
+    {
+      "partition": "credit",
+      "code": "other_non_food",
+      "label": "Other non-food credit",
+      "level": 2,
+      "parent_code": "non_food",
+      "metric": "major_sectoral.other_non_food_credit_gross_advances@dom",
+      "unit": "crore",
+      "aggregation": "leaf"
+    },
+    {
+      "partition": "credit",
+      "code": "housing",
+      "label": "Housing loans",
+      "level": 3,
+      "parent_code": "retail",
+      "metric": "major_sectoral.retail_loans_housing_loans_gross_advances@dom",
+      "unit": "crore",
+      "aggregation": "leaf"
+    },
+    {
+      "partition": "credit",
+      "code": "vehicle",
+      "label": "Vehicle / auto loans",
+      "level": 3,
+      "parent_code": "retail",
+      "metric": "major_sectoral.retail_loans_vehicle_auto_loans_gross_advances@dom",
+      "unit": "crore",
+      "aggregation": "leaf"
+    },
+    {
+      "partition": "credit",
+      "code": "cards",
+      "label": "Credit card receivables",
+      "level": 3,
+      "parent_code": "retail",
+      "metric": "major_sectoral.retail_loans_credit_card_receivables_gross_advances@dom",
+      "unit": "crore",
+      "aggregation": "leaf"
+    },
+    {
+      "partition": "credit",
+      "code": "education",
+      "label": "Education loans",
+      "level": 3,
+      "parent_code": "retail",
+      "metric": "major_sectoral.retail_loans_education_gross_advances@dom",
+      "unit": "crore",
+      "aggregation": "leaf"
+    },
+    {
+      "partition": "credit",
+      "code": "other_retail",
+      "label": "Other retail loans",
+      "level": 3,
+      "parent_code": "retail",
+      "metric": "major_sectoral.other_retail_loans_gross_advances@dom",
+      "unit": "crore",
+      "aggregation": "leaf"
+    }
+  ]
+}

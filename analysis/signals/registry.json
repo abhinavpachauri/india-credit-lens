@@ -2,7 +2,7 @@
   "_meta": {
     "schema_version": "1.0",
     "description": "Signal registry — permanent catalog of every tracked signal across all ingestion pipelines. Signal IDs are immutable once created. Add new signals; never rename or delete. layer: 1 = per-chart data signal (algorithmically computed), 2 = cross-chart synthesis (authored per period from data), 3 = lending ecosystem expert model (generated ~6-monthly, strict claim validation).",
-    "last_updated": "2026-11-07",
+    "last_updated": "2026-11-17",
     "cadence_vocabulary": [
       "fortnightly",
       "monthly",
@@ -39,6 +39,15 @@
       "snapshot_path": null,
       "insight_source": null,
       "description": "Outstanding credit deployed BY NBFCs and HFCs, by sector. A ~87% sample (Upper and Middle Layer NBFCs + HFCs) per RTP 2024-25, so its total is not the NBFC book — it is 87% of it."
+    },
+    "rbi_bankwise": {
+      "id": "rbi_bankwise",
+      "name": "RBI bank-wise quarterly variables (DBIE)",
+      "cadence": "quarterly",
+      "domain_primary": "credit",
+      "snapshot_path": null,
+      "insight_source": null,
+      "description": "Every scheduled commercial bank's credit by sector, quarterly from Mar 2015"
     }
   },
   "domains": {
@@ -19985,6 +19994,3517 @@
       "spec_version": "1.0",
       "current_status": "strengthening",
       "first_seen": "2024-01-31"
+    },
+    "bw-gross-bank-scan": {
+      "id": "bw-gross-bank-scan",
+      "title": "Gross advances (all banks) — per bank",
+      "description": "Domestic gross advances in gross advances (all banks) for every scheduled commercial bank, each quarter.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_bank_scan",
+        "metric": "major_sectoral.gross_advances@dom",
+        "unit": "crore",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-gross-bank-share-scan": {
+      "id": "bw-gross-bank-share-scan",
+      "title": "Gross advances (all banks) — each bank's share of all banks",
+      "description": "Each bank's share of all banks' gross advances (all banks); denominator RBI's All SCBs row.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_bank_scan_share",
+        "metric": "major_sectoral.gross_advances@dom",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-gross-bank-yoy-scan": {
+      "id": "bw-gross-bank-yoy-scan",
+      "title": "Gross advances (all banks) — per-bank growth a year",
+      "description": "Year-on-year change in each bank's gross advances (all banks); absent with merger_break across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_bank_scan",
+        "metric": "major_sectoral.gross_advances@dom",
+        "value_type": "yoy",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-gross-bank-allocation": {
+      "id": "bw-gross-bank-allocation",
+      "title": "Gross advances (all banks) — each bank's share of the year's new money",
+      "description": "Of the year's change in gross advances (all banks), how much each bank added or lost (contribution, always; alloc when banks moved together); absent across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_bank_allocation",
+        "metric": "major_sectoral.gross_advances@dom",
+        "unit": "crore",
+        "window": 12
+      }
+    },
+    "bw-gross-yoy": {
+      "id": "bw-gross-yoy",
+      "title": "Gross advances (all banks) — all banks, growth a year",
+      "description": "Year-on-year change in all banks' gross advances (all banks) (RBI's All SCBs row).",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "unknown",
+      "compute": {
+        "method": "csv_total_yoy",
+        "metric": "major_sectoral.gross_advances@dom"
+      }
+    },
+    "bw-gross-category-size-scan": {
+      "id": "bw-gross-category-size-scan",
+      "title": "Gross advances (all banks) — per bank group",
+      "description": "Gross advances (all banks) for each bank group, the sum of its banks as RBI printed them that quarter.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_category_scan_abs",
+        "metric": "major_sectoral.gross_advances@dom",
+        "unit": "crore",
+        "window": 12,
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      }
+    },
+    "bw-gross-category-share-scan": {
+      "id": "bw-gross-category-share-scan",
+      "title": "Gross advances (all banks) — each bank group's share",
+      "description": "Each bank group's share of all banks' gross advances (all banks).",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_category_scan_share",
+        "metric": "major_sectoral.gross_advances@dom",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-gross-category-yoy-scan": {
+      "id": "bw-gross-category-yoy-scan",
+      "title": "Gross advances (all banks) — per bank group growth a year",
+      "description": "Year-on-year change in each bank group's gross advances (all banks).",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_category_scan_yoy",
+        "metric": "major_sectoral.gross_advances@dom",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-food-bank-scan": {
+      "id": "bw-food-bank-scan",
+      "title": "Food credit — per bank",
+      "description": "Domestic gross advances in food credit for every scheduled commercial bank, each quarter.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_bank_scan",
+        "metric": "major_sectoral.food_credit_gross_advances@dom",
+        "unit": "crore",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-food-bank-share-scan": {
+      "id": "bw-food-bank-share-scan",
+      "title": "Food credit — each bank's share of all banks",
+      "description": "Each bank's share of all banks' food credit; denominator RBI's All SCBs row.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_bank_scan_share",
+        "metric": "major_sectoral.food_credit_gross_advances@dom",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-food-bank-yoy-scan": {
+      "id": "bw-food-bank-yoy-scan",
+      "title": "Food credit — per-bank growth a year",
+      "description": "Year-on-year change in each bank's food credit; absent with merger_break across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_bank_scan",
+        "metric": "major_sectoral.food_credit_gross_advances@dom",
+        "value_type": "yoy",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-food-bank-allocation": {
+      "id": "bw-food-bank-allocation",
+      "title": "Food credit — each bank's share of the year's new money",
+      "description": "Of the year's change in food credit, how much each bank added or lost (contribution, always; alloc when banks moved together); absent across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_bank_allocation",
+        "metric": "major_sectoral.food_credit_gross_advances@dom",
+        "unit": "crore",
+        "window": 12
+      }
+    },
+    "bw-food-yoy": {
+      "id": "bw-food-yoy",
+      "title": "Food credit — all banks, growth a year",
+      "description": "Year-on-year change in all banks' food credit (RBI's All SCBs row).",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "unknown",
+      "compute": {
+        "method": "csv_total_yoy",
+        "metric": "major_sectoral.food_credit_gross_advances@dom"
+      }
+    },
+    "bw-food-category-size-scan": {
+      "id": "bw-food-category-size-scan",
+      "title": "Food credit — per bank group",
+      "description": "Food credit for each bank group, the sum of its banks as RBI printed them that quarter.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_category_scan_abs",
+        "metric": "major_sectoral.food_credit_gross_advances@dom",
+        "unit": "crore",
+        "window": 12,
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      }
+    },
+    "bw-food-category-share-scan": {
+      "id": "bw-food-category-share-scan",
+      "title": "Food credit — each bank group's share",
+      "description": "Each bank group's share of all banks' food credit.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "weakening",
+      "compute": {
+        "method": "csv_category_scan_share",
+        "metric": "major_sectoral.food_credit_gross_advances@dom",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-food-category-yoy-scan": {
+      "id": "bw-food-category-yoy-scan",
+      "title": "Food credit — per bank group growth a year",
+      "description": "Year-on-year change in each bank group's food credit.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_category_scan_yoy",
+        "metric": "major_sectoral.food_credit_gross_advances@dom",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-food-of-book-scan": {
+      "id": "bw-food-of-book-scan",
+      "title": "Food credit — share of each bank's own book",
+      "description": "Each bank's food credit as a share of its own domestic gross advances (absent with no_book for a bank with none).",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_bank_ratio_scan",
+        "metric": "major_sectoral.food_credit_gross_advances@dom",
+        "denominator_metric": "major_sectoral.gross_advances@dom"
+      }
+    },
+    "bw-non-food-bank-scan": {
+      "id": "bw-non-food-bank-scan",
+      "title": "Non-food credit — per bank",
+      "description": "Domestic gross advances in non-food credit for every scheduled commercial bank, each quarter.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_bank_scan",
+        "metric": "major_sectoral.non_food_credit_gross_advances@dom",
+        "unit": "crore",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-non-food-bank-share-scan": {
+      "id": "bw-non-food-bank-share-scan",
+      "title": "Non-food credit — each bank's share of all banks",
+      "description": "Each bank's share of all banks' non-food credit; denominator RBI's All SCBs row.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_bank_scan_share",
+        "metric": "major_sectoral.non_food_credit_gross_advances@dom",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-non-food-bank-yoy-scan": {
+      "id": "bw-non-food-bank-yoy-scan",
+      "title": "Non-food credit — per-bank growth a year",
+      "description": "Year-on-year change in each bank's non-food credit; absent with merger_break across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_bank_scan",
+        "metric": "major_sectoral.non_food_credit_gross_advances@dom",
+        "value_type": "yoy",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-non-food-bank-allocation": {
+      "id": "bw-non-food-bank-allocation",
+      "title": "Non-food credit — each bank's share of the year's new money",
+      "description": "Of the year's change in non-food credit, how much each bank added or lost (contribution, always; alloc when banks moved together); absent across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_bank_allocation",
+        "metric": "major_sectoral.non_food_credit_gross_advances@dom",
+        "unit": "crore",
+        "window": 12
+      }
+    },
+    "bw-non-food-yoy": {
+      "id": "bw-non-food-yoy",
+      "title": "Non-food credit — all banks, growth a year",
+      "description": "Year-on-year change in all banks' non-food credit (RBI's All SCBs row).",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "unknown",
+      "compute": {
+        "method": "csv_total_yoy",
+        "metric": "major_sectoral.non_food_credit_gross_advances@dom"
+      }
+    },
+    "bw-non-food-category-size-scan": {
+      "id": "bw-non-food-category-size-scan",
+      "title": "Non-food credit — per bank group",
+      "description": "Non-food credit for each bank group, the sum of its banks as RBI printed them that quarter.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_category_scan_abs",
+        "metric": "major_sectoral.non_food_credit_gross_advances@dom",
+        "unit": "crore",
+        "window": 12,
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      }
+    },
+    "bw-non-food-category-share-scan": {
+      "id": "bw-non-food-category-share-scan",
+      "title": "Non-food credit — each bank group's share",
+      "description": "Each bank group's share of all banks' non-food credit.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_category_scan_share",
+        "metric": "major_sectoral.non_food_credit_gross_advances@dom",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-non-food-category-yoy-scan": {
+      "id": "bw-non-food-category-yoy-scan",
+      "title": "Non-food credit — per bank group growth a year",
+      "description": "Year-on-year change in each bank group's non-food credit.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_category_scan_yoy",
+        "metric": "major_sectoral.non_food_credit_gross_advances@dom",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-non-food-of-book-scan": {
+      "id": "bw-non-food-of-book-scan",
+      "title": "Non-food credit — share of each bank's own book",
+      "description": "Each bank's non-food credit as a share of its own domestic gross advances (absent with no_book for a bank with none).",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_bank_ratio_scan",
+        "metric": "major_sectoral.non_food_credit_gross_advances@dom",
+        "denominator_metric": "major_sectoral.gross_advances@dom"
+      }
+    },
+    "bw-agri-bank-scan": {
+      "id": "bw-agri-bank-scan",
+      "title": "Agriculture and allied activities — per bank",
+      "description": "Domestic gross advances in agriculture and allied activities for every scheduled commercial bank, each quarter.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "sector_mix",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_bank_scan",
+        "metric": "major_sectoral.agriculture_and_allied_activities_gross_advances@dom",
+        "unit": "crore",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-agri-bank-share-scan": {
+      "id": "bw-agri-bank-share-scan",
+      "title": "Agriculture and allied activities — each bank's share of all banks",
+      "description": "Each bank's share of all banks' agriculture and allied activities; denominator RBI's All SCBs row.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "sector_mix",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_bank_scan_share",
+        "metric": "major_sectoral.agriculture_and_allied_activities_gross_advances@dom",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-agri-bank-yoy-scan": {
+      "id": "bw-agri-bank-yoy-scan",
+      "title": "Agriculture and allied activities — per-bank growth a year",
+      "description": "Year-on-year change in each bank's agriculture and allied activities; absent with merger_break across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "sector_mix",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_bank_scan",
+        "metric": "major_sectoral.agriculture_and_allied_activities_gross_advances@dom",
+        "value_type": "yoy",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-agri-bank-allocation": {
+      "id": "bw-agri-bank-allocation",
+      "title": "Agriculture and allied activities — each bank's share of the year's new money",
+      "description": "Of the year's change in agriculture and allied activities, how much each bank added or lost (contribution, always; alloc when banks moved together); absent across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "sector_mix",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_bank_allocation",
+        "metric": "major_sectoral.agriculture_and_allied_activities_gross_advances@dom",
+        "unit": "crore",
+        "window": 12
+      }
+    },
+    "bw-agri-yoy": {
+      "id": "bw-agri-yoy",
+      "title": "Agriculture and allied activities — all banks, growth a year",
+      "description": "Year-on-year change in all banks' agriculture and allied activities (RBI's All SCBs row).",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "sector_mix",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "unknown",
+      "compute": {
+        "method": "csv_total_yoy",
+        "metric": "major_sectoral.agriculture_and_allied_activities_gross_advances@dom"
+      }
+    },
+    "bw-agri-category-size-scan": {
+      "id": "bw-agri-category-size-scan",
+      "title": "Agriculture and allied activities — per bank group",
+      "description": "Agriculture and allied activities for each bank group, the sum of its banks as RBI printed them that quarter.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "sector_mix",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_category_scan_abs",
+        "metric": "major_sectoral.agriculture_and_allied_activities_gross_advances@dom",
+        "unit": "crore",
+        "window": 12,
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      }
+    },
+    "bw-agri-category-share-scan": {
+      "id": "bw-agri-category-share-scan",
+      "title": "Agriculture and allied activities — each bank group's share",
+      "description": "Each bank group's share of all banks' agriculture and allied activities.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "sector_mix",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_category_scan_share",
+        "metric": "major_sectoral.agriculture_and_allied_activities_gross_advances@dom",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-agri-category-yoy-scan": {
+      "id": "bw-agri-category-yoy-scan",
+      "title": "Agriculture and allied activities — per bank group growth a year",
+      "description": "Year-on-year change in each bank group's agriculture and allied activities.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "sector_mix",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_category_scan_yoy",
+        "metric": "major_sectoral.agriculture_and_allied_activities_gross_advances@dom",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-agri-of-book-scan": {
+      "id": "bw-agri-of-book-scan",
+      "title": "Agriculture and allied activities — share of each bank's own book",
+      "description": "Each bank's agriculture and allied activities as a share of its own domestic gross advances (absent with no_book for a bank with none).",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "sector_mix",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_bank_ratio_scan",
+        "metric": "major_sectoral.agriculture_and_allied_activities_gross_advances@dom",
+        "denominator_metric": "major_sectoral.gross_advances@dom"
+      }
+    },
+    "bw-industry-bank-scan": {
+      "id": "bw-industry-bank-scan",
+      "title": "Industry — per bank",
+      "description": "Domestic gross advances in industry for every scheduled commercial bank, each quarter.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "industry",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_bank_scan",
+        "metric": "major_sectoral.industry_gross_advances@dom",
+        "unit": "crore",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-industry-bank-share-scan": {
+      "id": "bw-industry-bank-share-scan",
+      "title": "Industry — each bank's share of all banks",
+      "description": "Each bank's share of all banks' industry; denominator RBI's All SCBs row.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "industry",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "weakening",
+      "compute": {
+        "method": "csv_bank_scan_share",
+        "metric": "major_sectoral.industry_gross_advances@dom",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-industry-bank-yoy-scan": {
+      "id": "bw-industry-bank-yoy-scan",
+      "title": "Industry — per-bank growth a year",
+      "description": "Year-on-year change in each bank's industry; absent with merger_break across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "industry",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_bank_scan",
+        "metric": "major_sectoral.industry_gross_advances@dom",
+        "value_type": "yoy",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-industry-bank-allocation": {
+      "id": "bw-industry-bank-allocation",
+      "title": "Industry — each bank's share of the year's new money",
+      "description": "Of the year's change in industry, how much each bank added or lost (contribution, always; alloc when banks moved together); absent across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "industry",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_bank_allocation",
+        "metric": "major_sectoral.industry_gross_advances@dom",
+        "unit": "crore",
+        "window": 12
+      }
+    },
+    "bw-industry-yoy": {
+      "id": "bw-industry-yoy",
+      "title": "Industry — all banks, growth a year",
+      "description": "Year-on-year change in all banks' industry (RBI's All SCBs row).",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "industry",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "unknown",
+      "compute": {
+        "method": "csv_total_yoy",
+        "metric": "major_sectoral.industry_gross_advances@dom"
+      }
+    },
+    "bw-industry-category-size-scan": {
+      "id": "bw-industry-category-size-scan",
+      "title": "Industry — per bank group",
+      "description": "Industry for each bank group, the sum of its banks as RBI printed them that quarter.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "industry",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_category_scan_abs",
+        "metric": "major_sectoral.industry_gross_advances@dom",
+        "unit": "crore",
+        "window": 12,
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      }
+    },
+    "bw-industry-category-share-scan": {
+      "id": "bw-industry-category-share-scan",
+      "title": "Industry — each bank group's share",
+      "description": "Each bank group's share of all banks' industry.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "industry",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_category_scan_share",
+        "metric": "major_sectoral.industry_gross_advances@dom",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-industry-category-yoy-scan": {
+      "id": "bw-industry-category-yoy-scan",
+      "title": "Industry — per bank group growth a year",
+      "description": "Year-on-year change in each bank group's industry.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "industry",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_category_scan_yoy",
+        "metric": "major_sectoral.industry_gross_advances@dom",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-industry-of-book-scan": {
+      "id": "bw-industry-of-book-scan",
+      "title": "Industry — share of each bank's own book",
+      "description": "Each bank's industry as a share of its own domestic gross advances (absent with no_book for a bank with none).",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "industry",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_bank_ratio_scan",
+        "metric": "major_sectoral.industry_gross_advances@dom",
+        "denominator_metric": "major_sectoral.gross_advances@dom"
+      }
+    },
+    "bw-services-bank-scan": {
+      "id": "bw-services-bank-scan",
+      "title": "Services — per bank",
+      "description": "Domestic gross advances in services for every scheduled commercial bank, each quarter.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "sector_mix",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_bank_scan",
+        "metric": "major_sectoral.services_gross_advances@dom",
+        "unit": "crore",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-services-bank-share-scan": {
+      "id": "bw-services-bank-share-scan",
+      "title": "Services — each bank's share of all banks",
+      "description": "Each bank's share of all banks' services; denominator RBI's All SCBs row.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "sector_mix",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_bank_scan_share",
+        "metric": "major_sectoral.services_gross_advances@dom",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-services-bank-yoy-scan": {
+      "id": "bw-services-bank-yoy-scan",
+      "title": "Services — per-bank growth a year",
+      "description": "Year-on-year change in each bank's services; absent with merger_break across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "sector_mix",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_bank_scan",
+        "metric": "major_sectoral.services_gross_advances@dom",
+        "value_type": "yoy",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-services-bank-allocation": {
+      "id": "bw-services-bank-allocation",
+      "title": "Services — each bank's share of the year's new money",
+      "description": "Of the year's change in services, how much each bank added or lost (contribution, always; alloc when banks moved together); absent across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "sector_mix",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_bank_allocation",
+        "metric": "major_sectoral.services_gross_advances@dom",
+        "unit": "crore",
+        "window": 12
+      }
+    },
+    "bw-services-yoy": {
+      "id": "bw-services-yoy",
+      "title": "Services — all banks, growth a year",
+      "description": "Year-on-year change in all banks' services (RBI's All SCBs row).",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "sector_mix",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "unknown",
+      "compute": {
+        "method": "csv_total_yoy",
+        "metric": "major_sectoral.services_gross_advances@dom"
+      }
+    },
+    "bw-services-category-size-scan": {
+      "id": "bw-services-category-size-scan",
+      "title": "Services — per bank group",
+      "description": "Services for each bank group, the sum of its banks as RBI printed them that quarter.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "sector_mix",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_category_scan_abs",
+        "metric": "major_sectoral.services_gross_advances@dom",
+        "unit": "crore",
+        "window": 12,
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      }
+    },
+    "bw-services-category-share-scan": {
+      "id": "bw-services-category-share-scan",
+      "title": "Services — each bank group's share",
+      "description": "Each bank group's share of all banks' services.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "sector_mix",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "weakening",
+      "compute": {
+        "method": "csv_category_scan_share",
+        "metric": "major_sectoral.services_gross_advances@dom",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-services-category-yoy-scan": {
+      "id": "bw-services-category-yoy-scan",
+      "title": "Services — per bank group growth a year",
+      "description": "Year-on-year change in each bank group's services.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "sector_mix",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_category_scan_yoy",
+        "metric": "major_sectoral.services_gross_advances@dom",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-services-of-book-scan": {
+      "id": "bw-services-of-book-scan",
+      "title": "Services — share of each bank's own book",
+      "description": "Each bank's services as a share of its own domestic gross advances (absent with no_book for a bank with none).",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "sector_mix",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_bank_ratio_scan",
+        "metric": "major_sectoral.services_gross_advances@dom",
+        "denominator_metric": "major_sectoral.gross_advances@dom"
+      }
+    },
+    "bw-retail-bank-scan": {
+      "id": "bw-retail-bank-scan",
+      "title": "Retail loans — per bank",
+      "description": "Domestic gross advances in retail loans for every scheduled commercial bank, each quarter.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_bank_scan",
+        "metric": "major_sectoral.retail_loans_gross_advances@dom",
+        "unit": "crore",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-retail-bank-share-scan": {
+      "id": "bw-retail-bank-share-scan",
+      "title": "Retail loans — each bank's share of all banks",
+      "description": "Each bank's share of all banks' retail loans; denominator RBI's All SCBs row.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_bank_scan_share",
+        "metric": "major_sectoral.retail_loans_gross_advances@dom",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-retail-bank-yoy-scan": {
+      "id": "bw-retail-bank-yoy-scan",
+      "title": "Retail loans — per-bank growth a year",
+      "description": "Year-on-year change in each bank's retail loans; absent with merger_break across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_bank_scan",
+        "metric": "major_sectoral.retail_loans_gross_advances@dom",
+        "value_type": "yoy",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-retail-bank-allocation": {
+      "id": "bw-retail-bank-allocation",
+      "title": "Retail loans — each bank's share of the year's new money",
+      "description": "Of the year's change in retail loans, how much each bank added or lost (contribution, always; alloc when banks moved together); absent across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_bank_allocation",
+        "metric": "major_sectoral.retail_loans_gross_advances@dom",
+        "unit": "crore",
+        "window": 12
+      }
+    },
+    "bw-retail-yoy": {
+      "id": "bw-retail-yoy",
+      "title": "Retail loans — all banks, growth a year",
+      "description": "Year-on-year change in all banks' retail loans (RBI's All SCBs row).",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "unknown",
+      "compute": {
+        "method": "csv_total_yoy",
+        "metric": "major_sectoral.retail_loans_gross_advances@dom"
+      }
+    },
+    "bw-retail-category-size-scan": {
+      "id": "bw-retail-category-size-scan",
+      "title": "Retail loans — per bank group",
+      "description": "Retail loans for each bank group, the sum of its banks as RBI printed them that quarter.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_category_scan_abs",
+        "metric": "major_sectoral.retail_loans_gross_advances@dom",
+        "unit": "crore",
+        "window": 12,
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      }
+    },
+    "bw-retail-category-share-scan": {
+      "id": "bw-retail-category-share-scan",
+      "title": "Retail loans — each bank group's share",
+      "description": "Each bank group's share of all banks' retail loans.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "weakening",
+      "compute": {
+        "method": "csv_category_scan_share",
+        "metric": "major_sectoral.retail_loans_gross_advances@dom",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-retail-category-yoy-scan": {
+      "id": "bw-retail-category-yoy-scan",
+      "title": "Retail loans — per bank group growth a year",
+      "description": "Year-on-year change in each bank group's retail loans.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_category_scan_yoy",
+        "metric": "major_sectoral.retail_loans_gross_advances@dom",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-retail-of-book-scan": {
+      "id": "bw-retail-of-book-scan",
+      "title": "Retail loans — share of each bank's own book",
+      "description": "Each bank's retail loans as a share of its own domestic gross advances (absent with no_book for a bank with none).",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_bank_ratio_scan",
+        "metric": "major_sectoral.retail_loans_gross_advances@dom",
+        "denominator_metric": "major_sectoral.gross_advances@dom"
+      }
+    },
+    "bw-other-non-food-bank-scan": {
+      "id": "bw-other-non-food-bank-scan",
+      "title": "Other non-food credit — per bank",
+      "description": "Domestic gross advances in other non-food credit for every scheduled commercial bank, each quarter.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_bank_scan",
+        "metric": "major_sectoral.other_non_food_credit_gross_advances@dom",
+        "unit": "crore",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-other-non-food-bank-share-scan": {
+      "id": "bw-other-non-food-bank-share-scan",
+      "title": "Other non-food credit — each bank's share of all banks",
+      "description": "Each bank's share of all banks' other non-food credit; denominator RBI's All SCBs row.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_bank_scan_share",
+        "metric": "major_sectoral.other_non_food_credit_gross_advances@dom",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-other-non-food-bank-yoy-scan": {
+      "id": "bw-other-non-food-bank-yoy-scan",
+      "title": "Other non-food credit — per-bank growth a year",
+      "description": "Year-on-year change in each bank's other non-food credit; absent with merger_break across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_bank_scan",
+        "metric": "major_sectoral.other_non_food_credit_gross_advances@dom",
+        "value_type": "yoy",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-other-non-food-bank-allocation": {
+      "id": "bw-other-non-food-bank-allocation",
+      "title": "Other non-food credit — each bank's share of the year's new money",
+      "description": "Of the year's change in other non-food credit, how much each bank added or lost (contribution, always; alloc when banks moved together); absent across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_bank_allocation",
+        "metric": "major_sectoral.other_non_food_credit_gross_advances@dom",
+        "unit": "crore",
+        "window": 12
+      }
+    },
+    "bw-other-non-food-yoy": {
+      "id": "bw-other-non-food-yoy",
+      "title": "Other non-food credit — all banks, growth a year",
+      "description": "Year-on-year change in all banks' other non-food credit (RBI's All SCBs row).",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "unknown",
+      "compute": {
+        "method": "csv_total_yoy",
+        "metric": "major_sectoral.other_non_food_credit_gross_advances@dom"
+      }
+    },
+    "bw-other-non-food-category-size-scan": {
+      "id": "bw-other-non-food-category-size-scan",
+      "title": "Other non-food credit — per bank group",
+      "description": "Other non-food credit for each bank group, the sum of its banks as RBI printed them that quarter.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_category_scan_abs",
+        "metric": "major_sectoral.other_non_food_credit_gross_advances@dom",
+        "unit": "crore",
+        "window": 12,
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      }
+    },
+    "bw-other-non-food-category-share-scan": {
+      "id": "bw-other-non-food-category-share-scan",
+      "title": "Other non-food credit — each bank group's share",
+      "description": "Each bank group's share of all banks' other non-food credit.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_category_scan_share",
+        "metric": "major_sectoral.other_non_food_credit_gross_advances@dom",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-other-non-food-category-yoy-scan": {
+      "id": "bw-other-non-food-category-yoy-scan",
+      "title": "Other non-food credit — per bank group growth a year",
+      "description": "Year-on-year change in each bank group's other non-food credit.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_category_scan_yoy",
+        "metric": "major_sectoral.other_non_food_credit_gross_advances@dom",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-other-non-food-of-book-scan": {
+      "id": "bw-other-non-food-of-book-scan",
+      "title": "Other non-food credit — share of each bank's own book",
+      "description": "Each bank's other non-food credit as a share of its own domestic gross advances (absent with no_book for a bank with none).",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_bank_ratio_scan",
+        "metric": "major_sectoral.other_non_food_credit_gross_advances@dom",
+        "denominator_metric": "major_sectoral.gross_advances@dom"
+      }
+    },
+    "bw-housing-bank-scan": {
+      "id": "bw-housing-bank-scan",
+      "title": "Housing loans — per bank",
+      "description": "Domestic gross advances in housing loans for every scheduled commercial bank, each quarter.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_bank_scan",
+        "metric": "major_sectoral.retail_loans_housing_loans_gross_advances@dom",
+        "unit": "crore",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-housing-bank-share-scan": {
+      "id": "bw-housing-bank-share-scan",
+      "title": "Housing loans — each bank's share of all banks",
+      "description": "Each bank's share of all banks' housing loans; denominator RBI's All SCBs row.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_bank_scan_share",
+        "metric": "major_sectoral.retail_loans_housing_loans_gross_advances@dom",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-housing-bank-yoy-scan": {
+      "id": "bw-housing-bank-yoy-scan",
+      "title": "Housing loans — per-bank growth a year",
+      "description": "Year-on-year change in each bank's housing loans; absent with merger_break across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_bank_scan",
+        "metric": "major_sectoral.retail_loans_housing_loans_gross_advances@dom",
+        "value_type": "yoy",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-housing-bank-allocation": {
+      "id": "bw-housing-bank-allocation",
+      "title": "Housing loans — each bank's share of the year's new money",
+      "description": "Of the year's change in housing loans, how much each bank added or lost (contribution, always; alloc when banks moved together); absent across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_bank_allocation",
+        "metric": "major_sectoral.retail_loans_housing_loans_gross_advances@dom",
+        "unit": "crore",
+        "window": 12
+      }
+    },
+    "bw-housing-yoy": {
+      "id": "bw-housing-yoy",
+      "title": "Housing loans — all banks, growth a year",
+      "description": "Year-on-year change in all banks' housing loans (RBI's All SCBs row).",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "unknown",
+      "compute": {
+        "method": "csv_total_yoy",
+        "metric": "major_sectoral.retail_loans_housing_loans_gross_advances@dom"
+      }
+    },
+    "bw-housing-category-size-scan": {
+      "id": "bw-housing-category-size-scan",
+      "title": "Housing loans — per bank group",
+      "description": "Housing loans for each bank group, the sum of its banks as RBI printed them that quarter.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_category_scan_abs",
+        "metric": "major_sectoral.retail_loans_housing_loans_gross_advances@dom",
+        "unit": "crore",
+        "window": 12,
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      }
+    },
+    "bw-housing-category-share-scan": {
+      "id": "bw-housing-category-share-scan",
+      "title": "Housing loans — each bank group's share",
+      "description": "Each bank group's share of all banks' housing loans.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "weakening",
+      "compute": {
+        "method": "csv_category_scan_share",
+        "metric": "major_sectoral.retail_loans_housing_loans_gross_advances@dom",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-housing-category-yoy-scan": {
+      "id": "bw-housing-category-yoy-scan",
+      "title": "Housing loans — per bank group growth a year",
+      "description": "Year-on-year change in each bank group's housing loans.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_category_scan_yoy",
+        "metric": "major_sectoral.retail_loans_housing_loans_gross_advances@dom",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-housing-of-book-scan": {
+      "id": "bw-housing-of-book-scan",
+      "title": "Housing loans — share of each bank's own book",
+      "description": "Each bank's housing loans as a share of its own domestic gross advances (absent with no_book for a bank with none).",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_bank_ratio_scan",
+        "metric": "major_sectoral.retail_loans_housing_loans_gross_advances@dom",
+        "denominator_metric": "major_sectoral.gross_advances@dom"
+      }
+    },
+    "bw-vehicle-bank-scan": {
+      "id": "bw-vehicle-bank-scan",
+      "title": "Vehicle / auto loans — per bank",
+      "description": "Domestic gross advances in vehicle / auto loans for every scheduled commercial bank, each quarter.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_bank_scan",
+        "metric": "major_sectoral.retail_loans_vehicle_auto_loans_gross_advances@dom",
+        "unit": "crore",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-vehicle-bank-share-scan": {
+      "id": "bw-vehicle-bank-share-scan",
+      "title": "Vehicle / auto loans — each bank's share of all banks",
+      "description": "Each bank's share of all banks' vehicle / auto loans; denominator RBI's All SCBs row.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_bank_scan_share",
+        "metric": "major_sectoral.retail_loans_vehicle_auto_loans_gross_advances@dom",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-vehicle-bank-yoy-scan": {
+      "id": "bw-vehicle-bank-yoy-scan",
+      "title": "Vehicle / auto loans — per-bank growth a year",
+      "description": "Year-on-year change in each bank's vehicle / auto loans; absent with merger_break across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_bank_scan",
+        "metric": "major_sectoral.retail_loans_vehicle_auto_loans_gross_advances@dom",
+        "value_type": "yoy",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-vehicle-bank-allocation": {
+      "id": "bw-vehicle-bank-allocation",
+      "title": "Vehicle / auto loans — each bank's share of the year's new money",
+      "description": "Of the year's change in vehicle / auto loans, how much each bank added or lost (contribution, always; alloc when banks moved together); absent across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_bank_allocation",
+        "metric": "major_sectoral.retail_loans_vehicle_auto_loans_gross_advances@dom",
+        "unit": "crore",
+        "window": 12
+      }
+    },
+    "bw-vehicle-yoy": {
+      "id": "bw-vehicle-yoy",
+      "title": "Vehicle / auto loans — all banks, growth a year",
+      "description": "Year-on-year change in all banks' vehicle / auto loans (RBI's All SCBs row).",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "unknown",
+      "compute": {
+        "method": "csv_total_yoy",
+        "metric": "major_sectoral.retail_loans_vehicle_auto_loans_gross_advances@dom"
+      }
+    },
+    "bw-vehicle-category-size-scan": {
+      "id": "bw-vehicle-category-size-scan",
+      "title": "Vehicle / auto loans — per bank group",
+      "description": "Vehicle / auto loans for each bank group, the sum of its banks as RBI printed them that quarter.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_category_scan_abs",
+        "metric": "major_sectoral.retail_loans_vehicle_auto_loans_gross_advances@dom",
+        "unit": "crore",
+        "window": 12,
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      }
+    },
+    "bw-vehicle-category-share-scan": {
+      "id": "bw-vehicle-category-share-scan",
+      "title": "Vehicle / auto loans — each bank group's share",
+      "description": "Each bank group's share of all banks' vehicle / auto loans.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_category_scan_share",
+        "metric": "major_sectoral.retail_loans_vehicle_auto_loans_gross_advances@dom",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-vehicle-category-yoy-scan": {
+      "id": "bw-vehicle-category-yoy-scan",
+      "title": "Vehicle / auto loans — per bank group growth a year",
+      "description": "Year-on-year change in each bank group's vehicle / auto loans.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_category_scan_yoy",
+        "metric": "major_sectoral.retail_loans_vehicle_auto_loans_gross_advances@dom",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-vehicle-of-book-scan": {
+      "id": "bw-vehicle-of-book-scan",
+      "title": "Vehicle / auto loans — share of each bank's own book",
+      "description": "Each bank's vehicle / auto loans as a share of its own domestic gross advances (absent with no_book for a bank with none).",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_bank_ratio_scan",
+        "metric": "major_sectoral.retail_loans_vehicle_auto_loans_gross_advances@dom",
+        "denominator_metric": "major_sectoral.gross_advances@dom"
+      }
+    },
+    "bw-cards-bank-scan": {
+      "id": "bw-cards-bank-scan",
+      "title": "Credit card receivables — per bank",
+      "description": "Domestic gross advances in credit card receivables for every scheduled commercial bank, each quarter.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_bank_scan",
+        "metric": "major_sectoral.retail_loans_credit_card_receivables_gross_advances@dom",
+        "unit": "crore",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-cards-bank-share-scan": {
+      "id": "bw-cards-bank-share-scan",
+      "title": "Credit card receivables — each bank's share of all banks",
+      "description": "Each bank's share of all banks' credit card receivables; denominator RBI's All SCBs row.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_bank_scan_share",
+        "metric": "major_sectoral.retail_loans_credit_card_receivables_gross_advances@dom",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-cards-bank-yoy-scan": {
+      "id": "bw-cards-bank-yoy-scan",
+      "title": "Credit card receivables — per-bank growth a year",
+      "description": "Year-on-year change in each bank's credit card receivables; absent with merger_break across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_bank_scan",
+        "metric": "major_sectoral.retail_loans_credit_card_receivables_gross_advances@dom",
+        "value_type": "yoy",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-cards-bank-allocation": {
+      "id": "bw-cards-bank-allocation",
+      "title": "Credit card receivables — each bank's share of the year's new money",
+      "description": "Of the year's change in credit card receivables, how much each bank added or lost (contribution, always; alloc when banks moved together); absent across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_bank_allocation",
+        "metric": "major_sectoral.retail_loans_credit_card_receivables_gross_advances@dom",
+        "unit": "crore",
+        "window": 12
+      }
+    },
+    "bw-cards-yoy": {
+      "id": "bw-cards-yoy",
+      "title": "Credit card receivables — all banks, growth a year",
+      "description": "Year-on-year change in all banks' credit card receivables (RBI's All SCBs row).",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "unknown",
+      "compute": {
+        "method": "csv_total_yoy",
+        "metric": "major_sectoral.retail_loans_credit_card_receivables_gross_advances@dom"
+      }
+    },
+    "bw-cards-category-size-scan": {
+      "id": "bw-cards-category-size-scan",
+      "title": "Credit card receivables — per bank group",
+      "description": "Credit card receivables for each bank group, the sum of its banks as RBI printed them that quarter.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_category_scan_abs",
+        "metric": "major_sectoral.retail_loans_credit_card_receivables_gross_advances@dom",
+        "unit": "crore",
+        "window": 12,
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      }
+    },
+    "bw-cards-category-share-scan": {
+      "id": "bw-cards-category-share-scan",
+      "title": "Credit card receivables — each bank group's share",
+      "description": "Each bank group's share of all banks' credit card receivables.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_category_scan_share",
+        "metric": "major_sectoral.retail_loans_credit_card_receivables_gross_advances@dom",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-cards-category-yoy-scan": {
+      "id": "bw-cards-category-yoy-scan",
+      "title": "Credit card receivables — per bank group growth a year",
+      "description": "Year-on-year change in each bank group's credit card receivables.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_category_scan_yoy",
+        "metric": "major_sectoral.retail_loans_credit_card_receivables_gross_advances@dom",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-cards-of-book-scan": {
+      "id": "bw-cards-of-book-scan",
+      "title": "Credit card receivables — share of each bank's own book",
+      "description": "Each bank's credit card receivables as a share of its own domestic gross advances (absent with no_book for a bank with none).",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_bank_ratio_scan",
+        "metric": "major_sectoral.retail_loans_credit_card_receivables_gross_advances@dom",
+        "denominator_metric": "major_sectoral.gross_advances@dom"
+      }
+    },
+    "bw-education-bank-scan": {
+      "id": "bw-education-bank-scan",
+      "title": "Education loans — per bank",
+      "description": "Domestic gross advances in education loans for every scheduled commercial bank, each quarter.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_bank_scan",
+        "metric": "major_sectoral.retail_loans_education_gross_advances@dom",
+        "unit": "crore",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-education-bank-share-scan": {
+      "id": "bw-education-bank-share-scan",
+      "title": "Education loans — each bank's share of all banks",
+      "description": "Each bank's share of all banks' education loans; denominator RBI's All SCBs row.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_bank_scan_share",
+        "metric": "major_sectoral.retail_loans_education_gross_advances@dom",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-education-bank-yoy-scan": {
+      "id": "bw-education-bank-yoy-scan",
+      "title": "Education loans — per-bank growth a year",
+      "description": "Year-on-year change in each bank's education loans; absent with merger_break across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_bank_scan",
+        "metric": "major_sectoral.retail_loans_education_gross_advances@dom",
+        "value_type": "yoy",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-education-bank-allocation": {
+      "id": "bw-education-bank-allocation",
+      "title": "Education loans — each bank's share of the year's new money",
+      "description": "Of the year's change in education loans, how much each bank added or lost (contribution, always; alloc when banks moved together); absent across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_bank_allocation",
+        "metric": "major_sectoral.retail_loans_education_gross_advances@dom",
+        "unit": "crore",
+        "window": 12
+      }
+    },
+    "bw-education-yoy": {
+      "id": "bw-education-yoy",
+      "title": "Education loans — all banks, growth a year",
+      "description": "Year-on-year change in all banks' education loans (RBI's All SCBs row).",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "unknown",
+      "compute": {
+        "method": "csv_total_yoy",
+        "metric": "major_sectoral.retail_loans_education_gross_advances@dom"
+      }
+    },
+    "bw-education-category-size-scan": {
+      "id": "bw-education-category-size-scan",
+      "title": "Education loans — per bank group",
+      "description": "Education loans for each bank group, the sum of its banks as RBI printed them that quarter.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_category_scan_abs",
+        "metric": "major_sectoral.retail_loans_education_gross_advances@dom",
+        "unit": "crore",
+        "window": 12,
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      }
+    },
+    "bw-education-category-share-scan": {
+      "id": "bw-education-category-share-scan",
+      "title": "Education loans — each bank group's share",
+      "description": "Each bank group's share of all banks' education loans.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "weakening",
+      "compute": {
+        "method": "csv_category_scan_share",
+        "metric": "major_sectoral.retail_loans_education_gross_advances@dom",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-education-category-yoy-scan": {
+      "id": "bw-education-category-yoy-scan",
+      "title": "Education loans — per bank group growth a year",
+      "description": "Year-on-year change in each bank group's education loans.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_category_scan_yoy",
+        "metric": "major_sectoral.retail_loans_education_gross_advances@dom",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-education-of-book-scan": {
+      "id": "bw-education-of-book-scan",
+      "title": "Education loans — share of each bank's own book",
+      "description": "Each bank's education loans as a share of its own domestic gross advances (absent with no_book for a bank with none).",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_bank_ratio_scan",
+        "metric": "major_sectoral.retail_loans_education_gross_advances@dom",
+        "denominator_metric": "major_sectoral.gross_advances@dom"
+      }
+    },
+    "bw-other-retail-bank-scan": {
+      "id": "bw-other-retail-bank-scan",
+      "title": "Other retail loans — per bank",
+      "description": "Domestic gross advances in other retail loans for every scheduled commercial bank, each quarter.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_bank_scan",
+        "metric": "major_sectoral.other_retail_loans_gross_advances@dom",
+        "unit": "crore",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-other-retail-bank-share-scan": {
+      "id": "bw-other-retail-bank-share-scan",
+      "title": "Other retail loans — each bank's share of all banks",
+      "description": "Each bank's share of all banks' other retail loans; denominator RBI's All SCBs row.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_bank_scan_share",
+        "metric": "major_sectoral.other_retail_loans_gross_advances@dom",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-other-retail-bank-yoy-scan": {
+      "id": "bw-other-retail-bank-yoy-scan",
+      "title": "Other retail loans — per-bank growth a year",
+      "description": "Year-on-year change in each bank's other retail loans; absent with merger_break across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_bank_scan",
+        "metric": "major_sectoral.other_retail_loans_gross_advances@dom",
+        "value_type": "yoy",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-other-retail-bank-allocation": {
+      "id": "bw-other-retail-bank-allocation",
+      "title": "Other retail loans — each bank's share of the year's new money",
+      "description": "Of the year's change in other retail loans, how much each bank added or lost (contribution, always; alloc when banks moved together); absent across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_bank_allocation",
+        "metric": "major_sectoral.other_retail_loans_gross_advances@dom",
+        "unit": "crore",
+        "window": 12
+      }
+    },
+    "bw-other-retail-yoy": {
+      "id": "bw-other-retail-yoy",
+      "title": "Other retail loans — all banks, growth a year",
+      "description": "Year-on-year change in all banks' other retail loans (RBI's All SCBs row).",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "unknown",
+      "compute": {
+        "method": "csv_total_yoy",
+        "metric": "major_sectoral.other_retail_loans_gross_advances@dom"
+      }
+    },
+    "bw-other-retail-category-size-scan": {
+      "id": "bw-other-retail-category-size-scan",
+      "title": "Other retail loans — per bank group",
+      "description": "Other retail loans for each bank group, the sum of its banks as RBI printed them that quarter.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_category_scan_abs",
+        "metric": "major_sectoral.other_retail_loans_gross_advances@dom",
+        "unit": "crore",
+        "window": 12,
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "active"
+          },
+          {
+            "if": "true",
+            "then": "declining"
+          }
+        ]
+      }
+    },
+    "bw-other-retail-category-share-scan": {
+      "id": "bw-other-retail-category-share-scan",
+      "title": "Other retail loans — each bank group's share",
+      "description": "Each bank group's share of all banks' other retail loans.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_category_scan_share",
+        "metric": "major_sectoral.other_retail_loans_gross_advances@dom",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-other-retail-category-yoy-scan": {
+      "id": "bw-other-retail-category-yoy-scan",
+      "title": "Other retail loans — per bank group growth a year",
+      "description": "Year-on-year change in each bank group's other retail loans.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_category_scan_yoy",
+        "metric": "major_sectoral.other_retail_loans_gross_advances@dom",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-other-retail-of-book-scan": {
+      "id": "bw-other-retail-of-book-scan",
+      "title": "Other retail loans — share of each bank's own book",
+      "description": "Each bank's other retail loans as a share of its own domestic gross advances (absent with no_book for a bank with none).",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_bank_ratio_scan",
+        "metric": "major_sectoral.other_retail_loans_gross_advances@dom",
+        "denominator_metric": "major_sectoral.gross_advances@dom"
+      }
+    },
+    "bw-gnpa-ratio-bank-scan": {
+      "id": "bw-gnpa-ratio-bank-scan",
+      "title": "Gross NPA ratio — per bank",
+      "description": "Each bank's gross NPAs as a share of its domestic gross advances, as RBI prints it (Major Sectoral).",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_stress",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "weakening",
+      "compute": {
+        "method": "csv_bank_scan",
+        "metric": "major_sectoral.gross_npas_to_gross_advances@dom",
+        "unit": "pct",
+        "status_rules": [
+          {
+            "if": "value > prev_value",
+            "then": "strengthening"
+          },
+          {
+            "if": "value < prev_value",
+            "then": "weakening"
+          },
+          {
+            "if": "true",
+            "then": "active"
+          }
+        ]
+      }
+    },
+    "bw-gross-bank-momentum": {
+      "id": "bw-gross-bank-momentum",
+      "title": "Gross advances (all banks) — crore each bank added over the year",
+      "description": "Each bank's change in gross advances (all banks) over the year, with the net, gross and coherence that bound its share of the year's new money; absent across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_bank_momentum",
+        "metric": "major_sectoral.gross_advances@dom",
+        "unit": "crore",
+        "window": 12
+      }
+    },
+    "bw-food-bank-momentum": {
+      "id": "bw-food-bank-momentum",
+      "title": "Food credit — crore each bank added over the year",
+      "description": "Each bank's change in food credit over the year, with the net, gross and coherence that bound its share of the year's new money; absent across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_bank_momentum",
+        "metric": "major_sectoral.food_credit_gross_advances@dom",
+        "unit": "crore",
+        "window": 12
+      }
+    },
+    "bw-non-food-bank-momentum": {
+      "id": "bw-non-food-bank-momentum",
+      "title": "Non-food credit — crore each bank added over the year",
+      "description": "Each bank's change in non-food credit over the year, with the net, gross and coherence that bound its share of the year's new money; absent across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_bank_momentum",
+        "metric": "major_sectoral.non_food_credit_gross_advances@dom",
+        "unit": "crore",
+        "window": 12
+      }
+    },
+    "bw-agri-bank-momentum": {
+      "id": "bw-agri-bank-momentum",
+      "title": "Agriculture and allied activities — crore each bank added over the year",
+      "description": "Each bank's change in agriculture and allied activities over the year, with the net, gross and coherence that bound its share of the year's new money; absent across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "sector_mix",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_bank_momentum",
+        "metric": "major_sectoral.agriculture_and_allied_activities_gross_advances@dom",
+        "unit": "crore",
+        "window": 12
+      }
+    },
+    "bw-industry-bank-momentum": {
+      "id": "bw-industry-bank-momentum",
+      "title": "Industry — crore each bank added over the year",
+      "description": "Each bank's change in industry over the year, with the net, gross and coherence that bound its share of the year's new money; absent across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "industry",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_bank_momentum",
+        "metric": "major_sectoral.industry_gross_advances@dom",
+        "unit": "crore",
+        "window": 12
+      }
+    },
+    "bw-services-bank-momentum": {
+      "id": "bw-services-bank-momentum",
+      "title": "Services — crore each bank added over the year",
+      "description": "Each bank's change in services over the year, with the net, gross and coherence that bound its share of the year's new money; absent across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "sector_mix",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_bank_momentum",
+        "metric": "major_sectoral.services_gross_advances@dom",
+        "unit": "crore",
+        "window": 12
+      }
+    },
+    "bw-retail-bank-momentum": {
+      "id": "bw-retail-bank-momentum",
+      "title": "Retail loans — crore each bank added over the year",
+      "description": "Each bank's change in retail loans over the year, with the net, gross and coherence that bound its share of the year's new money; absent across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_bank_momentum",
+        "metric": "major_sectoral.retail_loans_gross_advances@dom",
+        "unit": "crore",
+        "window": 12
+      }
+    },
+    "bw-other-non-food-bank-momentum": {
+      "id": "bw-other-non-food-bank-momentum",
+      "title": "Other non-food credit — crore each bank added over the year",
+      "description": "Each bank's change in other non-food credit over the year, with the net, gross and coherence that bound its share of the year's new money; absent across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_bank_momentum",
+        "metric": "major_sectoral.other_non_food_credit_gross_advances@dom",
+        "unit": "crore",
+        "window": 12
+      }
+    },
+    "bw-housing-bank-momentum": {
+      "id": "bw-housing-bank-momentum",
+      "title": "Housing loans — crore each bank added over the year",
+      "description": "Each bank's change in housing loans over the year, with the net, gross and coherence that bound its share of the year's new money; absent across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_bank_momentum",
+        "metric": "major_sectoral.retail_loans_housing_loans_gross_advances@dom",
+        "unit": "crore",
+        "window": 12
+      }
+    },
+    "bw-vehicle-bank-momentum": {
+      "id": "bw-vehicle-bank-momentum",
+      "title": "Vehicle / auto loans — crore each bank added over the year",
+      "description": "Each bank's change in vehicle / auto loans over the year, with the net, gross and coherence that bound its share of the year's new money; absent across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_bank_momentum",
+        "metric": "major_sectoral.retail_loans_vehicle_auto_loans_gross_advances@dom",
+        "unit": "crore",
+        "window": 12
+      }
+    },
+    "bw-cards-bank-momentum": {
+      "id": "bw-cards-bank-momentum",
+      "title": "Credit card receivables — crore each bank added over the year",
+      "description": "Each bank's change in credit card receivables over the year, with the net, gross and coherence that bound its share of the year's new money; absent across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_bank_momentum",
+        "metric": "major_sectoral.retail_loans_credit_card_receivables_gross_advances@dom",
+        "unit": "crore",
+        "window": 12
+      }
+    },
+    "bw-education-bank-momentum": {
+      "id": "bw-education-bank-momentum",
+      "title": "Education loans — crore each bank added over the year",
+      "description": "Each bank's change in education loans over the year, with the net, gross and coherence that bound its share of the year's new money; absent across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_bank_momentum",
+        "metric": "major_sectoral.retail_loans_education_gross_advances@dom",
+        "unit": "crore",
+        "window": 12
+      }
+    },
+    "bw-other-retail-bank-momentum": {
+      "id": "bw-other-retail-bank-momentum",
+      "title": "Other retail loans — crore each bank added over the year",
+      "description": "Each bank's change in other retail loans over the year, with the net, gross and coherence that bound its share of the year's new money; absent across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_bank_momentum",
+        "metric": "major_sectoral.other_retail_loans_gross_advances@dom",
+        "unit": "crore",
+        "window": 12
+      }
     }
   }
 }
