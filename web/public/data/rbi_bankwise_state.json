@@ -1,0 +1,298 @@
+{
+ "_meta": {
+  "pipeline": "rbi_bankwise",
+  "period": "2026-06-30",
+  "period_label": "Jun 2026",
+  "purpose": "Standing state band per dashboard dimension — Layer-1 speed + Layer-2 mix state, rendered as sentences. Join on dimension id.",
+  "spec": "analysis/DASHBOARD_SPEC.md §16",
+  "renderer": "analysis/core/state_lines.py"
+ },
+ "dimensions": {
+  "banks": [
+   {
+    "dimension": "banks",
+    "cut": "gross-category",
+    "stem": "bw-gross-category",
+    "subject": "All banks' credit",
+    "speed": "All banks' credit growing 17.0% YoY, accelerating.",
+    "speed_short": "17.0% YoY · accelerating",
+    "speed_dir": "up",
+    "mix": "Drifting toward Foreign Banks — it took 4.8% of the growth while holding 3.4% of the total a year ago. Away from Private Sector Banks.",
+    "no_speed_note": null,
+    "no_mix_note": null,
+    "mix_state": "drifting",
+    "toward": "Foreign Banks",
+    "toward_entity": "Foreign Banks",
+    "source_signals": [
+     "bw-gross-category-allocation",
+     "bw-gross-category-momentum",
+     "bw-gross-yoy"
+    ],
+    "parent_entity": null,
+    "anchor": true
+   },
+   {
+    "dimension": "banks",
+    "cut": "food-category",
+    "stem": "bw-food-category",
+    "subject": "All banks' food credit",
+    "speed": "All banks' food credit growing 89.7% YoY, accelerating.",
+    "speed_short": "89.7% YoY · accelerating",
+    "speed_dir": "up",
+    "mix": "Drifting toward Private Sector Banks — it took 27.7% of the growth while holding 15.1% of the total a year ago. Away from Public Sector Banks.",
+    "no_speed_note": null,
+    "no_mix_note": null,
+    "mix_state": "drifting",
+    "toward": "Private Sector Banks",
+    "toward_entity": "Private Sector Banks",
+    "source_signals": [
+     "bw-food-category-allocation",
+     "bw-food-category-momentum",
+     "bw-food-yoy"
+    ],
+    "parent_entity": null,
+    "anchor": false
+   },
+   {
+    "dimension": "banks",
+    "cut": "non-food-category",
+    "stem": "bw-non-food-category",
+    "subject": "All banks' non-food credit",
+    "speed": "All banks' non-food credit growing 16.7% YoY, accelerating.",
+    "speed_short": "16.7% YoY · accelerating",
+    "speed_dir": "up",
+    "mix": "Drifting toward Foreign Banks — it took 4.9% of the growth while holding 3.4% of the total a year ago. Away from Private Sector Banks.",
+    "no_speed_note": null,
+    "no_mix_note": null,
+    "mix_state": "drifting",
+    "toward": "Foreign Banks",
+    "toward_entity": "Foreign Banks",
+    "source_signals": [
+     "bw-non-food-category-allocation",
+     "bw-non-food-category-momentum",
+     "bw-non-food-yoy"
+    ],
+    "parent_entity": null,
+    "anchor": false
+   },
+   {
+    "dimension": "banks",
+    "cut": "agri-category",
+    "stem": "bw-agri-category",
+    "subject": "All banks' agriculture and allied activities credit",
+    "speed": "All banks' agriculture and allied activities credit growing 17.2% YoY, accelerating.",
+    "speed_short": "17.2% YoY · accelerating",
+    "speed_dir": "up",
+    "mix": "Drifting toward Public Sector Banks — it took 71.8% of the growth while holding 66.1% of the total a year ago. Away from Private Sector Banks.",
+    "no_speed_note": null,
+    "no_mix_note": null,
+    "mix_state": "drifting",
+    "toward": "Public Sector Banks",
+    "toward_entity": "Public Sector Banks",
+    "source_signals": [
+     "bw-agri-category-allocation",
+     "bw-agri-category-momentum",
+     "bw-agri-yoy"
+    ],
+    "parent_entity": null,
+    "anchor": false
+   },
+   {
+    "dimension": "banks",
+    "cut": "industry-category",
+    "stem": "bw-industry-category",
+    "subject": "All banks' industry credit",
+    "speed": "All banks' industry credit growing 15.9% YoY, accelerating.",
+    "speed_short": "15.9% YoY · accelerating",
+    "speed_dir": "up",
+    "mix": "Drifting toward Private Sector Banks — it took 53.5% of the growth while holding 39.0% of the total a year ago. Away from Public Sector Banks.",
+    "no_speed_note": null,
+    "no_mix_note": null,
+    "mix_state": "drifting",
+    "toward": "Private Sector Banks",
+    "toward_entity": "Private Sector Banks",
+    "source_signals": [
+     "bw-industry-category-allocation",
+     "bw-industry-category-momentum",
+     "bw-industry-yoy"
+    ],
+    "parent_entity": null,
+    "anchor": false
+   },
+   {
+    "dimension": "banks",
+    "cut": "services-category",
+    "stem": "bw-services-category",
+    "subject": "All banks' services credit",
+    "speed": "All banks' services credit growing 18.2% YoY, accelerating.",
+    "speed_short": "18.2% YoY · accelerating",
+    "speed_dir": "up",
+    "mix": "Drifting toward Foreign Banks — it took 7.0% of the growth while holding 4.9% of the total a year ago. Away from Private Sector Banks.",
+    "no_speed_note": null,
+    "no_mix_note": null,
+    "mix_state": "drifting",
+    "toward": "Foreign Banks",
+    "toward_entity": "Foreign Banks",
+    "source_signals": [
+     "bw-services-category-allocation",
+     "bw-services-category-momentum",
+     "bw-services-yoy"
+    ],
+    "parent_entity": null,
+    "anchor": false
+   },
+   {
+    "dimension": "banks",
+    "cut": "retail-category",
+    "stem": "bw-retail-category",
+    "subject": "All banks' retail loans credit",
+    "speed": "All banks' retail loans credit growing 16.1% YoY, accelerating.",
+    "speed_short": "16.1% YoY · accelerating",
+    "speed_dir": "up",
+    "mix": "Drifting toward Public Sector Banks — it took 59.8% of the growth while holding 50.0% of the total a year ago. Away from Private Sector Banks.",
+    "no_speed_note": null,
+    "no_mix_note": null,
+    "mix_state": "drifting",
+    "toward": "Public Sector Banks",
+    "toward_entity": "Public Sector Banks",
+    "source_signals": [
+     "bw-retail-category-allocation",
+     "bw-retail-category-momentum",
+     "bw-retail-yoy"
+    ],
+    "parent_entity": null,
+    "anchor": false
+   },
+   {
+    "dimension": "banks",
+    "cut": "other-non-food-category",
+    "stem": "bw-other-non-food-category",
+    "subject": "All banks' other non-food credit",
+    "speed": "All banks' other non-food credit growing 6.9% YoY, accelerating.",
+    "speed_short": "6.9% YoY · accelerating",
+    "speed_dir": "up",
+    "mix": "Contested — parts are moving in opposite directions, with no single destination.",
+    "no_speed_note": null,
+    "no_mix_note": null,
+    "mix_state": "contested",
+    "toward": null,
+    "toward_entity": null,
+    "source_signals": [
+     "bw-other-non-food-yoy"
+    ],
+    "parent_entity": null,
+    "anchor": false
+   },
+   {
+    "dimension": "banks",
+    "cut": "housing-category",
+    "stem": "bw-housing-category",
+    "subject": "All banks' housing loans credit",
+    "speed": "All banks' housing loans credit growing 10.4% YoY, accelerating.",
+    "speed_short": "10.4% YoY · accelerating",
+    "speed_dir": "up",
+    "mix": "Steered toward Public Sector Banks — it took 70.0% of the growth while holding 53.7% of the total a year ago. Away from Private Sector Banks.",
+    "no_speed_note": null,
+    "no_mix_note": null,
+    "mix_state": "steered",
+    "toward": "Public Sector Banks",
+    "toward_entity": "Public Sector Banks",
+    "source_signals": [
+     "bw-housing-category-allocation",
+     "bw-housing-category-momentum",
+     "bw-housing-yoy"
+    ],
+    "parent_entity": null,
+    "anchor": false
+   },
+   {
+    "dimension": "banks",
+    "cut": "vehicle-category",
+    "stem": "bw-vehicle-category",
+    "subject": "All banks' vehicle / auto loans credit",
+    "speed": "All banks' vehicle / auto loans credit growing 19.5% YoY, accelerating.",
+    "speed_short": "19.5% YoY · accelerating",
+    "speed_dir": "up",
+    "mix": "Drifting toward Small Finance Banks — it took 3.8% of the growth while holding 2.3% of the total a year ago. Away from Private Sector Banks.",
+    "no_speed_note": null,
+    "no_mix_note": null,
+    "mix_state": "drifting",
+    "toward": "Small Finance Banks",
+    "toward_entity": "Small Finance Banks",
+    "source_signals": [
+     "bw-vehicle-category-allocation",
+     "bw-vehicle-category-momentum",
+     "bw-vehicle-yoy"
+    ],
+    "parent_entity": null,
+    "anchor": false
+   },
+   {
+    "dimension": "banks",
+    "cut": "cards-category",
+    "stem": "bw-cards-category",
+    "subject": "All banks' credit card receivables credit",
+    "speed": "All banks' credit card receivables credit growing 3.1% YoY, accelerating.",
+    "speed_short": "3.1% YoY · accelerating",
+    "speed_dir": "up",
+    "mix": "Drifting toward Small Finance Banks — it took 7.7% of the growth while holding 0.8% of the total a year ago. Away from Foreign Banks.",
+    "no_speed_note": null,
+    "no_mix_note": null,
+    "mix_state": "drifting",
+    "toward": "Small Finance Banks",
+    "toward_entity": "Small Finance Banks",
+    "source_signals": [
+     "bw-cards-category-allocation",
+     "bw-cards-category-momentum",
+     "bw-cards-yoy"
+    ],
+    "parent_entity": null,
+    "anchor": false
+   },
+   {
+    "dimension": "banks",
+    "cut": "education-category",
+    "stem": "bw-education-category",
+    "subject": "All banks' education loans credit",
+    "speed": "All banks' education loans credit growing 12.5% YoY, but slowing.",
+    "speed_short": "12.5% YoY · slowing",
+    "speed_dir": "up",
+    "mix": "Drifting toward Public Sector Banks — it took 85.9% of the growth while holding 84.0% of the total a year ago. Away from Private Sector Banks.",
+    "no_speed_note": null,
+    "no_mix_note": null,
+    "mix_state": "drifting",
+    "toward": "Public Sector Banks",
+    "toward_entity": "Public Sector Banks",
+    "source_signals": [
+     "bw-education-category-allocation",
+     "bw-education-category-momentum",
+     "bw-education-yoy"
+    ],
+    "parent_entity": null,
+    "anchor": false
+   },
+   {
+    "dimension": "banks",
+    "cut": "other-retail-category",
+    "stem": "bw-other-retail-category",
+    "subject": "All banks' other retail loans credit",
+    "speed": "All banks' other retail loans credit growing 24.2% YoY, but slowing.",
+    "speed_short": "24.2% YoY · slowing",
+    "speed_dir": "up",
+    "mix": "Drifting toward Public Sector Banks — it took 56.4% of the growth while holding 49.5% of the total a year ago. Away from Private Sector Banks.",
+    "no_speed_note": null,
+    "no_mix_note": null,
+    "mix_state": "drifting",
+    "toward": "Public Sector Banks",
+    "toward_entity": "Public Sector Banks",
+    "source_signals": [
+     "bw-other-retail-category-allocation",
+     "bw-other-retail-category-momentum",
+     "bw-other-retail-yoy"
+    ],
+    "parent_entity": null,
+    "anchor": false
+   }
+  ]
+ }
+}

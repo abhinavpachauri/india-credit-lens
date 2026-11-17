@@ -1990,7 +1990,13 @@
      "Output = IIP production over the last 12 months.",
      "Hover a — for why it is empty."
     ]
-   }
+   },
+   "col_labels": {
+    "of_cut": "% of basic metal and metal product"
+   },
+   "key": [
+    "% of basic metal and metal product: each row's slice of basic metal and metal product (Iron and Steel is 70.1% of it)."
+   ]
   },
   "sibc-chemicals-sub": {
    "cut": "sibc-chemicals-sub",
@@ -5091,7 +5097,13 @@
      "Output = IIP production over the last 12 months.",
      "Hover a — for why it is empty."
     ]
-   }
+   },
+   "col_labels": {
+    "of_cut": "% of chemicals and chemical products"
+   },
+   "key": [
+    "% of chemicals and chemical products: each row's slice of chemicals and chemical products (Others is 43.1% of it)."
+   ]
   },
   "sibc-engineering-sub": {
    "cut": "sibc-engineering-sub",
@@ -7142,7 +7154,13 @@
      "Output = IIP production over the last 12 months.",
      "Hover a — for why it is empty."
     ]
-   }
+   },
+   "col_labels": {
+    "of_cut": "% of all engineering"
+   },
+   "key": [
+    "% of all engineering: each row's slice of all engineering (Others is 77.4% of it)."
+   ]
   },
   "sibc-food-processing-sub": {
    "cut": "sibc-food-processing-sub",
@@ -10191,7 +10209,13 @@
      "Output = IIP production over the last 12 months.",
      "Hover a — for why it is empty."
     ]
-   }
+   },
+   "col_labels": {
+    "of_cut": "% of food processing"
+   },
+   "key": [
+    "% of food processing: each row's slice of food processing (Others is 80.6% of it)."
+   ]
   },
   "sibc-ind-size": {
    "cut": "sibc-ind-size",
@@ -13022,6 +13046,14 @@
     "sibc-ind-size-size-scan",
     "sibc-ind-size-yoy-scan",
     "sibc-industry-yoy"
+   ],
+   "col_labels": {
+    "of_cut": "% of industry",
+    "of_book": "% of bank credit"
+   },
+   "key": [
+    "% of industry: each row's slice of industry (Large is 66.5% of it).",
+    "% of bank credit: each row's slice of all bank credit (Large is 14.4% of it)."
    ]
   },
   "sibc-industry-type": {
@@ -27043,7 +27075,15 @@
      "·Q2 = Jul–Sep 2026; credit read at the quarter's end.",
      "Hover a — for why it is empty."
     ]
-   }
+   },
+   "col_labels": {
+    "of_cut": "% of industry",
+    "of_book": "% of bank credit"
+   },
+   "key": [
+    "% of industry: each row's slice of industry (Infrastructure is 31.7% of it).",
+    "% of bank credit: each row's slice of all bank credit (Infrastructure is 6.9% of it)."
+   ]
   },
   "sibc-infra-sub": {
    "cut": "sibc-infra-sub",
@@ -32416,7 +32456,15 @@
      "Output = IIP production over the last 12 months.",
      "Hover a — for why it is empty."
     ]
-   }
+   },
+   "col_labels": {
+    "of_cut": "% of infrastructure",
+    "of_book": "% of bank credit"
+   },
+   "key": [
+    "% of infrastructure: each row's slice of infrastructure (Power is 57.3% of it).",
+    "% of bank credit: each row's slice of all bank credit (Power is 3.9% of it)."
+   ]
   },
   "sibc-main": {
    "cut": "sibc-main",
@@ -36026,7 +36074,15 @@
      "·Q2 = Jul–Sep 2026; credit read at the quarter's end.",
      "Hover a — for why it is empty."
     ]
-   }
+   },
+   "col_labels": {
+    "of_cut": "% of the 4 sectors",
+    "of_book": "% of bank credit"
+   },
+   "key": [
+    "% of the 4 sectors: a slice of the 4 sectors added up, which are 94.8% of non-food credit.",
+    "% of bank credit: each row's slice of all bank credit (Personal Loans is 32.3% of it)."
+   ]
   },
   "sibc-nbfc-sub": {
    "cut": "sibc-nbfc-sub",
@@ -37717,6 +37773,12 @@
     "sibc-nbfc-sub-share-of-credit-scan",
     "sibc-nbfc-sub-size-scan",
     "sibc-nbfc-sub-yoy-scan"
+   ],
+   "col_labels": {
+    "of_cut": "% of the 2 parts"
+   },
+   "key": [
+    "% of the 2 parts: a slice of the 2 parts added up, which are 33.6% of non-banking financial companies."
    ]
   },
   "sibc-pl": {
@@ -44437,7 +44499,15 @@
      "·Q2 = Jul–Sep 2026; credit read at the quarter's end.",
      "Hover a — for why it is empty."
     ]
-   }
+   },
+   "col_labels": {
+    "of_cut": "% of personal loans",
+    "of_book": "% of bank credit"
+   },
+   "key": [
+    "% of personal loans: each row's slice of personal loans (Housing (Including Priority Sector Housing) is 47.0% of it).",
+    "% of bank credit: each row's slice of all bank credit (Housing (Including Priority Sector Housing) is 15.2% of it)."
+   ]
   },
   "sibc-psl": {
    "cut": "sibc-psl",
@@ -49568,6 +49638,12 @@
     "sibc-psl-share-of-credit-scan",
     "sibc-psl-size-scan",
     "sibc-psl-yoy-scan"
+   ],
+   "col_labels": {
+    "of_book": "% of bank credit"
+   },
+   "key": [
+    "% of bank credit: each row's slice of all bank credit (Micro and Small Enterprises is 14.2% of it)."
    ]
   },
   "sibc-services": {
@@ -56596,6 +56672,14 @@
     "sibc-services-size-scan",
     "sibc-services-yoy",
     "sibc-services-yoy-scan"
+   ],
+   "col_labels": {
+    "of_cut": "% of services",
+    "of_book": "% of bank credit"
+   },
+   "key": [
+    "% of services: each row's slice of services (Non-Banking Financial Companies (NBFCs) is 34.7% of it).",
+    "% of bank credit: each row's slice of all bank credit (Non-Banking Financial Companies (NBFCs) is 9.8% of it)."
    ]
   },
   "sibc-textiles-sub": {
@@ -59372,6 +59456,12 @@
     "sibc-textiles-sub-share-of-credit-scan",
     "sibc-textiles-sub-size-scan",
     "sibc-textiles-sub-yoy-scan"
+   ],
+   "col_labels": {
+    "of_cut": "% of textiles"
+   },
+   "key": [
+    "% of textiles: each row's slice of textiles (Other Textiles is 46.5% of it)."
    ]
   },
   "sibc-trade-sub": {
@@ -61108,6 +61198,12 @@
     "sibc-trade-sub-share-of-credit-scan",
     "sibc-trade-sub-size-scan",
     "sibc-trade-sub-yoy-scan"
+   ],
+   "col_labels": {
+    "of_cut": "% of trade"
+   },
+   "key": [
+    "% of trade: each row's slice of trade (Wholesale Trade is 55.3% of it)."
    ]
   }
  }

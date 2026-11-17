@@ -16,6 +16,7 @@ quietly stopped being one.
 """
 import argparse
 import json
+import re
 import sqlite3
 import sys
 from pathlib import Path
@@ -121,6 +122,40 @@ def all_tables(pipeline: str) -> tuple[dict, str]:
     return tables, doc["_meta"]["period"]
 
 
+def key_findings(stem: str, table: dict) -> list[str]:
+    """The key under a table quotes numbers (core/table_labels): the example row's cell, or the
+    stored coverage. Each must be exactly the cell of the row it names, in the column the
+    sentence is about, or the coverage the table carries; nothing else may appear.
+
+    The sentence names the row by its drawn name and the column by its label; both are resolved
+    here against the table itself, so a number moved to the wrong row or column fails too."""
+    out = []
+    labels = table.get("col_labels") or {}
+    by_label = {v: k for k, v in labels.items()}
+    rows = {(p.get("label") or p["entity"]): p for p in table["parts"]}
+    for line in table.get("key") or []:
+        head = line.split(":", 1)[0]
+        col = by_label.get(head)
+        if col is None:
+            out.append(f"{stem}: key line names no column of this table: {line!r}")
+            continue
+        nums = re.findall(r"-?\d[\d,]*\.?\d*%", line)
+        cov = table.get("coverage")
+        for n in nums:
+            if cov is not None and n == f"{cov:.1f}%" and "added up" in line or (
+                    cov is not None and n == f"{cov:.1f}%" and "names one part" in line):
+                continue
+            # The example: "(X is N of it)", "(X holds N)", "(N of X's)".
+            m = (re.search(r"\((.+?) (?:is|holds) " + re.escape(n), line)
+                 or re.search(re.escape(n) + r" of (.+?)'s\)", line))
+            who = m.group(1) if m else None
+            cell = (rows.get(who) or {}).get(col) or {}
+            if cell.get("display") != n:
+                out.append(f"{stem}: key quotes {n} for {who!r} in {labels[col]!r}, the cell reads "
+                           f"{cell.get('display')!r}")
+    return out
+
+
 def validate(pipeline: str, tables: dict | None = None) -> list[str]:
     """`tables` replaces the shipped files: the measurement harness injects defects into a copy
     and runs THIS function on it, never a re-implementation of it."""
@@ -137,6 +172,7 @@ def validate(pipeline: str, tables: dict | None = None) -> list[str]:
                 findings.append(f"{stem}: indexed as a bank breakout but its file is missing — "
                                 f"the toggle would open nothing")
                 continue
+            findings.extend(key_findings(stem, table))
             size_id = (table.get("columns") or {}).get("size", f"{stem}-size-scan")
             unit = reg.get(size_id, {}).get("compute", {}).get("unit")
             if not unit:

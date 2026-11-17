@@ -684,6 +684,13 @@
           "date": "2026-11-14",
           "how_measured": "same harness as 2026-11-14 (inject_bw2), all 19 saved quarters",
           "source": "analysis/pipelines/rbi_bankwise/validate_bankwise.py"
+        },
+        {
+          "metric": "table key sentences (core/table_labels → validate_cut_table.key_findings): each quoted number must be the named row's cell in the named column, or the table's coverage",
+          "value": "Control: 0 of 97 live tables flagged (sibc, nbfc, atm_pos, rbi_bankwise, incl. bank breakouts). Number changed by 0.1: 119/119 caught. Example row swapped for another row: 111/111 caught.",
+          "date": "2026-11-17",
+          "how_measured": "enumerated every key line of every shipped table; one injection per number and one per example row",
+          "source": "analysis/guards/validate_cut_table.py"
         }
       ],
       "observations": [

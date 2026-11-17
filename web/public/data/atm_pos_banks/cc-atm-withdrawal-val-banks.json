@@ -11784,6 +11784,13 @@
    "Jul 26",
    "Aug 26",
    "Sep 26"
+  ],
+  "new": [
+   "Apr 25",
+   "May 25",
+   "Jun 25",
+   "Jul 25",
+   "Aug 25"
   ]
  },
  "parent_periods": {
@@ -11848,13 +11855,19 @@
  },
  "source_signals": [
   "cc-atm-val-yoy",
+  "cc-atm-withdrawal-val-bank-allocation",
   "cc-atm-withdrawal-val-bank-scan",
   "cc-atm-withdrawal-val-bank-share-scan",
   "cc-atm-withdrawal-val-bank-yoy-scan",
   "cc-atm-withdrawal-val-banks-acceleration",
-  "cc-atm-withdrawal-val-banks-allocation",
   "cc-atm-withdrawal-val-banks-share-of-credit-scan"
  ],
  "metric": "cc_atm_withdrawal_val",
- "level": "bank"
+ "level": "bank",
+ "col_labels": {
+  "of_cut": "% of all banks"
+ },
+ "key": [
+  "% of all banks: each bank's share of all banks' credit card ATM withdrawal value (HDFC BANK LTD holds 28.9%)."
+ ]
 }

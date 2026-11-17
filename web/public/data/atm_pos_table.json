@@ -1526,7 +1526,13 @@
     "atm-offsite-category-yoy-scan",
     "atm-offsite-yoy"
    ],
-   "metric": "atm_offsite"
+   "metric": "atm_offsite",
+   "col_labels": {
+    "of_cut": "% of all banks"
+   },
+   "key": [
+    "% of all banks: each bank group's share of all banks' ATM offsite (Public Sector Banks holds 70.5%)."
+   ]
   },
   "atm-onsite-category": {
    "cut": "atm-onsite-category",
@@ -3143,7 +3149,13 @@
     "atm-onsite-category-yoy-scan",
     "atm-onsite-yoy"
    ],
-   "metric": "atm_onsite"
+   "metric": "atm_onsite",
+   "col_labels": {
+    "of_cut": "% of all banks"
+   },
+   "key": [
+    "% of all banks: each bank group's share of all banks' ATM onsite (Public Sector Banks holds 61.0%)."
+   ]
   },
   "bharat-qr-category": {
    "cut": "bharat-qr-category",
@@ -4771,7 +4783,13 @@
     "bharat-qr-category-yoy-scan",
     "bharat-qr-yoy"
    ],
-   "metric": "bharat_qr"
+   "metric": "bharat_qr",
+   "col_labels": {
+    "of_cut": "% of all banks"
+   },
+   "key": [
+    "% of all banks: each bank group's share of all banks' bharat QR (Private Sector Banks holds 60.3%)."
+   ]
   },
   "cc-atm-withdrawal-val-category": {
    "cut": "cc-atm-withdrawal-val-category",
@@ -6155,7 +6173,13 @@
     "cc-atm-withdrawal-val-category-size-scan",
     "cc-atm-withdrawal-val-category-yoy-scan"
    ],
-   "metric": "cc_atm_withdrawal_val"
+   "metric": "cc_atm_withdrawal_val",
+   "col_labels": {
+    "of_cut": "% of all banks"
+   },
+   "key": [
+    "% of all banks: each bank group's share of all banks' credit card ATM withdrawal value (Private Sector Banks holds 61.2%)."
+   ]
   },
   "cc-atm-withdrawal-vol-category": {
    "cut": "cc-atm-withdrawal-vol-category",
@@ -7541,7 +7565,13 @@
     "cc-atm-withdrawal-vol-category-size-scan",
     "cc-atm-withdrawal-vol-category-yoy-scan"
    ],
-   "metric": "cc_atm_withdrawal_vol"
+   "metric": "cc_atm_withdrawal_vol",
+   "col_labels": {
+    "of_cut": "% of all banks"
+   },
+   "key": [
+    "% of all banks: each bank group's share of all banks' credit card ATM withdrawals (Private Sector Banks holds 57.9%)."
+   ]
   },
   "cc-category": {
    "cut": "cc-category",
@@ -9180,7 +9210,13 @@
     "cc-category-yoy-scan",
     "cc-outstanding-yoy"
    ],
-   "metric": "credit_cards"
+   "metric": "credit_cards",
+   "col_labels": {
+    "of_cut": "% of all banks"
+   },
+   "key": [
+    "% of all banks: each bank group's share of all banks' credit cards (Private Sector Banks holds 70.4%)."
+   ]
   },
   "cc-ecom-txn-val-category": {
    "cut": "cc-ecom-txn-val-category",
@@ -10563,7 +10599,13 @@
     "cc-ecom-txn-val-category-yoy-scan",
     "cc-ecom-val-yoy"
    ],
-   "metric": "cc_ecom_txn_val"
+   "metric": "cc_ecom_txn_val",
+   "col_labels": {
+    "of_cut": "% of all banks"
+   },
+   "key": [
+    "% of all banks: each bank group's share of all banks' credit card ecommerce spend value (Private Sector Banks holds 74.5%)."
+   ]
   },
   "cc-ecom-txn-vol-category": {
    "cut": "cc-ecom-txn-vol-category",
@@ -12202,7 +12244,13 @@
     "cc-ecom-txn-vol-category-yoy-scan",
     "cc-ecom-vol-yoy"
    ],
-   "metric": "cc_ecom_txn_vol"
+   "metric": "cc_ecom_txn_vol",
+   "col_labels": {
+    "of_cut": "% of all banks"
+   },
+   "key": [
+    "% of all banks: each bank group's share of all banks' credit card ecommerce transactions (Private Sector Banks holds 62.1%)."
+   ]
   },
   "cc-other-txn-val-category": {
    "cut": "cc-other-txn-val-category",
@@ -13745,7 +13793,13 @@
     "cc-other-txn-val-category-yoy-scan",
     "cc-other-val-yoy"
    ],
-   "metric": "cc_other_txn_val"
+   "metric": "cc_other_txn_val",
+   "col_labels": {
+    "of_cut": "% of all banks"
+   },
+   "key": [
+    "% of all banks: each bank group's share of all banks' credit card other spend value (Small Finance Banks holds 93.3%)."
+   ]
   },
   "cc-other-txn-vol-category": {
    "cut": "cc-other-txn-vol-category",
@@ -15288,7 +15342,13 @@
     "cc-other-txn-vol-category-yoy-scan",
     "cc-other-vol-yoy"
    ],
-   "metric": "cc_other_txn_vol"
+   "metric": "cc_other_txn_vol",
+   "col_labels": {
+    "of_cut": "% of all banks"
+   },
+   "key": [
+    "% of all banks: each bank group's share of all banks' credit card other transactions (Small Finance Banks holds 96.4%)."
+   ]
   },
   "cc-pos-txn-val-category": {
    "cut": "cc-pos-txn-val-category",
@@ -16927,7 +16987,13 @@
     "cc-pos-txn-val-category-yoy-scan",
     "cc-pos-val-yoy"
    ],
-   "metric": "cc_pos_txn_val"
+   "metric": "cc_pos_txn_val",
+   "col_labels": {
+    "of_cut": "% of all banks"
+   },
+   "key": [
+    "% of all banks: each bank group's share of all banks' credit card POS spend value (Private Sector Banks holds 72.7%)."
+   ]
   },
   "cc-pos-txn-vol-category": {
    "cut": "cc-pos-txn-vol-category",
@@ -18566,7 +18632,13 @@
     "cc-pos-txn-vol-category-yoy-scan",
     "cc-pos-vol-yoy"
    ],
-   "metric": "cc_pos_txn_vol"
+   "metric": "cc_pos_txn_vol",
+   "col_labels": {
+    "of_cut": "% of all banks"
+   },
+   "key": [
+    "% of all banks: each bank group's share of all banks' credit card POS transactions (Private Sector Banks holds 82.2%)."
+   ]
   },
   "dc-atm-withdrawal-val-category": {
    "cut": "dc-atm-withdrawal-val-category",
@@ -20301,7 +20373,13 @@
     "dc-atm-withdrawal-val-category-size-scan",
     "dc-atm-withdrawal-val-category-yoy-scan"
    ],
-   "metric": "dc_atm_withdrawal_val"
+   "metric": "dc_atm_withdrawal_val",
+   "col_labels": {
+    "of_cut": "% of all banks"
+   },
+   "key": [
+    "% of all banks: each bank group's share of all banks' debit card ATM withdrawal value (Public Sector Banks holds 68.9%)."
+   ]
   },
   "dc-atm-withdrawal-vol-category": {
    "cut": "dc-atm-withdrawal-vol-category",
@@ -22036,7 +22114,13 @@
     "dc-atm-withdrawal-vol-category-size-scan",
     "dc-atm-withdrawal-vol-category-yoy-scan"
    ],
-   "metric": "dc_atm_withdrawal_vol"
+   "metric": "dc_atm_withdrawal_vol",
+   "col_labels": {
+    "of_cut": "% of all banks"
+   },
+   "key": [
+    "% of all banks: each bank group's share of all banks' debit card ATM withdrawals (Public Sector Banks holds 73.5%)."
+   ]
   },
   "dc-category": {
    "cut": "dc-category",
@@ -23516,7 +23600,13 @@
     "dc-category-yoy-scan",
     "dc-outstanding-yoy"
    ],
-   "metric": "debit_cards"
+   "metric": "debit_cards",
+   "col_labels": {
+    "of_cut": "% of all banks"
+   },
+   "key": [
+    "% of all banks: each bank group's share of all banks' debit cards (Public Sector Banks holds 63.5%)."
+   ]
   },
   "dc-ecom-txn-val-category": {
    "cut": "dc-ecom-txn-val-category",
@@ -24996,7 +25086,13 @@
     "dc-ecom-txn-val-category-yoy-scan",
     "dc-ecom-val-yoy"
    ],
-   "metric": "dc_ecom_txn_val"
+   "metric": "dc_ecom_txn_val",
+   "col_labels": {
+    "of_cut": "% of all banks"
+   },
+   "key": [
+    "% of all banks: each bank group's share of all banks' debit card ecommerce spend value (Private Sector Banks holds 72.4%)."
+   ]
   },
   "dc-ecom-txn-vol-category": {
    "cut": "dc-ecom-txn-vol-category",
@@ -26481,7 +26577,13 @@
     "dc-ecom-txn-vol-category-yoy-scan",
     "dc-ecom-vol-yoy"
    ],
-   "metric": "dc_ecom_txn_vol"
+   "metric": "dc_ecom_txn_vol",
+   "col_labels": {
+    "of_cut": "% of all banks"
+   },
+   "key": [
+    "% of all banks: each bank group's share of all banks' debit card ecommerce transactions (Private Sector Banks holds 60.2%)."
+   ]
   },
   "dc-other-txn-val-category": {
    "cut": "dc-other-txn-val-category",
@@ -28172,7 +28274,13 @@
     "dc-other-txn-val-category-yoy-scan",
     "dc-other-val-yoy"
    ],
-   "metric": "dc_other_txn_val"
+   "metric": "dc_other_txn_val",
+   "col_labels": {
+    "of_cut": "% of all banks"
+   },
+   "key": [
+    "% of all banks: each bank group's share of all banks' debit card other spend value (Private Sector Banks holds 92.3%)."
+   ]
   },
   "dc-other-txn-vol-category": {
    "cut": "dc-other-txn-vol-category",
@@ -29655,7 +29763,13 @@
     "dc-other-txn-vol-category-yoy-scan",
     "dc-other-vol-yoy"
    ],
-   "metric": "dc_other_txn_vol"
+   "metric": "dc_other_txn_vol",
+   "col_labels": {
+    "of_cut": "% of all banks"
+   },
+   "key": [
+    "% of all banks: each bank group's share of all banks' debit card other transactions (Private Sector Banks holds 79.5%)."
+   ]
   },
   "dc-pos-txn-val-category": {
    "cut": "dc-pos-txn-val-category",
@@ -31379,7 +31493,13 @@
     "dc-pos-txn-val-category-yoy-scan",
     "dc-pos-val-yoy"
    ],
-   "metric": "dc_pos_txn_val"
+   "metric": "dc_pos_txn_val",
+   "col_labels": {
+    "of_cut": "% of all banks"
+   },
+   "key": [
+    "% of all banks: each bank group's share of all banks' debit card POS spend value (Public Sector Banks holds 56.0%)."
+   ]
   },
   "dc-pos-txn-vol-category": {
    "cut": "dc-pos-txn-vol-category",
@@ -32857,7 +32977,13 @@
     "dc-pos-txn-vol-category-yoy-scan",
     "dc-pos-vol-yoy"
    ],
-   "metric": "dc_pos_txn_vol"
+   "metric": "dc_pos_txn_vol",
+   "col_labels": {
+    "of_cut": "% of all banks"
+   },
+   "key": [
+    "% of all banks: each bank group's share of all banks' debit card POS transactions (Public Sector Banks holds 62.2%)."
+   ]
   },
   "dc-pos-withdrawal-val-category": {
    "cut": "dc-pos-withdrawal-val-category",
@@ -34140,7 +34266,13 @@
     "dc-pos-withdrawal-val-category-yoy-scan",
     "dc-pos-withdrawal-val-yoy"
    ],
-   "metric": "dc_pos_withdrawal_val"
+   "metric": "dc_pos_withdrawal_val",
+   "col_labels": {
+    "of_cut": "% of all banks"
+   },
+   "key": [
+    "% of all banks: each bank group's share of all banks' debit card POS withdrawal value (Small Finance Banks holds 74.7%)."
+   ]
   },
   "dc-pos-withdrawal-vol-category": {
    "cut": "dc-pos-withdrawal-vol-category",
@@ -35425,7 +35557,13 @@
     "dc-pos-withdrawal-vol-category-yoy-scan",
     "dc-pos-withdrawal-vol-yoy"
    ],
-   "metric": "dc_pos_withdrawal_vol"
+   "metric": "dc_pos_withdrawal_vol",
+   "col_labels": {
+    "of_cut": "% of all banks"
+   },
+   "key": [
+    "% of all banks: each bank group's share of all banks' debit card POS withdrawals (Public Sector Banks holds 62.2%)."
+   ]
   },
   "micro-atms-category": {
    "cut": "micro-atms-category",
@@ -36894,7 +37032,13 @@
     "micro-atms-category-size-scan",
     "micro-atms-category-yoy-scan"
    ],
-   "metric": "micro_atms"
+   "metric": "micro_atms",
+   "col_labels": {
+    "of_cut": "% of all banks"
+   },
+   "key": [
+    "% of all banks: each bank group's share of all banks' micro atms (Payment Banks holds 75.9%)."
+   ]
   },
   "pos-category": {
    "cut": "pos-category",
@@ -38278,7 +38422,13 @@
     "pos-category-yoy-scan",
     "pos-terminals-yoy"
    ],
-   "metric": "pos_terminals"
+   "metric": "pos_terminals",
+   "col_labels": {
+    "of_cut": "% of all banks"
+   },
+   "key": [
+    "% of all banks: each bank group's share of all banks' POS terminals (Private Sector Banks holds 79.6%)."
+   ]
   },
   "upi-qr-category": {
    "cut": "upi-qr-category",
@@ -39980,7 +40130,13 @@
     "upi-qr-category-yoy-scan",
     "upi-qr-yoy"
    ],
-   "metric": "upi_qr"
+   "metric": "upi_qr",
+   "col_labels": {
+    "of_cut": "% of all banks"
+   },
+   "key": [
+    "% of all banks: each bank group's share of all banks' UPI QR (Private Sector Banks holds 96.4%)."
+   ]
   }
  }
 }

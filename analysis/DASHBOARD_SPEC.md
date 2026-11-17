@@ -969,6 +969,24 @@ the surface, and it was already there.
 
 ---
 
+### 17.6 Share columns say what they divide by (2026-11-17, user: "I keep forgetting of cut and of book")
+
+"of cut" and "of book" named a mechanism, and "of book" meant all bank credit (SIBC), all NBFC credit
+(NBFC) and the bank's own lending (bank-wise). The meaning lived in a hover hint a phone never shows.
+Now each table carries, rendered in Python (`core/table_labels.py`) and drawn by `CutTable`, the chart
+panel and the row list:
+- `col_labels`: "% of industry", "% of the 4 sectors" (rows that do not add up to the parent), "% of
+  the part shown" (RBI names one), "% of all banks", "% of bank credit", "% of NBFC credit", "% of
+  bank's book". Every name is derived: parent and denominator from the CSV by the registry's codes;
+  per-bank tables divide by all banks by construction.
+- `key`: one always-visible line per share column under the table, with the top row as the example.
+  `validate_cut_table.key_findings` checks each quoted number is that row's cell in that column, or the
+  table's coverage (measured 2026-11-17: 0 of 97 live tables flagged; 119/119 changed numbers and
+  111/111 swapped rows caught). Where the key states the coverage, the old caveat line is not repeated.
+- The adapters' hand-typed `bookLabel`s were removed (one source). Hover hints now point at the key.
+- Known, not fixed: on a two-row table (NBFC industry) the header hover boxes overflow the table and
+  draw a small scrollbar beside it; pre-existing.
+
 ## 18. Which cards still earn a place (2026-09-13)
 
 Once §17's table exists, most cards are a table row written out as a sentence. Measured over
@@ -1269,6 +1287,23 @@ instance of [[feedback_check_population]] in three days.
   own gate run, deliberately not folded into a UI refactor.
 
 ---
+
+### 20.x As built: the Banks dimension on the credit page (2026-11-17, BANKWISE_SPEC phase 5)
+
+Each bank's credit (`rbi_bankwise`, quarterly) is one more dimension of `/`, not a page: tile → measure
+filter (13, in the order the sidecar declares, `_meta.order`) → bank-group table → "by bank" breakout →
+cell chart. The same shell and parts as payments; no bespoke component.
+- **Its own calendar, said once.** The tile and pane carry "Jun 2026 · quarterly" (`asOf`, rendered in
+  Python as `_meta.period_label`), so a June quarter is never read as the page's September month. No news
+  block on the tile (`noNews`): bank-wise writes no cards, and "Nothing notable" would be a claim.
+- **Rows keyed by roster id are drawn by `label`** (`core.banks.display`, one rule plus `short` overrides).
+- **Columns a table declares**: `gnpa` (all credit, by bank), `of_book` (a line's share of each bank's own
+  book), `new` where a bank allocation is stored. Payments' by-bank tables gained `new` the same way (7 of 26).
+- **`unsortable`**: growth is not sortable on bank-wise by-bank tables until the minimum-base rule.
+- **Shared fixes made on the way:** a by-bank view's band is its measure's own (it fell back to the anchor);
+  a chart over more than 12 rows offers the 8 largest as compare chips and folds the rest; the band's
+  subline reads "every release", not "every month".
+- Open gaps (user, 2026-11-17): BANKWISE_SPEC §8b.
 
 ## 21. The real economy beside the credit (v0.3, BUILT 2026-10-04)
 

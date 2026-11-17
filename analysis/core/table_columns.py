@@ -39,9 +39,9 @@ COLUMNS: tuple[Column, ...] = (
     Column("size",        "Size",        "level",
            hint="How big this part is today, in the table's own unit."),
     Column("of_cut",      "of cut",      "pct",
-           hint="Its share of this table: the parts added up."),
+           hint="A share: this row's slice of the total the heading names. The line under the table says it in words."),
     Column("of_book",     "of book",     "pct",
-           hint="Its share of the whole book, not just of this table."),
+           hint="A second share, over a bigger whole that the heading names. The line under the table says it in words."),
     Column("growth",      "Growth",      "pct",
            hint="Year-on-year growth: now against the same month a year ago."),
     Column("pace",        "Pace",        "pp",
@@ -51,6 +51,9 @@ COLUMNS: tuple[Column, ...] = (
            hint="Of the net change over the last 12 months, the part that came from here. "
                 "Reads 'Of fall' when the total shrank; can pass 100% when parts move in "
                 "opposite directions."),
+    # Declared by the cut that has it (bank-wise: each bank's credit, 2026-11-17).
+    Column("gnpa",        "GNPA",        "pct",
+           hint="Gross non-performing assets as a share of gross advances, as RBI prints it."),
     # 1f (signals/README §1f): drawn only on a cut that declares 1f signals.
     Column("real_credit", "Real credit", "pct", "real",
            hint="Growth with price changes taken out, using the prices of what this part "

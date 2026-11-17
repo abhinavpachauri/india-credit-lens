@@ -13072,14 +13072,20 @@
   ]
  },
  "source_signals": [
+  "dc-bank-allocation",
   "dc-bank-scan",
   "dc-bank-share-scan",
   "dc-bank-yoy-scan",
   "dc-outstanding-yoy",
   "debit-cards-banks-acceleration",
-  "debit-cards-banks-allocation",
   "debit-cards-banks-share-of-credit-scan"
  ],
  "metric": "debit_cards",
- "level": "bank"
+ "level": "bank",
+ "col_labels": {
+  "of_cut": "% of all banks"
+ },
+ "key": [
+  "% of all banks: each bank's share of all banks' debit cards (STATE BANK OF INDIA holds 24.9%)."
+ ]
 }

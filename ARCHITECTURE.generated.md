@@ -8,7 +8,7 @@
 > Authored rationale (layer model, design principles, guard purposes) lives in the
 > hand-written `ARCHITECTURE.md`. This file is the structural, drift-guarded half.
 
-_Derived from 116 scripts._
+_Derived from 118 scripts._
 
 ## 1. Data-flow
 
@@ -89,7 +89,7 @@ Scripts each orchestrator launches as a subprocess, in execution order.
 | `analysis/rbi_atm_pos/insights.json` | derived | `pipelines/atm_pos/generate_atm_pos_insights` | `pipelines/atm_pos/validate_atm_pos_claims`, `pipelines/atm_pos/validate_atm_pos_insights` |
 | `analysis/rbi_atm_pos/merged/system_model.json` | external/authored | — | `core/relational_insights`, `guards/audit_force_sources` |
 | `analysis/rbi_atm_pos/signals.json` | derived | `pipelines/atm_pos/compute_atm_pos_signals` | `pipelines/atm_pos/generate_atm_pos_insights`, `pipelines/atm_pos/validate_atm_pos_claims`, `pipelines/atm_pos/validate_atm_pos_insights` |
-| `analysis/rbi_bankwise/skeleton_profile.json` | external/authored | — | `pipelines/rbi_bankwise/build_registry` |
+| `analysis/rbi_bankwise/skeleton_profile.json` | external/authored | — | `pipelines/rbi_bankwise/build_registry`, `pipelines/rbi_bankwise/cuts` |
 | `analysis/rbi_sibc/date_remap.json` | derived | `pipelines/sibc/update_web_data` | — |
 | `analysis/rbi_sibc/merged/annotations_merged.ts` | external/authored | — | `pipelines/sibc/validate_annotation_basis` |
 | `analysis/rbi_sibc/merged/sections_merged.json` | external/authored | — | `hook_validate`, `pipelines/sibc/detect_format`, `pipelines/sibc/generate_merge`, `pipelines/sibc/validate_content`, `pipelines/sibc/validate_web_series` |
@@ -97,7 +97,7 @@ Scripts each orchestrator launches as a subprocess, in execution order.
 | `analysis/rbi_sibc/series_breaks.json` | external/authored | — | `pipelines/sibc/check_restatements` |
 | `analysis/rbi_sibc/timeline.json` | external/authored | — | `core/validate_timeline`, `pipelines/sibc/generate_merge`, `signals/query` |
 | `analysis/signals/narrative_cache.json` | derived | `cross/generate_opportunity_narrative` | — |
-| `analysis/signals/registry.json` | derived | `pipelines/rbi_bankwise/build_registry`, `signals/apply_status_rules`, `signals/update_registry` | `core/coverage`, `core/force_check`, `core/generate_signal_history`, `core/generate_system_state`, `core/real_cells`, `core/relational_insights`, `core/validate_opportunity_traceability`, `cross/generate_opportunities_feed`, `cross/validate_composition`, `cross/validate_concordance`, `guards/check_signal_freshness`, `guards/validate_card_cuts`, `guards/validate_cut_table`, `guards/validate_signal_history`, `guards/validate_state_band`, `measure_coherence_threshold`, `pipelines/atm_pos/compute_atm_pos_signals`, `pipelines/atm_pos/generate_atm_pos_insights`, `pipelines/atm_pos/validate_atm_pos_insights`, `pipelines/sibc/generate_analysis_report`, `pipelines/sibc/validate_sibc_traceability`, `signals/proximity`, `signals/stamp_state`, `signals/stamp_table` |
+| `analysis/signals/registry.json` | derived | `pipelines/rbi_bankwise/build_registry`, `signals/apply_status_rules`, `signals/update_registry` | `core/coverage`, `core/force_check`, `core/generate_signal_history`, `core/generate_system_state`, `core/real_cells`, `core/relational_insights`, `core/table_labels`, `core/validate_opportunity_traceability`, `cross/generate_opportunities_feed`, `cross/validate_composition`, `cross/validate_concordance`, `guards/check_signal_freshness`, `guards/validate_card_cuts`, `guards/validate_cut_table`, `guards/validate_signal_history`, `guards/validate_state_band`, `measure_coherence_threshold`, `pipelines/atm_pos/compute_atm_pos_signals`, `pipelines/atm_pos/generate_atm_pos_insights`, `pipelines/atm_pos/validate_atm_pos_insights`, `pipelines/sibc/generate_analysis_report`, `pipelines/sibc/validate_sibc_traceability`, `signals/proximity`, `signals/stamp_state`, `signals/stamp_table` |
 | `analysis/signals/signals.db` | derived | `signals/db` | `core/derive_opportunities`, `core/force_check`, `core/gate`, `core/generate_system_state`, `core/relational_insights`, `core/validate_opportunity_traceability`, `cross/compose_ecosystem`, `cross/generate_opportunities_feed`, `cross/generate_opportunity_narrative`, `guards/check_derived_fresh`, `guards/validate_cut_table`, `guards/validate_signal_history`, `guards/validate_state_band`, `measure_coherence_threshold`, `pipelines/atm_pos/compute_atm_pos_signals`, `pipelines/atm_pos/generate_atm_pos_insights`, `pipelines/atm_pos/validate_atm_pos_claims`, `pipelines/atm_pos/validate_atm_pos_insights`, `pipelines/sibc/generate_analysis_report`, `pipelines/sibc/validate_sibc_traceability`, `signals/db_pack`, `signals/dominance`, `signals/proximity`, `signals/stamp_state`, `signals/stamp_table` |
 | `web/lib/reports/rbi_sibc.ts` | derived | `pipelines/sibc/promote_annotations` | `hook_validate`, `pipelines/sibc/validate_annotation_basis`, `pipelines/sibc/validate_web_series` |
 | `web/lib/reports/rbi_sibc_label_overrides.json` | external/authored | — | `core/cuts`, `pipelines/sibc/validate_web_series` |
@@ -128,6 +128,7 @@ orchestrated, not import-coupled).
 - `core/relationship_test` → `core/coverage`, `core/force_check`, `core/generate_skeleton`, `core/manifest`, `core/series_breaks`
 - `core/run_inference` → `core/generate_skeleton`, `core/keep_awake`, `core/manifest`
 - `core/series_breaks` → `core/absence`, `core/manifest`
+- `core/table_labels` → `core/manifest`
 - `core/validate_system_model` → `core/generate_skeleton`, `core/manifest`
 - `cross/compose_ecosystem` → `core/generate_skeleton`, `core/manifest`
 - `cross/derive_cross_links` → `core/generate_skeleton`, `core/manifest`
@@ -180,7 +181,7 @@ orchestrated, not import-coupled).
 - `signals/query` → `core/cadence`
 - `signals/stamp_planes` → `signals/planes`, `signals/proximity`
 - `signals/stamp_state` → `core/manifest`, `core/state_lines`
-- `signals/stamp_table` → `core/manifest`, `core/real_cells`, `core/table_rows`
+- `signals/stamp_table` → `core/banks`, `core/manifest`, `core/real_cells`, `core/table_labels`, `core/table_rows`
 
 ## 5. Findings (drift signals)
 

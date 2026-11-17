@@ -230,14 +230,30 @@ def test_every_computed_table_is_reachable_from_the_dashboard():
     # Which adapter renders which pipeline. A MAP, and the assert below is what stops it
     # becoming the fourth instance of this same defect: a pipeline that ships tables and has
     # no entry here FAILS, rather than being quietly skipped the way NBFC would have been.
-    ADAPTER = {"sibc": "SibcReadMode.tsx", "atm_pos": "AtmReadMode.tsx", "nbfc": "NbfcReadMode.tsx"}
+    ADAPTER = {"sibc": "SibcReadMode.tsx", "atm_pos": "AtmReadMode.tsx", "nbfc": "NbfcReadMode.tsx",
+               # Bank-wise is a dimension of the credit page (BANKWISE_SPEC phase 5).
+               "rbi_bankwise": "SibcReadMode.tsx"}
     shipping = set(manifest.pipelines_with_stage("stamp_table"))
     assert shipping <= set(ADAPTER), (
         f"{sorted(shipping - set(ADAPTER))} ships cut tables and no adapter is named here, so "
         f"this test would silently stop covering it — which is the defect it exists to catch")
 
+    # A sidecar that DECLARES its reading order (`_meta.order`) is rendered from that order, so
+    # every cut must be in it, and the page must actually load it for this pipeline.
+    page = (ROOT / "web" / "app" / "page.tsx").read_text()
+    by_order = set()
+    for pipeline in sorted(shipping):
+        doc = json.loads((DATA / f"{pipeline}_table.json").read_text())
+        order = doc.get("_meta", {}).get("order")
+        if order is None:
+            continue
+        by_order.add(pipeline)
+        assert f'loadCutOrder("{pipeline}")' in page, f"{pipeline} declares an order nothing loads"
+        assert set(doc["cuts"]) <= set(order), (
+            f"{pipeline}: computed and outside the declared order: {sorted(set(doc['cuts']) - set(order))}")
+
     # Every sector-hierarchy pipeline resolves a cut by its STEM, declared in the adapter.
-    for pipeline in sorted(shipping - {"atm_pos"}):
+    for pipeline in sorted(shipping - {"atm_pos"} - by_order):
         doc = json.loads((DATA / f"{pipeline}_table.json").read_text())
         declared = set(re.findall(r'stem:\s*"([^"]+)"',
                                   (web / ADAPTER[pipeline]).read_text()))
@@ -304,10 +320,14 @@ def test_a_bank_breakout_is_a_cut_like_any_other():
         assert t.get("level") == "bank" and t.get("metric") == metric
         assert len(t["parts"]) == entry["parts"] > 20, \
             f"{metric}: the index says {entry['parts']} banks, the file has {len(t['parts'])}"
-        # A bank breakout has no 12-month allocation window and no acceleration, and six
-        # columns of dashes would claim it does.
-        assert set(t["columns"]) == {"size", "of_cut", "growth"}, \
-            f"{metric} declares {sorted(t['columns'])}"
+        # A bank breakout stores no acceleration, so no pace column; its share of the new money
+        # is a column only where the bank allocation published one (`alloc` is withheld when
+        # banks moved against each other), and six columns of dashes would claim otherwise.
+        cols = set(t["columns"])
+        assert {"size", "of_cut", "growth"} <= cols <= {"size", "of_cut", "growth", "new"}, \
+            f"{metric} declares {sorted(cols)}"
+        assert ("new" in cols) == any(p.get("new") for p in t["parts"]), \
+            f"{metric}: a New column with no cell in it, or cells under no column"
 
 
 def test_a_breakout_ships_as_its_own_file():

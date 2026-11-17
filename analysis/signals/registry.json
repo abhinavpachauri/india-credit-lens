@@ -23243,7 +23243,11 @@
             "if": "true",
             "then": "active"
           }
-        ]
+        ],
+        "table_column": {
+          "metric": "major_sectoral.gross_advances@dom",
+          "column": "gnpa"
+        }
       }
     },
     "bw-gross-bank-momentum": {
@@ -23504,6 +23508,760 @@
         "metric": "major_sectoral.other_retail_loans_gross_advances@dom",
         "unit": "crore",
         "window": 12
+      }
+    },
+    "bw-gross-category-momentum": {
+      "id": "bw-gross-category-momentum",
+      "title": "Gross advances (all banks) — crore each bank group added over the year",
+      "description": "Each bank group's change in gross advances (all banks) over the year, with the net, gross and coherence; absent across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_category_momentum",
+        "metric": "major_sectoral.gross_advances@dom",
+        "unit": "crore",
+        "window": 12
+      }
+    },
+    "bw-gross-category-allocation": {
+      "id": "bw-gross-category-allocation",
+      "title": "Gross advances (all banks) — each bank group's share of the year's new money",
+      "description": "Of the year's change in gross advances (all banks), how much each bank group added or lost.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_category_allocation",
+        "metric": "major_sectoral.gross_advances@dom",
+        "window": 12,
+        "coherence_min": 0.9
+      }
+    },
+    "bw-gross-category-acceleration": {
+      "id": "bw-gross-category-acceleration",
+      "title": "Gross advances (all banks) — each bank group's pace",
+      "description": "The change in each bank group's growth a year since the previous quarter, in points.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_category_acceleration",
+        "metric": "major_sectoral.gross_advances@dom"
+      }
+    },
+    "bw-food-category-momentum": {
+      "id": "bw-food-category-momentum",
+      "title": "Food credit — crore each bank group added over the year",
+      "description": "Each bank group's change in food credit over the year, with the net, gross and coherence; absent across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_category_momentum",
+        "metric": "major_sectoral.food_credit_gross_advances@dom",
+        "unit": "crore",
+        "window": 12
+      }
+    },
+    "bw-food-category-allocation": {
+      "id": "bw-food-category-allocation",
+      "title": "Food credit — each bank group's share of the year's new money",
+      "description": "Of the year's change in food credit, how much each bank group added or lost.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_category_allocation",
+        "metric": "major_sectoral.food_credit_gross_advances@dom",
+        "window": 12,
+        "coherence_min": 0.9
+      }
+    },
+    "bw-food-category-acceleration": {
+      "id": "bw-food-category-acceleration",
+      "title": "Food credit — each bank group's pace",
+      "description": "The change in each bank group's growth a year since the previous quarter, in points.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_category_acceleration",
+        "metric": "major_sectoral.food_credit_gross_advances@dom"
+      }
+    },
+    "bw-non-food-category-momentum": {
+      "id": "bw-non-food-category-momentum",
+      "title": "Non-food credit — crore each bank group added over the year",
+      "description": "Each bank group's change in non-food credit over the year, with the net, gross and coherence; absent across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_category_momentum",
+        "metric": "major_sectoral.non_food_credit_gross_advances@dom",
+        "unit": "crore",
+        "window": 12
+      }
+    },
+    "bw-non-food-category-allocation": {
+      "id": "bw-non-food-category-allocation",
+      "title": "Non-food credit — each bank group's share of the year's new money",
+      "description": "Of the year's change in non-food credit, how much each bank group added or lost.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_category_allocation",
+        "metric": "major_sectoral.non_food_credit_gross_advances@dom",
+        "window": 12,
+        "coherence_min": 0.9
+      }
+    },
+    "bw-non-food-category-acceleration": {
+      "id": "bw-non-food-category-acceleration",
+      "title": "Non-food credit — each bank group's pace",
+      "description": "The change in each bank group's growth a year since the previous quarter, in points.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_category_acceleration",
+        "metric": "major_sectoral.non_food_credit_gross_advances@dom"
+      }
+    },
+    "bw-agri-category-momentum": {
+      "id": "bw-agri-category-momentum",
+      "title": "Agriculture and allied activities — crore each bank group added over the year",
+      "description": "Each bank group's change in agriculture and allied activities over the year, with the net, gross and coherence; absent across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "sector_mix",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_category_momentum",
+        "metric": "major_sectoral.agriculture_and_allied_activities_gross_advances@dom",
+        "unit": "crore",
+        "window": 12
+      }
+    },
+    "bw-agri-category-allocation": {
+      "id": "bw-agri-category-allocation",
+      "title": "Agriculture and allied activities — each bank group's share of the year's new money",
+      "description": "Of the year's change in agriculture and allied activities, how much each bank group added or lost.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "sector_mix",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_category_allocation",
+        "metric": "major_sectoral.agriculture_and_allied_activities_gross_advances@dom",
+        "window": 12,
+        "coherence_min": 0.9
+      }
+    },
+    "bw-agri-category-acceleration": {
+      "id": "bw-agri-category-acceleration",
+      "title": "Agriculture and allied activities — each bank group's pace",
+      "description": "The change in each bank group's growth a year since the previous quarter, in points.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "sector_mix",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_category_acceleration",
+        "metric": "major_sectoral.agriculture_and_allied_activities_gross_advances@dom"
+      }
+    },
+    "bw-industry-category-momentum": {
+      "id": "bw-industry-category-momentum",
+      "title": "Industry — crore each bank group added over the year",
+      "description": "Each bank group's change in industry over the year, with the net, gross and coherence; absent across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "industry",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_category_momentum",
+        "metric": "major_sectoral.industry_gross_advances@dom",
+        "unit": "crore",
+        "window": 12
+      }
+    },
+    "bw-industry-category-allocation": {
+      "id": "bw-industry-category-allocation",
+      "title": "Industry — each bank group's share of the year's new money",
+      "description": "Of the year's change in industry, how much each bank group added or lost.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "industry",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_category_allocation",
+        "metric": "major_sectoral.industry_gross_advances@dom",
+        "window": 12,
+        "coherence_min": 0.9
+      }
+    },
+    "bw-industry-category-acceleration": {
+      "id": "bw-industry-category-acceleration",
+      "title": "Industry — each bank group's pace",
+      "description": "The change in each bank group's growth a year since the previous quarter, in points.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "industry",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_category_acceleration",
+        "metric": "major_sectoral.industry_gross_advances@dom"
+      }
+    },
+    "bw-services-category-momentum": {
+      "id": "bw-services-category-momentum",
+      "title": "Services — crore each bank group added over the year",
+      "description": "Each bank group's change in services over the year, with the net, gross and coherence; absent across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "sector_mix",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_category_momentum",
+        "metric": "major_sectoral.services_gross_advances@dom",
+        "unit": "crore",
+        "window": 12
+      }
+    },
+    "bw-services-category-allocation": {
+      "id": "bw-services-category-allocation",
+      "title": "Services — each bank group's share of the year's new money",
+      "description": "Of the year's change in services, how much each bank group added or lost.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "sector_mix",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_category_allocation",
+        "metric": "major_sectoral.services_gross_advances@dom",
+        "window": 12,
+        "coherence_min": 0.9
+      }
+    },
+    "bw-services-category-acceleration": {
+      "id": "bw-services-category-acceleration",
+      "title": "Services — each bank group's pace",
+      "description": "The change in each bank group's growth a year since the previous quarter, in points.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "sector_mix",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_category_acceleration",
+        "metric": "major_sectoral.services_gross_advances@dom"
+      }
+    },
+    "bw-retail-category-momentum": {
+      "id": "bw-retail-category-momentum",
+      "title": "Retail loans — crore each bank group added over the year",
+      "description": "Each bank group's change in retail loans over the year, with the net, gross and coherence; absent across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_category_momentum",
+        "metric": "major_sectoral.retail_loans_gross_advances@dom",
+        "unit": "crore",
+        "window": 12
+      }
+    },
+    "bw-retail-category-allocation": {
+      "id": "bw-retail-category-allocation",
+      "title": "Retail loans — each bank group's share of the year's new money",
+      "description": "Of the year's change in retail loans, how much each bank group added or lost.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_category_allocation",
+        "metric": "major_sectoral.retail_loans_gross_advances@dom",
+        "window": 12,
+        "coherence_min": 0.9
+      }
+    },
+    "bw-retail-category-acceleration": {
+      "id": "bw-retail-category-acceleration",
+      "title": "Retail loans — each bank group's pace",
+      "description": "The change in each bank group's growth a year since the previous quarter, in points.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_category_acceleration",
+        "metric": "major_sectoral.retail_loans_gross_advances@dom"
+      }
+    },
+    "bw-other-non-food-category-momentum": {
+      "id": "bw-other-non-food-category-momentum",
+      "title": "Other non-food credit — crore each bank group added over the year",
+      "description": "Each bank group's change in other non-food credit over the year, with the net, gross and coherence; absent across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_category_momentum",
+        "metric": "major_sectoral.other_non_food_credit_gross_advances@dom",
+        "unit": "crore",
+        "window": 12
+      }
+    },
+    "bw-other-non-food-category-allocation": {
+      "id": "bw-other-non-food-category-allocation",
+      "title": "Other non-food credit — each bank group's share of the year's new money",
+      "description": "Of the year's change in other non-food credit, how much each bank group added or lost.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_category_allocation",
+        "metric": "major_sectoral.other_non_food_credit_gross_advances@dom",
+        "window": 12,
+        "coherence_min": 0.9
+      }
+    },
+    "bw-other-non-food-category-acceleration": {
+      "id": "bw-other-non-food-category-acceleration",
+      "title": "Other non-food credit — each bank group's pace",
+      "description": "The change in each bank group's growth a year since the previous quarter, in points.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "credit_headline",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_category_acceleration",
+        "metric": "major_sectoral.other_non_food_credit_gross_advances@dom"
+      }
+    },
+    "bw-housing-category-momentum": {
+      "id": "bw-housing-category-momentum",
+      "title": "Housing loans — crore each bank group added over the year",
+      "description": "Each bank group's change in housing loans over the year, with the net, gross and coherence; absent across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_category_momentum",
+        "metric": "major_sectoral.retail_loans_housing_loans_gross_advances@dom",
+        "unit": "crore",
+        "window": 12
+      }
+    },
+    "bw-housing-category-allocation": {
+      "id": "bw-housing-category-allocation",
+      "title": "Housing loans — each bank group's share of the year's new money",
+      "description": "Of the year's change in housing loans, how much each bank group added or lost.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_category_allocation",
+        "metric": "major_sectoral.retail_loans_housing_loans_gross_advances@dom",
+        "window": 12,
+        "coherence_min": 0.9
+      }
+    },
+    "bw-housing-category-acceleration": {
+      "id": "bw-housing-category-acceleration",
+      "title": "Housing loans — each bank group's pace",
+      "description": "The change in each bank group's growth a year since the previous quarter, in points.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_category_acceleration",
+        "metric": "major_sectoral.retail_loans_housing_loans_gross_advances@dom"
+      }
+    },
+    "bw-vehicle-category-momentum": {
+      "id": "bw-vehicle-category-momentum",
+      "title": "Vehicle / auto loans — crore each bank group added over the year",
+      "description": "Each bank group's change in vehicle / auto loans over the year, with the net, gross and coherence; absent across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_category_momentum",
+        "metric": "major_sectoral.retail_loans_vehicle_auto_loans_gross_advances@dom",
+        "unit": "crore",
+        "window": 12
+      }
+    },
+    "bw-vehicle-category-allocation": {
+      "id": "bw-vehicle-category-allocation",
+      "title": "Vehicle / auto loans — each bank group's share of the year's new money",
+      "description": "Of the year's change in vehicle / auto loans, how much each bank group added or lost.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_category_allocation",
+        "metric": "major_sectoral.retail_loans_vehicle_auto_loans_gross_advances@dom",
+        "window": 12,
+        "coherence_min": 0.9
+      }
+    },
+    "bw-vehicle-category-acceleration": {
+      "id": "bw-vehicle-category-acceleration",
+      "title": "Vehicle / auto loans — each bank group's pace",
+      "description": "The change in each bank group's growth a year since the previous quarter, in points.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_category_acceleration",
+        "metric": "major_sectoral.retail_loans_vehicle_auto_loans_gross_advances@dom"
+      }
+    },
+    "bw-cards-category-momentum": {
+      "id": "bw-cards-category-momentum",
+      "title": "Credit card receivables — crore each bank group added over the year",
+      "description": "Each bank group's change in credit card receivables over the year, with the net, gross and coherence; absent across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_category_momentum",
+        "metric": "major_sectoral.retail_loans_credit_card_receivables_gross_advances@dom",
+        "unit": "crore",
+        "window": 12
+      }
+    },
+    "bw-cards-category-allocation": {
+      "id": "bw-cards-category-allocation",
+      "title": "Credit card receivables — each bank group's share of the year's new money",
+      "description": "Of the year's change in credit card receivables, how much each bank group added or lost.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_category_allocation",
+        "metric": "major_sectoral.retail_loans_credit_card_receivables_gross_advances@dom",
+        "window": 12,
+        "coherence_min": 0.9
+      }
+    },
+    "bw-cards-category-acceleration": {
+      "id": "bw-cards-category-acceleration",
+      "title": "Credit card receivables — each bank group's pace",
+      "description": "The change in each bank group's growth a year since the previous quarter, in points.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_category_acceleration",
+        "metric": "major_sectoral.retail_loans_credit_card_receivables_gross_advances@dom"
+      }
+    },
+    "bw-education-category-momentum": {
+      "id": "bw-education-category-momentum",
+      "title": "Education loans — crore each bank group added over the year",
+      "description": "Each bank group's change in education loans over the year, with the net, gross and coherence; absent across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_category_momentum",
+        "metric": "major_sectoral.retail_loans_education_gross_advances@dom",
+        "unit": "crore",
+        "window": 12
+      }
+    },
+    "bw-education-category-allocation": {
+      "id": "bw-education-category-allocation",
+      "title": "Education loans — each bank group's share of the year's new money",
+      "description": "Of the year's change in education loans, how much each bank group added or lost.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_category_allocation",
+        "metric": "major_sectoral.retail_loans_education_gross_advances@dom",
+        "window": 12,
+        "coherence_min": 0.9
+      }
+    },
+    "bw-education-category-acceleration": {
+      "id": "bw-education-category-acceleration",
+      "title": "Education loans — each bank group's pace",
+      "description": "The change in each bank group's growth a year since the previous quarter, in points.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "weakening",
+      "compute": {
+        "method": "csv_category_acceleration",
+        "metric": "major_sectoral.retail_loans_education_gross_advances@dom"
+      }
+    },
+    "bw-other-retail-category-momentum": {
+      "id": "bw-other-retail-category-momentum",
+      "title": "Other retail loans — crore each bank group added over the year",
+      "description": "Each bank group's change in other retail loans over the year, with the net, gross and coherence; absent across a declared merger.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "strengthening",
+      "compute": {
+        "method": "csv_category_momentum",
+        "metric": "major_sectoral.other_retail_loans_gross_advances@dom",
+        "unit": "crore",
+        "window": 12
+      }
+    },
+    "bw-other-retail-category-allocation": {
+      "id": "bw-other-retail-category-allocation",
+      "title": "Other retail loans — each bank group's share of the year's new money",
+      "description": "Of the year's change in other retail loans, how much each bank group added or lost.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "active",
+      "compute": {
+        "method": "csv_category_allocation",
+        "metric": "major_sectoral.other_retail_loans_gross_advances@dom",
+        "window": 12,
+        "coherence_min": 0.9
+      }
+    },
+    "bw-other-retail-category-acceleration": {
+      "id": "bw-other-retail-category-acceleration",
+      "title": "Other retail loans — each bank group's pace",
+      "description": "The change in each bank group's growth a year since the previous quarter, in points.",
+      "pipeline": "rbi_bankwise",
+      "layer": 1,
+      "sub_layer": "1c",
+      "type": "data",
+      "cadence": "quarterly",
+      "domain": "retail",
+      "spec_version": "1.0",
+      "first_seen": "2015-03-31",
+      "current_status": "weakening",
+      "compute": {
+        "method": "csv_category_acceleration",
+        "metric": "major_sectoral.other_retail_loans_gross_advances@dom"
       }
     }
   }

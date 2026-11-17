@@ -14,7 +14,7 @@ import SectionCard from "@/components/SectionCard";
 import TrendChart from "@/components/TrendChart";
 import DistributionChart from "@/components/DistributionChart";
 import ReadModeShell, { type CutRef } from "./ReadModeShell";
-import type { CutTables } from "@/lib/table";
+import type { CutTables, BankIndex } from "@/lib/table";
 import { EYEBROW, type RMModel, type RMCard, type RMDimension } from "./parts";
 import { FS } from "@/lib/tokens";
 
@@ -40,7 +40,7 @@ const SIBC_CUTS: Record<string, CutRef[]> = {
       + "itself, and the sectors are one level down, in Main Sectors.",
   }],
   mainSectors: [{
-    stem: "sibc-main", title: "Main sectors", bookLabel: "of book",
+    stem: "sibc-main", title: "Main sectors",
     // The four sectors do not add up to non-food credit, and RBI attributes the difference
     // to nothing. Stated rather than hidden — the alternative is a column that silently
     // fails to sum to 100.
@@ -48,13 +48,32 @@ const SIBC_CUTS: Record<string, CutRef[]> = {
     // only the part no computation supplies — that RBI attributes the gap to nothing at all.
     footer: "The remainder is credit RBI attributes to no sector.",
   }],
-  industryBySize:  [{ stem: "sibc-ind-size", title: "Industry", bookLabel: "of book" }],
-  industryByType:  [{ stem: "sibc-industry-type", title: "Industry", bookLabel: "of book" }],
-  services:        [{ stem: "sibc-services", title: "Services", bookLabel: "of book" }],
-  personalLoans:   [{ stem: "sibc-pl", title: "Personal loans", bookLabel: "of book" }],
-  prioritySector:  [{ stem: "sibc-psl", title: "Priority sector", bookLabel: "of book" }],
+  industryBySize:  [{ stem: "sibc-ind-size", title: "Industry" }],
+  industryByType:  [{ stem: "sibc-industry-type", title: "Industry" }],
+  services:        [{ stem: "sibc-services", title: "Services" }],
+  personalLoans:   [{ stem: "sibc-pl", title: "Personal loans" }],
+  prioritySector:  [{ stem: "sibc-psl", title: "Priority sector" }],
 };
 const sibcCutsFor = (dimId: string): CutRef[] => SIBC_CUTS[dimId] ?? [];
+
+/** Each bank's credit (BANKWISE_SPEC phase 5): a second source shown as one more dimension of the
+ *  credit page, on its own quarterly calendar. Its tables, band and bank breakouts come from the
+ *  bank-wise sidecars; the measures and their order are declared there, in Python. */
+export interface BanksView {
+  tables: CutTables;
+  state: StateMap;
+  bankIndex: BankIndex;
+  order: string[];
+  asOf: string;            // "Jun 2026", rendered in Python
+}
+const BANKS_DIM = "banks";
+const banksCutsFor = (b: BanksView) => (): CutRef[] =>
+  b.order.filter((stem) => b.tables[stem]).map((stem) => ({
+    stem,
+    title: b.tables[stem].title ?? stem,
+    measure: b.tables[stem].title ?? stem,
+    metricKey: b.tables[stem].metric,
+  }));
 
 function lastValue(points: { date: string; [k: string]: string | number | null }[], name: string): number | null {
   for (let i = points.length - 1; i >= 0; i--) {
@@ -95,8 +114,8 @@ const modeLabel = (pm?: string | null) =>
   pm === "share" ? "Share" : pm === "yoy" ? "YoY" : pm === "fy" ? "FY" : "Absolute";
 
 export default function SibcReadMode(
-  { report, planes, state, tables }:
-    { report: Report; planes: PlanesMap; state: StateMap; tables: CutTables },
+  { report, planes, state, tables, banks }:
+    { report: Report; planes: PlanesMap; state: StateMap; tables: CutTables; banks?: BanksView },
 ) {
   const { model, annById, sectionById } = useMemo(() => {
     const org = organizeReadMode(report, planes);
@@ -126,9 +145,25 @@ export default function SibcReadMode(
       color: SEC_COLORS[r.section.accentIndex] ?? "#4e8ef7", reason: r.reason, direction: r.direction,
       mode: modeLabel(r.card.preferredMode),
     }));
+    // The Banks tile only when its sidecars arrived: a tile that opens onto nothing reads as broken.
+    if (banks && Object.keys(banks.tables).length) {
+      dimensions.push({
+        id: BANKS_DIM, title: "Banks", icon: "🏦", color: "#8c6bd6",
+        cardCount: 0, moved: 0, subjects: [], compositionTitles: [],
+        asOf: `${banks.asOf} · quarterly`, noNews: true,
+      });
+    }
     const model: RMModel = { reads, dimensions };
     return { model, annById, sectionById };
-  }, [report, planes]);
+  }, [report, planes, banks]);
+
+  const allTables = useMemo(() => (banks ? { ...tables, ...banks.tables } : tables), [tables, banks]);
+  const allState = useMemo(
+    () => (banks ? { ...state, [BANKS_DIM]: banks.state[BANKS_DIM] ?? [] } : state), [state, banks]);
+  const cutsFor = useMemo(() => {
+    const forBanks = banks ? banksCutsFor(banks) : () => [];
+    return (dimId: string) => (dimId === BANKS_DIM ? forBanks() : sibcCutsFor(dimId));
+  }, [banks]);
 
   /**
    * The chart for one card — DASHBOARD_SPEC §15.6(a).
@@ -206,8 +241,8 @@ export default function SibcReadMode(
 
   const period = report.latestDate?.split(" ")[0] ?? "period";
   return (
-    <ReadModeShell model={model} homeLabel="Credit dashboard" period={period} state={state}
-                   tables={tables} cutsFor={sibcCutsFor}
+    <ReadModeShell model={model} homeLabel="Credit dashboard" period={period} state={allState}
+                   tables={allTables} cutsFor={cutsFor} bankIndex={banks?.bankIndex}
                    renderChart={renderChart} hasDeep={hasDeep} renderDeep={renderDeep} />
   );
 }

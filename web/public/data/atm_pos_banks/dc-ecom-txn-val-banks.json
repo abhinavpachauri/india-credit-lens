@@ -1,6 +1,6 @@
 {
  "cut": "dc-ecom-txn-val-banks",
- "flow_label": "New",
+ "flow_label": "Of fall",
  "coverage": null,
  "parts": [
   {
@@ -12862,6 +12862,10 @@
    "Jul 26",
    "Aug 26",
    "Sep 26"
+  ],
+  "new": [
+   "Feb 25",
+   "Oct 25"
   ]
  },
  "parent_periods": {
@@ -12925,14 +12929,20 @@
   ]
  },
  "source_signals": [
+  "dc-ecom-txn-val-bank-allocation",
   "dc-ecom-txn-val-bank-scan",
   "dc-ecom-txn-val-bank-share-scan",
   "dc-ecom-txn-val-bank-yoy-scan",
   "dc-ecom-txn-val-banks-acceleration",
-  "dc-ecom-txn-val-banks-allocation",
   "dc-ecom-txn-val-banks-share-of-credit-scan",
   "dc-ecom-val-yoy"
  ],
  "metric": "dc_ecom_txn_val",
- "level": "bank"
+ "level": "bank",
+ "col_labels": {
+  "of_cut": "% of all banks"
+ },
+ "key": [
+  "% of all banks: each bank's share of all banks' debit card ecommerce spend value (HDFC BANK LTD holds 28.6%)."
+ ]
 }

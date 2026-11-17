@@ -120,6 +120,33 @@
       ]
     },
     {
+      "id": "stamp_state",
+      "label": "5.9 dashboard state band (DASHBOARD_SPEC §16)",
+      "core": "stamp_state",
+      "derived": [
+        "web/public/data/rbi_bankwise_state.json"
+      ]
+    },
+    {
+      "id": "state_band",
+      "label": "5.9b state band traceability",
+      "core": "state_band"
+    },
+    {
+      "id": "stamp_table",
+      "label": "5.9c Layer 1 cut tables (DASHBOARD_SPEC §17)",
+      "core": "stamp_table",
+      "derived": [
+        "web/public/data/rbi_bankwise_table.json",
+        "web/public/data/rbi_bankwise_banks/*.json"
+      ]
+    },
+    {
+      "id": "cut_table",
+      "label": "5.9d cut table traceability",
+      "core": "cut_table"
+    },
+    {
       "id": "reconcile",
       "label": "5.  architecture reconcile",
       "core": "reconcile",
@@ -135,5 +162,6 @@
       "bank_name",
       "bank_category"
     ]
-  }
+  },
+  "cuts_module": "pipelines.rbi_bankwise.cuts"
 }

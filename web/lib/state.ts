@@ -67,6 +67,17 @@ export async function loadStatePeriod(pipeline: Pipeline): Promise<string> {
   }
 }
 
+/** The period as a reader says it ("Jun 2026"), rendered in Python (`_meta.period_label`). */
+export async function loadStatePeriodLabel(pipeline: Pipeline): Promise<string> {
+  try {
+    const res = await fetch(`/data/${pipeline}_state.json`);
+    if (!res.ok) return "";
+    return String((await res.json())?._meta?.period_label ?? "");
+  } catch {
+    return "";
+  }
+}
+
 /** The tile form of the mix: two labels, no number — so this one is safe to compose here. */
 export function tileMix(block: StateBlock): string | null {
   if (!block.mix_state) return null;

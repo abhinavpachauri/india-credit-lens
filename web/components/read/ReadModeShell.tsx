@@ -47,8 +47,8 @@ const NOTABLE_BOX: React.CSSProperties = {
   border: "1px solid var(--border-card)", borderRadius: R.md, padding: 14, minWidth: 0,
 };
 
-const TABLE_EXPLAINER = "Each row is one part: its size, its share, its growth, and its share of the "
-  + "year's change. Hover a heading for its meaning; click a row for its history.";
+const TABLE_EXPLAINER = "Each row is one part: its size, its shares, its growth, and its share of the "
+  + "year's change. The lines under the table say what each share is of; click a row for its history.";
 
 export interface ReadModeShellProps {
   model: RMModel;
@@ -155,7 +155,10 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
    *  to whatever the dimension declares, so a dimension whose cut has no state (or no table at
    *  all, like Bank Credit) still renders its band rather than going quiet. */
   const dimBlocks = (dim && state[dim.id]) || [];
-  const onScreen = dimBlocks.filter((b) => b.stem === (byBank && bankEntry ? bankEntry.cut : cut?.stem));
+  // A bank breakout is the same MEASURE at a different level, so its band is the measure's own;
+  // matching on the breakout's id found no block and fell back to the dimension's anchor, which
+  // put all credit's sentence above the housing banks.
+  const onScreen = dimBlocks.filter((b) => b.stem === cut?.stem);
   const stacked = subCut ? dimBlocks.filter((b) => b.stem === subCut) : [];
   const bandBlocks = [...(onScreen.length ? onScreen : dimBlocks.filter((b) => b.anchor)),
                       ...stacked];
@@ -322,9 +325,12 @@ export default function ReadModeShell({ model, homeLabel, period, renderChart, h
           <div ref={detailRef} className="lg:col-start-2 mt-5 lg:mt-0">
             <div style={{ ...PANEL, padding: 20, borderTop: `3px solid ${secColor}` }}>
               <div className="flex items-start justify-between gap-3">
-                <h2 style={{ ...TEXT.title, marginBottom: 18 }}>
-                  <span style={{ fontSize: GLYPH.dimension }}>{dim.icon}</span> {dim.title}
-                </h2>
+                <div style={{ marginBottom: 18 }}>
+                  <h2 style={TEXT.title}>
+                    <span style={{ fontSize: GLYPH.dimension }}>{dim.icon}</span> {dim.title}
+                  </h2>
+                  {dim.asOf && <div style={{ ...TEXT.meta, marginTop: 2 }}>{dim.asOf}</div>}
+                </div>
                 <button onClick={() => setOpenDim(null)} className="rm-link shrink-0" aria-label="close dimension"
                         style={{ fontSize: GLYPH.arrow, color: "var(--font-muted)", lineHeight: 1 }}>✕</button>
               </div>

@@ -50,8 +50,11 @@ def parent_rates(pipeline: str) -> dict[str, str]:
     band above them quoted it. Where both name a signal and differ, that raises.
     """
     import importlib
-    mod = importlib.import_module(manifest.load(pipeline)["cuts_module"])
-    MOVEMENT_CUTS = mod.MOVEMENT_CUTS
+    # A pipeline with no card generator (bank-wise) declares no cut table; its parent rates
+    # come from the registry alone, the branch below.
+    cm = manifest.load(pipeline).get("cuts_module")
+    mod = importlib.import_module(cm) if cm else None
+    MOVEMENT_CUTS = getattr(mod, "MOVEMENT_CUTS", ())
     raw_prefix = getattr(mod, "MOVEMENT_PREFIX", f"{pipeline}-")
     # A section→stem MAP means each cut spells its own stem from its section; a plain string
     # means they all share one. Declared per pipeline, resolved here once.
@@ -62,7 +65,7 @@ def parent_rates(pipeline: str) -> dict[str, str]:
         stem = f"{prefix}{c.slug}" if prefix else f"{MOVEMENT_PREFIX[c.section]}{c.slug}"
         if c.parent_yoy:
             out[stem] = c.parent_yoy
-    if pipeline == "atm_pos":
+    if per_bank(pipeline):
         total = total_yoy_by_metric(pipeline, json.loads(REGISTRY.read_text())["signals"])
         for stem, metric in measured_metric(pipeline).items():
             sid = total.get(metric)
@@ -70,6 +73,12 @@ def parent_rates(pipeline: str) -> dict[str, str]:
                 raise ValueError(f"{stem}: the cut table declares {out[stem]} as its parent "
                                  f"rate, the registry says {sid}")
     return out
+
+
+def per_bank(pipeline: str) -> bool:
+    """Does this pipeline store banks as rows? Read from the manifest's compute module, never
+    from the pipeline's name: payments was the only one until bank-wise credit (2026-11-17)."""
+    return manifest.load(pipeline).get("compute_module") == "atm_pos"
 
 
 def cuts(pipeline: str) -> dict[str, str]:
@@ -125,19 +134,28 @@ def bank_cuts(pipeline: str) -> dict[str, dict]:
     convention and never will, and matching on a spelling is what hid three payments tables
     from the dashboard this week.
     """
-    if pipeline != "atm_pos":
+    if not per_bank(pipeline):
         return {}                    # SIBC is sector-level; RBI publishes no per-bank credit
     reg = json.loads(REGISTRY.read_text())["signals"]
     by_metric: dict[str, dict[str, str]] = {}
+    # Each method fills one column. A share of the bank's own book and a share of the year's new
+    # money are columns where the pipeline stores them (bank-wise: both; payments: the second).
+    BY_METHOD = {"csv_bank_scan_share": "of_cut", "csv_bank_ratio_scan": "of_book",
+                 "csv_bank_allocation": "alloc", "csv_bank_momentum": "momentum"}
     for sid, sig in reg.items():
         c = sig.get("compute", {})
         if sig.get("pipeline") != pipeline or not c.get("metric"):
             continue
         m = c["metric"]
-        if c.get("method") == "csv_bank_scan":
+        # A rate stored for ANOTHER measure's table (a bank's NPA ratio beside its credit)
+        # declares the measure and column it belongs to; it is not a breakout of its own.
+        into = c.get("table_column")
+        if into:
+            by_metric.setdefault(into["metric"], {})[into["column"]] = sid
+        elif c.get("method") == "csv_bank_scan":
             by_metric.setdefault(m, {})["growth" if c.get("value_type") == "yoy" else "size"] = sid
-        elif c.get("method") == "csv_bank_scan_share":
-            by_metric.setdefault(m, {})["of_cut"] = sid
+        elif c.get("method") in BY_METHOD:
+            by_metric.setdefault(m, {})[BY_METHOD[c["method"]]] = sid
     out = {}
     for metric, cols in by_metric.items():
         if "size" not in cols:       # a rate with no level is not a table
@@ -207,6 +225,11 @@ def build(pipeline: str, period: str | None = None) -> dict:
             if t is not None:
                 t["metric"] = spec["metric"]
                 t["level"] = "bank"
+                _label_banks(pipeline, t)
+                if t["parts"] and "label" in t["parts"][0]:
+                    # Growth off a negligible base would rank first (BANKWISE_SPEC §8b gap 4);
+                    # sorting by it waits for the minimum-base rule shared with payments.
+                    t["unsortable"] = ["growth"]
                 banks[stem] = t
         for stem, unit in sorted(cuts(pipeline).items()):
             t = table_rows.build(conn, pipeline, period, stem, unit, rates.get(stem), subs)
@@ -217,6 +240,20 @@ def build(pipeline: str, period: str | None = None) -> dict:
                 tables[stem] = t
     finally:
         conn.close()
+    import importlib
+    cm = manifest.load(pipeline).get("cuts_module")
+    titles = getattr(importlib.import_module(cm), "TITLES", None) if cm else None
+    for stem, title in (titles or {}).items():
+        if stem in tables:
+            tables[stem]["title"] = title
+    # Every share column named by what it divides by, with a visible key (core/table_labels).
+    from core import table_labels
+    pb = per_bank(pipeline)
+    title_of_metric = {t.get("metric"): t.get("title") for t in tables.values() if t.get("metric")}
+    for stem, t in tables.items():
+        table_labels.label(pipeline, stem, t, pb, t.get("title"))
+    for stem, t in banks.items():
+        table_labels.label(pipeline, stem, t, pb, title_of_metric.get(t.get("metric")))
     return {
         # The index of bank breakouts: which measure has one, how many banks it holds, and the
         # file to fetch. The browser needs to know a breakout EXISTS before the reader asks for
@@ -228,6 +265,8 @@ def build(pipeline: str, period: str | None = None) -> dict:
         "_meta": {
             "pipeline": pipeline,
             "period": period,
+            # The cuts module's reading order, where it declares one (bank-wise's measure menu).
+            **({"order": [s for s in titles if s in tables]} if titles else {}),
             "purpose": "One Layer 1 table per cut — every part of the cut with size, share, "
                        "growth, pace, the run of readings, and its share of the new money. "
                        "Numbers are rendered here and shipped as strings; `sort` orders and is "
@@ -236,6 +275,22 @@ def build(pipeline: str, period: str | None = None) -> dict:
         },
         "cuts": tables,
     }
+
+
+def _label_banks(pipeline: str, t: dict) -> None:
+    """A row keyed by a roster id is drawn by its display name (`core.banks.display`).
+
+    Only a pipeline whose rows ARE roster ids (it declares `paths.roster`) is labelled; payments
+    still keys rows by RBI's own spelling. An id the roster cannot name raises: a bank drawn as
+    `state-bank-of-india` would be a broken page that every gate here passes."""
+    if "roster" not in manifest.load(pipeline).get("paths", {}):
+        return
+    from core import banks as roster
+    names = roster.labels(manifest.path(pipeline, "roster"))
+    for p in t["parts"]:
+        if p["entity"] not in names:
+            raise KeyError(f"{pipeline}: bank {p['entity']!r} has no roster entry to name it by")
+        p["label"] = names[p["entity"]]
 
 
 def add_real_economy(conn, pipeline: str, period: str, stem: str, t: dict) -> None:

@@ -12092,14 +12092,20 @@
   ]
  },
  "source_signals": [
+  "cc-pos-txn-vol-bank-allocation",
   "cc-pos-txn-vol-bank-scan",
   "cc-pos-txn-vol-bank-share-scan",
   "cc-pos-txn-vol-bank-yoy-scan",
   "cc-pos-txn-vol-banks-acceleration",
-  "cc-pos-txn-vol-banks-allocation",
   "cc-pos-txn-vol-banks-share-of-credit-scan",
   "cc-pos-vol-yoy"
  ],
  "metric": "cc_pos_txn_vol",
- "level": "bank"
+ "level": "bank",
+ "col_labels": {
+  "of_cut": "% of all banks"
+ },
+ "key": [
+  "% of all banks: each bank's share of all banks' credit card POS transactions (HDFC BANK LTD holds 36.1%)."
+ ]
 }

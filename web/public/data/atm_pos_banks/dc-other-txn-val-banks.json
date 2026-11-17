@@ -11049,6 +11049,13 @@
    "Jul 26",
    "Aug 26",
    "Sep 26"
+  ],
+  "new": [
+   "Feb 25",
+   "Mar 25",
+   "Apr 25",
+   "May 25",
+   "Jun 25"
   ]
  },
  "parent_periods": {
@@ -11112,14 +11119,20 @@
   ]
  },
  "source_signals": [
+  "dc-other-txn-val-bank-allocation",
   "dc-other-txn-val-bank-scan",
   "dc-other-txn-val-bank-share-scan",
   "dc-other-txn-val-bank-yoy-scan",
   "dc-other-txn-val-banks-acceleration",
-  "dc-other-txn-val-banks-allocation",
   "dc-other-txn-val-banks-share-of-credit-scan",
   "dc-other-val-yoy"
  ],
  "metric": "dc_other_txn_val",
- "level": "bank"
+ "level": "bank",
+ "col_labels": {
+  "of_cut": "% of all banks"
+ },
+ "key": [
+  "% of all banks: each bank's share of all banks' debit card other spend value (HDFC BANK LTD holds 76.4%)."
+ ]
 }

@@ -1,6 +1,6 @@
 {
  "cut": "atm-offsite-banks",
- "flow_label": "New",
+ "flow_label": "Of fall",
  "coverage": null,
  "parts": [
   {
@@ -12176,6 +12176,24 @@
    "Jul 26",
    "Aug 26",
    "Sep 26"
+  ],
+  "new": [
+   "Jan 25",
+   "Feb 25",
+   "Mar 25",
+   "Apr 25",
+   "Jun 25",
+   "Jul 25",
+   "Aug 25",
+   "Sep 25",
+   "Oct 25",
+   "Nov 25",
+   "Dec 25",
+   "Jan 26",
+   "Feb 26",
+   "Mar 26",
+   "Apr 26",
+   "May 26"
   ]
  },
  "parent_periods": {
@@ -12239,14 +12257,20 @@
   ]
  },
  "source_signals": [
+  "atm-offsite-bank-allocation",
   "atm-offsite-bank-scan",
   "atm-offsite-bank-share-scan",
   "atm-offsite-bank-yoy-scan",
   "atm-offsite-banks-acceleration",
-  "atm-offsite-banks-allocation",
   "atm-offsite-banks-share-of-credit-scan",
   "atm-offsite-yoy"
  ],
  "metric": "atm_offsite",
- "level": "bank"
+ "level": "bank",
+ "col_labels": {
+  "of_cut": "% of all banks"
+ },
+ "key": [
+  "% of all banks: each bank's share of all banks' ATM offsite (STATE BANK OF INDIA holds 49.8%)."
+ ]
 }

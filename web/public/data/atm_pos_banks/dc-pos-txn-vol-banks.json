@@ -1,6 +1,6 @@
 {
  "cut": "dc-pos-txn-vol-banks",
- "flow_label": "New",
+ "flow_label": "Of fall",
  "coverage": null,
  "parts": [
   {
@@ -12960,6 +12960,18 @@
    "Jul 26",
    "Aug 26",
    "Sep 26"
+  ],
+  "new": [
+   "Jan 25",
+   "Feb 25",
+   "Mar 25",
+   "Apr 25",
+   "May 25",
+   "Jun 25",
+   "Jul 25",
+   "Aug 25",
+   "Sep 25",
+   "Oct 25"
   ]
  },
  "parent_periods": {
@@ -13023,14 +13035,20 @@
   ]
  },
  "source_signals": [
+  "dc-pos-txn-vol-bank-allocation",
   "dc-pos-txn-vol-bank-scan",
   "dc-pos-txn-vol-bank-share-scan",
   "dc-pos-txn-vol-bank-yoy-scan",
   "dc-pos-txn-vol-banks-acceleration",
-  "dc-pos-txn-vol-banks-allocation",
   "dc-pos-txn-vol-banks-share-of-credit-scan",
   "dc-pos-vol-yoy"
  ],
  "metric": "dc_pos_txn_vol",
- "level": "bank"
+ "level": "bank",
+ "col_labels": {
+  "of_cut": "% of all banks"
+ },
+ "key": [
+  "% of all banks: each bank's share of all banks' debit card POS transactions (STATE BANK OF INDIA holds 32.9%)."
+ ]
 }

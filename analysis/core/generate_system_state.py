@@ -131,6 +131,8 @@ def mix_states(pipeline: str, period: str, model: dict) -> dict:
     # Statement-1 industry node as industry-by-size), so join on code alone.
     by_code = {str(n.get("code")): n
                for n in model["nodes"] if n.get("tier") == "entity" and n.get("code")}
+    by_metric = {str(n["metric"]): n for n in model["nodes"]
+                 if n.get("tier") == "entity" and n.get("metric")}
     con = sqlite3.connect(DB)
     out: dict[str, dict] = {}
     try:
@@ -143,7 +145,10 @@ def mix_states(pipeline: str, period: str, model: dict) -> dict:
             # into child sectors, payments splits one METRIC across bank categories. Both
             # resolve against the same node index — payments entity nodes carry the metric
             # name as their code — so this is a second key, not a second mechanism.
-            node = by_code.get(str(comp.get("parent_code") or comp.get("metric")))
+            # Bank-wise nodes carry a short code and the metric in its own field, so the metric
+            # is matched there too.
+            node = (by_code.get(str(comp.get("parent_code") or comp.get("metric")))
+                    or by_metric.get(str(comp.get("metric"))))
             if node is None:
                 continue          # e.g. the PSL memo block is a child of no code
             alloc_sid = sid.replace("-momentum", "-allocation")

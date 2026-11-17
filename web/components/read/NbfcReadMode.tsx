@@ -23,22 +23,21 @@ import { type RMModel, type RMDimension } from "./parts";
  *  declares its cut table: which pane a cut appears under, what it is CALLED and what icon it
  *  carries are presentation decisions. Everything else — the parts, the columns, the coverage
  *  line, the band — is discovered. */
-const DIMS: { id: string; title: string; icon: string; color: string; stem: string;
-              bookLabel?: string }[] = [
+const DIMS: { id: string; title: string; icon: string; color: string; stem: string }[] = [
   { id: "mainSectors",    title: "Main sectors",   icon: "🏦", color: "#2ca02c",
     stem: "nbfc-main" },
   { id: "industry",       title: "Industry",       icon: "🏭", color: "#e05c5c",
-    stem: "nbfc-industry",  bookLabel: "of NBFC credit" },
+    stem: "nbfc-industry" },
   { id: "infrastructure", title: "Infrastructure", icon: "🛣️", color: "#2ec4b6",
-    stem: "nbfc-infra",     bookLabel: "of NBFC credit" },
+    stem: "nbfc-infra" },
   { id: "services",       title: "Services",       icon: "🛎️", color: "#a87fdb",
-    stem: "nbfc-services",  bookLabel: "of NBFC credit" },
+    stem: "nbfc-services" },
   { id: "retail",         title: "Retail",         icon: "🛍️", color: "#f0912a",
-    stem: "nbfc-retail",    bookLabel: "of NBFC credit" },
+    stem: "nbfc-retail" },
 ];
 
 const CUTS: Record<string, CutRef[]> = Object.fromEntries(
-  DIMS.map((d) => [d.id, [{ stem: d.stem, title: d.title, bookLabel: d.bookLabel }]]));
+  DIMS.map((d) => [d.id, [{ stem: d.stem, title: d.title }]]));
 
 export default function NbfcReadMode(
   { state, tables, period = "" }: { state: StateMap; tables: CutTables; period?: string },

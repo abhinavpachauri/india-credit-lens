@@ -40,6 +40,12 @@ export interface RMDimension {
   moved: number;
   subjects: RMSubject[];
   compositionTitles: string[];   // structural cards → the composition caption
+  /** A dimension read from another source on its own calendar says when it is from
+   *  ("Jun 2026 · quarterly"), so it is never read as the page's month. */
+  asOf?: string;
+  /** This dimension has no news layer (bank-wise writes no cards), so its tile says nothing
+   *  about what is notable rather than "Nothing notable", which would be a claim. */
+  noNews?: boolean;
 }
 export interface RMRead {
   id: string;             // card id
@@ -139,6 +145,7 @@ export function DimensionCard({ dim, state = [], reads = [], tables = 0, period,
       {/* L3 — the dimension. The icon sits beside the name, not on a line of its own. */}
       <div className="flex items-baseline gap-2" style={TEXT.item}>
         <span>{dim.icon}</span><span>{dim.title}</span>
+        {dim.asOf && <span className="ml-auto" style={{ ...TEXT.meta, fontWeight: 400 }}>{dim.asOf}</span>}
       </div>
       {/* The standing state (§16), as body: speed in ink, mix receding beneath it. A dimension
           with no movement cut shows NOTHING here — Bank Credit is the top level and has no mix. */}
@@ -163,7 +170,7 @@ export function DimensionCard({ dim, state = [], reads = [], tables = 0, period,
       {/* §20 — this dimension's own news, capped at three with the rest counted (user,
           2026-10-05: nine lines a tile flattened the grid). A pipeline with no card LAYER shows
           no news block at all; a quiet month says so, because the two must not look alike. */}
-      {newsLayer && (
+      {newsLayer && !dim.noNews && (
         <div className="mt-3 pt-3" style={{ borderTop: "1px solid var(--border-card)" }}>
           <div style={{ ...TEXT.meta, fontWeight: 600, marginBottom: 6 }}>
             {dim.cardCount > 0
@@ -277,7 +284,7 @@ export function StateBand({ blocks, explainer }: {
   const named = blocks.length > 1;   // two cuts on one dimension need telling apart
   return (
     <div className="mb-4">
-      <SectionHead title="How it moved" sub="every month, news or not" />
+      <SectionHead title="How it moved" sub="every release, news or not" />
       {blocks.map((b, i) => (
         <div key={b.cut} style={{ marginTop: i === 0 ? 8 : 12 }}>
           {named && (
@@ -387,16 +394,20 @@ export function CellPanel({ table, cell, color, title, flowLabel, crumb, onPick,
   onClose: () => void;
 }) {
   const [compare, setCompare] = React.useState<string[]>([]);
-  React.useEffect(() => setCompare([]), [cell.entity, cell.stem]);
+  const [allChips, setAllChips] = React.useState(false);
+  React.useEffect(() => { setCompare([]); setAllChips(false); }, [cell.entity, cell.stem]);
 
   const row = cell.entity === null ? table.total : table.parts.find((p) => p.entity === cell.entity);
   const own = row ? cellSeries(table, row, cell.col) : [];
   // The total row has no entity. It is named as the row list names it, never by the cut's id
   // ("cc-pos-txn-val-category · Growth" was the title, the breadcrumb and the legend chip).
-  const who = cell.entity ?? title ?? table.cut;
+  const who = row?.label ?? cell.entity ?? title ?? table.cut;
+  // A row keyed by an id is drawn by its label; the chart's series are keyed by what is drawn.
+  const nameOf = (p: import("@/lib/table").CutRow) => p.label ?? p.entity!;
   const siblings = table.parts.filter((p) => p.entity && p.entity !== cell.entity && p[cell.col]?.series);
   const cols = COLUMNS.filter((c) => row?.[c]?.series && (row[c]!.series as unknown[]).length > 1);
-  const colLabel = (c: ColKey) => (c === "new" ? (flowLabel ?? "New") : COL_LABEL[c]);
+  const colLabel = (c: ColKey) =>
+    table.col_labels?.[c] ?? (c === "new" ? (flowLabel ?? "New") : COL_LABEL[c]);
 
   // Each line's readings as Python rendered them, so the tooltip places a string instead of
   // formatting a float ("8.5481"): the browser never formats a number.
@@ -406,7 +417,7 @@ export function CellPanel({ table, cell, color, title, flowLabel, crumb, onPick,
   const data = own.map((pt, i) => {
     const point: Record<string, string | number | null> = { label: pt.label, [who]: pt.value };
     for (const name of compare) {
-      const sib = siblings.find((p) => p.entity === name);
+      const sib = siblings.find((p) => nameOf(p) === name);
       const s = sib ? cellSeries(table, sib, cell.col) : [];
       point[name] = s[i]?.label === pt.label ? s[i].value : null;
       if (s[i]?.label === pt.label) (shownAs[name] ??= {})[pt.label] = s[i].display;
@@ -414,10 +425,18 @@ export function CellPanel({ table, cell, color, title, flowLabel, crumb, onPick,
     return point;
   });
   // One colour per line, and the legend chip wears the same one — the notable charts' rule.
-  const lineColor = (name: string) => (name === who ? color : pickColor(name, siblings.findIndex((p) => p.entity === name) + 2));
+  const lineColor = (name: string) => (name === who ? color : pickColor(name, siblings.findIndex((p) => nameOf(p) === name) + 2));
+  // A by-bank table has 60 to 90 rows, and a chip for every one buried the chart under a wall of
+  // names. Past CHIP_CAP the legend offers the largest few (by size today) plus any already on the
+  // chart, and the rest one click away.
+  const bySize = [...siblings].sort((a, b) => (b.size?.sort ?? 0) - (a.size?.sort ?? 0));
+  const capped = !allChips && siblings.length > CHIP_CAP;
+  const chips = capped
+    ? bySize.filter((p, i) => i < CHIP_TOP || compare.includes(nameOf(p)))
+    : siblings;
   const legend = [
     { label: who, color: color, active: true },
-    ...siblings.map((p) => ({ label: p.entity!, color: lineColor(p.entity!), active: compare.includes(p.entity!) })),
+    ...chips.map((p) => ({ label: nameOf(p), color: lineColor(nameOf(p)), active: compare.includes(nameOf(p)) })),
   ];
   const toggle = (name: string) => {
     if (name === who) return;   // the row the reader opened is the subject; it does not switch off
@@ -459,6 +478,12 @@ export function CellPanel({ table, cell, color, title, flowLabel, crumb, onPick,
       <div className="mb-3" style={{ ...TEXT.meta, fontWeight: 600 }}>📈 Trend · {colLabel(cell.col)}</div>
       <SectionFrame color={color}>
         <ChartLegend items={legend} onToggle={siblings.length ? toggle : undefined} />
+        {siblings.length > CHIP_CAP && (
+          <button onClick={() => setAllChips(!allChips)} className="rm-link"
+                  style={{ ...TEXT.meta, marginTop: -6, marginBottom: 8 }}>
+            {allChips ? "fewer to compare" : `+${siblings.length - chips.length} more to compare`}
+          </button>
+        )}
         <div style={{ height: 280 }}>
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={data} margin={{ top: 4, right: 16, left: 0, bottom: 4 }}>
@@ -527,7 +552,8 @@ export function CutRowList({ table, title, cell, color, onPick }: {
   onPick: (ref: CellRef) => void;
 }) {
   const rows = [table.total, ...sortPartsMemo(table.parts, "size", "desc")];
-  const label = cell.col === "new" ? (table.flow_label ?? "New") : COL_LABEL[cell.col];
+  const label = table.col_labels?.[cell.col]
+    ?? (cell.col === "new" ? (table.flow_label ?? "New") : COL_LABEL[cell.col]);
   return (
     <div>
       <div style={{ ...TEXT.body, fontWeight: 700 }}>{title}</div>
@@ -547,7 +573,7 @@ export function CutRowList({ table, title, cell, color, onPick }: {
                              opacity: live ? 1 : 0.45 }}>
               <span style={{ fontSize: FS.note, fontWeight: r.entity === null || on ? 700 : 400,
                              color: "var(--font)", lineHeight: 1.35 }}>
-                {r.entity ?? title}
+                {r.label ?? r.entity ?? title}
               </span>
               <span className="ml-auto" style={{ fontSize: FS.note, fontVariantNumeric: "tabular-nums",
                                                  color: on ? color : "var(--font-muted)" }}>
@@ -582,6 +608,10 @@ export interface CutTableProps {
 /** What a row opens on when the reader clicks the ROW rather than one of its numbers.
  *  Growth, because that is the question a reader is asking when they click a sector — the
  *  size is already on the line in front of them. */
+/** Above this many rows the chart's legend shows the largest CHIP_TOP and folds the rest. */
+const CHIP_CAP = 12;
+const CHIP_TOP = 8;
+
 const ROW_DEFAULT: ColKey[] = ["growth", "size", "of_cut", "new", "pace", "of_book"];
 
 export function CutTable({ table, title, color, bookLabel, footer, all, depth = 0,
@@ -600,7 +630,13 @@ export function CutTable({ table, title, color, bookLabel, footer, all, depth = 
   const cols = COLUMNS.filter((c) => table.columns
     ? c in table.columns
     : c !== "of_book" || table.parts.some((p) => p.of_book));
-  const label = (c: ColKey) => (c === "new" ? (table.flow_label ?? "New") : COL_LABEL[c]);
+  // A share column says what it divides by, as Python named it for this table (§17.6); the
+  // generic label stays only where a table names none.
+  const label = (c: ColKey) => table.col_labels?.[c]
+    ?? (c === "new" ? (table.flow_label ?? "New") : c === "of_book" && bookLabel ? bookLabel : COL_LABEL[c]);
+  // The coverage caveat, unless the key already states it (one sentence, not two).
+  const showCoverage = table.coverage != null
+    && !table.key?.some((l) => l.includes("added up") || l.includes("names one part"));
   const lit = (row: import("@/lib/table").CutRow, c?: ColKey) =>
     active?.stem === table.cut && active.entity === row.entity && (!c || active.col === c);
 
@@ -672,13 +708,20 @@ export function CutTable({ table, title, color, bookLabel, footer, all, depth = 
           <tr>
             <th style={{ ...HEAD, textAlign: "left" }}><Hint text={PART_HINT} align="left">Part</Hint></th>
             {cols.map((c) => (
-              <th key={c} style={{ ...HEAD, ...groupRule(c) }}>
+              <th key={c} style={{ ...HEAD, ...groupRule(c),
+                                   ...(table.col_labels?.[c] ? { whiteSpace: "normal", minWidth: 84 } : {}) }}>
+                {table.unsortable?.includes(c) ? (
+                  <Hint text={`${COL_HINT[c]} Not sortable here: growth off a very small book would rank first.`}>
+                    {label(c)}
+                  </Hint>
+                ) : (
                 <button onClick={() => pickSort(c)} className="rm-link"
                         style={{ font: "inherit", letterSpacing: "inherit", textTransform: "inherit",
                                  color: sort.key === c ? color : "inherit" }}>
-                  <Hint text={COL_HINT[c]}>{c === "of_book" ? (bookLabel ?? label(c)) : label(c)}</Hint>
+                  <Hint text={COL_HINT[c]}>{label(c)}</Hint>
                   {sort.key === c ? (sort.dir === "desc" ? " ↓" : " ↑") : ""}
                 </button>
+                )}
               </th>
             ))}
           </tr>
@@ -707,9 +750,9 @@ export function CutTable({ table, title, color, bookLabel, footer, all, depth = 
                                 onExpand?.(isOpen ? null : (p.sub_cut ?? null));
                               }}
                               className="rm-link" style={{ font: "inherit", color: "inherit" }}>
-                        <span style={{ color, fontWeight: 700 }}>{isOpen ? "▾" : "▸"}</span> {p.entity}
+                        <span style={{ color, fontWeight: 700 }}>{isOpen ? "▾" : "▸"}</span> {p.label ?? p.entity}
                       </button>
-                    ) : p.entity}
+                    ) : (p.label ?? p.entity)}
                     {approxMark(p)}
                   </td>
                   {cols.map((c) => numeric(p, c))}
@@ -745,9 +788,17 @@ export function CutTable({ table, title, color, bookLabel, footer, all, depth = 
       {/* ONE caveat stays in view: an "of which" cut must SAY so. Four rows under a heading
           imply a complete decomposition; here they are a subset, and the rows alone cannot tell
           the reader. The number is the stored coverage row, not a string in this file. */}
-      {(table.coverage != null || footer) && (
+      {/* §17.6 — what each share column divides by, always in view (a phone has no hover), with
+          the table's top row as the example. Rendered in Python; the guard checks its numbers.
+          Where a key line already states the coverage, the caveat below does not repeat it. */}
+      {table.key?.length ? (
+        <div style={{ ...TEXT.meta, marginTop: 8, lineHeight: 1.5 }}>
+          {table.key.map((l) => <p key={l} style={{ margin: 0 }}>{l}</p>)}
+        </div>
+      ) : null}
+      {(showCoverage || footer) && (
         <p style={{ fontSize: FS.note, color: "var(--font-muted)", marginTop: 8, lineHeight: 1.5 }}>
-          {table.coverage != null && <>These {table.parts.length} are {table.coverage}% of {title.toLowerCase()}. </>}
+          {showCoverage && <>These {table.parts.length} are {table.coverage}% of {title.toLowerCase()}. </>}
           {footer}
         </p>
       )}

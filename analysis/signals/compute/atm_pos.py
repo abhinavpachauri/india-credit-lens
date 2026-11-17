@@ -683,7 +683,8 @@ def csv_category_momentum(params: dict, period: str, df: pd.DataFrame) -> list[d
     if got is None:
         return []
     deltas, net, gross = got
-    return _momentum_rows("bank_category", deltas, net, gross, params)
+    prior_date = _month_back(period, int(params.get("window", 12)), set(df["report_date"].unique()))
+    return _break_rows(_momentum_rows("bank_category", deltas, net, gross, params), df, prior_date, period)
 
 
 def _momentum_rows(entity_type: str, deltas: dict, net: float, gross: float,
@@ -712,7 +713,7 @@ def csv_category_acceleration(params: dict, period: str, df: pd.DataFrame) -> li
 
     def yoy(per, cat):
         back = _month_back(per, 12, avail)
-        if back is None:
+        if back is None or _spans(df, cat, back, per):
             return None
         now, was = _category_val(df, per, metric, cat), _category_val(df, back, metric, cat)
         return None if not was else (now - was) / was * 100
@@ -744,8 +745,9 @@ def csv_category_allocation(params: dict, period: str, df: pd.DataFrame) -> list
     prior_date = _month_back(period, window, set(df["report_date"].unique()))
     base = _cat_values(params, prior_date, df) if prior_date else {}
     now = _cat_values(params, period, df)
-    return _allocation_rows(deltas, net, gross, base, now,
-                            sum(base.values()), sum(now.values()), None, params)
+    return _break_rows(_allocation_rows(deltas, net, gross, base, now,
+                                        sum(base.values()), sum(now.values()), None, params),
+                       df, prior_date, period)
 
 
 def _allocation_rows(deltas: dict, net_denom: float | None, gross: float,
@@ -837,7 +839,10 @@ def _break_rows(rows: list[dict], df: pd.DataFrame, a: str, b: str) -> list[dict
         return [_absent("aggregate", "total", why)]
     out = []
     for r in rows:
-        w = _spans(df, r["entity_id"], a, b) if r["entity_type"] not in ("aggregate", "coverage") else None
+        # A share of the level at one end of the window (`weight`, `weight_now`) is not a move,
+        # so a merger inside the window leaves it standing; only the movement rows go absent.
+        w = (_spans(df, r["entity_id"], a, b)
+             if r["entity_type"] not in ("aggregate", "coverage", "weight", "weight_now") else None)
         out.append(_absent(r["entity_type"], r["entity_id"], w) if w else r)
     return out
 

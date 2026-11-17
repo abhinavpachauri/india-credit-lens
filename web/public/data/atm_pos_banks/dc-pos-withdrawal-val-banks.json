@@ -1,6 +1,6 @@
 {
  "cut": "dc-pos-withdrawal-val-banks",
- "flow_label": "New",
+ "flow_label": "Of fall",
  "coverage": null,
  "parts": [
   {
@@ -10657,6 +10657,15 @@
    "Jul 26",
    "Aug 26",
    "Sep 26"
+  ],
+  "new": [
+   "Jan 25",
+   "Feb 25",
+   "Mar 25",
+   "Apr 25",
+   "May 25",
+   "Jun 25",
+   "Jul 25"
   ]
  },
  "parent_periods": {
@@ -10720,14 +10729,20 @@
   ]
  },
  "source_signals": [
+  "dc-pos-withdrawal-val-bank-allocation",
   "dc-pos-withdrawal-val-bank-scan",
   "dc-pos-withdrawal-val-bank-share-scan",
   "dc-pos-withdrawal-val-bank-yoy-scan",
   "dc-pos-withdrawal-val-banks-acceleration",
-  "dc-pos-withdrawal-val-banks-allocation",
   "dc-pos-withdrawal-val-banks-share-of-credit-scan",
   "dc-pos-withdrawal-val-yoy"
  ],
  "metric": "dc_pos_withdrawal_val",
- "level": "bank"
+ "level": "bank",
+ "col_labels": {
+  "of_cut": "% of all banks"
+ },
+ "key": [
+  "% of all banks: each bank's share of all banks' debit card POS withdrawal value (SLICE SMALL FINANCE BANK LTD holds 74.7%)."
+ ]
 }

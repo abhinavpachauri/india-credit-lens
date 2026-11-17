@@ -90,3 +90,38 @@ class Resolver:
             raise UnknownBank(f"{self.source}: {name!r} is in no roster entry; add it to {ROSTER.name}")
         raise UnknownBank(f"{self.source}: {name!r} on {on} matches {len(ok)} entries (aliases dated "
                           f"{[(f, t) for _, f, t in hits]})")
+
+
+# ── how a bank is named on screen ─────────────────────────────────────────────────────────────
+# The roster's `name` is RBI's own spelling, title-cased ("Hdfc Bank Ltd.", "Icici Bank Limited"):
+# right for matching, wrong for reading. The display name is DERIVED from it by one rule (legal
+# suffixes dropped, acronyms and small words restored); a bank the rule gets wrong carries a
+# `short` in the roster, so the exception is data and the rule stays one rule.
+_SUFFIX = re.compile(r"[\s,]*(?:\b(?:limited|ltd|plc|pjsc|psc|ag|nv|n\.?v|n\.?a|s\.?a\.?o\.?g|b\.?s\.?c|q\.?p\.?s\.?c"
+                     r"|p\.?j\.?s\.?c|tbk|u\.?a|co)\b\.?|\((?:q\.?p\.?s\.?c|p\.?j\.?s\.?c\.?)\)|[\s.,])+$", re.I)
+_ACRONYM = {"hdfc", "icici", "idfc", "idbi", "sbm", "au", "dcb", "rbl", "uco", "csb", "esaf", "dbs",
+            "bnp", "hsbc", "ubs", "jsc", "vtb", "kbc", "keb", "mufg", "nbd", "jpmorgan", "ctbc",
+            "nsdl", "pt", "anz", "lab", "sbi"}
+_SMALL = {"of", "and", "the"}
+
+
+def display(entry: dict) -> str:
+    """A bank's name as a reader says it: "HDFC Bank", "State Bank of India", "J&K Bank"."""
+    if entry.get("short"):
+        return entry["short"]
+    words = _SUFFIX.sub("", " ".join(entry["name"].split())).split()
+    out = []
+    for i, w in enumerate(words):
+        lw = w.lower()
+        if lw in _ACRONYM:
+            out.append("JPMorgan" if lw == "jpmorgan" else lw.upper())
+        elif i and lw in _SMALL:
+            out.append(lw)
+        else:
+            out.append(w)
+    return " ".join(out)
+
+
+def labels(path: Path = ROSTER) -> dict[str, str]:
+    """{roster id: display name} for every bank."""
+    return {b["id"]: display(b) for b in load(path)["banks"]}

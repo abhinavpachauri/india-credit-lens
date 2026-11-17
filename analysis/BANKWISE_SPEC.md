@@ -221,6 +221,25 @@ after the view ships.
 **Timeline.** `analysis/rbi_bankwise/timeline.json` lists the saved quarters (written by
 consolidate from the releases); it is the freshness check's population.
 
+## 8b. Phase 5 gaps, to revisit (user, 2026-11-17: "document the gaps and we will revisit them in next sessions")
+
+The Banks view was built on the shared read-mode parts; these departures from the approved draft are open:
+1. **Pace per bank** is not stored (`csv_bank_acceleration` does not exist; payments stores none either). The
+   bank-group table has pace. Decide whether per-bank pace earns a signal family.
+2. **A bank row opening into its own sector mix** ("SBI ▾ Agriculture · Industry · Services · Retail ▸ Housing …").
+   Needs a per-bank table (parts = the bank's lines, columns from the of-book, size, share and growth scans at
+   that bank) fetched on open, like the breakouts; the shell has no on-demand sub-cut today. Until then each
+   sector's bank table carries "of book".
+3. **Merger markers on the chart.** Growth across a declared merger is a gap in the line; the size line keeps the
+   jump. A labelled marker ("Apr 2017: SBI absorbs its associates") needs `series_breaks.json` shipped with the
+   table and drawn by the cell panel.
+4. **Growth sorting is off on bank-wise by-bank tables** (declared in the sidecar, `unsortable`) until the
+   minimum-base rule (PLAN, shared with payments) is decided. Extremes on Jun 2026: Sberbank +299% on ₹588 Cr;
+   in cards, Unity SFB +3,047% on ₹238 Cr.
+5. **Flagged cells** (48 on the 13 measures, none in Jun 2026) are not yet blanked in the history lines, nor do
+   they carry their reason. Do it in the table stamp from `inconsistencies.json`: a flagged (quarter, bank,
+   metric) nulls that point in size and shares, and growth/new at that quarter and four later.
+
 ## 9. Decisions (user, 2026-11-14: "use your proposals")
 
 1. **All eight sheets** in phase 1: the whole record, read once.

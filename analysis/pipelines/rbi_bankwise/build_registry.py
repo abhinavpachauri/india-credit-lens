@@ -70,6 +70,16 @@ def entries() -> dict[str, dict]:
             f"{n['label']} for each bank group, the sum of its banks as RBI printed them that quarter.",
             {"method": "csv_category_scan_abs", "metric": m, "unit": "crore", "window": 12,
              "status_rules": [{"if": "value > prev_value", "then": "active"}, {"if": "true", "then": "declining"}]}, dom)
+        add(f"{p}-category-momentum", f"{n['label']} — crore each bank group added over the year",
+            f"Each bank group's change in {lab} over the year, with the net, gross and coherence; "
+            f"absent across a declared merger.",
+            {"method": "csv_category_momentum", "metric": m, "unit": "crore", "window": 12}, dom)
+        add(f"{p}-category-allocation", f"{n['label']} — each bank group's share of the year's new money",
+            f"Of the year's change in {lab}, how much each bank group added or lost.",
+            {"method": "csv_category_allocation", "metric": m, "window": 12, "coherence_min": 0.9}, dom)
+        add(f"{p}-category-acceleration", f"{n['label']} — each bank group's pace",
+            f"The change in each bank group's growth a year since the previous quarter, in points.",
+            {"method": "csv_category_acceleration", "metric": m}, dom)
         add(f"{p}-category-share-scan", f"{n['label']} — each bank group's share",
             f"Each bank group's share of all banks' {lab}.",
             {"method": "csv_category_scan_share", "metric": m, "status_rules": RISING}, dom)
@@ -83,7 +93,8 @@ def entries() -> dict[str, dict]:
                 {"method": "csv_bank_ratio_scan", "metric": m, "denominator_metric": GROSS}, dom)
     add("bw-gnpa-ratio-bank-scan", "Gross NPA ratio — per bank",
         "Each bank's gross NPAs as a share of its domestic gross advances, as RBI prints it (Major Sectoral).",
-        {"method": "csv_bank_scan", "metric": GNPA, "unit": "pct", "status_rules": RISING}, "credit_stress")
+        {"method": "csv_bank_scan", "metric": GNPA, "unit": "pct", "status_rules": RISING,
+         "table_column": {"metric": GROSS, "column": "gnpa"}}, "credit_stress")
     return out
 
 

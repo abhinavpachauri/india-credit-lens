@@ -5,80 +5,80 @@
     "schema_version": "4.0",
     "spec_ref": "analysis/SYSTEM_MODEL_SPEC.md §16",
     "computed_from": "signals.db",
-    "signals_observed": 130,
+    "signals_observed": 169,
     "force_rule": "v3.0"
   },
   "entity_states": {
     "icl:rbi_bankwise/credit/gross": {
       "direction": 1,
-      "signals": 9,
-      "observed": 9,
+      "signals": 12,
+      "observed": 12,
       "coherence": 1.0,
       "children": 2
     },
     "icl:rbi_bankwise/credit/food": {
       "direction": 1,
-      "signals": 10,
-      "observed": 10
+      "signals": 13,
+      "observed": 13
     },
     "icl:rbi_bankwise/credit/non_food": {
       "direction": 1,
-      "signals": 10,
-      "observed": 10,
+      "signals": 13,
+      "observed": 13,
       "coherence": 1.0,
       "children": 5
     },
     "icl:rbi_bankwise/credit/agri": {
       "direction": 1,
-      "signals": 10,
-      "observed": 10
+      "signals": 13,
+      "observed": 13
     },
     "icl:rbi_bankwise/credit/industry": {
       "direction": 1,
-      "signals": 10,
-      "observed": 10
+      "signals": 13,
+      "observed": 13
     },
     "icl:rbi_bankwise/credit/other_non_food": {
       "direction": 1,
-      "signals": 10,
-      "observed": 10
+      "signals": 13,
+      "observed": 13
     },
     "icl:rbi_bankwise/credit/retail": {
       "direction": 1,
-      "signals": 10,
-      "observed": 10,
+      "signals": 13,
+      "observed": 13,
       "coherence": 1.0,
       "children": 5
     },
     "icl:rbi_bankwise/credit/services": {
       "direction": 1,
-      "signals": 10,
-      "observed": 10
+      "signals": 13,
+      "observed": 13
     },
     "icl:rbi_bankwise/credit/cards": {
       "direction": 1,
-      "signals": 10,
-      "observed": 10
+      "signals": 13,
+      "observed": 13
     },
     "icl:rbi_bankwise/credit/education": {
       "direction": 1,
-      "signals": 10,
-      "observed": 10
+      "signals": 13,
+      "observed": 13
     },
     "icl:rbi_bankwise/credit/housing": {
       "direction": 1,
-      "signals": 10,
-      "observed": 10
+      "signals": 13,
+      "observed": 13
     },
     "icl:rbi_bankwise/credit/other_retail": {
       "direction": 1,
-      "signals": 10,
-      "observed": 10
+      "signals": 13,
+      "observed": 13
     },
     "icl:rbi_bankwise/credit/vehicle": {
       "direction": 1,
-      "signals": 10,
-      "observed": 10
+      "signals": 13,
+      "observed": 13
     }
   },
   "force_states": {},
@@ -91,7 +91,138 @@
     "active_balancing_loops": [],
     "authored_vs_observed_mismatches": []
   },
-  "mix_states": {},
+  "mix_states": {
+    "bw-gross-category-momentum": {
+      "entity_urn": "icl:rbi_bankwise/credit/gross",
+      "decomposition": null,
+      "mix_state": "drifting",
+      "coherence": 1.0,
+      "toward": "Foreign Banks",
+      "away_from": "Private Sector Banks",
+      "toward_tilt_pp": 1.41,
+      "children": 5
+    },
+    "bw-food-category-momentum": {
+      "entity_urn": "icl:rbi_bankwise/credit/food",
+      "decomposition": null,
+      "mix_state": "drifting",
+      "coherence": 0.9991,
+      "toward": "Private Sector Banks",
+      "away_from": "Public Sector Banks",
+      "toward_tilt_pp": 12.58,
+      "children": 5
+    },
+    "bw-non-food-category-momentum": {
+      "entity_urn": "icl:rbi_bankwise/credit/non_food",
+      "decomposition": null,
+      "mix_state": "drifting",
+      "coherence": 1.0,
+      "toward": "Foreign Banks",
+      "away_from": "Private Sector Banks",
+      "toward_tilt_pp": 1.5,
+      "children": 5
+    },
+    "bw-agri-category-momentum": {
+      "entity_urn": "icl:rbi_bankwise/credit/agri",
+      "decomposition": null,
+      "mix_state": "drifting",
+      "coherence": 1.0,
+      "toward": "Public Sector Banks",
+      "away_from": "Private Sector Banks",
+      "toward_tilt_pp": 5.74,
+      "children": 5
+    },
+    "bw-industry-category-momentum": {
+      "entity_urn": "icl:rbi_bankwise/credit/industry",
+      "decomposition": null,
+      "mix_state": "drifting",
+      "coherence": 1.0,
+      "toward": "Private Sector Banks",
+      "away_from": "Public Sector Banks",
+      "toward_tilt_pp": 14.5,
+      "children": 5
+    },
+    "bw-services-category-momentum": {
+      "entity_urn": "icl:rbi_bankwise/credit/services",
+      "decomposition": null,
+      "mix_state": "drifting",
+      "coherence": 1.0,
+      "toward": "Foreign Banks",
+      "away_from": "Private Sector Banks",
+      "toward_tilt_pp": 2.09,
+      "children": 5
+    },
+    "bw-retail-category-momentum": {
+      "entity_urn": "icl:rbi_bankwise/credit/retail",
+      "decomposition": null,
+      "mix_state": "drifting",
+      "coherence": 1.0,
+      "toward": "Public Sector Banks",
+      "away_from": "Private Sector Banks",
+      "toward_tilt_pp": 9.83,
+      "children": 5
+    },
+    "bw-other-non-food-category-momentum": {
+      "entity_urn": "icl:rbi_bankwise/credit/other_non_food",
+      "decomposition": null,
+      "mix_state": "contested",
+      "coherence": 0.8758,
+      "toward": null,
+      "away_from": null,
+      "toward_tilt_pp": null,
+      "children": 0
+    },
+    "bw-housing-category-momentum": {
+      "entity_urn": "icl:rbi_bankwise/credit/housing",
+      "decomposition": null,
+      "mix_state": "steered",
+      "coherence": 1.0,
+      "toward": "Public Sector Banks",
+      "away_from": "Private Sector Banks",
+      "toward_tilt_pp": 16.3,
+      "children": 5
+    },
+    "bw-vehicle-category-momentum": {
+      "entity_urn": "icl:rbi_bankwise/credit/vehicle",
+      "decomposition": null,
+      "mix_state": "drifting",
+      "coherence": 0.9999,
+      "toward": "Small Finance Banks",
+      "away_from": "Private Sector Banks",
+      "toward_tilt_pp": 1.55,
+      "children": 5
+    },
+    "bw-cards-category-momentum": {
+      "entity_urn": "icl:rbi_bankwise/credit/cards",
+      "decomposition": null,
+      "mix_state": "drifting",
+      "coherence": 0.9397,
+      "toward": "Small Finance Banks",
+      "away_from": "Foreign Banks",
+      "toward_tilt_pp": 6.89,
+      "children": 5
+    },
+    "bw-education-category-momentum": {
+      "entity_urn": "icl:rbi_bankwise/credit/education",
+      "decomposition": null,
+      "mix_state": "drifting",
+      "coherence": 0.991,
+      "toward": "Public Sector Banks",
+      "away_from": "Private Sector Banks",
+      "toward_tilt_pp": 1.87,
+      "children": 5
+    },
+    "bw-other-retail-category-momentum": {
+      "entity_urn": "icl:rbi_bankwise/credit/other_retail",
+      "decomposition": null,
+      "mix_state": "drifting",
+      "coherence": 1.0,
+      "toward": "Public Sector Banks",
+      "away_from": "Private Sector Banks",
+      "toward_tilt_pp": 6.88,
+      "children": 5
+    }
+  },
   "force_check": {},
   "explanation_coverage": {
     "summary": {

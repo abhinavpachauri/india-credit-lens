@@ -377,6 +377,18 @@
         "web/lib/table_columns.ts": "high"
       }
     },
+    "core/table_labels": {
+      "doc_claims": [],
+      "imports": [
+        "core/manifest"
+      ],
+      "invokes": [],
+      "path": "analysis/core/table_labels.py",
+      "reads": {
+        "analysis/signals/registry.json": "low"
+      },
+      "writes": {}
+    },
     "core/table_rows": {
       "doc_claims": [],
       "imports": [],
@@ -1014,6 +1026,16 @@
       "reads": {},
       "writes": {}
     },
+    "pipelines/rbi_bankwise/cuts": {
+      "doc_claims": [],
+      "imports": [],
+      "invokes": [],
+      "path": "analysis/pipelines/rbi_bankwise/cuts.py",
+      "reads": {
+        "analysis/rbi_bankwise/skeleton_profile.json": "low"
+      },
+      "writes": {}
+    },
     "pipelines/rbi_bankwise/fetch": {
       "doc_claims": [],
       "imports": [
@@ -1459,8 +1481,10 @@
     "signals/stamp_table": {
       "doc_claims": [],
       "imports": [
+        "core/banks",
         "core/manifest",
         "core/real_cells",
+        "core/table_labels",
         "core/table_rows"
       ],
       "invokes": [],

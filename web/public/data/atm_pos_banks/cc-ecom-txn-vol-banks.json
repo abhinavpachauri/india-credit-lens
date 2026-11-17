@@ -11980,6 +11980,27 @@
    "Jul 26",
    "Aug 26",
    "Sep 26"
+  ],
+  "new": [
+   "Jan 25",
+   "Feb 25",
+   "Mar 25",
+   "Apr 25",
+   "May 25",
+   "Jun 25",
+   "Jul 25",
+   "Aug 25",
+   "Sep 25",
+   "Nov 25",
+   "Dec 25",
+   "Jan 26",
+   "Feb 26",
+   "Mar 26",
+   "Apr 26",
+   "May 26",
+   "Jun 26",
+   "Jul 26",
+   "Aug 26"
   ]
  },
  "parent_periods": {
@@ -12043,14 +12064,20 @@
   ]
  },
  "source_signals": [
+  "cc-ecom-txn-vol-bank-allocation",
   "cc-ecom-txn-vol-bank-scan",
   "cc-ecom-txn-vol-bank-share-scan",
   "cc-ecom-txn-vol-bank-yoy-scan",
   "cc-ecom-txn-vol-banks-acceleration",
-  "cc-ecom-txn-vol-banks-allocation",
   "cc-ecom-txn-vol-banks-share-of-credit-scan",
   "cc-ecom-vol-yoy"
  ],
  "metric": "cc_ecom_txn_vol",
- "level": "bank"
+ "level": "bank",
+ "col_labels": {
+  "of_cut": "% of all banks"
+ },
+ "key": [
+  "% of all banks: each bank's share of all banks' credit card ecommerce transactions (STATE BANK OF INDIA holds 27.8%)."
+ ]
 }

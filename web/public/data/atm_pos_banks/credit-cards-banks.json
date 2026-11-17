@@ -12141,14 +12141,20 @@
   ]
  },
  "source_signals": [
+  "cc-bank-allocation",
   "cc-bank-scan",
   "cc-bank-share-scan",
   "cc-bank-yoy-scan",
   "cc-outstanding-yoy",
   "credit-cards-banks-acceleration",
-  "credit-cards-banks-allocation",
   "credit-cards-banks-share-of-credit-scan"
  ],
  "metric": "credit_cards",
- "level": "bank"
+ "level": "bank",
+ "col_labels": {
+  "of_cut": "% of all banks"
+ },
+ "key": [
+  "% of all banks: each bank's share of all banks' credit cards (HDFC BANK LTD holds 21.8%)."
+ ]
 }

@@ -20,8 +20,8 @@ driver test, each line's delay found on earlier months and confirmed on later on
 - **Pooled driver test: built 11-10** (SYSTEM_MODEL_SPEC §16 Step 6d): all 6 SIBC families too_short
   (large-industry rate, 35 lines, r 0.20, ~13 more months). Next: pooled verdicts in the grid.
 - **Each bank's credit (user, 11-14): `rbi_bankwise`**, spec v0.2 reviewed and decided (`analysis/BANKWISE_SPEC.md`).
-  Backfill done 11-15 (46 quarters from Mar 2015); phase 4 signals + model built 11-17 (117 signals). Next: phase 5, the
-  Banks view on the SIBC page (`/dashboard-change`), then its FOUNDATION pass. Payments onto the roster: separate (user).
+  Phase 4 (signals + model) and phase 5 (Banks view on the SIBC page) built 11-17. **Next: the five view gaps the user
+  set aside (BANKWISE_SPEC §8b), then the FOUNDATION pass.** Payments onto the roster: separate (user).
 - **Buyer first** (STRATEGY v3.1 §5): log who engages with X/LinkedIn, ask the 3 questions; a source is
   chosen by a buyer conversation and by the grid column it completes.
 

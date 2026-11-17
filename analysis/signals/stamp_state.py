@@ -57,6 +57,14 @@ def _cuts(pipeline):
     return mod.MOVEMENT_CUTS, prefix, getattr(mod, "STATE_RATE_ONLY", [])
 
 
+def _anchors(pipeline, cuts):
+    """The cuts a tile shows: all of them, unless the cuts module names fewer (`ANCHORS`)."""
+    import importlib
+    from core import manifest as _m
+    names = getattr(importlib.import_module(_m.load(pipeline)["cuts_module"]), "ANCHORS", None)
+    return cuts if names is None else [c for c in cuts if c.slug in names]
+
+
 REGISTRY = ROOT / "analysis" / "signals" / "registry.json"
 
 
@@ -186,6 +194,13 @@ def _mix_states(pipeline: str, period: str) -> dict:
     return json.loads(f.read_text()).get("mix_states", {})
 
 
+def _period_label(pipeline: str, period: str) -> str:
+    from signals.query import display_date
+    from core.table_rows import _MONTH
+    d = display_date(period, pipeline)
+    return f"{_MONTH[int(d[5:7]) - 1]} {d[:4]}"
+
+
 def build(pipeline: str) -> dict:
     """The sidecar payload: dimension id → the ordered state blocks under it."""
     period = latest_period(pipeline)
@@ -196,7 +211,7 @@ def build(pipeline: str) -> dict:
         prefix = {**prefix}          # derived payments cuts share their group's prefix
     with sqlite3.connect(DB) as con:
         blocks = state_lines.blocks(con, pipeline, period, [*cuts, *extra], prefix, mix,
-                                    rate_only, anchors=cuts)
+                                    rate_only, anchors=_anchors(pipeline, cuts))
     by_dim: dict[str, list[dict]] = {}
     for b in blocks:
         by_dim.setdefault(b.dimension, []).append(b.as_dict())
@@ -204,6 +219,8 @@ def build(pipeline: str) -> dict:
         "_meta": {
             "pipeline": pipeline,
             "period": period,
+            # The period as a reader says it ("Jun 2026"), rendered here, never in a browser.
+            "period_label": _period_label(pipeline, period),
             "purpose": "Standing state band per dashboard dimension — Layer-1 speed + Layer-2 "
                        "mix state, rendered as sentences. Join on dimension id.",
             "spec": "analysis/DASHBOARD_SPEC.md §16",

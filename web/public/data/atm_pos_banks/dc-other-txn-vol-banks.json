@@ -1,6 +1,6 @@
 {
  "cut": "dc-other-txn-vol-banks",
- "flow_label": "New",
+ "flow_label": "Of fall",
  "coverage": null,
  "parts": [
   {
@@ -11049,6 +11049,10 @@
    "Jul 26",
    "Aug 26",
    "Sep 26"
+  ],
+  "new": [
+   "Sep 25",
+   "Oct 25"
   ]
  },
  "parent_periods": {
@@ -11112,14 +11116,20 @@
   ]
  },
  "source_signals": [
+  "dc-other-txn-vol-bank-allocation",
   "dc-other-txn-vol-bank-scan",
   "dc-other-txn-vol-bank-share-scan",
   "dc-other-txn-vol-bank-yoy-scan",
   "dc-other-txn-vol-banks-acceleration",
-  "dc-other-txn-vol-banks-allocation",
   "dc-other-txn-vol-banks-share-of-credit-scan",
   "dc-other-vol-yoy"
  ],
  "metric": "dc_other_txn_vol",
- "level": "bank"
+ "level": "bank",
+ "col_labels": {
+  "of_cut": "% of all banks"
+ },
+ "key": [
+  "% of all banks: each bank's share of all banks' debit card other transactions (HDFC BANK LTD holds 61.1%)."
+ ]
 }

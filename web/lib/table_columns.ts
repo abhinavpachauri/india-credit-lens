@@ -3,7 +3,7 @@
 // (DASHBOARD_SPEC §21.5). tests/test_table_columns.py fails when this file drifts.
 
 /** The columns a row can carry, in the order the table draws them. */
-export const COLUMNS = ["size", "of_cut", "of_book", "growth", "pace", "new", "real_credit", "output"] as const;
+export const COLUMNS = ["size", "of_cut", "of_book", "growth", "pace", "new", "gnpa", "real_credit", "output"] as const;
 export type ColKey = typeof COLUMNS[number];
 
 export const COL_LABEL: Record<ColKey, string> = {
@@ -13,6 +13,7 @@ export const COL_LABEL: Record<ColKey, string> = {
   growth: "Growth",
   pace: "Pace",
   new: "New",
+  gnpa: "GNPA",
   real_credit: "Real credit",
   output: "Output 12m",
 };
@@ -25,6 +26,7 @@ export const COL_GROUP: Record<ColKey, string | null> = {
   growth: null,
   pace: null,
   new: null,
+  gnpa: null,
   real_credit: "real",
   output: "real",
 };
@@ -36,11 +38,12 @@ export const GROUP_LABEL: Record<string, string> = {
 /** What each heading means, shown on hover. */
 export const COL_HINT: Record<ColKey, string> = {
   size: "How big this part is today, in the table's own unit.",
-  of_cut: "Its share of this table: the parts added up.",
-  of_book: "Its share of the whole book, not just of this table.",
+  of_cut: "A share: this row's slice of the total the heading names. The line under the table says it in words.",
+  of_book: "A second share, over a bigger whole that the heading names. The line under the table says it in words.",
   growth: "Year-on-year growth: now against the same month a year ago.",
   pace: "Is growth speeding up or slowing down? The change in year-on-year growth since the previous reading, in percentage points.",
   new: "Of the net change over the last 12 months, the part that came from here. Reads 'Of fall' when the total shrank; can pass 100% when parts move in opposite directions.",
+  gnpa: "Gross non-performing assets as a share of gross advances, as RBI prints it.",
   real_credit: "Growth with price changes taken out, using the prices of what this part produces. Hover a cell for the price index used.",
   output: "Growth in real output (GVA) over the last four quarters: the economy this credit funds.",
 };

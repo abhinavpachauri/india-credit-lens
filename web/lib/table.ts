@@ -33,6 +33,8 @@ export { COLUMNS, COL_LABEL, COL_GROUP, GROUP_LABEL, COL_HINT, GROUP_HINT, type 
 
 export interface CutRow {
   entity:  string | null;      // null = the cut's own row
+  /** How the row is named on screen, when its key is an id (bank-wise rows are roster ids). */
+  label?:  string;
   size:    Cell | null;
   of_cut:  Cell | null;        // null on the total row — a whole is not a share of itself
   of_book: Cell | null;
@@ -42,6 +44,8 @@ export interface CutRow {
   /** §21: the real economy beside the credit, on a cut that declares it. */
   real_credit?: Cell | null;
   output?:      Cell | null;
+  /** Bank-wise: the bank's gross NPA ratio, beside its credit (declared by the cut). */
+  gnpa?:        Cell | null;
   /** §21.4: this row is an approximate match (ⓘ); the sentence, with its share, from Python. */
   approx?: string;
   /** The cut this part decomposes into, when it has one (§19) — resolved in Python. */
@@ -72,6 +76,16 @@ export interface CutTable {
   /** "bank" = the same measure broken out over the 63 reporting banks rather than the five
    *  bank categories. A different LEVEL of one table, not a drilldown into a row. */
   level?: "bank";
+  /** The measure's name in a measure menu, declared in Python (bank-wise). */
+  title?: string;
+  /** Columns a heading click may not sort by, declared in Python: growth off a tiny base would
+   *  rank first until a minimum-base rule exists (BANKWISE_SPEC §8b). */
+  unsortable?: ColKey[];
+  /** Each share column named by what it divides by ("% of industry", "% of bank's book"),
+   *  rendered in Python (core/table_labels.py). Absent → the generic column label. */
+  col_labels?: Partial<Record<ColKey, string>>;
+  /** One always-visible sentence per share column, its example number gate-checked. */
+  key?: string[];
   /** §21: what the real-economy columns cover this period, and what they mean. */
   real_economy?: { coverage: string[]; footnote: string[] };
   source_signals: string[];
@@ -108,6 +122,17 @@ export async function loadBankTable(entry: BankIndexEntry): Promise<CutTable | n
   } catch { /* left null — the toggle simply shows nothing rather than breaking the page */ }
   bankCache.set(entry.file, table);
   return table;
+}
+
+/** The reading order the sidecar declares for its cuts, if any (bank-wise's measure menu). */
+export async function loadCutOrder(pipeline: Pipeline): Promise<string[]> {
+  try {
+    const res = await fetch(`/data/${pipeline}_table.json`);
+    if (!res.ok) return [];
+    return ((await res.json()) as { _meta?: { order?: string[] } })._meta?.order ?? [];
+  } catch {
+    return [];
+  }
 }
 
 export async function loadCutTables(pipeline: Pipeline): Promise<CutTables> {

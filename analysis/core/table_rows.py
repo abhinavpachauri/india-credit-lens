@@ -84,7 +84,7 @@ def _count(v: float) -> str:
 # for one month of cash at ATMs. Caught by reading the rendered number for plausibility, not
 # by any check: every gate here verifies a number against its stored value, and the stored
 # value was right. A unit conversion is the one place traceability cannot help.
-UNIT_FMT = {"rs_cr": _rs, "count": _count, "transactions": _count,
+UNIT_FMT = {"rs_cr": _rs, "crore": _rs, "count": _count, "transactions": _count,
             "rs_thousands": lambda v: _rs(v / 1e4)}
 
 _pct = lambda v: f"{v:.1f}%"
@@ -209,6 +209,10 @@ def build(conn, pipeline: str, period: str, stem: str, unit: str = "rs_cr",
         "pace":    (accel_id, a_type,       ("aggregate", "total")),
         "new":     (alloc_id, "alloc",      None),
     }
+    # A column only some tables have is DECLARED by the cut (`signals`), never assumed: the
+    # gross NPA ratio sits beside each bank's credit in bank-wise, and nowhere else.
+    if (signals or {}).get("gnpa"):
+        COLS["gnpa"] = (signals["gnpa"], "bank", None)
     for c, (mid, et, agg) in list(COLS.items()):
         if et == "bank":                     # a declared share scan carries the member type
             COLS[c] = (mid, _member_type(conn, pipeline, period, mid) or et, agg)
@@ -230,7 +234,7 @@ def build(conn, pipeline: str, period: str, stem: str, unit: str = "rs_cr",
 
     fmt = UNIT_FMT.get(unit, _count)
     FMT = {"size": fmt, "of_cut": _pct, "of_book": _pct,
-           "growth": _pct, "pace": _pp, "new": _pct}
+           "growth": _pct, "pace": _pp, "new": _pct, "gnpa": _pct}
     def at(col, name):
         return hist[col].get(name, {}).get(period)
 
@@ -288,7 +292,7 @@ def build(conn, pipeline: str, period: str, stem: str, unit: str = "rs_cr",
     net = next((v for (v,) in conn.execute(
         "SELECT value FROM signals WHERE pipeline=? AND period=? AND metric_id=? "
         "AND entity_type='aggregate' AND entity_id='total'",
-        (pipeline, period, f"{stem}-momentum"))), None)
+        (pipeline, period, sid("momentum", f"{stem}-momentum")))), None)
     flow_label = "Of fall" if (net is not None and net < 0) else "New"
 
     # COVERAGE — what fraction of this cut the parts RBI actually names add up to. Shipped so
@@ -300,9 +304,10 @@ def build(conn, pipeline: str, period: str, stem: str, unit: str = "rs_cr",
     coverage = next((v for (v,) in conn.execute(
         "SELECT value FROM signals WHERE pipeline=? AND period=? AND metric_id=? "
         "AND entity_type='coverage' AND entity_id='total'",
-        (pipeline, period, f"{stem}-allocation"))), None)
+        (pipeline, period, alloc_id))), None)
 
     declared = sorted({size_id, growth_id, accel_id, alloc_id, book_id, COLS["of_cut"][0]}
+                      | ({COLS["gnpa"][0]} if "gnpa" in COLS else set())
                       | ({parent_yoy} if parent_yoy else set()))
     cells = lambda r: {k: (asdict(v) if isinstance(v, Cell) else v) for k, v in r.items()}
     return {

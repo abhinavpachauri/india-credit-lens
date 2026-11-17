@@ -4,10 +4,11 @@ import { useEffect, useState } from "react";
 import { loadReport }           from "@/lib/reports/rbi_sibc";
 import { loadPlanes, type PlanesMap } from "@/lib/planes";
 import { loadStateBands, type StateMap } from "@/lib/state";
-import { loadCutTables, type CutTables } from "@/lib/table";
+import { loadCutTables, loadBankIndex, loadCutOrder, type CutTables } from "@/lib/table";
+import { loadStatePeriodLabel } from "@/lib/state";
 import { useAppShell }          from "@/components/AppShell";
 import SibcExploreSection       from "@/components/SibcExploreSection";
-import SibcReadMode             from "@/components/read/SibcReadMode";
+import SibcReadMode, { type BanksView } from "@/components/read/SibcReadMode";
 import ModeToggle               from "@/components/read/ModeToggle";
 import { usePersistent }        from "@/hooks/usePersistent";
 import type { Report }          from "@/lib/types";
@@ -18,6 +19,7 @@ export default function Dashboard() {
   const [planes, setPlanes] = useState<PlanesMap>({});
   const [state, setState]   = useState<StateMap>({});
   const [tables, setTables] = useState<CutTables>({});
+  const [banks, setBanks]   = useState<BanksView | undefined>(undefined);
   const [mode, setMode] = usePersistent<"read" | "explore">("icl-mode", "read");
 
   useEffect(() => {
@@ -28,6 +30,11 @@ export default function Dashboard() {
     loadPlanes("sibc").then(setPlanes);
     loadStateBands("sibc").then(setState);
     loadCutTables("sibc").then(setTables);
+    // Each bank's credit: its own source and calendar, one more dimension of this page.
+    Promise.all([loadCutTables("rbi_bankwise"), loadStateBands("rbi_bankwise"), loadBankIndex("rbi_bankwise"),
+                 loadCutOrder("rbi_bankwise"), loadStatePeriodLabel("rbi_bankwise")])
+      .then(([t, s, i, order, asOf]) => setBanks({ tables: t, state: s, bankIndex: i, order, asOf }))
+      .catch(() => setBanks(undefined));
   }, [setHeaderMetric]);
 
   if (!report) {
@@ -49,7 +56,7 @@ export default function Dashboard() {
       <ModeToggle mode={mode} setMode={setMode} />
 
       {mode === "read" ? (
-        <SibcReadMode report={report} planes={planes} state={state} tables={tables} />
+        <SibcReadMode report={report} planes={planes} state={state} tables={tables} banks={banks} />
       ) : (
         report.sections.map((section) => (
           <SibcExploreSection key={section.id} section={section} />

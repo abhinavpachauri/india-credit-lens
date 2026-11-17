@@ -1,6 +1,6 @@
 {
  "cut": "micro-atms-banks",
- "flow_label": "New",
+ "flow_label": "Of fall",
  "coverage": null,
  "parts": [
   {
@@ -11554,13 +11554,19 @@
  },
  "source_signals": [
   "micro-atm-yoy",
+  "micro-atms-bank-allocation",
   "micro-atms-bank-scan",
   "micro-atms-bank-share-scan",
   "micro-atms-bank-yoy-scan",
   "micro-atms-banks-acceleration",
-  "micro-atms-banks-allocation",
   "micro-atms-banks-share-of-credit-scan"
  ],
  "metric": "micro_atms",
- "level": "bank"
+ "level": "bank",
+ "col_labels": {
+  "of_cut": "% of all banks"
+ },
+ "key": [
+  "% of all banks: each bank's share of all banks' micro atms (FINO PAYMENTS BANK holds 36.0%)."
+ ]
 }

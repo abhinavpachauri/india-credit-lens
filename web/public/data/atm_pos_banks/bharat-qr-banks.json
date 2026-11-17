@@ -1,6 +1,6 @@
 {
  "cut": "bharat-qr-banks",
- "flow_label": "New",
+ "flow_label": "Of fall",
  "coverage": null,
  "parts": [
   {
@@ -11112,14 +11112,20 @@
   ]
  },
  "source_signals": [
+  "bharat-qr-bank-allocation",
   "bharat-qr-bank-scan",
   "bharat-qr-bank-share-scan",
   "bharat-qr-bank-yoy-scan",
   "bharat-qr-banks-acceleration",
-  "bharat-qr-banks-allocation",
   "bharat-qr-banks-share-of-credit-scan",
   "bharat-qr-yoy"
  ],
  "metric": "bharat_qr",
- "level": "bank"
+ "level": "bank",
+ "col_labels": {
+  "of_cut": "% of all banks"
+ },
+ "key": [
+  "% of all banks: each bank's share of all banks' bharat QR (HDFC BANK LTD holds 42.8%)."
+ ]
 }
