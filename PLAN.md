@@ -42,8 +42,8 @@ driver test, each line's delay found on earlier months and confirmed on later on
    MoSPI's product feed (the annex lagged again in Nov); automating that fetch is a small next step.
 3. **X:** posts built to 3 Nov (`output/x/2026-10-18/`, `2026-10-23/`); next batch from 4 Nov, release
    stories once SIBC/payments September land. Card e-commerce held: HDFC/SBI share break in Aug.
-4. **Model pass, owed:** NBFC causes (no `/model-pass nbfc` or `/s4-source` since its Aug ingest;
-   deferred proposals #17-19 wait for it). Arrow signs done 11-20: 11 of 12 line arrows fit; card
+4. **Model pass, owed:** NBFC `/s4-source` (deferred proposals #17-19 wait for it). `/model-pass nbfc`
+   11-20 (Sep): honest null, 0 moves; the October file is release 6, the trigger to decide FOUNDATION. Arrow signs done 11-20: 11 of 12 line arrows fit; card
    concentration retired until a stored top-5 issuer share exists. Re-test 11-20: nothing admitted.
    Then S4 widened to market sources for the residual. NBFC force check stays off (9 moves of history).
 5. **NBFC post-ingest count** (NBFC plan §6): how many files did pipeline #3 touch that were not its
